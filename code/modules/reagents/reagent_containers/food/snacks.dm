@@ -684,6 +684,15 @@
 		reagents.add_reagent("nutriment", 6)
 		bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/corgiburger
+	name = "Corgi burger"
+	desc = "Is that...fur?"
+	icon_state = "corgiburger"
+	New()
+		..()
+		reagents.add_reagent("nutriment", 6)
+		bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/fishburger
 	name = "Fillet -o- Carp Sandwich"
 	desc = "Almost like a carp is yelling somewhere... Give me back that fillet -o- carp, give me that carp."
