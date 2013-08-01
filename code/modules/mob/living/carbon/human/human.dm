@@ -1012,12 +1012,19 @@
 	var/list/mob/creatures = list()
 
 	for(var/mob/living/carbon/h in world)
+		if(isalien(h)) continue //No! Bad meta man, no cheating.
 		var/turf/temp_turf = get_turf(h)
 		if((temp_turf.z != 1 && temp_turf.z != 5) || h.stat!=CONSCIOUS) //Not on mining or the station. Or dead
 			continue
 		creatures += h
 
 	var/mob/target = input ("Who do you want to project your mind to ?") as mob in creatures
+
+	if(istype(l_hand, /obj/item/tk_grab) || istype(r_hand, /obj/item/tk_grab/))
+		src << "\red Your mind is too busy with that telekinetic grab."
+		remoteview_target = null
+		reset_view(0)
+		return
 
 	if (target)
 		remoteview_target = target
