@@ -101,6 +101,13 @@ I said no!
 	result = /obj/item/weapon/reagent_containers/food/snacks/monkeyburger
 */
 
+/datum/recipe/corgiburger
+	reagents = list("flour" = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/corgi
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/corgiburger
+
 /datum/recipe/plainburger
 	reagents = list("flour" = 5)
 	items = list(

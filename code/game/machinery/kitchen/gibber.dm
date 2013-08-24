@@ -82,7 +82,7 @@
 	if(src.occupant)
 		user << "\red The gibber is full, empty it first!"
 		return
-	if (!( istype(G, /obj/item/weapon/grab)) || !(istype(G.affecting, /mob/living/carbon/human)))
+	if (!( istype(G, /obj/item/weapon/grab)) || !(istype(G.affecting, /mob/living/carbon/human) || istype(G.affecting, /mob/living/simple_animal/corgi)))
 		user << "\red This item is not suitable for the gibber!"
 		return
 	if(G.affecting.abiotic(1))
@@ -137,40 +137,60 @@
 	visible_message("\red You hear a loud squelchy grinding sound.")
 	src.operating = 1
 	update_icon()
-	var/sourcename = src.occupant.real_name
-	var/sourcejob = src.occupant.job
-	var/sourcenutriment = src.occupant.nutrition / 15
-	var/sourcetotalreagents = src.occupant.reagents.total_volume
-	var/totalslabs = 3
+	if (istype(occupant, /mob/living/carbon/human))
+		var/sourcename = src.occupant.real_name
+		var/sourcejob = src.occupant.job
+		var/sourcenutriment = src.occupant.nutrition / 15
+		var/sourcetotalreagents = src.occupant.reagents.total_volume
+		var/totalslabs = 3
 
-	var/obj/item/weapon/reagent_containers/food/snacks/meat/human/allmeat[totalslabs]
-	for (var/i=1 to totalslabs)
-		var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new
-		newmeat.name = sourcename + newmeat.name
-		newmeat.subjectname = sourcename
-		newmeat.subjectjob = sourcejob
-		newmeat.reagents.add_reagent ("nutriment", sourcenutriment / totalslabs) // Thehehe. Fat guys go first
-		src.occupant.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
-		allmeat[i] = newmeat
-
-	src.occupant.attack_log += "\[[time_stamp()]\] Was gibbed by <b>[user]/[user.ckey]</b>" //One shall not simply gib a mob unnoticed!
-	user.attack_log += "\[[time_stamp()]\] Gibbed <b>[src.occupant]/[src.occupant.ckey]</b>"
-	log_attack("\[[time_stamp()]\] <b>[user]/[user.ckey]</b> gibbed <b>[src.occupant]/[src.occupant.ckey]</b>")
-
-	src.occupant.death(1)
-	src.occupant.ghostize()
-	del(src.occupant)
-	spawn(src.gibtime)
-		playsound(src.loc, 'sound/effects/splat.ogg', 50, 1)
-		operating = 0
+		var/obj/item/weapon/reagent_containers/food/snacks/meat/human/allmeat[totalslabs]
 		for (var/i=1 to totalslabs)
-			var/obj/item/meatslab = allmeat[i]
-			var/turf/Tx = locate(src.x - i, src.y, src.z)
-			meatslab.loc = src.loc
-			meatslab.throw_at(Tx,i,3)
-			if (!Tx.density)
-				new /obj/effect/decal/cleanable/blood/gibs(Tx,i)
-		src.operating = 0
-		update_icon()
+			var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new
+			newmeat.name = sourcename + newmeat.name
+			newmeat.subjectname = sourcename
+			newmeat.subjectjob = sourcejob
+			newmeat.reagents.add_reagent ("nutriment", sourcenutriment / totalslabs) // Thehehe. Fat guys go first
+			src.occupant.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
+			allmeat[i] = newmeat
 
+		src.occupant.attack_log += "\[[time_stamp()]\] Was gibbed by <b>[user]/[user.ckey]</b>" //One shall not simply gib a mob unnoticed!
+		user.attack_log += "\[[time_stamp()]\] Gibbed <b>[src.occupant]/[src.occupant.ckey]</b>"
+		log_attack("\[[time_stamp()]\] <b>[user]/[user.ckey]</b> gibbed <b>[src.occupant]/[src.occupant.ckey]</b>")
+		src.occupant.death(1)
+		src.occupant.ghostize()
+		del(src.occupant)
+		spawn(src.gibtime)
+			playsound(src.loc, 'sound/effects/splat.ogg', 50, 1)
+			operating = 0
+			for (var/i=1 to totalslabs)
+				var/obj/item/meatslab = allmeat[i]
+				var/turf/Tx = locate(src.x - i, src.y, src.z)
+				meatslab.loc = src.loc
+				meatslab.throw_at(Tx,i,3)
+				if (!Tx.density)
+					new /obj/effect/decal/cleanable/blood/gibs(Tx,i)
+			src.operating = 0
+			update_icon()
 
+	else
+		var/totalmeat = 3
+
+		var/obj/item/weapon/reagent_containers/food/snacks/meat/corgi/allmeat[totalmeat]
+		for (var/i=1 to totalmeat)
+			var/obj/item/weapon/reagent_containers/food/snacks/meat/corgi/newmeat = new
+			allmeat[i] = newmeat
+
+		del(src.occupant)
+		spawn(src.gibtime)
+			playsound(src.loc, 'sound/effects/splat.ogg', 50, 1)
+			operating = 0
+			for (var/i=1 to totalmeat)
+				var/obj/item/weapon/reagent_containers/food/snacks/meat/corgi/nextmeat = allmeat[i]
+				var/turf/Tx = locate(src.x - i, src.y, src.z)
+				nextmeat.loc = src.loc
+				nextmeat.throw_at(Tx,i,3)
+				if (!Tx.density)
+					new /obj/effect/decal/cleanable/blood/gibs(Tx,i)
+			src.operating = 0
+			update_icon()
