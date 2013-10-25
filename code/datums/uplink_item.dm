@@ -176,7 +176,7 @@ var/list/uplink_items = list()
 	name = "DNA Syringe Gun"
 	desc = "A syringe gun that can shoot DNA-Injectors. Comes loaded with a monkey SE injector."
 	item = /obj/item/weapon/gun/syringe/dna
-	cost = 5
+	cost = 8
 	job = list("Geneticist")
 
 // DANGEROUS WEAPONS
