@@ -129,3 +129,105 @@
 		var/datum/reagents/R = new/datum/reagents(15)
 		reagents = R
 		R.my_atom = src
+
+/obj/effect/dnasyringe_gun_dummy
+	name = ""
+	desc = ""
+	icon = 'icons/obj/items.dmi'
+	anchored = 1
+	density = 0
+	var/dna = null
+	var/dnatype = null
+	var/ue = null
+	var/block = null
+
+/obj/item/weapon/gun/syringe/dna
+	name = "dna syringe gun"
+	desc = "A syringe gun modified to use DNA-Injectors. Seems malicious."
+	icon_state = "dnasyringegun"
+
+/obj/item/weapon/gun/syringe/dna/New()
+	..()
+	var/obj/item/weapon/dnainjector/h2m/L = new/obj/item/weapon/dnainjector/h2m(src)
+	syringes += L
+
+/obj/item/weapon/gun/syringe/dna/attackby(obj/item/I as obj, mob/user as mob)
+	if(istype(I, /obj/item/weapon/dnainjector))
+		if(syringes.len < max_syringes)
+			user.drop_item()
+			I.loc = src
+			syringes += I
+			user << "\blue You put the syringe in [src]."
+			user << "\blue [syringes.len] / [max_syringes] syringes."
+		else
+			usr << "\red [src] cannot hold more syringes."
+
+/obj/item/weapon/gun/syringe/dna/fire_syringe(atom/target, mob/user)
+	if (locate (/obj/structure/table, src.loc))
+		return
+	else
+		var/turf/trg = get_turf(target)
+		var/obj/effect/dnasyringe_gun_dummy/D = new/obj/effect/dnasyringe_gun_dummy(get_turf(src))
+		var/obj/item/weapon/dnainjector/S = syringes[1]
+		if((!S) || (!S.dna))
+			return
+		D.dna = S.dna
+		D.dnatype = S.dnatype
+		D.ue = S.ue
+		D.block = S.block
+		syringes -= S
+		del(S)
+		D.icon_state = "dnasyringeproj"
+		D.name = "DNA syringe"
+		playsound(user.loc, 'sound/items/syringeproj.ogg', 50, 1)
+		log_attack("[user.name] ([user.ckey]) fired \the [src] at [target] [ismob(target) ? "([target:ckey])" : ""] ([target.x],[target.y],[target.z])" )
+		for(var/i=0, i<6, i++)
+			if(!D) break
+			if(D.loc == trg) break
+			step_towards(D,trg)
+			if(D)
+				for(var/mob/living/carbon/M in D.loc)
+					if(!istype(M,/mob/living/carbon)) continue
+					if(M == user) continue
+					M.visible_message("<span class='danger'>[M] is hit by the DNA syringe!</span>")
+					if (istype(M, /mob))
+						M.attack_log += "\[[time_stamp()]\] <b>[user]/[user.ckey]</b> shot <b>[M]/[M.ckey]</b> with a <b>DNA syringegun</b>"
+						user.attack_log += "\[[time_stamp()]\] <b>[user]/[user.ckey]</b> shot <b>[M]/[M.ckey]</b> with a <b>DNA syringegun</b>"
+						msg_admin_attack("[user] ([user.ckey]) shot [M] ([M.ckey]) with a DNA syringegun (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+					else
+						M.attack_log += "\[[time_stamp()]\] <b>UNKNOWN SUBJECT (No longer exists)</b> shot <b>[M]/[M.ckey]</b> with a <b>DNA syringegun</b>"
+						msg_admin_attack("UNKNOWN shot [M] ([M.ckey]) with a <b>DNA syringegun</b> (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+					if (D.dnatype == "ui")
+						if(!D.block)
+							if (D.ue)
+
+								M.dna.uni_identity = D.dna
+								updateappearance(M, M.dna.uni_identity)
+								M.real_name = D.ue
+								M.name = D.ue
+							else
+								M.dna.uni_identity = D.dna
+								updateappearance(M, M.dna.uni_identity)
+						else
+							M.dna.uni_identity = setblock(M.dna.uni_identity,D.block,D.dna,3)
+							updateappearance(M, M.dna.uni_identity)
+					if (D.dnatype == "se")
+						if(!D.block)
+							M.dna.struc_enzymes = D.dna
+							domutcheck(M, null)
+						else
+							M.dna.struc_enzymes = setblock(M.dna.struc_enzymes,D.block,D.dna,3)
+							domutcheck(M, null,1)
+					del(D)
+					break
+			if(D)
+				for(var/atom/A in D.loc)
+					if(A == user) continue
+					if(A.density) del(D)
+
+			sleep(1)
+
+		if (D) spawn(10) del(D)
+
+		return
+
