@@ -9,22 +9,40 @@
 		return 0
 
 	var/datum/vampire/vampire = src.mind.vampire
+
 	if(!vampire)
 		world.log << "[src] has vampire verbs but isn't a vampire."
 		return 0
+
+	var/fullpower = (VAMP_FULL in vampire.powers)
 
 	if(src.stat > max_stat)
 		src << "<span class='warning'>You are incapacitated.</span>"
 		return 0
 
+	if(vampire.nullified)
+		if(!fullpower)
+			src << "<span class='warning'>Something is blocking your powers!</span>"
+			return 0
 	if(vampire.bloodusable < required_blood)
 		src << "<span class='warning'>You require at least [required_blood] units of usable blood to do that!</span>"
 		return 0
 	//chapel check
 	if(istype(loc.loc, /area/chapel))
-		if(!(VAMP_FULL in vampire.powers))
+		if(!fullpower)
 			src << "<span class='warning'>Your powers are useless on this holy ground.</span>"
 			return 0
+	return 1
+
+/mob/proc/vampire_affected(datum/mind/M)
+	//Other vampires aren't affected
+	if(mind && mind.vampire) return 0
+	//Vampires who have reached their full potential can affect nearly everything
+	if(M && M.vampire && (VAMP_FULL in M.vampire.powers))
+		return 1
+	//Chaplains are resistant to vampire powers
+	if(mind && mind.assigned_role == "Chaplain")
+		return 0
 	return 1
 
 /mob/proc/vampire_can_reach(mob/M as mob, active_range = 1)
@@ -62,6 +80,14 @@
 		M.current.paralysis = 0
 		//M.vampire.bloodusable -= 10
 		M.current << "\blue You flush your system with clean blood and remove any incapacitating effects."
+		spawn(1)
+			if(M.vampire.bloodtotal >= 200)
+				for(var/i = 0; i < 5; i++)
+					M.current.adjustBruteLoss(-2)
+					M.current.adjustOxyLoss(-5)
+					M.current.adjustToxLoss(-2)
+					M.current.adjustFireLoss(-2)
+					sleep(35)
 		M.current.verbs -= /client/proc/vampire_rejuvinate
 		spawn(200)
 			M.current.verbs += /client/proc/vampire_rejuvinate
@@ -117,6 +143,9 @@
 	M.current.visible_message("\blue [M] shakes [src] trying to wake [t_him] up!" )
 	playsound(src.loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)*/
 	C.help_shake_act(M.current) // i use da colon
+	if(!C.vampire_affected(M))
+		M.current << "\red They seem to be unaffected."
+		return
 	var/datum/disease2/disease/shutdown = new /datum/disease2/disease
 	var/datum/disease2/effectholder/holder = new /datum/disease2/effectholder
 	var/datum/disease2/effect/organs/vampire/O = new /datum/disease2/effect/organs/vampire
@@ -149,10 +178,10 @@
 		spawn(300)
 			M.current.verbs += /client/proc/vampire_glare
 		if(istype(M.current:glasses, /obj/item/clothing/glasses/sunglasses/blindfold))
-			M.current << "<span class='warning'>You're blindfolded</span>"
+			M.current << "<span class='warning'>You're blindfolded!</span>"
 			return
 		for(var/mob/living/carbon/C in oview(1))
-			if(C.mind && C.mind.vampire) continue
+			if(!C.vampire_affected(M)) continue
 			if(!M.current.vampire_can_reach(C, 1)) continue
 			C.Stun(8)
 			C.Weaken(8)
@@ -185,6 +214,7 @@
 		for(var/mob/living/carbon/C in ohearers(4, M.current))
 			if(C == M.current) continue
 			if(ishuman(C) && C:ears && istype(C:ears, /obj/item/clothing/ears/earmuffs)) continue
+			if(!C.vampire_affected(M)) continue
 			C << "<span class='warning'><font size='3'><b>You hear a ear piercing shriek and your senses dull!</font></b></span>"
 			C.Weaken(8)
 			C.ear_deaf = 20
@@ -218,11 +248,12 @@
 		if(M.current.can_enthrall(C) && M.current.vampire_power(300, 0)) // recheck
 			M.current.handle_enthrall(C)
 			M.current.remove_vampire_blood(300)
+			M.current.verbs -= /client/proc/vampire_enthrall
+			spawn(1800) M.current.verbs += /client/proc/vampire_enthrall
 		else
 			M.current << "\red You or your target either moved or you dont have enough usable blood."
 			return
-	M.current.verbs -= /client/proc/vampire_enthrall
-	spawn(1800) M.current.verbs += /client/proc/vampire_enthrall
+
 
 
 /client/proc/vampire_cloak()
@@ -260,9 +291,11 @@
 	if(!C.mind)
 		src << "\red [C.name]'s mind is not there for you to enthrall."
 		return 0
-	if(/obj/item/weapon/implant/traitor in C.contents || /obj/item/weapon/implant/loyalty in C.contents || C.mind in ticker.mode.vampires || C.mind.vampire || C.mind in ticker.mode.enthralled)
-		C.visible_message("[C] seems to resist the takeover!", "You feel a familiar sensation in your skull that quickly dissipates.")
+	if((/obj/item/weapon/implant/traitor in C.contents) || (/obj/item/weapon/implant/loyalty in C.contents )||( C.mind in ticker.mode.vampires )||( C.mind.vampire )||( C.mind in ticker.mode.enthralled ))
+		C.visible_message("\red [C] seems to resist the takeover!", "\blue You feel a familiar sensation in your skull that quickly dissipates.")
 		return 0
+	if(!C.vampire_affected(mind))
+		C.visible_message("\red [C] seems to resist the takeover!", "\blue Your faith of [ticker.Bible_deity_name] has kept your mind clear of all evil")
 	if(!ishuman(C))
 		src << "\red You can only enthrall humans!"
 		return 0
@@ -367,6 +400,64 @@
 		M.current.remove_vampire_blood(30)
 		M.current.verbs -= /client/proc/vampire_jaunt
 		spawn(600) M.current.verbs += /client/proc/vampire_jaunt
+
+// Blink for vamps
+// Less smoke spam.
+/client/proc/vampire_shadowstep()
+	set category = "Vampire"
+	set name = "Shadowstep (30)"
+	set desc = "Vanish into the shadows."
+	var/datum/mind/M = usr.mind
+	if(!M) return
+
+	// Teleport radii
+	var/inner_tele_radius = 0
+	var/outer_tele_radius = 6
+
+	// Maximum lighting_lumcount.
+	var/max_lum = 1
+
+	if(M.current.vampire_power(30, 0))
+		if(M.current.buckled) M.current.buckled.unbuckle()
+		spawn(0)
+			var/list/turfs = new/list()
+			for(var/turf/T in range(usr,outer_tele_radius))
+				if(T in range(usr,inner_tele_radius)) continue
+				if(istype(T,/turf/space)) continue
+				if(T.density) continue
+				if(T.x>world.maxx-outer_tele_radius || T.x<outer_tele_radius)	continue	//putting them at the edge is dumb
+				if(T.y>world.maxy-outer_tele_radius || T.y<outer_tele_radius)	continue
+
+				// LIGHTING CHECK
+				if(T.lighting_lumcount > max_lum) continue
+				turfs += T
+
+			if(!turfs.len)
+				usr << "\red You cannot find darkness to step to."
+				return
+
+			var/turf/picked = pick(turfs)
+
+			if(!picked || !isturf(picked))
+				return
+			M.current.ExtinguishMob()
+			if(M.current.buckled)
+				M.current.buckled.unbuckle()
+			var/atom/movable/overlay/animation = new /atom/movable/overlay( get_turf(usr) )
+			animation.name = usr.name
+			animation.density = 0
+			animation.anchored = 1
+			animation.icon = usr.icon
+			animation.alpha = 127
+			animation.layer = 5
+			//animation.master = src
+			usr.loc = picked
+			spawn(10)
+				del(animation)
+		M.current.remove_vampire_blood(30)
+		M.current.verbs -= /client/proc/vampire_shadowstep
+		spawn(20)
+			M.current.verbs += /client/proc/vampire_shadowstep
 
 /mob/proc/remove_vampire_blood(amount = 0)
 	var/bloodold

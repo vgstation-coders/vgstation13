@@ -56,7 +56,7 @@
 			if(player.assigned_role == job)
 				possible_vampires -= player
 
-	vampire_amount = 1 + round(num_players() / 10)
+	vampire_amount = max(1,round(num_players() / 10)) //1 + round(num_players() / 10)
 
 	if(possible_vampires.len>0)
 		for(var/i = 0, i < vampire_amount, i++)
@@ -82,7 +82,7 @@
 	return
 
 /datum/game_mode/proc/auto_declare_completion_vampire()
-	if(traitors.len)
+	if(vampires.len)
 		var/text = "<FONT size = 2><B>The vampires were:</B></FONT>"
 		for(var/datum/mind/vampire in vampires)
 			var/traitorwin = 1
@@ -127,7 +127,7 @@
 	return 1
 
 /datum/game_mode/proc/auto_declare_completion_enthralled()
-	if(traitors.len)
+	if(enthralled.len)
 		var/text = "<FONT size = 2><B>The Enthralled were:</B></FONT>"
 		for(var/datum/mind/enthralled in enthralled)
 			text += "<br>[enthralled.key] was [enthralled.name] ("
@@ -208,6 +208,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	var/iscloaking = 0 // handles the vampire cloak toggle
 	var/list/powers = list() // list of available powers and passives, see defines in setup.dm
 	var/mob/living/carbon/human/draining // who the vampire is draining of blood
+	var/nullified = 0 //Nullrod makes them useless for a short while.
 /datum/vampire/New(gend = FEMALE)
 	gender = gend
 
@@ -244,6 +245,8 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 				verbs += /client/proc/vampire_screech
 			if(VAMP_JAUNT)
 				verbs += /client/proc/vampire_jaunt
+			if(VAMP_BLINK)
+				verbs += /client/proc/vampire_shadowstep
 			if(VAMP_SLAVE)
 				verbs += /client/proc/vampire_enthrall
 			if(VAMP_FULL)
@@ -323,6 +326,11 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		// Commented out until we can figured out a way to stop this from spamming.
 		//src << "\blue Your rejuvination abilities have improved and will now heal you over time when used."
 
+	// TIER 3.5 (/vg/)
+	if(vamp.bloodtotal >= 250)
+		if(!(VAMP_BLINK in vamp.powers))
+			vamp.powers.Add(VAMP_BLINK)
+
 	// TIER 4
 	if(vamp.bloodtotal >= 300)
 		if(!(VAMP_JAUNT in vamp.powers))
@@ -365,6 +373,9 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 				if(VAMP_SLAVE)
 					src << "\blue You have gained the Enthrall ability which at a heavy blood cost allows you to enslave a human that is not loyal to any other for a random period of time."
 					verbs += /client/proc/vampire_enthrall
+				if(VAMP_BLINK)
+					src << "\blue You have gained the ability to shadowstep, which makes you disappear into nearby shadows at the cost of blood."
+					verbs += /client/proc/vampire_shadowstep
 				if(VAMP_FULL)
 					src << "\blue You have reached your full potential and are no longer weak to the effects of anything holy and your vision has been improved greatly."
 					//no verb
@@ -429,3 +440,53 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	update_vampire_icons_removed(vampire_mind)
 	//world << "Removed [vampire_mind.current.name] from vampire shit"
 	vampire_mind.current << "\red <FONT size = 3><B>The fog clouding your mind clears. You remember nothing from the moment you were enthralled until now.</B></FONT>"
+
+/mob/living/carbon/human/proc/check_sun()
+
+	var/ax = x
+	var/ay = y
+
+	for(var/i = 1 to 20)
+		ax += sun.dx
+		ay += sun.dy
+
+		var/turf/T = locate( round(ax,0.5),round(ay,0.5),z)
+
+		if(T.x == 1 || T.x==world.maxx || T.y==1 || T.y==world.maxy)
+			break
+
+		if(T.density)
+			return
+	if(prob(35))
+		switch(health)
+			if(80 to 100)
+				src << "\red Your skin flakes away..."
+			if(60 to 80)
+				src << "<span class='warning'>Your skin sizzles!</span>"
+			if((-INFINITY) to 60)
+				if(!on_fire)
+					src << "<b>\red Your skin catches fire!</b>"
+				else
+					src << "<b>\red You continue to burn!</b>"
+				fire_stacks += 5
+				IgniteMob()
+		emote("scream")
+	else
+		switch(health)
+			if((-INFINITY) to 60)
+				fire_stacks++
+				IgniteMob()
+	adjustFireLoss(3)
+
+/mob/living/carbon/human/proc/handle_vampire()
+	if(hud_used)
+		if(!hud_used.vampire_blood_display)
+			hud_used.vampire_hud()
+			//hud_used.human_hud(hud_used.ui_style)
+		hud_used.vampire_blood_display.maptext_width = 64
+		hud_used.vampire_blood_display.maptext_height = 26
+		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'> U:<font color='#33FF33' size='1'>[mind.vampire.bloodusable]</font><br> T:<font color='#FFFF00' size='1'>[mind.vampire.bloodtotal]</font></div>"
+	handle_vampire_cloak()
+	if(istype(loc, /turf/space))
+		check_sun()
+	mind.vampire.nullified = max(0, mind.vampire.nullified - 1)
