@@ -20,16 +20,21 @@
 	//  What gene activates this?
 	var/block=0
 
-// Called when the gene is loaded by the game. Do initial setup here
-/datum/dna/gene/proc/initialize()
-	return
+	// Any of a number of GENE_ flags.
+	var/flags=0
 
-// Return 1 if we can activate
-/datum/dna/gene/proc/can_activate(var/mob/M,var/list/old_mutations,var/flags)
+// Return 1 if we can activate.
+// HANDLE MUTCHK_FORCED HERE!
+/datum/dna/gene/proc/can_activate(var/mob/M, var/flags)
 	return 0
 
 // Called when the gene activates.  Do your magic here.
-/datum/dna/gene/proc/activate(var/mob/M)
+/datum/dna/gene/proc/activate(var/mob/M, var/connected, var/flags)
+	return
+
+// Called when the gene deactivates.  Undo your magic here.
+// Only called when the block is deactivated.
+/datum/dna/gene/proc/deactivate(var/mob/M, var/connected, var/flags)
 	return
 
 
@@ -54,23 +59,30 @@
 	// Activation probability
 	var/activation_prob=45
 
-	// Activation message
-	var/activation_message=""
+	// Possible activation messages
+	var/list/activation_messages=list()
 
-/datum/dna/gene/basic/can_activate(var/mob/M,var/list/old_mutations,var/flags)
+	// Possible deactivation messages
+	var/list/deactivation_messages=list()
+
+/datum/dna/gene/basic/can_activate(var/mob/M,var/flags)
 	if(mutation==0)
 		return 0
 
-	// Mutation already set?
-	if(mutation in old_mutations)
-		return 1
-
 	// Probability check
-	if(probinj(activation_prob,(flags&MUTCHK_FROM_INJECTOR)))
+	if(flags & MUTCHK_FORCED || probinj(activation_prob,(flags&MUTCHK_FORCED)))
 		return 1
 
 	return 0
 
 /datum/dna/gene/basic/activate(var/mob/M)
 	M.mutations.Add(mutation)
-	M << "\blue [activation_message]"
+	if(activation_messages.len)
+		var/msg = pick(activation_messages)
+		M << "\blue [msg]"
+
+/datum/dna/gene/basic/deactivate(var/mob/M)
+	M.mutations.Remove(mutation)
+	if(deactivation_messages.len)
+		var/msg = pick(deactivation_messages)
+		M << "\red [msg]"

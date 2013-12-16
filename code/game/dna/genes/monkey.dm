@@ -1,13 +1,15 @@
 /datum/dna/gene/monkey
 	name="Monkey"
 
-/datum/dna/gene/monkey/initialize()
+/datum/dna/gene/monkey/New()
 	block=MONKEYBLOCK
 
-/datum/dna/gene/monkey/can_activate(var/mob/M,var/list/old_mutations,var/flags)
-	return istype(M, /mob/living/carbon/human)
+/datum/dna/gene/monkey/can_activate(var/mob/M,var/flags)
+	return istype(M, /mob/living/carbon/human) || istype(M,/mob/living/carbon/monkey)
 
-/datum/dna/gene/monkey/activate(var/mob/living/M, var/connected)
+/datum/dna/gene/monkey/activate(var/mob/living/M, var/connected, var/flags)
+	if(!istype(M,/mob/living/carbon/human))
+		return
 	var/mob/living/carbon/human/H = M
 	H.monkeyizing = 1
 	var/list/implants = list() //Try to preserve implants.
@@ -82,7 +84,9 @@
 	del(M)
 	return
 
-/datum/dna/gene/monkey/deactivate(var/mob/living/M, var/connected)
+/datum/dna/gene/monkey/deactivate(var/mob/living/M, var/connected, var/flags)
+	if(!istype(M,/mob/living/carbon/monkey))
+		return
 	var/mob/living/carbon/monkey/Mo = M
 	Mo.monkeyizing = 1
 	var/list/implants = list() //Still preserving implants
