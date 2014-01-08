@@ -9,6 +9,11 @@
 
 	current_heat_capacity = 1000
 
+	var/list/rotate_verbs=list(
+		/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate,
+		/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate_ccw,
+	)
+
 	New()
 		..()
 		component_parts = list()
@@ -21,6 +26,9 @@
 		component_parts += new /obj/item/weapon/stock_parts/micro_laser
 		component_parts += new /obj/item/weapon/stock_parts/console_screen
 		RefreshParts()
+
+		if(anchored)
+			verbs -= rotate_verbs
 
 		initialize_directions = dir
 
@@ -50,6 +58,7 @@
 				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 				user << "You begin to unfasten the [src]..."
 				if (do_after(user, 40))
+					verbs += rotate_verbs
 					user.visible_message( \
 						"[user] unfastens \the [src].", \
 						"\blue You have unfastened \the [src]. Now it can be pulled somewhere else.", \
@@ -66,6 +75,7 @@
 				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 				user << "You begin to fasten [src]."
 				if(do_after(user, 40))
+					verbs -= rotate_verbs
 					user.visible_message( \
 						"[user] fastens \the [src].", \
 						"\blue You have fastened \the [src]. Now it can be pulled somewhere else.", \
@@ -138,9 +148,13 @@
 		if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
 			usr.set_machine(src)
 			if (href_list["start"])
+				if(isobserver(usr) && !canGhostWrite(usr,src,"turned [on?"off":"on"]"))
+					return
 				src.on = !src.on
 				update_icon()
 			if(href_list["temp"])
+				if(isobserver(usr) && !canGhostWrite(usr,src,"set temperature of"))
+					return
 				var/amount = text2num(href_list["temp"])
 				if(amount > 0)
 					src.current_temperature = min(T20C, src.current_temperature+amount)
@@ -155,6 +169,27 @@
 		src.updateUsrDialog()
 
 
+/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate()
+	set name = "Rotate Clockwise"
+	set category = "Object"
+	set src in oview(1)
+
+	if (src.anchored || usr:stat)
+		usr << "It is fastened to the floor!"
+		return 0
+	src.dir = turn(src.dir, 270)
+	return 1
+
+/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate_ccw()
+	set name = "Rotate Counter Clockwise"
+	set category = "Object"
+	set src in oview(1)
+
+	if (src.anchored || usr:stat)
+		usr << "It is fastened to the floor!"
+		return 0
+	src.dir = turn(src.dir, 90)
+	return 1
 
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater
@@ -168,6 +203,11 @@
 
 	current_heat_capacity = 1000
 
+	var/list/rotate_verbs=list(
+		/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate,
+		/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate_ccw,
+	)
+
 	New()
 		..()
 		component_parts = list()
@@ -180,6 +220,9 @@
 		component_parts += new /obj/item/weapon/stock_parts/micro_laser
 		component_parts += new /obj/item/weapon/stock_parts/console_screen
 		RefreshParts()
+
+		if(anchored)
+			verbs -= rotate_verbs
 
 		initialize_directions = dir
 
@@ -209,6 +252,7 @@
 				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 				user << "You begin to unfasten the [src]..."
 				if (do_after(user, 40))
+					verbs += rotate_verbs
 					user.visible_message( \
 						"[user] unfastens \the [src].", \
 						"\blue You have unfastened \the [src]. Now it can be pulled somewhere else.", \
@@ -225,6 +269,7 @@
 				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 				user << "You begin to fasten [src]."
 				if(do_after(user, 40))
+					verbs -= rotate_verbs
 					user.visible_message( \
 						"[user] fastens \the [src].", \
 						"\blue You have fastened \the [src]. Now it can be pulled somewhere else.", \
@@ -294,9 +339,13 @@
 		if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
 			usr.set_machine(src)
 			if (href_list["start"])
+				if(isobserver(usr) && !canGhostWrite(usr,src,"turned [on?"off":"on"]"))
+					return
 				src.on = !src.on
 				update_icon()
 			if(href_list["temp"])
+				if(isobserver(usr) && !canGhostWrite(usr,src,"set temperature of"))
+					return
 				var/amount = text2num(href_list["temp"])
 				if(amount > 0)
 					src.current_temperature = min((T20C+280), src.current_temperature+amount)
@@ -309,3 +358,27 @@
 	process()
 		..()
 		src.updateUsrDialog()
+
+
+
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate()
+	set name = "Rotate Clockwise"
+	set category = "Object"
+	set src in oview(1)
+
+	if (src.anchored || usr:stat)
+		usr << "It is fastened to the floor!"
+		return 0
+	src.dir = turn(src.dir, 270)
+	return 1
+
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate_ccw()
+	set name = "Rotate Counter Clockwise"
+	set category = "Object"
+	set src in oview(1)
+
+	if (src.anchored || usr:stat)
+		usr << "It is fastened to the floor!"
+		return 0
+	src.dir = turn(src.dir, 90)
+	return 1

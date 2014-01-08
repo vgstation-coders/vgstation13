@@ -142,7 +142,7 @@ obj/machinery/embedded_controller
 			return ..()
 
 		if(istype(W,/obj/item/device/multitool))
-			update_multitool_menu(user,W)
+			update_multitool_menu(user)
 		else
 			..()
 
@@ -163,6 +163,10 @@ obj/machinery/embedded_controller
 
 	Topic(href, href_list)
 		if(..())
+			return 0
+
+		if(isobserver(usr) && !canGhostWrite(usr,src,"fucked with"))
+			usr << "\red Nope."
 			return 0
 
 		var/processed=0
