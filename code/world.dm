@@ -1,8 +1,8 @@
 /world
-	mob = /mob/new_player
-	turf = /turf/space
-	area = /area
-	view = "15x15"
+	mob            = /mob/new_player
+	turf           = /turf/space
+	area           = /area
+	view           = "15x15"
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 
 
@@ -10,20 +10,24 @@
 #define RECOMMENDED_VERSION 500
 /world/New()
 	// Honk honk, fuck you science
-	WORLD_X_OFFSET=rand(-50,50)
-	WORLD_Y_OFFSET=rand(-50,50)
+	WORLD_X_OFFSET = rand(-50,50)
+	WORLD_Y_OFFSET = rand(-50,50)
 
 	starticon = rotate_icon('icons/obj/lightning.dmi', "lightningstart")
-	midicon = rotate_icon('icons/obj/lightning.dmi', "lightning")
-	endicon = rotate_icon('icons/obj/lightning.dmi', "lightningend")
+	midicon   = rotate_icon('icons/obj/lightning.dmi', "lightning")
+	endicon   = rotate_icon('icons/obj/lightning.dmi', "lightningend")
+
 	//logs
 	var/date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
-	href_logfile = file("data/logs/[date_string] hrefs.htm")
-	diary = file("data/logs/[date_string].log")
+        
+	href_logfile      = file("data/logs/[date_string] hrefs.htm")
+	diary             = file("data/logs/[date_string].log")
 	diaryofmeanpeople = file("data/logs/[date_string] Attack.log")
-	diary << "\n\nStarting up. [time2text(world.timeofday, "hh:mm.ss")]\n---------------------"
+
+	diary             << "\n\nStarting up. [time2text(world.timeofday, "hh:mm.ss")]\n---------------------"
 	diaryofmeanpeople << "\n\nStarting up. [time2text(world.timeofday, "hh:mm.ss")]\n---------------------"
-	changelog_hash = md5('html/changelog.html')					//used for telling if the changelog has changed recently
+
+	changelog_hash = md5('html/changelog.html') //used for telling if the changelog has changed recently
 
 	if(byond_version < RECOMMENDED_VERSION)
 		world.log << "Your server's byond version does not meet the recommended requirements for TGstation code. Please update BYOND"
@@ -39,10 +43,13 @@
 	load_admins()
 	load_mods()
 	LoadBansjob()
+
 	if(config.usewhitelist)
 		load_whitelist()
+
 	if(config.usealienwhitelist)
 		load_alienwhitelist()
+
 	jobban_loadbanfile()
 	jobban_updatelegacybans()
 	appearance_loadbanfile()
@@ -59,10 +66,10 @@
 
 	makepowernets()
 
-	sun = new /datum/sun()
+	sun              = new /datum/sun()
 	radio_controller = new /datum/controller/radio()
-	data_core = new /obj/effect/datacore()
-	paiController = new /datum/paiController()
+	data_core        = new /obj/effect/datacore()
+	paiController    = new /datum/paiController()
 
 	if(!setup_database_connection())
 		world.log << "Your server failed to establish a connection with the feedback database."
@@ -74,16 +81,16 @@
 	else
 		world.log << "Tgstation database connection established."
 
-	plmaster = new /obj/effect/overlay()
-	plmaster.icon = 'icons/effects/tile_effects.dmi'
-	plmaster.icon_state = "plasma"
-	plmaster.layer = FLY_LAYER
+	plmaster               = new /obj/effect/overlay()
+	plmaster.icon          = 'icons/effects/tile_effects.dmi'
+	plmaster.icon_state    = "plasma"
+	plmaster.layer         = FLY_LAYER
 	plmaster.mouse_opacity = 0
 
-	slmaster = new /obj/effect/overlay()
-	slmaster.icon = 'icons/effects/tile_effects.dmi'
-	slmaster.icon_state = "sleeping_agent"
-	slmaster.layer = FLY_LAYER
+	slmaster               = new /obj/effect/overlay()
+	slmaster.icon          = 'icons/effects/tile_effects.dmi'
+	slmaster.icon_state    = "sleeping_agent"
+	slmaster.layer         = FLY_LAYER
 	slmaster.mouse_opacity = 0
 
 	src.update_status()
@@ -100,14 +107,16 @@
 
 		setup_species()
 
-	process_teleport_locs()			//Sets up the wizard teleport locations
-	process_ghost_teleport_locs()	//Sets up ghost teleport locations.
+	process_teleport_locs()       // Sets up the wizard teleport locations
+	process_ghost_teleport_locs() // Sets up ghost teleport locations.
 
-	spawn(3000)		//so we aren't adding to the round-start lag
+	spawn(3000)	//so we aren't adding to the round-start lag
+
 		if(config.ToRban)
-			ToRban_autoupdate()
+       		 ToRban_autoupdate()
+
 		if(config.kick_inactive)
-			KickInactiveClients()
+        		KickInactiveClients()
 
 #undef RECOMMENDED_VERSION
 
@@ -141,17 +150,18 @@
 		return n
 
 	else if (T == "status")
-		var/list/s = list()
+		var/list/s   = list()
 		s["version"] = game_version
-		s["mode"] = master_mode
+		s["mode"]    = master_mode
 		s["respawn"] = config ? abandon_allowed : 0
-		s["enter"] = enter_allowed
-		s["vote"] = config.allow_vote_mode
-		s["ai"] = config.allow_ai
-		s["host"] = host ? host : null
+		s["enter"]   = enter_allowed
+		s["vote"]    = config.allow_vote_mode
+		s["ai"]      = config.allow_ai
+		s["host"]    = host ? host : null
 		s["players"] = list()
-		var/n = 0
-		var/admins = 0
+
+		var/n        = 0
+		var/admins   = 0
 
 		for(var/client/C in clients)
 			if(C.holder)
@@ -160,6 +170,7 @@
 				admins++
 			s["player[n]"] = C.key
 			n++
+
 		s["players"] = n
 
 		if(revdata)	s["revision"] = revdata.revision
@@ -312,11 +323,11 @@ proc/setup_database_connection()
 	if(!dbcon)
 		dbcon = new()
 
-	var/user = sqlfdbklogin
-	var/pass = sqlfdbkpass
-	var/db = sqlfdbkdb
+	var/user    = sqlfdbklogin
+	var/pass    = sqlfdbkpass
+	var/db      = sqlfdbkdb
 	var/address = sqladdress
-	var/port = sqlport
+	var/port    = sqlport
 
 	dbcon.Connect("dbi:mysql:[db]:[address]:[port]","[user]","[pass]")
 	. = dbcon.IsConnected()
@@ -356,11 +367,11 @@ proc/setup_old_database_connection()
 	if(!dbcon_old)
 		dbcon_old = new()
 
-	var/user = sqllogin
-	var/pass = sqlpass
-	var/db = sqldb
+	var/user    = sqllogin
+	var/pass    = sqlpass
+	var/db      = sqldb
 	var/address = sqladdress
-	var/port = sqlport
+	var/port    = sqlport
 
 	dbcon_old.Connect("dbi:mysql:[db]:[address]:[port]","[user]","[pass]")
 	. = dbcon_old.IsConnected()

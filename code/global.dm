@@ -2,17 +2,17 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
 var/global/obj/effect/datacore/data_core = null
-var/global/obj/effect/overlay/plmaster = null
-var/global/obj/effect/overlay/slmaster = null
+var/global/obj/effect/overlay/plmaster   = null
+var/global/obj/effect/overlay/slmaster   = null
 
-
-var/global/list/machines = list()
+//items that ask to be called every cycle
+var/global/list/machines           = list()
 var/global/list/processing_objects = list()
-var/global/list/active_diseases = list()
-var/global/list/events = list()
-		//items that ask to be called every cycle
+var/global/list/active_diseases    = list()
+var/global/list/events             = list()
 
-var/global/defer_powernet_rebuild = 0		// true if net rebuild will be called manually after an event
+// true if net rebuild will be called manually after an event
+var/global/defer_powernet_rebuild = 0
 
 var/global/list/global_map = null
 	//list/global_map = list(list(1,5),list(4,3))//an array of map Z levels.
@@ -34,207 +34,203 @@ var/list/paper_blacklist = list("java","onblur","onchange","onclick","ondblclick
 	"onkeypress","onkeyup","onload","onmousedown","onmousemove","onmouseout","onmouseover",	\
 	"onmouseup","onreset","onselect","onsubmit","onunload")
 
-var/BLINDBLOCK = 0
-var/DEAFBLOCK = 0
-var/HULKBLOCK = 0
-var/TELEBLOCK = 0
-var/FIREBLOCK = 0
-var/XRAYBLOCK = 0
-var/CLUMSYBLOCK = 0
-var/FAKEBLOCK = 0
-var/COUGHBLOCK = 0
-var/GLASSESBLOCK = 0
+var/BLINDBLOCK    = 0
+var/DEAFBLOCK     = 0
+var/HULKBLOCK     = 0
+var/TELEBLOCK     = 0
+var/FIREBLOCK     = 0
+var/XRAYBLOCK     = 0
+var/CLUMSYBLOCK   = 0
+var/FAKEBLOCK     = 0
+var/COUGHBLOCK    = 0
+var/GLASSESBLOCK  = 0
 var/EPILEPSYBLOCK = 0
-var/TWITCHBLOCK = 0
-var/NERVOUSBLOCK = 0
-var/MONKEYBLOCK = 27
+var/TWITCHBLOCK   = 0
+var/NERVOUSBLOCK  = 0
+var/MONKEYBLOCK   = 27
 
 var/BLOCKADD = 0
-var/DIFFMUT = 0
+var/DIFFMUT  = 0
 
-var/HEADACHEBLOCK = 0
-var/NOBREATHBLOCK = 0
-var/REMOTEVIEWBLOCK = 0
-var/REGENERATEBLOCK = 0
-var/INCREASERUNBLOCK = 0
-var/REMOTETALKBLOCK = 0
-var/MORPHBLOCK = 0
-var/COLDBLOCK = 0
+var/HEADACHEBLOCK      = 0
+var/NOBREATHBLOCK      = 0
+var/REMOTEVIEWBLOCK    = 0
+var/REGENERATEBLOCK    = 0
+var/INCREASERUNBLOCK   = 0
+var/REMOTETALKBLOCK    = 0
+var/MORPHBLOCK         = 0
+var/COLDBLOCK          = 0
 var/HALLUCINATIONBLOCK = 0
-var/NOPRINTSBLOCK = 0
+var/NOPRINTSBLOCK      = 0
 var/SHOCKIMMUNITYBLOCK = 0
-var/SMALLSIZEBLOCK = 0
+var/SMALLSIZEBLOCK     = 0
 
-var/skipupdate = 0
-	///////////////
+var/skipupdate  = 0
+
 var/eventchance = 10 //% per 5 mins
-var/event = 0
-var/hadevent = 0
-var/blobevent = 0
-	///////////////
-var/starticon = null
-var/midicon = null
-var/endicon = null
-var/diary = null
+var/event       = 0
+var/hadevent    = 0
+var/blobevent   = 0
+
+var/starticon         = null
+var/midicon           = null
+var/endicon           = null
+var/diary             = null
 var/diaryofmeanpeople = null
-var/href_logfile = null
-var/station_name = null
-var/game_version = "adsfasdfasdf"
-var/changelog_hash = ""
-var/game_year = (text2num(time2text(world.realtime, "YYYY")) + 544)
+var/href_logfile      = null
+var/station_name      = null
+var/game_version      = "adsfasdfasdf"
+var/changelog_hash    = ""
+var/game_year         = (text2num(time2text(world.realtime, "YYYY")) + 544)
 
 var/datum/air_tunnel/air_tunnel1/SS13_airtunnel = null
-var/going = 1.0
-var/master_mode = "extended"//"extended"
+var/going             = 1.0
+var/master_mode       = "extended"//"extended"
 var/secret_force_mode = "secret" // if this is anything but "secret", the secret rotation will forceably choose this mode
 
 var/datum/engine_eject/engine_eject_control = null
-var/host = null
-var/aliens_allowed = 1
-var/ooc_allowed = 1
-var/dooc_allowed = 1
-var/traitor_scaling = 1
-//var/goonsay_allowed = 0
-var/dna_ident = 1
-var/abandon_allowed = 1
-var/enter_allowed = 1
-var/guests_allowed = 1
-var/shuttle_frozen = 0
-var/shuttle_left = 0
-var/tinted_weldhelh = 1
+var/host                                    = null
+var/aliens_allowed                          = 1
+var/ooc_allowed                             = 1
+var/dooc_allowed                            = 1
+var/traitor_scaling                         = 1
+//var/goonsay_allowed                       = 0
+var/dna_ident                               = 1
+var/abandon_allowed                         = 1
+var/enter_allowed                           = 1
+var/guests_allowed                          = 1
+var/shuttle_frozen                          = 0
+var/shuttle_left                            = 0
+var/tinted_weldhelh                         = 1
 
-var/list/jobMax = list()
-var/list/bombers = list(  )
-var/list/admin_log = list (  )
-var/list/lastsignalers = list(	)	//keeps last 100 signals here in format: "[src] used \ref[src] @ location [src.loc]: [freq]/[code]"
-var/list/lawchanges = list(  ) //Stores who uploaded laws to which silicon-based lifeform, and what the law was
-var/list/shuttles = list(  )
-var/list/reg_dna = list(  )
-//	list/traitobj = list(  )
+var/list/jobMax        = list()
+var/list/bombers       = list()
+var/list/admin_log     = list()
+var/list/lastsignalers = list()	//keeps last 100 signals here in format: "[src] used \ref[src] @ location [src.loc]: [freq]/[code]"
+var/list/lawchanges    = list() //Stores who uploaded laws to which silicon-based lifeform, and what the law was
+var/list/shuttles      = list()
+var/list/reg_dna       = list()
+//	list/traitobj  = list()
 
 var/mouse_respawn_time = 1 //Amount of time that must pass between a player dying as a mouse and repawning as a mouse. In minutes.
 
-var/CELLRATE = 0.002  // multiplier for watts per tick <> cell storage (eg: .002 means if there is a load of 1000 watts, 20 units will be taken from a cell per second)
-var/CHARGELEVEL = 0.001 // Cap for how fast cells charge, as a percentage-per-tick (.001 means cellcharge is capped to 1% per second)
+var/CELLRATE    = 0.002  // multiplier for watts per tick <> cell storage (eg: .002 means if there is a load of 1000 watts, 20 units will be taken from a cell per second)
+var/CHARGELEVEL = 0.001  // Cap for how fast cells charge, as a percentage-per-tick (.001 means cellcharge is capped to 1% per second)
 
 // COORDINATE OFFSETS
 // Used for telescience.  Only apply to GPSes and other things that display coordinates to players.
 // The idea is that coordinates given will be entirely different from those displayed on the map in DreamMaker,
 //  while still making it very simple to lock onto someone who is drifting in space.
-var/WORLD_X_OFFSET=0
-var/WORLD_Y_OFFSET=0
+var/WORLD_X_OFFSET = 0
+var/WORLD_Y_OFFSET = 0
 
-var/shuttle_z = 2	//default
-var/airtunnel_start = 68 // default
-var/airtunnel_stop = 68 // default
-var/airtunnel_bottom = 72 // default
-var/list/monkeystart = list()
-var/list/wizardstart = list()
-var/list/newplayer_start = list()
-var/list/latejoin = list()
-var/list/prisonwarp = list()	//prisoners go to these
-var/list/holdingfacility = list()	//captured people go here
-var/list/xeno_spawn = list()//Aliens spawn at these.
-//	list/mazewarp = list()
-var/list/tdome1 = list()
-var/list/tdome2 = list()
-var/list/tdomeobserve = list()
-var/list/tdomeadmin = list()
+var/shuttle_z               = 2      // default 2
+var/airtunnel_start         = 68     // default 68
+var/airtunnel_stop          = 68     // default 68
+var/airtunnel_bottom        = 72     // default 72
+var/list/monkeystart        = list()
+var/list/wizardstart        = list()
+var/list/newplayer_start    = list()
+var/list/latejoin           = list()
+var/list/prisonwarp         = list() // prisoners go to these
+var/list/holdingfacility    = list() // captured people go here
+var/list/xeno_spawn         = list() // Aliens spawn at these.
+//	list/mazewarp       = list()
+var/list/tdome1             = list()
+var/list/tdome2             = list()
+var/list/tdomeobserve       = list()
+var/list/tdomeadmin         = list()
 var/list/prisonsecuritywarp = list()	//prison security goes to these
-var/list/prisonwarped = list()	//list of players already warped
-var/list/blobstart = list()
-var/list/ninjastart = list()
-//	list/traitors = list()	//traitor list
-var/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
-var/list/alldirs = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
+var/list/prisonwarped       = list()	//list of players already warped
+var/list/blobstart          = list()
+var/list/ninjastart         = list()
+//	list/traitors       = list()	//traitor list
+var/list/cardinal           = list( NORTH, SOUTH, EAST, WEST )
+var/list/alldirs            = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
 
 var/datum/station_state/start_state = null
-var/datum/configuration/config = null
-var/datum/sun/sun = null
+var/datum/configuration/config      = null
+var/datum/sun/sun                   = null
 
 var/list/combatlog = list()
-var/list/IClog = list()
-var/list/OOClog = list()
-var/list/adminlog = list()
+var/list/IClog     = list()
+var/list/OOClog    = list()
+var/list/adminlog  = list()
 
 
 var/list/powernets = list()
 
-var/Debug = 0	// global debug switch
+var/Debug  = 0	// global debug switch
 var/Debug2 = 0
 
 var/datum/debug/debugobj
 
 var/datum/moduletypes/mods = new()
 
-var/wavesecret = 0
+var/wavesecret    = 0
 var/gravity_is_on = 1
 
 var/shuttlecoming = 0
 
-var/join_motd = null
-var/forceblob = 0
+var/join_motd     = null
+var/forceblob     = 0
 
 // nanomanager, the manager for Nano UIs
 var/datum/nanomanager/nanomanager = new()
 
-#define SPEED_OF_LIGHT 3e8 //not exact but hey!
-#define SPEED_OF_LIGHT_SQ 9e+16
-#define FIRE_DAMAGE_MODIFIER 0.0215 //Higher values result in more external fire damage to the skin (default 0.0215)
-#define AIR_DAMAGE_MODIFIER 2.025 //More means less damage from hot air scalding lungs, less = more damage. (default 2.025)
-#define INFINITY 1e31 //closer then enough
+#define SPEED_OF_LIGHT       3e8    // not exact but hey!
+#define SPEED_OF_LIGHT_SQ    9e+16
+#define FIRE_DAMAGE_MODIFIER 0.0215 // Higher values result in more external fire damage to the skin (default 0.0215)
+#define AIR_DAMAGE_MODIFIER  2.025  // More means less damage from hot air scalding lungs, less = more damage. (default 2.025)
+#define INFINITY             1e31   // closer then enough
 
-	//Don't set this very much higher then 1024 unless you like inviting people in to dos your server with message spam
-#define MAX_MESSAGE_LEN 1024
+//Don't set this very much higher then 1024 unless you like inviting people in to dos your server with message spam
+#define MAX_MESSAGE_LEN       1024
 #define MAX_PAPER_MESSAGE_LEN 3072
-#define MAX_BOOK_MESSAGE_LEN 9216
-#define MAX_NAME_LEN 26
-#define MAX_BROADCAST_LEN		512
+#define MAX_BOOK_MESSAGE_LEN  9216
+#define MAX_NAME_LEN          26
+#define MAX_BROADCAST_LEN     512
 
 #define shuttle_time_in_station 1800 // 3 minutes in the station
-#define shuttle_time_to_arrive 6000 // 10 minutes to arrive
+#define shuttle_time_to_arrive  6000 // 10 minutes to arrive
 
-	//away missions
+//away missions
 var/list/awaydestinations = list()	//a list of landmarks that the warpgate can take you to
 
-	// MySQL configuration
-
+// MySQL configuration
 var/sqladdress = "localhost"
-var/sqlport = "3306"
-var/sqldb = "tgstation"
-var/sqllogin = "root"
-var/sqlpass = ""
+var/sqlport    = "3306"
+var/sqldb      = "tgstation"
+var/sqllogin   = "root"
+var/sqlpass    = ""
 
-	// Feedback gathering sql connection
-
-var/sqlfdbkdb = "test"
+// Feedback gathering sql connection
+var/sqlfdbkdb    = "test"
 var/sqlfdbklogin = "root"
-var/sqlfdbkpass = ""
+var/sqlfdbkpass  = ""
 
 var/sqllogging = 0 // Should we log deaths, population stats, etc?
 
+// Forum MySQL configuration (for use with forum account/key authentication)
+// These are all default values that will load should the forumdbconfig.txt
+// file fail to read for whatever reason.
 
-
-	// Forum MySQL configuration (for use with forum account/key authentication)
-	// These are all default values that will load should the forumdbconfig.txt
-	// file fail to read for whatever reason.
-
-var/forumsqladdress = "localhost"
-var/forumsqlport = "3306"
-var/forumsqldb = "tgstation"
-var/forumsqllogin = "root"
-var/forumsqlpass = ""
-var/forum_activated_group = "2"
+var/forumsqladdress           = "localhost"
+var/forumsqlport              = "3306"
+var/forumsqldb                = "tgstation"
+var/forumsqllogin             = "root"
+var/forumsqlpass              = ""
+var/forum_activated_group     = "2"
 var/forum_authenticated_group = "10"
 
-	// For FTP requests. (i.e. downloading runtime logs.)
-	// However it'd be ok to use for accessing attack logs and such too, which are even laggier.
+// For FTP requests. (i.e. downloading runtime logs.)
+// However it'd be ok to use for accessing attack logs and such too, which are even laggier.
 var/fileaccess_timer = 0
 var/custom_event_msg = null
 
 //Database connections
 //A connection is established on world creation. Ideally, the connection dies when the server restarts (After feedback logging.).
-var/DBConnection/dbcon = new()	//Feedback database (New database)
+var/DBConnection/dbcon     = new()	//Feedback database (New database)
 var/DBConnection/dbcon_old = new()	//Tgstation database (Old database) - See the files in the SQL folder for information what goes where.
 
 #define MIDNIGHT_ROLLOVER		864000	//number of deciseconds in a day
