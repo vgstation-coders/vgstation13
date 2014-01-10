@@ -32,7 +32,7 @@
 		/*
 		 * We first check if the cabinet is in close state.
 		 * If it's, the user must open it first before
-		 * extinguisher.can be taken.
+		 * extinguisher can be taken.
 		 */
 		if(!opened)
 			opened = !opened
