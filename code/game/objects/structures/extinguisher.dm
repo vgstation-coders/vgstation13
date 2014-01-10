@@ -29,10 +29,17 @@
 	if(isrobot(user) || isalien(user))
 		return
 	if(has_extinguisher)
-		user.put_in_hands(has_extinguisher)
-		user << "<span class='notice'>You take [has_extinguisher] from [src].</span>"
-		has_extinguisher = null
-		opened = 1
+		/*
+		 * We first check if the cabinet is in close state.
+		 * If it's, the user must open it first before
+		 * extinguisher.can be taken.
+		 */
+		if(!opened)
+			opened = !opened
+		else
+			user << "<span class='notice'>You take [has_extinguisher] from [src].</span>"
+			user.put_in_hands(has_extinguisher)
+			has_extinguisher = null
 	else
 		opened = !opened
 	update_icon()
