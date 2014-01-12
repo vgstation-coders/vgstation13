@@ -42,7 +42,7 @@
 		playsound(src, 'sound/items/Welder.ogg', 50, 1)
 		user << "<span class = 'caution'> You disassemble the telepad.</span>"
 		new /obj/item/stack/sheet/metal(get_turf(src))
-		new /obj/item/stack/sheet/glass(get_turf(src))
+		new /obj/item/stack/sheet/glass/basic(get_turf(src))
 		del(src)
 
 ///TELEPAD CALLER///

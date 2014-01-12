@@ -54,7 +54,7 @@ var/list/solars_list = list()
 /obj/machinery/power/solar/proc/Make(var/obj/item/solar_assembly/S)
 	if(!S)
 		S = new /obj/item/solar_assembly(src)
-		S.glass_type = /obj/item/stack/sheet/glass
+		S.glass_type = /obj/item/stack/sheet/glass/basic
 		S.anchored = 1
 	S.loc = src
 	update_icon()
@@ -230,7 +230,7 @@ var/list/solars_list = list()
 			playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
 			return 1
 
-		if(istype(W, /obj/item/stack/sheet/glass) || istype(W, /obj/item/stack/sheet/rglass))
+		if(istype(W, /obj/item/stack/sheet/glass/basic) || istype(W, /obj/item/stack/sheet/glass/reinforced))
 			var/obj/item/stack/sheet/S = W
 			if(S.amount >= 2)
 				glass_type = W.type

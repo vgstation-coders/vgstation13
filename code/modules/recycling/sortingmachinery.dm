@@ -345,8 +345,8 @@
 		),
 		"Glasses" = list(
 			/obj/item/weapon/shard,
-			/obj/item/stack/sheet/glass,
-			/obj/item/stack/sheet/rglass,
+			/obj/item/stack/sheet/glass/basic,
+			/obj/item/stack/sheet/glass/reinforced,
 			/obj/item/stack/tile/light,
 			/obj/item/weapon/broken_bottle,
 			/obj/item/weapon/reagent_containers/glass/bucket,

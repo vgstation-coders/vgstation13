@@ -106,7 +106,7 @@
 		M.amount = 50
 		src.modules += M
 
-		var/obj/item/stack/sheet/rglass/cyborg/G = new /obj/item/stack/sheet/rglass/cyborg(src)
+		var/obj/item/stack/sheet/glass/reinforced/cyborg/G = new /obj/item/stack/sheet/glass/reinforced/cyborg(src)
 		G.amount = 50
 		src.modules += G
 
@@ -121,7 +121,7 @@
 	respawn_consumable(var/mob/living/silicon/robot/R)
 		var/list/what = list (
 			/obj/item/stack/sheet/metal,
-			/obj/item/stack/sheet/rglass,
+			/obj/item/stack/sheet/glass/reinforced,
 			/obj/item/weapon/cable_coil,
 		)
 		for (var/T in what)

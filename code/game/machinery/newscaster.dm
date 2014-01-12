@@ -879,8 +879,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				src.scanned_user = text("[T.registered_name] ([T.assignment])")
 				src.screen=2*/  //Obsolete after autorecognition
 
-	if ((src.isbroken) && (istype(I, /obj/item/stack/sheet/glass)))
-		var/obj/item/stack/sheet/glass/stack = I
+	if ((src.isbroken) && (istype(I, /obj/item/stack/sheet/glass/basic)))
+		var/obj/item/stack/sheet/glass/basic/stack = I
 		if ((stack.amount - 2) < 0)
 			user << "\red You need more glass to do that."
 		else

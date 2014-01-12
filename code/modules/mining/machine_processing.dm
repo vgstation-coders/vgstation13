@@ -175,7 +175,7 @@ a.notsmelting {
 	id="glass"
 	cc_per_sheet=CC_PER_SHEET_GLASS
 	oretype=/obj/item/weapon/ore/glass
-	sheettype=/obj/item/stack/sheet/glass
+	sheettype=/obj/item/stack/sheet/glass/basic
 
 /datum/material/diamond
 	name="Diamond"

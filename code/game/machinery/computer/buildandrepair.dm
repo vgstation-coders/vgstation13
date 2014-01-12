@@ -339,7 +339,7 @@
 				A.amount = 5
 				return 1
 
-			if(istype(P, /obj/item/stack/sheet/glass))
+			if(istype(P, /obj/item/stack/sheet/glass/basic))
 				if(P:amount >= 2)
 					playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 					if(do_after(user, 20))
@@ -355,7 +355,7 @@
 				user << "\blue You remove the glass panel."
 				src.state = 3
 				src.icon_state = "3"
-				new /obj/item/stack/sheet/glass( src.loc, 2 )
+				new /obj/item/stack/sheet/glass/basic( src.loc, 2 )
 				return 1
 			if(istype(P, /obj/item/weapon/screwdriver))
 				playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
