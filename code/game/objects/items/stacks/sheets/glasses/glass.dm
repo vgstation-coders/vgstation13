@@ -120,7 +120,7 @@ obj/item/stack/sheet/glass
 	singular_name = "reinforced glass sheet"
 	icon_state = "sheet-rglass"
 	g_amt = CC_PER_SHEET_GLASS
-	m_amt = CC_PER_SHEET_METAL / 2
+	m_amt = CC_PER_SHEET_METAL
 	origin_tech = "materials=2"
 	created_window = /obj/structure/window/reinforced
 
@@ -134,7 +134,7 @@ obj/item/stack/sheet/glass
 
 /obj/item/stack/sheet/glass/reinforced/recycle(var/obj/machinery/mineral/processing_unit/recycle/rec)
 	rec.addMaterial("glass", 1)
-	rec.addMaterial("iron",  0.5)
+	rec.addMaterial("iron", 1)
 	return 1
 
 /obj/item/stack/sheet/glass/reinforced/attack_self(mob/user as mob)
