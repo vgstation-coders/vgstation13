@@ -13,6 +13,7 @@ obj/item/stack/sheet/glass
 	g_amt = CC_PER_SHEET_GLASS
 	origin_tech = "materials=1"
 	created_window = /obj/structure/window/basic
+	cable_coil_required_for_wired_glass_tile = 5
 
 /obj/item/stack/sheet/glass/basic/cyborg
 	g_amt = 0
@@ -27,10 +28,10 @@ obj/item/stack/sheet/glass
 /obj/item/stack/sheet/glass/basic/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/weapon/cable_coil))
 		var/obj/item/weapon/cable_coil/CC = W
-		if(CC.amount < 5)
-			user << "\b There is not enough wire in this coil. You need 5 lengths."
+		if(CC.amount < cable_coil_required_for_wired_glass_tile)
+			user << "\b There is not enough wire in this coil. You need [cable_coil_required_for_wired_glass_tile] lengths."
 			return
-		CC.use(5)
+		CC.use(cable_coil_required_for_wired_glass_tile)
 		user << "\blue You attach wire to the [name]."
 		new /obj/item/stack/light_w(user.loc)
 		src.use(1)
