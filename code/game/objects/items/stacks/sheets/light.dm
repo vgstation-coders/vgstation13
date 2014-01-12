@@ -17,7 +17,7 @@
 		var/obj/item/weapon/cable_coil/CC = new/obj/item/weapon/cable_coil(user.loc)
 		CC.amount = 5
 		amount--
-		new/obj/item/stack/sheet/glass(user.loc)
+		new/obj/item/stack/sheet/glass/basic(user.loc)
 		if(amount <= 0)
 			user.drop_from_inventory(src)
 			del(src)

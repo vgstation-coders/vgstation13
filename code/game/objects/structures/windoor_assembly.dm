@@ -70,7 +70,7 @@ obj/structure/windoor_assembly/Del()
 					if(do_after(user, 40))
 						if(!src || !WT.isOn()) return
 						user << "\blue You dissasembled the windoor assembly!"
-						new /obj/item/stack/sheet/rglass(get_turf(src), 5)
+						new /obj/item/stack/sheet/glass/reinforced(get_turf(src), 5)
 						if(secure)
 							new /obj/item/stack/rods(get_turf(src), 4)
 						del(src)

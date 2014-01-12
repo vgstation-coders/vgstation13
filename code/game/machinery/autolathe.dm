@@ -16,8 +16,8 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/clothing/head/welding(), \
 		new /obj/item/weapon/stock_parts/console_screen(), \
 		new /obj/item/stack/sheet/metal(), \
-		new /obj/item/stack/sheet/glass(), \
-		new /obj/item/stack/sheet/rglass(), \
+		new /obj/item/stack/sheet/glass/basic(), \
+		new /obj/item/stack/sheet/glass/reinforced(), \
 		new /obj/item/stack/rods(), \
 		new /obj/item/weapon/rcd_ammo(), \
 		new /obj/item/weapon/kitchenknife(), \
@@ -188,7 +188,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 					var/obj/item/stack/sheet/metal/G = new /obj/item/stack/sheet/metal(src.loc)
 					G.amount = round(m_amount / 3750)
 				if(g_amount >= 3750)
-					var/obj/item/stack/sheet/glass/G = new /obj/item/stack/sheet/glass(src.loc)
+					var/obj/item/stack/sheet/glass/basic/G = new /obj/item/stack/sheet/glass/basic(src.loc)
 					G.amount = round(g_amount / 3750)
 				del(src)
 				return 1

@@ -222,8 +222,8 @@
 			var/list/possible_spawns = list()
 			possible_spawns += /obj/item/stack/sheet/metal
 			possible_spawns += /obj/item/stack/sheet/plasteel
-			possible_spawns += /obj/item/stack/sheet/glass
-			possible_spawns += /obj/item/stack/sheet/rglass
+			possible_spawns += /obj/item/stack/sheet/glass/basic
+			possible_spawns += /obj/item/stack/sheet/glass/reinforced
 			possible_spawns += /obj/item/stack/sheet/mineral/plasma
 			possible_spawns += /obj/item/stack/sheet/mineral/mythril
 			possible_spawns += /obj/item/stack/sheet/mineral/gold

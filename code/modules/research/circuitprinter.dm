@@ -23,7 +23,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	var/stopped=1
 	var/obj/output=null
 	var/allowed_materials=list(
-		/obj/item/stack/sheet/glass,
+		/obj/item/stack/sheet/glass/basic,
 		/obj/item/stack/sheet/mineral/gold,
 		/obj/item/stack/sheet/mineral/diamond,
 		/obj/item/stack/sheet/mineral/uranium

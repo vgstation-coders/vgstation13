@@ -23,12 +23,12 @@
 		M.amount = 50
 		src.modules += M
 /* BIG
-		var/obj/item/stack/sheet/rglass/cyborg/G = new /obj/item/stack/sheet/rglass/cyborg(src)
+		var/obj/item/stack/sheet/glass/reinforced/cyborg/G = new /obj/item/stack/sheet/glass/reinforced/cyborg(src)
 		G.amount = 50
 		src.modules += G
 */
 		// Aurx also sed so
-		var/obj/item/stack/sheet/glass/cyborg/G = new /obj/item/stack/sheet/glass/cyborg(src)
+		var/obj/item/stack/sheet/glass/basic/cyborg/G = new /obj/item/stack/sheet/glass/basic/cyborg(src)
 		G.amount = 50
 		src.modules += G
 
@@ -40,7 +40,7 @@
 	respawn_consumable(var/mob/living/silicon/robot/R)
 		var/list/what = list (
 			/obj/item/stack/sheet/metal/cyborg,
-			/obj/item/stack/sheet/glass,
+			/obj/item/stack/sheet/glass/basic,
 			/obj/item/weapon/cable_coil,
 		)
 		for (var/T in what)
