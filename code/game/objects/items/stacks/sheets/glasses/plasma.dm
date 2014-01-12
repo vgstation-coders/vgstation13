@@ -49,7 +49,7 @@
 	origin_tech = "materials=4;plasmatech=2"
 	created_window = /obj/structure/window/plasmareinforced
 
-/obj/item/stack/sheet/glass/basic/plasma/recycle(var/obj/machinery/mineral/processing_unit/recycle/rec)
+/obj/item/stack/sheet/glass/reinforced/plasma/recycle(var/obj/machinery/mineral/processing_unit/recycle/rec)
 	rec.addMaterial("plasma",1)
 	rec.addMaterial("glass", 1)
 	rec.addMaterial("iron",  0.5)
