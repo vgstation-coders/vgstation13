@@ -73,7 +73,7 @@
 			return
 
 		del(src)
-		new /obj/item/stack/sheet/metal(usr.loc, 2)
+		new /obj/item/stack/sheet/metal(user.loc, 2)
 		return
 	else
 		return ..()
