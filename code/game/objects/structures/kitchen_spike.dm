@@ -21,8 +21,9 @@
 		if(occupied)
 			user << "\red You can't disassemble [src] with meat and gore all over it."
 			return
-		new /obj/item/stack/sheet/metal( user.loc )
+
 		del(src)
+		new /obj/item/stack/sheet/metal(user.loc, 2)
 		return
 
 	if(istype(W,/obj/item/weapon/grab))
