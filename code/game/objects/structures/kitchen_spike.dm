@@ -22,8 +22,8 @@
 			user << "\red You can't disassemble [src] with meat and gore all over it."
 			return
 
-		del(src)
 		new /obj/item/stack/sheet/metal(user.loc, 2)
+		del(src)
 		return
 
 	if(istype(W,/obj/item/weapon/grab))

@@ -72,8 +72,8 @@
 			user << "Remove the reagent container loaded first!"
 			return
 
-		del(src)
 		new /obj/item/stack/sheet/metal(user.loc, 2)
+		del(src)
 		return
 	else
 		return ..()
