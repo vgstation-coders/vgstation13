@@ -122,7 +122,7 @@
 
 
 /obj/structure/window/attack_hand(mob/user as mob)
-	if(HULK in user.mutations)
+	if(M_HULK in user.mutations)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!"))
 		user.visible_message("<span class='danger'>[user] smashes through [src]!</span>")
 		new /obj/item/weapon/shard(loc)
@@ -133,12 +133,12 @@
 			message_admins("Window destroyed by hulk [user.real_name] ([formatPlayerPanel(user,user.ckey)]) with pdiff [pdiff] at [formatJumpTo(loc)]!")
 			log_admin("Window destroyed by hulk [user.real_name] ([user.ckey]) with pdiff [pdiff] at [loc]!")
 	else if (usr.a_intent == "hurt")
-		playsound(src.loc, 'sound/effects/glassknock.ogg', 80, 1)
+		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 80, 1)
 		usr.visible_message("\red [usr.name] bangs against the [src.name]!", \
 							"\red You bang against the [src.name]!", \
 							"You hear a banging sound.")
 	else
-		playsound(src.loc, 'sound/effects/glassknock.ogg', 80, 1)
+		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 80, 1)
 		usr.visible_message("[usr.name] knocks on the [src.name].", \
 							"You knock on the [src.name].", \
 							"You hear a knocking sound.")

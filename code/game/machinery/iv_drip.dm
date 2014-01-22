@@ -72,7 +72,7 @@
 
 
 /obj/machinery/iv_drip/process()
-	set background = 1
+	//set background = 1
 
 	if(src.attached)
 		if(!(get_dist(src, src.attached) <= 1 && isturf(src.attached.loc)))
@@ -107,7 +107,7 @@
 			if(!istype(T)) return
 			if(!T.dna)
 				return
-			if(NOCLONE in T.mutations)
+			if(M_NOCLONE in T.mutations)
 				return
 
 			// If the human is losing too much blood, beep.

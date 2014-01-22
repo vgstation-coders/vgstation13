@@ -99,9 +99,9 @@
 		cult_mind.current << "\blue You are a member of the cult!"
 		memoize_cult_objectives(cult_mind)
 		cult_mind.special_role = "Cultist"
-
-	spawn (rand(waittime_l, waittime_h))
-		send_intercept()
+	if(!mixed)
+		spawn (rand(waittime_l, waittime_h))
+			send_intercept()
 	..()
 
 
@@ -131,7 +131,7 @@
 	if (mob.mind)
 		if (mob.mind.assigned_role == "Clown")
 			mob << "Your training has allowed you to overcome your clownish nature, allowing you to wield weapons without harming yourself."
-			mob.mutations.Remove(CLUMSY)
+			mob.mutations.Remove(M_CLUMSY)
 
 
 	var/obj/item/weapon/paper/talisman/supply/T = new(mob)

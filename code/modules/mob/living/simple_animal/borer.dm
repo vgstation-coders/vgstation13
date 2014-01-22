@@ -36,6 +36,8 @@
 	icon_living = "brainslug"
 	icon_dead = "brainslug_dead"
 	speed = 5
+	small = 1
+	density = 0
 	a_intent = "harm"
 	stop_automated_movement = 1
 	status_flags = CANPUSH
@@ -183,7 +185,7 @@
 	if(chemicals < 50)
 		src << "You don't have enough chemicals!"
 
-	var/chem = input("Select a chemical to secrete.", "Chemicals") in list("bicaridine","tramadol","hyperzine")
+	var/chem = input("Select a chemical to secrete.", "Chemicals") in list("bicaridine","tramadol","hyperzine","alkysine")
 
 	if(chemicals < 50 || !host || controlling || !src || stat) //Sanity check.
 		return
@@ -272,16 +274,24 @@ mob/living/simple_animal/borer/proc/detatch()
 
 	var/list/choices = list()
 	for(var/mob/living/carbon/C in view(1,src))
-		if(C.stat != 2)
+		if(C.stat != 2 && src.Adjacent(C))
 			choices += C
 
 	var/mob/living/carbon/M = input(src,"Who do you wish to infest?") in null|choices
 
 	if(!M || !src) return
 
+	if(!(src.Adjacent(M))) return
+
 	if(M.has_brain_worms())
 		src << "You cannot infest someone who is already infested!"
 		return
+
+	if(istype(M,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = M
+		if(H.check_head_coverage(HIDEEARS))
+			src << "You cannot get through that host's protective gear."
+			return
 
 	M << "Something slimy begins probing at the opening of your ear canal..."
 	src << "You slither up [M] and begin probing at their ear canal..."
@@ -313,6 +323,9 @@ mob/living/simple_animal/borer/proc/detatch()
 		return
 
 /mob/living/simple_animal/borer/proc/perform_infestation(var/mob/living/carbon/M)
+	if(!M || !istype(M))
+		error("[src]: Unable to perform_infestation on [M]!")
+		return
 	src.host = M
 	src.loc = M
 

@@ -68,7 +68,7 @@
 	src.throwing = 1
 
 	if(usr)
-		if(HULK in usr.mutations)
+		if(M_HULK in usr.mutations)
 			src.throwing = 2 // really strong throw!
 
 	var/dist_x = abs(target.x - src.x)
@@ -153,7 +153,7 @@
 
 	//done throwing, either because it hit something or it finished moving
 	src.throwing = 0
-	if(isobj(src)) src:throw_impact(get_turf(src),speed)
+	if(isobj(src)) src.throw_impact(get_turf(src),speed)
 
 
 //Overlays

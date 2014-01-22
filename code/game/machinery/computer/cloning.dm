@@ -363,7 +363,7 @@
 	if ((!subject.ckey) || (!subject.client))
 		scantemp = "Error: Mental interface failure."
 		return
-	if (NOCLONE in subject.mutations)
+	if (M_NOCLONE in subject.mutations)
 		scantemp = "Error: Mental interface failure."
 		return
 	if (!isnull(find_record(subject.ckey)))
@@ -405,13 +405,12 @@
 	return selected_record
 
 /obj/machinery/computer/cloning/update_icon()
-
 	if(stat & BROKEN)
-		icon_state = "commb"
+		icon_state = "broken"
+	else if(powered())
+		icon_state = initial(icon_state)
+		stat &= ~NOPOWER
 	else
-		if(stat & NOPOWER)
+		spawn(rand(0, 15))
 			src.icon_state = "c_unpowered"
 			stat |= NOPOWER
-		else
-			icon_state = initial(icon_state)
-			stat &= ~NOPOWER

@@ -67,7 +67,7 @@
 		unwield()
 		user << "<span class='notice'>You are now carrying the [name] with one hand.</span>"
 		if (src.unwieldsound)
-			playsound(src.loc, unwieldsound, 50, 1)
+			playsound(get_turf(src), unwieldsound, 50, 1)
 
 		var/obj/item/weapon/twohanded/offhand/O = user.get_inactive_hand()
 		if(O && istype(O))
@@ -81,7 +81,7 @@
 		wield()
 		user << "<span class='notice'>You grab the [initial(name)] with both hands.</span>"
 		if (src.wieldsound)
-			playsound(src.loc, wieldsound, 50, 1)
+			playsound(get_turf(src), wieldsound, 50, 1)
 
 		var/obj/item/weapon/twohanded/offhand/O = new(user) ////Let's reserve his other hand~
 		O.name = "[initial(name)] - offhand"
@@ -164,7 +164,7 @@
 
 /obj/item/weapon/twohanded/dualsaber/attack(target as mob, mob/living/user as mob)
 	..()
-	if((CLUMSY in user.mutations) && (wielded) &&prob(40))
+	if((M_CLUMSY in user.mutations) && (wielded) &&prob(40))
 		user << "\red You twirl around a bit before losing your balance and impaling yourself on the [src]."
 		user.take_organ_damage(20,25)
 		return
@@ -204,5 +204,25 @@
 
 /obj/item/weapon/twohanded/hfrequency/update_icon()
 	icon_state = "hfrequency[wielded]"
+	return
+
+
+//spears
+/obj/item/weapon/twohanded/spear
+	icon_state = "spearglass0"
+	name = "spear"
+	desc = "A haphazardly-constructed yet still deadly weapon of ancient design."
+	force = 10
+	w_class = 4.0
+	slot_flags = SLOT_BACK
+	force_unwielded = 10
+	force_wielded = 18 // Was 13, Buffed - RR
+	throwforce = 15
+	flags = NOSHIELD
+	hitsound = 'sound/weapons/bladeslice.ogg'
+	attack_verb = list("attacked", "poked", "jabbed", "torn", "gored")
+
+/obj/item/weapon/twohanded/spear/update_icon()
+	icon_state = "spearglass[wielded]"
 	return
 

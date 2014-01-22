@@ -18,7 +18,7 @@
 
 	// SE blocks to assign.
 	var/list/numsToAssign=new()
-	for(var/i=1;i<STRUCDNASIZE;i++)
+	for(var/i=1;i<DNA_SE_LENGTH;i++)
 		numsToAssign += i
 
 	//testing("Assigning DNA blocks:")
@@ -52,8 +52,31 @@
 	SHOCKIMMUNITYBLOCK = getAssignedBlock("SHOCKIMMUNITY", numsToAssign)
 	SMALLSIZEBLOCK     = getAssignedBlock("SMALLSIZE",     numsToAssign, DNA_HARD_BOUNDS)
 
+	//
+	// Goon muts
+	/////////////////////////////////////////////
+
+	// Disabilities
+	LISPBLOCK      = getAssignedBlock("LISP",       numsToAssign)
+	MUTEBLOCK      = getAssignedBlock("MUTE",       numsToAssign)
+	RADBLOCK       = getAssignedBlock("RAD",        numsToAssign)
+	FATBLOCK       = getAssignedBlock("FAT",        numsToAssign)
+	STUTTERBLOCK   = getAssignedBlock("STUTTER",    numsToAssign)
+	CHAVBLOCK      = getAssignedBlock("CHAV",       numsToAssign)
+	SWEDEBLOCK     = getAssignedBlock("SWEDE",      numsToAssign)
+	SCRAMBLEBLOCK  = getAssignedBlock("SCRAMBLE",   numsToAssign)
+	TOXICFARTBLOCK = getAssignedBlock("TOXICFART",  numsToAssign)
+	STRONGBLOCK    = getAssignedBlock("STRONG",     numsToAssign)
+	HORNSBLOCK     = getAssignedBlock("HORNS",      numsToAssign)
+
+	// Powers
+	SOBERBLOCK     = getAssignedBlock("SOBER",      numsToAssign)
+	PSYRESISTBLOCK = getAssignedBlock("PSYRESIST",  numsToAssign, DNA_HARD_BOUNDS)
+	SHADOWBLOCK    = getAssignedBlock("SHADOW",     numsToAssign, DNA_HARDER_BOUNDS)
+	CHAMELEONBLOCK = getAssignedBlock("CHAMELEON",  numsToAssign, DNA_HARDER_BOUNDS)
+
 	// And the genes that actually do the work. (domutcheck improvements)
-	var/list/blocks_assigned[STRUCDNASIZE]
+	var/list/blocks_assigned[DNA_SE_LENGTH]
 	for(var/gene_type in typesof(/datum/dna/gene))
 		var/datum/dna/gene/G = new gene_type
 		if(G.block)
@@ -76,7 +99,7 @@
 		if(species.default_block_names.len>0)
 			testing("Setting up genetics for [species.name] (needs [english_list(species.default_block_names)])")
 			species.default_blocks.Cut()
-			for(var/block=1;block<STRUCDNASIZE;block++)
+			for(var/block=1;block<DNA_SE_LENGTH;block++)
 				if(assigned_blocks[block] in species.default_block_names)
 					testing("  Found [assigned_blocks[block]] ([block])")
 					species.default_blocks.Add(block)
@@ -114,14 +137,14 @@
 			var/mob/living/carbon/human/M = new /mob/living/carbon/human(A.loc)
 			M.real_name = "Corpse"
 			M.death()
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_eng(M), slot_ears)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_eng(M), slot_l_ear)
 			M.equip_to_slot_or_del(new /obj/item/device/pda/engineering(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/engineer(M), slot_w_uniform)
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(M), slot_shoes)
 		//	M.equip_to_slot_or_del(new /obj/item/weapon/storage/toolbox/mechanical(M), slot_l_hand)
 			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow(M), slot_gloves)
 			M.equip_to_slot_or_del(new /obj/item/device/t_scanner(M), slot_r_store)
-			//M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
+			//M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_l_ear)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(M), slot_back)
 			if (prob(50))
 				M.equip_to_slot_or_del(new /obj/item/clothing/mask/gas(M), slot_wear_mask)
@@ -136,7 +159,7 @@
 			var/mob/living/carbon/human/M = new /mob/living/carbon/human(A.loc)
 			M.real_name = "Corpse"
 			M.death()
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_eng(M), slot_ears)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_eng(M), slot_l_ear)
 			M.equip_to_slot_or_del(new /obj/item/weapon/tank/emergency_oxygen(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/engineer(M), slot_w_uniform)
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(M), slot_shoes)
@@ -159,7 +182,7 @@
 			var/mob/living/carbon/human/M = new /mob/living/carbon/human(A.loc)
 			M.real_name = "Corpse"
 			M.death()
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_eng(M), slot_ears)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_eng(M), slot_l_ear)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/utilitybelt(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/chief_engineer(M), slot_w_uniform)
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(M), slot_shoes)
@@ -180,7 +203,7 @@
 			var/mob/living/carbon/human/M = new /mob/living/carbon/human(A.loc)
 			M.real_name = "Corpse"
 			M.death()
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_l_ear)
 			//M.equip_to_slot_or_del(new /obj/item/weapon/gun/revolver(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/syndicate(M), slot_w_uniform)
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(M), slot_shoes)

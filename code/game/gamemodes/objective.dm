@@ -288,7 +288,7 @@ datum/objective/hijack
 		// Implemented in response to 21/12/2013 player vote,  .
 		// Comment this if you want Borgs and MoMMIs counted.
 		// TODO: Check if borgs are subverted. Best I can think of is a fuzzy check for strings used in syndie laws. BYOND can't do regex, sadly. - N3X
-		protected_mobs += list(/mob/living/silicon/robot)
+		protected_mobs += list(/mob/living/silicon/robot, /mob/living/silicon/robot/mommi)
 		for(var/mob/living/player in player_list)
 			if(player.type in protected_mobs)	continue
 			if (player.mind && (player.mind != owner))
@@ -300,7 +300,6 @@ datum/objective/hijack
 
 datum/objective/block
 	explanation_text = "Do not allow any organic lifeforms to escape on the shuttle alive."
-
 
 	check_completion()
 		if(!istype(owner.current, /mob/living/silicon))
@@ -342,7 +341,6 @@ datum/objective/silence
 datum/objective/escape
 	explanation_text = "Escape on the shuttle or an escape pod alive and free."
 
-
 	check_completion()
 		if(issilicon(owner.current))
 			return 0
@@ -376,6 +374,16 @@ datum/objective/escape
 			return 1
 		else
 			return 0
+
+datum/objective/die
+	explanation_text = "Die a glorious death."
+
+	check_completion()
+		if(!owner.current || owner.current.stat == DEAD || isbrain(owner.current))
+			return 1		//Brains no longer win survive objectives. --NEO
+		if(issilicon(owner.current) && owner.current != owner.original)
+			return 1
+		return 0
 
 
 

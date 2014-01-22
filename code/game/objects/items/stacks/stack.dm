@@ -8,6 +8,7 @@
  * Stacks
  */
 /obj/item/stack
+	gender = PLURAL
 	origin_tech = "materials=1"
 	var/list/datum/stack_recipe/recipes
 	var/singular_name
@@ -177,7 +178,7 @@
 	for (var/obj/item/stack/item in usr.loc)
 		if (item==oldsrc)
 			continue
-		if (item.type != oldsrc.type || oldsrc.type in item.canCombineWith)
+		if(oldsrc.type != item.type)
 			continue
 		if (item.amount>=item.max_amount)
 			continue

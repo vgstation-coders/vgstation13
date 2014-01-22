@@ -54,7 +54,7 @@
 /datum/dna/gene/disability/hallucinate
 	name="Hallucinate"
 	activation_message="Your mind says 'Hello'."
-	mutation=mHallucination
+	mutation=M_HALLUCINATE
 
 	New()
 		block=HALLUCINATIONBLOCK
@@ -78,7 +78,7 @@
 /datum/dna/gene/disability/clumsy
 	name="Clumsiness"
 	activation_message="You feel lightheaded."
-	mutation=CLUMSY
+	mutation=M_CLUMSY
 
 	New()
 		block=CLUMSYBLOCK
@@ -126,3 +126,17 @@
 
 	New()
 		block=GLASSESBLOCK
+
+
+/datum/dna/gene/disability/lisp
+	name = "Lisp"
+	desc = "I wonder wath thith doeth."
+	activation_message = "Thomething doethn't feel right."
+	deactivation_message = "You now feel able to pronounce consonants."
+
+	New()
+		..()
+		block=LISPBLOCK
+
+	OnSay(var/mob/M, var/message)
+		return replacetext(replacetext(message,"S","TH"),"s","th")

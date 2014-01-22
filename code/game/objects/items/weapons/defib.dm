@@ -37,7 +37,7 @@
 			icon_state = "defibpaddleout_low"
 
 /obj/item/weapon/melee/defibrilator/attack_self(mob/user as mob)
-	if(status && (CLUMSY in user.mutations) && prob(50))
+	if(status && (M_CLUMSY in user.mutations) && prob(50))
 		spark_system.attach(user)
 		spark_system.set_up(5, 0, src)
 		spark_system.start()
@@ -51,7 +51,7 @@
 	if(charges > 0)
 		status = !status
 		user << "<span class='notice'>\The [src] is now [status ? "on" : "off"].</span>"
-		playsound(src.loc, "sparks", 75, 1, -1)
+		playsound(get_turf(src), "sparks", 75, 1, -1)
 		update_icon()
 	else
 		status = 0
@@ -97,7 +97,7 @@
 			if(!charges)
 				status = 0
 			update_icon()
-			playsound(src.loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+			playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
 			user.attack_log += "\[[time_stamp()]\]<font color='red'> Defibrilated [H.name] ([H.ckey]) with [src.name]</font>"
 			H.attack_log += "\[[time_stamp()]\]<font color='orange'> Defibrilated by [user.name] ([user.ckey]) with [src.name]</font>"
 			log_attack("<font color='red'>[user.name] ([user.ckey]) defibrilated [H.name] ([H.ckey]) with [src.name]</font>" )
@@ -141,7 +141,7 @@
 				H.updatehealth() //forces a health update, otherwise the oxyloss adjustment wouldnt do anything
 				M.visible_message("\red [M]'s body convulses a bit.")
 				var/datum/organ/external/temp = H.get_organ("head")
-				if(H.health > -100 && !(temp.status & ORGAN_DESTROYED) && !(NOCLONE in H.mutations) && !H.suiciding)
+				if(H.health > -100 && !(temp.status & ORGAN_DESTROYED) && !(M_NOCLONE in H.mutations) && !H.suiciding)
 					viewers(M) << "\blue [src] beeps: Resuscitation successful."
 					spawn(0)
 						H.stat = 1

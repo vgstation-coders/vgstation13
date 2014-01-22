@@ -86,8 +86,11 @@
 /obj/machinery/dna_scannernew/proc/eject_occupant()
 	src.go_out()
 	for(var/obj/O in src)
-		if((!istype(O,/obj/item/weapon/circuitboard/clonescanner)) && (!istype(O,/obj/item/weapon/stock_parts)) && (!istype(O,/obj/item/weapon/cable_coil)))
-			O.loc = get_turf(src)//Ejects items that manage to get in there (exluding the components)
+		if(!istype(O,/obj/item/weapon/circuitboard/clonescanner) && \
+		   !istype(O,/obj/item/weapon/stock_parts) && \
+		   !istype(O,/obj/item/weapon/cable_coil) && \
+		   O != beaker)
+			O.loc = get_turf(src)//Ejects items that manage to get in there (exluding the components and beaker)
 	if(!occupant)
 		for(var/mob/M in src)//Failsafe so you can get mobs out
 			M.loc = get_turf(src)
@@ -98,6 +101,8 @@
 	set name = "Enter DNA Scanner"
 
 	if (usr.stat != 0)
+		return
+	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
 		return
 	if (!ishuman(usr) && !ismonkey(usr)) //Make sure they're a mob that has dna
 		usr << "\blue Try as you might, you can not climb up into the scanner."
@@ -172,7 +177,7 @@
 			user << "\red You cannot disassemble this [src], it's occupado."
 			return 1
 		if (opened)
-			playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
+			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
 			M.state = 2
 			M.icon_state = "box_1"
@@ -306,7 +311,7 @@
 
 /obj/machinery/computer/scan_consolenew/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/screwdriver))
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, 20))
 			if (src.stat & BROKEN)
 				user << "\blue The broken glass falls out."
@@ -499,7 +504,7 @@
 		occupantData["name"] = connected.occupant.name
 		occupantData["stat"] = connected.occupant.stat
 		occupantData["isViableSubject"] = 1
-		if (NOCLONE in connected.occupant.mutations || !src.connected.occupant.dna)
+		if (M_NOCLONE in connected.occupant.mutations || !src.connected.occupant.dna)
 			occupantData["isViableSubject"] = 0
 		occupantData["health"] = connected.occupant.health
 		occupantData["maxHealth"] = connected.occupant.maxHealth
@@ -519,22 +524,18 @@
 			for(var/datum/reagent/R in connected.beaker.reagents.reagent_list)
 				data["beakerVolume"] += R.volume
 
-	if (!ui) // no ui has been passed, so we'll search for one
-	{
-		ui = nanomanager.get_open_ui(user, src, ui_key)
-	}
+	// update the ui if it exists, returns null if no ui is passed/found
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
 	if (!ui)
-		// the ui does not exist, so we'll create a new one
+		// the ui does not exist, so we'll create a new() one
+        // for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
 		ui = new(user, src, ui_key, "dna_modifier.tmpl", "DNA Modifier Console", 660, 700)
-		// When the UI is first opened this is the data it will use
+		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
+		// open the new ui window
 		ui.open()
-		// Auto update every Master Controller tick
+		// auto update every Master Controller tick
 		ui.set_auto_update(1)
-	else
-		// The UI is already open so push the new data to it
-		ui.push_data(data)
-		return
 
 /obj/machinery/computer/scan_consolenew/Topic(href, href_list)
 	if(..())
@@ -706,7 +707,7 @@
 	if (href_list["selectSEBlock"] && href_list["selectSESubblock"]) // This chunk of code updates selected block / sub-block based on click (se stands for strutural enzymes)
 		var/select_block = text2num(href_list["selectSEBlock"])
 		var/select_subblock = text2num(href_list["selectSESubblock"])
-		if ((select_block <= STRUCDNASIZE) && (select_block >= 1))
+		if ((select_block <= DNA_SE_LENGTH) && (select_block >= 1))
 			src.selected_se_block = select_block
 		if ((select_subblock <= DNA_BLOCK_SIZE) && (select_subblock >= 1))
 			src.selected_se_subblock = select_subblock
@@ -734,9 +735,9 @@
 				var/real_SE_block=selected_se_block
 				block = miniscramble(block, src.radiation_intensity, src.radiation_duration)
 				if(prob(20))
-					if (src.selected_se_block > 1 && src.selected_se_block < STRUCDNASIZE/2)
+					if (src.selected_se_block > 1 && src.selected_se_block < DNA_SE_LENGTH/2)
 						real_SE_block++
-					else if (src.selected_se_block > STRUCDNASIZE/2 && src.selected_se_block < STRUCDNASIZE)
+					else if (src.selected_se_block > DNA_SE_LENGTH/2 && src.selected_se_block < DNA_SE_LENGTH)
 						real_SE_block--
 
 				//testing("Irradiated SE block [real_SE_block]:[src.selected_se_subblock] ([original_block] now [block]) [(real_SE_block!=selected_se_block) ? "(SHIFTED)":""]!")
@@ -831,7 +832,7 @@
 			return 1
 
 		if (bufferOption == "clear")
-			src.buffers[bufferId]=null
+			src.buffers[bufferId]=new /datum/dna2/record()
 			return 1
 
 		if (bufferOption == "changeLabel")
@@ -842,7 +843,7 @@
 			return 1
 
 		if (bufferOption == "transfer")
-			if (!src.connected.occupant || (NOCLONE in src.connected.occupant.mutations) || !src.connected.occupant.dna)
+			if (!src.connected.occupant || (M_NOCLONE in src.connected.occupant.mutations) || !src.connected.occupant.dna)
 				return
 
 			irradiating = 2
