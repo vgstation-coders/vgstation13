@@ -55,11 +55,9 @@
 
 /obj/structure/sign/double/barsign/attack_hand(mob/user as mob)
 	if (!(src.allowed(user)))
-		user << "1 1"
 		return
 
 	else if (!(get_dir(src, user) in list(SOUTHWEST, SOUTH, SOUTHEAST)))
-		user << "1 2"
 		return
 
 	pick_sign(sign_list)
