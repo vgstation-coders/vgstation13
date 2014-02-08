@@ -331,17 +331,19 @@
 
 
 //var/global/lawyer = 0//Checks for another lawyer //This changed clothes on 2nd lawyer, both IA get the same dreds.
+//Once, a fancy assistant, now; A fancier assistant!
 /datum/job/lawyer
 	title = "Internal Affairs Agent"
 	flag = LAWYER
 	department_flag = CIVILIAN
 	faction = "Station"
+	idtype = /obj/item/weapon/card/id/centcomm
 	total_positions = 2
 	spawn_positions = 2
-	supervisors = "the captain"
+	supervisors = "NanoTransen Law, CentComm Officals, and the stations captain."
 	selection_color = "#dddddd"
-	access = list(access_lawyer, access_court, access_sec_doors, access_maint_tunnels)
-	minimal_access = list(access_lawyer, access_court, access_sec_doors)
+	access = list(access_lawyer, access_court, access_sec_doors, access_maint_tunnels, access_cargo, access_medbay,  access_bar, access_kitchen, access_hydroponics)
+	minimal_access = list(access_lawyer, access_court, access_sec_doors. access_maint_tunnels, access_cargo,  access_bar, access_kitchen)
 
 
 	equip(var/mob/living/carbon/human/H)
