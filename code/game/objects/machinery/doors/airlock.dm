@@ -841,7 +841,7 @@ About the new airlock wires panel:
 	use_power(50)
 	if(istype(src, /obj/machinery/door/airlock/glass))
 		playsound(get_turf(src), 'sound/machines/windowdoor.ogg', 100, 1)
-	if(istype(src, /obj/machinery/door/airlock/clown))
+	if(istype(src, /obj/machinery/door/airlock/bananium))
 		playsound(get_turf(src), 'sound/items/bikehorn.ogg', 30, 1)
 	else
 		playsound(get_turf(src), 'sound/machines/airlock.ogg', 30, 1)
@@ -896,7 +896,7 @@ About the new airlock wires panel:
 	use_power(50)
 	if(istype(src, /obj/machinery/door/airlock/glass))
 		playsound(get_turf(src), 'sound/machines/windowdoor.ogg', 30, 1)
-	if(istype(src, /obj/machinery/door/airlock/clown))
+	if(istype(src, /obj/machinery/door/airlock/bananium))
 		playsound(get_turf(src), 'sound/items/bikehorn.ogg', 30, 1)
 	else
 		playsound(get_turf(src), 'sound/machines/airlock.ogg', 30, 1)
