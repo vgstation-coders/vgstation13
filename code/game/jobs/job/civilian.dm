@@ -350,7 +350,7 @@
 			if(4) H.equip_to_slot_or_drop(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		H.equip_to_slot_or_drop(new /obj/item/clothing/under/rank/internalaffairs(H), slot_w_uniform)
 		H.equip_to_slot_or_drop(new /obj/item/clothing/suit/storage/internalaffairs(H), slot_wear_suit)
-		H.equip_to_slot_or_drop(new /obj/item/clothing/shoes/brown(H), slot_shoes)
+		H.equip_to_slot_or_drop(new /obj/item/clothing/shoes/centcomm(H), slot_shoes)
 		H.equip_to_slot_or_drop(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
 		H.equip_to_slot_or_drop(new /obj/item/device/pda/lawyer(H), slot_belt)
 		H.equip_to_slot_or_drop(new /obj/item/weapon/storage/briefcase(H), slot_l_hand)
