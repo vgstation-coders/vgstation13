@@ -339,7 +339,7 @@
 	supervisors = "NanoTransen Law, CentComm Officals, and the stations captain."
 	selection_color = "#dddddd"
 	access = list(access_lawyer, access_court, access_sec_doors, access_maint_tunnels, access_cargo, access_medbay,  access_bar, access_kitchen, access_hydroponics)
-	minimal_access = list(access_lawyer, access_court, access_sec_doors. access_maint_tunnels, access_cargo,  access_bar, access_kitchen)
+	minimal_access = list(access_lawyer, access_court, access_sec_doors, access_cargo,  access_bar, access_kitchen)
 
 
 	equip(var/mob/living/carbon/human/H)
