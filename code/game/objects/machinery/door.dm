@@ -1,4 +1,3 @@
-<<<<<<< HEAD:code/game/objects/machinery/door.dm
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
 /obj/machinery/door
@@ -24,6 +23,9 @@
 	//Multi-tile doors
 	dir = EAST
 	var/width = 1
+
+	// From old /vg/.
+	var/obj/jammed=null // The object that's jammed us open/closed
 
 /obj/machinery/door/New()
 	. = ..()
@@ -93,7 +95,7 @@
 
 
 /obj/machinery/door/proc/bumpopen(mob/user as mob)
-	if(operating)	return
+	if(operating || jammed return)	return
 	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //Fakkit
 		return
 	src.add_fingerprint(user)
@@ -129,8 +131,12 @@
  *        2 (emagged or bladed to open)
  *        3 (is robot)
  *        4 (attacked by detective scanner)
+ *        5 (the door is jammed)
  */
 /obj/machinery/door/attackby(obj/item/W as obj, mob/user as mob)
+	if (jammed)
+		return 5
+
 	if (W.type == /obj/item/device/detective_scanner)
 		return 4
 
@@ -222,6 +228,7 @@
 /obj/machinery/door/proc/open()
 	if(!density)		return 1
 	if(operating > 0)	return
+	if(jammed)			return
 	if(!ticker)			return 0
 	if(!operating)		operating = 1
 
@@ -320,7 +327,7 @@
 
 /obj/machinery/door/proc/autoclose()
 	var/obj/machinery/door/airlock/A = src
-	if(!A.density && !A.operating && !A.locked && !A.welded && A.autoclose)
+	if(!A.density && !A.operating && !A.locked && !A.welded && A.autoclose && !A.jammed)
 		close()
 	return
 
@@ -668,5 +675,4 @@
 	update_nearby_tiles()
 
 /obj/machinery/door/morgue
->>>>>>> upstream/Bleeding-Edge:code/game/machinery/doors/door.dm
 	icon = 'icons/obj/doors/doormorgue.dmi'
