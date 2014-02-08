@@ -192,7 +192,7 @@
 
 /obj/item/weapon/card/id/centcom
 	name = "\improper CentCom. ID"
-	desc = "A card assosiated with those in service with CentComm and NanoTransen."
+	desc = "A card associated with those in service with CentComm and NanoTransen."
 	icon_state = "centcom"
 	registered_name = "Central Command"
 	assignment = "General"
