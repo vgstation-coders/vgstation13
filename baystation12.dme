@@ -629,6 +629,7 @@
 #include "code\game\objects\machinery\doors\airlocks\maintenance_hatch.dm"
 #include "code\game\objects\machinery\doors\airlocks\medical.dm"
 #include "code\game\objects\machinery\doors\airlocks\mining.dm"
+#include "code\game\objects\machinery\doors\airlocks\plasma.dm"
 #include "code\game\objects\machinery\doors\airlocks\science.dm"
 #include "code\game\objects\machinery\doors\airlocks\security.dm"
 #include "code\game\objects\machinery\doors\airlocks\silver.dm"
