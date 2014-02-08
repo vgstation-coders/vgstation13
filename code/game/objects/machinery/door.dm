@@ -95,7 +95,7 @@
 
 
 /obj/machinery/door/proc/bumpopen(mob/user as mob)
-	if(operating || jammed return)	return
+	if(operating || jammed)	return
 	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //Fakkit
 		return
 	src.add_fingerprint(user)
