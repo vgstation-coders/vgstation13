@@ -63,13 +63,13 @@ var/list/mechtoys = list(
 /obj/structure/plasticflaps/ex_act(severity)
 	switch(severity)
 		if (1)
-			del(src)
+			qdel(src)
 		if (2)
 			if (prob(50))
-				del(src)
+				qdel(src)
 		if (3)
 			if (prob(5))
-				del(src)
+				qdel(src)
 
 /obj/structure/plasticflaps/mining //A specific type for mining that doesn't allow airflow because of them damn crates
 	name = "\improper Airtight plastic flaps"
@@ -265,7 +265,10 @@ var/list/mechtoys = list(
 					if(istype(A, /obj/item/stack/sheet/mineral/plasma))
 						var/obj/item/stack/sheet/mineral/plasma/P = A
 						plasma_count += P.amount
-			del(MA)
+					
+					// Delete it. (Fixes github #473)
+					qdel(A)
+			qdel(MA)
 
 		if(plasma_count)
 			points += Floor(plasma_count / plasma_per_point)

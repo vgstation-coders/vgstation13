@@ -238,7 +238,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define slot_r_hand 5
 #define slot_belt 6
 #define slot_wear_id 7
-#define slot_l_ear 8
+#define slot_ears 8
 #define slot_glasses 9
 #define slot_gloves 10
 #define slot_head 11
@@ -250,7 +250,6 @@ var/MAX_EXPLOSION_RANGE = 14
 #define slot_s_store 17
 #define slot_in_backpack 18
 #define slot_legcuffed 19
-#define slot_r_ear 20
 #define slot_legs 21
 
 //Cant seem to find a mob bitflags area other than the powers one
@@ -366,6 +365,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define M_STRONG        202		// (Nothing)
 #define M_SOBER         203		// Increased alcohol metabolism
 #define M_PSY_RESIST    204		// Block remoteview
+#define M_SUPER_FART    205		// Duh
 
 //disabilities
 #define NEARSIGHTED		1
@@ -824,3 +824,16 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 // Unfortunately, it created incredible amounts of lag.
 // Comment the following line if you want it anyway.
 #define USE_BROKEN_RECURSIVE_MOBCHECK
+
+
+//////////////////
+// RECYCLING SHIT
+//////////////////
+
+// Sorting categories
+#define NOT_RECYCLABLE   0
+#define RECYK_MISC       1
+#define RECYK_GLASS      2
+#define RECYK_BIOLOGICAL 3
+#define RECYK_METAL      4
+#define RECYK_ELECTRONIC 5

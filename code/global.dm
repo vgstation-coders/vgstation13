@@ -86,6 +86,14 @@ var/SOBERBLOCK = 0
 var/PSYRESISTBLOCK = 0
 var/SHADOWBLOCK = 0
 var/CHAMELEONBLOCK = 0
+var/CRYOBLOCK = 0
+var/EATBLOCK = 0
+var/JUMPBLOCK = 0
+var/MELTBLOCK = 0
+var/EMPATHBLOCK = 0
+var/SUPERFARTBLOCK = 0
+var/IMMOLATEBLOCK = 0
+var/POLYMORPHBLOCK = 0
 
 var/skipupdate = 0
 	///////////////
@@ -260,3 +268,6 @@ var/DBConnection/dbcon = new()	//Feedback database (New database)
 var/DBConnection/dbcon_old = new()	//Tgstation database (Old database) - See the files in the SQL folder for information what goes where.
 
 #define MIDNIGHT_ROLLOVER		864000	//number of deciseconds in a day
+
+// Recall time limit:  2 hours
+var/recall_time_limit=72000

@@ -33,6 +33,7 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	w_class = 2
 	g_amt = 25
 	m_amt = 75
+	w_type = RECYK_ELECTRONIC
 
 	var/const/TRANSMISSION_DELAY = 5 // only 2/second/radio
 	var/const/FREQ_LISTENING = 1
@@ -245,7 +246,7 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 
 	   //#### Grab the connection datum ####//
 		var/datum/radio_frequency/connection = null
-		testing("[src]: talk_into([M], [message], [channel])")
+		//testing("[src]: talk_into([M], [message], [channel])")
 		if(channel == "headset")
 			channel = null
 		if(channel) // If a channel is specified, look for it.

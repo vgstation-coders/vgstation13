@@ -124,6 +124,7 @@ var/global/list/RPD_recipes=list(
 	throw_range = 5
 	w_class = 3.0
 	m_amt = 50000
+	w_type = RECYK_ELECTRONIC
 	origin_tech = "engineering=4;materials=2"
 	var/datum/effect/effect/system/spark_spread/spark_system
 	var/working = 0
@@ -397,6 +398,10 @@ var/global/list/RPD_recipes=list(
 
 
 /obj/item/weapon/pipe_dispenser/afterattack(atom/A, mob/user)
+	if(!in_range(A,user))
+		return
+	if(loc != user)
+		return
 	if(!isrobot(user) && !ishuman(user))
 		return 0
 	if(istype(A,/area/shuttle)||istype(A,/turf/space/transit))

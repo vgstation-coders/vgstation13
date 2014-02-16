@@ -260,6 +260,42 @@
 	icon_closed = "hydrocrate"
 	density = 1
 
+/obj/structure/closet/crate/sci
+	desc = "A science crate."
+	name = "science crate"
+	icon = 'icons/obj/storage.dmi'
+	icon_state = "scicrate"
+	density = 1
+	icon_opened = "scicrateopen"
+	icon_closed = "scicrate"
+
+/obj/structure/closet/crate/secure/scisec
+	desc = "A secure science crate."
+	name = "secure science crate"
+	icon = 'icons/obj/storage.dmi'
+	icon_state = "scisecurecrate"
+	density = 1
+	icon_opened = "scisecurecrateopen"
+	icon_closed = "scisecurecrate"
+
+/obj/structure/closet/crate/engi
+	desc = "An engineering crate."
+	name = "engineering crate"
+	icon = 'icons/obj/storage.dmi'
+	icon_state = "engicrate"
+	density = 1
+	icon_opened = "engicrateopen"
+	icon_closed = "engicrate"
+
+/obj/structure/closet/crate/secure/engisec
+	desc = "A secure engineering crate."
+	name = "secure engineering crate"
+	icon = 'icons/obj/storage.dmi'
+	icon_state = "engisecurecrate"
+	density = 1
+	icon_opened = "engisecurecrateopen"
+	icon_closed = "engisecurecrate"
+
 /obj/structure/closet/crate/hydroponics/prespawned
 	//This exists so the prespawned hydro crates spawn with their contents.
 /*	name = "Hydroponics crate"
@@ -452,18 +488,18 @@
 	switch(severity)
 		if(1.0)
 			for(var/obj/O in src.contents)
-				del(O)
-			del(src)
+				qdel(O)
+			qdel(src)
 			return
 		if(2.0)
 			for(var/obj/O in src.contents)
 				if(prob(50))
-					del(O)
-			del(src)
+					qdel(O)
+			qdel(src)
 			return
 		if(3.0)
 			if (prob(50))
-				del(src)
+				qdel(src)
 			return
 		else
 	return

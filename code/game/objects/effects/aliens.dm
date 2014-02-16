@@ -15,6 +15,7 @@
 	desc = "theres something alien about this"
 	icon = 'icons/mob/alien.dmi'
 //	unacidable = 1 //Aliens won't ment their own.
+	w_type=NOT_RECYCLABLE
 
 
 /*
@@ -30,6 +31,8 @@
 	anchored = 1
 	var/health = 200
 	//var/mob/living/affecting = null
+
+	var/qdel=0 // Flag to let Del() know we're getting eaten by qdel.
 
 	wall
 		name = "resin wall"
@@ -48,15 +51,24 @@
 	var/turf/T = get_turf(src)
 	T.thermal_conductivity = WALL_HEAT_TRANSFER_COEFFICIENT
 
+
 /obj/effect/alien/resin/Del()
+	if(!qdel)
+		var/turf/T = get_turf(src)
+		T.thermal_conductivity = initial(T.thermal_conductivity)
+	..()
+
+/obj/effect/alien/resin/QDel()
+	qdel=1
 	var/turf/T = get_turf(src)
 	T.thermal_conductivity = initial(T.thermal_conductivity)
 	..()
 
+
 /obj/effect/alien/resin/proc/healthcheck()
 	if(health <=0)
 		density = 0
-		del(src)
+		qdel(src)
 	return
 
 /obj/effect/alien/resin/bullet_act(var/obj/item/projectile/Proj)
@@ -253,13 +265,13 @@ Alien plants should do something if theres a lot of poison
 /obj/effect/alien/weeds/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
+			qdel(src)
 		if(2.0)
 			if (prob(50))
-				del(src)
+				qdel(src)
 		if(3.0)
 			if (prob(5))
-				del(src)
+				qdel(src)
 	return
 
 /obj/effect/alien/weeds/attackby(var/obj/item/weapon/W, var/mob/user)

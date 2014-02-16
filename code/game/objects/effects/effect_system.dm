@@ -12,6 +12,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	mouse_opacity = 0
 	unacidable = 1//So effect are not targeted by alien acid.
 	flags = TABLEPASS
+	w_type=NOT_RECYCLABLE
 
 /obj/effect/effect/water
 	name = "water"
@@ -499,7 +500,7 @@ steam.start() -- spawns the effect
 		number = n
 		cardinals = c
 
-		chemholder.reagents.add_reagent("mercury", 50)
+		chemholder.reagents.add_reagent("space_drugs", rand(1,10))
 
 		if(istype(loca, /turf/))
 			location = loca
@@ -800,7 +801,7 @@ steam.start() -- spawns the effect
 
 
 	ex_act(severity)
-		del(src)
+		qdel(src)
 
 	blob_act()
 		del(src)

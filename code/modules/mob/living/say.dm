@@ -59,12 +59,10 @@ var/list/department_radio_keys = list(
 	if (!ishuman(src))
 		return
 	var/mob/living/carbon/human/H = src
-	if (H.l_ear || H.r_ear)
+	if (H.ears)
 		var/obj/item/device/radio/headset/dongle
-		if(istype(H.l_ear,/obj/item/device/radio/headset))
-			dongle = H.l_ear
-		else
-			dongle = H.r_ear
+		if(istype(H.ears,/obj/item/device/radio/headset))
+			dongle = H.ears
 		if(!istype(dongle)) return
 		if(dongle.translate_binary) return 1
 
@@ -72,12 +70,10 @@ var/list/department_radio_keys = list(
 	if (isalien(src)) return 1
 	if (!ishuman(src)) return
 	var/mob/living/carbon/human/H = src
-	if (H.l_ear || H.r_ear)
+	if (H.ears)
 		var/obj/item/device/radio/headset/dongle
-		if(istype(H.l_ear,/obj/item/device/radio/headset))
-			dongle = H.l_ear
-		else
-			dongle = H.r_ear
+		if(istype(H.ears,/obj/item/device/radio/headset))
+			dongle = H.ears
 		if(!istype(dongle)) return
 		if(dongle.translate_hive) return 1
 
@@ -159,10 +155,7 @@ var/list/department_radio_keys = list(
 		if(cprefix in department_radio_keys)
 			mmode = department_radio_keys[cprefix]
 	if (copytext(message, 1, 2) == ";" || (prob(braindam/2) && !mmode))
-		if (ishuman(src))
-			message_mode = "headset"
-		else if(ispAI(src) || isrobot(src))
-			message_mode = "pAI"
+		message_mode = "headset"
 		message = copytext(message, 2)
 	// Begin checking for either a message mode or a language to speak.
 	else if (length(message) >= 2)
@@ -236,27 +229,25 @@ var/list/department_radio_keys = list(
 
 	// Select all always_talk devices
 	//  Carbon lifeforms
-	if(istype(src, /mob/living/carbon))
-		for(var/obj/item/device/radio/R in contents)
-			if(R.always_talk)
-				devices += R
+	//if(istype(src, /mob/living/carbon))
+	for(var/obj/item/device/radio/R in contents)
+		if(R.always_talk)
+			devices += R
 
 	//src << "Speaking on [message_mode]: [message]"
 	if(message_mode)
 		switch (message_mode)
-			if ("right ear")
-				if(iscarbon(src))
-					var/mob/living/carbon/C=src
-					if(C:r_ear) devices += C:r_ear
-				message_mode="headset"
+			if ("right hand")
+				if (r_hand)
+					r_hand.talk_into(src, message)
+					used_radios += src:r_hand
 				message_range = 1
 				italics = 1
 
-			if ("left ear")
-				if(iscarbon(src))
-					var/mob/living/carbon/C=src
-					if(C:l_ear) devices += C:l_ear
-				message_mode="headset"
+			if ("left hand")
+				if (l_hand)
+					l_hand.talk_into(src, message)
+					used_radios += src:l_hand
 				message_range = 1
 				italics = 1
 
@@ -264,20 +255,22 @@ var/list/department_radio_keys = list(
 			if ("fake")
 				if(iscarbon(src))
 					var/mob/living/carbon/C=src
-					if(C:l_ear) used_radios += C:l_ear
-					if(C:r_ear) used_radios += C:r_ear
+					if(C:ears) used_radios += C:ears
+				if(issilicon(src))
+					var/mob/living/silicon/Ro=src
+					if(Ro:radio) devices += Ro:radio
 				message_range = 1
 				italics = 1
-			if ("fake left ear")
+			if ("fake left hand")
 				if(iscarbon(src))
 					var/mob/living/carbon/C=src
-					if(C:l_ear) used_radios += C:l_ear
+					if(C:l_hand) used_radios += C:l_hand
 				message_range = 1
 				italics = 1
-			if ("fake right ear")
+			if ("fake right hand")
 				if(iscarbon(src))
 					var/mob/living/carbon/C=src
-					if(C:r_ear) used_radios += C:r_ear
+					if(C:r_hand) used_radios += C:r_hand
 				message_range = 1
 				italics = 1
 
@@ -305,10 +298,6 @@ var/list/department_radio_keys = list(
 					alien_talk(message)
 				return
 
-			if ("department")
-				message_range = 1
-				italics = 1
-
 			if ("pAI")
 				message_range = 1
 				italics = 1
@@ -326,8 +315,7 @@ var/list/department_radio_keys = list(
 			else // headset, department channels.
 				if(iscarbon(src))
 					var/mob/living/carbon/C=src
-					if(C:l_ear) devices += C:l_ear
-					if(C:r_ear) devices += C:r_ear
+					if(C:ears) devices += C:ears
 				if(issilicon(src))
 					var/mob/living/silicon/Ro=src
 					if(Ro:radio) devices += Ro:radio

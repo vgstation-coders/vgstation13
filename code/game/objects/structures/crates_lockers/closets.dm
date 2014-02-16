@@ -16,6 +16,7 @@
 	var/storage_capacity = 30 //This is so that someone can't pack hundreds of items in a locker/crate
 							  //then open it in a populated area to crash clients.
 	m_amt = 2*CC_PER_SHEET_METAL
+	w_type = RECYK_METAL
 
 /obj/structure/closet/New()
 	..()
@@ -138,19 +139,19 @@
 			for(var/atom/movable/A as mob|obj in src)//pulls everything out of the locker and hits it with an explosion
 				A.loc = src.loc
 				A.ex_act(severity++)
-			del(src)
+			qdel(src)
 		if(2)
 			if(prob(50))
 				for (var/atom/movable/A as mob|obj in src)
 					A.loc = src.loc
 					A.ex_act(severity++)
-				del(src)
+				qdel(src)
 		if(3)
 			if(prob(5))
 				for(var/atom/movable/A as mob|obj in src)
 					A.loc = src.loc
 					A.ex_act(severity++)
-				del(src)
+				qdel(src)
 
 /obj/structure/closet/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
@@ -178,7 +179,7 @@
 	..(user)
 
 /obj/structure/closet/attack_animal(mob/living/simple_animal/user as mob)
-	if(user.wall_smash)
+	if(user.environment_smash>0)
 		visible_message("\red [user] destroys the [src]. ")
 		for(var/atom/movable/A as mob|obj in src)
 			A.loc = src.loc

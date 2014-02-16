@@ -3,6 +3,7 @@
  * 		Twohanded
  *		Fireaxe
  *		Double-Bladed Energy Swords
+ *		Spears
  */
 
 /*##################################################################
@@ -94,12 +95,48 @@
 	w_class = 5.0
 	icon_state = "offhand"
 	name = "offhand"
+	//flags = ABSTRACT
 
-	unwield()
-		del(src)
+/obj/item/weapon/twohanded/offhand/unwield()
+	del(src)
 
-	wield()
-		del(src)
+/obj/item/weapon/twohanded/offhand/wield()
+	del(src)
+
+/obj/item/weapon/twohanded/offhand/IsShield()//if the actual twohanded weapon is a shield, we count as a shield too!
+	var/mob/user = loc
+	if(!istype(user)) return 0
+	var/obj/item/I = user.get_active_hand()
+	if(I == src) I = user.get_inactive_hand()
+	if(!I) return 0
+	return I.IsShield()
+
+///////////Two hand required objects///////////////
+//This is for objects that require two hands to even pick up
+/obj/item/weapon/twohanded/required/
+	w_class = 5.0
+
+/obj/item/weapon/twohanded/required/attack_self()
+	return
+
+/obj/item/weapon/twohanded/required/mob_can_equip(M as mob, slot)
+	if(wielded)
+		M << "<span class='warning'>[src.name] is too cumbersome to carry with anything but your hands!</span>"
+		return 0
+	return ..()
+
+/obj/item/weapon/twohanded/required/attack_hand(mob/user)//Can't even pick it up without both hands empty
+	var/obj/item/weapon/twohanded/required/H = user.get_inactive_hand()
+	if(H != null)
+		user.visible_message("<span class='notice'>[src.name] is too cumbersome to carry in one hand!</span>")
+		return
+	var/obj/item/weapon/twohanded/offhand/O = new(user)
+	user.put_in_inactive_hand(O)
+	..()
+	wielded = 1
+
+
+obj/item/weapon/twohanded/
 
 /*
  * Fireaxe
@@ -119,7 +156,8 @@
 	icon_state = "fireaxe[wielded]"
 	return
 
-/obj/item/weapon/twohanded/fireaxe/afterattack(atom/A as mob|obj|turf|area, mob/user as mob)
+/obj/item/weapon/twohanded/fireaxe/afterattack(atom/A as mob|obj|turf|area, mob/user as mob, proximity)
+	if(!proximity) return
 	..()
 	if(A && wielded && (istype(A,/obj/structure/window) || istype(A,/obj/structure/grille))) //destroys windows and grilles in one hit
 		if(istype(A,/obj/structure/window)) //should just make a window.Break() proc but couldn't bother with it

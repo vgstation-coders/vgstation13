@@ -83,11 +83,15 @@
 
 	var/list/TLV = list()
 
+/obj/machinery/alarm/xenobio
+	preset = AALARM_PRESET_HUMAN
+	req_one_access = list(access_rd, access_atmospherics, access_engine_equip, access_xenobiology)
+	req_access = list()
 
 /obj/machinery/alarm/server
 	preset = AALARM_PRESET_SERVER
-	req_access = list(access_rd, access_atmospherics, access_engine_equip)
-
+	req_one_access = list(access_rd, access_atmospherics, access_engine_equip)
+	req_access = list()
 
 /obj/machinery/alarm/vox
 	preset = AALARM_PRESET_VOX
@@ -112,9 +116,9 @@
 	switch(preset)
 		if(AALARM_PRESET_VOX) // Same as usual, s/nitrogen/oxygen
 			TLV["nitrogen"] = 		list(16, 19, 135, 140) // Vox use same partial pressure values for N2 as humans do for O2.
-			TLV["oxygen"] =			list(-1.0, -1.0, 1, 2) // Under 1 kPa (PP), vox don't notice squat (vox_oxygen_max)
+			TLV["oxygen"] =			list(-1.0, -1.0, 0.5, 1.0) // Under 1 kPa (PP), vox don't notice squat (vox_oxygen_max)
 		if(AALARM_PRESET_SERVER) // Cold as fuck.
-			TLV["oxygen"] =			list(-1.0, -1.0,-1.0,-1.0) // Partial pressure, kpa
+			TLV["oxygen"] =			list(-1.0, -1.0,-1.0,-1.0)
 			TLV["carbon_dioxide"] = list(-1.0, -1.0,   5,  10) // Partial pressure, kpa
 			TLV["plasma"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
 			TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
@@ -622,13 +626,14 @@
 
 	var/data[0]
 	data["air"]=ui_air_status()
-	data["alarmActivated"]=alarmActivated || local_danger_level==2
+	data["alarmActivated"]=alarmActivated //|| local_danger_level==2
 	data["sensors"]=TLV
 
 	// Locked when:
 	//   Not sent from atmos console AND
-	//   Not silicon AND locked.
-	data["locked"]=!fromAtmosConsole && (!(istype(user, /mob/living/silicon)) && locked)
+	//   Not silicon AND locked AND
+	//   NOT adminghost.
+	data["locked"]=!fromAtmosConsole && (!(istype(user, /mob/living/silicon)) && locked) && !isAdminGhost(user)
 
 	data["rcon"]=rcon_setting
 	data["target_temp"] = target_temperature - T0C
@@ -971,20 +976,6 @@
 		usr << "It is not wired."
 	if (buildstage < 1)
 		usr << "The circuit is missing."
-/*
-/*
-AIR ALARM CIRCUIT
-Just a object used in constructing air alarms
-*/
-/obj/item/weapon/airalarm_electronics
-	name = "air alarm electronics"
-	icon = 'icons/obj/doors/door_assembly.dmi'
-	icon_state = "door_electronics"
-	desc = "Looks like a circuit. Probably is."
-	w_class = 2.0
-	m_amt = 50
-	g_amt = 50
-*/
 
 /*
 AIR ALARM ITEM
@@ -997,6 +988,8 @@ Code shamelessly copied from apc_frame
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "alarm_bitem"
 	flags = FPRINT | TABLEPASS| CONDUCT
+	m_amt = 2*CC_PER_SHEET_METAL
+	w_type = RECYK_METAL
 
 /obj/item/alarm_frame/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/wrench))
@@ -1307,20 +1300,7 @@ FIRE ALARM
 			src.overlays += image('icons/obj/monitors.dmi', "overlay_green")
 
 	update_icon()
-/*
-/*
-FIRE ALARM CIRCUIT
-Just a object used in constructing fire alarms
-*/
-/obj/item/weapon/firealarm_electronics
-	name = "fire alarm electronics"
-	icon = 'icons/obj/doors/door_assembly.dmi'
-	icon_state = "door_electronics"
-	desc = "A circuit. It has a label on it, it says \"Can handle heat levels up to 40 degrees celsius!\""
-	w_class = 2.0
-	m_amt = 50
-	g_amt = 50
-*/
+
 
 /*
 FIRE ALARM ITEM
@@ -1333,6 +1313,8 @@ Code shamelessly copied from apc_frame
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "fire_bitem"
 	flags = FPRINT | TABLEPASS| CONDUCT
+	m_amt=2*CC_PER_SHEET_METAL
+	w_type = RECYK_METAL
 
 /obj/item/firealarm_frame/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/wrench))

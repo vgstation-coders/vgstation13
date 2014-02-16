@@ -574,7 +574,7 @@
 /obj/machinery/light/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
+			qdel(src)
 			return
 		if(2.0)
 			if (prob(75))
@@ -648,6 +648,7 @@
 	base_state = "ltube"
 	item_state = "c_tube"
 	g_amt = 100
+	w_type = RECYK_GLASS
 	brightness = 8
 
 /obj/item/weapon/light/tube/large
@@ -663,6 +664,7 @@
 	item_state = "contvapour"
 	g_amt = 100
 	brightness = 5
+	w_type = RECYK_GLASS
 
 /obj/item/weapon/light/throw_impact(atom/hit_atom)
 	..()
