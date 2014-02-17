@@ -8,19 +8,19 @@
 /obj/structure/sign/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
+			qdel(src)
 			return
 		if(2.0)
-			del(src)
+			qdel(src)
 			return
 		if(3.0)
-			del(src)
+			qdel(src)
 			return
 		else
 	return
 
 /obj/structure/sign/blob_act()
-	del(src)
+	qdel(src)
 	return
 
 /obj/structure/sign/attackby(obj/item/tool as obj, mob/user as mob)	//deconstruction
@@ -149,16 +149,6 @@
 	name = "\improper FEA Atmospherics Division plaque"
 	desc = "This plaque commemorates the fall of the Atmos FEA division. For all the charred, dizzy, and brittle men who have died in its hands."
 	icon_state = "atmosplaque"
-
-/obj/structure/sign/double/maltesefalcon	//The sign is 64x32, so it needs two tiles. ;3
-	name = "The Maltese Falcon"
-	desc = "The Maltese Falcon, Space Bar and Grill."
-
-/obj/structure/sign/double/maltesefalcon/left
-	icon_state = "maltesefalcon-left"
-
-/obj/structure/sign/double/maltesefalcon/right
-	icon_state = "maltesefalcon-right"
 
 /obj/structure/sign/science			//These 3 have multiple types, just var-edit the icon_state to whatever one you want on the map
 	name = "\improper SCIENCE!"

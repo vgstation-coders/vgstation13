@@ -32,6 +32,11 @@
 	set_species("Vox")
 	..()
 
+/mob/living/carbon/human/skellington/New()
+	h_style = "Bald"
+	set_species("Skellington")
+	..()
+
 /mob/living/carbon/human/diona/New()
 	species = new /datum/species/diona(src)
 	..()
@@ -97,8 +102,8 @@
 					slime.UpdateFeed()
 			return
 
-		if(istype(tmob, /mob/living/carbon/human) && (FAT in tmob.mutations))
-			if(prob(40) && !(FAT in src.mutations))
+		if(istype(tmob, /mob/living/carbon/human) && (M_FAT in tmob.mutations))
+			if(prob(40) && !(M_FAT in src.mutations))
 				src << "\red <B>You fail to push [tmob]'s fat ass out of the way.</B>"
 				now_pushing = 0
 				return
@@ -197,7 +202,7 @@
 				b_loss = b_loss/1.5
 				f_loss = f_loss/1.5
 
-			if (!istype(l_ear, /obj/item/clothing/ears/earmuffs) && !istype(r_ear, /obj/item/clothing/ears/earmuffs))
+			if (!istype(ears, /obj/item/clothing/ears/earmuffs))
 				ear_damage += 30
 				ear_deaf += 120
 			if (prob(70) && !shielded)
@@ -207,7 +212,7 @@
 			b_loss += 30
 			if (prob(getarmor(null, "bomb")))
 				b_loss = b_loss/2
-			if (!istype(l_ear, /obj/item/clothing/ears/earmuffs) && !istype(r_ear, /obj/item/clothing/ears/earmuffs))
+			if (!istype(ears, /obj/item/clothing/ears/earmuffs))
 				ear_damage += 15
 				ear_deaf += 60
 			if (prob(50) && !shielded)
@@ -283,8 +288,7 @@
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
 			O.show_message("\red <B>[M]</B> [M.attacktext] [src]!", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
+		add_logs(M, src, "attacked", admin=0)
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
 		var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
@@ -393,8 +397,7 @@
 	<BR><B>Right Hand:</B> <A href='?src=\ref[src];item=r_hand'>[(r_hand ? r_hand : "Nothing")]</A>
 	<BR><B>Gloves:</B> <A href='?src=\ref[src];item=gloves'>[(gloves ? gloves : "Nothing")]</A>
 	<BR><B>Eyes:</B> <A href='?src=\ref[src];item=eyes'>[(glasses ? glasses : "Nothing")]</A>
-	<BR><B>Left Ear:</B> <A href='?src=\ref[src];item=l_ear'>[(l_ear ? l_ear : "Nothing")]</A>
-	<BR><B>Right Ear:</B> <A href='?src=\ref[src];item=r_ear'>[(r_ear ? r_ear : "Nothing")]</A>
+	<BR><B>Ears:</B> <A href='?src=\ref[src];item=ears'>[(ears ? ears : "Nothing")]</A>
 	<BR><B>Head:</B> <A href='?src=\ref[src];item=head'>[(head ? head : "Nothing")]</A>
 	<BR><B>Shoes:</B> <A href='?src=\ref[src];item=shoes'>[(shoes ? shoes : "Nothing")]</A>
 	<BR><B>Belt:</B> <A href='?src=\ref[src];item=belt'>[(belt ? belt : "Nothing")]</A>
@@ -484,7 +487,7 @@
 //Returns "Unknown" if facially disfigured and real_name if not. Useful for setting name when polyacided or when updating a human's name variable
 /mob/living/carbon/human/proc/get_face_name()
 	var/datum/organ/external/head/head = get_organ("head")
-	if( !head || head.disfigured || (head.status & ORGAN_DESTROYED) || !real_name || (HUSK in mutations) )	//disfigured. use id-name if possible
+	if( !head || head.disfigured || (head.status & ORGAN_DESTROYED) || !real_name || (M_HUSK in mutations) )	//disfigured. use id-name if possible
 		return "Unknown"
 	return real_name
 
@@ -514,7 +517,7 @@
 			var/obj/item/clothing/gloves/G = gloves
 			siemens_coeff = G.siemens_coefficient
 	//If they have shock immunity mutation
-	if(mShock in src.mutations)
+	if(M_NO_SHOCK in src.mutations)
 		siemens_coeff = 0
 	return ..(shock_damage,source,siemens_coeff)
 
@@ -867,7 +870,7 @@
 
 
 /mob/living/carbon/human/abiotic(var/full_body = 0)
-	if(full_body && ((src.l_hand && !( src.l_hand.abstract )) || (src.r_hand && !( src.r_hand.abstract )) || (src.back || src.wear_mask || src.head || src.shoes || src.w_uniform || src.wear_suit || src.glasses || src.l_ear || src.r_ear || src.gloves)))
+	if(full_body && ((src.l_hand && !( src.l_hand.abstract )) || (src.r_hand && !( src.r_hand.abstract )) || (src.back || src.wear_mask || src.head || src.shoes || src.w_uniform || src.wear_suit || src.glasses || src.ears || src.gloves)))
 		return 1
 
 	if( (src.l_hand && !src.l_hand.abstract) || (src.r_hand && !src.r_hand.abstract) )
@@ -934,7 +937,7 @@
 		remoteview_target = null
 		return
 
-	if(!(mMorph in mutations))
+	if(!(M_MORPH in mutations))
 		src.verbs -= /mob/living/carbon/human/proc/morph
 		return
 
@@ -1013,7 +1016,7 @@
 		remoteview_target = null
 		return
 
-	if(!(mRemotetalk in src.mutations))
+	if(!(M_REMOTE_TALK in src.mutations))
 		src.verbs -= /mob/living/carbon/human/proc/remotesay
 		return
 	var/list/creatures = list()
@@ -1024,7 +1027,7 @@
 		return
 
 	var/say = input ("What do you wish to say")
-	if(mRemotetalk in target.mutations)
+	if(M_REMOTE_TALK in target.mutations)
 		target.show_message("\blue You hear [src.real_name]'s voice: [say]")
 	else
 		target.show_message("\blue You hear a voice that seems to echo around the room: [say]")
@@ -1041,7 +1044,7 @@
 		reset_view(0)
 		return
 
-	if(!(mRemote in src.mutations))
+	if(!(M_REMOTE_VIEW in src.mutations))
 		remoteview_target = null
 		reset_view(0)
 		src.verbs -= /mob/living/carbon/human/proc/remoteobserve
@@ -1064,6 +1067,8 @@
 		if(!ishuman(h)) continue //Can't see non humans with your fancy human mind.
 		var/turf/temp_turf = get_turf(h)
 		if((temp_turf.z != 1 && temp_turf.z != 5) || h.stat!=CONSCIOUS) //Not on mining or the station. Or dead
+			continue
+		if(M_PSY_RESIST in h.mutations)
 			continue
 		creatures += h
 
@@ -1425,3 +1430,13 @@ mob/living/carbon/human/yank_out_object()
 		W.update_icon()
 		W.message = message
 		W.add_fingerprint(src)
+
+/mob/living/carbon/human/canSingulothPull(var/obj/machinery/singularity/singulo)
+	if(!..())
+		return 0
+
+	if(istype(shoes,/obj/item/clothing/shoes/magboots))
+		var/obj/item/clothing/shoes/magboots/M = shoes
+		if(M.magpulse)
+			return 0
+	return 1

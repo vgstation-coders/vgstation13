@@ -2,6 +2,9 @@
 	density = 1
 	layer = 4.0
 	animate_movement = 2
+
+	w_type = RECYK_BIOLOGICAL
+
 //	flags = NOREACT
 	var/datum/mind/mind
 
@@ -223,3 +226,5 @@
 	var/list/active_genes=list()
 
 	var/kills=0
+
+	var/last_movement = -100 // Last world.time the mob actually moved of its own accord.

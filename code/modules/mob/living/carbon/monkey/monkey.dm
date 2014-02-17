@@ -61,6 +61,7 @@
 
 		// We're a monkey
 		dna.SetSEState(MONKEYBLOCK,   1)
+		dna.SetSEValueRange(MONKEYBLOCK,0xDAC, 0xFFF)
 		// Fix gender
 		dna.SetUIState(DNA_UI_GENDER, gender != MALE, 1)
 
@@ -128,7 +129,7 @@
 		now_pushing = 1
 		if(ismob(AM))
 			var/mob/tmob = AM
-			if(istype(tmob, /mob/living/carbon/human) && (HULK in tmob.mutations))
+			if(istype(tmob, /mob/living/carbon/human) && (M_HULK in tmob.mutations))
 				if(prob(70))
 					usr << "\red <B>You fail to push [tmob]'s fat ass out of the way.</B>"
 					now_pushing = 0

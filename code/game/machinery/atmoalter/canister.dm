@@ -19,14 +19,7 @@
 	var/release_log = ""
 	var/busy = 0
 	m_amt=10*CC_PER_SHEET_METAL
-
-// Need to redefine /obj/item's recyk method
-/obj/machinery/portable_atmospherics/canister/recycle(var/obj/machinery/mineral/processing_unit/recycle/rec)
-	if (src.m_amt == 0 && src.g_amt == 0)
-		return 0
-	rec.addMaterial("iron",src.m_amt/CC_PER_SHEET_METAL)
-	rec.addMaterial("glass",src.g_amt/CC_PER_SHEET_GLASS)
-	return 1
+	w_type = RECYK_METAL
 
 /obj/machinery/portable_atmospherics/canister/sleeping_agent
 	name = "Canister: \[N2O\]"
@@ -59,31 +52,42 @@
 	_color = "grey"
 	can_label = 0
 
+/*
+ * return 0 (reached the proc code end)
+ *        1 (canister is destroyed)
+ */
 /obj/machinery/portable_atmospherics/canister/update_icon()
-	src.overlays = 0
+	var/L[0]
+	overlays = L
 
-	if (src.destroyed)
-		src.icon_state = text("[]-1", src._color)
+	if (destroyed)
+		icon_state = "[_color]-1"
+		return 1
 
-	else
-		icon_state = "[_color]"
-		if(holding)
-			overlays += "can-open"
+	icon_state = "[_color]"
 
-		if(connected_port)
-			overlays += "can-connector"
+	L += "can-o3"
 
-		var/tank_pressure = air_contents.return_pressure()
+	var/tank_pressure = air_contents.return_pressure()
 
-		if (tank_pressure < 10)
-			overlays += image('icons/obj/atmos.dmi', "can-o0")
-		else if (tank_pressure < ONE_ATMOSPHERE)
-			overlays += image('icons/obj/atmos.dmi', "can-o1")
-		else if (tank_pressure < 15*ONE_ATMOSPHERE)
-			overlays += image('icons/obj/atmos.dmi', "can-o2")
-		else
-			overlays += image('icons/obj/atmos.dmi', "can-o3")
-	return
+	if (tank_pressure < 10)
+		L[L.len] = "can-o0"
+	else if (tank_pressure < ONE_ATMOSPHERE)
+		L[L.len] = "can-o1"
+	else if (tank_pressure < 15 * ONE_ATMOSPHERE)
+		L[L.len] = "can-o2"
+
+	tank_pressure = null
+
+	if (holding)
+		L += "can-open"
+
+	if (connected_port)
+		L += "can-connector"
+
+	overlays = L
+	L = null
+	return 0
 
 /obj/machinery/portable_atmospherics/canister/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > temperature_resistance)

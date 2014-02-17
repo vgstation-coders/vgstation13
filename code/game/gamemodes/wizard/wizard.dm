@@ -174,7 +174,7 @@
 	del(wizard_mob.r_store)
 	del(wizard_mob.l_store)
 
-	wizard_mob.equip_to_slot_or_del(new /obj/item/device/radio/headset(wizard_mob), slot_l_ear)
+	wizard_mob.equip_to_slot_or_del(new /obj/item/device/radio/headset(wizard_mob), slot_ears)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(wizard_mob), slot_w_uniform)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(wizard_mob), slot_shoes)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
@@ -200,6 +200,7 @@
 		return ..()
 
 	var/wizards_alive = 0
+	var/traitors_alive = 0
 	for(var/datum/mind/wizard in wizards)
 		if(!istype(wizard.current,/mob/living/carbon))
 			continue
@@ -207,7 +208,15 @@
 			continue
 		wizards_alive++
 
-	if (wizards_alive)
+	if(!wizards_alive)
+		for(var/datum/mind/traitor in traitors)
+			if(!istype(traitor.current,/mob/living/carbon))
+				continue
+			if(traitor.current.stat==2)
+				continue
+			traitors_alive++
+
+	if (wizards_alive || traitors_alive)
 		return ..()
 	else
 		finished = 1
@@ -225,18 +234,18 @@
 
 /datum/game_mode/proc/auto_declare_completion_wizard()
 	if(wizards.len)
-		var/text = "<FONT size = 2><B>The wizards/witches were:</B></FONT>"
+		var/text = "<br><font size=3><b>the wizards/witches were:</b></font>"
 
 		for(var/datum/mind/wizard in wizards)
 
-			text += "<br>[wizard.key] was [wizard.name] ("
+			text += "<br><b>[wizard.key]</b> was <b>[wizard.name]</b> ("
 			if(wizard.current)
 				if(wizard.current.stat == DEAD)
 					text += "died"
 				else
 					text += "survived"
 				if(wizard.current.real_name != wizard.name)
-					text += " as [wizard.current.real_name]"
+					text += " as <b>[wizard.current.real_name]</b>"
 			else
 				text += "body destroyed"
 			text += ")"
@@ -259,6 +268,15 @@
 			else
 				text += "<br><font color='red'><B>The wizard has failed!</B></font>"
 				feedback_add_details("wizard_success","FAIL")
+			if(wizard.current && wizard.current.spell_list)
+				text += "<br><B>[wizard.name] used the following spells: </B>"
+				var/i = 1
+				for(var/obj/effect/proc_holder/spell/S in wizard.current.spell_list)
+					text += "[S.name]"
+					if(wizard.current.spell_list.len > i)
+						text += ", "
+					i++
+			text += "<br>"
 
 		world << text
 	return 1

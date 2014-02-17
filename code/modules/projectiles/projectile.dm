@@ -54,6 +54,12 @@
 	proc/on_hit(var/atom/target, var/blocked = 0)
 		if(blocked >= 2)		return 0//Full block
 		if(!isliving(target))	return 0
+		// FUCK mice. - N3X
+		if(ismouse(target) && (stun+weaken+paralyze+agony)>5)
+			var/mob/living/simple_animal/mouse/M=target
+			M << "\red What would probably not kill a human completely overwhelms your tiny body."
+			M.splat()
+			return 1
 		if(isanimal(target))	return 0
 		var/mob/living/L = target
 		L.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked) // add in AGONY!
@@ -129,8 +135,8 @@
 		spawn(0)
 
 			if(A)
-				if(firer && istype(A, /obj/structure/stool/bed/chair/janicart))//This is very sloppy but there's no way to get the firer after its passed to bullet_act, we'll just have to assume the admins will use their judgement
-					var/obj/structure/stool/bed/chair/janicart/JC = A
+				if(firer && istype(A, /obj/structure/stool/bed/chair/vehicle))//This is very sloppy but there's no way to get the firer after its passed to bullet_act, we'll just have to assume the admins will use their judgement
+					var/obj/structure/stool/bed/chair/vehicle/JC = A
 					if(JC.buckled_mob)
 						var/mob/BM = JC.buckled_mob
 						if(istype(firer, /mob))

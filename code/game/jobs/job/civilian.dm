@@ -37,6 +37,10 @@
 			H.equip_or_collect(new /obj/item/ammo_casing/shotgun/beanbag(H), slot_in_backpack)
 			H.equip_or_collect(new /obj/item/ammo_casing/shotgun/beanbag(H), slot_in_backpack)
 
+		H.dna.SetSEState(SOBERBLOCK,1)
+		H.mutations += M_SOBER
+		H.check_mutations = 1
+
 		return 1
 
 
@@ -116,7 +120,7 @@
 
 	equip(var/mob/living/carbon/human/H)
 		if(!H)	return 0
-		H.equip_or_collect(new /obj/item/device/radio/headset/headset_cargo(H), slot_l_ear)
+		H.equip_or_collect(new /obj/item/device/radio/headset/headset_cargo(H), slot_ears)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/cargo(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/device/pda/quartermaster(H), slot_belt)
@@ -146,7 +150,7 @@
 
 	equip(var/mob/living/carbon/human/H)
 		if(!H)	return 0
-		H.equip_or_collect(new /obj/item/device/radio/headset/headset_cargo(H), slot_l_ear)
+		H.equip_or_collect(new /obj/item/device/radio/headset/headset_cargo(H), slot_ears)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/cargotech(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/device/pda/cargo(H), slot_belt)
@@ -174,7 +178,7 @@
 
 	equip(var/mob/living/carbon/human/H)
 		if(!H)	return 0
-		H.equip_or_collect(new /obj/item/device/radio/headset/headset_cargo (H), slot_l_ear)
+		H.equip_or_collect(new /obj/item/device/radio/headset/headset_cargo (H), slot_ears)
 		switch(H.backbag)
 			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
 			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
@@ -224,7 +228,7 @@
 		H.equip_or_collect(new /obj/item/toy/crayon/rainbow(H), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/weapon/storage/fancy/crayons(H), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/toy/waterflower(H), slot_in_backpack)
-		H.mutations.Add(CLUMSY)
+		H.mutations.Add(M_CLUMSY)
 		return 1
 
 
@@ -332,12 +336,13 @@
 	flag = LAWYER
 	department_flag = CIVILIAN
 	faction = "Station"
+	idtype = /obj/item/weapon/card/id/centcom
 	total_positions = 2
 	spawn_positions = 2
-	supervisors = "the captain"
+	supervisors = "NanoTransen Law, CentComm Officals, and the stations captain."
 	selection_color = "#dddddd"
-	access = list(access_lawyer, access_court, access_sec_doors, access_maint_tunnels)
-	minimal_access = list(access_lawyer, access_court, access_sec_doors)
+	access = list(access_lawyer, access_court, access_sec_doors, access_maint_tunnels, access_cargo, access_medical,  access_bar, access_kitchen, access_hydroponics)
+	minimal_access = list(access_lawyer, access_court, access_sec_doors, access_cargo,  access_bar, access_kitchen)
 
 
 	equip(var/mob/living/carbon/human/H)
@@ -348,7 +353,7 @@
 			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/internalaffairs(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/suit/storage/internalaffairs(H), slot_wear_suit)
-		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
+		H.equip_or_collect(new /obj/item/clothing/shoes/centcom(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
 		H.equip_or_collect(new /obj/item/device/pda/lawyer(H), slot_belt)
 		H.equip_or_collect(new /obj/item/weapon/storage/briefcase(H), slot_l_hand)

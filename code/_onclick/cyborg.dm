@@ -15,6 +15,9 @@
 		build_click(src, client.buildmode, params, A)
 		return
 
+	if(stat || lockcharge || weakened || stunned || paralysis)
+		return
+
 	var/list/modifiers = params2list(params)
 	if(modifiers["middle"])
 		MiddleClickOn(A)
@@ -27,9 +30,6 @@
 		return
 	if(modifiers["ctrl"])
 		CtrlClickOn(A)
-		return
-
-	if(stat || lockcharge || weakened || stunned || paralysis)
 		return
 
 	if(next_move >= world.time)
@@ -101,6 +101,11 @@
 	cycle_modules()
 	return
 
+//Middle click cycles through selected modules.
+/mob/living/silicon/robot/AltClickOn(var/atom/A)
+	A.RobotAltClick(src)
+	return
+
 /*
 	As with AI, these are not used in click code,
 	because the code for robots is specific, not generic.
@@ -117,3 +122,15 @@
 /atom/proc/attack_robot(mob/user as mob)
 	attack_ai(user)
 	return
+
+
+// /vg/: Alt-click.
+/atom/proc/RobotAltClick()
+	return
+
+// /vg/: Alt-click to open shit
+/obj/machinery/door/airlock/RobotAltClick() // Opens doors
+	if(density)
+		Topic("aiEnable=7", list("aiEnable"="7"), 1) // 1 meaning no window (consistency!)
+	else
+		Topic("aiDisable=7", list("aiDisable"="7"), 1)

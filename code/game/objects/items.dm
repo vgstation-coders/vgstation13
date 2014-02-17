@@ -46,15 +46,15 @@
 /obj/item/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
+			qdel(src)
 			return
 		if(2.0)
 			if (prob(50))
-				del(src)
+				qdel(src)
 				return
 		if(3.0)
 			if (prob(5))
-				del(src)
+				qdel(src)
 				return
 		else
 	return
@@ -102,7 +102,7 @@
 		if(5.0)
 			size = "huge"
 		else
-	//if ((CLUMSY in usr.mutations) && prob(50)) t = "funny-looking"
+	//if ((M_CLUMSY in usr.mutations) && prob(50)) t = "funny-looking"
 	usr << "This is a [src.blood_DNA ? "bloody " : ""]\icon[src][src.name]. It is a [size] item."
 	if(src.desc)
 		usr << src.desc
@@ -213,7 +213,7 @@
 
 	return
 
-/obj/item/proc/talk_into(mob/M as mob, text)
+/obj/item/proc/talk_into(mob/M as mob, var/text, var/channel=null)
 	return
 
 /obj/item/proc/moved(mob/user as mob, old_loc as turf)
@@ -258,7 +258,7 @@
 		var/mob/living/carbon/human/H = M
 
 		if(istype(src, /obj/item/clothing/under) || istype(src, /obj/item/clothing/suit))
-			if(FAT in H.mutations)
+			if(M_FAT in H.mutations)
 				testing("[M] TOO FAT TO WEAR [src]!")
 				if(!(flags & ONESIZEFITSALL))
 					if(!disable_warning)
@@ -374,13 +374,25 @@
 					else
 						return 0
 				return 1
-			if(slot_l_ear)
+
+			if(slot_ears)
+				if( !(slot_flags & SLOT_EARS) )
+					return 0
+				if(H.ears)
+					if(automatic)
+						if(H.check_for_open_slot(src))
+							return 0
+					if(H.ears.canremove)
+						return 2
+					else
+						return 0
+				return 1
+			/* In case it's ever unfucked.
+			if(slot_ears)
 				if( !(slot_flags & SLOT_EARS) )
 					return 0
 				if( (slot_flags & SLOT_TWOEARS) && H.r_ear )
 					return 0
-				if( w_class < 2	)
-					return 1
 				if(H.l_ear)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -389,14 +401,14 @@
 						return 2
 					else
 						return 0
+				if( w_class < 2	)
+					return 1
 				return 1
 			if(slot_r_ear)
 				if( !(slot_flags & SLOT_EARS) )
 					return 0
 				if( (slot_flags & SLOT_TWOEARS) && H.l_ear )
 					return 0
-				if( w_class < 2 )
-					return 1
 				if(H.r_ear)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -405,7 +417,10 @@
 						return 2
 					else
 						return 0
+				if( w_class < 2 )
+					return 1
 				return 1
+			*/
 			if(slot_w_uniform)
 				if( !(slot_flags & SLOT_ICLOTHING) )
 					return 0
@@ -632,7 +647,7 @@
 		M.LAssailant = user
 
 	src.add_fingerprint(user)
-	//if((CLUMSY in user.mutations) && prob(50))
+	//if((M_CLUMSY in user.mutations) && prob(50))
 	//	M = user
 		/*
 		M << "\red You stab yourself in the eye."

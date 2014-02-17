@@ -9,6 +9,7 @@
 	throw_speed = 4
 	throw_range = 20
 	m_amt = 500
+	w_type = RECYK_ELECTRONIC
 	var/obj/item/weapon/disk/nuclear/the_disk = null
 	var/active = 0
 
@@ -123,12 +124,18 @@
 			mode = 2
 			switch(alert("Search for item signature or DNA fragment?" , "Signature Mode Select" , "" , "Item" , "DNA"))
 				if("Item")
-					var/datum/objective/steal/itemlist
-					itemlist = itemlist // To supress a 'variable defined but not used' error.
-					var/targetitem = input("Select item to search for.", "Item Mode Select","") as null|anything in itemlist.possible_items
+					var/list/item_names[0]
+					var/list/item_paths[0]
+					for(var/typepath in potential_theft_objectives)
+						var/obj/item/tmp_object=new typepath
+						var/n="[tmp_object]"
+						item_names+=n
+						item_paths[n]=typepath
+						del(tmp_object)
+					var/targetitem = input("Select item to search for.", "Item Mode Select","") as null|anything in potential_theft_objectives
 					if(!targetitem)
 						return
-					target=locate(itemlist.possible_items[targetitem])
+					target=locate(item_paths[targetitem])
 					if(!target)
 						usr << "Failed to locate [targetitem]!"
 						return

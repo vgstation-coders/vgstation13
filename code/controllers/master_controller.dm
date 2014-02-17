@@ -27,6 +27,7 @@ datum/controller/game_controller
 	var/nano_cost		= 0
 	var/events_cost		= 0
 	var/ticker_cost		= 0
+	var/gc_cost         = 0
 	var/total_cost		= 0
 
 	var/last_thing_processed
@@ -66,10 +67,14 @@ datum/controller/game_controller/proc/setup()
 	if(!ticker)
 		ticker = new /datum/controller/gameticker()
 
+	if(!garbage)
+		garbage = new /datum/controller/garbage_collector()
+
 	setup_objects()
 	setupgenetics()
 	setupfactions()
 	setup_economy()
+	SetupXenoarch()
 
 	for(var/i=0, i<max_secret_rooms, i++)
 		make_mining_asteroid_secret()
@@ -221,8 +226,14 @@ datum/controller/game_controller/proc/process()
 				ticker.process()
 				ticker_cost = (world.timeofday - timer) / 10
 
+				// GC
+				timer = world.timeofday
+				last_thing_processed = garbage.type
+				garbage.process()
+				gc_cost = (world.timeofday - timer) / 10
+
 				//TIMING
-				total_cost = air_cost + sun_cost + mobs_cost + diseases_cost + machines_cost + objects_cost + networks_cost + powernets_cost + nano_cost + events_cost + ticker_cost
+				total_cost = air_cost + sun_cost + mobs_cost + diseases_cost + machines_cost + objects_cost + networks_cost + powernets_cost + nano_cost + events_cost + ticker_cost + gc_cost
 
 				var/end_time = world.timeofday
 				if(end_time < start_time)
@@ -257,7 +268,7 @@ datum/controller/game_controller/proc/process_machines()
 	var/i = 1
 	while(i<=machines.len)
 		var/obj/machinery/Machine = machines[i]
-		if(Machine)
+		if(Machine && Machine.loc)
 			last_thing_processed = Machine.type
 			if(Machine.process() != PROCESS_KILL)
 				if(Machine)
@@ -271,7 +282,7 @@ datum/controller/game_controller/proc/process_objects()
 	var/i = 1
 	while(i<=processing_objects.len)
 		var/obj/Object = processing_objects[i]
-		if(Object)
+		if(Object && Object.loc)
 			last_thing_processed = Object.type
 			Object.process()
 			i++
@@ -304,7 +315,7 @@ datum/controller/game_controller/proc/process_nano()
 	var/i = 1
 	while(i<=nanomanager.processing_uis.len)
 		var/datum/nanoui/ui = nanomanager.processing_uis[i]
-		if(ui && ui.src_object && ui.user)
+		if(ui)
 			ui.process()
 			i++
 			continue

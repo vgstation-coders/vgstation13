@@ -12,6 +12,7 @@
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	explosion_resistance = 5
 	air_properties_vary_with_direction = 1
+	ghost_read=0
 
 
 /obj/machinery/door/window/update_nearby_tiles(need_rebuild)
@@ -33,7 +34,7 @@
 		src.base_state = src.icon_state
 	return
 
-/obj/machinery/door/window/Del()
+/obj/machinery/door/window/Destroy()
 	density = 0
 	playsound(src, "shatter", 70, 1)
 	..()
@@ -154,9 +155,6 @@
 	//..() //Does this really need to be here twice? The parent proc doesn't even do anything yet. - Nodrak
 	return
 
-/obj/machinery/door/window/attack_ghost(mob/user as mob)
-	return
-
 /obj/machinery/door/window/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)
@@ -242,7 +240,7 @@
 	icon_state = "leftsecure"
 	base_state = "leftsecure"
 	req_access = list(access_security)
-	var/id = null
+	var/id_tag = null
 	health = 300.0 //Stronger doors for prison (regular window door health is 200)
 
 

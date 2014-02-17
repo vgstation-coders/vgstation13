@@ -1,4 +1,7 @@
-/mob/Del()//This makes sure that mobs with clients/keys are not just deleted from the game.
+/mob/recycle(var/datum/materials)
+	return RECYK_BIOLOGICAL
+
+/mob/Destroy()//This makes sure that mobs with clients/keys are not just deleted from the game.
 	mob_list -= src
 	dead_mob_list -= src
 	living_mob_list -= src
@@ -270,23 +273,8 @@
 								del(W)
 								equip_to_slot(wearing, slot, redraw_mob)
 					// oh god what am I doing - N3X
-					if(slot_l_ear)
-						wearing = H.l_ear
-						equip_to_slot(W, slot, redraw_mob)
-						if(wearing)
-							if(hand)
-								r_hand = wearing
-								update_inv_r_hand()
-							else if(hand == 0)
-								l_hand = wearing
-								update_inv_l_hand()
-							else
-								u_equip(W)
-								del(W)
-								equip_to_slot(wearing, slot, redraw_mob)
-					// aaaaaaaaa
-					if(slot_r_ear)
-						wearing = H.r_ear
+					if(slot_ears)
+						wearing = H.ears
 						equip_to_slot(W, slot, redraw_mob)
 						if(wearing)
 							if(hand)
@@ -415,11 +403,16 @@
 // Used in job equipping so shit doesn't pile up at the start loc.
 /mob/living/carbon/human/proc/equip_or_collect(var/obj/item/W, var/slot)
 	if(!equip_to_slot_or_drop(W, slot))
-		// Do I have a bag?
-		var/obj/item/weapon/storage/bag/plasticbag/B = is_in_hands(/obj/item/weapon/storage/bag/plasticbag)
+		// Do I have a backpack?
+		var/obj/item/weapon/storage/B = back
+
+		// Do I have a plastic bag?
+		if(!B)
+			B=is_in_hands(/obj/item/weapon/storage/bag/plasticbag)
+
 		if(!B)
 			// Gimme one.
-			B=new(null) // Null in case of failed equip.
+			B=new /obj/item/weapon/storage/bag/plasticbag(null) // Null in case of failed equip.
 			if(!put_in_hands(B,slot_back))
 				return // Fuck it
 		B.handle_item_insertion(W,1)
@@ -434,8 +427,7 @@ var/list/slot_equipment_priority = list( \
 		slot_head,\
 		slot_shoes,\
 		slot_gloves,\
-		slot_l_ear,\
-		slot_r_ear,\
+		slot_ears,\
 		slot_glasses,\
 		slot_belt,\
 		slot_s_store,\
@@ -552,20 +544,11 @@ var/list/slot_equipment_priority = list( \
 					else
 						return 0
 				return 1
-			if(slot_l_ear)
-				if( !(slot_flags & slot_l_ear) )
+			if(slot_ears)
+				if( !(slot_flags & slot_ears) )
 					return 0
-				if(H.l_ear)
-					if(H.l_ear.canremove)
-						return 2
-					else
-						return 0
-				return 1
-			if(slot_r_ear)
-				if( !(slot_flags & slot_r_ear) )
-					return 0
-				if(H.r_ear)
-					if(H.r_ear.canremove)
+				if(H.ears)
+					if(H.ears.canremove)
 						return 2
 					else
 						return 0
@@ -573,7 +556,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_w_uniform)
 				if( !(slot_flags & SLOT_ICLOTHING) )
 					return 0
-				if((FAT in H.mutations) && !(flags & ONESIZEFITSALL))
+				if((M_FAT in H.mutations) && !(flags & ONESIZEFITSALL))
 					return 0
 				if(H.w_uniform)
 					if(H.w_uniform.canremove)
@@ -1192,6 +1175,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 				stat(null,"Obj-[master_controller.objects_cost]\t#[processing_objects.len]")
 				stat(null,"Net-[master_controller.networks_cost]\tPnet-[master_controller.powernets_cost]")
 				stat(null,"NanoUI-[master_controller.nano_cost]\t#[nanomanager.processing_uis.len]")
+				stat(null,"GC-[master_controller.gc_cost]\t#[garbage.queue.len]")
 				stat(null,"Tick-[master_controller.ticker_cost]\tALL-[master_controller.total_cost]")
 			else
 				stat(null,"MasterController-ERROR")
@@ -1212,11 +1196,11 @@ note dizziness decrements automatically in the mob's Life() proc.
 				continue //Not showing the noclothes spell
 			switch(S.charge_type)
 				if("recharge")
-					statpanel("Spells","[S.charge_counter/10.0]/[S.charge_max/10]",S)
+					statpanel(S.panel,"[S.charge_counter/10.0]/[S.charge_max/10]",S)
 				if("charges")
-					statpanel("Spells","[S.charge_counter]/[S.charge_max]",S)
+					statpanel(S.panel,"[S.charge_counter]/[S.charge_max]",S)
 				if("holdervar")
-					statpanel("Spells","[S.holder_var_type] [S.holder_var_amount]",S)
+					statpanel(S.panel,"[S.holder_var_type] [S.holder_var_amount]",S)
 
 
 

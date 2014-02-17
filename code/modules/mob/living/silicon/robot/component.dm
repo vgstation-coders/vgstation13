@@ -172,11 +172,12 @@
 	throw_speed = 5
 	throw_range = 10
 	m_amt = 200
-	origin_tech = "magnets=1;biotech=1"
+	w_type = RECYK_ELECTRONIC
+	origin_tech = "magnets=3;engineering=3"
 	var/mode = 1;
 
 /obj/item/device/robotanalyzer/attack(mob/living/M as mob, mob/living/user as mob)
-	if(( (CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
+	if(( (M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
 		user << text("\red You try to analyze the floor's vitals!")
 		for(var/mob/O in viewers(M, null))
 			O.show_message(text("\red [user] has analyzed the floor's vitals!"), 1)

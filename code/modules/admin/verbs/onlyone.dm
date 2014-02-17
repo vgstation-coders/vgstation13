@@ -10,10 +10,12 @@
 		ticker.mode.traitors += H.mind
 		H.mind.special_role = "traitor"
 
+		/* This never worked.
 		var/datum/objective/steal/steal_objective = new
 		steal_objective.owner = H.mind
 		steal_objective.set_target("nuclear authentication disk")
 		H.mind.objectives += steal_objective
+		*/
 
 		var/datum/objective/hijack/hijack_objective = new
 		hijack_objective.owner = H.mind
@@ -31,7 +33,7 @@
 			del(I)
 
 		H.equip_to_slot_or_del(new /obj/item/clothing/under/kilt(H), slot_w_uniform)
-		H.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(H), slot_l_ear)
+		H.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(H), slot_ears)
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/beret(H), slot_head)
 		H.equip_to_slot_or_del(new /obj/item/weapon/claymore(H), slot_l_hand)
 		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/combat(H), slot_shoes)

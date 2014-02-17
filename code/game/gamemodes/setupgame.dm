@@ -1,4 +1,7 @@
 /proc/getAssignedBlock(var/name,var/list/blocksLeft, var/activity_bounds=DNA_DEFAULT_BOUNDS)
+	if(blocksLeft.len==0)
+		warning("[name]: No more blocks left to assign!")
+		return 0
 	var/assigned = pick(blocksLeft)
 	blocksLeft.Remove(assigned)
 	assigned_blocks[assigned]=name
@@ -74,6 +77,21 @@
 	PSYRESISTBLOCK = getAssignedBlock("PSYRESIST",  numsToAssign, DNA_HARD_BOUNDS)
 	SHADOWBLOCK    = getAssignedBlock("SHADOW",     numsToAssign, DNA_HARDER_BOUNDS)
 	CHAMELEONBLOCK = getAssignedBlock("CHAMELEON",  numsToAssign, DNA_HARDER_BOUNDS)
+	CRYOBLOCK      = getAssignedBlock("CRYO",       numsToAssign, DNA_HARD_BOUNDS)
+	EATBLOCK       = getAssignedBlock("EAT",        numsToAssign, DNA_HARD_BOUNDS)
+	JUMPBLOCK      = getAssignedBlock("JUMP",       numsToAssign, DNA_HARD_BOUNDS)
+	MELTBLOCK      = getAssignedBlock("MELT",       numsToAssign)
+	IMMOLATEBLOCK  = getAssignedBlock("IMMOLATE",   numsToAssign)
+	EMPATHBLOCK    = getAssignedBlock("EMPATH",     numsToAssign, DNA_HARD_BOUNDS)
+	SUPERFARTBLOCK = getAssignedBlock("SUPERFART",  numsToAssign, DNA_HARDER_BOUNDS)
+	POLYMORPHBLOCK = getAssignedBlock("POLYMORPH",  numsToAssign, DNA_HARDER_BOUNDS)
+
+	//
+	// Static Blocks
+	/////////////////////////////////////////////.
+
+	// Monkeyblock is always last.
+	MONKEYBLOCK = DNA_SE_LENGTH
 
 	// And the genes that actually do the work. (domutcheck improvements)
 	var/list/blocks_assigned[DNA_SE_LENGTH]
@@ -88,7 +106,9 @@
 				assignedToBlock=blocks_assigned[G.block]
 			assignedToBlock.Add(G.name)
 			blocks_assigned[G.block]=assignedToBlock
-			testing("DNA2: Gene [G.name] assigned to block [G.block].")
+			//testing("DNA2: Gene [G.name] assigned to block [G.block].")
+
+	testing("DNA2: [numsToAssign.len] blocks are unused: [english_list(numsToAssign)]")
 
 // Run AFTER genetics setup and AFTER species setup.
 /proc/setup_species()
@@ -137,14 +157,14 @@
 			var/mob/living/carbon/human/M = new /mob/living/carbon/human(A.loc)
 			M.real_name = "Corpse"
 			M.death()
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_eng(M), slot_l_ear)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_eng(M), slot_ears)
 			M.equip_to_slot_or_del(new /obj/item/device/pda/engineering(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/engineer(M), slot_w_uniform)
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(M), slot_shoes)
 		//	M.equip_to_slot_or_del(new /obj/item/weapon/storage/toolbox/mechanical(M), slot_l_hand)
 			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow(M), slot_gloves)
 			M.equip_to_slot_or_del(new /obj/item/device/t_scanner(M), slot_r_store)
-			//M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_l_ear)
+			//M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(M), slot_back)
 			if (prob(50))
 				M.equip_to_slot_or_del(new /obj/item/clothing/mask/gas(M), slot_wear_mask)
@@ -159,7 +179,7 @@
 			var/mob/living/carbon/human/M = new /mob/living/carbon/human(A.loc)
 			M.real_name = "Corpse"
 			M.death()
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_eng(M), slot_l_ear)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_eng(M), slot_ears)
 			M.equip_to_slot_or_del(new /obj/item/weapon/tank/emergency_oxygen(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/engineer(M), slot_w_uniform)
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(M), slot_shoes)
@@ -182,7 +202,7 @@
 			var/mob/living/carbon/human/M = new /mob/living/carbon/human(A.loc)
 			M.real_name = "Corpse"
 			M.death()
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_eng(M), slot_l_ear)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_eng(M), slot_ears)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/utilitybelt(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/chief_engineer(M), slot_w_uniform)
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(M), slot_shoes)
@@ -203,7 +223,7 @@
 			var/mob/living/carbon/human/M = new /mob/living/carbon/human(A.loc)
 			M.real_name = "Corpse"
 			M.death()
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_l_ear)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
 			//M.equip_to_slot_or_del(new /obj/item/weapon/gun/revolver(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/syndicate(M), slot_w_uniform)
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(M), slot_shoes)

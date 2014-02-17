@@ -2,8 +2,9 @@
 	name = "landmark"
 	icon = 'icons/mob/screen1.dmi'
 	icon_state = "x2"
-	anchored = 1.0
+	anchored = 1
 	unacidable = 1
+	w_type=NOT_RECYCLABLE
 
 /obj/effect/landmark/New()
 
@@ -72,7 +73,7 @@
 	landmarks_list += src
 	return 1
 
-/obj/effect/landmark/Del()
+/obj/effect/landmark/Destroy()
 	landmarks_list -= src
 	..()
 

@@ -68,7 +68,7 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 	..()
 	return
 
-/obj/machinery/message_server/Del()
+/obj/machinery/message_server/Destroy()
 	message_servers -= src
 	..()
 	return
@@ -97,6 +97,8 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 	rc_msgs += new/datum/data_rc_msg(recipient,sender,message,stamp,id_auth)
 
 /obj/machinery/message_server/attack_hand(user as mob)
+	if(isobserver(user) && !isAdminGhost(user))
+		return 0
 //	user << "\blue There seem to be some parts missing from this server. They should arrive on the station in a few days, give or take a few CentCom delays."
 	user << "You toggle PDA message passing from [active ? "On" : "Off"] to [active ? "Off" : "On"]"
 	active = !active
@@ -205,7 +207,7 @@ var/obj/machinery/blackbox_recorder/blackbox
 			del(src)
 	blackbox = src
 
-/obj/machinery/blackbox_recorder/Del()
+/obj/machinery/blackbox_recorder/Destroy()
 	var/turf/T = locate(1,1,2)
 	if(T)
 		blackbox = null

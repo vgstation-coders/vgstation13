@@ -43,7 +43,7 @@
 	cable_list += src
 
 
-/obj/structure/cable/Del()						// called when a cable is deleted
+/obj/structure/cable/Destroy()						// called when a cable is deleted
 	if(!defer_powernet_rebuild)					// set if network will be rebuilt manually
 		if(powernet)
 			powernet.cut_cable(src)				// update the powernets
@@ -151,16 +151,16 @@
 /obj/structure/cable/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
+			qdel(src)
 		if(2.0)
 			if (prob(50))
 				new/obj/item/weapon/cable_coil(src.loc, src.d1 ? 2 : 1, _color)
-				del(src)
+				qdel(src)
 
 		if(3.0)
 			if (prob(25))
 				new/obj/item/weapon/cable_coil(src.loc, src.d1 ? 2 : 1, _color)
-				del(src)
+				qdel(src)
 	return
 
 // the cable coil object, used for laying cable
@@ -178,8 +178,8 @@
 	w_class = 2.0
 	throw_speed = 2
 	throw_range = 5
-	m_amt = 50
-	g_amt = 20
+	m_amt = CC_PER_SHEET_METAL
+	w_type = RECYK_METAL
 	flags = TABLEPASS | USEDELAY | FPRINT | CONDUCT
 	slot_flags = SLOT_BELT
 	item_state = "coil_red"

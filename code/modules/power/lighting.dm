@@ -257,7 +257,7 @@
 		spawn(1)
 			update(0)
 
-/obj/machinery/light/Del()
+/obj/machinery/light/Destroy()
 	var/area/A = get_area(src)
 	if(A)
 		on = 0
@@ -390,7 +390,7 @@
 					continue
 				M.show_message("[user.name] smashed the light!", 3, "You hear a tinkle of breaking glass", 2)
 			if(on && (W.flags & CONDUCT))
-				//if(!user.mutations & COLD_RESISTANCE)
+				//if(!user.mutations & M_RESIST_COLD)
 				if (prob(12))
 					electrocute_mob(user, get_area(src), src, 0.3)
 			broken()
@@ -426,7 +426,7 @@
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(3, 1, src)
 			s.start()
-			//if(!user.mutations & COLD_RESISTANCE)
+			//if(!user.mutations & M_RESIST_COLD)
 			if (prob(75))
 				electrocute_mob(user, get_area(src), src, rand(0.7,1.0))
 
@@ -520,7 +520,7 @@
 		else
 			prot = 1
 
-		if(prot > 0 || (mHeatres in user.mutations))
+		if(prot > 0 || (M_RESIST_HEAT in user.mutations))
 			user << "You remove the light [fitting]"
 		else
 			user << "You try to remove the light [fitting], but it's too hot and you don't want to burn your hand."
@@ -574,7 +574,7 @@
 /obj/machinery/light/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
+			qdel(src)
 			return
 		if(2.0)
 			if (prob(75))
@@ -648,6 +648,7 @@
 	base_state = "ltube"
 	item_state = "c_tube"
 	g_amt = 100
+	w_type = RECYK_GLASS
 	brightness = 8
 
 /obj/item/weapon/light/tube/large
@@ -663,6 +664,7 @@
 	item_state = "contvapour"
 	g_amt = 100
 	brightness = 5
+	w_type = RECYK_GLASS
 
 /obj/item/weapon/light/throw_impact(atom/hit_atom)
 	..()

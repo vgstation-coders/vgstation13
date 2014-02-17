@@ -49,7 +49,7 @@
 	return parent.return_network(reference)
 
 
-/obj/machinery/atmospherics/pipe/Del()
+/obj/machinery/atmospherics/pipe/Destroy()
 	del(parent)
 	if(air_temporary)
 		loc.assume_air(air_temporary)
@@ -179,7 +179,7 @@
 	var/datum/effect/effect/system/smoke_spread/smoke = new
 	smoke.set_up(1,0, src.loc, 0)
 	smoke.start()
-	del(src)
+	qdel(src)
 
 
 /obj/machinery/atmospherics/pipe/simple/proc/normalize_dir()
@@ -189,7 +189,7 @@
 		dir = 4
 
 
-/obj/machinery/atmospherics/pipe/simple/Del()
+/obj/machinery/atmospherics/pipe/simple/Destroy()
 	if(node1)
 		node1.disconnect(src)
 	if(node2)
@@ -216,7 +216,7 @@
 
 	else
 		if(!node1&&!node2)
-			del(src) //TODO: silent deleting looks weird
+			qdel(src) //TODO: silent deleting looks weird
 		var/have_node1 = node1?1:0
 		var/have_node2 = node2?1:0
 		icon_state = "exposed[have_node1][have_node2][invisibility ? "-f" : "" ]"
@@ -433,7 +433,7 @@
 	..()
 
 
-/obj/machinery/atmospherics/pipe/tank/Del()
+/obj/machinery/atmospherics/pipe/tank/Destroy()
 	if(node1)
 		node1.disconnect(src)
 
@@ -544,7 +544,7 @@
 	*/
 
 
-/obj/machinery/atmospherics/pipe/vent/Del()
+/obj/machinery/atmospherics/pipe/vent/Destroy()
 	if(node1)
 		node1.disconnect(src)
 
@@ -678,7 +678,7 @@
 	*/
 
 
-/obj/machinery/atmospherics/pipe/manifold/Del()
+/obj/machinery/atmospherics/pipe/manifold/Destroy()
 	if(node1)
 		node1.disconnect(src)
 	if(node2)
@@ -739,7 +739,7 @@
 		icon_state = "manifold_[connected]_[unconnected]"
 
 		if(!connected)
-			del(src)
+			qdel(src)
 
 	return
 
@@ -904,7 +904,7 @@
 	*/
 
 
-/obj/machinery/atmospherics/pipe/manifold4w/Del()
+/obj/machinery/atmospherics/pipe/manifold4w/Destroy()
 	if(node1)
 		node1.disconnect(src)
 	if(node2)
@@ -970,7 +970,7 @@
 			overlays += new/image(con,dir=8)
 
 		if(!node1 && !node2 && !node3 && !node4)
-			del(src)
+			qdel(src)
 	return
 
 
@@ -1085,7 +1085,7 @@
 		. = PROCESS_KILL
 
 
-/obj/machinery/atmospherics/pipe/cap/Del()
+/obj/machinery/atmospherics/pipe/cap/Destroy()
 	if(node)
 		node.disconnect(src)
 
@@ -1178,5 +1178,5 @@
 			if (meter.target == src)
 				new /obj/item/pipe_meter(T)
 				del(meter)
-		del(src)
+		qdel(src)
 

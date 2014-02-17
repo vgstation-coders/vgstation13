@@ -63,13 +63,13 @@ var/list/mechtoys = list(
 /obj/structure/plasticflaps/ex_act(severity)
 	switch(severity)
 		if (1)
-			del(src)
+			qdel(src)
 		if (2)
 			if (prob(50))
-				del(src)
+				qdel(src)
 		if (3)
 			if (prob(5))
-				del(src)
+				qdel(src)
 
 /obj/structure/plasticflaps/mining //A specific type for mining that doesn't allow airflow because of them damn crates
 	name = "\improper Airtight plastic flaps"
@@ -81,7 +81,7 @@ var/list/mechtoys = list(
 			T.blocks_air = 1
 		..()
 
-	Del() //lazy hack to set the turf to allow air to pass if it's a simulated floor
+	Destroy() //lazy hack to set the turf to allow air to pass if it's a simulated floor
 		var/turf/T = get_turf(loc)
 		if(T)
 			if(istype(T, /turf/simulated/floor))
@@ -192,8 +192,15 @@ var/list/mechtoys = list(
 		moving = 0
 
 		//Do I really need to explain this loop?
-		for(var/mob/living/unlucky_person in the_shuttles_way)
-			unlucky_person.gib()
+		for(var/atom/A in the_shuttles_way)
+			if(istype(A,/mob/living))
+				var/mob/living/unlucky_person = A
+				unlucky_person.gib()
+			// Weird things happen when this shit gets in the way.
+			if(istype(A,/obj/structure/lattice) \
+				|| istype(A, /obj/structure/window) \
+				|| istype(A, /obj/structure/grille))
+				del(A)
 
 		from.move_contents_to(dest)
 
@@ -258,7 +265,10 @@ var/list/mechtoys = list(
 					if(istype(A, /obj/item/stack/sheet/mineral/plasma))
 						var/obj/item/stack/sheet/mineral/plasma/P = A
 						plasma_count += P.amount
-			del(MA)
+
+					// Delete it. (Fixes github #473)
+					qdel(A)
+			qdel(MA)
 
 		if(plasma_count)
 			points += Floor(plasma_count / plasma_per_point)

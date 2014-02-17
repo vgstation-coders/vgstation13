@@ -12,6 +12,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	mouse_opacity = 0
 	unacidable = 1//So effect are not targeted by alien acid.
 	flags = TABLEPASS
+	w_type=NOT_RECYCLABLE
 
 /obj/effect/effect/water
 	name = "water"
@@ -38,7 +39,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 		return
 	return
 
-/obj/effect/effect/water/Del()
+/obj/effect/effect/water/Destroy()
 	//var/turf/T = src.loc
 	//if (istype(T, /turf))
 	//	T.firelevel = 0 //TODO: FIX
@@ -155,7 +156,7 @@ steam.start() -- spawns the effect
 		delete()
 	return
 
-/obj/effect/effect/sparks/Del()
+/obj/effect/effect/sparks/Destroy()
 	var/turf/T = src.loc
 	if (istype(T, /turf))
 		T.hotspot_expose(1000,100)
@@ -491,6 +492,34 @@ steam.start() -- spawns the effect
 					if(smoke) smoke.delete()
 					src.total_smoke--
 
+// Goon compat.
+/datum/effect/effect/system/smoke_spread/chem/fart
+	set_up(var/mob/M, n = 5, c = 0, loca, direct)
+		if(n > 20)
+			n = 20
+		number = n
+		cardinals = c
+
+		chemholder.reagents.add_reagent("space_drugs", rand(1,10))
+
+		if(istype(loca, /turf/))
+			location = loca
+		else
+			location = get_turf(loca)
+		if(direct)
+			direction = direct
+
+		var/contained = "\[[chemholder.reagents.get_reagent_ids()]\]"
+		var/area/A = get_area(location)
+
+		var/where = "[A.name] | [location.x], [location.y]"
+		var/whereLink=formatJumpTo(location,where)
+
+		var/more = "(<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</a>)"
+		message_admins("[M][more] produced a toxic fart in ([whereLink])[contained].", 0, 1)
+		log_game("[M][more] produced a toxic fart in ([where])[contained].")
+
+
 /////////////////////////////////////////////
 //////// Attach an Ion trail to any object, that spawns when it moves (like for the jetpack)
 /// just pass in the object to attach it to in set_up
@@ -631,7 +660,7 @@ steam.start() -- spawns the effect
 	return
 
 // on delete, transfer any reagents to the floor
-/obj/effect/effect/foam/Del()
+/obj/effect/effect/foam/Destroy()
 	if(!metal && reagents)
 		for(var/atom/A in oview(0,src))
 			if(A == src)
@@ -758,7 +787,7 @@ steam.start() -- spawns the effect
 
 
 
-	Del()
+	Destroy()
 
 		density = 0
 		update_nearby_tiles(1)
@@ -772,7 +801,7 @@ steam.start() -- spawns the effect
 
 
 	ex_act(severity)
-		del(src)
+		qdel(src)
 
 	blob_act()
 		del(src)
@@ -786,7 +815,7 @@ steam.start() -- spawns the effect
 		return
 
 	attack_hand(var/mob/user)
-		if ((HULK in user.mutations) || (prob(75 - metal*25)))
+		if ((M_HULK in user.mutations) || (prob(75 - metal*25)))
 			user << "\blue You smash through the metal foam wall."
 			for(var/mob/O in oviewers(user))
 				if ((O.client && !( O.blinded )))

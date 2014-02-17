@@ -40,7 +40,7 @@ ________________________________________________________________________________
 	cell = new/obj/item/weapon/cell/high//The suit should *always* have a battery because so many things rely on it.
 	cell.charge = 9000//Starting charge should not be higher than maximum charge. It leads to problems with recharging.
 
-/obj/item/clothing/suit/space/space_ninja/Del()
+/obj/item/clothing/suit/space/space_ninja/Destroy()
 	if(affecting)//To make sure the window is closed.
 		affecting << browse(null, "window=hack spideros")
 	if(AI)//If there are AIs present when the ninja kicks the bucket.
@@ -1443,7 +1443,7 @@ It is possible to destroy the net by the occupant or someone else.
 		return
 
 	attack_hand()
-		if (HULK in usr.mutations)
+		if (M_HULK in usr.mutations)
 			usr << text("\blue You easily destroy the energy net.")
 			for(var/mob/O in oviewers(src))
 				O.show_message(text("\red [] rips the energy net apart!", usr), 1)

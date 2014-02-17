@@ -53,7 +53,6 @@ datum/mind
 
 	var/datum/faction/faction 			//associated faction
 	var/datum/changeling/changeling		//changeling holder
-
 	var/datum/vampire/vampire			//vampire holder
 
 	var/rev_cooldown = 0
@@ -69,7 +68,8 @@ datum/mind
 
 	proc/transfer_to(mob/living/new_character)
 		if(!istype(new_character))
-			world.log << "## DEBUG: transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn"
+			error("transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn")
+
 		if(current)					//remove ourself from our old body's mind variable
 			if(changeling)
 				current.remove_changeling_powers()
@@ -794,8 +794,7 @@ datum/mind
 					var/mob/living/carbon/human/H = current
 					del(H.belt)
 					del(H.back)
-					del(H.l_ear)
-					del(H.r_ear)
+					del(H.ears)
 					del(H.gloves)
 					del(H.head)
 					del(H.shoes)
@@ -1097,8 +1096,7 @@ datum/mind
 			var/mob/living/carbon/human/H = current
 			del(H.belt)
 			del(H.back)
-			del(H.l_ear)
-			del(H.r_ear)
+			del(H.ears)
 			del(H.gloves)
 			del(H.head)
 			del(H.shoes)

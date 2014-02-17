@@ -308,8 +308,7 @@ Malf AIs/silicons aren't added. Monkeys aren't added. Messes with objective comp
 						if(2)//Steal
 							var/datum/objective/steal/ninja_objective = new
 							ninja_objective.owner = ninja_mind
-							var/target_item = pick(ninja_objective.possible_items_special)
-							ninja_objective.set_target(target_item)
+							ninja_objective.find_target(1) // Find a special target.
 							ninja_mind.objectives += ninja_objective
 
 							objective_list -= 2
@@ -527,7 +526,7 @@ As such, it's hard-coded for now. No reason for it not to be, really.
 		del(gloves)
 
 	var/obj/item/device/radio/R = new /obj/item/device/radio/headset(src)
-	equip_to_slot_or_del(R, slot_l_ear)
+	equip_to_slot_or_del(R, slot_ears)
 	if(gender==FEMALE)
 		equip_to_slot_or_del(new /obj/item/clothing/under/color/blackf(src), slot_w_uniform)
 	else

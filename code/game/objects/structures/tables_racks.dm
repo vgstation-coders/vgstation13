@@ -37,19 +37,19 @@
 	update_icon()
 	update_adjacent()
 
-/obj/structure/table/Del()
+/obj/structure/table/Destroy()
 	update_adjacent()
 	..()
 
 /obj/structure/table/proc/destroy()
 	new parts(loc)
 	density = 0
-	del(src)
+	qdel(src)
 
 /obj/structure/rack/proc/destroy()
 	new parts(loc)
 	density = 0
-	del(src)
+	qdel(src)
 
 /obj/structure/table/update_icon()
 	spawn(2) //So it properly updates when deleting
@@ -191,55 +191,21 @@
 						dir_sum = 2 //These translate the dir_sum to the correct dirs from the 'tabledir' icon_state.
 		if(dir_sum%16 == 15)
 			table_type = 4 //4-way intersection, the 'middle' table sprites will be used.
-
-		if(istype(src,/obj/structure/table/reinforced))
-			switch(table_type)
-				if(0)
-					icon_state = "reinf_table"
-				if(1)
-					icon_state = "reinf_1tileendtable"
-				if(2)
-					icon_state = "reinf_1tilethick"
-				if(3)
-					icon_state = "reinf_tabledir"
-				if(4)
-					icon_state = "reinf_middle"
-				if(5)
-					icon_state = "reinf_tabledir2"
-				if(6)
-					icon_state = "reinf_tabledir3"
-		else if(istype(src,/obj/structure/table/woodentable))
-			switch(table_type)
-				if(0)
-					icon_state = "wood_table"
-				if(1)
-					icon_state = "wood_1tileendtable"
-				if(2)
-					icon_state = "wood_1tilethick"
-				if(3)
-					icon_state = "wood_tabledir"
-				if(4)
-					icon_state = "wood_middle"
-				if(5)
-					icon_state = "wood_tabledir2"
-				if(6)
-					icon_state = "wood_tabledir3"
-		else
-			switch(table_type)
-				if(0)
-					icon_state = "table"
-				if(1)
-					icon_state = "table_1tileendtable"
-				if(2)
-					icon_state = "table_1tilethick"
-				if(3)
-					icon_state = "tabledir"
-				if(4)
-					icon_state = "table_middle"
-				if(5)
-					icon_state = "tabledir2"
-				if(6)
-					icon_state = "tabledir3"
+		switch(table_type)
+			if(0)
+				icon_state = "[initial(icon_state)]"
+			if(1)
+				icon_state = "[initial(icon_state)]_1tileendtable"
+			if(2)
+				icon_state = "[initial(icon_state)]_1tilethick"
+			if(3)
+				icon_state = "[initial(icon_state)]_dir"
+			if(4)
+				icon_state = "[initial(icon_state)]_middle"
+			if(5)
+				icon_state = "[initial(icon_state)]_dir2"
+			if(6)
+				icon_state = "[initial(icon_state)]_dir3"
 		if (dir_sum in list(1,2,4,8,5,6,9,10))
 			dir = dir_sum
 		else
@@ -248,11 +214,11 @@
 /obj/structure/table/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
+			qdel(src)
 			return
 		if(2.0)
 			if (prob(50))
-				del(src)
+				qdel(src)
 				return
 		if(3.0)
 			if (prob(25))
@@ -266,7 +232,7 @@
 		destroy()
 
 /obj/structure/table/attack_paw(mob/user)
-	if(HULK in user.mutations)
+	if(M_HULK in user.mutations)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		visible_message("<span class='danger'>[user] smashes the [src] apart!</span>")
 		destroy()
@@ -276,14 +242,14 @@
 	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
 
 /obj/structure/table/attack_animal(mob/living/simple_animal/user)
-	if(user.wall_smash)
+	if(user.environment_smash>0)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()
 
 
 
 /obj/structure/table/attack_hand(mob/user)
-	if(HULK in user.mutations)
+	if(M_HULK in user.mutations)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		destroy()
@@ -517,19 +483,26 @@
 /obj/structure/table/woodentable
 	name = "wooden table"
 	desc = "Do not apply fire to this. Rumour says it burns easily."
-	icon_state = "wood_table"
+	icon_state = "woodtable"
 	parts = /obj/item/weapon/table_parts/wood
 	health = 50
+
+
+/obj/structure/table/woodentable/poker //No specialties, Just a mapping object.
+	name = "gambling table"
+	desc = "A seedy table for seedy dealings in seedy places."
+	icon_state = "pokertable"
+	parts = /obj/item/weapon/table_parts/wood/poker
+
 /*
  * Reinforced tables
  */
 /obj/structure/table/reinforced
 	name = "reinforced table"
 	desc = "A version of the four legged table. It is stronger."
-	icon_state = "reinf_table"
-	health = 200
-	var/status = 2
+	icon_state = "reinftable"
 	parts = /obj/item/weapon/table_parts/reinforced
+	var/status = 2
 
 /obj/structure/table/reinforced/flip(var/direction)
 	if (status == 2)
@@ -581,14 +554,14 @@
 /obj/structure/rack/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
+			qdel(src)
 		if(2.0)
-			del(src)
+			qdel(src)
 			if(prob(50))
 				new /obj/item/weapon/rack_parts(src.loc)
 		if(3.0)
 			if(prob(25))
-				del(src)
+				qdel(src)
 				new /obj/item/weapon/rack_parts(src.loc)
 
 /obj/structure/rack/blob_act()
@@ -629,20 +602,20 @@
 		return
 	user.drop_item()
 	if(W && W.loc)	W.loc = src.loc
-	return
+	return 1
 
 /obj/structure/rack/meteorhit(obj/O as obj)
 	del(src)
 
 
 /obj/structure/table/attack_hand(mob/user)
-	if(HULK in user.mutations)
+	if(M_HULK in user.mutations)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		destroy()
 
 /obj/structure/rack/attack_paw(mob/user)
-	if(HULK in user.mutations)
+	if(M_HULK in user.mutations)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()
@@ -652,9 +625,10 @@
 	destroy()
 
 /obj/structure/rack/attack_animal(mob/living/simple_animal/user)
-	if(user.wall_smash)
+	if(user.environment_smash>0)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()
 
 /obj/structure/rack/attack_tk() // no telehulk sorry
 	return
+

@@ -26,7 +26,7 @@ var/list/solars_list = list()
 	use_power = 0
 	idle_power_usage = 0
 	active_power_usage = 0
-	var/id = 0
+	var/id_tag = 0
 	var/health = 10
 	var/obscured = 0
 	var/sunfrac = 0
@@ -157,14 +157,14 @@ var/list/solars_list = list()
 /obj/machinery/power/solar/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
+			qdel(src)
 			if(prob(15))
 				new /obj/item/weapon/shard( src.loc )
 			return
 		if(2.0)
 			if (prob(25))
 				new /obj/item/weapon/shard( src.loc )
-				del(src)
+				qdel(src)
 				return
 			if (prob(50))
 				broken()
@@ -273,7 +273,7 @@ var/list/solars_list = list()
 	use_power = 1
 	idle_power_usage = 5
 	active_power_usage = 20
-	var/id = 0
+	var/id_tag = 0
 	var/cdir = 0
 	var/gen = 0
 	var/lastgen = 0
@@ -520,7 +520,7 @@ Manual Tracking Direction:"}
 	switch(severity)
 		if(1.0)
 			//SN src = null
-			del(src)
+			qdel(src)
 			return
 		if(2.0)
 			if (prob(50))

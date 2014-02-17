@@ -22,7 +22,7 @@
 	speed = 8
 	projectiletype = /obj/item/projectile/beam/drone
 	projectilesound = 'sound/weapons/laser3.ogg'
-	destroy_surroundings = 0
+	environment_smash = 2
 	var/datum/effect/effect/system/ion_trail_follow/ion_trail
 
 	//the drone randomly switches between these states because it's malfunctioning
@@ -162,7 +162,7 @@
 	..()
 	del(src)
 
-/mob/living/simple_animal/hostile/retaliate/malf_drone/Del()
+/mob/living/simple_animal/hostile/retaliate/malf_drone/Destroy()
 	//some random debris left behind
 	if(has_loot)
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread

@@ -118,6 +118,17 @@
 				user << "\red [target] is full."
 				return
 
+			// /vg/: Logging transfers of bad things
+			if(target.reagents_to_log.len)
+				var/list/badshit=list()
+				for(var/bad_reagent in target.reagents_to_log)
+					if(reagents.has_reagent(bad_reagent))
+						badshit += reagents_to_log[bad_reagent]
+				if(badshit.len)
+					var/hl="\red <b>([english_list(badshit)])</b> \black"
+					message_admins("[user.name] ([user.ckey]) added [reagents.get_reagent_ids(1)] to \a [target] with [src].[hl] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+					log_game("[user.name] ([user.ckey]) added [reagents.get_reagent_ids(1)] to \a [target] with [src].")
+
 			var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
 			user << "\blue You transfer [trans] units of the solution to [target]."
 
@@ -164,6 +175,7 @@
 	item_state = "beaker"
 	m_amt = 0
 	g_amt = 500
+	w_type = RECYK_GLASS
 
 	on_reagent_change()
 		update_icon()
@@ -214,22 +226,41 @@
 	flags = FPRINT | TABLEPASS | OPENCONTAINER
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact
-	name = "cryostasis beaker"
-	desc = "A cryostasis beaker that allows for chemical storage without reactions. Can hold up to 50 units."
+	name = "stasis beaker"
+	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 50 units."
 	icon_state = "beakernoreact"
 	g_amt = 500
 	volume = 50
 	amount_per_transfer_from_this = 10
 	flags = FPRINT | TABLEPASS | OPENCONTAINER | NOREACT
 
+/obj/item/weapon/reagent_containers/glass/beaker/noreactlarge
+	name = "large stasis beaker"
+	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
+	icon_state = "beakernoreactlarge"
+	g_amt = 5000
+	volume = 100
+	amount_per_transfer_from_this = 10
+	flags = FPRINT | TABLEPASS | OPENCONTAINER | NOREACT
+
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace
 	name = "bluespace beaker"
-	desc = "A bluespace beaker, powered by experimental bluespace technology. Can hold up to 300 units."
+	desc = "A newly-developed high-capacity beaker, courtesy of bluespace research. Can hold up to 200 units."
 	icon_state = "beakerbluespace"
+	g_amt = 5000
+	volume = 200
+	amount_per_transfer_from_this = 10
+	possible_transfer_amounts = list(5,10,15,25,30,50,100,200)
+	flags = FPRINT | TABLEPASS | OPENCONTAINER
+
+/obj/item/weapon/reagent_containers/glass/beaker/bluespacelarge
+	name = "large bluespace beaker"
+	desc = "A prototype ultra-capacity beaker, courtesy of bluespace research. Can hold up to 300 units."
+	icon_state = "beakerbluespacelarge"
 	g_amt = 5000
 	volume = 300
 	amount_per_transfer_from_this = 10
-	possible_transfer_amounts = list(5,10,15,25,30,50,100,300)
+	possible_transfer_amounts = list(5,10,15,25,30,50,100,150,200,300)
 	flags = FPRINT | TABLEPASS | OPENCONTAINER
 
 
@@ -269,6 +300,7 @@
 	item_state = "bucket"
 	m_amt = 200
 	g_amt = 0
+	w_type = RECYK_METAL
 	w_class = 3.0
 	amount_per_transfer_from_this = 20
 	possible_transfer_amounts = list(10,20,30,50,70)

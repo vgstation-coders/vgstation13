@@ -123,7 +123,7 @@ var/list/ai_list = list()
 	..()
 	return
 
-/mob/living/silicon/ai/Del()
+/mob/living/silicon/ai/Destroy()
 	ai_list -= src
 	..()
 
@@ -273,7 +273,7 @@ var/list/ai_list = list()
 		if(AI.control_disabled)
 			src	 << "Wireless control is disabled!"
 			return
-	cancel_call_proc(src)
+	recall_shuttle(src)
 	return
 
 /mob/living/silicon/ai/check_eye(var/mob/user as mob)
