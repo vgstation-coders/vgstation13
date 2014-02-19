@@ -115,9 +115,9 @@
 			// AUTOFIXED BY fix_string_idiocy.py
 			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\computer\card.dm:103: header += "<div align='center'><br>"
 			header += {"<div align='center'><br>
-				<a href='?src=\ref[src];choice=modify'>Remove [target_name]</a> || 
-				<a href='?src=\ref[src];choice=scan'>Remove [scan_name]</a> <br> 
-				<a href='?src=\ref[src];choice=mode;mode_target=1'>Access Crew Manifest</a> || 
+				<a href='?src=\ref[src];choice=modify'>Remove [target_name]</a> ||
+				<a href='?src=\ref[src];choice=scan'>Remove [scan_name]</a> <br>
+				<a href='?src=\ref[src];choice=mode;mode_target=1'>Access Crew Manifest</a> ||
 				<a href='?src=\ref[src];choice=logout'>Log Out</a></div>"}
 		// END AUTOFIX
 
@@ -277,6 +277,40 @@
 						modify.access -= access_type
 						if(access_allowed == 1)
 							modify.access += access_type
+							//Messy code due to the way access works
+							//access_type check to prevent usr message spam
+							//findtext check is ghetto way to read bans var
+							//bans is the way it is to keep it as one var
+							//could add a return to prevent cycling all the get_region types but it makes the selection purple in-game
+							if(modify.bans != null)
+								if(access_type in get_region_accesses(1))
+									if(findtext(modify.bans,"1"))
+										modify.access -= get_region_accesses(1)
+										usr << "\red This ID is banned from that department."
+								if(access_type in get_region_accesses(2))
+									if(findtext(modify.bans,"2"))
+										modify.access -= get_region_accesses(2)
+										usr << "\red This ID is banned from that department."
+								if(access_type in get_region_accesses(3))
+									if(findtext(modify.bans,"3"))
+										modify.access -= get_region_accesses(3)
+										usr << "\red This ID is banned from that department."
+								if(access_type in get_region_accesses(4))
+									if(findtext(modify.bans,"4"))
+										modify.access -= get_region_accesses(4)
+										usr << "\red This ID is banned from that department."
+								if(access_type in get_region_accesses(5))
+									if(findtext(modify.bans,"5"))
+										modify.access -= get_region_accesses(5)
+										usr << "\red This ID is banned from that department."
+								if(access_type in get_region_accesses(6))
+									if(findtext(modify.bans,"6"))
+										modify.access -= get_region_accesses(6)
+										usr << "\red This ID is banned from that department."
+								if(access_type in get_region_accesses(7))
+									if(findtext(modify.bans,"7"))
+										modify.access -= get_region_accesses(7)
+										usr << "\red This ID is banned from that department."
 		if ("assign")
 			if (authenticated)
 				var/t1 = href_list["assign_target"]
@@ -300,7 +334,24 @@
 					if (modify)
 						modify.assignment = t1
 						modify.rank = t1
-		if ("reg")
+						//More ban code
+						if(modify.bans != null)
+							if(findtext(modify.bans,"1"))
+								modify.access -= get_region_accesses(1)
+							if(findtext(modify.bans,"2"))
+								modify.access -= get_region_accesses(2)
+							if(findtext(modify.bans,"3"))
+								modify.access -= get_region_accesses(3)
+							if(findtext(modify.bans,"4"))
+								modify.access -= get_region_accesses(4)
+							if(findtext(modify.bans,"5"))
+								modify.access -= get_region_accesses(5)
+							if(findtext(modify.bans,"6"))
+								modify.access -= get_region_accesses(6)
+							if(findtext(modify.bans,"7"))
+								modify.access -= get_region_accesses(7)
+							usr <<  "\red Banned access has been removed from the selected job."
+
 			if (authenticated)
 				var/t2 = modify
 				//var/t1 = input(usr, "What name?", "ID computer", null)  as text

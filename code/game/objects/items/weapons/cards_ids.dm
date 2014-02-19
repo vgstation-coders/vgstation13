@@ -75,6 +75,7 @@
 	var/blood_type = "\[UNSET\]"
 	var/dna_hash = "\[UNSET\]"
 	var/fingerprint_hash = "\[UNSET\]"
+	var/bans = null
 
 	//alt titles are handled a bit weirdly in order to unobtrusively integrate into existing ID system
 	var/assignment = null	//can be alt title or the actual job
@@ -226,17 +227,10 @@
 
 /obj/item/weapon/card/id/centcom
 	name = "\improper CentCom. ID"
-	desc = "An ID straight from Cent. Com."
+	desc = "A card associated with those in service with CentComm and NanoTransen."
 	icon_state = "centcom"
 	registered_name = "Central Command"
 	assignment = "General"
 	New()
 		access = get_all_centcom_access()
 		..()
-
-/obj/item/weapon/card/id/salvage_captain
-	name = "Captain's ID"
-	registered_name = "Captain"
-	icon_state = "centcom"
-	desc = "Finders, keepers."
-	access = list(access_salvage_captain)
