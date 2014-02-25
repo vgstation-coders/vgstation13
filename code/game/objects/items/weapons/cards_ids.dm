@@ -232,3 +232,10 @@
 	New()
 		access = get_all_centcom_access()
 		..()
+
+/obj/item/weapon/card/id/salvage_captain
+	name = "Captain's ID"
+	registered_name = "Captain"
+	icon_state = "centcom"
+	desc = "Finders, keepers."
+	access = list(access_salvage_captain)
