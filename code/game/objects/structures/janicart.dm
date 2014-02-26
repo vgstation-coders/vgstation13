@@ -7,6 +7,7 @@
 	name = "janicart"
 	icon_state = "pussywagon"
 	nick = "pimpin' ride"
+	keytype = /obj/item/key/janicart
 	flags = OPENCONTAINER
 	var/amount_per_transfer_from_this = 5 //shit I dunno, adding this so syringes stop runtime erroring. --NeoFite
 	var/obj/item/weapon/storage/bag/trash/mybag	= null
@@ -21,6 +22,8 @@
 /obj/structure/stool/bed/chair/vehicle/janicart/examine()
 	set src in usr
 	usr << "\icon[src] This pimpin' ride contains [reagents.total_volume] unit\s of water!"
+	if(in_range(src, usr) && reagents.has_reagent("lube"))
+		usr << "<span class='warning'> Something is very off about this water.</span>"
 	switch(health)
 		if(75 to 99)
 			usr << "\blue It appears slightly dented."
