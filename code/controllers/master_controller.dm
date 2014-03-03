@@ -57,7 +57,6 @@ datum/controller/game_controller/proc/setup()
 // notify the other process that we started up
 	socket_talk.send_raw("type=startup")
 
-
 	createRandomZlevel()
 
 	if(!air_master)

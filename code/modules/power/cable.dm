@@ -43,7 +43,7 @@
 	cable_list += src
 
 
-/obj/structure/cable/Del()						// called when a cable is deleted
+/obj/structure/cable/Destroy()						// called when a cable is deleted
 	if(!defer_powernet_rebuild)					// set if network will be rebuilt manually
 		if(powernet)
 			powernet.cut_cable(src)				// update the powernets
@@ -93,7 +93,7 @@
 		for(var/mob/O in viewers(src, null))
 			O.show_message("\red [user] cuts the cable.", 1)
 
-		var/message = "A wire has been cut"
+		var/message = "A wire has been cut "
 		var/atom/A = user
 		if(A)
 			var/turf/Z = get_turf(A)

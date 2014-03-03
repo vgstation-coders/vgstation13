@@ -164,11 +164,10 @@
 		now_pushing = 1
 		if (!( AM.anchored ))
 			var/t = get_dir(src, AM)
-			if (istype(AM, /obj/structure/window))
-				if(AM:ini_dir == NORTHWEST || AM:ini_dir == NORTHEAST || AM:ini_dir == SOUTHWEST || AM:ini_dir == SOUTHEAST)
-					for(var/obj/structure/window/win in get_step(AM,t))
-						now_pushing = 0
-						return
+			if (istype(AM, /obj/structure/window/full))
+				for(var/obj/structure/window/win in get_step(AM,t))
+					now_pushing = 0
+					return
 			step(AM, t)
 		now_pushing = null
 
@@ -1082,7 +1081,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			if(O.client)
 				var/area/A = get_area(src)
 				if(A)
-					O << "\blue <b>Golem rune created in [A.name]. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</b>"
+					O << "<span class=\"recruit\">Golem rune created in [A.name]. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>"
 
 	Topic(href,href_list)
 		if("signup" in href_list)

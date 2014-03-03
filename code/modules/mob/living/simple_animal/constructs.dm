@@ -84,19 +84,21 @@
 		now_pushing = 1
 		if (!( AM.anchored ))
 			var/t = get_dir(src, AM)
-			if (istype(AM, /obj/structure/window))
-				if(AM:ini_dir == NORTHWEST || AM:ini_dir == NORTHEAST || AM:ini_dir == SOUTHWEST || AM:ini_dir == SOUTHEAST)
-					for(var/obj/structure/window/win in get_step(AM,t))
-						now_pushing = 0
-						return
+			if (istype(AM, /obj/structure/window/full))
+				for(var/obj/structure/window/win in get_step(AM,t))
+					now_pushing = 0
+					return
 			step(AM, t)
 		now_pushing = null
 
 
 /mob/living/simple_animal/construct/attack_animal(mob/living/simple_animal/M as mob)
 	if(istype(M, /mob/living/simple_animal/construct/builder))
-		health += 5
-		M.emote("mends some of \the <EM>[src]'s</EM> wounds.")
+		if(src.health >= src.maxHealth)
+			M << "\blue [src] has nothing to mend."
+			return
+		health = min(maxHealth, health + 5) // Constraining health to maxHealth
+		M.visible_message("[M] mends some of \the <EM>[src]'s</EM> wounds.","You mend some of \the <em>[src]'s</em> wounds.")
 	else
 		if(M.melee_damage_upper <= 0)
 			M.emote("[M.friendly] \the <EM>[src]</EM>")

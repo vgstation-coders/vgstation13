@@ -20,7 +20,7 @@
 	..()
 	processing_objects.Add(src)
 
-/obj/item/weapon/holder/Del()
+/obj/item/weapon/holder/Destroy()
 	//Hopefully this will stop the icon from remaining on human mobs.
 	if(istype(loc,/mob/living))
 		var/mob/living/A = src.loc
@@ -30,7 +30,7 @@
 	..()
 
 /obj/item/weapon/holder/process()
-	if(!loc) return
+	if(!loc) del(src)
 
 	if(istype(loc,/turf) || !(contents.len))
 		for(var/mob/M in contents)

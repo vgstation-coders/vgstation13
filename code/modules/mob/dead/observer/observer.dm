@@ -60,6 +60,11 @@
 			icon_state = body.icon_state
 			overlays = body.overlays
 
+		// No icon?  Ghost icon time.
+		if(isnull(icon) || isnull(icon_state))
+			icon = initial(icon)
+			icon_state = initial(icon_state)
+
 		alpha = 127
 		// END BAY SPOOKY GHOST SPRITES
 
@@ -236,7 +241,7 @@ Works together with spawning an observer, noted above.
 		var/mob/dead/observer/ghost = new(src, flags)	//Transfer safety to observer spawning proc.
 		ghost.timeofdeath = src.timeofdeath //BS12 EDIT
 		ghost.key = key
-		if(!ghost.client.holder && !config.antag_hud_allowed)		// For new ghosts we remove the verb from even showing up if it's not allowed.
+		if(ghost.client && !ghost.client.holder && !config.antag_hud_allowed)		// For new ghosts we remove the verb from even showing up if it's not allowed.
 			ghost.verbs -= /mob/dead/observer/verb/toggle_antagHUD	// Poor guys, don't know what they are missing!
 		return ghost
 

@@ -19,39 +19,51 @@
 		access_virology
 	)
 	var/datum/materials/materials = new
-	var/stack_amt = 50; //amount to stack before releasing
+	var/stack_amt = 50 //amount to stack before releasing
 	var/obj/item/weapon/card/id/inserted_id
 	var/points = 0
 
-/obj/machinery/mineral/ore_redemption/New()
-	spawn( 5 )
-		for (var/dir in cardinal)
-			src.input = locate(/obj/machinery/mineral/input, get_step(src, dir))
-			if(src.input) break
-		for (var/dir in cardinal)
-			src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
-			if(src.output) break
+/obj/machinery/mineral/ore_redemption/initialize()
+	for (var/dir in cardinal)
+		src.input = locate(/obj/machinery/mineral/input, get_step(src, dir))
+		if(src.input) break
+	for (var/dir in cardinal)
+		src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
+		if(src.output) break
+
+/obj/machinery/mineral/ore_redemption/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(istype(W,/obj/item/weapon/card/id))
+		var/obj/item/weapon/card/id/I = usr.get_active_hand()
+		if(istype(I))
+			usr.drop_item()
+			I.loc = src
+			inserted_id = I
 
 /obj/machinery/mineral/ore_redemption/proc/process_sheet(obj/item/weapon/ore/O)
 	var/obj/item/stack/sheet/processed_sheet = SmeltMineral(O)
 	if(processed_sheet)
 		var/datum/material/mat = materials.getMaterial(O.material)
 		mat.stored += processed_sheet.amount //Stack the sheets
-		O.loc = null //Let the old sheet garbage collect
-		while(mat.stored > stack_amt) //Get rid of excessive stackage
-			var/obj/item/stack/sheet/out = new mat.sheettype(output.loc)
-			out.amount = stack_amt-mat.stored
-			mat.stored -= out.amount
+		qdel(O)
 
 /obj/machinery/mineral/ore_redemption/process()
 	var/turf/T = get_turf(input)
+	var/i
 	if(T)
-		var/obj/item/weapon/ore/O
-		for(O in T)
-			process_sheet(O)
-		for(var/obj/structure/ore_box/B in T)
-			for(O in B.contents)
-				process_sheet(O)
+		if(locate(/obj/item/weapon/ore) in T)
+			for (i = 0; i < 10; i++)
+				var/obj/item/weapon/ore/O = locate() in T
+				if(O)
+					process_sheet(O)
+				else
+					break
+		else
+			var/obj/structure/ore_box/B = locate() in T
+			if(B)
+				for(var/mat_id in B.materials.storage)
+					var/datum/material/mat = B.materials.getMaterial(mat_id)
+					materials.addAmount(mat_id,mat.stored)
+					mat.stored=0
 
 /obj/machinery/mineral/ore_redemption/proc/SmeltMineral(var/obj/item/weapon/ore/O)
 	if(O.material)
@@ -90,7 +102,8 @@
 	dat += text("<HR><b>Mineral Value List:</b><BR>[get_ore_values()]")
 
 	user << browse("[dat]", "window=console_stacking_machine")
-
+	user.set_machine(src)
+	onclose(user, "console_stacking_machine")
 	return
 
 /obj/machinery/mineral/ore_redemption/proc/get_ore_values()
@@ -120,17 +133,22 @@
 				usr.drop_item()
 				I.loc = src
 				inserted_id = I
-			else usr << "\red No valid ID."
-	if(href_list["release"] && istype(inserted_id))
+			else
+				usr << "\red No valid ID."
+				return 1
+	else if(href_list["release"] && istype(inserted_id))
 		if(check_access(inserted_id))
 			var/release=href_list["release"]
 			var/datum/material/mat = materials.getMaterial(release)
-			if(!mat) return
+			if(!mat)
+				usr << "\red Unable to find material [release]!"
+				return 1
 			var/desired = input("How much?","How much [mat.processed_name] to eject?",mat.stored) as num
-			if(desired==0) return
-			var/obj/item/stack/sheet/out = new mat.sheettype()
-			out.amount = min(mat.stored,desired)
-			mat.stored=desired
+			if(desired==0)
+				return 1
+			var/obj/item/stack/sheet/out = new mat.sheettype(output.loc)
+			out.amount = between(0,desired,min(mat.stored,out.max_amount))
+			mat.stored -= out.amount
 	updateUsrDialog()
 	return
 
@@ -196,6 +214,8 @@
 	dat += "</table>"
 
 	user << browse("[dat]", "window=mining_equipment_locker")
+	user.set_machine(src)
+	onclose(user, "mining_equipment_locker")
 	return
 
 /obj/machinery/mineral/equipment_locker/Topic(href, href_list)
@@ -218,7 +238,7 @@
 		if(istype(inserted_id))
 			var/datum/data/mining_equipment/prize = locate(href_list["purchase"])
 			if (!prize || !(prize in prize_list))
-				return
+				return 1
 			if(prize.cost > inserted_id.mining_points)
 			else
 				inserted_id.mining_points -= prize.cost
@@ -226,10 +246,16 @@
 	updateUsrDialog()
 	return
 
-/obj/machinery/mineral/equipment_locker/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I, /obj/item/weapon/mining_voucher))
-		RedeemVoucher(I, user)
+/obj/machinery/mineral/equipment_locker/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/weapon/mining_voucher))
+		RedeemVoucher(W, user)
 		return
+	if(istype(W,/obj/item/weapon/card/id))
+		var/obj/item/weapon/card/id/I = usr.get_active_hand()
+		if(istype(I))
+			usr.drop_item()
+			I.loc = src
+			inserted_id = I
 	..()
 
 /obj/machinery/mineral/equipment_locker/proc/RedeemVoucher(voucher, redeemer)
@@ -315,35 +341,61 @@
 			user << "<span class='notice'>The [src.name] failed to create a wormhole.</span>"
 			return
 		var/chosen_beacon = pick(L)
-		var/obj/effect/portal/wormhole/jaunt_tunnel/J = new /obj/effect/portal/wormhole/jaunt_tunnel(get_turf(src), chosen_beacon, lifespan=100)
+		var/obj/effect/portal/jaunt_tunnel/J = new /obj/effect/portal/jaunt_tunnel(get_turf(src))
 		J.target = chosen_beacon
 		try_move_adjacent(J)
 		playsound(src,'sound/effects/sparks4.ogg',50,1)
-		del(src)
+		del(src) //Single-use
 
-/obj/effect/portal/wormhole/jaunt_tunnel
+/obj/effect/portal/jaunt_tunnel
 	name = "jaunt tunnel"
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "bhole3"
 	desc = "A stable hole in the universe made by a wormhole jaunter. Turbulent doesn't even begin to describe how rough passage through one of these is, but at least it will always get you somewhere near a beacon."
 
-/obj/effect/portal/wormhole/jaunt_tunnel/teleport(atom/movable/M)
+/obj/effect/portal/jaunt_tunnel/New()
+	spawn(300) // 30s
+		del(src)
+
+/*/obj/effect/portal/wormhole/jaunt_tunnel/teleport(atom/movable/M)
 	if(istype(M, /obj/effect))
 		return
 	if(istype(M, /atom/movable))
-		do_teleport(M, target, 6)
-		if(isliving(M))
-			var/mob/living/L = M
-			L.Weaken(3)
-			if(ishuman(L))
-				shake_camera(L, 20, 1)
-				spawn(20)
+		do_teleport(M, target, 6) */
+
+/obj/effect/portal/jaunt_tunnel/teleport(atom/movable/M as mob|obj)
+	if(istype(M, /obj/effect))
+		return
+	if (!(istype(M, /atom/movable)))
+		return
+	if (!(target))
+		del(src)
+
+	//For safety. May be unnecessary.
+	var/T = target
+	if(!(isturf(T)))
+		T = get_turf(target)
+
+	if(prob(1)) //honk
+		T = (locate(rand(5,world.maxx-10), rand(5,world.maxy-10),3))
+
+	do_teleport(M, T, 6)
+
+	if(isliving(M))
+		var/mob/living/L = M
+		L.Weaken(3)
+		if(ishuman(L))
+			shake_camera(L, 20, 1)
+			spawn(20)
+				if(L)
 					L.visible_message("<span class='danger'>[L.name] vomits from travelling through the [src.name]!</span>")
 					L.nutrition -= 20
 					L.adjustToxLoss(-3)
-					var/turf/T = get_turf(L)
-					T.add_vomit_floor(L)
-					playsound(L, 'sound/effects/splat.ogg', 50, 1)
+					var/turf/V = get_turf(L) //V for Vomit
+					V.add_vomit_floor(L)
+					playsound(V, 'sound/effects/splat.ogg', 50, 1)
+					return
+	return
 
 /**********************Resonator**********************/
 
@@ -360,7 +412,7 @@
 
 /obj/item/weapon/resonator/proc/CreateResonance(var/target, var/creator)
 	if(cooldown <= 0)
-		playsound(src,'sound/effects/stealthoff.ogg',50,1)
+		playsound(get_turf(src),'sound/effects/stealthoff.ogg',50,1)
 		var/obj/effect/resonance/R = new /obj/effect/resonance(get_turf(target))
 		R.creator = creator
 		cooldown = 1

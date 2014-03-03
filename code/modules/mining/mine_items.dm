@@ -30,7 +30,7 @@
 	new /obj/item/clothing/under/rank/miner(src)
 	new /obj/item/clothing/gloves/black(src)
 	new /obj/item/clothing/shoes/black(src)
-	new /obj/item/device/analyzer(src)
+	new /obj/item/device/mining_scanner(src)
 	new /obj/item/weapon/storage/bag/ore(src)
 	new /obj/item/device/flashlight/lantern(src)
 	new /obj/item/weapon/shovel(src)
@@ -91,7 +91,7 @@ proc/move_mining_shuttle()
 			if(istype(A,/obj/structure/lattice) \
 				|| istype(A, /obj/structure/window) \
 				|| istype(A, /obj/structure/grille))
-				del(A)
+				qdel(A)
 
 		fromArea.move_contents_to(toArea)
 		if (mining_shuttle_location)

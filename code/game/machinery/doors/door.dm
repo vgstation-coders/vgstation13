@@ -61,7 +61,7 @@
 	if (istype(AM, /obj/machinery/bot))
 		var/obj/machinery/bot/bot = AM
 
-		if (check_access(bot.botcard))
+		if (check_access(bot.botcard) && !operating)
 			open()
 
 		return
@@ -70,7 +70,7 @@
 		var/obj/mecha/mecha = AM
 
 		if (density)
-			if (mecha.occupant && (allowed(mecha.occupant) || check_access_list(mecha.operation_req_access)))
+			if (mecha.occupant && !operating && (allowed(mecha.occupant) || check_access_list(mecha.operation_req_access)))
 				open()
 			else
 				door_animate("deny")
@@ -89,7 +89,7 @@
 	if(!requiresID())
 		user = null
 
-	if(allowed(user))
+	if(allowed(user) && !operating)
 		open()
 	else
 		door_animate("deny")
@@ -189,6 +189,7 @@
 	sleep(animation_delay_2)
 	return
 
+/*
 /obj/machinery/door/proc/open()
 	if (!density || operating || jammed)
 		return
@@ -220,6 +221,29 @@
 			autoclose()
 
 	return
+*/
+
+/obj/machinery/door/proc/open()
+	if(!density)		return 1
+	if(operating > 0)	return
+	if(!ticker)			return 0
+	if(!operating)		operating = 1
+
+	door_animate("opening")
+	icon_state = "door0"
+	src.SetOpacity(0)
+	sleep(10)
+	src.layer = 2.7
+	src.density = 0
+	explosion_resistance = 0
+	update_icon()
+	SetOpacity(0)
+	update_nearby_tiles()
+	//update_freelook_sight()
+
+	if(operating)	operating = 0
+
+	return 1
 
 /obj/machinery/door/proc/autoclose()
 	var/obj/machinery/door/airlock/A = src
@@ -282,7 +306,7 @@
 	update_nearby_tiles(need_rebuild=1)
 	return
 
-/obj/machinery/door/Del()
+/obj/machinery/door/Destroy()
 	density = 0
 	update_nearby_tiles()
 	..()
