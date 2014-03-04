@@ -246,7 +246,6 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 
 	   //#### Grab the connection datum ####//
 		var/datum/radio_frequency/connection = null
-		/* NEW
 		//testing("[src]: talk_into([M], [message], [channel])")
 		if(channel == "headset")
 			channel = null
@@ -262,16 +261,6 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 				// If we were to send to a channel we don't have, drop it.
 				return
 		else // If a channel isn't specified, send to common.
-		*/
-		// OLD
-		if(channel && channels && channels.len > 0)
-			if (channel == "department")
-				//world << "DEBUG: channel=\"[channel]\" switching to \"[channels[1]]\""
-				channel = channels[1]
-			connection = secure_radio_connections[channel]
-			if (!channels[channel]) // if the channel is turned off, don't broadcast
-				return
-		else
 			connection = radio_connection
 			channel = null
 		if (!istype(connection))
@@ -677,9 +666,9 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	..()
 	if ((in_range(src, usr) || loc == usr))
 		if (b_stat)
-			usr.show_message("\blue \the [src] can be attached and modified!")
+			usr.show_message("<span class=\"notice\">\the [src] can be attached and modified!</span>")
 		else
-			usr.show_message("\blue \the [src] can not be modified or attached!")
+			usr.show_message("<span class=\"notice\">\the [src] can not be modified or attached!</span>")
 	return
 
 /obj/item/device/radio/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -690,9 +679,9 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	b_stat = !( b_stat )
 	if(!istype(src, /obj/item/device/radio/beacon))
 		if (b_stat)
-			user.show_message("\blue The radio can now be attached and modified!")
+			user.show_message("<span class=\"notice\">The radio can now be attached and modified!</span>")
 		else
-			user.show_message("\blue The radio can no longer be modified or attached!")
+			user.show_message("<span class=\"notice\">The radio can no longer be modified or attached!</span>")
 		updateDialog()
 			//Foreach goto(83)
 		add_fingerprint(user)

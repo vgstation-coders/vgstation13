@@ -50,7 +50,7 @@ obj/var/contaminated = 0
 	if(zas_settings.Get(/datum/ZAS_Setting/SKIN_BURNS))
 		if(!pl_head_protected() || !pl_suit_protected())
 			burn_skin(0.75)
-			if(prob(20)) src << "\red Your skin burns!"
+			if(prob(20)) src << "<span class=\"rose\">Your skin burns!</span>"
 			updatehealth()
 
 	//Burn eyes if exposed.
@@ -73,18 +73,18 @@ obj/var/contaminated = 0
 	if(zas_settings.Get(/datum/ZAS_Setting/GENETIC_CORRUPTION))
 		if(rand(1,10000) < zas_settings.Get(/datum/ZAS_Setting/GENETIC_CORRUPTION))
 			randmutb(src)
-			src << "\red High levels of toxins cause you to spontaneously mutate."
+			src << "<span class=\"rose\">High levels of toxins cause you to spontaneously mutate.</span>"
 			domutcheck(src,null)
 
 
 /mob/living/carbon/human/proc/burn_eyes()
 	//The proc that handles eye burning.
-	if(prob(20)) src << "\red Your eyes burn!"
+	if(prob(20)) src << "<span class=\"rose\">Your eyes burn!</span>"
 	var/datum/organ/internal/eyes/E = internal_organs["eyes"]
 	E.damage += 2.5
 	eye_blurry = min(eye_blurry+1.5,50)
 	if (prob(max(0,E.damage - 15) + 1) &&!eye_blind)
-		src << "\red You are blinded!"
+		src << "<span class=\"rose\">You are blinded!</span>"
 		eye_blind += 20
 
 /mob/living/carbon/human/proc/pl_head_protected()

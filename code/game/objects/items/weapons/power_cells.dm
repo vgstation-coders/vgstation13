@@ -22,7 +22,7 @@
 	var/construction_time=100
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class=\"danger\">[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>"
 		return (FIRELOSS)
 
 /obj/item/weapon/cell/crap
@@ -114,10 +114,3 @@
 	m_amt = 0
 	g_amt = 0
 	w_type = RECYK_BIOLOGICAL
-
-
-/obj/item/weapon/cell/temperaturegun
-	name = "temperature gun cell"
-	desc = "A specially designed power cell for heating and cooling projectiles"
-	icon_state = "icell"
-	maxcharge = 900

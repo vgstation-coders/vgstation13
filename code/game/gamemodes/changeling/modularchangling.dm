@@ -326,7 +326,7 @@ var/list/datum/power/changeling/powerinstances = list()
 						return;
 					locked_tabs.push(id);
 					var notice_span = document.getElementById(notice_span_id);
-					notice_span.innerHTML = "<font color='red'>Locked</font> ";
+					notice_span.innerHTML = "<span class=\"rose\">Locked</span> ";
 					//link.setAttribute("onClick","attempt('"+id+"','"+link_id+"','"+notice_span_id+"');");
 					//document.write("removeFromLocked('"+id+"','"+link_id+"','"+notice_span_id+"')");
 					//document.write("aa - "+link.getAttribute("onClick"));

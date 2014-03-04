@@ -6,7 +6,7 @@
 	density = 1
 	anchored = 0
 
-	use_power = 0
+	use_power = 1
 	idle_power_usage = 100 //Watts, I hope.  Just enough to do the computer and display things.
 
 	var/obj/machinery/atmospherics/binary/circulator/circ1
@@ -47,20 +47,17 @@
 				circ1 = null
 				circ2 = null
 
-/obj/machinery/power/generator/proc/operable()
-	return circ1 && circ2 && anchored && !(stat & (BROKEN|NOPOWER))
-
 /obj/machinery/power/generator/proc/updateicon()
-	overlays = 0
+	if(stat & (NOPOWER|BROKEN))
+		overlays.Cut()
+	else
+		overlays.Cut()
 
-	if(!operable())
-		return
-
-	if(lastgenlev != 0)
-		overlays += image('icons/obj/power.dmi', "teg-op[lastgenlev]")
+		if(lastgenlev != 0)
+			overlays += image('icons/obj/power.dmi', "teg-op[lastgenlev]")
 
 /obj/machinery/power/generator/process()
-	if(!operable())
+	if(!circ1 || !circ2 || !anchored || stat & (BROKEN|NOPOWER))
 		return
 
 	updateDialog()
@@ -119,8 +116,8 @@
 /obj/machinery/power/generator/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/wrench))
 		anchored = !anchored
-		user << "\blue You [anchored ? "secure" : "unsecure"] the bolts holding [src] to the floor."
-		//use_power = anchored
+		user << "<span class=\"notice\">You [anchored ? "secure" : "unsecure"] the bolts holding [src] to the floor.</span>"
+		use_power = anchored
 		reconnect()
 	else
 		..()
@@ -178,13 +175,12 @@ Outlet Temperature: [round(circ2.air2.temperature, 0.1)] K<BR>"}
 
 /obj/machinery/power/generator/Topic(href, href_list)
 	..()
-	if("close" in href_list)
+	if( href_list["close"] )
 		usr << browse(null, "window=teg")
 		usr.unset_machine()
 		return 0
-	if("reconnect" in href_list)
-		reconnect()
-	updateUsrDialog()
+
+	updateDialog()
 	return 1
 
 

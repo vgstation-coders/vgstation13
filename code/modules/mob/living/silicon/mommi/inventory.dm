@@ -24,7 +24,7 @@
 	// Make sure we're not picking up something that's in our factory-supplied toolbox.
 	//if(is_type_in_list(W,src.module.modules))
 	if(is_in_modules(W))
-		src << "\red Picking up something that's built-in to you seems a bit silly."
+		src << "<span class=\"rose\">Picking up something that's built-in to you seems a bit silly.</span>"
 		return 0
 	if(tool_state)
 		//var/obj/item/found = locate(tool_state) in src.module.modules
@@ -94,7 +94,7 @@
 	if(tool_state)
 		//var/obj/item/found = locate(tool_state) in src.module.modules
 		if(is_in_modules(tool_state))
-			src << "\red This item cannot be dropped."
+			src << "<span class=\"rose\">This item cannot be dropped.</span>"
 			return 0
 		if(client)
 			client.screen -= tool_state

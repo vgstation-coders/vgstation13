@@ -18,15 +18,15 @@
 
 		opened = !opened
 		if(opened)
-			usr << "\blue The access panel is now open."
+			usr << "<span class=\"notice\">The access panel is now open.</span>"
 		else
-			usr << "\blue The access panel is now closed."
+			usr << "<span class=\"notice\">The access panel is now closed.</span>"
 		return
 
 
 	attackby(obj/item/weapon/O as obj, mob/user as mob)
 		if (user.z > 6)
-			user << "\red <b>Unable to establish a connection</b>: \black You're too far away from the station!"
+			user << "<span class=\"danger\">Unable to establish a connection</span>: You're too far away from the station!"
 			return
 		if(istype(O, /obj/item/weapon/aiModule))
 			var/obj/item/weapon/aiModule/M = O
@@ -53,14 +53,14 @@
 			else
 				var/obj/item/weapon/planning_frame/frame=O
 				if(frame.modules.len>0)
-					user << "\blue You load \the [frame] into \the [src]..."
+					user << "<span class=\"notice\">You load \the [frame] into \the [src]...</span>"
 					if(do_after(user,50))
 						for(var/i=1;i<=frame.modules.len;i++)
 							var/obj/item/weapon/aiModule/M = frame.modules[i]
-							user << "\blue Running [M]..."
+							user << "<span class=\"notice\">Running [M]...</span>"
 							M.install(src)
 				else
-					user << "\red It's empty, doofus."
+					user << "<span class=\"rose\">It's empty, doofus.</span>"
 		else
 			..()
 
@@ -97,7 +97,7 @@
 			if(isMoMMI(src.current))
 				var/mob/living/silicon/robot/mommi/mommi = src.current
 				if(mommi.keeper)
-					user << "\red [src.current] is operating in KEEPER mode and cannot be accessed via control signals."
+					user << "<span class=\"rose\">[src.current] is operating in KEEPER mode and cannot be accessed via control signals.</span>"
 					return ..()
 			module.install(src)
 		else if(istype(W, /obj/item/weapon/planning_frame))
@@ -123,14 +123,14 @@
 			else
 				var/obj/item/weapon/planning_frame/frame=W
 				if(frame.modules.len>0)
-					user << "\blue You load \the [frame] into \the [src]..."
+					user << "<span class=\"notice\">You load \the [frame] into \the [src]...</span>"
 					if(do_after(user,50))
 						for(var/i=1;i<=frame.modules.len;i++)
 							var/obj/item/weapon/aiModule/M = frame.modules[i]
-							user << "\blue Running [M]..."
+							user << "<span class=\"notice\">Running [M]...</span>"
 							M.install(src)
 				else
-					user << "\red It's empty, doofus."
+					user << "<span class=\"rose\">It's empty, doofus.</span>"
 		else
 			return ..()
 

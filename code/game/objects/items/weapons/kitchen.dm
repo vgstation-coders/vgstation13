@@ -64,11 +64,11 @@
 	if (src.icon_state == "forkloaded") //This is a poor way of handling it, but a proper rewrite of the fork to allow for a more varied foodening can happen when I'm in the mood. --NEO
 		if(M == user)
 			for(var/mob/O in viewers(M, null))
-				O.show_message(text("\blue [] eats a delicious forkful of omelette!", user), 1)
+				O.show_message(text("<span class=\"notice\">[] eats a delicious forkful of omelette!</span>", user), 1)
 				M.reagents.add_reagent("nutriment", 1)
 		else
 			for(var/mob/O in viewers(M, null))
-				O.show_message(text("\blue [] feeds [] a delicious forkful of omelette!", user, M), 1)
+				O.show_message(text("<span class=\"notice\">[] feeds [] a delicious forkful of omelette!</span>", user, M), 1)
 				M.reagents.add_reagent("nutriment", 1)
 		src.icon_state = "fork"
 		return
@@ -92,11 +92,11 @@
 	if (src.icon_state == "forkloaded") //This is a poor way of handling it, but a proper rewrite of the fork to allow for a more varied foodening can happen when I'm in the mood. --NEO
 		if(M == user)
 			for(var/mob/O in viewers(M, null))
-				O.show_message(text("\blue [] eats a delicious forkful of omelette!", user), 1)
+				O.show_message(text("<span class=\"notice\">[] eats a delicious forkful of omelette!</span>", user), 1)
 				M.reagents.add_reagent("nutriment", 1)
 		else
 			for(var/mob/O in viewers(M, null))
-				O.show_message(text("\blue [] feeds [] a delicious forkful of omelette!", user, M), 1)
+				O.show_message(text("<span class=\"notice\">[] feeds [] a delicious forkful of omelette!</span>", user, M), 1)
 				M.reagents.add_reagent("nutriment", 1)
 		src.icon_state = "fork"
 		return
@@ -116,14 +116,14 @@
 	throwforce = 10.0
 
 	suicide_act(mob/user)
-		viewers(user) << pick("\red <b>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</b>", \
-							"\red <b>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</b>", \
-							"\red <b>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</b>")
+		viewers(user) << pick("<span class=\"danger\">[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
+							"<span class=\"danger\">[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
+							"<span class=\"danger\">[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")
 		return (BRUTELOSS)
 
 /obj/item/weapon/kitchen/utensil/knife/attack(target as mob, mob/living/user as mob)
 	if ((M_CLUMSY in user.mutations) && prob(50))
-		user << "\red You accidentally cut yourself with the [src]."
+		user << "<span class=\"rose\">You accidentally cut yourself with the [src].</span>"
 		user.take_organ_damage(20)
 		return
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
@@ -138,7 +138,7 @@
 
 /obj/item/weapon/kitchen/utensil/knife/attack(target as mob, mob/living/user as mob)
 	if ((M_CLUMSY in user.mutations) && prob(50))
-		user << "\red You somehow managed to cut yourself with the [src]."
+		user << "<span class=\"rose\">You somehow managed to cut yourself with the [src].</span>"
 		user.take_organ_damage(20)
 		return
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
@@ -164,9 +164,9 @@
 	attack_verb = list("slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
 	suicide_act(mob/user)
-		viewers(user) << pick("\red <b>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</b>", \
-							"\red <b>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</b>", \
-							"\red <b>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</b>")
+		viewers(user) << pick("<span class=\"danger\">[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
+							"<span class=\"danger\">[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
+							"<span class=\"danger\">[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")
 		return (BRUTELOSS)
 
 /obj/item/weapon/kitchenknife/ritual
@@ -231,7 +231,7 @@
 
 /obj/item/weapon/kitchen/rollingpin/attack(mob/living/M as mob, mob/living/user as mob)
 	if ((M_CLUMSY in user.mutations) && prob(50))
-		user << "\red The [src] slips out of your hand and hits your head."
+		user << "<span class=\"rose\">The [src] slips out of your hand and hits your head.</span>"
 		user.take_organ_damage(10)
 		user.Paralyse(2)
 		return
@@ -251,7 +251,7 @@
 			if (H.stat < 2 && H.health < 50 && prob(90))
 				// ******* Check
 				if (istype(H, /obj/item/clothing/head) && H.flags & 8 && prob(80))
-					H << "\red The helmet protects you from being hit hard in the head!"
+					H << "<span class=\"rose\">The helmet protects you from being hit hard in the head!</span>"
 					return
 				var/time = rand(2, 6)
 				if (prob(75))
@@ -259,10 +259,10 @@
 				else
 					H.Stun(time)
 				if(H.stat != 2)	H.stat = 1
-				user.visible_message("\red <B>[H] has been knocked unconscious!</B>", "\red <B>You knock [H] unconscious!</B>")
+				user.visible_message("<span class=\"danger\">[H] has been knocked unconscious!</span>", "<span class=\"danger\">You knock [H] unconscious!</span>")
 				return
 			else
-				H.visible_message("\red [user] tried to knock [H] unconscious!", "\red [user] tried to knock you unconscious!")
+				H.visible_message("<span class=\"rose\">[user] tried to knock [H] unconscious!</span>", "<span class=\"rose\">[user] tried to knock you unconscious!</span>")
 				H.eye_blurry += 3
 	return ..()
 
@@ -303,7 +303,7 @@
 
 
 	if((M_CLUMSY in user.mutations) && prob(50))              //What if he's a clown?
-		M << "\red You accidentally slam yourself with the [src]!"
+		M << "<span class=\"rose\">You accidentally slam yourself with the [src]!</span>"
 		M.Weaken(1)
 		user.take_organ_damage(2)
 		if(prob(50))
@@ -340,19 +340,19 @@
 		if(prob(50))
 			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
 			for(var/mob/O in viewers(M, null))
-				O.show_message(text("\red <B>[] slams [] with the tray!</B>", user, M), 1)
+				O.show_message(text("<span class=\"danger\">[] slams [] with the tray!</span>", user, M), 1)
 			return
 		else
 			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)  //we applied the damage, we played the sound, we showed the appropriate messages. Time to return and stop the proc
 			for(var/mob/O in viewers(M, null))
-				O.show_message(text("\red <B>[] slams [] with the tray!</B>", user, M), 1)
+				O.show_message(text("<span class=\"danger\">[] slams [] with the tray!</span>", user, M), 1)
 			return
 
 
 
 
 	if(istype(M, /mob/living/carbon/human) && ((H.head && H.head.flags & HEADCOVERSEYES) || (H.wear_mask && H.wear_mask.flags & MASKCOVERSEYES) || (H.glasses && H.glasses.flags & GLASSESCOVERSEYES)))
-		M << "\red You get slammed in the face with the tray, against your mask!"
+		M << "<span class=\"rose\">You get slammed in the face with the tray, against your mask!</span>"
 		if(prob(33))
 			src.add_blood(H)
 			if (H.wear_mask)
@@ -368,11 +368,11 @@
 		if(prob(50))
 			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
 			for(var/mob/O in viewers(M, null))
-				O.show_message(text("\red <B>[] slams [] with the tray!</B>", user, M), 1)
+				O.show_message(text("<span class=\"danger\">[] slams [] with the tray!</span>", user, M), 1)
 		else
 			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)  //sound playin'
 			for(var/mob/O in viewers(M, null))
-				O.show_message(text("\red <B>[] slams [] with the tray!</B>", user, M), 1)
+				O.show_message(text("<span class=\"danger\">[] slams [] with the tray!</span>", user, M), 1)
 		if(prob(10))
 			M.Stun(rand(1,3))
 			M.take_organ_damage(3)
@@ -382,7 +382,7 @@
 			return
 
 	else //No eye or head protection, tough luck!
-		M << "\red You get slammed in the face with the tray!"
+		M << "<span class=\"rose\">You get slammed in the face with the tray!</span>"
 		if(prob(33))
 			src.add_blood(M)
 			var/turf/location = H.loc
@@ -392,11 +392,11 @@
 		if(prob(50))
 			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
 			for(var/mob/O in viewers(M, null))
-				O.show_message(text("\red <B>[] slams [] in the face with the tray!</B>", user, M), 1)
+				O.show_message(text("<span class=\"danger\">[] slams [] in the face with the tray!</span>", user, M), 1)
 		else
 			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)  //sound playin' again
 			for(var/mob/O in viewers(M, null))
-				O.show_message(text("\red <B>[] slams [] in the face with the tray!</B>", user, M), 1)
+				O.show_message(text("<span class=\"danger\">[] slams [] in the face with the tray!</span>", user, M), 1)
 		if(prob(30))
 			M.Stun(rand(2,4))
 			M.take_organ_damage(4)
@@ -498,7 +498,7 @@
 /*/obj/item/weapon/tray/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/kitchen/utensil/fork))
 		if (W.icon_state == "forkloaded")
-			user << "\red You already have omelette on your fork."
+			user << "<span class=\"rose\">You already have omelette on your fork.</span>"
 			return
 		W.icon = 'icons/obj/kitchen.dmi'
 		W.icon_state = "forkloaded"

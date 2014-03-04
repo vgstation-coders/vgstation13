@@ -14,16 +14,16 @@
 /obj/item/device/megaphone/attack_self(mob/living/user as mob)
 	if (user.client)
 		if(user.client.prefs.muted & MUTE_IC)
-			src << "\red You cannot speak in IC (muted)."
+			src << "<span class=\"rose\">You cannot speak in IC (muted).</span>"
 			return
 	if(!ishuman(user))
-		user << "\red You don't know how to use this!"
+		user << "<span class=\"rose\">You don't know how to use this!</span>"
 		return
 	if(user:miming || user.silent)
-		user << "\red You find yourself unable to speak at all."
+		user << "<span class=\"rose\">You find yourself unable to speak at all.</span>"
 		return
 	if(spamcheck)
-		user << "\red \The [src] needs to recharge!"
+		user << "<span class=\"rose\">\The [src] needs to recharge!</span>"
 		return
 
 	var/message = copytext(sanitize(input(user, "Shout a message?", "Megaphone", null)  as text),1,MAX_MESSAGE_LEN)
@@ -37,7 +37,7 @@
 					O.show_message("<B>[user]</B> broadcasts, <FONT size=3>\"[pick(insultmsg)]\"</FONT>",2) // 2 stands for hearable message
 				insults--
 			else
-				user << "\red *BZZZZzzzzzt*"
+				user << "<span class=\"rose\">*BZZZZzzzzzt*</span>"
 		else
 			for(var/mob/O in (viewers(user)))
 				O.show_message("<B>[user]</B> broadcasts, <FONT size=3>\"[message]\"</FONT>",2) // 2 stands for hearable message
@@ -49,21 +49,21 @@
 
 /obj/item/device/megaphone/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
-		user << "\red You overload \the [src]'s voice synthesizer."
+		user << "<span class=\"rose\">You overload \the [src]'s voice synthesizer.</span>"
 		emagged = 1
 		insults = rand(1, 3)//to prevent dickflooding
 		return
 	return
-	
-	
-	
-	
+
+
+
+
 /*
 	SOUND SYNTH BELOW THIS LINE
 ----------------------------------------------
 */
-	
-	
+
+
 
 /obj/item/device/soundsynth
 	name = "sound synthesizer"
@@ -203,9 +203,9 @@ And backwards
 
 		else
 			sound_flag = 0
-		
-		
-		
+
+
+
 /*
 This long ass as fuck shit plays the sounds. Im a huge fucking faggot.
 If you can make this smaller, please do.

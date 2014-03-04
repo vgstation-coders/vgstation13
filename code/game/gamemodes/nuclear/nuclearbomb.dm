@@ -52,7 +52,7 @@ var/bomb_set
 					var/obj/item/weapon/weldingtool/WT = O
 					if(!WT.isOn()) return
 					if (WT.get_fuel() < 5) // uses up 5 fuel.
-						user << "\red You need more fuel to complete this task."
+						user << "<span class=\"rose\">You need more fuel to complete this task.</span>"
 						return
 
 					user.visible_message("[user] starts cutting loose the anchoring bolt covers on [src].", "You start cutting loose the anchoring bolt covers with [O]...")
@@ -79,7 +79,7 @@ var/bomb_set
 					var/obj/item/weapon/weldingtool/WT = O
 					if(!WT.isOn()) return
 					if (WT.get_fuel() < 5) // uses up 5 fuel.
-						user << "\red You need more fuel to complete this task."
+						user << "<span class=\"rose\">You need more fuel to complete this task.</span>"
 						return
 
 					user.visible_message("[user] starts cutting apart the anchoring system sealant on [src].", "You start cutting apart the anchoring system's sealant with [O]...")
@@ -142,9 +142,9 @@ var/bomb_set
 	else if (src.deployable)
 		if(removal_stage < 5)
 			src.anchored = 1
-			visible_message("\red With a steely snap, bolts slide out of [src] and anchor it to the flooring!")
+			visible_message("<span class=\"rose\">With a steely snap, bolts slide out of [src] and anchor it to the flooring!</span>")
 		else
-			visible_message("\red \The [src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut.")
+			visible_message("<span class=\"rose\">\The [src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut.</span>")
 		flick("nuclearbombc", src)
 		src.icon_state = "nuclearbomb1"
 		src.extended = 1
@@ -156,10 +156,10 @@ var/bomb_set
 	set src in oview(1)
 
 	if (src.deployable)
-		usr << "\red You close several panels to make [src] undeployable."
+		usr << "<span class=\"rose\">You close several panels to make [src] undeployable.</span>"
 		src.deployable = 0
 	else
-		usr << "\red You adjust some panels to make [src] deployable."
+		usr << "<span class=\"rose\">You adjust some panels to make [src] deployable.</span>"
 		src.deployable = 1
 
 /obj/machinery/nuclearbomb/Topic(href, href_list)
@@ -167,7 +167,7 @@ var/bomb_set
 	if (!usr.canmove || usr.stat || usr.restrained())
 		return
 	if (!ishuman(usr))
-		usr << "\red You don't have the dexterity to do this!"
+		usr << "<span class=\"rose\">You don't have the dexterity to do this!</span>"
 		return 1
 	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))))
 		usr.set_machine(src)
@@ -207,7 +207,7 @@ var/bomb_set
 					if (src.timing == -1.0)
 						return
 					if (src.safety)
-						usr << "\red The safety is still on."
+						usr << "<span class=\"rose\">The safety is still on.</span>"
 						return
 					src.timing = !( src.timing )
 					if (src.timing)
@@ -228,14 +228,14 @@ var/bomb_set
 
 					if(removal_stage == 5)
 						src.anchored = 0
-						visible_message("\red \The [src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut.")
+						visible_message("<span class=\"rose\">\The [src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut.</span>")
 						return
 
 					src.anchored = !( src.anchored )
 					if(src.anchored)
-						visible_message("\red With a steely snap, bolts slide out of [src] and anchor it to the flooring.")
+						visible_message("<span class=\"rose\">With a steely snap, bolts slide out of [src] and anchor it to the flooring.</span>")
 					else
-						visible_message("\red The anchoring bolts slide back into the depths of [src].")
+						visible_message("<span class=\"rose\">The anchoring bolts slide back into the depths of [src].</span>")
 
 		src.add_fingerprint(usr)
 		for(var/mob/M in viewers(1, src))
@@ -308,7 +308,7 @@ var/bomb_set
 					blackbox.save_all_data_to_sql()
 
 				if (watchdog.waiting)
-					world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
+					world << "<span class=\"notice\"><B>Server will shut down for an automatic update in a few seconds.</B></span>"
 					watchdog.signal_ready()
 					return
 				sleep(300)

@@ -22,11 +22,11 @@
 
 		if (isrobot(usr) || src.locked)
 			if(istype(O, /obj/item/device/multitool))
-				user << "\red Resetting circuitry..."
+				user << "<span class=\"rose\">Resetting circuitry...</span>"
 				playsound(user, 'sound/machines/lockreset.ogg', 50, 1)
 				sleep(50) // Sleeping time~
 				src.locked = 0
-				user << "\blue You disable the locking modules."
+				user << "<span class=\"notice\">You disable the locking modules.</span>"
 				update_icon()
 				return
 			else if(istype(O, /obj/item/weapon))
@@ -40,7 +40,7 @@
 				else
 					playsound(user, 'sound/effects/Glasshit.ogg', 100, 1) //We don't want this playing every time
 				if(W.force < 15)
-					user << "\blue The cabinet's protective glass glances off the hit."
+					user << "<span class=\"notice\">The cabinet's protective glass glances off the hit.</span>"
 				else
 					src.hitstaken++
 					if(src.hitstaken == 4)
@@ -53,12 +53,12 @@
 		if (istype(O, /obj/item/weapon/twohanded/fireaxe) && src.localopened)
 			if(!fireaxe)
 				if(O:wielded)
-					user << "\red Unwield the axe first."
+					user << "<span class=\"rose\">Unwield the axe first.</span>"
 					return
 				fireaxe = O
 				user.drop_item(O)
 				src.contents += O
-				user << "\blue You place the fire axe back in the [src.name]."
+				user << "<span class=\"notice\">You place the fire axe back in the [src.name].</span>"
 				update_icon()
 			else
 				if(src.smashed)
@@ -81,10 +81,10 @@
 					spawn(10) update_icon()
 					return
 				else
-					user << "\red Resetting circuitry..."
+					user << "<span class=\"rose\">Resetting circuitry...</span>"
 					sleep(50)
 					src.locked = 1
-					user << "\blue You re-enable the locking modules."
+					user << "<span class=\"notice\">You re-enable the locking modules.</span>"
 					playsound(user, 'sound/machines/lockenable.ogg', 50, 1)
 					return
 			else
@@ -106,13 +106,13 @@
 			hasaxe = 1
 
 		if(src.locked)
-			user <<"\red The cabinet won't budge!"
+			user <<"<span class=\"rose\">The cabinet won't budge!</span>"
 			return
 		if(localopened)
 			if(fireaxe)
 				user.put_in_hands(fireaxe)
 				fireaxe = null
-				user << "\blue You take the fire axe from the [name]."
+				user << "<span class=\"notice\">You take the fire axe from the [name].</span>"
 				src.add_fingerprint(user)
 				update_icon()
 			else
@@ -142,9 +142,9 @@
 
 		if (isrobot(usr) || src.locked || src.smashed)
 			if(src.locked)
-				usr << "\red The cabinet won't budge!"
+				usr << "<span class=\"rose\">The cabinet won't budge!</span>"
 			else if(src.smashed)
-				usr << "\blue The protective glass is broken!"
+				usr << "<span class=\"notice\">The protective glass is broken!</span>"
 			return
 
 		localopened = !localopened
@@ -161,11 +161,11 @@
 			if(fireaxe)
 				usr.put_in_hands(fireaxe)
 				fireaxe = null
-				usr << "\blue You take the Fire axe from the [name]."
+				usr << "<span class=\"notice\">You take the Fire axe from the [name].</span>"
 			else
-				usr << "\blue The [src.name] is empty."
+				usr << "<span class=\"notice\">The [src.name] is empty.</span>"
 		else
-			usr << "\blue The [src.name] is closed."
+			usr << "<span class=\"notice\">The [src.name] is closed.</span>"
 		update_icon()
 
 	attack_paw(mob/user as mob)
@@ -174,14 +174,14 @@
 
 	attack_ai(mob/user as mob)
 		if(src.smashed)
-			user << "\red The security of the cabinet is compromised."
+			user << "<span class=\"rose\">The security of the cabinet is compromised.</span>"
 			return
 		else
 			locked = !locked
 			if(locked)
-				user << "\red Cabinet locked."
+				user << "<span class=\"rose\">Cabinet locked.</span>"
 			else
-				user << "\blue Cabinet unlocked."
+				user << "<span class=\"notice\">Cabinet unlocked.</span>"
 			return
 
 	update_icon() //Template: fireaxe[has fireaxe][is opened][hits taken][is smashed]. If you want the opening or closing animations, add "opening" or "closing" right after the numbers

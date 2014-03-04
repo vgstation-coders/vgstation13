@@ -6,7 +6,7 @@ var/global/normal_ooc_colour = "#002eb8"
 	set category = "OOC"
 
 	if(say_disabled)	//This is here to try to identify lag problems
-		usr << "\red Speech is currently admin-disabled."
+		usr << "<span class=\"rose\">Speech is currently admin-disabled.</span>"
 		return
 
 	if(!mob)	return
@@ -18,18 +18,18 @@ var/global/normal_ooc_colour = "#002eb8"
 	if(!msg)	return
 
 	if(!(prefs.toggles & CHAT_OOC))
-		src << "\red You have OOC muted."
+		src << "<span class=\"rose\">You have OOC muted.</span>"
 		return
 
 	if(!holder)
 		if(!ooc_allowed)
-			src << "\red OOC is globally muted"
+			src << "<span class=\"rose\">OOC is globally muted</span>"
 			return
 		if(!dooc_allowed && (mob.stat == DEAD))
-			usr << "\red OOC for dead mobs has been turned off."
+			usr << "<span class=\"rose\">OOC for dead mobs has been turned off.</span>"
 			return
 		if(prefs.muted & MUTE_OOC)
-			src << "\red You cannot use OOC (muted)."
+			src << "<span class=\"rose\">You cannot use OOC (muted).</span>"
 			return
 		if(handle_spam_prevention(msg,MUTE_OOC))
 			return
@@ -46,8 +46,6 @@ var/global/normal_ooc_colour = "#002eb8"
 		display_colour = "#0099cc"	//light blue
 		if(holder.rights & R_MOD && !(holder.rights & R_ADMIN))
 			display_colour = "#184880"	//dark blue
-		if(holder.rights & R_DEBUG && !(holder.rights & R_ADMIN))
-			display_colour = "#1b521f"	//dark green
 		else if(holder.rights & R_ADMIN)
 			if(config.allow_admin_ooccolor)
 				display_colour = src.prefs.ooccolor
@@ -94,7 +92,7 @@ var/global/normal_ooc_colour = "#002eb8"
 	set category = "OOC"
 
 	if(say_disabled)	//This is here to try to identify lag problems
-		usr << "\red Speech is currently admin-disabled."
+		usr << "<span class=\"rose\">Speech is currently admin-disabled.</span>"
 		return
 
 	if(!mob)	return
@@ -106,18 +104,18 @@ var/global/normal_ooc_colour = "#002eb8"
 	if(!msg)	return
 
 	if(!(prefs.toggles & CHAT_LOOC))
-		src << "\red You have LOOC muted."
+		src << "<span class=\"rose\">You have LOOC muted.</span>"
 		return
 
 	if(!holder)
 		if(!ooc_allowed)
-			src << "\red LOOC is globally muted"
+			src << "<span class=\"rose\">LOOC is globally muted</span>"
 			return
 		if(!dooc_allowed && (mob.stat == DEAD))
-			usr << "\red LOOC for dead mobs has been turned off."
+			usr << "<span class=\"rose\">LOOC for dead mobs has been turned off.</span>"
 			return
 		if(prefs.muted & MUTE_OOC)
-			src << "\red You cannot use LOOC (muted)."
+			src << "<span class=\"rose\">You cannot use LOOC (muted).</span>"
 			return
 		if(handle_spam_prevention(msg,MUTE_OOC))
 			return

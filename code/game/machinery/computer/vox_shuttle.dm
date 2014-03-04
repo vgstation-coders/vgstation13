@@ -52,7 +52,7 @@ var/global/vox_shuttle_location
 
 /obj/machinery/computer/vox_station/attack_hand(mob/user as mob)
 	if(!allowed(user))
-		user << "\red Access Denied"
+		user << "<span class=\"rose\">Access Denied</span>"
 		return
 
 	user.set_machine(src)
@@ -83,7 +83,7 @@ var/global/vox_shuttle_location
 	if(href_list["start"])
 		if(ticker && (istype(ticker.mode,/datum/game_mode/heist)))
 			if(!warning)
-				user << "\red Returning to dark space will end your raid and report your success or failure. If you are sure, press the button again."
+				user << "<span class=\"rose\">Returning to dark space will end your raid and report your success or failure. If you are sure, press the button again.</span>"
 				warning = 1
 				return
 		vox_move_to(/area/shuttle/vox/station)

@@ -102,8 +102,8 @@
 			src.take_organ_damage(10)
 			Stun(rand(1,5))
 	flick("noise", src:flash)
-	src << "\red <B>*BZZZT*</B>"
-	src << "\red Warning: Electromagnetic pulse detected."
+	src << "<span class=\"danger\">*BZZZT*</span>"
+	src << "<span class=\"rose\">Warning: Electromagnetic pulse detected.</span>"
 	..()
 
 /mob/living/silicon/proc/damage_mob(var/brute = 0, var/fire = 0, var/tox = 0)
@@ -145,8 +145,8 @@
 	if (bot.connected_ai == ai)
 		return 1
 	return 0
-	
-	
+
+
 // this function shows the health of the pAI in the Status panel
 /mob/living/silicon/proc/show_system_integrity()
 	if(!src.stat)
@@ -154,25 +154,25 @@
 	else
 		stat(null, text("Systems nonfunctional"))
 
-	
+
 // This is a pure virtual function, it should be overwritten by all subclasses
 /mob/living/silicon/proc/show_malf_ai()
 	return 0
 
-	
+
 // this function displays the station time in the status panel
 /mob/living/silicon/proc/show_station_time()
 	stat(null, "Station Time: [worldtime2text()]")
-	
-	
+
+
 // this function displays the shuttles ETA in the status panel if the shuttle has been called
 /mob/living/silicon/proc/show_emergency_shuttle_eta()
 	if(emergency_shuttle.online && emergency_shuttle.location < 2)
 		var/timeleft = emergency_shuttle.timeleft()
 		if (timeleft)
 			stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
-				
-				
+
+
 // This adds the basic clock, shuttle recall timer, and malf_ai info to all silicon lifeforms
 /mob/living/silicon/Stat()
 	..()
@@ -182,7 +182,7 @@
 		show_emergency_shuttle_eta()
 		show_system_integrity()
 		show_malf_ai()
-		
+
 // this function displays the stations manifest in a separate window
 /mob/living/silicon/proc/show_station_manifest()
 	var/dat

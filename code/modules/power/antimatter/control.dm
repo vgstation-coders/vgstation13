@@ -18,7 +18,6 @@
 	var/update_shield_icons = 0
 	var/stability = 100
 	var/exploding = 0
-	var/exploded = 0
 
 	var/active = 0//On or not
 	var/fuel_injection = 2//How much fuel to inject
@@ -46,12 +45,10 @@
 
 
 /obj/machinery/power/am_control_unit/process()
-	if(exploding && !exploded)
+	if(exploding)
 		message_admins("AME explosion at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) - Last touched by [fingerprintslast]",0,1)
-		exploded=1
 		explosion(get_turf(src),8,10,12,15)
-		if(src)
-			del(src)
+		if(src) del(src)
 
 	if(update_shield_icons && !shield_icon_delay)
 		check_shield_icons()
@@ -173,12 +170,12 @@
 			src.anchored = 0
 			disconnect_from_network()
 		else
-			user << "\red Once bolted and linked to a shielding unit it the [src.name] is unable to be moved!"
+			user << "<span class=\"rose\">Once bolted and linked to a shielding unit it the [src.name] is unable to be moved!</span>"
 		return
 
 	if(istype(W, /obj/item/weapon/am_containment))
 		if(fueljar)
-			user << "\red There is already a [fueljar] inside!"
+			user << "<span class=\"rose\">There is already a [fueljar] inside!</span>"
 			return
 		fueljar = W
 		if(user.client)

@@ -11,45 +11,45 @@
 			if("1")
 				log_admin("[key_name(usr)] has spawned a traitor.")
 				if(!src.makeTraitors())
-					usr << "\red Unfortunately there weren't enough candidates available."
+					usr << "<span class=\"rose\">Unfortunately there weren't enough candidates available.</span>"
 			if("2")
 				log_admin("[key_name(usr)] has spawned a changeling.")
 				if(!src.makeChanglings())
-					usr << "\red Unfortunately there weren't enough candidates available."
+					usr << "<span class=\"rose\">Unfortunately there weren't enough candidates available.</span>"
 			if("3")
 				log_admin("[key_name(usr)] has spawned revolutionaries.")
 				if(!src.makeRevs())
-					usr << "\red Unfortunately there weren't enough candidates available."
+					usr << "<span class=\"rose\">Unfortunately there weren't enough candidates available.</span>"
 			if("4")
 				log_admin("[key_name(usr)] has spawned a cultists.")
 				if(!src.makeCult())
-					usr << "\red Unfortunately there weren't enough candidates available."
+					usr << "<span class=\"rose\">Unfortunately there weren't enough candidates available.</span>"
 			if("5")
 				log_admin("[key_name(usr)] has spawned a malf AI.")
 				if(!src.makeMalfAImode())
-					usr << "\red Unfortunately there weren't enough candidates available."
+					usr << "<span class=\"rose\">Unfortunately there weren't enough candidates available.</span>"
 			if("6")
 				log_admin("[key_name(usr)] has spawned a wizard.")
 				if(!src.makeWizard())
-					usr << "\red Unfortunately there weren't enough candidates available."
+					usr << "<span class=\"rose\">Unfortunately there weren't enough candidates available.</span>"
 			if("7")
 				log_admin("[key_name(usr)] has spawned a nuke team.")
 				if(!src.makeNukeTeam())
-					usr << "\red Unfortunately there weren't enough candidates available."
+					usr << "<span class=\"rose\">Unfortunately there weren't enough candidates available.</span>"
 			if("8")
-				log_admin("[key_name(usr)] has spawned a ninja.")
+				log_admin("[key_name(usr)] has spawned a ninja.</span>")
 				src.makeSpaceNinja()
 			if("9")
-				log_admin("[key_name(usr)] has spawned aliens.")
+				log_admin("[key_name(usr)] has spawned aliens.</span>")
 				src.makeAliens()
 			if("10")
-				log_admin("[key_name(usr)] has spawned a death squad.")
+				log_admin("[key_name(usr)] has spawned a death squad.</span>")
 				if(!makeDeathsquad())
-					usr << "\red Unfortunatly there were no candidates available"
+					usr << "<span class=\"rose\">Unfortunatly there were no candidates available</span>"
 			if("11")
 				log_admin("[key_name(usr)] has spawned vox raiders.")
 				if(!src.makeVoxRaiders())
-					usr << "\red Unfortunately there weren't enough candidates available."
+					usr << "<span class=\"rose\">Unfortunately there weren't enough candidates available.</span>"
 	else if(href_list["dbsearchckey"] || href_list["dbsearchadmin"])
 		var/adminckey = href_list["dbsearchadmin"]
 		var/playerckey = href_list["dbsearchckey"]
@@ -223,7 +223,7 @@
 				emergency_shuttle.incall()
 				captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
 				log_admin("[key_name(usr)] called the Emergency Shuttle")
-				message_admins("\blue [key_name_admin(usr)] called the Emergency Shuttle to the station", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] called the Emergency Shuttle to the station</span>", 1)
 
 			if("2")
 				if ((!( ticker ) || emergency_shuttle.location || emergency_shuttle.direction == 0))
@@ -233,11 +233,11 @@
 						emergency_shuttle.incall()
 						captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
 						log_admin("[key_name(usr)] called the Emergency Shuttle")
-						message_admins("\blue [key_name_admin(usr)] called the Emergency Shuttle to the station", 1)
+						message_admins("<span class=\"notice\">[key_name_admin(usr)] called the Emergency Shuttle to the station</span>", 1)
 					if(1)
 						emergency_shuttle.recall()
 						log_admin("[key_name(usr)] sent the Emergency Shuttle back")
-						message_admins("\blue [key_name_admin(usr)] sent the Emergency Shuttle back", 1)
+						message_admins("<span class=\"notice\">[key_name_admin(usr)] sent the Emergency Shuttle back</span>", 1)
 
 		href_list["secretsadmin"] = "check_antagonist"
 
@@ -247,7 +247,7 @@
 		emergency_shuttle.settimeleft( input("Enter new shuttle duration (seconds):","Edit Shuttle Timeleft", emergency_shuttle.timeleft() ) as num )
 		log_admin("[key_name(usr)] edited the Emergency Shuttle's timeleft to [emergency_shuttle.timeleft()]")
 		captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
-		message_admins("\blue [key_name_admin(usr)] edited the Emergency Shuttle's timeleft to [emergency_shuttle.timeleft()]", 1)
+		message_admins("<span class=\"notice\">[key_name_admin(usr)] edited the Emergency Shuttle's timeleft to [emergency_shuttle.timeleft()]</span>", 1)
 		href_list["secretsadmin"] = "check_antagonist"
 
 	else if(href_list["delay_round_end"])
@@ -255,7 +255,7 @@
 
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
-		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
+		message_admins("<span class=\"notice\">[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].</span>", 1)
 		href_list["secretsadmin"] = "check_antagonist"
 
 	else if(href_list["simplemake"])
@@ -272,7 +272,7 @@
 			if("Yes")		delmob = 1
 
 		log_admin("[key_name(usr)] has used rudimentary transformation on [key_name(M)]. Transforming to [href_list["simplemake"]]; deletemob=[delmob]")
-		message_admins("\blue [key_name_admin(usr)] has used rudimentary transformation on [key_name_admin(M)]. Transforming to [href_list["simplemake"]]; deletemob=[delmob]", 1)
+		message_admins("<span class=\"notice\">[key_name_admin(usr)] has used rudimentary transformation on [key_name_admin(M)]. Transforming to [href_list["simplemake"]]; deletemob=[delmob]</span>", 1)
 
 		switch(href_list["simplemake"])
 			if("observer")			M.change_mob_type( /mob/dead/observer , null, null, delmob )
@@ -356,7 +356,7 @@
 
 		log_admin("[key_name(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [duration]")
 		ban_unban_log_save("[key_name(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [duration]")
-		message_admins("\blue [key_name_admin(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [duration]", 1)
+		message_admins("<span class=\"notice\">[key_name_admin(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [duration]</span>", 1)
 		Banlist.cd = "/base/[banfolder]"
 		Banlist["reason"] << reason
 		Banlist["temp"] << temp
@@ -392,8 +392,8 @@
 					feedback_inc("ban_appearance_unban", 1)
 					DB_ban_unban(M.ckey, BANTYPE_APPEARANCE)
 					appearance_unban(M)
-					message_admins("\blue [key_name_admin(usr)] removed [key_name_admin(M)]'s appearance ban", 1)
-					M << "\red<BIG><B>[usr.client.ckey] has removed your appearance ban.</B></BIG>"
+					message_admins("<span class=\"notice\">[key_name_admin(usr)] removed [key_name_admin(M)]'s appearance ban</span>", 1)
+					M << "<span class=\"rose\"><BIG><B>[usr.client.ckey] has removed your appearance ban.</B></BIG></span>"
 
 		else switch(alert("Appearance ban [M.ckey]?",,"Yes","No", "Cancel"))
 			if("Yes")
@@ -406,14 +406,14 @@
 				DB_ban_record(BANTYPE_APPEARANCE, M, -1, reason)
 				appearance_fullban(M, "[reason]; By [usr.ckey] on [time2text(world.realtime)]")
 				notes_add(M.ckey, "Appearance banned - [reason]")
-				message_admins("\blue [key_name_admin(usr)] appearance banned [key_name_admin(M)]", 1)
-				M << "\red<BIG><B>You have been appearance banned by [usr.client.ckey].</B></BIG>"
-				M << "\red <B>The reason is: [reason]</B>"
-				M << "\red Appearance ban can be lifted only upon request."
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] appearance banned [key_name_admin(M)]</span>", 1)
+				M << "<span class=\"rose\"><BIG><B>You have been appearance banned by [usr.client.ckey].</B></BIG></span>"
+				M << "<span class=\"rose\"><B>The reason is: [reason]</B></span>"
+				M << "<span class=\"rose\">Appearance ban can be lifted only upon request.</span>"
 				if(config.banappeals)
-					M << "\red To try to resolve this matter head to [config.banappeals]"
+					M << "<span class=\"rose\">To try to resolve this matter head to [config.banappeals]</span>"
 				else
-					M << "\red No ban appeals URL has been set."
+					M << "<span class=\"rose\">No ban appeals URL has been set.</span>"
 			if("No")
 				return
 
@@ -779,7 +779,7 @@
 			switch(alert("Temporary Ban?",,"Yes","No", "Cancel"))
 				if("Yes")
 					if(config.ban_legacy_system)
-						usr << "\red Your server is using the legacy banning system, which does not support temporary job bans. Consider upgrading. Aborting ban."
+						usr << "<span class=\"rose\">Your server is using the legacy banning system, which does not support temporary job bans. Consider upgrading. Aborting ban.</span>"
 						return
 					var/mins = input(usr,"How long (in minutes)?","Ban time",1440) as num|null
 					if(!mins)
@@ -801,10 +801,10 @@
 						else
 							msg += ", [job]"
 					notes_add(M.ckey, "Banned  from [msg] - [reason]")
-					message_admins("\blue [key_name_admin(usr)] banned [key_name_admin(M)] from [msg] for [mins] minutes", 1)
-					M << "\red<BIG><B>You have been jobbanned by [usr.client.ckey] from: [msg].</B></BIG>"
-					M << "\red <B>The reason is: [reason]</B>"
-					M << "\red This jobban will be lifted in [mins] minutes."
+					message_admins("<span class=\"notice\">[key_name_admin(usr)] banned [key_name_admin(M)] from [msg] for [mins] minutes</span>", 1)
+					M << "<span class=\"rose\"><BIG><B>You have been jobbanned by [usr.client.ckey] from: [msg].</B></BIG>"
+					M << "\<span class=\"danger\">The reason is: [reason]</span>"
+					M << "<span class=\"rose\">This jobban will be lifted in [mins] minutes.</span>"
 					href_list["jobban2"] = 1 // lets it fall through and refresh
 					return 1
 				if("No")
@@ -821,10 +821,10 @@
 							if(!msg)	msg = job
 							else		msg += ", [job]"
 						notes_add(M.ckey, "Banned  from [msg] - [reason]")
-						message_admins("\blue [key_name_admin(usr)] banned [key_name_admin(M)] from [msg]", 1)
-						M << "\red<BIG><B>You have been jobbanned by [usr.client.ckey] from: [msg].</B></BIG>"
-						M << "\red <B>The reason is: [reason]</B>"
-						M << "\red Jobban can be lifted only upon request."
+						message_admins("<span class=\"notice\">[key_name_admin(usr)] banned [key_name_admin(M)] from [msg]</span>", 1)
+						M << "<span class=\"rose\">You have been jobbanned by [usr.client.ckey] from: [msg].</span>"
+						M << "<span class=\"danger\">The reason is: [reason]</span>"
+						M << "<span class=\"rose\">Jobban can be lifted only upon request.</span>"
 						href_list["jobban2"] = 1 // lets it fall through and refresh
 						return 1
 				if("Cancel")
@@ -854,8 +854,8 @@
 					else
 						continue
 			if(msg)
-				message_admins("\blue [key_name_admin(usr)] unbanned [key_name_admin(M)] from [msg]", 1)
-				M << "\red<BIG><B>You have been un-jobbanned by [usr.client.ckey] from [msg].</B></BIG>"
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] unbanned [key_name_admin(M)] from [msg]</span>", 1)
+				M << "<span class=\"danger\">You have been un-jobbanned by [usr.client.ckey] from [msg].</span>"
 				href_list["jobban2"] = 1 // lets it fall through and refresh
 			return 1
 		return 0 //we didn't do anything!
@@ -865,9 +865,9 @@
 		if (ismob(M))
 			if(!check_if_greater_rights_than(M.client))
 				return
-			M << "\red You have been kicked from the server"
+			M << "<span class=\"rose\">You have been kicked from the server</span>"
 			log_admin("[key_name(usr)] booted [key_name(M)].")
-			message_admins("\blue [key_name_admin(usr)] booted [key_name_admin(M)].", 1)
+			message_admins("<span class=\"notice\">[key_name_admin(usr)] booted [key_name_admin(M)].</span>", 1)
 			//M.client = null
 			del(M.client)
 /*
@@ -896,7 +896,7 @@
 		if(t)
 			if((alert("Do you want to unjobban [t]?","Unjobban confirmation", "Yes", "No") == "Yes") && t) //No more misclicks! Unless you do it twice.
 				log_admin("[key_name(usr)] removed [t]")
-				message_admins("\blue [key_name_admin(usr)] removed [t]", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] removed [t]</span>", 1)
 				jobban_remove(t)
 				href_list["ban"] = 1 // lets it fall through and refresh
 				var/t_split = text2list(t, " - ")
@@ -923,17 +923,17 @@
 					return
 				AddBan(M.ckey, M.computer_id, reason, usr.ckey, 1, mins)
 				ban_unban_log_save("[usr.client.ckey] has banned [M.ckey]. - Reason: [reason] - This will be removed in [mins] minutes.")
-				M << "\red<BIG><B>You have been banned by [usr.client.ckey].\nReason: [reason].</B></BIG>"
-				M << "\red This is a temporary ban, it will be removed in [mins] minutes."
+				M << "<span class=\"danger\">You have been banned by [usr.client.ckey].\nReason: [reason].</span>"
+				M << "<span class=\"rose\">This is a temporary ban, it will be removed in [mins] minutes.</span>"
 				feedback_inc("ban_tmp",1)
 				DB_ban_record(BANTYPE_TEMP, M, mins, reason)
 				feedback_inc("ban_tmp_mins",mins)
 				if(config.banappeals)
-					M << "\red To try to resolve this matter head to [config.banappeals]"
+					M << "<span class=\"rose\">To try to resolve this matter head to [config.banappeals]</span>"
 				else
-					M << "\red No ban appeals URL has been set."
+					M << "<span class=\"rose\">No ban appeals URL has been set.</span>"
 				log_admin("[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.")
-				message_admins("\blue[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.")
+				message_admins("<span class=\"notice\">[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.</span>")
 
 				del(M.client)
 				//del(M)	// See no reason why to delete mob. Important stuff can be lost. And ban can be lifted before round ends.
@@ -947,15 +947,15 @@
 						AddBan(M.ckey, M.computer_id, reason, usr.ckey, 0, 0, M.lastKnownIP)
 					if("No")
 						AddBan(M.ckey, M.computer_id, reason, usr.ckey, 0, 0)
-				M << "\red<BIG><B>You have been banned by [usr.client.ckey].\nReason: [reason].</B></BIG>"
-				M << "\red This is a permanent ban."
+				M << "<span class=\"danger\">You have been banned by [usr.client.ckey].\nReason: [reason].</span>"
+				M << "<span class=\"rose\">This is a permanent ban.</span>"
 				if(config.banappeals)
-					M << "\red To try to resolve this matter head to [config.banappeals]"
+					M << "<span class=\"rose\">To try to resolve this matter head to [config.banappeals]</span>"
 				else
-					M << "\red No ban appeals URL has been set."
+					M << "<span class=\"rose\">No ban appeals URL has been set.</span>"
 				ban_unban_log_save("[usr.client.ckey] has permabanned [M.ckey]. - Reason: [reason] - This is a permanent ban.")
 				log_admin("[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis is a permanent ban.")
-				message_admins("\blue[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis is a permanent ban.")
+				message_admins("<span class=\"notice\">[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis is a permanent ban.</span>")
 				feedback_inc("ban_perma",1)
 				DB_ban_record(BANTYPE_PERMA, M, -1, reason)
 
@@ -1024,8 +1024,8 @@
 			return alert(usr, "The game has already started.", null, null, null, null)
 		master_mode = href_list["c_mode2"]
 		log_admin("[key_name(usr)] set the mode as [master_mode].")
-		message_admins("\blue [key_name_admin(usr)] set the mode as [master_mode].", 1)
-		world << "\blue <b>The mode is now: [master_mode]</b>"
+		message_admins("<span class=\"notice\">[key_name_admin(usr)] set the mode as [master_mode].</span>", 1)
+		world << "<span class=\"notice\"><b>The mode is now: [master_mode]</b></span>"
 		Game() // updates the main game menu
 		world.save_mode(master_mode)
 		.(href, list("c_mode"=1))
@@ -1039,7 +1039,7 @@
 			return alert(usr, "The game mode has to be secret!", null, null, null, null)
 		secret_force_mode = href_list["f_secret2"]
 		log_admin("[key_name(usr)] set the forced secret mode as [secret_force_mode].")
-		message_admins("\blue [key_name_admin(usr)] set the forced secret mode as [secret_force_mode].", 1)
+		message_admins("<span class=\"notice\">[key_name_admin(usr)] set the forced secret mode as [secret_force_mode].</span>", 1)
 		Game() // updates the main game menu
 		.(href, list("f_secret"=1))
 
@@ -1052,7 +1052,7 @@
 			return
 
 		log_admin("[key_name(usr)] attempting to monkeyize [key_name(H)]")
-		message_admins("\blue [key_name_admin(usr)] attempting to monkeyize [key_name_admin(H)]", 1)
+		message_admins("<span class=\"notice\">[key_name_admin(usr)] attempting to monkeyize [key_name_admin(H)]</span>", 1)
 		H.monkeyize()
 
 	else if(href_list["corgione"])
@@ -1064,7 +1064,7 @@
 			return
 
 		log_admin("[key_name(usr)] attempting to corgize [key_name(H)]")
-		message_admins("\blue [key_name_admin(usr)] attempting to corgize [key_name_admin(H)]", 1)
+		message_admins("<span class=\"notice\">[key_name_admin(usr)] attempting to corgize [key_name_admin(H)]</span>", 1)
 		H.corgize()
 
 	else if(href_list["forcespeech"])
@@ -1079,7 +1079,7 @@
 		M.say(speech)
 		speech = sanitize(speech) // Nah, we don't trust them
 		log_admin("[key_name(usr)] forced [key_name(M)] to say: [speech]")
-		message_admins("\blue [key_name_admin(usr)] forced [key_name_admin(M)] to say: [speech]")
+		message_admins("<span class=\"notice\">[key_name_admin(usr)] forced [key_name_admin(M)] to say: [speech]</span>")
 
 	else if(href_list["sendtoprison"])
 		if(!check_rights(R_ADMIN))	return
@@ -1122,9 +1122,9 @@
 			prisoner.equip_to_slot_or_del(new /obj/item/clothing/under/color/orange(prisoner), slot_w_uniform)
 			prisoner.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(prisoner), slot_shoes)
 
-		M << "\red You have been sent to the prison station!"
+		M << "<span class=\"notice\">You have been sent to the prison station!</span>"
 		log_admin("[key_name(usr)] sent [key_name(M)] to the prison station.")
-		message_admins("\blue [key_name_admin(usr)] sent [key_name_admin(M)] to the prison station.", 1)
+		message_admins("<span class=\"notice\">[key_name_admin(usr)] sent [key_name_admin(M)] to the prison station.</span>", 1)
 
 	else if(href_list["tdome1"])
 		if(!check_rights(R_FUN))	return
@@ -1151,7 +1151,7 @@
 		sleep(5)
 		M.loc = pick(tdome1)
 		spawn(50)
-			M << "\blue You have been sent to the Thunderdome."
+			M << "<span class=\"notice\">You have been sent to the Thunderdome.</span>"
 		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Team 1)")
 		message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Team 1)", 1)
 
@@ -1180,7 +1180,7 @@
 		sleep(5)
 		M.loc = pick(tdome2)
 		spawn(50)
-			M << "\blue You have been sent to the Thunderdome."
+			M << "<span class=\"notice\">You have been sent to the Thunderdome.</span>"
 		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Team 2)")
 		message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Team 2)", 1)
 
@@ -1202,7 +1202,7 @@
 		sleep(5)
 		M.loc = pick(tdomeadmin)
 		spawn(50)
-			M << "\blue You have been sent to the Thunderdome."
+			M << "<span class=\"notice\">You have been sent to the Thunderdome.</span>"
 		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Admin.)")
 		message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Admin.)", 1)
 
@@ -1235,7 +1235,7 @@
 		sleep(5)
 		M.loc = pick(tdomeobserve)
 		spawn(50)
-			M << "\blue You have been sent to the Thunderdome."
+			M << "<span class=\"notice\">You have been sent to the Thunderdome.</span>"
 		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Observer.)")
 		message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Observer.)", 1)
 
@@ -1249,7 +1249,7 @@
 
 		if(config.allow_admin_rev)
 			L.revive()
-			message_admins("\red Admin [key_name_admin(usr)] healed / revived [key_name_admin(L)]!", 1)
+			message_admins("<span class=\"rose\">Admin [key_name_admin(usr)] healed / revived [key_name_admin(L)]!</span>", 1)
 			log_admin("[key_name(usr)] healed / Rrvived [key_name(L)]")
 		else
 			usr << "Admin Rejuvinates have been disabled"
@@ -1262,7 +1262,7 @@
 			usr << "This can only be used on instances of type /mob/living/carbon/human"
 			return
 
-		message_admins("\red Admin [key_name_admin(usr)] AIized [key_name_admin(H)]!", 1)
+		message_admins("<span class=\"rose\">Admin [key_name_admin(usr)] AIized [key_name_admin(H)]!</span>", 1)
 		log_admin("[key_name(usr)] AIized [key_name(H)]")
 		H.AIize()
 
@@ -1471,7 +1471,7 @@
 		log_admin("[key_name(H)] got their cookie, spawned by [key_name(src.owner)]")
 		message_admins("[key_name(H)] got their cookie, spawned by [key_name(src.owner)]")
 		feedback_inc("admin_cookies_spawned",1)
-		H << "\blue Your prayers have been answered!! You received the <b>best cookie</b>!"
+		H << "<span class=\"notice\">Your prayers have been answered!! You received the <b>best cookie</b>!</span>"
 
 	else if(href_list["BlueSpaceArtillery"])
 		if(!check_rights(R_ADMIN|R_FUN))	return
@@ -1844,30 +1844,30 @@
 				feedback_add_details("admin_secrets_fun_used","Grav")
 				if(gravity_is_on)
 					log_admin("[key_name(usr)] toggled gravity on.", 1)
-					message_admins("\blue [key_name_admin(usr)] toggled gravity on.", 1)
+					message_admins("<span class=\"notice\">[key_name_admin(usr)] toggled gravity on.</span>", 1)
 					command_alert("Gravity generators are again functioning within normal parameters. Sorry for any inconvenience.")
 				else
 					log_admin("[key_name(usr)] toggled gravity off.", 1)
-					message_admins("\blue [key_name_admin(usr)] toggled gravity off.", 1)
+					message_admins("<span class=\"notice\">[key_name_admin(usr)] toggled gravity off.</span>", 1)
 					command_alert("Feedback surge detected in mass-distributions systems. Artifical gravity has been disabled whilst the system reinitializes. Further failures may result in a gravitational collapse and formation of blackholes. Have a nice day.")
 			if("wave")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Meteor")
 				log_admin("[key_name(usr)] spawned a meteor wave", 1)
-				message_admins("\blue [key_name_admin(usr)] spawned a meteor wave.", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] spawned a meteor wave.</span>", 1)
 				new /datum/event/meteor_wave
 			if("goblob")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Blob")
 				log_admin("[key_name(usr)] spawned a blob", 1)
-				message_admins("\blue [key_name_admin(usr)] spawned a blob.", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] spawned a blob.</span>", 1)
 				new /datum/event/blob
 
 			if("aliens")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Aliens")
 				log_admin("[key_name(usr)] spawned an alien infestation", 1)
-				message_admins("\blue [key_name_admin(usr)] attempted an alien infestation", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] attempted an alien infestation</span>", 1)
 				new /datum/event/alien_infestation
 
 
@@ -1875,32 +1875,32 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","P")
 				log_admin("[key_name(usr)] made all areas powered", 1)
-				message_admins("\blue [key_name_admin(usr)] made all areas powered", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] made all areas powered</span>", 1)
 				power_restore()
 			if("unpower")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","UP")
 				log_admin("[key_name(usr)] made all areas unpowered", 1)
-				message_admins("\blue [key_name_admin(usr)] made all areas unpowered", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] made all areas unpowered</span>", 1)
 				power_failure()
 			if("quickpower")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","QP")
 				log_admin("[key_name(usr)] made all SMESs powered", 1)
-				message_admins("\blue [key_name_admin(usr)] made all SMESs powered", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] made all SMESs powered</span>", 1)
 				power_restore_quick()
 			if("activateprison")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AP")
-				world << "\blue <B>Transit signature detected.</B>"
-				world << "\blue <B>Incoming shuttle.</B>"
+				world << "<span class=\"notice\"><B>Transit signature detected.</B></span>"
+				world << "<span class=\"notice\"><B>Incoming shuttle.</B></span>"
 				/*
 				var/A = locate(/area/shuttle_prison)
 				for(var/atom/movable/AM as mob|obj in A)
 					AM.z = 1
 					AM.Move()
 				*/
-				message_admins("\blue [key_name_admin(usr)] sent the prison shuttle to the station.", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] sent the prison shuttle to the station.</span>", 1)
 			if("deactivateprison")
 				/*
 				feedback_inc("admin_secrets_fun_used",1)
@@ -1910,20 +1910,20 @@
 					AM.z = 2
 					AM.Move()
 				*/
-				message_admins("\blue [key_name_admin(usr)] sent the prison shuttle back.", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] sent the prison shuttle back.</span>", 1)
 			if("toggleprisonstatus")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TPS")
 				for(var/obj/machinery/computer/prison_shuttle/PS in world)
 					PS.allowedtocall = !(PS.allowedtocall)
-					message_admins("\blue [key_name_admin(usr)] toggled status of prison shuttle to [PS.allowedtocall].", 1)
+					message_admins("<span class=\"notice\">[key_name_admin(usr)] toggled status of prison shuttle to [PS.allowedtocall].</span>", 1)
 			if("prisonwarp")
 				if(!ticker)
 					alert("The game hasn't started yet!", null, null, null, null, null)
 					return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","PW")
-				message_admins("\blue [key_name_admin(usr)] teleported all players to the prison station.", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] teleported all players to the prison station.</span>", 1)
 				for(var/mob/living/carbon/human/H in mob_list)
 					var/turf/loc = find_loc(H)
 					var/security = 0
@@ -1988,7 +1988,7 @@
 					A.mind.objectives += new_objective
 					ticker.mode.greet_traitor(A.mind)
 					ticker.mode.finalize_traitor(A.mind)
-				message_admins("\blue [key_name_admin(usr)] used everyone is a traitor secret. Objective is [objective]", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] used everyone is a traitor secret. Objective is [objective]</span>", 1)
 				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")
 			if("moveminingshuttle")
 				if(mining_shuttle_moving)
@@ -1996,25 +1996,25 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ShM")
 				move_mining_shuttle()
-				message_admins("\blue [key_name_admin(usr)] moved mining shuttle", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] moved mining shuttle</span>", 1)
 				log_admin("[key_name(usr)] moved the mining shuttle")
 			if("moveadminshuttle")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ShA")
 				move_admin_shuttle()
-				message_admins("\blue [key_name_admin(usr)] moved the centcom administration shuttle", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] moved the centcom administration shuttle</span>", 1)
 				log_admin("[key_name(usr)] moved the centcom administration shuttle")
 			if("moveferry")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ShF")
 				move_ferry()
-				message_admins("\blue [key_name_admin(usr)] moved the centcom ferry", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] moved the centcom ferry</span>", 1)
 				log_admin("[key_name(usr)] moved the centcom ferry")
 			if("movealienship")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ShX")
 				move_alien_ship()
-				message_admins("\blue [key_name_admin(usr)] moved the alien dinghy", 1)
+				message_admins("<span class=\"notice\">[key_name_admin(usr)] moved the alien dinghy</span>", 1)
 				log_admin("[key_name(usr)] moved the alien dinghy")
 			if("togglebombcap")
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2029,7 +2029,7 @@
 				var/range_dev = MAX_EXPLOSION_RANGE *0.25
 				var/range_high = MAX_EXPLOSION_RANGE *0.5
 				var/range_low = MAX_EXPLOSION_RANGE
-				message_admins("\red <b> [key_name_admin(usr)] changed the bomb cap to [range_dev], [range_high], [range_low]</b>", 1)
+				message_admins("<span class=\"danger\">[key_name_admin(usr)] changed the bomb cap to [range_dev], [range_high], [range_low]</span>", 1)
 				log_admin("[key_name_admin(usr)] changed the bomb cap to [MAX_EXPLOSION_RANGE]")
 
 			if("flicklights")
@@ -2049,27 +2049,27 @@
 								var/Message = rand(1,4)
 								switch(Message)
 									if(1)
-										M.show_message(text("\blue You shudder as if cold..."), 1)
+										M.show_message(text("<span class=\"notice\">You shudder as if cold...</span>"), 1)
 									if(2)
-										M.show_message(text("\blue You feel something gliding across your back..."), 1)
+										M.show_message(text("<span class=\"notice\">You feel something gliding across your back...</span>"), 1)
 									if(3)
-										M.show_message(text("\blue Your eyes twitch, you feel like something you can't see is here..."), 1)
+										M.show_message(text("<span class=\"notice\">Your eyes twitch, you feel like something you can't see is here...</span>"), 1)
 									if(4)
-										M.show_message(text("\blue You notice something moving out of the corner of your eye, but nothing is there..."), 1)
+										M.show_message(text("<span class=\"notice\">You notice something moving out of the corner of your eye, but nothing is there...</span>"), 1)
 								for(var/obj/W in orange(5,M))
 									if(prob(25) && !W.anchored)
 										step_rand(W)
 					sleep(rand(100,1000))
 				for(var/mob/M in player_list)
 					if(M.stat != 2)
-						M.show_message(text("\blue The chilling wind suddenly stops..."), 1)
+						M.show_message(text("<span class=\"notice\">The chilling wind suddenly stops...</span>"), 1)
 /*				if("shockwave")
 				ok = 1
-				world << "\red <B><big>ALERT: STATION STRESS CRITICAL</big></B>"
+				world << "<span class=\"danger\"><big>ALERT: STATION STRESS CRITICAL</big></span>"
 				sleep(60)
-				world << "\red <B><big>ALERT: STATION STRESS CRITICAL. TOLERABLE LEVELS EXCEEDED!</big></B>"
+				world << "<span class=\"danger\"><big>ALERT: STATION STRESS CRITICAL. TOLERABLE LEVELS EXCEEDED!</big></span>"
 				sleep(80)
-				world << "\red <B><big>ALERT: STATION STRUCTURAL STRESS CRITICAL. SAFETY MECHANISMS FAILED!</big></B>"
+				world << "<span class=\"danger\"><big>ALERT: STATION STRUCTURAL STRESS CRITICAL. SAFETY MECHANISMS FAILED!</big></span>"
 				sleep(40)
 				for(var/mob/M in world)
 					shake_camera(M, 400, 1)
@@ -2282,7 +2282,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RET")
 				for(var/mob/living/carbon/human/H in player_list)
-					H << "\red <B>You suddenly feel stupid.</B>"
+					H << "<span class=\"danger\">You suddenly feel stupid.</span>"
 					H.setBrainLoss(60)
 				message_admins("[key_name_admin(usr)] made everybody retarded")
 			if("fakeguns")

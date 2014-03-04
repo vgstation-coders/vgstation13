@@ -95,7 +95,7 @@
 
 		if(istype(I, /obj/item/weapon/storage/bag/trash))
 			var/obj/item/weapon/storage/bag/trash/T = I
-			user << "\blue You empty the bag."
+			user << "<span class=\"notice\">You empty the bag.</span>"
 			for(var/obj/item/O in T.contents)
 				T.remove_from_storage(O,src)
 			T.update_icon()
@@ -114,7 +114,7 @@
 						GM.client.eye = src
 					GM.loc = src
 					for (var/mob/C in viewers(src))
-						C.show_message("\red [GM.name] has been placed in the [src] by [user].", 3)
+						C.show_message("<span class=\"rose\">[GM.name] has been placed in the [src] by [user].</span>", 3)
 					del(G)
 					log_attack("<font color='red'>[usr] ([usr.ckey]) placed [GM] ([GM.ckey]) in a disposals unit.</font>")
 			return
@@ -125,7 +125,7 @@
 		else
 			var/mob/living/silicon/robot/mommi/M = user
 			if(is_type_in_list(I,M.module.modules))
-				user << "\red You can't throw away what's attached to you."
+				user << "<span class=\"rose\">You can't throw away what's attached to you.</span>"
 				return
 			else
 				M.drop_item()
@@ -221,11 +221,11 @@
 	// human interact with machine
 	attack_hand(mob/user as mob)
 		if(user && user.loc == src)
-			usr << "\red You cannot reach the controls from inside."
+			usr << "<span class=\"rose\">You cannot reach the controls from inside.</span>"
 			return
 		/*
 		if(mode==-1)
-			usr << "\red The disposal units power is disabled."
+			usr << "<span class=\"rose\">The disposal units power is disabled.</span>"
 			return
 		*/
 		interact(user, 0)
@@ -268,11 +268,11 @@
 
 	Topic(href, href_list)
 		if(usr.loc == src)
-			usr << "\red You cannot reach the controls from inside."
+			usr << "<span class=\"rose\">You cannot reach the controls from inside.</span>"
 			return
 
 		if(mode==-1 && !href_list["eject"]) // only allow ejecting if mode is -1
-			usr << "\red The disposal units power is disabled."
+			usr << "<span class=\"rose\">The disposal units power is disabled.</span>"
 			return
 		..()
 		src.add_fingerprint(usr)
@@ -997,7 +997,7 @@
 				sortType = O.currTag
 				playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
 				var/tag = uppertext(TAGGERLOCATIONS[O.currTag])
-				user << "\blue Changed filter to [tag]"
+				user << "<span class=\"notice\">Changed filter to [tag]</span>"
 				updatedesc()
 
 

@@ -36,7 +36,7 @@ AI MODULES
 /obj/item/weapon/aiModule/attack_ai(mob/user as mob)
 	// Keep MoMMIs from picking them up.
 	if(isMoMMI(user))
-		user << "\red Your firmware prevents you from picking that up!"
+		user << "<span class=\"rose\">Your firmware prevents you from picking that up!</span>"
 	return
 
 /obj/item/weapon/aiModule/proc/install(var/obj/machinery/computer/C)
@@ -696,7 +696,7 @@ AI MODULES
 	var/time = time2text(world.realtime,"hh:mm:ss")
 	lawchanges.Add("[time] <B>:</B> [sender.name]([sender.key]) used [src.name] on [target.name]([target.key])")
 	lawchanges.Add("The law is '[newFreeFormLaw]'")
-	target << "\red BZZZZT"
+	target << "<span class=\"rose\">BZZZZT</span>"
 	var/law = "[newFreeFormLaw]"
 	target.add_ion_law(law)
 	log_game("[sender.name]([sender.key]) added ion law \"[newFreeFormLaw]\" to [target.name]([target.key])")
@@ -708,7 +708,7 @@ AI MODULES
 	var/time = time2text(world.realtime,"hh:mm:ss")
 	lawchanges.Add("[time] <B>:</B> [sender.name]([sender.key]) used [src.name] on \a [target]")
 	lawchanges.Add("The law is '[newFreeFormLaw]'")
-	target << "\red BZZZZT"
+	target << "<span class=\"rose\">BZZZZT</span>"
 	var/law = "[newFreeFormLaw]"
 	target.add_ion_law(law)
 	log_game("[sender.name]([sender.key]) added ion law \"[newFreeFormLaw]\" to \a [target]")
@@ -806,7 +806,7 @@ AI MODULES
 
 /obj/item/weapon/aiModule/keeper/insertIntoFrame(var/obj/item/weapon/planning_frame/target, var/mob/sender)
 	..()
-	sender << "\red How the fuck did you get this?"
+	sender << "<span class=\"rose\">How the fuck did you get this?</span>"
 	return 0
 
 /obj/item/weapon/aiModule/keeper/install(var/obj/machinery/computer/C)

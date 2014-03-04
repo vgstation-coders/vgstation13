@@ -63,7 +63,7 @@ obj/machinery/embedded_controller
 					if(istype(W, /obj/item/weapon/screwdriver))
 						usr << "You begin removing screws from \the [src] backplate..."
 						if(do_after(user, 50))
-							usr << "\blue You unscrew \the [src] from the wall."
+							usr << "<span class=\"notice\">You unscrew \the [src] from the wall.</span>"
 							playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 							new /obj/item/airlock_controller_frame(get_turf(src))
 							del(src)
@@ -71,11 +71,11 @@ obj/machinery/embedded_controller
 					if(istype(W, /obj/item/weapon/circuitboard))
 						var/obj/item/weapon/circuitboard/C=W
 						if(C.board_type!="embedded controller")
-							user << "\red You cannot install this type of board into an embedded controller."
+							user << "<span class=\"rose\">You cannot install this type of board into an embedded controller.</span>"
 							return
 						usr << "You begin to insert \the [C] into \the [src]."
 						if(do_after(user, 10))
-							usr << "\blue You secure \the [C]!"
+							usr << "<span class=\"notice\">You secure \the [C]!</span>"
 							user.drop_item()
 							_circuitboard=C
 							C.loc=src
@@ -98,7 +98,7 @@ obj/machinery/embedded_controller
 							else
 								C=new boardtype(get_turf(src))
 							user.visible_message(\
-								"\red [user.name] has removed \the [C]!",\
+								"<span class=\"rose\">[user.name] has removed \the [C]!</span>",\
 								"You add cables to \the [C].")
 						return 1
 					if(istype(W, /obj/item/weapon/cable_coil))
@@ -110,7 +110,7 @@ obj/machinery/embedded_controller
 							build++
 							update_icon()
 							user.visible_message(\
-								"\red [user.name] has added cables to \the [src]!",\
+								"<span class=\"rose\">[user.name] has added cables to \the [src]!</span>",\
 								"You add cables to \the [src].")
 				if(2) // Circuitboard installed, wired.
 					if(istype(W, /obj/item/weapon/wirecutters))
@@ -118,7 +118,7 @@ obj/machinery/embedded_controller
 						if(do_after(user, 50))
 							new /obj/item/weapon/cable_coil(loc,5)
 							user.visible_message(\
-								"\red [user.name] cut the cables.",\
+								"<span class=\"rose\">[user.name] cut the cables.</span>",\
 								"You cut the cables.")
 							build--
 							update_icon()
@@ -134,7 +134,7 @@ obj/machinery/embedded_controller
 							EC.pixel_x=pixel_x
 							EC.pixel_y=pixel_y
 							user.visible_message(\
-								"\red [user.name] has finished \the [src]!",\
+								"<span class=\"rose\">[user.name] has finished \the [src]!</span>",\
 								"You finish \the [src].")
 							del(src)
 						return 1
@@ -166,7 +166,7 @@ obj/machinery/embedded_controller
 			return 0
 
 		if(isobserver(usr) && !canGhostWrite(usr,src,"fucked with"))
-			usr << "\red Nope."
+			usr << "<span class=\"rose\">Nope.</span>"
 			return 0
 
 		var/processed=0

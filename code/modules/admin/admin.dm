@@ -702,7 +702,7 @@ var/global/floorIsLava = 0
 	if(confirm == "Cancel")
 		return
 	if(confirm == "Yes")
-		world << "\red <b>Restarting world!</b> \blue Initiated by [usr.client.holder.fakekey ? "Admin" : usr.key]!"
+		world << "<span class=\"danger\">Restarting world!</span> <span class=\"notice\">Initiated by [usr.client.holder.fakekey ? "Admin" : usr.key]!</span>"
 		log_admin("[key_name(usr)] initiated a reboot.")
 
 		feedback_set_details("end_error","admin reboot - by [usr.key] [usr.client.holder.fakekey ? "(stealth)" : ""]")
@@ -712,7 +712,7 @@ var/global/floorIsLava = 0
 			blackbox.save_all_data_to_sql()
 
 		if (watchdog.waiting)
-			world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
+			world << "<span class=\"notice\"><B>Server will shut down for an automatic update in a few seconds.</B></span>"
 			watchdog.signal_ready()
 			return
 
@@ -730,7 +730,7 @@ var/global/floorIsLava = 0
 	if(message)
 		if(!check_rights(R_SERVER,0))
 			message = adminscrub(message,500)
-		world << "\blue <b>[usr.client.holder.fakekey ? "Administrator" : usr.key] Announces:</b>\n \t [message]"
+		world << "<span class=\"notice\"><b>[usr.client.holder.fakekey ? "Administrator" : usr.key] Announces:</b>\n \t [message]</span>"
 		log_admin("Announce: [key_name(usr)] : [message]")
 	feedback_add_details("admin_verb","A") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -793,7 +793,7 @@ var/global/floorIsLava = 0
 	else
 		world << "<B>New players may now enter the game.</B>"
 	log_admin("[key_name(usr)] toggled new player game entering.")
-	message_admins("\blue [key_name_admin(usr)] toggled new player game entering.", 1)
+	message_admins("<span class=\"notice\">[key_name_admin(usr)] toggled new player game entering.</span>", 1)
 	world.update_status()
 	feedback_add_details("admin_verb","TE") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -819,7 +819,7 @@ var/global/floorIsLava = 0
 		world << "<B>You may now respawn.</B>"
 	else
 		world << "<B>You may no longer respawn :(</B>"
-	message_admins("\blue [key_name_admin(usr)] toggled respawn to [abandon_allowed ? "On" : "Off"].", 1)
+	message_admins("<span class=\"notice\">[key_name_admin(usr)] toggled respawn to [abandon_allowed ? "On" : "Off"].</span>", 1)
 	log_admin("[key_name(usr)] toggled respawn to [abandon_allowed ? "On" : "Off"].")
 	world.update_status()
 	feedback_add_details("admin_verb","TR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -851,7 +851,7 @@ var/global/floorIsLava = 0
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
-		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
+		message_admins("<span class=\"notice\">[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].</span>", 1)
 		return //alert("Round end delayed", null, null, null, null, null)
 	going = !( going )
 	if (!( going ))
@@ -867,7 +867,7 @@ var/global/floorIsLava = 0
 	set desc="Toggle admin jumping"
 	set name="Toggle Jump"
 	config.allow_admin_jump = !(config.allow_admin_jump)
-	message_admins("\blue Toggled admin jumping to [config.allow_admin_jump].")
+	message_admins("<span class=\"notice\">Toggled admin jumping to [config.allow_admin_jump].</span>")
 	feedback_add_details("admin_verb","TJ") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/adspawn()
@@ -875,7 +875,7 @@ var/global/floorIsLava = 0
 	set desc="Toggle admin spawning"
 	set name="Toggle Spawn"
 	config.allow_admin_spawning = !(config.allow_admin_spawning)
-	message_admins("\blue Toggled admin item spawning to [config.allow_admin_spawning].")
+	message_admins("<span class=\"notice\">Toggled admin item spawning to [config.allow_admin_spawning].</span>")
 	feedback_add_details("admin_verb","TAS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/adrev()
@@ -883,7 +883,7 @@ var/global/floorIsLava = 0
 	set desc="Toggle admin revives"
 	set name="Toggle Revive"
 	config.allow_admin_rev = !(config.allow_admin_rev)
-	message_admins("\blue Toggled reviving to [config.allow_admin_rev].")
+	message_admins("<span class=\"notice\">Toggled reviving to [config.allow_admin_rev].</span>")
 	feedback_add_details("admin_verb","TAR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/immreboot()
@@ -893,7 +893,7 @@ var/global/floorIsLava = 0
 	if(!usr.client.holder)	return
 	if( alert("Reboot server?",,"Yes","No") == "No")
 		return
-	world << "\red <b>Rebooting world!</b> \blue Initiated by [usr.client.holder.fakekey ? "Admin" : usr.key]!"
+	world << "<span class=\"danger\">Rebooting world!</span> <span class=\"notice\">Initiated by [usr.client.holder.fakekey ? "Admin" : usr.key]!</span>"
 	log_admin("[key_name(usr)] initiated an immediate reboot.")
 
 	feedback_set_details("end_error","immediate admin reboot - by [usr.key] [usr.client.holder.fakekey ? "(stealth)" : ""]")
@@ -903,7 +903,7 @@ var/global/floorIsLava = 0
 		blackbox.save_all_data_to_sql()
 
 	if (watchdog.waiting)
-		world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
+		world << "<span class=\"notice\"><B>Server will shut down for an automatic update in a few seconds.</B></span>"
 		watchdog.signal_ready()
 		return
 
@@ -1061,7 +1061,7 @@ var/global/floorIsLava = 0
 	else
 		world << "<B>Guests may now enter the game.</B>"
 	log_admin("[key_name(usr)] toggled guests game entering [guests_allowed?"":"dis"]allowed.")
-	message_admins("\blue [key_name_admin(usr)] toggled guests game entering [guests_allowed?"":"dis"]allowed.", 1)
+	message_admins("<span class=\"notice\">[key_name_admin(usr)] toggled guests game entering [guests_allowed?"":"dis"]allowed.</span>", 1)
 	feedback_add_details("admin_verb","TGU") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/unjobban_panel()

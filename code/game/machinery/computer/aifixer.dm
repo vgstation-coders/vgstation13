@@ -16,7 +16,7 @@
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, 20))
 			if (src.stat & BROKEN)
-				user << "\blue The broken glass falls out."
+				user << "<span class=\"notice\">The broken glass falls out.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				new /obj/item/weapon/shard( src.loc )
 				var/obj/item/weapon/circuitboard/robotics/M = new /obj/item/weapon/circuitboard/robotics( A )
@@ -29,7 +29,7 @@
 				A.anchored = 1
 				del(src)
 			else
-				user << "\blue You disconnect the monitor."
+				user << "<span class=\"notice\">You disconnect the monitor.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				var/obj/item/weapon/circuitboard/robotics/M = new /obj/item/weapon/circuitboard/robotics( A )
 				for (var/obj/C in src)
@@ -66,7 +66,7 @@
 			if(user:wear_suit:s_control)
 				user:wear_suit.transfer_ai("AIFIXER","NINJASUIT",src,user)
 			else
-				user << "\red <b>ERROR</b>: \black Remote access channel disabled."
+				user << "<span class=\"danger\">ERROR</span>: Remote access channel disabled."
 			return
 
 	user.set_machine(src)

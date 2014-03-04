@@ -94,7 +94,7 @@
 /obj/effect/alien/resin/hitby(AM as mob|obj)
 	..()
 	for(var/mob/O in viewers(src, null))
-		O.show_message("\red <B>[src] was hit by [AM].</B>", 1)
+		O.show_message("<span class=\"danger\">[src] was hit by [AM].</span>", 1)
 	var/tforce = 0
 	if(ismob(AM))
 		tforce = 10
@@ -108,14 +108,14 @@
 
 /obj/effect/alien/resin/attack_hand()
 	if (M_HULK in usr.mutations)
-		usr << "\blue You easily destroy the [name]."
+		usr << "<span class=\"notice\">You easily destroy the [name].</span>"
 		for(var/mob/O in oviewers(src))
-			O.show_message("\red [usr] destroys the [name]!", 1)
+			O.show_message("<span class=\"rose\">[usr] destroys the [name]!</span>", 1)
 		health = 0
 	else
-		usr << "\blue You claw at the [name]."
+		usr << "<span class=\"notice\">You claw at the [name].</span>"
 		for(var/mob/O in oviewers(src))
-			O.show_message("\red [usr] claws at the [name]!", 1)
+			O.show_message("<span class=\"rose\">[usr] claws at the [name]!</span>", 1)
 		health -= rand(5,10)
 	healthcheck()
 	return
@@ -128,13 +128,13 @@
 		return
 	usr << "\green You claw at the [name]."
 	for(var/mob/O in oviewers(src))
-		O.show_message("\red [usr] claws at the resin!", 1)
+		O.show_message("<span class=\"rose\">[usr] claws at the resin!</span>", 1)
 	playsound(loc, 'sound/effects/attackblob.ogg', 100, 1)
 	health -= rand(40, 60)
 	if(health <= 0)
 		usr << "\green You slice the [name] to pieces."
 		for(var/mob/O in oviewers(src))
-			O.show_message("\red [usr] slices the [name] apart!", 1)
+			O.show_message("<span class=\"rose\">[usr] slices the [name] apart!</span>", 1)
 	healthcheck()
 	return
 
@@ -145,7 +145,7 @@
 		//Only aliens can stick humans and monkeys into resin walls. Also, the wall must not have a person inside already.
 			if(!affecting)
 				if(G.state<2)
-					user << "\red You need a better grip to do that!"
+					user << "<span class=\"rose\">You need a better grip to do that!</span>"
 					return
 				G.affecting.loc = src
 				G.affecting.paralysis = 10
@@ -157,7 +157,7 @@
 				spawn(0)
 					process()
 			else
-				user << "\red This wall is already occupied."
+				user << "<span class=\"rose\">This wall is already occupied.</span>"
 		return */
 
 	var/aforce = W.force
@@ -266,9 +266,9 @@ Alien plants should do something if theres a lot of poison
 
 /obj/effect/alien/weeds/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(W.attack_verb.len)
-		visible_message("\red <B>\The [src] have been [pick(W.attack_verb)] with \the [W][(user ? " by [user]." : ".")]")
+		visible_message("<span class=\"danger\">\The [src] have been [pick(W.attack_verb)] with \the [W][(user ? " by [user]." : ".")]</span>")
 	else
-		visible_message("\red <B>\The [src] have been attacked with \the [W][(user ? " by [user]." : ".")]")
+		visible_message("<span class=\"danger\">\The [src] have been attacked with \the [W][(user ? " by [user]." : ".")]</span>")
 
 	var/damage = W.force / 4.0
 
@@ -394,14 +394,14 @@ Alien plants should do something if theres a lot of poison
 		if(isalien(user))
 			switch(status)
 				if(BURST)
-					user << "\red You clear the hatched egg."
+					user << "<span class=\"rose\">You clear the hatched egg.</span>"
 					del(src)
 					return
 				if(GROWING)
-					user << "\red The child is not developed yet."
+					user << "<span class=\"rose\">The child is not developed yet.</span>"
 					return
 				if(GROWN)
-					user << "\red You retrieve the child."
+					user << "<span class=\"rose\">You retrieve the child.</span>"
 					Burst(0)
 					return
 		else
@@ -429,7 +429,7 @@ Alien plants should do something if theres a lot of poison
 			spawn(15)
 				status = BURST
 				if(!child)
-					src.visible_message("\red The egg bursts apart revealing nothing")
+					src.visible_message("<span class=\"rose\">The egg bursts apart revealing nothing</span>")
 					status = "GROWN"
 					new /obj/effect/decal/cleanable/blood/xeno(src)
 				loc.contents += child//need to write the code for giving it to the alien later
@@ -453,9 +453,9 @@ Alien plants should do something if theres a lot of poison
 	if(health <= 0)
 		return
 	if(W.attack_verb.len)
-		src.visible_message("\red <B>\The [src] has been [pick(W.attack_verb)] with \the [W][(user ? " by [user]." : ".")]")
+		src.visible_message("<span class=\"danger\">\The [src] has been [pick(W.attack_verb)] with \the [W][(user ? " by [user]." : ".")]</span>")
 	else
-		src.visible_message("\red <B>\The [src] has been attacked with \the [W][(user ? " by [user]." : ".")]")
+		src.visible_message("<span class=\"danger\">\The [src] has been attacked with \the [W][(user ? " by [user]." : ".")]</span>")
 	var/damage = W.force / 4.0
 
 	if(istype(W, /obj/item/weapon/weldingtool))

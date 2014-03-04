@@ -54,7 +54,7 @@
 	else if(istype(used_atom, /obj/item/weapon/cable_coil))
 		var/obj/item/weapon/cable_coil/C = used_atom
 		if(C.amount<4)
-			user << "\red There's not enough cable to finish the task."
+			user << "<span class=\"rose\">There's not enough cable to finish the task.</span>"
 			return 0
 		else
 			C.use(4)
@@ -62,7 +62,7 @@
 	else if(istype(used_atom, /obj/item/stack))
 		var/obj/item/stack/S = used_atom
 		if(S.amount < 5)
-			user << "\red There's not enough material in this stack."
+			user << "<span class=\"rose\">There's not enough material in this stack.</span>"
 			return 0
 		else
 			S.use(5)

@@ -96,5 +96,5 @@
 			return
 	else
 		for(var/mob/O in viewers(M, null))
-			O.show_message(text("\red [M] ate the [content ? content : "empty canister"]!"), 1)
+			O.show_message(text("<span class=\"rose\">[M] ate the [content ? content : "empty canister"]!</span>"), 1)
 		src.injest(M)

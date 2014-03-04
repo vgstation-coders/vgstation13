@@ -19,7 +19,7 @@
 	..()
 	if (istype(W, /obj/item/weapon/wrench))
 		if(occupied)
-			user << "\red You can't disassemble [src] with meat and gore all over it."
+			user << "<span class=\"rose\">You can't disassemble [src] with meat and gore all over it.</span>"
 			return
 		new /obj/item/stack/sheet/metal( user.loc )
 		del(src)
@@ -38,12 +38,12 @@
 			src.meat = 5
 			src.meattype = 1
 			for(var/mob/O in viewers(src, null))
-				O.show_message(text("\red [user] has forced [G.affecting] onto the spike, killing them instantly!"))
+				O.show_message(text("<span class=\"rose\">[user] has forced [G.affecting] onto the spike, killing them instantly!</span>"))
 			del(G.affecting)
 			del(G)
 
 		else
-			user << "\red The spike already has something on it, finish collecting its meat first!"
+			user << "<span class=\"rose\">The spike already has something on it, finish collecting its meat first!</span>"
 	else if(istype(G.affecting, /mob/living/carbon/alien))
 		if(src.occupied == 0)
 			src.icon_state = "spikebloodygreen"
@@ -51,13 +51,13 @@
 			src.meat = 5
 			src.meattype = 2
 			for(var/mob/O in viewers(src, null))
-				O.show_message(text("\red [user] has forced [G.affecting] onto the spike, killing them instantly!"))
+				O.show_message(text("<span class=\"rose\">[user] has forced [G.affecting] onto the spike, killing them instantly!</span>"))
 			del(G.affecting)
 			del(G)
 		else
-			user << "\red The spike already has something on it, finish collecting its meat first!"
+			user << "<span class=\"rose\">The spike already has something on it, finish collecting its meat first!</span>"
 	else
-		user << "\red They are too big for the spike, try something smaller!"
+		user << "<span class=\"rose\">They are too big for the spike, try something smaller!</span>"
 		return
 
 //	MouseDrop_T(var/atom/movable/C, mob/user)

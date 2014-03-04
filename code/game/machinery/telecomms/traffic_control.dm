@@ -203,7 +203,7 @@
 		return
 
 	if(!auth && !issilicon(usr) && !emagged)
-		usr << "\red ACCESS DENIED."
+		usr << "<span class=\"rose\">ACCESS DENIED.</span>"
 		return
 
 	if(href_list["viewserver"])
@@ -291,7 +291,7 @@
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, 20))
 			if (src.stat & BROKEN)
-				user << "\blue The broken glass falls out."
+				user << "<span class=\"notice\">The broken glass falls out.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				new /obj/item/weapon/shard( src.loc )
 				var/obj/item/weapon/circuitboard/comm_traffic/M = new /obj/item/weapon/circuitboard/comm_traffic( A )
@@ -303,7 +303,7 @@
 				A.anchored = 1
 				del(src)
 			else
-				user << "\blue You disconnect the monitor."
+				user << "<span class=\"notice\">You disconnect the monitor.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				var/obj/item/weapon/circuitboard/comm_traffic/M = new /obj/item/weapon/circuitboard/comm_traffic( A )
 				for (var/obj/C in src)
@@ -316,7 +316,7 @@
 	else if(istype(D, /obj/item/weapon/card/emag) && !emagged)
 		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
-		user << "\blue You you disable the security protocols"
+		user << "<span class=\"notice\">You you disable the security protocols</span>"
 	src.updateUsrDialog()
 	return
 

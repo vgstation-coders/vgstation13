@@ -15,7 +15,7 @@
 
 /obj/machinery/power/supermatter
 	name = "Supermatter"
-	desc = "A strangely translucent and iridescent crystal. \red You get headaches just from looking at it."
+	desc = "A strangely translucent and iridescent crystal. <span class=\"rose\">You get headaches just from looking at it.</span>"
 	icon = 'icons/obj/engine.dmi'
 	icon_state = "darkmatter"
 	density = 1
@@ -56,7 +56,7 @@
 
 	shard //Small subtype, less efficient and more sensitive, but less boom.
 		name = "Supermatter Shard"
-		desc = "A strangely translucent and iridescent crystal that looks like it used to be part of a larger structure. \red You get headaches just from looking at it."
+		desc = "A strangely translucent and iridescent crystal that looks like it used to be part of a larger structure. <span class=\"rose\">You get headaches just from looking at it.</span>"
 		icon_state = "darkmatter_shard"
 		base_icon_state = "darkmatter_shard"
 
@@ -102,11 +102,11 @@
 
 			if(damage > emergency_point)
 
-				radio.autosay(addtext(emergency_alert, " Instability: ",stability,"%"), "Supermatter Monitor")
+				radio.autosay(addtext(emergency_alert, " Stability: ",stability,"%"), "Supermatter Monitor")
 				lastwarning = world.timeofday
 
 			else if(damage >= damage_archived) // The damage is still going up
-				radio.autosay(addtext(warning_alert," Instability: ",stability,"%"), "Supermatter Monitor")
+				radio.autosay(addtext(warning_alert," Stability: ",stability,"%"), "Supermatter Monitor")
 				lastwarning = world.timeofday - 150
 
 			else                                                 // Phew, we're safe

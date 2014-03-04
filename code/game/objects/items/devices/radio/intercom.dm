@@ -10,11 +10,9 @@
 	var/anyai = 1
 	var/circuitry_installed=1
 	var/mob/living/silicon/ai/ai = list()
-	var/last_tick //used to delay the powercheck
 
 /obj/item/device/radio/intercom/New(turf/loc, var/ndir, var/building=0)
 	..()
-	processing_objects += src
 
 	// offset 24 pixels in direction of dir
 	// this allows the APC to be embedded in a wall, yet still inside an area
@@ -25,17 +23,20 @@
 
 		dir=SOUTH
 
-	if (building!=0)
+	if (building==0)
+		init()
+	else
 		b_stat=1
 		on = 0
 		circuitry_installed=0
 		installed=0
 		b_stat=1
-	src.update_icon()
+		src.update_icon()
 
-/obj/item/device/radio/intercom/Destroy()
-	processing_objects -= src
-	..()
+/obj/item/device/radio/intercom/proc/init()
+	spawn(5)
+		src.update_icon()
+		checkpower()
 
 /obj/item/device/radio/intercom/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
@@ -79,23 +80,23 @@
 	if(!installed)
 		if(istype(W,/obj/item/weapon/cable_coil))
 			if(!circuitry_installed)
-				user << "\red You need to install intercom electronics first!"
+				user << "<span class=\"rose\">You need to install intercom electronics first!</span>"
 				return 1
 			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
 			if(do_after(user, 10))
 				installed=1
 				b_stat=0
-				user << "\blue You wire \the [src]!"
+				user << "<span class=\"notice\">You wire \the [src]!</span>"
 			return 1
 		if(istype(W,/obj/item/weapon/intercom_electronics))
 			for(var/obj/item/weapon/intercom_electronics/board in src)
-				user << "\red There's already an intercom electronics board inside!"
+				user << "<span class=\"rose\">There's already an intercom electronics board inside!</span>"
 				return 1
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 			if(do_after(user, 10))
 				user.drop_item()
 				W.loc=src
-				user << "\blue You insert \the [W] into \the [src]!"
+				user << "<span class=\"notice\">You insert \the [W] into \the [src]!</span>"
 			return 1
 		if(istype(W,/obj/item/weapon/screwdriver))
 			for(var/obj/item/weapon/intercom_electronics/board in src)
@@ -104,7 +105,7 @@
 					del(board)
 					circuitry_installed=1
 					update_icon()
-					user << "\blue You secure the electronics!"
+					user << "<span class=\"notice\">You secure the electronics!</span>"
 				return 1
 		if(istype(W,/obj/item/weapon/weldingtool))
 			var/obj/item/weapon/weldingtool/WT=W
@@ -112,10 +113,10 @@
 				return ..()
 			playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 			if(!WT.remove_fuel(3, user))
-				user << "\red You're out of welding fuel."
+				user << "<span class=\"rose\">You're out of welding fuel.</span>"
 				return 1
 			if(do_after(user, 10))
-				user << "\blue You cut the intercom frame from the wall!"
+				user << "<span class=\"notice\">You cut the intercom frame from the wall!</span>"
 				new /obj/item/intercom_frame(src.loc)
 				return 1
 	else
@@ -126,7 +127,7 @@
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 			if(do_after(user, 10))
 				new /obj/item/weapon/intercom_electronics(src.loc)
-				user << "\blue The circuitboard pops out!"
+				user << "<span class=\"notice\">The circuitboard pops out!</span>"
 				installed=0
 				circuitry_installed=0
 				b_stat=1
@@ -140,9 +141,10 @@
 		return
 	icon_state = "intercom[!on?"-p":""][b_stat ? "-open":""]"
 
-/obj/item/device/radio/intercom/process()
-	if(((world.timeofday - last_tick) > 30) || ((world.timeofday - last_tick) < 0))
-		last_tick = world.timeofday
+/obj/item/device/radio/intercom/proc/checkpower()
+
+	// Simple loop, checks for power. Strictly for intercoms
+	while(src)
 
 		if(!src.loc)
 			on = 0
@@ -153,6 +155,8 @@
 			else
 				on = A.master.powered(EQUIP) // set "on" to the power status
 		update_icon()
+
+		sleep(30)
 
 
 /obj/item/weapon/intercom_electronics

@@ -103,7 +103,7 @@ datum
 			on_mob_life(var/mob/living/M as mob,var/alien)
 				if(M.dna.mutantrace != "slime" || !istype(M, /mob/living/carbon/slime))
 					if(prob(10))
-						M << "\red Your insides are burning!"
+						M << "<span class=\"rose\">Your insides are burning!</span>"
 						M.adjustToxLoss(rand(20,60)*REM)
 				if(prob(40))
 					M.heal_organ_damage(5*REM,0)
@@ -247,11 +247,11 @@ datum
 					if(H.species.name=="Grey")
 						if(method == TOUCH)
 							if(H.wear_mask)
-								H << "\red Your mask protects you from the water!"
+								H << "<span class=\"rose\">Your mask protects you from the water!</span>"
 								return
 
 							if(H.head)
-								H << "\red Your helmet protects you from the water!"
+								H << "<span class=\"rose\">Your helmet protects you from the water!</span>"
 								return
 							if(!M.unacidable)
 								if(prob(15) && volume >= 30)
@@ -486,7 +486,7 @@ datum
 				if(ishuman(M))
 					var/mob/living/carbon/human/human = M
 					if(human.dna.mutantrace == null)
-						M << "\red Your flesh rapidly mutates!"
+						M << "<span class=\"rose\">Your flesh rapidly mutates!</span>"
 						human.dna.mutantrace = "slime"
 						human.update_mutantrace()
 				..()
@@ -503,7 +503,7 @@ datum
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
 				if(istype(M, /mob/living/carbon) && M.stat != DEAD)
-					M << "\red Your flesh rapidly mutates!"
+					M << "<span class=\"rose\">Your flesh rapidly mutates!</span>"
 					if(M.monkeyizing)	return
 					M.monkeyizing = 1
 					M.canmove = 0
@@ -639,10 +639,10 @@ datum
 			on_mob_life(var/mob/living/M as mob,var/alien)
 				if(ishuman(M))
 					if((M.mind in ticker.mode.cult) && prob(10))
-						M << "\blue A cooling sensation from inside you brings you an untold calmness."
+						M << "<span class=\"notice\">A cooling sensation from inside you brings you an untold calmness.</span>"
 						ticker.mode.remove_cultist(M.mind)
 						for(var/mob/O in viewers(M, null))
-							O.show_message(text("\blue []'s eyes blink and become clearer.", M), 1) // So observers know it worked.
+							O.show_message(text("<span class=\"notice\">[]'s eyes blink and become clearer.</span>", M), 1) // So observers know it worked.
 					// Vamps react to this like acid
 					if(((M.mind in ticker.mode.vampires) || M.mind.vampire) && prob(10))
 						if(!(VAMP_FULL in M.mind.vampire.powers))
@@ -659,11 +659,11 @@ datum
 							var/mob/living/carbon/human/H=M
 							if(method == TOUCH)
 								if(H.wear_mask)
-									H << "\red Your mask protects you from the holy water!"
+									H << "<span class=\"rose\">Your mask protects you from the holy water!</span>"
 									return
 
 								if(H.head)
-									H << "\red Your helmet protects you from the holy water!"
+									H << "<span class=\"rose\">Your helmet protects you from the holy water!</span>"
 									return
 								if(!M.unacidable)
 									if(prob(15) && volume >= 30)
@@ -935,18 +935,18 @@ datum
 							if(!H.wear_mask.unacidable)
 								del (H.wear_mask)
 								H.update_inv_wear_mask()
-								H << "\red Your mask melts away but protects you from the acid!"
+								H << "<span class=\"rose\">Your mask melts away but protects you from the acid!</span>"
 							else
-								H << "\red Your mask protects you from the acid!"
+								H << "<span class=\"rose\">Your mask protects you from the acid!</span>"
 							return
 
 						if(H.head)
 							if(prob(15) && !H.head.unacidable)
 								del(H.head)
 								H.update_inv_head()
-								H << "\red Your helmet melts away but protects you from the acid"
+								H << "<span class=\"rose\">Your helmet melts away but protects you from the acid</span>"
 							else
-								H << "\red Your helmet protects you from the acid!"
+								H << "<span class=\"rose\">Your helmet protects you from the acid!</span>"
 							return
 
 					else if(ismonkey(M))
@@ -955,9 +955,9 @@ datum
 							if(!MK.wear_mask.unacidable)
 								del (MK.wear_mask)
 								MK.update_inv_wear_mask()
-								MK << "\red Your mask melts away but protects you from the acid!"
+								MK << "<span class=\"rose\">Your mask melts away but protects you from the acid!</span>"
 							else
-								MK << "\red Your mask protects you from the acid!"
+								MK << "<span class=\"rose\">Your mask protects you from the acid!</span>"
 							return
 
 					if(!M.unacidable)
@@ -989,7 +989,7 @@ datum
 						var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
 						I.desc = "Looks like this was \an [O] some time ago."
 						for(var/mob/M in viewers(5, O))
-							M << "\red \the [O] melts."
+							M << "<span class=\"rose\">\the [O] melts.</span>"
 						del(O)
 
 		pacid
@@ -1016,18 +1016,18 @@ datum
 							if(!H.wear_mask.unacidable)
 								del (H.wear_mask)
 								H.update_inv_wear_mask()
-								H << "\red Your mask melts away but protects you from the acid!"
+								H << "<span class=\"rose\">Your mask melts away but protects you from the acid!</span>"
 							else
-								H << "\red Your mask protects you from the acid!"
+								H << "<span class=\"rose\">Your mask protects you from the acid!</span>"
 							return
 
 						if(H.head)
 							if(prob(15) && !H.head.unacidable)
 								del(H.head)
 								H.update_inv_head()
-								H << "\red Your helmet melts away but protects you from the acid"
+								H << "<span class=\"rose\">Your helmet melts away but protects you from the acid</span>"
 							else
-								H << "\red Your helmet protects you from the acid!"
+								H << "<span class=\"rose\">Your helmet protects you from the acid!</span>"
 							return
 
 						if(!H.unacidable)
@@ -1042,9 +1042,9 @@ datum
 							if(!MK.wear_mask.unacidable)
 								del (MK.wear_mask)
 								MK.update_inv_wear_mask()
-								MK << "\red Your mask melts away but protects you from the acid!"
+								MK << "<span class=\"rose\">Your mask melts away but protects you from the acid!</span>"
 							else
-								MK << "\red Your mask protects you from the acid!"
+								MK << "<span class=\"rose\">Your mask protects you from the acid!</span>"
 							return
 
 						if(!MK.unacidable)
@@ -1067,7 +1067,7 @@ datum
 						var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
 						I.desc = "Looks like this was \an [O] some time ago."
 						for(var/mob/M in viewers(5, O))
-							M << "\red \the [O] melts."
+							M << "<span class=\"rose\">\the [O] melts.</span>"
 						del(O)
 
 		glycerol
@@ -1173,7 +1173,6 @@ datum
 			description = "Most probably know this as Tylenol, but this chemical is a mild, simple painkiller."
 			reagent_state = LIQUID
 			color = "#C855DC"
-			overdose_dam = 0
 			overdose = 60
 
 			on_mob_life(var/mob/living/M as mob)
@@ -1423,7 +1422,7 @@ datum
 						for(var/obj/effect/E in W) if(E.name == "Wallrot") del E
 
 						for(var/mob/O in viewers(W, null))
-							O.show_message(text("\blue The fungi are completely dissolved by the solution!"), 1)
+							O.show_message(text("<span class=\"notice\">The fungi are completely dissolved by the solution!</span>"), 1)
 
 			reaction_obj(var/obj/O, var/volume)
 				if(istype(O,/obj/effect/alien/weeds/))
@@ -2304,23 +2303,23 @@ datum
 							if ( !safe_thing )
 								safe_thing = victim.glasses
 						if ( eyes_covered && mouth_covered )
-							victim << "\red Your [safe_thing] protects you from the pepperspray!"
+							victim << "<span class=\"rose\">Your [safe_thing] protects you from the pepperspray!</span>"
 							return
 						else if ( mouth_covered )	// Reduced effects if partially protected
-							victim << "\red Your [safe_thing] protect you from most of the pepperspray!"
+							victim << "<span class=\"rose\">Your [safe_thing] protect you from most of the pepperspray!</span>"
 							victim.eye_blurry = max(M.eye_blurry, 15)
 							victim.eye_blind = max(M.eye_blind, 5)
 							victim.Paralyse(1)
 							victim.drop_item()
 							return
 						else if ( eyes_covered ) // Eye cover is better than mouth cover
-							victim << "\red Your [safe_thing] protects your eyes from the pepperspray!"
+							victim << "<span class=\"rose\">Your [safe_thing] protects your eyes from the pepperspray!</span>"
 							victim.emote("scream")
 							victim.eye_blurry = max(M.eye_blurry, 5)
 							return
 						else // Oh dear :D
 							victim.emote("scream")
-							victim << "\red You're sprayed directly in the eyes with pepperspray!"
+							victim << "<span class=\"rose\">You're sprayed directly in the eyes with pepperspray!</span>"
 							victim.eye_blurry = max(M.eye_blurry, 25)
 							victim.eye_blind = max(M.eye_blind, 10)
 							victim.Paralyse(1)

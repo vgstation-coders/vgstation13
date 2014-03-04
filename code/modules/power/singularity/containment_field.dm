@@ -65,9 +65,9 @@
 		var/shock_damage = min(rand(30,40),rand(30,40))
 		user.burn_skin(shock_damage)
 		user.updatehealth()
-		user.visible_message("\red [user.name] was shocked by the [src.name]!", \
-			"\red <B>You feel a powerful shock course through your body sending you flying!</B>", \
-			"\red You hear a heavy electrical crack")
+		user.visible_message("<span class=\"rose\">[user.name] was shocked by the [src.name]!</span>", \
+			"<span class=\"danger\">You feel a powerful shock course through your body sending you flying!</span>", \
+			"<span class=\"rose\">You hear a heavy electrical crack</span>")
 
 		var/stun = min(shock_damage, 15)
 		user.Stun(stun)
@@ -89,9 +89,9 @@
 		hasShocked = 1
 		var/shock_damage = rand(15,30)
 		user.take_overall_damage(0,shock_damage)
-		user.visible_message("\red [user.name] was shocked by the [src.name]!", \
-			"\red <B>Energy pulse detected, system damaged!</B>", \
-			"\red You hear an electrical crack")
+		user.visible_message("<span class=\"rose\">[user.name] was shocked by the [src.name]!</span>", \
+			"<span class=\"danger\">Energy pulse detected, system damaged!</span>", \
+			"<span class=\"rose\">You hear an electrical crack</span>")
 		if(prob(20))
 			user.Stun(2)
 

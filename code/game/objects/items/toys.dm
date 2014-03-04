@@ -40,7 +40,7 @@
 /obj/item/toy/balloon/afterattack(atom/A as mob|obj, mob/user as mob)
 	if (istype(A, /obj/structure/reagent_dispensers/watertank) && get_dist(src,A) <= 1)
 		A.reagents.trans_to(src, 10)
-		user << "\blue You fill the balloon with the contents of [A]."
+		user << "<span class=\"notice\">You fill the balloon with the contents of [A].</span>"
 		src.desc = "A translucent balloon with some form of liquid sloshing around in it."
 		src.update_icon()
 	return
@@ -57,14 +57,14 @@
 					del(src)
 				else
 					src.desc = "A translucent balloon with some form of liquid sloshing around in it."
-					user << "\blue You fill the balloon with the contents of [O]."
+					user << "<span class=\"notice\">You fill the balloon with the contents of [O].</span>"
 					O.reagents.trans_to(src, 10)
 	src.update_icon()
 	return
 
 /obj/item/toy/balloon/throw_impact(atom/hit_atom)
 	if(src.reagents.total_volume >= 1)
-		src.visible_message("\red The [src] bursts!","You hear a pop and a splash.")
+		src.visible_message("<span class=\"rose\">The [src] bursts!","You hear a pop and a splash.</span>")
 		src.reagents.reaction(get_turf(hit_atom))
 		for(var/atom/A in get_turf(hit_atom))
 			src.reagents.reaction(A)
@@ -142,17 +142,17 @@
 
 		if (istype(A, /obj/item/toy/ammo/gun))
 			if (src.bullets >= 7)
-				user << "\blue It's already fully loaded!"
+				user << "<span class=\"notice\">It's already fully loaded!</span>"
 				return 1
 			if (A.amount_left <= 0)
-				user << "\red There is no more caps!"
+				user << "<span class=\"rose\">There is no more caps!</span>"
 				return 1
 			if (A.amount_left < (7 - src.bullets))
 				src.bullets += A.amount_left
-				user << text("\red You reload [] caps\s!", A.amount_left)
+				user << text("<span class=\"rose\">You reload [] caps\s!</span>", A.amount_left)
 				A.amount_left = 0
 			else
-				user << text("\red You reload [] caps\s!", 7 - src.bullets)
+				user << text("<span class=\"rose\">You reload [] caps\s!</span>", 7 - src.bullets)
 				A.amount_left -= 7 - src.bullets
 				src.bullets = 7
 			A.update_icon()
@@ -163,17 +163,17 @@
 		if (flag)
 			return
 		if (!(istype(usr, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
-			usr << "\red You don't have the dexterity to do this!"
+			usr << "<span class=\"rose\">You don't have the dexterity to do this!</span>"
 			return
 		src.add_fingerprint(user)
 		if (src.bullets < 1)
-			user.show_message("\red *click* *click*", 2)
+			user.show_message("<span class=\"rose\">*click* *click*</span>", 2)
 			playsound(user, 'sound/weapons/empty.ogg', 100, 1)
 			return
 		playsound(user, 'sound/weapons/Gunshot.ogg', 100, 1)
 		src.bullets--
 		for(var/mob/O in viewers(user, null))
-			O.show_message(text("\red <B>[] fires a cap gun at []!</B>", user, target), 1, "\red You hear a gunshot", 2)
+			O.show_message(text("<span class=\"danger\">[] fires a cap gun at []!</span>", user, target), 1, "<span class=\"rose\">You hear a gunshot</span>", 2)
 
 /obj/item/toy/ammo/gun
 	name = "ammo-caps"
@@ -210,7 +210,7 @@
 		set src in view(2)
 		..()
 		if (bullets)
-			usr << "\blue It is loaded with [bullets] foam darts!"
+			usr << "<span class=\"notice\">It is loaded with [bullets] foam darts!</span>"
 
 	attackby(obj/item/I as obj, mob/user as mob)
 		if(istype(I, /obj/item/toy/ammo/crossbow))
@@ -218,9 +218,9 @@
 				user.drop_item()
 				del(I)
 				bullets++
-				user << "\blue You load the foam dart into the crossbow."
+				user << "<span class=\"notice\">You load the foam dart into the crossbow.</span>"
 			else
-				usr << "\red It's already fully loaded."
+				usr << "<span class=\"rose\">It's already fully loaded.</span>"
 
 
 	afterattack(atom/target as mob|obj|turf|area, mob/user as mob, flag)
@@ -246,7 +246,7 @@
 						if(!istype(M,/mob/living)) continue
 						if(M == user) continue
 						for(var/mob/O in viewers(world.view, D))
-							O.show_message(text("\red [] was hit by the foam dart!", M), 1)
+							O.show_message(text("<span class=\"rose\">[] was hit by the foam dart!</span>", M), 1)
 						new /obj/item/toy/ammo/crossbow(M.loc)
 						del(D)
 						return
@@ -268,7 +268,7 @@
 		else if (bullets == 0)
 			user.Weaken(5)
 			for(var/mob/O in viewers(world.view, user))
-				O.show_message(text("\red [] realized they were out of ammo and starting scrounging for some!", user), 1)
+				O.show_message(text("<span class=\"rose\">[] realized they were out of ammo and starting scrounging for some!</span>", user), 1)
 
 
 	attack(mob/M as mob, mob/user as mob)
@@ -280,15 +280,15 @@
 
 			for(var/mob/O in viewers(M, null))
 				if(O.client)
-					O.show_message(text("\red <B>[] casually lines up a shot with []'s head and pulls the trigger!</B>", user, M), 1, "\red You hear the sound of foam against skull", 2)
-					O.show_message(text("\red [] was hit in the head by the foam dart!", M), 1)
+					O.show_message(text("<span class=\"danger\">[] casually lines up a shot with []'s head and pulls the trigger!</span>", user, M), 1, "<span class=\"rose\">You hear the sound of foam against skull</span>", 2)
+					O.show_message(text("<span class=\"rose\">[] was hit in the head by the foam dart!</span>", M), 1)
 
 			playsound(user.loc, 'sound/items/syringeproj.ogg', 50, 1)
 			new /obj/item/toy/ammo/crossbow(M.loc)
 			src.bullets--
 		else if (M.lying && src.bullets == 0)
 			for(var/mob/O in viewers(M, null))
-				if (O.client)	O.show_message(text("\red <B>[] casually lines up a shot with []'s head, pulls the trigger, then realizes they are out of ammo and drops to the floor in search of some!</B>", user, M), 1, "\red You hear someone fall", 2)
+				if (O.client)	O.show_message(text("<span class=\"danger\">[] casually lines up a shot with []'s head, pulls the trigger, then realizes they are out of ammo and drops to the floor in search of some!</span>", user, M), 1, "<span class=\"rose\">You hear someone fall</span>", 2)
 			user.Weaken(5)
 		return
 
@@ -326,13 +326,13 @@
 	attack_self(mob/user as mob)
 		src.active = !( src.active )
 		if (src.active)
-			user << "\blue You extend the plastic blade with a quick flick of your wrist."
+			user << "<span class=\"notice\">You extend the plastic blade with a quick flick of your wrist.</span>"
 			playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
 			src.icon_state = "swordblue"
 			src.item_state = "swordblue"
 			src.w_class = 4
 		else
-			user << "\blue You push the plastic blade back down into the handle."
+			user << "<span class=\"notice\">You push the plastic blade back down into the handle.</span>"
 			playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
 			src.icon_state = "sword0"
 			src.item_state = "sword0"
@@ -371,7 +371,7 @@
 	var/colourName = "red" //for updateIcon purposes
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is jamming the [src.name] up \his nose and into \his brain. It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class=\"danger\">[user] is jamming the [src.name] up \his nose and into \his brain. It looks like \he's trying to commit suicide.</span>"
 		return (BRUTELOSS|OXYLOSS)
 
 /*
@@ -390,7 +390,7 @@
 		s.set_up(3, 1, src)
 		s.start()
 		new /obj/effect/decal/cleanable/ash(src.loc)
-		src.visible_message("\red The [src.name] explodes!","\red You hear a snap!")
+		src.visible_message("<span class=\"rose\">The [src.name] explodes!</span>","<span class=\"rose\">You hear a snap!</span>")
 		playsound(src, 'sound/effects/snap.ogg', 50, 1)
 		del(src)
 
@@ -398,13 +398,13 @@
 	if((ishuman(H))) //i guess carp and shit shouldn't set them off
 		var/mob/living/carbon/M = H
 		if(M.m_intent == "run")
-			M << "\red You step on the snap pop!"
+			M << "<span class=\"rose\">You step on the snap pop!</span>"
 
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(2, 0, src)
 			s.start()
 			new /obj/effect/decal/cleanable/ash(src.loc)
-			src.visible_message("\red The [src.name] explodes!","\red You hear a snap!")
+			src.visible_message("<span class=\"rose\">The [src.name] explodes!</span>","<span class=\"rose\">You hear a snap!</span>")
 			playsound(src, 'sound/effects/snap.ogg', 50, 1)
 			del(src)
 
@@ -439,12 +439,12 @@
 
 	else if (istype(A, /obj/structure/reagent_dispensers/watertank) && get_dist(src,A) <= 1)
 		A.reagents.trans_to(src, 10)
-		user << "\blue You refill your flower!"
+		user << "<span class=\"notice\">You refill your flower!</span>"
 		return
 
 	else if (src.reagents.total_volume < 1)
 		src.empty = 1
-		user << "\blue Your flower has run dry!"
+		user << "<span class=\"notice\">Your flower has run dry!</span>"
 		return
 
 	else
@@ -466,7 +466,7 @@
 				for(var/atom/T in get_turf(D))
 					D.reagents.reaction(T)
 					if(ismob(T) && T:client)
-						T:client << "\red [user] has sprayed you with water!"
+						T:client << "<span class=\"rose\">[user] has sprayed you with water!</span>"
 				sleep(4)
 			del(D)
 

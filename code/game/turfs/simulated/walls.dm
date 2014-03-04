@@ -93,12 +93,12 @@
 /turf/simulated/wall/attack_paw(mob/user as mob)
 	if ((M_HULK in user.mutations))
 		if (prob(hardness))
-			usr << text("\blue You smash through the wall.")
+			usr << text("<span class=\"notice\">You smash through the wall.</span>")
 			usr.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 			dismantle_wall(1)
 			return
 		else
-			usr << text("\blue You punch the wall.")
+			usr << text("<span class=\"notice\">You punch the wall.</span>")
 			return
 
 	return src.attack_hand(user)
@@ -119,20 +119,20 @@
 /turf/simulated/wall/attack_hand(mob/user as mob)
 	if (M_HULK in user.mutations)
 		if (prob(hardness) || rotting)
-			usr << text("\blue You smash through the wall.")
+			usr << text("<span class=\"notice\">You smash through the wall.</span>")
 			usr.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 			dismantle_wall(1)
 			return
 		else
-			usr << text("\blue You punch the wall.")
+			usr << text("<span class=\"notice\">You punch the wall.</span>")
 			return
 
 	if(rotting)
-		user << "\blue The wall crumbles under your touch."
+		user << "<span class=\"notice\">The wall crumbles under your touch.</span>"
 		dismantle_wall()
 		return
 
-	user << "\blue You push the wall but nothing happens!"
+	user << "<span class=\"notice\">You push the wall but nothing happens!</span>"
 	playsound(src, 'sound/weapons/Genhit.ogg', 25, 1)
 	src.add_fingerprint(user)
 	return

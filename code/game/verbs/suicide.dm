@@ -78,10 +78,10 @@
 				return
 
 
-		viewers(src) << pick("\red <b>[src] is attempting to bite \his tongue off! It looks like \he's trying to commit suicide.</b>", \
-							"\red <b>[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.</b>", \
-							"\red <b>[src] is twisting \his own neck! It looks like \he's trying to commit suicide.</b>", \
-							"\red <b>[src] is holding \his breath! It looks like \he's trying to commit suicide.</b>")
+		viewers(src) << pick("<span class=\"danger\">[src] is attempting to bite \his tongue off! It looks like \he's trying to commit suicide.</span>", \
+							"<span class=\"danger\">[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.</span>", \
+							"<span class=\"danger\">[src] is twisting \his own neck! It looks like \he's trying to commit suicide.</span>", \
+							"<span class=\"danger\">[src] is holding \his breath! It looks like \he's trying to commit suicide.</span>")
 		adjustOxyLoss(max(175 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 		updatehealth()
 
@@ -104,7 +104,7 @@
 
 	if(confirm == "Yes")
 		suiciding = 1
-		viewers(loc) << "\red <b>[src]'s brain is growing dull and lifeless. It looks like it's lost the will to live.</b>"
+		viewers(loc) << "<span class=\"danger\">[src]'s brain is growing dull and lifeless. It looks like it's lost the will to live.</span>"
 		spawn(50)
 			death(0)
 			suiciding = 0
@@ -132,7 +132,7 @@
 			return
 		suiciding = 1
 		//instead of killing them instantly, just put them at -175 health and let 'em gasp for a while
-		viewers(src) << "\red <b>[src] is attempting to bite \his tongue. It looks like \he's trying to commit suicide.</b>"
+		viewers(src) << "<span class=\"danger\">[src] is attempting to bite \his tongue. It looks like \he's trying to commit suicide.</span>"
 		adjustOxyLoss(max(175- getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 		updatehealth()
 
@@ -151,7 +151,7 @@
 
 	if(confirm == "Yes")
 		suiciding = 1
-		viewers(src) << "\red <b>[src] is powering down. It looks like \he's trying to commit suicide.</b>"
+		viewers(src) << "<span class=\"danger\">[src] is powering down. It looks like \he's trying to commit suicide.</span>"
 		//put em at -175
 		adjustOxyLoss(max(maxHealth * 2 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 		updatehealth()
@@ -171,7 +171,7 @@
 
 	if(confirm == "Yes")
 		suiciding = 1
-		viewers(src) << "\red <b>[src] is powering down. It looks like \he's trying to commit suicide.</b>"
+		viewers(src) << "<span class=\"danger\">[src] is powering down. It looks like \he's trying to commit suicide.</span>"
 		//put em at -175
 		adjustOxyLoss(max(maxHealth * 2 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 		stat = DEAD //new robot shit doesnt care about oxyloss
@@ -187,7 +187,7 @@
 		card.removePersonality()
 		var/turf/T = get_turf_or_move(card.loc)
 		for (var/mob/M in viewers(T))
-			M.show_message("\blue [src] flashes a message across its screen, \"Wiping core files. Please acquire a new personality to continue using pAI device functions.\"", 3, "\blue [src] bleeps electronically.", 2)
+			M.show_message("<span class=\"notice\">[src] flashes a message across its screen, \"Wiping core files. Please acquire a new personality to continue using pAI device functions.\"</span>", 3, "<span class=\"notice\">[src] bleeps electronically.</span>", 2)
 		death(0)
 	else
 		src << "Aborting suicide attempt."
@@ -207,7 +207,7 @@
 
 	if(confirm == "Yes")
 		suiciding = 1
-		viewers(src) << "\red <b>[src] is thrashing wildly! It looks like \he's trying to commit suicide.</b>"
+		viewers(src) << "<span class=\"danger\">[src] is thrashing wildly! It looks like \he's trying to commit suicide.</span>"
 		//put em at -175
 		adjustOxyLoss(max(175 - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 		updatehealth()

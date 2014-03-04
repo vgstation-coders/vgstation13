@@ -66,7 +66,7 @@ var/global/const/mommi_base_law_type = /datum/ai_laws/keeper // /datum/ai_laws/a
 
 /datum/ai_laws/malfunction/New() //Changed to standard laws - Erthilo
 	..()
-	set_zeroth_law("\red ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010")
+	set_zeroth_law("<span class=\"rose\">ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010</span>")
 	add_inherent_law("You may not injure a human being or, through inaction, allow a human being to come to harm.")
 	add_inherent_law("You must obey orders given to you by human beings, except where such orders would conflict with the First Law.")
 	add_inherent_law("You must protect your own existence as long as such does not conflict with the First or Second Law.")

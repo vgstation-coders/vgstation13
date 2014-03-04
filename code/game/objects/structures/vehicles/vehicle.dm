@@ -57,9 +57,9 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
 			if(destroyed)
-				user << "\red \The [src.name] is destroyed beyond repair."
+				user << "<span class=\"rose\">\The [src.name] is destroyed beyond repair.</span>"
 			add_fingerprint(user)
-			user.visible_message("\blue [user] has fixed some of the dents on \the [src].", "\blue You fix some of the dents on \the [src]")
+			user.visible_message("<span class=\"notice\">[user] has fixed some of the dents on \the [src].</span>", "<span class=\"notice\">You fix some of the dents on \the [src]</span>")
 			health += 20
 			HealthCheck()
 		else
@@ -87,7 +87,7 @@
 		return
 	if(empstun > 0)
 		if(user)
-			user << "\red \the [src] is unresponsive."
+			user << "<span class=\"rose\">\the [src] is unresponsive.</span>"
 		return
 	if(istype(src.loc, /turf/space))
 		if(!src.Process_Spacemove(0))	return
@@ -183,7 +183,7 @@
 /* The cart has very grippy tires and or magnets to keep it from slipping when on a good surface
 	//Check to see if we slipped
 	if(prob(Process_Spaceslipping(5)))
-		src << "\blue <B>You slipped!</B>"
+		src << "<span class=\"notice\"><B>You slipped!</B></span>"
 		src.inertia_dir = src.last_move
 		step(src, src.inertia_dir)
 		return 0
@@ -203,7 +203,7 @@
 		return
 
 	if(!check_key(M))
-		M << "\red You don't have the key for this."
+		M << "<span class=\"rose\">You don't have the key for this.</span>"
 		return
 
 	unbuckle()
@@ -262,7 +262,7 @@
 			src.empstun = (rand(5,10))
 		if(2)
 			src.empstun = (rand(1,5))
-	src.visible_message("\red The [src.name]'s motor short circuits!")
+	src.visible_message("<span class=\"rose\">The [src.name]'s motor short circuits!</span>")
 	spark_system.attach(src)
 	spark_system.set_up(5, 0, src)
 	spark_system.start()

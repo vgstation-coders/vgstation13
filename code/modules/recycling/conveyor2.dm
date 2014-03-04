@@ -160,9 +160,9 @@
 		update_multitool_menu(user)
 		return 1
 	if(!operating && istype(W, /obj/item/weapon/crowbar))
-		user << "\blue You begin prying apart \the [src]..."
+		user << "<span class=\"notice\">You begin prying apart \the [src]...</span>"
 		if(do_after(user,50))
-			user << "\blue You disassemble \the [src]..."
+			user << "<span class=\"notice\">You disassemble \the [src]...</span>"
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
 			M.state = 2
@@ -362,7 +362,7 @@
 // attack with hand, switch position
 /obj/machinery/conveyor_switch/attack_hand(mob/user)
 	if(isobserver(usr) && !canGhostWrite(user,src,"toggled"))
-		usr << "\red Nope."
+		usr << "<span class=\"rose\">Nope.</span>"
 		return 0
 	if(position == 0)
 		if(last_pos < 0)
@@ -397,10 +397,10 @@
 		update_multitool_menu(user)
 		return 1
 	if(istype(W, /obj/item/weapon/wrench))
-		user << "\blue Deconstructing \the [src]..."
+		user << "<span class=\"notice\">Deconstructing \the [src]...</span>"
 		if(do_after(user,50))
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-			user << "\blue You disassemble \the [src]."
+			user << "<span class=\"notice\">You disassemble \the [src].</span>"
 			var/turf/T=get_turf(src)
 			new /obj/item/device/assembly/signaler(T)
 			new /obj/item/stack/rods(T,1)
@@ -415,7 +415,7 @@
 // attack with hand, switch position
 /obj/machinery/conveyor_switch/oneway/attack_hand(mob/user)
 	if(isobserver(usr) && !canGhostWrite(user,src,"toggled"))
-		usr << "\red Nope."
+		usr << "<span class=\"rose\">Nope.</span>"
 		return 0
 	if(position == 0)
 		position = convdir

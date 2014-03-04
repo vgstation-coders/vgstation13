@@ -316,7 +316,7 @@ var/global/list/pipeID2State = list(
 
 	for(var/obj/machinery/atmospherics/M in src.loc)
 		if(M.initialize_directions & pipe_dir)	// matches at least one direction on either type of pipe
-			user << "\red There is already a pipe at that location."
+			user << "<span class=\"rose\">There is already a pipe at that location.</span>"
 			return 1
 	// no conflicts found
 
@@ -392,7 +392,7 @@ var/global/list/pipeID2State = list(
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		user.visible_message( \
 			"[user] fastens \the [src].", \
-			"\blue You have fastened \the [src].", \
+			"<span class=\"notice\">You have fastened \the [src].</span>", \
 			"You hear a ratchet.")
 		del(src)	// remove the pipe item
 		return 0
@@ -419,9 +419,9 @@ var/global/list/pipeID2State = list(
 	if (!istype(W, /obj/item/weapon/wrench))
 		return ..()
 	if(!locate(/obj/machinery/atmospherics/pipe, src.loc))
-		user << "\red You need to fasten it to a pipe"
+		user << "<span class=\"rose\">You need to fasten it to a pipe</span>"
 		return 1
 	new/obj/machinery/meter( src.loc )
 	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-	user << "\blue You have fastened the meter to the pipe"
+	user << "<span class=\"notice\">You have fastened the meter to the pipe</span>"
 	del(src)

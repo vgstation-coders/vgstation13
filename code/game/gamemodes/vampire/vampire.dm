@@ -112,7 +112,7 @@
 						text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
 						feedback_add_details("traitor_objective","[objective.type]|SUCCESS")
 					else
-						text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='red'>Fail.</font>"
+						text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <span class=\"rose\">Fail.</span>"
 						feedback_add_details("traitor_objective","[objective.type]|FAIL")
 						traitorwin = 0
 					count++
@@ -127,7 +127,7 @@
 				text += "<br><font color='green'><B>The [special_role_text] was successful!</B></font>"
 				feedback_add_details("traitor_success","SUCCESS")
 			else
-				text += "<br><font color='red'><B>The [special_role_text] has failed!</B></font>"
+				text += "<br><span class=\"danger\">The [special_role_text] has failed!</span>"
 				feedback_add_details("traitor_success","FAIL")
 		world << text
 	else
@@ -191,7 +191,7 @@
 /datum/game_mode/proc/greet_vampire(var/datum/mind/vampire, var/you_are=1)
 	var/dat
 	if (you_are)
-		dat = "<B>\red You are a Vampire! \black</br></B>"
+		dat = "<span class=\"danger\">You are a Vampire!</span><br>"
 	dat += {"To bite someone, target the head and use harm intent with an empty hand. Drink blood to gain new powers.
 You are weak to holy things and starlight. Don't go into space and avoid the Chaplain, the chapel and especially Holy Water."}
 	vampire.current << dat
@@ -269,22 +269,22 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	var/blood = 0
 	var/bloodtotal = 0 //used to see if we increased our blood total
 	var/bloodusable = 0 //used to see if we increased our blood usable
-	src.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [H.name] ([H.ckey]) in the neck and draining their blood</font>")
+	src.attack_log += text("\[[time_stamp()]\] <span class=\"rose\">Bit [H.name] ([H.ckey]) in the neck and draining their blood</span>")
 	H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [src.name] ([src.ckey])</font>")
 	log_attack("[src.name] ([src.ckey]) bit [H.name] ([H.ckey]) in the neck")
-	src.visible_message("\red <b>[src.name] bites [H.name]'s neck!<b>", "\red <b>You bite [H.name]'s neck and begin to drain their blood.", "\blue You hear a soft puncture and a wet sucking noise")
+	src.visible_message("<span class=\"danger\">[src.name] bites [H.name]'s neck!</span>", "<span class=\"danger\">You bite [H.name]'s neck and begin to drain their blood.</span>", "<span class=\"notice\">You hear a soft puncture and a wet sucking noise</span>")
 	if(!iscarbon(src))
 		H.LAssailant = null
 	else
 		H.LAssailant = src
 	while(do_mob(src, H, 50))
 		if(!mind.vampire || !(mind in ticker.mode.vampires))
-			src << "\red Your fangs have disappeared!"
+			src << "<span class=\"rose\">Your fangs have disappeared!</span>"
 			return 0
 		bloodtotal = src.mind.vampire.bloodtotal
 		bloodusable = src.mind.vampire.bloodusable
 		if(!H.vessel.get_reagent_amount("blood"))
-			src << "\red They've got no blood left to give."
+			src << "<span class=\"rose\">They've got no blood left to give.</span>"
 			break
 		if(H.stat < 2) //alive
 			blood = min(10, H.vessel.get_reagent_amount("blood"))// if they have less than 10 blood, give them the remnant else they get 10 blood
@@ -295,12 +295,12 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			blood = min(5, H.vessel.get_reagent_amount("blood"))// The dead only give 5 bloods
 			src.mind.vampire.bloodtotal += blood
 		if(bloodtotal != src.mind.vampire.bloodtotal)
-			src << "\blue <b>You have accumulated [src.mind.vampire.bloodtotal] [src.mind.vampire.bloodtotal > 1 ? "units" : "unit"] of blood[src.mind.vampire.bloodusable != bloodusable ?", and have [src.mind.vampire.bloodusable] left to use" : "."]"
+			src << "<span class=\"notice\"><b>You have accumulated [src.mind.vampire.bloodtotal] [src.mind.vampire.bloodtotal > 1 ? "units" : "unit"] of blood[src.mind.vampire.bloodusable != bloodusable ?", and have [src.mind.vampire.bloodusable] left to use" : "."]</span>"
 		check_vampire_upgrade(mind)
 		H.vessel.remove_reagent("blood",25)
 
 	src.mind.vampire.draining = null
-	src << "\blue You stop draining [H.name] of blood."
+	src << "<span class=\"notice\">You stop draining [H.name] of blood.</span>"
 	return 1
 
 /mob/proc/check_vampire_upgrade(datum/mind/v)
@@ -336,7 +336,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		if(!(VAMP_SCREAM in vamp.powers))
 			vamp.powers.Add(VAMP_SCREAM)
 		// Commented out until we can figured out a way to stop this from spamming.
-		//src << "\blue Your rejuvination abilities have improved and will now heal you over time when used."
+		//src << "<span class=\"notice\">Your rejuvination abilities have improved and will now heal you over time when used.</span>"
 
 	// TIER 3.5 (/vg/)
 	if(vamp.bloodtotal >= 250)
@@ -362,34 +362,34 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		if(!(n in old_powers))
 			switch(n)
 				if(VAMP_SHAPE)
-					src << "\blue You have gained the shapeshifting ability, at the cost of stored blood you can change your form permanently."
+					src << "<span class=\"notice\">You have gained the shapeshifting ability, at the cost of stored blood you can change your form permanently.</span>"
 					verbs += /client/proc/vampire_shapeshift
 				if(VAMP_VISION)
-					src << "\blue Your vampiric vision has improved."
+					src << "<span class=\"notice\">Your vampiric vision has improved.</span>"
 					//no verb
 				if(VAMP_DISEASE)
-					src << "\blue You have gained the Diseased Touch ability which causes those you touch to die shortly after unless treated medically."
+					src << "<span class=\"notice\">You have gained the Diseased Touch ability which causes those you touch to die shortly after unless treated medically.</span>"
 					verbs += /client/proc/vampire_disease
 				if(VAMP_CLOAK)
-					src << "\blue You have gained the Cloak of Darkness ability which when toggled makes you near invisible in the shroud of darkness."
+					src << "<span class=\"notice\">You have gained the Cloak of Darkness ability which when toggled makes you near invisible in the shroud of darkness.</span>"
 					verbs += /client/proc/vampire_cloak
 				if(VAMP_BATS)
-					src << "\blue You have gained the Summon Bats ability."
+					src << "<span class=\"notice\">You have gained the Summon Bats ability.</span>"
 					verbs += /client/proc/vampire_bats // work in progress
 				if(VAMP_SCREAM)
-					src << "\blue You have gained the Chriopteran Screech ability which stuns anything with ears in a large radius and shatters glass in the process."
+					src << "<span class=\"notice\">You have gained the Chriopteran Screech ability which stuns anything with ears in a large radius and shatters glass in the process.</span>"
 					verbs += /client/proc/vampire_screech
 				if(VAMP_JAUNT)
-					src << "\blue You have gained the Mist Form ability which allows you to take on the form of mist for a short period and pass over any obstacle in your path."
+					src << "<span class=\"notice\">You have gained the Mist Form ability which allows you to take on the form of mist for a short period and pass over any obstacle in your path.</span>"
 					verbs += /client/proc/vampire_jaunt
 				if(VAMP_SLAVE)
-					src << "\blue You have gained the Enthrall ability which at a heavy blood cost allows you to enslave a human that is not loyal to any other for a random period of time."
+					src << "<span class=\"notice\">You have gained the Enthrall ability which at a heavy blood cost allows you to enslave a human that is not loyal to any other for a random period of time.</span>"
 					verbs += /client/proc/vampire_enthrall
 				if(VAMP_BLINK)
-					src << "\blue You have gained the ability to shadowstep, which makes you disappear into nearby shadows at the cost of blood."
+					src << "<span class=\"notice\">You have gained the ability to shadowstep, which makes you disappear into nearby shadows at the cost of blood.</span>"
 					verbs += /client/proc/vampire_shadowstep
 				if(VAMP_FULL)
-					src << "\blue You have reached your full potential and are no longer weak to the effects of anything holy and your vision has been improved greatly."
+					src << "<span class=\"notice\">You have reached your full potential and are no longer weak to the effects of anything holy and your vision has been improved greatly.</span>"
 					//no verb
 //prepare for copypaste
 /datum/game_mode/proc/update_vampire_icons_added(datum/mind/vampire_mind)
@@ -451,7 +451,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	vampire_mind.special_role = null
 	update_vampire_icons_removed(vampire_mind)
 	//world << "Removed [vampire_mind.current.name] from vampire shit"
-	vampire_mind.current << "\red <FONT size = 3><B>The fog clouding your mind clears. You remember nothing from the moment you were enthralled until now.</B></FONT>"
+	vampire_mind.current << "<span class=\"danger\"><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were enthralled until now.</FONT></span>"
 
 /mob/living/carbon/human/proc/check_sun()
 
@@ -472,14 +472,14 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	if(prob(35))
 		switch(health)
 			if(80 to 100)
-				src << "\red Your skin flakes away..."
+				src << "<span class=\"rose\">Your skin flakes away...</span>"
 			if(60 to 80)
 				src << "<span class='warning'>Your skin sizzles!</span>"
 			if((-INFINITY) to 60)
 				if(!on_fire)
-					src << "<b>\red Your skin catches fire!</b>"
+					src << "<span class=\"danger\">Your skin catches fire!</span>"
 				else
-					src << "<b>\red You continue to burn!</b>"
+					src << "<span class=\"danger\">You continue to burn!</span>"
 				fire_stacks += 5
 				IgniteMob()
 		emote("scream")

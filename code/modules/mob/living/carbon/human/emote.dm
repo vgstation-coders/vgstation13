@@ -70,7 +70,7 @@
 				return
 			if (src.client)
 				if (client.prefs.muted & MUTE_IC)
-					src << "\red You cannot send IC messages (muted)."
+					src << "<span class=\"rose\">You cannot send IC messages (muted).</span>"
 					return
 				if (src.client.handle_spam_prevention(message,MUTE_IC))
 					return
@@ -563,7 +563,7 @@
 					message=""
 					if(wearing_suit)
 						if(!wearing_mask)
-							src << "\red You gas yourself!"
+							src << "<span class=\"rose\">You gas yourself!</span>"
 							reagents.add_reagent("space_drugs", rand(10,50))
 					else
 						// Was /turf/, now /mob/
@@ -592,22 +592,22 @@
 				if(M_SUPER_FART in mutations)
 					message=""
 					playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
-					visible_message("\red <b>[name]</b> hunches down and grits their teeth!")
+					visible_message("<span class=\"danger\">[name]</span><span class=\"rose\">hunches down and grits their teeth!</span>")
 					if(do_after(usr,30))
-						visible_message("\red <b>[name]</b> unleashes a [pick("tremendous","gigantic","colossal")] fart!","You hear a [pick("tremendous","gigantic","colossal")] fart.")
+						visible_message("<span class=\"danger\">[name]</span><span class=\"rose\">unleashes a [pick("tremendous","gigantic","colossal")] fart!</span>","You hear a [pick("tremendous","gigantic","colossal")] fart.")
 						//playsound(L.loc, 'superfart.ogg', 50, 0)
 						if(!wearing_suit)
 							for(var/mob/living/V in view(src,aoe_range))
 								shake_camera(V,10,5)
 								if (V == src)
 									continue
-								V << "\red You are sent flying!"
+								V << "<span class=\"rose\">You are sent flying!</span>"
 								V.Weaken(5) // why the hell was this set to 12 christ
 								step_away(V,location,15)
 								step_away(V,location,15)
 								step_away(V,location,15)
 					else
-						usr << "\red You were interrupted and couldn't fart! Rude!"
+						usr << "<span class=\"rose\">You were interrupted and couldn't fart! Rude!</span>"
 				lastFart=world.time
 			else
 				message = "<b>[src]</b> strains, and nothing happens."
@@ -617,7 +617,7 @@
 			src << "blink, blink_r, blush, bow-(none)/mob, burp, choke, chuckle, clap, collapse, cough,\ncry, custom, deathgasp, drool, eyebrow, frown, gasp, giggle, groan, grumble, handshake, hug-(none)/mob, glare-(none)/mob,\ngrin, laugh, look-(none)/mob, moan, mumble, nod, pale, point-atom, raise, salute, shake, shiver, shrug,\nsigh, signal-#1-10, smile, sneeze, sniff, snore, stare-(none)/mob, tremble, twitch, twitch_s, whimper,\nwink, yawn"
 
 		else
-			src << "\blue Unusable emote '[act]'. Say *help for a list."
+			src << "<span class=\"notice\">Unusable emote '[act]'. Say *help for a list.</span>"
 
 
 

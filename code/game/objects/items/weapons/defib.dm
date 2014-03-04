@@ -15,7 +15,7 @@
 	origin_tech = "biotech=3"
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is putting the live paddles on \his chest! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class=\"danger\">[user] is putting the live paddles on \his chest! It looks like \he's trying to commit suicide.</span>"
 		return (OXYLOSS)
 
 /obj/item/weapon/melee/defibrilator/update_icon()
@@ -41,7 +41,7 @@
 		spark_system.attach(user)
 		spark_system.set_up(5, 0, src)
 		spark_system.start()
-		user << "\red You touch the paddles together shorting the device."
+		user << "<span class=\"rose\">You touch the paddles together shorting the device.</span>"
 		user.Weaken(5)
 		charges--
 		if(charges < 1)
@@ -64,11 +64,11 @@
 		var/image/I = image("icon" = "icons/obj/weapons.dmi", "icon_state" = "defib_emag")
 		if(emagged == 0)
 			emagged = 1
-			usr << "\red [W] unlocks [src]'s safety protocols"
+			usr << "<span class=\"rose\">[W] unlocks [src]'s safety protocols</span>"
 			overlays += I
 		else
 			emagged = 0
-			usr << "\blue [W] sets [src]'s safety protocols"
+			usr << "<span class=\"notice\">[W] sets [src]'s safety protocols</span>"
 			overlays -= I
 
 /obj/item/weapon/melee/defibrilator/attack(mob/M as mob, mob/user as mob)
@@ -106,7 +106,7 @@
 			else
 				M.LAssailant = user
 			return
-		H.visible_message("\blue [user] places the defibrilator paddles on [M.name]'s chest.", "\blue You place the defibrilator paddles on [M.name]'s chest.")
+		H.visible_message("<span class=\"notice\">[user] places the defibrilator paddles on [M.name]'s chest.</span>", "<span class=\"notice\">You place the defibrilator paddles on [M.name]'s chest.</span>")
 		if(do_after(user, 10))
 			if(H.stat == 2 || H.stat == DEAD)
 				var/uni = 0
@@ -139,21 +139,21 @@
 						tobehealed -= 5 //They get 5 health in crit to heal the person or inject stabilizers
 						H.adjustOxyLoss(tobehealed)
 				H.updatehealth() //forces a health update, otherwise the oxyloss adjustment wouldnt do anything
-				M.visible_message("\red [M]'s body convulses a bit.")
+				M.visible_message("<span class=\"rose\">[M]'s body convulses a bit.</span>")
 				var/datum/organ/external/temp = H.get_organ("head")
 				if(H.health > -100 && !(temp.status & ORGAN_DESTROYED) && !(M_NOCLONE in H.mutations) && !H.suiciding)
-					viewers(M) << "\blue [src] beeps: Resuscitation successful."
+					viewers(M) << "<span class=\"notice\">[src] beeps: Resuscitation successful.</span>"
 					spawn(0)
 						H.stat = 1
 						dead_mob_list -= H
 						living_mob_list |= H
 						H.emote("gasp")
 				else
-					viewers(M) << "\blue [src] beeps: Resuscitation failed."
+					viewers(M) << "<span class=\"notice\">[src] beeps: Resuscitation failed.</span>"
 				charges--
 				if(charges < 1)
 					charges = 0
 					status = 0
 				update_icon()
 			else
-				user.visible_message("\blue [src] beeps: Patient is not in a valid state.")
+				user.visible_message("<span class=\"notice\">[src] beeps: Patient is not in a valid state.</span>")

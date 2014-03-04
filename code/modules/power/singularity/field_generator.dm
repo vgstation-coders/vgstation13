@@ -77,9 +77,6 @@ field_generator power level display
 
 
 /obj/machinery/field_generator/attack_hand(mob/user as mob)
-	if(isobserver(user) && !isAdminGhost(user))
-		return 0
-
 	if(state == 2)
 		if(get_dist(src, user) <= 1)//Need to actually touch the thing to turn it on
 			if(src.active >= 1)
@@ -95,7 +92,7 @@ field_generator power level display
 				src.add_fingerprint(user)
 	else
 		user << "The [src] needs to be firmly secured to the floor first."
-		return 0
+		return
 
 
 /obj/machinery/field_generator/attackby(obj/item/W, mob/user)
@@ -119,13 +116,13 @@ field_generator power level display
 					"You hear ratchet")
 				src.anchored = 0
 			if(2)
-				user << "\red The [src.name] needs to be unwelded from the floor."
+				user << "<span class=\"rose\">The [src.name] needs to be unwelded from the floor.</span>"
 				return
 	else if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		switch(state)
 			if(0)
-				user << "\red The [src.name] needs to be wrenched to the floor."
+				user << "<span class=\"rose\">The [src.name] needs to be wrenched to the floor.</span>"
 				return
 			if(1)
 				if (WT.remove_fuel(0,user))
@@ -218,7 +215,7 @@ field_generator power level display
 		return 1
 	else
 		for(var/mob/M in viewers(src))
-			M.show_message("\red The [src.name] shuts down!")
+			M.show_message("<span class=\"rose\">The [src.name] shuts down!</span>")
 		turn_off()
 		investigate_log("ran out of power and <font color='red'>deactivated</font>","singulo")
 		src.power = 0

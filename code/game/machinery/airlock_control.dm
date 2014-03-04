@@ -140,7 +140,7 @@ obj/machinery/door/airlock/New()
 		return
 	var/turf/loc = get_turf(usr)
 	if (!istype(loc, /turf/simulated/floor))
-		usr << "\red [src] cannot be placed on this spot."
+		usr << "<span class=\"rose\">[src] cannot be placed on this spot.</span>"
 		return
 	new /obj/machinery/airlock_sensor(loc, ndir, 1)
 	del(src)
@@ -298,7 +298,7 @@ obj/machinery/airlock_sensor/attackby(var/obj/item/W, var/mob/user)
 		return
 	var/turf/loc = get_turf(usr)
 	if (!istype(loc, /turf/simulated/floor))
-		usr << "\red [src] cannot be placed on this spot."
+		usr << "<span class=\"rose\">[src] cannot be placed on this spot.</span>"
 		return
 	new /obj/machinery/access_button(loc, ndir, 1)
 	del(src)
@@ -351,7 +351,7 @@ obj/machinery/access_button/update_icon()
 obj/machinery/access_button/attack_hand(mob/user)
 	add_fingerprint(usr)
 	if(!allowed(user))
-		user << "\red Access Denied"
+		user << "<span class=\"rose\">Access Denied</span>"
 
 	else if(radio_connection)
 		var/datum/signal/signal = new

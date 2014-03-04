@@ -60,14 +60,14 @@
 					if (S.contents.len < S.capacity)
 						S.contents += G
 					else
-						user << "\blue The plant bag is full."
+						user << "<span class=\"notice\">The plant bag is full.</span>"
 						return
-			user << "\blue You pick up all the plants and seeds."
+			user << "<span class=\"notice\">You pick up all the plants and seeds.</span>"
 		else
 			if (S.contents.len < S.capacity)
 				S.contents += src;
 			else
-				user << "\blue The plant bag is full."*/
+				user << "<span class=\"notice\">The plant bag is full.</span>"*/
 	return
 
 /*/obj/item/seeds/attackby(var/obj/item/O as obj, var/mob/user as mob)
@@ -79,14 +79,14 @@
 					if (S.contents.len < S.capacity)
 						S.contents += G
 					else
-						user << "\blue The plant bag is full."
+						user << "<span class=\"notice\">The plant bag is full.</span>"
 						return
-			user << "\blue You pick up all the plants and seeds."
+			user << "<span class=\"notice\">You pick up all the plants and seeds.</span>"
 		else
 			if (S.contents.len < S.capacity)
 				S.contents += src;
 			else
-				user << "\blue The plant bag is full."
+				user << "<span class=\"notice\">The plant bag is full.</span>"
 	return*/
 
 /obj/item/weapon/grown/attackby(var/obj/item/O as obj, var/mob/user as mob)
@@ -710,7 +710,7 @@
 			return
 
 		M.stop_pulling()
-		M << "\blue You slipped on the [name]!"
+		M << "<span class=\"notice\">You slipped on the [name]!</span>"
 		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
 		M.Stun(8)
 		M.Weaken(5)

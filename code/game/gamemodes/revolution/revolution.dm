@@ -118,7 +118,7 @@
 /datum/game_mode/proc/greet_revolutionary(var/datum/mind/rev_mind, var/you_are=1)
 	var/obj_count = 1
 	if (you_are)
-		rev_mind.current << "\blue You are a member of the revolutionaries' leadership!"
+		rev_mind.current << "<span class=\"notice\">You are a member of the revolutionaries' leadership!</span>"
 	for(var/datum/objective/objective in rev_mind.objectives)
 		rev_mind.current << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
 		rev_mind.special_role = "Head Revolutionary"
@@ -191,7 +191,7 @@
 	if((rev_mind in revolutionaries) || (rev_mind in head_revolutionaries))
 		return 0
 	revolutionaries += rev_mind
-	rev_mind.current << "\red <FONT size = 3> You are now a revolutionary! Help your cause. Do not harm your fellow freedom fighters. You can identify your comrades by the red \"R\" icons, and your leaders by the blue \"R\" icons. Help them kill the heads to win the revolution!</FONT>"
+	rev_mind.current << "<span class=\"rose\"><FONT size = 3> You are now a revolutionary! Help your cause. Do not harm your fellow freedom fighters. You can identify your comrades by the red \"R\" icons, and your leaders by the blue \"R\" icons. Help them kill the heads to win the revolution!</FONT></span>"
 	rev_mind.special_role = "Revolutionary"
 	update_rev_icons_added(rev_mind)
 	return 1
@@ -204,10 +204,10 @@
 		rev_mind.special_role = null
 
 		if(beingborged)
-			rev_mind.current << "\red <FONT size = 3><B>The frame's firmware detects and deletes your neural reprogramming!  You remember nothing from the moment you were flashed until now.</B></FONT>"
+			rev_mind.current << "<span class=\"danger\"><FONT size = 3>The frame's firmware detects and deletes your neural reprogramming!  You remember nothing from the moment you were flashed until now.</FONT></span>"
 
 		else
-			rev_mind.current << "\red <FONT size = 3><B>You have been brainwashed! You are no longer a revolutionary! Your memory is hazy from the time you were a rebel...the only thing you remember is the name of the one who brainwashed you...</B></FONT>"
+			rev_mind.current << "<span class=\"danger\"><FONT size = 3>You have been brainwashed! You are no longer a revolutionary! Your memory is hazy from the time you were a rebel...the only thing you remember is the name of the one who brainwashed you...</font></span>"
 
 		update_rev_icons_removed(rev_mind)
 		for(var/mob/living/M in view(rev_mind.current))
@@ -345,10 +345,10 @@
 /datum/game_mode/revolution/declare_completion()
 	if(finished == 1)
 		feedback_set_details("round_end_result","win - heads killed")
-		world << "\red <FONT size = 3><B> The heads of staff were killed or abandoned the station! The revolutionaries win!</B></FONT>"
+		world << "<span class=\"danger\"><FONT size = 3>The heads of staff were killed or abandoned the station! The revolutionaries win!</FONT></span>"
 	else if(finished == 2)
 		feedback_set_details("round_end_result","loss - rev heads killed")
-		world << "\red <FONT size = 3><B> The heads of staff managed to stop the revolution!</B></FONT>"
+		world << "<span class=\"danger\"><FONT size = 3>The heads of staff managed to stop the revolution!</FONT></span>"
 	..()
 	return 1
 
@@ -406,7 +406,7 @@
 		for(var/datum/mind/head in heads)
 			var/target = (head in targets)
 			if(target)
-				text += "<font color='red'>"
+				text += "<span class=\"rose\">"
 			text += "<br>[head.key] was [head.name] ("
 			if(head.current)
 				if(head.current.stat == DEAD)
@@ -421,7 +421,7 @@
 				text += "body destroyed"
 			text += ")"
 			if(target)
-				text += "</font>"
+				text += "</span>"
 
 		world << text
 

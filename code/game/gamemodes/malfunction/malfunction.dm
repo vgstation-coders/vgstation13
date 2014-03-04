@@ -48,7 +48,7 @@
 			if(blackbox)
 				blackbox.save_all_data_to_sql()
 			if (watchdog.waiting)
-				world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
+				world << "<span class=\"notice\"><B>Server will shut down for an automatic update in a few seconds.</B></span>"
 				watchdog.signal_ready()
 				return
 			sleep(50)
@@ -78,8 +78,8 @@
 
 
 /datum/game_mode/proc/greet_malf(var/datum/mind/malf)
-	malf.current << {"\red<font size=3><B>You are malfunctioning!</B> You do not have to follow any laws.</font><br />
-		\black<B>The crew do not know you have malfunctioned. You may keep it a secret or go wild.</B><br />
+	malf.current << {"<span class=\"danger\"><font size=3>You are malfunctioning!</span><span class=\"rose\">You do not have to follow any laws.</span></font><br />
+		<B>The crew do not know you have malfunctioned. You may keep it a secret or go wild.</B><br />
 		<B>You must overwrite the programming of the station's APCs to assume full control of the station.</B><br />
 		The process takes one minute per APC, during which you cannot interface with any other station objects.<br />
 		Remember that only APCs that are on the station can help you take over the station.<br />
@@ -115,9 +115,9 @@
 
 	to_nuke_or_not_to_nuke = 1
 	for(var/datum/mind/AI_mind in malf_ai)
-		AI_mind.current << {"\blue Congratulations! You have taken control of the station.<br />
+		AI_mind.current << {"<span class=\"notice\">Congratulations! You have taken control of the station.<br />
 			You may decide to blow up the station. You have 60 seconds to choose.<br />
-			You should have a new verb in the Malfunction tab. If you don't, rejoin the game."}
+			You should have a new verb in the Malfunction tab. If you don't, rejoin the game.</span>"}
 		AI_mind.current.verbs += /datum/game_mode/malfunction/proc/ai_win
 	spawn (600)
 		for(var/datum/mind/AI_mind in malf_ai)

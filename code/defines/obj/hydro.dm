@@ -35,19 +35,19 @@
 
 /obj/item/seeds/examine()
 	..()
-	usr << "Plant Yield: \blue [(yield != -1) ? yield : "\red ERROR"]"
-	usr << "Plant Potency: \blue [(potency != -1) ? potency : "\red ERROR"]"
+	usr << "Plant Yield: <span class=\"notice\">[(yield != -1) ? yield : "<span class=\"rose\">ERROR"]</span>"
+	usr << "Plant Potency: <span class=\"notice\"> [(potency != -1) ? potency : "<span class=\"rose\">ERROR"]</span>"
 
 /obj/item/seeds/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (istype(O, /obj/item/device/analyzer/plant_analyzer))
 		user << "*** <B>[plantname]</B> ***"
-		user << "-Plant Endurance: \blue [endurance]"
-		user << "-Plant Lifespan: \blue [lifespan]"
+		user << "-Plant Endurance: <span class=\"notice\">[endurance]</span>"
+		user << "-Plant Lifespan: <span class=\"notice\">[lifespan]</span>"
 		if(yield != -1)
-			user << "-Plant Yield: \blue [yield]"
-		user << "-Plant Production: \blue [production]"
+			user << "-Plant Yield: <span class=\"notice\">[yield]</span>"
+		user << "-Plant Production: <span class=\"notice\">[production]</span>"
 		if(potency != -1)
-			user << "-Plant Potency: \blue [potency]"
+			user << "-Plant Potency: <span class=\"notice\">[potency]</span>"
 		return
 	..() // Fallthrough to item/attackby() so that bags can pick seeds up
 
@@ -1359,7 +1359,7 @@
 			force = round((5+potency/5), 1)
 
 /obj/item/weapon/grown/deathnettle // -- Skie
-	desc = "The \red glowing \black nettle incites \red<B>rage</B>\black in you just from looking at it!"
+	desc = "The <span class=\"rose\">glowing</span> nettle incites <span class=\"danger\">rage</span> in you just from looking at it!"
 	icon = 'icons/obj/weapons.dmi'
 	name = "deathnettle"
 	icon_state = "deathnettle"
@@ -1382,7 +1382,7 @@
 			force = round((5+potency/2.5), 1)
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class=\"danger\">[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>"
 		return (BRUTELOSS|TOXLOSS)
 
 // *************************************
@@ -1453,7 +1453,7 @@
 	var/WeedKillStr = 2
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is huffing the [src.name]! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class=\"danger\">[user] is huffing the [src.name]! It looks like \he's trying to commit suicide.</span>"
 		return (TOXLOSS)
 
 /obj/item/weapon/pestspray // -- Skie
@@ -1472,7 +1472,7 @@
 	var/PestKillStr = 2
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is huffing the [src.name]! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class=\"danger\">[user] is huffing the [src.name]! It looks like \he's trying to commit suicide.</span>"
 		return (TOXLOSS)
 
 /obj/item/weapon/minihoe // -- Numbers

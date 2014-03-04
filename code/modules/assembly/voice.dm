@@ -21,7 +21,7 @@
 			if(findtext(msg, recorded))
 				pulse(0)
 				var/turf/T = get_turf(src)	//otherwise it won't work in hand
-				T.visible_message("\icon[src] \red beeps!")
+				T.visible_message("\icon[src] <span class=\"rose\">beeps!</span>")
 
 	activate()
 		if(secured)
