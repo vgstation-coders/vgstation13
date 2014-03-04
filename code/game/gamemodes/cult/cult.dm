@@ -96,7 +96,7 @@
 		equip_cultist(cult_mind.current)
 		grant_runeword(cult_mind.current)
 		update_cult_icons_added(cult_mind)
-		cult_mind.current << "\blue You are a member of the cult!"
+		cult_mind.current << "<span class=\"notice\">You are a member of the cult!</span>"
 		memoize_cult_objectives(cult_mind)
 		cult_mind.special_role = "Cultist"
 	if(!mixed)
@@ -165,7 +165,7 @@
 	if (!word)
 		word=pick(allwords)
 	var/wordexp = "[cultwords[word]] is [word]..."
-	cult_mob << "\red You remember one thing from the dark teachings of your master... [wordexp]"
+	cult_mob << "<span class=\"rose\">You remember one thing from the dark teachings of your master... [wordexp]</span>"
 	cult_mob.mind.store_memory("<B>You remember that</B> [wordexp]", 0, 0)
 
 
@@ -187,7 +187,7 @@
 /datum/game_mode/proc/remove_cultist(datum/mind/cult_mind, show_message = 1)
 	if(cult_mind in cult)
 		cult -= cult_mind
-		cult_mind.current << "\red <FONT size = 3><B>An unfamiliar white light flashes through your mind, cleansing the taint of the dark-one and the memories of your time as his servant with it.</B></FONT>"
+		cult_mind.current << "<span class=\"danger\"><FONT size = 3>An unfamiliar white light flashes through your mind, cleansing the taint of the dark-one and the memories of your time as his servant with it.</FONT></span>"
 		cult_mind.memory = ""
 		update_cult_icons_removed(cult_mind)
 		if(show_message)
@@ -281,11 +281,11 @@
 	if(!check_cult_victory())
 		feedback_set_details("round_end_result","win - cult win")
 		feedback_set("round_end_result",acolytes_survived)
-		world << "\red <FONT size = 3><B> The cult wins! It has succeeded in serving its dark masters!</B></FONT>"
+		world << "<span class=\"danger\"><FONT size = 3>The cult wins! It has succeeded in serving its dark masters!</FONT></span>"
 	else
 		feedback_set_details("round_end_result","loss - staff stopped the cult")
 		feedback_set("round_end_result",acolytes_survived)
-		world << "\red <FONT size = 3><B> The staff managed to stop the cult!</B></FONT>"
+		world << "<span class=\"danger\"><FONT size = 3>The staff managed to stop the cult!</FONT></span>"
 
 	var/text = "<b>Cultists escaped:</b> [acolytes_survived]"
 
@@ -299,7 +299,7 @@
 						explanation = "Make sure at least [acolytes_needed] acolytes escape on the shuttle. <font color='green'><B>Success!</B></font>"
 						feedback_add_details("cult_objective","cult_survive|SUCCESS|[acolytes_needed]")
 					else
-						explanation = "Make sure at least [acolytes_needed] acolytes escape on the shuttle. <font color='red'>Fail.</font>"
+						explanation = "Make sure at least [acolytes_needed] acolytes escape on the shuttle. <span class=\"rose\">Fail.</span>"
 						feedback_add_details("cult_objective","cult_survive|FAIL|[acolytes_needed]")
 				if("sacrifice")
 					if(sacrifice_target)
@@ -307,17 +307,17 @@
 							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role]. <font color='green'><B>Success!</B></font>"
 							feedback_add_details("cult_objective","cult_sacrifice|SUCCESS")
 						else if(sacrifice_target && sacrifice_target.current)
-							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role]. <font color='red'>Fail.</font>"
+							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role]. <span class=\"rose\">Fail.</span>"
 							feedback_add_details("cult_objective","cult_sacrifice|FAIL")
 						else
-							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role]. <font color='red'>Fail (Gibbed).</font>"
+							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role]. <span class=\"rose\">Fail (Gibbed).</span>"
 							feedback_add_details("cult_objective","cult_sacrifice|FAIL|GIBBED")
 				if("eldergod")
 					if(!eldergod)
 						explanation = "Summon Nar-Sie. <font color='green'><B>Success!</B></font>"
 						feedback_add_details("cult_objective","cult_narsie|SUCCESS")
 					else
-						explanation = "Summon Nar-Sie. <font color='red'>Fail.</font>"
+						explanation = "Summon Nar-Sie. <span class=\"rose\">Fail.</span>"
 						feedback_add_details("cult_objective","cult_narsie|FAIL")
 			text += "<br><B>Objective #[obj_count]</B>: [explanation]"
 

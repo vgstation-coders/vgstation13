@@ -1,5 +1,7 @@
 client/script = {"<style>
-body					{font-family: Verdana, sans-serif;}
+body					{font-family: Verdana, sans-serif;
+						 					background-color: #898989;
+						}
 
 h1, h2, h3, h4, h5, h6	{color: #0000ff;	font-family: Georgia, Verdana, sans-serif;}
 
@@ -55,6 +57,7 @@ h1.alert, h2.alert		{color: #000000;}
 .rose					{color: #ff5050;}
 .info					{color: #0000CC;}
 .notice					{color: #000099;}
+.success				{color: #00FF00;}
 
 .alien					{color: #543354;}
 .newscaster				{color: #800000;}

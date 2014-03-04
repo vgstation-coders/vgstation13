@@ -196,9 +196,9 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 			// AUTOFIXED BY fix_string_idiocy.py
 			// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\library\lib_machines.dm:180: dat += "<h3>Check Out a Book</h3><BR>"
 			dat += {"<h3>Check Out a Book</h3><BR>
-				Book: [src.buffer_book] 
+				Book: [src.buffer_book]
 				<A href='?src=\ref[src];editbook=1'>\[Edit\]</A><BR>
-				Recipient: [src.buffer_mob] 
+				Recipient: [src.buffer_mob]
 				<A href='?src=\ref[src];editmob=1'>\[Edit\]</A><BR>
 				Checkout Date : [world.time/600]<BR>
 				Due Date: [(world.time + checkoutperiod)/600]<BR>
@@ -273,7 +273,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 /obj/machinery/librarycomp/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (src.density && istype(W, /obj/item/weapon/card/emag) && !src.emagged)
 		src.emagged = 1
-		user << "\blue You override the library computer's printing restrictions."
+		user << "<span class=\"notice\">You override the library computer's printing restrictions.</span>"
 		return
 	if(istype(W, /obj/item/weapon/barcodescanner))
 		var/obj/item/weapon/barcodescanner/scanner = W

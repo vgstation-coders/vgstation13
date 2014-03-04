@@ -35,8 +35,8 @@
 
 	end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
-		user.visible_message("\blue [user] has patched the damaged vein in [target]'s [affected.display_name] with \the [tool].", \
-			"\blue You have patched the damaged vein in [target]'s [affected.display_name] with \the [tool].")
+		user.visible_message("<span class=\"notice\">[user] has patched the damaged vein in [target]'s [affected.display_name] with \the [tool].</span>", \
+			"<span class=\"notice\">You have patched the damaged vein in [target]'s [affected.display_name] with \the [tool].</span>")
 
 		for(var/datum/wound/W in affected.wounds) if(W.internal)
 			affected.wounds -= W
@@ -45,6 +45,6 @@
 
 	fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
-		user.visible_message("\red [user]'s hand slips, smearing [tool] in the incision in [target]'s [affected.display_name]!" , \
-		"\red Your hand slips, smearing [tool] in the incision in [target]'s [affected.display_name]!")
+		user.visible_message("<span class=\"rose\">[user]'s hand slips, smearing [tool] in the incision in [target]'s [affected.display_name]!</span>" , \
+		"<span class=\"rose\">Your hand slips, smearing [tool] in the incision in [target]'s [affected.display_name]!</span>")
 		affected.take_damage(5, 0)

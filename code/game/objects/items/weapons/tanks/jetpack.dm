@@ -24,7 +24,7 @@
 		set src in usr
 		..()
 		if(air_contents.oxygen < 10)
-			usr << text("\red <B>The meter on the [src.name] indicates you are almost out of air!</B>")
+			usr << text("<span class=\"danger\">The meter on the [src.name] indicates you are almost out of air!</span>")
 			playsound(usr, 'sound/effects/alert.ogg', 50, 1)
 		return
 
@@ -115,7 +115,7 @@
 		set src in usr
 		..()
 		if(air_contents.nitrogen < 10)
-			usr << text("\red <B>The meter on the [src.name] indicates you are almost out of nitrogen!</B>")
+			usr << text("<span class=\"danger\">The meter on the [src.name] indicates you are almost out of nitrogen!</span>")
 			playsound(usr, 'sound/effects/alert.ogg', 50, 1)
 		return
 
@@ -138,6 +138,6 @@
 		set src in usr
 		..()
 		if(air_contents.carbon_dioxide < 10)
-			usr << text("\red <B>The meter on the [src.name] indicates you are almost out of air!</B>")
+			usr << text("<span class=\"danger\">The meter on the [src.name] indicates you are almost out of air!</span>")
 			playsound(usr, 'sound/effects/alert.ogg', 50, 1)
 		return

@@ -82,8 +82,6 @@ RCD
 	afterattack(atom/A, mob/user)
 		if(disabled && !isrobot(user))
 			return 0
-		if(get_dist(user,A)>1)
-			return 0
 		if(istype(A,/area/shuttle)||istype(A,/turf/space/transit))
 			return 0
 		if(!(istype(A, /turf) || istype(A, /obj/machinery/door/airlock)))
@@ -168,7 +166,7 @@ RCD
 	if(matter < amount)
 		return 0
 	matter -= amount
-	desc = "An RCD. It currently holds [matter]/30 matter-units."
+	desc = "A RCD. It currently holds [matter]/30 matter-units."
 	return 1
 
 /obj/item/weapon/rcd/proc/checkResource(var/amount, var/mob/user)

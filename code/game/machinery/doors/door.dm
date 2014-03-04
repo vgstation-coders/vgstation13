@@ -61,7 +61,7 @@
 	if (istype(AM, /obj/machinery/bot))
 		var/obj/machinery/bot/bot = AM
 
-		if (check_access(bot.botcard) && !operating)
+		if (check_access(bot.botcard))
 			open()
 
 		return
@@ -70,7 +70,7 @@
 		var/obj/mecha/mecha = AM
 
 		if (density)
-			if (mecha.occupant && !operating && (allowed(mecha.occupant) || check_access_list(mecha.operation_req_access)))
+			if (mecha.occupant && (allowed(mecha.occupant) || check_access_list(mecha.operation_req_access)))
 				open()
 			else
 				door_animate("deny")
@@ -89,7 +89,7 @@
 	if(!requiresID())
 		user = null
 
-	if(allowed(user) && !operating)
+	if(allowed(user))
 		open()
 	else
 		door_animate("deny")
@@ -118,7 +118,7 @@
 			playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
 
 			if (!istype(H.head, /obj/item/clothing/head/helmet))
-				visible_message("\red [user] headbutts the airlock.")
+				visible_message("<span class=\"rose\">[user] headbutts the airlock.</span>")
 				H.Stun(8)
 				H.Weaken(5)
 				var/datum/organ/external/O = H.get_organ("head")
@@ -129,7 +129,7 @@
 					O = null
 			else
 				// TODO: fix sentence
-				visible_message("\red [user] headbutts the airlock. Good thing they're wearing a helmet.")
+				visible_message("<span class=\"rose\">[user] headbutts the airlock. Good thing they're wearing a helmet.</span>")
 
 			H = null
 			return

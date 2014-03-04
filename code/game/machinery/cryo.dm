@@ -53,7 +53,7 @@
 	if(!istype(user.loc, /turf) || !istype(O.loc, /turf)) // are you in a container/closet/pod/etc?
 		return
 	if(occupant)
-		user << "\blue <B>The cryo cell is already occupied!</B>"
+		user << "<span class=\"notice\"><B>The cryo cell is already occupied!</B></span>"
 		return
 	if(isrobot(user))
 		if(!istype(user:module, /obj/item/weapon/robot_module/medical))
@@ -63,7 +63,7 @@
 	if(!istype(L) || L.buckled)
 		return
 	if(L.abiotic())
-		user << "\red <B>Subject cannot have abiotic items on.</B>"
+		user << "<span class=\"danger\">Subject cannot have abiotic items on.</span>"
 		return
 	for(var/mob/living/carbon/slime/M in range(1,L))
 		if(M.Victim == L)
@@ -228,7 +228,7 @@
 /obj/machinery/atmospherics/unary/cryo_cell/attackby(var/obj/item/weapon/G as obj, var/mob/user as mob)
 	if(istype(G, /obj/item/weapon/reagent_containers/glass))
 		if(beaker)
-			user << "\red A beaker is already loaded into the machine."
+			user << "<span class=\"rose\">A beaker is already loaded into the machine.</span>"
 			return
 
 		beaker =  G
@@ -252,7 +252,7 @@
 			user << "[src] is on."
 			return
 		if(occupant)
-			user << "\red [occupant.name] is inside the [src]!"
+			user << "<span class=\"rose\">[occupant.name] is inside the [src]!</span>"
 			return
 		if(istype(G, /obj/item/weapon/crowbar)) //beakers are destroyed in the process of destroying the cryo cell
 			user << "You begin to remove the circuits from [src]."
@@ -320,7 +320,7 @@
 		var/has_clonexa = occupant.reagents.get_reagent_amount("clonexadone") >= 1
 		var/has_cryo_medicine = has_cryo || has_clonexa
 		if(beaker && !has_cryo_medicine)
-			beaker.reagents.trans_to(occupant, 1, 1)
+			beaker.reagents.trans_to(occupant, 1, 10)
 			beaker.reagents.reaction(occupant)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/heat_gas_contents()
@@ -360,16 +360,16 @@
 	return
 /obj/machinery/atmospherics/unary/cryo_cell/proc/put_mob(mob/living/carbon/M as mob)
 	if (!istype(M))
-		usr << "\red <B>The cryo cell cannot handle such a lifeform!</B>"
+		usr << "<span class=\"danger\">The cryo cell cannot handle such a lifeform!</span>"
 		return
 	if (occupant)
-		usr << "\red <B>The cryo cell is already occupied!</B>"
+		usr << "<span class=\"danger\">The cryo cell is already occupied!</span>"
 		return
 	if (M.abiotic())
-		usr << "\red Subject may not have abiotic items on."
+		usr << "<span class=\"rose\">Subject may not have abiotic items on.</span>"
 		return
 	if(!node)
-		usr << "\red The cell is not correctly connected to its pipe network!"
+		usr << "<span class=\"rose\">The cell is not correctly connected to its pipe network!</span>"
 		return
 	if (M.client)
 		M.client.perspective = EYE_PERSPECTIVE
@@ -377,7 +377,7 @@
 	M.stop_pulling()
 	M.loc = src
 	if(M.health > -100 && (M.health < 0 || M.sleeping))
-		M << "\blue <b>You feel a cold liquid surround you. Your skin starts to freeze up.</b>"
+		M << "<span class=\"notice\"><b>You feel a cold liquid surround you. Your skin starts to freeze up.</b></span>"
 	occupant = M
 	//M.metabslow = 1
 	add_fingerprint(usr)
@@ -392,7 +392,7 @@
 	if(usr == occupant)//If the user is inside the tube...
 		if (usr.stat == 2)//and he's not dead....
 			return
-		usr << "\blue Release sequence activated. This will take two minutes."
+		usr << "<span class=\"notice\">Release sequence activated. This will take two minutes.</span>"
 		sleep(1200)
 		if(!src || !usr || !occupant || (occupant != usr)) //Check if someone's released/replaced/bombed him already
 			return

@@ -125,8 +125,8 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 /datum/game_mode/proc/greet_changeling(var/datum/mind/changeling, var/you_are=1)
 	if (you_are)
-		changeling.current << "<B>\red You are a changeling!</B>"
-	changeling.current << "<b>\red Use say \":g message\" to communicate with your fellow changelings. Remember: you get all of their absorbed DNA if you absorb them.</b>"
+		changeling.current << "<span class=\"danger\">You are a changeling!</span>"
+	changeling.current << "<span class=\"danger\">Use say \":g message\" to communicate with your fellow changelings. Remember: you get all of their absorbed DNA if you absorb them.</span>"
 	changeling.current << "<B>You must complete the following tasks:</B>"
 
 	if (changeling.current.mind)
@@ -199,7 +199,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 						text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
 						feedback_add_details("changeling_objective","[objective.type]|SUCCESS")
 					else
-						text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='red'>Fail.</font>"
+						text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <span class=\"rose\">Fail.</span>"
 						feedback_add_details("changeling_objective","[objective.type]|FAIL")
 						changelingwin = 0
 					count++
@@ -208,7 +208,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 				text += "<br><font color='green'><B>The changeling was successful!</B></font>"
 				feedback_add_details("changeling_success","SUCCESS")
 			else
-				text += "<br><font color='red'><B>The changeling has failed.</B></font>"
+				text += "<br><span class=\"danger\">The changeling has failed.</span>"
 				feedback_add_details("changeling_success","FAIL")
 
 		world << text

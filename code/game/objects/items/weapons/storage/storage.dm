@@ -326,7 +326,7 @@
 		return
 
 	if(isrobot(user) && !isMoMMI(user))
-		user << "\blue You're a robot. No."
+		user << "<span class=\"notice\">You're a robot. No.</span>"
 		return //Robots can't interact with storage items.
 
 	if(!can_be_inserted(W))
@@ -336,14 +336,14 @@
 		var/obj/item/weapon/tray/T = W
 		if(T.calc_carry() > 0)
 			if(prob(85))
-				user << "\red The tray won't fit in [src]."
+				user << "<span class=\"rose\">The tray won't fit in [src].</span>"
 				return
 			else
 				W.loc = user.loc
 				if ((user.client && user.s_active != src))
 					user.client.screen -= W
 				W.dropped(user)
-				user << "\red God damnit!"
+				user << "<span class=\"rose\">God damnit!</span>"
 
 	handle_item_insertion(W)
 	return

@@ -118,7 +118,7 @@
 		var/pressure = ptank.air_contents.return_pressure()
 		var/total_moles = ptank.air_contents.total_moles()
 
-		user << "\blue Results of analysis of \icon[icon]"
+		user << "<span class=\"notice\">Results of analysis of \icon[icon]</span>"
 		if(total_moles>0)
 			var/o2_concentration = ptank.air_contents.oxygen/total_moles
 			var/n2_concentration = ptank.air_contents.nitrogen/total_moles
@@ -127,16 +127,16 @@
 
 			var/unknown_concentration =  1-(o2_concentration+n2_concentration+co2_concentration+plasma_concentration)
 
-			user << "\blue Pressure: [round(pressure,0.1)] kPa"
-			user << "\blue Nitrogen: [round(n2_concentration*100)]%"
-			user << "\blue Oxygen: [round(o2_concentration*100)]%"
-			user << "\blue CO2: [round(co2_concentration*100)]%"
-			user << "\blue Plasma: [round(plasma_concentration*100)]%"
+			user << "<span class=\"notice\">Pressure: [round(pressure,0.1)] kPa</span>"
+			user << "<span class=\"notice\">Nitrogen: [round(n2_concentration*100)]%</span>"
+			user << "<span class=\"notice\">Oxygen: [round(o2_concentration*100)]%</span>"
+			user << "<span class=\"notice\">CO2: [round(co2_concentration*100)]%</span>"
+			user << "<span class=\"notice\">Plasma: [round(plasma_concentration*100)]%</span>"
 			if(unknown_concentration>0.01)
-				user << "\red Unknown: [round(unknown_concentration*100)]%"
-			user << "\blue Temperature: [round(ptank.air_contents.temperature-T0C)]&deg;C"
+				user << "<span class=\"rose\">Unknown: [round(unknown_concentration*100)]%</span>"
+			user << "<span class=\"notice\">Temperature: [round(ptank.air_contents.temperature-T0C)]&deg;C</span>"
 		else
-			user << "\blue Tank is empty!"
+			user << "<span class=\"notice\">Tank is empty!</span>"
 		return
 	..()
 	return

@@ -97,30 +97,30 @@
 	else if (istype(W, /obj/item/weapon/wrench))
 		if(connected_port)
 			disconnect()
-			user << "\blue You disconnect [name] from the port."
+			user << "<span class=\"notice\">You disconnect [name] from the port.</span>"
 			update_icon()
 			return
 		else
 			var/obj/machinery/atmospherics/portables_connector/possible_port = locate(/obj/machinery/atmospherics/portables_connector/) in loc
 			if(possible_port)
 				if(connect(possible_port))
-					user << "\blue You connect [name] to the port."
+					user << "<span class=\"notice\">You connect [name] to the port.</span>"
 					update_icon()
 					return
 				else
-					user << "\blue [name] failed to connect to the port."
+					user << "<span class=\"notice\">[name] failed to connect to the port.</span>"
 					return
 			else
-				user << "\blue Nothing happens."
+				user << "<span class=\"notice\">Nothing happens.</span>"
 				return
 
 	else if ((istype(W, /obj/item/device/analyzer)) && get_dist(user, src) <= 1)
-		visible_message("\red [user] has used [W] on \icon[icon]")
+		visible_message("<span class=\"rose\">[user] has used [W] on \icon[icon]</span>")
 		if(air_contents)
 			var/pressure = air_contents.return_pressure()
 			var/total_moles = air_contents.total_moles()
 
-			user << "\blue Results of analysis of \icon[icon]"
+			user << "<span class=\"notice\">Results of analysis of \icon[icon]</span>"
 			if (total_moles>0)
 				var/o2_concentration = air_contents.oxygen/total_moles
 				var/n2_concentration = air_contents.nitrogen/total_moles
@@ -129,18 +129,18 @@
 
 				var/unknown_concentration =  1-(o2_concentration+n2_concentration+co2_concentration+plasma_concentration)
 
-				user << "\blue Pressure: [round(pressure,0.1)] kPa"
-				user << "\blue Nitrogen: [round(n2_concentration*100)]%"
-				user << "\blue Oxygen: [round(o2_concentration*100)]%"
-				user << "\blue CO2: [round(co2_concentration*100)]%"
-				user << "\blue Plasma: [round(plasma_concentration*100)]%"
+				user << "<span class=\"notice\">Pressure: [round(pressure,0.1)] kPa</span>"
+				user << "<span class=\"notice\">Nitrogen: [round(n2_concentration*100)]%</span>"
+				user << "<span class=\"notice\">Oxygen: [round(o2_concentration*100)]%</span>"
+				user << "<span class=\"notice\">CO2: [round(co2_concentration*100)]%</span>"
+				user << "<span class=\"notice\">Plasma: [round(plasma_concentration*100)]%</span>"
 				if(unknown_concentration>0.01)
-					user << "\red Unknown: [round(unknown_concentration*100)]%"
-				user << "\blue Temperature: [round(air_contents.temperature-T0C)]&deg;C"
+					user << "<span class=\"rose\">Unknown: [round(unknown_concentration*100)]%</span>"
+				user << "<span class=\"notice\">Temperature: [round(air_contents.temperature-T0C)]&deg;C</span>"
 			else
-				user << "\blue Tank is empty!"
+				user << "<span class=\"notice\">Tank is empty!</span>"
 		else
-			user << "\blue Tank is empty!"
+			user << "<span class=\"notice\">Tank is empty!</span>"
 		return
 
 	return

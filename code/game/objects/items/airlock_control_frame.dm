@@ -21,7 +21,7 @@
 		return
 	var/turf/loc = get_turf(usr)
 	if (!istype(loc, /turf/simulated/floor))
-		usr << "\red APC cannot be placed on this spot."
+		usr << "<span class=\"rose\">APC cannot be placed on this spot.</span>"
 		return
 	new /obj/machinery/embedded_controller(loc, ndir, 1)
 	del(src)

@@ -94,15 +94,18 @@ obj/machinery/air_sensor
 		if(..(user))
 			return
 		var/html=return_text()+"</body></html>"
+		/*
+		#warning Remember to remove atmo_control.dm:94-96!
+		var/f = file("data/gac_debug.html")
+		fdel(f)
+		f << html
+		*/
 		user << browse(html,"window=gac")
 		user.set_machine(src)
 		onclose(user, "gac")
 
 	process()
 		..()
-		if(!sensors)
-			warning("[src.type] at [x],[y],[z] has null sensors.  Please fix.")
-			sensors = list()
 		src.updateUsrDialog()
 
 	attackby(I as obj, user as mob)
@@ -110,7 +113,7 @@ obj/machinery/air_sensor
 			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 			if(do_after(user, 20))
 				if (src.stat & BROKEN)
-					user << "\blue The broken glass falls out."
+					user << "<span class=\"notice\">The broken glass falls out.</span>"
 					var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 					new /obj/item/weapon/shard( src.loc )
 					var/obj/item/weapon/circuitboard/air_management/M = new /obj/item/weapon/circuitboard/air_management( A )
@@ -123,7 +126,7 @@ obj/machinery/air_sensor
 					A.anchored = 1
 					del(src)
 				else
-					user << "\blue You disconnect the monitor."
+					user << "<span class=\"notice\">You disconnect the monitor.</span>"
 					var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 					var/obj/item/weapon/circuitboard/air_management/M = new /obj/item/weapon/circuitboard/air_management( A )
 					for (var/obj/C in src)
@@ -142,7 +145,7 @@ obj/machinery/air_sensor
 		if(!signal || signal.encryption) return
 
 		var/id_tag = signal.data["tag"]
-		if(!id_tag || !sensors || !sensors.Find(id_tag)) return
+		if(!id_tag || !sensors.Find(id_tag)) return
 
 		sensor_information[id_tag] = signal.data
 
@@ -400,7 +403,7 @@ legend {
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, 20))
 					if (src.stat & BROKEN)
-						user << "\blue The broken glass falls out."
+						user << "<span class=\"notice\">The broken glass falls out.</span>"
 						var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 						new /obj/item/weapon/shard( src.loc )
 						var/obj/item/weapon/circuitboard/injector_control/M = new /obj/item/weapon/circuitboard/injector_control( A )
@@ -413,7 +416,7 @@ legend {
 						A.anchored = 1
 						del(src)
 					else
-						user << "\blue You disconnect the monitor."
+						user << "<span class=\"notice\">You disconnect the monitor.</span>"
 						var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 						var/obj/item/weapon/circuitboard/injector_control/M = new /obj/item/weapon/circuitboard/injector_control( A )
 						for (var/obj/C in src)

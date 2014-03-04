@@ -125,7 +125,7 @@ Doesn't work on other aliens/AI.*/
 		src << "\green You spit neurotoxin at [target]."
 		for(var/mob/O in oviewers())
 			if ((O.client && !( O.blinded )))
-				O << "\red [src] spits neurotoxin at [target]!"
+				O << "<span class=\"danger\"> [src] spits neurotoxin at [target]!</span>"
 		//I'm not motivated enough to revise this. Prjectile code in general needs update.
 		var/turf/T = loc
 		var/turf/U = (istype(target, /atom/movable) ? target.loc : target)
@@ -160,7 +160,7 @@ Doesn't work on other aliens/AI.*/
 		adjustToxLoss(-75)
 		src << "\green You shape a [choice]."
 		for(var/mob/O in viewers(src, null))
-			O.show_message(text("\red <B>[src] vomits up a thick purple substance and begins to shape it!</B>"), 1)
+			O.show_message(text("<span class=\"danger\">[src] vomits up a thick purple substance and begins to shape it!</span>"), 1)
 		switch(choice)
 			if("resin door")
 				new /obj/structure/mineral_door/resin(loc)

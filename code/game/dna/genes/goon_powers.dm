@@ -1,4 +1,4 @@
-#define EAT_MOB_DELAY 300 // 30s
+
 
 // WAS: /datum/bioEffect/alcres
 /datum/dna/gene/basic/sober
@@ -141,13 +141,13 @@
 	var/mob/living/carbon/C = targets[1]
 
 	if(!iscarbon(C))
-		usr << "\red This will only work on normal organic beings."
+		usr << "<span class=\"rose\">This will only work on normal organic beings.</span>"
 		return
 
 	C.bodytemperature = -1500
 	C.ExtinguishMob()
 
-	C.visible_message("\red A cloud of fine ice crystals engulfs [C]!")
+	C.visible_message("<span class=\"rose\">A cloud of fine ice crystals engulfs [C]!</span>")
 
 	//playsound(usr.loc, 'bamf.ogg', 50, 0)
 
@@ -224,32 +224,12 @@
 
 	var/atom/movable/the_item = targets[1]
 	if(ismob(the_item))
-		//My gender
-		var/m_his="his"
-		if(usr.gender==FEMALE)
-			m_his="her"
-		// Their gender
 		var/t_his="his"
-		if(the_item.gender==FEMALE)
+		if(usr.gender==FEMALE)
 			t_his="her"
-		usr.visible_message("\red <b>[usr] begins stuffing [the_item] into [m_his] gaping maw!")
-		var/mob/living/carbon/human/H = the_item
-		var/datum/organ/external/limb = H.get_organ(usr.zone_sel.selecting)
-		if(!istype(limb))
-			usr << "\red You can't eat this part of them!"
-			return 0
-		if(!istype(limb,/datum/organ/external/head))
-			// Bullshit, but prevents being unable to clone someone.
-			usr << "\red You try to put \the [limb] in your mouth, but [t_his] ears tickle your throat!"
-			return 0
-		var/oldloc = H.loc
-		if(do_after(usr,EAT_MOB_DELAY))
-			if(!limb || !H)
-				return
-			if(H.loc!=oldloc)
-				usr << "\red \The [limb] moved away from your mouth!"
-				return
-			usr.visible_message("\red [usr] [pick("chomps","bites")] off [the_item]'s [limb]!")
+		usr.visible_message("<span class=\"danger\">[usr] begins stuffing [the_item] into [t_his] gaping maw!</span>")
+		if(do_after(usr,50))
+			usr.visible_message("<span class=\"rose\">[usr] eats [the_item]!</span>")
 			playsound(usr.loc, 'sound/items/eatfood.ogg', 50, 0)
 			var/mob/M=the_item
 			M.drop_l_hand()
@@ -263,7 +243,7 @@
 					chest.implants += head
 			del(M)
 	else
-		usr.visible_message("\red [usr] eats \the [the_item].")
+		usr.visible_message("<span class=\"rose\">[usr] eats \the [the_item].</span>")
 		playsound(usr.loc, 'sound/items/eatfood.ogg', 50, 0)
 		del(the_item)
 
@@ -314,11 +294,11 @@
 
 /obj/effect/proc_holder/spell/targeted/leap/cast(list/targets)
 	if (istype(usr.loc,/mob/))
-		usr << "\red You can't jump right now!"
+		usr << "<span class=\"rose\">You can't jump right now!</span>"
 		return
 
 	if (istype(usr.loc,/turf/))
-		usr.visible_message("\red <b>[usr.name]</b> takes a huge leap!")
+		usr.visible_message("<span class=\"danger\">[usr.name]</span><span class=\"rose\"> takes a huge leap!</span>")
 		playsound(usr.loc, 'sound/weapons/thudswoosh.ogg', 50, 1)
 		var/prevLayer = usr.layer
 		usr.layer = 15
@@ -330,7 +310,7 @@
 			sleep(1)
 
 		if (M_FAT in usr.mutations && prob(66))
-			usr.visible_message("\red <b>[usr.name]</b> crashes due to their heavy weight!")
+			usr.visible_message("<span class=\"danger\">[usr.name]</span><span class=\"rose\"> crashes due to their heavy weight!</span>")
 			//playsound(usr.loc, 'zhit.wav', 50, 1)
 			usr.weakened += 10
 			usr.stunned += 5
@@ -339,10 +319,10 @@
 
 	if (istype(usr.loc,/obj/))
 		var/obj/container = usr.loc
-		usr << "\red You leap and slam your head against the inside of [container]! Ouch!"
+		usr << "<span class=\"rose\">You leap and slam your head against the inside of [container]! Ouch!</span>"
 		usr.paralysis += 3
 		usr.weakened += 5
-		container.visible_message("\red <b>[usr.loc]</b> emits a loud thump and rattles a bit.")
+		container.visible_message("<span class=\"danger\">[usr.loc]</span><span class=\"rose\"> emits a loud thump and rattles a bit.</span>")
 		playsound(usr.loc, 'sound/effects/bang.ogg', 50, 1)
 		var/wiggle = 6
 		while(wiggle > 0)
@@ -388,7 +368,7 @@
 /obj/effect/proc_holder/spell/targeted/polymorph/cast(list/targets)
 	var/mob/living/M=targets[1]
 	if(!ishuman(M))
-		usr << "\red You can only change your appearance to that of another human."
+		usr << "<span class=\"rose\">You can only change your appearance to that of another human.</span>"
 		return
 
 	if(!ishuman(usr)) return
@@ -396,7 +376,7 @@
 
 	//playsound(usr.loc, 'blobattack.ogg', 50, 1)
 
-	usr.visible_message("\red [usr]'s body shifts and contorts.")
+	usr.visible_message("<span class=\"rose\">[usr]'s body shifts and contorts.</span>")
 
 	spawn(10)
 		if(M && usr)
@@ -425,24 +405,24 @@
 	set category = "Mutant Abilities"
 
 	if(!iscarbon(M))
-		usr << "\red You may only use this on other organic beings."
+		usr << "<span class=\"rose\">You may only use this on other organic beings.</span>"
 		return
 
 	if(usr.stat)
 		return
 
 	if (M_PSY_RESIST in M.mutations)
-		usr << "\red You can't see into [M.name]'s mind at all!"
+		usr << "<span class=\"rose\">You can't see into [M.name]'s mind at all!</span>"
 		return
 
 	if (M.stat == 2)
-		usr << "\red [M.name] is dead and cannot have their mind read."
+		usr << "<span class=\"rose\">[M.name] is dead and cannot have their mind read.</span>"
 		return
 	if (M.health < 0)
-		usr << "\red [M.name] is dying, and their thoughts are too scrambled to read."
+		usr << "<span class=\"rose\">[M.name] is dying, and their thoughts are too scrambled to read.</span>"
 		return
 
-	usr << "\blue Mind Reading of [M.name]:</b>"
+	usr << "<span class=\"notice\"><b>Mind Reading of [M.name]:</b></span>"
 	var/pain_condition = M.health
 	// lower health means more pain
 	var/list/randomthoughts = list("what to have for lunch","the future","the past","money",
@@ -457,33 +437,33 @@
 
 	switch(pain_condition)
 		if (81 to INFINITY)
-			usr << "\blue <b>Condition</b>: [M.name] feels good."
+			usr << "<span class=\"notice\"><b>Condition</b>: [M.name] feels good.</span>"
 		if (61 to 80)
-			usr << "\blue <b>Condition</b>: [M.name] is suffering mild pain."
+			usr << "<span class=\"notice\"><b>Condition</b>: [M.name] is suffering mild pain.</span>"
 		if (41 to 60)
-			usr << "\blue <b>Condition</b>: [M.name] is suffering significant pain."
+			usr << "<span class=\"notice\"><b>Condition</b>: [M.name] is suffering significant pain.</span>"
 		if (21 to 40)
-			usr << "\blue <b>Condition</b>: [M.name] is suffering severe pain."
+			usr << "<span class=\"notice\"><b>Condition</b>: [M.name] is suffering severe pain.</span>"
 		else
-			usr << "\blue <b>Condition</b>: [M.name] is suffering excruciating pain."
+			usr << "<span class=\"notice\"><b>Condition</b>: [M.name] is suffering excruciating pain.</span>"
 			thoughts = "haunted by their own mortality"
 
 	switch(M.a_intent)
 		if ("help")
-			usr << "\blue <b>Mood</b>: You sense benevolent thoughts from [M.name]."
+			usr << "<span class=\"notice\"><b>Mood</b>: You sense benevolent thoughts from [M.name].</span>"
 		if ("disarm")
-			usr << "\blue <b>Mood</b>: You sense cautious thoughts from [M.name]."
+			usr << "<span class=\"notice\"><b>Mood</b>: You sense cautious thoughts from [M.name].</span>"
 		if ("grab")
-			usr << "\blue <b>Mood</b>: You sense hostile thoughts from [M.name]."
+			usr << "<span class=\"notice\"><b>Mood</b>: You sense hostile thoughts from [M.name].</span>"
 		if ("harm")
-			usr << "\blue <b>Mood</b>: You sense cruel thoughts from [M.name]."
+			usr << "<span class=\"notice\"><b>Mood</b>: You sense cruel thoughts from [M.name].</span>"
 			for(var/mob/living/L in view(7,M))
 				if (L == M)
 					continue
 				thoughts = "thinking about punching [L.name]"
 				break
 		else
-			usr << "\blue <b>Mood</b>: You sense strange thoughts from [M.name]."
+			usr << "<span class=\"notice\"><b>Mood</b>: You sense strange thoughts from [M.name].</span>"
 
 	if (istype(M,/mob/living/carbon/human))
 		var/numbers[0]
@@ -492,13 +472,13 @@
 			numbers += H.mind.initial_account.account_number
 			numbers += H.mind.initial_account.remote_access_pin
 		if(numbers.len>0)
-			usr << "\blue <b>Numbers</b>: You sense the number[numbers.len>1?"s":""] [english_list(numbers)] [numbers.len>1?"are":"is"] important to [M.name]."
-	usr << "\blue <b>Thoughts</b>: [M.name] is currently [thoughts]."
+			usr << "<span class=\"notice\"><b>Numbers</b>: You sense the number[numbers.len>1?"s":""] [english_list(numbers)] [numbers.len>1?"are":"is"] important to [M.name].</span>"
+	usr << "<span class=\"notice\"><b>Thoughts</b>: [M.name] is currently [thoughts].</span>"
 
 	if (/datum/dna/gene/basic/grant_verb/empath in M.active_genes)
-		M << "\red You sense [usr.name] reading your mind."
+		M << "<span class=\"rose\">You sense [usr.name] reading your mind.</span>"
 	else if (prob(5) || M.mind.assigned_role=="Chaplain")
-		M << "\red You sense someone intruding upon your thoughts..."
+		M << "<span class=\"rose\">You sense someone intruding upon your thoughts...</span>"
 	return
 
 ////////////////////////////////////////////////////////////////////////

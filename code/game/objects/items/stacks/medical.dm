@@ -17,17 +17,17 @@
 			t_him = "him"
 		else if (M.gender == FEMALE)
 			t_him = "her"
-		user << "\red \The [M] is dead, you cannot help [t_him]!"
+		user << "<span class=\"rose\">\The [M] is dead, you cannot help [t_him]!</span>"
 		return 1
 
 	if (!istype(M))
-		user << "\red \The [src] cannot be applied to [M]!"
+		user << "<span class=\"rose\">\The [src] cannot be applied to [M]!</span>"
 		return 1
 
 	if ( ! (istype(user, /mob/living/carbon/human) || \
 			istype(user, /mob/living/silicon) || \
 			istype(user, /mob/living/carbon/monkey) && ticker && ticker.mode.name == "monkey") )
-		user << "\red You don't have the dexterity to do this!"
+		user << "<span class=\"rose\">You don't have the dexterity to do this!</span>"
 		return 1
 
 	if (istype(M, /mob/living/carbon/human))
@@ -36,19 +36,19 @@
 
 		if(affecting.display_name == "head")
 			if(H.head && istype(H.head,/obj/item/clothing/head/helmet/space))
-				user << "\red You can't apply [src] through [H.head]!"
+				user << "<span class=\"rose\">You can't apply [src] through [H.head]!</span>"
 				return 1
 		else
 			if(H.wear_suit && istype(H.wear_suit,/obj/item/clothing/suit/space))
-				user << "\red You can't apply [src] through [H.wear_suit]!"
+				user << "<span class=\"rose\">You can't apply [src] through [H.wear_suit]!</span>"
 				return 1
 
 		if(affecting.status & ORGAN_ROBOT)
-			user << "\red This isn't useful at all on a robotic limb.."
+			user << "<span class=\"rose\">This isn't useful at all on a robotic limb..</span>"
 			return 1
-		
+
 		if(affecting.status & ORGAN_PEG)
-			user << "\red This isn't useful at all on a peg limb. It's fucking wood."
+			user << "<span class=\"rose\">This isn't useful at all on a peg limb. It's fucking wood.</span>"
 			return 1
 
 		H.UpdateDamageIcon()
@@ -57,8 +57,8 @@
 
 		M.heal_organ_damage((src.heal_brute/2), (src.heal_burn/2))
 		user.visible_message( \
-			"\blue [M] has been applied with [src] by [user].", \
-			"\blue You apply \the [src] to [M]." \
+			"<span class=\"notice\">[M] has been applied with [src] by [user].</span>", \
+			"<span class=\"notice\">You apply \the [src] to [M].</span>" \
 		)
 		use(1)
 
@@ -80,22 +80,22 @@
 
 		if(affecting.open == 0)
 			if(!affecting.bandage())
-				user << "\red The wounds on [M]'s [affecting.display_name] have already been bandaged."
+				user << "<span class=\"rose\">The wounds on [M]'s [affecting.display_name] have already been bandaged.</span>"
 				return 1
 			else
 				for (var/datum/wound/W in affecting.wounds)
 					if (W.internal)
 						continue
 					if (W.current_stage <= W.max_bleeding_stage)
-						user.visible_message( 	"\blue [user] bandages [W.desc] on [M]'s [affecting.display_name].", \
-										"\blue You bandage [W.desc] on [M]'s [affecting.display_name]." )
+						user.visible_message( 	"<span class=\"notice\">[user] bandages [W.desc] on [M]'s [affecting.display_name].</span>", \
+										"<span class=\"notice\">You bandage [W.desc] on [M]'s [affecting.display_name].</span>" )
 						//H.add_side_effect("Itch")
 					else if (istype(W,/datum/wound/bruise))
-						user.visible_message( 	"\blue [user] places bruise patch over [W.desc] on [M]'s [affecting.display_name].", \
-										"\blue You place bruise patch over [W.desc] on [M]'s [affecting.display_name]." )
+						user.visible_message( 	"<span class=\"notice\">[user] places bruise patch over [W.desc] on [M]'s [affecting.display_name].</span>", \
+										"<span class=\"notice\">You place bruise patch over [W.desc] on [M]'s [affecting.display_name].</span>" )
 					else
-						user.visible_message( 	"\blue [user] places bandaid over [W.desc] on [M]'s [affecting.display_name].", \
-										"\blue You place bandaid over [W.desc] on [M]'s [affecting.display_name]." )
+						user.visible_message( 	"<span class=\"notice\">[user] places bandaid over [W.desc] on [M]'s [affecting.display_name].</span>", \
+										"<span class=\"notice\">You place bandaid over [W.desc] on [M]'s [affecting.display_name].</span>" )
 				use(1)
 		else
 			if (can_operate(H))        //Checks if mob is lying down on table for surgery
@@ -123,11 +123,11 @@
 
 		if(affecting.open == 0)
 			if(!affecting.salve())
-				user << "\red The wounds on [M]'s [affecting.display_name] have already been salved."
+				user << "<span class=\"rose\">The wounds on [M]'s [affecting.display_name] have already been salved.</span>"
 				return 1
 			else
-				user.visible_message( 	"\blue [user] salves wounds on [M]'s [affecting.display_name].", \
-										"\blue You salve wounds on [M]'s [affecting.display_name]." )
+				user.visible_message( 	"<span class=\"notice\">[user] salves wounds on [M]'s [affecting.display_name].</span>", \
+										"<span class=\"notice\">You salve wounds on [M]'s [affecting.display_name].</span>" )
 				use(1)
 		else
 			if (can_operate(H))        //Checks if mob is lying down on table for surgery
@@ -171,22 +171,22 @@
 
 		if(affecting.open == 0)
 			if(!affecting.bandage())
-				user << "\red The wounds on [M]'s [affecting.display_name] have already been treated."
+				user << "<span class=\"rose\">The wounds on [M]'s [affecting.display_name] have already been treated.</span>"
 				return 1
 			else
 				for (var/datum/wound/W in affecting.wounds)
 					if (W.internal)
 						continue
 					if (W.current_stage <= W.max_bleeding_stage)
-						user.visible_message( 	"\blue [user] cleans [W.desc] on [M]'s [affecting.display_name] and seals edges with bioglue.", \
-										"\blue You clean and seal [W.desc] on [M]'s [affecting.display_name]." )
+						user.visible_message( 	"<span class=\"notice\">[user] cleans [W.desc] on [M]'s [affecting.display_name] and seals edges with bioglue.</span>", \
+										"<span class=\"notice\">You clean and seal [W.desc] on [M]'s [affecting.display_name].</span>" )
 						//H.add_side_effect("Itch")
 					else if (istype(W,/datum/wound/bruise))
-						user.visible_message( 	"\blue [user] places medicine patch over [W.desc] on [M]'s [affecting.display_name].", \
-										"\blue You place medicine patch over [W.desc] on [M]'s [affecting.display_name]." )
+						user.visible_message( 	"<span class=\"notice\">[user] places medicine patch over [W.desc] on [M]'s [affecting.display_name].</span>", \
+										"<span class=\"notice\">You place medicine patch over [W.desc] on [M]'s [affecting.display_name].</span>" )
 					else
-						user.visible_message( 	"\blue [user] smears some bioglue over [W.desc] on [M]'s [affecting.display_name].", \
-										"\blue You smear some bioglue over [W.desc] on [M]'s [affecting.display_name]." )
+						user.visible_message( 	"<span class=\"notice\">[user] smears some bioglue over [W.desc] on [M]'s [affecting.display_name].</span>", \
+										"<span class=\"notice\">You smear some bioglue over [W.desc] on [M]'s [affecting.display_name].</span>" )
 				affecting.heal_damage(heal_brute,0)
 				use(1)
 		else
@@ -215,11 +215,11 @@
 
 		if(affecting.open == 0)
 			if(!affecting.salve())
-				user << "\red The wounds on [M]'s [affecting.display_name] have already been salved."
+				user << "<span class=\"rose\">The wounds on [M]'s [affecting.display_name] have already been salved.</span>"
 				return 1
 			else
-				user.visible_message( 	"\blue [user] covers wounds on [M]'s [affecting.display_name] with regenerative membrane.", \
-										"\blue You cover wounds on [M]'s [affecting.display_name] with regenerative membrane." )
+				user.visible_message( 	"<span class=\"notice\">[user] covers wounds on [M]'s [affecting.display_name] with regenerative membrane.</span>", \
+										"<span class=\"notice\">You cover wounds on [M]'s [affecting.display_name] with regenerative membrane.</span>" )
 				affecting.heal_damage(0,heal_burn)
 				use(1)
 		else
@@ -245,26 +245,26 @@
 		var/datum/organ/external/affecting = H.get_organ(user.zone_sel.selecting)
 		var/limb = affecting.display_name
 		if(!((affecting.name == "l_arm") || (affecting.name == "r_arm") || (affecting.name == "l_leg") || (affecting.name == "r_leg")))
-			user << "\red You can't apply a splint there!"
+			user << "<span class=\"rose\">You can't apply a splint there!</span>"
 			return
 		if(affecting.status & ORGAN_SPLINTED)
-			user << "\red [M]'s [limb] is already splinted!"
+			user << "<span class=\"rose\">[M]'s [limb] is already splinted!</span>"
 			return
 		if (M != user)
-			user.visible_message("\red [user] starts to apply \the [src] to [M]'s [limb].", "\red You start to apply \the [src] to [M]'s [limb].", "\red You hear something being wrapped.")
+			user.visible_message("<span class=\"rose\">[user] starts to apply \the [src] to [M]'s [limb].</span>", "<span class=\"rose\">You start to apply \the [src] to [M]'s [limb].</span>", "<span class=\"rose\">You hear something being wrapped.</span>")
 		else
 			if((!user.hand && affecting.name == "r_arm") || (user.hand && affecting.name == "l_arm"))
-				user << "\red You can't apply a splint to the arm you're using!"
+				user << "<span class=\"rose\">You can't apply a splint to the arm you're using!</span>"
 				return
-			user.visible_message("\red [user] starts to apply \the [src] to their [limb].", "\red You start to apply \the [src] to your [limb].", "\red You hear something being wrapped.")
+			user.visible_message("<span class=\"rose\">[user] starts to apply \the [src] to their [limb].</span>", "<span class=\"rose\">You start to apply \the [src] to your [limb].</span>", "<span class=\"rose\">You hear something being wrapped.</span>")
 		if(do_after(user, 50))
 			if (M != user)
-				user.visible_message("\red [user] finishes applying \the [src] to [M]'s [limb].", "\red You finish applying \the [src] to [M]'s [limb].", "\red You hear something being wrapped.")
+				user.visible_message("<span class=\"rose\">[user] finishes applying \the [src] to [M]'s [limb].</span>", "<span class=\"rose\">You finish applying \the [src] to [M]'s [limb].</span>", "<span class=\"rose\">You hear something being wrapped.</span>")
 			else
 				if(prob(25))
-					user.visible_message("\red [user] successfully applies \the [src] to their [limb].", "\red You successfully apply \the [src] to your [limb].", "\red You hear something being wrapped.")
+					user.visible_message("<span class=\"rose\">[user] successfully applies \the [src] to their [limb].</span>", "<span class=\"rose\">You successfully apply \the [src] to your [limb].</span>", "<span class=\"rose\">You hear something being wrapped.</span>")
 				else
-					user.visible_message("\red [user] fumbles \the [src].", "\red You fumble \the [src].", "\red You hear something being wrapped.")
+					user.visible_message("<span class=\"rose\">[user] fumbles \the [src].</span>", "<span class=\"rose\">You fumble \the [src].</span>", "<span class=\"rose\">You hear something being wrapped.</span>")
 					return
 			affecting.status |= ORGAN_SPLINTED
 			use(1)

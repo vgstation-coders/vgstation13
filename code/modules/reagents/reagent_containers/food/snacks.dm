@@ -48,7 +48,7 @@
 	if(istype(M, /mob/living/carbon))
 		if(M == user)								//If you're eating it yourself.
 			if(!M:hasmouth)
-				user << "\red Oh god where's your mouth?!"
+				user << "<span class=\"rose\">Oh god where's your mouth?!</span>"
 				return 0
 			var/fullness = M.nutrition + (M.reagents.get_reagent_amount("nutriment") * 25)
 			if(wrapped)
@@ -211,7 +211,7 @@
 				del(src)
 		if(ismouse(M))
 			var/mob/living/simple_animal/mouse/N = M
-			N << text("\blue You nibble away at [src].")
+			N << text("<span class=\"notice\">You nibble away at [src].</span>")
 			if(prob(50))
 				N.visible_message("[N] nibbles away at [src].", "")
 			//N.emote("nibbles away at the [src]")
@@ -478,7 +478,7 @@
 		..()
 		new/obj/effect/decal/cleanable/egg_smudge(src.loc)
 		src.reagents.reaction(hit_atom, TOUCH)
-		src.visible_message("\red [src.name] has been squashed.","\red You hear a smack.")
+		src.visible_message("<span class=\"rose\">[src.name] has been squashed.</span>","<span class=\"rose\">You hear a smack.</span>")
 		del(src)
 
 	attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -1102,7 +1102,7 @@
 		bitesize = 0.1 //this snack is supposed to be eating during looooong time. And this it not dinner food! --rastaf0
 	On_Consume()
 		if(prob(unpopped))	//lol ...what's the point? << AINT SO POINTLESS NO MORE
-			usr << "\red You bite down on an un-popped kernel, and it hurts your teeth!"
+			usr << "<span class=\"rose\">You bite down on an un-popped kernel, and it hurts your teeth!</span>"
 			unpopped = max(0, unpopped-1)
 			reagents.add_reagent("sacid",0.1) //only a little tingle.
 		..()
@@ -1473,7 +1473,7 @@
 
 	proc/Expand()
 		for(var/mob/M in viewers(src,7))
-			M << "\red \The [src] expands!"
+			M << "<span class=\"rose\">\The [src] expands!</span>"
 		new monkey_type(get_turf(src))
 		del(src)
 
@@ -2507,7 +2507,7 @@
 	if( open && pizza )
 		user.put_in_hands( pizza )
 
-		user << "\red You take the [src.pizza] out of the [src]."
+		user << "<span class=\"rose\">You take the [src.pizza] out of the [src].</span>"
 		src.pizza = null
 		update_icon()
 		return
@@ -2521,7 +2521,7 @@
 		boxes -= box
 
 		user.put_in_hands( box )
-		user << "\red You remove the topmost [src] from your hand."
+		user << "<span class=\"rose\">You remove the topmost [src] from your hand.</span>"
 		box.update_icon()
 		update_icon()
 		return
@@ -2560,11 +2560,11 @@
 				box.update_icon()
 				update_icon()
 
-				user << "\red You put the [box] ontop of the [src]!"
+				user << "<span class=\"rose\">You put the [box] ontop of the [src]!</span>"
 			else
-				user << "\red The stack is too high!"
+				user << "<span class=\"rose\">The stack is too high!</span>"
 		else
-			user << "\red Close the [box] first!"
+			user << "<span class=\"rose\">Close the [box] first!</span>"
 
 		return
 
@@ -2577,9 +2577,9 @@
 
 			update_icon()
 
-			user << "\red You put the [I] in the [src]!"
+			user << "<span class=\"rose\">You put the [I] in the [src]!</span>"
 		else
-			user << "\red You try to push the [I] through the lid but it doesn't work!"
+			user << "<span class=\"rose\">You try to push the [I] through the lid but it doesn't work!</span>"
 		return
 
 	if( istype(I, /obj/item/weapon/pen/) )

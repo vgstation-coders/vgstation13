@@ -120,19 +120,19 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 						if(locate(user) in get_step(src,direction))
 							found=1
 					if(!found)
-						user << "\red Cannot set this as the output location; You're too far away."
+						user << "<span class=\"rose\">Cannot set this as the output location; You're too far away.</span>"
 						return
 					if(istype(output,/obj/machinery/mineral/output))
 						del(output)
 					output=new /obj/machinery/mineral/output(usr.loc)
-					user << "\blue Output set."
+					user << "<span class=\"notice\">Output set.</span>"
 				if("No")
 					return
 				if("Machine Location")
 					if(istype(output,/obj/machinery/mineral/output))
 						del(output)
 					output=src
-					user << "\blue Output set."
+					user << "<span class=\"notice\">Output set.</span>"
 		return
 	if (opened)
 		if(istype(O, /obj/item/weapon/crowbar))
@@ -154,7 +154,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 			del(src)
 			return 1
 		else
-			user << "\red You can't load the [src.name] while it's opened."
+			user << "<span class=\"rose\">You can't load the [src.name] while it's opened.</span>"
 			return 1
 	if (disabled)
 		user << "\The [name] appears to not be working!"
@@ -165,16 +165,16 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	if (O.is_open_container())
 		return 0
 	if (!(O.type in allowed_materials))
-		user << "\red You cannot insert this item into the [name]!"
+		user << "<span class=\"rose\">You cannot insert this item into the [name]!</span>"
 		return 1
 	if (stat)
 		return 1
 	if (busy)
-		user << "\red The [name] is busy. Please wait for completion of previous operation."
+		user << "<span class=\"rose\">The [name] is busy. Please wait for completion of previous operation.</span>"
 		return 1
 	var/obj/item/stack/sheet/stack = O
 	if ((TotalMaterials() + stack.perunit) > max_material_amount)
-		user << "\red The [name] is full. Please remove glass from \the [name] in order to insert more."
+		user << "<span class=\"rose\">The [name] is full. Please remove glass from \the [name] in order to insert more.</span>"
 		return 1
 
 	var/amount = round(input("How many sheets do you want to add?") as num)
@@ -190,7 +190,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	var/stacktype = stack.type
 	stack.use(amount)
 	if (do_after(user, 16))
-		user << "\blue You add [amount] sheets to the [src.name]."
+		user << "<span class=\"notice\">You add [amount] sheets to the [src.name].</span>"
 		for(var/id in materials.storage)
 			var/datum/material/material=materials.getMaterial(id)
 			if(stacktype == material.sheettype)

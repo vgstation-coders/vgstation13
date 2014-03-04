@@ -115,9 +115,9 @@
 			// AUTOFIXED BY fix_string_idiocy.py
 			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\computer\card.dm:103: header += "<div align='center'><br>"
 			header += {"<div align='center'><br>
-				<a href='?src=\ref[src];choice=modify'>Remove [target_name]</a> || 
-				<a href='?src=\ref[src];choice=scan'>Remove [scan_name]</a> <br> 
-				<a href='?src=\ref[src];choice=mode;mode_target=1'>Access Crew Manifest</a> || 
+				<a href='?src=\ref[src];choice=modify'>Remove [target_name]</a> ||
+				<a href='?src=\ref[src];choice=scan'>Remove [scan_name]</a> <br>
+				<a href='?src=\ref[src];choice=mode;mode_target=1'>Access Crew Manifest</a> ||
 				<a href='?src=\ref[src];choice=logout'>Log Out</a></div>"}
 		// END AUTOFIX
 
@@ -293,7 +293,7 @@
 							jobdatum = J
 							break
 					if(!jobdatum)
-						usr << "\red No log exists for this job."
+						usr << "<span class=\"rose\">No log exists for this job.</span>"
 						return
 
 					modify.access = ( istype(src,/obj/machinery/computer/card/centcom) ? get_centcom_access(t1) : jobdatum.get_access() )

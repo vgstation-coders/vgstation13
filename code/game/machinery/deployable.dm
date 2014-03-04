@@ -68,11 +68,11 @@ for reference:
 	attackby(obj/item/W as obj, mob/user as mob)
 		if (istype(W, /obj/item/stack/sheet/wood))
 			if (src.health < src.maxhealth)
-				visible_message("\red [user] begins to repair the [src]!")
+				visible_message("<span class=\"rose\">[user] begins to repair the [src]!</span>")
 				if(do_after(user,20))
 					src.health = src.maxhealth
 					W:use(1)
-					visible_message("\red [user] repairs the [src]!")
+					visible_message("<span class=\"rose\">[user] repairs the [src]!</span>")
 					return
 			else
 				return
@@ -85,7 +85,7 @@ for reference:
 					src.health -= W.force * 0.75
 				else
 			if (src.health <= 0)
-				visible_message("\red <B>The barricade is smashed apart!</B>")
+				visible_message("<span class=\"danger\">The barricade is smashed apart!</span>")
 				new /obj/item/stack/sheet/wood(get_turf(src))
 				new /obj/item/stack/sheet/wood(get_turf(src))
 				new /obj/item/stack/sheet/wood(get_turf(src))
@@ -95,13 +95,13 @@ for reference:
 	ex_act(severity)
 		switch(severity)
 			if(1.0)
-				visible_message("\red <B>The barricade is blown apart!</B>")
+				visible_message("<span class=\"danger\">The barricade is blown apart!</span>")
 				qdel(src)
 				return
 			if(2.0)
 				src.health -= 25
 				if (src.health <= 0)
-					visible_message("\red <B>The barricade is blown apart!</B>")
+					visible_message("<span class=\"danger\">The barricade is blown apart!</span>")
 					new /obj/item/stack/sheet/wood(get_turf(src))
 					new /obj/item/stack/sheet/wood(get_turf(src))
 					new /obj/item/stack/sheet/wood(get_turf(src))
@@ -109,7 +109,7 @@ for reference:
 				return
 
 	meteorhit()
-		visible_message("\red <B>The barricade is smashed apart!</B>")
+		visible_message("<span class=\"danger\">The barricade is smashed apart!</span>")
 		new /obj/item/stack/sheet/wood(get_turf(src))
 		new /obj/item/stack/sheet/wood(get_turf(src))
 		new /obj/item/stack/sheet/wood(get_turf(src))
@@ -119,7 +119,7 @@ for reference:
 	blob_act()
 		src.health -= 25
 		if (src.health <= 0)
-			visible_message("\red <B>The blob eats through the barricade!</B>")
+			visible_message("<span class=\"danger\">The blob eats through the barricade!</span>")
 			del(src)
 		return
 
@@ -174,7 +174,7 @@ for reference:
 					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 					s.set_up(2, 1, src)
 					s.start()
-					visible_message("\red BZZzZZzZZzZT")
+					visible_message("<span class=\"rose\">BZZzZZzZZzZT</span>")
 					return
 			return
 		else if (istype(W, /obj/item/weapon/card/emag))
@@ -185,7 +185,7 @@ for reference:
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(2, 1, src)
 				s.start()
-				visible_message("\red BZZzZZzZZzZT")
+				visible_message("<span class=\"rose\">BZZzZZzZZzZT</span>")
 				return
 			else if (src.emagged == 1)
 				src.emagged = 2
@@ -193,19 +193,19 @@ for reference:
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(2, 1, src)
 				s.start()
-				visible_message("\red BZZzZZzZZzZT")
+				visible_message("<span class=\"rose\">BZZzZZzZZzZT</span>")
 				return
 		else if (istype(W, /obj/item/weapon/wrench))
 			if (src.health < src.maxhealth)
 				src.health = src.maxhealth
 				src.emagged = 0
 				src.req_access = list(access_security)
-				visible_message("\red [user] repairs the [src]!")
+				visible_message("<span class=\"rose\">[user] repairs the [src]!</span>")
 				return
 			else if (src.emagged > 0)
 				src.emagged = 0
 				src.req_access = list(access_security)
-				visible_message("\red [user] repairs the [src]!")
+				visible_message("<span class=\"rose\">[user] repairs the [src]!</span>")
 				return
 			return
 		else
@@ -257,7 +257,7 @@ for reference:
 
 	proc/explode()
 
-		visible_message("\red <B>[src] blows apart!</B>")
+		visible_message("<span class=\"danger\">[src] blows apart!</span>")
 		var/turf/Tsec = get_turf(src)
 
 	/*	var/obj/item/stack/rods/ =*/

@@ -41,7 +41,7 @@
 	clothes_req = 1
 	invocation = "BIRUZ BENNAR"
 	invocation_type = "shout"
-	message = "\blue You feel strong! You feel a pressure building behind your eyes!"
+	message = "<span class=\"notice\">You feel strong! You feel a pressure building behind your eyes!</span>"
 	range = -1
 	include_user = 1
 	centcomm_cancast = 0
@@ -202,7 +202,7 @@
 	clothes_req = 0
 	invocation = "STI KALY"
 	invocation_type = "whisper"
-	message = "\blue Your eyes cry out in pain!"
+	message = "<span class=\"notice\">Your eyes cry out in pain!</span>"
 	cooldown_min = 50 //12 deciseconds reduction per rank
 
 	starting_spells = list("/obj/effect/proc_holder/spell/targeted/inflict_handler/blind","/obj/effect/proc_holder/spell/targeted/genetic/blind")
@@ -239,7 +239,7 @@
 	clothes_req = 0
 	invocation = "DII ODA BAJI"
 	invocation_type = "whisper"
-	message = "\blue You suddenly feel completely overwhelmed!"
+	message = "<span class=\"notice\">You suddenly feel completely overwhelmed!</span>"
 
 	starting_spells = list("/obj/effect/proc_holder/spell/targeted/inflict_handler/subjugation")
 

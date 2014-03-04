@@ -104,7 +104,7 @@
 	if (get_dist(usr, src) <= 3 || istype(usr, /mob/living/silicon/ai) || istype(usr, /mob/dead))
 		t += status()
 	else
-		usr << "\blue <B>You are too far away.</B>"
+		usr << "<span class=\"notice\"><B>You are too far away.</B></span>"
 		return 1
 
 	usr << t
@@ -114,11 +114,11 @@
 	if (!istype(W, /obj/item/weapon/wrench))
 		return ..()
 	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-	user << "\blue You begin to unfasten \the [src]..."
+	user << "<span class=\"notice\">You begin to unfasten \the [src]...</span>"
 	if (do_after(user, 40))
 		user.visible_message( \
 			"[user] unfastens \the [src].", \
-			"\blue You have unfastened \the [src].", \
+			"<span class=\"notice\">You have unfastened \the [src].</span>", \
 			"You hear ratchet.")
 		new /obj/item/pipe_meter(src.loc)
 		del(src)

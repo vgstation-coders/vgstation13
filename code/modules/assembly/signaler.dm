@@ -123,7 +123,7 @@
 		if(usr)
 			lastsignalers.Add("[time] <B>:</B> [usr.key] used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
 		else
-			lastsignalers.Add("[time] <B>:</B> (\red NO USER FOUND) used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
+			lastsignalers.Add("[time] <B>:</B> (<span class=\"rose\">NO USER FOUND) used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]</span>")
 		return
 /*
 		for(var/obj/item/device/assembly/signaler/S in world)
@@ -183,4 +183,4 @@
 		set desc = "BOOOOM!"
 		deadman = 1
 		processing_objects.Add(src)
-		usr.visible_message("\red [usr] moves their finger over [src]'s signal button...")
+		usr.visible_message("<span class=\"rose\">[usr] moves their finger over [src]'s signal button...</span>")

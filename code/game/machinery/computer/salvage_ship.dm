@@ -48,7 +48,7 @@
 
 /obj/machinery/computer/salvage_ship/attack_hand(mob/user as mob)
 	if(!allowed(user))
-		user << "\red Access Denied"
+		user << "<span class=\"rose\">Access Denied</span>"
 		return
 
 	user.set_machine(src)

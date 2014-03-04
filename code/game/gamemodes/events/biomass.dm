@@ -172,4 +172,4 @@
 		if(turfs.len) //Pick a turf to spawn at if we can
 			var/turf/simulated/floor/T = pick(turfs)
 			new/obj/effect/biomass_controller(T) //spawn a controller at turf
-			message_admins("\blue Event: Biomass spawned at [T.loc.loc] ([T.x],[T.y],[T.z])")
+			message_admins("<span class=\"notice\">Event: Biomass spawned at [T.loc.loc] ([T.x],[T.y],[T.z])</span>")

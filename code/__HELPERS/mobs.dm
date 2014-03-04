@@ -88,7 +88,7 @@ Proc for attack log creation, because really why not
 
 proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var/addition=null)
 	if(user && ismob(user))
-		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has [what_done] [target ? "[target.name][(ismob(target) && target.ckey) ? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "][addition]</font>")
+		user.attack_log += text("\[[time_stamp()]\] <span class=\"rose\">Has [what_done] [target ? "[target.name][(ismob(target) && target.ckey) ? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "][addition]</span>")
 	if(target && ismob(target))
 		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [what_done] by [user ? "[user.name][(ismob(user) && user.ckey) ? "([user.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "][addition]</font>")
 		if(!iscarbon(user))
@@ -96,7 +96,7 @@ proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var
 		else
 			target.LAssailant = user
 	if(admin)
-		log_attack("<font color='red'>[user ? "[user.name][(ismob(user) && user.ckey) ? "([user.ckey])" : ""]" : "NON-EXISTANT SUBJECT"] [what_done] [target ? "[target.name][(ismob(target) && target.ckey)? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "][addition]</font>")
+		log_attack("<span class=\"rose\">[user ? "[user.name][(ismob(user) && user.ckey) ? "([user.ckey])" : ""]" : "NON-EXISTANT SUBJECT"] [what_done] [target ? "[target.name][(ismob(target) && target.ckey)? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "][addition]</span>")
 
 proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var/addition=null)
 	var/target_text = "NON-EXISTENT TARGET"
@@ -114,7 +114,7 @@ proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var
 			if(M.ckey)
 				subject_text += "([M.ckey])"
 	if(user && ismob(user))
-		user.attack_log += "\[[time_stamp()]\] GHOST: <font color='red'>Has [what_done] [target_text] [addition]</font>"
+		user.attack_log += "\[[time_stamp()]\] GHOST: <span class=\"rose\">Has [what_done] [target_text] [addition]</span>"
 	if(target && ismob(target))
 		var/mob/M=target
 		M.attack_log += "\[[time_stamp()]\] GHOST: <font color='orange'>Has been [what_done] by [subject_text] [addition]</font>"

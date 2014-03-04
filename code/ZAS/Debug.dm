@@ -118,5 +118,5 @@ zone/proc/DebugDisplay(client/client)
 	for(var/zone/Z in zones)
 		if(Z.air == air && Z != src)
 			var/turf/zloc = pick(Z.contents)
-			client << "\red Illegal air datum shared by: [zloc.loc.name]"
+			client << "<span class=\"rose\">Illegal air datum shared by: [zloc.loc.name]</span>"
 

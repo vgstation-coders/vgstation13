@@ -35,9 +35,6 @@
 
 	if( ismob(O) && !issilicon(O) )
 		turretTargets -= O
-	// /vg/ vehicles
-	else if( istype(O, /obj/structure/stool/bed/chair/vehicle) )
-		turretTargets -= O
 	else if( istype(O, /obj/mecha) )
 		turretTargets -= O
 	..()
@@ -145,11 +142,6 @@
 			var/obj/mecha/ME = T
 			if( ME.occupant )
 				return 1
-		// /vg/ vehicles
-		else if( istype(T, /obj/structure/stool/bed/chair/vehicle) )
-			var/obj/structure/stool/bed/chair/vehicle/V = T
-			if(V.buckled_mob)
-				return 1
 		else if(istype(T,/mob/living/simple_animal))
 			var/mob/living/simple_animal/A = T
 			if( !A.stat )
@@ -167,12 +159,6 @@
 	for(var/obj/mecha/M in protected_area.turretTargets)
 		if(M.occupant)
 			new_targets += M
-
-	// /vg/ vehicles
-	for(var/obj/structure/stool/bed/chair/vehicle/V in protected_area.turretTargets)
-		if(V.buckled_mob)
-			new_targets += V
-
 	for(var/mob/living/simple_animal/M in protected_area.turretTargets)
 		if(!M.stat)
 			new_targets += M
@@ -367,7 +353,7 @@
 		return src.attack_hand(user)
 
 	if (istype(W, /obj/item/weapon/card/emag) && !emagged)
-		user << "\red You short out the turret controls' access analysis module."
+		user << "<span class=\"rose\">You short out the turret controls' access analysis module.</span>"
 		emagged = 1
 		locked = 0
 		if(user.machine==src)
@@ -431,14 +417,14 @@
 /obj/machinery/turret/attack_animal(mob/living/simple_animal/M as mob)
 	if(M.melee_damage_upper == 0)	return
 	if(!(stat & BROKEN))
-		visible_message("\red <B>[M] [M.attacktext] [src]!</B>")
+		visible_message("<span class=\"danger\">[M] [M.attacktext] [src]!</span>")
 		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
 		//src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 		src.health -= M.melee_damage_upper
 		if (src.health <= 0)
 			src.die()
 	else
-		M << "\red That object is useless to you."
+		M << "<span class=\"rose\">That object is useless to you.</span>"
 	return
 
 
@@ -447,7 +433,7 @@
 /obj/machinery/turret/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	if(!(stat & BROKEN))
 		playsound(get_turf(src), 'sound/weapons/slash.ogg', 25, 1, -1)
-		visible_message("\red <B>[] has slashed at []!</B>", M, src)
+		visible_message("<span class=\"danger\">[] has slashed at []!</span>", M, src)
 		src.health -= 15
 		if (src.health <= 0)
 			src.die()

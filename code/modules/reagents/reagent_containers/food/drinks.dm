@@ -23,11 +23,11 @@
 		var/fillevel = gulp_size
 
 		if(!R.total_volume || !R)
-			user << "\red None of [src] left, oh no!"
+			user << "<span class=\"rose\">None of [src] left, oh no!</span>"
 			return 0
 
 		if(M == user)
-			M << "\blue You swallow a gulp of [src]."
+			M << "<span class=\"notice\">You swallow a gulp of [src].</span>"
 			if(reagents.total_volume)
 				reagents.reaction(M, INGEST)
 				spawn(5)
@@ -38,10 +38,10 @@
 		else if( istype(M, /mob/living/carbon/human) )
 
 			for(var/mob/O in viewers(world.view, user))
-				O.show_message("\red [user] attempts to feed [M] [src].", 1)
+				O.show_message("<span class=\"rose\">[user] attempts to feed [M] [src].</span>", 1)
 			if(!do_mob(user, M)) return
 			for(var/mob/O in viewers(world.view, user))
-				O.show_message("\red [user] feeds [M] [src].", 1)
+				O.show_message("<span class=\"rose\">[user] feeds [M] [src].</span>", 1)
 
 			M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed [src.name] by [user.name] ([user.ckey]) Reagents: [reagentlist(src)]</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [M.name] by [M.name] ([M.ckey]) Reagents: [reagentlist(src)]</font>")
@@ -75,23 +75,23 @@
 		if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
 
 			if(!target.reagents.total_volume)
-				user << "\red [target] is empty."
+				user << "<span class=\"rose\">[target] is empty.</span>"
 				return
 
 			if(reagents.total_volume >= reagents.maximum_volume)
-				user << "\red [src] is full."
+				user << "<span class=\"rose\">[src] is full.</span>"
 				return
 
 			var/trans = target.reagents.trans_to(src, target:amount_per_transfer_from_this)
-			user << "\blue You fill [src] with [trans] units of the contents of [target]."
+			user << "<span class=\"notice\">You fill [src] with [trans] units of the contents of [target].</span>"
 
 		else if(target.is_open_container()) //Something like a glass. Player probably wants to transfer TO it.
 			if(!reagents.total_volume)
-				user << "\red [src] is empty."
+				user << "<span class=\"rose\">[src] is empty.</span>"
 				return
 
 			if(target.reagents.total_volume >= target.reagents.maximum_volume)
-				user << "\red [target] is full."
+				user << "<span class=\"rose\">[target] is full.</span>"
 				return
 
 
@@ -103,7 +103,7 @@
 				refillName = reagents.get_master_reagent_name()
 
 			var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
-			user << "\blue You transfer [trans] units of the solution to [target]."
+			user << "<span class=\"notice\">You transfer [trans] units of the solution to [target].</span>"
 
 			if(isrobot(user)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
 				var/mob/living/silicon/robot/bro = user
@@ -123,15 +123,15 @@
 		..()
 		if (!(usr in range(0)) && usr!=src.loc) return
 		if(!reagents || reagents.total_volume==0)
-			usr << "\blue \The [src] is empty!"
+			usr << "<span class=\"notice\">\The [src] is empty!</span>"
 		else if (reagents.total_volume<=src.volume/4)
-			usr << "\blue \The [src] is almost empty!"
+			usr << "<span class=\"notice\">\The [src] is almost empty!</span>"
 		else if (reagents.total_volume<=src.volume*0.66)
-			usr << "\blue \The [src] is half full!"
+			usr << "<span class=\"notice\">\The [src] is half full!</span>"
 		else if (reagents.total_volume<=src.volume*0.90)
-			usr << "\blue \The [src] is almost full!"
+			usr << "<span class=\"notice\">\The [src] is almost full!</span>"
 		else
-			usr << "\blue \The [src] is full!"
+			usr << "<span class=\"notice\">\The [src] is full!</span>"
 
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -21,7 +21,7 @@
 
 /datum/game_mode/wizard/announce()
 	world << "<B>The current game mode is - Wizard!</B>"
-	world << "<B>There is a \red SPACE WIZARD\black on the station. You can't let him achieve his objective!</B>"
+	world << "<B>There is a <span class=\"rose\">SPACE WIZARD</span> on the station. You can't let him achieve his objective!</B>"
 
 
 /datum/game_mode/wizard/can_start()//This could be better, will likely have to recode it later
@@ -48,7 +48,7 @@
 	wizard.special_role = "Wizard"
 	wizard.original = wizard.current
 	if(wizardstart.len == 0)
-		wizard.current << "<B>\red A starting location for you could not be found, please report this bug!</B>"
+		wizard.current << "<span class=\"danger\"> A starting location for you could not be found, please report this bug!</span>"
 		return 0
 	return 1
 
@@ -142,7 +142,7 @@
 
 /datum/game_mode/proc/greet_wizard(var/datum/mind/wizard, var/you_are=1)
 	if (you_are)
-		wizard.current << "<B>\red You are the Space Wizard!</B>"
+		wizard.current << "<span class=\"danger\">You are the Space Wizard!</span>"
 	wizard.current << "<B>The Space Wizards Federation has given you the following tasks:</B>"
 
 	var/obj_count = 1
@@ -227,7 +227,7 @@
 /datum/game_mode/wizard/declare_completion()
 	if(finished)
 		feedback_set_details("round_end_result","loss - wizard killed")
-		world << "\red <FONT size = 3><B> The wizard[(wizards.len>1)?"s":""] has been killed by the crew! The Space Wizards Federation has been taught a lesson they will not soon forget!</B></FONT>"
+		world << "<span class=\"danger\"><FONT size = 3>The wizard[(wizards.len>1)?"s":""] has been killed by the crew! The Space Wizards Federation has been taught a lesson they will not soon forget!</font></span>"
 	..()
 	return 1
 
@@ -257,7 +257,7 @@
 					text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
 					feedback_add_details("wizard_objective","[objective.type]|SUCCESS")
 				else
-					text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='red'>Fail.</font>"
+					text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <span class=\"rose\">Fail.</span>"
 					feedback_add_details("wizard_objective","[objective.type]|FAIL")
 					wizardwin = 0
 				count++
@@ -266,7 +266,7 @@
 				text += "<br><font color='green'><B>The wizard was successful!</B></font>"
 				feedback_add_details("wizard_success","SUCCESS")
 			else
-				text += "<br><font color='red'><B>The wizard has failed!</B></font>"
+				text += "<br><span class=\"danger\">he wizard has failed!</span>"
 				feedback_add_details("wizard_success","FAIL")
 			if(wizard.current && wizard.current.spell_list)
 				text += "<br><B>[wizard.name] used the following spells: </B>"

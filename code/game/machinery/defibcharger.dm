@@ -79,10 +79,10 @@ obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as o
 		// Checks to make sure he's not in space doing it, and that the area got proper power.
 		var/area/a = get_area(src)
 		if(!isarea(a))
-			user << "\red The [name] blinks red as you try to insert the item!"
+			user << "<span class=\"rose\">The [name] blinks red as you try to insert the item!</span>"
 			return
 		if(a.power_equip == 0)
-			user << "\red The [name] blinks red as you try to insert the item!"
+			user << "<span class=\"rose\">The [name] blinks red as you try to insert the item!</span>"
 			return
 		user.drop_item()
 		G.loc = src
@@ -91,14 +91,14 @@ obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as o
 		update_icon()
 	/*if(istype(G, /obj/item/weapon/wrench)) If you want the defibrillator's to be ananchorable, uncomment this
 		if(charging)
-			user << "\red Remove the defibrilator first!"
+			user << "<span class=\"rose\">Remove the defibrilator first!</span>"
 			return
 		anchored = !anchored
 		user << "You [anchored ? "attached" : "detached"] the recharger."
 		playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)*/
 	if(istype(G, /obj/item/weapon/screwdriver))
 		if(charging)
-			user << "\red Remove the defibrillator first!"
+			user << "<span class=\"rose\">Remove the defibrillator first!</span>"
 			return
 		if(!opened)
 			src.opened = 1
@@ -112,7 +112,7 @@ obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as o
 		return 1
 	if(opened)
 		if(charging)
-			user << "\red Remove the defibrillator first!"
+			user << "<span class=\"rose\">Remove the defibrillator first!</span>"
 			return
 		if(istype(G, /obj/item/weapon/crowbar))
 			user << "You begin to remove the circuits from the [src]."

@@ -291,12 +291,12 @@
 /obj/machinery/clonepod/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if (!src.check_access(W))
-			user << "\red Access Denied."
+			user << "<span class=\"rose\">Access Denied.</span>"
 			return
 		if ((!src.locked) || (isnull(src.occupant)))
 			return
 		if ((src.occupant.health < -20) && (src.occupant.stat != 2))
-			user << "\red Access Refused."
+			user << "<span class=\"rose\">Access Refused.</span>"
 			return
 		else
 			src.locked = 0
@@ -320,7 +320,7 @@
 			return 1
 	else if(istype(W, /obj/item/weapon/crowbar))
 		if (occupant)
-			user << "\red You cannot disassemble this [src], it's occupado."
+			user << "<span class=\"rose\">You cannot disassemble this [src], it's occupado.</span>"
 			return 1
 		if (opened)
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
@@ -335,7 +335,7 @@
 			return
 /*Removing cloning pod biomass
 	else if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
-		user << "\blue \The [src] processes \the [W]."
+		user << "<span class=\"notice\">\The [src] processes \the [W].</span>"
 		biomass += 50
 		user.drop_item()
 		del(W)

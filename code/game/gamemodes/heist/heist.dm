@@ -165,7 +165,7 @@ VOX HEIST ROUNDTYPE
 	//-All- vox raids have these two objectives. Failing them loses the game.
 	objs += new /datum/objective/heist/inviolate_crew
 	objs += new /datum/objective/heist/inviolate_death */
-	
+
 	if(prob(25))
 		raid_objectives += new /datum/objective/heist/kidnap
 	raid_objectives += new /datum/objective/heist/loot
@@ -179,10 +179,10 @@ VOX HEIST ROUNDTYPE
 	return raid_objectives
 
 /datum/game_mode/heist/proc/greet_vox(var/datum/mind/raider)
-	raider.current << {"\blue <B>You are a Vox Raider, fresh from the Shoal!</b>
+	raider.current << {"<span class=\"notice\"><B>You are a Vox Raider, fresh from the Shoal!</b>
 The Vox are a race of cunning, sharp-eyed nomadic raiders and traders endemic to Tau Ceti and much of the unexplored galaxy. You and the crew have come to the Exodus for plunder, trade or both.
 Vox are cowardly and will flee from larger groups, but corner one or find them en masse and they are vicious.
-Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to turn on your nitrogen internals!"}
+Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to turn on your nitrogen internals!</b></span>"}
 	var/obj_count = 1
 	for(var/datum/objective/objective in raider.objectives)
 		raider.current << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
@@ -240,7 +240,7 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 		else
 			win_msg += "<B>The Vox Raiders were repelled!</B>"
 
-	world << {"\red <FONT size = 3><B>[win_type] [win_group] victory!</B></FONT>
+	world << {"<span class=\"danger\"><FONT size = 3>[win_type] [win_group] victory!</FONT></span>
 		[win_msg]"}
 	feedback_set_details("round_end_result","heist - [win_type] [win_group]")
 
@@ -250,7 +250,7 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 			world << "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
 			feedback_add_details("traitor_objective","[objective.type]|SUCCESS")
 		else
-			world << "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='red'>Fail.</font>"
+			world << "<br><B>Objective #[count]</B>: [objective.explanation_text] <span class=\"rose\">Fail.</span>"
 			feedback_add_details("traitor_objective","[objective.type]|FAIL")
 		count++
 

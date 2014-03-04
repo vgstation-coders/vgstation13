@@ -23,17 +23,17 @@
 	var/turf/loc = get_turf(usr)
 	var/area/A = loc.loc
 	if (!istype(loc, /turf/simulated/floor))
-		usr << "\red APC cannot be placed on this spot."
+		usr << "<span class=\"rose\">APC cannot be placed on this spot.</span>"
 		return
 	if (A.requires_power == 0 || A.name == "Space")
-		usr << "\red APC cannot be placed in this area."
+		usr << "<span class=\"rose\">APC cannot be placed in this area.</span>"
 		return
 	if (A.get_apc())
-		usr << "\red This area already has an APC."
+		usr << "<span class=\"rose\">This area already has an APC.</span>"
 		return //only one APC per area
 	for(var/obj/machinery/power/terminal/T in loc)
 		if (T.master)
-			usr << "\red There is another network terminal here."
+			usr << "<span class=\"rose\">There is another network terminal here.</span>"
 			return
 		else
 			var/obj/item/weapon/cable_coil/C = new /obj/item/weapon/cable_coil(loc)
@@ -71,14 +71,14 @@
 	var/turf/loc = get_turf(usr)
 	var/area/A = loc.loc
 	if (!istype(loc, /turf/simulated/floor))
-		usr << "\red Intercom cannot be placed on this spot."
+		usr << "<span class=\"rose\">Intercom cannot be placed on this spot.</span>"
 		return
 	if (A.requires_power == 0 || A.name == "Space")
-		usr << "\red Air Alarm cannot be placed in this area."
+		usr << "<span class=\"rose\">Air Alarm cannot be placed in this area.</span>"
 		return
 
 	if(gotwallitem(loc, ndir))
-		usr << "\red There's already an item on this wall!"
+		usr << "<span class=\"rose\">There's already an item on this wall!</span>"
 		return
 	new /obj/item/device/radio/intercom(loc, ndir, 1)
 	del(src)

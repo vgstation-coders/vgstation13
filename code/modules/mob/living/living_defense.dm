@@ -21,13 +21,13 @@
 		if(absorb_text)
 			show_message("[absorb_text]")
 		else
-			show_message("\red Your armor absorbs the blow!")
+			show_message("<span class=\"rose\">Your armor absorbs the blow!</span>")
 		return 2
 	if(absorb == 1)
 		if(absorb_text)
 			show_message("[soften_text]",4)
 		else
-			show_message("\red Your armor softens the blow!")
+			show_message("<span class=\"rose\">Your armor softens the blow!</span>")
 		return 1
 	return 0
 
@@ -41,7 +41,7 @@
 	if(C && C.active)
 		C.attack_self(src)//Should shut it off
 		update_icons()
-		src << "\blue Your [C.name] was disrupted!"
+		src << "<span class=\"notice\">Your [C.name] was disrupted!</span>"
 		Stun(2)
 
 	flash_weak_pain()
@@ -49,7 +49,7 @@
 	if(istype(equipped(),/obj/item/device/assembly/signaler))
 		var/obj/item/device/assembly/signaler/signaler = equipped()
 		if(signaler.deadman && prob(80))
-			src.visible_message("\red [src] triggers their deadman's switch!")
+			src.visible_message("<span class=\"rose\">[src] triggers their deadman's switch!</span>")
 			signaler.signal()
 
 	var/absorb = run_armor_check(def_zone, P.flag)
@@ -72,7 +72,7 @@
 		if(istype(O,/obj/item/weapon))
 			var/obj/item/weapon/W = O
 			dtype = W.damtype
-		src.visible_message("\red [src] has been hit by [O].")
+		src.visible_message("<span class=\"rose\">[src] has been hit by [O].</span>")
 		var/armor = run_armor_check(zone, "melee", "Your armor has protected your [zone].", "Your armor has softened hit to your [zone].")
 		if(armor < 2)
 			apply_damage(O.throwforce*(speed/5), dtype, zone, armor, O.sharp, O)
@@ -99,7 +99,7 @@
 				var/momentum = speed/2
 				var/dir = get_dir(M,src)
 
-				visible_message("\red [src] staggers under the impact!","\red You stagger under the impact!")
+				visible_message("<span class=\"rose\">[src] staggers under the impact!</span>","<span class=\"rose\">You stagger under the impact!</span>")
 				src.throw_at(get_edge_target_turf(src,dir),1,momentum)
 
 				if(istype(W.loc,/mob/living) && W.sharp) //Projectile is embedded and suitable for pinning.

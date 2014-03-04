@@ -44,7 +44,7 @@ datum/controller/game_controller/New()
 		job_master = new /datum/controller/occupations()
 		job_master.SetupOccupations()
 		job_master.LoadJobs("config/jobs.txt")
-		world << "\red \b Job setup complete"
+		world << "<span class=\"danger\">Job setup complete</span>"
 
 	if(!syndicate_code_phrase)		syndicate_code_phrase	= generate_code_phrase()
 	if(!syndicate_code_response)	syndicate_code_response	= generate_code_phrase()
@@ -88,17 +88,17 @@ datum/controller/game_controller/proc/setup()
 
 
 datum/controller/game_controller/proc/setup_objects()
-	world << "\red \b Initializing objects"
+	world << "<span class=\"danger\">Initializing objects</span>"
 	sleep(-1)
 	for(var/atom/movable/object in world)
 		object.initialize()
 
-	world << "\red \b Initializing pipe networks"
+	world << "<span class=\"danger\">Initializing pipe networks</span>"
 	sleep(-1)
 	for(var/obj/machinery/atmospherics/machine in machines)
 		machine.build_network()
 
-	world << "\red \b Initializing atmos machinery."
+	world << "<span class=\"danger\">Initializing atmos machinery.</span>"
 	sleep(-1)
 	for(var/obj/machinery/atmospherics/unary/U in machines)
 		if(istype(U, /obj/machinery/atmospherics/unary/vent_pump))
@@ -108,7 +108,7 @@ datum/controller/game_controller/proc/setup_objects()
 			var/obj/machinery/atmospherics/unary/vent_scrubber/T = U
 			T.broadcast_status()
 
-	world << "\red \b Initializations complete."
+	world << "<span class=\"danger\">Initializations complete.</span>"
 	sleep(-1)
 
 
@@ -146,7 +146,7 @@ datum/controller/game_controller/proc/process()
 					if(!air_master.tick()) //Runtimed.
 						air_master.failed_ticks++
 						if(air_master.failed_ticks > 5)
-							world << "<font color='red'><b>RUNTIMES IN ATMOS TICKER.  Killing air simulation!</font></b>"
+							world << "<span class=\"danger\">RUNTIMES IN ATMOS TICKER.  Killing air simulation!</span"
 							world.log << "### ZAS SHUTDOWN"
 							message_admins("ZASALERT: unable to run [air_master.tick_progress], shutting down!")
 							log_admin("ZASALERT: unable run zone/process() -- [air_master.tick_progress]")

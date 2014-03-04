@@ -20,7 +20,7 @@
 	set src in view()
 	..()
 	if (!(usr in view(2)) && usr!=src.loc) return
-	usr << "\blue [syringes.len] / [max_syringes] syringes."
+	usr << "<span class=\"notice\">[syringes.len] / [max_syringes] syringes.</span>"
 
 /obj/item/weapon/gun/syringe/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/reagent_containers/syringe))
@@ -30,12 +30,12 @@
 				user.drop_item()
 				I.loc = src
 				syringes += I
-				user << "\blue You put the syringe in [src]."
-				user << "\blue [syringes.len] / [max_syringes] syringes."
+				user << "<span class=\"notice\">You put the syringe in [src].</span>"
+				user << "<span class=\"notice\">[syringes.len] / [max_syringes] syringes.</span>"
 			else
-				usr << "\red [src] cannot hold more syringes."
+				usr << "<span class=\"rose\">[src] cannot hold more syringes.</span>"
 		else
-			usr << "\red This syringe is broken!"
+			usr << "<span class=\"rose\">This syringe is broken!</span>"
 
 
 /obj/item/weapon/gun/syringe/afterattack(obj/target, mob/user , flag)
@@ -52,7 +52,7 @@
 	if(syringes.len)
 		spawn(0) fire_syringe(target,user)
 	else
-		usr << "\red [src] is empty."
+		usr << "<span class=\"rose\">[src] is empty.</span>"
 
 /obj/item/weapon/gun/syringe/proc/fire_syringe(atom/target, mob/user)
 	if (locate (/obj/structure/table, src.loc))

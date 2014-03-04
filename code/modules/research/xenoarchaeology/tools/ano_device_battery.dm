@@ -35,7 +35,7 @@
 /obj/item/weapon/anodevice/attackby(var/obj/I as obj, var/mob/user as mob)
 	if(istype(I, /obj/item/weapon/anobattery))
 		if(!inserted_battery)
-			user << "\blue You insert the battery."
+			user << "<span class=\"notice\">You insert the battery.</span>"
 			user.drop_item()
 			I.loc = src
 			inserted_battery = I
@@ -93,7 +93,7 @@
 		cooldown -= 1
 		if(cooldown <= 0)
 			cooldown = 0
-			src.visible_message("\blue \icon[src] [src] chimes.", "\blue \icon[src] You hear something chime.")
+			src.visible_message("<span class=\"notice\">\icon[src] [src] chimes.</span>", "<span class=\"notice\">\icon[src] You hear something chime.</span>")
 	else if(activated)
 		if(inserted_battery && inserted_battery.battery_effect)
 			//make sure the effect is active
@@ -129,7 +129,7 @@
 	if(activated)
 		activated = 0
 		timing = 0
-		src.visible_message("\blue \icon[src] [src] buzzes.", "\icon[src]\blue You hear something buzz.")
+		src.visible_message("<span class=\"notice\">\icon[src] [src] buzzes.</span>", "\icon[src]<span class=\"notice\">You hear something buzz.</span>")
 
 		cooldown = archived_time / 2
 

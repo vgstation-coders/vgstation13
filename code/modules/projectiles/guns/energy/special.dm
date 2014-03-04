@@ -106,13 +106,13 @@ obj/item/weapon/gun/energy/staff
 			if(0)
 				mode = 1
 				charge_cost = 100
-				user << "\red The [src.name] is now set to increase yield."
+				user << "<span class=\"rose\">The [src.name] is now set to increase yield.</span>"
 				projectile_type = "/obj/item/projectile/energy/florayield"
 				modifystate = "florayield"
 			if(1)
 				mode = 0
 				charge_cost = 100
-				user << "\red The [src.name] is now set to induce mutations."
+				user << "<span class=\"rose\">The [src.name] is now set to induce mutations.</span>"
 				projectile_type = "/obj/item/projectile/energy/floramut"
 				modifystate = "floramut"
 		update_icon()
@@ -179,11 +179,11 @@ obj/item/weapon/gun/energy/staff/focus
 	attack_self(mob/living/user as mob)
 		if(projectile_type == "/obj/item/projectile/forcebolt")
 			charge_cost = 250
-			user << "\red The [src.name] will now strike a small area."
+			user << "<span class=\"rose\">The [src.name] will now strike a small area.</span>"
 			projectile_type = "/obj/item/projectile/forcebolt/strong"
 		else
 			charge_cost = 100
-			user << "\red The [src.name] will now strike only a single person."
+			user << "<span class=\"rose\">The [src.name] will now strike only a single person.</span>"
 			projectile_type = "/obj/item/projectile/forcebolt"
 
 /obj/item/weapon/gun/energy/kinetic_accelerator

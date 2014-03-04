@@ -123,5 +123,5 @@
 	MouseDrop(over_object, src_location, over_location)
 		if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
 			if(!ishuman(usr))	return
-			usr << "\red You can't fold that up anymore.."
+			usr << "<span class=\"rose\">You can't fold that up anymore..</span>"
 		..()

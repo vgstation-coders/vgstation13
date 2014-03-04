@@ -98,7 +98,7 @@ obj/structure/sign/poster/attackby(obj/item/weapon/W as obj, mob/user as mob)
 /turf/simulated/wall/proc/place_poster(var/obj/item/weapon/contraband/poster/P, var/mob/user)
 
 	if(!istype(src,/turf/simulated/wall))
-		user << "\red You can't place this here!"
+		user << "<span class=\"rose\">You can't place this here!</span>"
 		return
 
 	var/stuff_on_wall = 0

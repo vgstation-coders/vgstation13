@@ -37,16 +37,16 @@
 
 	end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
-		user.visible_message("\blue [user] cuts away flesh where [target]'s [affected.display_name] used to be with \the [tool].",	\
-		"\blue You cut away flesh where [target]'s [affected.display_name] used to be with \the [tool].")
+		user.visible_message("<span class=\"notice\">[user] cuts away flesh where [target]'s [affected.display_name] used to be with \the [tool].</span>",	\
+		"<span class=\"notice\">You cut away flesh where [target]'s [affected.display_name] used to be with \the [tool].</span>")
 		affected.status |= ORGAN_CUT_AWAY
 
 	fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
 		if (affected.parent)
 			affected = affected.parent
-			user.visible_message("\red [user]'s hand slips, cutting [target]'s [affected.display_name] open!", \
-			"\red Your hand slips,  cutting [target]'s [affected.display_name] open!")
+			user.visible_message("<span class=\"rose\">[user]'s hand slips, cutting [target]'s [affected.display_name] open!</span>", \
+			"<span class=\"rose\">Your hand slips,  cutting [target]'s [affected.display_name] open!</span>")
 			affected.createwound(CUT, 10)
 
 
@@ -71,16 +71,16 @@
 
 	end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
-		user.visible_message("\blue [user] has finished repositioning flesh and nerve endings where [target]'s [affected.display_name] used to be with [tool].",	\
-		"\blue You have finished repositioning flesh and nerve endings where [target]'s [affected.display_name] used to be with [tool].")
+		user.visible_message("<span class=\"notice\">[user] has finished repositioning flesh and nerve endings where [target]'s [affected.display_name] used to be with [tool].</span>",	\
+		"<span class=\"notice\">You have finished repositioning flesh and nerve endings where [target]'s [affected.display_name] used to be with [tool].</span>")
 		affected.open = 3
 
 	fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
 		if (affected.parent)
 			affected = affected.parent
-			user.visible_message("\red [user]'s hand slips, tearing flesh on [target]'s [affected.display_name]!", \
-			"\red Your hand slips, tearing flesh on [target]'s [affected.display_name]!")
+			user.visible_message("<span class=\"rose\">[user]'s hand slips, tearing flesh on [target]'s [affected.display_name]!</span>", \
+			"<span class=\"rose\">Your hand slips, tearing flesh on [target]'s [affected.display_name]!</span>")
 			target.apply_damage(10, BRUTE, affected)
 
 
@@ -107,8 +107,8 @@
 
 	end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
-		user.visible_message("\blue [user] has finished adjusting the area around [target]'s [affected.display_name] with \the [tool].",	\
-		"\blue You have finished adjusting the area around [target]'s [affected.display_name] with \the [tool].")
+		user.visible_message("<span class=\"notice\">[user] has finished adjusting the area around [target]'s [affected.display_name] with \the [tool].</span>",	\
+		"<span class=\"notice\">You have finished adjusting the area around [target]'s [affected.display_name] with \the [tool].</span>")
 		affected.status |= ORGAN_ATTACHABLE
 		affected.amputated = 1
 		affected.setAmputatedTree()
@@ -118,8 +118,8 @@
 		var/datum/organ/external/affected = target.get_organ(target_zone)
 		if (affected.parent)
 			affected = affected.parent
-			user.visible_message("\red [user]'s hand slips, searing [target]'s [affected.display_name]!", \
-			"\red Your hand slips, searing [target]'s [affected.display_name]!")
+			user.visible_message("<span class=\"rose\">[user]'s hand slips, searing [target]'s [affected.display_name]!</span>", \
+			"<span class=\"rose\">Your hand slips, searing [target]'s [affected.display_name]!</span>")
 			target.apply_damage(10, BURN, affected)
 
 
@@ -146,8 +146,8 @@
 	end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/obj/item/robot_parts/L = tool
 		var/datum/organ/external/affected = target.get_organ(target_zone)
-		user.visible_message("\blue [user] has attached [tool] where [target]'s [affected.display_name] used to be.",	\
-		"\blue You have attached [tool] where [target]'s [affected.display_name] used to be.")
+		user.visible_message("<span class=\"notice\">[user] has attached [tool] where [target]'s [affected.display_name] used to be.</span>",	\
+		"<span class=\"notice\">You have attached [tool] where [target]'s [affected.display_name] used to be.</span>")
 		affected.robotize()
 		if(L.sabotaged)
 			affected.sabotaged = 1
@@ -160,8 +160,8 @@
 
 	fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
-		user.visible_message("\red [user]'s hand slips, damaging connectors on [target]'s [affected.display_name]!", \
-		"\red Your hand slips, damaging connectors on [target]'s [affected.display_name]!")
+		user.visible_message("<span class=\"rose\">[user]'s hand slips, damaging connectors on [target]'s [affected.display_name]!</span>", \
+		"<span class=\"rose\">Your hand slips, damaging connectors on [target]'s [affected.display_name]!</span>")
 		target.apply_damage(10, BRUTE, affected)
 
 /datum/surgery_step/limb/attach_plank
@@ -182,8 +182,8 @@
 
 	end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
-		user.visible_message("\blue [user] has attached [tool] where [target]'s [affected.display_name] used to be.",	\
-		"\blue You have attached [tool] where [target]'s [affected.display_name] used to be.")
+		user.visible_message("<span class=\"notice\">[user] has attached [tool] where [target]'s [affected.display_name] used to be.</span>",	\
+		"<span class=\"notice\">You have attached [tool] where [target]'s [affected.display_name] used to be.</span>")
 		affected.peggify()
 		target.update_body()
 		target.updatehealth()
@@ -193,6 +193,6 @@
 
 	fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
-		user.visible_message("\red [user]'s hand slips, damaging connectors on [target]'s [affected.display_name]!", \
-		"\red Your hand slips, damaging connectors on [target]'s [affected.display_name]!")
+		user.visible_message("<span class=\"rose\">[user]'s hand slips, damaging connectors on [target]'s [affected.display_name]!</span>", \
+		"<span class=\"rose\">Your hand slips, damaging connectors on [target]'s [affected.display_name]!</span>")
 		target.apply_damage(10, BRUTE, affected)

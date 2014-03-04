@@ -50,7 +50,7 @@
 		user.drop_item()
 		module.loc=src
 		modules += module
-		user << "\blue You insert \the [module] into \the [src]!"
+		user << "<span class=\"notice\">You insert \the [module] into \the [src]!</span>"
 	else
 		return ..()
 
@@ -58,7 +58,7 @@
 	for(var/obj/item/weapon/aiModule/mod in modules)
 		mod.loc=get_turf(src)
 	modules.Cut()
-	user << "\blue You tip \the [src]'s contents onto the floor!"
+	user << "<span class=\"notice\">You tip \the [src]'s contents onto the floor!</span>"
 	laws = new base_law_type
 	return
 
@@ -88,11 +88,11 @@
 	)
 	for(var/i=1;i<=modules.len;i++)
 		var/obj/item/weapon/aiModule/module = modules[i]
-		var/notes="\blue Looks OK!"
+		var/notes="<span class=\"notice\">Looks OK!</span>"
 		if(i>1 && istype(modules[i],/obj/item/weapon/aiModule/purge))
-			notes="\red <b>This should be the first module!</b>"
+			notes="<span class=\"danger\">This should be the first module!</span>"
 		if(is_type_in_list(modules[i],badtypes))
-			notes="\red <b>Your heart skips a beat!</b>"
+			notes="<span class=\"danger\">Your heart skips a beat!</span>"
 		usr << " [i-1]. [module.name] - [notes]"
 
 

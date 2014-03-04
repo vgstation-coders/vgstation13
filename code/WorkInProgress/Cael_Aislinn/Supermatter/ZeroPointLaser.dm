@@ -63,9 +63,9 @@
 				src.use_power = 2
 			update_icon()
 		else
-			user << "\red The controls are locked!"
+			user << "<span class=\"rose\">The controls are locked!</span>"
 	else
-		user << "\red The [src] needs to be firmly secured to the floor first."
+		user << "<span class=\"rose\">The [src] needs to be firmly secured to the floor first.</span>"
 		return 1
 
 
@@ -137,7 +137,7 @@
 					"You hear a ratchet")
 				src.anchored = 0
 			if(2)
-				user << "\red The [src.name] needs to be unwelded from the floor."
+				user << "<span class=\"rose\">The [src.name] needs to be unwelded from the floor.</span>"
 		return
 
 	if(istype(W, /obj/item/weapon/weldingtool))
@@ -147,7 +147,7 @@
 			return
 		switch(state)
 			if(0)
-				user << "\red The [src.name] needs to be wrenched to the floor."
+				user << "<span class=\"rose\">The [src.name] needs to be wrenched to the floor.</span>"
 			if(1)
 				if (WT.remove_fuel(0,user))
 					playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
@@ -159,7 +159,7 @@
 						state = 2
 						user << "You weld the [src] to the floor."
 				else
-					user << "\red You need more welding fuel to complete this task."
+					user << "<span class=\"rose\">You need more welding fuel to complete this task.</span>"
 			if(2)
 				if (WT.remove_fuel(0,user))
 					playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
@@ -171,12 +171,12 @@
 						state = 1
 						user << "You cut the [src] free from the floor."
 				else
-					user << "\red You need more welding fuel to complete this task."
+					user << "<span class=\"rose\">You need more welding fuel to complete this task.</span>"
 		return
 
 	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
 		if(emagged)
-			user << "\red The lock seems to be broken"
+			user << "<span class=\"rose\">The lock seems to be broken</span>"
 			return
 		if(src.allowed(user))
 			if(active)
@@ -184,16 +184,16 @@
 				user << "The controls are now [src.locked ? "locked." : "unlocked."]"
 			else
 				src.locked = 0 //just in case it somehow gets locked
-				user << "\red The controls can only be locked when the [src] is online"
+				user << "<span class=\"rose\">The controls can only be locked when the [src] is online</span>"
 		else
-			user << "\red Access denied."
+			user << "<span class=\"rose\">Access denied.</span>"
 		return
 
 
 	if(istype(W, /obj/item/weapon/card/emag) && !emagged)
 		locked = 0
 		emagged = 1
-		user.visible_message("[user.name] emags the [src.name].","\red You short out the lock.")
+		user.visible_message("[user.name] emags the [src.name].","<span class=\"rose\">You short out the lock.</span>")
 		return
 
 	..()

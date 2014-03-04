@@ -168,19 +168,19 @@ it creates. All the menus and other manipulation commands are in the R&D console
 						if(locate(user) in get_step(src,direction))
 							found=1
 					if(!found)
-						user << "\red Cannot set this as the output location; You're too far away."
+						user << "<span class=\"rose\">Cannot set this as the output location; You're too far away.</span>"
 						return
 					if(istype(output,/obj/machinery/mineral/output))
 						del(output)
 					output=new /obj/machinery/mineral/output(usr.loc)
-					user << "\blue Output set."
+					user << "<span class=\"notice\">Output set.</span>"
 				if("No")
 					return
 				if("Machine Location")
 					if(istype(output,/obj/machinery/mineral/output))
 						del(output)
 					output=src
-					user << "\blue Output set."
+					user << "<span class=\"notice\">Output set.</span>"
 		return
 	if (opened)
 		if(istype(O, /obj/item/weapon/crowbar))
@@ -202,7 +202,7 @@ it creates. All the menus and other manipulation commands are in the R&D console
 			del(src)
 			return 1
 		else
-			user << "\red You can't load the [src.name] while it's opened."
+			user << "<span class=\"rose\">You can't load the [src.name] while it's opened.</span>"
 			return 1
 	if (disabled)
 		return
@@ -210,10 +210,10 @@ it creates. All the menus and other manipulation commands are in the R&D console
 		user << "\The protolathe must be linked to an R&D console first!"
 		return 1
 	if (busy)
-		user << "\red The protolathe is busy. Please wait for completion of previous operation."
+		user << "<span class=\"rose\">The protolathe is busy. Please wait for completion of previous operation.</span>"
 		return 1
 	if (!istype(O, /obj/item/stack/sheet))
-		user << "\red You cannot insert this item into the protolathe!"
+		user << "<span class=\"rose\">You cannot insert this item into the protolathe!</span>"
 		return 1
 	if (stat)
 		return 1
@@ -224,11 +224,11 @@ it creates. All the menus and other manipulation commands are in the R&D console
 			if(M.sheettype==O.type)
 				found=1
 		if(!found)
-			user << "\red The protolathe rejects \the [O]."
+			user << "<span class=\"rose\">The protolathe rejects \the [O].</span>"
 			return 1
 		var/obj/item/stack/sheet/S = O
 		if (TotalMaterials() + S.perunit > max_material_storage)
-			user << "\red The protolathe's material bin is full. Please remove material before adding more."
+			user << "<span class=\"rose\">The protolathe's material bin is full. Please remove material before adding more.</span>"
 			return 1
 
 		var/obj/item/stack/sheet/stack = O
@@ -254,7 +254,7 @@ it creates. All the menus and other manipulation commands are in the R&D console
 		var/stacktype = stack.type
 		stack.use(amount)
 		if (do_after(user, 16))
-			user << "\blue You add [amount] sheets to the [src.name]."
+			user << "<span class=\"notice\">You add [amount] sheets to the [src.name].</span>"
 			icon_state = "protolathe"
 			for(var/id in materials)
 				var/datum/material/material=materials[id]

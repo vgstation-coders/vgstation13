@@ -89,9 +89,9 @@ display round(lastgen) and plasmatank amount
 /obj/machinery/power/port_gen/examine()
 	set src in oview(1)
 	if(active)
-		usr << "\blue The generator is on."
+		usr << "<span class=\"notice\">The generator is on.</span>"
 	else
-		usr << "\blue The generator is off."
+		usr << "<span class=\"notice\">The generator is off.</span>"
 
 /obj/machinery/power/port_gen/pacman
 	name = "P.A.C.M.A.N.-type Portable Generator"
@@ -141,8 +141,8 @@ display round(lastgen) and plasmatank amount
 
 /obj/machinery/power/port_gen/pacman/examine()
 	..()
-	usr << "\blue The generator has [sheets] units of [sheet_name] fuel left, producing [power_gen] per cycle."
-	if(crit_fail) usr << "\red The generator seems to have broken down."
+	usr << "<span class=\"notice\">The generator has [sheets] units of [sheet_name] fuel left, producing [power_gen] per cycle.</span>"
+	if(crit_fail) usr << "<span class=\"rose\">The generator seems to have broken down.</span>"
 
 /obj/machinery/power/port_gen/pacman/HasFuel()
 	if(sheets >= 1 / (time_per_sheet / power_output) - sheet_left)
@@ -204,9 +204,9 @@ display round(lastgen) and plasmatank amount
 		var/obj/item/stack/addstack = O
 		var/amount = min((max_sheets - sheets), addstack.amount)
 		if(amount < 1)
-			user << "\blue The [src.name] is full!"
+			user << "<span class=\"notice\">The [src.name] is full!</span>"
 			return
-		user << "\blue You add [amount] sheets to the [src.name]."
+		user << "<span class=\"notice\">You add [amount] sheets to the [src.name].</span>"
 		sheets += amount
 		addstack.use(amount)
 		updateUsrDialog()
@@ -220,10 +220,10 @@ display round(lastgen) and plasmatank amount
 
 			if(!anchored)
 				connect_to_network()
-				user << "\blue You secure the generator to the floor."
+				user << "<span class=\"notice\">You secure the generator to the floor.</span>"
 			else
 				disconnect_from_network()
-				user << "\blue You unsecure the generator from the floor."
+				user << "<span class=\"notice\">You unsecure the generator from the floor.</span>"
 
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 			anchored = !anchored
@@ -232,9 +232,9 @@ display round(lastgen) and plasmatank amount
 			open = !open
 			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 			if(open)
-				user << "\blue You open the access panel."
+				user << "<span class=\"notice\">You open the access panel.</span>"
 			else
-				user << "\blue You close the access panel."
+				user << "<span class=\"notice\">You close the access panel.</span>"
 		else if(istype(O, /obj/item/weapon/crowbar) && open)
 			var/obj/machinery/constructable_frame/machine_frame/new_frame = new /obj/machinery/constructable_frame/machine_frame(src.loc)
 			for(var/obj/item/I in component_parts)

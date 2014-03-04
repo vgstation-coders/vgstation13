@@ -167,11 +167,11 @@
 	proc/handle_disabilities()
 		if (disabilities & EPILEPSY)
 			if ((prob(1) && paralysis < 1))
-				src << "\red You have a seizure!"
+				src << "<span class=\"rose\">You have a seizure!</span>"
 				for(var/mob/O in viewers(src, null))
 					if(O == src)
 						continue
-					O.show_message(text("\red <B>[src] starts having a seizure!"), 1)
+					O.show_message(text("<span class=\"danger\">[src] starts having a seizure!</span>"), 1)
 				Paralyse(10)
 				make_jittery(1000)
 
@@ -227,15 +227,15 @@
 					custom_pain("Your head feels numb and painful.")
 			if(getBrainLoss() >= 15)
 				if(4 <= rn && rn <= 6) if(eye_blurry <= 0)
-					src << "\red It becomes hard to see for some reason."
+					src << "<span class=\"rose\">It becomes hard to see for some reason.</span>"
 					eye_blurry = 10
 			if(getBrainLoss() >= 35)
 				if(7 <= rn && rn <= 9) if(hand && equipped())
-					src << "\red Your hand won't respond properly, you drop what you're holding."
+					src << "<span class=\"rose\">Your hand won't respond properly, you drop what you're holding.</span>"
 					drop_item()
 			if(getBrainLoss() >= 50)
 				if(10 <= rn && rn <= 12) if(!lying)
-					src << "\red Your legs won't respond properly, you fall down."
+					src << "<span class=\"rose\">Your legs won't respond properly, you fall down.</span>"
 					resting = 1
 
 	proc/handle_stasis_bag()
@@ -264,7 +264,7 @@
 			if (radiation > 100)
 				radiation = 100
 				Weaken(10)
-				src << "\red You feel weak."
+				src << "<span class=\"rose\">You feel weak.</span>"
 				emote("collapse")
 
 			if (radiation < 0)
@@ -297,7 +297,7 @@
 						if(prob(5))
 							radiation -= 5
 							Weaken(3)
-							src << "\red You feel weak."
+							src << "<span class=\"rose\">You feel weak.</span>"
 							emote("collapse")
 						updatehealth()
 
@@ -306,7 +306,7 @@
 						adjustToxLoss(3)
 						damage = 1
 						if(prob(1))
-							src << "\red You mutate!"
+							src << "<span class=\"rose\">You mutate!</span>"
 							randmutb(src)
 							domutcheck(src,null)
 							emote("gasp")
@@ -551,13 +551,13 @@
 			if(status_flags & GODMODE)	return 1	//godmode
 			if(breath.temperature < species.cold_level_1)
 				if(prob(20))
-					src << "\red You feel your face freezing and an icicle forming in your lungs!"
+					src << "<span class=\"rose\">You feel your face freezing and an icicle forming in your lungs!</span>"
 			else if(breath.temperature > species.heat_level_1)
 				if(prob(20))
 					if(dna.mutantrace == "slime")
-						src << "\red You feel supercharged by the extreme heat!"
+						src << "<span class=\"rose\">You feel supercharged by the extreme heat!</span>"
 					else
-						src << "\red You feel your face burning and a searing heat in your lungs!"
+						src << "<span class=\"rose\">You feel your face burning and a searing heat in your lungs!</span>"
 			if(dna.mutantrace == "slime")
 				if(breath.temperature < species.cold_level_1)
 					adjustToxLoss(round(species.cold_level_1 - breath.temperature))
@@ -967,7 +967,7 @@
 		if(species.flags & CAN_BE_FAT)
 			if(M_FAT in mutations)
 				if(overeatduration < 100)
-					src << "\blue You feel fit again!"
+					src << "<span class=\"notice\">You feel fit again!</span>"
 					mutations.Remove(M_FAT)
 					update_mutantrace(0)
 					update_mutations(0)
@@ -975,7 +975,7 @@
 					update_inv_wear_suit()
 			else
 				if(overeatduration > 500)
-					src << "\red You suddenly feel blubbery!"
+					src << "<span class=\"rose\">You suddenly feel blubbery!</span>"
 					mutations.Add(M_FAT)
 					update_mutantrace(0)
 					update_mutations(0)
@@ -1340,8 +1340,8 @@
 						if(1)	healths.icon_state = "health6"
 						if(2)	healths.icon_state = "health7"
 						else
-							switch(health - halloss)
-							//switch(100 - ((species && species.flags & NO_PAIN) ? 0 : traumatic_shock))
+							//switch(health - halloss)
+							switch(100 - ((species && species.flags & NO_PAIN) ? 0 : traumatic_shock))
 								if(100 to INFINITY)		healths.icon_state = "health0"
 								if(80 to 100)			healths.icon_state = "health1"
 								if(60 to 80)			healths.icon_state = "health2"
@@ -1425,18 +1425,18 @@
 					isRemoteObserve = 1
 					// Is he unconscious or dead?
 					if(remoteview_target.stat!=CONSCIOUS)
-						src << "\red Your psy-connection grows too faint to maintain!"
+						src << "<span class=\"rose\">Your psy-connection grows too faint to maintain!</span>"
 						isRemoteObserve = 0
 
 					// Does he have psy resist?
 					if(M_PSY_RESIST in remoteview_target.mutations)
-						src << "\red Your mind is shut out!"
+						src << "<span class=\"rose\">Your mind is shut out!</span>"
 						isRemoteObserve = 0
 
 					// Not on the station or mining?
 					var/turf/temp_turf = get_turf(remoteview_target)
 					if((temp_turf.z != 1 && temp_turf.z != 5) || remoteview_target.stat!=CONSCIOUS)
-						src << "\red Your psy-connection grows too faint to maintain!"
+						src << "<span class=\"rose\">Your psy-connection grows too faint to maintain!</span>"
 						isRemoteObserve = 0
 				if(!isRemoteObserve && client && !client.adminobs)
 					remoteview_target = null

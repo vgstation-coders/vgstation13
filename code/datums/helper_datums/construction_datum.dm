@@ -85,24 +85,24 @@
 			if(istype(used_atom,/obj/item/stack))
 				var/obj/item/stack/stack=used_atom
 				if(stack.amount < amount)
-					user << "\red You don't have enough [stack]! You need at least [amount]."
+					user << "<span class=\"rose\">You don't have enough [stack]! You need at least [amount].</span>"
 					return 0
 				stack.use(amount)
 			// CABLES
 			if(istype(used_atom,/obj/item/weapon/cable_coil))
 				var/obj/item/weapon/cable_coil/coil=used_atom
 				if(coil.amount < amount)
-					user << "\red You don't have enough cable! You need at least [amount] coils."
+					user << "<span class=\"rose\">You don't have enough cable! You need at least [amount] coils.</span>"
 					return 0
 				coil.use(amount)
 			// WELDER
 			if(istype(used_atom,/obj/item/weapon/weldingtool))
 				var/obj/item/weapon/weldingtool/welder=used_atom
 				if(!welder.isOn())
-					user << "\blue You tap the [src] with your unlit welder.  [pick("Ding","Dong")]."
+					user << "<span class=\"notice\">You tap the [src] with your unlit welder.  [pick("Ding","Dong")].</span>"
 					return 0
 				if(!welder.remove_fuel(amount,user))
-					user << "\red You don't have enough fuel!"
+					user << "<span class=\"rose\">You don't have enough fuel!</span>"
 					return 0
 		return 1
 

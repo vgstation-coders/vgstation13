@@ -141,7 +141,7 @@ obj/machinery/atmospherics/valve
 
 	attack_hand(mob/user as mob)
 		if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
-			user << "\red Nope."
+			user << "<span class=\"rose\">Nope.</span>"
 			return
 		src.add_fingerprint(usr)
 		update_icon(1)
@@ -239,7 +239,7 @@ obj/machinery/atmospherics/valve
 
 		attack_hand(mob/user as mob)
 			if(!src.allowed(user))
-				user << "\red Access denied."
+				user << "<span class=\"rose\">Access denied.</span>"
 				return
 			..()
 
@@ -338,24 +338,24 @@ obj/machinery/atmospherics/valve
 		if (!istype(W, /obj/item/weapon/wrench))
 			return ..()
 		if (istype(src,/obj/machinery/atmospherics/valve/digital) && src:frequency)
-			user << "\red You cannot unwrench this [src], it's digitally connected to another device."
+			user << "<span class=\"rose\">You cannot unwrench this [src], it's digitally connected to another device.</span>"
 			return 1
 		var/turf/T = src.loc
 		if (level==1 && isturf(T) && T.intact)
-			user << "\red You must remove the plating first."
+			user << "<span class=\"rose\">You must remove the plating first.</span>"
 			return 1
 		var/datum/gas_mixture/int_air = return_air()
 		var/datum/gas_mixture/env_air = loc.return_air()
 		if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
-			user << "\red You cannot unwrench this [src], it too exerted due to internal pressure."
+			user << "<span class=\"rose\">You cannot unwrench this [src], it too exerted due to internal pressure.</span>"
 			add_fingerprint(user)
 			return 1
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		user << "\blue You begin to unfasten \the [src]..."
+		user << "<span class=\"notice\">You begin to unfasten \the [src]...</span>"
 		if (do_after(user, 40))
 			user.visible_message( \
 				"[user] unfastens \the [src].", \
-				"\blue You have unfastened \the [src].", \
+				"<span class=\"notice\">You have unfastened \the [src].</span>", \
 				"You hear ratchet.")
 			new /obj/item/pipe(loc, make_from=src)
 			del(src)

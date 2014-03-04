@@ -120,7 +120,7 @@
 				steal_objective.find_target()
 				traitor.objectives += steal_objective
 		switch(rand(1,100))
-			if(1 to 30 && !(locate(/datum/objective/steal) in traitor.objectives)) // Die glorious death
+			if(1 to 30) // Die glorious death
 				if (!(locate(/datum/objective/die) in traitor.objectives))
 					var/datum/objective/die/die_objective = new
 					die_objective.owner = traitor
@@ -183,12 +183,12 @@
 	//Begin code phrase.
 	killer << "The Syndicate provided you with the following information on how to identify their agents:"
 	if(prob(80))
-		killer << "\red Code Phrase: \black [syndicate_code_phrase]"
+		killer << "<span class=\"rose\">Code Phrase: </span>[syndicate_code_phrase]"
 		killer.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
 	else
 		killer << "Unfortunately, the Syndicate did not provide you with a code phrase."
 	if(prob(80))
-		killer << "\red Code Response: \black [syndicate_code_response]"
+		killer << "<span class=\"rose\">Code Response: </span>[syndicate_code_response]"
 		killer.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
 	else
 		killer << "Unfortunately, the Syndicate did not provide you with a code response."
@@ -221,7 +221,7 @@
 						text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
 						feedback_add_details("traitor_objective","[objective.type]|SUCCESS")
 					else
-						text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='red'>Fail.</font>"
+						text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <span class=\"rose\">Fail.</span>"
 						feedback_add_details("traitor_objective","[objective.type]|FAIL")
 						traitorwin = 0
 					count++
@@ -236,7 +236,7 @@
 				text += "<br><font color='green'><B>The [(traitor in implanted) ? "greytide" : special_role_text] was successful!</B></font>"
 				feedback_add_details("traitor_success","SUCCESS")
 			else
-				text += "<br><font color='red'><B>The [(traitor in implanted) ? "greytide" : special_role_text] has failed!</B></font>"
+				text += "<br><span class=\"danger\">The [(traitor in implanted) ? "greytide" : special_role_text] has failed!</span>"
 				feedback_add_details("traitor_success","FAIL")
 
 		world << text
@@ -295,12 +295,12 @@
 	if(!safety)//If they are not a rev. Can be added on to.
 		traitor_mob << "The Syndicate provided you with the following information on how to identify other agents:"
 		if(prob(80))
-			traitor_mob << "\red Code Phrase: \black [syndicate_code_phrase]"
+			traitor_mob << "<span class=\"rose\">Code Phrase: </span>[syndicate_code_phrase]"
 			traitor_mob.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
 		else
 			traitor_mob << "Unfortunetly, the Syndicate did not provide you with a code phrase."
 		if(prob(80))
-			traitor_mob << "\red Code Response: \black [syndicate_code_response]"
+			traitor_mob << "<span class=\"rose\">Code Response: </span>[syndicate_code_response]"
 			traitor_mob.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
 		else
 			traitor_mob << "Unfortunately, the Syndicate did not provide you with a code response."
@@ -371,4 +371,4 @@
 	traitor_mind.special_role = null
 	update_traitor_icons_removed(traitor_mind)
 	//world << "Removed [traitor_mind.current.name] from traitor shit"
-	traitor_mind.current << "\red <FONT size = 3><B>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now.(You don't remember who implanted you)</B></FONT>"
+	traitor_mind.current << "<span class=\"danger\"><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now.(You don't remember who implanted you)</FONT></span>"

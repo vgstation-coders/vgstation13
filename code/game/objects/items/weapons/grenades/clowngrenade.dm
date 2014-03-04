@@ -72,7 +72,7 @@
 					if(M:shoes.flags&NOSLIP)
 						return
 				else
-					M << "\red Your feet feel like they're on fire!"
+					M << "<span class=\"rose\">Your feet feel like they're on fire!</span>"
 					M.take_overall_damage(0, max(0, (burned - 2)))
 
 			if(!istype(M, /mob/living/carbon/slime) && !isrobot(M))
@@ -83,7 +83,7 @@
 				spawn(3) step(M, M.dir)
 				spawn(4) step(M, M.dir)
 				M.take_organ_damage(2) // Was 5 -- TLE
-				M << "\blue You slipped on \the [name]!"
+				M << "<span class=\"notice\">You slipped on \the [name]!</span>"
 				playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
 				M.Weaken(10)
 				M.take_overall_damage(0, burned)

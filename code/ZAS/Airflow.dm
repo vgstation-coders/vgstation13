@@ -54,15 +54,15 @@ mob/proc/airflow_stun()
 		return 0
 	if(last_airflow_stun > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))	return 0
 	if(!(status_flags & CANSTUN) && !(status_flags & CANWEAKEN))
-		src << "\blue You stay upright as the air rushes past you."
+		src << "<span class=\"notice\">You stay upright as the air rushes past you.</span>"
 		return 0
 
 	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push))
-		if(weakened <= 0) src << "\red The sudden rush of air knocks you over!"
+		if(weakened <= 0) src << "<span class=\"rose\">The sudden rush of air knocks you over!</span>"
 		weakened = max(weakened,5)
 		last_airflow_stun = world.time
 		return
-	src << "\blue You stay upright as the air rushes past you."
+	src << "<span class=\"notice\">You stay upright as the air rushes past you.</span>"
 	last_airflow_stun = world.time
 
 mob/living/silicon/airflow_stun()
@@ -77,15 +77,15 @@ mob/living/carbon/human/airflow_stun()
 	if(shoes)
 		if(shoes.flags & NOSLIP) return 0
 	if(!(status_flags & CANSTUN) && !(status_flags & CANWEAKEN))
-		src << "\blue You stay upright as the air rushes past you."
+		src << "<span class=\"notice\">You stay upright as the air rushes past you.</span>"
 		return 0
 
 	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push))
-		if(weakened <= 0) src << "\red The sudden rush of air knocks you over!"
+		if(weakened <= 0) src << "<span class=\"rose\">The sudden rush of air knocks you over!</span>"
 		weakened = max(weakened,rand(1,5))
 		last_airflow_stun = world.time
 		return
-	src << "\blue You stay upright as the air rushes past you."
+	src << "<span class=\"notice\">You stay upright as the air rushes past you.</span>"
 	last_airflow_stun = world.time
 
 atom/movable/proc/check_airflow_movable(n)
@@ -263,7 +263,7 @@ proc/AirflowSpace(zone/A)
 				if(istype(src:shoes, /obj/item/clothing/shoes/magboots))
 					if(src:shoes:magpulse)
 						return
-		src << "\red You are sucked away by airflow!"
+		src << "<span class=\"rose\">You are sucked away by airflow!</span>"
 	var/airflow_falloff = 9 - ul_FalloffAmount(airflow_dest) //It's a fast falloff calc.  Very useful.
 	if(airflow_falloff < 1)
 		airflow_dest = null
@@ -328,7 +328,7 @@ proc/AirflowSpace(zone/A)
 				if(istype(src:shoes, /obj/item/clothing/shoes/magboots))
 					if(src:shoes.flags & NOSLIP)
 						return
-		src << "\red You are pushed away by airflow!"
+		src << "<span class=\"rose\">You are pushed away by airflow!</span>"
 		last_airflow = world.time
 	var/airflow_falloff = 9 - ul_FalloffAmount(airflow_dest) //It's a fast falloff calc.  Very useful.
 	if(airflow_falloff < 1)
@@ -381,14 +381,14 @@ atom/movable/proc/airflow_hit(atom/A)
 
 mob/airflow_hit(atom/A)
 	for(var/mob/M in hearers(src))
-		M.show_message("\red <B>\The [src] slams into \a [A]!</B>",1,"\red You hear a loud slam!",2)
+		M.show_message("<span class=\"danger\">\The [src] slams into \a [A]!</span>",1,"<span class=\"rose\">You hear a loud slam!</span>",2)
 	//playsound(get_turf(src), "smash.ogg", 25, 1, -1)
 	weakened = max(weakened, (istype(A,/obj/item) ? A:w_class : rand(1,5))) //Heheheh
 	. = ..()
 
 obj/airflow_hit(atom/A)
 	for(var/mob/M in hearers(src))
-		M.show_message("\red <B>\The [src] slams into \a [A]!</B>",1,"\red You hear a loud slam!",2)
+		M.show_message("<span class=\"danger\">\The [src] slams into \a [A]!</span>",1,"<span class=\"rose\">You hear a loud slam!</span>",2)
 	//playsound(get_turf(src), "smash.ogg", 25, 1, -1)
 	. = ..()
 
@@ -398,7 +398,7 @@ obj/item/airflow_hit(atom/A)
 
 mob/living/carbon/human/airflow_hit(atom/A)
 //	for(var/mob/M in hearers(src))
-//		M.show_message("\red <B>[src] slams into [A]!</B>",1,"\red You hear a loud slam!",2)
+//		M.show_message("<span class=\"danger\">[src] slams into [A]!</span>",1,"<span class=\"rose\">You hear a loud slam!</span>",2)
 	//playsound(get_turf(src), "punch", 25, 1, -1)
 	loc:add_blood(src)
 	if (src.wear_suit)

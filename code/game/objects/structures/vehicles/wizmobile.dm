@@ -10,7 +10,7 @@
 	//nick = "TRUE POWER"
 	keytype = /obj/item/key/wizmobile
 	can_spacemove=1
-	//ethereal=1 // NERF
+	ethereal=1
 	var/can_move=1
 
 // Shit be ethereal.
