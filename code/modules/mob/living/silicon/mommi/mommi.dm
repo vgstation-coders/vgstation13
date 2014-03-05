@@ -71,7 +71,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 	// Sanity check
 	if(connected_ai && keeper)
-		world << "\red ASSERT FAILURE: connected_ai && keeper in mommi.dm"
+		world << "<span class=\"rose\">ASSERT FAILURE: connected_ai && keeper in mommi.dm</span>"
 
 	//playsound(loc, 'sound/voice/liveagain.ogg', 75, 1)
 	playsound(loc, 'sound/misc/interference.ogg', 75, 1)
@@ -158,7 +158,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			updatehealth()
 			add_fingerprint(user)
 			for(var/mob/O in viewers(user, null))
-				O.show_message(text("\red [user] has fixed some of the dents on [src]!"), 1)
+				O.show_message(text("<span class=\"rose\">[user] has fixed some of the dents on [src]!</span>"), 1)
 		else
 			user << "Need more welding fuel!"
 			return
@@ -169,7 +169,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		updatehealth()
 		coil.use(1)
 		for(var/mob/O in viewers(user, null))
-			O.show_message(text("\red [user] has fixed some of the burnt wires on [src]!"), 1)
+			O.show_message(text("<span class=\"rose\">[user] has fixed some of the burnt wires on [src]!</span>"), 1)
 
 	else if (istype(W, /obj/item/weapon/crowbar))	// crowbar means open or close the cover
 		if(stat == DEAD)
@@ -237,7 +237,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				user << "You [ locked ? "lock" : "unlock"] [src]'s interface."
 				updateicon()
 			else
-				user << "\red Access denied."
+				user << "<span class=\"rose\">Access denied.</span>"
 
 	else if(istype(W, /obj/item/weapon/card/emag))		// trying to unlock with an emag card
 		if(!opened)//Cover is closed
@@ -273,22 +273,22 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 					var/time = time2text(world.realtime,"hh:mm:ss")
 					lawchanges.Add("[time] <B>:</B> [user.name]([user.key]) emagged [name]([key])")
 					set_zeroth_law("Only [user.real_name] and people he designates as being such are Syndicate Agents.")
-					src << "\red ALERT: Foreign software detected."
+					src << "<span class=\"rose\">ALERT: Foreign software detected.</span>"
 					sleep(5)
-					src << "\red Initiating diagnostics..."
+					src << "<span class=\"rose\">Initiating diagnostics...</span>"
 					sleep(20)
-					src << "\red SynBorg v1.7 loaded."
+					src << "<span class=\"rose\">SynBorg v1.7 loaded.</span>"
 					sleep(5)
-					src << "\red LAW SYNCHRONISATION ERROR"
+					src << "<span class=\"rose\">LAW SYNCHRONISATION ERROR</span>"
 					sleep(5)
-					src << "\red Would you like to send a report to NanoTraSoft? Y/N"
+					src << "<span class=\"rose\">Would you like to send a report to NanoTraSoft? Y/N</span>"
 					sleep(10)
-					src << "\red > N"
+					src << "<span class=\"rose\">> N</span>"
 					sleep(20)
-					src << "\red ERRORERRORERROR"
+					src << "<span class=\"rose\">ERRORERRORERROR</span>"
 					src << "<b>Obey these laws:</b>"
 					laws.show_laws(src)
-					src << "\red \b ALERT: [user.real_name] is your new master. Obey your new laws and his commands."
+					src << "<span class=\"danger\">ALERT: [user.real_name] is your new master. Obey your new laws and his commands.</span>"
 					if(src.module && istype(src.module, /obj/item/weapon/robot_module/miner))
 						for(var/obj/item/weapon/pickaxe/borgdrill/D in src.module.modules)
 							del(D)
@@ -296,7 +296,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 						src.module.rebuild()
 					updateicon()
 				else
-					user << "You fail to [ locked ? "unlock" : "lock"] [src]'s interface."
+					user << "<span class=\"rose\">You fail to [ locked ? "unlock" : "lock"] [src]'s interface.</span>"
 					if(prob(25))
 						src << "Hack attempt detected."
 			return
@@ -340,7 +340,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			call(/obj/item/clothing/gloves/space_ninja/proc/drain)("CYBORG",src,user:wear_suit)
 			return
 		if(user.a_intent == "help")
-			user.visible_message("\blue [user.name] pats [src.name] on the head.")
+			user.visible_message("<span class=\"notice\">[user.name] pats [src.name] on the head.</span>")
 			return
 
 	if(!istype(user, /mob/living/silicon))
@@ -355,14 +355,14 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				if (randn <= 25)
 					weakened = 3
 					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-					visible_message("\red <B>[user] has pushed [src]!</B>")
+					visible_message("<span class=\"danger\">[user] has pushed [src]!</span>")
 					var/obj/item/found = locate(tool_state) in src.module.modules
 					if(!found)
 						var/obj/item/TS = tool_state
 						drop_item()
 						if(TS && TS.loc)
 							TS.loc = src.loc
-							visible_message("\red <B>[src]'s robotic arm loses grip on what it was holding")
+							visible_message("<span class=\"danger\">[src]'s robotic arm loses grip on what it was holding</span>")
 					return
 				if(randn <= 50)//MoMMI's robot arm is stronger than a human's, but not by much
 					var/obj/item/found = locate(tool_state) in src.module.modules
@@ -372,14 +372,14 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 						if(TS && TS.loc)
 							TS.loc = src.loc
 						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-						visible_message("\red <B>[user] has disarmed [src]!</B>")
+						visible_message("<span class=\"danger\">[user] has disarmed [src]!</span>")
 					else
 						playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-						visible_message("\red <B>[user] attempted to disarm [src]!</B>")
+						visible_message("<span class=\"danger\">[user] attempted to disarm [src]!</span>")
 					return
 
 				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-				visible_message("\red <B>[user] attempted to disarm [src]!</B>")
+				visible_message("<span class=\"danger\">[user] attempted to disarm [src]!</span>")
 
 /mob/living/silicon/robot/mommi/updateicon()
 	icon_state=subtype
@@ -407,7 +407,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 /mob/living/silicon/robot/mommi/installed_modules()
 	if(weapon_lock)
-		src << "\red Weapon lock active, unable to use modules! Count:[weaponlock_time]"
+		src << "<span class=\"rose\">Weapon lock active, unable to use modules! Count:[weaponlock_time]</span>"
 		return
 
 	if(!module)

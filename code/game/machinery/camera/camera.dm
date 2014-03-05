@@ -167,10 +167,10 @@ var/list/camera_names=list()
 					O << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", itemname, info), text("window=[]", itemname))
 	else if (istype(W, /obj/item/device/camera_bug) && panel_open)
 		if (!src.can_use())
-			user << "\blue Camera non-functional"
+			user << "<span class=\"notice\">Camera non-functional</span>"
 			return
 		else
-			user << "\blue Camera bugged."
+			user << "<span class=\"notice\">Camera bugged.</span>"
 			user.drop_item(W)
 			hasbug = W
 			contents += W
@@ -180,7 +180,7 @@ var/list/camera_names=list()
 						desc += "<br>The power light on the camera is blinking"
 						triggerCameraAlarm()
 	else if (iscrowbar(W) && panel_open && src.hasbug)
-		user << "\blue You retrieve \the [hasbug]"
+		user << "<span class=\"notice\">You retrieve \the [hasbug]</span>"
 		user.put_in_hands(hasbug)
 		contents -= hasbug
 		hasbug = null
@@ -192,7 +192,7 @@ var/list/camera_names=list()
 		spark_system.start()
 		playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 		playsound(loc, "sparks", 50, 1)
-		visible_message("\blue The camera has been sliced apart by [] with an energy blade!")
+		visible_message("<span class=\"notice\">The camera has been sliced apart by [] with an energy blade!</span>")
 		del(src)
 	else
 		..()
@@ -211,19 +211,19 @@ var/list/camera_names=list()
 		status = !( src.status )
 		if (!(src.status))
 			if(user)
-				visible_message("\red [user] has deactivated [src]!")
+				visible_message("<span class=\"rose\">[user] has deactivated [src]!</span>")
 				add_hiddenprint(user)
 			else
-				visible_message("\red \The [src] deactivates!")
+				visible_message("<span class=\"rose\">\The [src] deactivates!</span>")
 			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
 			icon_state = "[initial(icon_state)]1"
 			add_hiddenprint(user)
 		else
 			if(user)
-				visible_message("\red [user] has reactivated [src]!")
+				visible_message("<span class=\"rose\">[user] has reactivated [src]!</span>")
 				add_hiddenprint(user)
 			else
-				visible_message("\red \the [src] reactivates!")
+				visible_message("<span class=\"rose\">\the [src] reactivates!</span>")
 			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
 			icon_state = initial(icon_state)
 			add_hiddenprint(user)

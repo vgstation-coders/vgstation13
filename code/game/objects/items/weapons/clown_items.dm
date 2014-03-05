@@ -15,7 +15,7 @@
 			return
 
 		M.stop_pulling()
-		M << "\blue You slipped on the [name]!"
+		M << "<span class=\"notice\">You slipped on the [name]!</span>"
 		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
 		M.Stun(2)
 		M.Weaken(2)
@@ -30,7 +30,7 @@
 			return
 
 		M.stop_pulling()
-		M << "\blue You slipped on the [name]!"
+		M << "<span class=\"notice\">You slipped on the [name]!</span>"
 		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
 		M.Stun(3)
 		M.Weaken(2)
@@ -68,7 +68,7 @@
 
 /obj/item/weapon/soap/attack(mob/target as mob, mob/user as mob)
 	if(target && user && ishuman(target) && !target.stat && !user.stat && user.zone_sel &&user.zone_sel.selecting == "mouth" )
-		user.visible_message("\red \the [user] washes \the [target]'s mouth out with soap!")
+		user.visible_message("<span class=\"rose\">\the [user] washes \the [target]'s mouth out with soap!</span>")
 		return
 	..()
 

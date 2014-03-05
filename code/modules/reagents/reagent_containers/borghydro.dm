@@ -65,18 +65,18 @@
 /obj/item/weapon/reagent_containers/borghypo/attack(mob/M as mob, mob/user as mob)
 	var/datum/reagents/R = reagent_list[mode]
 	if(!R.total_volume)
-		user << "\red The injector is empty."
+		user << "<span class=\"rose\">The injector is empty.</span>"
 		return
 	if (!( istype(M, /mob) ))
 		return
 	if (R.total_volume)
-		user << "\blue You inject [M] with the injector."
-		M << "\red You feel a tiny prick!"
+		user << "<span class=\"notice\">You inject [M] with the injector.</span>"
+		M << "<span class=\"rose\">You feel a tiny prick!</span>"
 
 		R.reaction(M, INGEST)
 		if(M.reagents)
 			var/trans = R.trans_to(M, amount_per_transfer_from_this)
-			user << "\blue [trans] units injected.  [R.total_volume] units remaining."
+			user << "<span class=\"notice\">[trans] units injected.  [R.total_volume] units remaining.</span>"
 	return
 
 /obj/item/weapon/reagent_containers/borghypo/attack_self(mob/user as mob)
@@ -87,7 +87,7 @@
 
 	charge_tick = 0 //Prevents wasted chems/cell charge if you're cycling through modes.
 	var/datum/reagent/R = chemical_reagents_list[reagent_ids[mode]]
-	user << "\blue Synthesizer is now producing '[R.name]'."
+	user << "<span class=\"notice\">Synthesizer is now producing '[R.name]'.</span>"
 	return
 
 /obj/item/weapon/reagent_containers/borghypo/examine()
@@ -100,8 +100,8 @@
 	for(var/datum/reagents/RS in reagent_list)
 		var/datum/reagent/R = locate() in RS.reagent_list
 		if(R)
-			usr << "\blue It currently has [R.volume] units of [R.name] stored."
+			usr << "<span class=\"notice\">It currently has [R.volume] units of [R.name] stored.</span>"
 			empty = 0
 
 	if(empty)
-		usr << "\blue It is currently empty. Allow some time for the internal syntheszier to produce more."
+		usr << "<span class=\"notice\">It is currently empty. Allow some time for the internal syntheszier to produce more.</span>"

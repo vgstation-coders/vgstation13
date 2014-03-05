@@ -37,15 +37,15 @@
 				var/req=mommi_assembly_parts[t]
 				if(cc<req)
 					var/temppart = new t(src)
-					user << "\red You're short [req-cc] [temppart]\s."
+					user << "<span class=\"rose\">You're short [req-cc] [temppart]\s.</span>"
 					del(temppart)
 					return TRUE
 
 			if(!istype(loc,/turf))
-				user << "\red You can't assemble the MoMMI, \the [src] has to be standing on the ground (or a table) to be perfectly precise."
+				user << "<span class=\"rose\">You can't assemble the MoMMI, \the [src] has to be standing on the ground (or a table) to be perfectly precise.</span>"
 				return TRUE
 			if(!brainmob)
-				user << "\red What are you doing oh god put the brain back in."
+				user << "<span class=\"rose\">What are you doing oh god put the brain back in.</span>"
 				return TRUE
 			if(!brainmob.key)
 				var/ghost_can_reenter = 0
@@ -59,15 +59,15 @@
 					return TRUE
 
 			if(brainmob.stat == DEAD)
-				user << "\red Yeah, good idea. Give something deader than the pizza in your fridge legs.  Mom would be so proud."
+				user << "<span class=\"rose\">Yeah, good idea. Give something deader than the pizza in your fridge legs.  Mom would be so proud.</span>"
 				return TRUE
 
 			if(brainmob.mind in ticker.mode.head_revolutionaries)
-				user << "\red \The [src]'s firmware lets out a shrill sound, and flashes 'Abnormal Memory Engram'. It refuses to accept the brain."
+				user << "<span class=\"rose\">\The [src]'s firmware lets out a shrill sound, and flashes 'Abnormal Memory Engram'. It refuses to accept the brain.</span>"
 				return TRUE
 
 			if(jobban_isbanned(brainmob, "Cyborg"))
-				user << "\red This brain does not seem to fit."
+				user << "<span class=\"rose\">This brain does not seem to fit.</span>"
 				return TRUE
 
 			//canmove = 0
@@ -105,15 +105,15 @@
 				var/cc=contents_count(t)
 				if(cc<mommi_assembly_parts[t])
 					if(!brainmob)
-						user << "\red Why are you sticking robot legs on an empty [src], you idiot?"
+						user << "<span class=\"rose\">Why are you sticking robot legs on an empty [src], you idiot?</span>"
 						return TRUE
 					contents += O
 					user.drop_item()
 					O.loc=src
-					user << "\blue You successfully add \the [O] to the contraption,"
+					user << "<span class=\"notice\">You successfully add \the [O] to the contraption.</span>"
 					return TRUE
 				else if(cc==mommi_assembly_parts[t])
-					user << "\red You have enough of these."
+					user << "<span class=\"rose\">You have enough of these.</span>"
 					return TRUE
 		return FALSE
 
@@ -122,10 +122,10 @@
 			return
 		if(istype(O,/obj/item/brain) && !brainmob) //Time to stick a brain in it --NEO
 			if(!O:brainmob)
-				user << "\red You aren't sure where this brain came from, but you're pretty sure it's a useless brain."
+				user << "<span class=\"rose\">You aren't sure where this brain came from, but you're pretty sure it's a useless brain.</span>"
 				return
 			for(var/mob/V in viewers(src, null))
-				V.show_message(text("\blue [user] sticks \a [O] into \the [src]."))
+				V.show_message(text("<span class=\"notice\">[user] sticks \a [O] into \the [src].</span>"))
 
 			brainmob = O:brainmob
 			O:brainmob = null
@@ -150,9 +150,9 @@
 		if((istype(O,/obj/item/weapon/card/id)||istype(O,/obj/item/device/pda)) && brainmob)
 			if(allowed(user))
 				locked = !locked
-				user << "\blue You [locked ? "lock" : "unlock"] the brain holder."
+				user << "<span class=\"notice\">You [locked ? "lock" : "unlock"] the brain holder.</span>"
 			else
-				user << "\red Access denied."
+				user << "<span class=\"rose\">Access denied.</span>"
 			return
 		if(brainmob)
 			O.attack(brainmob, user)//Oh noooeeeee
@@ -161,11 +161,11 @@
 
 	attack_self(mob/user as mob)
 		if(!brainmob)
-			user << "\red You upend the MMI, but there's nothing in it."
+			user << "<span class=\"rose\">You upend the MMI, but there's nothing in it.</span>"
 		else if(locked)
-			user << "\red You upend the MMI, but the brain is clamped into place."
+			user << "<span class=\"rose\">You upend the MMI, but the brain is clamped into place.</span>"
 		else
-			user << "\blue You upend the MMI, spilling the brain onto the floor."
+			user << "<span class=\"notice\">You upend the MMI, spilling the brain onto the floor.</span>"
 			var/obj/item/brain/brain = new(user.loc)
 			brainmob.container = null//Reset brainmob mmi var.
 			brainmob.loc = brain//Throw mob into brain.
@@ -214,7 +214,7 @@
 				brainmob << "Can't do that while incapacitated or dead."
 
 			radio.broadcasting = radio.broadcasting==1 ? 0 : 1
-			brainmob << "\blue Radio is [radio.broadcasting==1 ? "now" : "no longer"] broadcasting."
+			brainmob << "<span class=\"notice\">Radio is [radio.broadcasting==1 ? "now" : "no longer"] broadcasting.</span>"
 
 		Toggle_Listening()
 			set name = "Toggle Listening"
@@ -227,7 +227,7 @@
 				brainmob << "Can't do that while incapacitated or dead."
 
 			radio.listening = radio.listening==1 ? 0 : 1
-			brainmob << "\blue Radio is [radio.listening==1 ? "now" : "no longer"] receiving broadcast."
+			brainmob << "<span class=\"notice\">Radio is [radio.listening==1 ? "now" : "no longer"] receiving broadcast.</span>"
 
 /obj/item/device/mmi/emp_act(severity)
 	if(!brainmob)

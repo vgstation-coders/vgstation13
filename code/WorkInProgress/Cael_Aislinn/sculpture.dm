@@ -29,12 +29,12 @@
 		target.LAssailant = src
 
 		playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-		visible_message("\red [src] has grabbed [target]!")
-		target << "\red <b>You feel something suddenly grab you around the neck from behind!</b> Everything goes black..."
+		visible_message("<span class=\"rose\">[src] has grabbed [target]!</span>")
+		target << "<span class=\"danger\">You feel something suddenly grab you around the neck from behind!</span> Everything goes black..."
 
 		G.state = GRAB_KILL
 
-		desc = "It's some kind of human sized, doll-like sculpture, with weird discolourations on some parts of it. It appears to be quite solid. [G ? "\red The sculpture is holding [G.affecting] in a vice-like grip." : ""]"
+		desc = "It's some kind of human sized, doll-like sculpture, with weird discolourations on some parts of it. It appears to be quite solid. [G ? "<span class=\"rose\"> The sculpture is holding [G.affecting] in a vice-like grip.</span>" : ""]"
 		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been grabbed by SCP-173, and is being strangled!</font>")
 		log_admin("[target] ([target.ckey]) has been grabbed and is being strangled by SCP-173.")
 		message_admins("Alert: [target.real_name] has been grabbed and is being strangled by SCP-173.") //Set var/allow_escape = 1 to allow this player to escape temporarily, or var/hibernate = 1 to disable it entirely.
@@ -72,8 +72,8 @@
 	//if we are sent into forced hibernation mode, allow our victim to escape
 	if(hibernate && G && G.state == GRAB_KILL)
 		if(G)
-			G.affecting << "\red You suddenly feel the grip around your neck being loosened!"
-			visible_message("\red [src] suddenly loosens it's grip due to hibernate!")
+			G.affecting << "<span class=\"rose\">You suddenly feel the grip around your neck being loosened!</span>"
+			visible_message("<span class=\"rose\">[src] suddenly loosens it's grip due to hibernate!</span>")
 			G.state = GRAB_AGGRESSIVE
 		return
 
@@ -81,8 +81,8 @@
 	if(allow_escape)
 		allow_escape = 0
 		if(G)
-			G.affecting << "\red You suddenly feel the grip around your neck being loosened!"
-			visible_message("\red [src] suddenly loosens it's grip!")
+			G.affecting << "<span class=\"rose\">You suddenly feel the grip around your neck being loosened!</span>"
+			visible_message("<span class=\"rose\">[src] suddenly loosens it's grip!</span>")
 			G.state = GRAB_AGGRESSIVE
 			if(!observed)
 				Escape()
@@ -240,8 +240,8 @@
 //	else if(G)
 //		//we can't move while observed, so we can't effectively strangle any more //since victim is observer this means no strangling
 //		//our grip is still rock solid, but the victim has a chance to escape
-//		G.affecting << "\red You suddenly feel the grip around your neck being loosened!"
-//		visible_message("\red [src] suddenly loosens it's grip due to being observed!")
+//		G.affecting << "<span class=\"rose\">You suddenly feel the grip around your neck being loosened!</span>"
+//		visible_message("<span class=\"rose\">[src] suddenly loosens it's grip due to being observed!</span>")
 //		G.state = GRAB_AGGRESSIVE
 
 /mob/living/simple_animal/sculpture/attackby(var/obj/item/O as obj, var/mob/user as mob)

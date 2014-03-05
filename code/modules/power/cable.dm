@@ -87,7 +87,7 @@
 	if(istype(W, /obj/item/weapon/wirecutters))
 
 //		if(power_switch)
-//			user << "\red This piece of cable is tied to a power switch. Flip the switch to remove it."
+//			user << "<span class=\"rose\">This piece of cable is tied to a power switch. Flip the switch to remove it.</span>"
 //			return
 
 		if (shock(user, 50))
@@ -99,7 +99,7 @@
 			new/obj/item/weapon/cable_coil(T, 1, _color)
 
 		for(var/mob/O in viewers(src, null))
-			O.show_message("\red [user] cuts the cable.", 1)
+			O.show_message("<span class=\"rose\">[user] cuts the cable.</span>", 1)
 
 		var/message = "A wire has been cut "
 		var/atom/A = user
@@ -130,10 +130,10 @@
 		var/datum/powernet/PN = get_powernet()		// find the powernet
 
 		if(PN && (PN.avail > 0))		// is it powered?
-			user << "\red [PN.avail]W in power network."
+			user << "<span class=\"rose\">[PN.avail]W in power network.</span>"
 
 		else
-			user << "\red The cable is not powered."
+			user << "<span class=\"rose\">The cable is not powered.</span>"
 
 		shock(user, 5, 0.2)
 
@@ -194,7 +194,7 @@
 	attack_verb = list("whipped", "lashed", "disciplined", "flogged")
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class=\"danger\">[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>"
 		return(OXYLOSS)
 
 
@@ -238,14 +238,14 @@
 	if(ishuman(M) && !M.restrained() && !M.stat && !M.paralysis && ! M.stunned)
 		if(!istype(usr.loc,/turf)) return
 		if(src.amount <= 14)
-			usr << "\red You need at least 15 lengths to make restraints!"
+			usr << "<span class=\"rose\">You need at least 15 lengths to make restraints!</span>"
 			return
 		var/obj/item/weapon/handcuffs/cable/B = new /obj/item/weapon/handcuffs/cable(usr.loc)
 		B.icon_state = "cuff_[_color]"
-		usr << "\blue You wind some cable together to make some restraints."
+		usr << "<span class=\"notice\">You wind some cable together to make some restraints.</span>"
 		src.use(15)
 	else
-		usr << "\blue You cannot do that."
+		usr << "<span class=\"notice\">You cannot do that.</span>"
 	..()
 
 /obj/item/weapon/cable_coil/attackby(obj/item/weapon/W, mob/user)
@@ -581,12 +581,12 @@ obj/structure/cable/proc/cableColor(var/colorC)
 		if(S.burn_dam > 0 && use(1))
 			S.heal_damage(0,15,0,1)
 			if(user != M)
-				user.visible_message("\red \The [user] repairs some burn damage on their [S.display_name] with \the [src]",\
-				"\red You repair some burn damage on your [S.display_name]",\
+				user.visible_message("<span class=\"rose\">\The [user] repairs some burn damage on their [S.display_name] with \the [src]</span>",\
+				"<span class=\"rose\">You repair some burn damage on your [S.display_name]</span>",\
 				"You hear wires being cut.")
 			else
-				user.visible_message("\red \The [user] repairs some burn damage on their [S.display_name] with \the [src]",\
-				"\red You repair some burn damage on your [S.display_name]",\
+				user.visible_message("<span class=\"rose\">\The [user] repairs some burn damage on their [S.display_name] with \the [src]</span>",\
+				"<span class=\"rose\">You repair some burn damage on your [S.display_name]</span>",\
 				"You hear wires being cut.")
 		else
 			user << "Nothing to fix!"

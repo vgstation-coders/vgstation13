@@ -75,21 +75,21 @@
 				return
 
 	if (!user.IsAdvancedToolUser() || isMoMMI(user))
-		user << "\red You don't have the dexterity to do this!"
+		user << "<span class=\"rose\">You don't have the dexterity to do this!</span>"
 		return
 	if(istype(user, /mob/living))
 		var/mob/living/M = user
 		if (M_HULK in M.mutations)
-			M << "\red Your meaty finger is much too large for the trigger guard!"
+			M << "<span class=\"rose\">Your meaty finger is much too large for the trigger guard!</span>"
 			return
 	if(ishuman(user))
 		var/mob/living/carbon/human/H=user
 		if(user.dna && user.dna.mutantrace == "adamantine")
-			user << "\red Your metal fingers don't fit in the trigger guard!"
+			user << "<span class=\"rose\">Your metal fingers don't fit in the trigger guard!</span>"
 			return
 		var/datum/organ/external/a_hand = H.get_active_hand_organ()
 		if(!a_hand.can_use_advanced_tools())
-			user << "\red Your [a_hand] doesn't have the dexterity to do this!"
+			user << "<span class=\"rose\">Your [a_hand] doesn't have the dexterity to do this!</span>"
 			return
 
 	add_fingerprint(user)
@@ -172,7 +172,7 @@
 
 /obj/item/weapon/gun/proc/click_empty(mob/user = null)
 	if (user)
-		user.visible_message("*click click*", "\red <b>*click*</b>")
+		user.visible_message("*click click*", "<span class=\"danger\">*click*</span>")
 		playsound(user, 'sound/weapons/empty.ogg', 100, 1)
 	else
 		src.visible_message("*click click*")
@@ -182,9 +182,9 @@
 	//Suicide handling.
 	if (M == user && user.zone_sel.selecting == "mouth" && !mouthshoot)
 		mouthshoot = 1
-		M.visible_message("\red [user] sticks their gun in their mouth, ready to pull the trigger...")
+		M.visible_message("<span class=\"rose\">[user] sticks their gun in their mouth, ready to pull the trigger...</span>")
 		if(!do_after(user, 40))
-			M.visible_message("\blue [user] decided life was worth living")
+			M.visible_message("<span class=\"notice\">[user] decided life was worth living</span>")
 			mouthshoot = 0
 			return
 		if (load_into_chamber())
@@ -212,7 +212,7 @@
 	if (src.load_into_chamber())
 		//Point blank shooting if on harm intent or target we were targeting.
 		if(user.a_intent == "hurt")
-			user.visible_message("\red <b> \The [user] fires \the [src] point blank at [M]!</b>")
+			user.visible_message("<span class=\"danger\">\The [user] fires \the [src] point blank at [M]!</span>")
 			in_chamber.damage *= 1.3
 			src.Fire(M,user,0,0,1)
 			return

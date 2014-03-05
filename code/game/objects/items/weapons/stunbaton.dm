@@ -17,7 +17,7 @@
 	var/mob/foundmob = "" //Used in throwing proc.
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is putting the live [src.name] in \his mouth! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class=\"danger\">[user] is putting the live [src.name] in \his mouth! It looks like \he's trying to commit suicide.</span>"
 		return (FIRELOSS)
 
 /obj/item/weapon/melee/baton/New()
@@ -82,7 +82,7 @@
 
 /obj/item/weapon/melee/baton/attack_self(mob/user)
 	if(status && (M_CLUMSY in user.mutations) && prob(50))
-		user << "\red You grab the [src] on the wrong side."
+		user << "<span class=\"rose\">You grab the [src] on the wrong side.</span>"
 		user.Weaken(stunforce*3)
 		deductcharge(hitcost)
 		return

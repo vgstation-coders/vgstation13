@@ -693,19 +693,19 @@
 						if(locate(user) in get_step(src,direction))
 							found=1
 					if(!found)
-						user << "\red Cannot set this as the output location; You're too far away."
+						user << "<span class=\"rose\">Cannot set this as the output location; You're too far away.</span>"
 						return
 					if(istype(output,/obj/machinery/mineral/output))
 						del(output)
 					output=new /obj/machinery/mineral/output(usr.loc)
-					user << "\blue Output set."
+					user << "<span class=\"notice\">Output set.</span>"
 				if("No")
 					return
 				if("Machine Location")
 					if(istype(output,/obj/machinery/mineral/output))
 						del(output)
 					output=src
-					user << "\blue Output set."
+					user << "<span class=\"notice\">Output set.</span>"
 		return
 	if (opened)
 		if(istype(W, /obj/item/weapon/crowbar))
@@ -725,7 +725,7 @@
 			del(src)
 			return 1
 		else
-			user << "\red You can't load the [src.name] while it's opened."
+			user << "<span class=\"rose\">You can't load the [src.name] while it's opened.</span>"
 			return 1
 
 	if(istype(W, /obj/item/weapon/card/emag))

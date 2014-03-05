@@ -20,7 +20,7 @@
 	attack_self(mob/user as mob)
 		if(brainmob && !brainmob.key && searching == 0)
 			//Start the process of searching for a new user.
-			user << "\blue You carefully locate the manual activation switch and start the positronic brain's boot process."
+			user << "<span class=\"notice\">You carefully locate the manual activation switch and start the positronic brain's boot process.</span>"
 			icon_state = "posibrain-searching"
 			ghost_volunteers.Cut()
 			src.searching = 1
@@ -75,7 +75,7 @@
 
 		var/turf/T = get_turf_or_move(src.loc)
 		for (var/mob/M in viewers(T))
-			M.show_message("\blue The positronic brain chimes quietly.")
+			M.show_message("<span class=\"notice\">The positronic brain chimes quietly.</span>")
 		icon_state = "posibrain-occupied"
 
 	proc/reset_search() //We give the players sixty seconds to decide, then reset the timer.
@@ -87,7 +87,7 @@
 
 		var/turf/T = get_turf_or_move(src.loc)
 		for (var/mob/M in viewers(T))
-			M.show_message("\blue The positronic brain buzzes quietly, and the golden lights fade away. Perhaps you could try again?")
+			M.show_message("<span class=\"notice\">The positronic brain buzzes quietly, and the golden lights fade away. Perhaps you could try again?</span>")
 
 	Topic(href,href_list)
 		if("signup" in href_list)
@@ -100,16 +100,16 @@
 			O << "Not looking for a ghost, yet."
 			return
 		if(!istype(O))
-			O << "\red NO."
+			O << "<span class=\"rose\">NO.</span>"
 			return
 		if(O in ghost_volunteers)
-			O << "\blue Removed from registration list."
+			O << "<span class=\"notice\">Removed from registration list.</span>"
 			ghost_volunteers.Remove(O)
 			return
 		if(!check_observer(O))
-			O << "\red You cannot be \a [src]."
+			O << "<span class=\"rose\">You cannot be \a [src].</span>"
 			return
-		O.<< "\blue You've been added to the list of ghosts that may become this [src].  Click again to unvolunteer."
+		O.<< "<span class=\"notice\">You've been added to the list of ghosts that may become this [src].  Click again to unvolunteer.</span>"
 		ghost_volunteers.Add(O)
 
 
@@ -179,4 +179,4 @@
 	else
 		var/turf/T = get_turf_or_move(src.loc)
 		for (var/mob/M in viewers(T))
-			M.show_message("\blue The positronic brain pings softly.")
+			M.show_message("<span class=\"notice\">The positronic brain pings softly.</span>")

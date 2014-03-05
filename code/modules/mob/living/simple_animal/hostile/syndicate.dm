@@ -64,12 +64,12 @@
 			if (O.damtype == HALLOSS)
 				damage = 0
 			health -= damage
-			visible_message("\red \b [src] has been attacked with [O] by [user]. ")
+			visible_message("<span class=\"danger\">[src] has been attacked with [O] by [user].</span>")
 		else
-			visible_message("\red \b [src] blocks [O] with its shield! ")
+			visible_message("<span class=\"danger\">[src] blocks [O] with its shield!</span>")
 	else
-		usr << "\red This weapon is ineffective, it does no damage."
-		visible_message("\red [user] gently taps [src] with [O]. ")
+		usr << "<span class=\"rose\">This weapon is ineffective, it does no damage.</span>"
+		visible_message("<span class=\"rose\">[user] gently taps [src] with [O].</span>")
 
 
 /mob/living/simple_animal/hostile/syndicate/melee/bullet_act(var/obj/item/projectile/Proj)
@@ -77,7 +77,7 @@
 	if(prob(65))
 		src.health -= Proj.damage
 	else
-		visible_message("\red <B>[src] blocks [Proj] with its shield!</B>")
+		visible_message("<span class=\"danger\">[src] blocks [Proj] with its shield!</span>")
 	return 0
 
 
@@ -159,6 +159,6 @@
 
 /mob/living/simple_animal/hostile/viscerator/Die()
 	..()
-	visible_message("\red <b>[src]</b> is smashed into pieces!")
+	visible_message("<span class=\"danger\">[src]</span><span class=\"rose\">is smashed into pieces!</span>")
 	del src
 	return

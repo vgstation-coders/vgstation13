@@ -105,13 +105,13 @@
 	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
 		return
 	if (!ishuman(usr) && !ismonkey(usr)) //Make sure they're a mob that has dna
-		usr << "\blue Try as you might, you can not climb up into the scanner."
+		usr << "<span class=\"notice\">Try as you might, you can not climb up into the scanner.</span>"
 		return
 	if (src.occupant)
-		usr << "\blue <B>The scanner is already occupied!</B>"
+		usr << "<span class=\"notice\"><B>The scanner is already occupied!</B></span>"
 		return
 	if (usr.abiotic())
-		usr << "\blue <B>Subject cannot have abiotic items on.</B>"
+		usr << "<span class=\"notice\"><B>Subject cannot have abiotic items on.</B></span>"
 		return
 	usr.stop_pulling()
 	usr.client.perspective = EYE_PERSPECTIVE
@@ -140,7 +140,7 @@
 	if(!istype(user.loc, /turf) || !istype(O.loc, /turf)) // are you in a container/closet/pod/etc?
 		return
 	if(occupant)
-		user << "\blue <B>The DNA Scanner is already occupied!</B>"
+		user << "<span class=\"notice\"><B>The DNA Scanner is already occupied!</B></span>"
 		return
 	if(isrobot(user))
 		if(!istype(user:module, /obj/item/weapon/robot_module/medical))
@@ -150,7 +150,7 @@
 	if(!istype(L) || L.buckled)
 		return
 	if(L.abiotic())
-		user << "\red <B>Subject cannot have abiotic items on.</B>"
+		user << "<span class=\"danger\">Subject cannot have abiotic items on.</span>"
 		return
 	for(var/mob/living/carbon/slime/M in range(1,L))
 		if(M.Victim == L)
@@ -174,7 +174,7 @@
 			return 1
 	else if(istype(item, /obj/item/weapon/crowbar))
 		if (occupant)
-			user << "\red You cannot disassemble this [src], it's occupado."
+			user << "<span class=\"rose\">You cannot disassemble this [src], it's occupado.</span>"
 			return 1
 		if (opened)
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
@@ -189,7 +189,7 @@
 			return
 	else if(istype(item, /obj/item/weapon/reagent_containers/glass))
 		if(beaker)
-			user << "\red A beaker is already loaded into the machine."
+			user << "<span class=\"rose\">A beaker is already loaded into the machine.</span>"
 			return
 
 		beaker = item
@@ -203,10 +203,10 @@
 	if (!ismob(G.affecting))
 		return
 	if (src.occupant)
-		user << "\blue <B>The scanner is already occupied!</B>"
+		user << "<span class=\"notice\"><B>The scanner is already occupied!</B></span>"
 		return
 	if (G.affecting.abiotic())
-		user << "\blue <B>Subject cannot have abiotic items on.</B>"
+		user << "<span class=\"notice\"><B>Subject cannot have abiotic items on.</B></span>"
 		return
 	put_in(G.affecting)
 	src.add_fingerprint(user)
@@ -314,7 +314,7 @@
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, 20))
 			if (src.stat & BROKEN)
-				user << "\blue The broken glass falls out."
+				user << "<span class=\"notice\">The broken glass falls out.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				new /obj/item/weapon/shard( src.loc )
 				var/obj/item/weapon/circuitboard/scan_consolenew/M = new /obj/item/weapon/circuitboard/scan_consolenew( A )
@@ -326,7 +326,7 @@
 				A.anchored = 1
 				del(src)
 			else
-				user << "\blue You disconnect the monitor."
+				user << "<span class=\"notice\">You disconnect the monitor.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				var/obj/item/weapon/circuitboard/scan_consolenew/M = new /obj/item/weapon/circuitboard/scan_consolenew( A )
 				for (var/obj/C in src)

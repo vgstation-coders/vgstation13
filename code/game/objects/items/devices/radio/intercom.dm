@@ -79,23 +79,23 @@
 	if(!installed)
 		if(istype(W,/obj/item/weapon/cable_coil))
 			if(!circuitry_installed)
-				user << "\red You need to install intercom electronics first!"
+				user << "<span class=\"rose\">You need to install intercom electronics first!</span>"
 				return 1
 			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
 			if(do_after(user, 10))
 				installed=1
 				b_stat=0
-				user << "\blue You wire \the [src]!"
+				user << "<span class=\"notice\">You wire \the [src]!</span>"
 			return 1
 		if(istype(W,/obj/item/weapon/intercom_electronics))
 			for(var/obj/item/weapon/intercom_electronics/board in src)
-				user << "\red There's already an intercom electronics board inside!"
+				user << "<span class=\"rose\">There's already an intercom electronics board inside!</span>"
 				return 1
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 			if(do_after(user, 10))
 				user.drop_item()
 				W.loc=src
-				user << "\blue You insert \the [W] into \the [src]!"
+				user << "<span class=\"notice\">You insert \the [W] into \the [src]!</span>"
 			return 1
 		if(istype(W,/obj/item/weapon/screwdriver))
 			for(var/obj/item/weapon/intercom_electronics/board in src)
@@ -104,7 +104,7 @@
 					del(board)
 					circuitry_installed=1
 					update_icon()
-					user << "\blue You secure the electronics!"
+					user << "<span class=\"notice\">You secure the electronics!</span>"
 				return 1
 		if(istype(W,/obj/item/weapon/weldingtool))
 			var/obj/item/weapon/weldingtool/WT=W
@@ -112,10 +112,10 @@
 				return ..()
 			playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 			if(!WT.remove_fuel(3, user))
-				user << "\red You're out of welding fuel."
+				user << "<span class=\"rose\">You're out of welding fuel.</span>"
 				return 1
 			if(do_after(user, 10))
-				user << "\blue You cut the intercom frame from the wall!"
+				user << "<span class=\"notice\">You cut the intercom frame from the wall!</span>"
 				new /obj/item/intercom_frame(src.loc)
 				return 1
 	else
@@ -126,7 +126,7 @@
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 			if(do_after(user, 10))
 				new /obj/item/weapon/intercom_electronics(src.loc)
-				user << "\blue The circuitboard pops out!"
+				user << "<span class=\"notice\">The circuitboard pops out!</span>"
 				installed=0
 				circuitry_installed=0
 				b_stat=1

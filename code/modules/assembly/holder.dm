@@ -159,37 +159,37 @@
 	attackby(obj/item/weapon/W as obj, mob/user as mob)
 		if(isscrewdriver(W))
 			if(!a_left || !a_right)
-				user << "\red BUG:Assembly part missing, please report this!"
+				user << "<span class=\"rose\">BUG:Assembly part missing, please report this!</span>"
 				return
 			a_left.toggle_secure()
 			a_right.toggle_secure()
 			secured = !secured
 			if(secured)
-				user << "\blue \The [src] is ready!"
+				user << "<span class=\"notice\">\The [src] is ready!</span>"
 			else
-				user << "\blue \The [src] can now be taken apart!"
+				user << "<span class=\"notice\">\The [src] can now be taken apart!</span>"
 			update_icon()
 			return
 		else if(W.IsSpecialAssembly())
 			attach_special(W, user)
 		else if(istype(W,/obj/item/weapon/weldingtool))
 			if(!a_left || !a_right)
-				user << "\red BUG:Assembly part missing, please report this!"
+				user << "<span class=\"rose\">BUG:Assembly part missing, please report this!</span>"
 				return
 			if(!isigniter(a_left) && !isigniter(a_right))
-				user << "\red You can't make an igniter without an igniting component!"
+				user << "<span class=\"rose\">You can't make an igniter without an igniting component!</span>"
 				return
 			var/obj/item/weapon/weldingtool/WT = W
 			if (WT.remove_fuel(0,user))
 				playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
-				user << "\blue You begin to weld \the [src] to the floor..."
+				user << "<span class=\"notice\">You begin to weld \the [src] to the floor...</span>"
 				if (do_after(user, 40))
 					var/obj/machinery/igniter/igniter=new(src.loc)
 					igniter.assembly=src
 					src.loc=igniter
-					user << "\blue You attach the assembly to the floor with a few spot welds."
+					user << "<span class=\"notice\">You attach the assembly to the floor with a few spot welds.</span>"
 			else:
-				user << "\red You need more welder fuel to do that."
+				user << "<span class=\"rose\">You need more welder fuel to do that.</span>"
 				return
 
 		else
@@ -201,7 +201,7 @@
 		src.add_fingerprint(user)
 		if(src.secured)
 			if(!a_left || !a_right)
-				user << "\red Assembly part missing!"
+				user << "<span class=\"rose\">Assembly part missing!</span>"
 				return
 			if(istype(a_left,a_right.type))//If they are the same type it causes issues due to window code
 				switch(alert("Which side would you like to use?",,"Left","Right"))

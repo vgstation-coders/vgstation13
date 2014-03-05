@@ -314,10 +314,10 @@
 		if(istype(usr,/mob/living/silicon/robot))
 			var/mob/living/silicon/robot/R = usr
 			if(!(R.module && istype(R.module,/obj/item/weapon/robot_module/butler) ) && !isMoMMI(R))
-				usr << "\red The vending machine refuses to interface with you, as you are not in its target demographic!"
+				usr << "<span class=\"rose\">The vending machine refuses to interface with you, as you are not in its target demographic!</span>"
 				return
 		else
-			usr << "\red The vending machine refuses to interface with you, as you are not in its target demographic!"
+			usr << "<span class=\"rose\">The vending machine refuses to interface with you, as you are not in its target demographic!</span>"
 			return
 
 	if(href_list["remove_coin"])
@@ -328,7 +328,7 @@
 		coin.loc = src.loc
 		if(!usr.get_active_hand())
 			usr.put_in_hands(coin)
-		usr << "\blue You remove the [coin] from the [src]"
+		usr << "<span class=\"notice\">You remove the [coin] from the [src]</span>"
 		coin = null
 	usr.set_machine(src)
 
@@ -337,7 +337,7 @@
 		if ((href_list["vend"]) && (src.vend_ready) && (!currently_vending))
 
 			if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
-				usr << "\red Access denied." //Unless emagged of course
+				usr << "<span class=\"rose\">Access denied.</span>" //Unless emagged of course
 				flick(src.icon_deny,src)
 				return
 
@@ -382,20 +382,20 @@
 
 /obj/machinery/vending/proc/vend(datum/data/vending_product/R, mob/user)
 	if (!allowed(user) && !emagged && wires.IsIndexCut(VENDING_WIRE_IDSCAN)) //For SECURE VENDING MACHINES YEAH
-		user << "\red Access denied." //Unless emagged of course
+		user << "<span class=\"rose\">Access denied.</span>" //Unless emagged of course
 		flick(src.icon_deny,src)
 		return
 	src.vend_ready = 0 //One thing at a time!!
 
 	if (R in coin_records)
 		if(!coin)
-			user << "\blue You need to insert a coin to get this item."
+			user << "<span class=\"notice\">You need to insert a coin to get this item.</span>"
 			return
 		if(coin.string_attached)
 			if(prob(50))
-				user << "\blue You successfully pull the coin out before the [src] could swallow it."
+				user << "<span class=\"notice\">You successfully pull the coin out before the [src] could swallow it.</span>"
 			else
-				user << "\blue You weren't able to pull the coin out fast enough, the machine ate it, string and all."
+				user << "<span class=\"notice\">You weren't able to pull the coin out fast enough, the machine ate it, string and all.</span>"
 				del(coin)
 		else
 			del(coin)
@@ -446,7 +446,7 @@
 		return
 
 	for(var/mob/O in hearers(src, null))
-		O.show_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"",2)
+		O.show_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"</span>",2)
 	return
 
 /obj/machinery/vending/power_change()
@@ -500,7 +500,7 @@
 		return 0
 	spawn(0)
 		throw_item.throw_at(target, 16, 3)
-	src.visible_message("\red <b>[src] launches [throw_item.name] at [target.name]!</b>")
+	src.visible_message("<span class=\"danger\">[src] launches [throw_item.name] at [target.name]!</span>")
 	return 1
 
 
@@ -647,7 +647,7 @@
 	desc = "Medical drug dispenser."
 	icon_state = "med"
 	icon_deny = "med-deny"
-	product_ads = "Go save some lives!;The best stuff for your medbay.;Only the finest tools.;Natural chemicals!;This stuff saves lives.;Don't you want some?;Ping!"
+	product_ads = "Go save some lives!</span>;The best stuff for your medbay.</span>;Only the finest tools.</span>;Natural chemicals!</span>;This stuff saves lives.</span>;Don't you want some?;Ping!"
 	req_access_txt = "5"
 	products = list(/obj/item/weapon/reagent_containers/glass/bottle/antitoxin = 4,/obj/item/weapon/reagent_containers/glass/bottle/inaprovaline = 4,
 					/obj/item/weapon/reagent_containers/glass/bottle/stoxin = 4,/obj/item/weapon/reagent_containers/glass/bottle/toxin = 4,

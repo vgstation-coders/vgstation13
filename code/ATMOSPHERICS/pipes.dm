@@ -122,7 +122,7 @@
 	level = T.intact ? 2 : 1
 	initialize(1)
 	if(!node1&&!node2)
-		usr << "\red There's nothing to connect this pipe section to! (with how the pipe code works, at least one end needs to be connected to something, otherwise the game deletes the segment)"
+		usr << "<span class=\"rose\">There's nothing to connect this pipe section to! (with how the pipe code works, at least one end needs to be connected to something, otherwise the game deletes the segment)</span>"
 		return 0
 	update_icon()
 	build_network()
@@ -199,7 +199,7 @@
 
 
 /obj/machinery/atmospherics/pipe/simple/proc/burst()
-	src.visible_message("\red \bold [src] bursts!");
+	src.visible_message("<span class=\"danger\">[src] bursts!</span>");
 	playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
 	var/datum/effect/effect/system/smoke_spread/smoke = new
 	smoke.set_up(1,0, src.loc, 0)
@@ -515,12 +515,12 @@
 		return // Coloring pipes.
 	if (istype(W, /obj/item/device/analyzer) && get_dist(user, src) <= 1)
 		for (var/mob/O in viewers(user, null))
-			O << "\red [user] has used the analyzer on \icon[icon]"
+			O << "<span class=\"rose\">[user] has used the analyzer on \icon[icon]</span>"
 
 		var/pressure = parent.air.return_pressure()
 		var/total_moles = parent.air.total_moles()
 
-		user << "\blue Results of analysis of \icon[icon]"
+		user << "<span class=\"notice\">Results of analysis of \icon[icon]</span>"
 		if (total_moles>0)
 			var/o2_concentration = parent.air.oxygen/total_moles
 			var/n2_concentration = parent.air.nitrogen/total_moles
@@ -529,16 +529,16 @@
 
 			var/unknown_concentration =  1-(o2_concentration+n2_concentration+co2_concentration+plasma_concentration)
 
-			user << "\blue Pressure: [round(pressure,0.1)] kPa"
-			user << "\blue Nitrogen: [round(n2_concentration*100)]%"
-			user << "\blue Oxygen: [round(o2_concentration*100)]%"
-			user << "\blue CO2: [round(co2_concentration*100)]%"
-			user << "\blue Plasma: [round(plasma_concentration*100)]%"
+			user << "<span class=\"notice\">Pressure: [round(pressure,0.1)] kPa</span>"
+			user << "<span class=\"notice\">Nitrogen: [round(n2_concentration*100)]%</span>"
+			user << "<span class=\"notice\">Oxygen: [round(o2_concentration*100)]%</span>"
+			user << "<span class=\"notice\">CO2: [round(co2_concentration*100)]%</span>"
+			user << "<span class=\"notice\">Plasma: [round(plasma_concentration*100)]%</span>"
 			if(unknown_concentration>0.01)
-				user << "\red Unknown: [round(unknown_concentration*100)]%"
-			user << "\blue Temperature: [round(parent.air.temperature-T0C)]&deg;C"
+				user << "<span class=\"rose\">Unknown: [round(unknown_concentration*100)]%</span>"
+			user << "<span class=\"notice\">Temperature: [round(parent.air.temperature-T0C)]&deg;C</span>"
 		else
-			user << "\blue Tank is empty!"
+			user << "<span class=\"notice\">Tank is empty!</span>"
 
 /obj/machinery/atmospherics/pipe/vent
 	icon = 'icons/obj/atmospherics/pipe_vent.dmi'
@@ -649,7 +649,7 @@
 	level = T.intact ? 2 : 1
 	initialize(1)
 	if(!node1&&!node2&&!node3)
-		usr << "\red There's nothing to connect this manifold to! (with how the pipe code works, at least one end needs to be connected to something, otherwise the game deletes the segment)"
+		usr << "<span class=\"rose\">There's nothing to connect this manifold to! (with how the pipe code works, at least one end needs to be connected to something, otherwise the game deletes the segment)</span>"
 		return 0
 	update_icon() // Skipped in initialize()!
 	build_network()
@@ -893,7 +893,7 @@
 	level = T.intact ? 2 : 1
 	initialize(1)
 	if(!node1 && !node2 && !node3 && !node4)
-		usr << "\red There's nothing to connect this manifold to! (with how the pipe code works, at least one end needs to be connected to something, otherwise the game deletes the segment)"
+		usr << "<span class=\"rose\">There's nothing to connect this manifold to! (with how the pipe code works, at least one end needs to be connected to something, otherwise the game deletes the segment)</span>"
 		return 0
 	update_icon()
 	build_network()
@@ -1202,25 +1202,25 @@
 	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/red))
 		src._color = "red"
 		src.color = PIPE_COLOR_RED
-		user << "\red You paint the pipe red."
+		user << "<span class=\"rose\">You paint the pipe red.</span>"
 		update_icon()
 		return 1
 	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/blue))
 		src._color = "blue"
 		src.color = PIPE_COLOR_BLUE
-		user << "\red You paint the pipe blue."
+		user << "<span class=\"rose\">You paint the pipe blue.</span>"
 		update_icon()
 		return 1
 	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/green))
 		src._color = "green"
 		src.color = PIPE_COLOR_GREEN
-		user << "\red You paint the pipe green."
+		user << "<span class=\"rose\">You paint the pipe green.</span>"
 		update_icon()
 		return 1
 	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/yellow))
 		src._color = "yellow"
 		src.color = PIPE_COLOR_YELLOW
-		user << "\red You paint the pipe yellow."
+		user << "<span class=\"rose\">You paint the pipe yellow.</span>"
 		update_icon()
 		return 1
 
@@ -1228,20 +1228,20 @@
 		return ..()
 	var/turf/T = src.loc
 	if (level==1 && isturf(T) && T.intact)
-		user << "\red You must remove the plating first."
+		user << "<span class=\"rose\">You must remove the plating first.</span>"
 		return 1
 	var/datum/gas_mixture/int_air = return_air()
 	var/datum/gas_mixture/env_air = loc.return_air()
 	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
-		user << "\red You cannot unwrench this [src], it too exerted due to internal pressure."
+		user << "<span class=\"rose\">You cannot unwrench this [src], it too exerted due to internal pressure.</span>"
 		add_fingerprint(user)
 		return 1
 	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-	user << "\blue You begin to unfasten \the [src]..."
+	user << "<span class=\"notice\">You begin to unfasten \the [src]...</span>"
 	if (do_after(user, 40))
 		user.visible_message( \
 			"[user] unfastens \the [src].", \
-			"\blue You have unfastened \the [src].", \
+			"<span class=\"notice\">You have unfastened \the [src].</span>", \
 			"You hear ratchet.")
 		new /obj/item/pipe(loc, make_from=src)
 		for (var/obj/machinery/meter/meter in T)

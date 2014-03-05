@@ -39,7 +39,7 @@
 			if(istype(src, /mob/living/silicon/robot))
 				var/mob/living/silicon/robot/R = src
 				if(!R.is_component_functioning("comms"))
-					src << "\red Your binary communications component isn't functional."
+					src << "<span class=\"rose\">Your binary communications component isn't functional.</span>"
 					return
 
 			robot_talk(message)

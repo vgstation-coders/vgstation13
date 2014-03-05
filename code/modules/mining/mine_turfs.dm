@@ -189,7 +189,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 /turf/unsimulated/mineral/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 	if (!(istype(usr, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
-		usr << "\red You don't have the dexterity to do this!"
+		usr << "<span class=\"rose\">You don't have the dexterity to do this!</span>"
 		return
 
 	if (istype(W, /obj/item/device/core_sampler))
@@ -205,9 +205,9 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 
 	if (istype(W, /obj/item/device/measuring_tape))
 		var/obj/item/device/measuring_tape/P = W
-		user.visible_message("\blue[user] extends [P] towards [src].","\blue You extend [P] towards [src].")
+		user.visible_message("<span class=\"notice\">[user] extends [P] towards [src].</span>","<span class=\"notice\">You extend [P] towards [src].</span>")
 		if(do_after(user,25))
-			user << "\blue \icon[P] [src] has been excavated to a depth of [2*excavation_level]cm."
+			user << "<span class=\"notice\">\icon[P] [src] has been excavated to a depth of [2*excavation_level]cm.</span>"
 		return
 
 	if (istype(W, /obj/item/weapon/pickaxe))
@@ -237,7 +237,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 
 				fail_message = ", <b>[pick("there is a crunching noise","[W] collides with some different rock","part of the rock face crumbles away","something breaks under [W]")]</b>"
 
-		user << "\red You start [P.drill_verb][fail_message ? fail_message : ""]."
+		user << "<span class=\"rose\">You start [P.drill_verb][fail_message ? fail_message : ""].</span>"
 
 		if(fail_message && prob(90))
 			if(prob(25))
@@ -248,7 +248,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 					artifact_debris()
 
 		if(do_after(user,P.digspeed))
-			user << "\blue You finish [P.drill_verb] the rock."
+			user << "<span class=\"notice\">You finish [P.drill_verb] the rock.</span>"
 
 			if(finds && finds.len)
 				var/datum/find/F = finds[1]
@@ -403,7 +403,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 		var/obj/effect/suspension_field/S = locate() in src
 		if(!S || S.field_type != get_responsive_reagent(F.find_type))
 			if(X)
-				visible_message("\red<b>[pick("[display_name] crumbles away into dust","[display_name] breaks apart")].</b>")
+				visible_message("<span class=\"danger\">[pick("[display_name] crumbles away into dust","[display_name] breaks apart")].</span>")
 				del(X)
 
 	finds.Remove(F)
@@ -492,15 +492,15 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 			return
 
 		if (dug)
-			user << "\red This area has already been dug"
+			user << "<span class=\"rose\">This area has already been dug</span>"
 			return
 
-		user << "\red You start digging."
+		user << "<span class=\"rose\">You start digging.</span>"
 		playsound(get_turf(src), 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
 
 		sleep(40)
 		if ((user.loc == T && user.get_active_hand() == W))
-			user << "\blue You dug a hole."
+			user << "<span class=\"notice\">You dug a hole.</span>"
 			gets_dug()
 
 	if ((istype(W,/obj/item/weapon/pickaxe/drill)))
@@ -509,15 +509,15 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 			return
 
 		if (dug)
-			user << "\red This area has already been dug"
+			user << "<span class=\"rose\">This area has already been dug</span>"
 			return
 
-		user << "\red You start digging."
+		user << "<span class=\"rose\">You start digging.</span>"
 		playsound(get_turf(src), 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
 
 		sleep(30)
 		if ((user.loc == T && user.get_active_hand() == W))
-			user << "\blue You dug a hole."
+			user << "<span class=\"notice\">You dug a hole.</span>"
 			gets_dug()
 
 	if ((istype(W,/obj/item/weapon/pickaxe/diamonddrill)) || (istype(W,/obj/item/weapon/pickaxe/borgdrill)))
@@ -526,15 +526,15 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 			return
 
 		if (dug)
-			user << "\red This area has already been dug"
+			user << "<span class=\"rose\">This area has already been dug</span>"
 			return
 
-		user << "\red You start digging."
+		user << "<span class=\"rose\">You start digging.</span>"
 		playsound(get_turf(src), 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
 
 		sleep(0)
 		if ((user.loc == T && user.get_active_hand() == W))
-			user << "\blue You dug a hole."
+			user << "<span class=\"notice\">You dug a hole.</span>"
 			gets_dug()
 
 	if(istype(W,/obj/item/weapon/storage/bag/ore))

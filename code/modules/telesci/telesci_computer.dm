@@ -46,14 +46,14 @@
 
 	if(istype(W, /obj/item/weapon/cell) && anchored)
 		if(cell)
-			user << "\red There is already a cell in \the [name]."
+			user << "<span class=\"rose\">There is already a cell in \the [name].</span>"
 			return
 		else
 			var/area/a = loc.loc // Gets our locations location, like a dream within a dream
 			if(!isarea(a))
 				return
 			if(a.power_equip == 0) // There's no APC in this area, don't try to cheat power!
-				user << "\red \The [name] blinks red as you try to insert the cell!"
+				user << "<span class=\"rose\">\The [name] blinks red as you try to insert the cell!</span>"
 				return
 
 			user.drop_item()
@@ -139,7 +139,7 @@
 	if(prob(95))
 		sparks()
 		for(var/mob/O in hearers(src, null))
-			O.show_message("\red The telepad weakly fizzles.", 2)
+			O.show_message("<span class=\"rose\">The telepad weakly fizzles.</span>", 2)
 		return
 	if(prob(5))
 		// Irradiate everyone in telescience!
@@ -148,14 +148,14 @@
 			sparks()
 			for(var/mob/living/carbon/human/M in viewers(L, null))
 				M.apply_effect((rand(10, 20)), IRRADIATE, 0)
-				M << "\red You feel strange."
+				M << "<span class=\"rose\">You feel strange.</span>"
 		return
 	/* Lets not, for now.  - N3X
 	if(prob(1))
 		// AI CALL SHUTTLE I SAW RUNE, SUPER LOW CHANCE, CAN HARDLY HAPPEN
 		for(var/mob/living/carbon/O in viewers(src, null))
 			var/datum/game_mode/cult/temp = new
-			O.show_message("\red The telepad flashes with a strange light, and you have a sudden surge of allegiance toward the true dark one!", 2)
+			O.show_message("<span class=\"rose\">The telepad flashes with a strange light, and you have a sudden surge of allegiance toward the true dark one!</span>", 2)
 			O.mind.make_Cultist()
 			temp.grant_runeword(O)
 			sparks()
@@ -163,7 +163,7 @@
 	if(prob(1))
 		// VIVA LA FUCKING REVOLUTION BITCHES, SUPER LOW CHANCE, CAN HARDLY HAPPEN
 		for(var/mob/living/carbon/O in viewers(src, null))
-			O.show_message("\red The telepad flashes with a strange light, and you see all kind of images flash through your mind, of murderous things Nanotrasen has done, and you decide to rebel!", 2)
+			O.show_message("<span class=\"rose\">The telepad flashes with a strange light, and you see all kind of images flash through your mind, of murderous things Nanotrasen has done, and you decide to rebel!</span>", 2)
 			O.mind.make_Rev()
 			sparks()
 		return
@@ -171,7 +171,7 @@
 	if(prob(1))
 		// The OH SHIT FUCK GOD DAMN IT LYNCH THE SCIENTISTS event.
 		for(var/mob/living/carbon/O in viewers(src, null))
-			O.show_message("\red The telepad changes colors rapidly, and opens a portal, and you see what your mind seems to think is the very threads that hold the pattern of the universe together, and a eerie sense of paranoia creeps into you.", 2)
+			O.show_message("<span class=\"rose\">The telepad changes colors rapidly, and opens a portal, and you see what your mind seems to think is the very threads that hold the pattern of the universe together, and a eerie sense of paranoia creeps into you.</span>", 2)
 			spacevine_infestation()
 			sparks()
 		return
@@ -226,10 +226,10 @@
 		var/area/A=target.loc
 		if(A && A.jammed)
 			if(!telepad.amplifier || A.jammed==SUPER_JAMMED)
-				src.visible_message("\red \icon[src] [src] turns on and the lights dim.  You can see a faint shape, but it loses focus and the telepad shuts off with a buzz.  Perhaps you need more signal strength?", "\icon[src]\red You hear something buzz.")
+				src.visible_message("<span class=\"rose\">\icon[src] [src] turns on and the lights dim.  You can see a faint shape, but it loses focus and the telepad shuts off with a buzz.  Perhaps you need more signal strength?</span>", "\icon[src]<span class=\"rose\">You hear something buzz.</span>")
 				return
 			del(telepad.amplifier)
-			src.visible_message("\icon[src]\blue You hear something shatter.","\icon[src]\blue You hear something shatter.")
+			src.visible_message("\icon[src]<span class=\"notice\">You hear something shatter.</span>","\icon[src]<span class=\"notice\">You hear something shatter.</span>")
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(5, 1, telepad)
 		s.start()

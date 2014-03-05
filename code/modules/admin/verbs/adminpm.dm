@@ -48,7 +48,7 @@
 	/*if(C && C.last_pm_recieved + config.simultaneous_pm_warning_timeout > world.time && holder)
 		//send a warning to admins, but have a delay popup for mods
 		if(holder.rights & R_ADMIN)
-			src << "\red <b>Simultaneous PMs warning:</b> that player has been PM'd in the last [config.simultaneous_pm_warning_timeout / 10] seconds by: [C.ckey_last_pm]"
+			src << "<span class=\"danger\">Simultaneous PMs warning:</span><span class=\"rose\"> that player has been PM'd in the last [config.simultaneous_pm_warning_timeout / 10] seconds by: [C.ckey_last_pm]</span>"
 		else
 			if(alert("That player has been PM'd in the last [config.simultaneous_pm_warning_timeout / 10] seconds by: [C.ckey_last_pm]","Simultaneous PMs warning","Continue","Cancel") == "Cancel")
 				return*/
@@ -181,4 +181,4 @@
 		if(X == C || X == src)
 			continue
 		if(X.key!=key && X.key!=C.key && (X.holder.rights & R_ADMIN) || (X.holder.rights & R_MOD) )
-			X << "<B><font color='blue'>PM: [key_name(src, X, 0)]-&gt;[key_name(C, X, 0)]:</B> \blue [msg]</font>" //inform X
+			X << "<B><span class=\"notice\">PM: [key_name(src, X, 0)]-&gt;[key_name(C, X, 0)]:</span></b><span class=\"notice\">[msg]</span>" //inform X

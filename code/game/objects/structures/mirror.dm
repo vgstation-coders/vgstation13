@@ -75,7 +75,7 @@
 	if ((shattered) && (istype(I, /obj/item/stack/sheet/glass)))
 		var/obj/item/stack/sheet/glass/stack = I
 		if ((stack.amount - 2) < 0)
-			user << "\red You need more glass to do that."
+			user << "<span class=\"rose\">You need more glass to do that.</span>"
 		else
 			stack.use(2)
 			shattered = 0

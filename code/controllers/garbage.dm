@@ -121,4 +121,4 @@ var/global/list/uncollectable_vars=list(
 	garbage.del_everything = !garbage.del_everything
 	world << "<b>GC: qdel turned [garbage.del_everything?"off":"on"].</b>"
 	log_admin("[key_name(usr)] turned qdel [garbage.del_everything?"off":"on"].")
-	message_admins("\blue [key_name(usr)] turned qdel [garbage.del_everything?"off":"on"].", 1)
+	message_admins("<span class=\"notify\">[key_name(usr)] turned qdel [garbage.del_everything?"off":"on"].</span>", 1)

@@ -131,7 +131,7 @@
 			var/mob/tmob = AM
 			if(istype(tmob, /mob/living/carbon/human) && (M_HULK in tmob.mutations))
 				if(prob(70))
-					usr << "\red <B>You fail to push [tmob]'s fat ass out of the way.</B>"
+					usr << "<span class=\"danger\">You fail to push [tmob]'s fat ass out of the way.</span>"
 					now_pushing = 0
 					return
 			if(!(tmob.status_flags & CANPUSH))
@@ -179,7 +179,7 @@
 
 /mob/living/carbon/monkey/meteorhit(obj/O as obj)
 	for(var/mob/M in viewers(src, null))
-		M.show_message(text("\red [] has been hit by []", src, O), 1)
+		M.show_message(text("<span class=\"rose\">[] has been hit by []</span>", src, O), 1)
 	if (health > 0)
 		var/shielded = 0
 		adjustBruteLoss(30)
@@ -201,7 +201,7 @@
 			if ((prob(75) && health > 0))
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				for(var/mob/O in viewers(src, null))
-					O.show_message("\red <B>[M.name] has bit [name]!</B>", 1)
+					O.show_message("<span class=\"danger\">[M.name] has bit [name]!</span>", 1)
 				var/damage = rand(1, 5)
 				adjustBruteLoss(damage)
 				health = 100 - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
@@ -210,7 +210,7 @@
 						contract_disease(D,1,0)
 			else
 				for(var/mob/O in viewers(src, null))
-					O.show_message("\red <B>[M.name] has attempted to bite [name]!</B>", 1)
+					O.show_message("<span class=\"danger\">[M.name] has attempted to bite [name]!</span>", 1)
 	return
 
 /mob/living/carbon/monkey/attack_hand(mob/living/carbon/human/M as mob)
@@ -235,10 +235,10 @@
 
 					for(var/mob/O in viewers(src, null))
 						if (O.client)
-							O.show_message("\red <B>[src] has been touched with the stun gloves by [M]!</B>", 1, "\red You hear someone fall", 2)
+							O.show_message("<span class=\"danger\">[src] has been touched with the stun gloves by [M]!</span>", 1, "<span class=\"rose\">You hear someone fall</span>", 2)
 					return
 				else
-					M << "\red Not enough charge! "
+					M << "<span class=\"rose\">Not enough charge!</span>"
 					return
 
 	if (M.a_intent == "help")
@@ -248,7 +248,7 @@
 			if ((prob(75) && health > 0))
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>[] has punched [name]!</B>", M), 1)
+						O.show_message(text("<span class=\"danger\">[] has punched [name]!</span>", M), 1)
 
 				playsound(loc, "punch", 25, 1, -1)
 				var/damage = rand(5, 10)
@@ -259,7 +259,7 @@
 						spawn( 0 )
 							for(var/mob/O in viewers(src, null))
 								if ((O.client && !( O.blinded )))
-									O.show_message(text("\red <B>[] has knocked out [name]!</B>", M), 1)
+									O.show_message(text("<span class=\"danger\">[] has knocked out [name]!</span>", M), 1)
 							return
 				adjustBruteLoss(damage)
 				updatehealth()
@@ -267,7 +267,7 @@
 				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>[] has attempted to punch [name]!</B>", M), 1)
+						O.show_message(text("<span class=\"danger\">[] has attempted to punch [name]!</span>", M), 1)
 		else
 			if (M.a_intent == "grab")
 				if (M == src || anchored)
@@ -284,7 +284,7 @@
 
 				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				for(var/mob/O in viewers(src, null))
-					O.show_message(text("\red [] has grabbed [name] passively!", M), 1)
+					O.show_message(text("<span class=\"rose\">[] has grabbed [name] passively!</span>", M), 1)
 			else
 				if (!( paralysis ))
 					if (prob(25))
@@ -292,13 +292,13 @@
 						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 						for(var/mob/O in viewers(src, null))
 							if ((O.client && !( O.blinded )))
-								O.show_message(text("\red <B>[] has pushed down [name]!</B>", M), 1)
+								O.show_message(text("<span class=\"danger\">[] has pushed down [name]!</span>", M), 1)
 					else
 						drop_item()
 						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 						for(var/mob/O in viewers(src, null))
 							if ((O.client && !( O.blinded )))
-								O.show_message(text("\red <B>[] has disarmed [name]!</B>", M), 1)
+								O.show_message(text("<span class=\"danger\">[] has disarmed [name]!</span>", M), 1)
 	return
 
 /mob/living/carbon/monkey/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
@@ -314,7 +314,7 @@
 		if ("help")
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
-					O.show_message(text("\blue [M] caresses [src] with its scythe like arm."), 1)
+					O.show_message(text("<span class=\"notice\">[M] caresses [src] with its scythe like arm.</span>"), 1)
 
 		if ("hurt")
 			if ((prob(95) && health > 0))
@@ -326,18 +326,18 @@
 						Paralyse(rand(10, 15))
 					for(var/mob/O in viewers(src, null))
 						if ((O.client && !( O.blinded )))
-							O.show_message(text("\red <B>[] has wounded [name]!</B>", M), 1)
+							O.show_message(text("<span class=\"danger\">[] has wounded [name]!</span>", M), 1)
 				else
 					for(var/mob/O in viewers(src, null))
 						if ((O.client && !( O.blinded )))
-							O.show_message(text("\red <B>[] has slashed [name]!</B>", M), 1)
+							O.show_message(text("<span class=\"rose\">[] has slashed [name]!</span>", M), 1)
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
 				playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>[] has attempted to lunge at [name]!</B>", M), 1)
+						O.show_message(text("<span class=\"danger\">[] has attempted to lunge at [name]!</span>", M), 1)
 
 		if ("grab")
 			if (M == src)
@@ -353,7 +353,7 @@
 
 			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			for(var/mob/O in viewers(src, null))
-				O.show_message(text("\red [] has grabbed [name] passively!", M), 1)
+				O.show_message(text("<span class=\"rose\">[] has grabbed [name] passively!</span>", M), 1)
 
 		if ("disarm")
 			playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
@@ -362,12 +362,12 @@
 				Weaken(15)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>[] has tackled down [name]!</B>", M), 1)
+						O.show_message(text("<span class=\"danger\">[] has tackled down [name]!</span>", M), 1)
 			else
 				drop_item()
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>[] has disarmed [name]!</B>", M), 1)
+						O.show_message(text("<span class=\"danger\">[] has disarmed [name]!</span>", M), 1)
 			adjustBruteLoss(damage)
 			updatehealth()
 	return
@@ -379,7 +379,7 @@
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
-			O.show_message("\red <B>[M]</B> [M.attacktext] [src]!", 1)
+			O.show_message("<span class=\"danger\">[M]</span><span class=\"rose\">[M.attacktext] [src]!</span>", 1)
 		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
 		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
@@ -398,7 +398,7 @@
 
 		for(var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
-				O.show_message(text("\red <B>The [M.name] glomps []!</B>", src), 1)
+				O.show_message(text("<span class=\"danger\">The [M.name] glomps []!</span>", src), 1)
 
 		var/damage = rand(1, 3)
 
@@ -428,7 +428,7 @@
 
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>The [M.name] has shocked []!</B>", src), 1)
+						O.show_message(text("<span class=\"danger\">The [M.name] has shocked []!</span>", src), 1)
 
 				Weaken(power)
 				if (stuttering < power)

@@ -64,7 +64,7 @@
 		if (W) W.loc = src.loc
 	else if(istype(W, /obj/item/weapon/card/id))
 		if(src.broken)
-			user << "\red It appears to be broken."
+			user << "<span class=\"rose\">It appears to be broken.</span>"
 			return
 		var/obj/item/weapon/card/id/I = W
 		if(!I || !I.registered_name)	return
@@ -78,7 +78,7 @@
 				src.registered_name = I.registered_name
 				src.desc = "Owned by [I.registered_name]."
 		else
-			user << "\red Access Denied"
+			user << "<span class=\"rose\">Access Denied</span>"
 	else if( (istype(W, /obj/item/weapon/card/emag)||istype(W, /obj/item/weapon/melee/energy/blade)) && !src.broken)
 		broken = 1
 		locked = 0
@@ -91,7 +91,7 @@
 			playsound(get_turf(src), 'sound/weapons/blade1.ogg', 50, 1)
 			playsound(get_turf(src), "sparks", 50, 1)
 			for(var/mob/O in viewers(user, 3))
-				O.show_message("\blue The locker has been sliced open by [user] with an energy blade!", 1, "\red You hear metal being sliced and sparks flying.", 2)
+				O.show_message("<span class=\"notice\">The locker has been sliced open by [user] with an energy blade!</span>", 1, "<span class=\"rose\">You hear metal being sliced and sparks flying.</span>", 2)
 	else
-		user << "\red Access Denied"
+		user << "<span class=\"rose\">Access Denied</span>"
 	return

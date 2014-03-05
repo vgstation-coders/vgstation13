@@ -19,7 +19,7 @@
 		return
 	var/obj/machinery/atmospherics/pipe/P = A
 	if(!(mode in P.available_colors))
-		user << "\red This [P] can't be painted [mode]. Available colors: [english_list(P.available_colors)]"
+		user << "<span class=\"rose\">This [P] can't be painted [mode]. Available colors: [english_list(P.available_colors)]</span>"
 		return
 	P._color = mode
 	user.visible_message("<span class='notice'>[user] paints \the [P] [mode].</span>","<span class='notice'>You paint \the [P] [mode].</span>")

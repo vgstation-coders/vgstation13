@@ -57,7 +57,7 @@
 	examine()
 		..()
 		usr << "\blue The generator has [P.air_contents.toxins] units of fuel left, producing [power_gen] per cycle."
-		if(crit_fail) usr << "\red The generator seems to have broken down."
+		if(crit_fail) usr << "<span class=\"rose\">The generator seems to have broken down.</span>"
 
 	handleInactive()
 		heat -= 2
@@ -75,7 +75,7 @@
 	attackby(var/obj/item/O as obj, var/mob/user as mob)
 		if(istype(O, /obj/item/weapon/tank/plasma))
 			if(P)
-				user << "\red The generator already has a plasma tank loaded!"
+				user << "<span class=\"rose\">The generator already has a plasma tank loaded!</span>"
 				return
 			P = O
 			user.drop_item()

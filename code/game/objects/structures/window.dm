@@ -120,8 +120,8 @@
 		destroy()
 	else if (usr.a_intent == "hurt")
 		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 80, 1)
-		usr.visible_message("\red [usr.name] bangs against the [src.name]!", \
-							"\red You bang against the [src.name]!", \
+		usr.visible_message("<span class=\"rose\">[usr.name] bangs against the [src.name]!</span>", \
+							"<span class=\"rose\">You bang against the [src.name]!</span>", \
 							"You hear a banging sound.")
 	else
 		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 80, 1)
@@ -176,18 +176,18 @@
 				if(1)
 					M.apply_damage(7)
 					hit(10)
-					visible_message("\red [user] slams [M] against \the [src]!")
+					visible_message("<span class=\"rose\">[user] slams [M] against \the [src]!</span>")
 				if(2)
 					if (prob(50))
 						M.Weaken(1)
 					M.apply_damage(10)
 					hit(25)
-					visible_message("\red <b>[user] bashes [M] against \the [src]!</b>")
+					visible_message("<span class=\"danger\">[user] bashes [M] against \the [src]!</span>")
 				if(3)
 					M.Weaken(5)
 					M.apply_damage(20)
 					hit(50)
-					visible_message("\red <big><b>[user] crushes [M] against \the [src]!</b></big>")
+					visible_message("<span class=\"danger\"><big>[user] crushes [M] against \the [src]!</big></span>")
 			return
 	if(istype(W, /obj/item/weapon/screwdriver))
 		if(reinf && state >= 1)

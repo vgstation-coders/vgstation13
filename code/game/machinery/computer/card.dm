@@ -293,7 +293,7 @@
 							jobdatum = J
 							break
 					if(!jobdatum)
-						usr << "\red No log exists for this job."
+						usr << "<span class=\"rose\">No log exists for this job.</span>"
 						return
 
 					modify.access = ( istype(src,/obj/machinery/computer/card/centcom) ? get_centcom_access(t1) : jobdatum.get_access() )

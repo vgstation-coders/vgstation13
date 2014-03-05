@@ -100,11 +100,11 @@
 		biohazard_alert()
 
 /datum/event/blob/proc/greetblob(user)
-	user << {"<B>\red You are infected by the Blob!</B>
-<b>Your body is ready to give spawn to a new blob core which will eat this station.</b>
-<b>Find a good location to spawn the core and then take control and overwhelm the station!</b>
-<b>When you have found a location, wait until you spawn; this will happen automatically and you cannot speed up the process.</b>
-<b>If you go outside of the station level, or in space, then you will die; make sure your location has lots of ground to cover.</b>"}
+	user << {"<span class=\"danger\">You are infected by the Blob!
+Your body is ready to give spawn to a new blob core which will eat this station.
+Find a good location to spawn the core and then take control and overwhelm the station!
+When you have found a location, wait until you spawn; this will happen automatically and you cannot speed up the process.
+If you go outside of the station level, or in space, then you will die; make sure your location has lots of ground to cover.</span>"}
 
 /datum/event/blob/tick()
 	if(!Blob && infected_crew.len == 0)

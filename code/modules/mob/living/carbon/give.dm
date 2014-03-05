@@ -5,14 +5,14 @@
 	if(src.stat == 2 || usr.stat == 2 || src.client == null)
 		return
 	if(src == usr)
-		usr << "\red I feel stupider, suddenly."
+		usr << "<span class=\"rose\"> I feel stupider, suddenly.</span>"
 		return
 	var/obj/item/I
 	if(!usr.hand && usr.r_hand == null)
-		usr << "\red You don't have anything in your right hand to give to [src.name]"
+		usr << "<span class=\"rose\"> You don't have anything in your right hand to give to [src.name]</span>"
 		return
 	if(usr.hand && usr.l_hand == null)
-		usr << "\red You don't have anything in your left hand to give to [src.name]"
+		usr << "<span class=\"rose\"> You don't have anything in your left hand to give to [src.name]</span>"
 		return
 	if(usr.hand)
 		I = usr.l_hand
@@ -26,16 +26,16 @@
 				if(!I)
 					return
 				if(!Adjacent(usr))
-					usr << "\red You need to stay in reaching distance while giving an object."
-					src << "\red [usr.name] moved too far away."
+					usr << "<span class=\"rose\"> You need to stay in reaching distance while giving an object.</span>"
+					src << "<span class=\"rose\"> [usr.name] moved too far away.</span>"
 					return
 				if((usr.hand && usr.l_hand != I) || (!usr.hand && usr.r_hand != I))
-					usr << "\red You need to keep the item in your active hand."
-					src << "\red [usr.name] seem to have given up on giving \the [I.name] to you."
+					usr << "<span class=\"rose\"> You need to keep the item in your active hand.</span>"
+					src << "<span class=\"rose\"> [usr.name] seem to have given up on giving \the [I.name] to you.</span>"
 					return
 				if(src.r_hand != null && src.l_hand != null)
-					src << "\red Your hands are full."
-					usr << "\red Their hands are full."
+					src << "<span class=\"rose\"> Your hands are full.</span>"
+					usr << "<span class=\"rose\">Their hands are full.</span>"
 					return
 				else
 					usr.drop_item()
@@ -50,8 +50,8 @@
 				src.update_inv_r_hand()
 				usr.update_inv_l_hand()
 				usr.update_inv_r_hand()
-				src.visible_message("\blue [usr.name] handed \the [I.name] to [src.name].")
+				src.visible_message("<span class=\"notice\"> [usr.name] handed \the [I.name] to [src.name].</span>")
 			if("No")
-				src.visible_message("\red [usr.name] tried to hand [I.name] to [src.name] but [src.name] didn't want it.")
+				src.visible_message("<span class=\"rose\"> [usr.name] tried to hand [I.name] to [src.name] but [src.name] didn't want it.</span>")
 	else
-		usr << "\red [src.name]'s hands are full."
+		usr << "<span class=\"rose\"> [src.name]'s hands are full.</span>"

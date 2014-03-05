@@ -17,7 +17,7 @@
 		if(prob(40))
 			for(var/mob/M in hearers(4, src))
 				if(M.client)
-					M.show_message(text("\red You hear something rumbling inside [src]'s stomach..."), 2)
+					M.show_message(text("<span class=\"rose\">You hear something rumbling inside [src]'s stomach...</span>"), 2)
 			var/obj/item/I = user.get_active_hand()
 			if(I && I.force)
 				var/d = rand(round(I.force / 4), I.force)
@@ -33,7 +33,7 @@
 					src.take_organ_damage(d)
 				for(var/mob/M in viewers(user, null))
 					if(M.client)
-						M.show_message(text("\red <B>[user] attacks [src]'s stomach wall with the [I.name]!"), 2)
+						M.show_message(text("<span class=\"danger\">[user] attacks [src]'s stomach wall with the [I.name]!</span>"), 2)
 				playsound(user.loc, 'sound/effects/attackblob.ogg', 50, 1)
 
 				if(prob(src.getBruteLoss() - 50))
@@ -49,7 +49,7 @@
 		M.loc = src.loc
 		for(var/mob/N in viewers(src, null))
 			if(N.client)
-				N.show_message(text("\red <B>[M] bursts out of [src]!</B>"), 2)
+				N.show_message(text("<span class=\"danger\">[M] bursts out of [src]!</span>"), 2)
 	. = ..()
 
 /mob/living/carbon/proc/share_contact_diseases(var/mob/M)
@@ -67,7 +67,7 @@
 		if (M.hand)
 			temp = M:organs_by_name["l_hand"]
 		if(temp && !temp.is_usable())
-			M << "\red You can't use your [temp.display_name]"
+			M << "<span class=\"rose\">You can't use your [temp.display_name]</span>"
 			return
 	share_contact_diseases(M)
 	return
@@ -88,9 +88,9 @@
 	//src.adjustFireLoss(shock_damage) //burn_skin will do this for us
 	//src.updatehealth()
 	src.visible_message(
-		"\red [src] was shocked by the [source]!", \
-		"\red <B>You feel a powerful shock course through your body!</B>", \
-		"\red You hear a heavy electrical crack." \
+		"<span class=\"rose\">[src] was shocked by the [source]!</span>", \
+		"<span class=\"danger\">You feel a powerful shock course through your body!</span>", \
+		"<span class=\"rose\">You hear a heavy electrical crack.</span>" \
 	)
 //	if(src.stunned < shock_damage)	src.stunned = shock_damage
 	Stun(10)//This should work for now, more is really silly and makes you lay there forever
@@ -138,8 +138,8 @@
 		if(src == M && istype(src, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = src
 			src.visible_message( \
-				text("\blue [src] examines [].",src.gender==MALE?"himself":"herself"), \
-				"\blue You check yourself for injuries." \
+				text("<span class=\"notice\">[src] examines [].",src.gender==MALE? "himself</span>":"herself</span>"), \
+				"<span class=\"notice\">You check yourself for injuries.</span>" \
 				)
 
 			for(var/datum/organ/external/org in H.organs)
@@ -173,7 +173,7 @@
 					status = "weirdly shapen."
 				if(status == "")
 					status = "OK"
-				src.show_message(text("\t []My [] is [].",status=="OK"?"\blue ":"\red ",org.display_name,status),1)
+				src.show_message(text("\t []My [] is [].",status=="OK"?"<span class=\"notice\">":"<span class=\"rose\"> ",org.display_name,status) + "</span>",1)
 			if((SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
 				H.play_xylophone()
 		else if(lying) // /vg/: For hugs. This is how update_icon figgers it out, anyway.  - N3X15
@@ -193,8 +193,8 @@
 			AdjustWeakened(-3)
 			playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			M.visible_message( \
-				"\blue [M] shakes [src] trying to wake [t_him] up!", \
-				"\blue You shake [src] trying to wake [t_him] up!", \
+				"<span class=\"notice\">[M] shakes [src] trying to wake [t_him] up!</span>", \
+				"<span class=\"notice\">You shake [src] trying to wake [t_him] up!</span>", \
 				)
 		// BEGIN HUGCODE - N3X
 		else
@@ -203,8 +203,8 @@
 				H.w_uniform.add_fingerprint(M)
 			playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			M.visible_message( \
-				"\blue [M] gives [src] a [pick("hug","warm embrace")].", \
-				"\blue You hug [src].", \
+				"<span class=\"notice\">[M] gives [src] a [pick("hug","warm embrace")].</span>", \
+				"<span class=\"notice\">You hug [src].</span>", \
 				)
 			if(prob(10))
 				src.emote("fart")
@@ -236,7 +236,7 @@
 				if(!v.welded)
 					vent_found = v
 				else
-					src << "\red That vent is welded."
+					src << "<span class=\"rose\">That vent is welded.</span>"
 
 			if(vent_found)
 				if(vent_found.network&&vent_found.network.normal_members.len)
@@ -261,7 +261,7 @@
 					var/turf/startloc = loc
 					var/obj/selection = input("Select a destination.", "Duct System") as null|anything in sortList(vents)
 					if(!selection)
-						src << "\red You didn't choose anything."
+						src << "<span class=\"rose\">You didn't choose anything.</span>"
 						return
 
 					if(!do_after(src, 45))
@@ -274,7 +274,7 @@
 						if(contents.len && !isrobot(src))
 							for(var/obj/item/carried_item in contents)//If the monkey got on objects.
 								if( !istype(carried_item, /obj/item/weapon/implant) && !istype(carried_item, /obj/item/clothing/mask/facehugger) )//If it's not an implant or a facehugger
-									src << "\red You can't be carrying items or have items equipped when vent crawling!"
+									src << "<span class=\"rose\">You can't be carrying items or have items equipped when vent crawling!</span>"
 									return
 						var/obj/machinery/atmospherics/unary/vent_pump/target_vent = vents[selection]
 						if(target_vent)
@@ -295,7 +295,7 @@
 								if(!target_vent)	return
 								if(target_vent.welded)			//the vent can be welded while alien scrolled through the list or travelled.
 									target_vent = vent_found 	//travel back. No additional time required.
-									src << "\red The vent you were heading to appears to be welded."
+									src << "<span class=\"rose\">The vent you were heading to appears to be welded.</span>"
 								loc = target_vent.loc
 								var/area/new_area = get_area(loc)
 								if(new_area)
@@ -358,7 +358,7 @@
 		return
 
 	if(!istype(loc,/turf))
-		src << "\red You can't do that now!"
+		src << "<span class=\"rose\">You can't do that now!</span>"
 		return
 
 	if(target.type == /obj/screen) return
@@ -407,7 +407,7 @@
 	//actually throw it!
 	if (item)
 		item.layer = initial(item.layer)
-		src.visible_message("\red [src] has thrown [item].")
+		src.visible_message("<span class=\"rose\"> [src] has thrown [item].</span>")
 
 		if(!src.lastarea)
 			src.lastarea = get_area(T)
@@ -509,7 +509,7 @@
 	set category = "IC"
 
 	if(usr.sleeping)
-		usr << "\red You are already sleeping"
+		usr << "<span class=\"rose\">You are already sleeping.</span>"
 		return
 	if(alert(src,"You sure you want to sleep for a while?","Sleep","Yes","No") == "Yes")
 		usr.sleeping = 20 //Short nap
@@ -527,8 +527,8 @@
 		return
 
 	if(B.controlling)
-		src << "\red <B>You withdraw your probosci, releasing control of [B.host_brain]</B>"
-		B.host_brain << "\red <B>Your vision swims as the alien parasite releases control of your body.</B>"
+		src << "<span class=\"danger\">You withdraw your probosci, releasing control of [B.host_brain]</span>"
+		B.host_brain << "<span class=\"danger\">Your vision swims as the alien parasite releases control of your body.</span>"
 		B.ckey = ckey
 		B.controlling = 0
 	if(B.host_brain.ckey)
@@ -553,8 +553,8 @@
 		return
 
 	if(B.host_brain.ckey)
-		src << "\red <B>You send a punishing spike of psychic agony lancing into your host's brain.</B>"
-		B.host_brain << "\red <B><FONT size=3>Horrific, burning agony lances through you, ripping a soundless scream from your trapped mind!</FONT></B>"
+		src << "<span class=\"danger\">You send a punishing spike of psychic agony lancing into your host's brain.</span>"
+		B.host_brain << "<span class=\"danger\"><FONT size=3>Horrific, burning agony lances through you, ripping a soundless scream from your trapped mind!</span></font>"
 
 //Check for brain worms in head.
 /mob/proc/has_brain_worms()
@@ -576,8 +576,8 @@
 		return
 
 	if(B.chemicals >= 100)
-		src << "\red <B>Your host twitches and quivers as you rapdly excrete several larvae from your sluglike body.</B>"
-		visible_message("\red <B>[src] heaves violently, expelling a rush of vomit and a wriggling, sluglike creature!</B>")
+		src << "<span class=\"danger\">Your host twitches and quivers as you rapdly excrete several larvae from your sluglike body.</span>"
+		visible_message("<span class=\"danger\">[src] heaves violently, expelling a rush of vomit and a wriggling, sluglike creature!</span>")
 		B.chemicals -= 100
 
 		new /obj/effect/decal/cleanable/vomit(get_turf(src))

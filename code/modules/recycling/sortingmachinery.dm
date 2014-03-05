@@ -24,17 +24,17 @@
 
 			if(src.sortTag != O.currTag)
 				var/tag = uppertext(TAGGERLOCATIONS[O.currTag])
-				user << "\blue *[tag]*"
+				user << "<span class=\"notice\">*[tag]*</span>"
 				src.sortTag = O.currTag
 				playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
 
 		else if(istype(W, /obj/item/weapon/pen))
 			var/str = copytext(sanitize(input(usr,"Label text?","Set label","")),1,MAX_NAME_LEN)
 			if(!str || !length(str))
-				usr << "\red Invalid text."
+				usr << "<span class=\"rose\">Invalid text.</span>"
 				return
 			for(var/mob/M in viewers())
-				M << "\blue [user] labels [src] as [str]."
+				M << "<span class=\"notice\">[user] labels [src] as [str].</span>"
 			src.name = "[src.name] ([str])"
 		return
 
@@ -65,17 +65,17 @@
 
 			if(src.sortTag != O.currTag)
 				var/tag = uppertext(TAGGERLOCATIONS[O.currTag])
-				user << "\blue *[tag]*"
+				user << "<span class=\"notice\">*[tag]*</span>"
 				src.sortTag = O.currTag
 				playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
 
 		else if(istype(W, /obj/item/weapon/pen))
 			var/str = copytext(sanitize(input(usr,"Label text?","Set label","")),1,MAX_NAME_LEN)
 			if(!str || !length(str))
-				usr << "\red Invalid text."
+				usr << "<span class=\"rose\">Invalid text.</span>"
 				return
 			for(var/mob/M in viewers())
-				M << "\blue [user] labels [src] as [str]."
+				M << "<span class=\"notice\">[user] labels [src] as [str].</span>"
 			src.name = "[src.name] ([str])"
 		return
 
@@ -128,7 +128,7 @@
 				O.loc = P
 				src.amount -= 3
 			else if(src.amount < 3)
-				user << "\blue You need more paper."
+				user << "<span class=\"notice\">You need more paper.</span>"
 		else if (istype (target, /obj/structure/closet))
 			var/obj/structure/closet/O = target
 			if (src.amount > 3 && !O.opened)
@@ -138,9 +138,9 @@
 				O.loc = P
 				src.amount -= 3
 			else if(src.amount < 3)
-				user << "\blue You need more paper."
+				user << "<span class=\"notice\">You need more paper.</span>"
 		else
-			user << "\blue The object you are trying to wrap is unsuitable for the sorting machinery!"
+			user << "<span class=\"notice\">The object you are trying to wrap is unsuitable for the sorting machinery!</span>"
 		if (src.amount <= 0)
 			new /obj/item/weapon/c_tube( src.loc )
 			del(src)
@@ -149,7 +149,7 @@
 
 	examine()
 		if(src in usr)
-			usr << "\blue There are [amount] units of package wrap left!"
+			usr << "<span class=\"notice\">There are [amount] units of package wrap left!</span>"
 		..()
 		return
 

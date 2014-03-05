@@ -38,7 +38,7 @@
 		owner.radiation = max(owner.radiation, 20)
 		for(var/mob/living/L in range(1, owner))
 			if(L == owner) continue
-			L << "\red You are enveloped by a soft green glow emanating from [owner]."
+			L << "<span class=\"rose\">You are enveloped by a soft green glow emanating from [owner].</span>"
 			L.radiation += 5
 		return
 
@@ -277,9 +277,9 @@
 				if (C == owner)
 					continue
 				if (src.variant == 2)
-					C << "\red [src.personalized_stink]"
+					C << "<span class=\"rose\">[src.personalized_stink]</span>"
 				else
-					C << "\red [stinkString()]"
+					C << "<span class=\"rose\">[stinkString()]</span>"
 */
 
 
@@ -317,7 +317,7 @@
 	var/mob/living/L = usr
 
 	L.adjust_fire_stacks(0.5) // Same as walking into fire. Was 100 (goon fire)
-	L.visible_message("\red <b>[L.name]</b> suddenly bursts into flames!")
+	L.visible_message("<span class=\"danger\">[L.name]</span><span class=\"rose\">suddenly bursts into flames!</span>")
 	//playsound(L.loc, 'mag_fireballlaunch.ogg', 50, 0)
 
 ////////////////////////////////////////////////////////////////////////
@@ -343,7 +343,7 @@
 	if (istype(usr,/mob/living/carbon/human/))
 		var/mob/living/carbon/human/H = usr
 
-		H.visible_message("\red <b>[H.name]'s flesh melts right off! Holy shit!</b>")
+		H.visible_message("<span class=\"danger\">[H.name]'s flesh melts right off! Holy shit!</span>")
 		//if (H.gender == "female")
 		//	playsound(H.loc, 'female_fallscream.ogg', 50, 0)
 		//else
@@ -357,7 +357,7 @@
 		nH.brain_op_stage = 4
 		H.gib(1)
 	else
-		usr.visible_message("\red <b>[usr.name] melts into a pile of bloody viscera!</b>")
+		usr.visible_message("<span class=\"danger\">[usr.name] melts into a pile of bloody viscera!</span>")
 		usr.gib(1)
 
 	return

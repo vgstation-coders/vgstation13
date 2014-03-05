@@ -36,7 +36,7 @@ var/list/alldepartments = list("Central Command")
 	return 0
 
 /obj/machinery/faxmachine/attack_ghost(mob/user as mob)
-	usr << "\red Nope."
+	usr << "<span class=\"rose\">Nope.</span>"
 	return 0
 
 /obj/machinery/faxmachine/attack_ai(mob/user as mob)
@@ -194,7 +194,7 @@ var/list/alldepartments = list("Central Command")
 
 /proc/Centcomm_fax(var/sent, var/sentname, var/mob/Sender)
 
-	var/msg = "\blue <b><font color='orange'>CENTCOMM FAX: </font>[key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;secretsadmin=check_antagonist'>CA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: Receiving '[sentname]' via secure connection ... <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a>"
+	var/msg = "<span class=\"notice\"><b><font color='orange'>CENTCOMM FAX: </font>[key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;secretsadmin=check_antagonist'>CA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: Receiving '[sentname]' via secure connection ... <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a></span>"
 	admins << msg
 
 proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt)

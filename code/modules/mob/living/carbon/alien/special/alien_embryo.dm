@@ -34,16 +34,16 @@
 
 /obj/item/alien_embryo/proc/volunteer(var/mob/dead/observer/O)
 	if(!istype(O))
-		O << "\red NO."
+		O << "<span class=\"rose\">NO.</span>"
 		return
 	if(O in ghost_volunteers)
-		O << "\blue Removed from registration list."
+		O << "<span class=\"notice\">Removed from registration list.</span>"
 		ghost_volunteers.Remove(O)
 		return
 	if(!check_observer(O))
-		O << "\red You cannot be \a [src]."
+		O << "<span class=\"rose\">You cannot be \a [src].</span>"
 		return
-	O.<< "\blue You've been added to the list of ghosts that may become this [src].  Click again to unvolunteer."
+	O.<< "<span class=\"notice\">You've been added to the list of ghosts that may become this [src].  Click again to unvolunteer.</span>"
 	ghost_volunteers.Add(O)
 
 /obj/item/alien_embryo/proc/check_observer(var/mob/dead/observer/O)
@@ -86,25 +86,25 @@
 			if(prob(1))
 				affected_mob.emote("cough")
 			if(prob(1))
-				affected_mob << "\red Your throat feels sore."
+				affected_mob << "<span class=\"rose\">Your throat feels sore.</span>"
 			if(prob(1))
-				affected_mob << "\red Mucous runs down the back of your throat."
+				affected_mob << "<span class=\"rose\">Mucous runs down the back of your throat.</span>"
 		if(4)
 			if(prob(1))
 				affected_mob.emote("sneeze")
 			if(prob(1))
 				affected_mob.emote("cough")
 			if(prob(2))
-				affected_mob << "\red Your muscles ache."
+				affected_mob << "<span class=\"rose\">Your muscles ache.</span>"
 				if(prob(20))
 					affected_mob.take_organ_damage(1)
 			if(prob(2))
-				affected_mob << "\red Your stomach hurts."
+				affected_mob << "<span class=\"rose\">Your stomach hurts.</span>"
 				if(prob(20))
 					affected_mob.adjustToxLoss(1)
 					affected_mob.updatehealth()
 		if(5)
-			affected_mob << "\red You feel something tearing its way out of your stomach..."
+			affected_mob << "<span class=\"rose\">You feel something tearing its way out of your stomach...</span>"
 			affected_mob.adjustToxLoss(10)
 			affected_mob.updatehealth()
 			if(prob(50))

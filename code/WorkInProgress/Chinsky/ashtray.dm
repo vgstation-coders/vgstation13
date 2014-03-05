@@ -60,7 +60,7 @@
 			die()
 			return
 		if (contents.len)
-			src.visible_message("\red [src] slams into [hit_atom] spilling its contents!")
+			src.visible_message("<span class=\"rose\">[src] slams into [hit_atom] spilling its contents!</span>")
 		for (var/obj/item/clothing/mask/cigarette/O in contents)
 			contents -= O
 			O.loc = src.loc
@@ -68,7 +68,7 @@
 	return ..()
 
 /obj/item/ashtray/proc/die()
-	src.visible_message("\red [src] shatters spilling its contents!")
+	src.visible_message("<span class=\"rose\">[src] shatters spilling its contents!</span>")
 	for (var/obj/item/clothing/mask/cigarette/O in contents)
 		contents -= O
 		O.loc = src.loc

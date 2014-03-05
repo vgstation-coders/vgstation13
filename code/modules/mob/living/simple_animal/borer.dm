@@ -6,7 +6,7 @@
 
 	if (src.client)
 		if(client.prefs.muted & MUTE_IC)
-			src << "\red You cannot speak in IC (muted)."
+			src << "<span class=\"rose\">You cannot speak in IC (muted).</span>"
 			return
 		if (src.client.handle_spam_prevention(message,MUTE_IC))
 			return
@@ -94,7 +94,7 @@
 
 	if (src.client)
 		if(client.prefs.muted & MUTE_IC)
-			src << "\red You cannot speak in IC (muted)."
+			src << "<span class=\"rose\">You cannot speak in IC (muted).</span>"
 			return
 		if (src.client.handle_spam_prevention(message,MUTE_IC))
 			return
@@ -159,8 +159,8 @@
 		if(!host || !src || controlling) return
 
 		else
-			src << "\red <B>You plunge your probosci deep into the cortex of the host brain, interfacing directly with their nervous system.</B>"
-			host << "\red <B>You feel a strange shifting sensation behind your eyes as an alien consciousness displaces yours.</B>"
+			src << "<span class=\"danger\">You plunge your probosci deep into the cortex of the host brain, interfacing directly with their nervous system.</span>"
+			host << "<span class=\"danger\">You feel a strange shifting sensation behind your eyes as an alien consciousness displaces yours.</span>"
 
 			host_brain.ckey = host.ckey
 			host.ckey = src.ckey
@@ -190,7 +190,7 @@
 	if(chemicals < 50 || !host || controlling || !src || stat) //Sanity check.
 		return
 
-	src << "\red <B>You squirt a measure of [chem] from your reservoirs into [host]'s bloodstream.</B>"
+	src << "<span class=\"danger\">You squirt a measure of [chem] from your reservoirs into [host]'s bloodstream.</span>"
 	host.reagents.add_reagent(chem, 15)
 	chemicals -= 50
 
@@ -364,13 +364,13 @@ mob/living/simple_animal/borer/proc/detatch()
 				if(target_vent)
 					loc = target_vent.loc
 			else
-				src << "\blue You need to remain still while entering a vent."
+				src << "<span class=\"notice\">You need to remain still while entering a vent.</span>"
 		else
-			src << "\blue This vent is not connected to anything."
+			src << "<span class=\"notice\">This vent is not connected to anything.</span>"
 	else if(welded)
-		src << "\red That vent is welded."
+		src << "<span class=\"rose\">That vent is welded.</span>"
 	else
-		src << "\blue You must be standing on or beside an air vent to enter it."
+		src << "<span class=\"notice\">You must be standing on or beside an air vent to enter it.</span>"
 	return
 
 //copy paste from alien/larva, if that func is updated please update this one alsoghost
@@ -381,10 +381,10 @@ mob/living/simple_animal/borer/proc/detatch()
 
 	if (layer != TURF_LAYER+0.2)
 		layer = TURF_LAYER+0.2
-		src << text("\blue You are now hiding.")
+		src << text("<span class=\"notice\">You are now hiding.</span>")
 	else
 		layer = MOB_LAYER
-		src << text("\blue You have stopped hiding.")
+		src << text("<span class=\"notice\">You have stopped hiding.</span>")
 
 //Procs for grabbing players.
 mob/living/simple_animal/borer/proc/request_player()

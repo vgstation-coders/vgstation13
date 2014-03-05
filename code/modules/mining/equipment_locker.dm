@@ -134,14 +134,14 @@
 				I.loc = src
 				inserted_id = I
 			else
-				usr << "\red No valid ID."
+				usr << "<span class=\"rose\">No valid ID.</span>"
 				return 1
 	else if(href_list["release"] && istype(inserted_id))
 		if(check_access(inserted_id))
 			var/release=href_list["release"]
 			var/datum/material/mat = materials.getMaterial(release)
 			if(!mat)
-				usr << "\red Unable to find material [release]!"
+				usr << "<span class=\"rose\">Unable to find material [release]!</span>"
 				return 1
 			var/desired = input("How much?","How much [mat.processed_name] to eject?",mat.stored) as num
 			if(desired==0)
@@ -233,7 +233,7 @@
 				usr.drop_item()
 				I.loc = src
 				inserted_id = I
-			else usr << "\red No valid ID."
+			else usr << "<span class=\"rose\">No valid ID.</span>"
 	if(href_list["purchase"])
 		if(istype(inserted_id))
 			var/datum/data/mining_equipment/prize = locate(href_list["purchase"])

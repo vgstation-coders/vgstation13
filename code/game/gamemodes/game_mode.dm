@@ -256,10 +256,10 @@
 			if(suplink)
 				var/extra = 4
 				suplink.uses += extra
-				man << "\red We have received notice that enemy intelligence suspects you to be linked with us. We have thus invested significant resources to increase your uplink's capacity."
+				man << "<span class=\"rose\">We have received notice that enemy intelligence suspects you to be linked with us. We have thus invested significant resources to increase your uplink's capacity.</span>"
 			else
 				// Give them a warning!
-				man << "\red They are on to you!"
+				man << "<span class=\"rose\">They are on to you!</span>"
 
 		// Some poor people who were just in the wrong place at the wrong time..
 		else if(prob(10))
@@ -431,7 +431,7 @@
 //Reports player logouts//
 //////////////////////////
 proc/display_roundstart_logout_report()
-	var/msg = "\blue <b>Roundstart logout report\n\n"
+	var/msg = "<span class=\"notice\"><b>Roundstart logout report\n\n</span>"
 	for(var/mob/living/L in mob_list)
 
 		if(L.ckey)
@@ -450,7 +450,7 @@ proc/display_roundstart_logout_report()
 				continue //AFK client
 			if(L.stat)
 				if(L.suiciding)	//Suicider
-					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (<font color='red'><b>Suicide</b></font>)\n"
+					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (<span class=\"danger\">Suicide</span>)\n"
 					continue //Disconnected client
 				if(L.stat == UNCONSCIOUS)
 					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (Dying)\n"
@@ -464,17 +464,17 @@ proc/display_roundstart_logout_report()
 			if(D.mind && (D.mind.original == L || D.mind.current == L))
 				if(L.stat == DEAD)
 					if(L.suiciding)	//Suicider
-						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<font color='red'><b>Suicide</b></font>)\n"
+						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<span class=\"danger\">Suicide</span>)\n"
 						continue //Disconnected client
 					else
 						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (Dead)\n"
 						continue //Dead mob, ghost abandoned
 				else
 					if(D.can_reenter_corpse)
-						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<font color='red'><b>This shouldn't appear.</b></font>)\n"
+						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<span class=\"danger\">This shouldn't appear.</span>)\n"
 						continue //Lolwhat
 					else
-						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<font color='red'><b>Ghosted</b></font>)\n"
+						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<span class=\"danger\">Ghosted</span>)\n"
 						continue //Ghosted while alive
 
 

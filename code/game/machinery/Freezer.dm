@@ -61,7 +61,7 @@
 					verbs += rotate_verbs
 					user.visible_message( \
 						"[user] unfastens \the [src].", \
-						"\blue You have unfastened \the [src]. Now it can be pulled somewhere else.", \
+						"<span class=\"notice\">You have unfastened \the [src]. Now it can be pulled somewhere else.</span>", \
 						"You hear ratchet.")
 					src.anchored = 0
 
@@ -78,7 +78,7 @@
 					verbs -= rotate_verbs
 					user.visible_message( \
 						"[user] fastens \the [src].", \
-						"\blue You have fastened \the [src]. Now it can be pulled somewhere else.", \
+						"<span class=\"notice\">You have fastened \the [src]. Now it can be pulled somewhere else.</span>", \
 						"You hear ratchet.")
 					src.anchored = 1
 
@@ -255,7 +255,7 @@
 					verbs += rotate_verbs
 					user.visible_message( \
 						"[user] unfastens \the [src].", \
-						"\blue You have unfastened \the [src]. Now it can be pulled somewhere else.", \
+						"<span class=\"notice\">You have unfastened \the [src]. Now it can be pulled somewhere else.</span>", \
 						"You hear ratchet.")
 					src.anchored = 0
 
@@ -272,7 +272,7 @@
 					verbs -= rotate_verbs
 					user.visible_message( \
 						"[user] fastens \the [src].", \
-						"\blue You have fastened \the [src]. Now it can be pulled somewhere else.", \
+						"<span class=\"notice\">You have fastened \the [src]. Now it can be pulled somewhere else.</span>", \
 						"You hear ratchet.")
 					src.anchored = 1
 

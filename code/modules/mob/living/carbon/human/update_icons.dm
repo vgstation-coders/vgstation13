@@ -498,7 +498,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 			if(w_uniform.flags&ONESIZEFITSALL)
 				standing.icon	= 'icons/mob/uniform_fat.dmi'
 			else
-				src << "\red You burst out of \the [w_uniform]!"
+				src << "<span class=\"rose\">You burst out of \the [w_uniform]!</span>"
 				drop_from_inventory(w_uniform)
 				return
 		else

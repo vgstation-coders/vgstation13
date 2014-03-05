@@ -23,7 +23,7 @@
 					wearable = 1
 
 			if(!wearable && (slot != 15 && slot != 16)) //Pockets.
-				M << "\red Your species cannot wear [src]."
+				M << "<span class=\"rose\">Your species cannot wear [src].</span>"
 				return 0
 
 	return ..()
@@ -318,32 +318,32 @@ BLIND     // can't see anything
 	if(usr.stat) return
 
 	if (!hastie || !istype(hastie,/obj/item/clothing/tie/holster))
-		usr << "\red You need a holster for that!"
+		usr << "<span class=\"rose\">You need a holster for that!</span>"
 		return
 	var/obj/item/clothing/tie/holster/H = hastie
 
 	if(!H.holstered)
 		if(!istype(usr.get_active_hand(), /obj/item/weapon/gun))
-			usr << "\blue You need your gun equiped to holster it."
+			usr << "<span class=\"notice\">You need your gun equiped to holster it.</span>"
 			return
 		var/obj/item/weapon/gun/W = usr.get_active_hand()
 		if (!W.isHandgun())
-			usr << "\red This gun won't fit in \the [H]!"
+			usr << "<span class=\"rose\">This gun won't fit in \the [H]!</span>"
 			return
 		H.holstered = usr.get_active_hand()
 		usr.drop_item()
 		H.holstered.loc = src
-		usr.visible_message("\blue \The [usr] holsters \the [H.holstered].", "You holster \the [H.holstered].")
+		usr.visible_message("<span class=\"notice\">\The [usr] holsters \the [H.holstered].</span>", "You holster \the [H.holstered].")
 	else
 		if(istype(usr.get_active_hand(),/obj) && istype(usr.get_inactive_hand(),/obj))
-			usr << "\red You need an empty hand to draw the gun!"
+			usr << "<span class=\"rose\">You need an empty hand to draw the gun!</span>"
 		else
 			if(usr.a_intent == "hurt")
-				usr.visible_message("\red \The [usr] draws \the [H.holstered], ready to shoot!", \
-				"\red You draw \the [H.holstered], ready to shoot!")
+				usr.visible_message("<span class=\"rose\">\The [usr] draws \the [H.holstered], ready to shoot!</span>", \
+				"<span class=\"rose\">You draw \the [H.holstered], ready to shoot!</span>")
 			else
-				usr.visible_message("\blue \The [usr] draws \the [H.holstered], pointing it at the ground.", \
-				"\blue You draw \the [H.holstered], pointing it at the ground.")
+				usr.visible_message("<span class=\"notice\">\The [usr] draws \the [H.holstered], pointing it at the ground.</span>", \
+				"<span class=\"notice\">You draw \the [H.holstered], pointing it at the ground.</span>")
 			usr.put_in_hands(H.holstered)
 			H.holstered = null
 
@@ -355,7 +355,7 @@ BLIND     // can't see anything
 	if(usr.stat) return
 
 	if (!hastie || !istype(hastie,/obj/item/clothing/tie/storage))
-		usr << "\red You need something to store items in for that!"
+		usr << "<span class=\"rose\">You need something to store items in for that!</span>"
 		return
 	var/obj/item/clothing/tie/storage/W = hastie
 

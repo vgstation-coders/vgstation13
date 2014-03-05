@@ -26,11 +26,11 @@
 		usr << "<span class='warning'> Something is very off about this water.</span>"
 	switch(health)
 		if(75 to 99)
-			usr << "\blue It appears slightly dented."
+			usr << "<span class=\"notice\">It appears slightly dented.</span>"
 		if(40 to 74)
-			usr << "\red It appears heavily dented."
+			usr << "<span class=\"rose\">It appears heavily dented.</span>"
 		if(1 to 39)
-			usr << "\red It appears severely dented."
+			usr << "<span class=\"rose\">It appears severely dented.</span>"
 		if((INFINITY * -1) to 0)
 			usr << "It appears completely unsalvageable"
 	if(mybag)

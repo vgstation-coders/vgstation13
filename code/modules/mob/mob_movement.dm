@@ -42,7 +42,7 @@
 		var/mob/living/carbon/C = usr
 		C.toggle_throw_mode()
 	else
-		usr << "\red This mob type cannot throw items."
+		usr << "<span class=\"rose\">This mob type cannot throw items.</span>"
 	return
 
 
@@ -50,11 +50,11 @@
 	if(iscarbon(usr))
 		var/mob/living/carbon/C = usr
 		if(!C.get_active_hand())
-			usr << "\red You have nothing to drop in your hand."
+			usr << "<span class=\"rose\">You have nothing to drop in your hand.</span>"
 			return
 		drop_item()
 	else
-		usr << "\red This mob type cannot drop items."
+		usr << "<span class=\"rose\">This mob type cannot drop items.</span>"
 	return
 
 //This gets called when you press the delete button.
@@ -62,7 +62,7 @@
 	set hidden = 1
 
 	if(!usr.pulling)
-		usr << "\blue You are not pulling anything."
+		usr << "<span class=\"notice\">You are not pulling anything.</span>"
 		return
 	usr.stop_pulling()
 
@@ -280,13 +280,13 @@
 			for(var/mob/M in range(mob, 1))
 				if(M.pulling == mob)
 					if(!M.restrained() && M.stat == 0 && M.canmove && mob.Adjacent(M))
-						src << "\blue You're restrained! You can't move!"
+						src << "<span class=\"notice\">You're restrained! You can't move!</span>"
 						return 0
 					else
 						M.stop_pulling()
 
 		if(mob.pinned.len)
-			src << "\blue You're pinned to a wall by [mob.pinned[1]]!"
+			src << "<span class=\"notice\">You're pinned to a wall by [mob.pinned[1]]!</span>"
 			return 0
 
 		move_delay = world.time//set move delay
@@ -374,12 +374,12 @@
 			if(G.state == 2)
 				move_delay = world.time + 10
 				if(!prob(25))	return 1
-				mob.visible_message("\red [mob] has broken free of [G.assailant]'s grip!")
+				mob.visible_message("<span class=\"rose\">[mob] has broken free of [G.assailant]'s grip!</span>")
 				del(G)
 			if(G.state == 3)
 				move_delay = world.time + 10
 				if(!prob(5))	return 1
-				mob.visible_message("\red [mob] has broken free of [G.assailant]'s headlock!")
+				mob.visible_message("<span class=\"rose\">[mob] has broken free of [G.assailant]'s headlock!</span>")
 				del(G)
 	return 0
 
@@ -499,7 +499,7 @@
 
 	//Check to see if we slipped
 	if(prob(Process_Spaceslipping(5)))
-		src << "\blue <B>You slipped!</B>"
+		src << "<span class=\"notice\"><B>You slipped!</B></span>"
 		src.inertia_dir = src.last_move
 		step(src, src.inertia_dir)
 		return 0
