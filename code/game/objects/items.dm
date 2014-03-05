@@ -41,14 +41,17 @@
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
 
 /obj/item/Destroy()
-	if(istype(src.loc, /mob/living))
-		var/mob/living/H = src.loc
-		H.u_equip(src) // items at the very least get unequipped from their mob before being deleted
+	if(istype(src.loc, /mob))
+		var/mob/H = src.loc
+		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
 	if(reagents && istype(reagents))
 		reagents.my_atom = null
 		reagents.delete()
 	if(hasvar(src, "holder"))
 		src:holder = null
+	/*  BROKEN, FUCK BYOND
+	if(hasvar(src, "my_atom"))
+		src:my_atom = null*/
 	..()
 
 /obj/item/device
