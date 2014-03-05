@@ -47,14 +47,14 @@
 		set src in view()
 		..()
 		if (!(usr in view(2)) && usr!=src.loc) return
-		usr << "\blue It contains:"
+		usr << "<span class=\"notice\">It contains:</span>"
 		if(reagents && reagents.reagent_list.len)
 			for(var/datum/reagent/R in reagents.reagent_list)
-				usr << "\blue [R.volume] units of [R.name]"
+				usr << "<span class=\"notice\">[R.volume] units of [R.name]</span>"
 		else
-			usr << "\blue Nothing."
+			usr << "<span class=\"notice\">Nothing.</span>"
 		if (!is_open_container())
-			usr << "\blue Airtight lid seals it completely."
+			usr << "<span class=\"notice\">Airtight lid seals it completely.</span>"
 
 	attack_self()
 		..()
@@ -76,7 +76,7 @@
 				return
 
 		if(ismob(target) && target.reagents && reagents.total_volume)
-			user << "\blue You splash the solution onto [target]."
+			user << "<span class=\"notice\">You splash the solution onto [target].</span>"
 
 			var/mob/living/M = target
 			var/list/injected = list()
@@ -92,30 +92,30 @@
 				M.LAssailant = user
 
 			for(var/mob/O in viewers(world.view, user))
-				O.show_message(text("\red [] has been splashed with something by []!", target, user), 1)
+				O.show_message(text("<span class=\"rose\">[] has been splashed with something by []!</span>", target, user), 1)
 			src.reagents.reaction(target, TOUCH)
 			spawn(5) src.reagents.clear_reagents()
 			return
 		else if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
 
 			if(!target.reagents.total_volume && target.reagents)
-				user << "\red [target] is empty."
+				user << "<span class=\"rose\">[target] is empty.</span>"
 				return
 
 			if(reagents.total_volume >= reagents.maximum_volume)
-				user << "\red [src] is full."
+				user << "<span class=\"rose\">[src] is full.</span>"
 				return
 
 			var/trans = target.reagents.trans_to(src, target:amount_per_transfer_from_this)
-			user << "\blue You fill [src] with [trans] units of the contents of [target]."
+			user << "<span class=\"notice\">You fill [src] with [trans] units of the contents of [target].</span>"
 
 		else if(target.is_open_container() && target.reagents) //Something like a glass. Player probably wants to transfer TO it.
 			if(!reagents.total_volume)
-				user << "\red [src] is empty."
+				user << "<span class=\"rose\">[src] is empty.</span>"
 				return
 
 			if(target.reagents.total_volume >= target.reagents.maximum_volume)
-				user << "\red [target] is full."
+				user << "<span class=\"rose\">[target] is full.</span>"
 				return
 
 			// /vg/: Logging transfers of bad things
@@ -125,12 +125,12 @@
 					if(reagents.has_reagent(bad_reagent))
 						badshit += reagents_to_log[bad_reagent]
 				if(badshit.len)
-					var/hl="\red <b>([english_list(badshit)])</b> \black"
+					var/hl="<span class=\"danger\">([english_list(badshit)])</span>"
 					message_admins("[user.name] ([user.ckey]) added [reagents.get_reagent_ids(1)] to \a [target] with [src].[hl] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 					log_game("[user.name] ([user.ckey]) added [reagents.get_reagent_ids(1)] to \a [target] with [src].")
 
 			var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
-			user << "\blue You transfer [trans] units of the solution to [target]."
+			user << "<span class=\"notice\">You transfer [trans] units of the solution to [target].</span>"
 
 		//Safety for dumping stuff into a ninja suit. It handles everything through attackby() and this is unnecessary.
 		else if(istype(target, /obj/item/clothing/suit/space/space_ninja))
@@ -143,7 +143,7 @@
 			return
 
 		else if(reagents.total_volume)
-			user << "\blue You splash the solution onto [target]."
+			user << "<span class=\"notice\">You splash the solution onto [target].</span>"
 			if(reagents.has_reagent("fuel"))
 				message_admins("[user.name] ([user.ckey]) poured Welder Fuel onto [target]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 				log_game("[user.name] ([user.ckey]) poured Welder Fuel onto [target]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
@@ -155,9 +155,9 @@
 		if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
 			var/tmp_label = sanitize(input(user, "Enter a label for [src.name]","Label",src.label_text))
 			if(length(tmp_label) > 10)
-				user << "\red The label can be at most 10 characters long."
+				user << "<span class=\"rose\">The label can be at most 10 characters long.</span>"
 			else
-				user << "\blue You set the label to \"[tmp_label]\"."
+				user << "<span class=\"notice\">You set the label to \"[tmp_label]\".</span>"
 				src.label_text = tmp_label
 				src.update_name_label()
 

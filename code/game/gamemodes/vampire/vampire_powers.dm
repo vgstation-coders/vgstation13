@@ -79,7 +79,7 @@
 		M.current.stunned = 0
 		M.current.paralysis = 0
 		//M.vampire.bloodusable -= 10
-		M.current << "\blue You flush your system with clean blood and remove any incapacitating effects."
+		M.current << "<span class=\"notice\">You flush your system with clean blood and remove any incapacitating effects.</span>"
 		spawn(1)
 			if(M.vampire.bloodtotal >= 200)
 				for(var/i = 0; i < 5; i++)
@@ -108,18 +108,18 @@
 		M.current.verbs += /client/proc/vampire_hypnotise
 	if(do_mob(M.current, C, 50))
 		if(C.mind && C.mind.vampire)
-			M.current << "\red Your piercing gaze fails to knock out [C.name]."
-			C << "\blue [M.current.name]'s feeble gaze is ineffective."
+			M.current << "<span class=\"rose\">Your piercing gaze fails to knock out [C.name].</span>"
+			C << "<span class=\"notice\">[M.current.name]'s feeble gaze is ineffective.</span>"
 			return
 		else
-			M.current << "\red Your piercing gaze knocks out [C.name]."
-			C << "\red You find yourself unable to move and barely able to speak"
+			M.current << "<span class=\"rose\">Your piercing gaze knocks out [C.name].</span>"
+			C << "<span class=\"rose\">You find yourself unable to move and barely able to speak</span>"
 			C.Weaken(20)
 			C.Stun(20)
 			C.stuttering = 20
 		M.current.remove_vampire_blood(20)
 	else
-		M.current << "\red You broke your gaze."
+		M.current << "<span class=\"rose\">You broke your gaze.</span>"
 		return
 
 /client/proc/vampire_disease()
@@ -132,19 +132,19 @@
 	var/mob/living/carbon/C = M.current.vampire_active(100, 0, 1)
 	if(!C) return
 	if(!M.current.vampire_can_reach(C, 1))
-		M.current << "\red <b>You cannot touch [C.name] from where you are standing!"
+		M.current << "<span class=\"danger\">You cannot touch [C.name] from where you are standing!</span>"
 		return
-	M.current << "\red You stealthily infect [C.name] with your diseased touch."
+	M.current << "<span class=\"rose\">You stealthily infect [C.name] with your diseased touch.</span>"
 	/*var/t_him = "it"
 	if (src.gender == MALE)
 		t_him = "him"
 	else if (src.gender == FEMALE)
 		t_him = "her"
-	M.current.visible_message("\blue [M] shakes [src] trying to wake [t_him] up!" )
+	M.current.visible_message("<span class=\"notice\">[M] shakes [src] trying to wake [t_him] up!</span>" )
 	playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)*/
 	C.help_shake_act(M.current) // i use da colon
 	if(!C.vampire_affected(M))
-		M.current << "\red They seem to be unaffected."
+		M.current << "<span class=\"rose\">They seem to be unaffected.</span>"
 		return
 	var/datum/disease2/disease/shutdown = new /datum/disease2/disease
 	var/datum/disease2/effectholder/holder = new /datum/disease2/effectholder
@@ -172,7 +172,7 @@
 	var/datum/mind/M = usr.mind
 	if(!M) return
 	if(M.current.vampire_power(0, 1))
-		M.current.visible_message("\red <b>[M.current.name]'s eyes emit a blinding flash!")
+		M.current.visible_message("<span class=\"danger\">[M.current.name]'s eyes emit a blinding flash!</span>")
 		//M.vampire.bloodusable -= 10
 		M.current.verbs -= /client/proc/vampire_glare
 		spawn(300)
@@ -186,7 +186,7 @@
 			C.Stun(8)
 			C.Weaken(8)
 			C.stuttering = 20
-			C << "\red You are blinded by [M.current.name]'s glare"
+			C << "<span class=\"rose\">You are blinded by [M.current.name]'s glare</span>"
 
 /client/proc/vampire_shapeshift()
 	set category = "Vampire"
@@ -210,7 +210,7 @@
 	var/datum/mind/M = usr.mind
 	if(!M) return
 	if(M.current.vampire_power(30, 0))
-		M.current.visible_message("\red [M.current.name] lets out an ear piercing shriek!", "\red You let out a loud shriek.", "\red You hear a loud painful shriek!")
+		M.current.visible_message("<span class=\"rose\">[M.current.name] lets out an ear piercing shriek!</span>", "<span class=\"rose\">You let out a loud shriek.</span>", "<span class=\"rose\">You hear a loud painful shriek!</span>")
 		for(var/mob/living/carbon/C in ohearers(4, M.current))
 			if(C == M.current) continue
 			if(ishuman(C) && C:is_on_ears(/obj/item/clothing/ears/earmuffs)) continue
@@ -236,10 +236,10 @@
 	if(!M) return
 	var/mob/living/carbon/C = M.current.vampire_active(300, 0, 1)
 	if(!C) return
-	M.current.visible_message("\red [M.current.name] bites [C.name]'s neck!", "\red You bite [C.name]'s neck and begin the flow of power.")
+	M.current.visible_message("<span class=\"rose\">[M.current.name] bites [C.name]'s neck!</span>", "<span class=\"rose\">You bite [C.name]'s neck and begin the flow of power.</span>")
 	C << "<span class='warning'>You feel the tendrils of evil invade your mind.</span>"
 	if(!ishuman(C))
-		M.current << "\red You can only enthrall humans"
+		M.current << "<span class=\"rose\">You can only enthrall humans</span>"
 		return
 
 	if(do_mob(M.current, C, 50))
@@ -249,7 +249,7 @@
 			M.current.verbs -= /client/proc/vampire_enthrall
 			spawn(1800) M.current.verbs += /client/proc/vampire_enthrall
 		else
-			M.current << "\red You or your target either moved or you dont have enough usable blood."
+			M.current << "<span class=\"rose\">You or your target either moved or you dont have enough usable blood.</span>"
 			return
 
 
@@ -262,7 +262,7 @@
 	if(!M) return
 	if(M.current.vampire_power(0, 0))
 		M.vampire.iscloaking = !M.vampire.iscloaking
-		M.current << "\blue You will now be [M.vampire.iscloaking ? "hidden" : "seen"] in darkness."
+		M.current << "<span class=\"notice\">You will now be [M.vampire.iscloaking ? "hidden" : "seen"] in darkness.</span>"
 
 /mob/proc/handle_vampire_cloak()
 	if(!mind || !mind.vampire || !ishuman(src))
@@ -287,21 +287,21 @@
 		world.log << "something bad happened on enthralling a mob src is [src] [src.key] \ref[src]"
 		return 0
 	if(!C.mind)
-		src << "\red [C.name]'s mind is not there for you to enthrall."
+		src << "<span class=\"rose\">[C.name]'s mind is not there for you to enthrall.</span>"
 		return 0
 	if((/obj/item/weapon/implant/traitor in C.contents) || (/obj/item/weapon/implant/loyalty in C.contents )||( C.mind in ticker.mode.vampires )||( C.mind.vampire )||( C.mind in ticker.mode.enthralled ))
-		C.visible_message("\red [C] seems to resist the takeover!", "\blue You feel a familiar sensation in your skull that quickly dissipates.")
+		C.visible_message("<span class=\"rose\">[C] seems to resist the takeover!</span>", "<span class=\"notice\">You feel a familiar sensation in your skull that quickly dissipates.</span>")
 		return 0
 	if(!C.vampire_affected(mind))
-		C.visible_message("\red [C] seems to resist the takeover!", "\blue Your faith of [ticker.Bible_deity_name] has kept your mind clear of all evil")
+		C.visible_message("<span class=\"rose\">[C] seems to resist the takeover!</span>", "<span class=\"notice\">Your faith of [ticker.Bible_deity_name] has kept your mind clear of all evil</span>")
 	if(!ishuman(C))
-		src << "\red You can only enthrall humans!"
+		src << "<span class=\"rose\">You can only enthrall humans!</span>"
 		return 0
 	return 1
 
 /mob/proc/handle_enthrall(mob/living/carbon/human/H as mob)
 	if(!istype(H))
-		src << "<b>\red SOMETHING WENT WRONG, YELL AT POMF OR NEXIS</b>"
+		src << "<span class=\"danger\">SOMETHING WENT WRONG, YELL AT POMF OR NEXIS</span>"
 		return 0
 	var/ref = "\ref[src.mind]"
 	if(!(ref in ticker.mode.thralls))
@@ -311,8 +311,8 @@
 	ticker.mode.enthralled.Add(H.mind)
 	ticker.mode.enthralled[H.mind] = src.mind
 	H.mind.special_role = "VampThrall"
-	H << "<b>\red You have been Enthralled by [name]. Follow their every command.</b>"
-	src << "\red You have successfully Enthralled [H.name]. <i>If they refuse to do as you say just adminhelp.</i>"
+	H << "<span class=\"danger\"> You have been Enthralled by [name]. Follow their every command.</span>"
+	src << "<span class=\"rose\">You have successfully Enthralled [H.name]. <i>If they refuse to do as you say just adminhelp.</i></span>"
 	ticker.mode.update_vampire_icons_added(H.mind)
 	ticker.mode.update_vampire_icons_added(src.mind)
 	log_admin("[ckey(src.key)] has mind-slaved [ckey(H.key)].")
@@ -431,7 +431,7 @@
 				turfs += T
 
 			if(!turfs.len)
-				usr << "\red You cannot find darkness to step to."
+				usr << "<span class=\"rose\">You cannot find darkness to step to.</span>"
 				return
 
 			var/turf/picked = pick(turfs)
@@ -464,4 +464,4 @@
 	bloodold = mind.vampire.bloodusable
 	mind.vampire.bloodusable = max(0, (mind.vampire.bloodusable - amount))
 	if(bloodold != mind.vampire.bloodusable)
-		src << "\blue <b>You have [mind.vampire.bloodusable] left to use.</b>"
+		src << "<span class=\"notice\"><b>You have [mind.vampire.bloodusable] left to use.</b></span>"

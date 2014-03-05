@@ -110,7 +110,7 @@ obj/machinery/air_sensor
 			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 			if(do_after(user, 20))
 				if (src.stat & BROKEN)
-					user << "\blue The broken glass falls out."
+					user << "<span class=\"notice\">The broken glass falls out.</span>"
 					var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 					new /obj/item/weapon/shard( src.loc )
 					var/obj/item/weapon/circuitboard/air_management/M = new /obj/item/weapon/circuitboard/air_management( A )
@@ -123,7 +123,7 @@ obj/machinery/air_sensor
 					A.anchored = 1
 					del(src)
 				else
-					user << "\blue You disconnect the monitor."
+					user << "<span class=\"notice\">You disconnect the monitor.</span>"
 					var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 					var/obj/item/weapon/circuitboard/air_management/M = new /obj/item/weapon/circuitboard/air_management( A )
 					for (var/obj/C in src)
@@ -400,7 +400,7 @@ legend {
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, 20))
 					if (src.stat & BROKEN)
-						user << "\blue The broken glass falls out."
+						user << "<span class=\"notice\">The broken glass falls out.</span>"
 						var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 						new /obj/item/weapon/shard( src.loc )
 						var/obj/item/weapon/circuitboard/injector_control/M = new /obj/item/weapon/circuitboard/injector_control( A )
@@ -413,7 +413,7 @@ legend {
 						A.anchored = 1
 						del(src)
 					else
-						user << "\blue You disconnect the monitor."
+						user << "<span class=\"notice\">You disconnect the monitor.</span>"
 						var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 						var/obj/item/weapon/circuitboard/injector_control/M = new /obj/item/weapon/circuitboard/injector_control( A )
 						for (var/obj/C in src)

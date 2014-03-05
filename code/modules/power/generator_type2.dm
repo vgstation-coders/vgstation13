@@ -88,7 +88,7 @@
 
 /obj/machinery/power/generator/type2/proc/get_loop_state(var/loop_name,var/loop_dir,var/obj/machinery/atmospherics/unary/generator_input/loop)
 	if(!loop)
-		return "<b>[loop_name] Loop</b> ([dir2text(loop_dir)], <span style=\"color:red;font-weight:bold;\">UNCONNECTED</span>)<br />"
+		return "<b>[loop_name] Loop</b> ([dir2text(loop_dir)], <span class=\"danger\">UNCONNECTED</span>)<br />"
 	else
 		return {"<B>Cold Loop</B> ([dir2text(loop_dir)])
 <ul>

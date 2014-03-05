@@ -153,7 +153,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 			wires_win(user,50)
 			return
 		if (src.disabled)
-			user << "\red You press the button, but nothing happens."
+			user << "<span class=\"rose\">You press the button, but nothing happens.</span>"
 			return
 		regular_win(user)
 		return
@@ -162,7 +162,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 		if (stat)
 			return 1
 		if (busy)
-			user << "\red The autolathe is busy. Please wait for completion of previous operation."
+			user << "<span class=\"rose\">The autolathe is busy. Please wait for completion of previous operation.</span>"
 			return 1
 		if (istype(O, /obj/item/weapon/screwdriver))
 			if (!opened)
@@ -198,21 +198,21 @@ var/global/list/autolathe_recipes_hidden = list( \
 				return 1
 		if(isrobot(user))
 			if(!isMoMMI(user))
-				user << "\red You're a robot. No."
+				user << "<span class=\"rose\">You're a robot. No.</span>"
 				return 1
 			else
 				var/mob/living/silicon/robot/mommi/M = user
 				if(M.is_in_modules(O))
-					user << "\red You can't put something built into you in [src]."
+					user << "<span class=\"rose\">You can't put something built into you in [src].</span>"
 					return 1
 		if (src.m_amount + O.m_amt > max_m_amount)
-			user << "\red The autolathe is full. Please remove metal from the autolathe in order to insert more."
+			user << "<span class=\"rose\">The autolathe is full. Please remove metal from the autolathe in order to insert more.</span>"
 			return 1
 		if (src.g_amount + O.g_amt > max_g_amount)
-			user << "\red The autolathe is full. Please remove glass from the autolathe in order to insert more."
+			user << "<span class=\"rose\">The autolathe is full. Please remove glass from the autolathe in order to insert more.</span>"
 			return 1
 		if (O.m_amt == 0 && O.g_amt == 0)
-			user << "\red This object does not contain significant amounts of metal or glass, or cannot be accepted by the autolathe due to size or hazardous materials."
+			user << "<span class=\"rose\">This object does not contain significant amounts of metal or glass, or cannot be accepted by the autolathe due to size or hazardous materials.</span>"
 			return 1
 	/*
 		if (istype(O, /obj/item/weapon/grab) && src.hacked)
@@ -327,7 +327,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 							src.shocked = !src.shocked
 							src.shock(usr,50)
 		else
-			usr << "\red The autolathe is busy. Please wait for completion of previous operation."
+			usr << "<span class=\"rose\">The autolathe is busy. Please wait for completion of previous operation.</span>"
 		src.updateUsrDialog()
 		return
 

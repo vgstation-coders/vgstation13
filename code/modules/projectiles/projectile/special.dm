@@ -87,10 +87,10 @@
 					M.apply_effect((rand(30,80)),IRRADIATE)
 					M.Weaken(5)
 					for (var/mob/V in viewers(src))
-						V.show_message("\red [M] writhes in pain as \his vacuoles boil.", 3, "\red You hear the crunching of leaves.", 2)
+						V.show_message("<span class=\"rose\">[M] writhes in pain as \his vacuoles boil.</span>", 3, "<span class=\"rose\">You hear the crunching of leaves.</span>", 2)
 				if(prob(35))
 				//	for (var/mob/V in viewers(src)) //Public messages commented out to prevent possible metaish genetics experimentation and stuff. - Cheridan
-				//		V.show_message("\red [M] is mutated by the radiation beam.", 3, "\red You hear the snapping of twigs.", 2)
+				//		V.show_message("<span class=\"rose\"> [M] is mutated by the radiation beam.</span>", 3, "<span class=\"rose\">You hear the snapping of twigs.</span>", 2)
 					if(prob(80))
 						randmutb(M)
 						domutcheck(M,null)
@@ -99,13 +99,13 @@
 						domutcheck(M,null)
 				else
 					M.adjustFireLoss(rand(5,15))
-					M.show_message("\red The radiation beam singes you!")
+					M.show_message("<span class=\"rose\">The radiation beam singes you!</span>")
 				//	for (var/mob/V in viewers(src))
-				//		V.show_message("\red [M] is singed by the radiation beam.", 3, "\red You hear the crackle of burning leaves.", 2)
+				//		V.show_message("<span class=\"rose\">[M] is singed by the radiation beam.</span>", 3, "<span class=\"rose\">You hear the crackle of burning leaves.</span>", 2)
 		else if(istype(target, /mob/living/carbon/))
 		//	for (var/mob/V in viewers(src))
 		//		V.show_message("The radiation beam dissipates harmlessly through [M]", 3)
-			M.show_message("\blue The radiation beam dissipates harmlessly through your body.")
+			M.show_message("<span class=\"notice\">The radiation beam dissipates harmlessly through your body.</span>")
 		else
 			return 1
 
@@ -125,7 +125,7 @@
 			if((H.species.flags & IS_PLANT) && (M.nutrition < 500))
 				M.nutrition += 30
 		else if (istype(target, /mob/living/carbon/))
-			M.show_message("\blue The radiation beam dissipates harmlessly through your body.")
+			M.show_message("<span class=\"notice\">The radiation beam dissipates harmlessly through your body.</span>")
 		else
 			return 1
 

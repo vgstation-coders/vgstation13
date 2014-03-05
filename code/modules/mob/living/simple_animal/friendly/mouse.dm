@@ -103,7 +103,7 @@
 				choices.Add(a.loc)
 			var/turf/startloc = loc
 			if(!choices)
-				src << "\red This vent isn't connected to anything."
+				src << "<span class=\"rose\">This vent isn't connected to anything.</span>"
 			var/obj/selection = input("Select a destination.", "Duct System") in choices
 			var/selection_position = choices.Find(selection)
 			if(loc==startloc)
@@ -116,13 +116,13 @@
 					*/
 					loc = target_vent.loc
 			else
-				src << "\blue You need to remain still while entering a vent."
+				src << "<span class=\"notice\">You need to remain still while entering a vent.</span>"
 		else
-			src << "\blue This vent is not connected to anything."
+			src << "<span class=\"notice\">This vent is not connected to anything.</span>"
 	else if(welded)
-		src << "\red That vent is welded."
+		src << "<span class=\"rose\">That vent is welded.</span>"
 	else
-		src << "\blue You must be standing on or beside an air vent to enter it."
+		src << "<span class=\"notice\">You must be standing on or beside an air vent to enter it.</span>"
 	return
 
 //copy paste from alien/larva, if that func is updated please update this one alsoghost
@@ -133,7 +133,7 @@
 
 	if (layer != TURF_LAYER+0.2)
 		layer = TURF_LAYER+0.2
-		src << text("\blue You are now hiding.")
+		src << text("<span class=\"notice\">You are now hiding.</span>")
 		/*
 		for(var/mob/O in oviewers(src, null))
 			if ((O.client && !( O.blinded )))
@@ -141,7 +141,7 @@
 		*/
 	else
 		layer = MOB_LAYER
-		src << text("\blue You have stopped hiding.")
+		src << text("<span class=\"notice\">You have stopped hiding.</span>")
 		/*
 		for(var/mob/O in oviewers(src, null))
 			if ((O.client && !( O.blinded )))
@@ -179,7 +179,7 @@
 	if( ishuman(AM) )
 		if(!stat)
 			var/mob/M = AM
-			M << "\blue \icon[src] Squeek!"
+			M << "<span class=\"notice\">\icon[src] Squeek!</span>"
 			M << 'sound/effects/mousesqueek.ogg'
 	..()
 

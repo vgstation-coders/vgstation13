@@ -53,7 +53,7 @@
 
 /obj/structure/sign/double/barsign/attack_hand(mob/user as mob)
 	if (!src.allowed(user))
-		user << "\red Access denied."
+		user << "<span class=\"rose\">Access denied.</span>"
 		return
 
 	if (!(get_dir(src, usr) in list(SOUTHWEST, SOUTH, SOUTHEAST)))

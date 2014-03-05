@@ -24,10 +24,10 @@
 	var/turf/loc = get_turf(usr)
 	var/area/A = loc.loc
 	if (!istype(loc, /turf/simulated/floor))
-		usr << "\red Compressor cannot be placed on this spot."
+		usr << "<span class=\"rose\">Compressor cannot be placed on this spot.</span>"
 		return
 	if (A.requires_power == 0 || A.name == "Space")
-		usr << "\red Compressor cannot be placed in this area."
+		usr << "<span class=\"rose\">Compressor cannot be placed in this area.</span>"
 		return
 	new /obj/machinery/rust_fuel_compressor(loc, ndir, 1)
 	del(src)
@@ -61,21 +61,21 @@
 				user << "You begin removing the circuitboard" //lpeters - fixed grammar issues
 				if(do_after(user, 50))
 					user.visible_message(\
-						"\red [user.name] has removed the circuitboard from [src.name]!",\
-						"\blue You remove the circuitboard board.")
+						"<span class=\"rose\">[user.name] has removed the circuitboard from [src.name]!</span>",\
+						"<span class=\"notice\">You remove the circuitboard board.</span>")
 					has_electronics = 0
 					new /obj/item/weapon/module/rust_fuel_compressor(loc)
 					has_electronics &= ~1
 			else
 				opened = 0
 				icon_state = "fuel_compressor0"
-				user << "\blue You close the maintenance cover."
+				user << "<span class=\"notice\">You close the maintenance cover.</span>"
 		else
 			if(compressed_matter > 0)
-				user << "\red You cannot open the cover while there is compressed matter inside."
+				user << "<span class=\"rose\">You cannot open the cover while there is compressed matter inside.</span>"
 			else
 				opened = 1
-				user << "\blue You open the maintenance cover."
+				user << "<span class=\"notice\">You open the maintenance cover.</span>"
 				icon_state = "fuel_compressor1"
 		return
 
@@ -88,7 +88,7 @@
 				user << "You [ locked ? "lock" : "unlock"] the compressor interface."
 				update_icon()
 			else
-				user << "\red Access denied."
+				user << "<span class=\"rose\">Access denied.</span>"
 		return
 
 	else if (istype(W, /obj/item/weapon/card/emag) && !emagged)		// trying to unlock with an emag card
@@ -108,14 +108,14 @@
 	else if (istype(W, /obj/item/weapon/cable_coil) && opened && !(has_electronics & 2))
 		var/obj/item/weapon/cable_coil/C = W
 		if(C.amount < 10)
-			user << "\red You need more wires."
+			user << "<span class=\"rose\">You need more wires.</span>"
 			return
 		user << "You start adding cables to the compressor frame..."
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, 20) && C.amount >= 10)
 			C.use(10)
 			user.visible_message(\
-				"\red [user.name] has added cables to the compressor frame!",\
+				"<span class=\"rose\">[user.name] has added cables to the compressor frame!</span>",\
 				"You add cables to the port frame.")
 			has_electronics &= 2
 		return
@@ -126,7 +126,7 @@
 		if(do_after(user, 50))
 			new /obj/item/weapon/cable_coil(loc,10)
 			user.visible_message(\
-				"\red [user.name] cut the cabling inside the compressor.",\
+				"<span class=\"rose\">[user.name] cut the cabling inside the compressor.</span>",\
 				"You cut the cabling inside the port.")
 			has_electronics &= ~2
 		return
@@ -143,7 +143,7 @@
 	else if (istype(W, /obj/item/weapon/weldingtool) && opened && !has_electronics)
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.get_fuel() < 3)
-			user << "\blue You need more welding fuel to complete this task."
+			user << "<span class=\"notice\">You need more welding fuel to complete this task.</span>"
 			return
 		user << "You start welding the compressor frame..."
 		playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
@@ -151,9 +151,9 @@
 			if(!src || !WT.remove_fuel(3, user)) return
 			new /obj/item/rust_fuel_assembly_port_frame(loc)
 			user.visible_message(\
-				"\red [src] has been cut away from the wall by [user.name].",\
+				"<span class=\"rose\">[src] has been cut away from the wall by [user.name].</span>",\
 				"You detached the compressor frame.",\
-				"\red You hear welding.")
+				"<span class=\"rose\">You hear welding.</span>")
 			del(src)
 		return
 

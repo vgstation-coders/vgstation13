@@ -102,7 +102,7 @@
 	if (!istype(M, /mob))
 		return
 	if (!(istype(usr, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
-		user << "\red You don't have the dexterity to do this!"
+		user << "<span class=\"rose\">You don't have the dexterity to do this!</span>"
 		return
 
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been injected with [name] by [user.name] ([user.ckey])</font>")
@@ -132,17 +132,17 @@
 					if(block)// Isolated injector
 						testing("Isolated block [block] injector with contents: [GetValue()]")
 						if (GetState() && block == MONKEYBLOCK && istype(M, /mob/living/carbon/human)  )
-							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] \red(MONKEY)")
+							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] <span class=\"rose\">(MONKEY)</span>")
 							log_attack("[key_name(user)] injected [key_name(M)] with the Isolated [name] (MONKEY)")
-							log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] \red(MONKEY)")
+							log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] <span class=\"rose\">MONKEY)</span.")
 						else
 							log_attack("[key_name(user)] injected [key_name(M)] with the Isolated [name]")
 					else
 						testing("DNA injector with contents: [english_list(buf.dna.SE)]")
 						if (GetState(MONKEYBLOCK) && istype(M, /mob/living/carbon/human) )
-							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the [name] \red(MONKEY)")
+							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the [name] <span class=\"rose\">(MONKEY)</span>")
 							log_attack("[key_name(user)] injected [key_name(M)] with the [name] (MONKEY)")
-							log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the [name] \red(MONKEY)")
+							log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the [name] <span class=\"rose\">(MONKEY)</span.")
 						else
 	//						message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the [name]")
 							log_attack("[key_name(user)] injected [key_name(M)] with the [name]")
@@ -157,25 +157,25 @@
 			if(!inuse)
 
 				for(var/mob/O in viewers(M, null))
-					O.show_message(text("\red [] has been injected with [] by [].", M, src, user), 1)
+					O.show_message(text("<span class=\"rose\"> [] has been injected with [] by [].</span>", M, src, user), 1)
 					//Foreach goto(192)
 				if (!(istype(M, /mob/living/carbon/human) || istype(M, /mob/living/carbon/monkey)))
-					user << "\red Apparently it didn't work."
+					user << "<span class=\"rose\">Apparently it didn't work.</span>"
 					return
 
 				if (buf.types & DNA2_BUF_SE)
 					if(block)// Isolated injector
 						testing("Isolated block [block] injector with contents: [GetValue()]")
 						if (GetState() && block == MONKEYBLOCK && istype(M, /mob/living/carbon/human)  )
-							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] \red(MONKEY)")
+							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] <span class=\"rose\">(MONKEY)</span>")
 							log_attack("[key_name(user)] injected [key_name(M)] with the Isolated [name] (MONKEY)")
-							log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] \red(MONKEY)")
+							log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] <span class=\"rose\">(MONKEY)</span>")
 						else
 							log_attack("[key_name(user)] injected [key_name(M)] with the Isolated [name]")
 					else
 						testing("DNA injector with contents: [english_list(buf.dna.SE)]")
 						if (GetState(MONKEYBLOCK) && istype(M, /mob/living/carbon/human))
-							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the [name] \red(MONKEY)")
+							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the [name] <span class=\"rose\">(MONKEY)</span>")
 							log_game("[key_name(user)] injected [key_name(M)] with the [name] (MONKEY)")
 						else
 	//						message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the [name]")
@@ -194,9 +194,9 @@
 				*/
 				if(user)//If the user still exists. Their mob may not.
 					if(M)//Runtime fix: If the mob doesn't exist, mob.name doesnt work. - Nodrak
-						user.show_message(text("\red You inject [M.name]"))
+						user.show_message(text("<span class=\"rose\">You inject [M.name]</span>"))
 					else
-						user.show_message(text("\red You finish the injection."))
+						user.show_message(text("<span class=\"rose\">You finish the injection.</span>"))
 	return
 
 

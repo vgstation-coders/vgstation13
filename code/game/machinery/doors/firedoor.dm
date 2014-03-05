@@ -88,14 +88,14 @@
 			var/obj/item/weapon/weldingtool/W = C
 			if(W.remove_fuel(0, user))
 				blocked = !blocked
-				user.visible_message("\red \The [user] [blocked ? "welds" : "unwelds"] \the [src] with \a [W].",\
+				user.visible_message("<span class=\"rose\">\The [user] [blocked ? "welds" : "unwelds"] \the [src] with \a [W].</span>",\
 				"You [blocked ? "weld" : "unweld"] \the [src] with \the [W].",\
 				"You hear something being welded.")
 				update_icon()
 				return
 
 		if(blocked)
-			user << "\red \The [src] is welded solid!"
+			user << "<span class=\"rose\">\The [src] is welded solid!</span>"
 			return
 
 		var/area/A = get_area(src)
@@ -108,26 +108,26 @@
 			if(operating)
 				return
 			if( blocked && istype(C, /obj/item/weapon/crowbar) )
-				user.visible_message("\red \The [user] pries at \the [src] with \a [C], but \the [src] is welded in place!",\
+				user.visible_message("<span class=\"rose\">\The [user] pries at \the [src] with \a [C], but \the [src] is welded in place!</span>",\
 				"You try to pry \the [src] [density ? "open" : "closed"], but it is welded in place!",\
 				"You hear someone struggle and metal straining.")
 				return
 			if( istype(C, /obj/item/weapon/crowbar) )
 				if( stat & (BROKEN|NOPOWER) || !density || !alarmed )
-					user.visible_message("\red \The [user] forces \the [src] [density ? "open" : "closed"] with \a [C]!",\
+					user.visible_message("<span class=\"rose\">\The [user] forces \the [src] [density ? "open" : "closed"] with \a [C]!</span>",\
 					"You force \the [src] [density ? "open" : "closed"] with \the [C]!",\
 					"You hear metal strain, and a door [density ? "open" : "close"].")
 				else if( allowed(user) )
-					user.visible_message("\blue \The [user] lifts \the [src] with \a [C].",\
+					user.visible_message("<span class=\"notice\">\The [user] lifts \the [src] with \a [C].</span>",\
 					"\The [src] scans your ID, and obediently opens as you apply your [C].",\
 					"You hear metal move, and a door [density ? "open" : "close"].")
 				else
-					user.visible_message("\blue \The [user] pries at \the [src] with \a [C], but \the [src] resists being opened.",\
-					"\red You pry at \the [src], but it actively resists your efforts.  Maybe use your ID, perhaps?",\
+					user.visible_message("<span class=\"notice\">\The [user] pries at \the [src] with \a [C], but \the [src] resists being opened.</span>",\
+					"<span class=\"rose\">You pry at \the [src], but it actively resists your efforts.  Maybe use your ID, perhaps?</span>",\
 					"You hear someone struggling and metal straining")
 					return
 			else
-				user.visible_message("\red \The [user] forces \the [ blocked ? "welded" : "" ] [src] [density ? "open" : "closed"] with \a [C]!",\
+				user.visible_message("<span class=\"rose\">\The [user] forces \the [ blocked ? "welded" : "" ] [src] [density ? "open" : "closed"] with \a [C]!</span>",\
 					"You force \the [ blocked ? "welded" : "" ] [src] [density ? "open" : "closed"] with \the [C]!",\
 					"You hear metal strain and groan, and a door [density ? "open" : "close"].")
 			if(density)
@@ -174,14 +174,14 @@
 			return
 
 		if(alarmed && density && !access_granted && !( users_name in users_to_open ) )
-			user.visible_message("\red \The [src] opens for \the [user]",\
+			user.visible_message("<span class=\"rose\">\The [src] opens for \the [user]</span>",\
 			"\The [src] opens after you acknowledge the consequences.",\
 			"You hear a beep, and a door opening.")
 			if(!users_to_open)
 				users_to_open = list()
 			users_to_open += users_name
 		else
-			user.visible_message("\blue \The [src] [density ? "open" : "close"]s for \the [user].",\
+			user.visible_message("<span class=\"notice\">\The [src] [density ? "open" : "close"]s for \the [user].</span>",\
 			"\The [src] [density ? "open" : "close"]s.",\
 			"You hear a beep, and a door opening.")
 

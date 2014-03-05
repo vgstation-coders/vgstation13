@@ -28,7 +28,7 @@
 	// Internal organs of this body part
 	var/list/datum/organ/internal/internal_organs
 
-	var/damage_msg = "\red You feel an intense pain"
+	var/damage_msg = "<span class=\"rose\">You feel an intense pain</span>"
 	var/broken_description
 
 	var/status = 0
@@ -221,8 +221,8 @@ This function completely restores a damaged organ to perfect condition.
 			if(W.amount == 1 && W.started_healing())
 				W.open_wound(damage)
 				if(prob(25))
-					owner.visible_message("\red The wound on [owner.name]'s [display_name] widens with a nasty ripping noise.",\
-					"\red The wound on your [display_name] widens with a nasty ripping noise.",\
+					owner.visible_message("<span class=\"rose\">The wound on [owner.name]'s [display_name] widens with a nasty ripping noise.</span>",\
+					"<span class=\"rose\">The wound on your [display_name] widens with a nasty ripping noise.</span>",\
 					"You hear a nasty ripping noise, as if flesh is being torn apart.")
 				return
 
@@ -495,8 +495,8 @@ This function completely restores a damaged organ to perfect condition.
 
 		if(status & ORGAN_PEG)
 			owner.visible_message(\
-				"\red \The [owner]'s [display_name] snaps!",\
-				"\red <b>Your [display_name] snaps!</b>",\
+				"<span class=\"rose\">\The [owner]'s [display_name] snaps!</span>",\
+				"<span class=\"danger\">Your [display_name] snaps!</span>",\
 				"You hear wood being split.")
 
 			owner.regenerate_icons()
@@ -504,7 +504,7 @@ This function completely restores a damaged organ to perfect condition.
 
 		switch(body_part)
 			if(LOWER_TORSO)
-				owner << "\red You are now sterile."
+				owner << "<span class=\"rose\">You are now sterile.</span>"
 			if(HEAD)
 				if(!spawn_limb)
 					organ= new /obj/item/weapon/organ/head(owner.loc, owner)
@@ -560,8 +560,8 @@ This function completely restores a damaged organ to perfect condition.
 		destspawn = 1
 		//Robotic limbs explode if sabotaged.
 		if(status & ORGAN_ROBOT && !no_explode && sabotaged)
-			owner.visible_message("\red \The [owner]'s [display_name] explodes violently!",\
-			"\red <b>Your [display_name] explodes!</b>",\
+			owner.visible_message("<span class=\"rose\">\The [owner]'s [display_name] explodes violently!</span>",\
+			"<span class=\"danger\">Your [display_name] explodes!</span>",\
 			"You hear an explosion followed by a scream!")
 			explosion(get_turf(owner),-1,-1,2,3)
 			var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
@@ -572,7 +572,7 @@ This function completely restores a damaged organ to perfect condition.
 				del(spark_system)
 
 		if(organ)
-			owner.visible_message("\red [owner.name]'s [display_name] flies off in an arc.",\
+			owner.visible_message("<span class=\"rose\">[owner.name]'s [display_name] flies off in an arc.</span>",\
 			"<span class='moderate'><b>Your [display_name] goes flying off!</b></span>",\
 			"You hear a terrible sound of ripping tendons and flesh.")
 
@@ -614,7 +614,7 @@ This function completely restores a damaged organ to perfect condition.
 /datum/organ/external/proc/fracture()
 	if(status & ORGAN_BROKEN)
 		return
-	owner.visible_message("\red You hear a loud cracking sound coming from \the [owner].","\red <b>Something feels like it shattered in your [display_name]!</b>","You hear a sickening crack.")
+	owner.visible_message("<span class=\"rose\">You hear a loud cracking sound coming from \the [owner].</span>","<span class=\"danger\">Something feels like it shattered in your [display_name]!</span>","You hear a sickening crack.")
 
 	if(owner.species && !(owner.species.flags & NO_PAIN))
 		owner.emote("scream")
@@ -817,13 +817,13 @@ This function completely restores a damaged organ to perfect condition.
 	if (disfigured)
 		return
 	if(type == "brute")
-		owner.visible_message("\red You hear a sickening cracking sound coming from \the [owner]'s face.",	\
-		"\red <b>Your face becomes unrecognizible mangled mess!</b>",	\
-		"\red You hear a sickening crack.")
+		owner.visible_message("<span class=\"rose\">You hear a sickening cracking sound coming from \the [owner]'s face.</span>",	\
+		"<span class=\"danger\">Your face becomes unrecognizible mangled mess!</span>",	\
+		"<span class=\"rose\">You hear a sickening crack.</span>")
 	else
-		owner.visible_message("\red [owner]'s face melts away, turning into mangled mess!",	\
-		"\red <b>Your face melts off!</b>",	\
-		"\red You hear a sickening sizzle.")
+		owner.visible_message("<span class=\"rose\">[owner]'s face melts away, turning into mangled mess!</span>",	\
+		"<span class=\"danger\">Your face melts off!</span>",	\
+		"<span class=\"rose\">You hear a sickening sizzle.</span>")
 	disfigured = 1
 
 /****************************************************
@@ -951,17 +951,17 @@ obj/item/weapon/organ/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		switch(brain_op_stage)
 			if(0)
 				for(var/mob/O in (oviewers(brainmob) - user))
-					O.show_message("\red [brainmob] is beginning to have \his head cut open with [W] by [user].", 1)
-				brainmob << "\red [user] begins to cut open your head with [W]!"
-				user << "\red You cut [brainmob]'s head open with [W]!"
+					O.show_message("<span class=\"rose\">[brainmob] is beginning to have \his head cut open with [W] by [user].</span>", 1)
+				brainmob << "<span class=\"rose\">[user] begins to cut open your head with [W]!</span>"
+				user << "<span class=\"rose\">You cut [brainmob]'s head open with [W]!</span>"
 
 				brain_op_stage = 1
 
 			if(2)
 				for(var/mob/O in (oviewers(brainmob) - user))
-					O.show_message("\red [brainmob] is having \his connections to the brain delicately severed with [W] by [user].", 1)
-				brainmob << "\red [user] begins to cut open your head with [W]!"
-				user << "\red You cut [brainmob]'s head open with [W]!"
+					O.show_message("<span class=\"rose\">[brainmob] is having \his connections to the brain delicately severed with [W] by [user].</span>", 1)
+				brainmob << "<span class=\"rose\">[user] begins to cut open your head with [W]!</span>"
+				user << "<span class=\"rose\">You cut [brainmob]'s head open with [W]!</span>"
 
 				brain_op_stage = 3.0
 			else
@@ -970,16 +970,16 @@ obj/item/weapon/organ/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		switch(brain_op_stage)
 			if(1)
 				for(var/mob/O in (oviewers(brainmob) - user))
-					O.show_message("\red [brainmob] has \his skull sawed open with [W] by [user].", 1)
-				brainmob << "\red [user] begins to saw open your head with [W]!"
-				user << "\red You saw [brainmob]'s head open with [W]!"
+					O.show_message("<span class=\"rose\">[brainmob] has \his skull sawed open with [W] by [user].</span>", 1)
+				brainmob << "<span class=\"rose\">[user] begins to saw open your head with [W]!</span>"
+				user << "<span class=\"rose\">You saw [brainmob]'s head open with [W]!</span>"
 
 				brain_op_stage = 2
 			if(3)
 				for(var/mob/O in (oviewers(brainmob) - user))
-					O.show_message("\red [brainmob] has \his spine's connection to the brain severed with [W] by [user].", 1)
-				brainmob << "\red [user] severs your brain's connection to the spine with [W]!"
-				user << "\red You sever [brainmob]'s brain's connection to the spine with [W]!"
+					O.show_message("<span class=\"rose\">[brainmob] has \his spine's connection to the brain severed with [W] by [user].</span>", 1)
+				brainmob << "<span class=\"rose\">[user] severs your brain's connection to the spine with [W]!</span>"
+				user << "<span class=\"rose\">You sever [brainmob]'s brain's connection to the spine with [W]!</span>"
 
 				user.attack_log += "\[[time_stamp()]\]<font color='red'> Debrained [brainmob.name] ([brainmob.ckey]) with [W.name] (INTENT: [uppertext(user.a_intent)])</font>"
 				brainmob.attack_log += "\[[time_stamp()]\]<font color='orange'> Debrained by [user.name] ([user.ckey]) with [W.name] (INTENT: [uppertext(user.a_intent)])</font>"

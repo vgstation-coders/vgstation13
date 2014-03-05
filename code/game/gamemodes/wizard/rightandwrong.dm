@@ -13,7 +13,7 @@
 			var/datum/objective/survive/survive = new
 			survive.owner = H.mind
 			H.mind.objectives += survive
-			H.attack_log += "\[[time_stamp()]\] <font color='red'>Was made into a survivor, and trusts no one!</font>"
+			H.attack_log += "\[[time_stamp()]\] <span class=\"rose\">Was made into a survivor, and trusts no one!</span>"
 			H << "<B>You are the survivor! Your own safety matters above all else, trust no one and kill anyone who gets in your way. However, armed as you are, now would be the perfect time to settle that score or grab that pair of yellow gloves you've been eyeing...</B>"
 			var/obj_count = 1
 			for(var/datum/objective/OBJ in H.mind.objectives)
@@ -110,4 +110,4 @@
 						H.sight |= (SEE_MOBS|SEE_OBJS|SEE_TURFS)
 						H.see_in_dark = 8
 						H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-						H << "\blue The walls suddenly disappear."
+						H << "<span class=\"notice\">The walls suddenly disappear.</span>"

@@ -63,7 +63,7 @@ obj/machinery/gibber/New()
 	if(istype(O,/obj/item/weapon/grab))
 		return handleGrab(O,user)
 	else
-		user << "\red This item is not suitable for the gibber!"
+		user << "<span class=\"rose\">This item is not suitable for the gibber!</span>"
 
 //auto-gibs anything that bumps into it
 /obj/machinery/gibber/autogibber
@@ -140,7 +140,7 @@ obj/machinery/gibber/New()
 	if(stat & (NOPOWER|BROKEN))
 		return
 	if(operating)
-		user << "\red It's locked and running"
+		user << "<span class=\"rose\">It's locked and running</span>"
 		return
 	else
 		src.startgibbing(user)
@@ -148,19 +148,19 @@ obj/machinery/gibber/New()
 // OLD /obj/machinery/gibber/attackby(obj/item/weapon/grab/G as obj, mob/user as mob)
 /obj/machinery/gibber/proc/handleGrab(obj/item/weapon/grab/G as obj, mob/user as mob)
 	if(src.occupant)
-		user << "\red The gibber is full, empty it first!"
+		user << "<span class=\"rose\">The gibber is full, empty it first!</span>"
 		return
 	if (!( istype(G, /obj/item/weapon/grab)) || !(istype(G.affecting, /mob/living/carbon/human)))
-		user << "\red This item is not suitable for the gibber!"
+		user << "<span class=\"rose\">This item is not suitable for the gibber!</span>"
 		return
 	if(G.affecting.abiotic(1))
-		user << "\red Subject may not have abiotic items on."
+		user << "<span class=\"rose\">Subject may not have abiotic items on.</span>"
 		return
 
-	user.visible_message("\red [user] starts to put [G.affecting] into the gibber!")
+	user.visible_message("<span class=\"rose\">[user] starts to put [G.affecting] into the gibber!</span>")
 	src.add_fingerprint(user)
 	if(do_after(user, 30) && G && G.affecting && !occupant)
-		user.visible_message("\red [user] stuffs [G.affecting] into the gibber!")
+		user.visible_message("<span class=\"rose\">[user] stuffs [G.affecting] into the gibber!</span>")
 		var/mob/M = G.affecting
 		if(M.client)
 			M.client.perspective = EYE_PERSPECTIVE
@@ -199,10 +199,10 @@ obj/machinery/gibber/New()
 	if(src.operating)
 		return
 	if(!src.occupant)
-		visible_message("\red You hear a loud metallic grinding sound.")
+		visible_message("<span class=\"rose\">You hear a loud metallic grinding sound.</span>")
 		return
 	use_power(1000)
-	visible_message("\red You hear a loud squelchy grinding sound.")
+	visible_message("<span class=\"rose\">You hear a loud squelchy grinding sound.</span>")
 	src.operating = 1
 	update_icon()
 	var/sourcename = src.occupant.real_name
@@ -250,10 +250,10 @@ obj/machinery/gibber/New()
 	if(src.operating)
 		return
 	if(!victim)
-		visible_message("\red You hear a loud metallic grinding sound.")
+		visible_message("<span class=\"rose\">You hear a loud metallic grinding sound.</span>")
 		return
 	use_power(1000)
-	visible_message("\red You hear a loud squelchy grinding sound.")
+	visible_message("<span class=\"rose\">You hear a loud squelchy grinding sound.</span>")
 	src.operating = 1
 	update_icon()
 	var/sourcename = victim.real_name

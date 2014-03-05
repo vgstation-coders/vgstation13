@@ -273,7 +273,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 /obj/machinery/librarycomp/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (src.density && istype(W, /obj/item/weapon/card/emag) && !src.emagged)
 		src.emagged = 1
-		user << "\blue You override the library computer's printing restrictions."
+		user << "<span class=\"notice\">You override the library computer's printing restrictions.</span>"
 		return
 	if(istype(W, /obj/item/weapon/barcodescanner))
 		var/obj/item/weapon/barcodescanner/scanner = W

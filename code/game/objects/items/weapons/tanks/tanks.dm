@@ -43,7 +43,7 @@
 	if (istype(src.loc, /obj/item/assembly))
 		icon = src.loc
 	if (!in_range(src, usr))
-		if (icon == src) usr << "\blue It's \a \icon[icon][src]! If you want any more information you'll need to get closer."
+		if (icon == src) usr << "<span class=\"notice\">It's \a \icon[icon][src]! If you want any more information you'll need to get closer.</span>"
 		return
 
 	var/celsius_temperature = src.air_contents.temperature-T0C
@@ -62,7 +62,7 @@
 	else
 		descriptive = "furiously hot"
 
-	usr << "\blue \The \icon[icon][src] feels [descriptive]"
+	usr << "<span class=\"notice\">\The \icon[icon][src] feels [descriptive]</span>"
 
 	return
 
@@ -86,13 +86,13 @@
 
 	if ((istype(W, /obj/item/device/analyzer)) && get_dist(user, src) <= 1)
 		for (var/mob/O in viewers(user, null))
-			O << "\red [user] has used [W] on \icon[icon] [src]"
+			O << "<span class=\"rose\">[user] has used [W] on \icon[icon] [src]</span>"
 
 		var/pressure = air_contents.return_pressure()
 		manipulated_by = user.real_name			//This person is aware of the contents of the tank.
 		var/total_moles = air_contents.total_moles()
 
-		user << "\blue Results of analysis of \icon[icon]"
+		user << "<span class=\"notice\">Results of analysis of \icon[icon]</span>"
 		if (total_moles>0)
 			var/o2_concentration = air_contents.oxygen/total_moles
 			var/n2_concentration = air_contents.nitrogen/total_moles
@@ -101,16 +101,16 @@
 
 			var/unknown_concentration =  1-(o2_concentration+n2_concentration+co2_concentration+plasma_concentration)
 
-			user << "\blue Pressure: [round(pressure,0.1)] kPa"
-			user << "\blue Nitrogen: [round(n2_concentration*100)]%"
-			user << "\blue Oxygen: [round(o2_concentration*100)]%"
-			user << "\blue CO2: [round(co2_concentration*100)]%"
-			user << "\blue Plasma: [round(plasma_concentration*100)]%"
+			user << "<span class=\"notice\">Pressure: [round(pressure,0.1)] kPa</span>"
+			user << "<span class=\"notice\">Nitrogen: [round(n2_concentration*100)]%</span>"
+			user << "<span class=\"notice\">Oxygen: [round(o2_concentration*100)]%M</span>"
+			user << "<span class=\"notice\">CO2: [round(co2_concentration*100)]%</span>"
+			user << "<span class=\"notice\">Plasma: [round(plasma_concentration*100)]%</span>"
 			if(unknown_concentration>0.01)
-				user << "\red Unknown: [round(unknown_concentration*100)]%"
-			user << "\blue Temperature: [round(air_contents.temperature-T0C)]&deg;C"
+				user << "<span class=\"rose\">Unknown: [round(unknown_concentration*100)]%</span>"
+			user << "<span class=\"notice\">Temperature: [round(air_contents.temperature-T0C)]&deg;C</span>"
 		else
-			user << "\blue Tank is empty!"
+			user << "<span class=\"notice\">Tank is empty!</span>"
 		src.add_fingerprint(user)
 	else if (istype(W,/obj/item/latexballon))
 		var/obj/item/latexballon/LB = W
@@ -183,17 +183,17 @@
 			if(location.internal == src)
 				location.internal = null
 				location.internals.icon_state = "internal0"
-				usr << "\blue You close the tank release valve."
+				usr << "<span class=\"notice\">You close the tank release valve.</span>"
 				if (location.internals)
 					location.internals.icon_state = "internal0"
 			else
 				if(location.wear_mask && (location.wear_mask.flags & MASKINTERNALS))
 					location.internal = src
-					usr << "\blue You open \the [src] valve."
+					usr << "<span class=\"notice\">You open \the [src] valve.</span>"
 					if (location.internals)
 						location.internals.icon_state = "internal1"
 				else
-					usr << "\blue You need something to connect to \the [src]."
+					usr << "<span class=\"notice\">You need something to connect to \the [src].</span>"
 
 	src.add_fingerprint(usr)
 	return 1
@@ -241,7 +241,7 @@
 		if(!istype(src.loc,/obj/item/device/transfer_valve))
 			message_admins("Explosive tank rupture! last key to touch the tank was [src.fingerprintslast].")
 			log_game("Explosive tank rupture! last key to touch the tank was [src.fingerprintslast].")
-		//world << "\blue[x],[y] tank is exploding: [pressure] kPa"
+		//world << "<span class=\"notice\">[x],[y] tank is exploding: [pressure] kPa</span>"
 		//Give the gas a chance to build up more pressure through reacting
 		air_contents.react()
 		air_contents.react()
@@ -254,7 +254,7 @@
 		range = min(range, MAX_EXPLOSION_RANGE)		// was 8 - - - Changed to a configurable define -- TLE
 		var/turf/epicenter = get_turf(loc)
 
-		//world << "\blue Exploding Pressure: [pressure] kPa, intensity: [range]"
+		//world << "<span class=\"notice\">Exploding Pressure: [pressure] kPa, intensity: [range]</span>"
 
 		explosion(epicenter, round(range*0.25), round(range*0.5), round(range), round(range*1.5), 1, cap)
 		if(cap)
@@ -264,7 +264,7 @@
 		del(src)
 
 	else if(pressure > TANK_RUPTURE_PRESSURE)
-		//world << "\blue[x],[y] tank is rupturing: [pressure] kPa, integrity [integrity]"
+		//world << "<span class=\"notice\">[x],[y] tank is rupturing: [pressure] kPa, integrity [integrity]</span>"
 		if(integrity <= 0)
 			var/turf/simulated/T = get_turf(src)
 			if(!T)
@@ -276,7 +276,7 @@
 			integrity--
 
 	else if(pressure > TANK_LEAK_PRESSURE)
-		//world << "\blue[x],[y] tank is leaking: [pressure] kPa, integrity [integrity]"
+		//world << "<span class=\"notice\">[x],[y] tank is leaking: [pressure] kPa, integrity [integrity]</span>"
 		if(integrity <= 0)
 			var/turf/simulated/T = get_turf(src)
 			if(!T)

@@ -62,7 +62,7 @@ obj/item/proc/get_clamped_volume()
 		if(istype(M, /mob/living/carbon/slime))
 			var/mob/living/carbon/slime/slime = M
 			if(prob(25))
-				user << "\red [src] passes right through [M]!"
+				user << "<span class=\"rose\">[src] passes right through [M]!</span>"
 				return
 
 			if(power > 0)
@@ -148,7 +148,7 @@ obj/item/proc/get_clamped_volume()
 
 		if(!showname && user)
 			if(user.client)
-				user << "\red <B>You attack [M] with [src]. </B>"
+				user << "<span class=\"danger\">You attack [M] with [src]. </span>"
 
 
 

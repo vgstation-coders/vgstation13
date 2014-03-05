@@ -45,7 +45,7 @@
 		target_name = str
 		name = "[target_name]'s demotion microchip"
 		desc = desc + " Stamped by:"
-		user << "\blue The demotion microchip for [src.target_name] is now ready to be stamped."
+		user << "<span class=\"notice\">The demotion microchip for [src.target_name] is now ready to be stamped.</span>"
 
 /obj/item/demote_chip/attackby(obj/item/weapon/stamp/S as obj, mob/user as mob)
 
@@ -54,46 +54,46 @@
 			if(cap == 0)
 				desc = desc + "/Captain"
 			cap = 1
-			user << "\blue You stamp the demotion microchip of [target_name]."
+			user << "<span class=\"notice\">You stamp the demotion microchip of [target_name].</span>"
 		if(istype(S, /obj/item/weapon/stamp/hop))
 			if(hop == 0)
 				desc = desc + "/HoP"
 			hop = 1
-			user << "\blue You stamp the demotion microchip of [target_name]."
+			user << "<span class=\"notice\">You stamp the demotion microchip of [target_name].</span>"
 		if(istype(S, /obj/item/weapon/stamp/hos))
 			if(hos == 0)
 				desc = desc + "/HoS"
 			hos = 1
-			user << "\blue You stamp the demotion microchip of [target_name]."
+			user << "<span class=\"notice\">You stamp the demotion microchip of [target_name].</span>"
 		if(istype(S, /obj/item/weapon/stamp/ce))
 			if(ce == 0)
 				desc = desc + "/CE"
 			ce = 1
-			user << "\blue You stamp the demotion microchip of [target_name]."
+			user << "<span class=\"notice\">You stamp the demotion microchip of [target_name].</span>"
 		if(istype(S, /obj/item/weapon/stamp/rd))
 			if(rd == 0)
 				desc = desc + "/RD"
 			rd = 1
-			user << "\blue You stamp the demotion microchip of [target_name]."
+			user << "<span class=\"notice\">You stamp the demotion microchip of [target_name].</span>"
 		if(istype(S, /obj/item/weapon/stamp/cmo))
 			if(cmo == 0)
 				desc = desc + "/CMO"
 			cmo = 1
-			user << "\blue You stamp the demotion microchip of [target_name]."
+			user << "<span class=\"notice\">You stamp the demotion microchip of [target_name].</span>"
 		if(istype(S, /obj/item/weapon/stamp/clown))
 			if(clown == 0)
 				desc = desc + "/HONK"
 			clown = 1
-			user << "\blue You stamp the demotion microchip of [target_name]."
+			user << "<span class=\"notice\">You stamp the demotion microchip of [target_name].</span>"
 	else
-		user << "\blue The chip has not been initialized."
+		user << "<span class=\"notice\">The chip has not been initialized.</span>"
 
 /obj/item/weapon/card/id/syndicate/attackby(var/obj/item/demote_chip/DE as obj, mob/user as mob)
 	//placebo, does not affect access on syndie agent card
 	if(registered_name != DE.target_name)
-		user << "\blue Failed to apply, names do not match."
+		user << "<span class=\"notice\">Failed to apply, names do not match.</span>"
 	else if(bans != null)
-		user << "\blue This card already has a microchip applied"
+		user << "<span class=\"notice\">This card already has a microchip applied</span>"
 	else
 		icon_state = "centcom_old"
 		bans = "9" //if get_region_accesses ever uses 9 we're fucked
@@ -102,11 +102,11 @@
 /obj/item/weapon/card/id/attackby(var/obj/item/demote_chip/D as obj, mob/user as mob)
 	//Check for if names match, card already has a chip, and its not a captains ID.
 	if(registered_name != D.target_name)
-		user << "\blue Failed to apply, names do not match."
+		user << "<span class=\"notice\">Failed to apply, names do not match.</span>"
 	else if(bans != null)
-		user << "\blue This card already has a microchip applied"
+		user << "<span class=\"notice\">This card already has a microchip applied</span>"
 	else if(icon_state == "gold")
-		user << "\blue This microchip cannot apply to this card type."
+		user << "<span class=\"notice\">This microchip cannot apply to this card type.</span>"
 	else
 
 		if(D.cap == 1)
@@ -129,7 +129,7 @@
 			access -= get_region_accesses(2)
 			bans = bans + "2"
 		if(bans == null)
-			user << "\blue You require at least one stamp."
+			user << "<span class=\"notice\">You require at least one stamp.</span>"
 			return
 		icon_state = "centcom_old"
 		del(D)

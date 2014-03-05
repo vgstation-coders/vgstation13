@@ -54,7 +54,7 @@ var/global/datum/controller/gameticker/ticker
 				vote.process()
 				watchdog.check_for_update()
 				if(watchdog.waiting)
-					world << "\blue Server update detected, restarting momentarily."
+					world << "<span class=\"notice\">Server update detected, restarting momentarily.</span>"
 					watchdog.signal_ready()
 					return
 			if(going)
@@ -341,26 +341,26 @@ var/global/datum/controller/gameticker/ticker
 				if (mode.station_was_nuked)
 					feedback_set_details("end_proper","nuke")
 					if(!delay_end && !watchdog.waiting)
-						world << "\blue <B>Rebooting due to destruction of station in [restart_timeout/10] seconds</B>"
+						world << "<span class=\"notice\"><B>Rebooting due to destruction of station in [restart_timeout/10] seconds</B></span>"
 				else
 					feedback_set_details("end_proper","proper completion")
 					if(!delay_end && !watchdog.waiting)
-						world << "\blue <B>Restarting in [restart_timeout/10] seconds</B>"
+						world << "<span class=\"notice\"><B>Restarting in [restart_timeout/10] seconds</B></span>"
 
 				if(blackbox)
 					blackbox.save_all_data_to_sql()
 
 				if (watchdog.waiting)
-					world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
+					world << "<span class=\"notice\"><B>Server will shut down for an automatic update in a few seconds.</B></span>"
 					watchdog.signal_ready()
 				else if(!delay_end)
 					sleep(restart_timeout)
 					if(!delay_end)
 						world.Reboot()
 					else
-						world << "\blue <B>An admin has delayed the round end</B>"
+						world << "<span class=\"notice\"><B>An admin has delayed the round end</B></span>"
 				else
-					world << "\blue <B>An admin has delayed the round end</B>"
+					world << "<span class=\"notice\"><B>An admin has delayed the round end</B></span>"
 
 		return 1
 

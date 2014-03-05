@@ -48,23 +48,23 @@
 		// Wrench to toggle anchor
 		if (istype(W, /obj/item/weapon/wrench))
 			if (occupant)
-				user << "\red You cannot unwrench this [src], it's occupado."
+				user << "<span class=\"rose\">You cannot unwrench this [src], it's occupado.</span>"
 				return 1
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			if(anchored)
-				user << "\blue You begin to unfasten \the [src]..."
+				user << "<span class=\"notice\">You begin to unfasten \the [src]...</span>"
 				if (do_after(user, 40))
 					user.visible_message( \
 						"[user] unfastens \the [src].", \
-						"\blue You have unfastened \the [src].", \
+						"<span class=\"notice\">You have unfastened \the [src].</span>", \
 						"You hear a ratchet.")
 					anchored=0
 			else
-				user << "\blue You begin to fasten \the [src]..."
+				user << "<span class=\"notice\">You begin to fasten \the [src]...</span>"
 				if (do_after(user, 20))
 					user.visible_message( \
 						"[user] fastens \the [src].", \
-						"\blue You have fastened \the [src].", \
+						"<span class=\"notice\">You have fastened \the [src].</span>", \
 						"You hear a ratchet.")
 					anchored=1
 			src.build_icon()
@@ -72,17 +72,17 @@
 			/*// Weld to disassemble.
 		else if(istype(W, /obj/item/weapon/weldingtool))
 			if (occupant)
-				user << "\red You cannot disassemble this [src], it's occupado."
+				user << "<span class=\"rose\">You cannot disassemble this [src], it's occupado.</span>"
 				return 1
 			if (!anchored)
-				user << "\red \The [src] is too unstable to weld!  The anchoring bolts need to be tightened."
+				user << "<span class=\"rose\">\The [src] is too unstable to weld!  The anchoring bolts need to be tightened.</span>"
 				return 1
 			playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-			user << "\blue You begin to cut \the [src] into pieces..."
+			user << "<span class=\"notice\">You begin to cut \the [src] into pieces...</span>"
 			if (do_after(user, 40))
 				user.visible_message( \
 					"[user] disassembles \the [src].", \
-					"\blue You have disassembled \the [src].", \
+					"<span class=\"notice\">You have disassembled \the [src].</span>", \
 					"You hear welding.")
 				anchored=0
 				new /obj/item/weapon/circuitboard/recharge_station(src.loc)
@@ -109,7 +109,7 @@
 				return 1
 		else if(istype(W, /obj/item/weapon/crowbar))
 			if (occupant)
-				user << "\red You cannot disassemble this [src], it's occupado."
+				user << "<span class=\"rose\">You cannot disassemble this [src], it's occupado.</span>"
 				return 1
 			if(anchored)
 				user << "You have to unanchor the [src] first!"
@@ -270,13 +270,13 @@
 				//Whoever had it so that a borg with a dead cell can't enter this thing should be shot. --NEO
 				return
 			if (!(istype(usr, /mob/living/silicon/)))
-				usr << "\blue <B>Only non-organics may enter the recharger!</B>"
+				usr << "<span class=\"notice\"><B>Only non-organics may enter the recharger!</B></span>"
 				return
 			if (src.occupant)
-				usr << "\blue <B>The cell is already occupied!</B>"
+				usr << "<span class=\"notice\"><B>The cell is already occupied!</B></span>"
 				return
 			if (!usr:cell)
-				usr<<"\blue Without a powercell, you can't be recharged."
+				usr<<"<span class=\"notice\">Without a powercell, you can't be recharged.</span>"
 				//Make sure they actually HAVE a cell, now that they can get in while powerless. --NEO
 				return
 			usr.stop_pulling()

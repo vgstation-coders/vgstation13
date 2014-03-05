@@ -11,7 +11,7 @@
 		if (C.hasbug && C.status)
 			cameras.Add(C)
 	if (length(cameras) == 0)
-		usr << "\red No bugged functioning cameras found."
+		usr << "<span class=\"rose\">No bugged functioning cameras found.</span>"
 		return
 
 	var/list/friendly_cameras = new/list()

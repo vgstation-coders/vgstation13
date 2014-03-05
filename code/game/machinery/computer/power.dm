@@ -43,7 +43,7 @@
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, 20))
 			if (src.stat & BROKEN)
-				user << "\blue The broken glass falls out."
+				user << "<span class=\"notice\">The broken glass falls out.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				new /obj/item/weapon/shard( src.loc )
 				var/obj/item/weapon/circuitboard/powermonitor/M = new /obj/item/weapon/circuitboard/powermonitor( A )
@@ -55,7 +55,7 @@
 				A.anchored = 1
 				del(src)
 			else
-				user << "\blue You disconnect the monitor."
+				user << "<span class=\"notice\">You disconnect the monitor.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				var/obj/item/weapon/circuitboard/powermonitor/M = new /obj/item/weapon/circuitboard/powermonitor( A )
 				for (var/obj/C in src)
@@ -88,7 +88,7 @@
 		<BR><HR><A href='?src=\ref[src];close=1'>Close</A>"}
 	// END AUTOFIX
 	if(!powernet)
-		t += "\red No connection"
+		t += "<span class=\"rose\">No connection</span>"
 	else
 
 		var/list/L = list()

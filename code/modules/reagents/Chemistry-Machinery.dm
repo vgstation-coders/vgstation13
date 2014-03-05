@@ -337,10 +337,10 @@
 		src.updateUsrDialog()
 	else if(istype(B, /obj/item/weapon/screwdriver))
 		if(src.beaker)
-			user << "\red A beaker is loaded in [src]."
+			user << "<span class=\"rose\">A beaker is loaded in [src].</span>"
 			return
 		if(src.loaded_pill_bottle)
-			user << "\red A pill bottle is loaded in [src]."
+			user << "<span class=\"rose\">A pill bottle is loaded in [src].</span>"
 			return
 		if(!opened)
 			src.opened = 1
@@ -354,10 +354,10 @@
 	if(opened)
 		if(istype(B, /obj/item/weapon/crowbar))
 			if(src.beaker)
-				user << "\red A beaker is loaded in [src]."
+				user << "<span class=\"rose\">A beaker is loaded in [src].</span>"
 				return
 			if(src.loaded_pill_bottle)
-				user << "\red A pill bottle is loaded in [src]."
+				user << "<span class=\"rose\">A pill bottle is loaded in [src].</span>"
 				return
 			user << "You begin to remove the circuits from the [src]."
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
@@ -900,7 +900,7 @@
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, 20))
 			if (src.stat & BROKEN)
-				user << "\blue The broken glass falls out."
+				user << "<span class=\"notice\">The broken glass falls out.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe(src.loc)
 				new /obj/item/weapon/shard(src.loc)
 				var/obj/item/weapon/circuitboard/pandemic/M = new /obj/item/weapon/circuitboard/pandemic(A)
@@ -912,7 +912,7 @@
 				A.anchored = 1
 				del(src)
 			else
-				user << "\blue You disconnect the monitor."
+				user << "<span class=\"notice\">You disconnect the monitor.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				var/obj/item/weapon/circuitboard/pandemic/M = new /obj/item/weapon/circuitboard/pandemic(A)
 				for (var/obj/C in src)
@@ -1075,7 +1075,7 @@
 	else if(istype(O, /obj/item/weapon/crowbar))
 		if (opened)
 			if(beaker)
-				user << "\red A beaker is loaded, you cannot deconstruct [src]."
+				user << "<span class=\"rose\">A beaker is loaded, you cannot deconstruct [src].</span>"
 				return 1
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)

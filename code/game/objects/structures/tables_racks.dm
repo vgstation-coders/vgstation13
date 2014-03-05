@@ -329,20 +329,20 @@
 				if(user.a_intent == "hurt")
 					if (prob(15))	M.Weaken(5)
 					M.apply_damage(8,def_zone = "head")
-					visible_message("\red [G.assailant] slams [G.affecting]'s face against \the [src]!")
+					visible_message("<span class=\"rose\">[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
 				else
-					user << "\red You need a better grip to do that!"
+					user << "<span class=\"rose\">You need a better grip to do that!</span>"
 					return
 			else
 				G.affecting.loc = src.loc
 				G.affecting.Weaken(5)
-				visible_message("\red [G.assailant] puts [G.affecting] on \the [src].")
+				visible_message("<span class=\"rose\">[G.assailant] puts [G.affecting] on \the [src].</span>")
 			del(W)
 			return
 
 	if (istype(W, /obj/item/weapon/wrench))
-		user << "\blue Now disassembling table"
+		user << "<span class=\"notice\">Now disassembling table</span>"
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user,50))
 			destroy()
@@ -358,7 +358,7 @@
 		playsound(get_turf(src), 'sound/weapons/blade1.ogg', 50, 1)
 		playsound(get_turf(src), "sparks", 50, 1)
 		for(var/mob/O in viewers(user, 4))
-			O.show_message("\blue The [src] was sliced apart by [user]!", 1, "\red You hear [src] coming apart.", 2)
+			O.show_message("<span class=\"notice\">The [src] was sliced apart by [user]!</span>", 1, "<span class=\"rose\">You hear [src] coming apart.</span>", 2)
 		destroy()
 
 	user.drop_item(src)
@@ -516,18 +516,18 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			if(src.status == 2)
-				user << "\blue Now weakening the reinforced table"
+				user << "<span class=\"notice\">Now weakening the reinforced table</span>"
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 				if (do_after(user, 50))
 					if(!src || !WT.isOn()) return
-					user << "\blue Table weakened"
+					user << "<span class=\"notice\">Table weakened</span>"
 					src.status = 1
 			else
-				user << "\blue Now strengthening the reinforced table"
+				user << "<span class=\"notice\">Now strengthening the reinforced table</span>"
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 				if (do_after(user, 50))
 					if(!src || !WT.isOn()) return
-					user << "\blue Table strengthened"
+					user << "<span class=\"notice\">Table strengthened</span>"
 					src.status = 2
 			return
 		return

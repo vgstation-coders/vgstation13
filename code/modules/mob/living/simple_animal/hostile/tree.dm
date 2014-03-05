@@ -52,7 +52,7 @@
 
 /mob/living/simple_animal/hostile/tree/Die()
 	..()
-	visible_message("\red <b>[src]</b> is hacked into pieces!")
+	visible_message("<span class=\"danger\">[src]</span><span class=\"rose\">is hacked into pieces!</span>")
 	new /obj/item/stack/sheet/wood(loc)
 	del(src)
 
@@ -66,6 +66,6 @@
 
 /mob/living/simple_animal/hostile/tree/festivus/Die()
 	..()
-	visible_message("\red <b>[src]</b> is hacked into pieces!")
+	visible_message("<span class=\"danger\">[src]</span><span class=\"rose\">is hacked into pieces!</span>")
 	new /obj/item/stack/rods(loc)
 	del(src)

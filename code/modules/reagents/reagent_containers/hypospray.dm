@@ -25,13 +25,13 @@
 
 /obj/item/weapon/reagent_containers/hypospray/attack(mob/M as mob, mob/user as mob)
 	if(!reagents.total_volume)
-		user << "\red [src] is empty."
+		user << "<span class=\"rose\">[src] is empty.</span>"
 		return
 	if (!( istype(M, /mob) ))
 		return
 	if (reagents.total_volume)
-		user << "\blue You inject [M] with [src]."
-		M << "\red You feel a tiny prick!"
+		user << "<span class=\"notice\">You inject [M] with [src].</span>"
+		M << "<span class=\"rose\">You feel a tiny prick!</span>"
 
 		src.reagents.reaction(M, INGEST)
 		if(M.reagents)
@@ -50,7 +50,7 @@
 				M.LAssailant = user
 
 			var/trans = reagents.trans_to(M, amount_per_transfer_from_this)
-			user << "\blue [trans] units injected. [reagents.total_volume] units remaining in [src]."
+			user << "<span class=\"notice\">[trans] units injected. [reagents.total_volume] units remaining in [src].</span>"
 
 	return
 
@@ -85,6 +85,6 @@
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/examine()
 	..()
 	if(reagents && reagents.reagent_list.len)
-		usr << "\blue It is currently loaded."
+		usr << "<span class=\"notice\">It is currently loaded.</span>"
 	else
-		usr << "\blue It is spent."
+		usr << "<span class=\"notice\">It is spent.</span>"

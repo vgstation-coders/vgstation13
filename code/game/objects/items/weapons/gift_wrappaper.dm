@@ -30,7 +30,7 @@
 		user.put_in_active_hand(gift)
 		src.gift.add_fingerprint(user)
 	else
-		user << "\blue The gift was empty!"
+		user << "<span class=\"notice\">The gift was empty!</span>"
 	del(src)
 	return
 
@@ -41,16 +41,16 @@
 /obj/effect/spresent/relaymove(mob/user as mob)
 	if (user.stat)
 		return
-	user << "\blue You cant move."
+	user << "<span class=\"notice\">You cant move.</span>"
 
 /obj/effect/spresent/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 
 	if (!istype(W, /obj/item/weapon/wirecutters))
-		user << "\blue I need wirecutters for that."
+		user << "<span class=\"notice\">I need wirecutters for that.</span>"
 		return
 
-	user << "\blue You cut open the present."
+	user << "<span class=\"notice\">You cut open the present.</span>"
 
 	for(var/mob/M in src) //Should only be one but whatever.
 		M.loc = src.loc
@@ -127,11 +127,11 @@
 
 /obj/item/weapon/wrapping_paper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(isMoMMI(user))
-		user << "\red You need two hands for this."
+		user << "<span class=\"rose\">You need two hands for this.</span>"
 		return
 	..()
 	if (!( locate(/obj/structure/table, src.loc) ))
-		user << "\blue You MUST put the paper on a table!"
+		user << "<span class=\"notice\">You MUST put the paper on a table!</span>"
 	if (W.w_class < 4)
 		if (istype(user.get_inactive_hand(), /obj/item/weapon/wirecutters))
 			var/obj/item/weapon/wirecutters/C = user.get_inactive_hand()
@@ -139,7 +139,7 @@
 				return
 			var/a_used = 2 ** (src.w_class - 1)
 			if (src.amount < a_used)
-				user << "\blue You need more paper!"
+				user << "<span class=\"notice\">You need more paper!</span>"
 				return
 			else
 				if(istype(W, /obj/item/smallDelivery) || istype(W, /obj/item/weapon/gift)) //No gift wrapping gifts!
@@ -161,9 +161,9 @@
 				del(src)
 				return
 		else
-			user << "\blue You need wirecutters in your other hand!"
+			user << "<span class=\"notice\">You need wirecutters in your other hand!</span>"
 	else
-		user << "\blue The object is FAR too large!"
+		user << "<span class=\"notice\">The object is FAR too large!</span>"
 	return
 
 
@@ -198,6 +198,6 @@
 			log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to wrap [H.name] ([H.ckey])</font>")
 
 		else
-			user << "\blue You need more paper."
+			user << "<span class=\"notice\">You need more paper.</span>"
 	else
 		user << "They are moving around too much. A straightjacket would help."
