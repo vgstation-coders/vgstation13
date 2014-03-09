@@ -177,8 +177,8 @@ var/list/prisonwarped = list()	//list of players already warped
 var/list/blobstart = list()
 var/list/ninjastart = list()
 //	list/traitors = list()	//traitor list
-var/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
-var/list/alldirs = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
+var/const/list/CARDINALS = new /list( NORTH, SOUTH, EAST, WEST )
+var/const/list/ALL_DIRS = new /list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
 
 var/datum/station_state/start_state = null
 var/datum/configuration/config = null
