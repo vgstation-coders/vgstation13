@@ -153,7 +153,7 @@
 
 	var/cdir
 
-	for(var/card in cardinal)
+	for(var/card in CARDINALS)
 		var/turf/T = get_step(loc,card)
 		cdir = get_dir(T,loc)
 

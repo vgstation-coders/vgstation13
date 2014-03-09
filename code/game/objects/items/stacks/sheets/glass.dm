@@ -68,7 +68,7 @@
 			if(!src)	return 1
 			if(src.loc != user)	return 1
 
-			var/list/directions = new/list(cardinal)
+			var/list/directions = CARDINALS.Copy() 
 			var/i = 0
 			for (var/obj/structure/window/win in user.loc)
 				i++
@@ -80,7 +80,7 @@
 					user << "\red Can't let you do that."
 					return 1
 
-			//Determine the direction. It will first check in the direction the person making the window is facing, if it finds an already made window it will try looking at the next cardinal direction, etc.
+			//Determine the direction. It will first check in the direction the person making the window is facing, if it finds an already made window it will try looking at the next cardinals direction, etc.
 			var/dir_to_set = 2
 			for(var/direction in list( user.dir, turn(user.dir,90), turn(user.dir,180), turn(user.dir,270) ))
 				var/found = 0
@@ -147,7 +147,7 @@
 		if("One Direction")
 			if(!src)	return 1
 			if(src.loc != user)	return 1
-			var/list/directions = new/list(cardinal)
+			var/list/directions = CARDINALS.Copy()
 			var/i = 0
 			for (var/obj/structure/window/win in user.loc)
 				i++
@@ -159,7 +159,7 @@
 					user << "\red Can't let you do that."
 					return 1
 
-			//Determine the direction. It will first check in the direction the person making the window is facing, if it finds an already made window it will try looking at the next cardinal direction, etc.
+			//Determine the direction. It will first check in the direction the person making the window is facing, if it finds an already made window it will try looking at the next cardinals direction, etc.
 			var/dir_to_set = 2
 			for(var/direction in list( user.dir, turn(user.dir,90), turn(user.dir,180), turn(user.dir,270) ))
 				var/found = 0

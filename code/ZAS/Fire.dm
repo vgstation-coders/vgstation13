@@ -110,7 +110,7 @@ turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
 	for(var/atom/A in loc)
 		A.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
 	//spread
-	for(var/direction in cardinal)
+	for(var/direction in CARDINALS)
 		if(S.air_check_directions&direction) //Grab all valid bordering tiles
 
 			var/turf/simulated/enemy_tile = get_step(S, direction)
@@ -159,7 +159,7 @@ turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
 	if(!istype(loc, /turf))
 		del src
 
-	dir = pick(cardinal)
+	dir = pick(CARDINALS)
 	SetLuminosity(3)
 	firelevel = fl
 	air_master.active_hotspots.Add(src)

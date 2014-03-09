@@ -166,7 +166,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 
 /turf/unsimulated/mineral/proc/MineralSpread()
 	if(mineral && mineral.spread)
-		for(var/trydir in cardinal)
+		for(var/trydir in CARDINALS)
 			if(prob(mineral.spread_chance))
 				var/turf/unsimulated/mineral/random/target_turf = get_step(src, trydir)
 				if(istype(target_turf) && !target_turf.mineral)
@@ -828,7 +828,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 		src.length = length
 
 	// Get our directiosn
-	var/forward_cave_dir = pick(alldirs - exclude_dir)
+	var/forward_cave_dir = pick(ALL_DIRS - exclude_dir)
 	// Get the opposite direction of our facing direction
 	var/backward_cave_dir = angle2dir(dir2angle(forward_cave_dir) + 180)
 

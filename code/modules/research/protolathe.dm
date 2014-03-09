@@ -42,7 +42,7 @@ it creates. All the menus and other manipulation commands are in the R&D console
 
 	// Define initial output.
 	output=src
-	for(var/direction in cardinal)
+	for(var/direction in CARDINALS)
 		var/O = locate(/obj/machinery/mineral/output, get_step(src, dir))
 		if(O)
 			output=O
@@ -164,7 +164,7 @@ it creates. All the menus and other manipulation commands are in the R&D console
 			switch(result)
 				if("Yes")
 					var/found=0
-					for(var/direction in cardinal)
+					for(var/direction in CARDINALS)
 						if(locate(user) in get_step(src,direction))
 							found=1
 					if(!found)

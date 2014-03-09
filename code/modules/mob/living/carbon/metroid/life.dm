@@ -514,11 +514,11 @@
 		if(!Target)
 			if(hungry || starving)
 				if(canmove && isturf(loc) && prob(50))
-					step(src, pick(cardinal))
+					step(src, pick(CARDINALS))
 
 			else
 				if(canmove && isturf(loc) && prob(33))
-					step(src, pick(cardinal))
+					step(src, pick(CARDINALS))
 		else
 			if(!AIproc)
 				spawn() AIprocess()

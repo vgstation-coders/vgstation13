@@ -76,7 +76,7 @@
 
 		if(prob(33) && canmove && isturf(loc) && !pulledby) //won't move if being pulled
 
-			step(src, pick(cardinal))
+			step(src, pick(CARDINALS))
 
 		if(prob(1))
 			emote(pick("scratch","jump","roll","tail"))

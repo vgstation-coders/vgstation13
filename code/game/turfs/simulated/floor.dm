@@ -115,7 +115,7 @@ turf/simulated/floor/proc/update_icon()
 		if(!broken && !burnt)
 			if(icon_state == "carpet")
 				var/connectdir = 0
-				for(var/direction in cardinal)
+				for(var/direction in CARDINALS)
 					if(istype(get_step(src,direction),/turf/simulated/floor))
 						var/turf/simulated/floor/FF = get_step(src,direction)
 						if(FF.is_carpet_floor())
@@ -168,7 +168,7 @@ turf/simulated/floor/proc/update_icon()
 	..()
 	if(is_grass_floor())
 		var/dir_sum = 0
-		for(var/direction in cardinal)
+		for(var/direction in CARDINALS)
 			var/turf/T = get_step(src,direction)
 			if(!(T.is_grass_floor()))
 				dir_sum += direction
@@ -307,7 +307,7 @@ turf/simulated/floor/proc/update_icon()
 	if(is_catwalk()) return
 
 	if(is_grass_floor())
-		for(var/direction in cardinal)
+		for(var/direction in CARDINALS)
 			if(istype(get_step(src,direction),/turf/simulated/floor))
 				var/turf/simulated/floor/FF = get_step(src,direction)
 				FF.update_icon() //so siding get updated properly
@@ -513,7 +513,7 @@ turf/simulated/floor/proc/update_icon()
 					F.state = L.state
 					F.on = L.on
 				if(istype(T,/obj/item/stack/tile/grass))
-					for(var/direction in cardinal)
+					for(var/direction in CARDINALS)
 						if(istype(get_step(src,direction),/turf/simulated/floor))
 							var/turf/simulated/floor/FF = get_step(src,direction)
 							FF.update_icon() //so siding gets updated properly

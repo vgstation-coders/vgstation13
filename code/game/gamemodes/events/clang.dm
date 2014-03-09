@@ -46,7 +46,7 @@ In my current plan for it, 'solid' will be defined as anything with density == 1
 	var/starty = 0
 	var/endy = 0
 	var/endx = 0
-	var/startside = pick(cardinal)
+	var/startside = pick(CARDINALS)
 
 	switch(startside)
 		if(NORTH)

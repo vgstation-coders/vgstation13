@@ -326,7 +326,7 @@
 	if(M.current.vampire_power(75, 0))
 		var/list/turf/locs = new
 		var/number = 0
-		for(var/direction in alldirs) //looking for bat spawns
+		for(var/direction in ALL_DIRS) //looking for bat spawns
 			if(locs.len == 2) //we found 2 locations and thats all we need
 				break
 			var/turf/T = get_step(M.current,direction) //getting a loc in that direction

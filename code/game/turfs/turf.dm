@@ -299,7 +299,7 @@
 	var/atemp = 0
 	var/turf_count = 0
 
-	for(var/direction in cardinal)//Only use cardinals to cut down on lag
+	for(var/direction in CARDINALS)//Only use cardinals to cut down on lag
 		var/turf/T = get_step(src,direction)
 		if(istype(T,/turf/space))//Counted as no air
 			turf_count++//Considered a valid turf for air calcs
@@ -321,7 +321,7 @@
 	air.update_values()
 
 	//cael - duplicate the averaged values across adjacent turfs to enforce a seamless atmos change
-	for(var/direction in cardinal)//Only use cardinals to cut down on lag
+	for(var/direction in CARDINALS)//Only use cardinals to cut down on lag
 		var/turf/T = get_step(src,direction)
 		if(istype(T,/turf/space))//Counted as no air
 			continue
@@ -366,7 +366,7 @@
 // This Distance proc assumes that only cardinal movement is
 //  possible. It results in more efficient (CPU-wise) pathing
 //  for bots and anything else that only moves in cardinal dirs.
-/turf/proc/Distance_cardinal(turf/t)
+/turf/proc/Distance_CARDINALS(turf/t)
 	if(!src || !t) return 0
 	return abs(src.x - t.x) + abs(src.y - t.y)
 

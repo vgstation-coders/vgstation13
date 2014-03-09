@@ -344,7 +344,7 @@
 							return
 
 		else if(mob.confused)
-			step(mob, pick(cardinal))
+			step(mob, pick(CARDINALS))
 			mob.last_movement=world.time
 		else
 			. = ..()

@@ -864,7 +864,7 @@ Auto Patrol: []"},
 		pulse2.icon_state = "empdisable"
 		pulse2.name = "emp sparks"
 		pulse2.anchored = 1
-		pulse2.dir = pick(cardinal)
+		pulse2.dir = pick(CARDINALS)
 		spawn(10)
 			pulse2.delete()
 		var/list/mob/living/carbon/targets = new

@@ -22,7 +22,7 @@ proc/FloodFill(turf/simulated/start)
 			continue
 
 		//Check all cardinal directions
-		for(var/d in cardinal)
+		for(var/d in CARDINALS)
 			var/turf/simulated/O = get_step(T,d)
 
 			//Ensure the turf is of proper type, that it is not in either list, and that air can reach it.

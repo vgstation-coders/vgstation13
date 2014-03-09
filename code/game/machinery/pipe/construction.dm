@@ -219,7 +219,7 @@ var/global/list/pipeID2State = list(
 /obj/item/pipe/Move()
 	..()
 	if ((pipe_type in list (PIPE_SIMPLE_BENT, PIPE_HE_BENT, PIPE_INSULATED_BENT)) \
-		&& (src.dir in cardinal))
+		&& (src.dir in CARDINALS))
 		src.dir = src.dir|turn(src.dir, 90)
 	else if (pipe_type in list (PIPE_SIMPLE_STRAIGHT, PIPE_HE_STRAIGHT, PIPE_INSULATED_STRAIGHT, PIPE_MVALVE, PIPE_DVALVE))
 		if(dir==2)
