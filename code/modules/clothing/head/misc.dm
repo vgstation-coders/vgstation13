@@ -192,8 +192,16 @@
 	name = "\improper fedora"
 	icon_state = "fedora"
 	item_state = "fedora"
-	desc = "A sharp, stylish hat."
+	desc = "A hat worn by those with mental problems to look cool or be ironic. IE: you."
 	flags = FPRINT|TABLEPASS
+
+// *tips fedora*
+/obj/item/clothing/head/fedora/verb/tipfedora()
+	set name = "Tip Fedora"
+	set category = "Object"
+
+	src.visible_message("[src] tips his fedora.")
+	usr << "You tip your fedora."
 
 /obj/item/clothing/head/feathertrilby
 	name = "\improper feather trilby"
