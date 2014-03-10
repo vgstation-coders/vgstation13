@@ -134,31 +134,17 @@ Class Procs:
 		pulse2.icon_state = "empdisable"
 		pulse2.name = "emp sparks"
 		pulse2.anchored = 1
-		pulse2.dir = pick(cardinal)
+		pulse2.dir = pick(CARDINALS)
 
 		spawn(10)
 			pulse2.delete()
 	..()
 
-/obj/machinery/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-				return
-		if(3.0)
-			if (prob(25))
-				qdel(src)
-				return
-		else
-	return
+/obj/machinery/ex_act(const/severity)
+	loc = null
 
 /obj/machinery/blob_act()
-	if(prob(50))
-		del(src)
+	loc = null
 
 /obj/machinery/proc/auto_use_power()
 	if(!powered(power_channel))
