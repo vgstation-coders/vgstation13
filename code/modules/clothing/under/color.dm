@@ -31,7 +31,7 @@
 	icon_state = "grey"
 	item_state = "gy_suit"
 	_color = "grey"
-	flags = FPRINT | TABLEPASS | ONESIZEFITSALL
+	flags = FPRINT | TABLEPASS
 
 /obj/item/clothing/under/color/orange
 	name = "orange jumpsuit"

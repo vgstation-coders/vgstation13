@@ -9,6 +9,10 @@
 
 	power
 		var/next_shock = 0
+		item_state = "powergloves"
+		icon_state = "power"
+		name = "nintendo powergloves"
+		desc = "It's bad, so bad."
 
 /obj/item/clothing/gloves/fyellow                             //Cheap Chinese Crap
 	desc = "These gloves are cheap copies of the coveted gloves, no way this can end badly."
@@ -121,3 +125,10 @@
 
 	cargo
 		_color = "cargo"				//Exists for washing machines. Is not different from brown gloves in any way.
+
+/obj/item/clothing/gloves/powergloves
+	name = "nintendo powergloves"
+	desc = "It's bad, so bad."
+	icon_state = "power"
+	item_state = "powergloves"
+	_color="power"

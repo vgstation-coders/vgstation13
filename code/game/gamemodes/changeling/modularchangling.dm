@@ -178,6 +178,12 @@ var/list/datum/power/changeling/powerinstances = list()
 	genomecost = 8
 	verbpath = /mob/proc/changeling_rapidregen
 
+/datum/power/changeling/infect
+	name = "Infection Sting"
+	desc = "We sting a human, turning his body into a new changeling."
+	genomecost = 15
+	verbpath = /mob/proc/changeling_infect
+
 
 
 // Modularchangling, totally stolen from the new player panel.  YAYY

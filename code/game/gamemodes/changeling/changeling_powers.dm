@@ -818,3 +818,15 @@ var/list/datum/dna/hivemind_bank = list()
 
 	feedback_add_details("changeling_powers","ED")
 	return 1
+
+/mob/proc/changeling_infect()
+	set category = "Changeling"
+	set name = "Infect sting (60)"
+	set desc="Turn a target into a changeling."
+
+	var/mob/living/carbon/T = changeling_sting(60,/mob/proc/changeling_infect)
+	if(!T)	return 0
+	T << "<span class='danger'>You become one of many.</span>"
+	T.make_changeling()
+	feedback_add_details("changeling_powers","IS")
+	return 1
