@@ -98,6 +98,21 @@ var/list/uplink_items = list()
 	cost = 4
 	job = list("Clown")
 
+//Mime
+/datum/uplink_item/jobspecific/silencedpistol
+	name = "Silenced Pistol"
+	desc = "A quiet and cheap gun, along with a pun. Actual silence of shots may vairy on situation."
+	item = /obj/item/weapon/gun/projectile/silenced
+	cost = 4
+	job = list("Mime")
+
+/datum/uplink_item/jobspecific/silencedpistolammo
+	name = ".45 ammo"
+	desc = "Ammunition for the silenced pistol."
+	item = /obj/item/ammo_magazine/c45
+	cost = 2
+	job = list("Mime")
+
 //Detective
 /datum/uplink_item/jobspecific/evidenceforger
 	name = "Evidence Forger"
@@ -183,6 +198,8 @@ var/list/uplink_items = list()
 	item = /obj/item/clothing/gloves/yellow/power
 	cost = 7
 	job = list("Station Engineer","Chief Engineer")
+
+
 
 // DANGEROUS WEAPONS
 
