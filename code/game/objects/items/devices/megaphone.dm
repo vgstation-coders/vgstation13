@@ -34,13 +34,13 @@
 		if(emagged)
 			if(insults)
 				for(var/mob/O in (viewers(user)))
-					O.show_message("<B>[user]</B> broadcasts, <FONT size=3>\"[pick(insultmsg)]\"</FONT>",2) // 2 stands for hearable message
+					O.show_message("<B>[user]</B> broadcasts, <FONT size=4>\"[pick(insultmsg)]\"</FONT>",2) // 2 stands for hearable message
 				insults--
 			else
 				user << "\red *BZZZZzzzzzt*"
 		else
 			for(var/mob/O in (viewers(user)))
-				O.show_message("<B>[user]</B> broadcasts, <FONT size=3>\"[message]\"</FONT>",2) // 2 stands for hearable message
+				O.show_message("<B>[user]</B> broadcasts, <FONT size=4>\"[message]\"</FONT>",2) // 2 stands for hearable message
 
 		spamcheck = 1
 		spawn(20)
