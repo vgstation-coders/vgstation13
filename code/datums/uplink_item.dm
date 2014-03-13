@@ -90,6 +90,21 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific
 	category = "Job Specific Tools"
 
+//Mime
+/datum/uplink_item/jobspecific/silencedpistol
+	name = "Silenced Pistol"
+	desc = "A cheap, silent alternitive to the revolver. Actual silence may vairy."
+	item = /obj/item/weapon/gun/projectile/silenced
+	cost = 4
+	job = list("Mime")
+
+/datum/uplink_item/jobspecific/silencedpistolammo
+	name = ".45 Bullets"
+	desc = "A box of .45 ammo. Goes with the silenced pistol."
+	item = /obj/item/ammo_magazine/c45
+	cost = 2
+	job = list("Mime")
+
 //Clown
 /datum/uplink_item/jobspecific/clowngrenade
 	name = "1 Banana Grenade"
