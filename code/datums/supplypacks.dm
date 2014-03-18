@@ -443,7 +443,7 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 /datum/supply_packs/watertank
 	name = "Water tank crate"
 	contains = list(/obj/structure/reagent_dispensers/watertank)
-	cost = 8
+	cost = 10
 	containertype = /obj/structure/largecrate
 	containername = "water tank crate"
 	group = "Hydroponics"
@@ -451,10 +451,18 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 /datum/supply_packs/fueltank
 	name = "Fuel tank crate"
 	contains = list(/obj/structure/reagent_dispensers/fueltank)
-	cost = 8
+	cost = 10
 	containertype = /obj/structure/largecrate
 	containername = "fuel tank crate"
 	group = "Engineering"
+
+/datum/supply_packs/cleanertank
+	name = "Cleaner tank crate"
+	contains = list(/obj/structure/reagent_dispensers/cleanertank)
+	cost = 30
+	containertype = /obj/structure/largecrate
+	containername = "cleaner tank crate"
+	group = "Operations"
 
 /datum/supply_packs/solar
 	name = "Solar Pack crate"

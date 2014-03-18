@@ -86,6 +86,16 @@
 		..()
 		reagents.add_reagent("water",1000)
 
+/obj/structure/reagent_dispensers/cleanertank
+	name = "cleanertank"
+	desc = "A cleanertank"
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "cleanertank"
+	amount_per_transfer_from_this = 10
+	New()
+		..()
+		reagents.add_reagent("cleaner",1000)
+
 /obj/structure/reagent_dispensers/fueltank
 	name = "fueltank"
 	desc = "A fueltank"
