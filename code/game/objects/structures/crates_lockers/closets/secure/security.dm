@@ -47,12 +47,13 @@
 		..()
 		sleep(2)
 		new /obj/item/clothing/glasses/sunglasses(src)
-		new /obj/item/clothing/suit/armor/bulletproof(src)
+		new /obj/item/clothing/suit/armor/vest(src)
+		new /obj/item/clothing/head/helmet(src)
 		new /obj/item/weapon/cartridge/hop(src)
 		new /obj/item/device/radio/headset/heads/hop(src)
 		new /obj/item/weapon/storage/box/ids(src)
 		new /obj/item/weapon/storage/box/ids( src )
-		new /obj/item/weapon/reagent_containers/spray/pepper(src)
+		new /obj/item/weapon/gun/energy/taser(src)
 		new /obj/item/device/flash(src)
 		return
 
