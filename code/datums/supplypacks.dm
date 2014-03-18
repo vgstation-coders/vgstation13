@@ -188,7 +188,8 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 					/obj/item/weapon/grenade/chem_grenade/cleaner,
 					/obj/item/weapon/grenade/chem_grenade/cleaner,
 					/obj/item/weapon/grenade/chem_grenade/cleaner,
-					/obj/structure/mopbucket)
+					/obj/structure/mopbucket,
+					/obj/item/weapon/storage/box/soap)
 	cost = 10
 	containertype = /obj/structure/closet/crate
 	containername = "Janitorial supplies"

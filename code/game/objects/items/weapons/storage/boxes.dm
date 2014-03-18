@@ -415,6 +415,7 @@
 /obj/item/weapon/storage/box/pillbottles
 	name = "box of pill bottles"
 	desc = "It has pictures of pill bottles on its front."
+	icon_state = "pillbox"
 
 	New()
 		..()
@@ -425,6 +426,22 @@
 		new /obj/item/weapon/storage/pill_bottle( src )
 		new /obj/item/weapon/storage/pill_bottle( src )
 		new /obj/item/weapon/storage/pill_bottle( src )
+
+
+/obj/item/weapon/storage/box/soap
+	name = "box of soap bars"
+	desc = "A box full of soap bars."
+	icon_state = "soap"
+
+	New()
+		..()
+		new /obj/item/weapon/soap(src)
+		new /obj/item/weapon/soap(src)
+		new /obj/item/weapon/soap(src)
+		new /obj/item/weapon/soap(src)
+		new /obj/item/weapon/soap(src)
+		new /obj/item/weapon/soap(src)
+
 
 
 /obj/item/weapon/storage/box/snappops
