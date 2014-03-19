@@ -94,3 +94,5 @@
 	..()
 	if(remaining != 100)
 		usr <<"<span class='notice'>It is [remaining]% of its original size.</span>"
+
+
