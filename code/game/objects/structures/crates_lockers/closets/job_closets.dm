@@ -42,6 +42,7 @@
 /obj/structure/closet/jcloset/New()
 	..()
 	sleep(2)
+	new /obj/item/weapon/storage/box/soap(src)
 	new /obj/item/clothing/under/rank/janitor(src)
 	new /obj/item/weapon/cartridge/janitor(src)
 	new /obj/item/device/flashlight(src)

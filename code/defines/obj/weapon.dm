@@ -25,7 +25,6 @@
 	flags = TABLEPASS
 	w_class = 3.0
 
-
 /obj/item/weapon/spacecash
 	name = "1 credit chip"
 	desc = "It's worth 1 credit."
@@ -115,29 +114,6 @@
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
-
-/obj/item/weapon/soap
-	name = "soap"
-	desc = "A cheap bar of soap. Doesn't smell."
-	gender = PLURAL
-	icon = 'icons/obj/items.dmi'
-	icon_state = "soap"
-	w_class = 1.0
-	throwforce = 0
-	throw_speed = 4
-	throw_range = 20
-
-/obj/item/weapon/soap/nanotrasen
-	desc = "A Nanotrasen brand bar of soap. Smells of plasma."
-	icon_state = "soapnt"
-
-/obj/item/weapon/soap/deluxe
-	desc = "A deluxe Waffle Co. brand bar of soap. Smells of condoms."
-	icon_state = "soapdeluxe"
-
-/obj/item/weapon/soap/syndie
-	desc = "An untrustworthy bar of soap. Smells of fear."
-	icon_state = "soapsyndie"
 
 /obj/item/weapon/bikehorn
 	name = "bike horn"
@@ -278,8 +254,6 @@
 			var/mob/living/simple_animal/SA = AM
 			SA.health -= 20
 	..()
-
-
 
 /obj/item/weapon/caution
 	desc = "Caution! Wet Floor!"
