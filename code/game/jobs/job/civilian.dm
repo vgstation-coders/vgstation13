@@ -314,7 +314,6 @@
 			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		H.equip_or_collect(new /obj/item/key(H), slot_l_store)
 		return 1
 
 
