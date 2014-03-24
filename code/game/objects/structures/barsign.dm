@@ -1,5 +1,7 @@
 /*
  * TODO:
+ * Disable the change of sign when a human walk far than it can reach (the menu is open)
+ * Allow access when the ID is on active hand
  * Decide if we need fingerprints on this obj
  * Decide which other mob can use this
  * Sprite bar sign that is destroyed
@@ -18,8 +20,8 @@
  */
 
 /obj/structure/sign/double/barsign	// The sign is 64x32, so it needs two tiles. ;3
-	name = "--------"
-	desc = "a bar sign"
+	name = "Bar Sign"
+	desc = "It displays ``-------''."
 	icon = 'icons/obj/barsigns.dmi'
 	icon_state = "empty"
 
@@ -46,17 +48,16 @@
 							  "Maltese Falcon",
 							  "--------")
 
-	var/sign_name = ""
+	var/sign_name = "--------"
 
 /obj/structure/sign/double/barsign/attack_ai(mob/user as mob)
 	return src.attack_hand(user)
 
 /obj/structure/sign/double/barsign/attack_hand(mob/user as mob)
-	if (!src.allowed(user))
-		user << "\red Access denied."
+	if (!(src.allowed(user)))
 		return
 
-	if (!(get_dir(src, usr) in list(SOUTHWEST, SOUTH, SOUTHEAST)))
+	else if (!(get_dir(src, user) in list(SOUTHWEST, SOUTH, SOUTHEAST)))
 		return
 
 	pick_sign(sign_list)
