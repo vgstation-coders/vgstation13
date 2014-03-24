@@ -136,7 +136,7 @@ obj/machinery/door/airlock/New()
 	if (get_dist(on_wall,usr)>1)
 		return
 	var/ndir = get_dir(usr,on_wall)
-	if (!(ndir in cardinal))
+	if (!(ndir in CARDINALS))
 		return
 	var/turf/loc = get_turf(usr)
 	if (!istype(loc, /turf/simulated/floor))
@@ -294,7 +294,7 @@ obj/machinery/airlock_sensor/attackby(var/obj/item/W, var/mob/user)
 	if (get_dist(on_wall,usr)>1)
 		return
 	var/ndir = get_dir(usr,on_wall)
-	if (!(ndir in cardinal))
+	if (!(ndir in CARDINALS))
 		return
 	var/turf/loc = get_turf(usr)
 	if (!istype(loc, /turf/simulated/floor))

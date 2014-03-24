@@ -45,7 +45,7 @@ Pipelines + Other Objects -> Pipe network
 // @param connect_dirs integer Directions at which we should check for connections.
 /obj/machinery/atmospherics/proc/findAllConnections(var/connect_dirs)
 	var/node_id=0
-	for(var/direction in cardinal)
+	for(var/direction in CARDINALS)
 		if(connect_dirs & direction)
 			node_id++
 			var/obj/machinery/atmospherics/found

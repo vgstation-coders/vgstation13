@@ -13,7 +13,7 @@
 /proc/getOPressureDifferential(var/turf/loc)
 	var/minp=16777216;
 	var/maxp=0;
-	for(var/dir in cardinal)
+	for(var/dir in CARDINALS)
 		var/turf/T=get_turf(get_step(loc,dir))
 		var/cp=0
 		if(T && istype(T,/turf/simulated) && T.zone)
@@ -34,7 +34,7 @@
 	var/datum/gas_mixture/myenv=lT.return_air()
 	var/pressure=myenv.return_pressure()
 
-	for(var/dir in cardinal)
+	for(var/dir in CARDINALS)
 		var/turf/simulated/T=get_turf(get_step(loc,dir))
 		if(T && istype(T) && T.zone)
 			var/datum/gas_mixture/environment = T.return_air()

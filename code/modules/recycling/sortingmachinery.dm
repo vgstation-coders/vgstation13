@@ -347,7 +347,7 @@
 	..()
 	spawn( 5 )
 		var i = 0;
-		for (var/dir in cardinal)
+		for (var/dir in CARDINALS)
 			var/turf/T=get_step(src, dir)
 			if(!input)
 				src.input = locate(/obj/machinery/mineral/input, T)

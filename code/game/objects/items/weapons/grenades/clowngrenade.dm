@@ -23,11 +23,11 @@
 		*/
 		var/i = 0
 		var/number = 0
-		for(var/direction in alldirs)
+		for(var/direction in ALL_DIRS)
 			for(i = 0; i < 2; i++)
 				number++
 				var/obj/item/weapon/bananapeel/traitorpeel/peel = new /obj/item/weapon/bananapeel/traitorpeel(get_turf(src.loc))
-			/*	var/direction = pick(alldirs)
+			/*	var/direction = pick(ALL_DIRS)
 				var/spaces = pick(1;150, 2)
 				var/a = 0
 				for(a = 0; a < spaces; a++)

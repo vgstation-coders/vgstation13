@@ -271,7 +271,7 @@
 /mob/living/simple_animal/hostile/proc/DestroySurroundings()
 	if(environment_smash)
 		EscapeConfinement()
-		for(var/dir in cardinal)
+		for(var/dir in CARDINALS)
 			var/turf/T = get_step(src, dir)
 			if(istype(T, /turf/simulated/wall) && T.Adjacent(src))
 				T.attack_animal(src)

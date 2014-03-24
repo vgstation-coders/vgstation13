@@ -130,7 +130,7 @@
 
 	else
 		if(air_master)
-			for(var/direction in cardinal)
+			for(var/direction in CARDINALS)
 				var/turf/simulated/floor/target = get_step(src,direction)
 				if(istype(target))
 					air_master.tiles_to_update |= target
@@ -190,7 +190,7 @@
 	var/air_directions_archived = air_check_directions
 	air_check_directions = 0
 
-	for(var/direction in cardinal)
+	for(var/direction in CARDINALS)
 		if(ZAirPass(get_step(src,direction)))
 			air_check_directions |= direction
 
@@ -225,7 +225,7 @@
 	if(zone && istype(zone.air) && !zone.rebuild)
 		if(zone.air.check_tile_graphic())
 			update_visuals(zone.air)
-		for(var/direction in cardinal)
+		for(var/direction in CARDINALS)
 			var/turf/T = get_step(src,direction)
 			if(!istype(T))
 				continue
@@ -247,7 +247,7 @@
 						//If that is an unsimulated tile in my zone, see if we need to rebuild or just remove.
 						else if(istype(NT) && NT in zone.unsimulated_tiles)
 							var/consider_rebuild = 0
-							for(var/d in cardinal)
+							for(var/d in CARDINALS)
 								var/turf/UT = get_step(NT,d)
 								if(istype(UT, /turf/simulated) && UT.zone == zone && UT.CanPass(null, NT, 0, 0)) //If we find a neighboring tile that is in the same zone, check if we need to rebuild
 									consider_rebuild = 1
@@ -271,7 +271,7 @@
 						//If NT is unsimulated, parse if I should remove it or rebuild.
 						else if(istype(NT) && NT in T.zone.unsimulated_tiles)
 							var/consider_rebuild = 0
-							for(var/d in cardinal)
+							for(var/d in CARDINALS)
 								var/turf/UT = get_step(NT,d)
 								if(istype(UT, /turf/simulated) && UT.zone == T.zone && UT.CanPass(null, NT, 0, 0)) //If we find a neighboring tile that is in the same zone, check if we need to rebuild
 									consider_rebuild = 1
@@ -302,7 +302,7 @@
 					var/consider_rebuild = 0
 
 					//Loop through all neighboring turfs to see if we should remove the turf or just rebuild.
-					for(var/d in cardinal)
+					for(var/d in CARDINALS)
 						var/turf/UT = get_step(NT,d)
 
 						//If we find a neighboring tile that is in the same zone, rebuild
@@ -390,7 +390,7 @@
 /*UNUSED
 /turf/proc/check_connections()
 	//Checks for new connections that can be made.
-	for(var/d in cardinal)
+	for(var/d in CARDINALS)
 		var/turf/simulated/T = get_step(src,d)
 		if(istype(T) && ( !T.zone || !T.CanPass(0,src,0,0) ) )
 			continue
@@ -399,7 +399,7 @@
 
 /turf/proc/check_for_space()
 	//Checks for space around the turf.
-	for(var/d in cardinal)
+	for(var/d in CARDINALS)
 		var/turf/T = get_step(src,d)
 		if(istype(T,/turf/space) && T.CanPass(0,src,0,0))
 			zone.AddSpace(T)

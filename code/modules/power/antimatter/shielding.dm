@@ -1,7 +1,7 @@
 //like orange but only checks north/south/east/west for one step
 proc/cardinalrange(var/center)
 	var/list/things = list()
-	for(var/direction in cardinal)
+	for(var/direction in CARDINALS)
 		var/turf/T = get_step(center, direction)
 		if(!T) continue
 		things += T.contents
@@ -53,7 +53,7 @@ proc/cardinalrange(var/center)
 			break
 
 	if(!control_unit)//No other guys nearby, look for a control unit
-		for(var/direction in cardinal)
+		for(var/direction in CARDINALS)
 		for(var/obj/machinery/power/am_control_unit/AMC in cardinalrange(src))
 			if(AMC.add_shielding(src))
 				break
@@ -129,7 +129,7 @@ proc/cardinalrange(var/center)
 	overlays.Cut()
 	coredirs = 0
 	dirs = 0
-	for(var/direction in alldirs)
+	for(var/direction in ALL_DIRS)
 		var/turf/T = get_step(loc, direction)
 		for(var/obj/machinery/machine in T)
 			// Detect cores
@@ -137,7 +137,7 @@ proc/cardinalrange(var/center)
 				coredirs |= direction
 
 			// Detect cores, shielding, and control boxen.
-			if(direction in cardinal)
+			if(direction in CARDINALS)
 				if((istype(machine, /obj/machinery/am_shielding) && machine:control_unit == control_unit) || (istype(machine, /obj/machinery/power/am_control_unit) && machine == control_unit))
 					dirs |= direction
 
@@ -178,7 +178,7 @@ proc/cardinalrange(var/center)
 
 //Scans cards for shields or the control unit and if all there it
 /obj/machinery/am_shielding/proc/core_check()
-	for(var/direction in alldirs)
+	for(var/direction in ALL_DIRS)
 		var/found_am_device=0
 		for(var/obj/machinery/machine in get_step(loc, direction))
 			if(!machine)

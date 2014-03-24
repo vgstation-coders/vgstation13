@@ -306,7 +306,7 @@ var/global/list/uneatable = list(
 	if(!move_self)
 		return 0
 
-	var/movement_dir = pick(alldirs - last_failed_movement)
+	var/movement_dir = pick(ALL_DIRS - last_failed_movement)
 
 	if(force_move)
 		movement_dir = force_move

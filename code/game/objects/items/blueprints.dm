@@ -221,7 +221,7 @@ move an amendment</a> to the drawing.</p>
 			return ROOM_ERR_TOOLARGE
 		var/turf/T = pending[1] //why byond havent list::pop()?
 		pending -= T
-		for (var/dir in cardinal)
+		for (var/dir in CARDINALS)
 			var/skip = 0
 			for (var/obj/structure/window/W in T)
 				if(dir == W.dir || (W.is_fulltile()))

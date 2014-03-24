@@ -369,7 +369,7 @@
 /obj/effect/goliath_tentacle/original
 
 /obj/effect/goliath_tentacle/original/New()
-	var/list/directions = cardinal.Copy()
+	var/list/directions = CARDINALS.Copy()
 	var/counter
 	for(counter = 1, counter <= 3, counter++)
 		var/spawndir = pick(directions)

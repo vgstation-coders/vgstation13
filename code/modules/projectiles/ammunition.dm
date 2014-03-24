@@ -18,7 +18,7 @@
 			BB = new projectile_type(src)
 		pixel_x = rand(-10.0, 10)
 		pixel_y = rand(-10.0, 10)
-		dir = pick(cardinal)
+		dir = pick(CARDINALS)
 
 
 

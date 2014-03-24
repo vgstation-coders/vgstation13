@@ -70,7 +70,7 @@ var/global/list/mining_surprises = typesof(/mining_surprise)-/mining_surprise
 
 	proc/UpdateAdjacentsOfTurf(var/turf/T)
 		var/surprise_turf_info/Ti = turf_info[T]
-		for(var/dir in cardinal)
+		for(var/dir in CARDINALS)
 			var/turf/AT = get_step(T,dir)
 			if(!(AT in turfs))
 				return
@@ -176,7 +176,7 @@ var/global/list/mining_surprises = typesof(/mining_surprise)-/mining_surprise
 		var/list/opt_nt[0]
 		var/list/opt_nnt[0]
 		var/list/candidates[0]
-		for(var/dir in cardinal)
+		for(var/dir in CARDINALS)
 			var/di = "[dir]"
 			if(!di in opt_nt)
 				opt_nt[di]=list()
@@ -197,7 +197,7 @@ var/global/list/mining_surprises = typesof(/mining_surprise)-/mining_surprise
 
 	proc/IsTurfCandidate(var/turf/T,var/list/opt_nt,var/list/opt_nnt)
 		var/surprise_turf_info/sti = room.GetTurfInfo(T)
-		for(var/dir in cardinal)
+		for(var/dir in CARDINALS)
 			var/di = "[dir]"
 			for(var/_type in sti.adjacents[di])
 				if(_type in opt_nnt[di])
@@ -245,7 +245,7 @@ var/global/list/mining_surprises = typesof(/mining_surprise)-/mining_surprise
 			var/o_x=l_size_x?rand(0,l_size_x):0
 			var/o_y=l_size_y?rand(0,l_size_y):0
 			var/atom/npos
-			switch(pick(cardinal))
+			switch(pick(CARDINALS))
 				if(NORTH)
 					npos=locate(pos.x+o_x,  pos.y+sy-1, pos.z)
 				if(SOUTH)

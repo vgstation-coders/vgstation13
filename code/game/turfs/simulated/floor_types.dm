@@ -203,7 +203,7 @@
 		spawn(4)
 			if(src)
 				update_icon()
-				for(var/direction in cardinal)
+				for(var/direction in CARDINALS)
 					if(istype(get_step(src,direction),/turf/simulated/floor))
 						var/turf/simulated/floor/FF = get_step(src,direction)
 						FF.update_icon() //so siding get updated properly
@@ -286,7 +286,7 @@
 		underlays += new /icon('icons/turf/space.dmi',"[((x + y) ^ ~(x * y) + z) % 25]")
 
 		var/dirs = 0
-		for(var/direction in cardinal)
+		for(var/direction in CARDINALS)
 			var/turf/T = get_step(src,direction)
 			if(T.is_catwalk())
 				var/turf/simulated/floor/plating/airless/catwalk/C=T

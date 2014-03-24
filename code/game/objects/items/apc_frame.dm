@@ -18,7 +18,7 @@
 	if (get_dist(on_wall,usr)>1)
 		return
 	var/ndir = get_dir(usr,on_wall)
-	if (!(ndir in cardinal))
+	if (!(ndir in CARDINALS))
 		return
 	var/turf/loc = get_turf(usr)
 	var/area/A = loc.loc
@@ -66,7 +66,7 @@
 	if (get_dist(on_wall,usr)>1)
 		return
 	var/ndir = get_dir(usr,on_wall)
-	if (!(ndir in cardinal))
+	if (!(ndir in CARDINALS))
 		return
 	var/turf/loc = get_turf(usr)
 	var/area/A = loc.loc

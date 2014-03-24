@@ -19,7 +19,7 @@
 	var/turf/simulated/source = get_turf(src)
 	if(istype(source))
 		air_master.tiles_to_update |= source
-		for(var/dir in cardinal)
+		for(var/dir in CARDINALS)
 			var/turf/simulated/target = get_step(source,dir)
 			if(istype(target)) air_master.tiles_to_update |= target
 	return 1

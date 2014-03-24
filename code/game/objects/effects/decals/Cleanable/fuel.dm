@@ -24,7 +24,7 @@ obj/effect/decal/cleanable/liquid_fuel
 		if(amount < 0.5) return
 		var/turf/simulated/S = loc
 		if(!istype(S)) return
-		for(var/d in cardinal)
+		for(var/d in CARDINALS)
 			if(rand(25))
 				var/turf/simulated/target = get_step(src,d)
 				var/turf/simulated/origin = get_turf(src)

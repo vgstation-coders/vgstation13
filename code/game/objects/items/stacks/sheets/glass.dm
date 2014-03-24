@@ -68,7 +68,7 @@
 			if(!src)	return 1
 			if(src.loc != user)	return 1
 
-			var/list/directions = new/list(cardinal)
+			var/list/directions = CARDINALS.Copy() 
 			var/i = 0
 			for (var/obj/structure/window/win in user.loc)
 				i++
@@ -147,7 +147,7 @@
 		if("One Direction")
 			if(!src)	return 1
 			if(src.loc != user)	return 1
-			var/list/directions = new/list(cardinal)
+			var/list/directions = CARDINALS.Copy()
 			var/i = 0
 			for (var/obj/structure/window/win in user.loc)
 				i++

@@ -577,7 +577,7 @@ This function completely restores a damaged organ to perfect condition.
 			"You hear a terrible sound of ripping tendons and flesh.")
 
 			//Throw organs around
-			var/lol = pick(cardinal)
+			var/lol = pick(CARDINALS)
 			step(organ,lol)
 			owner.regenerate_icons()
 		return organ

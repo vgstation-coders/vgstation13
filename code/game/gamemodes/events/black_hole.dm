@@ -52,7 +52,7 @@
 		//MOVEMENT
 		if( prob(50) )
 			src.anchored = 0
-			step(src,pick(alldirs))
+			step(src,pick(ALL_DIRS))
 			src.anchored = 1
 
 /obj/effect/bhole/proc/grav(var/r, var/ex_act_force, var/pull_chance, var/turf_removal_chance)

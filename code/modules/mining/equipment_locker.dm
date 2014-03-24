@@ -24,10 +24,10 @@
 	var/points = 0
 
 /obj/machinery/mineral/ore_redemption/initialize()
-	for (var/dir in cardinal)
+	for (var/dir in CARDINALS)
 		src.input = locate(/obj/machinery/mineral/input, get_step(src, dir))
 		if(src.input) break
-	for (var/dir in cardinal)
+	for (var/dir in CARDINALS)
 		src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
 		if(src.output) break
 
@@ -598,7 +598,7 @@
 	var/obj/item/weapon/ore/O
 	for(O in src.loc)
 		O.loc = src
-	for(var/dir in alldirs)
+	for(var/dir in ALL_DIRS)
 		var/turf/T = get_step(src,dir)
 		for(O in T)
 			O.loc = src

@@ -532,7 +532,7 @@ zone/proc/Rebuild()
 		for(var/turf/S in new_unsimulated)
 			if(istype(S, /turf/simulated))
 				continue
-			for(var/direction in cardinal)
+			for(var/direction in CARDINALS)
 				var/turf/simulated/T = get_step(S,direction)
 				if(istype(T) && T.zone && S.CanPass(null, T, 0, 0))
 					T.zone.AddTurf(S)

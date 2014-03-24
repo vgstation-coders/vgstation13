@@ -48,7 +48,7 @@
 		health = min(initial(health), health + 1)
 		for(var/i = 1; i < 8; i += i)
 			Pulse(0, i)
-		for(var/b_dir in alldirs)
+		for(var/b_dir in ALL_DIRS)
 			if(!prob(5))
 				continue
 			var/obj/effect/blob/normal/B = locate() in get_step(src, b_dir)

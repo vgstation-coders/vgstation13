@@ -42,6 +42,23 @@
 	var/animation_delay = 12
 	var/animation_delay_2 = null
 
+/obj/machinery/door/ex_act(const/severity)
+	switch(severity)
+		if(1)
+			..()
+		if(2)
+			if(prob(25))
+				..()
+		if(3)
+			if(prob(80))
+				var/datum/effect/effect/system/spark_spread/S = new /datum/effect/effect/system/spark_spread()
+				S.set_up(2, location = loc)
+				S.start()
+
+/obj/machinery/door/blob_act()
+	if (prob(40))
+		..()
+
 /obj/machinery/door/Bumped(atom/AM)
 	if (ismob(AM))
 		var/mob/M = AM
@@ -162,12 +179,6 @@
 		return
 
 	door_animate("deny")
-	return
-
-/obj/machinery/door/blob_act()
-	if (prob(BLOB_PROBABILITY))
-		src = null
-
 	return
 
 /obj/machinery/door/proc/door_animate(var/animation as text)
@@ -327,21 +338,6 @@
 			spawn(300)
 				secondsElectrified = 0
 	..()
-
-
-/obj/machinery/door/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-		if(2.0)
-			if(prob(25))
-				qdel(src)
-		if(3.0)
-			if(prob(80))
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(2, 1, src)
-				s.start()
-	return
 
 /obj/machinery/door/proc/requiresID()
 	return 1

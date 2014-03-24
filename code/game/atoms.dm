@@ -290,10 +290,8 @@ its easier to just keep the beam vertical.
 	return
 
 /atom/proc/ex_act()
-	return
 
 /atom/proc/blob_act()
-	return
 
 /atom/proc/fire_act()
 	return

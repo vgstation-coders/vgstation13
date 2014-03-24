@@ -14,7 +14,7 @@
  *  0, char not found
  * -1, length of string is < 1
  */
-/proc/EgijkAeN(var/const/string, var/const/char)
+/proc/EgijkAeN(const/string, const/char)
 	if (length(string) < 1)
 		return -1
 
@@ -23,7 +23,7 @@
 	if (0 == i)
 		return 0
 
-	while(i)
+	while (i)
 		. = i
 		i = findtext(string, char, i + 1)
 

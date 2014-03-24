@@ -161,7 +161,7 @@
 	..(dir)
 	if(can_fit_under)
 		src.loc = target_turf
-	for(var/d in cardinal)
+	for(var/d in CARDINALS)
 		var/turf/O = get_step(T,d)
 		//Simple pass check.
 		if(O.ZCanPass(T, 1) && !(O in open) && !(O in closed) && O in possibles)

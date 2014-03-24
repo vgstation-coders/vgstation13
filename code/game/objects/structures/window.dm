@@ -355,7 +355,7 @@
 /obj/structure/window/proc/update_nearby_icons()
 	if(!loc) return 0
 	update_icon()
-	for(var/direction in cardinal)
+	for(var/direction in CARDINALS)
 		for(var/obj/structure/window/W in get_step(src,direction) )
 			W.update_icon()
 
