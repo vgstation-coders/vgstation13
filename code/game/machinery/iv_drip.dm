@@ -69,6 +69,14 @@
 		user << "You attach \the [W] to \the [src]."
 		src.update_icon()
 		return
+	else if (istype(W, /obj/item/weapon/wrench))
+		if(!isnull(src.beaker))
+			user << "Remove the reagent container loaded first!"
+			return
+
+		new /obj/item/stack/sheet/metal(user.loc, 2)
+		del(src)
+		return
 	else
 		return ..()
 
