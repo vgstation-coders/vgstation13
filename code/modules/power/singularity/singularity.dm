@@ -275,7 +275,7 @@ var/global/list/uneatable = list(
 			return
 		if(istype(A, /obj/machinery/singularity))//Welp now you did it
 			var/obj/machinery/singularity/S = A
-			src.energy += round(S.energy >> 1, 1)//Absorb most of it
+			src.energy += (S.energy >> 1) //Absorb most of it
 			del(S)
 			var/dist = max((current_size - 2), 1)
 			explosion(src.loc, (dist), (dist << 1), (dist << 2))
