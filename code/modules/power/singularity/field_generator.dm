@@ -214,7 +214,7 @@ field_generator power level display
 		if (isnull(F))
 			continue
 		power_draw++
-	if(draw_power(round(power_draw/2,1)))
+	if(draw_power((power_draw >> 1) + 1))
 		return 1
 	else
 		for(var/mob/M in viewers(src))
