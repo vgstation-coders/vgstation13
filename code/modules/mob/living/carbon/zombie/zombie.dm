@@ -117,7 +117,7 @@
 		else if (!target)
 			if (path_target.len) path_target = new/list()
 
-			var/last_health = INFINITY
+			var/last_health = POS_INF
 
 			for (var/mob/living/carbon/C in range(viewrange-2,src.loc))
 				if (C.stat == 2 || !can_see(src,C,viewrange) || istype(C, /mob/living/carbon/human/zombie) || istype(C, /mob/living/carbon/monkey))

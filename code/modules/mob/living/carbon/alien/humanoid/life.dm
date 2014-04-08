@@ -394,7 +394,7 @@
 		if (healths)
 			if (stat != 2)
 				switch(health)
-					if(100 to INFINITY)
+					if(100 to POS_INF)
 						healths.icon_state = "health0"
 					if(75 to 100)
 						healths.icon_state = "health1"

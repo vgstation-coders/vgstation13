@@ -123,7 +123,7 @@
 			if(400 to 460)
 				apply_damage(HEAT_DAMAGE_LEVEL_2, BURN)
 				fire_alert = max(fire_alert, 2)
-			if(460 to INFINITY)
+			if(460 to POS_INF)
 				if(on_fire)
 					apply_damage(HEAT_DAMAGE_LEVEL_3, BURN)
 					fire_alert = max(fire_alert, 2)

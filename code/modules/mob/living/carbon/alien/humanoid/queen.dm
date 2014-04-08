@@ -37,7 +37,7 @@
 		if (src.healths)
 			if (src.stat != 2)
 				switch(health)
-					if(300 to INFINITY)
+					if(300 to POS_INF)
 						src.healths.icon_state = "health0"
 					if(200 to 300)
 						src.healths.icon_state = "health1"

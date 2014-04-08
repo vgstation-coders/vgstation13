@@ -264,14 +264,14 @@
 				if(temp.brute_dam) switch(temp.brute_dam)
 					if(0 to 20)
 						wound_flavor_text["[temp.display_name]"] += " some marks"
-					if(21 to INFINITY)
+					if(21 to POS_INF)
 						wound_flavor_text["[temp.display_name]"] += pick(" a lot of damage"," severe cracks and splintering")
 				if(temp.brute_dam && temp.burn_dam)
 					wound_flavor_text["[temp.display_name]"] += " and"
 				if(temp.burn_dam) switch(temp.burn_dam)
 					if(0 to 20)
 						wound_flavor_text["[temp.display_name]"] += " some burns"
-					if(21 to INFINITY)
+					if(21 to POS_INF)
 						wound_flavor_text["[temp.display_name]"] += pick(" a lot of burns"," severe charring")
 				wound_flavor_text["[temp.display_name]"] += "!</span>\n"
 			else if(temp.status & ORGAN_ROBOT)
@@ -283,14 +283,14 @@
 				if(temp.brute_dam) switch(temp.brute_dam)
 					if(0 to 20)
 						wound_flavor_text["[temp.display_name]"] += " some dents"
-					if(21 to INFINITY)
+					if(21 to POS_INF)
 						wound_flavor_text["[temp.display_name]"] += pick(" a lot of dents"," severe denting")
 				if(temp.brute_dam && temp.burn_dam)
 					wound_flavor_text["[temp.display_name]"] += " and"
 				if(temp.burn_dam) switch(temp.burn_dam)
 					if(0 to 20)
 						wound_flavor_text["[temp.display_name]"] += " some burns"
-					if(21 to INFINITY)
+					if(21 to POS_INF)
 						wound_flavor_text["[temp.display_name]"] += pick(" a lot of burns"," severe melting")
 				wound_flavor_text["[temp.display_name]"] += "!</span>\n"
 			else if(temp.wounds.len > 0)
@@ -327,7 +327,7 @@
 									flavor_text += "<span class='warning'>[t_He] has several [wound]s"
 								else
 									flavor_text += " several [wound]s"
-							if(6 to INFINITY)
+							if(6 to POS_INF)
 								if(!flavor_text.len)
 									flavor_text += "<span class='warning'>[t_He] has a bunch of [wound]s"
 								else

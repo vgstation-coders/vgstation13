@@ -139,7 +139,7 @@
 				else
 					emp_damage = round(emp_damage,1)//Let's have some nice numbers to work with
 				switch(emp_damage)
-					if(31 to INFINITY)
+					if(31 to POS_INF)
 						emp_damage = 30//Let's not overdo it
 					if(21 to 30)//High level of EMP damage, unable to see, hear, or speak
 						eye_blind = 1
@@ -221,7 +221,7 @@
 		if (healths)
 			if (stat != 2)
 				switch(health)
-					if(100 to INFINITY)
+					if(100 to POS_INF)
 						healths.icon_state = "health0"
 					if(80 to 100)
 						healths.icon_state = "health1"

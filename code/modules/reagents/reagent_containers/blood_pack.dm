@@ -22,7 +22,7 @@
 		switch(percent)
 			if(0 to 9)			icon_state = "empty"
 			if(10 to 50) 		icon_state = "half"
-			if(51 to INFINITY)	icon_state = "full"
+			if(51 to POS_INF)	icon_state = "full"
 
 /obj/item/weapon/reagent_containers/blood/APlus
 	blood_type = "A+"

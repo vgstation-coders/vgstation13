@@ -206,7 +206,7 @@ var/global/list/uneatable = list(
 			allowed_size = 5
 		if(1000 to 1999)
 			allowed_size = 7
-		if(2000 to INFINITY)
+		if(2000 to POS_INF)
 			allowed_size = 9
 	if(current_size != allowed_size)
 		expand()

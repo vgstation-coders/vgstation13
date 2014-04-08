@@ -26,10 +26,10 @@
 	overlays.Cut()
 	switch(oxygentanks)
 		if(1 to 3)	overlays += "oxygen-[oxygentanks]"
-		if(4 to INFINITY) overlays += "oxygen-4"
+		if(4 to POS_INF) overlays += "oxygen-4"
 	switch(plasmatanks)
 		if(1 to 4)	overlays += "plasma-[plasmatanks]"
-		if(5 to INFINITY) overlays += "plasma-5"
+		if(5 to POS_INF) overlays += "plasma-5"
 
 
 /obj/structure/dispenser/attack_robot(mob/user as mob)

@@ -342,7 +342,7 @@
 
 /datum/powernet/proc/get_electrocute_damage()
 	switch(avail)/*
-		if (1300000 to INFINITY)
+		if (1300000 to POS_INF)
 			return min(rand(70,150),rand(70,150))
 		if (750000 to 1300000)
 			return min(rand(50,115),rand(50,115))
@@ -358,7 +358,7 @@
 			return min(rand(20,65),rand(20,65))
 		if (1000 to 10000-1)
 			return min(rand(10,20),rand(10,20))*/
-		if (5000000 to INFINITY)
+		if (5000000 to POS_INF)
 			return min(rand(100,180),rand(100,180))
 		if (4500000 to 5000000)
 			return min(rand(80,160),rand(80,160))

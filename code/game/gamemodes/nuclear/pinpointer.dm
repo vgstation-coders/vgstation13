@@ -45,7 +45,7 @@
 					icon_state = "pinonclose"
 				if(9 to 16)
 					icon_state = "pinonmedium"
-				if(16 to INFINITY)
+				if(16 to POS_INF)
 					icon_state = "pinonfar"
 		spawn(5)
 			.()
@@ -206,7 +206,7 @@
 			icon_state = "pinonclose"
 		if(9 to 16)
 			icon_state = "pinonmedium"
-		if(16 to INFINITY)
+		if(16 to POS_INF)
 			icon_state = "pinonfar"
 
 	spawn(5) .()
@@ -240,7 +240,7 @@
 				icon_state = "pinonclose"
 			if(9 to 16)
 				icon_state = "pinonmedium"
-			if(16 to INFINITY)
+			if(16 to POS_INF)
 				icon_state = "pinonfar"
 
 	spawn(5) .()

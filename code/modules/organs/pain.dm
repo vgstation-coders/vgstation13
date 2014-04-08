@@ -115,7 +115,7 @@ mob/living/carbon/human/proc/handle_pain()
 		if(15 to 25)
 			toxMessageProb = 3
 			toxDamageMessage = "Your whole body hurts badly."
-		if(26 to INFINITY)
+		if(26 to POS_INF)
 			toxMessageProb = 5
 			toxDamageMessage = "Your body aches all over, it's driving you mad."
 

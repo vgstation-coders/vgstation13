@@ -1366,7 +1366,7 @@ It is possible to destroy the net by the occupant or someone else.
 
 			density = 0//Make the net pass-through.
 			invisibility = 101//Make the net invisible so all the animations can play out.
-			health = INFINITY//Make the net invincible so that an explosion/something else won't kill it while, spawn() is running.
+			health = POS_INF//Make the net invincible so that an explosion/something else won't kill it while, spawn() is running.
 			for(var/obj/item/W in M)
 				if(istype(M,/mob/living/carbon/human))
 					if(W==M:w_uniform)	continue//So all they're left with are shoes and uniform.

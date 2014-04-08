@@ -53,14 +53,14 @@ proc/random_skin_tone()
 
 proc/skintone2racedescription(tone)
 	switch (tone)
-		if(30 to INFINITY)		return "albino"
+		if(30 to POS_INF)		return "albino"
 		if(20 to 30)			return "pale"
 		if(5 to 15)				return "light skinned"
 		if(-10 to 5)			return "white"
 		if(-25 to -10)			return "tan"
 		if(-45 to -25)			return "darker skinned"
 		if(-65 to -45)			return "brown"
-		if(-INFINITY to -65)	return "black"
+		if(NEG_INF to -65)	return "black"
 		else					return "unknown"
 
 proc/age2agedescription(age)
@@ -73,7 +73,7 @@ proc/age2agedescription(age)
 		if(30 to 45)		return "adult"
 		if(45 to 60)		return "middle-aged"
 		if(60 to 70)		return "aging"
-		if(70 to INFINITY)	return "elderly"
+		if(70 to POS_INF)	return "elderly"
 		else				return "unknown"
 
 /*
