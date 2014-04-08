@@ -42,7 +42,7 @@
 			usr << "\red It appears heavily dented."
 		if(1 to 39)
 			usr << "\red It appears severely dented."
-		if((POS_INF * -1) to 0)
+		if(NEG_INF to 0)
 			usr << "It appears completely unsalvageable"
 	if(mybag)
 		usr << "\A [mybag] is hanging on the pimpin' ride."
