@@ -53,7 +53,15 @@ var/list/masterPool
 	initializePool(new /list(\
 		/obj/item/weapon/shard,\
 		/obj/item/weapon/shard/plasma,\
-		/obj/structure/grille))
+		/obj/structure/grille,\
+		/obj/structure/window/basic,\
+		/obj/structure/window/full/basic,\
+		/obj/structure/window/reinforced,\
+		/obj/structure/window/full/reinforced,\
+		/obj/structure/window/plasmabasic,\
+		/obj/structure/window/full/plasmabasic,\
+		/obj/structure/window/plasmareinforced,\
+		/obj/structure/window/full/plasmareinforced))
 
 	world << "\red \b Object Pool Creation Complete!"
 
