@@ -115,7 +115,7 @@ var/list/masterPool
 	masterPool[A] -= Object
 
 	#if DEBUG_OBJECT_POOL
-	world << "DEBUG_OBJECT_POOL: getFromPool([A]) [length(masterPool[A])]"
+	world << "DEBUG_OBJECT_POOL: getFromPool([A]) [length(masterPool[A])] left."
 	#endif
 
 	if (0 == length(masterPool[A]))
@@ -153,7 +153,7 @@ var/list/masterPool
 	masterPool[Object.type] += Object
 
 	#if DEBUG_OBJECT_POOL
-	world << "DEBUG_OBJECT_POOL: returnToPool([Object.type]) [length(masterPool[Object.type])]"
+	world << "DEBUG_OBJECT_POOL: returnToPool([Object.type]) [length(masterPool[Object.type])] left."
 	#endif
 
 #undef DEBUG_OBJECT_POOL
