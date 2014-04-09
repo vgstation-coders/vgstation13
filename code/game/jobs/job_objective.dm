@@ -15,7 +15,7 @@
 	var/per_unit = 0
 	var/units_completed = 0
 	var/units_compensated = 0 // Shit paid for
-	var/units_requested = INFINITY
+	var/units_requested = POS_INF
 	var/completion_payment = 0			// Credits paid to owner when completed
 
 /datum/job_objective/New(var/datum/mind/new_owner)

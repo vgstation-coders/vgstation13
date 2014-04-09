@@ -462,7 +462,7 @@
 		pain_condition -= 25
 
 	switch(pain_condition)
-		if (81 to INFINITY)
+		if (81 to POS_INF)
 			usr << "\blue <b>Condition</b>: [M.name] feels good."
 		if (61 to 80)
 			usr << "\blue <b>Condition</b>: [M.name] is suffering mild pain."

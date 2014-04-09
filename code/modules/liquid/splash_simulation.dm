@@ -153,7 +153,7 @@ obj/effect/liquid/proc/update_icon2()
 			icon_state = "5"
 		if(40 to 50)
 			icon_state = "6"
-		if(50 to INFINITY)
+		if(50 to POS_INF)
 			icon_state = "7"
 
 turf/proc/can_accept_liquid(from_direction)

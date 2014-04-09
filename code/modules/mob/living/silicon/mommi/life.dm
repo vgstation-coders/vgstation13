@@ -164,7 +164,7 @@
 	if (src.healths)
 		if (src.stat != 2)
 			switch(health)
-				if(60 to INFINITY)
+				if(60 to POS_INF)
 					src.healths.icon_state = "health0"
 				if(40 to 60)
 					src.healths.icon_state = "health1"
@@ -199,7 +199,7 @@
 		if (src.cell)
 			var/cellcharge = src.cell.charge/src.cell.maxcharge
 			switch(cellcharge)
-				if(0.75 to INFINITY)
+				if(0.75 to POS_INF)
 					src.cells.icon_state = "charge4"
 				if(0.5 to 0.75)
 					src.cells.icon_state = "charge3"
@@ -214,7 +214,7 @@
 
 	if(bodytemp)
 		switch(src.bodytemperature) //310.055 optimal body temp
-			if(335 to INFINITY)
+			if(335 to POS_INF)
 				src.bodytemp.icon_state = "temp2"
 			if(320 to 335)
 				src.bodytemp.icon_state = "temp1"

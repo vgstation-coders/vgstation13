@@ -118,7 +118,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 				dat += "<A href='?src=\ref[src];make=\ref[t]'>[title]</A>"
 				if (istype(t, /obj/item/stack))
 					var/obj/item/stack/S = t
-					var/max_multiplier = min(S.max_amount, S.m_amt?round(m_amount/S.m_amt):INFINITY, S.g_amt?round(g_amount/S.g_amt):INFINITY)
+					var/max_multiplier = min(S.max_amount, S.m_amt?round(m_amount/S.m_amt):POS_INF, S.g_amt?round(g_amount/S.g_amt):POS_INF)
 					if (max_multiplier>1)
 						dat += " |"
 					if (max_multiplier>10)

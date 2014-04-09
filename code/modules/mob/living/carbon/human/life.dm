@@ -564,7 +564,7 @@
 					fire_alert = max(fire_alert, 1)
 			if(dna.mutantrace != "slime")
 				switch(breath.temperature)
-					if(-INFINITY to species.cold_level_3)
+					if(NEG_INF to species.cold_level_3)
 						apply_damage(COLD_GAS_DAMAGE_LEVEL_3, BURN, "head", used_weapon = "Excessive Cold")
 						fire_alert = max(fire_alert, 1)
 					if(species.cold_level_3 to species.cold_level_2)
@@ -579,7 +579,7 @@
 					if(species.heat_level_2 to species.heat_level_3)
 						apply_damage(HEAT_GAS_DAMAGE_LEVEL_2, BURN, "head", used_weapon = "Excessive Heat")
 						fire_alert = max(fire_alert, 2)
-					if(species.heat_level_3 to INFINITY)
+					if(species.heat_level_3 to POS_INF)
 						apply_damage(HEAT_GAS_DAMAGE_LEVEL_3, BURN, "head", used_weapon = "Excessive Heat")
 						fire_alert = max(fire_alert, 2)
 
@@ -636,7 +636,7 @@
 					if(400 to 1000)
 						apply_damage(HEAT_DAMAGE_LEVEL_2, BURN, used_weapon = "High Body Temperature")
 						fire_alert = max(fire_alert, 2)
-					if(1000 to INFINITY)
+					if(1000 to POS_INF)
 						apply_damage(HEAT_DAMAGE_LEVEL_3, BURN, used_weapon = "High Body Temperature")
 						fire_alert = max(fire_alert, 2)
 			else
@@ -657,7 +657,7 @@
 						if(120 to 200)
 							apply_damage(COLD_DAMAGE_LEVEL_2, BURN, used_weapon = "Low Body Temperature")
 							fire_alert = max(fire_alert, 1)
-						if(-INFINITY to 120)
+						if(NEG_INF to 120)
 							apply_damage(COLD_DAMAGE_LEVEL_3, BURN, used_weapon = "Low Body Temperature")
 							fire_alert = max(fire_alert, 1)
 
@@ -723,7 +723,7 @@
 		if (abs(body_temperature_difference) < 0.01)
 			return //fuck this precision
 		switch(bodytemperature)
-			if(-INFINITY to 260.15) //260.15 is 310.15 - 50, the temperature where you start to feel effects.
+			if(NEG_INF to 260.15) //260.15 is 310.15 - 50, the temperature where you start to feel effects.
 				if(nutrition >= 2) //If we are very, very cold we'll use up quite a bit of nutriment to heat us up.
 					nutrition -= 2
 				var/recovery_amt = max((body_temperature_difference / BODYTEMP_AUTORECOVERY_DIVISOR), BODYTEMP_AUTORECOVERY_MINIMUM)
@@ -733,7 +733,7 @@
 				var/recovery_amt = body_temperature_difference / BODYTEMP_AUTORECOVERY_DIVISOR
 //				log_debug("Norm. Difference = [body_temperature_difference]. Recovering [recovery_amt]")
 				bodytemperature += recovery_amt
-			if(360.15 to INFINITY) //360.15 is 310.15 + 50, the temperature where you start to feel effects.
+			if(360.15 to POS_INF) //360.15 is 310.15 + 50, the temperature where you start to feel effects.
 				//We totally need a sweat system cause it totally makes sense...~
 				var/recovery_amt = min((body_temperature_difference / BODYTEMP_AUTORECOVERY_DIVISOR), -BODYTEMP_AUTORECOVERY_MINIMUM)	//We're dealing with negative numbers
 //				log_debug("Hot. Difference = [body_temperature_difference]. Recovering [recovery_amt]")
@@ -1209,7 +1209,7 @@
 						I = image("icon" = 'icons/mob/screen1_full.dmi', "icon_state" = "passage8")
 					if(-95 to -90)
 						I = image("icon" = 'icons/mob/screen1_full.dmi', "icon_state" = "passage9")
-					if(-INFINITY to -95)
+					if(NEG_INF to -95)
 						I = image("icon" = 'icons/mob/screen1_full.dmi', "icon_state" = "passage10")
 				damageoverlay.overlays += I
 		else
@@ -1229,7 +1229,7 @@
 						I = image("icon" = 'icons/mob/screen1_full.dmi', "icon_state" = "oxydamageoverlay5")
 					if(40 to 45)
 						I = image("icon" = 'icons/mob/screen1_full.dmi', "icon_state" = "oxydamageoverlay6")
-					if(45 to INFINITY)
+					if(45 to POS_INF)
 						I = image("icon" = 'icons/mob/screen1_full.dmi', "icon_state" = "oxydamageoverlay7")
 				damageoverlay.overlays += I
 
@@ -1249,7 +1249,7 @@
 						I = image("icon" = 'icons/mob/screen1_full.dmi', "icon_state" = "brutedamageoverlay4")
 					if(70 to 85)
 						I = image("icon" = 'icons/mob/screen1_full.dmi', "icon_state" = "brutedamageoverlay5")
-					if(85 to INFINITY)
+					if(85 to POS_INF)
 						I = image("icon" = 'icons/mob/screen1_full.dmi', "icon_state" = "brutedamageoverlay6")
 				damageoverlay.overlays += I
 
@@ -1346,7 +1346,7 @@
 						else
 							switch(health - halloss)
 							//switch(100 - ((species && species.flags & NO_PAIN) ? 0 : traumatic_shock))
-								if(100 to INFINITY)		healths.icon_state = "health0"
+								if(100 to POS_INF)		healths.icon_state = "health0"
 								if(80 to 100)			healths.icon_state = "health1"
 								if(60 to 80)			healths.icon_state = "health2"
 								if(40 to 60)			healths.icon_state = "health3"
@@ -1356,7 +1356,7 @@
 
 			if(nutrition_icon)
 				switch(nutrition)
-					if(450 to INFINITY)				nutrition_icon.icon_state = "nutrition0"
+					if(450 to POS_INF)				nutrition_icon.icon_state = "nutrition0"
 					if(350 to 450)					nutrition_icon.icon_state = "nutrition1"
 					if(250 to 350)					nutrition_icon.icon_state = "nutrition2"
 					if(150 to 250)					nutrition_icon.icon_state = "nutrition3"
@@ -1383,7 +1383,7 @@
 
 			if(bodytemp)
 				switch(bodytemperature) //310.055 optimal body temp
-					if(370 to INFINITY)		bodytemp.icon_state = "temp4"
+					if(370 to POS_INF)		bodytemp.icon_state = "temp4"
 					if(350 to 370)			bodytemp.icon_state = "temp3"
 					if(335 to 350)			bodytemp.icon_state = "temp2"
 					if(320 to 335)			bodytemp.icon_state = "temp1"

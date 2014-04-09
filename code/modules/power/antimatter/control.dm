@@ -274,7 +274,7 @@
 			icon_mod="fuck"
 		if(25 to 49)
 			icon_mod="critical"
-		if(50 to INFINITY)
+		if(50 to POS_INF)
 			icon_mod="on"
 	if(icon_mod!=old_icon_mod)
 		old_icon_mod=icon_mod

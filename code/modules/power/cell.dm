@@ -153,7 +153,7 @@
 
 /obj/item/weapon/cell/proc/get_electrocute_damage()
 	switch (charge)
-/*		if (9000 to INFINITY)
+/*		if (9000 to POS_INF)
 			return min(rand(90,150),rand(90,150))
 		if (2500 to 9000-1)
 			return min(rand(70,145),rand(70,145))
@@ -167,7 +167,7 @@
 			return min(rand(20,80),rand(20,80))
 		if (100 to 250-1)
 			return min(rand(20,65),rand(20,65))*/
-		if (1000000 to INFINITY)
+		if (1000000 to POS_INF)
 			return min(rand(50,160),rand(50,160))
 		if (200000 to 1000000-1)
 			return min(rand(25,80),rand(25,80))

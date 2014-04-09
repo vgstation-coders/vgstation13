@@ -27,7 +27,7 @@
 		if (healths)
 			if (stat != 2)
 				switch(health)
-					if(250 to INFINITY)
+					if(250 to POS_INF)
 						healths.icon_state = "health0"
 					if(150 to 250)
 						healths.icon_state = "health1"

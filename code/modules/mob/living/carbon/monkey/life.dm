@@ -407,7 +407,7 @@
 		var/pressure = environment.return_pressure()
 		var/adjusted_pressure = calculate_affecting_pressure(pressure) //Returns how much pressure actually affects the mob.
 		switch(adjusted_pressure)
-			if(HAZARD_HIGH_PRESSURE to INFINITY)
+			if(HAZARD_HIGH_PRESSURE to POS_INF)
 				adjustBruteLoss( min( ( (adjusted_pressure / HAZARD_HIGH_PRESSURE) -1 )*PRESSURE_DAMAGE_COEFFICIENT , MAX_HIGH_PRESSURE_DAMAGE) )
 				pressure_alert = 2
 			if(WARNING_HIGH_PRESSURE to HAZARD_HIGH_PRESSURE)
@@ -583,7 +583,7 @@
 		if (healths)
 			if (stat != 2)
 				switch(health)
-					if(100 to INFINITY)
+					if(100 to POS_INF)
 						healths.icon_state = "health0"
 					if(80 to 100)
 						healths.icon_state = "health1"
@@ -615,7 +615,7 @@
 
 		if(bodytemp)
 			switch(bodytemperature) //310.055 optimal body temp
-				if(345 to INFINITY)
+				if(345 to POS_INF)
 					bodytemp.icon_state = "temp4"
 				if(335 to 345)
 					bodytemp.icon_state = "temp3"

@@ -559,7 +559,7 @@ datum
 						M.eye_blurry = max(M.eye_blurry, 10)
 					if(15 to 25)
 						M.drowsyness  = max(M.drowsyness, 20)
-					if(25 to INFINITY)
+					if(25 to POS_INF)
 						M.Paralyse(20)
 						M.drowsyness  = max(M.drowsyness, 30)
 				data++
@@ -586,7 +586,7 @@ datum
 						M.eye_blurry = max(M.eye_blurry, 10)
 					if(15 to 25)
 						M.drowsyness  = max(M.drowsyness, 20)
-					if(25 to INFINITY)
+					if(25 to POS_INF)
 						M.sleeping += 1
 						M.adjustOxyLoss(-M.getOxyLoss())
 						M.SetWeakened(0)
@@ -1910,7 +1910,7 @@ datum
 						M.adjustCloneLoss(-2)
 						M.heal_organ_damage(2,1)
 						M.status_flags &= ~DISFIGURED
-					if(35 to INFINITY)
+					if(35 to POS_INF)
 						M.adjustToxLoss(1)
 						M.make_dizzy(5)
 						M.make_jittery(5)
@@ -2149,7 +2149,7 @@ datum
 						M.drowsyness += 2
 					if(2 to 50)
 						M.sleeping += 1
-					if(51 to INFINITY)
+					if(51 to POS_INF)
 						M.sleeping += 1
 						M:toxloss += (data - 50)
 				..()
@@ -2172,7 +2172,7 @@ datum
 						M.drowsyness += 2
 					if(2 to 50)
 						M.sleeping += 1
-					if(51 to INFINITY)
+					if(51 to POS_INF)
 						M.sleeping += 1
 						M.adjustToxLoss(data - 50)
 				data++
@@ -2272,7 +2272,7 @@ datum
 							M.bodytemperature += rand(10,20)
 						if(M.dna.mutantrace == "slime")
 							M.bodytemperature += rand(10,20)
-					if(25 to INFINITY)
+					if(25 to POS_INF)
 						M.bodytemperature += 15 * TEMPERATURE_DAMAGE_COEFFICIENT
 						if(istype(M, /mob/living/carbon/slime))
 							M.bodytemperature += rand(15,20)
@@ -2370,7 +2370,7 @@ datum
 							M.bodytemperature -= rand(10,20)
 						if(M.dna.mutantrace == "slime")
 							M.bodytemperature -= rand(10,20)
-					if(25 to INFINITY)
+					if(25 to POS_INF)
 						M.bodytemperature -= 15 * TEMPERATURE_DAMAGE_COEFFICIENT
 						if(prob(1)) M.emote("shiver")
 						if(istype(M, /mob/living/carbon/slime))
@@ -2464,7 +2464,7 @@ datum
 						M.make_dizzy(10)
 						M.druggy = max(M.druggy, 35)
 						if(prob(20)) M.emote(pick("twitch","giggle"))
-					if (10 to INFINITY)
+					if (10 to POS_INF)
 						if (!M.stuttering) M.stuttering = 1
 						M.make_jittery(20)
 						M.make_dizzy(20)
@@ -2720,7 +2720,7 @@ datum
 					switch(data)
 						if(1 to 20)
 							//nothing
-						if(21 to INFINITY)
+						if(21 to POS_INF)
 							if (prob(data-10))
 								M.disabilities &= ~NEARSIGHTED
 					data++
@@ -3019,7 +3019,7 @@ datum
 									M.bodytemperature -= rand(10,20)
 								if(M.dna.mutantrace == "slime")
 									M.bodytemperature -= rand(10,20)
-							if(25 to INFINITY)
+							if(25 to POS_INF)
 								M.bodytemperature -= 15 * TEMPERATURE_DAMAGE_COEFFICIENT
 								if(prob(1)) M.emote("shiver")
 								if(istype(M, /mob/living/carbon/slime))
@@ -3064,7 +3064,7 @@ datum
 						M.make_dizzy(20)
 						M.druggy = max(M.druggy, 45)
 						if(prob(20)) M.emote(pick("twitch","giggle"))
-					if (10 to INFINITY)
+					if (10 to POS_INF)
 						if (!M.stuttering) M.stuttering = 1
 						M.make_jittery(40)
 						M.make_dizzy(40)

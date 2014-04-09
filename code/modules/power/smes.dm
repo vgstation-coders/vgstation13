@@ -380,8 +380,8 @@
 	name = "magical power storage unit"
 	desc = "A high-capacity superconducting magnetic energy storage (SMES) unit. Magically produces power."
 	process()
-		capacity = INFINITY
-		charge = INFINITY
+		capacity = POS_INF
+		charge = POS_INF
 		..()
 
 

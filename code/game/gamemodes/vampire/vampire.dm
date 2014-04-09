@@ -480,7 +480,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 				src << "\red Your skin flakes away..."
 			if(60 to 80)
 				src << "<span class='warning'>Your skin sizzles!</span>"
-			if((-INFINITY) to 60)
+			if((NEG_INF) to 60)
 				if(!on_fire)
 					src << "<b>\red Your skin catches fire!</b>"
 				else
@@ -490,7 +490,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		emote("scream")
 	else
 		switch(health)
-			if((-INFINITY) to 60)
+			if((NEG_INF) to 60)
 				fire_stacks++
 				IgniteMob()
 	adjustFireLoss(3)

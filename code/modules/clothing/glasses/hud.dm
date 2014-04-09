@@ -20,7 +20,7 @@
 
 	RoundHealth(health)
 		switch(health)
-			if(100 to INFINITY)
+			if(100 to POS_INF)
 				return "health100"
 			if(70 to 100)
 				return "health80"

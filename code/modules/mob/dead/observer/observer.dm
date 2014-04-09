@@ -142,7 +142,7 @@ Works together with spawning an observer, noted above.
 // Direct copied from medical HUD glasses proc, used to determine what health bar to put over the targets head.
 /mob/dead/proc/RoundHealth(var/health)
 	switch(health)
-		if(100 to INFINITY)
+		if(100 to POS_INF)
 			return "health100"
 		if(70 to 100)
 			return "health80"
