@@ -218,19 +218,19 @@
 			else if(istype(object,/turf) && pa.Find("ctrl") && pa.Find("left"))
 				switch(holder.builddir.dir)
 					if(NORTH)
-						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
+						var/obj/structure/window/reinforced/WIN = getFromPool(/obj/structure/window/reinforced, get_turf(object))
 						WIN.dir = NORTH
 					if(SOUTH)
-						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
+						var/obj/structure/window/reinforced/WIN = getFromPool(/obj/structure/window/reinforced, get_turf(object))
 						WIN.dir = SOUTH
 					if(EAST)
-						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
+						var/obj/structure/window/reinforced/WIN = getFromPool(/obj/structure/window/reinforced, get_turf(object))
 						WIN.dir = EAST
 					if(WEST)
-						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
+						var/obj/structure/window/reinforced/WIN = getFromPool(/obj/structure/window/reinforced, get_turf(object))
 						WIN.dir = WEST
 					if(SOUTHWEST)
-						new/obj/structure/window/full/reinforced(get_turf(object))
+						getFromPool(/obj/structure/window/full/reinforced, get_turf(object))
 		if(2)
 			if(pa.Find("left"))
 				if(ispath(holder.buildmode.objholder,/turf))
