@@ -421,9 +421,10 @@
 	health = 30
 
 /obj/structure/window/resetVariables()
-	state = initial(state)
-	dir = initial(dir)
-	ini_dir = initial(ini_dir)
 	anchored = initial(anchored)
+	dir = initial(dir)
+	health = initial(health)
+	ini_dir = initial(ini_dir)
+	state = initial(state)
 
 	return ..()

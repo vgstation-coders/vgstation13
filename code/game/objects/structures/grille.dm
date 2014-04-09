@@ -225,6 +225,7 @@
 	..()
 
 /obj/structure/grille/resetVariables()
+	anchored = initial(anchored)
 	density = initial(density)
 	icon_state = initial(icon_state)
 	destroyed = initial(destroyed)
