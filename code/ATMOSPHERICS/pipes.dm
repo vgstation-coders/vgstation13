@@ -22,15 +22,24 @@
 	use_power = 0
 	var/alert_pressure = 80*ONE_ATMOSPHERE
 	var/baseicon=""
-	var/list/available_colors = list(
-		"grey"=PIPE_COLOR_GREY,
-		"red"=PIPE_COLOR_RED,
-		"blue"=PIPE_COLOR_BLUE,
-		"cyan"=PIPE_COLOR_CYAN,
-		"green"=PIPE_COLOR_GREEN,
-		"yellow"=PIPE_COLOR_YELLOW,
-		"purple"=PIPE_COLOR_PURPLE
-	)
+
+/obj/machinery/atmospherics/pipe/proc/getAvailableColors(c)
+	var/list/cl = list(\
+		"grey"=PIPE_COLOR_GREY,\
+		"red"=PIPE_COLOR_RED,\
+		"blue"=PIPE_COLOR_BLUE,\
+		"cyan"=PIPE_COLOR_CYAN,\
+		"green"=PIPE_COLOR_GREEN,\
+		"yellow"=PIPE_COLOR_YELLOW,\
+		"purple"=PIPE_COLOR_PURPLE)
+
+	if (c)
+		if (c in cl)
+			return cl[c]
+		else
+			return
+	else
+		return cl
 
 /obj/machinery/atmospherics/pipe/proc/pipeline_expansion()
 	return null
@@ -229,7 +238,7 @@
 
 /obj/machinery/atmospherics/pipe/simple/update_icon()
 	alpha = invisibility ? 128 : 255
-	color = available_colors[_color]
+	color = getAvailableColors(_color)
 	if(node1&&node2)
 		icon_state = "intact"
 
@@ -339,11 +348,21 @@
 	maximum_pressure = 1000*ONE_ATMOSPHERE
 	fatigue_pressure = 900*ONE_ATMOSPHERE
 	alert_pressure = 900*ONE_ATMOSPHERE
-	available_colors = list(
-		"red"=IPIPE_COLOR_RED,
-		"blue"=IPIPE_COLOR_BLUE
-	)
 	_color = "red"
+
+/obj/machinery/atmospherics/pipe/simple/insulated/getAvailableColors(c)
+	var/list/cl = list(\
+		"red"=IPIPE_COLOR_RED,\
+		"blue"=IPIPE_COLOR_BLUE)
+
+	if (c)
+		if (c in cl)
+			return cl[c]
+		else
+			return
+	else
+		return cl
+
 /obj/machinery/atmospherics/pipe/simple/insulated/visible
 	icon_state = "intact"
 	level = 2
@@ -749,7 +768,7 @@
 
 /obj/machinery/atmospherics/pipe/manifold/update_icon()
 	alpha = invisibility ? 128 : 255
-	color = available_colors[_color]
+	color = getAvailableColors(_color)
 	overlays = 0
 	if(node1&&node2&&node3)
 		icon_state="manifold"
@@ -815,10 +834,20 @@
 	icon_state = "manifold"
 	alert_pressure = 900*ONE_ATMOSPHERE
 	level = 2
-	available_colors = list(
-		"red"=IPIPE_COLOR_RED,
-		"blue"=IPIPE_COLOR_BLUE
-	)
+
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/getAvailableColors(c)
+	var/list/cl =  list(\
+		"red"=IPIPE_COLOR_RED,\
+		"blue"=IPIPE_COLOR_BLUE)
+
+	if (c)
+		if (c in cl)
+			return cl[c]
+		else
+			return
+	else
+		return cl
+
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/visible
 	level = 2
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden
@@ -990,7 +1019,7 @@
 /obj/machinery/atmospherics/pipe/manifold4w/update_icon()
 	overlays=0
 	alpha = invisibility ? 128 : 255
-	color = available_colors[_color]
+	color = getAvailableColors(_color)
 	if(node1&&node2&&node3&&node4)
 		icon_state = "[baseicon]"
 	else
@@ -1051,10 +1080,20 @@
 	alert_pressure = 900*ONE_ATMOSPHERE
 	color=IPIPE_COLOR_RED
 	level = 2
-	available_colors = list(
-		"red"=IPIPE_COLOR_RED,
-		"blue"=IPIPE_COLOR_BLUE
-	)
+
+/obj/machinery/atmospherics/pipe/manifold4w/scrubbers/getAvailableColors(c)
+	var/list/cl = list(\
+		"red"=IPIPE_COLOR_RED,\
+		"blue"=IPIPE_COLOR_BLUE)
+
+	if (c)
+		if (c in cl)
+			return cl[c]
+		else
+			return
+	else
+		return cl
+
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/visible
 	level = 2
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden
@@ -1171,7 +1210,7 @@
 /obj/machinery/atmospherics/pipe/cap/update_icon()
 	overlays = 0
 	alpha = invisibility ? 128 : 255
-	color = available_colors[_color]
+	color = getAvailableColors(_color)
 	icon_state = "cap"
 	return
 
