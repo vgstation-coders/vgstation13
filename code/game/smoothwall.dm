@@ -9,13 +9,13 @@
 	var/junction = 0 //will be used to determine from which side the wall is connected to other walls
 
 	if(!istype(src,/turf/simulated/shuttle/wall)) //or else we'd have wacky shuttle merging with walls action
-		for(var/turf/simulated/wall/W in orange(src,1))
+		for(var/turf/simulated/wall/W in oview(src,1))
 			if(abs(src.x-W.x)-abs(src.y-W.y)) //doesn't count diagonal walls
 				junction |= get_dir(src,W)
-		for(var/obj/structure/falsewall/W in orange(src,1))
+		for(var/obj/structure/falsewall/W in oview(src,1))
 			if(abs(src.x-W.x)-abs(src.y-W.y)) //doesn't count diagonal walls
 				junction |= get_dir(src,W)
-		for(var/obj/structure/falserwall/W in orange(src,1))
+		for(var/obj/structure/falserwall/W in oview(src,1))
 			if(abs(src.x-W.x)-abs(src.y-W.y)) //doesn't count diagonal walls
 				junction |= get_dir(src,W)
 
@@ -78,12 +78,12 @@
 	return
 
 /atom/proc/relativewall_neighbours()
-	for(var/turf/simulated/wall/W in range(src,1))
+	for(var/turf/simulated/wall/W in view(src,1))
 		W.relativewall()
-	for(var/obj/structure/falsewall/W in range(src,1))
+	for(var/obj/structure/falsewall/W in view(src,1))
 		W.relativewall()
 		W.update_icon()//Refreshes the wall to make sure the icons don't desync
-	for(var/obj/structure/falserwall/W in range(src,1))
+	for(var/obj/structure/falserwall/W in view(src,1))
 		W.relativewall()
 	return
 
