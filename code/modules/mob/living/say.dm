@@ -136,7 +136,7 @@ var/list/department_radio_keys = list(
 	*/
 
 	var/italics = 0
-	var/message_range = 0
+	var/message_range = 7
 	var/message_mode = null
 	var/datum/language/speaking = null //For use if a specific language is being spoken.
 

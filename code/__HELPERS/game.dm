@@ -165,7 +165,7 @@
 		CRASH("2nd argument must be an obj or mob, value : [center]")
 
 	if (!isnum(rmb))
-		CRASH("2nd argument must be a num, value : [rmb]")
+		CRASH("3rd argument must be a num, value : [rmb]")
 
 	var/turf/T = get_turf(center)
 
