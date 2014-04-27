@@ -121,7 +121,7 @@
 			environment = loc.return_air()
 
 		var/env_pressure = environment.return_pressure()
-		var/pressure_delta = min(release_pressure - env_pressure, (air_contents.return_pressure() - env_pressure)/2)
+		var/pressure_delta = min(release_pressure - env_pressure, (air_contents.return_pressure() - env_pressure) >> 1)
 		//Can not have a pressure delta that would cause environment pressure > tank pressure
 
 		var/transfer_moles = 0

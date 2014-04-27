@@ -213,10 +213,10 @@ datum/gas_mixture/proc/zburn(obj/effect/decal/cleanable/liquid_fuel/liquid, forc
 		var/starting_energy = temperature * heat_capacity()
 
 		//determine the amount of oxygen used
-		var/total_oxygen = min(oxygen, 2 * total_fuel)
+		var/total_oxygen = min(oxygen, total_fuel << 1)
 
 		//determine the amount of fuel actually used
-		var/used_fuel_ratio = min(oxygen / 2 , total_fuel) / total_fuel
+		var/used_fuel_ratio = min(oxygen >> 1 , total_fuel) / total_fuel
 		total_fuel = total_fuel * used_fuel_ratio
 
 		var/total_reactants = total_fuel + total_oxygen
@@ -231,7 +231,7 @@ datum/gas_mixture/proc/zburn(obj/effect/decal/cleanable/liquid_fuel/liquid, forc
 		if(toxins < 0)
 			toxins = 0
 
-		carbon_dioxide += max(2 * total_fuel, 0)
+		carbon_dioxide += max(total_fuel << 1, 0)
 
 		if(fuel)
 			fuel.moles -= (fuel.moles * used_fuel_ratio * used_reactants_ratio) * 5 //Fuel burns 5 times as quick
