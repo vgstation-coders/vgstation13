@@ -35,12 +35,12 @@
 
 		if(reinf)
 			new /obj/item/stack/rods(loc)
-	qdel(src)
+	returnToPool(src)
 
 /obj/structure/window/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			qdel(src)
+			returnToPool(src)
 			return
 		if(2.0)
 			destroy()
@@ -425,3 +425,12 @@
 	icon_state = "fwindow"
 	basestate = "fwindow"
 	health = 30
+
+/obj/structure/window/resetVariables()
+	anchored = initial(anchored)
+	dir = initial(dir)
+	health = initial(health)
+	ini_dir = initial(ini_dir)
+	state = initial(state)
+
+	return ..()

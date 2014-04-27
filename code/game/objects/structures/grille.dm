@@ -156,9 +156,9 @@
 					return
 			var/obj/structure/window/WD
 			if(istype(W,/obj/item/stack/sheet/rglass))
-				WD = new/obj/structure/window/reinforced(loc,1) //reinforced window
+				WD = getFromPool(/obj/structure/window/reinforced, loc) //reinforced window
 			else
-				WD = new/obj/structure/window/basic(loc,0) //normal window
+				WD = getFromPool(/obj/structure/window/basic, loc) //normal window
 			WD.dir = dir_to_set
 			WD.ini_dir = dir_to_set
 			WD.anchored = 0
@@ -228,6 +228,7 @@
 	..()
 
 /obj/structure/grille/resetVariables()
+	anchored = initial(anchored)
 	density = initial(density)
 	icon_state = initial(icon_state)
 	destroyed = initial(destroyed)

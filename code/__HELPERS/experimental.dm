@@ -61,7 +61,15 @@ var/list/masterPool
 	initializePool(list(\
 		/obj/item/weapon/shard,\
 		/obj/item/weapon/shard/plasma,\
-		/obj/structure/grille))
+		/obj/structure/grille,\
+		/obj/structure/window/basic,\
+		/obj/structure/window/full/basic,\
+		/obj/structure/window/reinforced,\
+		/obj/structure/window/full/reinforced,\
+		/obj/structure/window/plasmabasic,\
+		/obj/structure/window/full/plasmabasic,\
+		/obj/structure/window/plasmareinforced,\
+		/obj/structure/window/full/plasmareinforced))
 
 	world << "\red \b Object Pool Creation Complete!"
 
@@ -115,7 +123,7 @@ var/list/masterPool
 	masterPool[A] -= Object
 
 	#if DEBUG_OBJECT_POOL
-	world << "DEBUG_OBJECT_POOL: getFromPool([A]) [length(masterPool[A])]"
+	world << "DEBUG_OBJECT_POOL: getFromPool([A]) [length(masterPool[A])] left."
 	#endif
 
 	if (0 == length(masterPool[A]))
@@ -153,7 +161,7 @@ var/list/masterPool
 	masterPool[Object.type] += Object
 
 	#if DEBUG_OBJECT_POOL
-	world << "DEBUG_OBJECT_POOL: returnToPool([Object.type]) [length(masterPool[Object.type])]"
+	world << "DEBUG_OBJECT_POOL: returnToPool([Object.type]) [length(masterPool[Object.type])] left."
 	#endif
 
 #undef DEBUG_OBJECT_POOL

@@ -90,8 +90,7 @@
 				if(!found)
 					dir_to_set = direction
 					break
-			var/obj/structure/window/W
-			W = new created_window( user.loc, 0 )
+			var/obj/structure/window/W = getFromPool(created_window, user.loc)
 			W.dir = dir_to_set
 			W.ini_dir = W.dir
 			W.anchored = 0
@@ -105,11 +104,10 @@
 			if(locate(/obj/structure/window/full) in user.loc)
 				user << "\red There is a full window in the way."
 				return 1
-			var/obj/structure/window/W = new full_window( user.loc, 0 )
+			var/obj/structure/window/W = getFromPool(full_window, user.loc)
 			W.anchored = 0
 			src.use(2)
 	return 0
-
 
 /*
  * Reinforced glass sheets
@@ -170,8 +168,7 @@
 					dir_to_set = direction
 					break
 
-			var/obj/structure/window/W
-			W = new /obj/structure/window/reinforced( user.loc, 1 )
+			var/obj/structure/window/W = getFromPool(/obj/structure/window/reinforced, user.loc)
 			W.state = 0
 			W.dir = dir_to_set
 			W.ini_dir = W.dir
@@ -187,8 +184,7 @@
 			if(locate(/obj/structure/window/full) in user.loc)
 				user << "\red There is a window in the way."
 				return 1
-			var/obj/structure/window/W
-			W = new /obj/structure/window/reinforced( user.loc, 1 )
+			var/obj/structure/window/W = getFromPool(/obj/structure/window/reinforced, user.loc)
 			W.state = 0
 			W.dir = SOUTHWEST
 			W.ini_dir = SOUTHWEST
