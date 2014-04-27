@@ -256,7 +256,7 @@
 
 		//world << "\blue Exploding Pressure: [pressure] kPa, intensity: [range]"
 
-		explosion(epicenter, round(range*0.25), round(range*0.5), round(range), round(range*1.5), 1, cap)
+		explosion(epicenter, range >> 2, range >> 1, round(range), round(range*1.5), 1, cap)
 		if(cap)
 			for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
 				if(bhangmeter)
