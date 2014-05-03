@@ -236,17 +236,17 @@
 	if (src.lasers)
 		switch(lasertype)
 			if(1)
-				A = new /obj/item/projectile/beam( loc )
+				A = getFromPool(/obj/item/projectile/beam, loc)
 			if(2)
-				A = new /obj/item/projectile/beam/heavylaser( loc )
+				A = getFromPool(/obj/item/projectile/beam/heavylaser, loc)
 			if(3)
-				A = new /obj/item/projectile/beam/pulse( loc )
+				A = getFromPool(/obj/item/projectile/beam/pulse, loc)
 			if(4)
-				A = new /obj/item/projectile/change( loc )
+				A = getFromPool(/obj/item/projectile/change, loc)
 			if(5)
-				A = new /obj/item/projectile/beam/lastertag/blue( loc )
+				A = getFromPool(/obj/item/projectile/beam/lastertag/blue, loc)
 			if(6)
-				A = new /obj/item/projectile/beam/lastertag/red( loc )
+				A = getFromPool(/obj/item/projectile/beam/lastertag/red, loc)
 		A.original = target
 		use_power(500)
 	else
@@ -298,6 +298,7 @@
 	return
 
 /obj/machinery/turret/attackby(obj/item/weapon/W, mob/user)//I can't believe no one added this before/N
+	user.changeNext_move(10)
 	..()
 	playsound(get_turf(src), 'sound/weapons/smash.ogg', 60, 1)
 	src.spark_system.start()
