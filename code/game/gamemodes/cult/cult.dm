@@ -316,6 +316,7 @@
 							feedback_add_details("cult_objective","cult_sacrifice|FAIL|GIBBED")
 					else
 						explanation = "Free objective."
+						feedback_add_details("cult_objective","cult_narsie|SUCCESS")
 				if("eldergod")
 					if(!eldergod)
 						explanation = "Summon Nar-Sie. <font color='green'><B>Success!</B></font>"
