@@ -314,6 +314,8 @@
 						else
 							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role]. <font color='red'>Fail (Gibbed).</font>"
 							feedback_add_details("cult_objective","cult_sacrifice|FAIL|GIBBED")
+					else
+						explanation = "Free objective."
 				if("eldergod")
 					if(!eldergod)
 						explanation = "Summon Nar-Sie. <font color='green'><B>Success!</B></font>"
