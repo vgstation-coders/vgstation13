@@ -48,7 +48,7 @@
 			if(particle_type && particle_type != "neutron")
 				if(collided_catcher.AddParticles(particle_type, 1 + additional_particles))
 					collided_catcher.parent.AddEnergy(energy,mega_energy)
-					del (src)
+					loc = null
 		else if( istype(A,/obj/machinery/power/rust_core) )
 			var/obj/machinery/power/rust_core/collided_core = A
 			if(particle_type && particle_type != "neutron")
@@ -56,7 +56,7 @@
 					var/energy_loss_ratio = abs(collided_core.owned_field.frequency - frequency) / 1e9
 					collided_core.owned_field.mega_energy += mega_energy - mega_energy * energy_loss_ratio
 					collided_core.owned_field.energy += energy - energy * energy_loss_ratio
-					del (src)
+					loc = null
 	return
 
 
@@ -67,7 +67,7 @@
 
 
 /obj/effect/accelerated_particle/ex_act(severity)
-	del(src)
+	loc = null
 	return
 
 
@@ -101,7 +101,7 @@
 			src.loc = get_step(src,dir)
 	movement_range--
 	if(movement_range <= 0)
-		del(src)
+		loc = null
 	else
 		sleep(lag)
 		move(lag)
