@@ -88,7 +88,7 @@ mob/living/carbon/human/proc/handle_pain()
 		return
 	var/maxdam = 0
 	var/datum/organ/external/damaged_organ = null
-	for(var/datum/organ/external/E in organs)
+	for(var/datum/organ/external/E in externalOrgans)
 		// amputated limbs don't cause pain
 		if(E.amputated) continue
 		if(E.status & ORGAN_DEAD) continue
@@ -102,8 +102,7 @@ mob/living/carbon/human/proc/handle_pain()
 		pain(damaged_organ.display_name, maxdam, 0)
 
 	// Damage to internal organs hurts a lot.
-	for(var/organ_name in internal_organs)
-		var/datum/organ/internal/I = internal_organs[organ_name]
+	for(var/datum/organ/internal/I in internalOrgans)
 		if(I.damage > 2) if(prob(2))
 			var/datum/organ/external/parent = get_organ(I.parent_organ)
 			src.custom_pain("You feel a sharp pain in your [parent.display_name]", 1)

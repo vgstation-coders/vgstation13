@@ -328,7 +328,7 @@
 						<th>Other Wounds</th>
 						</tr>"}
 					// END AUTOFIX
-					for(var/datum/organ/external/e in occupant.organs)
+					for(var/datum/organ/external/e in occupant.externalOrgans)
 						dat += "<tr>"
 						var/AN = ""
 						var/open = ""
@@ -360,8 +360,7 @@
 						else
 							dat += "<td>[e.display_name]</td><td>-</td><td>-</td><td>Not Found</td>"
 						dat += "</tr>"
-					for(var/organ_name in occupant.internal_organs)
-						var/datum/organ/internal/i = occupant.internal_organs[organ_name]
+					for(var/datum/organ/internal/i in occupant.internalOrgans)
 
 						// AUTOFIXED BY fix_string_idiocy.py
 						// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\adv_med.dm:311: dat += "<tr>"

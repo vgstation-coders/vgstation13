@@ -181,7 +181,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 	// first check whether something actually changed about damage appearance
 	var/damage_appearance = ""
 
-	for(var/datum/organ/external/O in organs)
+	for(var/datum/organ/external/O in externalOrgans)
 		if(O.status & ORGAN_DESTROYED) damage_appearance += "d"
 		else
 			damage_appearance += O.damage_state
@@ -198,7 +198,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 
 
 	// blend the individual damage states with our icons
-	for(var/datum/organ/external/O in organs)
+	for(var/datum/organ/external/O in externalOrgans)
 		if(!(O.status & ORGAN_DESTROYED))
 			O.update_icon()
 			if(O.damage_state == "00") continue
@@ -241,7 +241,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 	if(head && !(head.status & ORGAN_DESTROYED))
 		has_head = 1
 
-	for(var/datum/organ/external/part in organs)
+	for(var/datum/organ/external/part in externalOrgans)
 		if(!istype(part, /datum/organ/external/chest) && !(part.status & ORGAN_DESTROYED))
 			var/icon/temp
 			if (istype(part, /datum/organ/external/groin) || istype(part, /datum/organ/external/head))

@@ -52,7 +52,7 @@ emp_act
 		//If a specific bodypart is targetted, check how that bodypart is protected and return the value.
 
 	//If you don't specify a bodypart, it checks ALL your bodyparts for protection, and averages out the values
-	for(var/datum/organ/external/organ in organs)
+	for(var/datum/organ/external/organ in externalOrgans)
 		armorval += checkarmor(organ, type)
 		organnum++
 	return (armorval/max(organnum, 1))
@@ -125,7 +125,7 @@ emp_act
 		if(h && istype(h))
 			if(h.holstered)
 				h.holstered.emp_act(severity)
-	for(var/datum/organ/external/O  in organs)
+	for(var/datum/organ/external/O  in externalOrgans)
 		if(O.status & ORGAN_DESTROYED)	continue
 		O.emp_act(severity)
 		for(var/datum/organ/internal/I  in O.internal_organs)
@@ -316,7 +316,7 @@ emp_act
 	var/update = 0
 
 	// focus most of the blast on one organ
-	var/datum/organ/external/take_blast = pick(organs)
+	var/datum/organ/external/take_blast = pick(externalOrgans)
 	update |= take_blast.take_damage(b_loss * 0.9, f_loss * 0.9, used_weapon = "Explosive blast")
 
 	// distribute the remaining 10% on all limbs equally
@@ -325,7 +325,7 @@ emp_act
 
 	var/weapon_message = "Explosive Blast"
 
-	for(var/datum/organ/external/temp in organs)
+	for(var/datum/organ/external/temp in externalOrgans)
 		switch(temp.name)
 			if("head")
 				update |= temp.take_damage(b_loss * 0.2, f_loss * 0.2, used_weapon = weapon_message)

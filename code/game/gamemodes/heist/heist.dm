@@ -109,7 +109,7 @@ VOX HEIST ROUNDTYPE
 		vox.add_language("Vox-pidgin")
 		vox.h_style = "Short Vox Quills"
 		vox.f_style = "Shaved"
-		for(var/datum/organ/external/limb in vox.organs)
+		for(var/datum/organ/external/limb in vox.externalOrgans)
 			limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT)
 		vox.equip_vox_raider()
 		vox.regenerate_icons()
@@ -165,7 +165,7 @@ VOX HEIST ROUNDTYPE
 	//-All- vox raids have these two objectives. Failing them loses the game.
 	objs += new /datum/objective/heist/inviolate_crew
 	objs += new /datum/objective/heist/inviolate_death */
-	
+
 	if(prob(25))
 		raid_objectives += new /datum/objective/heist/kidnap
 	raid_objectives += new /datum/objective/heist/loot

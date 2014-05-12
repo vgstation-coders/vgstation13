@@ -468,7 +468,7 @@ datum/objective/harm
 				return 0
 
 			var/mob/living/carbon/human/H = target.current
-			for(var/datum/organ/external/E in H.organs)
+			for(var/datum/organ/external/E in H.externalOrgans)
 				if(E.status & ORGAN_BROKEN)
 					already_completed = 1
 					return 1

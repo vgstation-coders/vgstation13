@@ -1344,8 +1344,8 @@ datum/preferences
 		// Destroy/cyborgize organs
 
 		for(var/name in organ_data)
-			var/datum/organ/external/O = character.organs_by_name[name]
-			var/datum/organ/internal/I = character.internal_organs_by_name[name]
+			var/datum/organ/external/O = character.externalOrgans[name]
+			var/datum/organ/internal/I = character.internalOrgans[name]
 			var/status = organ_data[name]
 
 			if(status == "amputated")
