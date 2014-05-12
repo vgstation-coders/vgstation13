@@ -1,6 +1,9 @@
 /****************************************************
 				EXTERNAL ORGANS
 ****************************************************/
+/mob/living/carbon/human
+	var/list/externalOrgans = list()
+
 /datum/organ/external
 	name = "external"
 	var/icon_name = null

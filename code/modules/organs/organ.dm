@@ -33,10 +33,6 @@
 	W.damage += damage
 	W.time_inflicted = world.time
 
-/mob/living/carbon/human/var/list/organs = list()
-/mob/living/carbon/human/var/list/organs_by_name = list() // map organ names to organs
-/mob/living/carbon/human/var/list/internal_organs_by_name = list() // so internal organs have less ickiness too
-
 // Takes care of organ related updates, such as broken and missing limbs
 /mob/living/carbon/human/proc/handle_organs()
 	number_wounds = 0
@@ -52,7 +48,7 @@
 		bad_external_organs.Cut()
 		for(var/datum/organ/external/Ex in organs)
 			bad_external_organs += Ex
-			
+
 	for(var/datum/organ/external/E in bad_external_organs)
 		if(!E)
 			continue
@@ -112,7 +108,7 @@
 			emote("scream")
 		emote("collapse")
 		paralysis = 10
-	
+
 	//Check arms and legs for existence
 	var/canstand_l = 1  //Can stand on left leg
 	var/canstand_r = 1  //Can stand on right leg

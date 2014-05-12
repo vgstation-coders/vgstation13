@@ -2,7 +2,8 @@
 				INTERNAL ORGANS
 ****************************************************/
 
-/mob/living/carbon/human/var/list/internal_organs = list()
+/mob/living/carbon/human
+	var/list/internalOrgans = list()
 
 /datum/organ/internal
 	// amount of damage to the organ
