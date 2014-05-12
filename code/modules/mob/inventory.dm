@@ -15,9 +15,9 @@
 /mob/proc/get_active_hand_organ()
 	if(!istype(src, /mob/living/carbon)) return
 	if (hasorgans(src))
-		var/datum/organ/external/temp = src:organs_by_name["r_hand"]
+		var/datum/organ/external/temp = src:externalOrgans["r_hand"]
 		if (hand)
-			temp = src:organs_by_name["l_hand"]
+			temp = src:externalOrgans["l_hand"]
 		return temp
 
 //Returns the thing in our inactive hand

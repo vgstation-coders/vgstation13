@@ -146,7 +146,7 @@
 		if(istype(mob, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = mob
 			var/organ = pick(list("r_arm","l_arm","r_leg","r_leg"))
-			var/datum/organ/external/E = H.organs_by_name[organ]
+			var/datum/organ/external/E = H.externalOrgans[organ]
 			if (!(E.status & ORGAN_DEAD))
 				E.status |= ORGAN_DEAD
 				H << "<span class='notice'>You can't feel your [E.display_name] anymore...</span>"
@@ -162,7 +162,7 @@
 	deactivate(var/mob/living/carbon/mob,var/multiplier)
 		if(istype(mob, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = mob
-			for (var/datum/organ/external/E in H.organs)
+			for (var/datum/organ/external/E in H.externalOrgans)
 				E.status &= ~ORGAN_DEAD
 				for (var/datum/organ/external/C in E.children)
 					C.status &= ~ORGAN_DEAD
@@ -174,7 +174,7 @@
 	activate(var/mob/living/carbon/mob,var/multiplier)
 		if(istype(mob, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = mob
-			for (var/datum/organ/external/E in H.organs)
+			for (var/datum/organ/external/E in H.externalOrgans)
 				if (E.status & ORGAN_BROKEN && prob(30))
 					E.status ^= ORGAN_BROKEN
 		var/heal_amt = -5*multiplier
@@ -196,13 +196,13 @@
 	activate(var/mob/living/carbon/mob,var/multiplier)
 		if(istype(mob, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = mob
-			for (var/datum/organ/external/E in H.organs)
+			for (var/datum/organ/external/E in H.externalOrgans)
 				E.min_broken_damage = max(5, E.min_broken_damage - 30)
 
 	deactivate(var/mob/living/carbon/mob,var/multiplier)
 		if(istype(mob, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = mob
-			for (var/datum/organ/external/E in H.organs)
+			for (var/datum/organ/external/E in H.externalOrgans)
 				E.min_broken_damage = initial(E.min_broken_damage)
 
 /datum/disease2/effect/toxins
@@ -233,7 +233,7 @@
 	activate(var/mob/living/carbon/mob,var/multiplier)
 		if(istype(mob, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = mob
-			var/datum/organ/internal/brain/B = H.internal_organs["brain"]
+			var/datum/organ/internal/brain/B = H.internalOrgans["brain"]
 			B.take_damage(5)
 		else
 			mob.setBrainLoss(50)

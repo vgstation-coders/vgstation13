@@ -505,7 +505,7 @@ This function completely restores a damaged organ to perfect condition.
 			del(implant)
 
 		// If any organs are attached to this, destroy them
-		for(var/datum/organ/external/O in owner.organs)
+		for(var/datum/organ/external/O in owner.externalOrgans)
 			if(O.parent == src)
 				O.droplimb(1)
 

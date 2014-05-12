@@ -25,11 +25,11 @@
 
 /datum/organ/internal/New(mob/living/carbon/human/H)
 	..()
-	var/datum/organ/external/E = H.organs_by_name[src.parent_organ]
+	var/datum/organ/external/E = H.externalOrgans[src.parent_organ]
 	if(E.internal_organs == null)
 		E.internal_organs = list()
 	E.internal_organs += src
-	H.internal_organs[src.name] = src
+	H.internalOrgans[src.name] = src
 	src.owner = H
 
 /datum/organ/internal/proc/take_damage(amount, var/silent=0)
@@ -117,8 +117,7 @@
 					src.damage += 0.2 * process_accuracy
 				//Damaged one shares the fun
 				else
-					var/victim = pick(owner.internal_organs)
-					var/datum/organ/internal/O = owner.internal_organs[victim]
+					var/datum/organ/internal/O = pick(owner.internalOrgans)
 					O.damage += 0.2  * process_accuracy
 
 			//Detox can heal small amounts of damage

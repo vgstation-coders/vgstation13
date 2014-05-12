@@ -61,9 +61,9 @@
 		if (M_RESIST_HEAT in src.mutations) //fireproof
 			return 0
 		var/mob/living/carbon/human/H = src	//make this damage method divide the damage to be done among all the body parts, then burn each body part for that much damage. will have better effect then just randomly picking a body part
-		var/divided_damage = (burn_amount)/(H.organs.len)
+		var/divided_damage = (burn_amount)/(H.externalOrgans.len)
 		var/extradam = 0	//added to when organ is at max dam
-		for(var/datum/organ/external/affecting in H.organs)
+		for(var/datum/organ/external/affecting in H.externalOrgans)
 			if(!affecting)	continue
 			if(affecting.take_damage(0, divided_damage+extradam))	//TODO: fix the extradam stuff. Or, ebtter yet...rewrite this entire proc ~Carn
 				H.UpdateDamageIcon()
@@ -329,8 +329,7 @@
 		H.shock_stage = 0
 		spawn(1)
 			H.fixblood()
-		for(var/organ_name in H.organs_by_name)
-			var/datum/organ/external/O = H.organs_by_name[organ_name]
+		for(var/datum/organ/external/O in H.externalOrgans)
 			for(var/obj/item/weapon/shard/shrapnel/s in O.implants)
 				if(istype(s))
 					O.implants -= s
@@ -350,8 +349,7 @@
 			O.trace_chemicals = list()
 			O.wounds = list()
 			O.wound_update_accuracy = 1
-		for(var/organ_name in H.internal_organs)
-			var/datum/organ/internal/IO = H.internal_organs[organ_name]
+		for(var/datum/organ/internal/IO in H.internalOrgans)
 			IO.damage = 0
 			IO.trace_chemicals = list()
 		H.updatehealth()

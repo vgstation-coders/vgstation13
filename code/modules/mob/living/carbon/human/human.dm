@@ -307,7 +307,7 @@
 /mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
 	for(var/L in M.contents)
 		if(istype(L, /obj/item/weapon/implant/loyalty))
-			for(var/datum/organ/external/O in M.organs)
+			for(var/datum/organ/external/O in M.externalOrgans)
 				if(L in O.implants)
 					return 1
 	return 0
@@ -1296,7 +1296,7 @@ mob/living/carbon/human/yank_out_object()
 /mob/living/carbon/human/proc/get_visible_implants(var/class = 0)
 
 	var/list/visible_implants = list()
-	for(var/datum/organ/external/organ in src.organs)
+	for(var/datum/organ/external/organ in src.externalOrgans)
 		for(var/obj/item/weapon/O in organ.implants)
 			if(!istype(O,/obj/item/weapon/implant) && O.w_class > class)
 				visible_implants += O
@@ -1305,7 +1305,7 @@ mob/living/carbon/human/yank_out_object()
 
 /mob/living/carbon/human/proc/handle_embedded_objects()
 
-	for(var/datum/organ/external/organ in src.organs)
+	for(var/datum/organ/external/organ in src.externalOrgans)
 		if(organ.status & ORGAN_SPLINTED) //Splints prevent movement.
 			continue
 		for(var/obj/item/weapon/O in organ.implants)
