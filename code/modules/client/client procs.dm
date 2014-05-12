@@ -239,22 +239,26 @@
 	if(inactivity > duration)	return inactivity
 	return 0
 
-/client/verb/resend_resources()
-	set name = "Resend Resources"
-	set desc = "Re-send resources for NanoUI. May help those with NanoUI issues."
-	set category = "Preferences"
-
-	usr << "\blue Re-sending NanoUI resources.  This may result in lag."
-	nanomanager.send_resources(src)
-
 //send resources to the client. It's here in its own proc so we can move it around easiliy if need be
 /client/proc/send_resources()
 //	preload_vox() //Causes long delays with initial start window and subsequent windows when first logged in.
-
-	// Send NanoUI resources to this client
-	nanomanager.send_resources(src)
-
 	getFiles(
+		'nano/js/libraries.min.js',
+		'nano/js/nano_update.js',
+		'nano/js/nano_config.js',
+		'nano/js/nano_base_helpers.js',
+		'nano/css/shared.css',
+		'nano/css/icons.css',
+		'nano/templates/chem_dispenser.tmpl',
+		'nano/templates/smes.tmpl',
+		'nano/templates/apc.tmpl',
+		'nano/templates/cryo.tmpl',
+		'nano/images/uiBackground.png',
+		'nano/images/uiIcons16.png',
+		'nano/images/uiIcons24.png',
+		'nano/images/uiLinkPendingIcon.gif',
+		'nano/images/uiNoticeBackground.jpg',
+		'nano/images/uiTitleFluff.png',
 		'html/search.js',
 		'html/panels.css',
 		'icons/pda_icons/pda_atmos.png',

@@ -94,12 +94,6 @@ nanoui is used to open and update nano browser uis
   */
 /datum/nanoui/proc/add_common_assets()
 	add_script("libraries.min.js") // The jQuery library
-
-    // /vg/
-	//add_script("1-jquery.js")
-	//add_script("2-jsrender.js")
-	//add_script("3-jquery.timers.js")
-
 	add_script("nano_config.js") // The NanoConfig JS, this is used to store configuration values.
 	add_script("nano_update.js") // The NanoUpdate JS, this is used to receive updates and apply them.
 	add_script("nano_base_helpers.js") // The NanoBaseHelpers JS, this is used to set up template helpers which are common to all templates
@@ -345,12 +339,12 @@ nanoui is used to open and update nano browser uis
 	var/window_size = ""
 	if (width && height)
 		window_size = "size=[width]x[height];"
-	update_status(0)
 	var/html=get_html()
 	if(src.writeDebug)
 		var/f = file("nano/debug.html")
 		fdel(f)
 		f << html
+	update_status(0)
 	user << browse(html, "window=[window_id];[window_size][window_options]")
 	winset(user, "mapwindow.map", "focus=true") // return keyboard focus to map
 	on_close_winset()

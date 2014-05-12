@@ -184,7 +184,7 @@
   * @return nothing
   */
 /datum/nanomanager/proc/user_transferred(var/mob/oldMob, var/mob/newMob)
-	if (!oldMob || isnull(oldMob.open_uis) || !istype(oldMob.open_uis, /list) || open_uis.len == 0)
+	if (isnull(oldMob.open_uis) || !istype(oldMob.open_uis, /list) || open_uis.len == 0)
 		return 0 // has no open uis
 
 	if (isnull(newMob.open_uis) || !istype(newMob.open_uis, /list))
@@ -197,28 +197,4 @@
 	oldMob.open_uis.Cut()
 
 	return 1 // success
-
- /**
-  * Sends all nano assets to the client
-  * This is called on user login
-  *
-  * @param client /client The user's client
-  *
-  * @return nothing
-  */
-
-/datum/nanomanager/proc/send_resources(client)
-	var/list/nano_asset_dirs = list(\
-		"nano/css/",\
-		"nano/images/",\
-		"nano/js/",\
-		"nano/templates/"\
-	)
-
-	var/list/files = null
-	for (var/path in nano_asset_dirs)
-		files = flist(path)
-		for(var/file in files)
-			if(copytext(file, length(file)) != "/") // files which end in "/" are actually directories, which we want to ignore
-				client << browse_rsc(file(path + file))	// send the file to the client
 
