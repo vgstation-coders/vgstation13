@@ -59,6 +59,7 @@ json_reader
 			while(++i <= lentext(json))
 				var/char = get_char()
 				if(escape)
+					escape=FALSE // WHICH STUPID ASSHOLE FORGOT THIS - N3X. I DID - REI
 					switch(char)
 						if("\\", "'", "\"", "/", "u")
 							val += char
