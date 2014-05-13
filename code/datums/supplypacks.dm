@@ -1125,3 +1125,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Supermatter Shard Crate"
 	group = "Engineering"
 	access = access_ce
+
+/datum/supply_packs/supermatter_crystal
+	contains = list(/obj/machinery/power/supermatter)
+	name = "Supermatter Crystal"
+	cost = 200 //So cargo thinks 3 times
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "Supermatter Crystal Crate"
+	group = "Engineering"
+	access = access_ce
