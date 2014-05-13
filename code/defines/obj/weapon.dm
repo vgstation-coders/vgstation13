@@ -36,6 +36,21 @@
 	throw_speed = 4
 	throw_range = 20
 
+/obj/item/weapon/ddildo
+	name = "dragon dildo"
+	desc = "A dildo carved to match one that resembles a dragon's."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "ddildo"
+	item_state = "ddildo"
+	flags = FPRINT | TABLEPASS | CONDUCT
+	w_class = 2
+	force = 3.0
+	throwforce = 2.0
+	throw_speed = 1
+	throw_range = 20
+	attack_verb = list("slapped", "slammed")
+	hitsound = 'sound/weapons/slash.ogg'
+
 /obj/item/weapon/corncob
 	name = "corn cob"
 	desc = "A reminder of meals gone by."

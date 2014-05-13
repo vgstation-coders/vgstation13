@@ -59,13 +59,12 @@ json_reader
 			while(++i <= lentext(json))
 				var/char = get_char()
 				if(escape)
-					escape=FALSE // WHICH STUPID ASSHOLE FORGOT THIS - N3X
+					escape=FALSE // WHICH STUPID ASSHOLE FORGOT THIS? - N3X. I DID - REI
 					switch(char)
 						if("\\", "'", "\"", "/", "u")
 							val += char
 						else
 							// TODO: support octal, hex, unicode sequences
-							//testing("Having trouble with \"\\[char]\" in string \"[val]\"")
 							ASSERT(sequences.Find(char))
 							val += ascii2text(sequences[char])
 				else
