@@ -64,31 +64,26 @@
 
 /datum/species/proc/create_organs(var/mob/living/carbon/human/H) //Handles creation of mob organs.
 	//This is a basic humanoid limb setup.
-	H.organs = list()
-	H.organs_by_name["chest"] = new/datum/organ/external/chest()
-	H.organs_by_name["groin"] = new/datum/organ/external/groin(H.organs_by_name["chest"])
-	H.organs_by_name["head"] = new/datum/organ/external/head(H.organs_by_name["chest"])
-	H.organs_by_name["l_arm"] = new/datum/organ/external/l_arm(H.organs_by_name["chest"])
-	H.organs_by_name["r_arm"] = new/datum/organ/external/r_arm(H.organs_by_name["chest"])
-	H.organs_by_name["r_leg"] = new/datum/organ/external/r_leg(H.organs_by_name["groin"])
-	H.organs_by_name["l_leg"] = new/datum/organ/external/l_leg(H.organs_by_name["groin"])
-	H.organs_by_name["l_hand"] = new/datum/organ/external/l_hand(H.organs_by_name["l_arm"])
-	H.organs_by_name["r_hand"] = new/datum/organ/external/r_hand(H.organs_by_name["r_arm"])
-	H.organs_by_name["l_foot"] = new/datum/organ/external/l_foot(H.organs_by_name["l_leg"])
-	H.organs_by_name["r_foot"] = new/datum/organ/external/r_foot(H.organs_by_name["r_leg"])
+	H.externalOrgans["chest"] = new/datum/organ/external/chest()
+	H.externalOrgans["groin"] = new/datum/organ/external/groin(H.externalOrgans["chest"])
+	H.externalOrgans["head"] = new/datum/organ/external/head(H.externalOrgans["chest"])
+	H.externalOrgans["l_arm"] = new/datum/organ/external/l_arm(H.externalOrgans["chest"])
+	H.externalOrgans["r_arm"] = new/datum/organ/external/r_arm(H.externalOrgans["chest"])
+	H.externalOrgans["r_leg"] = new/datum/organ/external/r_leg(H.externalOrgans["groin"])
+	H.externalOrgans["l_leg"] = new/datum/organ/external/l_leg(H.externalOrgans["groin"])
+	H.externalOrgans["l_hand"] = new/datum/organ/external/l_hand(H.externalOrgans["l_arm"])
+	H.externalOrgans["r_hand"] = new/datum/organ/external/r_hand(H.externalOrgans["r_arm"])
+	H.externalOrgans["l_foot"] = new/datum/organ/external/l_foot(H.externalOrgans["l_leg"])
+	H.externalOrgans["r_foot"] = new/datum/organ/external/r_foot(H.externalOrgans["r_leg"])
 
-	H.internal_organs = list()
-	H.internal_organs_by_name["heart"] = new/datum/organ/internal/heart(H)
-	H.internal_organs_by_name["lungs"] = new/datum/organ/internal/lungs(H)
-	H.internal_organs_by_name["liver"] = new/datum/organ/internal/liver(H)
-	H.internal_organs_by_name["kidney"] = new/datum/organ/internal/kidney(H)
-	H.internal_organs_by_name["brain"] = new/datum/organ/internal/brain(H)
-	H.internal_organs_by_name["eyes"] = new/datum/organ/internal/eyes(H)
+	H.internalOrgans["heart"] = new/datum/organ/internal/heart(H)
+	H.internalOrgans["lungs"] = new/datum/organ/internal/lungs(H)
+	H.internalOrgans["liver"] = new/datum/organ/internal/liver(H)
+	H.internalOrgans["kidney"] = new/datum/organ/internal/kidney(H)
+	H.internalOrgans["brain"] = new/datum/organ/internal/brain(H)
+	H.internalOrgans["eyes"] = new/datum/organ/internal/eyes(H)
 
-	for(var/name in H.organs_by_name)
-		H.organs += H.organs_by_name[name]
-
-	for(var/datum/organ/external/O in H.organs)
+	for(var/datum/organ/external/O in H.externalOrgans)
 		O.owner = H
 
 	/*

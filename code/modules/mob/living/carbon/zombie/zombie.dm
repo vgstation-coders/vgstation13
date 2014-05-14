@@ -150,7 +150,7 @@
 						var/mob/living/carbon/human/T = target
 						T.bruteloss += rand(1,7)
 						var/datum/organ/external/affecting
-						if(T.organs["head"]) affecting = T.organs["head"]
+						if(T.externalOrgans["head"]) affecting = T.externalOrgans["head"]
 						affecting.take_damage(rand(1,7), 0)
 						playsound(get_turf(src), 'sound/items/eatfood.ogg', 50, 1)
 						if(prob(25))
@@ -188,7 +188,7 @@
 						var/mob/living/carbon/human/T = target
 						T.bruteloss += rand(1,7)
 						var/datum/organ/external/affecting
-						if(T.organs["head"]) affecting = T.organs["head"]
+						if(T.externalOrgans["head"]) affecting = T.externalOrgans["head"]
 						affecting.take_damage(rand(1,7), 0)
 						if(prob(12.5))
 							target.contract_disease(new/datum/disease/z_virus)

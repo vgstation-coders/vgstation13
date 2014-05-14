@@ -1011,8 +1011,7 @@ var/list/slot_equipment_priority = list( \
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
 		if(H.health - H.halloss <= config.health_threshold_softcrit)
-			for(var/name in H.organs_by_name)
-				var/datum/organ/external/e = H.organs_by_name[name]
+			for(var/datum/organ/external/e in H.externalOrgans)
 				if(H.lying)
 					if(((e.status & ORGAN_BROKEN && !(e.status & ORGAN_SPLINTED)) || e.status & ORGAN_BLEEDING) && (H.getBruteLoss() + H.getFireLoss() >= 100))
 						return 1

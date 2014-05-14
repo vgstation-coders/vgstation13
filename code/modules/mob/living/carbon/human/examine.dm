@@ -249,7 +249,7 @@
 	var/list/wound_flavor_text = list()
 	var/list/is_destroyed = list()
 	var/list/is_bleeding = list()
-	for(var/datum/organ/external/temp in organs)
+	for(var/datum/organ/external/temp in externalOrgans)
 		if(temp)
 			if(temp.status & ORGAN_DESTROYED)
 				is_destroyed["[temp.display_name]"] = 1

@@ -6,7 +6,7 @@
 		return
 	var/total_burn	= 0
 	var/total_brute	= 0
-	for(var/datum/organ/external/O in organs)	//hardcoded to streamline things a bit
+	for(var/datum/organ/external/O in externalOrgans)	//hardcoded to streamline things a bit
 		total_brute	+= O.brute_dam
 		total_burn	+= O.burn_dam
 	health = 100 - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
@@ -17,7 +17,7 @@
 
 /mob/living/carbon/human/getBrainLoss()
 	var/res = brainloss
-	var/datum/organ/internal/brain/sponge = internal_organs["brain"]
+	var/datum/organ/internal/brain/sponge = internalOrgans["brain"]
 	if (sponge.is_bruised())
 		res += 20
 	if (sponge.is_broken())
@@ -28,13 +28,13 @@
 //These procs fetch a cumulative total damage from all organs
 /mob/living/carbon/human/getBruteLoss()
 	var/amount = 0
-	for(var/datum/organ/external/O in organs)
+	for(var/datum/organ/external/O in externalOrgans)
 		amount += O.brute_dam
 	return amount
 
 /mob/living/carbon/human/getFireLoss()
 	var/amount = 0
-	for(var/datum/organ/external/O in organs)
+	for(var/datum/organ/external/O in externalOrgans)
 		amount += O.burn_dam
 	return amount
 
@@ -70,7 +70,7 @@
 	if (amount > 0)
 		if (prob(mut_prob))
 			var/list/datum/organ/external/candidates = list()
-			for (var/datum/organ/external/O in organs)
+			for (var/datum/organ/external/O in externalOrgans)
 				if(!(O.status & ORGAN_MUTATED))
 					candidates |= O
 			if (candidates.len)
@@ -80,14 +80,14 @@
 				return
 	else
 		if (prob(heal_prob))
-			for (var/datum/organ/external/O in organs)
+			for (var/datum/organ/external/O in externalOrgans)
 				if (O.status & ORGAN_MUTATED)
 					O.unmutate()
 					src << "<span class = 'notice'>Your [O.display_name] is shaped normally again.</span>"
 					return
 
 	if (getCloneLoss() < 1)
-		for (var/datum/organ/external/O in organs)
+		for (var/datum/organ/external/O in externalOrgans)
 			if (O.status & ORGAN_MUTATED)
 				O.unmutate()
 				src << "<span class = 'notice'>Your [O.display_name] is shaped normally again.</span>"
@@ -96,7 +96,7 @@
 //Returns a list of damaged organs
 /mob/living/carbon/human/proc/get_damaged_organs(var/brute, var/burn)
 	var/list/datum/organ/external/parts = list()
-	for(var/datum/organ/external/O in organs)
+	for(var/datum/organ/external/O in externalOrgans)
 		if((brute && O.brute_dam) || (burn && O.burn_dam))
 			parts += O
 	return parts
@@ -104,7 +104,7 @@
 //Returns a list of damageable organs
 /mob/living/carbon/human/proc/get_damageable_organs()
 	var/list/datum/organ/external/parts = list()
-	for(var/datum/organ/external/O in organs)
+	for(var/datum/organ/external/O in externalOrgans)
 		if(O.brute_dam + O.burn_dam < O.max_damage)
 			parts += O
 	return parts
@@ -186,7 +186,7 @@ This function restores the subjects blood to max.
 This function restores all organs.
 */
 /mob/living/carbon/human/restore_all_organs()
-	for(var/datum/organ/external/current_organ in organs)
+	for(var/datum/organ/external/current_organ in externalOrgans)
 		current_organ.rejuvenate()
 
 /mob/living/carbon/human/proc/HealDamage(zone, brute, burn)
@@ -203,7 +203,7 @@ This function restores all organs.
 	if(!zone)	zone = "chest"
 	if (zone in list( "eyes", "mouth" ))
 		zone = "head"
-	return organs_by_name[zone]
+	return externalOrgans[zone]
 
 /mob/living/carbon/human/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/sharp = 0, var/obj/used_weapon = null)
 

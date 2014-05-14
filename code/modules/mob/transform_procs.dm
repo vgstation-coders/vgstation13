@@ -11,7 +11,7 @@
 	stunned = 1
 	icon = null
 	invisibility = 101
-	for(var/t in organs)
+	for(var/t in externalOrgans)
 		del(t)
 	var/atom/movable/overlay/animation = new /atom/movable/overlay( loc )
 	animation.icon_state = "blank"
@@ -58,7 +58,7 @@
 /mob/living/carbon/human/AIize()
 	if (monkeyizing)
 		return
-	for(var/t in organs)
+	for(var/t in externalOrgans)
 		del(t)
 
 	return ..()
@@ -148,7 +148,7 @@
 	canmove = 0
 	icon = null
 	invisibility = 101
-	for(var/t in organs)
+	for(var/t in externalOrgans)
 		del(t)
 
 	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot( loc )
@@ -193,7 +193,7 @@
 	canmove = 0
 	icon = null
 	invisibility = 101
-	for(var/t in organs)
+	for(var/t in externalOrgans)
 		del(t)
 
 	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi( loc )
@@ -241,7 +241,7 @@
 	canmove = 0
 	icon = null
 	invisibility = 101
-	for(var/t in organs)
+	for(var/t in externalOrgans)
 		del(t)
 
 	var/alien_caste = pick("Hunter","Sentinel","Drone")
@@ -272,7 +272,7 @@
 	canmove = 0
 	icon = null
 	invisibility = 101
-	for(var/t in organs)
+	for(var/t in externalOrgans)
 		del(t)
 
 	var/mob/living/carbon/slime/new_slime
@@ -308,7 +308,7 @@
 	canmove = 0
 	icon = null
 	invisibility = 101
-	for(var/t in organs)	//this really should not be necessary
+	for(var/t in externalOrgans)	//this really should not be necessary
 		del(t)
 
 	var/mob/living/simple_animal/corgi/new_corgi = new /mob/living/simple_animal/corgi (loc)
@@ -340,7 +340,7 @@
 	icon = null
 	invisibility = 101
 
-	for(var/t in organs)
+	for(var/t in externalOrgans)
 		del(t)
 
 	var/mob/new_mob = new mobpath(src.loc)

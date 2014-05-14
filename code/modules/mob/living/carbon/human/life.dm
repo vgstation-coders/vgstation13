@@ -315,8 +315,8 @@
 							emote("gasp")
 						updatehealth()
 
-				if(damage && organs.len)
-					var/datum/organ/external/O = pick(organs)
+				if(damage && externalOrgans.len)
+					var/datum/organ/external/O = pick(externalOrgans)
 					if(istype(O)) O.add_autopsy_data("Radiation Poisoning", damage)
 
 	proc/breathe()
@@ -325,7 +325,7 @@
 		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)) return
 		if(species && species.flags & NO_BREATHE) return
 
-		var/datum/organ/internal/lungs/L = internal_organs["lungs"]
+		var/datum/organ/internal/lungs/L = internalOrgans["lungs"]
 		L.process()
 
 		var/datum/gas_mixture/environment = loc.return_air()
@@ -1026,10 +1026,10 @@
 
 		handle_trace_chems()
 
-		var/datum/organ/internal/liver/liver = internal_organs["liver"]
+		var/datum/organ/internal/liver/liver = internalOrgans["liver"]
 		liver.process()
 
-		var/datum/organ/internal/eyes/eyes = internal_organs["eyes"]
+		var/datum/organ/internal/eyes/eyes = internalOrgans["eyes"]
 		eyes.process()
 
 		updatehealth()

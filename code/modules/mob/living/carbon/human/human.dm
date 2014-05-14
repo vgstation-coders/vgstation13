@@ -228,7 +228,7 @@
 	var/update = 0
 
 	// focus most of the blast on one organ
-	var/datum/organ/external/take_blast = pick(organs)
+	var/datum/organ/external/take_blast = pick(externalOrgans)
 	update |= take_blast.take_damage(b_loss * 0.9, f_loss * 0.9, used_weapon = "Explosive blast")
 
 	// distribute the remaining 10% on all limbs equally
@@ -237,7 +237,7 @@
 
 	var/weapon_message = "Explosive Blast"
 
-	for(var/datum/organ/external/temp in organs)
+	for(var/datum/organ/external/temp in externalOrgans)
 		switch(temp.name)
 			if("head")
 				update |= temp.take_damage(b_loss * 0.2, f_loss * 0.2, used_weapon = weapon_message)
@@ -307,7 +307,7 @@
 /mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
 	for(var/L in M.contents)
 		if(istype(L, /obj/item/weapon/implant/loyalty))
-			for(var/datum/organ/external/O in M.organs)
+			for(var/datum/organ/external/O in M.externalOrgans)
 				if(L in O.implants)
 					return 1
 	return 0
@@ -1117,7 +1117,7 @@
 		germ_level += n
 
 /mob/living/carbon/human/revive()
-	for (var/datum/organ/external/O in organs)
+	for (var/datum/organ/external/O in externalOrgans)
 		O.status &= ~ORGAN_BROKEN
 		O.status &= ~ORGAN_BLEEDING
 		O.status &= ~ORGAN_SPLINTED
@@ -1129,7 +1129,7 @@
 		O.wounds.Cut()
 		O.heal_damage(1000,1000,1,1)
 
-	var/datum/organ/external/head/h = organs_by_name["head"]
+	var/datum/organ/external/head/h = externalOrgans["head"]
 	h.disfigured = 0
 
 	if(species && !(species.flags & NO_BLOOD))
@@ -1143,8 +1143,7 @@
 					H.brainmob.mind.transfer_to(src)
 					del(H)
 
-	for(var/E in internal_organs)
-		var/datum/organ/internal/I = internal_organs[E]
+	for(var/datum/organ/internal/I in internalOrgans)
 		I.damage = 0
 
 	for (var/datum/disease/virus in viruses)
@@ -1156,11 +1155,11 @@
 	..()
 
 /mob/living/carbon/human/proc/is_lung_ruptured()
-	var/datum/organ/internal/lungs/L = internal_organs["lungs"]
+	var/datum/organ/internal/lungs/L = internalOrgans["lungs"]
 	return L.is_bruised()
 
 /mob/living/carbon/human/proc/rupture_lung()
-	var/datum/organ/internal/lungs/L = internal_organs["lungs"]
+	var/datum/organ/internal/lungs/L = internalOrgans["lungs"]
 
 	if(!L.is_bruised())
 		src.custom_pain("You feel a stabbing pain in your chest!", 1)
@@ -1256,7 +1255,7 @@ mob/living/carbon/human/yank_out_object()
 
 	var/obj/item/weapon/selection = input("What do you want to yank out?", "Embedded objects") in valid_objects
 
-	for(var/datum/organ/external/organ in organs) //Grab the organ holding the implant.
+	for(var/datum/organ/external/organ in externalOrgans) //Grab the organ holding the implant.
 		for(var/obj/item/weapon/O in organ.implants)
 			if(O == selection)
 				affected = organ
@@ -1297,7 +1296,7 @@ mob/living/carbon/human/yank_out_object()
 /mob/living/carbon/human/proc/get_visible_implants(var/class = 0)
 
 	var/list/visible_implants = list()
-	for(var/datum/organ/external/organ in src.organs)
+	for(var/datum/organ/external/organ in src.externalOrgans)
 		for(var/obj/item/weapon/O in organ.implants)
 			if(!istype(O,/obj/item/weapon/implant) && O.w_class > class)
 				visible_implants += O
@@ -1311,7 +1310,7 @@ mob/living/carbon/human/yank_out_object()
 
 /mob/living/carbon/human/proc/handle_embedded_objects()
 
-	for(var/datum/organ/external/organ in src.organs)
+	for(var/datum/organ/external/organ in src.externalOrgans)
 		if(organ.status & ORGAN_SPLINTED) //Splints prevent movement.
 			continue
 		for(var/obj/item/weapon/O in organ.implants)
@@ -1383,7 +1382,7 @@ mob/living/carbon/human/yank_out_object()
 
 	species = all_species[new_species]
 
-	if(force_organs || !organs || !organs.len)
+	if(force_organs || !externalOrgans || !externalOrgans.len)
 		species.create_organs(src)
 
 	if(species.language)

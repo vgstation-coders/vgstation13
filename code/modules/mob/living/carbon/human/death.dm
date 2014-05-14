@@ -11,7 +11,7 @@
 	animation.icon = 'icons/mob/mob.dmi'
 	animation.master = src
 
-	for(var/datum/organ/external/E in src.organs)
+	for(var/datum/organ/external/E in src.externalOrgans)
 		if(istype(E, /datum/organ/external/chest))
 			continue
 		// Only make the limb drop if it's not too damaged

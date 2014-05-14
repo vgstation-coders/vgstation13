@@ -4,9 +4,9 @@
 		M << "No attacking people at spawn, you jackass."
 		return
 
-	var/datum/organ/external/temp = M:organs_by_name["r_hand"]
+	var/datum/organ/external/temp = M:externalOrgans["r_hand"]
 	if (M.hand)
-		temp = M:organs_by_name["l_hand"]
+		temp = M:externalOrgans["l_hand"]
 	if(temp && !temp.is_usable())
 		M << "\red You can't use your [temp.display_name]."
 		return

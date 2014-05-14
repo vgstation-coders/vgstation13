@@ -135,9 +135,9 @@
 /obj/item/attack_hand(mob/user as mob)
 	if (!user) return
 	if (hasorgans(user))
-		var/datum/organ/external/temp = user:organs_by_name["r_hand"]
+		var/datum/organ/external/temp = user:externalOrgans["r_hand"]
 		if (user.hand)
-			temp = user:organs_by_name["l_hand"]
+			temp = user:externalOrgans["l_hand"]
 		if(temp && !temp.is_usable())
 			user << "<span class='notice'>You try to move your [temp.display_name], but cannot!"
 			return
@@ -681,7 +681,7 @@
 			"\red You stab yourself in the eyes with [src]!" \
 		)
 	if(istype(M, /mob/living/carbon/human))
-		var/datum/organ/internal/eyes/eyes = H.internal_organs["eyes"]
+		var/datum/organ/internal/eyes/eyes = H.internalOrgans["eyes"]
 		eyes.damage += rand(3,4)
 		if(eyes.damage >= eyes.min_bruised_damage)
 			if(M.stat != 2)

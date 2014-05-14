@@ -365,7 +365,7 @@
 	var/safety = user:eyecheck()
 	if(istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
-		var/datum/organ/internal/eyes/E = H.internal_organs["eyes"]
+		var/datum/organ/internal/eyes/E = H.internalOrgans["eyes"]
 		switch(safety)
 			if(1)
 				usr << "\red Your eyes sting a little."
@@ -456,7 +456,7 @@
 
 /obj/item/weapon/weldingtool/attack(mob/M as mob, mob/user as mob)
 	if(hasorgans(M))
-		var/datum/organ/external/S = M:organs_by_name[user.zone_sel.selecting]
+		var/datum/organ/external/S = M:externalOrgans[user.zone_sel.selecting]
 		if (!S) return
 		if(!(S.status & ORGAN_ROBOT) || user.a_intent != "help")
 			return ..()

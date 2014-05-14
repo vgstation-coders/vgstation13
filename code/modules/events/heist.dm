@@ -89,7 +89,7 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 		vox.add_language("Vox-pidgin")
 		vox.h_style = "Short Vox Quills"
 		vox.f_style = "Shaved"
-		for(var/datum/organ/external/limb in vox.organs)
+		for(var/datum/organ/external/limb in vox.externalOrgans)
 			limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT)
 		vox.equip_vox_raider()
 		vox.regenerate_icons()

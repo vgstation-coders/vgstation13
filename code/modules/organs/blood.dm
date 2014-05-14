@@ -61,7 +61,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 		// Damaged heart virtually reduces the blood volume, as the blood isn't
 		// being pumped properly anymore.
-		var/datum/organ/internal/heart/heart = internal_organs["heart"]
+		var/datum/organ/internal/heart/heart = internalOrgans["heart"]
 
 		if(heart.damage > 1 && heart.damage < heart.min_bruised_damage)
 			blood_volume *= 0.8
@@ -123,7 +123,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 		//Bleeding out
 		var/blood_max = 0
-		for(var/datum/organ/external/temp in organs)
+		for(var/datum/organ/external/temp in externalOrgans)
 			if(!(temp.status & ORGAN_BLEEDING) || temp.status & (ORGAN_ROBOT|ORGAN_PEG))
 				continue
 			for(var/datum/wound/W in temp.wounds) if(W.bleeding())

@@ -140,7 +140,7 @@ proc/get_id_photo(var/mob/living/carbon/human/H)
 	temp = new /icon(icobase, "head_[g]")
 	preview_icon.Blend(temp, ICON_OVERLAY)
 
-	for(var/datum/organ/external/E in H.organs)
+	for(var/datum/organ/external/E in H.externalOrgans)
 		if(E.status & ORGAN_CUT_AWAY || E.status & ORGAN_DESTROYED) continue
 		var/o_icobase=icobase
 		if(E.status & ORGAN_PEG)
