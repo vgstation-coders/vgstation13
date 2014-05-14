@@ -168,7 +168,7 @@
 					M.visible_message("[M] busts out some [dancemoves] moves!")
 			if(2)
 				if(prob(20))
-					M.visible_message([M] [pick("rambles to themselves", "rotates their hips", "gyrates their hips", "taps their foot", "dances to an imaginary song", "jiggles their legs", "waves their arms around")])
+					M.visible_message("[M] [pick("rambles to themselves", "rotates their hips", "gyrates their hips", "taps their foot", "dances to an imaginary song", "jiggles their legs", "waves their arms around")]")
 
 
 // WAS: /datum/bioEffect/chav
