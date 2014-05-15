@@ -631,7 +631,7 @@
 	if ((src.loc == user && usr.stat == 0))
 
 		for(var/mob/O in (viewers(user)))
-			O.show_message("<B>[user]</B> broadcasts, <i>\"[message]\"i",2) 
+			O.show_message("<B>[user]</B> broadcasts, <i>\"[message]\"</i>",2) 
 		spamcheck = 1
 		spawn(20)
 			spamcheck = 0
