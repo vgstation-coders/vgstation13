@@ -2156,3 +2156,26 @@ other types of metals and chemistry for reagents).
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/hydronutrients
 	*/
+
+
+/////////////////////////////////////////
+/////////////////Devices/////////////////
+/////////////////////////////////////////
+
+/datum/design/soundsynth
+	name = "Sound Synthesizer"
+	desc = "A device capable of creating a large variety of noises."
+	id = "soundsynth"
+	req_tech = list("programming" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 100, "$glass" = 100)
+	build_path = /obj/item/device/soundsynth
+	
+/datum/design/megaphone
+	name = "Sound Synthesizer"
+	desc = "A device used to amplify the voice."
+	id = "megaphone"
+	req_tech = list("programming" = 4)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 200)
+	build_path = /obj/item/device/megaphone

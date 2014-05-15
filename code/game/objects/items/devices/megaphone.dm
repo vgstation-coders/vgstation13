@@ -75,6 +75,17 @@
 
 	var/spam_flag = 0 //To prevent mashing the button to cause annoyance like a huge idiot.
 	var/sound_flag = 1
+	var/BWOINK = 0
+	var/list/errors = list("Ah ah ah, you didn't say the magic word!", "YOU DIDN'T SAY THE MAGIC WORD!", "I'm sorry, Dave. I'm afraid I can't do that.", "This mission is too important for me to allow you to jeopardize it.", "3RR0R 1N BL0CK #1337 -BZZT-", "Warning: Unable to reticulate splines. Aborting Session.")
+	var/error = pick(errors)
+	
+	
+/obj/item/device/soundsynth/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/weapon/card/emag) && !BWOINK)
+		user << "\red You overide \the [src]'s child safety features."
+		BWOINK = 1 //Praise alllah
+		return
+	return
 
 /*
 This is to cycle sounds forward
@@ -82,63 +93,67 @@ This is to cycle sounds forward
 /obj/item/device/soundsynth/verb/CycleForward()
 	set category = "Object"
 	set name = "Cycle Sound Forward"
-	switch(sound_flag)
-		if(0)
-			sound_flag += 1
-			usr << "Sound switched to Bubbles!"
-			return
-		if(1)
-			sound_flag += 1
-			usr << "Sound switched to Boom!"
-			return
-		if(2)
-			sound_flag += 1
-			usr << "Sound switched to Startup!"
-			return
-		if(3)
-			sound_flag += 1
-			usr << "Sound switched to Alert!"
-			return
-		if(4)
-			sound_flag += 1
-			usr << "Sound switched to Air Horn!"
-			return
-		if(5)
-			sound_flag += 1
-			usr << "Sound switched to Trombone!"
-			return
-		if(6)
-			sound_flag += 1
-			usr << "Sound switched to Deconstruction Noises!"
-			return
-		if(7)
-			sound_flag += 1
-			usr << "Sound switched to Welding Noises!!"
-			return
-		if(8)
-			sound_flag += 1
-			usr << "Sound switched to Creepy Whisper!"
-			return
-		if(9)
-			sound_flag += 1
-			usr << "Sound switched to Ding!"
-			return
-		if(10)
-			sound_flag += 1
-			usr << "Sound switched to Flush!"
-			return
-		if(11)
-			sound_flag += 1
-			usr << "Sound switched to Double Beep!"
-			return
-		if(12)
-			sound_flag += 1
-			usr << "There is no sound higher then Double Beep!"
-			return
+	if(BWONIK = 1)
+		usr << "The screen on the [src] displays the following: [error]"
+		return
+	else
+		switch(sound_flag)
+			if(0)
+				sound_flag += 1
+				usr << "Sound switched to Bubbles!"
+				return
+			if(1)
+				sound_flag += 1
+				usr << "Sound switched to Boom!"
+				return
+			if(2)
+				sound_flag += 1
+				usr << "Sound switched to Startup!"
+				return
+			if(3)
+				sound_flag += 1
+				usr << "Sound switched to Alert!"
+				return
+			if(4)
+				sound_flag += 1
+				usr << "Sound switched to Air Horn!"
+				return
+			if(5)
+				sound_flag += 1
+				usr << "Sound switched to Trombone!"
+				return
+			if(6)
+				sound_flag += 1
+				usr << "Sound switched to Deconstruction Noises!"
+				return
+			if(7)
+				sound_flag += 1
+				usr << "Sound switched to Welding Noises!!"
+				return
+			if(8)
+				sound_flag += 1
+				usr << "Sound switched to Creepy Whisper!"
+				return
+			if(9)
+				sound_flag += 1
+				usr << "Sound switched to Ding!"
+				return
+			if(10)
+				sound_flag += 1
+				usr << "Sound switched to Flush!"
+				return
+			if(11)
+				sound_flag += 1
+				usr << "Sound switched to Double Beep!"
+				return
+			if(12)
+				sound_flag += 1
+				usr << "There is no sound higher then Double Beep!"
+				return
 
 
-		else
-			sound_flag = 12
+			else
+				sound_flag = 12
 
 /*
 And backwards
@@ -146,145 +161,152 @@ And backwards
 /obj/item/device/soundsynth/verb/CycleBackward()
 	set category = "Object"
 	set name = "Cycle Sound Backward"
+	
+	if(BWONIK = 1)
+		usr << "The screen on the [src] displays the following: [error]"
+		return
+	else
+		switch(sound_flag)
+			if(0)
+				usr << "There is no sound lower then Honk!"
+				return
+			if(1)
+				sound_flag -= 1
+				usr << "Sound switched to Honk!"
+				return
+			if(2)
+				sound_flag -= 1
+				usr << "Sound switched to Bubbles!"
+				return
+			if(3)
+				sound_flag -= 1
+				usr << "Sound switched to Boom!"
+				return
+			if(4)
+				sound_flag -= 1
+				usr << "Sound switched to Startup!"
+				return
+			if(5)
+				sound_flag -= 1
+				usr << "Sound switched to Alert!"
+				return
+			if(6)
+				sound_flag -= 1
+				usr << "Sound switched to Air Horn!"
+				return
+			if(7)
+				sound_flag -= 1
+				usr << "Sound switched to Trombone!"
+				return
+			if(8)
+				sound_flag -= 1
+				usr << "Sound switched to Deconstruction Noises!"
+				return
+			if(9)
+				sound_flag -= 1
+				usr << "Sound switched to Welding Noises!"
+				return
+			if(10)
+				sound_flag -= 1
+				usr << "Sound switched to Creepy Whisper!"
+				return
+			if(11)
+				sound_flag -= 1
+				usr << "Sound switched to Ding!"
+				return
+			if(12)
+				sound_flag -= 1
+				usr << "Sound switched to Flush!"
+				return
 
-	switch(sound_flag)
-		if(0)
-			usr << "There is no sound lower then Honk!"
-			return
-		if(1)
-			sound_flag -= 1
-			usr << "Sound switched to Honk!"
-			return
-		if(2)
-			sound_flag -= 1
-			usr << "Sound switched to Bubbles!"
-			return
-		if(3)
-			sound_flag -= 1
-			usr << "Sound switched to Boom!"
-			return
-		if(4)
-			sound_flag -= 1
-			usr << "Sound switched to Startup!"
-			return
-		if(5)
-			sound_flag -= 1
-			usr << "Sound switched to Alert!"
-			return
-		if(6)
-			sound_flag -= 1
-			usr << "Sound switched to Air Horn!"
-			return
-		if(7)
-			sound_flag -= 1
-			usr << "Sound switched to Trombone!"
-			return
-		if(8)
-			sound_flag -= 1
-			usr << "Sound switched to Deconstruction Noises!"
-			return
-		if(9)
-			sound_flag -= 1
-			usr << "Sound switched to Welding Noises!"
-			return
-		if(10)
-			sound_flag -= 1
-			usr << "Sound switched to Creepy Whisper!"
-			return
-		if(11)
-			sound_flag -= 1
-			usr << "Sound switched to Ding!"
-			return
-		if(12)
-			sound_flag -= 1
-			usr << "Sound switched to Flush!"
-			return
 
-
-		else
-			sound_flag = 0
+			else
+				sound_flag = 0
 
 
 
-/*
-This long ass as fuck shit plays the sounds. Im a huge fucking faggot.
-If you can make this smaller, please do.
-*/
+
 
 /obj/item/device/soundsynth/attack_self(mob/user as mob)
 
 	if(spam_flag + 20 < world.timeofday)
-		switch(sound_flag)
-			if(0)
-				spam_flag = world.timeofday
-				playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
-				usr << "Honk!"
-				return
+		if(BWOINK = 1)
+			spam_flag = world.timeofday
+			playsound(get_turf(src), 'sounds/effects/adminhelp.ogg' 50, 1)
+			return
+		else
+			switch(sound_flag)
+				if(0)
+					spam_flag = world.timeofday
+					playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
+					usr << "Honk!"
+					return
+	
+				if(1)
+					spam_flag = world.timeofday
+					playsound(get_turf(src), 'sound/effects/bubbles.ogg', 50, 1)
+					return
+	
+				if(2)
+					spam_flag = world.timeofday
+					playsound(get_turf(src), 'sound/effects/Explosion1.ogg', 50, 1)
+					return
+	
+				if(3)
+					spam_flag = world.timeofday
+					playsound(get_turf(src), 'sound/mecha/nominal.ogg', 50, 1)
+					return
+	
+				if(4)
+					spam_flag = world.timeofday
+					playsound(get_turf(src), 'sound/effects/alert.ogg', 50, 1)
+					return
+	
 
-			if(1)
-				spam_flag = world.timeofday
-				playsound(get_turf(src), 'sound/effects/bubbles.ogg', 50, 1)
-				return
+				if(5)
+					spam_flag = world.timeofday
+					playsound(get_turf(src), 'sound/items/AirHorn.ogg', 50, 1)
+					return
 
-			if(2)
-				spam_flag = world.timeofday
-				playsound(get_turf(src), 'sound/effects/Explosion1.ogg', 50, 1)
-				return
-
-			if(3)
-				spam_flag = world.timeofday
-				playsound(get_turf(src), 'sound/mecha/nominal.ogg', 50, 1)
-				return
-
-			if(4)
-				spam_flag = world.timeofday
-				playsound(get_turf(src), 'sound/effects/alert.ogg', 50, 1)
-				return
-
-
-			if(5)
-				spam_flag = world.timeofday
-				playsound(get_turf(src), 'sound/items/AirHorn.ogg', 50, 1)
-				return
-
-			if(6)
-				spam_flag = world.timeofday
-				playsound(get_turf(src), 'sound/misc/sadtrombone.ogg', 50, 1)
-				return
-
-
-			if(7)
-				spam_flag = world.timeofday
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-				return
-
-			if(8)
-				spam_flag = world.timeofday
-				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-				return
-
-			if(9)
-				spam_flag = world.timeofday
-				playsound(get_turf(src), 'sound/hallucinations/turn_around1.ogg', 50, 1)
-				return
+				if(6)
+					spam_flag = world.timeofday
+					playsound(get_turf(src), 'sound/misc/sadtrombone.ogg', 50, 1)
+					return
 
 
-			if(10)
-				spam_flag = world.timeofday
-				playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
-				return
+				if(7)
+					spam_flag = world.timeofday
+					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					return
+
+				if(8)
+					spam_flag = world.timeofday
+					playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+					return
+
+				if(9)
+					spam_flag = world.timeofday
+					playsound(get_turf(src), 'sound/hallucinations/turn_around1.ogg', 50, 1)
+					return
 
 
-			if(11)
-				spam_flag = world.timeofday
-				playsound(get_turf(src), 'sound/machines/disposalflush.ogg', 50, 1)
-				return
+				if(10)
+					spam_flag = world.timeofday
+					playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
+					return
+		
+
+				if(11)
+					spam_flag = world.timeofday
+					playsound(get_turf(src), 'sound/machines/disposalflush.ogg', 50, 1)
+					return
 
 
-			if(12)
-				spam_flag = world.timeofday
-				playsound(get_turf(src), 'sound/machines/twobeep.ogg', 50, 1)
-				return
+				if(12)
+					spam_flag = world.timeofday
+					playsound(get_turf(src), 'sound/machines/twobeep.ogg', 50, 1)
+					return
 
-			else
-				return
+				else
+					return
+	
