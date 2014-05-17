@@ -324,3 +324,26 @@
 	blood_color = "#004400"
 	flesh_color = "#907E4A"
 
+/datum/species/nemoid
+	name = "Nemoid"
+	icobase = 'icons/mob/human_races/r_nemoid.dmi'
+	deform = 'icons/mob/human_races/r_def_nemoid.dmi'
+	language = "Glub"
+	primitive = /mob/living/carbon/monkey //WIP
+	attack_verb = "slap"
+	eyes = "nemoid_eyes_s"
+	breath_type = "nitrogen"
+	wear_mask_icons = 'icons/mob/species/nemoid/masks.dmi'
+	flags = IS_WHITELISTED | HAS_LIPS | HAS_UNDERWEAR
+
+	equip(var/mob/living/carbon/human/H)
+		//Uneqips masks and hats
+		H.u_equip(H.head)
+		H.u_equip(H.wear_mask)
+
+		H.equip_or_collect(new /obj/item/clothing/mask/breath/nemoid(H), slot_wear_mask)
+		H.equip_or_collect(new /obj/item/weapon/tank/emergency_nitrogen(H), slot_r_store)
+		H << "\blue You are now running on nitrogen internals from the [H.r_store] in your pocket. Your species finds oxygen toxic, so you must breathe nitrogen (AKA N<sub>2</sub>) only."
+		H.internal = H.r_store
+		if (H.internals)
+			H.internals.icon_state = "internal1"
