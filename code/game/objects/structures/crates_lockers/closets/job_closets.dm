@@ -29,7 +29,8 @@
 	new /obj/item/clothing/suit/wcoat(src)
 	new /obj/item/clothing/shoes/black(src)
 	new /obj/item/clothing/shoes/black(src)
-
+	new /obj/item/watch/pocketwatch(src)
+	new /obj/item/watch/pocketwatch(src)
 /*
  * Janitor
  */
@@ -76,7 +77,7 @@
 	new /obj/item/clothing/suit/storage/lawyer/purpjacket(src)
 	new /obj/item/clothing/shoes/brown(src)
 	new /obj/item/clothing/shoes/black(src)
-
+	
 	//Paramedic
 
 /obj/structure/closet/paramedic
