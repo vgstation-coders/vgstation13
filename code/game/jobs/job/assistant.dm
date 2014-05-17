@@ -15,6 +15,7 @@
 	if(!H)	return 0
 	H.equip_or_collect(new /obj/item/clothing/under/color/grey(H), slot_w_uniform)
 	H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
+	H.equip_or_collect(new /obj/item/watch/wrist(H), slot_r_store)
 	H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 	return 1
 
