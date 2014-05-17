@@ -30,6 +30,7 @@
 		H.equip_or_collect(new /obj/item/clothing/under/rank/chief_medical_officer(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/heads/cmo(H), slot_belt)
+			H.equip_or_collect(new /obj/item/watch/wrist/medical(H), slot_r_store)
 		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/cmo(H), slot_wear_suit)
 		H.equip_or_collect(new /obj/item/weapon/storage/firstaid/regular(H), slot_l_hand)
 		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
@@ -97,6 +98,7 @@
 		//H.equip_or_collect(new /obj/item/device/pda/medical(H), slot_belt)
 		H.equip_or_collect(new /obj/item/weapon/storage/firstaid/regular(H), slot_l_hand)
 		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
+		H.equip_or_collect(new /obj/item/watch/wrist/medical(H), slot_r_store)
 		if(H.backbag == 1)
 			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
 		else
@@ -130,6 +132,7 @@
 		H.equip_or_collect(new /obj/item/clothing/shoes/white(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/chemist(H), slot_belt)
 		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/chemist(H), slot_wear_suit)
+		H.equip_or_collect(new /obj/item/watch/wrist/medical(H), slot_r_store)
 		if(H.backbag == 1)
 			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
 		else
@@ -162,6 +165,7 @@
 		//H.equip_or_collect(new /obj/item/device/pda/geneticist(H), slot_belt)
 		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/genetics(H), slot_wear_suit)
 		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
+		H.equip_or_collect(new /obj/item/watch/wrist/medical(H), slot_r_store)
 		if(H.backbag == 1)
 			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
 		else
@@ -195,6 +199,7 @@
 		H.equip_or_collect(new /obj/item/clothing/shoes/white(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/virologist(H), slot_wear_suit)
 		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
+		H.equip_or_collect(new /obj/item/watch/wrist/medical(H), slot_r_store)
 		if(H.backbag == 1)
 			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
 		else
@@ -226,6 +231,7 @@
 		H.equip_or_collect(new /obj/item/clothing/shoes/white(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
 		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
+		H.equip_or_collect(new /obj/item/watch/wrist/medical(H), slot_r_store)
 		if(H.backbag == 1)
 			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
 		else
