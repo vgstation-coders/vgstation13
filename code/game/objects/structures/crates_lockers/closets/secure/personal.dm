@@ -12,6 +12,7 @@
 		else
 			new /obj/item/weapon/storage/backpack/satchel_norm(src)
 		new /obj/item/device/radio/headset( src )
+		new /obj/item/watch/wrist(src)
 	return
 
 
