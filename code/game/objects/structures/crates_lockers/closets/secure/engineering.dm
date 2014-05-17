@@ -30,6 +30,7 @@
 		new /obj/item/device/multitool(src)
 		new /obj/item/device/flash(src)
 		new /obj/item/device/gps/engineering(src)
+		new /obj/item/watch/wrist/engineer(src)
 		return
 
 
@@ -116,6 +117,7 @@
 		new /obj/item/taperoll/engineering(src)
 		new /obj/item/taperoll/engineering(src)
 		new /obj/item/device/gps/engineering(src)
+		new /obj/item/watch/wrist/engineer(src)
 		return
 
 /obj/structure/closet/secure_closet/engineering_general
