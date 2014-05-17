@@ -50,7 +50,7 @@ obj/item/watch/wrist
 	w_class = 1.0
 	flags = FPRINT | TABLEPASS | CONDUCT
 	
-
+	watchtype = 1
 	
 //Job related watches	
 obj/item/watch/wrist/rolex
@@ -136,4 +136,43 @@ obj/item/watch/wrist/centcomm
 	w_class = 1.0
 	flags = FPRINT | TABLEPASS | CONDUCT
 
+
+//Pocket watches.
+/obj/item/watch/pocketwatch
+	name = "Pocket Watch"
+	desc = "Fancy."
+	icon_state = "pocket"
+	item_state = "watch"
+	w_class = 1.0
+	flags = FPRINT | TABLEPASS | CONDUCT
+
+	watchtype = 2 
+	
+/obj/item/watch/old
+	name = "Old Pocket Watch"
+	desc = "Classy."
+	icon_state = "oldpocket"
+	item_state = "watch"
+	w_class = 1.0
+	flags = FPRINT | TABLEPASS | CONDUCT
+
+
+/obj/item/watch/fakepocket
+	name = "Damaged Pocket Watch"
+	desc = "Something seems off.."
+	icon_state = "fakepocket"
+	item_state = "watch"
+	w_class = 1.0
+	flags = FPRINT | TABLEPASS | CONDUCT
+
+	fake = 1
+
+
+/obj/item/watch/syndie
+	name = "Strange Pocket Watch"
+	desc = "Strangly Fancy."
+	icon_state = "cloaking" //Old name. Felt I should leave it incase I ever get the urge to figure cloaking watches out.
+	item_state = "watch"
+	w_class = 1.0
+	flags = FPRINT | TABLEPASS | CONDUCT
 
