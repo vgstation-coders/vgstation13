@@ -23,7 +23,7 @@
 	new /obj/item/device/multitool(src)
 	new /obj/item/weapon/shield/energy(src)
 	new /obj/item/clothing/shoes/magboots(src)
-
+	new /obj/item/watch/wrist/syndie(src)
 
 /obj/structure/closet/syndicate/nuclear
 	desc = "It's a storage unit for nuclear-operative gear."
