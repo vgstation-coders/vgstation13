@@ -2,7 +2,7 @@
 Tickity tock
 */
 
-obj/item/watch
+/obj/item/watch
 	icon = 'icons/obj/watch.dmi' 
 	var/watchtype = 0 //Controls the visible message for checking time. 
 	var/fake = 0 //Hey kid, want a watch?
@@ -42,7 +42,7 @@ obj/item/watch
 		
 		
 //Base for the wrist watch.	
-obj/item/watch/wrist
+/obj/item/watch/wrist
 	name = "wrist watch"
 	desc = "A watch? On your wrist? What will they think of next?"
 	icon_state = "wristwatch"
@@ -53,7 +53,7 @@ obj/item/watch/wrist
 	watchtype = 1
 	
 //Job related watches	
-obj/item/watch/wrist/rolex
+/obj/item/watch/wrist/rolex
 	name = "rolex"
 	desc = "Easy to say, nice to look at."
 	icon_state = "rolex"
@@ -63,7 +63,7 @@ obj/item/watch/wrist/rolex
 
 
 
-obj/item/watch/wrist/cargo
+/obj/item/watch/wrist/cargo
 	name = "brown watch"
 	desc = "A wrist watch. This particular one is painted brown."
 	icon_state = "cargowatch"
@@ -74,7 +74,7 @@ obj/item/watch/wrist/cargo
 
 
 
-obj/item/watch/wrist/science
+/obj/item/watch/wrist/science
 	name = "purple watch"
 	desc = "A wrist watch. This particular one is painted purple."
 	icon_state = "sciencewatch"
@@ -85,7 +85,7 @@ obj/item/watch/wrist/science
 
 
 
-obj/item/watch/wrist/security
+/obj/item/watch/wrist/security
 	name = "red watch"
 	desc = "A wrist watch. This particular one is painted red."
 	icon_state = "securitywatch"
@@ -96,7 +96,7 @@ obj/item/watch/wrist/security
 
 
 
-obj/item/watch/wrist/medical
+/obj/item/watch/wrist/medical
 	name = "blue watch"
 	desc = "A wrist watch. This particular one is painted blue."
 	icon_state = "medicalwatch"
@@ -107,7 +107,7 @@ obj/item/watch/wrist/medical
 
 
 
-obj/item/watch/wrist/engineer
+/obj/item/watch/wrist/engineer
 	name = "yellow watch"
 	desc = "A wrist watch. This particular one is painted yellow."
 	icon_state = "engineerwatch"
@@ -117,7 +117,7 @@ obj/item/watch/wrist/engineer
 
 
 
-obj/item/watch/wrist/syndie
+/obj/item/watch/wrist/syndie
 	name = "black watch"
 	desc = "A wrist watch. This particular one is painted black. It has writing on the back that says 'FUK NT!!1!'"
 	icon_state = "syndiewatch"
@@ -128,7 +128,7 @@ obj/item/watch/wrist/syndie
 
 
 
-obj/item/watch/wrist/centcomm
+/obj/item/watch/wrist/centcomm
 	name = "grey watch"
 	desc = "A wrist watch. This particular one is painted grey, with blue trim."
 	icon_state = "centcommwatch"
