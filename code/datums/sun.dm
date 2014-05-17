@@ -5,7 +5,7 @@
 //	var/counter = 50		// to make the vars update during 1st call
 	var/rate
 	var/list/solars			// for debugging purposes, references solars_list at the constructor
-	var/nexttime = 3600		// Replacement for var/counter to force the sun to move every X IC minutes
+	var/nexttime		// Replacement for var/counter to force the sun to move every X IC minutes
 
 /datum/sun/New()
 
@@ -13,6 +13,8 @@
 	rate = rand(750,1250)/1000			// 75.0% - 125.0% of standard rotation
 	if(prob(50))
 		rate = -rate
+
+	nexttime = tick_lag * 3600
 
 // calculate the sun's position given the time of day
 
@@ -32,7 +34,7 @@
 	//  To prevent excess server load the server only updates the sun's sight lines every 6 minutes
 	if(nexttime < world.time)
 		return
-	nexttime = nexttime + 3600	// 600 world.time ticks = 1 minute, 3600 = 6 minutes.
+	nexttime = nexttime + (tick_lag * 3600)	// 600 world.time ticks = 1 minute, 3600 = 6 minutes.
 
 	// now calculate and cache the (dx,dy) increments for line drawing
 
