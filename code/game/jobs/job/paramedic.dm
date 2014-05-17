@@ -25,6 +25,7 @@
 		H.equip_or_collect(new /obj/item/clothing/mask/cigarette(H), slot_wear_mask)
 		H.equip_or_collect(new /obj/item/clothing/head/soft/paramedic(H), slot_head)
 		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
+		H.equip_or_collect(new /obj/item/watch/wrist/medical(H), slot_r_store)
 		if(H.backbag == 1)
 			H.equip_or_collect(new /obj/item/weapon/storage/box/engineer(H), slot_r_hand)
 			H.equip_or_collect(new /obj/item/device/healthanalyzer(H), slot_l_hand)
