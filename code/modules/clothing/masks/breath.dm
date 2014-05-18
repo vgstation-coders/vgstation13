@@ -59,11 +59,11 @@
 
 	return ..()
 
-/obj/item/clothing/mask/breath/nemoid
+/obj/item/clothing/mask/breath/nemoian
 	desc = "It looks like a space helmet, or...maybe even a fish bowl?"
-	name = "nemoid fish bowl"
-	icon_state = "nemoid"
-	item_state = "nemoid"
+	name = "nemoian fish bowl"
+	icon_state = "fishbowl"
+	item_state = "fishbowl"
 	permeability_coefficient = 0.01
 
 	toggle()

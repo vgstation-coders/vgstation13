@@ -510,48 +510,6 @@
 		breath.nitrogen -= nitrogen_used
 		breath.carbon_dioxide += oxygen_used
 
-		if(O2_pp < safe_oxygen_min && species.name != "Nemoid") 	// Too little oxygen
-			if(prob(20))
-				spawn(0) emote("gasp")
-			if(O2_pp > 0)
-				var/ratio = safe_oxygen_min/O2_pp
-				adjustOxyLoss(min(5*ratio, HUMAN_MAX_OXYLOSS)) // Don't fuck them up too fast (space only does HUMAN_MAX_OXYLOSS after all!)
-				failed_last_breath = 1
-				oxygen_used = breath.oxygen*ratio/6
-			else
-				adjustOxyLoss(HUMAN_MAX_OXYLOSS)
-				failed_last_breath = 1
-			oxygen_alert = max(oxygen_alert, 1)
-		/*else if (O2_pp > safe_oxygen_max) 		// Too much oxygen (commented this out for now, I'll deal with pressure damage elsewhere I suppose)
-			spawn(0) emote("cough")
-			var/ratio = O2_pp/safe_oxygen_max
-			oxyloss += 5*ratio
-			oxygen_used = breath.oxygen*ratio/6
-			oxygen_alert = max(oxygen_alert, 1)*/
-		else if(Nitrogen_pp < safe_oxygen_min && species.name == "Nemoid")  //Nemoid breathe nitrogen, not oxygen.
-
-			if(prob(20))
-				spawn(0) emote("gasp")
-			if(Nitrogen_pp > 0)
-				var/ratio = safe_oxygen_min/Nitrogen_pp
-				adjustOxyLoss(min(5*ratio, HUMAN_MAX_OXYLOSS))
-				failed_last_breath = 1
-				nitrogen_used = breath.nitrogen*ratio/6
-			else
-				adjustOxyLoss(HUMAN_MAX_OXYLOSS)
-				failed_last_breath = 1
-			oxygen_alert = max(oxygen_alert, 1)
-
-		else								// We're in safe limits
-			failed_last_breath = 0
-			adjustOxyLoss(-5)
-			oxygen_used = breath.oxygen/6
-			oxygen_alert = 0
-
-		breath.oxygen -= oxygen_used
-		breath.nitrogen -= nitrogen_used
-		breath.carbon_dioxide += oxygen_used
-
 		//CO2 does not affect failed_last_breath. So if there was enough oxygen in the air but too much co2, this will hurt you, but only once per 4 ticks, instead of once per tick.
 		if(CO2_pp > safe_co2_max)
 			if(!co2overloadtime) // If it's the first breath with too much CO2 in it, lets start a counter, then have them pass out after 12s or so.
@@ -574,19 +532,6 @@
 				reagents.add_reagent("plasma", Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
 			toxins_alert = max(toxins_alert, 1)
 		else if(O2_pp > vox_oxygen_max && species.name == "Vox") //Oxygen is toxic to vox.
-			var/ratio = (breath.oxygen/vox_oxygen_max) * 1000
-			adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
-			toxins_alert = max(toxins_alert, 1)
-		else
-			toxins_alert = 0
-
-		if(Toxins_pp > safe_toxins_max) // Too much toxins
-			var/ratio = (breath.toxins/safe_toxins_max) * 10
-			//adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))	//Limit amount of damage toxin exposure can do per second
-			if(reagents)
-				reagents.add_reagent("plasma", Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
-			toxins_alert = max(toxins_alert, 1)
-		else if(O2_pp > vox_oxygen_max && species.name == "Nemoid") //Oxygen is toxic to nemoid.
 			var/ratio = (breath.oxygen/vox_oxygen_max) * 1000
 			adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
 			toxins_alert = max(toxins_alert, 1)

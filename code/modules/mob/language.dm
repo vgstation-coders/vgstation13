@@ -38,9 +38,9 @@
 	key = "k"
 	flags = WHITELISTED
 
-/datum/language/nemoid
+/datum/language/nemoian
 	name = "Glubbian"
-	desc = "An interesting language spoke mostly among Nemoids."
+	desc = "An interesting language spoke mostly among Nemoians."
 	speech_verb = "glubs"
 	colour = "skrell" //WIP
 	key = "p"

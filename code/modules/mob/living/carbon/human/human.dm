@@ -36,9 +36,9 @@
 	h_style = "Bald"
 	..(new_loc, "Skellington")
 
-/mob/living/carbon/human/nemoid/New(var/new_loc)
+/mob/living/carbon/human/nemoian/New(var/new_loc)
 	h_style = "Bald"
-	..(new_loc, "Nemoid")
+	..(new_loc, "Nemoian")
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species = null)
 
