@@ -9,14 +9,14 @@ Tickity tock
 
 /obj/item/watch/attack_self(mob/living/user as mob)
 	switch(watchtype)
-		if(watchtype = 1)
+		if(1)
 			usr.visible_message("<span class='rose'>[usr] swiftly raises the watch to his hand, and checks the time. So cool.</span>") 
-		if(watchtype = 2)
+		if(2)
 			usr.visible_message("<span class='rose'>[usr] flicks open the pocket watch, glances at the watch face, and closes the watch again. Classy.</span>") 
 		else
 			usr.visible_message("<span class='rose'>[usr] checks the time.</span>")
 
-	if(fake = 1)
+	if(fake == 1)
 		usr << "The time is [rand(1,24)]:[rand(1,60)]."
 	else
 		usr << "The time is [worldtime2text()]."
@@ -28,14 +28,14 @@ Tickity tock
 	set desc = "Check the time on a watch."
 
 	switch(watchtype)
-		if(watchtype = 1)
+		if(1)
 			usr.visible_message("<span class='rose'>[usr] swiftly raises the watch to his hand, and checks the time. So cool.</span>") 
-		if(watchtype = 2)
+		if(2)
 			usr.visible_message("<span class='rose'>[usr] flicks open the pocket watch, glances at the watch face, and closes the watch again. Classy.</span>") 
 		else
 			usr.visible_message("<span class='rose'>[usr] checks the time.</span>")
 
-	if(fake = 1)
+	if(fake == 1)
 		usr << "The time is [rand(1,24)]:[rand(1,60)]."
 	else
 		usr << "The time is [worldtime2text()]."
