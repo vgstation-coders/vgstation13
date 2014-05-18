@@ -36,6 +36,7 @@
 //		H.equip_or_collect(new /obj/item/clothing/mask/gas(H), slot_wear_mask) //Grab one from the armory you donk
 		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses/sechud(H), slot_glasses)
 		H.equip_or_collect(new /obj/item/weapon/gun/energy/gun(H), slot_s_store)
+		H.equip_or_collect(new /obj/item/watch/wrist/rolex(H), slot_r_store)
 		if(H.backbag == 1)
 			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
 			H.equip_or_collect(new /obj/item/weapon/handcuffs(H), slot_l_store)
@@ -83,6 +84,8 @@
 		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses/sechud(H), slot_glasses)
 //		H.equip_or_collect(new /obj/item/clothing/mask/gas(H), slot_wear_mask) //Grab one from the armory you donk
 		H.equip_or_collect(new /obj/item/device/flash(H), slot_l_store)
+		H.equip_or_collect(new /obj/item/watch/security(H), slot_r_store)
+		
 		if(H.backbag == 1)
 			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
 			H.equip_or_collect(new /obj/item/weapon/handcuffs(H), slot_l_hand)
@@ -140,7 +143,7 @@
 			H.equip_or_collect(new /obj/item/clothing/suit/storage/det_suit(H), slot_wear_suit)
 			H.equip_or_collect(new /obj/item/clothing/head/det_hat(H), slot_head)
 		H.equip_or_collect(new /obj/item/weapon/lighter/zippo(H), slot_l_store)
-
+		H.equip_or_collect(new /obj/item/watch/old(H), slot_s_store)
 		if(H.backbag == 1)//Why cant some of these things spawn in his office?
 			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
 			H.equip_or_collect(new /obj/item/weapon/storage/box/evidence(H), slot_l_hand)
@@ -191,6 +194,7 @@
 		//H.equip_or_collect(new /obj/item/device/pda/security(H), slot_belt)
 		H.equip_or_collect(new /obj/item/weapon/handcuffs(H), slot_s_store)
 		H.equip_or_collect(new /obj/item/device/flash(H), slot_l_store)
+		H.equip_or_collect(new /obj/item/watch/wrist/security(H), slot_r_store)
 		if(H.backbag == 1)
 			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
 			H.equip_or_collect(new /obj/item/weapon/handcuffs(H), slot_l_hand)

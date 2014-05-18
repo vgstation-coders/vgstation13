@@ -29,6 +29,7 @@
 		new /obj/item/clothing/suit/armor/captain(src)
 		new /obj/item/weapon/melee/telebaton(src)
 		new /obj/item/clothing/under/dress/dress_cap(src)
+		new /obj/item/watch/wrist/rolex(src)
 		return
 
 
@@ -81,6 +82,7 @@
 		new /obj/item/clothing/shoes/black(src)
 		new /obj/item/clothing/shoes/leather(src)
 		new /obj/item/clothing/shoes/white(src)
+		new /obj/item/watch/wrist/rolex(src)
 		return
 
 
@@ -119,6 +121,7 @@
 		new /obj/item/weapon/gun/energy/gun(src)
 		new /obj/item/clothing/tie/holster/waist(src)
 		new /obj/item/weapon/melee/telebaton(src)
+		new /obj/item/watch/wrist/rolex(src)
 		return
 
 
@@ -153,6 +156,7 @@
 		new /obj/item/weapon/reagent_containers/spray/pepper(src)
 		new /obj/item/weapon/melee/baton/loaded(src)
 		new /obj/item/weapon/gun/energy/taser(src)
+		new /obj/item/watch/wrist/security(src)
 		return
 
 

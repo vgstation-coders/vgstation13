@@ -23,6 +23,7 @@
 		H.equip_or_collect(new /obj/item/clothing/under/rank/chaplain(H), slot_w_uniform)
 		//H.equip_or_collect(new /obj/item/device/pda/chaplain(H), slot_belt)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
+		H.equip_or_collect(new /obj/item/watch/wrist(H), slot_r_store)
 		if(H.backbag == 1)
 			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
 		else

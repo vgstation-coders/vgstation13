@@ -19,6 +19,7 @@
 		new /obj/item/device/radio/headset/headset_sci(src)
 		new /obj/item/weapon/tank/air(src)
 		new /obj/item/clothing/mask/gas(src)
+		new /obj/item/watch/wrist/science(src)
 		return
 
 
@@ -47,4 +48,5 @@
 		new /obj/item/weapon/tank/air(src)
 		new /obj/item/clothing/mask/gas(src)
 		new /obj/item/device/flash(src)
+		new /obj/item/watch/wrist/rolex(src)
 		return

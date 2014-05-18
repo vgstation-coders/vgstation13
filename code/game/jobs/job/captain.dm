@@ -31,6 +31,7 @@
 		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/head/caphat(H), slot_head)
 		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
+ 		equip_or_collect(new /obj/item/watch/wrist/rolex(H), slot_r_store)
 		if(H.backbag == 1)
 			H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H), slot_r_hand)
 		else
@@ -86,6 +87,7 @@
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/head_of_personnel(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
+		H.equip_or_collect(new /obj/item/watch/wrist/rolex(H), slot_r_store)
 		//H.equip_or_collect(new /obj/item/device/pda/heads/hop(H), slot_belt)
 		if(H.backbag == 1)
 			H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H), slot_r_hand)

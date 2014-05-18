@@ -35,6 +35,9 @@
 	new /obj/item/clothing/head/beret/sec(src)
 	new /obj/item/clothing/head/beret/sec(src)
 	new /obj/item/clothing/head/beret/sec(src)
+	new /obj/item/watch/wrist/security(src)
+	new /obj/item/watch/wrist/security(src)
+	new /obj/item/watch/wrist/security(src)
 	return
 
 
