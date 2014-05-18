@@ -7,6 +7,8 @@ var/list/admin_verbs_default = list(
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
 	/client/proc/check_antagonists,		/*shows all antags*/
+	/datum/admins/proc/checkCID,
+	/datum/admins/proc/checkCKEY
 //	/client/proc/deadchat				/*toggles deadchat on/off*/
 	)
 var/list/admin_verbs_admin = list(
@@ -77,7 +79,7 @@ var/list/admin_verbs_admin = list(
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
 	/client/proc/jobbans,
-	/client/proc/unjobban_panel,
+	/client/proc/unjobban_panel
 	// /client/proc/DB_ban_panel
 	)
 var/list/admin_verbs_sounds = list(
@@ -101,7 +103,8 @@ var/list/admin_verbs_fun = list(
 	/client/proc/toggle_random_events,
 	/client/proc/set_ooc,
 	/client/proc/editappear,
-	/client/proc/commandname
+	/client/proc/commandname,
+	/client/proc/gib_money // /vg/
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom,		/*allows us to spawn instances*/
@@ -145,8 +148,15 @@ var/list/admin_verbs_debug = list(
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,
 	/client/proc/callproc,
-	/client/proc/toggledebuglogs
-	)
+	/client/proc/toggledebuglogs,
+	/client/proc/qdel_toggle,              // /vg/
+	/client/proc/cmd_admin_dump_instances, // /vg/
+	/client/proc/disable_bloodvirii,       // /vg/
+	/client/proc/dumpmch,
+#ifdef PROFILE_MACHINES
+	/client/proc/cmd_admin_dump_macprofile,
+#endif
+	) + PROFILING_VERBS
 var/list/admin_verbs_possess = list(
 	/proc/possess,
 	/proc/release
@@ -596,11 +606,11 @@ var/list/admin_verbs_mod = list(
 	set category = "Debug"
 	set name = "Kill Air"
 	set desc = "Toggle Air Processing"
-	if(kill_air)
-		kill_air = 0
+	if(air_processing_killed)
+		air_processing_killed = 0
 		usr << "<b>Enabled air processing.</b>"
 	else
-		kill_air = 1
+		air_processing_killed = 1
 		usr << "<b>Disabled air processing.</b>"
 	feedback_add_details("admin_verb","KA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] used 'kill air'.")

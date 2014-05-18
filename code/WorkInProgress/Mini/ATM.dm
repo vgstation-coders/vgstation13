@@ -61,13 +61,21 @@ log transactions
 		if(ticks_left_locked_down <= 0)
 			number_incorrect_tries = 0
 
-	for(var/obj/item/weapon/spacecash/S in src)
-		S.loc = src.loc
-		if(prob(50))
-			playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
-		else
-			playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
-		break
+	if(authenticated_account)
+		var/turf/T = get_turf(src)
+		if(istype(T) && locate(/obj/item/weapon/spacecash) in T)
+			var/list/cash_found = list()
+			for(var/obj/item/weapon/spacecash/S in T)
+				cash_found+=S
+			if(cash_found.len>0)
+				if(prob(50))
+					playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
+				else
+					playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
+				var/amount = count_cash(cash_found)
+				for(var/obj/item/weapon/spacecash/S in cash_found)
+					qdel(S)
+				authenticated_account.charge(-amount,null,"Credit deposit",terminal_id=machine_id,dest_name = "Terminal")
 
 /obj/machinery/atm/proc/reconnect_database()
 	for(var/obj/machinery/account_database/DB in world) //Hotfix until someone finds out why it isn't in 'machines'
@@ -87,7 +95,7 @@ log transactions
 	else if(authenticated_account)
 		if(istype(I,/obj/item/weapon/spacecash))
 			//consume the money
-			authenticated_account.money += I:worth
+			authenticated_account.money += I:worth * I:amount
 			if(prob(50))
 				playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
 			else
@@ -362,30 +370,7 @@ log transactions
 
 //create the most effective combination of notes to make up the requested amount
 /obj/machinery/atm/proc/withdraw_arbitrary_sum(var/arbitrary_sum)
-	while(arbitrary_sum >= 1000)
-		arbitrary_sum -= 1000
-		new /obj/item/weapon/spacecash/c1000(src)
-	while(arbitrary_sum >= 500)
-		arbitrary_sum -= 500
-		new /obj/item/weapon/spacecash/c500(src)
-	while(arbitrary_sum >= 200)
-		arbitrary_sum -= 200
-		new /obj/item/weapon/spacecash/c200(src)
-	while(arbitrary_sum >= 100)
-		arbitrary_sum -= 100
-		new /obj/item/weapon/spacecash/c100(src)
-	while(arbitrary_sum >= 50)
-		arbitrary_sum -= 50
-		new /obj/item/weapon/spacecash/c50(src)
-	while(arbitrary_sum >= 20)
-		arbitrary_sum -= 20
-		new /obj/item/weapon/spacecash/c20(src)
-	while(arbitrary_sum >= 10)
-		arbitrary_sum -= 10
-		new /obj/item/weapon/spacecash/c10(src)
-	while(arbitrary_sum >= 1)
-		arbitrary_sum -= 1
-		new /obj/item/weapon/spacecash(src)
+	dispense_cash(arbitrary_sum,get_turf(src))
 
 //stolen wholesale and then edited a bit from newscasters, which are awesome and by Agouri
 /obj/machinery/atm/proc/scan_user(mob/living/carbon/human/human_user as mob)

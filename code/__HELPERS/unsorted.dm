@@ -172,7 +172,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 /proc/DirBlocked(turf/loc,var/dir)
 	for(var/obj/structure/window/D in loc)
 		if(!D.density)			continue
-		if(D.dir == SOUTHWEST)	return 1
+		if(D.is_fulltile())	return 1
 		if(D.dir == dir)		return 1
 
 	for(var/obj/machinery/door/D in loc)
@@ -291,6 +291,16 @@ Turf and target are seperate in case you want to teleport some distance from a t
 					PDA.name = "PDA-[newname] ([PDA.ownjob])"
 					if(!search_id)	break
 					search_pda = 0
+
+		//Fixes renames not being reflected in objective text
+		var/list/O = (typesof(/datum/objective)  - /datum/objective)
+		var/length
+		var/pos
+		for(var/datum/objective/objective in O)
+			if(objective.target != mind) continue
+			length = lentext(oldname)
+			pos = findtextEx(objective.explanation_text, oldname)
+			objective.explanation_text = copytext(objective.explanation_text, 1, pos)+newname+copytext(objective.explanation_text, pos+length)
 	return 1
 
 
@@ -1005,7 +1015,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 			/*if(T1.parent)
 				air_master.groups_to_rebuild += T1.parent
 			else
-				air_master.tiles_to_update += T1*/
+				air_master.mark_for_update(T1)*/
 
 	if(fromupdate.len)
 		for(var/turf/simulated/T2 in fromupdate)
@@ -1014,10 +1024,10 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 			/*if(T2.parent)
 				air_master.groups_to_rebuild += T2.parent
 			else
-				air_master.tiles_to_update += T2*/
+				air_master.mark_for_update(T2)*/
 
 	for(var/obj/O in doors)
-		O:update_nearby_tiles(1)
+		O:update_nearby_tiles()
 
 
 
@@ -1171,10 +1181,10 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 			/*if(T1.parent)
 				air_master.groups_to_rebuild += T1.parent
 			else
-				air_master.tiles_to_update += T1*/
+				air_master.mark_for_update(T1)*/
 
 	for(var/obj/O in doors)
-		O:update_nearby_tiles(1)
+		O:update_nearby_tiles()
 
 
 
@@ -1478,3 +1488,8 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 		result.Insert(temp, "[angle]")
 
 	return result
+
+/proc/iscatwalk(atom/A)
+	if(istype(A, /turf/simulated/floor/plating/airless/catwalk))
+		return 1
+	return 0

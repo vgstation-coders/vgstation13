@@ -64,6 +64,7 @@
 /var/const/access_gateway = 62
 /var/const/access_sec_doors = 63 // Security front doors
 /var/const/access_psychiatrist = 64 // Psychiatrist's office
+/var/const/access_salvage_captain = 65 // Salvage ship captain's quarters
 
 	//BEGIN CENTCOM ACCESS
 	/*Should leave plenty of room if we need to add more access levels.
@@ -176,6 +177,36 @@
 			return 0
 	if(src.req_one_access && src.req_one_access.len)
 		for(var/req in src.req_one_access)
+			if(req in L) //has an access from the single access list
+				return 1
+		return 0
+	return 1
+
+// /vg/ - Generic Access Checks.
+// Allows more flexible access checks.
+/proc/can_access(var/list/L, var/list/req_access=null,var/list/req_one_access=null)
+	// No perms set?  He's in.
+	if(!req_access  && !req_one_access)
+		return 1
+	// Fucked permissions set?  He's in.
+	if(!istype(req_access, /list))
+		return 1
+	// Blank permissions set?  He's in.
+	if(!req_access.len && (!req_one_access || !req_one_access.len))
+		return 1
+
+	// User doesn't have any accesses?  Fuck off.
+	if(!L)	return 0
+	if(!istype(L, /list))	return 0
+
+	// Doesn't have a req_access
+	for(var/req in req_access)
+		if(!(req in L)) //doesn't have this access
+			return 0
+
+	// If he has at least one req_one access, he's in.
+	if(req_one_access && req_one_access.len)
+		for(var/req in req_one_access)
 			if(req in L) //has an access from the single access list
 				return 1
 		return 0
@@ -415,13 +446,18 @@
 		if(access_cent_captain)
 			return "Code Gold"
 
+// Cache - N3X
+var/global/list/all_jobs
 /proc/get_all_jobs()
-	var/list/all_jobs = list()
-	var/list/all_datums = typesof(/datum/job)
-	all_datums.Remove(list(/datum/job,/datum/job/ai,/datum/job/cyborg))
-	var/datum/job/jobdatum
-	for(var/jobtype in all_datums)
-		jobdatum = new jobtype
+	// Have cache?  Use cache.
+	if(all_jobs)
+		return all_jobs
+
+	// Rebuild cache.
+	all_jobs=list()
+	for(var/jobtype in typesof(/datum/job) - /datum/job)
+		var/datum/job/jobdatum = new jobtype
+		if(jobdatum.info_flag & JINFO_SILICON) continue
 		all_jobs.Add(jobdatum.title)
 	return all_jobs
 
