@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1370208410 source:c:\users\chris\desktop\fuckingbyond\vgstation13\dllsocket\main.cpp
+	<winsock2.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<arpa/inet.h>
+	<netdb.h>
+	<fcntl.h>
+	<stdlib.h>
+	<string.h>
+

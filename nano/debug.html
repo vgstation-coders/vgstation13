@@ -1,0 +1,31 @@
+
+	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<head>
+		<script type='text/javascript'>
+			function receiveUpdateData(jsonString)
+			{
+				// We need both jQuery and NanoUpdate to be able to recieve data
+				// At the moment any data received before those libraries are loaded will be lost
+				if (typeof NanoUpdate != 'undefined' && typeof jQuery != 'undefined')
+				{
+					NanoUpdate.receiveUpdateData(jsonString);
+				}
+			}
+		</script>
+		<script type='text/javascript' src='libraries.min.js'></script> <script type='text/javascript' src='nano_config.js'></script> <script type='text/javascript' src='nano_update.js'></script> <script type='text/javascript' src='nano_base_helpers.js'></script> <link rel='stylesheet' type='text/css' href='shared.css'> <link rel='stylesheet' type='text/css' href='icons.css'> 
+	</head>
+	<body scroll=auto data-url-parameters='{"src":"[0x2100e220]"}' data-template-data='{"main":"chem_dispenser.tmpl"}' data-initial-data='{"amount":30,"energy":50,"maxEnergy":50,"isBeakerLoaded":0,"custom":0,"beakerContents":[],"beakerCurrentVolume":null,"beakerMaxVolume":null,"chemicals":[{"title":"Aluminum","id":"aluminum","commands":{"dispense":"aluminum"}},{"title":"Carbon","id":"carbon","commands":{"dispense":"carbon"}},{"title":"Chlorine","id":"chlorine","commands":{"dispense":"chlorine"}},{"title":"Copper","id":"copper","commands":{"dispense":"copper"}},{"title":"Ethanol","id":"ethanol","commands":{"dispense":"ethanol"}},{"title":"Fluorine","id":"fluorine","commands":{"dispense":"fluorine"}},{"title":"Hydrogen","id":"hydrogen","commands":{"dispense":"hydrogen"}},{"title":"Iron","id":"iron","commands":{"dispense":"iron"}},{"title":"Lithium","id":"lithium","commands":{"dispense":"lithium"}},{"title":"Mercury","id":"mercury","commands":{"dispense":"mercury"}},{"title":"Nitrogen","id":"nitrogen","commands":{"dispense":"nitrogen"}},{"title":"Oxygen","id":"oxygen","commands":{"dispense":"oxygen"}},{"title":"Phosphorus","id":"phosphorus","commands":{"dispense":"phosphorus"}},{"title":"Potassium","id":"potassium","commands":{"dispense":"potassium"}},{"title":"Radium","id":"radium","commands":{"dispense":"radium"}},{"title":"Sulphuric acid","id":"sacid","commands":{"dispense":"sacid"}},{"title":"Silicon","id":"silicon","commands":{"dispense":"silicon"}},{"title":"Sodium","id":"sodium","commands":{"dispense":"sodium"}},{"title":"Sugar","id":"sugar","commands":{"dispense":"sugar"}},{"title":"Sulfur","id":"sulfur","commands":{"dispense":"sulfur"}},{"title":"Tungsten","id":"tungsten","commands":{"dispense":"tungsten"}},{"title":"Water","id":"water","commands":{"dispense":"water"}}],"ui":{"status":2,"user":{"name":"Shit Nigga"}}}'>
+		<div id='uiWrapper'>
+			<div id='uiTitleWrapper'><div id='uiStatusIcon' class='icon24 uiStatusGood'></div><div id='uiTitle'>Chem Dispenser 5000</div><div id='uiTitleFluff'></div></div>
+			<div id='uiContent'>
+				<div id='uiNoJavaScript'>Initiating...</div>
+	
+	<div id='mainTemplate'></div>
+	
+			</div>
+		</div>
+	</body>
+</html>
+	
