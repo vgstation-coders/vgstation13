@@ -22,7 +22,7 @@
 	for(var/client/C in admins)
 		if(C.prefs.toggles & CHAT_PRAYER)
 			C << msg
-	usr << "Your prayers have been received by the gods."
+	usr << "Your prayers have probably been ignored by the gods."
 
 	feedback_add_details("admin_verb","PR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	//log_admin("HELP: [key_name(src)]: [msg]")
