@@ -91,6 +91,7 @@
 		dismantle_wall()
 
 /turf/simulated/wall/attack_paw(mob/user as mob)
+	user.changeNext_move(8)
 	if ((M_HULK in user.mutations))
 		if (prob(hardness))
 			usr << text("\blue You smash through the wall.")
@@ -104,6 +105,7 @@
 	return src.attack_hand(user)
 
 /turf/simulated/wall/attack_animal(var/mob/living/simple_animal/M)
+	M.changeNext_move(8)
 	if(M.environment_smash >= 2)
 		if(istype(src, /turf/simulated/wall/r_wall))
 			if(M.environment_smash == 3)
@@ -117,6 +119,7 @@
 			return
 
 /turf/simulated/wall/attack_hand(mob/user as mob)
+	user.changeNext_move(8)
 	if (M_HULK in user.mutations)
 		if (prob(hardness) || rotting)
 			usr << text("\blue You smash through the wall.")
@@ -138,7 +141,7 @@
 	return
 
 /turf/simulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
-
+	user.changeNext_move(8)
 	if (!(istype(user, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
 		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
 		return
@@ -360,7 +363,7 @@
 			O.layer = 5
 			O.mouse_opacity = 0
 
-/turf/simulated/wall/proc/thermitemelt(mob/user as mob)
+/turf/simulated/wall/proc/thermitemelt(var/mob/user)
 	if(mineral == "diamond")
 		return
 	var/obj/effect/overlay/O = new/obj/effect/overlay( src )
@@ -391,6 +394,21 @@
 
 	spawn(100)
 		if(O)	del(O)
+//	F.sd_LumReset()		//TODO: ~Carn
+	return
+
+// Generic wall melting proc.
+/turf/simulated/wall/proc/melt(var/mob/user)
+	if(mineral == "diamond")
+		return
+
+	src.ChangeTurf(/turf/simulated/floor/plating)
+
+	var/turf/simulated/floor/F = src
+	if(!F)
+		return
+	F.burn_tile()
+	F.icon_state = "wall_thermite"
 //	F.sd_LumReset()		//TODO: ~Carn
 	return
 

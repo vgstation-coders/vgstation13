@@ -1110,3 +1110,41 @@ Pressure: [env.return_pressure()]"}
 		log_admin("[key_name(src)] has toggled [M.key]'s [blockname] block [state]!")
 	else
 		alert("Invalid mob")
+
+
+/client/proc/cmd_admin_dump_instances()
+	set category = "Debug"
+	set name = "Dump Instance Counts"
+	set desc = "MEMORY PROFILING IS TOO HIGH TECH"
+
+	var/F=file("instances.csv")
+	fdel(F)
+	F << "Types,Number of Instances"
+	for(var/key in type_instances)
+		F << "[key],[type_instances[key]]"
+
+	usr << "\blue Dumped to instances.csv."
+
+#ifdef PROFILE_MACHINES
+/client/proc/cmd_admin_dump_macprofile()
+	set category = "Debug"
+	set name = "Dump Machine Profiling"
+
+	var/F = file("machine_profiling.csv")
+	fdel(F)
+	F << "type,nanoseconds"
+	for(var/typepath in machine_profiling)
+		var/ns = machine_profiling[typepath]
+		F << "[typepath],[ns]"
+
+	usr << "\blue Dumped to machine_profiling.csv."
+#endif
+
+/client/proc/gib_money()
+	set category = "Fun"
+	set name = "Dispense Money"
+	set desc = "Honk"
+
+	var/response = input(src,"How much moneys?") as num
+	if( response < 1) return
+	dispense_cash(response, mob.loc)

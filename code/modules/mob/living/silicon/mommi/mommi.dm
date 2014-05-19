@@ -40,8 +40,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 	if(!cell)
 		cell = new /obj/item/weapon/cell(src)
-		cell.maxcharge = 7500
-		cell.charge = 7500
+		cell.maxcharge = 15000
+		cell.charge = 15000
 	..()
 	module = new /obj/item/weapon/robot_module/mommi(src)
 	laws = new mommi_base_law_type
@@ -78,10 +78,13 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 
 /mob/living/silicon/robot/mommi/choose_icon()
-	var/icontype = input("Select an icon!", "Mobile MMI", null) in list("Basic", "Keeper")
+	var/icontype = input("Select an icon!", "Mobile MMI", null) in list("Basic", "Hover", "Keeper", "RepairBot", "Replicator")
 	switch(icontype)
-		if("Basic")	subtype = "mommi"
-		else		subtype = "keeper"
+		if("Replicator") subtype = "replicator"
+		if("Keeper")	 subtype = "keeper"
+		if("RepairBot")	 subtype = "repairbot"
+		if("Hover")	     subtype = "hovermommi"
+		else			 subtype = "mommi"
 	updateicon()
 	var/answer = input("Is this what you want?", "Mobile MMI", null) in list("Yes", "No")
 	switch(answer)
@@ -111,6 +114,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			module = new /obj/item/weapon/robot_module/standard(src)
 			module_sprites["Basic"] = "mommi"
 			module_sprites["Keeper"] = "keeper"
+			module_sprites["Replicator"] = "replicator"
+			module_sprites["RepairBot"] = "repairbot"
+			module_sprites["Hover"] = "hovermommi"
 
 	//Custom_sprite check and entry
 	if (custom_sprite == 1)
@@ -310,6 +316,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		else if(U.locked)
 			usr << "The upgrade is locked and cannot be used yet!"
 		else
+			if(istype(U, /obj/item/borg/upgrade/reset))
+				usr << "<span class='warning'>No.</span>"
+				return
 			if(U.action(src))
 				usr << "You apply the upgrade to [src]!"
 				usr.drop_item()
@@ -513,6 +522,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 /mob/living/silicon/robot/mommi/Move(a, b, flag)
 	..()
 
+/*
 /mob/living/silicon/robot/mommi/proc/ActivateKeeper()
 	set category = "Robot Commands"
 	set name = "Activate KEEPER"
@@ -527,8 +537,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		R.UnlinkSelf()
 		var/obj/item/weapon/aiModule/keeper/mdl = new
 
-		mdl.transmitInstructions(src, src)
+		mdl.upload(src.laws,src,src)
 		src << "These are your laws now:"
 		src.show_laws()
 
 		src.verbs -= /mob/living/silicon/robot/mommi/proc/ActivateKeeper
+*/

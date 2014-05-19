@@ -1,6 +1,15 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
 #define DEBUG
+#define PROFILE_MACHINES // Disable when not debugging.
+
+#ifdef PROFILE_MACHINES
+#define CHECK_DISABLED(TYPE) if(disable_##TYPE) return
+var/global/disable_scrubbers = 0
+var/global/disable_vents     = 0
+#else
+#define CHECK_DISABLED(TYPE) /* DO NOTHINK */
+#endif
 
 #define PI 3.1415
 
@@ -366,6 +375,11 @@ var/MAX_EXPLOSION_RANGE = 14
 #define M_SOBER         203		// Increased alcohol metabolism
 #define M_PSY_RESIST    204		// Block remoteview
 #define M_SUPER_FART    205		// Duh
+#define M_SMILE         206		// :)
+#define M_ELVIS         207		// You ain't nothin' but a hound dog.
+
+// Bustanuts
+#define M_HARDCORE      300
 
 //disabilities
 #define NEARSIGHTED		1
@@ -679,9 +693,10 @@ var/list/TAGGERLOCATIONS = list(
 #define CHAT_DEBUGLOGS	2048
 #define CHAT_LOOC		4096
 #define CHAT_GHOSTRADIO 8192
+#define SOUND_STREAMING 16384 // /vg/
 
 
-#define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_AMBIENCE|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_LOOC)
+#define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_AMBIENCE|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_LOOC|SOUND_STREAMING)
 
 #define BE_TRAITOR		1
 #define BE_OPERATIVE	2
@@ -732,13 +747,15 @@ var/list/be_special_flags = list(
 #define RIGHT 2
 
 // for secHUDs and medHUDs and variants. The number is the location of the image on the list hud_list of humans.
-#define HEALTH_HUD		1 // dead, alive, sick, health status
-#define STATUS_HUD		2 // a simple line rounding the mob's number health
-#define ID_HUD			3 // the job asigned to your ID
-#define WANTED_HUD		4 // wanted, released, parroled, security status
-#define IMPLOYAL_HUD	5 // loyality implant
-#define IMPCHEM_HUD		6 // chemical implant
-#define IMPTRACK_HUD	7 // tracking implant
+#define HEALTH_HUD          1 // a simple line rounding the mob's number health
+#define STATUS_HUD          2 // alive, dead, diseased, etc.
+#define ID_HUD              3 // the job asigned to your ID
+#define WANTED_HUD          4 // wanted, released, parroled, security status
+#define IMPLOYAL_HUD		5 // loyality implant
+#define IMPCHEM_HUD		    6 // chemical implant
+#define IMPTRACK_HUD		7 // tracking implant
+#define SPECIALROLE_HUD 	8 // AntagHUD image
+#define STATUS_HUD_OOC		9 // STATUS_HUD without virus db check for someone being ill.
 
 //Pulse levels, very simplified
 #define PULSE_NONE		0	//so !M.pulse checks would be possible
@@ -837,3 +854,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define RECYK_BIOLOGICAL 3
 #define RECYK_METAL      4
 #define RECYK_ELECTRONIC 5
+
+////////////////
+// job.info_flags
+#define JINFO_SILICON 1 // Silicon job

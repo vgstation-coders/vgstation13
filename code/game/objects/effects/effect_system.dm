@@ -25,6 +25,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 /obj/effect/proc/delete()
 	loc = null
 	if(reagents)
+		reagents.my_atom = null
 		reagents.delete()
 	return
 
@@ -43,6 +44,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	//var/turf/T = src.loc
 	//if (istype(T, /turf))
 	//	T.firelevel = 0 //TODO: FIX
+	src.delete()
 	..()
 	return
 
@@ -82,7 +84,6 @@ would spawn and follow the beaker, even if it is carried or thrown.
 		holder = atom
 
 	proc/start()
-
 
 /////////////////////////////////////////////
 // GENERIC STEAM SPREAD SYSTEM
@@ -141,23 +142,29 @@ steam.start() -- spawns the effect
 
 /obj/effect/effect/sparks
 	name = "sparks"
+	desc = "it's a spark what do you need to know?"
 	icon_state = "sparks"
-	var/amount = 6.0
 	anchored = 1.0
 	mouse_opacity = 0
 
-/obj/effect/effect/sparks/New()
+	var/inertia_dir = 0
+	var/energy = 0
+
+/obj/effect/effect/sparks/New(var/travel_dir)
 	..()
-	playsound(get_turf(src), "sparks", 100, 1)
-	var/turf/T = src.loc
+
+/obj/effect/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
+	inertia_dir=travel_dir
+	energy=rand(1,max_energy)
+	processing_objects.Add(src)
+	var/turf/T = loc
 	if (istype(T, /turf))
-		T.hotspot_expose(1000,100)
-	spawn (100)
-		delete()
-	return
+		T.hotspot_expose(1000, 100)
 
 /obj/effect/effect/sparks/Destroy()
+	processing_objects.Remove(src)
 	var/turf/T = src.loc
+
 	if (istype(T, /turf))
 		T.hotspot_expose(1000,100)
 	..()
@@ -170,43 +177,40 @@ steam.start() -- spawns the effect
 		T.hotspot_expose(1000,100)
 	return
 
-/datum/effect/effect/system/spark_spread
-	var/total_sparks = 0 // To stop it being spammed and lagging!
+/obj/effect/effect/sparks/process()
+	if(energy==0)
+		processing_objects.Remove(src)
+		returnToPool(src)
+		return
+	else
+		step(src,inertia_dir)
+	energy--
 
-	set_up(n = 3, c = 0, loca)
-		if(n > 10)
-			n = 10
-		number = n
-		cardinals = c
-		if(istype(loca, /turf/))
-			location = loca
-		else
-			location = get_turf(loca)
+/datum/effect/effect/system/spark_spread/set_up(var/n = 3, var/use_cardinals = 0, loca)
+	number = min(10,n)
+	cardinals = use_cardinals
 
-	start()
-		var/i = 0
-		for(i=0, i<src.number, i++)
-			if(src.total_sparks > 20)
-				return
-			spawn(0)
-				if(holder)
-					src.location = get_turf(holder)
-				var/obj/effect/effect/sparks/sparks = new /obj/effect/effect/sparks(src.location)
-				src.total_sparks++
-				var/direction
-				if(src.cardinals)
-					direction = pick(cardinal)
-				else
-					direction = pick(alldirs)
-				for(i=0, i<pick(1,2,3), i++)
-					sleep(5)
-					step(sparks,direction)
-				spawn(20)
-					if(sparks)
-						if(sparks) sparks.delete()
-					src.total_sparks--
+	if (istype(loca, /turf/))
+		location = loca
+	else
+		location = get_turf(loca)
 
+/datum/effect/effect/system/spark_spread/start()
+	if (holder)
+		location = get_turf(holder)
 
+	var/list/directions
+	if (cardinals)
+		directions = cardinal.Copy()
+	else
+		directions = alldirs.Copy()
+
+	playsound(location, "sparks", 100, 1)
+	for (var/i = 1 to number)
+		var/nextdir=pick_n_take(directions)
+		if(nextdir)
+			var/obj/effect/effect/sparks/sparks = getFromPool(/obj/effect/effect/sparks, location)
+			sparks.start(nextdir)
 
 /////////////////////////////////////////////
 //// SMOKE SYSTEMS
@@ -572,7 +576,62 @@ steam.start() -- spawns the effect
 		src.processing = 0
 		src.on = 0
 
-
+/datum/effect/effect/system/ion_trail_follow/space_trail
+	var/turf/oldloc // secondary ion trail loc
+	var/turf/currloc
+/datum/effect/effect/system/ion_trail_follow/space_trail/start()
+	if(!src.on)
+		src.on = 1
+		src.processing = 1
+	if(src.processing)
+		src.processing = 0
+		spawn(0)
+			var/turf/T = get_turf(src.holder)
+			if(currloc != T)
+				switch(holder.dir)
+					if(NORTH)
+						src.oldposition = T
+						src.oldposition = get_step(oldposition, SOUTH)
+						src.oldloc = get_step(oldposition,EAST)
+						//src.oldloc = get_step(oldloc, SOUTH)
+					if(SOUTH) // More difficult, offset to the north!
+						src.oldposition = get_step(holder,NORTH)
+						src.oldposition = get_step(oldposition,NORTH)
+						src.oldloc = get_step(oldposition,EAST)
+						//src.oldloc = get_step(oldloc,NORTH)
+					if(EAST) // Just one to the north should suffice
+						src.oldposition = T
+						src.oldposition = get_step(oldposition, WEST)
+						src.oldloc = get_step(oldposition,NORTH)
+						//src.oldloc = get_step(oldloc,WEST)
+					if(WEST) // One to the east and north from there
+						src.oldposition = get_step(holder,EAST)
+						src.oldposition = get_step(oldposition,EAST)
+						src.oldloc = get_step(oldposition,NORTH)
+						//src.oldloc = get_step(oldloc,EAST)
+				if(istype(T, /turf/space))
+					var/obj/effect/effect/ion_trails/I = new /obj/effect/effect/ion_trails(src.oldposition)
+					var/obj/effect/effect/ion_trails/II = new /obj/effect/effect/ion_trails(src.oldloc)
+					//src.oldposition = T
+					I.dir = src.holder.dir
+					II.dir = src.holder.dir
+					flick("ion_fade", I)
+					flick("ion_fade", II)
+					I.icon_state = "blank"
+					II.icon_state = "blank"
+					spawn( 20 )
+						if(I) I.delete()
+						if(II) II.delete()
+				spawn(2)
+					if(src.on)
+						src.processing = 1
+						src.start()
+			else
+				spawn(2)
+					if(src.on)
+						src.processing = 1
+						src.start()
+			currloc = T
 
 
 /////////////////////////////////////////////
@@ -783,14 +842,14 @@ steam.start() -- spawns the effect
 
 	New()
 		..()
-		update_nearby_tiles(1)
+		update_nearby_tiles()
 
 
 
 	Destroy()
 
 		density = 0
-		update_nearby_tiles(1)
+		update_nearby_tiles()
 		..()
 
 	proc/updateicon()
@@ -815,12 +874,12 @@ steam.start() -- spawns the effect
 		return
 
 	attack_hand(var/mob/user)
+		user.changeNext_move(10)
 		if ((M_HULK in user.mutations) || (prob(75 - metal*25)))
 			user << "\blue You smash through the metal foam wall."
 			for(var/mob/O in oviewers(user))
 				if ((O.client && !( O.blinded )))
 					O << "\red [user] smashes through the foamed metal."
-
 			del(src)
 		else
 			user << "\blue You hit the metal foam but bounce off it."
@@ -828,7 +887,7 @@ steam.start() -- spawns the effect
 
 
 	attackby(var/obj/item/I, var/mob/user)
-
+		user.changeNext_move(10)
 		if (istype(I, /obj/item/weapon/grab))
 			var/obj/item/weapon/grab/G = I
 			G.affecting.loc = src.loc
@@ -853,20 +912,14 @@ steam.start() -- spawns the effect
 		return !density
 
 
-	proc/update_nearby_tiles(need_rebuild)
-		if(!air_master) return 0
+	proc/update_nearby_tiles()
+		if (isnull(air_master))
+			return 0
 
-		var/turf/simulated/source = get_turf(src)
-		var/turf/simulated/north = get_step(source,NORTH)
-		var/turf/simulated/south = get_step(source,SOUTH)
-		var/turf/simulated/east = get_step(source,EAST)
-		var/turf/simulated/west = get_step(source,WEST)
+		var/T = loc
 
-		if(istype(source)) air_master.tiles_to_update |= source
-		if(istype(north)) air_master.tiles_to_update |= north
-		if(istype(south)) air_master.tiles_to_update |= south
-		if(istype(east)) air_master.tiles_to_update |= east
-		if(istype(west)) air_master.tiles_to_update |= west
+		if (isturf(T))
+			air_master.mark_for_update(T)
 
 		return 1
 
@@ -905,8 +958,14 @@ steam.start() -- spawns the effect
 			var/heavy = -1
 			var/light = -1
 			var/flash = -1
-
+			var/range = 0
 			// Clamp all values to MAX_EXPLOSION_RANGE
+			range = min (MAX_EXPLOSION_RANGE, light + round(amount/3))
+			devastation = round(min(1, range * 0.25)) // clamps to 1 devestation for grenades
+			heavy = round(min(3, range * 0.5)) // clamps to 3 heavy range for grenades
+			light = min(6, range) // clamps to 6 light range for grenades
+			flash = range * 1.5
+			/*
 			if (round(amount/12) > 0)
 				devastation = min (MAX_EXPLOSION_RANGE, devastation + round(amount/12))
 
@@ -918,6 +977,7 @@ steam.start() -- spawns the effect
 
 			if (flash && flashing_factor)
 				flash += (round(amount/4) * flashing_factor)
+			*/
 
 			for(var/mob/M in viewers(8, location))
 				M << "\red The solution violently explodes."

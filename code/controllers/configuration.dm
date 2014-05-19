@@ -79,7 +79,10 @@
 	var/server
 	var/banappeals
 	var/wikiurl = "http://baystation12.net/wiki/index.php?title=Main_Page"
+	var/vgws_base_url = "http://vg13.undo.it" // No hanging slashes.
 	var/forumurl = "http://baystation12.net/forums/"
+
+	var/media_base_url = "" // http://ss13.nexisonline.net/media
 
 	//Alert level description
 	var/alert_desc_green = "All threats to the station have passed. Security may not have weapons visible, privacy laws are once again fully enforced."
@@ -481,6 +484,10 @@
 					config.assistantratio = text2num(value)
 				if("copy_logs")
 					copy_logs=value
+				if("media_base_url")
+					media_base_url = value
+				if("vgws_base_url")
+					vgws_base_url = value
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

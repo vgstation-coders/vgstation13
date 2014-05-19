@@ -74,7 +74,9 @@
 	TOXICFARTBLOCK = getAssignedBlock("TOXICFART",  numsToAssign, good=1)
 	STRONGBLOCK    = getAssignedBlock("STRONG",     numsToAssign, good=1)
 	HORNSBLOCK     = getAssignedBlock("HORNS",      numsToAssign)
-
+	SMILEBLOCK     = getAssignedBlock("SMILE",      numsToAssign)
+	ELVISBLOCK     = getAssignedBlock("ELVIS",      numsToAssign)
+	
 	// Powers
 	SOBERBLOCK     = getAssignedBlock("SOBER",      numsToAssign, good=1)
 	PSYRESISTBLOCK = getAssignedBlock("PSYRESIST",  numsToAssign, DNA_HARD_BOUNDS, good=1)
@@ -84,7 +86,7 @@
 	EATBLOCK       = getAssignedBlock("EAT",        numsToAssign, DNA_HARD_BOUNDS, good=1)
 	JUMPBLOCK      = getAssignedBlock("JUMP",       numsToAssign, DNA_HARD_BOUNDS, good=1)
 	MELTBLOCK      = getAssignedBlock("MELT",       numsToAssign, good=1)
-	IMMOLATEBLOCK  = getAssignedBlock("IMMOLATE",   numsToAssign, good=1)
+	IMMOLATEBLOCK  = getAssignedBlock("IMMOLATE",   numsToAssign)
 	EMPATHBLOCK    = getAssignedBlock("EMPATH",     numsToAssign, DNA_HARD_BOUNDS, good=1)
 	SUPERFARTBLOCK = getAssignedBlock("SUPERFART",  numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	POLYMORPHBLOCK = getAssignedBlock("POLYMORPH",  numsToAssign, DNA_HARDER_BOUNDS, good=1)

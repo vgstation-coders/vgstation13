@@ -93,7 +93,21 @@ datum
 
 			on_update(var/atom/A)
 				return
-
+		muhhardcores
+			name = "Hardcores"
+			id = "bustanut"
+			description = "Concentrated hardcore beliefs."
+			reagent_state = LIQUID
+			color = "#FFF000"
+			custom_metabolism = 0.01
+			on_mob_life(var/mob/living/M)
+				if(prob(1))
+					if(prob(90))
+						M << "<span class='notice'>[pick("You feel quite hardcore","Coderbased is your god", "Fucking kickscammers Bustration will be the best")]."
+					else
+						M.say(pick("Muh hardcores.", "Falling down is a feature", "Gorrillionaires and Booty Borgs when?"))
+				..()
+				return
 		slimejelly
 			name = "Slime Jelly"
 			id = "slimejelly"
@@ -271,22 +285,7 @@ datum
 				if (!istype(T)) return
 				src = null
 				if(volume >= 3)
-					if(T.wet >= 1) return
-					T.wet = 1
-					if(T.wet_overlay)
-						T.overlays -= T.wet_overlay
-						T.wet_overlay = null
-					T.wet_overlay = image('icons/effects/water.dmi',T,"wet_floor")
-					T.overlays += T.wet_overlay
-
-					spawn(800)
-						if (!istype(T)) return
-						if(T.wet >= 2) return
-						T.wet = 0
-						if(T.wet_overlay)
-							T.overlays -= T.wet_overlay
-							T.wet_overlay = null
-
+					T.wet(800)
 				for(var/mob/living/carbon/slime/M in T)
 					M.adjustToxLoss(rand(15,20))
 				for(var/mob/living/carbon/human/H in T)
@@ -1791,6 +1790,21 @@ datum
 				..()
 				return
 
+		inacusiate
+			name = "Inacusiate"
+			id = "inacusiate"
+			description = "Rapidly heals ear damage"
+			reagent_state = LIQUID
+			color = "#6600FF" // rgb: 100, 165, 255
+			overdose = REAGENTS_OVERDOSE
+
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				M.ear_damage = 0
+				M.ear_deaf = 0
+				..()
+				return
+
 		peridaxon
 			name = "Peridaxon"
 			id = "peridaxon"
@@ -2513,21 +2527,7 @@ datum
 				if (!istype(T)) return
 				src = null
 				if(volume >= 3)
-					if(T.wet >= 1) return
-					T.wet = 1
-					if(T.wet_overlay)
-						T.overlays -= T.wet_overlay
-						T.wet_overlay = null
-					T.wet_overlay = image('icons/effects/water.dmi',T,"wet_floor")
-					T.overlays += T.wet_overlay
-
-					spawn(800)
-						if (!istype(T)) return
-						if(T.wet >= 2) return
-						T.wet = 0
-						if(T.wet_overlay)
-							T.overlays -= T.wet_overlay
-							T.wet_overlay = null
+					T.wet(800)
 				var/hotspot = (locate(/obj/fire) in T)
 				if(hotspot)
 					var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles() )
@@ -3080,7 +3080,7 @@ datum
 			on_mob_life(var/mob/living/M as mob)
 				// Sobering multiplier.
 				// Sober block makes it more difficult to get drunk
-				var/sober_str=(M_SOBER in M.mutations)?1:2
+				var/sober_str=!(M_SOBER in M.mutations)?1:2
 
 				M:nutrition += nutriment_factor
 				holder.remove_reagent(src.id, FOOD_METABOLISM)

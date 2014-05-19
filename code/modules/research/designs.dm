@@ -77,7 +77,7 @@ other types of metals and chemistry for reagents).
 ///////////////////Computer Boards///////////////////////////////////
 
 /datum/design/seccamera
-	name = "Circuit Design (Security)"
+	name = "Circuit Design (Security Cameras)"
 	desc = "Allows for the construction of circuit boards used to build security camera computers."
 	id = "seccamera"
 	req_tech = list("programming" = 2)
@@ -321,6 +321,15 @@ other types of metals and chemistry for reagents).
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/condimaster
 
+/datum/design/snackbarmachine
+	name = "Circuit Design (SnackBar Machine)"
+	desc = "Allows for the cosntruction of circuit boards used to build SnackBar Machines"
+	id="snackbarmachine"
+	req_tech = list ("engineering" = 3, "biotech" = 4)
+	build_type = IMPRINTER
+	materials = list("$glass" = 2000, "sacid" = 20)
+	build_path = /obj/item/weapon/circuitboard/snackbar_machine
+
 /datum/design/clonecontrol
 	name = "Circuit Design (Cloning Machine Console)"
 	desc = "Allows for the construction of circuit boards used to build a new Cloning Machine console."
@@ -519,6 +528,7 @@ other types of metals and chemistry for reagents).
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/pipedispenser/disposal
+
 ///////////////////////////////////
 //////////AI Module Disks//////////
 ///////////////////////////////////
@@ -529,7 +539,7 @@ other types of metals and chemistry for reagents).
 	req_tech = list("programming" = 3, "materials" = 4)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20, "$gold" = 100)
-	build_path = /obj/item/weapon/aiModule/safeguard
+	build_path = /obj/item/weapon/aiModule/targetted/safeguard
 
 /datum/design/onehuman_module
 	name = "Module Design (OneHuman)"
@@ -538,7 +548,7 @@ other types of metals and chemistry for reagents).
 	req_tech = list("programming" = 4, "materials" = 6)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20, "$diamond" = 100)
-	build_path = /obj/item/weapon/aiModule/oneHuman
+	build_path = /obj/item/weapon/aiModule/targetted/oneHuman
 
 /datum/design/protectstation_module
 	name = "Module Design (ProtectStation)"
@@ -547,7 +557,7 @@ other types of metals and chemistry for reagents).
 	req_tech = list("programming" = 3, "materials" = 6)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20, "$gold" = 100)
-	build_path = /obj/item/weapon/aiModule/protectStation
+	build_path = /obj/item/weapon/aiModule/standard/protectStation
 
 /datum/design/notele_module
 	name = "Module Design (TeleporterOffline Module)"
@@ -556,7 +566,7 @@ other types of metals and chemistry for reagents).
 	req_tech = list("programming" = 3)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20, "$gold" = 100)
-	build_path = /obj/item/weapon/aiModule/teleporterOffline
+	build_path = /obj/item/weapon/aiModule/standard/teleporterOffline
 
 /datum/design/quarantine_module
 	name = "Module Design (Quarantine)"
@@ -565,7 +575,7 @@ other types of metals and chemistry for reagents).
 	req_tech = list("programming" = 3, "biotech" = 2, "materials" = 4)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20, "$gold" = 100)
-	build_path = /obj/item/weapon/aiModule/quarantine
+	build_path = /obj/item/weapon/aiModule/standard/quarantine
 
 /datum/design/oxygen_module
 	name = "Module Design (OxygenIsToxicToHumans)"
@@ -574,7 +584,7 @@ other types of metals and chemistry for reagents).
 	req_tech = list("programming" = 3, "biotech" = 2, "materials" = 4)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20, "$gold" = 100)
-	build_path = /obj/item/weapon/aiModule/oxygen
+	build_path = /obj/item/weapon/aiModule/standard/oxygen
 
 /datum/design/freeform_module
 	name = "Module Design (Freeform)"
@@ -610,7 +620,7 @@ other types of metals and chemistry for reagents).
 	req_tech = list("programming" = 4, "materials" = 6)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20, "$diamond" = 100)
-	build_path = /obj/item/weapon/aiModule/freeformcore
+	build_path = /obj/item/weapon/aiModule/freeform/core
 
 /datum/design/asimov
 	name = "Core Module Design (Asimov)"
@@ -619,7 +629,7 @@ other types of metals and chemistry for reagents).
 	req_tech = list("programming" = 3, "materials" = 6)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20, "$diamond" = 100)
-	build_path = /obj/item/weapon/aiModule/asimov
+	build_path = /obj/item/weapon/aiModule/core/asimov
 
 /datum/design/paladin_module
 	name = "Core Module Design (P.A.L.A.D.I.N.)"
@@ -628,7 +638,7 @@ other types of metals and chemistry for reagents).
 	req_tech = list("programming" = 4, "materials" = 6)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20, "$diamond" = 100)
-	build_path = /obj/item/weapon/aiModule/paladin
+	build_path = /obj/item/weapon/aiModule/core/paladin
 
 /datum/design/tyrant_module
 	name = "Core Module Design (T.Y.R.A.N.T.)"
@@ -637,9 +647,7 @@ other types of metals and chemistry for reagents).
 	req_tech = list("programming" = 4, "syndicate" = 2, "materials" = 6)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20, "$diamond" = 100)
-	build_path = /obj/item/weapon/aiModule/tyrant
-
-
+	build_path = /obj/item/weapon/aiModule/core/tyrant
 
 ///////////////////////////////////
 /////Subspace Telecomms////////////
@@ -888,6 +896,15 @@ other types of metals and chemistry for reagents).
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/mecha/honker/targeting
+
+/datum/design/spacepod_main
+	name = "Circuit Design (Space Pod Mainboard)"
+	desc = "Allows for the construction of a Space Pod mainboard."
+	id = "spacepod_main"
+	req_tech = list("programming" = 4)
+	build_type = IMPRINTER
+	materials = list("$glass" = 2000, "sacid" = 20)
+	build_path = /obj/item/weapon/circuitboard/mecha/pod
 
 ////////////////////////////////////////
 /////////// Mecha Equpment /////////////
@@ -1525,14 +1542,14 @@ other types of metals and chemistry for reagents).
 	materials = list("$metal" = 8000, "$glass" = 2000)
 	build_path = /obj/item/device/robotanalyzer
 
-/datum/design/defibrilator
-	name = "Defibrilator"
-	desc = "A handheld emergency defibrilator, used to bring people back from the brink of death or put them there."
-	id = "defibrilatorr"
+/datum/design/defibrillator
+	name = "Defibrillator"
+	desc = "A handheld emergency defibrillator, used to bring people back from the brink of death or put them there."
+	id = "defibrillator"
 	req_tech = list("magnets" = 3, "materials" = 4, "biotech" = 4)
 	build_type = PROTOLATHE
 	materials = list("$metal" = 9000, "$silver" = 250, "$glass" = 10000)
-	build_path = /obj/item/weapon/melee/defibrilator
+	build_path = /obj/item/weapon/melee/defibrillator
 
 /datum/design/healthanalyzer
 	name = "Health Analyzer"
@@ -1871,7 +1888,7 @@ other types of metals and chemistry for reagents).
 
 /datum/design/superior_welding_goggles
 	name = "Superior Welding Goggles"
-	desc = "Welding goggles made from more expensive materials, strangely smells like potatoes."
+	desc = "Welding goggles made from more expensive materials, strangely smells like potatoes. Allows for better vision than normal goggles.."
 	id = "superior_welding_goggles"
 	req_tech = list("materials" = 3, "engineering" = 3)
 	build_type = PROTOLATHE

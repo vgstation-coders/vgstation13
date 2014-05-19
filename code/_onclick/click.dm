@@ -63,7 +63,7 @@
 
 	if(next_move > world.time) // in the year 2000...
 		return
-
+	//world << "next_move is [next_move] and world.time is [world.time]"
 	if(istype(loc,/obj/mecha))
 		if(!locate(/turf) in list(A,A.loc)) // Prevents inventory from being drilled
 			return
@@ -81,9 +81,9 @@
 	var/obj/item/W = get_active_hand()
 
 	if(W == A)
-		next_move = world.time + 6
+		/*next_move = world.time + 6
 		if(W.flags&USEDELAY)
-			next_move += 5
+			next_move += 5*/
 		W.attack_self(src)
 		if(hand)
 			update_inv_l_hand(0)
@@ -95,21 +95,29 @@
 	// operate two levels deep here (item in backpack in src; NOT item in box in backpack in src)
 	if(A == loc || (A in loc) || (A in contents) || (A.loc in contents))
 
-		// faster access to objects already on you
+		/*/ faster access to objects already on you
 		if(A in contents)
 			next_move = world.time + 6 // on your person
 		else
 			next_move = world.time + 8 // in a box/bag or in your square
-
+		*/
 		// No adjacency needed
 		if(W)
+			/*
 			if(W.flags&USEDELAY)
 				next_move += 5
+			*/
 
 			var/resolved = A.attackby(W,src)
+			if(ismob(A) || istype(A, /obj/mecha) || isturf(A))
+				changeNext_move(10)
 			if(!resolved && A && W)
 				W.afterattack(A,src,1,params) // 1 indicates adjacency
+			else
+				changeNext_move(10)
 		else
+			if(ismob(A))
+				changeNext_move(10)
 			UnarmedAttack(A)
 		return
 
@@ -118,31 +126,44 @@
 
 	// Allows you to click on a box's contents, if that box is on the ground, but no deeper than that
 	if(isturf(A) || isturf(A.loc) || (A.loc && isturf(A.loc.loc)))
-		next_move = world.time + 10
-
+		//next_move = world.time + 10
 		if(A.Adjacent(src)) // see adjacent.dm
 			if(W)
-				if(W.flags&USEDELAY)
+				/*if(W.flags&USEDELAY)
 					next_move += 5
-
+				*/
 				// Return 1 in attackby() to prevent afterattack() effects (when safely moving items for example)
+				if(ismob(A) || istype(A, /obj/mecha) || isturf(A))
+					changeNext_move(10)
 				var/resolved = A.attackby(W,src)
 				if(!resolved && A && W)
 					W.afterattack(A,src,1,params) // 1: clicking something Adjacent
+				else
+					changeNext_move(10)
 			else
+				if(ismob(A))
+					changeNext_move(10)
 				UnarmedAttack(A, 1)
 			return
 		else // non-adjacent click
 			if(W)
+				if(ismob(A))
+					changeNext_move(10)
 				W.afterattack(A,src,0,params) // 0: not Adjacent
 			else
+				if(ismob(A))
+					changeNext_move(10)
 				RangedAttack(A, params)
 
 	return
 
+/mob/proc/changeNext_move(num)
+	next_move = world.time + num
+
 // Default behavior: ignore double clicks, consider them normal clicks instead
 /mob/proc/DblClickOn(var/atom/A, var/params)
-	ClickOn(A,params)
+	//ClickOn(A,params)
+	return
 
 
 /*
@@ -156,6 +177,8 @@
 	in human click code to allow glove touches only at melee range.
 */
 /mob/proc/UnarmedAttack(var/atom/A, var/proximity_flag)
+	if(ismob(A))
+		changeNext_move(10)
 	return
 
 /*
@@ -168,10 +191,10 @@
 */
 /mob/proc/RangedAttack(var/atom/A, var/params)
 	if(!mutations.len) return
-	if((M_LASER in mutations) && a_intent == "harm")
+	if((M_LASER in mutations) && a_intent == "hurt")
 		LaserEyes(A) // moved into a proc below
 	else if(M_TK in mutations)
-		switch(get_dist(src,A))
+		/*switch(get_dist(src,A))
 			if(0)
 				;
 			if(1 to 5) // not adjacent may mean blocked by window
@@ -182,6 +205,7 @@
 				next_move += 10
 			else
 				return
+		*/
 		A.attack_tk(src)
 /*
 	Restrained ClickOn
@@ -263,11 +287,12 @@
 	return
 
 /mob/living/LaserEyes(atom/A)
-	next_move = world.time + 6
+	//next_move = world.time + 6
+	changeNext_move(4)
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(A)
 
-	var/obj/item/projectile/beam/LE = new /obj/item/projectile/beam( loc )
+	var/obj/item/projectile/beam/LE = new /obj/item/projectile/beam(loc)
 	LE.icon = 'icons/effects/genetics.dmi'
 	LE.icon_state = "eyelasers"
 	playsound(usr.loc, 'sound/weapons/taser2.ogg', 75, 1)
@@ -289,6 +314,69 @@
 	else
 		src << "\red You're out of energy!  You need food!"
 
+/mob/proc/PowerGlove(atom/A)
+	return
+
+/mob/living/carbon/human/PowerGlove(atom/A)
+	var/obj/item/clothing/gloves/yellow/power/G = src:gloves
+	var/time = 100
+	var/turf/T = get_turf(src)
+	var/turf/U = get_turf(A)
+	var/obj/structure/cable/cable = locate() in T
+	if(!cable || !istype(cable))
+		return
+	if(world.time < G.next_shock)
+		src << "<span class='warning'>[G] aren't ready to shock again!</span>"
+		return
+	src.visible_message("<span class='warning'>[name] fires an arc of electricity!</span>", \
+	"<span class='warning'>You fire an arc of electricity!</span>", \
+	"You hear the loud crackle of electricity!")
+	var/datum/powernet/PN = cable.get_powernet()
+	var/available = 0
+	var/obj/item/projectile/beam/lightning/L = new /obj/item/projectile/beam/lightning/(get_turf(src))
+	if(PN)
+		available = PN.avail
+		L.damage = PN.get_electrocute_damage()
+		if(available >= 5000000)
+			L.damage = 205
+		if(L.damage >= 200)
+			apply_damage(15, BURN, (hand ? "l_hand" : "r_hand"))
+			//usr:Stun(15)
+			//usr:Weaken(15)
+			//if(usr:status_flags & CANSTUN) // stun is usually associated with stutter
+			//	usr:stuttering += 20
+			time = 200
+			src << "<span class='warning'>[G] overload from the massive current shocking you in the process!"
+		else if(L.damage >= 100)
+			apply_damage(5, BURN, (hand ? "l_hand" : "r_hand"))
+			//usr:Stun(10)
+			//usr:Weaken(10)
+			//if(usr:status_flags & CANSTUN) // stun is usually associated with stutter
+			//	usr:stuttering += 10
+			time = 150
+			src << "<span class='warning'>[G] overload from the massive current shocking you in the process!"
+		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		s.set_up(5, 1, src)
+		s.start()
+	if(L.damage <= 0)
+		del(L)
+	if(L)
+		playsound(get_turf(src), 'sound/effects/eleczap.ogg', 75, 1)
+		L.tang = L.adjustAngle(get_angle(U,T))
+		L.icon = midicon
+		L.icon_state = "[L.tang]"
+		L.firer = usr
+		L.def_zone = get_organ_target()
+		L.original = src
+		L.current = U
+		L.starting = U
+		L.yo = U.y - T.y
+		L.xo = U.x - T.x
+		spawn( 1 )
+			L.process()
+
+	next_move = world.time + 12
+	G.next_shock = world.time + time
 // Simple helper to face what you clicked on, in case it should be needed in more than one place
 /mob/proc/face_atom(var/atom/A)
 	if( stat || buckled || !A || !x || !y || !A.x || !A.y ) return

@@ -55,6 +55,10 @@
 	else
 		return ..()
 
+/obj/item/stack/sheet/glass/recycle(var/datum/materials/rec)
+	rec.addAmount("glass", 1*src.amount)
+	return 1
+
 /obj/item/stack/sheet/glass/proc/construct_window(mob/user as mob)
 	if(!user || !src)	return 0
 	if(!istype(user.loc,/turf)) return 0
@@ -237,6 +241,12 @@
 /*
  * Glass shards - TODO: Move this into code/game/object/item/weapons
  */
+/obj/item/weapon/shard
+	resetVariables()
+		var/list/exclude = list("pixel_y", "pixel_x", "icon_state")
+		exclude += args
+		..(exclude)
+
 /obj/item/weapon/shard/Bump()
 
 	spawn( 0 )
@@ -277,7 +287,7 @@
 				G.attackby(NG, user)
 				usr << "You add the newly-formed glass to the stack. It now contains [NG.amount] sheets."
 			//SN src = null
-			del(src)
+			returnToPool(src)
 			return
 	return ..()
 
@@ -318,8 +328,8 @@
 	full_window = /obj/structure/window/full/plasmabasic
 
 /obj/item/stack/sheet/glass/plasmaglass/recycle(var/datum/materials/rec)
-	rec.addAmount("plasma",1)
-	rec.addAmount("glass", 1)
+	rec.addAmount("plasma",1*src.amount)
+	rec.addAmount("glass", 1*src.amount)
 	return RECYK_GLASS
 
 /obj/item/stack/sheet/glass/plasmaglass/attack_self(mob/user as mob)
@@ -356,10 +366,10 @@
 	created_window = /obj/structure/window/plasmareinforced
 	full_window = /obj/structure/window/full/plasmareinforced
 
-/obj/item/stack/sheet/glass/plasmaglass/recycle(var/datum/materials/rec)
-	rec.addAmount("plasma",1)
-	rec.addAmount("glass", 1)
-	rec.addAmount("iron",  0.5)
+/obj/item/stack/sheet/glass/plasmarglass/recycle(var/datum/materials/rec)
+	rec.addAmount("plasma",1*src.amount)
+	rec.addAmount("glass", 1*src.amount)
+	rec.addAmount("iron",  0.5*src.amount)
 	return 1
 
 /obj/item/stack/sheet/glass/plasmarglass/attack_self(mob/user as mob)

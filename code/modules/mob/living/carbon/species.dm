@@ -47,8 +47,80 @@
 
 	var/list/abilities = list()	// For species-derived or admin-given powers
 
-	var/blood_color = "#A10808" //Red.
-	var/flesh_color = "#FFC896" //Pink.
+	var/blood_color = "#A10808" // Red.
+	var/flesh_color = "#FFC896" // Pink.
+
+	var/uniform_icons = 'icons/mob/uniform.dmi'
+	var/fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
+	var/gloves_icons    = 'icons/mob/hands.dmi'
+	var/glasses_icons   = 'icons/mob/eyes.dmi'
+	var/ears_icons      = 'icons/mob/ears.dmi'
+	var/shoes_icons     = 'icons/mob/feet.dmi'
+	var/head_icons      = 'icons/mob/head.dmi'
+	var/belt_icons      = 'icons/mob/belt.dmi'
+	var/wear_suit_icons = 'icons/mob/suit.dmi'
+	var/wear_mask_icons = 'icons/mob/mask.dmi'
+	var/back_icons      = 'icons/mob/back.dmi'
+
+/datum/species/proc/create_organs(var/mob/living/carbon/human/H) //Handles creation of mob organs.
+	//This is a basic humanoid limb setup.
+	H.organs = list()
+	H.organs_by_name["chest"] = new/datum/organ/external/chest()
+	H.organs_by_name["groin"] = new/datum/organ/external/groin(H.organs_by_name["chest"])
+	H.organs_by_name["head"] = new/datum/organ/external/head(H.organs_by_name["chest"])
+	H.organs_by_name["l_arm"] = new/datum/organ/external/l_arm(H.organs_by_name["chest"])
+	H.organs_by_name["r_arm"] = new/datum/organ/external/r_arm(H.organs_by_name["chest"])
+	H.organs_by_name["r_leg"] = new/datum/organ/external/r_leg(H.organs_by_name["groin"])
+	H.organs_by_name["l_leg"] = new/datum/organ/external/l_leg(H.organs_by_name["groin"])
+	H.organs_by_name["l_hand"] = new/datum/organ/external/l_hand(H.organs_by_name["l_arm"])
+	H.organs_by_name["r_hand"] = new/datum/organ/external/r_hand(H.organs_by_name["r_arm"])
+	H.organs_by_name["l_foot"] = new/datum/organ/external/l_foot(H.organs_by_name["l_leg"])
+	H.organs_by_name["r_foot"] = new/datum/organ/external/r_foot(H.organs_by_name["r_leg"])
+
+	H.internal_organs = list()
+	H.internal_organs_by_name["heart"] = new/datum/organ/internal/heart(H)
+	H.internal_organs_by_name["lungs"] = new/datum/organ/internal/lungs(H)
+	H.internal_organs_by_name["liver"] = new/datum/organ/internal/liver(H)
+	H.internal_organs_by_name["kidney"] = new/datum/organ/internal/kidney(H)
+	H.internal_organs_by_name["brain"] = new/datum/organ/internal/brain(H)
+	H.internal_organs_by_name["eyes"] = new/datum/organ/internal/eyes(H)
+
+	for(var/name in H.organs_by_name)
+		H.organs += H.organs_by_name[name]
+
+	for(var/datum/organ/external/O in H.organs)
+		O.owner = H
+
+	/*
+	if(flags & IS_SYNTHETIC)
+		for(var/datum/organ/external/E in H.organs)
+			if(E.status & ORGAN_CUT_AWAY || E.status & ORGAN_DESTROYED) continue
+			E.status |= ORGAN_ROBOT
+		for(var/datum/organ/internal/I in H.internal_organs)
+			I.mechanize()
+	*/
+
+	return
+
+/datum/species/proc/handle_post_spawn(var/mob/living/carbon/human/H) //Handles anything not already covered by basic species assignment.
+	return
+
+// Used for species-specific names (Vox, etc)
+/datum/species/proc/makeName(var/gender,var/mob/living/carbon/human/H=null)
+	if(gender==FEMALE)	return capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
+	else				return capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
+
+/datum/species/proc/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
+	/*
+	if(flags & IS_SYNTHETIC)
+		//H.make_jittery(200) //S-s-s-s-sytem f-f-ai-i-i-i-i-lure-ure-ure-ure
+		H.h_style = ""
+		spawn(100)
+			//H.is_jittery = 0
+			//H.jitteriness = 0
+			H.update_hair()
+	*/
+	return
 
 /datum/species/proc/say_filter(mob/M, message, datum/language/speaking)
 	return message
@@ -98,6 +170,14 @@
 	attack_verb = "punch"
 
 	flags = IS_WHITELISTED | HAS_LIPS | HAS_TAIL /*| NO_EAT*/ | NO_BREATHE /*| NON_GENDERED*/ | NO_BLOOD
+
+	default_mutations=list(SKELETON)
+
+/datum/species/skellington/say_filter(mob/M, message, datum/language/speaking)
+	// 25% chance of adding ACK ACK! to the end of a message.
+	if(copytext(message, 1, 2) != "*" && prob(25))
+		message += "  ACK ACK!"
+	return message
 
 
 /datum/species/tajaran
@@ -175,6 +255,10 @@
 	blood_color = "#2299FC"
 	flesh_color = "#808D11"
 
+	uniform_icons = 'icons/mob/species/vox/uniform.dmi'
+	shoes_icons = 'icons/mob/species/vox/shoes.dmi'
+	wear_mask_icons = 'icons/mob/species/vox/masks.dmi'
+
 	equip(var/mob/living/carbon/human/H)
 		// Unequip existing suits and hats.
 		H.u_equip(H.wear_suit)
@@ -204,6 +288,16 @@
 		H.internal = H.s_store
 		if (H.internals)
 			H.internals.icon_state = "internal1"
+
+	makeName(var/gender,var/mob/living/carbon/human/H=null)
+		var/sounds = rand(2,8)
+		var/i = 0
+		var/newname = ""
+
+		while(i<=sounds)
+			i++
+			newname += pick(vox_name_syllables)
+		return capitalize(newname)
 
 /datum/species/diona
 	name = "Diona"

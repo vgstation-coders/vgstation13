@@ -107,6 +107,7 @@
 	return
 
 /obj/effect/alien/resin/attack_hand()
+	usr.changeNext_move(10)
 	if (M_HULK in usr.mutations)
 		usr << "\blue You easily destroy the [name]."
 		for(var/mob/O in oviewers(src))
@@ -159,7 +160,7 @@
 			else
 				user << "\red This wall is already occupied."
 		return */
-
+	user.changeNext_move(10)
 	var/aforce = W.force
 	health = max(0, health - aforce)
 	playsound(loc, 'sound/effects/attackblob.ogg', 100, 1)
@@ -195,14 +196,28 @@
 	desc = "Weird purple octopus-like thing."
 	luminosity = NODERANGE
 	var/node_range = NODERANGE
+	var/list/obj/effect/alien/weeds/spawns
+
+/obj/effect/alien/weeds/node/Destroy()
+	for(var/obj/effect/alien/weeds/W in spawns)
+		if(W.linked_node == src)
+			W.linked_node = null
+	..()
+
+/obj/effect/alien/weeds/Destroy()
+	if(linked_node)
+		linked_node.spawns.Remove(src)
+	..()
 
 /obj/effect/alien/weeds/node/New()
+	spawns = new()
 	..(src.loc, src)
 
 
-/obj/effect/alien/weeds/New(pos, node)
+/obj/effect/alien/weeds/New(pos, var/obj/effect/alien/weeds/node/node)
 	..()
 	linked_node = node
+	linked_node.spawns.Add(src)
 	if(istype(loc, /turf/space))
 		del(src)
 		return
@@ -265,6 +280,7 @@ Alien plants should do something if theres a lot of poison
 	return
 
 /obj/effect/alien/weeds/attackby(var/obj/item/weapon/W, var/mob/user)
+	user.changeNext_move(10)
 	if(W.attack_verb.len)
 		visible_message("\red <B>\The [src] have been [pick(W.attack_verb)] with \the [W][(user ? " by [user]." : ".")]")
 	else
@@ -284,7 +300,7 @@ Alien plants should do something if theres a lot of poison
 
 /obj/effect/alien/weeds/proc/healthcheck()
 	if(health <= 0)
-		del(src)
+		qdel(src)
 
 
 /obj/effect/alien/weeds/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
@@ -452,6 +468,7 @@ Alien plants should do something if theres a lot of poison
 /obj/effect/alien/egg/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(health <= 0)
 		return
+	user.changeNext_move(10)
 	if(W.attack_verb.len)
 		src.visible_message("\red <B>\The [src] has been [pick(W.attack_verb)] with \the [W][(user ? " by [user]." : ".")]")
 	else

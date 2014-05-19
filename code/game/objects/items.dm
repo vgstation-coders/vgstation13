@@ -39,6 +39,21 @@
 	var/list/allowed = null //suit storage stuff.
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
+	var/list/species_fit = null //This object has a different appearance when worn by these species
+
+/obj/item/Destroy()
+	if(istype(src.loc, /mob))
+		var/mob/H = src.loc
+		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
+	if(reagents && istype(reagents))
+		reagents.my_atom = null
+		reagents.delete()
+	if(hasvar(src, "holder"))
+		src:holder = null
+	/*  BROKEN, FUCK BYOND
+	if(hasvar(src, "my_atom"))
+		src:my_atom = null*/
+	..()
 
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
@@ -141,7 +156,7 @@
 	else
 		if(isliving(src.loc))
 			return
-		user.next_move = max(user.next_move+2,world.time + 2)
+		//user.next_move = max(user.next_move+2,world.time + 2)
 	src.pickup(user)
 	add_fingerprint(user)
 	user.put_in_active_hand(src)
@@ -175,7 +190,7 @@
 		if(istype(src.loc, /mob/living))
 			return
 		src.pickup(user)
-		user.next_move = max(user.next_move+2,world.time + 2)
+		//user.next_move = max(user.next_move+2,world.time + 2)
 
 	user.put_in_active_hand(src)
 	return
@@ -747,3 +762,9 @@
 	if(I && !I.abstract)
 		I.showoff(src)
 
+// /vg/ Affects wearers.
+/obj/item/proc/OnMobLife(var/mob/holder)
+	return
+
+/obj/item/proc/OnMobDeath(var/mob/holder)
+	return

@@ -1,4 +1,4 @@
-
+#define POLTERGEIST_COOLDOWN 300 // 30s
 
 #define GHOST_CAN_REENTER 1
 #define GHOST_IS_OBSERVER 2
@@ -21,6 +21,7 @@
 	var/can_reenter_corpse
 	var/datum/hud/living/carbon/hud = null // hud
 	var/bootime = 0
+	var/next_poltergeist = 0
 	var/started_as_observer //This variable is set to 1 when you enter the game as an observer.
 							//If you died in the game and are a ghsot - this will remain as null.
 							//Note that this is not a reliable way to determine if admins started as observers, since they change mobs a lot.
@@ -29,6 +30,8 @@
 	var/antagHUD = 0
 	universal_speak = 1
 	var/atom/movable/following = null
+	
+
 
 /mob/dead/observer/New(var/mob/body=null, var/flags=1)
 	sight |= SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF
@@ -261,8 +264,23 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		resting = 1
 		var/mob/dead/observer/ghost = ghostize(0)						//0 parameter is so we can never re-enter our body, "Charlie, you can never come baaaack~" :3
 		ghost.timeofdeath = world.time // Because the living mob won't have a time of death and we want the respawn timer to work properly.
+		if(ghost.client)
+			ghost.client.time_died_as_mouse = world.time //We don't want people spawning infinite mice on the station
 	return
 
+// Check for last poltergeist activity.
+/mob/dead/observer/proc/can_poltergeist(var/start_cooldown=1)
+	if(world.time >= next_poltergeist)
+		if(start_cooldown)
+			start_poltergeist_cooldown()
+		return 1
+	return 0
+
+/mob/dead/observer/proc/start_poltergeist_cooldown()
+	next_poltergeist=world.time + POLTERGEIST_COOLDOWN
+
+/mob/dead/observer/proc/reset_poltergeist_cooldown()
+	next_poltergeist=0
 
 /mob/dead/observer/Move(NewLoc, direct)
 	dir = direct
@@ -270,6 +288,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		loc = NewLoc
 		for(var/obj/effect/step_trigger/S in NewLoc)
 			S.HasEntered(src)
+
+		var/area/A = get_area_master(src)
+		if(A)
+			A.Entered(src)
 
 		return
 	loc = get_turf(src) //Get out of closets and such as a ghost
@@ -284,6 +306,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 	for(var/obj/effect/step_trigger/S in locate(x, y, z))	//<-- this is dumb
 		S.HasEntered(src)
+
+	var/area/A = get_area_master(src)
+	if(A)
+		A.Entered(src)
 
 /mob/dead/observer/examine()
 	if(usr)

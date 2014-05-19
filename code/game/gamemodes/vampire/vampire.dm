@@ -46,6 +46,8 @@
 
 /datum/game_mode/vampire/pre_setup()
 	// mixed mode scaling
+	if(istype(ticker.mode, /datum/game_mode/mixed))
+		mixed = 1
 	if(mixed)
 		recommended_enemies = 2
 		required_enemies = 1
@@ -280,6 +282,9 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	while(do_mob(src, H, 50))
 		if(!mind.vampire || !(mind in ticker.mode.vampires))
 			src << "\red Your fangs have disappeared!"
+			return 0
+		if(H.flags & NO_BLOOD)
+			src << "<span class='warning'>Not a drop of blood here</span>"
 			return 0
 		bloodtotal = src.mind.vampire.bloodtotal
 		bloodusable = src.mind.vampire.bloodusable

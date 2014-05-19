@@ -175,9 +175,9 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 					target_turf.MineralSpread()
 
 /turf/unsimulated/mineral/proc/UpdateMineral()
+	icon_state = "rock"
 	if(!mineral)
 		name = "\improper Rock"
-		icon_state = "rock"
 		return
 	name = "\improper [mineral.display_name] deposit"
 	icon_state = "rock_[mineral.name]"
@@ -364,20 +364,16 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 					M.Stun(5)
 			M.apply_effect(25, IRRADIATE)
 
-	var/turf/unsimulated/floor/asteroid/N = ChangeTurf(/turf/unsimulated/floor/asteroid)
-	N.fullUpdateMineralOverlays()
-
 	if(rand(1,500) == 1)
 		visible_message("<span class='notice'>An old dusty crate was buried within!</span>")
 		DropAbandonedCrate()
 
+	var/turf/unsimulated/floor/asteroid/N = ChangeTurf(/turf/unsimulated/floor/asteroid)
+	N.fullUpdateMineralOverlays()
+
 /turf/unsimulated/mineral/proc/DropAbandonedCrate()
-	// 50% chance of being empty.
-	if(prob(50))
-		new /obj/structure/closet/crate/secure/loot(src)
-	else
-		var/crate_type = pick(valid_abandoned_crate_types)
-		new crate_type(src)
+	var/crate_type = pick(valid_abandoned_crate_types)
+	new crate_type(src)
 
 /turf/unsimulated/mineral/proc/excavate_find(var/prob_clean = 0, var/datum/find/F)
 	//with skill and luck, players can cleanly extract finds
@@ -430,12 +426,12 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 			if(5)
 				var/quantity = rand(1,3)
 				for(var/i=0, i<quantity, i++)
-					new /obj/item/weapon/shard(src)
+					getFromPool(/obj/item/weapon/shard, loc)
 
 			if(6)
 				var/quantity = rand(1,3)
 				for(var/i=0, i<quantity, i++)
-					new /obj/item/weapon/shard/plasma(src)
+					getFromPool(/obj/item/weapon/shard/plasma, loc)
 
 			if(7)
 				var/obj/item/stack/sheet/mineral/uranium/R = new(src)
@@ -631,6 +627,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 	var/mineralChance = 10  //means 10% chance of this plot changing to a mineral deposit
 
 /turf/unsimulated/mineral/random/New()
+	icon_state = "rock"
 	if (prob(mineralChance) && !mineral)
 		var/mineral_name = pickweight(mineralSpawnChanceList) //temp mineral name
 
@@ -641,20 +638,23 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 			mineral = name_to_mineral[mineral_name]
 			mineral.UpdateTurf(src)
 
+
 	. = ..()
 
 /turf/unsimulated/mineral/random/high_chance
+	icon_state = "rock(high)"
 	mineralChance = 25
 	mineralSpawnChanceList = list(
 		"Uranium" = 10,
-		"Iron" = 30,
+		"Iron"    = 30,
 		"Diamond" = 2,
-		"Gold" = 10,
-		"Silver" = 10,
-		"Plasma" = 25,
+		"Gold"    = 10,
+		"Silver"  = 10,
+		"Plasma"  = 25,
 	)
 
 /turf/unsimulated/mineral/random/high_chance_clown
+	icon_state = "rock(clown)"
 	mineralChance = 40
 	mineralSpawnChanceList = list(
 		"Uranium" = 10,

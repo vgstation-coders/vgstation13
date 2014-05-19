@@ -3,6 +3,14 @@
 	..()
 	if (monkeyizing)	return
 	if(!loc)			return	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
+	if(reagents.has_reagent("bustanut"))
+		if(!(M_HARDCORE in mutations))
+			mutations.Add(M_HARDCORE)
+			src << "<span class='notice'>You feel like you're the best around.  Nothing's going to get you down.</span>"
+	else
+		if(M_HARDCORE in mutations)
+			mutations.Remove(M_HARDCORE)
+			src << "<span class='notice'>You feel like a pleb.</span>"
 	if(mind)
 		if(mind in ticker.mode.implanted)
 			if(implanting) return
@@ -650,6 +658,16 @@
 	//breaking out of handcuffs
 	else if(iscarbon(L))
 		var/mob/living/carbon/CM = L
+		if(CM.on_fire && CM.canmove)
+			CM.fire_stacks -= 5
+			CM.weakened = 5
+			CM.visible_message("<span class='danger'>[CM] rolls on the floor, trying to put themselves out!</span>", \
+				"<span class='notice'>You stop, drop, and roll!</span>")
+			if(fire_stacks <= 0)
+				CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>", \
+					"<span class='notice'>You extinguish yourself.</span>")
+				ExtinguishMob()
+			return
 		if(CM.handcuffed && CM.canmove && (CM.last_special <= world.time))
 			CM.next_move = world.time + 100
 			CM.last_special = world.time + 100

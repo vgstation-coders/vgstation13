@@ -1,4 +1,4 @@
-
+#define EAT_MOB_DELAY 300 // 30s
 
 // WAS: /datum/bioEffect/alcres
 /datum/dna/gene/basic/sober
@@ -144,7 +144,12 @@
 		usr << "\red This will only work on normal organic beings."
 		return
 
-	C.bodytemperature = -1500
+	if (M_RESIST_COLD in C.mutations)
+		C.visible_message("\red A cloud of fine ice crystals engulfs [C.name], but disappears almost instantly!")
+		return
+
+	C.bodytemperature = 0
+	C.adjustFireLoss(20)
 	C.ExtinguishMob()
 
 	C.visible_message("\red A cloud of fine ice crystals engulfs [C]!")
@@ -206,7 +211,7 @@
 	var/list/possible_targets = list()
 
 	for(var/atom/movable/O in view_or_range(range, user, selection_type))
-		if(is_type_in_list(O,types_allowed))
+		if(is_type_in_list(O,types_allowed) && !istype(O.loc, /mob)) // No eating things inside of you or another person, that's just creepy
 			possible_targets += O
 
 	targets += input("Choose the target of your hunger.", "Targeting") as anything in possible_targets
@@ -217,38 +222,9 @@
 
 	perform(targets)
 
-/obj/effect/proc_holder/spell/targeted/eat/cast(list/targets)
-	if(!targets.len)
-		usr << "<span class='notice'>No target found in range.</span>"
-		return
-
-	var/atom/movable/the_item = targets[1]
-	if(ismob(the_item))
-		var/t_his="his"
-		if(usr.gender==FEMALE)
-			t_his="her"
-		usr.visible_message("\red <b>[usr] begins stuffing [the_item] into [t_his] gaping maw!")
-		if(do_after(usr,50))
-			usr.visible_message("\red [usr] eats [the_item]!")
-			playsound(usr.loc, 'sound/items/eatfood.ogg', 50, 0)
-			var/mob/M=the_item
-			M.drop_l_hand()
-			M.drop_r_hand()
-			M.death(1)
-			if(ishuman(M) && ishuman(usr))
-				var/datum/organ/external/head = M:get_organ("head")
-				if(head)
-					head.droplimb(1,1)
-					var/datum/organ/external/chest=usr:get_organ("chest")
-					chest.implants += head
-			del(M)
-	else
-		usr.visible_message("\red [usr] eats \the [the_item].")
-		playsound(usr.loc, 'sound/items/eatfood.ogg', 50, 0)
-		del(the_item)
-
-	if(ishuman(usr))
-		var/mob/living/carbon/human/H=usr
+/obj/effect/proc_holder/spell/targeted/eat/proc/doHeal(var/mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H=user
 		for(var/name in H.organs_by_name)
 			var/datum/organ/external/affecting = null
 			if(!H.organs[name])
@@ -257,8 +233,63 @@
 			if(!istype(affecting, /datum/organ/external))
 				continue
 			affecting.heal_damage(4, 0)
-		usr:UpdateDamageIcon()
-		usr:updatehealth()
+		H.UpdateDamageIcon()
+		H.updatehealth()
+
+/obj/effect/proc_holder/spell/targeted/eat/cast(list/targets)
+	if(!targets.len)
+		usr << "<span class='notice'>No target found in range.</span>"
+		return
+
+	var/atom/movable/the_item = targets[1]
+	if(ishuman(the_item))
+		//My gender
+		var/m_his="his"
+		if(usr.gender==FEMALE)
+			m_his="her"
+		// Their gender
+		var/t_his="his"
+		if(the_item.gender==FEMALE)
+			t_his="her"
+		var/mob/living/carbon/human/H = the_item
+		var/datum/organ/external/limb = H.get_organ(usr.zone_sel.selecting)
+		if(!istype(limb))
+			usr << "\red You can't eat this part of them!"
+			revert_cast()
+			return 0
+		if(istype(limb,/datum/organ/external/head))
+			// Bullshit, but prevents being unable to clone someone.
+			usr << "\red You try to put \the [limb] in your mouth, but [t_his] ears tickle your throat!"
+			revert_cast()
+			return 0
+		if(istype(limb,/datum/organ/external/chest))
+			// Bullshit, but prevents being able to instagib someone.
+			usr << "\red You try to put their [limb] in your mouth, but it's too big to fit!"
+			revert_cast()
+			return 0
+		usr.visible_message("\red <b>[usr] begins stuffing [the_item]'s [limb.display_name] into [m_his] gaping maw!</b>")
+		var/oldloc = H.loc
+		if(!do_mob(usr,H,EAT_MOB_DELAY))
+			usr << "\red You were interrupted before you could eat [the_item]!"
+		else
+			if(!limb || !H)
+				return
+			if(H.loc!=oldloc)
+				usr << "\red \The [limb] moved away from your mouth!"
+				return
+			usr.visible_message("\red [usr] [pick("chomps","bites")] off [the_item]'s [limb]!")
+			playsound(usr.loc, 'sound/items/eatfood.ogg', 50, 0)
+			var/obj/limb_obj=limb.droplimb(1,1)
+			if(limb_obj)
+				var/datum/organ/external/chest=usr:get_organ("chest")
+				chest.implants += limb_obj
+				limb_obj.loc=usr
+			doHeal(usr)
+	else
+		usr.visible_message("\red [usr] eats \the [the_item].")
+		playsound(usr.loc, 'sound/items/eatfood.ogg', 50, 0)
+		del(the_item)
+		doHeal(usr)
 
 	return
 
@@ -301,7 +332,7 @@
 		usr.visible_message("\red <b>[usr.name]</b> takes a huge leap!")
 		playsound(usr.loc, 'sound/weapons/thudswoosh.ogg', 50, 1)
 		var/prevLayer = usr.layer
-		usr.layer = 15
+		usr.layer = 9
 
 		for(var/i=0, i<10, i++)
 			step(usr, usr.dir)

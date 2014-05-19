@@ -29,6 +29,7 @@
 	desc = "The subject suffers from constant radiation sickness and causes the same on nearby organics."
 	activation_message = "You feel a strange sickness permeate your whole body."
 	deactivation_message = "You no longer feel awful and sick all over."
+	flags = GENE_UNNATURAL
 
 	New()
 		..()
@@ -66,50 +67,73 @@
 // SPEECH MANIPULATORS //
 /////////////////////////
 
-/* Duplicate
-// WAS: /datum/bioEffect/stutter
-/datum/dna/gene/disability/stutter
-	name = "Stutter"
-	desc = "Hinders nerve transmission to and from the speech center of the brain, resulting in faltering speech."
-	activation_message = "Y-you f.. feel a.. a bit n-n-nervous."
-	deactivation_message = "You don't feel nervous anymore."
-
-	New()
-		..()
-		block=STUTTERBLOCK
-
-	OnMobLife(var/mob/owner)
-		if (prob(10))
-			owner:stuttering = max(10, owner:stuttering)
-
-/datum/dna/gene/disability/speech
-	can_activate(var/mob/M, var/flags)
-		// Can only activate one of these at a time.
-		if(is_type_in_list(/datum/dna/gene/disability/speech,M.active_genes))
-			return 0
-		return ..(M,flags)
-*/
-
-/* Figure out what the fuck this one does.
 // WAS: /datum/bioEffect/smile
 /datum/dna/gene/disability/speech/smile
 	name = "Smile"
-	desc = "Causes the speech center of the subject's brain to produce large amounts of seratonin when engaged."
-	activation_message = "You feel like you want to smile and smile and smile forever :)"
-	deactivation_message = "You don't feel like smiling anymore. :("
+	desc = "Causes the speech center of the subject's brain to produce large amounts of seratonin and a chemical resembling ecstacy when engaged."
+	activation_message = "You feel so happy. Nothing can be wrong with anything :)"
+	deactivation_message = "Everything is terrible again. :("
 
 	New()
 		..()
 		block=SMILEBLOCK
 
 	OnSay(var/mob/M, var/message)
+		//Time for a friendly game of SS13
+		message = replacetext(message,"stupid","smart")
+		message = replacetext(message,"retard","genius")
+		message = replacetext(message,"unrobust","robust")
+		message = replacetext(message,"dumb","smart")
+		message = replacetext(message,"awful","great")
+		message = replacetext(message,"gay",pick("nice","ok","alright"))
+		message = replacetext(message,"horrible","fun")
+		message = replacetext(message,"terrible","terribly fun")
+		message = replacetext(message,"terrifying","wonderful")
+		message = replacetext(message,"gross","cool")
+		message = replacetext(message,"disgusting","amazing")
+		message = replacetext(message,"loser","winner")
+		message = replacetext(message,"useless","useful")
+		message = replacetext(message,"oh god","cheese and crackers")
+		message = replacetext(message,"jesus","gee wiz")
+		message = replacetext(message,"weak","strong")
+		message = replacetext(message,"kill","hug")
+		message = replacetext(message,"murder","tease")
+		message = replacetext(message,"ugly","beutiful")
+		message = replacetext(message,"douchbag","nice guy")
+		message = replacetext(message,"whore","lady")
+		message = replacetext(message,"nerd","smart guy")
+		message = replacetext(message,"moron","fun person")
+		message = replacetext(message,"IT'S LOOSE","EVERYTHING IS FINE")
+		message = replacetext(message,"rape","hug fight")
+		message = replacetext(message,"idiot","genius")
+		message = replacetext(message,"fat","thin")
+		message = replacetext(message,"beer","water with ice")
+		message = replacetext(message,"drink","water")
+		message = replacetext(message,"feminist","empowered woman")
+		message = replacetext(message,"i hate you","you're mean")
+		message = replacetext(message,"nigger","african american")
+		message = replacetext(message,"jew","jewish")
+		message = replacetext(message,"shit","shiz")
+		message = replacetext(message,"crap","poo")
+		message = replacetext(message,"slut","tease")
+		message = replacetext(message,"ass","butt")
+		message = replacetext(message,"damn","dang")
+		message = replacetext(message,"fuck","")
+		message = replacetext(message,"penis","privates")
+		message = replacetext(message,"cunt","privates")
+		message = replacetext(message,"dick","jerk")
+		message = replacetext(message,"vagina","privates")
+//		message += "[pick(":)",":^)",":*)")]"             : ^ (
+		if(prob(30))
+			message += " check your privilege."
 		return message
-
+		
+		
 // WAS: /datum/bioEffect/elvis
 /datum/dna/gene/disability/speech/elvis
 	name = "Elvis"
-	desc = "Forces the language center of the subject's brain to drawl out sentences in a funky manner."
-	activation_message = "You feel funky."
+	desc = "Forces the language center and primary motor cortex of the subject's brain to talk and act like the King of Rock and Roll."
+	activation_message = "You feel pretty good, honeydoll."
 	deactivation_message = "You feel a little less conversation would be great."
 
 	New()
@@ -117,8 +141,38 @@
 		block=ELVISBLOCK
 
 	OnSay(var/mob/M, var/message)
-		return message
-*/
+		message = replacetext(message,"im not","I ain't")
+		message = replacetext(message,"i'm not","I aint")
+		message = replacetext(message,"girl",pick("honey","baby","baby doll"))
+		message = replacetext(message," man ",pick("son","buddy","brother", "pal", "friendo"))
+		message = replacetext(message," no ","naw")
+		message = replacetext(message,"security","police")
+		message = replacetext(message,"out of","outta")
+		message = replacetext(message,"thanks","thank you very much")
+		message = replacetext(message,"thank you","thank you, thank you very much")
+		message = replacetext(message,"what are you","whatcha")
+		message = replacetext(message,"yes",pick("sure", "yea"))
+		message = replacetext(message,"faggot","square")
+		message = replacetext(message,"muh valids","getting my kicks")
+		message = replacetext(message," vox ","bird")
+		
+		if(prob(10))
+			return ""
+			M.visible_message("<b>[M]</b> [pick("rambles to themselves.","begins talking to themselves.")]")
+		else
+			return message
+
+	OnMobLife(var/mob/M)
+		switch(pick(1,2))
+			if(1)
+				if(prob(20))
+					var/list/dancetypes = list("swinging", "fancy", "stylish", "20'th century", "jivin'", "rock and roller", "cool", "salacious", "bashing", "smashing")
+					var/dancemoves = pick(dancetypes)
+					M.visible_message("<b>[M]</b> busts out some [dancemoves] moves!")
+			if(2)
+				if(prob(20))
+					M.visible_message("<b>[M]</b> [pick("jiggles their hips", "rotates their hips", "gyrates their hips", "taps their foot", "dances to an imaginary song", "jiggles their legs", "snaps their fingers")]")
+
 
 // WAS: /datum/bioEffect/chav
 /datum/dna/gene/disability/speech/chav
@@ -132,6 +186,7 @@
 		block=CHAVBLOCK
 
 	OnSay(var/mob/M, var/message)
+		// THIS ENTIRE THING BEGS FOR REGEX
 		message = replacetext(message,"dick","prat")
 		message = replacetext(message,"comdom","knob'ead")
 		message = replacetext(message,"looking at","gawpin' at")
@@ -146,7 +201,7 @@
 		message = replacetext(message,"i don't know","wot mate")
 		message = replacetext(message,"no","naw")
 		message = replacetext(message,"robust","chin")
-		message = replacetext(message,"hi","how what how")
+		message = replacetext(message," hi ","how what how")
 		message = replacetext(message,"hello","sup bruv")
 		message = replacetext(message,"kill","bang")
 		message = replacetext(message,"murder","bang")
@@ -169,7 +224,7 @@
 		block=SWEDEBLOCK
 
 	OnSay(var/mob/M, var/message)
-		// svedish
+		// svedish!
 		message = replacetext(message,"w","v")
 		if(prob(30))
 			message += " Bork[pick("",", bork",", bork, bork")]!"
@@ -215,6 +270,7 @@
 	desc = "Causes the subject's digestion to create a significant amount of noxious gas."
 	activation_message = "Your stomach grumbles unpleasantly."
 	deactivation_message = "Your stomach stops acting up. Phew!"
+	flags = GENE_UNNATURAL
 
 	mutation = M_TOXIC_FARTS
 
@@ -246,6 +302,7 @@
 	desc = "Enables the growth of a compacted keratin formation on the subject's head."
 	activation_message = "A pair of horns erupt from your head."
 	deactivation_message = "Your horns crumble away into nothing."
+	flags = GENE_UNNATURAL
 
 	New()
 		..()
@@ -288,6 +345,7 @@
 /datum/dna/gene/basic/grant_spell/immolate
 	name = "Incendiary Mitochondria"
 	desc = "The subject becomes able to convert excess cellular energy into thermal energy."
+	flags = GENE_UNNATURAL
 	activation_messages = list("You suddenly feel rather hot.")
 	deactivation_messages = list("You no longer feel uncomfortably hot.")
 
@@ -318,7 +376,9 @@
 
 	L.adjust_fire_stacks(0.5) // Same as walking into fire. Was 100 (goon fire)
 	L.visible_message("\red <b>[L.name]</b> suddenly bursts into flames!")
-	//playsound(L.loc, 'mag_fireballlaunch.ogg', 50, 0)
+	L.on_fire = 1
+	L.update_icon = 1
+	playsound(L.loc, 'sound/effects/bamf.ogg', 50, 0)
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -326,6 +386,7 @@
 /datum/dna/gene/basic/grant_verb/melt
 	name = "Self Biomass Manipulation"
 	desc = "The subject becomes able to transform the matter of their cells into a liquid state."
+	flags = GENE_UNNATURAL
 	activation_messages = list("You feel strange and jiggly.")
 	deactivation_messages = list("You feel more solid.")
 

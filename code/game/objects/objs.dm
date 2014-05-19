@@ -16,6 +16,10 @@
 	// Reagent ID => friendly name
 	var/list/reagents_to_log=list()
 
+/obj/Destroy()
+	machines -= src
+	processing_objects -= src
+	..()
 /obj/item/proc/is_used_on(obj/O, mob/user)
 
 /obj/recycle(var/datum/materials/rec)
@@ -110,6 +114,15 @@
 /obj/proc/unlinkFrom(var/mob/user, var/obj/buffer)
 	return 0
 
+/obj/proc/canLink(var/obj/O)
+	return 0
+
+/obj/proc/isLinkedWith(var/obj/O)
+	return 0
+
+/obj/proc/getLink(var/idx)
+	return null
+
 /obj/proc/format_tag(var/label,var/varname, var/act="set_tag")
 	var/value = vars[varname]
 	if(!value || value=="")
@@ -163,8 +176,7 @@ a {
 	user << browse(dat, "window=mtcomputer")
 	user.set_machine(src)
 	onclose(user, "mtcomputer")
-/obj/proc/canLink(var/obj/O)
-	return 0
+
 /obj/proc/update_icon()
 	return
 

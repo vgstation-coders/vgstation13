@@ -10,7 +10,7 @@
 	var/turf/T=get_turf(src)
 	switch(state)
 		if(0)
-			if(istype(W, /obj/item/weapon/circuitboard/airlock))
+			if(istype(W, /obj/item/weapon/circuitboard/airlock) && W:icon_state != "door_electronics_smoked")
 				user.drop_item()
 				circuit=W
 				circuit.loc=src
@@ -75,6 +75,18 @@
 	req_access=list(access_captain)
 	update_icon()
 
+/obj/structure/displaycase/gooncode/New()
+	occupant=new /obj/item/toy/gooncode(src)
+	locked=1
+	req_access=list(access_captain)
+	update_icon()
+
+/obj/structure/displaycase/lamarr/New()
+	occupant=new /obj/item/clothing/mask/facehugger/lamarr(src)
+	locked=1
+	req_access=list(access_rd)
+	update_icon()
+
 /obj/structure/displaycase/examine()
 	..()
 	usr << "\blue Peering through the glass, you see that it contains:"
@@ -92,7 +104,7 @@
 /obj/structure/displaycase/ex_act(severity)
 	switch(severity)
 		if (1)
-			new /obj/item/weapon/shard( src.loc )
+			getFromPool(/obj/item/weapon/shard, loc)
 			if (occupant)
 				dump()
 			qdel(src)
@@ -115,13 +127,13 @@
 
 /obj/structure/displaycase/blob_act()
 	if (prob(75))
-		new /obj/item/weapon/shard( src.loc )
+		getFromPool(/obj/item/weapon/shard, loc)
 		if(occupant) dump()
 		del(src)
 
 
 /obj/structure/displaycase/meteorhit(obj/O as obj)
-		new /obj/item/weapon/shard( src.loc )
+		getFromPool(/obj/item/weapon/shard, loc)
 		if(occupant) dump()
 		del(src)
 
@@ -131,7 +143,7 @@
 		if (!( src.destroyed ))
 			src.density = 0
 			src.destroyed = 1
-			new /obj/item/weapon/shard( src.loc )
+			getFromPool(/obj/item/weapon/shard, loc)
 			playsound(get_turf(src), "shatter", 70, 1)
 			update_icon()
 	else
@@ -150,8 +162,6 @@
 		occupant_overlay = image(occupant_icon)
 		occupant_overlay.pixel_x=8
 		occupant_overlay.pixel_y=8
-		//occupant_overlay.Shift(NORTH, 8)
-		//occupant_overlay.Shift(EAST, 8)
 		if(locked)
 			occupant_overlay.alpha=128//ChangeOpacity(0.5)
 		//underlays += occupant_overlay

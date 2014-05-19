@@ -36,6 +36,8 @@
 	new /obj/item/weapon/shovel(src)
 	new /obj/item/weapon/pickaxe(src)
 	new /obj/item/clothing/glasses/meson(src)
+	new /obj/item/device/gps/mining(src)
+	new /obj/item/weapon/storage/belt/mining(src)
 
 
 /**********************Shuttle Computer**************************/
@@ -168,7 +170,7 @@ proc/move_mining_shuttle()
 
 			if (src.stat & BROKEN)
 				user << "\blue The broken glass falls out."
-				new /obj/item/weapon/shard( src.loc )
+				getFromPool(/obj/item/weapon/shard, loc)
 				A.state = 3
 				A.icon_state = "3"
 			else

@@ -57,10 +57,10 @@
 		return
 
 	if(W == A)
-		next_move = world.time + 8
+		/*next_move = world.time + 8
 		if(W.flags&USEDELAY)
 			next_move += 5
-
+		*/
 		W.attack_self(src)
 		return
 
@@ -68,8 +68,9 @@
 	if(A == loc || (A in loc) || (A in contents))
 		// No adjacency checks
 		next_move = world.time + 8
-		if(W.flags&USEDELAY)
+		/*if(W.flags&USEDELAY)
 			next_move += 5
+		*/
 
 		var/resolved = A.attackby(W,src)
 		if(!resolved && A && W)
@@ -82,16 +83,17 @@
 	// cyborgs are prohibited from using storage items so we can I think safely remove (A.loc && isturf(A.loc.loc))
 	if(isturf(A) || isturf(A.loc))
 		if(A.Adjacent(src)) // see adjacent.dm
-			next_move = world.time + 10
+			/*next_move = world.time + 10
 			if(W.flags&USEDELAY)
 				next_move += 5
+			*/
 
 			var/resolved = A.attackby(W, src)
 			if(!resolved && A && W)
 				W.afterattack(A, src, 1, params)
 			return
 		else
-			next_move = world.time + 10
+			//next_move = world.time + 10
 			W.afterattack(A, src, 0, params)
 			return
 	return
@@ -103,8 +105,31 @@
 
 //Middle click cycles through selected modules.
 /mob/living/silicon/robot/AltClickOn(var/atom/A)
+	//Borgs dont need a quick shock hotkey, just in case
+	/*
+	if(istype(A, /obj/machinery/door/airlock))
+		A.AIAltClick(src)
+		return
+	*/
+	if(isturf(A))
+		A.AltClick(src)
+		return
 	A.RobotAltClick(src)
 	return
+
+/mob/living/silicon/robot/ShiftClickOn(var/atom/A)
+	//Borgs can into doors as well
+	if(istype(A, /obj/machinery/door/airlock))
+		A.AIShiftClick(src)
+		return
+	..()
+
+/mob/living/silicon/robot/CtrlClickOn(var/atom/A)
+	//Borgs can into doors as well
+	if(istype(A, /obj/machinery/door/airlock))
+		A.AICtrlClick(src)
+		return
+	..()
 
 /*
 	As with AI, these are not used in click code,
@@ -129,8 +154,9 @@
 	return
 
 // /vg/: Alt-click to open shit
+/* not anymore
 /obj/machinery/door/airlock/RobotAltClick() // Opens doors
 	if(density)
 		Topic("aiEnable=7", list("aiEnable"="7"), 1) // 1 meaning no window (consistency!)
 	else
-		Topic("aiDisable=7", list("aiDisable"="7"), 1)
+		Topic("aiDisable=7", list("aiDisable"="7"), 1)*/

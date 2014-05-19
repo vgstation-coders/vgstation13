@@ -105,24 +105,38 @@ Class Procs:
 		//2 = run auto, use active
 	var/idle_power_usage = 0
 	var/active_power_usage = 0
-	var/power_channel = EQUIP
-		//EQUIP,ENVIRON or LIGHT
+	var/power_channel = EQUIP //EQUIP,ENVIRON or LIGHT
 	var/list/component_parts = null //list of all the parts used to build it, if made from certain kinds of frames.
 	var/uid
 	var/manual = 0
 	var/global/gl_uid = 1
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
+	var/area/myArea
 
 /obj/machinery/New()
-	..()
+	addAtProcessing()
+	return ..()
+
+/obj/machinery/proc/addAtProcessing()
+	if (use_power)
+		myArea = get_area_master(src)
+
 	machines += src
 
-/obj/machinery/Destroy()
+/obj/machinery/proc/removeAtProcessing()
+	if (myArea)
+		myArea = null
+
 	machines -= src
+
+/obj/machinery/Destroy()
+	if (src in machines)
+		removeAtProcessing()
+
 	..()
 
-/obj/machinery/process()//If you dont use process or power why are you here
+/obj/machinery/process() // If you dont use process or power why are you here
 	return PROCESS_KILL
 
 /obj/machinery/emp_act(severity)
@@ -163,10 +177,13 @@ Class Procs:
 /obj/machinery/proc/auto_use_power()
 	if(!powered(power_channel))
 		return 0
-	if(src.use_power == 1)
-		use_power(idle_power_usage,power_channel)
-	else if(src.use_power >= 2)
-		use_power(active_power_usage,power_channel)
+
+	switch (use_power)
+		if (1)
+			use_power(idle_power_usage, power_channel)
+		if (2)
+			use_power(active_power_usage, power_channel)
+
 	return 1
 
 /obj/machinery/Topic(href, href_list)
@@ -217,7 +234,11 @@ Class Procs:
 				re_init=1
 
 		if("unlink" in href_list)
-			var/obj/O = locate(href_list["unlink"])
+			var/idx = text2num(href_list["unlink"])
+			if (!idx)
+				return 1
+
+			var/obj/O = getLink(idx)
 			if(!O)
 				return 1
 			if(!canLink(O))
@@ -231,17 +252,20 @@ Class Procs:
 			update_mt_menu=1
 
 		if("link" in href_list)
-			var/obj/O = locate(href_list["unlink"])
+			var/obj/O = P.buffer
 			if(!O)
 				return 1
 			if(!canLink(O))
 				usr << "\red You can't link with that device."
 				return 1
+			if (isLinkedWith(O))
+				usr << "\red A red light flashes on \the [P]. The two devices are already linked between them."
+				return 1
 
 			if(linkWith(usr, O))
 				usr << "\blue A green light flashes on \the [P], confirming the link was removed."
 			else
-				usr << "\red A red light flashes on \the [P].  It appears something went wrong when unlinking the two devices."
+				usr << "\red A red light flashes on \the [P].  It appears something went wrong when linking the two devices."
 			update_mt_menu=1
 
 		if("buffer" in href_list)

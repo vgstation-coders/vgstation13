@@ -54,21 +54,21 @@
 		insults = rand(1, 3)//to prevent dickflooding
 		return
 	return
-	
-	
-	
-	
+
+
+
+
 /*
 	SOUND SYNTH BELOW THIS LINE
 ----------------------------------------------
 */
-	
-	
+
+
 
 /obj/item/device/soundsynth
 	name = "sound synthesizer"
 	desc = "A device that is able to create sounds."
-	icon_state = "megaphone"
+	icon_state = "soundsynth"
 	item_state = "radio"
 	w_class = 1.0
 	flags = FPRINT | TABLEPASS | CONDUCT
@@ -85,7 +85,7 @@ This is to cycle sounds forward
 	switch(sound_flag)
 		if(0)
 			sound_flag += 1
-			usr << "Sound switched to Bwoink!"
+			usr << "Sound switched to Bubbles!"
 			return
 		if(1)
 			sound_flag += 1
@@ -157,7 +157,7 @@ And backwards
 			return
 		if(2)
 			sound_flag -= 1
-			usr << "Sound switched to Bwoink!"
+			usr << "Sound switched to Bubbles!"
 			return
 		if(3)
 			sound_flag -= 1
@@ -203,9 +203,9 @@ And backwards
 
 		else
 			sound_flag = 0
-		
-		
-		
+
+
+
 /*
 This long ass as fuck shit plays the sounds. Im a huge fucking faggot.
 If you can make this smaller, please do.
@@ -223,7 +223,7 @@ If you can make this smaller, please do.
 
 			if(1)
 				spam_flag = world.timeofday
-				playsound(get_turf(src), 'sound/effects/adminhelp.ogg', 50, 1)
+				playsound(get_turf(src), 'sound/effects/bubbles.ogg', 50, 1)
 				return
 
 			if(2)

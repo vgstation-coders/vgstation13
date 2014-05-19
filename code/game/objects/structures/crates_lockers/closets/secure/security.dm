@@ -47,8 +47,8 @@
 		..()
 		sleep(2)
 		new /obj/item/clothing/glasses/sunglasses(src)
-		new /obj/item/clothing/suit/armor/vest(src)
-		new /obj/item/clothing/head/helmet(src)
+		new /obj/item/clothing/suit/storage/Hop_Coat(src)
+		new /obj/item/clothing/head/helmet/hopcap(src)
 		new /obj/item/weapon/cartridge/hop(src)
 		new /obj/item/device/radio/headset/heads/hop(src)
 		new /obj/item/weapon/storage/box/ids(src)
@@ -187,6 +187,7 @@
 		new /obj/item/clothing/glasses/sunglasses/sechud(src)
 		new /obj/item/taperoll/police(src)
 		new /obj/item/device/hailer(src) //wonder if vg would spam this
+		new /obj/item/clothing/gloves/black(src)
 		return
 
 

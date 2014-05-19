@@ -38,16 +38,11 @@
 	return 0 //not in range and not telekinetic
 
 // Like view but bypasses luminosity check
-
 /proc/hear(var/range, var/atom/source)
-
 	var/lum = source.luminosity
 	source.luminosity = 6
-
-	var/list/heard = view(range, source)
+	. = view(range, source)
 	source.luminosity = lum
-
-	return heard
 
 /proc/alone_in_area(var/area/the_area, var/mob/must_be_alone, var/check_type = /mob/living/carbon)
 	var/area/our_area = get_area_master(the_area)
@@ -150,7 +145,7 @@
 	//debug_mob += O.contents.len
 	if(!recursion_limit)
 		return L
-	for(var/atom/A in O.contents)
+	for(var/atom/movable/A in O.contents)
 
 		if(ismob(A))
 			var/mob/M = A
@@ -167,8 +162,8 @@
 				continue
 			L |= A
 
-		if(isobj(A) || ismob(A))
-			L = recursive_mob_check(A, L, recursion_limit - 1, client_check, sight_check, include_radio)
+		L = recursive_mob_check(A, L, recursion_limit - 1, client_check, sight_check, include_radio)
+
 	return L
 
 // The old system would loop through lists for a total of 5000 per function call, in an empty server.
@@ -185,7 +180,7 @@
 
 	var/list/range = hear(R, T)
 
-	for(var/atom/A in range)
+	for(var/atom/movable/A in range)
 		if(ismob(A))
 			var/mob/M = A
 			if(M.client)
@@ -194,8 +189,7 @@
 		else if(istype(A, /obj/item/device/radio))
 			hear += A
 
-		if(isobj(A) || ismob(A))
-			hear = recursive_mob_check(A, hear, 3, 1, 0, 1)
+		hear = recursive_mob_check(A, hear, 3, 1, 0, 1)
 
 	return hear
 
@@ -459,3 +453,15 @@ var/list/DummyCache = list()
 	var/dest_y = src_y + distance*cos(rotation);
 
 	return new /datum/projectile_data(src_x, src_y, time, distance, power_x, power_y, dest_x, dest_y)
+
+
+/proc/mobs_in_area(var/area/the_area, var/client_needed=0, var/moblist=mob_list)
+	var/list/mobs_found[0]
+	var/area/our_area = get_area_master(the_area)
+	for(var/mob/M in moblist)
+		if(client_needed && !M.client)
+			continue
+		if(our_area != get_area_master(M))
+			continue
+		mobs_found += M
+	return mobs_found

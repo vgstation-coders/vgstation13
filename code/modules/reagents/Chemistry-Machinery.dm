@@ -13,7 +13,7 @@
 	var/energy = 100
 	var/max_energy = 100
 	var/amount = 30
-	var/beaker = null
+	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/recharged = 0
 	var/opened = 0
 	var/custom = 0
@@ -111,15 +111,15 @@
 
 	var beakerContents[0]
 	var beakerCurrentVolume = 0
-	if(beaker && beaker:reagents && beaker:reagents.reagent_list.len)
-		for(var/datum/reagent/R in beaker:reagents.reagent_list)
+	if(beaker && beaker.reagents && beaker.reagents.reagent_list.len)
+		for(var/datum/reagent/R in beaker.reagents.reagent_list)
 			beakerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
 			beakerCurrentVolume += R.volume
 	data["beakerContents"] = beakerContents
 
 	if (beaker)
 		data["beakerCurrentVolume"] = beakerCurrentVolume
-		data["beakerMaxVolume"] = beaker:volume
+		data["beakerMaxVolume"] = beaker.volume
 	else
 		data["beakerCurrentVolume"] = null
 		data["beakerMaxVolume"] = null
@@ -251,7 +251,7 @@
 	icon_state = "mixer0"
 	use_power = 1
 	idle_power_usage = 20
-	var/beaker = null
+	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/obj/item/weapon/storage/pill_bottle/loaded_pill_bottle = null
 	var/mode = 0
 	var/condi = 0
@@ -284,6 +284,9 @@
 	component_parts += new /obj/item/weapon/stock_parts/console_screen
 	component_parts += new /obj/item/weapon/stock_parts/console_screen
 	RefreshParts()
+
+	var/image/overlay = image('icons/obj/chemical.dmi', src, "[icon_state]_overlay")
+	overlays += overlay
 
 /obj/machinery/chem_master/ex_act(severity)
 	switch(severity)
@@ -322,7 +325,7 @@
 		B.loc = src
 		user << "You add the beaker to the machine!"
 		src.updateUsrDialog()
-		icon_state = "mixer1"
+		update_icon()
 
 	else if(istype(B, /obj/item/weapon/storage/pill_bottle))
 
@@ -392,7 +395,7 @@
 		return
 
 	if(beaker)
-		var/datum/reagents/R = beaker:reagents
+		var/datum/reagents/R = beaker.reagents
 		if (href_list["analyze"])
 			var/dat = ""
 			if(!condi)
@@ -455,10 +458,10 @@
 			return
 		else if (href_list["eject"])
 			if(beaker)
-				beaker:loc = src.loc
+				beaker.loc = src.loc
 				beaker = null
 				reagents.clear_reagents()
-				icon_state = "mixer0"
+				update_icon()
 		else if (href_list["createpill"] || href_list["createpill_multiple"])
 			var/count = 1
 			if (href_list["createpill_multiple"]) count = isgoodnumber(input("Select the number of pills to make.", 10, pillamount) as num)
@@ -557,13 +560,14 @@
 	var/dat = ""
 	if(!beaker)
 		dat = "Please insert beaker.<BR>"
-		if(src.loaded_pill_bottle)
-			dat += "<A href='?src=\ref[src];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
-		else
-			dat += "No pill bottle inserted.<BR><BR>"
+		if(!condi)
+			if(src.loaded_pill_bottle)
+				dat += "<A href='?src=\ref[src];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
+			else
+				dat += "No pill bottle inserted.<BR><BR>"
 		dat += "<A href='?src=\ref[src];close=1'>Close</A>"
 	else
-		var/datum/reagents/R = beaker:reagents
+		var/datum/reagents/R = beaker.reagents
 		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker and Clear Buffer</A><BR>"
 		if(src.loaded_pill_bottle)
 			dat += "<A href='?src=\ref[src];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
@@ -601,7 +605,7 @@
 					<A href='?src=\ref[src];removecustom=[N.id]'>(Custom)</A><BR>"}
 				// END AUTOFIX
 		else
-			dat += "Empty<BR>"
+			dat += "Buffer is empty.<BR>"
 		if(!condi)
 
 			// AUTOFIXED BY fix_string_idiocy.py
@@ -634,6 +638,21 @@
 /obj/machinery/chem_master/condimaster
 	name = "CondiMaster 3000"
 	condi = 1
+
+/obj/machinery/chem_master/update_icon()
+	if(beaker)
+		icon_state = "mixer1"
+	else
+		icon_state = "mixer0"
+
+	var/image/overlay = image('icons/obj/chemical.dmi', src, "[icon_state]_overlay")
+	if(reagents.total_volume)
+		overlay.icon += mix_color_from_reagents(reagents.reagent_list)
+	overlays.Cut()
+	overlays += overlay
+
+/obj/machinery/chem_master/on_reagent_change()
+	update_icon()
 
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -752,7 +771,7 @@
 		src.updateUsrDialog()
 		return
 	else if (href_list["eject"])
-		beaker:loc = src.loc
+		beaker.loc = src.loc
 		beaker = null
 		icon_state = "mixer0"
 		src.updateUsrDialog()
@@ -902,7 +921,7 @@
 			if (src.stat & BROKEN)
 				user << "\blue The broken glass falls out."
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe(src.loc)
-				new /obj/item/weapon/shard(src.loc)
+				getFromPool(/obj/item/weapon/shard, loc)
 				var/obj/item/weapon/circuitboard/pandemic/M = new /obj/item/weapon/circuitboard/pandemic(A)
 				for (var/obj/C in src)
 					C.loc = src.loc
@@ -958,13 +977,14 @@
 	var/list/blend_items = list (
 
 		//Sheets
-		/obj/item/stack/sheet/mineral/plasma = list("plasma" = 20),
+		/obj/item/stack/sheet/mineral/plasma  = list("plasma" = 20),
 		/obj/item/stack/sheet/mineral/uranium = list("uranium" = 20),
-		/obj/item/stack/sheet/mineral/clown = list("banana" = 20),
-		/obj/item/stack/sheet/mineral/silver = list("silver" = 20),
-		/obj/item/stack/sheet/mineral/gold = list("gold" = 20),
-		/obj/item/weapon/grown/nettle = list("sacid" = 0),
-		/obj/item/weapon/grown/deathnettle = list("pacid" = 0),
+		/obj/item/stack/sheet/mineral/clown   = list("banana" = 20),
+		/obj/item/stack/sheet/mineral/silver  = list("silver" = 20),
+		/obj/item/stack/sheet/mineral/gold    = list("gold" = 20),
+		/obj/item/weapon/grown/nettle         = list("sacid" = 0),
+		/obj/item/weapon/grown/deathnettle    = list("pacid" = 0),
+		/obj/item/stack/sheet/charcoal        = list("charcoal" = 20),
 
 		//Blender Stuff
 		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans = list("soymilk" = 0),
@@ -978,8 +998,6 @@
 
 		//archaeology!
 		/obj/item/weapon/rocksliver = list("ground_rock" = 50),
-
-
 
 		//All types that you can put into the grinder to transfer the reagents to the beaker. !Put all recipes above this.!
 		/obj/item/weapon/reagent_containers/pill = list(),

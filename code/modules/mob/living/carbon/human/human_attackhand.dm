@@ -1,4 +1,5 @@
 /mob/living/carbon/human/attack_hand(mob/living/carbon/human/M as mob)
+	//M.changeNext_move(10)
 	if (istype(loc, /turf) && istype(loc.loc, /area/start))
 		M << "No attacking people at spawn, you jackass."
 		return
@@ -196,7 +197,7 @@
 					chance = !hand ? 40 : 20
 
 				if (prob(chance))
-					visible_message("<spawn class=danger>[src]'s [W] goes off during struggle!")
+					visible_message("<spawn class=danger>[W], held by [src], goes off during struggle!")
 					var/list/turfs = list()
 					for(var/turf/T in view())
 						turfs += T

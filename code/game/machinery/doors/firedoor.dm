@@ -71,6 +71,7 @@
 	power_change()
 		if(powered(ENVIRON))
 			stat &= ~NOPOWER
+			latetoggle()
 		else
 			stat |= NOPOWER
 		return
@@ -98,11 +99,9 @@
 			user << "\red \The [src] is welded solid!"
 			return
 
-		var/area/A = get_area(src)
-		ASSERT(istype(A))
-		if(A.master)
-			A = A.master
-		var/alarmed = A.air_doors_activated || A.fire
+		var/area/A = get_area_master(src)
+		ASSERT(istype(A)) // This worries me.
+		var/alarmed = A.doors_down || A.fire
 
 		if( istype(C, /obj/item/weapon/crowbar) || ( istype(C,/obj/item/weapon/twohanded/fireaxe) && C:wielded == 1 ) )
 			if(operating)
@@ -200,20 +199,13 @@
 				if(alarmed)
 					nextstate = CLOSED
 
+	open()
+		..()
+		latetoggle()
 
-	process()
-		if(operating || stat & NOPOWER || !nextstate)
-			return
-		switch(nextstate)
-			if(OPEN)
-				spawn()
-					open()
-			if(CLOSED)
-				spawn()
-					close()
-		nextstate = null
-		return
-
+	close()
+		..()
+		latetoggle()
 
 	door_animate(animation)
 		switch(animation)
@@ -236,7 +228,17 @@
 				overlays += "welded_open"
 		return
 
+/obj/machinery/door/firedoor/proc/latetoggle()
+	if(operating || stat & NOPOWER || !nextstate)
+		return
 
+	switch(nextstate)
+		if(OPEN)
+			nextstate = null
+			open()
+		if(CLOSED)
+			nextstate = null
+			close()
 
 /obj/machinery/door/firedoor/border_only
 //These are playing merry hell on ZAS.  Sorry fellas :(
@@ -264,20 +266,6 @@
 			return !density*/
 		else
 			return !density*/
-
-
-	update_nearby_tiles(need_rebuild)
-		if(!air_master) return 0
-
-		var/turf/simulated/source = loc
-		var/turf/simulated/destination = get_step(source,dir)
-
-		update_heat_protection(loc)
-
-		if(istype(source)) air_master.tiles_to_update += source
-		if(istype(destination)) air_master.tiles_to_update += destination
-		return 1
-
 
 /obj/machinery/door/firedoor/multi_tile
 	icon = 'icons/obj/doors/DoorHazard2x1.dmi'

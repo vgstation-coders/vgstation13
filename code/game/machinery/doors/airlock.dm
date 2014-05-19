@@ -626,6 +626,7 @@ About the new airlock wires panel:
 		..()
 	if(!isAdminGhost(usr))
 		if(usr.stat || usr.restrained()|| usr.small)
+			//testing("Returning: Not adminghost, stat=[usr.stat], restrained=[usr.restrained()], small=[usr.small]")
 			return
 	add_fingerprint(usr)
 	if(href_list["close"])
@@ -634,39 +635,34 @@ About the new airlock wires panel:
 			usr.unset_machine()
 			return
 
-	if((in_range(src, usr) && istype(src.loc, /turf)))
+	var/am_in_range=in_range(src, usr)
+	var/turf_ok = istype(src.loc, /turf)
+	//testing("in range: [am_in_range], turf ok: [turf_ok]")
+	if(am_in_range && turf_ok)
 		usr.set_machine(src)
-		if(!p_open)
-			if(!issilicon(usr))
-				if(!istype(usr.get_active_hand(), /obj/item/device/multitool))
-					testing("Not silicon, not using a multitool.")
-					return
-
-			if("set_tag" in href_list)
-				if(!(href_list["set_tag"] in vars))
-					usr << "\red Something went wrong: Unable to find [href_list["set_tag"]] in vars!"
-					return 1
-				var/current_tag = src.vars[href_list["set_tag"]]
-				var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag", src, current_tag) as null|text),1,MAX_MESSAGE_LEN)
-				if(newid)
-					vars[href_list["set_tag"]] = newid
-					initialize()
-
-			if("set_freq" in href_list)
-				var/newfreq=frequency
-				if(href_list["set_freq"]!="-1")
-					newfreq=text2num(href_list["set_freq"])
-				else
-					newfreq = input(usr, "Specify a new frequency (GHz). Decimals assigned automatically.", src, frequency) as null|num
-				if(newfreq)
-					if(findtext(num2text(newfreq), "."))
-						newfreq *= 10 // shift the decimal one place
-					if(newfreq < 10000)
-						frequency = newfreq
+		if(p_open)
+			var/obj/item/device/multitool/P = get_multitool(usr)
+			if(P && istype(P))
+				if("set_id" in href_list)
+					var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag for this machine", src, id_tag) as null|text),1,MAX_MESSAGE_LEN)
+					if(newid)
+						id_tag = newid
 						initialize()
+				if("set_freq" in href_list)
+					var/newfreq=frequency
+					if(href_list["set_freq"]!="-1")
+						newfreq=text2num(href_list["set_freq"])
+					else
+						newfreq = input(usr, "Specify a new frequency (GHz). Decimals assigned automatically.", src, frequency) as null|num
+					if(newfreq)
+						if(findtext(num2text(newfreq), "."))
+							newfreq *= 10 // shift the decimal one place
+						if(newfreq < 10000)
+							frequency = newfreq
+							initialize()
 
-			usr.set_machine(src)
-			update_multitool_menu(usr)
+				usr.set_machine(src)
+				update_multitool_menu(usr)
 
 
 	if(isAdminGhost(usr) || (istype(usr, /mob/living/silicon) && src.canAIControl()))
@@ -942,9 +938,9 @@ About the new airlock wires panel:
 
 	if (!p_open)
 		..(user)
-	else
-		// TODO: logic for adding fingerprints when interacting with wires
-		wires.Interact(user)
+	//else
+	//	// TODO: logic for adding fingerprints when interacting with wires
+	//	wires.Interact(user)
 
 	return
 
@@ -974,10 +970,11 @@ About the new airlock wires panel:
 			p_open = !p_open
 			update_icon()
 	else if (istype(I, /obj/item/weapon/wirecutters))
-		if (!operating)
-			attack_hand(user)
+		if (!operating && p_open)
+			wires.Interact(user)
 	else if (istype(I, /obj/item/device/multitool))
-		if (p_open)
+		if (!operating && p_open)
+			wires.Interact(user)
 			update_multitool_menu(user)
 		attack_hand(user)
 	// TODO: review this if
@@ -992,7 +989,7 @@ About the new airlock wires panel:
 			beingcrowbarred = 1 //derp, Agouri
 		else
 			beingcrowbarred = 0
-		if( beingcrowbarred && (density && welded && !operating && src.p_open && (!src.arePowerSystemsOn() || stat & NOPOWER) && !src.locked) )
+		if( beingcrowbarred && (operating == -1 || density && welded && !operating && src.p_open && (!src.arePowerSystemsOn() || stat & NOPOWER) && !src.locked) )
 			playsound(src.loc, 'sound/items/Crowbar.ogg', 100, 1)
 			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 			// TODO: refactor the called proc
@@ -1030,10 +1027,10 @@ About the new airlock wires panel:
 					A.loc = loc
 
 				if (operating == -1)
-					A.icon_state = "door_electronics_smoke"
+					A.icon_state = "door_electronics_smoked"
 					operating = 0
 
-				src = null
+				del(src)
 				return
 		else if(arePowerSystemsOn() && !(stat & NOPOWER))
 			user << "\blue The airlock's motors resist your efforts to force it."
@@ -1134,7 +1131,7 @@ About the new airlock wires panel:
 				S.victim = L
 
 				spawn (20)
-					S = null
+					del(S)
 
 				L.emote("scream")
 
