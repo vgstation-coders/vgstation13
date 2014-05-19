@@ -127,6 +127,10 @@
 						/obj/item/borg/upgrade/tasercooler,
 						/obj/item/borg/upgrade/jetpack
 						),
+
+	"Space Pod" = list(
+						/obj/item/pod_parts/core
+						),
 	"Misc"=list(
 						/obj/item/mecha_parts/mecha_tracking,
 						/obj/item/mecha_parts/janicart_upgrade
@@ -491,10 +495,12 @@
 
 /obj/machinery/mecha_part_fabricator/proc/sync(silent=null)
 	var/new_data=0
-	for(var/obj/machinery/computer/rdconsole/RDC in get_area(src))
+	var/found = 0
+	for(var/obj/machinery/computer/rdconsole/RDC in area_contents(get_area(src)))
 		if(!RDC) continue
 		if(!RDC.sync)
 			continue
+		found = 1
 		for(var/datum/tech/T in RDC.files.known_tech)
 			if(T)
 				files.AddTech2Known(T)
@@ -513,6 +519,10 @@
 			new_data=1
 	if(new_data)
 		src.visible_message("\icon[src] <b>[src]</b> beeps, \"Succesfully synchronized with R&D server. New data processed.\"")
+	if(!silent && !found)
+		temp = "Unable to connect to local R&D Database.<br>Please check your connections and try again.<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
+		src.updateUsrDialog()
+
 
 /obj/machinery/mecha_part_fabricator/proc/get_resource_cost_w_coeff(var/obj/item/part as obj,var/resource as text, var/roundto=1)
 	if(part.vars.Find("construction_time") && part.vars.Find("construction_cost"))
