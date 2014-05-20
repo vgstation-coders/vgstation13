@@ -274,7 +274,7 @@ datum/controller/game_controller/proc/process()
 				sleep(10)
 
 datum/controller/game_controller/proc/processMobs()
-	var/i = 1
+	/*var/i = 1
 	expensive_mobs.Cut()
 	while(i<=mob_list.len)
 		var/mob/M = mob_list[i]
@@ -286,19 +286,48 @@ datum/controller/game_controller/proc/processMobs()
 				expensive_mobs += M
 			i++
 			continue
-		mob_list.Cut(i,i+1)
+		mob_list.Cut(i,i+1)*/
+	expensive_mobs.len = 0
+	var/size = mob_list.len + 1
+	var/clock
+
+	for (var/index = 0, ++index < size)
+		var/mob/M = mob_list[index]
+
+		if (M && M.loc)
+			clock = world.timeofday
+			M.Life()
+
+			if ((world.timeofday - clock) > 1)
+				expensive_mobs.Add(M)
+
+			last_thing_processed = M.type
+			continue
+
+		mob_list.Cut(index, index + 1)
 
 /datum/controller/game_controller/proc/processDiseases()
-	for (var/datum/disease/Disease in active_diseases)
+	/*for (var/datum/disease/Disease in active_diseases)
 		if(Disease)
 			last_thing_processed = Disease.type
 			Disease.process()
 			continue
 
-		active_diseases -= Disease
+		active_diseases -= Disease*/
+	var/size = active_diseases.len + 1
+
+	for (var/index = 0, ++index < size)
+		var/datum/disease/Disease
+
+		if (isnull(Disease))
+			active_diseases.Cut(index, index + 1)
+			continue
+
+		Disease.process()
+		last_thing_processed = Disease.type
 
 /datum/controller/game_controller/proc/processMachines()
-	#ifdef PROFILE_MACHINES
+	/*#ifdef PROFILE_MACHINES
 	machine_profiling.Cut()
 	#endif
 
@@ -328,48 +357,121 @@ datum/controller/game_controller/proc/processMobs()
 				machine_profiling[Machinery.type] = 0
 
 			machine_profiling[Machinery.type] += end - start
+			#endif*/
+	#ifdef PROFILE_MACHINES
+	machine_profiling.len = 0
+	var/start
+	#endif
+
+	var/size = machines.len + 1
+
+	for (var/index = 0, ++index < size)
+		var/obj/machinery/Machinery = machines[index]
+
+		if (Machinery && Machinery.loc)
+			#ifdef PROFILE_MACHINES
+			start = world.timeofday
 			#endif
 
+			if (PROCESS_KILL == Machinery.process())
+				Machinery.removeAtProcessing()
+				continue
+
+			if (Machinery && Machinery.use_power)
+				Machinery.auto_use_power()
+
+			last_thing_processed = Machinery.type
+
+			#ifdef PROFILE_MACHINES
+			if (!(last_thing_processed in machine_profiling))
+				machine_profiling[last_thing_processed] = 0
+
+			machine_profiling[last_thing_processed] += (world.timeofday - start)
+			#endif
 
 /datum/controller/game_controller/proc/processObjects()
-	for (var/obj/Object in processing_objects)
+	/*for (var/obj/Object in processing_objects)
 		if (Object && Object.loc)
 			last_thing_processed = Object.type
 			Object.process()
 			continue
 
-		processing_objects -= Object
+		processing_objects -= Object*/
+	var/size = processing_objects.len + 1
+
+	for (var/index = 0, ++index < size)
+		var/obj/Object = processing_objects[index]
+
+		if (Object && Object.loc)
+			Object.process()
+			last_thing_processed = Object.type
+			continue
+
+		processing_objects.Cut(index, index + 1)
 
 /datum/controller/game_controller/proc/processPipenets()
-	last_thing_processed = /datum/pipe_network
+/*	last_thing_processed = /datum/pipe_network
 
 	for (var/datum/pipe_network/Pipe_Network in pipe_networks)
 		if(Pipe_Network)
 			Pipe_Network.process()
 			continue
 
-		pipe_networks -= Pipe_Network
+		pipe_networks -= Pipe_Network*/
+	var/size = pipe_networks.len + 1
+
+	for (var/index = 0, ++index < size)
+		var/datum/pipe_network/Pipe_Network = pipe_networks[index]
+
+		if (isnull(Pipe_Network))
+			pipe_networks.Cut(index, index + 1)
+			continue
+
+		Pipe_Network.process()
+		last_thing_processed = /datum/pipe_network
 
 /datum/controller/game_controller/proc/processPowernets()
-	last_thing_processed = /datum/powernet
+/*	last_thing_processed = /datum/powernet
 
 	for (var/datum/powernet/Powernet in powernets)
 		if (Powernet)
 			Powernet.reset()
 			continue
 
-		powernets -= Powernet
+		powernets -= Powernet*/
+	var/size = powernets.len + 1
+
+	for (var/index = 0, ++index < size)
+		var/datum/powernet/Powernet = powernets[index]
+
+		if (isnull(Powernet))
+			powernets.Cut(index, index + 1)
+			continue
+
+		Powernet.reset()
+		last_thing_processed = /datum/powernet
 
 /datum/controller/game_controller/proc/processNano()
-	for (var/datum/nanoui/Nanoui in nanomanager.processing_uis)
+/*	for (var/datum/nanoui/Nanoui in nanomanager.processing_uis)
 		if (Nanoui)
 			Nanoui.process()
 			continue
 
-		nanomanager.processing_uis -= Nanoui
+		nanomanager.processing_uis -= Nanoui*/
+	var/size = nanomanager.processing_uis.len + 1
+
+	for (var/index = 0, ++index < size)
+		var/datum/nanoui/Nanoui = nanomanager.processing_uis[index]
+
+		if (isnull(Nanoui))
+			nanomanager.processing_uis.Cut(index, index + 1)
+			continue
+
+		Nanoui.process()
+		last_thing_processed = /datum/nanoui
 
 /datum/controller/game_controller/proc/processEvents()
-	last_thing_processed = /datum/event
+/*	last_thing_processed = /datum/event
 
 	for (var/datum/event/Event in events)
 		if (Event)
@@ -377,6 +479,19 @@ datum/controller/game_controller/proc/processMobs()
 			continue
 
 		events -= Event
+
+	checkEvent()*/
+	var/size = events.len + 1
+
+	for (var/index = 0, ++index < size)
+		var/datum/event/Event = events[index]
+
+		if (isnull(Event))
+			events.Cut(index, index + 1)
+			continue
+
+		Event.process()
+		last_thing_processed = /datum/event
 
 	checkEvent()
 
@@ -393,4 +508,3 @@ datum/controller/game_controller/proc/Recover()		//Mostly a placeholder for now.
 				else
 					msg += "\t [varname] = [varval]\n"
 	world.log << msg
-
