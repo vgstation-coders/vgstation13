@@ -3211,11 +3211,10 @@ datum
 				color = "#664300" // rgb: 102, 67, 0
 				
 				on_mob_life(var/mob/living/M as mob)
-					if(!M) M = holder.my_atom
-						M.radiation = max(M.radiation-1,0)
-						..()
+					..()
+					M.radiation = max(M.radiation-1,0)
 					return
-
+					
 			sake
 				name = "Sake"
 				id = "sake"
