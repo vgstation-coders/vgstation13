@@ -3209,7 +3209,12 @@ datum
 				id = "vodka"
 				description = "Number one drink AND fueling choice for Russians worldwide."
 				color = "#664300" // rgb: 102, 67, 0
-
+				
+				on_mob_life(var/mob/living/M as mob)
+					..()
+					M.radiation = max(M.radiation-1,0)
+					return
+					
 			sake
 				name = "Sake"
 				id = "sake"
