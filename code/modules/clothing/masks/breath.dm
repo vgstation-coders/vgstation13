@@ -58,3 +58,17 @@
 		return 0
 
 	return ..()
+
+/obj/item/clothing/mask/breath/nemoian
+	desc = "It looks like a space helmet, or...maybe even a fish bowl?"
+	name = "nemoian fish bowl"
+	icon_state = "fishbowl"
+	item_state = "fishbowl"
+	permeability_coefficient = 0.01
+
+	toggle()
+		set category = "Object"
+		set name = "Adjust mask"
+		set src in usr
+
+		usr << "You don't think adjusting this bowl is a good idea"

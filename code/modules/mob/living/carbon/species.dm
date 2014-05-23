@@ -324,3 +324,20 @@
 	blood_color = "#004400"
 	flesh_color = "#907E4A"
 
+/datum/species/nemoian
+	name = "Nemoian"
+	icobase = 'icons/mob/human_races/r_nemoid.dmi'
+	deform = 'icons/mob/human_races/r_def_nemoid.dmi'
+	language = "Glubbian"
+	primitive = /mob/living/carbon/monkey //WIP
+	attack_verb = "slap"
+	eyes = "nemoid_eyes_s"
+	wear_mask_icons = 'icons/mob/species/nemoid/masks.dmi'
+	flags = IS_WHITELISTED | HAS_LIPS | HAS_UNDERWEAR
+
+	equip(var/mob/living/carbon/human/H)
+		//Uneqips masks and hats
+		H.u_equip(H.head)
+		H.u_equip(H.wear_mask)
+
+		H.equip_or_collect(new /obj/item/clothing/mask/breath/nemoian(H), slot_wear_mask)

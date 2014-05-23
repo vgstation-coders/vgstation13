@@ -38,6 +38,14 @@
 	key = "k"
 	flags = WHITELISTED
 
+/datum/language/nemoian
+	name = "Glubbian"
+	desc = "An interesting language spoke mostly among Nemoians."
+	speech_verb = "glubs"
+	colour = "skrell" //WIP
+	key = "p"
+	flags = RESTRICTED
+
 /datum/language/vox
 	name = "Vox-pidgin"
 	desc = "The common tongue of the various Vox ships making up the Shoal. It sounds like chaotic shrieking to everyone else."
