@@ -252,3 +252,10 @@
 	item_state = "bmhead"
 	flags = FPRINT | TABLEPASS | HEADCOVERSEYES | BLOCKHAIR
 	flags_inv = HIDEEARS|HIDEEYES|HIDEFACE
+
+/obj/item/clothing/head/unclesam
+	name = "uncle sam hat"
+	icon_state = "unclesam"
+	item_state = "unclesam"
+	desc = "'Murica"
+	flags = FPRINT|TABLEPASS

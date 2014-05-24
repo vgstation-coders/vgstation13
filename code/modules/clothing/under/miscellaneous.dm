@@ -394,3 +394,11 @@
 	icon_state = "bmuniform"
 	_color = "bmuniform"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO
+
+
+/obj/item/clothing/under/unclesam
+	name = "uncle sam suit"
+	desc = "I want you; to die alone."
+	icon_state = "unclesam"
+	item_state = "unclesam"
+	_color = "america"
