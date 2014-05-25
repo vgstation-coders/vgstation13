@@ -223,3 +223,8 @@
 				welder_salvage += part
 				parts -= part
 		return
+
+
+/obj/effect/decal/mecha_wreckage/lagann
+	name = "Lagann wreckage"
+	icon_state = "lagann-broken"
