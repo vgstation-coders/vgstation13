@@ -1,5 +1,5 @@
 /*
-I.. 
+I..
 
 I'm so sorry.
 
@@ -27,18 +27,21 @@ Here it is: Buttbot.
 		return
 	speak("butt")
 
+
+
 /obj/machinery/bot/buttbot/proc/speak(var/message)
 	if((!src.on) || (!message))
 		return
 	for(var/mob/O in hearers(src, null))
-		O.show_message("<b>[src]</b> beeps, [message]")
+		O.show_message("<b>[src]</b> beeps, '[message]'")
 	return
+
 
 /obj/machinery/bot/buttbot/hear_talk(mob/M as mob, msg)
 	if(prob(buttchance))
 		msg = html_decode(msg)
 
-		var/list/split_phrase = dd_text2list(msg," ") //Split it up into words.
+		var/list/split_phrase = text2list(msg," ") //Split it up into words.
 
 		var/list/prepared_words = split_phrase.Copy()
 		var/i = rand(1,3)
@@ -54,25 +57,23 @@ Here it is: Buttbot.
 
 		speak(sanitize(dd_list2text(split_phrase," ")))
 
+
+
 /obj/machinery/bot/buttbot/explode()
 	src.on = 0
 	src.visible_message("\red <B>[src] blows apart!</B>", 1)
 	var/turf/Tsec = get_turf(src)
-
-	for(var/obj/item/clothing/head/butt/B in src)	// So the butt's owner can still recover his old butt
-		B.loc = loc
-	//new /obj/item/clothing/head/butt(Tsec)
-
-	new /obj/decal/cleanable/poo(Tsec)
+	new /obj/item/clothing/head/butt(Tsec)
 
 	if (prob(50))
 		new /obj/item/robot_parts/l_arm(Tsec)
 
-	var/datum/effects/system/spark_spread/s = new /datum/effects/system/spark_spread
+	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 	s.set_up(3, 1, src)
 	s.start()
+
+	new /obj/effect/decal/cleanable/blood/oil(src.loc)
 	del(src)
-	return
 
 /obj/item/clothing/head/butt/attackby(var/obj/item/W, mob/user as mob)
 	..()
