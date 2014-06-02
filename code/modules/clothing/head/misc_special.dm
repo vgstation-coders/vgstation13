@@ -194,7 +194,7 @@
 	..()
 	spawn(5)
 		if(src.owner)
-			var/icon/new_icon = icon('hat.dmi', "butt")
+			var/icon/new_icon = icon('hats.dmi', "butt")
 			src.s_tone = src.owner.s_tone
 			if (src.s_tone >= 0)
 				new_icon.Blend(rgb(src.s_tone, src.s_tone, src.s_tone), ICON_ADD)
