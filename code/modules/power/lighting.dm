@@ -257,7 +257,7 @@
 		spawn(1)
 			update(0)
 
-/obj/machinery/light/Del()
+/obj/machinery/light/Destroy()
 	var/area/A = get_area(src)
 	if(A)
 		on = 0
@@ -337,7 +337,7 @@
 // attack with item - insert light (if right type), otherwise try to break the light
 
 /obj/machinery/light/attackby(obj/item/W, mob/user)
-
+	user.changeNext_move(8)
 	//Light replacer code
 	if(istype(W, /obj/item/device/lightreplacer))
 		var/obj/item/device/lightreplacer/LR = W
@@ -390,14 +390,13 @@
 					continue
 				M.show_message("[user.name] smashed the light!", 3, "You hear a tinkle of breaking glass", 2)
 			if(on && (W.flags & CONDUCT))
-				//if(!user.mutations & COLD_RESISTANCE)
+				//if(!user.mutations & M_RESIST_COLD)
 				if (prob(12))
 					electrocute_mob(user, get_area(src), src, 0.3)
 			broken()
 
 		else
 			user << "You hit the light!"
-
 	// attempt to stick weapon into light socket
 	else if(status == LIGHT_EMPTY)
 		if(istype(W, /obj/item/weapon/screwdriver)) //If it's a screwdriver open it.
@@ -426,7 +425,7 @@
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(3, 1, src)
 			s.start()
-			//if(!user.mutations & COLD_RESISTANCE)
+			//if(!user.mutations & M_RESIST_COLD)
 			if (prob(75))
 				electrocute_mob(user, get_area(src), src, rand(0.7,1.0))
 
@@ -451,8 +450,13 @@
 			update(0)
 		flickering = 0
 
-// ai attack - make lights flicker, because why not
+/obj/machinery/light/attack_ghost(mob/user)
+	if(blessed) return
+	src.add_hiddenprint(user)
+	src.flicker(1)
+	return
 
+// ai attack - make lights flicker, because why not
 /obj/machinery/light/attack_ai(mob/user)
 	// attack_robot is flaky.
 	if(isMoMMI(user))
@@ -496,6 +500,8 @@
 	if(isobserver(user))
 		return
 
+	if(!Adjacent(user)) return
+
 	add_fingerprint(user)
 
 	if(status == LIGHT_EMPTY)
@@ -515,7 +521,7 @@
 		else
 			prot = 1
 
-		if(prot > 0 || (mHeatres in user.mutations))
+		if(prot > 0 || (M_RESIST_HEAT in user.mutations))
 			user << "You remove the light [fitting]"
 		else
 			user << "You try to remove the light [fitting], but it's too hot and you don't want to burn your hand."
@@ -569,7 +575,7 @@
 /obj/machinery/light/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
+			qdel(src)
 			return
 		if(2.0)
 			if (prob(75))
@@ -598,9 +604,7 @@
 // called when area power state changes
 /obj/machinery/light/power_change()
 	spawn(10)
-		var/area/A = src.loc.loc
-		A = A.master
-		seton(A.lightswitch && A.power_light)
+		seton(areaMaster.lightswitch && areaMaster.power_light)
 
 // called when on fire
 
@@ -643,6 +647,7 @@
 	base_state = "ltube"
 	item_state = "c_tube"
 	g_amt = 100
+	w_type = RECYK_GLASS
 	brightness = 8
 
 /obj/item/weapon/light/tube/large
@@ -658,6 +663,7 @@
 	item_state = "contvapour"
 	g_amt = 100
 	brightness = 5
+	w_type = RECYK_GLASS
 
 /obj/item/weapon/light/throw_impact(atom/hit_atom)
 	..()
