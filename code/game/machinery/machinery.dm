@@ -116,13 +116,14 @@ Class Procs:
 	var/inMachineList = 1 // For debugging.
 
 /obj/machinery/New()
+	. = ..()
 	machines.Add(src)
-	return ..()
 
 /obj/machinery/Destroy()
 	if (src in machines)
 		machines.Remove(src)
 
+	components_parts = null
 	return ..()
 
 /obj/machinery/process() // If you dont use process or power why are you here

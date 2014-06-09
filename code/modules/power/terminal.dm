@@ -7,23 +7,27 @@
 	name = "terminal"
 	icon_state = "term"
 	desc = "It's an underfloor wiring terminal for power equipment."
-	level = 1
-	layer = TURF_LAYER
-	var/obj/machinery/power/master = null
-	anchored = 1
-	directwired = 0		// must have a cable on same turf connecting to terminal
-	layer = 2.6 // a bit above wires
+	layer = TURF_LAYER + 0.6 // A bit above wires.
 
+	anchored = 1
+	directwired = 0 // Must have a cable on same turf connecting to terminal.
+	level = 1
+
+	var/obj/machinery/power/master
 
 /obj/machinery/power/terminal/New()
-	..()
-	var/turf/T = src.loc
-	if(level==1) hide(T.intact)
-	return
+	. = ..()
+	var/turf/T = get_turf(src)
 
+	if (1 == level)
+		hide(T.intact)
 
-/obj/machinery/power/terminal/hide(var/i)
-	if(i)
+/obj/machinery/power/terminal/Destroy()
+	master = null
+	return ..()
+
+/obj/machinery/power/terminal/hide(const/i)
+	if (i)
 		invisibility = 101
 		icon_state = "term-f"
 	else
