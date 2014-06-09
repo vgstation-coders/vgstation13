@@ -123,7 +123,7 @@ Class Procs:
 	if (src in machines)
 		machines.Remove(src)
 
-	components_parts = null
+	component_parts = null
 	return ..()
 
 /obj/machinery/process() // If you dont use process or power why are you here
