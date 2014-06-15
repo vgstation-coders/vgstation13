@@ -112,6 +112,13 @@ datum
 			required_reagents = list("silicon" = 1, "potassium" = 1, "nitrogen" = 1)
 			result_amount = 3
 
+		phalanximine
+			name = "Phalanximine"
+			id = "phalanximine"
+			result = "phalanximine"
+			required_reagents = list("arithrazine" = 1, "diethylamine" = 1, "mutagen" = 1)
+			result_amount = 1
+
 		mutagen
 			name = "Unstable mutagen"
 			id = "mutagen"
