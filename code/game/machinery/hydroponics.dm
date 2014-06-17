@@ -402,6 +402,14 @@ obj/machinery/hydroponics/proc/mutatespecie() // Mutagent produced a new plant!
 		del(myseed)
 		myseed = new /obj/item/seeds/koiseed
 
+	else if ( istype(myseed, /obj/item/seeds/synthmeatseed ))
+		del(myseed)
+		switch(rand(1,100))
+			if(1 to 60)
+				myseed = new /obj/item/seeds/synthbuttseed
+			if(61 to 100)
+				myseed = new /obj/item/seeds/synthbrainseed
+
 	else if ( istype(myseed, /obj/item/seeds/sunflowerseed ))
 		del(myseed)
 		switch(rand(1,100))
