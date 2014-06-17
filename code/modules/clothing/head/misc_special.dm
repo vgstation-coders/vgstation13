@@ -190,6 +190,8 @@
 	throwforce = 2
 	throw_speed = 3
 	throw_range = 5
+	var/created_name = "buttbot"
+	nonplant_seed_type = "/obj/item/seeds/synthbuttseed"
 	var/s_tone = 0.0
 
 	var/mob/living/carbon/human/owner = null
