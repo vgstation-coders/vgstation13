@@ -33,6 +33,13 @@
 	amount_per_unit=10
 	other_amounts=list(5)
 
+/datum/biogen_recipe/food/meat
+	id="meat"
+	name="Slab of meat"
+	cost=50
+	other_amounts=list(5)
+	result=/obj/item/weapon/reagent_containers/food/snacks/meat
+
 /datum/biogen_recipe/nutrient
 	category="Nutrients"
 
