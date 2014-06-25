@@ -612,7 +612,7 @@
 							//playsound(L.loc, 'superfart.ogg', 50, 0)
 							if(!wearing_suit)
 								for(var/mob/living/V in view(src,aoe_range))
-		`							shake_camera(V,10,5)
+									shake_camera(V,10,5)
 									if (V == src)
 										continue
 									V << "\red You are sent flying!"
