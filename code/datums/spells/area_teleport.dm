@@ -65,6 +65,8 @@
 
 	return
 
+		playsound(get_turf(src), 'sound/weapons/radgun.ogg', 50, 0)
+
 /obj/effect/proc_holder/spell/targeted/area_teleport/invocation(area/chosenarea = null)
 	if(!invocation_area || !chosenarea)
 		..()
