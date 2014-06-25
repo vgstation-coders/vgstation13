@@ -553,11 +553,18 @@
 			else	
 				if(world.time-lastFart >= 300)
 					if(miming)
-						message = "<B>[src]</B> lets out a scilent but deadly fart."
+						message = "<B>[src]</B> lets out a silent but deadly fart."
 						m_type = 1
 					else	
 						var/list/farts = list("farts","passes wind","toots","shits himself a bit.","farts with the force of one thousand suns.","lets out the worse smelling fart.","lets out a fart so strong it burns your nostrils.","lets one rip","flatulates")
 						var/fart = pick(farts)
+						for(var/mob/M in view(1))
+							if(M != src)
+								visible_message("\red <b>[src]</b> farts in <b>[M]</b>'s face!")
+								if(prob(5))
+									M << "Get recked."
+							else
+								continue
 						message = "<b>[src]</b> [fart]."
 						playsound(get_turf(src), 'sound/misc/fart.ogg', 50, 1)
 						m_type = 2
