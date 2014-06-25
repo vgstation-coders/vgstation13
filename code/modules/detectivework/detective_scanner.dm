@@ -97,6 +97,8 @@
 			user << "The scanner displays on the screen: \"ERROR 43: Object on Excluded Object List.\""
 			return
 
+		playsound(get_turf(src), 'sound/items/detscan.ogg', 25, 1)
+
 		add_fingerprint(user)
 
 		var/list/blood_DNA_found    = src.extract_blood(A)

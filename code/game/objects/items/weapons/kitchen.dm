@@ -212,7 +212,7 @@
 
 
 /obj/item/weapon/butch/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
+	playsound(loc, 'sound/weapons/rapidslice.ogg', 50, 1, -1)
 	return ..()
 
 /*

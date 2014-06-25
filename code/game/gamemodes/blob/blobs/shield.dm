@@ -3,13 +3,13 @@
 	icon = 'icons/mob/blob.dmi'
 	icon_state = "blob_idle"
 	desc = "Some blob creature thingy"
-	health = 75
+	health = 100
 	fire_resist = 2
 
 
 	update_icon()
 		if(health <= 0)
-			playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
+			playsound(get_turf(src), 'sound/effects/blobsplat.ogg', 50, 1)
 			Delete()
 			return
 		return

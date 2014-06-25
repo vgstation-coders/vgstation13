@@ -18,6 +18,7 @@
 /obj/item/weapon/dice/attack_self(mob/user as mob)
 	var/result = rand(1, sides)
 	var/comment = ""
+	playsound(get_turf(src), 'sound/weapons/diceroll.ogg', 50, 1, -1)
 	if(sides == 20 && result == 20)
 		comment = "Nat 20!"
 	else if(sides == 20 && result == 1)

@@ -105,7 +105,7 @@
 		return(BRUTELOSS)
 
 /obj/item/weapon/claymore/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
+	playsound(loc, 'sound/weapons/bloodyslice.ogg', 50, 1, -1)
 	return ..()
 
 /obj/item/weapon/katana
@@ -128,7 +128,7 @@
 		return 1
 
 /obj/item/weapon/katana/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
+	playsound(loc, 'sound/weapons/bloodyslice.ogg', 50, 1, -1)
 	return ..()
 
 /obj/item/weapon/harpoon

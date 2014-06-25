@@ -10,7 +10,7 @@
 
 	switch(act)
 		if ("help")
-			src << "Available emotes: aflap, bow, clap, custom, flap, twitch, twitch_s, salute, nod, deathgasp, me, glare, stare, shrug, beep, ping, buzz, look"
+			src << "Available emotes: aflap, bow, clap, custom, flap, twitch, twitch_s, salute, nod, deathgasp, me, glare, stare, shrug, beep, ping, buzz, look, coffee, help, excuseme, hellothere, team, hi, error, maint"
 			return
 		if ("salute")
 			//if (!src.buckled)
@@ -216,6 +216,102 @@
 			playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
 			m_type = 1
 
+		if("coffee")
+			var/M = null
+			if(param)
+				for (var/mob/A in view(null, null))
+					if (param == A.name)
+						M = A
+						break
+			if(!M)
+				param = null
+				playsound(get_turf(src), 'sound/machines/mommi_comment2.ogg', 30, 0)
+					m_type = 1
+
+		if("help")
+			var/M = null
+			if(param)
+				for (var/mob/A in view(null, null))
+					if (param == A.name)
+						M = A
+						break
+			if(!M)
+				param = null
+				playsound(get_turf(src), 'sound/machines/mommi_comment1.ogg', 30, 0)
+					m_type = 1
+
+		if("hellothere")
+			var/M = null
+			if(param)
+				for (var/mob/A in view(null, null))
+					if (param == A.name)
+						M = A
+						break
+			if(!M)
+				param = null
+				playsound(get_turf(src), 'sound/machines/mommi_comment3.ogg', 30, 0)
+					m_type = 1
+
+		if("team")
+			var/M = null
+			if(param)
+				for (var/mob/A in view(null, null))
+					if (param == A.name)
+						M = A
+						break
+			if(!M)
+				param = null
+				playsound(get_turf(src), 'sound/machines/mommi_comment4.ogg', 30, 0)
+					m_type = 1
+
+	if("excuseme")
+			var/M = null
+			if(param)
+				for (var/mob/A in view(null, null))
+					if (param == A.name)
+						M = A
+						break
+			if(!M)
+				param = null
+				playsound(get_turf(src), 'sound/machines/mommi_comment5.ogg', 30, 0)
+					m_type = 1
+
+	if("hi")
+			var/M = null
+			if(param)
+				for (var/mob/A in view(null, null))
+					if (param == A.name)
+						M = A
+						break
+			if(!M)
+				param = null
+				playsound(get_turf(src), 'sound/machines/mommi_comment6.ogg', 30, 0)
+					m_type = 1
+
+
+	if("error")
+			var/M = null
+			if(param)
+				for (var/mob/A in view(null, null))
+					if (param == A.name)
+						M = A
+						break
+			if(!M)
+				param = null
+				playsound(get_turf(src), 'sound/machines/mommi_injured1.ogg', 30, 0)
+					m_type = 1
+
+	if("maint")
+			var/M = null
+			if(param)
+				for (var/mob/A in view(null, null))
+					if (param == A.name)
+						M = A
+						break
+			if(!M)
+				param = null
+				playsound(get_turf(src), 'sound/machines/mommi_injured2.ogg', 30, 0)
+					m_type = 1
 		else
 			src << text("Invalid Emote: [], use *help", act)
 	if ((message && src.stat == 0))

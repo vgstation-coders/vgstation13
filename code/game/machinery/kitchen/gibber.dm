@@ -224,6 +224,7 @@ obj/machinery/gibber/New()
 		visible_message("\red You hear a loud metallic grinding sound.")
 		return
 	use_power(1000)
+playsound(get_turf(src), 'sound/effects/gib.ogg', 50, 1)
 	visible_message("\red You hear a loud squelchy grinding sound.")
 	src.operating = 1
 	update_icon()
