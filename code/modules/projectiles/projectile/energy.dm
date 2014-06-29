@@ -31,7 +31,7 @@
 
 /obj/item/projectile/energy/dart
 	name = "dart"
-	icon_state = "toxin"
+	icon_state = "dshell"
 	damage = 5
 	damage_type = TOX
 	weaken = 5
