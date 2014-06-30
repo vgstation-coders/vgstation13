@@ -313,7 +313,7 @@ datum
 					lowertemp.temperature = max( min(lowertemp.temperature-2000,lowertemp.temperature / 2) ,0)
 					lowertemp.react()
 					T.assume_air(lowertemp)
-					del(hotspot)
+					qdel(hotspot)
 				return
 			reaction_obj(var/obj/O, var/volume)
 				src = null
@@ -324,7 +324,7 @@ datum
 					lowertemp.temperature = max( min(lowertemp.temperature-2000,lowertemp.temperature / 2) ,0)
 					lowertemp.react()
 					T.assume_air(lowertemp)
-					del(hotspot)
+					qdel(hotspot)
 				if(istype(O,/obj/item/weapon/reagent_containers/food/snacks/monkeycube))
 					var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
 					if(!cube.wrapped)
@@ -387,6 +387,21 @@ datum
 				M.adjustToxLoss(-2*REM)
 				..()
 				return
+
+		phalanximine
+			name = "Phalanximine"
+			id = "phalanximine"
+			description = "Phalanximine is a powerful chemotherapy agent."
+			reagent_state = LIQUID
+			color = "#1A1A1A" // rgb:idk
+
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				M.adjustToxLoss(-2*REM)
+				M.apply_effect(4*REM,IRRADIATE,0)
+				..()
+				return
+
 
 		toxin
 			name = "Toxin"
@@ -1953,7 +1968,10 @@ datum
 
 			on_mob_life(var/mob/living/carbon/M as mob)
 				if(!M) M = holder.my_atom
-				M.status_flags |= FAKEDEATH
+				if(volume >= 1) //Hotfix for Fakedeath never ending.
+					M.status_flags |= FAKEDEATH
+				else
+					M.status_flags &= ~FAKEDEATH
 				M.adjustOxyLoss(0.5*REM)
 				M.adjustToxLoss(0.5*REM)
 				M.Weaken(10)
@@ -1962,11 +1980,11 @@ datum
 				..()
 				return
 
-			Del()
+			/*Del()
 				if(holder && ismob(holder.my_atom))
 					var/mob/M = holder.my_atom
 					M.status_flags &= ~FAKEDEATH
-				..()
+				..()8*/
 
 		mindbreaker
 			name = "Mindbreaker Toxin"
@@ -2148,9 +2166,9 @@ datum
 					if(1)
 						M.confused += 2
 						M.drowsyness += 2
-					if(2 to 50)
+					if(2 to 80)
 						M.sleeping += 1
-					if(51 to INFINITY)
+					if(81 to INFINITY)
 						M.sleeping += 1
 						M:toxloss += (data - 50)
 				..()

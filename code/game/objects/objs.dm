@@ -5,7 +5,7 @@
 	var/unacidable = 0 //universal "unacidabliness" var, here so you can use it in any obj.
 	animate_movement = 2
 	var/throwforce = 1
-	var/list/attack_verb = list() //Used in attackby() to say how something was attacked "[x] has been [z.attack_verb] by [y] with [z]"
+	var/list/attack_verb //Used in attackby() to say how something was attacked "[x] has been [z.attack_verb] by [y] with [z]"
 	var/sharp = 0 // whether this object cuts
 	var/in_use = 0 // If we have a user using us, this will be set on. We will check if the user has stopped using us, and thus stop updating and LAGGING EVERYTHING!
 	var/list/mob/_using = list() // All mobs dicking with us.
@@ -18,8 +18,14 @@
 	var/list/reagents_to_log=list()
 
 /obj/Destroy()
-	if (src in processing_objects)
-		processing_objects.Remove(src)
+	if(src in processing_objects)
+		processing_objects -= src
+
+	if(attack_verb)
+		for(var/text in attack_verb)
+			attack_verb -= text
+
+		attack_verb = null
 
 	..()
 
@@ -69,26 +75,31 @@
 /obj/proc/updateUsrDialog()
 	if(in_use)
 		var/is_in_use = 0
-		var/list/nearby = viewers(1, src)
-		for(var/mob/M in _using.Copy()) // Only check things actually messing with us.
-			if (!M || !M.client || M.machine != src)
-				_using.Remove(M)
-				continue
+		if(_using.len)
+			var/list/nearby = viewers(1, src)
+			for(var/mob/M in _using.Copy()) // Only check things actually messing with us.
+				if (!M || !M.client || M.machine != src)
+					_using.Remove(M)
+					continue
 
-			if(!M in nearby) // NOT NEARBY
-				// AIs/Robots can do shit from afar.
-				if (isAI(M) || isrobot(M))
-					is_in_use = 1
-					src.attack_ai(M)
-
-				// check for TK users
-				else if (ishuman(M))
-					if(istype(M.l_hand, /obj/item/tk_grab) || istype(M.r_hand, /obj/item/tk_grab))
+				if(!M in nearby) // NOT NEARBY
+					// AIs/Robots can do shit from afar.
+					if (isAI(M) || isrobot(M))
 						is_in_use = 1
-						src.attack_hand(M)
-			else // EVERYTHING FROM HERE DOWN MUST BE NEARBY
-				is_in_use = 1
-				attack_hand(M)
+						src.attack_ai(M)
+
+					// check for TK users
+					else if (ishuman(M))
+						if(istype(M.l_hand, /obj/item/tk_grab) || istype(M.r_hand, /obj/item/tk_grab))
+							is_in_use = 1
+							src.attack_hand(M)
+					else
+						// Remove.
+						_using.Remove(M)
+						continue
+				else // EVERYTHING FROM HERE DOWN MUST BE NEARBY
+					is_in_use = 1
+					attack_hand(M)
 		in_use = is_in_use
 
 /obj/proc/updateDialog()
@@ -115,13 +126,13 @@
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"
 
-/obj/proc/linkWith(var/mob/user, var/obj/buffer)
+/obj/proc/linkWith(var/mob/user, var/obj/buffer, var/link/context)
 	return 0
 
 /obj/proc/unlinkFrom(var/mob/user, var/obj/buffer)
 	return 0
 
-/obj/proc/canLink(var/obj/O)
+/obj/proc/canLink(var/obj/O, var/link/context)
 	return 0
 
 /obj/proc/isLinkedWith(var/obj/O)
@@ -129,6 +140,12 @@
 
 /obj/proc/getLink(var/idx)
 	return null
+
+/obj/proc/linkMenu(var/obj/O)
+	var/dat=""
+	if(canLink(O, list()))
+		dat += " <a href='?src=\ref[src];link=1'>\[Link\]</a> "
+	return dat
 
 /obj/proc/format_tag(var/label,var/varname, var/act="set_tag")
 	var/value = vars[varname]
@@ -172,8 +189,9 @@ a {
 			else
 				id=P.buffer:id_tag
 			dat += "<p><b>MULTITOOL BUFFER:</b> [P.buffer] ([id])"
-			if(canLink(P.buffer))
-				dat += " <a href='?src=\ref[src];link=1'>\[Link\]</a> "
+
+			dat += linkMenu(P.buffer)
+
 			if(P.buffer)
 				dat += "<a href='?src=\ref[src];flush=1'>\[Flush\]</a>"
 			dat += "</p>"
@@ -188,16 +206,22 @@ a {
 	return
 
 /mob/proc/unset_machine()
-	if(machine)
+	if(machine && istype(machine, /obj/machinery))
 		machine._using -= src
 		machine = null
 
 /mob/proc/set_machine(var/obj/O)
-	if(src.machine)
+	if (src.machine)
 		unset_machine()
+
 	src.machine = O
-	if(istype(O))
+
+	if (istype(O))
 		O.in_use = 1
+
+		if (src in O._using)
+			return
+
 		O._using += src
 
 /obj/item/proc/updateSelfDialog()

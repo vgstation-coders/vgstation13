@@ -65,7 +65,7 @@
 
 /obj/machinery/door/airlock/medical
 	name = "Airlock"
-	icon = 'icons/obj/doors/Doormed.dmi'
+	icon = 'icons/obj/doors/doormed.dmi'
 	assembly_type = /obj/structure/door_assembly/door_assembly_med
 
 /obj/machinery/door/airlock/maintenance
@@ -136,7 +136,7 @@
 
 /obj/machinery/door/airlock/glass_medical
 	name = "Maintenance Hatch"
-	icon = 'icons/obj/doors/Doormedglass.dmi'
+	icon = 'icons/obj/doors/doormedglass.dmi'
 	opacity = 0
 	assembly_type = /obj/structure/door_assembly/door_assembly_med
 	glass = 1
@@ -153,12 +153,12 @@
 
 /obj/machinery/door/airlock/research
 	name = "Airlock"
-	icon = 'icons/obj/doors/Doorresearch.dmi'
+	icon = 'icons/obj/doors/doorresearch.dmi'
 	assembly_type = /obj/structure/door_assembly/door_assembly_research
 
 /obj/machinery/door/airlock/glass_research
 	name = "Maintenance Hatch"
-	icon = 'icons/obj/doors/Doorresearchglass.dmi'
+	icon = 'icons/obj/doors/doorresearchglass.dmi'
 	opacity = 0
 	assembly_type = /obj/structure/door_assembly/door_assembly_research
 	glass = 1
@@ -945,6 +945,9 @@ About the new airlock wires panel:
 	return
 
 /obj/machinery/door/airlock/attackby(obj/item/I as obj, mob/user as mob)
+	if(isAI(user) || isobserver(user))
+		return attack_ai(user)
+
 	if (!istype(user, /mob/living/silicon))
 		if (isElectrified())
 			// TODO: analyze the called proc
@@ -1090,12 +1093,13 @@ About the new airlock wires panel:
 	if(src.closeOther != null && istype(src.closeOther, /obj/machinery/door/airlock/) && !src.closeOther.density)
 		src.closeOther.close()
 	// This worries me - N3X
-	if(autoclose  && normalspeed)
-		spawn(150)
-			autoclose()
-	else if(autoclose && !normalspeed)
-		spawn(5)
-			autoclose()
+	if(!forced)
+		if(autoclose  && normalspeed)
+			spawn(150)
+				autoclose()
+		else if(autoclose && !normalspeed)
+			spawn(5)
+				autoclose()
 	// </worry>
 	return ..()
 

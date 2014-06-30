@@ -103,7 +103,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	else if(istype(W, /obj/item/weapon/melee/energy/sword))
 		var/obj/item/weapon/melee/energy/sword/S = W
 		if(S.active)
-			light("<span class='warning'>[user] swings their [W], barely missing their nose. They light their [name] in the process.</span>")
+			light("<span class='warning'>[user] raises their [W], lighting their [name]. Holy fucking shit.</span>")
 
 	else if(istype(W, /obj/item/device/assembly/igniter))
 		light("<span class='notice'>[user] fiddles with [W], and manages to light their [name].</span>")
@@ -163,6 +163,8 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 			del(src)
 			return
 		flags &= ~NOREACT // allowing reagents to react after being lit
+		flags |= (MASKINTERNALS | BLOCK_GAS_SMOKE_EFFECT)
+
 		reagents.handle_reactions()
 		// This ain't ready yet.
 		//overlays.Cut()
@@ -252,6 +254,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	icon_on = "cigaron"
 	icon_off = "cigaroff"
 	overlay_on = "cigarlit"
+	flags = FPRINT|TABLEPASS
 	type_butt = /obj/item/weapon/cigbutt/cigarbutt
 	throw_speed = 0.5
 	item_state = "cigaroff"
@@ -383,6 +386,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 /obj/item/clothing/mask/cigarette/pipe
 	name = "smoking pipe"
 	desc = "A pipe, for smoking. Probably made of meershaum or something."
+	flags = FPRINT|TABLEPASS
 	icon_state = "pipeoff"
 	item_state = "pipeoff"
 	icon_on = "pipeon"  //Note - these are in masks.dmi
@@ -474,12 +478,12 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	icon_on = "zippoon"
 	icon_off = "zippo"
 
-/obj/item/weapon/lighter/random
-	New()
-		var/color = pick("r","c","y","g")
-		icon_on = "lighter-[color]-on"
-		icon_off = "lighter-[color]"
-		icon_state = icon_off
+/obj/item/weapon/lighter/random/New()
+	. = ..()
+	var/color = pick("r","c","y","g")
+	icon_on = "lighter-[color]-on"
+	icon_off = "lighter-[color]"
+	icon_state = icon_off
 
 /obj/item/weapon/lighter/attack_self(mob/living/user)
 	if(user.r_hand == src || user.l_hand == src)

@@ -4,40 +4,11 @@
 
 var/global/datum/controller/game_controller/master_controller //Set in world.New()
 
-var/global/controller_iteration = 0
 var/global/last_tick_timeofday = world.timeofday
 var/global/last_tick_duration = 0
 
 var/global/air_processing_killed = 0
 var/global/pipe_processing_killed = 0
-
-var/list/near = list()
-var/list/nearr = list()
-
-/client/proc/dumpmch()
-	set category = "Debug"
-	set name = "Dump muh mch"
-	var/temp
-
-	usr << "--------"
-	for (var/x = 1 to near.len)
-		temp = null
-		for (var/y = 1 to length(near[x]))
-			temp += "[near[x][y]], "
-		usr << temp
-
-	usr << "/--------/"
-
-	for (var/x = 1 to nearr.len)
-		temp = null
-		for (var/y = 1 to length(nearr[x]))
-			temp += "[nearr[x][y]], "
-		usr << temp
-
-	// This list get too big fast so use only after the feature cooldowned.
-	//nearr = list()
-
-	usr << "--------"
 
 #ifdef PROFILE_MACHINES
 // /type = time this tick
@@ -45,7 +16,6 @@ var/list/machine_profiling=list()
 #endif
 
 datum/controller/game_controller
-	var/processing = 0
 	var/breather_ticks = 2		//a somewhat crude attempt to iron over the 'bumps' caused by high-cpu use by letting the MC have a breather for this many ticks after every loop
 	var/minimum_ticks = 20		//The minimum length of time between MC ticks
 
@@ -60,7 +30,6 @@ datum/controller/game_controller
 	var/nano_cost		= 0
 	var/events_cost		= 0
 	var/ticker_cost		= 0
-	var/gc_cost         = 0
 	var/total_cost		= 0
 
 	var/last_thing_processed
@@ -68,15 +37,19 @@ datum/controller/game_controller
 	var/rebuild_active_areas = 0
 
 datum/controller/game_controller/New()
-	//There can be only one master_controller. Out with the old and in with the new.
-	if(master_controller != src)
+	. = ..()
+
+	// There can be only one master_controller. Out with the old and in with the new.
+	if (master_controller != src)
 		log_debug("Rebuilding Master Controller")
-		if(istype(master_controller))
-			Recover()
-			del(master_controller)
+
+		if (istype(master_controller))
+			recover()
+			qdel(master_controller)
+
 		master_controller = src
 
-	if(!job_master)
+	if (isnull(job_master))
 		job_master = new /datum/controller/occupations()
 		job_master.SetupOccupations()
 		job_master.LoadJobs("config/jobs.txt")
@@ -123,7 +96,6 @@ datum/controller/game_controller/proc/setup()
 
 	lighting_controller.Initialize()
 
-
 datum/controller/game_controller/proc/setup_objects()
 	world << "\red \b Initializing objects"
 	sleep(-1)
@@ -149,21 +121,24 @@ datum/controller/game_controller/proc/setup_objects()
 	sleep(-1)
 
 
-datum/controller/game_controller/proc/process()
+/datum/controller/game_controller/proc/process()
 	processing = 1
-	spawn(0)
-		//set background = 1
-		while(1)	//far more efficient than recursively calling ourself
-			if(!Failsafe)	new /datum/controller/failsafe()
+
+	spawn (0)
+		set background = BACKGROUND_ENABLED
+
+		while (1) // Far more efficient than recursively calling ourself.
+			if (isnull(failsafe))
+				new /datum/controller/failsafe()
 
 			var/currenttime = world.timeofday
 			last_tick_duration = (currenttime - last_tick_timeofday) / 10
 			last_tick_timeofday = currenttime
 
-			if(processing)
+			if (processing)
+				iteration++
 				var/timer
 				var/start_time = world.timeofday
-				controller_iteration++
 
 				vote.process()
 				//process_newscaster()
@@ -257,14 +232,8 @@ datum/controller/game_controller/proc/process()
 				ticker.process()
 				ticker_cost = (world.timeofday - timer) / 10
 
-				// GC
-				timer = world.timeofday
-				last_thing_processed = garbage.type
-				garbage.process()
-				gc_cost = (world.timeofday - timer) / 10
-
 				//TIMING
-				total_cost = air_cost + sun_cost + mobs_cost + diseases_cost + machines_cost + objects_cost + networks_cost + powernets_cost + nano_cost + events_cost + ticker_cost + gc_cost
+				total_cost = air_cost + sun_cost + mobs_cost + diseases_cost + machines_cost + objects_cost + networks_cost + powernets_cost + nano_cost + events_cost + ticker_cost
 
 				var/end_time = world.timeofday
 				if(end_time < start_time)
@@ -318,17 +287,13 @@ datum/controller/game_controller/proc/processMobs()
 			if (Machinery && Machinery.use_power)
 				Machinery.auto_use_power()
 
-			var/end = world.timeofday
-			var/timeUsed = end - start
-
-			if (timeUsed > 1)
-				near += list(list("[worldtime2text()]", timeUsed, Machinery.x, Machinery.y, Machinery.z, Machinery.type))
-
 			#ifdef PROFILE_MACHINES
-			if(!(Machinery.type in machine_profiling))
+			var/end = world.timeofday
+
+			if (!(Machinery.type in machine_profiling))
 				machine_profiling[Machinery.type] = 0
 
-			machine_profiling[Machinery.type] += end - start
+			machine_profiling[Machinery.type] += (end - start)
 			#endif
 
 
@@ -381,11 +346,12 @@ datum/controller/game_controller/proc/processMobs()
 
 	checkEvent()
 
-datum/controller/game_controller/proc/Recover()		//Mostly a placeholder for now.
+datum/controller/game_controller/recover()		//Mostly a placeholder for now.
+	. = ..()
 	var/msg = "## DEBUG: [time2text(world.timeofday)] MC restarted. Reports:\n"
 	for(var/varname in master_controller.vars)
 		switch(varname)
-			if("tag","bestF","type","parent_type","vars")	continue
+			if("tag","type","parent_type","vars")	continue
 			else
 				var/varval = master_controller.vars[varname]
 				if(istype(varval,/datum))

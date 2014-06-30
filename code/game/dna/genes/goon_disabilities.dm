@@ -127,8 +127,8 @@
 		if(prob(30))
 			message += " check your privilege."
 		return message
-		
-		
+
+
 // WAS: /datum/bioEffect/elvis
 /datum/dna/gene/disability/speech/elvis
 	name = "Elvis"
@@ -152,7 +152,7 @@
 		message = replacetext(message,"faggot","square")
 		message = replacetext(message,"muh valids","getting my kicks")
 		message = replacetext(message," vox ","bird")
-		
+
 		if(prob(5))
 			return ""
 			M.visible_message("<b>[M]</b> [pick("rambles to themselves.","begins talking to themselves.")]")

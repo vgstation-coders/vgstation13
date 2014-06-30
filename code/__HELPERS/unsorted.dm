@@ -716,7 +716,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 		animation.master = target
 		flick(flick_anim, animation)
 	sleep(max(sleeptime, 15))
-	del(animation)
+	animation.loc = null
 
 //Will return the contents of an atom recursivly to a depth of 'searchDepth'
 /atom/proc/GetAllContents(searchDepth = 5)
@@ -1252,15 +1252,14 @@ proc/get_mob_with_client_list()
 
 	var/atom/A = O
 
-	for (var/i = 0, ++i <= 20)
+	for (var/i = 0, ++i <= 16)
 		if (isturf(A))
 			return A
 
-		switch (istype(A))
-			if (1)
-				A = A.loc
-			if (0)
-				return
+		if (istype(A))
+			A = A.loc
+		else
+			return
 
 /proc/get(atom/loc, type)
 	while(loc)

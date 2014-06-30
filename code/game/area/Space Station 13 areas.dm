@@ -1037,6 +1037,14 @@ proc/process_ghost_teleport_locs()
 		name = "Atmospherics"
 		icon_state = "atmos"
 
+	supermatter_room
+		name = "Supermatter Room"
+		icon_state = "engine_control"
+
+	engineering_auxiliary
+		name = "Auxiliary Engineering"
+		icon_state = "engiaux"
+
 //Solars
 
 /area/solar
@@ -1175,6 +1183,10 @@ proc/process_ghost_teleport_locs()
 /area/medical/sleeper
 	name = "Medbay Treatment Center"
 	icon_state = "exam_room"
+
+/area/medical/paramedics
+	name = "\improper Paramedic Station"
+	icon_state = "paramedics"
 
 //Security
 
