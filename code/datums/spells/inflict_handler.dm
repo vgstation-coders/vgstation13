@@ -44,9 +44,9 @@
 					var/mob/living/carbon/C = target
 					if(C.op_stage.butt != 4) // does the target have an ass
 						explosion(C.loc,-1,0,2)
-						/obj/item/clothing/head/butt = new(C.loc)
+						new /obj/item/clothing/head/butt(get_turf(C))
 					else
-						user << "That person doesn't even have an ass! Disgraceful."
+						src << "That person doesn't even have an ass! Disgraceful."
 						explosion(C.loc,-1,0,2)
 
 		if(!target)
