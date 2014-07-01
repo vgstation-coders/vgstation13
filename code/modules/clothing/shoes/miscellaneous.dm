@@ -137,3 +137,10 @@
 	desc = "Simon's Shoes"
 	icon_state = "simonshoes"
 	item_state = "simonshoes"
+
+/obj/item/clothing/shoes/mailshoes
+	name = "Mailman's Shoes"
+	desc = "Designed to make deliveries twice as fast, these mailman's shoes have special grip to prevent all slipping."
+	flags = NOSLIP
+	icon_state = "mail"
+	item_state = "mail"
