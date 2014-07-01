@@ -299,7 +299,7 @@
 	
 	
 /obj/effect/proc_holder/spell/targeted/inflict_handler/arsenath
-	name = "Disintegrate"
+	name = "Butt-Bot's Revenge"
 	desc = "This spell removes the target's ass in a firey explosion."
 
 	school = "evocation"
