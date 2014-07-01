@@ -42,7 +42,7 @@
 			if("butt")
 				if(ishuman(target) || ismonkey(target))
 					var/mob/living/carbon/C = target
-					if(C.butt_op_stage != 4) // does the target have an ass
+					if(C.op_stage.butt != 4) // does the target have an ass
 						explosion(C.loc,-1,0,2)
 						/obj/item/clothing/head/butt = new(C.loc)
 					else
