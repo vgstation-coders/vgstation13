@@ -188,7 +188,7 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	icon_state = "knife" //THIS NEEDS A NEW SPRITE BECAUSE IM SHIT AT IT. -Heredth
 	flags = FPRINT | TABLEPASS
 	slot_flags = SLOT_BELT
-	force = 12
+	force = 15
 	throwforce = 0
 	w_class = 1.0
 	throw_speed = 7
@@ -198,15 +198,5 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	suicide_act(mob/user)
 		viewers(user) << "\red <b>[user] is cutting their neck open with the [src.name]! It looks like \he's trying to commit suicide!</b>"
 		return (BRUTELOSS|OXYLOSS)
-
-/obj/item/weapon/letteropener/attack(mob/M, mob/user)
-		M.Stun(2)
-		M.Weaken(2)
-		M.apply_damage(force, BRUTE, user.zone_sel.selecting)
-		M.visible_message("\red <b>[M]</b> has been [attack_verb] with the [src] by <b>[user]</b>!")
-		user.attack_log += "\[[time_stamp()]\]<font color='red'> Attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
-		M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
-		msg_admin_attack("ATTACK: [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])") 
-		log_attack("<font color='red'> [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
 
