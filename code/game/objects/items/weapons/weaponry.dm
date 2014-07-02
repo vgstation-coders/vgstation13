@@ -188,18 +188,18 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	icon_state = "knife" //THIS NEEDS A NEW SPRITE BECAUSE IM SHIT AT IT. -Heredth
 	flags = FPRINT | TABLEPASS
 	slot_flags = SLOT_BELT
-	force = 20
+	force = 12
 	throwforce = 0
 	w_class = 1.0
 	throw_speed = 7
 	throw_range = 15
-	attack_verb = list("sliced")
+	attack_verb = list("sliced", "cut", "stabbed")
 
 	suicide_act(mob/user)
 		viewers(user) << "\red <b>[user] is cutting their neck open with the [src.name]! It looks like \he's trying to commit suicide!</b>"
-		return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
+		return (BRUTELOSS|OXYLOSS)
 
-/obj/item/weapon/melee/letteropener/attack(mob/M, mob/user)
+/obj/item/weapon/letteropener/attack(mob/M, mob/user)
 		M.Stun(2)
 		M.Weaken(2)
 
