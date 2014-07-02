@@ -38,6 +38,16 @@
 				target.gib()
 			if("disintegrate")
 				target.dust()
+				
+			if("butt")
+				if(ishuman(target) || ismonkey(target))
+					var/mob/living/carbon/C = target
+					if(C.op_stage.butt != 4) // does the target have an ass
+						explosion(C.loc,-1,0,2)
+						new /obj/item/clothing/head/butt(get_turf(C))
+					else
+						src << "That person doesn't even have an ass! Disgraceful."
+						explosion(C.loc,-1,0,2)
 
 		if(!target)
 			continue
