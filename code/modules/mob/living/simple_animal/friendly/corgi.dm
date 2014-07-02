@@ -297,6 +297,13 @@
 			emote_see = list("fiddles around with a sonic-bone", "builds something amazing- thats a poop. He just pooped.")
 			valid = 1
 
+		if(/obj/item/clothing/head/mailman)
+			name = "[real_name] the Maildog"
+			desc = "The very existance of a dog/mailman hybreed makes you very confused and slightly worried."
+			emote_hear =  list("barks for you to sign here.")
+			emote_see = list("delivers a shit to your floor.", "writes something down on his clipboard.")
+			valid = 1
+
 		/*
 		if(/obj/item/clothing/head/hardhat/reindeer)
 			name = "[real_name] the red-nosed Corgi"
