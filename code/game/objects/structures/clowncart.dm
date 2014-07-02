@@ -1,6 +1,6 @@
 /obj/structure/stool/bed/chair/clowncart
 	name = "clowncart"
-	desc = "Called the transport of the future by many, it runs on banana essence - an environmentally friendly fuel extracted from bananas and banana products.  A coin slot on its side is used for unlocking additional features."
+	desc = "Transport of the future, an advanced cart that runs on banana essence - an environmentally clean fuel extracted from bananas. A coin slot on its side is used for unlocking new features."
 	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "clowncar"
 	anchored = 1
@@ -16,20 +16,25 @@
 					//modes 1 and 2 consume extra fuel
 					//use bananium coins to cycle between modes
 	var/maximum_health = 100 //bananium increases maximum health by 20
-	var/printing_text = "nothing"	//what is printed on the ground in mode 2
+	var/printing_text = "nothing"	//what is printed on the ground in mode 1
 	var/printing_pos				//'rune' draws runes and 'graffiti' draws graffiti, other draws text
 	var/trail //trail from banana pie
 	var/colour1 = "#FF1111"
-	var/colour2 = "#FFFF22"	//colour for drawing in mode 1, defined by last used crayon
-							//doesn't work yet, unfortunately
+	var/colour2 = "#FFFF22"	//can't change it yet, sadly
+	var/emagged = 0			//does nothing yet
+	var/honk				//if you honk too much, explode
 /obj/structure/stool/bed/chair/clowncart/process()
-	if(empstun > 0)
-		empstun--
+	icon_state = "clowncar"
+	if(empstun > 0) empstun--
+	if(honk > 0) honk -= 2
+	if(honk < 0) honk = 0
 	if(empstun < 0)
 		empstun = 0
 	if(activated) //activated and nobody sits in it
+		icon_state = "clowncar_active"
 		if(!buckled_mob)
-			activated = 0 //deactivate
+			activated = 0
+			icon_state = "clowncar"
 	if(fuel < 0)
 		fuel = 0
 	if(trail < 0)
@@ -67,14 +72,30 @@
 		add_fingerprint(user)
 		user.visible_message("\blue [user] honks at the [src].", "\blue You honk at \the [src]")
 		playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
-		if(fuel <= 0)
-			user << "\red The [src.name] is out of fuel!"
-			return
-		spawn(10)
-			user.visible_message("\blue The [src.name] honks back in response.", "\blue The [src.name] honks back at you.")
-			playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
-			fuel -= 5 //response honk costs 5 fuel
-		activated = 1
+		if(fuel <= 5)
+			if(activated)
+				src.visible_message("\red The [src.name] lets out a last honk before running out of fuel.")
+				playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
+				activated = 0
+				fuel = 0
+			else
+				user << "\red The [src.name] doesn't have enough banana essence!"
+		else
+			spawn(5)
+				activated = 1
+				src.visible_message("\blue The [src.name] honks back happily.")
+				playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
+				fuel -= 5 //honking costs 5 fuel
+				honk++
+				if(honk == 4)
+					user << "\red You don't think this is a good idea."
+				if(honk == 8)
+					user << "\red The [src.name] starts to overheat!"
+				if(honk >= 12)
+					fuel = round(fuel * 0.5)
+					explosion(src.loc,-1,0,3,7,10)
+					health -= 30
+					honk = 0
 	//banana type items add fuel to the ride
 	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/bananabreadslice))
 		user.visible_message("\blue [user] puts the [W.name] in the [src].", "\blue You put the [W.name] in the [src].")
@@ -100,7 +121,7 @@
 		del(W)
 	else if(istype(W, /obj/item/stack/sheet/mineral/clown)) //bananium
 		user << "\blue You reinforce the [src] with [W.name]."
-		fuel += 500
+		fuel += 250
 		maximum_health += 20
 		health += 20
 
@@ -110,7 +131,7 @@
 		user.visible_message("\blue [user] puts the [W.name] in the [src].", "\blue You put the [W.name] in the [src].")
 		playsound(get_turf(src), 'sound/effects/bubbles.ogg', 50, 1)
 		usr << "\red The [W.name] starts boiling inside the [src]!"
-		fuel += 150
+		fuel += 175
 		trail += 5
 		del(W)
 	else if(istype(W, /obj/item/weapon/coin/clown)) //bananium coin
@@ -126,6 +147,7 @@
 					playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
 			if(1)
 				user << "\blue SmartCrayon II appears under the [src], ready to draw!"
+				user << "Use a crayon to decide what you want to draw."
 			if(2)
 				user << "\red The SmartCrayon II disappears in a puff of art!"
 				spawn(5)
@@ -137,6 +159,10 @@
 			printing_text = input(user, "Enter a message to print. To draw runes and graffiti, type 'rune' and 'graffiti' respectively.", "Message", printing_text)
 			printing_pos = 0
 			user << "\blue Now printing the following text: [printing_text]"
+	else if(istype(W, /obj/item/weapon/card/emag)) //emag
+		if(!emagged)
+			emagged = 1
+			src.visible_message("\red [src.name]'s eyes glow red for a second.")
 
 /obj/structure/stool/bed/chair/clowncart/relaymove(mob/user, direction)
 	if(user.stat || user.stunned || user.weakened || user.paralysis  || destroyed)
@@ -149,12 +175,14 @@
 	if(fuel <= 0) //no fuel
 		if(user)
 			user << "\red \the [src] has no fuel!"
+			activated = 0
 		return
 	if(activated)
 		var/old_pos = get_turf(src)
 		step(src, direction)
 		if(get_turf(src) <> old_pos) //if we actually moved
 			if(maximum_health < 300) fuel -= 1 //10 sheets of bananium required to drive without using fuel
+
 			if(mode == 1) //graffiti
 				if(printing_text != "nothing" && printing_text != "")
 					fuel -= 2
@@ -169,7 +197,7 @@
 						if(printing_pos > length(printing_text) - 1 || printing_pos == - 1)
 							printing_text = ""
 							printing_pos = 0
-			if(mode == 2) //lube
+			if(mode == 2) //peel
 				new /obj/item/weapon/bananapeel/(old_pos)
 				fuel -= 4
 			if(trail > 0)
@@ -295,9 +323,8 @@
 		visible_message("<span class='warning'>The honkin' ride explodes in a puff of potassium!</span>")
 		playsound(get_turf(src), 'sound/items/bikehorn.ogg', 75, 1)
 		explosion(src.loc,-1,0,3,7,10)
-		for(var/a=0, a<(fuel*0.5), a++) //spawn banana peels in place of the ride
-			spawn(0)
-				new /obj/item/weapon/bananapeel/( get_turf(src) )
+		for(var/a=0, a<(fuel*0.25), a++) //spawn banana peels in place of the ride
+			new /obj/item/weapon/bananapeel/traitorpeel( get_turf(src) )
 		del(src)
 
 /obj/structure/stool/bed/chair/clowncart/ex_act(severity)
