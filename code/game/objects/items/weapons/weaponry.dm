@@ -202,4 +202,11 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 /obj/item/weapon/letteropener/attack(mob/M, mob/user)
 		M.Stun(2)
 		M.Weaken(2)
+		M.apply_damage(force, BRUTE, user.zone_sel.selecting)
+		M.visible_message("\red <b>[M]</b> has been [attack_verb] with the [src] by <b>[user]</b>!")
+		user.attack_log += "\[[time_stamp()]\]<font color='red'> Attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
+		M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
+		msg_admin_attack("ATTACK: [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])") 
+		log_attack("<font color='red'> [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
+
 
