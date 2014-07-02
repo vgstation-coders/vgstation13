@@ -194,7 +194,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/letteropener
 	name = "Letter Opener"
-	desc = "A small knife that will stun targets shortly on impact. Also great for reciving messages from your grandmother."
+	desc = "A small knife that will stun targets shortly on impact. Also great for receiving messages from your grandmother."
 	item = /obj/item/weapon/letteropener
 	cost = 5
 	job = list("Mailman")

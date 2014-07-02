@@ -140,7 +140,6 @@
 
 /obj/item/clothing/shoes/mailshoes
 	name = "Mailman's Shoes"
-	desc = "Designed to make deliveries twice as fast, these mailman's shoes have special grip to prevent all slipping."
-	flags = NOSLIP
+	desc = "Lets see the dogs chew through these."
 	icon_state = "mail"
 	item_state = "mail"
