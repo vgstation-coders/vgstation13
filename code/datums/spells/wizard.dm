@@ -304,7 +304,7 @@
 	desc = "This spell removes the target's ass in a firey explosion."
 
 	school = "evocation"
-	charge_max = 600
+	charge_max = 500
 	clothes_req = 1
 	invocation = "ARSE NATH"
 	invocation_type = "shout"
