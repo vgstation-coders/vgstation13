@@ -299,7 +299,13 @@
 /obj/structure/stool/bed/chair/vehicle/proc/HealthCheck()
 	if(health > 100) health = 100
 	if(health <= 0 && !destroyed)
-		die()
+		destroyed = 1
+		density = 0
+		if(buckled_mob)
+			unbuckle()
+		visible_message("<span class='warning'>\The [nick] explodes!</span>")
+		explosion(src.loc,-1,0,2,7,10)
+		icon_state = "pussywagon_destroyed"
 
 /obj/structure/stool/bed/chair/vehicle/ex_act(severity)
 	switch (severity)
@@ -310,12 +316,3 @@
 		if(3.0)
 			health -= 45
 	HealthCheck()
-
-/obj/structure/stool/bed/chair/vehicle/proc/die() //called when health <= 0
-	destroyed = 1
-	density = 0
-	if(buckled_mob)
-		unbuckle()
-	visible_message("<span class='warning'>\The [nick] explodes!</span>")
-	explosion(src.loc,-1,0,2,7,10)
-	icon_state = "pussywagon_destroyed"
