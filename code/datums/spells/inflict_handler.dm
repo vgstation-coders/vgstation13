@@ -43,11 +43,18 @@
 				if(ishuman(target) || ismonkey(target))
 					var/mob/living/carbon/C = target
 					if(C.op_stage.butt != 4) // does the target have an ass
-						explosion(C.loc,-1,0,2)
+						playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, 1)
 						new /obj/item/clothing/head/butt(get_turf(C))
+						C.op_stage.butt = 4 //No having two butts.
+						C.apply_damage(40, BRUTE, "groin")
+						C.apply_damage(10, FIRE, "groin")
 					else
 						src << "That person doesn't even have an ass! Disgraceful."
-						explosion(C.loc,-1,0,2)
+						playsound(get_turf(src), 'sound/effects/fart.ogg', 50, 1)
+						C.apply_damage(40, BRUTE, "groin")
+						C.apply_damage(10, FIRE, "groin")
+					
+							
 
 		if(!target)
 			continue
