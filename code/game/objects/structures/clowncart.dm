@@ -166,7 +166,7 @@
 								printing_pos = -length(printing_text)-1 //indian code magic
 						printing_pos++
 						new /obj/effect/decal/cleanable/crayon(old_pos, colour1, colour2, copytext(printing_text, abs(printing_pos), 1+abs(printing_pos)))
-						if(printing_pos > length(printing_text) - 1 || printing_pos == - 1)
+						if(printing_pos > length(printing_text) || printing_pos == 0)
 							printing_text = ""
 							printing_pos = 0
 			if(mode == 2) //lube
