@@ -44,14 +44,14 @@
 					var/mob/living/carbon/C = target
 					if(C.op_stage.butt != 4) // does the target have an ass
 						playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, 1)
-						new /obj/item/clothing/head/butt(get_turf(C))
+						new /obj/item/clothing/head/butt/B(get_turf(C))
 						C.op_stage.butt = 4 //No having two butts.
+						B.name = "[C.name]'s butt"
 						C.apply_damage(40, BRUTE, "groin")
 						C.apply_damage(10, BURN, "groin")
 						C.Stun(8)
 						C.Weaken(8)
 					else
-						src << "That person doesn't even have an ass! Disgraceful."
 						playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, 1)
 						C.apply_damage(40, BRUTE, "groin")
 						C.apply_damage(10, BURN, "groin")
