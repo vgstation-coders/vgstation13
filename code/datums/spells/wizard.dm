@@ -296,3 +296,4 @@
 	summon_type = list("/obj/structure/stool/bed/chair/vehicle/wizmobile")
 	summon_lifespan = 0
 	centcomm_cancast = 0 //Stop people from getting to centcomm
+	

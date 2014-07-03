@@ -137,3 +137,9 @@
 	desc = "Simon's Shoes"
 	icon_state = "simonshoes"
 	item_state = "simonshoes"
+
+/obj/item/clothing/shoes/mailshoes
+	name = "Mailman's Shoes"
+	desc = "Lets see the dogs chew through these."
+	icon_state = "mail"
+	item_state = "mail"

@@ -177,6 +177,41 @@
 		return 1
 
 
+/datum/job/mail_man
+	title = "Mailman"
+	flag = MAILMAN
+	department_flag = CIVILIAN
+	faction = "Station"
+	total_positions = 1
+	spawn_positions = 1
+	supervisors = "the quartermaster and the head of personnel"
+	selection_color = "#dddddd"
+	idtype = /obj/item/weapon/card/id/supply
+	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm)
+	minimal_access = list(access_maint_tunnels, access_cargo, access_cargo_bot, access_mailsorting)
+	alt_titles = list("Mailwoman") //>Implying woman in spess
+
+	pdaslot=slot_belt
+	pdatype=/obj/item/device/pda/cargo
+
+	equip(var/mob/living/carbon/human/H)
+		if(!H)	return 0
+		switch(H.backbag)
+			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_mail(H), slot_back)
+			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_mail(H), slot_back)
+			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_mail(H), slot_back)
+		H.equip_or_collect(new /obj/item/device/radio/headset/headset_cargo(H), slot_ears)
+		H.equip_or_collect(new /obj/item/clothing/head/mailman(H), slot_head)
+		H.equip_or_collect(new /obj/item/clothing/under/rank/mailman(H), slot_w_uniform)
+		H.equip_or_collect(new /obj/item/clothing/shoes/mailshoes(H), slot_shoes)
+		//H.equip_or_collect(new /obj/item/device/pda/cargo(H), slot_belt)
+//		H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
+		if(H.backbag == 1)
+			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
+		else
+			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+		return 1
+
 
 /datum/job/mining
 	title = "Shaft Miner"

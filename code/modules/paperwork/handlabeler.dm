@@ -6,6 +6,7 @@
 	var/label = null
 	var/labels_left = 30
 	var/mode = 0	//off or on.
+	var/emagged = 0
 
 /obj/item/weapon/hand_labeler/afterattack(atom/A, mob/user as mob)
 	if(!user.Adjacent(A))
@@ -25,11 +26,23 @@
 		user << "<span class='notice'>Label too big.</span>"
 		return
 	if(ishuman(A))
-		user << "<span class='notice'>You can't label humans.</span>"
-		return
+		if(emagged == 0)
+			user << "<span class='notice'>You can't label humans.</span>"
+			return
+		else
+			user.visible_message("<span class='notice'>[user] labels [A] as [label].</span>", \
+								 "<span class='notice'>You label [A] as [label].</span>")
+			A.name = "[A.name] ([label])"
+
 	if(issilicon(A))
-		user << "<span class='notice'>You can't label cyborgs.</span>"
-		return
+		if(emagged == 0)
+			user << "<span class='notice'>You can't label silicons.</span>"
+			return
+		else
+			user.visible_message("<span class='notice'>[user] labels [A] as [label].</span>", \
+								 "<span class='notice'>You label [A] as [label].</span>")
+			A.name = "[A.name] ([label])"
+
 	if(istype(A, /obj/item/weapon/reagent_containers/glass))
 		user << "<span class='notice'>The label can't stick to the [A.name].  (Try using a pen)</span>"
 		return
@@ -52,3 +65,10 @@
 		user << "<span class='notice'>You set the text to '[str]'.</span>"
 	else
 		user << "<span class='notice'>You turn off \the [src].</span>"
+
+/obj/item/weapon/hand_labeler/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
+		user << "\red You overload \the [src]'s safety features."
+		emagged = 1
+		return
+	return

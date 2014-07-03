@@ -38,7 +38,7 @@
 				target.gib()
 			if("disintegrate")
 				target.dust()
-
+				
 		if(!target)
 			continue
 		//damage

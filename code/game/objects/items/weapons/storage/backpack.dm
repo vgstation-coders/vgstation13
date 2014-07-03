@@ -185,3 +185,9 @@
 	desc = "An exclusive satchel for Nanotrasen officers."
 	icon_state = "satchel-cap"
 	item_state = "captainpack"
+
+/obj/item/weapon/storage/backpack/satchel_mail
+	name = "mailmans's satchel"
+	desc = "A satchel saved for only the best postmen."
+	icon_state = "satchel-mail"
+	item_state = "satchel-mail"

@@ -192,6 +192,13 @@ var/list/uplink_items = list()
 	cost = 6
 	job = list("Geneticist")
 
+/datum/uplink_item/jobspecific/letteropener
+	name = "Letter Opener"
+	desc = "A sharp knife used to open letters. Also happens to be good at opening humans as well."
+	item = /obj/item/weapon/letteropener
+	cost = 6
+	job = list("Mailman")
+
 // DANGEROUS WEAPONS
 
 /datum/uplink_item/dangerous

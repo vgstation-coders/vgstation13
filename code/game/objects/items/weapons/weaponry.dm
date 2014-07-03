@@ -179,3 +179,24 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 		user << "<span class='notice'>You fasten the wirecutters to the top of the rod with the cable, prongs outward.</span>"
 		del(I)
 		del(src)
+
+
+/obj/item/weapon/letteropener
+	name = "Letter Opener"
+	desc = "<i>'Please sign here with your blood.'</i>"
+	icon = 'icons/obj/kitchen.dmi'
+	icon_state = "knife" //THIS NEEDS A NEW SPRITE BECAUSE IM SHIT AT IT. -Heredth
+	flags = FPRINT | TABLEPASS
+	slot_flags = SLOT_BELT
+	force = 15
+	throwforce = 0
+	w_class = 1.0
+	throw_speed = 7
+	throw_range = 15
+	attack_verb = list("sliced", "cut", "stabbed")
+
+	suicide_act(mob/user)
+		viewers(user) << "\red <b>[user] is cutting their neck open with the [src.name]! It looks like \he's trying to commit suicide!</b>"
+		return (BRUTELOSS|OXYLOSS)
+
+
