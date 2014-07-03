@@ -48,11 +48,15 @@
 						C.op_stage.butt = 4 //No having two butts.
 						C.apply_damage(40, BRUTE, "groin")
 						C.apply_damage(10, FIRE, "groin")
+						C.Stun(8)
+						C.Weaken(8)
 					else
 						src << "That person doesn't even have an ass! Disgraceful."
 						playsound(get_turf(src), 'sound/effects/fart.ogg', 50, 1)
 						C.apply_damage(40, BRUTE, "groin")
 						C.apply_damage(10, FIRE, "groin")
+						C.Stun(8)
+						C.Weaken(8)
 					
 							
 
