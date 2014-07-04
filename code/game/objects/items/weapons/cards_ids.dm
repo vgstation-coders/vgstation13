@@ -93,7 +93,7 @@ obj/item/weapon/card/id/attackby(var/obj/item/I, mob/user as mob)
 
 /obj/item/weapon/card/id/destroyed
 	name = "destroyed identification card"
-	desc = "A destroyed ID card. It doesn't look useable."
+	desc = "A destroyed ID card. It doesn't look usable."
 	icon_state = "destroyed"
 	item_state = "card-id"
 	slot_flags = SLOT_ID
