@@ -181,7 +181,7 @@
 
 /obj/item/clothing/head/butt
 	name = "butt"
-	desc = "What?"
+	desc = "So many butts, so little time."
 	icon_state = "butt"
 	item_state = "butt"
 	flags = TABLEPASS
@@ -194,5 +194,5 @@
 
 	proc
 		transfer_buttdentity(var/mob/living/carbon/H)
-			name = "[H]'s brain"
+			name = "[H]'s butt"
 			return
