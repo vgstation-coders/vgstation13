@@ -50,7 +50,7 @@
 						C.apply_damage(10, BURN, "groin")
 						C.Stun(8)
 						C.Weaken(8)
-						C << "Your ass just blew up!"
+						C << "\red Your ass just blew up!"
 					else
 						playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, 1)
 						C.apply_damage(40, BRUTE, "groin")
