@@ -84,11 +84,11 @@ obj/item/weapon/card/id/attackby(var/obj/item/I, mob/user as mob)
 	..()
 	if(istype(I, /obj/item/weapon/wirecutters))
 		var/obj/item/weapon/card/id/destroyed/D = new /obj/item/weapon/card/id/destroyed()
-
 		user.before_take_item(src)
-
 		user.put_in_hands(D)
 		user << "<span class='notice'>You mangle the ID with your wirecutters.</span>"
+		message_admins("[user] has destroyed an ID card.")
+		log_admin("[user] has destroyed an ID card.")
 		del(src)
 
 /obj/item/weapon/card/id/destroyed
