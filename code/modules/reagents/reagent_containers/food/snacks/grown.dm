@@ -141,6 +141,18 @@
 			reagents.add_reagent("sugar", 1+round((potency / 15), 1))
 			bitesize = 1+round(reagents.total_volume / 2, 1)
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/peanuts
+	seed = "/obj/item/seeds/peanutseed"
+	name = "peanuts"
+	desc = "Many uses."
+	icon_state = "peanut"
+	gender = PLURAL
+	New()
+		..()
+		spawn(5)	//So potency can be set in the proc that creates these crops
+			reagents.add_reagent("nutriment", 1+round((potency / 15), 1))
+			bitesize = 1+round(reagents.total_volume / 2, 1)
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/poppy
 	seed = "/obj/item/seeds/poppyseed"
 	name = "poppy"

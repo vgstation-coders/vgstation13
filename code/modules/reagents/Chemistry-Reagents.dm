@@ -2648,6 +2648,33 @@ datum
 				..()
 				return
 
+		elvissoul
+			name = "Soul of Elvis"
+			id = "elvissoul"
+			description = "Aint nothin but a hound dog."
+			reagent_state = LIQUID
+			color = "#A6A685" //rgb 166, 166, 133
+
+			on_mob_life(var/mob/living/M as mob,var/alien)
+				if (!M_ELVIS in M.mutations)
+					M.mutations += M_ELVIS
+				..()
+				return
+		/*
+		I'll just leave this here.
+		svedium
+			name = "Svedium Extract"
+			id = "svedium"
+			description = "Aint nothin but a hound dog."
+			reagent_state = LIQUID
+			color = "#A6A685" //rgb 166, 166, 133
+
+			on_mob_life(var/mob/living/M as mob,var/alien)
+				if (!M_SWEDE in M.mutations)
+					M.mutations += M_SWEDE
+				..()
+				return
+		*/
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////// DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
