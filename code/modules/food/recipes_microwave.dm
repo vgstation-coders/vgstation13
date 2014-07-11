@@ -1333,7 +1333,7 @@ I said no!
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/peanutsandwich
-
+/*
 /datum/recipe/elvisbread
 	reagents = list("flour" = 15)
 	items = list(
@@ -1345,7 +1345,7 @@ I said no!
 		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/elvisbread
-
+*/
 /datum/recipe/saltednuts
 	reagents = list("salt" = 1)
 	items = list(
