@@ -2819,7 +2819,7 @@
 		..()
 		reagents.add_reagent("nutriment", 6)
 		bitesize = 3
-
+/*
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/elvisbread
 	name = "elvis bread"
 	desc = "Swing low sweet bread chariot, come through easy!"
@@ -2842,6 +2842,8 @@
 		..()
 		reagents.add_reagent("elvissoul", 10)
 		bitesize = 2
+
+*/
 
 /obj/item/weapon/reagent_containers/food/snacks/saltednuts
 	name = "salted nuts"
