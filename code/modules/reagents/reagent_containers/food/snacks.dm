@@ -2794,7 +2794,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/pbj
 	name = "peanut butter and jelly sandwich"
 	desc = "So easy a child could make it."
-	icon_state = "peanutbutter"
+	icon_state = "pbj"
 	trash = /obj/item/trash/plate
 	New()
 		..()
@@ -2813,7 +2813,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/peanutsandwich
 	name = "peanut butter sandwich"
 	desc = "You're really asking for that mouth to be glued shut."
-	icon_state = "peanutbutter"
+	icon_state = "peanutsandwich"
 	trash = /obj/item/trash/plate
 	New()
 		..()
