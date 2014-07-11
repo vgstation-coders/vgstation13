@@ -72,6 +72,10 @@
 		input = /obj/item/weapon/reagent_containers/food/snacks/grown/soybeans
 		output = /obj/item/weapon/reagent_containers/food/snacks/soydope
 
+	peanuts
+		input = /obj/item/weapon/reagent_containers/food/snacks/grown/peanuts
+		output = /obj/item/weapon/reagent_containers/food/snacks/peanutbutter
+
 
 	/* mobs */
 	mob

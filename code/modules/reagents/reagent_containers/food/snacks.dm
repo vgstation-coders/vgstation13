@@ -2774,9 +2774,83 @@
 	name = "asspie"
 	desc = "Please remember to check your privlidge, pie eating scum."
 	icon_state = "asspie"
+	trash = /obj/item/trash/plate
 	New()
 		..()
 		reagents.add_reagent("nutriment", 4)
 		reagents.add_reagent("spiritbreaker", 10) // Screaming
 		reagents.add_reagent("mercury",       10) // Idiot
 		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/peanutbutter
+	name = "peanut butter"
+	desc = "<i>'Nano-Transen Brand Industrial Grade Penut Butter'</i>"
+	icon_state = "peanutbutter"
+	New()
+		..()
+		reagents.add_reagent("nutriment", 6)
+		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/pbj
+	name = "peanut butter and jelly sandwich"
+	desc = "So easy a child could make it."
+	icon_state = "pbj"
+	trash = /obj/item/trash/plate
+	New()
+		..()
+		reagents.add_reagent("nutriment", 8)
+		bitesize = 4
+
+/obj/item/weapon/reagent_containers/food/snacks/peanutburger
+	name = "peanut butter burger"
+	desc = "Some people just don't like jelly."
+	icon_state = "peanutburger"
+	New()
+		..()
+		reagents.add_reagent("nutriment", 6)
+		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/peanutsandwich
+	name = "peanut butter sandwich"
+	desc = "You're really asking for that mouth to be glued shut."
+	icon_state = "peanutsandwich"
+	trash = /obj/item/trash/plate
+	New()
+		..()
+		reagents.add_reagent("nutriment", 6)
+		bitesize = 3
+/*
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/elvisbread
+	name = "elvis bread"
+	desc = "Swing low sweet bread chariot, come through easy!"
+	icon_state = "elvisbread"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/elvisbreadslice
+	slices_num = 5
+	New()
+		..()
+		reagents.add_reagent("nutriment", 30)
+		reagents.add_reagent("elvissoul", 50)
+		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/elvisbreadslice
+	name = "elvis bread slice"
+	desc = "Harder then a jailhouse rock."
+	icon_state = "elvisbreadslice"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/elvisbreadslice
+	slices_num = 5
+	New()
+		..()
+		reagents.add_reagent("elvissoul", 10)
+		bitesize = 2
+
+*/
+
+/obj/item/weapon/reagent_containers/food/snacks/saltednuts
+	name = "salted nuts"
+	desc = "Airport grade salted nuts."
+	icon_state = "peanut"
+	New()
+		..()
+		reagents.add_reagent("nutriment", 10)
+		bitesize = 4
+

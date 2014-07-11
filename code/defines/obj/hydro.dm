@@ -1146,6 +1146,23 @@
 	plant_type = 0
 	growthstages = 5
 
+/obj/item/seeds/peanutseed
+	name = "pack of peanut pods"
+	desc = "peanutty."
+	icon_state = "seed-peanut"
+	mypath = "/obj/item/seeds/peanutseed"
+	species = "peanut"
+	plantname = "Peanut Plant"
+	productname = "/obj/item/weapon/reagent_containers/food/snacks/grown/peanuts"
+	lifespan = 35
+	endurance = 35
+	maturation = 5
+	production = 5
+	yield = 3
+	potency = 10
+	plant_type = 0
+	growthstages = 5
+
 /obj/item/seeds/kudzuseed
 	name = "pack of kudzu seeds"
 	desc = "These seeds grow into a weed that grows incredibly fast."

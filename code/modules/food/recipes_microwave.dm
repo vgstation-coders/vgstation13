@@ -1278,14 +1278,6 @@ I said no!
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sashimi
 
-/datum/recipe/assburger
-	reagents = list("soysauce" = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
-		/obj/item/weapon/reagent_containers/food/snacks/carpmeat,
-	)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sashimi
-
 /datum/recipe/asspie
 	reagents = list("flour" = 10)
 	items = list(
@@ -1299,3 +1291,65 @@ I said no!
 		/obj/item/clothing/head/butt,
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/assburger
+
+/datum/recipe/pbj
+	reagents = list("cherryjelly" = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich
+
+/datum/recipe/pbj/berry
+	reagents = list("berryjuice" = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich
+
+/datum/recipe/pbj/slime
+	reagents = list("slimejelly" = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pbj
+
+/datum/recipe/peanutburger
+	reagents = list("flour" = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/peanutburger
+
+/datum/recipe/peanutsandwich
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/peanutsandwich
+/*
+/datum/recipe/elvisbread
+	reagents = list("flour" = 15)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
+		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
+		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
+		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/elvisbread
+*/
+/datum/recipe/saltednuts
+	reagents = list("salt" = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/peanuts,
+
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/saltednuts

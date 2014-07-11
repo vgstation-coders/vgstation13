@@ -148,14 +148,15 @@
 		message = replacetext(message,"out of","outta")
 		message = replacetext(message,"thank you","thank you, thank you very much")
 		message = replacetext(message,"what are you","whatcha")
-		message = replacetext(message,"yes",pick("sure", "yea"))
+		message = replacetext(message,"yes",pick("sure", "yea", "uh huh", "uh HUH"))
 		message = replacetext(message,"faggot","square")
 		message = replacetext(message,"muh valids","getting my kicks")
 		message = replacetext(message," vox ","bird")
 
 		if(prob(5))
-			return ""
+			message = ""
 			M.visible_message("<b>[M]</b> [pick("rambles to themselves.","begins talking to themselves.")]")
+			return message
 		else
 			return message
 
@@ -169,6 +170,7 @@
 			if(2)
 				if(prob(15))
 					M.visible_message("<b>[M]</b> [pick("jiggles their hips", "rotates their hips", "gyrates their hips", "taps their foot", "dances to an imaginary song", "jiggles their legs", "snaps their fingers")]")
+
 
 
 // WAS: /datum/bioEffect/chav
