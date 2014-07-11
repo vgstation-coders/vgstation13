@@ -2647,7 +2647,8 @@ datum
 				M.nutrition += nutriment_factor
 				..()
 				return
-
+		/*
+		I'll just leave this here.
 		elvissoul
 			name = "Soul of Elvis"
 			id = "elvissoul"
@@ -2660,8 +2661,7 @@ datum
 					M.mutations += M_ELVIS
 				..()
 				return
-		/*
-		I'll just leave this here.
+		
 		svedium
 			name = "Svedium Extract"
 			id = "svedium"
