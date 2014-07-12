@@ -102,6 +102,10 @@
 			var/obj/mecha/working/ripley/RM = M
 			answer += "<b>Used cargo space:</b> [RM.cargo.len/RM.cargo_capacity*100]%<br>"
 
+		if(istype(M, /obj/mecha/working/lagann))
+			var/obj/mecha/working/lagann/RM = M
+			answer += "<b>Used cargo space:</b> [RM.cargo.len/RM.cargo_capacity*100]%<br>"
+
 		return answer
 
 	emp_act()
