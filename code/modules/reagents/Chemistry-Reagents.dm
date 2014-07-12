@@ -2665,7 +2665,7 @@ datum
 		svedium
 			name = "Svedium Extract"
 			id = "svedium"
-			description = "Aint nothin but a hound dog."
+			description = "Bork, Bork, Bork!"
 			reagent_state = LIQUID
 			color = "#A6A685" //rgb 166, 166, 133
 
