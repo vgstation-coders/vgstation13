@@ -24,6 +24,13 @@
 			world << "BAD: [src] ([src.type]) spawned at [src.x] [src.y] [src.z]"
 			del(src)
 
+/obj/item/weapon/storage/toolbox/verb/empty()
+	set src in usr
+
+	if(isturf(usr.loc))
+		usr << "<span class='notice'>You empty the [src] onto the floor.</span>"
+		quick_empty()
+
 /obj/item/weapon/storage/toolbox/emergency
 	name = "emergency toolbox"
 	icon_state = "red"

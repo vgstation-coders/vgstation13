@@ -80,6 +80,25 @@
 	var/rank = null			//actual job
 	var/dorm = 0		// determines if this ID has claimed a dorm already
 
+obj/item/weapon/card/id/attackby(var/obj/item/I, mob/user as mob)
+	..()
+	if(istype(I, /obj/item/weapon/wirecutters))
+		var/obj/item/weapon/card/id/destroyed/D = new /obj/item/weapon/card/id/destroyed()
+		user.before_take_item(src)
+		user.put_in_hands(D)
+		user << "<span class='notice'>You mangle the ID with your wirecutters.</span>"
+		message_admins("[user] has destroyed an ID card.")
+		log_admin("[user] has destroyed an ID card.")
+		del(src)
+
+/obj/item/weapon/card/id/destroyed
+	name = "destroyed identification card"
+	desc = "A destroyed ID card. It doesn't look usable."
+	icon_state = "destroyed"
+	item_state = "card-id"
+	slot_flags = SLOT_ID
+
+
 /obj/item/weapon/card/id/New()
 	..()
 	spawn(30)
