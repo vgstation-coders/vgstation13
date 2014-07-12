@@ -2784,7 +2784,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/peanutbutter
 	name = "peanut butter"
-	desc = "<i>'Nano-Transen Brand Industrial Grade Penut Butter'</i>"
+	desc = "<i>'Nano-Transen Brand Industrial Grade Peanut Butter'</i>"
 	icon_state = "peanutbutter"
 	New()
 		..()
