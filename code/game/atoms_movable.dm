@@ -23,7 +23,7 @@
 	var/timeDestroyed
 
 /atom/movable/New()
-	. = ..()
+	..()
 	areaMaster = get_area_master(src)
 
 /atom/movable/Destroy()
@@ -189,8 +189,8 @@
 	anchored = 1
 
 /atom/movable/overlay/New()
-	. = ..()
-	verbs.Cut()
+	..()
+	verbs.len = 0
 
 /atom/movable/overlay/attackby(a, b)
 	if (src.master)

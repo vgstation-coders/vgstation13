@@ -41,7 +41,7 @@
 	name = "Virus Sample"
 
 /obj/item/weapon/virusdish/random/New()
-	. = ..()
+	..()
 	virus2 = new /datum/disease2/disease
 	virus2.makerandom()
 	growth = rand(5, 50)

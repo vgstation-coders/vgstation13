@@ -158,7 +158,7 @@ var/global/list/RPD_recipes=list(
 	var/paint_color="grey"
 
 /obj/item/weapon/pipe_dispenser/New()
-	. = ..()
+	..()
 	spark_system = new /datum/effect/effect/system/spark_spread
 	spark_system.set_up(5, 0, src)
 	spark_system.attach(src)

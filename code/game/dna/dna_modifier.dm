@@ -50,16 +50,16 @@
 	var/opened = 0
 
 /obj/machinery/dna_scannernew/New()
-	. = ..()
+	..()
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/clonescanner,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/cable_coil,
-		/obj/item/weapon/cable_coil
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/clonescanner,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/console_screen,\
+		/obj/item/weapon/cable_coil,\
+		/obj/item/weapon/cable_coil\
 	)
 
 	RefreshParts()

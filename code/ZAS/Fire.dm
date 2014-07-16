@@ -139,7 +139,7 @@ turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
 
 
 /obj/fire/New()
-	. = ..()
+	..()
 	dir = pick(cardinal)
 	SetLuminosity(3)
 	air_master.active_hotspots.Add(src)

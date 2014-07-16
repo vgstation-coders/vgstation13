@@ -5,7 +5,7 @@
 	icon_closed = "blue"
 
 /obj/structure/closet/wardrobe/New()
-	. = ..()
+	..()
 	new /obj/item/clothing/under/color/blue(src)
 	new /obj/item/clothing/under/color/blue(src)
 	new /obj/item/clothing/under/color/blue(src)
@@ -19,6 +19,7 @@
 	icon_closed = "red"
 
 /obj/structure/closet/wardrobe/red/New()
+	..()
 	new /obj/item/clothing/under/rank/security(src)
 	new /obj/item/clothing/under/rank/security(src)
 	new /obj/item/clothing/under/rank/security(src)
@@ -34,8 +35,6 @@
 	new /obj/item/clothing/head/beret/sec(src)
 	new /obj/item/clothing/head/beret/sec(src)
 	new /obj/item/clothing/head/beret/sec(src)
-	return
-
 
 /obj/structure/closet/wardrobe/pink
 	name = "pink wardrobe"

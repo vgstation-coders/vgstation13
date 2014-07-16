@@ -10,7 +10,7 @@
 	..()
 
 /mob/New()
-	. = ..()
+	..()
 	mob_list += src
 
 	if(DEAD == stat)

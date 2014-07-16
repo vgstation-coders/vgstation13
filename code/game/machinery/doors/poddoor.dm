@@ -12,12 +12,10 @@
 	animation_delay_2 = 5
 
 /obj/machinery/door/poddoor/New()
-	. = ..()
+	..()
+
 	if(density)
-		layer = 3.3		//to override door.New() proc
-	else
-		layer = initial(layer)
-	return
+		layer = 3.3 // to override door.New() proc
 
 /obj/machinery/door/poddoor/Bumped(atom/AM)
 	if(!density)

@@ -10,20 +10,6 @@
 	var/mob/occupant = null
 	var/opened = 0.0
 
-	New()
-		. = ..()
-		build_icon()
-
-		component_parts = newlist(
-			/obj/item/weapon/circuitboard/recharge_station,
-			/obj/item/weapon/stock_parts/manipulator,
-			/obj/item/weapon/stock_parts/manipulator,
-			/obj/item/weapon/stock_parts/matter_bin,
-			/obj/item/weapon/stock_parts/matter_bin
-		)
-
-		RefreshParts()
-
 	Destroy()
 		src.go_out()
 		..()
@@ -305,7 +291,16 @@
 			src.use_power = 2
 			return
 
+/obj/machinery/recharge_station/New()
+	..()
+	build_icon()
 
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/recharge_station,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/matter_bin\
+	)
 
-
-
+	RefreshParts()

@@ -74,16 +74,19 @@
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
-
 /obj/machinery/suit_storage_unit/New()
-	. = ..()
-	src.update_icon()
+	..()
+	update_icon()
+
 	if(SUIT_TYPE)
 		SUIT = new SUIT_TYPE(src)
+
 	if(HELMET_TYPE)
 		HELMET = new HELMET_TYPE(src)
+
 	if(MASK_TYPE)
 		MASK = new MASK_TYPE(src)
+
 	if(BOOT_TYPE)
 		BOOTS = new BOOT_TYPE(src)
 

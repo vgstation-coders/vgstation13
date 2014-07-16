@@ -25,12 +25,6 @@
 		implant(var/mob/M)
 		add_implants()
 
-
-	New()
-		..()
-		add_implants()
-
-
 	attack_hand(mob/user as mob)
 		user.set_machine(src)
 		var/health_text = ""
@@ -173,3 +167,7 @@
 				return
 			put_mob(usr)
 			return
+
+/obj/machinery/implantchair/New()
+	..()
+	add_implants()

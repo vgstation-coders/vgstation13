@@ -36,7 +36,7 @@
 		usr.update_inv_wear_suit()	//so our overlays update
 
 /obj/item/clothing/suit/storage/labcoat/New()
-	. = ..()
+	..()
 	update_icon()
 
 /obj/item/clothing/suit/storage/labcoat/cmo

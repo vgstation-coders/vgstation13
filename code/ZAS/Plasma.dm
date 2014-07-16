@@ -114,7 +114,7 @@ obj/var/contaminated = 0
 
 
 turf/Entered(obj/item/I)
-	. = ..()
+	..()
 	//Items that are in plasma, but not on a mob, can still be contaminated.
 	if(istype(I) && zas_settings.Get(/datum/ZAS_Setting/CLOTH_CONTAMINATION))
 		var/datum/gas_mixture/env = return_air(1)

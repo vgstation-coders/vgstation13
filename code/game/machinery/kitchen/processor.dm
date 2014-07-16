@@ -17,18 +17,18 @@
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
 /obj/machinery/processor/New()
-	. = ..()
+	..()
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/processor,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser/high,
-		/obj/item/weapon/stock_parts/micro_laser/high
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/processor,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/capacitor,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/micro_laser/high,\
+		/obj/item/weapon/stock_parts/micro_laser/high\
 	)
 
 	RefreshParts()

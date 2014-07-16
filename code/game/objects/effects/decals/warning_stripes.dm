@@ -3,9 +3,9 @@
 	layer = 2.1
 
 /obj/effect/decal/warning_stripes/New()
-	. = ..()
+	..()
 	var/turf/T=get_turf(src)
-	T.AddDecal(image(icon, icon_state = icon_state, dir = dir))
+	T.AddDecal(image(icon, , icon_state, , dir))
 	qdel(src)
 
 /obj/effect/decal/warning_stripes/oldstyle

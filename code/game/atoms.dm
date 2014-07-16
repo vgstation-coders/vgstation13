@@ -76,7 +76,7 @@
 	invisibility = 101
 
 /atom/New()
-	. = ..()
+	..()
 	AddToProfiler()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)

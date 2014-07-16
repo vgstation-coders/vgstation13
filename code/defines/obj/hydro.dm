@@ -1234,8 +1234,8 @@
 	var/potency = 1
 	var/plant_type = 0
 
-/obj/item/weapon/grown/New()
-	. = ..()
+/obj/item/weapon/grown/New(loc)
+	..(loc)
 	create_reagents(50)
 
 /obj/item/weapon/grown/proc/changePotency(newValue) //-QualityVan
@@ -1305,7 +1305,7 @@
 	attack_verb = list("seared", "heated", "whacked", "steamed")
 
 /obj/item/weapon/grown/novaflower/New()
-	. = ..()
+	..()
 
 	spawn(5) // So potency can be set in the proc that creates these crops
 		reagents.add_reagent("nutriment", 1)
@@ -1354,9 +1354,9 @@
 	seed = "/obj/item/seeds/nettleseed"
 
 /obj/item/weapon/grown/nettle/New()
-	. = ..()
+	..()
 
-	spawn(5) //So potency can be set in the proc that creates these crops
+	spawn(5) // so potency can be set in the proc that creates these crops
 		reagents.add_reagent("nutriment", 1 + round((potency / 50), 1))
 		reagents.add_reagent("sacid", round(potency, 1))
 		force = round((5 + potency / 5), 1)
@@ -1383,7 +1383,7 @@
 		return (BRUTELOSS|TOXLOSS)
 
 /obj/item/weapon/grown/deathnettle/New()
-	. = ..()
+	..()
 
 	spawn(5) //So potency can be set in the proc that creates these crops
 		reagents.add_reagent("nutriment", 1 + round((potency / 50), 1))
@@ -1403,7 +1403,7 @@
 	var/PestKillStr = 0
 
 /obj/item/pestkiller/New()
-	. = ..()
+	..()
 	pixel_x = rand(-5.0, 5)
 	pixel_y = rand(-5.0, 5)
 
@@ -1525,7 +1525,7 @@
 	var/yieldmod = 0
 
 /obj/item/nutrient/New()
-	. = ..()
+	..()
 	pixel_x = rand(-5.0, 5)
 	pixel_y = rand(-5.0, 5)
 

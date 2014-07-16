@@ -70,7 +70,7 @@
 
 
 /obj/machinery/power/supermatter/New()
-	. = ..()
+	..()
 	radio = new (src)
 
 

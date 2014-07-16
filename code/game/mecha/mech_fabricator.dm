@@ -141,15 +141,15 @@
 
 
 /obj/machinery/mecha_part_fabricator/New()
-	. = ..()
+	..()
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/mechfab,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/mechfab,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/console_screen\
 	)
 
 	RefreshParts()

@@ -317,7 +317,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	chem_volume = 26
 
 /obj/item/clothing/mask/cigarette/blunt/New()
-	. = ..()
+	..()
 	reagents.add_reagent("nutriment", 1)
 	reagents.add_reagent("space_drugs", 7)
 	reagents.add_reagent("kelotane", 7)
@@ -332,7 +332,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	chem_volume = 36
 
 /obj/item/clothing/mask/cigarette/blunt/cruciatus/New()
-	. = ..()
+	..()
 	reagents.clear_reagents()
 	reagents.add_reagent("nutriment", 1)
 	reagents.add_reagent("space_drugs", 7)
@@ -352,7 +352,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	overlay_on = "dbluntlit"
 
 /obj/item/clothing/mask/cigarette/blunt/deus/New()
-	. = ..()
+	..()
 	reagents.clear_reagents()
 	reagents.add_reagent("nutriment", 1)
 	reagents.add_reagent("bicaridine", 7)
@@ -469,7 +469,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	icon_off = "zippo"
 
 /obj/item/weapon/lighter/random/New()
-	. = ..()
+	..()
 	var/color = pick("r","c","y","g")
 	icon_on = "lighter-[color]-on"
 	icon_off = "lighter-[color]"

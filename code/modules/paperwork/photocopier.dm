@@ -22,17 +22,17 @@
 ********************************************************************/
 
 /obj/machinery/photocopier/New()
-	. = ..()
+	..()
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/photocopier,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/photocopier,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/console_screen,\
+		/obj/item/weapon/stock_parts/console_screen\
 	)
 
 	RefreshParts()

@@ -16,8 +16,7 @@
 
 /obj/machinery/auto_cloner/New()
 	..()
-
-	ticks_required_to_spawn = rand(240,1440)
+	ticks_required_to_spawn = rand(240, 1440)
 
 	//33% chance to spawn nasties
 	if(prob(33))

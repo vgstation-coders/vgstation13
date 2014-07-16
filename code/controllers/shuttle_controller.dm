@@ -288,9 +288,9 @@ datum/shuttle_controller
 	layer = TURF_LAYER
 
 /obj/effect/bgstar/New()
-	. = ..()
-	pixel_x += rand(-2, 30)
-	pixel_y += rand(-2, 30)
+	..()
+	pixel_x = rand(-2, 30)
+	pixel_y = rand(-2, 30)
 	icon_state = "star" + pick("1", "1", "1", "2", "3", "4")
 	speed = rand(2, 5)
 

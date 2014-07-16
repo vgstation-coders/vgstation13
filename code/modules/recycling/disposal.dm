@@ -1151,7 +1151,7 @@
 	var/obj/linked
 
 /obj/structure/disposalpipe/trunk/New()
-	. = ..()
+	..()
 	dpdir = dir
 
 	spawn(1)

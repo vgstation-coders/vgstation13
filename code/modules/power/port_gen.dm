@@ -110,15 +110,15 @@ display round(lastgen) and plasmatank amount
 		connect_to_network()
 
 /obj/machinery/power/port_gen/pacman/New()
-	. = ..()
+	..()
 
-	component_parts = newlist(
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/cable_coil,
-		/obj/item/weapon/cable_coil,
-		/obj/item/weapon/stock_parts/capacitor,
-		board_path
+	component_parts = newlist(\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/cable_coil,\
+		/obj/item/weapon/cable_coil,\
+		/obj/item/weapon/stock_parts/capacitor,\
+		board_path\
 	)
 
 	var/obj/sheet = new sheet_path(null)

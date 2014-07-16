@@ -62,7 +62,7 @@
 			qdel(src)
 
 /obj/structure/reagent_dispensers/New()
-	. = ..()
+	..()
 	create_reagents(1000)
 
 	if (!possible_transfer_amounts)
@@ -77,7 +77,7 @@
 	amount_per_transfer_from_this = 10
 
 /obj/structure/reagent_dispensers/watertank/New()
-	. = ..()
+	..()
 	reagents.add_reagent("water", 1000)
 
 /obj/structure/reagent_dispensers/fueltank
@@ -168,7 +168,7 @@
 			del(src)
 
 /obj/structure/reagent_dispensers/fueltank/New()
-	. = ..()
+	..()
 	reagents.add_reagent("fuel", 1000)
 
 /obj/structure/reagent_dispensers/peppertank
@@ -181,7 +181,7 @@
 	amount_per_transfer_from_this = 45
 
 /obj/structure/reagent_dispensers/peppertank/New()
-	. = ..()
+	..()
 	reagents.add_reagent("condensedcapsaicin", 1000)
 
 /obj/structure/reagent_dispensers/water_cooler
@@ -194,7 +194,7 @@
 	anchored = 1
 
 /obj/structure/reagent_dispensers/water_cooler/New()
-	. = ..()
+	..()
 	reagents.add_reagent("water", 500)
 
 /obj/structure/reagent_dispensers/beerkeg
@@ -205,7 +205,7 @@
 	amount_per_transfer_from_this = 10
 
 /obj/structure/reagent_dispensers/beerkeg/New()
-	. = ..()
+	..()
 	reagents.add_reagent("beer", 1000)
 
 /obj/structure/reagent_dispensers/beerkeg/blob_act()
@@ -221,5 +221,5 @@
 	anchored = 1
 
 /obj/structure/reagent_dispensers/virusfood/New()
-	. = ..()
+	..()
 	reagents.add_reagent("virusfood", 1000)

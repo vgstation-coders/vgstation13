@@ -13,34 +13,8 @@
 	var/blocked = 0
 	var/nextstate = null
 	var/net_id
-	var/list/areas_added
 	var/list/users_to_open
-
-	New()
-		. = ..()
-		for(var/obj/machinery/door/firedoor/F in loc)
-			if(F != src)
-				spawn(1)
-					del src
-				return .
-		var/area/A = get_area(src)
-		ASSERT(istype(A))
-
-		A.all_doors.Add(src)
-		areas_added = list(A)
-
-		for(var/direction in cardinal)
-			A = get_area(get_step(src,direction))
-			if(istype(A) && !(A in areas_added))
-				A.all_doors.Add(src)
-				areas_added += A
-
-
-	Destroy()
-		for(var/area/A in areas_added)
-			A.all_doors.Remove(src)
-		. = ..()
-
+	var/list/areas_added
 
 	examine()
 		set src in view()
@@ -228,6 +202,34 @@
 			if(blocked)
 				overlays += "welded_open"
 		return
+
+/obj/machinery/door/firedoor/New()
+	..()
+
+	for(var/obj/machinery/door/firedoor/firedoor in loc)
+		if(firedoor != src)
+			spawn(-1)
+				qdel(src)
+			return .
+
+	var/area/A = get_area(src)
+	ASSERT(istype(A))
+
+	A.all_doors += src
+	areas_added = list(A)
+
+	for(var/direction in cardinal)
+		A = get_area(get_step(src, direction))
+
+		if(istype(A) && !(A in areas_added))
+			A.all_doors += src
+			areas_added += A
+
+/obj/machinery/door/firedoor/Destroy()
+	for(var/area/A in areas_added)
+		A.all_doors.Remove(src)
+
+	..()
 
 /obj/machinery/door/firedoor/proc/latetoggle()
 	if(operating || stat & NOPOWER || !nextstate)

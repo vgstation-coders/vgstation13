@@ -24,7 +24,7 @@
 	var/upgraded = 0
 
 /obj/structure/stool/bed/chair/vehicle/janicart/New()
-	. = ..()
+	..()
 	create_reagents(100)
 
 /obj/structure/stool/bed/chair/vehicle/janicart/examine()

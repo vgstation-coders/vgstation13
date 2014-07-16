@@ -14,8 +14,7 @@
 
 /obj/machinery/meter/New()
 	..()
-	src.target = locate(/obj/machinery/atmospherics/pipe) in loc
-	return 1
+	target = locate(/obj/machinery/atmospherics/pipe) in loc
 
 /obj/machinery/meter/initialize()
 	if (!target)

@@ -82,7 +82,8 @@
 
 /obj/machinery/light_construct/New()
 	..()
-	if (fixture_type == "bulb")
+
+	if(fixture_type == "bulb")
 		icon_state = "bulb-construct-stage1"
 
 /obj/machinery/light_construct/examine()

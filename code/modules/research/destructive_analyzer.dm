@@ -14,13 +14,13 @@ Note: Must be placed within 3 tiles of the R&D Console
 	var/decon_mod = 1
 
 /obj/machinery/r_n_d/destructive_analyzer/New()
-	. = ..()
+	..()
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/destructive_analyzer,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/destructive_analyzer,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/micro_laser\
 	)
 
 	RefreshParts()

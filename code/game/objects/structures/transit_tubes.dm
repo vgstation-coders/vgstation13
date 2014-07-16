@@ -43,7 +43,7 @@
 	anchored = 1.0
 	density = 1
 	var/moving = 0
-	var/datum/gas_mixture/air_contents = new()
+	var/datum/gas_mixture/air_contents = new
 
 /obj/structure/transit_tube_pod/Destroy()
 	for(var/atom/movable/AM in contents)
@@ -74,19 +74,19 @@ obj/structure/ex_act(severity)
 			return
 
 /obj/structure/transit_tube_pod/New()
-	. = ..()
+	..()
 	air_contents.oxygen = MOLES_O2STANDARD * 2
 	air_contents.nitrogen = MOLES_N2STANDARD
 	air_contents.temperature = T20C
 
 	// Give auto tubes time to align before trying to start moving
-	spawn (5)
+	spawn(5)
 		follow_tube()
 
 /obj/structure/transit_tube/New()
-	. = ..()
+	..()
 
-	if (tube_dirs == null)
+	if(isnull(tube_dirs))
 		init_dirs()
 
 /obj/structure/transit_tube/Bumped(mob/AM as mob|obj)
@@ -97,12 +97,6 @@ obj/structure/ex_act(severity)
 	else
 		AM.loc = src.loc
 		AM << "<span class='info'>You slip under the tube.</span>"
-
-
-/obj/structure/transit_tube/station/New(loc)
-	..(loc)
-
-
 
 /obj/structure/transit_tube/station/Bumped(mob/AM as mob|obj)
 	if(!pod_moving && icon_state == "open" && istype(AM, /mob))

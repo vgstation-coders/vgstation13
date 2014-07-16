@@ -25,17 +25,17 @@
 	var/opened = 0.0
 
 /obj/machinery/hydroponics/New()
-	. = ..()
+	..()
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/hydroponics,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/reagent_containers/glass/beaker,
-		/obj/item/weapon/reagent_containers/glass/beaker,
-		/obj/item/weapon/stock_parts/console_screen
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/hydroponics,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/capacitor,\
+		/obj/item/weapon/reagent_containers/glass/beaker,\
+		/obj/item/weapon/reagent_containers/glass/beaker,\
+		/obj/item/weapon/stock_parts/console_screen\
 	)
 
 	RefreshParts()

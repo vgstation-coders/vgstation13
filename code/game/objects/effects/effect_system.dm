@@ -20,7 +20,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	var/life = 15.0
 
 /obj/effect/effect/water/New()
-	. = ..()
+	..()
 	//var/turf/T = src.loc
 	//if (istype(T, /turf))
 	//	T.firelevel = 0 //TODO: FIX
@@ -219,7 +219,8 @@ steam.start() -- spawns the effect
 	pixel_y = -32
 
 /obj/effect/effect/smoke/New()
-	. = ..()
+	..()
+
 	spawn(time_to_live)
 		qdel(src)
 
@@ -376,7 +377,7 @@ steam.start() -- spawns the effect
 	icon = 'icons/effects/chemsmoke.dmi'
 
 /obj/effect/effect/smoke/chem/New()
-	. = ..()
+	..()
 	create_reagents(500)
 
 /obj/effect/effect/smoke/chem/Move()
@@ -676,13 +677,15 @@ steam.start() -- spawns the effect
 	animate_movement = 0
 	var/metal = 0
 
-/obj/effect/effect/foam/New(loc, var/ismetal=0)
-	. = ..(loc)
+/obj/effect/effect/foam/New(loc, var/ismetal = 0)
+	..(loc)
 	icon_state = "[ismetal ? "m":""]foam"
 	metal = ismetal
 	playsound(src, 'sound/effects/bubbles2.ogg', 80, 1, -3)
-	spawn(3 + metal*3)
+
+	spawn(3 + metal * 3)
 		process()
+
 	spawn(120)
 		processing_objects.Remove(src)
 		sleep(30)
@@ -890,7 +893,7 @@ steam.start() -- spawns the effect
 		return 1
 
 /obj/structure/foamedmetal/New()
-	. = ..()
+	..()
 	update_nearby_tiles()
 
 /obj/structure/foamedmetal/Destroy()

@@ -378,36 +378,34 @@ var/global/list/autolathe_recipes_hidden = list( \
 		max_m_amount = tot_rating * 2
 		max_g_amount = tot_rating
 
-	New()
-		. = ..()
+/obj/machinery/autolathe/New()
+	..()
 
-		component_parts = newlist(
-			/obj/item/weapon/circuitboard/autolathe,
-			/obj/item/weapon/stock_parts/matter_bin,
-			/obj/item/weapon/stock_parts/matter_bin,
-			/obj/item/weapon/stock_parts/matter_bin,
-			/obj/item/weapon/stock_parts/manipulator,
-			/obj/item/weapon/stock_parts/console_screen
-		)
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/autolathe,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/console_screen\
+	)
 
-		RefreshParts()
+	RefreshParts()
 
-		src.L = autolathe_recipes
-		src.LL = autolathe_recipes_hidden
-		src.wires["Light Red"] = 0
-		src.wires["Dark Red"] = 0
-		src.wires["Blue"] = 0
-		src.wires["Green"] = 0
-		src.wires["Yellow"] = 0
-		src.wires["Black"] = 0
-		src.wires["White"] = 0
-		src.wires["Gray"] = 0
-		src.wires["Orange"] = 0
-		src.wires["Pink"] = 0
-		var/list/w = list("Light Red","Dark Red","Blue","Green","Yellow","Black","White","Gray","Orange","Pink")
-		src.hack_wire = pick(w)
-		w -= src.hack_wire
-		src.shock_wire = pick(w)
-		w -= src.shock_wire
-		src.disable_wire = pick(w)
-		w -= src.disable_wire
+	L = autolathe_recipes
+	LL = autolathe_recipes_hidden
+	wires["Light Red"] = 0
+	wires["Dark Red"] = 0
+	wires["Blue"] = 0
+	wires["Green"] = 0
+	wires["Yellow"] = 0
+	wires["Black"] = 0
+	wires["White"] = 0
+	wires["Gray"] = 0
+	wires["Orange"] = 0
+	wires["Pink"] = 0
+	var/list/w = list("Light Red","Dark Red","Blue","Green","Yellow","Black","White","Gray","Orange","Pink")
+	hack_wire = pick_n_take(w)
+	shock_wire = pick_n_take(w)
+	disable_wire = pick_n_take(w)
+

@@ -48,6 +48,7 @@ var/datum/feed_network/news_network = new /datum/feed_network     //The global n
 
 var/list/obj/machinery/newscaster/allCasters = list() //Global list that will contain reference to all newscasters in existence.
 
+var/global/newscasterUnitNo = 0
 
 /obj/machinery/newscaster
 	name = "newscaster"
@@ -81,7 +82,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/securityCaster = 0
 		// 0 = Caster cannot be used to issue wanted posters
 		// 1 = the opposite
-	var/unit_no = 0 //Each newscaster has a unit number
+	var/unit_no // each newscaster has a unit number
 	//var/datum/feed_message/wanted //We're gonna use a feed_message to store data of the wanted person because fields are similar
 	//var/wanted_issue = 0          //OBSOLETE
 		// 0 = there's no WANTED issued, we don't need a special icon_state
@@ -106,13 +107,12 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	name = "Security Newscaster"
 	securityCaster = 1
 
-/obj/machinery/newscaster/New()         //Constructor, ho~
+/obj/machinery/newscaster/New() // constructor, ho~
+	..()
 	allCasters += src
-	src.paper_remaining = 15            // Will probably change this to something better
-	for(var/obj/machinery/newscaster/NEWSCASTER in allCasters) // Let's give it an appropriate unit number
-		src.unit_no++
-	src.update_icon() //for any custom ones on the map...
-	..()                                //I just realised the newscasters weren't in the global machines list. The superconstructor call will tend to that
+	paper_remaining = 15 // will probably change this to something better
+	unit_no = newscasterUnitNo++ // let's give it an appropriate unit number
+	update_icon() // for any custom ones on the map...
 
 /obj/machinery/newscaster/Destroy()
 	allCasters -= src

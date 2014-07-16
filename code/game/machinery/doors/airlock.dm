@@ -1160,8 +1160,9 @@ About the new airlock wires panel:
 	return
 
 /obj/machinery/door/airlock/New()
-	. = ..()
+	..()
 	wires = new(src)
+
 	if(src.closeOtherId != null)
 		spawn (5)
 			for (var/obj/machinery/door/airlock/A in world)

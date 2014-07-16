@@ -76,5 +76,5 @@
 			ink = null
 
 /obj/item/weapon/airlock_painter/New()
-	. = ..()
+	..()
 	ink = new /obj/item/device/toner(src)

@@ -11,17 +11,17 @@
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
 /obj/machinery/pipedispenser/New()
-	. = ..()
+	..()
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/pipedispenser,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/pipedispenser,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/capacitor,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/manipulator\
 	)
 
 	RefreshParts()
@@ -156,17 +156,17 @@
 	anchored = 1.0
 
 /obj/machinery/pipedispenser/disposal/New()
-	. = ..()
+	..()
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/pipedispenser/disposal,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/pipedispenser/disposal,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/capacitor,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/manipulator\
 	)
 
 	RefreshParts()

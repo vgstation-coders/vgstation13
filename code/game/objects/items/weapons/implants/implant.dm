@@ -276,7 +276,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 			malfunction--
 
 /obj/item/weapon/implant/chem/New()
-	. = ..()
+	..()
 	create_reagents(50)
 
 /obj/item/weapon/implant/loyalty

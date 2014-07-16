@@ -67,7 +67,7 @@
 	flags = FPRINT |  TABLEPASS
 
 /obj/item/beezeez/New()
-	. = ..()
+	..()
 	pixel_x = rand(-5.0, 5)
 	pixel_y = rand(-5.0, 5)
 
@@ -77,7 +77,7 @@
 	desc = "Dripping with sugary sweetness."
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb/New()
-	. = ..()
+	..()
 	reagents.add_reagent("honey",10)
 	reagents.add_reagent("nutriment", 0.5)
 	reagents.add_reagent("sugar", 2)

@@ -34,7 +34,7 @@
 ********************/
 
 /obj/machinery/microwave/New()
-	. = ..()
+	..()
 
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/microwave,\

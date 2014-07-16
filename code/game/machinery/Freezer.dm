@@ -14,27 +14,6 @@
 		/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate_ccw,
 	)
 
-	New()
-		. = ..()
-
-		component_parts = newlist(
-			/obj/item/weapon/circuitboard/freezer,
-			/obj/item/weapon/stock_parts/manipulator,
-			/obj/item/weapon/stock_parts/manipulator,
-			/obj/item/weapon/stock_parts/manipulator,
-			/obj/item/weapon/stock_parts/scanning_module,
-			/obj/item/weapon/stock_parts/scanning_module,
-			/obj/item/weapon/stock_parts/micro_laser,
-			/obj/item/weapon/stock_parts/console_screen
-		)
-
-		RefreshParts()
-
-		if(anchored)
-			verbs -= rotate_verbs
-
-		initialize_directions = dir
-
 	update_icon()
 		if(src.node)
 			if(src.on)
@@ -171,6 +150,26 @@
 		..()
 		src.updateUsrDialog()
 
+/obj/machinery/atmospherics/unary/cold_sink/freezer/New()
+	..()
+
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/freezer,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/console_screen\
+	)
+
+	RefreshParts()
+
+	if(anchored)
+		verbs -= rotate_verbs
+
+	initialize_directions = dir
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate()
 	set name = "Rotate Clockwise"
@@ -210,27 +209,6 @@
 		/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate,
 		/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate_ccw,
 	)
-
-	New()
-		. = ..()
-
-		component_parts = newlist(
-			/obj/item/weapon/circuitboard/heater,
-			/obj/item/weapon/stock_parts/manipulator,
-			/obj/item/weapon/stock_parts/manipulator,
-			/obj/item/weapon/stock_parts/manipulator,
-			/obj/item/weapon/stock_parts/scanning_module,
-			/obj/item/weapon/stock_parts/scanning_module,
-			/obj/item/weapon/stock_parts/micro_laser,
-			/obj/item/weapon/stock_parts/console_screen
-		)
-
-		RefreshParts()
-
-		if(anchored)
-			verbs -= rotate_verbs
-
-		initialize_directions = dir
 
 	update_icon()
 		if(src.node)
@@ -365,7 +343,26 @@
 		..()
 		src.updateUsrDialog()
 
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/New()
+	..()
 
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/heater,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/console_screen\
+	)
+
+	RefreshParts()
+
+	if(anchored)
+		verbs -= rotate_verbs
+
+	initialize_directions = dir
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate()
 	set name = "Rotate Clockwise"

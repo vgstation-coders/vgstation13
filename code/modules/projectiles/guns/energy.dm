@@ -34,7 +34,7 @@
 			icon_state = "[initial(icon_state)][ratio]"
 
 /obj/item/weapon/gun/energy/New()
-	. = ..()
+	..()
 
 	if(cell_type)
 		power_supply = new cell_type(src)
