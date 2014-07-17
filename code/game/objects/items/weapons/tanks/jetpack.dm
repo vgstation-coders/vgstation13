@@ -65,7 +65,7 @@
 		toggle()
 
 /obj/item/weapon/tank/jetpack/New()
-	. = ..()
+	..()
 	ion_trail = new /datum/effect/effect/system/ion_trail_follow()
 	ion_trail.set_up(src)
 
@@ -76,7 +76,7 @@
 	item_state =  "jetpack-void"
 
 /obj/item/weapon/tank/jetpack/void/New()
-	. = ..()
+	..()
 	air_contents.adjust((6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
 
 /obj/item/weapon/tank/jetpack/oxygen
@@ -86,7 +86,7 @@
 	item_state = "jetpack"
 
 /obj/item/weapon/tank/jetpack/oxygen/New()
-	. = ..()
+	..()
 	air_contents.adjust((6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
 
 /obj/item/weapon/tank/jetpack/nitrogen
@@ -104,7 +104,7 @@
 		return
 
 /obj/item/weapon/tank/jetpack/nitrogen/New()
-	. = ..()
+	..()
 	air_contents.adjust(, , (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
 
 /obj/item/weapon/tank/jetpack/carbondioxide
@@ -123,5 +123,5 @@
 		return
 
 /obj/item/weapon/tank/jetpack/carbondioxide/New()
-	. = ..()
+	..()
 	air_contents.adjust(, (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))

@@ -15,14 +15,16 @@
 
 	var/sun_angle = 0		// sun angle as set by sun datum
 
-/obj/machinery/power/tracker/New(var/turf/loc, var/obj/item/solar_assembly/S)
+/obj/machinery/power/tracker/New(loc, var/obj/item/solar_assembly/solar_assembly)
 	..(loc)
-	if(!S)
-		S = new /obj/item/solar_assembly(src)
-		S.glass_type = /obj/item/stack/sheet/glass
-		S.tracker = 1
-		S.anchored = 1
-	S.loc = src
+
+	if(!istype(solar_assembly))
+		solar_assembly = new
+		solar_assembly.glass_type = /obj/item/stack/sheet/glass
+		solar_assembly.tracker = 1
+		solar_assembly.anchored = 1
+
+	solar_assembly.loc = src
 	connect_to_network()
 
 /obj/machinery/power/tracker/disconnect_from_network()

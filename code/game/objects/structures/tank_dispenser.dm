@@ -5,33 +5,41 @@
 	icon_state = "dispenser"
 	density = 1
 	anchored = 1.0
-	var/oxygentanks = 10
-	var/plasmatanks = 10
+	var/oxygentanks
+	var/plasmatanks
 	var/list/oxytanks = list()	//sorry for the similar var names
 	var/list/platanks = list()
 
-
 /obj/structure/dispenser/oxygen
-	plasmatanks = 0
+	oxygentanks = 10
 
 /obj/structure/dispenser/plasma
-	oxygentanks = 0
-
+	plasmatanks = 10
 
 /obj/structure/dispenser/New()
-	. = ..()
+	..()
 	update_icon()
 
-
 /obj/structure/dispenser/update_icon()
-	overlays.Cut()
-	switch(oxygentanks)
-		if(1 to 3)	overlays += "oxygen-[oxygentanks]"
-		if(4 to INFINITY) overlays += "oxygen-4"
-	switch(plasmatanks)
-		if(1 to 4)	overlays += "plasma-[plasmatanks]"
-		if(5 to INFINITY) overlays += "plasma-5"
+	overlays.len = 0
 
+/obj/structure/dispenser/oxygen/update_icon()
+	..()
+
+	switch(oxygentanks)
+		if(1 to 3)
+			overlays += "oxygen-[oxygentanks]"
+		if(4 to INFINITY)
+			overlays += "oxygen-4"
+
+/obj/structure/dispenser/plasma/update_icon()
+	..()
+
+	switch(plasmatanks)
+		if(1 to 4)
+			overlays += "plasma-[plasmatanks]"
+		if(5 to INFINITY)
+			overlays += "plasma-5"
 
 /obj/structure/dispenser/attack_robot(mob/user as mob)
 	if(isMoMMI(user))

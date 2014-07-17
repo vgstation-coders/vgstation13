@@ -7,7 +7,7 @@
 	var/obj/mecha/recharging_mecha = null
 
 	Entered(var/obj/mecha/mecha)
-		. = ..()
+		..()
 		if(istype(mecha))
 			mecha.occupant_message("<b>Initializing power control devices.</b>")
 			init_devices()
@@ -19,15 +19,13 @@
 				mecha.occupant_message("<font color='red'>Control console not found. Terminating.</font>")
 			else if(!recharge_port)
 				mecha.occupant_message("<font color='red'>Power port not found. Terminating.</font>")
-		return
 
 	Exited(atom)
-		. = ..()
+		..()
 		if(atom == recharging_mecha)
 			recharging_mecha = null
 			if(recharge_console)
 				recharge_console.mecha_out()
-		return
 
 	proc/init_devices()
 		recharge_console = locate() in range(1,src)

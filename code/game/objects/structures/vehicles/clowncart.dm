@@ -36,11 +36,10 @@
 		trail = 0
 
 /obj/structure/stool/bed/chair/vehicle/clowncart/New()
-	. = ..()
+	..()
 	//fuel = 0
 	create_reagents(5000)
 	reagents.add_reagent("banana", 175)
-
 	processing_objects |= src
 	handle_rotation()
 

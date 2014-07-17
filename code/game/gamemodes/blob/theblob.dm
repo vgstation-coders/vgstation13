@@ -14,14 +14,13 @@
 
 
 /obj/effect/blob/New(loc)
-	blobs += src
-	src.dir = pick(1, 2, 4, 8)
-	src.update_icon()
 	..(loc)
+	blobs += src
+	dir = pick(cardinal)
+	update_icon()
+
 	for(var/atom/A in loc)
 		A.blob_act()
-	return
-
 
 /obj/effect/blob/Destroy()
 	blobs -= src

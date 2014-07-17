@@ -146,6 +146,7 @@ var/global/list/protected_objects = list(
 /mob/living/simple_animal/hostile/mimic/copy/New(loc, var/obj/copy, var/mob/living/creator, var/destroy_original = 0, var/duration=0)
 	..(loc)
 	CopyObject(copy, creator, destroy_original)
+
 	if(duration)
 		time_to_die=world.time+duration
 

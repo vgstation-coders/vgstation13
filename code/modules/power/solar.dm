@@ -37,7 +37,7 @@ var/list/solars_list = list()
 	var/obj/item/solar_assembly/solar_assembly
 
 /obj/machinery/power/solar/New()
-	. = ..()
+	..()
 	make()
 	connect_to_network()
 
@@ -169,7 +169,7 @@ var/list/solars_list = list()
 	..()
 
 /obj/machinery/power/solar/fake/New()
-	. = ..()
+	..()
 	disconnect_from_network()
 
 /obj/machinery/power/solar/fake/process()
@@ -270,9 +270,11 @@ var/list/solars_list = list()
 	var/nexttime = 0		// Next clock time that manual tracking will move the array
 
 /obj/machinery/power/solar_control/New()
-	. = ..()
+	..()
+
 	if(ticker)
 		initialize()
+
 	connect_to_network()
 
 /obj/machinery/power/solar_control/disconnect_from_network()

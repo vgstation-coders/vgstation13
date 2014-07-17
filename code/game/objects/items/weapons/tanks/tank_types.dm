@@ -24,7 +24,7 @@
 			playsound(usr, 'sound/effects/alert.ogg', 50, 1)
 
 /obj/item/weapon/tank/oxygen/New()
-	. = ..()
+	..()
 	air_contents.adjust((6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
 
 /obj/item/weapon/tank/oxygen/yellow
@@ -45,7 +45,7 @@
 	item_state = "an_tank"
 
 /obj/item/weapon/tank/anesthetic/New()
-	. = ..()
+	..()
 	var/datum/gas/sleeping_agent/sleeping_agent = new
 	sleeping_agent.moles = (3 * ONE_ATMOSPHERE) * 70 / (R_IDEAL_GAS_EQUATION * T20C) * N2STANDARD
 	air_contents.adjust((3 * ONE_ATMOSPHERE) * 70 / (R_IDEAL_GAS_EQUATION * T20C) * O2STANDARD, , , , list(sleeping_agent))
@@ -68,7 +68,12 @@
 
 /obj/item/weapon/tank/air/New()
 	. = ..()
-	air_contents.adjust((6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C) * O2STANDARD, , (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C) * N2STANDARD)
+
+	air_contents.adjust(\
+		(6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C) * O2STANDARD,\
+		,\
+		(6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C) * N2STANDARD\
+	)
 
 /*
  * Plasma
@@ -81,7 +86,7 @@
 	slot_flags = null	//they have no straps!
 
 /obj/item/weapon/tank/plasma/New()
-	. = ..()
+	..()
 	air_contents.adjust(, , , (3 * ONE_ATMOSPHERE) * 70 / (R_IDEAL_GAS_EQUATION * T20C))
 
 /obj/item/weapon/tank/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -118,7 +123,7 @@
 			usr << sound('sound/effects/alert.ogg')
 
 /obj/item/weapon/tank/emergency_oxygen/New()
-	. = ..()
+	..()
 	air_contents.adjust((3 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
 
 /obj/item/weapon/tank/emergency_oxygen/engi
@@ -139,7 +144,7 @@
 	volume = 2
 
 /obj/item/weapon/tank/emergency_nitrogen/New()
-	. = ..()
+	..()
 	air_contents.adjust(, , (3 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
 
 /*
@@ -152,7 +157,7 @@
 	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
 
 /obj/item/weapon/tank/nitrogen/New()
-	. = ..()
+	..()
 	air_contents.adjust(, , (3 * ONE_ATMOSPHERE) * 70 / (R_IDEAL_GAS_EQUATION * T20C))
 
 /obj/item/weapon/tank/nitrogen/examine()

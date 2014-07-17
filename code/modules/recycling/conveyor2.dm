@@ -82,7 +82,7 @@
  * Create a conveyor.
  */
 /obj/machinery/conveyor/New(loc, newdir = null, building = 0)
-	. = ..(loc)
+	..(loc)
 
 	if(newdir)
 		dir = newdir

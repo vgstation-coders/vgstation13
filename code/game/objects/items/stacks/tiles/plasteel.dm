@@ -14,7 +14,7 @@
 	max_amount = 60
 
 /obj/item/stack/tile/plasteel/New()
-	. = ..()
+	..()
 	pixel_x = rand(1, 14)
 	pixel_y = rand(1, 14)
 

@@ -31,7 +31,7 @@
 	energy = 50
 
 /obj/effect/accelerated_particle/New(loc, dir = 2)
-	. = ..()
+	..()
 	src.loc = loc
 	src.dir = dir
 

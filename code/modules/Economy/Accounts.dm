@@ -159,7 +159,7 @@ var/global/list/all_money_accounts = list()
 	ghost_write=0
 
 /obj/machinery/account_database/New()
-	. = ..()
+	..()
 	if(!station_account)
 		create_station_account()
 

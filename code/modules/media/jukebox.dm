@@ -103,7 +103,7 @@ var/global/loopModeNames=list(
 	var/state_base = "jukebox2"
 
 /obj/machinery/media/jukebox/New()
-	. = ..()
+	..()
 
 	if(department)
 		linked_account = department_accounts[department]

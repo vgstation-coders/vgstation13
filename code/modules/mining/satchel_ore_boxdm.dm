@@ -7,11 +7,7 @@
 	name = "Ore Box"
 	desc = "A heavy box used for storing ore."
 	density = 1
-	var/datum/materials/materials
-
-/obj/structure/ore_box/New()
-	. = ..()
-	materials = new
+	var/datum/materials/materials = new
 
 /obj/structure/ore_box/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/ore))

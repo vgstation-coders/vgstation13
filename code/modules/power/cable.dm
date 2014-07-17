@@ -200,12 +200,14 @@
 
 
 /obj/item/weapon/cable_coil/New(loc, length = MAXCOIL, var/param_color = null)
-	. = ..()
+	..(loc)
 	src.amount = length
+
 	if (param_color)
 		_color = param_color
-	pixel_x = rand(-2,2)
-	pixel_y = rand(-2,2)
+
+	pixel_x = rand(-2, 2)
+	pixel_y = rand(-2, 2)
 	updateicon()
 
 /obj/item/weapon/cable_coil/proc/updateicon()

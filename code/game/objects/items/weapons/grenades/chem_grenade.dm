@@ -174,7 +174,7 @@
 				G.loc = get_turf(src.loc)*/
 
 /obj/item/weapon/grenade/chem_grenade/New()
-	. = ..()
+	..()
 	create_reagents(1000)
 
 /obj/item/weapon/grenade/chem_grenade/large

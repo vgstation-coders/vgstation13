@@ -1,23 +1,10 @@
-obj/effect/decal/cleanable/liquid_fuel
+/obj/effect/decal/cleanable/liquid_fuel
 	//Liquid fuel is used for things that used to rely on volatile fuels or plasma being contained to a couple tiles.
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "fuel"
-	layer = TURF_LAYER+0.2
+	layer = TURF_LAYER + 0.2
 	anchored = 1
-	var/amount = 1 //Basically moles.
-
-	New(newLoc,amt=1)
-		src.amount = amt
-
-		//Be absorbed by any other liquid fuel in the tile.
-		for(var/obj/effect/decal/cleanable/liquid_fuel/other in newLoc)
-			if(other != src)
-				other.amount += src.amount
-				spawn other.Spread()
-				del src
-
-		Spread()
-		. = ..()
+	var/amount = 1 // basically moles.
 
 	proc/Spread()
 		//Allows liquid fuels to sometimes flow into other tiles.
@@ -33,12 +20,23 @@ obj/effect/decal/cleanable/liquid_fuel
 						new/obj/effect/decal/cleanable/liquid_fuel(target, amount*0.25)
 						amount *= 0.75
 
+/obj/effect/decal/cleanable/liquid_fuel/New(loc, amount = 1)
+	..(loc)
+	src.amount = amount
+
+	// be absorbed by any other liquid fuel in the tile
+	for(var/obj/effect/decal/cleanable/liquid_fuel/other in src.loc)
+		if(other != src)
+			other.amount += src.amount
+
+			spawn(0)
+				other.Spread()
+
+			qdel(src)
+
 	flamethrower_fuel
 		icon_state = "mustard"
 		anchored = 0
-		New(newLoc, amt = 1, d = 0)
-			dir = d //Setting this direction means you won't get torched by your own flamethrower.
-			. = ..()
 
 		Spread()
 			//The spread for flamethrower fuel is much more precise, to create a wide fire pattern.
@@ -55,3 +53,7 @@ obj/effect/decal/cleanable/liquid_fuel
 					O.hotspot_expose((T20C*2) + 380,500) //Light flamethrower fuel on fire immediately.
 
 			amount *= 0.25
+
+/obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel/New(loc, amount = 1, dir = 0)
+	..(loc, amount)
+	src.dir = dir // setting this direction means you won't get torched by your own flamethrower

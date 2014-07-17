@@ -11,14 +11,14 @@
 
 	l_color = GLOW_GREEN
 	w_class = 2
-	
+
 	suicide_act(mob/user)
 		viewers(user) << "\red <b>[user] is breaking open the [src.name] and eating the liquid inside! It looks like \he's  trying to commit suicide!</b>"
 		return (TOXLOSS)
 
 
 /obj/item/weapon/glowstick/New()
-	. = ..()
+	..()
 	SetLuminosity(2)
 
 /obj/item/weapon/glowstick/red

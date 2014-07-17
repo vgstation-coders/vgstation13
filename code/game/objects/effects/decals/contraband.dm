@@ -16,7 +16,8 @@
 	w_type=RECYK_MISC
 
 
-/obj/item/weapon/contraband/poster/New(turf/loc, var/given_serial = 0)
+/obj/item/weapon/contraband/poster/New(loc, var/given_serial = 0)
+	..(loc)
 	if(given_serial == 0)
 		serial_number = rand(1, poster_designs.len)
 	else
@@ -24,7 +25,6 @@
 	name += " - No. [serial_number]"
 	if(serial_number == -1)
 		name = "Commendation Poster"
-	..(loc)
 
 //############################## THE ACTUAL DECALS ###########################
 

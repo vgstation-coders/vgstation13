@@ -265,5 +265,5 @@ for reference:
 			qdel(src)
 
 /obj/machinery/deployable/barrier/New()
-	. = ..()
-	icon_state = "barrier[src.locked]"
+	..()
+	icon_state = "barrier[locked]"

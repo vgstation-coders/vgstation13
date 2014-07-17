@@ -30,7 +30,7 @@
 	return
 
 /turf/unsimulated/mineral/New()
-	. = ..()
+	..()
 	MineralSpread()
 
 	spawn(1)

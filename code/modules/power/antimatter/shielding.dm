@@ -29,7 +29,7 @@ proc/cardinalrange(var/center)
 	var/dirs=0
 
 /obj/machinery/am_shielding/New()
-	. = ..()
+	..()
 
 	spawn(10)
 		controllerscan()

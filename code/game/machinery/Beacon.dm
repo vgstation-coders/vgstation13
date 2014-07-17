@@ -43,7 +43,7 @@
 		updateicon()
 
 /obj/machinery/bluespace_beacon/New()
-	. = ..()
+	..()
 	var/turf/T = loc
 	Beacon = new /obj/item/device/radio/beacon
 	Beacon.invisibility = INVISIBILITY_MAXIMUM

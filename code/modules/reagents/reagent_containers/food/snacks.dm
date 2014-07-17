@@ -2611,17 +2611,17 @@
 	..()
 
 /obj/item/pizzabox/margherita/New()
-	. = ..()
+	..()
 	pizza = new /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/margherita(src)
 	boxtag = "Margherita Deluxe"
 
 /obj/item/pizzabox/vegetable/New()
-	. = ..()
+	..()
 	pizza = new /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/vegetablepizza(src)
 	boxtag = "Gourmet Vegatable"
 
 /obj/item/pizzabox/mushroom/New()
-	. = ..()
+	..()
 	pizza = new /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/mushroompizza(src)
 	boxtag = "Mushroom Special"
 
@@ -2635,7 +2635,7 @@
 	icon_state = "cracker"
 
 /obj/item/weapon/reagent_containers/food/snacks/cracker/New()
-	. = ..()
+	..()
 	reagents.add_reagent("nutriment", 1)
 
 

@@ -4,18 +4,16 @@
 	icon_state = "teleport"
 	circuit = "/obj/item/weapon/circuitboard/teleporter"
 	var/obj/item/locked = null
-	var/id = null
 	var/one_time_use = 0 //Used for one-time-use teleport cards (such as clown planet coordinates.)
 						 //Setting this to 1 will set src.locked to null after a player enters the portal and will not allow hand-teles to open portals to that location.
 	ghost_read=0 // #430
 	ghost_write=0
 
 /obj/machinery/computer/teleporter/New()
-	. = ..()
-	id = "[rand(1000, 9999)]"
+	..()
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/teleporter
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/teleporter\
 	)
 
 	RefreshParts()
@@ -187,26 +185,26 @@
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
 /obj/machinery/teleport/hub/New()
-	. = ..()
+	..()
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/telehub,
-		/obj/item/weapon/stock_parts/scanning_module/phasic,
-		/obj/item/weapon/stock_parts/scanning_module/phasic,
-		/obj/item/weapon/stock_parts/capacitor/super,
-		/obj/item/weapon/stock_parts/capacitor/super,
-		/obj/item/weapon/stock_parts/capacitor/super,
-		/obj/item/weapon/stock_parts/subspace/ansible,
-		/obj/item/weapon/stock_parts/subspace/ansible,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/subspace/treatment,
-		/obj/item/weapon/stock_parts/subspace/crystal,
-		/obj/item/weapon/stock_parts/subspace/crystal,
-		/obj/item/weapon/stock_parts/subspace/transmitter,
-		/obj/item/weapon/stock_parts/subspace/transmitter,
-		/obj/item/weapon/stock_parts/subspace/transmitter,
-		/obj/item/weapon/stock_parts/subspace/transmitter
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/telehub,\
+		/obj/item/weapon/stock_parts/scanning_module/phasic,\
+		/obj/item/weapon/stock_parts/scanning_module/phasic,\
+		/obj/item/weapon/stock_parts/capacitor/super,\
+		/obj/item/weapon/stock_parts/capacitor/super,\
+		/obj/item/weapon/stock_parts/capacitor/super,\
+		/obj/item/weapon/stock_parts/subspace/ansible,\
+		/obj/item/weapon/stock_parts/subspace/ansible,\
+		/obj/item/weapon/stock_parts/subspace/filter,\
+		/obj/item/weapon/stock_parts/subspace/filter,\
+		/obj/item/weapon/stock_parts/subspace/treatment,\
+		/obj/item/weapon/stock_parts/subspace/crystal,\
+		/obj/item/weapon/stock_parts/subspace/crystal,\
+		/obj/item/weapon/stock_parts/subspace/transmitter,\
+		/obj/item/weapon/stock_parts/subspace/transmitter,\
+		/obj/item/weapon/stock_parts/subspace/transmitter,\
+		/obj/item/weapon/stock_parts/subspace/transmitter\
 	)
 
 	RefreshParts()
@@ -346,20 +344,20 @@
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
 obj/machinery/teleport/station/New()
-	. = ..()
+	..()
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/telestation,
-		/obj/item/weapon/stock_parts/scanning_module/phasic,
-		/obj/item/weapon/stock_parts/scanning_module/phasic,
-		/obj/item/weapon/stock_parts/capacitor/super,
-		/obj/item/weapon/stock_parts/capacitor/super,
-		/obj/item/weapon/stock_parts/subspace/ansible,
-		/obj/item/weapon/stock_parts/subspace/ansible,
-		/obj/item/weapon/stock_parts/subspace/analyzer,
-		/obj/item/weapon/stock_parts/subspace/analyzer,
-		/obj/item/weapon/stock_parts/subspace/analyzer,
-		/obj/item/weapon/stock_parts/subspace/analyzer
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/telestation,\
+		/obj/item/weapon/stock_parts/scanning_module/phasic,\
+		/obj/item/weapon/stock_parts/scanning_module/phasic,\
+		/obj/item/weapon/stock_parts/capacitor/super,\
+		/obj/item/weapon/stock_parts/capacitor/super,\
+		/obj/item/weapon/stock_parts/subspace/ansible,\
+		/obj/item/weapon/stock_parts/subspace/ansible,\
+		/obj/item/weapon/stock_parts/subspace/analyzer,\
+		/obj/item/weapon/stock_parts/subspace/analyzer,\
+		/obj/item/weapon/stock_parts/subspace/analyzer,\
+		/obj/item/weapon/stock_parts/subspace/analyzer\
 	)
 
 	RefreshParts()

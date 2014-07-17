@@ -14,11 +14,14 @@
 	var/obj/machinery/artifact_scanpad/owned_scanner = null
 
 /obj/machinery/artifact_harvester/New()
-	. = ..()
+	..()
+
 	//connect to a nearby scanner pad
-	owned_scanner = locate(/obj/machinery/artifact_scanpad) in get_step(src, dir)
-	if(!owned_scanner)
-		owned_scanner = locate(/obj/machinery/artifact_scanpad) in orange(1, src)
+	for(dir in cardinal)
+		owned_scanner = locate(/obj/machinery/artifact_scanpad) in get_step(src, dir)
+
+		if(owned_scanner)
+			break
 
 /obj/machinery/artifact_harvester/attackby(var/obj/I as obj, var/mob/user as mob)
 	if(istype(I,/obj/item/weapon/anobattery))

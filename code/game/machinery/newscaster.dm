@@ -48,6 +48,7 @@ var/datum/feed_network/news_network = new /datum/feed_network     //The global n
 
 var/list/obj/machinery/newscaster/allCasters = list() //Global list that will contain reference to all newscasters in existence.
 
+var/global/newscasterUnitNo = 0
 
 /obj/machinery/newscaster
 	name = "newscaster"
@@ -81,7 +82,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/securityCaster = 0
 		// 0 = Caster cannot be used to issue wanted posters
 		// 1 = the opposite
-	var/global/unit_no = 0 //Each newscaster has a unit number
+	var/unit_no // each newscaster has a unit number
 	//var/datum/feed_message/wanted //We're gonna use a feed_message to store data of the wanted person because fields are similar
 	//var/wanted_issue = 0          //OBSOLETE
 		// 0 = there's no WANTED issued, we don't need a special icon_state
@@ -110,7 +111,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	..()
 	allCasters += src
 	paper_remaining = 15 // will probably change this to something better
-	unit_no++ // let's give it an appropriate unit number
+	unit_no = newscasterUnitNo++ // let's give it an appropriate unit number
 	update_icon() // for any custom ones on the map...
 
 /obj/machinery/newscaster/Destroy()

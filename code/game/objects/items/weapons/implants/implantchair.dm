@@ -169,5 +169,5 @@
 			return
 
 /obj/machinery/implantchair/New()
-	. = ..()
+	..()
 	add_implants()

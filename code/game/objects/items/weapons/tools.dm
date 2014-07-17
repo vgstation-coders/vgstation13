@@ -59,33 +59,33 @@
 		return(BRUTELOSS)
 
 /obj/item/weapon/screwdriver/New()
-	. = ..()
+	..()
 
-	switch(pick("red","blue","purple","brown","green","cyan","yellow"))
-		if ("red")
+	switch(pick("red", "blue", "purple", "brown", "green", "cyan", "yellow"))
+		if("red")
 			icon_state = "screwdriver2"
 			item_state = "screwdriver"
-		if ("blue")
+		if("blue")
 			icon_state = "screwdriver"
 			item_state = "screwdriver_blue"
-		if ("purple")
+		if("purple")
 			icon_state = "screwdriver3"
 			item_state = "screwdriver_purple"
-		if ("brown")
+		if("brown")
 			icon_state = "screwdriver4"
 			item_state = "screwdriver_brown"
-		if ("green")
+		if("green")
 			icon_state = "screwdriver5"
 			item_state = "screwdriver_green"
-		if ("cyan")
+		if("cyan")
 			icon_state = "screwdriver6"
 			item_state = "screwdriver_cyan"
-		if ("yellow")
+		if("yellow")
 			icon_state = "screwdriver7"
 			item_state = "screwdriver_yellow"
 
-	if (prob(75))
-		src.pixel_y = rand(0, 16)
+	if(prob(75))
+		pixel_y = rand(0, 16)
 
 /obj/item/weapon/screwdriver/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M))	return ..()
@@ -116,7 +116,7 @@
 	attack_verb = list("pinched", "nipped")
 
 /obj/item/weapon/wirecutters/New()
-	. = ..()
+	..()
 
 	if(prob(50))
 		icon_state = "cutters-y"
@@ -170,7 +170,7 @@
 		return (FIRELOSS|OXYLOSS)
 
 /obj/item/weapon/weldingtool/New()
-	. = ..()
+	..()
 	create_reagents(max_fuel)
 	reagents.add_reagent("fuel", max_fuel)
 

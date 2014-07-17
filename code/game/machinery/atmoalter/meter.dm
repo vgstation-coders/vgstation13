@@ -13,8 +13,8 @@
 	active_power_usage = 4
 
 /obj/machinery/meter/New()
-	. = ..()
-	src.target = locate(/obj/machinery/atmospherics/pipe) in loc
+	..()
+	target = locate(/obj/machinery/atmospherics/pipe) in loc
 
 /obj/machinery/meter/initialize()
 	if (!target)

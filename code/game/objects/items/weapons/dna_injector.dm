@@ -19,11 +19,11 @@
 	var/value=0
 
 /obj/item/weapon/dnainjector/New()
-	. = ..()
+	..()
 
 	if(datatype && block)
-		buf=new
-		buf.dna=new
+		buf = new
+		buf.dna = new
 		buf.types = datatype
 		buf.dna.ResetSE()
 		//testing("[name]: DNA2 SE blocks prior to SetValue: [english_list(buf.dna.SE)]")

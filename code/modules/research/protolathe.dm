@@ -25,16 +25,16 @@ it creates. All the menus and other manipulation commands are in the R&D console
 	var/obj/output=null
 
 /obj/machinery/r_n_d/protolathe/New()
-	. = ..()
+	..()
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/protolathe,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/reagent_containers/glass/beaker,
-		/obj/item/weapon/reagent_containers/glass/beaker
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/protolathe,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/reagent_containers/glass/beaker,\
+		/obj/item/weapon/reagent_containers/glass/beaker\
 	)
 
 	RefreshParts()

@@ -272,7 +272,7 @@
 		return 0
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/New()
-	. = ..()
+	..()
 	create_reagents(200)
 	reagents.add_reagent("water", 200)
 

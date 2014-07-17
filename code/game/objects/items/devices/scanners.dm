@@ -315,7 +315,7 @@ REAGENT SCANNER
 	var/recent_fail = 0
 
 /obj/item/device/mass_spectrometer/New()
-	. = ..()
+	..()
 	create_reagents(5)
 
 /obj/item/device/mass_spectrometer/on_reagent_change()

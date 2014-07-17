@@ -28,7 +28,7 @@
 	var/health = 400
 
 /obj/spacepod/New()
-	. = ..()
+	..()
 	if(!pod_overlays)
 		pod_overlays = new/list(2)
 		pod_overlays[DAMAGE] = image(icon, icon_state="pod_damage")

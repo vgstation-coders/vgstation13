@@ -15,7 +15,7 @@
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
 /obj/machinery/snackbar_machine/New()
-	. = ..()
+	..()
 	create_reagents(100)
 
 	component_parts = newlist(\

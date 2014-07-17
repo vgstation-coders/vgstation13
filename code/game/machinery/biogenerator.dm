@@ -166,7 +166,7 @@
 		return
 
 /obj/machinery/biogenerator/New()
-	. = ..()
+	..()
 	create_reagents(1000)
 	beaker = new /obj/item/weapon/reagent_containers/glass/beaker/large(src)
 

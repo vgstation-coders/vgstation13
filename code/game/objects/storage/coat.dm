@@ -197,7 +197,7 @@
 	return
 
 /obj/item/clothing/suit/storage/New()
-	. = ..()
+	..()
 	boxes = new /obj/screen/storage(  )
 	boxes.name = "storage"
 	boxes.master = src

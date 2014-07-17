@@ -616,7 +616,7 @@
 	var/rating = 1
 
 /obj/item/weapon/stock_parts/New()
-	. = ..()
+	..()
 	pixel_x = rand(-5, 5)
 	pixel_y = rand(-5, 5)
 
