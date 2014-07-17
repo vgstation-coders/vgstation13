@@ -1234,8 +1234,8 @@
 	var/potency = 1
 	var/plant_type = 0
 
-/obj/item/weapon/grown/New()
-	..()
+/obj/item/weapon/grown/New(loc)
+	..(loc)
 	create_reagents(50)
 
 /obj/item/weapon/grown/proc/changePotency(newValue) //-QualityVan

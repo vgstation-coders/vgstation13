@@ -4,6 +4,7 @@
 	icon_state = "teleport"
 	circuit = "/obj/item/weapon/circuitboard/teleporter"
 	var/obj/item/locked = null
+	var/id = null
 	var/one_time_use = 0 //Used for one-time-use teleport cards (such as clown planet coordinates.)
 						 //Setting this to 1 will set src.locked to null after a player enters the portal and will not allow hand-teles to open portals to that location.
 	ghost_read=0 // #430
@@ -11,6 +12,7 @@
 
 /obj/machinery/computer/teleporter/New()
 	..()
+	id = "[rand(1000, 9999)]"
 
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/teleporter\
