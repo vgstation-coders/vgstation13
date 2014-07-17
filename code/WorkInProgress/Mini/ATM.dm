@@ -37,7 +37,7 @@ log transactions
 	var/lastprint = 0 // Printer needs time to cooldown
 
 /obj/machinery/atm/New()
-	..()
+	. = ..()
 	machine_id = "[station_name()] RT #[num_financial_terminals++]"
 
 /obj/machinery/atm/initialize()

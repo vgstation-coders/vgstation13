@@ -318,34 +318,21 @@
 	return 1
 
 /obj/machinery/portable_atmospherics/canister/toxins/New()
-
 	..()
-
-	src.air_contents.toxins = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	air_contents.update_values()
-
-	src.update_icon()
-	return 1
+	air_contents.adjust(, , , (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	update_icon()
 
 /obj/machinery/portable_atmospherics/canister/oxygen/New()
-
 	..()
-
-	src.air_contents.oxygen = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	air_contents.update_values()
-	src.update_icon()
-	return 1
+	air_contents.adjust((maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	update_icon()
 
 /obj/machinery/portable_atmospherics/canister/sleeping_agent/New()
-
 	..()
-
-	var/datum/gas/sleeping_agent/trace_gas = new
-	air_contents.trace_gases += trace_gas
-	trace_gas.moles = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	air_contents.update_values()
-	src.update_icon()
-	return 1
+	var/datum/gas/sleeping_agent/sleeping_agent = new
+	sleeping_agent.moles = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
+	air_contents.adjust(, , , , list(sleeping_agent))
+	update_icon()
 
 /*
 //Dirty way to fill room with gas. However it is a bit easier to do than creating some floor/engine/n2o -rastaf0
@@ -364,34 +351,25 @@
 */
 
 /obj/machinery/portable_atmospherics/canister/nitrogen/New()
-
 	..()
-
-	src.air_contents.nitrogen = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	air_contents.update_values()
-
-	src.update_icon()
-	return 1
+	air_contents.adjust(, , (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	update_icon()
 
 /obj/machinery/portable_atmospherics/canister/carbon_dioxide/New()
-
 	..()
-	src.air_contents.carbon_dioxide = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	air_contents.update_values()
-
-	src.update_icon()
-	return 1
-
+	air_contents.adjust(, (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	update_icon()
 
 /obj/machinery/portable_atmospherics/canister/air/New()
-
 	..()
-	src.air_contents.oxygen = (O2STANDARD*src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	src.air_contents.nitrogen = (N2STANDARD*src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	air_contents.update_values()
 
-	src.update_icon()
-	return 1
+	air_contents.adjust(\
+		(maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature) * O2STANDARD,\
+		,\
+		(maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature) * N2STANDARD\
+	)
+
+	update_icon()
 
 /obj/machinery/portable_atmospherics/canister/proc/weld(var/obj/item/weapon/weldingtool/WT, var/mob/user)
 

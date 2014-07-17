@@ -26,20 +26,16 @@
 
 	// Borrows code from cloning computer
 /obj/machinery/computer/gravity_control_computer/New()
-	..()
+	. = ..()
+
 	spawn(5)
 		updatemodules()
-		return
-	return
 
 /obj/machinery/gravity_generator/New()
-	..()
+	. = ..()
+
 	spawn(5)
 		locatelocalareas()
-		return
-	return
-
-
 
 /obj/machinery/computer/gravity_control_computer/proc/updatemodules()
 	src.gravity_generator = findgenerator()

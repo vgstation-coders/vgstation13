@@ -28,13 +28,11 @@ proc/cardinalrange(var/center)
 	var/coredirs = 0
 	var/dirs=0
 
+/obj/machinery/am_shielding/New()
+	. = ..()
 
-/obj/machinery/am_shielding/New(loc)
-	..(loc)
 	spawn(10)
 		controllerscan()
-	return
-
 
 /obj/machinery/am_shielding/proc/controllerscan(var/priorscan = 0)
 	//Make sure we are the only one here

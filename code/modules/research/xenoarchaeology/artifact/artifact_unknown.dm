@@ -69,7 +69,7 @@ var/list/valid_secondary_effect_types = list(\
 	var/being_used = 0
 
 /obj/machinery/artifact/New()
-	..()
+	. = ..()
 
 	//setup primary effect - these are the main ones (mixed)
 	var/effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)

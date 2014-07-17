@@ -323,7 +323,7 @@ obj/machinery/access_button
 	ghost_write = 0
 
 /obj/machinery/access_button/New(turf/loc, var/ndir, var/building=0)
-	..()
+	. = ..(loc)
 
 	// offset 24 pixels in direction of dir
 	// this allows the APC to be embedded in a wall, yet still inside an area

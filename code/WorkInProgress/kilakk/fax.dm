@@ -26,7 +26,7 @@ var/list/alldepartments = list("Central Command")
 	var/dpt = "Central Command" // the department we're sending to
 
 /obj/machinery/faxmachine/New()
-	..()
+	. = ..()
 	allfaxes += src
 
 	if( !("[department]" in alldepartments) )

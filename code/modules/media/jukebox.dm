@@ -102,12 +102,14 @@ var/global/loopModeNames=list(
 
 	var/state_base = "jukebox2"
 
-/obj/machinery/media/jukebox/New(loc)
-	..(loc)
+/obj/machinery/media/jukebox/New()
+	. = ..()
+
 	if(department)
 		linked_account = department_accounts[department]
 	else
 		linked_account = station_account
+
 	update_icon()
 
 /obj/machinery/media/jukebox/attack_ai(var/mob/user)

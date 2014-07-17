@@ -270,20 +270,17 @@
 ********************************************************************/
 /obj/machinery/chem_master/New()
 	. = ..()
+	create_reagents(100)
 
-	var/datum/reagents/R = new/datum/reagents(100)
-	reagents = R
-	R.my_atom = src
-
-	component_parts = newlist(
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
+	component_parts = newlist(\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/console_screen,\
+		/obj/item/weapon/stock_parts/console_screen\
 	)
 
 	if(istype(src, /obj/machinery/chem_master/condimaster))
@@ -294,8 +291,7 @@
 
 	RefreshParts()
 
-	var/image/overlay = image('icons/obj/chemical.dmi', src, "[icon_state]_overlay")
-	overlays += overlay
+	overlays += image('icons/obj/chemical.dmi', src, "[icon_state]_overlay")
 
 /obj/machinery/chem_master/ex_act(severity)
 	switch(severity)

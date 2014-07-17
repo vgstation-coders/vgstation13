@@ -55,11 +55,6 @@
 	var/obj/machinery/computer/mech_bay_power_console/recharge_console
 	var/datum/global_iterator/mech_bay_recharger/pr_recharger
 
-	New()
-		..()
-		pr_recharger = new /datum/global_iterator/mech_bay_recharger(null,0)
-		return
-
 	proc/start_charge(var/obj/mecha/recharging_mecha)
 		if(stat&(NOPOWER|BROKEN))
 			recharging_mecha.occupant_message("<font color='red'>Power port not responding. Terminating.</font>")
@@ -100,6 +95,9 @@
 		else
 			return 0
 
+/obj/machinery/mech_bay_recharge_port/New()
+	..()
+	pr_recharger = new /datum/global_iterator/mech_bay_recharger(null, 0)
 
 /datum/global_iterator/mech_bay_recharger
 	delay = 20

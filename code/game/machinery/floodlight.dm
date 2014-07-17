@@ -13,8 +13,8 @@
 	var/brightness_on = 999		//can't remember what the maxed out value is
 
 /obj/machinery/floodlight/New()
-	src.cell = new(src)
-	..()
+	. = ..()
+	cell = new(src)
 
 /obj/machinery/floodlight/proc/updateicon()
 	icon_state = "flood[open ? "o" : ""][open && cell ? "b" : ""]0[on]"

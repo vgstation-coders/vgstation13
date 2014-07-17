@@ -1,5 +1,4 @@
 /obj/machinery/bluespace_beacon
-
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "floor_beaconf"
 	name = "Bluespace Gigabeacon"
@@ -10,15 +9,6 @@
 	use_power = 1
 	idle_power_usage = 0
 	var/obj/item/device/radio/beacon/Beacon
-
-	New()
-		..()
-		var/turf/T = loc
-		Beacon = new /obj/item/device/radio/beacon
-		Beacon.invisibility = INVISIBILITY_MAXIMUM
-		Beacon.loc = T
-
-		hide(T.intact)
 
 	Destroy()
 		if(Beacon)
@@ -52,4 +42,10 @@
 
 		updateicon()
 
-
+/obj/machinery/bluespace_beacon/New()
+	. = ..()
+	var/turf/T = loc
+	Beacon = new /obj/item/device/radio/beacon
+	Beacon.invisibility = INVISIBILITY_MAXIMUM
+	Beacon.loc = T
+	hide(T.intact)

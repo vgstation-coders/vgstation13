@@ -150,11 +150,6 @@ for reference:
 	var/locked = 0.0
 //	req_access = list(access_maint_tunnels)
 
-	New()
-		..()
-
-		src.icon_state = "barrier[src.locked]"
-
 	attackby(obj/item/weapon/W as obj, mob/user as mob)
 		if (istype(W, /obj/item/weapon/card/id/))
 			if (src.allowed(user))
@@ -268,3 +263,7 @@ for reference:
 		explosion(src.loc,-1,-1,0)
 		if(src)
 			qdel(src)
+
+/obj/machinery/deployable/barrier/New()
+	. = ..()
+	icon_state = "barrier[src.locked]"

@@ -47,6 +47,8 @@
 	icon_state = "crystal"
 
 /obj/machinery/crystal/New()
+	. = ..()
+
 	if(prob(50))
 		icon_state = "crystal2"
 

@@ -10,7 +10,7 @@
 	//	luminosity = 1
 
 /obj/machinery/light_switch/New()
-	..()
+	. = ..()
 	name = "[areaMaster.name] light switch"
 	on = areaMaster.lightswitch
 	updateicon()
