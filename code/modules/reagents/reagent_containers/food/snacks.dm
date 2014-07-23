@@ -2767,7 +2767,8 @@
 		..()
 		reagents.add_reagent("nutriment", 6)
 		reagents.add_reagent("spiritbreaker", 10) // Screaming
-		reagents.add_reagent("mercury",       10) // Idiot
+		reagents.add_reagent("mercury", 10) // Idiot
+		reagents.add_reagent("poo", 5)	  //why
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/asspie
@@ -2778,5 +2779,6 @@
 		..()
 		reagents.add_reagent("nutriment", 4)
 		reagents.add_reagent("spiritbreaker", 10) // Screaming
-		reagents.add_reagent("mercury",       10) // Idiot
+		reagents.add_reagent("mercury", 10) // Idiot
+		reagents.add_reagent("poo", 5)  // why
 		bitesize = 3
