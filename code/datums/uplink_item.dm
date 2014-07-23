@@ -144,6 +144,13 @@ var/list/uplink_items = list()
 	cost = 2
 	job = list("Janitor")
 
+/datum/uplink_item/jobspecific/poogrenade
+	name = "Poo Grenade"
+	desc = "A smoke grenade cleverly disguised as a cleaner grenade, it is designed to spread a certain foul substance to every surface it touches."
+	item = /obj/item/weapon/caution/proximity_sign
+	cost = 3
+	job = list("Janitor")
+
 
 //Assistant
 /datum/uplink_item/jobspecific/pickpocketgloves
