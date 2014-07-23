@@ -31,7 +31,7 @@ Here it is: Buttbot.
 		playsound(get_turf(src), 'sound/misc/fart.ogg', 50, 1)
 		sincelastfart = world.timeofday
 
-		
+
 
 
 /obj/machinery/bot/buttbot/proc/speak(var/message)
@@ -78,7 +78,8 @@ Here it is: Buttbot.
 	s.set_up(3, 1, src)
 	s.start()
 
-	new /obj/effect/decal/cleanable/blood/oil(src.loc)
+	new /obj/effect/decal/cleanable/blood/poo(src.loc)
+	new /obj/item/weapon/reagent_containers/food/snacks/poo(src.loc)
 	del(src)
 
 
