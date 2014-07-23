@@ -2771,6 +2771,20 @@ datum
 				..()
 				return
 
+		poo
+			name = "poo"
+			id = "poo"
+			description = "It's poo."
+			reagent_state = LIQUID
+			color = "#663300" // rgb: ITS FUCKING BROWN, OK!? ITS FUCKIN' BROWN.
+			//I hate myself.
+
+			reaction_turf(var/turf/T, var/volume)
+				src = null
+				if(!istype(T, /turf/space))
+					new /obj/effect/decal/cleanable/blood/poo(T)
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////// DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
