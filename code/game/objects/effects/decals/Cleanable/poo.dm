@@ -1,4 +1,4 @@
-/*http://i.imgur.com/iQAqVzS.png
+/*
 You know, when I woke up today, I didn't think
 "I'm going to make shit inside of a BYOND game!"
 No, I was thinking about butts and farts, as per usual.
