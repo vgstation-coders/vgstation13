@@ -248,46 +248,34 @@ var/list/beam_master = list()
 		return
 
 /obj/item/projectile/beam/dumbfire(var/dir)
+	var/reference = "\ref[src]" // So we do not have to recalculate it a ton.
+
 	spawn(0)
-		var/reference = "\ref[src]" // So we do not have to recalculate it a ton.
-		var/lastposition = loc
 		var/target_dir = src.dir // TODO: remove dir arg.
 
-		while(loc) // Move until we hit something.
+		for(var/i = 1 to kill_count) // move until we hit something
 			if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
 				returnToPool(src)
 				break
 
-			step(src, target_dir) // Move.
-
-			if(isnull(loc))
-				break
-
-			if(lastposition == loc)
-				kill_count = 0
-
-			lastposition = loc
-
-			if(kill_count < 1)
+			if(!step(src, target_dir)) // move
 				returnToPool(src)
 				break
-
-			kill_count--
 
 			// Add the overlay as we pass over tiles.
 
 			// If the icon has not been added yet.
-			if(!("[icon_state][target_dir]" in beam_master) )
+			if(!beam_master.Find("[icon_state][target_dir]"))
 				beam_master["[icon_state][target_dir]"] = image(icon, icon_state, 10, target_dir) // Generate, and cache it!
 
 			// Finally add the overlay
 			loc.overlays += beam_master["[icon_state][target_dir]"]
 
 			// Add the turf to a list in the beam master so they can be cleaned up easily.
-			if(reference in beam_master)
+			if(beam_master.Find(reference))
 				var/list/turf_master = beam_master[reference]
 
-				if("[icon_state][target_dir]" in turf_master)
+				if(turf_master.Find("[icon_state][target_dir]"))
 					turf_master["[icon_state][target_dir]"] += loc
 				else
 					turf_master["[icon_state][target_dir]"] = list(loc)
@@ -296,21 +284,20 @@ var/list/beam_master = list()
 				turfs["[icon_state][target_dir]"] = list(loc)
 				beam_master[reference] = turfs
 
-		cleanup(reference)
+	cleanup(reference)
 
 /obj/item/projectile/beam/proc/cleanup(const/reference)
 	src = null // Redundant.
 				// No, if it's not set to null this proc will be silently killed.
 
 	spawn(3) // Waits .3 seconds then removes the overlay.
-		var/list/turf_master = beam_master[reference]
+		var/list/turfMaster = beam_master[reference]
 
-		for(var/laser_state in turf_master)
-			var/list/turfs = turf_master[laser_state]
+		for(var/laser_state in turfMaster)
+			var/list/turfs = turfMaster[laser_state]
 
-			for(var/turf/T in turfs)
-				T.overlays -= beam_master[laser_state]
-				T = null
+			for(var/turf/turf in turfs)
+				turf.overlays.Remove(beam_master[laser_state])
 
 			turfs.Cut()
 
