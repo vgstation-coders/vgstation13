@@ -3,6 +3,11 @@
 	if(silent)
 		return
 
+	if(failed_last_breath == 1) //We are currently not able to breathe, so talking would be hard. Instead, we gasp. Could be changed into talking gibberish later
+		if (length(message) >= 1) //Admire my mastery of coding
+			emote("gasp")
+	return
+
 	//Mimes dont speak! Changeling hivemind and emotes are allowed.
 	if(miming)
 		if(length(message) >= 2)
