@@ -23,6 +23,14 @@
 	var/biomass = CLONE_BIOMASS // * 3 - N3X
 	var/opened = 0
 
+	l_color = "#00FF00"
+	power_change()
+		..()
+		if(!(stat & (BROKEN|NOPOWER)))
+			SetLuminosity(2)
+		else
+			SetLuminosity(0)
+
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
@@ -181,17 +189,14 @@
 	spawn(30)
 		src.eject_wait = 0
 
-	var/mob/living/carbon/human/H = new /mob/living/carbon/human(src)
+	var/mob/living/carbon/human/H = new /mob/living/carbon/human(src, delay_ready_dna=1)
 	occupant = H
 
-	if(!R.dna.real_name)	//to prevent null names
-		R.dna.real_name = "clone ([rand(0,999)])"
-	H.real_name = R.dna.real_name
-
-	H.dna.mutantrace = R.dna.mutantrace
-
 	src.icon_state = "pod_1"
+
 	//Get the clone body ready
+	H.dna = R.dna.Clone()
+
 	H.adjustCloneLoss(150) //new damage var so you can't eject a clone early then stab them to abuse the current damage system --NeoFite
 	H.adjustBrainLoss(src.heal_level + 50 + rand(10, 30)) // The rand(10, 30) will come out as extra brain damage
 	H.Paralyse(4)
@@ -219,23 +224,12 @@
 
 	// -- End mode specific stuff
 
-	if(!R.dna)
-		H.dna = new /datum/dna()
-		H.dna.real_name = H.real_name
-	else
-		H.dna=R.dna
 	H.UpdateAppearance()
-	randmutb(H) //Sometimes the clones come out wrong.
-	H.dna.UpdateSE()
-	H.dna.UpdateUI()
+	H.set_species()
+	randmutb(H) // sometimes the clones come out wrong.
+	H.update_mutantrace()
+	H.real_name = H.dna.real_name
 
-	H.f_style = "Shaved"
-	if(R.dna.species == "Human") //no more xenos losing ears/tentacles
-		H.h_style = pick("Bedhead", "Bedhead 2", "Bedhead 3")
-
-	H.set_species(R.dna.species)
-	//for(var/datum/language/L in languages)
-	//	H.add_language(L.name)
 	H.suiciding = 0
 	src.attempting = 0
 	return 1
@@ -460,7 +454,7 @@
 	icon_state = "disk_kit"
 
 /obj/item/weapon/storage/box/disks/New()
-	..()
+	. = ..()
 	new /obj/item/weapon/disk/data(src)
 	new /obj/item/weapon/disk/data(src)
 	new /obj/item/weapon/disk/data(src)

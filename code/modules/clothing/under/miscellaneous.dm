@@ -394,3 +394,19 @@
 	icon_state = "bmuniform"
 	_color = "bmuniform"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO
+
+/obj/item/clothing/under/officeruniform
+	name = "Officer's Uniform"
+	desc = "Bestraft die Juden für ihre Verbrechen."
+	icon_state = "officeruniform"
+	_color = "officeruniform"
+	item_state = "officeruniform"
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO
+
+/obj/item/clothing/under/soldieruniform
+	name = "Soldier's Uniform"
+	desc = "Bestraft die Verbündeten für ihren Widerstand."
+	icon_state = "soldieruniform"
+	_color = "soldieruniform"
+	item_state = "soldieruniform"
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO

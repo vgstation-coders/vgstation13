@@ -9,6 +9,8 @@
 	var/damaged = 0
 	var/last_change = 0
 
+	l_color = "#7BF9FF"
+
 
 	attack_ai(var/mob/user as mob)
 		src.add_hiddenprint(user)
@@ -344,8 +346,8 @@
 	for(var/obj/effect/decal/cleanable/blood/B in linkedholodeck)
 		del(B)
 
-	for(var/mob/living/simple_animal/hostile/carp/C in linkedholodeck)
-		del(C)
+	for(var/mob/living/simple_animal/hostile/carp/holocarp/holocarp in linkedholodeck)
+		del(holocarp)
 
 	holographic_items = A.copy_contents_to(linkedholodeck , 1)
 
@@ -365,7 +367,7 @@
 						T.temperature = 5000
 						T.hotspot_expose(50000,50000,1)
 			if(L.name=="Holocarp Spawn")
-				new /mob/living/simple_animal/hostile/carp(L.loc)
+				new /mob/living/simple_animal/hostile/carp/holocarp(L.loc)
 
 
 /obj/machinery/computer/HolodeckControl/proc/emergencyShutdown()
@@ -577,7 +579,7 @@
 		visible_message("\blue [user] dunks [W] into the [src]!", 3)
 		return
 
-/obj/structure/holohoop/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/holohoop/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover,/obj/item) && mover.throwing)
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
