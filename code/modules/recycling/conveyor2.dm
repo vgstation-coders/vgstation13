@@ -176,9 +176,7 @@
 			del(src)
 		return 1
 	if(isrobot(user))	return //Carn: fix for borgs dropping their modules on conveyor belts
-	user.drop_item()
-	if(W && W.loc)	W.loc = src.loc
-	return
+	user.drop_item(src)
 
 /obj/machinery/conveyor/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	//var/obj/item/device/multitool/P = get_multitool(user)

@@ -34,7 +34,7 @@
 
 /atom/movable/Del()
 	// Pass to Destroy().
-	if(!gcDestroyed)
+	if(isnull(gcDestroyed))
 		Destroy()
 
 	..()
