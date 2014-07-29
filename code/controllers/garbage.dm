@@ -3,6 +3,8 @@
 #define GC_FORCE_DEL_PER_TICK 20
 //#define GC_DEBUG
 
+var/delete_loc = locate(1, 1, CENTCOMM_Z)
+
 var/list/gc_hard_del_types = new
 var/datum/garbage_collector/garbageCollector
 

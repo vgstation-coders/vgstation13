@@ -67,8 +67,7 @@
 	if(istype(A, /obj/item/ammo_casing) && load_method == SPEEDLOADER)
 		var/obj/item/ammo_casing/AC = A
 		if(AC.caliber == caliber && loaded.len < max_shells)
-			user.drop_item()
-			AC.loc = src
+			user.drop_item_ex(src)
 			loaded += AC
 			num_loaded++
 	if(num_loaded)

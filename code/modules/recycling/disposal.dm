@@ -158,16 +158,14 @@
 
 		if(!I)	return
 		if(!isMoMMI(user))
-			user.drop_item()
+			user.drop_item_ex(src)
 		else
 			var/mob/living/silicon/robot/mommi/M = user
 			if(is_type_in_list(I,M.module.modules))
 				user << "\red You can't throw away what's attached to you."
 				return
 			else
-				M.drop_item()
-		if(I)
-			I.loc = src
+				M.drop_item_ex(src)
 
 		user << "You place \the [I] into the [src]."
 		for(var/mob/M in viewers(src))

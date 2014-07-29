@@ -70,8 +70,8 @@
 			if ((M_CLUMSY in M.mutations) && prob(50))
 				M << "<span class='danger'>[src] blows up in your face.</span>"
 				M.take_organ_damage(0,20)
-				M.drop_item()
-				del(src)
+				M.drop_item_ex(delete_loc)
+				qdel(src)
 				return
 
 	if (!user.IsAdvancedToolUser() || isMoMMI(user) || istype(user, /mob/living/carbon/monkey/diona))

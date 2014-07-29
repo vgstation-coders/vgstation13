@@ -2562,9 +2562,8 @@
 				boxestoadd += i
 
 			if( (boxes.len+1) + boxestoadd.len <= 5 )
-				user.drop_item()
+				user.drop_item_ex(src)
 
-				box.loc = src
 				box.boxes = list() // Clear the box boxes so we don't have boxes inside boxes. - Xzibit
 				src.boxes.Add( boxestoadd )
 
@@ -2582,9 +2581,8 @@
 	if( istype(I, /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/) ) // Long ass fucking object name
 
 		if( src.open )
-			user.drop_item()
-			I.loc = src
-			src.pizza = I
+			user.drop_item_ex(src)
+			pizza = I
 
 			update_icon()
 

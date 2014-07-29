@@ -363,8 +363,8 @@
 				on = has_power()
 				update()
 
-				user.drop_item()	//drop the item to update overlays and such
-				del(L)
+				user.drop_item_ex(delete_loc)	//drop the item to update overlays and such
+				qdel(L)
 
 				if(on && rigged)
 

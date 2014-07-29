@@ -165,8 +165,7 @@
 						usr << "\red It doesn't seem too keen on wearing that item."
 						return
 
-					usr.drop_item()
-					item_to_add.loc = src
+					usr.drop_item_ex(src)
 					src.inventory_head = item_to_add
 					regenerate_icons()
 
@@ -244,8 +243,7 @@
 						usr << "\red This object won't fit."
 						return
 
-					usr.drop_item()
-					item_to_add.loc = src
+					usr.drop_item_ex(src)
 					src.inventory_mask = item_to_add
 					regenerate_icons()
 

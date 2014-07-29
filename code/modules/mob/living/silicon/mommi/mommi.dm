@@ -201,8 +201,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		else if(cell)
 			user << "There is a power cell already installed."
 		else
-			user.drop_item()
-			W.loc = src
+			user.drop_item_ex(src)
 			cell = W
 			user << "You insert the power cell."
 //			chargecount = 0
@@ -320,9 +319,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				usr << "<span class='warning'>No.</span>"
 				return
 			if(U.action(src))
-				usr << "You apply the upgrade to [src]!"
-				usr.drop_item()
-				U.loc = src
+				user << "You apply the upgrade to [src]!"
+				user.drop_item_ex(src)
 			else
 				usr << "Upgrade error!"
 
@@ -368,18 +366,14 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 					var/obj/item/found = locate(tool_state) in src.module.modules
 					if(!found)
 						var/obj/item/TS = tool_state
-						drop_item()
-						if(TS && TS.loc)
-							TS.loc = src.loc
-							visible_message("\red <B>[src]'s robotic arm loses grip on what it was holding")
+						drop_item_ex(get_turf(src))
+						visible_message("\red <B>[src]'s robotic arm loses grip on what it was holding")
 					return
 				if(randn <= 50)//MoMMI's robot arm is stronger than a human's, but not by much
 					var/obj/item/found = locate(tool_state) in src.module.modules
 					if(!found)
 						var/obj/item/TS = tool_state
-						drop_item()
-						if(TS && TS.loc)
-							TS.loc = src.loc
+						drop_item_ex(get_turf(src))
 						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 						visible_message("\red <B>[user] has disarmed [src]!</B>")
 					else

@@ -61,9 +61,8 @@ var/global/list/rad_collectors = list()
 		if(src.P)
 			user << "\red There's already a plasma tank loaded."
 			return 1
-		user.drop_item()
+		user.drop_item_ex(src)
 		src.P = W
-		W.loc = src
 		update_icons()
 	else if(istype(W, /obj/item/weapon/crowbar))
 		if(P && !src.locked)

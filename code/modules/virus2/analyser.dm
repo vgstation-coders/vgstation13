@@ -12,11 +12,10 @@
 
 /obj/machinery/disease2/diseaseanalyser/attackby(var/obj/I as obj, var/mob/user as mob)
 	if(istype(I,/obj/item/weapon/virusdish))
-		var/mob/living/carbon/c = user
 		if(!dish)
+			user.drop_item_ex(src)
 			dish = I
-			c.drop_item()
-			I.loc = src
+
 			for(var/mob/M in viewers(src))
 				if(M == user)	continue
 				M.show_message("\blue [user.name] inserts the [dish.name] in the [src.name]", 3)

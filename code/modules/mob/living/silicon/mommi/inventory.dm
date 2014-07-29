@@ -30,9 +30,7 @@
 		//var/obj/item/found = locate(tool_state) in src.module.modules
 		var/obj/item/TS = tool_state
 		if(!is_in_modules(tool_state))
-			drop_item()
-			if(TS && TS.loc)
-				TS.loc = src.loc
+			drop_item_ex(get_turf(src))
 		else
 			TS.loc = src.module
 		contents -= tool_state
@@ -87,7 +85,7 @@
 
 /mob/living/silicon/robot/mommi/drop_item_v()		//this is dumb.
 	if(stat == CONSCIOUS && isturf(loc))
-		return drop_item()
+		return drop_item_ex()
 	return 0
 
 /mob/living/silicon/robot/mommi/drop_item(var/atom/Target)
@@ -139,9 +137,7 @@
 		//var/obj/item/found = locate(tool_state) in src.module.modules
 		TS = tool_state
 		if(!is_in_modules(TS))
-			drop_item()
-			if(TS && TS.loc)
-				TS.loc = get_turf(src)
+			drop_item_ex(get_turf(src))
 		if(istype(tool_state,/obj/item/borg/sight))
 			sight_mode &= ~tool_state:sight_mode
 		if (client)
@@ -173,9 +169,7 @@
 	if(tool_state)
 		var/obj/item/TS=tool_state
 		if(!is_in_modules(TS))
-			drop_item()
-			if(TS && TS.loc)
-				TS.loc = get_turf(src)
+			drop_item_ex(get_turf(src))
 		if(istype(tool_state,/obj/item/borg/sight))
 			sight_mode &= ~tool_state:sight_mode
 		if (client)

@@ -148,8 +148,8 @@
 			user << "<span class='notice'>[src] still has some film in it!</span>"
 			return
 		user << "<span class='notice'>You insert [I] into [src].</span>"
-		user.drop_item()
-		del(I)
+		user.drop_item_ex(delete_loc)
+		qdel(I)
 		pictures_left = pictures_max
 		icon_state = icon_on
 		on = 1

@@ -23,7 +23,7 @@ mob/living/carbon/proc/pain(var/partname, var/amount, var/force, var/burning = 0
 		if(src:paralysis)
 			src:paralysis = max(0, src:paralysis-round(amount/10))
 	if(amount > 50 && prob(amount / 5))
-		src:drop_item()
+		drop_item_ex()
 	var/msg
 	if(burning)
 		switch(amount)
