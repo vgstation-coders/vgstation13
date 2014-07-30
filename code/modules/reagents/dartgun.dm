@@ -87,9 +87,8 @@
 				user << "\blue There's already a cartridge in [src]."
 				return 0
 
-		user.drop_item()
+		user.drop_item_ex(D)
 		cartridge = D
-		D.loc = src
 		user << "\blue You slot [D] into [src]."
 		update_icon()
 		return
@@ -101,8 +100,7 @@
 			user << "\blue [src] already has [max_beakers] vials in it - another one isn't going to fit!"
 			return
 		var/obj/item/weapon/reagent_containers/glass/beaker/B = I
-		user.drop_item()
-		B.loc = src
+		user.drop_item_ex(src)
 		beakers += B
 		user << "\blue You slot [B] into [src]."
 		src.updateUsrDialog()

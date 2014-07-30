@@ -14,8 +14,8 @@
 		if(!perfect && prob(70 - (loaded.len * 10)))	//minimum probability of 10, maximum of 60
 			M << "<span class='danger'>[src] blows up in your face.</span>"
 			M.take_organ_damage(0,20)
-			M.drop_item()
-			del(src)
+			M.drop_item_ex(delete_loc)
+			qdel(src)
 			return 0
 		return 1
 

@@ -113,8 +113,7 @@
 		if(istype(A, /obj/item/ammo_casing) && !load_method)
 			var/obj/item/ammo_casing/AC = A
 			if(AC.caliber == caliber && (loaded.len < max_shells) && (contents.len < max_shells))	//forgive me father, for i have sinned
-				user.drop_item()
-				AC.loc = src
+				user.drop_item_ex(src)
 				loaded += AC
 				user << "<span class='notice'>You load a shell into \the [src]!</span>"
 		A.update_icon()

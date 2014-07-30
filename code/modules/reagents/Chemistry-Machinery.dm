@@ -224,9 +224,8 @@
 		user << "A beaker is already loaded into the machine."
 		return
 
-	src.beaker =  D
-	user.drop_item()
-	D.loc = src
+	user.drop_item_ex(src)
+	beaker = D
 	user << "You add the beaker to the machine!"
 	nanomanager.update_uis(src) // update all UIs attached to src
 
@@ -329,9 +328,8 @@
 		if(src.beaker)
 			user << "A beaker is already loaded into the machine."
 			return
-		src.beaker = B
-		user.drop_item()
-		B.loc = src
+		user.drop_item_ex(src)
+		beaker = B
 		user << "You add the beaker to the machine!"
 		src.updateUsrDialog()
 		update_icon()
@@ -342,9 +340,8 @@
 			user << "A pill bottle is already loaded into the machine."
 			return
 
-		src.loaded_pill_bottle = B
-		user.drop_item()
-		B.loc = src
+		user.drop_item_ex(src)
+		loaded_pill_bottle = B
 		user << "You add the pill bottle into the dispenser slot!"
 		src.updateUsrDialog()
 	else if(istype(B, /obj/item/weapon/screwdriver))
@@ -959,9 +956,8 @@
 			user << "A beaker is already loaded into the machine."
 			return
 
-		src.beaker =  I
-		user.drop_item()
-		I.loc = src
+		user.drop_item_ex(src)
+		beaker = I
 		user << "You add the beaker to the machine!"
 		src.updateUsrDialog()
 		icon_state = "mixer1"
@@ -1069,9 +1065,8 @@
 		if (beaker)
 			return 1
 		else
-			src.beaker =  O
-			user.drop_item()
-			O.loc = src
+			user.drop_item_ex(src)
+			beaker = O
 			update_icon()
 			src.updateUsrDialog()
 			return 0

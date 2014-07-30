@@ -2344,7 +2344,7 @@ datum
 							victim.eye_blurry = max(M.eye_blurry, 15)
 							victim.eye_blind = max(M.eye_blind, 5)
 							victim.Paralyse(1)
-							victim.drop_item()
+							victim.drop_item_ex()
 							return
 						else if ( eyes_covered ) // Eye cover is better than mouth cover
 							victim << "\red Your [safe_thing] protects your eyes from the pepperspray!"
@@ -2357,7 +2357,7 @@ datum
 							victim.eye_blurry = max(M.eye_blurry, 25)
 							victim.eye_blind = max(M.eye_blind, 10)
 							victim.Paralyse(1)
-							victim.drop_item()
+							victim.drop_item_ex()
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
 				if(prob(5))
