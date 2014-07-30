@@ -122,3 +122,78 @@ var/list/exclude = list("loc", "locs", "parent_type", "vars", "verbs", "type")
 		vars[key] = initial(vars[key])
 
 	vars["loc"] = null // Making sure the loc is null not a compile-time var value.
+
+/mob/proc/drop_from_inventory(var/obj/item/W)
+	if(W)
+		if(client)	client.screen -= W
+		u_equip(W)
+		if(!W) return 1 // self destroying objects (tk, grabs)
+		W.layer = initial(W.layer)
+		W.loc = loc
+
+		var/turf/T = get_turf(loc)
+		if(isturf(T))
+			T.Entered(W)
+
+		W.dropped(src)
+		update_icons()
+		return 1
+	return 0
+
+/*
+ * drops the item in our left hand
+ */
+/mob/proc/drop_l_hand_ex(const/atom/target)
+	if(l_hand)
+
+		if(client)
+			client.screen.Remove(l_hand)
+
+		l_hand.layer = initial(l_hand.layer)
+
+		if(target)
+			. = l_hand.Move(target)
+		else
+			. = l_hand.Move(loc)
+
+		if(.)
+			l_hand.dropped(src)
+			l_hand = null
+			update_inv_l_hand()
+
+		return .
+
+	return 0
+
+/*
+ * drops the item in our right hand
+ */
+/mob/proc/drop_r_hand_ex(const/atom/target)
+	if(r_hand)
+		if(client)
+			client.screen.Remove(r_hand)
+
+		r_hand.layer = initial(r_hand.layer)
+
+		if(target)
+			. = r_hand.Move(target)
+		else
+			. = r_hand.Move(loc)
+
+		if(.)
+			r_hand.dropped(src)
+			r_hand = null
+			update_inv_r_hand()
+
+		return .
+
+	return 0
+
+/*
+ * drops the item in our active hand
+ */
+/mob/proc/drop_item_ex(const/atom/target)
+	if(hand)
+		return drop_l_hand_ex(target)
+	else
+		return drop_r_hand_ex(target)
