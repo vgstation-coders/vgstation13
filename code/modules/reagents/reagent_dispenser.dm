@@ -129,9 +129,8 @@
 					message_admins("[key_name_admin(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
 					log_game("[key_name(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
 
+				user.drop_item_ex(src)
 				rig = W
-				user.drop_item()
-				W.loc = src
 
 				var/icon/test = getFlatIcon(W)
 				test.Shift(NORTH,1)

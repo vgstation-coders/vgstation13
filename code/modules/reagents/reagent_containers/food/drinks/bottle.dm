@@ -15,7 +15,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/bottle/proc/smash(mob/living/target as mob, mob/living/user as mob)
 
 	//Creates a shattering noise and replaces the bottle with a broken_bottle
-	user.drop_item()
+	user.drop_item_ex(delete_loc)
 	var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(user.loc)
 	user.put_in_active_hand(B)
 	if(prob(33))
@@ -31,7 +31,7 @@
 	user.put_in_active_hand(B)
 	src.transfer_fingerprints_to(B)
 
-	del(src)
+	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/attack(mob/living/target as mob, mob/living/user as mob)
 

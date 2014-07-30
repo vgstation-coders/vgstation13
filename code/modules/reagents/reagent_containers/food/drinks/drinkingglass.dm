@@ -11,7 +11,7 @@
 
 	proc/smash(mob/living/target as mob, mob/living/user as mob)
 		//Creates a shattering noise and replaces the drinking glass with a glass shard
-		user.drop_item()
+		user.drop_item_ex(delete_loc)
 		var/obj/item/weapon/shard/S = getFromPool(/obj/item/weapon/shard, user.loc)
 		user.put_in_active_hand(S)
 
@@ -19,7 +19,7 @@
 		user.put_in_active_hand(S)
 		src.transfer_fingerprints_to(S)
 
-		del(src)
+		qdel(src)
 
 
 	attack(mob/living/target as mob, mob/living/user as mob)

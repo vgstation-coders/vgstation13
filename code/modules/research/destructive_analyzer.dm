@@ -105,9 +105,8 @@ Note: Must be placed within 3 tiles of the R&D Console
 			usr << "\red Item is neither reliable enough or broken enough to learn from."
 			return*/
 		busy = 1
+		user.drop_item_ex(src)
 		loaded_item = O
-		user.drop_item()
-		O.loc = src
 		user << "\blue You add the [O.name] to the machine!"
 		flick("d_analyzer_la", src)
 		spawn(10)
