@@ -283,10 +283,6 @@
 			if(r && !(r.status & ORGAN_DESTROYED))
 				r.status |= ORGAN_DESTROYED
 
-/obj/item/weapon/caution/cone
-	desc = "This cone is trying to warn you of something!"
-	name = "warning cone"
-	icon_state = "cone"
 
 /obj/item/weapon/rack_parts
 	name = "rack parts"
