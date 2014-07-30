@@ -318,8 +318,7 @@
 
 	else
 		usr << "You set [item_to_add] on [src]'s head, but \he shakes it off!"
-		usr.drop_item()
-		item_to_add.loc = loc
+		usr.drop_item_ex(get_turf(src))
 		if(prob(25))
 			step_rand(item_to_add)
 		for(var/i in list(1,2,4,8,4,8,4,dir))

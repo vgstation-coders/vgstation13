@@ -399,8 +399,7 @@
 			if (stat & MAINT)
 				user << "\red There is no connector for your power cell."
 				return
-			user.drop_item()
-			W.loc = src
+			user.drop_item_ex(src)
 			cell = W
 			user.visible_message(\
 				"\red [user.name] has inserted the power cell to [src.name]!",\

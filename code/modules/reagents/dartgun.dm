@@ -87,7 +87,7 @@
 				user << "\blue There's already a cartridge in [src]."
 				return 0
 
-		user.drop_item_ex(D)
+		user.drop_item_ex(src)
 		cartridge = D
 		user << "\blue You slot [D] into [src]."
 		update_icon()
