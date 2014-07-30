@@ -275,3 +275,11 @@
 	item_state = "officercap"
 	flags = FPRINT | TABLEPASS | BLOCKHAIR
 	flags_inv = HIDEEARS
+
+/obj/item/clothing/head/cone
+	name = "warning cone"
+	desc = "This cone is trying to warn you of something!"
+	icon_state = "cone"
+	item_state = "cone"
+	flags = FPRINT | TABLEPASS | HEADCOVERSEYES | BLOCKHAIR
+	flags_inv = HIDEEARS|HIDEEYES|HIDEFACE
