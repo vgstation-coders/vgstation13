@@ -115,49 +115,63 @@
 		return 1
 	return 0
 
-
-//Drops the item in our left hand
+/*
+ * drops the item in our left hand
+ */
 /mob/proc/drop_l_hand(var/atom/Target)
 	if(l_hand)
-		if(client)	client.screen -= l_hand
+
+		if(client)
+			client.screen.Remove(l_hand)
+
 		l_hand.layer = initial(l_hand.layer)
 
-		if(Target)	l_hand.loc = Target.loc
-		else		l_hand.loc = loc
+		if(Target)
+			. = l_hand.Move(Target.loc)
+		else
+			. = l_hand.Move(loc)
 
-		var/turf/T = get_turf(loc)
-		if(isturf(T))
-			T.Entered(l_hand)
+		if(.)
+			l_hand.dropped(src)
+			l_hand = null
+			update_inv_l_hand()
 
-		l_hand.dropped(src)
-		l_hand = null
-		update_inv_l_hand()
-		return 1
+		return .
+
 	return 0
 
-//Drops the item in our right hand
+/*
+ * drops the item in our right hand
+ */
 /mob/proc/drop_r_hand(var/atom/Target)
 	if(r_hand)
-		if(client)	client.screen -= r_hand
+		if(client)
+			client.screen.Remove(r_hand)
+
 		r_hand.layer = initial(r_hand.layer)
 
-		if(Target)	r_hand.loc = Target.loc
-		else		r_hand.loc = loc
+		if(Target)
+			. = r_hand.Move(Target.loc)
+		else
+			. = r_hand.Move(loc)
 
-		var/turf/T = get_turf(Target)
-		if(istype(T))
-			T.Entered(r_hand)
+		if(.)
+			r_hand.dropped(src)
+			r_hand = null
+			update_inv_r_hand()
 
-		r_hand.dropped(src)
-		r_hand = null
-		update_inv_r_hand()
-		return 1
+		return .
+
 	return 0
 
-//Drops the item in our active hand.
+/*
+ * drops the item in our active hand
+ */
 /mob/proc/drop_item(var/atom/Target)
-	if(hand)	return drop_l_hand(Target)
-	else		return drop_r_hand(Target)
+	if(hand)
+		return drop_l_hand(Target)
+	else
+		return drop_r_hand(Target)
 
 
 
