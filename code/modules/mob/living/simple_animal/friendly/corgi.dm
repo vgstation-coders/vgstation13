@@ -140,8 +140,7 @@
 
 					if( ! ( item_to_add.type in allowed_types ) )
 						usr << "You set [item_to_add] on [src]'s back, but \he shakes it off!"
-						usr.drop_item()
-						item_to_add.loc = loc
+						usr.drop_item_ex(get_turf(src))
 						if(prob(25))
 							step_rand(item_to_add)
 						for(var/i in list(1,2,4,8,4,8,4,dir))
@@ -149,8 +148,7 @@
 							sleep(1)
 						return
 
-					usr.drop_item()
-					item_to_add.loc = src
+					usr.drop_item_ex(src)
 					src.inventory_back = item_to_add
 					regenerate_icons()
 
@@ -311,8 +309,7 @@
 			usr.visible_message("[usr] puts [item_to_add] on [real_name]'s head.  [src] looks at [usr] and barks once.",
 				"You put [item_to_add] on [real_name]'s head.  [src] gives you a peculiar look, then wags \his tail once and barks.",
 				"You hear a friendly-sounding bark.")
-			usr.drop_item()
-		item_to_add.loc = src
+			usr.drop_item_ex(src)
 		src.inventory_head = item_to_add
 		regenerate_icons()
 

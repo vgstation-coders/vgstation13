@@ -179,3 +179,33 @@ var/list/exclude = list("loc", "locs", "parent_type", "vars", "verbs", "type")
 		return drop_l_hand_ex(target)
 	else
 		return drop_r_hand_ex(target)
+
+/mob/living/silicon/robot/mommi/drop_item_ex(const/atom/target)
+	if(tool_state)
+		//var/obj/item/found = locate(tool_state) in src.module.modules
+		if(is_in_modules(tool_state))
+			src << "<span class='warning'>This item cannot be dropped.</span>"
+			return 0
+
+		if(client)
+			client.screen.Remove(tool_state)
+
+		var/obj/item/tool = tool_state
+
+		if(target)
+			. = tool.Move(target)
+		else
+			. = tool.Move(get_turf(src))
+
+		tool.layer = initial(tool.layer)
+		tool.dropped(src)
+		tool_state = null
+		module_active = null
+		inv_tool.icon_state="inv1"
+		update_items()
+		return .
+
+	return 0
+
+/mob/living/silicon/drop_item_ex()
+	return .

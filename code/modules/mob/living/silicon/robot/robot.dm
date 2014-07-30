@@ -649,8 +649,7 @@
 				C.installed = 1
 				C.wrapped = W
 				C.install()
-				user.drop_item()
-				W.loc = null
+				user.drop_item_ex(src)
 
 				usr << "\blue You install the [W.name]."
 
@@ -740,8 +739,7 @@
 		else if(cell)
 			user << "There is a power cell already installed."
 		else
-			user.drop_item()
-			W.loc = src
+			user.drop_item_ex(src)
 			cell = W
 			user << "You insert the power cell."
 
@@ -861,8 +859,7 @@
 		else
 			if(U.action(src))
 				usr << "You apply the upgrade to [src]!"
-				usr.drop_item()
-				U.loc = src
+				usr.drop_item_ex(src)
 			else
 				usr << "Upgrade error!"
 
