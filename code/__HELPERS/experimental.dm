@@ -128,7 +128,6 @@ var/list/exclude = list("loc", "locs", "parent_type", "vars", "verbs", "type")
  */
 /mob/proc/drop_l_hand_ex(const/atom/target)
 	if(l_hand)
-
 		if(client)
 			client.screen.Remove(l_hand)
 

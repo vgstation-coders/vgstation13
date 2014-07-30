@@ -115,9 +115,8 @@
 
 	if(istype(W, /obj/item/weapon/fuel_assembly) && !cur_assembly)
 		if(emergency_insert_ready)
+			user.drop_item_ex(src)
 			cur_assembly = W
-			user.drop_item()
-			W.loc = src
 			emergency_insert_ready = 0
 			return
 

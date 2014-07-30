@@ -18,9 +18,9 @@
 		user << "A syringe is already loaded into the machine."
 		return
 
-	src.beaker =  B
-	user.drop_item()
-	B.loc = src
+	user.drop_item_ex(src)
+	beaker = B
+
 	if(istype(B,/obj/item/weapon/reagent_containers/syringe))
 		user << "You add the syringe to the machine!"
 		src.updateUsrDialog()

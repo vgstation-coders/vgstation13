@@ -11,11 +11,10 @@
 	if(istype(I, /obj/item/weapon/screwdriver))
 		return ..(I,user)
 	if(istype(I,/obj/item/weapon/reagent_containers))
-		var/mob/living/carbon/C = user
 		if(!container)
+			user.drop_item_ex(src)
 			container = I
-			C.drop_item()
-			I.loc = src
+
 	if(istype(I,/obj/item/weapon/virusdish))
 		if(virusing)
 			user << "<b>The pathogen materializer is still recharging.."

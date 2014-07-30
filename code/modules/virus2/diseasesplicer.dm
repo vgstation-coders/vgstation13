@@ -15,12 +15,11 @@
 	if(istype(I, /obj/item/weapon/screwdriver))
 		return ..(I,user)
 	if(istype(I,/obj/item/weapon/virusdish))
-		var/mob/living/carbon/c = user
 		if(!dish)
 
+			user.drop_item_ex(src)
 			dish = I
-			c.drop_item()
-			I.loc = src
+
 	if(istype(I,/obj/item/weapon/diseasedisk))
 		user << "You upload the contents of the disk into the buffer"
 		memorybank = I:effect

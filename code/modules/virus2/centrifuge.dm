@@ -14,11 +14,9 @@
 		return ..(I,user)
 
 	if(istype(I,/obj/item/weapon/reagent_containers/glass/beaker/vial))
-		var/mob/living/carbon/C = user
 		if(!sample)
+			user.drop_item(src)
 			sample = I
-			C.drop_item()
-			I.loc = src
 
 	src.attack_hand(user)
 	return
