@@ -123,23 +123,6 @@ var/list/exclude = list("loc", "locs", "parent_type", "vars", "verbs", "type")
 
 	vars["loc"] = null // Making sure the loc is null not a compile-time var value.
 
-/mob/proc/drop_from_inventory(var/obj/item/W)
-	if(W)
-		if(client)	client.screen -= W
-		u_equip(W)
-		if(!W) return 1 // self destroying objects (tk, grabs)
-		W.layer = initial(W.layer)
-		W.loc = loc
-
-		var/turf/T = get_turf(loc)
-		if(isturf(T))
-			T.Entered(W)
-
-		W.dropped(src)
-		update_icons()
-		return 1
-	return 0
-
 /*
  * drops the item in our left hand
  */
