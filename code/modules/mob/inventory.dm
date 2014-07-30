@@ -118,7 +118,7 @@
 /*
  * drops the item in our left hand
  */
-/mob/proc/drop_l_hand(var/atom/Target)
+/mob/proc/drop_l_hand(const/atom/target)
 	if(l_hand)
 
 		if(client)
@@ -126,8 +126,8 @@
 
 		l_hand.layer = initial(l_hand.layer)
 
-		if(Target)
-			. = l_hand.Move(Target.loc)
+		if(target)
+			. = l_hand.Move(target.loc)
 		else
 			. = l_hand.Move(loc)
 
@@ -143,15 +143,15 @@
 /*
  * drops the item in our right hand
  */
-/mob/proc/drop_r_hand(var/atom/Target)
+/mob/proc/drop_r_hand(const/atom/target)
 	if(r_hand)
 		if(client)
 			client.screen.Remove(r_hand)
 
 		r_hand.layer = initial(r_hand.layer)
 
-		if(Target)
-			. = r_hand.Move(Target.loc)
+		if(target)
+			. = r_hand.Move(target.loc)
 		else
 			. = r_hand.Move(loc)
 

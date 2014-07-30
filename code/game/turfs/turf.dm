@@ -69,15 +69,15 @@
 		return 0
 
 	// first, check objects to block exit that are not on the border
-	for(var/atom/movable/obstacle in oldloc.contents - O)
-		if(obstacle.flags & ~ON_BORDER)
+	for(var/atom/movable/obstacle in oldloc)
+		if((obstacle.flags & ~ON_BORDER) && (obstacle != O))
 			if(!obstacle.CheckExit(O, src))
 				O.Bump(obstacle, 1)
 				return 0
 
 	// now, check objects to block exit that are on the border
-	for(var/atom/movable/border_obstacle in oldloc.contents - O)
-		if(border_obstacle.flags & ON_BORDER)
+	for(var/atom/movable/border_obstacle in oldloc)
+		if((border_obstacle.flags & ON_BORDER) && (border_obstacle != O))
 			if(!border_obstacle.CheckExit(O, src))
 				O.Bump(border_obstacle, 1)
 				return 0
@@ -90,7 +90,7 @@
 				return 0
 
 	// then, check the turf itself
-	if (!CanPass(O, src))
+	if(!CanPass(O, src))
 		O.Bump(src, 1)
 		return 0
 
