@@ -16,9 +16,9 @@
 
 /obj/item/bluespace_crystal/attack_self(var/mob/user)
 	blink_mob(user)
-	user.drop_item()
+	user.drop_item_ex(delete_loc)
+	qdel(src)
 	user.visible_message("<span class='notice'>[user] crushes the [src]!</span>")
-	del(src)
 
 /obj/item/bluespace_crystal/proc/blink_mob(var/mob/living/L)
 	do_teleport(L, get_turf(L), blink_range, asoundin = 'sound/effects/phasein.ogg')

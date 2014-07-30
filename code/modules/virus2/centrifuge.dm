@@ -15,7 +15,7 @@
 
 	if(istype(I,/obj/item/weapon/reagent_containers/glass/beaker/vial))
 		if(!sample)
-			user.drop_item(src)
+			user.drop_item_ex(src)
 			sample = I
 
 	src.attack_hand(user)

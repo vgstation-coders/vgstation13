@@ -131,9 +131,8 @@
 			var/datum/wound/internal_bleeding/I = new (15)
 			affected.wounds += I
 			affected.owner.custom_pain("You feel something rip in your [affected.display_name]!", 1)
-		user.drop_item()
+		user.drop_item_ex(target)
 		affected.hidden = tool
-		tool.loc = target
 
 		if(istype(tool, /obj/item/weapon/implant))
 			var/obj/item/weapon/implant/disobj = tool
