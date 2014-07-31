@@ -159,6 +159,7 @@
 	idtype = /obj/item/weapon/card/id/supply
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
 	minimal_access = list(access_maint_tunnels, access_cargo, access_cargo_bot, access_mailsorting)
+	alt_titles = list("Mailman") //I have a delivery for 'I. C. Weiner'?
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/cargo
@@ -166,8 +167,15 @@
 	equip(var/mob/living/carbon/human/H)
 		if(!H)	return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_cargo(H), slot_ears)
-		H.equip_or_collect(new /obj/item/clothing/under/rank/cargotech(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
+		if (H.mind.role_alt_title)
+			switch(H.mind.role_alt_title)
+				if("Cargo Technician")
+					H.equip_or_collect(new /obj/item/clothing/under/rank/cargotech(H), slot_w_uniform)
+					H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
+				if("Mailman")
+					H.equip_or_collect(new /obj/item/clothing/head/mailman(H), slot_head)
+					H.equip_or_collect(new /obj/item/clothing/under/rank/mailman(H), slot_w_uniform)
+					H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/cargo(H), slot_belt)
 //		H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
 		if(H.backbag == 1)
