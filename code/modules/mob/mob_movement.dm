@@ -233,7 +233,7 @@
 	if(!mob.lastarea)
 		mob.lastarea = get_area(mob.loc)
 
-	if((istype(mob.loc, /turf/space)) || (mob.lastarea.has_gravity == 0))
+	if((istype(mob.loc, /turf/space)) || ((mob.lastarea.has_gravity == 0) && (!istype(mob.loc, /obj/spacepod))))   // to prevent spacepods being unable to move when the gravity generator goes down
 		if(!mob.Process_Spacemove(0))	return 0
 
 
