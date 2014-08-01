@@ -1,6 +1,6 @@
 # Animus Station 13
 
-[Website](http://ss13.кг) - [Code](https://github.com/AnimusBlack/vgstation13)
+[Website](http://ss13.ru) - [Code](https://github.com/AnimusBlack/vgstation13)
 
 ---
 
