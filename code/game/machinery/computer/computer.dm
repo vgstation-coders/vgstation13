@@ -1,5 +1,5 @@
 /obj/machinery/computer
-	name = "computer"
+	name = "Computer"
 	icon = 'icons/obj/computer.dmi'
 	density = 1
 	anchored = 1.0

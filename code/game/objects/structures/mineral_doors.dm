@@ -2,7 +2,7 @@
 //machineryness
 
 /obj/structure/mineral_door
-	name = "mineral door"
+	name = "Mineral Door"
 	density = 1
 	anchored = 1
 	opacity = 1

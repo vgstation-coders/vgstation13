@@ -1,5 +1,5 @@
 obj/machinery/recharger/defibcharger/wallcharger
-	name = "defib recharger"
+	name = "Defibrillator Recharger"
 	desc = "A special wall mounted recharger meant for emergency defibrillators"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "wrecharger0"

@@ -1,10 +1,10 @@
 /obj/item/key/janicart
-	name = "janicart key"
+	name = "Janicart Key"
 	desc = "A keyring with a small steel key, and a pink fob reading \"Pussy Wagon\"."
 	icon_state = "jani_keys"
 
 /obj/item/mecha_parts/janicart_upgrade
-	name = "Janicart cleaner upgrade"
+	name = "Janicart Cleaner Upgrade"
 	desc = "This device upgrades the janicart to automatically clean surfaces when driving."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "cyborg_upgrade"
@@ -13,7 +13,7 @@
 	construction_cost = list("metal"=20000)
 
 /obj/structure/stool/bed/chair/vehicle/janicart
-	name = "janicart"
+	name = "Janicart"
 	icon_state = "pussywagon"
 	nick = "pimpin' ride"
 	keytype = /obj/item/key/janicart

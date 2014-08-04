@@ -1,5 +1,5 @@
 /obj/machinery/igniter
-	name = "igniter"
+	name = "Igniter"
 	desc = "It's useful for igniting plasma."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "igniter1"
@@ -78,7 +78,7 @@
 // Wall mounted remote-control igniter.
 
 /obj/machinery/sparker
-	name = "Mounted igniter"
+	name = "Mounted Igniter"
 	desc = "A wall-mounted ignition device."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "migniter"

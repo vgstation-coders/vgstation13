@@ -1,6 +1,6 @@
 /turf/simulated/floor/airless
 	icon_state = "floor"
-	name = "airless floor"
+	name = "Airless Floor"
 	oxygen = 0.01
 	nitrogen = 0.01
 	temperature = TCMB
@@ -13,7 +13,7 @@
 
 /turf/simulated/floor/plating/vox
 	icon_state = "plating"
-	name = "vox plating"
+	name = "Vox Plating"
 	//icon = 'icons/turf/shuttle-debug.dmi'
 	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON
 	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD // So it totals to the same pressure
@@ -24,7 +24,7 @@
 
 /turf/simulated/floor/vox
 	icon_state = "floor"
-	name = "vox floor"
+	name = "Vox Floor"
 	//icon = 'icons/turf/shuttle-debug.dmi'
 	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON
 	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD // So it totals to the same pressure
@@ -34,14 +34,14 @@
 		name = "floor"
 
 /turf/simulated/floor/vox/wood
-	name = "floor"
+	name = "Floor"
 	icon_state = "wood"
 	floor_tile = new/obj/item/stack/tile/wood
 	autoignition_temperature = AUTOIGNITION_WOOD
 	autoignition_temperature = AUTOIGNITION_WOOD
 
 /turf/simulated/floor/light
-	name = "Light floor"
+	name = "Light Floor"
 	luminosity = 5
 	icon_state = "light_on"
 	floor_tile = new/obj/item/stack/tile/light
@@ -58,7 +58,7 @@
 
 
 /turf/simulated/floor/wood
-	name = "floor"
+	name = "Floor"
 	icon_state = "wood"
 	floor_tile = new/obj/item/stack/tile/wood
 
@@ -77,7 +77,7 @@
 		icon_state = "[type]vault"
 
 /turf/simulated/floor/engine
-	name = "reinforced floor"
+	name = "Reinforced Floor"
 	icon_state = "engine"
 	thermal_conductivity = 0.025
 	heat_capacity = 325000
@@ -98,7 +98,7 @@
 			return
 
 /turf/simulated/floor/engine/cult
-	name = "engraved floor"
+	name = "Engraved Floor"
 	icon_state = "cult"
 
 
@@ -112,21 +112,21 @@
 		air.update_values()
 
 /turf/simulated/floor/engine/vacuum
-	name = "vacuum floor"
+	name = "Vacuum Floor"
 	icon_state = "engine"
 	oxygen = 0
 	nitrogen = 0.001
 	temperature = TCMB
 
 /turf/simulated/floor/plating
-	name = "plating"
+	name = "Plating"
 	icon_state = "plating"
 	floor_tile = null
 	intact = 0
 
 /turf/simulated/floor/plating/airless
 	icon_state = "plating"
-	name = "airless plating"
+	name = "Airless Plating"
 	oxygen = 0.01
 	nitrogen = 0.01
 	temperature = TCMB
@@ -145,30 +145,30 @@
 
 
 /turf/simulated/shuttle
-	name = "shuttle"
+	name = "Shuttle"
 	icon = 'icons/turf/shuttle.dmi'
 	thermal_conductivity = 0.05
 	heat_capacity = 0
 	layer = 2
 
 /turf/simulated/shuttle/wall
-	name = "wall"
+	name = "Wall"
 	icon_state = "wall1"
 	opacity = 1
 	density = 1
 	blocks_air = 1
 
 /turf/simulated/shuttle/floor
-	name = "floor"
+	name = "Floor"
 	icon_state = "floor"
 
 /turf/simulated/shuttle/plating
-	name = "plating"
+	name = "Plating"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "plating"
 
 /turf/simulated/shuttle/floor4 // Added this floor tile so that I have a seperate turf to check in the shuttle -- Polymorph
-	name = "Brig floor"        // Also added it into the 2x3 brig area of the shuttle.
+	name = "Brig Floor"        // Also added it into the 2x3 brig area of the shuttle.
 	icon_state = "floor4"
 
 /turf/simulated/floor/beach
@@ -193,7 +193,7 @@
 	overlays += image("icon"='icons/misc/beach.dmi',"icon_state"="water5","layer"=MOB_LAYER+0.1)
 
 /turf/simulated/floor/grass
-	name = "Grass patch"
+	name = "Grass Patch"
 	icon_state = "grass1"
 	floor_tile = new/obj/item/stack/tile/grass
 
@@ -240,12 +240,12 @@
 	icon_state = "ironsand[rand(1,15)]"
 
 /turf/simulated/floor/plating/snow
-	name = "snow"
+	name = "Snow"
 	icon = 'icons/turf/snow.dmi'
 	icon_state = "snow"
 
 /turf/simulated/floor/plating/snow/concrete
-	name = "concrete"
+	name = "Concrete"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "concrete"
 
@@ -269,7 +269,7 @@
 /turf/simulated/floor/plating/airless/catwalk
 	icon = 'icons/turf/catwalks.dmi'
 	icon_state = "catwalk0"
-	name = "catwalk"
+	name = "Catwalk"
 	desc = "Cats really don't like these things."
 
 	temperature = TCMB

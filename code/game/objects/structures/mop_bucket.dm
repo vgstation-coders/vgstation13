@@ -1,5 +1,5 @@
 /obj/structure/mopbucket
-	name = "mop bucket"
+	name = "Mop Bucket"
 	desc = "Fill it with water, but don't forget a mop!"
 	icon = 'icons/obj/janitor.dmi'
 	icon_state = "mopbucket"

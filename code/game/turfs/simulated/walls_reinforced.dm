@@ -1,5 +1,5 @@
 /turf/simulated/wall/r_wall
-	name = "reinforced wall"
+	name = "Reinforced Wall"
 	desc = "A huge chunk of reinforced metal used to seperate rooms."
 	icon_state = "r_wall"
 	opacity = 1

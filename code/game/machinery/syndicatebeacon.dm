@@ -7,7 +7,7 @@
 
 
 /obj/machinery/syndicate_beacon
-	name = "ominous beacon"
+	name = "Ominous Beacon"
 	desc = "This looks suspicious..."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "syndbeacon"
@@ -106,7 +106,7 @@
 #define SCREWED 32
 
 /obj/machinery/singularity_beacon //not the best place for it but it's a hack job anyway -- Urist
-	name = "ominous beacon"
+	name = "Ominous Beacon"
 	desc = "This looks suspicious..."
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "beacon"

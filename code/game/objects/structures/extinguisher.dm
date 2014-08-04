@@ -1,5 +1,5 @@
 /obj/structure/extinguisher_cabinet
-	name = "extinguisher cabinet"
+	name = "Extinguisher Cabinet"
 	desc = "A small wall mounted cabinet designed to hold a fire extinguisher."
 	icon = 'icons/obj/closet.dmi'
 	icon_state = "extinguisher_closed"

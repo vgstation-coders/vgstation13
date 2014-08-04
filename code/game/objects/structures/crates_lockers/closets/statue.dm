@@ -1,5 +1,5 @@
 /obj/structure/closet/statue
-	name = "statue"
+	name = "Statue"
 	desc = "An incredibly lifelike marble carving"
 	icon = 'icons/obj/statue.dmi'
 	icon_state = "human_male"
@@ -29,14 +29,14 @@
 		intialBrute = L.getBruteLoss()
 		intialOxy = L.getOxyLoss()
 		if(ishuman(L))
-			name = "statue of [L.name]"
+			name = "Statue of [L.name]"
 			if(L.gender == "female")
 				icon_state = "human_female"
 		else if(ismonkey(L))
-			name = "statue of a monkey"
+			name = "Statue of a monkey"
 			icon_state = "monkey"
 		else if(iscorgi(L))
-			name = "statue of a corgi"
+			name = "Statue of a corgi"
 			icon_state = "corgi"
 			desc = "If it takes forever, I will wait for you..."
 

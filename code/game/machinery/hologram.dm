@@ -30,7 +30,7 @@ Possible to do for anyone motivated enough:
 var/const/HOLOPAD_MODE = 0
 
 /obj/machinery/hologram/holopad
-	name = "\improper AI holopad"
+	name = "\improper AI Holopad"
 	desc = "It's a floor-mounted device for projecting holographic images. It is activated remotely."
 	icon_state = "holopad0"
 	var/mob/living/silicon/ai/master//Which AI, if any, is controlling the object? Only one AI may control a hologram at any time.

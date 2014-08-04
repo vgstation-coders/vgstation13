@@ -5,7 +5,7 @@
 var/global/vox_shuttle_location
 
 /obj/machinery/computer/vox_station
-	name = "vox skipjack terminal"
+	name = "Vox Skipjack Terminal"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "syndishuttle"
 	req_access = list(access_syndicate)

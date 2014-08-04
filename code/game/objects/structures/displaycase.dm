@@ -1,5 +1,5 @@
 /obj/structure/displaycase_frame
-	name = "display case frame"
+	name = "Display Case Frame"
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state="box_glass"
 	var/obj/item/weapon/circuitboard/airlock/circuit=null
@@ -53,7 +53,7 @@
 
 
 /obj/structure/displaycase
-	name = "display case"
+	name = "Display Case"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "glassbox20"
 	desc = "A display case for prized possessions. It taunts you to kick it."

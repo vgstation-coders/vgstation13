@@ -1,6 +1,6 @@
 var/list/camera_names=list()
 /obj/machinery/camera
-	name = "security camera"
+	name = "Security Camera"
 	desc = "It's used to monitor rooms."
 	icon = 'icons/obj/monitors.dmi'
 	var/obj/item/device/camera_bug/hasbug = null

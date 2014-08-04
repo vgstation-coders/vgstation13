@@ -1,5 +1,5 @@
 /obj/structure/closet/coffin
-	name = "coffin"
+	name = "Coffin"
 	desc = "It's a burial receptacle for the dearly departed."
 	icon_state = "coffin"
 	icon_closed = "coffin"

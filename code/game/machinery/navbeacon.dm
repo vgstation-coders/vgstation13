@@ -5,7 +5,7 @@
 
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "navbeacon0-f"
-	name = "navigation beacon"
+	name = "Navigation Beacon"
 	desc = "A radio beacon used for bot navigation."
 	level = 1		// underfloor
 	layer = 2.5

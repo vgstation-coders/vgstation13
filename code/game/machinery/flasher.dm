@@ -1,7 +1,7 @@
 // It is a gizmo that flashes a small area
 
 /obj/machinery/flasher
-	name = "Mounted flash"
+	name = "Mounted Flash"
 	desc = "A wall-mounted flashbulb device."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "mflash1"
@@ -16,7 +16,7 @@
 	ghost_write=0
 
 /obj/machinery/flasher/portable //Portable version of the flasher. Only flashes when anchored
-	name = "portable flasher"
+	name = "Portable Flasher"
 	desc = "A portable flashing device. Wrench to activate and deactivate. Cannot detect slow movements."
 	icon_state = "pflash1"
 	strength = 8

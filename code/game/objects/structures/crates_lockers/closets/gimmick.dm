@@ -1,5 +1,5 @@
 /obj/structure/closet/cabinet
-	name = "cabinet"
+	name = "Cabinet"
 	desc = "Old will forever be in fashion."
 	icon_state = "cabinet_closed"
 	icon_closed = "cabinet_closed"
@@ -12,7 +12,7 @@
 		icon_state = icon_opened
 
 /obj/structure/closet/acloset
-	name = "strange closet"
+	name = "Strange Closet"
 	desc = "It looks alien!"
 	icon_state = "acloset"
 	icon_closed = "acloset"
@@ -20,7 +20,7 @@
 
 
 /obj/structure/closet/gimmick
-	name = "administrative supply closet"
+	name = "Administrative Supply Closet"
 	desc = "It's a storage unit for things that have no right being here."
 	icon_state = "syndicate1"
 	icon_closed = "syndicate1"
@@ -28,7 +28,7 @@
 	anchored = 0
 
 /obj/structure/closet/gimmick/russian
-	name = "russian surplus closet"
+	name = "Russian Surplus Closet"
 	desc = "It's a storage unit for Russian standard-issue surplus."
 	icon_state = "syndicate1"
 	icon_closed = "syndicate1"
@@ -50,7 +50,7 @@
 
 
 /obj/structure/closet/gimmick/tacticool
-	name = "tacticool gear closet"
+	name = "Tacticool Gear Closet"
 	desc = "It's a storage unit for Tacticool gear."
 	icon_state = "syndicate1"
 	icon_closed = "syndicate1"
@@ -76,7 +76,7 @@
 
 
 /obj/structure/closet/thunderdome
-	name = "\improper Thunderdome closet"
+	name = "\improper Thunderdome Closet"
 	desc = "Everything you need!"
 	icon_state = "syndicate"
 	icon_closed = "syndicate"
@@ -113,7 +113,7 @@
 	new /obj/item/clothing/head/helmet/thunderdome(src)
 
 /obj/structure/closet/thunderdome/tdgreen
-	name = "green-team Thunderdome closet"
+	name = "green-team Thunderdome Closet"
 	icon_state = "syndicate1"
 	icon_closed = "syndicate1"
 	icon_opened = "syndicate1open"

@@ -4,7 +4,7 @@ Growing it to term with nothing injected will grab a ghost from the observers. *
 #define DIONA_COOLDOWN 18000 // 30 minutes between being diona
 var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost dionas to be picked again, removes the same guy being diona 5 times in 10 minutes.
 /obj/item/seeds/replicapod
-	name = "pack of dionaea-replicant seeds"
+	name = "Pack of dionaea-replicant seeds"
 	desc = "These seeds grow into 'replica pods' or 'dionaea', a form of strange sapient plantlife."
 	icon_state = "seed-replicapod"
 	mypath = "/obj/item/seeds/replicapod"

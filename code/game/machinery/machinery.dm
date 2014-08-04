@@ -92,7 +92,7 @@ Class Procs:
 */
 
 /obj/machinery
-	name = "machinery"
+	name = "Machinery"
 	icon = 'icons/obj/stationobjs.dmi'
 
 	w_type = NOT_RECYCLABLE

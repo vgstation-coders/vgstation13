@@ -1,5 +1,5 @@
 /obj/structure/girder
-	icon_state = "girder"
+	icon_state = "Girder"
 	anchored = 1
 	density = 1
 	layer = 2

@@ -1,5 +1,5 @@
 /obj/structure/closet/wardrobe
-	name = "wardrobe"
+	name = "Wardrobe"
 	desc = "It's a storage unit for standard-issue Nanotrasen attire."
 	icon_state = "blue"
 	icon_closed = "blue"
@@ -14,7 +14,7 @@
 	new /obj/item/clothing/shoes/brown(src)
 
 /obj/structure/closet/wardrobe/red
-	name = "security wardrobe"
+	name = "Security Wardrobe"
 	icon_state = "red"
 	icon_closed = "red"
 
@@ -38,7 +38,7 @@
 
 
 /obj/structure/closet/wardrobe/pink
-	name = "pink wardrobe"
+	name = "Pink Wardrobe"
 	icon_state = "pink"
 	icon_closed = "pink"
 
@@ -52,7 +52,7 @@
 	return
 
 /obj/structure/closet/wardrobe/black
-	name = "black wardrobe"
+	name = "Black Wardrobe"
 	icon_state = "black"
 	icon_closed = "black"
 
@@ -70,7 +70,7 @@
 
 
 /obj/structure/closet/wardrobe/chaplain_black
-	name = "chapel wardrobe"
+	name = "Chapel Wardrobe"
 	desc = "It's a storage unit for Nanotrasen-approved religious attire."
 	icon_state = "black"
 	icon_closed = "black"
@@ -91,7 +91,7 @@
 
 
 /obj/structure/closet/wardrobe/green
-	name = "green wardrobe"
+	name = "Green Wardrobe"
 	icon_state = "green"
 	icon_closed = "green"
 
@@ -105,7 +105,7 @@
 	return
 
 /obj/structure/closet/wardrobe/xenos
-	name = "xenos wardrobe"
+	name = "Xenos Wardrobe"
 	icon_state = "green"
 	icon_closed = "green"
 
@@ -119,8 +119,8 @@
 
 
 /obj/structure/closet/wardrobe/orange
-	name = "prison wardrobe"
-	desc = "It's a storage unit for Nanotrasen-regulation prisoner attire."
+	name = "Prison Wardrobe"
+	desc = "It's a storage unit for Nanotrasen-regulated prisoner attire."
 	icon_state = "orange"
 	icon_closed = "orange"
 
@@ -135,7 +135,7 @@
 
 
 /obj/structure/closet/wardrobe/yellow
-	name = "yellow wardrobe"
+	name = "Yellow Wardrobe"
 	icon_state = "wardrobe-y"
 	icon_closed = "wardrobe-y"
 
@@ -150,7 +150,7 @@
 
 
 /obj/structure/closet/wardrobe/atmospherics_yellow
-	name = "atmospherics wardrobe"
+	name = "Atmospherics Wardrobe"
 	icon_state = "yellow"
 	icon_closed = "yellow"
 
@@ -166,7 +166,7 @@
 
 
 /obj/structure/closet/wardrobe/engineering_yellow
-	name = "engineering wardrobe"
+	name = "Engineering Wardrobe"
 	icon_state = "yellow"
 	icon_closed = "yellow"
 
@@ -181,7 +181,7 @@
 
 
 /obj/structure/closet/wardrobe/white
-	name = "white wardrobe"
+	name = "White Wardrobe"
 	icon_state = "white"
 	icon_closed = "white"
 
@@ -196,7 +196,7 @@
 
 
 /obj/structure/closet/wardrobe/pjs
-	name = "Pajama wardrobe"
+	name = "Pajama Wardrobe"
 	icon_state = "white"
 	icon_closed = "white"
 
@@ -213,7 +213,7 @@
 
 
 /obj/structure/closet/wardrobe/toxins_white
-	name = "toxins wardrobe"
+	name = "Toxins Wardrobe"
 	icon_state = "white"
 	icon_closed = "white"
 
@@ -234,7 +234,7 @@
 
 
 /obj/structure/closet/wardrobe/robotics_black
-	name = "robotics wardrobe"
+	name = "Robotics Wardrobe"
 	icon_state = "black"
 	icon_closed = "black"
 
@@ -251,7 +251,7 @@
 
 
 /obj/structure/closet/wardrobe/chemistry_white
-	name = "chemistry wardrobe"
+	name = "Chemistry Wardrobe"
 	icon_state = "white"
 	icon_closed = "white"
 
@@ -266,7 +266,7 @@
 
 
 /obj/structure/closet/wardrobe/oncology_white
-	name = "oncology wardrobe"
+	name = "Oncology Wardrobe"
 	icon_state = "white"
 	icon_closed = "white"
 
@@ -280,7 +280,7 @@
 	return
 
 /obj/structure/closet/wardrobe/genetics_white
-	name = "genetics wardrobe"
+	name = "Genetics Wardrobe"
 	icon_state = "white"
 	icon_closed = "white"
 
@@ -295,7 +295,7 @@
 
 
 /obj/structure/closet/wardrobe/virology_white
-	name = "virology wardrobe"
+	name = "Virology Wardrobe"
 	icon_state = "white"
 	icon_closed = "white"
 
@@ -312,7 +312,7 @@
 
 
 /obj/structure/closet/wardrobe/medic_white
-	name = "medical wardrobe"
+	name = "Medical Wardrobe"
 	icon_state = "white"
 	icon_closed = "white"
 
@@ -332,7 +332,7 @@
 
 
 /obj/structure/closet/wardrobe/grey
-	name = "grey wardrobe"
+	name = "Grey Wardrobe"
 	icon_state = "grey"
 	icon_closed = "grey"
 
@@ -350,7 +350,7 @@
 
 
 /obj/structure/closet/wardrobe/mixed
-	name = "mixed wardrobe"
+	name = "Mixed Wardrobe"
 	icon_state = "mixed"
 	icon_closed = "mixed"
 

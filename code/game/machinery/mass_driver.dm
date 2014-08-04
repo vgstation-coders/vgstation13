@@ -1,7 +1,7 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
 /obj/machinery/mass_driver
-	name = "mass driver"
+	name = "Mass Driver"
 	desc = "Shoots things into space."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "mass_driver"
@@ -27,7 +27,7 @@
 				O_limit++
 				if(O_limit >= 20)
 					for(var/mob/M in hearers(src, null))
-						M << "\blue The mass driver lets out a screech, it mustn't be able to handle any more items."
+						M << "\blue The [src] lets out a screech, it mustn't be able to handle any more items."
 					break
 				use_power(500)
 				spawn( 0 )

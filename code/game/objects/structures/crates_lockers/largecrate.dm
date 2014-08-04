@@ -1,5 +1,5 @@
 /obj/structure/largecrate
-	name = "large crate"
+	name = "Large Crate"
 	desc = "A hefty wooden crate."
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "densecrate"
@@ -35,7 +35,7 @@
 	..()
 
 /obj/structure/largecrate/cow
-	name = "cow crate"
+	name = "Cow Crate"
 	icon_state = "lisacrate"
 
 /obj/structure/largecrate/cow/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -44,7 +44,7 @@
 	..()
 
 /obj/structure/largecrate/goat
-	name = "goat crate"
+	name = "Goat Crate"
 	icon_state = "lisacrate"
 
 /obj/structure/largecrate/goat/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -53,7 +53,7 @@
 	..()
 
 /obj/structure/largecrate/chick
-	name = "chicken crate"
+	name = "Chicken Crate"
 	icon_state = "lisacrate"
 
 /obj/structure/largecrate/chick/attackby(obj/item/weapon/W as obj, mob/user as mob)

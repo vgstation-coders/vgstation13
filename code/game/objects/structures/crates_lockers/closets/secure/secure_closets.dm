@@ -1,5 +1,5 @@
 /obj/structure/closet/secure_closet
-	name = "secure locker"
+	name = "Secure Locker"
 	desc = "It's an immobile card-locked storage unit."
 	icon = 'icons/obj/closet.dmi'
 	icon_state = "secure1"

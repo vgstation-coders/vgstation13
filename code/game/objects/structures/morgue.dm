@@ -11,7 +11,7 @@
  */
 
 /obj/structure/morgue
-	name = "morgue"
+	name = "Morgue"
 	desc = "Used to keep bodies in untill someone fetches them."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "morgue1"
@@ -127,7 +127,7 @@
  * Morgue tray
  */
 /obj/structure/m_tray
-	name = "morgue tray"
+	name = "Morgue Tray"
 	desc = "Apply corpse before closing."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "morguet"
@@ -177,7 +177,7 @@
  */
 
 /obj/structure/crematorium
-	name = "crematorium"
+	name = "Crematorium"
 	desc = "A human incinerator. Works well on barbeque nights."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "crema1"
@@ -346,7 +346,7 @@
  * Crematorium tray
  */
 /obj/structure/c_tray
-	name = "crematorium tray"
+	name = "Crematorium Tray"
 	desc = "Apply body before burning."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "cremat"
