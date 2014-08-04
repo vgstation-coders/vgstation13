@@ -196,7 +196,7 @@
 		icon_state = "beartrap[armed]"
 		user << "<span class='notice'>[src] is now [armed ? "armed" : "disarmed"]</span>"
 
-/obj/item/weapon/legcuffs/beartrap/HasEntered(AM as mob|obj)
+/obj/item/weapon/legcuffs/beartrap/Crossed(AM as mob|obj)
 	if(armed)
 		if(ishuman(AM))
 			if(isturf(src.loc))
@@ -617,8 +617,8 @@
 
 /obj/item/weapon/stock_parts/New()
 	. = ..()
-	pixel_x = rand(-5.0, 5)
-	pixel_y = rand(-5.0, 5)
+	pixel_x = rand(-5, 5)
+	pixel_y = rand(-5, 5)
 
 //Rank 1
 
