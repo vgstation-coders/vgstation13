@@ -1,15 +1,13 @@
-/mob/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/mob/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 
 	if(ismob(mover))
 		var/mob/moving_mob = mover
+
 		if ((other_mobs && moving_mob.other_mobs))
 			return 1
-		return (!mover.density || !density || lying)
-	else
-		return (!mover.density || !density || lying)
-	return
 
+	return (!mover.density || !density || lying)
 
 /client/North()
 	..()
@@ -233,7 +231,7 @@
 	if(!mob.lastarea)
 		mob.lastarea = get_area(mob.loc)
 
-	if((istype(mob.loc, /turf/space)) || (mob.lastarea.has_gravity == 0))
+	if((istype(mob.loc, /turf/space)) || ((mob.lastarea.has_gravity == 0) && (!istype(mob.loc, /obj/spacepod))))  // last section of if statement prevents spacepods being unable to move when the gravity goes down
 		if(!mob.Process_Spacemove(0))	return 0
 
 

@@ -37,6 +37,8 @@
 	name = "floor"
 	icon_state = "wood"
 	floor_tile = new/obj/item/stack/tile/wood
+	autoignition_temperature = AUTOIGNITION_WOOD
+	autoignition_temperature = AUTOIGNITION_WOOD
 
 /turf/simulated/floor/light
 	name = "Light floor"
@@ -303,8 +305,10 @@
 		if(!C || !user)
 			return 0
 		if(istype(C, /obj/item/weapon/screwdriver))
-			ReplaceWithLattice()
 			playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
+			if(do_after(user, 30))
+				new /obj/item/stack/rods(src, 2)
+				ReplaceWithLattice()
 			return
 
 		if(istype(C, /obj/item/weapon/cable_coil))

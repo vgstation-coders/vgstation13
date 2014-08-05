@@ -2,15 +2,19 @@
 	..()
 	update_hud()
 	return
-/mob/living/carbon/Move(NewLoc, direct)
+
+/mob/living/carbon/Move(NewLoc,Dir=0,step_x=0,step_y=0)
 	. = ..()
+
 	if(.)
-		if(src.nutrition && src.stat != 2)
-			src.nutrition -= HUNGER_FACTOR/10
-			if(src.m_intent == "run")
-				src.nutrition -= HUNGER_FACTOR/10
-		if((M_FAT in src.mutations) && src.m_intent == "run" && src.bodytemperature <= 360)
-			src.bodytemperature += 2
+		if(nutrition && stat != DEAD)
+			nutrition -= HUNGER_FACTOR / 10
+
+			if(m_intent == "run")
+				nutrition -= HUNGER_FACTOR / 10
+
+		if((M_FAT in mutations) && m_intent == "run" && bodytemperature <= 360)
+			bodytemperature += 2
 
 /mob/living/carbon/relaymove(var/mob/user, direction)
 	if(user in src.stomach_contents)
@@ -551,8 +555,8 @@
 	if(usr.sleeping)
 		usr << "\red You are already sleeping"
 		return
-	if(alert(src,"You sure you want to sleep for a while?","Sleep","Yes","No") == "Yes")
-		usr.sleeping = 20 //Short nap
+	if(alert(src,"Are you sure you want to sleep for a while?","Sleep","Yes","No") == "Yes")
+		usr.sleeping = 150 //Long nap of 5 minutes. Those are MC TICKS. Don't get fooled
 
 //Brain slug proc for voluntary removal of control.
 /mob/living/carbon/proc/release_control()
@@ -616,13 +620,21 @@
 		return
 
 	if(B.chemicals >= 100)
-		src << "\red <B>Your host twitches and quivers as you rapdly excrete several larvae from your sluglike body.</B>"
-		visible_message("\red <B>[src] heaves violently, expelling a rush of vomit and a wriggling, sluglike creature!</B>")
-		B.chemicals -= 100
+		src << "\red You strain, trying to push out your young..."
+		var/mob/dead/observer/O = B.request_player()
+		if(!O)
+			// No spaceghoasts.
+			src << "<span class='warning'>Your young are not ready yet.</span>"
+		else
+			src << "\red <B>Your host twitches and quivers as you rapidly excrete several larvae from your sluglike body.</B>"
+			visible_message("\red <B>[src] heaves violently, expelling a rush of vomit and a wriggling, sluglike creature!</B>")
+			B.chemicals -= 100
 
-		new /obj/effect/decal/cleanable/vomit(get_turf(src))
-		playsound(loc, 'sound/effects/splat.ogg', 50, 1)
-		new /mob/living/simple_animal/borer(get_turf(src))
+			new /obj/effect/decal/cleanable/vomit(get_turf(src))
+			playsound(loc, 'sound/effects/splat.ogg', 50, 1)
+
+			var/mob/living/simple_animal/borer/nB = new (get_turf(src),by_gamemode=1) // We've already chosen.
+			nB.transfer_personality(O.client)
 
 	else
 		src << "You do not have enough chemicals stored to reproduce."
