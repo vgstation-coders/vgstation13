@@ -102,14 +102,26 @@
 	icon_state = "cult"
 
 
+// /turf/simulated/floor/engine/n20
+//	New()
+//		..()
+//		// EXACTLY the same code as fucking roomfillers.  If this doesn't work, something's fucked.
+//		var/datum/gas/sleeping_agent/trace_gas = new
+//		air.trace_gases += trace_gas
+//		trace_gas.moles = 9*4000
+//		air.update_values()
+
 /turf/simulated/floor/engine/n20
 	New()
 		..()
-		// EXACTLY the same code as fucking roomfillers.  If this doesn't work, something's fucked.
+		var/datum/gas_mixture/adding = new
 		var/datum/gas/sleeping_agent/trace_gas = new
-		air.trace_gases += trace_gas
-		trace_gas.moles = 9*4000
-		air.update_values()
+
+		trace_gas.moles = 2000
+		adding.trace_gases += trace_gas
+		adding.temperature = T20C
+
+		assume_air(adding)
 
 /turf/simulated/floor/engine/vacuum
 	name = "vacuum floor"

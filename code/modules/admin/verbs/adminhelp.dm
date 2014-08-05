@@ -22,12 +22,12 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 
 	spawn(1200)
 		src.verbs += /client/verb/adminhelp	// 2 minute cool-down for adminhelps
-		src.verbs += /client/verb/adminhelp	// 2 minute cool-down for adminhelps//Go to hell
+		src.verbs += /client/verb/adminhelp	// 2 minute cool-down for adminhelps //Go to hell.
 	**/
 
 	//clean the input msg
 	if(!msg)	return
-	msg = sanitize(copytext(msg,1,MAX_MESSAGE_LEN))
+	msg = sanitize_uni(copytext(msg,1,MAX_MESSAGE_LEN))
 	if(!msg)	return
 	var/original_msg = msg
 

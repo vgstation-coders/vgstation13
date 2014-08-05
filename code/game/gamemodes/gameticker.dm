@@ -179,10 +179,6 @@ var/global/datum/controller/gameticker/ticker
 	master_controller.process()		//Start master_controller.process()
 	lighting_controller.process()	//Start processing DynamicAreaLighting updates
 
-	if(config.sql_enabled)
-		spawn(3000)
-		statistic_cycle() // Polls population totals regularly and stores them in an SQL DB -- TLE
-
 	return 1
 
 /datum/controller/gameticker

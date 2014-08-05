@@ -1322,7 +1322,7 @@
 	if (isnull(target))
 		return
 
-	var/say = input ("What do you wish to say")
+	var/say = sanitize_uni(input ("What do you wish to say"))
 	if(M_REMOTE_TALK in target.mutations)
 		target.show_message("\blue You hear [src.real_name]'s voice: [say]")
 	else

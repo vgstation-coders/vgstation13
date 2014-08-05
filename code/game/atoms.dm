@@ -62,7 +62,6 @@
 		type_instances[type] = type_instances[type] - 1
 	else
 		type_instances[type] = 0
-		WARNING("Type [type] does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler().")
 
 /atom/Destroy()
 	// Only call when we're actually deleted.

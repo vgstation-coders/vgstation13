@@ -760,7 +760,7 @@ var/list/slot_equipment_priority = list( \
 	set category = "IC"
 
 	msg = copytext(msg, 1, MAX_MESSAGE_LEN)
-	msg = sanitize(msg)
+	msg = sanitize_uni(msg)
 
 	if(mind)
 		mind.store_memory(msg)
@@ -789,7 +789,7 @@ var/list/slot_equipment_priority = list( \
 
 	if(msg != null)
 		msg = copytext(msg, 1, MAX_MESSAGE_LEN)
-		msg = html_encode(msg)
+		msg = sanitize_uni(msg)
 
 		flavor_text = msg
 

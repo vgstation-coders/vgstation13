@@ -1,5 +1,6 @@
 var/CMinutes = null
 var/savefile/Banlist
+var/list/bwhitelist
 
 
 /proc/CheckBan(var/ckey, var/id, var/address)
@@ -227,3 +228,29 @@ var/savefile/Banlist
 	Banlist.cd = "/base"
 	for (var/A in Banlist.dir)
 		RemoveBan(A)
+
+/proc/load_bwhitelist()
+	log_admin("Loading whitelist")
+	bwhitelist = list()
+	var/DBConnection/dbcon1 = new()
+	dbcon1.Connect("dbi:mysql:forum2:[sqladdress]:[sqlport]","[sqllogin]","[sqlpass]")
+	if(!dbcon1.IsConnected())
+		log_admin("Failed to load bwhitelist. Error: [dbcon1.ErrorMsg()]")
+		return
+	var/DBQuery/query = dbcon1.NewQuery("SELECT byond FROM Z_whitelist ORDER BY byond ASC")
+	query.Execute()
+	while(query.NextRow())
+		bwhitelist += "[query.item[1]]"
+	if (bwhitelist==list(  ))
+		log_admin("Failed to load bwhitelist or its empty")
+		return
+	dbcon1.Disconnect()
+
+/proc/check_bwhitelist(var/K)
+	if (!bwhitelist)
+		load_bwhitelist()
+		if (!bwhitelist)
+			return 0
+	if (K in bwhitelist)
+		return 1
+	return 0
