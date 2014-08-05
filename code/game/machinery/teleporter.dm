@@ -140,7 +140,7 @@
 	return T
 
 /obj/machinery/teleport
-	name = "teleport"
+	name = "Teleport"
 	icon = 'icons/obj/stationobjs.dmi'
 	density = 1
 	anchored = 1.0
@@ -150,7 +150,7 @@
 
 
 /obj/machinery/teleport/hub
-	name = "teleporter hub"
+	name = "Teleporter Hub"
 	desc = "It's the hub of a teleporting machine."
 	icon_state = "tele0"
 	var/accurate = 0

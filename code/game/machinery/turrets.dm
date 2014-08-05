@@ -45,7 +45,7 @@
 
 
 /obj/machinery/turret
-	name = "turret"
+	name = "Turret"
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "grey_target_prism"
 	var/raised = 0
@@ -87,7 +87,7 @@
 	return
 
 /obj/machinery/turretcover
-	name = "pop-up turret cover"
+	name = "Pop-Up Turret Cover"
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "turretCover"
 	anchored = 1
@@ -332,7 +332,7 @@
 		qdel(src)
 
 /obj/machinery/turretid
-	name = "Turret deactivation control"
+	name = "Turret Deactivation Control"
 	icon = 'icons/obj/device.dmi'
 	icon_state = "motion3"
 	anchored = 1

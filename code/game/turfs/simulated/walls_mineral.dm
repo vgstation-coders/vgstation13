@@ -1,12 +1,12 @@
 /turf/simulated/wall/mineral
-	name = "mineral wall"
+	name = "Mineral Wall"
 	desc = "This shouldn't exist"
 	icon_state = ""
 	var/last_event = 0
 	var/active = null
 
 /turf/simulated/wall/mineral/gold
-	name = "gold wall"
+	name = "Gold Wall"
 	desc = "A wall with gold plating. Swag!"
 	icon_state = "gold0"
 	walltype = "gold"
@@ -15,7 +15,7 @@
 	//var/shocked = null
 
 /turf/simulated/wall/mineral/silver
-	name = "silver wall"
+	name = "Silver Wall"
 	desc = "A wall with silver plating. Shiny!"
 	icon_state = "silver0"
 	walltype = "silver"
@@ -24,28 +24,28 @@
 	//var/shocked = null
 
 /turf/simulated/wall/mineral/diamond
-	name = "diamond wall"
+	name = "Diamond Wall"
 	desc = "A wall with diamond plating. You monster."
 	icon_state = "diamond0"
 	walltype = "diamond"
 	mineral = "diamond"
 
 /turf/simulated/wall/mineral/clown
-	name = "bananium wall"
+	name = "Bananium Wall"
 	desc = "A wall with bananium plating. Honk!"
 	icon_state = "clown0"
 	walltype = "clown"
 	mineral = "clown"
 
 /turf/simulated/wall/mineral/sandstone
-	name = "sandstone wall"
+	name = "Sandstone Wall"
 	desc = "A wall with sandstone plating."
 	icon_state = "sandstone0"
 	walltype = "sandstone"
 	mineral = "sandstone"
 
 /turf/simulated/wall/mineral/uranium
-	name = "uranium wall"
+	name = "Uranium Wall"
 	desc = "A wall with uranium plating. This is probably a bad idea."
 	icon_state = "uranium0"
 	walltype = "uranium"
@@ -77,7 +77,7 @@
 	..()
 
 /turf/simulated/wall/mineral/plasma
-	name = "plasma wall"
+	name = "Plasma Wall"
 	desc = "A wall with plasma plating. This is definately a bad idea."
 	icon_state = "plasma0"
 	walltype = "plasma"

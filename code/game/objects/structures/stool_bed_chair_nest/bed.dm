@@ -8,13 +8,13 @@
  * Beds
  */
 /obj/structure/stool/bed
-	name = "bed"
+	name = "Bed"
 	desc = "This is used to lie in, sleep in or strap on."
 	icon_state = "bed"
 	var/mob/living/buckled_mob
 
 /obj/structure/stool/bed/alien
-	name = "resting contraption"
+	name = "Resting Contraption"
 	desc = "This looks similar to contraptions from earth. Could aliens be stealing our technology?"
 	icon_state = "abed"
 
@@ -102,13 +102,13 @@
  * Roller beds
  */
 /obj/structure/stool/bed/roller
-	name = "roller bed"
+	name = "Roller Bed"
 	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "down"
 	anchored = 0
 
 /obj/item/roller
-	name = "roller bed"
+	name = "Roller Bed"
 	desc = "A collapsed roller bed that can be carried around."
 	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "folded"

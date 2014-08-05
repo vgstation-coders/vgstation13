@@ -2,7 +2,7 @@
 //i could have done these as just an ordinary plant, but fuck it - there would have been too much snowflake code
 
 /obj/machinery/apiary
-	name = "apiary tray"
+	name = "Apiary Tray"
 	icon = 'icons/obj/hydroponics.dmi'
 	icon_state = "hydrotray3"
 	density = 1

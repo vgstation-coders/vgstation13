@@ -13,8 +13,8 @@
  * Emergency Closet
  */
 /obj/structure/closet/emcloset
-	name = "emergency closet"
-	desc = "It's a storage unit for emergency breathmasks and o2/n2 tanks."
+	name = "Emergency Closet"
+	desc = "It's a storage unit for emergency breathmasks and O2/N2 tanks."
 	icon_state = "emergency"
 	icon_closed = "emergency"
 	icon_opened = "emergencyopen"
@@ -74,7 +74,7 @@
 
 
 /obj/structure/closet/emcloset/vox
-	name = "vox emergency closet"
+	name = "Vox Emergency Closet"
 	desc = "It's full of life-saving equipment.  Assuming, that is, that you breathe nitrogen."
 
 /obj/structure/closet/emcloset/vox/New()
@@ -87,7 +87,7 @@
  * Fire Closet
  */
 /obj/structure/closet/firecloset
-	name = "fire-safety closet"
+	name = "Fire-Safety Closet"
 	desc = "It's a storage unit for fire-fighting supplies."
 	icon_state = "firecloset"
 	icon_closed = "firecloset"
@@ -125,7 +125,7 @@
  * Tool Closet
  */
 /obj/structure/closet/toolcloset
-	name = "tool closet"
+	name = "Tool Closet"
 	desc = "It's a storage unit for tools."
 	icon_state = "toolcloset"
 	icon_closed = "toolcloset"
@@ -168,7 +168,7 @@
  * Radiation Closet
  */
 /obj/structure/closet/radiation
-	name = "radiation suit closet"
+	name = "Radiation Suit Closet"
 	desc = "It's a storage unit for rad-protective suits."
 	icon_state = "radsuitcloset"
 	icon_opened = "toolclosetopen"
@@ -183,7 +183,7 @@
  * Bombsuit closet
  */
 /obj/structure/closet/bombcloset
-	name = "\improper EOD closet"
+	name = "\improper EOD Closet"
 	desc = "It's a storage unit for explosion-protective suits."
 	icon_state = "bombsuit"
 	icon_closed = "bombsuit"
@@ -199,7 +199,7 @@
 
 
 /obj/structure/closet/bombclosetsecurity
-	name = "\improper EOD closet"
+	name = "\improper EOD Closet"
 	desc = "It's a storage unit for explosion-protective suits."
 	icon_state = "bombsuitsec"
 	icon_closed = "bombsuitsec"
@@ -217,7 +217,7 @@
  * Hydrant
  */
 /obj/structure/closet/hydrant //wall mounted fire closet
-	name = "fire-safety closet"
+	name = "Fire-Safety Closet"
 	desc = "It's a storage unit for fire-fighting supplies."
 	icon_state = "hydrant"
 	icon_closed = "hydrant"
@@ -240,7 +240,7 @@
  * First Aid
  */
 /obj/structure/closet/medical_wall //wall mounted medical closet
-	name = "first-aid closet"
+	name = "First-Aid Closet"
 	desc = "It's wall-mounted storage unit for first aid supplies."
 	icon_state = "medical_wall"
 	icon_closed = "medical_wall"

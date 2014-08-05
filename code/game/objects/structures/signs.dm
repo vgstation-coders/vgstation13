@@ -37,7 +37,7 @@
 	else ..()
 
 /obj/item/sign
-	name = "sign"
+	name = "Sign"
 	desc = ""
 	icon = 'icons/obj/decals.dmi'
 	w_class = 3		//big
@@ -66,7 +66,7 @@
 	else ..()
 
 /obj/structure/sign/double/map
-	name = "station map"
+	name = "Station Map"
 	desc = "A framed picture of the station."
 
 /obj/structure/sign/double/map/left
@@ -77,7 +77,7 @@
 
 //For efficiency station
 /obj/structure/sign/map/efficiency
-	name = "station map"
+	name = "Station Map"
 	desc = "A framed picture of the station."
 	icon_state = "map_efficiency"
 
@@ -132,12 +132,12 @@
 	icon_state = "nosmoking2"
 
 /obj/structure/sign/redcross
-	name = "medbay"
+	name = "Medbay"
 	desc = "The Intergalactic symbol of Medical institutions. You'll probably get help here.'"
 	icon_state = "redcross"
 
 /obj/structure/sign/greencross
-	name = "medbay"
+	name = "Medbay"
 	desc = "The Intergalactic symbol of Medical institutions. You'll probably get help here.'"
 	icon_state = "greencross"
 
@@ -147,7 +147,7 @@
 	icon_state = "goldenplaque"
 
 /obj/structure/sign/kiddieplaque
-	name = "AI developers plaque"
+	name = "AI Developer's Plaque"
 	desc = "Next to the extremely long list of names and job titles, there is a drawing of a little child. The child appears to be retarded. Beneath the image, someone has scratched the word \"PACKETS\""
 	icon_state = "kiddieplaque"
 
@@ -172,17 +172,17 @@
 	icon_state = "hydro1"
 
 /obj/structure/sign/directions/science
-	name = "\improper Science department"
+	name = "\improper Science Department"
 	desc = "A direction sign, pointing out which way Science department is."
 	icon_state = "direction_sci"
 
 /obj/structure/sign/directions/engineering
-	name = "\improper Engineering department"
+	name = "\improper Engineering Department"
 	desc = "A direction sign, pointing out which way Engineering department is."
 	icon_state = "direction_eng"
 
 /obj/structure/sign/directions/security
-	name = "\improper Security department"
+	name = "\improper Security Department"
 	desc = "A direction sign, pointing out which way Security department is."
 	icon_state = "direction_sec"
 

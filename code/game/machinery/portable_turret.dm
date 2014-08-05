@@ -10,7 +10,7 @@
 
 
 /obj/machinery/porta_turret
-	name = "turret"
+	name = "Turret"
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "grey_target_prism"
 	anchored = 1
@@ -681,7 +681,7 @@ Status: []<BR>"},
 */
 
 /obj/machinery/porta_turret_construct
-	name = "turret frame"
+	name = "Turret Frame"
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "turret_frame"
 	density=1

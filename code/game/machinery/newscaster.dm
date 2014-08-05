@@ -50,7 +50,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 
 /obj/machinery/newscaster
-	name = "newscaster"
+	name = "Newscaster"
 	desc = "A standard Nanotrasen-licensed newsfeed handler for use in commercial space stations. All the news you absolutely have no use for, in one place!"
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "newscaster_normal"
@@ -949,7 +949,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 //########################################################################################################################
 
 /obj/item/weapon/newspaper
-	name = "newspaper"
+	name = "Newspaper"
 	desc = "An issue of The Griffon, the newspaper circulating aboard Nanotrasen Space Stations."
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "newspaper"

@@ -6,7 +6,7 @@
 	var/tempo = 5
 
 /obj/structure/device/piano
-	name = "space minimoog"
+	name = "Space Minimoog"
 	icon = 'icons/obj/musician.dmi'
 	icon_state = "minimoog"
 	anchored = 1
@@ -19,11 +19,11 @@
 
 /obj/structure/device/piano/New()
 	if(prob(50))
-		name = "space minimoog"
+		name = "Space Minimoog"
 		desc = "This is a minimoog, like a space piano, but more spacey!"
 		icon_state = "minimoog"
 	else
-		name = "space piano"
+		name = "Space Piano"
 		desc = "This is a space piano, like a regular piano, but always in tune! Even if the musician isn't."
 		icon_state = "piano"
 

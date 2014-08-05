@@ -3,7 +3,7 @@
 /obj/structure/computerframe
 	density = 1
 	anchored = 0
-	name = "Computer-frame"
+	name = "Computer Frame"
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "0"
 	var/state = 0
@@ -14,7 +14,7 @@
 	density = 0
 	anchored = 0
 	w_class = 2.0
-	name = "Circuit board"
+	name = "Circuit Board"
 	icon = 'icons/obj/module.dmi'
 	icon_state = "id_mod"
 	item_state = "electronic"
@@ -34,112 +34,112 @@
 
 
 /obj/item/weapon/circuitboard/message_monitor
-	name = "Circuit board (Message Monitor)"
+	name = "Circuit Board (Message Monitor)"
 	build_path = "/obj/machinery/computer/message_monitor"
 	origin_tech = "programming=3"
 /obj/item/weapon/circuitboard/security
-	name = "Circuit board (Security)"
+	name = "Circuit Board (Security)"
 	build_path = "/obj/machinery/computer/security"
 /obj/item/weapon/circuitboard/security/engineering
-	name = "Circuit board (Engineering)"
+	name = "Circuit Board (Engineering)"
 	build_path = "/obj/machinery/computer/security/engineering"
 /obj/item/weapon/circuitboard/aicore
-	name = "Circuit board (AI core)"
+	name = "Circuit Board (AI Core)"
 	origin_tech = "programming=4;biotech=2"
 	board_type = "other"
 /obj/item/weapon/circuitboard/aiupload
-	name = "Circuit board (AI Upload)"
+	name = "Circuit Board (AI Upload)"
 	build_path = "/obj/machinery/computer/aiupload"
 	origin_tech = "programming=4"
 /obj/item/weapon/circuitboard/borgupload
-	name = "Circuit board (Cyborg Upload)"
+	name = "Circuit Board (Cyborg Upload)"
 	build_path = "/obj/machinery/computer/borgupload"
 	origin_tech = "programming=4"
 /obj/item/weapon/circuitboard/med_data
-	name = "Circuit board (Medical Records)"
+	name = "Circuit Board (Medical Records)"
 	build_path = "/obj/machinery/computer/med_data"
 /obj/item/weapon/circuitboard/pandemic
-	name = "Circuit board (PanD.E.M.I.C. 2200)"
+	name = "Circuit Board (PanD.E.M.I.C. 2200)"
 	build_path = "/obj/machinery/computer/pandemic"
 	origin_tech = "programming=2;biotech=2"
 /obj/item/weapon/circuitboard/scan_consolenew
-	name = "Circuit board (DNA Machine)"
+	name = "Circuit Board (DNA Machine)"
 	build_path = "/obj/machinery/computer/scan_consolenew"
 	origin_tech = "programming=2;biotech=2"
 /obj/item/weapon/circuitboard/communications
-	name = "Circuit board (Communications)"
+	name = "Circuit Board (Communications)"
 	build_path = "/obj/machinery/computer/communications"
 	origin_tech = "programming=2;magnets=2"
 /obj/item/weapon/circuitboard/card
-	name = "Circuit board (ID Computer)"
+	name = "Circuit Board (ID Computer)"
 	build_path = "/obj/machinery/computer/card"
 /obj/item/weapon/circuitboard/card/centcom
-	name = "Circuit board (CentCom ID Computer)"
+	name = "Circuit Board (CentCom ID Computer)"
 	build_path = "/obj/machinery/computer/card/centcom"
 //obj/item/weapon/circuitboard/shield
-//	name = "Circuit board (Shield Control)"
+//	name = "Circuit Board (Shield Control)"
 //	build_path = "/obj/machinery/computer/stationshield"
 /obj/item/weapon/circuitboard/teleporter
-	name = "Circuit board (Teleporter)"
+	name = "Circuit Board (Teleporter)"
 	build_path = "/obj/machinery/computer/teleporter"
 	origin_tech = "programming=2;bluespace=2"
 /obj/item/weapon/circuitboard/secure_data
-	name = "Circuit board (Security Records)"
+	name = "Circuit Board (Security Records)"
 	build_path = "/obj/machinery/computer/secure_data"
 /obj/item/weapon/circuitboard/stationalert
-	name = "Circuit board (Station Alerts)"
+	name = "Circuit Board (Station Alerts)"
 	build_path = "/obj/machinery/computer/station_alert"
 /obj/item/weapon/circuitboard/atmospheresiphonswitch
-	name = "Circuit board (Atmosphere siphon control)"
+	name = "Circuit Board (Atmosphere siphon control)"
 	build_path = "/obj/machinery/computer/atmosphere/siphonswitch"
 /obj/item/weapon/circuitboard/air_management
-	name = "Circuit board (Atmospheric General Monitor)"
+	name = "Circuit Board (Atmospheric General Monitor)"
 	build_path = "/obj/machinery/computer/general_air_control"
 /obj/item/weapon/circuitboard/large_tank_control
-	name = "Circuit board (Atmospheric Tank Control)"
+	name = "Circuit Board (Atmospheric Tank Control)"
 	build_path = "/obj/machinery/computer/general_air_control/large_tank_control"
 /obj/item/weapon/circuitboard/injector_control
-	name = "Circuit board (Injector control)"
+	name = "Circuit Board (Injector control)"
 	build_path = "/obj/machinery/computer/general_air_control/fuel_injection"
 /obj/item/weapon/circuitboard/atmos_alert
-	name = "Circuit board (Atmospheric Alert)"
+	name = "Circuit Board (Atmospheric Alert)"
 	build_path = "/obj/machinery/computer/atmos_alert"
 /obj/item/weapon/circuitboard/pod
-	name = "Circuit board (Massdriver control)"
+	name = "Circuit Board (Massdriver control)"
 	build_path = "/obj/machinery/computer/pod"
 /obj/item/weapon/circuitboard/robotics
-	name = "Circuit board (Robotics Control)"
+	name = "Circuit Board (Robotics Control)"
 	build_path = "/obj/machinery/computer/robotics"
 	origin_tech = "programming=3"
 /obj/item/weapon/circuitboard/cloning
-	name = "Circuit board (Cloning)"
+	name = "Circuit Board (Cloning)"
 	build_path = "/obj/machinery/computer/cloning"
 	origin_tech = "programming=3;biotech=3"
 /obj/item/weapon/circuitboard/arcade
-	name = "Circuit board (Arcade)"
+	name = "Circuit Board (Arcade)"
 	build_path = "/obj/machinery/computer/arcade"
 	origin_tech = "programming=1"
 /obj/item/weapon/circuitboard/turbine_control
-	name = "Circuit board (Turbine control)"
+	name = "Circuit Board (Turbine control)"
 	build_path = "/obj/machinery/computer/turbine_computer"
 /obj/item/weapon/circuitboard/solar_control
-	name = "Circuit board (Solar Control)"  //name fixed 250810
+	name = "Circuit Board (Solar Control)"  //name fixed 250810
 	build_path = "/obj/machinery/power/solar_control"
 	origin_tech = "programming=2;powerstorage=2"
 /obj/item/weapon/circuitboard/powermonitor
-	name = "Circuit board (Power Monitor)"  //name fixed 250810
+	name = "Circuit Board (Power Monitor)"  //name fixed 250810
 	build_path = "/obj/machinery/power/monitor"
 /obj/item/weapon/circuitboard/olddoor
-	name = "Circuit board (DoorMex)"
+	name = "Circuit Board (DoorMex)"
 	build_path = "/obj/machinery/computer/pod/old"
 /obj/item/weapon/circuitboard/syndicatedoor
-	name = "Circuit board (ProComp Executive)"
+	name = "Circuit Board (ProComp Executive)"
 	build_path = "/obj/machinery/computer/pod/old/syndicate"
 /obj/item/weapon/circuitboard/swfdoor
-	name = "Circuit board (Magix)"
+	name = "Circuit Board (Magix)"
 	build_path = "/obj/machinery/computer/pod/old/swf"
 /obj/item/weapon/circuitboard/prisoner
-	name = "Circuit board (Prisoner Management)"
+	name = "Circuit Board (Prisoner Management)"
 	build_path = "/obj/machinery/computer/prisoner"
 
 /obj/item/weapon/circuitboard/rdconsole
@@ -159,80 +159,80 @@
 	name = "Circuit Board (R&D Server Control)"
 	build_path = "/obj/machinery/computer/rdservercontrol"
 /obj/item/weapon/circuitboard/crew
-	name = "Circuit board (Crew monitoring computer)"
+	name = "Circuit Board (Crew monitoring computer)"
 	build_path = "/obj/machinery/computer/crew"
 	origin_tech = "programming=3;biotech=2;magnets=2"
 /obj/item/weapon/circuitboard/mech_bay_power_console
-	name = "Circuit board (Mech Bay Power Control Console)"
+	name = "Circuit Board (Mech Bay Power Control Console)"
 	build_path = "/obj/machinery/computer/mech_bay_power_console"
 	origin_tech = "programming=2;powerstorage=3"
 /obj/item/weapon/circuitboard/ordercomp
-	name = "Circuit board (Supply ordering console)"
+	name = "Circuit Board (Supply Ordering Console)"
 	build_path = "/obj/machinery/computer/ordercomp"
 	origin_tech = "programming=2"
 /obj/item/weapon/circuitboard/supplycomp
-	name = "Circuit board (Supply shuttle console)"
+	name = "Circuit Board (Supply Shuttle Console)"
 	build_path = "/obj/machinery/computer/supplycomp"
 	origin_tech = "programming=3"
 	var/contraband_enabled = 0
 /obj/item/weapon/circuitboard/research_shuttle
-	name = "Circuit board (Research Shuttle)"
+	name = "Circuit Board (Research Shuttle)"
 	build_path = "/obj/machinery/computer/research_shuttle"
 	origin_tech = "programming=2"
 /obj/item/weapon/circuitboard/operating
-	name = "Circuit board (Operating Computer)"
+	name = "Circuit Board (Operating Computer)"
 	build_path = "/obj/machinery/computer/operating"
 	origin_tech = "programming=2;biotech=2"
 /obj/item/weapon/circuitboard/mining
-	name = "Circuit board (Outpost Status Display)"
+	name = "Circuit Board (Outpost Status Display)"
 	build_path = "/obj/machinery/computer/security/mining"
 	origin_tech = "programming=2"
 /obj/item/weapon/circuitboard/comm_monitor
-	name = "Circuit board (Telecommunications Monitor)"
+	name = "Circuit Board (Telecommunications Monitor)"
 	build_path = "/obj/machinery/computer/telecomms/monitor"
 	origin_tech = "programming=3"
 /obj/item/weapon/circuitboard/comm_server
-	name = "Circuit board (Telecommunications Server Monitor)"
+	name = "Circuit Board (Telecommunications Server Monitor)"
 	build_path = "/obj/machinery/computer/telecomms/server"
 	origin_tech = "programming=3"
 /obj/item/weapon/circuitboard/comm_traffic
-	name = "Circuitboard (Telecommunications Traffic Control)"
+	name = "Circuit Board (Telecommunications Traffic Control)"
 	build_path = "/obj/machinery/computer/telecomms/traffic"
 	origin_tech = "programming=3"
 
 /obj/item/weapon/circuitboard/curefab
-	name = "Circuit board (Cure fab)"
+	name = "Circuit Board (Cure fab)"
 	build_path = "/obj/machinery/computer/curer"
 /obj/item/weapon/circuitboard/splicer
-	name = "Circuit board (Disease Splicer)"
+	name = "Circuit Board (Disease Splicer)"
 	build_path = "/obj/machinery/computer/diseasesplicer"
 
 /obj/item/weapon/circuitboard/mining_shuttle
-	name = "Circuit board (Mining Shuttle)"
+	name = "Circuit Board (Mining Shuttle)"
 	build_path = "/obj/machinery/computer/mining_shuttle"
 	origin_tech = "programming=2"
 /obj/item/weapon/circuitboard/research_shuttle
-	name = "Circuit board (Research Shuttle)"
+	name = "Circuit Board (Research Shuttle)"
 	build_path = "/obj/machinery/computer/research_shuttle"
 	origin_tech = "programming=2"
 /obj/item/weapon/circuitboard/HolodeckControl // Not going to let people get this, but it's just here for future
-	name = "Circuit board (Holodeck Control)"
+	name = "Circuit Board (Holodeck Control)"
 	build_path = "/obj/machinery/computer/HolodeckControl"
 	origin_tech = "programming=4"
 /obj/item/weapon/circuitboard/aifixer
-	name = "Circuit board (AI Integrity Restorer)"
+	name = "Circuit Board (AI Integrity Restorer)"
 	build_path = "/obj/machinery/computer/aifixer"
 	origin_tech = "programming=3;biotech=2"
 /obj/item/weapon/circuitboard/area_atmos
-	name = "Circuit board (Area Air Control)"
+	name = "Circuit Board (Area Air Control)"
 	build_path = "/obj/machinery/computer/area_atmos"
 	origin_tech = "programming=2"
 /obj/item/weapon/circuitboard/prison_shuttle
-	name = "Circuit board (Prison Shuttle)"
+	name = "Circuit Board (Prison Shuttle)"
 	build_path = "/obj/machinery/computer/prison_shuttle"
 	origin_tech = "programming=2"
 /obj/item/weapon/circuitboard/bhangmeter
-	name = "Circuit board (Bhangmeter)"
+	name = "Circuit Board (Bhangmeter)"
 	build_path = "/obj/machinery/computer/bhangmeter"
 	origin_tech = "programming=2"
 

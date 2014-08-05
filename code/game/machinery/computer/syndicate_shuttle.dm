@@ -2,7 +2,7 @@
 #define SYNDICATE_SHUTTLE_COOLDOWN 200
 
 /obj/machinery/computer/syndicate_station
-	name = "syndicate shuttle terminal"
+	name = "Syndicate Shuttle Terminal"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "syndishuttle"
 	req_access = list(access_syndicate)

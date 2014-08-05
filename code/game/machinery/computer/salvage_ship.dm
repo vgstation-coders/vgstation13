@@ -2,7 +2,7 @@
 #define SALVAGE_SHIP_COOLDOWN 800
 
 /obj/machinery/computer/salvage_ship
-	name = "salvage ship terminal"
+	name = "Salvage Ship Terminal"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "syndishuttle"
 	req_access = list(access_salvage_captain)

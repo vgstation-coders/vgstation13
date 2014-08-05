@@ -11,7 +11,7 @@
  * Tables
  */
 /obj/structure/table
-	name = "table"
+	name = "Table"
 	desc = "A square piece of metal standing on four metal legs. It can not move."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "table"
@@ -483,7 +483,7 @@
  * Wooden tables
  */
 /obj/structure/table/woodentable
-	name = "wooden table"
+	name = "Wooden Table"
 	desc = "Do not apply fire to this. Rumour says it burns easily."
 	icon_state = "woodtable"
 	parts = /obj/item/weapon/table_parts/wood
@@ -492,7 +492,7 @@
 
 
 /obj/structure/table/woodentable/poker //No specialties, Just a mapping object.
-	name = "gambling table"
+	name = "Gambling Table"
 	desc = "A seedy table for seedy dealings in seedy places."
 	icon_state = "pokertable"
 	parts = /obj/item/weapon/table_parts/wood/poker
@@ -501,7 +501,7 @@
  * Reinforced tables
  */
 /obj/structure/table/reinforced
-	name = "reinforced table"
+	name = "Reinforced Table"
 	desc = "A version of the four legged table. It is stronger."
 	icon_state = "reinftable"
 	parts = /obj/item/weapon/table_parts/reinforced
@@ -544,7 +544,7 @@
  * Racks
  */
 /obj/structure/rack
-	name = "rack"
+	name = "Rack"
 	desc = "Different from the Middle Ages version."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "rack"

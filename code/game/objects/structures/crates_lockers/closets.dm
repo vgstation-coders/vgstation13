@@ -1,5 +1,5 @@
 /obj/structure/closet
-	name = "closet"
+	name = "Closet"
 	desc = "It's a basic storage unit."
 	icon = 'icons/obj/closet.dmi'
 	icon_state = "closed"

@@ -99,7 +99,7 @@
 	return
 
 /obj/machinery/computer/security/telescreen/entertainment
-	name = "entertainment monitor"
+	name = "Entertainment Monitor"
 	desc = "Damn, they better have /tg/thechannel on these things."
 	icon = 'icons/obj/status_display.dmi'
 	icon_state = "entertainment"

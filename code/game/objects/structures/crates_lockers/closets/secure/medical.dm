@@ -208,7 +208,7 @@
 			icon_state = icon_opened
 
 /obj/structure/closet/secure_closet/paramedic
-	name = "Paramedic EVA gear"
+	name = "Paramedic EVA Gear"
 	desc = "A locker with a Paramedic EVA suit."
 	icon_state = "medical1"
 	icon_closed = "medical"

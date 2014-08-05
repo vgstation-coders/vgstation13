@@ -1,13 +1,13 @@
 //trees
 /obj/structure/flora/tree
-	name = "tree"
+	name = "Tree"
 	anchored = 1
 	density = 1
 	pixel_x = -16
 	layer = 9
 
 /obj/structure/flora/tree/pine
-	name = "pine tree"
+	name = "Pine Tree"
 	icon = 'icons/obj/flora/pinetrees.dmi'
 	icon_state = "pine_1"
 
@@ -16,7 +16,7 @@
 	..()
 
 /obj/structure/flora/tree/pine/xmas
-	name = "xmas tree"
+	name = "Xmas Tree"
 	icon = 'icons/obj/flora/pinetrees.dmi'
 	icon_state = "pine_c"
 
@@ -35,7 +35,7 @@
 
 //grass
 /obj/structure/flora/grass
-	name = "grass"
+	name = "Grass"
 	icon = 'icons/obj/flora/snowflora.dmi'
 	anchored = 1
 
@@ -64,7 +64,7 @@
 
 //bushes
 /obj/structure/flora/bush
-	name = "bush"
+	name = "Bush"
 	icon = 'icons/obj/flora/snowflora.dmi'
 	icon_state = "snowbush1"
 	anchored = 1
@@ -76,7 +76,7 @@
 //newbushes
 
 /obj/structure/flora/ausbushes
-	name = "bush"
+	name = "Bush"
 	icon = 'icons/obj/flora/ausflora.dmi'
 	icon_state = "firstbush_1"
 	anchored = 1

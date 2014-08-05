@@ -1,5 +1,5 @@
 /obj/machinery/computer/arcade
-	name = "arcade machine"
+	name = "Arcade Machine"
 	desc = "Does not support Pin ball."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "arcade"

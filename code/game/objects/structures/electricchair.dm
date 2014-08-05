@@ -1,5 +1,5 @@
 /obj/structure/stool/bed/chair/e_chair
-	name = "electric chair"
+	name = "Electric Chair"
 	desc = "Looks absolutely SHOCKING!"
 	icon_state = "echair0"
 	var/on = 0

@@ -1,7 +1,7 @@
 #define HYDRO_SPEED_MULTIPLIER 1
 
 /obj/machinery/hydroponics
-	name = "hydroponics tray"
+	name = "Hydroponics Tray"
 	icon = 'icons/obj/hydroponics.dmi'
 	icon_state = "hydrotray3"
 	density = 1
@@ -997,7 +997,7 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
 ///////////////////////////////////////////////////////////////////////////////
 /obj/machinery/hydroponics/soil //Not actually hydroponics at all! Honk!
-	name = "soil"
+	name = "Soil"
 	icon = 'icons/obj/hydroponics.dmi'
 	icon_state = "soil"
 	density = 0

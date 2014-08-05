@@ -5,7 +5,7 @@ LINEN BINS
 */
 
 /obj/item/weapon/bedsheet
-	name = "bedsheet"
+	name = "Bedsheet"
 	desc = "A surprisingly soft linen bedsheet."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "sheet"
@@ -96,7 +96,7 @@ LINEN BINS
 
 
 /obj/structure/bedsheetbin
-	name = "linen bin"
+	name = "Linen Bin"
 	desc = "A linen bin. It looks rather cosy."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "linenbin-full"

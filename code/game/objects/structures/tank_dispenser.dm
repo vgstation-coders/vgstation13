@@ -1,5 +1,5 @@
 /obj/structure/dispenser
-	name = "tank storage unit"
+	name = "Tank Storage Unit"
 	desc = "A simple yet bulky storage device for gas tanks. Has room for up to ten oxygen tanks, and ten plasma tanks."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "dispenser"

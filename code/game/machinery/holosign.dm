@@ -1,6 +1,6 @@
 ////////////////////HOLOSIGN///////////////////////////////////////
 /obj/machinery/holosign
-	name = "holosign"
+	name = "Holosign"
 	desc = "Small wall-mounted holographic projector"
 	icon = 'icons/obj/holosign.dmi'
 	icon_state = "sign_off"
@@ -30,13 +30,13 @@
 		update_icon()
 
 /obj/machinery/holosign/surgery
-	name = "surgery holosign"
+	name = "Surgery Holosign"
 	desc = "Small wall-mounted holographic projector. This one reads SURGERY."
 	on_icon = "surgery"
 ////////////////////SWITCH///////////////////////////////////////
 
 /obj/machinery/holosign_switch
-	name = "holosign switch"
+	name = "Holosign Switch"
 	icon = 'icons/obj/power.dmi'
 	icon_state = "light1"
 	desc = "A remote control switch for holosign."

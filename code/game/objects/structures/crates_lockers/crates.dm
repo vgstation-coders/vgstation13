@@ -1,7 +1,7 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
 
 /obj/structure/closet/crate
-	name = "crate"
+	name = "Crate"
 	desc = "A rectangular steel crate."
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "crate"
@@ -17,7 +17,7 @@
 	var/sound_effect_close = 'sound/machines/click.ogg'
 
 /obj/structure/closet/pcrate
-	name = "plastic crate"
+	name = "Plastic Crate"
 	desc = "A rectangular plastic crate."
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "plasticcrate"
@@ -34,7 +34,7 @@
 
 /obj/structure/closet/crate/internals
 	desc = "A internals crate."
-	name = "Internals crate"
+	name = "Internals Crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "o2crate"
 	density = 1
@@ -72,7 +72,7 @@
 
 /obj/structure/closet/crate/medical
 	desc = "A medical crate."
-	name = "Medical crate"
+	name = "Medical Crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "medicalcrate"
 	density = 1
@@ -81,7 +81,7 @@
 
 /obj/structure/closet/crate/rcd
 	desc = "A crate for the storage of the RCD."
-	name = "RCD crate"
+	name = "RCD Crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "crate"
 	density = 1
@@ -120,7 +120,7 @@
 
 /obj/structure/closet/crate/bin
 	desc = "A large bin."
-	name = "Large bin"
+	name = "Large Bin"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "largebin"
 	density = 1
@@ -129,7 +129,7 @@
 
 /obj/structure/closet/crate/radiation
 	desc = "A crate with a radiation sign on it."
-	name = "Radioactive gear crate"
+	name = "Radioactive Gear Crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "radiation"
 	density = 1
@@ -138,7 +138,7 @@
 
 /obj/structure/closet/crate/secure/weapon
 	desc = "A secure weapons crate."
-	name = "Weapons crate"
+	name = "Weapons Crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "weaponcrate"
 	density = 1
@@ -147,7 +147,7 @@
 
 /obj/structure/closet/crate/secure/plasma
 	desc = "A secure plasma crate."
-	name = "Plasma crate"
+	name = "Plasma Crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "plasmacrate"
 	density = 1
@@ -156,7 +156,7 @@
 
 /obj/structure/closet/crate/secure/gear
 	desc = "A secure gear crate."
-	name = "Gear crate"
+	name = "Gear Crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "secgearcrate"
 	density = 1
@@ -165,7 +165,7 @@
 
 /obj/structure/closet/crate/secure/hydrosec
 	desc = "A crate with a lock on it, painted in the scheme of the station's botanists."
-	name = "secure hydroponics crate"
+	name = "Secure Hydroponics Crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "hydrosecurecrate"
 	density = 1
@@ -174,7 +174,7 @@
 
 /obj/structure/closet/crate/secure/bin
 	desc = "A secure bin."
-	name = "Secure bin"
+	name = "Secure Bin"
 	icon_state = "largebins"
 	icon_opened = "largebinsopen"
 	icon_closed = "largebins"
@@ -184,7 +184,7 @@
 	emag = "largebinemag"
 
 /obj/structure/closet/crate/secure/large
-	name = "large crate"
+	name = "Large Crate"
 	desc = "A hefty metal crate with an electronic locking system."
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "largemetal"
@@ -219,7 +219,7 @@
 
 /obj/structure/closet/crate/secure
 	desc = "A secure crate."
-	name = "Secure crate"
+	name = "Secure Crate"
 	icon_state = "securecrate"
 	icon_opened = "securecrateopen"
 	icon_closed = "securecrate"
@@ -232,7 +232,7 @@
 	health = 1000
 
 /obj/structure/closet/crate/large
-	name = "large crate"
+	name = "Large Crate"
 	desc = "A hefty metal crate."
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "largemetal"
@@ -257,7 +257,7 @@
 	..()
 
 /obj/structure/closet/crate/hydroponics
-	name = "Hydroponics crate"
+	name = "Hydroponics Crate"
 	desc = "All you need to destroy those pesky weeds and pests."
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "hydrocrate"
@@ -267,7 +267,7 @@
 
 /obj/structure/closet/crate/sci
 	desc = "A science crate."
-	name = "science crate"
+	name = "Science Crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "scicrate"
 	density = 1
@@ -276,7 +276,7 @@
 
 /obj/structure/closet/crate/secure/scisec
 	desc = "A secure science crate."
-	name = "secure science crate"
+	name = "Secure Science Crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "scisecurecrate"
 	density = 1
@@ -285,7 +285,7 @@
 
 /obj/structure/closet/crate/engi
 	desc = "An engineering crate."
-	name = "engineering crate"
+	name = "Engineering Crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "engicrate"
 	density = 1
@@ -294,7 +294,7 @@
 
 /obj/structure/closet/crate/secure/engisec
 	desc = "A secure engineering crate."
-	name = "secure engineering crate"
+	name = "Secure Engineering Crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "engisecurecrate"
 	density = 1

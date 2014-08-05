@@ -1,5 +1,5 @@
 /obj/machinery/door/window
-	name = "interior door"
+	name = "Interior Door"
 	desc = "A strong door."
 	icon = 'icons/obj/doors/windoor.dmi'
 	icon_state = "left"

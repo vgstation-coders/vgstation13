@@ -22,7 +22,7 @@ var/image/list/w_overlays = list("wet" = image('icons/effects/water.dmi',icon_st
 
 	//Note to coders, the 'intact' var can no longer be used to determine if the floor is a plating or not.
 	//Use the is_plating(), is_plasteel_floor() and is_light_floor() procs instead. --Errorage
-	name = "floor"
+	name = "Floor"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "floor"
 

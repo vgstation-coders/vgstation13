@@ -424,7 +424,7 @@
 
 
 /obj/structure/table/holotable
-	name = "table"
+	name = "Table"
 	desc = "A square piece of metal standing on four metal legs. It can not move."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "table"
@@ -467,7 +467,7 @@
 		return
 
 /obj/structure/table/holotable/wood
-	name = "table"
+	name = "Table"
 	desc = "A square piece of wood standing on four wooden legs. It can not move."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "wood_table"
@@ -480,7 +480,7 @@
 	item_state = "boxing"
 
 /obj/structure/holowindow
-	name = "reinforced window"
+	name = "Reinforced Window"
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "rwindow"
 	desc = "A window."
@@ -555,7 +555,7 @@
 	w_class = 4 //Stops people from hiding it in their bags/pockets
 
 /obj/structure/holohoop
-	name = "basketball hoop"
+	name = "Basketball Hoop"
 	desc = "Boom, Shakalaka!."
 	icon = 'icons/obj/basketball.dmi'
 	icon_state = "hoop"

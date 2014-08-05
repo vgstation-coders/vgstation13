@@ -1,7 +1,7 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
 /obj/machinery/constructable_frame //Made into a seperate type to make future revisions easier.
-	name = "machine frame"
+	name = "Machine Frame"
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "box_0"
 	density = 1
@@ -267,7 +267,7 @@ Note: Once everything is added to the public areas, will add m_amt and g_amt to 
 to destroy them and players will be able to make replacements.
 */
 /obj/item/weapon/circuitboard/destructive_analyzer
-	name = "Circuit board (Destructive Analyzer)"
+	name = "Circuit Board (Destructive Analyzer)"
 	build_path = "/obj/machinery/r_n_d/destructive_analyzer"
 	board_type = "machine"
 	origin_tech = "magnets=2;engineering=2;programming=2"
@@ -278,7 +278,7 @@ to destroy them and players will be able to make replacements.
 							"/obj/item/weapon/stock_parts/micro_laser" = 1)
 
 /obj/item/weapon/circuitboard/autolathe
-	name = "Circuit board (Autolathe)"
+	name = "Circuit Board (Autolathe)"
 	build_path = "/obj/machinery/autolathe"
 	board_type = "machine"
 	origin_tech = "engineering=2;programming=2"
@@ -289,7 +289,7 @@ to destroy them and players will be able to make replacements.
 							"/obj/item/weapon/stock_parts/console_screen" = 1)
 
 /obj/item/weapon/circuitboard/protolathe
-	name = "Circuit board (Protolathe)"
+	name = "Circuit Board (Protolathe)"
 	build_path = "/obj/machinery/r_n_d/protolathe"
 	board_type = "machine"
 	origin_tech = "engineering=2;programming=2"
@@ -300,7 +300,7 @@ to destroy them and players will be able to make replacements.
 							"/obj/item/weapon/reagent_containers/glass/beaker" = 2)
 
 /obj/item/weapon/circuitboard/conveyor
-	name = "Circuit board (Conveyor)"
+	name = "Circuit Board (Conveyor)"
 	build_path = "/obj/machinery/conveyor"
 	board_type = "machine"
 	origin_tech = "engineering=2;programming=2"
@@ -309,7 +309,7 @@ to destroy them and players will be able to make replacements.
 
 
 /obj/item/weapon/circuitboard/circuit_imprinter
-	name = "Circuit board (Circuit Imprinter)"
+	name = "Circuit Board (Circuit Imprinter)"
 	build_path = "/obj/machinery/r_n_d/circuit_imprinter"
 	board_type = "machine"
 	origin_tech = "engineering=2;programming=2"
@@ -341,21 +341,21 @@ to destroy them and players will be able to make replacements.
 	origin_tech = "programming=3;powerstorage=5;engineering=5"
 
 /obj/item/weapon/circuitboard/air_alarm
-	name = "Circuit board (Air Alarm)"
+	name = "Circuit Board (Air Alarm)"
 	board_type="other"
 	icon = 'icons/obj/doors/door_assembly.dmi'
 	icon_state = "door_electronics"
 	//origin_tech = "programming=2"
 
 /obj/item/weapon/circuitboard/fire_alarm
-	name = "Circuit board (Fire Alarm)"
+	name = "Circuit Board (Fire Alarm)"
 	board_type="other"
 	icon = 'icons/obj/doors/door_assembly.dmi'
 	icon_state = "door_electronics"
 	//origin_tech = "programming=2"
 
 /obj/item/weapon/circuitboard/airlock
-	name = "Circuit board (Airlock)"
+	name = "Circuit Board (Airlock)"
 	board_type="other"
 	icon = 'icons/obj/doors/door_assembly.dmi'
 	icon_state = "door_electronics"
@@ -372,7 +372,7 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/scanning_module" = 1)
 
 /obj/item/weapon/circuitboard/mechfab
-	name = "Circuit board (Exosuit Fabricator)"
+	name = "Circuit Board (Exosuit Fabricator)"
 	build_path = "/obj/machinery/mecha_part_fabricator"
 	board_type = "machine"
 	origin_tech = "programming=3;engineering=3"
@@ -513,7 +513,7 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/console_screen" = 1)
 
 /obj/item/weapon/circuitboard/clonepod
-	name = "Circuit board (Clone Pod)"
+	name = "Circuit Board (Clone Pod)"
 	build_path = "/obj/machinery/clonepod"
 	board_type = "machine"
 	origin_tech = "programming=3;biotech=3"
@@ -524,7 +524,7 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/console_screen" = 1)
 
 /obj/item/weapon/circuitboard/clonescanner
-	name = "Circuit board (Cloning Scanner)"
+	name = "Circuit Board (Cloning Scanner)"
 	build_path = "/obj/machinery/dna_scannernew"
 	board_type = "machine"
 	origin_tech = "programming=2;biotech=2"

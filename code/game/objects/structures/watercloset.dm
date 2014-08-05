@@ -1,7 +1,7 @@
 //todo: toothbrushes, and some sort of "toilet-filthinator" for the hos
 
 /obj/structure/toilet
-	name = "toilet"
+	name = "Toilet"
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one seems remarkably clean."
 	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "toilet00"
@@ -93,7 +93,7 @@
 
 
 /obj/structure/urinal
-	name = "urinal"
+	name = "Urinal"
 	desc = "The HU-452, an experimental urinal."
 	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "urinal"
@@ -117,7 +117,7 @@
 
 
 /obj/machinery/shower
-	name = "shower"
+	name = "Shower"
 	desc = "The HS-451. Installed in the 2550s by the Nanotrasen Hygiene Division."
 	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "shower"
@@ -306,7 +306,7 @@
 
 
 /obj/item/weapon/bikehorn/rubberducky
-	name = "rubber ducky"
+	name = "Rubber Ducky"
 	desc = "Rubber ducky you're so fine, you make bathtime lots of fuuun. Rubber ducky I'm awfully fooooond of yooooouuuu~"	//thanks doohl
 	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "rubberducky"
@@ -315,7 +315,7 @@
 
 
 /obj/structure/sink
-	name = "sink"
+	name = "Sink"
 	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "sink"
 	desc = "A sink used for washing one's hands and face."

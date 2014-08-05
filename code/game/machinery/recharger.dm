@@ -1,5 +1,5 @@
 /obj/machinery/recharger
-	name = "recharger"
+	name = "Recharger"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "recharger0"
 	anchored = 1

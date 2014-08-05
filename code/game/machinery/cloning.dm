@@ -7,7 +7,7 @@
 
 /obj/machinery/clonepod
 	anchored = 1
-	name = "cloning pod"
+	name = "Cloning Pod"
 	desc = "An electronically-lockable pod for growing organic tissue."
 	density = 1
 	icon = 'icons/obj/cloning.dmi'
@@ -65,7 +65,7 @@
 	buf.dna=new
 
 /obj/item/weapon/disk/data/demo
-	name = "data disk - 'God Emperor of Mankind'"
+	name = "Data Disk - 'God Emperor of Mankind'"
 	read_only = 1
 
 	New()
@@ -80,7 +80,7 @@
 		buf.dna.UpdateUI()
 
 /obj/item/weapon/disk/data/monkey
-	name = "data disk - 'Mr. Muggles'"
+	name = "Data Disk - 'Mr. Muggles'"
 	read_only = 1
 
 	New()
@@ -131,7 +131,7 @@
 //Health Tracker Implant
 
 /obj/item/weapon/implant/health
-	name = "health implant"
+	name = "Health Implant"
 	var/healthstring = ""
 
 /obj/item/weapon/implant/health/proc/sensehealth()

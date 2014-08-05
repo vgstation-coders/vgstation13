@@ -1,5 +1,5 @@
 /obj/structure/stool/bed/chair	//YES, chairs are a type of bed, which are a type of stool. This works, believe me.	-Pete
-	name = "chair"
+	name = "Chair"
 	desc = "You sit in this. Either by will or force."
 	icon_state = "chair"
 
@@ -97,12 +97,12 @@
 
 /obj/structure/stool/bed/chair/wood/normal
 	icon_state = "wooden_chair"
-	name = "wooden chair"
+	name = "Wooden Chair"
 	desc = "Old is never too old to not be in fashion."
 
 /obj/structure/stool/bed/chair/wood/wings
 	icon_state = "wooden_chair_wings"
-	name = "wooden chair"
+	name = "Wooden Chair"
 	desc = "Old is never too old to not be in fashion."
 
 /obj/structure/stool/bed/chair/wood/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -115,12 +115,12 @@
 
 /obj/structure/stool/bed/chair/holowood/normal
 	icon_state = "wooden_chair"
-	name = "wooden chair"
+	name = "Wooden Chair"
 	desc = "Old is never too old to not be in fashion."
 
 /obj/structure/stool/bed/chair/holowood/wings
 	icon_state = "wooden_chair_wings"
-	name = "wooden chair"
+	name = "Wooden Chair"
 	desc = "Old is never too old to not be in fashion."
 
 /obj/structure/stool/bed/chair/holowood/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -130,7 +130,7 @@
 		..()
 
 /obj/structure/stool/bed/chair/comfy
-	name = "comfy chair"
+	name = "Comfy Chair"
 	desc = "It looks comfy."
 
 /obj/structure/stool/bed/chair/comfy/brown

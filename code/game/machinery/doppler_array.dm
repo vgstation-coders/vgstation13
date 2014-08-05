@@ -1,7 +1,7 @@
 var/list/doppler_arrays = list()
 
 /obj/machinery/computer/bhangmeter
-	name = "bhangmeter"
+	name = "Bhangmeter"
 	desc = "Ancient technology used to measure explosions of all shapes and sizes."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "forensic"

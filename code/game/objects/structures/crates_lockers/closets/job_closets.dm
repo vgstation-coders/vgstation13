@@ -9,7 +9,7 @@
  * Bartender
  */
 /obj/structure/closet/gmcloset
-	name = "formal closet"
+	name = "Formal Closet"
 	desc = "It's a storage unit for formal clothing."
 	icon_state = "black"
 	icon_closed = "black"
@@ -34,7 +34,7 @@
  * Janitor
  */
 /obj/structure/closet/jcloset
-	name = "custodial closet"
+	name = "Custodial Closet"
 	desc = "It's a storage unit for janitorial clothes and gear."
 	icon_state = "mixed"
 	icon_closed = "mixed"
@@ -61,7 +61,7 @@
  * Lawyer
  */
 /obj/structure/closet/lawcloset
-	name = "legal closet"
+	name = "Legal Closet"
 	desc = "It's a storage unit for courtroom apparel and items."
 	icon_state = "blue"
 	icon_closed = "blue"

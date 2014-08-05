@@ -11,7 +11,7 @@
 
 /obj/machinery/light_switch/New()
 	..()
-	name = "[areaMaster.name] light switch"
+	name = "[areaMaster.name] Lightswitch"
 	on = areaMaster.lightswitch
 	updateicon()
 
@@ -24,7 +24,7 @@
 /obj/machinery/light_switch/examine()
 	set src in oview(1)
 	if(usr && !usr.stat)
-		usr << "A light switch. It is [on? "on" : "off"]."
+		usr << "A lightswitch. It is [on? "on" : "off"]."
 
 
 /obj/machinery/light_switch/attack_paw(mob/user)

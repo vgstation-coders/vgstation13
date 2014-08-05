@@ -1,6 +1,6 @@
 //wip wip wup
 /obj/structure/mirror
-	name = "mirror"
+	name = "Mirror"
 	desc = "Mirror mirror on the wall, who's the most robust of them all?"
 	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "mirror"

@@ -1,5 +1,5 @@
 /obj/machinery/seed_extractor
-	name = "seed extractor"
+	name = "Seed Extractor"
 	desc = "Extracts and bags seeds from produce."
 	icon = 'icons/obj/hydroponics.dmi'
 	icon_state = "sextractor"

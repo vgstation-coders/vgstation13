@@ -1,6 +1,6 @@
 /obj/structure/closet/secure_closet/personal
 	desc = "It's a secure locker for personell. The first card swiped gains control."
-	name = "personal closet"
+	name = "Personal Closet"
 	req_access = list(access_all_personal_lockers)
 	var/registered_name = null
 
@@ -16,7 +16,7 @@
 
 
 /obj/structure/closet/secure_closet/personal/patient
-	name = "patient's closet"
+	name = "Patient's Closet"
 
 /obj/structure/closet/secure_closet/personal/patient/New()
 	..()

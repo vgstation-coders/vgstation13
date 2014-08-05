@@ -1,7 +1,7 @@
 //Alium nests. Essentially beds with an unbuckle delay that only aliums can buckle mobs to.
 
 /obj/structure/stool/bed/nest
-	name = "alien nest"
+	name = "Alien Nest"
 	desc = "It's a gruesome pile of thick, sticky resin shaped like a nest."
 	icon = 'icons/mob/alien.dmi'
 	icon_state = "nest"

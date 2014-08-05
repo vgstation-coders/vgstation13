@@ -5,7 +5,7 @@
 #define BRAINLOSS_FOR_HEADBUTT 60
 
 /obj/machinery/door
-	name = "door"
+	name = "Door"
 	desc = "It opens and closes."
 	icon = 'icons/obj/doors/door.dmi'
 	icon_state = "door_closed"

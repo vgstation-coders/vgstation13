@@ -1,5 +1,5 @@
 /obj/structure/ladder
-	name = "ladder"
+	name = "Ladder"
 	desc = "A sturdy metal ladder."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "ladder11"

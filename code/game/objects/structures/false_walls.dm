@@ -69,7 +69,7 @@
 	src << "WPCheck: [wpcheck]"
 
 /obj/structure/falsewall
-	name = "wall"
+	name = "Wall"
 	desc = "A huge chunk of metal used to seperate rooms."
 	anchored = 1
 	icon = 'icons/turf/walls.dmi'
@@ -224,7 +224,7 @@
  */
 
 /obj/structure/falserwall
-	name = "reinforced wall"
+	name = "Reinforced Wall"
 	desc = "A huge chunk of reinforced metal used to seperate rooms."
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "r_wall"
@@ -328,7 +328,7 @@
  */
 
 /obj/structure/falsewall/uranium
-	name = "uranium wall"
+	name = "Uranium Wall"
 	desc = "A wall with uranium plating. This is probably a bad idea."
 	icon_state = ""
 	mineral = "uranium"
@@ -360,38 +360,38 @@
  */
 
 /obj/structure/falsewall/gold
-	name = "gold wall"
+	name = "Gold Wall"
 	desc = "A wall with gold plating. Swag!"
 	icon_state = ""
 	mineral = "gold"
 
 /obj/structure/falsewall/silver
-	name = "silver wall"
+	name = "Silver Wall"
 	desc = "A wall with silver plating. Shiny."
 	icon_state = ""
 	mineral = "silver"
 
 /obj/structure/falsewall/diamond
-	name = "diamond wall"
+	name = "Diamond Wall"
 	desc = "A wall with diamond plating. You monster."
 	icon_state = ""
 	mineral = "diamond"
 
 /obj/structure/falsewall/plasma
-	name = "plasma wall"
+	name = "Plasma Wall"
 	desc = "A wall with plasma plating. This is definately a bad idea."
 	icon_state = ""
 	mineral = "plasma"
 
 //-----------wtf?-----------start
 /obj/structure/falsewall/clown
-	name = "bananium wall"
+	name = "Bananium Wall"
 	desc = "A wall with bananium plating. Honk!"
 	icon_state = ""
 	mineral = "clown"
 
 /obj/structure/falsewall/sandstone
-	name = "sandstone wall"
+	name = "Sandstone Wall"
 	desc = "A wall with sandstone plating."
 	icon_state = ""
 	mineral = "sandstone"

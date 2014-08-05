@@ -1,5 +1,5 @@
 /obj/structure/window
-	name = "window"
+	name = "Window"
 	desc = "A window."
 	icon = 'icons/obj/structures.dmi'
 	density = 1
@@ -392,7 +392,7 @@
 	basestate = "window"
 
 /obj/structure/window/plasmabasic
-	name = "plasma window"
+	name = "Plasma Window"
 	desc = "A plasma-glass alloy window. It looks insanely tough to break. It appears it's also insanely tough to burn through."
 	basestate = "plasmawindow"
 	icon_state = "plasmawindow"
@@ -405,7 +405,7 @@
 	..()
 
 /obj/structure/window/plasmareinforced
-	name = "reinforced plasma window"
+	name = "Reinforced Plasma Window"
 	desc = "A plasma-glass alloy window, with rods supporting it. It looks hopelessly tough to break. It also looks completely fireproof, considering how basic plasma windows are insanely fireproof."
 	basestate = "plasmarwindow"
 	icon_state = "plasmarwindow"
@@ -417,7 +417,7 @@
 	return
 
 /obj/structure/window/reinforced
-	name = "reinforced window"
+	name = "Reinforced Window"
 	desc = "It looks rather strong. Might take a few good hits to shatter it."
 	icon_state = "rwindow"
 	basestate = "rwindow"
@@ -425,14 +425,14 @@
 	reinf = 1
 
 /obj/structure/window/reinforced/tinted
-	name = "tinted window"
+	name = "Tinted Window"
 	desc = "It looks rather strong and opaque. Might take a few good hits to shatter it."
 	icon_state = "twindow"
 	basestate = "twindow"
 	opacity = 1
 
 /obj/structure/window/reinforced/tinted/frosted
-	name = "frosted window"
+	name = "Frosted Window"
 	desc = "It looks rather strong and frosted over. Looks like it might take a few less hits then a normal reinforced window."
 	icon_state = "fwindow"
 	basestate = "fwindow"

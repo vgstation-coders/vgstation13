@@ -1,5 +1,5 @@
 /obj/structure/stool
-	name = "stool"
+	name = "Stool"
 	desc = "Apply butt."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "stool"
@@ -51,7 +51,7 @@
 			H.visible_message("\red [H] grabs [src] from the floor!", "\red You grab [src] from the floor!")
 
 /obj/item/weapon/stool
-	name = "stool"
+	name = "Stool"
 	desc = "Uh-hoh, bar is heating up."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "stool"

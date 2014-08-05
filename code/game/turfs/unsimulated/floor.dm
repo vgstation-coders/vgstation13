@@ -1,5 +1,5 @@
 /turf/unsimulated/floor
-	name = "floor"
+	name = "Floor"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "Floor3"
 
