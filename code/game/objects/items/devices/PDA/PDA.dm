@@ -456,7 +456,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				dat += {"<h4><img src=pda_notes.png> Notekeeper V2.1</h4>
 					<a href='byond://?src=\ref[src];choice=Edit'> Edit</a><br>"}
 				// END AUTOFIX
-				dat += note
+				dat += sanitize_uni(html_decode(note))
 
 			if (2)
 
@@ -680,7 +680,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 //MESSENGER/NOTE FUNCTIONS===================================
 
 			if ("Edit")
-				var/n = input(U, "Please enter message", name, notehtml) as message
+				var/n = sanitize_uni(input(U, "Please enter message", name, notehtml) as message)
 				if (in_range(src, U) && loc == U)
 					n = copytext(adminscrub(n), 1, MAX_MESSAGE_LEN)
 					if (mode == 1)
@@ -842,7 +842,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 /obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P)
 
 	var/t = input(U, "Please enter message", name, null) as text
-	t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
+	t = copytext(sanitize_uni(t), 1, MAX_MESSAGE_LEN)
 	if (!t || !istype(P))
 		return
 	if (!in_range(src, U) && loc != U)
@@ -887,8 +887,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			return
 		useMS.send_pda_message("[P.owner]","[owner]","[t]")
 
-		tnote += "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
-		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[src]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
+		tnote += "<i><b>&rarr; To [P.owner]:</b></i><br>[sanitize_uni(html_decode(t))]<br>"
+		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[src]'>[owner]</a> ([ownjob]):</b></i><br>[sanitize_uni(html_decode(t))]<br>"
 		for(var/mob/dead/observer/M in player_list)
 			if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTEARS)) // src.client is so that ghosts don't have to listen to mice
 				M.show_message("<span class='game say'>PDA Message - <span class='name'>[owner]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
@@ -1191,7 +1191,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		src.pai.loc = get_turf(src.loc)
 	..()
 
-/obj/item/device/pda/clown/HasEntered(AM as mob|obj) //Clown PDA is slippery.
+/obj/item/device/pda/clown/Crossed(AM as mob|obj) //Clown PDA is slippery.
 	if (istype(AM, /mob/living/carbon))
 		var/mob/M =	AM
 		if ((istype(M, /mob/living/carbon/human) && (istype(M:shoes, /obj/item/clothing/shoes) && M:shoes.flags&NOSLIP)) || M.m_intent == "walk")

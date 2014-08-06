@@ -46,7 +46,9 @@ var/global/datum/controller/gameticker/ticker
 	'sound/music/clown.ogg',\
 	'sound/music/robocop.ogg',\
 	'sound/music/gaytony.ogg',\
-	'sound/music/rocketman.ogg')
+	'sound/music/rocketman.ogg',\
+	'sound/music/2525.ogg',\
+	'sound/music/moonbaseoddity.ogg')
 	do
 		pregame_timeleft = 300
 		world << "<B><FONT color='blue'>Welcome to the pre-game lobby!</FONT></B>"
@@ -176,10 +178,6 @@ var/global/datum/controller/gameticker/ticker
 	supply_shuttle.process() 		//Start the supply shuttle regenerating points -- TLE
 	master_controller.process()		//Start master_controller.process()
 	lighting_controller.process()	//Start processing DynamicAreaLighting updates
-
-	if(config.sql_enabled)
-		spawn(3000)
-		statistic_cycle() // Polls population totals regularly and stores them in an SQL DB -- TLE
 
 	return 1
 

@@ -1114,11 +1114,11 @@ datum/preferences
 							nanotrasen_relation = new_relation
 
 					if("flavor_text")
-						var/msg = input(usr,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message
+						var/msg = sanitize_uni(input(usr,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message)
 
 						if(msg != null)
 							msg = copytext(msg, 1, MAX_MESSAGE_LEN)
-							msg = html_encode(msg)
+							msg = sanitize_uni(msg)
 
 							flavor_text = msg
 

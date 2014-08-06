@@ -56,6 +56,14 @@ var/shuttle_call/shuttle_calls[0]
 	var/stat_msg2
 	var/display_type="blank"
 
+	l_color = "#0000FF"
+	power_change()
+		..()
+		if(!(stat & (BROKEN|NOPOWER)))
+			SetLuminosity(2)
+		else
+			SetLuminosity(0)
+
 /obj/machinery/computer/communications/Topic(href, href_list)
 	if(..(href, href_list))
 		return
@@ -127,10 +135,10 @@ var/shuttle_call/shuttle_calls[0]
 		if("announce")
 			if(src.authenticated==2 && !issilicon(usr))
 				if(message_cooldown)	return
-				var/input = stripped_input(usr, "Please choose a message to announce to the station crew.", "What?")
+				var/input = sanitize_uni(stripped_input(usr, "Please choose a message to announce to the station crew.", "What?"))
 				if(!input || !(usr in view(1,src)))
 					return
-				captain_announce(input)//This should really tell who is, IE HoP, CE, HoS, RD, Captain
+				captain_announce(input)//This should really tell who is, IE HoP, CE, HoS, RD, Captain. //05.06.2014: Three years, man. Three goddamn years.
 				log_say("[key_name(usr)] has made a captain announcement: [input]")
 				message_admins("[key_name_admin(usr)] has made a captain announcement.", 1)
 				message_cooldown = 1
@@ -185,6 +193,7 @@ var/shuttle_call/shuttle_calls[0]
 					post_status("message", stat_msg1, stat_msg2)
 				if("alert")
 					post_status("alert", href_list["alert"])
+					display_type = href_list["alert"]
 				else
 					post_status(href_list["statdisp"])
 			setMenuState(usr,COMM_SCREEN_STAT)
@@ -202,7 +211,7 @@ var/shuttle_call/shuttle_calls[0]
 				if(centcomm_message_cooldown)
 					usr << "\red Arrays recycling.  Please stand by."
 					return
-				var/input = stripped_input(usr, "Please choose a message to transmit to Centcomm via quantum entanglement.  Please be aware that this process is very expensive, and abuse will lead to... termination.  Transmission does not guarantee a response. There is a 30 second delay before you may send another message, be clear, full and concise.", "To abort, send an empty message.", "")
+				var/input = sanitize_uni(stripped_input(usr, "Please choose a message to transmit to Centcomm via quantum entanglement.  Please be aware that this process is very expensive, and abuse will lead to termination.  Transmission does not guarantee a response.", "To abort, send an empty message.", ""))
 				if(!input || !(usr in view(1,src)))
 					return
 				Centcomm_announce(input, usr)
@@ -220,7 +229,7 @@ var/shuttle_call/shuttle_calls[0]
 				if(centcomm_message_cooldown)
 					usr << "\red Arrays recycling.  Please stand by."
 					return
-				var/input = stripped_input(usr, "Please choose a message to transmit to \[ABNORMAL ROUTING CORDINATES\] via quantum entanglement.  Please be aware that this process is very expensive, and abuse will lead to... termination. Transmission does not guarantee a response. There is a 30 second delay before you may send another message, be clear, full and concise.", "To abort, send an empty message.", "")
+				var/input = sanitize_uni(stripped_input(usr, "Please choose a message to transmit to \[ABNORMAL ROUTING CORDINATES\] via quantum entanglement.  Please be aware that this process is very expensive, and abuse will lead to termination. Transmission does not guarantee a response. There is a 30 second delay before you may send another message, be clear, full and concise.", "To abort, send an empty message.", ""))
 				if(!input || !(usr in view(1,src)))
 					return
 				Syndicate_announce(input, usr)
@@ -305,6 +314,7 @@ var/shuttle_call/shuttle_calls[0]
 		var/cur_msg[0]
 		cur_msg["title"]=messagetitle[i]
 		cur_msg["body"]=messagetext[i]
+		cur_msg["id"] = i
 		msg_data += list(cur_msg)
 	data["messages"] = msg_data
 	data["current_message"] = data["is_ai"] ? aicurrmsg : currmsg

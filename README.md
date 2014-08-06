@@ -1,17 +1,17 @@
-# baystation12
+# Animus Station 13
 
-[Website](http://ss13.undo.it) - [Code](http://github.com/d3athrow/vgstation13/) - [IRC](irc://irc.rizon.net/vgstation) (irc.rizon.net #vgstation)
+[Website](http://ss13.ru) - [Code](https://github.com/AnimusBlack/vgstation13)
 
 ---
 
 ### GETTING THE CODE
 The simplest way to obtain the code is using the github .zip feature.
 
-Click [here](https://github.com/d3athrow/vgstation13/archive/master.zip) to get the latest stable code as a .zip file, then unzip it to wherever you want.
+Click [here](https://github.com/AnimusBlack/vgstation13/archive/master.zip) to get the latest stable code as a .zip file, then unzip it to wherever you want.
 
 The more complicated and easier to update method is using git.  You'll need to download git or some client from [here](http://git-scm.com/).  When that's installed, right click in any folder and click on "Git Bash".  When that opens, type in:
 
-    git clone https://github.com/d3athrow/vgstation13.git
+    git clone https://github.com/AnimusBlack/vgstation13.git
 
 (hint: hold down ctrl and press insert to paste into git bash)
 
