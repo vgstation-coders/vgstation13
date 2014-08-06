@@ -6228,7 +6228,7 @@
 "cpN" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible,/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/machinery/portable_atmospherics/pump,/turf/simulated/floor,/area/engineering/atmos)
 "cpO" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/atmospherics/unary/vent_pump{dir = 8; on = 1},/turf/simulated/floor,/area/engineering/atmos)
 "cpP" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{dir = 5},/turf/simulated/floor,/area/engineering/atmos)
-"cpQ" = (/obj/machinery/atmospherics/binary/pump{dir = 8; on = 1},/turf/simulated/floor,/area/engineering/atmos)
+"cpQ" = (/obj/machinery/atmospherics/binary/pump{dir = 8; on = 0},/turf/simulated/floor,/area/engineering/atmos)
 "cpR" = (/obj/machinery/computer/general_air_control/large_tank_control{frequency = 1441; input_tag = "tox_in"; name = "Toxin Supply Control"; output_tag = "tox_out"; sensors = list("tox_sensor" = "Tank")},/obj/machinery/atmospherics/pipe/simple/filtering/visible,/obj/machinery/light{dir = 4},/turf/simulated/floor{dir = 4; icon_state = "warning"},/area/engineering/atmos)
 "cpS" = (/obj/effect/decal/warning_stripes{icon_state = "plasma"},/turf/simulated/floor/engine{name = "plasma floor"; nitrogen = 0; oxygen = 0; toxins = 70000},/area/engineering/atmos)
 "cpT" = (/obj/machinery/atmospherics/miner/toxins,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/machinery/light/small{dir = 4},/turf/simulated/floor/engine{name = "plasma floor"; nitrogen = 0; oxygen = 0; toxins = 70000},/area/engineering/atmos)
