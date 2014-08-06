@@ -16,25 +16,7 @@
 //Call these procs to dump your world to a series of image files (!!)
 //NOTE: Does not explicitly support non 32x32 icons or stuff with large pixel_* values, so don't blame me if it doesn't work perfectly
 
-/mob/verb/nanomapgen_DumpImage()
-	set category = "Server"
-	set name = "Generate NanoUI Map"
 
-	if(!src.client.holder)
-		src << "Only administrators may use this command."
-		return
-	var/turf/T = get_turf(src)
-	nanomapgen_DumpTile(1,1, T.z)
-
-/mob/verb/nanomapgen_DumpImageAll()
-	set category = "Server"
-	set name = "Generate all NanoUI Maps"
-
-	if(!src.client.holder)
-		src << "Only administrators may use this command."
-		return
-	//var/turf/T = get_turf(src)
-	nanomapgen_DumpTile(allz = 1)
 
 /mob/proc/nanomapgen_DumpTile(var/startX = 1, var/startY = 1, var/currentZ = 1, var/endX = -1, var/endY = -1, var/allz = 0)
 

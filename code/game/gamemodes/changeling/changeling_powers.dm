@@ -354,25 +354,7 @@
 
 
 //Fake our own death and fully heal. You will appear to be dead but regenerate fully after a short delay.
-/mob/verb/check_mob_list()
-	set name = "(Mobs) Check Mob List"
-	set category = "Debug"
-	var/yes = 0
-	if(src in mob_list)
-		yes = 1
-	else
-		var/mob/M = locate(src) in mob_list
-		if(M == src)
-			yes = 1
-	usr << "[yes ? "\blue" : "\red"] You are [yes ? "" : "not "]in the mob list"
-	yes = 0
-	if(src in living_mob_list)
-		yes = 1
-	else
-		var/mob/M = locate(src) in living_mob_list
-		if(M == src)
-			yes = 1
-	usr << "[yes ? "\blue" : "\red"] You are [yes ? "" : "not "]in the living mob list"
+
 
 /mob/proc/changeling_returntolife()
 	set category = "Changeling"
