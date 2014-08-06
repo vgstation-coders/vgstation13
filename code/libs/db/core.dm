@@ -24,7 +24,6 @@ DBConnection
 	proc
 		Connect(dbi_handler=src.dbi,user_handler=src.user,password_handler=src.password,cursor_handler)
 			//if(!src) return 0
-			if(!sqllogging || !src) return 0
 			cursor_handler = src.default_cursor
 			if(!cursor_handler) cursor_handler = Default_Cursor
 			return _dm_db_connect(_db_con,dbi_handler,user_handler,password_handler,cursor_handler,null)

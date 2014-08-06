@@ -47,8 +47,8 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 				<A href='?src=\ref[src];search=1'>\[Start Search\]</A><BR>"}
 			// END AUTOFIX
 		if(1)
-			establish_old_db_connection()
-			if(!dbcon_old.IsConnected())
+			establish_db_connection()
+			if(!dbcon.IsConnected())
 				dat += "<font color=red><b>ERROR</b>: Unable to contact External Archive. Please contact your system administrator for assistance.</font><BR>"
 			else if(!SQLquery)
 				dat += "<font color=red><b>ERROR</b>: Malformed search request. Please contact your system administrator for assistance.</font><BR>"
@@ -59,7 +59,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 				dat += {"<table>
 					<tr><td>AUTHOR</td><td>TITLE</td><td>CATEGORY</td><td>SS<sup>13</sup>BN</td></tr>"}
 				// END AUTOFIX
-				var/DBQuery/query = dbcon_old.NewQuery(SQLquery)
+				var/DBQuery/query = dbcon.NewQuery(SQLquery)
 				query.Execute()
 
 				while(query.NextRow())
@@ -196,9 +196,9 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 			// AUTOFIXED BY fix_string_idiocy.py
 			// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\library\lib_machines.dm:180: dat += "<h3>Check Out a Book</h3><BR>"
 			dat += {"<h3>Check Out a Book</h3><BR>
-				Book: [src.buffer_book] 
+				Book: [src.buffer_book]
 				<A href='?src=\ref[src];editbook=1'>\[Edit\]</A><BR>
-				Recipient: [src.buffer_mob] 
+				Recipient: [src.buffer_mob]
 				<A href='?src=\ref[src];editmob=1'>\[Edit\]</A><BR>
 				Checkout Date : [world.time/600]<BR>
 				Due Date: [(world.time + checkoutperiod)/600]<BR>
@@ -208,8 +208,8 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 			// END AUTOFIX
 		if(4)
 			dat += "<h3>External Archive</h3>"
-			establish_old_db_connection()
-			if(!dbcon_old.IsConnected())
+			establish_db_connection()
+			if(!dbcon.IsConnected())
 				dat += "<font color=red><b>ERROR</b>: Unable to contact External Archive. Please contact your system administrator for assistance.</font>"
 			else
 
@@ -219,7 +219,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 					<table>
 					<tr><td>AUTHOR</td><td>TITLE</td><td>CATEGORY</td><td></td></tr>"}
 				// END AUTOFIX
-				var/DBQuery/query = dbcon_old.NewQuery("SELECT id, author, title, category FROM library")
+				var/DBQuery/query = dbcon.NewQuery("SELECT id, author, title, category FROM library")
 				query.Execute()
 
 				while(query.NextRow())
@@ -364,8 +364,8 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 			if(scanner.cache)
 				var/choice = input("Are you certain you wish to upload this title to the Archive?") in list("Confirm", "Abort")
 				if(choice == "Confirm")
-					establish_old_db_connection()
-					if(!dbcon_old.IsConnected())
+					establish_db_connection()
+					if(!dbcon.IsConnected())
 						alert("Connection to Archive has been severed. Aborting.")
 					else
 						/*
@@ -378,7 +378,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 						var/sqlauthor = sanitizeSQL(scanner.cache.author)
 						var/sqlcontent = sanitizeSQL(scanner.cache.dat)
 						var/sqlcategory = sanitizeSQL(upload_category)
-						var/DBQuery/query = dbcon_old.NewQuery("INSERT INTO library (author, title, content, category) VALUES ('[sqlauthor]', '[sqltitle]', '[sqlcontent]', '[sqlcategory]')")
+						var/DBQuery/query = dbcon.NewQuery("INSERT INTO library (author, title, content, category) VALUES ('[sqlauthor]', '[sqltitle]', '[sqlcontent]', '[sqlcategory]')")
 						if(!query.Execute())
 							usr << query.ErrorMsg()
 						else
@@ -387,8 +387,8 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 
 	if(href_list["targetid"])
 		var/sqlid = sanitizeSQL(href_list["targetid"])
-		establish_old_db_connection()
-		if(!dbcon_old.IsConnected())
+		establish_db_connection()
+		if(!dbcon.IsConnected())
 			alert("Connection to Archive has been severed. Aborting.")
 		if(bibledelay)
 			for (var/mob/V in hearers(src))
@@ -397,7 +397,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 			bibledelay = 1
 			spawn(60)
 				bibledelay = 0
-			var/DBQuery/query = dbcon_old.NewQuery("SELECT * FROM library WHERE id=[sqlid]")
+			var/DBQuery/query = dbcon.NewQuery("SELECT * FROM library WHERE id=[sqlid]")
 			query.Execute()
 
 			while(query.NextRow())
