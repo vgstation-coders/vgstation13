@@ -1,5 +1,3 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:33
-
 /mob/new_player
 	var/ready = 0
 	var/spawning = 0//Referenced when you want to delete the new_player later on in the code.
@@ -22,25 +20,22 @@
 
 	proc/new_player_panel_proc()
 		var/output = "<div align='center'><B>New Player Options</B>"
+		output +="<hr>"
+		output += "<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\new_player.dm:28: output +="<hr>"
-		output += {"<hr>
-			<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"}
-		// END AUTOFIX
 		if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
 			if(!ready)	output += "<p><a href='byond://?src=\ref[src];ready=1'>Declare Ready</A></p>"
 			else	output += "<p><b>You are ready</b> (<a href='byond://?src=\ref[src];ready=2'>Cancel</A>)</p>"
 
 		else
-
-			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\new_player.dm:36: output += "<a href='byond://?src=\ref[src];manifest=1'>View the Crew Manifest</A><br><br>"
-			output += {"<a href='byond://?src=\ref[src];manifest=1'>View the Crew Manifest</A><br><br>
-				<p><a href='byond://?src=\ref[src];late_join=1'>Join Game!</A></p>"}
-			// END AUTOFIX
+			output += "<a href='byond://?src=\ref[src];manifest=1'>View the Crew Manifest</A><br><br>"
+			output += "<p><a href='byond://?src=\ref[src];late_join=1'>Join Game!</A></p>"
 
 		output += "<p><a href='byond://?src=\ref[src];observe=1'>Observe</A></p>"
+		output += "</div>"
+
+		src << browse(output,"window=playersetup;size=210x240;can_close=0")
+		return
 
 		if(!IsGuestKey(src.key))
 			establish_db_connection()

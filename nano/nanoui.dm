@@ -103,7 +103,12 @@ nanoui is used to open and update nano browser uis
   */
 /datum/nanoui/proc/add_common_assets()
 	add_script("libraries.min.js") // The jQuery library
-
+	add_script("nano_utility.js") // The NanoUtility JS, this is used to store utility functions.
+	add_script("nano_template.js") // The NanoTemplate JS, this is used to render templates.
+	add_script("nano_state_manager.js") // The NanoStateManager JS, it handles updates from the server and passes data to the current state
+	add_script("nano_state.js") // The NanoState JS, this is the base state which all states must inherit from
+	add_script("nano_state_default.js") // The NanoStateDefault JS, this is the "default" state (used by all UIs by default), which inherits from NanoState
+	add_script("nano_base_callbacks.js") // The NanoBaseCallbacks JS, this is used to set up (before and after update) callbacks which are common to all UIs
     // /vg/
 	//add_script("1-jquery.js")
 	//add_script("2-jsrender.js")
@@ -210,6 +215,45 @@ nanoui is used to open and update nano browser uis
   * @return nothing
   */
 
+
+/datum/nanoui/proc/get_config_data()
+	var/list/config_data = list(
+			"title" = title,
+			"srcObject" = list("name" = src_object.name),
+			"stateKey" = state_key,
+			"status" = status,
+			"autoUpdateLayout" = auto_update_layout,
+			"autoUpdateContent" = auto_update_content,
+			"showMap" = show_map,
+			"mapZLevel" = map_z_level,
+			"user" = list("name" = user.name)
+		)
+	return config_data
+
+ /**
+  * Get data to sent to the ui.
+  *
+  * @param data /list The list of general data for this ui (can be null to use previous data sent)
+  *
+  * @return /list data to send to the ui
+  */
+/datum/nanoui/proc/get_send_data(var/list/data)
+	var/list/config_data = get_config_data()
+
+	var/list/send_data = list("config" = config_data)
+
+	if (!isnull(data))
+		send_data["data"] = data
+
+	return send_data
+
+ /**
+  * Set the browser window options for this ui
+  *
+  * @param nwindow_options string The new window options
+  *
+  * @return nothing
+  */
 
 /datum/nanoui/proc/set_window_options(nwindow_options)
 	window_options = nwindow_options

@@ -1255,6 +1255,7 @@
 #include "code\modules\mob\new_player\preferences_setup.dm"
 #include "code\modules\mob\new_player\skill.dm"
 #include "code\modules\mob\new_player\sprite_accessories.dm"
+#include "code\modules\nano\nanomanager.dm"
 #include "code\modules\nano\nanomapgen.dm"
 #include "code\modules\organs\blood.dm"
 #include "code\modules\organs\organ.dm"
@@ -1570,6 +1571,5 @@
 #include "nano\JSON Reader.dm"
 #include "nano\JSON Writer.dm"
 #include "nano\nanoexternal.dm"
-#include "nano\nanomanager.dm"
 #include "nano\nanoui.dm"
 // END_INCLUDE
