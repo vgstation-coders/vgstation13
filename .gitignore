@@ -17,6 +17,9 @@ info.json
 
 #ignore any files in config/, except those in subdirectories.
 /config/*
+/scripts/*
+/DLLSocket/*
+/maptools/*
 !/config/*/*
 
 # OpenBYOND-generated crap
