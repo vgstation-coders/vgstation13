@@ -49,7 +49,6 @@
 	LoadBans()
 	SetupHooks() // /vg/
 
-	copy_logs() // Just copy the logs.
 
 	if(config && config.server_name != null && config.server_suffix && world.port > 0)
 		// dumb and hardcoded but I don't care~
@@ -87,8 +86,6 @@
 	src.update_status()
 
 	sleep_offline = 1
-
-	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 
 	master_controller = new /datum/controller/game_controller()
 	spawn(1)
