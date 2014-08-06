@@ -3,6 +3,7 @@
 *.rsc
 *.dmb
 *.lk
+*.bat
 info.json
 
 # WinMerge backups
