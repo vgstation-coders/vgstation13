@@ -50,6 +50,11 @@ var/global/list/image/splatter_cache=list()
 	if(amount < 1)
 		return
 
+	var/datum/organ/external/l_foot = perp.get_organ("l_foot")
+	var/datum/organ/external/r_foot = perp.get_organ("r_foot")
+	var/hasfeet = 1
+	if((!l_foot || l_foot.status & ORGAN_DESTROYED) && (!r_foot || r_foot.status & ORGAN_DESTROYED))
+		hasfeet = 0
 	if(perp.shoes)
 		perp.shoes:track_blood = max(amount,perp.shoes:track_blood)                //Adding blood to shoes
 		if(!perp.shoes.blood_overlay)
@@ -61,6 +66,16 @@ var/global/list/image/splatter_cache=list()
 			perp.update_inv_shoes(1)
 		perp.shoes.blood_DNA |= blood_DNA.Copy()
 		perp.shoes.blood_color=basecolor
+
+	else if (hasfeet)//Or feet
+		perp.feet_blood_color = basecolor
+		perp.track_blood = max(amount,perp.track_blood)
+		if(!perp.feet_blood_DNA)
+			perp.feet_blood_DNA = list()
+		perp.feet_blood_DNA |= blood_DNA.Copy()
+	else if (perp.buckled && istype(perp.buckled, /obj/structure/stool/bed/chair/wheelchair))
+		var/obj/structure/stool/bed/chair/wheelchair/W = perp.buckled
+		W.bloodiness = 4
 	else
 		perp.track_blood = max(amount,perp.track_blood)                                //Or feet
 		if(!perp.feet_blood_DNA)
