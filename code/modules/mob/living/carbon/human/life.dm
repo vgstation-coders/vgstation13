@@ -1481,7 +1481,7 @@ var/global/list/brutefireloss_overlays = list("1" = image("icon" = 'icons/mob/sc
 		if(shock_stage >= 150)
 			Weaken(20)
 
-		if (mind & shock_stage > 10 and prob(5))
+		if(mind && shock_stage >= 10 && prob(5))
 			if((mind.active && client != null))
 				client.view = pick (6,8)
 				spawn(5)
