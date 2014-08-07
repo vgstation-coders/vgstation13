@@ -2660,7 +2660,7 @@
 "aZh" = (/obj/machinery/light{dir = 8},/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor/wood,/area/crew_quarters/bar)
 "aZi" = (/obj/structure/stool{pixel_y = 8},/turf/simulated/floor/wood,/area/crew_quarters/bar)
 "aZj" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/obj/structure/disposalpipe/segment,/turf/simulated/floor/wood,/area/crew_quarters/bar)
-"aZk" = (/obj/structure/table/reinforced,/obj/structure/noticeboard{pixel_y = 32},/turf/simulated/floor{icon_state = "grimy"},/area/crew_quarters/bar)
+"aZk" = (/obj/structure/table/reinforced,/obj/structure/noticeboard{pixel_y = 32},/obj/item/weapon/deck,/turf/simulated/floor{icon_state = "grimy"},/area/crew_quarters/bar)
 "aZl" = (/obj/machinery/atmospherics/unary/vent_pump{on = 1},/turf/simulated/floor{icon_state = "grimy"},/area/crew_quarters/bar)
 "aZm" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor{icon_state = "grimy"},/area/crew_quarters/bar)
 "aZn" = (/obj/machinery/vending/boozeomat,/obj/machinery/light{dir = 4},/turf/simulated/floor{icon_state = "grimy"},/area/crew_quarters/bar)
