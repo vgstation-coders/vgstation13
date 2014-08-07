@@ -1481,6 +1481,12 @@ var/global/list/brutefireloss_overlays = list("1" = image("icon" = 'icons/mob/sc
 		if(shock_stage >= 150)
 			Weaken(20)
 
+		if (mind & shock_stage > 10 and prob(5))
+			if((mind.active && client != null))
+				client.view = pick (6,8)
+				spawn(5)
+					client.view = world.view
+
 	proc/handle_pulse()
 
 		if(life_tick % 5) return pulse	//update pulse every 5 life ticks (~1 tick/sec, depending on server load)
