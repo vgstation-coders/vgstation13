@@ -1643,6 +1643,10 @@ proc/process_ghost_teleport_locs()
 	name = "\improper MoMMI Nest"
 	icon_state = "yellow"
 
+/area/construction/cyborg_aux
+	name = "\improper Auxillary Cyborg Station"
+	icon_state = "yellow"
+
 /area/construction/supplyshuttle
 	name = "\improper Supply Shuttle"
 	icon_state = "yellow"
