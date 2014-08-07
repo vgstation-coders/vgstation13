@@ -540,8 +540,11 @@ proc/get_damage_icon_part(damage_state, body_part)
 	if(gloves)
 		var/t_state = gloves.item_state
 		if(!t_state)	t_state = gloves.icon_state
-
-		var/image/standing	= image("icon" = ((gloves.icon_override) ? gloves.icon_override : 'icons/mob/hands.dmi'), "icon_state" = "[t_state]")
+		var/image/standing = null
+		if(gender == FEMALE)
+			standing = image("icon" = ((gloves.icon_override) ? gloves.icon_override : 'icons/mob/hands_f.dmi'), "icon_state" = "[t_state]")
+		else
+			standing = image("icon" = ((gloves.icon_override) ? gloves.icon_override : 'icons/mob/hands.dmi'), "icon_state" = "[t_state]")
 
 		var/obj/item/I = gloves
 		if(species.name in I.species_fit) //Allows clothes to display differently for multiple species

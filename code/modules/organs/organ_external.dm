@@ -886,28 +886,28 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 
 obj/item/weapon/organ/l_arm
 	name = "left arm"
-	icon_state = "l_arm"
+	icon_state = "l_arm_m"
 obj/item/weapon/organ/l_foot
 	name = "left foot"
-	icon_state = "l_foot"
+	icon_state = "l_foot_m"
 obj/item/weapon/organ/l_hand
 	name = "left hand"
-	icon_state = "l_hand"
+	icon_state = "l_hand_m"
 obj/item/weapon/organ/l_leg
 	name = "left leg"
-	icon_state = "l_leg"
+	icon_state = "l_leg_m"
 obj/item/weapon/organ/r_arm
 	name = "right arm"
-	icon_state = "r_arm"
+	icon_state = "r_arm_m"
 obj/item/weapon/organ/r_foot
 	name = "right foot"
-	icon_state = "r_foot"
+	icon_state = "r_foot_m"
 obj/item/weapon/organ/r_hand
 	name = "right hand"
-	icon_state = "r_hand"
+	icon_state = "r_hand_m"
 obj/item/weapon/organ/r_leg
 	name = "right leg"
-	icon_state = "r_leg"
+	icon_state = "r_leg_m"
 obj/item/weapon/organ/head
 	name = "head"
 	icon_state = "head_m"
