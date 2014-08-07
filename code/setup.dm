@@ -871,3 +871,5 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 
 #define AUTOIGNITION_WOOD  573.15
 #define AUTOIGNITION_PAPER 519.15
+
+#define MAX_GEAR_COST 1 //Used in chargen for loadout limit.
