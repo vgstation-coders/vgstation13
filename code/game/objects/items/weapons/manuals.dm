@@ -575,7 +575,7 @@
 	dat = {"
 		<html>
 			<body>
-				<iframe width="100%" height="100%" src="http://ss13.nexisonline.net/w/index.php?title=Space_Law&printable=yes"></iframe>
+				<iframe width="100%" height="100%" src="http://wiki.ss13.ru/index.php?title=Space_Law/Black&printable=yes"></iframe>
 			</body>
 
 		</html>
