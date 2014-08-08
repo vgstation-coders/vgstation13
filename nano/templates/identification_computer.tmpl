@@ -111,6 +111,15 @@
         </form>
 
         <div class='item'>
+          <div class='itemLabel'>
+            Terminations:
+          </div>
+          <div class='itemContent'>
+            {{:helper.link('Terminate ' + data.target_owner, 'gear', {'choice' : 'terminate'}, data.target_rank == "Terminated" ? 'disabled' : null, data.target_rank == "Terminated" ? 'disabled' : 'linkDanger')}}
+          </div>
+        </div>
+
+        <div class='item'>
           <h2>Assignment</h2>
         </div>
 
