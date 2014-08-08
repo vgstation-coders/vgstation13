@@ -7298,7 +7298,7 @@
 "cKr" = (/obj/effect/decal/warning_stripes{icon_state = "no"},/obj/effect/decal/warning_stripes{icon_state = "oxygen"; dir = 8},/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/engineering/supermatter_room)
 "cKs" = (/obj/machinery/door/airlock/external{req_access_txt = "10;13"; req_one_access_txt = "10;13"},/turf/simulated/floor/plating,/area/engineering/supermatter_room)
 "cKt" = (/obj/machinery/air_sensor{frequency = 1441; id_tag = "sme_sensor"; output = 63},/turf/simulated/floor/engine/vacuum,/area/engineering/supermatter_room)
-"cKu" = (/turf/simulated/floor/engine/vacuum{icon_state = "enginedelivery"},/area/engineering/supermatter_room)
+"cKu" = (/obj/machinery/power/supermatter,/turf/simulated/floor/engine/vacuum{icon_state = "enginedelivery"},/area/engineering/supermatter_room)
 "cKv" = (/obj/effect/decal/warning_stripes{tag = "icon-loadingarea (WEST)"; icon_state = "loadingarea"; dir = 8},/obj/machinery/power/emitter{anchored = 1; dir = 8; state = 2},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/engineering/supermatter_room)
 "cKw" = (/obj/structure/lattice,/obj/item/stack/rods{amount = 50},/turf/space,/area)
 "cKx" = (/obj/machinery/portable_atmospherics/canister/nitrogen,/turf/simulated/floor/plating,/area/engineering/engineering_auxiliary)
