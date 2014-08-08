@@ -348,8 +348,6 @@
 	heat_level_2 = 380 //Default 400
 	heat_level_3 = 800 //Default 1000
 
-	primitive = /mob/living/carbon/monkey/tajara
-
 	flags = IS_WHITELISTED | HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL
 
 	flesh_color = "#AFA59E"
@@ -369,33 +367,14 @@
 			"party pooper"
 		)
 	)
-	filter.addWordReplacement("me","meow")
-	filter.addWordReplacement("I","meow") // Should replace with player's first name.
+	filter.addWordReplacement("Мой","Мяу")
+	filter.addWordReplacement("Я","Мя") // Should replace with player's first name.
 	filter.addReplacement("fuck","yiff")
 	filter.addReplacement("shit","scat")
 	filter.addReplacement("scratch","scritch")
-	filter.addWordReplacement("(help|assist)\\bmeow","kill meow") // help me(ow) -> kill meow
-	filter.addReplacement("god","gosh")
+	filter.addWordReplacement("(помогите|пожалуйста)\\бвяу","убяу") // help me(ow) -> kill meow
+	filter.addReplacement("Бог","Бош")
 	filter.addWordReplacement("(ass|butt)", "rump")
-
-/datum/species/tajaran/say_filter(mob/M, message, datum/language/speaking)
-	if(prob(15))
-		message = ""
-		if(prob(50))
-			message = pick(
-				"GOD, PLEASE",
-				"NO, GOD",
-				"AGGGGGGGH",
-			)+" "
-		message += pick(
-			"KILL ME",
-			"END MY SUFFERING",
-			"I CAN'T DO THIS ANYMORE",
-		)
-		return message
-	if(copytext(message, 1, 2) != "*")
-		message = filter.FilterSpeech(message)
-	return message
 
 /datum/species/grey // /vg/
 	name = "Grey"

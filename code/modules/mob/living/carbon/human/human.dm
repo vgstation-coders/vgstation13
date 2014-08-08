@@ -25,6 +25,13 @@
 	h_style = "Short Vox Quills"
 	..(new_loc, "Vox")
 
+/mob/living/carbon/human/tajaran/New(var/new_loc)
+	h_style = "Tajaran Ears"
+	..(new_loc, "Tajaran")
+
+/mob/living/carbon/human/tajaran/IsAdvancedToolUser()
+	return 1
+
 /mob/living/carbon/human/diona/New(var/new_loc)
 	..(new_loc, "Diona")
 
