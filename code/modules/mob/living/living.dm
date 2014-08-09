@@ -33,7 +33,7 @@
 	set hidden = 1
 	if ((src.health < 0 && src.health > -95.0))
 		src.attack_log += "[src] has succumbed to death with [health] points of health!"
-		src.adjustOxyLoss(src.health + 200)
+		src.apply_damage(maxHealth + 5 + src.health, OXY) // This will ensure people die when using the command, but don't go into overkill. 15 oxy points over the limit for safety since brute and burn regenerates
 		src.health = 100 - src.getOxyLoss() - src.getToxLoss() - src.getFireLoss() - src.getBruteLoss()
 		src << "\blue You have given up life and succumbed to death."
 
@@ -740,7 +740,7 @@
 						if(!CM.legcuffed || CM.buckled)
 							return // time leniency for lag which also might make this whole thing pointless but the server
 						for(var/mob/O in viewers(CM))//                                         lags so hard that 40s isn't lenient enough - Quarxink
-							O.show_message("\red <B>[CM] manages to remove the legcuffs!</B>", 1)
+							O.show_message("\red <B>[CM] manages to remove the [HC.name]!</B>", 1)
 						CM << "\blue You successfully remove \the [CM.legcuffed]."
 						CM.legcuffed.loc = usr.loc
 						CM.legcuffed = null

@@ -47,13 +47,13 @@
 
 /datum/sprite_accessory/hair
 
-	icon = 'icons/mob/Human_face.dmi'	  // default icon for all hairs
+	icon = 'icons/mob/human_face.dmi'	  // default icon for all hairs
 
 	bald
 		name = "Bald"
 		icon_state = "bald"
 		gender = MALE
-		species_allowed = list("Human","Unathi")
+		species_allowed = list("Human","Unathi","Grey","Plasmaman","Skellington")
 
 	short
 		name = "Short Hair"	  // try to capatilize the names please~
@@ -291,6 +291,60 @@
 		icon_state = "hair_e"
 		gender = MALE // turnoff!
 
+	familyman
+		name = "The Family Man"
+		icon_state = "hair_thefamilyman"
+		gender = MALE
+
+	mahdrills
+		name = "Drillruru"
+		icon_state = "hair_drillruru"
+		gender = FEMALE
+
+	dandypomp
+		name = "Dandy Pompadour"
+		icon_state = "hair_dandypompadour"
+		gender = MALE
+
+	poofy
+		name = "Poofy"
+		icon_state = "hair_poofy"
+		gender = FEMALE
+
+	crono
+		name = "Toriyama"
+		icon_state = "hair_toriyama"
+		gender = MALE
+
+	vegeta
+		name = "Toriyama 2"
+		icon_state = "hair_toriyama2"
+		gender = MALE
+
+	cia
+		name = "CIA"
+		icon_state = "hair_cia"
+		gender = MALE
+
+	mulder
+		name = "Mulder"
+		icon_state = "hair_mulder"
+		gender = MALE
+
+	scully
+		name = "Scully"
+		icon_state = "hair_scully"
+		gender = FEMALE
+
+	nitori
+		name = "Nitori"
+		icon_state = "hair_nitori"
+		gender = FEMALE
+
+	joestar
+		name = "Joestar"
+		icon_state = "hair_joestar"
+		gender = MALE
 
 	bald
 		name = "Bald"
@@ -305,14 +359,14 @@
 
 /datum/sprite_accessory/facial_hair
 
-	icon = 'icons/mob/Human_face.dmi'
+	icon = 'icons/mob/human_face.dmi'
 	gender = MALE // barf (unless you're a dorf, dorfs dig chix /w beards :P)
 
 	shaved
 		name = "Shaved"
 		icon_state = "bald"
 		gender = NEUTER
-		species_allowed = list("Human","Unathi","Tajaran","Skrell","Vox")
+		species_allowed = list("Human","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington")
 
 	watson
 		name = "Watson Mustache"
