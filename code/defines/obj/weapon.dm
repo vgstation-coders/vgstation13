@@ -326,8 +326,7 @@
 		if(weight2)
 			weight2.loc = src.loc
 			weight2 = null
-		update_icon()
-		qdel(src)
+		update_icon(src)
 
 /obj/item/weapon/legcuffs/bolas/cable/attackby(var/obj/O)
 	if(istype(O, /obj/item))
