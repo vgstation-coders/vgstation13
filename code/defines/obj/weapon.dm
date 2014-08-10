@@ -326,15 +326,7 @@
 		if(weight2)
 			weight2.loc = src.loc
 			weight2 = null
-		var /obj/item/weapon/cable_coil/C = new /obj/item/weapon/cable_coil(src.loc)
-		var /obj/item/weapon/cable_coil/S = new /obj/item/weapon/screwdriver(src.loc)
-		C.amount = 10
-		C._color = cable_color
-		C.icon_state = "coil_[C._color]"
-		C.update_icon()
-		S.item_state = screw_state
-		S.icon_state = screw_istate
-		S.update_icon()
+		update_icon()
 		qdel(src)
 
 /obj/item/weapon/legcuffs/bolas/cable/attackby(var/obj/O)
