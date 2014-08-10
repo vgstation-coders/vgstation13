@@ -696,8 +696,8 @@ This function completely restores a damaged organ to perfect condition.
 		baseicon=owner.deform_icon
 	else if (status & ORGAN_PEG)
 		baseicon='icons/mob/human_races/o_peg.dmi'
-	else if (status & ORGAN_ROBOT)
-		baseicon='icons/mob/human_races/o_robot.dmi'
+//	else if (status & ORGAN_ROBOT)
+//		baseicon='icons/mob/human_races/o_robot.dmi'
 	return new /icon(baseicon, icon_state)
 
 
