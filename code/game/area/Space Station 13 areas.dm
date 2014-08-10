@@ -1951,7 +1951,9 @@ proc/process_ghost_teleport_locs()
 /area/awaymission/listeningpost
 	name = "\improper Listening Post"
 	icon_state = "away"
-	requires_power = 0
+	requires_power = 1
+	luminosity = 0
+	lighting_use_dynamic = 1
 
 /area/awaymission/beach
 	name = "Beach"
