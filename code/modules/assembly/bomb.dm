@@ -65,7 +65,7 @@
 	if(!src)
 		return
 	if(status)
-		bombtank.ignite()	//if its not a dud, boom (or not boom if you made shitty mix) the ignite proc is below, in this file
+		bombtank.detonate()	//if its not a dud, boom (or not boom if you made shitty mix) the ignite proc is below, in this file
 	else
 		bombtank.release()
 
@@ -73,9 +73,9 @@
 	if(bombassembly)
 		bombassembly.HasProximity(AM)
 
-/obj/item/device/onetankbomb/HasEntered(AM as mob|obj)
+/obj/item/device/onetankbomb/Crossed(AM as mob|obj)
 	if(bombassembly)
-		bombassembly.HasEntered(AM)
+		bombassembly.Crossed(AM)
 
 /obj/item/device/onetankbomb/on_found(mob/finder as mob)
 	if(bombassembly)
@@ -107,7 +107,7 @@
 	R.update_icon()
 	return
 
-/obj/item/weapon/tank/proc/ignite()	//This happens when a bomb is told to explode
+/obj/item/weapon/tank/proc/detonate()	//This happens when a bomb is told to explode
 	var/fuel_moles = air_contents.toxins + air_contents.oxygen/6
 	var/strength = 1
 

@@ -26,13 +26,22 @@
 	..(new_loc, "Vox")
 
 /mob/living/carbon/human/diona/New(var/new_loc)
+	h_style = "Bald"
 	..(new_loc, "Diona")
 
 /mob/living/carbon/human/skellington/New(var/new_loc)
 	h_style = "Bald"
 	..(new_loc, "Skellington")
 
-/mob/living/carbon/human/New(var/new_loc, var/new_species = null)
+/mob/living/carbon/human/plasma/New(var/new_loc)
+	h_style = "Bald"
+	..(new_loc, "Plasmaman")
+
+/mob/living/carbon/human/muton/New(var/new_loc)
+	h_style = "Bald"
+	..(new_loc, "Muton")
+
+/mob/living/carbon/human/New(var/new_loc, var/new_species = null, var/delay_ready_dna=0)
 
 	if(!species)
 		if(new_species)
@@ -58,7 +67,6 @@
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")
 
-
 	..()
 
 	if(dna)
@@ -66,6 +74,10 @@
 
 	prev_gender = gender // Debug for plural genders
 	make_blood()
+
+	// Set up DNA.
+	if(!delay_ready_dna)
+		dna.ready_dna(src)
 
 /mob/living/carbon/human/Bump(atom/movable/AM as mob|obj, yes)
 	if ((!( yes ) || now_pushing))
@@ -288,6 +300,12 @@
 	if(M.melee_damage_upper == 0)
 		M.emote("[M.friendly] [src]")
 	else
+		M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.attacktext] [src.name] ([src.ckey])</font>")
+		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
+		if(!iscarbon(M))
+			LAssailant = null
+		else
+			LAssailant = M
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
@@ -520,7 +538,7 @@
 
 // called when something steps onto a human
 // this could be made more general, but for now just handle mulebot
-/mob/living/carbon/human/HasEntered(var/atom/movable/AM)
+/mob/living/carbon/human/Crossed(var/atom/movable/AM)
 	var/obj/machinery/bot/mulebot/MB = AM
 	if(istype(MB))
 		MB.RunOverCreature(src,species.blood_color)
@@ -609,16 +627,21 @@
 	if (istype(id))
 		return id
 
-//Added a safety check in case you want to shock a human mob directly through electrocute_act.
-/mob/living/carbon/human/electrocute_act(var/shock_damage, var/obj/source, var/siemens_coeff = 1.0, var/safety = 0)
+/*
+ * added a safety check in case you want to shock a human mob directly through electrocute_act.
+ */
+/mob/living/carbon/human/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0, const/safety = 0)
+	var/sc = siemens_coeff
+
 	if(!safety)
 		if(gloves)
-			var/obj/item/clothing/gloves/G = gloves
-			siemens_coeff = G.siemens_coefficient
-	//If they have shock immunity mutation
+			var/obj/item/clothing/gloves/Glove = gloves
+			sc = Glove.siemens_coefficient
+
 	if(M_NO_SHOCK in src.mutations)
-		siemens_coeff = 0
-	return ..(shock_damage,source,siemens_coeff)
+		sc = 0
+
+	return ..(shock_damage, source, sc)
 
 
 /mob/living/carbon/human/proc/num2slotname(var/slot_id)
