@@ -144,11 +144,6 @@
 	for(var/mob/living/carbon/human/M in viewers(L, null))
 		M.apply_effect((rand(10, 50)), IRRADIATE, 0)
 	del(src)
-/obj/item/weapon/ore/cerenkite/attack_hand(mob/user as mob)
-	var/L = get_turf(user)
-	for(var/mob/living/carbon/human/M in viewers(L, null))
-		M.apply_effect((rand(10, 50)), IRRADIATE, 0)
-	del(src)
 /obj/item/weapon/ore/cerenkite/bullet_act(var/obj/item/projectile/P)
 	var/L = get_turf(src)
 	for(var/mob/living/carbon/human/M in viewers(L, null))
@@ -162,13 +157,6 @@
 /obj/item/weapon/ore/cytine/New()
 	..()
 	color = pick("#FF0000","#0000FF","#008000","#FFFF00")
-
-/obj/item/weapon/ore/cytine/attack_hand(mob/user as mob)
-	var/obj/item/weapon/glowstick/G = new /obj/item/weapon/glowstick(user.loc)
-	G.color = color
-	G.l_color = color
-	del(src)
-
 /obj/item/weapon/ore/uqill
 	name = "uqill nugget"
 	desc = "A nugget of Uqill, a rare and very dense stone."
