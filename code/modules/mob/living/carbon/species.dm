@@ -379,11 +379,11 @@
 /datum/species/grey // /vg/
 	name = "Grey"
 	icobase = 'icons/mob/human_races/r_grey.dmi'
-	deform = 'icons/mob/human_races/r_def_grey.dmi'
+	deform = 'icons/mob/human_races/r_grey.dmi'
 	language = "Grey"
 	attack_verb = "punch"
 	darksight = 5 // BOOSTED from 2
-	eyes = ""
+	eyes = "bald_s"
 
 	max_hurt_damage = 3 // From 5 (for humans)
 
@@ -394,6 +394,9 @@
 	// Both must be set or it's only a 45% chance of manifesting.
 	default_mutations=list(M_REMOTE_TALK)
 	default_block_names=list("REMOTETALK")
+
+	equip(var/mob/living/carbon/human/H)
+		H.gender = "male"
 
 /datum/species/muton // /vg/
 	name = "Muton"
