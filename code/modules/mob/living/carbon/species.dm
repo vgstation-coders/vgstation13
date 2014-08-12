@@ -313,22 +313,17 @@
 		message = replacetext(message, "s", stutter("ss"))
 	return message
 
-/datum/species/skellington // /vg/
-	name = "Skellington"
-	icobase = 'icons/mob/human_races/r_skeleton.dmi'
-	deform = 'icons/mob/human_races/r_skeleton.dmi'  // TODO: Need deform.
-	language = "Clatter"
-	attack_verb = "punch"
+/datum/species/hylotl
+	name = "Hylotl"
+	icobase = 'icons/mob/human_races/r_hylotl.dmi'
+	deform = 'icons/mob/human_races/r_def_hylotl.dmi'
+	language = "Hylotl"
+	primitive = /mob/living/carbon/monkey/skrell
+	eyes = "bald_s"
 
-	flags = IS_WHITELISTED | HAS_LIPS | /*HAS_TAIL | NO_EAT |*/ NO_BREATHE /*| NON_GENDERED*/ | NO_BLOOD
+	flags = WHITELISTED | HAS_LIPS
 
-	default_mutations=list(SKELETON)
-
-/datum/species/skellington/say_filter(mob/M, message, datum/language/speaking)
-	// 25% chance of adding ACK ACK! to the end of a message.
-	if(copytext(message, 1, 2) != "*" && prob(25))
-		message += "  ACK ACK!"
-	return message
+	flesh_color = "#8CD7A3"
 
 /datum/species/tajaran
 	name = "Tajaran"
@@ -537,3 +532,19 @@
 	blood_color = "#004400"
 	flesh_color = "#907E4A"
 
+/datum/species/skellington // /vg/
+	name = "Skellington"
+	icobase = 'icons/mob/human_races/r_skeleton.dmi'
+	deform = 'icons/mob/human_races/r_skeleton.dmi'  // TODO: Need deform.
+	language = "Clatter"
+	attack_verb = "punch"
+
+	flags = IS_WHITELISTED | HAS_LIPS | /*HAS_TAIL | NO_EAT |*/ NO_BREATHE /*| NON_GENDERED*/ | NO_BLOOD
+
+	default_mutations=list(SKELETON)
+
+/datum/species/skellington/say_filter(mob/M, message, datum/language/speaking)
+	// 25% chance of adding ACK ACK! to the end of a message.
+	if(copytext(message, 1, 2) != "*" && prob(25))
+		message += "  ACK ACK!"
+	return message

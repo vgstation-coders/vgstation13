@@ -111,6 +111,7 @@
 		name = "Ponytail 2"
 		icon_state = "hair_pa"
 		gender = FEMALE
+		species_allowed = list("Human","Hylotl")
 
 	ponytail3
 		name = "Ponytail 3"
@@ -215,6 +216,7 @@
 	emo
 		name = "Emo"
 		icon_state = "hair_emo"
+		species_allowed = list("Human","Hylotl")
 
 	fag
 		name = "Flow Hair"
@@ -232,7 +234,7 @@
 	mohawk
 		name = "Mohawk"
 		icon_state = "hair_d"
-		species_allowed = list("Human","Unathi")
+		species_allowed = list("Human","Unathi","Hylotl")
 	jensen
 		name = "Adam Jensen Hair"
 		icon_state = "hair_jensen"
@@ -246,7 +248,7 @@
 	spiky
 		name = "Spiky"
 		icon_state = "hair_spikey"
-		species_allowed = list("Human","Unathi")
+		species_allowed = list("Human","Unathi","Hylotl")
 	kusangi
 		name = "Kusanagi Hair"
 		icon_state = "hair_kusanagi"

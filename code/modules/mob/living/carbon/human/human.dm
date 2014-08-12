@@ -47,6 +47,10 @@
 	h_style = "Bald"
 	..(new_loc, "Muton")
 
+/mob/living/carbon/human/hylotl/New(var/new_loc)
+	h_style = "Mohawk"
+	..(new_loc, "Hylotl")
+
 /mob/living/carbon/human/New(var/new_loc, var/new_species = null, var/delay_ready_dna=0)
 
 	if(!species)

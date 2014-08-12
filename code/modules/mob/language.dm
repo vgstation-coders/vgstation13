@@ -76,6 +76,18 @@
 	colour = "rough"
 	key = "3"
 
+/datum/language/hylotl
+	name = "Hylotl"
+	desc = "Sounds more like songs of syrens."
+	key = "4"
+	speech_verb = "chants"
+	colour = "rough"
+	flags = RESTRICTED
+
+///datum/language/hylotl/say_misunderstood(mob/M, message)
+//	for (var/mob/living/T as mob in oview())
+//		T << sound(pick('sound/voice/hylotl_song_1.ogg','sound/voice/hylotl_song_2.ogg'))
+
 /datum/language/grey
 	name = "Grey"
 	desc = "Sounds more like quacking than anything else."
