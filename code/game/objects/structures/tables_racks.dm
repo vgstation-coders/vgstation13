@@ -249,7 +249,6 @@
 				var/mob/living/carbon/human/H = user
 				var/organ_name = pick("l_arm","r_arm","r_leg","l_leg")
 				var/datum/organ/external/E = H.get_organ(organ_name)
-				E.take_damage(10, 0, 0)
 				E.fracture()
 			else
 				user.weakened += rand(4,10)
@@ -284,7 +283,6 @@
 				var/mob/living/carbon/human/H = user
 				var/organ_name = pick("l_arm","r_arm","r_leg","l_leg")
 				var/datum/organ/external/E = H.get_organ(organ_name)
-				E.take_damage(10, 0, 0)
 				E.fracture()
 			else
 				user.weakened += rand(4,10)
