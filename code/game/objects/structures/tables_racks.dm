@@ -7,7 +7,7 @@
  */
 
 
-/*
+/*http://i.gyazo.com/ae86beffcaa3d4b1ea17fa71c1f6ae56.png
  * Tables
  */
 /obj/structure/table
@@ -233,11 +233,27 @@
 
 /obj/structure/table/attack_paw(mob/user)
 	if(M_HULK in user.mutations)
+		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-		visible_message("<span class='danger'>[user] smashes the [src] apart!</span>")
-		user.changeNext_move(8)
 		destroy()
 
+	if(usr.a_intent == "disarm" && get_dist(usr, src) <= 1 && !usr.buckled)
+		if(prob(70))
+			visible_message("<span class='notice'>[user] climbs on the [src].</span>")
+			usr.loc = src.loc
+		else
+			visible_message("<span class='warning'>[user] slipped off the edge of the [src].</span>")
+			playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
+			if(prob(10) && istype(user,/mob/living/carbon/human))
+				user.weakened += rand(4,10)
+				var/mob/living/carbon/human/H = user
+				var/organ_name = pick("l_arm","r_arm","r_leg","l_leg")
+				var/datum/organ/external/E = H.get_organ(organ_name)
+				E.take_damage(10, 0, 0)
+				E.fracture()
+			else
+				user.weakened += rand(4,10)
+	return
 
 /obj/structure/table/attack_alien(mob/user)
 	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
@@ -256,15 +272,23 @@
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		destroy()
 
-	if(usr.a_intent == "disarm" && get_dist(user, src) <= 1 && !usr.buckled)
-		visible_message("<span class='notice'>[user] trying to clumb on the [src].</span>")
-		if(do_mob(user, get_turf(user), 8))
-			if(prob(70))
-				visible_message("<span class='notice'>[user] climbs on the [src].</span>")
-				usr.loc = src.loc
+	if(usr.a_intent == "disarm" && get_dist(usr, src) <= 1 && !usr.buckled)
+		if(prob(70))
+			visible_message("<span class='notice'>[user] climbs on the [src].</span>")
+			usr.loc = src.loc
+		else
+			visible_message("<span class='warning'>[user] slipped off the edge of the [src].</span>")
+			playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
+			if(prob(10) && istype(user,/mob/living/carbon/human))
+				user.weakened += rand(4,10)
+				var/mob/living/carbon/human/H = user
+				var/organ_name = pick("l_arm","r_arm","r_leg","l_leg")
+				var/datum/organ/external/E = H.get_organ(organ_name)
+				E.take_damage(10, 0, 0)
+				E.fracture()
 			else
-				visible_message("<span class='warning'>[user] slipped off the edge of the [src].</span>")
-				usr.weakened += 3
+				user.weakened += rand(4,10)
+	return
 
 /obj/structure/table/attack_tk() // no telehulk sorry
 	return
@@ -627,6 +651,23 @@
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		destroy()
 
+	if(usr.a_intent == "disarm" && get_dist(usr, src) <= 1 && !usr.buckled)
+		if(prob(70))
+			visible_message("<span class='notice'>[user] climbs on the [src].</span>")
+			usr.loc = src.loc
+		else
+			visible_message("<span class='warning'>[user] slipped off the edge of the [src].</span>")
+			playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
+			if(prob(10) && istype(user,/mob/living/carbon/human))
+				user.weakened += rand(4,10)
+				var/mob/living/carbon/human/H = user
+				var/organ_name = pick("l_arm","r_arm","r_leg","l_leg")
+				var/datum/organ/external/E = H.get_organ(organ_name)
+				E.take_damage(10, 0, 0)
+				E.fracture()
+			else
+				user.weakened += rand(4,10)
+	return
 /obj/structure/rack/attack_paw(mob/user)
 	if(M_HULK in user.mutations)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))

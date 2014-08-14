@@ -135,6 +135,10 @@
 		if(copytext(message, 1, 2) != "*")
 			message = "[uppertext(message)]!!" //because I don't know how to code properly in getting vars from other files -Bro
 
+	if (src.stuttering)
+		if(copytext(message, 1, 2) != "*")
+			message = stutter(message)
+
 	if (src.slurring)
 		if(copytext(message, 1, 2) != "*")
 			message = slur(message)
