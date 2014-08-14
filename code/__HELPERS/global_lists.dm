@@ -92,7 +92,7 @@ var/list/hit_appends = list("-OOF", "-ACK", "-UGH", "-HRNK", "-HURGH", "-GLORF")
 		var/datum/species/S = new T
 		all_species[S.name] = S
 
-		if(S.flags & WHITELISTED)
+		if(S.flags & IS_WHITELISTED)
 			whitelisted_species += S.name
 
 /* // Uncomment to debug chemical reaction list.

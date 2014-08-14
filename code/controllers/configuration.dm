@@ -492,46 +492,47 @@
 					media_base_url = value
 				if("vgws_base_url")
 					vgws_base_url = value
+
 				if("max_explosion_range")
-					MAX_EXPLOSION_RANGE = value
+					MAX_EXPLOSION_RANGE = text2num(value)
 				if("health_threshold_crit")
-					config.health_threshold_crit = value
+					config.health_threshold_crit = text2num(value)
 				if("health_threshold_softcrit")
-					config.health_threshold_softcrit = value
+					config.health_threshold_softcrit = text2num(value)
 				if("health_threshold_dead")
-					config.health_threshold_dead = value
+					config.health_threshold_dead = text2num(value)
 				if("revival_pod_plants")
-					config.revival_pod_plants = value
+					config.revival_pod_plants = text2num(value)
 				if("revival_cloning")
-					config.revival_cloning = value
+					config.revival_cloning = text2num(value)
 				if("revival_brain_life")
-					config.revival_brain_life = value
+					config.revival_brain_life = text2num(value)
 				if("run_speed")
-					config.run_speed = value
+					config.run_speed = text2num(value)
 				if("walk_speed")
-					config.walk_speed = value
+					config.walk_speed = text2num(value)
 				if("human_delay")
-					config.human_delay = value
+					config.human_delay = text2num(value)
 				if("robot_delay")
-					config.robot_delay = value
+					config.robot_delay = text2num(value)
 				if("monkey_delay")
-					config.monkey_delay = value
+					config.monkey_delay = text2num(value)
 				if("alien_delay")
-					config.alien_delay = value
+					config.alien_delay = text2num(value)
 				if("slime_delay")
-					config.slime_delay = value
+					config.slime_delay = text2num(value)
 				if("animal_delay")
-					config.animal_delay = value
+					config.animal_delay = text2num(value)
 				if("organ_health_multiplier")
-					config.organ_health_multiplier = value / 100
+					config.organ_health_multiplier = text2num(value) / 100
 				if("organ_regeneration_multiplier")
-					config.organ_regeneration_multiplier = value / 100
+					config.organ_regeneration_multiplier = text2num(value) / 100
 				if("bones_can_break")
-					config.bones_can_break = value
+					config.bones_can_break = text2num(value)
 				if("limbs_can_break")
-					config.limbs_can_break = value
+					config.limbs_can_break = text2num(value)
 				if("respawn_delay")
-					config.respawn_delay = value
+					config.respawn_delay = text2num(value)
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

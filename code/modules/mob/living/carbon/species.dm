@@ -321,7 +321,7 @@
 	primitive = /mob/living/carbon/monkey/skrell
 	eyes = "bald_s"
 
-	flags = WHITELISTED | HAS_LIPS
+	flags = IS_WHITELISTED | HAS_LIPS
 
 	flesh_color = "#8CD7A3"
 
@@ -384,7 +384,7 @@
 
 	primitive = /mob/living/carbon/monkey // TODO
 
-	flags = WHITELISTED | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT
+	flags = IS_WHITELISTED | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT
 
 	// Both must be set or it's only a 45% chance of manifesting.
 	default_mutations=list(M_REMOTE_TALK)
@@ -393,7 +393,7 @@
 	equip(var/mob/living/carbon/human/H)
 		H.gender = "male"
 
-/datum/species/muton // /vg/
+/*/datum/species/muton // /vg/
 	name = "Muton"
 	icobase = 'icons/mob/human_races/r_muton.dmi'
 	deform = 'icons/mob/human_races/r_def_muton.dmi'
@@ -406,7 +406,7 @@
 
 	primitive = /mob/living/carbon/monkey // TODO
 
-	flags = HAS_LIPS
+	flags = IS_WHITELISTED | HAS_LIPS
 
 	// Both must be set or it's only a 45% chance of manifesting.
 	default_mutations=list(M_STRONG | M_RUN | M_LOUD)
@@ -416,7 +416,7 @@
 		// Unequip existing suits and hats.
 		H.u_equip(H.wear_suit)
 		H.u_equip(H.head)
-
+*/
 /datum/species/skrell
 	name = "Skrell"
 	icobase = 'icons/mob/human_races/r_skrell.dmi'
@@ -444,7 +444,7 @@
 	eyes = "vox_eyes_s"
 	breath_type = "nitrogen"
 
-	flags = WHITELISTED | NO_SCAN | NO_BLOOD
+	flags = NO_SCAN | NO_BLOOD
 
 	blood_color = "#2299FC"
 	flesh_color = "#808D11"
@@ -527,7 +527,7 @@
 	heat_level_2 = 3000
 	heat_level_3 = 4000
 
-	flags = IS_WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | NO_SCAN | IS_PLANT | RAD_ABSORB | NO_BLOOD | IS_SLOW | NO_PAIN
+	flags = NO_BREATHE | REQUIRE_LIGHT | NO_SCAN | IS_PLANT | RAD_ABSORB | NO_BLOOD | IS_SLOW | NO_PAIN
 
 	blood_color = "#004400"
 	flesh_color = "#907E4A"
@@ -539,7 +539,7 @@
 	language = "Clatter"
 	attack_verb = "punch"
 
-	flags = IS_WHITELISTED | HAS_LIPS | /*HAS_TAIL | NO_EAT |*/ NO_BREATHE /*| NON_GENDERED*/ | NO_BLOOD
+	flags = HAS_LIPS | /*HAS_TAIL | NO_EAT |*/ NO_BREATHE /*| NON_GENDERED*/ | NO_BLOOD
 
 	default_mutations=list(SKELETON)
 
