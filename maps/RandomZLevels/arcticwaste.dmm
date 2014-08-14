@@ -26,7 +26,7 @@
 "z" = (/obj/machinery/vending/assist,/turf/simulated/floor/plating{tag = "icon-warnplate (WEST)"; icon_state = "warnplate"; dir = 8},/area/awaymission)
 "A" = (/obj/machinery/vending/cigarette,/turf/simulated/floor/plating{tag = "icon-warnplate (EAST)"; icon_state = "warnplate"; dir = 4},/area/awaymission)
 "B" = (/obj/machinery/gateway{dir = 8},/turf/simulated/floor/plating,/area/awaymission)
-"C" = (/obj/machinery/gateway/centeraway{calibrated = 0},/turf/simulated/floor/plating,/area/awaymission)
+"C" = (/obj/machinery/gateway/centeraway{calibrated = 1},/turf/simulated/floor/plating,/area/awaymission)
 "D" = (/obj/machinery/gateway{dir = 4},/turf/simulated/floor/plating,/area/awaymission)
 "E" = (/obj/machinery/vending/engivend,/turf/simulated/floor/plating{tag = "icon-warnplate (WEST)"; icon_state = "warnplate"; dir = 8},/area/awaymission)
 "F" = (/turf/simulated/floor/plating{tag = "icon-warnplate (SOUTHWEST)"; icon_state = "warnplate"; dir = 10},/area/awaymission)
