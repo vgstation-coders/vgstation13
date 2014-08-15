@@ -25,13 +25,6 @@
 	h_style = "Short Vox Quills"
 	..(new_loc, "Vox")
 
-/mob/living/carbon/human/tajaran/New(var/new_loc)
-	h_style = "Tajaran Ears"
-	..(new_loc, "Tajaran")
-
-/mob/living/carbon/human/tajaran/IsAdvancedToolUser()
-	return 1
-
 /mob/living/carbon/human/diona/New(var/new_loc)
 	..(new_loc, "Diona")
 
@@ -42,14 +35,6 @@
 /mob/living/carbon/human/plasma/New(var/new_loc)
 	h_style = "Bald"
 	..(new_loc, "Plasmaman")
-
-/mob/living/carbon/human/muton/New(var/new_loc)
-	h_style = "Bald"
-	..(new_loc, "Muton")
-
-/mob/living/carbon/human/hylotl/New(var/new_loc)
-	h_style = "Mohawk"
-	..(new_loc, "Hylotl")
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species = null, var/delay_ready_dna=0)
 
@@ -1333,7 +1318,7 @@
 	if (isnull(target))
 		return
 
-	var/say = sanitize_uni(input ("What do you wish to say"))
+	var/say = input ("What do you wish to say")
 	if(M_REMOTE_TALK in target.mutations)
 		target.show_message("\blue You hear [src.real_name]'s voice: [say]")
 	else

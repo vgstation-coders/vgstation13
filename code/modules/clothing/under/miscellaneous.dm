@@ -396,15 +396,17 @@
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO
 
 /obj/item/clothing/under/officeruniform
-	name = "officer's uniform"
-	desc = "Bestraft die Juden fur ihre Verbrechen."
+	name = "Officer's Uniform"
+	desc = "Bestraft die Juden für ihre Verbrechen."
 	icon_state = "officeruniform"
-	item_state = "officeruniform"
 	_color = "officeruniform"
+	item_state = "officeruniform"
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO
 
 /obj/item/clothing/under/soldieruniform
-	name = "soldier's uniform"
-	desc = "Bestraft die Verbundeten fur ihren Widerstand."
+	name = "Soldier's Uniform"
+	desc = "Bestraft die Verbündeten für ihren Widerstand."
 	icon_state = "soldieruniform"
-	item_state = "soldieruniform"
 	_color = "soldieruniform"
+	item_state = "soldieruniform"
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO

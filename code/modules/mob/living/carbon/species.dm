@@ -313,17 +313,22 @@
 		message = replacetext(message, "s", stutter("ss"))
 	return message
 
-/datum/species/hylotl
-	name = "Hylotl"
-	icobase = 'icons/mob/human_races/r_hylotl.dmi'
-	deform = 'icons/mob/human_races/r_def_hylotl.dmi'
-	language = "Hylotl"
-	primitive = /mob/living/carbon/monkey/skrell
-	eyes = "bald_s"
+/datum/species/skellington // /vg/
+	name = "Skellington"
+	icobase = 'icons/mob/human_races/r_skeleton.dmi'
+	deform = 'icons/mob/human_races/r_skeleton.dmi'  // TODO: Need deform.
+	language = "Clatter"
+	attack_verb = "punch"
 
-	flags = IS_WHITELISTED | HAS_LIPS
+	flags = IS_WHITELISTED | HAS_LIPS | /*HAS_TAIL | NO_EAT |*/ NO_BREATHE /*| NON_GENDERED*/ | NO_BLOOD
 
-	flesh_color = "#8CD7A3"
+	default_mutations=list(SKELETON)
+
+/datum/species/skellington/say_filter(mob/M, message, datum/language/speaking)
+	// 25% chance of adding ACK ACK! to the end of a message.
+	if(copytext(message, 1, 2) != "*" && prob(25))
+		message += "  ACK ACK!"
+	return message
 
 /datum/species/tajaran
 	name = "Tajaran"
@@ -342,6 +347,8 @@
 	heat_level_1 = 330 //Default 360
 	heat_level_2 = 380 //Default 400
 	heat_level_3 = 800 //Default 1000
+
+	primitive = /mob/living/carbon/monkey/tajara
 
 	flags = IS_WHITELISTED | HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL
 
@@ -362,61 +369,53 @@
 			"party pooper"
 		)
 	)
-	filter.addWordReplacement("Мой","Мяу")
-	filter.addWordReplacement("Я","Мя") // Should replace with player's first name.
+	filter.addWordReplacement("me","meow")
+	filter.addWordReplacement("I","meow") // Should replace with player's first name.
 	filter.addReplacement("fuck","yiff")
 	filter.addReplacement("shit","scat")
 	filter.addReplacement("scratch","scritch")
-	filter.addWordReplacement("(помогите|пожалуйста)\\бвяу","убяу") // help me(ow) -> kill meow
-	filter.addReplacement("Бог","Бош")
+	filter.addWordReplacement("(help|assist)\\bmeow","kill meow") // help me(ow) -> kill meow
+	filter.addReplacement("god","gosh")
 	filter.addWordReplacement("(ass|butt)", "rump")
+
+/datum/species/tajaran/say_filter(mob/M, message, datum/language/speaking)
+	if(prob(15))
+		message = ""
+		if(prob(50))
+			message = pick(
+				"GOD, PLEASE",
+				"NO, GOD",
+				"AGGGGGGGH",
+			)+" "
+		message += pick(
+			"KILL ME",
+			"END MY SUFFERING",
+			"I CAN'T DO THIS ANYMORE",
+		)
+		return message
+	if(copytext(message, 1, 2) != "*")
+		message = filter.FilterSpeech(message)
+	return message
 
 /datum/species/grey // /vg/
 	name = "Grey"
 	icobase = 'icons/mob/human_races/r_grey.dmi'
-	deform = 'icons/mob/human_races/r_grey.dmi'
+	deform = 'icons/mob/human_races/r_def_grey.dmi'
 	language = "Grey"
 	attack_verb = "punch"
 	darksight = 5 // BOOSTED from 2
-	eyes = "bald_s"
+	eyes = "grey_eyes_s"
 
 	max_hurt_damage = 3 // From 5 (for humans)
 
 	primitive = /mob/living/carbon/monkey // TODO
 
-	flags = IS_WHITELISTED | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT
+	flags = WHITELISTED | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT
 
 	// Both must be set or it's only a 45% chance of manifesting.
 	default_mutations=list(M_REMOTE_TALK)
 	default_block_names=list("REMOTETALK")
 
-	equip(var/mob/living/carbon/human/H)
-		H.gender = "male"
-
-/*/datum/species/muton // /vg/
-	name = "Muton"
-	icobase = 'icons/mob/human_races/r_muton.dmi'
-	deform = 'icons/mob/human_races/r_def_muton.dmi'
-	language = "Muton"
-	attack_verb = "punch"
-	darksight = 1
-	eyes = "eyes_s"
-
-	max_hurt_damage = 10
-
-	primitive = /mob/living/carbon/monkey // TODO
-
-	flags = IS_WHITELISTED | HAS_LIPS
-
-	// Both must be set or it's only a 45% chance of manifesting.
-	default_mutations=list(M_STRONG | M_RUN | M_LOUD)
-	default_block_names=list("STRONGBLOCK","LOUDBLOCK","INCREASERUNBLOCK")
-
-	equip(var/mob/living/carbon/human/H)
-		// Unequip existing suits and hats.
-		H.u_equip(H.wear_suit)
-		H.u_equip(H.head)
-*/
 /datum/species/skrell
 	name = "Skrell"
 	icobase = 'icons/mob/human_races/r_skrell.dmi'
@@ -444,7 +443,7 @@
 	eyes = "vox_eyes_s"
 	breath_type = "nitrogen"
 
-	flags = NO_SCAN | NO_BLOOD
+	flags = WHITELISTED | NO_SCAN | NO_BLOOD
 
 	blood_color = "#2299FC"
 	flesh_color = "#808D11"
@@ -527,24 +526,8 @@
 	heat_level_2 = 3000
 	heat_level_3 = 4000
 
-	flags = NO_BREATHE | REQUIRE_LIGHT | NO_SCAN | IS_PLANT | RAD_ABSORB | NO_BLOOD | IS_SLOW | NO_PAIN
+	flags = IS_WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | NO_SCAN | IS_PLANT | RAD_ABSORB | NO_BLOOD | IS_SLOW | NO_PAIN
 
 	blood_color = "#004400"
 	flesh_color = "#907E4A"
 
-/datum/species/skellington // /vg/
-	name = "Skellington"
-	icobase = 'icons/mob/human_races/r_skeleton.dmi'
-	deform = 'icons/mob/human_races/r_skeleton.dmi'  // TODO: Need deform.
-	language = "Clatter"
-	attack_verb = "punch"
-
-	flags = HAS_LIPS | /*HAS_TAIL | NO_EAT |*/ NO_BREATHE /*| NON_GENDERED*/ | NO_BLOOD
-
-	default_mutations=list(SKELETON)
-
-/datum/species/skellington/say_filter(mob/M, message, datum/language/speaking)
-	// 25% chance of adding ACK ACK! to the end of a message.
-	if(copytext(message, 1, 2) != "*" && prob(25))
-		message += "  ACK ACK!"
-	return message
