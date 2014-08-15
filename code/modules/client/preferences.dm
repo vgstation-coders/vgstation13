@@ -283,7 +283,7 @@ datum/preferences
 		else
 			dat += "none."
 
-		if(total_cost < MAX_GEAR_COST)
+		if(total_cost < 4)
 			dat += " <a href='byond://?src=\ref[user];preference=loadout;task=input'>\[add\]</a>"
 
 		dat += "<br><br><b>Occupation Choices</b><br>"
@@ -883,11 +883,11 @@ datum/preferences
 
 					var/datum/gear/C = gear_datums[choice]
 					total_cost += C.cost
-					if(C && total_cost <= MAX_GEAR_COST)
+					if(C && total_cost <= 4)
 						gear += choice
-						user << "\blue Added [choice] for [C.cost] points ([MAX_GEAR_COST - total_cost] points remaining)."
+						user << "\blue Added [choice] for [C.cost] points ([4 - total_cost] points remaining)."
 					else
-						user << "\red That item will exceed the maximum loadout cost of [MAX_GEAR_COST] points."
+						user << "\red That item will exceed the maximum loadout cost of [4] points."
 
 			else if(href_list["task"] == "remove")
 				var/to_remove = href_list["gear"]

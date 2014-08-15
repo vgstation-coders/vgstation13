@@ -68,20 +68,6 @@ var/global/datum/controller/gameticker/ticker
 				current_state = GAME_STATE_SETTING_UP
 	while (!setup())
 
-/datum/controller/gameticker/proc/StartThematic(var/playlist)
-	if(!theme)
-		theme = new(locate(1,1,CENTCOMM_Z))
-	theme.playlist_id=playlist
-	theme.playing=1
-	theme.update_music()
-	theme.update_icon()
-
-/datum/controller/gameticker/proc/StopThematic()
-	theme.playing=0
-	theme.update_music()
-	theme.update_icon()
-
-
 /datum/controller/gameticker/proc/setup()
 	//Create and announce mode
 	if(master_mode=="secret")

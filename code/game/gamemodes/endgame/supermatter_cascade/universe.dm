@@ -74,7 +74,6 @@
 			APC.queue_icon_update()
 			APC.update()
 
-	ticker.StartThematic("endgame")
 	for(var/datum/mind/M in player_list)
 		if(!istype(M.current,/mob/living))
 			continue
@@ -196,10 +195,6 @@ AUTOMATED ALERT: Link to [command_name()] lost."}
 		if(blackbox)
 			blackbox.save_all_data_to_sql()
 
-		if (watchdog.waiting)
-			world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
-			watchdog.signal_ready()
-			return
 		sleep(300)
 		log_game("Rebooting due to universal collapse")
 		world.Reboot()
