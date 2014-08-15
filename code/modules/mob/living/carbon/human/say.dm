@@ -28,11 +28,6 @@
 					if(gene.is_active(src))
 						message = gene.OnSay(src,message)
 
-	if(species)
-		var/datum/species/S = species
-		if(istype(S, /datum/species/hylotl) && copytext(message, 1, 2) != "*" && copytext(message, 1, 3) == ":4")
-			var/songsound = pick('sound/voice/hylotl_song_1.ogg','sound/voice/hylotl_song_2.ogg')
-			playsound(get_turf(src), songsound, 40, 1, -1)
 	/*
 		if(dna.mutantrace == "lizard")
 			if(copytext(message, 1, 2) != "*")
