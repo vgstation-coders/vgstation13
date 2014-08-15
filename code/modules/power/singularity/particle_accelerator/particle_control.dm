@@ -3,7 +3,7 @@
 /obj/machinery/particle_accelerator/control_box
 	name = "Particle Accelerator Control Computer"
 	desc = "This controls the density of the particles."
-	icon = 'icons/obj/machines/particle_accelerator.dmi'
+	icon = 'icons/obj/machines/particle_accelerator2.dmi'
 	icon_state = "control_box"
 	reference = "control_box"
 	anchored = 0
@@ -20,6 +20,8 @@
 	var/assembled = 0
 	var/parts = null
 	var/datum/wires/particle_acc/control_box/wires = null
+
+	l_color = "#0000FF"
 
 /obj/machinery/particle_accelerator/control_box/New()
 	wires = new(src)
@@ -144,6 +146,11 @@
 	else if(!stat && construction_state <= 3)
 		use_power = 1
 	return
+
+	if(!(stat & (BROKEN|NOPOWER)))
+		SetLuminosity(2)
+	else
+		SetLuminosity(0)
 
 
 /obj/machinery/particle_accelerator/control_box/process()

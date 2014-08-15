@@ -1,4 +1,3 @@
-#define STRIP_DELAY			40	//time taken (in deciseconds) to strip somebody
 /mob/living/carbon/human
 	name = "unknown"
 	real_name = "unknown"
@@ -26,6 +25,7 @@
 	..(new_loc, "Vox")
 
 /mob/living/carbon/human/diona/New(var/new_loc)
+	h_style = "Bald"
 	..(new_loc, "Diona")
 
 /mob/living/carbon/human/skellington/New(var/new_loc)
@@ -36,6 +36,10 @@
 	h_style = "Bald"
 	..(new_loc, "Plasmaman")
 
+/mob/living/carbon/human/muton/New(var/new_loc)
+	h_style = "Bald"
+	..(new_loc, "Muton")
+
 /mob/living/carbon/human/New(var/new_loc, var/new_species = null, var/delay_ready_dna=0)
 
 	if(!species)
@@ -44,9 +48,7 @@
 		else
 			set_species()
 
-	var/datum/reagents/R = new/datum/reagents(1000)
-	reagents = R
-	R.my_atom = src
+	create_reagents(1000)
 
 	if(!dna)
 		dna = new /datum/dna(null)
@@ -267,8 +269,10 @@
 
 
 /mob/living/carbon/human/blob_act()
-	if(stat == 2)	return
-	show_message("\red The blob attacks you!")
+	if(stat == DEAD)
+		return
+
+	show_message("<span class='warning'>The blob attacks you!</span>")
 	var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
 	var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
 	apply_damage(rand(30,40), BRUTE, affecting, run_armor_check(affecting, "melee"))
@@ -622,16 +626,21 @@
 	if (istype(id))
 		return id
 
-//Added a safety check in case you want to shock a human mob directly through electrocute_act.
-/mob/living/carbon/human/electrocute_act(var/shock_damage, var/obj/source, var/siemens_coeff = 1.0, var/safety = 0)
+/*
+ * added a safety check in case you want to shock a human mob directly through electrocute_act.
+ */
+/mob/living/carbon/human/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0, const/safety = 0)
+	var/sc = siemens_coeff
+
 	if(!safety)
 		if(gloves)
-			var/obj/item/clothing/gloves/G = gloves
-			siemens_coeff = G.siemens_coefficient
-	//If they have shock immunity mutation
+			var/obj/item/clothing/gloves/Glove = gloves
+			sc = Glove.siemens_coefficient
+
 	if(M_NO_SHOCK in src.mutations)
-		siemens_coeff = 0
-	return ..(shock_damage,source,siemens_coeff)
+		sc = 0
+
+	return ..(shock_damage, source, sc)
 
 
 /mob/living/carbon/human/proc/num2slotname(var/slot_id)
@@ -726,7 +735,7 @@
 					else if(place_item && place_item.mob_can_equip(src, slot_wear_id, 1))
 						usr << "<span class='notice'>You try to place [place_item] on [src].</span>"
 
-					if(do_mob(usr, src, STRIP_DELAY))
+					if(do_mob(usr, src, HUMAN_STRIP_DELAY))
 						if(id_item)
 							u_equip(id_item)
 							if(pickpocket) usr.put_in_hands(id_item)
@@ -764,7 +773,7 @@
 			else
 				return
 
-			if(do_mob(usr, src, STRIP_DELAY))
+			if(do_mob(usr, src, HUMAN_STRIP_DELAY))
 				if(pocket_item)
 					u_equip(pocket_item)
 					if(pickpocket) usr.put_in_hands(pocket_item)

@@ -220,7 +220,25 @@ var/global/list/brutefireloss_overlays = list("1" = image("icon" = 'icons/mob/sc
 					if(1)
 						say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", "without oxigen blob don't evoluate?", "CAPTAINS A COMDOM", "[pick("", "that faggot traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", "can u give me [pick("telikesis","halk","eppilapse")]?", "THe saiyans screwed", "Bi is THE BEST OF BOTH WORLDS>", "I WANNA PET TEH monkeyS", "stop grifing me!!!!", "SOTP IT#"))
 					if(2)
-						say(pick("FUS RO DAH","fucking 4rries!", "stat me", ">my face", "roll it easy!", "waaaaaagh!!!", "red wonz go fasta", "FOR TEH EMPRAH", "lol2cat", "dem dwarfs man, dem dwarfs", "SPESS MAHREENS", "hwee did eet fhor khayosss", "lifelike texture ;_;", "luv can bloooom", "PACKETS!!!", "SARAH HALE DID IT!!!"))
+						say(pick( \
+							"FUS RO DAH", \
+							"fucking 4rries!", \
+							"stat me", \
+							">my face", \
+							"roll it easy!", \
+							"waaaaaagh!!!", \
+							"red wonz go fasta", \
+							"FOR TEH EMPRAH", \
+							"lol2cat", \
+							"dem dwarfs man, dem dwarfs", \
+							"SPESS MAHREENS", \
+							"hwee did eet fhor khayosss", \
+							"lifelike texture ;_;", \
+							"luv can bloooom", \
+							"PACKETS!!!", \
+							"SARAH HALE DID IT!!!", \
+							"Don't tell Chase", \
+							"not so tough now huh"))
 					if(3)
 						emote("drool")
 
@@ -406,7 +424,11 @@ var/global/list/brutefireloss_overlays = list("1" = image("icon" = 'icons/mob/sc
 			if (!istype(wear_suit,/obj/item/clothing/suit/space/plasmaman) || !istype(head,/obj/item/clothing/head/helmet/space/plasmaman))
 				//testing("Plasmaman [src] leakin'.  coverflags=[cover_flags]")
 				// OH FUCK HE LEAKIN'.
-				environment.adjust(tx = environment.total_moles()*BREATH_PERCENTAGE) // About one breath's worth. (I know we aren't breathing it out, but this should be about the right amount)
+				// This was OP.
+				//environment.adjust(tx = environment.total_moles()*BREATH_PERCENTAGE) // About one breath's worth. (I know we aren't breathing it out, but this should be about the right amount)
+				src << "<span class='warning'>Your body reacts with the atmosphere and bursts into flame!</span>"
+				adjust_fire_stacks(0.5)
+				IgniteMob()
 
 		if(breath)
 			loc.assume_air(breath)

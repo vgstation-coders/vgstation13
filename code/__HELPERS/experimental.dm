@@ -48,7 +48,7 @@
 var/list/masterPool = new
 
 // Read-only or compile-time vars and special exceptions.
-var/list/exclude = list("loc", "locs", "parent_type", "vars", "verbs", "type")
+var/list/exclude = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z")
 
 /*
  * @args
@@ -69,7 +69,7 @@ var/list/exclude = list("loc", "locs", "parent_type", "vars", "verbs", "type")
 	masterPool["[A]"] -= O
 
 	#ifdef DEBUG_OBJECT_POOL
-	world << text("DEBUG_OBJECT_POOL: getFromPool([]) [] left.", A, length(masterPool["[A]"]))
+	world << text("DEBUG_OBJECT_POOL: getFromPool([]) [] left.", A, length(masterPool[A]))
 	#endif
 
 	O.loc = B
@@ -85,7 +85,7 @@ var/list/exclude = list("loc", "locs", "parent_type", "vars", "verbs", "type")
  * Example call: returnToPool(src)
  */
 /proc/returnToPool(const/atom/movable/AM)
-	if(length(masterPool["[AM.type]"]) >= MAINTAINING_OBJECT_POOL_COUNT)
+	if(length(masterPool["[AM.type]"]) > MAINTAINING_OBJECT_POOL_COUNT)
 		#ifdef DEBUG_OBJECT_POOL
 		world << text("DEBUG_OBJECT_POOL: returnToPool([]) exceeds [] discarding...", AM.type, MAINTAINING_OBJECT_POOL_COUNT)
 		#endif
@@ -110,15 +110,29 @@ var/list/exclude = list("loc", "locs", "parent_type", "vars", "verbs", "type")
 #endif
 
 /*
- * Override this if the object variables needed to reset.
+ * if you have a variable that needed to be preserve, override this and call ..
  *
- * Example: see, code\game\objects\items\stacks\sheets\glass.dm
- *				 /obj/item/weapon/shard/resetVariables()
+ * example
+ *
+ * /obj/item/resetVariables()
+ * 	..("var1", "var2", "var3")
+ *
+ * however, if the object has a child type an it has overridden resetVariables()
+ * this should be
+ *
+ * /obj/item/resetVariables()
+ * 	..("var1", "var2", "var3", args)
+ *
+ * /obj/item/weapon/resetVariables()
+ * 	..("var4")
  */
 /atom/movable/proc/resetVariables()
-	var/list/exclude = global.exclude + args // Explicit var exclusion.
+	loc = null
 
-	for(var/key in vars - exclude)
+	var/list/exclude = global.exclude + args // explicit var exclusion
+
+	for(var/key in vars)
+		if(key in exclude)
+			continue
+
 		vars[key] = initial(vars[key])
-
-	vars["loc"] = null // Making sure the loc is null not a compile-time var value.

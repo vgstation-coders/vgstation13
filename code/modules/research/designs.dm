@@ -928,6 +928,15 @@ other types of metals and chemistry for reagents).
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot
 	category = "Exosuit Equipment"
 
+/datum/design/mech_bolas
+	name = "Exosuit Weapon Design (PCMK-6 Bolas Launcher)"
+	desc = "Allows for the construction of PCMK-6 Bolas Launcher."
+	id = "mech_bolas"
+	build_type = MECHFAB
+	req_tech = list("combat" = 3)
+	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas
+	category = "Exosuit Equipment"
+
 /datum/design/mech_laser
 	name = "Exosuit Weapon Design (CH-PS \"Immolator\" Laser)"
 	desc = "Allows for the construction of CH-PS Laser."
@@ -2251,23 +2260,14 @@ other types of metals and chemistry for reagents).
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/ecb/airlock_controller
 
-/datum/design/vent_control
-	name = "Circuit Design (Vent Control)"
-	desc = "Allows for the construction of ECB used to build a vent control panel."
-	id = "vent_control"
+/datum/design/advanced_airlock_control
+	name = "Circuit Design (Advanced)"
+	desc = "Allows for the construction of ECB used to build an advanced control panel."
+	id = "advanced_airlock_control"
 	req_tech = list("programming" = 3)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
-	build_path = /obj/item/weapon/circuitboard/ecb/vent_controller
-
-/datum/design/smart_airlock_control
-	name = "Circuit Design (Smart Airlock Control)"
-	desc = "Allows for the construction of ECB used to build a smart airlock control panel."
-	id = "smart_airlock_control"
-	req_tech = list("programming" = 3)
-	build_type = IMPRINTER
-	materials = list("$glass" = 2000, "sacid" = 20)
-	build_path = /obj/item/weapon/circuitboard/ecb/smart_airlock_controller
+	build_path = /obj/item/weapon/circuitboard/ecb/advanced_airlock_controller
 
 /*
 /datum/design/hydroseeds

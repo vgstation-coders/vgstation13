@@ -15,7 +15,7 @@ Attach to transfer valve and open. BOOM.
 	var/fire_dmi = 'icons/effects/fire.dmi'
 	var/fire_sprite = "fire"
 	var/ashtype = /obj/effect/decal/cleanable/ash
-	var/fire_time_min = 5 // Seconds
+	var/fire_time_min = 5  // Seconds
 	var/fire_time_max = 10 // Seconds
 
 /atom/proc/ignite(var/temperature)
@@ -36,6 +36,9 @@ turf/proc/hotspot_expose(exposed_temperature, exposed_volume, soh = 0)
 
 
 turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
+	var/obj/effect/effect/foam/fire/W = locate() in contents
+	if(istype(W))
+		return 0
 	if(fire_protection > world.time-300)
 		return 0
 	if(locate(/obj/fire) in src)
@@ -55,7 +58,12 @@ turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
 			new /obj/fire(src)
 
 	return igniting
-
+/*
+/turf/simulated/proc/getAmtFuel()
+	var/fuel_found=0
+	for(var/atom/A in T)
+		t += A.getFuelAmount()
+*/
 /obj/fire
 	//Icon for fire on turfs.
 
@@ -138,6 +146,10 @@ turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
 				if(!acs.check_recombustability(liq)) continue
 				//If extinguisher mist passed over the turf it's trying to spread to, don't spread and
 				//reduce firelevel.
+				var/obj/effect/effect/foam/fire/W = locate() in enemy_tile
+				if(istype(W))
+					firelevel -= 3
+					continue
 				if(enemy_tile.fire_protection > world.time-30)
 					firelevel -= 1.5
 					continue

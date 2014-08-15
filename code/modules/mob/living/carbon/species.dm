@@ -416,6 +416,30 @@
 	default_mutations=list(M_REMOTE_TALK)
 	default_block_names=list("REMOTETALK")
 
+/datum/species/muton // /vg/
+	name = "Muton"
+	icobase = 'icons/mob/human_races/r_muton.dmi'
+	deform = 'icons/mob/human_races/r_def_muton.dmi'
+	language = "Muton"
+	attack_verb = "punch"
+	darksight = 1
+	eyes = "eyes_s"
+
+	max_hurt_damage = 10
+
+	primitive = /mob/living/carbon/monkey // TODO
+
+	flags = HAS_LIPS
+
+	// Both must be set or it's only a 45% chance of manifesting.
+	default_mutations=list(M_STRONG | M_RUN | M_LOUD)
+	default_block_names=list("STRONGBLOCK","LOUDBLOCK","INCREASERUNBLOCK")
+
+	equip(var/mob/living/carbon/human/H)
+		// Unequip existing suits and hats.
+		H.u_equip(H.wear_suit)
+		H.u_equip(H.head)
+
 /datum/species/skrell
 	name = "Skrell"
 	icobase = 'icons/mob/human_races/r_skrell.dmi'

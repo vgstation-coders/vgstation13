@@ -1,4 +1,6 @@
 //Food items that are eaten normally and don't leave anything behind.
+var/global/deepfry_nutriment = 1
+
 /obj/item/weapon/reagent_containers/food/snacks
 	name = "snack"
 	desc = "yummy"
@@ -22,6 +24,7 @@
 		if(M == usr)
 			usr << "<span class='notice'>You finish eating \the [src].</span>"
 		usr.visible_message("<span class='notice'>[usr] finishes eating \the [src].</span>")
+		score["foodeaten"]++
 		usr.drop_from_inventory(src)	//so icons update :[
 
 		if(trash)
@@ -37,6 +40,10 @@
 /obj/item/weapon/reagent_containers/food/snacks/attack_self(mob/user)
 	attack(user,user)
 	return
+
+/obj/item/weapon/reagent_containers/food/snacks/New()
+	..()
+	score["meals"]++
 
 
 /obj/item/weapon/reagent_containers/food/snacks/attack(mob/M, mob/user, def_zone)
@@ -1173,6 +1180,68 @@
 		reagents.add_reagent("nutriment", 4)
 		reagents.add_reagent("doctorsdelight", 5)
 		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/discountchocolate
+	name = "\improper Discount Dan's Chocolate Bar"
+	desc = "Something tells you that the glowing green filling inside, isn't healthy."
+	icon_state = "danbar"
+	trash = /obj/item/trash/discountchocolate
+	New()
+		..()
+		reagents.add_reagent("nutriment", 3)
+		reagents.add_reagent("discount", 4)
+		reagents.add_reagent("moonrocks", 4)
+		reagents.add_reagent("toxicwaste", 8)
+		reagents.add_reagent("chemical_waste", 2) //Does nothing, but it's pretty fucking funny.
+		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/discountburger
+	name = "\improper Discount Dan's On The Go Burger"
+	desc = "Its still warm..."
+	icon_state = "goburger" //Someone make a better sprite for this.
+	New()
+		..()
+		reagents.add_reagent("nutriment", 4)
+		reagents.add_reagent("discount", 4)
+		reagents.add_reagent("beff", 4)
+		reagents.add_reagent("horsemeat", 4)
+		reagents.add_reagent("offcolorcheese", 4)
+		reagents.add_reagent("chemical_waste", 2) //Does nothing, but it's pretty fucking funny.
+		bitesize = 2
+
+
+/obj/item/weapon/reagent_containers/food/snacks/danitos
+	name = "Danitos"
+	desc = "For only the most MLG hardcore robust spessmen."
+	icon_state = "danitos"
+	trash = /obj/item/trash/danitos
+	New()
+		..()
+		reagents.add_reagent("nutriment", 3)
+		reagents.add_reagent("discount", 4)
+		reagents.add_reagent("bonemarrow", 4)
+		reagents.add_reagent("toxicwaste", 8)
+		reagents.add_reagent("bustanut", 2) //YOU FEELIN HARDCORE BRAH?
+		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/discountburrito
+	name = "Discount Dan's Burritos"
+	desc = "The perfect blend of cheap processing and cheap materials."
+	icon_state = "danburrito"
+	var/list/ddname = list("Spooky Dan's BOO-ritos - Texas Toast Chainsaw Massacre Flavor","Sconto Danilo's Burritos - 50% Real Mozzarella Pepperoni Pizza Party Flavor","Descuento Danito's Burritos - Pancake Sausage Brunch Flavor","Descuento Danito's Burritos - Homestyle Comfort Flavor","Spooky Dan's BOO-ritos - Nightmare on Elm Meat Flavor","Descuento Danito's Burritos - Strawberrito Churro Flavor","Descuento Danito's Burritos - Beff and Bean Flavor")
+	New()
+		..()
+		name = pick(ddname)
+		reagents.add_reagent("nutriment", 3)
+		reagents.add_reagent("discount", 6)
+		reagents.add_reagent("irradiatedbeans", 4)
+		reagents.add_reagent("refriedbeans", 4)
+		reagents.add_reagent("mutatedbeans", 4)
+		reagents.add_reagent("beff", 4)
+		reagents.add_reagent("chemical_waste", 2) //Does nothing, but it's pretty fucking funny.
+		bitesize = 2
+
+
 
 /obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato
 	name = "Loaded Baked Potato"
@@ -2848,7 +2917,7 @@
 	deepfried = 1
 	New()
 		..()
-		reagents.add_reagent("nutriment", 3)
+		reagents.add_reagent("nutriment", deepfry_nutriment)
 
 ///////////////////////////////////////////
 // new old food stuff from bs12
@@ -2923,3 +2992,17 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 4)
+
+/client/proc/fryer_nutriment()
+	set name = "Toggle nutriment added by deep frying."
+	set desc = "Toggle the amount of nutriment added to things that have been deep fried."
+	set category = "Debug"
+
+	deepfry_nutriment = input("Please select an amount. Note: Setting this number below 1 can cause problems with deep fried food, and has been disabled.", "Select amount", "[deepfry_nutriment]")  as text
+	if(deepfry_nutriment < 1)
+		deepfry_nutriment = 1
+		usr << "The nutriment has been set to 1. Please select a number that is above or equal to 1 next time."
+
+	log_admin("[key_name(usr)] set the base nutriment of deep fried foods to [deepfry_nutriment]")
+	message_admins("\blue [key_name(usr)] set the nutriment of deep fried foods to [deepfry_nutriment]", 1)
+

@@ -236,8 +236,9 @@
 	return 0
 
 
-/mob/living/proc/electrocute_act(var/shock_damage, var/obj/source, var/siemens_coeff = 1.0)
-	  return 0 //only carbon liveforms have this proc
+/mob/living/proc/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
+	  return 0 // only carbon liveforms have this proc
+				// now with silicons
 
 /mob/living/emp_act(severity)
 	var/list/L = src.get_contents()
@@ -740,7 +741,7 @@
 						if(!CM.legcuffed || CM.buckled)
 							return // time leniency for lag which also might make this whole thing pointless but the server
 						for(var/mob/O in viewers(CM))//                                         lags so hard that 40s isn't lenient enough - Quarxink
-							O.show_message("\red <B>[CM] manages to remove the legcuffs!</B>", 1)
+							O.show_message("\red <B>[CM] manages to remove the [HC.name]!</B>", 1)
 						CM << "\blue You successfully remove \the [CM.legcuffed]."
 						CM.legcuffed.loc = usr.loc
 						CM.legcuffed = null
