@@ -130,6 +130,17 @@ Please contact me on #coderbus IRC. ~Carn x
 	var/icon/race_icon
 	var/icon/deform_icon
 
+/mob/living/carbon/human/proc/apply_overlay(const/cache_index)
+	var/image/I = overlays_standing[cache_index]
+
+	if(I)
+		overlays += I
+
+/mob/living/carbon/human/proc/remove_overlay(const/cache_index)
+	if(overlays_standing[cache_index])
+		overlays -= overlays_standing[cache_index]
+		overlays_standing[cache_index] = null
+
 //UPDATES OVERLAYS FROM OVERLAYS_LYING/OVERLAYS_STANDING
 //this proc is messy as I was forced to include some old laggy cloaking code to it so that I don't break cloakers
 //I'll work on removing that stuff by rewriting some of the cloaking stuff at a later date.
@@ -773,28 +784,49 @@ proc/get_damage_icon_part(damage_state, body_part)
 	if(update_icons)   update_icons()
 
 
-/mob/living/carbon/human/update_inv_r_hand(var/update_icons=1)
+/mob/living/carbon/human/update_inv_r_hand()
+	remove_overlay(R_HAND_LAYER)
+
+	if(handcuffed)
+		drop_r_hand()
+		return
+
 	if(r_hand)
-		r_hand.screen_loc = ui_rhand	//TODO
+		r_hand.screen_loc = ui_rhand // TODO
+
+		if(client)
+			client.screen += r_hand
+
 		var/t_state = r_hand.item_state
-		if(!t_state)	t_state = r_hand.icon_state
-		overlays_standing[R_HAND_LAYER] = image("icon" = 'icons/mob/items_righthand.dmi', "icon_state" = "[t_state]")
-		if (handcuffed) drop_r_hand()
-	else
-		overlays_standing[R_HAND_LAYER] = null
-	if(update_icons)   update_icons()
 
+		if(!t_state)
+			t_state = r_hand.icon_state
 
-/mob/living/carbon/human/update_inv_l_hand(var/update_icons=1)
+		overlays_standing[R_HAND_LAYER] = image("icon" = 'icons/mob/items_righthand.dmi', "icon_state" = "[t_state]", "layer" = -R_HAND_LAYER)
+
+	apply_overlay(R_HAND_LAYER)
+
+/mob/living/carbon/human/update_inv_l_hand()
+	remove_overlay(L_HAND_LAYER)
+
+	if(handcuffed)
+		drop_l_hand()
+		return
+
 	if(l_hand)
-		l_hand.screen_loc = ui_lhand	//TODO
+		l_hand.screen_loc = ui_lhand // TODO
+
+		if(client)
+			client.screen += l_hand
+
 		var/t_state = l_hand.item_state
-		if(!t_state)	t_state = l_hand.icon_state
-		overlays_standing[L_HAND_LAYER] = image("icon" = 'icons/mob/items_lefthand.dmi', "icon_state" = "[t_state]")
-		if (handcuffed) drop_l_hand()
-	else
-		overlays_standing[L_HAND_LAYER] = null
-	if(update_icons)   update_icons()
+
+		if(!t_state)
+			t_state = l_hand.icon_state
+
+		overlays_standing[L_HAND_LAYER] = image("icon" = 'icons/mob/items_lefthand.dmi', "icon_state" = "[t_state]", "layer" = -L_HAND_LAYER)
+
+	apply_overlay(L_HAND_LAYER)
 
 /mob/living/carbon/human/proc/update_tail_showing(var/update_icons=1)
 	overlays_standing[TAIL_LAYER] = null
