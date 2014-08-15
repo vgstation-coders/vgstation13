@@ -2267,9 +2267,9 @@ other types of metals and chemistry for reagents).
 	req_tech = list("programming" = 3)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
-	build_path = /obj/item/weapon/circuitboard/ecb/advanced_airlock_controller
+	build_path = /obj/machinery/embedded_controller/radio/smart_airlock_controller
 
-/*
+
 /datum/design/hydroseeds
 	name = "Circuit Design (MegaSeed Servitor)"
 	desc = "Allows for the construction of circuit boards used to build a MegaSeedServitor."
@@ -2287,4 +2287,4 @@ other types of metals and chemistry for reagents).
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/hydronutrients
-	*/
+

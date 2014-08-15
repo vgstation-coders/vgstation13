@@ -10,7 +10,7 @@
 			for(var/mob/living/carbon/human/H in world)
 				if((H.virus2.len) || (H.stat == 2) || prob(30))
 					continue
-				if(prob(100))	// no lethal diseases outside virus mode!
+				if(prob(80))	// no lethal diseases outside virus mode!
 					infect_mob_random_lesser(H)
 					if(prob(20))//don't want people to know that the virus alert = greater virus
 						command_alert("Probable outbreak of level [rand(1,6)] viral biohazard aboard [station_name()]. All personnel must contain the outbreak.", "Virus Alert")

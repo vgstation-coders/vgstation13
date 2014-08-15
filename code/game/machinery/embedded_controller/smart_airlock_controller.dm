@@ -9,6 +9,17 @@
 #define AIRLOCK_TARGET_LOCKDOWN		2
 
 datum/computer/file/embedded_program/smart_airlock_controller
+	var/id_tag
+	var/tag_exterior_door
+	var/tag_interior_door
+	var/tag_airpump
+	var/tag_chamber_sensor
+	var/tag_exterior_sensor
+	var/tag_interior_sensor
+	//var/sanitize_external
+
+	state = AIRLOCK_STATE_WAIT
+	var/target_state = AIRLOCK_TARGET_NONE
 	var/current_state = AIRLOCK_TARGET_NONE
 
 datum/computer/file/embedded_program/smart_airlock_controller/New()
@@ -286,6 +297,7 @@ datum/computer/file/embedded_program/smart_airlock_controller/process()
 
 
 obj/machinery/embedded_controller/radio/smart_airlock_controller
+	boardtype = /obj/item/weapon/circuitboard/ecb/smart_airlock_controller
 
 	icon = 'icons/obj/airlock_machines.dmi'
 	icon_state = "airlock_control_standby"
@@ -297,7 +309,13 @@ obj/machinery/embedded_controller/radio/smart_airlock_controller
 	power_channel = ENVIRON
 
 	// Setup parameters only
-
+	var/id_tag
+	var/tag_exterior_door
+	var/tag_interior_door
+	var/tag_airpump
+	var/tag_chamber_sensor
+	var/tag_exterior_sensor
+	var/tag_interior_sensor
 	//var/sanitize_external
 
 	initialize()
@@ -345,7 +363,7 @@ obj/machinery/embedded_controller/radio/smart_airlock_controller
 			<li>[format_tag("Exterior","tag_exterior_sensor")]</li>
 		</ul>"}
 
-	proc/return_text()
+	return_text()
 		var/state_options = ""
 
 		var/state = 0

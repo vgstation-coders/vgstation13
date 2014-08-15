@@ -1,4 +1,4 @@
-<<<<<<< HEAD:vgstation12.dme
+
 // DM Environment file for baystation12.dme.
 // All manual changes should be made outside the BEGIN_ and END_ blocks.
  // New source code should be placed in .dm files: choose File/New --> Code File.
@@ -324,6 +324,7 @@
 #include "code\game\gamemodes\cult\cult.dm"
 #include "code\game\gamemodes\cult\cult_items.dm"
 #include "code\game\gamemodes\cult\cult_structures.dm"
+#include "code\game\gamemodes\cult\hell_universe.dm"
 #include "code\game\gamemodes\cult\ritual.dm"
 #include "code\game\gamemodes\cult\runes.dm"
 #include "code\game\gamemodes\cult\talisman.dm"
@@ -443,6 +444,7 @@
 #include "code\game\machinery\transformer.dm"
 #include "code\game\machinery\turrets.dm"
 #include "code\game\machinery\vending.dm"
+#include "code\game\machinery\walllockers.dm"
 #include "code\game\machinery\washing_machine.dm"
 #include "code\game\machinery\wishgranter.dm"
 #include "code\game\machinery\atmoalter\area_atmos_computer.dm"
@@ -513,6 +515,8 @@
 #include "code\game\machinery\embedded_controller\airlock_controllers.dm"
 #include "code\game\machinery\embedded_controller\airlock_program.dm"
 #include "code\game\machinery\embedded_controller\embedded_controller_base.dm"
+#include "code\game\machinery\embedded_controller\simple_vent_controller.dm"
+#include "code\game\machinery\embedded_controller\smart_airlock_controller.dm"
 #include "code\game\machinery\kitchen\gibber.dm"
 #include "code\game\machinery\kitchen\juicer.dm"
 #include "code\game\machinery\kitchen\microwave.dm"
@@ -818,6 +822,9 @@
 #include "code\game\verbs\who.dm"
 #include "code\js\byjax.dm"
 #include "code\js\menus.dm"
+#include "code\libs\db\constants.dm"
+#include "code\libs\db\core.dm"
+#include "code\libs\db\db.dm"
 #include "code\libs\Get Flat Icon\Get Flat Icon.dm"
 #include "code\libs\IconProcs\IconProcs.dm"
 #include "code\modules\admin\admin.dm"
@@ -1586,8 +1593,6 @@
 #include "maps\RandomZLevels\beach.dmm"
 #include "maps\RandomZLevels\listeningpost.dmm"
 // END_INCLUDE
-
-=======
 // DM Environment file for baystation12.dme.
 // All manual changes should be made outside the BEGIN_ and END_ blocks.
  // New source code should be placed in .dm files: choose File/New --> Code File.
@@ -3112,4 +3117,3 @@
 #include "maps\RandomZLevels\stationCollision.dm"
 #include "maps\RandomZLevels\wildwest.dm"
 // END_INCLUDE
->>>>>>> cac7f05474d4abefa55f47be43a02b2508acf5ad:baystation12.dme

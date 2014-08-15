@@ -94,5 +94,3 @@ In short:
 	for(var/mob/living/simple_animal/M in world)
 		if(M && !M.client)
 			M.stat = DEAD
-
-	ticker.StartThematic("endgame")

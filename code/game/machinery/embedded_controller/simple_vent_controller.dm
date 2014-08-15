@@ -39,6 +39,7 @@
 
 
 /obj/machinery/embedded_controller/radio/simple_vent_controller
+	boardtype = /obj/item/weapon/circuitboard/ecb/vent_controller
 
 	icon = 'icons/obj/airlock_machines.dmi'
 	icon_state = "airlock_control_standby"
@@ -69,7 +70,7 @@
 			icon_state = "airlock_control_off"
 
 
-	proc/return_text()
+	return_text()
 		var/state_options = null
 		state_options = {"<A href='?src=\ref[src];command=vent_inactive'>Deactivate Vent</A><BR>
 <A href='?src=\ref[src];command=vent_pump'>Activate Vent / Pump</A><BR>

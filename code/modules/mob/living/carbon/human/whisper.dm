@@ -153,26 +153,18 @@
 			continue
 		if (M.say_understands(src))
 			var/message_c
-<<<<<<< HEAD
 			message_c = sanitize(stars(message))
 			rendered = "<span class='game say'><span class='name'>[GetVoice()]</span>[alt_name] whispers, <span class='message'>\"[message_c]\"</span>[and_passes_on]</span>"
-=======
 			message_c = stars(message)
 			rendered = "<span class='game say'><span class='name'>[GetVoice()]</span>[alt_name] [heard] <span class='message'>\"[message_c]\"</span>[and_passes_on]</span>"
->>>>>>> cac7f05474d4abefa55f47be43a02b2508acf5ad
 			M.show_message(rendered, 2)
 		else
 			rendered = "<span class='game say'><span class='name'>[src.voice_name]</span> [unheard][and_passes_on].</span>"
 			M.show_message(rendered, 2)
 
 	if (italics)
-<<<<<<< HEAD
 		message = "<i>[sanitize(message)]</i>"
 	rendered = "<span class='game say'><span class='name'>[GetVoice()]</span>[alt_name] whispers, <span class='message'>\"[message]\"</span>[and_passes_on]</span>"
-=======
-		message = "<i>[message]</i>"
-	rendered = "<span class='game say'><span class='name'>[GetVoice()]</span>[alt_name] [heard] <span class='message'>\"[message]\"</span>[and_passes_on]</span>"
->>>>>>> cac7f05474d4abefa55f47be43a02b2508acf5ad
 
 	for (var/mob/M in dead_mob_list)
 		if (!(M.client) || istype(M, /mob/new_player))
