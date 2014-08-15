@@ -110,7 +110,6 @@
 	ponytail2
 		name = "Ponytail 2"
 		icon_state = "hair_pa"
-		gender = FEMALE
 		species_allowed = list("Human","Hylotl")
 
 	ponytail3

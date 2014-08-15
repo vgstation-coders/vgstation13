@@ -466,6 +466,10 @@ proc/get_damage_icon_part(damage_state, body_part)
 	update_inv_legcuffed(0)
 	update_inv_pockets(0)
 	UpdateDamageIcon()
+	update_hair()
+	update_body()
+	check_dna(src)
+
 	update_icons()
 	//Hud Stuff
 	update_hud()
