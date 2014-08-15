@@ -7,7 +7,7 @@
  */
 
 
-/*http://i.gyazo.com/ae86beffcaa3d4b1ea17fa71c1f6ae56.png
+/*
  * Tables
  */
 /obj/structure/table

@@ -29,6 +29,12 @@
 		if(M.lying)	return
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
+			if(locate(/obj/item/weapon, src) && prob(5) && H.m_intent == "run")
+				H.stop_pulling()
+				H << "\blue You stumbled over something!"
+				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -3)
+				H.Stun(2)
+				H.Weaken(2)
 			if(istype(H.shoes, /obj/item/clothing/shoes/clown_shoes))
 				var/obj/item/clothing/shoes/clown_shoes/O = H.shoes
 				if(H.m_intent == "run")
@@ -39,6 +45,11 @@
 						O.footstep++
 				else
 					playsound(src, "clownstep", 20, 1)
+			else if(H.shoes)
+				if(H.m_intent == "run")
+					playsound(src, pick('sound/effects/footsteps/concrete_step2.ogg','sound/effects/footsteps/concrete_step3.ogg','sound/effects/footsteps/concrete_step4.ogg'), 25, 1) // this will get annoying very fast.
+				else
+					playsound(src, 'sound/effects/footsteps/concrete_step5.ogg', 20, 1)
 
 			// Tracking blood
 			var/list/bloodDNA = null
