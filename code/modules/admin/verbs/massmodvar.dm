@@ -115,11 +115,18 @@
 		if(dir)
 			usr << "If a direction, direction is: [dir]"
 
-	var/class = input("What kind of variable?","Variable Type",default) as null|anything in list("text",
+	var/class
+	if(holder.marked_datum)
+		class = input("What kind of variable?","Variable Type",default) as null|anything in list("text",
+			"num","type","icon","file","edit referenced object","restore to default","marked datum ([holder.marked_datum.type])")
+	else
+		class = input("What kind of variable?","Variable Type",default) as null|anything in list("text",
 		"num","type","icon","file","edit referenced object","restore to default")
-
 	if(!class)
 		return
+
+	if(holder.marked_datum && class == "marked datum ([holder.marked_datum.type])")
+		class = "marked datum"
 
 	var/original_name
 
@@ -339,6 +346,43 @@
 			var/new_value = input("Pick icon:","Icon",O.vars[variable]) as null|icon
 			if(new_value == null) return
 			O.vars[variable] = new_value
+			if(method)
+				if(istype(O, /mob))
+					for(var/mob/M in mob_list)
+						if ( istype(M , O.type) )
+							M.vars[variable] = O.vars[variable]
+
+				else if(istype(O, /obj))
+					for(var/obj/A in world)
+						if ( istype(A , O.type) )
+							A.vars[variable] = O.vars[variable]
+
+				else if(istype(O, /turf))
+					for(var/turf/A in world)
+						if ( istype(A , O.type) )
+							A.vars[variable] = O.vars[variable]
+
+			else
+				if(istype(O, /mob))
+					for(var/mob/M in mob_list)
+						if (M.type == O.type)
+							M.vars[variable] = O.vars[variable]
+
+				else if(istype(O, /obj))
+					for(var/obj/A in world)
+						if (A.type == O.type)
+							A.vars[variable] = O.vars[variable]
+
+				else if(istype(O, /turf))
+					for(var/turf/A in world)
+						if (A.type == O.type)
+							A.vars[variable] = O.vars[variable]
+
+		if("marked datum")
+			var/new_value = holder.marked_datum
+			if(new_value == null) return
+			O.vars[variable] = new_value
+
 			if(method)
 				if(istype(O, /mob))
 					for(var/mob/M in mob_list)
