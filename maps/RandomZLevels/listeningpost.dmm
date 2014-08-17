@@ -1,151 +1,228 @@
-"a" = (/turf/space,/area)
-"b" = (/turf/simulated/mineral,/area/mine/unexplored)
-"c" = (/turf/simulated/wall/r_wall,/area/awaymission/listeningpost)
-"d" = (/turf/simulated/floor/plating,/area/awaymission/listeningpost)
-"e" = (/obj/machinery/power/smes/magical{desc = "A high-capacity superconducting magnetic energy storage (SMES) unit."; name = "power storage unit"},/turf/simulated/floor/plating,/area/awaymission/listeningpost)
-"f" = (/obj/machinery/door/airlock,/turf/simulated/floor,/area/awaymission/listeningpost)
-"g" = (/turf/simulated/wall,/area/awaymission/listeningpost)
-"h" = (/obj/structure/table,/obj/item/weapon/paper/monitorkey,/obj/item/device/radio/intercom{desc = "Talk through this. Evilly"; freerange = 1; frequency = 1213; name = "Syndicate Intercom"; pixel_x = 32; subspace_transmission = 1; syndie = 1},/obj/item/clothing/glasses/regular,/turf/simulated/floor,/area/awaymission/listeningpost)
-"i" = (/obj/structure/table,/turf/simulated/floor,/area/awaymission/listeningpost)
-"j" = (/turf/simulated/floor,/area/awaymission/listeningpost)
-"k" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
-"l" = (/turf/simulated/floor/plating/airless/asteroid,/area/mine/explored)
-"m" = (/obj/machinery/computer/message_monitor,/turf/simulated/floor,/area/awaymission/listeningpost)
-"n" = (/obj/structure/stool/bed/chair{dir = 4},/mob/living/simple_animal/hostile/syndicate{desc = "A weary looking syndicate operative."; faction = "syndicate"},/turf/simulated/floor,/area/awaymission/listeningpost)
-"o" = (/obj/structure/table,/obj/item/weapon/paper{info = "Nothing of interest to report."; name = "november report"},/obj/item/weapon/pen,/turf/simulated/floor,/area/awaymission/listeningpost)
-"p" = (/obj/item/device/radio/intercom{desc = "Talk through this. Evilly"; freerange = 1; frequency = 1213; name = "Syndicate Intercom"; pixel_x = 32; subspace_transmission = 1; syndie = 1},/turf/simulated/floor,/area/awaymission/listeningpost)
-"q" = (/obj/structure/rack,/obj/item/clothing/suit/space/syndicate,/obj/item/clothing/mask/gas,/obj/item/clothing/head/helmet/space/syndicate,/turf/simulated/floor,/area/awaymission/listeningpost)
-"r" = (/obj/machinery/door/airlock,/obj/item/weapon/paper{info = "I wonder how much longer they will accept my empty reports. They will cancel the case  soon without results.  When the pickup comes, I will tell them I have lost faith in our cause, and beg them to consider a diplomatic solution. How many nuclear teams have been dispatched with those nukes? I must try and prevent more from ever being sent. If they will not listen to reason, I will detonate the warehouse myself. Maybe some day in the immediate future, space will be peaceful, though I don't intend to live to see it. And that is why I write this down- it is my sacrifice that stabilised your worlds, traveller. Spare a thought for me, and please attempt to prevent nuclear proliferation, should it ever rear it's ugly head again. -Donk Co. Operative #451"; name = "odd report"},/obj/item/weapon/gun/projectile/pistol,/obj/item/weapon/silencer,/turf/simulated/floor,/area/awaymission/listeningpost)
-"s" = (/obj/structure/disposalpipe/segment{dir = 4; icon_state = "pipe-c"},/turf/simulated/mineral,/area/mine/unexplored)
-"t" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/mineral,/area/mine/unexplored)
-"u" = (/obj/structure/disposaloutlet{dir = 4},/obj/structure/disposalpipe/trunk{dir = 8},/turf/simulated/floor/plating/airless,/area)
-"v" = (/obj/structure/stool/bed,/obj/item/weapon/bedsheet/brown,/turf/simulated/floor,/area/awaymission/listeningpost)
-"w" = (/obj/structure/table,/obj/item/device/flashlight/lamp,/turf/simulated/floor,/area/awaymission/listeningpost)
-"x" = (/obj/machinery/vending/snack,/turf/simulated/floor,/area/awaymission/listeningpost)
-"y" = (/obj/structure/disposalpipe/segment,/turf/simulated/mineral,/area/mine/unexplored)
-"z" = (/obj/machinery/vending/cola,/turf/simulated/floor,/area/awaymission/listeningpost)
-"A" = (/obj/structure/closet,/obj/item/clothing/gloves/boxing,/turf/simulated/floor,/area/awaymission/listeningpost)
-"B" = (/obj/structure/filingcabinet,/obj/item/weapon/paper{info = "A good start to the operation: intercepted Nanotrasen military communications. A convoy is scheduled to transfer nuclear warheads to a new military base. This is as good a chance as any to get our hands on some heavy weaponry, I suggest we take it."; name = "april report"},/obj/item/weapon/paper{info = "Nothing of real interest to report this month. I have intercepted faint transmissions from what appears to be some sort of pirate radio station. They do not appear to be relevant to my assignment."; name = "may report"},/obj/item/weapon/paper{info = "Nanotrasen communications have been noticably less frequent recently.  The pirate radio station I found last month has been transmitting pro-Nanotrasen propaganda. I will continue to monitor it."; name = "june report"},/obj/item/weapon/paper{info = "Nothing of interest to report."; name = "july report"},/obj/item/weapon/paper{info = "Nothing of interest to report."; name = "august report"},/obj/item/weapon/paper{info = "Nothing of interest to report."; name = "september report"},/obj/item/weapon/paper{info = "Nothing of interest to report."; name = "october report"},/obj/item/weapon/paper{info = "1 x Stechtkin pistol - $600<br>1 x silencer - $200<br>shipping charge - $4360<br>total - $5160"; name = "receipt"},/turf/simulated/floor,/area/awaymission/listeningpost)
-"C" = (/obj/structure/table,/obj/item/weapon/paper{info = "<b>Mission Details</b>: You have been assigned to a newly constructed listening post constructed within an asteroid in Nanotrasen space to monitor their plasma mining operations. Accurate intel is crucial to the success of our operatives onboard, do not fail us."; name = "mission briefing"},/turf/simulated/floor,/area/awaymission/listeningpost)
-"D" = (/obj/machinery/disposal,/obj/structure/disposalpipe/trunk{dir = 4},/turf/simulated/floor,/area/awaymission/listeningpost)
-"E" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/wall/r_wall,/area/awaymission/listeningpost)
-"F" = (/obj/structure/disposalpipe/segment{dir = 8; icon_state = "pipe-c"},/turf/simulated/mineral,/area/mine/unexplored)
-"G" = (/obj/machinery/door/airlock{name = "Toilet"},/turf/simulated/floor,/area/awaymission/listeningpost)
-"H" = (/turf/simulated/floor{icon_state = "freezerfloor"},/area/awaymission/listeningpost)
-"I" = (/obj/machinery/shower{tag = "icon-shower (WEST)"; icon_state = "shower"; dir = 8},/turf/simulated/floor{icon_state = "freezerfloor"},/area/awaymission/listeningpost)
-"J" = (/obj/structure/toilet{tag = "icon-toilet00 (WEST)"; icon_state = "toilet00"; dir = 8},/turf/simulated/floor{icon_state = "freezerfloor"},/area/awaymission/listeningpost)
-"K" = (/turf/simulated/mineral/clown,/area/mine/unexplored)
-"L" = (/turf/simulated/shuttle/wall{tag = "icon-wall3"; icon_state = "wall3"},/area/mine/explored)
-"M" = (/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/mine/explored)
-"N" = (/obj/machinery/gateway{tag = "icon-off (NORTHWEST)"; icon_state = "off"; dir = 9},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/mine/explored)
-"O" = (/obj/machinery/gateway{tag = "icon-off (NORTH)"; icon_state = "off"; dir = 1},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/mine/explored)
-"P" = (/obj/machinery/gateway{tag = "icon-off (NORTHEAST)"; icon_state = "off"; dir = 5},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/mine/explored)
-"Q" = (/obj/machinery/gateway{tag = "icon-off (WEST)"; icon_state = "off"; dir = 8},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/mine/explored)
-"R" = (/obj/machinery/gateway/centeraway,/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/mine/explored)
-"S" = (/obj/machinery/gateway{tag = "icon-off (EAST)"; icon_state = "off"; dir = 4},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/mine/explored)
-"T" = (/obj/machinery/gateway{tag = "icon-off (SOUTHWEST)"; icon_state = "off"; dir = 10},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/mine/explored)
-"U" = (/obj/machinery/gateway,/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/mine/explored)
-"V" = (/obj/machinery/gateway{tag = "icon-off (SOUTHEAST)"; icon_state = "off"; dir = 6},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/mine/explored)
+"aa" = (/turf/space,/area)
+"ab" = (/turf/unsimulated/mineral/random,/area/mine/unexplored)
+"ac" = (/obj/item/weapon/gun/projectile/automatic/c20r,/turf/unsimulated/floor/asteroid,/area/mine/explored)
+"ad" = (/turf/unsimulated/floor/asteroid/plating,/area/mine/explored)
+"ae" = (/obj/effect/decal/remains/human,/turf/unsimulated/floor/asteroid/plating,/area/mine/explored)
+"af" = (/turf/simulated/wall/r_wall,/area/awaymission/listeningpost)
+"ag" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"ah" = (/obj/item/weapon/caution/cone,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"ai" = (/obj/effect/decal/cleanable/blood/oil{tag = "icon-mfloor3"; icon_state = "mfloor3"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"aj" = (/obj/effect/decal/cleanable/blood/oil{tag = "icon-mfloor4"; icon_state = "mfloor4"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"ak" = (/obj/effect/decal/cleanable/blood/oil{tag = "icon-mfloor7"; icon_state = "mfloor7"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"al" = (/obj/spacepod/civilian{tag = "icon-pod_civ (NORTH)"; icon_state = "pod_civ"; dir = 1},/obj/effect/decal/cleanable/blood/oil{tag = "icon-mfloor3"; icon_state = "mfloor3"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"am" = (/obj/effect/decal/cleanable/blood/oil{tag = "icon-mfloor5"; icon_state = "mfloor5"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"an" = (/obj/effect/decal/cleanable/blood/oil{tag = "icon-mfloor2"; icon_state = "mfloor2"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"ao" = (/obj/structure/reagent_dispensers/fueltank,/obj/machinery/light/small{tag = "icon-bulb1 (WEST)"; icon_state = "bulb1"; dir = 8},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"ap" = (/obj/effect/decal/cleanable/blood/oil{tag = "icon-mgibbl1"; icon_state = "mgibbl1"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"aq" = (/obj/effect/decal/cleanable/blood/oil{tag = "icon-mgibbl3"; icon_state = "mgibbl3"},/obj/structure/reagent_dispensers/fueltank,/obj/machinery/light/small{tag = "icon-bulb1 (EAST)"; icon_state = "bulb1"; dir = 4},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"ar" = (/turf/simulated/wall,/area/awaymission/listeningpost)
+"as" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"at" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"au" = (/obj/machinery/door/airlock/external,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"av" = (/obj/effect/decal/cleanable/cobweb,/obj/machinery/vending/coffee,/obj/machinery/light/small{tag = "icon-bulb1 (NORTH)"; icon_state = "bulb1"; dir = 1},/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"aw" = (/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"ax" = (/obj/effect/decal/cleanable/blood/oil{tag = "icon-mfloor6"; icon_state = "mfloor6"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"ay" = (/obj/effect/decal/cleanable/blood/oil{tag = "icon-mfloor5"; icon_state = "mfloor5"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"az" = (/obj/effect/decal/cleanable/cobweb2,/obj/effect/decal/cleanable/blood/oil,/obj/machinery/light/small{tag = "icon-bulb1 (NORTH)"; icon_state = "bulb1"; dir = 1},/obj/structure/dispenser/oxygen,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"aA" = (/obj/structure/lattice,/turf/space,/area)
+"aB" = (/obj/machinery/door/airlock/external,/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"aC" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"aD" = (/obj/machinery/portable_atmospherics/pump,/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"aE" = (/obj/structure/closet/crate,/obj/item/stack/sheet/mineral/uranium,/obj/item/stack/sheet/mineral/uranium,/obj/item/stack/sheet/mineral/uranium,/obj/item/stack/sheet/mineral/uranium,/obj/item/stack/sheet/mineral/uranium,/obj/item/stack/sheet/mineral/uranium,/obj/item/stack/sheet/mineral/uranium,/obj/effect/decal/cleanable/cobweb,/obj/effect/decal/cleanable/blood/oil{tag = "icon-mfloor5"; icon_state = "mfloor5"},/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"aF" = (/obj/effect/decal/cleanable/cobweb2,/obj/effect/decal/cleanable/blood/oil{tag = "icon-mfloor6"; icon_state = "mfloor6"},/obj/machinery/light/small{tag = "icon-bulb1 (NORTH)"; icon_state = "bulb1"; dir = 1},/obj/machinery/floodlight,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"aG" = (/turf/simulated/floor,/area/awaymission/listeningpost)
+"aH" = (/obj/structure/closet/secure_closet/freezer/fridge{locked = 0},/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/turf/simulated/floor,/area/awaymission/listeningpost)
+"aI" = (/obj/structure/closet/secure_closet/freezer/kitchen/mining{locked = 0},/turf/simulated/floor,/area/awaymission/listeningpost)
+"aJ" = (/obj/structure/table,/obj/item/weapon/storage/box/donkpockets,/turf/simulated/floor,/area/awaymission/listeningpost)
+"aK" = (/obj/machinery/microwave,/obj/structure/table,/turf/simulated/floor,/area/awaymission/listeningpost)
+"aL" = (/obj/structure/extinguisher_cabinet{pixel_x = -24},/obj/effect/decal/cleanable/blood/oil{tag = "icon-mfloor5"; icon_state = "mfloor5"},/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"aM" = (/obj/machinery/power/port_gen/pacman/super{anchored = 1},/obj/structure/cable{tag = "icon-0-2"; icon_state = "0-2"},/obj/effect/decal/cleanable/blood/oil{tag = "icon-mfloor3"; icon_state = "mfloor3"},/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"aN" = (/obj/machinery/light/small{tag = "icon-bulb1 (EAST)"; icon_state = "bulb1"; dir = 4},/turf/simulated/floor,/area/awaymission/listeningpost)
+"aO" = (/obj/machinery/light{tag = "icon-tube1 (WEST)"; icon_state = "tube1"; dir = 8},/turf/simulated/floor,/area/awaymission/listeningpost)
+"aP" = (/obj/structure/stool,/turf/simulated/floor,/area/awaymission/listeningpost)
+"aQ" = (/obj/structure/table,/turf/simulated/floor,/area/awaymission/listeningpost)
+"aR" = (/obj/machinery/power/apc{aidisabled = 1; cell_type = 30000; chargecount = 15000; locked = 0; pixel_x = -24},/obj/structure/cable{tag = "icon-0-4"; icon_state = "0-4"},/obj/machinery/power/terminal{tag = "icon-term (WEST)"; icon_state = "term"; dir = 8},/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"aS" = (/obj/structure/cable,/obj/structure/cable{tag = "icon-0-8"; icon_state = "0-8"},/obj/machinery/power/smes,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"aT" = (/obj/machinery/door/airlock/glass,/turf/simulated/floor,/area/awaymission/listeningpost)
+"aU" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"aV" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"aW" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"aX" = (/obj/machinery/door/airlock,/turf/simulated/floor,/area/awaymission/listeningpost)
+"aY" = (/turf/space,/turf/simulated/floor/plating/airless/catwalk{icon_state = "catwalk2"},/area)
+"aZ" = (/obj/structure/table,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"ba" = (/obj/machinery/light/small{tag = "icon-bulb1 (NORTH)"; icon_state = "bulb1"; dir = 1},/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"bb" = (/obj/machinery/door/airlock/glass,/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"bc" = (/obj/machinery/light{tag = "icon-tube1 (NORTH)"; icon_state = "tube1"; dir = 1},/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"bd" = (/obj/machinery/floodlight,/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"be" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced/tinted{dir = 8},/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"bf" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"bg" = (/turf/space,/turf/simulated/floor/plating/airless/catwalk{icon_state = "catwalk3"},/area)
+"bh" = (/obj/structure/rack,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/basic{dir = 4},/obj/item/clothing/shoes/magboots,/obj/item/clothing/suit/space/syndicate/black,/obj/item/clothing/head/helmet/space/syndicate/black,/obj/item/clothing/mask/gas,/obj/item/weapon/tank/jetpack/oxygen,/obj/item/weapon/gun/projectile/automatic/c20r,/turf/simulated/floor{icon_state = "dark-markings"; dir = 8},/area/awaymission/listeningpost)
+"bi" = (/obj/structure/rack,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/basic{dir = 8},/obj/item/clothing/shoes/magboots,/obj/item/clothing/suit/space/syndicate/black,/obj/item/clothing/head/helmet/space/syndicate/black,/obj/item/clothing/mask/gas,/obj/item/weapon/tank/jetpack/oxygen,/obj/item/weapon/gun/projectile/automatic/c20r,/turf/simulated/floor{icon_state = "dark-markings"; dir = 8},/area/awaymission/listeningpost)
+"bj" = (/obj/machinery/light/small{tag = "icon-bulb1 (WEST)"; icon_state = "bulb1"; dir = 8},/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"bk" = (/obj/item/device/radio/intercom{desc = "Talk through this. Evilly"; freerange = 1; frequency = 1213; name = "Syndicate Intercom"; pixel_x = 32; subspace_transmission = 1; syndie = 1},/turf/simulated/floor,/area/awaymission/listeningpost)
+"bl" = (/obj/machinery/door/airlock/external,/obj/item/tape/engineering{icon_state = "engineering_door"; layer = 3.2},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"bm" = (/obj/machinery/door/airlock/external,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"bn" = (/obj/structure/rack,/obj/structure/window/reinforced,/obj/structure/window/basic{dir = 4},/obj/item/clothing/shoes/magboots,/obj/item/clothing/suit/space/syndicate/black,/obj/item/clothing/head/helmet/space/syndicate/black,/obj/item/clothing/mask/gas,/obj/item/weapon/tank/jetpack/oxygen,/obj/item/weapon/gun/projectile/automatic/c20r,/turf/simulated/floor{icon_state = "dark-markings"; dir = 8},/area/awaymission/listeningpost)
+"bo" = (/obj/structure/rack,/obj/structure/window/reinforced,/obj/structure/window/basic{dir = 8},/obj/item/clothing/shoes/magboots,/obj/item/clothing/suit/space/syndicate/black,/obj/item/clothing/head/helmet/space/syndicate/black,/obj/item/clothing/mask/gas,/obj/item/weapon/tank/jetpack/oxygen,/obj/item/weapon/gun/projectile/automatic/c20r,/turf/simulated/floor{icon_state = "dark-markings"; dir = 8},/area/awaymission/listeningpost)
+"bp" = (/obj/machinery/computer/message_monitor,/turf/simulated/floor,/area/awaymission/listeningpost)
+"bq" = (/obj/structure/stool/bed/chair/office/light{dir = 4},/mob/living/simple_animal/hostile/syndicate{desc = "A weary looking syndicate operative."; faction = "syndicate"},/turf/simulated/floor,/area/awaymission/listeningpost)
+"br" = (/obj/structure/table,/obj/item/weapon/paper{info = "Nothing of interest to report."; name = "november report"},/obj/item/weapon/pen,/turf/simulated/floor,/area/awaymission/listeningpost)
+"bs" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"bt" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"bu" = (/obj/structure/table,/obj/item/device/flashlight,/obj/machinery/light{tag = "icon-tube1 (WEST)"; icon_state = "tube1"; dir = 8},/turf/simulated/floor,/area/awaymission/listeningpost)
+"bv" = (/obj/structure/table,/obj/item/weapon/paper/monitorkey,/obj/item/device/radio/intercom{desc = "Talk through this. Evilly"; freerange = 1; frequency = 1213; name = "Syndicate Intercom"; pixel_x = 32; subspace_transmission = 1; syndie = 1},/obj/item/clothing/glasses/regular,/obj/machinery/light,/turf/simulated/floor,/area/awaymission/listeningpost)
+"bw" = (/obj/machinery/light,/turf/simulated/floor,/area/awaymission/listeningpost)
+"bx" = (/obj/structure/rack,/obj/item/clothing/suit/space/syndicate,/obj/item/clothing/mask/gas,/obj/item/clothing/head/helmet/space/syndicate,/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"by" = (/turf/space,/turf/simulated/floor/plating/airless/catwalk{icon_state = "catwalk1"},/area)
+"bz" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced/tinted{dir = 1},/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"bA" = (/obj/machinery/door/airlock/external,/obj/item/tape/engineering{icon_state = "engineering_door"; layer = 3.2},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{tag = "icon-floorgrime"; icon_state = "floorgrime"},/area/awaymission/listeningpost)
+"bB" = (/obj/machinery/door/airlock,/obj/item/weapon/paper{info = "I wonder how much longer they will accept my empty reports. They will cancel the case  soon without results.  When the pickup comes, I will tell them I have lost faith in our cause, and beg them to consider a diplomatic solution. How many nuclear teams have been dispatched with those nukes? I must try and prevent more from ever being sent. If they will not listen to reason, I will detonate the warehouse myself. Maybe some day in the immediate future, space will be peaceful, though I don't intend to live to see it. And that is why I write this down- it is my sacrifice that stabilised your worlds, traveller. Spare a thought for me, and please attempt to prevent nuclear proliferation, should it ever rear it's ugly head again. -Donk Co. Operative #451"; name = "odd report"},/obj/item/weapon/gun/projectile/pistol,/obj/item/weapon/silencer,/turf/simulated/floor,/area/awaymission/listeningpost)
+"bC" = (/obj/structure/disposalpipe/segment{dir = 4; icon_state = "pipe-c"},/turf/unsimulated/floor/asteroid/plating,/area/awaymission/listeningpost)
+"bD" = (/obj/structure/disposalpipe/segment{dir = 4},/obj/structure/grille,/turf/unsimulated/floor/asteroid/plating,/area/awaymission/listeningpost)
+"bE" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/unsimulated/floor/asteroid/plating,/area/awaymission/listeningpost)
+"bF" = (/obj/structure/disposaloutlet{dir = 4},/obj/structure/disposalpipe/trunk{dir = 8},/turf/simulated/floor/plating/airless,/area/awaymission/listeningpost)
+"bG" = (/obj/machinery/light/small{tag = "icon-bulb1 (WEST)"; icon_state = "bulb1"; dir = 8},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"bH" = (/obj/machinery/floodlight,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"bI" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced/tinted{dir = 4},/obj/structure/grille,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"bJ" = (/obj/structure/stool/bed/chair{dir = 4},/turf/simulated/floor,/area/awaymission/listeningpost)
+"bK" = (/obj/structure/table,/obj/item/device/flashlight/lamp,/turf/simulated/floor,/area/awaymission/listeningpost)
+"bL" = (/obj/machinery/light{tag = "icon-tube1 (NORTH)"; icon_state = "tube1"; dir = 1},/obj/machinery/portable_atmospherics/pump,/turf/simulated/floor,/area/awaymission/listeningpost)
+"bM" = (/obj/machinery/vending/snack,/obj/effect/decal/cleanable/cobweb2,/turf/simulated/floor,/area/awaymission/listeningpost)
+"bN" = (/obj/structure/disposalpipe/segment,/turf/unsimulated/floor/asteroid/plating,/area/awaymission/listeningpost)
+"bO" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced/tinted{dir = 4},/obj/structure/grille,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"bP" = (/obj/machinery/vending/cola,/turf/simulated/floor,/area/awaymission/listeningpost)
+"bQ" = (/obj/machinery/portable_atmospherics/scrubber,/turf/simulated/floor,/area/awaymission/listeningpost)
+"bR" = (/obj/structure/table,/obj/item/weapon/paper{info = "<b>Mission Details</b>: You have been assigned to a newly constructed listening post constructed within an asteroid in Nanotrasen space to monitor their plasma mining operations. Accurate intel is crucial to the success of our operatives onboard, do not fail us."; name = "mission briefing"},/obj/item/device/flashlight/flare,/obj/item/device/flashlight/flare,/turf/simulated/floor,/area/awaymission/listeningpost)
+"bS" = (/obj/machinery/disposal,/obj/structure/disposalpipe/trunk{dir = 4},/turf/simulated/floor,/area/awaymission/listeningpost)
+"bT" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/wall/r_wall,/area/awaymission/listeningpost)
+"bU" = (/obj/structure/disposalpipe/segment{dir = 8; icon_state = "pipe-c"},/turf/unsimulated/floor/asteroid/plating,/area/awaymission/listeningpost)
+"bV" = (/turf/unsimulated/floor/asteroid,/area/mine/explored)
+"bW" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/grille,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"bX" = (/obj/machinery/door/airlock{name = "Toilet"},/turf/simulated/floor,/area/awaymission/listeningpost)
+"bY" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/asteroid,/area/mine/explored)
+"bZ" = (/obj/structure/stool/bed,/obj/item/weapon/bedsheet/brown,/turf/simulated/floor,/area/awaymission/listeningpost)
+"ca" = (/obj/structure/table,/obj/item/device/flashlight/lamp,/obj/effect/decal/cleanable/cobweb2,/turf/simulated/floor,/area/awaymission/listeningpost)
+"cb" = (/obj/machinery/light/small{tag = "icon-bulb1 (WEST)"; icon_state = "bulb1"; dir = 8},/turf/simulated/floor{icon_state = "freezerfloor"},/area/awaymission/listeningpost)
+"cc" = (/obj/machinery/shower{tag = "icon-shower (WEST)"; icon_state = "shower"; dir = 8},/obj/structure/window/reinforced,/turf/simulated/floor{icon_state = "freezerfloor"},/area/awaymission/listeningpost)
+"cd" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/structure/window/reinforced/tinted{dir = 4},/obj/structure/grille,/turf/simulated/floor/plating,/area/awaymission/listeningpost)
+"ce" = (/obj/machinery/light/small,/turf/simulated/floor,/area/awaymission/listeningpost)
+"cf" = (/obj/structure/filingcabinet,/obj/item/weapon/paper{info = "A good start to the operation: intercepted Nanotrasen military communications. A convoy is scheduled to transfer nuclear warheads to a new military base. This is as good a chance as any to get our hands on some heavy weaponry, I suggest we take it."; name = "april report"},/obj/item/weapon/paper{info = "Nothing of real interest to report this month. I have intercepted faint transmissions from what appears to be some sort of pirate radio station. They do not appear to be relevant to my assignment."; name = "may report"},/obj/item/weapon/paper{info = "Nanotrasen communications have been noticably less frequent recently.  The pirate radio station I found last month has been transmitting pro-Nanotrasen propaganda. I will continue to monitor it."; name = "june report"},/obj/item/weapon/paper{info = "Nothing of interest to report."; name = "july report"},/obj/item/weapon/paper{info = "Nothing of interest to report."; name = "august report"},/obj/item/weapon/paper{info = "Nothing of interest to report."; name = "september report"},/obj/item/weapon/paper{info = "Nothing of interest to report."; name = "october report"},/obj/item/weapon/paper{info = "1 x Stechtkin pistol - $600<br>1 x silencer - $200<br>shipping charge - $4360<br>total - $5160"; name = "receipt"},/turf/simulated/floor,/area/awaymission/listeningpost)
+"cg" = (/obj/structure/sink{dir = 8; pixel_x = -12; pixel_y = 2},/obj/structure/mirror{dir = 4; pixel_x = -24},/turf/simulated/floor{icon_state = "freezerfloor"},/area/awaymission/listeningpost)
+"ch" = (/obj/structure/toilet{tag = "icon-toilet00 (WEST)"; icon_state = "toilet00"; dir = 8},/turf/simulated/floor{icon_state = "freezerfloor"},/area/awaymission/listeningpost)
+"ci" = (/obj/effect/decal/remains/human,/turf/unsimulated/floor/asteroid,/area/mine/explored)
+"cj" = (/turf/simulated/shuttle/wall{tag = "icon-wall3"; icon_state = "wall3"},/area/awaymission/listeningpost)
+"ck" = (/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/awaymission/listeningpost)
+"cl" = (/obj/machinery/gateway{tag = "icon-off (NORTHWEST)"; icon_state = "off"; dir = 9},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/awaymission/listeningpost)
+"cm" = (/obj/machinery/gateway{tag = "icon-off (NORTH)"; icon_state = "off"; dir = 1},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/awaymission/listeningpost)
+"cn" = (/obj/machinery/gateway{tag = "icon-off (NORTHEAST)"; icon_state = "off"; dir = 5},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/awaymission/listeningpost)
+"co" = (/obj/machinery/gateway{tag = "icon-off (WEST)"; icon_state = "off"; dir = 8},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/awaymission/listeningpost)
+"cp" = (/obj/machinery/gateway/centeraway,/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/awaymission/listeningpost)
+"cq" = (/obj/machinery/gateway{tag = "icon-off (EAST)"; icon_state = "off"; dir = 4},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/awaymission/listeningpost)
+"cr" = (/obj/effect/decal/remains/robot,/turf/unsimulated/floor/asteroid/plating,/area/mine/explored)
+"cs" = (/obj/machinery/gateway{tag = "icon-off (SOUTHWEST)"; icon_state = "off"; dir = 10},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/awaymission/listeningpost)
+"ct" = (/obj/machinery/gateway,/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/awaymission/listeningpost)
+"cu" = (/obj/machinery/gateway{tag = "icon-off (SOUTHEAST)"; icon_state = "off"; dir = 6},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/awaymission/listeningpost)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbaaaaaaaaaaaaabbbbbbbbbbaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbaaaaaabbbbbbbbbbbbbbbbaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbccccbbbbbaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbcdecbbbbbaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbcccfgccccaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbcchijjkddkaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaalbbbbbbbbbbbbbbbbbbcmnojjkddkaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbalbbbbbbbbbbbbbbbbbbccpijjccccaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbllbbbbbbbbbbbbbbbbbbbcjjjqcbbbbaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbblbbbbbbbbbbbbbbbbccccrgggcbsttuaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbcvwgjjjxcbybbbbbbaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbcjjfjjjzcbybbbbbbbaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbcABgCjDEEtFbbbbbaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbcccccGgcbbbbbbbbbaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbcHIcbbbbbbbbbaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbcHJcbbbbbbbbbbaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbblllbbbbbbbbbbbbbbbbbbbbaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbKKbbbbbbbllaaabbbbbbbbbbbbbbbbbaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbKbbKbbblllaaaabbbbbbbbbbbbbbaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbKbbbbbbbbbbbblaaaaabbbbbbbbbbbbbbaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbKKbbbbbbbbbbblaaaabbbbbbbbbbbbbaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbKKbbbbbbbbbbblaabbbbbbbbbbbbbbaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbKbbbbbbaabbbbbbbbbbbbbaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbabbbbbbbbbbbbaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaabbbbaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbaaaaaabbbbbbbbbbbbbbbbbbbbKKbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbaaabbbbbbbbbbbbbbbbKbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbKbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbKKbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbblllllbbbbaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbblaaaabbaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbllbaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbLLLLLLLbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbblMMMMMLbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbMNOPMLbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbQRSMLbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbblbbbbbbbbbbbbbbMTUVMLbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbllbbbbbbbbbbbbblMMMMLbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbaalbbbbbbbbbbbbllLLLLLbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbblbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbllbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbalbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbaalbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbaaabbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadadadadadadaeababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafagagahagagagafababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababafaiajahagakagafababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababafalamahaganaiafababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababafaoagagagapaqafababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababafararasatauarafababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababafavarawaxayazafababababaAaAaAaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababafawaBawawaCaDafafafafabababaAaAaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababafawararararararaEaFafabababaAaAaAaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababafaGaraHaIaJaKaraLaMafabababaAaAaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababafaNaraOaGaPaQaraRaSafabababaAaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababafafafafafafawaraTaUaVaWaraXarafafafafaYaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababafaZawbaawbbawbbaGaGaGawbcawbdbeagagbfbgaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababafbhawawbiarbjararbkaQaGawawawblagagbmbgaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababafbnawawboarawarbpbqbraGaGawbsafafafafbgaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababababafbtawawawbbawarbubvaQaGbwaGbxafabababbyaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababafbzbAbAbfafafararararbBarararafabbCbDbEbFaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaaaaababaaaaababaaaaaaaaaaaaaaaaabababababababababababafbGagagbHafabbIbJbKaraGbLaGbMafabbNababaAaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababababaaaaaaaaabababababababababababababababafagagagbHafabbOaGaGaXaGaGaGbPafabbNababaAaAaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababababababaaabababababababababababababababababafbfbmbmbfafabbOaGbQarbRaGbSbTbTbEbUababaAaAaAaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababababababababababababababbVbVbVabbVadadadadbVbVbOaTbWararbXarafababababababaAaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababababababababababababbVbVbVbVbYbVbVbVadadbVbVbVbOaGbZcaarcbccafababababababaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababababababababababababababababababbVbVbVbVbVbVbVbVbVbVbVbVbVbVcdaGcecfarcgchafababababaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababababababababababbVbVbVbVbVbVbVbVbVbVbVbVbVbVafafafafafafafafababababaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababababababababababababababbVabbVbVabbVbVabbVbVbVbVababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaaaaaaaaaaaaaaaaabababababababababababababababababababababababababababababbVababababbVbVababbVbVbVbVababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababababababababababababababababababababababababababababababababbVbVbVabababbVbVbVababbVbVbVbVbVbVbVabababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababababababababababababababababababababababababababbVbVabababbVbVbVababababbVbVbVabciabababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababababababababababababababababababababababababababababababababababababababababababababababbVababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababababababababababababababbVabababababababababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababababababababbVababababbVbVababababbVbVbVbVabababababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababbVababbVababbVbVabbVbVbVababbVbVababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababbVbVababbVbVbVbVbVabababbVbVbVabababababbVbVababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababbVbVababbVbVabababababababbVbVbVababababbVbVabababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababbVbVbVbVbVabababababababababababababababbVbVabbVbVababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababababbVbVababbVababababababababababababababbVbVbVbVbVbVbVabababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababbVababbVbVababbVbVbVbVabababbVbVabababbVbVbVbVabababababbVbVabababababababababababababaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababbVbVbVababababababbVabababbVbVbVbVbVbVbVbVabababababababbVababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababbVbVababababababbVbVabababbVbVbVababababababbVbVabababbVababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababbVbVababbVbVabababababababbVbVbVbVababababbVbVbVabababbVababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababbVabbVbVabbVbVabababababababbVbVbVabbVbVbVbVabababbVbVabababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababbVabbVabababbVbVabababababababbVbVbVbVbVabababababbVababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababbVabababbVbVbVababababbVbVababababababbVbVbVabababababbVbVbVababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababbVbVababbVbVababababababbVababababababbVabababababbVbVbVbVabababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababababababababbVababababababababababbVababababbVbVbVababababbVbVbVabababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababbVbVbVabababababababababbVababbVbVbVbVababbVbVbVabababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababbVabbVabababbVbVababbVbVababababbVbVbVbVababababababbVbVbVabababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababbVbVbVababababbVbVbVbVbVabababbVbVbVbVabababababababababbVabababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababababbVbVababbVbVbVbVabbVbVabbVbVbVbVbVbVabcjcjcjcjcjcjcjbVbVbVbVababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaabababaaababababababababababababababbVabbVbVbVbVabababbVbVbVbVbVbVbVbVbVadckckckckckcjabababbVababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaababababababababababababababababababbVbVbVabbVababababababbVbVbVbVbVcibVbVbVadckclcmcnckcjabababbVbVabababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaabababababababababababbVbVababababbVbVbVbVbVbVababababababbVbVbVbVbVbVbVbVbVadadcocpcqckcjababababbVbVabababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaababababababababababbVbVbVbVabababbVbVabababababababababbVbVbVbVbVbVbVbVbVbVcrckcsctcuckcjabababababbVababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaabababababababababbVababbVbVbVababababababababababbVbVbVbVcibVbVbVbVbVbVbVadadckckckckcjabababababbVabababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaabababaaaaaaaabVbVababababbVbVababababbVbVabababbVabbVbVbVbVbVbVbVbVbVbVadaecjcjcjcjcjabababababbVababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababbVbVbVbVbVbVbVbVbVbVbVabbVbVbVbVbVbVbVbVbVbVbVbVabababababababababbVbVababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababbVbVabbVbVabbVbVabababbVbVbVbVbVbVbVbVbVbVbVabababababababbVbVbVabababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababbVabababababbVbVababbVababababbVbVbVbVbVbVbVbVbVbVbVbVababbVababbVbVabababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbVbVababababbVbVabbVbVababababbVcibVbVbVbVbVabbVbVabbVbVbVbVbVbVbVabababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababbVabababbVbVababbVababababbVbVababbVbVbVbVabababababbVbVabababababababababababababababababababababaaaaababaaaaababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababbVbVababababababbVababababbVababababbVbVbVabababababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababbVababababbVbVbVababababbVbVabababbVabbVbVababababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababbVbVabbVbVbVbVabababababbVbVabababababababbVbVabababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababbVbVabbVabababababababbVbVabababababababababbVabababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababbVbVbVababababababbVbVbVbVababababababababbVbVabababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababbVbVbVabbVababbVbVababababababababbVbVababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababbVabbVbVbVabababbVbVbVabababababbVbVbVbVabababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababbVabababababbVbVbVabbVbVababababbVababbVbVabababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababbVabababbVababbVbVbVabababbVbVababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababababababbVbVabbVabababababbVbVabababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababababababababababababababbVabbVababababababbVababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababaaaaaaababababbVbVababababababababababababaaaaaaaaababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababaaaaaaaaababbVbVbVababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababaaaaaaaaaaaaaaaabVbVabababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababaaaaaaaaaaaaaaaaaabVababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaaaaaaaaaaaaaaaaaaaaaaaaababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}

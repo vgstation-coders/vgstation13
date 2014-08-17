@@ -234,6 +234,7 @@ var/bomb_set
 					src.anchored = !( src.anchored )
 					if(src.anchored)
 						visible_message("\red With a steely snap, bolts slide out of [src] and anchor it to the flooring.")
+						playsound(src,'sound/effects/bolt.ogg', 70, 1)
 					else
 						visible_message("\red The anchoring bolts slide back into the depths of [src].")
 
@@ -307,10 +308,6 @@ var/bomb_set
 				if(blackbox)
 					blackbox.save_all_data_to_sql()
 
-				if (watchdog.waiting)
-					world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
-					watchdog.signal_ready()
-					return
 				sleep(300)
 				log_game("Rebooting due to nuclear detonation")
 				world.Reboot()

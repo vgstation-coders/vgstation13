@@ -35,7 +35,7 @@ datum
 				var/datum/reagent/self = src
 				src = null										  //of the reagent to the mob on TOUCHING it.
 
-				if(!istype(self.holder.my_atom, /obj/effect/effect/smoke/chem))
+				if(self.holder && !istype(self.holder.my_atom, /obj/effect/effect/smoke/chem))
 					// If the chemicals are in a smoke cloud, do not try to let the chemicals "penetrate" into the mob's system (balance station 13) -- Doohl
 
 					if(method == TOUCH)
@@ -2415,6 +2415,78 @@ datum
 			reagent_state = SOLID
 			color = "#FFFFFF" // rgb: 255,255,255
 
+		creatine
+			name = "Creatine"
+			id = "creatine"
+			description = "Highly toxic substance that grants the user enormous strength, before their muscles seize and tear their own body to shreds."
+			reagent_state = LIQUID
+			color = "#6F884F" // rgb: 255,255,255
+			var/has_been_hulk=0
+			var/has_ripped_and_torn=0 // We've applied permanent damage.
+			var/hulked_at = 0 // World.time
+
+			custom_metabolism=0.1
+
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				if(!data) data = 1
+				switch(volume)
+					if(1 to 25)
+						M.adjustToxLoss(1)
+						M.make_dizzy(5)
+						M.make_jittery(5)
+						if(prob(5))
+							M << "<span class='warning'>Oh god, the pain!</span>"
+					if(25 to INFINITY)
+						if(ishuman(M)) // Does nothing to non-humans.
+							var/mob/living/carbon/human/H=M
+							if(H.species.name!="Dionae") // Dionae are broken as fuck
+								if(H.hulk_time<world.time && !has_been_hulk)
+									H.hulk_time = world.time + (30 SECONDS)
+									hulked_at = H.hulk_time
+									if(!(M_HULK in H.mutations))
+										has_been_hulk=1
+										has_ripped_and_torn=0 // Fuck them UP after they dehulk.
+										H.mutations.Add(M_HULK)
+										H.update_mutations()		//update our mutation overlays
+										H.update_body()
+										message_admins("[key_name(M)] is TOO SWOLE TO CONTROL (on creatine)! ([formatJumpTo(M)])")
+								else if(H.hulk_time<world.time && has_been_hulk) // TIME'S UP
+									dehulk(H)
+								else if(prob(1))
+									H.say(pick("YOU TRYIN' BUILD SUM MUSSLE?","TOO SWOLE TO CONTROL","HEY MANG","HEY MAAAANG"))
+
+				data++
+				..()
+				return
+
+			proc/dehulk(var/mob/living/carbon/human/H)
+				if(has_been_hulk && !has_ripped_and_torn)
+					H << "<span class='warning'>You feel like your muscles are ripping apart!</span>"
+					has_ripped_and_torn=1
+					holder.remove_reagent(src.id) // Clean them out
+					H.adjustBruteLoss(200)        // Crit
+
+					for(var/datum/organ/external/E in H.organs)
+						if(istype(E, /datum/organ/external/chest))
+							continue
+						if(istype(E, /datum/organ/external/head))
+							continue // Permit basket cases.
+						if(prob(50))
+							// Override the current limb status and don't cause an explosion
+							E.droplimb(1,1)
+
+					if(H.species)
+						hgibs(H.loc, H.viruses, H.dna, H.species.flesh_color, H.species.blood_color)
+					else
+						hgibs(H.loc, H.viruses, H.dna)
+
+					H.hulk_time=0 // Just to be sure.
+					H.mutations.Remove(M_HULK)
+					//M.dna.SetSEState(HULKBLOCK,0)
+					H.update_mutations()		//update our mutation overlays
+					H.update_body()
+
 		blackpepper
 			name = "Black Pepper"
 			id = "blackpepper"
@@ -2458,7 +2530,58 @@ datum
 
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
-				M.adjustToxLoss(1*REM)
+				M.adjustToxLoss(1.5)
+				..()
+				return
+
+		amanatin
+			name = "Alpha-Amanatin"
+			id = "amanatin"
+			description = "A deadly poison derived from certain species of Amanita. Sits in the victim's system for a long period of time, then ravages the body."
+			color = "#792300" // rgb: 121, 35, 0
+			custom_metabolism = 0.01
+			var/activated = 0
+
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				if(!data) data = 1
+				if(volume <= 3 && data >= 60 && !activated)	//minimum of 1 minute required to be useful
+					activated = 1
+				if(activated)
+					if(ishuman(M))
+						var/mob/living/carbon/human/H = M
+						if(prob(8))
+							H << "<span class = 'warning'>You feel violently ill.</span>"
+						if(prob(min(data / 10, 100)))	H.vomit()
+						var/datum/organ/internal/liver/L = H.internal_organs["liver"]
+						if (istype(L) && !L.is_broken())
+							L.take_damage(data * 0.01, 0)
+							H.adjustToxLoss(round(data / 20, 1))
+						else
+							H.adjustToxLoss(round(data / 10, 1))
+							data += 4
+					holder.remove_reagent(src.id, 0.02)
+				switch(data)
+					if(1 to 30)
+						M.druggy = max(M.druggy, 10)
+					if(540 to 600)	//start barfing violently after 9 minutes
+						if(ishuman(M))
+							var/mob/living/carbon/human/H = M
+							if(prob(12))
+								H << "<span class = 'warning'>You feel violently ill.</span>"
+							H.adjustToxLoss(0.1)
+							if(prob(8)) H.vomit()
+					if(600 to INFINITY)	//ded in 10 minutes with a minimum of 6 units
+						if(ishuman(M))
+							var/mob/living/carbon/human/H = M
+							if(prob(20))
+								H << "<span class = 'sinister'>You feel deathly ill.</span>"
+							var/datum/organ/internal/liver/L = H.internal_organs["liver"]
+							if (istype(L) && !L.is_broken())
+								L.take_damage(10, 0)
+							else
+								H.adjustToxLoss(60)
+				data++
 				..()
 				return
 
@@ -2648,8 +2771,134 @@ datum
 				..()
 				return
 
+		discount
+			name = "Discount Dan's Special Sauce"
+			id = "discount"
+			description = "You can almost feel your liver failing, just by looking at it."
+			reagent_state = LIQUID
+			color = "#6F884F" // rgb: 255,255,255 //to-do
+
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				if(!data) data = 1
+				if(ishuman(M))
+					var/mob/living/carbon/human/H = M
+					switch(volume)
+						if(1 to 20)
+							if(prob(5))
+								H << "<span class='warning'>You don't feel very good..</span>"
+								holder.remove_reagent(src.id, 0.1 * REAGENTS_METABOLISM)
+						if(20 to 35)
+							if(prob(10))
+								H << "<span class='warning'>You REALLY don't feel very good..</span>"
+							if(prob(5))
+								H.adjustToxLoss(0.1)
+								H.visible_message("[H] groans.")
+								holder.remove_reagent(src.id, 0.3 * REAGENTS_METABOLISM)
+						if(35 to INFINITY)
+							if(prob(10))
+								H << "<span class='warning'>Your stomach grumbles unsettlingly..</span>"
+							if(prob(5))
+								H << "<span class='warning'>Something feels wrong with your body..</span>"
+								var/datum/organ/internal/liver/L = H.internal_organs["liver"]
+								if (istype(L))
+									L.take_damage(0.1, 1)
+								H.adjustToxLoss(0.13)
+								holder.remove_reagent(src.id, 0.5 * REAGENTS_METABOLISM)
+						else
+							return
+
+		irradiatedbeans
+			name = "Irradiated Beans"
+			id = "irradiatedbeans"
+			description = "You can almost taste the lead sheet behind it!"
+			reagent_state = LIQUID
+			color = "#6F884F" // rgb: 255,255,255 //to-do
+		toxicwaste
+			name = "Toxic Waste"
+			id = "toxicwaste"
+			description = "Yum!"
+			reagent_state = LIQUID
+			color = "#6F884F" // rgb: 255,255,255 //to-do
+		refriedbeans
+			name = "Re-Fried Beans"
+			id = "refriedbeans"
+			description = "Mmm.."
+			reagent_state = LIQUID
+			color = "#6F884F" // rgb: 255,255,255 //to-do
+		mutatedbeans
+			name = "Mutated Beans"
+			id = "mutatedbeans"
+			description = "Mutated flavor."
+			reagent_state = LIQUID
+			color = "#6F884F" // rgb: 255,255,255 //to-do
+		beff
+			name = "Beff"
+			id = "beff"
+			description = "What's beff? Find out!"
+			reagent_state = LIQUID
+			color = "#6F884F" // rgb: 255,255,255 //to-do
+		horsemeat
+			name = "Horse Meat"
+			id = "horsemeat"
+			description = "Tastes excellent in lasagna."
+			reagent_state = LIQUID
+			color = "#6F884F" // rgb: 255,255,255 //to-do
+		moonrocks
+			name = "Moon Rocks"
+			id = "moonrocks"
+			description = "We don't know much about it, but we damn well know that it hates the human skeleton."
+			reagent_state = LIQUID
+			color = "#6F884F" // rgb: 255,255,255 //to-do
+		offcolorcheese
+			name = "Off-Color Cheese"
+			id = "offcolorcheese"
+			description = "American Cheese."
+			reagent_state = LIQUID
+			color = "#6F884F" // rgb: 255,255,255 //to-do
+		bonemarrow
+			name = "Bone Marrow"
+			id = "bonemarrow"
+			description = "Looks like a skeleton got stuck in the production line."
+			reagent_state = LIQUID
+			color = "#6F884F" // rgb: 255,255,255 //to-do
+		greenramen
+			name = "Greenish Ramen Noodles"
+			id = "greenramen"
+			description = "That green isn't organic."
+			reagent_state = LIQUID
+			color = "#6F884F" // rgb: 255,255,255 //to-do
+		glowingramen
+			name = "Glowing Ramen Noodles"
+			id = "glowingramen"
+			description = "That glow 'aint healthy."
+			reagent_state = LIQUID
+			color = "#6F884F" // rgb: 255,255,255 //to-do
+		deepfriedramen
+			name = "Deep Fried Ramen Noodles"
+			id = "deepfriedramen"
+			description = "Ramen, deep fried."
+			reagent_state = LIQUID
+			color = "#6F884F" // rgb: 255,255,255 //to-do
+			
+		peptobismol
+			name = "Peptobismol"
+			id = "peptobismol"
+			description = "Jesus juice." //You're welcome, guy in the thread that rolled a 69.
+			reagent_state = LIQUID
+			color = "#C8A5DC" // rgb: 200, 165, 220
+			
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				M.drowsyness = max(M.drowsyness-2*REM, 0)
+				if(holder.has_reagent("discount"))
+					holder.remove_reagent("discount", 2*REM)
+				M.hallucination = max(0, M.hallucination - 5*REM)
+				M.adjustToxLoss(-2*REM)
+				..()
+				return
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////// DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum////////////////////////////////
+//////////DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum//////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		drink
@@ -3088,13 +3337,13 @@ datum
 			reagent_state = LIQUID
 			nutriment_factor = 0 //So alcohol can fill you up! If they want to.
 			color = "#404030" // rgb: 64, 64, 48
-			var/dizzy_adj = 3
-			var/slurr_adj = 3
-			var/confused_adj = 2
-			var/slur_start = 65			//amount absorbed after which mob starts slurring
+			var/dizzy_adj = 7
+			var/slurr_adj = 7
+			var/confused_adj = 4
+			var/slur_start = 60			//amount absorbed after which mob starts slurring
 			var/confused_start = 130	//amount absorbed after which mob starts confusing directions
-			var/blur_start = 260	//amount absorbed after which mob starts getting blurred vision
-			var/pass_out = 325	//amount absorbed after which mob starts passing out
+			var/blur_start = 160	//amount absorbed after which mob starts getting blurred vision
+			var/pass_out = 200	//amount absorbed after which mob starts passing out
 
 			on_mob_life(var/mob/living/M as mob)
 				// Sobering multiplier.
@@ -3790,3 +4039,8 @@ datum
 						M.confused = max(M.confused+15,15)
 					..()
 					return
+
+/datum/reagent/Destroy()
+	if(holder)
+		holder.reagent_list -= src
+		holder = null

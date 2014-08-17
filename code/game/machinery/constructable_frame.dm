@@ -637,7 +637,7 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/weapon/stock_parts/micro_laser/high" = 2)
 
-/*
+
 /obj/item/weapon/circuitboard/hydroseeds
 	name = "Circuit Board (MegaSeed Servitor)"
 	build_path = "/obj/machinery/vending/hydroseeds"
@@ -661,7 +661,7 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/capacitor" = 1,
 							"/obj/item/weapon/stock_parts/scanning_module" = 2,
 							"/obj/item/weapon/stock_parts/manipulator" = 2)
-*/
+
 
 /obj/item/weapon/circuitboard/pipedispenser
 	name = "Circuit Board (Pipe Dispenser)"

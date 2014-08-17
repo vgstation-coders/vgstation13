@@ -12,11 +12,6 @@
 	m_amt = 1875
 	max_amount = 60
 	attack_verb = list("hit", "bludgeoned", "whacked")
-	w_type=RECYK_METAL
-
-/obj/item/stack/rods/recycle(var/datum/materials/rec)
-	rec.addAmount("iron",amount/2)
-	return RECYK_METAL
 
 /obj/item/stack/rods/attackby(obj/item/W as obj, mob/user as mob)
 	..()
@@ -62,12 +57,10 @@
 			user << "\blue You need at least two rods to do this."
 			return
 		usr << "\blue Assembling grille..."
-
 		if (!do_after(usr, 10))
 			return
-
-		var /obj/structure/grille/Grille = getFromPool(/obj/structure/grille, usr.loc)
+		var/obj/structure/grille/F = new /obj/structure/grille/ ( usr.loc )
 		usr << "\blue You assemble a grille"
-		Grille.add_fingerprint(usr)
+		F.add_fingerprint(usr)
 		use(2)
 	return

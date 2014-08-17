@@ -1,6 +1,7 @@
 /mob/living/carbon/human/say(var/message)
 
 	if(silent)
+		src << "\red Silence."
 		return
 
 	//Mimes dont speak! Changeling hivemind and emotes are allowed.
@@ -26,6 +27,12 @@
 						continue
 					if(gene.is_active(src))
 						message = gene.OnSay(src,message)
+
+	if(species)
+		var/datum/species/S = species
+		if(istype(S, /datum/species/hylotl) && copytext(message, 1, 2) != "*" && copytext(message, 1, 3) == ":4")
+			var/songsound = pick('sound/voice/hylotl_song_1.ogg','sound/voice/hylotl_song_2.ogg')
+			playsound(get_turf(src), songsound, 40, 1, -1)
 	/*
 		if(dna.mutantrace == "lizard")
 			if(copytext(message, 1, 2) != "*")
@@ -133,6 +140,10 @@
 	if ((M_HULK in mutations) && health >= 25 && length(message))
 		if(copytext(message, 1, 2) != "*")
 			message = "[uppertext(message)]!!" //because I don't know how to code properly in getting vars from other files -Bro
+
+	if (src.stuttering)
+		if(copytext(message, 1, 2) != "*")
+			message = stutter(message)
 
 	if (src.slurring)
 		if(copytext(message, 1, 2) != "*")

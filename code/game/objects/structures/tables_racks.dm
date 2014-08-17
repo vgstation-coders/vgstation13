@@ -233,11 +233,26 @@
 
 /obj/structure/table/attack_paw(mob/user)
 	if(M_HULK in user.mutations)
+		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-		visible_message("<span class='danger'>[user] smashes the [src] apart!</span>")
-		user.changeNext_move(8)
 		destroy()
 
+	if(usr.a_intent == "disarm" && get_dist(usr, src) <= 1 && !usr.buckled)
+		if(prob(70))
+			visible_message("<span class='notice'>[user] climbs on the [src].</span>")
+			usr.loc = src.loc
+		else
+			visible_message("<span class='warning'>[user] slipped off the edge of the [src].</span>")
+			playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
+			if(prob(10) && istype(user,/mob/living/carbon/human))
+				user.weakened += rand(4,10)
+				var/mob/living/carbon/human/H = user
+				var/organ_name = pick("l_arm","r_arm","r_leg","l_leg")
+				var/datum/organ/external/E = H.get_organ(organ_name)
+				E.fracture()
+			else
+				user.weakened += rand(4,10)
+	return
 
 /obj/structure/table/attack_alien(mob/user)
 	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
@@ -256,10 +271,27 @@
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		destroy()
 
+	if(usr.a_intent == "disarm" && get_dist(usr, src) <= 1 && !usr.buckled)
+		if(prob(70))
+			visible_message("<span class='notice'>[user] climbs on the [src].</span>")
+			usr.loc = src.loc
+		else
+			visible_message("<span class='warning'>[user] slipped off the edge of the [src].</span>")
+			playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
+			if(prob(10) && istype(user,/mob/living/carbon/human))
+				user.weakened += rand(4,10)
+				var/mob/living/carbon/human/H = user
+				var/organ_name = pick("l_arm","r_arm","r_leg","l_leg")
+				var/datum/organ/external/E = H.get_organ(organ_name)
+				E.fracture()
+			else
+				user.weakened += rand(4,10)
+	return
+
 /obj/structure/table/attack_tk() // no telehulk sorry
 	return
 
-/obj/structure/table/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/table/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 	if(istype(mover,/obj/item/projectile))
 		return (check_cover(mover,target))
@@ -488,6 +520,7 @@
 	icon_state = "woodtable"
 	parts = /obj/item/weapon/table_parts/wood
 	health = 50
+	autoignition_temperature = AUTOIGNITION_WOOD // TODO:  Special ash subtype that looks like charred table legs.
 
 
 /obj/structure/table/woodentable/poker //No specialties, Just a mapping object.
@@ -575,7 +608,7 @@
 		del(src)
 		return
 
-/obj/structure/rack/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/rack/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 	if(src.density == 0) //Because broken racks -Agouri |TODO: SPRITE!|
 		return 1
@@ -616,6 +649,23 @@
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		destroy()
 
+	if(usr.a_intent == "disarm" && get_dist(usr, src) <= 1 && !usr.buckled)
+		if(prob(70))
+			visible_message("<span class='notice'>[user] climbs on the [src].</span>")
+			usr.loc = src.loc
+		else
+			visible_message("<span class='warning'>[user] slipped off the edge of the [src].</span>")
+			playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
+			if(prob(10) && istype(user,/mob/living/carbon/human))
+				user.weakened += rand(4,10)
+				var/mob/living/carbon/human/H = user
+				var/organ_name = pick("l_arm","r_arm","r_leg","l_leg")
+				var/datum/organ/external/E = H.get_organ(organ_name)
+				E.take_damage(10, 0, 0)
+				E.fracture()
+			else
+				user.weakened += rand(4,10)
+	return
 /obj/structure/rack/attack_paw(mob/user)
 	if(M_HULK in user.mutations)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))

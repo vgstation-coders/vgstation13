@@ -29,7 +29,20 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 		/obj/item/stack/sheet/mineral/gold,
 		/obj/item/stack/sheet/mineral/diamond,
 		/obj/item/stack/sheet/mineral/uranium,
-		/obj/item/stack/sheet/mineral/plasma
+		/obj/item/stack/sheet/mineral/plasma,
+		/obj/item/stack/sheet/mineral/pharosium,
+		/obj/item/stack/sheet/mineral/char,
+		/obj/item/stack/sheet/mineral/claretine,
+		/obj/item/stack/sheet/mineral/bohrum,
+		/obj/item/stack/sheet/mineral/syreline,
+		/obj/item/stack/sheet/mineral/erebite,
+		/obj/item/stack/sheet/mineral/cytine,
+		/obj/item/stack/sheet/mineral/telecrystal,
+		/obj/item/stack/sheet/mineral/mauxite,
+		/obj/item/stack/sheet/mineral/cobryl,
+		/obj/item/stack/sheet/mineral/cerenkite,
+		/obj/item/stack/sheet/mineral/molitz,
+		/obj/item/stack/sheet/mineral/uqill
 	)
 
 /obj/machinery/r_n_d/circuit_imprinter/New()
@@ -65,9 +78,8 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	var/T = 0
 	for(var/obj/item/weapon/reagent_containers/glass/G in component_parts)
 		T += G.reagents.maximum_volume
-	var/datum/reagents/R = new/datum/reagents(T)		//Holder for the reagents used as materials.
-	reagents = R
-	R.my_atom = src
+
+	create_reagents(T) // Holder for the reagents used as materials.
 	T = 0
 	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
 		T += M.rating

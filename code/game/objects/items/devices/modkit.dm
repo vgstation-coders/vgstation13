@@ -40,14 +40,6 @@
 	if(!parts)
 		del(src)
 
-/* /vg/ - Not needed
-/obj/item/device/modkit/tajaran
-	name = "tajara hardsuit modification kit"
-	desc = "A kit containing all the needed tools and parts to modify a hardsuit for another user. This one looks like it's meant for Tajara."
-	to_helmet = /obj/item/clothing/head/helmet/space/rig/tajara
-	to_suit = /obj/item/clothing/suit/space/rig/tajara
-*/
-
 // /vg/: Old atmos hardsuit.
 /obj/item/device/modkit/gold_rig
 	name = "gold atmos hardsuit modification kit"

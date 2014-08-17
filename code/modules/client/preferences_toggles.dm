@@ -181,15 +181,3 @@
 		prefs.UI_style_color = UI_style_color_new
 		prefs.save_preferences()
 		usr << "UI was saved"
-
-/client/verb/toggle_media()
-	set name = "Hear/Silence Streaming"
-	set category = "Preferences"
-	set desc = "Toggle hearing streaming media (radios, jukeboxes, etc)"
-
-	prefs.toggles ^= SOUND_STREAMING
-	prefs.save_preferences()
-	usr << "You will [(prefs.toggles & SOUND_STREAMING) ? "now" : "no longer"] hear streamed media."
-	// Restart.
-	media.stop_music()
-	media.update_music()

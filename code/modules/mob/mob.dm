@@ -103,6 +103,9 @@
 /mob/proc/movement_delay()
 	return 0
 
+/mob/proc/get_gender()
+	return gender
+
 /mob/proc/Life()
 	return
 
@@ -462,6 +465,150 @@ var/list/slot_equipment_priority = list( \
 			break
 	return openslot
 
+/mob/proc/hear_say(var/message, var/verb = "says", var/datum/language/language = null, var/alt_name = "",var/italics = 0, var/mob/speaker = null, var/sound/speech_sound, var/sound_vol)
+	if(!client)
+		return
+
+	if(speaker && !speaker.client && istype(src,/mob/dead/observer) && client.prefs.toggles & CHAT_GHOSTEARS && !speaker in view(src))
+			//Does the speaker have a client?  It's either random stuff that observers won't care about (Experiment 97B says, 'EHEHEHEHEHEHEHE')
+			//Or someone snoring.  So we make it where they won't hear it.
+		return
+
+	var/style = "body"
+
+	//non-verbal languages are garbled if you can't see the speaker. Yes, this includes if they are inside a closet.
+
+	if(!say_understands(speaker,language))
+		if(istype(speaker,/mob/living/simple_animal))
+			var/mob/living/simple_animal/S = speaker
+			message = pick(S.speak)
+		else
+			message = stars(message)
+
+	if(language)
+		style = language.colour
+
+	var/speaker_name = speaker.name
+	if(istype(speaker, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = speaker
+		speaker_name = H.GetVoice()
+
+	if(italics)
+		message = "<i>[message]</i>"
+
+	var/track = null
+	if(istype(src, /mob/dead/observer))
+		if(italics && client.prefs.toggles & CHAT_GHOSTRADIO)
+			return
+		if(speaker_name != speaker.real_name && speaker.real_name)
+			speaker_name = "[speaker.real_name] ([speaker_name])"
+		track = "(<a href='byond://?src=\ref[src];track=\ref[speaker]'>follow</a>) "
+		if(client.prefs.toggles & CHAT_GHOSTEARS && speaker in view(src))
+			message = "<b>[message]</b>"
+
+	if(sdisabilities & DEAF || ear_deaf)
+		if(speaker == src)
+			src << "<span class='warning'>You cannot hear yourself speak!</span>"
+		else
+			src << "<span class='name'>[speaker_name]</span>[alt_name] talks but you cannot hear \him."
+	else
+		src << "<span class='game say'><span class='name'>[speaker_name]</span>[alt_name] [track][verb], <span class='message'><span class='[style]'>\"[message]\"</span></span></span>"
+		if (speech_sound && (get_dist(speaker, src) <= world.view && src.z == speaker.z))
+			var/turf/source = speaker? get_turf(speaker) : get_turf(src)
+			src.playsound_local(source, speech_sound, sound_vol, 1)
+
+
+/mob/proc/hear_radio(var/message, var/verb="says", var/datum/language/language=null, var/part_a, var/part_b, var/mob/speaker = null, var/hard_to_hear = 0, var/vname ="")
+
+	if(!client)
+		return
+
+
+	var/track = null
+
+	var/style = "body"
+
+	//non-verbal languages are garbled if you can't see the speaker. Yes, this includes if they are inside a closet.
+
+	if(!say_understands(speaker,language))
+		if(istype(speaker,/mob/living/simple_animal))
+			var/mob/living/simple_animal/S = speaker
+			message = pick(S.speak)
+		else
+			message = stars(message)
+
+	if(language)
+		verb = language.speech_verb
+		style = language.colour
+
+
+
+	if(hard_to_hear)
+		message = stars(message)
+
+	var/speaker_name = speaker.name
+
+	if(vname)
+		speaker_name = vname
+
+	if(hard_to_hear)
+		speaker_name = "unknown"
+
+	var/changed_voice
+
+	if(istype(src, /mob/living/silicon/ai) && !hard_to_hear)
+		var/jobname // the mob's "job"
+		var/mob/living/carbon/human/impersonating //The crewmember being impersonated, if any.
+
+		if (ishuman(speaker))
+			var/mob/living/carbon/human/H = speaker
+
+			if((H.wear_id && istype(H.wear_id,/obj/item/weapon/card/id/syndicate)) && (H.wear_mask && istype(H.wear_mask,/obj/item/clothing/mask/gas/voice)))
+
+				changed_voice = 1
+				var/mob/living/carbon/human/I = locate(speaker_name)
+
+				if(I)
+					impersonating = I
+					jobname = impersonating.get_assignment()
+				else
+					jobname = "Unknown"
+			else
+				jobname = H.get_assignment()
+
+		else if (iscarbon(speaker)) // Nonhuman carbon mob
+			jobname = "No id"
+		else if (isAI(speaker))
+			jobname = "AI"
+		else if (isrobot(speaker))
+			jobname = "Cyborg"
+		else if (istype(speaker, /mob/living/silicon/pai))
+			jobname = "Personal AI"
+		else
+			jobname = "Unknown"
+
+		if(changed_voice)
+			if(impersonating)
+				track = "<a href='byond://?src=\ref[src];trackname=[rhtml_encode(speaker_name)];track=\ref[impersonating]'>[speaker_name] ([jobname])</a>"
+			else
+				track = "[speaker_name] ([jobname])"
+		else
+			track = "<a href='byond://?src=\ref[src];trackname=[rhtml_encode(speaker_name)];track=\ref[speaker]'>[speaker_name] ([jobname])</a>"
+
+	if(istype(src, /mob/dead/observer))
+		if(speaker_name != speaker.real_name && !isAI(speaker)) //Announce computer and various stuff that broadcasts doesn't use it's real name but AI's can't pretend to be other mobs.
+			speaker_name = "[speaker.real_name] ([speaker_name])"
+		track = "[speaker_name] (<a href='byond://?src=\ref[src];track=\ref[speaker]'>follow</a>)"
+
+	if(sdisabilities & DEAF || ear_deaf)
+		if(prob(20))
+			src << "<span class='warning'>You feel your headset vibrate but can hear nothing from it!</span>"
+	else if(track)
+		src << "[part_a][track][part_b][verb], <span class=\"[style]\">\"[message]\"</span></span></span>"
+	else
+		src << "[part_a][speaker_name][part_b][verb], <span class=\"[style]\">\"[message]\"</span></span></span>"
+
+
 /obj/item/proc/mob_check_equip(M as mob, slot, disable_warning = 0)
 	if(!M) return 0
 	if(!slot) return 0
@@ -760,7 +907,7 @@ var/list/slot_equipment_priority = list( \
 	set category = "IC"
 
 	msg = copytext(msg, 1, MAX_MESSAGE_LEN)
-	msg = sanitize(msg)
+	msg = sanitize_uni(msg)
 
 	if(mind)
 		mind.store_memory(msg)
@@ -789,7 +936,7 @@ var/list/slot_equipment_priority = list( \
 
 	if(msg != null)
 		msg = copytext(msg, 1, MAX_MESSAGE_LEN)
-		msg = html_encode(msg)
+		msg = sanitize_uni(msg)
 
 		flavor_text = msg
 
@@ -876,6 +1023,122 @@ var/list/slot_equipment_priority = list( \
 	set name = "Changelog"
 	set category = "OOC"
 	getFiles(
+		'nano/images/uiBackground.png',
+		'nano/mapbase1024.png',
+		'nano/NTLogoRevised.fla',
+		'nano/uiBackground.fla',
+		'nano/images/source/icon-eye.xcf',
+		'nano/images/source/NTLogoRevised.fla',
+		'nano/images/source/splash-ds.html',
+		'nano/images/source/uiBackground.fla',
+		'nano/images/source/uiBackground.xcf',
+		'nano/images/source/uiBackground-Syndicate.xcf',
+		'nano/images/source/uiBasicBackground.xcf',
+		'nano/images/source/uiIcons16Green.xcf',
+		'nano/images/source/uiIcons16Red.xcf',
+		'nano/images/source/uiIcons24.xcf',
+		'nano/images/source/uiNoticeBackground.xcf',
+		'nano/images/source/uiTitleBackground.xcf',
+		'nano/images/loading.gif',
+		'nano/images/icon-eye.xcf',
+		'nano/images/uiBackground.png',
+		'nano/images/uiBackground.xcf',
+		'nano/images/uiBackground-Syndicate.xcf',
+		'nano/images/uiBasicBackground.png',
+		'nano/images/nanomap.png',
+		'nano/images/nanomap1.png',
+		'nano/images/nanomap2.png',
+		'nano/images/nanomap3.png',
+		'nano/images/nanomap4.png',
+		'nano/images/nanomap5.png',
+		'nano/images/nanomap6.png',
+		'nano/images/nanomapBackground.png',
+		'nano/images/uiBackground-Syndicate.png',
+		'nano/images/uiIcons16.png',
+		'nano/images/uiIcons16Green.png',
+		'nano/images/uiIcons16Red.png',
+		'nano/images/uiIcons16Orange.png',
+		'nano/images/uiIcons24.png',
+		'nano/images/uiIcons24.xcf',
+		'nano/images/uiLinkPendingIcon.gif',
+		'nano/images/uiMaskBackground.png',
+		'nano/images/uiNoticeBackground.jpg',
+		'nano/images/uiTitleFluff.png',
+		'nano/images/uiTitleFluff-Syndicate.png',
+		'nano/templates/apc.tmpl',
+		'nano/templates/accounts_terminal.tmpl',
+		'nano/templates/advanced_airlock_console.tmpl',
+		'nano/templates/ame.tmpl',
+		'nano/templates/atmos_control.tmpl',
+		'nano/templates/atmos_control_map_content.tmpl',
+		'nano/templates/atmos_control_map_header.tmpl',
+		'nano/templates/comm_console.tmpl',
+		'nano/templates/disease_splicer.tmpl',
+		'nano/templates/dish_incubator.tmpl',
+		'nano/templates/docking_airlock_console.tmpl',
+		'nano/templates/door_access_console.tmpl',
+		'nano/templates/engines_control.tmpl',
+		'nano/templates/escape_pod_berth_console.tmpl',
+		'nano/templates/escape_pod_console.tmpl',
+		'nano/templates/escape_shuttle_control_console.tmpl',
+		'nano/templates/helm.tmpl',
+		'nano/templates/isolation_centrifuge.tmpl',
+		'nano/templates/layout_default.tmpl',
+		'nano/templates/multi_docking_console.tmpl',
+		'nano/templates/omni_filter.tmpl',
+		'nano/templates/omni_mixer.tmpl',
+		'nano/templates/pathogenic_isolator.tmpl',
+		'nano/templates/shuttle_control_console.tmpl',
+		'nano/templates/shuttle_control_console_exploration.tmpl',
+		'nano/templates/simple_airlock_console.tmpl',
+		'nano/templates/simple_docking_console.tmpl',
+		'nano/templates/simple_docking_console_pod.tmpl',
+		'nano/templates/TemplatesGuide.txt',
+		'nano/templates/air_alarm.tmpl',
+		'nano/templates/atmos_control.tmpl',
+		'nano/templates/atmos_control_map_header.tmpl',
+		'nano/templates/atmos_control_map_content.tmpl',
+		'nano/templates/crew_monitor.tmpl',
+		'nano/templates/crew_monitor_map_content.tmpl',
+		'nano/templates/crew_monitor_map_header.tmpl',
+		'nano/templates/canister.tmpl',
+		'nano/templates/chem_dispenser.tmpl',
+		'nano/templates/crew_monitor.tmpl',
+		'nano/templates/cryo.tmpl',
+		'nano/templates/dna_modifier.tmpl',
+		'nano/templates/freezer.tmpl',
+		'nano/templates/geoscanner.tmpl',
+		'nano/templates/identification_computer.tmpl',
+		'nano/templates/pda.tmpl',
+		'nano/templates/smartfridge.tmpl',
+		'nano/templates/smes.tmpl',
+		'nano/templates/tanks.tmpl',
+		'nano/templates/telescience_console.tmpl',
+		'nano/templates/transfer_valve.tmpl',
+		'nano/templates/uplink.tmpl',
+		'nano/js/libraries/1-jquery.js',
+		'nano/js/libraries.min.js',
+		'nano/js/libraries/2-doT.js',
+		'nano/js/libraries/3-jquery.timers.js',
+		'nano/js/pngfix.js',
+		'nano/js/nano_template.js',
+		'nano/js/nano_base_helpers.js',
+		'nano/js/nano_update.js',
+		'nano/js/nano_config.js',
+		'nano/js/nano_utility.js',
+		'nano/js/nano_base_callbacks.js',
+		'nano/js/nano_state.js',
+		'nano/js/nano_state_manager.js',
+		'nano/js/nano_state_default.js',
+		'nano/css/layout_basic.css',
+		'nano/css/nlayout_default.css',
+		'nano/css/layout_default.css',
+		'nano/css/icons.css',
+		'nano/css/shared.css',
+		'html/painew.png',
+		'html/loading.gif',
+		'html/search.js',
+		'html/panels.css',
 		'html/postcardsmall.jpg',
 		'html/somerights20.png',
 		'html/88x31.png',
@@ -1036,6 +1299,9 @@ var/list/slot_equipment_priority = list( \
 	if(pulling)
 		pulling.pulledby = null
 		pulling = null
+
+/mob/proc/is_ready()
+	return client && !!mind
 
 /mob/proc/start_pulling(var/atom/movable/AM)
 

@@ -492,55 +492,47 @@
 					media_base_url = value
 				if("vgws_base_url")
 					vgws_base_url = value
-				else
-					diary << "Unknown setting in configuration: '[name]'"
 
-		else if(type == "game_options")
-			if(!value)
-				diary << "Unknown value for setting [name] in [filename]."
-			value = text2num(value)
-
-			switch(name)
 				if("max_explosion_range")
-					MAX_EXPLOSION_RANGE = value
+					MAX_EXPLOSION_RANGE = text2num(value)
 				if("health_threshold_crit")
-					config.health_threshold_crit = value
+					config.health_threshold_crit = text2num(value)
 				if("health_threshold_softcrit")
-					config.health_threshold_softcrit = value
+					config.health_threshold_softcrit = text2num(value)
 				if("health_threshold_dead")
-					config.health_threshold_dead = value
+					config.health_threshold_dead = text2num(value)
 				if("revival_pod_plants")
-					config.revival_pod_plants = value
+					config.revival_pod_plants = text2num(value)
 				if("revival_cloning")
-					config.revival_cloning = value
+					config.revival_cloning = text2num(value)
 				if("revival_brain_life")
-					config.revival_brain_life = value
+					config.revival_brain_life = text2num(value)
 				if("run_speed")
-					config.run_speed = value
+					config.run_speed = text2num(value)
 				if("walk_speed")
-					config.walk_speed = value
+					config.walk_speed = text2num(value)
 				if("human_delay")
-					config.human_delay = value
+					config.human_delay = text2num(value)
 				if("robot_delay")
-					config.robot_delay = value
+					config.robot_delay = text2num(value)
 				if("monkey_delay")
-					config.monkey_delay = value
+					config.monkey_delay = text2num(value)
 				if("alien_delay")
-					config.alien_delay = value
+					config.alien_delay = text2num(value)
 				if("slime_delay")
-					config.slime_delay = value
+					config.slime_delay = text2num(value)
 				if("animal_delay")
-					config.animal_delay = value
+					config.animal_delay = text2num(value)
 				if("organ_health_multiplier")
-					config.organ_health_multiplier = value / 100
+					config.organ_health_multiplier = text2num(value) / 100
 				if("organ_regeneration_multiplier")
-					config.organ_regeneration_multiplier = value / 100
+					config.organ_regeneration_multiplier = text2num(value) / 100
 				if("bones_can_break")
-					config.bones_can_break = value
+					config.bones_can_break = text2num(value)
 				if("limbs_can_break")
-					config.limbs_can_break = value
+					config.limbs_can_break = text2num(value)
 				if("respawn_delay")
-					config.respawn_delay = value
+					config.respawn_delay = text2num(value)
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 
@@ -579,58 +571,11 @@
 				sqllogin = value
 			if ("password")
 				sqlpass = value
-			if ("feedback_database")
-				sqlfdbkdb = value
-			if ("feedback_login")
-				sqlfdbklogin = value
-			if ("feedback_password")
-				sqlfdbkpass = value
 			if ("enable_stat_tracking")
 				sqllogging = 1
 			else
 				diary << "Unknown setting in configuration: '[name]'"
 
-/datum/configuration/proc/loadforumsql(filename)  // -- TLE
-	var/list/Lines = file2list(filename)
-	for(var/t in Lines)
-		if(!t)	continue
-
-		t = trim(t)
-		if (length(t) == 0)
-			continue
-		else if (copytext(t, 1, 2) == "#")
-			continue
-
-		var/pos = findtext(t, " ")
-		var/name = null
-		var/value = null
-
-		if (pos)
-			name = lowertext(copytext(t, 1, pos))
-			value = copytext(t, pos + 1)
-		else
-			name = lowertext(t)
-
-		if (!name)
-			continue
-
-		switch (name)
-			if ("address")
-				forumsqladdress = value
-			if ("port")
-				forumsqlport = value
-			if ("database")
-				forumsqldb = value
-			if ("login")
-				forumsqllogin = value
-			if ("password")
-				forumsqlpass = value
-			if ("activatedgroup")
-				forum_activated_group = value
-			if ("authenticatedgroup")
-				forum_authenticated_group = value
-			else
-				diary << "Unknown setting in configuration: '[name]'"
 
 /datum/configuration/proc/pick_mode(mode_name)
 	// I wish I didn't have to instance the game modes in order to look up
@@ -640,7 +585,7 @@
 		if (M.config_tag && M.config_tag == mode_name)
 			return M
 		del(M)
-	return new /datum/game_mode/extended()
+	return new /datum/game_mode/()
 
 /datum/configuration/proc/get_runnable_modes()
 	var/list/datum/game_mode/runnable_modes = new

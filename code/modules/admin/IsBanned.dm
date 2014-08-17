@@ -13,6 +13,8 @@ world/IsBanned(key,address,computer_id)
 		AddBan(ckey(key), computer_id, "Use of ToR", "Automated Ban", 0, 0)
 		return list("reason"="Using ToR", "desc"="\nReason: The network you are using to connect has been banned.\nIf you believe this is a mistake, please request help at [config.banappeals]")
 
+	if(!check_bwhitelist(ckey(key)))
+		return list("reason"="not in whitelist", "desc"="\nYou are not in whitelist.\nGo to forum: http://forum.ss13.ru/index.php?showforum=48")
 
 	if(config.ban_legacy_system)
 		//Ban Checking

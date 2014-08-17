@@ -133,7 +133,7 @@
 	if(custom_event_msg && custom_event_msg != "")
 		src << "<h1 class='alert'>Custom Event</h1>"
 		src << "<h2 class='alert'>A custom event is taking place. OOC Info:</h2>"
-		src << "<span class='alert'>[html_encode(custom_event_msg)]</span>"
+		src << "<span class='alert'>[sanitize(html_decode(custom_event_msg))]</span>"
 		src << "<br>"
 
 	if( (world.address == address || !address) && !host )
@@ -166,16 +166,16 @@
 
 
 /client/proc/log_client_to_db()
-
-	if ( IsGuestKey(src.key) )
+	if(IsGuestKey(key))
 		return
 
 	establish_db_connection()
+
 	if(!dbcon.IsConnected())
 		return
 
-	var/sql_ckey = sql_sanitize_text(src.ckey)
-
+	var/sql_ckey = sanitizeSQL(ckey)
+	testing("sql_ckey = [sql_ckey]")
 	var/DBQuery/query = dbcon.NewQuery("SELECT id, datediff(Now(),firstseen) as age FROM erro_player WHERE ckey = '[sql_ckey]'")
 	query.Execute()
 	var/sql_id = 0
@@ -184,14 +184,18 @@
 		player_age = text2num(query.item[2])
 		break
 
-	var/DBQuery/query_ip = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE ip = '[address]'")
+	var/sql_address = sanitizeSQL(address)
+
+	var/DBQuery/query_ip = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE ip = '[sql_address]'")
 	query_ip.Execute()
 	related_accounts_ip = ""
 	while(query_ip.NextRow())
 		related_accounts_ip += "[query_ip.item[1]], "
 		break
 
-	var/DBQuery/query_cid = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE computerid = '[computer_id]'")
+	var/sql_computerid = sanitizeSQL(computer_id)
+
+	var/DBQuery/query_cid = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE computerid = '[sql_computerid]'")
 	query_cid.Execute()
 	related_accounts_cid = ""
 	while(query_cid.NextRow())
@@ -206,27 +210,27 @@
 			return
 
 	var/admin_rank = "Player"
-	if(src.holder)
-		admin_rank = src.holder.rank
 
-	var/sql_ip = sql_sanitize_text(src.address)
-	var/sql_computerid = sql_sanitize_text(src.computer_id)
-	var/sql_admin_rank = sql_sanitize_text(admin_rank)
+	if(istype(holder))
+		admin_rank = holder.rank
 
+	var/sql_admin_rank = sanitizeSQL(admin_rank)
 
 	if(sql_id)
 		//Player already identified previously, we need to just update the 'lastseen', 'ip' and 'computer_id' variables
-		var/DBQuery/query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_ip]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]' WHERE id = [sql_id]")
+		var/DBQuery/query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]' WHERE id = [sql_id]")
 		query_update.Execute()
 	else
 		//New player!! Need to insert all the stuff
-		var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO erro_player (id, ckey, firstseen, lastseen, ip, computerid, lastadminrank) VALUES (null, '[sql_ckey]', Now(), Now(), '[sql_ip]', '[sql_computerid]', '[sql_admin_rank]')")
+		var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO erro_player (id, ckey, firstseen, lastseen, ip, computerid, lastadminrank) VALUES (null, '[sql_ckey]', Now(), Now(), '[sql_address]', '[sql_computerid]', '[sql_admin_rank]')")
 		query_insert.Execute()
 
-	//Logging player access
-	var/serverip = "[world.internet_address]:[world.port]"
-	var/DBQuery/query_accesslog = dbcon.NewQuery("INSERT INTO `erro_connection_log`(`id`,`datetime`,`serverip`,`ckey`,`ip`,`computerid`) VALUES(null,Now(),'[serverip]','[sql_ckey]','[sql_ip]','[sql_computerid]');")
-	query_accesslog.Execute()
+	// logging player access
+	var/server_address_port = "[world.internet_address]:[world.port]"
+	var/sql_server_address_port = sanitizeSQL(server_address_port)
+	var/DBQuery/query_connection_log = dbcon.NewQuery("INSERT INTO `erro_connection_log`(`id`,`datetime`,`serverip`,`ckey`,`ip`,`computerid`) VALUES(null,Now(),'[sql_server_address_port]','[sql_ckey]','[sql_address]','[sql_computerid]');")
+
+	query_connection_log.Execute()
 
 
 #undef TOPIC_SPAM_DELAY
@@ -255,6 +259,120 @@
 	nanomanager.send_resources(src)
 
 	getFiles(
+		'nano/images/uiBackground.png',
+		'nano/mapbase1024.png',
+		'nano/NTLogoRevised.fla',
+		'nano/uiBackground.fla',
+		'nano/images/source/icon-eye.xcf',
+		'nano/images/source/NTLogoRevised.fla',
+		'nano/images/source/splash-ds.html',
+		'nano/images/source/uiBackground.fla',
+		'nano/images/source/uiBackground.xcf',
+		'nano/images/source/uiBackground-Syndicate.xcf',
+		'nano/images/source/uiBasicBackground.xcf',
+		'nano/images/source/uiIcons16Green.xcf',
+		'nano/images/source/uiIcons16Red.xcf',
+		'nano/images/source/uiIcons24.xcf',
+		'nano/images/source/uiNoticeBackground.xcf',
+		'nano/images/source/uiTitleBackground.xcf',
+		'nano/images/loading.gif',
+		'nano/images/icon-eye.xcf',
+		'nano/images/uiBackground.png',
+		'nano/images/uiBackground.xcf',
+		'nano/images/uiBackground-Syndicate.xcf',
+		'nano/images/uiBasicBackground.png',
+		'nano/images/nanomap.png',
+		'nano/images/nanomap1.png',
+		'nano/images/nanomap2.png',
+		'nano/images/nanomap3.png',
+		'nano/images/nanomap4.png',
+		'nano/images/nanomap5.png',
+		'nano/images/nanomap6.png',
+		'nano/images/nanomapBackground.png',
+		'nano/images/uiBackground-Syndicate.png',
+		'nano/images/uiIcons16.png',
+		'nano/images/uiIcons16Green.png',
+		'nano/images/uiIcons16Red.png',
+		'nano/images/uiIcons16Orange.png',
+		'nano/images/uiIcons24.png',
+		'nano/images/uiIcons24.xcf',
+		'nano/images/uiLinkPendingIcon.gif',
+		'nano/images/uiMaskBackground.png',
+		'nano/images/uiNoticeBackground.jpg',
+		'nano/images/uiTitleFluff.png',
+		'nano/images/uiTitleFluff-Syndicate.png',
+		'nano/templates/apc.tmpl',
+		'nano/templates/accounts_terminal.tmpl',
+		'nano/templates/advanced_airlock_console.tmpl',
+		'nano/templates/ame.tmpl',
+		'nano/templates/atmos_control.tmpl',
+		'nano/templates/atmos_control_map_content.tmpl',
+		'nano/templates/atmos_control_map_header.tmpl',
+		'nano/templates/comm_console.tmpl',
+		'nano/templates/disease_splicer.tmpl',
+		'nano/templates/dish_incubator.tmpl',
+		'nano/templates/docking_airlock_console.tmpl',
+		'nano/templates/door_access_console.tmpl',
+		'nano/templates/engines_control.tmpl',
+		'nano/templates/escape_pod_berth_console.tmpl',
+		'nano/templates/escape_pod_console.tmpl',
+		'nano/templates/escape_shuttle_control_console.tmpl',
+		'nano/templates/helm.tmpl',
+		'nano/templates/isolation_centrifuge.tmpl',
+		'nano/templates/layout_default.tmpl',
+		'nano/templates/multi_docking_console.tmpl',
+		'nano/templates/omni_filter.tmpl',
+		'nano/templates/omni_mixer.tmpl',
+		'nano/templates/pathogenic_isolator.tmpl',
+		'nano/templates/shuttle_control_console.tmpl',
+		'nano/templates/shuttle_control_console_exploration.tmpl',
+		'nano/templates/simple_airlock_console.tmpl',
+		'nano/templates/simple_docking_console.tmpl',
+		'nano/templates/simple_docking_console_pod.tmpl',
+		'nano/templates/TemplatesGuide.txt',
+		'nano/templates/air_alarm.tmpl',
+		'nano/templates/atmos_control.tmpl',
+		'nano/templates/atmos_control_map_header.tmpl',
+		'nano/templates/atmos_control_map_content.tmpl',
+		'nano/templates/crew_monitor.tmpl',
+		'nano/templates/crew_monitor_map_content.tmpl',
+		'nano/templates/crew_monitor_map_header.tmpl',
+		'nano/templates/canister.tmpl',
+		'nano/templates/chem_dispenser.tmpl',
+		'nano/templates/crew_monitor.tmpl',
+		'nano/templates/cryo.tmpl',
+		'nano/templates/dna_modifier.tmpl',
+		'nano/templates/freezer.tmpl',
+		'nano/templates/geoscanner.tmpl',
+		'nano/templates/identification_computer.tmpl',
+		'nano/templates/pda.tmpl',
+		'nano/templates/smartfridge.tmpl',
+		'nano/templates/smes.tmpl',
+		'nano/templates/tanks.tmpl',
+		'nano/templates/telescience_console.tmpl',
+		'nano/templates/transfer_valve.tmpl',
+		'nano/templates/uplink.tmpl',
+		'nano/js/libraries/1-jquery.js',
+		'nano/js/libraries.min.js',
+		'nano/js/libraries/2-doT.js',
+		'nano/js/libraries/3-jquery.timers.js',
+		'nano/js/pngfix.js',
+		'nano/js/nano_template.js',
+		'nano/js/nano_base_helpers.js',
+		'nano/js/nano_update.js',
+		'nano/js/nano_config.js',
+		'nano/js/nano_utility.js',
+		'nano/js/nano_base_callbacks.js',
+		'nano/js/nano_state.js',
+		'nano/js/nano_state_manager.js',
+		'nano/js/nano_state_default.js',
+		'nano/css/layout_basic.css',
+		'nano/css/nlayout_default.css',
+		'nano/css/layout_default.css',
+		'nano/css/icons.css',
+		'nano/css/shared.css',
+		'html/painew.png',
+		'html/loading.gif',
 		'html/search.js',
 		'html/panels.css',
 		'icons/pda_icons/pda_atmos.png',

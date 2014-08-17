@@ -36,6 +36,9 @@ var/global/datum/controller/gameticker/ticker
 
 	var/triai = 0//Global holder for Triumvirate
 
+	// Hack
+	var/obj/machinery/media/jukebox/superjuke/thematic/theme = null
+
 /datum/controller/gameticker/proc/pregame()
 	login_music = pick(\
 	'sound/music/space.ogg',\
@@ -46,7 +49,9 @@ var/global/datum/controller/gameticker/ticker
 	'sound/music/clown.ogg',\
 	'sound/music/robocop.ogg',\
 	'sound/music/gaytony.ogg',\
-	'sound/music/rocketman.ogg')
+	'sound/music/rocketman.ogg',\
+	'sound/music/2525.ogg',\
+	'sound/music/moonbaseoddity.ogg')
 	do
 		pregame_timeleft = 300
 		world << "<B><FONT color='blue'>Welcome to the pre-game lobby!</FONT></B>"
@@ -55,11 +60,7 @@ var/global/datum/controller/gameticker/ticker
 			for(var/i=0, i<10, i++)
 				sleep(1)
 				vote.process()
-				watchdog.check_for_update()
-				if(watchdog.waiting)
-					world << "\blue Server update detected, restarting momentarily."
-					watchdog.signal_ready()
-					return
+
 			if(going)
 				pregame_timeleft--
 
@@ -170,16 +171,10 @@ var/global/datum/controller/gameticker/ticker
 	//start_events() //handles random events and space dust.
 	//new random event system is handled from the MC.
 
-	if(0 == admins.len)
-		send2adminirc("Round has started with no admins online.")
 
 	supply_shuttle.process() 		//Start the supply shuttle regenerating points -- TLE
 	master_controller.process()		//Start master_controller.process()
 	lighting_controller.process()	//Start processing DynamicAreaLighting updates
-
-	if(config.sql_enabled)
-		spawn(3000)
-		statistic_cycle() // Polls population totals regularly and stores them in an SQL DB -- TLE
 
 	return 1
 
@@ -328,13 +323,10 @@ var/global/datum/controller/gameticker/ticker
 		mode.process()
 
 		emergency_shuttle.process()
-		watchdog.check_for_update()
 
 		var/force_round_end=0
 
 		// If server's empty, force round end.
-		if(watchdog.waiting && player_list.len == 0)
-			force_round_end=1
 
 		var/mode_finished = mode.check_finished() || (emergency_shuttle.location == 2 && emergency_shuttle.alert == 1) || force_round_end
 		if(!mode.explosion_in_progress && mode_finished)
@@ -346,19 +338,12 @@ var/global/datum/controller/gameticker/ticker
 			spawn(50)
 				if (mode.station_was_nuked)
 					feedback_set_details("end_proper","nuke")
-					if(!delay_end && !watchdog.waiting)
-						world << "\blue <B>Rebooting due to destruction of station in [restart_timeout/10] seconds</B>"
 				else
 					feedback_set_details("end_proper","proper completion")
-					if(!delay_end && !watchdog.waiting)
-						world << "\blue <B>Restarting in [restart_timeout/10] seconds</B>"
 
 				if(blackbox)
 					blackbox.save_all_data_to_sql()
 
-				if (watchdog.waiting)
-					world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
-					watchdog.signal_ready()
 				else if(!delay_end)
 					sleep(restart_timeout)
 					if(!delay_end)
@@ -407,26 +392,6 @@ var/global/datum/controller/gameticker/ticker
 
 	mode.declare_completion()//To declare normal completion.
 
-	//calls auto_declare_completion_* for all modes
-	for(var/handler in typesof(/datum/game_mode/proc))
-		if (findtext("[handler]","auto_declare_completion_"))
-			call(mode, handler)()
-
-	//Print a list of antagonists to the server log
-	var/list/total_antagonists = list()
-	//Look into all mobs in world, dead or alive
-	for(var/datum/mind/Mind in minds)
-		var/temprole = Mind.special_role
-		if(temprole)							//if they are an antagonist of some sort.
-			if(temprole in total_antagonists)	//If the role exists already, add the name to it
-				total_antagonists[temprole] += ", [Mind.name]([Mind.key])"
-			else
-				total_antagonists.Add(temprole) //If the role doesnt exist in the list, create it and add the mob
-				total_antagonists[temprole] += ": [Mind.name]([Mind.key])"
-
-	//Now print them all into the log!
-	log_game("Antagonists at round end were...")
-	for(var/i in total_antagonists)
-		log_game("[i]s[total_antagonists[i]].")
+	scoreboard()
 
 	return 1

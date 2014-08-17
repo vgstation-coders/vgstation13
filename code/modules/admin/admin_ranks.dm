@@ -80,6 +80,7 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 			var/ckey = ckey(List[1])
 			if(!ckey)						continue
 
+
 			//rank follows the first "-"
 			var/rank = ""
 			if(List.len >= 2)
@@ -87,7 +88,6 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 
 			//load permissions associated with this rank
 			var/rights = admin_ranks[rank]
-
 			//create the admin datum and store it for later use
 			var/datum/admins/D = new /datum/admins(rank, rights, ckey)
 
@@ -105,14 +105,14 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 			load_admins()
 			return
 
-		var/DBQuery/query = dbcon.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin")
+		var/DBQuery/query = dbcon.NewQuery("SELECT ckey, rank, flags FROM erro_admin")
 		query.Execute()
 		while(query.NextRow())
 			var/ckey = query.item[1]
 			var/rank = query.item[2]
+			var/rights = query.item[3]
 			if(rank == "Removed")	continue	//This person was de-adminned. They are only in the admin list for archive purposes.
 
-			var/rights = query.item[4]
 			if(istext(rights))	rights = text2num(rights)
 			var/datum/admins/D = new /datum/admins(rank, rights, ckey)
 

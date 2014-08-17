@@ -1,15 +1,13 @@
-/mob/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/mob/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 
 	if(ismob(mover))
 		var/mob/moving_mob = mover
+
 		if ((other_mobs && moving_mob.other_mobs))
 			return 1
-		return (!mover.density || !density || lying)
-	else
-		return (!mover.density || !density || lying)
-	return
 
+	return (!mover.density || !density || lying)
 
 /client/North()
 	..()
@@ -233,7 +231,7 @@
 	if(!mob.lastarea)
 		mob.lastarea = get_area(mob.loc)
 
-	if((istype(mob.loc, /turf/space)) || (mob.lastarea.has_gravity == 0))
+	if((istype(mob.loc, /turf/space)) || ((mob.lastarea.has_gravity == 0) && (!istype(mob.loc, /obj/spacepod))))  // last section of if statement prevents spacepods being unable to move when the gravity goes down
 		if(!mob.Process_Spacemove(0))	return 0
 
 
@@ -272,8 +270,20 @@
 			var/tickcomp = ((1/(world.tick_lag))*1.3)
 			move_delay = move_delay + tickcomp
 
-
-
+		if(mob.pulledby || mob.buckled) // Wheelchair driving!
+			if(istype(mob.loc, /turf/space))
+				return // No wheelchair driving in space
+			if(istype(mob.pulledby, /obj/structure/stool/bed/chair/wheelchair))
+				return mob.pulledby.relaymove(mob, dir)
+			else if(istype(mob.buckled, /obj/structure/stool/bed/chair/wheelchair))
+				if(ishuman(mob.buckled))
+					var/mob/living/carbon/human/driver = mob.buckled
+					var/datum/organ/external/l_hand = driver.get_organ("l_hand")
+					var/datum/organ/external/r_hand = driver.get_organ("r_hand")
+					if((!l_hand || (l_hand.status & ORGAN_DESTROYED)) && (!r_hand || (r_hand.status & ORGAN_DESTROYED)))
+						return // No hands to drive your chair? Tough luck!
+				move_delay += 2
+				return mob.buckled.relaymove(mob,dir)
 
 		//We are now going to move
 		moving = 1

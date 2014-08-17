@@ -16,6 +16,7 @@
 	var/moving			= null
 	var/adminobs		= null
 	var/area			= null
+	var/adminhelped = 0
 	var/time_died_as_mouse = null //when the client last died as a mouse
 
 

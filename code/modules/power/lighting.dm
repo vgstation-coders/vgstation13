@@ -231,7 +231,7 @@
 	name = "spotlight"
 	fitting = "large tube"
 	light_type = /obj/item/weapon/light/tube/large
-	brightness = 12
+	brightness = 8
 
 /obj/machinery/light/built/New()
 	status = LIGHT_EMPTY
@@ -250,11 +250,9 @@
 	spawn(2)
 		switch(fitting)
 			if("tube")
-				brightness = 8
 				if(prob(2))
 					broken(1)
 			if("bulb")
-				brightness = 4
 				if(prob(5))
 					broken(1)
 		spawn(1)
@@ -453,11 +451,11 @@
 		flickering = 0
 
 /obj/machinery/light/attack_ghost(mob/user)
-	if(blessed) return
+/*	if(blessed) return
 	src.add_hiddenprint(user)
 	src.flicker(1)
 	return
-
+*/
 // ai attack - make lights flicker, because why not
 /obj/machinery/light/attack_ai(mob/user)
 	// attack_robot is flaky.

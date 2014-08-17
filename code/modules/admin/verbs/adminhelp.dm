@@ -27,12 +27,11 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 
 	//clean the input msg
 	if(!msg)	return
-	msg = sanitize(copytext(msg,1,MAX_MESSAGE_LEN))
+	msg = sanitize_uni(copytext(msg,1,MAX_MESSAGE_LEN))
 	if(!msg)	return
 	var/original_msg = msg
 
 	//explode the input msg into a list
-	var/list/msglist = text2list(msg, " ")
 
 	//generate keywords lookup
 	var/list/surnames = list()
@@ -61,28 +60,6 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 			ckeys[M.ckey] = M
 
 	var/ai_found = 0
-	msg = ""
-	var/list/mobs_found = list()
-	for(var/original_word in msglist)
-		var/word = ckey(original_word)
-		if(word)
-			if(!(word in adminhelp_ignored_words))
-				if(word == "ai")
-					ai_found = 1
-				else
-					var/mob/found = ckeys[word]
-					if(!found)
-						found = surnames[word]
-						if(!found)
-							found = forenames[word]
-					if(found)
-						if(!(found in mobs_found))
-							mobs_found += found
-							if(!ai_found && isAI(found))
-								ai_found = 1
-							msg += "<b><font color='black'>[original_word] (<A HREF='?_src_=holder;adminmoreinfo=\ref[found]'>?</A>)</font></b> "
-							continue
-			msg += "[original_word] "
 
 	if(!mob)	return						//this doesn't happen
 
@@ -104,12 +81,5 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 
 	var/admin_number_present = admins.len - admin_number_afk
 	log_admin("HELP: [key_name(src)]: [original_msg] - heard by [admin_number_present] non-AFK admins.")
-	if(admin_number_present <= 0)
-		if(!admin_number_afk)
-			send2adminirc("HELP [key_name(src)]: [original_msg] - No admins online")
-		else
-			send2adminirc("HELP [key_name(src)]: [original_msg] - All admins AFK ([admin_number_afk])")
-	else
-		send2adminirc("HELP [key_name(src)]: [original_msg]")
 	feedback_add_details("admin_verb","AH") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return

@@ -20,6 +20,27 @@ var/global/floorIsLava = 0
 				var/msg = rendered
 				C << msg
 
+/proc/get_options_bar(whom, detail = 2, name = 0, link = 1, highlight_special = 1)
+	if(!whom)
+		return "<b>(*null*)</b>"
+	var/mob/M
+	var/client/C
+	if(istype(whom, /client))
+		C = whom
+		M = C.mob
+	else if(istype(whom, /mob))
+		M = whom
+		C = M.client
+	else
+		return "<b>(*not an mob*)</b>"
+	switch(detail)
+		if(0)
+			return "<b>[key_name(C, link, name, highlight_special)]</b>"
+		if(1)
+			return "<b>[key_name(C, link, name, highlight_special)](<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)</b>"
+		if(2)
+			var/ref_mob = "\ref[M]"
+			return "<b>[key_name(C, link, name, highlight_special)](<A HREF='?_src_=holder;adminmoreinfo=[ref_mob]'>?</A>) (<A HREF='?_src_=holder;adminplayeropts=[ref_mob]'>PP</A>) (<A HREF='?_src_=vars;Vars=[ref_mob]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=[ref_mob]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=[ref_mob]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>)</b>"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////Panels
 
@@ -641,7 +662,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];vsc=default'>Choose a default ZAS setting</A><br>
 		"}
 
-	usr << browse(dat, "window=admin2;size=210x280")
+	usr << browse(dat, "window=admin2;size=280x370")
 	return
 
 /datum/admins/proc/Secrets()
@@ -768,11 +789,6 @@ var/global/floorIsLava = 0
 		if(blackbox)
 			blackbox.save_all_data_to_sql()
 
-		if (watchdog.waiting)
-			world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
-			watchdog.signal_ready()
-			return
-
 		sleep(50)
 		world.Reboot()
 
@@ -783,7 +799,7 @@ var/global/floorIsLava = 0
 	set desc="Announce your desires to the world"
 	if(!check_rights(0))	return
 
-	var/message = input("Global message to send:", "Admin Announce", null, null)  as message
+	var/message = sanitize_uni(input("Global message to send:", "Admin Announce", null, null)  as message)
 	if(message)
 		if(!check_rights(R_SERVER,0))
 			message = adminscrub(message,500)
@@ -959,10 +975,6 @@ var/global/floorIsLava = 0
 	if(blackbox)
 		blackbox.save_all_data_to_sql()
 
-	if (watchdog.waiting)
-		world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
-		watchdog.signal_ready()
-		return
 
 	world.Reboot()
 

@@ -498,7 +498,6 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "graycoat"
 	item_state = "graycoat"
-	color = "graycoat"
 
 /obj/item/clothing/suit/storage/det_suit/fluff/leatherjack //atomicdog92: Seth Sealis
 	name = "leather jacket"
@@ -506,7 +505,6 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "leatherjack"
 	item_state = "leatherjack"
-	color = "leatherjack"
 
 /obj/item/clothing/suit/storage/labcoat/fluff/burnt //Jamini: Edwin Atweeke
 	name = "burnt labcoat"
@@ -537,7 +535,6 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "jumpsuitdown"
 	item_state = "jumpsuitdown"
-	color = "jumpsuitdown"
 
 /obj/item/clothing/under/fluff/olddressuniform //desiderium: Momiji Inubashiri
 	name = "retired dress uniform"
@@ -545,14 +542,12 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "olddressuniform"
 	item_state = "olddressuniform"
-	color = "olddressuniform"
 
 /obj/item/clothing/under/rank/security/fluff/jeremy_wolf_1 //whitewolf41: Jeremy Wolf
 	name = "worn officer's uniform"
 	desc = "An old red security jumpsuit. Seems to have some slight modifications."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "jeremy_wolf_1"
-	color = "jeremy_wolf_1"
 
 /obj/item/clothing/under/fluff/tian_dress //phaux: Tian Yinhu
 	name = "purple dress"
@@ -560,7 +555,6 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "tian_dress"
 	item_state = "tian_dress"
-	color = "tian_dress"
 
 /obj/item/clothing/under/rank/bartender/fluff/classy	//searif: Ara Al-Jazari
 	name = "classy bartender uniform"
@@ -568,7 +562,6 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "ara_bar_uniform"
 	item_state = "ara_bar_uniform"
-	color = "ara_bar_uniform"
 
 /obj/item/clothing/under/fluff/callum_suit //roaper: Callum Leamus
 	name = "knockoff suit"
@@ -576,7 +569,6 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "callum_suit"
 	item_state = "callum_suit"
-	color = "callum_suit"
 
 /////// NT-SID Suit //Zuhayr: Jane Doe
 
@@ -587,7 +579,6 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "jane_sid_suit"
 	item_state = "jane_sid_suit"
-	color = "jane_sid_suit"
 	has_sensor = 2
 	sensor_mode = 3
 	flags = FPRINT | TABLEPASS
@@ -620,7 +611,6 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "wyatt_uniform"
 	item_state = "wyatt_uniform"
-	color = "wyatt_uniform"
 
 //////////// Masks ////////////
 
@@ -652,7 +642,6 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "altair_locket"
 	item_state = "altair_locket"
-	color = "altair_locket"
 	slot_flags = 0
 	flags = FPRINT|TABLEPASS
 	w_class = 1
@@ -703,7 +692,6 @@ hi
 	desc = "Made of a special fiber that gives special protection against biohazards. Has a cross on the chest denoting that the wearer is trained medical personnel and short sleeves."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "medical_short"
-	color = "medical_short"
 
 /obj/item/clothing/suit/storage/labcoat/fluff/red
 	name = "red labcoat"
@@ -719,7 +707,6 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "retpolcoat"
 	item_state = "retpolcoat"
-	color = "retpolcoat"
 
 /obj/item/clothing/head/det_hat/fluff/retpolcap
 	name = "retired colony patrolman's cap"
@@ -732,7 +719,6 @@ hi
 	desc = "A meticulously clean police uniform belonging to Precinct 31, Outer Light Colony. The word \"RETIRED\" is engraved tastefully and professionally in the badge below the number, 501."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "retpoluniform"
-	color = "retpoluniform"
 
 //////////// Weapons ////////////
 

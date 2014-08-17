@@ -77,7 +77,7 @@ macro "macro"
 		is-disabled = false
 	elem 
 		name = "CTRL+4"
-		command = "a-intent harm"
+		command = "a-intent hurt"
 		is-disabled = false
 	elem 
 		name = "CTRL+A+REP"
@@ -98,6 +98,10 @@ macro "macro"
 	elem 
 		name = "CTRL+G"
 		command = "a-intent right"
+		is-disabled = false
+	elem 
+		name = "CTRL+H"
+		command = "holster"
 		is-disabled = false
 	elem 
 		name = "CTRL+Q"
@@ -136,6 +140,10 @@ macro "macro"
 		command = ".options"
 		is-disabled = false
 	elem 
+		name = "F2"
+		command = "ooc"
+		is-disabled = false
+	elem 
 		name = "F2+REP"
 		command = ".screenshot auto"
 		is-disabled = false
@@ -153,7 +161,7 @@ macro "macro"
 		is-disabled = false
 	elem 
 		name = "F5"
-		command = "Aghost"
+		command = "asay"
 		is-disabled = false
 	elem 
 		name = "F6"
@@ -310,6 +318,10 @@ macro "hotkeymode"
 		command = "a-intent right"
 		is-disabled = false
 	elem 
+		name = "CTRL+H"
+		command = "holster"
+		is-disabled = false
+	elem 
 		name = "Q"
 		command = ".northwest"
 		is-disabled = false
@@ -378,6 +390,10 @@ macro "hotkeymode"
 		command = ".options"
 		is-disabled = false
 	elem 
+		name = "F2"
+		command = "ooc"
+		is-disabled = false
+	elem 
 		name = "F2+REP"
 		command = ".screenshot auto"
 		is-disabled = false
@@ -395,7 +411,7 @@ macro "hotkeymode"
 		is-disabled = false
 	elem 
 		name = "F5"
-		command = "Aghost"
+		command = "asay"
 		is-disabled = false
 	elem 
 		name = "F6"
@@ -742,7 +758,7 @@ window "Telecomms IDE"
 		right-click = false
 		saved-params = "is-checked"
 		on-size = ""
-		text = "Save"
+		text = "Apply"
 		image = ""
 		command = "tcssave"
 		is-flat = false
@@ -779,14 +795,14 @@ window "chemdispenser"
 	elem "chemdispenser"
 		type = MAIN
 		pos = 281,0
-		size = 625x412
+		size = 340x480
 		anchor1 = none
 		anchor2 = none
 		font-family = ""
 		font-size = 0
 		font-style = ""
 		text-color = #000000
-		background-color = #414141
+		background-color = none
 		is-visible = false
 		is-disabled = false
 		is-transparent = false
@@ -801,7 +817,7 @@ window "chemdispenser"
 		statusbar = false
 		can-close = true
 		can-minimize = true
-		can-resize = false
+		can-resize = true
 		is-pane = false
 		is-minimized = false
 		is-maximized = false
@@ -815,73 +831,17 @@ window "chemdispenser"
 		macro = ""
 		menu = ""
 		on-close = ""
-	elem "eject"
-		type = BUTTON
-		pos = 328,373
-		size = 296x39
-		anchor1 = 10,91
-		anchor2 = 100,100
-		font-family = ""
-		font-size = 13
-		font-style = ""
-		text-color = #808080
-		background-color = #414141
-		is-visible = true
-		is-disabled = false
-		is-transparent = false
-		is-default = false
-		border = none
-		drop-zone = false
-		right-click = false
-		saved-params = "is-checked"
-		on-size = ""
-		text = "[Insert beaker]"
-		image = ""
-		command = "skincmd \"chemdispenser;eject\""
-		is-flat = true
-		stretch = false
-		is-checked = false
-		group = ""
-		button-type = pushbutton
-	elem "amountc"
-		type = BUTTON
-		pos = 0,373
-		size = 280x39
-		anchor1 = 0,91
-		anchor2 = 0,100
-		font-family = ""
-		font-size = 13
-		font-style = ""
-		text-color = #808080
-		background-color = #414141
-		is-visible = true
-		is-disabled = false
-		is-transparent = false
-		is-default = false
-		border = none
-		drop-zone = false
-		right-click = false
-		saved-params = "is-checked"
-		on-size = ""
-		text = "Change Amount"
-		image = ""
-		command = "skincmd \"chemdispenser;amountc\""
-		is-flat = true
-		stretch = false
-		is-checked = false
-		group = ""
-		button-type = pushbutton
 	elem "energy"
 		type = LABEL
-		pos = 288,0
-		size = 264x32
-		anchor1 = 100,0
+		pos = 8,24
+		size = 56x16
+		anchor1 = none
 		anchor2 = none
 		font-family = ""
-		font-size = 13
+		font-size = 0
 		font-style = ""
-		text-color = #808080
-		background-color = #414141
+		text-color = #000000
+		background-color = none
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -897,17 +857,157 @@ window "chemdispenser"
 		keep-aspect = false
 		align = center
 		text-wrap = false
+	elem "eject"
+		type = BUTTON
+		pos = 264,4
+		size = 72x20
+		anchor1 = none
+		anchor2 = none
+		font-family = ""
+		font-size = 0
+		font-style = ""
+		text-color = #000000
+		background-color = none
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = "is-checked"
+		on-size = ""
+		text = "[Insert beaker]"
+		image = ""
+		command = "skincmd \"chemdispenser;eject\""
+		is-flat = false
+		stretch = false
+		is-checked = false
+		group = ""
+		button-type = pushbutton
+	elem "amountc"
+		type = BUTTON
+		pos = 208,4
+		size = 48x20
+		anchor1 = none
+		anchor2 = none
+		font-family = ""
+		font-size = 0
+		font-style = ""
+		text-color = #000000
+		background-color = none
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = "is-checked"
+		on-size = ""
+		text = "[Other]"
+		image = ""
+		command = "skincmd \"chemdispenser;amountc\""
+		is-flat = false
+		stretch = false
+		is-checked = false
+		group = ""
+		button-type = pushbutton
+	elem "amount3"
+		type = BUTTON
+		pos = 176,4
+		size = 24x20
+		anchor1 = none
+		anchor2 = none
+		font-family = ""
+		font-size = 0
+		font-style = ""
+		text-color = #000000
+		background-color = none
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = "is-checked"
+		on-size = ""
+		text = "[30]"
+		image = ""
+		command = "skincmd \"chemdispenser;amount30\""
+		is-flat = false
+		stretch = false
+		is-checked = false
+		group = ""
+		button-type = pushbutton
+	elem "amount2"
+		type = BUTTON
+		pos = 144,4
+		size = 24x20
+		anchor1 = none
+		anchor2 = none
+		font-family = ""
+		font-size = 0
+		font-style = ""
+		text-color = #000000
+		background-color = none
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = "is-checked"
+		on-size = ""
+		text = "[20]"
+		image = ""
+		command = "skincmd \"chemdispenser;amount20\""
+		is-flat = false
+		stretch = false
+		is-checked = false
+		group = ""
+		button-type = pushbutton
+	elem "amount1"
+		type = BUTTON
+		pos = 112,4
+		size = 24x20
+		anchor1 = none
+		anchor2 = none
+		font-family = ""
+		font-size = 0
+		font-style = ""
+		text-color = #000000
+		background-color = none
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = "is-checked"
+		on-size = ""
+		text = "[10]"
+		image = ""
+		command = "skincmd \"chemdispenser;amount10\""
+		is-flat = false
+		stretch = false
+		is-checked = false
+		group = ""
+		button-type = pushbutton
 	elem "amount"
 		type = LABEL
-		pos = 0,0
-		size = 288x34
-		anchor1 = 0,0
-		anchor2 = 29,7
+		pos = 4,4
+		size = 100x20
+		anchor1 = none
+		anchor2 = none
 		font-family = ""
-		font-size = 13
+		font-size = 12
 		font-style = ""
-		text-color = #808080
-		background-color = #414141
+		text-color = #000000
+		background-color = none
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -925,15 +1025,15 @@ window "chemdispenser"
 		text-wrap = false
 	elem "child1"
 		type = CHILD
-		pos = 0,32
-		size = 624x333
-		anchor1 = 0,8
-		anchor2 = 100,87
+		pos = 0,40
+		size = 340x440
+		anchor1 = none
+		anchor2 = none
 		font-family = ""
 		font-size = 0
 		font-style = ""
 		text-color = #000000
-		background-color = #408080
+		background-color = none
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -954,14 +1054,14 @@ window "chemdispenser_reagents"
 	elem "chemdispenser_reagents"
 		type = MAIN
 		pos = 281,0
-		size = 652x309
+		size = 340x448
 		anchor1 = none
 		anchor2 = none
 		font-family = ""
 		font-size = 0
 		font-style = ""
 		text-color = #000000
-		background-color = #414141
+		background-color = none
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -990,17 +1090,17 @@ window "chemdispenser_reagents"
 		macro = ""
 		menu = ""
 		on-close = ""
-	elem "template_name"
+	elem "template_dispense"
 		type = BUTTON
-		pos = 8,8
-		size = 144x32
+		pos = 256,8
+		size = 64x32
 		anchor1 = none
 		anchor2 = none
 		font-family = ""
-		font-size = 13
+		font-size = 0
 		font-style = ""
 		text-color = #000000
-		background-color = #808080
+		background-color = none
 		is-visible = false
 		is-disabled = false
 		is-transparent = false
@@ -1010,14 +1110,40 @@ window "chemdispenser_reagents"
 		right-click = false
 		saved-params = "is-checked"
 		on-size = ""
-		text = "Chloral Hydrate"
-		image = ""
+		text = "Dispense"
+		image = 'icons\\dispensebutton_bg.png'
 		command = ""
 		is-flat = true
 		stretch = false
 		is-checked = false
 		group = ""
-		button-type = pushbox
+		button-type = pushbutton
+	elem "template_name"
+		type = LABEL
+		pos = 18,8
+		size = 230x32
+		anchor1 = none
+		anchor2 = none
+		font-family = ""
+		font-size = 15
+		font-style = ""
+		text-color = #000000
+		background-color = none
+		is-visible = false
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = ""
+		on-size = ""
+		text = "Chloral Hydrate"
+		image = 'icons\\reagentname_bg.png'
+		image-mode = stretch
+		keep-aspect = false
+		align = center
+		text-wrap = false
 
 window "mainwindow"
 	elem "mainwindow"
@@ -1059,10 +1185,10 @@ window "mainwindow"
 		macro = "macro"
 		menu = "menu"
 		on-close = ""
-	elem "hotkey_toggle"
+	elem "oocbutton"
 		type = BUTTON
-		pos = 560,420
-		size = 80x20
+		pos = 584,420
+		size = 56x20
 		anchor1 = 100,100
 		anchor2 = none
 		font-family = ""
@@ -1079,9 +1205,9 @@ window "mainwindow"
 		right-click = false
 		saved-params = ""
 		on-size = ""
-		text = "Hotkey Toggle"
+		text = "OOC"
 		image = ""
-		command = ".winset \"mainwindow.macro!=macro ? mainwindow.macro=macro hotkey_toggle.is-checked=false input.focus=true : mainwindow.macro=hotkeymode hotkey_toggle.is-checked=true mapwindow.map.focus=true\""
+		command = ".winset \"oocbutton.is-checked=true?input.command=\"!ooc \\\"\" saybutton.is-checked=false:input.command=\""
 		is-flat = false
 		stretch = false
 		is-checked = false
@@ -1140,7 +1266,7 @@ window "mainwindow"
 	elem "saybutton"
 		type = BUTTON
 		pos = 520,420
-		size = 40x20
+		size = 64x20
 		anchor1 = 100,100
 		anchor2 = none
 		font-family = ""
@@ -1212,7 +1338,7 @@ window "mapwindow"
 		size = 640x480
 		anchor1 = 0,0
 		anchor2 = 100,100
-		font-family = "Arial"
+		font-family = "Arial Rounded MT Bold,Arial Black,Arial,sans-serif"
 		font-size = 7
 		font-style = ""
 		text-color = none
@@ -1228,6 +1354,8 @@ window "mapwindow"
 		on-size = ""
 		icon-size = 0
 		text-mode = false
+		letterbox = true
+		zoom = 0
 		on-show = ".winset\"mainwindow.mainvsplit.left=mapwindow\""
 		on-hide = ".winset\"mainwindow.mainvsplit.left=\""
 		style = ""
@@ -1365,32 +1493,6 @@ window "rpane"
 		splitter = 50
 		show-splitter = true
 		lock = none
-	elem "hosttracker"
-		type = BROWSER
-		pos = 392,25
-		size = 1x1
-		anchor1 = none
-		anchor2 = none
-		font-family = ""
-		font-size = 0
-		font-style = ""
-		text-color = #000000
-		background-color = none
-		is-visible = true
-		is-disabled = false
-		is-transparent = false
-		is-default = false
-		border = none
-		drop-zone = false
-		right-click = false
-		saved-params = ""
-		on-size = ""
-		show-history = false
-		show-url = false
-		auto-format = true
-		use-title = false
-		on-show = ""
-		on-hide = ""
 	elem "rulesb"
 		type = BUTTON
 		pos = 278,0
@@ -1726,4 +1828,6 @@ window "infowindow"
 		on-show = ".winset\"rpane.infob.is-visible=true;rpane.browseb.is-visible=true?rpane.infob.pos=130,0:rpane.infob.pos=65,0 rpane.textb.is-visible=true rpane.infob.is-checked=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=infowindow\""
 		on-hide = ".winset\"rpane.infob.is-visible=false;rpane.browseb.is-visible=true?rpane.browseb.is-checked=true rpane.rpanewindow.left=browserwindow:rpane.textb.is-visible=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=\""
 		on-tab = ""
+		prefix-color = none
+		suffix-color = none
 
