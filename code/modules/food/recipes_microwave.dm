@@ -19,6 +19,12 @@ I said no!
 	result = /obj/item/weapon/reagent_containers/food/snacks/telebacon
 */
 
+/datum/recipe/customizable_bun
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/dough
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bun
+
 /datum/recipe/friedegg
 	reagents = list("sodiumchloride" = 1, "blackpepper" = 1)
 	items = list(
@@ -90,7 +96,7 @@ I said no!
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/human
 	)
-	result = /obj/item/weapon/reagent_containers/food/snacks/human/burger
+	result = /obj/item/weapon/reagent_containers/food/snacks/human
 
 /datum/recipe/plainburger
 	reagents = list("flour" = 5)
@@ -1277,3 +1283,25 @@ I said no!
 		/obj/item/weapon/reagent_containers/food/snacks/carpmeat,
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sashimi
+
+/datum/recipe/assburger
+	reagents = list("soysauce" = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
+		/obj/item/weapon/reagent_containers/food/snacks/carpmeat,
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sashimi
+
+/datum/recipe/asspie
+	reagents = list("flour" = 10)
+	items = list(
+		/obj/item/clothing/head/butt,
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/asspie
+
+/datum/recipe/assburger
+	reagents = list("flour" = 5)
+	items = list(
+		/obj/item/clothing/head/butt,
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/assburger

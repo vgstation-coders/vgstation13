@@ -1,29 +1,31 @@
 obj/machinery/recharger/defibcharger/wallcharger
-	name = "defib recharger"
+	name = "defibrillator recharger"
 	desc = "A special wall mounted recharger meant for emergency defibrillators"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "wrecharger0"
 	anchored = 1
 	use_power = 1
-	idle_power_usage = 4
+	idle_power_usage = 10
 	active_power_usage = 150
 	var/opened = 0
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
-obj/machinery/recharger/defibcharger/wallcharger/New()
-	..()
-	component_parts = list()
-	component_parts += new /obj/item/weapon/circuitboard/defib_recharger
-	component_parts += new /obj/item/weapon/stock_parts/matter_bin
-	component_parts += new /obj/item/weapon/stock_parts/matter_bin
-	component_parts += new /obj/item/weapon/stock_parts/manipulator
-	component_parts += new /obj/item/weapon/stock_parts/manipulator
-	component_parts += new /obj/item/weapon/stock_parts/micro_laser
-	component_parts += new /obj/item/weapon/stock_parts/console_screen
-	RefreshParts()
+/obj/machinery/recharger/defibcharger/wallcharger/New()
+	. = ..()
 
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/defib_recharger,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/console_screen
+	)
+
+	RefreshParts()
 
 obj/machinery/recharger/defibcharger/wallcharger/attack_hand(mob/user as mob)
 	add_fingerprint(user)
@@ -74,15 +76,20 @@ obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as o
 	if(istype(user,/mob/living/silicon))
 		return
 	if(istype(G, /obj/item/weapon/melee/defibrillator))
+		var/obj/item/weapon/melee/defibrillator/D = G
+		if(D.status)
+			user << "<span class='warning'>[D] won't fit. Try putting the paddles back on!</span>"
+			return
 		if(charging)
+			user << "<span class='warning'>Remove [D] first!</span>"
 			return
 		// Checks to make sure he's not in space doing it, and that the area got proper power.
 		var/area/a = get_area(src)
 		if(!isarea(a))
-			user << "\red The [name] blinks red as you try to insert the item!"
+			user << "<span class='warning'>[src] blinks red as you try to insert [D]!</span>"
 			return
 		if(a.power_equip == 0)
-			user << "\red The [name] blinks red as you try to insert the item!"
+			user << "<span class='warning'>[src] blinks red as you try to insert [D]!</span>"
 			return
 		user.drop_item()
 		G.loc = src
@@ -98,7 +105,7 @@ obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as o
 		playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)*/
 	if(istype(G, /obj/item/weapon/screwdriver))
 		if(charging)
-			user << "\red Remove the defibrillator first!"
+			user << "<span class='warning'>Not while [src] is charging!</span>"
 			return
 		if(!opened)
 			src.opened = 1
@@ -112,7 +119,7 @@ obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as o
 		return 1
 	if(opened)
 		if(charging)
-			user << "\red Remove the defibrillator first!"
+			user << "<span class='warning'>Not while [src] is charging!</span>"
 			return
 		if(istype(G, /obj/item/weapon/crowbar))
 			user << "You begin to remove the circuits from the [src]."

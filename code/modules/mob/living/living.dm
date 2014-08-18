@@ -33,7 +33,7 @@
 	set hidden = 1
 	if ((src.health < 0 && src.health > -95.0))
 		src.attack_log += "[src] has succumbed to death with [health] points of health!"
-		src.adjustOxyLoss(src.health + 200)
+		src.apply_damage(maxHealth + 5 + src.health, OXY) // This will ensure people die when using the command, but don't go into overkill. 15 oxy points over the limit for safety since brute and burn regenerates
 		src.health = 100 - src.getOxyLoss() - src.getToxLoss() - src.getFireLoss() - src.getBruteLoss()
 		src << "\blue You have given up life and succumbed to death."
 
@@ -236,8 +236,9 @@
 	return 0
 
 
-/mob/living/proc/electrocute_act(var/shock_damage, var/obj/source, var/siemens_coeff = 1.0)
-	  return 0 //only carbon liveforms have this proc
+/mob/living/proc/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
+	  return 0 // only carbon liveforms have this proc
+				// now with silicons
 
 /mob/living/emp_act(severity)
 	var/list/L = src.get_contents()
@@ -449,7 +450,7 @@
 						var/atom/movable/t = M.pulling
 						M.stop_pulling()
 
-						//this is the gay blood on floor shit -- Added back -- Skie
+						/*//this is the gay blood on floor shit -- Added back -- Skie
 						if (M.lying && (prob(M.getBruteLoss() / 6)))
 							var/turf/location = M.loc
 							if (istype(location, /turf/simulated))
@@ -469,7 +470,7 @@
 										var/mob/living/carbon/H = M
 										var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
 										if(blood_volume > 0)
-											H:vessel.remove_reagent("blood",1)
+											H:vessel.remove_reagent("blood",1)*/
 
 
 						step(pulling, get_dir(pulling.loc, T))
@@ -589,7 +590,7 @@
 			L.buckled.manual_unbuckle(L)
 
 	//Breaking out of a locker?
-	else if( src.loc && (istype(src.loc, /obj/structure/closet)) )
+	if( src.loc && (istype(src.loc, /obj/structure/closet)) )
 		var/breakout_time = 2 //2 minutes by default
 
 		var/obj/structure/closet/C = L.loc
@@ -614,7 +615,7 @@
 
 
 		spawn(0)
-			if(do_after(usr,(breakout_time*60*10))) //minutes * 60seconds * 10deciseconds
+			if(do_after(usr,breakout_time * 60 * 10)) //minutes * 60seconds * 10deciseconds
 				if(!C || !L || L.stat != CONSCIOUS || L.loc != C || C.opened) //closet/user destroyed OR user dead/unconcious OR user no longer in closet OR closet opened
 					return
 
@@ -636,8 +637,9 @@
 					sleep(10)
 					flick(SC.icon_broken, SC)
 					sleep(10)
-					SC.broken = 1
+					SC.broken = SC.locked // If it's only welded just break the welding, dont break the lock.
 					SC.locked = 0
+					SC.welded = 0
 					usr << "\red You successfully break out!"
 					for(var/mob/O in viewers(L.loc))
 						O.show_message("\red <B>\the [usr] successfully broke out of \the [SC]!</B>", 1)
@@ -739,7 +741,7 @@
 						if(!CM.legcuffed || CM.buckled)
 							return // time leniency for lag which also might make this whole thing pointless but the server
 						for(var/mob/O in viewers(CM))//                                         lags so hard that 40s isn't lenient enough - Quarxink
-							O.show_message("\red <B>[CM] manages to remove the legcuffs!</B>", 1)
+							O.show_message("\red <B>[CM] manages to remove the [HC.name]!</B>", 1)
 						CM << "\blue You successfully remove \the [CM.legcuffed]."
 						CM.legcuffed.loc = usr.loc
 						CM.legcuffed = null

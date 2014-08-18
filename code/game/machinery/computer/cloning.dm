@@ -14,6 +14,8 @@
 	var/obj/item/weapon/disk/data/diskette = null //Mostly so the geneticist can steal everything.
 	var/loading = 0 // Nice loading text
 
+	l_color = "#0000FF"
+
 /obj/machinery/computer/cloning/New()
 	..()
 	spawn(5)
@@ -47,7 +49,7 @@
 /obj/machinery/computer/cloning/proc/findcloner()
 	var/obj/machinery/clonepod/podf = null
 
-	for(dir in list(NORTH,EAST,SOUTH,WEST))
+	for(dir in cardinal)
 
 		podf = locate(/obj/machinery/clonepod, get_step(src, dir))
 

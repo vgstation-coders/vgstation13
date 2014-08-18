@@ -154,17 +154,25 @@ proc/listclearnulls(list/list)
 			output += L[i]
 	return output
 
-//Randomize: Return the list in a random order
-/proc/shuffle(var/list/shufflelist)
-	if(!shufflelist)
-		return
-	var/list/new_list = list()
-	var/list/old_list = shufflelist.Copy()
-	while(old_list.len)
-		var/item = pick(old_list)
-		new_list += item
-		old_list -= item
-	return new_list
+/*
+ * Using Fisher-Yates shuffle modern algorithm.
+ * Stephen001 snippet at http://www.byond.com/forum/?post=1604987#comment10716726
+ */
+/proc/shuffle(var/list/L)
+	var/length = length(L)
+
+	if(length < 2)
+		return L
+
+	var/j
+
+	for (var/i in 1 to length)
+		j = rand(i, length)
+
+		if(i != j)
+			L.Swap(i, j)
+
+	return L
 
 //Return a list with no duplicate entries
 /proc/uniquelist(var/list/L)
@@ -346,3 +354,49 @@ proc/listclearnulls(list/list)
 	var/list/out = insertion_sort_numeric_list_ascending(L)
 	//world.log << "	output: [out.len]"
 	return reverselist(out)
+
+// List of lists, sorts by element[key] - for things like crew monitoring computer sorting records by name.
+/proc/sortByKey(var/list/L, var/key)
+	if(L.len < 2)
+		return L
+	var/middle = L.len / 2 + 1
+	return mergeKeyedLists(sortByKey(L.Copy(0, middle), key), sortByKey(L.Copy(middle), key), key)
+
+/proc/mergeKeyedLists(var/list/L, var/list/R, var/key)
+	var/Li=1
+	var/Ri=1
+	var/list/result = new()
+	while(Li <= L.len && Ri <= R.len)
+		if(sorttext(L[Li][key], R[Ri][key]) < 1)
+			// Works around list += list2 merging lists; it's not pretty but it works
+			result += "temp item"
+			result[result.len] = R[Ri++]
+		else
+			result += "temp item"
+			result[result.len] = L[Li++]
+
+	if(Li <= L.len)
+		return (result + L.Copy(Li, 0))
+	return (result + R.Copy(Ri, 0))
+
+
+//Mergesort: any value in a list, preserves key=value structure
+/proc/sortAssoc(var/list/L)
+	if(L.len < 2)
+		return L
+	var/middle = L.len / 2 + 1 // Copy is first,second-1
+	return mergeAssoc(sortAssoc(L.Copy(0,middle)), sortAssoc(L.Copy(middle))) //second parameter null = to end of list
+
+/proc/mergeAssoc(var/list/L, var/list/R)
+	var/Li=1
+	var/Ri=1
+	var/list/result = new()
+	while(Li <= L.len && Ri <= R.len)
+		if(sorttext(L[Li], R[Ri]) < 1)
+			result += R&R[Ri++]
+		else
+			result += L&L[Li++]
+
+	if(Li <= L.len)
+		return (result + L.Copy(Li, 0))
+	return (result + R.Copy(Ri, 0))

@@ -9,17 +9,36 @@ Fill rest with super hot gas from separated canisters, they should be about 125C
 Attach to transfer valve and open. BOOM.
 
 */
+/atom
+	var/autoignition_temperature = 0 // In Kelvin.  0 = Not flammable
+	var/on_fire=0
+	var/fire_dmi = 'icons/effects/fire.dmi'
+	var/fire_sprite = "fire"
+	var/ashtype = /obj/effect/decal/cleanable/ash
+	var/fire_time_min = 5  // Seconds
+	var/fire_time_max = 10 // Seconds
 
+/atom/proc/ignite(var/temperature)
+	on_fire=1
+	visible_message("\The [src] bursts into flame!")
+	overlays += image(fire_dmi,fire_sprite)
+	spawn(rand(fire_time_min,fire_time_max) SECONDS)
+		if(!on_fire)
+			return
+		new ashtype(src.loc)
+		qdel(src)
 
-//Some legacy definitions so fires can be started.
-atom/proc/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	return null
-
+/atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(autoignition_temperature && !on_fire && exposed_temperature > autoignition_temperature)
+		ignite(exposed_temperature)
 
 turf/proc/hotspot_expose(exposed_temperature, exposed_volume, soh = 0)
 
 
 turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
+	var/obj/effect/effect/foam/fire/W = locate() in contents
+	if(istype(W))
+		return 0
 	if(fire_protection > world.time-300)
 		return 0
 	if(locate(/obj/fire) in src)
@@ -39,7 +58,12 @@ turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
 			new /obj/fire(src)
 
 	return igniting
-
+/*
+/turf/simulated/proc/getAmtFuel()
+	var/fuel_found=0
+	for(var/atom/A in T)
+		t += A.getFuelAmount()
+*/
 /obj/fire
 	//Icon for fire on turfs.
 
@@ -106,6 +130,9 @@ turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
 		M.FireBurn(firelevel, air_contents.temperature, air_contents.return_pressure() ) //Burn the humans!
 	for(var/atom/A in loc)
 		A.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
+	// Burn the turf, too.
+	S.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
+
 	//spread
 	for(var/direction in cardinal)
 		if(S.open_directions & direction) //Grab all valid bordering tiles
@@ -119,6 +146,10 @@ turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
 				if(!acs.check_recombustability(liq)) continue
 				//If extinguisher mist passed over the turf it's trying to spread to, don't spread and
 				//reduce firelevel.
+				var/obj/effect/effect/foam/fire/W = locate() in enemy_tile
+				if(istype(W))
+					firelevel -= 3
+					continue
 				if(enemy_tile.fire_protection > world.time-30)
 					firelevel -= 1.5
 					continue
@@ -134,16 +165,8 @@ turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
 ///////////////////////////////// FLOW HAS BEEN CREATED /// DONT DELETE THE FIRE UNTIL IT IS MERGED BACK OR YOU WILL DELETE AIR ///////////////////////////////////////////////
 
 	if(flow)
+		flow.zburn(liquid, 1)
 
-		if(flow.check_recombustability(liquid))
-			//Ensure flow temperature is higher than minimum fire temperatures.
-				//this creates some energy ex nihilo but is necessary to get a fire started
-				//lets just pretend this energy comes from the ignition source and dont mention this again
-			//flow.temperature = max(PLASMA_MINIMUM_BURN_TEMPERATURE+0.1,flow.temperature)
-
-			//burn baby burn!
-
-			flow.zburn(liquid,1)
 		//merge the air back
 		S.assume_air(flow)
 
@@ -242,9 +265,9 @@ datum/gas_mixture/proc/check_recombustability(obj/effect/decal/cleanable/liquid_
 	if(oxygen && (toxins || fuel || liquid))
 		if(liquid)
 			return 1
-		if(toxins >= 0.1)
+		if(QUANTIZE(toxins * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= 0.1)
 			return 1
-		if(fuel && fuel.moles >= 0.1)
+		if(fuel && QUANTIZE(fuel.moles * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= 0.1)
 			return 1
 
 	return 0
@@ -257,9 +280,9 @@ datum/gas_mixture/proc/check_combustability(obj/effect/decal/cleanable/liquid_fu
 	if(oxygen && (toxins || fuel || liquid))
 		if(liquid)
 			return 1
-		if (toxins >= MOLES_PLASMA_VISIBLE)
+		if(QUANTIZE(toxins * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE)
 			return 1
-		if(fuel && fuel.moles >= 0.1)
+		if(fuel && QUANTIZE(fuel.moles * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= 0.1)
 			return 1
 
 	return 0

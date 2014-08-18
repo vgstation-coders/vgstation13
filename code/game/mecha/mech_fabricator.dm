@@ -141,14 +141,17 @@
 
 
 /obj/machinery/mecha_part_fabricator/New()
-	..()
-	component_parts = list()
-	component_parts += new /obj/item/weapon/circuitboard/mechfab(src)
-	component_parts += new /obj/item/weapon/stock_parts/matter_bin(src)
-	component_parts += new /obj/item/weapon/stock_parts/matter_bin(src)
-	component_parts += new /obj/item/weapon/stock_parts/manipulator(src)
-	component_parts += new /obj/item/weapon/stock_parts/micro_laser(src)
-	component_parts += new /obj/item/weapon/stock_parts/console_screen(src)
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/mechfab,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/console_screen
+	)
+
 	RefreshParts()
 
 	//	part_sets["Cyborg Upgrade Modules"] = typesof(/obj/item/borg/upgrade/) - /obj/item/borg/upgrade/  // Eh.  This does it dymaically, but to support having the items referenced otherwhere in the code but not being constructable, going to do it manaully.
@@ -718,16 +721,23 @@
 /obj/machinery/mecha_part_fabricator/proc/remove_material(var/matID, var/amount)
 	if(matID in materials)
 		var/datum/material/material = materials[matID]
-		var/obj/item/stack/sheet/res = new material.sheettype(src)
-		var/total_amount = round(material.stored/res.perunit)
-		res.amount = min(total_amount,amount)
-		if(res.amount>0)
-			material.stored -= res.amount*res.perunit
-			materials[matID]=material
-			res.Move(src.loc)
-			return res.amount
-		else
-			del res
+		//var/obj/item/stack/sheet/res = new material.sheettype(src)
+		var/total_amount = min(round(material.stored/material.cc_per_sheet),amount)
+		var/to_spawn = total_amount
+
+		while(to_spawn > 0)
+			var/obj/item/stack/sheet/res = new material.sheettype(src)
+			if(to_spawn > res.max_amount)
+				res.amount = res.max_amount
+				to_spawn -= res.max_amount
+			else
+				res.amount = to_spawn
+				to_spawn = 0
+
+			material.stored -= res.amount * res.perunit
+			//materials[matID]=material - why?
+			res.loc = src.loc
+		return total_amount
 	return 0
 
 
@@ -810,7 +820,7 @@
 		sleep(10)
 		if(stack && stack.amount)
 			while(material.stored < res_max_amount && stack)
-				if(stack.amount < 0 || !stack)
+				if(stack.amount <= 0 || !stack)
 					user.drop_item(stack)
 					qdel(stack)
 					break

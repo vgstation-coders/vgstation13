@@ -38,6 +38,7 @@
 		/mob/living/simple_animal/cow,
 		/mob/living/simple_animal/hostile/retaliate/goat,
 		/obj/machinery/computer/centrifuge,
+		/obj/machinery/icemachine,
 		/obj/machinery/sleeper	)
 
 	New()
@@ -119,6 +120,9 @@
 				user << "\red [target] is full."
 				return
 
+			var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
+			user << "\blue You transfer [trans] units of the solution to [target]."
+
 			// /vg/: Logging transfers of bad things
 			if(target.reagents_to_log.len)
 				var/list/badshit=list()
@@ -127,11 +131,8 @@
 						badshit += reagents_to_log[bad_reagent]
 				if(badshit.len)
 					var/hl="\red <b>([english_list(badshit)])</b> \black"
-					message_admins("[user.name] ([user.ckey]) added [reagents.get_reagent_ids(1)] to \a [target] with [src].[hl] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-					log_game("[user.name] ([user.ckey]) added [reagents.get_reagent_ids(1)] to \a [target] with [src].")
-
-			var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
-			user << "\blue You transfer [trans] units of the solution to [target]."
+					message_admins("[user.name] ([user.ckey]) added [trans]U to \a [target] with [src].[hl] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+					log_game("[user.name] ([user.ckey]) added [trans]U to \a [target] with [src].")
 
 		//Safety for dumping stuff into a ninja suit. It handles everything through attackby() and this is unnecessary.
 		else if(istype(target, /obj/item/clothing/suit/space/space_ninja))

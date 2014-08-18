@@ -55,6 +55,8 @@
 	name = "sandals"
 	icon_state = "wizard"
 
+	wizard_garb = 1
+
 /obj/item/clothing/shoes/sandal/marisa
 	desc = "A pair of magic, black shoes."
 	name = "magic shoes"
@@ -137,3 +139,9 @@
 	desc = "Simon's Shoes"
 	icon_state = "simonshoes"
 	item_state = "simonshoes"
+
+/obj/item/clothing/shoes/kneesocks
+	name = "Kneesocks"
+	desc = "For only the most kawaii tsundres."
+	icon_state = "kneesock"
+	item_state = "kneesock"

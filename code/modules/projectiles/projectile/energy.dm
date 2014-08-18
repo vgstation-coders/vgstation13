@@ -30,7 +30,7 @@
 
 
 /obj/item/projectile/energy/dart
-	name = "dart"
+	name = "dshell"
 	icon_state = "toxin"
 	damage = 5
 	damage_type = TOX
@@ -51,6 +51,18 @@
 	name = "largebolt"
 	damage = 20
 
+/obj/item/projectile/energy/plasma
+	name = "plasma"
+	icon_state = "declone"
+
+/obj/item/projectile/energy/plasma/pistol
+	damage = 5
+
+/obj/item/projectile/energy/plasma/light
+	damage = 10
+
+/obj/item/projectile/energy/plasma/rifle
+	damage = 20
 
 /obj/item/projectile/energy/neurotoxin
 	name = "neuro"

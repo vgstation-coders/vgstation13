@@ -331,7 +331,7 @@
 //wedding stuff
 
 /obj/item/clothing/under/wedding/bride_orange
-	name = "orange wedding dress"
+	name = "white wedding dress"
 	desc = "A big and puffy orange dress."
 	icon_state = "bride_orange"
 	_color = "bride_orange"
@@ -394,3 +394,17 @@
 	icon_state = "bmuniform"
 	_color = "bmuniform"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO
+
+/obj/item/clothing/under/officeruniform
+	name = "officer's uniform"
+	desc = "Bestraft die Juden fur ihre Verbrechen."
+	icon_state = "officeruniform"
+	item_state = "officeruniform"
+	_color = "officeruniform"
+
+/obj/item/clothing/under/soldieruniform
+	name = "soldier's uniform"
+	desc = "Bestraft die Verbundeten fur ihren Widerstand."
+	icon_state = "soldieruniform"
+	item_state = "soldieruniform"
+	_color = "soldieruniform"

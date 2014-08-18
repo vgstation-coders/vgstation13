@@ -92,7 +92,7 @@
 	return
 
 
-/obj/structure/grille/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/grille/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 	if(istype(mover) && mover.checkpass(PASSGRILLE))
 		return 1
@@ -225,7 +225,7 @@
 			return 0
 	return 0
 
-/obj/structure/grille/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/obj/structure/grille/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(!destroyed)
 		if(exposed_temperature > T0C + 1500)
 			health -= 1

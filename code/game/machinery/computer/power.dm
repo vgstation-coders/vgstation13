@@ -11,8 +11,11 @@
 	idle_power_usage = 20
 	active_power_usage = 80
 
+	l_color = "#FF9933"
+
 //fix for issue 521, by QualityVan.
 //someone should really look into why circuits have a powernet var, it's several kinds of retarded.
+
 /obj/machinery/power/monitor/New()
 	..()
 	var/obj/structure/cable/attached = null
@@ -145,6 +148,11 @@
 
 
 /obj/machinery/power/monitor/power_change()
+
+	if(!(stat & (BROKEN|NOPOWER)))
+		SetLuminosity(2)
+	else
+		SetLuminosity(0)
 
 	if(stat & BROKEN)
 		icon_state = "broken"

@@ -50,7 +50,7 @@
 	var/lastattacked = null
 	var/attack_log = list( )
 	var/already_placed = 0.0
-	var/obj/machinery/machine = null
+	var/obj/machine
 	var/other_mobs = null
 	var/memory = ""
 	var/poll_answer = 0.0
@@ -228,3 +228,6 @@
 	var/kills=0
 
 	var/last_movement = -100 // Last world.time the mob actually moved of its own accord.
+
+	// /vg/ - Prevent mobs from being moved by a client.
+	var/deny_client_move = 0

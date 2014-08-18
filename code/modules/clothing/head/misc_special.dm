@@ -23,7 +23,7 @@
 	var/up = 0
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	flags_inv = (HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE)
-	icon_action_button = "action_welding"
+	action_button_name = "Toggle Welding Helmet"
 	siemens_coefficient = 0.9
 	species_fit = list("Vox")
 
@@ -181,7 +181,7 @@
 
 /obj/item/clothing/head/butt
 	name = "butt"
-	desc = "What?"
+	desc = "So many butts, so little time."
 	icon_state = "butt"
 	item_state = "butt"
 	flags = TABLEPASS
@@ -190,19 +190,14 @@
 	throwforce = 2
 	throw_speed = 3
 	throw_range = 5
+
+	wizard_garb = 1
+
 	var/s_tone = 0.0
+	var/created_name = "Buttbot"
+	nonplant_seed_type = /obj/item/seeds/synthbuttseed
 
-	var/mob/living/carbon/human/owner = null
-
-/obj/item/clothing/head/butt/New()
-	..()
-	spawn(5)
-		if(src.owner)
-			var/icon/new_icon = icon('icons/obj/clothing/hats.dmi', "butt")
-			src.s_tone = src.owner.s_tone
-			if (src.s_tone >= 0)
-				new_icon.Blend(rgb(src.s_tone, src.s_tone, src.s_tone), ICON_ADD)
-			else
-				new_icon.Blend(rgb(-src.s_tone,  -src.s_tone,  -src.s_tone), ICON_SUBTRACT)
-			src.icon = new_icon
-			src.name = "[src.owner]'s butt"
+	proc
+		transfer_buttdentity(var/mob/living/carbon/H)
+			name = "[H]'s butt"
+			return

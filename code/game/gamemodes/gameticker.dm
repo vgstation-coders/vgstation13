@@ -36,6 +36,9 @@ var/global/datum/controller/gameticker/ticker
 
 	var/triai = 0//Global holder for Triumvirate
 
+	// Hack
+	var/obj/machinery/media/jukebox/superjuke/thematic/theme = null
+
 /datum/controller/gameticker/proc/pregame()
 	login_music = pick(\
 	'sound/music/space.ogg',\
@@ -46,7 +49,10 @@ var/global/datum/controller/gameticker/ticker
 	'sound/music/clown.ogg',\
 	'sound/music/robocop.ogg',\
 	'sound/music/gaytony.ogg',\
-	'sound/music/rocketman.ogg')
+	'sound/music/rocketman.ogg',\
+	'sound/music/2525.ogg',\
+	'sound/music/moonbaseoddity.ogg',\
+	'sound/music/whatisthissong.ogg')
 	do
 		pregame_timeleft = 300
 		world << "<B><FONT color='blue'>Welcome to the pre-game lobby!</FONT></B>"
@@ -66,6 +72,20 @@ var/global/datum/controller/gameticker/ticker
 			if(pregame_timeleft <= 0)
 				current_state = GAME_STATE_SETTING_UP
 	while (!setup())
+
+/datum/controller/gameticker/proc/StartThematic(var/playlist)
+	if(!theme)
+		theme = new(locate(1,1,CENTCOMM_Z))
+	theme.playlist_id=playlist
+	theme.playing=1
+	theme.update_music()
+	theme.update_icon()
+
+/datum/controller/gameticker/proc/StopThematic()
+	theme.playing=0
+	theme.update_music()
+	theme.update_icon()
+
 
 /datum/controller/gameticker/proc/setup()
 	//Create and announce mode
@@ -139,7 +159,7 @@ var/global/datum/controller/gameticker/ticker
 		for(var/obj/effect/landmark/start/S in landmarks_list)
 			//Deleting Startpoints but we need the ai point to AI-ize people later
 			if (S.name != "AI")
-				del(S)
+				qdel(S)
 		var/list/obj/effect/landmark/spacepod/random/L = list()
 		for(var/obj/effect/landmark/spacepod/random/SS in landmarks_list)
 			if(istype(SS))
@@ -148,7 +168,7 @@ var/global/datum/controller/gameticker/ticker
 		new /obj/spacepod/random(S.loc)
 		for(var/obj in L)
 			if(istype(obj, /obj/effect/landmark/spacepod/random))
-				del(obj)
+				qdel(obj)
 		world << "<FONT color='blue'><B>Enjoy the game!</B></FONT>"
 		//world << sound('sound/AI/welcome.ogg') // Skie //Out with the old, in with the new. - N3X15
 		var/welcome_sentence=list('sound/AI/vox_login.ogg')
@@ -170,18 +190,12 @@ var/global/datum/controller/gameticker/ticker
 	//start_events() //handles random events and space dust.
 	//new random event system is handled from the MC.
 
-	var/admins_number = 0
-	for(var/client/C)
-		if(C.holder)
-			admins_number++
-	if(admins_number == 0)
+	if(0 == admins.len)
 		send2adminirc("Round has started with no admins online.")
 
 	supply_shuttle.process() 		//Start the supply shuttle regenerating points -- TLE
 	master_controller.process()		//Start master_controller.process()
 	lighting_controller.process()	//Start processing DynamicAreaLighting updates
-	garbage.process()
-
 
 	if(config.sql_enabled)
 		spawn(3000)
@@ -413,26 +427,6 @@ var/global/datum/controller/gameticker/ticker
 
 	mode.declare_completion()//To declare normal completion.
 
-	//calls auto_declare_completion_* for all modes
-	for(var/handler in typesof(/datum/game_mode/proc))
-		if (findtext("[handler]","auto_declare_completion_"))
-			call(mode, handler)()
-
-	//Print a list of antagonists to the server log
-	var/list/total_antagonists = list()
-	//Look into all mobs in world, dead or alive
-	for(var/datum/mind/Mind in minds)
-		var/temprole = Mind.special_role
-		if(temprole)							//if they are an antagonist of some sort.
-			if(temprole in total_antagonists)	//If the role exists already, add the name to it
-				total_antagonists[temprole] += ", [Mind.name]([Mind.key])"
-			else
-				total_antagonists.Add(temprole) //If the role doesnt exist in the list, create it and add the mob
-				total_antagonists[temprole] += ": [Mind.name]([Mind.key])"
-
-	//Now print them all into the log!
-	log_game("Antagonists at round end were...")
-	for(var/i in total_antagonists)
-		log_game("[i]s[total_antagonists[i]].")
+	scoreboard()
 
 	return 1
