@@ -984,7 +984,7 @@ var/global/list/brutefireloss_overlays = list("1" = image("icon" = 'icons/mob/sc
 				if(!reagents.has_reagent("inaprovaline") && !reagents.has_reagent("bicardine")) //Our body slowly degrades as air lacks
 					sponge.damage += rand(50, 70)/1000 //Brain degrades quickly, causing confusion and concussion. Alkyzine can fix it though
 					cubanbeat.damage += rand(50, 70)/1000 //Heart degrades as you are knocked out, worsening overall condition and causing extreme winding
-				else if (!reagents.has_reagent("bicardine") || !reagents.has_reagent("inaprovaline"))
+				else if (reagents.has_reagent("bicardine") && !reagents.has_reagent("inaprovaline") || reagents.has_reagent("inaprovaline") && !reagents.has_reagent("bicardine"))
 					sponge.damage += rand(20, 30)/1000 //Inaprovaline or Bicardine slows damage fairly and overall prevents deadly degradation
 					cubanbeat.damage += rand(20, 30)/1000
 				else
