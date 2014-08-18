@@ -1,2 +1,3 @@
 author: Dylanstrategie
-changes: []
+changes:
+  - wip: Changed the way oxy damage functions. When crit or above 50 Oxy, your heart and brain will slowly degrade. Inaprov or Bicardine will slow it down, and a cocktail of both will grind it to a halt
