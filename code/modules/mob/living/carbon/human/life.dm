@@ -980,20 +980,16 @@ var/global/list/brutefireloss_overlays = list("1" = image("icon" = 'icons/mob/sc
 			if((getOxyLoss() > 50) || (config.health_threshold_crit > health))
 				Paralyse(3)
 				var/datum/organ/internal/brain/sponge = internal_organs["brain"]
-				if(!reagents.has_reagent("inaprovaline")) //Our body slowly degrades as air lacks
-					//apply_damage(0.05, BRUTE)
-					sponge.damage += rand(25,35)/1000 //Brain damage evolves faster than everything else
-					for(var/organ_name in internal_organs)
-						var/datum/organ/internal/IO = internal_organs[organ_name]
-						IO.damage += rand(45,55)/1000 //Degrade internal organs
-					take_overall_damage(rand(8,14)/10) //That looks like a lot, but natural regeneration soothes it
+				var/datum/organ/internal/brain/cubanbeat = internal_organs["heart"]
+				if(!reagents.has_reagent("inaprovaline") && !reagents.has_reagent("bicardine")) //Our body slowly degrades as air lacks
+					sponge.damage += rand(50, 70)/1000 //Brain degrades quickly, causing confusion and concussion. Alkyzine can fix it though
+					cubanbeat.damage += rand(50, 70)/1000 //Heart degrades as you are knocked out, worsening overall condition and causing extreme winding
+				else if (!reagents.has_reagent("bicardine") || !reagents.has_reagent("inaprovaline"))
+					sponge.damage += rand(20, 30)/1000 //Inaprovaline or Bicardine slows damage fairly and overall prevents deadly degradation
+					cubanbeat.damage += rand(20, 30)/1000
 				else
-					//apply_damage(0.05, BRUTE)
-					sponge.damage += rand(3,7)/1000 //Brain damage evolves faster than everything else
-					for(var/organ_name in internal_organs)
-						var/datum/organ/internal/IO = internal_organs[organ_name]
-						IO.damage += rand(10,20)/1000 //Degrade internal organs
-					take_overall_damage(rand(3,7)/10) //Not enough to deal permanent damage, just jams natural regeneration a little and degrades open wounds
+					sponge.damage += rand(0, 5)/1000 //Bicardine and Inaprovaline mix ? Nearly no internal organ damage. Tricord and DD does not count since only pure Bicardine counts for organ damage to start with
+					cubanbeat.damage += rand(0, 5)/1000
 
 			if(hallucination)
 				if(hallucination >= 20)
