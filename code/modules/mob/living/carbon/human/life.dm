@@ -977,15 +977,23 @@ var/global/list/brutefireloss_overlays = list("1" = image("icon" = 'icons/mob/sc
 			analgesic = max(0, analgesic - 1)
 
 			//UNCONSCIOUS. NO-ONE IS HOME
-			if( (getOxyLoss() > 50) || (config.health_threshold_crit > health) )
+			if((getOxyLoss() > 50) || (config.health_threshold_crit > health))
 				Paralyse(3)
-
-				/* Done by handle_breath()
-				if( health <= 20 && prob(1) )
-					spawn(0)
-						emote("gasp")
-				if(!reagents.has_reagent("inaprovaline"))
-					adjustOxyLoss(1)*/
+				var/datum/organ/internal/brain/sponge = internal_organs["brain"]
+				if(!reagents.has_reagent("inaprovaline")) //Our body slowly degrades as air lacks
+					//apply_damage(0.05, BRUTE)
+					sponge.damage += rand(25,35)/1000 //Brain damage evolves faster than everything else
+					for(var/organ_name in internal_organs)
+						var/datum/organ/internal/IO = internal_organs[organ_name]
+						IO.damage += rand(45,55)/1000 //Degrade internal organs
+					take_overall_damage(rand(8,14)/10) //That looks like a lot, but natural regeneration soothes it
+				else
+					//apply_damage(0.05, BRUTE)
+					sponge.damage += rand(3,7)/1000 //Brain damage evolves faster than everything else
+					for(var/organ_name in internal_organs)
+						var/datum/organ/internal/IO = internal_organs[organ_name]
+						IO.damage += rand(10,20)/1000 //Degrade internal organs
+					take_overall_damage(rand(3,7)/10) //Not enough to deal permanent damage, just jams natural regeneration a little and degrades open wounds
 
 			if(hallucination)
 				if(hallucination >= 20)
