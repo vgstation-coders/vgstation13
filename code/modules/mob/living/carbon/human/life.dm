@@ -977,15 +977,19 @@ var/global/list/brutefireloss_overlays = list("1" = image("icon" = 'icons/mob/sc
 			analgesic = max(0, analgesic - 1)
 
 			//UNCONSCIOUS. NO-ONE IS HOME
-			if( (getOxyLoss() > 50) || (config.health_threshold_crit > health) )
+			if((getOxyLoss() > 50) || (config.health_threshold_crit > health))
 				Paralyse(3)
-
-				/* Done by handle_breath()
-				if( health <= 20 && prob(1) )
-					spawn(0)
-						emote("gasp")
-				if(!reagents.has_reagent("inaprovaline"))
-					adjustOxyLoss(1)*/
+				var/datum/organ/internal/brain/sponge = internal_organs["brain"]
+				var/datum/organ/internal/brain/cubanbeat = internal_organs["heart"]
+				if(!reagents.has_reagent("inaprovaline") && !reagents.has_reagent("bicardine")) //Our body slowly degrades as air lacks
+					sponge.damage += rand(50, 70)/1000 //Brain degrades quickly, causing confusion and concussion. Alkyzine can fix it though
+					cubanbeat.damage += rand(50, 70)/1000 //Heart degrades as you are knocked out, worsening overall condition and causing extreme winding
+				else if (reagents.has_reagent("bicardine") && !reagents.has_reagent("inaprovaline") || reagents.has_reagent("inaprovaline") && !reagents.has_reagent("bicardine"))
+					sponge.damage += rand(20, 30)/1000 //Inaprovaline or Bicardine slows damage fairly and overall prevents deadly degradation
+					cubanbeat.damage += rand(20, 30)/1000
+				else
+					sponge.damage += rand(0, 5)/1000 //Bicardine and Inaprovaline mix ? Nearly no internal organ damage. Tricord and DD does not count since only pure Bicardine counts for organ damage to start with
+					cubanbeat.damage += rand(0, 5)/1000
 
 			if(hallucination)
 				if(hallucination >= 20)
