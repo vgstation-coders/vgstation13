@@ -928,15 +928,6 @@ other types of metals and chemistry for reagents).
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot
 	category = "Exosuit Equipment"
 
-/datum/design/mech_bolas
-	name = "Exosuit Weapon Design (PCMK-6 Bolas Launcher)"
-	desc = "Allows for the construction of PCMK-6 Bolas Launcher."
-	id = "mech_bolas"
-	build_type = MECHFAB
-	req_tech = list("combat" = 3)
-	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas
-	category = "Exosuit Equipment"
-
 /datum/design/mech_laser
 	name = "Exosuit Weapon Design (CH-PS \"Immolator\" Laser)"
 	desc = "Allows for the construction of CH-PS Laser."
@@ -1081,6 +1072,24 @@ other types of metals and chemistry for reagents).
 	build_type = MECHFAB
 	req_tech = list("powerstorage"= 3, "engineering" = 3, "materials" = 3)
 	build_path = /obj/item/mecha_parts/mecha_equipment/generator/nuclear
+	category = "Exosuit Equipment"
+
+/datum/design/mech_bolas
+	name = "Exosuit Weapon Design (PCMK-6 Bolas Launcher)"
+	desc = "Allows for the construction of PCMK-6 Bolas Launcher."
+	id = "mech_bolas"
+	build_type = MECHFAB
+	req_tech = list("combat" = 3)
+	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas
+	category = "Exosuit Equipment"
+
+/datum/design/mech_jail
+	name = "Mounted Jail Cell"
+	desc = "Mounted Jail Cell, capable of holding up to two prisoners for a limited time. (Can be attached to Gygax)"
+	id = "mech_jail"
+	build_type = MECHFAB
+	req_tech = list("biotech" = 2, "engineering" = 3, "combat" = 4, "materials"= 3)
+	build_path = /obj/item/mecha_parts/mecha_equipment/tool/jail
 	category = "Exosuit Equipment"
 
 

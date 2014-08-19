@@ -109,9 +109,11 @@
 	src.update_chassis_page()
 	return
 
-/obj/item/mecha_parts/mecha_equipment/proc/detach(atom/moveto=null)
-	moveto = moveto || get_turf(chassis)
-	if(src.Move(moveto))
+/obj/item/mecha_parts/mecha_equipment/proc/detach(atom/moveto=null) //wasn't working for me, did my best, should work now - Comic
+	moveto = get_turf(chassis)
+	if(moveto)
+		src.loc = moveto
+		log_admin("Equipment moved")
 		chassis.equipment -= src
 		if(chassis.selected == src)
 			chassis.selected = null
