@@ -160,7 +160,7 @@
 
 /obj/structure/closet/secure_closet/security
 	name = "Security Officer's Locker"
-	req_access = list(access_security)
+	req_access = list(access_brig)
 	icon_state = "sec1"
 	icon_closed = "sec"
 	icon_locked = "sec1"
@@ -175,6 +175,8 @@
 			new /obj/item/weapon/storage/backpack/security(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_sec(src)
+		new /obj/item/taperoll/police(src)
+		new /obj/item/device/hailer(src) //wonder if vg would spam this
 		new /obj/item/clothing/suit/armor/vest/security(src)
 		new /obj/item/clothing/head/helmet(src)
 //		new /obj/item/weapon/cartridge/security(src)
@@ -186,8 +188,6 @@
 		new /obj/item/weapon/melee/baton/loaded(src)
 		new /obj/item/weapon/gun/energy/taser(src)
 		new /obj/item/clothing/glasses/sunglasses/sechud(src)
-		new /obj/item/taperoll/police(src)
-		new /obj/item/device/hailer(src) //wonder if vg would spam this
 		new /obj/item/clothing/gloves/black(src)
 		return
 
@@ -238,6 +238,7 @@
 	New()
 		..()
 		sleep(2)
+		new /obj/item/taperoll/police(src)
 		new /obj/item/clothing/under/det(src)
 		new /obj/item/clothing/suit/storage/det_suit(src)
 		new /obj/item/clothing/suit/storage/forensics/blue(src)
@@ -251,6 +252,7 @@
 		new /obj/item/clothing/suit/armor/det_suit(src)
 		new /obj/item/ammo_magazine/c38(src)
 		new /obj/item/ammo_magazine/c38(src)
+		new /obj/item/clothing/glasses/sunglasses/sechud(src)
 		new /obj/item/weapon/gun/projectile/detective(src)
 		new /obj/item/clothing/tie/holster/armpit(src)
 		return
