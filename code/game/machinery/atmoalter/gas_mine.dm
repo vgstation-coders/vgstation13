@@ -8,7 +8,8 @@
 	m_amt=10*CC_PER_SHEET_METAL
 	w_type = RECYK_METAL
 
-	var/datum/gas_mixture/air_contents
+	var/datum/gas_mixture/air_contents = new
+	var/mining_gas = null
 
 	var/on=1
 
@@ -19,10 +20,14 @@
 
 /obj/machinery/atmospherics/miner/New()
 	..()
-	air_contents = new
+	air_contents.oxygen = 0
+	air_contents.nitrogen = 0
+	air_contents.toxins = 0
+	air_contents.carbon_dioxide = 0
+	air_contents.nitrous_oxide = 0
 	air_contents.volume=1000
 	air_contents.temperature = T20C
-	AddAir()
+	AddAir(src.mining_gas)
 	air_contents.update_values()
 	update_icon()
 
@@ -52,7 +57,8 @@
 	update_icon()
 
 // Add air here.  DO NOT CALL UPDATE_VALUES OR UPDATE_ICON.
-/obj/machinery/atmospherics/miner/proc/AddAir()
+/obj/machinery/atmospherics/miner/proc/AddAir(var/datum/gas_mixture/A)
+	A = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
 	return
 
 /obj/machinery/atmospherics/miner/update_icon()
@@ -106,50 +112,53 @@
 
 		loc.assume_air(removed)
 
-/obj/machinery/atmospherics/miner/sleeping_agent
+/obj/machinery/atmospherics/miner/nitrous_oxide
 	name = "\improper N2O Gas Miner"
 	light_color = "#FFCCCC"
 
-	AddAir()
-		var/datum/gas/sleeping_agent/trace_gas = new
-		air_contents.trace_gases += trace_gas
-		trace_gas.moles = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+	New()
+		mining_gas = air_contents.nitrous_oxide
+		..()
 
 /obj/machinery/atmospherics/miner/nitrogen
 	name = "\improper N2 Gas Miner"
 	light_color = "#CCFFCC"
 
-	AddAir()
-		air_contents.nitrogen = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+	New()
+		mining_gas = air_contents.nitrogen
+		..()
 
 /obj/machinery/atmospherics/miner/oxygen
 	name = "\improper O2 Gas Miner"
 	light_color = "#007FFF"
 
-	AddAir()
-		air_contents.oxygen = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+	New()
+		mining_gas = air_contents.oxygen
+		..()
 
 /obj/machinery/atmospherics/miner/toxins
 	name = "\improper Plasma Gas Miner"
 	light_color = "#FF0000"
 
-	AddAir()
-		air_contents.toxins = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+	New()
+		mining_gas = air_contents.toxins
+		..()
 
 /obj/machinery/atmospherics/miner/carbon_dioxide
 	name = "\improper CO2 Gas Miner"
 	light_color = "#CDCDCD"
 
-	AddAir()
-		air_contents.carbon_dioxide = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+	New()
+		mining_gas = air_contents.carbon_dioxide
+		..()
 
 
 /obj/machinery/atmospherics/miner/air
 	name = "\improper Air Miner"
 	desc = "You fucking cheater."
 	light_color = "#70DBDB"
-
 	on = 0
 
-	AddAir()
-		air_contents.carbon_dioxide = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+	New()
+		mining_gas = air_contents.carbon_dioxide
+		..()

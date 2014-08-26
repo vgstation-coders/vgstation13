@@ -46,9 +46,7 @@
 
 /obj/item/weapon/tank/anesthetic/New()
 	. = ..()
-	var/datum/gas/sleeping_agent/sleeping_agent = new
-	sleeping_agent.moles = (3 * ONE_ATMOSPHERE) * 70 / (R_IDEAL_GAS_EQUATION * T20C) * N2STANDARD
-	air_contents.adjust((3 * ONE_ATMOSPHERE) * 70 / (R_IDEAL_GAS_EQUATION * T20C) * O2STANDARD, , , , list(sleeping_agent))
+	air_contents.adjust((3 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C) * O2STANDARD, , , , (3 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C) * N2STANDARD)
 
 /*
  * Air

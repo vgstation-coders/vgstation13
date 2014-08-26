@@ -29,6 +29,8 @@ var/global/disable_vents     = 0
 #define MIN_PLASMA_DAMAGE 1
 #define MAX_PLASMA_DAMAGE 10
 
+#define MOLES_N2O_VISIBLE 1 //Taken from previous value used in spaghetti code
+
 #define BREATH_VOLUME 0.5	//liters in a normal breath
 #define BREATH_MOLES (ONE_ATMOSPHERE * BREATH_VOLUME /(T20C*R_IDEAL_GAS_EQUATION))
 #define BREATH_PERCENTAGE BREATH_VOLUME/CELL_VOLUME

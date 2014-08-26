@@ -83,6 +83,7 @@ datum/pipe_network
 		air_transient.nitrogen = 0
 		air_transient.toxins = 0
 		air_transient.carbon_dioxide = 0
+		air_transient.nitrous_oxide = 0
 
 
 		air_transient.trace_gases = list()
@@ -97,6 +98,7 @@ datum/pipe_network
 			air_transient.nitrogen += gas.nitrogen
 			air_transient.toxins += gas.toxins
 			air_transient.carbon_dioxide += gas.carbon_dioxide
+			air_transient.nitrous_oxide += gas.nitrous_oxide
 
 			if(gas.trace_gases.len)
 				for(var/datum/gas/trace_gas in gas.trace_gases)
@@ -125,6 +127,7 @@ datum/pipe_network
 				gas.nitrogen = air_transient.nitrogen*gas.volume/air_transient.volume
 				gas.toxins = air_transient.toxins*gas.volume/air_transient.volume
 				gas.carbon_dioxide = air_transient.carbon_dioxide*gas.volume/air_transient.volume
+				gas.nitrous_oxide = air_transient.nitrous_oxide*gas.volume/air_transient.volume
 
 				gas.temperature = air_transient.temperature
 
@@ -151,6 +154,7 @@ proc/equalize_gases(datum/gas_mixture/list/gases)
 	var/total_oxygen = 0
 	var/total_nitrogen = 0
 	var/total_toxins = 0
+	var/total_nitrous_oxide = 0
 	var/total_carbon_dioxide = 0
 
 	var/list/total_trace_gases = list()
@@ -164,6 +168,7 @@ proc/equalize_gases(datum/gas_mixture/list/gases)
 		total_oxygen += gas.oxygen
 		total_nitrogen += gas.nitrogen
 		total_toxins += gas.toxins
+		total_nitrous_oxide += gas.nitrous_oxide
 		total_carbon_dioxide += gas.carbon_dioxide
 
 		if(gas.trace_gases.len)
@@ -188,6 +193,7 @@ proc/equalize_gases(datum/gas_mixture/list/gases)
 			gas.oxygen = total_oxygen*gas.volume/total_volume
 			gas.nitrogen = total_nitrogen*gas.volume/total_volume
 			gas.toxins = total_toxins*gas.volume/total_volume
+			gas.nitrous_oxide = total_nitrous_oxide*gas.volume/total_volume
 			gas.carbon_dioxide = total_carbon_dioxide*gas.volume/total_volume
 
 			gas.temperature = temperature

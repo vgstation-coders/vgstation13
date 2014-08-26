@@ -466,7 +466,8 @@
 	if(prob(20))
 		icon_state = "asteroid[rand(0,12)]"
 	spawn(2)
-		updateMineralOverlays()
+		if(istype(src, /turf/unsimulated/floor/asteroid)) //Why does this need a check? - Comic
+			updateMineralOverlays()
 
 /turf/unsimulated/floor/asteroid/ex_act(severity)
 	switch(severity)

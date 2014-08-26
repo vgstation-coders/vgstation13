@@ -321,6 +321,9 @@
 		// And CO2, lets say a PP of more than 10 will be bad (It's a little less really, but eh, being passed out all round aint no fun)
 		var/CO2_pp = (breath.carbon_dioxide/breath.total_moles())*breath_pressure
 
+		var/N2O_pp = (breath.nitrous_oxide/breath.total_moles())*breath_pressure
+
+
 		if(O2_pp < safe_oxygen_min) 			// Too little oxygen
 			if(prob(20))
 				spawn(0) emote("gasp")
@@ -374,16 +377,10 @@
 		else
 			toxins_alert = 0
 
-		if(breath.trace_gases.len)	// If there's some other shit in the air lets deal with it here.
-			for(var/datum/gas/sleeping_agent/SA in breath.trace_gases)
-				var/SA_pp = (SA.moles/breath.total_moles())*breath_pressure
-				if(SA_pp > SA_para_min) // Enough to make us paralysed for a bit
-					Paralyse(3) // 3 gives them one second to wake up and run away a bit!
-					if(SA_pp > SA_sleep_min) // Enough to make us sleep as well
-						sleeping = max(sleeping+2, 10)
-				else if(SA_pp > 0.01)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
-					if(prob(20))
-						spawn(0) emote(pick("giggle", "laugh"))
+		if(N2O_pp > SA_para_min) // Enough to make us paralysed for a bit
+			Paralyse(3) // 3 gives them one second to wake up and run away a bit!
+			if(N2O_pp > SA_sleep_min) // Enough to make us sleep as well
+				sleeping = min(sleeping+2, 10)
 
 
 		if(breath.temperature > (T0C+66)) // Hot air hurts :(

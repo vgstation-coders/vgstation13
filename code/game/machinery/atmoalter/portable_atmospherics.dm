@@ -105,9 +105,8 @@
 			if(possible_port)
 				if(connect(possible_port))
 					user << "\blue You connect [name] to the port."
-					var/datum/gas/sleeping_agent/S = locate() in src.air_contents.trace_gases
-					if(src.air_contents.toxins > 0 || (istype(S)))
-						log_admin("[usr]([ckey(usr.key)]) connected a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] to a connector_port at [loc.x], [loc.y], [loc.z]")
+					if(src.air_contents.toxins > 0 || src.air_contents.nitrous_oxide > 0)
+						log_admin("[usr]([ckey(usr.key)]) connected a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [src.air_contents.nitrous_oxide ? " N2O" : ""]\] to a connector_port at [loc.x], [loc.y], [loc.z]")
 					update_icon()
 					return
 				else

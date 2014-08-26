@@ -10,6 +10,7 @@
 	var/carbon_dioxide = 0
 	var/nitrogen = 0
 	var/toxins = 0
+	var/nitrous_oxide = 0
 
 	//Properties for airtight tiles (/wall)
 	var/thermal_conductivity = 0.05

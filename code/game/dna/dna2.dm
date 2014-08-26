@@ -32,7 +32,7 @@
 #define DNA_UI_HAIR_STYLE  13
 #define DNA_UI_LENGTH      13 // Update this when you add something, or you WILL break shit.
 
-#define DNA_SE_LENGTH 50 // Was STRUCDNASIZE, size 27. 15 new blocks added = 42, plus room to grow.
+#define DNA_SE_LENGTH 54 // Was STRUCDNASIZE, size 27. 15 new blocks added = 42, plus room to grow. //Added 4 more for new mutations, now at 54 - Comic
 
 // Defines which values mean "on" or "off".
 //  This is to make some of the more OP superpowers a larger PITA to activate,
@@ -176,6 +176,8 @@ var/global/list/bad_blocks[0]
 // Used in hair and facial styles (value being the index and maxvalue being the len of the hairstyle list)
 /datum/dna/proc/SetUIValueRange(var/block,var/value,var/maxvalue,var/defer=0)
 	if (block<=0) return
+	if(!maxvalue) //this is because some values are list lengths before the lists are initialised
+		maxvalue = 1 //again, a landmark fix until I find a way to not have landmarks do what they do
 	ASSERT(maxvalue<=4095)
 	var/range = (4095 / maxvalue)
 	if(value)

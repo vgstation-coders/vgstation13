@@ -210,6 +210,7 @@
 	GM.carbon_dioxide = carbon_dioxide
 	GM.nitrogen = nitrogen
 	GM.toxins = toxins
+	GM.nitrous_oxide = nitrous_oxide
 
 	GM.temperature = temperature
 	GM.update_values()
@@ -219,12 +220,13 @@
 /turf/remove_air(amount as num)
 	var/datum/gas_mixture/GM = new
 
-	var/sum = oxygen + carbon_dioxide + nitrogen + toxins
+	var/sum = oxygen + carbon_dioxide + nitrogen + toxins + nitrous_oxide
 	if(sum>0)
 		GM.oxygen = (oxygen/sum)*amount
 		GM.carbon_dioxide = (carbon_dioxide/sum)*amount
 		GM.nitrogen = (nitrogen/sum)*amount
 		GM.toxins = (toxins/sum)*amount
+		GM.nitrous_oxide = (nitrous_oxide/sum)*amount
 
 	GM.temperature = temperature
 	GM.update_values()
@@ -257,7 +259,7 @@
 /turf/proc/make_air()
 	air = new/datum/gas_mixture
 	air.temperature = temperature
-	air.adjust(oxygen, carbon_dioxide, nitrogen, toxins)
+	air.adjust(oxygen, carbon_dioxide, nitrogen, toxins, nitrous_oxide)
 	air.group_multiplier = 1
 	air.volume = CELL_VOLUME
 

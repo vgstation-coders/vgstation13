@@ -117,7 +117,7 @@
 			if(\
 				(scrub_Toxins && environment.toxins > 0) ||\
 				(scrub_CO2 && environment.carbon_dioxide > 0) ||\
-				(scrub_N2O && environment.trace_gases.len > 0) ||\
+				(scrub_N2O && environment.nitrous_oxide > 0) ||\
 				(scrub_O2 && environment.oxygen > 0) ||\
 				(scrub_N2 && environment.nitrogen > 0))
 				var/transfer_moles = min(1, volume_rate/environment.volume)*environment.total_moles()
@@ -147,12 +147,13 @@
 					filtered_out.nitrogen = removed.nitrogen
 					removed.nitrogen = 0
 
+				if(scrub_N2O)
+					filtered_out.nitrous_oxide = removed.nitrous_oxide
+					removed.nitrous_oxide = 0
+
 				if(removed.trace_gases.len>0)
 					for(var/datum/gas/trace_gas in removed.trace_gases)
 						if(istype(trace_gas, /datum/gas/oxygen_agent_b))
-							removed.trace_gases -= trace_gas
-							filtered_out.trace_gases += trace_gas
-						else if(istype(trace_gas, /datum/gas/sleeping_agent) && scrub_N2O)
 							removed.trace_gases -= trace_gas
 							filtered_out.trace_gases += trace_gas
 

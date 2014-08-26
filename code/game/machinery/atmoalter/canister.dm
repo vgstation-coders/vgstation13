@@ -21,7 +21,7 @@
 	m_amt=10*CC_PER_SHEET_METAL
 	w_type = RECYK_METAL
 
-/obj/machinery/portable_atmospherics/canister/sleeping_agent
+/obj/machinery/portable_atmospherics/canister/nitrous_oxide
 	name = "Canister: \[N2O\]"
 	icon_state = "redws"
 	canister_color = "redws"
@@ -269,10 +269,9 @@
 			if (holding)
 				release_log += "Valve was <b>closed</b> by [usr] ([usr.ckey]), stopping the transfer into the [holding]<br>"
 			else
-				var/datum/gas/sleeping_agent/S = locate() in src.air_contents.trace_gases
-				if(src.air_contents.toxins > 0 || (istype(S)))
-					message_admins("[usr.real_name] ([formatPlayerPanel(usr,usr.ckey)]) opened a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] at [formatJumpTo(loc)]!")
-					log_admin("[usr]([ckey(usr.key)]) opened a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] at [loc.x], [loc.y], [loc.z]")
+				if(src.air_contents.toxins > 0 || src.air_contents.nitrous_oxide > 0)
+					message_admins("[usr.real_name] ([formatPlayerPanel(usr,usr.ckey)]) opened a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [src.air_contents.nitrous_oxide > 0 ? " N2O" : ""]\] at [formatJumpTo(loc)]!")
+					log_admin("[usr]([ckey(usr.key)]) opened a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [src.air_contents.nitrous_oxide ? " N2O" : ""]\] at [loc.x], [loc.y], [loc.z]")
 				release_log += "Valve was <b>closed</b> by [usr] ([usr.ckey]), stopping the transfer into the <font color='red'><b>air</b></font><br>"
 		else
 			if (holding)
@@ -327,11 +326,9 @@
 	src.air_contents.adjust((maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()
 
-/obj/machinery/portable_atmospherics/canister/sleeping_agent/New(loc)
+/obj/machinery/portable_atmospherics/canister/nitrous_oxide/New(loc)
 	..(loc)
-	var/datum/gas/sleeping_agent/sleeping_agent = new
-	sleeping_agent.moles = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
-	air_contents.adjust(traces = list(sleeping_agent))
+	src.air_contents.adjust(n2o = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()
 
 /*

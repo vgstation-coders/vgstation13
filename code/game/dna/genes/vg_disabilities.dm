@@ -22,7 +22,7 @@
 	name = "Quiet"
 	desc = "Damages the subjects vocal cords"
 	activation_message = "<i>Your throat feels sore..</i>"
-	deactivation_message = "You feel fine again."
+	deactivation_message = "Your throat feels fine again."
 
 	New()
 		..()
@@ -36,8 +36,8 @@
 
 	OnSay(var/mob/M, var/message)
 		M.whisper(message)
-		
-		
+
+
 /datum/dna/gene/disability/dizzy
 	name = "Dizzy"
 	desc = "Causes the cerebellum to shut down in some places."
@@ -60,7 +60,7 @@
 	name = "Wacky"
 	desc = "Forces the subject to talk in an odd manner."
 	activation_message = "You feel an off sensation in your voicebox.."
-	deactivation_message = "The off sensation passes.."
+	deactivation_message = "The off sensation in your voicebox passes.."
 
 	New()
 		..()
