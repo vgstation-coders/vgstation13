@@ -4,7 +4,7 @@ Growing it to term with nothing injected will grab a ghost from the observers. *
 #define DIONA_COOLDOWN 18000 // 30 minutes between being diona
 var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost dionas to be picked again, removes the same guy being diona 5 times in 10 minutes.
 /obj/item/seeds/replicapod
-	name = "pack of dionaea-replicant seeds"
+	name = "\improper pack of dionaea-replicant seeds"
 	desc = "These seeds grow into 'replica pods' or 'dionaea', a form of strange sapient plantlife."
 	icon_state = "seed-replicapod"
 	mypath = "/obj/item/seeds/replicapod"
@@ -32,7 +32,7 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 
 	if(istype(W,/obj/item/weapon/reagent_containers))
 
-		user << "You inject the contents of the syringe into the seeds."
+		user << "<span class='notice'>You inject the contents of [W] into [src].</span>"
 
 		var/datum/reagent/blood/B
 
@@ -43,7 +43,7 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 				break
 		if(B)
 			source = B.data["donor"]
-			user << "The strange, sluglike seeds quiver gently and swell with blood."
+			user << "<span class='warning'>The strange, sluglike seeds quiver gently and swell with blood.</span>"
 			if(!source.client && source.mind)
 				for(var/mob/dead/observer/O in player_list)
 					if(O.mind == source.mind && config.revival_pod_plants)
@@ -72,9 +72,9 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 
 
 	if(beingharvested)
-		user << ("\red You can only harvest the pod once!")
+		user << ("<span class='warning'>You can only harvest the pod once!</span>")
 	else
-		user.visible_message("\blue [user] carefully begins to open the pod...","\blue You carefully begin to open the pod...")
+		user.visible_message("<span class='notice'>[user] carefully begins to open the pod.</span>","<span class='notice'>You carefully begin to open the pod.</span>")
 		beingharvested = 1
 
 	//If a sample is injected (and revival is allowed) the plant will be controlled by the original donor.
@@ -101,7 +101,7 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 
 
 /obj/item/seeds/replicapod/proc/harvest_failure(mob/user)
-	parent.visible_message("The pod has formed badly, and all you can do is salvage some of the seeds.")
+	parent.visible_message("<span class='warning'>The pod has formed badly and all that can be salvaged are some seeds.</span>")
 	var/seed_count = 1
 	if(prob(yield * parent.yieldmod * 20))
 		seed_count++
@@ -183,5 +183,5 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 		if (newname != "")
 			podman.real_name = newname
 
-	parent.visible_message("\blue The pod disgorges a fully-formed plant creature!")
+	parent.visible_message("<span class='notice'>The pod disgorges a fully-formed plant creature!</span>")
 	parent.update_tray()

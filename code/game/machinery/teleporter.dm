@@ -1,5 +1,5 @@
 /obj/machinery/computer/teleporter
-	name = "Teleporter"
+	name = "\improper Teleporter"
 	desc = "Used to control a linked teleportation Hub and Station."
 	icon_state = "teleport"
 	circuit = "/obj/item/weapon/circuitboard/teleporter"
@@ -35,26 +35,12 @@
 
 
 		if(istype(L, /obj/effect/landmark/) && istype(L.loc, /turf))
-			usr << "You insert the coordinates into the machine."
-			usr << "A message flashes across the screen reminding the traveller that the nuclear authentication disk is to remain on the station at all times."
+			usr.visible_message("<span class='warning'>[user] enters coordinates into the machine!</span>", "<span class='notice'>You enter coordinates into the machine.</span>")
+			usr << "<span class='notice'>A message flashes across the screen reminding the traveller that the nuclear authentication disk is to remain on the station at all times.</span>"
 			user.drop_item()
 			del(I)
 
-			/* FUCK YOU
-			if(C.data == "Clown Land")
-				//whoops
-				for(var/mob/O in hearers(src, null))
-					O.show_message("\red Incoming bluespace portal detected, unable to lock in.", 2)
-
-				for(var/obj/machinery/teleport/hub/H in range(1))
-					var/amount = rand(2,5)
-					for(var/i=0;i<amount;i++)
-						new /mob/living/simple_animal/hostile/carp(get_turf(H))
-				//
-			else
-			*/
-			for(var/mob/O in hearers(src, null))
-				O.show_message("\blue Locked In", 2)
+			visible_message("<span class='notice'>Locked In</span>")
 			src.locked = L
 			one_time_use = 1
 
@@ -146,7 +132,7 @@
 
 
 /obj/machinery/teleport/hub
-	name = "teleporter hub"
+	name = "\improper teleporter hub"
 	desc = "It's the hub of a teleporting machine."
 	icon_state = "tele0"
 	var/accurate = 0
@@ -157,27 +143,29 @@
 
 /obj/machinery/teleport/hub/attackby(obj/item/weapon/O as obj, mob/user as mob)
 	if (istype(O, /obj/item/weapon/screwdriver))
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if (!opened)
 			src.opened = 1
-			user << "You open the maintenance hatch of [src]."
-			//src.icon_state = "autolathe_t"
+			user.visible_message("<span class='warning'>[user] opens [src]'s maintenance hatch!</span>", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
 		else
 			src.opened = 0
-			user << "You close the maintenance hatch of [src]."
-			//src.icon_state = "autolathe"
+			user.visible_message("<span class='warning'>[user] closes [src]'s maintenance hatch!</span>", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
 			return 1
 	else if(istype(O, /obj/item/weapon/crowbar))
 		if (opened)
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-			return 1
+			user.visible_message("<span class='warning'>[user] begins to remove the circuits from [src]!</span>", "<span class='notice'>You begin to remove the circuits from [src].</span>")
+			if(do_after(user,50))
+				user.visible_message("<span class='warning'>[user] removes the circuits from [src]!</span>", "<span class='notice'>You remove the circuits from [src].</span>")
+				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
+				M.state = 2
+				M.icon_state = "box_1"
+				for(var/obj/I in component_parts)
+					if(I.reliability != 100 && crit_fail)
+						I.crit_fail = 1
+					I.loc = src.loc
+				del(src)
+				return 1
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -220,8 +208,7 @@
 	if (!com)
 		return
 	if (!com.locked)
-		for(var/mob/O in hearers(src, null))
-			O.show_message("\red Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.")
+		visible_message("<span class='warning'>Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.</span>")
 		return
 	if (istype(M, /atom/movable))
 		if(prob(5) && !accurate) //oh dear a problem, put em in deep space
@@ -236,99 +223,12 @@
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(5, 1, src)
 		s.start()
-		for(var/mob/B in hearers(src, null))
-			B.show_message("\blue Test fire completed.")
+		visible_message("<span class='notice'>Test fire completed.</span>")
 	return
-/*
-/proc/do_teleport(atom/movable/M as mob|obj, atom/destination, precision)
-	if(istype(M, /obj/effect))
-		del(M)
-		return
-	if (istype(M, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite
-		for(var/mob/O in viewers(M, null))
-			O.show_message(text("\red <B>The [] bounces off of the portal!</B>", M.name), 1)
-		return
-	if (istype(M, /mob/living))
-		var/mob/living/MM = M
-		if(MM.check_contents_for(/obj/item/weapon/disk/nuclear))
-			MM << "\red Something you are carrying seems to be unable to pass through the portal. Better drop it if you want to go through."
-			return
-	var/disky = 0
-	for (var/atom/O in M.contents) //I'm pretty sure this accounts for the maximum amount of container in container stacking. --NeoFite
-		if (istype(O, /obj/item/weapon/storage) || istype(O, /obj/item/weapon/gift))
-			for (var/obj/OO in O.contents)
-				if (istype(OO, /obj/item/weapon/storage) || istype(OO, /obj/item/weapon/gift))
-					for (var/obj/OOO in OO.contents)
-						if (istype(OOO, /obj/item/weapon/disk/nuclear))
-							disky = 1
-				if (istype(OO, /obj/item/weapon/disk/nuclear))
-					disky = 1
-		if (istype(O, /obj/item/weapon/disk/nuclear))
-			disky = 1
-		if (istype(O, /mob/living))
-			var/mob/living/MM = O
-			if(MM.check_contents_for(/obj/item/weapon/disk/nuclear))
-				disky = 1
-	if (disky)
-		for(var/mob/P in viewers(M, null))
-			P.show_message(text("\red <B>The [] bounces off of the portal!</B>", M.name), 1)
-		return
-
-//Bags of Holding cause bluespace teleportation to go funky. --NeoFite
-	if (istype(M, /mob/living))
-		var/mob/living/MM = M
-		if(MM.check_contents_for(/obj/item/weapon/storage/backpack/holding))
-			MM << "\red The Bluespace interface on your Bag of Holding interferes with the teleport!"
-			precision = rand(1,100)
-	if (istype(M, /obj/item/weapon/storage/backpack/holding))
-		precision = rand(1,100)
-	for (var/atom/O in M.contents) //I'm pretty sure this accounts for the maximum amount of container in container stacking. --NeoFite
-		if (istype(O, /obj/item/weapon/storage) || istype(O, /obj/item/weapon/gift))
-			for (var/obj/OO in O.contents)
-				if (istype(OO, /obj/item/weapon/storage) || istype(OO, /obj/item/weapon/gift))
-					for (var/obj/OOO in OO.contents)
-						if (istype(OOO, /obj/item/weapon/storage/backpack/holding))
-							precision = rand(1,100)
-				if (istype(OO, /obj/item/weapon/storage/backpack/holding))
-					precision = rand(1,100)
-		if (istype(O, /obj/item/weapon/storage/backpack/holding))
-			precision = rand(1,100)
-		if (istype(O, /mob/living))
-			var/mob/living/MM = O
-			if(MM.check_contents_for(/obj/item/weapon/storage/backpack/holding))
-				precision = rand(1,100)
-
-
-	var/turf/destturf = get_turf(destination)
-
-	var/tx = destturf.x + rand(precision * -1, precision)
-	var/ty = destturf.y + rand(precision * -1, precision)
-
-	var/tmploc
-
-	if (ismob(destination.loc)) //If this is an implant.
-		tmploc = locate(tx, ty, destturf.z)
-	else
-		tmploc = locate(tx, ty, destination.z)
-
-	if(tx == destturf.x && ty == destturf.y && (istype(destination.loc, /obj/structure/closet) || istype(destination.loc, /obj/structure/closet/secure_closet)))
-		tmploc = destination.loc
-
-	if(tmploc==null)
-		return
-
-	M.loc = tmploc
-	sleep(2)
-
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(5, 1, M)
-	s.start()
-	return
-*/
 
 /obj/machinery/teleport/station
-	name = "station"
-	desc = "It's the station thingy of a teleport thingy." //seriously, wtf.
+	name = "\improper station"
+	desc = "It's the station thingy of the teleport thingy." //seriously, wtf.
 	icon_state = "controller"
 	var/active = 0
 	var/engaged = 0
@@ -362,27 +262,29 @@ obj/machinery/teleport/station/New()
 
 /obj/machinery/teleport/station/attackby(var/obj/item/weapon/W, var/mob/user as mob)
 	if (istype(W, /obj/item/weapon/screwdriver))
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if (!opened)
 			src.opened = 1
-			user << "You open the maintenance hatch of [src]."
-			//src.icon_state = "autolathe_t"
+			user.visible_message("<span class='warning'>[user] opens [src]'s maintenance hatch!</span>", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
 		else
 			src.opened = 0
-			user << "You close the maintenance hatch of [src]."
-			//src.icon_state = "autolathe"
+			user.visible_message("<span class='warning'>[user] closes [src]'s maintenance hatch!</span>", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
 			return 1
 	else if(istype(W, /obj/item/weapon/crowbar))
 		if (opened)
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-			return 1
+			user.visible_message("<span class='warning'>[user] begins to remove the circuits from [src]!</span>", "<span class='notice'>You begin to remove the circuits from [src].</span>")
+			if(do_after(user,50))
+				user.visible_message("<span class='warning'>[user] removes the circuits from [src]!</span>", "<span class='notice'>You remove the circuits from [src].</span>")
+				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
+				M.state = 2
+				M.icon_state = "box_1"
+				for(var/obj/I in component_parts)
+					if(I.reliability != 100 && crit_fail)
+						I.crit_fail = 1
+					I.loc = src.loc
+				del(src)
+				return 1
 	else src.attack_hand()
 
 /obj/machinery/teleport/station/attack_paw(var/mob/user)
@@ -406,8 +308,7 @@ obj/machinery/teleport/station/New()
 	if (com)
 		com.icon_state = "tele1"
 		use_power(5000)
-		for(var/mob/O in hearers(src, null))
-			O.show_message("\blue Teleporter engaged!", 2)
+		visible_message("<span class='notice'>Teleporter engaged!</span>")
 	src.add_fingerprint(usr)
 	src.engaged = 1
 	return
@@ -420,8 +321,7 @@ obj/machinery/teleport/station/New()
 	var/atom/com = locate(/obj/machinery/teleport/hub, locate(l.x + 1, l.y, l.z))
 	if (com)
 		com.icon_state = "tele0"
-		for(var/mob/O in hearers(src, null))
-			O.show_message("\blue Teleporter disengaged!", 2)
+		visible_message("<span class='notice'>Teleporter disengaged!</span>")
 	src.add_fingerprint(usr)
 	src.engaged = 0
 	return
@@ -438,8 +338,7 @@ obj/machinery/teleport/station/New()
 	var/obj/machinery/teleport/hub/com = locate(/obj/machinery/teleport/hub, locate(l.x + 1, l.y, l.z))
 	if (com && !active)
 		active = 1
-		for(var/mob/O in hearers(src, null))
-			O.show_message("\blue Test firing!", 2)
+		visible_message("<span class='notice'>Test firing!</span>")
 		com.teleport()
 		use_power(5000)
 

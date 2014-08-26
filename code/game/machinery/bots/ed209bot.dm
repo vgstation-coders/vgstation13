@@ -1,5 +1,5 @@
 /obj/machinery/bot/ed209
-	name = "ED-209 Security Robot"
+	name = "\improper ED-209 Security Robot"
 	desc = "A security robot.  He looks less than thrilled."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "ed2090"
@@ -61,7 +61,7 @@
 
 
 /obj/item/weapon/ed209_assembly
-	name = "ED-209 assembly"
+	name = "\improper ED-209 assembly"
 	desc = "Some sort of bizarre assembly."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "ed209_frame"
@@ -207,8 +207,7 @@ Auto Patrol: []"},
 	if(open && !locked)
 		if(user) user << "<span class='warning'>You short out [src]'s target assessment circuits.</span>"
 		spawn(0)
-			for(var/mob/O in hearers(src, null))
-				O.show_message("\red <B>[src] buzzes oddly!</B>", 1)
+		visible_message("<span class='danger'>[src] buzzes oddly!</span>")
 		src.target = null
 		if(user) src.oldtarget_name = user.name
 		src.last_found = world.time
@@ -292,7 +291,7 @@ Auto Patrol: []"},
 					maxstuns--
 					if (maxstuns <= 0)
 						target = null
-					visible_message("\red <B>[src.target] has been stunned by [src]!</B>")
+					visible_message("<span class='danger'>[src.target] has been stunned by [src]!</span>")
 
 					mode = SECBOT_PREP_ARREST
 					src.anchored = 1
@@ -325,7 +324,7 @@ Auto Patrol: []"},
 				if (!src.target.handcuffed && !src.arrest_type)
 					playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
 					mode = SECBOT_ARREST
-					visible_message("\red <B>[src] is trying to put handcuffs on [src.target]!</B>")
+					visible_message("<span class='danger'>[src] is trying to put handcuffs on [src.target]!</span>")
 
 					spawn(60)
 						if (get_dist(src, src.target) <= 1)
@@ -652,7 +651,7 @@ Auto Patrol: []"},
 			src.speak("Level [src.threatlevel] infraction alert!")
 			if(!src.lasercolor)
 				playsound(get_turf(src), pick('sound/voice/ed209_20sec.ogg', 'sound/voice/EDPlaceholder.ogg'), 50, 0)
-			src.visible_message("<b>[src]</b> points at [C.name]!")
+			src.visible_message("<span class='warning'><b>[src]</b> points at [C.name]!</span>")
 			mode = SECBOT_HUNT
 			spawn(0)
 				process()	// ensure bot quickly responds to a perp
@@ -756,12 +755,12 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/ed209/proc/speak(var/message)
 	for(var/mob/O in hearers(src, null))
-		O.show_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"",2)
+		O.show_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"")
 	return
 
 /obj/machinery/bot/ed209/explode()
 	walk_to(src,0)
-	src.visible_message("\red <B>[src] blows apart!</B>", 1)
+	src.visible_message("<span class='danger'>[src] blows apart!</span>")
 	var/turf/Tsec = get_turf(src)
 
 	var/obj/item/weapon/ed209_assembly/Sa = new /obj/item/weapon/ed209_assembly(Tsec)
@@ -937,7 +936,7 @@ Auto Patrol: []"},
 				if(WT.remove_fuel(0,user))
 					build_step++
 					name = "shielded frame assembly"
-					user << "<span class='notice'>You welded the vest to [src].</span>"
+					user << "<span class='notice'>You weld the vest to [src].</span>"
 		if(4)
 			if( istype(W, /obj/item/clothing/head/helmet) )
 				user.drop_item()
@@ -961,10 +960,8 @@ Auto Patrol: []"},
 		if(6)
 			if( istype(W, /obj/item/weapon/cable_coil) )
 				var/obj/item/weapon/cable_coil/coil = W
-				var/turf/T = get_turf(user)
 				user << "<span class='notice'>You start to wire [src]...</span>"
-				sleep(40)
-				if(get_turf(user) == T)
+				if(do_after(user,50))
 					coil.use(1)
 					build_step++
 					user << "<span class='notice'>You wire the ED-209 assembly.</span>"

@@ -1,6 +1,6 @@
 ////////////////////HOLOSIGN///////////////////////////////////////
 /obj/machinery/holosign
-	name = "holosign"
+	name = "\improper holosign"
 	desc = "Small wall-mounted holographic projector"
 	icon = 'icons/obj/holosign.dmi'
 	icon_state = "sign_off"
@@ -11,6 +11,8 @@
 	var/lit = 0
 	var/id_tag = null
 	var/on_icon = "sign_on"
+	idle_power_usage = 50
+	active_power_usage = 150
 
 	proc/toggle()
 		if (stat & (BROKEN|NOPOWER))

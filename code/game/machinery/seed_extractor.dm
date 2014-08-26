@@ -1,5 +1,5 @@
 /obj/machinery/seed_extractor
-	name = "seed extractor"
+	name = "\improper seed extractor"
 	desc = "Extracts and bags seeds from produce."
 	icon = 'icons/obj/hydroponics.dmi'
 	icon_state = "sextractor"
@@ -29,7 +29,7 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/))
 		var/obj/item/weapon/reagent_containers/food/snacks/grown/F = O
 		user.drop_item()
-		user << "<span class='notice'>You extract some seeds from the [F.name].</span>"
+		user << "<span class='notice'>You extract some seeds from [F].</span>"
 		var/seed = text2path(F.seed)
 		var/t_amount = 0
 		var/t_max = rand(1,4)
@@ -48,7 +48,7 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 	else if(istype(O, /obj/item/weapon/grown/))
 		var/obj/item/weapon/grown/F = O
 		user.drop_item()
-		user << "<span class='notice'>You extract some seeds from the [F.name].</span>"
+		user << "<span class='notice'>You extract some seeds from [F].</span>"
 		var/seed = text2path(F.seed)
 		var/t_amount = 0
 		var/t_max = rand(1,4)
@@ -66,7 +66,7 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 
 	else if(istype(O, /obj/item/stack/tile/grass))
 		var/obj/item/stack/tile/grass/S = O
-		user << "<span class='notice'>You extract some seeds from the [S.name].</span>"
+		user << "<span class='notice'>You extract some seeds from [S].</span>"
 		S.use(1)
 		new /obj/item/seeds/grassseed(loc)
 
@@ -82,26 +82,26 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 			del(F)
 
 	else if (istype(O, /obj/item/weapon/screwdriver))
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if (!opened)
+			user.visible_message("<span class='warning'>[user] opens [src]'s maintenance hatch!</span>", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
 			src.opened = 1
-			user << "You open the maintenance hatch of [src]."
-			//src.icon_state = "autolathe_t"
 		else
+			user.visible_message("<span class='warning'>[user] closes [src]'s maintenance hatch!</span>", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
 			src.opened = 0
-			user << "You close the maintenance hatch of [src]."
-			//src.icon_state = "autolathe"
-			return 1
+		return 1
 	else if(istype(O, /obj/item/weapon/crowbar))
 		if (opened)
+			user.visible_message("<span class='warning'>[user] begins to remove the circuits from [src]!</span>", "<span class='notice'>You begin to remove the circuits from [src].</span>")
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-			return 1
-
-	return
+			if(do_after(user,50))
+				user.visible_message("<span class='warning'>[user] removes the circuits from [src]!", "<span class='notice'>You remove the circuits from [src].</span>")
+				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
+				M.state = 2
+				M.icon_state = "box_1"
+				for(var/obj/I in component_parts)
+					if(I.reliability != 100 && crit_fail)
+						I.crit_fail = 1
+					I.loc = src.loc
+				del(src)
+				return 1

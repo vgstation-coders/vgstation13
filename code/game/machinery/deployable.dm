@@ -56,7 +56,7 @@ for reference:
 
 //Barricades, maybe there will be a metal one later...
 /obj/structure/barricade/wooden
-	name = "wooden barricade"
+	name = "\improper wooden barricade"
 	desc = "This space is blocked off by a wooden barricade."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "woodenbarricade"
@@ -68,11 +68,16 @@ for reference:
 	attackby(obj/item/W as obj, mob/user as mob)
 		if (istype(W, /obj/item/stack/sheet/wood))
 			if (src.health < src.maxhealth)
-				visible_message("\red [user] begins to repair the [src]!")
-				if(do_after(user,20))
+				user.visible_message("<span class='warning'>[user] begins to repair [src]!", "<span class='notice'>You begin to repair [src].</span>")
+				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 60, 1)
+				spawn(rand(3,7))
+				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 40, 1)
+				spawn(rand(3,7))
+				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1) //No seriously, that's how I do repairing sounds
+				if(do_after(user,50))
 					src.health = src.maxhealth
 					W:use(1)
-					visible_message("\red [user] repairs the [src]!")
+					user.visible_message("<span class='warning'>[user] repairs [src]!", "<span class='notice'>You repair [src].</span>")
 					return
 			else
 				return
@@ -85,7 +90,7 @@ for reference:
 					src.health -= W.force * 0.75
 				else
 			if (src.health <= 0)
-				visible_message("\red <B>The barricade is smashed apart!</B>")
+				visible_message("<span class='danger'>[src] is smashed apart!</span>")
 				new /obj/item/stack/sheet/wood(get_turf(src, 5))
 				del(src)
 			..()
@@ -93,13 +98,13 @@ for reference:
 	ex_act(severity)
 		switch(severity)
 			if(1.0)
-				visible_message("\red <B>The barricade is blown apart!</B>")
+				visible_message("<span class='danger'>[src] is blown apart!</span>")
 				qdel(src)
 				return
 			if(2.0)
 				src.health -= 25
 				if (src.health <= 0)
-					visible_message("\red <B>The barricade is blown apart!</B>")
+					visible_message("<span class='danger'>[src] is blown apart!</span>")
 					new /obj/item/stack/sheet/wood(get_turf(src))
 					new /obj/item/stack/sheet/wood(get_turf(src))
 					new /obj/item/stack/sheet/wood(get_turf(src))
@@ -107,7 +112,7 @@ for reference:
 				return
 
 	meteorhit()
-		visible_message("\red <B>The barricade is smashed apart!</B>")
+		visible_message("<span class='danger'>[src] is smashed apart!</span>")
 		new /obj/item/stack/sheet/wood(get_turf(src))
 		new /obj/item/stack/sheet/wood(get_turf(src))
 		new /obj/item/stack/sheet/wood(get_turf(src))
@@ -117,7 +122,7 @@ for reference:
 	blob_act()
 		src.health -= 25
 		if (src.health <= 0)
-			visible_message("\red <B>The blob eats through the barricade!</B>")
+			visible_message("<span class='danger'>The blob eats through [src]!</span>")
 			del(src)
 		return
 
@@ -141,13 +146,13 @@ for reference:
 //Actual Deployable machinery stuff
 
 /obj/machinery/deployable
-	name = "deployable"
+	name = "\improper deployable"
 	desc = "deployable"
 	icon = 'icons/obj/objects.dmi'
 	req_access = list(access_security)//I'm changing this until these are properly tested./N
 
 /obj/machinery/deployable/barrier
-	name = "deployable barrier"
+	name = "\improper deployable barrier"
 	desc = "A deployable barrier. Swipe your ID card to lock/unlock it."
 	icon = 'icons/obj/objects.dmi'
 	anchored = 0.0
@@ -156,7 +161,6 @@ for reference:
 	var/health = 100.0
 	var/maxhealth = 100.0
 	var/locked = 0.0
-//	req_access = list(access_maint_tunnels)
 
 	New()
 		..()
@@ -171,48 +175,54 @@ for reference:
 					src.anchored = !src.anchored
 					src.icon_state = "barrier[src.locked]"
 					if ((src.locked == 1.0) && (src.emagged < 2.0))
-						user << "Barrier lock toggled on."
+						user.visible_message("<span class='warning'>[user] toggles [src] on!", "<span class='notice'>You toggle [src] on.</span>")
 						return
 					else if ((src.locked == 0.0) && (src.emagged < 2.0))
-						user << "Barrier lock toggled off."
+						user.visible_message("<span class='warning'>[user] toggles [src] off!", "<span class='notice'>You toggle [src] off.</span>")
 						return
 				else
 					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 					s.set_up(2, 1, src)
 					s.start()
-					visible_message("\red BZZzZZzZZzZT")
+					visible_message("<span class='warning'>[src] sparks violently.</span>")
 					return
 			return
 		else if (istype(W, /obj/item/weapon/card/emag))
 			if (src.emagged == 0)
 				src.emagged = 1
 				src.req_access = null
-				user << "You break the ID authentication lock on the [src]."
+				user << "<span class='notice'>You break the ID authentication lock on [src].</span>"
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(2, 1, src)
 				s.start()
-				visible_message("\red BZZzZZzZZzZT")
+				visible_message("<span class='warning'>[src] sparks violently.</span>")
 				return
 			else if (src.emagged == 1)
 				src.emagged = 2
-				user << "You short out the anchoring mechanism on the [src]."
+				user << "<span class='notice'>You short out the anchoring mechanism on [src].</span>"
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(2, 1, src)
 				s.start()
-				visible_message("\red BZZzZZzZZzZT")
+				visible_message("<span class='warning'>[src] sparks violently.</span>")
 				return
 		else if (istype(W, /obj/item/weapon/wrench))
 			if (src.health < src.maxhealth)
-				src.health = src.maxhealth
-				src.emagged = 0
-				src.req_access = list(access_security)
-				visible_message("\red [user] repairs the [src]!")
-				return
+				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+				user.visible_message("<span class='warning'>[user] starts repairing [src]!", "<span class='notice'>You start repairing [src]!</span>", "<span class='notice'>You hear a ratchet.</span>")
+				if(do_after(user,50))
+					src.health = src.maxhealth
+					src.emagged = 0
+					src.req_access = list(access_security)
+					user.visible_message("<span class='warning'>[user] repairs [src]!", "<span class='notice'>You repair [src]!</span>")
+					return
 			else if (src.emagged > 0)
-				src.emagged = 0
-				src.req_access = list(access_security)
-				visible_message("\red [user] repairs the [src]!")
-				return
+				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+				user.visible_message("<span class='warning'>[user] starts repairing [src]!", "<span class='notice'>You start repairing [src]!</span>", "<span class='notice'>You hear a ratchet.</span>")
+				if(do_after(user,50))
+					src.emagged = 0
+					src.req_access = list(access_security)
+					user.visible_message("<span class='warning'>[user] repairs [src]!", "<span class='notice'>You repair [src]!</span>")
+					return
 			return
 		else
 			switch(W.damtype)
@@ -263,7 +273,7 @@ for reference:
 
 	proc/explode()
 
-		visible_message("\red <B>[src] blows apart!</B>")
+		visible_message("<span class='danger'>[src] blows apart!</span>")
 		var/turf/Tsec = get_turf(src)
 
 	/*	var/obj/item/stack/rods/ =*/

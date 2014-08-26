@@ -1,5 +1,5 @@
 /obj/machinery/portable_atmospherics/scrubber
-	name = "Portable Air Scrubber"
+	name = "\improper Portable Air Scrubber"
 
 	icon = 'icons/obj/atmos.dmi'
 	icon_state = "pscrubber:0"
@@ -22,7 +22,7 @@
 	..(severity)
 
 /obj/machinery/portable_atmospherics/scrubber/huge
-	name = "Huge Air Scrubber"
+	name = "\improper Huge Air Scrubber"
 	icon_state = "scrubber:0"
 	anchored = 1
 	volume = 50000
@@ -38,7 +38,7 @@
 		name = "[name] (ID [id])"
 
 	attack_hand(var/mob/user as mob)
-		usr << "\blue You can't directly interact with this machine. Use the area atmos computer."
+		usr << "<span class='notice'>You can't directly interact with [src]. Use the area's atmos computer.</span>"
 
 	update_icon()
 		src.overlays = 0
@@ -51,23 +51,20 @@
 	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 		if(istype(W, /obj/item/weapon/wrench))
 			if(on)
-				user << "\blue Turn it off first!"
+				user << "<span class='notice'>Turn [src] off first!</span>"
 				return
 
 			anchored = !anchored
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-			user << "\blue You [anchored ? "wrench" : "unwrench"] \the [src]."
-
-			return
-
+			user.visible_message("<span class='warning'>[user] [anchored ? "wrenches" : "unwrenches"] [src]!</span>", "<span class='notice'>You [anchored ? "wrench" : "unwrench"] [src].</span>")
 		..()
 
 /obj/machinery/portable_atmospherics/scrubber/huge/stationary
-	name = "Stationary Air Scrubber"
+	name = "\improper Stationary Air Scrubber"
 
 	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 		if(istype(W, /obj/item/weapon/wrench))
-			user << "\blue The bolts are too tight for you to unscrew!"
+			user << "<span class='warning'>The bolts are too tight for you to unscrew!</span>"
 			return
 
 		..()

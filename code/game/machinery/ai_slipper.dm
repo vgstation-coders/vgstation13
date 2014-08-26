@@ -1,5 +1,5 @@
 /obj/machinery/ai_slipper
-	name = "AI Foam Dispenser"
+	name = "\improper AI Foam Dispenser"
 	icon = 'icons/obj/device.dmi'
 	icon_state = "motion3"
 	layer = 3
@@ -37,7 +37,7 @@
 	else // trying to unlock the interface
 		if (src.allowed(user))
 			locked = !locked
-			user << "You [ locked ? "lock" : "unlock"] the device."
+			user << "<span class='notice'>You [locked ? "lock" : "unlock"] [src].</span>"
 			if (locked)
 				if (user.machine==src)
 					user.unset_machine()
@@ -46,7 +46,7 @@
 				if (user.machine==src)
 					src.attack_hand(usr)
 		else
-			user << "\red Access denied."
+			user << "<span class='warning'>Access denied.</span>"
 			return
 	return
 

@@ -1,5 +1,5 @@
 /obj/machinery/zvent
-	name = "Interfloor Air Transfer System"
+	name = "\improper Interfloor Air Transfer System" //Say goddamn what now ?
 
 	icon = 'icons/obj/pipes.dmi'
 	icon_state = "vent-db"

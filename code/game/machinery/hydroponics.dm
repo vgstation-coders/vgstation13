@@ -1,7 +1,7 @@
 #define HYDRO_SPEED_MULTIPLIER 1
 
 /obj/machinery/hydroponics
-	name = "hydroponics tray"
+	name = "\improper hydroponics tray"
 	icon = 'icons/obj/hydroponics.dmi'
 	icon_state = "hydrotray3"
 	density = 1
@@ -247,7 +247,7 @@ obj/machinery/hydroponics/proc/weedinvasion() // If a weed growth is sufficient,
 	weedlevel = 0 // Reset
 	pestlevel = 0 // Reset
 	updateicon()
-	visible_message("\blue [src] has been overtaken by [myseed.plantname].")
+	visible_message("<span class='notice'>[src] has been overtaken by [myseed.plantname].</span>")
 
 	return
 
@@ -434,14 +434,14 @@ obj/machinery/hydroponics/proc/mutatespecie() // Mutagent produced a new plant!
 
 	spawn(5) // Wait a while
 	updateicon()
-	visible_message("\red[src] has suddenly mutated into \blue [myseed.plantname]!")
+	visible_message("<span class='danger'>[src] has suddenly mutated into [myseed.plantname]!</span>")
 
 	return
 
 
 
 obj/machinery/hydroponics/proc/mutateweed() // If the weeds gets the mutagent instead. Mind you, this pretty much destroys the old plant
-	if ( weedlevel > 5 )
+	if(weedlevel > 5)
 		del(myseed)
 		var/newWeed = pick(/obj/item/seeds/libertymycelium, /obj/item/seeds/angelmycelium, /obj/item/seeds/deathnettleseed, /obj/item/seeds/kudzuseed)
 		myseed = new newWeed
@@ -454,11 +454,11 @@ obj/machinery/hydroponics/proc/mutateweed() // If the weeds gets the mutagent in
 		harvest = 0
 		weedlevel = 0 // Reset
 
-		spawn(5) // Wait a while
+		spawn(50) // Wait a while. 5 seconds is a while enough ?
 		updateicon()
-		visible_message("\red The mutated weeds in [src] spawned a \blue [myseed.plantname]!")
+		visible_message("<span class='danger'>The mutated weeds in [src] spawned a [myseed.plantname]!</span>")
 	else
-		usr << "The few weeds in the [src] seem to react, but only for a moment..."
+		usr << "<span class='notice'>The few weeds in [src] seem to react, but only for a moment.</span>"
 	return
 
 
@@ -468,26 +468,26 @@ obj/machinery/hydroponics/proc/plantdies() // OH NOES!!!!! I put this all in one
 	dead = 1
 	harvest = 0
 	updateicon()
-	visible_message("\red[src] is looking very unhealthy!")
+	visible_message("<span class='danger'>[src] is looking very unhealthy!</span>")
 	return
 
 
 
 obj/machinery/hydroponics/proc/mutatepest()  // Until someone makes a spaceworm, this is commented out
-	if ( pestlevel > 5 )
- 	visible_message("The pests seem to behave oddly...")
-//		spawn(10)
-//		new /obj/effect/alien/spaceworm(loc)
+	if(pestlevel > 5)
+ 	visible_message("<span class='warning'>The pests seem to behave oddly.</span>")
+		//spawn(10)
+		//new /obj/effect/alien/spaceworm(loc)
 	else
-		usr << "The pests seem to behave oddly, but quickly settle down..." //Modified to give a better idea of what's happening when you inject mutagen. There's still nothing proper to spawn here though. -Cheridan
-	return
+		visible_message("<span class='notice'>The pests seem to behave oddly but quickly settle down.</span>") //Modified to give a better idea of what's happening when you inject mutagen. There's still nothing proper to spawn here though. -Cheridan
+		return
 
 
 
 obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
 	//Called when mob user "attacks" it with object O
-	if (istype(O, /obj/item/weapon/reagent_containers/glass/bucket))
+	if(istype(O, /obj/item/weapon/reagent_containers/glass/bucket))
 		var/b_amount = O.reagents.get_reagent_amount("water")
 		if(b_amount > 0 && waterlevel < 100)
 			if(b_amount + waterlevel > 100)
@@ -495,7 +495,7 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 			O.reagents.remove_reagent("water", b_amount)
 			waterlevel += b_amount
 			playsound(loc, 'sound/effects/slosh.ogg', 25, 1)
-			user << "You fill the [src] with [b_amount] units of water."
+			user.visible_message("<span class='warning'>[user] fills [src] with [O]!", "<span class='notice'>You fill [src] with [b_amount] units of water.</span>")
 
 	//		Toxicity dilutation code. The more water you put in, the lesser the toxin concentration.
 			toxic -= round(b_amount/4)
@@ -503,18 +503,18 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 				toxic = 0
 
 		else if(waterlevel >= 100)
-			user << "\red The [src] is already full."
+			user << "<span class='warning'>[src] is already full.</span>"
 		else
-			user << "\red The bucket is not filled with water."
+			user << "<span class='warning'>[O] is not filled with water.</span>"
 		updateicon()
 
-	else if ( istype(O, /obj/item/nutrient) )
+	else if ( istype(O, /obj/item/nutrient))
 		var/obj/item/nutrient/myNut = O
 		user.u_equip(O)
 		nutrilevel = 10
 		yieldmod = myNut.yieldmod
 		mutmod = myNut.mutmod
-		user << "You replace the nutrient solution in the [src]."
+		user.visible_message("<span class='warning'>[user] replaces [src]'s nutrient solution!</span>", "<span class='notice'>You replace [src]'s nutrient solution.</span>")
 		del(O)
 		updateicon()
 
@@ -523,9 +523,9 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 		if (planted)
 			if (S.mode == 1)
 				if(!S.reagents.total_volume)
-					user << "\red The syringe is empty."
+					user << "<span class='warning'>[S] is empty.</span>"
 					return
-				user << "\red You inject the [myseed.plantname] with a chemical solution."
+				user.visible_message("<span class='warning'>[user] injects [myseed.plantname] with a chemical solution!</span>", "<span class='notice'>You inject [myseed.plantname] with a chemical solution.</span>")
 
 				// There needs to be a good amount of mutagen to actually work
 
@@ -535,10 +535,10 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 						if (81  to 90)  mutatespecie()
 						if (66	to 80)	hardmutate()
 						if (41  to 65)  mutate()
-						if (21  to 41)  user << "The plants don't seem to react..."
+						if (21  to 41)  user << "<span class='notice'>The plant doesn't seem to react.</span>"
 						if (11	to 20)  mutateweed()
 						if (1   to 10)  mutatepest()
-						else 			user << "Nothing happens..."
+						else 			user << "<span class='notice'>Nothing happens.</span>"
 
 				// Antitoxin binds shit pretty well. So the tox goes significantly down
 				if(S.reagents.has_reagent("anti_toxin", 1))
@@ -650,10 +650,10 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 						if (81  to 90)  mutatespecie()
 						if (66	to 80)	hardmutate()
 						if (41  to 65)  mutate()
-						if (21  to 41)  user << "The plants don't seem to react..."
+						if (21  to 41)  user << "<span class='notice'>The plant doesn't seem to react.</span>"
 						if (11	to 20)  mutateweed()
 						if (1   to 10)  mutatepest()
-						else 			user << "Nothing happens..."
+						else 			user << "<span class='notice'>Nothing happens.</span>"
 
 				// The best stuff there is. For testing/debugging.
 				if(S.reagents.has_reagent("adminordrazine", 1))
@@ -667,7 +667,7 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 						if (66  to 100)  mutatespecie()
 						if (33	to 65)  mutateweed()
 						if (1   to 32)  mutatepest()
-						else 			user << "Nothing happens..."
+						else 			user << "<span class='notice'>Nothing happens.</span>"
 
 				S.reagents.clear_reagents()
 				if (weedlevel < 0 ) // The following checks are to prevent the stats from going out of bounds.
@@ -687,15 +687,15 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 				if (nutrilevel > 10 )
 					nutrilevel = 10
 			else
-				user << "You can't get any extract out of this plant."
+				user << "<span class='notice'>You can't get any extract out of this plant.</span>"
 		else
-			user << "There's nothing to apply the solution into."
+			user << "<span class='notice'>There's nothing to apply the solution into.</span>"
 		updateicon()
 
 	else if ( istype(O, /obj/item/seeds/) )
 		if(!planted)
 			user.u_equip(O)
-			user << "You plant the [O.name]"
+			user.visible_message("<span class='warning'>[user] plants [O.name]!</span>", "<span class='notice'>You plant [O.name].</span>")
 			dead = 0
 			myseed = O
 			planted = 1
@@ -712,7 +712,7 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 				if(!RP.source)
 					RP.request_player()
 		else
-			user << "\red The [src] already has seeds in it!"
+			user << "<span class='warning'>[src] already has something planted in it!</span>"
 
 	else if (istype(O, /obj/item/device/analyzer/plant_analyzer))
 		if(planted && myseed)
@@ -754,19 +754,18 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 			else
 				weedlevel = 0
 			toxic += 4 // Oops
-			visible_message("\red <B>\The [src] has been sprayed with \the [O][(user ? " by [user]." : ".")]")
+			visible_message("<span class='warning'>[src] has been sprayed with [O][(user ? " by [user]." : ".")]</span>")
 			playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
 			updateicon()
 
 	else if (istype(O, /obj/item/weapon/minihoe))  // The minihoe
-		//var/deweeding
 		if(weedlevel > 0)
-			user.visible_message("\red [user] starts uprooting the weeds.", "\red You remove the weeds from the [src].")
+			user.visible_message("<span class='warning'>[user] uproots the weeds from [src].</span>", "<span class='notice'>You uproot the weeds from [src].</span>")
 			weedlevel = 0
 			updateicon()
 			src.updateicon()
 		else
-			user << "\red This plot is completely devoid of weeds. It doesn't need uprooting."
+			user << "<span class='notice'>This plot is completely devoid of weeds. It doesn't need uprooting.</span>"
 
 	else if ( istype(O, /obj/item/weapon/weedspray) )
 		var/obj/item/weedkiller/myWKiller = O
@@ -777,7 +776,7 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 			weedlevel = 0
 		if (toxic > 100 ) // Make sure it won't go overoboard
 			toxic = 100
-		user << "You apply the weedkiller solution into the [src]."
+		user.visible_message("<span class='warning'>[user] applies [O] to [src]!</span>", "<span class='notice'>You apply [O] to [src].</span>")
 		playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
 		del(O)
 		updateicon()
@@ -799,21 +798,21 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 			pestlevel = 0
 		if (toxic > 100 ) // Make sure it won't go overoboard
 			toxic = 100
-		user << "You apply the pestkiller solution into the [src]."
+		user.visible_message("<span class='warning'>[user] applies [O] to [src]!</span>", "<span class='notice'>You apply [O] to [src].</span>")
 		playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
 		del(O)
 		updateicon()
 	else if(istype(O, /obj/item/weapon/wrench))
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 		anchored = !anchored
-		user << "You [anchored ? "wrench" : "unwrench"] \the [src]."
+		user.visible_message("<span class='warning'>[user] [anchored ? "anchors" : "unanchors"] [src]!", "<span class='notice'>You [anchored ? "anchor" : "unanchor"] [src].</span>")
 	else if(istype(O, /obj/item/weapon/shovel))
 		if(istype(src, /obj/machinery/hydroponics/soil))
-			user << "You clear up the [src]!"
+			user.visible_message("<span class='warning'>[user] digs up [src]!</span>", "<span class='notice'>You dig up [src].</span>")
 			del(src)
 	else if(istype(O, /obj/item/apiary))
 		if(planted)
-			user << "\red The hydroponics tray is already occupied!"
+			user << "<span class='warning'>[src] is already occupied!</span>"
 		else
 			user.drop_item()
 			del(O)
@@ -825,31 +824,31 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 			del(src)
 	else if(istype(O, /obj/item/weapon/screwdriver))
 		if(anchored)
-			user << "You have to unanchor the [src] first!"
+			user << "<span class='warning'>Unanchor [src] first!</span>" //Okay
 			return
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if(!opened)
+			user.visible_message("<span class='warning'>[user] opens [src]'s maintenance hatch!</span>", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
 			src.opened = 1
-			//src.icon_state = "chem_dispenser_t"
-			user << "You open the maintenance hatch of [src]"
 		else
+			user.visible_message("<span class='warning'>[user] closes [src]'s maintenance hatch!</span>", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
 			src.opened = 0
-			//src.icon_state = "chem_dispenser"
-			user << "You close the maintenance hatch of [src]"
-			return 1
+		return 1
 	else if(opened)
 		if(istype(O, /obj/item/weapon/crowbar))
+			user.visible_message("<span class='warning'>[user] begins to remove the circuits from [src]!</span>", "<span class='notice'>You begin to remove the circuits from [src].</span>")
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-		return 1
-	return
-
+			if(do_after(user,50))
+				user.visible_message("<span class='warning'>[user] removes the circuits from [src]!", "<span class='notice'>You remove the circuits from [src].</span>")
+				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
+				M.state = 2
+				M.icon_state = "box_1"
+				for(var/obj/I in component_parts)
+					if(I.reliability != 100 && crit_fail)
+						I.crit_fail = 1
+					I.loc = src.loc
+				del(src)
+				return 1
 
 /obj/machinery/hydroponics/attack_hand(mob/user as mob)
 	if(!ishuman(user) && !ismonkey(user))
@@ -861,7 +860,7 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	else if(dead)
 		planted = 0
 		dead = 0
-		usr << text("You remove the dead plant from the [src].")
+		user.visible_message("<span class='warning'>[user] rips the dead [myseed.name] away from [src]!", "<span class='notice'>You rip the dead [myseed.name] away from [src].</span>")
 		del(myseed)
 		updateicon()
 	else
@@ -997,7 +996,7 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
 ///////////////////////////////////////////////////////////////////////////////
 /obj/machinery/hydroponics/soil //Not actually hydroponics at all! Honk!
-	name = "soil"
+	name = "\improper soil" //Let's just argue we plant it into THE soil
 	icon = 'icons/obj/hydroponics.dmi'
 	icon_state = "soil"
 	density = 0

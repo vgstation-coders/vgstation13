@@ -1,5 +1,5 @@
 /obj/machinery/igniter
-	name = "igniter"
+	name = "\improper igniter"
 	desc = "It's useful for igniting plasma."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "igniter1"
@@ -60,25 +60,22 @@
 	if(istype(W, /obj/item/weapon/weldingtool) && src.assembly)
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0,user))
+			user.visible_message("<span class='warning'>[user] starts cutting [src] away from the floor!", "<span class='notice'>You start cutting [src] away from the floor.</span>", "<span class='notice'>You hear welding.</span>")
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
-			user << "\blue You begin to cut \the [src] off the floor..."
-			if (do_after(user, 40))
-				user.visible_message( \
-					"[user] disassembles \the [src].", \
-					"\blue You have disassembled \the [src].", \
-					"You hear welding.")
+			if (do_after(user, 50))
+				user.visible_message("<span class='warning'>[user] cuts [src] away from the floor!", "<span class='notice'>You cut [src] away from the floor.</span>")
 				src.assembly.loc=src.loc
 				del(src)
 				return
 		else:
-			user << "\red You need more welder fuel to do that."
+			user << "<span class='warning'>You need more welder fuel to do that.</span>"
 			return 1
 
 
 // Wall mounted remote-control igniter.
 
 /obj/machinery/sparker
-	name = "Mounted igniter"
+	name = "\improper mounted igniter"
 	desc = "A wall-mounted ignition device."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "migniter"
@@ -105,16 +102,15 @@
 //		src.sd_SetLuminosity(0)
 
 /obj/machinery/sparker/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/device/detective_scanner))
-		return
 	if (istype(W, /obj/item/weapon/screwdriver))
 		add_fingerprint(user)
 		src.disable = !src.disable
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if (src.disable)
-			user.visible_message("\red [user] has disabled the [src]!", "\red You disable the connection to the [src].")
+			user.visible_message("<span class='warning'>[user] disables [src]!</span>", "<span class='notice'>You disable [src].</span>")
 			icon_state = "[base_state]-d"
 		if (!src.disable)
-			user.visible_message("\red [user] has reconnected the [src]!", "\red You fix the connection to the [src].")
+			user.visible_message("<span class='warning'>[user] fixes [src]!</span>", "<span class='notice'>You fix [src].</span>")
 			if(src.powered())
 				icon_state = "[base_state]"
 			else

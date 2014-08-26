@@ -2,7 +2,8 @@
 //i could have done these as just an ordinary plant, but fuck it - there would have been too much snowflake code
 
 /obj/machinery/apiary
-	name = "apiary tray"
+	name = "\improper apiary tray"
+	desc = "Not the bees! NOT THE BEES!"
 	icon = 'icons/obj/hydroponics.dmi'
 	icon_state = "hydrotray3"
 	density = 1
@@ -46,56 +47,58 @@
 /obj/machinery/apiary/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/queen_bee))
 		if(health > 0)
-			user << "\red There is already a queen in there."
+			user << "<span class='warning'>There is already a queen in there.</span>"
 		else
 			health = 10
 			nutrilevel += 10
 			user.drop_item()
 			del(O)
-			user << "\blue You carefully insert the queen into [src], she gets busy making a hive."
+			user.visible_message("<span class='warning'>[user] carefully inserts a queen into [src]!</span>", "<span class='notice'>You carefully insert a queen into [src], she gets busy making a hive.</span>")
 			bees_in_hive = 0
 	else if(istype(O, /obj/item/beezeez))
 		beezeez += 100
 		nutrilevel += 10
 		user.drop_item()
 		if(health > 0)
-			user << "\blue You insert [O] into [src]. A relaxed humming appears to pick up."
+			user.visible_message("<span class='warning'>[user] inserts [O] into [src]. A relaxed humming appears to pick up!</span>", "<span class='notice'>You insert [O] into [src], a relaxed humming appears to pick up.</span>", "<span class='notice'>You hear relaxed buzzing!</span>")
 		else
-			user << "\blue You insert [O] into [src]. Now it just needs some bees."
+			user.visible_message("<span class='warning'>[user] inserts [O] into [src]!</span>", "<span class='notice'>You insert [O] into [src].</span>")
 		del(O)
 	else if(istype(O, /obj/item/weapon/minihoe))
 		if(health > 0)
-			user << "\red <b>You begin to dislodge the apiary from the tray, the bees don't like that.</b>"
+			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			user.visible_message("<span class='danger'>[user] begins to disloge the apiary from the tray. The bees don't seem to like that!</span>", "<span class='danger'>You begin to disloge the apiary from the tray. The bees don't seem to like that!</span>", "<span class='danger'>You hear omnious buzzing!</span>")
 			angry_swarm(user)
 		else
-			user << "\blue You begin to dislodge the dead apiary from the tray."
-		if(do_after(user, 50))
+			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			user.visible_message("<span class='warning'>[user] begins to disloge the apiary from the tray!</span>", "<span class='notic'>You begin to disloge the apiary from the tray.</span>")
+		if(do_after(user,50))
 			new hydrotray_type(src.loc)
 			new /obj/item/apiary(src.loc)
-			user << "\red You dislodge the apiary from the tray."
+			user.visible_message("<span class='warning'>[user] disloges the apiary from the tray!</span>", "<span class='warning'>You disloge the apiary from the tray.</span>")
 			del(src)
 	else if(istype(O, /obj/item/weapon/bee_net))
 		var/obj/item/weapon/bee_net/N = O
 		if(N.caught_bees > 0)
-			user << "\blue You empty the bees into the apiary."
+			user.visible_message("<span class='warning'>[user] empties [N] into [src]!</span>", "<span class='notice'>You empty [N] into [src].</span>")
 			bees_in_hive += N.caught_bees
 			N.caught_bees = 0
 		else
-			user << "\blue There are no more bees in the net."
+			user << "<span class='notice'>[N] is empty."
 	else if(istype(O, /obj/item/weapon/reagent_containers/glass))
 		var/obj/item/weapon/reagent_containers/glass/G = O
 		if(harvestable_honey > 0)
 			if(health > 0)
-				user << "\red You begin to harvest the honey. The bees don't seem to like it."
+				user.visible_message("<span class='danger'>[user] begins to harvest honey. The bees don't seem to like it!</span>", "<span class='danger'>You begin to harvest honey. The bees don't seem to like it!</span>", "<span class='danger'>You hear omnious buzzing!</span>")
 				angry_swarm(user)
 			else
-				user << "\blue You begin to harvest the honey."
+				user.visible_message("<span class='warning'>[user] begins to harvest honey!</span>", "<span class='notice'>You begin to harvest honey.</span>")
 			if(do_after(user,50))
 				G.reagents.add_reagent("honey",harvestable_honey)
 				harvestable_honey = 0
-				user << "\blue You successfully harvest the honey."
+				user.visible_message("<span class='warning'>[user] harvests some honey!</span>", "<span class='notice'>You harvest some honey</span>")
 		else
-			user << "\blue There is no honey left to harvest."
+			user << "<span class='notice'>There is no honey left to harvest.</span>"
 	else
 		angry_swarm(user)
 		..()
@@ -238,5 +241,5 @@
 		if(toxic > 0)
 			H.reagents.add_reagent("toxin", toxic)
 
-	usr << "\blue You harvest the honeycomb from the hive. There is a wild buzzing!"
+	usr.visible_message("<span class='danger'>[usr] harvests the honeycomb from the hive. The bees start to buzz widly!</span>", "<span class='danger'>You harvest the honeycomb from the hive. The bees start to buzz wildly</span>", "<span class='danger'>You hear omnious buzzing !</span>")
 	angry_swarm(usr)

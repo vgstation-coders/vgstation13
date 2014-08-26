@@ -1,6 +1,6 @@
 /obj/machinery/atmospherics/miner
-	name = "gas miner"
-	desc = "Gasses mined from the gas giant below (above?) flow out through this massive vent."
+	name = "\improper Gas Miner"
+	desc = "Gasses mined from a nearby gas giant flows out through this massive vent."
 	icon = 'icons/obj/atmospherics/miner.dmi'
 	icon_state = "miner"
 	power_channel=ENVIRON

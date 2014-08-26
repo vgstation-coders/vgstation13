@@ -14,7 +14,7 @@
 /obj/machinery/status_display
 	icon = 'icons/obj/status_display.dmi'
 	icon_state = "frame"
-	name = "status display"
+	name = "\improper status display"
 	anchored = 1
 	density = 0
 	use_power = 1

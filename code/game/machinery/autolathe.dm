@@ -1,7 +1,6 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
 var/global/list/autolathe_recipes = list( \
-		/* screwdriver removed*/ \
 		new /obj/item/weapon/reagent_containers/glass/bucket(), \
 		new /obj/item/weapon/crowbar(), \
 		new /obj/item/device/flashlight(), \
@@ -69,7 +68,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 
 /obj/machinery/autolathe
 	name = "\improper Autolathe"
-	desc = "It produces items using metal and glass."
+	desc = "Produces all sorts of items using raw metal and glass."
 	icon_state = "autolathe"
 	density = 1
 
@@ -167,7 +166,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 			wires_win(user,50)
 			return
 		if (src.disabled)
-			user << "\red You press the button, but nothing happens."
+			user << "<span class='warning'>You press the button, but nothing happens.</span>"
 			return
 		regular_win(user)
 		return
@@ -176,66 +175,62 @@ var/global/list/autolathe_recipes_hidden = list( \
 		if (stat)
 			return 1
 		if (busy)
-			user << "\red The autolathe is busy. Please wait for completion of previous operation."
+			user << "<span class='warning'>[src] is busy. Please wait for completion of previous operation.</span>"
 			return 1
 		if (istype(O, /obj/item/weapon/screwdriver))
+			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 			if (!opened)
 				src.opened = 1
 				src.icon_state = "autolathe_t"
-				user << "You open the maintenance hatch of [src]."
+				user.visible_message("<span class='warning'>[user] opens [src]'s maintenance hatch!</span>", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
 			else
 				src.opened = 0
 				src.icon_state = "autolathe"
-				user << "You close the maintenance hatch of [src]."
+				user.visible_message("<span class='warning'>[user] closes [src]'s maintenance hatch!</span>", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
 			return 1
 		if (opened)
 			if(istype(O, /obj/item/weapon/crowbar))
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-				M.state = 2
-				M.icon_state = "box_1"
-				for(var/obj/I in component_parts)
-					if(I.reliability != 100 && crit_fail)
-						I.crit_fail = 1
-					I.loc = src.loc
-				if(m_amount >= 3750)
-					var/obj/item/stack/sheet/metal/G = new /obj/item/stack/sheet/metal(src.loc)
-					G.amount = round(m_amount / 3750)
-				if(g_amount >= 3750)
-					var/obj/item/stack/sheet/glass/G = new /obj/item/stack/sheet/glass(src.loc)
-					G.amount = round(g_amount / 3750)
-				del(src)
-				return 1
+				user.visible_message("<span class='warning'>[user] begins to remove the circuits from [src]!</span>", "<span class='notice'>You begin to remove the circuits from [src].</span>")
+				if(do_after(user,50))
+					user.visible_message("<span class='warning'>[user] removes the circuits from [src]!</span>", "<span class='notice'>You remove the circuits from [src].</span>")
+					var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
+					M.state = 2
+					M.icon_state = "box_1"
+					for(var/obj/I in component_parts)
+						if(I.reliability != 100 && crit_fail)
+							I.crit_fail = 1
+						I.loc = src.loc
+					if(m_amount >= 3750)
+						var/obj/item/stack/sheet/metal/G = new /obj/item/stack/sheet/metal(src.loc)
+						G.amount = round(m_amount / 3750)
+					if(g_amount >= 3750)
+						var/obj/item/stack/sheet/glass/G = new /obj/item/stack/sheet/glass(src.loc)
+						G.amount = round(g_amount / 3750)
+					del(src)
+					return 1
 			else
 				user.set_machine(src)
 				interact(user)
 				return 1
 		if(isrobot(user))
 			if(!isMoMMI(user))
-				user << "\red You're a robot. No."
+				user << "<span class='warning'>You're a robot. No.</span>"
 				return 1
 			else
 				var/mob/living/silicon/robot/mommi/M = user
 				if(M.is_in_modules(O,permit_sheets=1))
-					user << "\red You can't put something built into you in [src]."
+					user << "<span class='warning'>You can't put something built into you in [src].</span>"
 					return 1
 		if (src.m_amount + O.m_amt > max_m_amount)
-			user << "\red The autolathe is full. Please remove metal from the autolathe in order to insert more."
+			user << "<span class='warning'>[src] is full. Please remove metal from [src] in order to insert more.</span>"
 			return 1
 		if (src.g_amount + O.g_amt > max_g_amount)
-			user << "\red The autolathe is full. Please remove glass from the autolathe in order to insert more."
+			user << "<span class='warning'>[src] is full. Please remove glass from [src] in order to insert more.</span>"
 			return 1
 		if (O.m_amt == 0 && O.g_amt == 0)
-			user << "\red This object does not contain significant amounts of metal or glass, or cannot be accepted by the autolathe due to size or hazardous materials."
+			user << "<span class='warning'>This object does not contain significant amounts of metal or glass or cannot be accepted by [src] due to size or hazardous materials.</span>"
 			return 1
-	/*
-		if (istype(O, /obj/item/weapon/grab) && src.hacked)
-			var/obj/item/weapon/grab/G = O
-			if (prob(25) && G.affecting)
-				G.affecting.gib()
-				m_amount += 50000
-			return
-	*/
 
 		var/amount = 1
 		var/obj/item/stack/stack
@@ -259,7 +254,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 		use_power(max(1000, (m_amt+g_amt)*amount/10))
 		src.m_amount += m_amt * amount
 		src.g_amount += g_amt * amount
-		user << "You insert [amount] sheet[amount>1 ? "s" : ""] to the autolathe."
+		user << "<span class='notice'>You insert [amount>1 ? "[amount]" : "a"] sheet[amount>1 ? "s" : ""] into [src].</span>"
 		if (O && O.loc == src)
 			del(O)
 		busy = 0
@@ -344,10 +339,10 @@ var/global/list/autolathe_recipes_hidden = list( \
 				var/temp_wire = href_list["wire"]
 				if(href_list["act"] == "pulse")
 					if (!istype(usr.get_active_hand(), /obj/item/device/multitool))
-						usr << "You need a multitool!"
+						usr << "<span class='notice'>You need a multitool!</span>"
 					else
 						if(src.wires[temp_wire])
-							usr << "You can't pulse a cut wire."
+							usr << "<span class='notice'>You can't pulse a cut wire.</span>"
 						else
 							if(src.hack_wire == temp_wire)
 								src.hacked = !src.hacked
@@ -362,7 +357,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 								spawn(100) src.shocked = !src.shocked
 				if(href_list["act"] == "wire")
 					if (!istype(usr.get_active_hand(), /obj/item/weapon/wirecutters))
-						usr << "You need wirecutters!"
+						usr << "<span class='notice'>You need wirecutters!</span>"
 					else
 						wires[temp_wire] = !wires[temp_wire]
 						if(src.hack_wire == temp_wire)
@@ -374,7 +369,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 							src.shocked = !src.shocked
 							src.shock(usr,50)
 		else
-			usr << "\red The autolathe is busy. Please wait for completion of previous operation."
+			usr << "<span class='warning'>[src] is busy. Please wait for completion of previous operation.</span>"
 		src.updateUsrDialog()
 		return
 

@@ -1,5 +1,5 @@
 /obj/machinery/driver_button
-	name = "mass driver button"
+	name = "\improper mass driver button"
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "launcherbtt"
 	desc = "A remote control switch for a mass driver."
@@ -14,7 +14,7 @@
 	ghost_write = 0
 
 /obj/machinery/ignition_switch
-	name = "ignition switch"
+	name = "\improper ignition switch"
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "launcherbtt"
 	desc = "A remote control switch for a mounted igniter."
@@ -29,7 +29,7 @@
 	ghost_write = 0
 
 /obj/machinery/flasher_button
-	name = "flasher button"
+	name = "\improper flasher button"
 	desc = "A remote control switch for a mounted flasher."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "launcherbtt"
@@ -44,8 +44,8 @@
 	ghost_write = 0
 
 /obj/machinery/crema_switch
+	name = "\improper crematorium igniter"
 	desc = "Burn baby burn!"
-	name = "crematorium igniter"
 	icon = 'icons/obj/power.dmi'
 	icon_state = "crema_switch"
 	anchored = 1.0

@@ -1,5 +1,5 @@
 /obj/machinery/transformer
-	name = "Automatic Robotic Factory 5000"
+	name = "\improper Automatic Robotic Factory 5000"
 	desc = "A large metallic machine with an entrance and an exit. A sign on the side reads 'human goes in, robot comes out'. Human must be lying down and alive. Has to cooldown between each use."
 	icon = 'icons/obj/recycling.dmi'
 	icon_state = "separator-AO1"
@@ -13,7 +13,7 @@
 	var/cooldown_state = 0 // Just for icons.
 	var/robot_cell_charge = 5000
 	use_power = 1
-	idle_power_usage = 10
+	idle_power_usage = 100
 	active_power_usage = 5000
 
 	// /vg/
@@ -69,29 +69,29 @@
 	H.handle_regular_hud_updates() // Make sure they see the pain.
 
 	// Sleep for a couple of ticks to allow the human to see the pain
-	sleep(5)
+	spawn(5)
 
-	var/mob/living/silicon/robot/R = H.Robotize(1) // Delete the items or they'll all pile up in a single tile and lag
-	if(R)
-		R.cell.maxcharge = robot_cell_charge
-		R.cell.charge = robot_cell_charge
-
-	 	// So he can't jump out the gate right away.
-		R.weakened = 5
-
-		// /vg/: Force borg module, if needed.
-		R.pick_module(force_borg_module)
-		R.updateicon()
-
-	spawn(50)
-		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 0)
+		var/mob/living/silicon/robot/R = H.Robotize(1) // Delete the items or they'll all pile up in a single tile and lag
 		if(R)
-			R.weakened = 0
+			R.cell.maxcharge = robot_cell_charge
+			R.cell.charge = robot_cell_charge
 
-	// Activate the cooldown
-	cooldown_time = world.time + cooldown_duration
-	cooldown_state = 1
-	update_icon()
+		 	// So he can't jump out the gate right away.
+			R.weakened = 5
+
+			// /vg/: Force borg module, if needed.
+			R.pick_module(force_borg_module)
+			R.updateicon()
+
+		spawn(50)
+			playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 0)
+			if(R)
+				R.weakened = 0
+
+			// Activate the cooldown
+			cooldown_time = world.time + cooldown_duration
+			cooldown_state = 1
+			update_icon()
 
 /obj/machinery/transformer/process()
 	..()
@@ -144,7 +144,7 @@
 
 /obj/machinery/transformer/Topic(href, href_list)
 	if(!isAI(usr))
-		usr << "\red This machine is way above your pay-grade."
+		usr << "<span class='warning'>This machine is way above your pay-grade.</span>"
 		return 0
 	if(!("act" in href_list))
 		return 0

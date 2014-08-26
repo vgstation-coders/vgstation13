@@ -1,5 +1,5 @@
 /obj/machinery/recharger
-	name = "recharger"
+	name = "\improper recharger"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "recharger0"
 	anchored = 1
@@ -27,7 +27,7 @@
 			return
 
 		if (istype(G, /obj/item/weapon/gun/energy/gun/nuclear) || istype(G, /obj/item/weapon/gun/energy/crossbow))
-			user << "<span class='notice'>Your gun's recharge port was removed to make room for a miniaturized reactor.</span>"
+			user << "<span class='notice'>[G]'s recharge port was removed to make room for a miniaturized reactor.</span>"
 			return
 		if (istype(G, /obj/item/weapon/gun/energy/staff))
 			return
@@ -41,8 +41,8 @@
 			user << "<span class='notice'>Remove the charging item first!</span>"
 			return
 		anchored = !anchored
-		user << "<span class='notice'>You [anchored ? "attached" : "detached"] [src].</span>"
 		playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)
+		user.visible_message("<span class='warning'>[user] [anchored ? "attaches" : "detaches"] [src]!</span>", "<span class='notice'>You [anchored ? "attach" : "detach"] [src].</span>, <span class='notice'>You hear a ratchet.</span>")
 
 
 /obj/machinery/recharger/attack_hand(mob/user)
@@ -110,7 +110,7 @@ obj/machinery/recharger/update_icon()	//we have an update_icon() in addition to 
 		icon_state = "recharger0"
 
 obj/machinery/recharger/wallcharger
-	name = "wall recharger"
+	name = "\improper wall recharger"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "wrecharger0"
 

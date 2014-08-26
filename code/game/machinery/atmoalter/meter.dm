@@ -1,5 +1,5 @@
 /obj/machinery/meter
-	name = "meter"
+	name = "\improper meter"
 	desc = "It measures something."
 	icon = 'icons/obj/meter.dmi'
 	icon_state = "meterX"
@@ -104,7 +104,7 @@
 	if (get_dist(usr, src) <= 3 || istype(usr, /mob/living/silicon/ai) || istype(usr, /mob/dead))
 		t += status()
 	else
-		usr << "\blue <B>You are too far away.</B>"
+		usr << "<span class='notice'><B>You are too far away.</B></span>"
 		return 1
 
 	usr << t
@@ -114,12 +114,9 @@
 	if (!istype(W, /obj/item/weapon/wrench))
 		return ..()
 	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-	user << "\blue You begin to unfasten \the [src]..."
-	if (do_after(user, 40))
-		user.visible_message( \
-			"[user] unfastens \the [src].", \
-			"\blue You have unfastened \the [src].", \
-			"You hear ratchet.")
+	user.visible_message("<span class='warning'>[user] begins to unfasten [src]!</span>", "<span class='notice'>You begin to unfasten [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
+	if (do_after(user, 50))
+		user.visible_message("<span class='warning'>[user] unfastens [src].</span>", "<span class='notice'>You unfasten [src].</span>")
 		new /obj/item/pipe_meter(src.loc)
 		del(src)
 

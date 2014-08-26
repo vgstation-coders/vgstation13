@@ -1,6 +1,6 @@
 obj/machinery/recharger/defibcharger/wallcharger
-	name = "defibrillator recharger"
-	desc = "A special wall mounted recharger meant for emergency defibrillators"
+	name = "\improper defibrillator recharger"
+	desc = "A special wall mounted recharger meant for emergency defibrillators."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "wrecharger0"
 	anchored = 1
@@ -107,24 +107,23 @@ obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as o
 		if(charging)
 			user << "<span class='warning'>Not while [src] is charging!</span>"
 			return
-		if(!opened)
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+		if (!opened)
+			user.visible_message("<span class='warning'>[user] opens [src]'s maintenance hatch!</span>", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
 			src.opened = 1
-			//src.icon_state = "wrecharger1"
-			user << "You open the maintenance hatch of [src]"
-			return
 		else
+			user.visible_message("<span class='warning'>[user] closes [src]'s maintenance hatch!</span>", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
 			src.opened = 0
-			//src.icon_state = "wrecharger1_t"
-			user << "You close the maintenance hatch of [src]"
 		return 1
 	if(opened)
 		if(charging)
 			user << "<span class='warning'>Not while [src] is charging!</span>"
 			return
 		if(istype(G, /obj/item/weapon/crowbar))
-			user << "You begin to remove the circuits from the [src]."
+			user.visible_message("<span class='warning'>[user] begins to remove the circuits from [src]!</span>", "<span class='notice'>You begin to remove the circuits from [src].</span>")
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			if(do_after(user, 50))
+			if(do_after(user,50))
+				user.visible_message("<span class='warning'>[user] removes the circuits from [src]!", "<span class='notice'>You remove the circuits from [src].</span>")
 				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
 				M.state = 2
 				M.icon_state = "box_1"

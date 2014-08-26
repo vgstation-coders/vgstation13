@@ -159,7 +159,7 @@
 
 /obj/machinery/alarm/proc/first_run()
 	area_uid = areaMaster.uid
-	name = "[areaMaster.name] Air Alarm"
+	name = "\improper [areaMaster.name] Air Alarm"
 
 	// breathable air according to human/Life()
 	/*
@@ -834,22 +834,14 @@
 
 
 /obj/machinery/alarm/attackby(obj/item/W as obj, mob/user as mob)
-/*	if (istype(W, /obj/item/weapon/wirecutters))
-		stat ^= BROKEN
-		add_fingerprint(user)
-		for(var/mob/O in viewers(user, null))
-			O.show_message(text("\red [] has []activated []!", user, (stat&BROKEN) ? "de" : "re", src), 1)
-		update_icon()
-		return
-*/
+
 	src.add_fingerprint(user)
 
 	switch(buildstage)
 		if(2)
 			if(istype(W, /obj/item/weapon/screwdriver))  // Opening that Air Alarm up.
-				//user << "You pop the Air Alarm's maintence panel open."
 				wiresexposed = !wiresexposed
-				user << "The wires have been [wiresexposed ? "exposed" : "unexposed"]"
+				user.visible_message("<span class='warning'>[user] [wiresexposed ? "exposes" : "unexposes"] [src]'s wires!</span>", "<span class='notice'>You [wiresexposed ? "expose" : "unexpose"] [src]'s wires.</span>")
 				update_icon()
 				return
 
@@ -863,54 +855,61 @@
 				else
 					if(allowed(user) && !wires.IsIndexCut(AALARM_WIRE_IDSCAN))
 						locked = !locked
-						user << "\blue You [ locked ? "lock" : "unlock"] the Air Alarm interface."
+						user << "<span class='notice'>You [locked ? "lock" : "unlock"] [src]'s interface.</span>"
 						updateUsrDialog()
 					else
-						user << "\red Access denied."
+						user << "<span class='warning'>Access denied.</span>"
 			return
 
 		if(1)
 			if(istype(W, /obj/item/weapon/cable_coil))
 				var/obj/item/weapon/cable_coil/coil = W
 				if(coil.amount < 5)
-					user << "You need more cable for this!"
+					user << "<span class='warning'>You need more cable for this!</span>"
 					return
 
-				user << "You wire \the [src]!"
-				coil.amount -= 5
-				if(!coil.amount)
-					del(coil)
+				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				user.visible_message("<span class='warning'>[user] starts wiring [src]!</span>", "<span class='notice'>You start wiring [src].</span>")
+				if(do_after(src,30))
+					user.visible_message("<span class='warning'>[user] wires [src]!</span>", "<span class='notice'>You wire [src].</span>")
+					coil.amount -= 5
+					if(!coil.amount)
+						del(coil)
 
-				buildstage = 2
-				update_icon()
-				first_run()
-				return
+					buildstage = 2
+					update_icon()
+					first_run()
 
 			else if(istype(W, /obj/item/weapon/crowbar))
-				user << "You start prying out the circuit."
+				user.visible_message("<span class='warning'>[user] starts prying out [src]'s circuit!</span>", "<span class='notice'>You start prying out [src]'s circuit.</span>")
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				if(do_after(user,20))
-					user << "You pry out the circuit!"
+				if(do_after(user,30))
+					user.visible_message("<span class='warning'>[user] pries out [src]'s circuit!</span>", "<span class='notice'>You pry out [src]'s circuit.</span>")
 					var/obj/item/weapon/circuitboard/air_alarm/circuit = new /obj/item/weapon/circuitboard/air_alarm()
 					circuit.loc = user.loc
 					buildstage = 0
 					update_icon()
-				return
+
 		if(0)
 			if(istype(W, /obj/item/weapon/circuitboard/air_alarm))
-				user << "You insert the circuit!"
-				del(W)
-				buildstage = 1
-				update_icon()
-				return
+
+				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				user.visible_message("<span class='warning'>[user] starts inserting [W] into [src]!</span>", "<span class='notice'>You start inserting [W] into [src].</span>")
+				if(do_after(src,20))
+					user.visible_message("<span class='warning'>[user] inserts [W] into [src]</span>", "<span class='notice'>You insert [W] into [src].</span>")
+					del(W)
+					buildstage = 1
+					update_icon()
 
 			else if(istype(W, /obj/item/weapon/wrench))
-				user << "You remove the fire alarm assembly from the wall!"
-				var/obj/item/alarm_frame/frame = new /obj/item/alarm_frame()
-				frame.loc = user.loc
+
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				del(src)
-				return
+				user.visible_message("<span class='warning'>[user] starts removing [src] from the wall!</span>", "<span class='notice'>You start removing [src] from the wall.</span>")
+				if(do_after(src,50))
+					user.visible_message("<span class='warning'>[user] removes [src] from the wall!</span>", "<span class='notice'>You remove [src] from the wall.</span>")
+					var/obj/item/alarm_frame/frame = new /obj/item/alarm_frame()
+					frame.loc = user.loc
+					del(src)
 
 	return ..()
 
@@ -927,7 +926,7 @@
 	if (buildstage < 2)
 		usr << "It is not wired."
 	if (buildstage < 1)
-		usr << "The circuit is missing."
+		usr << "There is no circuit."
 
 /*
 AIR ALARM ITEM
@@ -945,10 +944,14 @@ Code shamelessly copied from apc_frame
 
 /obj/item/alarm_frame/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/wrench))
-		new /obj/item/stack/sheet/metal( get_turf(src.loc), 2 )
-		del(src)
-		return
-	..()
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		user.visible_message("<span class='warning'>[user] starts disassembling [src]!</span>", "<span class='notice'>You start disassembling [src].</span>")
+		if(do_after(src,50))
+			user.visible_message("<span class='warning'>[user] disassembles [src]!</span>", "<span class='notice'>You disassemble [src].</span>")
+			new /obj/item/stack/sheet/metal(get_turf(src.loc), 2)
+			del(src)
+			return
+		..()
 
 /obj/item/alarm_frame/proc/try_build(turf/on_wall)
 	if (get_dist(on_wall,usr)>1)
@@ -961,14 +964,14 @@ Code shamelessly copied from apc_frame
 	var/turf/loc = get_turf_loc(usr)
 	var/area/A = loc.loc
 	if (!istype(loc, /turf/simulated/floor))
-		usr << "\red Air Alarm cannot be placed on this spot."
+		usr << "<span class='warning'>[src] cannot be placed on this spot.</span>"
 		return
 	if (A.requires_power == 0 || A.name == "Space")
-		usr << "\red Air Alarm cannot be placed in this area."
+		usr << "<span class='warning'>[src] cannot be placed in this area. Try using blueprints first.</span>"
 		return
 
 	if(gotwallitem(loc, ndir))
-		usr << "\red There's already an item on this wall!"
+		usr << "<span class='warning'>There's already something in this spot!</span>"
 		return
 
 	new /obj/machinery/alarm(loc, ndir, 1)
@@ -978,7 +981,6 @@ Code shamelessly copied from apc_frame
 FIRE ALARM
 */
 /obj/machinery/firealarm
-	name = "Fire Alarm"
 	desc = "<i>\"Pull this in case of emergency\"<i>. Thus, keep pulling it forever."
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "fire0"
@@ -1052,52 +1054,63 @@ FIRE ALARM
 				if (istype(W, /obj/item/device/multitool))
 					src.detecting = !( src.detecting )
 					if (src.detecting)
-						user.visible_message("\red [user] has reconnected [src]'s detecting unit!", "You have reconnected [src]'s detecting unit.")
+						user.visible_message("<span class='warning'>[user] reconnects [src]'s detecting unit!</span>", "<span class='notice'>You reconnect [src]'s detecting unit.</span>")
 					else
-						user.visible_message("\red [user] has disconnected [src]'s detecting unit!", "You have disconnected [src]'s detecting unit.")
+						user.visible_message("<span class='warning'>[user] disconnects [src]'s detecting unit!</span>", "<span class='notice'>You disconnect [src]'s detecting unit.</span>")
 				if(istype(W, /obj/item/weapon/wirecutters))
+					user.visible_message("<span class='warning'>[user] starts to cut the wiring of [src]!</span>", "<span class='notice'>You start cutting the wiring of [src].</span>")
+					playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
 					if(do_after(user,50))
 						buildstage=1
-						user.visible_message("\red [user] has cut the wiring from \the [src]!", "You have cut the last of the wiring from \the [src].")
+						user.visible_message("<span class='warning'>[user] cuts the wiring of [src]!</span>", "<span class='notice'>You cut the wiring of [src].</span>")
 						update_icon()
 						new /obj/item/weapon/cable_coil(user.loc,5)
-						playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
 			if(1)
 				if(istype(W, /obj/item/weapon/cable_coil))
 					var/obj/item/weapon/cable_coil/coil = W
 					if(coil.amount < 5)
-						user << "You need more cable for this!"
+						user << "<span class='warning'>You need more cable for this!</span>"
 						return
 
-					coil.amount -= 5
-					if(!coil.amount)
-						del(coil)
+					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					user.visible_message("<span class='warning'>[user] starts wiring [src]!</span>", "<span class='notice'>You start wiring [src].</span>")
+					if(do_after(src,30))
+						user.visible_message("<span class='warning'>[user] wires [src]!</span>", "<span class='notice'>You wire [src].</span>")
+						coil.amount -= 5
+						if(!coil.amount)
+							del(coil)
 
-					buildstage = 2
-					user << "You wire \the [src]!"
-					update_icon()
+						buildstage = 2
+						update_icon()
 
 				else if(istype(W, /obj/item/weapon/crowbar))
-					user << "You pry out the circuit!"
+					user.visible_message("<span class='warning'>[user] starts prying the circuit out of [src]!</span>", "<span class='notice'>You start prying the circuit out of [src].</span>")
 					playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-					spawn(20)
-						var/obj/item/weapon/circuitboard/fire_alarm/circuit = new /obj/item/weapon/circuitboard/fire_alarm()
+					if(do_after(user,30))
+						user.visible_message("<span class='warning'>[user] pries the circuit out of [src]!</span>", "<span class='notice'>You pry the circuit out of [src].</span>")
+						var/obj/item/weapon/circuitboard/air_alarm/circuit = new /obj/item/weapon/circuitboard/air_alarm()
 						circuit.loc = user.loc
 						buildstage = 0
 						update_icon()
+
 			if(0)
 				if(istype(W, /obj/item/weapon/circuitboard/fire_alarm))
-					user << "You insert the circuit!"
-					del(W)
-					buildstage = 1
-					update_icon()
+					user.visible_message("<span class='warning'>[user] starts inserting [W] into [src]!</span>", "<span class='notice'>You start inserting [W] in [src].</span>")
+					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					if(do_after(src,30))
+						user.visible_message("<span class='warning'>[user] inserts [W] into [src]!</span>", "<span class='notice'>You insert [W] into [src].</span>")
+						del(W)
+						buildstage = 1
+						update_icon()
 
 				else if(istype(W, /obj/item/weapon/wrench))
-					user << "You remove the fire alarm assembly from the wall!"
-					var/obj/item/firealarm_frame/frame = new /obj/item/firealarm_frame()
-					frame.loc = user.loc
 					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-					del(src)
+					user.visible_message("<span class='warning'>[user] starts removing [src] from the wall!</span>", "<span class='notice'>You start removing [src] from the wall.</span>")
+					if(do_after(src,50))
+						user.visible_message("<span class='warning'>[user] removes [src] from the wall!</span>", "<span class='notice'>You remove [src] from the wall.</span>")
+						var/obj/item/alarm_frame/frame = new /obj/item/alarm_frame()
+						frame.loc = user.loc
+						del(src)
 		return
 
 	src.alarm()
@@ -1221,7 +1234,7 @@ FIRE ALARM
 
 /obj/machinery/firealarm/New(loc, dir, building)
 	..()
-	name = "[areaMaster.name] fire alarm"
+	name = "\improper [areaMaster.name] Fire Alarm"
 	if(loc)
 		src.loc = loc
 

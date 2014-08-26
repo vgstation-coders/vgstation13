@@ -7,7 +7,7 @@
 
 /obj/machinery/clonepod
 	anchored = 1
-	name = "cloning pod"
+	name = "\improper cloning pod"
 	desc = "An electronically-lockable pod for growing organic tissue."
 	density = 1
 	icon = 'icons/obj/cloning.dmi'
@@ -64,7 +64,7 @@
 //The return of data disks?? Just for transferring between genetics machine/cloning machine.
 //TO-DO: Make the genetics machine accept them.
 /obj/item/weapon/disk/data
-	name = "Cloning Data Disk"
+	name = "\improper Cloning Data Disk"
 	icon = 'icons/obj/cloning.dmi'
 	icon_state = "datadisk0" //Gosh I hope syndies don't mistake them for the nuke disk.
 	item_state = "card-id"
@@ -132,7 +132,7 @@
 
 /obj/item/weapon/disk/data/attack_self(mob/user as mob)
 	src.read_only = !src.read_only
-	user << "You flip the write-protect tab to [src.read_only ? "protected" : "unprotected"]."
+	user << "<span class='notice'>You flip the write-protect tab to [src.read_only ? "protected" : "unprotected"].</span>"
 
 /obj/item/weapon/disk/data/examine()
 	set src in oview(5)
@@ -167,7 +167,7 @@
 		return
 	if ((!isnull(src.occupant)) && (src.occupant.stat != 2))
 		var/completion = (100 * ((src.occupant.health + 100) / (src.heal_level + 100)))
-		user << "Current clone cycle is [round(completion)]% complete."
+		user << "<span class='notice'>Current clone cycle is [round(completion)]% complete.</span>"
 	return
 
 //Clonepod
@@ -302,50 +302,53 @@
 /obj/machinery/clonepod/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if (!src.check_access(W))
-			user << "\red Access Denied."
+			user << "<span class='warning'>Access Denied.</span>"
 			return
 		if ((!src.locked) || (isnull(src.occupant)))
 			return
 		if ((src.occupant.health < -20) && (src.occupant.stat != 2))
-			user << "\red Access Refused."
+			user << "<span class='warning'>Access Refused.</span>"
 			return
 		else
 			src.locked = 0
-			user << "System unlocked."
+			user << "<span class='notice'>System unlocked.</span>"
 	else if (istype(W, /obj/item/weapon/card/emag))
 		if (isnull(src.occupant))
 			return
-		user << "You force an emergency ejection."
+		user << "<span class='notice'>You force an emergency ejection.</span>"
 		src.locked = 0
 		src.go_out()
 		return
 	else if (istype(W, /obj/item/weapon/screwdriver))
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if (!opened)
+			user.visible_message("<span class='warning'>[user] opens [src]'s maintenance hatch!</span>", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
 			src.opened = 1
-			user << "You open the maintenance hatch of [src]."
-			//src.icon_state = "autolathe_t"
 		else
+			user.visible_message("<span class='warning'>[user] closes [src]'s maintenance hatch!</span>", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
 			src.opened = 0
-			user << "You close the maintenance hatch of [src]."
-			//src.icon_state = "autolathe"
-			return 1
+		return 1
 	else if(istype(W, /obj/item/weapon/crowbar))
 		if (occupant)
-			user << "\red You cannot disassemble this [src], it's occupado."
+			user << "<span class='warning'>You cannot disassemble [src], it's occupado.</span>"
 			return 1
 		if (opened)
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-			return
+			user.visible_message("<span class='warning'>[user] begins to remove the circuits from [src]!</span>", "<span class='notice'>You begin to remove the circuits from [src].</span>")
+			if(do_after(user,50))
+				user.visible_message("<span class='warning'>[user] removes the circuits from [src]!</span>", "<span class='notice'>You remove the circuits from [src].</span>")
+				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
+				M.state = 2
+				M.icon_state = "box_1"
+				for(var/obj/I in component_parts)
+					if(I.reliability != 100 && crit_fail)
+						I.crit_fail = 1
+					I.loc = src.loc
+				del(src)
+				return
 	else if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
-		user << "\blue \The [src] processes \the [W]."
+		playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1) //Hopefully not too annoying
+		user << "<span class='notice'>[src] processes [W].</span>"
 		biomass += 50
 		user.drop_item()
 		del(W)
@@ -383,20 +386,10 @@
 		src.mess = 0
 		gibs(src.loc)
 		src.icon_state = "pod_0"
-
-		/*
-		for(var/obj/O in src)
-			O.loc = src.loc
-		*/
 		return
 
 	if (!(src.occupant))
 		return
-
-	/*
-	for(var/obj/O in src)
-		O.loc = src.loc
-	*/
 
 	if (src.occupant.client)
 		src.occupant.client.eye = src.occupant.client.mob

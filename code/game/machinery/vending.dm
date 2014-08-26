@@ -12,7 +12,7 @@
 
 
 /obj/machinery/vending
-	name = "Vendomat"
+	name = "\improper Vendomat"
 	desc = "A generic vending machine."
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "generic"
@@ -142,11 +142,12 @@
 /obj/machinery/vending/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/card/emag))
 		emagged = 1
-		user << "You short out the product lock on [src]"
+		user << "<span class='notice'>You short out [src]'s product lock</span>"
 		return
 	else if(istype(W, /obj/item/weapon/screwdriver))
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		panel_open = !panel_open
-		user << "You [panel_open ? "open" : "close"] the maintenance panel."
+		user.visible_message("<span class='warning'>[user] [panel_open ? "opens" : "closes"] [src]'s maintenance panel!</span>", "<span class='notice'>You [panel_open ? "open" : "close"] [src]'s maintenance panel.</span>")
 		overlays.Cut()
 		if(panel_open)
 			overlays += image(icon, "[initial(icon_state)]-panel")
@@ -356,21 +357,21 @@
 		if(istype(usr,/mob/living/silicon/robot))
 			var/mob/living/silicon/robot/R = usr
 			if(!(R.module && istype(R.module,/obj/item/weapon/robot_module/butler) ) && !isMoMMI(R))
-				usr << "\red The vending machine refuses to interface with you, as you are not in its target demographic!"
+				usr << "<span class='warning'>The vending machine refuses to interface with you, as you are not in its target demographic!</span>"
 				return
 		else
-			usr << "\red The vending machine refuses to interface with you, as you are not in its target demographic!"
+			usr << "<span class='warning'>The vending machine refuses to interface with you, as you are not in its target demographic!</span>"
 			return
 
 	if(href_list["remove_coin"])
 		if(!coin)
-			usr << "There is no coin in this machine."
+			usr << "<span class='notice'>There is no coin in this machine.</span>"
 			return
 
 		coin.loc = src.loc
 		if(!usr.get_active_hand())
 			usr.put_in_hands(coin)
-		usr << "\blue You remove the [coin] from the [src]"
+		usr << "<span class='notice'>You remove [coin] from [src]</span>"
 		coin = null
 	usr.set_machine(src)
 
@@ -380,7 +381,7 @@
 			//testing("vend: [href]")
 
 			if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
-				usr << "\red Access denied." //Unless emagged of course
+				usr << "<span class='warning'>Access denied.</span>" //Unless emagged of course
 				flick(src.icon_deny,src)
 				return
 
@@ -439,20 +440,20 @@
 
 /obj/machinery/vending/proc/vend(datum/data/vending_product/R, mob/user)
 	if (!allowed(user) && !emagged && wires.IsIndexCut(VENDING_WIRE_IDSCAN)) //For SECURE VENDING MACHINES YEAH
-		user << "\red Access denied." //Unless emagged of course
+		user << "<span class='warning'>Access denied.</span>" //Unless emagged of course
 		flick(src.icon_deny,src)
 		return
 	src.vend_ready = 0 //One thing at a time!!
 
 	if (R in coin_records)
 		if(!coin)
-			user << "\blue You need to insert a coin to get this item."
+			user << "<span class='notice'>You need to insert a coin to get this item.</span>"
 			return
 		if(coin.string_attached)
 			if(prob(50))
-				user << "\blue You successfully pull the coin out before the [src] could swallow it."
+				user << "<span class='notice'>You successfully pull the coin out before the [src] could swallow it.</span>"
 			else
-				user << "\blue You weren't able to pull the coin out fast enough, the machine ate it, string and all."
+				user << "<span class='notice'>You weren't able to pull the coin out fast enough, [src] ate it, string and all.</span>"
 				del(coin)
 		else
 			del(coin)
@@ -502,8 +503,7 @@
 	if (!message)
 		return
 
-	for(var/mob/O in hearers(src, null))
-		O.show_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"",2)
+	visible_message("<span class='game say'>[src] beeps, \"[message]\"</span>")
 	return
 
 /obj/machinery/vending/power_change()
@@ -557,7 +557,7 @@
 		return 0
 	spawn(0)
 		throw_item.throw_at(target, 16, 3)
-	src.visible_message("\red <b>[src] launches [throw_item.name] at [target.name]!</b>")
+	src.visible_message("<span class='danger'>[src] launches [throw_item] at [target]!</span>")
 	return 1
 
 
@@ -604,7 +604,7 @@
 */
 
 /obj/machinery/vending/boozeomat
-	name = "Booze-O-Mat"
+	name = "\improper Booze-O-Mat"
 	desc = "A technological marvel, supposedly able to mix just the mixture you'd like to drink the moment you ask for one."
 	icon_state = "boozeomat"        //////////////18 drink entities below, plus the glasses, in case someone wants to edit the number of bottles
 	icon_deny = "boozeomat-deny"
@@ -632,7 +632,7 @@
 	product_ads = "Only the finest!;Have some tools.;The most robust equipment.;The finest gear in space!"
 
 /obj/machinery/vending/coffee
-	name = "Hot Drinks machine"
+	name = "\improper Hot Drinks machine"
 	desc = "A vending machine which dispenses hot drinks."
 	product_ads = "Have a drink!;Drink up!;It's good for you!;Would you like a hot joe?;I'd kill for some coffee!;The best beans in the galaxy.;Only the finest brew for you.;Mmmm. Nothing like a coffee.;I like coffee, don't you?;Coffee helps you work!;Try some tea.;We hope you like the best!;Try our new chocolate!;Admin conspiracies"
 	icon_state = "coffee"
@@ -646,7 +646,7 @@
 
 
 /obj/machinery/vending/snack
-	name = "Getmore Chocolate Corp"
+	name = "\improper Getmore Chocolate Corp"
 	desc = "A snack machine courtesy of the Getmore Chocolate Corporation, based out of Mars"
 	product_slogans = "Try our new nougat bar!;Half the calories for double the price!;It's better then Dan's!"
 	product_ads = "The healthiest!;Award-winning chocolate bars!;Mmm! So good!;Oh my god it's so juicy!;Have a snack.;Snacks are good for you!;Have some more Getmore!;Best quality snacks straight from mars.;We love chocolate!;Try our new jerky!"
@@ -664,7 +664,7 @@
 
 
 /obj/machinery/vending/cola
-	name = "Robust Softdrinks"
+	name = "\improper Robust Softdrinks"
 	desc = "A softdrink vendor provided by Robust Industries, LLC."
 	icon_state = "Cola_Machine"
 	product_slogans = "Robust Softdrinks: More robust than a toolbox to the head!;At least we aren't Dan!"
@@ -679,7 +679,7 @@
 
 //This one's from bay12
 /obj/machinery/vending/cart
-	name = "PTech"
+	name = "\improper PTech"
 	desc = "Cartridges for PDAs"
 	product_slogans = "Carts to go!"
 	icon_state = "cart"
@@ -690,7 +690,7 @@
 
 
 /obj/machinery/vending/cigarette
-	name = "Cigarette machine" //OCD had to be uppercase to look nice with the new formating
+	name = "\improper Cigarette Machine" //OCD had to be uppercase to look nice with the new formating
 	desc = "If you want to get cancer, might as well do it in style"
 	product_slogans = "Space cigs taste good like a cigarette should.;I'd rather toolbox than switch.;Smoke!;Don't believe the reports - smoke today!"
 	product_ads = "Probably not bad for you!;Don't believe the scientists!;It's good for you!;Don't quit, buy more!;Smoke!;Nicotine heaven.;Best cigarettes since 2150.;Award-winning cigs."
@@ -703,7 +703,7 @@
 
 
 /obj/machinery/vending/medical
-	name = "NanoMed Plus"
+	name = "\improper NanoMed Plus"
 	desc = "Medical drug dispenser."
 	icon_state = "med"
 	icon_deny = "med-deny"
@@ -725,14 +725,14 @@
 
 //This one's from bay12
 /obj/machinery/vending/plasmaresearch
-	name = "Toximate 3000"
+	name = "\improper Toximate 3000"
 	desc = "All the fine parts you need in one vending machine!"
 	products = list(/obj/item/clothing/under/rank/scientist = 6,/obj/item/clothing/suit/bio_suit = 6,/obj/item/clothing/head/bio_hood = 6,
 					/obj/item/device/transfer_valve = 6,/obj/item/device/assembly/timer = 6,/obj/item/device/assembly/signaler = 6,
 					/obj/item/device/assembly/prox_sensor = 6,/obj/item/device/assembly/igniter = 6)
 
 /obj/machinery/vending/wallmed1
-	name = "NanoMed"
+	name = "\improper NanoMed"
 	desc = "Wall-mounted Medical Equipment dispenser."
 	product_ads = "Go save some lives!;The best stuff for your medbay.;Only the finest tools.;Natural chemicals!;This stuff saves lives.;Don't you want some?"
 	icon_state = "wallmed"
@@ -743,7 +743,7 @@
 	contraband = list(/obj/item/weapon/reagent_containers/syringe/antitoxin = 4,/obj/item/weapon/reagent_containers/syringe/antiviral = 4,/obj/item/weapon/reagent_containers/pill/tox = 1)
 
 /obj/machinery/vending/wallmed2
-	name = "NanoMed"
+	name = "\improper NanoMed"
 	desc = "Wall-mounted Medical Equipment dispenser."
 	icon_state = "wallmed"
 	icon_deny = "wallmed-deny"
@@ -754,7 +754,7 @@
 	contraband = list(/obj/item/weapon/reagent_containers/pill/tox = 3)
 
 /obj/machinery/vending/security
-	name = "SecTech"
+	name = "\improper SecTech"
 	desc = "A security equipment vendor"
 	product_ads = "Crack capitalist skulls!;Beat some heads in!;Don't forget - harm is good!;Your weapons are right here.;Handcuffs!;Freeze, scumbag!;Don't tase me bro!;Tase them, bro.;Why not have a donut?"
 	icon_state = "sec"
@@ -766,7 +766,7 @@
 	contraband = list(/obj/item/clothing/glasses/sunglasses = 2,/obj/item/weapon/storage/fancy/donut_box = 2)
 
 /obj/machinery/vending/hydronutrients
-	name = "NutriMax"
+	name = "\improper NutriMax"
 	desc = "A plant nutrients vendor"
 	product_slogans = "Aren't you glad you don't have to fertilize the natural way?;Now with 50% less stink!;Plants are people too!"
 	product_ads = "We like plants!;Don't you want some?;The greenest thumbs ever.;We like big plants.;Soft soil..."
@@ -777,7 +777,7 @@
 	contraband = list(/obj/item/weapon/reagent_containers/glass/bottle/ammonia = 10,/obj/item/weapon/reagent_containers/glass/bottle/diethylamine = 5)
 
 /obj/machinery/vending/hydroseeds
-	name = "MegaSeed Servitor"
+	name = "\improper MegaSeed Servitor"
 	desc = "When you need seeds fast!"
 	product_slogans = "THIS'S WHERE TH' SEEDS LIVE! GIT YOU SOME!;Hands down the best seed selection on the station!;Also certain mushroom varieties available, more for experts! Get certified today!"
 	product_ads = "We like plants!;Grow some crops!;Grow, baby, growww!;Aw h'yeah son!"
@@ -794,7 +794,7 @@
 
 
 /obj/machinery/vending/magivend
-	name = "MagiVend"
+	name = "\improper MagiVend"
 	desc = "A magic vending machine."
 	icon_state = "MagiVend"
 	product_slogans = "Sling spells the proper way with MagiVend!;Be your own Houdini! Use MagiVend!"
@@ -814,7 +814,7 @@
 	contraband = list(/obj/item/weapon/reagent_containers/glass/bottle/wizarditis = 1)	//No one can get to the machine to hack it anyways; for the lulz - Microwave
 
 /obj/machinery/vending/dinnerware
-	name = "Dinnerware"
+	name = "\improper Dinnerware"
 	desc = "A kitchen and restaurant equipment vendor"
 	product_ads = "Mm, food stuffs!;Food and food accessories.;Get your plates!;You like forks?;I like forks.;Woo, utensils.;You don't really need these..."
 	icon_state = "dinnerware"
@@ -822,7 +822,7 @@
 	contraband = list(/obj/item/weapon/kitchen/utensil/spoon = 2,/obj/item/weapon/kitchen/utensil/knife = 2,/obj/item/weapon/kitchen/rollingpin = 2, /obj/item/weapon/butch = 2)
 
 /obj/machinery/vending/sovietsoda
-	name = "BODA"
+	name = "\improper BODA"
 	desc = "Old sweet water vending machine"
 	icon_state = "sovietsoda"
 	product_slogans = "BODA: We sell drink.;BODA: Drink today.;BODA: We're better then Comrade Dan."
@@ -831,7 +831,7 @@
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/cola = 20)
 
 /obj/machinery/vending/tool
-	name = "YouTool"
+	name = "\improper YouTool"
 	desc = "Tools for tools."
 	icon_state = "tool"
 	icon_deny = "tool-deny"
@@ -842,7 +842,7 @@
 	premium = list(/obj/item/clothing/gloves/yellow = 1)
 
 /obj/machinery/vending/engivend
-	name = "Engi-Vend"
+	name = "\improper Engi-Vend"
 	desc = "Spare tool vending. What? Did you expect some witty description?"
 	icon_state = "engivend"
 	icon_deny = "engivend-deny"
@@ -853,7 +853,7 @@
 
 //This one's from bay12
 /obj/machinery/vending/engineering
-	name = "Robco Tool Maker"
+	name = "\improper Robco Tool Maker"
 	desc = "Everything you need for do-it-yourself station repair."
 	icon_state = "engi"
 	icon_deny = "engi-deny"
@@ -870,7 +870,7 @@
 
 //This one's from bay12
 /obj/machinery/vending/robotics
-	name = "Robotech Deluxe"
+	name = "\improper Robotech Deluxe"
 	desc = "All the tools you need to create your own robot army."
 	icon_state = "robotics"
 	icon_deny = "robotics-deny"
@@ -910,7 +910,7 @@
 
 
 /obj/machinery/vending/hatdispenser
-	name = "Hatlord 9000"
+	name = "\improper Hatlord 9000"
 	desc = "It doesn't seem the slightist bit unusual. This frustrates you immensly."
 	icon_state = "hats"
 	vend_reply = "Take care now!"
@@ -921,7 +921,7 @@
 	premium = list(/obj/item/clothing/head/soft/rainbow = 1)
 
 /obj/machinery/vending/suitdispenser
-	name = "Suitlord 9000"
+	name = "\improper Suitlord 9000"
 	desc = "You wonder for a moment why all of your shirts and pants come conjoined. This hurts your head and you stop thinking about it."
 	icon_state = "suits"
 	vend_reply = "Come again!"
@@ -936,7 +936,7 @@
 
 //THIS IS WHERE THE FEET LIVE, GIT YE SOME
 /obj/machinery/vending/shoedispenser
-	name = "Shoelord 9000"
+	name = "\improper Shoelord 9000"
 	desc = "Wow, hatlord looked fancy, suitlord looked streamlined, and this is just normal. The guy who designed these must be an idiot."
 	icon_state = "shoes"
 	vend_reply = "Enjoy your pair!"
@@ -949,7 +949,7 @@
 
 //HEIL ADMINBUS
 /obj/machinery/vending/nazivend
-	name = "Nazivend"
+	name = "\improper Nazivend"
 	desc = "Remember the gorrilions lost."
 	icon_state = "nazi"
 	vend_reply = "SIEG HEIL!"
@@ -959,7 +959,7 @@
 	contraband = list(/obj/item/clothing/head/naziofficer = 10, /obj/item/clothing/suit/officercoat = 10, /obj/item/clothing/under/officeruniform = 10)
 
 /obj/machinery/vending/discount
-	name = "Discount Dan's"
+	name = "\improper Discount Dan's"
 	desc = "A snack machine owned by the infamous 'Discount Dan' franchise."
 	product_slogans = "Discount Dan, he's the man!;There 'aint nothing better in this world then a bite of mystery.;Don't listen to those other machines, buy my product!;Quantity over Quality!;Don't listen to those eggheads at the CDC, buy now!;Discount Dan's: We're good for you! Nope, couldn't say it with a straight face.;Discount Dan's: Only the best quality produ-*BZZT*"
 	product_ads = "Discount Dan(tm) is not responsible for any damages caused by misuse of his product."
@@ -972,7 +972,7 @@
 
 
 /obj/machinery/vending/groans
-	name = "Groans Soda"
+	name = "\improper Groans Soda"
 	desc = "A soda machine owned by the infamous 'Groans' franchise."
 	product_slogans = "Groans: Drink up!;Sponsored by Discount Dan!;Take a sip!;Just one sip, do it!"
 	product_ads = "Try our new 'Double Dan' flavor!"

@@ -1,7 +1,7 @@
 //Cleanbot assembly
 /obj/item/weapon/bucket_sensor
 	desc = "It's a bucket. With a sensor attached."
-	name = "proxy bucket"
+	name = "\improper proxy bucket"
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "bucket_proxy"
 	force = 3.0
@@ -15,7 +15,7 @@
 
 //Cleanbot
 /obj/machinery/bot/cleanbot
-	name = "Cleanbot"
+	name = "\improper Cleanbot"
 	desc = "A little cleaning robot, he looks so excited!"
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "cleanbot0"
@@ -144,7 +144,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if(src.allowed(usr) && !open && !emagged)
 			src.locked = !src.locked
-			user << "<span class='notice'>You [ src.locked ? "lock" : "unlock"] the [src] behaviour controls.</span>"
+			user << "<span class='notice'>You [src.locked ? "lock" : "unlock"] [src]'s behaviour controls.</span>"
 		else
 			if(emagged)
 				user << "<span class='warning'>ERROR</span>"
@@ -158,7 +158,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 /obj/machinery/bot/cleanbot/Emag(mob/user as mob)
 	..()
 	if(open && !locked)
-		if(user) user << "<span class='notice'>The [src] buzzes and beeps.</span>"
+		if(user) user << "<span class='notice'>[src] buzzes and beeps.</span>"
 		src.oddbutton = 1
 		src.screwloose = 1
 
@@ -171,14 +171,14 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		return
 
 	if(!src.screwloose && !src.oddbutton && prob(5))
-		visible_message("[src] makes an excited beeping booping sound!")
+		visible_message("<span class='notice'>[src] makes an excited beeping booping sound!</span>")
 
 	if(src.screwloose && prob(5))
 		if(istype(loc,/turf/simulated))
 			var/turf/simulated/T = src.loc
 			T.wet(800)
 	if(src.oddbutton && prob(5))
-		visible_message("Something flies out of [src]. He seems to be acting oddly.")
+		visible_message("<span class='notice'>Something flies out of [src]. He seems to be acting oddly.</span>")
 		var/obj/effect/decal/cleanable/blood/gibs/gib = new /obj/effect/decal/cleanable/blood/gibs(src.loc)
 		//gib.streak(list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST))
 		src.oldtarget = get_turf(gib)
@@ -304,7 +304,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 /obj/machinery/bot/cleanbot/proc/clean(var/turf/target)
 	anchored = 1
 	icon_state = "cleanbot-c"
-	visible_message("\red [src] begins to clean up the [target]")
+	visible_message("<span class='warning'>[src] begins to clean up the [target]</span>")
 	cleaning = 1
 	var/cleantime = 20 // 50 // 5 seconds is too long.
 	var/list/cleansed=list()
@@ -322,7 +322,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 
 /obj/machinery/bot/cleanbot/explode()
 	src.on = 0
-	src.visible_message("\red <B>[src] blows apart!</B>", 1)
+	src.visible_message("<span class='danger'>[src] blows apart!</span>")
 	var/turf/Tsec = get_turf(src)
 
 	new /obj/item/weapon/reagent_containers/glass/bucket(Tsec)

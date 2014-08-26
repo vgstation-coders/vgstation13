@@ -2,7 +2,7 @@
 
 
 /obj/machinery/detector
-	name = "Mr. V.A.L.I.D. Portable Threat Detector"
+	name = "\improper Mr. V.A.L.I.D. Portable Threat Detector"
 	desc = "This state of the art unit allows NT security personnel to contain a situation or secure an area better and faster."
 	icon = 'icons/obj/detector.dmi'
 	icon_state = "detector1"
@@ -163,10 +163,11 @@
 	if (istype(W, /obj/item/weapon/wirecutters))
 		add_fingerprint(user)
 		src.disable = !src.disable
+		playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
 		if (src.disable)
-			user.visible_message("\red [user] has disconnected the detector array!", "\red You disconnect the detector array!")
+			user.visible_message("<span class='warning'>[user] disconnects [src]'s detector array!</span>", "<span class='notice'>You disconnect [src]'s detector array!</span>")
 		if (!src.disable)
-			user.visible_message("\red [user] has connected the detector array!", "\red You connect the detector array!")
+			user.visible_message("<span class='warning'>[user] connects [src]'s detector array!</span>", "<span class='notice'>You connect [src]'s detector array!</span>")
 
 
 
@@ -252,7 +253,7 @@
 
 	else:
 
-		src.visible_message("<span class = 'warning'>ACCESS DENIED!</span>")
+		src.visible_message("<span class='warning'>ACCESS DENIED!</span>")
 
 
 /obj/machinery/detector/proc/flash()
@@ -285,7 +286,7 @@
 
 			src.last_read = world.time
 			use_power(1000)
-			src.visible_message("<span class = 'warning'>Theat Detected! Subject: [dudesname]</span>")////
+			src.visible_message("<span class='warning'>Theat Detected! Subject: [dudesname]</span>")////
 
 
 		else if(dudesthreat <= 3 && dudesthreat != 0 && senset)
@@ -297,7 +298,7 @@
 
 			src.last_read = world.time
 			use_power(1000)
-			src.visible_message("<span class = 'warning'>Additional screening required! Subject: [dudesname]</span>")
+			src.visible_message("<span class='warning'>Additional screening required! Subject: [dudesname]</span>")
 
 
 		else
@@ -309,7 +310,7 @@
 
 			src.last_read = world.time
 			use_power(1000)
-			src.visible_message("<span class = 'notice'> Subject: [dudesname] clear.</span>")
+			src.visible_message("<span class='notice'> Subject: [dudesname] clear.</span>")
 
 
 	flick("[base_state]_flash", src)
@@ -337,16 +338,17 @@
 			src.flash()
 
 /obj/machinery/detector/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/wrench))
+	if(istype(W, /obj/item/weapon/wrench))
 		add_fingerprint(user)
 		src.anchored = !src.anchored
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 
-		if (!src.anchored)
-			user.show_message(text("\red [src] can now be moved."))
+		if(!src.anchored)
+			user.visible_message("<span class='warning'>[user] unsecures [src]!", "<span class='notice'>[src] can now be moved.</span>")
 			src.overlays.Cut()
 
-		else if (src.anchored)
-			user.show_message(text("\red [src] is now secured."))
+		else if(src.anchored)
+			user.visible_message("<span class='warning'>[user] secures [src]!", "<span class='notice'>[src] is now secure.</span>")
 			src.overlays += "[base_state]-s"
 
 

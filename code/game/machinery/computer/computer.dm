@@ -1,5 +1,5 @@
 /obj/machinery/computer
-	name = "computer"
+	name = "\improper Computer"
 	icon = 'icons/obj/computer.dmi'
 	density = 1
 	anchored = 1.0
@@ -102,20 +102,21 @@
 /obj/machinery/computer/attackby(I as obj, user as mob)
 	if(istype(I, /obj/item/weapon/screwdriver) && circuit)
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-		if(do_after(user, 20))
-			var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-			var/obj/item/weapon/circuitboard/M = new circuit( A )
+		usr.visible_message("<span class='warning'>[usr] starts disconnecting [src]'s monitor!</span>", "<span class='notice'>You start disconnecting [src]'s monitor.</span>")
+		if(do_after(user, 30))
+			usr.visible_message("<span class='warning'>[usr] disconnects [src]'s monitor!</span>", "<span class='notice'>You disconnect [src]'s monitor.</span>")
+			var/obj/structure/computerframe/A = new /obj/structure/computerframe(src.loc)
+			var/obj/item/weapon/circuitboard/M = new circuit(A)
 			A.circuit = M
 			A.anchored = 1
 			for (var/obj/C in src)
 				C.loc = src.loc
 			if (src.stat & BROKEN)
-				user << "\blue The broken glass falls out."
+				visible_message("<span class='notice'>The broken glass falls out.</span>")
 				getFromPool(/obj/item/weapon/shard, loc)
 				A.state = 3
 				A.icon_state = "3"
 			else
-				user << "\blue You disconnect the monitor."
 				A.state = 4
 				A.icon_state = "4"
 			del(src)

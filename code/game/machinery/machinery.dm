@@ -92,7 +92,7 @@ Class Procs:
 */
 
 /obj/machinery
-	name = "machinery"
+	name = "\improper machinery"
 	icon = 'icons/obj/stationobjs.dmi'
 
 	w_type = NOT_RECYCLABLE
@@ -213,7 +213,7 @@ Class Procs:
 		var/re_init=0
 		if("set_tag" in href_list)
 			if(!(href_list["set_tag"] in vars))
-				usr << "\red Something went wrong: Unable to find [href_list["set_tag"]] in vars!"
+				usr << "<span class='warning'>Something went wrong: Unable to find [href_list["set_tag"]] in vars!</span>"
 				return 1
 			var/current_tag = src.vars[href_list["set_tag"]]
 			var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag", src, current_tag) as null|text),1,MAX_MESSAGE_LEN)
@@ -230,13 +230,13 @@ Class Procs:
 			if(!O)
 				return 1
 			if(!canLink(O))
-				usr << "\red You can't link with that device."
+				usr << "<span class='warning'>You can't link with [O].</span>"
 				return 1
 
 			if(unlinkFrom(usr, O))
-				usr << "\blue A green light flashes on \the [P], confirming the link was removed."
+				usr << "<span class='notice'>A green light flashes on [P] confirming the link with [O] was removed.</span>"
 			else
-				usr << "\red A red light flashes on \the [P].  It appears something went wrong when unlinking the two devices."
+				usr << "<span class='warning'>A red light flashes on [P]. It appears something went wrong when unlinking with [O].</span>"
 			update_mt_menu=1
 
 		if("link" in href_list)
@@ -244,25 +244,25 @@ Class Procs:
 			if(!O)
 				return 1
 			if(!canLink(O,href_list))
-				usr << "\red You can't link with that device."
+				usr << "<span class='warning'>You can't link with [O].</span>"
 				return 1
 			if (isLinkedWith(O))
-				usr << "\red A red light flashes on \the [P]. The two devices are already linked."
+				usr << "<span class='warning'>A red light flashes on [P]. [O] is already linked.</span>"
 				return 1
 
 			if(linkWith(usr, O, href_list))
-				usr << "\blue A green light flashes on \the [P], confirming the link was removed."
+				usr << "<span class='notice'>A green light flashes on [P] confirming the link with [O] was removed."
 			else
-				usr << "\red A red light flashes on \the [P].  It appears something went wrong when linking the two devices."
+				usr << "<span class='warning'>A red light flashes on [P]. It appears something went wrong when linking with [O].</span>"
 			update_mt_menu=1
 
 		if("buffer" in href_list)
 			P.buffer = src
-			usr << "\blue A green light flashes, and the device appears in the multitool buffer."
+			usr << "<span class='notice'>A green light flashes, and the device appears in the multitool buffer.</span>"
 			update_mt_menu=1
 
 		if("flush" in href_list)
-			usr << "\blue A green light flashes, and the device disappears from the multitool buffer."
+			usr << "<span class='notice'>A green light flashes, and the device disappears from the multitool buffer.</span>"
 			P.buffer = null
 			update_mt_menu=1
 
@@ -294,7 +294,7 @@ Class Procs:
 		if ( ! (istype(usr, /mob/living/carbon/human) || \
 				istype(usr, /mob/living/silicon) || \
 				istype(usr, /mob/living/carbon/monkey) && ticker && ticker.mode.name == "monkey") )
-			usr << "\red You don't have the dexterity to do this!"
+			usr << "<span class='warning'>You don't have the dexterity to do this!</span>"
 			return 1
 
 		var/norange = 0
@@ -350,7 +350,7 @@ Class Procs:
 	if ( ! (istype(usr, /mob/living/carbon/human) || \
 			istype(usr, /mob/living/silicon) || \
 			istype(usr, /mob/living/carbon/monkey) && ticker && ticker.mode.name == "monkey") )
-		usr << "\red You don't have the dexterity to do this!"
+		usr << "<span class='warning'>You don't have the dexterity to do this!</span>"
 		return 1
 /*
 	//distance checks are made by atom/proc/DblClick
@@ -360,10 +360,10 @@ Class Procs:
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(H.getBrainLoss() >= 60)
-			visible_message("\red [H] stares cluelessly at [src] and drools.")
+			user.visible_message("<span class='warning'>[H] stares cluelessly at [src] and drools.!</span>", "<span class='warning'>You stare cluelessly at [src] and drool!</span>")
 			return 1
 		else if(prob(H.getBrainLoss()))
-			user << "\red You momentarily forget how to use [src]."
+			user << "<span class='warning'>You momentarily forget how to use [src].</span>"
 			return 1
 
 	src.add_fingerprint(user)
@@ -377,23 +377,25 @@ Class Procs:
 	uid = gl_uid
 	gl_uid++
 
-/obj/machinery/proc/default_deconstruction_crowbar()
+/obj/machinery/proc/default_deconstruction_crowbar(var/mob/user) //Very redundant, doublecheck. Adding user var because
+	user.visible_message("<span class='warning'>[user] begins to remove the circuits from [src]!</span>", "<span class='notice'>You begin to remove the circuits from [src].</span>")
 	playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-	var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-	M.state = 2
-	M.icon_state = "box_1"
-	for(var/obj/I in component_parts)
-		if(I.reliability != 100 && crit_fail)
-			I.crit_fail = 1
-		I.loc = src.loc
-	del(src)
+	if(do_after(user,50))
+		user.visible_message("<span class='warning'>[user] removes the circuits from [src]!", "<span class='notice'>You remove the circuits from [src].</span>")
+		var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
+		M.state = 2
+		M.icon_state = "box_1"
+		for(var/obj/I in component_parts)
+			if(I.reliability != 100 && crit_fail)
+				I.crit_fail = 1
+			I.loc = src.loc
+		del(src)
 
-/obj/machinery/proc/default_deconstruction_screwdriver(var/mob/user, var/icon_state_open, var/icon_state_closed)
-	if (!panel_open)
+/obj/machinery/proc/default_deconstruction_screwdriver(var/mob/user, var/icon_state_open, var/icon_state_closed) //Ditto above
+	playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+	if(!panel_open)
+		user.visible_message("<span class='warning'>[user] opens [src]'s panel!</span>", "<span class='notice'>You open [src]'s panel.</span>")
 		panel_open = 1
-		icon_state = icon_state_open
-		user << "<span class='notice'>You open the maintenance hatch of [src].</span>"
 	else
+		user.visible_message("<span class='warning'>[user] closes [src]'s panel!</span>", "<span class='notice'>You close [src]'s panel.</span>")
 		panel_open = 0
-		icon_state = icon_state_closed
-		user << "<span class='notice'>You close the maintenance hatch of [src].</span>"

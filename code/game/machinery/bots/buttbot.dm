@@ -9,7 +9,7 @@ Here it is: Buttbot.
 */
 
 /obj/machinery/bot/buttbot
-	name = "butt bot"
+	name = "\improper butt bot"
 	desc = "Somehow, this doesn't bode well with you."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "buttbot"
@@ -31,14 +31,13 @@ Here it is: Buttbot.
 		playsound(get_turf(src), 'sound/misc/fart.ogg', 50, 1)
 		sincelastfart = world.timeofday
 
-		
+
 
 
 /obj/machinery/bot/buttbot/proc/speak(var/message)
 	if((!src.on) || (!message))
 		return
-	for(var/mob/O in hearers(src, null))
-		O.show_message("<b>[src]</b> beeps, '[message]'")
+	visible_message("<span class='notice'><b>[src]</b> beeps, '[message]'</span>")
 	return
 
 
@@ -66,7 +65,7 @@ Here it is: Buttbot.
 
 /obj/machinery/bot/buttbot/explode()
 	src.on = 0
-	src.visible_message("\red <B>[src] blows apart!</B>", 1)
+	src.visible_message("\<span class='danger'>[src] blows apart!</span>")
 	playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, 1) //A fitting end
 	var/turf/Tsec = get_turf(src)
 	new /obj/item/clothing/head/butt(Tsec)

@@ -1,7 +1,7 @@
 /obj/machinery/air_sensor
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "gsensor1"
-	name = "Gas Sensor"
+	name = "\improper Gas Sensor"
 
 	anchored = 1
 
@@ -40,12 +40,9 @@
 			return 1
 		if(istype(W, /obj/item/weapon/wrench))
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-			user << "\blue You begin to unfasten \the [src]..."
-			if (do_after(user, 40))
-				user.visible_message( \
-					"[user] unfastens \the [src].", \
-					"\blue You have unfastened \the [src].", \
-					"You hear a ratchet.")
+			user.visible_message("<span class='warning'>[user] begins to unfasten [src]!</span>", "<span class='notice'>You begin unfastening [src].</span>")
+			if (do_after(user, 50))
+				user.visible_message("<span class='warning'>[user] unfastens [src]!</span>", "<span class='notice'>You unfasten [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
 				new /obj/item/pipe_gsensor(src.loc)
 				del(src)
 		..()
@@ -104,7 +101,7 @@
 	icon_state = "tank"
 	circuit = "/obj/item/weapon/circuitboard/air_management"
 
-	name = "Computer"
+	name = "\improper General Air Control Computer"
 
 	var/frequency = 1439
 	var/show_sensors=1
@@ -261,7 +258,7 @@ legend {
 				if(!isnull(G.id_tag) && G.frequency == frequency)
 					sensor_list|=G.id_tag
 			if(!sensor_list.len)
-				user << "<span class=\"warning\">No sensors on this frequency.</span>"
+				user << "<span class='warning'>No sensors on this frequency.</span>"
 				return MT_ERROR
 
 			// Have the user pick one of them and name its label
@@ -282,7 +279,7 @@ legend {
 				if(!isnull(G.id_tag) && G.frequency == frequency)
 					sensor_list|=G.id_tag
 			if(!sensor_list.len)
-				user << "<span class=\"warning\">No sensors on this frequency.</span>"
+				user << "<span class='warning'>No sensors on this frequency.</span>"
 				return MT_ERROR
 			var/label = sensors[href_list["edit_sensor"]]
 			var/sensor = input(user, "Select a sensor:", "Sensor Data", href_list["edit_sensor"]) as null|anything in sensor_list

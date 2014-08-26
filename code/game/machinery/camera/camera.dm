@@ -1,6 +1,6 @@
 var/list/camera_names=list()
 /obj/machinery/camera
-	name = "security camera"
+	name = "\improper ecurity camera"
 	desc = "It's used to monitor rooms."
 	icon = 'icons/obj/monitors.dmi'
 	var/obj/item/device/camera_bug/hasbug = null
@@ -88,7 +88,7 @@ var/list/camera_names=list()
 					if (S.current == src)
 						O.unset_machine()
 						O.reset_view(null)
-						O << "The screen bursts into static."
+						O << "<span class='warning'>The screen bursts into static!</span>"
 			..()
 
 
@@ -116,7 +116,7 @@ var/list/camera_names=list()
 	if(!istype(user))
 		return
 	status = 0
-	visible_message("<span class='warning'>\The [user] slashes at [src]!</span>")
+	visible_message("<span class='warning'>[user] slashes at [src]!</span>")
 	playsound(get_turf(src), 'sound/weapons/slash.ogg', 100, 1)
 	icon_state = "[initial(icon_state)]1"
 	add_hiddenprint(user)
@@ -129,8 +129,7 @@ var/list/camera_names=list()
 		//user << "<span class='notice'>You start to [panel_open ? "close" : "open"] the camera's panel.</span>"
 		//if(toggle_panel(user)) // No delay because no one likes screwdrivers trying to be hip and have a duration cooldown
 		panel_open = !panel_open
-		user.visible_message("<span class='warning'>[user] screws the camera's panel [panel_open ? "open" : "closed"]!</span>",
-		"<span class='notice'>You screw the camera's panel [panel_open ? "open" : "closed"].</span>")
+		user.visible_message("<span class='warning'>[user] screws [src]'s panel [panel_open ? "open" : "closed"]!</span>", "<span class='notice'>You screw [src]'s panel [panel_open ? "open" : "closed"].</span>")
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 
 	else if((istype(W, /obj/item/weapon/wirecutters) || istype(W, /obj/item/device/multitool)) && panel_open)
@@ -160,24 +159,24 @@ var/list/camera_names=list()
 			P = W
 			itemname = P.name
 			info = P.notehtml
-		U << "You hold \a [itemname] up to the camera ..."
+		U << "<span class='notice'>You hold [itemname] up to the camera.</span>"
 		for(var/mob/living/silicon/ai/O in living_mob_list)
 			if(!O.client) continue
-			if(U.name == "Unknown") O << "<b>[U]</b> holds \a [itemname] up to one of your cameras ..."
+			if(U.name == "Unknown") O << "<span class='notice'><b>[U]</b> holds [itemname] up to one of your cameras.</span>"
 			else O << "<b><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></b> holds \a [itemname] up to one of your cameras ..."
 			O << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", itemname, info), text("window=[]", itemname))
 		for(var/mob/O in player_list)
 			if (istype(O.machine, /obj/machinery/computer/security))
 				var/obj/machinery/computer/security/S = O.machine
 				if (S.current == src)
-					O << "[U] holds \a [itemname] up to one of the cameras ..."
+					O << "<span class='notice'>[U] holds [itemname] up to one of the cameras.</span>"
 					O << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", itemname, info), text("window=[]", itemname))
 	else if (istype(W, /obj/item/device/camera_bug) && panel_open)
 		if (!src.can_use())
-			user << "\blue Camera non-functional"
+			user << "<span class='notice'>Camera non-functional.</span>"
 			return
 		else
-			user << "\blue Camera bugged."
+			user << "<span class='notice'>Camera bugged.</span>"
 			user.drop_item(W)
 			hasbug = W
 			contents += W
@@ -199,7 +198,7 @@ var/list/camera_names=list()
 		spark_system.start()
 		playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 		playsound(loc, "sparks", 50, 1)
-		visible_message("\blue The camera has been sliced apart by [] with an energy blade!")
+		visible_message("<span class='danger'>The camera has been sliced apart by [user] with an energy blade!</span>")
 		del(src)
 	else
 		..()
@@ -212,26 +211,26 @@ var/list/camera_names=list()
 			if (S.current == src)
 				O.unset_machine()
 				O.reset_view(null)
-				O << "The screen bursts into static."
+				O << "<span class='warning'>The screen bursts into static!</span>"
 /obj/machinery/camera/proc/deactivate(user as mob, var/choice = 1)
 	if(choice==1)
 		status = !( src.status )
 		if (!(src.status))
 			if(user)
-				visible_message("\red [user] has deactivated [src]!")
+				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
+				visible_message("<span class='warning'>[user] has deactivated [src]!</span>", "<span class='notice'>You deactivate [src]!</span>")
 				add_hiddenprint(user)
 			else
-				visible_message("\red \The [src] deactivates!")
-			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
+				visible_message("<span class='warning'>[src] deactivates!</span>")
 			icon_state = "[initial(icon_state)]1"
 			add_hiddenprint(user)
 		else
 			if(user)
-				visible_message("\red [user] has reactivated [src]!")
+				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
+				visible_message("<span class='notice'>[user] has reactivated [src]!</span>", "<span class='notice'>You reactivate [src]!</span>")
 				add_hiddenprint(user)
 			else
-				visible_message("\red \the [src] reactivates!")
-			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
+				visible_message("<span class='notice'>[src] reactivates!</span>")
 			icon_state = initial(icon_state)
 			add_hiddenprint(user)
 	// now disconnect anyone using the camera
@@ -243,7 +242,7 @@ var/list/camera_names=list()
 			if (S.current == src)
 				O.unset_machine()
 				O.reset_view(null)
-				O << "The screen bursts into static."
+				O << "<span class='warning'>The screen bursts into static!</span>"
 
 /obj/machinery/camera/proc/triggerCameraAlarm()
 	alarm_on = 1
@@ -316,7 +315,7 @@ var/list/camera_names=list()
 		return 0
 
 	// Do after stuff here
-	user << "<span class='notice'>You start to weld the [src]..</span>"
+	user.visible_message("<span class='warning'>[user] starts to weld [src]!</span>", "<span class='notice'>You start to weld [src].</span>", "<span class='notice'>You hear welding</span>")
 	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 	WT.eyecheck(user)
 	busy = 1
@@ -324,6 +323,7 @@ var/list/camera_names=list()
 		busy = 0
 		if(!WT.isOn())
 			return 0
+		user.visible_message("<span class='warning'>[user] welds [src]!</span>", "<span class='notice'>You weld [src].</span>")
 		return 1
 	busy = 0
 	return 0

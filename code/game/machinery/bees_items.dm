@@ -1,12 +1,12 @@
 /obj/item/queen_bee
-	name = "queen bee packet"
+	name = "\improper queen bee packet"
 	desc = "Place her into an apiary so she can get busy."
 	icon = 'icons/obj/seeds.dmi'
 	icon_state = "seed-kudzu"
 	w_class = 1
 
 /obj/item/weapon/bee_net
-	name = "bee net"
+	name = "\improper bee net"
 	desc = "For catching rogue bees."
 	icon = 'icons/obj/apiary_bees_etc.dmi'
 	icon_state = "bee_net"
@@ -20,9 +20,9 @@
 		if(B.feral < 0)
 			caught_bees += B.strength
 			del(B)
-			user.visible_message("\blue [user] nets some bees.","\blue You net up some of the becalmed bees.")
+			user.visible_message("<span class='warning'>[user] catches the bees with [src].</span>","<span class='notice'>You catch the bees with [src].</span>")
 		else
-			user.visible_message("\red [user] swings at some bees, they don't seem to like it.","\red You swing at some bees, they don't seem to like it.")
+			user.visible_message("<span class='danger'>[user] swings at the bees with [src]. They don't seem to like it!</span>","<span class='danger'>You swing at the bees with [src]. They don't seem to like it!</span>", "<span class='danger'>You hear omnious buzzing</span>")
 			B.feral = 5
 			B.target = user
 
@@ -35,6 +35,7 @@
 		M = usr
 
 	while(caught_bees > 0)
+		usr.visible_message("<span class='danger'>[usr] releases the bees in [src]. They seem pissed!</span>","<span class='danger'>You release the bees in [src]. They seem pissed!</span>", "<span class='danger'>You hear omnious buzzing</span>")
 		//release a few super massive swarms
 		while(caught_bees > 5)
 			var/mob/living/simple_animal/bee/B = new(src.loc)
@@ -54,7 +55,7 @@
 		caught_bees = 0
 
 /obj/item/apiary
-	name = "moveable apiary"
+	name = "\improper moveable apiary"
 	icon = 'icons/obj/apiary_bees_etc.dmi'
 	icon_state = "apiary_item"
 	item_state = "giftbag"
@@ -72,7 +73,7 @@
 	pixel_y = rand(-5.0, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb
-	name = "honeycomb"
+	name = "\improper honeycomb"
 	icon_state = "honeycomb"
 	desc = "Dripping with sugary sweetness."
 
