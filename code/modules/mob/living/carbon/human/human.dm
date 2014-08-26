@@ -42,8 +42,6 @@
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species = null, var/delay_ready_dna=0)
 
-	..(new_loc)
-
 	if(!species)
 		if(new_species)
 			set_species(new_species)
@@ -65,6 +63,8 @@
 	hud_list[IMPTRACK_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")
+
+	..()
 
 	if(dna)
 		dna.real_name = real_name
@@ -1186,7 +1186,7 @@
 
 /mob/living/carbon/human/get_species()
 
-	if(!species && src)
+	if(!species)
 		set_species()
 
 	if(dna && dna.mutantrace == "golem")
@@ -1653,7 +1653,7 @@ mob/living/carbon/human/yank_out_object()
 		if(!new_species)
 			new_species = "Human"
 	else
-		if(!new_species && dna.species)
+		if(!new_species)
 			new_species = dna.species
 		else
 			dna.species = new_species
@@ -1667,10 +1667,7 @@ mob/living/carbon/human/yank_out_object()
 	if(species && species.abilities)
 		verbs -= species.abilities
 
-	if(all_species[new_species])
-		species = all_species[new_species]
-	else if (!species) //if we can't find the new_species, and there isn't an old species to go back to
-		species = new/datum/species/human //I don't like this, but mobs are being created before all_species is loaded because of landmarks in corpse.dm
+	species = all_species[new_species]
 
 	if(species.abilities)
 		verbs |= species.abilities

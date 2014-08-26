@@ -28,11 +28,10 @@
 	var/corpseidicon = null //For setting it to be a gold, silver, centcomm etc ID
 
 /obj/effect/landmark/mobcorpse/New()
-	..() //Is there any reason not to call this?
 	createCorpse()
 
 /obj/effect/landmark/mobcorpse/proc/createCorpse() //Creates a mob and checks for gear in each slot before attempting to equip it.
-	var/mob/living/carbon/human/M = new /mob/living/carbon/human(src.loc)
+	var/mob/living/carbon/human/M = new /mob/living/carbon/human (src.loc)
 	M.real_name = src.name
 	M.stat = 2 //Kills the new mob
 	if(src.corpseuniform)

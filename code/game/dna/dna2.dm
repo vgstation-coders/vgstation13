@@ -176,8 +176,8 @@ var/global/list/bad_blocks[0]
 // Used in hair and facial styles (value being the index and maxvalue being the len of the hairstyle list)
 /datum/dna/proc/SetUIValueRange(var/block,var/value,var/maxvalue,var/defer=0)
 	if (block<=0) return
-	if(!maxvalue) //this is because some values are list lengths before the lists are initialised
-		maxvalue = 1 //again, a landmark fix until I find a way to not have landmarks do what they do
+	if(!maxvalue) //this is because some values can be list lengths before the lists are initialised
+		maxvalue = 1 //bit sloppy, but avoids a divide by 0 if it ever happens
 	ASSERT(maxvalue<=4095)
 	var/range = (4095 / maxvalue)
 	if(value)
