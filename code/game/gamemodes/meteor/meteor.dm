@@ -49,9 +49,9 @@
 
 	spawn(meteorannouncedelay)
 		if(prob(70)) //Slighty off-scale
-			command_alert("A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteordelay - 900, meteordelay + 900))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supplydelay/10] seconds. Make good use of these supplies to build a safe zone and good luck.", "Space Weather Automated Announcements")
+			command_alert("A meteor storm has been detected in proximity of [station_name()] and is expected to strike in [round((rand(meteordelay - 900, meteordelay + 900))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supplydelay/10] seconds. Make good use of these supplies to build a safe zone and good luck.", "Space Weather Automated Announcements")
 		else //Oh boy
-			command_alert("A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteordelay - 2400, meteordelay + 2400))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supplydelay/10] seconds. Make good use of these supplies to build a safe zone and good luck.", "Space Weather Automated Announcements")
+			command_alert("A meteor storm has been detected in proximity of [station_name()] and is expected to strike in [round((rand(meteordelay - 2400, meteordelay + 2400))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supplydelay/10] seconds. Make good use of these supplies to build a safe zone and good luck.", "Space Weather Automated Announcements")
 		world << sound('sound/AI/meteorround.ogg')
 		for(var/obj/item/weapon/rcd/rcd in world) //No, you're not walling in everything
 			rcd.disabled = 1
