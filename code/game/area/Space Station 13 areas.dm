@@ -1222,6 +1222,10 @@ proc/process_ghost_teleport_locs()
 	name = "Medbay Treatment Center"
 	icon_state = "exam_room"
 
+/area/medical/storage
+	name = "Medbay Storage"
+	icon_state = "medstorage"
+
 /area/medical/paramedics
 	name = "\improper Paramedic Station"
 	icon_state = "paramedics"
@@ -1261,6 +1265,10 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Interrogation Room"
 	icon_state = "interrog"
 
+/area/security/toilet
+	name = "\improper Security Toilets"
+	icon_state = "toilet"
+
 /obj/item/weapon/paper/Gaschamber
 	name = "paper - 'Gas Chambers for Idiots'"
 	info = {"<h4>Gas Chambers for Idiots</h4>
@@ -1281,9 +1289,9 @@ proc/process_ghost_teleport_locs()
 	icon_state = "Warden"
 	jammed=1
 
-/area/security/armoury
-	name = "\improper Armory"
-	icon_state = "Warden"
+/area/security/securearmory
+	name = "\improper Secure Armory"
+	icon_state = "Armory"
 	jammed=1
 
 /area/security/hos
@@ -1406,6 +1414,10 @@ proc/process_ghost_teleport_locs()
 /area/science/hallway
 	name = "\improper Research Division"
 	icon_state = "tox_hall"
+
+/area/science/dock
+	name = "\improper Research Shuttle Dock"
+	icon_state = "toxshuttle"
 
 /area/science/rd
 	name = "\improper Research Director's Office"
@@ -1812,7 +1824,7 @@ proc/process_ghost_teleport_locs()
 
 
 
-// Telecommunications Satellite
+// Telecommunications
 
 /area/tcommsat/entrance
 	name = "\improper Satellite Teleporter"
@@ -1825,6 +1837,10 @@ proc/process_ghost_teleport_locs()
 /area/tcomms/chamber
 	name = "\improper Telecoms Chamber"
 	icon_state = "ai"
+
+/area/tcomms/soundsystem
+	name = "\improper Radio Broadcast Server"
+	icon_state = "tcomsatcham"
 
 /area/tcomms/storage
 	name = "\improper Telecoms Storage"
