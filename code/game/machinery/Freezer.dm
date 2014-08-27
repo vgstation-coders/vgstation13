@@ -102,7 +102,7 @@
 				src.opened = 1
 			else
 				user.visible_message("<span class='warning'>[user] closes [src]'s maintenance hatch!</span>", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
-				src.opened = 1
+				src.opened = 0
 			return 1
 		if(opened)
 			if(src.on || anchored)
@@ -295,7 +295,7 @@
 				src.opened = 1
 			else
 				user.visible_message("<span class='warning'>[user] closes [src]'s maintenance hatch!</span>", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
-				src.opened = 1
+				src.opened = 0
 			return 1
 		if(opened)
 			if(src.on || anchored)
