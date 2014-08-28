@@ -287,6 +287,7 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 	B.nitrogen = max(0, (B.nitrogen - nit_avg) * (1-ratio) + nit_avg )
 	B.carbon_dioxide = max(0, (B.carbon_dioxide - co2_avg) * (1-ratio) + co2_avg )
 	B.toxins = max(0, (B.toxins - plasma_avg) * (1-ratio) + plasma_avg )
+	B.nitrous_oxide = max(0, (B.nitrous_oxide - n2o_avg) * (1-ratio) + n2o_avg )
 
 	B.temperature = max(0, (B.temperature - temp_avg) * (1-ratio) + temp_avg )
 
