@@ -2277,6 +2277,11 @@
 				feedback_add_details("admin_secrets_fun_used","R")
 				message_admins("[key_name_admin(usr)] has has irradiated the station", 1)
 				new /datum/event/radiation_storm
+			if("rave")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","R")
+				message_admins("[key_name_admin(usr)] has has started a rave", 1)
+				new /datum/event/rave
 			if("immovable")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","IR")
