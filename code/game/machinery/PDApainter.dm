@@ -14,6 +14,7 @@ Feel free to do whatever with this if you think it lacks.
 	anchored = 1
 	var/obj/item/device/pda/storedpda = null
 	var/list/colorlist = list()
+	opened = 0
 
 
 /obj/machinery/pdapainter/update_icon()
@@ -60,7 +61,17 @@ Feel free to do whatever with this if you think it lacks.
 				P.loc = src
 				P.add_fingerprint(usr)
 				update_icon()
-
+	
+	if(istype(O, /obj/item/weapon/screwdriver))
+		opened = !opened
+		user << "You [opened ? "open" : "close"] the maintenance hatch of [src]."
+		updateUsrDialog()
+		return
+	
+	if(istype(O, /obj/item/weapon/crowbar))
+		if(opened)
+			dismantle()
+			return
 
 /obj/machinery/pdapainter/attack_hand(mob/user as mob)
 	..()
