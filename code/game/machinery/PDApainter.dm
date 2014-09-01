@@ -15,6 +15,8 @@ Feel free to do whatever with this if you think it lacks.
 	var/obj/item/device/pda/storedpda = null
 	var/list/colorlist = list()
 	opened = 0
+	
+	var/last_print = 0 //No spamming PDA printing 
 
 
 /obj/machinery/pdapainter/update_icon()
@@ -104,6 +106,21 @@ Feel free to do whatever with this if you think it lacks.
 		update_icon()
 	else
 		usr << "<span class='notice'>The [src] is empty.</span>"
+		
+/obj/machinery/pdapainter/verb/ejectpda()
+	set name = "Print PDA"
+	set category = "Object"
+	set src in oview(1)
+
+	if(spam_flag + 300 < world.timeofday)
+		usr << "<span class='notice'>The [src] begins to hum lightly.</span>"
+		sleep(200)
+		usr << "<span class='notice'>The [src] rattles and shakes, spitting out a new PDA.</span>"
+		var/turf/T = get_turf(src.loc)
+		var/obj/item/device/pda/A = new /obj/item/device/pda(T)
+	else
+		usr << "The [src] is not ready to print again."
+	
 
 
 /obj/machinery/pdapainter/power_change()
