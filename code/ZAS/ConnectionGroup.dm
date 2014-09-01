@@ -250,7 +250,7 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 		full_nitro = A.nitrogen * size
 		full_co2 = A.carbon_dioxide * size
 		full_plasma = A.toxins * size
-		full_n2o = A.nitrous_oxide * share_size
+		full_n2o = A.nitrous_oxide * size
 
 		full_heat_capacity = A.heat_capacity() * size
 

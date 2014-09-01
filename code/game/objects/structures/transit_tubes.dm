@@ -351,6 +351,7 @@ obj/structure/ex_act(severity)
 	GM.carbon_dioxide	= air_contents.carbon_dioxide
 	GM.nitrogen			= air_contents.nitrogen
 	GM.toxins			= air_contents.toxins
+	GM.nitrous_oxide	= air_contents.nitrous_oxide
 	GM.temperature		= air_contents.temperature
 	return GM
 

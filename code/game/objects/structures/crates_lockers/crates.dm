@@ -107,6 +107,7 @@
 		newgas.carbon_dioxide = gas.carbon_dioxide
 		newgas.nitrogen = gas.nitrogen
 		newgas.toxins = gas.toxins
+		newgas.nitrous_oxide = gas.nitrous_oxide
 		newgas.volume = gas.volume
 		newgas.temperature = gas.temperature
 		if(newgas.temperature <= target_temp)	return

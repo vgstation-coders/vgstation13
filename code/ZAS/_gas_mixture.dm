@@ -897,7 +897,7 @@ What are the archived variables for?
 		temperature_mimic(model, model.thermal_conductivity, border_multiplier)
 
 	if((delta_temperature > MINIMUM_TEMPERATURE_TO_MOVE) || abs(moved_moles) > MINIMUM_MOLES_DELTA_TO_MOVE)
-		var/delta_pressure = temperature_archived*(total_moles() + moved_moles) - model.temperature*(model.oxygen+model.carbon_dioxide+model.nitrogen+model.toxins)
+		var/delta_pressure = temperature_archived*(total_moles() + moved_moles) - model.temperature*(model.oxygen+model.carbon_dioxide+model.nitrogen+model.toxins+model.nitrous_oxide)
 		return delta_pressure*R_IDEAL_GAS_EQUATION/volume
 	else
 		return 0

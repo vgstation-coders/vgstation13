@@ -35,7 +35,7 @@
 	var/heat_damage_per_tick = 3	//amount of damage applied if animal's body temperature is higher than maxbodytemp
 	var/cold_damage_per_tick = 2	//same as heat_damage_per_tick, only if the bodytemperature it's lower than minbodytemp
 
-	//Atmos effect - Yes, you can make creatures that require plasma or co2 to survive. N2O is a trace gas and handled separately, hence why it isn't here. It'd be hard to add it. Hard and me don't mix (Yes, yes make all the dick jokes you want with that.) - Errorage
+	//Atmos effect - Yes, you can make creatures that require plasma or co2 to survive. Fuck Errorage's pussy shit, N2O is here as well.
 	var/min_oxy = 5
 	var/max_oxy = 0					//Leaving something at 0 means it's off - has no maximum
 	var/min_tox = 0
@@ -44,6 +44,8 @@
 	var/max_co2 = 5
 	var/min_n2 = 0
 	var/max_n2 = 0
+	var/min_n2o = 0
+	var/max_n2o = 0
 	var/unsuitable_atoms_damage = 2	//This damage is taken when atmos doesn't fit all the requirements above
 
 
@@ -190,6 +192,14 @@
 
 			if(max_co2)
 				if(Environment.carbon_dioxide > max_co2)
+					atmos_suitable = 0
+
+			if(min_n2o)
+				if(Environment.nitrous_oxide < min_n2o)
+					atmos_suitable = 0
+
+			if(max_n2o)
+				if(Environment.nitrous_oxide > max_n2o)
 					atmos_suitable = 0
 
 	//Atmos effect
