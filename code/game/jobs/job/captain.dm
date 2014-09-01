@@ -89,6 +89,8 @@
 		//H.equip_or_collect(new /obj/item/device/pda/heads/hop(H), slot_belt)
 		if(H.backbag == 1)
 			H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H), slot_r_hand)
+			H.equip_or_collect(new /obj/item/weapon/storage/box/PDAs(H), slot_r_hand)
 		else
 			H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H.back), slot_in_backpack)
+			H.equip_or_collect(new /obj/item/weapon/storage/box/PDAs(H.back), slot_in_backpack)
 		return 1
