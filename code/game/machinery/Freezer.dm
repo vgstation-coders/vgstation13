@@ -1,9 +1,11 @@
 /obj/machinery/atmospherics/unary/cold_sink/freezer
-	name = "Freezer"
+	name = "\improper Freezer"
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
 	density = 1
 	var/opened = 0
+	idle_power_usage = 50
+	active_power_usage = 500
 
 	anchored = 1.0
 
@@ -55,17 +57,14 @@
 	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 		if(istype(W, /obj/item/weapon/wrench))
 			if(src.on)
-				user << "You have to turn off the [src] first!"
+				user << "<span class='warning'>Turn [src] off first!</span>"
 				return
 			if(anchored)
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				user << "You begin to unfasten the [src]..."
-				if (do_after(user, 40))
+				user.visible_message("<span class='warning'>[user] begins to unfasten [src]!", "<span class='notice'>You begin to unfasten [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
+				if (do_after(user, 50))
 					verbs += rotate_verbs
-					user.visible_message( \
-						"[user] unfastens \the [src].", \
-						"\blue You have unfastened \the [src]. Now it can be pulled somewhere else.", \
-						"You hear ratchet.")
+					user.visible_message("<span class='warning'>[user] unfastens [src]!", "<span class='notice'>You unfasten [src]. It can now be pulled somewhere else.</span>")
 					src.anchored = 0
 
 					// From Destroy()
@@ -76,13 +75,10 @@
 					node = null
 			else
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				user << "You begin to fasten [src]."
+				user.visible_message("<span class='warning'>[user] begins to fasten [src]!", "<span class='notice'>You begin to fasten [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
 				if(do_after(user, 40))
 					verbs -= rotate_verbs
-					user.visible_message( \
-						"[user] fastens \the [src].", \
-						"\blue You have fastened \the [src]. Now it can be pulled somewhere else.", \
-						"You hear ratchet.")
+					user.visible_message("<span class='warning'>[user] fastens [src]!", "<span class='notice'>You fasten [src].</span>")
 					src.anchored = 1
 
 					// Connect to network
@@ -95,27 +91,27 @@
 			return 1
 		if(istype(W, /obj/item/weapon/screwdriver))
 			if(anchored)
-				user << "You have to unanchor the [src] first!"
+				user << "<span class='warning'>You need to unanchor [src] first!</span>"
 				return
 			if(src.on)
-				user << "You have to turn off the [src]!"
+				user << "<span class='warning'>Turn [src] off first!</span>" //Okay then, better safe than sorry ?
 				return
-			if(!opened)
+			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			if (!opened)
+				user.visible_message("<span class='warning'>[user] opens [src]'s maintenance hatch!</span>", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
 				src.opened = 1
-				//src.icon_state = "freezer_t"
-				user << "You open the maintenance hatch of [src]."
 			else
+				user.visible_message("<span class='warning'>[user] closes [src]'s maintenance hatch!</span>", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
 				src.opened = 0
-				//src.icon_state = "freezer"
-				user << "You close the maintenance hatch of [src]."
 			return 1
 		if(opened)
 			if(src.on || anchored)
 				return
 			if(istype(W, /obj/item/weapon/crowbar))
-				user << "You begin to remove the circuits from the [src]."
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				if(do_after(user, 50))
+				user.visible_message("<span class='warning'>[user] begins to remove the circuits from [src]!</span>", "<span class='notice'>You begin to remove the circuits from [src].</span>")
+				if(do_after(user,50))
+					user.visible_message("<span class='warning'>[user] removes the circuits from [src]!</span>", "<span class='notice'>You remove the circuits from [src].</span>")
 					var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
 					M.state = 2
 					M.icon_state = "box_1"
@@ -178,7 +174,7 @@
 	set src in oview(1)
 
 	if (src.anchored || usr:stat)
-		usr << "It is fastened to the floor!"
+		usr << "<span class='warning'>[src] is fastened to the floor!</span>"
 		return 0
 	src.dir = turn(src.dir, 270)
 	return 1
@@ -189,18 +185,20 @@
 	set src in oview(1)
 
 	if (src.anchored || usr:stat)
-		usr << "It is fastened to the floor!"
+		usr << "<span class='warning'>[src] is fastened to the floor!</span>"
 		return 0
 	src.dir = turn(src.dir, 90)
 	return 1
 
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater
-	name = "Heater"
+	name = "\improper Heater"
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
 	density = 1
 	var/opened = 0
+	idle_power_usage = 50
+	active_power_usage = 500
 
 	anchored = 1.0
 
@@ -252,17 +250,14 @@
 	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 		if(istype(W, /obj/item/weapon/wrench))
 			if(src.on)
-				user << "You have to turn off the [src] first!"
+				user << "<span class='warning'>Turn [src] off first!</span>"
 				return
 			if(anchored)
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				user << "You begin to unfasten the [src]..."
-				if (do_after(user, 40))
+				user.visible_message("<span class='warning'>[user] begins to unfasten [src]!", "<span class='notice'>You begin to unfasten [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
+				if (do_after(user, 50))
 					verbs += rotate_verbs
-					user.visible_message( \
-						"[user] unfastens \the [src].", \
-						"\blue You have unfastened \the [src]. Now it can be pulled somewhere else.", \
-						"You hear ratchet.")
+					user.visible_message("<span class='warning'>[user] unfastens [src]!", "<span class='notice'>You unfasten [src]. It can now be pulled somewhere else.</span>")
 					src.anchored = 0
 
 					// From Destroy()
@@ -273,13 +268,10 @@
 					node = null
 			else
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				user << "You begin to fasten [src]."
+				user.visible_message("<span class='warning'>[user] begins to fasten [src]!", "<span class='notice'>You begin to fasten [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
 				if(do_after(user, 40))
 					verbs -= rotate_verbs
-					user.visible_message( \
-						"[user] fastens \the [src].", \
-						"\blue You have fastened \the [src]. Now it can be pulled somewhere else.", \
-						"You hear ratchet.")
+					user.visible_message("<span class='warning'>[user] fastens [src]!", "<span class='notice'>You fasten [src].</span>")
 					src.anchored = 1
 
 					// Connect to network
@@ -292,27 +284,27 @@
 			return 1
 		if(istype(W, /obj/item/weapon/screwdriver))
 			if(anchored)
-				user << "You have to unanchor the [src] first!"
+				user << "<span class='warning'>You need to unanchor [src] first!</span>"
 				return
 			if(src.on)
-				user << "You have to turn off the [src]!"
+				user << "<span class='warning'>Turn [src] off first!</span>" //Okay then, better safe than sorry ?
 				return
-			if(!opened)
+			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			if (!opened)
+				user.visible_message("<span class='warning'>[user] opens [src]'s maintenance hatch!</span>", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
 				src.opened = 1
-				//src.icon_state = "freezer_t"
-				user << "You open the maintenance hatch of [src]."
 			else
+				user.visible_message("<span class='warning'>[user] closes [src]'s maintenance hatch!</span>", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
 				src.opened = 0
-				//src.icon_state = "freezer"
-				user << "You close the maintenance hatch of [src]."
 			return 1
 		if(opened)
 			if(src.on || anchored)
 				return
 			if(istype(W, /obj/item/weapon/crowbar))
-				user << "You begin to remove the circuits from the [src]."
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				if(do_after(user, 50))
+				user.visible_message("<span class='warning'>[user] begins to remove the circuits from [src]!</span>", "<span class='notice'>You begin to remove the circuits from [src].</span>")
+				if(do_after(user,50))
+					user.visible_message("<span class='warning'>[user] removes the circuits from [src]!</span>", "<span class='notice'>You remove the circuits from [src].</span>")
 					var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
 					M.state = 2
 					M.icon_state = "box_1"
@@ -373,7 +365,7 @@
 	set src in oview(1)
 
 	if (src.anchored || usr:stat)
-		usr << "It is fastened to the floor!"
+		usr << "<span class='warning'>[src] is fastened to the floor!</span>"
 		return 0
 	src.dir = turn(src.dir, 270)
 	return 1
@@ -384,7 +376,7 @@
 	set src in oview(1)
 
 	if (src.anchored || usr:stat)
-		usr << "It is fastened to the floor!"
+		usr << "<span class='warning'>[src] is fastened to the floor!</span>"
 		return 0
 	src.dir = turn(src.dir, 90)
 	return 1

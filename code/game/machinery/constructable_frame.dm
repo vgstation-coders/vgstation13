@@ -1,7 +1,7 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
 /obj/machinery/constructable_frame //Made into a seperate type to make future revisions easier.
-	name = "machine frame"
+	name = "\improper machine frame"
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "box_0"
 	density = 1
@@ -77,7 +77,7 @@
 
 	attackby(obj/item/P as obj, mob/user as mob)
 		if(P.crit_fail)
-			user << "\red This part is faulty, you cannot add this to the machine!"
+			user << "<span class='warning'>This part is faulty, you cannot add this to [src]!</span>"
 			return
 		switch(state)
 			if(1)
@@ -85,31 +85,33 @@
 					var/obj/item/weapon/cable_coil/C = P
 					if(C.amount >= 5)
 						playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-						user << "\blue You start to add cables to the frame."
-						if(do_after(user, 20))
+						user.visible_message("<span class='warning'>[user] starts to add cables to [src]!", "<span class='notice'>You start to add cables to [src].</span>")
+						if(do_after(user, 50))
 							if(C && C.amount >= 5) // Check again
 								C.use(5)
-								user << "\blue You add cables to the frame."
+								user.visible_message("<span class='warning'>[user] adds cables to [src]!", "<span class='notice'>You add cables to [src].</span>")
 								state = 2
 								icon_state = "box_1"
 				else if(istype(P, /obj/item/stack/sheet/glass))
 					var/obj/item/stack/sheet/glass/G=P
 					if(G.amount<1)
-						user << "\red How...?"
+						user << "<span class='warning'>How...?</span>"
 						return
-					G.use(1)
-					user << "\blue You add the glass to the frame."
+					user.visible_message("<span class='warning'>[user] starts adding [G] to [src]!", "<span class='notice'>You start adding [G] to [src].</span>")
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-					new /obj/structure/displaycase_frame(src.loc)
-					del(src)
-					return
+					if(do_after(user, 50))
+						G.use(1)
+						user.visible_message("<span class='warning'>[user] adds [G] to [src]!", "<span class='notice'>You add [G] to [src].</span>")
+						new /obj/structure/displaycase_frame(src.loc)
+						del(src)
+						return
 				else if(istype(P, /obj/item/stack/rods))
 					var/obj/item/stack/rods/R=P
 					if(R.amount<10)
-						user << "\red You need 10 rods to assemble a pod frame."
+						user << "<span class='warning'>You need 10 [R] to assemble a pod frame.</span>"
 						return
 					if(!find_square())
-						user << "\red You cannot assemble a pod frame without a 2x2 square of machine frames."
+						user << "<span class='warning'>You cannot assemble a pod frame without a 2x2 square of machine frames.</span>"
 						return
 
 					R.use(10)
@@ -127,70 +129,80 @@
 						if(4)
 							T=get_step(T,SOUTHWEST)
 
-					new /obj/structure/spacepod_frame(T)
-					user << "\blue You assemble the pod frame."
+					user.visible_message("<span class='warning'>[user] starts assembling a pod frame!", "<span class='notice'>You start assembling a pod frame.</span>")
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-					qdel(src)
+					if(do_after(user,50))
+						user.visible_message("<span class='warning'>[user] assembles a pod frame!", "<span class='notice'>You assemble a pod frame.</span>")
+						new /obj/structure/spacepod_frame(T)
+						qdel(src)
 					return
 				else
 					if(istype(P, /obj/item/weapon/wrench))
 						playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
-						user << "\blue You dismantle the frame"
-						new /obj/item/stack/sheet/metal(src.loc, 5)
-						del(src)
+						user.visible_message("<span class='warning'>[user] starts dismantling the pod frame!", "<span class='notice'>You start dismantling the pod frame.</span>", "<span class='notice'>You hear a ratchet.</span>")
+						if(do_after(user,50))
+							user.visible_message("<span class='warning'>[user] dismantles the pod frame!", "<span class='notice'>You dismantle the pod frame.</span>")
+							new /obj/item/stack/sheet/metal(src.loc, 5)
+							del(src)
 			if(2)
 				if(istype(P, /obj/item/weapon/circuitboard))
 					var/obj/item/weapon/circuitboard/B = P
 					if(B.board_type == "machine")
 						playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-						user << "\blue You add the circuit board to the frame."
-						circuit = P
-						user.drop_item()
-						P.loc = src
-						icon_state = "box_2"
-						state = 3
-						components = list()
-						req_components = circuit.req_components.Copy()
-						for(var/A in circuit.req_components)
-							req_components[A] = circuit.req_components[A]
-						req_component_names = circuit.req_components.Copy()
-						for(var/A in req_components)
-							var/cp = text2path(A)
-							var/obj/ct = new cp() // have to quickly instantiate it get name
-							req_component_names[A] = ct.name
-							del(ct)
-						if(circuit.frame_desc)
-							desc = circuit.frame_desc
-						else
-							update_desc()
-						user << desc
+						user.visible_message("<span class='warning'>[user] starts adding [B] to [src]!", "<span class='notice'>You start adding [B] to [src].</span>")
+						if(do_after(user,30))
+							user.visible_message("<span class='warning'>[user] adds [B] to [src]!", "<span class='notice'>You add [B] to [src].</span>")
+							circuit = P
+							user.drop_item()
+							P.loc = src
+							icon_state = "box_2"
+							state = 3
+							components = list()
+							req_components = circuit.req_components.Copy()
+							for(var/A in circuit.req_components)
+								req_components[A] = circuit.req_components[A]
+							req_component_names = circuit.req_components.Copy()
+							for(var/A in req_components)
+								var/cp = text2path(A)
+								var/obj/ct = new cp() // have to quickly instantiate it get name
+								req_component_names[A] = ct.name
+								del(ct)
+							if(circuit.frame_desc)
+								desc = circuit.frame_desc
+							else
+								update_desc()
+							user << desc
 					else
-						user << "\red This frame does not accept circuit boards of this type!"
+						user << "<span class='warning'>[src] does not accept circuit boards of this type!</span>"
 				else
 					if(istype(P, /obj/item/weapon/wirecutters))
 						playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
-						user << "\blue You remove the cables."
-						state = 1
-						icon_state = "box_0"
-						var/obj/item/weapon/cable_coil/A = new /obj/item/weapon/cable_coil( src.loc )
-						A.amount = 5
+						user.visible_message("<span class='warning'>[user] starts removing the cables from [src]!", "<span class='notice'>You start removing the cables from [src].</span>")
+						if(do_after(user,30))
+							user.visible_message("<span class='warning'>[user] removes the cables from [src]!", "<span class='notice'>You remove the cables from [src].</span>")
+							state = 1
+							icon_state = "box_0"
+							var/obj/item/weapon/cable_coil/A = new /obj/item/weapon/cable_coil( src.loc )
+							A.amount = 5
 
 			if(3)
 				if(istype(P, /obj/item/weapon/crowbar))
 					playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-					state = 2
-					circuit.loc = src.loc
-					circuit = null
-					if(components.len == 0)
-						user << "\blue You remove the circuit board."
-					else
-						user << "\blue You remove the circuit board and other components."
-						for(var/obj/item/weapon/W in components)
-							W.loc = src.loc
-					desc = initial(desc)
-					req_components = null
-					components = null
-					icon_state = "box_1"
+					user.visible_message("<span class='warning'>[user] starts removing the circuit board from [src]!", "<span class='notice'>You start removing the circuit board from [src].</span>")
+					if(do_after(user,30))
+						state = 2
+						circuit.loc = src.loc
+						circuit = null
+						if(components.len == 0)
+							user.visible_message("<span class='warning'>[user] removes the circuit board from [src]!", "<span class='notice'>You remove the circuit board from [src].</span>")
+						else
+							user.visible_message("<span class='warning'>[user] removes the circuit board from [src] along with other components!", "<span class='notice'>You remove the circuit board from [src] along with other components.</span>")
+							for(var/obj/item/weapon/W in components)
+								W.loc = src.loc
+						desc = initial(desc)
+						req_components = null
+						components = null
+						icon_state = "box_1"
 				else
 					if(istype(P, /obj/item/weapon/screwdriver))
 						var/component_check = 1
@@ -200,22 +212,27 @@
 								break
 						if(component_check)
 							playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
-							for(var/obj/O in new_machine.component_parts)
-								del(O)
-							new_machine.component_parts = list()
-							for(var/obj/O in src)
-								if(circuit.contain_parts) // things like disposal don't want their parts in them
-									O.loc = components_in_use
+							user.visible_message("<span class='warning'>[user] starts putting [src] together!", "<span class='notice'>You start putting [src] together.</span>")
+							if(do_after(user,30))
+								user.visible_message("<span class='warning'>[user] finishes putting [src] together!", "<span class='notice'>You finish putting [src] together!.</span>")
+								var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
+								for(var/obj/O in new_machine.component_parts)
+									del(O)
+								new_machine.component_parts = list()
+								for(var/obj/O in src)
+									if(circuit.contain_parts) // things like disposal don't want their parts in them
+										O.loc = components_in_use
+									else
+										O.loc = null
+									new_machine.component_parts += O
+								if(circuit.contain_parts)
+									circuit.loc = components_in_use
 								else
-									O.loc = null
-								new_machine.component_parts += O
-							if(circuit.contain_parts)
-								circuit.loc = components_in_use
-							else
-								circuit.loc = null
-							new_machine.RefreshParts()
-							del(src)
+									circuit.loc = null
+								new_machine.RefreshParts()
+								del(src)
+						else
+							user << "<span class='warning'>[src] lacks needed components.</span>"
 					else
 						if(istype(P, /obj/item/weapon)||istype(P, /obj/item/stack))
 							for(var/I in req_components)
@@ -234,7 +251,7 @@
 											update_desc()
 											break
 										else
-											user << "\red You do not have enough [P]!"
+											user << "<span class='warning'>You do not have enough cable!</span>"
 									if(istype(P, /obj/item/stack/rods))
 										var/obj/item/stack/rods/R = P
 										if(R.amount >= req_components[I])
@@ -248,16 +265,17 @@
 											update_desc()
 											break
 										else
-											user << "\red You do not have enough [P]!"
+											user << "<span class='warning'>You do not have enough rods!</span>"
 									user.drop_item()
 									P.loc = src
 									components += P
 									req_components[I]--
 									update_desc()
+									user.visible_message("<span class='warning'>[user] adds [P] to [src]!", "<span class='notice'>You add [P] to [src].</span>")
 									break
 							user << desc
 							if(P && P.loc != src && !istype(P, /obj/item/weapon/cable_coil))
-								user << "\red You cannot add that component to the machine!"
+								user << "<span class='warning'>You cannot add that component to the machine!</span>"
 
 
 //Machine Frame Circuit Boards

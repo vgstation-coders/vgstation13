@@ -1,12 +1,16 @@
 var/list/doppler_arrays = list()
 
+//What is this doing in the machinery folder ?
 /obj/machinery/computer/bhangmeter
-	name = "bhangmeter"
+	name = "\improper bhangmeter"
 	desc = "Ancient technology used to measure explosions of all shapes and sizes."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "forensic"
 	circuit = "/obj/item/weapon/circuitboard/bhangmeter"
+	idle_power_usage = 100
 	var/list/bangs = list()
+
+	l_color = "#B40000"
 
 /obj/machinery/computer/bhangmeter/New()
 	..()
@@ -31,6 +35,8 @@ var/list/doppler_arrays = list()
 	interact(user)
 
 /obj/machinery/computer/bhangmeter/interact(mob/user as mob)
+	if(stat & (BROKEN|NOPOWER))
+		return //Really shouldn't be needed, but here goes
 	var/listing={"
 <html>
 	<head>

@@ -7,7 +7,7 @@ var/req_console_information = list()
 var/list/obj/machinery/requests_console/allConsoles = list()
 
 /obj/machinery/requests_console
-	name = "Requests Console"
+	name = "\improper Requests Console" //Redundant, see below
 	desc = "A console intended to send requests to diferent departments on the station."
 	anchored = 1
 	icon = 'icons/obj/terminals.dmi'
@@ -69,7 +69,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			icon_state = "req_comp0"
 
 /obj/machinery/requests_console/New()
-	name = "[department] Requests Console"
+	name = "\improper [department] Requests Console"
 	allConsoles.Add(src)
 	//req_console_departments += department
 	switch(departmentType)
@@ -283,8 +283,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 									Console.icon_state = "req_comp2"
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/twobeep.ogg', 50, 1)
-									for (var/mob/O in hearers(5, Console.loc))
-										O.show_message(text("\icon[Console] *The Requests Console beeps: 'PRIORITY Alert in [department]'"))
+									Console.visible_message("<span class='warning'>\icon[Console] [src] beeps: \"PRIORITY Alert in [department]!\"</span>")
 								Console.messages += "<B><FONT color='red'>High Priority message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[sending]"
 
 		//					if("3")		//Not implemanted, but will be 		//Removed as it doesn't look like anybody intends on implimenting it ~Carn
@@ -303,17 +302,14 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 									Console.icon_state = "req_comp1"
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/twobeep.ogg', 50, 1)
-									for (var/mob/O in hearers(4, Console.loc))
-										O.show_message(text("\icon[Console] *The Requests Console beeps: 'Message from [department]'"))
+									Console.visible_message("<span class='notice'>\icon[Console] [src] beeps: \"Message from [department].\"</span>")
 								Console.messages += "<B>Message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[message]"
 
 						screen = 6
 						Console.luminosity = 2
 				messages += "<B>Message sent to [dpt]</B><BR>[message]"
 			else
-				for (var/mob/O in hearers(4, src.loc))
-					O.show_message(text("\icon[src] *The Requests Console beeps: 'NOTICE: No server detected!'"))
-
+				visible_message("<span class='notice'>\icon[src] [src] beeps: \"NOTICE: No server detected!\"</span>")
 
 	//Handle screen switching
 	switch(text2num(href_list["setScreen"]))
@@ -358,27 +354,6 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 					//err... hacking code, which has no reason for existing... but anyway... it's supposed to unlock priority 3 messanging on that console (EXTREME priority...) the code for that actually exists.
 /obj/machinery/requests_console/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
-	/*
-	if (istype(O, /obj/item/weapon/crowbar))
-		if(open)
-			open = 0
-			icon_state="req_comp0"
-		else
-			open = 1
-			if(hackState == 0)
-				icon_state="req_comp_open"
-			else if(hackState == 1)
-				icon_state="req_comp_rewired"
-	if (istype(O, /obj/item/weapon/screwdriver))
-		if(open)
-			if(hackState == 0)
-				hackState = 1
-				icon_state="req_comp_rewired"
-			else if(hackState == 1)
-				hackState = 0
-				icon_state="req_comp_open"
-		else
-			user << "You can't do much with that."*/
 
 	if (istype(O, /obj/item/weapon/card/id))
 		if(screen == 9)
@@ -391,7 +366,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				announceAuth = 1
 			else
 				announceAuth = 0
-				user << "\red You are not authorized to send announcements."
+				user << "<span class='warning'>You are not authorized to send announcements.</span>"
 			updateUsrDialog()
 	if (istype(O, /obj/item/weapon/stamp))
 		if(screen == 9)

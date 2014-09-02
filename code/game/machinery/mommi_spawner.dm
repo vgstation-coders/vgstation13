@@ -1,6 +1,6 @@
 /obj/machinery/mommi_spawner
-	name = "MoMMI Fabricator"
-	desc = "A large pad sunk into the ground."
+	name = "\improper MoMMI Fabricator"
+	desc = "An extremely complicated machine that pulls functional MoMMIs from the reaches of the etheral planes."
 	icon = 'icons/obj/robotics.dmi'
 	icon_state = "mommispawner-idle"
 	density = 1
@@ -10,9 +10,9 @@
 	var/const/metalPerMoMMI=10
 	var/const/metalPerTick=1
 	use_power = 1
-	idle_power_usage = 20
-	active_power_usage = 5000
-	var/recharge_time=600 // 60s
+	idle_power_usage = 50
+	active_power_usage = 1000
+	var/recharge_time = 600 // 60s
 
 /obj/machinery/mommi_spawner/power_change()
 	if (powered())
@@ -33,37 +33,15 @@
 
 /obj/machinery/mommi_spawner/attack_ghost(var/mob/dead/observer/user as mob)
 	if(building)
-		user << "\red \The [src] is busy building something already."
+		user << "<span class='warning'>[src] is busy.</span>"
 		return 1
-	/*
-	if(!mmi.brainmob)
-		user << "\red \The [mmi] appears to be devoid of any soul."
-		return 1
-	if(!mmi.brainmob.key)
-		var/ghost_can_reenter = 0
-		if(mmi.brainmob.mind)
-			for(var/mob/dead/observer/G in player_list)
-				if(G.can_reenter_corpse && G.mind == mmi.brainmob.mind)
-					ghost_can_reenter = 1
-					break
-		if(!ghost_can_reenter)
-			user << "<span class='notice'>\The [src] indicates that their mind is completely unresponsive; there's no point.</span>"
-			return TRUE
 
-	if(mmi.brainmob.stat == DEAD)
-		user << "\red Yeah, good idea. Give something deader than the pizza in your fridge legs.  Mom would be so proud."
-		return TRUE
-
-	if(mmi.brainmob.mind in ticker.mode.head_revolutionaries)
-		user << "\red \The [src]'s firmware lets out a shrill sound, and flashes 'Abnormal Memory Engram'. It refuses to accept \the [mmi]."
-		return TRUE
-	*/
 	if(jobban_isbanned(user, "MoMMI"))
-		user << "\red \The [src] lets out an annoyed buzz."
+		user << "<span class='warning'>[src] lets out an annoyed buzz.</span>"
 		return TRUE
 
 	if(metal < metalPerMoMMI)
-		user << "\red \The [src] doesn't have enough metal to complete this task."
+		user << "<span class='warning'>[src] doesn't have enough metal to complete this task.</span>"
 		return 1
 
 	if(alert(src, "Do you wish to be turned into a MoMMI at this position?", "Confirm", "Yes", "No") != "Yes") return
@@ -77,10 +55,10 @@
 	if(istype(O,/obj/item/device/mmi))
 		var/obj/item/device/mmi/mmi = O
 		if(building)
-			user << "\red \The [src] is busy building something already."
+			user << "<span class='warning'>[src] is busy.</span>"
 			return 1
 		if(!mmi.brainmob)
-			user << "\red \The [mmi] appears to be devoid of any soul."
+			user << "<span class='warning'>[mmi] appears to be devoid of any soul.</span>"
 			return 1
 		if(!mmi.brainmob.key)
 			var/ghost_can_reenter = 0
@@ -90,23 +68,23 @@
 						ghost_can_reenter = 1
 						break
 			if(!ghost_can_reenter)
-				user << "<span class='notice'>\The [src] indicates that their mind is completely unresponsive; there's no point.</span>"
+				user << "<span class='notice'>[src] indicates that their mind is completely unresponsive; there's no point.</span>"
 				return TRUE
 
 		if(mmi.brainmob.stat == DEAD)
-			user << "\red Yeah, good idea. Give something deader than the pizza in your fridge legs.  Mom would be so proud."
+			user << "<span class='warning'>Yeah, good idea. Give something deader than the pizza in your fridge legs.  Mom would be so proud.</span>"
 			return TRUE
 
 		if(mmi.brainmob.mind in ticker.mode.head_revolutionaries)
-			user << "\red \The [src]'s firmware lets out a shrill sound, and flashes 'Abnormal Memory Engram'. It refuses to accept \the [mmi]."
+			user << "<span class='warning'>[src]'s firmware lets out a shrill sound, and flashes 'Abnormal Memory Engram'. It refuses to accept [mmi].</span>"
 			return TRUE
 
 		if(jobban_isbanned(mmi.brainmob, "Cyborg"))
-			user << "\red \The [src] lets out an annoyed buzz and rejects \the [mmi]."
+			user << "<span class='warning'>[src] lets out an annoyed buzz and rejects [mmi].</span>"
 			return TRUE
 
 		if(metal < metalPerMoMMI)
-			user << "\red \The [src] doesn't have enough metal to complete this task."
+			user << "<span class='warning'>[src] doesn't have enough metal to complete this task.</span>"
 			return TRUE
 
 		building=1
@@ -124,7 +102,6 @@
 	if(!M)	return
 
 	M.invisibility = 0
-	//M.custom_name = created_name
 	M.Namepick()
 	M.updatename()
 
@@ -142,9 +119,6 @@
 	if(M.z==4) // Derelict Z-level?
 		M.add_ion_law("The Derelict is your station.  Do not leave the Derelict.")
 		M.locked_to_z=4
-
-	//M.cell = locate(/obj/item/weapon/cell) in contents
-	//M.cell.loc = M
 	user.loc = M//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
 
 	M.mmi = new /obj/item/device/mmi(M)

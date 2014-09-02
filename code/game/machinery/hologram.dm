@@ -31,7 +31,7 @@ var/const/HOLOPAD_MODE = 0
 
 /obj/machinery/hologram/holopad
 	name = "\improper AI holopad"
-	desc = "It's a floor-mounted device for projecting holographic images. It is activated remotely."
+	desc = "A floor-mounted device for projecting holographic images. It is activated remotely."
 	icon_state = "holopad0"
 	var/mob/living/silicon/ai/master//Which AI, if any, is controlling the object? Only one AI may control a hologram at any time.
 	var/last_request = 0 //to prevent request spam. ~Carn
@@ -43,7 +43,7 @@ var/const/HOLOPAD_MODE = 0
 	if(alert(user,"Would you like to request an AI's presence?",,"Yes","No") == "Yes")
 		if(last_request + 200 < world.time) //don't spam the AI with requests you jerk!
 			last_request = world.time
-			user << "<span class='notice'>You request an AI's presence.</span>"
+			user.visible_message("<span class='warning'>[user] requests an AI's presence!", "<span class='notice'>You request an AI's presence.</span>")
 			var/area/area = get_area(src)
 			for(var/mob/living/silicon/ai/AI in living_mob_list)
 				if(!AI.client)	continue
@@ -69,11 +69,11 @@ var/const/HOLOPAD_MODE = 0
 	if(!(stat & NOPOWER) && user.eyeobj.loc == src.loc)//If the projector has power and client eye is on it.
 		if(!hologram)//If there is not already a hologram.
 			create_holo(user)//Create one.
-			src.visible_message("A holographic image of [user] flicks to life right before your eyes!")
+			src.visible_message("<span class='warning'>A holographic image of [user] flicks to life right before your eyes!</span>")
 		else
-			user << "\red ERROR: \black Image feed in progress."
+			user << "<span class='warning'>ERROR: Image feed in progress.</span>"
 	else
-		user << "\red ERROR: \black Unable to project hologram."
+		user << "<span class='warning'>ERROR: Unable to project hologram.</span>"
 	return
 
 /*This is the proc for special two-way communication between AI and holopad/people talking near holopad.
@@ -146,8 +146,8 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 /obj/machinery/hologram
 	anchored = 1
 	use_power = 1
-	idle_power_usage = 5
-	active_power_usage = 100
+	idle_power_usage = 50
+	active_power_usage = 250
 	var/obj/effect/overlay/hologram//The projection itself. If there is one, the instrument is on, off otherwise.
 
 /obj/machinery/hologram/power_change()

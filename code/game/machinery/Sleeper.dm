@@ -3,7 +3,7 @@
 /////////////////////////////////////////
 
 /obj/machinery/sleep_console
-	name = "Sleeper Console"
+	name = "\improper Sleeper Console"
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "sleeperconsole"
 	var/obj/machinery/sleeper/connected = null
@@ -125,7 +125,7 @@
 /////////////////////////////////////////
 
 /obj/machinery/sleeper
-	name = "Sleeper"
+	name = "\improper Sleeper"
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "sleeper_0"
 	density = 1
@@ -136,20 +136,19 @@
 	var/amounts = list(5, 10)
 
 	l_color = "#7BF9FF"
-	power_change()
-		..()
-		if(!(stat & (BROKEN|NOPOWER)) && occupant)
-			SetLuminosity(2)
-		else
-			SetLuminosity(0)
 
 /obj/machinery/sleeper/New()
 	..()
-	spawn( 5 )
+	spawn(5)
 		if(orient == "RIGHT")
 			icon_state = "sleeper_0-r"
 		return
 	return
+
+/obj/machinery/sleeper/power_change()
+	..()
+	if(stat & (BROKEN|NOPOWER))
+		SetLuminosity(0)
 
 /obj/machinery/sleeper/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
 	if(O.loc == user) //no you can't pull things out of your ass
@@ -169,7 +168,7 @@
 	if(!istype(user.loc, /turf) || !istype(O.loc, /turf)) // are you in a container/closet/pod/etc?
 		return
 	if(occupant)
-		user << "\blue <B>The sleeper is already occupied!</B>"
+		user << "<span class='notice'><B>[src] is already occupied!</B></span>"
 		return
 	if(isrobot(user))
 		if(!istype(user:module, /obj/item/weapon/robot_module/medical))
@@ -179,23 +178,27 @@
 	if(!istype(L) || L.buckled)
 		return
 	if(L.abiotic())
-		user << "\blue <B>Subject cannot have abiotic items on.</B>"
+		user << "<span class='notice'>Subject cannot have abiotic items on.</span>"
 		return
 	for(var/mob/living/carbon/slime/M in range(1,L))
 		if(M.Victim == L)
-			usr << "[L.name] will not fit into the sleeper because they have a slime latched onto their head."
+			usr << "<span class='warning'>Subject will not fit into [src] because they have a slime latched onto their head.</span>"
 			return
 	if(L == user)
-		visible_message("[user] starts climbing into the sleeper.", 3)
+		user.visible_message("<span class='notice'>[user] starts climbing into [src]!</span>", "<span class='notice'>You start climbing into [src].</span>")
 	else
-		visible_message("[user] starts putting [L.name] into the sleeper.", 3)
+		user.visible_message("<span class='notice'>[user] starts putting [L] into [src]!</span>", "<span class='notice'>You start putting [L] into [src].</span>")
 
-	if(do_after(user, 20))
+	if(do_after(user, 30))
 		if(src.occupant)
-			user << "\blue <B>The sleeper is already occupied!</B>"
+			user << "<span class='notice'><B>The sleeper is already occupied!</B></span>"
 			return
 		if(!L) return
 
+		if(L == user)
+			usr.visible_message("<span class='warning'>[usr] climbs into [src]!</span>", "<span class='notice'>You climb into [src].</span>")
+		else
+			usr.visible_message("<span class='warning'>[usr] puts [L] into [src]!</span>", "<span class='notice'>You put [L] into [src].</span>")
 		if(L.client)
 			L.client.perspective = EYE_PERSPECTIVE
 			L.client.eye = src
@@ -204,12 +207,13 @@
 		src.icon_state = "sleeper_1"
 		if(orient == "RIGHT")
 			icon_state = "sleeper_1-r"
-		L << "\blue <b>You feel cool air surround you. You go numb as your senses turn inward.</b>"
+		L << "<span class='notice'><B>You feel cool air surround you. You go numb as your senses turn inward.</B></span>"
 		for(var/obj/OO in src)
 			OO.loc = src.loc
 		src.add_fingerprint(user)
 		if(user.pulling == L)
 			user.pulling = null
+		SetLuminosity(2)
 		return
 	return
 
@@ -235,19 +239,19 @@
 	if((!( istype(G, /obj/item/weapon/grab)) || !( ismob(G.affecting))))
 		return
 	if(src.occupant)
-		user << "\blue <B>The sleeper is already occupied!</B>"
+		user << "<span class='notice'><B>[src] is already occupied!</B></span>"
 		return
 
 	for(var/mob/living/carbon/slime/M in range(1,G.affecting))
 		if(M.Victim == G.affecting)
-			usr << "[G.affecting.name] will not fit into the sleeper because they have a slime latched onto their head."
+			usr << "<span class='warning'>[G.affecting.name] will not fit into the sleeper because they have a slime latched onto their head."
 			return
 
-	visible_message("[user] starts putting [G.affecting.name] into the sleeper.", 3)
+	user.visible_message("<span class='warning'>[user] starts putting [G.affecting] into [src]!</span>", "<span class='notice'>You start putting [G.affecting] into [src].</span>")
 
-	if(do_after(user, 20))
+	if(do_after(user, 30))
 		if(src.occupant)
-			user << "\blue <B>The sleeper is already occupied!</B>"
+			user << "<span class='notice'><B>[src] is already occupied!</B></span>"
 			return
 		if(!G || !G.affecting) return
 		var/mob/M = G.affecting
@@ -260,12 +264,15 @@
 		if(orient == "RIGHT")
 			icon_state = "sleeper_1-r"
 
-		M << "\blue <b>You feel cool air surround you. You go numb as your senses turn inward.</b>"
+		user.visible_message("<span class='warning'>[usr] puts [G.affecting] into [src]!</span>", "<span class='notice'>You put [G.affecting] into [src].</span>")
+		M << "<span class='notice'><b>You feel cool air surround you. You go numb as your senses turn inward.</b></span>"
 
 		for(var/obj/O in src)
 			O.loc = src.loc
 		src.add_fingerprint(user)
 		del(G)
+		if(!(stat & (BROKEN|NOPOWER)))
+			SetLuminosity(2)
 		return
 	return
 
@@ -332,6 +339,7 @@
 	src.occupant = null
 	if(orient == "RIGHT")
 		icon_state = "sleeper_0-r"
+	SetLuminosity(0)
 	return
 
 
@@ -339,9 +347,9 @@
 	if(src.occupant && src.occupant.reagents)
 		if(src.occupant.reagents.get_reagent_amount(chemical) + amount <= 20)
 			src.occupant.reagents.add_reagent(chemical, amount)
-			user << "Occupant now has [src.occupant.reagents.get_reagent_amount(chemical)] units of [available_chemicals[chemical]] in his/her bloodstream."
+			user << "<span class='notice'>Occupant now has [src.occupant.reagents.get_reagent_amount(chemical)] units of [available_chemicals[chemical]] in his/her bloodstream.</span>"
 			return
-	user << "There's no occupant in the sleeper or the subject has too many chemicals!"
+	user << "<span class='notice'>There's no occupant in [src] or the subject has too many chemicals!</span>"
 	return
 
 /obj/machinery/sleeper/proc/check(mob/living/user as mob)
@@ -354,7 +362,7 @@
 			if(1.0)
 				t1 = "Unconscious"
 			if(2.0)
-				t1 = "*dead*"
+				t1 = "*Dead*"
 			else
 		user << text("[]\t Health %: [] ([])", (src.occupant.health > 50 ? "\blue " : "\red "), src.occupant.health, t1)
 		user << text("[]\t -Core Temperature: []&deg;C ([]&deg;F)</FONT><BR>", (src.occupant.bodytemperature > 50 ? "<font color='blue'>" : "<font color='red'>"), src.occupant.bodytemperature-T0C, src.occupant.bodytemperature*1.8-459.67)
@@ -365,7 +373,7 @@
 		user << "\blue Expected time till occupant can safely awake: (note: If health is below 20% these times are inaccurate)"
 		user << text("\blue \t [] second\s (if around 1 or 2 the sleeper is keeping them asleep.)", src.occupant.paralysis / 5)
 	else
-		user << "\blue There is no one inside!"
+		user << "<span class='notice'>There is no one inside!</span>"
 	return
 
 
@@ -380,6 +388,8 @@
 	src.icon_state = "sleeper_0"
 	src.go_out()
 	add_fingerprint(usr)
+	usr.visible_message("<span class='notice'>[usr] leaves [src].</span>", "<span class='notice'>You leave [src].</span>")
+	SetLuminosity(0)
 	return
 
 
@@ -391,18 +401,18 @@
 		return
 
 	if(src.occupant)
-		usr << "\blue <B>The sleeper is already occupied!</B>"
+		usr << "<span class='notice'><B>[src] is already occupied!</B></span>"
 		return
 	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
 		return
 	for(var/mob/living/carbon/slime/M in range(1,usr))
 		if(M.Victim == usr)
-			usr << "You're too busy getting your life sucked out of you."
+			usr << "<span class='warning'>You are too busy getting the life sucked out of you!</span>"
 			return
-	visible_message("[usr] starts climbing into the sleeper.", 3)
-	if(do_after(usr, 20))
+	usr.visible_message("<span class='warning'>[usr] starts climbing into [src]!</span>", "<span class='notice'>You start climbing into [src].</span>")
+	if(do_after(usr, 30))
 		if(src.occupant)
-			usr << "\blue <B>The sleeper is already occupied!</B>"
+			usr << "<span class='notice'><B>[src] is already occupied!</B></span>"
 			return
 		usr.stop_pulling()
 		usr.client.perspective = EYE_PERSPECTIVE
@@ -416,5 +426,8 @@
 		for(var/obj/O in src)
 			del(O)
 		src.add_fingerprint(usr)
+		usr.visible_message("<span class='warning'>[usr] climbs into [src]!</span>", "<span class='notice'>You climb into [src].</span>")
+		if(!(stat & (BROKEN|NOPOWER)))
+			SetLuminosity(2)
 		return
 	return

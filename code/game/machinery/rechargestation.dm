@@ -1,5 +1,5 @@
 /obj/machinery/recharge_station
-	name = "cyborg recharging station"
+	name = "\improper cyborg recharging station"
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "borgcharger0"
 	density = 1
@@ -51,84 +51,52 @@
 		// Wrench to toggle anchor
 		if (istype(W, /obj/item/weapon/wrench))
 			if (occupant)
-				user << "\red You cannot unwrench this [src], it's occupado."
+				user << "<span class='warning'>You cannot unwrench [src], it's occupado.</span>"
 				return 1
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			if(anchored)
-				user << "\blue You begin to unfasten \the [src]..."
-				if (do_after(user, 40))
-					user.visible_message( \
-						"[user] unfastens \the [src].", \
-						"\blue You have unfastened \the [src].", \
-						"You hear a ratchet.")
+				user.visible_message("<span class='warning'>[user] begins to unfasten [src]!</span>", "<span class='notice'>You begin to unfasten [src].</span>", "<span class='notice'>You hear a ratchet</span>")
+				if (do_after(user, 50))
+					user.visible_message("<span class='warning'>[user] unfastens [src]!</span>", "<span class='notice'>You unfasten [src].</span>")
 					anchored=0
 			else
-				user << "\blue You begin to fasten \the [src]..."
-				if (do_after(user, 20))
-					user.visible_message( \
-						"[user] fastens \the [src].", \
-						"\blue You have fastened \the [src].", \
-						"You hear a ratchet.")
+				user.visible_message("<span class='warning'>[user] begins to fasten [src]!</span>", "<span class='notice'>You begin to fasten [src].</span>", "<span class='notice'>You hear a ratchet</span>")
+				if (do_after(user, 50))
+					user.visible_message("<span class='warning'>[user] fastens [src]!</span>", "<span class='notice'>You fasten [src].</span>")
 					anchored=1
 			src.build_icon()
 			return 1
-			/*// Weld to disassemble.
-		else if(istype(W, /obj/item/weapon/weldingtool))
-			if (occupant)
-				user << "\red You cannot disassemble this [src], it's occupado."
-				return 1
-			if (!anchored)
-				user << "\red \The [src] is too unstable to weld!  The anchoring bolts need to be tightened."
-				return 1
-			playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-			user << "\blue You begin to cut \the [src] into pieces..."
-			if (do_after(user, 40))
-				user.visible_message( \
-					"[user] disassembles \the [src].", \
-					"\blue You have disassembled \the [src].", \
-					"You hear welding.")
-				anchored=0
-				new /obj/item/weapon/circuitboard/recharge_station(src.loc)
-				var/obj/item/weapon/wire/wire = new (src.loc)
-				wire.amount=4
-				new /obj/item/weapon/stock_parts/manipulator(src.loc)
-				new /obj/item/weapon/stock_parts/manipulator(src.loc)
-				new /obj/item/weapon/stock_parts/matter_bin(src.loc)
-				new /obj/item/weapon/stock_parts/matter_bin(src.loc)
-				new /obj/item/stack/sheet/metal(src.loc,amount=5)
-				del(src)
-				return
-			src.build_icon()
-			return 1 */ //Inconsistent with other methods and unintuitive so I'm commenting this out
+
 		else if (istype(W, /obj/item/weapon/screwdriver))
+			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 			if (!opened)
+				user.visible_message("<span class='warning'>[user] opens [src]'s maintenance hatch!</span>", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
 				src.opened = 1
-				user << "You open the maintenance hatch of [src]."
-				//src.icon_state = "autolathe_t"
 			else
+				user.visible_message("<span class='warning'>[user] closes [src]'s maintenance hatch!</span>", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
 				src.opened = 0
-				user << "You close the maintenance hatch of [src]."
-				//src.icon_state = "autolathe"
-				return 1
+			return 1
 		else if(istype(W, /obj/item/weapon/crowbar))
 			if (occupant)
-				user << "\red You cannot disassemble this [src], it's occupado."
+				user << "<span class='warning'>You cannot disassemble [src], it's occupado.</span>"
 				return 1
 			if(anchored)
 				user << "You have to unanchor the [src] first!"
 				return
 			if (opened)
+				user.visible_message("<span class='warning'>[user] begins to remove the circuits from [src]!</span>", "<span class='notice'>You begin to remove the circuits from [src].</span>")
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-				M.state = 2
-				M.icon_state = "box_1"
-				for(var/obj/I in component_parts)
-					if(I.reliability != 100 && crit_fail)
-						I.crit_fail = 1
-					I.loc = src.loc
-				del(src)
-				return
-		return ..()
+				if(do_after(user,50))
+					user.visible_message("<span class='warning'>[user] removes the circuits from [src]!", "<span class='notice'>You remove the circuits from [src].</span>")
+					var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
+					M.state = 2
+					M.icon_state = "box_1"
+					for(var/obj/I in component_parts)
+						if(I.reliability != 100 && crit_fail)
+							I.crit_fail = 1
+						I.loc = src.loc
+					del(src)
+					return 1
 
 	process()
 		if(stat & (NOPOWER|BROKEN) || !anchored)
@@ -184,10 +152,8 @@
 						return
 
 		go_out()
-			if(!( src.occupant ))
+			if(!(src.occupant))
 				return
-			//for(var/obj/O in src)
-			//	O.loc = src.loc
 			if (src.occupant.client)
 				src.occupant.client.eye = src.occupant.client.mob
 				src.occupant.client.perspective = MOB_PERSPECTIVE
@@ -283,13 +249,13 @@
 				//Whoever had it so that a borg with a dead cell can't enter this thing should be shot. --NEO
 				return
 			if (!(istype(usr, /mob/living/silicon/)))
-				usr << "\blue <B>Only non-organics may enter the recharger!</B>"
+				usr << "<span class='notice'>Only non-organics may enter [src]!</span>"
 				return
 			if (src.occupant)
-				usr << "\blue <B>The cell is already occupied!</B>"
+				usr << "<span class='notice'>[src] is already occupied!</span>"
 				return
 			if (!usr:cell)
-				usr<<"\blue Without a powercell, you can't be recharged."
+				usr<<"<span class='notice'>Without a powercell, you can't be recharged.</span>"
 				//Make sure they actually HAVE a cell, now that they can get in while powerless. --NEO
 				return
 			usr.stop_pulling()
@@ -298,8 +264,6 @@
 				usr.client.eye = src
 			usr.loc = src
 			src.occupant = usr
-			/*for(var/obj/O in src)
-				O.loc = src.loc*/
 			src.add_fingerprint(usr)
 			build_icon()
 			src.use_power = 2

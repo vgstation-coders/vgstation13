@@ -4,7 +4,7 @@
 
 
 /obj/machinery/bot/medbot
-	name = "Medibot"
+	name = "\improper Medibot"
 	desc = "A little medical robot. He looks somewhat underwhelmed."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "medibot0"
@@ -36,10 +36,10 @@
 	var/treatment_fire = "tricordrazine"
 	var/treatment_tox = "tricordrazine"
 	var/treatment_virus = "spaceacillin"
-	var/shut_up = 0 //self explanatory :)
+	var/shut_up = 0 //self explanatory
 
 /obj/machinery/bot/medbot/mysterious
-	name = "Mysterious Medibot"
+	name = "\improper Mysterious Medibot"
 	desc = "International Medibot of mystery."
 	skin = "bezerk"
 	treatment_oxy = "dexalinp"
@@ -48,7 +48,7 @@
 	treatment_tox = "anti_toxin"
 
 /obj/item/weapon/firstaid_arm_assembly
-	name = "first aid/robot arm assembly"
+	name = "\improper first aid/robot arm assembly"
 	desc = "A first aid kit with a robot arm permanently grafted to it."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "firstaid_arm"
@@ -218,8 +218,7 @@
 	if(open && !locked)
 		if(user) user << "<span class='warning'>You short out [src]'s reagent synthesis circuits.</span>"
 		spawn(0)
-			for(var/mob/O in hearers(src, null))
-				O.show_message("\red <B>[src] buzzes oddly!</B>", 1)
+		visible_message("<span class='danger'>[src] buzzes oddly!</span>")
 		flick("medibot_spark", src)
 		src.patient = null
 		if(user) src.oldpatient = user
@@ -278,7 +277,7 @@
 						var/message = pick("Hey, you! Hold on, I'm coming.","Wait! I want to help!","You appear to be injured!")
 						src.speak(message)
 						src.last_newpatient_speak = world.time
-					src.visible_message("<b>[src]</b> points at [C.name]!")
+					src.visible_message("<span class='notice'><b>[src]</b> points at [C.name]!</span>")
 				break
 			else
 				continue
@@ -424,7 +423,7 @@
 		return
 	else
 		src.icon_state = "medibots"
-		visible_message("\red <B>[src] is trying to inject [src.patient]!</B>")
+		visible_message("<span class='danger'>[src] is trying to inject [src.patient]!</span>")
 		spawn(30)
 			if ((get_dist(src, src.patient) <= 1) && (src.on))
 				if((reagent_id == "internal_beaker") && (src.reagent_glass) && (src.reagent_glass.reagents.total_volume))
@@ -432,7 +431,7 @@
 					src.reagent_glass.reagents.reaction(src.patient, 2)
 				else
 					src.patient.reagents.add_reagent(reagent_id,src.injection_amount)
-				visible_message("\red <B>[src] injects [src.patient] with the syringe!</B>")
+				visible_message("<span class='danger'>[src] injects [src.patient] with the syringe!</span>")
 
 			src.icon_state = "medibot[src.on]"
 			src.currently_healing = 0
@@ -456,7 +455,7 @@
 
 /obj/machinery/bot/medbot/explode()
 	src.on = 0
-	visible_message("\red <B>[src] blows apart!</B>", 1)
+	visible_message("<span class='danger'>[src] blows apart!</span>")
 	var/turf/Tsec = get_turf(src)
 
 	new /obj/item/weapon/storage/firstaid(Tsec)
@@ -488,44 +487,6 @@
 		src.loc = M:loc
 		src.frustration = 0
 	return
-
-/* terrible
-/obj/machinery/bot/medbot/Bumped(atom/movable/M as mob|obj)
-	spawn(0)
-		if (M)
-			var/turf/T = get_turf(src)
-			M:loc = T
-*/
-
-/*
- *	Pathfinding procs, allow the medibot to path through doors it has access to.
- */
-
-//Pretty ugh
-/*
-/turf/proc/AdjacentTurfsAllowMedAccess()
-	var/L[] = new()
-	for(var/turf/t in oview(src,1))
-		if(!t.density)
-			if(!LinkBlocked(src, t) && !TurfBlockedNonWindowNonDoor(t,get_access("Medical Doctor")))
-				L.Add(t)
-	return L
-
-
-//It isn't blocked if we can open it, man.
-/proc/TurfBlockedNonWindowNonDoor(turf/loc, var/list/access)
-	for(var/obj/O in loc)
-		if(O.density && !istype(O, /obj/structure/window) && !istype(O, /obj/machinery/door))
-			return 1
-
-		if (O.density && (istype(O, /obj/machinery/door)) && (access.len))
-			var/obj/machinery/door/D = O
-			for(var/req in D.req_access)
-				if(!(req in access)) //doesn't have this access
-					return 1
-
-	return 0
-*/
 
 /*
  *	Medbot Assembly -- Can be made out of all three medkits.

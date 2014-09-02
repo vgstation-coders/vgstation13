@@ -5,7 +5,7 @@
 
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "navbeacon0-f"
-	name = "navigation beacon"
+	name = "\improper navigation beacon"
 	desc = "A radio beacon used for bot navigation."
 	level = 1		// underfloor
 	layer = 2.5
@@ -107,7 +107,7 @@
 		if(istype(I, /obj/item/weapon/screwdriver))
 			open = !open
 
-			user.visible_message("[user] [open ? "opens" : "closes"] the beacon's cover.", "You [open ? "open" : "close"] the beacon's cover.")
+			user.visible_message("<span class='warning'>[user] [open ? "opens" : "closes"] [src]'s cover.</span>", "<span class='notice'>You [open ? "open" : "close"] [src]'s cover.</span>")
 
 			updateicon()
 
@@ -115,12 +115,12 @@
 			if(open)
 				if (src.allowed(user))
 					src.locked = !src.locked
-					user << "Controls are now [src.locked ? "locked." : "unlocked."]"
+					user << "<span class='notice'>Controls are now [src.locked ? "locked." : "unlocked."]</span>"
 				else
-					user << "\red Access denied."
+					user << "<span class='warning'>Access Denied.</span>"
 				updateDialog()
 			else
-				user << "You must open the cover first!"
+				user << "<span class='notice'>Open the cover first!</span>"
 		return
 
 	attack_ai(var/mob/user)

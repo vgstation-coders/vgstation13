@@ -50,7 +50,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 
 /obj/machinery/newscaster
-	name = "newscaster"
+	name = "\improper Newscaster"
 	desc = "A standard Nanotrasen-licensed newsfeed handler for use in commercial space stations. All the news you absolutely have no use for, in one place!"
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "newscaster_normal"
@@ -103,7 +103,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 
 /obj/machinery/newscaster/security_unit                   //Security unit
-	name = "Security Newscaster"
+	name = "\improper Security Newscaster"
 	securityCaster = 1
 
 /obj/machinery/newscaster/New()         //Constructor, ho~
@@ -284,7 +284,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(6)
 				dat+="<B><FONT COLOR='maroon'>ERROR: Could not submit Feed story to Network.</B></FONT><HR><BR>"
 				if(src.channel_name=="")
-					dat+="<FONT COLOR='maroon'>•Invalid receiving channel name.</FONT><BR>"
+					dat+="<FONT COLOR='maroon'>•nvalid receiving channel name.</FONT><BR>"
 				if(src.scanned_user=="Unknown")
 					dat+="<FONT COLOR='maroon'>•Channel author unverified.</FONT><BR>"
 				if(src.msg == "" || src.msg == "\[REDACTED\]")
@@ -534,13 +534,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	if(..())
 		return
 	if(masterController && !isobserver(masterController) && get_dist(masterController,src)<=1 && usr!=masterController)
-		usr << "\red You must wait for [masterController] to finish and move away."
+		usr << "<span class='warning'>You must wait for [masterController] to finish and move away.</span>"
 		return
 	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon) || isobserver(usr)))
 		usr.set_machine(src)
 		if(href_list["set_channel_name"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"set a channel's name"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			src.channel_name = strip_html_simple(input(usr, "Provide a Feed Channel Name", "Network Channel Handler", ""))
 			while (findtext(src.channel_name," ") == 1)
@@ -550,7 +550,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["set_channel_lock"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"locked a channel"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			src.c_locked = !src.c_locked
 			src.updateUsrDialog()
@@ -558,7 +558,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["submit_new_channel"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"created a new channel"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			//var/list/existing_channels = list() //OBSOLETE
 			var/list/existing_authors = list()
@@ -592,7 +592,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["set_channel_receiving"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"tried to set the receiving channel"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			//var/list/datum/feed_channel/available_channels = list()
 			var/list/available_channels = list()
@@ -604,7 +604,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["set_new_message"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"set the message of a new feed story"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			if(isnull(src.msg))
 				src.msg = ""
@@ -615,14 +615,14 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["set_attachment"])
 			if(isobserver(usr))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			AttachPhoto(usr)
 			src.updateUsrDialog()
 
 		else if(href_list["submit_new_message"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"added a new story"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			if(src.msg =="" || src.msg=="\[REDACTED\]" || src.scanned_user == "Unknown" || src.channel_name == "" )
 				src.screen=6
@@ -645,27 +645,27 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["create_channel"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"created a channel"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			src.screen=2
 			src.updateUsrDialog()
 
 		else if(href_list["create_feed_story"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"created a feed story"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			src.screen=3
 			src.updateUsrDialog()
 
 		else if(href_list["menu_paper"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,""))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			src.screen=8
 			src.updateUsrDialog()
 		else if(href_list["print_paper"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"printed a paper"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			if(!src.paper_remaining)
 				src.screen=21
@@ -676,21 +676,21 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["menu_censor_story"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"censored a story"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			src.screen=10
 			src.updateUsrDialog()
 
 		else if(href_list["menu_censor_channel"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"censored a channel"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			src.screen=11
 			src.updateUsrDialog()
 
 		else if(href_list["menu_wanted"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,""))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			var/already_wanted = 0
 			if(news_network.wanted_issue)
@@ -704,7 +704,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["set_wanted_name"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"tried to set the name of a wanted person"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			src.channel_name = strip_html(input(usr, "Provide the name of the Wanted person", "Network Security Handler", ""))
 			while (findtext(src.channel_name," ") == 1)
@@ -713,7 +713,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["set_wanted_desc"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"tried to set the description of a wanted person"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			src.msg = strip_html(input(usr, "Provide the a description of the Wanted person and any other details you deem important", "Network Security Handler", ""))
 			while (findtext(src.msg," ") == 1)
@@ -722,7 +722,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["submit_wanted"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"submitted a wanted poster"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			var/input_param = text2num(href_list["submit_wanted"])
 			if(src.msg == "" || src.channel_name == "" || src.scanned_user == "Unknown")
@@ -772,7 +772,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			src.updateUsrDialog()
 		else if(href_list["censor_channel_author"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"tried to censor an author"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			var/datum/feed_channel/FC = locate(href_list["censor_channel_author"])
 			if(FC.is_admin_channel)
@@ -787,7 +787,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["censor_channel_story_author"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"tried to censor a story's author"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			var/datum/feed_message/MSG = locate(href_list["censor_channel_story_author"])
 			if(MSG.is_admin_message)
@@ -802,7 +802,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["censor_channel_story_body"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"tried to censor a story"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			var/datum/feed_message/MSG = locate(href_list["censor_channel_story_body"])
 			if(MSG.is_admin_message)
@@ -822,7 +822,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["pick_d_notice"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,""))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			var/datum/feed_channel/FC = locate(href_list["pick_d_notice"])
 			src.viewing_channel = FC
@@ -831,7 +831,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["toggle_d_notice"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"tried to set a D-notice"))
-				usr << "\red You can't do that."
+				usr << "<span class='warning'>You can't do that.</span>"
 				return
 			var/datum/feed_channel/FC = locate(href_list["toggle_d_notice"])
 			if(FC.is_admin_channel)
@@ -872,22 +872,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 /obj/machinery/newscaster/attackby(obj/item/I as obj, mob/user as mob)
 
-/*	if (istype(I, /obj/item/weapon/card/id) || istype(I, /obj/item/device/pda) ) //Name verification for channels or messages
-		if(src.screen == 4 || src.screen == 5)
-			if( istype(I, /obj/item/device/pda) )
-				var/obj/item/device/pda/P = I
-				if(P.id)
-					src.scanned_user = "[P.id.registered_name] ([P.id.assignment])"
-					src.screen=2
-			else
-				var/obj/item/weapon/card/id/T = I
-				src.scanned_user = text("[T.registered_name] ([T.assignment])")
-				src.screen=2*/  //Obsolete after autorecognition
-
 	if ((src.isbroken) && (istype(I, /obj/item/stack/sheet/glass)))
 		var/obj/item/stack/sheet/glass/stack = I
 		if ((stack.amount - 2) < 0)
-			user << "\red You need more glass to do that."
+			user << "<span class='warning'>You need more glass to do that.</span>"
 		else
 			stack.use(2)
 			src.hitstaken = 0
@@ -896,29 +884,23 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 	else if (src.isbroken)
 		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 100, 1)
-		for (var/mob/O in hearers(5, src.loc))
-			O.show_message("<EM>[user.name]</EM> further abuses the shattered [src.name].")
+		user.visible_message("<span class='warning'>[user] abuses [src] further!</span>", "<span class='warning'>You abuse [src] further!</span>")
 
 	else
-		if(istype(I, /obj/item/weapon) )
+		if(istype(I, /obj/item/weapon))
 			var/obj/item/weapon/W = I
-			if(W.force <15)
-				for (var/mob/O in hearers(5, src.loc))
-					O.show_message("[user.name] hits the [src.name] with the [W.name] with no visible effect." )
-					playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 100, 1)
+			if(W.force < 15)
+				user.visible_message("<span class='warning'>[user] hits [src] with [W] with no visible effect!</span>", "<span class='warning'>You hit [src] with [W] with no visible effect!</span>")
+				playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 100, 1)
 			else
 				src.hitstaken++
-				if(src.hitstaken==3)
-					for (var/mob/O in hearers(5, src.loc))
-						O.show_message("[user.name] smashes the [src.name]!" )
-					src.isbroken=1
+				if(src.hitstaken == 3)
+					user.visible_message("<span class='warning'>[user] smashes [src]!</span>", "<span class='warning'>You smash [src]!</span>")
+					src.isbroken = 1
 					playsound(get_turf(src), 'sound/effects/Glassbr3.ogg', 100, 1)
 				else
-					for (var/mob/O in hearers(5, src.loc))
-						O.show_message("[user.name] forcefully slams the [src.name] with the [I.name]!" )
+					user.visible_message("<span class='warning'>[user] slams [src] with [W]!</span>", "<span class='warning'>You slam [src] with [W]!</span>")
 					playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 100, 1)
-		else
-			user << "<FONT COLOR='blue'>This does nothing.</FONT>"
 	src.update_icon()
 
 /obj/machinery/newscaster/attack_ai(mob/user as mob)
@@ -927,7 +909,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 
 /obj/machinery/newscaster/attack_paw(mob/user as mob)
-	user << "<font color='blue'>The newscaster controls are far too complicated for your tiny brain!</font>"
+	user << "<span class='notice'>The newscaster controls are far too complicated for your tiny brain!</span>"
 	return
 
 /obj/machinery/newscaster/proc/AttachPhoto(mob/user as mob)
@@ -1052,7 +1034,7 @@ obj/item/weapon/newspaper/attack_self(mob/user as mob)
 		usr << browse(dat, "window=newspaper_main;size=300x400")
 		onclose(usr, "newspaper_main")
 	else
-		user << "The paper is full of intelligible symbols!"
+		user << "<span class='notice'>The paper is full of intelligible symbols!</span>"
 
 
 obj/item/weapon/newspaper/Topic(href, href_list)
@@ -1090,7 +1072,7 @@ obj/item/weapon/newspaper/Topic(href, href_list)
 obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen))
 		if(src.scribble_page == src.curr_page)
-			user << "<FONT COLOR='blue'>There's already a scribble in this page... You wouldn't want to make things too cluttered, would you?</FONT>"
+			user << "<span class='notice'>There's already a scribble in this page. You wouldn't want to make things too cluttered, would you?</span>"
 		else
 			var/s = strip_html( input(user, "Write something", "Newspaper", "") )
 			s = copytext(sanitize(s), 1, MAX_MESSAGE_LEN)
@@ -1112,7 +1094,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		if(masterController != user)
 			if(get_dist(masterController,src)<=1)
 				if(!isobserver(masterController))
-					user << "\red Wait for [masterController] to finish and move away."
+					user << "<span class='warning'>Wait for [masterController] to finish and move away.</span>"
 					return
 	if(istype(user,/mob/living/carbon/human))                       //User is a human
 		var/mob/living/carbon/human/human_user = user
@@ -1137,10 +1119,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		src.scanned_user = "Nanotrasen Officer #[rand(0,9)][rand(0,9)][rand(0,9)]"
 	else if (isobserver(user))
 		src.scanned_user = "Space-Time Anomaly #[rand(0,9)][rand(0,9)][rand(0,9)]"
-//	if(masterController && masterController.client && get_dist(masterController,src)<=1)
-//		masterController << "\red You were booted from \the [src] by [scanned_user]."
 	masterController = user
-//	masterController << "\icon[src] \blue Welcome back, [scanned_user]!"
 
 /obj/machinery/newscaster/proc/print_paper()
 	feedback_inc("newscaster_newspapers_printed",1)
@@ -1158,10 +1137,8 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 //	return                                  //bode well with a newscaster network of 10+ machines. Let's just return it, as it's added in the machines list.
 
 /obj/machinery/newscaster/proc/newsAlert(channel)   //This isn't Agouri's work, for it is ugly and vile.
-	var/turf/T = get_turf(src)                      //Who the fuck uses spawn(600) anyway, jesus christ
 	if(channel)
-		for(var/mob/O in hearers(world.view-1, T))
-			O.show_message("<span class='newscaster'><EM>[src.name]</EM> beeps, \"Breaking news from [channel]!\"</span>",2)
+		visible_message("<span class='newscaster'><EM>[src]</EM> beeps, \"Breaking news from [channel]!\"</span>")
 		src.alert = 1
 		src.update_icon()
 		spawn(300)
@@ -1169,7 +1146,6 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 			src.update_icon()
 		playsound(get_turf(src), 'sound/machines/twobeep.ogg', 75, 1)
 	else
-		for(var/mob/O in hearers(world.view-1, T))
-			O.show_message("<span class='newscaster'><EM>[src.name]</EM> beeps, \"Attention! Wanted issue distributed!\"</span>",2)
+		visible_message("<span class='newscaster'><EM>[src]</EM> beeps, \"Attention! Wanted issue distributed!\"</span>")
 		playsound(get_turf(src), 'sound/machines/warning-buzzer.ogg', 75, 1)
 	return

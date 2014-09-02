@@ -1,5 +1,5 @@
 /obj/machinery/optable
-	name = "Operating Table"
+	name = "\improper Operating Table"
 	desc = "Used for advanced medical procedures."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "table2-idle"
@@ -46,21 +46,19 @@
 
 /obj/machinery/optable/attack_paw(mob/user as mob)
 	if ((M_HULK in usr.mutations))
-		usr << text("\blue You destroy the operating table.")
-		visible_message("\red [usr] destroys the operating table!")
+		user.visible_message("<span class='danger'>[user] destroys [src]!</span>", "<span class='warning'>You destroy [src].</span>")
 		src.density = 0
 		del(src)
-	if (!( locate(/obj/machinery/optable, user.loc) ))
+	if (!(locate(/obj/machinery/optable, user.loc)))
 		step(user, get_dir(user, src))
 		if (user.loc == src.loc)
 			user.layer = TURF_LAYER
-			visible_message("The monkey hides under the table!")
+			user.visible_message("<span class='danger'>[user] hides under [src]!</span>", "<span class='warning'>You hide under [src].</span>")
 	return
 
 /obj/machinery/optable/attack_hand(mob/user as mob)
 	if (M_HULK in usr.mutations)
-		usr << text("\blue You destroy the table.")
-		visible_message("\red [usr] destroys the operating table!")
+		user.visible_message("<span class='danger'>[user] destroys [src]!</span>", "<span class='warning'>You destroy [src].</span>")
 		src.density = 0
 		del(src)
 	return
@@ -111,7 +109,7 @@
 			L.client.eye = src
 		L.resting = 1
 		L.loc = src.loc
-		visible_message("\red [L] has been laid on the operating table by [user].", 3)
+		user.visible_message("<span class='warning'>[L] has been laid on [src] by [user]!</span>", "<span class='notice'>You lay [L] on [src].</span>")
 		for(var/obj/OO in src)
 			OO.loc = src.loc
 		src.add_fingerprint(user)
@@ -134,9 +132,9 @@
 
 /obj/machinery/optable/proc/take_victim(mob/living/carbon/C, mob/living/carbon/user as mob)
 	if (C == user)
-		user.visible_message("[user] climbs on the operating table.","You climb on the operating table.")
+		user.visible_message("<span class='warning'>[user] climbs on [src].</span>","<span class='notice'>You climb on [src].</span>")
 	else
-		visible_message("\red [C] has been laid on the operating table by [user].", 3)
+		visible_message("<span class='warning'>[C] has been laid on [src] by [user].</span>")
 	if (C.client)
 		C.client.perspective = EYE_PERSPECTIVE
 		C.client.eye = src
@@ -161,7 +159,7 @@
 		return
 
 	if(src.victim)
-		usr << "\blue <B>The table is already occupied!</B>"
+		usr << "<span class='warning'>[src] is already occupied!</span>"
 		return
 
 	take_victim(usr,usr)

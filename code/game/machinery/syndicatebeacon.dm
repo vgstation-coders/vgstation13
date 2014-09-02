@@ -7,7 +7,7 @@
 
 
 /obj/machinery/syndicate_beacon
-	name = "ominous beacon"
+	name = "\improper ominous beacon"
 	desc = "This looks suspicious..."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "syndbeacon"
@@ -106,7 +106,7 @@
 #define SCREWED 32
 
 /obj/machinery/singularity_beacon //not the best place for it but it's a hack job anyway -- Urist
-	name = "ominous beacon"
+	name = "\improper ominous beacon"
 	desc = "This looks suspicious..."
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "beacon"
@@ -123,14 +123,17 @@
 
 	proc/Activate(mob/user = null)
 		if(!checkWirePower())
-			if(user) user << "\blue The connected wire doesn't have enough current."
+			if(user) user << "<span class='notice'>The connected wire doesn't have enough current.</span>"
 			return
 		for(var/obj/machinery/singularity/singulo in world)
 			if(singulo.z == z)
 				singulo.target = src
 		icon_state = "[icontype]1"
 		active = 1
-		if(user) user << "\blue You activate the beacon."
+		if(user)
+			user.visible_message("<span class='warning'>[user] activates [src]!</span>", "<span class='notice'>You activate [src].</span>")
+		else
+			visible_message("<span class='warning'>[src] activates.</span>")
 
 
 	proc/Deactivate(mob/user = null)
@@ -139,8 +142,10 @@
 				singulo.target = null
 		icon_state = "[icontype]0"
 		active = 0
-		if(user) user << "\blue You deactivate the beacon."
-
+		if(user)
+			user.visible_message("<span class='warning'>[user] deactivates [src]!</span>", "<span class='notice'>You deactivate [src].</span>")
+		else
+			visible_message("<span class='warning'>[src] deactivates.</span>")
 
 	attack_ai(mob/user as mob)
 		return
@@ -150,20 +155,21 @@
 		if(stat & SCREWED)
 			return active ? Deactivate(user) : Activate(user)
 		else
-			user << "\red You need to screw the beacon to the floor first!"
+			user << "<span class='warning'>You need to screw [src] to the floor first!</span>"
 			return
 
 
 	attackby(obj/item/weapon/W as obj, mob/user as mob)
 		if(istype(W,/obj/item/weapon/screwdriver))
 			if(active)
-				user << "\red You need to deactivate the beacon first!"
+				user << "<span class='warning'>You need to deactivate [src] first!</span>"
 				return
 
 			if(stat & SCREWED)
 				stat &= ~SCREWED
 				anchored = 0
-				user << "\blue You unscrew the beacon from the floor."
+				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				user.visible_message("<span class='warning'>[user] unscrews [src] from the floor!</span>", "<span class='notice'>You unscrew [src] from the floor.</span>")
 				attached = null
 				return
 			else
@@ -171,11 +177,12 @@
 				if(isturf(T) && !T.intact)
 					attached = locate() in T
 				if(!attached)
-					user << "This device must be placed over an exposed cable."
+					user << "<span class='warning'>This device must be placed over an exposed cable!</span>"
 					return
 				stat |= SCREWED
 				anchored = 1
-				user << "\blue You screw the beacon to the floor and attach the cable."
+				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				user.visible_message("<span class='warning'>[user] screws [src] to the floor and attaches a cable!</span>", "<span class='notice'>You screw [src] to the floor and attach a cable.</span>")
 				return
 		..()
 		return

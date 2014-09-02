@@ -1,5 +1,5 @@
 /obj/machinery/portable_atmospherics/canister
-	name = "canister"
+	name = "\improper Canister"
 	icon = 'icons/obj/atmos.dmi'
 	icon_state = "yellow"
 	density = 1
@@ -22,32 +22,32 @@
 	w_type = RECYK_METAL
 
 /obj/machinery/portable_atmospherics/canister/sleeping_agent
-	name = "Canister: \[N2O\]"
+	name = "\improper Canister: \[N2O\]"
 	icon_state = "redws"
 	canister_color = "redws"
 	can_label = 0
 /obj/machinery/portable_atmospherics/canister/nitrogen
-	name = "Canister: \[N2\]"
+	name = "\improper Canister: \[N2\]"
 	icon_state = "red"
 	canister_color = "red"
 	can_label = 0
 /obj/machinery/portable_atmospherics/canister/oxygen
-	name = "Canister: \[O2\]"
+	name = "\improper Canister: \[O2\]"
 	icon_state = "blue"
 	canister_color = "blue"
 	can_label = 0
 /obj/machinery/portable_atmospherics/canister/toxins
-	name = "Canister \[Toxin (Bio)\]"
+	name = "\improper Canister \[Toxin (Bio)\]"
 	icon_state = "orange"
 	canister_color = "orange"
 	can_label = 0
 /obj/machinery/portable_atmospherics/canister/carbon_dioxide
-	name = "Canister \[CO2\]"
+	name = "\improper Canister \[CO2\]"
 	icon_state = "black"
 	canister_color = "black"
 	can_label = 0
 /obj/machinery/portable_atmospherics/canister/air
-	name = "Canister \[Air\]"
+	name = "\improper Canister \[Air\]"
 	icon_state = "grey"
 	canister_color = "grey"
 	can_label = 0
@@ -180,14 +180,14 @@
 /obj/machinery/portable_atmospherics/canister/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if(iswelder(W) && src.destroyed)
 		if(weld(W, user))
-			user << "\blue You salvage whats left of \the [src]"
+			user.visible_message("<span class='warning'>[user] salvages what's left of [src]!</span>", "<span class='notice'>You salvage what's left of [src].</span>")
 			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(src.loc)
 			M.amount = 3
 			del src
 		return
 
 	if(!istype(W, /obj/item/weapon/wrench) && !istype(W, /obj/item/weapon/tank) && !istype(W, /obj/item/device/analyzer) && !istype(W, /obj/item/device/pda))
-		visible_message("\red [user] hits the [src] with a [W]!")
+		user.visible_message("<span class='warning'>[user] hits [src] with [W]!</span>", "<span class='warning'>You hit [src] with [W]!</span>")
 		src.health -= W.force
 		src.add_fingerprint(user)
 		healthcheck()
@@ -202,7 +202,7 @@
 			transfer_moles = pressure_delta*thejetpack.volume/(air_contents.temperature * R_IDEAL_GAS_EQUATION)//Actually transfer the gas
 			var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
 			thejetpack.merge(removed)
-			user << "You pulse-pressurize your jetpack from the tank."
+			user << "<span class='notice'>You pulse-pressurize your jetpack from the tank.</span>"
 		return
 
 	..()
@@ -334,22 +334,6 @@
 	air_contents.adjust(traces = list(sleeping_agent))
 	update_icon()
 
-/*
-//Dirty way to fill room with gas. However it is a bit easier to do than creating some floor/engine/n2o -rastaf0
-/obj/machinery/portable_atmospherics/canister/sleeping_agent/roomfiller/New()
-	..()
-	var/datum/gas/sleeping_agent/trace_gas = air_contents.trace_gases[1]
-	trace_gas.moles = 9*4000
-	spawn(10)
-		var/turf/simulated/location = src.loc
-		if (istype(src.loc))
-			while (!location.air)
-				sleep(10)
-			location.assume_air(air_contents)
-			air_contents = new
-	return 1
-*/
-
 /obj/machinery/portable_atmospherics/canister/nitrogen/New(loc)
 	..(loc)
 	air_contents.adjust(n2 = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
@@ -378,7 +362,7 @@
 		return 0
 
 	// Do after stuff here
-	user << "<span class='notice'>You start to slice away at \the [src]...</span>"
+	user.visible_message("<span class='warning'>[user] starts to slice away at [src]!</span>", "<span class='notice'>You start to slice away at [src].</span>", "<span class='notice'>You hear welding.</span>")
 	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 	WT.eyecheck(user)
 	busy = 1
@@ -386,6 +370,7 @@
 		busy = 0
 		if(!WT.isOn())
 			return 0
+		user.visible_message("<span class='warning'>[user] slices [src] away !</span>", "<span class='notice'>You slice [src] away.</span>")
 		return 1
 	busy = 0
 	return 0

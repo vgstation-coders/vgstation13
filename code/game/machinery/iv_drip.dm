@@ -43,13 +43,13 @@
 	if(isanimal(usr))
 		return
 	if(attached)
-		visible_message("[src.attached] is detached from \the [src]")
+		visible_message("<span class='notice'>[src.attached] is detached from [src]</span>")
 		src.attached = null
 		src.update_icon()
 		return
 
 	if(in_range(src, usr) && ishuman(over_object) && get_dist(over_object, src) <= 1)
-		visible_message("[usr] attaches \the [src] to \the [over_object].")
+		usr.visible_message("<span class='warning'>[usr] attaches [src] to [over_object]!</span>", "<span class='notice'>You attach [src] to [over_object].</span>")
 		src.attached = over_object
 		src.update_icon()
 
@@ -60,21 +60,23 @@
 		return
 	if(istype(W, /obj/item/weapon/wrench))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		new /obj/item/stack/sheet/metal(src.loc,2)
-		if(src.beaker)
-			src.beaker.loc = get_turf(src)
-			src.beaker = null
-		user << "\blue You dismantle \the [name]."
-		del(src)
+		user.visible_message("<span class='warning'>[user] starts dismantling [src]!</span>", "<span class='notice'>You start dismantling [src].</span>")
+		if(do_after(user,50))
+			new /obj/item/stack/sheet/metal(src.loc,2)
+			if(src.beaker)
+				src.beaker.loc = get_turf(src)
+				src.beaker = null
+			user.visible_message("<span class='warning'>[user] dismantles [src]!</span>", "<span class='notice'>You dismantle [src].</span>")
+			del(src)
 	if (istype(W, /obj/item/weapon/reagent_containers))
 		if(!isnull(src.beaker))
-			user << "There is already a reagent container loaded!"
+			user << "<span class='warning'>There is a reagent container loaded already!</span>"
 			return
 
 		user.drop_item()
 		W.loc = src
 		src.beaker = W
-		user << "You attach \the [W] to \the [src]."
+		user.visible_message("<span class='warning'>[user] attaches [W] to [src]!</span>", "<span class='notice'>You attach [W] to [src].</span>")
 		src.update_icon()
 		return
 	else
@@ -86,7 +88,7 @@
 
 	if(src.attached)
 		if(!(get_dist(src, src.attached) <= 1 && isturf(src.attached.loc)))
-			visible_message("The needle is ripped out of [src.attached], doesn't that hurt?")
+			visible_message("<span class='warning'>The needle is ripped out of [src.attached], doesn't that hurt?</span>")
 			src.attached:apply_damage(3, BRUTE, pick("r_arm", "l_arm"))
 			src.attached = null
 			src.update_icon()
@@ -109,7 +111,7 @@
 			amount = min(amount, 4)
 			// If the beaker is full, ping
 			if(amount == 0)
-				if(prob(5)) visible_message("\The [src] pings.")
+				if(prob(5)) visible_message("<span class='notice'>[src] pings.</span>")
 				return
 
 			var/mob/living/carbon/human/T = attached
@@ -122,7 +124,7 @@
 
 			// If the human is losing too much blood, beep.
 			if(T.vessel.get_reagent_amount("blood") < BLOOD_VOLUME_SAFE) if(prob(5))
-				visible_message("\The [src] beeps loudly.")
+				visible_message("<span class='warning'>[src] beeps loudly.</span>")
 
 			var/datum/reagent/B = T.take_blood(beaker,amount)
 
@@ -149,14 +151,14 @@
 	set src in view(1)
 
 	if(!istype(usr, /mob/living))
-		usr << "\red You can't do that."
+		usr << "<span class='warning'>You can't do that.</span>"
 		return
 
 	if(usr.stat)
 		return
 
 	mode = !mode
-	usr << "The [src] is now [mode ? "injecting" : "taking blood"]."
+	usr << "<span class='notice'>[src] is now [mode ? "injecting" : "taking blood"].</span>"
 
 /obj/machinery/iv_drip/examine()
 	set src in view()

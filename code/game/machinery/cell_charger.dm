@@ -1,12 +1,12 @@
 /obj/machinery/cell_charger
-	name = "cell charger"
+	name = "\improper cell charger"
 	desc = "It charges power cells."
 	icon = 'icons/obj/power.dmi'
 	icon_state = "ccharger0"
 	anchored = 1
 	use_power = 1
-	idle_power_usage = 5
-	active_power_usage = 60
+	idle_power_usage = 10
+	active_power_usage = 50
 	power_channel = EQUIP
 	var/obj/item/weapon/cell/charging = null
 	var/chargelevel = -1
@@ -44,30 +44,32 @@
 
 		if(istype(W, /obj/item/weapon/cell) && anchored)
 			if(charging)
-				user << "\red There is already a cell in the charger."
+				user << "<span class='warning'>There is a cell in [src] already!</span>"
 				return
 			else
 				var/area/a = loc.loc // Gets our locations location, like a dream within a dream
 				if(!isarea(a))
 					return
 				if(a.power_equip == 0) // There's no APC in this area, don't try to cheat power!
-					user << "\red The [name] blinks red as you try to insert the cell!"
+					user << "<span class='warning'>[src] blinks red as you try to insert [W]!</span>"
 					return
 
 				user.drop_item()
 				W.loc = src
 				charging = W
-				user.visible_message("[user] inserts a cell into the charger.", "You insert a cell into the charger.")
+				user.visible_message("<span class='warning'>[user] inserts [W] into [src]!</span>", "<span class='notice'>You insert [W] into [src].</span>")
 				chargelevel = -1
 			updateicon()
 		else if(istype(W, /obj/item/weapon/wrench))
 			if(charging)
-				user << "\red Remove the cell first!"
+				user << "<span class='warning'>Remove the cell first!</span>"
 				return
 
-			anchored = !anchored
-			user << "You [anchored ? "attach" : "detach"] the cell charger [anchored ? "to" : "from"] the ground"
+			user.visible_message("<span class='warning'>[user] starts [anchored ? "attaching" : "detaching"] [src] [anchored ? "to" : "from"] the ground!</span>", "<span class='notice'>You start [anchored ? "attaching" : "detaching"] [src] [anchored ? "to" : "from"] the ground.</span>", "<span class='notice'>You hear a ratchet.</span>")
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			if(do_after(user,30))
+				anchored = !anchored
+				user.visible_message("<span class='warning'>[user] [anchored ? "attaches" : "detaches"] [src] [anchored ? "to" : "from"] the ground!</span>", "<span class='notice'>You [anchored ? "attach" : "detach"] [src] [anchored ? "to" : "from"] the ground.</span>")
 
 	attack_hand(mob/user)
 		if(charging)
@@ -76,7 +78,7 @@
 			charging.updateicon()
 
 			src.charging = null
-			user.visible_message("[user] removes the cell from the charger.", "You remove the cell from the charger.")
+			user.visible_message("<span class='warning'>[user] removes the cell from [src]!", "<span class='notice'>You remove the cell from [src].</span>")
 			chargelevel = -1
 			updateicon()
 
@@ -97,6 +99,6 @@
 			return
 
 		use_power(200)		//this used to use CELLRATE, but CELLRATE is fucking awful. feel free to fix this properly!
-		charging.give(175)	//inefficiency.
+		charging.give(150)	//25 % inneficiency
 
 		updateicon()

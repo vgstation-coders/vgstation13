@@ -45,7 +45,7 @@
 
 
 /obj/machinery/turret
-	name = "turret"
+	name = "\improper turret"
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "grey_target_prism"
 	var/raised = 0
@@ -87,7 +87,7 @@
 	return
 
 /obj/machinery/turretcover
-	name = "pop-up turret cover"
+	name = "\improper pop-up turret cover"
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "turretCover"
 	anchored = 1
@@ -368,7 +368,7 @@
 		return src.attack_hand(user)
 
 	if (istype(W, /obj/item/weapon/card/emag) && !emagged)
-		user << "\red You short out the turret controls' access analysis module."
+		user << "<span class='warning'>You short out [src]'s controls and access analysis module.</span>"
 		emagged = 1
 		locked = 0
 		if(user.machine==src)
@@ -379,11 +379,11 @@
 	else if( get_dist(src, user) == 0 )		// trying to unlock the interface
 		if (src.allowed(usr))
 			if(emagged)
-				user << "<span class='notice'>The turret control is unresponsive.</span>"
+				user << "<span class='notice'>[src]'s controls are unresponsive.</span>"
 				return
 
 			locked = !locked
-			user << "<span class='notice'>You [ locked ? "lock" : "unlock"] the panel.</span>"
+			user << "<span class='notice'>You [locked ? "lock" : "unlock"] the panel.</span>"
 			if (locked)
 				if (user.machine==src)
 					user.unset_machine()
@@ -432,14 +432,14 @@
 /obj/machinery/turret/attack_animal(mob/living/simple_animal/M as mob)
 	if(M.melee_damage_upper == 0)	return
 	if(!(stat & BROKEN))
-		visible_message("\red <B>[M] [M.attacktext] [src]!</B>")
+		visible_message("<span class='warning'><B>[M] [M.attacktext] [src]!</B></span>")
 		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
 		//src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 		src.health -= M.melee_damage_upper
 		if (src.health <= 0)
 			src.die()
 	else
-		M << "\red That object is useless to you."
+		M << "<span class='warning'>That object is useless to you.</span>"
 	return
 
 
@@ -453,7 +453,7 @@
 		if (src.health <= 0)
 			src.die()
 	else
-		M << "\green That object is useless to you."
+		M << "<span class='warning'>That object is useless to you.</span>"
 	return
 
 
@@ -462,7 +462,7 @@
 	..()
 	if (src.locked)
 		if (!istype(usr, /mob/living/silicon))
-			usr << "Control panel is locked!"
+			usr << "<span class='warning'>Control panel is locked!</span>"
 			return
 	if ( get_dist(src, usr) == 0 || issilicon(usr))
 		if (href_list["toggleOn"])
@@ -498,7 +498,7 @@
 
 
 /obj/structure/turret/gun_turret
-	name = "Gun Turret"
+	name = "\improper Gun Turret"
 	density = 1
 	anchored = 1
 	var/cooldown = 20
@@ -569,7 +569,7 @@
 
 
 	attack_alien(mob/user as mob)
-		user.visible_message("[user] slashes at [src]", "You slash at [src]")
+		user.visible_message("<span class='danger'>[user] slashes at [src]</span>", "<span class='warning'>You slash at [src]</span>")
 		src.take_damage(15)
 		return
 

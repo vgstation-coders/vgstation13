@@ -1,7 +1,7 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
 /obj/machinery/mass_driver
-	name = "mass driver"
+	name = "\improper mass driver"
 	desc = "Shoots things into space."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "mass_driver"
@@ -26,11 +26,10 @@
 			if(!O.anchored||istype(O, /obj/mecha))//Mechs need their launch platforms.
 				O_limit++
 				if(O_limit >= 20)
-					for(var/mob/M in hearers(src, null))
-						M << "\blue The mass driver lets out a screech, it mustn't be able to handle any more items."
+					visible_message("<span class='warning'>[src] lets out a screech, it can't handle more items.</span>")
 					break
 				use_power(500)
-				spawn( 0 )
+				spawn(0)
 					O.throw_at(target, drive_range * power, power)
 		flick("mass_driver1", src)
 		return

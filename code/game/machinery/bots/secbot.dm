@@ -1,5 +1,5 @@
 /obj/machinery/bot/secbot
-	name = "Securitron"
+	name = "\improper Securitron"
 	desc = "A little security robot.  He looks less than thrilled."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "secbot0"
@@ -61,13 +61,13 @@
 
 
 /obj/machinery/bot/secbot/beepsky
-	name = "Officer Beep O'sky"
+	name = "\improper Officer Beep O'sky"
 	desc = "It's Officer Beep O'sky! Powered by a potato and a shot of whiskey."
 	idcheck = 0
 	auto_patrol = 1
 
 /obj/item/weapon/secbot_assembly
-	name = "helmet/signaler assembly"
+	name = "\improper helmet/signaler assembly"
 	desc = "Some sort of bizarre assembly."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "helmet_signaler"
@@ -167,14 +167,14 @@ Auto Patrol: []"},
 	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if(src.allowed(user) && !open && !emagged)
 			src.locked = !src.locked
-			user << "Controls are now [src.locked ? "locked." : "unlocked."]"
+			user << "<span class='notice'>Controls are now [src.locked ? "locked." : "unlocked."]</span>"
 		else
 			if(emagged)
 				user << "<span class='warning'>ERROR</span>"
 			if(open)
-				user << "\red Please close the access panel before locking it."
+				user << "<span class='warning'>Please close the access panel before locking it.</span>"
 			else
-				user << "\red Access denied."
+				user << "<span class='warning'>Access denied.</span>"
 	else
 		..()
 		if(!istype(W, /obj/item/weapon/screwdriver) && (W.force) && (!src.target))
@@ -184,10 +184,9 @@ Auto Patrol: []"},
 /obj/machinery/bot/secbot/Emag(mob/user as mob)
 	..()
 	if(open && !locked)
-		if(user) user << "\red You short out [src]'s target assessment circuits."
+		if(user) user << "<span class='notice'>You short out [src]'s target assessment circuits.</span>"
 		spawn(0)
-			for(var/mob/O in hearers(src, null))
-				O.show_message("\red <B>[src] buzzes oddly!</B>", 1)
+		visible_message("<span class='danger'>[src] buzzes oddly!</span>")
 		src.target = null
 		if(user) src.oldtarget_name = user.name
 		src.last_found = world.time
@@ -247,7 +246,7 @@ Auto Patrol: []"},
 						maxstuns--
 						if(maxstuns <= 0)
 							target = null
-						visible_message("\red <B>[src.target] has been stunned by [src]!</B>")
+						visible_message("<span class='danger'>[src.target] has been stunned by [src]!</span>")
 
 						mode = SECBOT_PREP_ARREST
 						src.anchored = 1
@@ -258,7 +257,7 @@ Auto Patrol: []"},
 						if(world.time > next_harm_time)
 							next_harm_time = world.time + 15
 							playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
-							visible_message("\red <B>[src] beats [src.target] with the stun baton!</B>")
+							visible_message("<span class='danger'>[src] beats [src.target] with the stun baton!</span>")
 							src.icon_state = "secbot-c"
 							spawn(2)
 								src.icon_state = "secbot[src.on]"
@@ -294,7 +293,7 @@ Auto Patrol: []"},
 				if(!C.handcuffed && !src.arrest_type)
 					playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
 					mode = SECBOT_ARREST
-					visible_message("\red <B>[src] is trying to put handcuffs on [src.target]!</B>")
+					visible_message("<span class='danger'>[src] is trying to put handcuffs on [src.target]!</span>")
 
 					spawn(60)
 						if(get_dist(src, src.target) <= 1)
@@ -314,8 +313,6 @@ Auto Patrol: []"},
 							src.frustration = 0
 
 							playsound(get_turf(src), pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
-		//					var/arrest_message = pick("Have a secure day!","I AM THE LAW.", "God made tomorrow for the crooks we don't catch today.","You can't outrun a radio.")
-		//					src.speak(arrest_message)
 
 			else
 				mode = SECBOT_IDLE
@@ -634,7 +631,7 @@ Auto Patrol: []"},
 			src.oldtarget_name = M.name
 			src.speak("Level [src.threatlevel] infraction alert!")
 			playsound(get_turf(src), pick('sound/voice/bcriminal.ogg', 'sound/voice/bjustice.ogg', 'sound/voice/bfreeze.ogg'), 50, 0)
-			src.visible_message("<b>[src]</b> points at [M.name]!")
+			src.visible_message("<span class='danger'><b>[src]</b> points at [M.name]!</span>")
 			mode = SECBOT_HUNT
 			spawn(0)
 				process()	// ensure bot quickly responds to a perp
@@ -707,24 +704,16 @@ Auto Patrol: []"},
 		src.frustration = 0
 	return
 
-/* terrible
-/obj/machinery/bot/secbot/Bumped(atom/movable/M as mob|obj)
-	spawn(0)
-		if(M)
-			var/turf/T = get_turf(src)
-			M:loc = T
-*/
-
 /obj/machinery/bot/secbot/proc/speak(var/message)
 	for(var/mob/O in hearers(src, null))
-		O.show_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"",2)
+		O.show_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"")
 	return
 
 
 /obj/machinery/bot/secbot/explode()
 
 	walk_to(src,0)
-	src.visible_message("\red <B>[src] blows apart!</B>", 1)
+	src.visible_message("<span class='danger'>[src] blows apart!</span>")
 	var/turf/Tsec = get_turf(src)
 
 	var/obj/item/weapon/secbot_assembly/Sa = new /obj/item/weapon/secbot_assembly(Tsec)
@@ -765,7 +754,7 @@ Auto Patrol: []"},
 		del(S)
 		var/obj/item/weapon/secbot_assembly/A = new /obj/item/weapon/secbot_assembly
 		user.put_in_hands(A)
-		user << "You add the signaler to the helmet."
+		user << "<span class='notice'>You add the signaler to the helmet.</span>"
 		user.drop_from_inventory(src)
 		del(src)
 	else
@@ -778,28 +767,28 @@ Auto Patrol: []"},
 		if(WT.remove_fuel(0,user))
 			src.build_step++
 			src.overlays += image('icons/obj/aibots.dmi', "hs_hole")
-			user << "You weld a hole in [src]!"
+			user << "<span class='notice'>You weld a hole in [src]!</span>"
 
 	else if(isprox(W) && (src.build_step == 1))
 		user.drop_item()
 		src.build_step++
-		user << "You add the prox sensor to [src]!"
+		user << "<span class='notice'>You add the prox sensor to [src]!</span>"
 		src.overlays += image('icons/obj/aibots.dmi', "hs_eye")
-		src.name = "helmet/signaler/prox sensor assembly"
+		src.name = "\improper helmet/signaler/prox sensor assembly"
 		del(W)
 
 	else if(((istype(W, /obj/item/robot_parts/l_arm)) || (istype(W, /obj/item/robot_parts/r_arm))) && (src.build_step == 2))
 		user.drop_item()
 		src.build_step++
-		user << "You add the robot arm to [src]!"
-		src.name = "helmet/signaler/prox sensor/robot arm assembly"
+		user << "<span class='notice'>You add the robot arm to [src]!</span>"
+		src.name = "\improper helmet/signaler/prox sensor/robot arm assembly"
 		src.overlays += image('icons/obj/aibots.dmi', "hs_arm")
 		del(W)
 
 	else if((istype(W, /obj/item/weapon/melee/baton)) && (src.build_step >= 3))
 		user.drop_item()
 		src.build_step++
-		user << "You complete the Securitron! Beep boop."
+		user << "<span class='notice'>You complete the Securitron! Beep boop.</span>"
 		var/obj/machinery/bot/secbot/S = new /obj/machinery/bot/secbot
 		S.loc = get_turf(src)
 		S.name = src.created_name

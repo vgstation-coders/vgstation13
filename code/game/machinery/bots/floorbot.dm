@@ -1,7 +1,7 @@
 //Floorbot assemblies
 /obj/item/weapon/toolbox_tiles
-	desc = "It's a toolbox with tiles sticking out the top"
-	name = "tiles and toolbox"
+	name = "\improper tiles and toolbox"
+	desc = "It's a toolbox with tiles sticking out of the top"
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "toolbox_tiles"
 	force = 3.0
@@ -13,8 +13,8 @@
 	var/created_name = "Floorbot"
 
 /obj/item/weapon/toolbox_tiles_sensor
-	desc = "It's a toolbox with tiles sticking out the top and a sensor attached"
-	name = "tiles, toolbox and sensor arrangement"
+	name = "\improper tiles, toolbox and sensor arrangement"
+	desc = "It's a toolbox with tiles sticking out of the top and a sensor attached"
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "toolbox_tiles_sensor"
 	force = 3.0
@@ -30,7 +30,7 @@ var/global/list/floorbot_targets=list()
 
 //Floorbot
 /obj/machinery/bot/floorbot
-	name = "Floorbot"
+	name = "\improper Floorbot"
 	desc = "A little floor repairing robot, he looks so excited!"
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "floorbot0"
@@ -307,7 +307,7 @@ var/global/list/floorbot_targets=list()
 				F.break_tile_to_plating()
 			else
 				F.ReplaceWithLattice()
-			visible_message("\red [src] makes an excited booping sound.")
+			visible_message("<span class='warning'>[src] makes an excited booping sound.</span>")
 			spawn(50)
 				src.amount ++
 				src.anchored = 0
@@ -341,7 +341,7 @@ var/global/list/floorbot_targets=list()
 			return 0
 
 	if(prob(5))
-		visible_message("[src] makes an excited booping beeping sound!")
+		visible_message("<span class='notice'>[src] makes an excited booping beeping sound!</span>")
 
 	if(!src.have_target() && emagged < 2)
 		if(targetdirection != null)
@@ -423,7 +423,7 @@ var/global/list/floorbot_targets=list()
 	else
 		var/turf/simulated/floor/F = src.loc
 		if(!F.broken && !F.burnt)
-			visible_message("\red [src] begins to improve the floor.")
+			visible_message("<span class='notice'>[src] begins to improve the floor.</span>")
 			src.repairing = 1
 			spawn(50)
 				F.make_plasteel_floor()
@@ -435,7 +435,7 @@ var/global/list/floorbot_targets=list()
 				src.target = null
 		else
 			if(F.is_plating())
-				visible_message("\red [src] begins to fix dents in the floor.")
+				visible_message("<span class='notice'>[src] begins to fix dents in the floor.</span>")
 				src.repairing = 1
 				spawn(20)
 					src.repairing = 0
@@ -449,7 +449,7 @@ var/global/list/floorbot_targets=list()
 /obj/machinery/bot/floorbot/proc/eattile(var/obj/item/stack/tile/plasteel/T)
 	if(!istype(T, /obj/item/stack/tile/plasteel))
 		return
-	visible_message("\red [src] begins to collect tiles.")
+	visible_message("<span class='notice'>[src] begins to collect tiles.</span>")
 	src.repairing = 1
 	spawn(20)
 		if(isnull(T))
@@ -473,7 +473,7 @@ var/global/list/floorbot_targets=list()
 		return
 	if(M.amount > 1)
 		return
-	visible_message("\red [src] begins to create tiles.")
+	visible_message("<span class='notice'>[src] begins to create tiles.</span>")
 	src.repairing = 1
 	spawn(20)
 		if(isnull(M))
@@ -667,7 +667,7 @@ var/global/list/floorbot_targets=list()
 
 /obj/machinery/bot/floorbot/explode()
 	src.on = 0
-	src.visible_message("\red <B>[src] blows apart!</B>", 1)
+	src.visible_message("<span class='danger'>[src] blows apart!</span>")
 	var/turf/Tsec = get_turf(src)
 
 	var/obj/item/weapon/storage/toolbox/mechanical/N = new /obj/item/weapon/storage/toolbox/mechanical(Tsec)

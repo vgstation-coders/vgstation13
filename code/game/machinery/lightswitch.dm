@@ -2,7 +2,7 @@
 // can have multiple per area
 // can also operate on non-loc area through "otherarea" var
 /obj/machinery/light_switch
-	desc = "It turns lights on and off. What are you, simple?"
+	desc = "Turns the lights of a room on and off. What are you, simple?"
 	icon = 'icons/obj/power.dmi'
 	icon_state = "light1"
 	anchored = 1.0
@@ -11,7 +11,7 @@
 
 /obj/machinery/light_switch/New()
 	..()
-	name = "[areaMaster.name] light switch"
+	name = "\improper [areaMaster.name] light switch" //The ... light switch
 	on = areaMaster.lightswitch
 	updateicon()
 
@@ -32,7 +32,7 @@
 
 /obj/machinery/light_switch/attack_ghost(var/mob/dead/observer/G)
 	if(!G.can_poltergeist())
-		G << "Your poltergeist abilities are still cooling down."
+		G << "<span class='warning'>Your poltergeist abilities are still cooling down.</span>"
 		return 0
 	return ..()
 

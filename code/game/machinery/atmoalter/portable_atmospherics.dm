@@ -1,5 +1,5 @@
 /obj/machinery/portable_atmospherics
-	name = "atmoalter"
+	name = "\improper atmoalter" //Okay ?
 	use_power = 0
 	var/datum/gas_mixture/air_contents = new
 
@@ -97,24 +97,25 @@
 	else if (istype(W, /obj/item/weapon/wrench))
 		if(connected_port)
 			disconnect()
-			user << "\blue You disconnect [name] from the port."
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			user.visible_message("<span class='warning'>[user] disconnects [name] from the port!</span>", "<span class='notice'>You disconnect [name] from the port.</span>","<span class='notice'>You hear a ratchet.</span>")
 			update_icon()
 			return
 		else
 			var/obj/machinery/atmospherics/portables_connector/possible_port = locate(/obj/machinery/atmospherics/portables_connector/) in loc
 			if(possible_port)
 				if(connect(possible_port))
-					user << "\blue You connect [name] to the port."
+					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+					user.visible_message("<span class='warning'>[user] connects [name] to the port!</span>", "<span class='notice'>You connect [name] to the port.</span>","<span class='notice'>You hear a ratchet.</span>")
 					var/datum/gas/sleeping_agent/S = locate() in src.air_contents.trace_gases
 					if(src.air_contents.toxins > 0 || (istype(S)))
 						log_admin("[usr]([ckey(usr.key)]) connected a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] to a connector_port at [loc.x], [loc.y], [loc.z]")
 					update_icon()
 					return
 				else
-					user << "\blue [name] failed to connect to the port."
+					user << "<span class='warning'>[name] failed to connect to the port.</span>"
 					return
 			else
-				user << "\blue Nothing happens."
 				return
 
 	else if ((istype(W, /obj/item/device/analyzer)) && get_dist(user, src) <= 1)

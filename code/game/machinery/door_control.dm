@@ -1,5 +1,5 @@
 /obj/machinery/door_control
-	name = "remote door-control"
+	name = "\improper remote door-control"
 	desc = "It controls doors, remotely."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "doorctrl0"
@@ -39,7 +39,7 @@
 	if(wires & 2)
 		return src.attack_hand(user)
 	else
-		user << "Error, no route to host."
+		user << "<span class='warning'>Error, no route to host.</span>"
 
 /obj/machinery/door_control/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -73,7 +73,7 @@
 		return
 
 	if(!allowed(user) && (wires & 1))
-		user << "\red Access Denied"
+		user << "<span class='warning'>Access Denied.</span>"
 		flick("doorctrl-denied",src)
 		return
 

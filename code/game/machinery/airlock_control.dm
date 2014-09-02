@@ -120,7 +120,7 @@ obj/machinery/door/airlock/New()
 
 
 /obj/item/airlock_sensor_frame
-	name = "Airlock Sensor frame"
+	name = "\improper airlock sensor frame"
 	desc = "Used for repairing or building airlock sensors"
 	icon = 'icons/obj/airlock_machines.dmi'
 	icon_state = "airlock_sensor_off"
@@ -140,7 +140,7 @@ obj/machinery/door/airlock/New()
 		return
 	var/turf/loc = get_turf(usr)
 	if (!istype(loc, /turf/simulated/floor))
-		usr << "\red [src] cannot be placed on this spot."
+		usr << "<span class='warning'>[src] cannot be placed on this spot.</span>"
 		return
 	new /obj/machinery/airlock_sensor(loc, ndir, 1)
 	del(src)
@@ -148,7 +148,7 @@ obj/machinery/door/airlock/New()
 obj/machinery/airlock_sensor
 	icon = 'icons/obj/airlock_machines.dmi'
 	icon_state = "airlock_sensor_off"
-	name = "airlock sensor"
+	name = "\improper airlock sensor"
 
 	anchored = 1
 	power_channel = ENVIRON
@@ -229,7 +229,7 @@ obj/machinery/airlock_sensor/airlock_exterior
 	..()
 
 	// offset 24 pixels in direction of dir
-	// this allows the APC to be embedded in a wall, yet still inside an area
+	// this allows the airlock sensor to be embedded in a wall, yet still inside an area
 	if (building)
 		dir = ndir
 
@@ -257,7 +257,6 @@ obj/machinery/airlock_sensor/Topic(href,href_list)
 
 	if(!issilicon(usr))
 		if(!istype(usr.get_active_hand(), /obj/item/device/multitool))
-			testing("Not silicon, not using a multitool.")
 			return
 	if("set_freq" in href_list)
 		var/newfreq=frequency
@@ -278,9 +277,10 @@ obj/machinery/airlock_sensor/attackby(var/obj/item/W, var/mob/user)
 	if(istype(W,/obj/item/device/multitool))
 		update_multitool_menu(user)
 	if(istype(W,/obj/item/weapon/screwdriver))
-		user << "You begin to pry \the [src] off the wall..."
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+		user.visible_message("<span class='warning'>[user] begins to pry [src] off the wall!</span>", "<span class='notice'>You begin to pry [src] off the wall.</span>")
 		if(do_after(user, 50))
-			user << "You successfully pry \the [src] off the wall."
+			user.visible_message("<span class='warning'>[user] pries [src] off the wall!</span>", "<span class='notice'>You pry [src] off the wall.</span>")
 			new /obj/item/airlock_sensor_frame(get_turf(src))
 			del(src)
 
@@ -294,7 +294,8 @@ obj/machinery/airlock_sensor/attackby(var/obj/item/W, var/mob/user)
 /obj/item/access_button_frame/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	if (istype(W, /obj/item/weapon/wrench))
-		new /obj/item/stack/sheet/metal( get_turf(src.loc), 1 )
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		new /obj/item/stack/sheet/metal( get_turf(src.loc), 1)
 		del(src)
 
 /obj/item/access_button_frame/proc/try_build(turf/on_wall)
@@ -305,7 +306,7 @@ obj/machinery/airlock_sensor/attackby(var/obj/item/W, var/mob/user)
 		return
 	var/turf/loc = get_turf(usr)
 	if (!istype(loc, /turf/simulated/floor))
-		usr << "\red [src] cannot be placed on this spot."
+		usr << "<span class='warning'>[src] cannot be placed on this spot.</span>"
 		return
 	new /obj/machinery/access_button(loc, ndir, 1)
 	del(src)
@@ -358,7 +359,7 @@ obj/machinery/access_button/update_icon()
 obj/machinery/access_button/attack_hand(mob/user)
 	add_fingerprint(usr)
 	if(!allowed(user))
-		user << "\red Access Denied"
+		user << "<span class='warning'>Access Denied</span>"
 
 	else if(radio_connection)
 		var/datum/signal/signal = new
@@ -374,9 +375,10 @@ obj/machinery/access_button/attackby(var/obj/item/W, var/mob/user)
 	if (istype(W, /obj/item/device/multitool))
 		update_multitool_menu()
 	if(istype(W,/obj/item/weapon/screwdriver))
-		user << "You begin to pry \the [src] off the wall..."
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+		user.visible_message("<span class='warning'>[user] begins to pry [src] off the wall!</span>", "<span class='notice'>You begin to pry [src] off the wall.</span>")
 		if(do_after(user, 50))
-			user << "You successfully pry \the [src] off the wall."
+			user.visible_message("<span class='warning'>[user] pries [src] off the wall!</span>", "<span class='notice'>You pry [src] off the wall.</span>")
 			new /obj/item/access_button_frame(get_turf(src))
 			del(src)
 
@@ -420,7 +422,6 @@ obj/machinery/access_button/Topic(href,href_list)
 
 	if(!issilicon(usr))
 		if(!istype(usr.get_active_hand(), /obj/item/device/multitool))
-			testing("Not silicon, not using a multitool.")
 			return
 
 	var/obj/item/device/multitool/P = get_multitool(usr)

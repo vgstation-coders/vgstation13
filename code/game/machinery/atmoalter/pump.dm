@@ -1,5 +1,5 @@
 /obj/machinery/portable_atmospherics/pump
-	name = "Portable Air Pump"
+	name = "\improper Portable Air Pump"
 
 	icon = 'icons/obj/atmos.dmi'
 	icon_state = "psiphon:0"

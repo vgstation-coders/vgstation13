@@ -1,5 +1,5 @@
 /obj/machinery/atmospherics/unary/cryo_cell
-	name = "cryo cell"
+	name = "\improper cryo cell"
 	icon = 'icons/obj/cryogenics.dmi'
 	icon_state = "cell-off"
 	density = 1
@@ -15,12 +15,6 @@
 	var/current_heat_capacity = 50
 
 	l_color = "#00FF00"
-	power_change()
-		..()
-		if(!(stat & (BROKEN|NOPOWER)) && on)
-			SetLuminosity(2)
-		else
-			SetLuminosity(0)
 
 /obj/machinery/atmospherics/unary/cryo_cell/New()
 	. = ..()
@@ -64,7 +58,7 @@
 	if(!istype(user.loc, /turf) || !istype(O.loc, /turf)) // are you in a container/closet/pod/etc?
 		return
 	if(occupant)
-		user << "\blue <B>The cryo cell is already occupied!</B>"
+		user << "<span class='notice'><B>[src] is already occupied!</B></span>"
 		return
 	if(isrobot(user))
 		if(!istype(user:module, /obj/item/weapon/robot_module/medical))
@@ -74,17 +68,17 @@
 	if(!istype(L) || L.buckled)
 		return
 	if(L.abiotic())
-		user << "\red <B>Subject cannot have abiotic items on.</B>"
+		user << "<span class='warning'><B>Subject cannot have abiotic items on.</B></span>"
 		return
 	for(var/mob/living/carbon/slime/M in range(1,L))
 		if(M.Victim == L)
-			usr << "[L.name] will not fit into the cryo cell because they have a slime latched onto their head."
+			usr << "<span class='warning'>Subject will not fit into [src] because they have a slime latched onto their head.</span>"
 			return
 	if(put_mob(L))
 		if(L == user)
-			visible_message("[user] climbs into the cryo cell.", 3)
+			user.visible_message("<span class='notice'>[user] climbs into [src].</span>", "<span class='notice'>You climb into [src].</span>", 3)
 		else
-			visible_message("[user] puts [L.name] into the cryo cell.", 3)
+			user.visible_message("<span class='notice'>[user] puts [L] into [src].</span>", "<span class='warning'>[user] puts you into [src]", 3)
 			if(user.pulling == L)
 				user.pulling = null
 
@@ -94,7 +88,10 @@
 		return
 	if(!on)
 		updateUsrDialog()
+		SetLuminosity(0)
 		return
+	else
+		SetLuminosity(2)
 
 	if(occupant)
 		if(occupant.stat != 2)
@@ -126,7 +123,7 @@
 	..()
 
 	if(in_range(usr, src))
-		usr << "You can just about make out some loose objects floating in the murk:"
+		usr << "<span class='notice'>You can barely make out some loose objects floating in the murk.</span>"
 		for(var/obj/O in src)
 			if(O != beaker)
 				usr << O.name
@@ -134,7 +131,7 @@
 			if(M != occupant)
 				usr << M.name
 	else
-		usr << "<span class='notice'>Too far away to view contents.</span>"
+		usr << "<span class='notice'>Too far away to view the contents.</span>"
 
 /obj/machinery/atmospherics/unary/cryo_cell/attack_hand(mob/user)
 	ui_interact(user)
@@ -241,36 +238,34 @@
 /obj/machinery/atmospherics/unary/cryo_cell/attackby(var/obj/item/weapon/G as obj, var/mob/user as mob)
 	if(istype(G, /obj/item/weapon/reagent_containers/glass))
 		if(beaker)
-			user << "\red A beaker is already loaded into the machine."
+			user << "<span class='warning'>A beaker is already loaded into [src]</span>."
 			return
 
 		beaker =  G
 		user.drop_item()
 		G.loc = src
-		user.visible_message("[user] adds \a [G] to \the [src]!", "You add \a [G] to \the [src]!")
+		user.visible_message("<span class='warning'>[user] adds [G] to [src]!</span>", "<span class='notice'>You add [G] to [src]!</span>")
 	else if(istype(G, /obj/item/weapon/screwdriver))
-		if(!opened)
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+		if (!opened)
+			user.visible_message("<span class='warning'>[user] opens [src]'s maintenance hatch!</span>", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
 			src.opened = 1
-			//src.icon_state = "cryo_cell_t"
-			user << "You open the maintenance hatch of [src]"
-			return
 		else
-			src.opened = 0
-			//src.icon_state = "cryo_cell"
-			user << "You close the maintenance hatch of [src]"
-			return
+			user.visible_message("<span class='warning'>[user] closes [src]'s maintenance hatch!</span>", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
+			src.opened = 1
 		return 1
 	if (opened)
 		if(on)
-			user << "[src] is on."
+			user << "<span class='warning'>[src] is on!</span>"
 			return
 		if(occupant)
-			user << "\red [occupant.name] is inside the [src]!"
+			user << "<span class='warning'>[occupant.name] is inside [src]!</span>"
 			return
 		if(istype(G, /obj/item/weapon/crowbar)) //beakers are destroyed in the process of destroying the cryo cell
-			user << "You begin to remove the circuits from [src]."
+			user.visible_message("<span class='warning'>[user] begins to remove the circuits from [src]!</span>", "<span class='notice'>You begin to remove the circuits from [src].</span>")
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			if(do_after(user, 50))
+			if(do_after(user,50))
+				user.visible_message("<span class='warning'>[user] removes the circuits from [src]!", "<span class='notice'>You remove the circuits from [src].</span>")
 				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
 				M.state = 2
 				M.icon_state = "box_1"
@@ -289,7 +284,7 @@
 			return
 		for(var/mob/living/carbon/slime/M in range(1,G:affecting))
 			if(M.Victim == G:affecting)
-				usr << "[G:affecting:name] will not fit into the cryo because they have a slime latched onto their head."
+				usr << "<span class='warning'>Subject will not fit into [src] because they have a slime latched onto their head.</span>"
 				return
 		var/mob/M = G:affecting
 		if(put_mob(M))
@@ -373,16 +368,16 @@
 	return
 /obj/machinery/atmospherics/unary/cryo_cell/proc/put_mob(mob/living/carbon/M as mob)
 	if (!istype(M))
-		usr << "\red <B>The cryo cell cannot handle such a lifeform!</B>"
+		usr << "<span class='warning'><B>[src] cannot handle such a lifeform!</B></span>"
 		return
 	if (occupant)
-		usr << "\red <B>The cryo cell is already occupied!</B>"
+		usr << "<span class='warning'><B>[src] is already occupied!</B></span>"
 		return
 	if (M.abiotic())
-		usr << "\red Subject may not have abiotic items on."
+		usr << "<span class='warning'>Subject may not have abiotic items on.</span>"
 		return
 	if(!node)
-		usr << "\red The cell is not correctly connected to its pipe network!"
+		usr << "<span class='warning'>[src] is not correctly connected to a pipe network!</span>"
 		return
 	if (M.client)
 		M.client.perspective = EYE_PERSPECTIVE
@@ -390,7 +385,7 @@
 	M.stop_pulling()
 	M.loc = src
 	if(M.health > -100 && (M.health < 0 || M.sleeping))
-		M << "\blue <b>You feel a cold liquid surround you. Your skin starts to freeze up.</b>"
+		M << "<span class='notice'><b>You feel a cold liquid surround you. Your skin starts to freeze up.</b></span>"
 	occupant = M
 	//M.metabslow = 1
 	add_fingerprint(usr)
@@ -405,8 +400,8 @@
 	if(usr == occupant)//If the user is inside the tube...
 		if (usr.stat == 2)//and he's not dead....
 			return
-		usr << "\blue Release sequence activated. This will take two minutes."
-		sleep(1200)
+		usr << "<span class='notice'>Release sequence activated. This will take two minutes.</span>"
+		spawn(1200)
 		if(!src || !usr || !occupant || (occupant != usr)) //Check if someone's released/replaced/bombed him already
 			return
 		go_out()//and release him from the eternal prison.
@@ -425,7 +420,7 @@
 		return
 	for(var/mob/living/carbon/slime/M in range(1,usr))
 		if(M.Victim == usr)
-			usr << "You're too busy getting your life sucked out of you."
+			usr << "<span class='notice'>You're too busy getting the life sucked out of you.</span>"
 			return
 	if (usr.stat != 0 || stat & (NOPOWER|BROKEN))
 		return
