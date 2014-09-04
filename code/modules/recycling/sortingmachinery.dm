@@ -346,7 +346,7 @@
 
 /obj/machinery/sorting_machine/New()
 	..()
-	spawn( 5 )
+	spawn(5)
 		var i = 0;
 		for (var/dir in cardinal)
 			var/turf/T=get_step(src, dir)
@@ -387,25 +387,26 @@
 /obj/machinery/sorting_machine/process()
 	if(stat & (BROKEN | NOPOWER))
 		return
+	if(!input || !output) //Do we still have those fancy input and output landmarks we found early on ?
+		return //If not, stop here. It's ogre, game over
 	use_power(100)
 
 	var/affecting = input.loc.contents		// moved items will be all in loc
-	spawn(1)	// slight delay to prevent infinite propagation due to map order	//TODO: please no spawn() in process(). It's a very bad idea
-		var/items_moved = 0
-		for(var/atom/movable/A in affecting)
-			if(!A.anchored)
-				if(A.loc == input.loc) // prevents the object from being affected if it's not currently here.
-					var/found=0
-					for(var/wt in selected_types)
-						if(A.w_type)
-							A.loc=selected_output.loc
-							found=1
-							break
-					if(!found)
-						A.loc=output.loc
-					items_moved++
-			if(items_moved >= 10)
-				break
+	var/items_moved = 0
+	for(var/atom/movable/A in affecting)
+		if(!A.anchored)
+			if(A.loc == input.loc) // prevents the object from being affected if it's not currently here.
+				var/found=0
+				for(var/wt in selected_types)
+					if(A.w_type)
+						A.loc=selected_output.loc
+						found=1
+						break
+				if(!found)
+					A.loc=output.loc
+				items_moved++
+		if(items_moved >= 10)
+			break
 
 /obj/machinery/sorting_machine/proc/openwindow(mob/user as mob)
 	var/dat = {"
