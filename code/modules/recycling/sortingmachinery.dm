@@ -393,6 +393,9 @@
 
 	var/affecting = input.loc.contents		// moved items will be all in loc
 	var/items_moved = 0
+	var/timetomove = world.timeofday + 10
+	if(world.timeofday < timetomove)
+		return
 	for(var/atom/movable/A in affecting)
 		if(!A.anchored)
 			if(A.loc == input.loc) // prevents the object from being affected if it's not currently here.
