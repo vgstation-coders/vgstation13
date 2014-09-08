@@ -99,3 +99,5 @@
 	name = "Juggerwall"
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "m_shield_cult"
+	l_color = "#B40000"
+	luminosity = 2
