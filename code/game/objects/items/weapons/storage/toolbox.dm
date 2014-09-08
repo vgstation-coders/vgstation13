@@ -17,7 +17,7 @@
 		viewers(user) << "\red <b>[user] is [pick("stoving","robusting")] \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</b>"
 		return (BRUTELOSS)
 
-	
+
 	New()
 		..()
 		if (src.type == /obj/item/weapon/storage/toolbox)
@@ -36,7 +36,9 @@
 		if(prob(50))
 			new /obj/item/device/flashlight(src)
 		else
-			new /obj/item/device/flashlight/flare(src)
+			new /obj/item/weapon/storage/fancy/flares(src)
+		if(prob(30)) //suitably rare
+			new /obj/item/weapon/gun/projectile/flare(src)
 		new /obj/item/device/radio(src)
 
 /obj/item/weapon/storage/toolbox/mechanical

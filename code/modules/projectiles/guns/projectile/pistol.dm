@@ -4,11 +4,10 @@
 	icon_state = "silenced_pistol"
 	w_class = 3.0
 	max_shells = 12
-	caliber = ".45"
+	caliber = list(".45"  = 1)
 	silenced = 1
 	origin_tech = "combat=2;materials=2;syndicate=8"
 	ammo_type = "/obj/item/ammo_casing/c45"
-
 
 
 /obj/item/weapon/gun/projectile/deagle
@@ -17,24 +16,11 @@
 	icon_state = "deagle"
 	force = 14.0
 	max_shells = 7
-	caliber = ".50"
+	caliber = list(".50" = 1)
 	ammo_type ="/obj/item/ammo_casing/a50"
+	mag_type = "/obj/item/ammo_storage/magazine/a50"
 	load_method = 2
-	New()
-		..()
-		empty_mag = new /obj/item/ammo_magazine/a50/empty(src)
-		update_icon()
-		return
-
-
-	afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag)
-		..()
-		if(!loaded.len && empty_mag)
-			empty_mag.loc = get_turf(src.loc)
-			empty_mag = null
-			playsound(user, 'sound/weapons/smg_empty_alarm.ogg', 40, 1)
-			update_icon()
-		return
+	auto_mag_drop = 1
 
 /obj/item/weapon/gun/projectile/deagle/gold
 	desc = "A gold plated gun folded over a million times by superior martian gunsmiths. Uses .50 AE ammo."
@@ -55,30 +41,17 @@
 	desc = "A bulky pistol designed to fire self propelled rounds"
 	icon_state = "gyropistol"
 	max_shells = 8
-	caliber = "75"
+	caliber = list("75" = 1)
 	fire_sound = 'sound/weapons/elecfire.ogg'
 	origin_tech = "combat=3"
 	ammo_type = "/obj/item/ammo_casing/a75"
+	mag_type = "/obj/item/ammo_storage/magazine/a75"
 	load_method = 2
-	New()
-		..()
-		empty_mag = new /obj/item/ammo_magazine/a75/empty(src)
-		update_icon()
-		return
-
-
-	afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag)
-		..()
-		if(!loaded.len && empty_mag)
-			empty_mag.loc = get_turf(src.loc)
-			empty_mag = null
-			playsound(user, 'sound/weapons/smg_empty_alarm.ogg', 40, 1)
-			update_icon()
-		return
+	auto_mag_drop = 1
 
 	update_icon()
 		..()
-		if(empty_mag)
+		if(stored_magazine)
 			icon_state = "gyropistolloaded"
 		else
 			icon_state = "gyropistol"
@@ -90,23 +63,13 @@
 	icon_state = "pistol"
 	w_class = 2
 	max_shells = 8
-	caliber = "9mm"
+	caliber = list("9mm" = 1)
 	silenced = 0
 	origin_tech = "combat=2;materials=2;syndicate=2"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
+	mag_type = "/obj/item/ammo_storage/magazine/c9mm"
 	load_method = 2
-
-/obj/item/weapon/gun/projectile/pistol/New()
-	..()
-	empty_mag = new /obj/item/ammo_magazine/mc9mm/empty(src)
-	return
-
-/obj/item/weapon/gun/projectile/pistol/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag)
-	..()
-	if(!loaded.len && empty_mag)
-		empty_mag.loc = get_turf(src.loc)
-		empty_mag = null
-	return
+	auto_mag_drop = 1
 
 /obj/item/weapon/gun/projectile/pistol/attack_hand(mob/user as mob)
 	if(loc == user)
