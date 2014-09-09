@@ -54,6 +54,7 @@
 			usr << "<span class='notice'>You remove the magazine from \the [src].</span>"
 		stored_magazine.update_icon()
 		stored_magazine = null
+		loaded = null //nevar 4get this or you start getting problems
 		update_icon()
 		return 1
 	return 0

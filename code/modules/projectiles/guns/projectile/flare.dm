@@ -10,7 +10,8 @@
 	max_shells = 1
 	empty_casings = 1
 	w_class = 3.0
-	m_amt = 5000
+	m_amt = 15000
+	g_amt = 7500
 	w_type = RECYK_METAL
 	force = 4
 	recoil = 1

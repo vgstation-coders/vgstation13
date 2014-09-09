@@ -265,6 +265,7 @@
 	icon_type = "flare"
 	name = "box of flares"
 	storage_slots = 6
+	m_amt = 15000
 	can_hold = list("/obj/item/device/flashlight/flare")
 
 /obj/item/weapon/storage/fancy/flares/New()
@@ -283,3 +284,7 @@
 		user <<"This flare is empty!"
 		return
 	..()
+
+/obj/item/weapon/storage/fancy/flares/update_icon()
+	..()
+	m_amt = contents.len * 2500
