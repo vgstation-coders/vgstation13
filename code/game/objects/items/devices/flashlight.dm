@@ -212,3 +212,13 @@
 		update_brightness(user)
 	else
 		update_brightness()
+
+/obj/item/device/flashlight/flare/pickup(mob/user)
+	..()
+	if(on)
+		user.l_color = l_color
+
+
+/obj/item/device/flashlight/flare/dropped(mob/user)
+	..()
+	user.l_color = initial(user.l_color)
