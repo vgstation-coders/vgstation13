@@ -1,13 +1,3 @@
-/obj/item/weapon/gun/projectile/shotgun/Fire()
-	..()
-	for(var/obj/item/ammo_casing/shotgun/shell in src) //replaces the fired shells with the empty kind: hacky, or what? (empty shells are special shotgun ammo)
-		if(shell.spent)
-			var/obj/item/ammo_casing/shotgun/empty/new_shell = new(src)
-			new_shell.desc += " This looks like it used to be a [shell.name]."
-			loaded += new_shell //to stop new shells being loaded
-			loaded -= shell
-			qdel(shell)
-
 /obj/item/weapon/gun/projectile/shotgun/pump
 	name = "shotgun"
 	desc = "Useful for sweeping alleys."
@@ -123,6 +113,16 @@
 
 		user << "<span class='notice'>You break \the [src].</span>"
 		update_icon()
+
+	Fire()
+		..()
+		for(var/obj/item/ammo_casing/shotgun/shell in src) //replaces the fired shells with the empty kind: hacky, or what? (empty shells are special shotgun ammo)
+			if(shell.spent)
+				var/obj/item/ammo_casing/shotgun/empty/new_shell = new(src)
+				new_shell.desc += " This looks like it used to be a [shell.name]."
+				loaded += new_shell //to stop new shells being loaded
+				loaded -= shell
+				qdel(shell)
 
 	attackby(var/obj/item/A as obj, mob/user as mob)
 		..()

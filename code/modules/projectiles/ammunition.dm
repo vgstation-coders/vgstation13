@@ -158,7 +158,7 @@
 			for(var/obj/item/ammo_casing/loading in bullets_from.stored_ammo)
 				if(PW.loaded.len >= PW.max_shells)
 					break
-				if(istype(loading, text2path(PW.ammo_type))) //hurrah for gun variables.
+				if(PW.caliber && PW.caliber[loading.caliber]) //hurrah for gun variables.
 					bullets_from.stored_ammo -= loading
 					PW.loaded += loading
 					loading.loc = PW

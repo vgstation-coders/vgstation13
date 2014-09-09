@@ -134,8 +134,9 @@
 			loaded -= AC
 			AC.loc = get_turf(src) //Eject casing onto ground.
 			user << "\blue You unload shell from \the [src]!"
-		if (load_method == MAGAZINE)
+		if (load_method == MAGAZINE && stored_magazine)
 			RemoveMag(user)
+			user << "<span class='notice'>You remove the magazine from [src].</span>"
 	else
 		user << "\red Nothing loaded in \the [src]!"
 
@@ -145,11 +146,6 @@
 		RemoveMag()
 		playsound(user, 'sound/weapons/smg_empty_alarm.ogg', 40, 1)
 	return
-
-/obj/item/weapon/gun/projectile/attack_self(mob/user as mob)
-	if (stored_magazine)
-		RemoveMag(user)
-		user << "<span class='notice'>You remove the magazine from [src].</span>"
 
 /obj/item/weapon/gun/projectile/examine()
 	..()
