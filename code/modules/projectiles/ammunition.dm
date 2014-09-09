@@ -25,7 +25,7 @@
 //Boxes of ammo
 /obj/item/ammo_storage
 	name = "ammo box (.357)"
-	desc = "A box of ammo"
+	desc = "A box of ammo."
 	icon_state = "357"
 	icon = 'icons/obj/ammo.dmi'
 	flags = FPRINT | TABLEPASS | CONDUCT
@@ -39,7 +39,7 @@
 	throw_range = 5
 	var/list/stored_ammo = list()
 	var/ammo_type = "/obj/item/ammo_casing/a357"
-	var/exact = 0 //whether or not the item only takes ammo_type, or also subtypes. Set to 1 to only take the specified ammo
+	var/exact = 1 //whether or not the item only takes ammo_type, or also subtypes. Set to 1 to only take the specified ammo
 	var/max_ammo = 7
 	var/starting_ammo = -1 //-1 makes it spawn the max ammo, 0 and above makes it spawn that number
 	var/multiple_sprites = 0 //if it has multiple sprites. Please sprite more than 2 sprites if you set this to true, you fricks
@@ -90,7 +90,10 @@
 			if(visible_ammo == 0 && stored_ammo.len) //if there IS ammo, but we can't see it because the thing is at 0 (most sprites are like this)
 				visible_ammo += sprite_modulo //we go to the next lowest sprite state so it doesn't look empty
 			icon_state = "[initial(icon_state)]-[visible_ammo]"
-		desc = "There are [stored_ammo.len] shell\s left!"
+
+	examine() //never change descriptions, always use examine
+		..()
+		usr<< "There are [stored_ammo.len] shell\s left!"
 
 	attack_self(mob/user) //allows you to remove individual bullets
 		if(stored_ammo)
@@ -139,11 +142,11 @@
 			return 0
 		if(!target || !istype(target))
 			return 0
-		if(istype(bullets_from, /obj/item/ammo_storage/box) || istype(target, /obj/item/ammo_storage/box))
-			if(!slowLoad(bullets_from, target))
-				return 0
 		var/bullets_loaded = 0
 		if(istype(target, /obj/item/ammo_storage))
+			if(istype(bullets_from, /obj/item/ammo_storage/box) || istype(target, /obj/item/ammo_storage/box))
+				if(!slowLoad(bullets_from, target))
+					return 0
 			var/obj/item/ammo_storage/AS = target
 			for(var/obj/item/ammo_casing/loading in bullets_from.stored_ammo)
 				if(AS.stored_ammo.len >= AS.max_ammo)
@@ -154,6 +157,9 @@
 					loading.loc = AS
 					bullets_loaded++
 		if(istype(target, /obj/item/weapon/gun/projectile)) //if we load directly, this is what we want to do
+			if(istype(bullets_from, /obj/item/ammo_storage/box))
+				if(!slowLoad(bullets_from, target))
+					return 0
 			var/obj/item/weapon/gun/projectile/PW = target
 			for(var/obj/item/ammo_casing/loading in bullets_from.stored_ammo)
 				if(PW.loaded.len >= PW.max_shells)

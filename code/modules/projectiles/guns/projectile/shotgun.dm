@@ -36,12 +36,11 @@
 	Fire()
 		..() //replaces the current shell with an empty one if it's been fired
 		if(current_shell) //because of how fucking painful current_shell is to work with, this is what I got
-			if(current_shell.spent)
-				var/obj/item/ammo_casing/shotgun/empty/new_shell = new(src)
-				new_shell.desc += " This looks like it used to be a [current_shell.name]."
-				qdel(current_shell)
-				current_shell = new_shell
-				new_shell = null
+			var/obj/item/ammo_casing/shotgun/empty/new_shell = new(src)
+			new_shell.desc += " This looks like it used to be a [current_shell.name]."
+			qdel(current_shell)
+			current_shell = new_shell
+			new_shell = null
 
 	proc/pump(mob/M as mob)
 		playsound(M, 'sound/weapons/shotgunpump.ogg', 60, 1)
@@ -58,7 +57,6 @@
 		current_shell = AC
 		if(current_shell && AC.BB)
 			in_chamber = AC.BB //Load projectile into chamber.
-			current_shell.spent = 1
 		update_icon()	//I.E. fix the desc
 		return 1
 
