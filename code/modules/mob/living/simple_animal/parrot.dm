@@ -286,7 +286,6 @@
 		if(health < maxHealth)
 			adjustBruteLoss(-10)
 		user << "\blue [src] eagerly devours the cracker."
-		playsound(user.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
 	..()
 	return
 
@@ -707,7 +706,6 @@
 		if(health < maxHealth)
 			adjustBruteLoss(-10)
 		emote("[src] eagerly downs the cracker")
-		playsound(usr.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
 		return 1
 
 
