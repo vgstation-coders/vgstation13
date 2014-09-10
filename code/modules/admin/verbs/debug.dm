@@ -565,6 +565,8 @@ Pressure: [env.return_pressure()]"}
 		"space pirate",
 		"soviet admiral",
 		"tunnel clown",
+		"space muslim",
+		"space muslim - saw",
 		"masked killer",
 		"assassin",
 		"death commando",
@@ -736,6 +738,61 @@ Pressure: [env.return_pressure()]"}
 
 			var/obj/item/weapon/twohanded/fireaxe/fire_axe = new(M)
 			M.equip_to_slot_or_del(fire_axe, slot_r_hand)
+			
+		if("space muslim")
+			M.equip_to_slot_or_del(new /obj/item/clothing/head/greenbandana(M), slot_head)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/syndicate(M), slot_ears)
+			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/unathi/robe(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/under/syndicate/tacticool(M), slot_w_uniform)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/black(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/automatic/mini_uzi(M), slot_belt)
+			
+			M.equip_to_slot_or_del(new /obj/item/weapon/hatchet/unathiknife(M), slot_l_store)
+
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/cultpack(M), slot_back)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/box/engineer/(M), slot_in_backpack)
+//			M.equip_to_slot_or_del(new /obj/effect/spawner/newbomb/timer/syndicate(M), slot_in_backpack)
+			M.equip_to_slot_or_del(new /obj/item/weapon/plastique(M), slot_in_backpack)
+			M.equip_to_slot_or_del(new /obj/item/weapon/plastique(M), slot_in_backpack)
+			M.equip_to_slot_or_del(new /obj/item/weapon/plastique(M), slot_in_backpack)
+			
+			var/obj/item/weapon/card/id/syndicate/W = new(M)
+			W.name = "[M.real_name]'s ID Card"
+			W.access = get_all_accesses()
+			W.assignment = "Space Muslim"
+			W.registered_name = M.real_name
+			M.equip_to_slot_or_del(W, slot_wear_id)
+
+//Clone of Space Muslim with 1 l6 saw in-hand
+		if("space muslim - Saw")
+			M.equip_to_slot_or_del(new /obj/item/clothing/head/greenbandana(M), slot_head)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/syndicate(M), slot_ears)
+			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/unathi/robe(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/under/syndicate/tacticool(M), slot_w_uniform)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/black(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/automatic/mini_uzi(M), slot_belt)
+
+			M.equip_to_slot_or_del(new /obj/item/weapon/hatchet/unathiknife(M), slot_l_store)
+			
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/cultpack(M), slot_back)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/box/engineer/(M), slot_in_backpack)
+//			M.equip_to_slot_or_del(new /obj/effect/spawner/newbomb/timer/syndicate(M), slot_in_backpack)
+			M.equip_to_slot_or_del(new /obj/item/weapon/plastique(M), slot_in_backpack)
+			M.equip_to_slot_or_del(new /obj/item/weapon/plastique(M), slot_in_backpack)
+			M.equip_to_slot_or_del(new /obj/item/weapon/plastique(M), slot_in_backpack)
+			
+			M.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/automatic/l6_saw(M), slot_r_hand)
+			
+			var/obj/item/weapon/card/id/syndicate/W = new(M)
+			W.name = "[M.real_name]'s ID Card"
+			W.access = get_all_accesses()
+			W.assignment = "Space Muslim"
+			W.registered_name = M.real_name
+			M.equip_to_slot_or_del(W, slot_wear_id)
 
 		if("masked killer")
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/overalls(M), slot_w_uniform)
