@@ -265,7 +265,7 @@ This function restores all organs.
 			S.add_blood(src)
 	if(istype(used_weapon,/obj/item/projectile/flare)) //We want them to carry the flare, not a projectile
 		var/obj/item/projectile/flare/F = used_weapon
-		if(damagetype == BURN && F.embed && istype(F.shot_from, /obj/item/weapon/gun/projectile/flare/syndicate)) //only syndicate guns are dangerous
+		if(damagetype == BURN && F.embed && istype(F.shot_from, /obj/item/weapon/gun/projectile/flare/syndicate) && prob(75)) //only syndicate guns are dangerous
 			var/obj/item/device/flashlight/flare/FS = new
 			FS.name = "shot [FS.name]"
 			FS.desc = "[FS.desc]. It looks like it was fired from [F.shot_from]."
@@ -275,7 +275,7 @@ This function restores all organs.
 			FS.add_blood(src)
 			FS.luminosity = 4 //not so bright, because it's inside them
 			FS.Light(src) //Now they glow, because the flare is lit
-			if(prob(75))
+			if(prob(80)) //tends to happen, which is good
 				visible_message("<span class='danger'><b>[name]</b> bursts into flames!</span>", "<span class='danger'>You burst into flames!</span>")
 				on_fire = 1
 				adjust_fire_stacks(0.5) //as seen in ignite code
