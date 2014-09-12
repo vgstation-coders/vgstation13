@@ -24,9 +24,6 @@
 /obj/item/weapon/gun/projectile/rocketlauncher/isHandgun()
 	return 0
 
-/obj/item/weapon/gun/projectile/rocketlauncher/attack_self(mob/user as mob)
-	update_icon()
-
 /obj/item/weapon/gun/projectile/rocketlauncher/update_icon()
 	if(!loaded.len)
 		icon_state = "rpg_e"

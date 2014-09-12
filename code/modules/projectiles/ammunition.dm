@@ -81,7 +81,7 @@
 				if(loaded_bullets)
 					user << "<span class='notice'>You successfully fill the [src] with [loaded_bullets] shell\s from the [AS]</span>"
 					update_icon()
-			else if (stored_ammo.len == max_ammo)
+			else if (stored_ammo.len >= max_ammo)
 				user << "<span class='notice'>\The [src] can't hold any more shells.</span>"
 
 	update_icon()
@@ -96,12 +96,12 @@
 		usr<< "There are [stored_ammo.len] shell\s left!"
 
 	attack_self(mob/user) //allows you to remove individual bullets
-		if(stored_ammo)
+		if(stored_ammo.len)
 			var/obj/item/ammo_casing/dropped = stored_ammo[1]
 			dropped.loc = get_turf(user)
 			stored_ammo -= dropped
 			update_icon()
-			user << "<span class='notice'>You remove a [dropped] from \the [src].</span>"
+			user << "<span class='notice'>You remove \a [dropped] from \the [src].</span>"
 
 	//used for loading from or to boxes. Has the fumble check
 	//this doesn't load any bullets by itself, but is a check for the slow loading used by boxes

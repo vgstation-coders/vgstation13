@@ -67,7 +67,7 @@
 	silenced = 0
 	origin_tech = "combat=2;materials=2;syndicate=2"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
-	mag_type = "/obj/item/ammo_storage/magazine/c9mm"
+	mag_type = "/obj/item/ammo_storage/magazine/mc9mm"
 	load_method = 2
 	auto_mag_drop = 1
 

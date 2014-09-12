@@ -7,10 +7,18 @@
 
 /obj/item/ammo_storage/box/a357
 	name = "ammo box (.357)"
-	desc = "A box of .357 ammo"
+	desc = "A box of .357 ammo."
 	icon_state = "357"
 	ammo_type = "/obj/item/ammo_casing/a357"
 	max_ammo = 7
+	multiple_sprites = 1
+
+/obj/item/ammo_storage/box/c38
+	name = "ammo box (.38)"
+	desc = "A box of non-lethal .38 ammo."
+	icon_state = "b38"
+	ammo_type = "/obj/item/ammo_casing/c38"
+	max_ammo = 6
 	multiple_sprites = 1
 
 /obj/item/ammo_storage/box/a418
@@ -26,9 +34,6 @@
 	ammo_type = "/obj/item/ammo_casing/a666"
 	max_ammo = 4
 	multiple_sprites = 1
-
-/obj/item/ammo_storage/magazine/mc9mm/empty
-	starting_ammo = 0
 
 /obj/item/ammo_storage/box/c9mm
 	name = "ammo box (9mm)"

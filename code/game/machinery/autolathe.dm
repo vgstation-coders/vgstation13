@@ -37,6 +37,7 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/ammo_casing/shotgun/beanbag(), \
 		new /obj/item/ammo_casing/shotgun/flare(), \
 		new /obj/item/ammo_storage/speedloader/c38(), \
+		new /obj/item/ammo_storage/box/c38(), \
 		new /obj/item/device/taperecorder(), \
 		new /obj/item/weapon/storage/pill_bottle/dice(),\
 		new /obj/item/device/assembly/igniter(), \
@@ -58,7 +59,6 @@ var/global/list/autolathe_recipes = list( \
 
 var/global/list/autolathe_recipes_hidden = list( \
 		new /obj/item/weapon/flamethrower/full(), \
-		new /obj/item/weapon/gun/projectile/flare(), \
 		new /obj/item/ammo_storage/box/flare(), \
 		new /obj/item/weapon/rcd(), \
 		new /obj/item/weapon/pipe_dispenser(),\

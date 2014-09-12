@@ -26,7 +26,7 @@
 	if(mag_type && load_method == 2)
 		stored_magazine = new mag_type(src)
 		for(var/i = 1, i <= stored_magazine.max_ammo, i++)
-			loaded += new ammo_type(src) //we put it straight into loaded because that's how magazines work
+			loaded += new ammo_type(stored_magazine) //we put it straight into loaded because that's how magazines work
 	else
 		for(var/i = 1, i <= max_shells, i++)
 			loaded += new ammo_type(src)
@@ -36,6 +36,7 @@
 //loads the argument magazine into the gun
 /obj/item/weapon/gun/projectile/proc/LoadMag(var/obj/item/ammo_storage/magazine/AM, var/mob/user)
 	if(istype(AM) && !stored_magazine)
+		AM.loc = src
 		stored_magazine = AM
 		loaded = AM.stored_ammo
 		if(user)
@@ -54,7 +55,7 @@
 			usr << "<span class='notice'>You remove the magazine from \the [src].</span>"
 		stored_magazine.update_icon()
 		stored_magazine = null
-		loaded = null //nevar 4get this or you start getting problems
+		loaded = list() //nevar 4get this or you start getting problems
 		update_icon()
 		return 1
 	return 0
@@ -121,7 +122,7 @@
 			loaded += AC
 			num_loaded++
 	if(num_loaded)
-		user << "\blue You load [num_loaded] shell\s into the gun!"
+		user << "\blue You load [num_loaded] shell\s into \the [src]!"
 	A.update_icon()
 	update_icon()
 	return
@@ -134,10 +135,10 @@
 			var/obj/item/ammo_casing/AC = loaded[1]
 			loaded -= AC
 			AC.loc = get_turf(src) //Eject casing onto ground.
-			user << "\blue You unload shell from \the [src]!"
+			user << "\blue You unload \the [AC] from \the [src]!"
+			update_icon()
 		if (load_method == MAGAZINE && stored_magazine)
 			RemoveMag(user)
-			user << "<span class='notice'>You remove the magazine from [src].</span>"
 	else
 		user << "\red Nothing loaded in \the [src]!"
 

@@ -11,7 +11,11 @@
 	origin_tech = "combat=2"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
 	max_ammo = 8
+	sprite_modulo = 8
 	multiple_sprites = 1
+
+/obj/item/ammo_storage/magazine/mc9mm/empty
+	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/a12mm
 	name = "magazine (12mm)"

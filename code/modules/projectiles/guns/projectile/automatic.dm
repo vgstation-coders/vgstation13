@@ -17,7 +17,6 @@
 	..()
 	stored_magazine = new mag_type(src)
 	loaded = stored_magazine.stored_ammo
-	stored_magazine.stored_ammo = null
 	update_icon()
 	return
 
@@ -28,8 +27,6 @@
 	set name = "Toggle Burstfire"
 	set category = "Object"
 	burstfire = !burstfire
-	if(!burstfire)
-		fire_delay = initial(fire_delay) //reset the firing delay to the single version
 	usr << "You toggle \the [src]'s firing setting to [burstfire ? "burst fire" : "single fire"]."
 
 /obj/item/weapon/gun/projectile/automatic/Fire()
@@ -40,10 +37,11 @@
 			usr << "<span class='warning'>\The [src] is still cooling down!</span>"
 			return
 		var/shots_fired = 0 //haha, I'm so clever
-		for(var/i = 1; i <= min(burst_count, loaded.len); i++)
+		var/to_shoot = min(burst_count, loaded.len)
+		for(var/i = 1; i <= to_shoot; i++)
 			..()
 			shots_fired++
-		//message_admins("[usr] just shot [shots_fired] burst fire bullets from their [src].")
+		message_admins("[usr] just shot [shots_fired] burst fire bullets out of [loaded.len + shots_fired] from their [src].")
 		fire_delay = shots_fired * 10
 	else
 		..()
