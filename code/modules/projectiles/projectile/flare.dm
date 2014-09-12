@@ -1,7 +1,7 @@
 /obj/item/projectile/flare
 	name = "flare"
 	icon_state = "flareround"
-	damage = 30 //bit weak, but since it sets them on fire (probably) it's balanced
+	damage = 15 //bit weak, but since it sets them on fire (probably) it's balanced
 	damage_type = BURN
 	var/embed = 1
 	var/obj/shotloc = null //Where the flare was shot from (stored to  be retrieved when the projectile dies)
