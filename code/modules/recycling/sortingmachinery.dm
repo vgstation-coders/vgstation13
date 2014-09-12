@@ -334,8 +334,9 @@
 	density = 1
 	icon = 'icons/obj/recycling.dmi'
 	icon_state = "grinder-b1"
-	anchored=1
+	anchored = 1
 
+	var/processing = 0
 	var/select_txt
 	var/list/selected_types=list()
 	var/list/types[6]
@@ -393,9 +394,9 @@
 
 	var/affecting = input.loc.contents		// moved items will be all in loc
 	var/items_moved = 0
-	var/timetomove = world.timeofday + 10
-	if(world.timeofday < timetomove)
+	if(processing)
 		return
+	processing = 1
 	for(var/atom/movable/A in affecting)
 		if(!A.anchored)
 			if(A.loc == input.loc) // prevents the object from being affected if it's not currently here.
@@ -410,6 +411,7 @@
 				items_moved++
 		if(items_moved >= 10)
 			break
+	processing = 0
 
 /obj/machinery/sorting_machine/proc/openwindow(mob/user as mob)
 	var/dat = {"
