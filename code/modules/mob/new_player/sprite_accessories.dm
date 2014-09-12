@@ -405,6 +405,16 @@
 		icon_state = "hair_shinobu"
 		gender = FEMALE
 
+	highponytail
+		name = "High Ponytail"
+		icon_state = "hair_highponytail"
+		gender = FEMALE
+
+	longstraightpony
+		name = "Long Straight Ponytail"
+		icon_state = "hair_longstraightpony"
+		gender = FEMALE
+
 	bald
 		name = "Bald"
 		icon_state = "bald"
