@@ -46,7 +46,7 @@ var/list/uplink_items = list()
 	/*
 	Here's how the gamemode list works.
 	If you wish for your gamemode to have the normal uplink, put it in the list.
-	If you want it to have a new type of uplink, use the gamemode list on the items and exclude it from the list.
+	If you want it to have a new type of uplink, use the gamemode list on the items and exclude it from the list. 
 	*/
 	var/list/gamemodes = list("autotraitor","blob","Cortical Borers","changeling","traitor+changeling","cult","extended","heist","AI malfunction","meteor","mixed","revolution","sandbox","double agents","traitor","vampire","wizard","nuclear emergency")
 	var/list/job = null
