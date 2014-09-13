@@ -35,7 +35,6 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/weapon/reagent_containers/syringe(), \
 		new /obj/item/ammo_casing/shotgun/blank(), \
 		new /obj/item/ammo_casing/shotgun/beanbag(), \
-		new /obj/item/ammo_casing/shotgun/flare(), \
 		new /obj/item/ammo_storage/speedloader/c38(), \
 		new /obj/item/ammo_storage/box/c38(), \
 		new /obj/item/device/taperecorder(), \

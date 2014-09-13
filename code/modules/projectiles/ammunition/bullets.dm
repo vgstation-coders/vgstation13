@@ -93,16 +93,6 @@
 	spent = 1 //just to stop people loading a gun with it. This should never go to 0 on the empty
 	w_type = RECYK_METAL
 
-	attackby(var/obj/O)
-		if(istype(O, /obj/item/device/flashlight/flare))
-			var/obj/item/device/flashlight/flare/F = O
-			if(F.fuel && !F.on)
-				usr << "You assemble the flare shell"
-				var/obj/item/ammo_casing/shotgun/flare/FS = new(src.loc)
-				FS.stored_flare = F
-				qdel(src)
-				usr.drop_item(F)
-
 /obj/item/ammo_casing/shotgun/beanbag
 	name = "beanbag shell"
 	desc = "A weak beanbag shell."
