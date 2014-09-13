@@ -954,7 +954,7 @@ var/list/slot_equipment_priority = list( \
 			creatures[name] = O
 
 
-	for(var/mob/M in sortAtom(mob_list))
+	for(var/mob/M in sortNames(mob_list))
 		var/name = M.name
 		if (names.Find(name))
 			namecounts[name]++
@@ -1455,4 +1455,7 @@ mob/verb/yank_out_object()
 
 // Skip over all the complex list checks.
 /mob/proc/hasFullAccess()
+	return 0
+
+mob/proc/assess_threat()
 	return 0

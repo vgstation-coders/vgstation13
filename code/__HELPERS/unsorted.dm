@@ -822,7 +822,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 
 //Returns: all the areas in the world, sorted.
 /proc/return_sorted_areas()
-	return sortAtom(return_areas())
+	return sortNames(return_areas())
 
 //Takes: Area type as text string or as typepath OR an instance of the area.
 //Returns: A list of all areas of that type in the world.
@@ -979,7 +979,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 							continue
 						if(!istype(O,/obj)) continue
 						O.loc.Exited(O)
-						O.loc = X
+						O.setLoc(X,teleported=1)
 						O.loc.Entered(O)
 					for(var/mob/M in T)
 						if(!M.move_on_shuttle)
