@@ -110,8 +110,8 @@
 	name = "engraved floor"
 	icon_state = "cult"
 
-
-/turf/simulated/floor/engine/n20
+/*
+/turf/simulated/floor/engine/n2o
 	New()
 		..()
 		// EXACTLY the same code as fucking roomfillers.  If this doesn't work, something's fucked.
@@ -119,6 +119,7 @@
 		air.trace_gases += trace_gas
 		trace_gas.moles = 9*4000
 		air.update_values()
+*/
 
 /turf/simulated/floor/engine/vacuum
 	name = "vacuum floor"

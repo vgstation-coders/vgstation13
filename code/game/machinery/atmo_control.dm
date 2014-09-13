@@ -20,6 +20,7 @@
 	// 8 for toxins concentration
 	// 16 for nitrogen concentration
 	// 32 for carbon dioxide concentration
+	// 64 for n2o concentration
 
 	var/datum/radio_frequency/radio_connection
 
@@ -77,11 +78,14 @@
 						signal.data["nitrogen"] = round(100*air_sample.nitrogen/total_moles,0.1)
 					if(output&32)
 						signal.data["carbon_dioxide"] = round(100*air_sample.carbon_dioxide/total_moles,0.1)
+					if(output&64)
+						signal.data["nitrous_oxide"] = round(100*air_sample.nitrous_oxide/total_moles,0.1)
 				else
 					signal.data["oxygen"] = 0
 					signal.data["toxins"] = 0
 					signal.data["nitrogen"] = 0
 					signal.data["carbon_dioxide"] = 0
+					signal.data["nitrous_oxide"] = 0
 			signal.data["sigtype"]="status"
 			radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
 	proc
@@ -160,7 +164,7 @@
 						sensor_part += "<tr><th>Pressure:</th><td>[data["pressure"]] kPa</td></tr>"
 					if(data["temperature"])
 						sensor_part += "<tr><th>Temperature:</th><td>[data["temperature"]] K</td></tr>"
-					if(data["oxygen"]||data["toxins"]||data["nitrogen"]||data["carbon_dioxide"])
+					if(data["oxygen"]||data["toxins"]||data["nitrogen"]||data["carbon_dioxide"]||data["nitrous_oxide"])
 						sensor_part += "<tr><th>Gas Composition :</th><td><ul>"
 						if(data["oxygen"])
 							sensor_part += "<li>[data["oxygen"]]% O<sub>2</sub></li>"
@@ -170,6 +174,8 @@
 							sensor_part += "<li>[data["carbon_dioxide"]]% CO<sub>2</sub></li>"
 						if(data["toxins"])
 							sensor_part += "<li>[data["toxins"]]% Plasma</li>"
+						if(data["nitrous_oxide"])
+							sensor_part += "<li>[data["nitrous_oxide"]]% N<sub>2</sub>O</li>"
 						sensor_part += "</ul></td></tr>"
 					sensor_part += "</table>"
 

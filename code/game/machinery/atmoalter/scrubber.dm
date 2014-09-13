@@ -120,11 +120,8 @@
 			filtered_out.carbon_dioxide = removed.carbon_dioxide
 			removed.carbon_dioxide = 0
 
-			if(removed.trace_gases.len>0)
-				for(var/datum/gas/trace_gas in removed.trace_gases)
-					if(istype(trace_gas, /datum/gas/sleeping_agent))
-						removed.trace_gases -= trace_gas
-						filtered_out.trace_gases += trace_gas
+			filtered_out.nitrous_oxide = removed.nitrous_oxide
+			removed.nitrous_oxide = 0
 
 			if(removed.trace_gases.len>0)
 				for(var/datum/gas/trace_gas in removed.trace_gases)

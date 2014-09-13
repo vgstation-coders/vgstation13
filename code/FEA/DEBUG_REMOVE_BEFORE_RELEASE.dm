@@ -474,6 +474,10 @@ obj/indicator
 				if(GM.nitrogen < 0)
 					return "error"
 				return "[round(GM.nitrogen/MOLES_CELLSTANDARD*10+0.5)]"
+			if("nitroous oxide")
+				if(GM.nitrous_oxide < 0)
+					return "error"
+				return "[round(GM.nitrous_oxide/MOLES_CELLSTANDARD*10+0.5)]"
 			else
 				return "[round((GM.total_moles())/MOLES_CELLSTANDARD*10+0.5)]"
 

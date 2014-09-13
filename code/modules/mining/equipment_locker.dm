@@ -537,6 +537,8 @@
 	max_co2 = 0
 	min_n2 = 0
 	max_n2 = 0
+	min_n2o = 0
+	max_n2o = 0
 	minbodytemp = 0
 	wander = 0
 	idle_vision_range = 5

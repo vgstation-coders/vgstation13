@@ -42,6 +42,7 @@ var/list/CounterDoorDirections = list(SOUTH,EAST) //Which directions doors turfs
 		air.nitrogen += T.nitrogen / air.group_multiplier
 		air.carbon_dioxide += T.carbon_dioxide / air.group_multiplier
 		air.toxins += T.toxins / air.group_multiplier
+		air.nitrous_oxide += T.nitrous_oxide / air.group_multiplier
 		air.temperature += T.temperature / air.group_multiplier
 	air.update_values()
 
@@ -183,10 +184,8 @@ var/list/CounterDoorDirections = list(SOUTH,EAST) //Which directions doors turfs
 	air.graphics = 0
 	if(air.toxins > MOLES_PLASMA_VISIBLE)
 		air.graphics |= GRAPHICS_PLASMA
-	if(air.trace_gases.len)
-		var/datum/gas/sleeping_agent = locate(/datum/gas/sleeping_agent) in air.trace_gases
-		if(sleeping_agent && (sleeping_agent.moles > 1))
-			air.graphics |= GRAPHICS_N2O
+	if(air.nitrous_oxide > MOLES_N2O_VISIBLE) //Look at that, much nicer
+		air.graphics |= GRAPHICS_N2O
 	// If configured and cold, maek ice
 	if(zas_settings.Get(/datum/ZAS_Setting/ice_formation))
 		if(air.temperature <= TEMPERATURE_ICE_FORMATION && air.return_pressure()>MIN_PRESSURE_ICE_FORMATION)
@@ -298,6 +297,7 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 		full_nitro = A.nitrogen * size
 		full_co2 = A.carbon_dioxide * size
 		full_plasma = A.toxins * size
+		full_n2o = A.nitrous_oxide * size
 
 		full_heat_capacity = A.heat_capacity() * size
 
@@ -305,6 +305,7 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 		s_full_nitro = B.nitrogen * share_size
 		s_full_co2 = B.carbon_dioxide * share_size
 		s_full_plasma = B.toxins * share_size
+		s_full_n2o = B.nitrous_oxide * share_size
 
 		s_full_heat_capacity = B.heat_capacity() * share_size
 
@@ -312,6 +313,7 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 		nit_avg = (full_nitro + s_full_nitro) / (size + share_size)
 		co2_avg = (full_co2 + s_full_co2) / (size + share_size)
 		plasma_avg = (full_plasma + s_full_plasma) / (size + share_size)
+		n20_avg = (full_n2o + s_full_n2o) / (size + share_size)
 
 		temp_avg = (A.temperature * full_heat_capacity + B.temperature * s_full_heat_capacity) / (full_heat_capacity + s_full_heat_capacity)
 
@@ -324,6 +326,7 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 	A.nitrogen = max(0, (A.nitrogen - nit_avg) * (1-ratio) + nit_avg )
 	A.carbon_dioxide = max(0, (A.carbon_dioxide - co2_avg) * (1-ratio) + co2_avg )
 	A.toxins = max(0, (A.toxins - plasma_avg) * (1-ratio) + plasma_avg )
+	A.nitrous_oxide = max(0, (A.nitrous_oxide - n2o_avg) * (1-ratio) + n2o_avg )
 
 	A.temperature = max(0, (A.temperature - temp_avg) * (1-ratio) + temp_avg )
 
@@ -331,6 +334,7 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 	B.nitrogen = max(0, (B.nitrogen - nit_avg) * (1-ratio) + nit_avg )
 	B.carbon_dioxide = max(0, (B.carbon_dioxide - co2_avg) * (1-ratio) + co2_avg )
 	B.toxins = max(0, (B.toxins - plasma_avg) * (1-ratio) + plasma_avg )
+	B.nitrous_oxide = max(0, (B.nitrous_oxide - n2o_avg) * (1-ratio) + n2o_avg )
 
 	B.temperature = max(0, (B.temperature - temp_avg) * (1-ratio) + temp_avg )
 
@@ -363,6 +367,7 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 		unsim_nitrogen = 0
 		unsim_co2 = 0
 		unsim_plasma = 0
+		unsim_n2o = 0
 		unsim_heat_capacity = 0
 		unsim_temperature = 0
 
@@ -382,6 +387,7 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 		unsim_co2 += T.carbon_dioxide
 		unsim_nitrogen += T.nitrogen
 		unsim_plasma += T.toxins
+		unsim_n2o += T.nitrous_oxide
 		unsim_temperature += T.temperature/unsimulated_tiles.len
 
 	//These values require adjustment in order to properly represent a room of the specified size.
@@ -389,7 +395,8 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 	unsim_co2 *= correction_ratio
 	unsim_nitrogen *= correction_ratio
 	unsim_plasma *= correction_ratio
-	unsim_heat_capacity = HEAT_CAPACITY_CALCULATION(unsim_oxygen,unsim_co2,unsim_nitrogen,unsim_plasma)
+	unsim_n2o *= correction_ratio
+	unsim_heat_capacity = HEAT_CAPACITY_CALCULATION(unsim_oxygen,unsim_co2,unsim_nitrogen,unsim_plasma,unsim_nitrous_oxide)
 
 	var
 		ratio = sharing_lookup_table[6]
@@ -400,6 +407,7 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 		full_nitro = A.nitrogen * size
 		full_co2 = A.carbon_dioxide * size
 		full_plasma = A.toxins * size
+		full_n2o = A.nitrous_oxide * size
 
 		full_heat_capacity = A.heat_capacity() * size
 
@@ -407,6 +415,7 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 		nit_avg = (full_nitro + unsim_nitrogen) / (size + share_size)
 		co2_avg = (full_co2 + unsim_co2) / (size + share_size)
 		plasma_avg = (full_plasma + unsim_plasma) / (size + share_size)
+		n2o_avg = (full_n2o + unsim_n2o) / (size + share_size)
 
 		temp_avg = (A.temperature * full_heat_capacity + unsim_temperature * unsim_heat_capacity) / (full_heat_capacity + unsim_heat_capacity) / 2
 
@@ -417,6 +426,7 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 	A.nitrogen = max(0, (A.nitrogen - nit_avg) * (1 - ratio) + nit_avg )
 	A.carbon_dioxide = max(0, (A.carbon_dioxide - co2_avg) * (1 - ratio) + co2_avg )
 	A.toxins = max(0, (A.toxins - plasma_avg) * (1 - ratio) + plasma_avg )
+	A.nitrous_oxide = max(0, (A.nitrous_oxide - n2o_avg) * (1 - ratio) + n2o_avg )
 
 	// EXPERIMENTAL: Disable space being cold
 	// N3X: Made this togglable for Pomf. Comment recovered from older code.

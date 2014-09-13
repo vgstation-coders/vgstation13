@@ -578,14 +578,16 @@
 			var/n2_level = environment.nitrogen/total_moles
 			var/co2_level = environment.carbon_dioxide/total_moles
 			var/plasma_level = environment.toxins/total_moles
-			var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
+			var/n2o_level = environment.nitrous_oxide/total_moles
+			var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level+n2o_level)
 
 			// AUTOFIXED BY fix_string_idiocy.py
 			// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:547: dat += "Nitrogen: [round(n2_level*100)]%<br>"
 			dat += {"Nitrogen: [round(n2_level*100)]%<br>
 				Oxygen: [round(o2_level*100)]%<br>
 				Carbon Dioxide: [round(co2_level*100)]%<br>
-				Plasma: [round(plasma_level*100)]%<br>"}
+				Plasma: [round(plasma_level*100)]%<br>
+				Nitrous Oxide: [round(n2o_level*100)]"}
 			// END AUTOFIX
 			if(unknown_level > 0.01)
 				dat += "OTHER: [round(unknown_level)]%<br>"

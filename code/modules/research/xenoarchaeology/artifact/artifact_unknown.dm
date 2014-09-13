@@ -18,6 +18,7 @@
 #define TRIGGER_CO2 11
 #define TRIGGER_NITRO 12
 #define MAX_TRIGGER 12
+#define TRIGGER_N2O 13
 /*
 //sleeping gas appears to be bugged, currently
 var/list/valid_primary_effect_types = list(\
@@ -101,7 +102,7 @@ var/list/valid_secondary_effect_types = list(\
 	else if(icon_num == 10)
 		desc = "A large alien device, there appear to be some kind of vents in the side."
 		if(prob(50))
-			my_effect.trigger = rand(6,12)
+			my_effect.trigger = rand(6,13)
 	else if(icon_num == 11)
 		name = "sealed alien pod"
 		desc = "A strange alien device."
@@ -112,6 +113,7 @@ var/list/valid_secondary_effect_types = list(\
 #define TRIGGER_OXY 10
 #define TRIGGER_CO2 11
 #define TRIGGER_NITRO 12
+#define TRIGGER_N2O 13
 
 /obj/machinery/artifact/process()
 
@@ -134,6 +136,7 @@ var/list/valid_secondary_effect_types = list(\
 	var/trigger_oxy = 0
 	var/trigger_co2 = 0
 	var/trigger_nitro = 0
+	var/trigger_n2o = 0
 	if( (my_effect.trigger >= TRIGGER_HEAT && my_effect.trigger <= TRIGGER_NITRO) || (my_effect.trigger >= TRIGGER_HEAT && my_effect.trigger <= TRIGGER_NITRO) )
 		var/turf/T = get_turf(src)
 		var/datum/gas_mixture/env = T.return_air()
@@ -151,6 +154,8 @@ var/list/valid_secondary_effect_types = list(\
 				trigger_co2 = 1
 			if(env.nitrogen >= 10)
 				trigger_nitro = 1
+			if(env.nitrous_oxide >= 10)
+				trigger_n2o = 1
 
 	//COLD ACTIVATION
 	if(trigger_cold)
@@ -222,6 +227,18 @@ var/list/valid_secondary_effect_types = list(\
 		if(my_effect.trigger == TRIGGER_NITRO && my_effect.activated)
 			my_effect.ToggleActivate()
 		if(secondary_effect && secondary_effect.trigger == TRIGGER_NITRO && !secondary_effect.activated)
+			secondary_effect.ToggleActivate(0)
+
+	//N2O GAS ACTIVATION
+	if(trigger_n2o)
+		if(my_effect.trigger == TRIGGER_N2O && !my_effect.activated)
+			my_effect.ToggleActivate()
+		if(secondary_effect && secondary_effect.trigger == TRIGGER_N2O && !secondary_effect.activated)
+			secondary_effect.ToggleActivate(0)
+	else
+		if(my_effect.trigger == TRIGGER_N2O && my_effect.activated)
+			my_effect.ToggleActivate()
+		if(secondary_effect && secondary_effect.trigger == TRIGGER_N2O && !secondary_effect.activated)
 			secondary_effect.ToggleActivate(0)
 
 /obj/machinery/artifact/attack_hand(var/mob/user as mob)

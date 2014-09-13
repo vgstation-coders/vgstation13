@@ -149,6 +149,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 Oxygen : [env.oxygen]
 Plasma : [env.toxins]
 CO2: [env.carbon_dioxide]
+N2O: [env.nitrous_oxide]
 Pressure: [env.return_pressure()]"}
 	// END AUTOFIX
 	usr.show_message(t, 1)

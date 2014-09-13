@@ -412,7 +412,7 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 		if(total_fuel > 0 && oxygen > 0)
 
 			//slows down the burning when the concentration of the reactants is low
-			var/dampening_multiplier = total_combustables / (total_combustables + nitrogen + carbon_dioxide)
+			var/dampening_multiplier = total_combustables / (total_combustables + nitrogen + carbon_dioxide + nitrous_oxide)
 			//calculates how close the mixture of the reactants is to the optimum
 			var/mix_multiplier = 1 / (1 + (5 * ((oxygen / total_combustables) ** 2))) // Thanks, Mloc
 			//toss everything together

@@ -107,6 +107,7 @@
 	TLV["nitrogen"] =		list(-1, -1,  -1,  -1) // Partial pressure, kpa
 	TLV["carbon_dioxide"] = list(-1.0, -1.0, 5, 10) // Partial pressure, kpa
 	TLV["plasma"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
+	TLV["nitrous_oxide"] =	list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 	TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 	TLV["pressure"] =		list(ONE_ATMOSPHERE*0.80,ONE_ATMOSPHERE*0.90,ONE_ATMOSPHERE*1.10,ONE_ATMOSPHERE*1.20) /* kpa */
 	TLV["temperature"] =	list(T0C-30, T0C, T0C+40, T0C+70) // K
@@ -279,6 +280,7 @@
 	var/nitrogen_dangerlevel = get_danger_level(environment.nitrogen*partial_pressure, TLV["nitrogen"])
 	var/co2_dangerlevel = get_danger_level(environment.carbon_dioxide*partial_pressure, TLV["carbon_dioxide"])
 	var/plasma_dangerlevel = get_danger_level(environment.toxins*partial_pressure, TLV["plasma"])
+	var/n2o_dangerlevel = get_danger_level(environment.nitrous_oxide*partial_pressure, TLV["nitrous_oxide"])
 	var/temperature_dangerlevel = get_danger_level(environment.temperature, TLV["temperature"])
 	var/other_dangerlevel = get_danger_level(other_moles*partial_pressure, TLV["other"])
 
@@ -288,6 +290,7 @@
 		co2_dangerlevel,
 		nitrogen_dangerlevel,
 		plasma_dangerlevel,
+		n2o_dangerlevel,
 		other_dangerlevel,
 		temperature_dangerlevel
 		)
@@ -513,7 +516,7 @@
 /obj/machinery/alarm/proc/ui_air_status()
 	var/turf/location = get_turf(src)
 	var/datum/gas_mixture/environment = location.return_air()
-	var/total = environment.oxygen + environment.carbon_dioxide + environment.toxins + environment.nitrogen
+	var/total = environment.oxygen + environment.carbon_dioxide + environment.toxins + environment.nitrogen + environment.nitrous_oxide
 	if(total==0)
 		return null
 
@@ -539,6 +542,10 @@
 	var/plasma_dangerlevel = get_danger_level(environment.toxins*partial_pressure, current_settings)
 	var/plasma_percent = round(environment.toxins / total * 100, 2)
 
+	current_settings = TLV["nitrous_oxide"]
+	var/n2o_dangerlevel = get_danger_level(environment.nitrous_oxide*partial_pressure, current_settings)
+	var/n2o_percent = round(environment.nitrous_oxide / total * 100, 2)
+
 	current_settings = TLV["other"]
 	var/other_moles = 0.0
 	for(var/datum/gas/G in environment.trace_gases)
@@ -559,6 +566,7 @@
 	percentages["nitrogen"]=nitrogen_percent
 	percentages["co2"]=co2_percent
 	percentages["plasma"]=plasma_percent
+	percentages["nitrous_oxide"]=n2o_percent
 	percentages["other"]=other_moles
 	data["contents"]=percentages
 
@@ -569,8 +577,9 @@
 	danger["nitrogen"]=nitrogen_dangerlevel
 	danger["co2"]=co2_dangerlevel
 	danger["plasma"]=plasma_dangerlevel
+	danger["nitrous_oxide"]=n2o_dangerlevel
 	danger["other"]=other_dangerlevel
-	danger["overall"]=max(pressure_dangerlevel,oxygen_dangerlevel,nitrogen_dangerlevel,co2_dangerlevel,plasma_dangerlevel,other_dangerlevel,temperature_dangerlevel)
+	danger["overall"]=max(pressure_dangerlevel,oxygen_dangerlevel,nitrogen_dangerlevel,co2_dangerlevel,plasma_dangerlevel,n2o_dangerlevel,other_dangerlevel,temperature_dangerlevel)
 	data["danger"]=danger
 	return data
 

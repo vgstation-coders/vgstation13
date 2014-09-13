@@ -7,8 +7,8 @@ What are the archived variables for?
 #define SPECIFIC_HEAT_TOXIN		200
 #define SPECIFIC_HEAT_AIR		20
 #define SPECIFIC_HEAT_CDO		30
-#define HEAT_CAPACITY_CALCULATION(oxygen,carbon_dioxide,nitrogen,toxins) \
-	(carbon_dioxide*SPECIFIC_HEAT_CDO + (oxygen+nitrogen)*SPECIFIC_HEAT_AIR + toxins*SPECIFIC_HEAT_TOXIN)
+#define HEAT_CAPACITY_CALCULATION(oxygen,carbon_dioxide,nitrogen,toxins,nitrous_oxide) \
+	(carbon_dioxide*SPECIFIC_HEAT_CDO + (oxygen+nitrogen)*SPECIFIC_HEAT_AIR + toxins*SPECIFIC_HEAT_TOXIN + nitrous_oxide*SPECIFIC_HEAT_N2O)
 
 #define MINIMUM_HEAT_CAPACITY	0.0003
 #define QUANTIZE(variable)		(round(variable,0.0001))
@@ -37,10 +37,11 @@ What are the archived variables for?
 	var/moles_archived = 0
 
 /datum/gas_mixture/
-	var/oxygen = 0		//Holds the "moles" of each of the four gases.
+	var/oxygen = 0		//Holds the "moles" of each of the five gases. //TODO - Make this a modular list so this fuckery never happens again - Comic
 	var/carbon_dioxide = 0
 	var/nitrogen = 0
 	var/toxins = 0
+	var/nitrous_oxide
 
 	var/total_moles = 0	//Updated when a reaction occurs.
 
@@ -62,6 +63,7 @@ What are the archived variables for?
 	var/tmp/carbon_dioxide_archived
 	var/tmp/nitrogen_archived
 	var/tmp/toxins_archived
+	var/tmp/nitrous_oxide_archived
 
 	var/tmp/temperature_archived
 
@@ -76,7 +78,7 @@ What are the archived variables for?
 //FOR THE LOVE OF GOD PLEASE USE THIS PROC
 //Call it with negative numbers to remove gases.
 
-/datum/gas_mixture/proc/adjust(o2 = 0, co2 = 0, n2 = 0, tx = 0, list/datum/gas/traces = list())
+/datum/gas_mixture/proc/adjust(o2 = 0, co2 = 0, n2 = 0, tx = 0, n20 = 0, list/datum/gas/traces = list())
 	//Purpose: Adjusting the gases within a airmix
 	//Called by: Nothing, yet!
 	//Inputs: The values of the gases to adjust
@@ -86,6 +88,7 @@ What are the archived variables for?
 	carbon_dioxide = max(0, carbon_dioxide + co2)
 	nitrogen       = max(0, nitrogen + n2)
 	toxins         = max(0, toxins + tx)
+	nitrous_oxide  = max(0, nitrous_oxide + n2o)
 
 	//handle trace gasses
 	for(var/datum/gas/G in traces)
@@ -125,7 +128,7 @@ What are the archived variables for?
 	//Inputs: None
 	//Outputs: Heat capacity
 
-	var/heat_capacity = HEAT_CAPACITY_CALCULATION(oxygen,carbon_dioxide,nitrogen,toxins)
+	var/heat_capacity = HEAT_CAPACITY_CALCULATION(oxygen,carbon_dioxide,nitrogen,toxins,nitrous_oxide)
 
 	if(trace_gases && trace_gases.len) //sanity check because somehow the tracegases gets nulled?
 		for(var/datum/gas/trace_gas in trace_gases)
@@ -139,7 +142,7 @@ What are the archived variables for?
 	//Inputs: None
 	//Outputs: Archived heat capacity
 
-	var/heat_capacity_archived = HEAT_CAPACITY_CALCULATION(oxygen_archived,carbon_dioxide_archived,nitrogen_archived,toxins_archived)
+	var/heat_capacity_archived = HEAT_CAPACITY_CALCULATION(oxygen_archived,carbon_dioxide_archived,nitrogen_archived,toxins_archived,nitrous_oxide_archived)
 
 	if(trace_gases.len)
 		for(var/datum/gas/trace_gas in trace_gases)
@@ -190,7 +193,7 @@ What are the archived variables for?
 	//Inputs: None
 	//Outputs: None
 
-	total_moles = oxygen + carbon_dioxide + nitrogen + toxins
+	total_moles = oxygen + carbon_dioxide + nitrogen + toxins + nitrous_oxide
 
 	if(trace_gases.len)
 		for(var/datum/gas/trace_gas in trace_gases)
@@ -231,10 +234,8 @@ What are the archived variables for?
 	if(toxins > MOLES_PLASMA_VISIBLE)
 		graphics |= GRAPHICS_PLASMA
 
-	if(length(trace_gases))
-		var/datum/gas/sleeping_agent = locate(/datum/gas/sleeping_agent) in trace_gases
-		if(sleeping_agent && (sleeping_agent.moles > 1))
-			graphics |= GRAPHICS_N2O
+	if(nitrous_oxide > MOLES_N2O_VISIBLE)
+		graphics |= GRAPHICS_N2O
 /*
 	if(aerosols && aerosols.total_volume >= 1)
 		graphics |= GRAPHICS_REAGENTS
@@ -332,6 +333,7 @@ What are the archived variables for?
 	carbon_dioxide_archived = carbon_dioxide
 	nitrogen_archived =  nitrogen
 	toxins_archived = toxins
+	nitrous_oxide_archived = nitrous_oxide
 
 	if(trace_gases.len)
 		for(var/datum/gas/trace_gas in trace_gases)
@@ -356,6 +358,7 @@ What are the archived variables for?
 		|| ((giver.carbon_dioxide > MINIMUM_AIR_TO_SUSPEND) && (giver.carbon_dioxide >= carbon_dioxide*MINIMUM_AIR_RATIO_TO_SUSPEND)) \
 		|| ((giver.nitrogen > MINIMUM_AIR_TO_SUSPEND) && (giver.nitrogen >= nitrogen*MINIMUM_AIR_RATIO_TO_SUSPEND)) \
 		|| ((giver.toxins > MINIMUM_AIR_TO_SUSPEND) && (giver.toxins >= toxins*MINIMUM_AIR_RATIO_TO_SUSPEND)))
+		|| ((giver.nitrous_oxide > MINIMUM_AIR_TO_SUSPEND) && (giver.nitrous_oxide >= nitrous_oxide*MINIMUM_AIR_RATIO_TO_SUSPEND)))
 		return 0
 	if(abs(giver.temperature - temperature) > MINIMUM_TEMPERATURE_DELTA_TO_SUSPEND)
 		return 0
@@ -389,11 +392,13 @@ What are the archived variables for?
 		carbon_dioxide += giver.carbon_dioxide*giver.group_multiplier/group_multiplier
 		nitrogen += giver.nitrogen*giver.group_multiplier/group_multiplier
 		toxins += giver.toxins*giver.group_multiplier/group_multiplier
+		nitrous_oxide += giver.nitrous_oxide*giver.group_multiplier/group_multiplier
 	else
 		oxygen += giver.oxygen
 		carbon_dioxide += giver.carbon_dioxide
 		nitrogen += giver.nitrogen
 		toxins += giver.toxins
+		nitrous_oxide += giver.nitrous_oxide
 
 	if(giver.trace_gases.len)
 		for(var/datum/gas/trace_gas in giver.trace_gases)
@@ -434,11 +439,13 @@ What are the archived variables for?
 	removed.nitrogen = QUANTIZE((nitrogen/sum)*amount)
 	removed.carbon_dioxide = QUANTIZE((carbon_dioxide/sum)*amount)
 	removed.toxins = QUANTIZE((toxins/sum)*amount)
+	removed.nitrous_oxide = QUANTIZE(nitrous_oxide/sum)*amount)
 
 	oxygen -= removed.oxygen/group_multiplier
 	nitrogen -= removed.nitrogen/group_multiplier
 	carbon_dioxide -= removed.carbon_dioxide/group_multiplier
 	toxins -= removed.toxins/group_multiplier
+	nitrous_oxide -= removed.nitrous_oxide/group_multiplier
 
 	if(trace_gases.len)
 		for(var/datum/gas/trace_gas in trace_gases)
@@ -475,11 +482,13 @@ What are the archived variables for?
 	removed.nitrogen = QUANTIZE(nitrogen*ratio)
 	removed.carbon_dioxide = QUANTIZE(carbon_dioxide*ratio)
 	removed.toxins = QUANTIZE(toxins*ratio)
+	removed.nitrous_oxide = QUANTIZE(nitrous_oxide*ratio)
 
 	oxygen -= removed.oxygen/group_multiplier
 	nitrogen -= removed.nitrogen/group_multiplier
 	carbon_dioxide -= removed.carbon_dioxide/group_multiplier
 	toxins -= removed.toxins/group_multiplier
+	nitrous_oxide -= removed.nitrous_oxide/group_multiplier
 
 	if(trace_gases.len)
 		for(var/datum/gas/trace_gas in trace_gases)
@@ -519,6 +528,7 @@ What are the archived variables for?
 	carbon_dioxide = sample.carbon_dioxide
 	nitrogen = sample.nitrogen
 	toxins = sample.toxins
+	nitrous_oxide = sample.nitrous_oxide
 	total_moles = sample.total_moles()
 
 	trace_gases.len=null
@@ -547,6 +557,7 @@ What are the archived variables for?
 	var/delta_carbon_dioxide = QUANTIZE(carbon_dioxide_archived - sharer.carbon_dioxide_archived)/TRANSFER_FRACTION
 	var/delta_nitrogen = QUANTIZE(nitrogen_archived - sharer.nitrogen_archived)/TRANSFER_FRACTION
 	var/delta_toxins = QUANTIZE(toxins_archived - sharer.toxins_archived)/TRANSFER_FRACTION
+	var/delta_nitrous_oxide = QUANTIZE(nitrous_oxide_archived - sharer.nitrous_oxide_archived)/TRANSFER_FRACTION
 
 	var/delta_temperature = (temperature_archived - sharer.temperature_archived)
 
@@ -554,6 +565,7 @@ What are the archived variables for?
 		|| ((abs(delta_carbon_dioxide) > MINIMUM_AIR_TO_SUSPEND) && (abs(delta_carbon_dioxide) >= carbon_dioxide_archived*MINIMUM_AIR_RATIO_TO_SUSPEND)) \
 		|| ((abs(delta_nitrogen) > MINIMUM_AIR_TO_SUSPEND) && (abs(delta_nitrogen) >= nitrogen_archived*MINIMUM_AIR_RATIO_TO_SUSPEND)) \
 		|| ((abs(delta_toxins) > MINIMUM_AIR_TO_SUSPEND) && (abs(delta_toxins) >= toxins_archived*MINIMUM_AIR_RATIO_TO_SUSPEND)))
+		|| ((abs(delta_nitrous_oxide) > MINIMUM_AIR_TO_SUSPEND) && (abs(delta_nitrous_oxide) >= nitrous_oxide_archived*MINIMUM_AIR_RATIO_TO_SUSPEND)))
 		return 0
 
 	if(abs(delta_temperature) > MINIMUM_TEMPERATURE_DELTA_TO_SUSPEND)
@@ -579,6 +591,7 @@ What are the archived variables for?
 		|| ((abs(delta_carbon_dioxide) > MINIMUM_AIR_TO_SUSPEND) && (abs(delta_carbon_dioxide) >= sharer.carbon_dioxide_archived*MINIMUM_AIR_RATIO_TO_SUSPEND)) \
 		|| ((abs(delta_nitrogen) > MINIMUM_AIR_TO_SUSPEND) && (abs(delta_nitrogen) >= sharer.nitrogen_archived*MINIMUM_AIR_RATIO_TO_SUSPEND)) \
 		|| ((abs(delta_toxins) > MINIMUM_AIR_TO_SUSPEND) && (abs(delta_toxins) >= sharer.toxins_archived*MINIMUM_AIR_RATIO_TO_SUSPEND)))
+		|| ((abs(delta_nitrous_oxide) > MINIMUM_AIR_TO_SUSPEND) && (abs(delta_nitrous_oxide) >= sharer.nitrous_oxide_archived*MINIMUM_AIR_RATIO_TO_SUSPEND)))
 		return -1
 
 	if(trace_gases.len)
@@ -603,6 +616,7 @@ What are the archived variables for?
 	var/delta_carbon_dioxide = (carbon_dioxide_archived - model.carbon_dioxide)/TRANSFER_FRACTION
 	var/delta_nitrogen = (nitrogen_archived - model.nitrogen)/TRANSFER_FRACTION
 	var/delta_toxins = (toxins_archived - model.toxins)/TRANSFER_FRACTION
+	var/delta_nitrous_oxide = (nitrous_oxide_archived - model.nitrous_oxide)/TRANSFER_FRACTION
 
 	var/delta_temperature = (temperature_archived - model.temperature)
 
@@ -610,6 +624,7 @@ What are the archived variables for?
 		|| ((abs(delta_carbon_dioxide) > MINIMUM_AIR_TO_SUSPEND) && (abs(delta_carbon_dioxide) >= carbon_dioxide_archived*MINIMUM_AIR_RATIO_TO_SUSPEND)) \
 		|| ((abs(delta_nitrogen) > MINIMUM_AIR_TO_SUSPEND) && (abs(delta_nitrogen) >= nitrogen_archived*MINIMUM_AIR_RATIO_TO_SUSPEND)) \
 		|| ((abs(delta_toxins) > MINIMUM_AIR_TO_SUSPEND) && (abs(delta_toxins) >= toxins_archived*MINIMUM_AIR_RATIO_TO_SUSPEND)))
+		|| ((abs(delta_nitrous_oxide) > MINIMUM_AIR_TO_SUSPEND) && (abs(delta_nitrous_oxide) >= nitrous_oxide_archived*MINIMUM_AIR_RATIO_TO_SUSPEND)))
 		return 0
 	if(abs(delta_temperature) > MINIMUM_TEMPERATURE_DELTA_TO_SUSPEND)
 		return 0
@@ -636,6 +651,7 @@ What are the archived variables for?
 	var/delta_carbon_dioxide = QUANTIZE(carbon_dioxide_archived - sharer.carbon_dioxide_archived)/TRANSFER_FRACTION
 	var/delta_nitrogen = QUANTIZE(nitrogen_archived - sharer.nitrogen_archived)/TRANSFER_FRACTION
 	var/delta_toxins = QUANTIZE(toxins_archived - sharer.toxins_archived)/TRANSFER_FRACTION
+	var/delta_nitrous_oxide = QUANTIZE(nitrous_oxide_archived - sharer.nitrous_oxide_archived)/TRANSFER_FRACTION
 
 	var/delta_temperature = (temperature_archived - sharer.temperature_archived)
 
@@ -677,6 +693,15 @@ What are the archived variables for?
 				heat_sharer_to_self -= toxins_heat_capacity*sharer.temperature_archived
 				heat_capacity_sharer_to_self -= toxins_heat_capacity
 
+		if(delta_nitrous_oxide)
+			var/nitrous_oxide_heat_capacity = SPECIFIC_HEAT_N2O*delta_nitrous_oxide
+			if(delta_nitrous_oxide > 0)
+				heat_self_to_sharer += nitrous_oxide_heat_capacity*temperature_archived
+				heat_capacity_self_to_sharer += nitrous_oxide_heat_capacity
+			else
+				heat_sharer_to_self -= nitrous_oxide_heat_capacity*sharer.temperature_archived
+				heat_capacity_sharer_to_self -= nitrous_oxide_heat_capacity
+
 		old_self_heat_capacity = heat_capacity()*group_multiplier
 		old_sharer_heat_capacity = sharer.heat_capacity()*sharer.group_multiplier
 
@@ -692,7 +717,10 @@ What are the archived variables for?
 	toxins -= delta_toxins/group_multiplier
 	sharer.toxins += delta_toxins/sharer.group_multiplier
 
-	var/moved_moles = (delta_oxygen + delta_carbon_dioxide + delta_nitrogen + delta_toxins)
+	nitrous_oxide -= delta_nitrous_oxide/group_multiplier
+	sharer.nitrous_oxide += delta_nitrous_oxide/sharer.group_multiplier
+
+	var/moved_moles = (delta_oxygen + delta_carbon_dioxide + delta_nitrogen + delta_toxins + delta_nitrous_oxide)
 
 	var/list/trace_types_considered = list()
 
@@ -782,6 +810,7 @@ What are the archived variables for?
 	var/delta_carbon_dioxide = QUANTIZE(carbon_dioxide_archived - model.carbon_dioxide)/TRANSFER_FRACTION
 	var/delta_nitrogen = QUANTIZE(nitrogen_archived - model.nitrogen)/TRANSFER_FRACTION
 	var/delta_toxins = QUANTIZE(toxins_archived - model.toxins)/TRANSFER_FRACTION
+	var/delta_nitrous_oxide = QUANTIZE(nitrous_oxide_archived - model.nitrous_oxide)/TRANSFER_FRACTION
 
 	var/delta_temperature = (temperature_archived - model.temperature)
 
@@ -807,6 +836,11 @@ What are the archived variables for?
 			heat_transferred -= toxins_heat_capacity*model.temperature
 			heat_capacity_transferred -= toxins_heat_capacity
 
+		if(delta_nitrous_oxide)
+			var/nitrous_oxide_heat_capacity = SPECIFIC_HEAT_N2O*delta_nitrous_oxide
+			heat_transferred -= nitrous_oxide_heat_capacity*model.temperature
+			heat_capacity_transferred -= nitrous_oxide_heat_capacity
+
 		old_self_heat_capacity = heat_capacity()*group_multiplier
 
 	if(border_multiplier)
@@ -814,13 +848,14 @@ What are the archived variables for?
 		carbon_dioxide -= delta_carbon_dioxide*border_multiplier/group_multiplier
 		nitrogen -= delta_nitrogen*border_multiplier/group_multiplier
 		toxins -= delta_toxins*border_multiplier/group_multiplier
+		nitrous_oxide -= delta_nitrous_oxide*border_multiplier/group_multiplier
 	else
 		oxygen -= delta_oxygen/group_multiplier
 		carbon_dioxide -= delta_carbon_dioxide/group_multiplier
 		nitrogen -= delta_nitrogen/group_multiplier
-		toxins -= delta_toxins/group_multiplier
+		nitrous_oxide -= delta_nitrous_oxide/group_multiplier
 
-	var/moved_moles = (delta_oxygen + delta_carbon_dioxide + delta_nitrogen + delta_toxins)
+	var/moved_moles = (delta_oxygen + delta_carbon_dioxide + delta_nitrogen + delta_toxins + delta_nitrous_oxide)
 
 	if(trace_gases.len)
 		for(var/datum/gas/trace_gas in trace_gases)
@@ -1029,6 +1064,9 @@ What are the archived variables for?
 	if((abs(toxins-sample.toxins) > MINIMUM_AIR_TO_SUSPEND) && \
 		((toxins < (1-MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.toxins) || (toxins > (1+MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.toxins)))
 		return 0
+	if((abs(nitrous_oxide-sample.nitrous_oxide) > MINIMUM_AIR_TO_SUSPEND) && \
+		((nitrous_oxide < (1-MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.nitrous_oxide) || (nitrous_oxide > (1+MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.nitrous_oxide)))
+		return 0
 
 	if(total_moles() > MINIMUM_AIR_TO_SUSPEND)
 		if((abs(temperature-sample.temperature) > MINIMUM_TEMPERATURE_DELTA_TO_SUSPEND) && \
@@ -1069,6 +1107,7 @@ What are the archived variables for?
 	carbon_dioxide -= right_side.carbon_dioxide
 	nitrogen -= right_side.nitrogen
 	toxins -= right_side.toxins
+	nitrous_oxide -= right_side.nitrous_oxide
 
 	if((trace_gases.len > 0)||(right_side.trace_gases.len > 0))
 		for(var/datum/gas/trace_gas in right_side.trace_gases)

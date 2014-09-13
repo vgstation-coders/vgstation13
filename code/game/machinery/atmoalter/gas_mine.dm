@@ -8,7 +8,7 @@
 	m_amt=10*CC_PER_SHEET_METAL
 	w_type = RECYK_METAL
 
-	var/datum/gas_mixture/air_contents
+	var/datum/gas_mixture/air_contents = new
 
 	var/on=1
 
@@ -106,14 +106,12 @@
 
 		loc.assume_air(removed)
 
-/obj/machinery/atmospherics/miner/sleeping_agent
+/obj/machinery/atmospherics/miner/nitrous_oxide
 	name = "\improper N2O Gas Miner"
 	light_color = "#FFCCCC"
 
 	AddAir()
-		var/datum/gas/sleeping_agent/trace_gas = new
-		air_contents.trace_gases += trace_gas
-		trace_gas.moles = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+		air_contents.nitrous_oxide = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
 
 /obj/machinery/atmospherics/miner/nitrogen
 	name = "\improper N2 Gas Miner"
@@ -148,8 +146,7 @@
 	name = "\improper Air Miner"
 	desc = "You fucking cheater."
 	light_color = "#70DBDB"
-
 	on = 0
 
-	AddAir()
+	New()
 		air_contents.carbon_dioxide = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)

@@ -37,7 +37,8 @@
 \blue Nitrogen: [environment.nitrogen] \n
 \blue Oxygen: [environment.oxygen] \n
 \blue Plasma : [environment.toxins] \n
-\blue Carbon Dioxide: [environment.carbon_dioxide] \n"}
+\blue Carbon Dioxide: [environment.carbon_dioxide] \n
+\blue Nitrous Oxide: [environment.nitrous_oxide] \n"}
 	// END AUTOFIX
 	for(var/datum/gas/trace_gas in environment.trace_gases)
 		usr << "\blue [trace_gas.type]: [trace_gas.moles] \n"

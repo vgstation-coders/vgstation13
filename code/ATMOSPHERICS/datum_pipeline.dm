@@ -41,6 +41,7 @@ datum/pipeline
 			member.air_temporary.nitrogen = air.nitrogen*member.volume/air.volume
 			member.air_temporary.toxins = air.toxins*member.volume/air.volume
 			member.air_temporary.carbon_dioxide = air.carbon_dioxide*member.volume/air.volume
+			member.air_temporary.nitrous_oxide = air.nitrous_oxide*member.volume/air.volume
 
 			member.air_temporary.temperature = air.temperature
 

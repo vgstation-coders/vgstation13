@@ -105,9 +105,8 @@
 			if(possible_port)
 				if(connect(possible_port))
 					user << "\blue You connect [name] to the port."
-					var/datum/gas/sleeping_agent/S = locate() in src.air_contents.trace_gases
-					if(src.air_contents.toxins > 0 || (istype(S)))
-						log_admin("[usr]([ckey(usr.key)]) connected a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] to a connector_port at [loc.x], [loc.y], [loc.z]")
+					if(src.air_contents.toxins > 0 || src.air_contents.nitrous_oxide > 0)
+						log_admin("[usr]([ckey(usr.key)]) connected a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [src.air_contents.nitrous_oxide ? " N2O" : ""]\] to a connector_port at [loc.x], [loc.y], [loc.z]")
 					update_icon()
 					return
 				else
@@ -129,14 +128,16 @@
 				var/n2_concentration = air_contents.nitrogen/total_moles
 				var/co2_concentration = air_contents.carbon_dioxide/total_moles
 				var/plasma_concentration = air_contents.toxins/total_moles
+				var/n2o_concentration = air_contents.nitrous_oxide/total_moles
 
-				var/unknown_concentration =  1-(o2_concentration+n2_concentration+co2_concentration+plasma_concentration)
+				var/unknown_concentration =  1-(o2_concentration+n2_concentration+co2_concentration+plasma_concentration+n2o_concentration)
 
 				user << "\blue Pressure: [round(pressure,0.1)] kPa"
 				user << "\blue Nitrogen: [round(n2_concentration*100)]%"
 				user << "\blue Oxygen: [round(o2_concentration*100)]%"
 				user << "\blue CO2: [round(co2_concentration*100)]%"
 				user << "\blue Plasma: [round(plasma_concentration*100)]%"
+				user << "\blue N2O: [round(n2o_concentration*100)]%"
 				if(unknown_concentration>0.01)
 					user << "\red Unknown: [round(unknown_concentration*100)]%"
 				user << "\blue Temperature: [round(air_contents.temperature-T0C)]&deg;C"
