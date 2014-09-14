@@ -110,7 +110,7 @@
 				playsound(loc, M.attack_sound, 50, 1, 1)
 			for(var/mob/O in viewers(src, null))
 				O.show_message("<span class='attack'>\The <EM>[M]</EM> [M.attacktext] \the <EM>[src]</EM>!</span>", 1)
-			add_logs(M, src, "attacked", admin=0)
+			add_logs(M, src, "attacked", admin=1)
 			var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 			adjustBruteLoss(damage)
 
@@ -129,7 +129,11 @@
 			if ((M.client && !( M.blinded )))
 				M.show_message("\red [user] gently taps [src] with [O]. ")
 
+/mob/living/simple_animal/construct/airflow_stun()
+	return
 
+/mob/living/simple_animal/construct/airflow_hit(atom/A)
+	return
 
 /////////////////Juggernaut///////////////
 
@@ -339,3 +343,54 @@
 				return
 			cultist.loc = usr.loc
 			usr.visible_message("\red [cultist] appears in a flash of red light as [usr] glows with power")*/
+
+/mob/living/simple_animal/construct/Life()
+	. = ..()
+	if(.)
+		if(fire)
+			if(fire_alert)							fire.icon_state = "fire1" //fire_alert is either 0 if no alert, 1 for cold and 2 for heat.
+			else									fire.icon_state = "fire0"
+		if(pullin)
+			if(pulling)								pullin.icon_state = "pull1"
+			else									pullin.icon_state = "pull0"
+
+/mob/living/simple_animal/construct/armoured/Life()
+	switch(health)
+		if(250 to INFINITY)		healths.icon_state = "juggernaut_health0"
+		if(200 to 250)			healths.icon_state = "juggernaut_health1"
+		if(150 to 200)			healths.icon_state = "juggernaut_health2"
+		if(100 to 150)			healths.icon_state = "juggernaut_health3"
+		if(50 to 100)			healths.icon_state = "juggernaut_health4"
+		if(1 to 50)				healths.icon_state = "juggernaut_health5"
+		else					healths.icon_state = "juggernaut_health7"
+
+
+/mob/living/simple_animal/construct/behemoth/Life()
+	switch(health)
+		if(250 to INFINITY)		healths.icon_state = "juggernaut_health0"
+		if(200 to 250)			healths.icon_state = "juggernaut_health1"
+		if(150 to 200)			healths.icon_state = "juggernaut_health2"
+		if(100 to 150)			healths.icon_state = "juggernaut_health3"
+		if(50 to 100)			healths.icon_state = "juggernaut_health4"
+		if(1 to 50)				healths.icon_state = "juggernaut_health5"
+		else					healths.icon_state = "juggernaut_health7"
+
+/mob/living/simple_animal/construct/builder/Life()
+	switch(health)
+		if(50 to INFINITY)		healths.icon_state = "artificer_health0"
+		if(40 to 50)			healths.icon_state = "artificer_health1"
+		if(30 to 40)			healths.icon_state = "artificer_health2"
+		if(20 to 30)			healths.icon_state = "artificer_health3"
+		if(10 to 20)			healths.icon_state = "artificer_health4"
+		if(1 to 10)				healths.icon_state = "artificer_health5"
+		else					healths.icon_state = "artificer_health7"
+
+/mob/living/simple_animal/construct/wraith/Life()
+	switch(health)
+		if(75 to INFINITY)		healths.icon_state = "wraith_health0"
+		if(60 to 75)			healths.icon_state = "wraith_health1"
+		if(45 to 60)			healths.icon_state = "wraith_health2"
+		if(30 to 45)			healths.icon_state = "wraith_health3"
+		if(15 to 30)			healths.icon_state = "wraith_health4"
+		if(1 to 15)				healths.icon_state = "wraith_health5"
+		else					healths.icon_state = "wraith_health7"

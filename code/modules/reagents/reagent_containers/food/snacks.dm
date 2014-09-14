@@ -1,5 +1,4 @@
 //Food items that are eaten normally and don't leave anything behind.
-var/global/deepfry_nutriment = 1
 
 /obj/item/weapon/reagent_containers/food/snacks
 	name = "snack"
@@ -2654,18 +2653,15 @@ var/global/deepfry_nutriment = 1
 
 		return
 
-	if( istype(I, /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/) ) // Long ass fucking object name
-
-		if( src.open )
+	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/)) // Long ass fucking object name
+		if(src.pizza) user << "<span class='warning'>[src] already has a pizza in it.</span>"
+		else if(src.open)
 			user.drop_item()
 			I.loc = src
 			src.pizza = I
-
-			update_icon()
-
-			user << "\red You put the [I] in the [src]!"
-		else
-			user << "\red You try to push the [I] through the lid but it doesn't work!"
+			src.update_icon()
+			user << "<span class='notice'>You put [I] in [src].</span>"
+		else user << "<span class='warning'>Open [src] first.</span>"
 		return
 
 	if( istype(I, /obj/item/weapon/pen/) )
@@ -2908,16 +2904,16 @@ var/global/deepfry_nutriment = 1
 	New()
 		..()
 		reagents.add_reagent("nutriment", 3)
+
 /obj/item/weapon/reagent_containers/food/snacks/deepfryholder
 	name = "Deep Fried Foods Holder Obj"
-	desc = "If you can see this description the code for the deep fryer fucked up."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "deepfried_holder_icon"
 	bitesize = 2
 	deepfried = 1
 	New()
 		..()
-		reagents.add_reagent("nutriment", deepfry_nutriment)
+		reagents.add_reagent("nutriment",deepFriedNutriment)
 
 ///////////////////////////////////////////
 // new old food stuff from bs12
@@ -2992,17 +2988,3 @@ var/global/deepfry_nutriment = 1
 	New()
 		..()
 		reagents.add_reagent("nutriment", 4)
-
-/client/proc/fryer_nutriment()
-	set name = "Toggle nutriment added by deep frying."
-	set desc = "Toggle the amount of nutriment added to things that have been deep fried."
-	set category = "Debug"
-
-	deepfry_nutriment = input("Please select an amount. Note: Setting this number below 1 can cause problems with deep fried food, and has been disabled.", "Select amount", "[deepfry_nutriment]")  as text
-	if(deepfry_nutriment < 1)
-		deepfry_nutriment = 1
-		usr << "The nutriment has been set to 1. Please select a number that is above or equal to 1 next time."
-
-	log_admin("[key_name(usr)] set the base nutriment of deep fried foods to [deepfry_nutriment]")
-	message_admins("\blue [key_name(usr)] set the nutriment of deep fried foods to [deepfry_nutriment]", 1)
-

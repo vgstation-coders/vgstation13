@@ -689,7 +689,8 @@
 /mob/living/carbon/human/Topic(href, href_list)
 	var/pickpocket = 0
 	var/list/ourlist = list()
-	if(!usr.stat && usr.canmove && !usr.restrained() && in_range(src, usr) && Adjacent(usr))
+	var/able = (!usr.stat && usr.canmove && !usr.restrained() && in_range(src, usr) && Adjacent(usr))
+
 	/*
 
 	if(!usr.stat && usr.canmove && !usr.restrained() && in_range(src, usr) && Adjacent(usr))
@@ -702,95 +703,92 @@
 
 	*/
 
-		if(href_list["item"])
-			var/slot = href_list["item"]
-			var/obj/item/place_item = usr.get_active_hand()
-			var/obj/item/id_item = src.wear_id
+	if(href_list["item"] && able)
+		var/slot = href_list["item"]
+		var/obj/item/place_item = usr.get_active_hand()
+		var/obj/item/id_item = src.wear_id
 
-			for(var/things in check_obscured_slots())
-				ourlist += num2slotname(things)
-			for(var/thingsa in ourlist)
+		for(var/things in check_obscured_slots())
+			ourlist += num2slotname(things)
+		for(var/thingsa in ourlist)
 
-			if(slot in ourlist)
-				usr << "<span class='warning'>You can't reach that. Something is covering it.</span>"
-				return
-			else
-				if(isanimal(usr)) return //Animals can't do that
-				var/obj/effect/equip_e/human/O = new /obj/effect/equip_e/human(  )
-				if(ishuman(usr) && usr:gloves)
-					var/obj/item/clothing/gloves/G = usr:gloves
-					pickpocket = G.pickpocket
-				O.source = usr
-				O.target = src
-				O.item = usr.get_active_hand()
-				O.s_loc = usr.loc
-				O.t_loc = loc
-				O.place = href_list["item"]
-				O.pickpocket = pickpocket //Stealthy
-				requests += O
-				//world << O.place
-				if(O.place == "id")
-					if(id_item)
-						usr << "<span class='notice'>You try to take [src]'s ID.</span>"
-					else if(place_item && place_item.mob_can_equip(src, slot_wear_id, 1))
-						usr << "<span class='notice'>You try to place [place_item] on [src].</span>"
-
-					if(do_mob(usr, src, HUMAN_STRIP_DELAY))
-						if(id_item)
-							u_equip(id_item)
-							if(pickpocket) usr.put_in_hands(id_item)
-						else
-							if(place_item)
-								usr.u_equip(place_item)
-								equip_to_slot_if_possible(place_item, slot_wear_id, 0, 1)
-						// Update strip window
-						if(usr.machine == src && in_range(src, usr))
-							show_inv(usr)
-
-					else if(!pickpocket)
-						// Display a warning if the user mocks up
-						src << "<span class='warning'>You feel your ID being fumbled with!</span>"
-				else
-					spawn( 0 )
-						O.process()
-						return
-
-
-		if(href_list["pockets"])
-			var/pocket_side = href_list["pockets"]
-			var/pocket_id = (pocket_side == "right" ? slot_r_store : slot_l_store)
-			var/obj/item/pocket_item = (pocket_id == slot_r_store ? src.r_store : src.l_store)
-			var/obj/item/place_item = usr.get_active_hand() // Item to place in the pocket, if it's empty
+		if(slot in ourlist)
+			usr << "<span class='warning'>You can't reach that. Something is covering it.</span>"
+			return
+		else
 			if(isanimal(usr)) return //Animals can't do that
-			if(ishuman(usr) && (usr:gloves))
+			var/obj/effect/equip_e/human/O = new /obj/effect/equip_e/human(  )
+			if(ishuman(usr) && usr:gloves)
 				var/obj/item/clothing/gloves/G = usr:gloves
 				pickpocket = G.pickpocket
+			O.source = usr
+			O.target = src
+			O.item = usr.get_active_hand()
+			O.s_loc = usr.loc
+			O.t_loc = loc
+			O.place = href_list["item"]
+			O.pickpocket = pickpocket //Stealthy
+			requests += O
+			//world << O.place
+			if(O.place == "id")
+				if(id_item)
+					usr << "<span class='notice'>You try to take [src]'s ID.</span>"
+				else if(place_item && place_item.mob_can_equip(src, slot_wear_id, 1))
+					usr << "<span class='notice'>You try to place [place_item] on [src].</span>"
 
-			if(pocket_item)
-				usr << "<span class='notice'>You try to empty [src]'s [pocket_side] pocket.</span>"
-			else if(place_item && place_item.mob_can_equip(src, pocket_id, 1))
-				usr << "<span class='notice'>You try to place [place_item] into [src]'s [pocket_side] pocket.</span>"
-			else
-				return
+				if(do_mob(usr, src, HUMAN_STRIP_DELAY))
+					if(id_item)
+						u_equip(id_item)
+						if(pickpocket) usr.put_in_hands(id_item)
+					else
+						if(place_item)
+							usr.u_equip(place_item)
+							equip_to_slot_if_possible(place_item, slot_wear_id, 0, 1)
+					// Update strip window
+					if(usr.machine == src && in_range(src, usr))
+						show_inv(usr)
 
-			if(do_mob(usr, src, HUMAN_STRIP_DELAY))
-				if(pocket_item)
-					u_equip(pocket_item)
-					if(pickpocket) usr.put_in_hands(pocket_item)
-				else
-					if(place_item)
-						usr.u_equip(place_item)
-						equip_to_slot_if_possible(place_item, pocket_id, 0, 1)
-				// Update strip window
-				if(usr.machine == src && in_range(src, usr))
-					show_inv(usr)
-
-			else if(!pickpocket)
+				else if(!pickpocket)
 					// Display a warning if the user mocks up
-				src << "<span class='warning'>You feel your [pocket_side] pocket being fumbled with!</span>"
+					src << "<span class='warning'>You feel your ID being fumbled with!</span>"
+			else
+				spawn( 0 )
+					O.process()
+					return
 
-		..()
-		return
+
+	if(href_list["pockets"] && able)
+		var/pocket_side = href_list["pockets"]
+		var/pocket_id = (pocket_side == "right" ? slot_r_store : slot_l_store)
+		var/obj/item/pocket_item = (pocket_id == slot_r_store ? src.r_store : src.l_store)
+		var/obj/item/place_item = usr.get_active_hand() // Item to place in the pocket, if it's empty
+		if(isanimal(usr)) return //Animals can't do that
+		if(ishuman(usr) && (usr:gloves))
+			var/obj/item/clothing/gloves/G = usr:gloves
+			pickpocket = G.pickpocket
+
+		if(pocket_item)
+			usr << "<span class='notice'>You try to empty [src]'s [pocket_side] pocket.</span>"
+		else if(place_item && place_item.mob_can_equip(src, pocket_id, 1))
+			usr << "<span class='notice'>You try to place [place_item] into [src]'s [pocket_side] pocket.</span>"
+		else
+			return
+
+		if(do_mob(usr, src, HUMAN_STRIP_DELAY))
+			if(pocket_item)
+				u_equip(pocket_item)
+				if(pickpocket) usr.put_in_hands(pocket_item)
+			else
+				if(place_item)
+					usr.u_equip(place_item)
+					equip_to_slot_if_possible(place_item, pocket_id, 0, 1)
+			// Update strip window
+			if(usr.machine == src && in_range(src, usr))
+				show_inv(usr)
+
+		else if(!pickpocket)
+				// Display a warning if the user mocks up
+			src << "<span class='warning'>You feel your [pocket_side] pocket being fumbled with!</span>"
 
 
 	if (href_list["refresh"])
@@ -822,9 +820,9 @@
 */
 	if (href_list["criminal"])
 		if(hasHUD(usr,"security"))
-
-			var/modified = 0
 			var/perpname = "wot"
+			var/modified
+
 			if(wear_id)
 				var/obj/item/weapon/card/id/I = wear_id.GetID()
 				if(I)
@@ -1771,3 +1769,75 @@ mob/living/carbon/human/yank_out_object()
 	if(wear_id)
 		ACL |= wear_id.GetAccess()
 	return ACL
+
+/mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
+	if(judgebot.emagged == 2)
+		return 10 //Everyone is a criminal!
+
+	var/threatcount = 0
+
+	//Lasertag
+	if(lasercolor)
+		if(lasercolor == "b")//Lasertag turrets target the opposing team.
+			if(istype(wear_suit, /obj/item/clothing/suit/redtag))
+				threatcount += 4
+			if((istype(r_hand,/obj/item/weapon/gun/energy/laser/redtag)) || (istype(l_hand,/obj/item/weapon/gun/energy/laser/redtag)))
+				threatcount += 4
+			if(istype(belt, /obj/item/weapon/gun/energy/laser/redtag))
+				threatcount += 2
+
+		if(lasercolor == "r")
+			if(istype(wear_suit, /obj/item/clothing/suit/bluetag))
+				threatcount += 4
+			if((istype(r_hand,/obj/item/weapon/gun/energy/laser/bluetag)) || (istype(l_hand,/obj/item/weapon/gun/energy/laser/bluetag)))
+				threatcount += 4
+			if(istype(belt, /obj/item/weapon/gun/energy/laser/bluetag))
+				threatcount += 2
+
+		return threatcount
+
+	//Check for ID
+	var/obj/item/weapon/card/id/idcard = get_idcard()
+	if(judgebot.idcheck && !idcard)
+		threatcount += 4
+
+	//Check for weapons
+	if(judgebot.weaponscheck)
+		if(!idcard || !(access_weapons in idcard.access))
+			if(judgebot.check_for_weapons(l_hand))
+				threatcount += 4
+			if(judgebot.check_for_weapons(r_hand))
+				threatcount += 4
+			if(judgebot.check_for_weapons(belt))
+				threatcount += 2
+
+	//Check for arrest warrant
+	if(judgebot.check_records)
+		var/perpname = get_face_name(get_id_name())
+		var/datum/data/record/R = find_record("name", perpname, data_core.security)
+		if(R && R.fields["criminal"])
+			switch(R.fields["criminal"])
+				if("*Arrest*")
+					threatcount += 5
+				if("Incarcerated")
+					threatcount += 2
+				if("Parolled")
+					threatcount += 2
+
+	//Check for dresscode violations
+	if(istype(head, /obj/item/clothing/head/wizard) || istype(head, /obj/item/clothing/head/helmet/space/rig/wizard))
+		threatcount += 2
+
+	//Loyalty implants imply trustworthyness
+	if(isloyal(src))
+		threatcount -= 1
+
+	//Secbots are racist!
+	if(dna && dna.mutantrace && dna.mutantrace != "none")
+		threatcount += 2
+
+	//Agent cards lower threatlevel.
+	if(istype(idcard, /obj/item/weapon/card/id/syndicate))
+		threatcount -= 2
+
+	return threatcount

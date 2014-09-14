@@ -47,6 +47,7 @@
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	var/hasShocked = 0 //Prevents multiple shocks from happening
 	autoclose = 1
+	var/busy = 0
 
 /obj/machinery/door/airlock/Destroy()
 	if(wires)
@@ -936,7 +937,7 @@ About the new airlock wires panel:
 	return dat
 
 /obj/machinery/door/airlock/attack_hand(mob/user as mob)
-	if (!istype(user, /mob/living/silicon))
+	if (!istype(user, /mob/living/silicon) && !isobserver(user))
 		if (isElectrified())
 			// TODO: analyze the called proc
 			if (shock(user, 100))
@@ -992,6 +993,8 @@ About the new airlock wires panel:
 			PC.plugin(src, user)
 			PC = null
 	else if(istype(I, /obj/item/weapon/crowbar) || istype(I, /obj/item/weapon/twohanded/fireaxe) )
+		if(src.busy) return
+		src.busy = 1
 		var/beingcrowbarred = null
 		if(istype(I, /obj/item/weapon/crowbar) )
 			beingcrowbarred = 1 //derp, Agouri
@@ -1026,9 +1029,9 @@ About the new airlock wires panel:
 					A = new/obj/item/weapon/circuitboard/airlock(loc)
 
 					// TODO: recheck the vars
-					if (req_access.len)
+					if(req_access && req_access.len)
 						A.conf_access = req_access
-					else if (req_one_access.len)
+					else if(req_one_access && req_one_access.len)
 						A.conf_access = req_one_access
 						A.one_access = 1
 				else
@@ -1065,12 +1068,12 @@ About the new airlock wires panel:
 						user << "\red You need to be wielding the Fire axe to do that."
 				else
 					spawn(0)	close(1)
+		src.busy = 0
 	else if (istype(I, /obj/item/weapon/card/emag) || istype(I, /obj/item/weapon/melee/energy/blade))
 		if (!operating)
 			if(density)
 				door_animate("spark")
-				sleep(6)
-				open()
+				open(1)
 			operating = -1
 	else
 		..(I, user)
@@ -1103,7 +1106,7 @@ About the new airlock wires panel:
 			spawn(150)
 				autoclose()
 		else if(autoclose && !normalspeed)
-			spawn(5)
+			spawn(20)
 				autoclose()
 	// </worry>
 	return ..()
@@ -1125,6 +1128,12 @@ About the new airlock wires panel:
 
 			if (locate(/mob/living) in T)
 				playsound(get_turf(src), 'sound/machines/buzz-two.ogg', 50, 0)
+				if(autoclose  && normalspeed)
+					spawn(150)
+						autoclose()
+				else if(autoclose && !normalspeed)
+					spawn(20)
+						autoclose()
 				return
 
 	else
