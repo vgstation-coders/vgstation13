@@ -1823,13 +1823,13 @@ other types of metals and chemistry for reagents).
 	locked = 1
 
 /datum/design/ammo_9mm
-	name = "Ammunition Box (9mm)"
+	name = "ammo box (9mm)"
 	desc = "A box of prototype 9mm ammunition."
 	id = "ammo_9mm"
 	req_tech = list("combat" = 4, "materials" = 3)
 	build_type = PROTOLATHE
 	materials = list("$metal" = 3750, "$silver" = 100)
-	build_path = /obj/item/ammo_magazine/c9mm
+	build_path = /obj/item/ammo_storage/box/c9mm
 
 /datum/design/stunshell
 	name = "Stun Shell"

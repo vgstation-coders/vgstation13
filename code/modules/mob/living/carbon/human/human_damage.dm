@@ -263,4 +263,3 @@ This function restores all organs.
 			organ.implants += S
 			visible_message("<span class='danger'>The projectile sticks in the wound!</span>")
 			S.add_blood(src)
-	return 1

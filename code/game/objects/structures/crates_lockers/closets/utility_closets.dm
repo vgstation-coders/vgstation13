@@ -136,6 +136,8 @@
 		new /obj/item/clothing/suit/storage/hazardvest(src)
 	if(prob(70))
 		new /obj/item/device/flashlight(src)
+	else
+		new /obj/item/weapon/storage/fancy/flares(src)
 	if(prob(70))
 		new /obj/item/weapon/screwdriver(src)
 	if(prob(70))

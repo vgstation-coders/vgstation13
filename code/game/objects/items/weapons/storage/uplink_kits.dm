@@ -25,7 +25,7 @@
 
 			if("guns")
 				new /obj/item/weapon/gun/projectile(src)
-				new /obj/item/ammo_magazine/a357(src)
+				new /obj/item/ammo_storage/box/a357(src)
 				new /obj/item/weapon/card/emag(src)
 				new /obj/item/weapon/plastique(src)
 				return
@@ -137,7 +137,7 @@
 /obj/item/weapon/storage/box/syndie_kit/conversion/New()
 	..()
 	new /obj/item/weapon/conversion_kit(src)
-	new /obj/item/ammo_magazine/a357(src)
+	new /obj/item/ammo_storage/box/a357(src)
 	return
 
 /obj/item/weapon/storage/box/syndie_kit/greytide
@@ -160,3 +160,11 @@
 		new /obj/item/ammo_casing/shotgun/fakebeanbag(src)
 		new /obj/item/ammo_casing/shotgun/fakebeanbag(src)
 		new /obj/item/ammo_casing/shotgun/fakebeanbag(src)
+
+/obj/item/weapon/storage/box/syndie_kit/extra_ammo
+	name = "surplus ammo"
+
+/obj/item/weapon/storage/box/syndie/kit/extra_ammo/New()
+	..()
+	new /obj/item/ammo_storage/box/a357(src)
+	new /obj/item/ammo_storage/speedloader/a357(src)
