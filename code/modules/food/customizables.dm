@@ -76,7 +76,6 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/New(loc,ingredient)
 	. = ..()
 	src.reagents.add_reagent("nutriment",8)
-	src.update()
 	return
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/attackby(obj/item/I,mob/user)
@@ -110,7 +109,7 @@
 			src.overlays += I
 			src.overlays += I.overlays
 		else
-			I = new(src.icon,"[initial(src.icon_state)]_filling")
+			I = image(src.icon,,"[src.icon_state]_filling")
 			if(S.filling_color == "#FFFFFF") I.color = pick("#FF0000","#0000FF","#008000","#FFFF00")
 			else I.color = S.filling_color
 			if(src.stackIngredients)
@@ -122,10 +121,6 @@
 		I = image(src.icon,,"src.[icon_state]_top")
 		I.pixel_x = rand(-1,1)
 		I.pixel_y = (ingredients.len*2)+1
-		src.overlays += I
-	if(!src.overlays.len)
-		I = new(src.icon,"[initial(src.icon_state)]_filling")
-		I.color = pick("#FF0000","#0000FF","#008000","#FFFF00")
 		src.overlays += I
 	return
 

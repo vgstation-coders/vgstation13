@@ -6,7 +6,6 @@
 	item_state = "deathsquad"
 	armor = list(melee = 65, bullet = 55, laser = 35,energy = 20, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.2
-	species_restricted = list("exclude","Vox")
 
 /obj/item/clothing/head/helmet/space/deathsquad/beret
 	name = "officer's beret"
@@ -22,7 +21,6 @@
 	desc = "A paramedic space helmet. Used in the recovery of bodies from space."
 	icon_state = "paramedic-eva-helmet"
 	item_state = "paramedic-eva-helmet"
-	species_restricted = list("exclude","Vox")
 
 /obj/item/clothing/suit/space/paramedic
 	name = "Paramedic EVA suit"
@@ -57,7 +55,6 @@
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	flags = FPRINT | TABLEPASS | HEADCOVERSEYES | BLOCKHAIR | STOPSPRESSUREDMAGE
 	siemens_coefficient = 0.9
-
 
 /obj/item/clothing/suit/space/pirate
 	name = "pirate coat"
