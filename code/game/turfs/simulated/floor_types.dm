@@ -114,12 +114,11 @@
 /turf/simulated/floor/engine/n20
 	New()
 		..()
-		if(src.air)
-			// EXACTLY the same code as fucking roomfillers.  If this doesn't work, something's fucked.
-			var/datum/gas/sleeping_agent/trace_gas = new
-			air.trace_gases += trace_gas
-			trace_gas.moles = 9*4000
-			air.update_values()
+		// EXACTLY the same code as fucking roomfillers.  If this doesn't work, something's fucked.
+		var/datum/gas/sleeping_agent/trace_gas = new
+		air.trace_gases += trace_gas
+		trace_gas.moles = 9*4000
+		air.update_values()
 
 /turf/simulated/floor/engine/vacuum
 	name = "vacuum floor"

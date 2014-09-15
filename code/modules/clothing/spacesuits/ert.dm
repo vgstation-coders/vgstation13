@@ -7,7 +7,7 @@
 	siemens_coefficient = 0.6
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECITON_TEMPERATURE
 	var/obj/machinery/camera/camera
-	species_restricted = list("exclude","Vox")
+
 /obj/item/clothing/head/helmet/space/ert/attack_self(mob/user)
 	if(camera)
 		..(user)
@@ -38,14 +38,13 @@
 	/obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton, /obj/item/weapon/gun/energy/gun)
 	siemens_coefficient = 0.6
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECITON_TEMPERATURE
-	species_restricted = list("exclude","Vox")
+
 //Commander
 /obj/item/clothing/head/helmet/space/ert/commander
 	name = "emergency response team commander helmet"
 	desc = "A helmet worn by the commander of a NanoTrasen Emergency Response Team. Armoured, space ready and fire resistant."
 	icon_state = "ert_commander"
 	item_state = "helm-command"
-	species_restricted = list("exclude","Vox")
 
 /obj/item/clothing/suit/space/ert/commander
 	name = "emergency response team commander suit"
@@ -59,7 +58,6 @@
 	desc = "A helmet worn by the security members of a NanoTrasen Emergency Response Team. Armoured, space ready and fire resistant."
 	icon_state = "ert_security"
 	item_state = "syndicate-helm-black-red"
-	species_restricted = list("exclude","Vox")
 
 /obj/item/clothing/suit/space/ert/security
 	name = "emergency response team security suit"
@@ -72,7 +70,6 @@
 	name = "emergency response team engineer helmet"
 	desc = "A helmet worn by the engineering members of a NanoTrasen Emergency Response Team. Armoured, space ready and fire resistant."
 	icon_state = "ert_engineer"
-	species_restricted = list("exclude","Vox")
 
 /obj/item/clothing/suit/space/ert/engineer
 	name = "emergency response team engineer suit"
@@ -84,7 +81,6 @@
 	name = "emergency response team medical helmet"
 	desc = "A helmet worn by the medical members of a NanoTrasen Emergency Response Team. Armoured, space ready and fire resistant."
 	icon_state = "ert_medical"
-	species_restricted = list("exclude","Vox")
 
 /obj/item/clothing/suit/space/ert/medical
 	name = "emergency response team medical suit"
