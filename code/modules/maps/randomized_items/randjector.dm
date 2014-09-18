@@ -8,13 +8,11 @@
 //**************************************************************
 
 /obj/item/randjector
+	icon = 'icons/obj/map/randjectors.dmi'
 	desc = "It's filled with a murky liquid, and appears to be spring-loaded."
 	var/list/reagentsToAdd = list()
 	var/messagePre
 	var/messagePost
-
-/obj/item/randjector
-	icon = 'icons/obj/map/randjectors.dmi'
 
 /obj/item/randjector/New()
 	src.create_reagents(1000)
