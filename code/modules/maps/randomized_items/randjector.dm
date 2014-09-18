@@ -7,11 +7,6 @@
 //
 //**************************************************************
 
-/mob/verb/spawnRandjectors()
-	. = (input(src,"give num",,20) as num)
-	for(.,.,.--) new/obj/item/randjector(src.loc)
-	return
-
 /obj/item/randjector
 	desc = "It's filled with a murky liquid, and appears to be spring-loaded."
 	var/list/reagentsToAdd = list()
