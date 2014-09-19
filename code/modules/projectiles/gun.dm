@@ -54,6 +54,8 @@
 /obj/item/weapon/gun/preAttack(atom/target,mob/user)
 	if(user.a_intent != "help") //If the user wants to shoot
 		src.Fire(target,user) //Just shoot, fuck everything else!
+	else if(user.canTouch(target)) target.attackby(src,user)
+	else src.afterattack(target,user)
 	return
 			
 /obj/item/weapon/gun/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
