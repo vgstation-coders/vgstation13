@@ -63,7 +63,6 @@
 	return ..()
 
 /obj/item/randjector/proc/pickReagents() //honk if you love RNG
-	if(prob(5)) src.reagentsToAdd["adminordrazine"] = rand(20,100)
 	if(prob(5)) src.reagentsToAdd["cyanide"] = rand(1,10)
 	if(prob(5)) src.reagentsToAdd["chloralhydrate"] = rand(1,10)
 	if(prob(5)) src.reagentsToAdd["creatine"] = rand(30,70)
@@ -106,7 +105,7 @@
 /obj/item/randjector/attack(mob/M,mob/user)
 	if(istype(M,/mob) && M.reagents)
 		src.reagents.trans_to(M,src.reagents.total_volume)
-		. = "<font color='red'>[user.name] ([user.ckey]) injected [M.name] ([M.ckey]) with the [src] (reagents: [list2params(src.reagentsToAdd)]).</font>"
+		. = "<span class='warning'>[user.name] ([user.ckey]) injected [M.name] ([M.ckey]) with the [src] (reagents: [list2params(src.reagentsToAdd)]).</span>"
 		user.attack_log += text("\[[time_stamp()]\] [.]")
 		if(M != user) //We only need this if they stab someone else
 			M.attack_log += text("\[[time_stamp()]\] [.]")
