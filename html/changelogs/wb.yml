@@ -1,2 +1,3 @@
 author: Wild Bill
-changes: []
+changes:
+  - tweak: Refactored click code
