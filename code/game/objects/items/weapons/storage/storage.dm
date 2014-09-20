@@ -412,8 +412,8 @@
 	for(var/obj/item/I in contents)
 		remove_from_storage(I, T)
 
-/obj/item/weapon/storage/New()
-	. = ..()
+/obj/item/weapon/storage/New(loc)
+	..(loc)
 
 	if(allow_quick_empty)
 		verbs += /obj/item/weapon/storage/verb/quick_empty
@@ -425,17 +425,30 @@
 	else
 		verbs -= /obj/item/weapon/storage/verb/toggle_gathering_mode
 
-	src.boxes = new /obj/screen/storage(  )
+	src.boxes = new/obj/screen/storage()
 	src.boxes.name = "storage"
 	src.boxes.master = src
 	src.boxes.icon_state = "block"
 	src.boxes.screen_loc = "7,7 to 10,8"
 	src.boxes.layer = 19
-	src.closer = new /obj/screen/close(  )
+
+	src.closer = new/obj/screen/close()
 	src.closer.master = src
 	src.closer.icon_state = "x"
 	src.closer.layer = 20
+
 	orient2hud()
+
+/obj/item/weapon/storage/Destroy()
+	if(src.closer)
+		qdel(src.closer)
+		src.closer = null
+
+	if(src.boxes)
+		qdel(src.boxes)
+		src.boxes = null
+
+	..()
 
 /obj/item/weapon/storage/emp_act(severity)
 	if(!istype(src.loc, /mob/living))

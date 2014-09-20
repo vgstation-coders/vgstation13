@@ -196,19 +196,33 @@
 	src.add_fingerprint(user)
 	return
 
-/obj/item/clothing/suit/storage/New()
-	. = ..()
-	boxes = new /obj/screen/storage(  )
+/obj/item/clothing/suit/storage/New(loc)
+	..(loc)
+
+	boxes = new/obj/screen/storage()
 	boxes.name = "storage"
 	boxes.master = src
 	boxes.icon_state = "block"
 	boxes.screen_loc = "7,7 to 10,8"
 	boxes.layer = 19
-	closer = new /obj/screen/close(  )
+
+	closer = new/obj/screen/close()
 	closer.master = src
 	closer.icon_state = "x"
 	closer.layer = 20
+
 	orient2hud()
+
+/obj/item/clothing/suit/storage/Destroy()
+	if(closer)
+		qdel(closer)
+		closer = null
+
+	if(boxes)
+		qdel(boxes)
+		boxes = null
+
+	..()
 
 /obj/item/clothing/suit/emp_act(severity)
 	if(!istype(src.loc, /mob/living))
