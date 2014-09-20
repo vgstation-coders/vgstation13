@@ -21,6 +21,11 @@
 	var/state = 0
 	var/locked = 0
 
+/obj/machinery/power/emitter/New(loc)
+	..(loc)
+	src.effect_system = new/datum/effect/effect/system/spark_spread()
+	src.effect_system.set_up(5, 1, src)
+	src.effect_system.attach(src)
 
 /obj/machinery/power/emitter/verb/rotate()
 	set name = "Rotate"
@@ -40,7 +45,7 @@
 		src.directwired = 1
 
 /obj/machinery/power/emitter/Destroy()
-	message_admins("Emitter deleted at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+	message_admins("Emitter deleted at [formatJumpTo(src.loc)]")
 	log_game("Emitter deleted at ([x],[y],[z])")
 	investigate_log("<font color='red'>deleted</font> at ([x],[y],[z])","singulo")
 	..()
@@ -64,16 +69,16 @@
 		if(!src.locked)
 			if(src.active==1)
 				src.active = 0
-				user << "You turn off the [src]."
-				message_admins("Emitter turned off by [key_name(user, user.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+				user << "<span class=\"notice\">You turn off the [src].</span>"
+				message_admins("Emitter turned off by [key_name_admin(user)](<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>) in [formatJumpTo(src.loc)]")
 				log_game("Emitter turned off by [user.ckey]([user]) in ([x],[y],[z])")
 				investigate_log("turned <font color='red'>off</font> by [user.key]","singulo")
 			else
 				src.active = 1
-				user << "You turn on the [src]."
+				user << "<span class=\"notice\">You turn on the [src].</span>"
 				src.shot_number = 0
 				src.fire_delay = 100
-				message_admins("Emitter turned on by [key_name(user, user.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+				message_admins("Emitter turned on by [key_name_admin(user)](<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>) in [formatJumpTo(src.loc)]")
 				log_game("Emitter turned on by [user.ckey]([user]) in ([x],[y],[z])")
 				investigate_log("turned <font color='green'>on</font> by [user.key]","singulo")
 			update_icon()
@@ -133,9 +138,7 @@
 		playsound(get_turf(src), 'sound/weapons/emitter.ogg', 25, 1)
 
 		if(prob(35))
-			var/datum/effect/effect/system/spark_spread/Sparks = new
-			Sparks.set_up(5, 1, src)
-			Sparks.start()
+			effect_system.start()
 
 		A.dumbfire()
 

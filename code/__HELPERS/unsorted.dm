@@ -507,12 +507,14 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		return -M
 
 
-/proc/key_name(var/whom, var/include_link = null, var/include_name = 1)
+/proc/key_name(const/whom, const/include_link = FALSE, const/include_name = TRUE)
+	if(isnull(whom))
+		return "*null*"
+
 	var/mob/M
 	var/client/C
 	var/key
 
-	if(!whom)	return "*null*"
 	if(istype(whom, /client))
 		C = whom
 		M = C.mob
@@ -552,8 +554,8 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 	return .
 
-/proc/key_name_admin(var/whom, var/include_name = 1)
-	return key_name(whom, 1, include_name)
+/proc/key_name_admin(const/whom, const/include_name = TRUE)
+	return key_name(whom, TRUE, include_name)
 
 // Returns the atom sitting on the turf.
 // For example, using this on a disk, which is in a bag, on a mob, will return the mob because it's on the turf.

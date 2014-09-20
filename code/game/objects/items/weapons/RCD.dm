@@ -147,6 +147,7 @@
 
 /obj/item/weapon/rcd/examine()
 	set src in oview(0)
+
 	..()
 	usr << text("It currently holds []/[] matter-units.", matter, max_matter)
 
