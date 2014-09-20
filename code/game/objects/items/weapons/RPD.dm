@@ -139,7 +139,6 @@ var/global/list/RPD_recipes=list(
 	g_amt = 37500
 	w_type = RECYK_ELECTRONIC
 	origin_tech = "engineering=4;materials=2"
-	var/datum/effect/effect/system/spark_spread/spark_system
 	var/working = 0
 	var/p_type = 0
 	var/p_conntype = 0
@@ -157,11 +156,11 @@ var/global/list/RPD_recipes=list(
 	)
 	var/paint_color="grey"
 
-/obj/item/weapon/pipe_dispenser/New()
-	. = ..()
-	spark_system = new /datum/effect/effect/system/spark_spread
-	spark_system.set_up(5, 0, src)
-	spark_system.attach(src)
+/obj/item/weapon/pipe_dispenser/New(loc)
+	..(loc)
+	src.effect_system = new/datum/effect/effect/system/spark_spread()
+	src.effect_system.set_up(5, 0, src)
+	src.effect_system.attach(src)
 
 /obj/item/weapon/pipe_dispenser/attack_self(mob/user as mob)
 	show_menu(user)
@@ -367,7 +366,7 @@ var/global/list/RPD_recipes=list(
 		p_class = -1
 		p_conntype=-1
 		p_dir=1
-		src.spark_system.start()
+		src.effect_system.start()
 		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
 		show_menu(usr)
 
@@ -375,13 +374,13 @@ var/global/list/RPD_recipes=list(
 		p_class = -2
 		p_conntype=-1
 		p_dir=1
-		src.spark_system.start()
+		src.effect_system.start()
 		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
 		show_menu(usr)
 
 	if(href_list["set_color"])
 		paint_color=href_list["set_color"]
-		src.spark_system.start()
+		src.effect_system.start()
 		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
 		show_menu(usr)
 
@@ -390,7 +389,7 @@ var/global/list/RPD_recipes=list(
 		p_dir = text2num(href_list["dir"])
 		p_conntype = text2num(href_list["type"])
 		p_class = 0
-		src.spark_system.start()
+		src.effect_system.start()
 		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
 		show_menu(usr)
 
@@ -398,7 +397,7 @@ var/global/list/RPD_recipes=list(
 		p_class = 1
 		p_conntype=-1
 		p_dir=1
-		src.spark_system.start()
+		src.effect_system.start()
 		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
 		show_menu(usr)
 
@@ -406,7 +405,7 @@ var/global/list/RPD_recipes=list(
 		p_class = 3
 		p_conntype=-1
 		p_dir=1
-		src.spark_system.start()
+		src.effect_system.start()
 		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
 		show_menu(usr)
 
@@ -415,7 +414,7 @@ var/global/list/RPD_recipes=list(
 		p_conntype = text2num(href_list["type"])
 		p_dir = 1
 		p_class = 2
-		src.spark_system.start()
+		src.effect_system.start()
 		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
 		show_menu(usr)
 

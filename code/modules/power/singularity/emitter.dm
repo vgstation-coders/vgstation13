@@ -64,7 +64,7 @@
 	src.add_fingerprint(user)
 	if(state == 2)
 		if(!powernet)
-			user << "The emitter isn't connected to a wire."
+			user << "<span class=\"notice\">The emitter isn't connected to a wire.</span>"
 			return 1
 		if(!src.locked)
 			if(src.active==1)
@@ -75,7 +75,7 @@
 				investigate_log("turned <font color='red'>off</font> by [user.key]","singulo")
 			else
 				src.active = 1
-				user << "<span class=\"notice\">You turn on the [src].</span>"
+				user << "<span class=\"warning\">You turn on the [src].</span>"
 				src.shot_number = 0
 				src.fire_delay = 100
 				message_admins("Emitter turned on by [key_name_admin(user)](<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>) in [formatJumpTo(src.loc)]")
@@ -83,9 +83,9 @@
 				investigate_log("turned <font color='green'>on</font> by [user.key]","singulo")
 			update_icon()
 		else
-			user << "\red The controls are locked!"
+			user << "<span class=\"notice\">The controls are locked.</span>"
 	else
-		user << "\red The [src] needs to be firmly secured to the floor first."
+		user << "<span class=\"warning\">The [src] needs to be firmly secured to the floor first.</span>"
 		return 1
 
 
