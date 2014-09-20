@@ -27,6 +27,8 @@
 	//Detective Work, used for the duplicate data points kept in the scanners
 	var/list/original_atom
 
+	var/datum/effect/effect/system/effect_system
+
 /atom/proc/throw_impact(atom/hit_atom, var/speed)
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
@@ -65,15 +67,19 @@
 		WARNING("Type [type] does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler().")
 
 /atom/Destroy()
-	// Only call when we're actually deleted.
+	// only call when we're actually deleted
 	DeleteFromProfiler()
 
-	if(reagents)
-		reagents.Destroy()
-		reagents = null
+	if(src.effect_system)
+		src.effect_system.Destroy()
+		src.effect_system = null
 
-	// Idea by ChuckTheSheep to make the object even more unreferencable.
-	invisibility = 101
+	if(src.reagents)
+		src.reagents.Destroy()
+		src.reagents = null
+
+	// idea by ChuckTheSheep to make the object even more unreferencable
+	src.invisibility = 101
 
 /atom/New()
 	. = ..()

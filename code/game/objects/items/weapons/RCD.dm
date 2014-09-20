@@ -1,9 +1,3 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
-
-/*
-CONTAINS:
-RCD
-*/
 /obj/item/weapon/rcd
 	name = "rapid-construction-device (RCD)"
 	desc = "A device used to rapidly build walls/floor."
@@ -21,39 +15,17 @@ RCD
 	m_amt = 50000
 	w_type = RECYK_ELECTRONIC
 	origin_tech = "engineering=4;materials=2"
-	var/datum/effect/effect/system/spark_spread/spark_system
-	var/matter = 0
 	var/working = 0
 	var/mode = 1
 	var/canRwall = 0
 	var/disabled = 0
 
+	var/matter = 0
+	var/max_matter = 30
+
 	suicide_act(mob/user)
 		viewers(user) << "\red <b>[user] is using the deconstruct function on the [src.name] on \himself! It looks like \he's  trying to commit suicide!</b>"
-		return (user.death(1)) 
-
-	New()
-		desc = "A RCD. It currently holds [matter]/30 matter-units."
-		src.spark_system = new /datum/effect/effect/system/spark_spread
-		spark_system.set_up(5, 0, src)
-		spark_system.attach(src)
-		return
-
-
-	attackby(obj/item/weapon/W, mob/user)
-		..()
-		if(istype(W, /obj/item/weapon/rcd_ammo))
-			if((matter + 10) > 30)
-				user << "<span class='notice'>The RCD cant hold any more matter-units.</span>"
-				return
-			user.drop_item()
-			del(W)
-			matter += 10
-			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
-			user << "<span class='notice'>The RCD now holds [matter]/30 matter-units.</span>"
-			desc = "A RCD. It currently holds [matter]/30 matter-units."
-			return
-
+		return (user.death(1))
 
 	attack_self(mob/user)
 		//Change the mode
@@ -63,19 +35,19 @@ RCD
 				mode = 2
 				user << "<span class='notice'>Changed mode to 'Airlock'</span>"
 				if(prob(20))
-					src.spark_system.start()
+					src.effect_system.start()
 				return
 			if(2)
 				mode = 3
 				user << "<span class='notice'>Changed mode to 'Deconstruct'</span>"
 				if(prob(20))
-					src.spark_system.start()
+					src.effect_system.start()
 				return
 			if(3)
 				mode = 1
 				user << "<span class='notice'>Changed mode to 'Floor & Walls'</span>"
 				if(prob(20))
-					src.spark_system.start()
+					src.effect_system.start()
 				return
 
 	proc/activate()
@@ -167,11 +139,35 @@ RCD
 				user << "ERROR: RCD in MODE: [mode] attempted use by [user]. Send this text #coderbus or an admin."
 				return 0
 
+/obj/item/weapon/rcd/New(loc)
+	..(loc)
+	src.desc = "A RCD. It currently holds [src.matter]/[src.max_matter] matter-units."
+	src.effect_system = new/datum/effect/effect/system/spark_spread()
+	src.effect_system.set_up(5, 0, src)
+	src.effect_system.attach(src)
+
+/obj/item/weapon/rcd/attackby(obj/item/weapon/W, mob/user)
+	..()
+
+	if(istype(W, /obj/item/weapon/rcd_ammo))
+		var/obj/item/weapon/rcd_ammo/rcd_ammo = W
+
+		if((src.matter + rcd_ammo.matter) > src.max_matter)
+			user << "<span class='notice'>[src] the device cannot hold any more matter-units.</span>"
+			return
+
+		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+		src.matter += rcd_ammo.matter
+		src.desc = "A RCD. It currently holds [src.matter]/[src.max_matter] matter-units."
+		user << "<span class='notice'>[src] the device now holds [src.matter]/[src.max_matter] matter-units.</span>"
+		user.drop_item()
+		qdel(rcd_ammo)
+
 /obj/item/weapon/rcd/proc/useResource(var/amount, var/mob/user)
 	if(matter < amount)
 		return 0
 	matter -= amount
-	desc = "An RCD. It currently holds [matter]/30 matter-units."
+	desc = "An RCD. It currently holds [matter]/[max_matter] matter-units."
 	return 1
 
 /obj/item/weapon/rcd/proc/checkResource(var/amount, var/mob/user)
@@ -179,12 +175,12 @@ RCD
 /obj/item/weapon/rcd/borg/useResource(var/amount, var/mob/user)
 	if(!isrobot(user))
 		return 0
-	return user:cell:use(amount * 30)
+	return user:cell:use(amount * max_matter)
 
 /obj/item/weapon/rcd/borg/checkResource(var/amount, var/mob/user)
 	if(!isrobot(user))
 		return 0
-	return user:cell:charge >= (amount * 30)
+	return user:cell:charge >= (amount * max_matter)
 
 /obj/item/weapon/rcd/borg/New()
 	..()
@@ -204,3 +200,5 @@ RCD
 	m_amt = 30000
 	g_amt = 15000
 	w_type = RECYK_ELECTRONIC
+
+	var/matter = 10
