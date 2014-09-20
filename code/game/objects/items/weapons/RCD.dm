@@ -141,10 +141,14 @@
 
 /obj/item/weapon/rcd/New(loc)
 	..(loc)
-	src.desc = "A RCD. It currently holds [src.matter]/[src.max_matter] matter-units."
 	src.effect_system = new/datum/effect/effect/system/spark_spread()
 	src.effect_system.set_up(5, 0, src)
 	src.effect_system.attach(src)
+
+/obj/item/weapon/rcd/examine()
+	set src in oview(0)
+	..()
+	usr << text("It currently holds []/[] matter-units.", matter, max_matter)
 
 /obj/item/weapon/rcd/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -153,13 +157,12 @@
 		var/obj/item/weapon/rcd_ammo/rcd_ammo = W
 
 		if((src.matter + rcd_ammo.matter) > src.max_matter)
-			user << "<span class='notice'>[src] the device cannot hold any more matter-units.</span>"
+			user << "<span class='notice'>[src] device cannot hold any more matter-units.</span>"
 			return
 
 		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
 		src.matter += rcd_ammo.matter
-		src.desc = "A RCD. It currently holds [src.matter]/[src.max_matter] matter-units."
-		user << "<span class='notice'>[src] the device now holds [src.matter]/[src.max_matter] matter-units.</span>"
+		user << "<span class='notice'>[src] now holds [src.matter]/[src.max_matter] matter-units.</span>"
 		user.drop_item()
 		qdel(rcd_ammo)
 
@@ -167,11 +170,11 @@
 	if(matter < amount)
 		return 0
 	matter -= amount
-	desc = "An RCD. It currently holds [matter]/[max_matter] matter-units."
 	return 1
 
 /obj/item/weapon/rcd/proc/checkResource(var/amount, var/mob/user)
 	return matter >= amount
+
 /obj/item/weapon/rcd/borg/useResource(var/amount, var/mob/user)
 	if(!isrobot(user))
 		return 0
@@ -182,9 +185,8 @@
 		return 0
 	return user:cell:charge >= (amount * max_matter)
 
-/obj/item/weapon/rcd/borg/New()
-	..()
-	desc = "A device used to rapidly build walls/floor."
+/obj/item/weapon/rcd/borg/New(loc)
+	..(loc)
 	canRwall = 1
 
 /obj/item/weapon/rcd_ammo
