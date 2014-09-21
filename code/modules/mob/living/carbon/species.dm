@@ -303,7 +303,7 @@
 	punch_damage = 5
 	eyes = "mantid_eyes_s"
 	darksight = 3
-	flags = WHITELISTED
+//	flags = WHITELISTED //Adminbus only until a gamemode is found (Or until enough people care for non-antag status)
 
 
 /datum/species/unathi

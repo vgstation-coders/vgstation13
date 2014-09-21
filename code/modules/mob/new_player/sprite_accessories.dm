@@ -723,3 +723,4 @@
 		name = "Default mantis skin"
 		icon_state = "default"
 		icon = 'icons/mob/human_races/r_mantid.dmi'
+		species_allowed = list("Mantid")
