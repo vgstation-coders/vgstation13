@@ -293,6 +293,19 @@
 
 	flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT
 
+
+/datum/species/mantis
+	name = "Mantid"
+//	language = "chitter-chat" //Figure out how the hell language works, get a bug-speak going
+	icobase = 'icons/mob/human_races/r_mantid.dmi'
+	deform = 'icons/mob/human_races/r_def_mantid.dmi'
+	attack_verb = "flay"
+	punch_damage = 5
+	eyes = "mantid_eyes_s"
+	darksight = 3
+	flags = WHITELISTED
+
+
 /datum/species/unathi
 	name = "Unathi"
 	icobase = 'icons/mob/human_races/r_lizard.dmi'

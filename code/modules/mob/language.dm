@@ -76,6 +76,7 @@
 	colour = "rough"
 	key = "3"
 
+
 /datum/language/grey
 	name = "Grey"
 	desc = "Sounds more like quacking than anything else."
@@ -109,6 +110,16 @@
 		for(var/i=0,i<len,i++)
 			message += " CL[pick("A","I")]CK"
 	return message+"!"
+
+// Dormant until i can figure out what the hell is causing the 90+ errors
+
+///datum/language/chitter-chat //Name rework eventually, not the best
+//	name = "chitter-chat"
+//	desc = "A complex motion of inner and outer mandibles working independantly of each other. The amout of phlegm expelled during speech is often used to identify the dialect of the speaker."
+//	speech_verb = "chitters"
+//	color = "rough"
+//	key = "y"
+//	flags = RESTRICTED
 
 // Language handling.
 /mob/proc/add_language(var/language)

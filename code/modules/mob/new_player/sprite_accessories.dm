@@ -718,3 +718,8 @@
 		icon_state = "default"
 		icon = 'icons/mob/human_races/r_skrell.dmi'
 		species_allowed = list("Skrell")
+
+	mantis
+		name = "Default mantis skin"
+		icon_state = "default"
+		icon = 'icons/mob/human_races/r_mantid.dmi'
