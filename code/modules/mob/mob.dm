@@ -20,6 +20,7 @@
 	else if(findtext(params,"ctrl"))	src.CtrlClickOn(target)
 	else if(findtext(params,"alt"))		src.AltClickOn(target)
 	else if(istype(src.loc,/obj/mecha))	src.loc:click_action(target,src)
+	else if(src.restrained())			return
 	else if(src.in_throw_mode)			src.throw_item(target)
 	else if(src.isAbleBodied())
 		src.faceAtom(target)
