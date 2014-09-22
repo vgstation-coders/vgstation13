@@ -13,6 +13,7 @@
 	explosion_resistance = 5
 	air_properties_vary_with_direction = 1
 	ghost_read=0
+	delayAttacks = 1
 
 /obj/machinery/door/window/New()
 	..()
