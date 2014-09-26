@@ -239,6 +239,16 @@ var/global/list/brutefireloss_overlays = list("1" = image("icon" = 'icons/mob/sc
 							"SARAH HALE DID IT!!!", \
 							"Don't tell Chase", \
 							"not so tough now huh", \
+							"WERE NOT TG!!", \
+							"WERE NOT GOON!!", \
+							"WERE NOT PARUDEESE!!", \
+							"WERE NOT NOX!!", \
+							"DAT ISNT SEEROUS ENUGH ARR PEE!", \
+							"DAT IS TU GAEMY!", \
+							"IMMULSHIONS!", \
+							"DIS ISNT AN ARR PEE GAEM I WAN GAMPLY!", \
+							"MUH VALIDS!", \
+							"FEATURES!!!", \
 							"WERE NOT BAY!!", \
 							"BLAME HOSHI!!!"))
 					if(3)
