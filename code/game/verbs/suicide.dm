@@ -15,6 +15,14 @@
 		src << "<span class='sinister'>BUT WHY? I'M SO HAPPY!</span>"
 		return
 
+	if(istype(slot_w_uniform, /obj/item/clothing/under/owl))
+		src << "<span class='notice'>You were the owl this station deserved, not the one it needed.</span>"
+		var/turf/T = get_turf(src.loc)
+		var/mob/living/simple_animal/owl/O = new /mob/living/simple_animal/owl(T)
+		O.name = "mourning owl"
+		O.desc = "'He was the owl we deserved, not the one we needed.'"
+		return
+
 	var/permitted = 1
 	var/list/allowed = list("Syndicate","traitor","Wizard","Head Revolutionary","Cultist","Changeling")
 	for(var/T in allowed)
