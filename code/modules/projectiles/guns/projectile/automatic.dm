@@ -197,13 +197,7 @@
 	load_method = 2
 	auto_mag_drop = 1
 
-	update_icon()
-		..()
-		if(stored_magazine)
-			icon_state = "u40ag-loaded"
-		else
-			icon_state = "u40ag"
-		return
+
 
 /obj/item/weapon/gun/projectile/automatic/k4m
 	name = "k4m-storm"
@@ -221,13 +215,6 @@
 	load_method = 2
 	auto_mag_drop = 1
 
-	update_icon()
-		..()
-		if(stored_magazine)
-			icon_state = "k4m-loaded"
-		else
-			icon_state = "k4m"
-		return
 
 /obj/item/weapon/gun/projectile/automatic/mp5
 	name = "Mp5-A2"
@@ -244,13 +231,6 @@
 	load_method = 2
 	auto_mag_drop = 1
 
-	update_icon()
-		..()
-		if(stored_magazine)
-			icon_state = "mp5a-loaded"
-		else
-			icon_state = "mp5a"
-		return
 
 /*
 /obj/item/weapon/gun/projectile/automatic/G36K
