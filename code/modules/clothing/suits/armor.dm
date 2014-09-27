@@ -17,6 +17,7 @@
 	icon_state = "armor"
 	item_state = "armor"
 	blood_overlay_type = "armor"
+	m_amt = 30000
 	flags = FPRINT | TABLEPASS | ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 
@@ -160,6 +161,17 @@
 	..()
 
 
+/obj/item/clothing/suit/armor/advanced
+	name = "Advanced armor"
+	desc = "An armored vest with new composite alloys for protect moderate damage."
+	icon_state = "advanced"
+	item_state = "advanced"
+	m_amt = 100000
+	blood_overlay_type = "armor"
+	flags = FPRINT | TABLEPASS | ONESIZEFITSALL
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|HANDS
+	armor = list(melee = 70, bullet = 70, laser = 70, energy = 50, bomb = 50, bio = 0, rad = 0)
+
 //All of the armor below is mostly unused
 
 
@@ -184,6 +196,7 @@
 	w_class = 4//bulky item
 	gas_transfer_coefficient = 0.90
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
+	armor = list(melee = 80, bullet = 80, laser = 60, energy = 20, bomb = 50, bio = 0, rad = 0)
 	slowdown = 3
 	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
 	siemens_coefficient = 0

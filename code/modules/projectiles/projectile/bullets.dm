@@ -45,29 +45,29 @@
 		return 0
 
 /obj/item/projectile/bullet/midbullet
-	damage = 20
-	stun = 5
-	weaken = 5
+	damage = 15
+	stun = 2
+	weaken = 2
 
 /obj/item/projectile/bullet/midbullet2
 	damage = 25
+
+/obj/item/projectile/bullet/midbullet3
+	damage = 20
 
 /obj/item/projectile/bullet/suffocationbullet//How does this even work?
 	name = "co bullet"
 	damage = 20
 	damage_type = OXY
 
-
 /obj/item/projectile/bullet/cyanideround
 	name = "poison bullet"
 	damage = 40
 	damage_type = TOX
 
-
 /obj/item/projectile/bullet/burstbullet//I think this one needs something for the on hit
 	name = "exploding bullet"
 	damage = 20
-
 
 /obj/item/projectile/bullet/stunshot
 	name = "stunshot"
@@ -78,4 +78,12 @@
 	stutter = 10
 
 /obj/item/projectile/bullet/a762
-	damage = 25
+	damage = 30
+
+/obj/item/projectile/bullet/a556
+	damage = 20
+	stutter = 10
+
+/obj/item/projectile/bullet/c50
+	name = "A .50AE bullet"
+	damage = 60
