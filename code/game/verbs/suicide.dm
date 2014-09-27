@@ -21,7 +21,7 @@
 		var/mob/living/simple_animal/owl/O = new /mob/living/simple_animal/owl(T)
 		O.name = "mourning owl"
 		O.desc = "'He was the owl we deserved, not the one we needed.'"
-		return
+		continue
 
 	var/permitted = 1
 	var/list/allowed = list("Syndicate","traitor","Wizard","Head Revolutionary","Cultist","Changeling")
