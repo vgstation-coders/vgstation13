@@ -6,6 +6,10 @@
 	var/happensonce = 0
 	var/multiplier = 1 //The chance the effects are WORSE
 	var/stage = 0
+	var/datum/disease2/disease/virus
+
+/datum/disease2/effectholder/New(var/datum/disease2/disease/D)
+	virus=D
 
 /datum/disease2/effectholder/proc/runeffect(var/mob/living/carbon/human/mob,var/stage)
 	if(happensonce > -1 && effect.stage <= stage && prob(chance))
@@ -14,6 +18,10 @@
 			happensonce = -1
 
 /datum/disease2/effectholder/proc/getrandomeffect(var/badness = 1)
+	if(effect)
+		virus.log += "<br />[timestamp()] Effect [effect.name] [chance]% is now "
+	else
+		virus.log += "<br />[timestamp()] Added effect "
 	var/list/datum/disease2/effect/list = list()
 	for(var/e in (typesof(/datum/disease2/effect) - /datum/disease2/effect))
 		var/datum/disease2/effect/f = new e
@@ -23,6 +31,7 @@
 			list += f
 	effect = pick(list)
 	chance = rand(1,6)
+	virus.log += "[effect.name] [chance]%:"
 
 /datum/disease2/effectholder/proc/minormutate()
 	switch(pick(1,2,3,4,5))
@@ -481,41 +490,38 @@
 
 
 
-
-
 /datum/disease2/effect/elvis
 	name = "Elvisism"
 	stage = 3
 	activate(var/mob/living/carbon/mob,var/multiplier)
-		//
+		if(!istype(mob))
+			return
+
+		var/mob/living/carbon/human/H = mob
 		var/obj/item/clothing/glasses/virussunglasses = new /obj/item/clothing/glasses/virussunglasses
-		mob.equip_to_slot(virussunglasses, slot_glasses)
+		if(H.glasses && !istype(H.glasses, /obj/item/clothing/glasses/virussunglasses))
+			mob.u_equip(H.glasses)
+			mob.equip_to_slot(virussunglasses, slot_glasses)
+		if(!slot_glasses)
+			mob.equip_to_slot(virussunglasses, slot_glasses)
 		mob.confused += 10
-
-
-
 
 		if(pick(0,1))
 			mob.say(pick("Uh HUH!", "Thank you, Thank you very much...", "I ain't nothin' but a hound dog!", "Swing low, sweet chariot!"))
 		else
 			mob.emote("me",1,pick("curls his lip!", "gyrates his hips!", "thrusts his hips!"))
 
-		if(istype(mob, /mob/living/carbon/human))
+		if(istype(H))
 
-			var/mob/living/carbon/human/H = mob
 			if(H.species.name == "Human" && !(H.f_style == "Pompadour"))
 				spawn(50)
 					H.h_style = "Pompadour"
 					H.update_hair()
 
-
-
 			if(H.species.name == "Human" && !(H.f_style == "Elvis Sideburns"))
 				spawn(50)
 					H.f_style = "Elvis Sideburns"
 					H.update_hair()
-
-
 
 /obj/item/clothing/glasses/virussunglasses
 
@@ -541,7 +547,11 @@
 	activate(var/mob/living/carbon/mob,var/multiplier)
 		//
 		var/obj/item/clothing/mask/gas/virusclown_hat = new /obj/item/clothing/mask/gas/virusclown_hat
-		mob.equip_to_slot(virusclown_hat, slot_wear_mask)
+		if(mob.wear_mask && !istype(mob.wear_mask, /obj/item/clothing/mask/gas/virusclown_hat))
+			mob.u_equip(mob.wear_mask)
+			mob.equip_to_slot(virusclown_hat, slot_wear_mask)
+		if(!mob.wear_mask)
+			mob.equip_to_slot(virusclown_hat, slot_wear_mask)
 		mob.reagents.add_reagent("psilocybin", 20)
 		mob.say(pick("HONK!", "Honk!", "Honk.", "Honk?", "Honk!!", "Honk?!", "Honk..."))
 
@@ -574,7 +584,11 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 
 
 		var/obj/item/clothing/mask/horsehead/magic/magichead = new /obj/item/clothing/mask/horsehead/magic
-		mob.equip_to_slot(magichead, slot_wear_mask)
+		if(mob.wear_mask && !istype(mob.wear_mask, /obj/item/clothing/mask/horsehead/magic))
+			mob.u_equip(mob.wear_mask)
+			mob.equip_to_slot(magichead, slot_wear_mask)
+		if(!mob.wear_mask)
+			mob.equip_to_slot(magichead, slot_wear_mask)
 		mob << "<span class='warning'>You feel a little horse!</span>"
 
 
@@ -831,5 +845,5 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	stage = 1
 	activate(var/mob/living/carbon/mob,var/multiplier)
 		mob << "<span class = 'notice'> You feel optimistic!</span>"
-		if (mob.reagents.get_reagent_amount("tricordazine") < 1)
-			mob.reagents.add_reagent("tricordazine", 1)
+		if (mob.reagents.get_reagent_amount("tricordrazine") < 1)
+			mob.reagents.add_reagent("tricordrazine", 1)

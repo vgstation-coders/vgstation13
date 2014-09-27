@@ -78,11 +78,9 @@ var/list/ai_list = list()
 
 	proc_holder_list = new()
 
-	if(L)
-		if (istype(L, /datum/ai_laws))
-			laws = L
-	else
-		laws = new base_law_type
+	//Determine the AI's lawset
+	if(L && istype(L,/datum/ai_laws)) src.laws = L
+	else src.laws = getLawset(src)
 
 	verbs += /mob/living/silicon/ai/proc/show_laws_verb
 
@@ -662,17 +660,30 @@ var/list/ai_list = list()
 
 	else
 		var/icon_list[] = list(
-		"default",
-		"floating face"
+		"Default",
+		"Floating face",
+		"Cortano",
+		"Spoopy",
+		"343",
+		"Auto"
 		)
 		input = input("Please select a hologram:") as null|anything in icon_list
 		if(input)
 			del(holo_icon)
 			switch(input)
-				if("default")
+				if("Default")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo1"))
-				if("floating face")
+				if("Floating face")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo2"))
+				if("Cortano")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo3"))
+				if("Spoopy")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo4"))
+				if("343")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo5"))
+				if("Auto")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo6"))
+
 	return
 
 /mob/living/silicon/ai/proc/corereturn()
