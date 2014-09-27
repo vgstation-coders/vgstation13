@@ -21,7 +21,7 @@
 	update_nearby_tiles()
 	..()
 
-/obj/machinery/shield/CanPass(atom/movable/mover, turf/target, height, air_group)
+/obj/machinery/shield/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(!height || air_group) return 0
 	else return ..()
 
@@ -230,6 +230,10 @@
 				malfunction = 1
 	checkhp()
 
+/obj/machinery/shieldgen/attack_ghost(mob/user)
+	if(isAdminGhost(user)) src.attack_hand(user)
+	return
+	
 /obj/machinery/shieldgen/attack_hand(mob/user as mob)
 	if(locked)
 		user << "The machine is locked, you are unable to use it."
@@ -627,7 +631,7 @@
 	return
 
 
-/obj/machinery/shieldwall/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/machinery/shieldwall/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 
 	if(istype(mover) && mover.checkpass(PASSGLASS))
