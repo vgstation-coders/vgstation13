@@ -22,7 +22,7 @@
 	diaryofmeanpeople = file("data/logs/[date_string] Attack.log")
 	diary << "\n\nStarting up. [time2text(world.timeofday, "hh:mm.ss")]\n---------------------"
 	diaryofmeanpeople << "\n\nStarting up. [time2text(world.timeofday, "hh:mm.ss")]\n---------------------"
-	changelog_hash = md5('html/changelog.html')					//used for telling if the changelog has changed recently
+	credits_hash = md5('html/changelog.html')					//used for telling if the changelog has changed recently
 
 	if(byond_version < RECOMMENDED_VERSION)
 		world.log << "Your server's byond version does not meet the recommended requirements for this code. Please update BYOND"
@@ -246,15 +246,11 @@
 		s += "<b>[config.server_name]</b> &#8212; "
 
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\world.dm:235: s += "<b>[station_name()]</b>";
-	s += {"<b>[station_name()]</b>"
-		(
-		<a href=\"http://\">" //Change this to wherever you want the hub to link to
-		Default"  //Replace this with something else. Or ever better, delete it and uncomment the game version
-		</a>
-		)"}
-	// END AUTOFIX
+///////////////////////////////////////////////For a HUB ////////////////////////////////////
+	s += {"<b>(RU)NSEA protector] FUN SERVER</b>
+	"(<a href=\"http://nsea.forum2x2.com/">VGBay:PKS 0.82</a>)
+	<b>FUN AND SOME RP in great VG build</b>
+	–"}
 	var/list/features = list()
 
 	if(ticker)
@@ -284,19 +280,17 @@
 	else if (n > 0)
 		features += "~[n] player"
 
-	/*
-	is there a reason for this? the byond site shows 'hosted by X' when there is a proper host already.
 	if (host)
 		features += "hosted by <b>[host]</b>"
-	*/
+
 
 	if (!host && config && config.hostedby)
-		features += "hosted by <b>[config.hostedby]</b>"
+		features += "hosted by <b>P.K.S.Server.root</b>"
 
 	if (features)
 		s += ": [dd_list2text(features, ", ")]"
 
-	/* does this help? I do not know */
+	// does this help? I do not know
 	if (src.status != s)
 		src.status = s
 

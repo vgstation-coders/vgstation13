@@ -30,6 +30,8 @@ var/list/station_departments = list("Command", "Medical", "Engineering", "Scienc
 
 /datum/job/chaplain/department = "Civilian"
 
+/datum/job/scavenger/department = "Civilian"
+
 /datum/job/qm/department = "Cargo"
 /datum/job/qm/head_position = 1
 

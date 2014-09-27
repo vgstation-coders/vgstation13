@@ -1636,7 +1636,6 @@ other types of metals and chemistry for reagents).
 	materials = list("$metal" = 5000, "$glass" = 1000, "$uranium" = 500)
 	reliability_base = 76
 	build_path = /obj/item/weapon/gun/energy/gun/nuclear
-	locked = 1
 
 /datum/design/stunrevolver
 	name = "Stun Revolver"
@@ -1646,7 +1645,6 @@ other types of metals and chemistry for reagents).
 	build_type = PROTOLATHE
 	materials = list("$metal" = 4000)
 	build_path = /obj/item/weapon/gun/energy/stunrevolver
-	locked = 1
 
 /datum/design/lasercannon
 	name = "Laser Cannon"
@@ -1656,7 +1654,7 @@ other types of metals and chemistry for reagents).
 	build_type = PROTOLATHE
 	materials = list("$metal" = 10000, "$glass" = 1000, "$diamond" = 2000)
 	build_path = /obj/item/weapon/gun/energy/lasercannon
-	locked = 1
+	locked = 0
 
 /datum/design/xcomsquaddiearmor
 	name = "Squaddie Armor"
@@ -1684,7 +1682,6 @@ other types of metals and chemistry for reagents).
 	build_type = PROTOLATHE
 	materials = list("$metal" = 10000, "$glass" = 1000, "$diamond" = 1000)
 	build_path = /obj/item/weapon/gun/energy/plasma/pistol
-	locked = 1
 
 /datum/design/xcomplasmarifle
 	name = "Plasma Rifle"
@@ -1694,7 +1691,6 @@ other types of metals and chemistry for reagents).
 	build_type = PROTOLATHE
 	materials = list("$metal" = 10000, "$glass" = 1000, "$diamond" = 3000)
 	build_path = /obj/item/weapon/gun/energy/plasma/rifle
-	locked = 1
 
 /datum/design/xcomlightplasmarifle
 	name = "Light Plasma Rifle"
@@ -1704,7 +1700,6 @@ other types of metals and chemistry for reagents).
 	build_type = PROTOLATHE
 	materials = list("$metal" = 10000, "$glass" = 1000, "$diamond" = 2000)
 	build_path = /obj/item/weapon/gun/energy/plasma/light
-	locked = 1
 
 /datum/design/xcomlaserrifle
 	name = "Laser Cannon"
@@ -1714,7 +1709,6 @@ other types of metals and chemistry for reagents).
 	build_type = PROTOLATHE
 	materials = list("$metal" = 10000, "$glass" = 1000, "$diamond" = 2000)
 	build_path = /obj/item/weapon/gun/energy/laser/rifle
-	locked = 1
 
 /datum/design/xcomlaserpistol
 	name = "Laser Pistol"
@@ -1724,7 +1718,7 @@ other types of metals and chemistry for reagents).
 	build_type = PROTOLATHE
 	materials = list("$metal" = 10000, "$glass" = 1000, "$diamond" = 1000)
 	build_path = /obj/item/weapon/gun/energy/laser/pistol
-	locked = 1
+	locked = 0
 
 /datum/design/xcomar
 	name = "Assault Rifle"
@@ -1734,7 +1728,7 @@ other types of metals and chemistry for reagents).
 	build_type = PROTOLATHE
 	materials = list("$metal" = 10000, "$glass" = 1000)
 	build_path = /obj/item/weapon/gun/projectile/automatic/xcom
-	locked = 1
+	locked = 0
 
 /datum/design/decloner
 	name = "Decloner"
@@ -1781,7 +1775,7 @@ other types of metals and chemistry for reagents).
 	build_type = PROTOLATHE
 	materials = list("$metal" = 5000, "$glass" = 500, "$silver" = 3000)
 	build_path = /obj/item/weapon/gun/energy/temperature
-	locked = 1
+	locked = 0
 
 /datum/design/flora_gun
 	name = "Floral Somatoray"
@@ -1812,6 +1806,7 @@ other types of metals and chemistry for reagents).
 	reliability_base = 79
 	build_path = /obj/item/weapon/grenade/chem_grenade/exgrenade
 
+
 /datum/design/smg
 	name = "Submachine Gun"
 	desc = "A lightweight, fast firing gun."
@@ -1819,8 +1814,9 @@ other types of metals and chemistry for reagents).
 	req_tech = list("combat" = 4, "materials" = 3)
 	build_type = PROTOLATHE
 	materials = list("$metal" = 8000, "$silver" = 2000, "$diamond" = 1000)
-	build_path = /obj/item/weapon/gun/projectile/automatic
-	locked = 1
+	build_path = /obj/item/weapon/gun/projectile/automatic/saber
+	locked = 0
+
 
 /datum/design/ammo_9mm
 	name = "Ammunition Box (9mm)"
@@ -2013,7 +2009,7 @@ other types of metals and chemistry for reagents).
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = /obj/item/clothing/glasses/hud/health
 
-/*
+
 /datum/design/security_hud
 	name = "Security HUD"
 	desc = "A heads-up display that scans the humans in view and provides accurate data about their ID status."
@@ -2022,18 +2018,26 @@ other types of metals and chemistry for reagents).
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = /obj/item/clothing/glasses/hud/security
-	locked = 1
-*/
+
 
 /datum/design/sechud_sunglass
 	name = "HUDSunglasses"
 	desc = "Sunglasses with a heads-up display that scans the humans in view and provides accurate data about their ID status."
 	id = "sechud_sunglass"
-	req_tech = list("magnets" = 3, "combat" = 2)
+	req_tech = list("magnets" = 3, "combat" = 3)
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = /obj/item/clothing/glasses/sunglasses/sechud
-	locked = 1
+	locked = 0
+
+/datum/design/thermal_scanners
+	name = "ThermalScanners"
+	desc = "Thermals in the shape of glasses."
+	id = "thermal_scanners"
+	req_tech = list("magnets" = 5, "combat" = 3, "syndicate" = 4)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 50, "$glass" = 500, "$gold" = 100)
+	build_path = /obj/item/clothing/glasses/thermal
 
 /////////////////////////////////////////
 /////////////////Engineering/////////////
@@ -2070,7 +2074,17 @@ other types of metals and chemistry for reagents).
 	build_type = PROTOLATHE
 	materials = list("$metal" = 1500, "$glass" = 2500, "$diamond" = 3750, "$silver" = 1000, "$uranium" = 500)
 	build_path = /obj/item/clothing/suit/armor/laserproof
-	locked = 1
+	locked = 0
+
+/datum/design/advanced_armor
+	name = "Advanced Armor Vest"
+	desc = "An armored vest with new composite alloys for protect moderate damage."
+	id = "advanced_armor"
+	req_tech = list("combat" = 5, "materials" = 4)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 15000, "$glass" = 500, "$silver" = 2000, "$uranium" = 2000)
+	build_path = /obj/item/clothing/suit/armor/advanced
+
 
 /////////////////////////////////////////
 //////////////////Test///////////////////

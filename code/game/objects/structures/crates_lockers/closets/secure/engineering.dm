@@ -112,6 +112,7 @@
 		new /obj/item/device/radio/headset/headset_eng(src)
 		new /obj/item/clothing/suit/storage/hazardvest(src)
 		new /obj/item/clothing/mask/gas(src)
+		new /obj/item/clothing/tie/storage/brown_vest(src)
 		new /obj/item/clothing/glasses/meson(src)
 		new /obj/item/taperoll/engineering(src)
 		new /obj/item/taperoll/engineering(src)

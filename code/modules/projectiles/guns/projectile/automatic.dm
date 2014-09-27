@@ -1,7 +1,7 @@
 /obj/item/weapon/gun/projectile/automatic //Hopefully someone will find a way to make these fire in bursts or something. --Superxpdude
-	name = "submachine gun"
-	desc = "A lightweight, fast firing gun. Uses 9mm rounds."
-	icon_state = "saber"	//ugly
+	name = "Prototype"
+	desc = "Unknown automatical shit"
+	icon_state = "shit"	//ugly
 	w_class = 3.0
 	max_shells = 18
 	caliber = list("9mm" = 1)
@@ -19,6 +19,14 @@
 	stored_magazine = new mag_type(src)
 	loaded = stored_magazine.stored_ammo
 	update_icon()
+	return
+
+/obj/item/weapon/gun/projectile/automatic/update_icon()
+	..()
+	if(stored_magazine)
+		icon_state = "shit-loaded"
+	else
+		icon_state = "shit"
 	return
 
 /obj/item/weapon/gun/projectile/automatic/isHandgun()
@@ -43,9 +51,28 @@
 			..()
 			shots_fired++
 		message_admins("[usr] just shot [shots_fired] burst fire bullets out of [loaded.len + shots_fired] from their [src].")
-		fire_delay = shots_fired * 10
+		fire_delay = shots_fired * 5
 	else
 		..()
+
+/obj/item/weapon/gun/projectile/automatic/saber
+	name = "'saber' submachine gun"
+	desc = "A lightweight, fast firing gun. Uses 9mm rounds."
+	icon_state = "saber"	//ugly
+	w_class = 2.0
+	max_shells = 18
+	caliber = list("9mm" = 1)
+	burst_count = 3
+	mag_type = "/obj/item/ammo_storage/magazine/mc9mm"
+	ammo_type = "/obj/item/ammo_casing/c9mm"
+
+	update_icon()
+		..()
+		if(stored_magazine)
+			icon_state = "saber-loaded"
+		else
+			icon_state = "saber"
+		return
 
 /obj/item/weapon/gun/projectile/automatic/mini_uzi
 	name = "Uzi"
@@ -58,6 +85,14 @@
 	origin_tech = "combat=5;materials=2;syndicate=8"
 	ammo_type = "/obj/item/ammo_casing/c45"
 	mag_type = "/obj/item/ammo_storage/magazine/c45"
+
+	update_icon()
+		..()
+		if(stored_magazine)
+			icon_state = "mini-uzi-loaded"
+		else
+			icon_state = "mini-uzi"
+		return
 
 /obj/item/weapon/gun/projectile/automatic/mini_uzi/isHandgun()
 	return 1
@@ -78,13 +113,13 @@
 	load_method = 2
 	auto_mag_drop = 1
 
-/obj/item/weapon/gun/projectile/automatic/c20r/update_icon()
-	..()
-	if(stored_magazine)
-		icon_state = "c20r-[round(loaded.len,4)]"
-	else
-		icon_state = "c20r"
-	return
+	update_icon()
+		..()
+		if(stored_magazine)
+			icon_state = "c20r-loaded"
+		else
+			icon_state = "c20r"
+		return
 
 /obj/item/weapon/gun/projectile/automatic/xcom
 	name = "\improper Assault Rifle"
@@ -92,7 +127,7 @@
 	icon_state = "xcomassaultrifle"
 	origin_tech = "combat=5;materials=2"
 	item_state = "c20r"
-	w_class = 3.0
+	w_class = 4.0
 	max_shells = 20
 	burst_count = 4
 	caliber = list("12mm" = 1)
@@ -102,6 +137,14 @@
 	load_method = 2
 	auto_mag_drop = 1
 
+	update_icon()
+		..()
+		if(stored_magazine)
+			icon_state = "xcomassaultrifle-loaded"
+		else
+			icon_state = "xcomassaultrifle"
+		return
+
 /obj/item/weapon/gun/projectile/automatic/l6_saw
 	name = "\improper L6 SAW"
 	desc = "A rather traditionally made light machine gun with a pleasantly lacquered wooden pistol grip. Has 'Aussec Armoury- 2531' engraved on the reciever"
@@ -110,7 +153,7 @@
 	w_class = 4
 	slot_flags = 0
 	max_shells = 50
-	burst_count = 5
+	burst_count = 10
 	caliber = list("a762" = 1)
 	origin_tech = "combat=5;materials=1;syndicate=2"
 	ammo_type = "/obj/item/ammo_casing/a762"
@@ -118,7 +161,6 @@
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
 	load_method = 2
 	var/cover_open = 0
-
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw/attack_self(mob/user as mob)
 	cover_open = !cover_open
@@ -137,7 +179,6 @@
 		..()
 		update_icon()
 
-
 /obj/item/weapon/gun/projectile/automatic/l6_saw/attack_hand(mob/user as mob)
 	if(loc != user)
 		..()
@@ -148,7 +189,6 @@
 		//drop the mag
 		RemoveMag(user)
 		user << "<span class='notice'>You remove the magazine from [src].</span>"
-
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw/attackby(obj/item/ammo_storage/magazine/a762/A as obj, mob/user as mob)
 	if(!cover_open)
@@ -166,7 +206,6 @@
 	else
 		usr << "<span class='rose'>There is no magazine to remove!</span>"
 
-
 /* The thing I found with guns in ss13 is that they don't seem to simulate the rounds in the magazine in the gun.
    Afaik, since projectile.dm features a revolver, this would make sense since the magazine is part of the gun.
    However, it looks like subsequent guns that use removable magazines don't take that into account and just get
@@ -177,3 +216,138 @@
 /* Guns now properly store and move magazines and bullets about. Moving bullets from loaded to the magazine and back again on actions
    still feels poorly coded and hacky, but it's more trouble than this to attempt to modify gun code any further. Perhaps a braver
    soul than I might feel that some injustice was done in quitting most of the way there, but I think this is modular enough. */
+
+
+
+///////////////////////////////////////////////////////PKS Guns//////////////////////////////////
+
+/obj/item/weapon/gun/projectile/automatic/u40ag
+	name = "u40ag"
+	desc = "Machine for civil violence. Used by mercenaries, personal guards. Weapon of last chance. .45 rounds."
+	icon_state = "u40ag"
+	item_state = "c20r"
+	w_class = 3.0
+	max_shells = 10
+	caliber = list(".45" = 1)
+	burst_count = 2
+	origin_tech = "combat=5;materials=1"
+	ammo_type = "/obj/item/ammo_casing/c45"
+	mag_type = "/obj/item/ammo_storage/magazine/c45"
+	load_method = 2
+	auto_mag_drop = 1
+
+	update_icon()
+		..()
+		if(stored_magazine)
+			icon_state = "u40ag-loaded"
+		else
+			icon_state = "u40ag"
+		return
+
+/obj/item/weapon/gun/projectile/automatic/k4m
+	name = "k4m-storm"
+	desc = "Hmm.. That reminds me, but what? Uses 5.56 rounds."
+	icon_state = "k4m"
+	item_state = "c20r"
+	w_class = 3.0
+	max_shells = 30
+	burst_count = 3
+	caliber = list("5.56" = 1)
+	origin_tech = "combat=4;materials=4"
+	ammo_type = "/obj/item/ammo_casing/a556"
+	mag_type = "/obj/item/ammo_storage/magazine/a5x56"
+	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
+	load_method = 2
+	auto_mag_drop = 1
+
+	update_icon()
+		..()
+		if(stored_magazine)
+			icon_state = "k4m-loaded"
+		else
+			icon_state = "k4m"
+		return
+
+/obj/item/weapon/gun/projectile/automatic/mp5
+	name = "Mp5-A2"
+	desc = "A lightweight, fast firing gun, used by Corp. special ops. Uses 9mm rounds."
+	icon_state = "mp5a"
+	w_class = 3.0
+	max_shells = 30
+	burst_count = 3
+	caliber = "9x18"
+	fire_sound = 'sound/weapons/mp5.ogg'
+	origin_tech = "combat=4;materials=2"
+	ammo_type = "/obj/item/ammo_casing/c9mmp"
+	mag_type = "/obj/item/ammo_storage/magazine/c9mmp"
+	load_method = 2
+	auto_mag_drop = 1
+
+	update_icon()
+		..()
+		if(stored_magazine)
+			icon_state = "mp5a-loaded"
+		else
+			icon_state = "mp5a"
+		return
+
+/*
+/obj/item/weapon/gun/projectile/automatic/G36K
+	name = "G36K"
+	desc = "For a PKS/EXALT fire support"
+	icon_state = "g36k"
+	item_state = "c20r"
+	w_class = 4.0
+	max_shells = 30
+	burst_count = 3
+	caliber = list("5.56" = 1)
+	origin_tech = "combat=5;materials=3;syndicate=4"
+	ammo_type = "/obj/item/ammo_casing/a556"
+	mag_type = "/obj/item/ammo_storage/magazine/a5x56"
+	fire_sound = 'sound/weapons/G36.ogg'
+	load_method = 2
+	auto_mag_drop = 1
+
+/obj/item/weapon/gun/projectile/automatic/G36K/isHandgun()
+	return 1
+
+/obj/item/weapon/gun/projectile/automatic/u40ag/isHandgun()
+	return 1
+
+/obj/item/weapon/gun/projectile/automatic/hkg36c
+	name = "HK-G36c"
+	desc = "tactical assault rifle. Can kill... if you have skill Uses 5.56 rounds."
+	icon_state = "hkg36c"
+	item_state = "c20r"
+	w_class = 4.0
+	max_shells = 30
+	burst_count = 4
+	caliber = list("5.56" = 1)
+	origin_tech = "combat=4;materials=3"
+	ammo_type = "/obj/item/ammo_casing/a556"
+	mag_type = "/obj/item/ammo_storage/magazine/a5x56"
+	fire_sound = 'sound/weapons/G36.ogg'
+	load_method = 2
+	auto_mag_drop = 1
+
+/obj/item/weapon/gun/projectile/automatic/hkg36c/isHandgun()
+	return 1
+
+/obj/item/weapon/gun/projectile/automatic/b80b
+	name = "b80b"
+	desc = "If you want to be a really great sniper. Uses 0.50S rounds."
+	icon_state = "b80b"
+	w_class = 3.0
+	max_shells = 9
+	burst_count = 3
+	caliber = list("5.56" = 1)
+	origin_tech = "combat=4;materials=4"
+	ammo_type = "/obj/item/ammo_casing/a50s"
+	mag_type = "/obj/item/ammo_storage/magazine/a50s"
+	fire_sound = 'sound/weapons/G36.ogg'
+	load_method = 2
+	auto_mag_drop = 1
+
+/obj/item/weapon/gun/projectile/automatic/hkg36c/isHandgun()
+	return 1
+*/

@@ -68,8 +68,18 @@ var/global/list/autolathe_recipes_hidden = list( \
 		new /obj/item/ammo_storage/box/a357(), \
 		new /obj/item/ammo_casing/shotgun(), \
 		new /obj/item/ammo_casing/shotgun/dart(), \
-		/* new /obj/item/weapon/shield/riot(), */ \
-	)
+		new /obj/item/weapon/shield/riot(),  \
+		new /obj/item/ammo_storage/magazine/a5x56(),  \
+		new /obj/item/ammo_storage/magazine/a12mm(),  \
+		new /obj/item/ammo_storage/magazine/a50(),  \
+		new /obj/item/ammo_storage/magazine/a762(),  \
+		new /obj/item/ammo_storage/magazine/c45(),  \
+		new /obj/item/ammo_storage/magazine/a50s(),  \
+		new /obj/item/clothing/suit/armor/vest(), \
+		new /obj/item/clothing/head/helmet(), \
+		new /obj/item/weapon/gun/projectile/pistol(), \
+		new /obj/item/weapon/silencer(), \
+			)
 
 /obj/machinery/autolathe
 	name = "\improper Autolathe"

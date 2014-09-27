@@ -117,7 +117,6 @@
 	m_amt = 2500
 	w_type = RECYK_METAL
 
-
 /obj/item/ammo_casing/shotgun/dart
 	name = "shotgun darts"
 	desc = "A dart for use in shotguns."
@@ -129,9 +128,26 @@
 /obj/item/ammo_casing/a762
 	desc = "A 7.62 bullet casing."
 	caliber = "a762"
-	projectile_type = "/obj/item/projectile/bullet"
+	projectile_type = "/obj/item/projectile/bullet/a762"
 	w_type = RECYK_METAL
 
+/obj/item/ammo_casing/a556
+	desc = "A 5.56 bullet casing. HATO"
+	caliber = "5.56"
+	projectile_type = "/obj/item/projectile/bullet/a556"
+	w_type = RECYK_METAL
+
+/obj/item/ammo_casing/c9mmp
+	desc = "A m9x18 bullet casing."
+	caliber = "9x18"
+	projectile_type = "/obj/item/projectile/bullet/midbullet3"
+	w_type = RECYK_METAL
+
+/obj/item/ammo_casing/a50s
+	desc = "A .50s bullet casing."
+	caliber = ".50s"
+	projectile_type = "/obj/item/projectile/bullet"
+	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/energy/kinetic
 	projectile_type = /obj/item/projectile/bullet

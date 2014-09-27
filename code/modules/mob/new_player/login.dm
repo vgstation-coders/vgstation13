@@ -29,9 +29,9 @@
 	new_player_panel()
 	spawn(40)
 		if(client)
-			//If the changelog has changed, show it to them
+			//If the credits has changed, show it to them
 			spawn(1)
-				if(client.prefs.lastchangelog != changelog_hash)
+				if(client.prefs.lastcredits != credits_hash)
 					// Need to send them the CSS and images :V
 					client.getFiles(
 						'html/postcardsmall.jpg',
@@ -55,8 +55,8 @@
 						'html/changelog.html'
 						)
 					src << browse('html/changelog.html', "window=changes;size=675x650")
-					client.prefs.lastchangelog = changelog_hash
+					client.prefs.lastcredits = credits_hash
 					client.prefs.save_preferences()
-					winset(client, "rpane.changelog", "background-color=none;font-style=;")
+					winset(client, "rpane.credits", "background-color=none;font-style=;")
 			handle_privacy_poll()
 			client.playtitlemusic()

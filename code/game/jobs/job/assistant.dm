@@ -23,3 +23,33 @@
 		return list(access_maint_tunnels)
 	else
 		return list()
+
+/datum/job/scavenger
+	title = "Scavenger"
+	flag = SCAVENGER
+	department_flag = CIVILIAN
+	faction = "Station"
+	total_positions = -1
+	spawn_positions = -1
+	supervisors = "Anarchy"
+	selection_color = "#dddddd"
+	access = list(access_maint_tunnels)			//See /datum/job/assistant/get_access()
+	minimal_access = list(access_maint_tunnels)	//See /datum/job/assistant/get_access()
+
+/datum/job/scavenger/equip(var/mob/living/carbon/human/H)
+	if(!H)	return 0
+	H.equip_or_collect(new /obj/item/clothing/under/color/black(H), slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
+	H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
+	H.equip_or_collect(new /obj/item/clothing/mask/balaclava(H), slot_wear_mask) //YEAH
+	if(H.backbag == 1)
+		H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
+		H.equip_or_collect(new /obj/item/weapon/gun/projectile/automatic/u40ag(H), slot_l_hand)
+		H.equip_or_collect(new /obj/item/ammo_storage/magazine/c45(H.back), slot_l_store)
+	else
+		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+		H.equip_or_collect(new /obj/item/ammo_storage/magazine/c45(H.back), slot_in_backpack)
+		H.equip_or_collect(new /obj/item/weapon/gun/projectile/automatic/u40ag(H), slot_in_backpack)
+		H.equip_or_collect(new /obj/item/clothing/tie/storage/black_vest(H), slot_in_backpack)
+	return 1
+

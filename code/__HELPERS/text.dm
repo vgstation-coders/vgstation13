@@ -20,7 +20,7 @@
 
 	var/sqltext = dbcon.Quote(t)
 	//testing("sanitizeSQL(): BEFORE copytext(): [sqltext]")
-	sqltext = copytext(sqltext, 2, length(sqltext))//Quote() adds quotes around input, we already do that
+	sqltext = copytext(sqltext, 2, lentext(sqltext))//Quote() adds quotes around input, we already do that
 	//testing("sanitizeSQL(): AFTER copytext(): [sqltext]")
 	return sqltext
 
@@ -45,17 +45,38 @@
 	return t
 
 //Removes a few problematic characters
-/proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","ï¿½"="ï¿½"))
+/proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","ï¿½"="ï¿½","ÿ"="____255_"))
 	for(var/char in repl_chars)
 		var/index = findtext(t, char)
 		while(index)
 			t = copytext(t, 1, index) + repl_chars[char] + copytext(t, index+1)
 			index = findtext(t, char)
+	t = html_encode(t)
+	var/index = findtext(t, "____255_")
+	while(index)
+		t = copytext(t, 1, index) + "&#255;" + copytext(t, index+8)
+		index = findtext(t, "____255_")
+	return t
+
+/proc/sanitize_simple_uni(var/t,var/list/repl_chars = list("\n"="#","\t"="#","ÿ"="____255_"))
+	for(var/char in repl_chars)
+		var/index = findtext(t, char)
+		while(index)
+			t = copytext(t, 1, index) + repl_chars[char] + copytext(t, index+1)
+			index = findtext(t, char)
+	t = html_encode(t)
+	var/index = findtext(t, "____255_")
+	while(index)
+		t = copytext(t, 1, index) + "&#1103;" + copytext(t, index+8)
+		index = findtext(t, "____255_")
 	return t
 
 //Runs byond's sanitization proc along-side sanitize_simple
 /proc/sanitize(var/t,var/list/repl_chars = null)
-	return html_encode(sanitize_simple(t,repl_chars))
+	return sanitize_simple(t,repl_chars)
+
+/proc/sanitize_uni(var/t,var/list/repl_chars = null)
+	return sanitize_simple(t,repl_chars)
 
 //Runs sanitize and strip_html_simple
 //I believe strip_html_simple() is required to run first to prevent '<' from displaying as '&lt;' after sanitize() calls byond's html_encode()
@@ -65,35 +86,21 @@
 //Runs byond's sanitization proc along-side strip_html_simple
 //I believe strip_html_simple() is required to run first to prevent '<' from displaying as '&lt;' that html_encode() would cause
 /proc/adminscrub(var/t,var/limit=MAX_MESSAGE_LEN)
-	return copytext((html_encode(strip_html_simple(t))),1,limit)
+	return copytext((sanitize(strip_html_simple(t))),1,limit)
 
 
-/*
- * returns null if there is any bad text in the string
- */
-/proc/reject_bad_text(const/text, var/max_length = 512)
-	var/text_length = length(text)
-
-	if(text_length > max_length)
-		return // message too long
-
-	var/non_whitespace = FALSE
-
-	for(var/i = 1 to text_length)
-		switch(text2ascii(text, i))
-			if(62, 60, 92, 47)
-				return // rejects the text if it contains these bad characters: <, >, \ or /
-			if(127 to 255)
-				return // rejects weird letters like ï¿½
-			if(0 to 31)
-				return // more weird stuff
-			if(32)
-				continue //whitespace
-			else
-				non_whitespace = TRUE
-
-	if(non_whitespace)
-		return text // only accepts the text if it has some non-spaces
+//Returns null if there is any bad text in the string
+/proc/reject_bad_text(var/text, var/max_length=512)
+	if(length(text) > max_length)	return			//message too long
+	var/non_whitespace = 0
+	for(var/i=1, i<=length(text), i++)
+		switch(text2ascii(text,i))
+			if(62,60,92,47)	return			//rejects the text if it contains these bad characters: <, >, \ or /
+			if(127 to 255)	return			//rejects weird letters like
+			if(0 to 31)		return			//more weird stuff
+			if(32)			continue		//whitespace
+			else			non_whitespace = 1
+	if(non_whitespace)		return text		//only accepts the text if it has some non-spaces
 
 // Used to get a sanitized input.
 /proc/stripped_input(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
@@ -218,6 +225,7 @@ proc/checkhtml(var/t)
 /*
  * Text modification
  */
+
 /proc/replacetext(text, find, replacement)
 	var/find_len = length(find)
 	if(find_len < 1)	return text
@@ -338,9 +346,9 @@ proc/checkhtml(var/t)
 //is in the other string at the same spot (assuming it is not a replace char).
 //This is used for fingerprints
 	var/newtext = text
-	if(length(text) != length(compare))
+	if(lentext(text) != lentext(compare))
 		return 0
-	for(var/i = 1, i < length(text), i++)
+	for(var/i = 1, i < lentext(text), i++)
 		var/a = copytext(text,i,i+1)
 		var/b = copytext(compare,i,i+1)
 //if it isn't both the same letter, or if they are both the replacement character
@@ -360,11 +368,41 @@ proc/checkhtml(var/t)
 	if(!text || !character)
 		return 0
 	var/count = 0
-	for(var/i = 1, i <= length(text), i++)
+	for(var/i = 1, i <= lentext(text), i++)
 		var/a = copytext(text,i,i+1)
 		if(a == character)
 			count++
 	return count
+
+proc/rhtml_encode(var/msg)
+	var/list/c = text2list(msg, "ÿ")
+	if(c.len == 1)
+		c = text2list(msg, "&#255;")
+		if(c.len == 1)
+			return html_encode(msg)
+	var/out = ""
+	var/first = 1
+	for(var/text in c)
+		if(!first)
+			out += "&#255;"
+		first = 0
+		out += html_encode(text)
+	return out
+
+/proc/rhtml_decode(var/msg)
+	var/list/c = text2list(msg, "ÿ")
+	if(c.len == 1)
+		c = text2list(msg, "&#255;")
+		if(c.len == 1)
+			return html_decode(msg)
+	var/out = ""
+	var/first = 1
+	for(var/text in c)
+		if(!first)
+			out += "&#255;"
+		first = 0
+		out += html_decode(text)
+	return out
 
 /proc/reverse_text(var/text = "")
 	var/new_text = ""
