@@ -21,7 +21,7 @@
 		beakers += B2
 		icon_state = initial(icon_state) +"_locked"
 
-/obj/item/weapon/grenade/flashbang
+/obj/item/weapon/grenade/flashbang/owl
 	name = "Owl Flashbang"
 	desc = "HOOT HOOT!"
 	icon_state = "owl"
