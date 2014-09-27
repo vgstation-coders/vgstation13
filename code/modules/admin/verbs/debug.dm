@@ -576,7 +576,8 @@ Pressure: [env.return_pressure()]"}
 		"emergency rescue team",
 		"nanotrasen representative",
 		"nanotrasen officer",
-		"nanotrasen captain"
+		"nanotrasen captain",
+		"owlman"
 		)
 	var/dostrip = input("Do you want to strip [M] before equipping them? (0=no, 1=yes)", "STRIPTEASE") as null|anything in list(0,1)
 	if(isnull(dostrip))
@@ -962,6 +963,22 @@ Pressure: [env.return_pressure()]"}
 			W.access = get_all_accesses()
 			W.access += get_all_centcom_access()
 			W.assignment = "Admiral"
+			W.registered_name = M.real_name
+			M.equip_to_slot_or_del(W, slot_wear_id)
+		if("owlman")
+			M.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/owl_mask (M), slot_wear_mask)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/owl(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/owl(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(M), slot_ears)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/owlbelt/complete(M), slot_belt)
+			M.equip_to_slot_or_del(new /obj/item/clothing/under/owl(M), slot_w_uniform)
+			var/obj/item/weapon/card/id/W = new(M)
+			W.name = "[M.real_name]'s ID Card"
+			W.icon_state = "centcom"
+			W.access = get_all_accesses()
+			W.access += get_all_centcom_access()
+			W.assignment = "The Owlman"
 			W.registered_name = M.real_name
 			M.equip_to_slot_or_del(W, slot_wear_id)
 

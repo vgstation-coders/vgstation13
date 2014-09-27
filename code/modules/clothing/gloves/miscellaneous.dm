@@ -86,3 +86,11 @@
 	item_state = "bmgloves"
 	_color="bmgloves"
 	species_fit = list("Vox")
+
+/obj/item/clothing/gloves/owl
+	desc = "It smells like JUSTICE."
+	name = "owlgloves"
+	icon_state = "brown"
+	item_state = "browngloves"
+	_color="brown"
+	species_fit = list("Vox")

@@ -19,6 +19,7 @@
 			// Override the current limb status and don't cause an explosion
 			E.droplimb(1,1)
 
+
 	flick("gibbed-h", animation)
 	if(species)
 		hgibs(loc, viruses, dna, species.flesh_color, species.blood_color)

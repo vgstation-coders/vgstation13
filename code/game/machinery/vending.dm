@@ -906,7 +906,7 @@
 					/obj/item/clothing/under/sexyclown = 3,/obj/item/clothing/mask/gas/sexymime = 3,/obj/item/clothing/under/sexymime = 3,/obj/item/clothing/suit/apron/overalls = 3,
 					/obj/item/clothing/head/rabbitears =3) //Pretty much everything that had a chance to spawn.
 	contraband = list(/obj/item/clothing/suit/cardborg = 3,/obj/item/clothing/head/cardborg = 3,/obj/item/clothing/suit/judgerobe = 3,/obj/item/clothing/head/powdered_wig = 3)
-	premium = list(/obj/item/clothing/suit/hgpirate = 3, /obj/item/clothing/head/hgpiratecap = 3, /obj/item/clothing/head/helmet/roman = 3, /obj/item/clothing/head/helmet/roman/legionaire = 3, /obj/item/clothing/under/roman = 3, /obj/item/clothing/shoes/roman = 3, /obj/item/weapon/shield/riot/roman = 3)
+	premium = list(/obj/item/clothing/suit/hgpirate = 3, /obj/item/clothing/head/hgpiratecap = 3, /obj/item/clothing/head/helmet/roman = 3, /obj/item/clothing/head/helmet/roman/legionaire = 3, /obj/item/clothing/under/roman = 3, /obj/item/clothing/shoes/roman = 3, /obj/item/weapon/shield/riot/roman = 3, /obj/item/weapon/storage/belt/owlbelt = 3, /obj/item/clothing/gloves/owl = 3, /obj/item/clothing/shoes/owl = 3)
 
 
 /obj/machinery/vending/hatdispenser

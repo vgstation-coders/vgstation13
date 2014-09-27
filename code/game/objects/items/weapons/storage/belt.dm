@@ -147,6 +147,47 @@
 	icon_state = "bmbelt"
 	item_state = "bmbelt"
 
+/obj/item/weapon/storage/belt/owlbelt
+	name = "owl utility-belt"
+	desc = "Holds all the tools an owl can ask for."
+	icon_state = "bmbelt"
+	item_state = "bmbelt"
+	can_hold = list(
+		"/obj/item/weapon/grenade/flashbang",
+		"/obj/item/weapon/grenade/chem_grenade",
+		"/obj/item/weapon/reagent_containers/spray/pepper",
+		"/obj/item/weapon/handcuffs",
+		"/obj/item/device/flash",
+		"/obj/item/clothing/glasses",
+		"/obj/item/ammo_casing/shotgun",
+		"/obj/item/ammo_storage",
+		"/obj/item/weapon/reagent_containers/food/snacks/donut/normal",
+		"/obj/item/weapon/reagent_containers/food/snacks/donut/jelly",
+		"/obj/item/weapon/melee/baton",
+		"/obj/item/weapon/gun/energy/taser",
+		"/obj/item/weapon/lighter/zippo",
+		"/obj/item/weapon/cigpacket",
+		"/obj/item/clothing/glasses/hud/security",
+		"/obj/item/device/flashlight",
+		"/obj/item/device/pda",
+		"/obj/item/device/radio/headset",
+		"/obj/item/weapon/melee/baton",
+		"/obj/item/taperoll/police",
+		"/obj/item/weapon/gun/energy/taser",
+		"/obj/item/weapon/legcuffs/bolas"
+
+		)
+
+/obj/item/weapon/storage/belt/owlbelt/complete/New()
+	..()
+	new /obj/item/weapon/grenade/chem_grenade/owl(src)
+	new /obj/item/weapon/grenade/chem_grenade/owl(src)
+	new /obj/item/weapon/grenade/flashbang(src)
+	new /obj/item/weapon/grenade/flashbang(src)
+	new /obj/item/weapon/legcuffs/bolas(src)
+	new /obj/item/weapon/handcuffs/cable/red(src)
+	new /obj/item/weapon/handcuffs/cable/red(src)
+
 /obj/item/weapon/storage/belt/soulstone
 	name = "soul stone belt"
 	desc = "Designed for ease of access to the shards during a fight, as to not let a single enemy spirit slip away"

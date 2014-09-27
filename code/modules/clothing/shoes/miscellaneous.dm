@@ -149,3 +149,9 @@
 	desc = "A pair of girly knee-high socks"
 	icon_state = "kneesock"
 	item_state = "kneesock"
+
+/obj/item/clothing/shoes/owl
+	name = "owl boots"
+	desc = "Hides owl poo fairly well."
+	icon_state = "owl"
+	item_state = "owl"
