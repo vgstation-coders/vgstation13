@@ -61,8 +61,8 @@
 		base_icon_state = "darkmatter_shard"
 
 		warning_point = 50
-		emergency_point = 500
-		explosion_point = 900
+		emergency_point = 350
+		explosion_point = 500
 
 		gasefficency = 0.125
 
