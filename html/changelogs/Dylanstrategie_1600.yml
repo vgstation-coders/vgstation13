@@ -1,0 +1,4 @@
+author: Dylanstrategie
+delete-after: True
+changes:
+  - experiment: Changed the way random events fire. Basically, they fire more often, weighting is more straightforward (no longer considers jobs), player count matters more and round time now matters
