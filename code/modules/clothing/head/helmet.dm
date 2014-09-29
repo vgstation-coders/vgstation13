@@ -4,6 +4,8 @@
 	icon_state = "helmet"
 	flags = FPRINT | TABLEPASS | HEADCOVERSEYES
 	item_state = "helmet"
+	m_amt = 5000
+	g_amt = 370
 	armor = list(melee = 50, bullet = 15, laser = 50,energy = 10, bomb = 25, bio = 0, rad = 0)
 	flags_inv = HIDEEARS|HIDEEYES
 	cold_protection = HEAD

@@ -22,12 +22,12 @@
 	var/log_runtimes = 0                // Logs all runtimes.
 	var/sql_enabled = 1					// for sql switching
 	var/allow_admin_ooccolor = 0		// Allows admins with relevant permissions to have their own ooc colour
-	var/allow_vote_restart = 0 			// allow votes to restart
-	var/allow_vote_mode = 0				// allow votes to change mode
+	var/allow_vote_restart = 1 			// allow votes to restart
+	var/allow_vote_mode = 1				// allow votes to change mode
 	var/allow_admin_jump = 1			// allows admin jumping
 	var/allow_admin_spawning = 1		// allows admin item spawning
 	var/allow_admin_rev = 1				// allows admin revives
-	var/vote_delay = 6000				// minimum time between voting sessions (deciseconds, 10 minute default)
+	var/vote_delay = 12000				// minimum time between voting sessions (deciseconds, 10 minute default)
 	var/vote_period = 600				// length of voting period (deciseconds, default 1 minute)
 	var/vote_no_default = 0				// vote does not default to nochange/norestart (tbi)
 	var/vote_no_dead = 0				// dead people can't vote (tbi)
@@ -39,7 +39,7 @@
 	var/continous_rounds = 0			// Gamemodes which end instantly will instead keep on going until the round ends by escape shuttle or nuke.
 	var/allow_Metadata = 0				// Metadata is supported.
 	var/popup_admin_pm = 0				//adminPMs to non-admins show in a pop-up 'reply' window when set to 1.
-	var/Ticklag = 0.9
+	var/Ticklag = 0.6                   //Любите играть без лагов?
 	var/Tickcomp = 0
 	var/socket_talk	= 0					// use socket_talk to communicate with other processes
 	var/list/resource_urls = null
@@ -54,7 +54,7 @@
 	var/allow_ai = 1					// allow ai job
 	var/hostedby = null
 	var/respawn = 1
-	var/respawn_delay=30
+	var/respawn_delay= 30
 	var/respawn_as_mommi = 0
 	var/respawn_as_mouse = 1
 	var/guest_jobban = 1
@@ -82,8 +82,7 @@
 	var/vgws_base_url = "http://vg13.undo.it" // No hanging slashes.
 	var/forumurl = "http://nsea.forum2x2.com"
 
-	var/media_base_url = "" // http://ss13.nexisonline.net/media
-
+	var/media_base_url = "http://ss13.nexisonline.net/media" // попробуем, чому нет.
 	//Alert level description
 	var/alert_desc_green = "All threats to the station have passed. Security may not have weapons visible, privacy laws are once again fully enforced."
 	var/alert_desc_blue_upto = "The station has received reliable information about possible hostile activity on the station. Security staff may have weapons visible, random searches are permitted."

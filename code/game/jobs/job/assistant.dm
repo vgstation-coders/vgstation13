@@ -28,7 +28,7 @@
 	title = "Scavenger"
 	flag = SCAVENGER
 	department_flag = CIVILIAN
-	faction = "Station"
+	//faction = "Station" // ждем Derelict TG station.
 	total_positions = -1
 	spawn_positions = -1
 	supervisors = "Anarchy"

@@ -113,7 +113,7 @@ obj/item/weapon/gun/energy/laser/retro
 	origin_tech = "combat=4;materials=3;powerstorage=3"
 	projectile_type = "/obj/item/projectile/beam/heavylaser"
 
-	fire_delay = 2
+	fire_delay = 6 //Balancing stuff
 
 	isHandgun()
 		return 0

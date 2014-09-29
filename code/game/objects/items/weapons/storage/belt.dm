@@ -106,7 +106,8 @@
 		"/obj/item/device/flashlight/pen",
 		"/obj/item/clothing/mask/surgical",
 		"/obj/item/clothing/gloves/latex",
-        "/obj/item/weapon/reagent_containers/hypospray/autoinjector"
+        "/obj/item/weapon/reagent_containers/hypospray/autoinjector",
+        "/obj/item/weapon/reagent_containers/hypospray" //почему мне приходится самому это фиксить?))
 	)
 
 
@@ -115,7 +116,7 @@
 	desc = "Can hold security gear like handcuffs and flashes."
 	icon_state = "securitybelt"
 	item_state = "security"//Could likely use a better one.
-	storage_slots = 7
+	storage_slots = 5 //balance stuff
 	max_w_class = 3
 	max_combined_w_class = 21
 	can_hold = list(
@@ -146,6 +147,7 @@
 	desc = "For all your crime-fighting bat needs."
 	icon_state = "bmbelt"
 	item_state = "bmbelt"
+	storage_slots = 7 //Ну вы чо, это же бетмен!
 
 /obj/item/weapon/storage/belt/soulstone
 	name = "soul stone belt"

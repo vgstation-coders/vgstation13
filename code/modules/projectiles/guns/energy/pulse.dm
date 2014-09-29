@@ -28,6 +28,7 @@
 			if(1)
 				mode = 2
 				charge_cost = 200
+				fire_delay = 6 //Balancing stuff
 				fire_sound = 'sound/weapons/pulse.ogg'
 				user << "\red [src.name] is now set to DESTROY."
 				projectile_type = "/obj/item/projectile/beam/pulse"
