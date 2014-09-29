@@ -28,13 +28,13 @@
 	title = "Scavenger"
 	flag = SCAVENGER
 	department_flag = CIVILIAN
-	//faction = "Station" // ждем Derelict TG station.
-	total_positions = -1
-	spawn_positions = -1
-	supervisors = "Anarchy"
+	faction = "Station"
+	total_positions = 3
+	spawn_positions = 5
+	supervisors = "Factions"
 	selection_color = "#dddddd"
-	access = list(access_maint_tunnels)			//See /datum/job/assistant/get_access()
-	minimal_access = list(access_maint_tunnels)	//See /datum/job/assistant/get_access()
+	access = list(access_maint_tunnels)
+	minimal_access = list(access_maint_tunnels)
 
 /datum/job/scavenger/equip(var/mob/living/carbon/human/H)
 	if(!H)	return 0
