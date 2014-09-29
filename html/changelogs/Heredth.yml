@@ -1,0 +1,5 @@
+author: Heredth
+changes: 
+  - rscadd: Added new owl mob. Only spawns when somebody suicides whilst wearing the owlman uniform.
+  - rscadd: (Suiciding whilst in the owlman suit will cause you to turn into a pile of ashes.)
+  - rscadd: Added more parts to the owlman clothing. New parts can be accessed from the vending machine in the bar. (Premium. Requires silver coin.)
