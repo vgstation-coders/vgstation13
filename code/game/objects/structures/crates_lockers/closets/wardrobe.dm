@@ -244,12 +244,15 @@
 /obj/structure/closet/wardrobe/robotics_black/New()
 	new /obj/item/clothing/under/rank/roboticist(src)
 	new /obj/item/clothing/under/rank/roboticist(src)
+	new /obj/item/clothing/under/rank/biomechanical(src)
+	new /obj/item/clothing/under/rank/mechatronic(src)
 	new /obj/item/clothing/suit/storage/labcoat(src)
 	new /obj/item/clothing/suit/storage/labcoat(src)
 	new /obj/item/clothing/shoes/black(src)
 	new /obj/item/clothing/shoes/black(src)
 	new /obj/item/clothing/gloves/black(src)
 	new /obj/item/clothing/gloves/black(src)
+	new /obj/item/device/radio/headset/headset_sci(src)
 	return
 
 
