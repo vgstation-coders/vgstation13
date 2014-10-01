@@ -14,6 +14,14 @@
 	load_method = 2
 	mag_type = "/obj/item/ammo_storage/magazine/smg9mm"
 
+	update_icon()
+		..()
+		if(stored_magazine)
+			icon_state = "saber-full"
+		else
+			icon_state = "saber"
+		return
+
 
 /obj/item/weapon/gun/projectile/automatic/isHandgun()
 	return 0
@@ -24,10 +32,12 @@
 	burstfire = !burstfire
 	usr << "You toggle \the [src]'s firing setting to [burstfire ? "burst fire" : "single fire"]."
 
+/*
 /obj/item/weapon/gun/projectile/automatic/update_icon()
 	..()
 	icon_state = "[initial(icon_state)][stored_magazine ? "-[stored_magazine.max_ammo]" : ""][chambered ? "" : "-e"]"
 	return
+*/ //Говно код который глючит. У тебя он так и не заработал как нужно, фикс блин.
 
 /obj/item/weapon/gun/projectile/automatic/Fire()
 	if(burstfire == 1)
@@ -59,6 +69,14 @@
 	ammo_type = "/obj/item/ammo_casing/c45"
 	mag_type = "/obj/item/ammo_storage/magazine/uzi45"
 
+	update_icon()
+		..()
+		if(stored_magazine)
+			icon_state = "mini-uzi-loaded"
+		else
+			icon_state = "mini-uzi"
+		return
+
 
 /obj/item/weapon/gun/projectile/automatic/mini_uzi/isHandgun()
 	return 1
@@ -78,7 +96,6 @@
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
 	load_method = 2
 	auto_mag_drop = 1
-
 
 /obj/item/weapon/gun/projectile/automatic/c20r/update_icon()
 	..()
@@ -104,6 +121,14 @@
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
 	load_method = 2
 	auto_mag_drop = 1
+
+	update_icon()
+		..()
+		if(stored_magazine)
+			icon_state = "xcomassaultrifle-full"
+		else
+			icon_state = "xcomassaultrifle"
+		return
 
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw
@@ -197,6 +222,14 @@
 	load_method = 2
 	auto_mag_drop = 1
 
+	update_icon()
+		..()
+		if(stored_magazine)
+			icon_state = "u40ag-full"
+		else
+			icon_state = "u40ag"
+		return
+
 
 
 /obj/item/weapon/gun/projectile/automatic/k4m
@@ -215,6 +248,14 @@
 	load_method = 2
 	auto_mag_drop = 1
 
+	update_icon()
+		..()
+		if(stored_magazine)
+			icon_state = "k4m-full"
+		else
+			icon_state = "k4m"
+		return
+
 
 /obj/item/weapon/gun/projectile/automatic/mp5
 	name = "Mp5-A2"
@@ -230,6 +271,14 @@
 	mag_type = "/obj/item/ammo_storage/magazine/c9mmp"
 	load_method = 2
 	auto_mag_drop = 1
+
+	update_icon()
+		..()
+		if(stored_magazine)
+			icon_state = "mp5a-full"
+		else
+			icon_state = "mp5a"
+		return
 
 
 /*
