@@ -216,7 +216,7 @@
 	icon_state = "soviet"
 	item_state = "soviet"
 	_color = "soviet"
-
+	species_fit = list("Vox")
 /obj/item/clothing/under/redcoat
 	name = "redcoat uniform"
 	desc = "Looks old."
