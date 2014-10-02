@@ -231,7 +231,6 @@
 		src.modules += new /obj/item/weapon/melee/baton/loaded(src)
 		src.modules += new /obj/item/weapon/gun/energy/taser/cyborg(src)
 		src.modules += new /obj/item/weapon/handcuffs/cyborg(src)
-		src.modules += new /obj/item/weapon/reagent_containers/spray/pepper(src)
 		src.modules += new /obj/item/taperoll/police(src)
 		src.emag = new /obj/item/weapon/gun/energy/laser/cyborg(src)
 		return
