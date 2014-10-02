@@ -209,7 +209,7 @@
 
 /obj/item/weapon/gun/projectile/automatic/u40ag
 	name = "u40ag"
-	desc = "Machine for civil violence. Used by mercenaries, personal guards. Weapon of last chance. .45 rounds."
+	desc = "Machine gun for civil violence. Used by mercenaries, personal guards. Weapon of last chance. .45 rounds."
 	icon_state = "u40ag"
 	item_state = "c20r"
 	w_class = 3.0
@@ -218,7 +218,7 @@
 	burst_count = 2
 	origin_tech = "combat=5;materials=1"
 	ammo_type = "/obj/item/ammo_casing/c45"
-	mag_type = list (/obj/item/ammo_storage/magazine/c45)
+	mag_type = "/obj/item/ammo_storage/magazine/c45"
 	load_method = 2
 	auto_mag_drop = 1
 

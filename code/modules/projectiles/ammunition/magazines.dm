@@ -123,8 +123,8 @@
 	icon_state = "9x18p-0"
 	m_amt = 8000
 
-/obj/item/ammo_storage/magazine/a5x56
-	name = "magazine (5x56)"
+/obj/item/ammo_storage/magazine/a556
+	name = "magazine (5.56)"
 	icon_state = "5.56"
 	origin_tech = "combat=2"
 	ammo_type = "/obj/item/ammo_casing/a556"
