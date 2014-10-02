@@ -985,7 +985,7 @@ window "mainwindow"
 		on-size = ""
 		text = "OOC"
 		image = ""
-		command = "command = \".winset \"oocbutton.is-checked=true?input.command=\"!ooc \\\"\" saybutton.is-checked=false:input.command=\"\""
+		command = ".winset \"oocbutton.is-checked=true?input.command=\"!ooc \\\"\" saybutton.is-checked=false:input.command=\""
 		is-flat = false
 		stretch = false
 		is-checked = false
@@ -1236,7 +1236,7 @@ window "outputwindow"
 window "rpane"
 	elem "rpane"
 		type = MAIN
-		pos = 287,41
+		pos = 281,0
 		size = 640x510
 		anchor1 = none
 		anchor2 = none
