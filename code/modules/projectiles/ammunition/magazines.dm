@@ -82,11 +82,22 @@
 	starting_ammo = 0
 	m_amt = 5000
 
-/obj/item/ammo_storage/magazine/c45
-	name = "magazine (.45)"
+/obj/item/ammo_storage/magazine/c45m
+	name = "magazine (.45) - lethal"
 	icon_state = "45"
 	origin_tech = "combat=2"
-	ammo_type = "/obj/item/ammo_casing/c45"
+	ammo_type = "/obj/item/ammo_casing/c45m"
+	m_amt = 15000
+	max_ammo = 8
+	multiple_sprites = 1
+	sprite_modulo = 1
+
+/obj/item/ammo_storage/magazine/c45r
+	name = "magazine (.45) - rubber"
+	icon_state = "45"
+	origin_tech = "combat=2"
+	ammo_type = "/obj/item/ammo_casing/c45r"
+	m_amt = 5000
 	max_ammo = 8
 	multiple_sprites = 1
 	sprite_modulo = 1

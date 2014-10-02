@@ -52,7 +52,7 @@
 			..()
 			shots_fired++
 		message_admins("[usr] just shot [shots_fired] burst fire bullets out of [getAmmo() + shots_fired] from their [src].")
-		fire_delay = shots_fired * 10
+		fire_delay = shots_fired * 7
 	else
 		..()
 
@@ -66,7 +66,7 @@
 	burst_count = 3
 	caliber = list(".45" = 1)
 	origin_tech = "combat=5;materials=2;syndicate=8"
-	ammo_type = "/obj/item/ammo_casing/c45"
+	ammo_type = "/obj/item/ammo_casing/c45m"
 	mag_type = "/obj/item/ammo_storage/magazine/uzi45"
 
 	update_icon()
@@ -213,12 +213,13 @@
 	icon_state = "u40ag"
 	item_state = "c20r"
 	w_class = 3.0
-	max_shells = 10
+	max_shells = 8
 	caliber = list(".45" = 1)
 	burst_count = 2
 	origin_tech = "combat=5;materials=1"
 	ammo_type = "/obj/item/ammo_casing/c45"
-	mag_type = "/obj/item/ammo_storage/magazine/c45"
+	mag_type = list (/obj/item/ammo_storage/magazine/c45m,
+					 /obj/item/ammo_storage/magazine/c45r)
 	load_method = 2
 	auto_mag_drop = 1
 

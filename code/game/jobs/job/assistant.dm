@@ -45,10 +45,8 @@
 	if(H.backbag == 1)
 		H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
 		H.equip_or_collect(new /obj/item/weapon/gun/projectile/automatic/u40ag(H), slot_l_hand)
-		H.equip_or_collect(new /obj/item/ammo_storage/magazine/c45(H.back), slot_l_store)
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		H.equip_or_collect(new /obj/item/ammo_storage/magazine/c45(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/weapon/gun/projectile/automatic/u40ag(H), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/clothing/tie/storage/black_vest(H), slot_in_backpack)
 	return 1

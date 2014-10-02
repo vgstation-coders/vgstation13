@@ -25,6 +25,7 @@
 			if(1)
 				mode = 0
 				charge_cost = 100
+				fire_delay = 5 //учитесь стрелять наконец!!
 				fire_sound = 'sound/weapons/Taser.ogg'
 				user << "\red [src.name] is now set to stun."
 				projectile_type = "/obj/item/projectile/energy/electrode"

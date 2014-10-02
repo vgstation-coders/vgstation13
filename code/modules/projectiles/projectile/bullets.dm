@@ -44,16 +44,21 @@
 			return 1
 		return 0
 
-/obj/item/projectile/bullet/midbullet
+/obj/item/projectile/bullet/midbullet //12mm
 	damage = 15
 	stun = 2
 	weaken = 2
 
-/obj/item/projectile/bullet/midbullet2
+/obj/item/projectile/bullet/midbullet2 //7 62
 	damage = 25
 
-/obj/item/projectile/bullet/midbullet3
+/obj/item/projectile/bullet/midbullet3 //5 56
 	damage = 20
+
+/obj/item/projectile/bullet/midbullet4 //rubber
+	damage = 5
+	stun = 5
+	weaken = 5
 
 /obj/item/projectile/bullet/suffocationbullet//How does this even work?
 	name = "co bullet"

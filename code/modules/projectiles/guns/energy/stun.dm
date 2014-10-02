@@ -6,6 +6,7 @@
 	item_state = null	//so the human update icon uses the icon_state instead.
 	fire_sound = 'sound/weapons/Taser.ogg'
 	charge_cost = 100
+	fire_delay = 6 //учитесь стрелять наконец!!
 	projectile_type = "/obj/item/projectile/energy/electrode"
 	cell_type = "/obj/item/weapon/cell/crap"
 
@@ -52,6 +53,7 @@
 	fire_sound = 'sound/weapons/Gunshot.ogg'
 	origin_tech = "combat=3;materials=3;powerstorage=2"
 	charge_cost = 125
+	fire_delay = 4 //учитесь стрелять наконец!!
 	projectile_type = "/obj/item/projectile/energy/electrode"
 	cell_type = "/obj/item/weapon/cell"
 

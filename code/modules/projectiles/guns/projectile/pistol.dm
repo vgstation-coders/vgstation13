@@ -3,14 +3,34 @@
 	desc = "A small, quiet,  easily concealable gun. Uses .45 rounds."
 	icon_state = "silenced_pistol"
 	w_class = 3.0
-	max_shells = 10
+	max_shells = 8
 	caliber = list(".45"  = 1)
 	silenced = 1
 	origin_tech = "combat=2;materials=2;syndicate=8"
-	ammo_type = "/obj/item/ammo_casing/c45"
-	mag_type = "/obj/item/ammo_storage/magazine/c45"
+	ammo_type = "/obj/item/ammo_casing/c45m"
+	mag_type = "/obj/item/ammo_storage/magazine/c45m"
 	load_method = 2
 
+/obj/item/weapon/gun/projectile/colt
+	name = "improper Colt M1911"
+	desc = "A cheap Martian knock-off of a Colt M1911. Uses less-than-lethal .45 rounds."
+	icon_state = "colt"
+	w_class = 3.0
+	max_shells = 8
+	caliber = list(".45"  = 1)
+	origin_tech = "combat=2;materials=2"
+	ammo_type = "/obj/item/ammo_casing/c45r"
+	mag_type = list (/obj/item/ammo_storage/magazine/c45r,
+					 /obj/item/ammo_storage/magazine/c45m)
+	load_method = 2
+
+	update_icon()
+		..()
+		if(stored_magazine)
+			icon_state = "colt-full"
+		else
+			icon_state = "colt"
+		return
 
 /obj/item/weapon/gun/projectile/deagle
 	name = "desert eagle"

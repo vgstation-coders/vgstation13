@@ -77,7 +77,7 @@ macro "macro"
 		is-disabled = false
 	elem 
 		name = "CTRL+4"
-		command = "a-intent harm"
+		command = "a-intent hurt"
 		is-disabled = false
 	elem 
 		name = "CTRL+A+REP"
@@ -153,7 +153,7 @@ macro "macro"
 		is-disabled = false
 	elem 
 		name = "F5"
-		command = "Aghost"
+		command = "asay"
 		is-disabled = false
 	elem 
 		name = "F6"
@@ -170,6 +170,10 @@ macro "macro"
 	elem 
 		name = "F12"
 		command = "F12"
+		is-disabled = false
+	elem 
+		name = "/"
+		command = "holster"
 		is-disabled = false
 
 macro "hotkeymode"
@@ -270,106 +274,6 @@ macro "hotkeymode"
 		command = "a-intent hurt"
 		is-disabled = false
 	elem 
-		name = "A+REP"
-		command = ".west"
-		is-disabled = false
-	elem 
-		name = "CTRL+A+REP"
-		command = ".west"
-		is-disabled = false
-	elem 
-		name = "D+REP"
-		command = ".east"
-		is-disabled = false
-	elem 
-		name = "CTRL+D+REP"
-		command = ".east"
-		is-disabled = false
-	elem 
-		name = "E"
-		command = "quick-equip"
-		is-disabled = false
-	elem 
-		name = "CTRL+E"
-		command = "quick-equip"
-		is-disabled = false
-	elem 
-		name = "F"
-		command = "a-intent left"
-		is-disabled = false
-	elem 
-		name = "CTRL+F"
-		command = "a-intent left"
-		is-disabled = false
-	elem 
-		name = "G"
-		command = "a-intent right"
-		is-disabled = false
-	elem 
-		name = "CTRL+G"
-		command = "a-intent right"
-		is-disabled = false
-	elem 
-		name = "Q"
-		command = ".northwest"
-		is-disabled = false
-	elem 
-		name = "CTRL+Q"
-		command = ".northwest"
-		is-disabled = false
-	elem 
-		name = "R"
-		command = ".southwest"
-		is-disabled = false
-	elem 
-		name = "CTRL+R"
-		command = ".southwest"
-		is-disabled = false
-	elem "s_key"
-		name = "S+REP"
-		command = ".south"
-		is-disabled = false
-	elem 
-		name = "CTRL+S+REP"
-		command = ".south"
-		is-disabled = false
-	elem 
-		name = "T"
-		command = "say"
-		is-disabled = false
-	elem "w_key"
-		name = "W+REP"
-		command = ".north"
-		is-disabled = false
-	elem 
-		name = "CTRL+W+REP"
-		command = ".north"
-		is-disabled = false
-	elem 
-		name = "X"
-		command = ".northeast"
-		is-disabled = false
-	elem 
-		name = "CTRL+X"
-		command = ".northeast"
-		is-disabled = false
-	elem 
-		name = "Y"
-		command = "Activate-Held-Object"
-		is-disabled = false
-	elem 
-		name = "CTRL+Y"
-		command = "Activate-Held-Object"
-		is-disabled = false
-	elem 
-		name = "Z"
-		command = "Activate-Held-Object"
-		is-disabled = false
-	elem 
-		name = "CTRL+Z"
-		command = "Activate-Held-Object"
-		is-disabled = false
-	elem 
 		name = "F1"
 		command = "adminhelp"
 		is-disabled = false
@@ -378,8 +282,8 @@ macro "hotkeymode"
 		command = ".options"
 		is-disabled = false
 	elem 
-		name = "F2+REP"
-		command = ".screenshot auto"
+		name = "F2"
+		command = "OOC"
 		is-disabled = false
 	elem 
 		name = "SHIFT+F2+REP"
@@ -395,7 +299,7 @@ macro "hotkeymode"
 		is-disabled = false
 	elem 
 		name = "F5"
-		command = "Aghost"
+		command = "asay"
 		is-disabled = false
 	elem 
 		name = "F6"
@@ -1059,6 +963,34 @@ window "mainwindow"
 		macro = "macro"
 		menu = "menu"
 		on-close = ""
+	elem "OOC"
+		type = BUTTON
+		pos = 504,420
+		size = 56x20
+		anchor1 = 100,100
+		anchor2 = none
+		font-family = ""
+		font-size = 0
+		font-style = ""
+		text-color = #000000
+		background-color = none
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = ""
+		on-size = ""
+		text = "OOC"
+		image = ""
+		command = "command = \".winset \"oocbutton.is-checked=true?input.command=\"!ooc \\\"\" saybutton.is-checked=false:input.command=\"\""
+		is-flat = false
+		stretch = false
+		is-checked = false
+		group = ""
+		button-type = pushbox
 	elem "hotkey_toggle"
 		type = BUTTON
 		pos = 560,420
@@ -1116,7 +1048,7 @@ window "mainwindow"
 	elem "input"
 		type = INPUT
 		pos = 3,420
-		size = 517x20
+		size = 461x20
 		anchor1 = 0,100
 		anchor2 = 100,100
 		font-family = ""
@@ -1139,7 +1071,7 @@ window "mainwindow"
 		no-command = false
 	elem "saybutton"
 		type = BUTTON
-		pos = 520,420
+		pos = 464,420
 		size = 40x20
 		anchor1 = 100,100
 		anchor2 = none
@@ -1304,8 +1236,8 @@ window "outputwindow"
 window "rpane"
 	elem "rpane"
 		type = MAIN
-		pos = 281,0
-		size = 640x480
+		pos = 287,41
+		size = 640x510
 		anchor1 = none
 		anchor2 = none
 		font-family = ""
@@ -1344,7 +1276,7 @@ window "rpane"
 	elem "rpanewindow"
 		type = CHILD
 		pos = 0,0
-		size = 640x499
+		size = 640x529
 		anchor1 = 0,0
 		anchor2 = 100,100
 		font-family = ""
@@ -1396,7 +1328,7 @@ window "rpane"
 	elem "rulesb"
 		type = BUTTON
 		pos = 278,0
-		size = 60x16
+		size = 66x16
 		anchor1 = none
 		anchor2 = none
 		font-family = ""
@@ -1413,37 +1345,9 @@ window "rpane"
 		right-click = false
 		saved-params = "is-checked"
 		on-size = ""
-		text = "Rules"
+		text = "Правила"
 		image = ""
 		command = "rules"
-		is-flat = false
-		stretch = false
-		is-checked = false
-		group = "rpanemode"
-		button-type = pushbutton
-	elem "changelog"
-		type = BUTTON
-		pos = 341,0
-		size = 67x16
-		anchor1 = none
-		anchor2 = none
-		font-family = ""
-		font-size = 0
-		font-style = ""
-		text-color = #000000
-		background-color = none
-		is-visible = true
-		is-disabled = false
-		is-transparent = false
-		is-default = false
-		border = none
-		drop-zone = false
-		right-click = false
-		saved-params = "is-checked"
-		on-size = ""
-		text = "Changelog"
-		image = ""
-		command = "Changelog"
 		is-flat = false
 		stretch = false
 		is-checked = false
@@ -1469,7 +1373,7 @@ window "rpane"
 		right-click = false
 		saved-params = "is-checked"
 		on-size = ""
-		text = "Forum"
+		text = "Форум"
 		image = ""
 		command = "forum"
 		is-flat = false
@@ -1497,7 +1401,7 @@ window "rpane"
 		right-click = false
 		saved-params = "is-checked"
 		on-size = ""
-		text = "Wiki"
+		text = "VG wiki"
 		image = ""
 		command = "wiki"
 		is-flat = false
