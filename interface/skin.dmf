@@ -136,12 +136,8 @@ macro "macro"
 		command = ".options"
 		is-disabled = false
 	elem 
-		name = "F2+REP"
-		command = ".screenshot auto"
-		is-disabled = false
-	elem 
-		name = "SHIFT+F2+REP"
-		command = ".screenshot"
+		name = "F2"
+		command = "OOC"
 		is-disabled = false
 	elem 
 		name = "F3"
@@ -164,8 +160,8 @@ macro "macro"
 		command = "Admin-PM"
 		is-disabled = false
 	elem 
-		name = "F8"
-		command = "Invisimin"
+		name = "F8+REP"
+		command = ".screenshot auto"
 		is-disabled = false
 	elem 
 		name = "F12"
@@ -963,10 +959,10 @@ window "mainwindow"
 		macro = "macro"
 		menu = "menu"
 		on-close = ""
-	elem "OOC"
+	elem "ooc"
 		type = BUTTON
-		pos = 504,420
-		size = 56x20
+		pos = 600,420
+		size = 40x20
 		anchor1 = 100,100
 		anchor2 = none
 		font-family = ""
@@ -986,34 +982,6 @@ window "mainwindow"
 		text = "OOC"
 		image = ""
 		command = ".winset \"oocbutton.is-checked=true?input.command=\"!ooc \\\"\" saybutton.is-checked=false:input.command=\""
-		is-flat = false
-		stretch = false
-		is-checked = false
-		group = ""
-		button-type = pushbox
-	elem "hotkey_toggle"
-		type = BUTTON
-		pos = 560,420
-		size = 80x20
-		anchor1 = 100,100
-		anchor2 = none
-		font-family = ""
-		font-size = 0
-		font-style = ""
-		text-color = #000000
-		background-color = none
-		is-visible = true
-		is-disabled = false
-		is-transparent = false
-		is-default = false
-		border = none
-		drop-zone = false
-		right-click = false
-		saved-params = ""
-		on-size = ""
-		text = "Hotkey Toggle"
-		image = ""
-		command = ".winset \"mainwindow.macro!=macro ? mainwindow.macro=macro hotkey_toggle.is-checked=false input.focus=true : mainwindow.macro=hotkeymode hotkey_toggle.is-checked=true mapwindow.map.focus=true\""
 		is-flat = false
 		stretch = false
 		is-checked = false
@@ -1048,7 +1016,7 @@ window "mainwindow"
 	elem "input"
 		type = INPUT
 		pos = 3,420
-		size = 461x20
+		size = 541x20
 		anchor1 = 0,100
 		anchor2 = 100,100
 		font-family = ""
@@ -1071,8 +1039,8 @@ window "mainwindow"
 		no-command = false
 	elem "saybutton"
 		type = BUTTON
-		pos = 464,420
-		size = 40x20
+		pos = 544,420
+		size = 56x20
 		anchor1 = 100,100
 		anchor2 = none
 		font-family = ""
@@ -1089,7 +1057,7 @@ window "mainwindow"
 		right-click = false
 		saved-params = "is-checked"
 		on-size = ""
-		text = "Chat"
+		text = "[IC]Say"
 		image = ""
 		command = ".winset \"saybutton.is-checked=true?input.command=\"!say \\\"\" macrobutton.is-checked=false:input.command=\""
 		is-flat = false

@@ -52,19 +52,11 @@
 	w_type = RECYK_METAL
 
 
-/obj/item/ammo_casing/c45m
+/obj/item/ammo_casing/c45
 	desc = "A .45 bullet casing."
 	caliber = ".45"
 	projectile_type = "/obj/item/projectile/bullet/midbullet"
 	w_type = RECYK_METAL
-
-/obj/item/ammo_casing/c45r
-	desc = "A .45 rubber bullet casing."
-	caliber = ".45"
-	projectile_type = "/obj/item/projectile/bullet/midbullet4"
-	w_type = RECYK_METAL
-
-
 
 /obj/item/ammo_casing/a12mm
 	desc = "A 12mm bullet casing."

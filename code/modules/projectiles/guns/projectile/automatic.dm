@@ -218,8 +218,7 @@
 	burst_count = 2
 	origin_tech = "combat=5;materials=1"
 	ammo_type = "/obj/item/ammo_casing/c45"
-	mag_type = list (/obj/item/ammo_storage/magazine/c45m,
-					 /obj/item/ammo_storage/magazine/c45r)
+	mag_type = list (/obj/item/ammo_storage/magazine/c45)
 	load_method = 2
 	auto_mag_drop = 1
 

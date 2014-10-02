@@ -7,8 +7,8 @@
 	caliber = list(".45"  = 1)
 	silenced = 1
 	origin_tech = "combat=2;materials=2;syndicate=8"
-	ammo_type = "/obj/item/ammo_casing/c45m"
-	mag_type = "/obj/item/ammo_storage/magazine/c45m"
+	ammo_type = "/obj/item/ammo_casing/c45"
+	mag_type = "/obj/item/ammo_storage/magazine/c45"
 	load_method = 2
 
 /obj/item/weapon/gun/projectile/colt
@@ -19,9 +19,8 @@
 	max_shells = 8
 	caliber = list(".45"  = 1)
 	origin_tech = "combat=2;materials=2"
-	ammo_type = "/obj/item/ammo_casing/c45r"
-	mag_type = list (/obj/item/ammo_storage/magazine/c45r,
-					 /obj/item/ammo_storage/magazine/c45m)
+	ammo_type = "/obj/item/ammo_casing/c45"
+	mag_type = "/obj/item/ammo_storage/magazine/c45"
 	load_method = 2
 
 	update_icon()

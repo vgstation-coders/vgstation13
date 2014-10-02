@@ -38,7 +38,6 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/ammo_casing/shotgun/flare(), \
 		new /obj/item/ammo_storage/speedloader/c38/empty(), \
 		new /obj/item/ammo_storage/box/c38(), \
-		new /obj/item/ammo_storage/magazine/c45r(),  \
 		new /obj/item/device/taperecorder(), \
 		new /obj/item/weapon/storage/pill_bottle/dice(),\
 		new /obj/item/device/assembly/igniter(), \
@@ -74,7 +73,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 		new /obj/item/ammo_storage/magazine/a12mm(),  \
 		new /obj/item/ammo_storage/magazine/a50(),  \
 		new /obj/item/ammo_storage/magazine/a762(),  \
-		new /obj/item/ammo_storage/magazine/c45m(),  \
+		new /obj/item/ammo_storage/magazine/c45(),  \
 		new /obj/item/ammo_storage/magazine/a50s(),  \
 		new /obj/item/clothing/suit/armor/vest(), \
 		new /obj/item/clothing/head/helmet(), \

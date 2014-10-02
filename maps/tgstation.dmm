@@ -7852,7 +7852,7 @@
 "cUZ" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/turf/simulated/shuttle/plating,/area/centcom/evac)
 "cVa" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/turf/simulated/shuttle/plating,/area/centcom/evac)
 "cVb" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'FOURTH WALL'."; name = "\improper FOURTH WALL"; pixel_x = -32},/turf/unsimulated/floor{icon = 'icons/turf/snow.dmi'; icon_state = "snow"},/area/syndicate_mothership)
-"cVc" = (/obj/structure/closet/crate,/obj/item/ammo_storage/magazine/c45m,/obj/item/weapon/storage/box/dartshells,/obj/item/weapon/storage/box/lethalshells{pixel_x = -5},/turf/unsimulated/floor{icon_state = "floor4"},/area/syndicate_station/start)
+"cVc" = (/obj/structure/closet/crate,/obj/item/ammo_storage/magazine/c45,/obj/item/weapon/storage/box/dartshells,/obj/item/weapon/storage/box/lethalshells{pixel_x = -5},/turf/unsimulated/floor{icon_state = "floor4"},/area/syndicate_station/start)
 "cVd" = (/obj/structure/table,/obj/machinery/computer/pod/old/syndicate{id_tag = "smindicate"},/turf/unsimulated/floor{icon_state = "floor4"},/area/syndicate_station/start)
 "cVe" = (/obj/structure/dispenser/oxygen,/turf/unsimulated/floor{icon_state = "floor4"},/area/syndicate_station/start)
 "cVf" = (/turf/unsimulated/floor{icon = 'icons/turf/snow.dmi'; icon_state = "snow"},/obj/structure/flora/grass/brown,/turf/unsimulated/floor{icon = 'icons/turf/snow.dmi'; icon_state = "gravsnow_corner"; dir = 8},/area/syndicate_mothership)
