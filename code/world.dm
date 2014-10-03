@@ -247,9 +247,10 @@
 
 
 ///////////////////////////////////////////////For a HUB ////////////////////////////////////
-	s += {"<b>(RU)NSEA protector] FUN SERVER</b>
-	"(<a href=\"http://nsea.forum2x2.com/">VGBay:PKS 0.82</a>)
-	<b>FUN AND SOME RP in great VG build</b>
+	s += {"<b><a href=\"http://nsea.forum2x2.com/">(RU)NSEA protector] FUN SERVER</b></a>
+	"(Build - VGstation13:PKS)
+	<b>English: FUN AND RP in VG:PKS</b>
+	<b>Russian: ‘‡Ì Ë –œ Ì‡ VG:PKS</b>
 	ñ"}
 	var/list/features = list()
 
