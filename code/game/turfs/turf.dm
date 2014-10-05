@@ -62,45 +62,44 @@
 	..()
 	return 0
 
-/turf/Enter(atom/movable/O, atom/oldloc)
-	if(movement_disabled && usr.ckey != movement_disabled_exception)
-		usr << "\red Movement is admin-disabled." //This is to identify lag problems
-		return 0
-
-	// first, check objects to block exit that are not on the border
-	for(var/atom/movable/obstacle in oldloc)
+/turf/Exit(atom/movable/O, atom/newloc)
+	// check objects to block exit that are not on the border
+	for(var/atom/movable/obstacle in src)
 		if((obstacle.flags & ~ON_BORDER) && (obstacle != O))
-			if(!obstacle.CheckExit(O, src))
+			if(!obstacle.CheckExit(O, newloc))
 				O.Bump(obstacle, 1)
 				return 0
 
-	// now, check objects to block exit that are on the border
-	for(var/atom/movable/border_obstacle in oldloc)
+	// check objects to block exit that are on the border
+	for(var/atom/movable/border_obstacle in src)
 		if((border_obstacle.flags & ON_BORDER) && (border_obstacle != O))
-			if(!border_obstacle.CheckExit(O, src))
+			if(!border_obstacle.CheckExit(O, newloc))
 				O.Bump(border_obstacle, 1)
 				return 0
 
-	// next, check objects to block entry that are on the border
+	return 1 // nothing found to block, permit exit
+
+/turf/Enter(atom/movable/O, atom/oldloc)
+	// check objects to block entry that are on the border
 	for(var/atom/movable/border_obstacle in contents)
 		if(border_obstacle.flags & ON_BORDER)
 			if(!border_obstacle.CanPass(O, oldloc))
 				O.Bump(border_obstacle, 1)
 				return 0
 
-	// then, check the turf itself
+	// check the turf itself
 	if (!CanPass(O, src))
 		O.Bump(src, 1)
 		return 0
 
-	// finally, check objects/mobs to block entry that are not on the border
+	// check objects/mobs to block entry that are not on the border
 	for(var/atom/movable/obstacle in contents)
 		if(obstacle.flags & ~ON_BORDER)
 			if(!obstacle.CanPass(O, oldloc))
 				O.Bump(obstacle, 1)
 				return 0
 
-	return 1 // nothing found to block so return success!
+	return 1 // nothing found to block, permit enter
 
 /turf/Entered(atom/movable/Obj,atom/OldLoc)
 	var/loopsanity = 100
