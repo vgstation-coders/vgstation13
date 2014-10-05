@@ -484,7 +484,7 @@ datum/objective/harm
 
 
 datum/objective/nuclear
-	explanation_text = "Destroy the station with a nuclear device."
+	explanation_text = "Destroy the station with the nuclear device provided to you by the Syndicate."
 
 
 
