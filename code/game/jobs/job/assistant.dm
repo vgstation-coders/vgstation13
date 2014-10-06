@@ -28,7 +28,7 @@
 	title = "Scavenger"
 	flag = SCAVENGER
 	department_flag = CIVILIAN
-	faction = "Station"
+//	faction = "Station" - RP
 	total_positions = 3
 	spawn_positions = 5
 	supervisors = "Factions"
