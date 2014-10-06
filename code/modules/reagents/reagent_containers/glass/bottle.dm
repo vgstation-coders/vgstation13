@@ -290,6 +290,61 @@
 		var/list/data = list("viruses"= list(F))
 		reagents.add_reagent("blood", 20, data)
 
+/obj/item/weapon/reagent_containers/glass/bottle/birdflu
+	name = "Bird Flu culture bottle"
+	desc = "A small bottle. Contains a sample of Grippus Avium."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle3"
+	New()
+		..()
+		var/datum/disease/F = new /datum/disease/birdflu(0)
+		var/list/data = list("viruses"= list(F))
+		reagents.add_reagent("blood", 20, data)
+
+/obj/item/weapon/reagent_containers/glass/bottle/inhalational_anthrax
+	name = "Inhalational Anthrax culture bottle"
+	desc = "A small bottle. Contains a sample of Inhalational Anthrax."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle3"
+	New()
+		..()
+		var/datum/disease/F = new /datum/disease/inhalational_anthrax(0)
+		var/list/data = list("viruses"= list(F))
+		reagents.add_reagent("blood", 20, data)
+
+/obj/item/weapon/reagent_containers/glass/bottle/mochashakah
+	name = "Mochashakah culture bottle"
+	desc = "A small bottle. Contains a sample of N1G6A."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle3"
+	New()
+		..()
+		var/datum/disease/F = new /datum/disease/mochashakah(0)
+		var/list/data = list("viruses"= list(F))
+		reagents.add_reagent("blood", 20, data)
+
+/obj/item/weapon/reagent_containers/glass/bottle/plague
+	name = "Plague culture bottle"
+	desc = "A small bottle. Contains a sample of Pestis."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle3"
+	New()
+		..()
+		var/datum/disease/F = new /datum/disease/plague(0)
+		var/list/data = list("viruses"= list(F))
+		reagents.add_reagent("blood", 20, data)
+
+/obj/item/weapon/reagent_containers/glass/bottle/swineflu
+	name = "SwineFlu culture bottle"
+	desc = "A small bottle. Contains a sample of H1N1."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle3"
+	New()
+		..()
+		var/datum/disease/F = new /datum/disease/swineflu(0)
+		var/list/data = list("viruses"= list(F))
+		reagents.add_reagent("blood", 20, data)
+
 /obj/item/weapon/reagent_containers/glass/bottle/pacid
 	name = "Polytrinic Acid Bottle"
 	desc = "A small bottle. Contains a small amount of Polytrinic Acid"
