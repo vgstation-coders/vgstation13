@@ -93,4 +93,3 @@
 	icon_state = "brown"
 	item_state = "browngloves"
 	_color="brown"
-	species_fit = list("Vox")
