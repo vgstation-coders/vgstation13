@@ -28,27 +28,21 @@
 
 /obj/item/weapon/melee/energy/sword/attack_self(mob/living/user as mob)
 	if ((M_CLUMSY in user.mutations) && prob(50))
-		user << "\red You accidentally cut yourself with [src]."
+		user << "<span class='warning'>You accidentally cut yourself with \the [src].</span>"
 		user.take_organ_damage(5,5)
 	active = !active
 	if (active)
 		force = 30
-		if(istype(src,/obj/item/weapon/melee/energy/sword/pirate))
-			icon_state = "cutlass1"
-		else
-			icon_state = "sword[_color]"
 		w_class = 4
+		update_icon()
 		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
-		user << "\blue [src] is now active."
+		user << "<span class='notice'>\The [src] is now active.</span>"
 	else
 		force = 3
-		if(istype(src,/obj/item/weapon/melee/energy/sword/pirate))
-			icon_state = "cutlass0"
-		else
-			icon_state = "sword0"
 		w_class = 2
+		update_icon()
 		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
-		user << "\blue [src] can now be concealed."
+		user << "<span class='notice'>\The [src] can now be concealed.</span>"
 	add_fingerprint(user)
 	return
 
@@ -56,15 +50,26 @@
 	..()
 	if(istype(W, /obj/item/weapon/melee/energy/sword))
 		if(W == src)
-			user << "<span class='notice'>You try to attach the end of the energy sword to... itself. You're not very smart, are you?</span>"
+			user << "<span class='notice'>You try to attach the end of \the [src]... to itself. You're not that smart, are you?</span>"
 			if(ishuman(user))
 				user.adjustBrainLoss(10)
 		else
-			user << "<span class='notice'>You attach the ends of the two energy swords, making a single double-bladed weapon! You're cool.</span>"
+			user << "<span class='notice'>You attach the ends of the two energy swords, creating a single double-bladed weapon! You're cool.</span>"
 			new /obj/item/weapon/twohanded/dualsaber(user.loc)
 			del(W)
 			del(src)
 
+/obj/item/weapon/melee/energy/sword/update_icon()
+	if(active)
+		if(istype(src,/obj/item/weapon/melee/energy/sword/pirate))
+			icon_state = "cutlass1"
+		else
+			icon_state = "sword[_color]"
+	else
+		if(istype(src,/obj/item/weapon/melee/energy/sword/pirate))
+			icon_state = "cutlass0"
+		else
+			icon_state = "sword0"
 /*
  * Classic Baton
  */
