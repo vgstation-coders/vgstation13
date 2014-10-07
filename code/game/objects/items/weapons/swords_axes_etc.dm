@@ -27,22 +27,22 @@
 	_color = pick("red","blue","green","purple")
 
 /obj/item/weapon/melee/energy/sword/attack_self(mob/living/user as mob)
-	if ((M_CLUMSY in user.mutations) && prob(50))
+	if((M_CLUMSY in user.mutations) && prob(50))
 		user << "<span class='warning'>You accidentally cut yourself with \the [src].</span>"
 		user.take_organ_damage(5,5)
 	active = !active
-	if (active)
+	if(active)
 		force = 30
 		w_class = 4
 		update_icon()
 		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
-		user << "<span class='notice'>\The [src] is now active.</span>"
+		//user << "<span class='notice'>\The [src] is now active.</span>"
 	else
 		force = 3
 		w_class = 2
 		update_icon()
 		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
-		user << "<span class='notice'>\The [src] can now be concealed.</span>"
+		//user << "<span class='notice'>\The [src] can now be concealed.</span>"
 	add_fingerprint(user)
 	return
 
