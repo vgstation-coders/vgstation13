@@ -49,6 +49,7 @@
 	var/shut_up = 0				//Stop spouting those godawful pitches!
 	var/extended_inventory = 0	//can we access the hidden inventory?
 	var/scan_id = 1
+	var/unwrenched = 0
 	var/obj/item/weapon/coin/coin
 	var/datum/wires/vending/wires = null
 
@@ -156,6 +157,32 @@
 		if(panel_open)
 			attack_hand(user)
 		return
+		else if (istype(W, /obj/item/weapon/wrench))
+		if (unwrenched==0)
+			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			user << "\blue You begin to unfasten \the [src] from the floor..."
+			if (do_after(user, 40))
+				user.visible_message( \
+					"[user] unfastens \the [src].", \
+					"\blue You have unfastened \the [src]. Now it can be pulled somewhere else.", \
+					"You hear ratchet.")
+				src.anchored = 0
+				src.stat |= MAINT
+				src.unwrenched = 1
+				if (usr.machine==src)
+					usr << browse(null, "window=vending")
+		else /*if (unwrenched==1)*/
+			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			user << "\blue You begin to fasten \the [src] to the floor..."
+			if (do_after(user, 20))
+				user.visible_message( \
+					"[user] fastens \the [src].", \
+					"\blue You have fastened \the [src].", \
+					"You hear ratchet.")
+				src.anchored = 1
+				src.stat &= ~MAINT
+				src.unwrenched = 0
+				power_change()
 	else if(istype(W, /obj/item/weapon/coin) && premium.len > 0)
 		user.drop_item()
 		W.loc = src
