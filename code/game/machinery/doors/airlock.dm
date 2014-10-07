@@ -1075,6 +1075,36 @@ About the new airlock wires panel:
 				door_animate("spark")
 				open(1)
 			operating = -1
+	else if(istype(I, /obj/item/weapon/melee/energy/sword))
+		if(!operating)
+			if(density)
+				var/obj/item/weapon/melee/energy/sword/S = I
+				if(S.active)
+					if(prob(40)) //Makes it a bit more unwieldy than an emag
+						user << "<span class='warning'>You thrust \the [S] into the wire panel, shorting out the door's electronics and activating the hydraulic release.</span>"
+						playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
+						user << "<span class='warning'>[S]'s safety spontaneously activates, turning the blade off.</span>"
+						S.active = !S.active //Turn off the sword as a cheap way to generate use delay
+						if(istype(S,/obj/item/weapon/melee/energy/sword/pirate)) //No, seriously
+							S.icon_state = "cutlass0"
+						else
+							S.icon_state = "sword0"
+						S.w_class = 2
+						door_animate("spark")
+						if(locked)
+							locked = !locked
+						open(1)
+						operating = -1
+					else
+						user << "<span class='warning'>You thrust \the [S] into the airlock, but you closely miss the wires.</span>"
+						playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
+						user << "<span class='warning'>[S]'s safety spontaneously activates, turning the blade off.</span>"
+						S.active = !S.active
+						if(istype(S,/obj/item/weapon/melee/energy/sword/pirate))
+							S.icon_state = "cutlass0"
+						else
+							S.icon_state = "sword0"
+						S.w_class = 2
 	else
 		..(I, user)
 
