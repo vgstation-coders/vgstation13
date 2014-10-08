@@ -64,6 +64,10 @@
 		input = /obj/item/weapon/reagent_containers/food/snacks/grown/soybeans
 		output = /obj/item/weapon/reagent_containers/food/snacks/soydope
 
+	burritofilling
+		input = /obj/item/weapon/reagent_containers/food/snacks/discountburrito
+		output = /obj/item/weapon/reagent_containers/food/snacks/burritofilling
+
 
 	/* mobs */
 	mob
