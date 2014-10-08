@@ -1070,15 +1070,32 @@ About the new airlock wires panel:
 					spawn(0)	close(1)
 		src.busy = 0
 	else if (istype(I, /obj/item/weapon/card/emag) || istype(I, /obj/item/weapon/melee/energy/blade))
-		if (!operating)
-			if(density)
-				door_animate("spark")
-				open(1)
-			operating = -1
+		forcehack()
+	else if(istype(I, /obj/item/weapon/melee/energy/sword))
+		var/obj/item/weapon/melee/energy/sword/S = I
+		if(S.active)
+			if(prob(40))
+				user << "<span class='warning'>You thrust \the [S] into the wire panel, shorting out the door's electronics and activating the hydraulic release.</span>"
+				user << "<span class='warning'>[S]'s safety spontaneously activates, turning the blade off.</span>"
+				S.attack_self(user)
+				if(locked)
+					locked = !locked //Cut the bolts if any
+				forcehack()
+			else
+				user << "<span class='warning'>You thrust \the [S] into the airlock, but you closely miss the wires.</span>"
+				user << "<span class='warning'>[S]'s safety spontaneously activates, turning the blade off.</span>"
+				S.attack_self(user)
 	else
 		..(I, user)
 
 	return
+
+/obj/machinery/door/airlock/proc/forcehack(obj/item/I as obj, mob/user as mob)
+	if(!operating)
+		if(density)
+			door_animate("spark")
+			open(1)
+			operating = -1
 
 /obj/machinery/door/airlock/plasma/attackby(C as obj, mob/user as mob)
 	if(C)
