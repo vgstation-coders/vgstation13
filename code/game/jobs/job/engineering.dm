@@ -2,7 +2,7 @@
 	title = "Chief Engineer"
 	flag = CHIEF
 	department_flag = ENGSEC
-	faction = "Station"
+	//faction = "Station" - Grief
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
@@ -87,7 +87,7 @@
 	title = "Atmospheric Technician"
 	flag = ATMOSTECH
 	department_flag = ENGSEC
-	faction = "Station"
+	//faction = "Station" - Grief
 	total_positions = 3
 	spawn_positions = 2
 	supervisors = "the chief engineer"

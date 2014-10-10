@@ -2,7 +2,7 @@
 	title = "Chief Medical Officer"
 	flag = CMO
 	department_flag = MEDSCI
-	faction = "Station"
+	//faction = "Station" - Grief
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
@@ -112,7 +112,7 @@
 	title = "Chemist"
 	flag = CHEMIST
 	department_flag = MEDSCI
-	faction = "Station"
+	//faction = "Station" - Grief
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the chief medical officer"
@@ -142,7 +142,8 @@
 	title = "Geneticist"
 	flag = GENETICIST
 	department_flag = MEDSCI
-	faction = "Station"
+	//faction = "Station" - Grief
+
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the chief medical officer and research director"

@@ -52,7 +52,7 @@
 	title = "Chef"
 	flag = CHEF
 	department_flag = CIVILIAN
-	faction = "Station"
+	//faction = "Station" - Grief
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
@@ -84,7 +84,7 @@
 	title = "Botanist"
 	flag = BOTANIST
 	department_flag = CIVILIAN
-	faction = "Station"
+	//faction = "Station" - Grief
 	total_positions = 3
 	spawn_positions = 2
 	supervisors = "the head of personnel"

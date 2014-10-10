@@ -131,7 +131,7 @@
 	m_amt = 25000
 	max_ammo = 30
 
-/obj/item/ammo_storage/magazine/a5x56/empty
+/obj/item/ammo_storage/magazine/a556/empty
 	starting_ammo = 0
 	m_amt = 5000
 

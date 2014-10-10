@@ -2,7 +2,7 @@
 	title = "Captain"
 	flag = CAPTAIN
 	department_flag = ENGSEC
-	faction = "Station"
+	//faction = "Station" - Grief
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "Nanotrasen officials and Space law"
@@ -53,7 +53,7 @@
 	title = "Head of Personnel"
 	flag = HOP
 	department_flag = CIVILIAN
-	faction = "Station"
+	//faction = "Station" - Grief
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"

@@ -1,8 +1,8 @@
 /datum/job/assistant
 	title = "Assistant"
 	flag = ASSISTANT
+	//faction = "Station" - Grief
 	department_flag = CIVILIAN
-	faction = "Station"
 	total_positions = -1
 	spawn_positions = -1
 	supervisors = "absolutely everyone"
@@ -27,8 +27,8 @@
 /datum/job/scavenger
 	title = "Scavenger"
 	flag = SCAVENGER
+	faction = "Station"
 	department_flag = CIVILIAN
-//	faction = "Station" - RP
 	total_positions = 3
 	spawn_positions = 5
 	supervisors = "Factions"
