@@ -236,14 +236,14 @@
 	name = "k4m-storm"
 	desc = "Hmm.. That reminds me, but what? Uses 5.56 rounds."
 	icon_state = "k4m"
-	item_state = "c20r"
+	item_state = "k4m"
 	w_class = 3.0
 	max_shells = 30
 	burst_count = 3
 	caliber = list("5.56" = 1)
 	origin_tech = "combat=4;materials=4"
 	ammo_type = "/obj/item/ammo_casing/a556"
-	mag_type = "/obj/item/ammo_storage/magazine/a5x56"
+	mag_type = "/obj/item/ammo_storage/magazine/a556"
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
 	load_method = 2
 	auto_mag_drop = 1
@@ -293,7 +293,7 @@
 	caliber = list("5.56" = 1)
 	origin_tech = "combat=5;materials=3;syndicate=4"
 	ammo_type = "/obj/item/ammo_casing/a556"
-	mag_type = "/obj/item/ammo_storage/magazine/a5x56"
+	mag_type = "/obj/item/ammo_storage/magazine/a556"
 	fire_sound = 'sound/weapons/G36.ogg'
 	load_method = 2
 	auto_mag_drop = 1
@@ -315,7 +315,7 @@
 	caliber = list("5.56" = 1)
 	origin_tech = "combat=4;materials=3"
 	ammo_type = "/obj/item/ammo_casing/a556"
-	mag_type = "/obj/item/ammo_storage/magazine/a5x56"
+	mag_type = "/obj/item/ammo_storage/magazine/a556"
 	fire_sound = 'sound/weapons/G36.ogg'
 	load_method = 2
 	auto_mag_drop = 1

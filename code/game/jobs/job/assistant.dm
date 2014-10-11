@@ -29,8 +29,8 @@
 	flag = SCAVENGER
 	faction = "Station"
 	department_flag = CIVILIAN
-	total_positions = 3
-	spawn_positions = 5
+	total_positions = -1
+	spawn_positions = -1
 	supervisors = "Factions"
 	selection_color = "#dddddd"
 	access = list(access_maint_tunnels)
