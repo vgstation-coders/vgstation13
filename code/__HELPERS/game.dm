@@ -515,3 +515,12 @@ var/list/DummyCache = list()
 	//	return 0
 	// that's not the kind of operation we are running here, nerd
 	return Clamp(round(mixedcolor), 0, 255)
+
+/atom/proc/get_turf_new()
+	return loc
+
+/turf/get_turf_new()
+	return src
+
+/atom/movable/get_turf_new()
+	return loc ? locs[1] : null
