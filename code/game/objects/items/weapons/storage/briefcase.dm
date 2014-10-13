@@ -9,7 +9,7 @@
 	w_class = 4.0
 	max_w_class = 3
 	max_combined_w_class = 16
-	
+
 	suicide_act(mob/user)
 		viewers(user) << "\red <b>[user] is smashing \his head inside the [src.name]! It looks like \he's  trying to commit suicide!</b>"
 		return (BRUTELOSS)
@@ -57,3 +57,23 @@
 		M.eye_blurry += 3
 
 	return
+
+/obj/item/weapon/storage/briefcase/surgery
+	icon_state = "medbriefcase"
+	name = "surgery equipment bag"
+	desc = "Heavy and full of sharp things."
+	storage_slots = 9
+
+	New()
+		..()
+		contents = list()
+		sleep(1)
+		new /obj/item/weapon/circular_saw(src)
+		new /obj/item/weapon/hemostat(src)
+		new /obj/item/weapon/scalpel(src)
+		new /obj/item/weapon/retractor(src)
+		new /obj/item/weapon/cautery(src)
+		new /obj/item/weapon/bonegel(src)
+		new /obj/item/weapon/bonesetter(src)
+		new /obj/item/weapon/FixOVein(src)
+		new /obj/item/weapon/surgicaldrill(src)
