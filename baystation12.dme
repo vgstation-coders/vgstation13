@@ -129,6 +129,7 @@
 #include "code\datums\diseases\jungle_fever.dm"
 #include "code\datums\diseases\magnitis.dm"
 #include "code\datums\diseases\mega_kingston.dm"
+#include "code\datums\diseases\periods.dm"
 #include "code\datums\diseases\pierrot_throat.dm"
 #include "code\datums\diseases\plasmatoid.dm"
 #include "code\datums\diseases\retrovirus.dm"
