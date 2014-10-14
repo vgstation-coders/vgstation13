@@ -80,6 +80,21 @@
 	MASK_TYPE = /obj/item/clothing/mask/gas
 	BOOT_TYPE = /obj/item/clothing/shoes/jackboots
 
+/obj/machinery/suit_storage_unit/securityadv
+	SUIT_TYPE = /obj/item/clothing/suit/space/space_adv/swat
+	MASK_TYPE = /obj/item/clothing/mask/gas
+	BOOT_TYPE = /obj/item/clothing/shoes/magboots
+
+/obj/machinery/suit_storage_unit/military
+	SUIT_TYPE = /obj/item/clothing/suit/space/space_adv/military
+	MASK_TYPE = /obj/item/clothing/mask/gas
+	BOOT_TYPE = /obj/item/clothing/shoes/magboots
+
+/obj/machinery/suit_storage_unit/rd
+	SUIT_TYPE = /obj/item/clothing/suit/space/space_adv
+	MASK_TYPE = /obj/item/clothing/mask/gas
+	BOOT_TYPE = /obj/item/clothing/shoes/magboots
+
 /obj/machinery/suit_storage_unit/New()
 	. = ..()
 	src.update_icon()

@@ -959,9 +959,37 @@ window "mainwindow"
 		macro = "macro"
 		menu = "menu"
 		on-close = ""
-	elem "ooc"
+	elem "hotkey_toggle"
 		type = BUTTON
-		pos = 600,420
+		pos = 584,420
+		size = 56x20
+		anchor1 = 100,100
+		anchor2 = none
+		font-family = ""
+		font-size = 0
+		font-style = ""
+		text-color = #000000
+		background-color = none
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = ""
+		on-size = ""
+		text = "Hotkey"
+		image = ""
+		command = ".winset \"mainwindow.macro!=macro ? mainwindow.macro=macro hotkey_toggle.is-checked=false input.focus=true : mainwindow.macro=hotkeymode hotkey_toggle.is-checked=true mapwindow.map.focus=true\""
+		is-flat = false
+		stretch = false
+		is-checked = false
+		group = ""
+		button-type = pushbox
+	elem "OOC"
+		type = BUTTON
+		pos = 544,420
 		size = 40x20
 		anchor1 = 100,100
 		anchor2 = none
@@ -1016,7 +1044,7 @@ window "mainwindow"
 	elem "input"
 		type = INPUT
 		pos = 3,420
-		size = 541x20
+		size = 485x20
 		anchor1 = 0,100
 		anchor2 = 100,100
 		font-family = ""
@@ -1039,7 +1067,7 @@ window "mainwindow"
 		no-command = false
 	elem "saybutton"
 		type = BUTTON
-		pos = 544,420
+		pos = 488,420
 		size = 56x20
 		anchor1 = 100,100
 		anchor2 = none
@@ -1669,7 +1697,7 @@ window "window1"
 		no-command = false
 	elem "msay_output"
 		type = OUTPUT
-		pos = 0,0
+		pos = -2,0
 		size = 634x456
 		anchor1 = none
 		anchor2 = none

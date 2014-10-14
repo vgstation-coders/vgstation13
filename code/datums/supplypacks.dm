@@ -5,7 +5,7 @@
 //BIG NOTE: Don't add living things to crates, that's bad, it will break the shuttle.
 //NEW NOTE: Do NOT set the price of any crates below 7 points. Doing so allows infinite points.
 
-var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality","Engineering","Medical","Science","Hydroponics","ErR^&$Ror")
+var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality","Engineering","Medical","Science","Hydroponics","Misc")
 
 /datum/supply_packs
 	var/name = null
@@ -834,6 +834,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Security Barriers crate"
 	group = "Security"
 
+/*
 /datum/supply_packs/erteng
 	name = "ERT Enginering Equipment"
 	contains = list(/obj/item/clothing/suit/space/ert/engineer,
@@ -918,6 +919,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "ERT Medical Equipment x1"
 	//access = access_armory //Easy cargo mode ON
 	group = "Security"
+*/
 
 //Security/////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////Science//
@@ -1248,6 +1250,22 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 //Science/////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////CrimeScumContraband//
+/datum/supply_packs/contraband_military
+	name = "Poison Inc. Military crate"
+	contains = list(/obj/item/clothing/suit/space/space_adv/military,
+					/obj/item/weapon/gun/projectile/automatic/k4m,
+					/obj/item/clothing/glasses/hud/security,
+					/obj/item/clothing/shoes/jackboots,
+					/obj/item/clothing/tie/storage/black_vest,
+					/obj/item/clothing/under/color/black,
+					/obj/item/ammo_storage/magazine/a556,
+					/obj/item/ammo_storage/magazine/a556,
+					/obj/item/ammo_storage/magazine/a556)
+	cost = 500
+	contraband = 1 //Easy cargo mode ON
+	containertype = /obj/structure/closet/crate
+	containername = "Unlabeled crate"
+	group = "Misc"
 
 /datum/supply_packs/randomised/contraband_markman
 	name = "Rando Inc. Military crate"
@@ -1267,29 +1285,29 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/gun/projectile/silenced,
 					/obj/item/toy/gun)
 	cost = 160
-	//contraband = 1 //Easy cargo mode ON
+	contraband = 1 //Easy cargo mode ON
 	containertype = /obj/structure/closet/crate
 	containername = "Unlabeled crate"
-	group = "ErR^&$Ror"
+	group = "Misc"
 
 /datum/supply_packs/contraband_armor
 	name = "Armor crate"
 	contains = list(/obj/item/clothing/suit/armor/vest,
 					/obj/item/clothing/head/helmet)
 	cost = 160
-	//contraband = 1 //Easy cargo mode ON
+	contraband = 1 //Easy cargo mode ON
 	containertype = /obj/structure/closet/crate
 	containername = "Unlabeled crate"
-	group = "ErR^&$Ror"
+	group = "Misc"
 
 /datum/supply_packs/contraband_shotgun
 	name = "Shotgun crate"
 	contains = list(/obj/item/weapon/gun/projectile/shotgun/pump)
 	cost = 240
-	//contraband = 1 //Easy cargo mode ON
+	contraband = 1 //Easy cargo mode ON
 	containertype = /obj/structure/closet/crate
 	containername = "Unlabeled crate"
-	group = "ErR^&$Ror"
+	group = "Misc"
 
 /datum/supply_packs/randomised/contraband_supply
 	num_contained = 5
@@ -1302,8 +1320,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 60
 	containertype = /obj/structure/closet/crate
 	containername = "Unlabeled crate"
-	//contraband = 1 //Easy cargo mode ON
-	group = "ErR^&$Ror"
+	contraband = 1 //Easy cargo mode ON
+	group = "Misc"
 
 /datum/supply_packs/randomised/contraband_blackmarket
 	name = "Resorces Crate"
@@ -1321,7 +1339,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/stack/sheet/mineral/gold,
 					/obj/item/stack/sheet/mineral/gold)
 	cost = 800
-	//contraband = 1 //Easy cargo mode ON
+	contraband = 1 //Easy cargo mode ON
 	containertype = /obj/structure/closet/crate
 	containername = "Unlabeled crate"
-	group = "ErR^&$Ror"
+	group = "Misc"
