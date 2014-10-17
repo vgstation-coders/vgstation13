@@ -455,13 +455,9 @@
 						if(prob(75))
 							var/obj/item/weapon/grab/G = pick(M.grabbed_by)
 							if(istype(G, /obj/item/weapon/grab))
-								src.visible_message("<class span='warning'>[G.affecting] has been pulled from [G.affecting]'s grip by [src]</span>")
+								M.visible_message("<class span='warning'>[G.affecting] has been pulled from [G.affecting]'s grip by [src]</span>")
 								del(G)
-						else
-							return
-						if(locate(/obj/item/weapon/grab, M.grabbed_by.len))
-							return
-						var/atom/movable/t = M.pulling
+
 						M.stop_pulling()
 
 						/*//this is the gay blood on floor shit -- Added back -- Skie
@@ -487,8 +483,8 @@
 											H:vessel.remove_reagent("blood",1)*/
 
 
-						step(pulling, get_dir(pulling.loc, T))
-						M.start_pulling(t)
+					step(pulling, get_dir(pulling.loc, T))
+					M.start_pulling(t)
 				else
 					if(pulling) //I'm not gonna touch this but... what is THAT supposed to even DO ?
 						if(istype(pulling, /obj/structure/window/full))
