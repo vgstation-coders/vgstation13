@@ -49,7 +49,7 @@
 						update_brightness(user)
 		return
 
-/obj/item/weapon/reagent_containers/food/drinks/beer/proc/light(var/flavor_text = "\red [usr] lights the [name].")
+/obj/item/weapon/reagent_containers/food/drinks/beer/proc/light(var/flavor_text = "<span  class='rose'>[usr] lights the [name].</span>")
 		if(!src.lit && src.molotov)
 				src.lit = 1
 				for(var/mob/O in viewers(usr, null))
@@ -84,7 +84,7 @@
 		..()
 		if(molotov)
 				new /obj/item/weapon/shard(src.loc)
-				src.visible_message("\red The [src.name] shatters!","\red You hear a shatter!")
+				src.visible_message("<span  class='warning'>The [src.name] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
 				playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 50, 1)
 				if(reagents.total_volume)
 						src.reagents.reaction(hit_atom, TOUCH)
