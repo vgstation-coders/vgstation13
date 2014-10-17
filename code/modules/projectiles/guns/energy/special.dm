@@ -272,3 +272,45 @@ obj/item/weapon/gun/energy/staff/focus
 		power_supply.give(100)
 		update_icon()
 		return 1
+
+/obj/item/weapon/gun/energy/sniper //Самое мощное летальное энерго оружие, что должно быть на станции. от него баланс.
+	name = "P.E.S.R. Mk80"
+	desc = "pulse-based energy sniper rifle, stable model - Mark 80"
+	icon_state = "sniper"
+	item_state = null	//so the human update icon uses the icon_state instead.
+	force = 10
+	fire_sound = 'sound/weapons/pulse.ogg'
+	charge_cost = 1000
+	projectile_type = "/obj/item/projectile/beam"
+	cell_type = "/obj/item/weapon/cell/high"
+	slot_flags = SLOT_BACK
+	var/mode = 1
+	fire_delay = 5
+
+	attack_self(mob/living/user as mob)
+		switch(mode)
+			if(2)
+				mode = 0
+				charge_cost = 2000
+				fire_delay = 10 //учитесь стрелять наконец!!
+				fire_sound = 'sound/weapons/Taser.ogg'
+				user << "\red [src.name] is now set to shock beam mode."
+				projectile_type = "/obj/item/projectile/energy/electrode"
+			if(0)
+				mode = 1
+				charge_cost = 1000
+				fire_delay = 5
+				fire_sound = 'sound/weapons/Laser.ogg'
+				user << "\red [src.name] is now set to laser mode."
+				projectile_type = "/obj/item/projectile/beam"
+			if(1)
+				mode = 2
+				charge_cost = 2000
+				fire_delay = 15
+				fire_sound = 'sound/weapons/pulse.ogg'
+				user << "\red [src.name] is now set to high power sniper mode."
+				projectile_type = "/obj/item/projectile/beam/deathlaser"
+		return
+
+	isHandgun()
+		return 0
