@@ -10,6 +10,7 @@
 	var/trash = null
 	var/slice_path
 	var/slices_num
+	var/list/random_icon_states = list()
 	var/eatverb
 	var/wrapped = 0
 	var/dried_type = null
@@ -273,7 +274,30 @@
 //		bitesize = 3													//This is the amount each bite consumes.
 
 
+/obj/item/weapon/reagent_containers/food/snacks/poo
+	name = "poo"
+	desc = "It's a poo..."
+	icon = 'icons/obj/poop.dmi'
+	icon_state = "poop2"
+	item_state = "poop"
+	random_icon_states = list("poop1", "poop2", "poop3", "poop4", "poop5", "poop6", "poop7")
+	New()
+		..()
+		icon_state = pick(random_icon_states)
+		reagents.add_reagent("poo", 10)
+		bitesize = 3
 
+	proc/poo_splat(atom/target)
+		if(reagents.total_volume)
+			if(ismob(target))
+				src.reagents.reaction(target, TOUCH)
+			if(isturf(target))
+				src.reagents.reaction(get_turf(target))
+			if(isobj(target))
+				src.reagents.reaction(target, TOUCH)
+		spawn(5) src.reagents.clear_reagents()
+		playsound(src.loc, "squish.ogg", 40, 1)
+		del(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/aesirsalad
 	name = "Aesir salad"
