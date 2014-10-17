@@ -45,8 +45,7 @@
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/engie
-	SUIT_TYPE = /obj/item/clothing/suit/space/rig
-	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig
+	SUIT_TYPE = /obj/item/clothing/suit/space/space_adv/rig
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
@@ -92,7 +91,7 @@
 
 /obj/machinery/suit_storage_unit/rd
 	SUIT_TYPE = /obj/item/clothing/suit/space/space_adv
-	MASK_TYPE = /obj/item/clothing/mask/gas
+	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/New()
