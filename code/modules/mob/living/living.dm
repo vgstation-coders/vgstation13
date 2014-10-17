@@ -484,7 +484,7 @@
 
 
 					step(pulling, get_dir(pulling.loc, T))
-					M.start_pulling(t)
+					M.start_pulling(M.pulling)
 				else
 					if(pulling) //I'm not gonna touch this but... what is THAT supposed to even DO ?
 						if(istype(pulling, /obj/structure/window/full))
