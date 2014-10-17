@@ -33,12 +33,12 @@
 						light()
 						update_brightness(user)
 		else if(istype(I, /obj/item/device/assembly/igniter))
-				var/obj/item/candle/C = I
-				if(C.lit)
-						light()
-						update_brightness(user)
+				var/obj/item/device/assembly/igniter/C = I
+				C.activate()
+				light()
+				update_brightness(user)
 		else if(istype(I, /obj/item/clothing/mask/cigarette))
-				var/obj/item/candle/C = I
+				var/obj/item/clothing/mask/cigarette/C = I
 				if(C.lit)
 						light()
 						update_brightness(user)
