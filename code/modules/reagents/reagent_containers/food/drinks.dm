@@ -20,6 +20,9 @@
 		return
 
 	attack(mob/M as mob, mob/user as mob, def_zone)
+		if(!is_open_container())
+			user << "\red You can't; [src] is closed."  //Added this here and elsewhere to prevent drinking, etc. from closed drink containers. - Hinaichigo
+			return 0
 		var/datum/reagents/R = src.reagents
 		var/fillevel = gulp_size
 
@@ -72,8 +75,10 @@
 
 
 	afterattack(obj/target, mob/user , flag)
-
 		if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
+			if(!is_open_container())
+				user << "\red You can't; [src] is closed."
+				return 0
 
 			if(!target.reagents.total_volume)
 				user << "\red [target] is empty."
@@ -87,6 +92,10 @@
 			user << "\blue You fill [src] with [trans] units of the contents of [target]."
 
 		else if(target.is_open_container()) //Something like a glass. Player probably wants to transfer TO it.
+			if(!is_open_container())
+				user << "\red You can't; [src] is closed."
+				return 0
+
 			if(!reagents.total_volume)
 				user << "\red [src] is empty."
 				return
