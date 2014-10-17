@@ -140,11 +140,13 @@
 			&&(target.has_brain()))
 				target.visible_message("<span class='notice'>[src] beeps: Defibrillation successful.</span>")
 				dead_mob_list -= target
-				living_mob_list |= list(target)
+				living_mob_list += target
 				target.tod = null
-				target.stat = UNCONSCIOUS
+				if(target.health < config.health_threshold_crit) //Sanity check
+					target.stat = UNCONSCIOUS
+				else
+					target.stat = CONSCIOUS
 				target.regenerate_icons()
-				target.update_canmove()
 				flick("e_flash",target.flash)
 				target.apply_effect(10, EYE_BLUR) //I'll still put this back in to avoid dumd "pounce back up" behavior
 				target.apply_effect(10, PARALYZE)
@@ -152,5 +154,5 @@
 				target << "<span class='notice'>You suddenly feel a spark and your consciousness returns, dragging you back to the mortal plane.</span>"
 			else
 				target.visible_message("<span class='notice'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
-		target.apply_damage(rand(1,5),BURN,"chest") //Better not try too much times
+		target.apply_damage(rand(1,5),BURN,"chest") //Better not try too much
 		return

@@ -443,28 +443,24 @@
 			stop_pulling()
 			return
 
-		if (!restrained())
+		if(!restrained())
 			var/diag = get_dir(src, pulling)
-			if ((diag - 1) & diag)
+			if((diag - 1) & diag)
 			else
 				diag = null
-			if ((get_dist(src, pulling) > 1 || diag))
-				if (isliving(pulling))
+			if((get_dist(src, pulling) > 1 || diag))
+				if(isliving(pulling))
 					var/mob/living/M = pulling
-					var/ok = 1
-					if (locate(/obj/item/weapon/grab, M.grabbed_by))
-						if (prob(75))
+					if(locate(/obj/item/weapon/grab, M.grabbed_by))
+						if(prob(75))
 							var/obj/item/weapon/grab/G = pick(M.grabbed_by)
-							if (istype(G, /obj/item/weapon/grab))
-								for(var/mob/O in viewers(M, null))
-									O.show_message(text("\red [] has been pulled from []'s grip by []", G.affecting, G.assailant, src), 1)
-								//G = null
+							if(istype(G, /obj/item/weapon/grab))
+								src.visible_message("<class span='warning'>[G.affecting] has been pulled from [G.affecting]'s grip by [src]</span>")
 								del(G)
 						else
-							ok = 0
-						if (locate(/obj/item/weapon/grab, M.grabbed_by.len))
-							ok = 0
-					if (ok)
+							return
+						if(locate(/obj/item/weapon/grab, M.grabbed_by.len))
+							return
 						var/atom/movable/t = M.pulling
 						M.stop_pulling()
 
@@ -494,11 +490,11 @@
 						step(pulling, get_dir(pulling.loc, T))
 						M.start_pulling(t)
 				else
-					if (pulling)
-						if (istype(pulling, /obj/structure/window/full))
+					if(pulling) //I'm not gonna touch this but... what is THAT supposed to even DO ?
+						if(istype(pulling, /obj/structure/window/full))
 							for(var/obj/structure/window/win in get_step(pulling,get_dir(pulling.loc, T)))
 								stop_pulling()
-					if (pulling)
+					if(pulling)
 						step(pulling, get_dir(pulling.loc, T))
 	else
 		stop_pulling()
@@ -553,7 +549,7 @@
 			return
 
 	//resisting grabs (as if it helps anyone...)
-	if ((!(L.stat) && L.canmove && !(L.restrained())))
+	if((!(L.stat) && L.canmove && !(L.restrained())))
 		var/resisting = 0
 		for(var/obj/O in L.requests)
 			L.requests.Remove(O)
@@ -561,23 +557,20 @@
 			resisting++
 		for(var/obj/item/weapon/grab/G in usr.grabbed_by)
 			resisting++
-			if (G.state == 1)
+			if(G.state == 1)
 				del(G)
 			else
-				if (G.state == 2)
-					if (prob(25))
-						for(var/mob/O in viewers(L, null))
-							O.show_message(text("<span class='danger'>[L] has broken free of [G.assailant]'s grip!</span>"), 1)
+				if(G.state == 2)
+					if(prob(25))
+						L.visible_message("<span class='danger'>[L] has broken free of [G.assailant]'s grip!</span>")
 						del(G)
 				else
-					if (G.state == 3)
-						if (prob(5))
-							for(var/mob/O in viewers(usr, null))
-								O.show_message(text("<span class='danger'>[L] has broken free of [G.assailant]'s headlock!</span>"), 1)
+					if(G.state == 3)
+						if(prob(5))
+							L.visible_message("<span class='danger'>[L] has broken free of [G.assailant]'s headlock!</span>")
 							del(G)
 		if(resisting)
-			for(var/mob/O in viewers(usr, null))
-				O.show_message(text("\red <B>[] resists!</B>", L), 1)
+			L.visible_message("<span class='warning'><B>[L] resists!</B>")
 
 
 	//unbuckling yourself
@@ -587,16 +580,12 @@
 			if(C.handcuffed)
 				C.next_move = world.time + 100
 				C.last_special = world.time + 100
-				C << "<span class='warning'>You attempt to unbuckle yourself. (This will take around 2 minutes and you need to stand still)</span>"
-				for(var/mob/O in viewers(L))
-					O.show_message("<span class='warning'>[usr] attempts to unbuckle themself!</span>", 1)
+				C.visible_message("<span class='warning'>[usr] attempts to unbuckle themselves!</span>", "<span class='warning'>You try to unbuckle yourself. (This will take 2 minutes and you need to stand still)</span>")
 				spawn(0)
 					if(do_after(usr, 1200))
 						if(!C.buckled)
 							return
-						for(var/mob/O in viewers(C))
-							O.show_message("<span class='danger'>[usr] manages to unbuckle themself!</B></span>", 1)
-						C << "<span class='notice'>You successfully unbuckle yourself.</span>"
+						C.visible_message("<span class='danger'>[usr] manages to unbuckle themselves!</B></span>", "<span class='notice'>You manage to unbuckle yourself.</span>")
 						C.buckled.manual_unbuckle(C)
 					else
 						C << "<span class='warning'>Your unbuckling attempt was interrupted.</span>"
@@ -624,8 +613,7 @@
 		usr.next_move = world.time + 100
 		L.last_special = world.time + 100
 		L << "<span class='warning'>You lean on the back of [C] and start pushing the door open (this will take about [breakout_time] minutes).</span>"
-		for(var/mob/O in viewers(usr.loc))
-			O.show_message("<span class='danger'>The [C] begins to shake violently!</span>", 1)
+		C.visible_message("<span class='danger'>The [C] begins to shake violently!</span>")
 
 
 		spawn(0)
@@ -687,18 +675,14 @@
 		if(CM.handcuffed && CM.canmove && (CM.last_special <= world.time))
 			CM.next_move = world.time + 100
 			CM.last_special = world.time + 100
-			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
-				usr << "<span class='warning'>You attempt to break your handcuffs. (This will take around 5 seconds and you need to stand still)</span>"
-				for(var/mob/O in viewers(CM))
-					O.show_message(text("<span class='danger'>[] is trying to break the handcuffs!</span>", CM), 1)
+			if(isalienadult(CM) || (M_HULK in usr.mutations)) //Don't want to do a lot of logic gating here.
+				CM.visible_message("<span class='danger'>[CM] is trying to break their handcuffs!</span>", "<span class='warning'>You try to break your handcuffs. (This will take 5 seconds and you need to stand still)</span>")
 				spawn(0)
 					if(do_after(CM, 50))
 						if(!CM.handcuffed || CM.buckled)
 							return
-						for(var/mob/O in viewers(CM))
-							O.show_message(text("<span class='danger'>[] manages to break the handcuffs!</span>", CM), 1)
-						CM << "<span class='warning'>You successfully break your handcuffs.</span>"
-						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+						CM.visible_message("<span class='danger'>[CM] manages to break the handcuffs!</span>", "<span class='warning'>You manage to break your handcuffs.</span>")
+						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!"))
 						del(CM.handcuffed)
 						CM.handcuffed = null
 						CM.update_inv_handcuffed()
@@ -711,16 +695,12 @@
 				var/breakouttime = HC.breakouttime
 				if(!(breakouttime))
 					breakouttime = 1200 //Default
-				CM << "<span class='warning'>You attempt to remove [HC]. (This will take around [(breakouttime)/600] minutes and you need to stand still)</span>"
-				for(var/mob/O in viewers(CM))
-					O.show_message( "<span class='warning'>[usr] attempts to remove [HC]!</span>", 1)
+				CM.visible_message("<span class='warning'>[CM] attempts to remove [HC]!</span>", "<span class='warning'>You attempt to remove [HC]. (This will take [(breakouttime)/600] minutes and you need to stand still)</span>")
 				spawn(0)
 					if(do_after(CM, breakouttime))
 						if(!CM.handcuffed || CM.buckled)
 							return // time leniency for lag which also might make this whole thing pointless but the server
-						for(var/mob/O in viewers(CM))//                                         lags so hard that 40s isn't lenient enough - Quarxink
-							O.show_message("<span class='danger'>[CM] manages to remove [HC]!</span>", 1)
-						CM << "<span class='notice'>You successfully remove [HC].</span>"
+						CM.visible_message("<span class='danger'>[CM] manages to remove [HC]!</span>", "<span class='notice'>You manage to remove [HC].</span>")
 						CM.handcuffed.loc = usr.loc
 						CM.handcuffed = null
 						CM.update_inv_handcuffed()
@@ -731,7 +711,7 @@
 			CM.next_move = world.time + 100
 			CM.last_special = world.time + 100
 			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
-				usr << "<span class='warning'>You attempt to break your legcuffs. (This will take around 5 seconds and you need to stand still)</span>"
+				CM.visible_message("<span class='warning'>[CM] is trying to break the legcuffs!</span>", "<span class='warning'>You try to break your legcuffs. (This will take 5 seconds and you need to stand still)</span>")
 				for(var/mob/O in viewers(CM))
 					O.show_message(text("<span class='warning'>[CM] is trying to break the legcuffs!</span>"), 1)
 				spawn(0)
@@ -752,16 +732,12 @@
 				var/breakouttime = HC.breakouttime
 				if(!(breakouttime))
 					breakouttime = 1200 //Default
-				CM << "<span class='warning'>You attempt to remove [HC]. (This will take around [(breakouttime)/600] minutes and you need to stand still)</span>"
-				for(var/mob/O in viewers(CM))
-					O.show_message( "<span class='warning'>[usr] attempts to remove [HC]!</span>", 1)
+				CM.visible_message("<span class='warning'>[CM] attempts to remove [HC]!</span>", "<span class='warning'>You attempt to remove [HC]. (This will take [(breakouttime)/600] minutes and you need to stand still)</span>")
 				spawn(0)
 					if(do_after(CM, breakouttime))
 						if(!CM.legcuffed || CM.buckled)
 							return // time leniency for lag which also might make this whole thing pointless but the server
-						for(var/mob/O in viewers(CM))//                                         lags so hard that 40s isn't lenient enough - Quarxink
-							O.show_message("<span class='danger'>[CM] manages to remove [HC]!</span>", 1)
-						CM << "<span class='notice'>You successfully remove [CM].</span>"
+						CM.visible_message("<span class='danger'>[CM] manages to remove [HC]!</span>", "<span class='notice'>You manage to remove [CM].</span>")
 						CM.legcuffed.loc = usr.loc
 						CM.legcuffed = null
 						CM.update_inv_legcuffed()
@@ -773,7 +749,7 @@
 	set category = "IC"
 
 	resting = !resting
-	src << "\blue You are now [resting ? "resting" : "getting up"]"
+	src << "<span class='notice'>You are now [resting ? "resting" : "getting up"]"
 
 /mob/living/proc/has_brain()
 	return 1
