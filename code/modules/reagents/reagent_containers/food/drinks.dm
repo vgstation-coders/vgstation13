@@ -11,6 +11,11 @@
 	possible_transfer_amounts = list(5,10,25)
 	volume = 50
 
+	//molotov variables
+	var/molotov = 0 //-1 = can be made into molotov, 0 = can't, 1 = has had rag stuffed into it
+	var/lit = 0
+	var/brightness_lit = 3
+
 	on_reagent_change()
 		if (gulp_size < 5) gulp_size = 5
 		else gulp_size = max(round(reagents.total_volume / 5), 5)
@@ -20,6 +25,9 @@
 		return
 
 	attack(mob/M as mob, mob/user as mob, def_zone)
+		if(!is_open_container())
+			user << "\red You can't; [src] is closed."  //Added this here and elsewhere to prevent drinking, etc. from closed drink containers. - Hinaichigo
+			return 0
 		var/datum/reagents/R = src.reagents
 		var/fillevel = gulp_size
 
@@ -72,8 +80,10 @@
 
 
 	afterattack(obj/target, mob/user , flag)
-
 		if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
+			if(!is_open_container())
+				user << "\red You can't; [src] is closed."
+				return 0
 
 			if(!target.reagents.total_volume)
 				user << "\red [target] is empty."
@@ -87,6 +97,10 @@
 			user << "\blue You fill [src] with [trans] units of the contents of [target]."
 
 		else if(target.is_open_container()) //Something like a glass. Player probably wants to transfer TO it.
+			if(!is_open_container())
+				user << "\red You can't; [src] is closed."
+				return 0
+
 			if(!reagents.total_volume)
 				user << "\red [src] is empty."
 				return
@@ -438,6 +452,7 @@
 	name = "Space Beer"
 	desc = "Beer. In space."
 	icon_state = "beer"
+	molotov = -1 //can become a molotov
 	New()
 		..()
 		reagents.add_reagent("beer", 30)
@@ -449,6 +464,7 @@
 	desc = "A true dorf's drink of choice."
 	icon_state = "alebottle"
 	item_state = "beer"
+	molotov = -1 //can become a molotov
 	New()
 		..()
 		reagents.add_reagent("ale", 30)
@@ -593,3 +609,137 @@
 	desc = "A cup with the british flag emblazoned on it."
 	icon_state = "britcup"
 	volume = 30
+
+//////////////////////
+// molotov cocktail //
+//  by Hinaichigo   //
+//////////////////////
+
+/obj/item/weapon/reagent_containers/food/drinks/attackby(var/obj/item/I, mob/user as mob)
+		if(istype(I, /obj/item/weapon/reagent_containers/glass/rag) && molotov == -1)  //check if it is a molotovable drink - just beer and ale for now
+				user << "<span  class='notice'>You stuff the [I] into the mouth of the [src].</span>"
+				del(I)
+				molotov = 1
+				flags ^= OPENCONTAINER
+				name = "incendiary cocktail"
+				desc = "A rag stuffed into a bottle."
+				update_icon()
+				slot_flags = SLOT_BELT
+		else if(istype(I, /obj/item/weapon/weldingtool))
+				var/obj/item/weapon/weldingtool/WT = I
+				if(WT.isOn())
+						light()
+						update_brightness(user)
+		else if(istype(I, /obj/item/weapon/lighter))
+				var/obj/item/weapon/lighter/L = I
+				if(L.lit)
+						light()
+						update_brightness(user)
+		else if(istype(I, /obj/item/weapon/match))
+				var/obj/item/weapon/match/M = I
+				if(M.lit)
+						light()
+						update_brightness(user)
+		else if(istype(I, /obj/item/device/assembly/igniter))
+				var/obj/item/device/assembly/igniter/C = I
+				C.activate()
+				light()
+				update_brightness(user)
+		else if(istype(I, /obj/item/clothing/mask/cigarette))
+				var/obj/item/clothing/mask/cigarette/C = I
+				if(C.lit)
+						light()
+						update_brightness(user)
+		else if(istype(I, /obj/item/candle))
+				var/obj/item/candle/C = I
+				if(C.lit)
+						light()
+						update_brightness(user)
+		return
+
+/obj/item/weapon/reagent_containers/food/drinks/proc/light(var/flavor_text = "<span  class='rose'>[usr] lights the [name].</span>")
+		if(!lit && molotov == 1)
+				lit = 1
+				for(var/mob/O in viewers(usr, null))
+						O.show_message(flavor_text, 1)
+				processing_objects.Add(src)
+				update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/proc/update_brightness(var/mob/user = null)
+	if(lit)
+		if(loc == user)
+			user.SetLuminosity(user.luminosity + brightness_lit)
+		else if(isturf(loc))
+			SetLuminosity(src.brightness_lit)
+	else
+		if(loc == user)
+			user.SetLuminosity(user.luminosity - brightness_lit)
+		else if(isturf(loc))
+			SetLuminosity(0)
+
+/obj/item/weapon/reagent_containers/food/drinks/pickup(mob/user)
+	if(lit)
+		user.SetLuminosity(user.luminosity + brightness_lit)
+		SetLuminosity(0)
+
+
+/obj/item/weapon/reagent_containers/food/drinks/dropped(mob/user)
+	if(src)
+		user.SetLuminosity(user.luminosity - brightness_lit)
+		SetLuminosity(brightness_lit)
+
+/obj/item/weapon/reagent_containers/food/drinks/throw_impact(atom/hit_atom)
+		..()
+		if(molotov == 1)
+				new /obj/item/weapon/shard(src.loc)
+				src.visible_message("<span  class='warning'>The [src.name] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
+				playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 50, 1)
+				if(reagents.total_volume)
+						src.reagents.reaction(hit_atom, TOUCH)
+						spawn(5) src.reagents.clear_reagents()
+				invisibility = INVISIBILITY_MAXIMUM
+				var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
+				spark_system.set_up(5, 0, src.loc)
+				spark_system.start()
+				spawn(50)
+						del(src)
+
+/obj/item/weapon/reagent_containers/food/drinks/process()
+		var/turf/loca = get_turf(src)
+		if(lit)
+				loca.hotspot_expose(700, 1000)
+		return
+
+
+/obj/item/weapon/reagent_containers/food/drinks/update_icon()
+		..()
+		overlays.Cut()
+		if(molotov == 1)
+				overlays += image('icons/obj/grenade.dmi', icon_state = "molotov_rag")
+		if(molotov == 1 && lit)
+				overlays += image('icons/obj/grenade.dmi', icon_state = "molotov_fire") //todo: make lit sprite
+		else
+				item_state = initial(item_state)
+		if(ishuman(src.loc))
+				var/mob/living/carbon/human/H = src.loc
+				H.update_inv_belt()
+
+
+
+////////  Could be expanded upon:
+//  make it work with more chemicals and reagents, more like a chem grenade
+//  only allow the bottle to be stuffed if there are certain reagents inside, like fuel
+//  different flavor text for different means of lighting
+//  new fire overlay - current is edited version of the IED one
+//  a chance to not break, if desired
+//  fingerprints appearing on the object, which might already happen, and the shard
+//  belt sprite and new hand sprite
+//	ability to put out with water or otherwise
+//	burn out after a time causing the contents to ignite
+//	different refuse upon breaking, such as a broken bottle
+//	generalize to all bottles
+//	some easy way of obtaining or making rags such as by cutting up sheets
+//	make into its own item type so they could be spawned full of fuel with New()
+//	the rag can store chemicals as well so maybe the rag's chemicals could react with the bottle's chemicals before or upon breaking
+//  somehow make it possible to wipe down the bottles instead of exclusively stuffing rags into them
+////////
