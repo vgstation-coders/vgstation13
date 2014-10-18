@@ -613,8 +613,8 @@
 					m_type = 2
 				else
 					message = "<B>[src]</B> poos on the floor."
-					playsound(src.loc, 'fart.ogg', 60, 1)
-					playsound(src.loc, 'squishy.ogg', 40, 1)
+					playsound(src.loc, 'sound/misc/fart.ogg', 60, 1)
+					playsound(src.loc, 'sound/misc/squishy.ogg', 40, 1)
 					var/turf/location = src.loc
 
 					var/obj/effect/decal/cleanable/poo/D = new/obj/effect/decal/cleanable/poo(location)

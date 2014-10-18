@@ -230,7 +230,7 @@ var/global/list/image/splatter_cache=list()
 	density = 0
 	anchored = 1
 	layer = 2
-	icon = 'pooeffect.dmi'
+	icon = 'icons/effects/pooeffect.dmi'
 	icon_state = "cum1"
 	random_icon_states = list("cum1", "cum2", "cum3", "cum4", "cum5")
 	var/base_icon = 'icons/effects/blood.dmi'
@@ -256,7 +256,7 @@ var/global/list/image/splatter_cache=list()
 	density = 0
 	anchored = 1
 	layer = 2
-	icon = 'pooeffect.dmi'
+	icon = 'icons/effects/pooeffect.dmi'
 	icon_state = "floor1"
 	random_icon_states = list("floor1", "floor2", "floor3", "floor4", "floor5", "floor6", "floor7", "floor8")
 //	var/datum/disease/virus = null
@@ -266,7 +266,7 @@ var/global/list/image/splatter_cache=list()
 //	blood_type = null
 
 /obj/effect/decal/cleanable/poo/New()
-	src.icon = 'pooeffect.dmi'
+	src.icon = 'icons/effects/pooeffect.dmi'
 	src.icon_state = pick(src.random_icon_states)
 //	spawn(5) src.reagents.add_reagent("poo",5)
 	spawn(400)
@@ -282,7 +282,7 @@ var/global/list/image/splatter_cache=list()
 	density = 0
 	anchored = 1
 	layer = 2
-	icon = 'pooeffect.dmi'
+	icon = 'icons/effects/pooeffect.dmi'
 	icon_state = "drip1"
 	random_icon_states = list("drip1", "drip2", "drip3", "drip4", "drip5")
 //	blood_DNA = null
@@ -308,7 +308,7 @@ var/global/list/image/splatter_cache=list()
 
 		M.pulling = null
 		M << "\blue You slipped on the wet poo stain!"
-		playsound(src.loc, 'slip.ogg', 50, 1, -3)
+		playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
 		M.stunned = 6
 		M.weakened = 5
 
@@ -324,7 +324,7 @@ var/global/list/image/splatter_cache=list()
 	density = 0
 	anchored = 1
 	layer = 2
-	icon = 'pooeffect.dmi'
+	icon = 'icons/effects/pooeffect.dmi'
 	icon_state = "pee1"
 	random_icon_states = list("pee1", "pee2", "pee3")
 //	var/datum/disease/virus = null
@@ -340,7 +340,7 @@ var/global/list/image/splatter_cache=list()
 
 		M.pulling = null
 		M << "\blue You slipped in the urine puddle!"
-		playsound(src.loc, 'slip.ogg', 50, 1, -3)
+		playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
 		M.stunned = 8
 		M.weakened = 5
 
