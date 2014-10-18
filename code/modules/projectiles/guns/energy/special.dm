@@ -278,11 +278,13 @@ obj/item/weapon/gun/energy/staff/focus
 	desc = "pulse-based energy sniper rifle, stable model - Mark 80"
 	icon_state = "sniper"
 	item_state = null	//so the human update icon uses the icon_state instead.
-	force = 10
-	fire_sound = 'sound/weapons/pulse.ogg'
-	charge_cost = 1000
 	projectile_type = "/obj/item/projectile/beam"
 	cell_type = "/obj/item/weapon/cell/high"
+	fire_sound = 'sound/weapons/pulse.ogg'
+	w_class = 4
+	force = 10
+	charge_cost = 1000
+
 	slot_flags = SLOT_BACK
 	var/mode = 1
 	fire_delay = 5
@@ -295,7 +297,7 @@ obj/item/weapon/gun/energy/staff/focus
 				fire_delay = 10 //учитесь стрелять наконец!!
 				fire_sound = 'sound/weapons/Taser.ogg'
 				user << "\red [src.name] is now set to shock beam mode."
-				projectile_type = "/obj/item/projectile/energy/electrode"
+				projectile_type = "/obj/item/projectile/beam/xsniper"
 			if(0)
 				mode = 1
 				charge_cost = 1000
@@ -306,7 +308,7 @@ obj/item/weapon/gun/energy/staff/focus
 			if(1)
 				mode = 2
 				charge_cost = 2000
-				fire_delay = 15
+				fire_delay = 20 //Снайперка не автоматическая, не забывайте об этом.
 				fire_sound = 'sound/weapons/pulse.ogg'
 				user << "\red [src.name] is now set to high power sniper mode."
 				projectile_type = "/obj/item/projectile/beam/deathlaser"

@@ -1284,7 +1284,19 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Unlabeled crate"
 	group = "Misc"
 
-/datum/supply_packs/randomised/contraband_markman
+/datum/supply_packs/contraband_markman
+	name = "Poison Inc. Markman crate"
+	contains = list(/obj/item/weapon/gun/energy/sniper,
+					/obj/item/clothing/glasses/hud/security,
+					/obj/item/clothing/head/helmet,
+					/obj/item/clothing/glasses/sunglasses)
+	cost = 380
+	contraband = 1 //Easy cargo mode ON
+	containertype = /obj/structure/closet/crate
+	containername = "Unlabeled crate"
+	group = "Misc"
+
+/datum/supply_packs/randomised/contraband_rando
 	name = "Rando Inc. Gun crate"
 	num_contained = 1
 	contains = list(/obj/item/weapon/gun/projectile/automatic/k4m,
