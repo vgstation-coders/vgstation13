@@ -137,7 +137,7 @@
 						/obj/item/borg/upgrade/rename,
 						/obj/item/borg/upgrade/restart,
 						/obj/item/borg/upgrade/vtec,
-						/obj/item/borg/upgrade/tasercooler,
+//						/obj/item/borg/upgrade/tasercooler,
 						/obj/item/borg/upgrade/jetpack
 						),
 

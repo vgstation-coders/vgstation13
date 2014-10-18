@@ -167,7 +167,7 @@
 	..()
 
 /proc/getAvailableRobotModules()
-	var/list/modules = list("Standard", "Engineering", "Medical", "Miner", "Janitor", "Service", "Security")
+	var/list/modules = list("Standard", "Engineering", "Medical", "Miner", "Janitor", "Service")
 	if(security_level == SEC_LEVEL_RED) //Add crisis to this check if you want to make it available at an admin's whim
 		modules+="Combat"
 	return modules
@@ -229,7 +229,7 @@
 			module_sprites["Marina"] = "marina"
 			module_sprites["Eve"] = "eve"
 
-		if("Security")
+/*		if("Security")
 			module = new /obj/item/weapon/robot_module/security(src)
 			channels = list("Security" = 1)
 			module_sprites["Basic"] = "secborg"
@@ -237,7 +237,7 @@
 			module_sprites["Black Knight"] = "securityrobot"
 			module_sprites["Bloodhound"] = "bloodhound"
 			module_sprites["Securitron"] = "securitron"
-			module_sprites["Marina-SC"] = "marinaSC"
+			module_sprites["Marina-SC"] = "marinaSC"*/
 
 		if("Engineering")
 			module = new /obj/item/weapon/robot_module/engineering(src)
@@ -274,7 +274,7 @@
 	feedback_inc("cyborg_[lowertext(modtype)]",1)
 	updatename()
 
-	if(modtype == "Medical" || modtype == "Security" || modtype == "Combat")
+	if(modtype == "Medical" || modtype == "Combat")
 		status_flags &= ~CANPUSH
 
 	if(!forced_module)

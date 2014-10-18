@@ -187,7 +187,7 @@
 			playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
 			m_type = 1
 
-		if("law")
+/*		if("law")
 			if (istype(module,/obj/item/weapon/robot_module/security))
 				message = "<B>[src]</B> shows its legal authorization barcode."
 
@@ -203,15 +203,15 @@
 				playsound(get_turf(src), 'sound/voice/halt.ogg', 50, 0)
 				m_type = 2
 			else
-				src << "You are not security."
-				
+				src << "You are not security."*/
+
 		/*
 		if ("fart")
 			var/list/robotfarts = list("makes a farting noise","vents excess methane","shakes violently, then vents methane.")
 			var/robofart = pick(robotfarts)
 			message = "<B>[src]</B> [robofart]."
-			m_type = 1 	
-			
+			m_type = 1
+
 		*/
 
 		if ("help")

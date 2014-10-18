@@ -144,7 +144,7 @@
 	return 1
 
 
-/obj/item/borg/upgrade/tasercooler
+/*/obj/item/borg/upgrade/tasercooler
 	name = "robotic Rapid Taser Cooling Module"
 	desc = "Used to cool a mounted taser, increasing the potential current in it and thus its recharge rate."
 	construction_cost = list("metal"=80000 , "glass"=6000 , "gold"= 2000, "diamond" = 500)
@@ -177,7 +177,7 @@
 	else
 		T.recharge_time = max(2 , T.recharge_time - 4)
 
-	return 1
+	return 1*/
 
 /obj/item/borg/upgrade/jetpack
 	name = "mining robot jetpack"

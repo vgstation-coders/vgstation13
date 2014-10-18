@@ -45,7 +45,7 @@
 
 	New()
 		..()
-		src.modules += new /obj/item/weapon/melee/baton/loaded(src)
+//		src.modules += new /obj/item/weapon/melee/baton/loaded(src)
 		src.modules += new /obj/item/weapon/extinguisher(src)
 		src.modules += new /obj/item/weapon/wrench(src)
 		src.modules += new /obj/item/weapon/crowbar(src)
@@ -186,7 +186,7 @@
 
 
 
-/obj/item/weapon/robot_module/security
+/*/obj/item/weapon/robot_module/security
 	name = "security robot module"
 
 	New()
@@ -204,7 +204,7 @@
 			if(istype(M,/obj/item/weapon/melee/baton))
 				var/obj/item/weapon/melee/baton/B=M
 				if(B && B.bcell)
-					B.bcell.give(175)
+					B.bcell.give(175)*/
 
 /obj/item/weapon/robot_module/janitor
 	name = "janitorial robot module"
