@@ -1263,6 +1263,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Electrical maintenance crate"
 	group = "Engineering"
 
+	           //RIG//
+/datum/supply_packs/rig
+	name = "Engineering hardsuit"
+	cost = 100
+	contains = list(/obj/item/clothing/suit/space/space_adv/rig,
+					/obj/item/weapon/tank/air,
+					/obj/item/clothing/mask/breath)
+
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "Engineering hardsuit"
+	group = "Engineering"
+
 
 
 //Science/////////////////////////////////////////////////////////////////////////////////////////////////////

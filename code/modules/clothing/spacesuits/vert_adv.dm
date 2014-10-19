@@ -145,7 +145,6 @@
 			else
 				return ..()
 	else
-		..()
 		return ..()
 
 
