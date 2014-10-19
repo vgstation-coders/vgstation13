@@ -39,6 +39,11 @@
 		W.amount = 50
 		W.max_amount = 50 // Override MAXCOIL
 		src.modules += W
+
+		var/obj/item/stack/tile/plasteel/F = new /obj/item/stack/tile/plasteel(src)
+		F.amount = 50
+		src.modules += F
+
 		return
 	respawn_consumable(var/mob/living/silicon/robot/R)
 		var/list/what = list (
@@ -46,6 +51,7 @@
 			/obj/item/stack/sheet/glass,
 			/obj/item/weapon/cable_coil,
 			/obj/item/stack/sheet/rglass/cyborg,
+			/obj/item/stack/tile/plasteel,
 		)
 		for (var/T in what)
 			if (!(locate(T) in src.modules))
