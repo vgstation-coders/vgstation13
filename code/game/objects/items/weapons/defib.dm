@@ -140,7 +140,7 @@
 			&&(target.has_brain()))
 				target.visible_message("<span class='notice'>[src] beeps: Defibrillation successful.</span>")
 				dead_mob_list -= target
-				living_mob_list |= target
+				living_mob_list |= list(target)
 				target.tod = null
 				if(target.health < config.health_threshold_crit) //Sanity check
 					target.stat = UNCONSCIOUS
