@@ -158,8 +158,8 @@
 		else
 			custom = 0
 			amount = round(text2num(href_list["amount"]), 5) // round to nearest 5
-		if (amount < 0) // Since the user can actually type the commands himself, some sanity checking
-			amount = 0
+		if (amount < 5) // Since the user can actually type the commands himself, some sanity checking
+			amount = 5
 		if (amount > 100)
 			amount = 100
 
@@ -264,6 +264,8 @@
 	var/bottlesprite = "1" //yes, strings
 	var/pillsprite = "1"
 	var/client/has_sprites = list()
+
+	l_color = "#0000FF"
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -475,6 +477,7 @@
 			var/count = 1
 			if (href_list["createpill_multiple"]) count = isgoodnumber(input("Select the number of pills to make.", 10, pillamount) as num)
 			if (count > 20) count = 20	//Pevent people from creating huge stacks of pills easily. Maybe move the number to defines?
+			if (!count) return
 			var/amount_per_pill = reagents.total_volume/count
 			if (amount_per_pill > 50) amount_per_pill = 50
 			var/name = reject_bad_text(input(usr,"Name:","Name your pill!","[reagents.get_master_reagent_name()] ([amount_per_pill] units)"))
@@ -677,6 +680,8 @@
 	var/temphtml = ""
 	var/wait = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
+
+	l_color = "#0000FF"
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **

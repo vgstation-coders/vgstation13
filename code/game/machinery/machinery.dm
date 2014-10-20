@@ -147,7 +147,7 @@ Class Procs:
 		pulse2.dir = pick(cardinal)
 
 		spawn(10)
-			pulse2.delete()
+			qdel(pulse2)
 	..()
 
 /obj/machinery/ex_act(severity)
@@ -193,6 +193,7 @@ Class Procs:
 	if("set_freq" in href_list)
 		if(!("frequency" in vars))
 			warning("set_freq: [type] has no frequency var.")
+			return 0
 		var/newfreq=src:frequency
 		if(href_list["set_freq"]!="-1")
 			newfreq=text2num(href_list["set_freq"])

@@ -31,6 +31,9 @@
 	var/scribble		//Scribble on the back.
 	var/blueprints = 0	//Does it include the blueprints?
 
+	autoignition_temperature = 530 // Kelvin
+	fire_fuel = 1
+
 
 /obj/item/weapon/photo/attack_self(mob/user)
 	examine()
@@ -120,7 +123,7 @@
 /obj/item/device/camera/ai_camera //camera AI can take pictures with
 	name = "AI photo camera"
 	var/in_camera_mode = 0
-
+/*
 	verb/picture()
 		set category ="AI Commands"
 		set name = "Take Image"
@@ -134,6 +137,7 @@
 		set src in usr
 
 		viewpictures()
+*/
 
 
 /obj/item/device/camera/attack(mob/living/carbon/human/M, mob/user)

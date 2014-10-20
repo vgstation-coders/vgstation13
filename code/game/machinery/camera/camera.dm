@@ -19,6 +19,7 @@ var/list/camera_names=list()
 	var/invuln = null
 	var/bugged = 0
 	var/obj/item/weapon/camera_assembly/assembly = null
+	var/light_on = 0
 
 	//OTHER
 
@@ -56,6 +57,13 @@ var/list/camera_names=list()
 				camera_names[nethash+c_tag]=src
 				break
 			suffix++
+	..()
+
+/obj/machinery/camera/Destroy()
+	if(wires)
+		wires.Destroy()
+		wires = null
+
 	..()
 
 /obj/machinery/camera/emp_act(severity)
@@ -320,3 +328,4 @@ var/list/camera_names=list()
 		return 1
 	busy = 0
 	return 0
+

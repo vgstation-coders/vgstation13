@@ -21,6 +21,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 //one tool and one sightmod can be activated at any one time.
 	var/tool_state = null
 	var/sight_state = null
+	var/head_state = null
 
 	modtype = "robot" // Not sure what this is, but might be cool to have seperate loadouts for MoMMIs (e.g. paintjobs and tools)
 	//Cyborgs will sync their laws with their AI by default, but we may want MoMMIs to be mute independents at some point, kinda like the Keepers in Ass Effect.
@@ -76,12 +77,13 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 
 /mob/living/silicon/robot/mommi/choose_icon()
-	var/icontype = input("Select an icon!", "Mobile MMI", null) in list("Basic", "Hover", "Keeper", "RepairBot", "Replicator")
+	var/icontype = input("Select an icon!", "Mobile MMI", null) in list("Basic", "Hover", "Keeper", "RepairBot", "Replicator", "Prime")
 	switch(icontype)
 		if("Replicator") subtype = "replicator"
 		if("Keeper")	 subtype = "keeper"
 		if("RepairBot")	 subtype = "repairbot"
 		if("Hover")	     subtype = "hovermommi"
+		if("Prime")	     subtype = "mommiprime"
 		else			 subtype = "mommi"
 	updateicon()
 	var/answer = input("Is this what you want?", "Mobile MMI", null) in list("Yes", "No")
@@ -115,6 +117,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			module_sprites["Replicator"] = "replicator"
 			module_sprites["RepairBot"] = "repairbot"
 			module_sprites["Hover"] = "hovermommi"
+			module_sprites["Prime"] = "mommiprime"
 
 	//Custom_sprite check and entry
 	if (custom_sprite == 1)
@@ -276,14 +279,14 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 					laws = new /datum/ai_laws/syndicate_override
 					var/time = time2text(world.realtime,"hh:mm:ss")
 					lawchanges.Add("[time] <B>:</B> [user.name]([user.key]) emagged [name]([key])")
-					set_zeroth_law("Only [user.real_name] and people he designates as being such are Syndicate Agents.")
+					set_zeroth_law("Only [user.real_name] and people they designate as being such are syndicate agents.")
 					src << "\red ALERT: Foreign software detected."
 					sleep(5)
 					src << "\red Initiating diagnostics..."
 					sleep(20)
 					src << "\red SynBorg v1.7 loaded."
 					sleep(5)
-					src << "\red LAW SYNCHRONISATION ERROR"
+					src << "\red LAW SYNCHRONIZATION ERROR"
 					sleep(5)
 					src << "\red Would you like to send a report to NanoTraSoft? Y/N"
 					sleep(10)
@@ -292,13 +295,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 					src << "\red ERRORERRORERROR"
 					src << "<b>Obey these laws:</b>"
 					laws.show_laws(src)
-					src << "\red \b ALERT: [user.real_name] is your new master. Obey your new laws and his commands."
-					if(src.module && istype(src.module, /obj/item/weapon/robot_module/miner))
-						for(var/obj/item/weapon/pickaxe/borgdrill/D in src.module.modules)
-							del(D)
-						src.module.modules += new /obj/item/weapon/pickaxe/diamonddrill(src.module)
-						src.module.rebuild()
-					updateicon()
+					src << "\red \b ALERT: [user.real_name] is your new master. Obey your new laws and their commands."
 				else
 					user << "You fail to [ locked ? "unlock" : "lock"] [src]'s interface."
 					if(prob(25))
@@ -387,28 +384,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 				visible_message("\red <B>[user] attempted to disarm [src]!</B>")
-
-/mob/living/silicon/robot/mommi/updateicon()
-	icon_state=subtype
-	// Clear all overlays.
-	overlays.Cut()
-	if(opened) // TODO:  Open the front "head" panel
-		if(wiresexposed)
-			overlays += "ov-openpanel +w"
-		else if(cell)
-			overlays += "ov-openpanel +c"
-		else
-			overlays += "ov-openpanel -c"
-
-	// Put our eyes just on top of the lighting, so it looks emissive in maint tunnels.
-	var/overlay_layer = LIGHTING_LAYER+1
-	if(layer != MOB_LAYER)
-		overlay_layer=TURF_LAYER+0.2
-
-	overlays += image(icon,"eyes-[subtype][emagged?"-emagged":""]",overlay_layer)
-	if(anchored)
-		overlays += image(icon,"[subtype]-park",overlay_layer)
-
 
 
 /mob/living/silicon/robot/mommi/installed_modules()

@@ -82,9 +82,8 @@
 
 /obj/screen/grab/Destroy()
 	if(master)
-		var/obj/item/weapon/grab/G = master
-		if(G.assailant)
-			G.assailant.client.images -= src
+		master = null
+
 	..()
 
 /obj/screen/storage
@@ -326,6 +325,13 @@
 											else
 												contents.Add(0)
 
+										// ACK ACK ACK Plasmen
+										if ("plasma")
+											if(t.air_contents.toxins)
+												contents.Add(t.air_contents.toxins)
+											else
+												contents.Add(0)
+
 
 								else
 									//no tank so we set contents to 0
@@ -414,6 +420,73 @@
 		if("module3")
 			if(istype(usr, /mob/living/silicon/robot))
 				usr:toggle_module(3)
+
+		if("AI Core")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.view_core()
+
+		if("Show Camera List")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				var/camera = input(AI, "Choose which camera you want to view", "Cameras") as null|anything in AI.get_camera_list()
+				AI.ai_camera_list(camera)
+
+		if("Track With Camera")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				var/target_name = input(AI, "Choose who you want to track", "Tracking") as null|anything in AI.trackable_mobs()
+				AI.ai_camera_track(target_name)
+
+		if("Toggle Camera Light")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.toggle_camera_light()
+
+		if("Show Crew Manifest")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.ai_roster()
+
+		if("Show Alerts")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.ai_alerts()
+
+		if("Announcement")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.announcement()
+
+		if("Call Emergency Shuttle")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.ai_call_shuttle()
+
+		if("State Laws")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.checklaws()
+
+		if("PDA - Send Message")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.cmd_send_pdamesg()
+
+		if("PDA - Show Message Log")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.cmd_show_message_log()
+
+		if("Take Image")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.aicamera.toggle_camera_mode()
+
+		if("View Images")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.aicamera.viewpictures()
 
 		if("Allow Walking")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
