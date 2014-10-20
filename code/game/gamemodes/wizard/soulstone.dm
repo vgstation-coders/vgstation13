@@ -2,7 +2,7 @@
 	name = "Soul Stone Shard"
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "soulstone"
-	item_state = "shard-soulstone"
+	item_state = "electronic"
 	desc = "A fragment of the legendary treasure known simply as the 'Soul Stone'. The shard still flickers with a fraction of the full artefacts power."
 	w_class = 1.0
 	flags = FPRINT | TABLEPASS
@@ -16,9 +16,8 @@
 	attack(mob/living/carbon/human/M as mob, mob/user as mob)
 		if(!istype(M, /mob/living/carbon/human))//If target is not a human.
 			return ..()
-		if(istype(M, /mob/living/carbon/human/manifested))
-			user << "The soul stone shard seems unable to pull the soul out of that poor manifested ghost back onto our plane."
-			return
+		if(istype(M, /mob/living/carbon/human/dummy))
+			return..()
 		add_logs(user, M, "captured [M.name]'s soul", object=src)
 
 		transfer_soul("VICTIM", M, user)

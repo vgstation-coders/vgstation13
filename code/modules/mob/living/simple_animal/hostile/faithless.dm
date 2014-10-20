@@ -32,9 +32,6 @@
 
 	faction = "faithless"
 
-/mob/living/simple_animal/hostile/faithless/cult
-	faction = "cult"
-
 /mob/living/simple_animal/hostile/faithless/Process_Spacemove(var/check_drift = 0)
 	return 1
 

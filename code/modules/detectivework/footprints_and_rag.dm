@@ -14,7 +14,7 @@
 	var/track_blood = 0
 
 /obj/item/weapon/reagent_containers/glass/rag
-	name = "rag" //changed to "rag" from "damp rag" - Hinaichigo
+	name = "damp rag"
 	desc = "For cleaning up messes, you suppose."
 	w_class = 1
 	icon = 'icons/obj/toy.dmi'

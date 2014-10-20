@@ -394,11 +394,7 @@
 	var/safety = user:eyecheck()
 	if(istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
-		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
-		if(!E)
-			return
-		if(H.species.flags & IS_SYNTHETIC)
-			return
+		var/datum/organ/internal/eyes/E = H.internal_organs["eyes"]
 		switch(safety)
 			if(1)
 				usr << "\red Your eyes sting a little."

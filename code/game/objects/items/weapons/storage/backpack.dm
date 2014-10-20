@@ -26,7 +26,6 @@
 	name = "Bag of Holding"
 	desc = "A backpack that opens into a localized pocket of Blue Space."
 	origin_tech = "bluespace=4"
-	item_state = "holdingpack"
 	icon_state = "holdingpack"
 	max_w_class = 4
 	max_combined_w_class = 28
@@ -88,7 +87,6 @@
 	name = "trophy rack"
 	desc = "It's useful for both carrying extra gear and proudly declaring your insanity."
 	icon_state = "cultpack"
-	item_state = "cultpacknew"
 
 /obj/item/weapon/storage/backpack/clown
 	name = "Giggles Von Honkerton"
