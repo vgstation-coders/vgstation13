@@ -132,10 +132,6 @@
 
 
 /datum/preferences/proc/save_preferences_sqlite(var/user, var/ckey)
-	if(!(world.timeofday >= (lastPolled + POLLED_LIMIT)))
-		user << "You need to wait [round((((lastPolled + POLLED_LIMIT) - world.timeofday) / 10))] seconds before you can save again."
-		return
-
 	var/database/query/check = new
 	var/database/query/q = new
 	check.Add("SELECT ckey FROM client WHERE ckey = ?", ckey)
@@ -159,7 +155,6 @@
 		warning("Error #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 	user << "Preferences Updated."
-	lastPolled = world.timeofday
 	return 1
 
 /datum/preferences/proc/save_preferences()
