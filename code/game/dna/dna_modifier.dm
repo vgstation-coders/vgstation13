@@ -114,16 +114,13 @@
 	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
 		return
 	if (!ishuman(usr) && !ismonkey(usr)) //Make sure they're a mob that has dna
-		usr << "<span class='notice'> Try as you might, you can not climb up into the scanner.</span>"
-		return
-	if (istype(usr, /mob/living/carbon/human/manifested))
-		usr << "<span class='notice'> For some reason, the scanner is unable to read your genes.</span>"//to prevent a loophole that allows cultist to turn manifested ghosts into normal humans
+		usr << "\blue Try as you might, you can not climb up into the scanner."
 		return
 	if (src.occupant)
-		usr << "<span class='notice'> <B>The scanner is already occupied!</B></span>"
+		usr << "\blue <B>The scanner is already occupied!</B>"
 		return
 	if (usr.abiotic())
-		usr << "<span class='notice'> <B>Subject cannot have abiotic items on.</B></span>"
+		usr << "\blue <B>Subject cannot have abiotic items on.</B>"
 		return
 	usr.stop_pulling()
 	usr.client.perspective = EYE_PERSPECTIVE
@@ -135,8 +132,6 @@
 	return
 
 /obj/machinery/dna_scannernew/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if(!istype(O) || isturf(O)) // Cant drag the floor man
-		return
 	if(O.loc == user) //no you can't pull things out of your ass
 		return
 	if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.resting) //are you cuffed, dying, lying, stunned or other
@@ -155,9 +150,6 @@
 		return
 	if(occupant)
 		user << "\blue <B>The DNA Scanner is already occupied!</B>"
-		return
-	if (istype(O, /mob/living/carbon/human/manifested))
-		usr << "<span class='notice'> For some reason, the scanner is unable to read that person's genes.</span>"//to prevent a loophole that allows cultist to turn manifested ghosts into normal humans
 		return
 	if(isrobot(user))
 		if(!istype(user:module, /obj/item/weapon/robot_module/medical))
