@@ -66,7 +66,7 @@
 	<a href='?src=\ref[src];clown_asteroid=1'>Clown Asteroid</a> |
 	<a href='?src=\ref[src];derelict=1'>Derelict Station</a> |
 	<a href='?src=\ref[src];djstation=1'>Ruskie DJ Station</a><br>
-	<a href='?src=\ref[src];commssat=1'>Communications Satellite</a> |
+	<a href='?src=\ref[src];commssat=1'>NT civil station</a> |
 	<a href='?src=\ref[src];abandoned_ship=1'>Abandoned Ship</a><br>
 	<a href='?src=\ref[user];mach_close=computer'>Close</a>"}
 
