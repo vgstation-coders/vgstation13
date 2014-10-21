@@ -274,6 +274,24 @@
 	icon_opened = "scicrateopen"
 	icon_closed = "scicrate"
 
+/obj/structure/closet/crate/sci/RnD
+	New()
+		..()
+		new /obj/item/weapon/reagent_containers/spray/plantbgone(src)
+		new /obj/item/weapon/circuitboard/protolathe(src)
+		new	/obj/item/weapon/circuitboard/rdconsole(src)
+		new	/obj/item/weapon/circuitboard/circuit_imprinter(src)
+		new	/obj/item/weapon/circuitboard/destructive_analyzer(src)
+		new	/obj/item/weapon/stock_parts/matter_bin(src)
+		new	/obj/item/weapon/stock_parts/matter_bin(src)
+		new	/obj/item/weapon/stock_parts/manipulator(src)
+		new	/obj/item/weapon/stock_parts/manipulator(src)
+		new	/obj/item/weapon/stock_parts/manipulator(src)
+		new	/obj/item/weapon/reagent_containers/glass/beaker(src)
+		new	/obj/item/weapon/reagent_containers/glass/beaker(src)
+		new	/obj/item/weapon/stock_parts/scanning_module(src)
+		new	/obj/item/weapon/stock_parts/micro_laser(src)
+
 /obj/structure/closet/crate/secure/scisec
 	desc = "A secure science crate."
 	name = "secure science crate"

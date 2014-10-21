@@ -787,10 +787,45 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Arrival Shuttle Hallway"
 	icon_state = "entry"
 
+
+//civil station
+/area/civil_station
+	name = "\improper Central Civilian station Hallway"
+	icon_state = "hallC"
+
+/area/civil_station/captain
+	name = "\improper Civilian Station captain's Office"
+	icon_state = "captain"
+	jammed=1
+
+/area/civil_station/bridge
+	name = "\improper Bridge of Civil Station"
+	icon_state = "bridge"
+	music = "signal"
+	jammed=1
+
+/area/civil_station/security/main
+	name = "\improper Civil Station Security Office"
+	icon_state = "security"
+
+/area/civil_station/maintenance/nmaint
+	name = "North wing Maintenance"
+	icon_state = "maint"
+
+/area/civil_station/maintenance/smaint
+	name = "South wing Maintenance"
+	icon_state = "maint"
+
 //Command
 
 /area/bridge
 	name = "\improper Bridge"
+	icon_state = "bridge"
+	music = "signal"
+	jammed=1
+
+/area/civil_station/bridge
+	name = "\improper Bridge of civil station"
 	icon_state = "bridge"
 	music = "signal"
 	jammed=1
@@ -805,6 +840,7 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Captain's Office"
 	icon_state = "captain"
 	jammed=1
+
 
 /area/crew_quarters/heads
 	hop
@@ -1563,100 +1599,197 @@ proc/process_ghost_teleport_locs()
 //DERELICT
 
 /area/derelict
-	name = "\improper Derelict Station"
+	name = "\improper old Derelict Station"
 	icon_state = "storage"
 
 /area/derelict/hallway/primary
-	name = "\improper Derelict Primary Hallway"
+	name = "\improper old Derelict Primary Hallway"
 	icon_state = "hallP"
 
 /area/derelict/hallway/secondary
-	name = "\improper Derelict Secondary Hallway"
+	name = "\improper old Derelict Secondary Hallway"
 	icon_state = "hallS"
 
 /area/derelict/arrival
+	name = "\improper old Derelict Arrival Centre"
+	icon_state = "yellow"
+
+/area/derelict/storage/equipment
+	name = "old Derelict Equipment Storage"
+
+/area/derelict/storage/storage_access
+	name = "old Derelict Storage Access"
+
+/area/derelict/storage/engine_storage
+	name = "old Derelict  Engine Storage"
+	icon_state = "green"
+
+/area/derelict/bridge
+	name = "\improper old Derelict Control Room"
+	icon_state = "bridge"
+
+/area/derelict/secret
+	name = "\improper old Derelict Secret Room"
+	icon_state = "library"
+
+/area/derelict/bridge/access
+	name = "Derelict old Control Room Access"
+	icon_state = "auxstorage"
+
+/area/derelict/bridge/ai_upload
+	name = "\improper old Derelict Computer Core"
+	icon_state = "ai"
+
+/area/derelict/solar_control
+	name = "\improper old Derelict Solar Control"
+	icon_state = "engine"
+
+/area/derelict/atmos
+	name = "\improper old Derelict Atmospherics"
+	icon_state = "atmos"
+
+/area/derelict/research
+	name = "\improper old Derelict Research"
+	icon_state = "toxins"
+
+/area/derelict/crew_quarters
+	name = "\improper old Derelict Crew Quarters"
+	icon_state = "fitness"
+
+/area/derelict/medical
+	name = "old Derelict  Medbay"
+	icon_state = "medbay"
+
+/area/derelict/medical/morgue
+	name = "\improper old Derelict Morgue"
+	icon_state = "morgue"
+
+/area/derelict/medical/chapel
+	name = "\improper old Derelict Chapel"
+	icon_state = "chapel"
+
+/area/derelict/teleporter
+	name = "\improper old Derelict Teleporter"
+	icon_state = "teleporter"
+
+/area/derelict/eva
+	name = "Derelict old EVA Storage"
+	icon_state = "eva"
+
+/area/derelict/ship
+	name = "\improper old Abandoned Ship"
+	icon_state = "yellow"
+
+/area/solar/derelict_starboard
+	name = "\improper old Derelict Starboard Solar Array"
+	icon_state = "panelsS"
+
+/area/solar/derelict_aft
+	name = "\improper old Derelict Aft Solar Array"
+	icon_state = "aft"
+
+/area/derelict/singularity_engine
+	name = "\improper old Derelict Singularity Engine"
+	icon_state = "engine"
+
+/area/derelict/research
+	name = "\improper old Derelict Research"
+	icon_state = "toxmisc"
+
+//DERELICTTGSTATION
+
+/area/derelicts
+	name = "\improper Derelict Station"
+	icon_state = "storage"
+
+/area/derelicts/hallway/primary
+	name = "\improper Derelict Primary Hallway"
+	icon_state = "hallP"
+
+/area/derelicts/hallway/secondary
+	name = "\improper Derelict Secondary Hallway"
+	icon_state = "hallS"
+
+/area/derelicts/arrival
 	name = "\improper Derelict Arrival Centre"
 	icon_state = "yellow"
 
 /area/derelict/storage/equipment
 	name = "Derelict Equipment Storage"
 
-/area/derelict/storage/storage_access
+/area/derelicts/storage/storage_access
 	name = "Derelict Storage Access"
 
-/area/derelict/storage/engine_storage
+/area/derelicts/storage/engine_storage
 	name = "Derelict Engine Storage"
 	icon_state = "green"
 
-/area/derelict/bridge
+/area/derelicts/brig
+	name = "\improper Derelict Brig"
+	icon_state = "red"
+
+/area/derelicts/bridge
 	name = "\improper Derelict Control Room"
 	icon_state = "bridge"
 
-/area/derelict/secret
+/area/derelicts/secret
 	name = "\improper Derelict Secret Room"
 	icon_state = "library"
 
-/area/derelict/bridge/access
+/area/derelicts/bridge/access
 	name = "Derelict Control Room Access"
 	icon_state = "auxstorage"
 
-/area/derelict/bridge/ai_upload
+/area/derelicts/bridge/ai_upload
 	name = "\improper Derelict Computer Core"
 	icon_state = "ai"
 
-/area/derelict/solar_control
+/area/derelicts/solar_control
 	name = "\improper Derelict Solar Control"
 	icon_state = "engine"
 
-/area/derelict/atmos
+/area/derelicts/atmos
 	name = "\improper Derelict Atmospherics"
 	icon_state = "atmos"
 
-/area/derelict/research
+/area/derelicts/research
 	name = "\improper Derelict Research"
 	icon_state = "toxins"
 
-/area/derelict/crew_quarters
+/area/derelicts/crew_quarters
 	name = "\improper Derelict Crew Quarters"
 	icon_state = "fitness"
 
-/area/derelict/medical
+/area/derelicts/medical
 	name = "Derelict Medbay"
 	icon_state = "medbay"
 
-/area/derelict/medical/morgue
+/area/derelicts/medical/morgue
 	name = "\improper Derelict Morgue"
 	icon_state = "morgue"
 
-/area/derelict/medical/chapel
+/area/derelicts/medical/chapel
 	name = "\improper Derelict Chapel"
 	icon_state = "chapel"
 
-/area/derelict/teleporter
+/area/derelicts/teleporter
 	name = "\improper Derelict Teleporter"
 	icon_state = "teleporter"
 
-/area/derelict/eva
+/area/derelicts/eva
 	name = "Derelict EVA Storage"
 	icon_state = "eva"
 
-/area/derelict/ship
-	name = "\improper Abandoned Ship"
-	icon_state = "yellow"
-
-/area/solar/derelict_starboard
+/area/solar/derelicts_solar
 	name = "\improper Derelict Starboard Solar Array"
 	icon_state = "panelsS"
 
-/area/solar/derelict_aft
-	name = "\improper Derelict Aft Solar Array"
-	icon_state = "aft"
 
-/area/derelict/singularity_engine
+/area/derelicts/singularity_engine
 	name = "\improper Derelict Singularity Engine"
 	icon_state = "engine"
 
-/area/derelict/research
+/area/derelicts/research
 	name = "\improper Derelict Research"
 	icon_state = "toxmisc"
 
