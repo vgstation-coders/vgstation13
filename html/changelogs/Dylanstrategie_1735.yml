@@ -1,0 +1,4 @@
+author: Dylanstrategie
+delete-after: True
+changes:
+  - bugfix: Bottles that can be made into molotovs (notably beer bottles) should no longer drop rags for no reason
