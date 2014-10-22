@@ -14,7 +14,8 @@
 	amount_per_transfer_from_this = 5
 	possible_transfer_amounts = null //list(5,10,15)
 	volume = 15
-	g_amt = 1000
+	g_amt = 300
+	w_type = RECYK_GLASS
 	var/mode = SYRINGE_DRAW
 
 	suicide_act(mob/user)
