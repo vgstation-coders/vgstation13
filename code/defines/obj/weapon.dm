@@ -763,12 +763,32 @@
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	return ..()
 
-/obj/item/weapon/hatchet/unathiknife
+/obj/item/weapon/blade
 	name = "duelling knife"
 	desc = "A length of leather-bound wood studded with razor-sharp teeth. How crude."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "unathiknife"
+	origin_tech = "materials=2;combat=1"
+	flags = FPRINT | TABLEPASS | CONDUCT
+	force = 12.0
+	w_class = 2.0
+	throwforce = 15.0
+	throw_speed = 4
+	throw_range = 4
+	m_amt = 5000
+	w_type = RECYK_METAL
 	attack_verb = list("ripped", "torn", "cut")
+
+/obj/item/weapon/blade/sck
+	name = "Scavenger combat knife"
+	desc = "light in weight, comfortable to hold, simple and durable, combat knife from plasteel. Used by scavengers and smugglers."
+	icon_state = "sck"
+	force = 24.0
+	throwforce = 30.0
+	throw_speed = 5
+	throw_range = 5
+	m_amt = 9000
+	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
 /obj/item/weapon/scythe
 	icon_state = "scythe0"

@@ -208,7 +208,7 @@
 ///////////////////////////////////////////////////////PKS Guns//////////////////////////////////
 
 /obj/item/weapon/gun/projectile/automatic/u40ag
-	name = "u40ag"
+	name = "Carbine Mk2"
 	desc = "Machine gun for civil violence. Used by mercenaries, personal guards. Weapon of last chance. .45 rounds."
 	icon_state = "u40ag"
 	item_state = "c20r"
@@ -233,10 +233,10 @@
 
 
 /obj/item/weapon/gun/projectile/automatic/k4m
-	name = "k4m-storm"
+	name = "Carbine Mk4"
 	desc = "Hmm.. That reminds me, but what? Uses 5.56 rounds."
 	icon_state = "k4m"
-	item_state = "k4m"
+	item_state = "c20r"
 	w_class = 3.0
 	max_shells = 30
 	burst_count = 3

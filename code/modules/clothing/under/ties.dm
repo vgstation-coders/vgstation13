@@ -318,7 +318,7 @@
 /obj/item/clothing/tie/storage/knifeharness/proc/update()
 	var/count = 0
 	for(var/obj/item/I in hold)
-		if(istype(I,/obj/item/weapon/hatchet/unathiknife))
+		if(istype(I,/obj/item/weapon/blade))
 			count++
 	if(count>2) count = 2
 	item_state = "unathiharness[count]"
@@ -333,5 +333,5 @@
 
 /obj/item/clothing/tie/storage/knifeharness/New()
 	..()
-	new /obj/item/weapon/hatchet/unathiknife(hold)
-	new /obj/item/weapon/hatchet/unathiknife(hold)
+	new /obj/item/weapon/blade(hold)
+	new /obj/item/weapon/blade(hold)
