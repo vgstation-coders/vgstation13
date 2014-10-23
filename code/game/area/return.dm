@@ -64,11 +64,11 @@
 	name = "AFT RET Port Solar Maintenance"
 	icon_state = "SolarcontrolA"
 
-/area/ret/teleporter
+/area/ret/com/teleporter
 	name = "\improper RET Teleporter"
 	icon_state = "teleporter"
 
-/area/ret/bridge
+/area/ret/com/bridge
 	name = "\improper RET Bridge"
 	icon_state = "bridge"
 	music = "signal"
