@@ -32,15 +32,15 @@ delete-after: True
 # SCREW THIS UP AND IT WON'T WORK.
 # Also, this gets changed to [] after reading.  Just remove the brackets when you add new shit.
 changes: 
-	- tweak Added a scythe to botany's storage crate
-	- tweak Added a foam extinguisher to the Chief Engineer's locker
-	- tweak RCD matter carts are now tiny-sized
-	- tweak Added an atmospherics automation and large tank control board in atmospherics monitoring station
-	- tweak Added colored hats to the hat vendor
-	- spellcheck Fixed a whole bunch of grammar errors in the emote code because I'm an autistic fuck
-	- spellcheck Changed the 'Chat' button to 'Say' to make it a little more intuitive
-	- tweak atmospheric technicians now spawn with blue shoes to match their blue strips on their jumpsuits
-	- bugfix Fixed the absolutely game devastating and server crashing bug that is exosuit logs saying '2555' as the year instead of '2525'
-	- tweak All mechanical internal organs (except for appendix) now select-able in character creation
+	- tweak: Added a scythe to botany's storage crate
+	- tweak: Added a foam extinguisher to the Chief Engineer's locker
+	- tweak: RCD matter carts are now tiny-sized
+	- tweak: Added an atmospherics automation and large tank control board in atmospherics monitoring station
+	- tweak: Added colored hats to the hat vendor
+	- spellcheck: Fixed a whole bunch of grammar errors in the emote code because I'm an autistic fuck
+	- spellcheck: Changed the 'Chat' button to 'Say' to make it a little more intuitive
+	- tweak: atmospheric technicians now spawn with blue shoes to match their blue strips on their jumpsuits
+	- bugfix: Fixed the absolutely game devastating and server crashing bug that is exosuit logs saying '2555' as the year instead of '2525'
+	- tweak: All mechanical internal organs (except for appendix) now select-able in character creation
 	
-	- wip Will get to enabling the selection of a few more disabilities so you can be the bumbling retard your mother always knew you could be!
+	- wip: Will get to enabling the selection of a few more disabilities so you can be the bumbling retard your mother always knew you could be!
