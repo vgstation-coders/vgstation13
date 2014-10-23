@@ -7,7 +7,7 @@
 		act = copytext(act, 1, t1)
 
 	var/t_his = "its"
-	var/t_him = "it"
+	//var/t_him = "it"
 
 	if(findtext(act,"s",-1) && !findtext(act,"_",-2))//Removes ending s's unless they are prefixed with a '_'
 		act = copytext(act,1,length(act))
@@ -652,10 +652,10 @@
 				if (src.w_uniform)
 					if (src.gender == MALE)
 						t_his = "his"
-						t_him = "him"
+						//t_him = "him"
 					else if (src.gender == FEMALE)
 						t_his = "her"
-						t_him = "her"
+						//t_him = "her"
 					message = "<B>[src]</B> cums in [t_his] panties."
 					src.nutrition -= 80
 				else
