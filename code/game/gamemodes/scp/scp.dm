@@ -19,7 +19,7 @@
 	var/const/takeover_l = 300
 	var/const/takeover_h = 600
 	var/containment_breached = 0 //Is SCP a go ?
-	var/breach_event_running = 0 //Is an event happening in the meantime ?
+	var/breach_event_running = 1 //Is an event happening in the meantime ? Starts as 1 for activation delay
 	var/scp_spaced = 0 //Did we send SCP away for recovery ?
 	var/scp_gone = 0 //Just gone, good luck figuring out why
 	var/scp_disabled = 0 //SCP has been set to hibernate by admins, thanks admins
@@ -69,6 +69,8 @@
 			var/mob/living/simple_animal/sculpture/scp = new /mob/living/simple_animal/sculpture(get_turf(vent))
 			theonlyone += scp
 			containment_breached = 1
+			spawn(300)
+				breach_event_running = 0
 
 		spawn(rand(mystery_delay_l, mystery_delay_h))
 
@@ -215,61 +217,60 @@
 	//The containment breach isn't just SCP-173. Notably, SCP-079 will get access to the station (and even the sector to a degree, budget firewalls oblige) and act as very rogue AI
 	//Since it doesn't take lots of time to neutralize SCP and teleport it away, shit happens very quickly
 	//Oh, and I sure hope it doesn't total your teleporter, otherwise you're going to have fun...
-	spawn(300) //Very cheap way of having an initial delay on the first event
-		switch(rand(1,5))
-			if(1)
-				new /datum/event/communications_blackout
-			if(2)
-				command_alert("Illegal access to the station's powernet systems detected. Please repair any damage that may have occured", "Powernet Alert")
-				//world << sound('sound/AI/illegalaccess.ogg')
-				for(var/area/area in world)
-					if(prob(5))
-						scpEventAreas += area
-					for(var/area/A in scpEventAreas)
-						for(var/obj/machinery/light/L in A)
-							L.flicker(10)
-						if(prob(75))
-							for(var/obj/machinery/door/airlock/temp_airlock in A)
-								temp_airlock.prison_open() //This is effectively a 'open and bolt' routine
-						if(prob(40))
-							for(var/obj/machinery/power/apc/temp_apc in A)
-								temp_apc.toggle_breaker()
-						if(prob(25))
-							for(var/obj/machinery/power/apc/temp_apc in A)
-								temp_apc.overload_lighting()
-					scpEventAreas = list()
-			if(3)
-				command_alert("Bluespace artillery shelling detected. Brace for impact", "Nanotrasen Fleet Alert")
-				//world << sound('sound/AI/bluespaceartillery.ogg')
-				spawn(100)
-					spawn(rand(10,30))
-						explosion(locate(rand(1,world.maxx),rand(1,world.maxy),1), rand(0,1), rand(1,3), rand(2,4), 8, 0)
-					spawn(rand(20,50))
-						explosion(locate(rand(1,world.maxx),rand(1,world.maxy),1), rand(1,3), rand(2,4), rand(3,6), 8, 0) //The main shell
-					spawn(rand(10,20))
-						explosion(locate(rand(1,world.maxx),rand(1,world.maxy),1), rand(0,1), rand(1,3), rand(2,4), 8, 0)
+	switch(rand(1,5))
+		if(1)
+			new /datum/event/communications_blackout
+		if(2)
+			command_alert("Illegal access to the station's powernet systems detected. Please repair any damage that may have occured", "Powernet Alert")
+			//world << sound('sound/AI/illegalaccess.ogg')
+			for(var/area/area in world)
+				if(prob(5))
+					scpEventAreas += area
+				for(var/area/A in scpEventAreas)
+					for(var/obj/machinery/light/L in A)
+						L.flicker(10)
+					if(prob(75))
+						for(var/obj/machinery/door/airlock/temp_airlock in A)
+							temp_airlock.prison_open() //This is effectively a 'open and bolt' routine
+					if(prob(40))
+						for(var/obj/machinery/power/apc/temp_apc in A)
+							temp_apc.toggle_breaker()
+					if(prob(25))
+						for(var/obj/machinery/power/apc/temp_apc in A)
+							temp_apc.overload_lighting()
+				scpEventAreas = list()
+		if(3)
+			command_alert("Bluespace artillery shelling detected. Brace for impact", "Nanotrasen Fleet Alert")
+			//world << sound('sound/AI/bluespaceartillery.ogg')
+			spawn(100)
+				spawn(rand(10,30))
+					explosion(locate(rand(1,world.maxx),rand(1,world.maxy),1), rand(0,1), rand(1,3), rand(2,4), 8, 0)
+				spawn(rand(20,50))
+					explosion(locate(rand(1,world.maxx),rand(1,world.maxy),1), rand(1,3), rand(2,4), rand(3,6), 8, 0) //The main shell
+				spawn(rand(10,20))
+					explosion(locate(rand(1,world.maxx),rand(1,world.maxy),1), rand(0,1), rand(1,3), rand(2,4), 8, 0)
+				spawn(rand(50,100))
+					explosion(locate(rand(1,world.maxx),rand(1,world.maxy),1), rand(1,3), rand(2,4), rand(3,6), 8, 0)
+				spawn(rand(20,40))
+					explosion(locate(rand(1,world.maxx),rand(1,world.maxy),1), rand(0,1), rand(1,3), rand(2,4), 8, 0)
+				if(prob(25)) //Muh RNG-based gameplay
 					spawn(rand(50,100))
 						explosion(locate(rand(1,world.maxx),rand(1,world.maxy),1), rand(1,3), rand(2,4), rand(3,6), 8, 0)
-					spawn(rand(20,40))
-						explosion(locate(rand(1,world.maxx),rand(1,world.maxy),1), rand(0,1), rand(1,3), rand(2,4), 8, 0)
-					if(prob(25)) //Muh RNG-based gameplay
-						spawn(rand(50,100))
-							explosion(locate(rand(1,world.maxx),rand(1,world.maxy),1), rand(1,3), rand(2,4), rand(3,6), 8, 0)
-			if(4)
-				command_alert("Malignous trojan detected in the station's electronic systems. Please ensure all machinery is functioning properly", "Powernet Alert")
-				//world << sound('sound/AI/trojan.ogg')
-				for(var/obj/machinery/door/airlock/temp_airlock in world)
-					if(prob(2))
-						temp_airlock.prison_open()
-					if(prob(1))
-						temp_airlock.secondsElectrified = -1
-			if(5)
-				//If the crew has SCP locked down but are taking their sweet time, give them a nasty surprise
-				for(var/mob/living/simple_animal/sculpture/scp in theonlyone)
-					empulse(scp.loc, 2, 4, 0)
-					var/obj/item/weapon/grenade/flashbang/clusterbang/surprise = new /obj/item/weapon/grenade/flashbang/clusterbang(scp.loc)
-					spawn(1)
-						surprise.prime() //Have fun
+		if(4)
+			command_alert("Malignous trojan detected in the station's electronic systems. Please ensure all machinery is functioning properly", "Powernet Alert")
+			//world << sound('sound/AI/trojan.ogg')
+			for(var/obj/machinery/door/airlock/temp_airlock in world)
+				if(prob(2))
+					temp_airlock.prison_open()
+				if(prob(1))
+					temp_airlock.secondsElectrified = -1
+		if(5)
+			//If the crew has SCP locked down but are taking their sweet time, give them a nasty surprise
+			for(var/mob/living/simple_animal/sculpture/scp in theonlyone)
+				empulse(get_turf(scp), 2, 4, 0)
+				var/obj/item/weapon/grenade/flashbang/clusterbang/surprise = new /obj/item/weapon/grenade/flashbang/clusterbang(get_turf(scp))
+				spawn(1)
+					surprise.prime() //Have fun
 	spawn(rand(1200,3000)) //2 minutes to 5 minutes
 		breach_event_running = 0
 
