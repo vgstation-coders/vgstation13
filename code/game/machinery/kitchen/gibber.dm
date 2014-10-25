@@ -14,7 +14,6 @@
 	use_power = 1
 	idle_power_usage = 20
 	active_power_usage = 500
-//	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK - //took out for now - was causing 'undefined var'compile error
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
