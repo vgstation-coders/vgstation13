@@ -1,0 +1,8 @@
+author: Angelite Entyshak
+
+delete-after: True
+
+changes:
+  -tweak: Added scythe to botany storage crate
+  -tweak: Added atmospheric automations and large tank control boards to atmospheric monitoring station
+  
