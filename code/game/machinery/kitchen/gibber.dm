@@ -45,8 +45,6 @@ obj/machinery/gibber/New()
 	if(operating)
 		user << "<span class='notice'>[src] is currently gibbing something!</span>"
 		return
-		
-	..()
 	if(istype(O,/obj/item/weapon/wrench))
 		if(!anchored)
 			playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
