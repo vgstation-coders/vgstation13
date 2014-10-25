@@ -1762,8 +1762,8 @@ window "infowindow"
 window "window1"
 	elem "window1"
 		type = MAIN
-		pos = 325,0
-		size = 634x480
+		pos = 281,0
+		size = 634x473
 		anchor1 = none
 		anchor2 = none
 		font-family = ""
@@ -1801,7 +1801,7 @@ window "window1"
 		on-close = ""
 	elem "input2"
 		type = INPUT
-		pos = 0,456
+		pos = 0,455
 		size = 634x20
 		anchor1 = 0,100
 		anchor2 = 100,100
