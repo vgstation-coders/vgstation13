@@ -23,6 +23,10 @@ sound/AI/meteors = Meteors detected on collision course with the station. Seek s
 sound/AI/newroundsexy = You want to put a banging donk on it.
 sound/AI/radiation = High levels of radiation detected near the station. Please evacuate into one of the shielded maintenance tunnels.
 sound/AI/meteorround = A meteor storm has been detected in proximity of the station and is expected to strike within a few minutes.
+sound/AI/containment = A containment breach has been detected abord the station. This station is now on lockdown
+sound/AI/illegalaccess = Illegal access to the station's powernet systems detected. Please repair any damage that may have occured
+sound/AI/bluespaceartillery = Bluespace artillery shelling detected. Brace for impact
+sound/AI/trojan = Malignous trojan detected in the station's electronic systems
 
 sound/AI/outbreak_before = Confirmed outbreak of level
 sound/AI/outbreak_after  = biohazard aboard the station.  All personnel must contain the outbreak.
