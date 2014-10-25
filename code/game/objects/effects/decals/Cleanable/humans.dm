@@ -19,6 +19,27 @@ var/global/list/image/splatter_cache=list()
 	var/list/datum/disease2/disease/virus2 = list()
 	var/amount = 5
 
+/obj/effect/decal/cleanable/blood/golem
+	name = "adamantine golem fluid"
+	desc = "A thick and iridescent fluid. This mystical substance is usually found inside adamantine golems."
+	icon = 'icons/effects/blood.dmi'
+	icon_state = "mfloor1"
+	random_icon_states = list("mfloor1", "mfloor2", "mfloor3", "mfloor4", "mfloor5", "mfloor6", "mfloor7")
+	base_icon = 'icons/effects/blood.dmi'
+	basecolor="#008877" // Color when wet.
+
+/obj/effect/decal/cleanable/blood/gibs/golem
+	name = "adamantine golem chunks"
+	desc = "Chunks of a destroyed adamantine golem."
+	gender = PLURAL
+	density = 0
+	anchored = 1
+	layer = 2
+	icon = 'icons/effects/blood.dmi'
+	icon_state = "gibbl5"
+	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6")
+	fleshcolor = "#008877"
+
 /obj/effect/decal/cleanable/blood/Destroy()
 	for(var/datum/disease/D in viruses)
 		D.cure(0)

@@ -354,6 +354,7 @@ var/MAX_EXPLOSION_RANGE = 14
 	//2spooky
 #define SKELETON 29
 #define PLANT 30
+#define GOLEM 31
 
 // Other Mutations:
 #define M_NO_BREATH		100 	// no need to breathe
@@ -722,7 +723,7 @@ var/list/be_special_flags = list(
 	"Wizard" = BE_WIZARD,
 	"Malf AI" = BE_MALF,
 	"Revolutionary" = BE_REV,
-	"Xenomorph" = BE_ALIEN,
+	"xenomorph" = BE_ALIEN,
 	"pAI" = BE_PAI,
 	"Cultist" = BE_CULTIST,
 	"Monkey" = BE_MONKEY,

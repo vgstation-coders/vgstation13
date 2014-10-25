@@ -44,6 +44,10 @@
 	h_style = "Bald"
 	..(new_loc, "Skellington")
 
+/mob/living/carbon/human/golem/New(var/new_loc)
+	h_style = "Bald"
+	..(new_loc, "Adamantine Golem")
+
 /mob/living/carbon/human/plasma/New(var/new_loc)
 	h_style = "Bald"
 	..(new_loc, "Plasmaman")

@@ -75,21 +75,21 @@
 				return
 
 	if (!user.IsAdvancedToolUser() || isMoMMI(user) || istype(user, /mob/living/carbon/monkey/diona))
-		user << "\red You don't have the dexterity to do this!"
+		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
 		return
 	if(istype(user, /mob/living))
 		var/mob/living/M = user
 		if (M_HULK in M.mutations)
-			M << "\red Your meaty finger is much too large for the trigger guard!"
+			M << "<span class='warning'>Your meaty finger is much too large for the trigger guard!</span>"
 			return
 	if(ishuman(user))
 		var/mob/living/carbon/human/H=user
-		if(user.dna && user.dna.mutantrace == "adamantine")
-			user << "\red Your metal fingers don't fit in the trigger guard!"
+		if(GOLEM in H.mutations)
+			user << "<span class='warning'>Your metal fingers don't fit in the trigger guard!</span>"
 			return
 		var/datum/organ/external/a_hand = H.get_active_hand_organ()
 		if(!a_hand.can_use_advanced_tools())
-			user << "\red Your [a_hand] doesn't have the dexterity to do this!"
+			user << "<span class='warning'>Your [a_hand] doesn't have the dexterity to do this!</span>"
 			return
 
 	add_fingerprint(user)

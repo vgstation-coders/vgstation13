@@ -50,6 +50,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/heat_level_2 = 400  // Heat damage level 2 above this point.
 	var/heat_level_3 = 1000 // Heat damage level 2 above this point.
 
+
 	var/fireloss_mult = 1
 
 	var/darksight = 2
@@ -61,9 +62,10 @@ var/global/list/whitelisted_species = list("Human")
 	var/hazard_low_pressure = HAZARD_LOW_PRESSURE     // Dangerously low pressure.
 
 	// This shit is apparently not even wired up.
-	var/brute_resist    // Physical damage reduction.
-	var/burn_resist     // Burn damage reduction.
+	var/brute_resist = 0    // Physical damage reduction.
+	var/burn_resist = 0    // Burn damage reduction.
 
+	//This seems to be in human_damage.dm - might be working
 	var/brute_mod 		// brute multiplier
 	var/burn_mod		// burn multiplier
 
@@ -374,11 +376,60 @@ var/global/list/whitelisted_species = list("Human")
 
 	default_mutations=list(SKELETON)
 
-/datum/species/skellington/say_filter(mob/M, message, datum/language/speaking)
+/datum/species/skellington/say_filter(mob/M, message, datum/language/speaking)  //should this be for greys instead?
 	// 25% chance of adding ACK ACK! to the end of a message.
 	if(copytext(message, 1, 2) != "*" && prob(25))
 		message += "  ACK ACK!"
 	return message
+
+/datum/species/golem
+	name = "Adamantine Golem"
+	icobase = 'icons/mob/human_races/r_golem.dmi'
+	deform = 'icons/mob/human_races/r_golem.dmi' //TODO: Need deform
+	language = "Runespeech"
+	attack_verb = "bash"
+
+	flags = HAS_LIPS | NO_BREATHE | NO_BLOOD
+
+	default_mutations = list(GOLEM, M_RESIST_COLD, M_NOCLONE, M_RESIST_HEAT, M_NO_BREATH, M_RESIST_HEAT, M_FINGERPRINTS)
+
+
+	punch_damage = 10		 //Adamantine is actually really light, but eh, magic forces could be at work.
+	fireloss_mult = 0
+	throw_mult = 2 //It's a poweful golem.
+
+	hazard_high_pressure = 200000000000000000   // Dangerously high pressure.
+	warning_high_pressure = 100000000000000000 // High pressure warning.
+	warning_low_pressure = -100000000000000000   // Low pressure warning.
+	hazard_low_pressure = -200000000000000000     // Dangerously low pressure.
+
+
+//	brute_resist //doesn't seem to be implemted yet
+	brute_mod =	0.50
+
+	body_temperature = 293.15  //Room temperature of 20 degrees C.
+
+	blood_color = "#008877" //Not sure if this has an effect but just to be sure.
+	flesh_color = "#008877"
+
+	//todo: give no eat?
+	//todo: make it non gendered
+	//todo: drop adamantine on death?
+	//todo: remove blood splatters on ground and golem itself from hitting it or gibbing it
+	//todo: make gibber gibs the proper color
+	//todo: fix up blood colors or hopefully stop blood appearing altogether
+	//todo: new brain type and sprite (golem core or something) or use the synthetic brain?
+	//todo: give eyes? (it can see anyway)
+	//todo: alter gibs to adamantine chunks
+	//todo: no healing? - not sure
+	//todo: denting instead of bruising - not sure
+	//todo: no [BLEEDING] when damaged
+	//todo: make non-injectable - not sure
+	//todo: starting as one gives it more features such as eyes and i think complete organs - whereas spawning via rune doesnt
+	//todo: fix all blood stuff (maybe just give alternate fluid instead of blood - or not)
+	//todo: should it be able to eat?
+
+	has_organ = list("brain" =    /datum/organ/internal/brain) //Not as many organs due to it being a golem.
 
 /datum/species/tajaran
 	name = "Tajaran"

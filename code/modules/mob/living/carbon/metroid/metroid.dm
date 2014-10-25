@@ -1034,79 +1034,78 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	layer = TURF_LAYER
 	var/list/mob/dead/observer/ghosts[0]
 
-	New()
-		..()
-		processing_objects.Add(src)
+/obj/effect/golem_rune/New()
+	..()
+	processing_objects.Add(src)
 
-	process()
-		if(ghosts.len>0)
-			icon_state = "golem2"
-		else
-			icon_state = "golem"
+/obj/effect/golem_rune/process()
+	if(ghosts.len>0)
+		icon_state = "golem2"
+	else
+		icon_state = "golem"
 
-	attack_hand(mob/living/user as mob)
-		var/mob/dead/observer/ghost
-		for(var/mob/dead/observer/O in src.loc)
-			if(!check_observer(O))
-				continue
-			ghost = O
-			break
-		if(!ghost)
-			user << "The rune fizzles uselessly. There is no spirit nearby."
-			return
-		var/mob/living/carbon/human/G = new /mob/living/carbon/human
-		G.dna.mutantrace = "adamantine"
-		G.real_name = text("Adamantine Golem ([rand(1, 1000)])")
-		G.equip_to_slot_or_del(new /obj/item/clothing/under/golem(G), slot_w_uniform)
-		G.equip_to_slot_or_del(new /obj/item/clothing/suit/golem(G), slot_wear_suit)
-		G.equip_to_slot_or_del(new /obj/item/clothing/shoes/golem(G), slot_shoes)
-		G.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/golem(G), slot_wear_mask)
-		G.equip_to_slot_or_del(new /obj/item/clothing/gloves/golem(G), slot_gloves)
-		//G.equip_to_slot_or_del(new /obj/item/clothing/head/space/golem(G), slot_head)
-		G.loc = src.loc
-		G.key = ghost.key
-		G << "You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as blunt trauma. You are unable to wear clothes, but can still use most tools. Serve [user], and assist them in completing their goals at any cost."
-		del (src)
-		if(ticker.mode.name == "sandbox")
-			G.CanBuild()
-			G << "Sandbox tab enabled."
+/obj/effect/golem_rune/attack_hand(mob/living/user as mob)
+	var/mob/dead/observer/ghost
+	for(var/mob/dead/observer/O in src.loc)
+		if(!check_observer(O))
+			continue
+		ghost = O
+		break
+	if(!ghost)
+		user << "The rune fizzles uselessly. There is no spirit nearby."
+		return
+	var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem
+	G.real_name = "Adamantine Golem"  //removed the random number
+	//G.equip_to_slot_or_del(new /obj/item/clothing/under/golem(G), slot_w_uniform)  //no golem items anymore
+	//G.equip_to_slot_or_del(new /obj/item/clothing/suit/golem(G), slot_wear_suit)
+	//G.equip_to_slot_or_del(new /obj/item/clothing/shoes/golem(G), slot_shoes)
+	//G.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/golem(G), slot_wear_mask)
+	//G.equip_to_slot_or_del(new /obj/item/clothing/gloves/golem(G), slot_gloves)
+	//G.equip_to_slot_or_del(new /obj/item/clothing/head/space/golem(G), slot_head)
+	G.loc = src.loc
+	G.key = ghost.key
+	G << "You are an adamantine golem. Your master [user] has completed the runic ritual and has bound you to them.  Assist them in completing their goals at any cost. You are immune to extreme pressures and temperatures, and are resistant to blunt trauma. You are able to use most tools."
+	del (src)
+	if(ticker.mode.name == "sandbox")
+		G.CanBuild()
+		G << "Sandbox tab enabled."
 
 
-	proc/announce_to_ghosts()
-		for(var/mob/dead/observer/O in player_list)
-			if(O.client)
-				var/area/A = get_area(src)
-				if(A)
-					O << "<span class=\"recruit\">Golem rune created in [A.name]. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>"
+/obj/effect/golem_rune/proc/announce_to_ghosts()
+	for(var/mob/dead/observer/O in player_list)
+		if(O.client)
+			var/area/A = get_area(src)
+			if(A)
+				O << "<span class=\"recruit\">Golem rune created in [A.name]. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>"
 
-	Topic(href,href_list)
-		if("signup" in href_list)
-			var/mob/dead/observer/O = locate(href_list["signup"])
-			volunteer(O)
-
-	attack_ghost(var/mob/dead/observer/O)
-		if(!O) return
+/obj/effect/golem_rune/Topic(href,href_list)
+	if("signup" in href_list)
+		var/mob/dead/observer/O = locate(href_list["signup"])
 		volunteer(O)
 
-	proc/check_observer(var/mob/dead/observer/O)
-		if(!O)
-			return 0
-		if(!O.client)
-			return 0
-		if(O.mind && O.mind.current && O.mind.current.stat != DEAD)
-			return 0
-		return 1
+/obj/effect/golem_rune/attack_ghost(var/mob/dead/observer/O)
+	if(!O) return
+	volunteer(O)
 
-	proc/volunteer(var/mob/dead/observer/O)
-		if(O in ghosts)
-			ghosts.Remove(O)
-			O << "\red You are no longer signed up to be a golem."
-		else
-			if(!check_observer(O))
-				O << "\red You are not eligable."
-				return
-			ghosts.Add(O)
-			O << "\blue You are signed up to be a golem."
+/obj/effect/golem_rune/proc/check_observer(var/mob/dead/observer/O)
+	if(!O)
+		return 0
+	if(!O.client)
+		return 0
+	if(O.mind && O.mind.current && O.mind.current.stat != DEAD)
+		return 0
+	return 1
+
+/obj/effect/golem_rune/proc/volunteer(var/mob/dead/observer/O)
+	if(O in ghosts)
+		ghosts.Remove(O)
+		O << "\red You are no longer signed up to be a golem."
+	else
+		if(!check_observer(O))
+			O << "\red You are not eligable."
+			return
+		ghosts.Add(O)
+		O << "\blue You are signed up to be a golem."
 
 
 /mob/living/carbon/slime/has_eyes()

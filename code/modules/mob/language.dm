@@ -102,6 +102,15 @@
 	native=1
 	flags = RESTRICTED
 
+/datum/language/golem
+	name = "Runespeech"
+	desc = "A harmonious resonating sound, understood only by the ancient runemasters and their creations."
+	key = "r"
+	speech_verb = "resonates"
+	colour = "golem"
+	native = 1
+	flags = RESTRICTED
+
 /datum/language/skellington/say_misunderstood(mob/M, message)
 	message="CLICK"
 	var/len = max(1,Ceiling(length(message)/5))
