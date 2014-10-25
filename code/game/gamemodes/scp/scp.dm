@@ -23,7 +23,7 @@
 	var/scp_spaced = 0 //Did we send SCP away for recovery ?
 	var/scp_gone = 0 //Just gone, good luck figuring out why
 	var/scp_disabled = 0 //SCP has been set to hibernate by admins, thanks admins
-	var/list/area/scpeventAreas = list() //BYOND YOU PIECE OF SHIT
+	var/list/area/scpEventAreas = list() //BYOND YOU PIECE OF SHIT
 	var/list/mob/living/simple_animal/sculpture/theonlyone = list()
 
 	uplink_welcome = "SCP Containment Control Console:"
@@ -225,8 +225,8 @@
 				//world << sound('sound/AI/illegalaccess.ogg')
 				for(var/area/area in world)
 					if(prob(5))
-						scpeventAreas += area
-					for(var/area/A in scpeventAreas)
+						scpEventAreas += area
+					for(var/area/A in scpEventAreas)
 						for(var/obj/machinery/light/L in A)
 							L.flicker(10)
 						if(prob(75))
@@ -238,7 +238,7 @@
 						if(prob(25))
 							for(var/obj/machinery/power/apc/temp_apc in A)
 								temp_apc.overload_lighting()
-					scpeventAreas = list()
+					scpEventAreas = list()
 			if(3)
 				command_alert("Bluespace artillery shelling detected. Brace for impact", "Nanotrasen Fleet Alert")
 				//world << sound('sound/AI/bluespaceartillery.ogg')
