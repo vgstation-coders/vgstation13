@@ -593,8 +593,8 @@ window "Telecomms IDE"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d2d2d2
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -621,8 +621,8 @@ window "Telecomms IDE"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d2d2d2
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -649,8 +649,8 @@ window "Telecomms IDE"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d2d2d2
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -703,8 +703,8 @@ window "Telecomms IDE"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d2d2d2
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -731,8 +731,8 @@ window "Telecomms IDE"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d2d2d2
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1068,8 +1068,8 @@ window "mainwindow"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d3b5b5
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1096,8 +1096,8 @@ window "mainwindow"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d3b5b5
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1124,8 +1124,8 @@ window "mainwindow"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d3b5b5
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1178,8 +1178,8 @@ window "mainwindow"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = #d3b5b5
+		text-color = #d2d2d2
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1202,8 +1202,8 @@ window "mainwindow"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d3b5b5
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1294,7 +1294,7 @@ window "outputwindow"
 	elem "outputwindow"
 		type = MAIN
 		pos = 281,0
-		size = 640x480
+		size = 761x474
 		anchor1 = none
 		anchor2 = none
 		font-family = ""
@@ -1333,14 +1333,14 @@ window "outputwindow"
 	elem "output"
 		type = OUTPUT
 		pos = 0,0
-		size = 640x480
+		size = 761x474
 		anchor1 = 0,0
 		anchor2 = 100,100
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = #ffffff
+		text-color = #d2d2d2
+		background-color = #4e4e4e
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1350,8 +1350,8 @@ window "outputwindow"
 		right-click = false
 		saved-params = "max-lines"
 		on-size = ""
-		link-color = #0000ff
-		visited-color = #ff00ff
+		link-color = #e1a21e
+		visited-color = #aca253
 		style = ".system {color:#ff0000;}"
 		enable-http-images = false
 		max-lines = 1000
@@ -1360,7 +1360,7 @@ window "outputwindow"
 window "rpane"
 	elem "rpane"
 		type = MAIN
-		pos = 267,14
+		pos = 281,0
 		size = 640x478
 		anchor1 = none
 		anchor2 = none
@@ -1400,14 +1400,14 @@ window "rpane"
 	elem "rpanewindow"
 		type = CHILD
 		pos = 0,0
-		size = 640x497
+		size = 638x473
 		anchor1 = 0,0
 		anchor2 = 100,100
 		font-family = ""
 		font-size = 0
 		font-style = ""
 		text-color = #000000
-		background-color = none
+		background-color = #5c5c5c
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1458,8 +1458,8 @@ window "rpane"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d2d2d2
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1486,8 +1486,8 @@ window "rpane"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d2d2d2
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1514,8 +1514,8 @@ window "rpane"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d2d2d2
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1542,8 +1542,8 @@ window "rpane"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d2d2d2
+		background-color = #414141
 		is-visible = false
 		is-disabled = false
 		is-transparent = false
@@ -1570,8 +1570,8 @@ window "rpane"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d2d2d2
+		background-color = #414141
 		is-visible = false
 		is-disabled = false
 		is-transparent = false
@@ -1598,8 +1598,8 @@ window "rpane"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = none
+		text-color = #d2d2d2
+		background-color = #414141
 		is-visible = false
 		is-disabled = false
 		is-transparent = false
@@ -1668,7 +1668,7 @@ window "browserwindow"
 		font-size = 0
 		font-style = ""
 		text-color = #000000
-		background-color = #ffffff
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1688,7 +1688,7 @@ window "browserwindow"
 window "infowindow"
 	elem "infowindow"
 		type = MAIN
-		pos = 367,0
+		pos = 281,0
 		size = 640x480
 		anchor1 = none
 		anchor2 = none
@@ -1734,8 +1734,8 @@ window "infowindow"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #e2e884
-		background-color = #332e13
+		text-color = #d2d2d2
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1745,9 +1745,9 @@ window "infowindow"
 		right-click = false
 		saved-params = ""
 		on-size = ""
-		highlight-color = #00aa00
-		tab-text-color = #dee15b
-		tab-background-color = #595959
+		highlight-color = #ebb8b8
+		tab-text-color = #d2d2d2
+		tab-background-color = #414141
 		tab-font-family = ""
 		tab-font-size = 0
 		tab-font-style = ""
@@ -1757,12 +1757,12 @@ window "infowindow"
 		on-hide = ".winset\"rpane.infob.is-visible=false;rpane.browseb.is-visible=true?rpane.browseb.is-checked=true rpane.rpanewindow.left=browserwindow:rpane.textb.is-visible=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=\""
 		on-tab = ""
 		prefix-color = #dcdf6c
-		suffix-color = #e6e693
+		suffix-color = #c8c18c
 
 window "window1"
 	elem "window1"
 		type = MAIN
-		pos = 281,0
+		pos = 325,0
 		size = 634x480
 		anchor1 = none
 		anchor2 = none
@@ -1794,7 +1794,7 @@ window "window1"
 		image = ""
 		image-mode = center
 		keep-aspect = false
-		transparent-color = none
+		transparent-color = #4e4e4e
 		alpha = 255
 		macro = ""
 		menu = ""
@@ -1808,8 +1808,8 @@ window "window1"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = #d3b5b5
+		text-color = #d2d2d2
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1832,8 +1832,8 @@ window "window1"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #000000
-		background-color = #fffdd0
+		text-color = #d3b5b5
+		background-color = #4e4e4e
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1843,8 +1843,8 @@ window "window1"
 		right-click = false
 		saved-params = "max-lines"
 		on-size = ""
-		link-color = #0000ff
-		visited-color = #ff00ff
+		link-color = #e1a21e
+		visited-color = #dcdf6c
 		style = ""
 		enable-http-images = false
 		max-lines = 1000
