@@ -1,3 +1,10 @@
+
+//Code by vert1881/Lilorien Vert
+
+
+
+//Space ninja autif. for e.g
+
 /obj/item/clothing/head/helmet/space/space_adv
 	name = "Space working hardsuit helmet"
 	desc = "A special helmet designed for work in a hazardous, low-pressure environment. Has radiation shielding."
@@ -24,7 +31,7 @@
 	var/mob/living/carbon/affecting = null //The wearer
 
 
-
+//Space ninja autif. for e.g
 
                      //____DEPLOY_____//
 /obj/item/clothing/suit/space/space_adv/proc/depl() //Body cheking
@@ -52,11 +59,11 @@
 			if(istype(usr:wear_suit, /obj/item/clothing/suit/space/space_adv))
 				usr.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/space_adv, slot_head)
 
-
-//			var/obj/item/clothing/head/helmet/space/space_adv
-//			usr.contents += /obj/item/clothing/head/helmet/space/space_adv
-//			usr:head = /obj/item/clothing/head/helmet/space/space_adv  //Head create
-
+/*
+			var/obj/item/clothing/head/helmet/space/space_adv
+			usr.contents += /obj/item/clothing/head/helmet/space/space_adv                        Version with reconnect
+			usr:head = /obj/item/clothing/head/helmet/space/space_adv  //Head create
+*/
 			n_hood = usr:head
 			n_hood.canremove = 0
 			usr.update_icons()
@@ -127,7 +134,7 @@
 
 
 
-	                  //___Unwrench___//
+	                  //___Unwrench___//To remove suit
 
 /obj/item/weapon/wrench/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(user.zone_sel.selecting == "head")
@@ -154,7 +161,7 @@
 
 	                 //____OTHER SUITS_____//
 
-///Military
+///Military // Cargo color suits
 /obj/item/clothing/head/helmet/space/space_adv/military
 	name = "Military space hardsuit helmet"
 	desc = "A special helmet designed for military forces"
@@ -175,7 +182,7 @@
 
 
 
-//SWAT
+//SWAT //Red suits
 /obj/item/clothing/head/helmet/space/space_adv/swat
 	name = "Swat space hardsuit helmet"
 	desc = "A special helmet designed for SWAT, armored with close combat kewlar layers"
@@ -193,7 +200,7 @@
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
 
 
-//FRAC
+//FRAC //Yellow suits
 /obj/item/clothing/head/helmet/space/space_adv/frac
 	name = "Special space hardsuit helmet"
 	desc = "A special helmet designed on order, armored with close combat kewlar layers"
@@ -252,7 +259,7 @@
 
 
 
-	//RIG NORM
+	//RIG NORM (Need to make other versions)
 
 /obj/item/clothing/head/helmet/space/space_adv/rig
 	name = "engineering hardsuit helmet"
@@ -304,3 +311,8 @@
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
 	heat_protection = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECITON_TEMPERATURE
+
+
+
+
+//Code by vert1881/Lilorien Vert
