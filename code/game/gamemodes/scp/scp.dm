@@ -42,7 +42,7 @@
 
 /datum/game_mode/containment_breach/announce()
 	world << "<B>The current game mode is - Containment Breach!</B>"
-	world << "<B>Something has went horribly wrong and strange monstruosities are flooding into the station. Follow Nanostraten's instructions as they arrive!</B>"
+	world << "<B>Something has went horribly wrong and strange monstrosities are flooding into the station. Follow Nanostraten's instructions as they arrive!</B>"
 
 /datum/game_mode/containment_breach/pre_setup()
 	return 1
