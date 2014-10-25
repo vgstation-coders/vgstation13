@@ -1099,13 +1099,13 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /obj/effect/golem_rune/proc/volunteer(var/mob/dead/observer/O)
 	if(O in ghosts)
 		ghosts.Remove(O)
-		O << "\red You are no longer signed up to be a golem."
+		O << "<span class = "warning">You are no longer signed up to be a golem.</span>"
 	else
 		if(!check_observer(O))
-			O << "\red You are not eligable."
+			O << "<span class = "warning">You are not eligable.</span>"
 			return
 		ghosts.Add(O)
-		O << "\blue You are signed up to be a golem."
+		O << "<span class = "notice">You are signed up to be a golem.</span>"
 
 
 /mob/living/carbon/slime/has_eyes()
