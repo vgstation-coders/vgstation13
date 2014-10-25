@@ -65,9 +65,8 @@
 
 		var/obj/vent = pick(vents)
 
-		empulse(vent.loc, 2, 4, 0) //SCP is being 'teleported' in, let's have him enter in a gracious manner
 		spawn(5) //OH SHI-
-			var/mob/living/simple_animal/sculpture/scp = new /mob/living/simple_animal/sculpture(vent.loc)
+			var/mob/living/simple_animal/sculpture/scp = new /mob/living/simple_animal/sculpture(get_turf(vent))
 			theonlyone += scp
 			containment_breached = 1
 
