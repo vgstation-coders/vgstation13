@@ -103,11 +103,11 @@ RCD
 					return 0
 
 				if(istype(A, /turf/simulated/floor))
-					if(checkResource(3, user))
+					if(checkResource(2, user))
 						user << "Building Wall ..."
 						playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
 						if(do_after(user, 20))
-							if(!useResource(3, user)) return 0
+							if(!useResource(2, user)) return 0
 							activate()
 							A:ChangeTurf(/turf/simulated/wall)
 							return 1
