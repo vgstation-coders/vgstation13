@@ -1,0 +1,10 @@
+author: Angelite Entyshak
+
+delete-after: True
+
+changes:
+  -tweak: Changed the 'Chat' button to 'Say' to make things a little more intuitive
+  -rscdel: No more hug farts
+  -spellcheck: Fixed some grammatical errors in the emote files (tested, no bugs)
+  -tweak: Atmospheric Technicians now spawn with blue shoes to match the blue accents on their jumpsuits
+  -bugfix: Exosuit logs now state the proper year
