@@ -163,6 +163,25 @@
 //	rather then having to add it to something else first. They should only contain liquids. They have a default container size of 50.
 //	Formatting is the same as food.
 
+/obj/item/weapon/reagent_containers/food/drinks/chocolatemilk
+	name = "Chocolate Milk"
+	desc = "It's chocolate milk. Sticky and brown goodness!"
+	icon_state = "chocolatemilk"
+	New()
+		..()
+		reagents.add_reagent("poo", 50)
+		src.pixel_x = rand(-10.0, 10)
+		src.pixel_y = rand(-10.0, 10)
+
+/obj/item/weapon/reagent_containers/food/drinks/penismilk
+	name = "Penis Milk"
+	desc = "It's penis milk. Sticky and white goodness!"
+	icon_state = "penismilk"
+	New()
+		..()
+		reagents.add_reagent("cum", 50)
+		src.pixel_x = rand(-10.0, 10)
+		src.pixel_y = rand(-10.0, 10)
 
 /obj/item/weapon/reagent_containers/food/drinks/milk
 	name = "Space Milk"

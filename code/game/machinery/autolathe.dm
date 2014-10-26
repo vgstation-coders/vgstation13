@@ -55,6 +55,8 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/weapon/camera_assembly(), \
 		new /obj/item/weapon/chisel(), \
 		new /obj/item/weapon/tile_painter(), \
+		new /obj/item/weapon/dildo(), \
+		new /obj/item/weapon/fleshlight(), \
 	)
 
 var/global/list/autolathe_recipes_hidden = list( \
