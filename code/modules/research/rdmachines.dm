@@ -310,6 +310,8 @@
 			var/obj/item/weapon/storage/lockbox/L = new/obj/item/weapon/storage/lockbox(output.loc)
 			new_item.loc = L
 			L.name += " ([new_item.name])"
+			if(being_built.req_lock_access.len) //if the design has a specific list of accesses, we want those. If it doesn't, the default access is armory
+				L.req_access = being_built.req_lock_access
 		else
 			new_item.loc = output.loc
 		return 1
