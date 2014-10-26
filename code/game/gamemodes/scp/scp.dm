@@ -200,7 +200,7 @@
 	for(var/mob/living/simple_animal/sculpture/scp in subjects)
 		if(null) //What spoopy ?
 			scp_gone = 1
-		if(scp.loc.z != 1)
+		if(scp.loc.z != zMain)
 			scp_spaced = 1
 		if(scp.hibernate == 1)
 			message_admins("SCP-173 is hibernating during a Containment Breach round, please avoid that. Round will end if SCP-173 is still hibernating when checked in one minute.")
