@@ -1139,3 +1139,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Supermatter Shard Crate"
 	group = "Engineering"
 	access = access_ce
+
+
+/datum/supply_packs/gygax
+	name = "Battle-Ready Gygax"
+	cost = 2000
+	containertype = /obj/structure/closet/crate/secure/large/gygax
+	containername = "Gygax Crate"
+	group = "Security"
+	access = access_armory

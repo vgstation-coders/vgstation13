@@ -210,6 +210,45 @@
 				break
 	..()
 
+//gygax crate
+/obj/structure/closet/crate/secure/large/gygax
+	name = "gygax crate"
+	desc = "A hefty metal crate with an electronic locking system which stores a Gygax in it."
+	icon = 'icons/obj/storage.dmi'
+	icon_state = "largemetal"
+	icon_opened = "largemetalopen"
+	icon_closed = "largemetal"
+	redlight = "largemetalr"
+	greenlight = "largemetalg"
+
+/obj/structure/closet/crate/secure/large/gygax/close()
+	//we can hold up to one large item
+	var/found = 0
+	for(var/obj/mecha/M in src.loc)
+		if(M == src)
+			continue
+		if(M.anchored)
+			found = 1
+			M.loc = src
+			break
+	if(!found)
+		for(var/obj/machinery/M in src.loc)
+			if(M.anchored)
+				M.loc = src
+				break
+	..()
+
+/obj/structure/closet/crate/secure/large/gygax/New()
+	..()
+	var/obj/mecha/combat/gygax/a_fucking_gygax = new (src)
+	var/obj/item/mecha_parts/mecha_equipment/weapon/energy/taser/taser_mech = new (src)
+	var/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas/bolas_mech = new (src)
+
+	taser_mech.attach(a_fucking_gygax)
+	bolas_mech.attach(a_fucking_gygax)
+//end gygaxcrate
+
+
 //fluff variant
 /obj/structure/closet/crate/secure/large/reinforced
 	desc = "A hefty, reinforced metal crate with an electronic locking system."
