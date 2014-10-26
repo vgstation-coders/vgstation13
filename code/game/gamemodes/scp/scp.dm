@@ -34,11 +34,11 @@
 	var/scp_disabled = 0
 
 	var/list/milestones = list(
-		"milestone" = list(
-			0,	//time to trigger (in deciseconds, from start of action), 0 after
-			list(),	//things to call once upon trigger
-			list(),	//things to start calling regularly after trigger
-			),
+		//"milestone" = list(
+			//0,	//time to trigger (in deciseconds, from start of action), 0 after
+			//list(),	//things to call once upon trigger
+			//list(),	//things to start calling regularly after trigger
+			//),
 		"Intercept" = list(
 			1000,
 			list("send_intercept"),
@@ -107,12 +107,12 @@
 
 /datum/game_mode/containment_breach/proc/setMilestones()
 	src.milestones["Intercept"][1] = rand(waittime_l, waittime_h)
-	src.milestones["Early Game"][1] = rand(scp_delay_l,scp_delay_h)
-	src.milestones["Announcement"][1] = rand(mystery_delay_l,mystery_delay_h)
-	src.milestones["First Dispatch"][1] = rand(first_dispatch_prepare_l,first_dispatch_prepare_h)
-	src.milestones["Second Dispatch"][1] = rand(second_dispatch_prepare_l,second_dispatch_prepare_h)
-	src.milestones["Last Dispatch"][1] = rand(last_dispatch_prepare_l,last_dispatch_prepare_h)
-	src.milestones["Takeover"][1] = rand(takeover_l,takeover_h)
+	src.milestones["Early Game"][1] = rand(scp_delay_l,scp_delay_h) + src.milestones["Intercept"][1]
+	src.milestones["Announcement"][1] = rand(mystery_delay_l,mystery_delay_h) + src.milestones["Early Game"][1]
+	src.milestones["First Dispatch"][1] = rand(first_dispatch_prepare_l,first_dispatch_prepare_h) + src.milestones["Announcement"][1]
+	src.milestones["Second Dispatch"][1] = rand(second_dispatch_prepare_l,second_dispatch_prepare_h) + src.milestones["First Dispatch"][1]
+	src.milestones["Last Dispatch"][1] = rand(last_dispatch_prepare_l,last_dispatch_prepare_h) + src.milestones["Second Dispatch"][1]
+	src.milestones["Takeover"][1] = rand(takeover_l,takeover_h) + src.milestones["Last Dispatch"][1]
 	return
 
 /datum/game_mode/containment_breach/proc/ticker()
@@ -121,18 +121,20 @@
 	var/milestone
 	var/event
 	while(src) //This is going to run forever or until manually killed
-		for(milestone in milestones)
+		for(milestone in src.milestones)
+			milestone = milestones[milestone]
 			if(milestone[1]) //If it hasn't passed yet
 				if((world.timeofday - src.tStart) > milestone[1]) //If it just passed now
 					milestone[1] = 0 //Set to zero so we know it's passed
 					for(event in milestone[2])
-						spawn() call(event)() //Call on-trigger events
+						spawn() call(src,event)() //Call on-trigger events
+						testing("Firing event")
 			else //If it has passed, call after-trigger events
 				for(event in milestone[3])
-					if((world.timeofday - lastCycle) > milestones[3][event])
-						spawn() call(event)()
-			lastCycle = world.timeofday
-			sleep(src.tickerPeriod)
+					if((world.timeofday - lastCycle) > milestone[3][event])
+						spawn() call(src,event)()
+		lastCycle = world.timeofday
+		sleep(src.tickerPeriod)
 	return
 
 /datum/game_mode/containment_breach/proc/sendRadioMessages()
@@ -218,6 +220,7 @@
 <*> The anomaly can move at tremendous speeds when left unchecked and can use vent connections. It is also extremely hostilee.</br>
  Reports indicate that the containment breach was caused by external forces, exercise extreme caution at all times.</br>
 <I> Another dispatch will be sent when containment protocols are ready.</I></br>"})
+			command_alert("Update downloaded and printed out at all communications consoles.", "Nanotrasen Official Instructions.")
 			world << sound('sound/AI/commandreport.ogg')
 
 /datum/game_mode/containment_breach/proc/secondDispatch()
@@ -240,6 +243,7 @@
 <*> Force *REDACTED* into the field and send away off-station. A professional recovery team will arrive to contain the anomaly.</br>
  Note that we are now certain that an entity foreign to the station is using this breach to infiltrate the station's electronics.</br>
 <I> No further instructions should be needed. Should new information be acquired, other dispatchs will be sent.</I></br>"})
+		command_alert("Update downloaded and printed out at all communications consoles.", "Nanotrasen Official Instructions.")
 		world << sound('sound/AI/commandreport.ogg')
 
 /datum/game_mode/containment_breach/proc/lastDispatch()
@@ -256,6 +260,7 @@
 			comm.messagetext.Add({"<FONT size = 3><B>SCP Emergency Update:</B></FONT><HR>
  <B>WARNING:</B> UNKNOWN ANOMALY ?$*KING OVER CONTROL O/ [station_name()]. ESTI~%*0/ E.T.///1-&* MIN/??</br>
  *RED//173/* APPEARS TO BE *B*ES!ENT.$%!! TAK?V?R$*^%%-</br>"})
+		command_alert("Update downloaded and printed out at all communications consoles.", "Nanotrasen Official Instructions.")
 		world << sound('sound/AI/commandreport.ogg')
 
 /datum/game_mode/containment_breach/proc/randomEvent()
