@@ -6,9 +6,6 @@
 		param = copytext(act, t1 + 1, length(act) + 1)
 		act = copytext(act, 1, t1)
 
-	var/t_his = "its"
-	//var/t_him = "it"
-
 	if(findtext(act,"s",-1) && !findtext(act,"_",-2))//Removes ending s's unless they are prefixed with a '_'
 		act = copytext(act,1,length(act))
 
@@ -557,129 +554,7 @@
 					message = "<B>[src]</B> makes a very loud noise."
 					m_type = 2
 
-		if("milk")
-			m_type = 1
-			if (!src.restrained())
-				var/M = null
-				if (param)
-					for (var/mob/A in view(1, null))
-						if (param == A.name)
-							M = A
-							break
-				if (M == src)
-					M = null
-				if (M)
-					if (M:gender == MALE)
-						message = "<B>[src]</B> begins to milk [M] from his penis."
 
-						spawn(30)
-							if(M:s_tone < -80)
-								var/obj/item/weapon/reagent_containers/food/drinks/chocolatemilk/V = new/obj/item/weapon/reagent_containers/food/drinks/chocolatemilk(M:loc)
-								V.name = "[M:name]'s [V.name]"
-							else
-								var/obj/item/weapon/reagent_containers/food/drinks/penismilk/V = new/obj/item/weapon/reagent_containers/food/drinks/penismilk(M:loc)
-								V.name = "[M:name]'s [V.name]"
-					else if (M:gender == FEMALE)
-						message = "<B>[src]</B> begins to milk [M] from her breasts."
-						spawn(30)
-							if(M:s_tone < -80)
-								var/obj/item/weapon/reagent_containers/food/drinks/chocolatemilk/V = new/obj/item/weapon/reagent_containers/food/drinks/chocolatemilk(M:loc)
-								V.name = "[M:name]'s [V.name]"
-							else
-								var/obj/item/weapon/reagent_containers/food/drinks/milk/V = new/obj/item/weapon/reagent_containers/food/drinks/milk(M:loc)
-								V.name = "[M:name]'s [V.name]"
-					else
-						message = "<B>[src]</B> begins to milk [M] from their penis and breasts."
-						spawn(30)
-							if(M:s_tone < -80)
-								var/obj/item/weapon/reagent_containers/food/drinks/chocolatemilk/V = new/obj/item/weapon/reagent_containers/food/drinks/chocolatemilk(M:loc)
-								V.name = "[M:name]'s [V.name]"
-							else
-								var/obj/item/weapon/reagent_containers/food/drinks/soymilk/V = new/obj/item/weapon/reagent_containers/food/drinks/soymilk(M:loc)
-								V.name = "[M:name]'s [V.name]"
-				else
-					src << "\red You must specify who you want to milk, 'say *milk-Test Dummy' for example."
-
-		if(("poo") || ("poop") || ("shit") || ("crap"))
-			if (src.nutrition <= 300)
-				src.emote("fart")
-				m_type = 2
-			else
-				if (src.w_uniform)
-					message = "<B>[src]</B> poos in their uniform."
-					playsound(src.loc, 'sound/misc/fart.ogg', 60, 1)
-					playsound(src.loc, 'sound/misc/squishy.ogg', 40, 1)
-					src.nutrition -= 80
-					m_type = 2
-				else
-					message = "<B>[src]</B> poos on the floor."
-					playsound(src.loc, 'sound/misc/fart.ogg', 60, 1)
-					playsound(src.loc, 'sound/misc/squishy.ogg', 40, 1)
-					var/turf/location = src.loc
-
-					var/obj/effect/decal/cleanable/poo/D = new/obj/effect/decal/cleanable/poo(location)
-					if(src.reagents)
-						src.reagents.trans_to(D, 10)
-
-					var/obj/item/weapon/reagent_containers/food/snacks/poo/V = new/obj/item/weapon/reagent_containers/food/snacks/poo(location)
-					if(src.reagents)
-						src.reagents.trans_to(V, 10)
-
-//					if(!infinitebutt)
-//						src.nutrition -= 80
-//						m_type = 2
-
-					// check for being in sight of a working security camera
-/*					if(seen_by_camera(src))
-						// determine the name of the perp (goes by ID if wearing one)
-						var/perpname = src.name
-						if(src:wear_id && src:wear_id.registered)
-							perpname = src:wear_id.registered
-						// find the matching security record
-						for(var/datum/data/record/R in data_core.general)
-							if(R.fields["name"] == perpname)
-								for (var/datum/data/record/S in data_core.security)
-									if (S.fields["id"] == R.fields["id"])
-										// now add to rap sheet
-										S.fields["criminal"] = "*Arrest*"
-										S.fields["mi_crim"] = "Public defecation"
-										break	*/
-
-		if("cum")
-			if(src.nutrition <= 300)
-				message = "<B>[src]</B> attempts to cum but nothing comes out."
-			else
-				if (src.w_uniform)
-					if (src.gender == MALE)
-						t_his = "his"
-						//t_him = "him"
-					else if (src.gender == FEMALE)
-						t_his = "her"
-						//t_him = "her"
-					message = "<B>[src]</B> cums in [t_his] panties."
-					src.nutrition -= 80
-				else
-					var/obj/effect/decal/cleanable/urine/D = new/obj/effect/decal/cleanable/cum(src.loc)
-					if(src.reagents)
-						src.reagents.trans_to(D, 10)
-					message = "<B>[src]</B> cums on the floor."
-					src.nutrition -= 80
-					m_type = 1
-				// check for being in sight of a working security camera
-/*					if(seen_by_camera(src))
-						// determine the name of the perp (goes by ID if wearing one)
-						var/perpname = src.name
-						if(src:wear_id && src:wear_id.registered)
-							perpname = src:wear_id.registered
-						// find the matching security record
-						for(var/datum/data/record/R in data_core.general)
-							if(R.fields["name"] == perpname)
-								for (var/datum/data/record/S in data_core.security)
-									if (S.fields["id"] == R.fields["id"])
-										// now add to rap sheet
-										S.fields["criminal"] = "*Arrest*"
-										S.fields["mi_crim"] = "Public cumming"
-										break*/
 
 		// Needed for M_TOXIC_FART
 		if("fart")

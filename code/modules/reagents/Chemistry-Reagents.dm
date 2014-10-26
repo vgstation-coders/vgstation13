@@ -126,53 +126,6 @@ datum
 				..()
 				return
 
-		cum //DEAR GOD WHO REMOVED THIS
-			name = "cum"
-			id = "cum"
-			description = "Penis milk."
-			reagent_state = LIQUID
-			color = "#FFFFFF" //rgb : 255, 255, 255
-
-			reaction_turf(var/turf/T, var/volume)
-				src = null
-				if(!istype(T, /turf/space))
-					new /obj/effect/decal/cleanable/cum(T)
-
-		poo
-			name = "poo"
-			id = "poo"
-			description = "It's poo."
-			reagent_state = LIQUID
-			color = "#402000" //rgb : 64, 32, 0
-			on_mob_life(var/mob/M)
-				if(!M) M = holder.my_atom
-				if(prob(20))
-					M.contract_disease(new /datum/disease/gastric_ejections)
-				M:toxloss += 0.1
-				holder.remove_reagent(src.id, 0.2)
-				..()
-				return
-
-//			reaction_mob(var/mob/M, var/method=TOUCH, var/volume)
-//				src = null
-//				if(istype(M, /mob/living/carbon/human) && method==TOUCH)
-//					if(M:wear_suit) M:wear_suit.add_poo()
-//					if(M:w_uniform) M:w_uniform.add_poo()
-//					if(M:shoes) M:shoes.add_poo()
-//					if(M:gloves) M:gloves.add_poo()
-//					if(M:head) M:head.add_poo()
-				//if(method==INGEST)
-				//	if(prob(20))
-					//	M.contract_disease(new /datum/disease/gastric_ejections)
-					//	holder.add_reagent("gastricejections", 1)
-					//	M:toxloss += 0.1
-					//	holder.remove_reagent(src.id, 0.2)
-
-			reaction_turf(var/turf/T, var/volume)
-				src = null
-				if(!istype(T, /turf/space))
-					new /obj/effect/decal/cleanable/poo(T)
-
 		blood
 			data = new/list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=null,"resistances"=null,"trace_chem"=null, "antibodies" = null)
 			name = "Blood"

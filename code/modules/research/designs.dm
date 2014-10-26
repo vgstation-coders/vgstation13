@@ -76,15 +76,6 @@ other types of metals and chemistry for reagents).
 
 ///////////////////Computer Boards///////////////////////////////////
 
-/datum/design/operation_table
-	name = "Circuit Design (Operation Table)"
-	desc = "Allows for the construction of operation table."
-	id = "seccamera"
-	req_tech = list("programming" = 2, "biotech" = 3, "engineering" = 2)
-	build_type = IMPRINTER
-	materials = list("$glass" = 2000, "sacid" = 20)
-	build_path = /obj/item/weapon/circuitboard/operation_table
-
 /datum/design/seccamera
 	name = "Circuit Design (Security Cameras)"
 	desc = "Allows for the construction of circuit boards used to build security camera computers."
