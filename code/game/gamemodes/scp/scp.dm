@@ -1,3 +1,16 @@
+#define scp_delay_l 6000
+#define scp_delay_h 9000
+#define mystery_delay_l 3000
+#define mystery_delay_h 6000
+#define first_dispatch_prepare_l 300
+#define first_dispatch_prepare_h 1200
+#define second_dispatch_prepare_l 3000
+#define second_dispatch_prepare_h 6000
+#define last_dispatch_prepare_l 6000
+#define last_dispatch_prepare_h 9000
+#define takeover_l 300
+#define takeover_h 600
+
 /datum/game_mode/containment_breach
 
 	name = "containment breach"
@@ -5,21 +18,8 @@
 	required_players = 15
 	required_players_secret = 25
 
-	var/const/waittime_l = 600 //Lower bound before intercept arrives
-	var/const/waittime_h = 1800 //Upper bound before intercept arrives
-	var/const/scp_delay_l = 6000 //Time before we get shit going
-	var/const/scp_delay_h = 9000
-	var/const/mystery_delay_l = 3000 //Let SCP have a bit of fun while Nanotrasen unfucks itself
-	var/const/mystery_delay_h = 6000
-	var/const/first_dispatch_prepare_l = 300 //Tell them what to expect
-	var/const/first_dispatch_prepare_h = 1200
-	var/const/second_dispatch_prepare_l = 3000 //Send precise guidelines
-	var/const/second_dispatch_prepare_h = 6000
-	var/const/last_dispatch_prepare_l = 6000 //Oh hey, did we tell you about this time limit ?
-	var/const/last_dispatch_prepare_h = 9000
-	var/const/takeover_l = 300
-	var/const/takeover_h = 600
-
+	var/const/waittime_l = 600
+	var/const/waittime_h = 1800
 	var/containment_breached = 0
 	var/adminControl = 0
 	var/tStart //When the action started
@@ -74,7 +74,7 @@
             ),
 		"Takeover" = list(
 			7000,
-			list("sendRadioMessages"),
+			list("takeoverAndNuke"),
 			list(),
 			),
 			)
@@ -137,7 +137,7 @@
 		sleep(src.tickerPeriod)
 	return
 
-/datum/game_mode/containment_breach/proc/sendRadioMessages()
+/datum/game_mode/containment_breach/proc/takeoverAndNuke()
 	world << "<span class='danger'>Illegal access to [station_name()]'s systems. Beginning emergency shutdown.</span>"
 	sleep(100)
 	world << "<span class='danger'>Shutdown cancelled. Access logged as SC*$^///?!-079^^^^*?. Writing to memory.</span>"
@@ -194,6 +194,19 @@
 	subjects += scp
 	containment_breached = 1
 	return
+
+/datum/game_mode/containment_breach/proc/checkSubjectStatus()
+
+	for(var/mob/living/simple_animal/sculpture/scp in subjects)
+		if(null) //What spoopy ?
+			scp_gone = 1
+		if(scp.loc.z != 1)
+			scp_spaced = 1
+		if(scp.hibernate == 1)
+			message_admins("SCP-173 is hibernating during a Containment Breach round, please avoid that. Round will end if SCP-173 is still hibernating when checked in one minute.")
+			spawn(600)
+				if(scp.hibernate == 1)
+					scp_disabled = 1
 
 /datum/game_mode/containment_breach/proc/announceSubject()
 	//world << sound('sound/AI/containment.ogg')
