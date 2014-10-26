@@ -47,7 +47,6 @@ var/list/event_last_fired = list()
 	possibleEvents[/datum/event/economic_event] = 200
 	possibleEvents[/datum/event/trivial_news] = 300
 	possibleEvents[/datum/event/mundane_news] = 200
-	possibleEvents[/datum/event/spontaneous_periods] = active_with_role["Scavenger"] * 150
 
 	possibleEvents[/datum/event/pda_spam] = max(min(25, player_list.len) * 4, 200)
 	possibleEvents[/datum/event/money_lotto] = max(min(5, player_list.len), 50)
@@ -93,7 +92,7 @@ var/list/event_last_fired = list()
 		var/time_passed = world.time - event_last_fired[event_type]
 		var/full_recharge_after = 60 * 60 * 10 * 3 // 3 hours
 		var/weight_modifier = max(0, (full_recharge_after - time_passed) / 300)
-
+		
 		possibleEvents[event_type] = max(possibleEvents[event_type] - weight_modifier, 0)
 
 	var/picked_event = pickweight(possibleEvents)
