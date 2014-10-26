@@ -127,7 +127,7 @@
 				for(event in milestone[3])
 					if((world.timeofday - lastCycle) > milestone[3][event])
 						spawn() call(src,event)()
-		lastCycle = world.timeofday
+		lastCycle = world.time
 		sleep(src.tickerPeriod)
 	return
 
