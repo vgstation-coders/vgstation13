@@ -99,9 +99,8 @@
 		return //Try again when we get a chance
 
 	//see if we're able to strangle anyone
-	var/turf/myTurf = get_turf(src)
-	for(var/mob/living/carbon/human/M in myTurf)
-		if(!M.stat)
+	for(var/mob/living/carbon/human/M in T)
+		if(M.stat == CONSCIOUS)
 			GrabMob(M)
 			break
 
@@ -112,7 +111,7 @@
 		//this may not be quite the right test
 		if(M == src)
 			continue
-		if (!M.stat)
+		if (M.stat == CONSCIOUS)
 			conscious.Add(M)
 
 	//pick the nearest valid conscious target
