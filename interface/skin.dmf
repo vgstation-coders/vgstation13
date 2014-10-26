@@ -1340,7 +1340,7 @@ window "outputwindow"
 		font-size = 0
 		font-style = ""
 		text-color = #4e4e4e
-		background-color = #cfcfcf
+		background-color = #b5b5b5
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1360,8 +1360,8 @@ window "outputwindow"
 window "rpane"
 	elem "rpane"
 		type = MAIN
-		pos = 281,13
-		size = 634x469
+		pos = 281,0
+		size = 597x469
 		anchor1 = none
 		anchor2 = none
 		font-family = ""
@@ -1400,7 +1400,7 @@ window "rpane"
 	elem "rpanewindow"
 		type = CHILD
 		pos = 0,0
-		size = 634x440
+		size = 597x464
 		anchor1 = 0,0
 		anchor2 = 100,100
 		font-family = ""
@@ -1728,7 +1728,7 @@ window "infowindow"
 	elem "info"
 		type = INFO
 		pos = 0,0
-		size = 634x427
+		size = 638x403
 		anchor1 = 0,0
 		anchor2 = 100,100
 		font-family = ""
@@ -1802,13 +1802,13 @@ window "window1"
 	elem "input2"
 		type = INPUT
 		pos = 0,455
-		size = 634x20
+		size = 634x17
 		anchor1 = 0,100
 		anchor2 = 100,100
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #414141
+		text-color = #2d2d2d
 		background-color = #cfcfcf
 		is-visible = true
 		is-disabled = false

@@ -28,3 +28,5 @@ info.json
 /bot/config.yml
 /bot/data
 /analysis
+config/news/trivial.txt
+config/README feedback.txt
