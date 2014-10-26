@@ -1,15 +1,9 @@
-#define scp_delay_l 6000
-#define scp_delay_h 9000
-#define mystery_delay_l 3000
-#define mystery_delay_h 6000
-#define first_dispatch_prepare_l 300
-#define first_dispatch_prepare_h 1200
-#define second_dispatch_prepare_l 3000
-#define second_dispatch_prepare_h 6000
-#define last_dispatch_prepare_l 6000
-#define last_dispatch_prepare_h 9000
-#define takeover_l 300
-#define takeover_h 600
+#define scp_delay rand(6000,9000)
+#define mystery_delay rand(3000,6000)
+#define first_dispatch_prepare rand(300,1200)
+#define second_dispatch_prepare rand(3000,6000)
+#define last_dispatch_prepare rand(6000,9000)
+#define takeover_scp rand(300,600)
 
 /datum/game_mode/containment_breach
 
@@ -107,12 +101,12 @@
 
 /datum/game_mode/containment_breach/proc/setMilestones()
 	src.milestones["Intercept"][1] = rand(waittime_l, waittime_h)
-	src.milestones["Early Game"][1] = rand(scp_delay_l,scp_delay_h) + src.milestones["Intercept"][1]
-	src.milestones["Announcement"][1] = rand(mystery_delay_l,mystery_delay_h) + src.milestones["Early Game"][1]
-	src.milestones["First Dispatch"][1] = rand(first_dispatch_prepare_l,first_dispatch_prepare_h) + src.milestones["Announcement"][1]
-	src.milestones["Second Dispatch"][1] = rand(second_dispatch_prepare_l,second_dispatch_prepare_h) + src.milestones["First Dispatch"][1]
-	src.milestones["Last Dispatch"][1] = rand(last_dispatch_prepare_l,last_dispatch_prepare_h) + src.milestones["Second Dispatch"][1]
-	src.milestones["Takeover"][1] = rand(takeover_l,takeover_h) + src.milestones["Last Dispatch"][1]
+	src.milestones["Early Game"][1] = scp_delay + src.milestones["Intercept"][1]
+	src.milestones["Announcement"][1] = mystery_delay + src.milestones["Early Game"][1]
+	src.milestones["First Dispatch"][1] = first_dispatch_prepare + src.milestones["Announcement"][1]
+	src.milestones["Second Dispatch"][1] = second_dispatch_prepare + src.milestones["First Dispatch"][1]
+	src.milestones["Last Dispatch"][1] = last_dispatch_prepare + src.milestones["Second Dispatch"][1]
+	src.milestones["Takeover"][1] = takeover_scp + src.milestones["Last Dispatch"][1]
 	return
 
 /datum/game_mode/containment_breach/proc/ticker()
