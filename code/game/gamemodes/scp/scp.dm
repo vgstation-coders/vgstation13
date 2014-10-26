@@ -48,7 +48,7 @@
             ),
         "Announcement" = list(
             3000,
-            list("announceSubject"),
+            list("announceBreach"),
             list(),
             ),
         "First Dispatch" = list(
@@ -202,9 +202,9 @@
 				if(scp.hibernate == 1)
 					scp_disabled = 1
 
-/datum/game_mode/containment_breach/proc/announceSubject()
+/datum/game_mode/containment_breach/proc/announceBreach()
 	//world << sound('sound/AI/containment.ogg')
-	command_alert("A containment breach has been detected abord [station_name()], this station is now on lockdown. Directives will be sent to this station's Command staff in short order.", "Anomaly Alert")
+	command_alert("A containment breach has been detected aboard [station_name()], this station is now on lockdown. Directives will be sent to this station's Command staff in short order.", "Anomaly Alert")
 	return
 
 /datum/game_mode/containment_breach/proc/firstDispatch()
