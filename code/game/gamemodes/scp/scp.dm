@@ -192,7 +192,7 @@
 /datum/game_mode/containment_breach/proc/checkSubjectStatus()
 
 	for(var/mob/living/simple_animal/sculpture/scp in subjects)
-		if(null) //What spoopy ?
+		if(!scp) //What spoopy ?
 			scp_gone = 1
 		if(scp.loc.z != zMain)
 			scp_spaced = 1
