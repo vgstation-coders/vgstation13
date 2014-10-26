@@ -48,8 +48,8 @@
             2000,
             list("spawnSubject"),
             list(
-                "checkSubjectStatus" = 30,
-                "randomEvent" = 1800
+                "checkSubjectStatus" 	= 30,
+                "randomEvent" 			= 1800
                 ),
             ),
         "Announcement" = list(
@@ -77,7 +77,7 @@
 			list("takeoverAndNuke"),
 			list(),
 			),
-			)
+		)
 
 	uplink_welcome = "SCP Containment Control Console"
 	uplink_uses = 10
