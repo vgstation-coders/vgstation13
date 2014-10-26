@@ -38,6 +38,10 @@
 	name = "\improper Kitchen"
 	icon_state = "kitchen"
 
+/area/ret/medical
+	name = "\improper RET Medbay"
+	icon_state = "sec_medbay"
+
 
 
 
