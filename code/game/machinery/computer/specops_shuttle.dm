@@ -22,6 +22,8 @@ var/specops_shuttle_timeleft = 0
 	var/allowedtocall = 0
 	var/specops_shuttle_timereset = 0
 
+	l_color = "#7BF9FF"
+
 /proc/specops_return()
 	var/obj/item/device/radio/intercom/announcer = new /obj/item/device/radio/intercom(null)//We need a fake AI to announce some stuff below. Otherwise it will be wonky.
 	announcer.config(list("Response Team" = 0))
@@ -246,11 +248,9 @@ var/specops_shuttle_timeleft = 0
 /obj/machinery/computer/specops_shuttle/attack_paw(var/mob/user as mob)
 	return attack_hand(user)
 
-/obj/machinery/computer/specops_shuttle/attackby(I as obj, user as mob)
-	if(istype(I,/obj/item/weapon/card/emag))
-		user << "\blue The electronic systems in this console are far too advanced for your primitive hacking peripherals."
-	else
-		return attack_hand(user)
+/obj/machinery/computer/specops_shuttle/emag(mob/user as mob)
+	user << "\blue The electronic systems in this console are far too advanced for your primitive hacking peripherals."
+	return
 
 /obj/machinery/computer/specops_shuttle/attack_hand(var/mob/user as mob)
 	if(!allowed(user))

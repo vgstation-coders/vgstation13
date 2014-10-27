@@ -11,32 +11,38 @@
 	var/opened = 0
 	var/useramount = 30 // Last used amount
 
+	machine_flags = SCREWTOGGLE | CROWDESTROY
+
+	l_color = "#7BF9FF"
+	power_change()
+		..()
+		if(!(stat & (BROKEN|NOPOWER)))
+			SetLuminosity(2)
+		else
+			SetLuminosity(0)
+
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
 /obj/machinery/snackbar_machine/New()
 	. = ..()
-	var/datum/reagents/R = new/datum/reagents(100)
-	reagents = R
-	R.my_atom = src
+	create_reagents(100)
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/snackbar_machine,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/snackbar_machine,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/console_screen,\
+		/obj/item/weapon/stock_parts/console_screen\
 	)
 
 	RefreshParts()
 
-	var/image/overlay = image('icons/obj/chemical.dmi', src, "[icon_state]_overlay")
-	overlays += overlay
-
+	overlays += image('icons/obj/chemical.dmi', src, "[icon_state]_overlay")
 
 /obj/machinery/snackbar_machine/ex_act(severity)
 	switch(severity)
@@ -76,35 +82,8 @@
 		src.updateUsrDialog()
 		update_icon()
 
-	else if(istype(B, /obj/item/weapon/screwdriver))
-		if(src.beaker)
-			user << "\red A beaker is loaded in [src]."
-			return
-		if(!opened)
-			src.opened = 1
-			user << "You open the maintenance hatch of [src]."
-		else
-			src.opened = 0
-			user << "You close the maintenance hatch of [src]."
-		return 1
-
-	else if(istype(B, /obj/item/weapon/crowbar))
-		if(opened)
-			if(src.beaker)
-				user << "\red A beaker is loaded in [src]."
-				return
-			user << "You begin to remove the circuits from the [src]."
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			if(do_after(user, 50))
-				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-				M.state = 2
-				M.icon_state = "box_1"
-				for(var/obj/I in component_parts)
-					if(I.reliability != 100 && crit_fail)
-						I.crit_fail = 1
-					I.loc = src.loc
-				del(src)
-				return 1
+	else
+		..()
 
 /obj/machinery/snackbar_machine/Topic(href, href_list)
 	if(stat & (BROKEN|NOPOWER)) 		return

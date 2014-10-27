@@ -50,12 +50,15 @@
 	var/coretype = /obj/item/slime_extract/grey
 	var/list/slime_mutation[4]
 
+	var/core_removal_stage = 0 //For removing cores
+
 /mob/living/carbon/slime/adult
 	name = "adult slime"
 	icon = 'icons/mob/slimes.dmi'
 	icon_state = "grey adult slime"
 	speak_emote = list("telepathically chirps")
 
+	maxHealth = 200
 	health = 200
 	gender = NEUTER
 
@@ -621,18 +624,11 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /mob/living/carbon/slime/updatehealth()
 	if(status_flags & GODMODE)
-		if(istype(src, /mob/living/carbon/slime/adult))
-			health = 200
-		else
-			health = 150
+		health = maxHealth
 		stat = CONSCIOUS
 	else
 		// slimes can't suffocate unless they suicide. They are also not harmed by fire
-		if(istype(src, /mob/living/carbon/slime/adult))
-			health = 200 - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
-		else
-			health = 150 - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
-
+		health = maxHealth - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
 
 /mob/living/carbon/slime/proc/get_obstacle_ok(atom/A)
 	var/direct = get_dir(src, A)
@@ -1111,6 +1107,10 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 				return
 			ghosts.Add(O)
 			O << "\blue You are signed up to be a golem."
+
+
+/mob/living/carbon/slime/has_eyes()
+	return 0
 
 //////////////////////////////Old shit from metroids/RoRos, and the old cores, would not take much work to re-add them////////////////////////
 

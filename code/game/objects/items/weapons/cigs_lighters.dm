@@ -35,7 +35,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		processing_objects.Remove(src)
 		return
 	if(location)
-		location.hotspot_expose(700, 5)
+		location.hotspot_expose(700, 5,surfaces=istype(loc,/turf))
 		return
 
 /obj/item/weapon/match/dropped(mob/user as mob)
@@ -47,6 +47,21 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		name = "burnt match"
 		desc = "A match. This one has seen better days."
 	return ..()
+	
+/obj/item/weapon/match/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+	if(!isliving(M))
+		return
+	M.IgniteMob()
+	if(!istype(M,/mob/living/carbon))
+		return
+	if(istype(M.wear_mask, /obj/item/clothing/mask/cigarette) && user.zone_sel.selecting == "mouth" && lit)
+		var/obj/item/clothing/mask/cigarette/cig = M.wear_mask
+		if(M == user)
+			cig.attackby(src, user)
+		else
+			cig.light("<span class='notice'>[user] holds the [name] out for [M], and lights the [cig.name].</span>")
+	else
+		..()
 
 //////////////////
 //FINE SMOKABLES//
@@ -73,10 +88,6 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	..()
 	flags |= NOREACT // so it doesn't react until you light it
 	create_reagents(chem_volume) // making the cigarrete a chemical holder with a maximum volume of 15
-
-/obj/item/clothing/mask/cigarette/Destroy()
-	..()
-	del(reagents)
 
 /obj/item/clothing/mask/cigarette/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -199,7 +210,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		del(src)
 		return
 	if(location)
-		location.hotspot_expose(700, 5)
+		location.hotspot_expose(700, 5,surfaces=istype(loc,/turf))
 	if(reagents && reagents.total_volume)	//	check if it has any reagents at all
 		if(iscarbon(M) && (src == M:wear_mask)) // if it's in the human/monkey mouth, transfer reagents to the mob
 			if(M.reagents.has_reagent("lexorin") || M_NO_BREATH in M.mutations || istype(M, /obj/machinery/atmospherics/unary/cryo_cell))
@@ -316,38 +327,32 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	smoketime = 420
 	chem_volume = 26
 
-	New()
-		..()
-		reagents.add_reagent("nutriment", 1)
-		reagents.add_reagent("space_drugs", 7)
-		reagents.add_reagent("kelotane", 7)
-		reagents.add_reagent("bicaridine", 5)
-		reagents.add_reagent("toxin", 5)
+/obj/item/clothing/mask/cigarette/blunt/New()
+	. = ..()
+	reagents.add_reagent("nutriment", 1)
+	reagents.add_reagent("space_drugs", 7)
+	reagents.add_reagent("kelotane", 7)
+	reagents.add_reagent("bicaridine", 5)
+	reagents.add_reagent("toxin", 5)
 
 /obj/item/clothing/mask/cigarette/blunt/rolled //grown.dm handles reagents for these
-
-/obj/item/clothing/mask/cigarette/blunt/rolled/New()
-	..()
 
 /obj/item/clothing/mask/cigarette/blunt/cruciatus
 	name = "blunt"
 	desc = "A fat ambrosia vulgaris cigar. Light it up and pass it around."
 	chem_volume = 36
 
-	New()
-		..()
-		reagents.clear_reagents()
-		reagents.add_reagent("nutriment", 1)
-		reagents.add_reagent("space_drugs", 7)
-		reagents.add_reagent("kelotane", 7)
-		reagents.add_reagent("bicaridine", 5)
-		reagents.add_reagent("toxin", 5)
-		reagents.add_reagent("spiritbreaker", 10)
+/obj/item/clothing/mask/cigarette/blunt/cruciatus/New()
+	. = ..()
+	reagents.clear_reagents()
+	reagents.add_reagent("nutriment", 1)
+	reagents.add_reagent("space_drugs", 7)
+	reagents.add_reagent("kelotane", 7)
+	reagents.add_reagent("bicaridine", 5)
+	reagents.add_reagent("toxin", 5)
+	reagents.add_reagent("spiritbreaker", 10)
 
 /obj/item/clothing/mask/cigarette/blunt/cruciatus/rolled
-
-/obj/item/clothing/mask/cigarette/blunt/cruciatus/rolled/New()
-	..()
 
 /obj/item/clothing/mask/cigarette/blunt/deus
 	name = "godblunt"
@@ -357,19 +362,16 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	icon_off = "dbluntoff"
 	overlay_on = "dbluntlit"
 
-	New()
-		..()
-		reagents.clear_reagents()
-		reagents.add_reagent("nutriment", 1)
-		reagents.add_reagent("bicaridine", 7)
-		reagents.add_reagent("synaptizine", 7)
-		reagents.add_reagent("hyperzine", 5)
-		reagents.add_reagent("space_drugs", 5)
+/obj/item/clothing/mask/cigarette/blunt/deus/New()
+	. = ..()
+	reagents.clear_reagents()
+	reagents.add_reagent("nutriment", 1)
+	reagents.add_reagent("bicaridine", 7)
+	reagents.add_reagent("synaptizine", 7)
+	reagents.add_reagent("hyperzine", 5)
+	reagents.add_reagent("space_drugs", 5)
 
 /obj/item/clothing/mask/cigarette/blunt/deus/rolled
-
-/obj/item/clothing/mask/cigarette/blunt/deus/rolled/New()
-	..()
 
 /obj/item/weapon/cigbutt/bluntbutt
 	name = "blunt butt"
@@ -378,7 +380,6 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	icon_state = "bluntbutt"
 	w_class = 1
 	throwforce = 1
-
 
 /////////////////
 //SMOKING PIPES//
@@ -419,7 +420,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		processing_objects.Remove(src)
 		return
 	if(location)
-		location.hotspot_expose(700, 5)
+		location.hotspot_expose(700, 5,surfaces=istype(loc,/turf))
 	return
 
 /obj/item/clothing/mask/cigarette/pipe/attack_self(mob/user as mob) //Refills the pipe. Can be changed to an attackby later, if loose tobacco is added to vendors or something.
@@ -540,7 +541,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 /obj/item/weapon/lighter/process()
 	var/turf/location = get_turf(src)
 	if(location)
-		location.hotspot_expose(700, 5)
+		location.hotspot_expose(700, 5,surfaces=istype(loc,/turf))
 	return
 
 

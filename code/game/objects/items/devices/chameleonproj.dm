@@ -47,7 +47,7 @@
 		var/obj/effect/overlay/T = new/obj/effect/overlay(get_turf(src))
 		T.icon = 'icons/effects/effects.dmi'
 		flick("emppulse",T)
-		spawn(8) T.delete()
+		spawn(8) qdel(T)
 	else
 		playsound(get_turf(src), 'sound/effects/pop.ogg', 100, 1, -6)
 		var/obj/O = new saved_item(src)
@@ -59,7 +59,7 @@
 		var/obj/effect/overlay/T = new/obj/effect/overlay(get_turf(src))
 		T.icon = 'icons/effects/effects.dmi'
 		flick("emppulse",T)
-		spawn(8) T.delete()
+		spawn(8) qdel(T)
 
 /obj/item/device/chameleon/proc/disrupt(var/delete_dummy = 1)
 	if(active_dummy)
@@ -80,12 +80,13 @@
 		if(ismob(A))
 			var/mob/M = A
 			M.reset_view(null)
+			M.layer = MOB_LAYER //Reset the mob's layer
 
 /obj/effect/dummy/chameleon
 	name = ""
 	desc = ""
 	density = 0
-	anchored = 1
+	anchored = 0
 	var/can_move = 1
 	var/obj/item/device/chameleon/master = null
 
@@ -97,6 +98,7 @@
 	overlays = new_overlays
 	dir = O.dir
 	M.loc = src
+	M.layer = OBJ_LAYER //Needed for some things, notably lockers
 	master = C
 	master.active_dummy = src
 

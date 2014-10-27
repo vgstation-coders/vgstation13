@@ -19,6 +19,9 @@ var/global/list/image/splatter_cache=list()
 	var/list/datum/disease2/disease/virus2 = list()
 	var/amount = 5
 
+/obj/effect/decal/cleanable/blood/cultify()
+	return
+
 /obj/effect/decal/cleanable/blood/Destroy()
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
@@ -44,7 +47,7 @@ var/global/list/image/splatter_cache=list()
 	if(basecolor == "rainbow") basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
 	color = basecolor
 
-/obj/effect/decal/cleanable/blood/HasEntered(mob/living/carbon/human/perp)
+/obj/effect/decal/cleanable/blood/Crossed(mob/living/carbon/human/perp)
 	if (!istype(perp))
 		return
 	if(amount < 1)

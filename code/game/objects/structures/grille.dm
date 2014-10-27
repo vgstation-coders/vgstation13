@@ -12,6 +12,12 @@
 	var/health = 10
 	var/destroyed = 0
 
+/obj/structure/grille/cultify()
+	var/turf/T = get_turf(src)
+	if(T)
+		T.ChangeTurf(/turf/simulated/wall/cult)
+	..()
+
 /obj/structure/grille/fence/east_west
 	//width=80
 	//height=42
@@ -92,7 +98,7 @@
 	return
 
 
-/obj/structure/grille/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/grille/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 	if(istype(mover) && mover.checkpass(PASSGRILLE))
 		return 1

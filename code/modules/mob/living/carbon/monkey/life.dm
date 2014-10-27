@@ -126,6 +126,9 @@
 			src << "\red You suddenly feel very weak."
 			Weaken(3)
 			emote("collapse")
+			if(reagents.has_reagent("creatine"))
+				var/datum/reagent/creatine/C = reagents.get_reagent("creatine")
+				C.dehulk(src)
 
 		if (radiation)
 
@@ -180,14 +183,14 @@
 			if(B.virus2.len)
 				for (var/ID in B.virus2)
 					var/datum/disease2/disease/V = B.virus2[ID]
-					if (infect_virus2(src,V))
+					if (infect_virus2(src,V, notes="(Airborne from blood)"))
 						return 1
 
 		for(var/obj/effect/decal/cleanable/mucus/M in get_turf(src))
 			if(M.virus2.len)
 				for (var/ID in M.virus2)
 					var/datum/disease2/disease/V = M.virus2[ID]
-					if (infect_virus2(src,V))
+					if (infect_virus2(src,V, notes="(Airborne from mucus)"))
 						return 1
 		return 0
 
@@ -494,7 +497,8 @@
 			blinded = 1
 			silent = 0
 		else				//ALIVE. LIGHTS ARE ON
-			if(health < config.health_threshold_dead || brain_op_stage == 4.0)
+			updatehealth()
+			if(health < config.health_threshold_dead || !has_brain())
 				death()
 				blinded = 1
 				stat = DEAD
@@ -576,6 +580,15 @@
 
 
 	proc/handle_regular_hud_updates()
+
+		if(!canWearHats && m_hatbg)
+			if(m_hatbg.icon_state != "blank")
+				m_hatbg.icon_state = "blank"
+
+		if(!canWearClothes && m_suitclothesbg)
+			if(m_suitclothesbg.icon_state != "blank")
+				m_suitclothesbg.icon_state = "blank"
+
 
 		if (stat == 2 || (M_XRAY in mutations))
 			sight |= SEE_TURFS

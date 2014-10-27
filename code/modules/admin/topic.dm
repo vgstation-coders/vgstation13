@@ -2441,6 +2441,35 @@
 				feedback_add_details("admin_secrets_fun_used","OO")
 				usr.client.only_one()
 //				message_admins("[key_name_admin(usr)] has triggered a battle to the death (only one)")
+			if("togglenarsie")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","NA")
+				var/choice = input("How do you wish for narsie to interact with her surroundings?") in list("CultStation13", "Nar-Singulo")
+				if(choice == "CultStation13")
+					message_admins("[key_name_admin(usr)] has set narsie's behaviour to \"CultStation13\".")
+					narsie_behaviour = "CultStation13"
+				if(choice == "Nar-Singulo")
+					message_admins("[key_name_admin(usr)] has set narsie's behaviour to \"Nar-Singulo\".")
+					narsie_behaviour = "Nar-Singulo"
+			if("hellonearth")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","NS")
+				var/choice = input("You sure you want to end the round and summon narsie at your location? Misuse of this could result in removal of flags or halarity.") in list("PRAISE SATAN", "Cancel")
+				if(choice == "PRAISE SATAN")
+					new /obj/machinery/singularity/narsie/large(get_turf(usr))
+					SetUniversalState(/datum/universal_state/hell)
+					message_admins("[key_name_admin(usr)] has summoned narsie and brought about a new realm of suffering.")
+			if("supermattercascade")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","SC")
+				var/choice = input("You sure you want to destroy the universe and create a large explosion at your location? Misuse of this could result in removal of flags or halarity.") in list("NO TIME TO EXPLAIN", "Cancel")
+				if(choice == "NO TIME TO EXPLAIN")
+					explosion(get_turf(usr), 8, 16, 24, 32, 1)
+					new /turf/unsimulated/wall/supermatter(get_turf(usr))
+					SetUniversalState(/datum/universal_state/supermatter_cascade)
+					message_admins("[key_name_admin(usr)] has managed to destroy the universe with a supermatter cascade. Good job, [key_name_admin(usr)]")
+
+
 		if(usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsfun"]]")
 			if (ok)
@@ -2563,6 +2592,10 @@
 				J.total_positions = -1
 				J.spawn_positions = -1
 				message_admins("[key_name_admin(usr)] has removed the cap on security officers.")
+			if("virus_custom")
+				if(virus2_make_custom(usr.client))
+					feedback_add_details("admin_secrets_fun_used", "V_C")
+					message_admins("[key_name_admin(usr)] has trigger a custom virus outbreak.", 1)
 
 	else if(href_list["ac_view_wanted"])            //Admin newscaster Topic() stuff be here
 		src.admincaster_screen = 18                 //The ac_ prefix before the hrefs stands for AdminCaster.
@@ -2571,7 +2604,7 @@
 	else if(href_list["ac_set_channel_name"])
 		src.admincaster_feed_channel.channel_name = strip_html_simple(input(usr, "Provide a Feed Channel Name", "Network Channel Handler", ""))
 		while (findtext(src.admincaster_feed_channel.channel_name," ") == 1)
-			src.admincaster_feed_channel.channel_name = copytext(src.admincaster_feed_channel.channel_name,2,lentext(src.admincaster_feed_channel.channel_name)+1)
+			src.admincaster_feed_channel.channel_name = copytext(src.admincaster_feed_channel.channel_name,2,length(src.admincaster_feed_channel.channel_name)+1)
 		src.access_news_network()
 
 	else if(href_list["ac_set_channel_lock"])
@@ -2610,7 +2643,7 @@
 	else if(href_list["ac_set_new_message"])
 		src.admincaster_feed_message.body = adminscrub(input(usr, "Write your Feed story", "Network Channel Handler", ""))
 		while (findtext(src.admincaster_feed_message.body," ") == 1)
-			src.admincaster_feed_message.body = copytext(src.admincaster_feed_message.body,2,lentext(src.admincaster_feed_message.body)+1)
+			src.admincaster_feed_message.body = copytext(src.admincaster_feed_message.body,2,length(src.admincaster_feed_message.body)+1)
 		src.access_news_network()
 
 	else if(href_list["ac_submit_new_message"])
@@ -2664,13 +2697,13 @@
 	else if(href_list["ac_set_wanted_name"])
 		src.admincaster_feed_message.author = adminscrub(input(usr, "Provide the name of the Wanted person", "Network Security Handler", ""))
 		while (findtext(src.admincaster_feed_message.author," ") == 1)
-			src.admincaster_feed_message.author = copytext(admincaster_feed_message.author,2,lentext(admincaster_feed_message.author)+1)
+			src.admincaster_feed_message.author = copytext(admincaster_feed_message.author,2,length(admincaster_feed_message.author)+1)
 		src.access_news_network()
 
 	else if(href_list["ac_set_wanted_desc"])
 		src.admincaster_feed_message.body = adminscrub(input(usr, "Provide the a description of the Wanted person and any other details you deem important", "Network Security Handler", ""))
 		while (findtext(src.admincaster_feed_message.body," ") == 1)
-			src.admincaster_feed_message.body = copytext(src.admincaster_feed_message.body,2,lentext(src.admincaster_feed_message.body)+1)
+			src.admincaster_feed_message.body = copytext(src.admincaster_feed_message.body,2,length(src.admincaster_feed_message.body)+1)
 		src.access_news_network()
 
 	else if(href_list["ac_submit_wanted"])

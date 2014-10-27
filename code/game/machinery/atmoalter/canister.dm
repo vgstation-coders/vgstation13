@@ -265,24 +265,31 @@
 		return
 
 	if(href_list["toggle"])
+		var/datum/gas/sleeping_agent/S = locate() in src.air_contents.trace_gases
+
 		if (valve_open)
 			if (holding)
 				release_log += "Valve was <b>closed</b> by [usr] ([usr.ckey]), stopping the transfer into the [holding]<br>"
 			else
-				var/datum/gas/sleeping_agent/S = locate() in src.air_contents.trace_gases
-				if(src.air_contents.toxins > 0 || (istype(S)))
-					message_admins("[usr.real_name] ([formatPlayerPanel(usr,usr.ckey)]) opened a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] at [formatJumpTo(loc)]!")
-					log_admin("[usr]([ckey(usr.key)]) opened a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] at [loc.x], [loc.y], [loc.z]")
 				release_log += "Valve was <b>closed</b> by [usr] ([usr.ckey]), stopping the transfer into the <font color='red'><b>air</b></font><br>"
 		else
 			if (holding)
 				release_log += "Valve was <b>opened</b> by [usr] ([usr.ckey]), starting the transfer into the [holding]<br>"
 			else
+				if(src.air_contents.toxins > 0 || (istype(S)))
+					message_admins("[usr.real_name] ([formatPlayerPanel(usr,usr.ckey)]) opened a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] at [formatJumpTo(loc)]!")
+					log_admin("[usr]([ckey(usr.key)]) opened a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] at [loc.x], [loc.y], [loc.z]")
 				release_log += "Valve was <b>opened</b> by [usr] ([usr.ckey]), starting the transfer into the <font color='red'><b>air</b></font><br>"
 		valve_open = !valve_open
 
 	if (href_list["remove_tank"])
+		var/datum/gas/sleeping_agent/S = locate() in src.air_contents.trace_gases
 		if(holding)
+			if(valve_open)
+				if(src.air_contents.toxins > 0 || (istype(S)))
+					message_admins("[usr.real_name] ([formatPlayerPanel(usr,usr.ckey)]) opened a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] at [formatJumpTo(loc)]!")
+					log_admin("[usr]([ckey(usr.key)]) opened a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] at [loc.x], [loc.y], [loc.z]")
+
 			if(istype(holding, /obj/item/weapon/tank))
 				holding.manipulated_by = usr.real_name
 			holding.loc = loc
@@ -317,35 +324,22 @@
 
 	return 1
 
-/obj/machinery/portable_atmospherics/canister/toxins/New()
+/obj/machinery/portable_atmospherics/canister/toxins/New(loc)
+	..(loc)
+	air_contents.adjust(tx = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	update_icon()
 
-	..()
+/obj/machinery/portable_atmospherics/canister/oxygen/New(loc)
+	..(loc)
+	src.air_contents.adjust((maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	update_icon()
 
-	src.air_contents.toxins = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	air_contents.update_values()
-
-	src.update_icon()
-	return 1
-
-/obj/machinery/portable_atmospherics/canister/oxygen/New()
-
-	..()
-
-	src.air_contents.oxygen = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	air_contents.update_values()
-	src.update_icon()
-	return 1
-
-/obj/machinery/portable_atmospherics/canister/sleeping_agent/New()
-
-	..()
-
-	var/datum/gas/sleeping_agent/trace_gas = new
-	air_contents.trace_gases += trace_gas
-	trace_gas.moles = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	air_contents.update_values()
-	src.update_icon()
-	return 1
+/obj/machinery/portable_atmospherics/canister/sleeping_agent/New(loc)
+	..(loc)
+	var/datum/gas/sleeping_agent/sleeping_agent = new
+	sleeping_agent.moles = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
+	air_contents.adjust(traces = list(sleeping_agent))
+	update_icon()
 
 /*
 //Dirty way to fill room with gas. However it is a bit easier to do than creating some floor/engine/n2o -rastaf0
@@ -363,35 +357,25 @@
 	return 1
 */
 
-/obj/machinery/portable_atmospherics/canister/nitrogen/New()
+/obj/machinery/portable_atmospherics/canister/nitrogen/New(loc)
+	..(loc)
+	air_contents.adjust(n2 = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	update_icon()
 
-	..()
+/obj/machinery/portable_atmospherics/canister/carbon_dioxide/New(loc)
+	..(loc)
+	air_contents.adjust(co2 = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	update_icon()
 
-	src.air_contents.nitrogen = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	air_contents.update_values()
+/obj/machinery/portable_atmospherics/canister/air/New(loc)
+	..(loc)
 
-	src.update_icon()
-	return 1
+	air_contents.adjust(\
+		(O2STANDARD * maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature),\
+		n2 = (N2STANDARD * maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)\
+	)
 
-/obj/machinery/portable_atmospherics/canister/carbon_dioxide/New()
-
-	..()
-	src.air_contents.carbon_dioxide = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	air_contents.update_values()
-
-	src.update_icon()
-	return 1
-
-
-/obj/machinery/portable_atmospherics/canister/air/New()
-
-	..()
-	src.air_contents.oxygen = (O2STANDARD*src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	src.air_contents.nitrogen = (N2STANDARD*src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	air_contents.update_values()
-
-	src.update_icon()
-	return 1
+	update_icon()
 
 /obj/machinery/portable_atmospherics/canister/proc/weld(var/obj/item/weapon/weldingtool/WT, var/mob/user)
 
