@@ -27,7 +27,7 @@
 		H.equip_or_collect(new /obj/item/device/radio/headset/heads/rd(H), slot_ears)
 		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/research_director(H), slot_w_uniform)
-		//H.equip_or_collect(new /obj/item/device/pda/heads/rd(H), slot_belt)
+		H.equip_or_collect(new /obj/item/weapon/hand_tele(H), slot_l_store)
 		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
 		H.equip_or_collect(new /obj/item/weapon/clipboard(H), slot_l_hand)
 		if(H.backbag == 1)
