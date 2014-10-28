@@ -10,6 +10,7 @@
 	var/moving = 0
 	var/lastMove = 0
 
+	l_color = "#B40000"
 
 /obj/machinery/computer/salvage_ship/New()
 	curr_location= locate(/area/shuttle/salvage/start)
@@ -37,7 +38,8 @@
 
 
 /obj/machinery/computer/salvage_ship/attackby(obj/item/I as obj, mob/user as mob)
-	return attack_hand(user)
+	if(!..())
+		return attack_hand(user)
 
 /obj/machinery/computer/salvage_ship/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)

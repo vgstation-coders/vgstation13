@@ -20,6 +20,12 @@
 	opacity = 1
 	var/health = 50
 
+	autoignition_temperature = AUTOIGNITION_WOOD
+	fire_fuel = 10
+
+/obj/structure/bookcase/cultify()
+	return
+
 /obj/structure/bookcase/initialize()
 	for(var/obj/item/I in loc)
 		if(istype(I, /obj/item/weapon/book))
@@ -31,8 +37,16 @@
 		user.drop_item()
 		O.loc = src
 		update_icon()
+	else if(istype(O, /obj/item/weapon/tome))
+		user.drop_item()
+		O.loc = src
+		update_icon()
+	else if(istype(O, /obj/item/weapon/spellbook))
+		user.drop_item()
+		O.loc = src
+		update_icon()
 	else if(istype(O, /obj/item/weapon/wrench))
-		user << "\blue Now disassembling bookcase"
+		user << "<span class='notice'> Now disassembling bookcase</span>"
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user,50))
 			new /obj/item/stack/sheet/wood(get_turf(src))
@@ -149,6 +163,10 @@
 	w_class = 3		 //upped to three because books are, y'know, pretty big. (and you could hide them inside eachother recursively forever)
 	flags = FPRINT | TABLEPASS
 	attack_verb = list("bashed", "whacked", "educated")
+
+	autoignition_temperature = AUTOIGNITION_PAPER
+	fire_fuel = 3
+
 	var/dat			 // Actual page content
 	var/due_date = 0 // Game time in 1/10th seconds
 	var/author		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
@@ -156,6 +174,10 @@
 	var/title		 // The real name of the book.
 	var/carved = 0	 // Has the book been hollowed out for use as a secret storage item?
 	var/obj/item/store	//What's in the book?
+
+/obj/item/weapon/book/cultify()
+	new /obj/item/weapon/tome(loc)
+	..()
 
 /obj/item/weapon/book/attack_self(var/mob/user as mob)
 	if(carved)
@@ -204,7 +226,7 @@
 					src.name = newtitle
 					src.title = newtitle
 			if("Contents")
-				var/content = strip_html(input(usr, "Write your book's contents (HTML NOT allowed):"),8192) as message|null
+				var/content = sanitize(input(usr, "Write your book's contents (HTML NOT allowed):") as message|null)
 				if(!content)
 					usr << "The content is invalid."
 					return

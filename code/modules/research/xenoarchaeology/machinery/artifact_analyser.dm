@@ -140,9 +140,6 @@
 		if(/obj/machinery/power/supermatter)
 			return "Super dense plasma clump - Appears to have been shaped or hewn, structure is composed of matter 2000% denser than ordinary carbon matter residue.\
 			Potential application as unrefined plasma source."
-		if(/obj/machinery/power/supermatter)
-			return "Super dense plasma clump - Appears to have been shaped or hewn, structure is composed of matter 2000% denser than ordinary carbon matter residue.\
-			Potential application as unrefined plasma source."
 		if(/obj/structure/constructshell)
 			return "Tribal idol - Item resembles statues/emblems built by superstitious pre-warp civilisations to honour their gods. Material appears to be a \
 			rock/plastcrete composite."
@@ -186,7 +183,7 @@
 				out += " have been detected "
 
 				//how the artifact does it's effect
-				switch(A.my_effect.effect_type)
+				switch(A.my_effect.effect)
 					if(1)
 						out += " emitting in an ambient energy field."
 					if(2)
@@ -204,7 +201,7 @@
 					out += " Unable to determine any data about activation trigger."
 
 			//secondary:
-			if(A.secondary_effect && A.secondary_effect.activated)
+			if(A.secondary_effect)
 				//sciencey words go!
 				out += "<br><br>Warning, internal scans indicate ongoing [pick("subluminous","subcutaneous","superstructural")] activity operating \
 				independantly from primary systems. Auxiliary activity involves "
@@ -229,7 +226,7 @@
 						out += "low level radiation"
 
 				//how the artifact does it's effect
-				switch(A.secondary_effect.effect_type)
+				switch(A.secondary_effect.effect)
 					if(1)
 						out += " emitting in an ambient energy field."
 					if(2)

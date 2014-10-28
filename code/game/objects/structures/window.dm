@@ -6,7 +6,6 @@
 	layer = 3.2//Just above doors
 	pressure_resistance = 4*ONE_ATMOSPHERE
 	anchored = 1.0
-	flags = ON_BORDER
 	var/health = 14.0
 	var/ini_dir = null
 	var/state = 2
@@ -16,6 +15,15 @@
 	var/sheets = 1 // Number of sheets needed to build this window (determines how much shit is spawned by destroy())
 //	var/silicate = 0 // number of units of silicate
 //	var/icon/silicateIcon = null // the silicated icon
+
+/obj/structure/window/New(loc)
+	..(loc)
+	flags |= ON_BORDER
+
+	ini_dir = dir
+
+	update_nearby_tiles()
+	update_nearby_icons()
 
 /obj/structure/window/examine()
 	..()
@@ -69,7 +77,7 @@
 		return !density
 	return 1
 
-/obj/structure/window/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/window/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if(get_dir(loc, target) == dir)
@@ -323,20 +331,6 @@
 		icon = I
 		silicateIcon = I
 */
-
-
-/obj/structure/window/New(Loc,re=0)
-	..()
-
-//	if(re)	reinf = re
-
-	ini_dir = dir
-
-	update_nearby_tiles()
-	update_nearby_icons()
-
-	return
-
 
 /obj/structure/window/Destroy()
 	density = 0

@@ -145,7 +145,6 @@
 	anchored = 1
 	use_power = 1
 	idle_power_usage = 40
-	var/opened = 0.0
 	var/processing = 0
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/points = 0
@@ -153,55 +152,67 @@
 	var/list/recipes[0]
 	var/list/recipe_categories[0]
 
-	New()
-		. = ..()
-		var/datum/reagents/R = new/datum/reagents(1000)
-		reagents = R
-		R.my_atom = src
-		beaker = new /obj/item/weapon/reagent_containers/glass/beaker/large(src)
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
-		component_parts = newlist(
-			/obj/item/weapon/circuitboard/biogenerator,
-			/obj/item/weapon/stock_parts/manipulator,
-			/obj/item/weapon/stock_parts/manipulator,
-			/obj/item/weapon/stock_parts/matter_bin,
-			/obj/item/weapon/stock_parts/matter_bin,
-			/obj/item/weapon/stock_parts/micro_laser,
-			/obj/item/weapon/stock_parts/micro_laser,
-			/obj/item/weapon/stock_parts/micro_laser,
-			/obj/item/weapon/stock_parts/scanning_module,
-			/obj/item/weapon/stock_parts/scanning_module,
-			/obj/item/weapon/stock_parts/console_screen,
-			/obj/item/weapon/stock_parts/console_screen
-		)
+	l_color = "#7BF9FF"
 
-		RefreshParts()
+/obj/machinery/biogenerator/power_change()
+	..()
+	if(!(stat & (BROKEN|NOPOWER)))
+		SetLuminosity(2)
+	else
+		SetLuminosity(0)
 
-		for(var/biotype in typesof(/datum/biogen_recipe))
-			var/datum/biogen_recipe/recipe = new biotype
-			if(recipe.id=="") continue
-			if(!(recipe.category in recipe_categories))
-				recipe_categories[recipe.category]=list()
-			recipe_categories[recipe.category] += recipe.id
-			recipes[recipe.id]=recipe
-
-	on_reagent_change()			//When the reagents change, change the icon as well.
-		update_icon()
-
+/obj/machinery/biogenerator/on_reagent_change()			//When the reagents change, change the icon as well.
 	update_icon()
-		if(!src.beaker)
-			icon_state = "biogen-empty"
-		else if(!src.processing)
-			icon_state = "biogen-stand"
-		else
-			icon_state = "biogen-work"
-		return
 
+/obj/machinery/biogenerator/update_icon()
+	if(!src.beaker)
+		icon_state = "biogen-empty"
+	else if(!src.processing)
+		icon_state = "biogen-stand"
+	else
+		icon_state = "biogen-work"
+	return
+
+/obj/machinery/biogenerator/New()
+	. = ..()
+	create_reagents(1000)
+	beaker = new /obj/item/weapon/reagent_containers/glass/beaker/large(src)
+
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/biogenerator,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/console_screen,\
+		/obj/item/weapon/stock_parts/console_screen\
+	)
+
+	RefreshParts()
+
+	for(var/biotype in typesof(/datum/biogen_recipe))
+		var/datum/biogen_recipe/recipe = new biotype
+		if(recipe.id=="") continue
+		if(!(recipe.category in recipe_categories))
+			recipe_categories[recipe.category]=list()
+		recipe_categories[recipe.category] += recipe.id
+		recipes[recipe.id]=recipe
 
 /obj/machinery/biogenerator/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/reagent_containers/glass))
+	if(..())
+		return 1
+	else if(istype(O, /obj/item/weapon/reagent_containers/glass))
 		if(beaker)
 			user << "\red The biogenerator already occuped."
+		else if(panel_open)
+			user << "<span class='rose'>The biogenerator's maintenance panel must be closed first.</span>"
 		else
 			user.before_take_item(O)
 			O.loc = src
@@ -224,31 +235,6 @@
 					break
 			if(i<10)
 				user << "\blue You empty the plant bag into the biogenerator."
-	else if (istype(O, /obj/item/weapon/screwdriver))
-		if (!opened)
-			src.opened = 1
-			user << "You open the maintenance hatch of [src]."
-			//src.icon_state = "autolathe_t"
-		else
-			src.opened = 0
-			user << "You close the maintenance hatch of [src]."
-			//src.icon_state = "autolathe"
-			return 1
-	else if(istype(O, /obj/item/weapon/crowbar))
-		if (opened)
-			if(beaker)
-				user << "\red A beaker is loaded, you cannot deconstruct [src]."
-				return 1
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-			return 1
 
 	else if(!istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
 		user << "\red You cannot put this in [src.name]"
@@ -263,6 +249,25 @@
 			O.loc = src
 			user << "\blue You put [O.name] in [src.name]"
 	update_icon()
+	return
+
+/obj/machinery/biogenerator/crowbarDestroy(mob/user)
+	if(beaker)
+		user << "\red A beaker is loaded, you cannot deconstruct \the [src]."
+		return
+	return ..()
+
+/obj/machinery/biogenerator/togglePanelOpen(var/obj/toggleitem, mob/user)
+	if(beaker)
+		user << "<span class='rose'>You can't open \the [src]'s maintenance panel while a beaker is loaded.</span>"
+		return
+	if(..())
+		if(panel_open)
+			overlays += "biogen-open"
+		else
+			overlays -= "biogen-open"
+		update_icon()
+		return 1
 	return
 
 /obj/machinery/biogenerator/interact(mob/user as mob)

@@ -21,6 +21,7 @@
 	icon_state = "swat"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
 	flags = NOSLIP
+	species_fit = list("Vox")
 	siemens_coefficient = 0.6
 
 /obj/item/clothing/shoes/combat //Basically SWAT shoes combined with galoshes.
@@ -29,6 +30,7 @@
 	icon_state = "swat"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
 	flags = NOSLIP
+	species_fit = list("Vox")
 	siemens_coefficient = 0.6
 
 	cold_protection = FEET
@@ -87,6 +89,7 @@
 	item_state = "jackboots"
 	_color = "hosred"
 	siemens_coefficient = 0.7
+	species_fit = list("Vox")
 
 /obj/item/clothing/shoes/jackboots/batmanboots
 	name = "batboots"
@@ -104,6 +107,9 @@
 	min_cold_protection_temperature = SHOE_MIN_COLD_PROTECITON_TEMPERATURE
 	heat_protection = FEET
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECITON_TEMPERATURE
+
+/obj/item/clothing/shoes/cult/cultify()
+	return
 
 /obj/item/clothing/shoes/cyborg
 	name = "cyborg boots"
@@ -139,3 +145,10 @@
 	desc = "Simon's Shoes"
 	icon_state = "simonshoes"
 	item_state = "simonshoes"
+	species_fit = list("Vox")
+
+/obj/item/clothing/shoes/kneesocks
+	name = "kneesocks"
+	desc = "A pair of girly knee-high socks"
+	icon_state = "kneesock"
+	item_state = "kneesock"

@@ -136,7 +136,7 @@
 	var/obj/structure/morgue/connected = null
 	anchored = 1.0
 
-/obj/structure/m_tray/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/m_tray/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover, /obj/item/weapon/dummy))
 		return 1
 	else
@@ -322,7 +322,7 @@
 
 		for(var/mob/living/M in contents)
 			if (M.stat!=2)
-				M.emote("scream")
+				M.emote("scream",,, 1)
 			//Logging for this causes runtimes resulting in the cremator locking up. Commenting it out until that's figured out.
 			//M.attack_log += "\[[time_stamp()]\] Has been cremated by <b>[user]/[user.ckey]</b>" //No point in this when the mob's about to be deleted
 			//user.attack_log +="\[[time_stamp()]\] Cremated <b>[M]/[M.ckey]</b>"
@@ -355,7 +355,7 @@
 	var/obj/structure/crematorium/connected = null
 	anchored = 1.0
 
-/obj/structure/c_tray/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/c_tray/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover, /obj/item/weapon/dummy))
 		return 1
 	else

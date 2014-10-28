@@ -31,6 +31,9 @@
 	var/scribble		//Scribble on the back.
 	var/blueprints = 0	//Does it include the blueprints?
 
+	autoignition_temperature = 530 // Kelvin
+	fire_fuel = 1
+
 
 /obj/item/weapon/photo/attack_self(mob/user)
 	examine()
@@ -96,8 +99,8 @@
 	name = "camera"
 	icon = 'icons/obj/items.dmi'
 	desc = "A polaroid camera."
-	icon_state = "camera"
-	item_state = "electropack"
+	icon_state = "polaroid"
+	item_state = "polaroid"
 	w_class = 2.0
 	flags = FPRINT | CONDUCT | USEDELAY | TABLEPASS
 	slot_flags = SLOT_BELT
@@ -120,7 +123,7 @@
 /obj/item/device/camera/ai_camera //camera AI can take pictures with
 	name = "AI photo camera"
 	var/in_camera_mode = 0
-
+/*
 	verb/picture()
 		set category ="AI Commands"
 		set name = "Take Image"
@@ -134,6 +137,7 @@
 		set src in usr
 
 		viewpictures()
+*/
 
 
 /obj/item/device/camera/attack(mob/living/carbon/human/M, mob/user)
@@ -176,7 +180,7 @@
 	var/icon/res = icon('icons/effects/96x96.dmi', "")
 
 	for(var/atom/A in sorted)
-		var/icon/img = getFlatIcon(A)
+		var/icon/img = getFlatIcon(A,A.dir,0)
 		if(istype(A, /mob/living) && A:lying)
 			img.Turn(A:lying)
 
@@ -191,8 +195,11 @@
 		if(istype(A, /obj/item/blueprints))
 			blueprints = 1
 
+	/*
 	for(var/turf/T in turfs)
 		res.Blend(getFlatIcon(T.loc), blendMode2iconMode(T.blend_mode), 32 * (T.x - center.x) + 33, 32 * (T.y - center.y) + 33)
+	//Turfs are atoms as well, duh, they render perfectly well without that part of the code. Plus that part was causing tiles with colored lightning to appear all white.
+	*/
 
 	return res
 

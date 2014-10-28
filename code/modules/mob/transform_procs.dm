@@ -6,11 +6,13 @@
 			continue
 		drop_from_inventory(W)
 	regenerate_icons()
+
 	monkeyizing = 1
 	canmove = 0
 	stunned = 1
 	icon = null
 	invisibility = 101
+
 	for(var/t in organs)
 		del(t)
 	var/atom/movable/overlay/animation = new /atom/movable/overlay( loc )
@@ -75,7 +77,9 @@
 	new_mob.a_intent = "hurt"
 	new_mob.key = key
 
-	new_mob << "<B>You are now a cluwne. Enjoy your misery!</B>"
+	new_mob << "<span class='sinister'>Instantly, what was your clothes fall off, and are replaced with a mockery of all that is clowning; Disgusting-looking garb that the foulest of creatures would be afraid of wearing. Your very face begins to shape, mold, into something truely disgusting. A mask made of flesh. Your body is feeling the worst pain it has ever felt. As you think it cannot get any worse, one of your arms turns into a horrific meld of flesh and plastic, making a limb made entirely of bike horns.</span>"
+	new_mob << "<span class='sinister'>Your very soul is being torn apart. What was organs, blood, flesh, is now darkness. And inside the infernal void that was once a living being, something sinister takes root. As what you were goes away, you try to let out a frantic plea of 'Help me! Please god help me!' but your god has abandoned you, and all that leaves your horrible mouth is a strangled 'HONK!'.</span>"
+	new_mob.say("HONK!")
 	spawn(0)//To prevent the proc from returning null.
 		del(src)
 	return
@@ -148,13 +152,13 @@
 		O.show_laws()
 		O << "<b>These laws may be changed by other players, or by you being the traitor.</b>"
 
-	O.verbs += /mob/living/silicon/ai/proc/ai_call_shuttle
+	//O.verbs += /mob/living/silicon/ai/proc/ai_call_shuttle
 	O.verbs += /mob/living/silicon/ai/proc/show_laws_verb
-	O.verbs += /mob/living/silicon/ai/proc/ai_camera_track
-	O.verbs += /mob/living/silicon/ai/proc/ai_alerts
-	O.verbs += /mob/living/silicon/ai/proc/ai_camera_list
+	//O.verbs += /mob/living/silicon/ai/proc/ai_camera_track
+	//O.verbs += /mob/living/silicon/ai/proc/ai_alerts
+	//O.verbs += /mob/living/silicon/ai/proc/ai_camera_list
 	O.verbs += /mob/living/silicon/ai/proc/ai_statuschange
-	O.verbs += /mob/living/silicon/ai/proc/ai_roster
+	//O.verbs += /mob/living/silicon/ai/proc/ai_roster
 
 	O.job = "AI"
 

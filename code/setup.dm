@@ -382,6 +382,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define M_LOUD		208		// CAUSES INTENSE YELLING
 #define M_WHISPER	209		// causes quiet whispering
 #define M_DIZZY		210		// Trippy.
+#define M_SANS		211		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'fuck comic sans' IN YOUR PR.
 
 // Bustanuts
 #define M_HARDCORE      300
@@ -658,10 +659,6 @@ var/list/TAGGERLOCATIONS = list(
 #define ORGAN_MUTATED		2048
 #define ORGAN_PEG			4096 // ROB'S MAGICAL PEGLEGS v2
 
-#define ROUNDSTART_LOGOUT_REPORT_TIME 6000 //Amount of time (in deciseconds) after the rounds starts, that the player disconnect report is issued.
-
-
-
 //Please don't edit these values without speaking to Errorage first	~Carn
 //Admin Permissions
 #define R_BUILDMODE		1
@@ -699,6 +696,7 @@ var/list/TAGGERLOCATIONS = list(
 #define CHAT_LOOC		4096
 #define CHAT_GHOSTRADIO 8192
 #define SOUND_STREAMING 16384 // /vg/
+#define CHAT_GHOSTPDA   32768
 
 
 #define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_AMBIENCE|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_LOOC|SOUND_STREAMING)
@@ -806,6 +804,16 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 
 #define CAN_BE_FAT 8192 // /vg/
 
+#define IS_SYNTHETIC 16384 // from baystation
+
+
+// from bay station
+#define INFECTION_LEVEL_ONE 100
+#define INFECTION_LEVEL_TWO 500
+#define INFECTION_LEVEL_THREE 1000
+
+
+
 //Language flags.
 #define WHITELISTED 1  // Language is available if the speaker is whitelisted.
 #define RESTRICTED 2   // Language can only be accquired by spawning or an admin.
@@ -872,3 +880,25 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define MT_ERROR  -1
 #define MT_UPDATE 1
 #define MT_REINIT 2
+
+#define AUTOIGNITION_WOOD  573.15
+#define AUTOIGNITION_PAPER 519.15
+
+////////////////////////
+//// MACHINE FLAGS /////
+////////////////////////
+
+//used to define machine behaviour in attackbys and other code situations
+#define EMAGGABLE		1	//can we emag it? If this is flagged, the machine calls emag()
+#define SCREWTOGGLE		2	//does it toggle panel_open when hit by a screwdriver?
+#define CROWDESTROY		4	//does hitting a panel_open machine with a crowbar disassemble it?
+#define WRENCHMOVE		8	//does hitting it with a wrench toggle its anchored state?
+#define FIXED2WORK		16	//does it need to be anchored to work? Try to use this with WRENCHMOVE
+#define EJECTNOTDEL		32 	//when we destroy the machine, does it remove all its items or destroy them?
+
+/////////////////////////
+//gun shit - prepare to have various things added to this
+#define SILENCECOMP 1 		//Silencer-compatible
+#define AUTOMAGDROP 2		//Does the mag drop when it's empty?
+#define EMPTYCASINGS 4		//Does the gun eject empty casings?
+

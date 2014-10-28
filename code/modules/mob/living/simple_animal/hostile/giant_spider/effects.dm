@@ -23,7 +23,7 @@
 
 /obj/effect/spider/attackby(var/obj/item/weapon/W, var/mob/user)
 	user.changeNext_move(10)
-	if(W.attack_verb.len)
+	if(W.attack_verb && W.attack_verb.len)
 		visible_message("\red <B>\The [src] have been [pick(W.attack_verb)] with \the [W][(user ? " by [user]." : ".")]")
 	else
 		visible_message("\red <B>\The [src] have been attacked with \the [W][(user ? " by [user]." : ".")]")
@@ -63,7 +63,7 @@
 	if (prob(50))
 		icon_state = "stickyweb2"
 
-/obj/effect/spider/stickyweb/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/effect/spider/stickyweb/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 	if(istype(mover, /mob/living/simple_animal/hostile/giant_spider))
 		return 1

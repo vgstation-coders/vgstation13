@@ -38,6 +38,11 @@
 	icon_state = "wood"
 	floor_tile = new/obj/item/stack/tile/wood
 
+	autoignition_temperature = AUTOIGNITION_WOOD
+	fire_fuel = 10
+	soot_type = null
+	melt_temperature = 0 // Doesn't melt.
+
 /turf/simulated/floor/light
 	name = "Light floor"
 	luminosity = 5
@@ -53,12 +58,15 @@
 				update_icon()
 				name = n
 
-
-
 /turf/simulated/floor/wood
 	name = "floor"
 	icon_state = "wood"
 	floor_tile = new/obj/item/stack/tile/wood
+
+	autoignition_temperature = AUTOIGNITION_WOOD
+	fire_fuel = 10
+	soot_type = null
+	melt_temperature = 0 // Doesn't melt.
 
 /turf/simulated/floor/vault
 	icon_state = "rockvault"
@@ -80,6 +88,9 @@
 	thermal_conductivity = 0.025
 	heat_capacity = 325000
 
+	soot_type = null
+	melt_temperature = 0 // Doesn't melt.
+
 /turf/simulated/floor/engine/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	if(!C)
 		return
@@ -99,15 +110,26 @@
 	name = "engraved floor"
 	icon_state = "cult"
 
+/turf/simulated/floor/engine/cult/cultify()
+	return
+
+/turf/simulated/floor/engine/cult/narsie//version that spawns on Nar-Sie's path
+	name = "engraved floor"
+	desc = "something that goes beyond your understanding went this way"
+	icon_state = "cult-narsie"
+	luminosity = 1
+	l_color = "#3e0000"
+
 
 /turf/simulated/floor/engine/n20
 	New()
 		..()
-		// EXACTLY the same code as fucking roomfillers.  If this doesn't work, something's fucked.
-		var/datum/gas/sleeping_agent/trace_gas = new
-		air.trace_gases += trace_gas
-		trace_gas.moles = 9*4000
-		air.update_values()
+		if(src.air)
+			// EXACTLY the same code as fucking roomfillers.  If this doesn't work, something's fucked.
+			var/datum/gas/sleeping_agent/trace_gas = new
+			air.trace_gases += trace_gas
+			trace_gas.moles = 9*4000
+			air.update_values()
 
 /turf/simulated/floor/engine/vacuum
 	name = "vacuum floor"
@@ -149,6 +171,9 @@
 	heat_capacity = 0
 	layer = 2
 
+	soot_type = null
+	melt_temperature = 0 // Doesn't melt.
+
 /turf/simulated/shuttle/wall
 	name = "wall"
 	icon_state = "wall1"
@@ -156,9 +181,19 @@
 	density = 1
 	blocks_air = 1
 
+/turf/simulated/shuttle/wall/cultify()
+	ChangeTurf(/turf/simulated/wall/cult)
+	cultification()
+	return
+
 /turf/simulated/shuttle/floor
 	name = "floor"
 	icon_state = "floor"
+
+/turf/simulated/shuttle/floor/cultify()
+	ChangeTurf(/turf/simulated/floor/engine/cult)
+	cultification()
+	return
 
 /turf/simulated/shuttle/plating
 	name = "plating"
@@ -169,9 +204,16 @@
 	name = "Brig floor"        // Also added it into the 2x3 brig area of the shuttle.
 	icon_state = "floor4"
 
+/turf/simulated/shuttle/floor4/cultify()
+	ChangeTurf(/turf/simulated/floor/engine/cult)
+	cultification()
+	return
+
 /turf/simulated/floor/beach
 	name = "Beach"
 	icon = 'icons/misc/beach.dmi'
+	soot_type = null
+	melt_temperature = 0 // Doesn't melt.
 
 /turf/simulated/floor/beach/sand
 	name = "Sand"
@@ -226,6 +268,9 @@
 							var/turf/simulated/floor/FF = get_step(src,direction)
 							FF.update_icon() //so siding get updated properly
 
+/turf/simulated/floor/carpet/cultify()
+	return
+
 /turf/simulated/floor/carpet/arcade
 	name = "Arcade Carpet"
 	icon_state = "arcadecarpet"
@@ -278,6 +323,9 @@
 
 	intact = 0
 
+	soot_type = null
+	melt_temperature = 0 // Doesn't melt.
+
 	New()
 		..()
 		// Fucking cockshit dickfuck shitslut
@@ -303,8 +351,10 @@
 		if(!C || !user)
 			return 0
 		if(istype(C, /obj/item/weapon/screwdriver))
-			ReplaceWithLattice()
 			playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
+			if(do_after(user, 30))
+				new /obj/item/stack/rods(src, 2)
+				ReplaceWithLattice()
 			return
 
 		if(istype(C, /obj/item/weapon/cable_coil))

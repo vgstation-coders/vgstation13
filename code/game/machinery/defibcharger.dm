@@ -1,13 +1,14 @@
 obj/machinery/recharger/defibcharger/wallcharger
-	name = "defib recharger"
+	name = "defibrillator recharger"
 	desc = "A special wall mounted recharger meant for emergency defibrillators"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "wrecharger0"
 	anchored = 1
 	use_power = 1
-	idle_power_usage = 4
+	idle_power_usage = 10
 	active_power_usage = 150
-	var/opened = 0
+
+	machine_flags = SCREWTOGGLE | CROWDESTROY //| WRENCHMOVE | FIXED2WORK if we want it to be wrenchable
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -72,60 +73,42 @@ obj/machinery/recharger/defibcharger/wallcharger/process()
 			else
 				icon_state = "wrecharger2"
 
+/obj/machinery/recharger/defibcharger/wallcharger/togglePanelOpen(var/obj/toggleitem, var/mob/user)
+	if(charging)
+		user << "<span class='warning'>Not while [src] is charging!</span>"
+		return
+	return(..())
+
+/obj/machinery/recharger/defibcharger/wallcharger/crowbarDestroy()
+	if(..() == 1)
+		if(charging)
+			charging.loc = src.loc
+		return 1
+	return -1
+
 obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as obj, mob/user as mob)
+	if(..())
+		return
 	if(istype(user,/mob/living/silicon))
 		return
 	if(istype(G, /obj/item/weapon/melee/defibrillator))
+		var/obj/item/weapon/melee/defibrillator/D = G
+		if(D.ready)
+			user << "<span class='warning'>[D] won't fit. Try putting the paddles back on!</span>"
+			return
 		if(charging)
+			user << "<span class='warning'>Remove [D] first!</span>"
 			return
 		// Checks to make sure he's not in space doing it, and that the area got proper power.
 		var/area/a = get_area(src)
 		if(!isarea(a))
-			user << "\red The [name] blinks red as you try to insert the item!"
+			user << "<span class='warning'>[src] blinks red as you try to insert [D]!</span>"
 			return
 		if(a.power_equip == 0)
-			user << "\red The [name] blinks red as you try to insert the item!"
+			user << "<span class='warning'>[src] blinks red as you try to insert [D]!</span>"
 			return
 		user.drop_item()
 		G.loc = src
 		charging = G
 		use_power = 2
 		update_icon()
-	/*if(istype(G, /obj/item/weapon/wrench)) If you want the defibrillator's to be ananchorable, uncomment this
-		if(charging)
-			user << "\red Remove the defibrillator first!"
-			return
-		anchored = !anchored
-		user << "You [anchored ? "attached" : "detached"] the recharger."
-		playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)*/
-	if(istype(G, /obj/item/weapon/screwdriver))
-		if(charging)
-			user << "\red Remove the defibrillator first!"
-			return
-		if(!opened)
-			src.opened = 1
-			//src.icon_state = "wrecharger1"
-			user << "You open the maintenance hatch of [src]"
-			return
-		else
-			src.opened = 0
-			//src.icon_state = "wrecharger1_t"
-			user << "You close the maintenance hatch of [src]"
-		return 1
-	if(opened)
-		if(charging)
-			user << "\red Remove the defibrillator first!"
-			return
-		if(istype(G, /obj/item/weapon/crowbar))
-			user << "You begin to remove the circuits from the [src]."
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			if(do_after(user, 50))
-				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-				M.state = 2
-				M.icon_state = "box_1"
-				for(var/obj/I in component_parts)
-					if(I.reliability != 100 && crit_fail)
-						I.crit_fail = 1
-					I.loc = src.loc
-				del(src)
-				return 1
