@@ -32,7 +32,7 @@ var/list/mommicomment_sound = list('sound/voice/mommi_comment1.ogg', 'sound/voic
 	 - If the proc has NO extrarange, the fraction of the 7 range is used, so a sound only trasmits to those in the screen at regular pressure
 	 - This means that at low or 0 pressure, sound doesn't trasmit from the tile at all! How cool is that?
 */
-	if(gas_modified)
+	if(gas_modified && !turf_source.isDense())
 		var/atmosphere = 0
 		if(istype(turf_source, /turf/simulated))
 			var/turf/simulated/TS = turf_source
@@ -45,7 +45,7 @@ var/list/mommicomment_sound = list('sound/voice/mommi_comment1.ogg', 'sound/voic
 			atmosphere = turf_source.air.return_pressure()
 		//message_admins("We're starting off with [atmosphere] and [extrarange]")
 		if(extrarange)
-			extrarange = -7 + min ( round( extrarange * round(atmosphere/101.325, 0.1), 1 ), extrarange )
+			extrarange = -7 + min ( round( (7 + extrarange) * round(atmosphere/101.325, 0.1), 1 ), (7 + extrarange) )
 		else
 			extrarange = -7 + min( round(7 * round(atmosphere/101.325, 0.1), 1 ), 10 )
 		//message_admins("We've adjusted the sound of [source] at [turf_source.loc] to have a range of [7 + extrarange]")
