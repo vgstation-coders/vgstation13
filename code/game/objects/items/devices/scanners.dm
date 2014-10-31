@@ -109,6 +109,7 @@ REAGENT SCANNER
 	var/TX = M.getToxLoss() > 50 	? 	"<b>[M.getToxLoss()]</b>" 		: M.getToxLoss()
 	var/BU = M.getFireLoss() > 50 	? 	"<b>[M.getFireLoss()]</b>" 		: M.getFireLoss()
 	var/BR = M.getBruteLoss() > 50 	? 	"<b>[M.getBruteLoss()]</b>" 	: M.getBruteLoss()
+	playsound(get_turf(src), 'sound/items/healthanalyzer.ogg', 50, 1)
 	if(M.status_flags & FAKEDEATH)
 		OX = fake_oxy > 50 			? 	"<b>[fake_oxy]</b>" 			: fake_oxy
 		user.show_message("\blue Analyzing Results for [M]:\n\t Overall Status: dead")
@@ -172,7 +173,7 @@ REAGENT SCANNER
 		user.show_message("\blue Bloodstream Analysis located [M.reagents:get_reagent_amount("inaprovaline")] units of rejuvenation chemicals.")
 	if (M.has_brain_worms())
 		user.show_message("\red Subject suffering from aberrant brain activity. Recommend further scanning.")
-	else if (M.getBrainLoss() >= 100 || istype(M, /mob/living/carbon/human) && M:brain_op_stage == 4.0)
+	else if (M.getBrainLoss() >= 100 || !M.has_brain())
 		user.show_message("\red Subject is brain dead.")
 	else if (M.getBrainLoss() >= 60)
 		user.show_message("\red Severe brain damage detected. Subject likely to have mental retardation.")
@@ -186,7 +187,7 @@ REAGENT SCANNER
 			if(e.status & ORGAN_BROKEN)
 				if(((e.name == "l_arm") || (e.name == "r_arm") || (e.name == "l_leg") || (e.name == "r_leg")) && (!(e.status & ORGAN_SPLINTED)))
 					user << "\red Unsecured fracture in subject [limb]. Splinting recommended for transport."
-			if(e.is_infected())
+			if(e.has_infected_wound())
 				user << "\red Infected wound detected in subject [limb]. Disinfection recommended."
 
 		for(var/name in H.organs_by_name)
@@ -314,10 +315,8 @@ REAGENT SCANNER
 	var/recent_fail = 0
 
 /obj/item/device/mass_spectrometer/New()
-	..()
-	var/datum/reagents/R = new/datum/reagents(5)
-	reagents = R
-	R.my_atom = src
+	. = ..()
+	create_reagents(5)
 
 /obj/item/device/mass_spectrometer/on_reagent_change()
 	if(reagents.total_volume)

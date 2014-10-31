@@ -13,6 +13,8 @@ Note: Must be placed within 3 tiles of the R&D Console
 	var/obj/item/weapon/loaded_item = null
 	var/decon_mod = 1
 
+	research_flags = CONSOLECONTROL
+
 /obj/machinery/r_n_d/destructive_analyzer/New()
 	. = ..()
 
@@ -42,49 +44,22 @@ Note: Must be placed within 3 tiles of the R&D Console
 		temp_list[O] = text2num(temp_list[O])
 	return temp_list
 
+/obj/machinery/r_n_d/destructive_analyzer/togglePanelOpen(var/obj/toggleitem, mob/user)
+	if(loaded_item)
+		user << "<span class='rose'>You can't open the maintenance panel while an item is loaded!</span>"
+		return -1
+	return ..()
 
-/obj/machinery/r_n_d/destructive_analyzer/update_icon()
-	overlays.Cut()
-	if(linked_console)
-		overlays += "d_analyzer_link"
+/obj/machinery/r_n_d/destructive_analyzer/crowbarDestroy(mob/user)
+	if(..() == 1)
+		if(loaded_item)
+			loaded_item.loc = src.loc
+		return 1
+	return -1
 
 /obj/machinery/r_n_d/destructive_analyzer/attackby(var/obj/O as obj, var/mob/user as mob)
-	if (shocked)
-		shock(user,50)
-	if (istype(O, /obj/item/weapon/screwdriver))
-		if (!opened)
-			opened = 1
-			if(linked_console)
-				linked_console.linked_destroy = null
-				linked_console = null
-			icon_state = "d_analyzer_t"
-			user << "You open the maintenance hatch of [src]."
-		else
-			opened = 0
-			icon_state = "d_analyzer"
-			user << "You close the maintenance hatch of [src]."
-		return
-	if (opened)
-		if(istype(O, /obj/item/weapon/crowbar))
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				I.loc = src.loc
-			del(src)
-			return 1
-		else
-			user << "\red You can't load the [src.name] while it's opened."
-			return 1
-	if (disabled)
-		return
-	if (!linked_console)
-		user << "\red The protolathe must be linked to an R&D console first!"
-		return
-	if (busy)
-		user << "\red The protolathe is busy right now."
-		return
+	if(..())
+		return 1
 	if (istype(O, /obj/item) && !loaded_item)
 		if(isrobot(user)) //Don't put your module items in there!
 			if(isMoMMI(user))

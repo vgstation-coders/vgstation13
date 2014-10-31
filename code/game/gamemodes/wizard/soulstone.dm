@@ -2,7 +2,7 @@
 	name = "Soul Stone Shard"
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "soulstone"
-	item_state = "electronic"
+	item_state = "shard-soulstone"
 	desc = "A fragment of the legendary treasure known simply as the 'Soul Stone'. The shard still flickers with a fraction of the full artefacts power."
 	w_class = 1.0
 	flags = FPRINT | TABLEPASS
@@ -10,14 +10,14 @@
 	origin_tech = "bluespace=4;materials=4"
 	var/imprinted = "empty"
 
-
 //////////////////////////////Capturing////////////////////////////////////////////////////////
 
 	attack(mob/living/carbon/human/M as mob, mob/user as mob)
 		if(!istype(M, /mob/living/carbon/human))//If target is not a human.
 			return ..()
-		if(istype(M, /mob/living/carbon/human/dummy))
-			return..()
+		if(istype(M, /mob/living/carbon/human/manifested))
+			user << "The soul stone shard seems unable to pull the soul out of that poor manifested ghost back onto our plane."
+			return
 		add_logs(user, M, "captured [M.name]'s soul", object=src)
 
 		transfer_soul("VICTIM", M, user)
@@ -75,13 +75,23 @@
 					src.icon_state = "soulstone"
 		attack_self(U)
 
+/obj/item/device/soulstone/cultify()
+	return
+
 ///////////////////////////Transferring to constructs/////////////////////////////////////////////////////
 /obj/structure/constructshell
 	name = "empty shell"
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "construct"
-	desc = "A wicked machine used by those skilled in magical arts. It is inactive"
+	desc = "A wicked machine used by those skilled in magical arts. It is inactive."
 	flags = FPRINT | TABLEPASS
+
+/obj/structure/constructshell/cultify()
+	return
+
+/obj/structure/constructshell/cult
+	icon_state = "construct-cult"
+	desc = "This eerie contraption looks like it would come alive if supplied with a missing ingredient."
 
 /obj/structure/constructshell/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/device/soulstone))

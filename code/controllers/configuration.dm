@@ -83,6 +83,7 @@
 	var/forumurl = "http://baystation12.net/forums/"
 
 	var/media_base_url = "" // http://ss13.nexisonline.net/media
+	var/media_secret_key = "" // Random string
 
 	//Alert level description
 	var/alert_desc_green = "All threats to the station have passed. Security may not have weapons visible, privacy laws are once again fully enforced."
@@ -145,6 +146,11 @@
 
 	var/assistantlimit = 0 //enables assistant limiting
 	var/assistantratio = 2 //how many assistants to security members
+
+	var/emag_energy = -1
+	var/emag_starts_charged = 1
+	var/emag_recharge_rate = 0
+	var/emag_recharge_ticks = 0
 
 /datum/configuration/New()
 	. = ..()
@@ -490,6 +496,8 @@
 					copy_logs=value
 				if("media_base_url")
 					media_base_url = value
+				if("media_secret_key")
+					media_secret_key = value
 				if("vgws_base_url")
 					vgws_base_url = value
 				else
@@ -541,6 +549,14 @@
 					config.limbs_can_break = value
 				if("respawn_delay")
 					config.respawn_delay = value
+				if("emag_energy")
+					config.emag_energy = value
+				if("emag_starts_charged")
+					config.emag_starts_charged = value
+				if("emag_recharge_rate")
+					config.emag_recharge_rate = value
+				if("emag_recharge_ticks")
+					config.emag_recharge_ticks = value
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 
