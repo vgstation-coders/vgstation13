@@ -28,7 +28,7 @@ RCD
 	var/canRwall = 0
 	var/disabled = 0
 
-	suicide_act(mob/user)
+	/obj/item/weapon/rcd/suicide_act(mob/user)
 		viewers(user) << "\red <b>[user] is using the deconstruct function on the [src.name] on \himself! It looks like \he's  trying to commit suicide!</b>"
 		return (user.death(1))
 
@@ -40,7 +40,7 @@ RCD
 		return
 
 
-	attackby(obj/item/weapon/W, mob/user)
+	/obj/item/weapon/rcd/attackby(obj/item/weapon/W, mob/user)
 		..()
 		if(istype(W, /obj/item/weapon/rcd_ammo))
 			if((matter + 10) > 30)
@@ -55,7 +55,7 @@ RCD
 			return
 
 
-	attack_self(mob/user)
+	/obj/item/weapon/rcd/attack_self(mob/user)
 		//Change the mode
 		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
 		switch(mode)
@@ -78,11 +78,11 @@ RCD
 					src.spark_system.start()
 				return
 
-	proc/activate()
+	/obj/item/weapon/rcd/proc/activate()
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 
 
-	afterattack(atom/A, mob/user)
+	/obj/item/weapon/rcd/afterattack(atom/A, mob/user)
 		if(disabled && !isrobot(user))
 			return 0
 		if(get_dist(user,A)>1)
