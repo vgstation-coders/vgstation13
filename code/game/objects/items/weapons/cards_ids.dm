@@ -139,6 +139,18 @@
 	icon_state = "silver"
 	item_state = "silver_id"
 
+/obj/item/weapon/card/id/commander_spare
+	name = "Return station commander's spare ID"
+	desc = "The spare ID of the High Lord himself."
+	icon_state = "silver"
+	item_state = "silver_id"
+	registered_name = "Commander"
+	assignment = "Commander"
+	New()
+		var/datum/job/captain/J = new/datum/job/captain
+		access = J.get_access()
+		..()
+
 /obj/item/weapon/card/id/gold
 	name = "identification card"
 	desc = "A golden card which shows power and might."
