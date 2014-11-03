@@ -123,7 +123,7 @@
 	anchored = 1
 	var/orient = "LEFT" // "RIGHT" changes the dir suffix to "-r"
 	var/mob/living/occupant = null
-	var/available_chemicals = list("inaprovaline" = "Inaprovaline", "stoxin" = "Soporific", "kelotane" = "Kelotane", "dermaline" = "Dermaline", "bicaridine" = "Bicaridine")
+	var/available_chemicals = list("inaprovaline" = "Inaprovaline", "stoxin" = "Soporific", "kelotane" = "Kelotane", "bicaridine" = "Bicaridine")
 	var/amounts = list(5, 10)
 	var/manip_level = 1
 	var/scan_level = 0 //I have my reasons
