@@ -95,7 +95,7 @@
 					else if(src.connected.occupant.health > (config.health_threshold_crit - (25 * src.connected.scan_level)) || href_list["chemical"] == "inaprovaline")
 						src.connected.inject_chemical(usr,href_list["chemical"],text2num(href_list["amount"]))
 					else
-						usr << "<span class='warning'>The sleeper fails to inject the patient, his state is too degraded to allow medication.</span>"
+						usr << "<span class='warning'>The sleeper fails to inject the patient. The patient's state is too degraded to allow medication.</span>"
 		if(href_list["refresh"])
 			src.updateUsrDialog()
 		src.add_fingerprint(usr)
