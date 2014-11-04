@@ -111,6 +111,30 @@
 	return
 	// no change - sleeper works without power (you just can't inject more)
 
+/obj/machinery/computer/sleep_console/verb/rotate_switch()
+	set name = "Rotate Sleeper"
+	set category = "Object"
+	set src in oview(1)
+	if(usr.stat != 0 || !(ishuman(usr) || ismonkey(usr)))
+		return
+
+	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
+		return
+	usr.visible_message("<span class='notice'>[usr] starts rotating \the [src]!</span>",
+						"<span class='notice'>You start rotating \the [src]!</span>")
+	if(do_after(usr, 30))
+		if(orient == "RIGHT")
+			orient = "LEFT"
+			src.connected = locate(/obj/machinery/sleeper, get_step(src, WEST))
+			icon_state = "sleeperconsole"
+		else if(orient == "LEFT")
+			orient = "RIGHT"
+			src.connected = locate(/obj/machinery/sleeper, get_step(src, EAST))
+			icon_state = "sleeperconsole-r"
+
+		usr.visible_message("<span class='notice'>[usr] rotates \the [src]!</span>",
+							"<span class='notice'>You rotate \the [src]!</span>")
+
 /////////////////////////////////////////
 // THE SLEEPER ITSELF
 /////////////////////////////////////////
@@ -253,7 +277,7 @@
 
 
 /obj/machinery/sleeper/attackby(obj/item/weapon/grab/G as obj, mob/user as mob)
-	if((!( istype(G, /obj/item/weapon/grab)) || !( ismob(G.affecting))))
+	if((!(istype(G, /obj/item/weapon/grab)) || !(ismob(G.affecting))))
 		return
 	if(src.occupant)
 		user << "<span class='notice'>\The [src] is already occupied!</span>"
@@ -341,6 +365,10 @@
 		M:reagents.add_reagent("inaprovaline", 5)
 	return
 
+/obj/machinery/sleeper/crowbarDestroy(mob/user)
+	if(src.occupant)
+		user << "<span class='warning'>[src.occupant] is inside \the [src]!</span>"
+		return
 
 /obj/machinery/sleeper/proc/go_out()
 	if(!src.occupant)
@@ -414,18 +442,18 @@
 		return
 
 	if(src.occupant)
-		usr << "<span class='notice'>The sleeper is already occupied!</span>"
+		usr << "<span class='notice'>\The [src] is already occupied!</span>"
 		return
 	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
 		return
 	for(var/mob/living/carbon/slime/M in range(1,usr))
 		if(M.Victim == usr)
-			usr << "<span class='warning'>You are too busy getting your life sucked out of you.</span>"
+			usr << "<span class='warning'>You are too busy getting the life sucked out of you.</span>"
 			return
-	visible_message("<span class='notice'>[usr] starts climbing into the sleeper.</span>")
+	visible_message("<span class='notice'>[usr] starts climbing into \the [src].</span>")
 	if(do_after(usr, 20))
 		if(src.occupant)
-			usr << "<span class='notice'>The sleeper is already occupied!</span>"
+			usr << "<span class='notice'>\The [src] is already occupied!</span>"
 			return
 		usr.stop_pulling()
 		usr.client.perspective = EYE_PERSPECTIVE
@@ -441,3 +469,28 @@
 		src.add_fingerprint(usr)
 		return
 	return
+
+/obj/machinery/sleeper/verb/rotate_switch()
+	set name = "Rotate Sleeper"
+	set category = "Object"
+	set src in oview(1)
+	if(usr.stat != 0 || !(ishuman(usr) || ismonkey(usr)))
+		return
+
+	if(src.occupant)
+		usr << "<span class='notice'>\The [src] is occupied!</span>"
+		return
+	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
+		return
+	usr.visible_message("<span class='notice'>[usr] starts rotating \the [src]!</span>",
+						"<span class='notice'>You start rotating \the [src]!</span>")
+	if(do_after(usr, 30))
+		if(orient == "RIGHT")
+			orient = "LEFT"
+			src.icon_state = "sleeper_0"
+		else if(orient == "LEFT")
+			orient = "RIGHT"
+			src.icon_state = "sleeper_0-r"
+
+		usr.visible_message("<span class='notice'>[usr] rotates \the [src]!</span>",
+							"<span class='notice'>You rotate \the [src]!</span>")
