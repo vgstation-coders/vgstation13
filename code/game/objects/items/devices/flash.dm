@@ -240,12 +240,3 @@
 /obj/item/device/flash/syndicate
 	superflash = 1
 	origin_tech = "magnets=3;combat=2;illegal=2"
-
-/obj/item/device/flash/syndicate/attack(mob/living/M as mob, mob/user as mob)
-	..()
-	if(!broken && prob(30))
-		broken = 1
-		user << "<span class='danger'>The bulb explodes in your hand and the internal wiring melts!</span>"
-		playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
-		user.Weaken(5)
-		icon_state = "flashburnt"
