@@ -115,9 +115,11 @@
 	set name = "Rotate Sleeper"
 	set category = "Object"
 	set src in oview(1)
+
+	if(anchored)
+		return
 	if(usr.stat != 0 || !(ishuman(usr) || ismonkey(usr)))
 		return
-
 	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
 		return
 	usr.visible_message("<span class='notice'>[usr] starts rotating \the [src]!</span>",
@@ -275,9 +277,13 @@
 		del(src)
 	return
 
+/obj/machinery/sleeper/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/weapon/wrench))
+		add_fingerprint(user)
+		src.anchored = !src.anchored
 
 /obj/machinery/sleeper/attackby(obj/item/weapon/grab/G as obj, mob/user as mob)
-	if((!(istype(G, /obj/item/weapon/grab)) || !(ismob(G.affecting))))
+	if(!(istype(G, /obj/item/weapon/grab) || ismob(G.affecting)))
 		return
 	if(src.occupant)
 		user << "<span class='notice'>\The [src] is already occupied!</span>"
@@ -369,6 +375,7 @@
 	if(src.occupant)
 		user << "<span class='warning'>[src.occupant] is inside \the [src]!</span>"
 		return
+	..()
 
 /obj/machinery/sleeper/proc/go_out()
 	if(!src.occupant)
@@ -474,6 +481,10 @@
 	set name = "Rotate Sleeper"
 	set category = "Object"
 	set src in oview(1)
+
+	if(anchored)
+		return
+
 	if(usr.stat != 0 || !(ishuman(usr) || ismonkey(usr)))
 		return
 
