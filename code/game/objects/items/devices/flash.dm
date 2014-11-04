@@ -87,7 +87,7 @@
 				flick("e_flash", Subject.flash)
 				Subject.apply_effect(30, PARALYZE) //Burns right through their mind
 				Subject.apply_damage(rand(10,30), BURN, "head") //No seriously, it's that powerful
-				Subject.emote("scream",,, 1) //I have no eyes and I must scream
+				Subject.emote("scream", automatic = 1) //I have no eyes and I must scream
 				Subject.apply_effect(10, STUTTER) //O-o-oh g-go-od !
 			else //Nah, it's a good old Nanotrasen flash
 				Subject.Weaken(10)
