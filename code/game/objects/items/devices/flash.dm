@@ -13,6 +13,7 @@
 	var/times_used = 0 //Number of times it's been used.
 	var/broken = 0     //Is the flash burnt out?
 	var/last_used = 0 //last world.time it was used.
+	var/superflash = 0 //Is it a syndicate superflash ?
 
 /obj/item/device/flash/proc/clown_check(var/mob/user)
 	if(user && (M_CLUMSY in user.mutations) && prob(50))
@@ -77,10 +78,20 @@
 	if(iscarbon(M))
 		var/mob/living/carbon/Subject = M
 		var/safe = Subject.eyecheck()
-
 		if(safe <= 0)
-			Subject.Weaken(10)
-			flick("e_flash", Subject.flash)
+			if(superflash) //Are we using a syndicate super flash ?
+				if(ishuman(Subject))
+					var/mob/living/carbon/human/H = Subject //That's dumb but oh well
+					var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+					E.damage += rand(35,50) //Fuck their eyes up big time
+				flick("e_flash", Subject.flash)
+				Subject.apply_effect(30, PARALYZE) //Burns right through their mind
+				Subject.apply_damage(rand(10,30), BURN, "head") //No seriously, it's that powerful
+				Subject.emote("scream",,, 1) //I have no eyes and I must scream
+				Subject.apply_effect(10, STUTTER) //O-o-oh g-go-od !
+			else //Nah, it's a good old Nanotrasen flash
+				Subject.Weaken(10)
+				flick("e_flash", Subject.flash)
 
 			if(ishuman(user) && user.mind && user.mind in ticker.mode.head_revolutionaries) // alien revhead when?
 				if(ishuman(Subject))
@@ -103,7 +114,10 @@
 		else
 			flashfail = TRUE
 	else if(issilicon(M))
-		M.Weaken(rand(5, 10))
+		if(superflash) //Dis gun be gud
+			M.Weaken(rand(15, 30))
+		else
+			M.Weaken(rand(5, 10))
 	else
 		flashfail = TRUE
 
@@ -221,4 +235,17 @@
 	if(!broken)
 		broken = 1
 		user << "\red The bulb has burnt out!"
+		icon_state = "flashburnt"
+
+/obj/item/device/flash/syndicate
+	superflash = 1
+	origin_tech = "magnets=3;combat=2;illegal=2"
+
+/obj/item/device/flash/syndicate/attack(mob/living/M as mob, mob/user as mob)
+	..()
+	if(!broken && prob(30))
+		broken = 1
+		user << "<span class='danger'>The bulb explodes in your hand and the internal wiring melts!</span>"
+		playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
+		user.Weaken(5)
 		icon_state = "flashburnt"
