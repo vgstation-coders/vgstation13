@@ -27,6 +27,26 @@
 	mat.stored += amount
 	storage[mat_id]=mat
 
+/datum/materials/proc/removeFrom(var/datum/materials/mats)
+	src.addFrom(mats,zero_after=1)
+
+/datum/materials/proc/addFrom(var/datum/materials/mats, var/zero_after=0)
+	if(mats == null)
+		return
+	for(var/mat_id in storage)
+		var/datum/material/myMat=mats.storage[mat_id]
+		var/datum/material/theirMat=mats.storage[mat_id]
+		myMat.stored += theirMat.stored
+		if(zero_after)
+			theirMat.stored = 0
+
+/datum/materials/proc/getVolume()
+	var/volume=0
+	for(var/mat_id in storage)
+		var/datum/material/mat = storage[mat_id]
+		volume += mat.stored
+	return volume
+
 /datum/materials/proc/removeAmount(var/mat_id,var/amount)
 	if(!(mat_id in storage))
 		warning("removeAmount(): Unknown material [mat_id]!")
@@ -144,4 +164,119 @@
 	value=1
 	oretype=null
 	sheettype=/obj/item/stack/sheet/mineral/plastic
+	cointype=null
+
+/datum/material/pharosium
+	name="Pharosium"
+	id="pharosium"
+	value=10
+	oretype=/obj/item/weapon/ore/pharosium
+	sheettype=/obj/item/stack/sheet/mineral/pharosium
+	cointype=null
+
+
+/datum/material/char
+	name="Char"
+	id="char"
+	value=5
+	oretype=/obj/item/weapon/ore/char
+	sheettype=/obj/item/stack/sheet/mineral/char
+	cointype=null
+
+
+/datum/material/claretine
+	name="Claretine"
+	id="claretine"
+	value=50
+	oretype=/obj/item/weapon/ore/claretine
+	sheettype=/obj/item/stack/sheet/mineral/claretine
+	cointype=null
+
+
+/datum/material/bohrum
+	name="Bohrum"
+	id="bohrum"
+	value=50
+	oretype=/obj/item/weapon/ore/bohrum
+	sheettype=/obj/item/stack/sheet/mineral/bohrum
+	cointype=null
+
+
+/datum/material/syreline
+	name="Syreline"
+	id="syreline"
+	value=70
+	oretype=/obj/item/weapon/ore/syreline
+	sheettype=/obj/item/stack/sheet/mineral/syreline
+	cointype=null
+
+
+/datum/material/erebite
+	name="Erebite"
+	id="erebite"
+	value=50
+	oretype=/obj/item/weapon/ore/erebite
+	sheettype=/obj/item/stack/sheet/mineral/erebite
+	cointype=null
+
+
+/datum/material/cytine
+	name="Cytine"
+	id="cytine"
+	value=30
+	oretype=/obj/item/weapon/ore/cytine
+	sheettype=/obj/item/stack/sheet/mineral/cytine
+	cointype=null
+
+
+/datum/material/uqill
+	name="Uqill"
+	id="uqill"
+	value=90
+	oretype=/obj/item/weapon/ore/uqill
+	sheettype=/obj/item/stack/sheet/mineral/uqill
+	cointype=null
+
+
+/datum/material/telecrystal
+	name="Telecrystal"
+	id="telecrystal"
+	value=30
+	oretype=/obj/item/weapon/ore/telecrystal
+	sheettype=/obj/item/stack/sheet/mineral/telecrystal
+	cointype=null
+
+
+/datum/material/mauxite
+	name="Mauxite"
+	id="mauxite"
+	value=5
+	oretype=/obj/item/weapon/ore/mauxite
+	sheettype=/obj/item/stack/sheet/mineral/mauxite
+	cointype=null
+
+
+/datum/material/cobryl
+	name="Cobryl"
+	id="cobryl"
+	value=30
+	oretype=/obj/item/weapon/ore/cobryl
+	sheettype=/obj/item/stack/sheet/mineral/cobryl
+	cointype=null
+
+
+/datum/material/cerenkite
+	name="Cerenkite"
+	id="cerenkite"
+	value=50
+	oretype=/obj/item/weapon/ore/cerenkite
+	sheettype=/obj/item/stack/sheet/mineral/cerenkite
+	cointype=null
+
+/datum/material/molitz
+	name="Molitz"
+	id="molitz"
+	value=10
+	oretype=/obj/item/weapon/ore/molitz
+	sheettype=/obj/item/stack/sheet/mineral/molitz
 	cointype=null

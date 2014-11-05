@@ -163,6 +163,12 @@
 /obj/machinery/mineral/ore_redemption/ex_act()
 	return //So some chucklefuck doesn't ruin miners reward with an explosion
 
+/obj/machinery/mineral/ore_redemption/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(air_group) return 0
+	if(istype(mover) && mover.checkpass(PASSGLASS))
+		return !opacity
+	return !density
+
 /**********************Mining Equipment Locker**************************/
 
 /obj/machinery/mineral/equipment_locker
@@ -182,6 +188,7 @@
 		new /datum/data/mining_equipment("Alien toy",           /obj/item/clothing/mask/facehugger/toy, 		                   250),
 		//new /datum/data/mining_equipment("Laser pointer",       /obj/item/device/laser_pointer, 				                   250),
 		new /datum/data/mining_equipment("Lazarus Capsule",     /obj/item/device/mobcapsule,     				                   250),
+		new /datum/data/mining_equipment("Trainer's Belt",		/obj/item/weapon/storage/belt/lazarus,							   500),
 		new /datum/data/mining_equipment("Point card",    		/obj/item/weapon/card/mining_point_card,               			   500),
 		new /datum/data/mining_equipment("Lazarus injector",    /obj/item/weapon/lazarus_injector,                                1000),
 		new /datum/data/mining_equipment("Sonic jackhammer",    /obj/item/weapon/pickaxe/jackhammer,                               500),
@@ -528,7 +535,7 @@
 	status_flags = CANSTUN|CANWEAKEN|CANPUSH
 	mouse_opacity = 1
 	faction = "neutral"
-	a_intent = "harm"
+	a_intent = "hurt"
 	min_oxy = 0
 	max_oxy = 0
 	min_tox = 0
@@ -670,7 +677,7 @@
 		if(istype(target, /mob/living/simple_animal))
 			var/mob/living/simple_animal/M = target
 			if(M.stat == DEAD)
-				M.faction = "lazarus"
+				M.faction = "lazarus \ref[user]"
 				M.revive()
 				if(istype(target, /mob/living/simple_animal/hostile))
 					var/mob/living/simple_animal/hostile/H = M
@@ -706,25 +713,38 @@
 	throw_range = 20
 	force = 0
 	var/storage_capacity = 1
-	var/capsuleowner = null
+	var/mob/living/capsuleowner = null
 	var/tripped = 0
 	var/colorindex = 0
+	var/mob/contained_mob
 
-	throw_impact(atom/A, mob/user)
-		..()
-		if(!tripped)
-			if(contents.len >= storage_capacity)
-				dump_contents()
-				tripped = 1
-			else
-				take_contents()
-				tripped = 1
+/obj/item/device/mobcapsule/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/weapon/pen))
+		if(user != capsuleowner)
+			user << "<span class='warning'>The [src.name] flashes briefly in error.</span>"
+			return 0
+		spawn()
+			var/name = sanitize(input("Choose a name for your friend.", "Name your friend", contained_mob.name) as text | null)
+			if(name)
+				contained_mob.name = name
+				user << "<span class='notice'>Rename successful, say hello to [contained_mob]</span>"
+	..()
+
+/obj/item/device/mobcapsule/throw_impact(atom/A, mob/user)
+	..()
+	if(!tripped)
+		if(contained_mob)
+			dump_contents(user)
+			tripped = 1
+		else
+			take_contents(user)
+			tripped = 1
 
 
 
-/obj/item/device/mobcapsule/proc/insert(var/atom/movable/AM)
+/obj/item/device/mobcapsule/proc/insert(var/atom/movable/AM, mob/user)
 
-	if(contents.len >= storage_capacity)
+	if(contained_mob)
 		return -1
 
 
@@ -740,6 +760,7 @@
 	else if(AM.density || AM.anchored)
 		return 0
 	AM.loc = src
+	contained_mob = AM
 	return 1
 
 
@@ -748,7 +769,8 @@
 	capsuleowner = user
 
 
-/obj/item/device/mobcapsule/proc/dump_contents()
+/obj/item/device/mobcapsule/proc/dump_contents(mob/user)
+	/*
 	//Cham Projector Exception
 	for(var/obj/effect/dummy/chameleon/AD in src)
 		AD.loc = src.loc
@@ -761,34 +783,30 @@
 		if(M.client)
 			M.client.eye = M.client.mob
 			M.client.perspective = MOB_PERSPECTIVE
-
-
-
-
+*/
+	if(contained_mob)
+		contained_mob.loc = src.loc
+		if(contained_mob.client)
+			contained_mob.client.eye = contained_mob.client.mob
+			contained_mob.client.perspective = MOB_PERSPECTIVE
+		contained_mob = null
 
 /obj/item/device/mobcapsule/attack_self(mob/user)
-	//
 	colorindex += 1
 	if(colorindex >= 6)
 		colorindex = 0
 	icon_state = "mobcap[colorindex]"
 	update_icon()
 
-
-
-
-
-/obj/item/device/mobcapsule/proc/take_contents(atom/target)
-	for(var/atom/AM in src.loc)
-
-
-		if(istype(AM, /mob/living/simple_animal))
+/obj/item/device/mobcapsule/proc/take_contents(mob/user)
+	for(var/mob/living/simple_animal/AM in src.loc)
+		if(istype(AM))
 			var/mob/living/simple_animal/M = AM
 			var/mob/living/simple_animal/hostile/H = M
 			for(var/things in H.friends)
-			if(capsuleowner in H.friends)
-				if(insert(AM) == -1) // limit reached
-					break
+				if(capsuleowner in H.friends)
+					if(insert(AM, user) == -1) // limit reached
+						break
 
 
 

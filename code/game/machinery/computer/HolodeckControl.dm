@@ -9,6 +9,8 @@
 	var/damaged = 0
 	var/last_change = 0
 
+	l_color = "#7BF9FF"
+
 
 	attack_ai(var/mob/user as mob)
 		src.add_hiddenprint(user)
@@ -171,6 +173,7 @@
 
 
 /obj/machinery/computer/HolodeckControl/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
+	..() //does the same thing, keep an eye on this
 //Warning, uncommenting this can have concequences. For example, deconstructing the computer may cause holographic eswords to never derez
 
 /*		if(istype(D, /obj/item/weapon/screwdriver))
@@ -201,14 +204,15 @@
 					del(src)
 
 */
-	if(istype(D, /obj/item/weapon/card/emag) && !emagged)
-		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
-		emagged = 1
-		user << "\blue You vastly increase projector power and override the safety and security protocols."
-		user << "Warning.  Automatic shutoff and derezing protocols have been corrupted.  Please call Nanotrasen maintenance and do not use the simulator."
-		log_game("[key_name(usr)] emagged the Holodeck Control Computer")
-	src.updateUsrDialog()
 	return
+
+/obj/machinery/computer/HolodeckControl/emag(mob/user as mob)
+	playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+	emagged = 1
+	user << "\blue You vastly increase projector power and override the safety and security protocols."
+	user << "Warning.  Automatic shutoff and derezing protocols have been corrupted.  Please call Nanotrasen maintenance and do not use the simulator."
+	log_game("[key_name(usr)] emagged the Holodeck Control Computer")
+	src.updateUsrDialog()
 
 /obj/machinery/computer/HolodeckControl/New()
 	..()
@@ -265,7 +269,7 @@
 					s.set_up(2, 1, T)
 					s.start()
 				T.ex_act(3)
-				T.hotspot_expose(1000,500,1)
+				T.hotspot_expose(1000,500,1,surfaces=1)
 
 
 		for(var/item in holographic_items)
@@ -314,7 +318,7 @@
 						s.start()
 						if(T)
 							T.temperature = 5000
-							T.hotspot_expose(50000,50000,1)
+							T.hotspot_expose(50000,50000,1,surfaces=1)
 
 		active = 1
 	else
@@ -344,8 +348,8 @@
 	for(var/obj/effect/decal/cleanable/blood/B in linkedholodeck)
 		del(B)
 
-	for(var/mob/living/simple_animal/hostile/carp/C in linkedholodeck)
-		del(C)
+	for(var/mob/living/simple_animal/hostile/carp/holocarp/holocarp in linkedholodeck)
+		del(holocarp)
 
 	holographic_items = A.copy_contents_to(linkedholodeck , 1)
 
@@ -363,9 +367,9 @@
 					s.start()
 					if(T)
 						T.temperature = 5000
-						T.hotspot_expose(50000,50000,1)
+						T.hotspot_expose(50000,50000,1,surfaces=1)
 			if(L.name=="Holocarp Spawn")
-				new /mob/living/simple_animal/hostile/carp(L.loc)
+				new /mob/living/simple_animal/hostile/carp/holocarp(L.loc)
 
 
 /obj/machinery/computer/HolodeckControl/proc/emergencyShutdown()
@@ -577,7 +581,7 @@
 		visible_message("\blue [user] dunks [W] into the [src]!", 3)
 		return
 
-/obj/structure/holohoop/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/holohoop/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover,/obj/item) && mover.throwing)
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))

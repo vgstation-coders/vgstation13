@@ -29,9 +29,10 @@ Mineral Sheets
 	throw_range = 5
 	origin_tech = "materials=1"
 	sheettype = "sandstone"
+	melt_temperature = MELTPOINT_GLASS
 
 var/global/list/datum/stack_recipe/sandstone_recipes = list ( \
-	new/datum/stack_recipe("pile of dirt", /obj/machinery/hydroponics/soil, 3, time = 10, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("pile of dirt", /obj/machinery/portable_atmospherics/hydroponics/soil, 3, time = 10, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("sandstone door", /obj/structure/mineral_door/sandstone, 10, one_per_turf = 1, on_floor = 1), \
 /*	new/datum/stack_recipe("sandstone wall", ???), \
 		new/datum/stack_recipe("sandstone floor", ???),\ */
@@ -57,8 +58,9 @@ var/global/list/datum/stack_recipe/sandstone_recipes = list ( \
 	w_class = 3.0
 	throw_range = 3
 	origin_tech = "materials=6"
-	perunit = 3750
+	perunit = 1750
 	sheettype = "diamond"
+	melt_temperature = 3820 // In a vacuum, but fuck dat
 
 var/global/list/datum/stack_recipe/diamond_recipes = list ( \
 	new/datum/stack_recipe("diamond door", /obj/structure/mineral_door/transparent/diamond, 10, one_per_turf = 1, on_floor = 1), \
@@ -88,6 +90,7 @@ var/global/list/datum/stack_recipe/diamond_recipes = list ( \
 	origin_tech = "materials=5"
 	perunit = 2000
 	sheettype = "uranium"
+	melt_temperature = 1132+T0C
 
 var/global/list/datum/stack_recipe/uranium_recipes = list ( \
 	new/datum/stack_recipe("uranium door", /obj/structure/mineral_door/uranium, 10, one_per_turf = 1, on_floor = 1), \
@@ -117,6 +120,7 @@ var/global/list/datum/stack_recipe/uranium_recipes = list ( \
 	origin_tech = "plasmatech=2;materials=2"
 	perunit = 2000
 	sheettype = "plasma"
+	melt_temperature = MELTPOINT_STEEL+500
 
 var/global/list/datum/stack_recipe/plasma_recipes = list ( \
 	new/datum/stack_recipe("plasma door", /obj/structure/mineral_door/transparent/plasma, 10, one_per_turf = 1, on_floor = 1), \
@@ -142,6 +146,7 @@ var/global/list/datum/stack_recipe/plasma_recipes = list ( \
 	throw_range = 3
 	origin_tech = "materials=3"
 	perunit = 2000
+	melt_temperature = MELTPOINT_PLASTIC
 	sheettype = "plastic"
 
 var/global/list/datum/stack_recipe/plastic_recipes = list ( \
@@ -177,6 +182,7 @@ var/global/list/datum/stack_recipe/plastic_recipes = list ( \
 	throw_range = 3
 	origin_tech = "materials=4"
 	perunit = 2000
+	melt_temperature = 1064+T0C
 	sheettype = "gold"
 
 var/global/list/datum/stack_recipe/gold_recipes = list ( \
@@ -204,9 +210,9 @@ var/global/list/datum/stack_recipe/phazon_recipes = list()
 	singular_name = "phazon sheet"
 	desc = "Holy christ what is this?"
 	icon_state = "sheet-phazon"
-	item_state = "sheet-metal"
-	m_amt = 7500
-	w_type = RECYK_METAL
+	item_state = "sheet-phazon"
+	perunit = 1500
+	melt_temperature = MELTPOINT_PLASTIC
 	throwforce = 15.0
 	flags = FPRINT | TABLEPASS | CONDUCT
 	origin_tech = "materials=9"
@@ -316,3 +322,158 @@ var/global/list/datum/stack_recipe/silver_recipes = list ( \
 	throw_range = 3
 	origin_tech = "materials=4"
 	perunit = 2000
+
+/obj/item/stack/sheet/mineral/pharosium
+	name = "pharosium"
+	icon_state = "sheet-pharosium"
+	force = 5.0
+	throwforce = 5
+	w_class = 3.0
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = "materials=5"
+	perunit = 3750
+
+/obj/item/stack/sheet/mineral/char
+	name = "char"
+	icon_state = "sheet-char"
+	force = 5.0
+	throwforce = 5
+	w_class = 3.0
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = "materials=5"
+	perunit = 3750
+
+
+/obj/item/stack/sheet/mineral/claretine
+	name = "claretine"
+	icon_state = "sheet-claretine"
+	force = 5.0
+	throwforce = 5
+	w_class = 3.0
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = "materials=5"
+	perunit = 3750
+
+
+/obj/item/stack/sheet/mineral/cobryl
+	name = "cobryl"
+	icon_state = "sheet-cobryl"
+	force = 5.0
+	throwforce = 5
+	w_class = 3.0
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = "materials=5"
+	perunit = 3750
+
+
+/obj/item/stack/sheet/mineral/bohrum
+	name = "bohrum"
+	icon_state = "sheet-bohrum"
+	force = 5.0
+	throwforce = 5
+	w_class = 3.0
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = "materials=5"
+	perunit = 3750
+
+
+/obj/item/stack/sheet/mineral/syreline
+	name = "syreline"
+	icon_state = "sheet-syreline"
+	force = 5.0
+	throwforce = 5
+	w_class = 3.0
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = "materials=5"
+	perunit = 3750
+
+
+/obj/item/stack/sheet/mineral/erebite
+	name = "erebite"
+	icon_state = "sheet-erebite"
+	force = 5.0
+	throwforce = 5
+	w_class = 3.0
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = "materials=5"
+	perunit = 3750
+
+
+/obj/item/stack/sheet/mineral/cerenkite
+	name = "cerenkite"
+	icon_state = "sheet-cerenkite"
+	force = 5.0
+	throwforce = 5
+	w_class = 3.0
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = "materials=5"
+	perunit = 3750
+
+
+/obj/item/stack/sheet/mineral/cytine
+	name = "cytine"
+	icon_state = "sheet-cytine"
+	force = 5.0
+	throwforce = 5
+	w_class = 3.0
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = "materials=5"
+	perunit = 3750
+
+
+/obj/item/stack/sheet/mineral/uqill
+	name = "uqill"
+	icon_state = "sheet-uqill"
+	force = 5.0
+	throwforce = 5
+	w_class = 3.0
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = "materials=5"
+	perunit = 3750
+
+
+/obj/item/stack/sheet/mineral/telecrystal
+	name = "telecrystal"
+	icon_state = "sheet-telecrystal"
+	force = 5.0
+	throwforce = 5
+	w_class = 3.0
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = "materials=5"
+	perunit = 3750
+
+
+/obj/item/stack/sheet/mineral/mauxite
+	name = "mauxite"
+	icon_state = "sheet-mauxite"
+	force = 5.0
+	throwforce = 5
+	w_class = 3.0
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = "materials=5"
+	perunit = 3750
+
+
+/obj/item/stack/sheet/mineral/molitz
+	name = "molitz"
+	icon_state = "sheet-molitz"
+	force = 5.0
+	throwforce = 5
+	w_class = 3.0
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = "materials=5"
+	perunit = 3750
+

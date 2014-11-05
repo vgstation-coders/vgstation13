@@ -1144,6 +1144,7 @@
 					chargecount++
 				else
 					chargecount = 0
+					charging = 0
 
 				if(chargecount == 10)
 
@@ -1283,20 +1284,11 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 		terminal.master = null
 		terminal = null
 
-	..()
+	if(wires)
+		wires.Destroy()
+		wires = null
 
-/obj/machinery/power/apc/proc/shock(mob/user, prb)
-	if(!prob(prb))
-		return 0
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(5, 1, src)
-	s.start()
-	if(isalien(user))
-		return 0
-	if (electrocute_mob(user, src, src))
-		return 1
-	else
-		return 0
+	..()
 
 /obj/machinery/power/apc/proc/setsubsystem(val)
 	if(cell && cell.charge > 0)

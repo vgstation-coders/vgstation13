@@ -21,7 +21,19 @@
 	var/attempting = 0 //One clone attempt at a time thanks
 	var/eject_wait = 0 //Don't eject them as soon as they are created fuckkk
 	var/biomass = CLONE_BIOMASS // * 3 - N3X
-	var/opened = 0
+	var/time_coeff = 1 //Upgraded via part upgrading
+	var/resource_efficiency = 1
+
+	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY
+
+	l_color = "#7BF9FF"
+
+/obj/machinery/clonepod/power_change()
+	..()
+	if(!(stat & (BROKEN|NOPOWER)) && attempting)
+		SetLuminosity(2)
+	else
+		SetLuminosity(0)
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -40,6 +52,16 @@
 
 	RefreshParts()
 
+/obj/machinery/clonepod/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
+		T += SM.rating //First rank is two times more efficient, second rank is two and a half times, third is three times. For reference, there's TWO scanning modules
+	time_coeff = T/2
+	T = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/MA in component_parts)
+		T += MA.rating //Ditto above
+	resource_efficiency = T/2
+	T = 0
 
 //The return of data disks?? Just for transferring between genetics machine/cloning machine.
 //TO-DO: Make the genetics machine accept them.
@@ -91,12 +113,12 @@
 		return
 
 	var/mob/selected = null
-	for(var/mob/M in player_list)
+	for(var/mob/living/M in player_list)
 		//Dead people only thanks!
 		if ((M.stat != 2) || (!M.client))
 			continue
 		//They need a brain!
-		if ((istype(M, /mob/living/carbon/human)) && (M:brain_op_stage >= 4.0))
+		if ((istype(M, /mob/living/carbon/human)) && !M.has_brain())
 			continue
 
 		if (M.ckey == find_key)
@@ -181,17 +203,14 @@
 	spawn(30)
 		src.eject_wait = 0
 
-	var/mob/living/carbon/human/H = new /mob/living/carbon/human(src)
+	var/mob/living/carbon/human/H = new /mob/living/carbon/human(src, delay_ready_dna=1)
 	occupant = H
 
-	if(!R.dna.real_name)	//to prevent null names
-		R.dna.real_name = "clone ([rand(0,999)])"
-	H.real_name = R.dna.real_name
-
-	H.dna.mutantrace = R.dna.mutantrace
-
 	src.icon_state = "pod_1"
+
 	//Get the clone body ready
+	H.dna = R.dna.Clone()
+
 	H.adjustCloneLoss(150) //new damage var so you can't eject a clone early then stab them to abuse the current damage system --NeoFite
 	H.adjustBrainLoss(src.heal_level + 50 + rand(10, 30)) // The rand(10, 30) will come out as extra brain damage
 	H.Paralyse(4)
@@ -219,23 +238,13 @@
 
 	// -- End mode specific stuff
 
-	if(!R.dna)
-		H.dna = new /datum/dna()
-		H.dna.real_name = H.real_name
-	else
-		H.dna=R.dna
 	H.UpdateAppearance()
-	randmutb(H) //Sometimes the clones come out wrong.
-	H.dna.UpdateSE()
-	H.dna.UpdateUI()
-
-	H.f_style = "Shaved"
-	if(R.dna.species == "Human") //no more xenos losing ears/tentacles
-		H.h_style = pick("Bedhead", "Bedhead 2", "Bedhead 3")
-
 	H.set_species(R.dna.species)
-	//for(var/datum/language/L in languages)
-	//	H.add_language(L.name)
+	randmutb(H) // sometimes the clones come out wrong.
+	H.dna.mutantrace = R.dna.mutantrace
+	H.update_mutantrace()
+	H.real_name = H.dna.real_name
+
 	H.suiciding = 0
 	src.attempting = 0
 	return 1
@@ -260,14 +269,19 @@
 			src.occupant.Paralyse(4)
 
 			 //Slowly get that clone healed and finished.
-			src.occupant.adjustCloneLoss(-2)
+			src.occupant.adjustCloneLoss(-1*time_coeff) //Very slow, new parts = much faster
 
 			//Premature clones may have brain damage.
-			src.occupant.adjustBrainLoss(-1)
+			src.occupant.adjustBrainLoss(-1*time_coeff) //Ditto above
 
 			//So clones don't die of oxyloss in a running pod.
 			if (src.occupant.reagents.get_reagent_amount("inaprovaline") < 30)
 				src.occupant.reagents.add_reagent("inaprovaline", 60)
+
+			var/mob/living/carbon/human/H = src.occupant
+
+			if(istype(H.species, /datum/species/vox))
+				src.occupant.reagents.add_reagent("nitrogen", 10)
 
 			//Also heal some oxyloss ourselves because inaprovaline is so bad at preventing it!!
 			src.occupant.adjustOxyLoss(-4)
@@ -292,6 +306,20 @@
 
 	return
 
+/obj/machinery/clonepod/emag(mob/user as mob)
+	if (isnull(src.occupant))
+		return
+	user << "You force an emergency ejection."
+	src.locked = 0
+	src.go_out()
+	return
+
+/obj/machinery/clonepod/crowbarDestroy(mob/user)
+	if (occupant)
+		user << "\red You cannot disassemble this [src], it's occupado."
+		return
+	..()
+
 //Let's unlock this early I guess.  Might be too early, needs tweaking.
 /obj/machinery/clonepod/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
@@ -306,38 +334,6 @@
 		else
 			src.locked = 0
 			user << "System unlocked."
-	else if (istype(W, /obj/item/weapon/card/emag))
-		if (isnull(src.occupant))
-			return
-		user << "You force an emergency ejection."
-		src.locked = 0
-		src.go_out()
-		return
-	else if (istype(W, /obj/item/weapon/screwdriver))
-		if (!opened)
-			src.opened = 1
-			user << "You open the maintenance hatch of [src]."
-			//src.icon_state = "autolathe_t"
-		else
-			src.opened = 0
-			user << "You close the maintenance hatch of [src]."
-			//src.icon_state = "autolathe"
-			return 1
-	else if(istype(W, /obj/item/weapon/crowbar))
-		if (occupant)
-			user << "\red You cannot disassemble this [src], it's occupado."
-			return 1
-		if (opened)
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-			return
 	else if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
 		user << "\blue \The [src] processes \the [W]."
 		biomass += 50
@@ -402,7 +398,7 @@
 	src.occupant.add_side_effect("Bad Stomach") // Give them an extra side-effect for free.
 	src.occupant = null
 
-	src.biomass -= CLONE_BIOMASS
+	src.biomass -= CLONE_BIOMASS/resource_efficiency //Improve parts to use less biomass
 
 	return
 
@@ -460,7 +456,7 @@
 	icon_state = "disk_kit"
 
 /obj/item/weapon/storage/box/disks/New()
-	..()
+	. = ..()
 	new /obj/item/weapon/disk/data(src)
 	new /obj/item/weapon/disk/data(src)
 	new /obj/item/weapon/disk/data(src)

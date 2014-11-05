@@ -1,21 +1,28 @@
-# DMITool Difference Report: C:\Users\Rob\Documents\Projects\vgstation13\icons\mob\in-hand\left C:\Users\Rob\Documents\Projects\vgstation13\icons\mob\in-hand\right
---- C:\Users\Rob\Documents\Projects\vgstation13\icons\mob\in-hand\left\cable_stuff.dmi
-+++ C:\Users\Rob\Documents\Projects\vgstation13\icons\mob\in-hand\right\cable_stuff.dmi
+# DMITool Difference Report: Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\left Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\right
+--- Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\left\cable_stuff.dmi
++++ Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\right\cable_stuff.dmi
  + cuff_cyan
  + cuff_orange
  + cuff_pink
  + cuff_white
---- C:\Users\Rob\Documents\Projects\vgstation13\icons\mob\in-hand\left\clownwiz.dmi
-+++ C:\Users\Rob\Documents\Projects\vgstation13\icons\mob\in-hand\right\clownwiz.dmi
- + clownwizhat
- + clownwizrobe
- - wizhatclown
- - wizrobeclown
---- C:\Users\Rob\Documents\Projects\vgstation13\icons\mob\in-hand\left\guns.dmi
-+++ C:\Users\Rob\Documents\Projects\vgstation13\icons\mob\in-hand\right\guns.dmi
+--- Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\left\guns.dmi
++++ Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\right\guns.dmi
  + scythe0
---- C:\Users\Rob\Documents\Projects\vgstation13\icons\mob\in-hand\left\swords_axes.dmi
-+++ C:\Users\Rob\Documents\Projects\vgstation13\icons\mob\in-hand\right\swords_axes.dmi
+ + taser100
+--- Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\left\newsprites_lefthand.dmi
++++ Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\right\newsprites_lefthand.dmi
+ + chapmask
+ + honkbook
+ + ianism
+ + necronomicon
+ + shadows
+ + torah
+--- Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\left\paramedic_eva.dmi
++++ Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\right\paramedic_eva.dmi
+ + paramedic-eva
+ + paramedic-eva-helmet
+--- Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\left\swords_axes.dmi
++++ Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\right\swords_axes.dmi
  + axe0
  + axe1
  - dualsaber0
@@ -25,11 +32,11 @@
  - katana
  - scythe0
  - unathiknife
---- C:\Users\Rob\Documents\Projects\vgstation13\icons\mob\in-hand\left\vox_civvie.dmi
-+++ C:\Users\Rob\Documents\Projects\vgstation13\icons\mob\in-hand\right\vox_civvie.dmi
+--- Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\left\vox_civvie.dmi
++++ Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\right\vox_civvie.dmi
  + vox-pressure-security
---- C:\Users\Rob\Documents\Projects\vgstation13\icons\mob\in-hand\left\zz_old_items_lefthand.dmi
-+++ C:\Users\Rob\Documents\Projects\vgstation13\icons\mob\in-hand\right\zz_old_items_lefthand.dmi
+--- Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\left\zz_old_items_lefthand.dmi
++++ Y:\Documents\GitHub\vgstation13\icons\mob\in-hand\right\zz_old_items_lefthand.dmi
  + DONGS
  + altair_locket
  + an_tank
@@ -74,6 +81,7 @@
  + blade
  + blindfold
  + blueprints
+ + bolas
  + bombvest
  + brain2
  + brick

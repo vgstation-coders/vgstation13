@@ -87,6 +87,7 @@ var/global/list/datum/stack_recipe/metal_recipes = list ( \
 	throwforce = 14.0
 	flags = FPRINT | TABLEPASS | CONDUCT
 	origin_tech = "materials=1"
+	melt_temperature = MELTPOINT_STEEL
 
 /obj/item/stack/sheet/metal/recycle(var/datum/materials/rec)
 	rec.addAmount("iron",1*amount)
@@ -116,12 +117,14 @@ var/global/list/datum/stack_recipe/plasteel_recipes = list ( \
 	singular_name = "plasteel sheet"
 	desc = "This sheet is an alloy of iron and plasma."
 	icon_state = "sheet-plasteel"
-	item_state = "sheet-metal"
+	item_state = "sheet-plasteel"
 	m_amt = 3750 // Was 7500, which doesn't make any fucking sense
+	perunit = 2875 //average of plasma and metal
 	throwforce = 15.0
 	flags = FPRINT | TABLEPASS | CONDUCT
 	origin_tech = "materials=2"
 	w_type = RECYK_METAL
+	melt_temperature = MELTPOINT_STEEL+500
 
 /obj/item/stack/sheet/plasteel/New(var/loc, var/amount=null)
 		recipes = plasteel_recipes
@@ -140,7 +143,7 @@ var/global/list/datum/stack_recipe/wood_recipes = list ( \
 	new/datum/stack_recipe("wood floor tile", /obj/item/stack/tile/wood, 1, 4, 20), \
 	new/datum/stack_recipe("table parts", /obj/item/weapon/table_parts/wood, 2), \
 	new/datum/stack_recipe("wooden chair", /obj/structure/stool/bed/chair/wood/normal, 3, time = 10, one_per_turf = 1, on_floor = 1), \
-	new/datum/stack_recipe("wooden barricade", /obj/structure/barricade/wooden, 5, time = 50, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("barricade kit", /obj/item/weapon/barricade_kit, 5), \
 	new/datum/stack_recipe("bookcase", /obj/structure/bookcase, 5, time = 50, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("wooden door", /obj/structure/mineral_door/wood, 10, time = 20, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("coffin", /obj/structure/closet/coffin, 5, time = 15, one_per_turf = 1, on_floor = 1), \
@@ -153,6 +156,10 @@ var/global/list/datum/stack_recipe/wood_recipes = list ( \
 	singular_name = "wood plank"
 	icon_state = "sheet-wood"
 	origin_tech = "materials=1;biotech=1"
+	autoignition_temperature=AUTOIGNITION_WOOD
+
+/obj/item/stack/sheet/wood/cultify()
+	return
 
 /obj/item/stack/sheet/wood/New(var/loc, var/amount=null)
 	recipes = wood_recipes
@@ -207,6 +214,7 @@ var/global/list/datum/stack_recipe/charcoal_recipes = list ()
 	icon_state = "sheet-charcoal"
 	flags = FPRINT | TABLEPASS
 	origin_tech = "materials=1"
+	autoignition_temperature=AUTOIGNITION_WOOD
 
 /obj/item/stack/sheet/charcoal/New(var/loc, var/amount=null)
 		recipes = charcoal_recipes

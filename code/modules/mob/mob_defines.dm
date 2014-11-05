@@ -35,6 +35,23 @@
 	var/obj/screen/gun/run/gun_run_icon = null
 	var/obj/screen/gun/mode/gun_setting_icon = null
 
+	//monkey inventory icons
+	var/obj/screen/m_suitclothes = null
+	var/obj/screen/m_suitclothesbg = null
+	var/obj/screen/m_hat = null
+	var/obj/screen/m_hatbg = null
+
+	//construct spells hud icons
+	var/obj/screen/construct_spell1 = null
+	var/obj/screen/construct_spell2 = null
+	var/obj/screen/construct_spell3 = null
+	var/obj/screen/construct_spell4 = null
+	var/obj/screen/construct_spell5 = null
+
+	//thou shall always be able to see the Geometer of Blood
+	var/image/narsimage = null
+	var/image/narglow = null
+
 	/*A bunch of this stuff really needs to go under their own defines instead of being globally attached to mob.
 	A variable should only be globally attached to turfs/objects/whatever, when it is in fact needed as such.
 	The current method unnecessarily clusters up the variable list, especially for humans (although rearranging won't really clean it up a lot but the difference will be noticable for other mobs).
@@ -87,6 +104,7 @@
 	var/lastpuke = 0
 	var/unacidable = 0
 	var/small = 0
+	var/list/callOnFace = list()
 	var/list/pinned = list()            // List of things pinning this creature to walls (see living_defense.dm)
 	var/list/embedded = list()          // Embedded items, since simple mobs don't have organs.
 	var/list/languages = list()         // For speaking/listening.
@@ -200,6 +218,8 @@
 
 	var/status_flags = CANSTUN|CANWEAKEN|CANPARALYSE|CANPUSH	//bitflags defining which status effects can be inflicted (replaces canweaken, canstun, etc)
 
+	var/area/lastarea = null
+
 	var/digitalcamo = 0 // Can they be tracked by the AI?
 
 	var/list/radar_blips = list() // list of screen objects, radar blips
@@ -229,3 +249,4 @@
 
 	// /vg/ - Prevent mobs from being moved by a client.
 	var/deny_client_move = 0
+	var/incorporeal_move = 0

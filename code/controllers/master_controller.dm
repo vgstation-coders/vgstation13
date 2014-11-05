@@ -109,6 +109,7 @@ datum/controller/game_controller/proc/setup_objects()
 	for(var/atom/movable/object in world)
 		object.initialize()
 
+
 	world << "\red \b Initializing pipe networks"
 	sleep(-1)
 	for(var/obj/machinery/atmospherics/machine in machines)
@@ -317,6 +318,15 @@ datum/controller/game_controller/proc/processMobs()
 			continue
 
 		processing_objects -= Object
+
+	// Hack.
+	for (var/turf/unsimulated/wall/supermatter/SM in processing_objects)
+		if (SM)
+			last_thing_processed = SM.type
+			SM.process()
+			continue
+
+		processing_objects -= SM
 
 /datum/controller/game_controller/proc/processPipenets()
 	last_thing_processed = /datum/pipe_network
