@@ -55,7 +55,6 @@
 		/obj/item/weapon/card/id/clown,
 		/obj/item/weapon/card/id/mime,
 		)
-/obj/map/spawner/ID
 
 // Medical /////////////////////////////////////////////////////
 
