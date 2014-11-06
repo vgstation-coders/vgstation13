@@ -1,7 +1,7 @@
 /datum/job/assistant
 	title = "Assistant"
 	flag = ASSISTANT
-	//faction = "Station" - Grief
+	faction = "Station"
 	department_flag = CIVILIAN
 	total_positions = -1
 	spawn_positions = -1
@@ -51,3 +51,56 @@
 		H.equip_or_collect(new /obj/item/clothing/tie/storage/black_vest(H), slot_in_backpack)
 	return 1
 
+/datum/job/Stalker // Derelict Station Stuff
+	title = "Stalker"
+	flag = STALKER
+	//faction = "Station"
+	department_flag = CIVILIAN
+	total_positions = -1
+	spawn_positions = -1
+	supervisors = "Factions"
+	selection_color = "#dddddd"
+	access = list(access_maint_tunnels)
+	minimal_access = list(access_maint_tunnels)
+
+/datum/job/scavenger/equip(var/mob/living/carbon/human/H)
+	if(!H)	return 0
+	H.equip_or_collect(new /obj/item/clothing/under/color/black(H), slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
+	H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
+	//H.equip_or_collect(new /obj/item/clothing/mask/balaclava(H), slot_wear_mask) //YEAH
+	H.equip_or_collect(new /obj/item/weapon/blade/sck(H), slot_l_store)
+	H.equip_or_collect(new /obj/item/weapon/gun/projectile/pistol (H), slot_l_hand)
+	if(H.backbag == 1)
+		H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
+		H.equip_or_collect(new /obj/item/clothing/tie/storage/black_vest(H), slot_l_hand)
+	else
+		H.equip_or_collect(new /obj/item/clothing/tie/storage/black_vest(H), slot_in_backpack)
+	return 1
+
+/datum/job/Merc // Derelict Station Stuff
+	title = "Mercenary"
+	flag = MERC
+	//faction = "Station"
+	department_flag = CIVILIAN
+	total_positions = -1
+	spawn_positions = -1
+	selection_color = "#dddddd"
+	access = list(access_maint_tunnels)
+	minimal_access = list(access_maint_tunnels)
+
+/datum/job/scavenger/equip(var/mob/living/carbon/human/H)
+	if(!H)	return 0
+	H.equip_or_collect(new /obj/item/clothing/under/color/black(H), slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
+	H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
+	//H.equip_or_collect(new /obj/item/clothing/mask/balaclava(H), slot_wear_mask) //YEAH
+	H.equip_or_collect(new /obj/item/weapon/gun/projectile/shotgun/pump(H), slot_l_hand)
+	H.equip_or_collect(new /obj/item/clothing/suit/armor/heavy(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/clothing/head/helmet/riot(H), slot_head)
+	if(H.backbag == 1)
+		H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
+		H.equip_or_collect(new /obj/item/clothing/tie/storage/black_vest(H), slot_l_hand)
+	else
+		H.equip_or_collect(new /obj/item/clothing/tie/storage/black_vest(H), slot_in_backpack)
+	return 1

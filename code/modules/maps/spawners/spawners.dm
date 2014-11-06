@@ -29,6 +29,33 @@
 //**************************************************************
 // Subtypes ////////////////////////////////////////////////////
 //**************************************************************
+// ID      /////////////////////////////////////////////////////
+/obj/map/spawner/ids
+	name = "Spare Ids"
+	icon_state = "id_card"
+	amount = 1
+	chance = 30
+	toSpawn = list(
+		/obj/item/weapon/card/id/gold,
+		/obj/item/weapon/card/id/commander_spare,
+		/obj/item/weapon/card/id/silver,
+		/obj/item/weapon/card/id/syndicate,
+		/obj/item/weapon/card/id/captains_spare,
+		/obj/item/weapon/card/id/centcom,
+		/obj/item/weapon/card/id/salvage_captain,
+		/obj/item/weapon/card/id/medical,
+		/obj/item/weapon/card/id/security,
+		/obj/item/weapon/card/id/research,
+		/obj/item/weapon/card/id/supply,
+		/obj/item/weapon/card/id/engineering,
+		/obj/item/weapon/card/id/hos,
+		/obj/item/weapon/card/id/cmo,
+		/obj/item/weapon/card/id/rd,
+		/obj/item/weapon/card/id/ce,
+		/obj/item/weapon/card/id/clown,
+		/obj/item/weapon/card/id/mime,
+		)
+/obj/map/spawner/ID
 
 // Medical /////////////////////////////////////////////////////
 
@@ -86,8 +113,7 @@
 		/obj/item/clothing/suit/armor/riot,
 		/obj/item/clothing/suit/armor/bulletproof,
 		/obj/item/clothing/suit/armor/laserproof,
-		/obj/item/clothing/suit/armor/heavy,
-		/obj/item/clothing/suit/armor/reactive,
+		/obj/item/clothing/suit/armor/heavy,,
 		)
 
 /obj/map/spawner/security/gear
@@ -104,9 +130,24 @@
 		/obj/item/device/hailer,
 		)
 
-/obj/map/spawner/security/weapons
+/obj/map/spawner/security/weapons_armory
 	name = "armory weapon spawner"
 	icon_state = "armory_weapons"
+	chance = 70
+	toSpawn = list(
+		/obj/item/weapon/gun/energy/ionrifle,
+		/obj/item/weapon/gun/energy/laser,
+		/obj/item/weapon/gun/projectile/automatic/k4m,
+		/obj/item/weapon/gun/projectile/colt,
+		/obj/item/weapon/gun/projectile/shotgun/pump,
+		/obj/item/weapon/gun/energy/plasma/rifle,
+		)
+
+/obj/map/spawner/security/weapons
+	name = "random weapon spawner"
+	icon_state = "armory_weapons"
+	chance = 15
+	jiggle = 4
 	toSpawn = list(
 		/obj/item/weapon/gun/energy/gun,
 		/obj/item/weapon/gun/energy/ionrifle,
@@ -120,6 +161,11 @@
 		/obj/item/weapon/gun/projectile/pistol,
 		/obj/item/weapon/gun/projectile/shotgun/pump,
 		/obj/item/weapon/gun/projectile/shotgun/pump/combat,
+		/obj/item/weapon/gun/energy/plasma/rifle,
+		/obj/item/weapon/gun/energy/plasma/light,
+		/obj/item/weapon/gun/energy/sniper,
+		/obj/item/weapon/gun/energy/plasma/MP40k,
+		/obj/item/weapon/gun/energy/pulse_rifle,
 		)
 
 /obj/map/spawner/security/misc

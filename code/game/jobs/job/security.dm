@@ -103,7 +103,7 @@
 	title = "Detective"
 	flag = DETECTIVE
 	department_flag = ENGSEC
-	//faction = "Station" - Grief
+	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of security"

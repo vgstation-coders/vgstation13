@@ -281,7 +281,7 @@
 		return
 
 
-/*
+
 /obj/item/weapon/gun/projectile/automatic/G36K
 	name = "G36K"
 	desc = "For a PKS/EXALT fire support"
@@ -301,9 +301,7 @@
 /obj/item/weapon/gun/projectile/automatic/G36K/isHandgun()
 	return 1
 
-/obj/item/weapon/gun/projectile/automatic/u40ag/isHandgun()
-	return 1
-
+/*
 /obj/item/weapon/gun/projectile/automatic/hkg36c
 	name = "HK-G36c"
 	desc = "tactical assault rifle. Can kill... if you have skill Uses 5.56 rounds."

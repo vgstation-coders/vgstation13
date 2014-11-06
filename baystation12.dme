@@ -4,7 +4,6 @@
 // BEGIN_INTERNALS
 // END_INTERNALS
 // BEGIN_FILE_DIR
-#define FILE_DIR .
 // END_FILE_DIR
 // BEGIN_PREFERENCES
 #define DEBUG
@@ -1543,4 +1542,7 @@
 #include "maps\RandomZLevels\challenge.dm"
 #include "maps\RandomZLevels\stationCollision.dm"
 #include "maps\RandomZLevels\wildwest.dm"
+#include "maps\RandomZLevels\arcticwaste.dmm"
+#include "maps\RandomZLevels\assistantChamber.dmm"
+#include "maps\RandomZLevels\listeningpost.dmm"
 // END_INCLUDE
