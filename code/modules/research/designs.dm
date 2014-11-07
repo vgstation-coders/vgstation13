@@ -158,6 +158,24 @@ other types of metals and chemistry for reagents).
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/chem_dispenser
 
+/datum/design/sleeper
+	name = "Circuit Design (Sleeper)"
+	desc = "Allows for the construction of circuit boards used to build a Sleeper"
+	id = "sleeper"
+	req_tech = list("programming" = 3, "biotech" = 4, "engineering" = 3)
+	build_type = IMPRINTER
+	materials = list("$glass" = 2000, "sacid" = 20)
+	build_path = /obj/item/weapon/circuitboard/sleeper
+
+/datum/design/sleep_console
+	name = "Circuit Design (Sleeper Console)"
+	desc = "Allows for the construction of circuit boards used to build a Sleeper Console"
+	id = "sleep_console"
+	req_tech = list("programming" = 3, "biotech" = 4, "engineering" = 3)
+	build_type = IMPRINTER
+	materials = list("$glass" = 2000, "sacid" = 20)
+	build_path = /obj/item/weapon/circuitboard/sleeperconsole
+
 /datum/design/scan_console
 	name = "Circuit Design (DNA Machine)"
 	desc = "Allows for the construction of circuit boards used to build a new DNA scanning console."

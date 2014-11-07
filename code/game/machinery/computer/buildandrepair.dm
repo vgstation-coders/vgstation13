@@ -238,6 +238,10 @@
 	name = "Circuit board (Bhangmeter)"
 	build_path = "/obj/machinery/computer/bhangmeter"
 	origin_tech = "programming=2"
+/obj/item/weapon/circuitboard/sleeperconsole
+	name = "Circuit board (Sleeper Console)"
+	build_path = "/obj/machinery/computer/sleep_console"
+	origin_tech = "programming=3;biotech=4;engineering=3"
 
 
 /obj/item/weapon/circuitboard/supplycomp/attackby(obj/item/I as obj, mob/user as mob)

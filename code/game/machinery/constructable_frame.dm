@@ -360,6 +360,17 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/micro_laser" = 3,
 							"/obj/item/weapon/stock_parts/console_screen" = 1)
 
+/obj/item/weapon/circuitboard/sleeper
+	name = "Circuit Board (Sleeper)"
+	build_path = "/obj/machinery/sleeper"
+	board_type = "machine"
+	origin_tech = "programming=3;biotech=4;engineering=3"
+	frame_desc = "Requires 2 manipulators, 2 scanning modules and 1 console screen."
+	req_components = list (
+							"/obj/item/weapon/stock_parts/scanning_module" = 2,
+							"/obj/item/weapon/stock_parts/manipulator" = 2,
+							"/obj/item/weapon/stock_parts/console_screen" = 1)
+
 /obj/item/weapon/circuitboard/chemmaster3000
 	name = "Circuit Board (ChemMaster 3000)"
 	build_path = "/obj/machinery/chem_master"
