@@ -208,6 +208,14 @@ var/list/uplink_items = list()
 	cost = 4
 	job = list("Atmospheric Technician")
 
+//Security
+/datum/uplink_item/jobspecific/syndiflash
+	name = "Super Flash"
+	desc = "An illegally supercharged flash, able to knock people out cold for a large amount of time and deal serious damage. Will most likely not last long."
+	item = /obj/item/device/flash/syndicate
+	cost = 4
+	job = list("Security Officer", "Warden", "Head of Security")
+
 // DANGEROUS WEAPONS
 
 /datum/uplink_item/dangerous
