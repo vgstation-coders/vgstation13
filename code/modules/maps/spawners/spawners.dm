@@ -36,12 +36,9 @@
 	amount = 1
 	chance = 30
 	toSpawn = list(
-		/obj/item/weapon/card/id/gold,
 		/obj/item/weapon/card/id/commander_spare,
-		/obj/item/weapon/card/id/silver,
 		/obj/item/weapon/card/id/syndicate,
 		/obj/item/weapon/card/id/captains_spare,
-		/obj/item/weapon/card/id/centcom,
 		/obj/item/weapon/card/id/salvage_captain,
 		/obj/item/weapon/card/id/medical,
 		/obj/item/weapon/card/id/security,
@@ -122,7 +119,6 @@
 	toSpawn = list(
 		/obj/item/clothing/head/helmet/riot,
 		/obj/item/weapon/shield/riot,
-		/obj/item/weapon/melee/baton/loaded,
 		/obj/item/clothing/suit/armor/vest/security,
 		/obj/item/weapon/storage/belt/security,
 		/obj/item/weapon/gun/energy/taser,
@@ -151,14 +147,12 @@
 		/obj/item/weapon/gun/energy/gun,
 		/obj/item/weapon/gun/energy/ionrifle,
 		/obj/item/weapon/gun/energy/laser,
-		/obj/item/weapon/gun/energy/lasercannon,
 		/obj/item/weapon/gun/projectile/automatic/mini_uzi,
 		/obj/item/weapon/gun/projectile/automatic,
 		/obj/item/weapon/gun/projectile/automatic/l6_saw,
 		/obj/item/weapon/gun/projectile/deagle,
 		/obj/item/weapon/gun/projectile/mateba,
 		/obj/item/weapon/gun/projectile/pistol,
-		/obj/item/weapon/gun/projectile/shotgun/pump,
 		/obj/item/weapon/gun/projectile/shotgun/pump/combat,
 		/obj/item/weapon/gun/energy/plasma/rifle,
 		/obj/item/weapon/gun/energy/plasma/light,
@@ -174,7 +168,6 @@
 	jiggle = 5
 	toSpawn = list(
 		/obj/item/weapon/storage/box/flashbangs,
-		/obj/item/weapon/storage/box/emps,
 		/obj/item/weapon/storage/box/handcuffs,
 		/obj/item/weapon/storage/box/donkpockets,
 		/obj/item/weapon/storage/fancy/donut_box,

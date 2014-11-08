@@ -51,7 +51,7 @@
 		H.equip_or_collect(new /obj/item/clothing/tie/storage/black_vest(H), slot_in_backpack)
 	return 1
 
-/datum/job/Stalker // Derelict Station Stuff
+/datum/job/stalker // Derelict Station Stuff
 	title = "Stalker"
 	flag = STALKER
 	//faction = "Station"
@@ -63,7 +63,7 @@
 	access = list(access_maint_tunnels)
 	minimal_access = list(access_maint_tunnels)
 
-/datum/job/scavenger/equip(var/mob/living/carbon/human/H)
+/datum/job/stalker/equip(var/mob/living/carbon/human/H)
 	if(!H)	return 0
 	H.equip_or_collect(new /obj/item/clothing/under/color/black(H), slot_w_uniform)
 	H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
@@ -78,7 +78,7 @@
 		H.equip_or_collect(new /obj/item/clothing/tie/storage/black_vest(H), slot_in_backpack)
 	return 1
 
-/datum/job/Merc // Derelict Station Stuff
+/datum/job/merc // Derelict Station Stuff
 	title = "Mercenary"
 	flag = MERC
 	//faction = "Station"
@@ -89,7 +89,7 @@
 	access = list(access_maint_tunnels)
 	minimal_access = list(access_maint_tunnels)
 
-/datum/job/scavenger/equip(var/mob/living/carbon/human/H)
+/datum/job/Merc/equip(var/mob/living/carbon/human/H)
 	if(!H)	return 0
 	H.equip_or_collect(new /obj/item/clothing/under/color/black(H), slot_w_uniform)
 	H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
