@@ -156,13 +156,16 @@
 	return 0
 
 
-// this function shows the health of the pAI in the Status panel
+// this function shows the health of a silicon in the Status panel
 /mob/living/silicon/proc/show_system_integrity()
-	if(!src.stat)
-		stat(null, text("System integrity: [round((health / maxHealth) * 100)]%"))
+	// A silicon doesn't become inoperable until -100% (or whatever config.health_threshold_dead is set to)
+	if(stat == CONSCIOUS)
+		stat(null, text("System integrity: [system_integrity()]%"))
 	else
 		stat(null, text("Systems nonfunctional"))
 
+/mob/living/silicon/ai/proc/system_integrity()
+	return (health - config.health_threshold_dead) / 2
 
 // This is a pure virtual function, it should be overwritten by all subclasses
 /mob/living/silicon/proc/show_malf_ai()
