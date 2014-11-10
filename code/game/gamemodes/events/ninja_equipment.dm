@@ -1454,18 +1454,19 @@ It is possible to destroy the net by the occupant or someone else.
 	attack_paw()
 		return attack_hand()
 
-	attack_alien()
-		if (islarva(usr))
+	attack_alien(mob/living/user as mob)
+		user.do_attack_animation(src)
+		if (islarva(user))
 			return
-		usr << text("\green You claw at the net.")
+		user << text("\green You claw at the net.")
 		for(var/mob/O in oviewers(src))
-			O.show_message(text("\red [] claws at the energy net!", usr), 1)
+			O.show_message(text("\red [] claws at the energy net!", user), 1)
 		playsound(get_turf(src), 'sound/weapons/slash.ogg', 80, 1)
 		health -= rand(10, 20)
 		if(health <= 0)
-			usr << text("\green You slice the energy net to pieces.")
+			user << text("\green You slice the energy net to pieces.")
 			for(var/mob/O in oviewers(src))
-				O.show_message(text("\red [] slices the energy net apart!", usr), 1)
+				O.show_message(text("\red [] slices the energy net apart!", user), 1)
 		healthcheck()
 		return
 

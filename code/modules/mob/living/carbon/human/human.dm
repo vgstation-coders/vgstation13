@@ -316,6 +316,7 @@
 			LAssailant = null
 		else
 			LAssailant = M
+		M.do_attack_animation(src)
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
@@ -341,7 +342,8 @@
 	if(M.Victim) return // can't attack while eating!
 
 	if (health > -100)
-
+		
+		M.do_attack_animation(src)
 		for(var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
 				O.show_message(text("\red <B>The [M.name] glomps []!</B>", src), 1)

@@ -1,6 +1,6 @@
 //I still dont think this should be a closet but whatever
 /obj/structure/closet/fireaxecabinet
-	name = "Fire Axe Cabinet"
+	name = "fire axe cabinet"
 	desc = "There is small label that reads \"For Emergency use only\" along with details for safe use of the axe. As if."
 	var/obj/item/weapon/twohanded/fireaxe/fireaxe = new/obj/item/weapon/twohanded/fireaxe
 	icon_state = "fireaxe1000"
@@ -13,14 +13,14 @@
 	var/hitstaken = 0
 	var/smashed = 0
 
-	attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
+	attackby(var/obj/item/O as obj, var/mob/living/user as mob)  //Marker -Agouri
 		//..() //That's very useful, Erro
 
 		var/hasaxe = 0       //gonna come in handy later~
 		if(fireaxe)
 			hasaxe = 1
 
-		if (isrobot(usr) || src.locked)
+		if (isrobot(user) || src.locked)
 			if(istype(O, /obj/item/device/multitool))
 				user << "\red Resetting circuitry..."
 				playsound(user, 'sound/machines/lockreset.ogg', 50, 1)
@@ -38,6 +38,7 @@
 						spawn(10) update_icon()
 					return
 				else
+					user.do_attack_animation(src)
 					playsound(user, 'sound/effects/Glasshit.ogg', 100, 1) //We don't want this playing every time
 				if(W.force < 15)
 					user << "\blue The cabinet's protective glass glances off the hit."

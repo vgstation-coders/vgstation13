@@ -9,7 +9,7 @@
 
 
 /obj/mecha
-	name = "Mecha"
+	name = "mecha"
 	desc = "Exosuit"
 	icon = 'icons/mecha/mecha.dmi'
 	density = 1 //Dense. To raise the heat.
@@ -60,7 +60,6 @@
 	var/datum/global_iterator/pr_inertial_movement //controls intertial movement in spesss
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
 	var/datum/global_iterator/pr_internal_damage //processes internal damage
-
 
 	var/wreckage
 
@@ -274,7 +273,7 @@
 			last_message = world.time
 		return 0
 	if(state)
-		occupant_message("<font color='red'>Maintenance protocols in effect</font>")
+		occupant_message("<span class='danger'>Maintenance protocols in effect</span>")
 		return
 	return domove(direction)
 
@@ -415,7 +414,9 @@
 		src.destroy()
 	return
 
-/obj/mecha/attack_hand(mob/user as mob)
+/obj/mecha/attack_hand(mob/living/user as mob)
+	user.changeNext_move(10) // Ugh. Ideally we shouldn't be setting cooldowns outside of click code.
+	user.do_attack_animation(src)
 	src.log_message("Attack by hand/paw. Attacker - [user].",1)
 
 	if(ishuman(user))
@@ -426,9 +427,10 @@
 	if ((M_HULK in user.mutations) && !prob(src.deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-		user.visible_message("<font color='red'><b>[user] hits [src.name], doing some damage.</b></font>", "<font color='red'><b>You hit [src.name] with all your might. The metal creaks and bends.</b></font>")
+		user.visible_message("<span class='danger'>[user] hits [src.name], doing some damage.</span>", "<span class='danger'>You hit [src.name] with all your might. The metal creaks and bends.</span>")
+		src.occupant_message("<span class='userdanger'>[user] hits [src.name], doing some damage.</span>")
 	else
-		user.visible_message("<font color='red'><b>[user] hits [src.name]. Nothing happens</b></font>","<font color='red'><b>You hit [src.name] with no visible effect.</b></font>")
+		user.visible_message("<span class='danger'>[user] hits [src.name]. Nothing happens</span>","<span class='danger'>You hit [src.name] with no visible effect.</span>")
 		src.log_append_to_last("Armor saved.")
 	return
 
@@ -436,39 +438,45 @@
 	return src.attack_hand(user)
 
 
-/obj/mecha/attack_alien(mob/user as mob)
+/obj/mecha/attack_alien(mob/living/user as mob)
 	src.log_message("Attack by alien. Attacker - [user].",1)
+	user.changeNext_move(10) //Now stompy alien killer mechs are actually scary to aliens!
+	user.do_attack_animation(src)
 	if(!prob(src.deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 		playsound(get_turf(src), 'sound/weapons/slash.ogg', 50, 1, -1)
-		user << "\red You slash at the armored suit!"
-		visible_message("\red The [user] slashes at [src.name]'s armor!")
+		user << "<span class='danger'>You slash at the armored suit!</span>"
+		visible_message("<span class='danger'>The [user] slashes at [src.name]'s armor!</span>")
+		src.occupant_message("<span class='userdanger'>The [user] slashes at [src.name]'s armor!</span>")
 	else
 		src.log_append_to_last("Armor saved.")
 		playsound(get_turf(src), 'sound/weapons/slash.ogg', 50, 1, -1)
 		user << "\green Your claws had no effect!"
-		src.occupant_message("\blue The [user]'s claws are stopped by the armor.")
-		visible_message("\blue The [user] rebounds off [src.name]'s armor!")
+		src.occupant_message("<span class='notice'>The [user]'s claws are stopped by the armor.</span>")
+		visible_message("<span class='notice'>The [user] rebounds off [src.name]'s armor!</span>")
 	return
 
 
 /obj/mecha/attack_animal(mob/living/simple_animal/user as mob)
 	src.log_message("Attack by simple animal. Attacker - [user].",1)
+	user.changeNext_move(10)
 	if(user.melee_damage_upper == 0)
 		user.emote("[user.friendly] [src]")
 	else
+		user.do_attack_animation(src)
 		if(!prob(src.deflect_chance))
 			var/damage = rand(user.melee_damage_lower, user.melee_damage_upper)
 			src.take_damage(damage)
 			src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-			visible_message("\red <B>[user]</B> [user.attacktext] [src]!")
+			visible_message("<span class='danger'>[user] [user.attacktext] [src]!</span>")
+			src.occupant_message("<span class='userdanger'>[user] [user.attacktext] [src]!</span>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
 		else
 			src.log_append_to_last("Armor saved.")
 			playsound(get_turf(src), 'sound/weapons/slash.ogg', 50, 1, -1)
-			src.occupant_message("\blue The [user]'s attack is stopped by the armor.")
-			visible_message("\blue The [user] rebounds off [src.name]'s armor!")
+			src.occupant_message("<span class='notice'>[user]'s attack is stopped by the armor.</span>")
+			visible_message("<span class='notice'>The [user] rebounds off [src.name]'s armor!</span>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
 	return
 
@@ -483,8 +491,8 @@
 		src.visible_message("The [A] fastens firmly to [src].")
 		return
 	if(prob(src.deflect_chance) || istype(A, /mob))
-		src.occupant_message("\blue The [A] bounces off the armor.")
-		src.visible_message("The [A] bounces off the [src.name] armor")
+		src.occupant_message("<span class='notice'>[A] bounces off the armor.</span>")
+		src.visible_message("[A] bounces off the [src.name] armor")
 		src.log_append_to_last("Armor saved.")
 		if(istype(A, /mob/living))
 			var/mob/living/M = A
@@ -492,6 +500,8 @@
 	else if(istype(A, /obj))
 		var/obj/O = A
 		if(O.throwforce)
+			src.occupant_message("<span class='userdanger'>[src.name] is hit by [A].</span>")
+			src.visible_message("<span class='danger'>[src.name] is hit by [A].</span>")
 			src.take_damage(O.throwforce)
 			src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 	return
@@ -505,7 +515,7 @@
 
 /obj/mecha/proc/dynbulletdamage(var/obj/item/projectile/Proj)
 	if(prob(src.deflect_chance))
-		src.occupant_message("\blue The armor deflects incoming projectile.")
+		src.occupant_message("<span class='notice'>The armor deflects incoming projectile.</span>")
 		src.visible_message("The [src.name] armor deflects the projectile")
 		src.log_append_to_last("Armor saved.")
 		return
@@ -633,10 +643,12 @@
 		src.check_for_internal_damage(list(MECHA_INT_FIRE, MECHA_INT_TEMP_CONTROL))
 	return
 
-/obj/mecha/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/mecha/proc/dynattackby(obj/item/weapon/W as obj, mob/living/user as mob)
+	user.changeNext_move(10) // Ugh. Ideally we shouldn't be setting cooldowns outside of click code.
+	user.do_attack_animation(src)
 	src.log_message("Attacked by [W]. Attacker - [user]")
 	if(prob(src.deflect_chance))
-		user << "\red The [W] bounces off [src.name] armor."
+		user << "<span class='danger'>The [W] bounces off [src.name] armor.</span>"
 		src.log_append_to_last("Armor saved.")
 /*
 		for (var/mob/V in viewers(src))
@@ -711,9 +723,9 @@
 			if(CC.amount > 1)
 				CC.use(2)
 				clearInternalDamage(MECHA_INT_SHORT_CIRCUIT)
-				user << "You replace the fused wires."
+				user << "<span class='notice'>You replace the fused wires.</span>"
 			else
-				user << "There's not enough wire to finish the task."
+				user << "<span class='warning'>You need two lengths of cable to fix this mecha.</span>"
 		return
 	else if(istype(W, /obj/item/weapon/screwdriver))
 		if(hasInternalDamage(MECHA_INT_TEMP_CONTROL))
@@ -747,14 +759,14 @@
 		if (WT.remove_fuel(0,user))
 			if (hasInternalDamage(MECHA_INT_TANK_BREACH))
 				clearInternalDamage(MECHA_INT_TANK_BREACH)
-				user << "\blue You repair the damaged gas tank."
+				user << "<span class='notice'>You repair the damaged gas tank.</span>"
 		else
 			return
 		if(src.health<initial(src.health))
-			user << "\blue You repair some damage to [src.name]."
+			user.visible_message("<span class='notice'>[user] repairs some damage to [src.name].</span>")
 			src.health += min(10, initial(src.health)-src.health)
 		else
-			user << "The [src.name] is at full integrity"
+			user << "<span class='warning'>The [src.name] is at full integrity.</span>"
 		return
 
 	else if(istype(W, /obj/item/mecha_parts/mecha_tracking))
@@ -783,8 +795,6 @@
 */
 	return
 
-
-
 /*
 /obj/mecha/attack_ai(var/mob/living/silicon/ai/user as mob)
 	if(!istype(user, /mob/living/silicon/ai))
@@ -795,6 +805,8 @@
 	user << browse(output, "window=mecha_attack_ai")
 	return
 */
+
+
 
 /////////////////////////////////////
 ////////  Atmospheric stuff  ////////

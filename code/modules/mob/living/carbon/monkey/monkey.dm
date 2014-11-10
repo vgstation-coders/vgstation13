@@ -320,13 +320,14 @@
 //mob/living/carbon/monkey/bullet_act(var/obj/item/projectile/Proj)taken care of in living
 
 
-/mob/living/carbon/monkey/attack_paw(mob/M as mob)
+/mob/living/carbon/monkey/attack_paw(mob/living/M as mob)
 	..()
 
 	if (M.a_intent == "help")
 		help_shake_act(M)
 	else
 		if ((M.a_intent == "hurt" && !( istype(wear_mask, /obj/item/clothing/mask/muzzle) )))
+			M.do_attack_animation(src)
 			if ((prob(75) && health > 0))
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				for(var/mob/O in viewers(src, null))
@@ -374,6 +375,7 @@
 		help_shake_act(M)
 	else
 		if (M.a_intent == "hurt")
+			M.do_attack_animation(src)
 			if ((prob(75) && health > 0))
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
@@ -446,6 +448,7 @@
 					O.show_message(text("\blue [M] caresses [src] with its scythe like arm."), 1)
 
 		if ("hurt")
+			M.do_attack_animation(src)
 			if ((prob(95) && health > 0))
 				playsound(loc, 'sound/weapons/slice.ogg', 25, 1, -1)
 				var/damage = rand(15, 30)
@@ -485,6 +488,7 @@
 				O.show_message(text("\red [] has grabbed [name] passively!", M), 1)
 
 		if ("disarm")
+			M.do_attack_animation(src)
 			playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
 			var/damage = 5
 			if(prob(95))
@@ -505,6 +509,7 @@
 	if(M.melee_damage_upper == 0)
 		M.emote("[M.friendly] [src]")
 	else
+		M.do_attack_animation(src)
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
@@ -525,6 +530,7 @@
 
 	if (health > -100)
 
+		M.do_attack_animation(src)
 		for(var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
 				O.show_message(text("\red <B>The [M.name] glomps []!</B>", src), 1)
