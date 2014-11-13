@@ -150,9 +150,11 @@
 		if ("help")
 			help_shake_act(M)
 		else
+			M.do_attack_animation(src)
 			if (istype(wear_mask, /obj/item/clothing/mask/muzzle))
 				return
 			if (health > 0)
+				M.do_attack_animation(src)
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
@@ -170,7 +172,8 @@
 	if(M.Victim) return // can't attack while eating!
 
 	if (health > -100)
-
+		
+		M.do_attack_animation(src)
 		for(var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
 				O.show_message(text("\red <B>The [M.name] glomps []!</B>", src), 1)
@@ -228,6 +231,7 @@
 	else
 		M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.attacktext] [src.name] ([src.ckey])</font>")
 		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
+		M.do_attack_animation(src)
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
@@ -307,6 +311,7 @@
 					O.show_message(text("\red [] has grabbed [] passively!", M, src), 1)
 
 		if ("hurt")
+			M.do_attack_animation(src)
 			var/damage = rand(1, 9)
 			if (prob(90))
 				if (M_HULK in M.mutations)//M_HULK SMASH
@@ -385,6 +390,7 @@ In all, this is a lot like the monkey code. /N
 
 		else
 			if (health > 0)
+				M.do_attack_animation(src)
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				var/damage = rand(1, 3)
 				for(var/mob/O in viewers(src, null))

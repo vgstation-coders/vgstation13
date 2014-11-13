@@ -24,6 +24,7 @@
 			visible_message(text("\red [] has grabbed [] passively!", M, src))
 
 		if("hurt")
+			M.do_attack_animation(src)
 			if (w_uniform)
 				w_uniform.add_fingerprint(M)
 			var/damage = rand(15, 30)
@@ -44,6 +45,7 @@
 			updatehealth()
 
 		if("disarm")
+			M.do_attack_animation(src)
 			if (prob(80))
 				playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
 				Weaken(rand(3,4))

@@ -436,6 +436,8 @@
 
 
 /obj/machinery/turret/attack_animal(mob/living/simple_animal/M as mob)
+	M.changeNext_move(10)
+	M.do_attack_animation(src)
 	if(M.melee_damage_upper == 0)	return
 	if(!(stat & BROKEN))
 		visible_message("\red <B>[M] [M.attacktext] [src]!</B>")
@@ -452,9 +454,11 @@
 
 
 /obj/machinery/turret/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
+	M.changeNext_move(10)
+	M.do_attack_animation(src)
 	if(!(stat & BROKEN))
 		playsound(get_turf(src), 'sound/weapons/slash.ogg', 25, 1, -1)
-		visible_message("\red <B>[] has slashed at []!</B>", M, src)
+		visible_message("<span class='userdanger'>[M] has slashed at [src]!</span>")
 		src.health -= 15
 		if (src.health <= 0)
 			src.die()
@@ -574,7 +578,9 @@
 		return attack_hand(user)
 
 
-	attack_alien(mob/user as mob)
+	attack_alien(mob/living/user as mob)
+		user.changeNext_move(10)
+		user.do_attack_animation(src)
 		user.visible_message("[user] slashes at [src]", "You slash at [src]")
 		src.take_damage(15)
 		return

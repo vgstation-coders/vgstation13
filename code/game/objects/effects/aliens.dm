@@ -106,8 +106,9 @@
 	..()
 	return
 
-/obj/effect/alien/resin/attack_hand()
+/obj/effect/alien/resin/attack_hand(mob/living/user)
 	usr.changeNext_move(10)
+	user.do_attack_animation(src)
 	if (M_HULK in usr.mutations)
 		usr << "\blue You easily destroy the [name]."
 		for(var/mob/O in oviewers(src))
@@ -124,7 +125,9 @@
 /obj/effect/alien/resin/attack_paw()
 	return attack_hand()
 
-/obj/effect/alien/resin/attack_alien()
+/obj/effect/alien/resin/attack_alien(mob/living/user)
+	user.changeNext_move(10)
+	user.do_attack_animation(src)
 	if (islarva(usr))//Safety check for larva. /N
 		return
 	usr << "\green You claw at the [name]."
@@ -139,7 +142,7 @@
 	healthcheck()
 	return
 
-/obj/effect/alien/resin/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/effect/alien/resin/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	/*if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
 		var/obj/item/weapon/grab/G = W
 		if(isalien(user)&&(ishuman(G.affecting)||ismonkey(G.affecting)))

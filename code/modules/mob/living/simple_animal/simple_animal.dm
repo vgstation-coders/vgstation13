@@ -269,6 +269,7 @@
 	else
 		M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.attacktext] [src.name] ([src.ckey])</font>")
 		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
+		M.do_attack_animation(src)
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
@@ -320,6 +321,7 @@
 					O.show_message(text("\red [] has grabbed [] passively!", M, src), 1)
 
 		if("hurt", "disarm")
+			M.do_attack_animation(src)
 			adjustBruteLoss(harm_intent_damage)
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
@@ -357,6 +359,7 @@
 					O.show_message(text("\red [] has grabbed [] passively!", M, src), 1)
 
 		if("hurt", "disarm")
+			M.do_attack_animation(src)
 			var/damage = rand(15, 30)
 			visible_message("\red <B>[M] has slashed at [src]!</B>")
 			adjustBruteLoss(damage)
@@ -371,7 +374,7 @@
 
 
 		else
-
+			L.do_attack_animation(src)
 			var/damage = rand(5, 10)
 			visible_message("\red <B>[L] bites [src]!</B>")
 
@@ -387,6 +390,7 @@
 
 	if(M.Victim) return // can't attack while eating!
 
+	M.do_attack_animation(src)
 	visible_message("\red <B>[M.name] glomps [src]!</B>")
 
 	var/damage = rand(1, 3)
@@ -402,7 +406,7 @@
 	return
 
 
-/mob/living/simple_animal/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
+/mob/living/simple_animal/attackby(var/obj/item/O as obj, var/mob/living/user as mob)  //Marker -Agouri
 	if(istype(O, /obj/item/stack/medical))
 		user.changeNext_move(4)
 		if(stat != DEAD)
@@ -423,6 +427,7 @@
 			harvest()
 	else
 		user.changeNext_move(8)
+		user.do_attack_animation(src)
 		if(O.force)
 			var/damage = O.force
 			if (O.damtype == HALLOSS)

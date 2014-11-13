@@ -124,8 +124,9 @@
 	return 0
 
 
-/obj/effect/blob/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/effect/blob/attackby(var/obj/item/weapon/W, var/mob/living/user)
 	user.changeNext_move(10)
+	user.do_attack_animation(src)
 	playsound(get_turf(src), 'sound/effects/attackblob.ogg', 50, 1)
 	src.visible_message("\red <B>The [src.name] has been attacked with \the [W][(user ? " by [user]." : ".")]")
 	var/damage = 0

@@ -185,8 +185,10 @@ emp_act
 		return
 	var/hit_area = affecting.display_name
 
-	if((user != src) && check_shields(I.force, "the [I.name]"))
-		return 0
+	if(user != src)
+		user.do_attack_animation(src)
+		if(check_shields(I.force, "the [I.name]"))
+			return 0
 
 	if(istype(I,/obj/item/weapon/card/emag))
 		if(!(affecting.status & ORGAN_ROBOT))
