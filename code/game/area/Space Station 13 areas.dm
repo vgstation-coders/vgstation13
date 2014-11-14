@@ -1717,6 +1717,10 @@ proc/process_ghost_teleport_locs()
 	name = "Derelict EVA Storage"
 	icon_state = "eva"
 
+/area/derelict/engineering
+	name = "Derelict Engineering Station"
+	icon_state = "engine_lobby"
+
 /area/derelict/ship
 	name = "\improper Abandoned Ship"
 	icon_state = "yellow"
