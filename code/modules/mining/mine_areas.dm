@@ -64,3 +64,16 @@
 /area/asteroid_field/unexplored
 	name = "\improper Asteroid Field"
 	icon_state = "unexplored"
+
+/area/asteroid_field/med_outpost/lobby
+	name = "\improper Medical Outpost Lobby"
+	icon_state = "medbay"
+
+/area/asteroid_field/med_outpost/treatment
+	name = "\improper Medical Outpost Treatment Room"
+	icon_state = "medbay2"
+
+/area/asteroid_field/med_outpost/storage
+	name = "\improper Medical Outpost Storage"
+	icon_state = "storage"
+
