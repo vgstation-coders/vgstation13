@@ -50,3 +50,17 @@
 
 /area/mine/west_outpost
 	name = "West Mining Outpost"
+
+/**********************Asteroid field areas**************************/
+
+/area/asteroid_field/syndicache1
+	name = "\improper Syndicate Guard Central Substation"
+	icon_state = "bridge"
+
+/area/asteroid_field/explored
+	name = "\improper Mining Substation Construction Area"
+	icon_state = "explored"
+
+/area/asteroid_field/unexplored
+	name = "\improper Asteroid Field"
+	icon_state = "unexplored"

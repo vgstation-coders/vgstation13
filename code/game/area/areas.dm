@@ -408,7 +408,7 @@
 					sound = pick('sound/ambience/ghetto.ogg')
 				else if (istype(src, /area/shuttle/salvage/derelict))
 					sound = pick('sound/ambience/derelict1.ogg', 'sound/ambience/derelict2.ogg', 'sound/ambience/derelict3.ogg', 'sound/ambience/derelict4.ogg')
-				else if (istype(src, /area/mine/explored) || istype(src, /area/mine/unexplored))
+				else if (istype(src, /area/mine/explored) || istype(src, /area/mine/unexplored) || istype(src, /area/asteroid_field/explored) || istype(src, /area/asteroid_field/unexplored) || istype(src, /area/asteroid_field/syndicache1))
 					sound = pick('sound/ambience/ambimine.ogg', 'sound/ambience/song_game.ogg', 'sound/music/torvus.ogg')
 				else if (istype(src, /area/maintenance/fsmaint2) || istype(src, /area/maintenance/port) || istype(src, /area/maintenance/aft) || istype(src, /area/maintenance/asmaint))
 					sound = pick('sound/ambience/spookymaint1.ogg', 'sound/ambience/spookymaint2.ogg')
