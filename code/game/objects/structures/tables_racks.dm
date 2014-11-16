@@ -29,6 +29,10 @@
 			var/obj/structure/table/T = locate(/obj/structure/table,get_step(src,direction))
 			T.update_icon()
 
+/obj/structure/table/cultify()
+	new /obj/structure/table/woodentable(loc)
+	..()
+
 /obj/structure/table/New()
 	..()
 	for(var/obj/structure/table/T in src.loc)
@@ -259,7 +263,7 @@
 /obj/structure/table/attack_tk() // no telehulk sorry
 	return
 
-/obj/structure/table/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/table/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 	if(istype(mover,/obj/item/projectile))
 		return (check_cover(mover,target))
@@ -488,7 +492,11 @@
 	icon_state = "woodtable"
 	parts = /obj/item/weapon/table_parts/wood
 	health = 50
+	autoignition_temperature = AUTOIGNITION_WOOD // TODO:  Special ash subtype that looks like charred table legs.
+	fire_fuel = 5
 
+/obj/structure/table/woodentable/cultify()
+	return
 
 /obj/structure/table/woodentable/poker //No specialties, Just a mapping object.
 	name = "gambling table"
@@ -575,7 +583,7 @@
 		del(src)
 		return
 
-/obj/structure/rack/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/rack/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 	if(src.density == 0) //Because broken racks -Agouri |TODO: SPRITE!|
 		return 1

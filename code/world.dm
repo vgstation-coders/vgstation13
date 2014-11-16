@@ -5,8 +5,11 @@
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 
 #define RECOMMENDED_VERSION 501
+
+
 /world/New()
 	// Honk honk, fuck you science
+	populate_seed_list()
 	WORLD_X_OFFSET=rand(-50,50)
 	WORLD_Y_OFFSET=rand(-50,50)
 
@@ -15,13 +18,21 @@
 	midicon = rotate_icon('icons/obj/lightning.dmi', "lightning")
 	endicon = rotate_icon('icons/obj/lightning.dmi', "lightningend")
 	*/
-	//logs
+
+	// logs
 	var/date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
+
 	href_logfile = file("data/logs/[date_string] hrefs.htm")
 	diary = file("data/logs/[date_string].log")
 	diaryofmeanpeople = file("data/logs/[date_string] Attack.log")
-	diary << "\n\nStarting up. [time2text(world.timeofday, "hh:mm.ss")]\n---------------------"
-	diaryofmeanpeople << "\n\nStarting up. [time2text(world.timeofday, "hh:mm.ss")]\n---------------------"
+	admin_diary = file("data/logs/[date_string] admin only.log")
+
+	var/log_start = "---------------------\n\[[time_stamp()]\]WORLD: starting up..."
+
+	diary << log_start
+	diaryofmeanpeople << log_start
+	admin_diary << log_start
+
 	changelog_hash = md5('html/changelog.html')					//used for telling if the changelog has changed recently
 
 	if(byond_version < RECOMMENDED_VERSION)
@@ -169,6 +180,26 @@
 
 
 /world/Reboot(reason)
+	if(config.map_voting)
+		//testing("we have done a map vote")
+		if(fexists(vote.chosen_map))
+			//testing("[vote.chosen_map] exists")
+			var/start = 1
+			var/pos = findtext(vote.chosen_map, "/", start)
+			var/lastpos = pos
+			//testing("First slash [lastpos]")
+			while(pos > 0)
+				lastpos = pos
+				pos = findtext(vote.chosen_map, "/", start)
+				start = pos + 1
+				//testing("Next slash [pos]")
+			var/filename = copytext(vote.chosen_map, lastpos + 1, 0)
+			//testing("Found [filename]")
+
+			if(!fcopy(vote.chosen_map, filename))
+				//testing("Fcopy failed, deleting and copying")
+				fdel(filename)
+				fcopy(vote.chosen_map, filename)
 	spawn(0)
 		world << sound(pick('sound/AI/newroundsexy.ogg','sound/misc/apcdestroyed.ogg','sound/misc/bangindonk.ogg','sound/misc/slugmissioncomplete.ogg')) // random end sounds!! - LastyBatsy
 
@@ -191,7 +222,7 @@
 				if(C.is_afk(INACTIVITY_KICK))
 					if(!istype(C.mob, /mob/dead))
 						log_access("AFK: [key_name(C)]")
-						C << "\red You have been inactive for more than 10 minutes and have been disconnected."
+						C << "<span class='warning'>You have been inactive for more than 10 minutes and have been disconnected.</span>"
 						del(C)
 #undef INACTIVITY_KICK
 
@@ -294,7 +325,7 @@
 		features += "hosted by <b>[config.hostedby]</b>"
 
 	if (features)
-		s += ": [dd_list2text(features, ", ")]"
+		s += ": [list2text(features, ", ")]"
 
 	/* does this help? I do not know */
 	if (src.status != s)

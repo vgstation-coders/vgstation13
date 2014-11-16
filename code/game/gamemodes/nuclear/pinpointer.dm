@@ -10,6 +10,7 @@
 	throw_range = 20
 	m_amt = 500
 	w_type = RECYK_ELECTRONIC
+	melt_temperature = MELTPOINT_STEEL
 	var/obj/item/weapon/disk/nuclear/the_disk = null
 	var/active = 0
 
@@ -19,6 +20,7 @@
 			active = 1
 			workdisk()
 			usr << "\blue You activate the pinpointer"
+			playsound(get_turf(src), 'sound/items/healthanalyzer.ogg', 30, 1)
 		else
 			active = 0
 			icon_state = "pinoff"

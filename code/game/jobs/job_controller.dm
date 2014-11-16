@@ -83,7 +83,7 @@ var/global/datum/controller/occupations/job_master
 			if(!job.player_old_enough(player.client))
 				Debug("FOC player not old enough, Player: [player]")
 				continue
-			if(flag && (!player.client.prefs.be_special & flag))
+			if(flag && !player.client.desires_role(job.title))
 				Debug("FOC flag failed, Player: [player], Flag: [flag], ")
 				continue
 			if(player.client.prefs.GetJobDepartment(job, level) & job.flag)
@@ -163,7 +163,7 @@ var/global/datum/controller/occupations/job_master
 			for(var/level = 1 to 3)
 				var/list/candidates = list()
 				if(ticker.mode.name == "AI malfunction")//Make sure they want to malf if its malf
-					candidates = FindOccupationCandidates(job, level, BE_MALF)
+					candidates = FindOccupationCandidates(job, level, ROLE_MALF)
 				else
 					candidates = FindOccupationCandidates(job, level)
 				if(candidates.len)
@@ -202,7 +202,7 @@ var/global/datum/controller/occupations/job_master
 		for(var/mob/new_player/player in player_list)
 			if(player.ready && player.mind && !player.mind.assigned_role)
 				unassigned += player
-				if(player.client.prefs.randomslot) player.client.prefs.random_character()
+				if(player.client.prefs.randomslot) player.client.prefs.random_character_sqlite(player, player.ckey)
 		Debug("DO, Len: [unassigned.len]")
 		if(unassigned.len == 0)	return 0
 

@@ -10,7 +10,7 @@
 
 /proc/is_convertable_to_cult(datum/mind/mind)
 	if(!istype(mind))	return 0
-	if(istype(mind.current, /mob/living/carbon/human) && (mind.assigned_role in list("Captain", "Chaplain")))	return 0
+	if(istype(mind.current, /mob/living/carbon/human) && (mind.assigned_role == "Chaplain"))	return 0
 	for(var/obj/item/weapon/implant/loyalty/L in mind.current)
 		if(L && (L.imp_in == mind.current))//Checks to see if the person contains an implant, then checks that the implant is actually inside of them
 			return 0
@@ -65,7 +65,7 @@
 	if(config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
 
-	var/list/cultists_possible = get_players_for_role(BE_CULTIST)
+	var/list/cultists_possible = get_players_for_role(ROLE_CULTIST)
 	for(var/datum/mind/player in cultists_possible)
 		for(var/job in restricted_jobs)//Removing heads and such from the list
 			if(player.assigned_role == job)
@@ -93,7 +93,11 @@
 
 		if(possible_targets.len > 0)
 			sacrifice_target = pick(possible_targets)
-
+		if(!sacrifice_target)
+			for(var/datum/mind/possible_target in ticker.minds)
+				if(ishuman(possible_target.current) && (possible_target.current.stat != 2) && !(possible_target in cult))
+					possible_targets += possible_target
+			sacrifice_target = pick(possible_targets)
 	for(var/datum/mind/cult_mind in cult)
 		equip_cultist(cult_mind.current)
 		grant_runeword(cult_mind.current)
@@ -167,7 +171,7 @@
 	if (!word)
 		word=pick(allwords)
 	var/wordexp = "[cultwords[word]] is [word]..."
-	cult_mob << "\red You remember one thing from the dark teachings of your master... [wordexp]"
+	cult_mob << "<span class='sinister'>You remember one thing from the dark teachings of your master... [wordexp]</span>"
 	cult_mob.mind.store_memory("<B>You remember that</B> [wordexp]", 0, 0)
 
 

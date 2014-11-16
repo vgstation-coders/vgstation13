@@ -91,9 +91,12 @@ Class Procs:
 	Compiled by Aygar
 */
 
+//The machine flags can be found in setup.dm
+
 /obj/machinery
 	name = "machinery"
 	icon = 'icons/obj/stationobjs.dmi'
+	var/icon_state_open = ""
 
 	w_type = NOT_RECYCLABLE
 
@@ -112,12 +115,38 @@ Class Procs:
 	var/global/gl_uid = 1
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
+	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
+
+	/**
+	 * Machine construction/destruction/emag flags.
+	 */
+	var/machine_flags = 0
+
+	/**
+	 * Emag energy cost (in MJ).
+	 */
+	var/emag_cost = 1
 
 	var/inMachineList = 1 // For debugging.
+
+/obj/machinery/cultify()
+	var/list/random_structure = list(
+		/obj/structure/cult/talisman,
+		/obj/structure/cult/forge,
+		/obj/structure/cult/tome
+		)
+	var/I = pick(random_structure)
+	new I(loc)
+	..()
 
 /obj/machinery/New()
 	machines += src
 	return ..()
+
+/obj/machinery/examine(mob/user)
+	..()
+	if(panel_open)
+		user << "Its maintenance panel is open."
 
 /obj/machinery/Destroy()
 	if(src in machines)
@@ -147,7 +176,7 @@ Class Procs:
 		pulse2.dir = pick(cardinal)
 
 		spawn(10)
-			pulse2.delete()
+			qdel(pulse2)
 	..()
 
 /obj/machinery/ex_act(severity)
@@ -193,6 +222,7 @@ Class Procs:
 	if("set_freq" in href_list)
 		if(!("frequency" in vars))
 			warning("set_freq: [type] has no frequency var.")
+			return 0
 		var/newfreq=src:frequency
 		if(href_list["set_freq"]!="-1")
 			newfreq=text2num(href_list["set_freq"])
@@ -377,23 +407,148 @@ Class Procs:
 	uid = gl_uid
 	gl_uid++
 
-/obj/machinery/proc/default_deconstruction_crowbar()
-	playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-	var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-	M.state = 2
-	M.icon_state = "box_1"
-	for(var/obj/I in component_parts)
-		if(I.reliability != 100 && crit_fail)
-			I.crit_fail = 1
-		I.loc = src.loc
-	del(src)
+/obj/machinery/proc/crowbarDestroy(mob/user)
+	user.visible_message(	"[user] begins to pry out the circuitboard from \the [src].",
+							"You begin to pry out the circuitboard from \the [src]...")
+	if(do_after(user, 40))
+		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+		var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
+		M.state = 2
+		M.icon_state = "box_1"
+		for(var/obj/I in component_parts)
+			if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker) && src:reagents && src:reagents.total_volume)
+				reagents.trans_to(I, reagents.total_volume)
+			if(I.reliability != 100 && crit_fail)
+				I.crit_fail = 1
+			I.loc = src.loc
+		for(var/obj/I in src) //remove any stuff loaded, like for fridges
+			if(machine_flags &EJECTNOTDEL)
+				I.loc = src.loc
+			else
+				qdel(I)
+		user.visible_message(	"<span class='notice'>[user] successfully pries out the circuitboard from \the [src]!</span>",
+								"<span class='notice'>\icon[src] You successfully pry out the circuitboard from \the [src]!</span>")
+		return 1
+	return -1
 
-/obj/machinery/proc/default_deconstruction_screwdriver(var/mob/user, var/icon_state_open, var/icon_state_closed)
-	if (!panel_open)
-		panel_open = 1
+/obj/machinery/proc/togglePanelOpen(var/obj/toggleitem, var/mob/user)
+	panel_open = !panel_open
+	if(!icon_state_open)
+		icon_state_open = icon_state
+	if(panel_open)
 		icon_state = icon_state_open
-		user << "<span class='notice'>You open the maintenance hatch of [src].</span>"
 	else
-		panel_open = 0
-		icon_state = icon_state_closed
-		user << "<span class='notice'>You close the maintenance hatch of [src].</span>"
+		icon_state = initial(icon_state)
+	user << "<span class='notice'>\icon[src] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>"
+	if(istype(toggleitem, /obj/item/weapon/screwdriver))
+		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+	update_icon()
+	return 1
+
+/obj/machinery/proc/wrenchAnchor(var/mob/user)
+	if(state == 2 && src.machine_flags & WELD_FIXED)
+		user <<"\The [src] has to be unwelded from the floor first."
+		return -1 //state set to 2, can't do it
+	user.visible_message(	"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
+							"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts...")
+	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	if(do_after(user, 30))
+		anchored = !anchored
+		state = anchored //since these values will match as long as state isn't 2, we can do this safely
+		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
+								"<span class='notice'>\icon[src] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
+								"<span class='notice'>You hear a ratchet.</span>")
+		return 1
+	return -1
+
+/obj/machinery/proc/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
+	if(!anchored)
+		state = 0 //since this might be wrong, we go sanity
+		user << "You need to secure \the [src] before it can be welded."
+		return -1
+	if (WT.remove_fuel(0,user))
+		playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+		user.visible_message("[user.name] starts to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
+				"You start to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
+				"You hear welding.")
+		if (do_after(user,20))
+			if(!src || !WT.isOn())
+				return -1
+			switch(state)
+				if(0)
+					user <<"You have to keep \the [src] secure before it can be welded down."
+					return -1
+				if(1)
+					state = 2
+				if(2)
+					state = 1
+			user.visible_message(	"[user.name] [state - 1 ? "weld" : "unweld"]s \the [src] [state - 1 ? "to" : "from"] the floor.",
+									"\icon [src] You [state - 1 ? "weld" : "unweld"] \the [src] [state - 1 ? "to" : "from"] the floor."
+								)
+			return 1
+	else
+		user << "<span class='rose'>You need more welding fuel to complete this task.</span>"
+		return -1
+
+/**
+ * Handle emags.
+ * @param user /mob The mob that used the emag.
+ */
+/obj/machinery/proc/emag(mob/user as mob)
+	// Disable emaggability.
+	machine_flags &= ~EMAGGABLE
+
+/**
+ * Returns the cost of emagging this machine (emag_cost by default)
+ * @param user /mob The mob that used the emag.
+ * @param emag /obj/item/weapon/card/emag The emag used on this device.
+ * @return number Cost to emag.
+ */
+/obj/machinery/proc/getEmagCost(var/mob/user, var/obj/item/weapon/card/emag/emag)
+	return emag_cost
+
+/obj/machinery/attackby(var/obj/O, var/mob/user)
+	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
+		var/obj/item/weapon/card/emag/E = O
+		if(E.canUse(user,src))
+			emag(user)
+			return
+
+	if(istype(O, /obj/item/weapon/wrench) && machine_flags & WRENCHMOVE) //make sure this is BEFORE the fixed2work check
+		if(!panel_open)
+			return wrenchAnchor(user)
+		else
+			user <<"<span class='warning'>\The [src]'s maintenance panel must be closed first!</span>"
+			return -1 //we return -1 rather than 0 for the if(..()) checks
+
+	if(istype(O, /obj/item/weapon/screwdriver) && machine_flags & SCREWTOGGLE)
+		return togglePanelOpen(O, user)
+
+	if(istype(O, /obj/item/weapon/weldingtool) && machine_flags & WELD_FIXED)
+		return weldToFloor(O, user)
+
+	if(istype(O, /obj/item/weapon/crowbar) && machine_flags & CROWDESTROY)
+		if(panel_open)
+			if(crowbarDestroy(user) == 1)
+				qdel(src)
+				return 1
+			else
+				return -1
+
+	if(!anchored && machine_flags & FIXED2WORK)
+		return user << "<span class='warning'>\The [src] must be anchored first!</span>"
+
+/obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
+	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
+		return 0
+	if(!prob(prb))
+		return 0
+	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	s.set_up(5, 1, src)
+	s.start()
+	if(siemenspassed == -1) //this means it hasn't been set by proc arguments, so we can set it ourselves safely
+		siemenspassed = 0.7
+	if (electrocute_mob(user, get_area(src), src, siemenspassed))
+		return 1
+	else
+		return -1

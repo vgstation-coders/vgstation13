@@ -56,6 +56,12 @@ var/list/spells = typesof(/obj/effect/proc_holder/spell) //needed for the badmin
 	if(usr.z == 2 && !centcomm_cancast) //Certain spells are not allowed on the centcomm zlevel
 		return 0
 
+	if(istype(usr, /mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = usr
+		if(SA.purge)
+			SA << "<span class='warning'>The nullrod's power interferes with your own!</span>"
+			return 0
+
 	if(!skipcharge)
 		switch(charge_type)
 			if("recharge")
@@ -77,7 +83,7 @@ var/list/spells = typesof(/obj/effect/proc_holder/spell) //needed for the badmin
 				return 0
 	var/obj/effect/proc_holder/spell/noclothes/spell = locate() in user.spell_list
 	if(clothes_req && !(spell && istype(spell)))//clothes check
-		if(usr.wearing_wiz_garb())
+		if(!usr.wearing_wiz_garb())
 			return 0
 		/*  This is all rendered obsolete.  Use mob.wearing_wiz_garb() instead.
 		if(!istype(usr, /mob/living/carbon/human))

@@ -8,7 +8,7 @@
 	priority = 1
 	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
-		return affected.open == 2 && !(affected.status & ORGAN_BLEEDING) && (target_zone != "chest" || target.op_stage.ribcage == 2)
+		return affected.open == (affected.encased ? 3 : 2) && !(affected.status & ORGAN_BLEEDING)
 
 	proc/get_max_wclass(datum/organ/external/affected)
 		switch (affected.name)
@@ -161,6 +161,11 @@
 	min_duration = 80
 	max_duration = 100
 
+	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+		var/datum/organ/internal/brain/sponge = target.internal_organs_by_name["brain"]
+		var/datum/organ/external/affected = target.get_organ(target_zone)
+		return ..() && !(affected.status & ORGAN_CUT_AWAY) && (!sponge || !sponge.damage)
+
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
 		user.visible_message("[user] starts poking around inside the incision on [target]'s [affected.display_name] with \the [tool].", \
@@ -196,7 +201,7 @@
 					var/mob/living/simple_animal/borer/worm = obj
 					if(worm.controlling)
 						target.release_control()
-					worm.detatch()
+					worm.detach()
 
 				obj.loc = get_turf(target)
 				if(istype(obj,/obj/item/weapon/implant))

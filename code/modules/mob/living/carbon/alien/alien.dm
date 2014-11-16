@@ -48,7 +48,7 @@
 	return 2
 
 // MULEBOT SMASH
-/mob/living/carbon/alien/HasEntered(var/atom/movable/AM)
+/mob/living/carbon/alien/Crossed(var/atom/movable/AM)
 	var/obj/machinery/bot/mulebot/MB = AM
 	if(istype(MB))
 		MB.RunOverCreature(src,"#00ff00")
@@ -229,6 +229,9 @@ Des: Removes all infected images from the alien.
 			if(dd_hasprefix_case(I.icon_state, "infected"))
 				del(I)
 	return
+
+/mob/living/carbon/alien/has_eyes()
+	return 0
 
 #undef HEAT_DAMAGE_LEVEL_1
 #undef HEAT_DAMAGE_LEVEL_2

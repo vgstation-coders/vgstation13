@@ -10,10 +10,14 @@
 	var/moving = 0
 	var/lastMove = 0
 
+	l_color = "#B40000"
 
 /obj/machinery/computer/syndicate_station/New()
 	curr_location= locate(/area/syndicate_station/start)
 
+/obj/machinery/computer/salvage_ship/update_icon()
+	..()
+	icon_state = "syndishuttle"
 
 /obj/machinery/computer/syndicate_station/proc/syndicate_move_to(area/destination as area)
 	if(moving)	return
@@ -37,7 +41,8 @@
 
 
 /obj/machinery/computer/syndicate_station/attackby(obj/item/I as obj, mob/user as mob)
-	return attack_hand(user)
+	if(!..())
+		return attack_hand(user)
 
 /obj/machinery/computer/syndicate_station/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)

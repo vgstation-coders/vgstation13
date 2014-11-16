@@ -34,6 +34,7 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	g_amt = 25
 	m_amt = 75
 	w_type = RECYK_ELECTRONIC
+	melt_temperature = MELTPOINT_PLASTIC
 
 	var/const/TRANSMISSION_DELAY = 5 // only 2/second/radio
 	var/const/FREQ_LISTENING = 1
@@ -52,10 +53,12 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 
 /obj/item/device/radio/New()
 	wires = new(src)
+
 	if(prison_radio)
 		wires.CutWireIndex(WIRE_TRANSMIT)
+
 	secure_radio_connections = new
-	..()
+	..(loc)
 	if(radio_controller)
 		initialize()
 
@@ -72,9 +75,8 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 
 	set_frequency(frequency)
 
-	for (var/ch_name in channels)
-		secure_radio_connections[ch_name] = radio_controller.add_object(src, radiochannels[ch_name],  RADIO_CHAT)
-
+	for (var/channel in channels)
+		secure_radio_connections[channel] = radio_controller.add_object(src, radiochannels[channel], RADIO_CHAT)
 
 /obj/item/device/radio/attack_self(mob/user as mob)
 	user.set_machine(src)
@@ -838,4 +840,9 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	if(isrobot(src.loc))
 		var/mob/living/silicon/robot/R = src.loc
 		R.radio = null
+
+	if(wires)
+		wires.Destroy()
+		wires = null
+
 	..()

@@ -66,7 +66,7 @@
 					D.reagents.reaction(A_turf)
 				sleep(2)
 			sleep(3)
-		D.reagents.delete()
+		D.reagents.Destroy()
 		D.loc = null
 
 	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
@@ -239,8 +239,6 @@
 
 
 /obj/item/weapon/reagent_containers/spray/plantbgone/afterattack(atom/A as mob|obj, mob/user as mob)
-	if (istype(A, /obj/machinery/hydroponics)) // We are targeting hydrotray
-		return
 
 	if (istype(A, /obj/effect/blob)) // blob damage in blob code
 		return

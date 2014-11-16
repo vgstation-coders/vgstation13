@@ -138,6 +138,7 @@ var/global/list/RPD_recipes=list(
 	m_amt = 75000
 	g_amt = 37500
 	w_type = RECYK_ELECTRONIC
+	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "engineering=4;materials=2"
 	var/datum/effect/effect/system/spark_spread/spark_system
 	var/working = 0
@@ -158,7 +159,8 @@ var/global/list/RPD_recipes=list(
 	var/paint_color="grey"
 
 /obj/item/weapon/pipe_dispenser/New()
-	src.spark_system = new /datum/effect/effect/system/spark_spread
+	. = ..()
+	spark_system = new /datum/effect/effect/system/spark_spread
 	spark_system.set_up(5, 0, src)
 	spark_system.attach(src)
 
@@ -242,7 +244,7 @@ var/global/list/RPD_recipes=list(
 			if(preview)
 				user << browse_rsc(new /icon(preview, dir=NORTHWEST),  "nw.png")
 				user << browse_rsc(new /icon(preview, dir=NORTHEAST),  "ne.png")
-				user << browse_rsc(new /icon(preview, dir=SOUTHWEST), "sw.png")
+				user << browse_rsc(new /icon(preview, dir=SOUTHWEST),  "sw.png")
 				user << browse_rsc(new /icon(preview, dir=SOUTHEAST),  "se.png")
 
 				dirsel += "<p>"
@@ -265,9 +267,9 @@ var/global/list/RPD_recipes=list(
 		if(PIPE_TRINARY) // Manifold
 			if(preview)
 				user << browse_rsc(new /icon(preview, dir=NORTH), "s.png")
-				user << browse_rsc(new /icon(preview, dir=EAST), "w.png")
+				user << browse_rsc(new /icon(preview, dir=EAST),  "w.png")
 				user << browse_rsc(new /icon(preview, dir=SOUTH), "n.png")
-				user << browse_rsc(new /icon(preview, dir=WEST), "e.png")
+				user << browse_rsc(new /icon(preview, dir=WEST),  "e.png")
 
 				dirsel += "<p>"
 				dirsel += render_dir_img(1,"s.png","West South East")
@@ -325,6 +327,7 @@ var/global/list/RPD_recipes=list(
 
 			a img {
 				border:1px solid #0066cc;
+				background:#dfdfdf;
 			}
 
 			a.color {

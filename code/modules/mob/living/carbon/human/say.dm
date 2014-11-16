@@ -1,6 +1,7 @@
 /mob/living/carbon/human/say(var/message)
 
 	if(silent)
+		src << "\red Silence."
 		return
 
 	//Mimes dont speak! Changeling hivemind and emotes are allowed.
@@ -54,7 +55,7 @@
 					if(findtext(temp_message[H], "*") || findtext(temp_message[H], ";") || findtext(temp_message[H], ":")) continue
 					temp_message[H] = "HONK"
 					pick_list -= H //Make sure that you dont HONK the same word twice
-				message = dd_list2text(temp_message, " ")
+				message = list2text(temp_message, " ")
 	if(wear_mask)
 		if(istype(wear_mask, /obj/item/clothing/mask/gas/voice/space_ninja) && wear_mask:voice == "Unknown")
 			if(copytext(message, 1, 2) != "*")
@@ -67,7 +68,7 @@
 					if(findtext(temp_message[H], "*") || findtext(temp_message[H], ";") || findtext(temp_message[H], ":")) continue
 					temp_message[H] = ninjaspeak(temp_message[H])
 					pick_list -= H
-				message = dd_list2text(temp_message, " ")
+				message = list2text(temp_message, " ")
 				message = replacetext(message, "o", "¤")
 				message = replacetext(message, "p", "þ")
 				message = replacetext(message, "l", "£")

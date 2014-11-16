@@ -12,6 +12,7 @@ var/global/list/cached_icons = list()
 	g_amt = 0
 	w_type = RECYK_METAL
 	w_class = 3.0
+	melt_temperature = MELTPOINT_STEEL
 	amount_per_transfer_from_this = 10
 	possible_transfer_amounts = list(10,20,30,50,70)
 	volume = 70
@@ -36,7 +37,7 @@ var/global/list/cached_icons = list()
 	New()
 		if(paint_type == "remover")
 			name = "paint remover bucket"
-		else if(paint_type && lentext(paint_type) > 0)
+		else if(paint_type && length(paint_type) > 0)
 			name = paint_type + " " + name
 		..()
 		reagents.add_reagent("paint_[paint_type]", volume)
