@@ -239,7 +239,7 @@
 				var/datum/admins/D = new /datum/admins("Moderator", rights, ckey)
 				D.associate(directory[ckey])
 
-/world/proc/update_status()
+/*/world/proc/update_status()
 	var/s = ""
 
 	if (config && config.server_name)
@@ -247,11 +247,25 @@
 
 
 ///////////////////////////////////////////////For a HUB ////////////////////////////////////
-	s += {"<b><a href=\"http://nsea.forum2x2.com/">(RU)NSEA protector] FUN SERVER</b></a>
-	"(Build - VGstation13:PKS)
-	<b>English: FUN AND RP in VG:PKS</b>
-	<b>Russian: ‘‡Ì Ë –œ Ì‡ VG:PKS</b>
-	ñ"}
+	s += {"<b><a> href=\"http://nsea.forum2x2.com/">(RU)NSEA protector] FUN SERVER</b></a>
+	s +="(Build - VGstation13:PKS)"}
+	s += {"<b>English: FUN AND RP in VG:PKS</b>
+	<b>Russian: ‘‡Ì Ë –œ Ì‡ VG:PKS</b>"}*/ ///old
+
+/world/proc/update_status()
+	var/s = ""
+
+	if (config && config.server_name)
+		s += {"<b><a href=\"http://nsea.forum2x2.com/">(RU)NSEA protector] FUN SERVER</b></a>"}
+
+	s += "<b>[station_name()]</b>";
+	s += " ("
+	s += "Build - /VG/: Custom"
+	s += "</a>"
+	s += ")"
+	s += "<br>English: FUN AND RP in VG:PKS.<br>"
+	s += "<br>Russian: ‘‡Ì Ë –œ Ì‡ VG:PKS<br>"
+	s += ""
 	var/list/features = list()
 
 	if(ticker)

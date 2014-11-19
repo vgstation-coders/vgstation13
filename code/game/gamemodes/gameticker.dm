@@ -54,9 +54,9 @@ var/global/datum/controller/gameticker/ticker
 	'sound/music/moonbaseoddity.ogg',\
 	'sound/music/whatisthissong.ogg')
 	do
-		pregame_timeleft = 300
+		pregame_timeleft = 80
 		world << "<B><FONT color='blue'>Welcome to the pre-game lobby!</FONT></B>"
-		world << "Please, setup your character and select ready. Game will start in [pregame_timeleft] seconds"
+		world << "Пожалуйста, настройте вашего персонажа адекватно, иначе это может вызвать агрессию окружающих в игре. Игра начнется через [pregame_timeleft] секунд"
 		while(current_state == GAME_STATE_PREGAME)
 			for(var/i=0, i<10, i++)
 				sleep(1)
@@ -96,7 +96,7 @@ var/global/datum/controller/gameticker/ticker
 		runnable_modes = config.get_runnable_modes()
 		if (runnable_modes.len==0)
 			current_state = GAME_STATE_PREGAME
-			world << "<B>Unable to choose playable game mode.</B> Reverting to pre-game lobby."
+			world << "<B>Не выбран режим игры.</B> Откат времени до старта."
 			return 0
 		if(secret_force_mode != "secret")
 			var/datum/game_mode/M = config.pick_mode(secret_force_mode)
@@ -111,7 +111,7 @@ var/global/datum/controller/gameticker/ticker
 	else
 		src.mode = config.pick_mode(master_mode)
 	if (!src.mode.can_start())
-		world << "<B>Unable to start [mode.name].</B> Not enough players, [mode.required_players] players needed. Reverting to pre-game lobby."
+		world << "<B>Unable to start [mode.name].</B> Не хватает игроков, необходимо [mode.required_players] игроков. Откат времени до старта."
 		del(mode)
 		current_state = GAME_STATE_PREGAME
 		job_master.ResetOccupations()
@@ -123,7 +123,7 @@ var/global/datum/controller/gameticker/ticker
 	if(!can_continue)
 		del(mode)
 		current_state = GAME_STATE_PREGAME
-		world << "<B>Error setting up [master_mode].</B> Reverting to pre-game lobby."
+		world << "<B>Невозможно установить режим: [master_mode].</B> Откат времени до старта."
 		job_master.ResetOccupations()
 		return 0
 
@@ -132,8 +132,8 @@ var/global/datum/controller/gameticker/ticker
 		for (var/datum/game_mode/M in runnable_modes)
 			modes+=M.name
 		modes = sortList(modes)
-		world << "<B>The current game mode is - Secret!</B>"
-		world << "<B>Possibilities:</B> [english_list(modes)]"
+		world << "<B>В настоящее время режим игры - Секрет!</B>"
+		world << "<B>Возможные угрозы(режимы игры):</B> [english_list(modes)]"
 	else
 		src.mode.announce()
 
@@ -169,7 +169,7 @@ var/global/datum/controller/gameticker/ticker
 		for(var/obj in L)
 			if(istype(obj, /obj/effect/landmark/spacepod/random))
 				qdel(obj)
-		world << "<FONT color='blue'><B>Enjoy the game!</B></FONT>"
+		world << "<FONT color='blue'><B>Приятной игры!</B></FONT>"
 		//world << sound('sound/AI/welcome.ogg') // Skie //Out with the old, in with the new. - N3X15
 		var/welcome_sentence=list('sound/AI/vox_login.ogg')
 		welcome_sentence += pick(
@@ -367,7 +367,7 @@ var/global/datum/controller/gameticker/ticker
 				if (mode.station_was_nuked)
 					feedback_set_details("end_proper","nuke")
 					if(!delay_end && !watchdog.waiting)
-						world << "\blue <B>Rebooting due to destruction of station in [restart_timeout/10] seconds</B>"
+						world << "\blue <B>Перезагрузка по причине полного уничтожения станции через [restart_timeout/10] секунд</B>"
 				else
 					feedback_set_details("end_proper","proper completion")
 					if(!delay_end && !watchdog.waiting)
@@ -377,7 +377,7 @@ var/global/datum/controller/gameticker/ticker
 					blackbox.save_all_data_to_sql()
 
 				if (watchdog.waiting)
-					world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
+					world << "\blue <B>Сервер будет перезапущен изза автоматического обновлениЯ через 10 секунд.</B>"
 					watchdog.signal_ready()
 				else if(!delay_end)
 					sleep(restart_timeout)
@@ -385,9 +385,9 @@ var/global/datum/controller/gameticker/ticker
 						CallHook("Reboot",list())
 						world.Reboot()
 					else
-						world << "\blue <B>An admin has delayed the round end</B>"
+						world << "\blue <B>Администратор приотановил конец раунда</B>"
 				else
-					world << "\blue <B>An admin has delayed the round end</B>"
+					world << "\blue <B>Администратор приотановил конец раунда</B>"
 
 		return 1
 
