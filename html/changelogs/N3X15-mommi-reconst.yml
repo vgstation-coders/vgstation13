@@ -1,0 +1,4 @@
+author: N3X15
+delete-after: true
+changes:
+- rscadd: "Matter synth is now matter reconstitutor.  Mobile and simplified recycling system.  Recharges glass and metal every tick (cyborg version only)."
