@@ -607,6 +607,11 @@
 	desc = "Mini-Mecha action figure! Collect them all! 11/11."
 	icon_state = "phazonprize"
 
+/obj/item/toy/prize/reptar
+	name = "Reptar Doll"
+	desc = "Reptar! Destroyer of worlds!"
+	icon_state = "reptar"
+
 /obj/item/toy/katana
 	name = "replica katana"
 	desc = "Woefully underpowered in D20."
