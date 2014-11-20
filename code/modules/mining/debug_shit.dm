@@ -9,4 +9,4 @@
 	New()
 		..()
 		for(var/ore_id in mats.storage)
-			mats.addAmount(ore_id, 20*CC_PER_SHEET_METAL)
+			mats.addAmount(ore_id, 20)

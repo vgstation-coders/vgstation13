@@ -44,7 +44,7 @@
 	for(var/ore_id in ingredients)
 		var/datum/material/po=materials.getMaterial(ore_id)
 
-		batches = min(batches, po.stored/ingredients[ore_id])
+		batches = min(batches, round(po.stored/ingredients[ore_id]))
 
 	return batches
 

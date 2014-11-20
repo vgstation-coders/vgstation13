@@ -22,11 +22,11 @@
 	var/datum/materials/materials
 	var/datum/smelting_manager/smelter
 
-	// material => CC per tick.
+	// material => sheets per tick.
 	var/list/material_regen = list()
 
-	// How much volume this has (in CC)
-	var/max_volume = CC_PER_SHEET_METAL * 50
+	// How much volume this has (in sheets)
+	var/max_volume = 50
 
 	var/const/CHARGE_DEPLETION_MULTIPLIER = 50
 
@@ -38,11 +38,11 @@
 
 /obj/item/device/material_synth/cyborg
 	material_regen = list(
-		"metal" = CC_PER_SHEET_METAL / 2, // One sheet every two ticks
-		"glass" = CC_PER_SHEET_GLASS / 2, // One sheet every two ticks
+		"metal" = 0.5, // One sheet every two ticks
+		"glass" = 0.5, // One sheet every two ticks
 	)
 
-	max_volume = CC_PER_SHEET_METAL * 30
+	max_volume = 30
 
 /obj/item/device/material_synth/New()
 	..()
@@ -70,7 +70,7 @@
 	for(var/mat_id in material_regen)
 		var/amount = material_regen[mat_id]
 		var/c_amount = materials.getAmount(mat_id)
-		if(c_amount >= 10 * CC_PER_SHEET_METAL)
+		if(c_amount >= 10)
 			continue
 		if(materials.addAmount(mat_id, amount))
 			changed=1
@@ -84,7 +84,7 @@
 	for(var/mat_id in materials.storage)
 		var/datum/material/mat=materials.getMaterial(mat_id)
 		if(mat.stored > 0)
-			bits.Add("[mat.stored/mat.cc_per_sheet]U of [mat.processed_name]")
+			bits.Add("[mat.stored]U of [mat.processed_name]")
 
 	if(bits.len>0)
 		usr << "<span class=\"info\">It contains:</span>"
@@ -120,8 +120,8 @@
 			else
 				user << "<span class='info'>\The [src] fires a beam at \the [target], disintegrating it and then sucking it into the device's matter storage bin.</span>"
 			qdel(target)
-			user << "[available_recipes.len] recipes available."
 			recalc_recipes()
+			//user << "[available_recipes.len] recipes available."
 			return 1
 	else
 		user << "<span class='warning'>The matter recycling beam is scattered by \the [target].</span>"
@@ -140,6 +140,7 @@
 				sleep(10)
 				new spawn_item(get_turf(src))
 				materials.removeAmount("iron",matter_rng)
+				recalc_recipes()
 				return 1
 			else
 				user<<"<span class='danger'>The lack of matter in \the [src] shorts out the device!</span>"
@@ -185,3 +186,4 @@
 				return
 
 		active_recipe.smelt(get_turf(src), materials, amount)
+		recalc_recipes()
