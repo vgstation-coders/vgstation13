@@ -55,8 +55,8 @@ var/global/datum/controller/gameticker/ticker
 	'sound/music/whatisthissong.ogg')
 	do
 		pregame_timeleft = 80
-		world << "<B><FONT color='blue'>Welcome to the pre-game lobby!</FONT></B>"
-		world << "Пожалуйста, настройте вашего персонажа адекватно, иначе это может вызвать агрессию окружающих в игре. Игра начнется через [pregame_timeleft] секунд"
+		world << "<B><FONT color='blue'>Добро пожаловать в лобби!</FONT></B>"
+		world << sanitize_uni("Пожалуйста, настройте вашего персонажа адекватно, иначе это может вызвать агрессию окружающих в игре. Игра начнется через [pregame_timeleft] секунд.")
 		while(current_state == GAME_STATE_PREGAME)
 			for(var/i=0, i<10, i++)
 				sleep(1)
@@ -132,7 +132,7 @@ var/global/datum/controller/gameticker/ticker
 		for (var/datum/game_mode/M in runnable_modes)
 			modes+=M.name
 		modes = sortList(modes)
-		world << "<B>В настоящее время режим игры - Секрет!</B>"
+		world << "<B>Режим игры - Секрет!</B>"
 		world << "<B>Возможные угрозы(режимы игры):</B> [english_list(modes)]"
 	else
 		src.mode.announce()
@@ -169,7 +169,7 @@ var/global/datum/controller/gameticker/ticker
 		for(var/obj in L)
 			if(istype(obj, /obj/effect/landmark/spacepod/random))
 				qdel(obj)
-		world << "<FONT color='blue'><B>Приятной игры!</B></FONT>"
+		world << sanitize_russian("<FONT color='blue'><B>Приятной игры!</B></FONT>")
 		//world << sound('sound/AI/welcome.ogg') // Skie //Out with the old, in with the new. - N3X15
 		var/welcome_sentence=list('sound/AI/vox_login.ogg')
 		welcome_sentence += pick(

@@ -71,6 +71,13 @@
 		index = findtext(t, "____255_")
 	return t
 
+proc/sanitize_russian(var/msg)
+	var/index = findtext(msg, "ÿ")
+	while(index)
+		msg = copytext(msg, 1, index) + "&#255;" + copytext(msg, index + 1)
+		index = findtext(msg, "ÿ")
+	return msg
+
 //Runs byond's sanitization proc along-side sanitize_simple
 /proc/sanitize(var/t,var/list/repl_chars = null)
 	return sanitize_simple(t,repl_chars)
