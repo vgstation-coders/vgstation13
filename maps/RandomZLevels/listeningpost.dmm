@@ -46,6 +46,7 @@
 "T" = (/obj/machinery/gateway{tag = "icon-off (SOUTHWEST)"; icon_state = "off"; dir = 10},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/mine/explored)
 "U" = (/obj/machinery/gateway,/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/mine/explored)
 "V" = (/obj/machinery/gateway{tag = "icon-off (SOUTHEAST)"; icon_state = "off"; dir = 6},/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/mine/explored)
+"W" = (/obj/machinery/power/apc,/turf/simulated/floor/airless{tag = "icon-gcircuit"; icon_state = "gcircuit"},/area/mine/explored)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -112,7 +113,7 @@ aaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbblMMMMMLbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaa
 aaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbMNOPMLbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbQRSMLbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaabbbbbbbbbbbbbbbblbbbbbbbbbbbbbbMTUVMLbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaabbbbbbbbbbbbbbbbllbbbbbbbbbbbbblMMMMLbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaabbbbbbbbbbbbbbbbllbbbbbbbbbbbbblMMMWLbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaabbbbbbbbbbbbbbbaalbbbbbbbbbbbbllLLLLLbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaabbbbbbbbbbbbbaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaabbbbbbbbbbbaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

@@ -1617,7 +1617,5 @@
 #include "maps\RandomZLevels\challenge.dm"
 #include "maps\RandomZLevels\stationCollision.dm"
 #include "maps\RandomZLevels\wildwest.dm"
-#include "maps\RandomZLevels\arcticwaste.dmm"
-#include "maps\RandomZLevels\assistantChamber.dmm"
 #include "maps\RandomZLevels\listeningpost.dmm"
 // END_INCLUDE
