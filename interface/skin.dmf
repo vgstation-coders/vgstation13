@@ -1030,7 +1030,7 @@ window "mainwindow"
 		font-size = 0
 		font-style = ""
 		text-color = #000000
-		background-color = none
+		background-color = #1e1e1e
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1068,8 +1068,8 @@ window "mainwindow"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #4e4e4e
-		background-color = #d2d2d2
+		text-color = #ffffff
+		background-color = #0f0f0f
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1096,8 +1096,8 @@ window "mainwindow"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #4e4e4e
-		background-color = #d2d2d2
+		text-color = #ffffff
+		background-color = #0f0f0f
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1124,8 +1124,8 @@ window "mainwindow"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #414141
-		background-color = #d3b5b5
+		text-color = #ffffff
+		background-color = #8e3131
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1145,15 +1145,15 @@ window "mainwindow"
 		button-type = pushbox
 	elem "mainvsplit"
 		type = CHILD
-		pos = 3,0
-		size = 634x416
+		pos = 0,0
+		size = 637x420
 		anchor1 = 0,0
 		anchor2 = 100,100
 		font-family = ""
 		font-size = 0
 		font-style = ""
 		text-color = #000000
-		background-color = none
+		background-color = #1e1e1e
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1178,8 +1178,8 @@ window "mainwindow"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #4e4e4e
-		background-color = #d2d2d2
+		text-color = #ffffff
+		background-color = #414141
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1202,8 +1202,8 @@ window "mainwindow"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #4e4e4e
-		background-color = #d2d2d2
+		text-color = #ffffff
+		background-color = #0f0f0f
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1339,8 +1339,8 @@ window "outputwindow"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #4e4e4e
-		background-color = #b5b5b5
+		text-color = #000000
+		background-color = #ffffff
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1350,8 +1350,8 @@ window "outputwindow"
 		right-click = false
 		saved-params = "max-lines"
 		on-size = ""
-		link-color = #cc7126
-		visited-color = #812d1b
+		link-color = #0000e1
+		visited-color = #ff00ff
 		style = ".system {color:#ff0000;}"
 		enable-http-images = false
 		max-lines = 1000
@@ -1368,7 +1368,7 @@ window "rpane"
 		font-size = 0
 		font-style = ""
 		text-color = #000000
-		background-color = #cfcfcf
+		background-color = #1e1e1e
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1400,14 +1400,14 @@ window "rpane"
 	elem "rpanewindow"
 		type = CHILD
 		pos = 0,0
-		size = 597x464
+		size = 638x475
 		anchor1 = 0,0
 		anchor2 = 100,100
 		font-family = ""
 		font-size = 0
 		font-style = ""
 		text-color = #000000
-		background-color = #d2d2d2
+		background-color = #1e1e1e
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1423,32 +1423,6 @@ window "rpane"
 		splitter = 50
 		show-splitter = true
 		lock = none
-	elem "hosttracker"
-		type = BROWSER
-		pos = 392,25
-		size = 1x1
-		anchor1 = none
-		anchor2 = none
-		font-family = ""
-		font-size = 0
-		font-style = ""
-		text-color = #000000
-		background-color = none
-		is-visible = true
-		is-disabled = false
-		is-transparent = false
-		is-default = false
-		border = none
-		drop-zone = false
-		right-click = false
-		saved-params = ""
-		on-size = ""
-		show-history = false
-		show-url = false
-		auto-format = true
-		use-title = false
-		on-show = ""
-		on-hide = ""
 	elem "rulesb"
 		type = BUTTON
 		pos = 356,0
@@ -1458,8 +1432,8 @@ window "rpane"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #414141
-		background-color = #d2d2d2
+		text-color = #ffffff
+		background-color = #1e1e1e
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1486,8 +1460,8 @@ window "rpane"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #414141
-		background-color = #d2d2d2
+		text-color = #ffffff
+		background-color = #1e1e1e
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1514,8 +1488,8 @@ window "rpane"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #414141
-		background-color = #d2d2d2
+		text-color = #ffffff
+		background-color = #1e1e1e
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1525,7 +1499,7 @@ window "rpane"
 		right-click = false
 		saved-params = "is-checked"
 		on-size = ""
-		text = "VG - Wiki"
+		text = "VG Wiki"
 		image = ""
 		command = "wiki"
 		is-flat = false
@@ -1542,8 +1516,8 @@ window "rpane"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #414141
-		background-color = #cfcfcf
+		text-color = #ffffff
+		background-color = #1e1e1e
 		is-visible = false
 		is-disabled = false
 		is-transparent = false
@@ -1570,8 +1544,8 @@ window "rpane"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #414141
-		background-color = #d2d2d2
+		text-color = #ffffff
+		background-color = #1e1e1e
 		is-visible = false
 		is-disabled = false
 		is-transparent = false
@@ -1598,8 +1572,8 @@ window "rpane"
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #414141
-		background-color = #d2d2d2
+		text-color = #ffffff
+		background-color = #1e1e1e
 		is-visible = false
 		is-disabled = false
 		is-transparent = false
@@ -1696,7 +1670,7 @@ window "infowindow"
 		font-size = 0
 		font-style = ""
 		text-color = #000000
-		background-color = none
+		background-color = #1e1e1e
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1707,11 +1681,11 @@ window "infowindow"
 		saved-params = "pos;size;is-minimized;is-maximized"
 		on-size = ""
 		title = "Info"
-		titlebar = true
-		statusbar = true
-		can-close = true
-		can-minimize = true
-		can-resize = true
+		titlebar = false
+		statusbar = false
+		can-close = false
+		can-minimize = false
+		can-resize = false
 		is-pane = true
 		is-minimized = false
 		is-maximized = false
@@ -1728,14 +1702,14 @@ window "infowindow"
 	elem "info"
 		type = INFO
 		pos = 0,0
-		size = 640x472
+		size = 638x472
 		anchor1 = 0,0
 		anchor2 = 100,100
 		font-family = ""
 		font-size = 0
 		font-style = ""
-		text-color = #414141
-		background-color = #b5b5b5
+		text-color = #ffffff
+		background-color = #171717
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -1745,9 +1719,9 @@ window "infowindow"
 		right-click = false
 		saved-params = ""
 		on-size = ""
-		highlight-color = #0055aa
-		tab-text-color = #414141
-		tab-background-color = #cfcfcf
+		highlight-color = #e09d0d
+		tab-text-color = #ffffff
+		tab-background-color = #1e1e1e
 		tab-font-family = ""
 		tab-font-size = 0
 		tab-font-style = ""
@@ -1756,8 +1730,8 @@ window "infowindow"
 		on-show = ".winset\"rpane.infob.is-visible=true;rpane.browseb.is-visible=true?rpane.infob.pos=130,0:rpane.infob.pos=65,0 rpane.textb.is-visible=true rpane.infob.is-checked=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=infowindow\""
 		on-hide = ".winset\"rpane.infob.is-visible=false;rpane.browseb.is-visible=true?rpane.browseb.is-checked=true rpane.rpanewindow.left=browserwindow:rpane.textb.is-visible=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=\""
 		on-tab = ""
-		prefix-color = #db2424
-		suffix-color = #81d87c
+		prefix-color = #ffffff
+		suffix-color = #ffffff
 
 window "window1"
 	elem "window1"
