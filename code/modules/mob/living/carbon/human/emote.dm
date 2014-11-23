@@ -219,7 +219,7 @@
 			if(M_HARDCORE in mutations)
 				message = "<B>[src]</B> прошептал с последним вздохом, <i>'i told u i was hardcore..'</i>"
 			else
-				message = "<B>[src]</B> больше не дышит и не двигается,а глаза стали мертвыми и безжизненными..."
+				message = "<B>[src]</B> больше не дышит и не двигаетсЯ, а глаза стали мертвыми и безжизненными..."
 			m_type = 1
 
 		if ("giggle")
