@@ -2372,6 +2372,57 @@ datum
 				..()
 				return
 
+		cat_drugs
+			name = "Nepetalactone"
+			id = "cat_drugs"
+			description = "A chemical originally extracted from cat-nip, this liquid has strange effects on felines."
+			reagent_state = LIQUID
+			color = "#CCCC00" // rgb: 200, 165, 220
+
+
+			on_mob_life(var/mob/living/M as mob)
+				if(ishuman(M))
+					var/mob/living/carbon/human/H = M
+					if(H.species.name=="Tajaran")
+						if(!M) M = holder.my_atom
+						M.gib() //It can't handle the pure catnip extract and explodes. Fuck catbeasts.
+
+					if(!holder) return
+					if(!M) M = holder.my_atom
+					if(prob(5))
+						M.visible_message("<span class = 'warning'><b>[M]</b> [pick("hisses!","meows.")]</span>")
+						switch(rand(1,4))
+							if(1)
+								playsound(get_turf(src), 'sound/effects/cat1.ogg', 50, 1)
+							if(2)
+								playsound(get_turf(src), 'sound/effects/cat1.ogg', 50, 1)
+							if(3)
+								playsound(get_turf(src), 'sound/effects/cat1.ogg', 50, 1)
+							if(4)
+								playsound(get_turf(src), 'sound/effects/cat1.ogg', 50, 1)
+					if(prob(1))
+						M.make_jittery(1)
+						M.make_dizzy(10)
+					..()
+					return
+
+		jenkem
+			name = "Jenkem"
+			id = "jenkem"
+			description = "The poor man's high."
+			reagent_state = LIQUID
+			color = "#663300" // rgb: 200, 165, 220
+
+			on_mob_life(var/mob/living/M as mob)
+				if(!holder) return
+				if(!M) M = holder.my_atom
+				if(prob(10)) M.make_dizzy(200)
+				if(prob(5)) M.make_jittery(100)
+				if(prob(50)) M.adjustToxLoss(1)
+				..()
+				return
+
+
 
 /////////////////////////Food Reagents////////////////////////////
 // Part of the food code. Nutriment is used instead of the old "heal_amt" code. Also is where all the food
