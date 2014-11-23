@@ -7,6 +7,7 @@
 	m_amt = 60
 	g_amt = 30
 	w_type = RECYK_ELECTRONIC
+	melt_temperature = MELTPOINT_PLASTIC
 	var/emagged = 0.0
 	var/recording = 0.0
 	var/playing = 0.0
@@ -56,7 +57,7 @@
 		var/mob/M = loc
 		M << "<span class='danger'>\The [src] explodes!</span>"
 	if(T)
-		T.hotspot_expose(700,125)
+		T.hotspot_expose(700,125,surfaces=istype(loc,/turf))
 		explosion(T, -1, -1, 0, 4)
 	del(src)
 	return

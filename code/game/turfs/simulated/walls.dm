@@ -13,6 +13,19 @@
 
 	var/walltype = "metal"
 	var/hardness = 40 //lower numbers are harder. Used to determine the probability of a hulk smashing through.
+	var/engraving, engraving_quality //engraving on the wall
+	var/del_suppress_resmoothing = 0 // Do not resmooth neighbors on Destroy. (smoothwall.dm)
+	canSmoothWith = list(
+		/turf/simulated/wall,
+		/obj/structure/falsewall,
+		/obj/structure/falserwall // WHY DO WE SMOOTH WITH FALSE R-WALLS WHEN WE DON'T SMOOTH WITH REAL R-WALLS.
+	)
+
+	soot_type = null
+
+/turf/simulated/wall/examine()
+	..()
+	if(src.engraving) usr << src.engraving
 
 /turf/simulated/wall/proc/dismantle_wall(devastated=0, explode=0)
 	if(istype(src,/turf/simulated/wall/r_wall))
@@ -336,6 +349,11 @@
 		AH.try_build(src)
 		return
 
+	else if(istype(W,/obj/item/wallmed_frame))
+		var/obj/item/wallmed_frame/AH = W
+		AH.try_build(src)
+		return
+
 	//Poster stuff
 	else if(istype(W,/obj/item/weapon/contraband/poster))
 		place_poster(W,user)
@@ -398,7 +416,7 @@
 	return
 
 // Generic wall melting proc.
-/turf/simulated/wall/proc/melt(var/mob/user)
+/turf/simulated/wall/melt()
 	if(mineral == "diamond")
 		return
 
@@ -428,3 +446,8 @@
 /turf/simulated/wall/ChangeTurf(var/newtype)
 	for(var/obj/effect/E in src) if(E.name == "Wallrot") del E
 	..(newtype)
+
+/turf/simulated/wall/cultify()
+	ChangeTurf(/turf/simulated/wall/cult)
+	cultification()
+	return

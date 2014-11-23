@@ -46,10 +46,10 @@ var/list/uplink_items = list()
 	var/list/gamemodes = list() // Empty list means it is in all the gamemodes. Otherwise place the gamemode name here.
 	var/list/job = null
 
-/datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U)
+/datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	U.uses -= max(cost, 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
-	return new item(loc)
+	return new item(loc,user)
 
 /datum/uplink_item/proc/buy(var/obj/item/device/uplink/hidden/U, var/mob/user)
 
@@ -69,7 +69,7 @@ var/list/uplink_items = list()
 		if(cost > U.uses)
 			return 0
 
-		var/obj/I = spawn_item(get_turf(user), U)
+		var/obj/I = spawn_item(get_turf(user), U, user)
 
 		if(ishuman(user))
 			var/mob/living/carbon/human/A = user
@@ -89,6 +89,14 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific
 	category = "Job Specific Tools"
+
+//Shaft Miner
+/datum/uplink_item/jobspecific/mastertrainer
+	name = "Master Trainer's Belt"
+	desc = "A Trainer's belt containing 6 random hostile mobs loyal to you alone."
+	item = /obj/item/weapon/storage/belt/lazarus/antag
+	cost = 4
+	job = list("Shaft Miner")
 
 //Clown
 /datum/uplink_item/jobspecific/clowngrenade
@@ -117,7 +125,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/ambrosiacruciatus
 	name = "Ambrosia Cruciatus Seeds"
 	desc = "Part of the notorious Ambrosia family, this species is nearly indistinguishable from Ambrosia Vulgaris- but its' branches contain a revolting toxin. Eight units are enough to drive victims insane after a three-minute delay."
-	item = /obj/item/seeds/ambrosiavulgarisseed/cruciatus
+	item = /obj/item/seeds/ambrosiacruciatusseed
 	cost = 2
 	job = list("Botanist")
 
@@ -192,6 +200,22 @@ var/list/uplink_items = list()
 	cost = 6
 	job = list("Geneticist")
 
+//Atmospheric Technician
+/datum/uplink_item/jobspecific/flaregun
+	name = "Modified Flaregun"
+	desc = "A modified flaregun, identical in most appearances to the regular kind, as well as 7 rounds of flare ammunition. Capable of firing flares at lethal velocity, as well as firing shotgun ammunition."
+	item = /obj/item/weapon/storage/box/syndie_kit/flaregun
+	cost = 4
+	job = list("Atmospheric Technician")
+
+//Mechanic
+/datum/uplink_item/jobspecific/dev_analyser
+	name = "Modified Device Analyser"
+	desc = "A device analyser with the safety features disabled. Allows the user to replicate any kind of Syndicate equipment."
+	item = /obj/item/device/device_analyser/syndicate
+	cost = 4
+	job = list("Mechanic")
+
 // DANGEROUS WEAPONS
 
 /datum/uplink_item/dangerous
@@ -205,8 +229,8 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/dangerous/ammo
 	name = "Ammo-357"
-	desc = "Seven additional rounds for the revolver. Reports indicate the presence of machinery aboard Nanotrasen space stations suitable for producing extra .357 cartridges."
-	item = /obj/item/ammo_magazine/a357
+	desc = "A speedloader and seven additional rounds for the revolver. Reports indicate the presence of machinery aboard Nanotrasen space stations suitable for producing extra .357 cartridges."
+	item = /obj/item/weapon/storage/box/syndie_kit/ammo
 	cost = 2
 
 /datum/uplink_item/dangerous/crossbow
@@ -227,6 +251,11 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/emps
 	cost = 3
 
+/datum/uplink_item/dangerous/viscerator
+	name = "Viscerator Grenade"
+	desc = "A single grenade containing a pair of incredibly destructive viscerators. Be aware that they will attack any nearby targets, including yourself. Emits a blinding flash upon detonation."
+	item = /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate
+	cost = 3
 
 // STEALTHY WEAPONS
 
@@ -289,7 +318,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/stealthy_tools/chameleon_proj
 	name = "Chameleon-Projector"
-	desc = "Projects an image across a user, disguising them as an object scanned with it, as long as they don't move the projector from their hand. The disguised user cannot run and rojectiles pass over them."
+	desc = "Projects an image across a user, disguising them as an object scanned with it, as long as they don't move the projector from their hand. The disguised user cannot run and projectiles pass over them."
 	item = /obj/item/device/chameleon
 	cost = 4
 
@@ -311,6 +340,12 @@ var/list/uplink_items = list()
 	desc = "The syndicate toolbox is a suspicious black and red. Aside from tools, it comes with cable and a multitool. Insulated gloves are not included."
 	item = /obj/item/weapon/storage/toolbox/syndicate
 	cost = 1
+
+/datum/uplink_item/device_tools/bugdetector
+	name = "Bug Detector"
+	desc = "A functional multitool that can detect certain surveillance devices. Its screen changes color if the AI or a pAI can see you, or if a tape recorder or voice analyzer is nearby. Examine it to see everything it detects."
+	item = /obj/item/device/multitool/ai_detect
+	cost = 2
 
 /datum/uplink_item/device_tools/space_suit
 	name = "Space Suit"

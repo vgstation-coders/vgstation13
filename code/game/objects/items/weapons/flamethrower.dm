@@ -12,6 +12,7 @@
 	w_class = 3.0
 	m_amt = 500
 	w_type = RECYK_MISC
+	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "combat=1;plasmatech=1"
 	var/status = 0
 	var/throw_amount = 100
@@ -44,7 +45,7 @@
 		if(M.l_hand == src || M.r_hand == src)
 			location = M.loc
 	if(isturf(location)) //start a fire if possible
-		location.hotspot_expose(700, 2)
+		location.hotspot_expose(700, 2,surfaces=istype(loc,/turf))
 	return
 
 
@@ -217,7 +218,7 @@
 	target.assume_air(air_transfer)
 	//Burn it based on transfered gas
 	//target.hotspot_expose(part4.air_contents.temperature*2,300)
-	target.hotspot_expose((ptank.air_contents.temperature*2) + 380,500) // -- More of my "how do I shot fire?" dickery. -- TLE
+	target.hotspot_expose((ptank.air_contents.temperature*2) + 380,500,surfaces=istype(loc,/turf)) // -- More of my "how do I shot fire?" dickery. -- TLE
 	//location.hotspot_expose(1000,500,1)
 	return
 

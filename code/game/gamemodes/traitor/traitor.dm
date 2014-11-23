@@ -34,7 +34,7 @@
 	if(config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
 
-	var/list/possible_traitors = get_players_for_role(BE_TRAITOR)
+	var/list/possible_traitors = get_players_for_role(ROLE_TRAITOR)
 
 	// stop setup if no possible traitors
 	if(!possible_traitors.len)
@@ -338,8 +338,8 @@
 				var/I = image('icons/mob/mob.dmi', loc = traitor_mind.current, icon_state = "greytide_head")
 				traitor_mind.current.client.images += I
 	for(var/headref in implanter)
+		var/datum/mind/head = locate(headref)
 		for(var/datum/mind/t_mind in implanter[headref])
-			var/datum/mind/head = locate(headref)
 			if(head)
 				if(head.current)
 					if(head.current.client)

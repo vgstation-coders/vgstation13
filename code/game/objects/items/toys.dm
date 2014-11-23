@@ -30,9 +30,8 @@
 	item_state = "balloon-empty"
 
 /obj/item/toy/balloon/New()
-	var/datum/reagents/R = new/datum/reagents(10)
-	reagents = R
-	R.my_atom = src
+	. = ..()
+	create_reagents(10)
 
 /obj/item/toy/balloon/attack(mob/living/carbon/human/M as mob, mob/user as mob)
 	return
@@ -112,7 +111,7 @@
 	desc = "\"Singulo\" brand spinning toy."
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "singularity_s1"
-	
+
 	suicide_act(mob/user)
 		viewers(user) << "\red <b>[user] is putting \his head into the [src.name]! It looks like \he's  trying to commit suicide!</b>"
 		return (BRUTELOSS|TOXLOSS|OXYLOSS)
@@ -133,6 +132,7 @@
 	g_amt = 10
 	m_amt = 10
 	w_type = RECYK_MISC
+	melt_temperature = MELTPOINT_PLASTIC
 	attack_verb = list("struck", "pistol whipped", "hit", "bashed")
 	var/bullets = 7.0
 
@@ -189,6 +189,8 @@
 	w_class = 1.0
 	g_amt = 10
 	m_amt = 10
+	melt_temperature = MELTPOINT_PLASTIC
+	w_type = RECYK_MISC
 	var/amount_left = 7.0
 
 	update_icon()
@@ -374,10 +376,20 @@
 	var/uses = 30 //0 for unlimited uses
 	var/instant = 0
 	var/colourName = "red" //for updateIcon purposes
+	var/style_type = /datum/writing_style/crayon
+	var/datum/writing_style/style
 
-	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is jamming the [src.name] up \his nose and into \his brain. It looks like \he's trying to commit suicide.</b>"
-		return (BRUTELOSS|OXYLOSS)
+/obj/item/toy/crayon/New()
+	..()
+
+	style = new style_type
+
+/obj/item/toy/crayon/proc/Format(var/mob/user,var/text,var/obj/item/weapon/paper/P)
+	return style.Format(text,src,user,P)
+
+/obj/item/toy/crayon/suicide_act(mob/user)
+	viewers(user) << "\red <b>[user] is jamming the [src.name] up \his nose and into \his brain. It looks like \he's trying to commit suicide.</b>"
+	return (BRUTELOSS|OXYLOSS)
 
 
 
@@ -432,7 +444,7 @@
 		playsound(src, 'sound/effects/snap.ogg', 50, 1)
 		del(src)
 
-/obj/item/toy/snappop/HasEntered(H as mob|obj)
+/obj/item/toy/snappop/Crossed(H as mob|obj)
 	if((ishuman(H))) //i guess carp and shit shouldn't set them off
 		var/mob/living/carbon/M = H
 		if(M.m_intent == "run")
@@ -459,10 +471,9 @@
 	flags =  USEDELAY
 
 /obj/item/toy/waterflower/New()
-	var/datum/reagents/R = new/datum/reagents(10)
-	reagents = R
-	R.my_atom = src
-	R.add_reagent("water", 10)
+	. = ..()
+	create_reagents(10)
+	reagents.add_reagent("water", 10)
 
 /obj/item/toy/waterflower/attack(mob/living/carbon/human/M as mob, mob/user as mob)
 	return
@@ -596,6 +607,11 @@
 	desc = "Mini-Mecha action figure! Collect them all! 11/11."
 	icon_state = "phazonprize"
 
+/obj/item/toy/prize/reptar
+	name = "Reptar Doll"
+	desc = "Reptar! Destroyer of worlds!"
+	icon_state = "reptar"
+
 /obj/item/toy/katana
 	name = "replica katana"
 	desc = "Woefully underpowered in D20."
@@ -609,6 +625,12 @@
 	w_class = 3
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced")
 
+/obj/item/toy/rcube
+	name = "puzzle cube"
+	desc = "A seemingly simple puzzle, this toy is actually quite likely to induce suicidal thoughts. Play with at your own risk."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "rubikscube"
+
 
 /*
  * OMG THEIF
@@ -618,7 +640,7 @@
 	desc = "The holy grail of all programmers."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "gooncode"
-	
+
 	suicide_act(mob/user)
 		viewers(user) << "\red <b>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</b>"
 		return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)

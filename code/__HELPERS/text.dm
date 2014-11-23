@@ -15,10 +15,20 @@
 
 // Run all strings to be used in an SQL query through this proc first to properly escape out injection attempts.
 /proc/sanitizeSQL(var/t as text)
-	var/sanitized_text = replacetext(t, "'", "\\'")
-	sanitized_text = replacetext(sanitized_text, "\"", "\\\"")
-	return sanitized_text
+	//var/sanitized_text = replacetext(t, "'", "\\'")
+	//sanitized_text = replacetext(sanitized_text, "\"", "\\\"")
 
+	var/sqltext = dbcon.Quote(t)
+	//testing("sanitizeSQL(): BEFORE copytext(): [sqltext]")
+	sqltext = copytext(sqltext, 2, length(sqltext))//Quote() adds quotes around input, we already do that
+	//testing("sanitizeSQL(): AFTER copytext(): [sqltext]")
+	return sqltext
+
+/*
+/mob/verb/SanitizeTest(var/t as text)
+	src << "IN: [t]"
+	src << "OUT: [sanitizeSQL(t)]"
+*/
 /*
  * Text sanitization
  */
@@ -58,18 +68,32 @@
 	return copytext((html_encode(strip_html_simple(t))),1,limit)
 
 
-//Returns null if there is any bad text in the string
-/proc/reject_bad_text(var/text, var/max_length=512)
-	if(length(text) > max_length)	return			//message too long
-	var/non_whitespace = 0
-	for(var/i=1, i<=length(text), i++)
-		switch(text2ascii(text,i))
-			if(62,60,92,47)	return			//rejects the text if it contains these bad characters: <, >, \ or /
-			if(127 to 255)	return			//rejects weird letters like �
-			if(0 to 31)		return			//more weird stuff
-			if(32)			continue		//whitespace
-			else			non_whitespace = 1
-	if(non_whitespace)		return text		//only accepts the text if it has some non-spaces
+/*
+ * returns null if there is any bad text in the string
+ */
+/proc/reject_bad_text(const/text, var/max_length = 512)
+	var/text_length = length(text)
+
+	if(text_length > max_length)
+		return // message too long
+
+	var/non_whitespace = FALSE
+
+	for(var/i = 1 to text_length)
+		switch(text2ascii(text, i))
+			if(62, 60, 92, 47)
+				return // rejects the text if it contains these bad characters: <, >, \ or /
+			if(127 to 255)
+				return // rejects weird letters like �
+			if(0 to 31)
+				return // more weird stuff
+			if(32)
+				continue //whitespace
+			else
+				non_whitespace = TRUE
+
+	if(non_whitespace)
+		return text // only accepts the text if it has some non-spaces
 
 // Used to get a sanitized input.
 /proc/stripped_input(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
@@ -195,32 +219,10 @@ proc/checkhtml(var/t)
  * Text modification
  */
 /proc/replacetext(text, find, replacement)
-	var/find_len = length(find)
-	if(find_len < 1)	return text
-	. = ""
-	var/last_found = 1
-	while(1)
-		var/found = findtext(text, find, last_found, 0)
-		. += copytext(text, last_found, found)
-		if(found)
-			. += replacement
-			last_found = found + find_len
-			continue
-		return .
+	return list2text(text2list(text, find), replacement)
 
 /proc/replacetextEx(text, find, replacement)
-	var/find_len = length(find)
-	if(find_len < 1)	return text
-	. = ""
-	var/last_found = 1
-	while(1)
-		var/found = findtextEx(text, find, last_found, 0)
-		. += copytext(text, last_found, found)
-		if(found)
-			. += replacement
-			last_found = found + find_len
-			continue
-		return .
+	return list2text(text2listEx(text, find), replacement)
 
 //Adds 'u' number of zeros ahead of the text 't'
 /proc/add_zero(t, u)
@@ -287,36 +289,14 @@ proc/checkhtml(var/t)
 		return message
 	return copytext(message, 1, length + 1)
 
-/*
- * Misc
- */
-
-/proc/stringsplit(txt, character)
-	var/cur_text = txt
-	var/last_found = 1
-	var/found_char = findtext(cur_text,character)
-	var/list/list = list()
-	if(found_char)
-		var/fs = copytext(cur_text,last_found,found_char)
-		list += fs
-		last_found = found_char+length(character)
-		found_char = findtext(cur_text,character,last_found)
-	while(found_char)
-		var/found_string = copytext(cur_text,last_found,found_char)
-		last_found = found_char+length(character)
-		list += found_string
-		found_char = findtext(cur_text,character,last_found)
-	list += copytext(cur_text,last_found,length(cur_text)+1)
-	return list
-
 /proc/stringmerge(var/text,var/compare,replace = "*")
 //This proc fills in all spaces with the "replace" var (* by default) with whatever
 //is in the other string at the same spot (assuming it is not a replace char).
 //This is used for fingerprints
 	var/newtext = text
-	if(lentext(text) != lentext(compare))
+	if(length(text) != length(compare))
 		return 0
-	for(var/i = 1, i < lentext(text), i++)
+	for(var/i = 1, i < length(text), i++)
 		var/a = copytext(text,i,i+1)
 		var/b = copytext(compare,i,i+1)
 //if it isn't both the same letter, or if they are both the replacement character
@@ -336,7 +316,7 @@ proc/checkhtml(var/t)
 	if(!text || !character)
 		return 0
 	var/count = 0
-	for(var/i = 1, i <= lentext(text), i++)
+	for(var/i = 1, i <= length(text), i++)
 		var/a = copytext(text,i,i+1)
 		if(a == character)
 			count++

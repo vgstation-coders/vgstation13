@@ -138,12 +138,12 @@
 		src.sight |= SEE_OBJS
 		src.see_in_dark = 8
 		src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-	else if (src.sight_mode & BORGMESON && src.sight_mode & BORGTHERM)
+	else if ((src.sight_mode & BORGMESON || sensor_mode == MESON_VISION) && src.sight_mode & BORGTHERM)
 		src.sight |= SEE_TURFS
 		src.sight |= SEE_MOBS
 		src.see_in_dark = 8
 		see_invisible = SEE_INVISIBLE_MINIMUM
-	else if (src.sight_mode & BORGMESON)
+	else if (src.sight_mode & BORGMESON || sensor_mode == MESON_VISION)
 		src.sight |= SEE_TURFS
 		src.see_in_dark = 8
 		see_invisible = SEE_INVISIBLE_MINIMUM
@@ -273,6 +273,8 @@
 		src.sight_state:screen_loc = ui_inv1
 	if(src.tool_state)
 		src.tool_state:screen_loc = ui_inv2
+	if(src.head_state)
+		src.head_state:screen_loc = ui_monkey_mask
 
 /mob/living/silicon/robot/mommi/update_canmove()
 	canmove = !(paralysis || stunned || weakened || buckled || lockcharge || anchored)

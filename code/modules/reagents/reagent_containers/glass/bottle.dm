@@ -11,7 +11,9 @@
 	possible_transfer_amounts = list(5,10,15,25,30)
 	flags = FPRINT | TABLEPASS | OPENCONTAINER
 	volume = 30
-	g_amt=1000 // Half of a circuit board
+	g_amt = 1000 // Half of a circuit board
+	w_type = RECYK_GLASS
+	melt_temperature = MELTPOINT_GLASS
 
 	New()
 		..()
@@ -77,7 +79,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate
 	name = "Chloral Hydrate Bottle"
-	desc = "A small bottle of Choral Hydrate. Mickey's Favorite!"
+	desc = "A small bottle of Chloral Hydrate. Mickey's Favorite!"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle20"
 

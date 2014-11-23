@@ -5,7 +5,7 @@
 //BIG NOTE: Don't add living things to crates, that's bad, it will break the shuttle.
 //NEW NOTE: Do NOT set the price of any crates below 7 points. Doing so allows infinite points.
 
-var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality","Engineering","Medical","Science","Hydroponics")
+var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality","Engineering","Medical","Science","Hydroponics","Vending Machine packs")
 
 /datum/supply_packs
 	var/name = null
@@ -133,7 +133,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/food/drinks/beer,
 					/obj/item/weapon/reagent_containers/food/drinks/beer,
 					/obj/item/weapon/reagent_containers/food/drinks/beer,
-					/obj/item/weapon/reagent_containers/food/drinks/beer)
+					/obj/item/weapon/reagent_containers/food/drinks/beer,
+					/obj/item/device/maracas,
+					/obj/item/device/maracas)
 	cost = 20
 	containertype = /obj/structure/closet/crate
 	containername = "Party equipment"
@@ -167,8 +169,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/mask/gas,
 					/obj/item/clothing/mask/gas,
 					/obj/item/clothing/mask/gas,
-					/obj/item/clothing/mask/gas)
-	cost = 35
+					/obj/item/clothing/mask/gas,
+					/obj/machinery/bot/floorbot,
+					/obj/machinery/bot/floorbot,
+					/obj/machinery/bot/medbot,
+					/obj/machinery/bot/medbot)
+	cost = 40
 	containertype = /obj/structure/closet/crate/internals
 	containername = "Emergency Crate"
 	group = "Supplies"
@@ -335,17 +341,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Hydroponics"
 
 /datum/supply_packs/exoticseeds
-	name = "Exotic Seeds Crate"
-	contains = list(/obj/item/seeds/nettleseed,
+	name = "Exotic seeds crate"
+	contains = list(/obj/item/seeds/replicapod,
 					/obj/item/seeds/replicapod,
-					/obj/item/seeds/replicapod,
-					/obj/item/seeds/replicapod,
-					/obj/item/seeds/plumpmycelium,
 					/obj/item/seeds/libertymycelium,
-					/obj/item/seeds/amanitamycelium,
 					/obj/item/seeds/reishimycelium,
-					/obj/item/seeds/bananaseed,
-					/obj/item/seeds/eggyseed)
+					/obj/item/seeds/random,
+					/obj/item/seeds/random,
+					/obj/item/seeds/random,
+					/obj/item/seeds/random,
+					/obj/item/seeds/random,
+					/obj/item/seeds/random,
+					/obj/item/seeds/kudzuseed)
 	cost = 15
 	containertype = /obj/structure/closet/crate/hydroponics
 	containername = "Exotic Seeds crate"
@@ -408,6 +415,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 10
 	containertype = /obj/structure/closet/crate/engi
 	containername = "Glass sheets crate"
+	group = "Supplies"
+
+/datum/supply_packs/wood25
+	name = "25 Wooden Planks"
+	contains = list(/obj/item/stack/sheet/wood)
+	amount = 25
+	cost = 12
+	containertype = /obj/structure/closet/crate/engi
+	containername = "Wooden planks crate"
 	group = "Supplies"
 
 /datum/supply_packs/electrical
@@ -624,7 +640,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/gun/energy/taser,
 					/obj/item/weapon/gun/energy/taser,
 					/obj/item/weapon/storage/box/flashbangs,
-					/obj/item/weapon/storage/box/flashbangs)
+					/obj/item/weapon/storage/box/flashbangs,
+					/obj/item/weapon/storage/box/bolas)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/weapon
 	containername = "Weapons crate"
@@ -677,7 +694,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/helmet/riot,
 					/obj/item/clothing/suit/armor/riot,
 					/obj/item/clothing/head/helmet/riot,
-					/obj/item/clothing/suit/armor/riot)
+					/obj/item/clothing/suit/armor/riot,
+					/obj/item/weapon/storage/box/bolas,
+					/obj/item/weapon/storage/box/bolas)
 	cost = 60
 	containertype = /obj/structure/closet/crate/secure
 	containername = "Riot gear crate"
@@ -844,6 +863,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = "/obj/structure/closet/crate"
 	containername = "Arts and Crafts crate"
 	group = "Supplies"
+
 
 /datum/supply_packs/randomised/contraband
 	num_contained = 5
@@ -1125,3 +1145,110 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Supermatter Shard Crate"
 	group = "Engineering"
 	access = access_ce
+
+/////VENDING MACHINES PACKS////////
+
+/datum/supply_packs/snackmachines
+	name = "Snacks n Cigs stack of packs"
+	contains = list(/obj/structure/vendomatpack/snack,
+					/obj/structure/vendomatpack/snack,
+					/obj/structure/vendomatpack/snack,
+					/obj/structure/vendomatpack/cola,
+					/obj/structure/vendomatpack/coffee,
+					/obj/structure/vendomatpack/cigarette)
+	cost = 30
+	containertype = /obj/structure/stackopacks
+	containername = "Snacks n Cigs  stack of packs"
+	group = "Vending Machine packs"
+
+/datum/supply_packs/snackmachinesalt
+	name = "Groans n Dan stack of packs"
+	contains = list(/obj/structure/vendomatpack/discount,
+					/obj/structure/vendomatpack/discount,
+					/obj/structure/vendomatpack/groans,
+					/obj/structure/vendomatpack/groans)
+	cost = 20
+	containertype = /obj/structure/stackopacks
+	containername = "Groans n Dan stack of packs"
+	group = "Vending Machine packs"
+
+/datum/supply_packs/hospitalitymachines
+	name = "Theatre, Bar n Kitchen stack of packs"
+	contains = list(/obj/structure/vendomatpack/boozeomat,
+					/obj/structure/vendomatpack/dinnerware,
+					/obj/structure/vendomatpack/autodrobe)
+	cost = 15
+	containertype = /obj/structure/stackopacks
+	containername = "Theatre, Bar n Kitchen stack of packs"
+	group = "Vending Machine packs"
+
+/datum/supply_packs/securitymachines
+	name = "Security stack of packs"
+	contains = list(/obj/structure/vendomatpack/security,
+					/obj/structure/vendomatpack/security)
+	cost = 10
+	containertype = /obj/structure/stackopacks
+	containername = "Security stack of packs"
+	group = "Vending Machine packs"
+
+/datum/supply_packs/medbaymachines
+	name = "Medical stack of packs"
+	contains = list(/obj/structure/vendomatpack/medical,
+					/obj/structure/vendomatpack/medical)
+	cost = 10
+	containertype = /obj/structure/stackopacks
+	containername = "Medical stack of packs"
+	group = "Vending Machine packs"
+
+/datum/supply_packs/botanymachines
+	name = "Hydroponics stack of packs"
+	contains = list(/obj/structure/vendomatpack/hydronutrients,
+					/obj/structure/vendomatpack/hydroseeds)
+	cost = 10
+	containertype = /obj/structure/stackopacks
+	containername = "Hydroponics stack of packs"
+	group = "Vending Machine packs"
+
+/datum/supply_packs/toolsmachines
+	name = "Tools n Engineering stack of packs"
+	contains = list(/obj/structure/vendomatpack/tool,
+					/obj/structure/vendomatpack/tool,
+					/obj/structure/vendomatpack/assist,
+					/obj/structure/vendomatpack/engivend)
+	cost = 20
+	containertype = /obj/structure/stackopacks
+	containername = "Tools n Engineering stack of packs"
+	group = "Vending Machine packs"
+
+/datum/supply_packs/clothesmachines
+	name = "Clothing stack of packs"
+	contains = list(/obj/structure/vendomatpack/hatdispenser,
+					/obj/structure/vendomatpack/suitdispenser,
+					/obj/structure/vendomatpack/shoedispenser)
+	cost = 15
+	containertype = /obj/structure/stackopacks
+	containername = "Clothing stack of packs"
+	group = "Vending Machine packs"
+
+/*
+/datum/supply_packs/sovietmachines
+	name = "Old and Forgotten stack of packs"
+	contains = list(/obj/structure/vendomatpack/sovietsoda,
+					/obj/structure/vendomatpack/sovietsoda,
+					/obj/structure/vendomatpack/nazivend,
+					/obj/structure/vendomatpack/sovietvend)
+	cost = 20
+	containertype = /obj/structure/stackopacks
+	containername = "Old and Forgotten stack of packs"
+	group = "Vending Machine packs"
+	hidden = 1
+*/
+
+/datum/supply_packs/magimachines
+	name = "Strange and Bright stack of packs"
+	contains = list(/obj/structure/vendomatpack/magivend)
+	cost = 80
+	containertype = /obj/structure/stackopacks
+	containername = "Strange and Bright stack of packs"
+	group = "Vending Machine packs"
+	hidden = 1
