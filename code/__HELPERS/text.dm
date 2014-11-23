@@ -78,6 +78,15 @@ proc/sanitize_russian(var/msg)
 		index = findtext(msg, "ÿ")
 	return msg
 
+/proc/sanitize_multi(var/t,var/list/repl_chars = list("\n"="#","\t"="#","ï¿½"="ï¿½"))
+	t = sanitize_russian(t)
+	for(var/char in repl_chars)
+		var/index = findtext(t, char)
+		while(index)
+			t = copytext(t, 1, index) + repl_chars[char] + copytext(t, index+1)
+			index = findtext(t, char)
+	return t
+
 //Runs byond's sanitization proc along-side sanitize_simple
 /proc/sanitize(var/t,var/list/repl_chars = null)
 	return sanitize_simple(t,repl_chars)
