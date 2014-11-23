@@ -26,7 +26,7 @@
 		src.miming = 0
 		for(var/obj/effect/proc_holder/spell/aoe_turf/conjure/mime_wall/s in src.spell_list)
 			del(s)
-		message_admins("[src.name] ([src.ckey]) нарушает свой обет молчания. (<A HREF='?_src_=holder;adminplayerobservejump=\ref[src]'>JMP</a>)")
+		message_admins("[src.name] ([src.ckey]) нарушает свой обет молчани€. (<A HREF='?_src_=holder;adminplayerobservejump=\ref[src]'>JMP</a>)")
 		src << "\red An unsettling feeling surrounds you..."
 		return
 
@@ -41,7 +41,7 @@
 			m_type = 1
 
 		if ("blink_r")
-			message = "<B>[src]</B> постоянно моргает."
+			message = "<B>[src]</B> посто€нно моргает."
 			m_type = 1
 
 		if ("bow")
@@ -56,9 +56,9 @@
 					param = null
 
 				if (param)
-					message = "<B>[src]</B> кланяется в сторону [param]."
+					message = "<B>[src]</B> клан€етс€ в сторону [param]."
 				else
-					message = "<B>[src]</B> кланяется"
+					message = "<B>[src]</B> клан€етс€"
 			m_type = 1
 
 		if ("custom")
@@ -111,11 +111,11 @@
 
 		if ("choke")
 			if(miming)
-				message = "<B>[src]</B> хватается за горло, отчаянно!"
+				message = "<B>[src]</B> хватаетс€ за горло, отча€нно!"
 				m_type = 1
 			else
 				if (!muzzled)
-					message = "<B>[src]</B> дергается в шоке и мычит"
+					message = "<B>[src]</B> дергаетс€ в шоке и мычит"
 					m_type = 2
 				else
 					message = "<B>[src]</B> издает пронзительный крик!"
@@ -129,7 +129,7 @@
 					m_type = 1
 		if ("flap")
 			if (!src.restrained())
-				message = "<B>[src]</B> пытается похлопать в ладоши."
+				message = "<B>[src]</B> пытаетс€ похлопать в ладоши."
 				m_type = 2
 				if(miming)
 					m_type = 1
@@ -162,11 +162,11 @@
 					m_type = 2
 
 		if ("twitch")
-			message = "<B>[src]</B> яростно дергается"
+			message = "<B>[src]</B> €ростно дергаетс€"
 			m_type = 1
 
 		if ("twitch_s")
-			message = "<B>[src]</B> дергается"
+			message = "<B>[src]</B> дергаетс€"
 			m_type = 1
 
 		if ("faint")
@@ -178,18 +178,18 @@
 
 		if ("cough")
 			if(miming)
-				message = "<B>[src]</B> пытается кашлять!"
+				message = "<B>[src]</B> пытаетс€ кашл€ть!"
 				m_type = 1
 			else
 				if (!muzzled)
-					message = "<B>[src]</B> кашляет!"
+					message = "<B>[src]</B> кашл€ет!"
 					m_type = 2
 				else
-					message = "<B>[src]</B> слегка дергается и издает звуки, смахивающие на кашель"
+					message = "<B>[src]</B> слегка дергаетс€ и издает звуки, смахивающие на кашель"
 					m_type = 2
 
 		if ("frown")
-			message = "<B>[src]</B> хмурится"
+			message = "<B>[src]</B> хмуритс€"
 			m_type = 1
 
 		if ("nod")
@@ -202,11 +202,11 @@
 
 		if ("gasp")
 			if(miming)
-				message = "<B>[src]</B> бесшумно задыхается!"
+				message = "<B>[src]</B> бесшумно задыхаетс€!"
 				m_type = 1
 			else
 				if (!muzzled)
-					message = "<B>[src]</B> задыхается!"
+					message = "<B>[src]</B> задыхаетс€!"
 					m_type = 2
 				else
 					message = "<B>[src]</B> makes a weak noise."
@@ -219,7 +219,7 @@
 			if(M_HARDCORE in mutations)
 				message = "<B>[src]</B> прошептал с последним вздохом, <i>'i told u i was hardcore..'</i>"
 			else
-				message = "<B>[src]</B> больше не дышит и не двигается,а глаза стали мертвыми и безжизненными..."
+				message = "<B>[src]</B> больше не дышит и не двигаетс€,а глаза стали мертвыми и безжизненными..."
 			m_type = 1
 
 		if ("giggle")
@@ -260,9 +260,9 @@
 				param = null
 
 			if (param)
-				message = "<B>[src]</B> уставился на [param]."
+				message = "<B>[src]</B> уставилс€ на [param]."
 			else
-				message = "<B>[src]</B> уставился"
+				message = "<B>[src]</B> уставилс€"
 
 		if ("look")
 			var/M = null
@@ -282,7 +282,7 @@
 			m_type = 1
 
 		if ("grin")
-			message = "<B>[src]</B> улыбается"
+			message = "<B>[src]</B> улыбаетс€"
 			m_type = 1
 
 		if ("cry")
@@ -294,7 +294,7 @@
 					message = "<B>[src]</B> плачет"
 					m_type = 2
 				else
-					message = "<B>[src]</B> еле издает звуки и хмурится"
+					message = "<B>[src]</B> еле издает звуки и хмуритс€"
 					m_type = 2
 
 		if ("sigh")
@@ -311,11 +311,11 @@
 
 		if ("laugh")
 			if(miming)
-				message = "<B>[src]</B> показывает что как бы усмехается"
+				message = "<B>[src]</B> показывает что как бы усмехаетс€"
 				m_type = 1
 			else
 				if (!muzzled)
-					message = "<B>[src]</B> умехается"
+					message = "<B>[src]</B> умехаетс€"
 					m_type = 2
 				else
 					message = "<B>[src]</B> что то шумит"
@@ -347,7 +347,7 @@
 					message = "<B>[src]</B> стонет!"
 					m_type = 2
 				else
-					message = "<B>[src]</B> мычит в кляп"
+					message = "<B>[src]</B> мычит в кл€п"
 					m_type = 2
 
 		if ("moan")
@@ -359,7 +359,7 @@
 					message = "<B>[src]</B> слегка стонет"
 					m_type = 2
 				else
-					message = "<B>[src]</B> тихо мычит в кляп"
+					message = "<B>[src]</B> тихо мычит в кл€п"
 					m_type = 2
 
 		if ("point")
@@ -383,7 +383,7 @@
 
 		if ("raise")
 			if (!src.restrained())
-				message = "<B>[src]</B> поднял руки вверх"
+				message = "<B>[src]</B> подн€л руки вверх"
 			m_type = 1
 
 		if("shake")
