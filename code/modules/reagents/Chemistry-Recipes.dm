@@ -737,6 +737,19 @@ datum
 			required_reagents = list("toxin" = 1, "water" = 4)
 			result_amount = 5
 
+		cat_drugs
+			name = "Nepetalactone"
+			id = "cat_drugs"
+			result = "cat_drugs"
+			required_reagents = list("oxygen" = 2, "hydrogen" = 2, "carbon" = 2, "mutagen" = 2)
+			result_amount = 5
+
+		jenkem
+			name = "Jenkem"
+			id = "jenkem"
+			result = "jenkem"
+			required_reagents = list("carbon" = 1, "toxin" = 2, "discount" = 2) /* Ever wondered what DD puts in his burritos? */
+			result_amount = 2
 
 /////////////////////////////////////OLD SLIME CORE REACTIONS ///////////////////////////////
 /*
