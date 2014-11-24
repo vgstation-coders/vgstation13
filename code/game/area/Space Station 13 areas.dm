@@ -1116,6 +1116,9 @@ proc/process_ghost_teleport_locs()
 	name = "Mechanics"
 	icon_state = "mechanics"
 
+/area/engineering/dormitories
+	name = "Engineering Dormitories"
+	icon_state = "Sleep"
 
 //Solars
 
@@ -1306,6 +1309,9 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Paramedic Station"
 	icon_state = "paramedics"
 
+/area/medical/dormitories
+	name = "\improper Medbay Dormitories"
+	icon_state = "Sleep"
 //Security
 
 /area/security/main
@@ -1386,6 +1392,10 @@ proc/process_ghost_teleport_locs()
 /area/security/range
 	name = "\improper Firing Range"
 	icon_state = "firingrange"
+
+/area/security/dormitories
+	name = "\improper Security Dormitories"
+	icon_state = "Sleep"
 
 /*
 	New()
