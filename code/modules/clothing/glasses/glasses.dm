@@ -32,12 +32,11 @@
 
 /obj/item/clothing/glasses/night
 	name = "Night Vision Goggles"
-	desc = "You can totally see in the dark now!."
+	desc = "You can totally see in the dark now!"
 	icon_state = "night"
 	item_state = "glasses"
 	origin_tech = "magnets=2"
-	vision_flags = SEE_TURFS
-	darkness_view = 3
+	darkness_view = 5
 	species_fit = list("Vox")
 
 /obj/item/clothing/glasses/eyepatch
