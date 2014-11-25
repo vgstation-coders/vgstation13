@@ -1310,7 +1310,7 @@ proc/process_ghost_teleport_locs()
 	icon_state = "paramedics"
 
 /area/medical/dormitories
-	name = "\improper Medbay Dormitories"
+	name = "Medbay Dormitories"
 	icon_state = "Sleep"
 //Security
 
@@ -1394,7 +1394,7 @@ proc/process_ghost_teleport_locs()
 	icon_state = "firingrange"
 
 /area/security/dormitories
-	name = "\improper Security Dormitories"
+	name = "Security Dormitories"
 	icon_state = "Sleep"
 
 /*
