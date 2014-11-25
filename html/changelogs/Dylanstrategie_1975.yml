@@ -1,0 +1,4 @@
+author: Dylanstrategie
+delete-after: True
+changes:
+  - tweak: Night-vision Googles can no longer see through walls but now have an effective range of 5 tiles counting origin tile
