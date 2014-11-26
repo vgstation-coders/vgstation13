@@ -1,0 +1,4 @@
+author: Dylanstrategie
+delete-after: True	
+changes:
+  - wip : Added private Dormitories to Medbay, Engineering and Security. Atmos/Med/Sci Maint complex split in such a way that Atmos Maint is now isolated
