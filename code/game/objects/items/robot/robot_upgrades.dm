@@ -27,10 +27,10 @@
 
 /obj/item/borg/upgrade/proc/action(var/mob/living/silicon/robot/R)
 	if(R.stat == DEAD)
-		usr << "\red The [src] will not function on a deceased robot."
+		usr << "<span class='warning'>The [src] will not function on a deceased robot.</span>"
 		return 1
 	if(isMoMMI(R))
-		usr << "\red The [src] is only compactible with Nanotrasen Cyborgs."
+		usr << "<span class='warning'>The [src] is only compactible with Nanotrasen Cyborgs.</span>"
 	return 0
 
 
@@ -245,13 +245,13 @@
 
 		// Add a bunch of stupid tiles
 		var/obj/item/stack/tile/carpet/T_C = new/obj/item/stack/tile/carpet
-		T_C.amount = 50
+		T_C.amount = T_C.max_amount
 		var/obj/item/stack/tile/wood/T_W = new/obj/item/stack/tile/wood
-		T_W.amount = 50
+		T_W.amount = T_W.max_amount
 		var/obj/item/stack/tile/grass/T_G = new/obj/item/stack/tile/grass
-		T_G.amount = 50
+		T_G.amount = T_G.max_amount
 		var/obj/item/stack/tile/light/T_L = new/obj/item/stack/tile/light
-		T_L.amount = 50
+		T_L.amount = T_L.max_amount
 		T_L.state = 0 //Normal
 
 		R.module.modules += T_C
