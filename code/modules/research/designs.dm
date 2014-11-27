@@ -2454,6 +2454,16 @@ other types of metals and chemistry for reagents).
 	category = "Robotic_Upgrade_Modules"
 	materials = list("$iron"=10000,"$plasma"=15000,"$uranium" = 20000)
 
+/datum/design/borg_construction_board
+	name = "cyborg engineering module"
+	desc = "Used to give engineering cyborgs more materials."
+	id = "borg_construction_board"
+	req_tech = list("engineering" = 1)
+	build_type = MECHFAB
+	build_path = /obj/item/borg/upgrade/construction
+	category = "Robotic_Upgrade_Modules"
+	materials = list("$iron"=5000,"$plasma"=20000,"$glass"=20000)
+
 /////////////////////////////////////////
 ///////////General Upgrades//////////////
 /////////////////////////////////////////

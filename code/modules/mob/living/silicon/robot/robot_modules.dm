@@ -236,16 +236,13 @@
 		// ^ makes sinle list of active (R.contents) and inactive modules (R.module.modules)
 		for(var/obj/O in um)
 			// Engineering
-			if(istype(O,/obj/item/stack/sheet/metal)\
-			|| istype(O,/obj/item/stack/sheet/rglass)\
-			|| istype(O,/obj/item/stack/sheet/glass)\
-			|| istype(O,/obj/item/weapon/cable_coil)\
-			|| istype(O,/obj/item/stack/tile/plasteel))
-				if(O:amount < 50)
+			if(istype(O,/obj/item/weapon/cable_coil)\
+			|| istype(O,/obj/item/stack/))
+				if(O:amount < O:max_amount)
 					O:amount += 1
 					R.cell.use(50) 		//Take power from the borg...
-				if(O:amount > 50)
-					O:amount = 50
+				if(O:amount > O:max_amount)
+					O:amount = O:max_amount
 
 
 /obj/item/weapon/robot_module/security

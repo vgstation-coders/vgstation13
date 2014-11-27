@@ -30,7 +30,7 @@
 		usr << "\red The [src] will not function on a deceased robot."
 		return 1
 	if(isMoMMI(R))
-		usr << "\red The [src] only functions on Nanotrasen Cyborgs."
+		usr << "\red The [src] is only compactible with Nanotrasen Cyborgs."
 	return 0
 
 
@@ -198,7 +198,7 @@
 
 /obj/item/borg/upgrade/syndicate/
 	name = "Illegal Equipment Module"
-	desc = "Unlocks the hidden, deadlier functions of a robot"
+	desc = "Unlocks the hidden, deadlier functions of a robot."
 	icon_state = "cyborg_upgrade3"
 	require_module = 1
 
@@ -210,3 +210,56 @@
 
 	R.emagged = 1
 	return 1
+
+/obj/item/borg/upgrade/construction
+	name = "Construction Equipment Upgrade"
+	desc = "Used to give engineering cyborgs more materials to work with."
+	icon_state = "cyborg_upgrade3"
+	require_module = 1
+
+/obj/item/borg/upgrade/construction/action(var/mob/living/silicon/robot/R)
+	if(..()) return 0
+
+	if(istype(R.module, /obj/item/weapon/robot_module/engineering))
+		// Add plasma glass
+		var/obj/item/stack/sheet/glass/plasmaglass/PG = new /obj/item/stack/sheet/glass/plasmaglass(src)
+		PG.g_amt = 0
+		PG.amount = 50
+		R.module.modules += PG
+
+		// Add reinforced plasma glass
+		var/obj/item/stack/sheet/glass/plasmarglass/PG_R = new /obj/item/stack/sheet/glass/plasmarglass(src)
+		PG_R.g_amt = 0
+		PG.amount = 50
+		R.module.modules += PG_R
+
+		// Add plasteel
+		var/obj/item/stack/sheet/plasteel/PS = new /obj/item/stack/sheet/plasteel(src)
+		PS.m_amt = 0
+		PS.amount = 50
+		PS.recipes = null //Remove recipes so that plasteel may only be used for r.walls
+		R.module.modules += PS
+
+		// Add a tile painter
+		R.module.modules += new/obj/item/weapon/tile_painter
+
+		// Add a bunch of stupid tiles
+		var/obj/item/stack/tile/carpet/T_C = new/obj/item/stack/tile/carpet
+		T_C.amount = 50
+		var/obj/item/stack/tile/wood/T_W = new/obj/item/stack/tile/wood
+		T_W.amount = 50
+		var/obj/item/stack/tile/grass/T_G = new/obj/item/stack/tile/grass
+		T_G.amount = 50
+		var/obj/item/stack/tile/light/T_L = new/obj/item/stack/tile/light
+		T_L.amount = 50
+		T_L.state = 0 //Normal
+
+		R.module.modules += T_C
+		R.module.modules += T_W
+		R.module.modules += T_G
+		R.module.modules += T_L
+		return 1
+	else
+		R << "<span class='warning'>Upgrade mounting error!  No suitable hardpoint detected!</span>"
+		usr << "<span class='warning'>There's no mounting point for the module!</span>"
+		return 0
