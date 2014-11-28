@@ -216,6 +216,22 @@
 		/obj/item/stack/sheet/rglass,
 		/obj/item/weapon/cable_coil,
 	)
+	var/obj/item/weapon/tile_painter/TP = locate() in R.module	// construction module adds a tile painter along with more materials
+	if(!TP)														// a tile painter stays forever, so search for it
+		TP = locate() in R.module.contents
+	if(!TP)
+		TP = locate() in R.module.modules
+	if(TP)
+		what += list (
+			/obj/item/stack/sheet/glass/plasmaglass,
+			/obj/item/stack/sheet/glass/plasmarglass,
+			/obj/item/stack/sheet/plasteel,
+			/obj/item/stack/tile/carpet,
+			/obj/item/stack/tile/light,
+			/obj/item/stack/tile/grass,
+			/obj/item/stack/tile/wood,
+		)
+
 	for (var/T in what)
 		if (!(locate(T) in src.modules))
 			src.modules -= null

@@ -221,10 +221,10 @@
 					// Engineering
 					if(istype(O,/obj/item/stack)\
 					|| istype(O,/obj/item/weapon/cable_coil))
-						if(O:amount < 50)
+						if(O:amount < O:max_amount)
 							O:amount += 2
-						if(O:amount > 50)
-							O:amount = 50
+						if(O:amount > O:max_amount)
+							O:amount = O:max_amount
 					// Security
 					if(istype(O,/obj/item/device/flash))
 						if(O:broken)
