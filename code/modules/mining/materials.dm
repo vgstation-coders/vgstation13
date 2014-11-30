@@ -11,8 +11,10 @@
 */
 /datum/materials
 	var/list/datum/material/storage[0]
+	var/max_volume = INFINITY
 
-/datum/materials/New()
+/datum/materials/New(var/max_volume=INFINITY)
+	src.max_volume=max_volume
 	for(var/matdata in typesof(/datum/material) - /datum/material)
 		var/datum/material/mat = new matdata
 		storage[mat.id]=mat
@@ -20,12 +22,15 @@
 /datum/materials/proc/addAmount(var/mat_id,var/amount)
 	if(!(mat_id in storage))
 		warning("addAmount(): Unknown material [mat_id]!")
-		return
+		return 0
 	// I HATE BYOND
 	// storage[mat_id].stored++
+	if(getVolume() + amount > max_volume)
+		return 0
 	var/datum/material/mat=storage[mat_id]
 	mat.stored += amount
 	storage[mat_id]=mat
+	return 1
 
 /datum/materials/proc/removeFrom(var/datum/materials/mats)
 	src.addFrom(mats,zero_after=1)
@@ -33,11 +38,13 @@
 /datum/materials/proc/addFrom(var/datum/materials/mats, var/zero_after=0)
 	if(mats == null)
 		return
+	var/vol=getVolume()
 	for(var/mat_id in storage)
 		var/datum/material/myMat=storage[mat_id]
 		var/datum/material/theirMat=mats.storage[mat_id]
-		if(theirMat.stored>0)
+		if(theirMat.stored>0 && theirMat.stored + vol <= max_volume)
 			myMat.stored += theirMat.stored
+			vol += theirMat.stored
 			if(zero_after)
 				theirMat.stored = 0
 

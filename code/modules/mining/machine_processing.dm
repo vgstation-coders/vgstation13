@@ -157,7 +157,7 @@ a.notsmelting {
 	var/obj/machinery/mineral/CONSOLE = null
 
 	var/datum/materials/ore
-	var/list/recipes=list()
+	var/datum/smelting_manager/recipes
 	var/list/selected[0]
 	var/on = 0 //0 = off, 1 =... oh you know!
 
@@ -175,13 +175,7 @@ a.notsmelting {
 
 		ore = new
 
-		for(var/recipetype in typesof(/datum/smelting_recipe) - /datum/smelting_recipe)
-			var/datum/smelting_recipe/recipe = new recipetype
-			// Sanity
-			for(var/ingredient in recipe.ingredients)
-				if(!(ingredient in ore.storage))
-					warning("Unknown ingredient [ingredient] in recipe [recipe.name]!")
-			recipes += recipe
+		recipes = new (ore)
 
 		return
 	return
@@ -191,49 +185,8 @@ a.notsmelting {
 		var/i
 		if(on)
 			for (i = 0; i < 10; i++)
-				var/located=0
-				var/insufficient_ore=0
-
-				// For every recipe
-				for(var/datum/smelting_recipe/recipe in recipes)
-					// Check if it's selected and we have the ingredients
-					var/signal=recipe.checkIngredients(src)
-
-					// If we have a matching recipe but we're out of ore,
-					// Shut off but DO NOT spawn slag.
-					if(signal==-1)
-						insufficient_ore=1
-						break
-
-					// Otherwise, if we've matched
-					else if(signal==1)
-
-						// Take ingredients
-						for(var/ore_id in recipe.ingredients)
-							ore.removeAmount(ore_id,1)
-						// Spawn yield
-						new recipe.yieldtype(output.loc)
-
-						located=1
-						break
-				if(insufficient_ore)
-					on=0
-					break
-
-				// If we haven't found a matching recipe,
-				if(!located)
-					// Turn off
-					on=0
-
-					// Spawn slag
-					var/obj/item/weapon/ore/slag/slag = new /obj/item/weapon/ore/slag(output.loc)
-
-					// Take one of every ore selected and give it to the slag.
-					for(var/ore_id in ore.storage)
-						if(ore.getAmount(ore_id)>0 && ore_id in selected)
-							ore.removeAmount(ore_id,1)
-							slag.mats.addAmount(ore_id,1)
-
+				if(recipes.smelt(output.loc,selected) < 1) // -1 and 0 turn off the machine.
+					on=0 // Turn off.
 					break
 
 		// Collect ore even if not on.
@@ -260,51 +213,8 @@ a.notsmelting {
 		var/i
 		if(on)
 			for (i = 0; i < 10; i++)
-				var/located=0
-				var/insufficient_ore=0
-
-				// For every recipe
-				for(var/datum/smelting_recipe/recipe in recipes)
-					// Check if it's selected and we have the ingredients
-					var/signal=recipe.checkIngredients(src)
-
-					// If we have a matching recipe but we're out of ore,
-					// Shut off but DO NOT spawn slag.
-					if(signal==-1)
-						insufficient_ore=1
-						break
-
-					// Otherwise, if we've matched
-					else if(signal==1)
-
-						// Take ingredients
-						for(var/ore_id in recipe.ingredients)
-							// Oh how I wish ore[ore_id].stored-- worked.
-							ore.removeAmount(ore_id,1)
-
-						// Spawn yield
-						new recipe.yieldtype(output.loc)
-
-						located=1
-						break
-				if(insufficient_ore)
-					on=0
-					break
-
-				// If we haven't found a matching recipe,
-				if(!located)
-					// Turn off
-					on=0
-
-					// Spawn slag
-					var/obj/item/weapon/ore/slag/slag = new /obj/item/weapon/ore/slag(output.loc)
-
-					// Take one of every ore selected and give it to the slag.
-					for(var/ore_id in ore.storage)
-						if(ore.getAmount(ore_id)>0 && ore_id in selected)
-							ore.removeAmount(ore_id,1)
-							slag.mats.addAmount(ore_id,1)
-
+				if(recipes.smelt(output.loc,selected) < 1) // -1 and 0 turn off the machine.
+					on=0 // Turn off.
 					break
 
 		for (i = 0; i < 10; i++)

@@ -4,26 +4,26 @@
 	var/yieldtype=null
 
 // Note: Returns -1 if not enough ore!
-/datum/smelting_recipe/proc/checkIngredients(var/obj/machinery/mineral/processing_unit/P)
+/datum/smelting_recipe/proc/checkIngredients(var/datum/materials/materials, var/list/selected, var/multiplier=1)
 	var/sufficient_ore=1
 	var/matching_ingredient_count=0
-	for(var/ore_id in P.ore.storage)
-		var/datum/material/po=P.ore.getMaterial(ore_id)
+	for(var/ore_id in materials.storage)
+		var/datum/material/po=materials.getMaterial(ore_id)
 		var/required=(ore_id in ingredients)
-		var/selected=(ore_id in P.selected)
+		var/is_selected=(ore_id in selected)
 
 		// Selected but not in ingredients
-		if(selected && !required)
+		if(is_selected && !required)
 			return 0
 
 		// Unselected but in ingredients
-		if(!selected && required)
+		if(!is_selected && required)
 			return 0
 
-		var/min_ore_required=ingredients[ore_id]
+		var/min_ore_required=ingredients[ore_id] * multiplier
 
 		// Selected, in ingredients, but not enough in stock.
-		if(selected && required)
+		if(is_selected && required)
 			if(po.stored < min_ore_required)
 				sufficient_ore=0
 				continue
@@ -35,7 +35,38 @@
 
 	return matching_ingredient_count == ingredients.len
 
+/**
+ * Get the maximum number of batches possible, given the available materials.
+ * @return num
+ */
+/datum/smelting_recipe/proc/getMaxBatches(var/datum/materials/materials, var/maxbatches=50)
+	var/batches=maxbatches
+	for(var/ore_id in ingredients)
+		var/datum/material/po=materials.getMaterial(ore_id)
+
+		batches = min(batches, round(po.stored/ingredients[ore_id]))
+
+	return batches
+
+/**
+ * Actually smelt the raw materials into product.
+ * @param output Where to plop the product.
+ * @param materials Materials to use.
+ * @param batches Number of batches to make.
+ */
+/datum/smelting_recipe/proc/smelt(var/turf/output, var/datum/materials/materials, var/batches=1)
+	// Take ingredients
+	for(var/ore_id in ingredients)
+		materials.removeAmount(ore_id, ingredients[ore_id] * batches)
+
+	// Spawn yield
+	var/obj/item/stack/sheet/S = new yieldtype(output)
+	S.amount=batches
+
+/////////////////////////////////
 // RECIPES BEEP BOOP
+/////////////////////////////////
+
 /datum/smelting_recipe/glass
 	name="Glass"
 	ingredients=list(
