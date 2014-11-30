@@ -236,7 +236,8 @@
 		// Add plasteel
 		var/obj/item/stack/sheet/plasteel/PS = new /obj/item/stack/sheet/plasteel(src)
 		PS.m_amt = 0
-		PS.amount = 50
+		PS.max_amount = 30 //30 instead of 50
+		PS.amount = PS.max_amount
 		PS.recipes = null //Remove recipes so that plasteel may only be used for r.walls
 		R.module.modules += PS
 
@@ -246,17 +247,11 @@
 		// Add a bunch of stupid tiles
 		var/obj/item/stack/tile/carpet/T_C = new/obj/item/stack/tile/carpet
 		T_C.amount = T_C.max_amount
-		var/obj/item/stack/tile/wood/T_W = new/obj/item/stack/tile/wood
-		T_W.amount = T_W.max_amount
-		var/obj/item/stack/tile/grass/T_G = new/obj/item/stack/tile/grass
-		T_G.amount = T_G.max_amount
 		var/obj/item/stack/tile/light/T_L = new/obj/item/stack/tile/light
 		T_L.amount = T_L.max_amount
 		T_L.state = 0 //Normal
 
 		R.module.modules += T_C
-		R.module.modules += T_W
-		R.module.modules += T_G
 		R.module.modules += T_L
 		return 1
 	else

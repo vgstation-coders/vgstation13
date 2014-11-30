@@ -238,6 +238,9 @@
 			var/O = new T(src)
 			if(istype(O,/obj/item/weapon/cable_coil))
 				O:max_amount = 50
+			if(istype(O,/obj/item/stack/sheet/plasteel))
+				O:max_amount = 30 //Borgs can carry only 30 plasteel
+				O:recipes = null
 			src.modules += O
 			O:amount = 1
 	return
