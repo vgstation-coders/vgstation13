@@ -1260,17 +1260,21 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "medbay_break"
 	music = 'sound/ambience/signal.ogg'
 
-/area/medical/patients_rooms
-	name = "\improper Patient's Rooms"
-	icon_state = "patients"
+/area/medical/diagnostics
+	name = "Diagnostics"
+	icon_state = "diagnostics"
 
-/area/medical/patient_room1
-	name = "\improper Patient Room 1"
-	icon_state = "patients"
+/area/medical/xenovox
+	name = "Vox Xenomedical"
+	icon_state = "xenovox"
 
-/area/medical/patient_room2
-	name = "\improper Patient Room 2"
-	icon_state = "patients"
+/area/medical/xenoplas
+	name = "Plasmaman Xenomedical"
+	icon_state = "xenoplas"
+
+/area/medical/psych/
+	name = "Psychiatric Ward"
+	icon_state = "psychward"
 
 /area/medical/cmo
 	name = "\improper Chief Medical Officer's Office"
@@ -1405,6 +1409,10 @@ proc/process_adminbus_teleport_locs()
 /area/security/range
 	name = "\improper Firing Range"
 	icon_state = "firingrange"
+
+/area/security/robotics
+	name = "\improper Secure Robotics"
+	icon_state = "secrob"
 
 /*
 	New()
