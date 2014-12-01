@@ -1125,3 +1125,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Supermatter Shard Crate"
 	group = "Engineering"
 	access = access_ce
+
+/datum/supply_packs/bloodpack
+	name = "BloodPack crate"
+	contains = list(/obj/item/weapon/reagent_containers/blood/OMinus,
+					/obj/item/weapon/reagent_containers/blood/OMinus,
+					/obj/item/weapon/reagent_containers/blood/OMinus,
+					/obj/item/weapon/reagent_containers/blood/OMinus)
+	cost = 40
+	containertype = "/obj/structure/closet/crate/secure"
+	containername = "BloodPack crate"
+	access = access_medical
+	group = "Medical"
