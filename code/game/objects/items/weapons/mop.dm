@@ -12,39 +12,57 @@
 	flags = FPRINT | TABLEPASS
 	attack_verb = list("mopped", "bashed", "bludgeoned", "whacked", "slapped", "whipped")
 
-/obj/item/weapon/mop/New()
-	. = ..()
+/obj/item/weapon/mop/New(loc)
+	. = ..(loc)
 	create_reagents(5)
-
-/obj/item/weapon/mop/proc/clean(turf/simulated/A as turf)
-	reagents.reaction(A,1,10) //Mops magically make chems ten times more efficient than usual, aka equivalent of 50 units of whatever you're using
-	A.clean_blood()
-	for(var/obj/effect/O in A)
-		if(istype(O,/obj/effect/rune) || istype(O,/obj/effect/decal/cleanable) || istype(O,/obj/effect/overlay))
-			qdel(O)
 
 /obj/effect/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/mop))
 		return
 	..()
 
-/obj/item/weapon/mop/afterattack(atom/A, mob/user as mob)
-	if(!user.Adjacent(A))
+/obj/item/weapon/mop/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(proximity_flag == 0) // not Adjacent
 		return
 
-	if(istype(A, /mob/living))
-		if(!(reagents.total_volume < 1)) //Slap slap slap
-			A.visible_message("<span class='danger'>[user] covers [A] in the mop's contents</span>")
-			reagents.reaction(A,1,10) //I hope you like my polyacid cleaner mix
-			reagents.clear_reagents()
+	if(reagents.total_volume < 1)
+		user << "<span class='notice'>Your mop is dry!</span>"
+		return
 
-	if(istype(A, /turf/simulated) || istype(A, /obj/effect/decal/cleanable) || istype(A, /obj/effect/overlay) || istype(A, /obj/effect/rune))
-		if(reagents.total_volume < 1)
-			user << "<span class='notice'>Your mop is dry!</span>"
-			return
-		user.visible_message("<span class='warning'>[user] begins to clean \the [get_turf(A)].</span>")
+	var/surface = target
+
+	if(istype(target, /obj/effect/rune) || istype(target, /obj/effect/decal/cleanable) || istype(target, /obj/effect/overlay))
+		surface = target.loc
+
+	target = null
+
+	/* lack proper checks of protection at mobs
+	if(isliving(surface))
+		user.visible_message("<span class='danger'>[user] covers [surface] with the mop's contents</span>")
+		reagents.reaction(surface, TOUCH, 10) //I hope you like my polyacid cleaner mix
+		reagents.clear_reagents()
+	*/
+
+	if(istype(surface, /turf/simulated))
+		user.visible_message("<span class='warning'>[user] begins to clean \the [surface] with [src].</span>")
+
 		if(do_after(user, 30))
-			if(A)
-				clean(get_turf(A))
-				reagents.remove_any(1) //Might be a tad wonky with "special mop mixes", but fuck it
-				user << "<span class='notice'>You have finished mopping \the [get_turf(A)]!</span>"
+			clean(surface)
+			user << "<span class='notice'>You have finished mopping!</span>"
+
+/obj/item/weapon/mop/proc/clean(atom/surface)
+	surface.wipe(src)
+
+/atom/proc/wipe(atom/source)
+	return 0
+
+/turf/simulated/wipe(atom/source)
+	if(source.reagents.has_reagent("water", 1) || source.reagents.has_reagent("holywater", 1))
+		clean_blood()
+
+		for(var/obj/effect/O in src)
+			if(istype(O, /obj/effect/rune) || istype(O, /obj/effect/decal/cleanable) || istype(O, /obj/effect/overlay))
+				qdel(O)
+
+	source.reagents.reaction(src, TOUCH, 10)
+	return source.reagents.remove_any(1)
