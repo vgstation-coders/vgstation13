@@ -346,7 +346,7 @@
 
 	switch(L.a_intent)
 		if("help")
-			visible_message("\blue [L] rubs it's head against [src]")
+			visible_message("\blue [L] rubs its head against [src]")
 
 
 		else

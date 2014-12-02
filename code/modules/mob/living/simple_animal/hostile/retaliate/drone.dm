@@ -85,7 +85,7 @@
 
 	//repair a bit of damage
 	if(prob(1))
-		src.visible_message("\red \icon[src] [src] shudders and shakes as some of it's damaged systems come back online.")
+		src.visible_message("\red \icon[src] [src] shudders and shakes as some of its damaged systems come back online.")
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(3, 1, src)
 		s.start()
@@ -100,7 +100,7 @@
 	//sometimes our targetting sensors malfunction, and we attack anyone nearby
 	if(prob(disabled ? 0 : 1))
 		if(hostile_drone)
-			src.visible_message("\blue \icon[src] [src] retracts several targetting vanes, and dulls it's running lights.")
+			src.visible_message("\blue \icon[src] [src] retracts several targetting vanes, and dulls its running lights.")
 			hostile_drone = 0
 		else
 			src.visible_message("\red \icon[src] [src] suddenly lights up, and additional targetting vanes slide into place.")

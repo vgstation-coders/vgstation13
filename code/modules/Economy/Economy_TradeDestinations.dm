@@ -84,7 +84,7 @@ var/list/weighted_mundaneevent_locations = list()
 
 /datum/trade_destination/new_gibson
 	name = "New Gibson"
-	description = "Heavily industrialised rocky planet containing the majority of the planet-bound resources in the system, New Gibson is torn by unrest and has very little wealth to call it's own except in the hands of the corporations who jostle with NT for control."
+	description = "Heavily industrialised rocky planet containing the majority of the planet-bound resources in the system, New Gibson is torn by unrest and has very little wealth to call its own except in the hands of the corporations who jostle with NT for control."
 	distance = 6.6
 	willing_to_buy = list()
 	willing_to_sell = list()

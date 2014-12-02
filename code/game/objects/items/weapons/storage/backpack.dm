@@ -31,7 +31,7 @@
 	max_combined_w_class = 28
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] puts the [src.name] on \his head and stretches the bag around \himself. With a sudden snapping sound, the bag shrinks to it's original size, leaving no trace of [user] </b>"
+		viewers(user) << "\red <b>[user] puts the [src.name] on \his head and stretches the bag around \himself. With a sudden snapping sound, the bag shrinks to its original size, leaving no trace of [user] </b>"
 		loc = get_turf(user)
 		qdel(user)
 

@@ -208,7 +208,7 @@
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is white."
 
 /obj/item/clothing/suit/space/vox/casual/security
-	name = "vox medical pressure suit"
+	name = "vox security pressure suit"
 	desc = "A modernized pressure suit for Vox who've decided to work for shitcurity."
 	icon_state = "vox-pressure-security"
 	item_state = "vox-pressure-security"

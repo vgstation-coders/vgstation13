@@ -212,7 +212,7 @@ var/list/solars_list = list()
 	else
 		if(iswrench(W))
 			anchored = 0
-			user.visible_message("<span class='notice'>[user] unwrenches the solar assembly from it's place.</span>")
+			user.visible_message("<span class='notice'>[user] unwrenches the solar assembly from its place.</span>")
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
 			return 1
 

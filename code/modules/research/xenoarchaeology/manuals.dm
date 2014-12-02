@@ -98,7 +98,7 @@
 				<li><b>Setup field gen</b> - Bolt it down, choose the field, check the charge and activate it. If you forget it, you'll wish you hadn't when that priceless
 					Uryom vase crumbles as it sees the light of day.</li>
 				<li><b>FUNCTIONAL AND SAFE digging</b> - Dig into the rock until you've cleared away a depth equal to (the anomaly depth MINUS the clearance range). The find
-					should come loose on it's own, but it will be in the midst of a chunk of rock. Use a welder or miniature excavation tool to clear away the excess.</li>
+					should come loose on its own, but it will be in the midst of a chunk of rock. Use a welder or miniature excavation tool to clear away the excess.</li>
 				<li><b>FANCY AND SPEEDY digging</b> - Dig into the rock until you've cleared away a depth equal to the anomaly depth, but without any of your strokes
 					entering the clearance range.</li>
 				<li><b>The Big Find</b> - Sometimes, you'll chance upon something big, both literally and figuratively. Giant statues and functioning remnants of Precursor
@@ -158,7 +158,7 @@
 				<h1><a name="Seal">Seal integrity</a></h1>
 				In order to maintain sterile and environmentally static procedures, a special chamber is setup inside the spectrometer. It's protected by a proprietary vacuum seal
 					produced by top tier industrial science. It will only last for a certain number of scans before failing outright, but it can be resealed through use of nanite paste.
-					Unfortunately, it's susceptible to malforming under heat stress so exposing it to higher temperatures will cause it's operation life to drop significantly.<br>
+					Unfortunately, it's susceptible to malforming under heat stress so exposing it to higher temperatures will cause its operation life to drop significantly.<br>
 				<br>
 				<a href="#Contents">Contents</a>
 
@@ -275,7 +275,7 @@
 				of harvesting and 'bottling' up virtually any energy emissions yet encountered by spacefaring civilisations.<br>
 				<br>
 				And yet, there are some amongst us who do not see the benefits of those who have come before us - indeed, some among them profess the opinion that there
-				is no species that could possibly match humanity in it's achievements and knowledge, or simply that employing non-human technology is dangerous and unethical.
+				is no species that could possibly match humanity in its achievements and knowledge, or simply that employing non-human technology is dangerous and unethical.
 				Folly, say I. If it is their desire to throw onto the wayside the greatest achievements <i>in the history of the galaxy</i>, simply for preferment of the
 				greatest achievements <i>in the history of mankind</i>, then they have no business in the establishment of science.<br>
 				<a href="#Contents">Contents</a>
@@ -360,9 +360,9 @@
 				<ol>
 					<li>The energy repulsion factor provides a 'shell' capable of weak suspension.</li>
 					<li>The Hoffman emissions nullify energy transferral and other kinetic activity, maintaining stability inside the field.</li>
-					<li>The resonant waveform combines the effects of the above two points, and applies it magnified onto it's synched 'resonance' materials.</li>
+					<li>The resonant waveform combines the effects of the above two points, and applies it magnified onto its synched 'resonance' materials.</li>
 				</ol>
-				As an interesting aside, a carbon waveform was chosen for the field in prison suspension fields, due to it's resonance with organic matter.<br>
+				As an interesting aside, a carbon waveform was chosen for the field in prison suspension fields, due to its resonance with organic matter.<br>
 				<a href="#Contents">Contents</a>
 
 				</body>

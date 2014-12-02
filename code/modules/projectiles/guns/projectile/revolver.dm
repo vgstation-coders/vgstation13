@@ -92,7 +92,7 @@
 
 /obj/item/weapon/gun/projectile/russian
 	name = "Russian Revolver"
-	desc = "A Russian made revolver. Uses .357 ammo. It has a single slot in it's chamber for a bullet."
+	desc = "A Russian made revolver. Uses .357 ammo. It has a single slot in its chamber for a bullet."
 	max_shells = 6
 	origin_tech = "combat=2;materials=2"
 

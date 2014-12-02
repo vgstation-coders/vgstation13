@@ -1599,17 +1599,17 @@ var/global/list/brutefireloss_overlays = list("1" = image("icon" = 'icons/mob/sc
 			stuttering = max(stuttering, 5)
 
 		if(shock_stage == 40)
-			src << "<font color='red'><b>"+pick("The pain is excrutiating!", "Please, just end the pain!", "Your whole body is going numb!")
+			src << "<font color='red'><b>"+pick("The pain is excruciating!", "Please, just end the pain!", "Your whole body is going numb!")
 
 		if (shock_stage >= 60)
 			if(shock_stage == 60) emote("me",1,"'s body becomes limp.")
 			if (prob(2))
-				src << "<font color='red'><b>"+pick("The pain is excrutiating!", "Please, just end the pain!", "Your whole body is going numb!")
+				src << "<font color='red'><b>"+pick("The pain is excruciating!", "Please, just end the pain!", "Your whole body is going numb!")
 				Weaken(20)
 
 		if(shock_stage >= 80)
 			if (prob(5))
-				src << "<font color='red'><b>"+pick("The pain is excrutiating!", "Please, just end the pain!", "Your whole body is going numb!")
+				src << "<font color='red'><b>"+pick("The pain is excruciating!", "Please, just end the pain!", "Your whole body is going numb!")
 				Weaken(20)
 
 		if(shock_stage >= 120)
