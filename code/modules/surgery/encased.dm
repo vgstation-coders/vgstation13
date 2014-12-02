@@ -18,6 +18,7 @@
 /datum/surgery_step/open_encased/saw
 	allowed_tools = list(
 	/obj/item/weapon/circular_saw = 100, \
+	/obj/item/weapon/holo/circular_saw = 100, \
 	/obj/item/weapon/hatchet = 75
 	)
 
@@ -67,6 +68,7 @@
 /datum/surgery_step/open_encased/retract
 	allowed_tools = list(
 	/obj/item/weapon/retractor = 100, 	\
+	/obj/item/weapon/holo/retractor = 100, 	\
 	/obj/item/weapon/crowbar = 75,	\
 	/obj/item/weapon/kitchen/utensil/fork = 20
 	)
@@ -124,6 +126,7 @@
 /datum/surgery_step/open_encased/close
 	allowed_tools = list(
 	/obj/item/weapon/retractor = 100, 	\
+	/obj/item/weapon/holo/retractor = 100, 	\
 	/obj/item/weapon/crowbar = 75,	\
 	/obj/item/weapon/kitchen/utensil/fork = 20
 	)
@@ -182,6 +185,7 @@
 /datum/surgery_step/open_encased/mend
 	allowed_tools = list(
 	/obj/item/weapon/bonegel = 100,	\
+	/obj/item/weapon/holo/bonegel = 100,	\
 	/obj/item/weapon/screwdriver = 75
 	)
 

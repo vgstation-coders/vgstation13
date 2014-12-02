@@ -12,6 +12,7 @@
 /datum/surgery_step/slime/cut_flesh
 	allowed_tools = list(
 	/obj/item/weapon/scalpel = 100,		\
+	/obj/item/weapon/holo/scalpel = 100,\
 	/obj/item/weapon/kitchenknife = 75,	\
 	/obj/item/weapon/shard = 50, 		\
 	)
@@ -38,6 +39,7 @@
 /datum/surgery_step/slime/cut_innards
 	allowed_tools = list(
 	/obj/item/weapon/scalpel = 100,		\
+	/obj/item/weapon/holo/scalpel = 100,\
 	/obj/item/weapon/kitchenknife = 75,	\
 	/obj/item/weapon/shard = 50, 		\
 	)
@@ -64,6 +66,7 @@
 /datum/surgery_step/slime/saw_core
 	allowed_tools = list(
 	/obj/item/weapon/circular_saw = 100, \
+	/obj/item/weapon/holo/circular_saw = 100, \
 	/obj/item/weapon/hatchet = 75
 	)
 

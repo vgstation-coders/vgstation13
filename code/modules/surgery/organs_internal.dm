@@ -18,6 +18,7 @@
 /datum/surgery_step/internal/remove_embryo
 	allowed_tools = list(
 	/obj/item/weapon/hemostat = 100,	\
+	/obj/item/weapon/holo/hemostat = 100,	\
 	/obj/item/weapon/wirecutters = 75,	\
 	/obj/item/weapon/kitchen/utensil/fork = 20
 	)
@@ -154,6 +155,7 @@
 	allowed_tools = list(
 	/obj/item/stack/nanopaste = 100,		\
 	/obj/item/weapon/bonegel = 30, 		\
+	/obj/item/weapon/holo/bonegel = 30, 		\
 	/obj/item/weapon/screwdriver = 70,	\
 	)
 
@@ -226,6 +228,7 @@
 
 	allowed_tools = list(
 	/obj/item/weapon/scalpel = 100,		\
+	/obj/item/weapon/holo/scalpel = 100,\
 	/obj/item/weapon/kitchenknife = 75,	\
 	/obj/item/weapon/shard = 50, 		\
 	)
@@ -281,6 +284,7 @@
 
 	allowed_tools = list(
 	/obj/item/weapon/hemostat = 100,	\
+	/obj/item/weapon/holo/hemostat = 100,	\
 	/obj/item/weapon/wirecutters = 75,	\
 	/obj/item/weapon/kitchen/utensil/fork = 20
 	)
@@ -450,6 +454,7 @@
 /datum/surgery_step/internal/attach_organ
 	allowed_tools = list(
 	/obj/item/weapon/FixOVein = 100, \
+	/obj/item/weapon/holo/FixOVein = 100, \
 	/obj/item/weapon/cable_coil = 75
 	)
 

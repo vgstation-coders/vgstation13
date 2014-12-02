@@ -22,6 +22,7 @@
 /datum/surgery_step/limb/cut
 	allowed_tools = list(
 	/obj/item/weapon/scalpel = 100,		\
+	/obj/item/weapon/holo/scalpel = 100,\
 	/obj/item/weapon/kitchenknife = 75,	\
 	/obj/item/weapon/shard = 50, 		\
 	)
@@ -53,6 +54,7 @@
 /datum/surgery_step/limb/mend
 	allowed_tools = list(
 	/obj/item/weapon/retractor = 100, 	\
+	/obj/item/weapon/holo/retractor = 100, 	\
 	/obj/item/weapon/crowbar = 75,	\
 	/obj/item/weapon/kitchen/utensil/fork = 50)
 
@@ -87,6 +89,7 @@
 /datum/surgery_step/limb/prepare
 	allowed_tools = list(
 	/obj/item/weapon/cautery = 100,			\
+	/obj/item/weapon/holo/cautery = 100,	\
 	/obj/item/clothing/mask/cigarette = 75,	\
 	/obj/item/weapon/lighter = 50,			\
 	/obj/item/weapon/weldingtool = 25

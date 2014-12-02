@@ -20,6 +20,7 @@
 /datum/surgery_step/head/peel
 	allowed_tools = list(
 	/obj/item/weapon/retractor = 100,		\
+	/obj/item/weapon/holo/retractor = 100,		\
 	/obj/item/weapon/crowbar = 75,	\
 	/obj/item/weapon/kitchen/utensil/fork = 50, 		\
 	)
@@ -51,6 +52,7 @@
 /datum/surgery_step/head/shape
 	allowed_tools = list(
 	/obj/item/weapon/FixOVein = 100, 	\
+	/obj/item/weapon/holo/FixOVein = 100, 	\
 	/obj/item/weapon/cable_coil = 75,	\
 	/obj/item/device/assembly/mousetrap = 10) //ok chinsky
 
@@ -84,6 +86,7 @@
 /datum/surgery_step/head/suture
 	allowed_tools = list(
 	/obj/item/weapon/hemostat = 100, 	\
+	/obj/item/weapon/holo/hemostat = 100, 	\
 	/obj/item/weapon/cable_coil = 60,	\
 	/obj/item/weapon/FixOVein = 80)
 
@@ -116,6 +119,7 @@
 /datum/surgery_step/head/prepare
 	allowed_tools = list(
 	/obj/item/weapon/cautery = 100,			\
+	/obj/item/weapon/holo/cautery = 100,	\
 	/obj/item/clothing/mask/cigarette = 75,	\
 	/obj/item/weapon/lighter = 50,			\
 	/obj/item/weapon/weldingtool = 25

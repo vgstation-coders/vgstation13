@@ -76,6 +76,9 @@
 /obj/structure/closet/emcloset/vox
 	name = "vox emergency closet"
 	desc = "It's full of life-saving equipment.  Assuming, that is, that you breathe nitrogen."
+	icon_state = "emergencyn2"
+	icon_closed = "emergencyn2"
+	icon_opened = "fireclosetopen"
 
 /obj/structure/closet/emcloset/vox/New()
 	new /obj/item/weapon/tank/nitrogen(src)

@@ -8,6 +8,7 @@
 	priority = 2
 	allowed_tools = list(
 	/obj/item/weapon/FixOVein = 100, \
+	/obj/item/weapon/holo/FixOVein = 100, \
 	/obj/item/weapon/cable_coil = 75
 	)
 	can_infect = 1
@@ -56,6 +57,7 @@
 	priority = 2
 	allowed_tools = list(
 		/obj/item/weapon/scalpel = 100,		\
+		/obj/item/weapon/holo/scalpel = 100,		\
 		/obj/item/weapon/kitchenknife = 75,	\
 		/obj/item/weapon/shard = 50, 		\
 	)

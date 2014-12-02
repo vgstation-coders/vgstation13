@@ -16,6 +16,7 @@
 /datum/surgery_step/butt/slice_cheek
 	allowed_tools = list(
 	/obj/item/weapon/circular_saw = 100, \
+	/obj/item/weapon/holo/circular_saw = 100, \
 	/obj/item/weapon/hatchet = 75
 	)
 
@@ -50,6 +51,7 @@
 /datum/surgery_step/butt/seperate_anus
 	allowed_tools = list(
 	/obj/item/weapon/scalpel = 100,		\
+	/obj/item/weapon/holo/scalpel = 100, \
 	/obj/item/weapon/kitchenknife = 75,	\
 	/obj/item/weapon/shard = 50, 		\
 	)
@@ -84,6 +86,7 @@
 /datum/surgery_step/butt/saw_hip
 	allowed_tools = list(
 	/obj/item/weapon/circular_saw = 100, \
+	/obj/item/weapon/holo/circular_saw = 100, \
 	/obj/item/weapon/hatchet = 75
 	)
 
@@ -113,6 +116,7 @@
 /datum/surgery_step/butt/cauterize_butt
 	allowed_tools = list(
 	/obj/item/weapon/cautery = 100,			\
+	/obj/item/weapon/holo/cautery = 100,	\
 	/obj/item/clothing/mask/cigarette = 75,	\
 	/obj/item/weapon/lighter = 50,			\
 	/obj/item/weapon/weldingtool = 25

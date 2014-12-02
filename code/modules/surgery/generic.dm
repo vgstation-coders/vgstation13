@@ -110,6 +110,7 @@
 /datum/surgery_step/generic/cut_open
 	allowed_tools = list(
 	/obj/item/weapon/scalpel = 100,		\
+	/obj/item/weapon/holo/scalpel = 100,\
 	/obj/item/weapon/kitchenknife = 75,	\
 	/obj/item/weapon/shard = 50, 		\
 	)
@@ -146,6 +147,7 @@
 /datum/surgery_step/generic/clamp_bleeders
 	allowed_tools = list(
 	/obj/item/weapon/hemostat = 100,	\
+	/obj/item/weapon/holo/hemostat = 100,	\
 	/obj/item/weapon/cable_coil = 75, 	\
 	/obj/item/device/assembly/mousetrap = 20
 	)
@@ -181,6 +183,7 @@
 /datum/surgery_step/generic/retract_skin
 	allowed_tools = list(
 	/obj/item/weapon/retractor = 100, 	\
+	/obj/item/weapon/holo/retractor = 100, 	\
 	/obj/item/weapon/crowbar = 75,	\
 	/obj/item/weapon/kitchen/utensil/fork = 50
 	)
@@ -236,6 +239,7 @@
 /datum/surgery_step/generic/cauterize
 	allowed_tools = list(
 	/obj/item/weapon/cautery = 100,			\
+	/obj/item/weapon/holo/cautery = 100,	\
 	/obj/item/clothing/mask/cigarette = 75,	\
 	/obj/item/weapon/lighter = 50,			\
 	/obj/item/weapon/weldingtool = 25
@@ -273,6 +277,7 @@
 /datum/surgery_step/generic/cut_limb
 	allowed_tools = list(
 	/obj/item/weapon/circular_saw = 100, \
+	/obj/item/weapon/holo/circular_saw = 100, \
 	/obj/item/weapon/hatchet = 75
 	)
 

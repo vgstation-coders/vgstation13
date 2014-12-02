@@ -5,6 +5,7 @@
 /datum/surgery_step/brain/bone_chips
 	allowed_tools = list(
 	/obj/item/weapon/hemostat = 100, 		\
+	/obj/item/weapon/holo/hemostat = 100,    \
 	/obj/item/weapon/wirecutters = 75, 		\
 	/obj/item/weapon/kitchen/utensil/fork = 20
 	)
@@ -38,6 +39,7 @@
 /datum/surgery_step/brain/hematoma
 	allowed_tools = list(
 	/obj/item/weapon/FixOVein = 100, \
+	/obj/item/weapon/holo/FixOVein = 100, \
 	/obj/item/weapon/cable_coil = 75
 	)
 
