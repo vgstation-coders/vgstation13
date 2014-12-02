@@ -191,7 +191,7 @@ hi
 
 /obj/item/weapon/fluff/hugo_cinderbacth_1 //thatoneguy: Hugo Cinderbatch
 	name = "Old Cane"
-	desc = "An old brown cane made from wood. It has a a large, itallicized H on it's handle."
+	desc = "An old brown cane made from wood. It has a a large, itallicized H on its handle."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "special_cane"
 

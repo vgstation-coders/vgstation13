@@ -79,7 +79,7 @@
 				if(6)
 					sender = pick("NanoTrasen Morale Divison","Feeling Lonely?","Bored?","www.wetskrell.nt")
 					message = pick("The NanoTrasen Morale Division wishes to provide you with quality entertainment sites.",\
-					"WetSkrell.nt is a xenophillic website endorsed by NT for the use of male crewmembers among it's many stations and outposts.",\
+					"WetSkrell.nt is a xenophillic website endorsed by NT for the use of male crewmembers among its many stations and outposts.",\
 					"Wetskrell.nt only provides the higest quality of male entertaiment to NanoTrasen Employees.",\
 					"Simply enter your NanoTrasen Bank account system number and pin. With three easy steps this service could be yours!")
 				if(7)

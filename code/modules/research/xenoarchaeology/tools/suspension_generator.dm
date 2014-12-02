@@ -1,6 +1,6 @@
 /obj/machinery/suspension_gen
 	name = "suspension field generator"
-	desc = "It has stubby legs bolted up against it's body for stabilising."
+	desc = "It has stubby legs bolted up against its body for stabilising."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "suspension2-b"
 	density = 1
@@ -205,7 +205,7 @@
 			if(anchored)
 				desc = "It is resting securely on four stubby legs."
 			else
-				desc = "It has stubby legs bolted up against it's body for stabilising."
+				desc = "It has stubby legs bolted up against its body for stabilising."
 		else
 			user << "<span class='warning'>You are unable to secure [src] while it is active!</span>"
 	else if (istype(W, /obj/item/weapon/cell))

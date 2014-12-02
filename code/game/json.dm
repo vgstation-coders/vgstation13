@@ -49,7 +49,7 @@ proc/makejson()
 		oldmap = M.mapname
 
 	else
-		message_admins("Did not locate mapinfo object. Go bug the mapper to add a /obj/mapinfo to their map!\n For now, you can probably spawn one manually. If you do, be sure to set it's mapname var correctly, or else you'll just get an error again.")
+		message_admins("Did not locate mapinfo object. Go bug the mapper to add a /obj/mapinfo to their map!\n For now, you can probably spawn one manually. If you do, be sure to set its mapname var correctly, or else you'll just get an error again.")
 		return
 
 	message_admins("Current map: [oldmap]")

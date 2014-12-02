@@ -103,7 +103,7 @@
 					U << "\red <b>Capture failed!</b>: \black Kill or maim the victim first!"
 				else
 					if(T.client == null)
-						U << "\red <b>Capture failed!</b>: \black The soul has already fled it's mortal frame."
+						U << "\red <b>Capture failed!</b>: \black The soul has already fled its mortal frame."
 					else
 						if(C.contents.len)
 							U << "\red <b>Capture failed!</b>: \black The soul stone is full! Use or free an existing soul to make room."
