@@ -3,8 +3,8 @@
 
 //copy paste from the mining shuttle
 
-var/research_shuttle_launchdelay = 100
-var/research_shuttle_transitdelay = 200
+var/research_shuttle_launchdelay = 50
+var/research_shuttle_transitdelay = 100
 var/research_shuttle_moving = 0
 var/research_loc_expected // A simple helper to keep things sane, tells the shuttle where it'll arrive and hope it will
 var/research_shuttle_location = 0 // 0 = station 13, 1 = research outpost, 2 = moving (transit)

@@ -42,8 +42,8 @@
 
 /**********************Shuttle Computer**************************/
 
-var/mining_shuttle_launchdelay = 100
-var/mining_shuttle_transitdelay = 200
+var/mining_shuttle_launchdelay = 50
+var/mining_shuttle_transitdelay = 100
 var/mining_shuttle_moving = 0
 var/mining_loc_expected // A simple helper to keep things sane, tells the shuttle where it'll arrive and hope it will
 var/mining_shuttle_location = 0 // 0 = station 13, 1 = mining outpost, 2 = moving (transit)
