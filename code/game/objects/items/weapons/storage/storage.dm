@@ -362,8 +362,6 @@
 	return
 
 /obj/item/weapon/storage/attack_hand(mob/user as mob)
-	if(istype(src, /obj/item/weapon/storage/portal_shield))
-		return ..()
 	playsound(get_turf(src), "rustle", 50, 1, -5)
 
 	if(ishuman(user))
