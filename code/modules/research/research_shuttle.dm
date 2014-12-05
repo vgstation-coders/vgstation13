@@ -3,59 +3,39 @@
 
 //copy paste from the mining shuttle
 
-var/research_shuttle_tickstomove = 10
+var/research_shuttle_launchdelay = 50
+var/research_shuttle_transitdelay = 100
 var/research_shuttle_moving = 0
-var/research_shuttle_location = 0 // 0 = station 13, 1 = research station
+var/research_loc_expected // A simple helper to keep things sane, tells the shuttle where it'll arrive and hope it will
+var/research_shuttle_location = 0 // 0 = station 13, 1 = research outpost, 2 = moving (transit)
 
 proc/move_research_shuttle()
-	if(research_shuttle_moving)	return
+	if(research_shuttle_moving)
+		return
 	research_shuttle_moving = 1
-	spawn(research_shuttle_tickstomove*10)
+
+	spawn(research_shuttle_launchdelay)
 		var/area/fromArea
+		var/area/transitArea
 		var/area/toArea
-		if (research_shuttle_location == 1)
+		transitArea = locate(/area/shuttle/research/transit)
+		if(research_shuttle_location == 1) //Currently at the research outpost
 			fromArea = locate(/area/shuttle/research/outpost)
 			toArea = locate(/area/shuttle/research/station)
-		else
+			research_loc_expected = 0 //It's going to the station
+		else if(research_shuttle_location == 0) //Currently at the station
 			fromArea = locate(/area/shuttle/research/station)
 			toArea = locate(/area/shuttle/research/outpost)
+			research_loc_expected = 1 //It's going to the outpost
 
-		var/list/dstturfs = list()
-		var/throwy = world.maxy
+		for(var/obj/machinery/door/unpowered/shuttle/D in fromArea) //THE FUCKING DOORS YOU IDIOT
+			D.close()
+			D.locked = 1
 
-		for(var/turf/T in toArea)
-			dstturfs += T
-			if(T.y < throwy)
-				throwy = T.y
+		fromArea.move_contents_to(transitArea) //Entering transit
+		research_shuttle_location = 2
 
-		// hey you, get out of the way!
-		for(var/turf/T in dstturfs)
-			// find the turf to move things to
-			var/turf/D = locate(T.x, throwy - 1, 1)
-			//var/turf/E = get_step(D, SOUTH)
-			for(var/atom/movable/AM as mob|obj in T)
-				AM.Move(D)
-
-			if(istype(T, /turf/simulated))
-				del(T)
-		//Do I really need to explain this loop?
-		for(var/atom/A in toArea)
-			if(istype(A,/mob/living))
-				var/mob/living/unlucky_person = A
-				unlucky_person.gib()
-			// Weird things happen when this shit gets in the way.
-			if(istype(A,/obj/structure/lattice) \
-				|| istype(A, /obj/structure/window) \
-				|| istype(A, /obj/structure/grille))
-				qdel(A)
-
-		fromArea.move_contents_to(toArea)
-		if (research_shuttle_location)
-			research_shuttle_location = 0
-		else
-			research_shuttle_location = 1
-
-		for(var/mob/M in toArea)
+		for(var/mob/M in transitArea)
 			if(M.client)
 				spawn(0)
 					if(M.buckled)
@@ -66,7 +46,54 @@ proc/move_research_shuttle()
 				if(!M.buckled)
 					M.Weaken(3)
 
-		research_shuttle_moving = 0
+		spawn(research_shuttle_transitdelay)
+			var/list/dstturfs = list()
+			var/throwy = world.maxy
+
+			for(var/turf/T in toArea)
+				dstturfs += T
+				if(T.y < throwy)
+					throwy = T.y
+
+			// hey you, get out of the way!
+			for(var/turf/T in dstturfs)
+				// find the turf to move things to
+				var/turf/D = locate(T.x, throwy - 1, 1)
+				//var/turf/E = get_step(D, SOUTH)
+				for(var/atom/movable/AM as mob|obj in T)
+					AM.Move(D)
+
+				if(istype(T, /turf/simulated))
+					del(T)
+			//Do I really need to explain this loop?
+			for(var/atom/A in toArea)
+				if(istype(A,/mob/living))
+					var/mob/living/unlucky_person = A
+					unlucky_person.gib()
+				// Weird things happen when this shit gets in the way.
+				if(istype(A,/obj/structure/lattice) \
+					|| istype(A, /obj/structure/window) \
+					|| istype(A, /obj/structure/grille))
+					qdel(A)
+
+			transitArea.move_contents_to(toArea)
+			research_shuttle_location = research_loc_expected
+
+			for(var/mob/M in toArea)
+				if(M.client)
+					spawn(0)
+						if(M.buckled)
+							shake_camera(M, 3, 1) // buckled, not a lot of shaking
+						else
+							shake_camera(M, 10, 1) // unbuckled, HOLY SHIT SHAKE THE ROOM
+				if(istype(M, /mob/living/carbon))
+					if(!M.buckled)
+						M.Weaken(3)
+
+			research_shuttle_moving = 0
+			for(var/obj/machinery/door/unpowered/shuttle/D in toArea) //Alright we're good
+				D.open()
+				D.locked = 0
 	return
 
 /obj/machinery/computer/research_shuttle

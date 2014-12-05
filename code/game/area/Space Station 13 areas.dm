@@ -241,6 +241,10 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/mining/station
 	icon_state = "shuttle2"
 
+/area/shuttle/mining/transit //Shuttle on its way
+	name = "\improper Mining Shuttle Transit"
+	icon_state = "shuttle"
+
 /area/shuttle/mining/outpost
 	icon_state = "shuttle"
 
@@ -333,6 +337,10 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/research/station
 	icon_state = "shuttle2"
+
+/area/shuttle/research/transit //Shuttle on its way
+	name = "\improper Research Shuttle Transit"
+	icon_state = "shuttle"
 
 /area/shuttle/research/outpost
 	icon_state = "shuttle"
