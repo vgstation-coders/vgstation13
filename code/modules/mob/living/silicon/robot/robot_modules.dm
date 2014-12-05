@@ -216,12 +216,31 @@
 		/obj/item/stack/sheet/rglass,
 		/obj/item/weapon/cable_coil,
 	)
+	var/obj/item/weapon/tile_painter/TP = locate() in R.module	// construction module adds a tile painter along with more materials
+	if(!TP)														// a tile painter stays forever, so search for it
+		TP = locate() in R.module.contents
+	if(!TP)
+		TP = locate() in R.module.modules
+	if(TP)
+		what += list (
+			/obj/item/stack/sheet/glass/plasmaglass,
+			/obj/item/stack/sheet/glass/plasmarglass,
+			/obj/item/stack/sheet/plasteel,
+			/obj/item/stack/tile/carpet,
+			/obj/item/stack/tile/light,
+			/obj/item/stack/tile/grass,
+			/obj/item/stack/tile/wood,
+		)
+
 	for (var/T in what)
 		if (!(locate(T) in src.modules))
 			src.modules -= null
 			var/O = new T(src)
 			if(istype(O,/obj/item/weapon/cable_coil))
 				O:max_amount = 50
+			if(istype(O,/obj/item/stack/sheet/plasteel))
+				O:max_amount = 30 //Borgs can carry only 30 plasteel
+				O:recipes = null
 			src.modules += O
 			O:amount = 1
 	return
@@ -236,16 +255,13 @@
 		// ^ makes sinle list of active (R.contents) and inactive modules (R.module.modules)
 		for(var/obj/O in um)
 			// Engineering
-			if(istype(O,/obj/item/stack/sheet/metal)\
-			|| istype(O,/obj/item/stack/sheet/rglass)\
-			|| istype(O,/obj/item/stack/sheet/glass)\
-			|| istype(O,/obj/item/weapon/cable_coil)\
-			|| istype(O,/obj/item/stack/tile/plasteel))
-				if(O:amount < 50)
+			if(istype(O,/obj/item/weapon/cable_coil)\
+			|| istype(O,/obj/item/stack/))
+				if(O:amount < O:max_amount)
 					O:amount += 1
 					R.cell.use(50) 		//Take power from the borg...
-				if(O:amount > 50)
-					O:amount = 50
+				if(O:amount > O:max_amount)
+					O:amount = O:max_amount
 
 
 /obj/item/weapon/robot_module/security

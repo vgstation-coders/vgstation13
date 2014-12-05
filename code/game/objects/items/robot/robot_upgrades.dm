@@ -27,10 +27,10 @@
 
 /obj/item/borg/upgrade/proc/action(var/mob/living/silicon/robot/R)
 	if(R.stat == DEAD)
-		usr << "\red The [src] will not function on a deceased robot."
+		usr << "<span class='warning'>The [src] will not function on a deceased robot.</span>"
 		return 1
 	if(isMoMMI(R))
-		usr << "\red The [src] only functions on Nanotrasen Cyborgs."
+		usr << "<span class='warning'>The [src] is only compactible with Nanotrasen Cyborgs.</span>"
 	return 0
 
 
@@ -198,7 +198,7 @@
 
 /obj/item/borg/upgrade/syndicate/
 	name = "Illegal Equipment Module"
-	desc = "Unlocks the hidden, deadlier functions of a robot"
+	desc = "Unlocks the hidden, deadlier functions of a robot."
 	icon_state = "cyborg_upgrade3"
 	require_module = 1
 
@@ -210,3 +210,51 @@
 
 	R.emagged = 1
 	return 1
+
+/obj/item/borg/upgrade/construction
+	name = "Construction Equipment Upgrade"
+	desc = "Used to give engineering cyborgs more materials to work with."
+	icon_state = "cyborg_upgrade3"
+	require_module = 1
+
+/obj/item/borg/upgrade/construction/action(var/mob/living/silicon/robot/R)
+	if(..()) return 0
+
+	if(istype(R.module, /obj/item/weapon/robot_module/engineering))
+		// Add plasma glass
+		var/obj/item/stack/sheet/glass/plasmaglass/PG = new /obj/item/stack/sheet/glass/plasmaglass(src)
+		PG.g_amt = 0
+		PG.amount = 50
+		R.module.modules += PG
+
+		// Add reinforced plasma glass
+		var/obj/item/stack/sheet/glass/plasmarglass/PG_R = new /obj/item/stack/sheet/glass/plasmarglass(src)
+		PG_R.g_amt = 0
+		PG.amount = 50
+		R.module.modules += PG_R
+
+		// Add plasteel
+		var/obj/item/stack/sheet/plasteel/PS = new /obj/item/stack/sheet/plasteel(src)
+		PS.m_amt = 0
+		PS.max_amount = 30 //30 instead of 50
+		PS.amount = PS.max_amount
+		PS.recipes = null //Remove recipes so that plasteel may only be used for r.walls
+		R.module.modules += PS
+
+		// Add a tile painter
+		R.module.modules += new/obj/item/weapon/tile_painter
+
+		// Add a bunch of stupid tiles
+		var/obj/item/stack/tile/carpet/T_C = new/obj/item/stack/tile/carpet
+		T_C.amount = T_C.max_amount
+		var/obj/item/stack/tile/light/T_L = new/obj/item/stack/tile/light
+		T_L.amount = T_L.max_amount
+		T_L.state = 0 //Normal
+
+		R.module.modules += T_C
+		R.module.modules += T_L
+		return 1
+	else
+		R << "<span class='warning'>Upgrade mounting error!  No suitable hardpoint detected!</span>"
+		usr << "<span class='warning'>There's no mounting point for the module!</span>"
+		return 0
