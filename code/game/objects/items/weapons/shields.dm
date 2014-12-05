@@ -89,7 +89,7 @@
 
 /obj/item/weapon/shield/portal_shield/New()
 	..()
-	storage_space = new
+	storage_space = new(src)
 	storage_space.can_hold = list(	"/obj/item/weapon/melee",
 									"/obj/item/weapon/gun",
 									"/obj/item/ammo_storage",
@@ -109,7 +109,7 @@
 									60;list(/obj/item/weapon/plastique),
 									60;typesof(/obj/item/weapon/grenade) - list(/obj/item/weapon/grenade, /obj/item/weapon/grenade/flashbang/clusterbang/segment, /obj/item/weapon/grenade/flashbang/clusterbang))
 		var/obj/item/spawn_item = pick(spawn_items) //gets an item out of the chosen list
-		storage_space.contents += new spawn_item(storage_space)
+		new spawn_item(storage_space)
 
 ////////////////////////////////////////////////////////
 
