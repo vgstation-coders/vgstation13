@@ -48,6 +48,7 @@
 	new /obj/item/weapon/cartridge/janitor(src)
 	new /obj/item/device/flashlight(src)
 	new /obj/item/clothing/shoes/galoshes(src)
+	new /obj/item/weapon/storage/box/donkpockets(src)
 	new /obj/item/weapon/caution(src)
 	new /obj/item/weapon/caution(src)
 	new /obj/item/weapon/caution(src)

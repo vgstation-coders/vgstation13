@@ -187,3 +187,14 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 		user << "<span class='notice'>You fasten the wirecutters to the top of the rod with the cable, prongs outward.</span>"
 		del(I)
 		del(src)
+
+	else if(istype(I, /obj/item/weapon/mop/rag))
+		var/obj/item/weapon/mop/makeshift/M = new /obj/item/weapon/mop/makeshift
+
+		user.before_take_item(I)
+		user.before_take_item(src)
+
+		user.put_in_hands(M)
+		user << "<span class='notice'>You fasten the rag to the top of the rod with the cable.</span>"
+		del(I)
+		del(src)
