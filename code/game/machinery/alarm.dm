@@ -1168,7 +1168,7 @@ FIRE ALARM
 	if (buildstage != 2)
 		return
 
-	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+	if((usr.contents.Find(src) || (in_range(src, usr) && isturf(src.loc))) || issilicon(usr))
 		usr.set_machine(src)
 		if (href_list["reset"])
 			src.reset()
@@ -1181,7 +1181,7 @@ FIRE ALARM
 		else if (href_list["tp"])
 			var/tp = text2num(href_list["tp"])
 			src.time += tp
-			src.time = min(max(round(src.time), 0), 120)
+			src.time = Clamp(round(src.time), 0, 120)
 
 		src.updateUsrDialog()
 
