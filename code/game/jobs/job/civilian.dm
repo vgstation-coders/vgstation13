@@ -10,6 +10,7 @@
 	selection_color = "#dddddd"
 	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_weapons)
 	minimal_access = list(access_bar,access_weapons)
+	alt_titles = list("Barista","Sommelier")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/bar
@@ -20,9 +21,17 @@
 			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
 			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
 			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		switch(H.mind.role_alt_title)
+			if("Barista")
+				H.equip_or_collect(new /obj/item/clothing/suit/wcoat, slot_wear_suit)
+				H.equip_or_collect(new /obj/item/clothing/suit/armor/vest(H), slot_in_backpack)
+			if("Sommelier")
+				H.equip_or_collect(new /obj/item/clothing/under/sl_suit, slot_wear_suit)
+				H.equip_or_collect(new /obj/item/clothing/suit/armor/vest(H), slot_in_backpack)
+			else
+				H.equip_or_collect(new /obj/item/clothing/suit/armor/vest(H), slot_wear_suit)
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_service(H), slot_ears)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
-		H.equip_or_collect(new /obj/item/clothing/suit/armor/vest(H), slot_wear_suit)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/bartender(H), slot_w_uniform)
 		//H.equip_or_collect(new /obj/item/device/pda/bar(H), slot_belt)
 
@@ -130,6 +139,7 @@
 	idtype = /obj/item/weapon/card/id/supply
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station, access_taxi)
 	minimal_access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station, access_taxi)
+	alt_titles = list("Foreman","Requisistions Manager")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/quartermaster
@@ -163,6 +173,7 @@
 	idtype = /obj/item/weapon/card/id/supply
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station, access_taxi)
 	minimal_access = list(access_maint_tunnels, access_cargo, access_cargo_bot, access_mailsorting, access_taxi)
+	alt_titles = list("Requisitions Officer")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/cargo
@@ -231,6 +242,7 @@
 	idtype = /obj/item/weapon/card/id/clown
 	access = list(access_clown, access_theatre, access_maint_tunnels)
 	minimal_access = list(access_clown, access_theatre)
+	alt_titles = list("Practical Joke Technician")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/clown
@@ -266,6 +278,7 @@
 	idtype = /obj/item/weapon/card/id/mime
 	access = list(access_mime, access_theatre, access_maint_tunnels)
 	minimal_access = list(access_mime, access_theatre)
+	alt_titles = list("Artiste","Pantomime")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/mime
@@ -306,6 +319,7 @@
 	selection_color = "#dddddd"
 	access = list(access_janitor, access_maint_tunnels)
 	minimal_access = list(access_janitor, access_maint_tunnels)
+	alt_titles = list("Concierge")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/janitor
@@ -368,7 +382,7 @@
 	selection_color = "#dddddd"
 	access = list(access_lawyer, access_court, access_sec_doors, access_maint_tunnels, access_cargo, access_medical,  access_bar, access_kitchen, access_hydroponics)
 	minimal_access = list(access_lawyer, access_court, access_sec_doors, access_cargo,  access_bar, access_kitchen)
-	alt_titles = list("Lawyer")
+	alt_titles = list("Lawyer","Analyst","Chief Information Agent","Prison Psychiatrist","Inspector")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/lawyer
@@ -385,10 +399,27 @@
 					H.equip_or_collect(new /obj/item/clothing/under/lawyer/bluesuit(H), slot_w_uniform)
 					H.equip_or_collect(new /obj/item/clothing/suit/storage/lawyer/bluejacket(H), slot_wear_suit)
 					H.equip_or_collect(new /obj/item/clothing/shoes/leather(H), slot_shoes)
-		H.equip_or_collect(new /obj/item/clothing/under/rank/internalaffairs(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/suit/storage/internalaffairs(H), slot_wear_suit)
+					H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
+				if("Analyst")
+					H.equip_or_collect(new /obj/item/clothing/under/lawyer/oldman(H), slot_w_uniform)
+					H.equip_or_collect(new /obj/item/clothing/glasses/regular(H), slot_glasses)
+					H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_l_store)
+				if("Prison Psychiatrist")
+					if(H.gender == FEMALE)
+						H.equip_or_collect(new /obj/item/clothing/under/dress/plaid_red, slot_w_uniform)
+					else
+						H.equip_or_collect(new /obj/item/clothing/under/rank/orderly(H), slot_w_uniform)
+					H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat, slot_wear_suit)
+					H.equip_or_collect(new /obj/item/clothing/shoes/leather(H), slot_shoes)
+					H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_l_store)
+				if("Inspector")
+					H.equip_or_collect(new /obj/item/clothing/under/suit_jacket/really_black(H), slot_w_uniform)
+					H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
+				else
+					H.equip_or_collect(new /obj/item/clothing/under/rank/internalaffairs(H), slot_w_uniform)
+					H.equip_or_collect(new /obj/item/clothing/suit/storage/internalaffairs(H), slot_wear_suit)
+					H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
 		H.equip_or_collect(new /obj/item/clothing/shoes/centcom(H), slot_shoes)
-		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
 		//H.equip_or_collect(new /obj/item/device/pda/lawyer(H), slot_belt)
 		H.equip_or_collect(new /obj/item/weapon/storage/briefcase(H), slot_l_hand)
 		if(H.backbag == 1)
