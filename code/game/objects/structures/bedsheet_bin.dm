@@ -35,7 +35,7 @@ LINEN BINS
 			user << "<span  class='notice'>You have cut the [src] into rags.</span>"
 			var/turf/location = get_turf(src)
 			for(var/x=0; x<=8; x++)
-				var/obj/item/weapon/reagent_containers/glass/rag/S = new/obj/item/weapon/reagent_containers/glass/rag/(location)
+				var/obj/item/weapon/mop/rag/S = new/obj/item/weapon/mop/rag/(location)
 				S.pixel_x = rand(-5.0, 5)
 				S.pixel_y = rand(-5.0, 5)
 			del(src)

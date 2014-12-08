@@ -1,2 +1,6 @@
 author: Velard Amakar
-changes: []
+changes:
+  - rscadd: Added a makeshift mop for when times are hard.
+  - bugfix: Makes molotov code just a bit less painful to look at.
+  - tweak: Added a box of donkpockets to the Janitor's office.
+  - tweak: Nerfed rags slightly.

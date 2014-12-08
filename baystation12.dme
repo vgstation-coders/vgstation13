@@ -925,7 +925,7 @@
 #include "code\modules\detectivework\detective_scanner.dm"
 #include "code\modules\detectivework\detective_work.dm"
 #include "code\modules\detectivework\evidence.dm"
-#include "code\modules\detectivework\footprints_and_rag.dm"
+#include "code\modules\detectivework\footprints.dm"
 #include "code\modules\Economy\Accounts.dm"
 #include "code\modules\Economy\Economy.dm"
 #include "code\modules\Economy\Economy_Events.dm"

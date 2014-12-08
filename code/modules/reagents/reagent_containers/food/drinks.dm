@@ -17,6 +17,7 @@
 	var/isGlass = 0 //Whether the 'bottle' is made of glass or not so that milk cartons dont shatter when someone gets hit by it
 
 	//molotov and smashing variables
+	var/obj/item/weapon/mop/rag/molrag = null //the rag that the molotov is using
 	var/molotov = 0 //-1 = can be made into molotov, 0 = can't, 1 = has had rag stuffed into it
 	var/lit = 0
 	var/brightness_lit = 3
@@ -1037,11 +1038,13 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/smash(mob/living/M as mob, mob/living/user as mob)
 
-	if(molotov == 1) //for molotovs
+	if(molrag)
 		if(lit)
 			new /obj/effect/decal/cleanable/ash(get_turf(src))
+			del(molrag)
 		else
-			new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
+			molrag.loc = get_turf(src)
+			molrag = null
 
 	//Creates a shattering noise and replaces the bottle with a broken_bottle
 	user.drop_item()
@@ -1079,22 +1082,22 @@
 			spawn(5) src.reagents.clear_reagents()  //maybe this could be improved?
 		invisibility = INVISIBILITY_MAXIMUM  //so it stays a while to ignite any fuel
 
-		if(molotov == 1) //for molotovs
+		if(molrag) //for molotovs
 			if(lit)
 				new /obj/effect/decal/cleanable/ash(get_turf(src))
-				var/turf/loca = get_turf(src)
-				if(loca)
+				var/turf/T = get_turf(src)
+				if(T)
 					//world << "<span  class='warning'>Burning...</span>"
-					loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
+					T.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
 			else
-				new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
-
+				molrag.loc = get_turf(src)
+				molrag = null
 
 		//create new broken bottle
 		var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(loc)
-		B.force = src.force
-		B.name = src.smashname
-		B.icon_state = src.icon_state
+		B.force = force
+		B.name = smashname
+		B.icon_state = icon_state
 
 		if(istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
 			B.icon_state = "glass_empty"
@@ -1106,7 +1109,7 @@
 		Q.Blend(B.broken_outline, ICON_OVERLAY, rand(5), 1)
 		Q.SwapColor(rgb(255, 0, 220, 255), rgb(0, 0, 0, 0))
 		B.icon = Q
-		src.transfer_fingerprints_to(B)
+		transfer_fingerprints_to(B)
 
 
 		spawn(50)
@@ -1120,7 +1123,7 @@
 //////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/attackby(var/obj/item/I, mob/user as mob)
-	if(istype(I, /obj/item/weapon/reagent_containers/glass/rag) && molotov == -1)  //check if it is a molotovable drink - just beer and ale for now - other bottles require different rag overlay positions - if you can figure this out then go for it
+	if(istype(I, /obj/item/weapon/mop/rag) && molotov == -1)  //check if it is a molotovable drink - just beer and ale for now - other bottles require different rag overlay positions - if you can figure this out then go for it
 		user << "<span  class='notice'>You stuff the [I] into the mouth of the [src].</span>"
 		del(I)
 		molotov = 1
