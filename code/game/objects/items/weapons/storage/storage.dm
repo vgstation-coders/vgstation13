@@ -16,8 +16,8 @@
 	var/list/cant_hold = new/list() //List of objects which this item can't store (in effect only if can_hold isn't set)
 
 	var/max_w_class = 2 //Max size of objects that this object can store (in effect only if can_hold isn't set)
-	var/max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
-	var/storage_slots = 7 //The number of storage slots in this container.
+	var/max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item. Set to 0 for infinite
+	var/storage_slots = 7 //The number of storage slots in this container. Set to 0 for infinite
 	var/obj/screen/storage/boxes = null
 	var/obj/screen/close/closer = null
 	var/use_to_pickup	//Set this to make it possible to use this item in an inverse way, so you can have the item in your hand and click items on the floor to pick them up.
@@ -191,7 +191,7 @@
 
 	if(src.loc == W)
 		return 0 //Means the item is already in the storage item
-	if(contents.len >= storage_slots)
+	if(storage_slots && contents.len >= storage_slots)
 		if(!stop_messages)
 			usr << "<span class='notice'>[src] is full, make some space.</span>"
 		return 0 //Storage item is full
@@ -240,7 +240,7 @@
 	for(var/obj/item/I in contents)
 		sum_w_class += I.w_class //Adds up the combined w_classes which will be in the storage item if the item is added to it.
 
-	if(sum_w_class > max_combined_w_class)
+	if(max_combined_w_class && sum_w_class > max_combined_w_class)
 		if(!stop_messages)
 			usr << "<span class='notice'>[src] is full, make some space.</span>"
 		return 0
@@ -387,6 +387,9 @@
 				src.close(M)
 	src.add_fingerprint(user)
 	return
+
+/obj/item/weapon/storage/attack_paw(mob/user as mob)
+	return src.attack_hand(user)
 
 /obj/item/weapon/storage/verb/toggle_gathering_mode()
 	set name = "Switch Gathering Method"
