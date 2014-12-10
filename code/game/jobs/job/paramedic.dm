@@ -10,6 +10,7 @@
 	idtype = /obj/item/weapon/card/id/medical
 	access = list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks)
 	minimal_access=list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks)
+	alt_titles = list("Emergency Medical Technician")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/medical
@@ -19,6 +20,10 @@
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_med(H), slot_ears)
 		if(H.backbag == 2) H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic (H), slot_back)
 		if(H.backbag == 3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_med(H), slot_back)
+		if (H.mind.role_alt_title)
+			switch(H.mind.role_alt_title)
+				if("Emergency Medical Technician")
+					H.equip_or_collect(new /obj/item/clothing/suit/storage/fr_jacket(H), slot_wear_suit)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/medical/paramedic(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/device/pda/medical(H), slot_belt)

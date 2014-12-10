@@ -1,0 +1,5 @@
+author: or-or
+delete-after: True
+changes:
+  - tweak: Added several, alternative job titles for the jobs: AAI, Atmospherics Technician, Bartender, Cargo Technician, Clown, Detective, Janitor, Head of Personnel, Head of Security, Mime, Paramedic, Quarter Master and Security Officer.
+  - tweak: Some alternative titles start with different starting gear. The prison psychiatrist spawns with an orderly suit and labcoat. The analyst starts with an old man suit, glasses and has their sunglasses pocketed. The inspector spawns with a female suit. The sommelier in an Amish suit and their armour in their backpack. The barista with a service top. The guards spawn in the blue security outfit with a red cap on and the ace and private investigator have different suits on. The sergeant spawns with a cigar and a box of matches.

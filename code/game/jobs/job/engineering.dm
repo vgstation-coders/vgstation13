@@ -103,6 +103,7 @@
 	idtype = /obj/item/weapon/card/id/engineering
 	access = list(access_eva, access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics)
 	minimal_access = list(access_atmospherics, access_maint_tunnels, access_emergency_storage, access_construction, access_engine_equip, access_external_airlocks)
+	alt_titles = list("Firefighter","Pipe Maintenance Specialist")
 
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/atmos
