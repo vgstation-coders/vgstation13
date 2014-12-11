@@ -327,11 +327,11 @@
 		return*/
 
 	if(isrobot(user))
-		if(ismommi(user))
+		if(isMoMMI(user))
 			var/mob/living/silicon/robot/mommi/M = user
 			if(M.is_in_modules(W))
 				user << "<span class='notice'>You can't throw away something built into you.</span>"
-				return //Mommis cant give away their modules
+				return //Mommis cant give away their modules but can place other items
 		else
 			user << "<span class='notice'> You're a robot. No.</span>"
 			return //Robots can't interact with storage items.
