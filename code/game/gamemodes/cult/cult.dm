@@ -41,8 +41,7 @@
 
 	var/eldergod = 1 //for the summon god objective
 
-	var/const/acolytes_needed_base = 3 //Minimum acolytes needed for survive objective. Player-scaled later, so pick with caution. Should be starting cultists logically
-	var/acolytes_needed = 3 //Scaled later on, failsafe
+	var/const/acolytes_needed = 5 //for the survive objective
 	var/const/min_cultists_to_start = 3
 	var/const/max_cultists_to_start = 4
 	var/acolytes_survived = 0
@@ -79,7 +78,6 @@
 
 
 /datum/game_mode/cult/post_setup()
-	acolytes_needed = acolytes_needed_base + num_players()/5
 	modePlayer += cult
 	if("sacrifice" in objectives)
 		var/list/possible_targets = get_unconvertables()
