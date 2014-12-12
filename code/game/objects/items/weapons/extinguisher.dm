@@ -46,6 +46,12 @@
 	icon_state = "foam_extinguisher0"
 	item_state = "foam_extinguisher"
 	sprite_name = "foam_extinguisher"
+	flags = FPRINT | USEDELAY | TABLEPASS
+	throwforce = 10
+	w_class = 3.0
+	throw_speed = 2
+	throw_range = 10
+	force = 10.0
 
 /obj/item/weapon/extinguisher/examine()
 	set src in usr
