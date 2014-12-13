@@ -13,11 +13,10 @@
 	explosion_resistance = 5
 	air_properties_vary_with_direction = 1
 	ghost_read=0
+	machine_flags = EMAGGABLE
 
 /obj/machinery/door/window/New()
 	..()
-
-	machine_flags = EMAGGABLE // Why is this here?
 
 	if (src.req_access && src.req_access.len)
 		src.icon_state = "[src.icon_state]"
