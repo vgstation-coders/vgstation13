@@ -159,100 +159,84 @@ var/global/list/organ_damage_overlays = list(
 			domutcheck(src,null,MUTCHK_FORCED)
 			update_mutations()
 			check_mutations=0
-
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-			src << "Successfully checked mutations."
 			last_processed = "Check Mutations"
 
 		//Updates the number of stored chemicals for powers
 		handle_changeling()
 
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-			src << "Successfully handled changeling datum"
 			last_processed = "Handle Ling"
 
 		//Mutations and radiation
 		handle_mutations_and_radiation()
 
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-			src << "Successfully handled mutations and radiation"
 			last_processed = "Handle Mut and Rads"
 
 		//Chemicals in the body
 		handle_chemicals_in_body()
 
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-			src << "Successfully handled internal chemicals"
 			last_processed = "Handle Chems"
 
 		//Disabilities
 		handle_disabilities()
 
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-			src << "Successfully handled disabilities"
 			last_processed = "Handle disabilities"
 
 		//Organ failure.
 		handle_organs()
 
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-			src << "Successfully handled organs"
 			last_processed = "Handle organs"
 
 		//Random events (vomiting etc)
 		handle_random_events()
 
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-			src << "Successfully handled random events"
 			last_processed = "Handle random events"
 
 		handle_virus_updates()
 
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-			src << "Successfully handled virus updates"
 			last_processed = "Handle Virus"
 
-		//stuff in the stomach
+		//Stuff in the stomach
 		handle_stomach()
 
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-			src << "Successfully handled stomach"
 			last_processed = "Handle stomach"
 
 		handle_shock()
 
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-			src << "Successfully handled shock"
 			last_processed = "Handle shock"
 
 		handle_pain()
 
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-			src << "Successfully handled pain"
 			last_processed = "Handle pain"
 
 		handle_medical_side_effects()
 
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-			src << "Successfully handled medical side effects"
 			last_processed = "Handle side effects"
 
 		handle_equipment()
 
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-			src << "Successfully handled equipment"
 			last_processed = "Handle equip"
 
 	handle_stasis_bag()
 
 	if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-		src << "Successfully handled stasis"
 		last_processed = "Handle stasis"
 
 	if(life_tick > 5 && timeofdeath && (timeofdeath < 5 || world.time - timeofdeath > 6000))	//We are long dead, or we're junk mobs spawned like the clowns on the clown shuttle
 
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-			src << "We have been dead for too long, we stop here."
 			last_processed = "DEAD"
 		cycle = "DEAD"
 		return											//We go ahead and process them 5 times for HUD images and other stuff though.
@@ -261,46 +245,39 @@ var/global/list/organ_damage_overlays = list(
 	handle_environment(environment)
 
 	if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-		src << "Successfully handled enviroment"
 		last_processed = "Handle enviroment"
 
 	//Check if we're on fire
 	handle_fire()
 
 	if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-		src << "Successfully handled fire"
 		last_processed = "Handle fire"
 
 	//Status updates, death etc.
 	handle_regular_status_updates()		//Optimized a bit
 
 	if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-		src << "Successfully handled regular status updates"
 		last_processed = "Handle Regular Status Updates"
 
 	update_canmove()
 
 	if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-		src << "Successfully updated canmove"
 		last_processed = "update canmove"
 
 	//Update our name based on whether our face is obscured/disfigured
 	name = get_visible_name()
 
 	if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-		src << "Successfully got our visible name"
 		last_processed = "get visible name"
 
 	handle_regular_hud_updates()
 
 	if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-		src << "Successfully handled hud update"
 		last_processed = "Handle HUD"
 
 	pulse = handle_pulse()
 
 	if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-		src << "Successfully handled pulse"
 		last_processed = "Handle pulse"
 
 	// Grabbing
@@ -308,14 +285,12 @@ var/global/list/organ_damage_overlays = list(
 		G.process()
 
 	if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-		src << "Successfully handled grabs"
 		last_processed = "Handle grabs"
 
 	if(mind && mind.vampire)
 		handle_vampire()
 
 	if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
-		src << "Successfully handled vampire"
 		last_processed = "Handle vampire"
 	cycle++
 
