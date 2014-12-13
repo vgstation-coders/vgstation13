@@ -1,0 +1,6 @@
+author: Clusterfack
+delete-after: true
+changes:
+- bugfix: Ghosts can no longer activate the unauthorized access message on exofabs.
+- bugfix: Windoors do not open their panel (and turn invisible/break) if you screwdrive them anymore
+- bugfix: Foam extinguishers are now a weapon like regular extinguishers
