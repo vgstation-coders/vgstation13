@@ -1,4 +1,4 @@
-datum/pipeline
+/datum/pipeline
 	var/datum/gas_mixture/air
 
 	var/list/obj/machinery/atmospherics/pipe/members
@@ -19,7 +19,7 @@ datum/pipeline
 		..()
 
 	proc/process()//This use to be called called from the pipe networks
-
+		/* Do not uncomment.  Pipe bursting is just really problematic.
 		//Check to see if pressure is within acceptable limits
 		var/pressure = air.return_pressure()
 		if(pressure > alert_pressure)
@@ -29,6 +29,7 @@ datum/pipeline
 
 		//Allow for reactions
 		//air.react() //Should be handled by pipe_network now
+		*/
 
 	proc/temporarily_store_air()
 		//Update individual gas_mixtures by volume ratio
