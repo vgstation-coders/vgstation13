@@ -60,7 +60,102 @@
 	icon_state = "emag"
 	item_state = "card-id"
 	origin_tech = "magnets=2;syndicate=2"
-	var/uses = 10
+
+	/**
+	 * Number of uses left.  -1 = infinite
+	 * (Note: Some devices can use more than 1 use, so this is just called "energy")
+	 * @since 10-28-2014
+	 */
+	var/energy = -1
+
+	/**
+	 * Max energy per emag.  -1 = infinite
+	 * @since 10-28-2014
+	 */
+	var/max_energy = -1
+
+	/**
+	 * Every X ticks, add [recharge_rate] energy.
+	 * @since 10-28-2014
+	 */
+	var/recharge_ticks = 0
+
+	/**
+	 * Every [recharge_ticks] ticks, add X energy.
+	 * @since 10-28-2014
+	 */
+	var/recharge_rate = 0
+
+	var/nticks=0
+
+/obj/item/weapon/card/emag/New(var/loc, var/disable_tuning=0)
+	..(loc)
+
+	// For standardized subtypes, once they're established.
+	if(disable_tuning)
+		return
+
+	// Tuning tools.
+	//////////////////
+	if(config.emag_energy != -1)
+		max_energy = config.emag_energy
+
+		if(config.emag_starts_charged)
+			energy = max_energy
+
+	if(config.emag_recharge_rate != 0)
+		recharge_rate = config.emag_recharge_rate
+
+	if(config.emag_recharge_ticks > 0)
+		recharge_ticks = config.emag_recharge_ticks
+
+/obj/item/weapon/card/emag/process()
+	if(energy < max_energy)
+		// Specified number of ticks has passed?  Add charge.
+		if(nticks >= recharge_ticks)
+			nticks = 0
+			energy = min(energy + recharge_rate, max_energy)
+		nticks ++
+	else
+		nticks = 0
+		processing_objects.Remove(src)
+
+/obj/item/weapon/card/emag/proc/canUse(var/mob/user, var/obj/machinery/M)
+	// We've already checked for emaggability.  All we do here is check cost.
+
+	// Infinite uses?  Just return true.
+	if(energy < 0)
+		return 1
+
+	var/cost=M.getEmagCost(user,src)
+
+	// Free to emag?  Return true every time.
+	if(cost == 0)
+		return 1
+
+	if(energy >= cost)
+		energy -= cost
+
+		// Start recharging, if we're supposed to.
+		if(energy < max_energy && recharge_rate && recharge_ticks)
+			if(!(src in processing_objects))
+				processing_objects.Add(src)
+
+		return 1
+
+	return 0
+
+/obj/item/weapon/card/emag/examine()
+	..()
+	if(energy==-1)
+		usr << "<span class=\"info\">\The [name] has a tiny fusion generator for power.</span>"
+	else
+		var/class="info"
+		if(energy/max_energy < 0.1 /* 10% energy left */)
+			class="warning"
+		usr << "<span class=\"[class]\">This [name] has [energy]MJ left in its capacitor ([max_energy]MJ capacity).</span>"
+	if(recharge_rate && recharge_ticks)
+		usr << "<span class=\"info\">A small label on a thermocouple notes that it recharges at a rate of [recharge_rate]MJ for every [recharge_ticks<=1?"":"[recharge_ticks] "]oscillator tick[recharge_ticks>1?"s":""].</span>"
 
 /obj/item/weapon/card/id
 	name = "identification card"
@@ -108,6 +203,19 @@
 	if(format)
 		amt = "$[num2septext(amt)]"
 	return amt
+
+/obj/item/weapon/card/id/GetJobName()
+	var/jobName = src.assignment //what the card's job is called
+	var/alt_jobName = src.rank   //what the card's job ACTUALLY IS: determines access, etc.
+
+	if(jobName in get_all_job_icons()) //Check if the job name has a hud icon
+		return jobName
+	if(alt_jobName in get_all_job_icons()) //Check if the base job has a hud icon
+		return alt_jobName
+	if(jobName in get_all_centcom_jobs() || alt_jobName in get_all_centcom_jobs()) //Return with the NT logo if it is a Centcom job
+		return "Centcom"
+	return "Unknown" //Return unknown if none of the above apply
+
 // vgedit: We have different wallets.
 /*
 /obj/item/weapon/card/id/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -226,10 +334,22 @@
 	item_state = "gold_id"
 	registered_name = "Captain"
 	assignment = "Captain"
-	New()
-		var/datum/job/captain/J = new/datum/job/captain
-		access = J.get_access()
-		..()
+
+/obj/item/weapon/card/id/captains_spare/New()
+	var/datum/job/captain/J = new/datum/job/captain
+	access = J.get_access()
+	..()
+
+/obj/item/weapon/card/id/admin
+	name = "Admin ID"
+	icon_state = "admin"
+	item_state = "gold_id"
+	registered_name = "Admin"
+	assignment = "Testing Shit"
+
+/obj/item/weapon/card/id/admin/New()
+	access = get_absolutely_all_accesses()
+	..()
 
 /obj/item/weapon/card/id/centcom
 	name = "\improper CentCom. ID"
@@ -237,9 +357,10 @@
 	icon_state = "centcom"
 	registered_name = "Central Command"
 	assignment = "General"
-	New()
-		access = get_all_centcom_access()
-		..()
+
+/obj/item/weapon/card/id/centcom/New()
+	access = get_all_centcom_access()
+	..()
 
 /obj/item/weapon/card/id/salvage_captain
 	name = "Captain's ID"
@@ -248,15 +369,12 @@
 	desc = "Finders, keepers."
 	access = list(access_salvage_captain)
 
-
-
 /obj/item/weapon/card/id/medical
 	name = "Medical ID"
 	registered_name = "Medic"
 	icon_state = "medical"
 	desc = "A card covered in the blood stains of the wild ride."
 	access = list(access_medical, access_genetics, access_morgue, access_chemistry, access_paramedic, access_virology, access_surgery, access_cmo)
-
 
 /obj/item/weapon/card/id/security
 	name = "Security ID"
@@ -277,8 +395,7 @@
 	registered_name = "Cargonian"
 	icon_state = "cargo"
 	desc = "ROH ROH! HEIL THE QUARTERMASTER!"
-	access = list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm)
-
+	access = list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm, access_taxi)
 
 /obj/item/weapon/card/id/engineering
 	name = "Engineering ID"
@@ -322,10 +439,23 @@
 	desc = "Even looking at the card strikes you with deep fear."
 	access = list(access_clown, access_theatre, access_maint_tunnels)
 
-
 /obj/item/weapon/card/id/mime
 	name = "Black and White ID"
 	registered_name = "..."
 	icon_state = "mime"
 	desc = "..."
 	access = list(access_clown, access_theatre, access_maint_tunnels)
+
+/obj/item/weapon/card/id/thunderdome/red
+	name = "Thunderdome Red ID"
+	registered_name = "Red Team Fighter"
+	assignment = "Red Team Fighter"
+	icon_state = "TDred"
+	desc = "This ID card is given to those who fought inside the thunderdome for the Red Team. Not many have lived to see one of those, even fewer lived to keep it."
+
+/obj/item/weapon/card/id/thunderdome/green
+	name = "Thunderdome Green ID"
+	registered_name = "Green Team Fighter"
+	assignment = "Green Team Fighter"
+	icon_state = "TDgreen"
+	desc = "This ID card is given to those who fought inside the thunderdome for the Green Team. Not many have lived to see one of those, even fewer lived to keep it."

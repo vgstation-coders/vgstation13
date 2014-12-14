@@ -3,29 +3,31 @@
 	desc = "Used to separate things with different weight. Spin 'em round, round, right round."
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "centrifuge"
+	circuit = "/obj/item/weapon/circuitboard/centrifuge"
 	var/curing
 	var/isolating
 
 	var/obj/item/weapon/reagent_containers/glass/beaker/vial/sample = null
 	var/datum/disease2/disease/virus2 = null
 
-/obj/machinery/computer/centrifuge/attackby(var/obj/I as obj, var/mob/user as mob)
-	if(istype(I, /obj/item/weapon/screwdriver))
-		return ..(I,user)
+	l_color = "#000000"
 
-	if(istype(I,/obj/item/weapon/reagent_containers/glass/beaker/vial))
-		var/mob/living/carbon/C = user
-		if(!sample)
-			sample = I
-			C.drop_item()
-			I.loc = src
+/obj/machinery/computer/centrifuge/attackby(var/obj/item/weapon/reagent_containers/glass/beaker/vial/I, var/mob/user as mob)
+	if(!istype(I))
+		return ..()
 
-	src.attack_hand(user)
-	return
+	var/mob/living/carbon/C = user
+	if(!sample)
+		sample = I
+		C.drop_item()
+		I.loc = src
+
+	attack_hand(user)
 
 /obj/machinery/computer/centrifuge/update_icon()
 	..()
 	if(! (stat & (BROKEN|NOPOWER)) && (isolating || curing))
+		l_color = "#7BF9FF"
 		icon_state = "centrifuge_moving"
 
 /obj/machinery/computer/centrifuge/attack_hand(var/mob/user as mob)

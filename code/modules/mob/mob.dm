@@ -1,6 +1,8 @@
 /mob/recycle(var/datum/materials)
 	return RECYK_BIOLOGICAL
 
+/mob/burnFireFuel(var/used_fuel_ratio,var/used_reactants_ratio)
+
 /mob/Destroy() // This makes sure that mobs with clients/keys are not just deleted from the game.
 	unset_machine()
 	mob_list.Remove(src)
@@ -8,6 +10,9 @@
 	living_mob_list.Remove(src)
 	ghostize()
 	..()
+
+/mob/proc/cultify()
+	return
 
 /mob/New()
 	. = ..()
@@ -18,8 +23,26 @@
 	else
 		living_mob_list += src
 
+	store_position()
+
+/mob/proc/store_position()
+	origin_x = x
+	origin_y = y
+	origin_z = z
+
+/mob/proc/send_back()
+	x = origin_x
+	y = origin_y
+	z = origin_z
+
 /mob/proc/generate_name()
 	return name
+
+/**
+ * Player panel controls for this mob.
+ */
+/mob/proc/player_panel_controls(var/mob/user)
+	return ""
 
 /mob/proc/Cell()
 	set category = "Admin"
@@ -29,18 +52,18 @@
 
 	var/datum/gas_mixture/environment = loc.return_air()
 
-	var/t = "\blue Coordinates: [x],[y] \n"
+	var/t = "<span class='notice'> Coordinates: [x],[y] \n</span>"
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\mob.dm:25: t+= "\red Temperature: [environment.temperature] \n"
-	t += {"\red Temperature: [environment.temperature] \n
-\blue Nitrogen: [environment.nitrogen] \n
-\blue Oxygen: [environment.oxygen] \n
-\blue Plasma : [environment.toxins] \n
-\blue Carbon Dioxide: [environment.carbon_dioxide] \n"}
+	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\mob.dm:25: t+= "<span class='warning'> Temperature: [environment.temperature] \n"
+	t += {"<span class='warning'> Temperature: [environment.temperature] \n</span>
+<span class='notice'> Nitrogen: [environment.nitrogen] \n</span>
+<span class='notice'> Oxygen: [environment.oxygen] \n</span>
+<span class='notice'> Plasma : [environment.toxins] \n</span>
+<span class='notice'> Carbon Dioxide: [environment.carbon_dioxide] \n</span>"}
 	// END AUTOFIX
 	for(var/datum/gas/trace_gas in environment.trace_gases)
-		usr << "\blue [trace_gas.type]: [trace_gas.moles] \n"
+		usr << "<span class='notice'> [trace_gas.type]: [trace_gas.moles] \n</span>"
 
 	usr.show_message(t, 1)
 
@@ -106,6 +129,32 @@
 /mob/proc/Life()
 	return
 
+/mob/proc/see_narsie(var/obj/machinery/singularity/narsie/large/N)
+	if(N.chained)
+		if(narsimage)
+			del(narsimage)
+			del(narglow)
+		return
+	if((N.z == src.z)&&(get_dist(N,src) <= (N.consume_range+10)))
+		if(!narsimage)
+			narsimage = image('icons/obj/narsie.dmi',src.loc,"narsie",9,1)
+		narsimage.pixel_x = 32 * (N.x - src.x) + N.pixel_x
+		narsimage.pixel_y = 32 * (N.y - src.y) + N.pixel_y
+		narsimage.loc = src.loc
+		narsimage.mouse_opacity = 0
+		if(!narglow)
+			narglow = image('icons/obj/narsie.dmi',narsimage.loc,"glow-narsie",LIGHTING_LAYER+2,1)
+		narglow.pixel_x = narsimage.pixel_x
+		narglow.pixel_y = narsimage.pixel_y
+		narglow.loc = narsimage.loc
+		narglow.mouse_opacity = 0
+		src << narsimage
+		src << narglow
+	else
+		if(narsimage)
+			del(narsimage)
+			del(narglow)
+
 /mob/proc/get_item_by_slot(slot_id)
 	switch(slot_id)
 		if(slot_l_hand)
@@ -152,7 +201,7 @@
 						W.loc=get_turf(src) // I think.
 					else
 						if(!disable_warning)
-							src << "\red You are unable to equip that." //Only print if act_on_fail is NOTHING
+							src << "<span class='warning'> You are unable to equip that.</span>" //Only print if act_on_fail is NOTHING
 				return 0
 			if(1)
 				equip_to_slot(W, slot, redraw_mob)
@@ -387,7 +436,7 @@
 					W.loc=get_turf(src) // I think.
 				else
 					if(!disable_warning)
-						src << "\red You are unable to equip that." //Only print if act_on_fail is NOTHING
+						src << "<span class='warning'> You are unable to equip that.</span>" //Only print if act_on_fail is NOTHING
 			return 0
 
 		equip_to_slot(W, slot, redraw_mob) //This proc should not ever fail.
@@ -523,7 +572,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_belt)
 				if(!H.w_uniform)
 					if(!disable_warning)
-						H << "\red You need a jumpsuit before you can attach this [name]."
+						H << "<span class='warning'> You need a jumpsuit before you can attach this [name].</span>"
 					return 0
 				if( !(slot_flags & SLOT_BELT) )
 					return 0
@@ -574,7 +623,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_wear_id)
 				if(!H.w_uniform)
 					if(!disable_warning)
-						H << "\red You need a jumpsuit before you can attach this [name]."
+						H << "<span class='warning'> You need a jumpsuit before you can attach this [name].</span>"
 					return 0
 				if( !(slot_flags & SLOT_ID) )
 					return 0
@@ -589,7 +638,7 @@ var/list/slot_equipment_priority = list( \
 					return 0
 				if(!H.w_uniform)
 					if(!disable_warning)
-						H << "\red You need a jumpsuit before you can attach this [name]."
+						H << "<span class='warning'> You need a jumpsuit before you can attach this [name].</span>"
 					return 0
 				if(slot_flags & SLOT_DENYPOCKET)
 					return
@@ -600,7 +649,7 @@ var/list/slot_equipment_priority = list( \
 					return 0
 				if(!H.w_uniform)
 					if(!disable_warning)
-						H << "\red You need a jumpsuit before you can attach this [name]."
+						H << "<span class='warning'> You need a jumpsuit before you can attach this [name].</span>"
 					return 0
 				if(slot_flags & SLOT_DENYPOCKET)
 					return 0
@@ -610,7 +659,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_s_store)
 				if(!H.wear_suit)
 					if(!disable_warning)
-						H << "\red You need a suit before you can attach this [name]."
+						H << "<span class='warning'> You need a suit before you can attach this [name].</span>"
 					return 0
 				if(!H.wear_suit.allowed)
 					if(!disable_warning)
@@ -715,6 +764,38 @@ var/list/slot_equipment_priority = list( \
 				return L.container
 	return
 
+/mob/verb/pointed(atom/A as turf | obj | mob in view())
+	set name = "Point To"
+	set category = "Object"
+
+	if(!src || !isturf(src.loc))
+		return
+
+	if(src.stat != CONSCIOUS || src.restrained())
+		return
+
+	if(src.status_flags & FAKEDEATH)
+		return
+
+	if(!(A in view(src.loc)))
+		return
+
+	if(istype(A, /obj/effect/decal/point))
+		return
+
+	var/tile = get_turf(A)
+
+	if(isnull(tile))
+		return
+
+	var/obj/point = new/obj/effect/decal/point(tile)
+
+	spawn(20)
+		if(point)
+			qdel(point)
+
+	usr.visible_message("<b>[src]</b> points to [A]")
+
 /mob/verb/mode()
 	set name = "Activate Held Object"
 	set category = "IC"
@@ -802,7 +883,7 @@ var/list/slot_equipment_priority = list( \
 	if(flavor_text)
 		var/msg = replacetext(flavor_text, "\n", "<br />")
 
-		if(lentext(msg) <= 32)
+		if(length(msg) <= 32)
 			return "<font color='#ffa000'><b>[msg]</b></font>"
 		else
 			return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=\ref[src];flavor_text=more'>More</a></b></font>"
@@ -819,20 +900,20 @@ var/list/slot_equipment_priority = list( \
 	set category = "OOC"
 
 	if (!( abandon_allowed ))
-		usr << "\blue Respawn is disabled."
+		usr << "<span class='notice'> Respawn is disabled.</span>"
 		return
 	if ((stat != 2 || !( ticker )))
-		usr << "\blue <B>You must be dead to use this!</B>"
+		usr << "<span class='notice'> <B>You must be dead to use this!</B></span>"
 		return
 	if (ticker.mode.name == "meteor" || ticker.mode.name == "epidemic") //BS12 EDIT
-		usr << "\blue Respawn is disabled."
+		usr << "<span class='notice'> Respawn is disabled.</span>"
 		return
 	else
 		var/deathtime = world.time - src.timeofdeath
 		if(istype(src,/mob/dead/observer))
 			var/mob/dead/observer/G = src
 			if(G.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
-				usr << "\blue <B>Upon using the antagHUD you forfeighted the ability to join the round.</B>"
+				usr << "<span class='notice'> <B>Upon using the antagHUD you forfeighted the ability to join the round.</B></span>"
 				return
 		var/deathtimeminutes = round(deathtime / 600)
 		var/pluralcheck = "minute"
@@ -852,7 +933,7 @@ var/list/slot_equipment_priority = list( \
 
 	log_game("[usr.name]/[usr.key] used abandon mob.")
 
-	usr << "\blue <B>Make sure to play a different character, and please roleplay correctly!</B>"
+	usr << "<span class='notice'> <B>Make sure to play a different character, and please roleplay correctly!</B></span>"
 
 	if(!client)
 		log_game("[usr.key] AM failed due to disconnect.")
@@ -910,7 +991,7 @@ var/list/slot_equipment_priority = list( \
 	if(client.holder && (client.holder.rights & R_ADMIN))
 		is_admin = 1
 	else if(stat != DEAD || istype(src, /mob/new_player))
-		usr << "\blue You must be observing to use this!"
+		usr << "<span class='notice'> You must be observing to use this!</span>"
 		return
 
 	if(is_admin && stat == DEAD)
@@ -954,7 +1035,7 @@ var/list/slot_equipment_priority = list( \
 			creatures[name] = O
 
 
-	for(var/mob/M in sortAtom(mob_list))
+	for(var/mob/M in sortNames(mob_list))
 		var/name = M.name
 		if (names.Find(name))
 			namecounts[name]++
@@ -1062,10 +1143,14 @@ var/list/slot_equipment_priority = list( \
 	src.pulling = AM
 	AM.pulledby = src
 
-	if(ishuman(AM))
-		var/mob/living/carbon/human/H = AM
-		if(H.pull_damage())
-			src << "\red <B>Pulling \the [H] in their current condition would probably be a bad idea.</B>"
+	if(ismob(AM))
+		M.attack_log += text("\[[time_stamp()]\] <span class='warning'>Has been pulled by [src.name] ([src.ckey])</span>")
+		src.attack_log += text("\[[time_stamp()]\] <span class='warning'>Pulled [M.name] ([M.ckey])</span>")
+
+		if(ishuman(AM))
+			var/mob/living/carbon/human/H = AM
+			if(H.pull_damage())
+				src << "<span class='warning'> <B>Pulling \the [H] in their current condition would probably be a bad idea.</B></span>"
 
 	//Attempted fix for people flying away through space when cuffed and dragged.
 	if(ismob(AM))
@@ -1146,7 +1231,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 	var/old_x = pixel_x
 	var/old_y = pixel_y
 	is_jittery = 1
-	while(jitteriness > 100)
+	while((jitteriness > 100) && !(flags & INVULNERABLE))
 //		var/amplitude = jitteriness*(sin(jitteriness * 0.044 * world.time) + 1) / 70
 //		pixel_x = amplitude * sin(0.008 * jitteriness * world.time)
 //		pixel_y = amplitude * cos(0.008 * jitteriness * world.time)
@@ -1238,6 +1323,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 		else
 			lying = 1
 	else if( stat || weakened || paralysis || resting || sleeping || (status_flags & FAKEDEATH))
+		stop_pulling()
 		lying = 1
 		canmove = 0
 	else if( stunned )
@@ -1252,13 +1338,15 @@ note dizziness decrements automatically in the mob's Life() proc.
 		canmove = has_limbs
 
 	if(lying)
-		layer = 3.9
+		if(ishuman(src))
+			layer = 3.9
 		density = 0
 		drop_l_hand()
 		drop_r_hand()
 	else
+		if(ishuman(src))
+			layer = 4
 		density = 1
-		layer = 4
 
 	//Temporarily moved here from the various life() procs
 	//I'm fixing stuff incrementally so this will likely find a better home.
@@ -1276,6 +1364,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 	set hidden = 1
 	if(!canface())	return 0
 	dir = EAST
+	Facing()
 	client.move_delay += movement_delay()
 	return 1
 
@@ -1284,6 +1373,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 	set hidden = 1
 	if(!canface())	return 0
 	dir = WEST
+	Facing()
 	client.move_delay += movement_delay()
 	return 1
 
@@ -1292,6 +1382,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 	set hidden = 1
 	if(!canface())	return 0
 	dir = NORTH
+	Facing()
 	client.move_delay += movement_delay()
 	return 1
 
@@ -1300,8 +1391,17 @@ note dizziness decrements automatically in the mob's Life() proc.
 	set hidden = 1
 	if(!canface())	return 0
 	dir = SOUTH
+	Facing()
 	client.move_delay += movement_delay()
 	return 1
+
+
+/mob/proc/Facing()
+    var/datum/listener
+    for(. in src.callOnFace)
+        listener = locate(.)
+        if(listener) call(listener,src.callOnFace[.])(src)
+        else src.callOnFace -= .
 
 
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
@@ -1386,7 +1486,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 /mob/proc/flash_weak_pain()
 	flick("weak_pain",pain)
 
-mob/verb/yank_out_object()
+mob/proc/yank_out_object()
 	set category = "Object"
 	set name = "Yank out object"
 	set desc = "Remove an embedded item at the cost of bleeding and pain."
@@ -1426,7 +1526,7 @@ mob/verb/yank_out_object()
 	var/obj/item/weapon/selection = input("What do you want to yank out?", "Embedded objects") in valid_objects
 
 	if(self)
-		src << "<span class='warning'>You attempt to get a good grip on the [selection] in your body.</span>"
+		src << "<span class='warning'>You attempt to get a good grip on the [selection] in your body.</span></span>"
 	else
 		U << "<span class='warning'>You attempt to get a good grip on the [selection] in [S]'s body.</span>"
 
@@ -1455,4 +1555,7 @@ mob/verb/yank_out_object()
 
 // Skip over all the complex list checks.
 /mob/proc/hasFullAccess()
+	return 0
+
+mob/proc/assess_threat()
 	return 0

@@ -13,8 +13,14 @@
 	var/brute_dam_coeff = 1.0
 	var/open = 0//Maint panel
 	var/locked = 1
+	var/bot_type
+	var/declare_message = "" //What the bot will display to the HUD user.
+	#define SEC_BOT 1 // Secutritrons (Beepsky) and ED-209s
+	#define MULE_BOT 2 // MULEbots
+	#define FLOOR_BOT 3 // Floorbots
+	#define CLEAN_BOT 4 // Cleanbots
+	#define MED_BOT 5 // Medibots
 	//var/emagged = 0 //Urist: Moving that var to the general /bot tree as it's used by most bots
-
 
 /obj/machinery/bot/proc/turn_on()
 	if(stat)	return 0
@@ -52,6 +58,8 @@
 	return
 
 /obj/machinery/bot/attack_alien(var/mob/living/carbon/alien/user as mob)
+	if(flags & INVULNERABLE)
+		return
 	src.health -= rand(15,30)*brute_dam_coeff
 	src.visible_message("\red <B>[user] has slashed [src]!</B>")
 	playsound(get_turf(src), 'sound/weapons/slice.ogg', 25, 1, -1)
@@ -61,6 +69,8 @@
 
 
 /obj/machinery/bot/attack_animal(var/mob/living/simple_animal/M as mob)
+	if(flags & INVULNERABLE)
+		return
 	if(M.melee_damage_upper == 0)	return
 	src.health -= M.melee_damage_upper
 	src.visible_message("\red <B>[M] has [M.attacktext] [src]!</B>")
@@ -69,10 +79,23 @@
 		new /obj/effect/decal/cleanable/blood/oil(src.loc)
 	healthcheck()
 
-
+/obj/machinery/bot/proc/declare() //Signals a medical or security HUD user to a relevant bot's activity.
+	var/hud_user_list = list() //Determines which userlist to use.
+	switch(bot_type) //Made into a switch so more HUDs can be added easily.
+		if(SEC_BOT) //Securitrons and ED-209
+			hud_user_list = sec_hud_users
+		if(MED_BOT) //Medibots
+			hud_user_list = med_hud_users
+	var/area/myturf = get_turf(src)
+	for(var/mob/huduser in hud_user_list)
+		var/turf/mobturf = get_turf(huduser)
+		if(mobturf.z == myturf.z)
+			huduser.show_message(declare_message,1)
 
 
 /obj/machinery/bot/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(flags & INVULNERABLE)
+		return
 	if(istype(W, /obj/item/weapon/screwdriver))
 		if(!locked)
 			open = !open
@@ -101,20 +124,28 @@
 			..()
 
 /obj/machinery/bot/bullet_act(var/obj/item/projectile/Proj)
+	if(flags & INVULNERABLE)
+		return
 	health -= Proj.damage
 	..()
 	healthcheck()
 
 /obj/machinery/bot/meteorhit()
+	if(flags & INVULNERABLE)
+		return
 	src.explode()
 	return
 
 /obj/machinery/bot/blob_act()
+	if(flags & INVULNERABLE)
+		return
 	src.health -= rand(20,40)*fire_dam_coeff
 	healthcheck()
 	return
 
 /obj/machinery/bot/ex_act(severity)
+	if(flags & INVULNERABLE)
+		return
 	switch(severity)
 		if(1.0)
 			src.explode()
@@ -133,6 +164,8 @@
 	return
 
 /obj/machinery/bot/emp_act(severity)
+	if(flags & INVULNERABLE)
+		return
 	var/was_on = on
 	stat |= EMPED
 	var/obj/effect/overlay/pulse2 = new/obj/effect/overlay ( src.loc )
@@ -143,7 +176,7 @@
 	pulse2.dir = pick(cardinal)
 
 	spawn(10)
-		pulse2.delete()
+		qdel(pulse2)
 	if (on)
 		turn_off()
 	spawn(severity*300)
@@ -222,3 +255,10 @@
 			//if((dir & EAST ) && (D.dir & (NORTH|SOUTH)))	return !D.check_access(ID)
 		else return !D.check_access(ID)	// it's a real, air blocking door
 	return 0
+
+
+/obj/machinery/bot/cultify()
+	if(src.flags & INVULNERABLE)
+		return
+	else
+		qdel(src)

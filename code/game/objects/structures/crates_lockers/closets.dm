@@ -23,6 +23,7 @@
 	m_amt = 2*CC_PER_SHEET_METAL
 	w_type = RECYK_METAL
 
+
 /obj/structure/closet/initialize()
 	..()
 	if(!opened)		// if closed, any item at the crate's loc is put in the contents
@@ -36,7 +37,7 @@
 /obj/structure/closet/alter_health()
 	return get_turf(src)
 
-/obj/structure/closet/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/closet/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0 || wall_mounted)) return 1
 	return (!density)
 
@@ -52,6 +53,14 @@
 	return 1
 
 /obj/structure/closet/proc/dump_contents()
+	if(usr)
+		var/mob/living/L = usr
+		var/obj/machinery/power/supermatter/SM = locate() in contents
+		if(istype(SM))
+			message_admins("[L.name] ([L.ckey]) opened \the [src] that contained supermatter (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[L.x];Y=[L.y];Z=[L.z]'>JMP</a>)")
+			log_game("[L.name] ([L.ckey]) opened \the [src] that contained supermatter (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[L.x];Y=[L.y];Z=[L.z]'>JMP</a>)")
+
+
 	//Cham Projector Exception
 	for(var/obj/effect/dummy/chameleon/AD in src)
 		AD.loc = src.loc
@@ -194,6 +203,27 @@
 		del(src)
 
 	return
+
+/obj/structure/closet/beam_connect(var/obj/effect/beam/B)
+	if(!processing_objects.Find(src))
+		processing_objects.Add(src)
+		testing("Connected [src] with [B]!")
+	return ..()
+
+/obj/structure/closet/beam_disconnect(var/obj/effect/beam/B)
+	..()
+	if(beams.len==0)
+		// I hope to christ this doesn't break shit.
+		processing_objects.Remove(src)
+
+/obj/structure/closet/process()
+	//..()
+	for(var/obj/effect/beam/B in beams)
+		health -= B.get_damage()
+
+	if(health <= 0)
+		dump_contents()
+		del(src)
 
 // This is broken, see attack_ai.
 /obj/structure/closet/attack_robot(mob/living/silicon/robot/user as mob)

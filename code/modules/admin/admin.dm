@@ -95,6 +95,9 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A>
 	"}
 
+	// Mob-specific controls.
+	body += M.player_panel_controls(usr)
+
 	if (M.client)
 		if(!istype(M, /mob/new_player))
 
@@ -194,8 +197,8 @@ var/global/floorIsLava = 0
 			<b>Other actions:</b>
 			<br>
 			<A href='?src=\ref[src];forcespeech=\ref[M]'>Forcesay</A> |
-			<A href='?src=\ref[src];tdome1=\ref[M]'>Thunderdome 1</A> |
-			<A href='?src=\ref[src];tdome2=\ref[M]'>Thunderdome 2</A> |
+			<A href='?src=\ref[src];tdome1=\ref[M]'>Thunderdome Green</A> |
+			<A href='?src=\ref[src];tdome2=\ref[M]'>Thunderdome Red</A> |
 			<A href='?src=\ref[src];tdomeadmin=\ref[M]'>Thunderdome Admin</A> |
 			<A href='?src=\ref[src];tdomeobserve=\ref[M]'>Thunderdome Observer</A> |
 		"}
@@ -623,12 +626,10 @@ var/global/floorIsLava = 0
 		<hr />
 		<ul>
 			<li>
-				<b>Default Cyborg/AI Laws:</b>
-				<a href="?src=\ref[src];set_base_laws=ai">[base_law_type]</a>
+				<a href="?src=\ref[src];set_base_laws=ai"><b>Default Cyborg/AI Laws:</b>[base_law_type]</a>
 			</li>
 			<li>
-				<b>Default MoMMI Laws:</b>
-				<a href="?src=\ref[src];set_base_laws=mommi">[mommi_base_law_type]</a>
+				<a href="?src=\ref[src];set_base_laws=mommi"><b>Default MoMMI Laws:</b>[mommi_base_law_type]</a>
 			</li>
 		</ul>
 		<hr />
@@ -641,13 +642,28 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];vsc=default'>Choose a default ZAS setting</A><br>
 		"}
 
-	usr << browse(dat, "window=admin2;size=210x280")
+	usr << browse(dat, "window=admin2;size=280x370")
 	return
 
 /datum/admins/proc/Secrets()
 	if(!check_rights(0))	return
 
 	var/dat = "<B>The first rule of adminbuse is: you don't talk about the adminbuse.</B><HR>"
+
+	if(check_rights(R_FUN,0) || check_rights(R_ADMINBUS,0))
+		dat += {"
+			<B>Fourth-Wall Demolition</B><BR>
+			<BR>
+			"}
+	if(check_rights(R_ADMINBUS,0))
+		dat += {"
+			<A href='?src=\ref[src];secretsfun=spawnadminbus'>Spawn an Adminbus</A><BR>
+			"}
+	if(check_rights(R_FUN,0))
+		dat += {"
+			<A href='?src=\ref[src];secretsfun=spawnselfdummy'>Spawn yourself as a Test Dummy</A><BR>
+			<BR>
+			"}
 
 	if(check_rights(R_ADMIN,0))
 		dat += {"
@@ -689,6 +705,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
 			<A href='?src=\ref[src];secretsfun=spacevines'>Spawn Space-Vines</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
+			<A href='?src=\ref[src];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
 			<BR>
 			<B>Fun Secrets</B><BR>
 			<BR>
@@ -718,10 +735,22 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=floorlava'>The floor is lava! (DANGEROUS: extremely lame)</A><BR>
+			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
+			<BR>
+			<B>Final Soloutions</B><BR>
+			<I>(Warning, these will end the round!)</I><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsfun=hellonearth'>Summon Nar-Sie</A><BR>
+			<A href='?src=\ref[src];secretsfun=supermattercascade'>Start a Supermatter Cascade</A><BR>
 			"}
 
 	if(check_rights(R_SERVER,0))
-		dat += "<A href='?src=\ref[src];secretsfun=togglebombcap'>Toggle bomb cap</A><BR>"
+
+		dat += {"
+			<BR>
+			<B>Server</B><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsfun=togglebombcap'>Toggle bomb cap</A><BR>"}
 
 	dat += "<BR>"
 
@@ -732,6 +761,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretscoder=maint_access_engiebrig'>Change all maintenance doors to engie/brig access only</A><BR>
 			<A href='?src=\ref[src];secretscoder=maint_access_brig'>Change all maintenance doors to brig access only</A><BR>
 			<A href='?src=\ref[src];secretscoder=infinite_sec'>Remove cap on security officers</A><BR>
+			<a href='?src=\ref[src];secretscoder=virus_custom'>Custom Virus Outbreak</a><BR>
 			<BR>
 			<B>Coder Secrets</B><BR>
 			<BR>
@@ -767,6 +797,8 @@ var/global/floorIsLava = 0
 
 		if(blackbox)
 			blackbox.save_all_data_to_sql()
+
+		CallHook("Reboot",list())
 
 		if (watchdog.waiting)
 			world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
@@ -959,6 +991,8 @@ var/global/floorIsLava = 0
 	if(blackbox)
 		blackbox.save_all_data_to_sql()
 
+	CallHook("Reboot",list())
+
 	if (watchdog.waiting)
 		world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
 		watchdog.signal_ready()
@@ -1009,6 +1043,10 @@ var/global/floorIsLava = 0
 		return 1
 	if(M.mind in ticker.mode.changelings)
 		if (ticker.mode.config_tag == "changeling")
+			return 2
+		return 1
+	if(M.mind in ticker.mode.borers)
+		if (ticker.mode.config_tag == "borer")
 			return 2
 		return 1
 

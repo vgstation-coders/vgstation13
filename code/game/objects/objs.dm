@@ -5,8 +5,9 @@
 	var/unacidable = 0 //universal "unacidabliness" var, here so you can use it in any obj.
 	animate_movement = 2
 	var/throwforce = 1
-	var/list/attack_verb //Used in attackby() to say how something was attacked "[x] has been [z.attack_verb] by [y] with [z]"
+
 	var/sharp = 0 // whether this object cuts
+	var/edge = 0
 	var/in_use = 0 // If we have a user using us, this will be set on. We will check if the user has stopped using us, and thus stop updating and LAGGING EVERYTHING!
 
 	var/damtype = "brute"
@@ -14,28 +15,24 @@
 
 	// What reagents should be logged when transferred TO this object?
 	// Reagent ID => friendly name
-	var/global/list/reagents_to_log = list(
-		"fuel"  =  "welder fuel",
-		"plasma"=  "plasma",
-		"pacid" =  "polytrinic acid",
-		"sacid" =  "sulphuric acid"
+	var/global/list/reagents_to_log = list( \
+		"fuel"  =  "welder fuel", \
+		"plasma"=  "plasma", \
+		"pacid" =  "polytrinic acid", \
+		"sacid" =  "sulphuric acid" \
 	)
 
 	var/list/mob/_using // All mobs dicking with us.
 
+	// Shit for mechanics. (MECH_*)
+	var/mech_flags=0
+
 /obj/Destroy()
-	if(_using)
-		for(var/mob/mob in _using)
-			mob.unset_machine()
+	for(var/mob/user in _using)
+		user.unset_machine()
 
 	if(src in processing_objects)
 		processing_objects -= src
-
-	if(attack_verb)
-		for(var/text in attack_verb)
-			attack_verb -= text
-
-		attack_verb = null
 
 	..()
 
@@ -47,6 +44,12 @@
 	rec.addAmount("iron",src.m_amt/CC_PER_SHEET_METAL)
 	rec.addAmount("glass",src.g_amt/CC_PER_SHEET_GLASS)
 	return w_type
+
+/obj/melt()
+	var/obj/effect/decal/slag/slag=locate(/obj/effect/decal/slag) in get_turf(src)
+	if(!slag)
+		slag = new(get_turf(src))
+	slag.slaggify(src)
 
 /obj/proc/process()
 	processing_objects.Remove(src)
@@ -117,7 +120,7 @@
 	if(in_use)
 		var/list/nearby = viewers(1, src)
 		var/is_in_use = 0
-		for(var/mob/M in _using.Copy()) // Only check things actually messing with us.
+		for(var/mob/M in _using) // Only check things actually messing with us.
 			// Not actually using the fucking thing?
 			if (!M || !M.client || M.machine != src)
 				_using.Remove(M)

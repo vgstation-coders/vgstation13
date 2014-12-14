@@ -32,7 +32,7 @@
 
 	update_icon()
 		if(health <= 0)
-			playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
+			playsound(get_turf(src), 'sound/effects/blobkill.ogg', 50, 1)
 			Delete()
 			return
 		return
@@ -74,7 +74,7 @@
 		var/list/candidates = list()
 
 		if(!new_overmind)
-			candidates = get_candidates(BE_ALIEN)
+			candidates = get_candidates(ROLE_BLOB)
 			if(candidates.len)
 				C = pick(candidates)
 		else

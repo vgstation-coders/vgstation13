@@ -63,12 +63,41 @@
 	handle_rotation()
 	return
 
+
 /obj/structure/stool/bed/chair/MouseDrop_T(mob/M as mob, mob/user as mob)
 	if(!istype(M)) return
-	buckle_mob(M, user)
+	var/mob/living/carbon/human/target = null
+	if(ishuman(M))
+		target = M
+	if((target) && (target.op_stage.butt == 4)) //Butt surgery is at stage 4
+		if(!M.weakened)	//Spam prevention
+			if(M == usr)
+				M.visible_message(\
+					"\blue [M.name] has no butt, and slides right out of [src]!",\
+					"Having no butt, you slide right out of the [src]",\
+					"You hear metal clanking")
+
+			else
+				M.visible_message(\
+					"\blue [M.name] has no butt, and slides right out of [src]!",\
+					"Having no butt, you slide right out of the [src]",\
+					"You hear metal clanking")
+
+			M.Weaken(5)
+		else
+			user << "You can't buckle [M.name] to [src], They just fell out!"
+
+	else
+		buckle_mob(M, user)
+
 	return
 
 // Chair types
+/obj/structure/stool/bed/chair/wood
+	autoignition_temperature = AUTOIGNITION_WOOD
+	fire_fuel = 3
+	// TODO:  Special ash subtype that looks like charred chair legs
+
 /obj/structure/stool/bed/chair/wood/normal
 	icon_state = "wooden_chair"
 	name = "wooden chair"
@@ -78,6 +107,9 @@
 	icon_state = "wooden_chair_wings"
 	name = "wooden chair"
 	desc = "Old is never too old to not be in fashion."
+
+/obj/structure/stool/bed/chair/wood/wings/cultify()
+	return
 
 /obj/structure/stool/bed/chair/wood/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/wrench))
@@ -132,5 +164,27 @@
 /obj/structure/stool/bed/chair/office/light
 	icon_state = "officechair_white"
 
+/obj/structure/stool/bed/chair/office/light/New()
+	..()
+	overlays += image(icon,"officechair_white-overlay",FLY_LAYER)
+
 /obj/structure/stool/bed/chair/office/dark
 	icon_state = "officechair_dark"
+
+/obj/structure/stool/bed/chair/office/dark/New()
+	..()
+	overlays += image(icon,"officechair_dark-overlay",FLY_LAYER)
+
+/obj/structure/stool/bed/chair/office/handle_rotation()
+	layer = OBJ_LAYER
+
+	if(buckled_mob)
+		if(buckled_mob.loc != src.loc)
+			buckled_mob.buckled = null //Temporary, so Move() succeeds.
+			if(!buckled_mob.Move(loc))
+				unbuckle()
+				buckled_mob = null
+			else
+				buckled_mob.buckled = src //Restoring
+		if(buckled_mob)
+			buckled_mob.dir = dir

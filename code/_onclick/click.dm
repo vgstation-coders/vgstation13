@@ -109,7 +109,7 @@
 			*/
 
 			var/resolved = A.attackby(W,src)
-			if(ismob(A) || istype(A, /obj/mecha) || isturf(A) || istype(W, /obj/item/weapon/grab))
+			if(ismob(A) || istype(A, /obj/mecha) || istype(W, /obj/item/weapon/grab))
 				changeNext_move(10)
 			if(!resolved && A && W)
 				W.afterattack(A,src,1,params) // 1 indicates adjacency
@@ -133,7 +133,7 @@
 					next_move += 5
 				*/
 				// Return 1 in attackby() to prevent afterattack() effects (when safely moving items for example)
-				if(ismob(A) || istype(A, /obj/mecha) || isturf(A) || istype(W, /obj/item/weapon/grab))
+				if(ismob(A) || istype(A, /obj/mecha) || istype(W, /obj/item/weapon/grab))
 					changeNext_move(10)
 				var/resolved = A.attackby(W,src)
 				if(!resolved && A && W)
@@ -242,7 +242,6 @@
 /atom/proc/ShiftClick(var/mob/user)
 	if(user.client && user.client.eye == user)
 		examine()
-		user.face_atom(src)
 	return
 
 /*
@@ -268,6 +267,9 @@
 	return
 
 /atom/proc/AltClick(var/mob/user)
+	if(ishuman(src) && user.Adjacent(src))
+		src:give_item(user)
+		return
 	var/turf/T = get_turf(src)
 	if(T && T.Adjacent(user))
 		if(user.listed_turf == T)
@@ -332,13 +334,9 @@
 	"<span class='warning'>You fire an arc of electricity!</span>", \
 	"You hear the loud crackle of electricity!")
 	var/datum/powernet/PN = cable.get_powernet()
-	var/available = 0
 	var/obj/item/projectile/beam/lightning/L = getFromPool(/obj/item/projectile/beam/lightning, loc)
 	if(PN)
-		available = PN.avail
 		L.damage = PN.get_electrocute_damage()
-		if(available >= 5000000)
-			L.damage = 205
 		if(L.damage >= 200)
 			apply_damage(15, BURN, (hand ? "l_hand" : "r_hand"))
 			//usr:Stun(15)
@@ -346,7 +344,7 @@
 			//if(usr:status_flags & CANSTUN) // stun is usually associated with stutter
 			//	usr:stuttering += 20
 			time = 200
-			src << "<span class='warning'>[G] overload from the massive current shocking you in the process!"
+			src << "<span class='warning'>[G] overloads from the massive current, shocking you in the process!"
 		else if(L.damage >= 100)
 			apply_damage(5, BURN, (hand ? "l_hand" : "r_hand"))
 			//usr:Stun(10)
@@ -354,7 +352,7 @@
 			//if(usr:status_flags & CANSTUN) // stun is usually associated with stutter
 			//	usr:stuttering += 10
 			time = 150
-			src << "<span class='warning'>[G] overload from the massive current shocking you in the process!"
+			src << "<span class='warning'>[G] overloads from the massive current, shocking you in the process!"
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(5, 1, src)
 		s.start()
@@ -378,16 +376,34 @@
 
 	next_move = world.time + 12
 	G.next_shock = world.time + time
+
 // Simple helper to face what you clicked on, in case it should be needed in more than one place
 /mob/proc/face_atom(var/atom/A)
-	if( stat || buckled || !A || !x || !y || !A.x || !A.y ) return
+	if(stat != CONSCIOUS || buckled || !A || !x || !y || !A.x || !A.y )
+		return
+
 	var/dx = A.x - x
 	var/dy = A.y - y
-	if(!dx && !dy) return
+
+	if(!dx && !dy) // Wall items are graphically shifted but on the floor
+		if(A.pixel_y > 16)
+			dir = NORTH
+		else if(A.pixel_y < -16)
+			dir = SOUTH
+		else if(A.pixel_x > 16)
+			dir = EAST
+		else if(A.pixel_x < -16)
+			dir = WEST
+
+		return
 
 	if(abs(dx) < abs(dy))
-		if(dy > 0)	usr.dir = NORTH
-		else		usr.dir = SOUTH
+		if(dy > 0)
+			dir = NORTH
+		else
+			dir = SOUTH
 	else
-		if(dx > 0)	usr.dir = EAST
-		else		usr.dir = WEST
+		if(dx > 0)
+			dir = EAST
+		else
+			dir = WEST

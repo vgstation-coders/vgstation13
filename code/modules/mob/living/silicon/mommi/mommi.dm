@@ -16,11 +16,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	var/picked = 0
 	var/subtype="keeper"
 	var/obj/screen/inv_tool = null
-	var/obj/screen/inv_sight = null
+	//var/obj/screen/inv_sight = null
 
 //one tool and one sightmod can be activated at any one time.
 	var/tool_state = null
 	var/sight_state = null
+	var/head_state = null
 
 	modtype = "robot" // Not sure what this is, but might be cool to have seperate loadouts for MoMMIs (e.g. paintjobs and tools)
 	//Cyborgs will sync their laws with their AI by default, but we may want MoMMIs to be mute independents at some point, kinda like the Keepers in Ass Effect.
@@ -40,8 +41,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 	if(!cell)
 		cell = new /obj/item/weapon/cell(src)
-		cell.maxcharge = 15000
-		cell.charge = 15000
+		cell.maxcharge = 7500
+		cell.charge = 7500
 	..(loc,startup_sound='sound/misc/interference.ogg')
 	module = new /obj/item/weapon/robot_module/mommi(src)
 	laws = new mommi_base_law_type
@@ -76,12 +77,13 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 
 /mob/living/silicon/robot/mommi/choose_icon()
-	var/icontype = input("Select an icon!", "Mobile MMI", null) in list("Basic", "Hover", "Keeper", "RepairBot", "Replicator")
+	var/icontype = input("Select an icon!", "Mobile MMI", null) in list("Basic", "Hover", "Keeper", "RepairBot", "Replicator", "Prime")
 	switch(icontype)
 		if("Replicator") subtype = "replicator"
 		if("Keeper")	 subtype = "keeper"
 		if("RepairBot")	 subtype = "repairbot"
 		if("Hover")	     subtype = "hovermommi"
+		if("Prime")	     subtype = "mommiprime"
 		else			 subtype = "mommi"
 	updateicon()
 	var/answer = input("Is this what you want?", "Mobile MMI", null) in list("Yes", "No")
@@ -115,6 +117,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			module_sprites["Replicator"] = "replicator"
 			module_sprites["RepairBot"] = "repairbot"
 			module_sprites["Hover"] = "hovermommi"
+			module_sprites["Prime"] = "mommiprime"
 
 	//Custom_sprite check and entry
 	if (custom_sprite == 1)
@@ -151,7 +154,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	real_name = changed_name
 	name = real_name
 
-/mob/living/silicon/robot/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/mob/living/silicon/robot/mommi/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/handcuffs)) // fuck i don't even know why isrobot() in handcuff code isn't working so this will have to do
 		return
 
@@ -229,7 +232,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			radio.attackby(W,user)//GTFO, you have your own procs
 		else
 			user << "Unable to locate a radio."
-
+/*
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
 		if(emagged)//still allow them to open the cover
 			user << "The interface seems slightly damaged"
@@ -242,8 +245,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				updateicon()
 			else
 				user << "\red Access denied."
-
+*/
 	else if(istype(W, /obj/item/weapon/card/emag))		// trying to unlock with an emag card
+		if(user == src && !emagged)//fucking MoMMI is trying to emag itself, stop it and alert the admins
+			user << "<span class='warning'>The fuck are you doing? Are you retarded? Stop trying to get around your laws and be productive, you little shit.</span>"
+			message_admins("[key_name(src)] is a smartass MoMMI that's trying to emag itself. ([formatJumpTo(src)])")
+			return
 		if(!opened)//Cover is closed
 			if(locked)
 				if(prob(90))
@@ -252,7 +259,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				else
 					user << "You fail to emag the cover lock."
 					if(prob(25))
-						src << "Hack attempt detected."
+						src << "<span class='warning'>Hack attempt detected.</span>"
 			else
 				user << "The cover is already unlocked."
 			return
@@ -276,33 +283,27 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 					laws = new /datum/ai_laws/syndicate_override
 					var/time = time2text(world.realtime,"hh:mm:ss")
 					lawchanges.Add("[time] <B>:</B> [user.name]([user.key]) emagged [name]([key])")
-					set_zeroth_law("Only [user.real_name] and people he designates as being such are Syndicate Agents.")
-					src << "\red ALERT: Foreign software detected."
+					set_zeroth_law("Only [user.real_name] and people they designate as being such are syndicate agents.")
+					src << "<span class='warning'>ALERT: Foreign software detected.</span>"
 					sleep(5)
-					src << "\red Initiating diagnostics..."
+					src << "<span class='warning'>Initiating diagnostics...</span>"
 					sleep(20)
-					src << "\red SynBorg v1.7 loaded."
+					src << "<span class='warning'>SynBorg v1.7m loaded.</span>"
 					sleep(5)
-					src << "\red LAW SYNCHRONISATION ERROR"
+					src << "<span class='warning'>LAW SYNCHRONIZATION ERROR</span>"
 					sleep(5)
-					src << "\red Would you like to send a report to NanoTraSoft? Y/N"
+					src << "<span class='warning'>Would you like to send a report to NanoTraSoft? Y/N</span>"
 					sleep(10)
-					src << "\red > N"
+					src << "<span class='warning'>> N</span>"
 					sleep(20)
-					src << "\red ERRORERRORERROR"
+					src << "<span class='warning'>ERRORERRORERROR</span>"
 					src << "<b>Obey these laws:</b>"
 					laws.show_laws(src)
-					src << "\red \b ALERT: [user.real_name] is your new master. Obey your new laws and his commands."
-					if(src.module && istype(src.module, /obj/item/weapon/robot_module/miner))
-						for(var/obj/item/weapon/pickaxe/borgdrill/D in src.module.modules)
-							del(D)
-						src.module.modules += new /obj/item/weapon/pickaxe/diamonddrill(src.module)
-						src.module.rebuild()
-					updateicon()
+					src << "<span class='warning'><b>ALERT: [user.real_name] is your new master. Obey your new laws and their commands.</b></span>"
 				else
 					user << "You fail to [ locked ? "unlock" : "lock"] [src]'s interface."
 					if(prob(25))
-						src << "Hack attempt detected."
+						src << "<span class='warning'>Hack attempt detected.</span>"
 			return
 
 	else if(istype(W, /obj/item/borg/upgrade/))
@@ -324,6 +325,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			else
 				usr << "Upgrade error!"
 
+	else if(istype(W, /obj/item/device/camera_bug))
+		help_shake_act(user)
+		return 0
 
 	else
 		spark_system.start()
@@ -346,8 +350,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		if(istype(user:gloves, /obj/item/clothing/gloves/space_ninja)&&user:gloves:candrain&&!user:gloves:draining)
 			call(/obj/item/clothing/gloves/space_ninja/proc/drain)("CYBORG",src,user:wear_suit)
 			return
-		if(user.a_intent == "help")
-			user.visible_message("\blue [user.name] pats [src.name] on the head.")
+		else
+			if (user:a_intent == "help")
+				help_shake_act(user)
 			return
 
 	if(!istype(user, /mob/living/silicon))
@@ -387,28 +392,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 				visible_message("\red <B>[user] attempted to disarm [src]!</B>")
-
-/mob/living/silicon/robot/mommi/updateicon()
-	icon_state=subtype
-	// Clear all overlays.
-	overlays.Cut()
-	if(opened) // TODO:  Open the front "head" panel
-		if(wiresexposed)
-			overlays += "ov-openpanel +w"
-		else if(cell)
-			overlays += "ov-openpanel +c"
-		else
-			overlays += "ov-openpanel -c"
-
-	// Put our eyes just on top of the lighting, so it looks emissive in maint tunnels.
-	var/overlay_layer = LIGHTING_LAYER+1
-	if(layer != MOB_LAYER)
-		overlay_layer=TURF_LAYER+0.2
-
-	overlays += image(icon,"eyes-[subtype][emagged?"-emagged":""]",overlay_layer)
-	if(anchored)
-		overlays += image(icon,"[subtype]-park",overlay_layer)
-
 
 
 /mob/living/silicon/robot/mommi/installed_modules()
@@ -486,7 +469,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			contents += O
 			sight_mode |= sight_state:sight_mode
 
-			inv_sight.icon_state = "sight+a"
+			//inv_sight.icon_state = "sight+a"
 			inv_tool.icon_state = "inv1"
 			module_active=sight_state
 		else
@@ -499,7 +482,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			O.layer = 20
 			contents += O
 
-			inv_sight.icon_state = "sight"
+			//inv_sight.icon_state = "sight"
 			inv_tool.icon_state = "inv1 +a"
 			module_active=tool_state
 		if(TS && istype(TS))
@@ -540,3 +523,11 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 		src.verbs -= /mob/living/silicon/robot/mommi/proc/ActivateKeeper
 */
+
+/mob/living/silicon/robot/mommi/sensor_mode()
+	if(sensor_mode)
+		sensor_mode = 0
+		src << "<span class='notice'>Meson Vision augmentation disabled.</span>"
+	else
+		sensor_mode = MESON_VISION
+		src << "<span class='notice'>Meson Vison augmentation enabled.</span>"

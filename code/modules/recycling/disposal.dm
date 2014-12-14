@@ -496,7 +496,7 @@
 			H.vent_gas(loc)
 			qdel(H)
 
-	CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+	CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 		if (istype(mover,/obj/item) && mover.throwing)
 			var/obj/item/I = mover
 			if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
@@ -595,6 +595,8 @@
 
 				break
 			sleep(1)		// was 1
+			if(!loc || isnull(loc))
+				del(src)
 			var/obj/structure/disposalpipe/curr = loc
 			last = curr
 			curr = curr.transfer(src)
@@ -760,10 +762,11 @@
 	proc/expel(var/obj/structure/disposalholder/H, var/turf/T, var/direction)
 
 		var/turf/target
-
+		if(!T || isnull(T))
+			T = loc
 		if(T.density)		// dense ouput turf, so stop holder
 			H.active = 0
-			H.loc = src
+			H.loc = src.
 			return
 		if(T.intact && istype(T,/turf/simulated/floor)) //intact floor, pop the tile
 			var/turf/simulated/floor/F = T

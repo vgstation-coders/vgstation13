@@ -3,7 +3,7 @@
 /obj/structure/computerframe
 	density = 1
 	anchored = 0
-	name = "Computer-frame"
+	name = "Computer Frame"
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "0"
 	var/state = 0
@@ -17,7 +17,7 @@
 	name = "Circuit board"
 	icon = 'icons/obj/module.dmi'
 	icon_state = "id_mod"
-	item_state = "electronic"
+	item_state = "circuitboard"
 	origin_tech = "programming=2"
 	g_amt=2000 // Recycle glass only
 	w_type = RECYK_ELECTRONIC
@@ -95,6 +95,9 @@
 /obj/item/weapon/circuitboard/air_management
 	name = "Circuit board (Atmospheric General Monitor)"
 	build_path = "/obj/machinery/computer/general_air_control"
+/obj/item/weapon/circuitboard/atmos_automation
+	name = "Circuit board (Atmospherics Automation)"
+	build_path = "/obj/machinery/computer/general_air_control/atmos_automation"
 /obj/item/weapon/circuitboard/large_tank_control
 	name = "Circuit board (Atmospheric Tank Control)"
 	build_path = "/obj/machinery/computer/general_air_control/large_tank_control"
@@ -151,6 +154,9 @@
 /obj/item/weapon/circuitboard/rdconsole/robotics
 	name = "Circuit Board (Robotics R&D Console)"
 	build_path = "/obj/machinery/computer/rdconsole/robotics"
+/obj/item/weapon/circuitboard/rdconsole/mechanic
+	name = "Circuit Board (Mechanic R&D Console)"
+	build_path = "/obj/machinery/computer/rdconsole/mechanic"
 
 /obj/item/weapon/circuitboard/mecha_control
 	name = "Circuit Board (Exosuit Control Console)"
@@ -206,6 +212,11 @@
 /obj/item/weapon/circuitboard/splicer
 	name = "Circuit board (Disease Splicer)"
 	build_path = "/obj/machinery/computer/diseasesplicer"
+	origin_tech = "programming=3;biotech=4"
+/obj/item/weapon/circuitboard/centrifuge
+	name = "Circuit board (Disease Splicer)"
+	build_path = "/obj/machinery/computer/centrifuge"
+	origin_tech = "programming=3;biotech=3"
 
 /obj/item/weapon/circuitboard/mining_shuttle
 	name = "Circuit board (Mining Shuttle)"
@@ -234,6 +245,10 @@
 /obj/item/weapon/circuitboard/bhangmeter
 	name = "Circuit board (Bhangmeter)"
 	build_path = "/obj/machinery/computer/bhangmeter"
+	origin_tech = "programming=2"
+/obj/item/weapon/circuitboard/pda_terminal
+	name = "Circuit board (PDA Terminal)"
+	build_path = "/obj/machinery/computer/pda_terminal"
 	origin_tech = "programming=2"
 
 

@@ -77,7 +77,7 @@
 
 /obj/machinery/atmospherics/pipe/Destroy()
 	del(parent)
-	if(air_temporary)
+	if(air_temporary && loc)
 		loc.assume_air(air_temporary)
 
 	..()
@@ -94,9 +94,14 @@
 	var/obj/machinery/atmospherics/node2
 	var/minimum_temperature_difference = 300
 	var/thermal_conductivity = 0 //WALL_HEAT_TRANSFER_COEFFICIENT No
-	var/maximum_pressure = 70*ONE_ATMOSPHERE
-	var/fatigue_pressure = 55*ONE_ATMOSPHERE
-	alert_pressure = 55*ONE_ATMOSPHERE
+
+	var/maximum_pressure = 100*ONE_ATMOSPHERE // 10132.5 kPa
+	var/fatigue_pressure = 80 *ONE_ATMOSPHERE //  8106   kPa
+	alert_pressure       = 80 *ONE_ATMOSPHERE
+
+	// Type of burstpipe to use on burst()
+	var/burst_type = /obj/machinery/atmospherics/unary/vent/burstpipe
+
 	level = 1
 
 /obj/machinery/atmospherics/pipe/simple/New()
@@ -184,28 +189,84 @@
 
 
 /obj/machinery/atmospherics/pipe/simple/check_pressure(pressure)
+	if(!loc)
+		return
+
+	// Note: This checks the difference between atmospheric pressure and pressure in the pipe.
+	// So, a pipe rated at 8,000 kPa in a 104kPa environment will explode at 8,104kPa.
 	var/datum/gas_mixture/environment = loc.return_air()
 
 	var/pressure_difference = pressure - environment.return_pressure()
 
-	if(pressure_difference > maximum_pressure)
+	// Burst check first.
+	if(pressure_difference > maximum_pressure && prob(1))
 		burst()
 
-	else if(pressure_difference > fatigue_pressure)
+	// Groan if that check failed and we're above fatigue pressure
+	else if(pressure_difference > fatigue_pressure && prob(1)) // 5 was too often
+		groan()
 
-		if(prob(5))
-			burst()
+	// Otherwise, continue on.
+	else
+		return 1
 
-	else return 1
+/obj/machinery/atmospherics/pipe/simple/examine()
+	..()
+	usr << "<span class='info'>This [src.name] is rated up to [format_num(alert_pressure)] kPa.</span>"
+
+/obj/machinery/atmospherics/pipe/simple/proc/groan()
+	src.visible_message("<span class='warning'>\The [src] groans from the pressure!</span>");
+
+	// Need SFX for groaning metal.
+	//playsound(get_turf(src), 'sound/effects/groan.ogg', 25, 1)
 
 
 /obj/machinery/atmospherics/pipe/simple/proc/burst()
-	src.visible_message("\red \bold [src] bursts!");
-	playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
-	var/datum/effect/effect/system/smoke_spread/smoke = new
-	smoke.set_up(1,0, src.loc, 0)
-	smoke.start()
-	qdel(src)
+	src.visible_message("<span class='danger'>\The [src] bursts!</span>");
+
+	var/turf/T=get_turf(src)
+
+	message_admins("Pipe burst in area [formatJumpTo(T)]")
+	var/area/A=get_area_master(src)
+	log_game("Pipe burst in area [A.name] ")
+
+	// Disconnect first.
+	for(var/obj/machinery/atmospherics/node in pipeline_expansion())
+		if(node)
+			node.disconnect(src)
+
+	// Move away from explosion
+	loc=null
+
+	if(prob(50))
+		explosion(T, -1, 1, 2, adminlog=0)
+	else
+		explosion(T, 0, 1, 2, adminlog=0)
+
+	// Now connect burstpipes.
+	var/node_id=0
+	for(var/direction in cardinal)
+		if(initialize_directions & direction)
+			node_id++
+			var/obj/machinery/atmospherics/found
+			var/node_type=getNodeType(node_id)
+			switch(node_type)
+				if(PIPE_TYPE_STANDARD)
+					found = findConnecting(direction)
+				if(PIPE_TYPE_HE)
+					found = findConnectingHE(direction)
+				else
+					error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([node_id]): [node_type]")
+					return
+			if(!found) continue
+
+			var/obj/machinery/atmospherics/unary/vent/burstpipe/BP = new burst_type(T, setdir=direction)
+			BP.color=src.color
+			BP.invisibility=src.invisibility
+			BP.level=src.level
+			BP.do_connect()
+
+	del(src) // NOT qdel.
 
 
 /obj/machinery/atmospherics/pipe/simple/proc/normalize_dir()
@@ -337,9 +398,11 @@
 	icon = 'icons/obj/atmospherics/insulated.dmi'
 	minimum_temperature_difference = 10000
 	thermal_conductivity = 0
-	maximum_pressure = 1000*ONE_ATMOSPHERE
-	fatigue_pressure = 900*ONE_ATMOSPHERE
-	alert_pressure = 900*ONE_ATMOSPHERE
+
+	maximum_pressure = 1000000 // 1M   kPa
+	fatigue_pressure =  900000 // 900k kPa
+	alert_pressure   =  900000
+
 	available_colors = list(
 		"red"=IPIPE_COLOR_RED,
 		"blue"=IPIPE_COLOR_BLUE
@@ -360,6 +423,7 @@
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue
 	color=IPIPE_COLOR_BLUE
 	_color = "blue"
+
 /obj/machinery/atmospherics/pipe/tank
 	icon = 'icons/obj/atmospherics/pipe_tank.dmi'
 	icon_state = "intact"
@@ -540,127 +604,6 @@
 			user << "\blue Temperature: [round(parent.air.temperature-T0C)]&deg;C"
 		else
 			user << "\blue Tank is empty!"
-
-/obj/machinery/atmospherics/pipe/vent
-	icon = 'icons/obj/atmospherics/pipe_vent.dmi'
-	icon_state = "intact"
-	name = "Vent"
-	desc = "A large air vent"
-	level = 1
-	volume = 250
-	dir = SOUTH
-	initialize_directions = SOUTH
-	var/build_killswitch = 1
-	var/obj/machinery/atmospherics/node1
-
-/obj/machinery/atmospherics/pipe/vent/New()
-	initialize_directions = dir
-	..()
-
-/obj/machinery/atmospherics/pipe/vent/high_volume
-	name = "Larger vent"
-	volume = 1000
-
-/obj/machinery/atmospherics/pipe/vent/process()
-	if(!parent)
-		if(build_killswitch <= 0)
-			. = PROCESS_KILL
-		else
-			build_killswitch--
-		..()
-		return
-	else
-		parent.mingle_with_turf(loc, volume)
-	/*
-	if(!node1)
-		if(!nodealert)
-			//world << "Missing node from [src] at [src.x],[src.y],[src.z]"
-			nodealert = 1
-	else if (nodealert)
-		nodealert = 0
-	*/
-
-
-/obj/machinery/atmospherics/pipe/vent/Destroy()
-	if(node1)
-		node1.disconnect(src)
-
-	..()
-
-
-/obj/machinery/atmospherics/pipe/vent/pipeline_expansion()
-	return list(node1)
-
-
-/obj/machinery/atmospherics/pipe/vent/update_icon()
-	if(node1)
-		icon_state = "intact"
-
-		dir = get_dir(src, node1)
-
-	else
-		icon_state = "exposed"
-
-
-/obj/machinery/atmospherics/pipe/vent/initialize()
-	var/connect_direction = dir
-
-	node1=findConnecting(connect_direction)
-
-	update_icon()
-
-
-/obj/machinery/atmospherics/pipe/vent/disconnect(obj/machinery/atmospherics/reference)
-	if(reference == node1)
-		if(istype(node1, /obj/machinery/atmospherics/pipe))
-			del(parent)
-		node1 = null
-
-	update_icon()
-
-	return null
-
-
-/obj/machinery/atmospherics/pipe/vent/hide(var/i)
-	if(node1)
-		icon_state = "[i == 1 && istype(loc, /turf/simulated) ? "h" : "" ]intact"
-		dir = get_dir(src, node1)
-	else
-		icon_state = "exposed"
-
-/obj/machinery/atmospherics/pipe/vent/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
-	dir = pipe.dir
-	initialize_directions = pipe.get_pipe_dir()
-	if (pipe.pipename)
-		name = pipe.pipename
-	var/turf/T = loc
-	level = T.intact ? 2 : 1
-	initialize()
-	build_network()
-	if (node1)
-		node1.initialize()
-		node1.build_network()
-	return 1
-
-/obj/machinery/atmospherics/pipe/vent/attackby(var/obj/item/weapon/W, var/mob/user)
-	if (!istype(W, /obj/item/weapon/wrench))
-		return ..()
-	var/turf/T = get_turf(src)
-	var/datum/gas_mixture/int_air = return_air()
-	var/datum/gas_mixture/env_air = T.return_air()
-	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
-		user << "\red You cannot unwrench this [src], it too exerted due to internal pressure."
-		add_fingerprint(user)
-		return 1
-	playsound(T, 'sound/items/Ratchet.ogg', 50, 1)
-	user << "\blue You begin to unfasten \the [src]..."
-	if (do_after(user, 40))
-		user.visible_message( \
-			"[user] unfastens \the [src].", \
-			"\blue You have unfastened \the [src].", \
-			"You hear ratchet.")
-		new /obj/item/pipe(T, make_from=src)
-		del(src)
 
 /obj/machinery/atmospherics/pipe/manifold
 	icon = 'icons/obj/atmospherics/pipe_manifold.dmi'
@@ -849,6 +792,8 @@
 	icon = 'icons/obj/atmospherics/insulated.dmi'
 	icon_state = "manifold"
 	alert_pressure = 900*ONE_ATMOSPHERE
+	_color = "red"
+	color=IPIPE_COLOR_RED
 	level = 2
 	available_colors = list(
 		"red"=IPIPE_COLOR_RED,
@@ -1138,7 +1083,7 @@
 		return // Coloring pipes.
 	if (istype(src, /obj/machinery/atmospherics/pipe/tank))
 		return ..()
-	if (istype(src, /obj/machinery/atmospherics/pipe/vent))
+	if (istype(src, /obj/machinery/atmospherics/unary/vent))
 		return ..()
 
 	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/red))
@@ -1170,21 +1115,34 @@
 		return ..()
 	var/turf/T = src.loc
 	if (level==1 && isturf(T) && T.intact)
-		user << "\red You must remove the plating first."
+		user << "<span class='warning'>You must remove the plating first.</span>"
 		return 1
 	var/datum/gas_mixture/int_air = return_air()
 	var/datum/gas_mixture/env_air = loc.return_air()
+	add_fingerprint(user)
 	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
-		user << "\red You cannot unwrench this [src], it too exerted due to internal pressure."
-		add_fingerprint(user)
-		return 1
+		if(istype(W, /obj/item/weapon/wrench/socket))
+			user << "<span class='warning'>You begin to open the pressure release valve on the pipe...</span>"
+			if(do_after(user, 50))
+				playsound(get_turf(src), 'sound/machines/hiss.ogg', 50, 1)
+				user.visible_message("[user] vents \the [src].",
+									"You have vented \the [src].",
+									"You hear a ratchet.")
+				var/datum/gas_mixture/transit = new
+				transit.add(int_air)
+				transit.divide(parent.members.len) //we get the total pressure over the number of pipes to find gas per pipe
+				env_air.add(transit) //put it in the air
+				del(transit) //remove the carrier
+		else
+			user << "<span class='warning'>You cannot unwrench this [src], it too exerted due to internal pressure.</span>"
+			return 1
 	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-	user << "\blue You begin to unfasten \the [src]..."
+	user << "<span class='notice'>You begin to unfasten \the [src]...</span>"
 	if (do_after(user, 40))
 		user.visible_message( \
 			"[user] unfastens \the [src].", \
-			"\blue You have unfastened \the [src].", \
-			"You hear ratchet.")
+			"<span class='notice'>You have unfastened \the [src].</span>", \
+			"You hear a ratchet.")
 		new /obj/item/pipe(loc, make_from=src)
 		for (var/obj/machinery/meter/meter in T)
 			if (meter.target == src)

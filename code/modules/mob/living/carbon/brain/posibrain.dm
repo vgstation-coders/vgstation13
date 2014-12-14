@@ -6,8 +6,6 @@
 	w_class = 3
 	origin_tech = "engineering=4;materials=4;bluespace=2;programming=4"
 
-	construction_cost = list("metal"=500,"glass"=500,"silver"=200,"gold"=200,"plasma"=100,"diamond"=10)
-	construction_time = 75
 	var/searching = 0
 	var/askDelay = 10 * 60 * 1
 	//var/mob/living/carbon/brain/brainmob = null
@@ -33,11 +31,11 @@
 				reset_search()
 
 	proc/request_player()
-		for(var/mob/dead/observer/O in player_list)
-			if(O.client && O.client.prefs.be_special & BE_PAI)
+		for(var/mob/dead/observer/O in get_active_candidates(ROLE_POSIBRAIN,poll="\A [src] has been activated."))
+			if(O.client)
 				if(check_observer(O))
-					O << "<span class=\"recruit\">\A [src] has been activated. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>"
-					//question(O.client)
+					O << "<span class=\"recruit\">You are a possible candidate for \a [src]. Get ready. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Retract</a>)</span>"
+					ghost_volunteers += O
 
 	proc/check_observer(var/mob/dead/observer/O)
 		if(O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
@@ -55,8 +53,6 @@
 			if(!C || brainmob.key || 0 == searching)	return		//handle logouts that happen whilst the alert is waiting for a response, and responses issued after a brain has been located.
 			if(response == "Yes")
 				transfer_personality(C.mob)
-			else if (response == "Never for this round")
-				C.prefs.be_special ^= BE_PAI
 
 	proc/transfer_personality(var/mob/candidate)
 
@@ -163,7 +159,6 @@
 	src.brainmob.robot_talk_understand = 0
 	src.brainmob.stat = 0
 	src.brainmob.silent = 0
-	src.brainmob.brain_op_stage = 4.0
 	dead_mob_list -= src.brainmob
 
 	..()

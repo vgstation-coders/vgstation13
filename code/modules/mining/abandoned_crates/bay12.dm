@@ -2,7 +2,7 @@
 	New()
 		..()
 		new/obj/item/weapon/reagent_containers/food/drinks/bottle/rum(src)
-		new/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiadeus(src)
+		new/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/deus(src)
 		new/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey(src)
 		new/obj/item/weapon/lighter/zippo(src)
 
@@ -28,7 +28,7 @@
 	New()
 		..()
 		for(var/i = 0, i < 3, i++)
-			new/obj/machinery/hydroponics(src)
+			new/obj/machinery/portable_atmospherics/hydroponics(src)
 /obj/structure/closet/crate/secure/loot/bay_06
 	New()
 		..()

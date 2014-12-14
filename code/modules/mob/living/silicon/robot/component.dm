@@ -71,7 +71,7 @@
 
 /datum/robot_component/actuator
 	name = "actuator"
-	energy_consumption = 2
+	energy_consumption = 0 // seeing as we can move without any charge...
 	external_type = /obj/item/robot_parts/robot_component/actuator
 	max_damage = 50
 
@@ -82,6 +82,7 @@
 /datum/robot_component/cell/destroy()
 	..()
 	owner.cell = null
+	owner.updateicon()
 
 /datum/robot_component/radio
 	name = "radio"
@@ -103,7 +104,7 @@
 
 /datum/robot_component/diagnosis_unit
 	name = "self-diagnosis unit"
-	energy_consumption = 1
+	energy_consumption = 0
 	external_type = /obj/item/robot_parts/robot_component/diagnosis_unit
 	max_damage = 30
 
@@ -130,8 +131,6 @@
 /obj/item/robot_parts/robot_component
 	icon = 'icons/robot_component.dmi'
 	icon_state = "working"
-	construction_time = 200
-	construction_cost = list("metal"=5000)
 
 /obj/item/robot_parts/robot_component/binary_communication_device
 	name = "binary communication device"

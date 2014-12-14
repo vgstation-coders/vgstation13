@@ -420,7 +420,7 @@ ________________________________________________________________________________
 				// AUTOFIXED BY fix_string_idiocy.py
 				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\events\ninja_equipment.dm:416: dat += "Stored AI: <b>[A.name]</b><br>"
 				dat += {"Stored AI: <b>[A.name]</b><br>
-					System integrity: [(A.health+100)/2]%<br>"}
+					System integrity: [A.system_integrity()]%<br>"}
 				// END AUTOFIX
 				//I personally think this makes things a little more fun. Ninjas can override all but law 0.
 				//if (A.laws.zeroth)
@@ -528,7 +528,7 @@ ________________________________________________________________________________
 		if("Shock")
 			var/damage = min(cell.charge, rand(50,150))//Uses either the current energy left over or between 50 and 150.
 			if(damage>1)//So they don't spam it when energy is a factor.
-				spark_system.start()//SPARKS THERE SHALL BE SPARKS
+				//spark_system.start()//SPARKS THERE SHALL BE SPARKS
 				U.electrocute_act(damage, src,0.1,1)//The last argument is a safety for the human proc that checks for gloves.
 				cell.charge -= damage
 			else

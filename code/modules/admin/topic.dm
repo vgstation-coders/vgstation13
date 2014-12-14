@@ -1138,22 +1138,29 @@
 		message_admins("\blue [key_name_admin(usr)] forced [key_name_admin(M)] to say: [speech]")
 
 	else if(href_list["sendtoprison"])
-		if(!check_rights(R_ADMIN))	return
+		// Reworked to be useful for investigating shit.
+		if(!check_rights(R_ADMIN))
+			return
 
-		if(alert(usr, "Send to admin prison for the round?", "Message", "Yes", "No") != "Yes")
+		if(alert(usr, "Warp to prison?", "Message", "Yes", "No") != "Yes")
 			return
 
 		var/mob/M = locate(href_list["sendtoprison"])
+
 		if(!ismob(M))
 			usr << "This can only be used on instances of type /mob"
 			return
+
 		if(istype(M, /mob/living/silicon/ai))
 			usr << "This cannot be used on instances of type /mob/living/silicon/ai"
 			return
 
 		var/turf/prison_cell = pick(prisonwarp)
-		if(!prison_cell)	return
 
+		if(!prison_cell)
+			return
+
+		/*
 		var/obj/structure/closet/secure_closet/brig/locker = new /obj/structure/closet/secure_closet/brig(prison_cell)
 		locker.opened = 0
 		locker.locked = 1
@@ -1165,30 +1172,52 @@
 				I.loc = locker
 				I.layer = initial(I.layer)
 				I.dropped(M)
+
 		M.update_icons()
+		*/
 
 		//so they black out before warping
 		M.Paralyse(5)
+		M.visible_message(
+			"<span class=\"sinister\">You hear the sound of cell doors slamming shut, and [M.name] suddenly vanishes!</span>",
+			"<span class=\"sinister\">You hear the sound of cell doors slamming shut!</span>")
+
 		sleep(5)
-		if(!M)	return
+
+		if(!M)
+			return
+
+		// TODO: play sound here.  Thinking of using Wolfenstein 3D's cell door closing sound.
 
 		M.loc = prison_cell
+
+		/*
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/prisoner = M
 			prisoner.equip_to_slot_or_del(new /obj/item/clothing/under/color/orange(prisoner), slot_w_uniform)
 			prisoner.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(prisoner), slot_shoes)
+		*/
 
 		M << "\red You have been sent to the prison station!"
 		log_admin("[key_name(usr)] sent [key_name(M)] to the prison station.")
 		message_admins("\blue [key_name_admin(usr)] sent [key_name_admin(M)] to the prison station.", 1)
 
-	else if(href_list["tdome1"])
+	else if(href_list["tdome1"] || href_list["tdome2"])
 		if(!check_rights(R_FUN))	return
 
 		if(alert(usr, "Confirm?", "Message", "Yes", "No") != "Yes")
 			return
 
-		var/mob/M = locate(href_list["tdome1"])
+		var/mob/M = null
+		var/team = ""
+
+		if(href_list["tdome1"])
+			team = "Green"
+			M = locate(href_list["tdome1"])
+		else if (href_list["tdome2"])
+			team = "Red"
+			M = locate(href_list["tdome2"])
+
 		if(!ismob(M))
 			usr << "This can only be used on instances of type /mob"
 			return
@@ -1196,49 +1225,122 @@
 			usr << "This cannot be used on instances of type /mob/living/silicon/ai"
 			return
 
+		var/obj/item/packobelongings/pack = null
+
+		switch(team)
+			if("Green")
+				pack = new /obj/item/packobelongings/green(M.loc)
+				pack.x = map.tDomeX+2
+			if("Red")
+				pack = new /obj/item/packobelongings/red(M.loc)
+				pack.x = map.tDomeX-2
+
+		pack.z = map.tDomeZ //the players' belongings are stored there, in the Thunderdome Admin lodge.
+		pack.y = map.tDomeY
+
+		pack.name = "[M.real_name]'s belongings"
+
 		for(var/obj/item/I in M)
+			if(istype(I,/obj/item/clothing/glasses))
+				var/obj/item/clothing/glasses/G = I
+				if(G.prescription)
+					continue
 			M.u_equip(I)
 			if(I)
 				I.loc = M.loc
 				I.layer = initial(I.layer)
 				I.dropped(M)
+				I.loc = pack
 
-		M.Paralyse(5)
-		sleep(5)
-		M.loc = pick(tdome1)
-		spawn(50)
-			M << "\blue You have been sent to the Thunderdome."
-		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Team 1)")
-		message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Team 1)", 1)
+		var/obj/item/weapon/card/id/thunderdome/ident = null
 
-	else if(href_list["tdome2"])
-		if(!check_rights(R_FUN))	return
+		switch(team)
+			if("Green")
+				ident = new /obj/item/weapon/card/id/thunderdome/green(M)
+				ident.name = "[M.real_name]'s Thunderdome Green ID"
+			if("Red")
+				ident = new /obj/item/weapon/card/id/thunderdome/red(M)
+				ident.name = "[M.real_name]'s Thunderdome Red ID"
 
-		if(alert(usr, "Confirm?", "Message", "Yes", "No") != "Yes")
-			return
+		if(!iscarbon(M))
+			qdel(ident)
 
-		var/mob/M = locate(href_list["tdome2"])
-		if(!ismob(M))
-			usr << "This can only be used on instances of type /mob"
-			return
-		if(istype(M, /mob/living/silicon/ai))
-			usr << "This cannot be used on instances of type /mob/living/silicon/ai"
-			return
+		switch(team)
+			if("Green")
+				if(ishuman(M))
+					var/mob/living/carbon/human/H = M
+					H.equip_to_slot_or_del(new /obj/item/clothing/under/color/green(H), slot_w_uniform)
+					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(H), slot_shoes)
+					H.equip_to_slot_or_del(ident, slot_wear_id)
+					H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/green(H), slot_belt)
+					H.regenerate_icons()
+				else if(ismonkey(M))
+					var/mob/living/carbon/monkey/K = M
+					var/obj/item/clothing/monkeyclothes/jumpsuit_green/JS = new /obj/item/clothing/monkeyclothes/jumpsuit_green(K)
+					var/obj/item/clothing/monkeyclothes/olduniform = null
+					var/obj/item/clothing/monkeyclothes/oldhat = null
+					if(K.uniform)
+						olduniform = K.uniform
+						K.uniform = null
+						olduniform.loc = pack
+					K.uniform = JS
+					K.uniform.loc = K
+					if(K.hat)
+						oldhat = K.hat
+						K.hat = null
+						oldhat.loc = pack
+					K.equip_to_slot_or_del(ident, slot_r_hand)
+					K.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/green(K), slot_l_hand)
+					K.regenerate_icons()
 
-		for(var/obj/item/I in M)
-			M.u_equip(I)
-			if(I)
-				I.loc = M.loc
-				I.layer = initial(I.layer)
-				I.dropped(M)
+			if("Red")
+				if(ishuman(M))
+					var/mob/living/carbon/human/H = M
+					H.equip_to_slot_or_del(new /obj/item/clothing/under/color/red(H), slot_w_uniform)
+					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(H), slot_shoes)
+					H.equip_to_slot_or_del(ident, slot_wear_id)
+					H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/red(H), slot_belt)
+					H.regenerate_icons()
+				else if(ismonkey(M))
+					var/mob/living/carbon/monkey/K = M
+					var/obj/item/clothing/monkeyclothes/jumpsuit_red/JS = new /obj/item/clothing/monkeyclothes/jumpsuit_red(K)
+					var/obj/item/clothing/monkeyclothes/olduniform = null
+					var/obj/item/clothing/monkeyclothes/oldhat = null
+					if(K.uniform)
+						olduniform = K.uniform
+						K.uniform = null
+						olduniform.loc = pack
+					K.uniform = JS
+					K.uniform.loc = K
+					if(K.hat)
+						oldhat = K.hat
+						K.hat = null
+						oldhat.loc = pack
+					K.equip_to_slot_or_del(ident, slot_r_hand)
+					K.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/red(K), slot_l_hand)
+					K.regenerate_icons()
 
-		M.Paralyse(5)
-		sleep(5)
-		M.loc = pick(tdome2)
-		spawn(50)
-			M << "\blue You have been sent to the Thunderdome."
-		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Team 2)")
-		message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Team 2)", 1)
+		if(pack.contents.len == 0)
+			qdel(pack)
+
+		switch(team)
+			if("Green")
+				log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Team Green)")
+				message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Team Green)", 1)
+				M.loc = pick(tdome1)
+			if("Red")
+				log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Team Red)")
+				message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Team Red)", 1)
+				M.loc = pick(tdome2)
+
+		M << "<span class='danger'>You have been chosen to fight for the [team] Team. [pick(\
+		"The wheel of fate is turning!",\
+		"Heaven or Hell!",\
+		"Set Spell Card!",\
+		"Hologram Summer Again!",\
+		"Get ready for the next battle!",\
+		"Fight for your life!",\
+		)]</span>"
 
 	else if(href_list["tdomeadmin"])
 		if(!check_rights(R_FUN))	return
@@ -1616,9 +1718,12 @@
 		H << "You hear something crackle in your headset for a moment before a voice speaks.  \"Please stand by for a message from your benefactor.  Message as follows, agent. <b>\"[input]\"</b>  Message ends.\""
 
 	else if(href_list["CentcommFaxView"])
-		var/info = locate(href_list["CentcommFaxView"])
-
-		usr << browse("<HTML><HEAD><TITLE>Centcomm Fax Message</TITLE></HEAD><BODY>[info]</BODY></HTML>", "window=Centcomm Fax Message")
+		var/obj/item/weapon/paper/P = locate(href_list["CentcommFaxView"])
+		var/info_2 = ""
+		if(P.img)
+			usr << browse_rsc(P.img.img, "tmp_photo.png")
+			info_2 = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br>"
+		usr << browse("<HTML><HEAD><TITLE>Centcomm Fax Message</TITLE></HEAD><BODY>[info_2][P.info]</BODY></HTML>", "window=Centcomm Fax Message")
 
 	else if(href_list["CentcommFaxReply"])
 		var/mob/living/carbon/human/H = locate(href_list["CentcommFaxReply"])
@@ -1800,7 +1905,7 @@
 			alert("Select fewer object types, (max 5)")
 			return
 		else if(length(removed_paths))
-			alert("Removed:\n" + dd_list2text(removed_paths, "\n"))
+			alert("Removed:\n" + list2text(removed_paths, "\n"))
 
 		var/list/offset = text2list(href_list["offset"],",")
 		var/number = dd_range(1, 100, text2num(href_list["object_count"]))
@@ -2259,6 +2364,12 @@
 				else
 					communications_blackout(1)
 				message_admins("[key_name_admin(usr)] triggered a communications blackout.", 1)
+
+			if("pda_spam")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","PDA")
+				new /datum/event/pda_spam
+
 			if("spaceninja")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SN")
@@ -2441,6 +2552,63 @@
 				feedback_add_details("admin_secrets_fun_used","OO")
 				usr.client.only_one()
 //				message_admins("[key_name_admin(usr)] has triggered a battle to the death (only one)")
+			if("togglenarsie")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","NA")
+				var/choice = input("How do you wish for narsie to interact with her surroundings?") in list("CultStation13", "Nar-Singulo")
+				if(choice == "CultStation13")
+					message_admins("[key_name_admin(usr)] has set narsie's behaviour to \"CultStation13\".")
+					narsie_behaviour = "CultStation13"
+				if(choice == "Nar-Singulo")
+					message_admins("[key_name_admin(usr)] has set narsie's behaviour to \"Nar-Singulo\".")
+					narsie_behaviour = "Nar-Singulo"
+			if("hellonearth")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","NS")
+				var/choice = input("You sure you want to end the round and summon narsie at your location? Misuse of this could result in removal of flags or halarity.") in list("PRAISE SATAN", "Cancel")
+				if(choice == "PRAISE SATAN")
+					new /obj/machinery/singularity/narsie/large(get_turf(usr))
+					SetUniversalState(/datum/universal_state/hell)
+					message_admins("[key_name_admin(usr)] has summoned narsie and brought about a new realm of suffering.")
+			if("supermattercascade")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","SC")
+				var/choice = input("You sure you want to destroy the universe and create a large explosion at your location? Misuse of this could result in removal of flags or halarity.") in list("NO TIME TO EXPLAIN", "Cancel")
+				if(choice == "NO TIME TO EXPLAIN")
+					explosion(get_turf(usr), 8, 16, 24, 32, 1)
+					new /turf/unsimulated/wall/supermatter(get_turf(usr))
+					SetUniversalState(/datum/universal_state/supermatter_cascade)
+					message_admins("[key_name_admin(usr)] has managed to destroy the universe with a supermatter cascade. Good job, [key_name_admin(usr)]")
+			if("spawnadminbus")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","AB")
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = new /obj/structure/stool/bed/chair/vehicle/adminbus(get_turf(usr))
+				A.dir = EAST
+				A.update_lightsource()
+				A.busjuke.dir = EAST
+				message_admins("[key_name_admin(usr)] has spawned an Adminbus. Who gave him the keys?")
+			if("spawnselfdummy")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","TD")
+				message_admins("[key_name_admin(usr)] spawned himself as a Test Dummy.")
+				var/turf/T = get_turf(usr)
+				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
+				usr.client.cmd_assume_direct_control(D)
+				D.equip_to_slot_or_del(new /obj/item/clothing/under/color/black(D), slot_w_uniform)
+				D.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(D), slot_shoes)
+				D.equip_to_slot_or_del(new /obj/item/weapon/card/id/admin(D), slot_wear_id)
+				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
+				D.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(D), slot_back)
+				D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/engineer(D.back), slot_in_backpack)
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg')
+				D.name = "Admin"
+				D.real_name = "Admin"
+				var/newname = ""
+				newname = copytext(sanitize(input(D, "Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
+				if (!newname)
+					newname = "Admin"
+				D.name = newname
+				D.real_name = newname
 		if(usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsfun"]]")
 			if (ok)
@@ -2563,6 +2731,10 @@
 				J.total_positions = -1
 				J.spawn_positions = -1
 				message_admins("[key_name_admin(usr)] has removed the cap on security officers.")
+			if("virus_custom")
+				if(virus2_make_custom(usr.client))
+					feedback_add_details("admin_secrets_fun_used", "V_C")
+					message_admins("[key_name_admin(usr)] has trigger a custom virus outbreak.", 1)
 
 	else if(href_list["ac_view_wanted"])            //Admin newscaster Topic() stuff be here
 		src.admincaster_screen = 18                 //The ac_ prefix before the hrefs stands for AdminCaster.
@@ -2571,7 +2743,7 @@
 	else if(href_list["ac_set_channel_name"])
 		src.admincaster_feed_channel.channel_name = strip_html_simple(input(usr, "Provide a Feed Channel Name", "Network Channel Handler", ""))
 		while (findtext(src.admincaster_feed_channel.channel_name," ") == 1)
-			src.admincaster_feed_channel.channel_name = copytext(src.admincaster_feed_channel.channel_name,2,lentext(src.admincaster_feed_channel.channel_name)+1)
+			src.admincaster_feed_channel.channel_name = copytext(src.admincaster_feed_channel.channel_name,2,length(src.admincaster_feed_channel.channel_name)+1)
 		src.access_news_network()
 
 	else if(href_list["ac_set_channel_lock"])
@@ -2610,7 +2782,7 @@
 	else if(href_list["ac_set_new_message"])
 		src.admincaster_feed_message.body = adminscrub(input(usr, "Write your Feed story", "Network Channel Handler", ""))
 		while (findtext(src.admincaster_feed_message.body," ") == 1)
-			src.admincaster_feed_message.body = copytext(src.admincaster_feed_message.body,2,lentext(src.admincaster_feed_message.body)+1)
+			src.admincaster_feed_message.body = copytext(src.admincaster_feed_message.body,2,length(src.admincaster_feed_message.body)+1)
 		src.access_news_network()
 
 	else if(href_list["ac_submit_new_message"])
@@ -2664,13 +2836,13 @@
 	else if(href_list["ac_set_wanted_name"])
 		src.admincaster_feed_message.author = adminscrub(input(usr, "Provide the name of the Wanted person", "Network Security Handler", ""))
 		while (findtext(src.admincaster_feed_message.author," ") == 1)
-			src.admincaster_feed_message.author = copytext(admincaster_feed_message.author,2,lentext(admincaster_feed_message.author)+1)
+			src.admincaster_feed_message.author = copytext(admincaster_feed_message.author,2,length(admincaster_feed_message.author)+1)
 		src.access_news_network()
 
 	else if(href_list["ac_set_wanted_desc"])
 		src.admincaster_feed_message.body = adminscrub(input(usr, "Provide the a description of the Wanted person and any other details you deem important", "Network Security Handler", ""))
 		while (findtext(src.admincaster_feed_message.body," ") == 1)
-			src.admincaster_feed_message.body = copytext(src.admincaster_feed_message.body,2,lentext(src.admincaster_feed_message.body)+1)
+			src.admincaster_feed_message.body = copytext(src.admincaster_feed_message.body,2,length(src.admincaster_feed_message.body)+1)
 		src.access_news_network()
 
 	else if(href_list["ac_submit_wanted"])

@@ -82,9 +82,8 @@
 
 /obj/screen/grab/Destroy()
 	if(master)
-		var/obj/item/weapon/grab/G = master
-		if(G.assailant)
-			G.assailant.client.images -= src
+		master = null
+
 	..()
 
 /obj/screen/storage
@@ -326,6 +325,13 @@
 											else
 												contents.Add(0)
 
+										// ACK ACK ACK Plasmen
+										if ("plasma")
+											if(t.air_contents.toxins)
+												contents.Add(t.air_contents.toxins)
+											else
+												contents.Add(0)
+
 
 								else
 									//no tank so we set contents to 0
@@ -415,6 +421,73 @@
 			if(istype(usr, /mob/living/silicon/robot))
 				usr:toggle_module(3)
 
+		if("AI Core")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.view_core()
+
+		if("Show Camera List")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				var/camera = input(AI, "Choose which camera you want to view", "Cameras") as null|anything in AI.get_camera_list()
+				AI.ai_camera_list(camera)
+
+		if("Track With Camera")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				var/target_name = input(AI, "Choose who you want to track", "Tracking") as null|anything in AI.trackable_mobs()
+				AI.ai_camera_track(target_name)
+
+		if("Toggle Camera Light")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.toggle_camera_light()
+
+		if("Show Crew Manifest")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.ai_roster()
+
+		if("Show Alerts")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.ai_alerts()
+
+		if("Announcement")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.announcement()
+
+		if("Call Emergency Shuttle")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.ai_call_shuttle()
+
+		if("State Laws")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.checklaws()
+
+		if("PDA - Send Message")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.cmd_send_pdamesg()
+
+		if("PDA - Show Message Log")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.cmd_show_message_log()
+
+		if("Take Image")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.aicamera.toggle_camera_mode()
+
+		if("View Images")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.aicamera.viewpictures()
+
 		if("Allow Walking")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
 				return
@@ -473,6 +546,261 @@
 		if("Toggle Gun Mode")
 			usr.client.ToggleGunMode()
 
+		if("uniform")
+			if(ismonkey(usr))
+				var/mob/living/carbon/monkey/M = usr
+				if(M.canWearClothes)
+					if (!M.get_active_hand())
+						M.wearclothes(null)
+					else if (istype(M.get_active_hand(), /obj/item/clothing/monkeyclothes))
+						M.wearclothes(M.get_active_hand())
+
+		if("hat")
+			if(ismonkey(usr))
+				var/mob/living/carbon/monkey/M = usr
+				if(M.canWearHats)
+					if (!M.get_active_hand())
+						M.wearhat(null)
+					else if (istype(M.get_active_hand(), /obj/item/clothing/head))
+						M.wearhat(M.get_active_hand())
+		if("wall")
+			if(isconstruct(usr))
+				var/mob/living/simple_animal/construct/builder/C = usr
+				var/obj/effect/proc_holder/spell/S = null
+				for(var/datum/D in C.spell_list)
+					if(istype(D, /obj/effect/proc_holder/spell/aoe_turf/conjure/wall))
+						S = D
+						break
+				if(S)
+					if(S.cast_check())
+						S.choose_targets()
+		if("floor")
+			if(isconstruct(usr))
+				var/mob/living/simple_animal/construct/builder/C = usr
+				var/obj/effect/proc_holder/spell/S = null
+				for(var/datum/D in C.spell_list)
+					if(istype(D, /obj/effect/proc_holder/spell/aoe_turf/conjure/floor ))
+						S = D
+						break
+				if(S)
+					if(S.cast_check())
+						S.choose_targets()
+		if("soulstone")
+			if(isconstruct(usr))
+				var/mob/living/simple_animal/construct/builder/C = usr
+				var/obj/effect/proc_holder/spell/S = null
+				for(var/datum/D in C.spell_list)
+					if(istype(D, /obj/effect/proc_holder/spell/aoe_turf/conjure/soulstone ))
+						S = D
+						break
+				if(S)
+					if(S.cast_check())
+						S.choose_targets()
+		if("shell")
+			if(isconstruct(usr))
+				var/mob/living/simple_animal/construct/builder/C = usr
+				var/obj/effect/proc_holder/spell/S = null
+				for(var/datum/D in C.spell_list)
+					if(istype(D, /obj/effect/proc_holder/spell/aoe_turf/conjure/construct/lesser  ))
+						S = D
+						break
+				if(S)
+					if(S.cast_check())
+						S.choose_targets()
+		if("pylon")
+			if(isconstruct(usr))
+				var/mob/living/simple_animal/construct/builder/C = usr
+				var/obj/effect/proc_holder/spell/S = null
+				for(var/datum/D in C.spell_list)
+					if(istype(D, /obj/effect/proc_holder/spell/aoe_turf/conjure/pylon ))
+						S = D
+						break
+				if(S)
+					if(S.cast_check())
+						S.choose_targets()
+		if("shift")
+			if(isconstruct(usr))
+				var/mob/living/simple_animal/construct/wraith/C = usr
+				var/obj/effect/proc_holder/spell/S = null
+				for(var/datum/D in C.spell_list)
+					if(istype(D, /obj/effect/proc_holder/spell/targeted/ethereal_jaunt/shift ))
+						S = D
+						break
+				if(S)
+					if(S.cast_check())
+						S.choose_targets()
+		if("juggerwall")
+			if(isconstruct(usr))
+				var/mob/living/simple_animal/construct/armoured/C = usr
+				var/obj/effect/proc_holder/spell/S = null
+				for(var/datum/D in C.spell_list)
+					if(istype(D, /obj/effect/proc_holder/spell/aoe_turf/conjure/lesserforcewall ))
+						S = D
+						break
+				if(S)
+					if(S.cast_check())
+						S.choose_targets()
+		if("rune")
+			if(isconstruct(usr))
+				var/mob/living/simple_animal/construct/harvester/C = usr
+				if(!C.purge)
+					C.harvesterune()
+				else
+					C << "<span class='warning'>The nullrod's power interferes with your own!</span>"
+
+		if("breakdoor")
+			if(isconstruct(usr))
+				var/mob/living/simple_animal/construct/harvester/C = usr
+				if(!C.purge)
+					C.harvesterknock()
+				else
+					C << "<span class='warning'>The nullrod's power interferes with your own!</span>"
+
+		if("harvest")
+			if(isconstruct(usr))
+				var/mob/living/simple_animal/construct/harvester/C = usr
+				if(!C.purge)
+					C.harvesterharvest()
+				else
+					C << "<span class='warning'>The nullrod's power interferes with your own!</span>"
+
+////////////ADMINBUS HUD ICONS////////////
+		if("Delete Bus")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.Adminbus_Deletion(usr)
+		if("Delete Mobs")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.remove_mobs(usr)
+		if("Spawn Clowns")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.spawn_mob(usr,1,5)
+		if("Spawn Carps")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.spawn_mob(usr,2,5)
+		if("Spawn Bears")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.spawn_mob(usr,3,5)
+		if("Spawn Trees")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.spawn_mob(usr,4,5)
+		if("Spawn Spiders")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.spawn_mob(usr,5,5)
+		if("Spawn Large Alien Queen")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.spawn_mob(usr,6,1)
+		if("Spawn Loads of Captain Spare IDs")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.loadsa_goodies(usr,1)
+		if("Spawn Loads of Money")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.loadsa_goodies(usr,2)
+		if("Repair Surroundings")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.Mass_Repair(usr)
+		if("Mass Rejuvination")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.mass_rejuvinate(usr)
+		if("Singularity Hook")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.throw_hookshot(usr)
+		if("Adminbus-mounted Jukebox")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.Mounted_Jukebox(usr)
+		if("Teleportation")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.Teleportation(usr)
+		if("Release Passengers")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.release_passengers(usr)
+		if("Send Passengers Back Home")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.Send_Home(usr)
+		if("Antag Madness!")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.Make_Antag(usr)
+		if("Give Infinite Laser Guns to the Passengers")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.give_lasers(usr)
+		if("Delete the given Infinite Laser Guns")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.delete_lasers(usr)
+		if("Give Fuse-Bombs to the Passengers")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.give_bombs(usr)
+		if("Delete the given Fuse-Bombs")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.delete_bombs(usr)
+		if("Send Passengers to the Thunderdome's Red Team")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.Sendto_Thunderdome_Arena_Red(usr)
+		if("Split the Passengers between the two Thunderdome Teams")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.Sendto_Thunderdome_Arena(usr)
+		if("Send Passengers to the Thunderdome's Green Team")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.Sendto_Thunderdome_Arena_Green(usr)
+		if("Send Passengers to the Thunderdome's Observers' Lodge")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.Sendto_Thunderdome_Obs(usr)
+		if("Capture Mobs")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.toggle_bumpers(usr,1)
+		if("Hit Mobs")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.toggle_bumpers(usr,2)
+		if("Gib Mobs")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.toggle_bumpers(usr,3)
+		if("Close Door")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.toggle_door(usr,0)
+		if("Open Door")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.toggle_door(usr,1)
+		if("Turn Off Headlights")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.toggle_lights(usr,0)
+		if("Dipped Headlights")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.toggle_lights(usr,1)
+		if("Main Headlights")
+			if(usr.buckled && istype(usr.buckled, /obj/structure/stool/bed/chair/vehicle/adminbus))
+				var/obj/structure/stool/bed/chair/vehicle/adminbus/A = usr.buckled
+				A.toggle_lights(usr,2)
 		else
 			return 0
 	return 1

@@ -100,7 +100,7 @@
 		icon_state = "secborg"
 		modtype = "Security"
 	else
-		laws = new base_law_type // Was NT Default
+		src.laws = getLawset(src)
 		connected_ai = select_active_ai_with_fewest_borgs()
 		if(connected_ai)
 			connected_ai.connected_robots += src
@@ -163,6 +163,8 @@
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
 		if(T)	mmi.loc = T
 		if(mind)	mind.transfer_to(mmi.brainmob)
+		if(mmi.brainmob)
+			mmi.brainmob.locked_to_z = locked_to_z
 		mmi = null
 	..()
 
@@ -195,6 +197,8 @@
 			module_sprites["Basic"] = "robot_old"
 			module_sprites["Android"] = "droid"
 			module_sprites["Default"] = "robot"
+			module_sprites["Marina-SD"] = "marinaSD"
+			module_sprites["Sleek"] = "sleekstandard"
 
 		if("Service")
 			module = new /obj/item/weapon/robot_module/butler(src)
@@ -204,6 +208,8 @@
 			module_sprites["Rich"] = "maximillion"
 			module_sprites["Default"] = "Service2"
 			module_sprites["R2-D2"] = "r2d2"
+			module_sprites["Marina-SV"] = "marinaSV"
+			module_sprites["Sleek"] = "sleekservice"
 
 		if("Miner")
 			module = new /obj/item/weapon/robot_module/miner(src)
@@ -214,6 +220,8 @@
 			module_sprites["Advanced Droid"] = "droid-miner"
 			module_sprites["Treadhead"] = "Miner"
 			module_sprites["Wall-A"] = "wall-a"
+			module_sprites["Marina-MN"] = "marinaMN"
+			module_sprites["Sleek"] = "sleekminer"
 
 		if("Medical")
 			module = new /obj/item/weapon/robot_module/medical(src)
@@ -224,17 +232,20 @@
 			module_sprites["Advanced Droid"] = "droid-medical"
 			module_sprites["Needles"] = "medicalrobot"
 			module_sprites["Standard"] = "surgeon"
-			module_sprites["Marina"] = "marina"
+			module_sprites["Marina-MD"] = "marina"
 			module_sprites["Eve"] = "eve"
+			module_sprites["Sleek"] = "sleekmedic"
 
 		if("Security")
 			module = new /obj/item/weapon/robot_module/security(src)
 			channels = list("Security" = 1)
 			module_sprites["Basic"] = "secborg"
-			module_sprites["Red Knight"] = "Security"
+			module_sprites["Red Knight 2.0"] = "sleeksecurity"
 			module_sprites["Black Knight"] = "securityrobot"
 			module_sprites["Bloodhound"] = "bloodhound"
 			module_sprites["Securitron"] = "securitron"
+			module_sprites["Marina-SC"] = "marinaSC"
+			src << "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>"
 
 		if("Engineering")
 			module = new /obj/item/weapon/robot_module/engineering(src)
@@ -246,6 +257,8 @@
 			module_sprites["Engiseer"] = "Engiseer"
 			module_sprites["Landmate"] = "landmate"
 			module_sprites["Wall-E"] = "wall-e"
+			module_sprites["Marina-EN"] = "marinaEN"
+			module_sprites["Sleek"] = "sleekengineer"
 
 		if("Janitor")
 			module = new /obj/item/weapon/robot_module/janitor(src)
@@ -254,11 +267,15 @@
 			module_sprites["Mop Gear Rex"] = "mopgearrex"
 			module_sprites["Mechaduster"] = "mechaduster"
 			module_sprites["HAN-D"] = "han-d"
+			module_sprites["Marina-JN"] = "marinaJN"
+			module_sprites["Sleek"] = "sleekjanitor"
 
 		if("Combat")
 			module = new /obj/item/weapon/robot_module/combat(src)
 			module_sprites["Combat Android"] = "droid-combat"
 			module_sprites["Bladewolf"] = "bladewolf"
+			module_sprites["Mr. Gutsy"] = "mrgutsy"
+			module_sprites["Marina-CB"] = "marinaCB"
 			channels = list("Security" = 1)
 
 	//Custom_sprite check and entry
@@ -423,6 +440,8 @@
 		src << "\red You enable [C.name]."
 
 /mob/living/silicon/robot/blob_act()
+	if(flags & INVULNERABLE)
+		return
 	if (stat != 2)
 		adjustBruteLoss(60)
 		updatehealth()
@@ -519,6 +538,10 @@
 
 
 /mob/living/silicon/robot/ex_act(severity)
+	if(flags & INVULNERABLE)
+		src << "The bus' robustness protects you from the explosion."
+		return
+
 	if(!blinded)
 		flick("flash", flash)
 
@@ -541,6 +564,8 @@
 
 
 /mob/living/silicon/robot/meteorhit(obj/O as obj)
+	if(flags & INVULNERABLE)
+		return
 	for(var/mob/M in viewers(src, null))
 		M.show_message(text("\red [src] has been hit by [O]"), 1)
 		//Foreach goto(19)
@@ -821,14 +846,14 @@
 					laws = new /datum/ai_laws/syndicate_override
 					var/time = time2text(world.realtime,"hh:mm:ss")
 					lawchanges.Add("[time] <B>:</B> [user.name]([user.key]) emagged [name]([key])")
-					set_zeroth_law("Only [user.real_name] and people he designates as being such are Syndicate Agents.")
+					set_zeroth_law("Only [user.real_name] and people they designate as being such are syndicate agents.")
 					src << "\red ALERT: Foreign software detected."
 					sleep(5)
 					src << "\red Initiating diagnostics..."
 					sleep(20)
 					src << "\red SynBorg v1.7 loaded."
 					sleep(5)
-					src << "\red LAW SYNCHRONISATION ERROR"
+					src << "\red LAW SYNCHRONIZATION ERROR"
 					sleep(5)
 					src << "\red Would you like to send a report to NanoTraSoft? Y/N"
 					sleep(10)
@@ -837,7 +862,7 @@
 					src << "\red ERRORERRORERROR"
 					src << "<b>Obey these laws:</b>"
 					laws.show_laws(src)
-					src << "\red \b ALERT: [user.real_name] is your new master. Obey your new laws and his commands."
+					src << "\red \b ALERT: [user.real_name] is your new master. Obey your new laws and their commands."
 					if(src.module && istype(src.module, /obj/item/weapon/robot_module/miner))
 						for(var/obj/item/weapon/pickaxe/borgdrill/D in src.module.modules)
 							del(D)
@@ -866,6 +891,9 @@
 			else
 				usr << "Upgrade error!"
 
+	else if(istype(W, /obj/item/device/camera_bug))
+		help_shake_act(user)
+		return 0
 
 	else
 		spark_system.start()
@@ -1053,8 +1081,9 @@
 		if(istype(user:gloves, /obj/item/clothing/gloves/space_ninja)&&user:gloves:candrain&&!user:gloves:draining)
 			call(/obj/item/clothing/gloves/space_ninja/proc/drain)("CYBORG",src,user:wear_suit)
 			return
-		if(user.a_intent == "help")
-			user.visible_message("\blue [user.name] pats [src.name] on the head.")
+		else
+			if (user:a_intent == "help")
+				help_shake_act(user)
 			return
 
 /mob/living/silicon/robot/proc/allowed(mob/M)
@@ -1090,7 +1119,7 @@
 /mob/living/silicon/robot/proc/updateicon()
 
 	overlays.Cut()
-	if(stat == 0)
+	if(stat == 0 && cell != null)
 		overlays += image(icon,"eyes-[icon_state]",LIGHTING_LAYER+1)
 
 	if(opened)
@@ -1263,6 +1292,10 @@
 		statelaws()
 	return
 
+/mob/living/silicon/robot/sensor_mode() //Medical/Security HUD controller for borgs
+	set category = "Robot Commands"
+	set desc = "Augment visual feed with internal sensor overlays."
+	..()
 /mob/living/silicon/robot/proc/radio_menu()
 	radio.interact(src)//Just use the radio's Topic() instead of bullshit special-snowflake code
 
@@ -1404,3 +1437,26 @@
 			return
 	else
 		src << "Your icon has been set. You now require a module reset to change it."
+
+/mob/living/silicon/robot/rejuvenate()
+	..()
+	for(var/datum/robot_component/component in components)
+		component.electronics_damage = 0
+		component.brute_damage = 0
+		component.installed = 1
+
+
+/mob/living/silicon/robot/Process_Spaceslipping(var/prob_slip=5)
+	//Engineering borgs have the magic of magnets.
+	if(istype(module, /obj/item/weapon/robot_module/engineering))
+		return 0
+	..()
+
+/mob/living/silicon/robot/put_in_inactive_hand(var/obj/item/W)
+	return 0
+
+/mob/living/silicon/robot/get_inactive_hand(var/obj/item/W)
+	return 0
+
+/mob/living/silicon/robot/proc/help_shake_act(mob/user)
+	user.visible_message("<span class='notice'>[user.name] pats [src.name] on the head.</span>")

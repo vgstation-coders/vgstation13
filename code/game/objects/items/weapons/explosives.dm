@@ -16,7 +16,14 @@
 	var/open_panel = 0
 
 /obj/item/weapon/plastique/New()
+	. = ..()
 	wires = new(src)
+
+/obj/item/weapon/plastique/Destroy()
+	if(wires)
+		wires.Destroy()
+		wires = null
+
 	..()
 
 /obj/item/weapon/plastique/suicide_act(var/mob/user)
@@ -74,6 +81,7 @@
 			var/mob/M=target
 			target:attack_log += "\[[time_stamp()]\]<font color='orange'> Had the [name] planted on them by [user.real_name] ([user.ckey])</font>"
 			user.visible_message("\red [user.name] finished planting an explosive on [target.name]!")
+			playsound(get_turf(src), 'sound/weapons/c4armed.ogg', 60, 1)
 			if(!iscarbon(user))
 				M.LAssailant = null
 			else
@@ -93,6 +101,10 @@
 		explosion(location, -1, -1, 2, 3)
 
 	if(target)
+		if(!(target.singuloCanEat()))//mostly adminbus objects. It'd make sense though that C4 can't destroy what even a singulo can't eat.
+			target.overlays -= image('icons/obj/assemblies.dmi', "plastic-explosive2")
+			del(src)
+			return
 		if (istype(target, /turf/simulated/wall))
 			target:dismantle_wall(1)
 		else

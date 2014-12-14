@@ -93,6 +93,8 @@
 	var/global/list/status_overlays_lighting
 	var/global/list/status_overlays_environ
 
+	var/is_critical = 0 // Endgame scenarios will not destroy this APC.
+
 /obj/machinery/power/apc/updateDialog()
 	if (stat & (BROKEN|MAINT))
 		return
@@ -602,7 +604,7 @@
 	if(!isobserver(user))
 		src.add_fingerprint(user)
 		if(usr == user && opened)
-			if(cell)
+			if(cell && get_dist(src,user)<=1)
 				if(issilicon(user) && !isMoMMI(user)) // MoMMIs can hold one item in their tool slot.
 					cell.loc=src.loc // Drop it, whoops.
 				else
@@ -1144,6 +1146,7 @@
 					chargecount++
 				else
 					chargecount = 0
+					charging = 0
 
 				if(chargecount == 10)
 
@@ -1283,20 +1286,11 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 		terminal.master = null
 		terminal = null
 
-	..()
+	if(wires)
+		wires.Destroy()
+		wires = null
 
-/obj/machinery/power/apc/proc/shock(mob/user, prb)
-	if(!prob(prb))
-		return 0
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(5, 1, src)
-	s.start()
-	if(isalien(user))
-		return 0
-	if (electrocute_mob(user, src, src))
-		return 1
-	else
-		return 0
+	..()
 
 /obj/machinery/power/apc/proc/setsubsystem(val)
 	if(cell && cell.charge > 0)

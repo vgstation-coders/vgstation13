@@ -57,6 +57,21 @@ emp_act
 		organnum++
 	return (armorval/max(organnum, 1))
 
+/mob/living/carbon/human/proc/get_siemens_coefficient_organ(var/datum/organ/external/def_zone)
+	if(!def_zone)
+		return 1.0
+
+	var/siemens_coefficient = 1.0
+	var/list/clothing_items = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes) // What all are we checking?
+
+	for(var/obj/item/clothing/C in clothing_items)
+		if(istype(C) && (C.body_parts_covered & def_zone.body_part)) // Is that body part being targeted covered?
+			siemens_coefficient *= C.siemens_coefficient
+
+
+	return siemens_coefficient
+
+
 
 /mob/living/carbon/human/proc/checkarmor(var/datum/organ/external/def_zone, var/type)
 	if(!type)	return 0
@@ -116,6 +131,9 @@ emp_act
 	return 0
 
 /mob/living/carbon/human/emp_act(severity)
+	if(flags & INVULNERABLE)
+		return
+
 	for(var/obj/O in src)
 		if(!O)	continue
 		O.emp_act(severity)
@@ -184,7 +202,7 @@ emp_act
 			affecting.sabotaged = 1
 		return
 
-	if(I.attack_verb.len)
+	if(I.attack_verb && I.attack_verb.len)
 		visible_message("\red <B>[src] has been [pick(I.attack_verb)] in the [hit_area] with [I.name] by [user]!</B>")
 	else
 		visible_message("\red <B>[src] has been attacked in the [hit_area] with [I.name] by [user]!</B>")
@@ -258,6 +276,9 @@ emp_act
 		update_inv_w_uniform(0)
 
 /mob/living/carbon/human/ex_act(severity)
+	if(flags & INVULNERABLE)
+		return
+
 	if(!blinded)
 		flick("flash", flash)
 
@@ -351,6 +372,8 @@ emp_act
 
 
 /mob/living/carbon/human/blob_act()
+	if(flags & INVULNERABLE)
+		return
 	if(stat == 2)	return
 	show_message("\red The blob attacks you!")
 	var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
@@ -359,6 +382,8 @@ emp_act
 	return
 
 /mob/living/carbon/human/meteorhit(O as obj)
+	if(flags & INVULNERABLE)
+		return
 	for(var/mob/M in viewers(src, null))
 		if ((M.client && !( M.blinded )))
 			M.show_message("\red [src] has been hit by [O]", 1)

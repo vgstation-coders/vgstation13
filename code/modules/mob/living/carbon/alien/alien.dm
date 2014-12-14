@@ -3,7 +3,7 @@
 #define HEAT_DAMAGE_LEVEL_3 8 //Amount of damage applied when your body temperature passes the 460K point and you are on fire
 
 /mob/living/carbon/alien
-	name = "alien"
+	name = "alien" //The alien, not Alien
 	voice_name = "alien"
 	speak_emote = list("hisses")
 	icon = 'icons/mob/alien.dmi'
@@ -48,7 +48,7 @@
 	return 2
 
 // MULEBOT SMASH
-/mob/living/carbon/alien/HasEntered(var/atom/movable/AM)
+/mob/living/carbon/alien/Crossed(var/atom/movable/AM)
 	var/obj/machinery/bot/mulebot/MB = AM
 	if(istype(MB))
 		MB.RunOverCreature(src,"#00ff00")
@@ -83,7 +83,7 @@
 			adjustFireLoss(-heal_rate)
 			adjustOxyLoss(-heal_rate)
 
-	if(!environment)
+	if(!environment || (flags & INVULNERABLE))
 		return
 	var/loc_temp = T0C
 	if(istype(loc, /obj/mecha))
@@ -229,6 +229,9 @@ Des: Removes all infected images from the alien.
 			if(dd_hasprefix_case(I.icon_state, "infected"))
 				del(I)
 	return
+
+/mob/living/carbon/alien/has_eyes()
+	return 0
 
 #undef HEAT_DAMAGE_LEVEL_1
 #undef HEAT_DAMAGE_LEVEL_2

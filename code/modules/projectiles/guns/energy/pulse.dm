@@ -36,7 +36,7 @@
 	isHandgun()
 		return 0
 
-/obj/item/weapon/gun/energy/pulse_rifle/cyborg/load_into_chamber()
+/obj/item/weapon/gun/energy/pulse_rifle/cyborg/process_chambered()
 	if(in_chamber)
 		return 1
 	if(isrobot(src.loc))
@@ -62,6 +62,7 @@
 	name = "m1911-P"
 	desc = "It's not the size of the gun, it's the size of the hole it puts through people."
 	icon_state = "m1911-p"
+	item_state = "pulse"
 	cell_type = "/obj/item/weapon/cell/infinite"
 
 	isHandgun()

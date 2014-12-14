@@ -34,6 +34,9 @@
 	new /obj/item/clothing/head/beret/sec(src)
 	new /obj/item/clothing/head/beret/sec(src)
 	new /obj/item/clothing/head/beret/sec(src)
+	new /obj/item/clothing/mask/bandana/red(src)
+	new /obj/item/clothing/mask/bandana/red(src)
+	new /obj/item/clothing/mask/bandana/red(src)
 	return
 
 
@@ -120,7 +123,7 @@
 
 /obj/structure/closet/wardrobe/orange
 	name = "prison wardrobe"
-	desc = "It's a storage unit for Nanotrasen-regulation prisoner attire."
+	desc = "It's a storage unit for Nanotrasen-regulated prisoner attire."
 	icon_state = "orange"
 	icon_closed = "orange"
 
@@ -173,7 +176,12 @@
 /obj/structure/closet/wardrobe/engineering_yellow/New()
 	new /obj/item/clothing/under/rank/engineer(src)
 	new /obj/item/clothing/under/rank/engineer(src)
-	new /obj/item/clothing/under/rank/engineer(src)
+	new /obj/item/clothing/under/rank/engine_tech(src)
+	new /obj/item/clothing/under/rank/engine_tech(src)
+	new /obj/item/clothing/under/rank/maintenance_tech(src)
+	new /obj/item/clothing/under/rank/maintenance_tech(src)
+	new /obj/item/clothing/under/rank/electrician(src)
+	new /obj/item/clothing/under/rank/electrician(src)
 	new /obj/item/clothing/shoes/orange(src)
 	new /obj/item/clothing/shoes/orange(src)
 	new /obj/item/clothing/shoes/orange(src)
@@ -220,7 +228,10 @@
 /obj/structure/closet/wardrobe/toxins_white/New()
 	new /obj/item/clothing/under/rank/scientist(src)
 	new /obj/item/clothing/under/rank/scientist(src)
-	new /obj/item/clothing/under/rank/scientist(src)
+	new /obj/item/clothing/under/rank/xenoarch(src)
+	new /obj/item/clothing/under/rank/plasmares(src)
+	new /obj/item/clothing/under/rank/xenobio(src)
+	new /obj/item/clothing/under/rank/anomalist(src)
 	new /obj/item/clothing/suit/storage/labcoat(src)
 	new /obj/item/clothing/suit/storage/labcoat(src)
 	new /obj/item/clothing/suit/storage/labcoat(src)
@@ -241,6 +252,10 @@
 /obj/structure/closet/wardrobe/robotics_black/New()
 	new /obj/item/clothing/under/rank/roboticist(src)
 	new /obj/item/clothing/under/rank/roboticist(src)
+	new /obj/item/clothing/under/rank/mechatronic(src)
+	new /obj/item/clothing/under/rank/mechatronic(src)
+	new /obj/item/clothing/under/rank/biomechanical(src)
+	new /obj/item/clothing/under/rank/biomechanical(src)
 	new /obj/item/clothing/suit/storage/labcoat(src)
 	new /obj/item/clothing/suit/storage/labcoat(src)
 	new /obj/item/clothing/shoes/black(src)
@@ -258,6 +273,8 @@
 /obj/structure/closet/wardrobe/chemistry_white/New()
 	new /obj/item/clothing/under/rank/chemist(src)
 	new /obj/item/clothing/under/rank/chemist(src)
+	new /obj/item/clothing/under/rank/pharma(src)
+	new /obj/item/clothing/under/rank/pharma(src)
 	new /obj/item/clothing/shoes/white(src)
 	new /obj/item/clothing/shoes/white(src)
 	new /obj/item/clothing/suit/storage/labcoat/chemist(src)

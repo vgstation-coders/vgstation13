@@ -22,12 +22,15 @@
 	var/isopen = 0
 	var/islocked = 0
 	var/isUV = 0
-	var/ispowered = 1 //starts powered
-	var/isbroken = 0
+	//var/ispowered = 1 //starts powered
+	//var/isbroken = 0
+	//OBSOLETE: That's what the NOPOWER and BROKEN stat bitflags are for
 	var/issuperUV = 0
 	var/panelopen = 0
 	var/safetieson = 1
 	var/cycletime_left = 0
+
+	machine_flags = SCREWTOGGLE
 
 
 //The units themselves/////////////////
@@ -74,6 +77,11 @@
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
+/obj/machinery/suit_storage_unit/meteor_eod //Used for meteor rounds
+	SUIT_TYPE = /obj/item/clothing/suit/bomb_suit
+	HELMET_TYPE = /obj/item/clothing/head/bomb_hood
+	MASK_TYPE = /obj/item/clothing/mask/gas
+	BOOT_TYPE = /obj/item/clothing/shoes/jackboots
 
 /obj/machinery/suit_storage_unit/New()
 	. = ..()
@@ -97,17 +105,23 @@
 		hassuit = 1
 	if(OCCUPANT)
 		hashuman = 1
-	icon_state = text("suitstorage[][][][][][][][][]",hashelmet,hassuit,hashuman,src.isopen,src.islocked,src.isUV,src.ispowered,src.isbroken,src.issuperUV)
-
+	icon_state = text("suitstorage[][][][][][][][][]",
+					hashelmet,
+					hassuit,
+					hashuman,
+					src.isopen,
+					src.islocked,
+					src.isUV,
+					!(stat & NOPOWER),
+					stat & BROKEN,
+					src.issuperUV)
 
 /obj/machinery/suit_storage_unit/power_change()
 	if( powered() )
-		src.ispowered = 1
 		stat &= ~NOPOWER
 		src.update_icon()
 	else
 		spawn(rand(0, 15))
-			src.ispowered = 0
 			stat |= NOPOWER
 			src.islocked = 0
 			src.isopen = 1
@@ -163,7 +177,7 @@
 		//onclose(user, "ssu_cycling_panel")
 
 	else
-		if(!src.isbroken)
+		if(!(stat & BROKEN))
 
 			// AUTOFIXED BY fix_string_idiocy.py
 			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\suit_storage_unit.dm:117: dat+= "<HEAD><TITLE>Suit storage unit</TITLE></HEAD>"
@@ -414,11 +428,11 @@
 			if(src.issuperUV)
 				var/burndamage = rand(28,35)
 				OCCUPANT.take_organ_damage(0,burndamage)
-				OCCUPANT.emote("scream")
+				OCCUPANT.emote("scream",,, 1)
 			else
 				var/burndamage = rand(6,10)
 				OCCUPANT.take_organ_damage(0,burndamage)
-				OCCUPANT.emote("scream")
+				OCCUPANT.emote("scream",,, 1)
 		if(i==3) //End of the cycle
 			if(!src.issuperUV)
 				if(src.HELMET)
@@ -439,7 +453,7 @@
 				if(src.BOOTS)
 					src.BOOTS = null
 				visible_message("<font color='red'>With a loud whining noise, the Suit Storage Unit's door grinds open. Puffs of ashen smoke come out of its chamber.</font>", 3)
-				src.isbroken = 1
+				stat |= BROKEN
 				src.isopen = 1
 				src.islocked = 0
 				src.eject_occupant(OCCUPANT) //Mixing up these two lines causes bug. DO NOT DO IT.
@@ -527,7 +541,7 @@
 	if (!src.isopen)
 		usr << "<font color='red'>The unit's doors are shut.</font>"
 		return
-	if (!src.ispowered || src.isbroken)
+	if ((stat & NOPOWER) || (stat & BROKEN))
 		usr << "<font color='red'>The unit is not operational.</font>"
 		return
 	if ( (src.OCCUPANT) || (src.HELMET) || (src.SUIT) || BOOTS )
@@ -554,16 +568,15 @@
 		src.OCCUPANT = null //Testing this as a backup sanity test
 	return
 
+/obj/machinery/suit_storage_unit/togglePanelOpen(var/obj/toggleitem, mob/user)
+	..()
+	src.updateUsrDialog()
 
 /obj/machinery/suit_storage_unit/attackby(obj/item/I as obj, mob/user as mob)
-	if(!src.ispowered)
+	if(stat & NOPOWER)
 		return
-	if(istype(I, /obj/item/weapon/screwdriver))
-		src.panelopen = !src.panelopen
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
-		user << text("<font color='blue'>You [] the unit's maintenance panel.</font>",(src.panelopen ? "open up" : "close") )
-		src.updateUsrDialog()
-		return
+	if(..())
+		return 1
 	if ( istype(I, /obj/item/weapon/grab) )
 		var/obj/item/weapon/grab/G = I
 		if( !(ismob(G.affecting)) )
@@ -571,7 +584,7 @@
 		if (!src.isopen)
 			usr << "<font color='red'>The unit's doors are shut.</font>"
 			return
-		if (!src.ispowered || src.isbroken)
+		if ((stat & NOPOWER) || (stat & BROKEN))
 			usr << "<font color='red'>The unit is not operational.</font>"
 			return
 		if ( (src.OCCUPANT) || (src.HELMET) || (src.SUIT) || BOOTS) //Unit needs to be absolutely empty

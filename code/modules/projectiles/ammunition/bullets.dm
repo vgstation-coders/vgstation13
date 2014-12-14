@@ -37,6 +37,13 @@
 	projectile_type = "/obj/item/projectile/bullet/weakbullet"
 	w_type = RECYK_METAL
 
+/* Not entirely ready to be implemented yet. Get a server vote on bringing these in
+/obj/item/ammo_casing/c38/lethal
+	desc = "A .38 bullet casing. This is the lethal variant."
+	caliber = "38"
+	projectile_type = "/obj/item/projectile/bullet" //HAHA, why is this a good idea
+	w_type = RECYK_METAL
+*/
 
 /obj/item/ammo_casing/c9mm
 	desc = "A 9mm bullet casing."
@@ -68,6 +75,11 @@
 	m_amt = 12500
 	w_type = RECYK_METAL
 
+	update_icon()
+		desc = "[initial(desc)][BB ? "" : " This one is spent"]"
+		overlays = list()
+		if(!BB)
+			overlays += icon('icons/obj/ammo.dmi', "emptyshell")
 
 /obj/item/ammo_casing/shotgun/blank
 	name = "shotgun shell"
@@ -76,6 +88,7 @@
 	projectile_type = ""
 	m_amt = 250
 	w_type = RECYK_METAL
+
 
 
 /obj/item/ammo_casing/shotgun/beanbag

@@ -89,7 +89,12 @@ var/global/mulebot_count = 0
 
 	verbs -= /atom/movable/verb/pull
 
+/obj/machinery/bot/mulebot/Destroy()
+	if(wires)
+		wires.Destroy()
+		wires = null
 
+	..()
 
 // attack by item
 // emag : lock/unlock,
@@ -396,7 +401,7 @@ var/global/mulebot_count = 0
 
 // called to load a crate
 /obj/machinery/bot/mulebot/proc/load(var/atom/movable/C)
-	if(wires.LoadCheck() && !istype(C,/obj/structure/closet/crate))
+	if(wires.LoadCheck() && !istype(C,/obj/structure/closet/crate) && !istype(C,/obj/structure/vendomatpack) && !istype(C,/obj/structure/stackopacks))
 		src.visible_message("[src] makes a sighing buzz.", "You hear an electronic buzzing sound.")
 		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return		// if not emagged, only allow crates to be loaded
@@ -415,7 +420,7 @@ var/global/mulebot_count = 0
 			return
 	mode = 1
 
-	// if a create, close before loading
+	// if a crate, close before loading
 	var/obj/structure/closet/crate/crate = C
 	if(istype(crate))
 		crate.close()
@@ -691,8 +696,16 @@ var/global/mulebot_count = 0
 							break
 				else			// otherwise, look for crates only
 					AM = locate(/obj/structure/closet/crate) in get_step(loc,loaddir)
-				if(AM)
-					load(AM)
+					if(AM)
+						load(AM)
+					else
+						AM = locate(/obj/structure/vendomatpack) in get_step(loc,loaddir)
+						if(AM)
+							load(AM)
+						else
+							AM = locate(/obj/structure/stackopacks) in get_step(loc,loaddir)
+							if(AM)
+								load(AM)
 		// whatever happened, check to see if we return home
 
 		if(auto_return && destination != home_destination)
@@ -725,7 +738,7 @@ var/global/mulebot_count = 0
 	return get_turf(src)
 
 
-// called from mob/living/carbon/human/HasEntered()
+// called from mob/living/carbon/human/Crossed()
 // when mulebot is in the same loc
 /obj/machinery/bot/mulebot/proc/RunOver(var/mob/living/carbon/human/H)
 	src.visible_message("\red [src] drives over [H]!")
@@ -739,10 +752,7 @@ var/global/mulebot_count = 0
 	H.apply_damage(0.5*damage, BRUTE, "l_arm")
 	H.apply_damage(0.5*damage, BRUTE, "r_arm")
 
-	var/obj/effect/decal/cleanable/blood/B = new(src.loc)
-	B.blood_DNA = list()
-	B.blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
-
+	blood_splatter(src,H,1)
 	bloodiness += 4
 	currentBloodColor="#A10808" // For if species get different blood colors.
 

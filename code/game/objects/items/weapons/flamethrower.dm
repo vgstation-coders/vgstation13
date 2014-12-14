@@ -12,6 +12,7 @@
 	w_class = 3.0
 	m_amt = 500
 	w_type = RECYK_MISC
+	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "combat=1;plasmatech=1"
 	var/status = 0
 	var/throw_amount = 100
@@ -44,7 +45,7 @@
 		if(M.l_hand == src || M.r_hand == src)
 			location = M.loc
 	if(isturf(location)) //start a fire if possible
-		location.hotspot_expose(700, 2)
+		location.hotspot_expose(700, 2,surfaces=istype(loc,/turf))
 	return
 
 
@@ -212,7 +213,7 @@
 	//Transfer 5% of current tank air contents to turf
 	var/datum/gas_mixture/air_transfer = ptank.air_contents.remove_ratio(0.02*(throw_amount/100))
 	//air_transfer.toxins = air_transfer.toxins * 5 // This is me not comprehending the air system. I realize this is retarded and I could probably make it work without fucking it up like this, but there you have it. -- TLE
-	new/obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel(target,air_transfer.toxins,get_dir(loc,target))
+	new/obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel(target,air_transfer.toxins*10,get_dir(loc,target))
 	air_transfer.toxins = 0
 	target.assume_air(air_transfer)
 	//Burn it based on transfered gas

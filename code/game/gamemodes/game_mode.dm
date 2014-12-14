@@ -31,6 +31,9 @@
 	var/uplink_welcome = "Syndicate Uplink Console:"
 	var/uplink_uses = 10
 	var/mixed = 0 // denotes whether its apart of a mixed mode or not
+	var/list/datum/mind/necromancer = list() //Those who use a necromancy staff OR soulstone a shade/construct
+	var/list/datum/mind/risen = list() // Those risen by necromancy or soulstone
+	var/eldergod = 1 // Can cultists spawn Nar-Sie? (Set to 0 on cascade or narsie spawn)
 
 /datum/game_mode/proc/announce() //to be calles when round starts
 	world << "<B>Notice</B>: [src] did not define announce()"
@@ -225,22 +228,11 @@
 		set_security_level(SEC_LEVEL_BLUE)*/
 
 
-/datum/game_mode/proc/get_players_for_role(var/role, override_jobbans=1)
+/datum/game_mode/proc/get_players_for_role(var/role, override_jobbans=1, poll=0)
 	var/list/players = list()
 	var/list/candidates = list()
 	var/list/drafted = list()
 	var/datum/mind/applicant = null
-
-	var/roletext
-	switch(role)
-		if(BE_CHANGELING)	roletext="changeling"
-		if(BE_TRAITOR)		roletext="traitor"
-		if(BE_OPERATIVE)	roletext="operative"
-		if(BE_WIZARD)		roletext="wizard"
-		if(BE_REV)			roletext="revolutionary"
-		if(BE_CULTIST)		roletext="cultist"
-		if(BE_RAIDER)       roletext="Vox Raider"
-
 
 	// Ultimate randomizing code right here
 	for(var/mob/new_player/player in player_list)
@@ -253,10 +245,10 @@
 
 	for(var/mob/new_player/player in players)
 		if(player.client && player.ready)
-			if(player.client.prefs.be_special & role)
-				if(!jobban_isbanned(player, "Syndicate") && !jobban_isbanned(player, roletext)) //Nodrak/Carn: Antag Job-bans
+			if(player.client.desires_role(role, display_to_user=poll))//if(player.client.prefs.be_special & role)
+				if(!jobban_isbanned(player, "Syndicate") && !jobban_isbanned(player, role)) //Nodrak/Carn: Antag Job-bans
 					candidates += player.mind				// Get a list of all the people who want to be the antagonist for this round
-					log_debug("[player.key] had [roletext] enabled, so drafting them.")
+					log_debug("[player.key] had [role] enabled, so drafting them.")
 
 	if(restricted_jobs)
 		for(var/datum/mind/player in candidates)
@@ -267,8 +259,8 @@
 	if(candidates.len < recommended_enemies)
 		for(var/mob/new_player/player in players)
 			if(player.client && player.ready)
-				if(!(player.client.prefs.be_special & role)) // We don't have enough people who want to be antagonist, make a seperate list of people who don't want to be one
-					if(!jobban_isbanned(player, "Syndicate") && !jobban_isbanned(player, roletext)) //Nodrak/Carn: Antag Job-bans
+				if(player.client.desires_role(role, display_to_user=poll)) // We don't have enough people who want to be antagonist, make a seperate list of people who don't want to be one
+					if(!jobban_isbanned(player, "Syndicate") && !jobban_isbanned(player, role)) //Nodrak/Carn: Antag Job-bans
 						drafted += player.mind
 
 	if(restricted_jobs)
@@ -284,7 +276,7 @@
 			applicant = pick(drafted)
 			if(applicant)
 				candidates += applicant
-				log_debug("[applicant.key] was force-drafted as [roletext], because there aren't enough candidates.")
+				log_debug("[applicant.key] was force-drafted as [role], because there aren't enough candidates.")
 				drafted.Remove(applicant)
 
 		else												// Not enough scrubs, ABORT ABORT ABORT
@@ -293,7 +285,7 @@
 	if(candidates.len < recommended_enemies && override_jobbans) //If we still don't have enough people, we're going to start drafting banned people.
 		for(var/mob/new_player/player in players)
 			if (player.client && player.ready)
-				if(jobban_isbanned(player, "Syndicate") || jobban_isbanned(player, roletext)) //Nodrak/Carn: Antag Job-bans
+				if(jobban_isbanned(player, "Syndicate") || jobban_isbanned(player, role)) //Nodrak/Carn: Antag Job-bans
 					drafted += player.mind
 
 	if(restricted_jobs)
@@ -310,7 +302,7 @@
 			if(applicant)
 				candidates += applicant
 				drafted.Remove(applicant)
-				log_debug("[applicant.key] was force-drafted as [roletext], because there aren't enough candidates.")
+				log_debug("[applicant.key] was force-drafted as [role], because there aren't enough candidates.")
 
 		else												// Not enough scrubs, ABORT ABORT ABORT
 			break
@@ -427,3 +419,87 @@ proc/get_nt_opposed()
 				dudes += man
 	if(dudes.len == 0) return null
 	return pick(dudes)
+
+
+/datum/game_mode/proc/update_necro_icons_added(datum/mind/owner)
+	for(var/headref in necromancer)
+		var/datum/mind/head = locate(headref)
+		for(var/datum/mind/t_mind in necromancer[headref])
+			if(head)
+				if(head.current)
+					if(head.current.client)
+						var/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "minion")
+						head.current.client.images += I
+						//world << "Adding minion overlay to [head.current]"
+				if(t_mind.current)
+					if(t_mind.current.client)
+						var/I = image('icons/mob/mob.dmi', loc = head.current, icon_state = "necromancer")
+						t_mind.current.client.images += I
+						//world << "Adding master overlay to [t_mind.current]"
+				if(t_mind.current)
+					if(t_mind.current.client)
+						var/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "minion")
+						t_mind.current.client.images += I
+						//world << "Adding minion overlay to [t_mind.current]"
+
+/datum/game_mode/proc/update_necro_icons_removed(datum/mind/owner)
+	for(var/headref in necromancer)
+		var/datum/mind/head = locate(headref)
+		for(var/datum/mind/t_mind in necromancer[headref])
+			if(t_mind.current)
+				if(t_mind.current.client)
+					for(var/image/I in t_mind.current.client.images)
+						if((I.icon_state == "minion" || I.icon_state == "necromancer") && I.loc == owner.current)
+							//world << "deleting [t_mind.current] overlay"
+							del(I)
+		if(head)
+			//world.log << "found [head.name]"
+			if(head.current)
+				if(head.current.client)
+					for(var/image/I in head.current.client.images)
+						if((I.icon_state == "minion" || I.icon_state == "necromancer") && I.loc == owner.current)
+							//world << "deleting [head.current] overlay"
+							del(I)
+	if(owner.current)
+		if(owner.current.client)
+			for(var/image/I in owner.current.client.images)
+				if(I.icon_state == "minion" || I.icon_state == "necromancer")
+					//world << "deleting [owner.current] overlay"
+					del(I)
+
+/datum/game_mode/proc/update_all_necro_icons()
+	spawn(0)
+		for(var/headref in necromancer)
+			var/datum/mind/head = locate(headref)
+			if(head.current)
+				if(head.current.client)
+					for(var/image/I in head.current.client.images)
+						if(I.icon_state == "minion" || I.icon_state == "necromancer")
+							//world << "deleting [head.current] overlay"
+							del(I)
+			for(var/datum/mind/t_mind in necromancer[headref])
+				if(t_mind.current && t_mind.current.client)
+					for(var/image/I in t_mind.current.client.images)
+						if(I.icon_state == "minion" || I.icon_state == "necromancer")
+							//world << "deleting [t_mind.current] overlay"
+							del(I)
+
+		for(var/headref in necromancer)
+			var/datum/mind/head = locate(headref)
+			for(var/datum/mind/t_mind in necromancer[headref])
+				if(head)
+					if(head.current)
+						if(head.current.client)
+							var/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "minion")
+							//world << "Adding minion overlay to [head.current]"
+							head.current.client.images += I
+					if(t_mind.current)
+						if(t_mind.current.client)
+							var/I = image('icons/mob/mob.dmi', loc = head.current, icon_state = "necromancer")
+							t_mind.current.client.images += I
+							//world << "Adding master overlay to [t_mind.current]"
+					if(t_mind.current)
+						if(t_mind.current.client)
+							var/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "minion")
+							t_mind.current.client.images += I
+							//world << "Adding minion overlay to [t_mind.current]"

@@ -1,9 +1,12 @@
-/obj/machinery/disease2/incubator/
+/obj/machinery/disease2/incubator
 	name = "Pathogenic incubator"
 	density = 1
 	anchored = 1
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "incubator"
+
+	machine_flags = SCREWTOGGLE | CROWDESTROY
+
 	var/obj/item/weapon/virusdish/dish
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/radiation = 0
@@ -16,7 +19,23 @@
 
 	var/virusing
 
+/obj/machinery/disease2/incubator/New()
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/incubator,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/reagent_containers/glass/beaker,
+	)
+
+	RefreshParts()
+
 /obj/machinery/disease2/incubator/attackby(var/obj/B as obj, var/mob/user as mob)
+	..()
 	if(istype(B, /obj/item/weapon/reagent_containers/glass) || istype(B,/obj/item/weapon/reagent_containers/syringe))
 
 		if(src.beaker)
@@ -63,6 +82,8 @@
 		on = !on
 		if(on)
 			icon_state = "incubator_on"
+			if(dish && dish.virus2)
+				dish.virus2.log += "<br />[timestamp()] Incubation starting by [key_name(usr)] {food=[foodsupply],rads=[radiation]}"
 		else
 			icon_state = "incubator"
 	if (href_list["ejectdish"])
@@ -82,11 +103,13 @@
 		else
 			var/datum/reagent/blood/B = locate(/datum/reagent/blood) in beaker.reagents.reagent_list
 			if (!B)
-				state("\The [src.name] buzzes, \"No suitable breeding enviroment detected.\"", "blue")
+				state("\The [src.name] buzzes, \"No suitable breeding environment detected.\"", "blue")
 			else
 				if (!B.data["virus2"])
 					B.data["virus2"] = list()
-				var/list/virus = list("[dish.virus2.uniqueID]" = dish.virus2.getcopy())
+				var/datum/disease2/disease/D = dish.virus2.getcopy()
+				D.log += "<br />[timestamp()] Injected into blood via [src] by [key_name(usr)]"
+				var/list/virus = list("[dish.virus2.uniqueID]" = D)
 				B.data["virus2"] = virus
 
 				state("\The [src.name] pings, \"Injection complete.\"", "blue")
@@ -142,6 +165,7 @@
 				state("The [src.name] pings", "blue")
 		if(radiation)
 			if(radiation > 50 & prob(5))
+				dish.virus2.log += "<br />[timestamp()] MAJORMUTATE (incubator rads)"
 				dish.virus2.majormutate()
 				if(dish.info)
 					dish.info = "OUTDATED : [dish.info]"

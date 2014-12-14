@@ -1,6 +1,6 @@
 var/global/list/datum/pipe_network/pipe_networks = list()
 
-datum/pipe_network
+/datum/pipe_network
 	var/list/datum/gas_mixture/gases = list() //All of the gas_mixtures continuously connected in this network
 
 	var/list/obj/machinery/atmospherics/normal_members = list()
@@ -21,9 +21,11 @@ datum/pipe_network
 			update = 0
 			reconcile_air() //equalize_gases(gases)
 
+#ifdef ATMOS_PIPELINE_PROCESSING
 		//Give pipelines their process call for pressure checking and what not. Have to remove pressure checks for the time being as pipes dont radiate heat - Mport
-		//for(var/datum/pipeline/line_member in line_members)
-		//	line_member.process()
+		for(var/datum/pipeline/line_member in line_members)
+			line_member.process()
+#endif
 
 	proc/build_network(obj/machinery/atmospherics/start_normal, obj/machinery/atmospherics/reference)
 		//Purpose: Generate membership roster
@@ -77,7 +79,8 @@ datum/pipe_network
 		var/total_thermal_energy = 0
 		var/total_heat_capacity = 0
 
-		air_transient.volume = 0
+		//air_transient.volume = 0
+		var/air_transient_volume = 0
 
 		air_transient.oxygen = 0
 		air_transient.nitrogen = 0
@@ -88,7 +91,7 @@ datum/pipe_network
 		air_transient.trace_gases = list()
 
 		for(var/datum/gas_mixture/gas in gases)
-			air_transient.volume += gas.volume
+			air_transient_volume += gas.volume
 			var/temp_heatcap = gas.heat_capacity()
 			total_thermal_energy += gas.temperature*temp_heatcap
 			total_heat_capacity += temp_heatcap
@@ -107,7 +110,9 @@ datum/pipe_network
 
 					corresponding.moles += trace_gas.moles
 
-		if(air_transient.volume > 0)
+		air_transient.volume = air_transient_volume
+
+		if(air_transient_volume > 0)
 
 			if(total_heat_capacity > 0)
 				air_transient.temperature = total_thermal_energy/total_heat_capacity
@@ -121,22 +126,27 @@ datum/pipe_network
 
 			//Update individual gas_mixtures by volume ratio
 			for(var/datum/gas_mixture/gas in gases)
-				gas.oxygen = air_transient.oxygen*gas.volume/air_transient.volume
-				gas.nitrogen = air_transient.nitrogen*gas.volume/air_transient.volume
-				gas.toxins = air_transient.toxins*gas.volume/air_transient.volume
-				gas.carbon_dioxide = air_transient.carbon_dioxide*gas.volume/air_transient.volume
+				var/volume_ratio = gas.volume / air_transient.volume
+
+				gas.oxygen = air_transient.oxygen * volume_ratio
+				gas.nitrogen = air_transient.nitrogen * volume_ratio
+				gas.toxins = air_transient.toxins * volume_ratio
+				gas.carbon_dioxide = air_transient.carbon_dioxide * volume_ratio
 
 				gas.temperature = air_transient.temperature
 
 				if(air_transient.trace_gases.len)
 					for(var/datum/gas/trace_gas in air_transient.trace_gases)
 						var/datum/gas/corresponding = locate(trace_gas.type) in gas.trace_gases
+
 						if(!corresponding)
 							corresponding = new trace_gas.type()
 							gas.trace_gases += corresponding
 
-						corresponding.moles = trace_gas.moles*gas.volume/air_transient.volume
+						corresponding.moles = trace_gas.moles * volume_ratio
+
 				gas.update_values()
+
 		air_transient.update_values()
 		return 1
 

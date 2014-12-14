@@ -92,7 +92,7 @@ datum/light_source
 		if(owner.loc && owner.luminosity > 0)
 			readrgb(owner.l_color)
 			effect = list()
-			for(var/turf/T in view(owner.get_light_range(),owner))
+			for(var/turf/T in view(owner.get_light_range(), get_turf(owner)))
 				var/delta_lumen = lum(T)
 				if(delta_lumen > 0)
 					effect[T] = delta_lumen
@@ -320,6 +320,7 @@ turf/proc/shift_to_subarea()
 			A.SetLightLevel(level, color_light)
 
 		A.contents += src	// move the turf into the area
+	universe.OnTurfTick(src)
 
 // Dedicated lighting sublevel for space turfs
 // helps us depower things in space, remove space fire alarms,

@@ -1,15 +1,13 @@
-/mob/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/mob/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 
 	if(ismob(mover))
 		var/mob/moving_mob = mover
+
 		if ((other_mobs && moving_mob.other_mobs))
 			return 1
-		return (!mover.density || !density || lying)
-	else
-		return (!mover.density || !density || lying)
-	return
 
+	return (!mover.density || !density || lying)
 
 /client/North()
 	..()
@@ -42,7 +40,7 @@
 		var/mob/living/carbon/C = usr
 		C.toggle_throw_mode()
 	else
-		usr << "\red This mob type cannot throw items."
+		usr << "<span class='warning'>This mob type cannot throw items.</span>"
 	return
 
 
@@ -50,11 +48,22 @@
 	if(iscarbon(usr))
 		var/mob/living/carbon/C = usr
 		if(!C.get_active_hand())
-			usr << "\red You have nothing to drop in your hand."
+			usr << "<span class='warning'> You have nothing to drop in your hand.</span>"
 			return
 		drop_item()
+	else if(isMoMMI(usr))
+		var/mob/living/silicon/robot/mommi/M = usr
+		if(!M.get_active_hand())
+			M << "<span class='warning'> You have nothing to drop or store.</span>"
+			return
+		M.uneq_active()
+	else if(isrobot(usr))
+		var/mob/living/silicon/robot/R = usr
+		if(!R.module_active)
+			return
+		R.uneq_active()
 	else
-		usr << "\red This mob type cannot drop items."
+		usr << "<span class='warning'> This mob type cannot drop items.</span>"
 	return
 
 //This gets called when you press the delete button.
@@ -62,7 +71,7 @@
 	set hidden = 1
 
 	if(!usr.pulling)
-		usr << "\blue You are not pulling anything."
+		usr << "<span class='notice'> You are not pulling anything.</span>"
 		return
 	usr.stop_pulling()
 
@@ -190,6 +199,8 @@
 	if(!mob)
 		return // Moved here to avoid nullrefs below. - N3X
 
+	call(/datum/pda_app/station_map/proc/minimap_update)(mob)
+
 	// /vg/ - Deny clients from moving certain mobs. (Like cluwnes :^)
 	if(mob.deny_client_move)
 		src << "<span class='warning'>You cannot move this mob.</span>"
@@ -197,7 +208,9 @@
 
 	if(mob.control_object)	Move_object(dir)
 
-	if(isobserver(mob))	return mob.Move(loc, dir)
+	if(mob.incorporeal_move)
+		Process_Incorpmove(dir)
+		return
 
 	if(moving)	return 0
 
@@ -214,11 +227,7 @@
 
 	if(mob.monkeyizing)	return//This is sota the goto stop mobs from moving var
 
-	if(isliving(mob))
-		var/mob/living/L = mob
-		if(L.incorporeal_move)//Move though walls
-			Process_Incorpmove(dir)
-			return
+
 
 	if(Process_Grab())	return
 
@@ -233,7 +242,7 @@
 	if(!mob.lastarea)
 		mob.lastarea = get_area(mob.loc)
 
-	if((istype(mob.loc, /turf/space)) || (mob.lastarea.has_gravity == 0))
+	if((istype(mob.loc, /turf/space)) || ((mob.lastarea.has_gravity == 0) && (!istype(mob.loc, /obj/spacepod))))  // last section of if statement prevents spacepods being unable to move when the gravity goes down
 		if(!mob.Process_Spacemove(0))	return 0
 
 
@@ -247,13 +256,13 @@
 			for(var/mob/M in range(mob, 1))
 				if(M.pulling == mob)
 					if(!M.restrained() && M.stat == 0 && M.canmove && mob.Adjacent(M))
-						src << "\blue You're restrained! You can't move!"
+						src << "<span class='notice'> You're restrained! You can't move!</span>"
 						return 0
 					else
 						M.stop_pulling()
 
 		if(mob.pinned.len)
-			src << "\blue You're pinned to a wall by [mob.pinned[1]]!"
+			src << "<span class='notice'> You're pinned to a wall by [mob.pinned[1]]!</span>"
 			return 0
 
 		move_delay = world.time//set move delay
@@ -271,9 +280,6 @@
 			move_delay -= 1.3
 			var/tickcomp = ((1/(world.tick_lag))*1.3)
 			move_delay = move_delay + tickcomp
-
-
-
 
 		//We are now going to move
 		moving = 1
@@ -341,12 +347,12 @@
 			if(G.state == 2)
 				move_delay = world.time + 10
 				if(!prob(25))	return 1
-				mob.visible_message("\red [mob] has broken free of [G.assailant]'s grip!")
+				mob.visible_message("<span class='warning'> [mob] has broken free of [G.assailant]'s grip!</span>")
 				del(G)
 			if(G.state == 3)
 				move_delay = world.time + 10
 				if(!prob(5))	return 1
-				mob.visible_message("\red [mob] has broken free of [G.assailant]'s headlock!")
+				mob.visible_message("<span class='warning'> [mob] has broken free of [G.assailant]'s headlock!</span>")
 				del(G)
 	return 0
 
@@ -356,13 +362,15 @@
 ///Allows mobs to run though walls
 /client/proc/Process_Incorpmove(direct)
 	var/turf/mobloc = get_turf(mob)
-	if(!isliving(mob))
-		return
-	var/mob/living/L = mob
-	switch(L.incorporeal_move)
+
+	switch(mob.incorporeal_move)
 		if(1)
-			L.loc = get_step(L, direct)
-			L.dir = direct
+			var/turf/T = get_step(mob, direct)
+			if(T.holy && isobserver(mob) && ((mob.invisibility == 0) || (ticker.mode && (mob.mind in ticker.mode.cult))))
+				mob << "<span class='warning'>You cannot get past holy grounds while you are in this plane of existence!</span>"
+			else
+				mob.loc = get_step(mob, direct)
+				mob.dir = direct
 		if(2)
 			if(prob(50))
 				var/locx
@@ -390,19 +398,25 @@
 							return
 					else
 						return
-				L.loc = locate(locx,locy,mobloc.z)
+				mob.loc = locate(locx,locy,mobloc.z)
 				spawn(0)
 					var/limit = 2//For only two trailing shadows.
-					for(var/turf/T in getline(mobloc, L.loc))
+					for(var/turf/T in getline(mobloc, mob.loc))
 						spawn(0)
-							anim(T,L,'icons/mob/mob.dmi',,"shadow",,L.dir)
+							anim(T,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
 						limit--
 						if(limit<=0)	break
 			else
 				spawn(0)
-					anim(mobloc,mob,'icons/mob/mob.dmi',,"shadow",,L.dir)
-				L.loc = get_step(L, direct)
-			L.dir = direct
+					anim(mobloc,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
+				mob.loc = get_step(mob, direct)
+			mob.dir = direct
+	for(var/obj/effect/step_trigger/S in mob.loc)
+		S.Crossed(src)
+
+	var/area/A = get_area_master(mob)
+	if(A)
+		A.Entered(mob)
 	return 1
 
 
@@ -466,7 +480,7 @@
 
 	//Check to see if we slipped
 	if(prob(Process_Spaceslipping(5)))
-		src << "\blue <B>You slipped!</B>"
+		src << "<span class='notice'> <B>You slipped!</B></span>"
 		src.inertia_dir = src.last_move
 		step(src, src.inertia_dir)
 		return 0

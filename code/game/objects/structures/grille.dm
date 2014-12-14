@@ -12,6 +12,12 @@
 	var/health = 10
 	var/destroyed = 0
 
+/obj/structure/grille/cultify()
+	var/turf/T = get_turf(src)
+	if(T)
+		T.ChangeTurf(/turf/simulated/wall/cult)
+	..()
+
 /obj/structure/grille/fence/east_west
 	//width=80
 	//height=42
@@ -92,7 +98,7 @@
 	return
 
 
-/obj/structure/grille/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/grille/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 	if(istype(mover) && mover.checkpass(PASSGRILLE))
 		return 1
@@ -154,14 +160,17 @@
 				if(WINDOW.dir == dir_to_set)//checking this for a 2nd time to check if a window was made while we were waiting.
 					user << "<span class='notice'>There is already a window facing this way there.</span>"
 					return
-			var/obj/structure/window/WD
-
-			if(istype(W,/obj/item/stack/sheet/rglass))
-				WD = new/obj/structure/window/reinforced(loc,1) //reinforced window
-			else
+			var/obj/structure/window/WD 
+			if(istype(W,/obj/item/stack/sheet/glass)) //Creates anything under glass tree
 				var/obj/item/stack/sheet/glass/G = W
 				if(!ispath(G.created_window))
 					WD = new/obj/structure/window/basic(loc,0) //normal window
+				else
+					WD = new G.created_window(loc,0)
+			else if (istype(W,/obj/item/stack/sheet/rglass)) //Creates anything under rglass tree
+				var/obj/item/stack/sheet/rglass/G = W
+				if(!ispath(G.created_window))
+					WD = new/obj/structure/window/reinforced(loc,0) //reinforced window
 				else
 					WD = new G.created_window(loc,0)
 			WD.dir = dir_to_set

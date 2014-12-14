@@ -6,7 +6,6 @@
 	layer = 3.2//Just above doors
 	pressure_resistance = 4*ONE_ATMOSPHERE
 	anchored = 1.0
-	flags = ON_BORDER
 	var/health = 14.0
 	var/ini_dir = null
 	var/state = 2
@@ -16,6 +15,15 @@
 	var/sheets = 1 // Number of sheets needed to build this window (determines how much shit is spawned by destroy())
 //	var/silicate = 0 // number of units of silicate
 //	var/icon/silicateIcon = null // the silicated icon
+
+/obj/structure/window/New(loc)
+	..(loc)
+	flags |= ON_BORDER
+
+	ini_dir = dir
+
+	update_nearby_tiles()
+	update_nearby_icons()
 
 /obj/structure/window/examine()
 	..()
@@ -69,7 +77,7 @@
 		return !density
 	return 1
 
-/obj/structure/window/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/window/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if(get_dir(loc, target) == dir)
@@ -237,6 +245,20 @@
 		state = 1 - state
 		playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
 		user << (state ? "<span class='notice'>You have pried the window into the frame.</span>" : "<span class='notice'>You have pried the window out of the frame.</span>")
+	else if(istype(W, /obj/item/weapon/weldingtool) && !anchored && (!state || !reinf))
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		user << "<span class='notice'>Now disassembling the window...</span>"
+		var/obj/item/weapon/weldingtool/WT = W
+		if (WT.remove_fuel(0))
+			if(do_after(user,40))
+				if(!user || !src) return
+				visible_message("<span class='notice'>[user] dismantles \the [src].</span>")
+				new /obj/item/stack/sheet/glass(get_turf(src))
+				qdel(src)
+		else
+			user << "Need more welding fuel!"
+			return
+
 	else
 		if(W.damtype == BRUTE || W.damtype == BURN)
 			user.changeNext_move(10)
@@ -323,20 +345,6 @@
 		icon = I
 		silicateIcon = I
 */
-
-
-/obj/structure/window/New(Loc,re=0)
-	..()
-
-//	if(re)	reinf = re
-
-	ini_dir = dir
-
-	update_nearby_tiles()
-	update_nearby_icons()
-
-	return
-
 
 /obj/structure/window/Destroy()
 	density = 0

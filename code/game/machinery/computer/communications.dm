@@ -56,6 +56,8 @@ var/shuttle_call/shuttle_calls[0]
 	var/stat_msg2
 	var/display_type="blank"
 
+	l_color = "#0000FF"
+
 /obj/machinery/computer/communications/Topic(href, href_list)
 	if(..(href, href_list))
 		return
@@ -141,7 +143,10 @@ var/shuttle_call/shuttle_calls[0]
 			if(src.authenticated)
 				var/response = alert("Are you sure you wish to call the shuttle?", "Confirm", "Yes", "No")
 				if(response == "Yes")
-					call_shuttle_proc(usr)
+					var/justification = stripped_input(usr, "Please input a concise justification for the shuttle call. Note that failure to properly justify a shuttle call may lead to recall or termination", "Nanotrasen Anti-Comdom Systems")
+					if(!justification || !(usr in view(1,src)))
+						return
+					call_shuttle_proc(usr, justification)
 					if(emergency_shuttle.online)
 						post_status("shuttle")
 			setMenuState(usr,COMM_SCREEN_MAIN)
@@ -185,15 +190,16 @@ var/shuttle_call/shuttle_calls[0]
 					post_status("message", stat_msg1, stat_msg2)
 				if("alert")
 					post_status("alert", href_list["alert"])
+					display_type = href_list["alert"]
 				else
 					post_status(href_list["statdisp"])
 			setMenuState(usr,COMM_SCREEN_STAT)
 
 		if("setmsg1")
-			stat_msg1 = input("Line 1", "Enter Message Text", stat_msg1) as text|null
+			stat_msg1 = reject_bad_text(trim(copytext(sanitize(input("Line 1", "Enter Message Text", stat_msg1) as text|null), 1, 40)), 40)
 			setMenuState(usr,COMM_SCREEN_STAT)
 		if("setmsg2")
-			stat_msg2 = input("Line 2", "Enter Message Text", stat_msg2) as text|null
+			stat_msg2 = reject_bad_text(trim(copytext(sanitize(input("Line 2", "Enter Message Text", stat_msg2) as text|null), 1, 40)), 40)
 			setMenuState(usr,COMM_SCREEN_STAT)
 
 		// OMG CENTCOMM LETTERHEAD
@@ -238,11 +244,9 @@ var/shuttle_call/shuttle_calls[0]
 
 	return 1
 
-/obj/machinery/computer/communications/attackby(var/obj/I as obj, var/mob/user as mob)
-	if(istype(I,/obj/item/weapon/card/emag/))
-		src.emagged = 1
-		user << "You scramble the communication routing circuits!"
-	..()
+/obj/machinery/computer/communcations/emag(mob/user as mob)
+	src.emagged = 1
+	user << "You scramble the communication routing circuits!"
 
 /obj/machinery/computer/communications/attack_ai(var/mob/user as mob)
 	src.add_hiddenprint(user)
@@ -305,6 +309,7 @@ var/shuttle_call/shuttle_calls[0]
 		var/cur_msg[0]
 		cur_msg["title"]=messagetitle[i]
 		cur_msg["body"]=messagetext[i]
+		cur_msg["id"] = i
 		msg_data += list(cur_msg)
 	data["messages"] = msg_data
 	data["current_message"] = data["is_ai"] ? aicurrmsg : currmsg
@@ -360,8 +365,11 @@ var/shuttle_call/shuttle_calls[0]
 	for(var/obj/machinery/computer/prison_shuttle/PS in world)
 		PS.allowedtocall = !(PS.allowedtocall)
 
-/proc/call_shuttle_proc(var/mob/user)
-	if ((!( ticker ) || emergency_shuttle.location))
+/proc/call_shuttle_proc(var/mob/user, var/justification)
+	if ((!(ticker) || emergency_shuttle.location))
+		return
+
+	if(!universe.OnShuttleCall(user))
 		return
 
 	if(sent_strike_team == 1)
@@ -385,9 +393,11 @@ var/shuttle_call/shuttle_calls[0]
 		return
 
 	emergency_shuttle.incall()
-	log_game("[key_name(user)] has called the shuttle.")
-	message_admins("[key_name_admin(user)] has called the shuttle.", 1)
-	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
+	if(!justification)
+		justification = "#??!7E/_1$*/ARR-CON²FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
+	log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
+	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'. You are encouraged to act if that justification is shit", 1)
+	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification : '[justification]'")
 	world << sound('sound/AI/shuttlecalled.ogg')
 
 	return
@@ -406,6 +416,9 @@ var/shuttle_call/shuttle_calls[0]
 
 	// if force is 0, some things may stop the shuttle call
 	if(!force)
+		if(!universe.OnShuttleCall(user))
+			return
+
 		if(emergency_shuttle.deny_shuttle)
 			user << "Centcom does not currently have a shuttle available in your sector. Please try again later."
 			return

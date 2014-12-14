@@ -2,46 +2,36 @@
 
 //meteor storms are much heavier
 /datum/event/meteor_wave
-	startWhen		= 6
-	endWhen			= 33
+	startWhen		= 10
+	endWhen			= 60
 
 /datum/event/meteor_wave/setup()
-	endWhen = rand(10,25) * 3
+	endWhen = rand(60, 120) + 10 //Goes from one minute to two minutes. Supposed to be a devastating event
 
 /datum/event/meteor_wave/announce()
-	command_alert("Meteors have been detected on collision course with the station.", "Meteor Alert")
+	command_alert("A meteor storm has been detected on collision course with the station. Seek shelter within the core of the station immediately.", "Meteor Alert")
 	world << sound('sound/AI/meteors.ogg')
 
 /datum/event/meteor_wave/tick()
-	if(IsMultiple(activeFor, 3))
-		spawn_meteors(rand(2,5))
+	meteor_wave(rand(25,50)) //Large waves, panic is mandatory
 
 /datum/event/meteor_wave/end()
 	command_alert("The station has cleared the meteor storm.", "Meteor Alert")
 
 //
 /datum/event/meteor_shower
-	startWhen		= 5
-	endWhen 		= 7
-	var/next_meteor = 6
-	var/waves = 1
+	startWhen		= 10
+	endWhen 		= 30
 
 /datum/event/meteor_shower/setup()
-	waves = rand(1,4)
+	endWhen	= rand(30, 60) + 10 //From 30 seconds to one minute
 
 /datum/event/meteor_shower/announce()
-	command_alert("The station is now in a meteor shower.", "Meteor Alert")
+	command_alert("The station is about to be hit by a small-intensity meteor storm. Seek shelter within the core of the station immediately", "Meteor Alert")
 
 //meteor showers are lighter and more common,
 /datum/event/meteor_shower/tick()
-	if(activeFor >= next_meteor)
-		spawn_meteors(rand(1,4))
-		next_meteor += rand(20,100)
-		waves--
-		if(waves <= 0)
-			endWhen = activeFor + 1
-		else
-			endWhen = next_meteor + 1
+	meteor_wave(rand(10,25)) //Much more clement
 
 /datum/event/meteor_shower/end()
 	command_alert("The station has cleared the meteor shower", "Meteor Alert")

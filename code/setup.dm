@@ -36,6 +36,8 @@ var/global/disable_vents     = 0
 #define HUMAN_NEEDED_OXYGEN	MOLES_CELLSTANDARD*BREATH_PERCENTAGE*0.16
 	//Amount of air needed before pass out/suffocation commences
 
+#define BASE_ZAS_FUEL_REQ	0.1
+
 // Pressure limits.
 #define HAZARD_HIGH_PRESSURE 550	//This determins at what pressure the ultra-high pressure red icon is displayed. (This one is set as a constant)
 #define WARNING_HIGH_PRESSURE 325 	//This determins when the orange pressure icon is displayed (it is 0.7 * HAZARD_HIGH_PRESSURE)
@@ -157,6 +159,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define HUMAN_STRIP_DELAY 40 //takes 40ds = 4s to strip someone.
 
 #define ALIEN_SELECT_AFK_BUFFER 1 // How many minutes that a person can be AFK before not being allowed to be an alien.
+#define ROLE_SELECT_AFK_BUFFER  1 // Default value.
 
 #define NORMPIPERATE 30					//pipe-insulation rate divisor
 #define HEATPIPERATE 8					//heat-exch pipe insulation
@@ -218,6 +221,8 @@ var/MAX_EXPLOSION_RANGE = 14
 
 #define BLOCKHEADHAIR 4             // temporarily removes the user's hair overlay. Leaves facial hair.
 #define BLOCKHAIR	32768			// temporarily removes the user's hair, facial and otherwise.
+
+#define INVULNERABLE 128
 
 //flags for pass_flags
 #define PASSTABLE	1
@@ -382,6 +387,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define M_LOUD		208		// CAUSES INTENSE YELLING
 #define M_WHISPER	209		// causes quiet whispering
 #define M_DIZZY		210		// Trippy.
+#define M_SANS		211		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'fuck comic sans' IN YOUR PR.
 
 // Bustanuts
 #define M_HARDCORE      300
@@ -513,7 +519,7 @@ var/list/liftable_structures = list(\
 
 	/obj/machinery/autolathe, \
 	/obj/machinery/constructable_frame, \
-	/obj/machinery/hydroponics, \
+	/obj/machinery/portable_atmospherics/hydroponics, \
 	/obj/machinery/computer, \
 	/obj/machinery/optable, \
 	/obj/structure/dispenser, \
@@ -658,10 +664,6 @@ var/list/TAGGERLOCATIONS = list(
 #define ORGAN_MUTATED		2048
 #define ORGAN_PEG			4096 // ROB'S MAGICAL PEGLEGS v2
 
-#define ROUNDSTART_LOGOUT_REPORT_TIME 6000 //Amount of time (in deciseconds) after the rounds starts, that the player disconnect report is issued.
-
-
-
 //Please don't edit these values without speaking to Errorage first	~Carn
 //Admin Permissions
 #define R_BUILDMODE		1
@@ -678,8 +680,9 @@ var/list/TAGGERLOCATIONS = list(
 #define R_SOUNDS		2048
 #define R_SPAWN			4096
 #define R_MOD			8192
+#define R_ADMINBUS		16384
 
-#define R_MAXPERMISSION 8192 //This holds the maximum value for a permission. It is used in iteration, so keep it updated.
+#define R_MAXPERMISSION 16384 //This holds the maximum value for a permission. It is used in iteration, so keep it updated.
 
 #define R_HOST			65535
 
@@ -699,41 +702,49 @@ var/list/TAGGERLOCATIONS = list(
 #define CHAT_LOOC		4096
 #define CHAT_GHOSTRADIO 8192
 #define SOUND_STREAMING 16384 // /vg/
+#define CHAT_GHOSTPDA   32768
 
 
 #define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_AMBIENCE|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_LOOC|SOUND_STREAMING)
 
-#define BE_TRAITOR		1
-#define BE_OPERATIVE	2
-#define BE_CHANGELING	4
-#define BE_WIZARD		8
-#define BE_MALF			16
-#define BE_REV			32
-#define BE_ALIEN		64
-#define BE_PAI			128
-#define BE_CULTIST		256
-#define BE_MONKEY		512
-#define BE_NINJA		1024
-#define BE_RAIDER		2048
-#define BE_PLANT		4096
-#define BE_VAMPIRE		8192
+//////////////////////////////////
+// ROLES 2.0
+//////////////////////////////////
+// First bit is no/yes.
+// Second bit is persistence (save to char prefs).
+// Third bit is whether we polled for that role yet.
+#define ROLEPREF_ENABLE         1 // Enable role for this character.
+#define ROLEPREF_PERSIST        2 // Save preference.
+#define ROLEPREF_POLLED         4 // Have we polled this guy?
 
-var/list/be_special_flags = list(
-	"Traitor" = BE_TRAITOR,
-	"Operative" = BE_OPERATIVE,
-	"Changeling" = BE_CHANGELING,
-	"Wizard" = BE_WIZARD,
-	"Malf AI" = BE_MALF,
-	"Revolutionary" = BE_REV,
-	"Xenomorph" = BE_ALIEN,
-	"pAI" = BE_PAI,
-	"Cultist" = BE_CULTIST,
-	"Monkey" = BE_MONKEY,
-	"Ninja" = BE_NINJA,
-	"Raider" = BE_RAIDER,
-	"Diona" = BE_PLANT,
-	"Vampire" = BE_VAMPIRE
-	)
+#define ROLEPREF_NEVER   ROLEPREF_PERSIST
+#define ROLEPREF_NO      0
+#define ROLEPREF_YES     ROLEPREF_ENABLE
+#define ROLEPREF_ALWAYS  (ROLEPREF_ENABLE|ROLEPREF_PERSIST)
+
+// Masks.
+#define ROLEPREF_SAVEMASK 1 // 0b00000001 - For saving shit.
+#define ROLEPREF_VALMASK  3 // 0b00000011 - For a lot of things.
+
+// Should correspond to jobbans, too.
+#define ROLE_ALIEN      "alien"
+#define ROLE_BLOB       "blob"      // New!
+#define ROLE_BORER      "borer"     // New!
+#define ROLE_CHANGELING "changeling"
+#define ROLE_COMMANDO   "commando"  // New!
+#define ROLE_CULTIST    "cultist"
+#define ROLE_MALF       "malf AI"
+#define ROLE_NINJA      "ninja"
+#define ROLE_OPERATIVE  "operative" // New!
+#define ROLE_PAI        "pAI"
+#define ROLE_PLANT      "Dionaea"
+#define ROLE_POSIBRAIN  "posibrain"
+#define ROLE_REV        "revolutionary"
+#define ROLE_TRAITOR    "traitor"
+#define ROLE_VAMPIRE    "vampire"
+#define ROLE_VOXRAIDER  "vox raider"
+#define ROLE_WIZARD     "wizard"
+
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
@@ -806,6 +817,16 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 
 #define CAN_BE_FAT 8192 // /vg/
 
+#define IS_SYNTHETIC 16384 // from baystation
+
+
+// from bay station
+#define INFECTION_LEVEL_ONE 100
+#define INFECTION_LEVEL_TWO 500
+#define INFECTION_LEVEL_THREE 1000
+
+
+
 //Language flags.
 #define WHITELISTED 1  // Language is available if the speaker is whitelisted.
 #define RESTRICTED 2   // Language can only be accquired by spawning or an admin.
@@ -872,3 +893,56 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define MT_ERROR  -1
 #define MT_UPDATE 1
 #define MT_REINIT 2
+
+#define AUTOIGNITION_WOOD  573.15
+#define AUTOIGNITION_PAPER 519.15
+
+#define MELTPOINT_GLASS   1500+T0C
+#define MELTPOINT_STEEL   1510+T0C
+#define MELTPOINT_SILICON 1687 // KELVIN
+#define MELTPOINT_PLASTIC 180+T0C
+
+//used to define machine behaviour in attackbys and other code situations
+#define EMAGGABLE		1 //can we emag it? If this is flagged, the machine calls emag()
+#define SCREWTOGGLE		2 //does it toggle panel_open when hit by a screwdriver?
+#define CROWDESTROY		4 //does hitting a panel_open machine with a crowbar disassemble it?
+#define WRENCHMOVE		8 //does hitting it with a wrench toggle its anchored state?
+#define FIXED2WORK		16 //does it need to be anchored to work? Try to use this with WRENCHMOVE
+#define EJECTNOTDEL		32 //when we destroy the machine, does it remove all its items or destroy them?
+#define WELD_FIXED		64 //if it is attacked by a welder and is anchored, it'll toggle between welded and unwelded to the floor
+
+//gun shit - prepare to have various things added to this
+#define SILENCECOMP  1 		//Silencer-compatible
+#define AUTOMAGDROP  2		//Does the mag drop when it's empty?
+#define EMPTYCASINGS 4		//Does the gun eject empty casings?
+
+///////////////////////
+///////RESEARCH////////
+///////////////////////
+//used in rdmachines, to define certain behaviours
+//bitflags are my waifu - Comic
+
+//NB TRUELOCKS should ONLY be used for machines that produce stuff that's not good in an emergency i.e. a gun fabricator. Be very careful with it
+#define CONSOLECONTROL		1	//does the console control it? can't be interacted if not linked
+#define HASOUTPUT			2	//does it have an output? - mainly for fabricators
+#define TAKESMATIN			4	//does it takes materials (sheets) - mainly for fabricators
+#define NANOTOUCH			8	//does it have a nanoui when you smack it with your hand? - mainly for fabricators
+#define HASMAT_OVER			16	//does it have overlays for when you load materials in? - mainly for fabricators
+#define ACCESS_EMAG			32	//does it lose all its access when smacked by an emag? incompatible with CONSOLECONTROl, for obvious reasons
+#define LOCKBOXES			64	//does it spawn a lockbox around a design which is said to be locked? - for fabricators
+#define TRUELOCKS			128 //does it make a truly locked lockbox? If not set, the lockboxes made are unlockable by any crew with an ID
+
+// Mecca scanner flags
+#define MECH_SCAN_FAIL     1 // Cannot be scanned at all.
+#define MECH_SCAN_ILLEGAL  2 // Can only be scanned by the antag scanner.
+
+
+// EMOTES!
+#define VISIBLE 1
+#define HEARABLE 2
+
+// /vg/ - Pipeline processing (enables exploding pipes and whatnot)
+#define ATMOS_PIPELINE_PROCESSING 1
+
+#define MAXIMUM_FREQUENCY 1600
+#define MINIMUM_FREQUENCY 1200

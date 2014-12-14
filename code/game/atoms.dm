@@ -27,6 +27,19 @@
 	//Detective Work, used for the duplicate data points kept in the scanners
 	var/list/original_atom
 
+	var/list/beams=list()
+
+	// EVENTS
+	var/event/on_destroyed = new() // On Destroy()
+
+/atom/proc/beam_connect(var/obj/effect/beam/B)
+	if(!(B in beams))
+		beams.Add(B)
+	return 1
+
+/atom/proc/beam_disconnect(var/obj/effect/beam/B)
+	beams.Remove(B)
+
 /atom/proc/throw_impact(atom/hit_atom, var/speed)
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
@@ -62,20 +75,20 @@
 		type_instances[type] = type_instances[type] - 1
 	else
 		type_instances[type] = 0
-		WARNING("Type [type] does not inherit /atom/New().  Please ensure ..() is called, or that the type at least adds to type_instances\[type\].")
+		WARNING("Type [type] does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler().")
 
 /atom/Destroy()
 	// Only call when we're actually deleted.
 	DeleteFromProfiler()
 
-	//world << "[type] - [tag] - [x].[y].[z]"
-
-	density = 0
+	if(reagents)
+		reagents.Destroy()
+		reagents = null
 
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
 
-	..()
+	INVOKE_EVENT(on_destroyed, list()) // No args.
 
 /atom/New()
 	. = ..()
@@ -129,14 +142,14 @@
 /atom/proc/CheckExit()
 	return 1
 
-/atom/proc/HasEntered(atom/movable/AM as mob|obj)
-	return
-
 /atom/proc/HasProximity(atom/movable/AM as mob|obj)
 	return
 
 /atom/proc/emp_act(var/severity)
 	return
+
+/atom/proc/singuloCanEat()
+	return 1
 
 /atom/proc/bullet_act(var/obj/item/projectile/Proj)
 	return 0
@@ -271,8 +284,13 @@ its easier to just keep the beam vertical.
 
 	if (!( usr ))
 		return
+
+	usr.face_atom(src)
 	usr << "That's \a [src]." //changed to "That's" from "This is" because "This is some metal sheets" sounds dumb compared to "That's some metal sheets" ~Carn
 	usr << desc
+
+	if(on_fire)
+		usr << "\red OH SHIT! IT'S ON FIRE!"
 	// *****RM
 	//usr << "[name]: Dn:[density] dir:[dir] cont:[contents] icon:[icon] is:[icon_state] loc:[loc]"
 	return
@@ -485,6 +503,11 @@ its easier to just keep the beam vertical.
 //returns 1 if made bloody, returns 0 otherwise
 /atom/proc/add_blood(mob/living/carbon/human/M as mob)
 	.=1
+	if(!M)//if the blood is of non-human source
+		if(!blood_DNA || !istype(blood_DNA, /list))
+			blood_DNA = list()
+		blood_color = "#A10808"
+		return 1
 	if (!( istype(M, /mob/living/carbon/human) ))
 		return 0
 	if (!istype(M.dna, /datum/dna))

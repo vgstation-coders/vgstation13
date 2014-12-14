@@ -658,7 +658,7 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/weapon/cloaking_device(M), slot_r_store)
 
 			M.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile(M), slot_r_hand)
-			M.equip_to_slot_or_del(new /obj/item/ammo_magazine/a357(M), slot_l_store)
+			M.equip_to_slot_or_del(new /obj/item/ammo_storage/box/a357(M), slot_l_store)
 
 		if ("tournament chef") //Steven Seagal FTW
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/chef(M), slot_w_uniform)
@@ -773,7 +773,7 @@ Pressure: [env.return_pressure()]"}
 				sec_briefcase.contents += new /obj/item/weapon/spacecash/c1000
 			sec_briefcase.contents += new /obj/item/weapon/gun/energy/crossbow
 			sec_briefcase.contents += new /obj/item/weapon/gun/projectile/mateba
-			sec_briefcase.contents += new /obj/item/ammo_magazine/a357
+			sec_briefcase.contents += new /obj/item/ammo_storage/box/a357
 			sec_briefcase.contents += new /obj/item/weapon/plastique
 			M.equip_to_slot_or_del(sec_briefcase, slot_l_hand)
 
@@ -1014,7 +1014,7 @@ Pressure: [env.return_pressure()]"}
 			if(!Rad.P)
 				var/obj/item/weapon/tank/plasma/Plasma = new/obj/item/weapon/tank/plasma(Rad)
 				Plasma.air_contents.toxins = 70
-				Rad.drainratio = 0
+				Rad.drain_ratio = 0
 				Rad.P = Plasma
 				Plasma.loc = Rad
 
@@ -1083,17 +1083,17 @@ Pressure: [env.return_pressure()]"}
 
 	switch(input("Which list?") in list("Players","Admins","Mobs","Living Mobs","Dead Mobs", "Clients"))
 		if("Players")
-			usr << dd_list2text(player_list,",")
+			usr << list2text(player_list,",")
 		if("Admins")
-			usr << dd_list2text(admins,",")
+			usr << list2text(admins,",")
 		if("Mobs")
-			usr << dd_list2text(mob_list,",")
+			usr << list2text(mob_list,",")
 		if("Living Mobs")
-			usr << dd_list2text(living_mob_list,",")
+			usr << list2text(living_mob_list,",")
 		if("Dead Mobs")
-			usr << dd_list2text(dead_mob_list,",")
+			usr << list2text(dead_mob_list,",")
 		if("Clients")
-			usr << dd_list2text(clients,",")
+			usr << list2text(clients,",")
 
 
 /client/proc/cmd_admin_toggle_block(var/mob/M,var/block)
@@ -1102,7 +1102,7 @@ Pressure: [env.return_pressure()]"}
 		return
 	if(istype(M, /mob/living/carbon))
 		M.dna.SetSEState(block,!M.dna.GetSEState(block))
-		domutcheck(M,null,MUTCHK_FORCED)
+		genemutcheck(M,block,null,MUTCHK_FORCED)
 		M.update_mutations()
 		var/state="[M.dna.GetSEState(block)?"on":"off"]"
 		var/blockname=assigned_blocks[block]
@@ -1175,3 +1175,35 @@ var/global/blood_virus_spreading_disabled = 0
 		log_admin("[key_name(src)] has cluwne-ified [M.key].")
 	else
 		alert("Invalid mob, needs to be a human.")
+
+client/proc/make_invulnerable(var/mob/M in mob_list)
+	set name = "Toggle Invulnerability"
+	set desc = "Make the target atom invulnerable to all form of damage."
+	set category = "Fun"
+
+	var/isinvuln = 0
+	if(M.flags & INVULNERABLE)
+		isinvuln = 1
+
+	switch(isinvuln)
+		if(0)
+			if(alert(usr, "Make the target atom invulnerable to all form of damage?", "Toggle Invulnerability", "Yes", "No") != "Yes")
+				return
+
+			M.flags |= INVULNERABLE
+		if(1)
+			if(alert(usr, "Make the target atom vulnerable again?", "Toggle Invulnerability", "Yes", "No") != "Yes")
+				return
+
+			M.flags &= ~INVULNERABLE
+
+client/proc/delete_all_adminbus()
+	set name = "Delete every Adminbus"
+	set desc = "When the world cannot handle them anymore."
+	set category = "Fun"
+
+	if(alert(usr, "Delete every single Adminbus in the game world?", "Delete Adminbus", "Yes", "No") != "Yes")
+		return
+
+	for(var/obj/structure/stool/bed/chair/vehicle/adminbus/AB in world)
+		AB.Adminbus_Deletion()

@@ -56,6 +56,7 @@
 	var/datum/speech_filter/filter
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/New()
+	..()
 	// Set up wordfilter
 	filter = new
 	filter.addPickReplacement("\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|security|shitcurity)", list(
@@ -295,7 +296,7 @@
 	for(var/i=1, (i <= temp_message.len), i++) //Loop for each stage of the disease or until we run out of words
 		if(prob(50)) //Stage 1: 3% Stage 2: 6% Stage 3: 9% Stage 4: 12%
 			temp_message[i] = "HONK"
-	message = uppertext(dd_list2text(temp_message, " "))
+	message = uppertext(list2text(temp_message, " "))
 	return ..(message)
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/Die()
