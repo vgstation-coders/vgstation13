@@ -468,7 +468,8 @@
 				else
 					user << "<span class='warning'>You fail to force-[locked ? "unlock":"lock"] [src]'s interface.</span>"
 	else if(istype(W, /obj/item/weapon/cable_coil) && !terminal && opened && has_electronics != 2) //Trying to wire the APC up
-		if(src.loc:intact)
+		var/turf/simulated/floor/apcloc = src.loc
+		if(apcloc.intact)
 			user << "<span class='warning'>You will need to reach for the plating under [src] to place a terminal.</span>"
 			return
 		var/obj/item/weapon/cable_coil/C = W
@@ -492,7 +493,8 @@
 			make_terminal()
 			terminal.connect_to_network()
 	else if(istype(W, /obj/item/weapon/wirecutters) && terminal && opened && has_electronics != 2)
-		if(src.loc:intact)
+		var/turf/simulated/floor/apcloc = src.loc
+		if(apcloc.intact)
 			user << "<span class='warning'>You will need to reach for the plating under [src] to remove the terminal.</span>"
 			return
 		visible_message("<span class='warning'>[user] starts unwiring [src] and dismantling its terminal.</span>", \
@@ -610,10 +612,12 @@
 		if(stat & (BROKEN|MAINT))
 			return
 
+		/* //Nah m8, fuck your ninjaflakes
 		if(ishuman(user))
 			if(istype(user:gloves, /obj/item/clothing/gloves/space_ninja)&&user:gloves:candrain&&!user:gloves:draining)
 				call(/obj/item/clothing/gloves/space_ninja/proc/drain)("APC",src,user:wear_suit)
 				return
+		*/
 
 	//Load up that good old menu
 	user.set_machine(src)
@@ -653,7 +657,7 @@
 	return ui_interact(user)
 
 /obj/machinery/power/apc/proc/get_malf_status(mob/user)
-	if (ticker && ticker.mode && (user.mind in ticker.mode.malf_ai) && istype(user, /mob/living/silicon/ai))
+	if(ticker && ticker.mode && (user.mind in ticker.mode.malf_ai) && istype(user, /mob/living/silicon/ai))
 		if(malfai == (user:parent ? user:parent : user))
 			if(occupant == user)
 				return 3 //3 = User is shunted in this APC
@@ -854,7 +858,7 @@
 					malfai.malfhacking = 0
 					locked = 1
 					if(ticker.mode.config_tag == "malfunction")
-						if(STATION_Z == z)
+						if(map.zMainStation == z)
 							ticker.mode:apcs++
 					if(usr:parent)
 						src.malfai = usr:parent
@@ -886,7 +890,7 @@
 
 	if(malfai)
 		if (ticker.mode.config_tag == "malfunction")
-			if (STATION_Z == z)
+			if (map.zMainStation == z)
 				operating ? ticker.mode:apcs++ : ticker.mode:apcs--
 	update()
 	update_icon()
@@ -900,7 +904,7 @@
 	if(!malf.can_shunt)
 		malf << "<span class='warning'>You cannot shunt.</span>"
 		return
-	if(STATION_Z != z)
+	if(map.zMainStation != z)
 		return
 	src.occupant = new /mob/living/silicon/ai(src,malf.laws,null,1)
 	src.occupant.adjustOxyLoss(malf.getOxyLoss())
@@ -949,7 +953,7 @@
 
 /obj/machinery/power/apc/proc/ion_act()
 	//Intended to be exactly the same as an AI malf attack
-	if(!src.malfhack && STATION_Z == z)
+	if(!src.malfhack && map.zMainStation == z)
 		if(prob(3))
 			src.locked = 1
 			if (src.cell.charge > 0)
@@ -1130,7 +1134,7 @@
 	else if (last_ch != charging)
 		queue_icon_update()
 
-//Values 0 = off,, 1 = off(auto), 2 = on, 3 = on (auto)
+//Values 0 = off, 1 = off(auto), 2 = on, 3 = on (auto)
 //On 0 = off, 1 = on, 2 = autooff
 
 obj/machinery/power/apc/proc/autoset(var/val, var/on)
@@ -1198,7 +1202,7 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 /obj/machinery/power/apc/proc/set_broken()
 	if(malfai && operating)
 		if(ticker.mode.config_tag == "malfunction")
-			if(STATION_Z == z)
+			if(map.zMainStation == z)
 				ticker.mode:apcs--
 	stat |= BROKEN
 	operating = 0
@@ -1224,7 +1228,7 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 /obj/machinery/power/apc/Destroy()
 	if(malfai && operating)
 		if(ticker.mode.config_tag == "malfunction")
-			if(STATION_Z == z)
+			if(map.zMainStation == z)
 				ticker.mode:apcs--
 	areaMaster.power_light = 0
 	areaMaster.power_equip = 0
