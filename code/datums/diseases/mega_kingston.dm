@@ -37,7 +37,8 @@ Stage 3 - u r now catbeest
 		if(4)
 
 			if(prob(1))
-				affected_mob.say(pick(";I FEEL FRISKY","*me scritches behind its ears.", "*me licks its arm.",";YIFF",";MEOW"))				return
+				affected_mob.say(pick(";I FEEL FRISKY","*me scritches behind its ears.", "*me licks its arm.",";YIFF",";MEOW"))	
+				return
 
 			if(prob(1) && prob(50))
 				var/mob/living/carbon/human/H=affected_mob
