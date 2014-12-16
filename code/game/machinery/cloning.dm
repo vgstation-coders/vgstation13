@@ -74,7 +74,7 @@
 	var/datum/dna2/record/buf=null
 	var/read_only = 0 //Well,it's still a floppy disk
 
-/obj/item/weapon/disk/data/proc/initializeDisk()
+/obj/item/weapon/disk/data/proc/Initialize()
 	buf = new
 	buf.dna=new
 
@@ -83,7 +83,7 @@
 	read_only = 1
 
 	New()
-		initializeDisk()
+		Initialize()
 		buf.types=DNA2_BUF_UE|DNA2_BUF_UI
 		//data = "066000033000000000AF00330660FF4DB002690"
 		//data = "0C80C80C80C80C80C8000000000000161FBDDEF" - Farmer Jeff
@@ -98,7 +98,7 @@
 	read_only = 1
 
 	New()
-		initializeDisk()
+		Initialize()
 		buf.types=DNA2_BUF_SE
 		var/list/new_SE=list(0x098,0x3E8,0x403,0x44C,0x39F,0x4B0,0x59D,0x514,0x5FC,0x578,0x5DC,0x640,0x6A4)
 		for(var/i=new_SE.len;i<=DNA_SE_LENGTH;i++)
