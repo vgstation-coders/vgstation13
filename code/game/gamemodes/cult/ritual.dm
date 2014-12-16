@@ -353,7 +353,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 */
 
 /obj/item/weapon/tome/attack(mob/living/M as mob, mob/living/user as mob)
-	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had the [name] used on \him by [user.name] ([user.ckey])</font>")
+	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had the [name] used on him by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used [name] on [M.name] ([M.ckey])</font>")
 	msg_admin_attack("[user.name] ([user.ckey]) used [name] on [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 	if(!iscarbon(M))
