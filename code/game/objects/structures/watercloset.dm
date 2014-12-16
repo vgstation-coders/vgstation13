@@ -388,7 +388,7 @@
 			else
 				B.deductcharge(1)
 			user.visible_message( \
-				"[user] was stunned by his wet [O].", \
+				"[user] was stunned by \his wet [O].", \
 				"\red You have wet \the [O], it shocks you!")
 			return
 

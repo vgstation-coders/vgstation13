@@ -102,7 +102,7 @@
 	var/mob/living/carbon/C = M.current.vampire_active(20, 0, 1)
 
 	if(!C) return
-	M.current.visible_message("<span class='warning'>[M.current.name]'s eyes flash briefly as he stares into [C.name]'s eyes</span>")
+	M.current.visible_message("<span class='warning'>[M.current.name]'s eyes flash briefly as \he stares into [C.name]'s eyes</span>")
 	M.current.verbs -= /client/proc/vampire_hypnotise
 	spawn(1800)
 		M.current.verbs += /client/proc/vampire_hypnotise

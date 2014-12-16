@@ -31,7 +31,7 @@ var/global/list/floorbot_targets=list()
 //Floorbot
 /obj/machinery/bot/floorbot
 	name = "Floorbot"
-	desc = "A little floor repairing robot, he looks so excited!"
+	desc = "A little floor repairing robot, it looks so excited!"
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "floorbot0"
 	layer = 5.0
@@ -133,7 +133,7 @@ var/global/list/floorbot_targets=list()
 		var/loaded = min(50-src.amount, T.amount)
 		T.use(loaded)
 		src.amount += loaded
-		user << "<span class='notice'>You load [loaded] tiles into the floorbot. He now contains [src.amount] tiles.</span>"
+		user << "<span class='notice'>You load [loaded] tiles into the floorbot. It now contains [src.amount] tiles.</span>"
 		src.updateicon()
 	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if(src.allowed(usr) && !open && !emagged)

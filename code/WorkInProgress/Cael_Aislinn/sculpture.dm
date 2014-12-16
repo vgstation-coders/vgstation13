@@ -39,7 +39,7 @@
 		target << "<span class='alert'><b>[response_snap_target]</b> Your vision fades away...</span>"
 		target.attack_log += text("\[[time_stamp()]\] <font color='red'>Had his neck snapped by [src]!</font>")
 		log_admin("[target] ([target.ckey]) had his neck snapped by an active [src].")
-		message_admins("ALERT: <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[target.x];Y=[target.y];Z=[target.z]'>[target.real_name]</a> had his neck snapped by an active [src].")
+		message_admins("ALERT: <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[target.x];Y=[target.y];Z=[target.z]'>[target.real_name]</a> had \his neck snapped by an active [src].")
 
 		//Instead of making SCP piss around, let's have him snap more necks
 		del(G)

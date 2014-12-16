@@ -127,7 +127,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"Space France surrendered for the 10124th time, making it the most invaded country in the galaxy.",
 		"Our glorious leader Karl Pilkington the 24th was crowned emperor of the Intergalactic Human Empire.",
 		"Everyone in the universe said 'Dave sucks.' at the same time. The cause of this event was unknown, but over 200000 men named Dave were murdered.",
-		"A cult religion following the belief god was a chicken was created.",
+		"A cult religion following the belief that god is a chicken was created.",
 		)
 	var/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, you have $1.19. You also have the largest amount of money in coins without being able to make change for a dollar.",
 		"The numbers '172' can be found on the back of the U.S. $5 dollar bill in the bushes at the base of the Lincoln Memorial.",
@@ -136,7 +136,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"Odontophobia is the fear of teeth.",
 		"The surface area of an average-sized brick is 79 cm squared.",
 		"According to suicide statistics, Monday is the favoured day for self-destruction.",
-		"When you die your hair still grows for a couple of months.",
+		"When you die, your hair still grows for a couple of months.",
 		"The Neanderthal's brain was bigger than yours is.",
 		"The pancreas produces Insulin.",
 		"The word 'lethologica' describes the state of not being able to remember the word you want.",

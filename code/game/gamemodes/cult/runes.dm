@@ -186,7 +186,7 @@ var/list/sacrificed = list()
 			usr.visible_message("<span class='warning'>Something is blocking the conversion!</span>")
 			return 0
 		invocation("rune_convert")
-		M.visible_message("<span class='warning'>[M] writhes in pain as the markings below him glow a bloody red.</span>", \
+		M.visible_message("<span class='warning'>[M] writhes in pain as the markings below \him glow a bloody red.</span>", \
 		"<span class='danger'>AAAAAAHHHH!.</span>", \
 		"<span class='warning'>You hear an anguished scream.</span>")
 		if(is_convertable_to_cult(M.mind) && !jobban_isbanned(M, "cultist"))//putting jobban check here because is_convertable uses mind as argument
@@ -387,10 +387,10 @@ var/global/cult_tearreality_lastattempt=0
 	corpse_to_raise.key = ghost.key	//the corpse will keep its old mind! but a new player takes ownership of it (they are essentially possessed)
 									//This means, should that player leave the body, the original may re-enter
 	usr.say("Pasnar val'keriam usinar. Savrae ines amutan. Yam'toth remium il'tarat!")
-	corpse_to_raise.visible_message("<span class='warning'>[corpse_to_raise]'s eyes glow with a faint red as he stands up, slowly starting to breathe again.</span>", \
+	corpse_to_raise.visible_message("<span class='warning'>[corpse_to_raise]'s eyes glow with a faint red as \he stands up, slowly starting to breathe again.</span>", \
 	"<span class='warning'>Life... I am alive again...</span>", \
 	"<span class='warning'>You hear a faint, slightly familiar whisper.</span>")
-	body_to_sacrifice.visible_message("<span class='warning'>[body_to_sacrifice] is torn apart, a black smoke swiftly dissipating from his remains!</span>", \
+	body_to_sacrifice.visible_message("<span class='warning'>[body_to_sacrifice] is torn apart, a black smoke swiftly dissipating from \his remains!</span>", \
 	"<span class='warning'>You feel as your blood boils, tearing you apart.</span>", \
 	"<span class='warning'>You hear a thousand voices, all crying in pain.</span>")
 	body_to_sacrifice.gib()
@@ -633,7 +633,7 @@ var/global/cult_tearreality_lastattempt=0
 	user.say("Uhrast ka'hfa heldsagen ver[pick("'","`")]lot!")
 	user.take_overall_damage(200, 0)
 	runedec+=10
-	user.visible_message("<span class='warning'>[user] keels over dead, his blood glowing blue as it escapes his body and dissipates into thin air.</span>", \
+	user.visible_message("<span class='warning'>[user] keels over dead, \his blood glowing blue as it escapes \his body and dissipates into thin air.</span>", \
 	"<span class='warning'>In the last moment of your humble life, you feel an immense pain as fabric of reality mends... with your blood.</span>", \
 	"<span class='warning'>You hear faint rustle.</span>")
 	for(,user.stat==2)
@@ -940,7 +940,7 @@ var/global/cult_tearreality_lastattempt=0
 		if (cultist == user) //just to be sure.
 			return
 		if(cultist.buckled || cultist.handcuffed || (!isturf(cultist.loc) && !istype(cultist.loc, /obj/structure/closet)))
-			user << "<span class='warning'>You cannot summon the [cultist], for his shackles of blood are strong</span>"
+			user << "<span class='warning'>You cannot summon the [cultist], for \his shackles of blood are strong</span>"
 			return fizzle()
 		var/turf/T = get_turf(cultist)
 		T.turf_animation('icons/effects/effects.dmi',"rune_teleport")

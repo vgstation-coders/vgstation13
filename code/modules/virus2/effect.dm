@@ -511,7 +511,7 @@
 	if(pick(0,1))
 		mob.say(pick("Uh HUH!", "Thank you, Thank you very much...", "I ain't nothin' but a hound dog!", "Swing low, sweet chariot!"))
 	else
-		mob.emote("me",1,pick("curls his lip!", "gyrates his hips!", "thrusts his hips!"))
+		mob.emote("me",1,pick("curls \his lip!", "gyrates \his hips!", "thrusts \his hips!"))
 
 	if(istype(H))
 

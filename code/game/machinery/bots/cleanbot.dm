@@ -16,7 +16,7 @@
 //Cleanbot
 /obj/machinery/bot/cleanbot
 	name = "Cleanbot"
-	desc = "A little cleaning robot, he looks so excited!"
+	desc = "A little cleaning robot, it looks so excited!"
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "cleanbot0"
 	layer = 5.0
@@ -178,7 +178,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 			var/turf/simulated/T = src.loc
 			T.wet(800)
 	if(src.oddbutton && prob(5))
-		visible_message("Something flies out of [src]. He seems to be acting oddly.")
+		visible_message("Something flies out of [src]. It seems to be acting oddly.")
 		var/obj/effect/decal/cleanable/blood/gibs/gib = new /obj/effect/decal/cleanable/blood/gibs(src.loc)
 		//gib.streak(list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST))
 		src.oldtarget = get_turf(gib)

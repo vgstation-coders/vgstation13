@@ -116,7 +116,7 @@
 			)
 		else
 			user.visible_message (
-				"<span class='warning'>[user] just tried to smash his book into that ghost!  It's not very effective</span>",
+				"<span class='warning'>[user] just tried to smash \his book into that ghost!  It's not very effective</span>",
 				"<span class='warning'>You get the feeling that the ghost can't become any more visible.</span>"
 			)
 
