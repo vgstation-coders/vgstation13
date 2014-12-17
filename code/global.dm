@@ -8,7 +8,7 @@ var/global/list/type_instances[0]
 //FIXME: These are lists of things that get called every tick.
 // All of these badly need optimizing, half of them don't
 // actually need to be called every tick, many of them busy-wait
-// (come on people we're not writing assembly), and many should 
+// (come on people we're not writing assembly), and many should
 // be using tickers instead (eg narsie, singulo). Major target
 // for cutting down on lag and boosting overall performance.
 var/global/list/machines = list()
@@ -22,11 +22,14 @@ var/global/obj/effect/overlay/slmaster = null
 
 var/global/list/account_DBs = list()
 
+//Toggling these variables on during narsie's summoning to reduce resource load
 var/global/defer_powernet_rebuild = 0		// true if net rebuild will be called manually after an event
+var/global/world_end = 0 //disables the machinery, disables the station alert system, disables power_changing
+//functions with world end should be ones that resource hog and are unnecessary when the universal state is meant to be unrepairable
 
 // Used only by space turfs. TODO: Remove.
 // The comment below is no longer accurate.
-var/global/list/global_map = null 
+var/global/list/global_map = null
 
 	//list/global_map = list(list(1,5),list(4,3))//an array of map Z levels.
 	//Resulting sector map looks like

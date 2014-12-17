@@ -46,6 +46,17 @@ In short:
 	emergency_shuttle.force_shutdown()
 	*/
 
+	world_end = 1 //Kill the machinery, disable the power_changing and disable station alerts.
+	defer_powernet_rebuild = 1 //Fuck the powernet
+
+	for (var/obj/machinery/power/apc/APC in world)
+		if (!(APC.stat & BROKEN) && !istype(APC.areaMaster,/area/turret_protected/ai))
+			if(APC.cell)
+				APC.cell.charge = 0
+			APC.emagged = 1
+			APC.queue_icon_update()
+			APC.update()
+
 	for(var/area/ca in world)
 		var/area/A=get_area_master(ca)
 		if(!istype(A,/area) || A.name=="Space")
@@ -61,7 +72,7 @@ In short:
 		A.poweralm = 1
 		A.party    = null
 		A.radalert = 0
-
+		A.updateicon()
 /*
 		// Slap random alerts on shit
 		if(prob(25))
@@ -76,10 +87,7 @@ In short:
 					A.party=1
 */
 
-		A.updateicon()
-
-	for(var/turf/space/spess in world)
-		spess.overlays += "hell01"
+	world_end = 1
 
 	for(var/turf/T in world)
 		if(!T.holy && istype(T,/turf/simulated/floor) && prob(1))
@@ -89,14 +97,6 @@ In short:
 		if (!(alm.stat & BROKEN))
 			alm.ex_act(2)
 
-	for (var/obj/machinery/power/apc/APC in world)
-		if (!(APC.stat & BROKEN) && !istype(APC.areaMaster,/area/turret_protected/ai))
-			if(APC.cell)
-				APC.cell.charge = 0
-			APC.emagged = 1
-			APC.queue_icon_update()
-			APC.update()
-
 	for(var/mob/living/simple_animal/M in world)
 		if(M && !M.client)
 			M.stat = DEAD
@@ -104,3 +104,10 @@ In short:
 	runedec += 9000	//basically removing the rune cap
 
 	ticker.StartThematic("endgame")
+
+	//Here comes the fucking lag matey, lets take the zlevels one at a time
+	for(var/i = 1, i < world.maxz, i++)
+		for(var/turf/space/spess in world)
+			if(spess.z==i)
+				spess.overlays += "hell01"
+		sleep()
