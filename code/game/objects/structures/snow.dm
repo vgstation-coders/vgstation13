@@ -4,6 +4,7 @@
 #define SNOWCOVERING_MEDIUM 1
 #define SNOWCOVERING_LITTLE 0
 
+#define TICK_JIGGLE(X) rand(((X)-((X)*0.1)),((X)+((X)*0.1)))
 
 /obj/structure/snow
 	name = "snow"
@@ -97,42 +98,36 @@
 /obj/structure/snow/cosmic/New()
 	..()
 	snow_tiles++
-
 	var/blocked = 0
 	for(var/atom/A in get_turf(src))
 		if(A.density)
 			blocked = 1
-
 	if((snow_tiles >= COSMICFREEZE_LEVEL_1) && !blocked && prob(15))
 		if(prob(30))
 			new/obj/structure/snow_flora/sappling/pine(get_turf(src))
 		else
 			new/obj/structure/snow_flora/sappling(get_turf(src))
-
 	if((snow_tiles >= COSMICFREEZE_LEVEL_2) && !blocked && prob(2))
 		new/mob/living/simple_animal/hostile/retaliate/snowman(get_turf(src))
-
 	if(!bear_invasion && (snow_tiles >= COSMICFREEZE_LEVEL_4))
 		bear_invasion = 1
 		for(var/obj/effect/landmark/C in landmarks_list)
 			if(C.name == "carpspawn")
 				if(prob(50))
 					new /mob/living/simple_animal/hostile/bear(C.loc)
-
 	var/turf/simulated/TS = get_turf(src)
-	if(!istype(TS))	return
+	if(!istype(TS))    return
 	env = TS.return_air()
-
-	chill()
-
-	spawn(5)//so the parent snow doesn't have to wait for its children's spread to finish, to prevent some sort of gigantic recursion that only lets snow duplicate toward North.
-		if(src)
-			spread()
-
 	for(var/obj/machinery/alarm/A in get_turf(src))
 		A.stat |= FROZEN
 		A.rcon_setting = RCON_NO
 		A.update_icon()
+	spawn(chill_delay)
+		if(src)
+			chill()
+	spawn(rand(5,15))
+		spread()
+	return
 
 /obj/structure/snow/cosmic/proc/update_env_air()
 	var/turf/simulated/TS = get_turf(src)
@@ -140,86 +135,74 @@
 	env = TS.return_air()
 
 /obj/structure/snow/cosmic/proc/spread()
-	if(!src)	return
+	while(src && !src.gcDestroyed)
+		if(snow_tiles >= COSMICFREEZE_END)	return
+		update_env_air()
+		if(!env)    return
+		else if(env.temperature > MELTPOINT_SNOW)//above 30°C, the snow melts away)
+			src.snowMelt()
+			return
+		else if(env.temperature < SNOWSPREAD_MAXTEMP)
+			for(var/i in cardinal)
+				var/turf/T = get_step(src,i)
+				var/datum/gas_mixture/env2 = T.return_air()
+				if(env2.temperature >= MELTPOINT_SNOW)	continue
+				if(src.canSpreadTo(T))
+					new/obj/structure/snow/cosmic(T)
 
-	update_env_air()
+		sleep(TICK_JIGGLE(spread_delay))
+	return
 
-	if(!env)	return
+/obj/structure/snow/cosmic/proc/snowMelt()
+	var/turf/simulated/TS = get_turf(src)
+	if(!istype(TS))    return
+	TS.wet(300)
+	snow_tiles--
+	qdel(src)
+	return
 
-	if(env.temperature > MELTPOINT_SNOW)//above 30°C, the snow melts away)
-		var/turf/simulated/TS = get_turf(src)
-		if(!istype(TS))	return
-		TS.wet(300)
-		snow_tiles--
-		qdel(src)
-		return
 
-	if(env.temperature < SNOWSPREAD_MAXTEMP)//the cosmic snow only spreads when the temperature is bellow 23°C
+//The below proc is extremely expensive: consider minimizing the
+//number of times it runs by calculating per map turfs
+//maybe push the delay to something like 50 (or find a way to cut
+//out some of these checks)
+/obj/structure/snow/cosmic/proc/canSpreadTo(turf/T)
+	if(is_type_in_list(T,block_spread_turf)) return 0
+	if(T.density) return 0
 
-		for(var/i in cardinal)
-			var/turf/T = get_step(src,i)
+	for(var/blockingA in block_spread_obj)
+		if(locate(blockingA) in T) return 0
 
-			if(is_type_in_list(T,block_spread_turf))
-				continue
+	for(var/blockingB in block_spread_density)
+		var/obj/BB = (locate(blockingB) in T)
+		if(BB && BB.density) return 0
 
-			if(T.density)
-				continue	//walls, duh
+	for(var/obj/structure/window/WA in get_turf(src))
+		if(WA.dir & get_dir(get_turf(src),T)) return 0
 
-			var/can_spread = 1
-			for(var/blockingA in block_spread_obj)
-				if(locate(blockingA) in T)
-					can_spread = 0
-					break
+	for(var/obj/machinery/door/window/WB in get_turf(src))
+		if((WB.dir & get_dir(get_turf(src),T)) && WB.density)
+			return 0
 
-			for(var/blockingB in block_spread_density)
-				var/obj/BB = (locate(blockingB) in T)
-				if(BB && BB.density)
-					can_spread = 0
-					break
+	for(var/obj/structure/window/WA in T)
+		if(WA.is_fulltile()) return 0
+		if(WA.dir & get_dir(T,get_turf(src))) return 0
 
-			//checking for windows and windoors on the source tile
-			for(var/obj/structure/window/WA in get_turf(src))
-				if(WA.dir & get_dir(get_turf(src),T))
-					can_spread = 0
-					break
+	for(var/obj/machinery/door/window/WB in T)
+		if((WB.dir & get_dir(T,get_turf(src))) && WB.density)
+			return 0
 
-			for(var/obj/machinery/door/window/WB in get_turf(src))
-				if((WB.dir & get_dir(get_turf(src),T)) && WB.density)
-					can_spread = 0
-					break
-
-			//checking for windows and windoors on the destination tile
-			for(var/obj/structure/window/WA in T)
-				if(WA.is_fulltile())
-					can_spread = 0
-					break
-				if(WA.dir & get_dir(T,get_turf(src)))
-					can_spread = 0
-					break
-
-			for(var/obj/machinery/door/window/WB in T)
-				if((WB.dir & get_dir(T,get_turf(src))) && WB.density)
-					can_spread = 0
-					break
-
-			var/datum/gas_mixture/env2 = T.return_air()
-
-			if(can_spread && (env2.temperature < MELTPOINT_SNOW))
-				new/obj/structure/snow/cosmic(T)
-
-	spawn(spread_delay)
-		.()
+	return 1
 
 /obj/structure/snow/cosmic/proc/chill()
-	if(!src)	return
-
-	if(env.temperature > COSMICSNOW_MINIMALTEMP)//the snow will slowly lower the temperature until -40°C.
-		env.temperature -= (0.01 * snow_amount)
-
-	spawn(chill_delay)
-		.()
-
-
+	while(src && !src.gcDestroyed)
+		if(snow_tiles >= COSMICFREEZE_END)	return
+		if(env.temperature > COSMICSNOW_MINIMALTEMP)//the snow will slowly lower the temperature until -40°C.
+			env.temperature -= (0.01 * snow_amount)
+		if(env.temperature < COSMICSNOW_MINIMALTEMP+1)//snow that reached its minimal temperature stops its reaction. should considerably reduce the lag.
+			return
+		sleep(TICK_JIGGLE(chill_delay * snowTickMod))
+	return
 
 //////SNOWBALLS//////
 
@@ -410,19 +393,23 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 		"snowbush6",
 		)
 	growthlevel = rand(15,25)
-	growing()
+	spawn()
+		growing()
 
 /obj/structure/snow_flora/sappling/proc/growing()
-	if(growth > growthlevel)
-		new/obj/structure/snow_flora/tree(get_turf(src))
-		qdel(src)
+	while(src && !src.gcDestroyed)
 
-	if(locate(/obj/structure/snow) in get_turf(src))
+		if(growth > growthlevel)
+			new/obj/structure/snow_flora/tree(get_turf(src))
+			qdel(src)
+
+		if(!(locate(/obj/structure/snow) in get_turf(src)))
+			qdel(src)
+
 		growth++
-		spawn(40)
-			growing()
-	else
-		qdel(src)
+
+		sleep(TICK_JIGGLE(40 * snowTickMod))
+	return
 
 /obj/structure/snow_flora/sappling/attackby(obj/item/W,mob/user)
 	var/list/cutting = list(
@@ -443,19 +430,22 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	growthlevel = rand(25,35)
 
 /obj/structure/snow_flora/sappling/pine/growing()
-	if(growth > growthlevel)
-		if(prob(20))
-			new/obj/structure/snow_flora/tree/pine/xmas(get_turf(src))
-		else
-			new/obj/structure/snow_flora/tree/pine(get_turf(src))
-		qdel(src)
+	while(src && !src.gcDestroyed)
 
-	if(locate(/obj/structure/snow) in get_turf(src))
+		if(growth > growthlevel)
+			if(prob(20))
+				new/obj/structure/snow_flora/tree/pine/xmas(get_turf(src))
+			else
+				new/obj/structure/snow_flora/tree/pine(get_turf(src))
+			qdel(src)
+
+		if(!(locate(/obj/structure/snow) in get_turf(src)))
+			qdel(src)
+
 		growth++
-		spawn(40)
-			growing()
-	else
-		qdel(src)
+
+		sleep(TICK_JIGGLE(40 * snowTickMod))
+	return
 
 /obj/structure/snow_flora/tree
 	name = "tree"
@@ -480,19 +470,20 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 		"tree_5",
 		"tree_6",
 		)
-
-	idle()
+	spawn()
+		idle()
 
 /obj/structure/snow_flora/tree/proc/idle()
-	if(!(locate(/obj/structure/snow) in get_turf(src)))
-		axe_hits++
-		if(axe_hits >= 3)
-			new/obj/item/weapon/grown/log(get_turf(src))
-			qdel(src)
-			return
-	spawn(50)
-		if(src)
-			idle()
+	while(src && !src.gcDestroyed)
+
+		if(!(locate(/obj/structure/snow) in get_turf(src)))
+			axe_hits++
+			if(axe_hits >= 3)
+				new/obj/item/weapon/grown/log(get_turf(src))
+				qdel(src)
+
+		sleep(TICK_JIGGLE(50 * snowTickMod))
+	return
 
 /obj/structure/snow_flora/tree/attackby(obj/item/W,mob/user)
 	var/list/cutting = list(
@@ -545,17 +536,17 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 			qdel(src)
 
 /obj/structure/snow_flora/tree/pine/idle()
-	if(!(locate(/obj/structure/snow) in get_turf(src)))
-		axe_hits++
-		if(axe_hits >= 5)
-			new/obj/item/weapon/grown/log(get_turf(src))
-			new/obj/item/weapon/grown/log(get_turf(src))
-			new/obj/item/weapon/grown/log(get_turf(src))
-			qdel(src)
-			return
-	spawn(50)
-		if(src)
-			idle()
+	while(src && !src.gcDestroyed)
+		if(!(locate(/obj/structure/snow) in get_turf(src)))
+			axe_hits++
+			if(axe_hits >= 5)
+				new/obj/item/weapon/grown/log(get_turf(src))
+				new/obj/item/weapon/grown/log(get_turf(src))
+				new/obj/item/weapon/grown/log(get_turf(src))
+				qdel(src)
+				return
+		sleep(TICK_JIGGLE(50 * snowTickMod))
+	return
 
 /obj/structure/snow_flora/tree/pine/xmas
 	name = "christmas tree"
@@ -565,6 +556,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 /obj/structure/snow_flora/tree/pine/xmas/New()
 	..()
+	icon_state = "pine_c"
 	for(var/turf/simulated/floor/T in orange(1,src))
 		var/blocked = 0
 		for(var/atom/A in T)
@@ -578,3 +570,5 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 #undef SNOWCOVERING_FULL
 #undef SNOWCOVERING_MEDIUM
 #undef SNOWCOVERING_LITTLE
+
+#undef TICK_JIGGLE

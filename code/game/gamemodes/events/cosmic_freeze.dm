@@ -19,6 +19,7 @@
 	if(turfs.len)
 		var/turf/simulated/floor/T = pick(turfs)
 		new/obj/structure/snow/cosmic(T)
+		snow_tiles = 0
 		message_admins("<span class='notice'>Event: Cosmic Snow Storm spawned at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[T.loc] ([T.x],[T.y],[T.z])</a></span>")
 		return T
 	else
