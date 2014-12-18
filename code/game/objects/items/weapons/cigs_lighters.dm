@@ -255,7 +255,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 
 	if(src.lit == 0 && M.on_fire) //Hit burning mobs with cigarettes to light it up.
 		if(M == user)
-			src.light("<span class='notice'>[user] uses his burning body to light the [src]. Smooth.</span>")
+			src.light("<span class='notice'>[user] uses \his burning body to light the [src]. Smooth.</span>")
 			return
 		else
 			src.light("<span class='notice'>[user] uses the flames on [M] to light the [src]. How rude.</span>")

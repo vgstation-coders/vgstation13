@@ -48,7 +48,7 @@
 				message = "<B>The [src.name]</B> roars."
 				m_type = HEARABLE
 		if("tail")
-			message = "<B>The [src.name]</B> waves his tail."
+			message = "<B>The [src.name]</B> waves \his tail."
 			m_type = VISIBLE
 		if("gasp")
 			message = "<B>The [src.name]</B> gasps."
@@ -61,7 +61,7 @@
 			m_type = VISIBLE
 		if("paw")
 			if (!src.restrained())
-				message = "<B>The [src.name]</B> flails his paw."
+				message = "<B>The [src.name]</B> flails \his paw."
 				m_type = VISIBLE
 		if("scretch")
 			if (!muzzled)
@@ -74,7 +74,7 @@
 			message = "<B>The [src.name]</B> moans!"
 			m_type = HEARABLE
 		if("nod")
-			message = "<B>The [src.name]</B> nods his head."
+			message = "<B>The [src.name]</B> nods \his head."
 			m_type = VISIBLE
 		if("sit")
 			message = "<B>The [src.name]</B> sits down."
@@ -97,11 +97,11 @@
 				message = "<B>The [src.name]</B> rolls."
 				m_type = VISIBLE
 		if("shake")
-			message = "<B>The [src.name]</B> shakes his head."
+			message = "<B>The [src.name]</B> shakes \his head."
 			m_type = VISIBLE
 		if("gnarl")
 			if (!muzzled)
-				message = "<B>The [src.name]</B> gnarls and shows his teeth.."
+				message = "<B>The [src.name]</B> gnarls and shows \his teeth.."
 				m_type = HEARABLE
 		if("jump")
 			message = "<B>The [src.name]</B> jumps!"

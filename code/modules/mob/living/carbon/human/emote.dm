@@ -108,7 +108,7 @@
 
 		if ("choke")
 			if(miming)
-				message = "<B>[src]</B> clutches his throat desperately!"
+				message = "<B>[src]</B> clutches \his throat desperately!"
 				m_type = VISIBLE
 			else
 				if (!muzzled)
@@ -126,14 +126,14 @@
 					m_type = VISIBLE
 		if ("flap")
 			if (!src.restrained())
-				message = "<B>[src]</B> flaps his wings."
+				message = "<B>[src]</B> flaps \his wings."
 				m_type = HEARABLE
 				if(miming)
 					m_type = VISIBLE
 
 		if ("aflap")
 			if (!src.restrained())
-				message = "<B>[src]</B> flaps his wings ANGRILY!"
+				message = "<B>[src]</B> flaps \his wings ANGRILY!"
 				m_type = HEARABLE
 				if(miming)
 					m_type = VISIBLE
@@ -218,7 +218,7 @@
 				src.emote("fart")
 				message = "<B>[src]</B> has left the building..."
 			if(M_HARDCORE in mutations)
-				message = "<B>[src]</B> whispers with his final breath, <i>'i told u i was hardcore..'</i>"
+				message = "<B>[src]</B> whispers with \his final breath, <i>'i told u i was hardcore..'</i>"
 			else
 				message = "<B>[src]</B> seizes up and falls limp, \his eyes dead and lifeless..."
 			m_type = VISIBLE

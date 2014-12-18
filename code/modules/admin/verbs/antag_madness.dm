@@ -107,7 +107,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 	var/turf/T = get_turf(M)
 	T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg')
 
-	M << "<span class='danger'>You get the feeling that you're not the only one who remembered his true origin. Will they be your allies or your foes? That is for you to decide.</span>"
+	M << "<span class='danger'>You get the feeling that you're not the only one who has remembered their true origin. Will the others be your allies or your foes? That is for you to decide.</span>"
 
 /proc/create_madness(var/mob/living/carbon/human/M, var/choice)
 	if (M.mind.assigned_role == "Clown")

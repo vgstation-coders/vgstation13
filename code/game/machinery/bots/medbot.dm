@@ -5,7 +5,7 @@
 
 /obj/machinery/bot/medbot
 	name = "Medibot"
-	desc = "A little medical robot. He looks somewhat underwhelmed."
+	desc = "A little medical robot. It looks somewhat underwhelmed."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "medibot0"
 	layer = 5.0

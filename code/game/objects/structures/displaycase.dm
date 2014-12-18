@@ -262,7 +262,7 @@
 				else
 					src << "\icon[src] \red \The [src] is empty!"
 		else
-			user.visible_message("[user.name] gently runs his hands over \the [src] in appreciation of its contents.", \
+			user.visible_message("[user.name] gently runs \his hands over \the [src] in appreciation of its contents.", \
 				"You gently run your hands over \the [src] in appreciation of its contents.", \
 				"You hear someone streaking glass with their greasy hands.")
 

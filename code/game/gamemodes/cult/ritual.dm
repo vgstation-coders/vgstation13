@@ -280,7 +280,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				<h3>Summon cultist</h3>
 				This rune allows you to summon a fellow cultist to your location. The target cultist must be unhandcuffed ant not buckled to anything. You also need to have 3 people chanting at the rune to succesfully invoke it. Invoking it takes heavy strain on the bodies of all chanting cultists.<br>
 				<h3>Free a cultist</h3>
-				This rune unhandcuffs and unbuckles any cultist of your choice, no matter where he is. You need to have 3 people invoking the rune for it to work. Invoking it takes heavy strain on the bodies of all chanting cultists.<br>
+				This rune unhandcuffs and unbuckles any cultist of your choice, no matter where they are. You need to have 3 people invoking the rune for it to work. Invoking it takes heavy strain on the bodies of all chanting cultists.<br>
 				<h3>Deafen</h3>
 				This rune temporarily deafens all non-cultists around you.<br>
 				<h3>Blind</h3>
@@ -290,11 +290,11 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				<h3>Communicate</h3>
 				Invoking this rune allows you to relay a message to all cultists on the station and nearby space objects.
 				<h3>Stun</h3>
-				Unlike other runes, this ons is supposed to be used in talisman form. When invoked directly, it simply releases some dark energy, briefly stunning everyone around. When imbued into a talisman, you can force all of its energy into one person, stunning him so hard he cant even speak. However, effect wears off rather fast.<br>
+				Unlike other runes, this one is supposed to be used in talisman form. When invoked directly, it simply releases some dark energy, briefly stunning everyone around. When imbued into a talisman, you can force all of its energy into one person, stunning them so hard that they can't even speak. However, effect wears off rather fast.<br>
 				<h3>Equip Armor</h3>
 				When this rune is invoked, either from a rune or a talisman, it will equip the user with the armor of the followers of Nar-Sie. To use this rune to its fullest extent, make sure you are not wearing any form of headgear, armor, gloves or shoes, and make sure you are not holding anything in your hands.<br>
 				<h3>See Invisible</h3>
-				When invoked when standing on it, this rune allows the user to see the the world beyond as long as he does not move.<br>
+				When invoked when standing on it, this rune allows the user to see the the world beyond as long as they do not move.<br>
 				</body>
 				</html>
 				"}

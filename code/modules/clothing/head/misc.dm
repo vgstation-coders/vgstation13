@@ -208,7 +208,7 @@
 	set desc = "Show that CIS SCUM who's boss."
 
 	usr << "You tip your fedora."
-	usr.visible_message("[usr] tips his fedora.")
+	usr.visible_message("[usr] tips \his fedora.")
 
 /obj/item/clothing/head/fez
 	name = "\improper fez"

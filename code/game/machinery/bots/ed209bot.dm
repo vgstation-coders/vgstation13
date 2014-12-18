@@ -1,6 +1,6 @@
 /obj/machinery/bot/ed209
 	name = "ED-209 Security Robot"
-	desc = "A security robot.  He looks less than thrilled."
+	desc = "A security robot. It looks less than thrilled."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "ed2090"
 	layer = 5.0

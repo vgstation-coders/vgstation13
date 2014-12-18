@@ -71,7 +71,7 @@
 
 		if ("aflap")
 			if (!src.restrained())
-				message = "<B>[src]</B> flaps his utility arms ANGRILY!"
+				message = "<B>[src]</B> flaps \his utility arms ANGRILY!"
 				m_type = HEARABLE
 
 		if ("custom")
