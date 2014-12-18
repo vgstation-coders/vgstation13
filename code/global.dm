@@ -21,11 +21,7 @@ var/global/obj/effect/overlay/plmaster = null
 var/global/obj/effect/overlay/slmaster = null
 
 var/global/list/account_DBs = list()
-
-//Toggling these variables on during narsie's summoning to reduce resource load
 var/global/defer_powernet_rebuild = 0		// true if net rebuild will be called manually after an event
-var/global/world_end = 0 //disables the machinery, disables the station alert system, disables power_changing
-//functions with world end should be ones that resource hog and are unnecessary when the universal state is meant to be unrepairable
 
 // Used only by space turfs. TODO: Remove.
 // The comment below is no longer accurate.
@@ -49,6 +45,10 @@ var/list/paper_tag_whitelist = list("center","p","div","span","h1","h2","h3","h4
 var/list/paper_blacklist = list("java","onblur","onchange","onclick","ondblclick","onfocus","onkeydown",	\
 	"onkeypress","onkeyup","onload","onmousedown","onmousemove","onmouseout","onmouseover",	\
 	"onmouseup","onreset","onselect","onsubmit","onunload")
+
+
+var/world_end = 0 //disables the machinery, disables the station alert system, disables power_changing
+//functions with world end should be ones that resource hog and are unnecessary when the universal state is meant to be unrepairable
 
 var/BLINDBLOCK = 0
 var/DEAFBLOCK = 0
@@ -227,6 +227,10 @@ var/list/combatlog = list()
 var/list/IClog = list()
 var/list/OOClog = list()
 var/list/adminlog = list()
+
+//For adding space overlays
+var/list/spacelist = list() //Contains all space tiles at any point
+var/space_overlay //Will add this overlay to any newly created space tiles
 
 
 var/list/powernets = list()

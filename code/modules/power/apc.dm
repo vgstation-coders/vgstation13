@@ -1267,6 +1267,9 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 					sleep(1)
 
 /obj/machinery/power/apc/Destroy()
+	if(world_end)
+		set invisibility = 101
+		return
 	if(malfai && operating)
 		if (ticker.mode.config_tag == "malfunction")
 			if (STATION_Z == z)

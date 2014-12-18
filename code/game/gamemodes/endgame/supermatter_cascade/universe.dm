@@ -86,13 +86,10 @@
 		if (!(alm.stat & BROKEN))
 			alm.ex_act(2)
 
-	//Here comes the lag train
-	for(var/i = 1, i < world.maxz, i++)
-		for(var/turf/space/spess in world)
-			if(spess.z==i)
-				spess.overlays += "hell01"
-		sleep()
-
+	//Here comes the fucking lag matey, lets ignore all non space tiles
+	for(var/turf/space/T in spacelist)
+		T.overlays += "end01"
+	space_overlay = "end01" //Update all future destroyed tiles
 
 	ticker.StartThematic("endgame")
 

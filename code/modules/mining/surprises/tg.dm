@@ -40,7 +40,7 @@
 		/turf/unsimulated/mineral/random/high_chance=1
 	)
 	floortypes = list(
-		/turf/simulated/floor/engine/cult=1
+		/turf/simulated/floor/cult=1
 	)
 	spawntypes = list(
 		/mob/living/simple_animal/hostile/creature=1,

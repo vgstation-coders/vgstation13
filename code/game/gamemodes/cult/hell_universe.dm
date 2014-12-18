@@ -55,7 +55,7 @@ In short:
 				APC.cell.charge = 0
 			APC.emagged = 1
 			APC.queue_icon_update()
-			APC.update()
+			APC.set_broken()
 
 	for(var/area/ca in world)
 		var/area/A=get_area_master(ca)
@@ -105,9 +105,9 @@ In short:
 
 	ticker.StartThematic("endgame")
 
-	//Here comes the fucking lag matey, lets take the zlevels one at a time
-	for(var/i = 1, i < world.maxz, i++)
-		for(var/turf/space/spess in world)
-			if(spess.z==i)
-				spess.overlays += "hell01"
-		sleep()
+	machines = 0
+
+	//Here comes the fucking lag matey, lets ignore all non space tiles
+	for(var/turf/space/T in spacelist)
+		T.overlays += "hell01"
+	space_overlay = "hell01" //All future turfs will spawn with this overlay

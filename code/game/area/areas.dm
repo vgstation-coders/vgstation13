@@ -92,7 +92,11 @@
 
 /area/proc/updateDangerLevel()
 	var/danger_level = 0
-
+	if(world_end)
+		atmosalm = 0
+		door_alerts = 0
+		UpdateFirelocks()
+	return
 	// Determine what the highest DL reported by air alarms is
 	for (var/area/RA in related)
 		for(var/obj/machinery/alarm/AA in RA)

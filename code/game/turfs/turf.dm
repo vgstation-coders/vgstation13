@@ -70,7 +70,7 @@
 
 /turf/Enter(atom/movable/O, atom/oldloc)
 	if(movement_disabled && usr.ckey != movement_disabled_exception)
-		usr << "\red Movement is admin-disabled." //This is to identify lag problems
+		usr << "<span class='warning'>Movement is admin-disabled.</span>" //This is to identify lag problems
 		return 0
 
 	// first, check objects to block exit that are not on the border
@@ -212,8 +212,15 @@
 
 //Creates a new turf
 /turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1)
+	var/turf/T = get_turf(src)
 	if (!N)
 		return
+	else if (T == N)
+		return
+
+	if (istype(N,/turf/space))
+		spacelist += T
+		T.overlays = space_overlay
 
 #ifdef ENABLE_TRI_LEVEL
 // Fuck this, for now - N3X
