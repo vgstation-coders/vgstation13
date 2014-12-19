@@ -41,10 +41,10 @@
 			if(R.amount < 2)
 				user << "<span class='warning'>You don't have enough rods to do that.</span>"
 				return
-			user << "<span class='notice'>You begin to build \a catwalk.</span>"
+			user << "<span class='notice'>You begin to build a catwalk.</span>"
 			if(do_after(user,30))
 				playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-				user << "<span class='notice'>You build \a catwalk!</span>"
+				user << "<span class='notice'>You build a catwalk!</span>"
 				R.use(2)
 				ChangeTurf(/turf/simulated/floor/plating/airless/catwalk)
 				spacelist -= src

@@ -447,16 +447,16 @@ turf/simulated/floor/proc/update_icon()
 				del(C)
 				T.state = C //fixing it by bashing it with a light bulb, fun eh?
 				update_icon()
-				user << "<span class='notice'>You replace \the light bulb.</span>"
+				user << "<span class='notice'>You replace \the [C].</span>"
 			else
-				user << "<span class='notice'>\The lightbulb seems fine, no need to replace it.</span>"
+				user << "<span class='notice'>\The [C] seems fine, no need to replace it.</span>"
 
 	if(istype(C, /obj/item/weapon/crowbar) && (!(is_plating())))
 		if(broken || burnt)
-			user << "<span class='warning'>You remove \the broken plating.</span>"
+			user << "<span class='warning'>You remove the broken plating.</span>"
 		else
 			if(is_wood_floor())
-				user << "<span class='warning'>You forcefully pry off \the planks, destroying them in \the process.</span>"
+				user << "<span class='warning'>You forcefully pry off the planks, destroying them in \the process.</span>"
 			else
 				user << "<span class='warning'>You remove \the [floor_tile.name].</span>"
 				new floor_tile.type(src)
@@ -473,7 +473,7 @@ turf/simulated/floor/proc/update_icon()
 				return
 			else
 				if(is_wood_floor())
-					user << "<span class='warning'>You unscrew \the planks.</span>"
+					user << "<span class='warning'>You unscrew the planks.</span>"
 					new floor_tile.type(src)
 
 			make_plating()
@@ -488,7 +488,7 @@ turf/simulated/floor/proc/update_icon()
 		var/obj/item/stack/rods/R = C
 		if (is_plating())
 			if (R.amount >= 2)
-				user << "<span class='notice'>Reinforcing \the floor...</span>"
+				user << "<span class='notice'>Reinforcing the floor...</span>"
 				if(do_after(user, 30) && R && R.amount >= 2 && is_plating())
 					ChangeTurf(/turf/simulated/floor/engine)
 					playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
@@ -497,14 +497,14 @@ turf/simulated/floor/proc/update_icon()
 			else
 				user << "<span class='warning'>You need more rods.</span>"
 		else if (is_catwalk())
-			user << "<span class='warning'>\The entire thing is 100% rods already, it doesn't need any more.</span>"
+			user << "<span class='warning'>The entire thing is 100% rods already, it doesn't need any more.</span>"
 		else
-			user << "<span class='warning'>You must remove \the plating first.</span>"
+			user << "<span class='warning'>You must remove the plating first.</span>"
 		return
 
 	if(istype(C, /obj/item/stack/tile))
 		if (is_catwalk())
-			user << "<span class='warning'>\The catwalk is too primitive to support tiling.</span>"
+			user << "<span class='warning'>The catwalk is too primitive to support tiling.</span>"
 		if(is_plating())
 			if(!broken && !burnt)
 				var/obj/item/stack/tile/T = C
@@ -530,7 +530,7 @@ turf/simulated/floor/proc/update_icon()
 				levelupdate()
 				playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 			else
-				user << "<span class='notice'>This section is too damaged to support \a tile. Use \a welder to fix \the damage.</span>"
+				user << "<span class='notice'>This section is too damaged to support a tile. Use a welder to fix the damage.</span>"
 
 
 	if(istype(C, /obj/item/weapon/cable_coil))
@@ -538,13 +538,13 @@ turf/simulated/floor/proc/update_icon()
 			var/obj/item/weapon/cable_coil/coil = C
 			coil.turf_place(src, user)
 		else
-			user << "<span class='warning'>You must remove \the plating first.</span>"
+			user << "<span class='warning'>You must remove the plating first.</span>"
 
 	if(istype(C, /obj/item/weapon/shovel))
 		if(is_grass_floor())
 			new /obj/item/weapon/ore/glass(src)
 			new /obj/item/weapon/ore/glass(src) //Make some sand if you shovel grass
-			user << "<span class='notice'>You shovel \the grass.</span>"
+			user << "<span class='notice'>You shovel the grass.</span>"
 			make_plating()
 		else
 			user << "<span class='warning'>You cannot shovel this.</span>"
@@ -554,7 +554,7 @@ turf/simulated/floor/proc/update_icon()
 		if(welder.isOn() && (is_plating()))
 			if(broken || burnt)
 				if(welder.remove_fuel(0,user))
-					user << "<span class='warning'>You fix some dents on \the broken plating.</span>"
+					user << "<span class='warning'>You fix some dents on the broken plating.</span>"
 					playsound(src, 'sound/items/Welder.ogg', 80, 1)
 					icon_state = "plating"
 					burnt = 0
