@@ -12,19 +12,19 @@
 /turf/simulated/wall/r_wall/attack_hand(mob/user as mob)
 	if (M_HULK in user.mutations)
 		if (prob(10) || rotting)
-			usr << text("\blue You smash through the wall.")
+			usr << text("<span class='notice'>You smash through \the wall.</span>")
 			usr.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 			dismantle_wall(1)
 			return
 		else
-			usr << text("\blue You punch the wall.")
+			usr << text("<span class='notice'>You punch \the [src].</span>")
 			return
 
 	if(rotting)
-		user << "\blue This wall feels rather unstable."
+		user << "<span class='notice'>This wall feels rather unstable.</span>"
 		return
 
-	user << "\blue You push the wall but nothing happens!"
+	user << "<span class='notice'>You push \the [src] but nothing happens!</span>"
 	playsound(src, 'sound/weapons/Genhit.ogg', 25, 1)
 	src.add_fingerprint(user)
 	return
@@ -199,7 +199,7 @@
 						src.d_state = 6
 						src.icon_state = "r_wall-6"
 						new /obj/item/stack/rods( src )
-						user << "<span class='notice'>The support rods drop out as you cut them loose from the frame.</span>"
+						user << "<span class='notice'>\The support rods drop out as you cut them loose from the frame.</span>"
 				else
 					user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
 				return
@@ -216,7 +216,7 @@
 					src.d_state = 6
 					src.icon_state = "r_wall-6"
 					new /obj/item/stack/rods( src )
-					user << "<span class='notice'>The support rods drop out as you cut them loose from the frame.</span>"
+					user << "<span class='notice'>\The support rods drop out as you cut them loose from the frame.</span>"
 				return
 
 		if(6)
@@ -238,7 +238,7 @@
 	//DRILLING
 	if (istype(W, /obj/item/weapon/pickaxe/diamonddrill))
 
-		user << "<span class='notice'>You begin to drill though the wall.</span>"
+		user << "<span class='notice'>You begin to drill though \the [src].</span>"
 
 		sleep(200)
 		if( !istype(src, /turf/simulated/wall/r_wall) || !user || !W || !T )	return

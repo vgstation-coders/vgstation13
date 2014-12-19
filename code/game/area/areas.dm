@@ -5,6 +5,7 @@
 /area
 	var/global/global_uid = 0
 	var/uid
+	var/world_has_ended = 0 //Toggling this on means an APC has done its final duty in depowering this area
 
 /area/New()
 	icon_state = ""
@@ -59,6 +60,7 @@
 	return contents
 
 /area/proc/poweralert(var/state, var/obj/source as obj)
+	if (world_end) return //Its the end of the world, even a fleet of mommis wont save you now.
 	if (state != poweralm)
 		poweralm = state
 		if(istype(source))	//Only report power alarms on the z-level where the source is located.
@@ -90,7 +92,13 @@
 
 /area/proc/updateDangerLevel()
 	var/danger_level = 0
-
+	if(world_end)
+		if(atmosalm)
+			atmosalm = 0
+			door_alerts &= ~DOORALERT_ATMOS
+			UpdateFirelocks()
+		return
+	return
 	// Determine what the highest DL reported by air alarms is
 	for (var/area/RA in related)
 		for(var/obj/machinery/alarm/AA in RA)
@@ -331,11 +339,14 @@
  * Called when power status changes.
  */
 /area/proc/power_change()
+	if(master.world_has_ended) return //No, it's not coming back, dont even bother asking
 	for(var/area/RA in related)
 		for(var/obj/machinery/M in RA)	// for each machine in the area
 			M.power_change()				// reverify power status (to update icons etc.)
 		if (fire || eject || party)
 			RA.updateicon()
+	if(world_end) //A final shot rings out in the night, this area has done its last update.
+		master.world_has_ended = 1
 
 /area/proc/usage(const/chan)
 	switch (chan)

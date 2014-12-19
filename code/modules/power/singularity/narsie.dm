@@ -37,7 +37,7 @@ var/global/narsie_behaviour = "CultStation13"
 		world << "<font size='15' color='red'><b>[uppertext(name)] HAS RISEN</b></font>"
 
 	if (emergency_shuttle)
-		emergency_shuttle.incall(0.3) // Cannot recall.
+		emergency_shuttle.incall(1) // Cannot recall.
 
 	SetUniversalState(/datum/universal_state/hell)
 /*
@@ -57,13 +57,9 @@ var/global/narsie_behaviour = "CultStation13"
 
 /obj/machinery/singularity/narsie/large/eat()
 	set background = BACKGROUND_ENABLED
-
-	if (defer_powernet_rebuild != 2)
-		defer_powernet_rebuild = 1
+	//The hell universe has taken care of all our power latency concerns
 	for (var/atom/A in orange(consume_range, src))
 		consume(A)
-	if (defer_powernet_rebuild != 2)
-		defer_powernet_rebuild = 0
 
 /obj/machinery/singularity/narsie/mezzer()
 	for(var/mob/living/carbon/M in oviewers(8, src))

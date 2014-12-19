@@ -9,6 +9,13 @@
 		..()
 		name = "floor"
 
+/turf/simulated/floor/cult
+	name = "engraved floor"
+	icon_state = "cult"
+
+/turf/simulated/floor/cult/cultify()
+	return
+
 
 
 /turf/simulated/floor/plating/vox
@@ -97,7 +104,7 @@
 	if(!user)
 		return
 	if(istype(C, /obj/item/weapon/wrench))
-		user << "\blue Removing rods..."
+		user << "<span class='notice'>Removing rods...</span>"
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 80, 1)
 		if(do_after(user, 30))
 			new /obj/item/stack/rods(src, 2)
@@ -105,14 +112,6 @@
 			var/turf/simulated/floor/F = src
 			F.make_plating()
 			return
-
-/turf/simulated/floor/engine/cult
-	name = "engraved floor"
-	icon_state = "cult"
-
-/turf/simulated/floor/engine/cult/cultify()
-	return
-
 
 /turf/simulated/floor/engine/n20
 	New()

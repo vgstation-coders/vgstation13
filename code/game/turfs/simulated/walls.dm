@@ -107,12 +107,12 @@
 	user.changeNext_move(8)
 	if ((M_HULK in user.mutations))
 		if (prob(hardness))
-			usr << text("\blue You smash through the wall.")
+			usr << text("<span class='notice'>You smash through \the wall.</span>")
 			usr.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 			dismantle_wall(1)
 			return
 		else
-			usr << text("\blue You punch the wall.")
+			usr << text("<span class='notice'>You punch the [src].</span>")
 			return
 
 	return src.attack_hand(user)
@@ -123,11 +123,11 @@
 		if(istype(src, /turf/simulated/wall/r_wall))
 			if(M.environment_smash == 3)
 				dismantle_wall(1)
-				M << "<span class='info'>You smash through the wall.</span>"
+				M << "<span class='info'>You smash through \the [src].</span>"
 			else
 				M << "<span class='info'>This wall is far too strong for you to destroy.</span>"
 		else
-			M << "<span class='info'>You smash through the wall.</span>"
+			M << "<span class='info'>You smash through \the [src].</span>"
 			dismantle_wall(1)
 			return
 
@@ -135,20 +135,20 @@
 	user.changeNext_move(8)
 	if (M_HULK in user.mutations)
 		if (prob(hardness) || rotting)
-			usr << text("\blue You smash through the wall.")
+			usr << text("<span class='notice'>You smash through \the wall.</span>")
 			usr.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 			dismantle_wall(1)
 			return
 		else
-			usr << text("\blue You punch the wall.")
+			usr << text("<span class='notice'>You punch \the [src].</span>")
 			return
 
 	if(rotting)
-		user << "\blue The wall crumbles under your touch."
+		user << "<span class='notice'>\The [src] crumbles under your touch.</span>"
 		dismantle_wall()
 		return
 
-	user << "\blue You push the wall but nothing happens!"
+	user << "<span class='notice'>You push \the [src] but nothing happens!</span>"
 	playsound(src, 'sound/weapons/Genhit.ogg', 25, 1)
 	src.add_fingerprint(user)
 	return
@@ -220,8 +220,8 @@
 				user << "<span class='notice'>You remove the outer plating.</span>"
 				var/pdiff=performWallPressureCheck(src.loc)
 				if(pdiff)
-					message_admins("[user.real_name] ([formatPlayerPanel(user,user.ckey)]) dismanted a wall with a pdiff of [pdiff] at [formatJumpTo(loc)]!")
-					log_admin("[user.real_name] ([user.ckey]) dismanted a wall with a pdiff of [pdiff] at [loc]!")
+					message_admins("[user.real_name] ([formatPlayerPanel(user,user.ckey)]) dismanted \a [src] with a pdiff of [pdiff] at [formatJumpTo(loc)]!")
+					log_admin("[user.real_name] ([user.ckey]) dismanted \a [src] with a pdiff of [pdiff] at [loc]!")
 				dismantle_wall()
 		else
 			user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
@@ -251,7 +251,7 @@
 	//DRILLING
 	else if (istype(W, /obj/item/weapon/pickaxe/diamonddrill))
 
-		user << "<span class='notice'>You begin to drill though the wall.</span>"
+		user << "<span class='notice'>You begin to drill though \the [src].</span>"
 
 		sleep(60)
 		if(mineral == "diamond")
@@ -264,16 +264,16 @@
 			var/pdiff=performWallPressureCheck(src.loc)
 			if(pdiff)
 				message_admins("[user.real_name] ([formatPlayerPanel(user,user.ckey)]) drilled a wall with a pdiff of [pdiff] at [formatJumpTo(loc)]!")
-				log_admin("[user.real_name] ([user.ckey]) drilled a wall with a pdiff of [pdiff] at [loc]!")
+				log_admin("[user.real_name] ([user.ckey]) drilled \a [src] with a pdiff of [pdiff] at [loc]!")
 			for(var/mob/O in viewers(user, 5))
-				O.show_message("<span class='warning'>The wall was drilled through by [user]!</span>", 1, "<span class='warning'>You hear the grinding of metal.</span>", 2)
+				O.show_message("<span class='warning'>The [src] was drilled through by [user]!</span>", 1, "<span class='warning'>You hear the grinding of metal.</span>", 2)
 		return
 
 	else if( istype(W, /obj/item/weapon/melee/energy/blade) )
 		var/obj/item/weapon/melee/energy/blade/EB = W
 
 		EB.spark_system.start()
-		user << "<span class='notice'>You stab \the [EB] into the wall and begin to slice it apart.</span>"
+		user << "<span class='notice'>You stab \the [EB] into \the [src] and begin to slice it apart.</span>"
 		playsound(src, "sparks", 50, 1)
 
 		sleep(70)
@@ -288,10 +288,10 @@
 			dismantle_wall(1)
 			var/pdiff=performWallPressureCheck(src.loc)
 			if(pdiff)
-				message_admins("[user.real_name] ([formatPlayerPanel(user,user.ckey)]) sliced up a wall with a pdiff of [pdiff] at [formatJumpTo(loc)]!")
-				log_admin("[user.real_name] ([user.ckey]) sliced up a wall with a pdiff of [pdiff] at [loc]!")
+				message_admins("[user.real_name] ([formatPlayerPanel(user,user.ckey)]) sliced up \a [src] with a pdiff of [pdiff] at [formatJumpTo(loc)]!")
+				log_admin("[user.real_name] ([user.ckey]) sliced up \a [src] with a pdiff of [pdiff] at [loc]!")
 			for(var/mob/O in viewers(user, 5))
-				O.show_message("<span class='warning'>The wall was sliced apart by [user]!</span>", 1, "<span class='warning'>You hear metal being sliced apart and sparks flying.</span>", 2)
+				O.show_message("<span class='warning'>\The [src] was sliced apart by [user]!</span>", 1, "<span class='warning'>You hear metal being sliced apart and sparks flying.</span>", 2)
 		return
 
 	else if(istype(W,/obj/item/apc_frame))
@@ -398,17 +398,17 @@
 	var/turf/simulated/floor/F = src
 	if(!F)
 		if(O)
-			message_admins("[user.real_name] ([formatPlayerPanel(user,user.ckey)]) thermited a wall into space at [formatJumpTo(loc)]!")
+			message_admins("[user.real_name] ([formatPlayerPanel(user,user.ckey)]) thermited \a [src] into space at [formatJumpTo(loc)]!")
 			del(O)
-			user << "<span class='warning'>The thermite melts through the wall.</span>"
+			user << "<span class='warning'>The thermite melts through \the [src].</span>"
 		return
 	F.burn_tile()
 	F.icon_state = "wall_thermite"
-	user << "<span class='warning'>The thermite melts through the wall.</span>"
+	user << "<span class='warning'>\The thermite melts through \the [src].</span>"
 
 	var/pdiff=performWallPressureCheck(src.loc)
 	if(pdiff)
-		message_admins("[user.real_name] ([formatPlayerPanel(user,user.ckey)]) thermited a wall with a pdiff of [pdiff] at [formatJumpTo(loc)]!")
+		message_admins("[user.real_name] ([formatPlayerPanel(user,user.ckey)]) thermited \a [src] with a pdiff of [pdiff] at [formatJumpTo(loc)]!")
 
 	spawn(100)
 		if(O)	del(O)

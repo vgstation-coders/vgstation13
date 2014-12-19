@@ -32,12 +32,25 @@
 
 // Apply changes when entering state
 /datum/universal_state/supermatter_cascade/OnEnter()
+	ticker.mode.eldergod=0 //Lets not have an accident here
 	world << "<span class='sinister' style='font-size:22pt'>You are blinded by a brilliant flash of energy.</span>"
 
 	if(emergency_shuttle.direction==2)
 		captain_announce("The emergency shuttle has returned due to bluespace distortion.")
 
 	emergency_shuttle.force_shutdown()
+
+	//You dont need this shit, the universe is gonna die in 6 minutes.
+	world_end = 1 //Kill the machinery, disable the power_changing and disable station alerts.
+	defer_powernet_rebuild = 1 //Fuck the powernet
+
+	for (var/obj/machinery/power/apc/APC in world)
+		if (!(APC.stat & BROKEN) && !APC.is_critical)
+			if(APC.cell)
+				APC.cell.charge = 0
+			APC.emagged = 1
+			APC.queue_icon_update()
+			APC.update()
 
 	for(var/area/ca in world)
 		var/area/A=get_area_master(ca)
@@ -69,25 +82,22 @@
 
 		A.updateicon()
 
-	for(var/turf/space/spess in world)
-		spess.overlays += "end01"
-
 	for (var/obj/machinery/firealarm/alm in world)
 		if (!(alm.stat & BROKEN))
 			alm.ex_act(2)
 
-	for (var/obj/machinery/power/apc/APC in world)
-		if (!(APC.stat & BROKEN) && !APC.is_critical)
-			if(APC.cell)
-				APC.cell.charge = 0
-			APC.emagged = 1
-			APC.queue_icon_update()
-			APC.update()
-
-	// Disable Nar-Sie.
-	ticker.mode.eldergod=0
+	//Here comes the fucking lag matey, lets ignore all non space tiles
+	for(var/turf/space/T in spacelist)
+		T.overlays += "end01"
+	space_overlay = "end01" //Update all future destroyed tiles
 
 	ticker.StartThematic("endgame")
+
+	Fail_Antags()
+
+	Final_Countdown() //We're leaving together, but still its farewell.
+
+/datum/universal_state/supermatter_cascade/proc/Fail_Antags()
 	for(var/datum/mind/M in player_list)
 		if(!istype(M.current,/mob/living))
 			continue
@@ -195,6 +205,7 @@
 
 			A << "\red <FONT size = 3><B>The massive blast of energy has fried the systems that were malfunctioning.  You are no longer malfunctioning.</B></FONT>"
 
+/datum/universal_state/supermatter_cascade/proc/Final_Countdown()
 	new /obj/machinery/singularity/narsie/large/exit(pick(endgame_exits))
 	spawn(rand(30,60) SECONDS)
 		var/txt = {"

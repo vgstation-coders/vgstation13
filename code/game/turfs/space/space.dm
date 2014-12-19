@@ -11,6 +11,7 @@
 /turf/space/New()
 	if(!istype(src, /turf/space/transit))
 		icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
+	spacelist += src
 
 /turf/space/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -33,40 +34,39 @@
 	return
 
 /turf/space/attackby(obj/item/C as obj, mob/user as mob)
-
+	var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
 	if (istype(C, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = C
-		var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
 		if(L)
 			if(R.amount < 2)
-				user << "\red You don't have enough rods to do that."
+				user << "<span class='warning'>You don't have enough rods to do that.</span>"
 				return
-			user << "\blue You begin to build a catwalk."
+			user << "<span class='notice'>You begin to build a catwalk.</span>"
 			if(do_after(user,30))
 				playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-				user << "\blue You build a catwalk!"
+				user << "<span class='notice'>You build a catwalk!</span>"
 				R.use(2)
 				ChangeTurf(/turf/simulated/floor/plating/airless/catwalk)
+				spacelist -= src
 				qdel(L)
 				return
 
-		user << "\blue Constructing support lattice ..."
+		user << "<span class='notice'>Constructing support lattice ...</span>"
 		playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
 		ReplaceWithLattice()
 		R.use(1)
 		return
-
 	if (istype(C, /obj/item/stack/tile/plasteel))
-		var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
 		if(L)
 			var/obj/item/stack/tile/plasteel/S = C
 			qdel(L)
 			playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
 			S.build(src)
+			spacelist -= src
 			S.use(1)
 			return
 		else
-			user << "\red The plating is going to need some support."
+			user << "<span class='warning'>\The plating is going to need some support.</span>"
 	return
 
 
@@ -74,7 +74,7 @@
 
 /turf/space/Entered(atom/movable/A as mob|obj)
 	if(movement_disabled)
-		usr << "\red Movement is admin-disabled." //This is to identify lag problems
+		usr << "<span class='warning'>Movement is admin-disabled.</span>" //This is to identify lag problems
 		return
 	..()
 	if ((!(A) || src != A.loc))	return
@@ -100,7 +100,7 @@
 				if(istype(A, /mob/living))
 					var/mob/living/MM = A
 					if(MM.client && !MM.stat)
-						MM << "\red Something you are carrying is preventing you from leaving. Don't play stupid; you know exactly what it is."
+						MM << "<span class='warning'>Something you are carrying is preventing you from leaving. Don't play stupid; you know exactly what it is.</span>"
 						if(MM.x <= TRANSITIONEDGE)
 							MM.inertia_dir = 4
 						else if(MM.x >= world.maxx -TRANSITIONEDGE)
@@ -125,7 +125,7 @@
 				if(MM.client && !MM.stat)
 					if(MM.locked_to_z!=0)
 						if(src.z == MM.locked_to_z)
-							MM << "\red You cannot leave this area."
+							MM << "<span class='warning'>You cannot leave this area.</span>"
 							if(MM.x <= TRANSITIONEDGE)
 								MM.inertia_dir = 4
 							else if(MM.x >= world.maxx -TRANSITIONEDGE)
@@ -136,7 +136,7 @@
 								MM.inertia_dir = 2
 							return
 						else
-							MM << "\red You find your way back."
+							MM << "<span class='warning'>You find your way back.</span>"
 							move_to_z=MM.locked_to_z
 
 			var/safety = 1
