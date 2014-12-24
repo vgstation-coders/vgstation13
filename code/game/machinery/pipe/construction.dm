@@ -343,7 +343,7 @@ var/global/list/pipeID2State = list(
 	if (pipe_type in list (PIPE_SIMPLE_STRAIGHT, PIPE_HE_STRAIGHT, PIPE_INSULATED_STRAIGHT, PIPE_MVALVE, PIPE_DVALVE))
 		dir=rotate_pipe_straight(dir)
 	else if (pipe_type in list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W))
-		dir = 2
+		dir = SOUTH
 	var/pipe_dir = get_pipe_dir()
 
 	for(var/obj/machinery/atmospherics/M in src.loc)
@@ -432,18 +432,18 @@ var/global/list/pipeID2State = list(
 		if(PIPE_INSUL_MANIFOLD4W)
 			P=new /obj/machinery/atmospherics/pipe/manifold4w/insulated(src.loc)
 
-	if(P.buildFrom(usr,src))
+	if(P.buildFrom(user, src))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		user.visible_message( \
 			"[user] fastens \the [src].", \
 			"\blue You have fastened \the [src].", \
 			"You hear a ratchet.")
-		del(src)	// remove the pipe item
+		qdel(src)	// remove the pipe item
 		return 0
 	else
 		// If the pipe's still around, nuke it.
 		if(P)
-			del(P)
+			qdel(P)
 	return 1
 	 //TODO: DEFERRED
 
