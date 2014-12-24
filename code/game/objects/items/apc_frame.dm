@@ -25,7 +25,7 @@
 	if (!istype(loc, /turf/simulated/floor))
 		usr << "\red APC cannot be placed on this spot."
 		return
-	if (A.requires_power == 0 || A.name == "Space")
+	if(A.requires_power == 0 || istype(A, /area/space))
 		usr << "\red APC cannot be placed in this area."
 		return
 	if (A.get_apc())
@@ -73,7 +73,7 @@
 	if (!istype(loc, /turf/simulated/floor))
 		usr << "\red Intercom cannot be placed on this spot."
 		return
-	if (A.requires_power == 0 || A.name == "Space")
+	if(A.requires_power == 0 || istype(A, /area/space))
 		usr << "\red Air Alarm cannot be placed in this area."
 		return
 
