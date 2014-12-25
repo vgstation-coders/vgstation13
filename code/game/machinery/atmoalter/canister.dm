@@ -22,36 +22,49 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 
+	//costumizable canister color vars
+	var/color1 = "yellow"
+	var/color2
+	var/color3
+	var/color4
+	var/list/decals = list()
+
 /obj/machinery/portable_atmospherics/canister/sleeping_agent
 	name = "Canister: \[N2O\]"
 	icon_state = "redws"
 	canister_color = "redws"
 	can_label = 0
+	color1 = "redws"
 /obj/machinery/portable_atmospherics/canister/nitrogen
 	name = "Canister: \[N2\]"
 	icon_state = "red"
 	canister_color = "red"
 	can_label = 0
+	color1 = "red"
 /obj/machinery/portable_atmospherics/canister/oxygen
 	name = "Canister: \[O2\]"
 	icon_state = "blue"
 	canister_color = "blue"
 	can_label = 0
+	color1 = "blue"
 /obj/machinery/portable_atmospherics/canister/toxins
 	name = "Canister \[Toxin (Bio)\]"
 	icon_state = "orange"
 	canister_color = "orange"
 	can_label = 0
+	color1 = "orange"
 /obj/machinery/portable_atmospherics/canister/carbon_dioxide
 	name = "Canister \[CO2\]"
 	icon_state = "black"
 	canister_color = "black"
 	can_label = 0
+	color1 = "black"
 /obj/machinery/portable_atmospherics/canister/air
 	name = "Canister \[Air\]"
 	icon_state = "grey"
 	canister_color = "grey"
 	can_label = 0
+	color1 = "grey"
 
 /obj/machinery/portable_atmospherics/canister/update_icon()
 	overlays = null
@@ -59,8 +72,22 @@
 	if (destroyed)
 		icon_state = "[canister_color]-1"
 	else
-		icon_state = canister_color
+		icon_state = color1
+
 		overlays = new/list()
+
+		//costum colors
+		if (color2)
+			overlays.Add(color2)
+
+		if (color3)
+			overlays.Add(color3)
+
+		if (color4)
+			overlays.Add(color4)
+
+		for(var/D in decals)
+			overlays.Add("decal-" + D)
 
 		if (holding)
 			overlays.Add("can-open")
@@ -304,8 +331,9 @@
 			release_pressure = max(ONE_ATMOSPHERE/10, release_pressure+diff)
 
 	if (href_list["relabel"])
+
 		if (can_label)
-			var/list/colors = list(\
+			var/list/maincolor = list(\
 				"\[N2O\]" = "redws", \
 				"\[N2\]" = "red", \
 				"\[O2\]" = "blue", \
@@ -314,11 +342,62 @@
 				"\[Air\]" = "grey", \
 				"\[CAUTION\]" = "yellow", \
 			)
-			var/label = input("Choose canister label", "Gas canister") as null|anything in colors
-			if (label)
-				src.canister_color = colors[label]
-				src.icon_state = colors[label]
-				src.name = "Canister: [label]"
+			var/list/seccolor = list(\
+				"\[N2\]" = "red-c", \
+				"\[O2\]" = "blue-c", \
+				"\[Toxin (Bio)\]" = "orange-c", \
+				"\[CO2\]" = "black-c", \
+				"\[Air\]" = "grey-c", \
+				"\[CAUTION\]" = "yellow-c", \
+			)
+			var/list/tertcolor = list(\
+				"\[N2\]" = "red-c-1", \
+				"\[O2\]" = "blue-c-1", \
+				"\[Toxin (Bio)\]" = "orange-c-1", \
+				"\[CO2\]" = "black-c-1", \
+				"\[Air\]" = "grey-c-1", \
+				"\[CAUTION\]" = "yellow-c-1", \
+			)
+			var/list/quartcolor = list(\
+				"\[N2\]" = "red-c-2", \
+				"\[O2\]" = "blue-c-2", \
+				"\[Toxin (Bio)\]" = "orange-c-2", \
+				"\[CO2\]" = "black-c-2", \
+				"\[Air\]" = "grey-c-2", \
+				"\[CAUTION\]" = "yellow-c-2", \
+			)
+			var/list/possibledecals = list(
+				"Low-termperature canister" = "cold",
+				"High-temperature canister" = "hot",
+				"Plasma!" = "plasma",
+				"Done" = "DONE"
+				)
+			var/label1 = input("Choose canister label", "Primary color") as null|anything in maincolor
+			if (label1) color1 = maincolor[label1]
+
+			var/label2 = input("Choose canister label", "Secondary color") as null|anything in seccolor
+			if (label2) color2 = seccolor[label2]
+			else color2 = null
+
+			var/label3 = input("Choose canister label", "Tertiary color") as null|anything in tertcolor
+			if (label3) color3 = tertcolor[label3]
+			else color3 = null
+
+			var/label4 = input("Choose canister label", "Quaternary color") as null|anything in quartcolor
+			if (label4) color4 = quartcolor[label4]
+			else color4 = null
+
+			decals = list()
+
+			while (1)
+				var/newdecal = input("Choose canister label", "Decal") as anything in possibledecals
+				if (newdecal == "Done")
+					break
+				decals.Add(possibledecals[newdecal])
+				possibledecals.Remove(newdecal)
+
+			src.name = (input("Choose canister label", "Name") as text) + " canister"
+			src.canister_color = maincolor[label1]
 
 	src.add_fingerprint(usr)
 	update_icon()
