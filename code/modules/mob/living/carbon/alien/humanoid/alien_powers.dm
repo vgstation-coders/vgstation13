@@ -51,7 +51,7 @@ Doesn't work on other aliens/AI.*/
 		adjustToxLoss(-10)
 		var/msg = sanitize(input("Message:", "Alien Whisper") as text|null)
 		if(msg)
-			log_say("AlienWhisper: [key_name(src)]->[M.key] : [msg]")
+			log_say("AlienWhisper: [key_name(src)](@[src.x],[src.y],[src.z])->[M.key] (@[M.x],[M.y],[M.z]): [msg]")
 			M << "<span class='alien'>You hear a strange, alien voice in your head... \italic [msg]</span>"
 			src << "<span class='alien'>You said: [msg] to [M]</span>"
 	return
@@ -158,7 +158,7 @@ Doesn't work on other aliens/AI.*/
 		visible_message("<span class='alien'>\The [src] vomits up a thick purple substance and shapes it into some form of resin structure!</span>", "<span class='alien'>You shape a [choice]</span>")
 		switch(choice)
 			if("resin door")
-				new /obj/structure/mineral_door/resin(loc)
+				new /obj/machinery/door/mineral/resin(loc)
 			if("resin wall")
 				new /obj/effect/alien/resin/wall(loc)
 			if("resin membrane")

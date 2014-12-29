@@ -91,7 +91,7 @@
 	assembly_type = /obj/structure/door_assembly/door_assembly_ext
 
 /obj/machinery/door/airlock/external/cultify()
-	new /obj/structure/mineral_door/wood(loc)
+	new /obj/machinery/door/mineral/wood(loc)
 	..()
 
 /obj/machinery/door/airlock/glass
@@ -960,10 +960,9 @@ About the new airlock wires panel:
 
 	return
 
-// huehue you cannot screwdrive an operating door
-// neither closed door ;)
+//You can ALWAYS screwdriver a door. Period. Well, at least you can even if it's open
 /obj/machinery/door/airlock/togglePanelOpen(var/obj/toggleitem, mob/user)
-	if (density && !operating)
+	if(!operating)
 		panel_open = !panel_open
 		update_icon()
 		return 1

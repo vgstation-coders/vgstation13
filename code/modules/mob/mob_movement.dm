@@ -366,11 +366,15 @@
 	switch(mob.incorporeal_move)
 		if(1)
 			var/turf/T = get_step(mob, direct)
-			if(T.holy && isobserver(mob) && ((mob.invisibility == 0) || (ticker.mode && (mob.mind in ticker.mode.cult))))
-				mob << "<span class='warning'>You cannot get past holy grounds while you are in this plane of existence!</span>"
+			var/area/A = get_area(T)
+			if(A.anti_ethereal)
+				mob << "<span class='warning'>A strong force repels you from this area!</span>"
 			else
-				mob.loc = get_step(mob, direct)
-				mob.dir = direct
+				if(T.holy && isobserver(mob) && ((mob.invisibility == 0) || (ticker.mode && (mob.mind in ticker.mode.cult))))
+					mob << "<span class='warning'>You cannot get past holy grounds while you are in this plane of existence!</span>"
+				else
+					mob.loc = get_step(mob, direct)
+					mob.dir = direct
 		if(2)
 			if(prob(50))
 				var/locx
@@ -411,8 +415,10 @@
 					anim(mobloc,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
 				mob.loc = get_step(mob, direct)
 			mob.dir = direct
-	for(var/obj/effect/step_trigger/S in mob.loc)
-		S.Crossed(src)
+	// Crossed is always a bit iffy
+	for(var/obj/S in mob.loc)
+		if(istype(S,/obj/effect/step_trigger) || istype(S,/obj/effect/beam))
+			S.Crossed(mob)
 
 	var/area/A = get_area_master(mob)
 	if(A)
