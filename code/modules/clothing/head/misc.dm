@@ -297,3 +297,10 @@
 	item_state = "russofurhat"
 	flags = FPRINT | TABLEPASS | BLOCKHEADHAIR
 	flags_inv = HIDEEARS
+
+/obj/item/clothing/head/lordadmiralhat
+	name = "Admiralty Hat"
+	desc = "A hat befitting of a man of high and exalted rank."
+	icon_state = "lordadmiralhat"
+	item_state = "lordadmiralhat"
+	flags = FPRINT | TABLEPASS
