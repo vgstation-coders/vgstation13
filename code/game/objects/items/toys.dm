@@ -620,6 +620,12 @@
 	w_class = 3
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced")
 
+/obj/item/toy/rcube
+	name = "puzzle cube"
+	desc = "A seemingly simple puzzle, this toy is actually quite likely to induce suicidal thoughts. Play with at your own risk."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "rubikscube"
+
 
 /*
  * OMG THEIF
