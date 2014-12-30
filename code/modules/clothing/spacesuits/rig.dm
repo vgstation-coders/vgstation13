@@ -58,7 +58,7 @@
 	_color = "white"
 	species_restricted = list("exclude","Vox")
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECITON_TEMPERATURE
-	flags |= PLASMAGUARD
+	flags = PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/elite
 	icon_state = "rig-white"
@@ -67,7 +67,7 @@
 	desc = "An advanced suit that protects against hazardous, low pressure environments. Shines with a high polish."
 	item_state = "ce_hardsuit"
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECITON_TEMPERATURE
-	flags |= PLASMAGUARD
+	flags = PLASMAGUARD
 
 
 //Mining rig
@@ -205,7 +205,7 @@
 	species_restricted = list("exclude","Vox")
 	armor = list(melee = 40, bullet = 0, laser = 0, energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECITON_TEMPERATURE
-	flags |= PLASMAGUARD
+	flags = PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/atmos
 	desc = "A special suit that protects against hazardous low pressure environments. Has reduced radiation shielding to allow for greater mobility."
@@ -215,7 +215,7 @@
 	species_restricted = list("exclude","Vox")
 	armor = list(melee = 40, bullet = 0, laser = 0, energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECITON_TEMPERATURE
-	flags |= PLASMAGUARD
+	flags = PLASMAGUARD
 
 //Firefighting/Atmos RIG (old /vg/)
 /obj/item/clothing/head/helmet/space/rig/atmos/gold
@@ -228,7 +228,7 @@
 	_color = "atmos"
 	species_restricted = list("exclude","Vox")
 	no_light=1
-	flags |= PLASMAGUARD
+	flags = PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/atmos/gold
 	desc = "A special suit that protects against hazardous low pressure environments and extreme temperatures. In other words, perfect for atmos."
@@ -242,7 +242,7 @@
 	slowdown = 2
 	armor = list(melee = 30, bullet = 5, laser = 40,energy = 5, bomb = 35, bio = 100, rad = 60)
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/weapon/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/)
-	flags |= PLASMAGUARD
+	flags = PLASMAGUARD
 
 //ADMINBUS RIGS. SOVIET + NAZI
 /obj/item/clothing/head/helmet/space/rig/nazi
