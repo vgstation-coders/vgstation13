@@ -238,7 +238,6 @@
 /mob/living/simple_animal/hostile/retaliate/cluwne/AttackingTarget()
 	if(isliving(target))
 		var/mob/living/L = target
-		L.attack_animal(src)
 		if(prob(10))
 			L.Weaken(5)
 			L.visible_message("<span class='danger'>\The [src.name] slips \the [L.name]!</span>")
@@ -257,19 +256,19 @@
 		health -= damage
 		for(var/mob/M in viewers(src, null))
 			if ((M.client && !( M.blinded )))
-				M.show_message("\red \b [src] has been attacked with the [O] by [user]. ")
+				M.show_message("<span class='warning'><B>[src] has been attacked with the [O] by [user].</B></span>")
 	else
-		user << "\red This weapon is ineffective, it does no damage."
+		user << "<span class='warning'>This weapon is ineffective, it does no damage.</span>"
 		for(var/mob/M in viewers(src, null))
 			if ((M.client && !( M.blinded )))
-				M.show_message("\red [user] gently taps [src] with the [O]. ")
+				M.show_message("<span class='warning'>[user] gently taps [src] with the [O]. </span>")
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/Bump(atom/movable/AM as mob|obj, yes)
 	spawn( 0 )
 		if ((!( yes ) || now_pushing))
 			return
 		if(ismob(AM))
-			src << "\red <B>You are too depressed to push [AM] out of the way.</B>"
+			src << "<span class='warning'><B>You are too depressed to push [AM] out of \the way.</B></span>"
 			AM:LAssailant = src
 			return
 		..()
@@ -305,10 +304,23 @@
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/proc/handle_disabilities()
 	if ((prob(5) && paralysis < 10))
-		src << "\red You have a seizure!"
+		src << "<span class='warning'>You have a seizure!</span>"
 		Paralyse(10)
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/emote(var/act)
 	var/message=pick("quietly sobs into a dirty handkerchief","cries into [gender==MALE?"his":"her"] hands","bawls like a cow")
 	message = "<B>[src]</B> [message]"
 	return ..(message)
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)
+	. = ..(NewLoc, Dir, step_x, step_y)
+
+	if(.)
+		if(m_intent == "run")
+			if(footstep > 1)
+				footstep = 0
+				playsound(src, "clownstep", 50, 1) // this will get annoying very fast.
+			else
+				footstep++
+		else
+			playsound(src, "clownstep", 20, 1)

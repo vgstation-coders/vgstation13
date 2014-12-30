@@ -192,9 +192,6 @@ var/global/list/organ_damage_overlays = list(
 			src << "Successfully handled disabilities"
 			last_processed = "Handle disabilities"
 
-		//Organ failure.
-		handle_organs()
-
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
 			src << "Successfully handled organs"
 			last_processed = "Handle organs"
@@ -340,13 +337,12 @@ var/global/list/organ_damage_overlays = list(
 /mob/living/carbon/human
 
 	proc/handle_disabilities()
-		if (disabilities & EPILEPSY)
-			if ((prob(1) && paralysis < 1))
-				src << "\red You have a seizure!"
-				for(var/mob/O in viewers(src, null))
-					if(O == src)
-						continue
-					O.show_message(text("\red <B>[src] starts having a seizure!"), 1)
+		if(disabilities & EPILEPSY)
+			if((prob(1)) && (paralysis < 1))
+				visible_message( \
+					"<SPAN CLASS='danger'>[src] starts having a seizure!</SPAN>", \
+					"<SPAN CLASS='warning'>You have a seizure!</SPAN>")
+
 				Paralyse(10)
 				make_jittery(1000)
 
@@ -1274,8 +1270,9 @@ var/global/list/organ_damage_overlays = list(
 	proc/handle_regular_hud_updates()
 		if(!client)	return 0
 
-		regular_hud_updates()
+		sight &= ~BLIND
 
+		regular_hud_updates()
 
 		client.screen.Remove(global_hud.blurry, global_hud.druggy, global_hud.vimpaired, global_hud.darkMask/*, global_hud.nvg*/)
 

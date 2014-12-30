@@ -45,7 +45,7 @@
 	if (src.anchored || usr:stat)
 		usr << "It is fastened to the floor!"
 		return 0
-	src.dir = turn(src.dir, 90)
+	src.dir = turn(src.dir, -90)
 	return 1
 
 /obj/machinery/power/emitter/verb/rotate_ccw()
@@ -56,7 +56,7 @@
 	if (src.anchored || usr:stat)
 		usr << "It is fastened to the floor!"
 		return 0
-	src.dir = turn(src.dir, -90)
+	src.dir = turn(src.dir, 90)
 	return 1
 
 /obj/machinery/power/emitter/initialize()
@@ -64,6 +64,9 @@
 	if(state == 2 && anchored)
 		connect_to_network()
 		src.directwired = 1
+		update_icon()
+		update_beam()
+
 	if(frequency)
 		set_frequency(frequency)
 
@@ -80,7 +83,7 @@
 		if(!beam)
 			beam = new (loc)
 			beam.dir=dir
-		beam.emit(spawn_by=src)
+			beam.emit(spawn_by=src)
 	else
 		qdel(beam)
 		beam=null
@@ -298,7 +301,10 @@
 	return beam
 
 /obj/effect/beam/emitter/update_icon()
-	var/visible_power=min(max(round(power/3)+1,1),3)
+	if(!master)
+		invisibility=101 // Make doubly sure
+		return
+	var/visible_power=Clamp(round(power/3)+1, 1, 3)
 	//if(!master) testing("Visible power: [visible_power]")
 	icon_state="[base_state]_[visible_power]"
 
