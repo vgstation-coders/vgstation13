@@ -8,6 +8,7 @@
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECITON_TEMPERATURE
 	var/obj/machinery/camera/camera
 	species_restricted = list("exclude","Vox")
+	flags = PLASMAGUARD
 /obj/item/clothing/head/helmet/space/ert/attack_self(mob/user)
 	if(camera)
 		..(user)
@@ -36,6 +37,7 @@
 	/obj/item/weapon/screwdriver, /obj/item/weapon/weldingtool, /obj/item/weapon/wirecutters, /obj/item/weapon/wrench, /obj/item/device/multitool, \
 	/obj/item/device/radio, /obj/item/device/analyzer, /obj/item/weapon/gun/energy/laser, /obj/item/weapon/gun/energy/pulse_rifle, \
 	/obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton, /obj/item/weapon/gun/energy/gun)
+	flags = PLASMAGUARD
 	siemens_coefficient = 0.6
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECITON_TEMPERATURE
 	species_restricted = list("exclude","Vox")
