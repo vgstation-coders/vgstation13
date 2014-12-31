@@ -392,3 +392,10 @@
 	icon_state = "russofurcoat"
 	item_state = "russofurcoat"
 	allowed = list(/obj/item/weapon/gun)
+
+/obj/item/clothing/suit/lordadmiral
+	name = "Admirality Uniform"
+	desc = "Duty is the great business of a sea officer; all private considerations must give way to it, however painful it may be."
+	icon_state = "lordadmiral"
+	item_state = "lordadmiral"
+	allowed = list(/obj/item/weapon/gun)
