@@ -349,3 +349,11 @@ var/list/score=list(
 	"dmgestdamage"  = 0,
 	"dmgestkey"     = null
 )
+
+//Cosmic Snow Storm event
+/var/global/snow_tiles = 0
+/var/global/bear_invasion = 0
+/var/global/spread_delay = 50
+/var/global/chill_delay = 20
+
+/var/global/snowTickMod = 1
