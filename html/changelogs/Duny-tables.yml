@@ -1,0 +1,4 @@
+author: Duny
+delete-after: True
+changes: 
+  - bugfix: Fixed tables disappearing when combined with grass in your hand.
