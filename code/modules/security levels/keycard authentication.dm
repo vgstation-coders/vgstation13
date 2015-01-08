@@ -8,7 +8,6 @@
 	var/screen = 1
 	var/confirmed = 0 //This variable is set by the device that confirms the request.
 	var/confirm_delay = 20 //(2 seconds)
-	var/busy = 0 //Busy when waiting for authentication or an event request has been sent from this device.
 	var/obj/machinery/keycard_auth/event_source
 	var/mob/event_triggered_by
 	var/mob/event_confirmed_by

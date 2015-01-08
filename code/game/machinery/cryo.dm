@@ -8,7 +8,6 @@
 
 	var/on = 0
 	var/temperature_archived
-	var/mob/living/carbon/occupant = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 
 	var/current_heat_capacity = 50

@@ -3,7 +3,6 @@
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "ai-fixer"
 	req_access = list(access_captain, access_robotics, access_heads)
-	var/mob/living/silicon/ai/occupant = null
 	var/active = 0
 
 	l_color = "#CD00CD"

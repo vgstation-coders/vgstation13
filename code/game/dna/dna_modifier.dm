@@ -45,7 +45,6 @@
 	idle_power_usage = 50
 	active_power_usage = 300
 	var/locked = 0
-	var/mob/living/carbon/occupant = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/opened = 0
 

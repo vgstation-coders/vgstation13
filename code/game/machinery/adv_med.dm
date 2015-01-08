@@ -11,7 +11,6 @@
 	active_power_usage = 250
 	machine_flags = 0
 
-	var/mob/living/carbon/occupant
 	var/locked
 
 	l_color = "#00FF00"

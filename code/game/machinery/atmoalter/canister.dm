@@ -18,7 +18,6 @@
 	volume = 1000
 	use_power = 0
 	var/release_log = ""
-	var/busy = 0
 	m_amt=10*CC_PER_SHEET_METAL
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL

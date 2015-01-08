@@ -116,6 +116,11 @@ Class Procs:
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
+	var/busy = 0
+	var/state_open = 0
+	var/mob/living/occupant = null
+	var/unsecuring_tool = /obj/item/weapon/wrench
+	var/interact_offline = 0
 
 	/**
 	 * Machine construction/destruction/emag flags.
@@ -167,6 +172,37 @@ Class Procs:
 
 /obj/machinery/process() // If you dont use process or power why are you here
 	return PROCESS_KILL
+
+/obj/machinery/proc/go_in(mob/living/target as mob, mob/user as mob)
+	if(stat || user.stat || user.lying || !Adjacent(user) || !target.Adjacent(user) || !iscarbon(target))
+		return
+	if(istype(user, /mob/living/simple_animal) || istype(user, /mob/living/carbon/slime))
+		return
+	if(busy)
+		user << "<span class='warning'>Someone else is trying to fit into \the [src]</span>"
+		return
+	if(!target)
+		for(var/mob/living/carbon/C in loc)
+			if(C.buckled)
+				continue
+			else
+				target = C
+
+	if(target)
+		busy = 1
+		user.visible_message("<span class='warning'>[user] attempts to shove [target] into \the [src].</span>")
+		if(do_after(user, 20))
+			if(target.client)
+				target.client.perspective = EYE_PERSPECTIVE
+				target.client.eye = src
+			occupant = target
+			target.loc = src
+			target.stop_pulling()
+			busy = 0
+		else
+			busy = 0
+	update_icon()
+	return
 
 /obj/machinery/emp_act(severity)
 	if(use_power && stat == 0)
