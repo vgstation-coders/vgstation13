@@ -3,6 +3,7 @@
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "ai-fixer"
 	req_access = list(access_captain, access_robotics, access_heads)
+	var/mob/living/silicon/ai/occupier = null
 	var/active = 0
 
 	l_color = "#CD00CD"
@@ -40,29 +41,29 @@
 			return
 	var/dat = "<h3>AI System Integrity Restorer</h3><br><br>"
 
-	if (src.occupant)
+	if (src.occupier)
 		var/laws
-		dat += "Stored AI: [src.occupant.name]<br>System integrity: [src.occupant.system_integrity()]%<br>"
+		dat += "Stored AI: [src.occupier.name]<br>System integrity: [src.occupier.system_integrity()]%<br>"
 
-		if (src.occupant.laws.zeroth)
-			laws += "0: [src.occupant.laws.zeroth]<BR>"
+		if (src.occupier.laws.zeroth)
+			laws += "0: [src.occupier.laws.zeroth]<BR>"
 
 		var/number = 1
-		for (var/index = 1, index <= src.occupant.laws.inherent.len, index++)
-			var/law = src.occupant.laws.inherent[index]
+		for (var/index = 1, index <= src.occupier.laws.inherent.len, index++)
+			var/law = src.occupier.laws.inherent[index]
 			if (length(law) > 0)
 				laws += "[number]: [law]<BR>"
 				number++
 
-		for (var/index = 1, index <= src.occupant.laws.supplied.len, index++)
-			var/law = src.occupant.laws.supplied[index]
+		for (var/index = 1, index <= src.occupier.laws.supplied.len, index++)
+			var/law = src.occupier.laws.supplied[index]
 			if (length(law) > 0)
 				laws += "[number]: [law]<BR>"
 				number++
 
 		dat += "Laws:<br>[laws]<br>"
 
-		if (src.occupant.stat == 2)
+		if (src.occupier.stat == 2)
 			dat += "<b>AI nonfunctional</b>"
 		else
 			dat += "<b>AI functional</b>"

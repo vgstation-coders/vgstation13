@@ -174,10 +174,12 @@ Class Procs:
 	return PROCESS_KILL
 
 /obj/machinery/proc/go_in(mob/living/target as mob, mob/user as mob)
-	if(stat || user.stat || user.lying || !Adjacent(user) || !target.Adjacent(user) || !iscarbon(target))
+	if(stat || user.stat || user.lying || !Adjacent(user) || !target.Adjacent(user) || !iscarbon(target) || istype(target, /mob/living/carbon/human/manifested))
 		return
 	if(istype(user, /mob/living/simple_animal) || istype(user, /mob/living/carbon/slime))
 		return
+	if(occupant)
+		user << "<span class='info'>\The [src] is already occupied by [occupant.name].</span>"
 	if(busy)
 		user << "<span class='warning'>Someone else is trying to fit into \the [src]</span>"
 		return
@@ -187,7 +189,6 @@ Class Procs:
 				continue
 			else
 				target = C
-
 	if(target)
 		busy = 1
 		user.visible_message("<span class='warning'>[user] attempts to shove [target] into \the [src].</span>")

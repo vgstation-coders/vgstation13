@@ -70,7 +70,7 @@
 	RefreshParts()
 
 /obj/machinery/dna_scannernew/allow_drop()
-	return 0
+	return 1
 
 /obj/machinery/dna_scannernew/relaymove(mob/user as mob)
 	if (user.stat)
@@ -108,73 +108,35 @@
 	set category = "Object"
 	set name = "Enter DNA Scanner"
 
-	if (usr.stat != 0)
-		return
-	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
-		return
-	if (!ishuman(usr) && !ismonkey(usr)) //Make sure they're a mob that has dna
-		usr << "<span class='notice'> Try as you might, you can not climb up into the scanner.</span>"
-		return
-	if (istype(usr, /mob/living/carbon/human/manifested))
-		usr << "<span class='notice'> For some reason, the scanner is unable to read your genes.</span>"//to prevent a loophole that allows cultist to turn manifested ghosts into normal humans
-		return
-	if (src.occupant)
-		usr << "<span class='notice'> <B>The scanner is already occupied!</B></span>"
-		return
-	if (usr.abiotic())
-		usr << "<span class='notice'> <B>Subject cannot have abiotic items on.</B></span>"
-		return
-	usr.stop_pulling()
-	usr.client.perspective = EYE_PERSPECTIVE
-	usr.client.eye = src
-	usr.loc = src
-	src.occupant = usr
-	src.icon_state = "scanner_1"
-	src.add_fingerprint(usr)
+	go_in(src)
 	return
 
-/obj/machinery/dna_scannernew/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if(!ismob(O)) //mobs only
-		return
-	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
-		return
-	if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.resting) //are you cuffed, dying, lying, stunned or other
-		return
-	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
-		return
-	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
-		return
-	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the scanner
-		return
-	if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
-		return
+/obj/machinery/dna_scannernew/update_icon()
 	if(occupant)
-		user << "<span class='notice'>\The [src] is already occupied!</span>"
-		return
-	if(istype(O, /mob/living/carbon/human/manifested))
-		usr << "<span class='notice'> For some reason, the scanner is unable to read that person's genes.</span>"//to prevent a loophole that allows cultist to turn manifested ghosts into normal humans
-		return
-	if(isrobot(user))
-		if(!istype(user:module, /obj/item/weapon/robot_module/medical))
-			user << "<span class='warning'>You do not have the means to do this!</span>"
-			return
-	var/mob/living/L = O
-	if(!istype(L) || L.buckled)
-		return
-	if(L.abiotic())
-		user << "\red <B>Subject cannot have abiotic items on.</B>"
-		return
-	for(var/mob/living/carbon/slime/M in range(1,L))
-		if(M.Victim == L)
-			usr << "[L.name] will not fit into the DNA Scanner because they have a slime latched onto their head."
-			return
-	if(L == user)
-		return
-	visible_message("[user] puts [L.name] into the DNA Scanner.", 3)
-	put_in(L)
-	if(user.pulling == L)
-		user.pulling = null
+		src.icon_state = "scanner_1"
+	else
+		src.icon_state = "scanner_0"
 
+/obj/machinery/dna_scannernew/MouseDrop_T(mob/target, mob/user)
+	go_in(target, user)
+	return
+
+/obj/machinery/dna_scannernew/go_in()
+	if(!state_open)
+		return 0
+
+	..()
+
+	if(occupant)
+		for(dir in list(NORTH, EAST, SOUTH, WEST))
+			if(locate(/obj/machinery/computer/cloning, get_step(src, dir)))
+				var/mob/dead/observer/ghost = occupant.get_ghost()
+				if(ghost)
+					ghost << 'sound/effects/adminhelp.ogg'
+					ghost << "<b><font color = #330033><font size = 3>Your corpse has been placed into a cloning scanner. Return to your body if you want to be resurrected/cloned!</b> (Verbs -> Ghost -> Re-enter corpse)</font color>"
+					break
+				break
+	return 1
 /obj/machinery/dna_scannernew/attackby(var/obj/item/weapon/item as obj, var/mob/user as mob)
 	if (istype(item, /obj/item/weapon/screwdriver))
 		if (!opened)
@@ -211,43 +173,6 @@
 		item.loc = src
 		user.visible_message("[user] adds \a [item] to \the [src]!", "You add \a [item] to \the [src]!")
 		return
-	if(istype(item, /obj/item/weapon/grab)) //sanity checks, you chucklefucks
-		var/obj/item/weapon/grab/G = item
-		if (!ismob(G.affecting))
-			return
-		if (src.occupant)
-			user << "\blue <B>The scanner is already occupied!</B>"
-			return
-		if (G.affecting.abiotic())
-			user << "\blue <B>Subject cannot have abiotic items on.</B>"
-			return
-		put_in(G.affecting)
-		src.add_fingerprint(user)
-		qdel(G)
-		return 1
-	return
-
-/obj/machinery/dna_scannernew/proc/put_in(var/mob/M)
-	if(M.client)
-		M.client.perspective = EYE_PERSPECTIVE
-		M.client.eye = src
-	M.loc = src
-	src.occupant = M
-	src.icon_state = "scanner_1"
-
-	// search for ghosts, if the corpse is empty and the scanner is connected to a cloner
-	for(dir in list(NORTH, EAST, SOUTH, WEST))
-		if(locate(/obj/machinery/computer/cloning, get_step(src, dir)))
-			if(!M.client && M.mind)
-				for(var/mob/dead/observer/ghost in player_list)
-					if(ghost.mind == M.mind)
-						if(ghost.client)
-							ghost << 'sound/effects/adminhelp.ogg'
-							ghost << "<b><font color = #330033><font size = 3>Your corpse has been placed into a cloning scanner. Return to your body if you want to be resurrected/cloned!</b> (Verbs -> Ghost -> Re-enter corpse)</font color>"
-						else
-							ghost.canclone = M
-						break
-			break
 	return
 
 /obj/machinery/dna_scannernew/proc/go_out()

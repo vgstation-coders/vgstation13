@@ -46,47 +46,9 @@
 		beaker.loc = get_step(loc, SOUTH) //Beaker is carefully ejected from the wreckage of the cryotube
 	..()
 
-/obj/machinery/atmospherics/unary/cryo_cell/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if(!ismob(O)) //humans only
-		return
-	if(O.loc == user) //no you can't pull things out of your ass
-		return
-	if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.resting) //are you cuffed, dying, lying, stunned or other
-		return
-	if(O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
-		return
-	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
-		return
-	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
-		return
-	if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
-		return
-	if(!istype(user.loc, /turf) || !istype(O.loc, /turf)) // are you in a container/closet/pod/etc?
-		return
-	if(occupant)
-		user << "<span class='bnotice'>The cryo cell is already occupied!</span>"
-		return
-	if(isrobot(user))
-		if(!istype(user:module, /obj/item/weapon/robot_module/medical))
-			user << "<span class='warning'>You do not have the means to do this!</span>"
-			return
-	var/mob/living/L = O
-	if(!istype(L) || L.buckled)
-		return
-	if(L.abiotic())
-		user << "<span class='danger'>Subject cannot have abiotic items on.</span>"
-		return
-	for(var/mob/living/carbon/slime/M in range(1,L))
-		if(M.Victim == L)
-			usr << "[L.name] will not fit into the cryo cell because they have a slime latched onto their head."
-			return
-	if(put_mob(L))
-		if(L == user)
-			visible_message("[user] climbs into the cryo cell.", 3)
-		else
-			visible_message("[user] puts [L.name] into the cryo cell.", 3)
-			if(user.pulling == L)
-				user.pulling = null
+/obj/machinery/atmospherics/unary/cryo_cell/MouseDrop_T(mob/target, mob/user)
+	go_in(target, user)
+	return
 
 /obj/machinery/atmospherics/unary/cryo_cell/process()
 	..()
@@ -113,7 +75,7 @@
 
 
 /obj/machinery/atmospherics/unary/cryo_cell/allow_drop()
-	return 0
+	return 1
 
 
 /obj/machinery/atmospherics/unary/cryo_cell/relaymove(mob/user as mob)
@@ -266,7 +228,7 @@
 		user.set_machine(src)
 		interact(user)
 		return 1
-	if(istype(G, /obj/item/weapon/grab))
+/*	if(istype(G, /obj/item/weapon/grab))
 		if(!ismob(G:affecting))
 			return
 		for(var/mob/living/carbon/slime/M in range(1,G:affecting))
@@ -275,7 +237,7 @@
 				return
 		var/mob/M = G:affecting
 		if(put_mob(M))
-			del(G)
+			del(G)*/
 	updateUsrDialog()
 	return
 
