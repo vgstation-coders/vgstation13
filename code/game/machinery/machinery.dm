@@ -586,7 +586,7 @@ Class Procs:
 
 	if(istype(O, /obj/item/weapon/crowbar) && machine_flags & CROWDESTROY)
 		if(occupant)
-			user << "<span class='danger'>You cannot disaeemble this [src], it's occupado.</span>"
+			user << "<span class='danger'>You cannot disassemble this [src], it's occupado.</span>"
 			return -1
 		if(panel_open)
 			if(crowbarDestroy(user) == 1)
