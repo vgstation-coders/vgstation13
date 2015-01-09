@@ -3,11 +3,11 @@
 	icon = 'icons/obj/iv_drip.dmi'
 	anchored = 0
 	density = 0 //Tired of these blocking up the station
+	machine_flags = INSERTBEAKER
 
 
 /obj/machinery/iv_drip/var/mob/living/carbon/human/attached = null
 /obj/machinery/iv_drip/var/mode = 1 // 1 is injecting, 0 is taking blood.
-/obj/machinery/iv_drip/var/obj/item/weapon/reagent_containers/beaker = null
 
 /obj/machinery/iv_drip/update_icon()
 	if(src.attached)

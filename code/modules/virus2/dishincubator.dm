@@ -7,10 +7,9 @@
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "incubator"
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY
+	machine_flags = SCREWTOGGLE | CROWDESTROY | INSERTBEAKER
 
 	var/obj/item/weapon/virusdish/dish
-	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/radiation = 0
 
 	var/on = 0

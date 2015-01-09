@@ -6,7 +6,7 @@
 	icon_state = "isolator"
 	var/datum/disease2/disease/virus2 = null
 	var/isolating = 0
-	var/beaker = null
+	machine_flags = INSERTBEAKER
 
 /obj/machinery/disease2/isolator/attackby(var/W as obj, var/mob/user)
 	if(!istype(W,/obj/item/weapon/reagent_containers/syringe))

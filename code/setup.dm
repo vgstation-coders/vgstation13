@@ -953,6 +953,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define FIXED2WORK		16 //does it need to be anchored to work? Try to use this with WRENCHMOVE
 #define EJECTNOTDEL		32 //when we destroy the machine, does it remove all its items or destroy them?
 #define WELD_FIXED		64 //if it is attacked by a welder and is anchored, it'll toggle between welded and unwelded to the floor
+#define INSERTBEAKER	128 //if it's possible to insert a beaker into a machine.
 
 //gun shit - prepare to have various things added to this
 #define SILENCECOMP  1 		//Silencer-compatible

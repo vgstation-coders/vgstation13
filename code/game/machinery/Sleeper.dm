@@ -170,11 +170,13 @@
 		del(src)
 	return
 /obj/machinery/sleeper/update_icon()
-	if(state_open)
-		icon_state = "sleeper-open"
+	if(!occupant)
+		icon_state = "sleeper0"
 	else
+		src.icon_state = "sleeper_1"
 		if(orient == "RIGHT")
 			icon_state = "sleeper_1-r"
+
 /*
 /obj/machinery/sleeper/proc/go_in(mob/living/target as mob, mob/user as mob)
 	if(stat || user.stat || user.lying || !Adjacent(user) || !target.Adjacent(user) || !iscarbon(target))
@@ -342,38 +344,7 @@
 	set name = "Enter Sleeper"
 	set category = "Object"
 	set src in oview(1)
-	if(usr.stat != 0 || !(ishuman(usr) || ismonkey(usr)))
-		return
-	if(busy)
-		usr << "<span class='warning'>Someone else is already attempting to get into that sleeper.</span>"
-		return
-	if(src.occupant)
-		usr << "<span class='notice'>The sleeper is already occupied!</span>"
-		return
-	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
-		return
-	for(var/mob/living/carbon/slime/M in range(1,usr))
-		if(M.Victim == usr)
-			usr << "You're too busy getting your life sucked out of you."
-			return
-	visible_message("[usr] starts climbing into the sleeper.", 3)
-	busy = 1
-	if(do_after(usr, 20))
-		if(src.occupant)
-			usr << "<span class='notice'>The sleeper is already occupied!</span>"
-			return
-		usr.stop_pulling()
-		usr.client.perspective = EYE_PERSPECTIVE
-		usr.client.eye = src
-		usr.loc = src
-		src.occupant = usr
-		src.icon_state = "sleeper_1"
-		if(orient == "RIGHT")
-			icon_state = "sleeper_1-r"
 
-		for(var/obj/O in src)
-			del(O)
-		src.add_fingerprint(usr)
-		busy = 0
-		return
+	go_in(usr, usr)
+
 	return
