@@ -26,8 +26,8 @@
 	if (!istype(loc, /turf/simulated/floor))
 		usr << "\red APC cannot be placed on this spot."
 		return
-	if (A.requires_power == 0 || A.name == "Space")
-		usr << "\red APC cannot be placed in this area."
+	if(A.requires_power == 0 || A.type == /area)
+		usr << "<SPAN CLASS='warning'>APC cannot be placed in this area.</SPAN>"
 		return
 	if (A.get_apc())
 		usr << "\red This area already has an APC."
@@ -42,7 +42,7 @@
 			usr << "You cut the cables and disassemble the unused power terminal."
 			del(T)
 	new /obj/machinery/power/apc(loc, ndir, 1)
-	del(src)
+	qdel(src)
 
 ///////////////
 // TY OSAIFH
@@ -75,12 +75,12 @@
 	if (!istype(loc, /turf/simulated/floor))
 		usr << "\red Intercom cannot be placed on this spot."
 		return
-	if (A.requires_power == 0 || A.name == "Space")
-		usr << "\red Air Alarm cannot be placed in this area."
+	if(A.requires_power == 0 || A.type == /area)
+		usr << "<SPAN CLASS='warning'>Air Alarm cannot be placed in this area.</SPAN>"
 		return
 
 	if(gotwallitem(loc, ndir))
 		usr << "\red There's already an item on this wall!"
 		return
 	new /obj/item/device/radio/intercom(loc, ndir, 1)
-	del(src)
+	qdel(src)
