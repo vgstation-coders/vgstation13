@@ -70,7 +70,7 @@
 
 /turf/Enter(atom/movable/O, atom/oldloc)
 	if(movement_disabled && usr.ckey != movement_disabled_exception)
-		usr << "\red Movement is admin-disabled." //This is to identify lag problems
+		usr << "<span class='warning'>Movement is admin-disabled.</span>" //This is to identify lag problems
 		return 0
 
 	// first, check objects to block exit that are not on the border
@@ -233,6 +233,7 @@
 #endif
 
 	var/old_lumcount = lighting_lumcount - initial(lighting_lumcount)
+	var/datum/gas_mixture/env
 
 	//world << "Replacing [src.type] with [N]"
 
@@ -243,6 +244,7 @@
 		//Despite this being called a bunch during explosions,
 		//the zone will only really do heavy lifting once.
 		var/turf/simulated/S = src
+		env = S.air //Get the air before the change
 		if(S.zone) S.zone.rebuild()
 
 	if(ispath(N, /turf/simulated/floor))
@@ -254,7 +256,8 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/simulated/W = new N( locate(src.x, src.y, src.z) )
-		//W.Assimilate_Air()
+		if(env)
+			W.air = env //Copy the old environment data over if both turfs were simulated
 
 		W.lighting_lumcount += old_lumcount
 		if(old_lumcount != W.lighting_lumcount)
@@ -413,3 +416,13 @@
 /turf/proc/cultify()
 	ChangeTurf(/turf/space)
 	return
+
+/turf/singularity_act()
+	if(intact)
+		for(var/obj/O in contents)
+			if(O.level != 1)
+				continue
+			if(O.invisibility == 101)
+				O.singularity_act()
+	ChangeTurf(/turf/space)
+	return(2)

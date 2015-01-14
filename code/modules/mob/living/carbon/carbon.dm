@@ -222,11 +222,8 @@
 				"\blue [M] gives [src] a [pick("hug","warm embrace")].", \
 				"\blue You hug [src].", \
 				)
-			if(prob(10))
-				src.emote("fart")
-			/* VG-EDIT Killing people through hugs, one overdose at a time.
 			reagents.add_reagent("paracetamol", 1)
-			*/
+
 			share_contact_diseases(M)
 
 
@@ -300,7 +297,7 @@
 								O.show_message(text("<B>[src] scrambles into the ventilation ducts!</B>"), 1)
 							loc = target_vent
 
-							var/travel_time = round(get_dist(loc, target_vent.loc) / 2)
+							var/travel_time = round(get_dist(loc, target_vent.loc) / 4)
 
 							spawn(travel_time)
 
