@@ -246,6 +246,10 @@
 	name = "Circuit board (Bhangmeter)"
 	build_path = "/obj/machinery/computer/bhangmeter"
 	origin_tech = "programming=2"
+/obj/item/weapon/circuitboard/meteormonitor
+	name = "Circuit board (Meteor Monitor)"
+	build_path = "/obj/machinery/computer/meteormonitor"
+	origin_tech = "programming=3;engineering=2;bluespace=2" //Robust techs I know, but you usually won't want to deconstruct it
 /obj/item/weapon/circuitboard/pda_terminal
 	name = "Circuit board (PDA Terminal)"
 	build_path = "/obj/machinery/computer/pda_terminal"
