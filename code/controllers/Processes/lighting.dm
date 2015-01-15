@@ -1,7 +1,7 @@
 /datum/controller/process/lighting/setup()
 	name = "lighting"
 	schedule_interval = 5 // every .5 second
-	lighting_controller.Initialize()
+	lighting_controller.initialize()
 
 /datum/controller/process/lighting/doWork()
 	lighting_controller.lights_workload_max = \
