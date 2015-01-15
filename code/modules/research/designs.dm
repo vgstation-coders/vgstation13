@@ -2652,6 +2652,15 @@ k
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/bhangmeter
 
+/datum/design/meteormonitor
+	name = "Circuit Design (Meteor Monitor)"
+	desc = "Allows for the construction of circuit boards used to build a meteor monitor."
+	id = "meteormonitor"
+	req_tech = list("programming" = 3, "engineering" = 2, "bluespace" = 2)
+	build_type = IMPRINTER
+	materials = list("$glass" = 2000, "$gold" = 2000, "sacid" = 20)
+	build_path = /obj/item/weapon/circuitboard/meteormonitor
+
 /datum/design/mechapowerport
 	name = "Circuit Design (Mech Bay Power Port)"
 	desc = "Allows for the construction of circuit boards used to build a mech bay power connector port."
