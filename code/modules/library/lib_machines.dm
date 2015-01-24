@@ -170,9 +170,11 @@ var/libcomp_menu
 
 /*
  * Library Computer
+ *
+ * TODO: Make this an actual /obj/machinery/computer that can be crafted from circuit boards and such
+ * It is August 22nd, 2012... This TODO has already been here for months.. I wonder how long it'll last before someone does something about it.
+ * It's 25th of January in the year of (our) Lord 2015... And it's still not a computer.
  */
-// TODO: Make this an actual /obj/machinery/computer that can be crafted from circuit boards and such
-// It is August 22nd, 2012... This TODO has already been here for months.. I wonder how long it'll last before someone does something about it.
 /obj/machinery/librarycomp
 	name = "Check-In/Out Computer"
 	icon = 'icons/obj/library.dmi'
