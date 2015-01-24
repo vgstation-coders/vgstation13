@@ -36,13 +36,13 @@ var/libcomp_menu
 	for(var/obj/machinery/librarycomp/L in library_computers)
 		L.booklist += "<tr><td>[author]</td><td>[title]</td><td>[category]</td><td><A href='?src=\ref[L];cacheid=[id]'>\[Order\]</A></td></tr>"
 
-/proc/load_library_db_to_cache(force=0)
-
+/proc/load_library_db_to_cache(force = FALSE)
 	if(cachedbooks && !force)
 		return
-	establish_db_connection()
-	if(!dbcon.IsConnected())
 
+	establish_db_connection()
+
+	if(!dbcon.IsConnected())
 		return
 
 	cachedbooks = list()
@@ -57,15 +57,10 @@ var/libcomp_menu
 		newbook.category = query.item[4]
 
 		cachedbooks += newbook
-	//build_library_menu()
 
-/proc/build_library_menu(var/obj/machinery/librarycomp/L)
-	if(!L || !cachedbooks)
-		return
-	var/menu
-	for(var/datum/cachedbook/C in cachedbooks)
-		menu += "<tr><td>[C.author]</td><td>[C.title]</td><td>[C.category]</td><td><A href='?src=\ref[L];cacheid=[cachedbooks.Find(C)]'>\[Order\]</A></td></tr>"
-	L.booklist = menu
+	if(force)
+		for(var/obj/machinery/librarycomp/L in library_computers)
+			L.build_library_menu()
 
 /*
  * Library Public Computer
@@ -197,9 +192,16 @@ var/libcomp_menu
 	var/bibledelay = 0 // LOL NO SPAM (1 minute delay) -- Doohl
 	var/booklist
 
-/obj/machinery/librarycomp/New()
-	library_computers += src
+/obj/machinery/librarycomp/New(loc)
+	..(loc)
+	library_computers.Add(src)
+
+	if(ticker)
+		initialize()
+
+/obj/machinery/librarycomp/initialize()
 	..()
+	build_library_menu()
 
 /obj/machinery/librarycomp/Destroy()
 	library_computers -= src
@@ -209,14 +211,23 @@ var/libcomp_menu
 	new /obj/structure/cult/tome(loc)
 	..()
 
+/obj/machinery/librarycomp/proc/build_library_menu()
+	var/menu
+
+	for(var/datum/cachedbook/C in cachedbooks)
+		menu += "<tr><td>[C.author]</td><td>[C.title]</td><td>[C.category]</td><td><A href='?src=\ref[src];cacheid=[cachedbooks.Find(C)]'>\[Order\]</A></td></tr>"
+
+	booklist = menu
+
 /obj/machinery/librarycomp/attack_hand(var/mob/user as mob)
 	if(istype(user,/mob/dead))
 		user << "<span class='danger'>Nope.</span>"
 		return
-	if(!booklist)
-		build_library_menu(src)
-	usr.set_machine(src)
+
+	user.set_machine(src)
+
 	var/dat = "<HEAD><TITLE>Book Inventory Management</TITLE></HEAD><BODY>\n" // <META HTTP-EQUIV='Refresh' CONTENT='10'>
+
 	switch(screenstate)
 		if(0)
 			// Main Menu
