@@ -26,7 +26,8 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	var/syndie = 0//Holder to see if it's a syndicate encrpyed radio
 	var/maxf = 1499
 //			"Example" = FREQ_LISTENING|FREQ_BROADCASTING
-	flags = FPRINT | CONDUCT | TABLEPASS
+	flags = FPRINT
+	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	throw_speed = 2
 	throw_range = 9
@@ -673,16 +674,12 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 		return get_mobs_in_view(canhear_range, src)
 
 
-/obj/item/device/radio/examine()
-	set src in view()
-
+/obj/item/device/radio/examine(mob/user)
 	..()
-	if ((in_range(src, usr) || loc == usr))
-		if (b_stat)
-			usr.show_message("\blue \the [src] can be attached and modified!")
-		else
-			usr.show_message("\blue \the [src] can not be modified or attached!")
-	return
+	if (b_stat)
+		user.show_message("<span class = 'info'>\the [src] can be attached and modified!</span>")
+	else
+		user.show_message("<span class = 'info'>\the [src] can not be modified or attached!</span>")
 
 /obj/item/device/radio/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -692,9 +689,9 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	b_stat = !( b_stat )
 	if(!istype(src, /obj/item/device/radio/beacon))
 		if (b_stat)
-			user.show_message("\blue The radio can now be attached and modified!")
+			user.show_message("<span class = 'notice'>The radio can now be attached and modified!</span>")
 		else
-			user.show_message("\blue The radio can no longer be modified or attached!")
+			user.show_message("<span class = 'notice'>The radio can no longer be modified or attached!</span>")
 		updateDialog()
 			//Foreach goto(83)
 		add_fingerprint(user)

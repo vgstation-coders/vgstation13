@@ -41,7 +41,7 @@ The required techs are the following:
 - Electromagnetic Spectrum Research	max=8	"magnets"
 - Data Theory Research				max=5	"programming"
 - Illegal Technologies Research		max=8	"syndicate"
-
+k
 */
 #define	IMPRINTER	1	//For circuits. Uses glass/chemicals.
 #define PROTOLATHE	2	//New stuff. Uses glass/metal/chemicals
@@ -81,7 +81,7 @@ The required techs are the following:
 	for(var/datum/tech/T in temp_techs)
 		if(T.id in req_tech)
 			new_reliability += T.level
-	new_reliability = between(reliability_base, new_reliability, 100)
+	new_reliability = Clamp(new_reliability, reliability_base, 100)
 	reliability = new_reliability
 	return
 
@@ -2177,7 +2177,7 @@ The required techs are the following:
 	build_type = PROTOLATHE
 	materials = list("$iron" = 3000, "$glass" = 1000, "$diamond" = 3750) //Yes, a whole diamond is needed.
 	reliability_base = 79
-	build_path = /obj/item/weapon/pickaxe/diamonddrill
+	build_path = /obj/item/weapon/pickaxe/drill/diamond
 
 /datum/design/mesons
 	name = "Optical Meson Scanners"
@@ -2345,6 +2345,14 @@ The required techs are the following:
 	materials = list("$iron" = 700, "$glass" = 2000, "$gold" = 100)
 	build_path = /obj/item/clothing/glasses/night
 
+/datum/design/device_analyser
+	name = "Device Analyser"
+	desc = "A device for scanning other devices. Meta."
+	id = "deviceanalyser"
+	req_tech = list("magnets"=3, "engineering"=4, "materials"=4, "programming"=3)
+	build_type = PROTOLATHE
+	materials = list("$iron" = 500, "$glass" = 1000, "$gold" = 200, "$silver" = 200)
+	build_path = /obj/item/device/device_analyser
 
 /////////////////////////////////////////
 //////////////////Security///////////////
@@ -2407,6 +2415,16 @@ The required techs are the following:
 	build_path = /obj/item/borg/upgrade/syndicate
 	category = "Cyborg Upgrade Modules"
 	materials = list("$iron"=10000,"$glass"=15000,"$diamond" = 10000)
+
+/datum/design/borg_engineer_upgrade
+	name = "engineering module board"
+	desc = "Used to give an engineering cyborg more materials."
+	id = "borg_engineer_module"
+	build_type = MECHFAB
+	req_tech = list("engineering" = 1)
+	build_path = /obj/item/borg/upgrade/engineering
+	category = "Cyborg Upgrade Modules"
+	materials = list("$iron"=10000,"$glass"=10000,"$plasma"=5000)
 
 /datum/design/medical_module_surgery
 	name = "medical module board"

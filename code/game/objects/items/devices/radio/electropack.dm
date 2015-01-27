@@ -4,7 +4,8 @@
 	icon_state = "electropack0"
 	item_state = "electropack"
 	frequency = 1449
-	flags = FPRINT | CONDUCT | TABLEPASS
+	flags = FPRINT
+	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
 	w_class = 5.0
 	g_amt = 2500
@@ -108,7 +109,7 @@
 
 		M.Weaken(10)
 
-	if(master && wires & 1)
+	if(master && isWireCut(1))
 		master.receive_signal()
 	return
 
