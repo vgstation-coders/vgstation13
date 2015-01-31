@@ -2236,6 +2236,15 @@ k
 	build_type = PROTOLATHE
 	materials = list("$iron" = 50, "$glass" = 50)
 	build_path = /obj/item/clothing/glasses/meson
+	
+/datum/design/excavationdrill
+	name = "Excavation Drill"
+	desc = "Handheld drill capable of perforating rocks at various depths (1-30 centimeters)."
+	id = "excavationdrill"
+	req_tech = list("materials" = 3, "powerstorage" = 2, "engineering" = 2)
+	build_type = PROTOLATHE
+	materials = list("$iron" = 4000, "$glass" = 1000, "$silver" = 1000)
+	build_path = /obj/item/weapon/pickaxe/excavationdrill
 
 /////////////////////////////////////////
 //////////////Blue Space/////////////////
