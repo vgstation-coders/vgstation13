@@ -2241,7 +2241,7 @@ k
 	name = "Excavation Drill"
 	desc = "Handheld drill capable of perforating rocks at various depths (1-30 centimeters)."
 	id = "excavationdrill"
-	req_tech = list("materials" = 3, "powerstorage" = 2, "engineering" = 2)
+	req_tech = list("materials" = 4, "powerstorage" = 3, "engineering" = 3)
 	build_type = PROTOLATHE
 	materials = list("$iron" = 4000, "$glass" = 1000, "$silver" = 1000)
 	build_path = /obj/item/weapon/pickaxe/excavationdrill
