@@ -5,10 +5,10 @@
 	item_state = "syringe_0"
 	excavation_amount = 15
 	digspeed = 40
-	desc = "Handheld drill capable of perforating rocks at various depths (1-30 centimeters)."
+	desc = "Ultrasonic handheld drill capable of precision excavation with adjustable tip lenght (1-30 centimeters)."
 	drill_sound = 'sound/weapons/thudswoosh.ogg'
 	drill_verb = "drilling"
-	force = 15.0
+	force = 10.0
 	w_class = 2
 	w_type = RECYK_ELECTRONIC
 	attack_verb = list("drilled")

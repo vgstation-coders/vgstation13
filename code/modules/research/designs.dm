@@ -2239,9 +2239,9 @@ k
 	
 /datum/design/excavationdrill
 	name = "Excavation Drill"
-	desc = "Handheld drill capable of perforating rocks at various depths (1-30 centimeters)."
+	desc = "Ultrasonic handheld drill capable of precision excavation with adjustable tip lenght (1-30 centimeters)."
 	id = "excavationdrill"
-	req_tech = list("materials" = 4, "powerstorage" = 3, "engineering" = 3)
+	req_tech = list("materials" = 4, "powerstorage" = 3, "engineering" = 3, "bluespace" = 3)
 	build_type = PROTOLATHE
 	materials = list("$iron" = 4000, "$glass" = 1000, "$silver" = 1000)
 	build_path = /obj/item/weapon/pickaxe/excavationdrill
