@@ -82,7 +82,7 @@
 	if(!istype(W)) return
 	if(crit_fail) return
 
-	switch(rand(0,10))
+	switch(rand(0,11))
 		if(0 to 5) //Just delete the item.
 			user << "<span class='warning'>[W] disappears in an instant.</span>"
 			del(W)
