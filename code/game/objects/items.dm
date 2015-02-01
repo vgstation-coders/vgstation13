@@ -643,7 +643,9 @@
 	return 0
 
 /obj/item/proc/UsesBluespace() //If the object uses bluespace technology, return 1
-	return 0 //Used in bags of holding (causing conflict when putting a bluespace item in)
+	if("bluespace" in ConvertReqString2List(origin_tech)) //Used in bags of holding (causing conflict when putting a bluespace item in)
+		return 1
+	return 0
 
 /obj/item/proc/eyestab(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 
