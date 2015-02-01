@@ -3855,7 +3855,7 @@
 "bwg" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/bluegrid,/area/turret_protected/ai_upload)
 "bwh" = (/obj/machinery/alarm{pixel_y = 23},/obj/machinery/computer/aiupload,/turf/simulated/floor/bluegrid,/area/turret_protected/ai_upload)
 "bwi" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/floor/bluegrid,/area/turret_protected/ai_upload)
-"bwj" = (/obj/structure/table,/obj/item/weapon/aiModule/standard/oxygen,/obj/item/weapon/aiModule/targetted/oneHuman,/obj/machinery/door/window{dir = 8; name = "High-Risk Modules"; req_access_txt = "20"},/obj/item/weapon/aiModule/purge,/obj/structure/window/reinforced,/obj/item/weapon/aiModule/core/antimov,/obj/item/weapon/aiModule/standard/teleporterOffline,/turf/simulated/floor/bluegrid,/area/turret_protected/ai_upload)
+"bwj" = (/obj/structure/table,/obj/item/weapon/aiModule/standard/oxygen,/obj/machinery/door/window{dir = 8; name = "High-Risk Modules"; req_access_txt = "20"},/obj/item/weapon/aiModule/purge,/obj/structure/window/reinforced,/obj/item/weapon/aiModule/core/antimov,/obj/item/weapon/aiModule/standard/teleporterOffline,/turf/simulated/floor/bluegrid,/area/turret_protected/ai_upload)
 "bwk" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/wall,/area/crew_quarters/captain)
 "bwl" = (/obj/machinery/door/firedoor/border_only,/obj/machinery/door/airlock/command{name = "Captain's Quarters"; req_access = null; req_access_txt = "20"},/turf/simulated/floor/carpet,/area/crew_quarters/captain)
 "bwm" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/wall,/area/crew_quarters/captain)
