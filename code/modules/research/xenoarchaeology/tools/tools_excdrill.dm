@@ -5,7 +5,7 @@
 	item_state = "syringe_0"
 	excavation_amount = 15
 	digspeed = 30
-	desc = "Advanced archaeological drill combining ultrasonic excitation and bluespace manipulation to provide extreme precision. The diamond tip is adjustable from 1 to 30 cm (currently: [depth]cm)."
+	desc = "Advanced archaeological drill combining ultrasonic excitation and bluespace manipulation to provide extreme precision. The diamond tip is adjustable from 1 to 30 cm."
 	drill_sound = 'sound/weapons/thudswoosh.ogg'
 	drill_verb = "drilling"
 	force = 15.0
@@ -20,3 +20,8 @@
 		return
 	excavation_amount = depth/2
 	user << "<span class='notice'>You set the depth to [depth]cm.</span>"
+
+/obj/item/weapon/pickaxe/excavationdrill/examine(mob/user)
+	..()
+	var/depth = excavation_amount*2
+	user << "<span class='info'>It is currently set at [depth]cms.</span>"
