@@ -230,7 +230,10 @@
 	amount_per_transfer_from_this = 10
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 
-/obj/item/weapon/reagent_containers/glass/beaker/noreactlarge
+/obj/item/weapon/reagent_containers/glass/beaker/noreact/UsesBluespace()
+	return 1
+
+/obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
 	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
 	icon_state = "beakernoreactlarge"
@@ -251,7 +254,10 @@
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,200)
 	flags = FPRINT  | OPENCONTAINER
 
-/obj/item/weapon/reagent_containers/glass/beaker/bluespacelarge
+/obj/item/weapon/reagent_containers/glass/beaker/bluespace/UsesBluespace()
+	return 1
+
+/obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
 	desc = "A prototype ultra-capacity beaker, courtesy of bluespace research. Can hold up to 300 units."
 	icon_state = "beakerbluespacelarge"

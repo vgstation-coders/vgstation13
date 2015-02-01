@@ -2288,7 +2288,7 @@ k
 	build_type = PROTOLATHE
 	materials = list("$diamond" = 1500, "$iron" = 6000, "$glass" = 6000)
 	reliability = 100
-	build_path = /obj/item/weapon/reagent_containers/glass/beaker/bluespacelarge
+	build_path = /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 
 /datum/design/stasisbeaker_small
 	name = "Stasis Beaker"
@@ -2308,7 +2308,7 @@ k
 	build_type = PROTOLATHE
 	materials = list("$diamond" = 1500, "$iron" = 3750, "$glass" = 3750, "$uranium" = 1500)
 	reliability = 100
-	build_path = /obj/item/weapon/reagent_containers/glass/beaker/noreactlarge
+	build_path = /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 
 /datum/design/reactive_teleport_armor
 	name = "Reactive Teleport Armor"

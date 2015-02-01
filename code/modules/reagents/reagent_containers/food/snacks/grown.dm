@@ -605,6 +605,9 @@
 	filling_color = "#91F8FF"
 	plantname = "bluespacetomato"
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato/UsesBluespace()
+	return 1
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato/throw_impact(atom/hit_atom)
 	..()
 	var/mob/M = usr

@@ -14,6 +14,9 @@
 	pixel_x = rand(-5, 5)
 	pixel_y = rand(-5, 5)
 
+/obj/item/bluespace_crystal/UsesBluespace()
+	return 1
+
 /obj/item/bluespace_crystal/attack_self(var/mob/user)
 	blink_mob(user)
 	user.drop_item()

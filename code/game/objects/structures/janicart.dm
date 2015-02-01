@@ -71,6 +71,7 @@
 					return ..()
 				if("Cancel")
 					return
+		if(!in_range(src,user)) return //to prevent exploits
 		mybag.loc = get_turf(user)
 		user.put_in_hands(mybag)
 		mybag = null
