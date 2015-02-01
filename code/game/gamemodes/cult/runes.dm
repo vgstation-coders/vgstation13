@@ -204,27 +204,113 @@ var/list/sacrificed = list()
 /////////////////////////////////////////FOURTH RUNE
 
 /obj/effect/rune/proc/tearreality()
+	if(summoning)
+		return
+
 	var/list/active_cultists=list()
+	var/ghostcount = 0
 
 	for(var/mob/M in range(1,src))
 		if(iscultist(M) && !M.stat)
 			active_cultists.Add(M)
+			if (istype(M, /mob/living/carbon/human/manifested))
+				ghostcount++
 
 	if(universe.name == "Hell Rising")
 		for(var/mob/M in active_cultists)
 			M << "<span class='warning'>This plane of reality has already been torn into Nar-Sie's realm.</span>"
+		return
 
-	if(active_cultists.len >= 9)
+	if(ticker.mode.eldergod)
 		// Sanity checks
 		// Are we permitted to spawn Nar-Sie?
-		if(ticker.mode.eldergod)
-			// Only chant when Nar-Sie spawns
+
+		if(ticker.mode.narsie_condition_cleared)
+			if(active_cultists.len >= 9)
+				summoning = 1
+				log_admin("NAR-SIE SUMMONING: [active_cultists.len] are summoning Nar-Sie at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>). [6 + (ghostcount * 5)] seconds remaining.")
+				message_admins("NAR-SIE SUMMONING: [active_cultists.len] are summoning Nar-Sie at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>). [6 + (ghostcount * 5)] seconds remaining.")
+				updatetear(6 + (ghostcount * 5))	//the summoning takes 6 seconds by default , but for each manifested ghost around it takes 5 more seconds.
+				return								//with 8 manifested ghosts summoned by a single human, it'd take 46 seconds, which would cause 46*8 = 368 brute damage over time to the human.
+													//no more lone human summoning nar-sie all by himself (as all the ghosts would die as soon as he goes uncounscious)
+		else
 			for(var/mob/M in active_cultists)
-				M.say("Tok-lyr rqa'nap g[pick("'","`")]lt-ulotf!")
-			ticker.mode.eldergod = 0
-			new /obj/machinery/singularity/narsie/large(src.loc)
+				M << "<span class='sinister'>The Geometer of Blood has required of you to perform a certain task. This place cannot welcome him until this task has been cleared.</span>"
 			return
+
+	else
+		for(var/mob/M in active_cultists)
+			M << "<span class='danger'>Nar-Sie has lost interest in this world.</span>"//narsie won't appear if a supermatter cascade has started
+		return
+
 	return fizzle()
+
+
+/obj/effect/rune/proc/updatetear(var/currentCountdown)
+	if(!summoning)
+		summonturfs = list()
+		return
+	summonturfs = list()
+	var/list/active_cultists=list()
+	for(var/mob/M in range(1,src))
+		if(iscultist(M) && !M.stat)
+			active_cultists.Add(M)
+			var/turf/T = get_turf(M)
+			summonturfs += T
+			if(!(locate(/obj/effect/summoning) in T))
+				var/obj/effect/summoning/S = new(T)
+				S.init(src)
+
+
+	if(active_cultists.len < 9)
+		summoning = 0
+		summonturfs = list()
+		for(var/mob/M in active_cultists)
+			M << "<span class='warning'>The ritual has been disturbed. All summoners need to stay by the rune.</span>"
+		return
+
+	if(currentCountdown <= 0)
+		for(var/mob/M in active_cultists)
+			// Only chant when Nar-Sie spawns
+			M.say("Tok-lyr rqa'nap g[pick("'","`")]lt-ulotf!")
+		ticker.mode.eldergod = 0
+		summonturfs = list()
+		summoning = 0
+		new /obj/machinery/singularity/narsie/large(src.loc)
+		return
+
+	currentCountdown--
+
+	sleep(10)
+
+	updatetear(currentCountdown)
+	return
+
+/obj/effect/summoning
+	name = "summoning"
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "summoning"
+	mouse_opacity = 0
+	density = 0
+	flags = 0
+	var/obj/effect/rune/summon_target = null
+
+/obj/effect/summoning/New()
+	..()
+	spawn(10)
+		update()
+
+/obj/effect/summoning/proc/update()
+	if(locate(get_turf(src)) in summon_target.summonturfs)
+		sleep(10)
+		update()
+		return
+	else
+		qdel(src)
+
+/obj/effect/summoning/proc/init(var/obj/effect/rune/S)
+	summon_target = S
+
 
 /////////////////////////////////////////FIFTH RUNE
 
