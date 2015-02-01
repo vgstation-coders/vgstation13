@@ -4,11 +4,11 @@
 	icon_state = "excavationdrill"
 	item_state = "syringe_0"
 	excavation_amount = 15
-	digspeed = 40
-	desc = "Ultrasonic handheld drill capable of precision excavation with adjustable tip lenght (1-30 centimeters)."
+	digspeed = 30
+	desc = "Advanced archaeological drill combining ultrasonic excitation and bluespace manipulation to provide extreme precision. The diamond tip is adjustable from 1 to 30 cm (currently: [depth]cm)."
 	drill_sound = 'sound/weapons/thudswoosh.ogg'
 	drill_verb = "drilling"
-	force = 10.0
+	force = 15.0
 	w_class = 2
 	w_type = RECYK_ELECTRONIC
 	attack_verb = list("drilled")
