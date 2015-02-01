@@ -11,6 +11,8 @@
 	siemens_coefficient = 1
 	origin_tech = "programming=2;materials=2"
 
+/obj/item/mecha_parts/UsesBluespace()
+	return 0
 
 /obj/item/mecha_parts/chassis
 	name="Mecha Chassis"

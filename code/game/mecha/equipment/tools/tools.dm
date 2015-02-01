@@ -286,6 +286,9 @@
 	var/mode = 0 //0 - deconstruct, 1 - wall or floor, 2 - airlock.
 	var/disabled = 0 //malf
 
+	UsesBluespace()
+		return 1
+
 	action(atom/target)
 		if(istype(target,/area/shuttle)||istype(target, /turf/space/transit))//>implying these are ever made -Sieve
 			disabled = 1
@@ -387,6 +390,9 @@
 	energy_drain = 1000
 	range = RANGED
 
+	UsesBluespace()
+		return 1
+
 	action(atom/target)
 		if(!action_checks(target) || src.loc.z == 2) return
 		var/turf/T = get_turf(target)
@@ -407,6 +413,8 @@
 	energy_drain = 300
 	range = RANGED
 
+	UsesBluespace()
+		return 1
 
 	action(atom/target)
 		if(!action_checks(target) || src.loc.z == 2) return
@@ -461,6 +469,9 @@
 
 	var/last_fired = 0  //Concept stolen from guns.
 	var/fire_delay = 10 //Used to prevent spam-brute against humans.
+
+	UsesBluespace()
+		return 1
 
 	action(atom/movable/target)
 

@@ -90,25 +90,25 @@
 		user << "<span class = 'warning'>[W]'s screen flashes brightly, overloaded with data.</span>"
 		return 1
 
-	user << "<span class = 'danger'>[W] causes [src]'s Bluespace interface to malfunction!</span>"
+	src.visible_message("<span class = 'danger'>[W] causes [src]'s Bluespace interface to malfunction!</span>")
 	switch(rand(0,11))
-		if(0 to 5) //Just delete the item.
-			user << "<span class='warning'>[W] disappears in an instant.</span>"
+		if(0 to 2) //Just delete the item.
+			src.visible_message("<span class='warning'>[W] disappears in an instant.</span>")
 			del(W)
-		if(6 to 7) //Delete a random amount of items inside the bag. If anything was deleted, show a special message
+		if(3 to 5) //Delete a random amount of items inside the bag. If anything was deleted, show a special message
 			var/deleted_anything=0
 			for(var/obj/O in src.contents)
-				if(prob(30))
+				if(prob(030))
 					deleted_anything=1
 					del(O)
 			if(deleted_anything==1)
-				user << "<span class='warning'>The bluespace window flickers for a moment.</span>"
+				src.visible_message("<span class='warning'>The bluespace window flickers for a moment.</span>")
 				return
 			user << "Nothing seems to happen."
-		if(8 to 9) //A small, IED level explosion
-			user << "<span class='danger'>[src] releases a sudden burst of energy!</span>"
-			explosion(src.loc,-1,0,2)
-		if(10) //Honk
+		if(6 to 8) //A small explosion
+			src.visible_message("<span class='danger'>[src] releases a sudden burst of energy!</span>")
+			explosion(src.loc,-1,1,3)
+		if(9) //Honk
 			for(var/mob/living/carbon/M in hearers(src, null))
 				M << sound('sound/items/AirHorn.ogg')
 				if(istype(M, /mob/living/carbon/human))
@@ -125,8 +125,8 @@
 					M.Paralyse(4)
 				else
 					M.Jitter(500)
-		if(11) //BoH turns itself off
-			user << "<span class='warning'>[src] shuts itself down to prevent potentially catastrophic damage.</span>"
+		if(10 to 11) //BoH turns itself off
+			src.visible_message("<span class='warning'>[src] shuts itself down to prevent potentially catastrophic damage.</span>")
 			crit_fail = 1
 			icon_state = "brokenpack"
 	return 0

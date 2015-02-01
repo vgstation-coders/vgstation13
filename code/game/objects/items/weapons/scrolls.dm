@@ -11,6 +11,9 @@
 	throw_range = 20
 	origin_tech = "bluespace=4"
 
+/obj/item/weapon/teleportation_scroll/UsesBluespace()
+	return 0
+
 /obj/item/weapon/teleportation_scroll/apprentice
 	name = "lesser scroll of teleportation"
 	uses = 1
