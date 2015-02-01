@@ -50,9 +50,8 @@
 		user << "<span class = 'warning'>The Bluespace generator isn't working.</span>"
 		return
 	if(!W.crit_fail && checkforbluespace(W))
-		user << "<span class = 'danger'>[W] causes [src]'s Bluespace interface to malfunction!</span>"
-		bluespaceerror(W, user)
-		return
+		if(bluespaceerror(W, user)!=1)
+			return
 	/*if(istype(W, /obj/item/weapon/storage/backpack/holding) && !W.crit_fail)
 		user << "<span class = 'warning'>The Bluespace interfaces of the two devices conflict and malfunction.</span>"
 		del(W)
@@ -78,28 +77,34 @@
 		if(.(W1))
 			return 1
 
+//If bluespaceerror returns 1, the item will still be put inside. Otherwise it won't.
 /obj/item/weapon/storage/backpack/holding/proc/bluespaceerror(obj/item/W as obj, mob/user as mob) //Don't play with bluespace, kids
 	if(!istype(W)) return
 	if(crit_fail) return
 
+	if(istype(W,/obj/item/device/gps)) //GPS only uses bluespace to transmit/gather data or some shit like that
+		var/obj/item/device/gps/G = W //Not enough for a real malfunction, just corrupt the GPS and put it inside
+		G.emped = 1
+		G.overlays -= "working"
+		G.overlays += "emp"
+		user << "<span class = 'warning'>[W]'s screen flashes brightly, overloaded with data.</span>"
+		return 1
+
+	user << "<span class = 'danger'>[W] causes [src]'s Bluespace interface to malfunction!</span>"
 	switch(rand(0,11))
 		if(0 to 5) //Just delete the item.
 			user << "<span class='warning'>[W] disappears in an instant.</span>"
 			del(W)
-		if(6 to 7) //Delete a random amount of items inside the bag. If anything was successfully deleted, the bag starts shaking.
+		if(6 to 7) //Delete a random amount of items inside the bag. If anything was deleted, show a special message
 			var/deleted_anything=0
 			for(var/obj/O in src.contents)
 				if(prob(30))
 					deleted_anything=1
 					del(O)
 			if(deleted_anything==1)
-				user << "<span class='warning'>[src] starts shaking violently!</span>"
-				if(istype(user,/mob/living/carbon/human))
-					var/mob/living/carbon/human/H = user
-					if(H.back == src)
-						H.Jitter(5)
-			else
-				user << "Nothing seems to happen."
+				user << "<span class='warning'>The bluespace window flickers for a moment.</span>"
+				return
+			user << "Nothing seems to happen."
 		if(8 to 9) //A small, IED level explosion
 			user << "<span class='danger'>[src] releases a sudden burst of energy!</span>"
 			explosion(src.loc,-1,0,2)
@@ -124,6 +129,7 @@
 			user << "<span class='warning'>[src] shuts itself down to prevent potentially catastrophic damage.</span>"
 			crit_fail = 1
 			icon_state = "brokenpack"
+	return 0
 
 /obj/item/weapon/storage/backpack/holding/proc/failcheck(mob/user as mob)
 	if (prob(src.reliability)) return 1 //No failure
@@ -142,6 +148,8 @@
 	return
 
 /obj/item/weapon/storage/backpack/holding/UsesBluespace()
+	if(crit_fail)
+		return 0
 	return 1
 
 /obj/item/weapon/storage/backpack/santabag

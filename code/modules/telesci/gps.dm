@@ -20,6 +20,7 @@ var/list/GPS_list = list()
 	GPS_list.Remove(src)
 	..()
 /obj/item/device/gps/emp_act(severity)
+	if(emped) return
 	emped = 1
 	overlays -= "working"
 	overlays += "emp"
@@ -40,10 +41,21 @@ var/list/GPS_list = list()
 			var/turf/pos = get_turf(G)
 			var/area/gps_area = get_area(G)
 			var/tracked_gpstag = G.gpstag
+
+			var/show_x=pos.x-WORLD_X_OFFSET
+			var/show_y=pos.y-WORLD_Y_OFFSET
+			var/show_z=pos.z
+			var/show_name = format_text(gps_area.name)
+
 			if(G.emped == 1)
+				show_x=rand(-512,512)
+				show_y=rand(-512,512)
+				show_z=rand(-8,8)
+				show_name="Space"
+			if(G.emped == 1 && prob(25))
 				t += "<BR>[tracked_gpstag]: ERROR"
 			else
-				t += "<BR>[tracked_gpstag]: [format_text(gps_area.name)] ([pos.x-WORLD_X_OFFSET], [pos.y-WORLD_Y_OFFSET], [pos.z])"
+				t += "<BR>[tracked_gpstag]: [show_name] ([show_x], [show_y], [show_z])"
 
 	var/datum/browser/popup = new(user, "GPS", name, 600, 450)
 	popup.set_content(t)

@@ -1,2 +1,3 @@
 author: Unid
-changes: []
+changes: 
+  - tweak: Bags of Holding can no longer hold bluespace-manipulating items (bluespace/stasis beakers, reactive armour etc.). Trying to put one in will cause the bag to malfunction.
