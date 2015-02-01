@@ -50,7 +50,7 @@
 		user << "<span class = 'warning'>The Bluespace generator isn't working.</span>"
 		return
 	if(!W.crit_fail && checkforbluespace(W))
-		visible_message("<span class = 'danger'>[W] causes [src]'s Bluespace interface to malfunction!</span>")
+		user << "<span class = 'danger'>[W] causes [src]'s Bluespace interface to malfunction!</span>"
 		bluespaceerror(W, user)
 		return
 	/*if(istype(W, /obj/item/weapon/storage/backpack/holding) && !W.crit_fail)
@@ -84,7 +84,7 @@
 
 	switch(rand(0,10))
 		if(0 to 5) //Just delete the item.
-			src.visible_message("<span class='warning'>[W] disappears in an instant.</span>")
+			user << "<span class='warning'>[W] disappears in an instant.</span>"
 			del(W)
 		if(6 to 7) //Delete a random amount of items inside the bag. If anything was successfully deleted, the bag starts shaking.
 			var/deleted_anything=0
@@ -93,7 +93,7 @@
 					deleted_anything=1
 					del(O)
 			if(deleted_anything==1)
-				src.visible_message("<span class='warning'>[src] starts shaking violently!</span>")
+				user << "<span class='warning'>[src] starts shaking violently!</span>"
 				if(istype(user,/mob/living/carbon/human))
 					var/mob/living/carbon/human/H = user
 					if(H.back == src)
@@ -101,7 +101,7 @@
 			else
 				user << "Nothing seems to happen."
 		if(8 to 9) //A small, IED level explosion
-			src.visible_message("<span class='danger'>[src] releases a sudden burst of energy!</span>")
+			user << "<span class='danger'>[src] releases a sudden burst of energy!</span>"
 			explosion(src.loc,-1,0,2)
 		if(10) //Honk
 			for(var/mob/living/carbon/M in hearers(src, null))
@@ -121,7 +121,7 @@
 				else
 					M.Jitter(500)
 		if(11) //BoH turns itself off
-			src.visible_message("<span class='warning'>[src] shuts itself down to prevent potentially catastrophic damage.</span>")
+			user << "<span class='warning'>[src] shuts itself down to prevent potentially catastrophic damage.</span>"
 			crit_fail = 1
 			icon_state = "brokenpack"
 
