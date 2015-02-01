@@ -148,7 +148,7 @@
 
 	adult.name = src.name
 	adult.real_name = src.real_name
-	src.mind.transfer_to(adult)
+	adult.ckey = src.ckey
 
 	for (var/obj/item/W in src.contents)
 		src.drop_from_inventory(W)

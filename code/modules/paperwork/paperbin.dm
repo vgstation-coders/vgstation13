@@ -75,7 +75,6 @@
 	user << "<span class='notice'>You put [i] in [src].</span>"
 	papers.Add(i)
 	amount++
-	update_icon()
 
 
 /obj/item/weapon/paper_bin/examine(mob/user)
@@ -91,7 +90,3 @@
 		icon_state = "paper_bin0"
 	else
 		icon_state = "paper_bin1"
-
-/obj/item/weapon/paper_bin/empty
-	icon_state = "paper_bin0"
-	amount = 0

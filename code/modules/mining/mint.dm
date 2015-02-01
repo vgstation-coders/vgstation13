@@ -32,6 +32,7 @@
 			if(ore_datum.cointype)
 				ore[ore_datum.id]=ore_datum
 
+		processing_objects.Add(src)
 		return
 	return
 
