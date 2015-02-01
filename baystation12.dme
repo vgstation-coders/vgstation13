@@ -663,6 +663,7 @@
 #include "code\game\objects\items\weapons\handcuffs.dm"
 #include "code\game\objects\items\weapons\hydroponics.dm"
 #include "code\game\objects\items\weapons\kitchen.dm"
+#include "code\game\objects\items\weapons\line_painter.dm"
 #include "code\game\objects\items\weapons\manuals.dm"
 #include "code\game\objects\items\weapons\mop.dm"
 #include "code\game\objects\items\weapons\paint.dm"
