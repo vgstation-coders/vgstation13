@@ -390,9 +390,6 @@
 	energy_drain = 1000
 	range = RANGED
 
-	UsesBluespace()
-		return 1
-
 	action(atom/target)
 		if(!action_checks(target) || src.loc.z == 2) return
 		var/turf/T = get_turf(target)
@@ -412,9 +409,6 @@
 	equip_cooldown = 50
 	energy_drain = 300
 	range = RANGED
-
-	UsesBluespace()
-		return 1
 
 	action(atom/target)
 		if(!action_checks(target) || src.loc.z == 2) return
@@ -469,9 +463,6 @@
 
 	var/last_fired = 0  //Concept stolen from guns.
 	var/fire_delay = 10 //Used to prevent spam-brute against humans.
-
-	UsesBluespace()
-		return 1
 
 	action(atom/movable/target)
 

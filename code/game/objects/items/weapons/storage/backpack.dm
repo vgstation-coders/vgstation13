@@ -107,7 +107,7 @@
 			user << "Nothing seems to happen."
 		if(6 to 8) //A small explosion
 			src.visible_message("<span class='danger'>[src] releases a sudden burst of energy!</span>")
-			explosion(src.loc,-1,1,3)
+			explosion(src.loc,0,0,3)
 		if(9) //Honk
 			for(var/mob/living/carbon/M in hearers(src, null))
 				M << sound('sound/items/AirHorn.ogg')
