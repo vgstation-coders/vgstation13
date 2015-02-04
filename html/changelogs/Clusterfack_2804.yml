@@ -1,0 +1,4 @@
+author: Clusterfack
+delete-after: true
+changes:
+- tweak: Spawned bombs such as those from cuban pete, nukes ops shuttle, and syndie uplink are nerfed down to the strenght allowed by the lowest bombcap: 3/7/14.
