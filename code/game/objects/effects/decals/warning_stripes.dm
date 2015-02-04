@@ -38,3 +38,7 @@
 	icon = 'icons/effects/warning_stripes.dmi'
 	icon_state = "maintguide"
 	layer = 2.45
+
+/obj/effect/nmpi/general //avoid map editing
+	name = "path marker"
+	desc = "A white stripe showing the way to a destination. Taking orders from lines is not advisable."
