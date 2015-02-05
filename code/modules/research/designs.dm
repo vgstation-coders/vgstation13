@@ -2739,17 +2739,6 @@ k
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/mech_bay_recharge_station
 
-
-/datum/design/rsf
-	name = "Rapid-Service-Fabricator"
-	desc = "A device used to rapidly deploy service items."
-	id = "rsf"
-	req_tech = list("materials" = 1)
-	build_type = PROTOLATHE
-	materials = list("$iron" = 2000, "$glass" = 2000)
-	build_path = /obj/item/weapon/rsf
-
-
 //////////////////////////////////////////////////////////////////
 // EMBEDDED CONTROLLER BOARDS
 //////////////////////////////////////////////////////////////////

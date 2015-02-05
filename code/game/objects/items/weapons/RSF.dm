@@ -11,6 +11,7 @@ RSF
         opacity = 0
         density = 0
         anchored = 0.0
+        m_amt = 40000
         var/matter = 0
         var/matter_respawn = 0
         var/mode = 1
@@ -71,7 +72,7 @@ RSF
         desc = "An RSF. It currently holds [matter]/40 fabrication-units."
 
 /obj/item/weapon/rsf/afterattack(atom/A, mob/user as mob, var/proximity_flag)
-        if (!Adjacent(A) && proximity_flag != 1)
+        if(!A.Adjacent(user))
                 return
 
         if (!(istype(A, /obj/structure/table) || istype(A, /turf/simulated/floor))) //Must click on a table or floor to spawn stuff
