@@ -1106,8 +1106,9 @@ Pressure: [env.return_pressure()]"}
 	set category = "Debug"
 	set name = "Dump Instance Counts"
 	set desc = "MEMORY PROFILING IS TOO HIGH TECH"
-	var/date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
+	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
 	var/F=file("data/logs/profiling/instances_[date_string].csv")
+	fdel(F)
 	F << "Types,Number of Instances"
 	for(var/key in type_instances)
 		F << "[key],[type_instances[key]]"
@@ -1119,8 +1120,9 @@ Pressure: [env.return_pressure()]"}
 	set category = "Debug"
 	set name = "Dump Machine and Object Profiling"
 
-	var/date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
+	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
 	var/F =file("data/logs/profiling/machine_profiling_[date_string].csv")
+	fdel(F)
 	F << "type,nanoseconds"
 	for(var/typepath in machine_profiling)
 		var/ns = machine_profiling[typepath]
@@ -1141,15 +1143,32 @@ Pressure: [env.return_pressure()]"}
 	set category = "Debug"
 	set name = "Dump Del Profiling"
 
-	var/date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
+	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
 	var/F =file("data/logs/profiling/del_profiling_[date_string].csv")
-
+	fdel(F)
 	F << "type,deletes"
 	for(var/typepath in del_profiling)
 		var/ns = del_profiling[typepath]
 		F << "[typepath],[ns]"
 
 	usr << "\blue Dumped to del_profiling.csv."
+	F =file("data/logs/profiling/gdel_profiling_[date_string].csv")
+	fdel(F)
+	F << "type,soft deletes"
+	for(var/typepath in gdel_profiling)
+		var/ns = gdel_profiling[typepath]
+		F << "[typepath],[ns]"
+
+	usr << "\blue Dumped to gdel_profiling.csv."
+
+	F =file("data/logs/profiling/ghdel_profiling_[date_string].csv")
+	fdel(F)
+	F << "type,hard deletes"
+	for(var/typepath in ghdel_profiling)
+		var/ns = ghdel_profiling[typepath]
+		F << "[typepath],[ns]"
+
+	usr << "\blue Dumped to ghdel_profiling.csv."
 
 /client/proc/gib_money()
 	set category = "Fun"
@@ -1239,3 +1258,20 @@ client/proc/delete_all_adminbus()
 
 	for(var/obj/structure/stool/bed/chair/vehicle/adminbus/AB in world)
 		AB.Adminbus_Deletion()
+
+client/proc/mob_list()
+	set name = "show mob list"
+	set category = "Debug"
+	if(!holder) return
+	usr << "mob list length is [mob_list.len]"
+	var/foundnull = 0
+	for(var/mob/V in mob_list)
+		var/msg = "mob ([V]) is in slot [mob_list.Find(V)]"
+		if(!ismob(V))
+			if(isnull(V))
+				foundnull++
+			msg = "Non mob found in mob list [isnull(V) ? "null entry found at mob_list.Find(V)" : "[V]'s type is [V.type]"]"
+		usr << msg
+	if(foundnull)
+		usr << "Found [foundnull] null entries in the mob list, running null clearer."
+		listclearnulls(mob_list)

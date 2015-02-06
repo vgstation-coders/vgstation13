@@ -129,7 +129,7 @@
 		for(var/datum/organ/external/affecting in H.organs)
 			if(!affecting)	continue
 			if(affecting.take_damage(0, divided_damage+extradam))	//TODO: fix the extradam stuff. Or, ebtter yet...rewrite this entire proc ~Carn
-				H.QueueUpdateDamageIcon()
+				H.UpdateDamageIcon()
 		H.updatehealth()
 		return 1
 	else if(istype(src, /mob/living/carbon/monkey))
@@ -567,6 +567,16 @@
 		for(var/mob/living/carbon/slime/M in view(1,src))
 			M.UpdateFeed(src)
 
+	if(.)
+		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
+			var/mob/living/M = G.loc
+			if(!(M in view(src)))
+				NotTargeted(G)
+		for(var/obj/item/weapon/gun/G in src) //Handle the gunner loosing sight of their target/s
+			if(G.target)
+				for(var/mob/living/M in G.target)
+					if(M && !(M in view(src)))
+						M.NotTargeted(G)
 	// Update on_moved listeners.
 	INVOKE_EVENT(on_moved,list("loc"=loc))
 
@@ -618,15 +628,15 @@
 			resisting++
 		for(var/obj/item/weapon/grab/G in usr.grabbed_by)
 			resisting++
-			if (G.state == 1)
+			if (G.state == GRAB_PASSIVE)
 				del(G)
 			else
-				if (G.state == 2)
+				if (G.state == GRAB_AGGRESSIVE)
 					if (prob(25))
 						L.visible_message("<span class='danger'>[L] has broken free of [G.assailant]'s grip!</span>")
 						del(G)
 				else
-					if (G.state == 3)
+					if (G.state == GRAB_NECK)
 						if (prob(5))
 							L.visible_message("<span class='danger'>[L] has broken free of [G.assailant]'s headlock!</span>")
 							del(G)
