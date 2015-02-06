@@ -26,6 +26,8 @@ RSF
 		"a pen",
 		"dice",
 		"a cigarette",
+		"a deck of cards",
+		"a candle",
 		)
 	return
 
@@ -100,6 +102,16 @@ RSF
 				user << "Dispensing a Cigarette..."
 				playsound(get_turf(src), 'sound/machines/click.ogg', 10, 1)
 				new /obj/item/clothing/mask/cigarette(get_turf(A))
+		if("a deck of cards")
+			if(pay(user,1))
+				user << "Dispensing a Deck of Cards..."
+				playsound(get_turf(src), 'sound/machines/click.ogg', 10, 1)
+				new /obj/item/toy/cards(get_turf(A))
+		if("a candle")
+			if(pay(user,1))
+				user << "Dispensing a Candle..."
+				playsound(get_turf(src), 'sound/machines/click.ogg', 10, 1)
+				new /obj/item/candle(get_turf(A))
 	update_desc()
 
 /obj/item/weapon/rsf/cyborg/New()
