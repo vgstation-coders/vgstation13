@@ -23,6 +23,7 @@ RSF
         update_desc()
         modes = list(
                 "glass",
+                "paper",
                 "flask",
                 "dice",
                 "a deck of cards",
@@ -105,6 +106,11 @@ RSF
                                 user << "Dispensing a Deck of Cards..."
                                 playsound(get_turf(src), 'sound/machines/click.ogg', 10, 1)
                                 new /obj/item/toy/cards(get_turf(A))
+                if("paper")
+                        if(pay(user,1))
+                                user << "Dispensing a Paper..."
+                                playsound(get_turf(src), 'sound/machines/click.ogg', 10, 1)
+                                new /obj/item/weapon/paper(get_turf(A))
                 if("a candle")
                         if(pay(user,1))
                                 user << "Dispensing a Candle..."
