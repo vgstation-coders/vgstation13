@@ -809,6 +809,7 @@ var/list/sacrificed = list()
 			if(O)
 				if((ticker.mode.name == "cult") && (O.brainmob.mind == ticker.mode:sacrifice_target))
 					if(cultsinrange.len >= 3)
+						sacrificed += O.brainmob.mind
 						ritualresponse += "The Geometer of Blood accepts this sacrifice, your objective is now complete."
 						sacrificedone = 1
 						invocation("rune_sac")
