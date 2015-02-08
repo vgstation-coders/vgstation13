@@ -16,6 +16,9 @@ datum
 		var/list/secondary_results = list()		//additional reagents produced by the reaction
 		var/requires_heating = 0
 
+		var/required_temp = 0
+		var/mix_message = "The solution begins to bubble."
+
 		// /vg/: Send admin alerts with standardized code.
 		proc/send_admin_alert(var/datum/reagents/holder, var/reaction_name=src.name)
 			var/message_prefix = "\A [reaction_name] reaction has occured"

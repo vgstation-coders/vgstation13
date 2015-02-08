@@ -17,9 +17,11 @@
 	var/label_text = ""
 
 	//This is absolutely terrible
+	//This is fucking horrible.
 	var/list/can_be_placed_into = list(
 		/obj/machinery/chem_master/,
 		/obj/machinery/chem_dispenser/,
+		/obj/machinery/chem_heater/,
 		/obj/machinery/snackbar_machine/,
 		/obj/machinery/reagentgrinder,
 		/obj/structure/table,
