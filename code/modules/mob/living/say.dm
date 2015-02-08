@@ -17,6 +17,9 @@
 #define MODE_HOLOPAD "holopad"
 #define MODE_CHANGELING "changeling"
 #define MODE_CULTCHAT "cultchat"
+//languages
+#define MODE_VOXTALK "voxtalk"
+#define MODE_TREESPEAK "treespeak"
 
 #define SAY_MINIMUM_PRESSURE 10
 var/list/department_radio_keys = list(
@@ -37,6 +40,9 @@ var/list/department_radio_keys = list(
 	  ":d" = "Service",     "#d" = "Service",       ".d" = "Service",
 	  ":g" = "changeling",	"#g" = "changeling",	".g" = "changeling",
 	  ":x" = "cultchat",	"#x" = "cultchat",		".x" = "cultchat",
+	  //languages
+	":v" = "voxtalk"	"#v" = "voxtalk"	".v" = "voxtalk"
+		":q" = "treespeak"	"#q" = "treespeak"	".q" = "treespeak"
 
 	  ":R" = "right ear",	"#R" = "right ear",		".R" = "right ear", "!R" = "fake right ear",
 	  ":L" = "left ear",	"#L" = "left ear",		".L" = "left ear",  "!L" = "fake left ear",
@@ -55,25 +61,28 @@ var/list/department_radio_keys = list(
 	  ":D" = "Service",     "#D" = "Service",       ".D" = "Service",
 	  ":G" = "changeling",	"#G" = "changeling",	".G" = "changeling",
 	  ":X" = "cultchat",	"#X" = "cultchat",		".X" = "cultchat",
+	  //languages
+	":V" = "voxtalk"	"#V" = "voxtalk"	".V" = "voxtalk"
+	":Q" = "treespeak"	"#Q" = "treespeak"	".Q" = "treespeak"
 
 	  //kinda localization -- rastaf0
 	  //same keys as above, but on russian keyboard layout. This file uses cp1251 as encoding.
-	  ":ê" = "right ear",	"#ê" = "right ear",		".ê" = "right ear",
-	  ":ä" = "left ear",	"#ä" = "left ear",		".ä" = "left ear",
-	  ":ø" = "intercom",	"#ø" = "intercom",		".ø" = "intercom",
-	  ":ð" = "department",	"#ð" = "department",	".ð" = "department",
-	  ":ñ" = "Command",		"#ñ" = "Command",		".ñ" = "Command",
-	  ":ò" = "Science",		"#ò" = "Science",		".ò" = "Science",
-	  ":ü" = "Medical",		"#ü" = "Medical",		".ü" = "Medical",
-	  ":ó" = "Engineering",	"#ó" = "Engineering",	".ó" = "Engineering",
-	  ":û" = "Security",	"#û" = "Security",		".û" = "Security",
-	  ":ö" = "whisper",		"#ö" = "whisper",		".ö" = "whisper",
-	  ":è" = "binary",		"#è" = "binary",		".è" = "binary",
-	  ":ô" = "alientalk",	"#ô" = "alientalk",		".ô" = "alientalk",
-	  ":å" = "Syndicate",	"#å" = "Syndicate",		".å" = "Syndicate",
-	  ":é" = "Supply",		"#é" = "Supply",		".é" = "Supply",
-	  ":â" = "Service",     "#â" = "Service",       ".â" = "Service",
-	  ":ï" = "changeling",	"#ï" = "changeling",	".ï" = "changeling"
+	  ":Ãª" = "right ear",	"#Ãª" = "right ear",		".Ãª" = "right ear",
+	  ":Ã¤" = "left ear",	"#Ã¤" = "left ear",		".Ã¤" = "left ear",
+	  ":Ã¸" = "intercom",	"#Ã¸" = "intercom",		".Ã¸" = "intercom",
+	  ":Ã°" = "department",	"#Ã°" = "department",	".Ã°" = "department",
+	  ":Ã±" = "Command",		"#Ã±" = "Command",		".Ã±" = "Command",
+	  ":Ã²" = "Science",		"#Ã²" = "Science",		".Ã²" = "Science",
+	  ":Ã¼" = "Medical",		"#Ã¼" = "Medical",		".Ã¼" = "Medical",
+	  ":Ã³" = "Engineering",	"#Ã³" = "Engineering",	".Ã³" = "Engineering",
+	  ":Ã»" = "Security",	"#Ã»" = "Security",		".Ã»" = "Security",
+	  ":Ã¶" = "whisper",		"#Ã¶" = "whisper",		".Ã¶" = "whisper",
+	  ":Ã¨" = "binary",		"#Ã¨" = "binary",		".Ã¨" = "binary",
+	  ":Ã´" = "alientalk",	"#Ã´" = "alientalk",		".Ã´" = "alientalk",
+	  ":Ã¥" = "Syndicate",	"#Ã¥" = "Syndicate",		".Ã¥" = "Syndicate",
+	  ":Ã©" = "Supply",		"#Ã©" = "Supply",		".Ã©" = "Supply",
+	  ":Ã¢" = "Service",     "#Ã¢" = "Service",       ".Ã¢" = "Service",
+	  ":Ã¯" = "changeling",	"#Ã¯" = "changeling",	".Ã¯" = "changeling"
 )
 
 /mob/living/proc/binarycheck()
@@ -234,6 +243,26 @@ var/list/department_radio_keys = list(
 	else if(length(message) > 2)
 		return department_radio_keys[copytext(message, 1, 3)]
 
+//language check
+/mob/living/proc/get_language_mode(message, message_mode)
+	if(message_mode == MODE_VOXTALK)
+	
+		if(language == "Vox-pidgen")
+			message = "[src.name] squawks:<i><font color=#800080> [message]</font></i>"
+		else 
+			message = "[src.name] squawks incoherently"
+		return 1
+		
+	if(message_mode == MODE_TREESPEAK)	
+	
+		if(language == "Rootspeak")
+			message = "[src.name] creaks:<i><font color=#00FF00> [message]</font></i>"
+		else
+			message = "[src.name] creaks incoherently"
+		return 1
+	return 0
+
+
 /mob/living/proc/handle_inherent_channels(message, message_mode)
 	if(message_mode == MODE_CHANGELING)
 		if(lingcheck())
@@ -256,6 +285,10 @@ var/list/department_radio_keys = list(
 
 	if(stuttering)
 		message = stutter(message)
+		
+	//languages
+		message = "<span class='name'>[speaker]</span> squawks incoherently."
+		message = "<span class='name'>[speaker]</span> creaks incoherently."
 
 	return message
 
