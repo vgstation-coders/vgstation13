@@ -20,6 +20,9 @@
 	search_for_candidates()
 #endif
 
+/obj/item/device/mmi/posibrain/UsesBluespace()
+	return 0
+
 /obj/item/device/mmi/posibrain/attack_self(mob/user as mob)
 	if(brainmob && !brainmob.key && searching == 0)
 		//Start the process of searching for a new user.

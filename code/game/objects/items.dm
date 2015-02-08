@@ -680,6 +680,11 @@
 /obj/item/proc/IsShield()
 	return 0
 
+/obj/item/proc/UsesBluespace() //If the object uses bluespace for storage, return 1
+	if( ("bluespace" in ConvertReqString2List(origin_tech)) && (reagents || length(contents)!=0)) //If 'bluespace' in origin tech, and the object has a reagent system or anything inside of it
+		return 1
+	return 0  //Used in bags of holding (causing conflict when putting a bluespace item in)
+
 /obj/item/proc/eyestab(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 
 	var/mob/living/carbon/human/H = M

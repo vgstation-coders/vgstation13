@@ -286,6 +286,9 @@
 	var/mode = 0 //0 - deconstruct, 1 - wall or floor, 2 - airlock.
 	var/disabled = 0 //malf
 
+	UsesBluespace()
+		return 1
+
 	action(atom/target)
 		if(istype(target,/area/shuttle)||istype(target, /turf/space/transit))//>implying these are ever made -Sieve
 			disabled = 1
@@ -406,7 +409,6 @@
 	equip_cooldown = 50
 	energy_drain = 300
 	range = RANGED
-
 
 	action(atom/target)
 		if(!action_checks(target) || src.loc.z == 2) return

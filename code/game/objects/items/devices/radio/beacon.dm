@@ -9,6 +9,8 @@
 /obj/item/device/radio/beacon/Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq)
 	return
 
+/obj/item/device/radio/beacon/UsesBluespace()
+	return 0
 
 /obj/item/device/radio/beacon/send_hear()
 	return null

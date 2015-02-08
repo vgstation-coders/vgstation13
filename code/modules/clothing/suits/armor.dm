@@ -122,6 +122,11 @@
 		return 1
 	return 0
 
+/obj/item/clothing/suit/armor/reactive/UsesBluespace()
+	if(active)
+		return 1
+	return 0
+
 /obj/item/clothing/suit/armor/reactive/attack_self(mob/user as mob)
 	src.active = !( src.active )
 	if (src.active)

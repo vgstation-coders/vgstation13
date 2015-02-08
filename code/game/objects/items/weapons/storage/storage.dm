@@ -193,6 +193,13 @@
 
 	if(src.loc == W)
 		return 0 //Means the item is already in the storage item
+
+	if(istype(src.loc,/obj/item))
+		var/obj/item/I=src.loc
+		if(I.UsesBluespace())//This is to prevent putting bluespace devices (like bluespace beakers or crystals) inside of bags which are inside a bag of holding
+			usr << "<span class='notice'>Take [src] out of the bluespace pocket first.</span>" //Without this check, you'd be able to put a backpack in a BoH, and then a bluespace device inside that backpack without any conflicts
+			return 0
+
 	if(contents.len >= storage_slots)
 		if(!stop_messages)
 			usr << "<span class='notice'>[src] is full, make some space.</span>"

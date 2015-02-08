@@ -32,6 +32,8 @@
 	var/frame_desc = null
 	var/contain_parts = 1
 
+/obj/item/weapon/circuitboard/UsesBluespace()
+	return 0
 
 /obj/item/weapon/circuitboard/message_monitor
 	name = "Circuit board (Message Monitor)"

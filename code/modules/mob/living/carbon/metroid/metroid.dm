@@ -830,6 +830,9 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	name = "bluespace slime extract"
 	icon_state = "bluespace slime extract"
 
+/obj/item/slime_extract/bluespace/UsesBluespace()
+	return 1
+
 /obj/item/slime_extract/pyrite
 	name = "pyrite slime extract"
 	icon_state = "pyrite slime extract"

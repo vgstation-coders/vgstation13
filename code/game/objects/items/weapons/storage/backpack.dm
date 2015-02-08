@@ -27,7 +27,7 @@
 
 /obj/item/weapon/storage/backpack/holding
 	name = "Bag of Holding"
-	desc = "A backpack that opens into a localized pocket of Blue Space."
+	desc = "A backpack that opens into a localized pocket of Bluespace. Highly unstable in proximity of other Bluespace-using devices."
 	origin_tech = "bluespace=4"
 	item_state = "holdingpack"
 	icon_state = "holdingpack"
@@ -43,17 +43,20 @@
 	..()
 	return
 
-/obj/item/weapon/storage/backpack/holding/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/storage/backpack/holding/attackby(obj/item/W as obj, mob/user as mob)
 	if(W == src)
 		return // HOLY FUCKING SHIT WHY STORAGE CODE, WHY - pomf
 	if(crit_fail)
 		user << "<span class = 'warning'>The Bluespace generator isn't working.</span>"
 		return
-	if(istype(W, /obj/item/weapon/storage/backpack/holding) && !W.crit_fail)
+	if(!W.crit_fail && checkforbluespace(W))
+		if(bluespaceerror(W, user)!=1)
+			return
+	/*if(istype(W, /obj/item/weapon/storage/backpack/holding) && !W.crit_fail)
 		user << "<span class = 'warning'>The Bluespace interfaces of the two devices conflict and malfunction.</span>"
 		del(W)
-		return
-	//BoH+BoH=Singularity, WAS commented out
+		return*/
+	/*//BoH+BoH=Singularity, WAS commented out
 	if(istype(W, /obj/item/weapon/storage/backpack/holding) && !W.crit_fail)
 		investigation_log(I_SINGULO,"has become a singularity. Caused by [user.key]")
 		message_admins("[src] has become a singularity. Caused by [user.key]")
@@ -64,8 +67,69 @@
 		message_admins("[key_name_admin(user)] detonated a bag of holding")
 		log_game("[key_name(user)] detonated a bag of holding")
 		del(src)
-		return
+		return*/
 	..()
+
+/obj/item/weapon/storage/backpack/holding/proc/checkforbluespace(obj/item/W) //check the item and its contents for bluespace shit
+	if(W.UsesBluespace())
+		return 1
+	for(var/obj/item/W1 in W.contents)
+		if(.(W1))
+			return 1
+
+//If bluespaceerror returns 1, the item will still be put inside. Otherwise it won't.
+/obj/item/weapon/storage/backpack/holding/proc/bluespaceerror(obj/item/W as obj, mob/user as mob) //Don't play with bluespace, kids
+	if(!istype(W)) return
+	if(crit_fail) return
+
+	if(istype(W,/obj/item/device/gps)) //GPS only uses bluespace to transmit/gather data or some shit like that
+		var/obj/item/device/gps/G = W //Not enough for a real malfunction, just corrupt the GPS and put it inside
+		G.emped = 1
+		G.overlays -= "working"
+		G.overlays += "emp"
+		user << "<span class = 'warning'>[W]'s screen flashes brightly, overloaded with data.</span>"
+		return 1
+
+	src.visible_message("<span class = 'danger'>[W] causes [src]'s Bluespace interface to malfunction!</span>")
+	switch(rand(0,11))
+		if(0 to 2) //Just delete the item.
+			src.visible_message("<span class='warning'>[W] disappears in an instant.</span>")
+			del(W)
+		if(3 to 5) //Delete a random amount of items inside the bag. If anything was deleted, show a special message
+			var/deleted_anything=0
+			for(var/obj/O in src.contents)
+				if(prob(030))
+					deleted_anything=1
+					del(O)
+			if(deleted_anything==1)
+				src.visible_message("<span class='warning'>The bluespace window flickers for a moment.</span>")
+				return
+			user << "Nothing seems to happen."
+		if(6 to 8) //A small explosion
+			src.visible_message("<span class='danger'>[src] releases a sudden burst of energy!</span>")
+			explosion(src.loc,0,0,3)
+		if(9) //Honk
+			for(var/mob/living/carbon/M in hearers(src, null))
+				M << sound('sound/items/AirHorn.ogg')
+				if(istype(M, /mob/living/carbon/human))
+					var/mob/living/carbon/human/H = M
+					if(H.is_on_ears(/obj/item/clothing/ears/earmuffs))
+						continue
+				M << "<font color='red' size='7'>HONK</font>"
+				M.sleeping = 0
+				M.stuttering += 20
+				M.ear_deaf += 30
+				M.Weaken(3)
+				if(prob(30))
+					M.Stun(10)
+					M.Paralyse(4)
+				else
+					M.Jitter(500)
+		if(10 to 11) //BoH turns itself off
+			src.visible_message("<span class='warning'>[src] shuts itself down to prevent potentially catastrophic damage.</span>")
+			crit_fail = 1
+			icon_state = "brokenpack"
+	return 0
 
 /obj/item/weapon/storage/backpack/holding/proc/failcheck(mob/user as mob)
 	if (prob(src.reliability)) return 1 //No failure
@@ -83,6 +147,10 @@
 	explosion(src.loc,(dist),(dist*2),(dist*4))
 	return
 
+/obj/item/weapon/storage/backpack/holding/UsesBluespace()
+	if(crit_fail)
+		return 0
+	return 1
 
 /obj/item/weapon/storage/backpack/santabag
 	name = "Santa's Gift Bag"
