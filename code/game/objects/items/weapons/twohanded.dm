@@ -31,6 +31,9 @@
 			wielding.afterattack(target, user, proximity_flag, click_parameters)
 		return 1
 
+/obj/item/offhand/attack_self(mob/user)
+	return wielding.unwield(user)
+
 /obj/item/offhand/proc/attach_to(var/obj/item/I)
 	I.wielded = src
 	wielding = I
@@ -47,6 +50,7 @@
 	name = "fire axe"
 	desc = "Truly, the weapon of a madman. Who would think to fight fire with an axe?"
 	w_class = 4.0
+	sharpness = 1.2
 	slot_flags = SLOT_BACK
 	attack_verb = list("attacked", "chopped", "cleaved", "torn", "cut")
 	flags = FPRINT | TWOHANDABLE

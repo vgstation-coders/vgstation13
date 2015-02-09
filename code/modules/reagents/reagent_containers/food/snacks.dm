@@ -610,6 +610,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", rand(3,5))
+		reagents.add_reagent("cholesterol", 3)
 		reagents.add_reagent("toxin",	rand(1,3))
 		src.bitesize = 3
 
@@ -651,6 +652,7 @@
 		eatverb = pick("bite","chew","choke down","gnaw","swallow","chomp")
 		reagents.add_reagent("nutriment", 3)
 		reagents.add_reagent("carpotoxin", 3)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/carpmeat/imitation
@@ -665,6 +667,7 @@
 		..()
 		reagents.add_reagent("nutriment", 4)
 		reagents.add_reagent("carpotoxin", 3)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice
@@ -694,6 +697,7 @@
 		..()
 		reagents.add_reagent("nutriment", 12)
 		reagents.add_reagent("hyperzine", 5)
+		reagents.add_reagent("cholesterol", 5)
 		src.bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/xenomeat
@@ -703,6 +707,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 3)
+		reagents.add_reagent("cholesterol", 3)
 		src.bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/spidermeat
@@ -713,6 +718,7 @@
 		..()
 		reagents.add_reagent("nutriment", 3)
 		reagents.add_reagent("toxin", 3)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/spiderleg
@@ -723,6 +729,7 @@
 		..()
 		reagents.add_reagent("nutriment", 2)
 		reagents.add_reagent("toxin", 2)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/faggot
@@ -732,6 +739,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 3)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/sausage
@@ -769,6 +777,7 @@
 		..()
 		reagents.add_reagent("nutriment", 6)
 		reagents.add_reagent("alkysine", 6)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/ghostburger
@@ -778,6 +787,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 2)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 
@@ -792,6 +802,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 6)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger
@@ -801,6 +812,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 6)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth
@@ -810,6 +822,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 6)
+		reagents.add_reagent("cholesterol", 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/appendixburger
 	name = "appendix burger"
@@ -818,6 +831,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 6)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/fishburger
@@ -828,6 +842,7 @@
 		..()
 		reagents.add_reagent("nutriment", 6)
 		reagents.add_reagent("carpotoxin", 3)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/tofuburger
@@ -847,6 +862,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/chickenburger/New()
 	..()
 	reagents.add_reagent("nutriment", 6)
+	reagents.add_reagent("cholesterol", 3)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/roburger
@@ -875,6 +891,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 8)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/clownburger
@@ -889,6 +906,7 @@
 		reagents.add_reagent("blood", 4, data)
 */
 		reagents.add_reagent("nutriment", 6)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/mimeburger
@@ -898,6 +916,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 6)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
@@ -909,6 +928,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 8)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 1
 
 	attackby(obj/item/weapon/W, mob/user)
@@ -999,6 +1019,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 10)
+		reagents.add_reagent("cholesterol", 10)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/soylenviridians
@@ -1020,6 +1041,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 10)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/tofupie
@@ -1067,6 +1089,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 10)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/wingfangchu
@@ -1077,6 +1100,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 6)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 
@@ -1088,6 +1112,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 8)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeykabob
@@ -1098,6 +1123,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 8)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeykabob/synth
@@ -1108,6 +1134,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 8)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/corgikabob
@@ -1118,6 +1145,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 8)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/tofukabob
@@ -1140,6 +1168,7 @@
 		reagents.add_reagent("nutriment", 6)
 		reagents.add_reagent("carpotoxin", 3)
 		reagents.add_reagent("capsaicin", 3)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/popcorn
@@ -1170,6 +1199,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 4)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/no_raisin
@@ -1348,6 +1378,7 @@
 		..()
 		reagents.add_reagent("toxin", 1)
 		reagents.add_reagent("carbon", 3)
+		reagents.add_reagent("????", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/meatsteak
@@ -1360,6 +1391,7 @@
 		reagents.add_reagent("nutriment", 4)
 		reagents.add_reagent("sodiumchloride", 1)
 		reagents.add_reagent("blackpepper", 1)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meatsteak/synth
@@ -1372,6 +1404,7 @@
 		reagents.add_reagent("nutriment", 4)
 		reagents.add_reagent("sodiumchloride", 1)
 		reagents.add_reagent("blackpepper", 1)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/spacylibertyduff
@@ -1417,6 +1450,7 @@
 		..()
 		reagents.add_reagent("nutriment", 8)
 		reagents.add_reagent("water", 5)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/slimesoup
@@ -1802,6 +1836,7 @@
 		reagents.add_reagent("tomatojuice", 5)
 		reagents.add_reagent("imidazoline", 5)
 		reagents.add_reagent("water", 5)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/jelliedtoast
@@ -1862,6 +1897,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 8)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledspagetti
@@ -1924,6 +1960,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 8)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/spesslaw
@@ -1933,6 +1970,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 8)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/poppypretzel
@@ -1962,6 +2000,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 40)
+		reagents.add_reagent("cholesterol", 3)
 		bitesize = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/candiedapple
@@ -3063,6 +3102,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/buchedenoel/New()
 	..()
 	reagents.add_reagent("nutriment", 20)
+	reagents.add_reagent("cholesterol", 20)
 	reagents.add_reagent("sugar", 9)
 	reagents.add_reagent("coco", 5)
 	bitesize = 3
@@ -3085,6 +3125,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/turkey/New()
 	..()
 	reagents.add_reagent("nutriment", 20)
+	reagents.add_reagent("cholesterol", 20)
 	reagents.add_reagent("blackpepper", 1)
 	reagents.add_reagent("sodiumchloride", 1)
 	reagents.add_reagent("cornoil", 1)
@@ -3105,6 +3146,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/rawchicken/New()
 	..()
 	reagents.add_reagent("nutriment", 3)
+	reagents.add_reagent("cholesterol", 3)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets
@@ -3117,6 +3159,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets/New()
 	..()
 	reagents.add_reagent("nutriment", 6)
+	reagents.add_reagent("cholesterol", 3)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick
@@ -3127,4 +3170,5 @@
 /obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick/New()
 	..()
 	reagents.add_reagent("nutriment", 3)
+	reagents.add_reagent("cholesterol", 3)
 	bitesize = 1

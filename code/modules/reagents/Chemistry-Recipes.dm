@@ -439,7 +439,7 @@ datum
 
 				var/eye_safety = 0
 
-				for(var/mob/living/carbon/M in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/living/carbon/M in viewers(get_turf(holder.my_atom), null))
 					if(iscarbon(M))
 						eye_safety = M.eyecheck()
 
@@ -1056,7 +1056,7 @@ datum
 				else
 					holder.my_atom.visible_message("<span class='rose'>Infused with plasma, the core begins to quiver and grow, and soon a new baby slime emerges from it!</span>")
 				var/mob/living/carbon/slime/S = new /mob/living/carbon/slime
-				S.loc = get_turf_loc(holder.my_atom)
+				S.loc = get_turf(holder.my_atom)
 
 		slimemonkey
 			name = "Slime Monkey"
@@ -1069,7 +1069,7 @@ datum
 			on_reaction(var/datum/reagents/holder)
 				for(var/i = 1, i <= 3, i++)
 					var /obj/item/weapon/reagent_containers/food/snacks/monkeycube/M = new /obj/item/weapon/reagent_containers/food/snacks/monkeycube
-					M.loc = get_turf_loc(holder.my_atom)
+					M.loc = get_turf(holder.my_atom)
 
 //Green
 		slimemutate
@@ -1091,11 +1091,11 @@ datum
 			required_container = /obj/item/slime_extract/metal
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
-				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf_loc(holder.my_atom))
+				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(holder.my_atom))
 				M.amount = 15
 				var/obj/item/stack/sheet/plasteel/P = new /obj/item/stack/sheet/plasteel
 				P.amount = 5
-				P.loc = get_turf_loc(holder.my_atom)
+				P.loc = get_turf(holder.my_atom)
 
 //Gold
 		slimecrit
@@ -1149,9 +1149,9 @@ datum
 				var/list/critters = typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
 
 
-				playsound(get_turf_loc(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 					if (istype(O, /mob/living/carbon/human/))
 						var /mob/living/carbon/human/H = O
 						if((H.eyecheck() <= 0)&&(!istype(H.glasses, /obj/item/clothing/glasses/science)))
@@ -1166,7 +1166,7 @@ datum
 					var/chosen = pick(critters)
 					var/mob/living/simple_animal/hostile/C = new chosen
 					C.faction = "slimesummon"
-					C.loc = get_turf_loc(holder.my_atom)
+					C.loc = get_turf(holder.my_atom)
 					if(prob(50))
 						for(var/j = 1, j <= rand(1, 3), j++)
 							step(C, pick(NORTH,SOUTH,EAST,WEST))
@@ -1223,7 +1223,7 @@ datum
 
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 					if (istype(O, /mob/living/carbon/human/))
 						var /mob/living/carbon/human/H = O
 						if((H.eyecheck() <= 0)&&(!istype(H.glasses, /obj/item/clothing/glasses/science)))
@@ -1261,7 +1261,7 @@ datum
 
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 					if (istype(O, /mob/living/carbon/human/))
 						var /mob/living/carbon/human/H = O
 						if((H.eyecheck() <= 0)&&(!istype(H.glasses, /obj/item/clothing/glasses/science)))
@@ -1314,7 +1314,7 @@ datum
 
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 					if (istype(O, /mob/living/carbon/human/))
 						var /mob/living/carbon/human/H = O
 						if((H.eyecheck() <= 0)&&(!istype(H.glasses, /obj/item/clothing/glasses/science)))

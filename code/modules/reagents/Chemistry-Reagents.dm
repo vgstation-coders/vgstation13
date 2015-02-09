@@ -275,6 +275,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 /datum/reagent/water/reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)
 	if(!istype(M, /mob/living))
 		return
+	M.color = inital(M.color)
 
 	// Put out fire
 	if(method == TOUCH)
@@ -336,6 +337,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 
 /datum/reagent/water/reaction_turf(var/turf/simulated/T, var/volume)
 	if (!istype(T)) return
+	T.color = inital(T.color)
 	src = null
 	if(volume >= 3)
 		T.wet(800)
@@ -351,6 +353,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	return
 
 /datum/reagent/water/reaction_obj(var/obj/O, var/volume)
+	O.color = inital(O.color)
 	src = null
 	var/turf/T = get_turf(O)
 	var/hotspot = (locate(/obj/fire) in T)
@@ -680,7 +683,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 			color = "#60A584" // rgb: 96, 165, 132
 			overdose_threshold = REAGENTS_OVERDOSE
 
-/datum/reagent/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/space_drugs/on_mob_life(var/mob/living/M as mob)
 
 	if(!holder) return
 	if(!M) M = holder.my_atom
@@ -990,6 +993,17 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	description = "The organic compound commonly known as table sugar and sometimes called saccharose. This white, odorless, crystalline powder has a pleasing, sweet taste."
 	reagent_state = SOLID
 	color = "#FFFFFF" // rgb: 255, 255, 255
+	overdose_threshold = 200
+/datum/reagent/sugar/overdose_start(var/mob/living/M as mob)
+	M << "<span class = 'userdanger'>You go into hyperglycaemic shock! Lay off the twinkies!</span>"
+	M.sleeping += 30
+	..()
+	return
+
+/datum/reagent/sugar/overdose_process(var/mob/living/M as mob)
+	M.sleeping += 3
+	..()
+	return
 
 /datum/reagent/sugar/on_mob_life(var/mob/living/M as mob)
 	M.nutrition += 1*REM
@@ -1487,9 +1501,11 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	else
 		if(O)
 			O.clean_blood()
+	O.color = inital(O.color)
 
 /datum/reagent/space_cleaner/reaction_turf(var/turf/T, var/volume)
 	if(volume >= 1)
+		T.color = inital(T.color)
 		T.overlays.len = 0
 		T.clean_blood()
 		for(var/obj/effect/decal/cleanable/C in src)
@@ -1505,6 +1521,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 /datum/reagent/space_cleaner/reaction_mob(var/mob/M, var/method=TOUCH, var/volume)
 
 	if(!holder) return
+	M.color = inital(M.color)
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
 		if(C.r_hand)

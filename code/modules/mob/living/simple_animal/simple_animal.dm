@@ -239,34 +239,6 @@
 		adjustBruteLoss(unsuitable_atoms_damage)
 	return 1
 
-/mob/living/simple_animal/Bump(AM as mob|obj)
-	if(!AM) return
-
-	if(resting || buckled || !Adjacent(AM))
-		return
-	var/dense = 0
-	if(loc.density)
-		dense = 1
-	for(var/atom/movable/A in loc)
-		if(A == src)
-			continue
-		if(A.density)
-			if(A.flags&ON_BORDER)
-				dense = !A.CanPass(src, src.loc)
-			else
-				dense = 1
-		if(dense) break
-
-	if(isturf(src.loc))
-		if(ismob(AM))
-			var/mob/living/L = AM
-			if(L.canmove && !dense)
-				var/newamloc = src.loc
-				src.loc = AM:loc
-				AM:loc = newamloc
-		else
-			..()
-
 /mob/living/simple_animal/gib(var/animation = 0)
 	if(icon_gib)
 		flick(icon_gib, src)
@@ -451,7 +423,7 @@
 		else
 			user << "\blue this [src] is dead, medical items won't bring it back to life."
 	if(meat_type && (stat == DEAD))	//if the animal has a meat, and if it is dead.
-		if(istype(O, /obj/item/weapon/kitchenknife) || istype(O, /obj/item/weapon/butch))
+		if(istype(O, /obj/item/weapon/kitchen/utensil/knife/large) || istype(O, /obj/item/weapon/kitchen/utensil/knife/large/butch))
 			harvest()
 	else
 		user.delayNextAttack(8)

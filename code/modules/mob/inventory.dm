@@ -162,8 +162,9 @@
 			T.Entered(r_hand)
 
 		r_hand.dropped(src)
-		r_hand.layer = initial(r_hand.layer)
-		r_hand = null
+		if(r_hand)
+			r_hand.layer = initial(r_hand.layer)
+			r_hand = null
 		update_inv_r_hand()
 		return 1
 	return 0
@@ -220,6 +221,13 @@
 
 //everything on the mob that it isn't holding
 /mob/proc/get_equipped_items()
+	var/list/equipped = get_all_slots()
+	equipped.Remove(get_active_hand())
+	equipped.Remove(get_inactive_hand())
+	return equipped
+
+//everything on the mob that is not in its pockets, hands and belt.
+/mob/proc/get_clothing_items()
 	var/list/equipped = get_all_slots()
 	equipped.Remove(get_active_hand())
 	equipped.Remove(get_inactive_hand())
