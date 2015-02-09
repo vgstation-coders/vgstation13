@@ -610,42 +610,6 @@
 	return 2
 
 
-/mob/living/silicon/robot/Bump(atom/movable/AM as mob|obj, yes)
-	spawn( 0 )
-		if ((!( yes ) || now_pushing))
-			return
-		now_pushing = 1
-		if(ismob(AM))
-			var/mob/tmob = AM
-			if(istype(tmob, /mob/living/carbon/human) && (M_FAT in tmob.mutations))
-				if(prob(20))
-					usr << "<span class='danger'>You fail to push [tmob]'s fat ass out of the way.</span>"
-					now_pushing = 0
-					return
-			if(!(tmob.status_flags & CANPUSH))
-				now_pushing = 0
-				return
-		now_pushing = 0
-		..()
-		if (istype(AM, /obj/machinery/recharge_station))
-			var/obj/machinery/recharge_station/F = AM
-			F.move_inside()
-		if (!istype(AM, /atom/movable))
-			return
-		if (!now_pushing)
-			now_pushing = 1
-			if (!AM.anchored)
-				var/t = get_dir(src, AM)
-				if (istype(AM, /obj/structure/window/full))
-					for(var/obj/structure/window/win in get_step(AM,t))
-						now_pushing = 0
-						return
-				step(AM, t)
-			now_pushing = null
-		return
-	return
-
-
 /mob/living/silicon/robot/triggerAlarm(var/class, area/A, var/O, var/alarmsource)
 	if (stat == 2)
 		return 1
@@ -709,8 +673,8 @@
 				user << "The wires get in your way."
 				return
 			else
-				sleep(6)
 				if(prob(50))
+					sleep(6)
 					SetEmagged(1)
 					SetLockdown(1)
 					lawupdate = 0
@@ -744,15 +708,12 @@
 					SetLockdown(0)
 					update_icons()
 				else
-					user << "You fail to [ locked ? "unlock" : "lock"] [src]'s interface."
+					user << "You fail to unlock [src]'s interface."
 					if(prob(25))
 						src << "Hack attempt detected."
 
 
 /mob/living/silicon/robot/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/handcuffs)) // fuck i don't even know why isrobot() in handcuff code isn't working so this will have to do
-		return
-
 	if(opened) // Are they trying to insert something?
 		for(var/V in components)
 			var/datum/robot_component/C = components[V]
@@ -1212,11 +1173,6 @@
 			dat += text("[obj]: <B>Activated</B><BR>")
 		else
 			dat += text("[obj]: <A HREF=?src=\ref[src];act=\ref[obj]>Activate</A><BR>")
-	if (emagged)
-		if(activated(module.emag))
-			dat += text("[module.emag]: <B>Activated</B><BR>")
-		else
-			dat += text("[module.emag]: <A HREF=?src=\ref[src];act=\ref[module.emag]>Activate</A><BR>")
 /*
 		if(activated(obj))
 			dat += text("[obj]: \[<B>Activated</B> | <A HREF=?src=\ref[src];deact=\ref[obj]>Deactivate</A>\]<BR>")
@@ -1452,12 +1408,17 @@
 		src << "Your icon has been set. You now require a module reset to change it."
 
 /mob/living/silicon/robot/rejuvenate()
-	..()
-	for(var/datum/robot_component/component in components)
+	for(var/C in components)
+		var/datum/robot_component/component = components[C]
 		component.electronics_damage = 0
 		component.brute_damage = 0
 		component.installed = 1
-
+	if(!cell)
+		cell = new(src)
+	cell.maxcharge = max(15000, cell.maxcharge)
+	cell.charge = cell.maxcharge
+	..()
+	updatehealth()
 
 /mob/living/silicon/robot/Process_Spaceslipping(var/prob_slip=5)
 	//Engineering borgs have the magic of magnets.

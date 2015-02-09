@@ -1,4 +1,6 @@
 var/global/list/del_profiling = list()
+var/global/list/gdel_profiling = list()
+var/global/list/ghdel_profiling = list()
 /atom
 	layer = 2
 
@@ -37,14 +39,6 @@ var/global/list/del_profiling = list()
 
 	// When this object moves. (args: loc)
 	var/event/on_moved = new()
-
-/atom/movable/Del()
-	if(!ticker || ticker.current_state != 3) return ..()
-	if(!("[type]" in del_profiling))
-		del_profiling["[type]"] = 0
-
-	del_profiling["[type]"] += 1
-	..()
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!(B in beams))
@@ -91,6 +85,18 @@ var/global/list/del_profiling = list()
 		type_instances[type] = 0
 		WARNING("Type [type] does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler().")
 
+/atom/Del()
+	if(ismob(src))
+		if(mob_list.Find(src))
+			diary << "WARNING: found [src]|[src.type] in the mob list"
+			mob_list.Remove(src)
+		if(living_mob_list.Find(src))
+			diary << "WARNING: found [src]|[src.type] in the living mob list"
+			living_mob_list.Remove(src)
+		if(dead_mob_list.Find(src))
+			diary << "WARNING: found [src]|[src.type] in the dead mob list"
+			dead_mob_list.Remove(src)
+	..()
 /atom/Destroy()
 	SetOpacity(0)
 
