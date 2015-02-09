@@ -16,8 +16,8 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/clothing/head/welding(), \
 		new /obj/item/weapon/stock_parts/console_screen(), \
 		new /obj/item/stack/sheet/metal(), \
-		new /obj/item/stack/sheet/glass/glass(), \
-		new /obj/item/stack/sheet/glass/rglass(), \
+		new /obj/item/stack/sheet/glass(), \
+		new /obj/item/stack/sheet/rglass(), \
 		new /obj/item/stack/rods(), \
 		new /obj/item/weapon/rcd_ammo(), \
 		new /obj/item/weapon/kitchenknife(), \
@@ -61,7 +61,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 		new /obj/item/ammo_storage/box/flare(), \
 		new /obj/item/weapon/rcd(), \
 		new /obj/item/weapon/pipe_dispenser(),\
-		new /obj/item/weapon/rsf,\
+		new /obj/item/weapon/rsf(), \
 		new /obj/item/device/radio/electropack(), \
 		new /obj/item/weapon/weldingtool/largetank(), \
 		new /obj/item/weapon/handcuffs(), \
@@ -192,7 +192,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 		return 1
 	if (O.m_amt == 0 && O.g_amt == 0)
 		user << "<span class='warning'>This object does not contain significant amounts of metal or glass, or cannot be accepted by \the [src] due to size or hazardous materials.</span>"
-		return
+		return 1
 	/*
 		if (istype(O, /obj/item/weapon/grab) && src.hacked)
 			var/obj/item/weapon/grab/G = O
@@ -226,7 +226,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 	src.g_amount += g_amt * amount
 	user << "You insert [amount] sheet[amount>1 ? "s" : ""] to \the [src]."
 	if (O && O.loc == src)
-		qdel(O)
+		del(O)
 	busy = 0
 	src.updateUsrDialog()
 
@@ -236,7 +236,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 			var/obj/item/stack/sheet/metal/G = new /obj/item/stack/sheet/metal(src.loc)
 			G.amount = round(m_amount / 3750)
 		if(g_amount >= 3750)
-			var/obj/item/stack/sheet/glass/glass/G = new /obj/item/stack/sheet/glass/glass(src.loc)
+			var/obj/item/stack/sheet/glass/G = new /obj/item/stack/sheet/glass(src.loc)
 			G.amount = round(g_amount / 3750)
 		return 1
 	return -1
