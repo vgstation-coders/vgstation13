@@ -4,35 +4,35 @@
 
 #define REM REAGENTS_EFFECT_MULTIPLIER
 
-datum/reagent/oil
+/datum/reagent/oil
 	name = "Oil"
 	id = "oil"
 	description = "A slippery solution."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 
-datum/reagent/stable_plasma
+/datum/reagent/stable_plasma
 	name = "Stable Plasma"
 	id = "stable_plasma"
 	description = "Non-flammable plasma locked into a liquid form that cannot ignite or become gaseous/solid."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 
-datum/reagent/iodine
+/datum/reagent/iodine
 	name = "Iodine"
 	id = "iodine"
 	description = "A slippery solution."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 
-datum/reagent/fluorine
+/datum/reagent/fluorine
 	name = "Fluorine"
 	id = "fluorine"
 	description = "A slippery solution."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 
-datum/reagent/carpet
+/datum/reagent/carpet
 	name = "Carpet"
 	id = "carpet"
 	description = "A slippery solution."
@@ -47,28 +47,28 @@ datum/reagent/carpet
 	..()
 	return
 
-datum/reagent/bromine
+/datum/reagent/bromine
 	name = "Bromine"
 	id = "bromine"
 	description = "A slippery solution."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 
-datum/reagent/phenol
+/datum/reagent/phenol
 	name = "Phenol"
 	id = "phenol"
 	description = "A slippery solution."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 
-datum/reagent/ash
+/datum/reagent/ash
 	name = "Ash"
 	id = "ash"
 	description = "A burnt solution."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 
-datum/reagent/acetone
+/datum/reagent/acetone
 	name = "Acetone"
 	id = "acetone"
 	description = "A solution."
@@ -112,7 +112,7 @@ datum/reagent/acetone
 	result_amount = 1
 	required_temp = 480
 
-datum/reagent/colorful_reagent
+/datum/reagent/colorful_reagent
 	name = "Colorful Reagent"
 	id = "colorful_reagent"
 	description = "A solution."
@@ -127,30 +127,30 @@ datum/reagent/colorful_reagent
 	required_reagents = list("stable_plasma" = 1, "radium" = 1, "space_drugs" = 1, "cryoxadone" = 1, "triple_citrus" = 1)
 	result_amount = 5
 
-datum/reagent/colorful_reagent/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/colorful_reagent/on_mob_life(var/mob/living/M as mob)
 	if(M && isliving(M))
 		M.color = pick(potential_colors)
 	..()
 	return
 
-datum/reagent/colorful_reagent/reaction_mob(var/mob/living/M, var/volume)
+/datum/reagent/colorful_reagent/reaction_mob(var/mob/living/M, var/volume)
 	if(M && isliving(M))
 		M.color = pick(potential_colors)
 	..()
 	return
-datum/reagent/colorful_reagent/reaction_obj(var/obj/O, var/volume)
+/datum/reagent/colorful_reagent/reaction_obj(var/obj/O, var/volume)
 	if(O)
 		O.color = pick(potential_colors)
 	..()
 	return
-datum/reagent/colorful_reagent/reaction_turf(var/turf/T, var/volume)
+/datum/reagent/colorful_reagent/reaction_turf(var/turf/T, var/volume)
 	if(T)
 		T.color = pick(potential_colors)
 	..()
 	return
 
 
-datum/reagent/triple_citrus
+/datum/reagent/triple_citrus
 	name = "Triple Citrus"
 	id = "triple_citrus"
 	description = "A solution."
@@ -164,7 +164,7 @@ datum/reagent/triple_citrus
 	required_reagents = list("lemonjuice" = 1, "limejuice" = 1, "orangejuice" = 1)
 	result_amount = 5
 
-datum/reagent/corn_starch
+/datum/reagent/corn_starch
 	name = "Corn Starch"
 	id = "corn_starch"
 	description = "A slippery solution."
@@ -179,14 +179,14 @@ datum/reagent/corn_starch
 	result_amount = 5
 	required_temp = 374
 
-datum/reagent/corn_syrup
+/datum/reagent/corn_syrup
 	name = "Corn Syrup"
 	id = "corn_syrup"
 	description = "Decays into sugar."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 
-datum/reagent/corn_syrup/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/corn_syrup/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	M.reagents.add_reagent("sugar", 3)
 	M.reagents.remove_reagent("corn_syrup", 1)
@@ -201,7 +201,7 @@ datum/reagent/corn_syrup/on_mob_life(var/mob/living/M as mob)
 	result_amount = 3
 	required_temp = 374
 
-datum/reagent/corgium
+/datum/reagent/corgium
 	name = "Corgium"
 	id = "corgium"
 	description = "Creates a corgi at the reaction location."
@@ -214,7 +214,7 @@ datum/reagent/corgium
 	..()
 	return
 
-datum/reagent/hair_dye
+/datum/reagent/hair_dye
 	name = "Quantum Hair Dye"
 	id = "hair_dye"
 	description = "A solution."
@@ -228,7 +228,7 @@ datum/reagent/hair_dye
 	required_reagents = list("colorful_reagent" = 1, "radium" = 1, "space_drugs" = 1)
 	result_amount = 5
 
-datum/reagent/hair_dye/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/hair_dye/on_mob_life(var/mob/living/M as mob)
 	if(M && ishuman(M))
 		var/mob/living/carbon/human/H = M
 		H.r_hair = rand(0,255)
@@ -241,7 +241,7 @@ datum/reagent/hair_dye/on_mob_life(var/mob/living/M as mob)
 	..()
 	return
 
-datum/reagent/hair_dye/reaction_mob(var/mob/living/M, var/volume)
+/datum/reagent/hair_dye/reaction_mob(var/mob/living/M, var/volume)
 	if(M && ishuman(M))
 		var/mob/living/carbon/human/H = M
 		H.r_hair = rand(0,255)
@@ -254,7 +254,7 @@ datum/reagent/hair_dye/reaction_mob(var/mob/living/M, var/volume)
 	..()
 	return
 
-datum/reagent/barbers_aid
+/datum/reagent/barbers_aid
 	name = "Barber's Aid"
 	id = "barbers_aid"
 	description = "A solution to hair loss across the world."
@@ -268,18 +268,18 @@ datum/reagent/barbers_aid
 	required_reagents = list("carpet" = 1, "radium" = 1, "space_drugs" = 1)
 	result_amount = 5
 
-datum/reagent/barbers_aid/reaction_mob(var/mob/living/M, var/volume)
+/datum/reagent/barbers_aid/reaction_mob(var/mob/living/M, var/volume)
 	if(M && ishuman(M))
 		var/mob/living/carbon/human/H = M
-		var/datum/sprite_accessory/hair/picked_hair = pick(hair_styles_list)
-		var/datum/sprite_accessory/facial_hair/picked_beard = pick(facial_hair_styles_list)
+		var/datum/sprite_accessory/hair/picked_hair = random_hair_style(M.gender, "Human")
+		var/datum/sprite_accessory/facial_hair/picked_beard = random_facial_hair_style(M.gender, "Human")
 		H.h_style = picked_hair
 		H.f_style = picked_beard
 		H.update_hair()
 	..()
 	return
 
-datum/reagent/concentrated_barbers_aid
+/datum/reagent/concentrated_barbers_aid
 	name = "Concentrated Barber's Aid"
 	id = "concentrated_barbers_aid"
 	description = "A concentrated solution to hair loss across the world."
@@ -293,7 +293,7 @@ datum/reagent/concentrated_barbers_aid
 	required_reagents = list("barbers_aid" = 1, "mutagen" = 1)
 	result_amount = 2
 
-datum/reagent/concentrated_barbers_aid/reaction_mob(var/mob/living/M, var/volume)
+/datum/reagent/concentrated_barbers_aid/reaction_mob(var/mob/living/M, var/volume)
 	if(M && ishuman(M))
 		var/mob/living/carbon/human/H = M
 		H.h_style = "Very Long Hair"
@@ -302,7 +302,7 @@ datum/reagent/concentrated_barbers_aid/reaction_mob(var/mob/living/M, var/volume
 	..()
 	return
 
-datum/reagent/untable_mutagen
+/datum/reagent/untable_mutagen
 	name = "Untable Mutagen"
 	id = "untable_mutagen"
 	description = "A solution."
@@ -316,7 +316,7 @@ datum/reagent/untable_mutagen
 	required_reagents = list("liquid_dark_matter" = 1, "iron" = 1, "mutagen" = 1)
 	result_amount = 3
 
-datum/reagent/untable_mutagen/reaction_obj(var/obj/O, var/volume)
+/datum/reagent/untable_mutagen/reaction_obj(var/obj/O, var/volume)
 	if(istype(O, /obj/structure/table))
 		O.visible_message("<span class = 'notice'>[O] melts into goop!</span>")
 		new/obj/item/trash/candle(O.loc)

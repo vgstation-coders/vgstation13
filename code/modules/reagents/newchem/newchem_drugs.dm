@@ -4,7 +4,7 @@
 
 #define REM REAGENTS_EFFECT_MULTIPLIER
 
-datum/reagent/nicotine
+/datum/reagent/nicotine
 	name = "Nicotine"
 	id = "nicotine"
 	description = "Stun reduction per cycle, slight stamina regeneration buff. Overdoses become rapidly deadly."
@@ -13,7 +13,7 @@ datum/reagent/nicotine
 	overdose_threshold = 35
 	addiction_threshold = 30
 
-datum/reagent/nicotine/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/nicotine/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	var/smoke_message = pick("You can just feel your lungs dying!", "You feel relaxed.", "You feel calmed.", "You feel the lung cancer forming.", "You feel the money you wasted.", "You feel like a space cowboy.", "You feel rugged.")
 	if(prob(5))
@@ -22,7 +22,7 @@ datum/reagent/nicotine/on_mob_life(var/mob/living/M as mob)
 	..()
 	return
 
-datum/reagent/nicotine/overdose_process(var/mob/living/M as mob)
+/datum/reagent/nicotine/overdose_process(var/mob/living/M as mob)
 	if(prob(20))
 		M << "You feel like you smoked too much."
 	M.adjustToxLoss(1*REM)
@@ -30,7 +30,7 @@ datum/reagent/nicotine/overdose_process(var/mob/living/M as mob)
 	..()
 	return
 
-datum/reagent/crank
+/datum/reagent/crank
 	name = "Crank"
 	id = "crank"
 	description = "2x stun reduction per cycle. Warms you up, makes you jittery as hell."
@@ -39,7 +39,7 @@ datum/reagent/crank
 	overdose_threshold = 20
 	addiction_threshold = 10
 
-datum/reagent/crank/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/crank/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	var/high_message = pick("You feel jittery.", "You feel like you gotta go fast.", "You feel like you need to step it up.")
 	if(prob(5))
@@ -49,26 +49,26 @@ datum/reagent/crank/on_mob_life(var/mob/living/M as mob)
 	M.AdjustWeakened(-2)
 	..()
 	return
-datum/reagent/crank/overdose_process(var/mob/living/M as mob)
+/datum/reagent/crank/overdose_process(var/mob/living/M as mob)
 	M.adjustBrainLoss(rand(1,10)*REM)
 	M.adjustToxLoss(rand(1,10)*REM)
 	M.adjustBruteLoss(rand(1,10)*REM)
 	..()
 	return
 
-datum/reagent/crank/addiction_act_stage1(var/mob/living/M as mob)
+/datum/reagent/crank/addiction_act_stage1(var/mob/living/M as mob)
 	M.adjustBrainLoss(rand(1,10)*REM)
 	..()
 	return
-datum/reagent/crank/addiction_act_stage2(var/mob/living/M as mob)
+/datum/reagent/crank/addiction_act_stage2(var/mob/living/M as mob)
 	M.adjustToxLoss(rand(1,10)*REM)
 	..()
 	return
-datum/reagent/crank/addiction_act_stage3(var/mob/living/M as mob)
+/datum/reagent/crank/addiction_act_stage3(var/mob/living/M as mob)
 	M.adjustBruteLoss(rand(1,10)*REM)
 	..()
 	return
-datum/reagent/crank/addiction_act_stage4(var/mob/living/M as mob)
+/datum/reagent/crank/addiction_act_stage4(var/mob/living/M as mob)
 	M.adjustBrainLoss(rand(1,10)*REM)
 	M.adjustToxLoss(rand(1,10)*REM)
 	M.adjustBruteLoss(rand(1,10)*REM)
@@ -441,7 +441,7 @@ datum/reagent/crank/addiction_act_stage4(var/mob/living/M as mob)
 		..()
 		reagents.add_reagent("hydrogen_chloride", 50)
 
-datum/reagent/cocaine
+/datum/reagent/cocaine
 	name = "Cocaine"
 	id = "cocaine"
 	description = "It isn't just wrong. It's dead wrong."
@@ -450,7 +450,7 @@ datum/reagent/cocaine
 	overdose_threshold = 15
 	addiction_threshold = 10
 
-datum/reagent/cocaine/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/cocaine/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	var/high_message = pick("You feel alert.", "You feel like you can see everything more clearly.", "You feel like you need to relax and examine your surroundings.")
 	if(prob(5))
@@ -462,7 +462,7 @@ datum/reagent/cocaine/on_mob_life(var/mob/living/M as mob)
 	M.adjustFireLoss(-0.2)
 	..()
 	return
-datum/reagent/cocaine/overdose_process(var/mob/living/M as mob)
+/datum/reagent/cocaine/overdose_process(var/mob/living/M as mob)
 	M.adjustBrainLoss(rand(1,20)*REM)
 	M.adjustToxLoss(rand(1,20)*REM)
 	M.adjustBruteLoss(rand(1,20)*REM)
@@ -473,25 +473,25 @@ datum/reagent/cocaine/overdose_process(var/mob/living/M as mob)
 	..()
 	return
 
-datum/reagent/cocaine/addiction_act_stage1(var/mob/living/M as mob)
+/datum/reagent/cocaine/addiction_act_stage1(var/mob/living/M as mob)
 	M.adjustBrainLoss(rand(1,10))
 	M.hallucination += 30
 	M.druggy = max(M.druggy, 30)
 	..()
 	return
-datum/reagent/cocaine/addiction_act_stage2(var/mob/living/M as mob)
+/datum/reagent/cocaine/addiction_act_stage2(var/mob/living/M as mob)
 	M.adjustBrainLoss(rand(1,20))
 	M.hallucination += 30
 	M.druggy = max(M.druggy, 30)
 	..()
 	return
-datum/reagent/cocaine/addiction_act_stage3(var/mob/living/M as mob)
+/datum/reagent/cocaine/addiction_act_stage3(var/mob/living/M as mob)
 	M.adjustBrainLoss(rand(1,30))
 	M.hallucination += 30
 	M.druggy = max(M.druggy, 30)
 	..()
 	return
-datum/reagent/cocaine/addiction_act_stage4(var/mob/living/M as mob)
+/datum/reagent/cocaine/addiction_act_stage4(var/mob/living/M as mob)
 	M.adjustBrainLoss(rand(1,30))
 	M.hallucination += 30
 	M.druggy = max(M.druggy, 30)

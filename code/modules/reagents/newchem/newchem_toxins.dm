@@ -4,7 +4,7 @@
 
 #define REM REAGENTS_EFFECT_MULTIPLIER
 
-datum/reagent/polonium
+/datum/reagent/polonium
 	name = "Polonium"
 	id = "polonium"
 	description = "+8 RAD."
@@ -12,14 +12,14 @@ datum/reagent/polonium
 	color = "#CF3600" // rgb: 207, 54, 0
 	custom_metabolism = 0.1
 
-datum/reagent/polonium/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/polonium/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	M.radiation += 8
 	..()
 	return
 
 
-datum/reagent/histamine
+/datum/reagent/histamine
 	name = "Histamine"
 	id = "histamine"
 	description = "A dose-dependent toxin, ranges from annoying to incredibly lethal."
@@ -28,7 +28,7 @@ datum/reagent/histamine
 	custom_metabolism = 0.2
 	overdose_threshold = 30
 
-datum/reagent/histamine/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/histamine/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	switch(pick(1, 2, 3, 4))
 		if(1)
@@ -44,21 +44,21 @@ datum/reagent/histamine/on_mob_life(var/mob/living/M as mob)
 				M.adjustBruteLoss(2*REM)
 	..()
 	return
-datum/reagent/histamine/overdose_process(var/mob/living/M as mob)
+/datum/reagent/histamine/overdose_process(var/mob/living/M as mob)
 	M.adjustOxyLoss(pick(1,3)*REM)
 	M.adjustBruteLoss(pick(1,3)*REM)
 	M.adjustToxLoss(pick(1,3)*REM)
 	..()
 	return
 
-datum/reagent/formaldehyde
+/datum/reagent/formaldehyde
 	name = "Formaldehyde"
 	id = "formaldehyde"
 	description = "+1 TOX, 10% chance to decay into 5-15 units of histamine."
 	reagent_state = LIQUID
 	color = "#CF3600" // rgb: 207, 54, 0
 
-datum/reagent/formaldehyde/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/formaldehyde/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	M.adjustToxLoss(1*REM)
 	if(prob(10))
@@ -75,14 +75,14 @@ datum/reagent/formaldehyde/on_mob_life(var/mob/living/M as mob)
 	result_amount = 3
 	required_temp = 420
 
-datum/reagent/venom
+/datum/reagent/venom
 	name = "Venom"
 	id = "venom"
 	description = "Scaling TOX and BRUTE damage with dose. 25% chance to decay into 5-10 histamine."
 	reagent_state = LIQUID
 	color = "#CF3600" // rgb: 207, 54, 0
 	custom_metabolism = 0.2
-datum/reagent/venom/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/venom/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	M.adjustToxLoss((0.1*volume)*REM)
 	M.adjustBruteLoss((0.1*volume)*REM)
@@ -92,7 +92,7 @@ datum/reagent/venom/on_mob_life(var/mob/living/M as mob)
 	..()
 	return
 
-datum/reagent/neurotoxin2
+/datum/reagent/neurotoxin2
 	name = "Neurotoxin"
 	id = "neurotoxin2"
 	description = "+1 TOX, +1 BRAIN up to 60 before it slows down, confusion, knockout after 17 elapsed cycles."
@@ -101,7 +101,7 @@ datum/reagent/neurotoxin2
 	var/cycle_count = 0
 	custom_metabolism = 1
 
-datum/reagent/neurotoxin2/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/neurotoxin2/on_mob_life(var/mob/living/M as mob)
 	cycle_count++
 	if(M.brainloss + M.toxloss <= 60)
 		M.adjustBrainLoss(1*REM)
@@ -119,7 +119,7 @@ datum/reagent/neurotoxin2/on_mob_life(var/mob/living/M as mob)
 	result_amount = 1
 	required_temp = 200
 
-datum/reagent/cyanide
+/datum/reagent/cyanide
 	name = "Cyanide"
 	id = "cyanide"
 	description = "+1.5 TOX, 10% chance of +1 LOSEBREATH, 8% chance of stun and extra +2 TOX."
@@ -127,7 +127,7 @@ datum/reagent/cyanide
 	color = "#CF3600" // rgb: 207, 54, 0
 	custom_metabolism = 0.1
 
-datum/reagent/cyanide/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/cyanide/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	M.adjustToxLoss(1.5*REM)
 	if(prob(10))
@@ -155,13 +155,13 @@ datum/reagent/cyanide/on_mob_life(var/mob/living/M as mob)
 	color = "#CF3600" // rgb: 207, 54, 0
 	custom_metabolism = 0.2
 
-datum/reagent/questionmark/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/questionmark/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	M.adjustToxLoss(1*REM)
 	..()
 	return
 
-datum/reagent/itching_powder
+/datum/reagent/itching_powder
 	name = "Itching Powder"
 	id = "itching_powder"
 	description = "Lots of annoying random effects, chances to do BRUTE damage from scratching. 6% chance to decay into 1-3 units of histamine."
@@ -174,16 +174,19 @@ datum/reagent/itching_powder
 		M.reagents.add_reagent("itching_powder", volume)
 		return
 
-datum/reagent/itching_powder/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/itching_powder/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	if(prob(rand(5,50)))
 		M << "You scratch at your head."
+		M.visible_message("<span class = 'notice'>[M] scratches their head.</span>")
 		M.adjustBruteLoss(0.2*REM)
-	if(prob(rand(5,50)))
+	else if(prob(rand(5,50)))
 		M << "You scratch at your leg."
+		M.visible_message("<span class = 'notice'>[M] scratches their leg.</span>")
 		M.adjustBruteLoss(0.2*REM)
-	if(prob(rand(5,50)))
+	else if(prob(rand(5,50)))
 		M << "You scratch at your arm."
+		M.visible_message("<span class = 'notice'>[M] scratches their arm.</span>")
 		M.adjustBruteLoss(0.2*REM)
 	if(prob(6))
 		M.reagents.add_reagent("histamine",rand(1,3))
@@ -206,7 +209,7 @@ datum/reagent/itching_powder/on_mob_life(var/mob/living/M as mob)
 	result_amount = 4
 	required_temp = 380
 
-datum/reagent/cholesterol
+/datum/reagent/cholesterol
 	name = "Cholesterol"
 	id = "cholesterol"
 	description = "Minor stamina penalty."
@@ -214,13 +217,13 @@ datum/reagent/cholesterol
 	color = "#CF3600" // rgb: 207, 54, 0]
 	overdose_threshold = 25
 
-datum/reagent/cholesterol/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/cholesterol/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	M.adjustToxLoss(0.2)
 	..()
 	return
 
-datum/reagent/cholesterol/overdose_process(var/mob/living/M as mob)
+/datum/reagent/cholesterol/overdose_process(var/mob/living/M as mob)
 	if(prob(rand(1,100)))
 		M.adjustToxLoss(1)
 	if(prob(rand(1,100)))
@@ -233,7 +236,7 @@ datum/reagent/cholesterol/overdose_process(var/mob/living/M as mob)
 	..()
 	return
 
-datum/reagent/porktonium
+/datum/reagent/porktonium
 	name = "Porktonium"
 	id = "porktonium"
 	description = "OVERDOSE - An 8% chance of metabolizing to 10 cyanide, 15 radium and 2 cholesterol for every 0.2 units above 125."
@@ -242,7 +245,7 @@ datum/reagent/porktonium
 	overdose_threshold = 125
 	custom_metabolism = 0.2
 
-datum/reagent/porktonium/overdose_process(var/mob/living/M as mob)
+/datum/reagent/porktonium/overdose_process(var/mob/living/M as mob)
 	if(prob(8) && volume > 125)
 		M.reagents.add_reagent("cyanide", 10)
 		M.reagents.add_reagent("radium", 15)
