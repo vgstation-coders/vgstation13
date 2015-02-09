@@ -275,7 +275,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 /datum/reagent/water/reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)
 	if(!istype(M, /mob/living))
 		return
-	M.color = inital(M.color)
+	M.color = initial(M.color)
 
 	// Put out fire
 	if(method == TOUCH)
@@ -337,7 +337,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 
 /datum/reagent/water/reaction_turf(var/turf/simulated/T, var/volume)
 	if (!istype(T)) return
-	T.color = inital(T.color)
+	T.color = initial(T.color)
 	src = null
 	if(volume >= 3)
 		T.wet(800)
@@ -353,7 +353,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	return
 
 /datum/reagent/water/reaction_obj(var/obj/O, var/volume)
-	O.color = inital(O.color)
+	O.color = initial(O.color)
 	src = null
 	var/turf/T = get_turf(O)
 	var/hotspot = (locate(/obj/fire) in T)
@@ -1501,11 +1501,11 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	else
 		if(O)
 			O.clean_blood()
-	O.color = inital(O.color)
+	O.color = initial(O.color)
 
 /datum/reagent/space_cleaner/reaction_turf(var/turf/T, var/volume)
 	if(volume >= 1)
-		T.color = inital(T.color)
+		T.color = initial(T.color)
 		T.overlays.len = 0
 		T.clean_blood()
 		for(var/obj/effect/decal/cleanable/C in src)
@@ -1521,7 +1521,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 /datum/reagent/space_cleaner/reaction_mob(var/mob/M, var/method=TOUCH, var/volume)
 
 	if(!holder) return
-	M.color = inital(M.color)
+	M.color = initial(M.color)
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
 		if(C.r_hand)
