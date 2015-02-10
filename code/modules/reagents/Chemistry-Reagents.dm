@@ -995,7 +995,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	color = "#FFFFFF" // rgb: 255, 255, 255
 	overdose_threshold = 200
 /datum/reagent/sugar/overdose_start(var/mob/living/M as mob)
-	M << "<span class = 'userdanger'>You go into hyperglycaemic shock! Lay off the twinkies!</span>"
+	M << "<span class = 'userdanger'>You go into hyperglycemic shock! Lay off the twinkies!</span>"
 	M.sleeping += 30
 	..()
 	return

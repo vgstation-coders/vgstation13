@@ -51,7 +51,7 @@
 	name = "Bromine"
 	id = "bromine"
 	description = "A slippery solution."
-	reagent_state = LIQUID
+	reagent_state = GAS
 	color = "#C8A5DC" // rgb: 200, 165, 220
 
 /datum/reagent/phenol
@@ -64,7 +64,7 @@
 /datum/reagent/ash
 	name = "Ash"
 	id = "ash"
-	description = "A burnt solution."
+	description = "Ashes to ashes, dust to dust."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 

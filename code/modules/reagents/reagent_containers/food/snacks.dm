@@ -140,55 +140,43 @@
 			name = "[n_name]"
 		return
 	if(istype(W,/obj/item/weapon/storage))
-		..() // -> item/attackby()
-		return 0
+		return ..() // -> item/attackby()
+	if(istype(W, /obj/item/weapon/kitchen/utensil/fork))
+		var/obj/item/weapon/kitchen/utensil/fork/fork = W
+		if(slices_num || slice_path)
+			user << "<span class='notice'>You can't take the whole [src] at once!.</span>"
+			return
+		else
+			return fork.load_food(src, user)
 	if((slices_num <= 0 || !slices_num) || !slice_path)
 		return 0
-	var/inaccurate = 0
-	if( \
-			istype(W, /obj/item/weapon/kitchen/utensil/knife/large) || \
-			istype(W, /obj/item/weapon/kitchen/utensil/knife/large/butch) || \
-			istype(W, /obj/item/weapon/scalpel) || \
-			istype(W, /obj/item/weapon/kitchen/utensil/knife) \
-		)
-	else if( \
-			istype(W, /obj/item/weapon/circular_saw) || \
-			istype(W, /obj/item/weapon/melee/energy/sword) && W:active || \
-			istype(W, /obj/item/weapon/melee/energy/blade) || \
-			istype(W, /obj/item/weapon/pickaxe/shovel) || \
-			istype(W, /obj/item/weapon/hatchet) \
-		)
-		inaccurate = 1
-	else if(W.w_class <= 2 && istype(src,/obj/item/weapon/reagent_containers/food/snacks/sliceable))
+	if(W.w_class <= 2 && istype(src,/obj/item/weapon/reagent_containers/food/snacks/sliceable) && W.is_sharp() < 0.8)
 		if(!iscarbon(user))
 			return 0
 		user << "<span class='notice'>You slip [W] inside [src].</span>"
-		user.u_equip(W)
-		if ((user.client && user.s_active != src))
-			user.client.screen -= W
-		W.dropped(user)
+		user.drop_item(W)
 		add_fingerprint(user)
 		contents += W
 		return 1 // no afterattack here
-	else
-		return 0 // --- this is everything that is NOT a slicing implement, and which is not being slipped into food; allow afterattack ---
+
+	if(W.is_sharp() < 0.8)
+		return 0
 
 	if ( \
 			!isturf(src.loc) || \
 			!(locate(/obj/structure/table) in src.loc) && \
-			/*!(locate(/obj/structure/optable) in src.loc) && \ */
 			!(locate(/obj/item/weapon/tray) in src.loc) \
 		)
 		user << "<span class='notice'>You cannot slice [src] here! You need a table or at least a tray.</span>"
 		return 1
 
 	var/slices_lost = 0
-	if (!inaccurate)
+	if (W.is_sharp() >= 1.2) //actually sharp things are this sharp, yes
 		user.visible_message( \
 			"<span class='notice'>[user] slices [src].</span>", \
 			"<span class='notice'>You slice [src].</span>" \
 		)
-	else
+	else //we're above 0.8
 		user.visible_message( \
 			"<span class='notice'>[user] inaccurately slices [src] with [W]!</span>", \
 			"<span class='notice'>You inaccurately slice [src] with your [W]!</span>" \
@@ -199,6 +187,7 @@
 		var/obj/slice = new slice_path (src.loc)
 		reagents.trans_to(slice,reagents_per_slice)
 	del(src) // so long and thanks for all the fish
+	return 1
 
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
@@ -233,6 +222,7 @@
 				N.visible_message("[N] nibbles away at [src].", "")
 			//N.emote("nibbles away at the [src]")
 			N.health = min(N.health + 1, N.maxHealth)
+
 
 
 ////////////////////////////////////////////////////////////////////////////////
