@@ -31,6 +31,7 @@
 	var/turf/simulated/T = get_turf(holder.my_atom)
 	for(var/turf/simulated/turf in range(1,T))
 		new /obj/fire(turf)
+	holder.chem_temp = 1000 // hot as shit
 	return
 
 /datum/reagent/clf3/reaction_turf(var/turf/simulated/T, var/volume)
@@ -59,6 +60,12 @@
 		M.adjust_fire_stacks(20)
 		M.IgniteMob()
 		new /obj/fire(M.loc)
+		return
+
+/datum/reagent/clf3/reaction_obj(var/obj/O, var/volume)
+	// slags objects if it can
+	if(istype(O, /obj/) )
+		O.melt()
 		return
 
 
@@ -135,3 +142,30 @@ proc/goonchem_vortex(var/turf/simulated/T, var/setting_type, var/range, var/pull
 				else
 					for(var/i = 0, i < pull_times, i++)
 						step_towards(X,T)
+
+
+/datum/reagent/blackpowder
+	name = "Black Powder"
+	id = "blackpowder"
+	description = "Explodes. Violently."
+	reagent_state = LIQUID
+	color = "#000000"  //rgb: 96, 165, 132
+
+/datum/chemical_reaction/blackpowder
+	name = "Black Powder"
+	id = "blackpowder"
+	result = null
+	required_reagents = list("saltpetre" = 1, "charcoal" = 1, "sulfur" = 1)
+	result_amount = 3
+	required_temp = 474
+
+/datum/chemical_reaction/blackpowder/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/turf/simulated/T = get_turf(holder.my_atom)
+	holder.my_atom.visible_message("<span class = 'userdanger'>Sparks come out of [holder.my_atom]!</span>")
+	sleep(rand(10,30))
+	var/ex_severe = round(created_volume / 10)
+	var/ex_heavy = round(created_volume / 8)
+	var/ex_light = round(created_volume / 6)
+	var/ex_flash = round(created_volume / 4)
+	explosion(T,ex_severe,ex_heavy,ex_light,ex_flash)
+	return

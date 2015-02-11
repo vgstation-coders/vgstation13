@@ -1,6 +1,9 @@
 // Called if the reagent has passed the overdose threshold and is set to be triggering overdose effects
 
 datum/reagents/proc/metabolize(var/mob/M)
+	if(M)
+		chem_temp = M.bodytemperature
+		handle_reactions()
 	if(last_tick == 3)
 		last_tick = 1
 		for(var/A in reagent_list)
