@@ -14,6 +14,19 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	max_amount = 60
+/obj/item/stack/tile/use(var/amount)
+	ASSERT(isnum(src.amount))
+	if(src.amount>=amount)
+		src.amount-=amount
+	else
+		return 0
+	. = 1
+	if (src.amount<=0)
+		if(usr)
+			usr.before_take_item(src)
+		spawn
+			src.Destroy()
+			returnToPool(src)
 
 /obj/item/stack/tile/plasteel/New(var/loc, var/amount=null)
 	. = ..()
@@ -51,7 +64,6 @@
 	return
 
 /obj/item/stack/tile/plasteel/attackby(obj/item/W as obj, mob/user as mob)
-	..()
 	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(amount < 4)
@@ -71,5 +83,5 @@
 			R.use(4)
 			if (!R && replace)
 				user.put_in_hands(M)
-		return
-	..()
+		return 1
+	return ..()
