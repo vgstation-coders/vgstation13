@@ -101,8 +101,8 @@
 					new /obj/item/weapon/gun/magic/staff/healing(get_turf(H))
 				*/
 				if("armor")
-					new /obj/item/clothing/suit/space/rig/wizard(get_turf(H))
-					new /obj/item/clothing/head/helmet/space/rig/wizard(get_turf(H))
+					new /obj/item/clothing/suit/space/void/wizard(get_turf(H))
+					new /obj/item/clothing/head/helmet/space/void/wizard(get_turf(H))
 				if("scrying")
 					new /obj/item/weapon/scrying(get_turf(H))
 					if (!(M_XRAY in H.mutations))

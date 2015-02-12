@@ -238,11 +238,11 @@
 								if(flags & AIRTIGHT)
 									helmet.flags |= AIRTIGHT
 								helmet.flags_inv |= (HIDEEYES|HIDEFACE)
-								helmet.body_parts_covered |= (FACE|EYES)
+								//helmet.body_parts_covered |= (FACE|EYES)
 							else
 								helmet.flags &= ~AIRTIGHT
 								helmet.flags_inv &= ~(HIDEEYES|HIDEFACE)
-								helmet.body_parts_covered &= ~(FACE|EYES)
+								//helmet.body_parts_covered &= ~(FACE|EYES)
 				else
 					failed_to_seal = 1
 
@@ -261,12 +261,12 @@
 				if(flags & AIRTIGHT)
 					helmet.flags |= AIRTIGHT
 				helmet.flags_inv          |= (HIDEEYES|HIDEFACE)
-				helmet.body_parts_covered |= (FACE|EYES)
+				//helmet.body_parts_covered |= (FACE|EYES)
 			else
 				if(flags & AIRTIGHT)
 					helmet.flags &= ~AIRTIGHT
 				helmet.flags_inv          &= ~(HIDEEYES|HIDEFACE)
-				helmet.body_parts_covered &= ~(FACE|EYES)
+				//helmet.body_parts_covered &= ~(FACE|EYES)
 		update_icon(1)
 		return 0
 
@@ -280,10 +280,10 @@
 	for(var/obj/item/piece in list(helmet,boots,gloves,chest))
 		if(!piece) continue
 		if(canremove && (flags & AIRTIGHT))
-			piece.flags &= ~STOPSPRESSUREDMAGE
+			piece.flags &= ~STOPSPRESSUREDMG
 			piece.flags &= ~AIRTIGHT
 		else
-			piece.flags |=  STOPSPRESSUREDMAGE
+			piece.flags |=  STOPSPRESSUREDMG
 			piece.flags |=  AIRTIGHT
 	update_icon(1)
 

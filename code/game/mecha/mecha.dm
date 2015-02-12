@@ -69,6 +69,15 @@
 	var/max_equip = 3
 	var/datum/events/events
 
+/obj/mecha/drain_power(var/drain_check)
+	if(drain_check)
+		return 1
+
+	if(!cell)
+		return 0
+
+	return cell.drain_power(drain_check)
+
 /obj/mecha/New()
 	..()
 	events = new
@@ -415,11 +424,6 @@
 
 /obj/mecha/attack_hand(mob/user as mob)
 	src.log_message("Attack by hand/paw. Attacker - [user].",1)
-
-	if(ishuman(user))
-		if(istype(user:gloves, /obj/item/clothing/gloves/space_ninja)&&user:gloves:candrain&&!user:gloves:draining)
-			call(/obj/item/clothing/gloves/space_ninja/proc/drain)("MECHA",src,user:wear_suit)
-			return
 
 	if ((M_HULK in user.mutations) && !prob(src.deflect_chance))
 		src.take_damage(15)

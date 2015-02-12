@@ -475,11 +475,7 @@ var/list/ai_list = list()
 
 /mob/living/silicon/ai/attack_hand(mob/living/carbon/M as mob)
 	if(ishuman(M))//Checks to see if they are ninja
-		if(istype(M:gloves, /obj/item/clothing/gloves/space_ninja)&&M:gloves:candrain&&!M:gloves:draining)
-			if(M:wear_suit:s_control)
-				M:wear_suit:transfer_ai("AICORE", "NINJASUIT", src, M)
-			else
-				M << "<span class='danger'>ERROR: </span>Remote access channel disabled."
+		M << "<span class='danger'>ERROR</span>: Remote access channel disabled."
 	return
 
 

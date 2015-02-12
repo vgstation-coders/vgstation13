@@ -216,7 +216,7 @@
 
 	interface_name = "mounted chem injector"
 	interface_desc = "Dispenses loaded chemicals via an arm-mounted injector."
-
+/* Needs to be remade
 /obj/item/rig_module/voice
 
 	name = "hardsuit voice synthesiser"
@@ -268,7 +268,7 @@
 			voice_holder.voice = sanitize(copytext(raw_choice,1,MAX_MESSAGE_LEN))
 			usr << "You are now mimicking <B>[voice_holder.voice]</B>.</font>"
 	return 1
-
+*/
 /obj/item/rig_module/maneuvering_jets
 
 	name = "hardsuit maneuvering jets"

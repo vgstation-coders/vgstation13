@@ -216,7 +216,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 			del(src)
 			return
 		flags &= ~NOREACT // allowing reagents to react after being lit
-		flags |= (MASKINTERNALS | BLOCK_GAS_SMOKE_EFFECT)
+		flags |= (AIRTIGHT | BLOCK_GAS_SMOKE_EFFECT)
 
 		reagents.handle_reactions()
 		// This ain't ready yet.

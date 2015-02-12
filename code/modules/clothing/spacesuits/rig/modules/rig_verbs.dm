@@ -167,7 +167,7 @@
 		return
 
 	visor.engage()
-
+/* need to be reworked
 /obj/item/weapon/rig/verb/alter_voice()
 
 	set name = "Configure Voice Synthesiser"
@@ -188,7 +188,7 @@
 		return
 
 	speech.engage()
-
+*/
 /obj/item/weapon/rig/verb/select_module()
 
 	set name = "Select Module"

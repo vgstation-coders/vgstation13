@@ -7,7 +7,8 @@
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_magazine,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank,/obj/item/device/suit_cooling_unit,/obj/item/weapon/cell)
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	slowdown = 0
-	flags = FPRINT | TABLEPASS | STOPSPRESSUREDMAGE | THICKMATERIAL
+	flags = FPRINT | STOPSPRESSUREDMG //| THICKMATERIAL
+	pass_flags = PASSTABLE
 	offline_slowdown = 0
 	offline_vision_restriction = 0
 
@@ -46,7 +47,8 @@
 
 /obj/item/clothing/head/helmet/space/rig/mask
 	name = "mask"
-	flags = FPRINT | TABLEPASS | THICKMATERIAL
+	flags = FPRINT //| THICKMATERIAL
+	pass_flags = PASSTABLE
 
 /obj/item/weapon/rig/light/ninja
 	name = "ominous suit control module"
@@ -63,7 +65,7 @@
 		/obj/item/rig_module/teleporter,
 		/obj/item/rig_module/stealth_field,
 		/obj/item/rig_module/mounted/energy_blade,
-		/obj/item/rig_module/vision,
+		///obj/item/rig_module/vision,
 		/obj/item/rig_module/voice,
 		/obj/item/rig_module/fabricator/energy_net,
 		/obj/item/rig_module/chem_dispenser,

@@ -4,9 +4,11 @@
 
 /obj/item/clothing/head/helmet/space/rig
 	name = "helmet"
-	flags = FPRINT | TABLEPASS | HEADCOVERSEYES | BLOCKHAIR | HEADCOVERSMOUTH | THICKMATERIAL
-	flags_inv = 		 HIDEEARS
-	body_parts_covered = HEAD
+	flags = FPRINT
+	pass_flags = PASSTABLE
+
+	flags_inv = 		 HIDEEARS | HIDEFACE | HIDEEYES | HIDEHAIR
+	//body_parts_covered = HEAD
 	heat_protection =    HEAD
 	cold_protection =    HEAD
 	brightness_on = 4
@@ -14,7 +16,8 @@
 
 /obj/item/clothing/gloves/rig
 	name = "gauntlets"
-	flags = FPRINT | TABLEPASS | THICKMATERIAL
+	flags = FPRINT //| THICKMATERIAL
+	pass_flags = PASSTABLE
 	body_parts_covered = HANDS
 	heat_protection =    HANDS
 	cold_protection =    HANDS
@@ -34,12 +37,13 @@
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
 	heat_protection =    UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
 	cold_protection =    UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
-	flags_inv =          HIDEJUMPSUIT|HIDETAIL
-	flags =              FPRINT | TABLEPASS | STOPSPRESSUREDMAGE | THICKMATERIAL | AIRTIGHT
+	flags_inv =          HIDEJUMPSUIT//|HIDETAIL
+	flags =              FPRINT | STOPSPRESSUREDMG | AIRTIGHT //| THICKMATERIAL
+	pass_flags =		 PASSTABLE
 	slowdown = 0
-	breach_threshold = 35
-	can_breach = 1
-	supporting_limbs = list()
+	//breach_threshold = 35
+	//can_breach = 1
+	//supporting_limbs = list()
 
 //TODO: move this to modules
 /obj/item/clothing/head/helmet/space/rig/proc/prevent_track()

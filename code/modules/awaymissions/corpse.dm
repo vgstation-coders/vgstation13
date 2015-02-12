@@ -102,12 +102,12 @@
 /obj/effect/landmark/corpse/syndicatecommando
 	name = "Syndicate Commando"
 	corpseuniform = /obj/item/clothing/under/syndicate
-	corpsesuit = /obj/item/clothing/suit/space/rig/syndi
+	corpsesuit = /obj/item/clothing/suit/space/void/merc
 	corpseshoes = /obj/item/clothing/shoes/swat
 	corpsegloves = /obj/item/clothing/gloves/swat
 	corpseradio = /obj/item/device/radio/headset
 	corpsemask = /obj/item/clothing/mask/gas/syndicate
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/syndi
+	corpsehelmet = /obj/item/clothing/head/helmet/space/void/merc
 	corpseback = /obj/item/weapon/tank/jetpack/oxygen
 	corpsepocket1 = /obj/item/weapon/tank/emergency_oxygen
 	corpseid = 1
@@ -207,9 +207,9 @@
 	corpseidaccess = "Shaft Miner"
 
 /obj/effect/landmark/corpse/miner/rig
-	corpsesuit = /obj/item/clothing/suit/space/rig/mining
+	corpsesuit = /obj/item/clothing/suit/space/void/mining
 	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/mining
+	corpsehelmet = /obj/item/clothing/head/helmet/space/void/mining
 
 
 /////////////////Officers//////////////////////

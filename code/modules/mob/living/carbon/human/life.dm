@@ -627,7 +627,7 @@ var/global/list/organ_damage_overlays = list(
 	if(internal)
 		if (!contents.Find(internal))
 			internal = null
-		if (!wear_mask || !(wear_mask.flags & MASKINTERNALS) )
+		if (!wear_mask || !(wear_mask.flags & AIRTIGHT) )
 			internal = null
 		if(internal)
 			return internal.remove_air_volume(volume_needed)
@@ -1597,7 +1597,7 @@ var/global/list/organ_damage_overlays = list(
 
 		var/masked = 0
 
-		if( istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/unathi))
+		if( istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/void/unathi))
 			var/obj/item/clothing/head/welding/O = head
 			if(!O.up && tinted_weldhelh)
 				client.screen += global_hud.darkMask

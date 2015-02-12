@@ -42,8 +42,8 @@
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/atmos
-	SUIT_TYPE = /obj/item/clothing/suit/space/rig/atmos
-	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/atmos
+	SUIT_TYPE = /obj/item/clothing/suit/space/void/atmos
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/void/atmos
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots/atmos
 
@@ -60,8 +60,8 @@
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots/elite
 
 /obj/machinery/suit_storage_unit/mining
-	SUIT_TYPE = /obj/item/clothing/suit/space/rig/mining
-	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/mining
+	SUIT_TYPE = /obj/item/clothing/suit/space/void/mining
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/void/mining
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
@@ -72,14 +72,14 @@
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/security
-	SUIT_TYPE = /obj/item/clothing/suit/space/rig/security
-	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/security
+	SUIT_TYPE = /obj/item/clothing/suit/space/void/security
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/void/security
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/medical
-	SUIT_TYPE = /obj/item/clothing/suit/space/rig/medical
-	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/medical
+	SUIT_TYPE = /obj/item/clothing/suit/space/void/medical
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/void/medical
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 

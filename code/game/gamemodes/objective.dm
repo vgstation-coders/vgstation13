@@ -570,108 +570,107 @@ datum/objective/nuclear
 		if(!steal_target) return 1 // Free Objective
 		return steal_target.check_completion(owner)
 
-datum/objective/download
-	proc/gen_amount_goal()
-		target_amount = rand(10,20)
-		explanation_text = "Download [target_amount] research levels."
-		return target_amount
+datum/objective/download/proc/gen_amount_goal()
+	target_amount = rand(10,20)
+	explanation_text = "Download [target_amount] research levels."
+	return target_amount
 
 
-	check_completion()
-		if(blocked) return 0
-		if(!ishuman(owner.current))
-			return 0
-		if(!owner.current || owner.current.stat == 2)
-			return 0
-		if(!(istype(owner.current:wear_suit, /obj/item/clothing/suit/space/space_ninja)&&owner.current:wear_suit:s_initialized))
-			return 0
-		var/current_amount
-		var/obj/item/clothing/suit/space/space_ninja/S = owner.current:wear_suit
-		if(!S.stored_research.len)
-			return 0
-		else
-			for(var/datum/tech/current_data in S.stored_research)
-				if(current_data.level>1)	current_amount+=(current_data.level-1)
-		if(current_amount<target_amount)	return 0
-		return 1
+datum/objective/download/check_completion()
+	if(blocked) return 0
+	if(!ishuman(owner.current))
+		return 0
+	if(!owner.current || owner.current.stat == 2)
+		return 0
+	var/current_amount
+	var/obj/item/weapon/rig/S
+	if(ishuman(owner.current))
+		var/mob/living/carbon/human/H = owner.current
+		S = H.back
+	if(!istype(S) || !S.installed_modules || !S.installed_modules.len)
+		return 0
+	var/obj/item/rig_module/datajack/stolen_data = locate() in S.installed_modules
+	if(!istype(stolen_data))
+		return 0
+	for(var/datum/tech/current_data in S.stored_research)
+		if(current_data.level>1)
+			current_amount+=(current_data.level-1)
+	return (current_amount < target_amount) ? 0 : 1
 
 
 
-datum/objective/capture
-	proc/gen_amount_goal()
-		target_amount = rand(5,10)
-		explanation_text = "Accumulate [target_amount] capture points."
-		return target_amount
+datum/objective/capture/proc/gen_amount_goal()
+	target_amount = rand(5,10)
+	explanation_text = "Accumulate [target_amount] capture points."
+	return target_amount
 
 
-	check_completion()//Basically runs through all the mobs in the area to determine how much they are worth.
-		if(blocked) return 0
-		var/captured_amount = 0
-		var/area/centcom/holding/A = locate()
-		for(var/mob/living/carbon/human/M in A)//Humans.
-			if(M.stat==2)//Dead folks are worth less.
-				captured_amount+=0.5
-				continue
-			captured_amount+=1
-		for(var/mob/living/carbon/monkey/M in A)//Monkeys are almost worthless, you failure.
-			captured_amount+=0.1
-		for(var/mob/living/carbon/alien/larva/M in A)//Larva are important for research.
+datum/objective/capture/check_completion()//Basically runs through all the mobs in the area to determine how much they are worth.
+	if(blocked) return 0
+	var/captured_amount = 0
+	var/area/centcom/holding/A = locate()
+	for(var/mob/living/carbon/human/M in A)//Humans.
+		if(M.stat==2)//Dead folks are worth less.
+			captured_amount+=0.5
+			continue
+		captured_amount+=1
+	for(var/mob/living/carbon/monkey/M in A)//Monkeys are almost worthless, you failure.
+		captured_amount+=0.1
+	for(var/mob/living/carbon/alien/larva/M in A)//Larva are important for research.
+		if(M.stat==2)
+			captured_amount+=0.5
+			continue
+		captured_amount+=1
+	for(var/mob/living/carbon/alien/humanoid/M in A)//Aliens are worth twice as much as humans.
+		if(istype(M, /mob/living/carbon/alien/humanoid/queen))//Queens are worth three times as much as humans.
 			if(M.stat==2)
-				captured_amount+=0.5
-				continue
+				captured_amount+=1.5
+			else
+				captured_amount+=3
+			continue
+		if(M.stat==2)
 			captured_amount+=1
-		for(var/mob/living/carbon/alien/humanoid/M in A)//Aliens are worth twice as much as humans.
-			if(istype(M, /mob/living/carbon/alien/humanoid/queen))//Queens are worth three times as much as humans.
-				if(M.stat==2)
-					captured_amount+=1.5
-				else
-					captured_amount+=3
-				continue
-			if(M.stat==2)
-				captured_amount+=1
-				continue
-			captured_amount+=2
-		if(captured_amount<target_amount)
-			return 0
+			continue
+		captured_amount+=2
+	if(captured_amount<target_amount)
+		return 0
+	return 1
+
+datum/objective/blood/proc/gen_amount_goal(low = 150, high = 400)
+	target_amount = rand(low,high)
+	target_amount = round(round(target_amount/5)*5)
+	explanation_text = "Accumulate atleast [target_amount] units of blood in total."
+	return target_amount
+
+datum/objective/blood/check_completion()
+	if(blocked) return 0
+	if(owner && owner.vampire && owner.vampire.bloodtotal && owner.vampire.bloodtotal >= target_amount)
 		return 1
+	else
+		return 0
+datum/objective/absorb/proc/gen_amount_goal(var/lowbound = 4, var/highbound = 6)
+	target_amount = rand (lowbound,highbound)
+	if (ticker)
+		var/n_p = 1 //autowin
+		if (ticker.current_state == GAME_STATE_SETTING_UP)
+			for(var/mob/new_player/P in player_list)
+				if(P.client && P.ready && P.mind!=owner)
+					n_p ++
+		else if (ticker.current_state == GAME_STATE_PLAYING)
+			for(var/mob/living/carbon/human/P in player_list)
+				if(P.client && !(P.mind in ticker.mode.changelings) && P.mind!=owner)
+					n_p ++
+		target_amount = min(target_amount, n_p)
 
-datum/objective/blood
-	proc/gen_amount_goal(low = 150, high = 400)
-		target_amount = rand(low,high)
-		target_amount = round(round(target_amount/5)*5)
-		explanation_text = "Accumulate atleast [target_amount] units of blood in total."
-		return target_amount
+	explanation_text = "Absorb [target_amount] compatible genomes."
+	return target_amount
 
-	check_completion()
-		if(blocked) return 0
-		if(owner && owner.vampire && owner.vampire.bloodtotal && owner.vampire.bloodtotal >= target_amount)
-			return 1
-		else
-			return 0
-datum/objective/absorb
-	proc/gen_amount_goal(var/lowbound = 4, var/highbound = 6)
-		target_amount = rand (lowbound,highbound)
-		if (ticker)
-			var/n_p = 1 //autowin
-			if (ticker.current_state == GAME_STATE_SETTING_UP)
-				for(var/mob/new_player/P in player_list)
-					if(P.client && P.ready && P.mind!=owner)
-						n_p ++
-			else if (ticker.current_state == GAME_STATE_PLAYING)
-				for(var/mob/living/carbon/human/P in player_list)
-					if(P.client && !(P.mind in ticker.mode.changelings) && P.mind!=owner)
-						n_p ++
-			target_amount = min(target_amount, n_p)
-
-		explanation_text = "Absorb [target_amount] compatible genomes."
-		return target_amount
-
-	check_completion()
-		if(blocked) return 0
-		if(owner && owner.changeling && owner.changeling.absorbed_dna && (owner.changeling.absorbedcount >= target_amount))
-			return 1
-		else
-			return 0
+datum/objective/absorb/check_completion()
+	if(blocked) return 0
+	if(owner && owner.changeling && owner.changeling.absorbed_dna && (owner.changeling.absorbedcount >= target_amount))
+		return 1
+	else
+		return 0
 
 
 

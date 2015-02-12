@@ -51,7 +51,7 @@
 // /vg/: Old atmos hardsuit.
 /obj/item/device/modkit/gold_rig
 	name = "gold atmos hardsuit modification kit"
-	from_helmet = /obj/item/clothing/head/helmet/space/rig/atmos
-	from_suit = /obj/item/clothing/suit/space/rig/atmos
-	to_helmet = /obj/item/clothing/head/helmet/space/rig/atmos/gold
-	to_suit = /obj/item/clothing/suit/space/rig/atmos/gold
+	from_helmet = /obj/item/clothing/head/helmet/space/void/atmos
+	from_suit = /obj/item/clothing/suit/space/void/atmos
+	to_helmet = /obj/item/clothing/head/helmet/space/void/atmos/gold
+	to_suit = /obj/item/clothing/suit/space/void/atmos/gold
