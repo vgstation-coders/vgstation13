@@ -167,6 +167,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/make_invulnerable,
 	/client/proc/cmd_admin_dump_delprofile,
 	/client/proc/mob_list,
+	/client/proc/cure_disease,
 #ifdef PROFILE_MACHINES
 	/client/proc/cmd_admin_dump_macprofile,
 #endif
@@ -603,7 +604,7 @@ var/list/admin_verbs_mod = list(
 	set category = "Fun"
 	set name = "Give Spell"
 	set desc = "Gives a spell to a mob."
-	var/obj/effect/proc_holder/spell/S = input("Choose the spell to give to that guy", "ABRAKADABRA") as null|anything in spells
+	var/spell/S = input("Choose the spell to give to that guy", "ABRAKADABRA") as null|anything in spells
 	if(!S) return
 	T.spell_list += new S
 	feedback_add_details("admin_verb","GS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
