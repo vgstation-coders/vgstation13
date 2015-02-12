@@ -52,7 +52,8 @@
 		"pacid" =           3,
 		"plantbgone" =      3,
 		"cryoxadone" =     -3,
-		"radium" =          2
+		"radium" =          2,
+		"clf3" = 20
 		)
 	var/global/list/nutrient_reagents = list(
 		"milk" =            0.1,
@@ -76,12 +77,15 @@
 		"sacid" =          -2,
 		"pacid" =          -4,
 		"plantbgone" =     -8,
-		"adminordrazine" = -5
+		"adminordrazine" = -5,
+		"clf3" = -20
+
 		)
 	var/global/list/pestkiller_reagents = list(
 		"sugar" =           2,
 		"diethylamine" =   -2,
-		"adminordrazine" = -5
+		"adminordrazine" = -5,
+		"clf3" = -20
 		)
 	var/global/list/water_reagents = list(
 		"water" =           1,
