@@ -1,5 +1,3 @@
-var/list/sacrificed = list()
-
 /obj/effect/rune/cultify()
 	return
 
@@ -161,6 +159,9 @@ var/list/sacrificed = list()
 /////////////////////////////////////////THIRD RUNE
 
 /obj/effect/rune/proc/convert()
+
+	var/datum/game_mode/cult/mode_ticker = ticker.mode
+
 	for(var/mob/living/carbon/M in src.loc)
 		if(iscultist(M))
 			usr << "<span class='warning'>You cannot convert what is already a follower of Nar-Sie.</span>"
@@ -171,7 +172,7 @@ var/list/sacrificed = list()
 		if(!M.mind)
 			usr << "<span class='warning'>You cannot convert that which has no soul</span>"
 			return 0
-		if((ticker.mode.name == "cult") && (M.mind == ticker.mode:sacrifice_target))
+		if(istype(mode_ticker) && (M.mind == mode_ticker.sacrifice_target))
 			usr << "<span class='warning'>The Geometer of blood wants this mortal for himself.</span>"
 			return 0
 		usr.say("Mah[pick("'","`")]weyh pleggh at e'ntrath!")
@@ -221,11 +222,13 @@ var/list/sacrificed = list()
 			M << "<span class='warning'>This plane of reality has already been torn into Nar-Sie's realm.</span>"
 		return
 
-	if(ticker.mode.eldergod)
+	var/datum/game_mode/cult/mode_ticker = ticker.mode
+
+	if(mode_ticker.eldergod)
 		// Sanity checks
 		// Are we permitted to spawn Nar-Sie?
 
-		if(ticker.mode.narsie_condition_cleared)
+		if((ticker.mode.name != "cult") || mode_ticker.narsie_condition_cleared)//if the game mode wasn't cult to begin with, there won't be need to complete a first objective to prepare the summoning.
 			if(active_cultists.len >= 9)
 				summoning = 1
 				log_admin("NAR-SIE SUMMONING: [active_cultists.len] are summoning Nar-Sie at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>). [6 + (ghostcount * 5)] seconds remaining.")
@@ -301,7 +304,7 @@ var/list/sacrificed = list()
 		update()
 
 /obj/effect/summoning/proc/update()
-	if(locate(get_turf(src)) in summon_target.summonturfs)
+	if(summon_target && (locate(get_turf(src)) in summon_target.summonturfs))
 		sleep(10)
 		update()
 		return
@@ -310,7 +313,6 @@ var/list/sacrificed = list()
 
 /obj/effect/summoning/proc/init(var/obj/effect/rune/S)
 	summon_target = S
-
 
 /////////////////////////////////////////FIFTH RUNE
 
@@ -762,6 +764,13 @@ var/list/sacrificed = list()
 		usr << "<span class='warning'>The presence of a null rod is perturbing the ritual.</span>"
 		return
 
+	var/cult_game = 0
+
+	if(ticker.mode.name == "cult")
+		cult_game = 1
+
+	var/datum/game_mode/cult/mode_ticker = ticker.mode
+
 	for(var/atom/A in loc)
 		if(iscultist(A))
 			continue
@@ -769,13 +778,15 @@ var/list/sacrificed = list()
 //Humans and Animals
 		if(istype(A,/mob/living/carbon) || istype(A,/mob/living/simple_animal))//carbon mobs and simple animals
 			var/mob/living/M = A
-			if ((ticker.mode.name == "cult") && (M.mind == ticker.mode:sacrifice_target))
+			if (cult_game && (M.mind == mode_ticker.sacrifice_target))
 				if(cultsinrange.len >= 3)
-					sacrificed += M.mind
+					mode_ticker.sacrificed += M.mind
 					M.gib()
 					sacrificedone = 1
 					invocation("rune_sac")
 					ritualresponse += "The Geometer of Blood gladly accepts this sacrifice, your objective is now complete."
+					spawn(10)	//so the messages for the new phase get received after the feedback for the sacrifice
+						mode_ticker.additional_phase()
 				else
 					ritualresponse += "You need more cultists to perform the ritual and complete your objective."
 			else
@@ -807,13 +818,15 @@ var/list/sacrificed = list()
 			var/mob/living/silicon/robot/B = A
 			var/obj/item/device/mmi/O = locate() in B
 			if(O)
-				if((ticker.mode.name == "cult") && (O.brainmob.mind == ticker.mode:sacrifice_target))
+				if(cult_game && (O.brainmob.mind == mode_ticker.sacrifice_target))
 					if(cultsinrange.len >= 3)
-						sacrificed += O.brainmob.mind
+						mode_ticker.sacrificed += O.brainmob.mind
 						ritualresponse += "The Geometer of Blood accepts this sacrifice, your objective is now complete."
 						sacrificedone = 1
 						invocation("rune_sac")
 						B.dust()
+						spawn(10)	//so the messages for the new phase get received after the feedback for the sacrifice
+							mode_ticker.additional_phase()
 					else
 						ritualresponse += "You need more cultists to perform the ritual and complete your objective."
 				else
@@ -861,9 +874,11 @@ var/list/sacrificed = list()
 			var/obj/item/device/aicard/D = A
 			var/mob/living/silicon/ai/T = locate() in D
 			if(T)//there is an AI on the card
-				if((ticker.mode.name == "cult") && (T.mind == ticker.mode:sacrifice_target))//what are the odds this ever happens?
-					sacrificed += T.mind
+				if(cult_game && (T.mind == ticker.mode:sacrifice_target))//what are the odds this ever happens?
+					mode_ticker.sacrificed += T.mind
 					ritualresponse += "With a sigh, the Geometer of Blood accepts this sacrifice, your objective is now complete."//since you cannot debrain an AI.
+					spawn(10)	//so the messages for the new phase get received after the feedback for the sacrifice
+						mode_ticker.additional_phase()
 				else
 					ritualresponse += "The Geometer of Blood accepts to destroy that piece of technological garbage."
 				sacrificedone = 1
