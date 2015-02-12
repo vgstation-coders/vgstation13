@@ -9,7 +9,6 @@
 	use_power = 1
 	idle_power_usage = 5
 	active_power_usage = 100
-	var/obj/item/weapon/reagent_containers/beaker = null
 	var/global/list/allowed_items = list (
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato  = "tomatojuice",
 		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot  = "carrotjuice",
@@ -22,7 +21,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice = "watermelonjuice",
 		/obj/item/weapon/reagent_containers/food/snacks/grown/poisonberries = "poisonberryjuice",
 	)
-	machine_flags = WRENCHMOVE
+	machine_flags = WRENCHMOVE | INSERTBEAKER
 
 /obj/machinery/juicer/New()
 	beaker = new /obj/item/weapon/reagent_containers/glass/beaker/large(src)

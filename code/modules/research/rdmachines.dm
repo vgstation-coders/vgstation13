@@ -7,7 +7,6 @@
 	density = 1
 	anchored = 1
 	use_power = 1
-	var/busy = 0
 	var/hacked = 0
 	var/disabled = 0
 	var/shocked = 0

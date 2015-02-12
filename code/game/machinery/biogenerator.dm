@@ -146,13 +146,12 @@
 	use_power = 1
 	idle_power_usage = 40
 	var/processing = 0
-	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/points = 0
 	var/menustat = "menu"
 	var/list/recipes[0]
 	var/list/recipe_categories[0]
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | INSERTBEAKER
 
 	l_color = "#7BF9FF"
 

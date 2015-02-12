@@ -15,8 +15,6 @@ Feel free to do whatever with this if you think it lacks.
 	var/obj/item/device/pda/storedpda = null
 	var/list/colorlist = list()
 
-	var/busy = 0
-
 	var/last_print = 0 //No spamming PDA printing
 	var/build_time = 200 //could change in the future
 	var/blocked = list(/obj/item/device/pda/ai/pai,

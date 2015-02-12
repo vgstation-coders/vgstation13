@@ -29,7 +29,6 @@ var/list/camera_names=list()
 
 	var/light_disabled = 0
 	var/alarm_on = 0
-	var/busy = 0
 
 /obj/machinery/camera/New()
 	wires = new(src)

@@ -49,7 +49,6 @@
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	var/hasShocked = 0 //Prevents multiple shocks from happening
 	autoclose = 1
-	var/busy = 0
 	soundeffect = 'sound/machines/airlock.ogg'
 
 	emag_cost = 1 // in MJ

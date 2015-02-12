@@ -12,8 +12,7 @@
 /obj/machinery/cooking/icemachine
 	name = "Cream-Master Deluxe"
 	icon_state = "icecream_vat"
-
-	var/obj/item/weapon/reagent_containers/glass/beaker = null
+	machine_flags = INSERTBEAKER
 
 /obj/machinery/cooking/icemachine/New()
 	src.reagents = new/datum/reagents(500)

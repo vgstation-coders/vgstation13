@@ -6,7 +6,6 @@
 	icon_state = "port2"
 	density = 0
 	var/obj/item/weapon/fuel_assembly/cur_assembly
-	var/busy = 0
 	anchored = 1
 
 	var/opened = 1 //0=closed, 1=opened

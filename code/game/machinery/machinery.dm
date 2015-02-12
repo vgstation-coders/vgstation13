@@ -116,6 +116,11 @@ Class Procs:
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
+	var/busy = 0
+	var/mob/living/occupant = null
+	var/obj/item/weapon/reagent_containers/glass/beaker = null
+	var/unsecuring_tool = /obj/item/weapon/wrench
+	var/interact_offline = 0
 
 	/**
 	 * Machine construction/destruction/emag flags.
@@ -167,6 +172,40 @@ Class Procs:
 
 /obj/machinery/process() // If you dont use process or power why are you here
 	return PROCESS_KILL
+
+/obj/machinery/proc/go_in(mob/living/target as mob, mob/user as mob)
+	if(stat || user.stat || user.lying || !Adjacent(user) || !target.Adjacent(user) || !iscarbon(target) || istype(target, /mob/living/carbon/human/manifested))
+		return
+	if(istype(user, /mob/living/simple_animal) || istype(user, /mob/living/carbon/slime))
+		return
+	if(occupant)
+		user << "<span class='info'>\The [src] is already occupied by [occupant.name].</span>"
+		return
+	if(busy)
+		user << "<span class='warning'>Someone else is trying to fit into \the [src]</span>"
+		return
+	if(!target)
+		for(var/mob/living/carbon/C in loc)
+			if(C.buckled)
+				continue
+			else
+				target = C
+	if(target)
+		busy = 1
+		user.visible_message("<span class='warning'>[user] attempts to shove [target] into \the [src].</span>")
+		if(do_after(user, 20))
+			if(target.client)
+				target.client.perspective = EYE_PERSPECTIVE
+				target.client.eye = src
+			occupant = target
+			target.loc = src
+			target.stop_pulling()
+			busy = 0
+		else
+			busy = 0
+	src.add_fingerprint(user)
+	update_icon()
+	return
 
 /obj/machinery/emp_act(severity)
 	if(use_power && stat == 0)
@@ -497,6 +536,16 @@ Class Procs:
 		user << "<span class='rose'>You need more welding fuel to complete this task.</span>"
 		return -1
 
+/obj/machinery/proc/putBeakerIn(var/obj/item/weapon/reagent_containers/glass/item, mob/user)
+	if(beaker)
+		user << "<span class='warning'>A beaker is already loaded into \the [src].</span>"
+		return 0
+	beaker = item
+	user.drop_item()
+	item.loc = src
+	user.visible_message("[user] adds \a [item] to \the [src]!", "You add \a [item] to \the [src]!")
+	return 1
+
 /**
  * Handle emags.
  * @param user /mob The mob that used the emag.
@@ -530,11 +579,15 @@ Class Procs:
 
 	if(istype(O, /obj/item/weapon/screwdriver) && machine_flags & SCREWTOGGLE)
 		return togglePanelOpen(O, user)
-
+	if(istype(O, /obj/item/weapon/reagent_containers/glass) && machine_flags & INSERTBEAKER)
+		return putBeakerIn(O, user)
 	if(istype(O, /obj/item/weapon/weldingtool) && machine_flags & WELD_FIXED)
 		return weldToFloor(O, user)
 
 	if(istype(O, /obj/item/weapon/crowbar) && machine_flags & CROWDESTROY)
+		if(occupant)
+			user << "<span class='danger'>You cannot disassemble this [src], it's occupado.</span>"
+			return -1
 		if(panel_open)
 			if(crowbarDestroy(user) == 1)
 				qdel(src)

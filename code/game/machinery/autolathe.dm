@@ -98,7 +98,6 @@ var/global/list/autolathe_recipes_hidden = list( \
 	use_power = 1
 	idle_power_usage = 50
 	active_power_usage = 500
-	var/busy = 0
 	var/build_delay = 30 //Partial
 	var/time_coeff = 1 //Upgraded via part upgrading
 	var/resource_store_coeff = 1

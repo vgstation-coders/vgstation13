@@ -7,7 +7,6 @@
 	use_power = 1
 	idle_power_usage = 5
 	active_power_usage = 1000
-	var/mob/occupant = null
 	var/list/acceptable_upgradeables = list(/obj/item/weapon/cell) // battery for now
 	var/list/upgrade_holder = list()
 	var/upgrading = 0 // are we upgrading a nigga?
