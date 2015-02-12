@@ -36,8 +36,16 @@ var/global/narsie_cometh = 0
 	if(announce)
 		world << "<font size='15' color='red'><b>[uppertext(name)] HAS RISEN</b></font>"
 		world << sound('sound/effects/wind/wind_5_1.ogg')
+
+	if(istype(ticker.mode, /datum/game_mode/cult))
+		var/datum/game_mode/cult/mode_ticker = ticker.mode
+		if (mode_ticker.objectives[mode_ticker.current_objective] == "eldergod")
+			mode_ticker.third_phase()
+
 	if (emergency_shuttle)
-		emergency_shuttle.incall(0.3) // Cannot recall.
+		emergency_shuttle.incall(0.3)
+		emergency_shuttle.can_recall = 0
+		emergency_shuttle.settimeleft(600)
 
 	SetUniversalState(/datum/universal_state/hell)
 	narsie_cometh = 1
@@ -160,6 +168,11 @@ var/global/narsie_cometh = 0
 
 			if(M.flags & INVULNERABLE)
 				return 0
+
+			if((M in player_list) && (ticker.mode.name == "cult"))
+				var/datum/game_mode/cult/mode_ticker = ticker.mode
+				if(M.mind && (!(M.mind in mode_ticker.cult)))
+					mode_ticker.harvested++
 
 			M.cultify()
 
