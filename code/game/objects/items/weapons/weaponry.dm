@@ -351,12 +351,11 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 /obj/effect/energy_net/attack_hand(var/mob/user)
 	var/mob/living/carbon/human/H = user
 	if(istype(H))
-		if(H.species.can_shred(H))
+	/*	if(H.species.can_shred(H))
 			playsound(src.loc, 'sound/weapons/slash.ogg', 80, 1)
-			health -= rand(10, 20)
-		else
-			health -= rand(1,3)
-	else if (HULK in user.mutations)
+			health -= rand(10, 20)*/
+		health -= rand(1,3)
+	else if (M_HULK in user.mutations)
 		health = 0
 	else
 		health -= rand(5,8)

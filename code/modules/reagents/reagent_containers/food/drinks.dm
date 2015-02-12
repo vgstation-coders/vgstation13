@@ -949,10 +949,6 @@
 				message_admins("[user.name] ([user.ckey]) added [trans]U to \a [target] with [src].[hl] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 				log_game("[user.name] ([user.ckey]) added [trans]U to \a [target] with [src].")
 
-	//Safety for dumping stuff into a ninja suit. It handles everything through attackby() and this is unnecessary.
-	else if(istype(target, /obj/item/clothing/suit/space/space_ninja))
-		return
-
 	else if(istype(target, /obj/machinery/bunsen_burner))
 		return
 

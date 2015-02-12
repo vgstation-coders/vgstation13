@@ -122,7 +122,8 @@
 			if(istype(H.head, /obj/item/clothing/head/helmet/space/rig))
 				var/obj/item/clothing/head/helmet/space/rig/helmet = H.head
 				if(helmet.prevent_track())
-					continue
+					//TODO: FIX THIS
+					//continue
 			if(H.digitalcamo)
 				src << "Unable to locate an airlock"
 				return
@@ -176,10 +177,13 @@
 					U << "Follow camera mode terminated."
 					U.cameraFollow = null
 					return
-		 		if(istype(H.head, /obj/item/clothing/head/helmet/space/space_ninja) && !H.head.canremove)
-		 			U << "Follow camera mode terminated."
-					U.cameraFollow = null
-					return
+		 		if(istype(H.head, /obj/item/clothing/head/helmet/space/rig))
+					var/obj/item/clothing/head/helmet/space/rig/helmet = H.head
+					if(helmet.prevent_track())
+						//U << "Follow camera mode terminated."
+						//U.cameraFollow = null
+						//U.ai_cancel_tracking()
+						return // Honk!
 				if(H.digitalcamo)
 					U << "Follow camera mode terminated."
 					U.cameraFollow = null

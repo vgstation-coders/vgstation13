@@ -81,7 +81,7 @@
 		paste.use(1)
 		return
 
-	else if(istype(W,/obj/item/stack/cable_coil))
+	else if(istype(W,/obj/item/weapon/cable_coil))
 
 		switch(damage)
 			if(0)
@@ -91,7 +91,7 @@
 				user << "There is no damage that you are capable of mending with such crude tools."
 				return
 
-		var/obj/item/stack/cable_coil/cable = W
+		var/obj/item/weapon/cable_coil/cable = W
 		if(!cable.amount >= 5)
 			user << "You need five units of cable to repair \the [src]."
 			return

@@ -143,7 +143,8 @@ Class Procs:
 
 	var/inMachineList = 1 // For debugging.
 
-/obj/machinery/power_drain(var/drain_check)
+
+/obj/machinery/drain_power(var/drain_check)
 	if(drain_check)
 		return 1
 	if(!powered())

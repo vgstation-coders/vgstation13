@@ -55,7 +55,7 @@
 
 /obj/machinery/suit_storage_unit/elite
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig/elite
-	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/elite
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/void/elite
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots/elite
 

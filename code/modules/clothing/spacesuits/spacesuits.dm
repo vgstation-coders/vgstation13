@@ -17,17 +17,17 @@
 	species_restricted = list("exclude","Diona","Muton")
 
 	cold_breath_protection = 230
-	var/obj/machinery/camera/camera/
+	var/obj/machinery/camera/camera
 	var/list/camera_networks
 	brightness_on = 4
 	on = 0
 
 /obj/item/clothing/head/helmet/space/attack_self(mob/user)
-	
+
 	if(!camera && camera_networks)
 		if(!icon_action_button)
 			icon_action_button = "[icon_state]"
-		
+
 		camera = new /obj/machinery/camera(src)
 		camera.network = camera_networks
 		cameranet.removeCamera(camera)
@@ -40,8 +40,8 @@
 	..()
 	if(camera_networks && get_dist(usr, src) <= 1)
 		usr << "This helmet has a built-in camera. It's [camera ? "" : "in"]active."
-	
-	
+
+
 /obj/item/clothing/suit/space
 	name = "Space suit"
 	desc = "A suit that protects against low pressure environments. Has a big 13 on the back."

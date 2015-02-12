@@ -10,6 +10,12 @@
 
 	var/cold_speed_protection = 300 //that cloth allows its wearer to keep walking at normal speed at lower temperatures
 
+	var/list/sprite_sheets_refit = null
+
+
+
+/obj/item/clothing/proc/update_clothing_icon()
+	return
 //BS12: Species-restricted clothing check.
 /obj/item/clothing/mob_can_equip(M as mob, slot)
 
