@@ -51,7 +51,7 @@
 	suit_overlay_active = "mounted-drill"
 	suit_overlay_inactive = "mounted-drill"
 
-	device_type = /obj/item/weapon/pickaxe/diamonddrill
+	device_type = /obj/item/weapon/pickaxe/drill/diamond
 
 /obj/item/rig_module/device/anomaly_scanner
 	name = "hardsuit anomaly scanner"
@@ -72,8 +72,8 @@
 	usable = 1
 	selectable = 0
 
-	device_type = /obj/item/weapon/mining_scanner
-
+	device_type = /obj/item/device/mining_scanner
+/* TODO: FIX THIS
 /obj/item/rig_module/device/rcd
 	name = "RCD mount"
 	desc = "A cell-powered rapid construction device for a hardsuit."
@@ -82,7 +82,7 @@
 	usable = 1
 	engage_string = "Configure RCD"
 
-	device_type = /obj/item/weapon/rcd/mounted
+	device_type = /obj/item/weapon/rcd/mounted*/
 
 /obj/item/rig_module/device/New()
 	..()

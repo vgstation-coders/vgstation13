@@ -124,9 +124,9 @@
 				if(helmet.prevent_track())
 					//TODO: FIX THIS
 					//continue
-			if(H.digitalcamo)
-				src << "Unable to locate an airlock"
-				return
+				if(H.digitalcamo)
+					src << "Unable to locate an airlock"
+					return
 		if (!near_camera(target))
 			src << "Target is not near any active cameras."
 			return

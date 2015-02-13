@@ -321,7 +321,20 @@ var/global/list/organ_damage_overlays = list(
 	cycle++
 	..()
 
+/mob/living/carbon/human/proc/get_pressure_weakness()
+	var/pressure_adjustment_coefficient = 1 //assume no protection at first
 
+	if(wear_suit && (wear_suit.flags & STOPSPRESSUREDMG) && head && (head.flags & STOPSPRESSUREDMG))
+		pressure_adjustment_coefficient = 0
+
+		//handles breaches in your space suit. 10 suit damage equals a 100% loss in pressure protection.
+		if(istype(wear_suit,/obj/item/clothing/suit/space))
+			var/obj/item/clothing/suit/space/S = wear_suit
+			if(S.can_breach && S.damage)
+				pressure_adjustment_coefficient += S.damage * 0.1
+	pressure_adjustment_coefficient = Clamp(pressure_adjustment_coefficient,0,1)
+
+	return pressure_adjustment_coefficient
 
 /mob/living/carbon/human/calculate_affecting_pressure(var/pressure)
 	..()
@@ -1576,7 +1589,7 @@ var/global/list/organ_damage_overlays = list(
 
 		var/masked = 0
 
-		if( istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/void/unathi))
+		if( istype(head, /obj/item/clothing/head/welding))
 			var/obj/item/clothing/head/welding/O = head
 			if(!O.up && tinted_weldhelh)
 				client.screen += global_hud.darkMask

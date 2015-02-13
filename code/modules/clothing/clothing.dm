@@ -153,8 +153,8 @@ BLIND     // can't see anything
 
 /obj/item/clothing/head/New()
 	..()
-	if(!icon_action_button && brightness_on)
-		icon_action_button = "[icon_state]"
+	if(!action_button_name && brightness_on)
+		action_button_name = "[icon_state]"
 
 /obj/item/clothing/head/attack_self(mob/user)
 	if(brightness_on)

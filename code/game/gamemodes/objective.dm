@@ -592,9 +592,9 @@ datum/objective/download/check_completion()
 	var/obj/item/rig_module/datajack/stolen_data = locate() in S.installed_modules
 	if(!istype(stolen_data))
 		return 0
-	for(var/datum/tech/current_data in S.stored_research)
+	for(var/datum/tech/current_data in stolen_data.stored_research)
 		if(current_data.level>1)
-			current_amount+=(current_data.level-1)
+			current_amount += (current_data.level-1)
 	return (current_amount < target_amount) ? 0 : 1
 
 

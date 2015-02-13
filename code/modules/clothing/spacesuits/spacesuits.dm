@@ -25,8 +25,8 @@
 /obj/item/clothing/head/helmet/space/attack_self(mob/user)
 
 	if(!camera && camera_networks)
-		if(!icon_action_button)
-			icon_action_button = "[icon_state]"
+		if(!action_button_name)
+			action_button_name = "[icon_state]"
 
 		camera = new /obj/machinery/camera(src)
 		camera.network = camera_networks
