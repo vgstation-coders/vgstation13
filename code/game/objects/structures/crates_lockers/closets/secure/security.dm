@@ -119,6 +119,7 @@
 		new /obj/item/weapon/gun/energy/gun(src)
 		new /obj/item/clothing/accessory/holster/waist(src)
 		new /obj/item/weapon/melee/telebaton(src)
+		new /obj/item/weapon/rig/light(src)
 		return
 
 

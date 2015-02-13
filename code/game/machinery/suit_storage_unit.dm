@@ -48,8 +48,8 @@
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots/atmos
 
 /obj/machinery/suit_storage_unit/engie
-	SUIT_TYPE = /obj/item/clothing/suit/space/rig
-	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig
+	SUIT_TYPE = /obj/item/clothing/suit/space/void/engineering
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/void/engineering
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 

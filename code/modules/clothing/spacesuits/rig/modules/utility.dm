@@ -73,7 +73,7 @@
 	selectable = 0
 
 	device_type = /obj/item/device/mining_scanner
-/* TODO: FIX THIS
+
 /obj/item/rig_module/device/rcd
 	name = "RCD mount"
 	desc = "A cell-powered rapid construction device for a hardsuit."
@@ -82,7 +82,7 @@
 	usable = 1
 	engage_string = "Configure RCD"
 
-	device_type = /obj/item/weapon/rcd/mounted*/
+	device_type = /obj/item/weapon/rcd
 
 /obj/item/rig_module/device/New()
 	..()
@@ -279,7 +279,7 @@
 	disruptive = 0
 
 	suit_overlay_active = "maneuvering_active"
-	suit_overlay_inactive = "maneuvering_inactive"
+	suit_overlay_inactive = null //"maneuvering_inactive"
 
 	engage_string = "Toggle Stabilizers"
 	activate_string = "Activate Thrusters"
