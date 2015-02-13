@@ -88,3 +88,28 @@
 	item_state = "atmos_voidsuit"
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 50)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+
+//Firefighting/Atmos RIG (old /vg/)
+/obj/item/clothing/head/helmet/space/void/atmos/gold
+	desc = "A special helmet designed for work in hazardous low pressure environments and extreme temperatures. In other words, perfect for atmos."
+	heat_protection = HEAD
+	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE*2
+	name = "atmos hardsuit helmet"
+	icon_state = "rig0-atmos_gold"
+	item_state = "atmos_gold_helm"
+	_color = "atmos"
+	species_restricted = list("exclude","Vox")
+	//no_light=1
+
+/obj/item/clothing/suit/space/void/atmos/gold
+	desc = "A special suit that protects against hazardous low pressure environments and extreme temperatures. In other words, perfect for atmos."
+	heat_protection = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
+	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE*4
+	gas_transfer_coefficient = 0.80
+	permeability_coefficient = 0.25
+	icon_state = "rig-atmos_gold"
+	name = "atmos hardsuit"
+	item_state = "atmos_gold_hardsuit"
+	slowdown = 2
+	armor = list(melee = 30, bullet = 5, laser = 40,energy = 5, bomb = 35, bio = 100, rad = 60)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/weapon/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/)
