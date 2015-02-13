@@ -330,7 +330,7 @@
 	mob.emote("me",1,"vomits up a live spiderling!")
 
 /datum/disease2/effect/bonefix
-	name = "Advanced Automated Internal Recuperation"
+	name = "Advanced Skeletal Recuperation"
 	stage = 4
 /datum/disease2/effect/bonefix/activate(var/mob/living/carbon/mob,var/multiplier)
 	if(ishuman(mob)) //A splice from health scanner code
@@ -338,17 +338,13 @@
 		for(var/name in H.organs_by_name)
 			var/datum/organ/external/e = H.organs_by_name[name]
 			if(e.status & ORGAN_BROKEN)
-				H << "<span class = 'warning'>Your bones begin to painfully reshape themselves!</span>"
-				H.shock_stage += 30
-				spawn(300)
+				H << "<span class = 'warning'>Your bones are painfully reshaping themselves!</span>"
+				H.shock_stage = H.shock_stage + 10
+				if (prob(40))
 					e.status &= ~ORGAN_BROKEN
-					H.shock_stage += 30
+					H.shock_stage = H.shock_stage - 30
 					H << "<span class = 'notice'>Your skeleton feels stable again.</span>"
 					//Definitely needs work
-		for(var/datum/organ/external/e in H.organs)
-			for(var/datum/wound/W in e.wounds) if(W.internal)
-				spawn(30)
-					W.bleed_timer = 0
 
 /datum/disease2/effect/orbweapon
 	name = "Biolobulin Effect"
@@ -785,7 +781,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	if(mob:vessel)
 		var/blood_volume = round(mob:vessel.get_reagent_amount("blood"))
 		if (blood_volume < 560)
-			mob:vessel.add_reagent("blood", 3)
+			mob:vessel.add_reagent("blood", 8) //should be impressive, but shouldn't save you from impossible odds, nerf as neccasary
 			mob << "<span class='notice'>Your veins pulsate.</span>"
 
 /datum/disease2/effect/beard
