@@ -567,7 +567,11 @@
 		// Needed for M_TOXIC_FART
 		if("fart")
 			if(src.op_stage.butt != 4)
-				if(world.time-lastFart >= 400)
+				if(world.time-lastFart >= 400 && prob(30) && src.nutrition >= 300)
+					message = "<b>[src]</b> tries to fart, but shits instead!"
+					visible_message("<span class='warning'>[message]</span>")
+					new/obj/item/poop(get_turf(src), src.dna.unique_enzymes, src.dna.b_type)
+				else if(world.time-lastFart >= 400)
 					for(var/mob/M in view(0))
 						if(M != src && M.loc == src.loc)
 							if(!miming)
