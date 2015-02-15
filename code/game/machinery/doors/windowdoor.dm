@@ -29,7 +29,7 @@
 /obj/machinery/door/window/Destroy()
 	density = 0
 	if (!dismantled)
-		playsound(src, "shatter", 70, 1)
+		playsound(src, SOUND_SHATTER, 70, 1)
 	..()
 
 /obj/machinery/door/window/Bumped(atom/movable/AM as mob|obj)

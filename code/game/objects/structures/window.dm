@@ -352,7 +352,7 @@
 	density = 0
 	update_nearby_tiles()
 	if(loc)
-		playsound(get_turf(src), "shatter", 70, 1)
+		playsound(get_turf(src), SOUND_SHATTER, 70, 1)
 	update_nearby_icons()
 	..()
 

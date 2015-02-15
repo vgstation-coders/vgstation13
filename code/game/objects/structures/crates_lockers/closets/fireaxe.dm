@@ -46,7 +46,7 @@
 				visible_message("<span class='warning'>[user] damages [src]'s protective glass with [O].")
 				hitstaken++
 				if(hitstaken == 4)
-					playsound(user, SOUND_SHATTER, 100, 1) //Break cabinet, receive goodies. Cabinet's fucked for life after that.
+					playsound(user, SOUND_GLASS_BREAK_THREE, 100, 1) //Break cabinet, receive goodies. Cabinet's fucked for life after that.
 					visible_message("<span class='warning'>[src]'s protective glass shatters, exposing the cabinet's content.")
 					smashed = 1
 					locked = 0

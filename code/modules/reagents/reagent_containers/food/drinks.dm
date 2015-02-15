@@ -1070,7 +1070,7 @@
 
 	user.put_in_active_hand(B)
 	src.transfer_fingerprints_to(B)
-	playsound(src, "shatter", 70, 1)
+	playsound(src, SOUND_SHATTER, 70, 1)
 
 	del(src)
 

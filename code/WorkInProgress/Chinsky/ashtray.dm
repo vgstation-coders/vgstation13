@@ -136,5 +136,5 @@
 		..()
 		name = "shards of glass"
 		desc = "Shards of glass with ash on them."
-		playsound(src, "shatter", 30, 1)
+		playsound(src, SOUND_SHATTER, 30, 1)
 		return

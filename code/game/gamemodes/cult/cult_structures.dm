@@ -43,7 +43,7 @@
 				if(M == user)
 					continue
 				M.show_message("[user.name] smashed the pylon!", 3, "You hear a tinkle of crystal shards", 2)
-			playsound(get_turf(src), SOUND_SHATTER, 75, 1)
+			playsound(get_turf(src), SOUND_GLASS_BREAK_THREE, 75, 1)
 			isbroken = 1
 			density = 0
 			icon_state = "pylon-broken"

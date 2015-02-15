@@ -109,7 +109,7 @@
 				shake_camera(M, 3, 2) //Medium hit
 		if(A)
 			A.meteorhit(src)
-			playsound(get_turf(src), "explosion", 50, 1) //Medium boom
+			playsound(get_turf(src), SOUND_EXPLOSION, 50, 1) //Medium boom
 			explosion(src.loc, 2, 4, 6, 8, 0) //Medium meteor, medium boom
 			qdel(src)
 
@@ -151,7 +151,7 @@
 				shake_camera(M, 7, 3) //Massive shellshock
 		if(A)
 			explosion(src.loc, 4, 6, 8, 8, 0) //You have been visited by the nuclear meteor
-			playsound(get_turf(src), "explosion", 100, 1) //Deafening boom, default is 50
+			playsound(get_turf(src), SOUND_EXPLOSION, 100, 1) //Deafening boom, default is 50
 			qdel(src)
 
 /obj/effect/meteor/attackby(obj/item/weapon/W as obj, mob/user as mob)

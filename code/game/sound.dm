@@ -1,4 +1,3 @@
-var/list/explosion_sound = list('sound/effects/Explosion1.ogg','sound/effects/Explosion2.ogg','sound/effects/Explosion3.ogg','sound/effects/Explosion4.ogg','sound/effects/Explosion5.ogg','sound/effects/Explosion6.ogg')
 var/list/spark_sound = list('sound/effects/sparks1.ogg','sound/effects/sparks2.ogg','sound/effects/sparks3.ogg','sound/effects/sparks4.ogg')
 var/list/rustle_sound = list('sound/effects/rustle1.ogg','sound/effects/rustle2.ogg','sound/effects/rustle3.ogg','sound/effects/rustle4.ogg','sound/effects/rustle5.ogg')
 var/list/punch_sound = list('sound/weapons/punch1.ogg','sound/weapons/punch2.ogg','sound/weapons/punch3.ogg','sound/weapons/punch4.ogg')
@@ -15,7 +14,7 @@ var/list/mommicomment_sound = list('sound/voice/mommi_comment1.ogg', 'sound/voic
 //space sounds have no gas modification, for example. Though >space sounds
 /proc/playsound(var/atom/source, soundin, vol as num, vary, extrarange as num, falloff, var/gas_modified = 1)
 
-	//soundin = get_sfx(soundin) // same sound for everyone
+	soundin = get_sfx(soundin)
 
 	if(isarea(source))
 		error("[source] is an area and is trying to make the sound: [soundin]")
@@ -89,17 +88,12 @@ var/const/SURROUND_CAP = 7
 			vol = min( vol * atmosphere / ONE_ATMOSPHERE, vol) //sound can't be amplified from low to high pressure, but can be reduced
 		/// end ///
 
-	soundin = get_sfx(soundin)
+	if (istext(soundin))
+		soundin = get_sfx(soundin)
 
 	var/sound/S = soundin
-
-	if (istype(S))
-		world << "woop"
-	else
-		S = sound(soundin)
-
-	S.wait = 0 //No queue
-	S.channel = 0 //Any channel
+	S.wait = 0 // No queue.
+	S.channel = 0 // Any channel.
 	S.volume = vol
 
 	if (vary)

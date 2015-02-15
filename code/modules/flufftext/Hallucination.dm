@@ -115,10 +115,10 @@ mob/living/carbon/proc/handle_hallucinations()
 					switch(rand(1, 10))
 						if(1) src << 'sound/machines/airlock.ogg'
 						if(2)
-							if(prob(50))src << 'sound/effects/Explosion1.ogg'
-							else src << 'sound/effects/Explosion2.ogg'
+							if(prob(50))src << get_sfx(SOUND_EXPLOSION_ONE)
+							else src << get_sfx(SOUND_EXPLOSION_TWO)
 						if(3) src << 'sound/effects/explosionfar.ogg'
-						if(4) src << get_sfx(SOUND_LIST_SHATTER)
+						if(4) src << get_sfx(SOUND_SHATTER)
 						if(5) src << 'sound/machines/twobeep.ogg'
 						if(6) src << 'sound/machines/windowdoor.ogg'
 						if(7)

@@ -148,7 +148,7 @@
 			src.density = 0
 			src.destroyed = 1
 			getFromPool(/obj/item/weapon/shard, loc)
-			playsound(get_turf(src), "shatter", 70, 1)
+			playsound(get_turf(src), SOUND_SHATTER, 70, 1)
 			update_icon()
 	else
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
