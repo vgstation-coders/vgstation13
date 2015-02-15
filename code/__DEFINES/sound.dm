@@ -3,6 +3,8 @@
 #define SOUND_BLADE_SLICE "blade_slice"
 #define SOUND_BLOODY_SLICE "bloody_slice"
 #define SOUND_CLICK "click"
+#define SOUND_CLOWN_STEP_ONE "clown_step_one"
+#define SOUND_CLOWN_STEP_TWO "clown_step_two"
 #define SOUND_CROWBAR "crowbar"
 #define SOUND_DECONSTRUCT "deconstruct"
 #define SOUND_EXPLOSION_ONE "explosion_one"
@@ -27,6 +29,7 @@
 #define SOUND_TOOL_HIT "tool_hit"
 #define SOUND_WIRECUTTER "wirecutter"
 
+#define SOUND_CLOWN_STEP "clown_step"
 #define SOUND_EXPLOSION "explosion"
 #define SOUND_SHATTER "shatter"
 #define SOUND_SPARK "spark"
@@ -43,6 +46,8 @@ proc/gen_sounds()
 	sounds[SOUND_BLADE_SLICE] = sound('sound/weapons/bladeslice.ogg')
 	sounds[SOUND_BLOODY_SLICE] = sound('sound/weapons/bloodyslice.ogg')
 	sounds[SOUND_CLICK] = sound('sound/machines/click.ogg')
+	sounds[SOUND_CLOWN_STEP_ONE] = ('sound/effects/clownstep1.ogg')
+	sounds[SOUND_CLOWN_STEP_TWO] = ('sound/effects/clownstep2.ogg')
 	sounds[SOUND_CROWBAR] = sound('sound/items/Crowbar.ogg')
 	sounds[SOUND_DECONSTRUCT] = sound('sound/items/Deconstruct.ogg')
 	sounds[SOUND_EXPLOSION_ONE] = sound('sound/effects/Explosion1.ogg')
@@ -67,6 +72,7 @@ proc/gen_sounds()
 	sounds[SOUND_TOOL_HIT] = sound('sound/weapons/toolhit.ogg')
 	sounds[SOUND_WIRECUTTER] = sound('sound/items/Wirecutter.ogg')
 
+	sounds[SOUND_CLOWN_STEP] = list(sounds[SOUND_CLOWN_STEP_ONE], sounds[SOUND_CLOWN_STEP_TWO])
 	sounds[SOUND_EXPLOSION] = list(sounds[SOUND_EXPLOSION_ONE], sounds[SOUND_EXPLOSION_TWO], sounds[SOUND_EXPLOSION_THREE], sounds[SOUND_EXPLOSION_FOUR], sounds[SOUND_EXPLOSION_FIVE], sounds[SOUND_EXPLOSION_SIX])
 	sounds[SOUND_SHATTER] = list(sounds[SOUND_GLASS_BREAK_ONE], sounds[SOUND_GLASS_BREAK_TWO], sounds[SOUND_GLASS_BREAK_THREE])
 	sounds[SOUND_SPARK] = list(sounds[SOUND_SPARK_ONE], sounds[SOUND_SPARK_TWO], sounds[SOUND_SPARK_THREE], sounds[SOUND_SPARK_FOUR])

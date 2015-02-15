@@ -303,8 +303,8 @@
 		if(m_intent == "run")
 			if(footstep > 1)
 				footstep = 0
-				playsound(src, "clownstep", 50, 1) // this will get annoying very fast.
+				playsound(src, SOUND_CLOWN_STEP, 50, 1) // this will get annoying very fast.
 			else
 				footstep++
 		else
-			playsound(src, "clownstep", 20, 1)
+			playsound(src, SOUND_CLOWN_STEP, 20, 1)
