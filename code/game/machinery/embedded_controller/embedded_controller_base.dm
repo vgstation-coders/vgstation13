@@ -37,7 +37,7 @@
 					usr << "You begin removing screws from \the [src] backplate..."
 					if(do_after(user, 50))
 						usr << "\blue You unscrew \the [src] from the wall."
-						playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+						playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 						new /obj/item/mounted/frame/airlock_controller(get_turf(src))
 						del(src)
 					return 1
@@ -98,7 +98,7 @@
 					return 1
 				if(istype(W, /obj/item/weapon/screwdriver))
 					user << "You begin to complete \the [src]..."
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 					if(do_after(user, 20))
 						if(!_circuitboard)
 							_circuitboard=new boardtype(src)

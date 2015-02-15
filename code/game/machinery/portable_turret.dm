@@ -785,7 +785,7 @@ Status: []<BR>"},
 
 		if(5)
 			if(istype(W, /obj/item/weapon/screwdriver))
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 100, 1)
 				build_step = 6
 				user << "\blue You close the internal access hatch."
 				return
@@ -803,7 +803,7 @@ Status: []<BR>"},
 					return
 
 			else if(istype(W, /obj/item/weapon/screwdriver))
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 100, 1)
 				build_step = 5
 				user << "You open the internal access hatch."
 				return

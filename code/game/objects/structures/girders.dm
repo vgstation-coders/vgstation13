@@ -44,7 +44,7 @@
 			qdel(src)
 
 	else if(istype(W, /obj/item/weapon/screwdriver) && state == 2)
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+		playsound(get_turf(src), SOUND_SCREWDRIVER, 100, 1)
 		user << "<span class='info'>Now unsecuring support struts.</span>"
 		if(do_after(user,40))
 			if(!src || !get_turf(src)) return

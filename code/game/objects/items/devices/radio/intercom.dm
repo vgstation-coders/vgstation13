@@ -103,7 +103,7 @@
 			return 1
 		if(istype(W,/obj/item/weapon/screwdriver))
 			for(var/obj/item/weapon/intercom_electronics/board in src)
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				if(do_after(user, 10))
 					del(board)
 					circuitry_installed=1

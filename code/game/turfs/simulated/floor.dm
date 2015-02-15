@@ -475,12 +475,12 @@ turf/simulated/floor/proc/update_icon()
 					new floor_tile.type(src)
 
 			make_plating()
-			playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
+			playsound(src, SOUND_SCREWDRIVER, 80, 1)
 		if(is_catwalk())
 			if(broken) return
 			ReplaceWithLattice()
 			user << "<span class='notice'>You begin dismantling the catwalk.</span>"
-			playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
+			playsound(src, SOUND_SCREWDRIVER, 80, 1)
 		return
 
 	if(istype(C, /obj/item/stack/rods))

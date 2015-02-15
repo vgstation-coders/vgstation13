@@ -106,7 +106,7 @@
 /obj/machinery/computer/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(!circuit) //we can't disassemble with no circuit, so add some fucking circuits if you want disassembly
 		return
-	playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 	user.visible_message(	"[user] begins to unscrew \the [src]'s monitor.",
 							"You begin to unscrew the monitor...")
 	if(do_after(user, 20))

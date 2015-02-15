@@ -88,12 +88,12 @@
 					return
 				if(mode==0) // It's off but still not unscrewed
 					mode=-1 // Set it to doubleoff l0l
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 					user << "You remove the screws around the power connection."
 					return
 				else if(mode==-1)
 					mode=0
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 					user << "You attach the screws around the power connection."
 					return
 			else if(istype(I,/obj/item/weapon/weldingtool) && mode==-1)
@@ -1376,12 +1376,12 @@
 		if(istype(I, /obj/item/weapon/screwdriver))
 			if(mode==0)
 				mode=1
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				user << "You remove the screws around the power connection."
 				return
 			else if(mode==1)
 				mode=0
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				user << "You attach the screws around the power connection."
 				return
 		else if(istype(I,/obj/item/weapon/weldingtool) && mode==1)

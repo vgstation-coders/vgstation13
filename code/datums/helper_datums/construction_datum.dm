@@ -55,7 +55,7 @@
 			playsound(holder, SOUND_RATCHET, 50, 1)
 
 		else if(istype(used_atom, /obj/item/weapon/screwdriver))
-			playsound(holder, 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(holder, SOUND_SCREWDRIVER, 50, 1)
 
 		else if(istype(used_atom, /obj/item/weapon/wirecutters))
 			playsound(holder, 'sound/items/Wirecutter.ogg', 50, 1)

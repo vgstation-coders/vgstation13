@@ -15,7 +15,7 @@
 				circuit=W
 				circuit.loc=src
 				state++
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 			if(istype(W, /obj/item/weapon/crowbar))
 				new /obj/machinery/constructable_frame/machine_frame(T)
 				new /obj/item/stack/sheet/glass/glass(T)
@@ -32,7 +32,7 @@
 				else
 					C.req_access = circuit.conf_access
 					C.req_one_access = null
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				del(src)
 				return
 			if(istype(W, /obj/item/weapon/crowbar))

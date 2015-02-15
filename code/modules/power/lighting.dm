@@ -98,7 +98,7 @@
 			src.stage = 3
 			user.visible_message("[user.name] closes [src]'s casing.", \
 				"You close [src]'s casing.", "You hear a noise.")
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 75, 1)
+			playsound(get_turf(src), SOUND_SCREWDRIVER, 75, 1)
 
 			switch(fixture_type)
 
@@ -347,7 +347,7 @@
 	// attempt to stick weapon into light socket
 	else if(status == LIGHT_EMPTY)
 		if(istype(W, /obj/item/weapon/screwdriver)) //If it's a screwdriver open it.
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 75, 1)
+			playsound(get_turf(src), SOUND_SCREWDRIVER, 75, 1)
 			user.visible_message("[user.name] opens [src]'s casing.", \
 				"You open [src]'s casing.", "You hear a noise.")
 			var/obj/machinery/light_construct/newlight = null

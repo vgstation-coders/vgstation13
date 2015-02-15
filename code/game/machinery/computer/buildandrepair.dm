@@ -319,7 +319,7 @@
 					user << "<span class='warning'>This frame does not accept circuit boards of this type!</span>"
 				return 1
 			if(istype(P, /obj/item/weapon/screwdriver) && circuit)
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				user << "<span class='notice'>You screw the circuit board into place.</span>"
 				src.state = 2
 				src.icon_state = "2"
@@ -334,7 +334,7 @@
 				return 1
 		if(2)
 			if(istype(P, /obj/item/weapon/screwdriver) && circuit)
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				user << "<span class='notice'>You unfasten the circuit board.</span>"
 				src.state = 1
 				src.icon_state = "1"
@@ -379,7 +379,7 @@
 				new /obj/item/stack/sheet/glass/glass( src.loc, 2 )
 				return 1
 			if(istype(P, /obj/item/weapon/screwdriver))
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				user << "<span class='notice'>You connect the monitor.</span>"
 				var/B = new src.circuit.build_path ( src.loc )
 				if(circuit.powernet) B:powernet = circuit.powernet

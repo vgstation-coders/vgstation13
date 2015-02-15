@@ -160,6 +160,8 @@ var/const/SURROUND_CAP = 7
 			if (SOUND_CLICK)
 				soundin = sounds[SOUND_CLICK]
 			if (SOUND_DECONSTRUCT)
-				soundin = sounds[SOUND_DECONSTRUCT)
+				soundin = sounds[SOUND_DECONSTRUCT]
+			if (SOUND_SCREWDRIVER)
+				soundin = sounds[SOUND_SCREWDRIVER]
 
 	return soundin

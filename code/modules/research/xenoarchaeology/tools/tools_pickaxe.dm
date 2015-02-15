@@ -22,7 +22,7 @@
 	digspeed = 20
 	desc = "A miniature excavation tool for precise digging (2 centimetre excavation depth)."
 	excavation_amount = 1
-	drill_sound = 'sound/items/Screwdriver.ogg'
+	drill_sound = SOUND_SCREWDRIVER
 	drill_verb = "delicately picking"
 	w_class = 2
 
@@ -34,7 +34,7 @@
 	digspeed = 20
 	desc = "A miniature excavation tool for precise digging (4 centimetre excavation depth)."
 	excavation_amount = 2
-	drill_sound = 'sound/items/Screwdriver.ogg'
+	drill_sound = SOUND_SCREWDRIVER
 	drill_verb = "delicately picking"
 	w_class = 2
 
@@ -46,7 +46,7 @@
 	digspeed = 20
 	desc = "A miniature excavation tool for precise digging (6 centimetre excavation depth)."
 	excavation_amount = 3
-	drill_sound = 'sound/items/Screwdriver.ogg'
+	drill_sound = SOUND_SCREWDRIVER
 	drill_verb = "delicately picking"
 	w_class = 2
 
@@ -58,7 +58,7 @@
 	digspeed = 20
 	desc = "A miniature excavation tool for precise digging (8 centimetre excavation depth)."
 	excavation_amount = 4
-	drill_sound = 'sound/items/Screwdriver.ogg'
+	drill_sound = SOUND_SCREWDRIVER
 	drill_verb = "delicately picking"
 	w_class = 2
 
@@ -70,7 +70,7 @@
 	digspeed = 20
 	desc = "A miniature excavation tool for precise digging (10 centimetre excavation depth)."
 	excavation_amount = 5
-	drill_sound = 'sound/items/Screwdriver.ogg'
+	drill_sound = SOUND_SCREWDRIVER
 	drill_verb = "delicately picking"
 	w_class = 2
 
@@ -82,7 +82,7 @@
 	digspeed = 20
 	desc = "A miniature excavation tool for precise digging (12 centimetre excavation depth)."
 	excavation_amount = 6
-	drill_sound = 'sound/items/Screwdriver.ogg'
+	drill_sound = SOUND_SCREWDRIVER
 	drill_verb = "delicately picking"
 	w_class = 2
 

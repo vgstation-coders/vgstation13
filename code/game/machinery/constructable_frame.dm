@@ -131,7 +131,7 @@
 								component_check = 0
 								break
 						if(component_check)
-							playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+							playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
 							for(var/obj/O in new_machine.component_parts)
 								del(O)

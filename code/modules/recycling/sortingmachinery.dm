@@ -329,12 +329,12 @@
 	if(istype(I, /obj/item/weapon/screwdriver))
 		if(c_mode==0)
 			c_mode=1
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 			user << "You remove the screws around the power connection."
 			return
 		else if(c_mode==1)
 			c_mode=0
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 			user << "You attach the screws around the power connection."
 			return
 	else if(istype(I,/obj/item/weapon/weldingtool) && c_mode==1)

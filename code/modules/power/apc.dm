@@ -407,12 +407,12 @@
 				if (has_electronics==1 && terminal)
 					has_electronics = 2
 					stat &= ~MAINT
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 					user << "You screw the circuit electronics into place."
 				else if (has_electronics==2)
 					has_electronics = 1
 					stat |= MAINT
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 					user << "You unfasten the electronics."
 				else /* has_electronics==0 */
 					user << "\red There is nothing to secure."

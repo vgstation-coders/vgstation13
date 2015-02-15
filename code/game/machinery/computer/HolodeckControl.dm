@@ -177,7 +177,7 @@
 //Warning, uncommenting this can have concequences. For example, deconstructing the computer may cause holographic eswords to never derez
 
 /*		if(istype(D, /obj/item/weapon/screwdriver))
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 			if(do_after(user, 20))
 				if (src.stat & BROKEN)
 					user << "\blue The broken glass falls out."

@@ -221,12 +221,12 @@
 	if(istype(W, /obj/item/weapon/screwdriver))
 		if(reinf && state >= 1)
 			state = 3 - state
-			playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+			playsound(loc, SOUND_SCREWDRIVER, 75, 1)
 			user << (state == 1 ? "<span class='notice'>You have unfastened the window from the frame.</span>" : "<span class='notice'>You have fastened the window to the frame.</span>")
 		else if(reinf && state == 0)
 			anchored = !anchored
 			update_nearby_icons()
-			playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+			playsound(loc, SOUND_SCREWDRIVER, 75, 1)
 			user << (anchored ? "<span class='notice'>You have fastened the frame to the floor.</span>" : "<span class='notice'>You have unfastened the frame from the floor.</span>")
 			if(!anchored)
 				var/pdiff=performWallPressureCheck(src.loc)
@@ -236,7 +236,7 @@
 		else if(!reinf)
 			anchored = !anchored
 			update_nearby_icons()
-			playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+			playsound(loc, SOUND_SCREWDRIVER, 75, 1)
 			user << (anchored ? "<span class='notice'>You have fastened the window to the floor.</span>" : "<span class='notice'>You have unfastened the window.</span>")
 			if(!anchored)
 				var/pdiff=performWallPressureCheck(src.loc)

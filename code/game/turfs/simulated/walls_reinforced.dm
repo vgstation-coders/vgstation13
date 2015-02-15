@@ -98,7 +98,7 @@
 		if(1)
 			if (istype(W, /obj/item/weapon/screwdriver))
 				user << "<span class='notice'>You begin removing the support lines.</span>"
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(src, SOUND_SCREWDRIVER, 100, 1)
 
 				sleep(40)
 				if( !istype(src, /turf/simulated/wall/r_wall) || !user || !W || !T )	return

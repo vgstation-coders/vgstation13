@@ -943,7 +943,7 @@
 				usr << "You begin removing screws from \the [src] backplate..."
 				if(do_after(user, 50))
 					usr << "<span class='notice'>You unscrew \the [src] from the wall.</span>"
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 					new /obj/item/mounted/frame/wallmed(get_turf(src))
 					del(src)
 				return 1
@@ -1004,7 +1004,7 @@
 				return 1
 			if(istype(W, /obj/item/weapon/screwdriver))
 				user << "You begin to complete \the [src]..."
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				if(do_after(user, 20))
 					if(!_circuitboard)
 						_circuitboard=new boardtype(src)
@@ -1017,7 +1017,7 @@
 		if(3) // Waiting for a recharge pack
 			if(istype(W, /obj/item/weapon/screwdriver))
 				user << "You begin to unscrew \the [src]..."
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				if(do_after(user, 30))
 					build--
 					update_icon()

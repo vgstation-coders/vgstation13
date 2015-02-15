@@ -16,11 +16,11 @@
 /obj/machinery/telepad/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/screwdriver))
 		if(opened)
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(src, SOUND_SCREWDRIVER, 50, 1)
 			user << "<span class = 'caution'> You secure the access port on \the [src].</span>"
 			opened = 0
 		else
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(src, SOUND_SCREWDRIVER, 50, 1)
 			user << "<span class = 'caution'> You open \the [src]'s access port.</span>"
 			opened = 1
 	if(istype(W, /obj/item/bluespace_crystal) && opened)
@@ -64,11 +64,11 @@
 			user << "<span class = 'caution'> The [src] is now secured.</span>"
 	if(istype(W, /obj/item/weapon/screwdriver))
 		if(stage == 0)
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(src, SOUND_SCREWDRIVER, 50, 1)
 			user << "<span class = 'caution'> You unscrew the telepad's tracking beacon.</span>"
 			stage = 1
 		else if(stage == 1)
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(src, SOUND_SCREWDRIVER, 50, 1)
 			user << "<span class = 'caution'> You screw in the telepad's tracking beacon.</span>"
 			stage = 0
 	if(istype(W, /obj/item/weapon/weldingtool) && stage == 1)

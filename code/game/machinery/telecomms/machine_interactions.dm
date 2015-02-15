@@ -22,12 +22,12 @@
 		if(0)
 			if(istype(P, /obj/item/weapon/screwdriver))
 				user << "You unfasten the bolts."
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				construct_op ++
 		if(1)
 			if(istype(P, /obj/item/weapon/screwdriver))
 				user << "You fasten the bolts."
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				construct_op --
 			if(istype(P, /obj/item/weapon/wrench))
 				user << "You dislodge the external plating."

@@ -162,7 +162,7 @@ obj/structure/windoor_assembly/Destroy()
 
 			//Adding airlock electronics for access. Step 6 complete.
 			else if(istype(W, /obj/item/weapon/circuitboard/airlock) && W:icon_state != "door_electronics_smoked")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 100, 1)
 				user.visible_message("[user] installs the electronics into the airlock assembly.", "You start to install electronics into the airlock assembly.")
 
 				if(do_after(user, 40))
@@ -178,7 +178,7 @@ obj/structure/windoor_assembly/Destroy()
 
 			//Screwdriver to remove airlock electronics. Step 6 undone.
 			else if(istype(W, /obj/item/weapon/screwdriver) && electronics)
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 100, 1)
 				user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to uninstall electronics from the airlock assembly.")
 
 				if(do_after(user, 40))
