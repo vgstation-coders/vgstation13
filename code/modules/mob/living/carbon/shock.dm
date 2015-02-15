@@ -21,6 +21,8 @@
 		src.traumatic_shock -= 50
 	if(reagents.has_reagent("tramadol"))
 		src.traumatic_shock -= 80 // make synaptizine function as good painkiller
+	if(reagents.has_reagent("morphine"))
+		src.traumatic_shock -= 200 // make synaptizine function as good painkiller
 	if(reagents.has_reagent("oxycodone"))
 		src.traumatic_shock -= 200 // make synaptizine function as good painkiller
 	if(src.slurring)

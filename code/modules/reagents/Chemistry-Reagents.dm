@@ -121,6 +121,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 		M << "<span class = 'userdanger'>You're not feeling good at all! You really need some [name].</span>"
 	return
 
+
 /datum/reagent/muhhardcores
 	name = "Hardcores"
 	id = "bustanut"
@@ -470,23 +471,6 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	// Toxins are really weak, but without being treated, last very long.
 	M.adjustToxLoss(0.2)
-	..()
-	return
-
-/datum/reagent/cyanide
-	// Fast and lethal
-	name = "Cyanide"
-	id = "cyanide"
-	description = "A highly toxic chemical."
-	reagent_state = LIQUID
-	color = "#CF3600" // rgb: 207, 54, 0
-	custom_metabolism = 0.4
-
-/datum/reagent/cyanide/on_mob_life(var/mob/living/M as mob)
-	if(!M) M = holder.my_atom
-	M.adjustToxLoss(4)
-	M.adjustOxyLoss(4)
-	M.sleeping += 1
 	..()
 	return
 

@@ -122,19 +122,20 @@
 /datum/reagent/cyanide
 	name = "Cyanide"
 	id = "cyanide"
-	description = "+0.5 TOX, 10% chance of +1 LOSEBREATH, 8% chance of stun and extra +2 TOX."
+	description = "+1.5 TOX, 10% chance of +1 LOSEBREATH, 8% chance of stun and extra +2 TOX."
 	reagent_state = LIQUID
 	color = "#CF3600" // rgb: 207, 54, 0
 	custom_metabolism = 0.1
 
 /datum/reagent/cyanide/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
-	M.adjustToxLoss(0.5*REM)
+	M.adjustToxLoss(1.5*REM)
 	if(prob(10))
 		M.losebreath += 1
 	if(prob(8))
 		M << "You feel horrendously weak!"
 		M.Stun(2)
+		M.Weaken(2)
 		M.adjustToxLoss(2*REM)
 	..()
 	return
