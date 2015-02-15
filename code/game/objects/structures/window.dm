@@ -248,7 +248,7 @@
 		playsound(loc, SOUND_CROWBAR, 75, 1)
 		user << (state ? "<span class='notice'>You have pried the window into the frame.</span>" : "<span class='notice'>You have pried the window out of the frame.</span>")
 	else if(istype(W, /obj/item/weapon/weldingtool) && !anchored && (!state || !reinf))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 		user << "<span class='notice'>Now disassembling the window...</span>"
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))

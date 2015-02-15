@@ -51,7 +51,7 @@
 		update_icon()
 	else if(istype(O, /obj/item/weapon/wrench))
 		user << "<span class='notice'> Now disassembling bookcase</span>"
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 		if(do_after(user,50))
 			new /obj/item/stack/sheet/wood(get_turf(src))
 			new /obj/item/stack/sheet/wood(get_turf(src))

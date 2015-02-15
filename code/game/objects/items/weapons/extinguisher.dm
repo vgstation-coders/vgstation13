@@ -74,13 +74,13 @@
 			user.visible_message("[user] begins to unwrench the fill cap on \the [src].","<span class='notice'>You begin to unwrench the fill cap on \the [src].</span>")
 			if(do_after(user, 25))
 				user.visible_message("[user] removes the fill cap on \the [src].","<span class='notice'>You remove the fill cap on \the [src].</span>")
-				playsound(get_turf(src),'sound/items/Ratchet.ogg', 100, 1)
+				playsound(get_turf(src),SOUND_RATCHET, 100, 1)
 				flags |= OPENCONTAINER
 		else
 			user.visible_message("[user] begins to seal the fill cap on \the [src].","<span class='notice'>You begin to seal the fill cap on \the [src].</span>")
 			if(do_after(user, 25))
 				user.visible_message("[user] fastens the fill cap on \the [src].","<span class='notice'>You fasten the fill cap on \the [src].</span>")
-				playsound(get_turf(src),'sound/items/Ratchet.ogg', 100, 1)
+				playsound(get_turf(src),SOUND_RATCHET, 100, 1)
 				flags &= ~OPENCONTAINER
 		return
 

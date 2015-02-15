@@ -698,7 +698,7 @@ Status: []<BR>"},
 	switch(build_step)
 		if(0) // first step
 			if(istype(W, /obj/item/weapon/wrench) && !anchored)
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 				user << "\blue You secure the external bolts."
 				anchored = 1
 				build_step = 1
@@ -725,7 +725,7 @@ Status: []<BR>"},
 					return
 
 			else if(istype(W, /obj/item/weapon/wrench))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 75, 1)
 				user << "You unfasten the external bolts."
 				anchored = 0
 				build_step = 0
@@ -734,7 +734,7 @@ Status: []<BR>"},
 
 		if(2)
 			if(istype(W, /obj/item/weapon/wrench))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 				user << "\blue You bolt the metal armor into place."
 				build_step = 3
 				return
@@ -769,7 +769,7 @@ Status: []<BR>"},
 				return
 
 			else if(istype(W, /obj/item/weapon/wrench))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 				user << "You remove the turret's metal armor bolts."
 				build_step = 2
 				return

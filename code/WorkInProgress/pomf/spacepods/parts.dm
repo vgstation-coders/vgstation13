@@ -74,12 +74,12 @@
 				//log_admin("Repositioning")
 				pod.loc = F.loc
 			qdel(F)
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 	if(istype(O, /obj/item/weapon/wrench))
 		user << "<span class='notice'>You [!anchored ? "secure \the [src] in place."  : "remove the securing bolts."]</span>"
 		anchored = !anchored
 		density = anchored
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 
 /obj/item/pod_parts/pod_frame/verb/rotate()
 	set name = "Rotate Frame"

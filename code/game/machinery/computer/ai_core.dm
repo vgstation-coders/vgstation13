@@ -17,7 +17,7 @@
 	switch(state)
 		if(0)
 			if(istype(P, /obj/item/weapon/wrench))
-				playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(loc, SOUND_RATCHET, 50, 1)
 				if(do_after(user, 20))
 					user << "<span class='notice'>You wrench the frame into place.</span>"
 					anchored = 1
@@ -35,7 +35,7 @@
 					del(src)
 		if(1)
 			if(istype(P, /obj/item/weapon/wrench))
-				playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(loc, SOUND_RATCHET, 50, 1)
 				if(do_after(user, 20))
 					user << "<span class='notice'>You unfasten the frame.</span>"
 					anchored = 0

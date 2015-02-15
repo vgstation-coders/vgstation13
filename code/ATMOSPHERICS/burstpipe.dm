@@ -42,7 +42,7 @@
 	if (!istype(W, /obj/item/weapon/wrench))
 		return ..()
 	var/turf/T = get_turf(src)
-	playsound(T, 'sound/items/Ratchet.ogg', 50, 1)
+	playsound(T, SOUND_RATCHET, 50, 1)
 	user << "\blue You begin to remove \the [src]..."
 	if (do_after(user, 40))
 		user.visible_message( \

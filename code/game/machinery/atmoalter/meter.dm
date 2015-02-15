@@ -141,7 +141,7 @@
 	if (!istype(W, /obj/item/weapon/wrench))
 		return ..()
 
-	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 	user << "<span class='notice'>You begin to unfasten \the [src]...</span>"
 	if (do_after(user, 40))
 		user.visible_message( \

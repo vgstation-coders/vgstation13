@@ -183,7 +183,7 @@
 
 	else if(istype(W, /obj/item/weapon/wrench) && state == 0)
 		busy = 1
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 		if(anchored)
 			user.visible_message("[user] unsecures the airlock assembly from the floor.", "You start to unsecure the airlock assembly from the floor.")
 		else

@@ -80,7 +80,7 @@ obj/structure/windoor_assembly/Destroy()
 
 			//Wrenching an unsecure assembly anchors it in place. Step 4 complete
 			if(istype(W, /obj/item/weapon/wrench) && !anchored)
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 				user.visible_message("[user] secures the windoor assembly to the floor.", "You start to secure the windoor assembly to the floor.")
 
 				if(do_after(user, 40))
@@ -94,7 +94,7 @@ obj/structure/windoor_assembly/Destroy()
 
 			//Unwrenching an unsecure assembly un-anchors it. Step 4 undone
 			else if(istype(W, /obj/item/weapon/wrench) && anchored)
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 				user.visible_message("[user] unsecures the windoor assembly to the floor.", "You start to unsecure the windoor assembly to the floor.")
 
 				if(do_after(user, 40))

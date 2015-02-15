@@ -209,7 +209,7 @@
 				else
 					density = 1 // We don't want disposal bins or outlets to go density 0
 				user << "You attach the [nicetype] to the underfloor."
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 			update()
 
 		else if(istype(I, /obj/item/weapon/weldingtool))

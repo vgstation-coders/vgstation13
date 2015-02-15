@@ -278,7 +278,7 @@
 	switch(state)
 		if(0)
 			if(istype(P, /obj/item/weapon/wrench))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 				if(do_after(user, 5))
 					user << "<span class='notice'>You wrench the frame into place.</span>"
 					src.anchored = 1
@@ -300,7 +300,7 @@
 				return 1
 		if(1)
 			if(istype(P, /obj/item/weapon/wrench))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 				if(do_after(user, 20))
 					user << "<span class='notice'>You unfasten the frame.</span>"
 					src.anchored = 0

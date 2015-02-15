@@ -895,7 +895,7 @@
 			else if(istype(W, /obj/item/weapon/wrench))
 				user << "You remove the air alarm assembly from the wall!"
 				new /obj/item/mounted/frame/alarm_frame(get_turf(user))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 				qdel(src)
 				return
 
@@ -1037,7 +1037,7 @@ FIRE ALARM
 				else if(istype(W, /obj/item/weapon/wrench))
 					user << "You remove the fire alarm assembly from the wall!"
 					new /obj/item/mounted/frame/firealarm(get_turf(user))
-					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 					qdel(src)
 		return
 

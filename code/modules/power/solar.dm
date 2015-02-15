@@ -58,7 +58,7 @@ var/list/solars_list = list()
 			density = 1
 			user.visible_message("<span class='notice'>[user] wrenches [src] down.</span>", \
 			"<span class='notice'>You wrench [src] down.</span>")
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			playsound(get_turf(src), SOUND_RATCHET, 75, 1)
 			return 1
 	else
 		if(iswrench(W))
@@ -66,7 +66,7 @@ var/list/solars_list = list()
 			density = 0
 			user.visible_message("<span class='notice'>[user] unwrenches [src] from the ground.</span>", \
 			"<span class='notice'>You unwrench [src] from the ground.</span>")
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			playsound(get_turf(src), SOUND_RATCHET, 75, 1)
 			return 1
 
 		if(istype(W, /obj/item/stack/sheet/glass))

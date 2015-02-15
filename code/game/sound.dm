@@ -94,7 +94,7 @@ var/const/SURROUND_CAP = 7
 
 	var/sound/S = soundin
 
-	if (istype(soundin))
+	if (istype(S))
 		world << "woop"
 	else
 		S = sound(soundin)
@@ -153,5 +153,9 @@ var/const/SURROUND_CAP = 7
 				soundin = sounds[SOUND_AIRLOCK]
 			if (SOUND_CROWBAR)
 				soundin = sounds[SOUND_CROWBAR]
+			if (SOUND_SLIP)
+				soundin = sounds[SOUND_SLIP]
+			if (SOUND_RATCHET)
+				soundin = sounds[SOUND_RATCHET]
 
 	return soundin

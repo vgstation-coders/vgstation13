@@ -31,7 +31,7 @@
 		if(0)
 			// State 0
 			if(iswrench(W) && isturf(src.loc))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 				user << "You wrench the assembly into place."
 				anchored = 1
 				state = 1
@@ -49,7 +49,7 @@
 				return
 
 			else if(iswrench(W))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 				user << "You unattach the assembly from it's place."
 				anchored = 0
 				update_icon()

@@ -458,7 +458,7 @@ Class Procs:
 		return -1 //state set to 2, can't do it
 	user.visible_message(	"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 							"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts...")
-	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	playsound(loc, SOUND_RATCHET, 50, 1)
 	if(do_after(user, 30))
 		anchored = !anchored
 		state = anchored //since these values will match as long as state isn't 2, we can do this safely

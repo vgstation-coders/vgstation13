@@ -31,12 +31,12 @@
 				construct_op --
 			if(istype(P, /obj/item/weapon/wrench))
 				user << "You dislodge the external plating."
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 75, 1)
 				construct_op ++
 		if(2)
 			if(istype(P, /obj/item/weapon/wrench))
 				user << "You secure the external plating."
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 75, 1)
 				construct_op --
 			if(istype(P, /obj/item/weapon/wirecutters))
 				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
