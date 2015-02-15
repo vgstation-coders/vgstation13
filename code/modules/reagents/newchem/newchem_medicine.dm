@@ -87,9 +87,9 @@ var/global/list/banned_mob_spawns = list(/mob/living/simple_animal/hostile,
 
 /datum/reagent/salglu_solution/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
-	if(prob(50))
-		M.adjustBruteLoss(-3*REM)
-		M.adjustFireLoss(-3*REM)
+	if(prob(33))
+		M.adjustBruteLoss(-1*REM)
+		M.adjustFireLoss(-1*REM)
 	..()
 	return
 
