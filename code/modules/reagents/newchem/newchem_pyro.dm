@@ -64,7 +64,7 @@
 
 /datum/reagent/clf3/reaction_obj(var/obj/O, var/volume)
 	// slags objects if it can
-	if(istype(O, /obj/) )
+	if(istype(O, /obj/) && prob(10)) // slag everything
 		O.melt()
 		return
 
@@ -150,16 +150,25 @@ proc/goonchem_vortex(var/turf/simulated/T, var/setting_type, var/range, var/pull
 	description = "Explodes. Violently."
 	reagent_state = LIQUID
 	color = "#000000"  //rgb: 96, 165, 132
+	custom_metabolism = 0.05
 
 /datum/chemical_reaction/blackpowder
 	name = "Black Powder"
 	id = "blackpowder"
-	result = null
+	result = "blackpowder"
 	required_reagents = list("saltpetre" = 1, "charcoal" = 1, "sulfur" = 1)
 	result_amount = 3
 	required_temp = 474
 
-/datum/chemical_reaction/blackpowder/on_reaction(var/datum/reagents/holder, var/created_volume)
+/datum/chemical_reaction/blackpowder_explosion
+	name = "Black Powder Kaboom"
+	id = "blackpowder_explosion"
+	result = null
+	required_reagents = list("blackpowder" = 1)
+	result_amount = 1
+	required_temp = 500
+
+/datum/chemical_reaction/blackpowder_explosion/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/turf/simulated/T = get_turf(holder.my_atom)
 	holder.my_atom.visible_message("<span class = 'userdanger'>Sparks come out of [holder.my_atom]!</span>")
 	sleep(rand(10,30))

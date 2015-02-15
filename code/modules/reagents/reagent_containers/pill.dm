@@ -26,7 +26,7 @@
 			M << "\blue You [apply_method] [src]."
 			M.drop_from_inventory(src) //icon update
 			if(reagents.total_volume)
-				reagents.reaction(M, INGEST)
+				reagents.reaction(M, apply_type)
 				spawn(5)
 					reagents.trans_to(M, reagents.total_volume)
 					del(src)
