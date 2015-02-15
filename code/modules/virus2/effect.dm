@@ -73,11 +73,6 @@
 			mob:gib()
 			del D*/
 
-/datum/disease2/effect/invisible
-	name = "Waiting Syndrome"
-	stage = 1
-	activate(var/mob/living/carbon/mob,var/multiplier)
-		return
 
 
 
@@ -334,7 +329,22 @@
 	new /mob/living/simple_animal/hostile/giant_spider/spiderling(placemob)
 	mob.emote("me",1,"vomits up a live spiderling!")
 
-
+/datum/disease2/effect/bonefix
+	name = "Advanced Skeletal Recuperation"
+	stage = 4
+/datum/disease2/effect/bonefix/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(ishuman(mob)) //A splice from health scanner code
+		var/mob/living/carbon/human/H = mob
+		for(var/name in H.organs_by_name)
+			var/datum/organ/external/e = H.organs_by_name[name]
+			if(e.status & ORGAN_BROKEN)
+				H << "<span class = 'warning'>Your bones are painfully reshaping themselves!</span>"
+				H.shock_stage = H.shock_stage + 10
+				if (prob(40))
+					e.status &= ~ORGAN_BROKEN
+					H.shock_stage = H.shock_stage - 30
+					H << "<span class = 'notice'>Your skeleton feels stable again.</span>"
+					//Definitely needs work
 
 /datum/disease2/effect/orbweapon
 	name = "Biolobulin Effect"
@@ -464,10 +474,6 @@
 /datum/disease2/effect/groan/activate(var/mob/living/carbon/mob,var/multiplier)
 	mob.say("*groan")
 
-
-
-
-
 /datum/disease2/effect/sweat
 	name = "Hyper-perspiration Effect"
 	stage = 3
@@ -490,10 +496,6 @@
 						if(T.wet_overlay)
 							T.overlays -= T.wet_overlay
 							T.wet_overlay = null
-
-
-
-
 
 /datum/disease2/effect/elvis
 	name = "Elvisism"
@@ -616,6 +618,14 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	..()
 
 
+/datum/disease2/effect/foodheal
+	name = "Metabolic Regenesis"
+	stage = 3
+/datum/disease2/effect/foodheal/activate(var/mob/living/carbon/mob,var/multiplier)
+	if (mob.reagents.get_reagent_amount("nutriment") > 0)
+		mob.adjustToxLoss(-2)
+		mob.heal_organ_damage(0,2)
+		mob.heal_organ_damage(2,0)
 
 
 
@@ -724,8 +734,55 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	if (prob(10))
 		mob.reagents.add_reagent("nutriment", 1000)
 		mob.overeatduration = 1000
+/*
+/datum/disease2/effect/bruteheal
+	name = "Super Protiens"
+	stage = 2
+/datum/disease2/effect/bruteheal/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(mob.getBruteLoss())
+		mob << "<span class='notice'>Your wounds heal ever so slightly.</span>"
+		mob.adjustBruteLoss(-2*multiplier)
+*/
+/datum/disease2/effect/damconvert
+	name = "Abnormal Physical Trauma Response Syndrome"
+	stage = 2
+/datum/disease2/effect/damconvert/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(mob.getBruteLoss())
+		mob << "<span class='notice'>Your body aches slightly!.</span>"
+		mob.heal_organ_damage(2,0)
+		mob.adjustToxLoss(2)
+	else if (mob.getFireLoss())
+		mob << "<span class='notice'>Your body aches slightly!.</span>"
+		mob.heal_organ_damage(0,2)
+		mob.adjustToxLoss(2)
+	else if (mob.getFireLoss() & mob.getFireLoss())
+		mob << "<span class='notice'>Your body aches slightly!.</span>"
+		mob.heal_organ_damage(1,0)
+		mob.heal_organ_damage(0,1)
+		mob.adjustToxLoss(2)
+
+/datum/disease2/effect/toxconvert
+	name = "Abnormal Toxic Response Syndrome"
+	stage = 2
+/datum/disease2/effect/toxconvert/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(mob.getToxLoss())
+		mob << "<span class='warning'>Your body aches slighty!</span>"
+		mob.adjustToxLoss(-2)
+		if (prob(50))
+			mob.take_organ_damage(2,0)
+		else
+			mob.take_organ_damage(0,2)
 
 
+/datum/disease2/effect/bloodhold
+	name = "Reactive Accelerated Hemogenesis"
+	stage = 2
+/datum/disease2/effect/bloodhold/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(mob:vessel)
+		var/blood_volume = round(mob:vessel.get_reagent_amount("blood"))
+		if (blood_volume < 560)
+			mob:vessel.add_reagent("blood", 8) //should be impressive, but shouldn't save you from impossible odds, nerf as neccasary
+			mob << "<span class='notice'>Your veins pulsate.</span>"
 
 /datum/disease2/effect/beard
 	name = "Bearding"
@@ -740,10 +797,6 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 				H.update_hair()
 
 
-
-
-
-
 /datum/disease2/effect/bloodynose
 	name = "Intranasal Hemorrhage"
 	stage = 2
@@ -755,12 +808,6 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 			D.New(D.loc)
 
 		D.virus2 |= virus_copylist(mob.virus2)
-
-
-
-
-
-
 
 /datum/disease2/effect/viralsputum
 	name = "Respiratory Putrification"
@@ -776,9 +823,6 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 
 		D.virus2 |= virus_copylist(mob.virus2)
 
-
-
-
 /datum/disease2/effect/lantern
 	name = "Lantern Syndrome"
 	stage = 2
@@ -786,6 +830,14 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	mob.SetLuminosity(4)
 	mob << "<span class = 'notice'>You are glowing!</span>"
 
+/datum/disease2/effect/nopain
+	name = "congenital analgesia"
+	stage = 2
+/datum/disease2/effect/nopain/activate(var/mob/living/carbon/mob,var/multiplier)
+	if (prob(20))
+		mob << "<span class = 'notice'>You feel a bit numb.</span>"
+	mob.shock_stage = 0
+	mob.traumatic_shock = 0
 
 
 ////////////////////////STAGE 1/////////////////////////////////
@@ -860,3 +912,10 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	mob << "<span class = 'notice'> You feel optimistic!</span>"
 	if (mob.reagents.get_reagent_amount("tricordrazine") < 1)
 		mob.reagents.add_reagent("tricordrazine", 1)
+
+/datum/disease2/effect/invisible
+	name = "Waiting Syndrome"
+	stage = 1
+	activate(var/mob/living/carbon/mob,var/multiplier)
+		return
+
