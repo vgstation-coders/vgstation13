@@ -65,6 +65,10 @@
 /obj/machinery/chem_heater/attack_hand(var/mob/user as mob)
 	ui_interact(user)
 
+/obj/machinery/chem_heater/attack_ai(mob/user as mob)
+	src.add_hiddenprint(user)
+	return src.attack_hand(user)
+
 /obj/machinery/chem_heater/Topic(href, href_list)
 	if(..())
 		return 0
