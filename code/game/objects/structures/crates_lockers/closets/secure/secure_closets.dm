@@ -116,7 +116,7 @@
 		src.icon_state = src.icon_opened
 		src.opened = 1
 		src.density = 0
-		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
+		playsound(get_turf(src), SOUND_CLICK, 15, 1, -3)
 	else
 		if(!can_open())
 			user << "<span class='notice'>It won't budge!</span>"

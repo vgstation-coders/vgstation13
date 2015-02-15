@@ -38,7 +38,7 @@
 		var/turf/T = get_turf(src)
 		var/obj/item/stack/sheet/glass/G = solar_assembly.glass_type
 		user << "<span class='notice'>You begin taking the [initial(G.name)] off the [src].</span>"
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_CLICK, 50, 1)
 		if(do_after(user, 50))
 			if(solar_assembly)
 				solar_assembly.loc = T

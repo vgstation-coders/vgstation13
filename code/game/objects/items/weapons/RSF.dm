@@ -46,7 +46,7 @@ RSF
 			return
 		del(W)
 		matter += 20
-		playsound(get_turf(src), 'sound/machines/click.ogg', 10, 1)
+		playsound(get_turf(src), SOUND_CLICK, 10, 1)
 		user << "The RSF now holds [matter]/40 fabrication-units."
 		update_desc()
 		return
@@ -83,44 +83,44 @@ RSF
 		if("dosh")
 			if(pay(user,4))
 				user << "Dispensing Dosh..."
-				playsound(get_turf(src), 'sound/machines/click.ogg', 10, 1)
+				playsound(get_turf(src), SOUND_CLICK, 10, 1)
 				new /obj/item/weapon/spacecash/c10(get_turf(A))
 				return
 		if("glass")
 			if(pay(user,1))
 				user << "Dispensing Glass..."
-				playsound(get_turf(src), 'sound/machines/click.ogg', 10, 1)
+				playsound(get_turf(src), SOUND_CLICK, 10, 1)
 				new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(get_turf(A))
 		if("flask")
 			if(pay(user,1))
 				user << "Dispensing Flask..."
-				playsound(get_turf(src), 'sound/machines/click.ogg', 10, 1)
+				playsound(get_turf(src), SOUND_CLICK, 10, 1)
 				new /obj/item/weapon/reagent_containers/food/drinks/flask/barflask(get_turf(A))
 		if("paper")
 			if(pay(user,1))
 				user << "Dispensing Paper..."
-				playsound(get_turf(src), 'sound/machines/click.ogg', 10, 1)
+				playsound(get_turf(src), SOUND_CLICK, 10, 1)
 				new /obj/item/weapon/paper(get_turf(A))
 		if("candle")
 			if(pay(user,1))
 				user << "Dispensing a Candle..."
-				playsound(get_turf(src), 'sound/machines/click.ogg', 10, 1)
+				playsound(get_turf(src), SOUND_CLICK, 10, 1)
 				new /obj/item/candle(get_turf(A))
 		if("dice")
 			if(pay(user,1))
 				user << "Dispensing Dice Pack..."
-				playsound(get_turf(src), 'sound/machines/click.ogg', 10, 1)
+				playsound(get_turf(src), SOUND_CLICK, 10, 1)
 				new /obj/item/weapon/storage/pill_bottle/dice(get_turf(A))
 		if("deck of cards")
 			if(pay(user,1))
 				user << "Dispensing a Deck of Cards..."
-				playsound(get_turf(src), 'sound/machines/click.ogg', 10, 1)
+				playsound(get_turf(src), SOUND_CLICK, 10, 1)
 				new /obj/item/toy/cards(get_turf(A))
 
 		if("cardboard sheet")
 			if(pay(user,1))
 				user << "Dispensing a Cardboard Sheet..."
-				playsound(get_turf(src), 'sound/machines/click.ogg', 10, 1)
+				playsound(get_turf(src), SOUND_CLICK, 10, 1)
 				new /obj/item/stack/sheet/cardboard(get_turf(A))
 	update_desc()
 

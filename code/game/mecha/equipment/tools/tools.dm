@@ -294,7 +294,7 @@
 		if(!istype(target, /turf) && !istype(target, /obj/machinery/door/airlock))
 			target = get_turf(target)
 		if(!action_checks(target) || disabled || get_dist(chassis, target)>3) return
-		playsound(chassis, 'sound/machines/click.ogg', 50, 1)
+		playsound(chassis, SOUND_CLICK, 50, 1)
 		//meh
 		switch(mode)
 			if(0)

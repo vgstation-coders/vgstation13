@@ -1,7 +1,8 @@
 #define SOUND_AIRLOCK "airlock"
+#define SOUND_CLICK "click"
 #define SOUND_CROWBAR "crowbar"
-#define SOUND_SLIP "slip"
 #define SOUND_RATCHET "ratchet"
+#define SOUND_SLIP "slip"
 
 /world/New()
 	..()
@@ -11,6 +12,7 @@ var/list/sounds = list()
 
 proc/gen_sounds()
 	sounds[SOUND_AIRLOCK] = sound('sound/machines/airlock.ogg')
+	sounds[SOUND_CLICK] = sound('sound/machines/click.ogg')
 	sounds[SOUND_CROWBAR] = sound('sound/items/Crowbar.ogg')
-	sounds[SOUND_SLIP] = sound('sound/misc/slip.ogg')
 	sounds[SOUND_RATCHET] = sound('sound/items/Ratchet.ogg')
+	sounds[SOUND_SLIP] = sound('sound/misc/slip.ogg')

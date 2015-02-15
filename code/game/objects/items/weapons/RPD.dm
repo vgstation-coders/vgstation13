@@ -490,7 +490,7 @@ var/global/list/RPD_recipes=list(
 			if(!(paint_color in P.available_colors))
 				user << "\red This [P] can't be painted [paint_color]. Available colors: [english_list(P.available_colors)]"
 				return 0
-			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_CLICK, 50, 1)
 			P._color = paint_color
 			user.visible_message("<span class='notice'>[user] paints \the [P] [paint_color].</span>","<span class='notice'>You paint \the [P] [paint_color].</span>")
 			P.update_icon()
@@ -499,7 +499,7 @@ var/global/list/RPD_recipes=list(
 			// Must click on an actual pipe or meter.
 			if(istype(A,/obj/item/pipe) || istype(A,/obj/item/pipe_meter) || istype(A,/obj/structure/disposalconstruct) || istype(A,/obj/item/pipe_gsensor))
 				user << "Destroying Pipe..."
-				playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_CLICK, 50, 1)
 				if(do_after(user, 5))
 					if(A)
 						activate()
@@ -518,10 +518,10 @@ var/global/list/RPD_recipes=list(
 				user << "The [src]'s error light flickers."
 				return 0
 			user << "Building Pipes ..."
-			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_CLICK, 50, 1)
 			if(do_after(user, 20))
 				activate()
-				var/obj/item/pipe/P = getFromPool(/obj/item/pipe, A) 
+				var/obj/item/pipe/P = getFromPool(/obj/item/pipe, A)
 				P.New(A,pipe_type=p_type,dir=p_dir) //new (A, pipe_type=p_type, dir=p_dir)
 				P.update()
 				P.add_fingerprint(usr)
@@ -533,7 +533,7 @@ var/global/list/RPD_recipes=list(
 				user << "The [src]'s error light flickers."
 				return 0
 			user << "Building Meter..."
-			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_CLICK, 50, 1)
 			if(do_after(user, 20))
 				activate()
 				new /obj/item/pipe_meter(A)
@@ -545,7 +545,7 @@ var/global/list/RPD_recipes=list(
 				user << "The [src]'s error light flickers."
 				return 0
 			user << "Building Pipes..."
-			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_CLICK, 50, 1)
 			if(do_after(user, 20))
 				activate()
 				var/obj/structure/disposalconstruct/C = new (A)
@@ -581,7 +581,7 @@ var/global/list/RPD_recipes=list(
 				user << "The [src]'s error light flickers."
 				return 0
 			user << "Building Sensor..."
-			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_CLICK, 50, 1)
 			if(do_after(user, 20))
 				activate()
 				new /obj/item/pipe_gsensor(A)

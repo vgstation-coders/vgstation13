@@ -122,7 +122,7 @@
 
 /obj/item/device/lightreplacer/proc/Use(var/mob/user)
 
-	playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_CLICK, 50, 1)
 	AddUses(-1)
 	return 1
 

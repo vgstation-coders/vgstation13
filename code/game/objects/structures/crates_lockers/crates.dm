@@ -13,8 +13,8 @@
 	flags = FPRINT
 //	mouse_drag_pointer = MOUSE_ACTIVE_POINTER	//???
 	var/rigged = 0
-	var/sound_effect_open = 'sound/machines/click.ogg'
-	var/sound_effect_close = 'sound/machines/click.ogg'
+	var/sound_effect_open = SOUND_CLICK
+	var/sound_effect_close = SOUND_CLICK
 
 /obj/structure/closet/pcrate
 	name = "plastic crate"
@@ -29,8 +29,8 @@
 	flags = FPRINT
 //	mouse_drag_pointer = MOUSE_ACTIVE_POINTER	//???
 	var/rigged = 0
-	var/sound_effect_open = 'sound/machines/click.ogg'
-	var/sound_effect_close = 'sound/machines/click.ogg'
+	var/sound_effect_open = SOUND_CLICK
+	var/sound_effect_close = SOUND_CLICK
 
 /obj/structure/closet/crate/internals
 	desc = "A internals crate."

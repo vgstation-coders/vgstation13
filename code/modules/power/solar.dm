@@ -74,7 +74,7 @@ var/list/solars_list = list()
 			if(S.amount >= 2)
 				glass_type = W.type
 				S.use(2)
-				playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_CLICK, 50, 1)
 				user.visible_message("<span class='notice'>[user] carefully adds glass to [src].</span>", \
 				"<span class='notice'>You carefully add glass to [src].</span>")
 				if(tracker)

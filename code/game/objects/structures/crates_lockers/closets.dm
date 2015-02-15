@@ -93,7 +93,7 @@
 	if(istype(src, /obj/structure/closet/body_bag))
 		playsound(get_turf(src), 'sound/items/zip.ogg', 15, 1, -3)
 	else
-		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
+		playsound(get_turf(src), SOUND_CLICK, 15, 1, -3)
 	density = 0
 	return 1
 
@@ -164,7 +164,7 @@
 	if(istype(src, /obj/structure/closet/body_bag))
 		playsound(get_turf(src), 'sound/items/zip.ogg', 15, 1, -3)
 	else
-		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
+		playsound(get_turf(src), SOUND_CLICK, 15, 1, -3)
 	density = 1
 	return 1
 
