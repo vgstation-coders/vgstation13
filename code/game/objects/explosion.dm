@@ -38,7 +38,7 @@
 		if(!epicenter) return
 
 		var/max_range = max(devastation_range, heavy_impact_range, light_impact_range, flash_range)
-//		playsound(epicenter, 'sound/effects/explosionfar.ogg', 100, 1, round(devastation_range*2,1) )
+//		playsound(epicenter, SOUND_EXPLOSION_FAR, 100, 1, round(devastation_range*2,1) )
 //		playsound(epicenter, SOUND_EXPLOSION, 100, 1, round(devastation_range,1) )
 
 
@@ -67,14 +67,14 @@
 					else if(dist <= far_dist)
 						var/far_volume = Clamp(far_dist, 30, 50) // Volume is based on explosion size and dist
 						far_volume += (dist <= far_dist * 0.5 ? 50 : 0) // add 50 volume if the mob is pretty close to the explosion
-						M.playsound_local(epicenter, 'sound/effects/explosionfar.ogg', far_volume, 1, frequency, falloff = 5)
+						M.playsound_local(epicenter, SOUND_EXPLOSION_FAR, far_volume, 1, frequency, falloff = 5)
 
 		var/close = trange(world.view+round(devastation_range,1), epicenter)
 		// to all distanced mobs play a different sound
 		for(var/mob/M in mob_list) if(M.z == epicenter.z) if(!(M in close))
 			// check if the mob can hear
 			if(M.ear_deaf <= 0 || !M.ear_deaf) if(!istype(M.loc,/turf/space))
-				M << 'sound/effects/explosionfar.ogg'
+				M << get_sfx(SOUND_EXPLOSION_FAR)
 		if(adminlog)
 			message_admins("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>)")
 			log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ")

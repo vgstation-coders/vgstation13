@@ -11,6 +11,7 @@
 #define SOUND_EXPLOSION_FOUR "explosion_four"
 #define SOUND_EXPLOSION_FIVE "explosion_five"
 #define SOUND_EXPLOSION_SIX "explosion_six"
+#define SOUND_EXPLOSION_FAR "explosion_far"
 #define SOUND_FLASH "flash"
 #define SOUND_GLASS_BREAK_ONE "glass_break_one"
 #define SOUND_GLASS_BREAK_TWO "glass_break_two"
@@ -45,6 +46,7 @@ proc/gen_sounds()
 	sounds[SOUND_EXPLOSION_FOUR] = sound('sound/effects/Explosion4.ogg')
 	sounds[SOUND_EXPLOSION_FIVE] = sound('sound/effects/Explosion5.ogg')
 	sounds[SOUND_EXPLOSION_SIX] = sound('sound/effects/Explosion6.ogg')
+	sounds[SOUND_EXPLOSION_FAR] = sound('sound/effects/explosionfar.ogg')
 	sounds[SOUND_FLASH] = sound('sound/weapons/flash.ogg')
 	sounds[SOUND_GLASS_BREAK_ONE] = sound('sound/effects/Glassbr1.ogg')
 	sounds[SOUND_GLASS_BREAK_TWO] = sound('sound/effects/Glassbr2.ogg')
