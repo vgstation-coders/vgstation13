@@ -19,7 +19,7 @@
 	var/custom = 0
 	var/list/dispensable_reagents = list("hydrogen","lithium","carbon","nitrogen","oxygen","fluorine",
 	"sodium","aluminum","silicon","phosphorus","sulfur","chlorine","potassium","iron",
-	"copper","mercury","radium","water","ethanol","sugar","sacid","tungsten")
+	"copper","mercury","radium","water","ethanol","sugar","sacid","tungsten","fuel","silver","iodine","bromine","fluorine","stable_plasma")
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
@@ -29,8 +29,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 */
 
 /obj/machinery/chem_dispenser/mapping
-	max_energy = 100
-	energy = 100
+	max_energy = 200
+	energy = 200
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -168,7 +168,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "chem_dispenser.tmpl", "Chem Dispenser 5000", 370, 605)
+		ui = new(user, src, ui_key, "chem_dispenser.tmpl", "Chem Dispenser 5000", 470, 705)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
 		// open the new ui window
@@ -284,10 +284,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	var/condi = 0
 	var/useramount = 30 // Last used amount
 	var/pillamount = 10
+	var/patchamount = 10
 	var/bottlesprite = "1" //yes, strings
 	var/pillsprite = "1"
 	var/client/has_sprites = list()
-
+	var/max_patch_count = 20
 	l_color = "#0000FF"
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
@@ -489,6 +490,33 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 					if(loaded_pill_bottle.contents.len < loaded_pill_bottle.storage_slots)
 						P.loc = loaded_pill_bottle
 						src.updateUsrDialog()
+		else if (href_list["createpatch"] || href_list["createpatch_multiple"])
+			var/count = 1
+
+			if(reagents.total_volume/count < 1) //Sanity checking.
+				return
+
+			if (href_list["createpatch_multiple"])
+				count = Clamp(isgoodnumber(input("Select the number of patches to make.", 10, patchamount) as num),1,max_patch_count)
+
+			if(reagents.total_volume/count < 1) //Sanity checking.
+				return
+
+			var/amount_per_patch = reagents.total_volume/count
+			if (amount_per_patch > 60) amount_per_patch = 60
+
+			var/name = reject_bad_text(input(usr,"Name:","Name your patch!","[reagents.get_master_reagent_name()] ([amount_per_patch] units)"))
+
+			if(reagents.total_volume/count < 1) //Sanity checking.
+				return
+			while (count--)
+				var/obj/item/weapon/reagent_containers/pill/patch/P = new/obj/item/weapon/reagent_containers/pill/patch(src.loc)
+				if(!name) name = reagents.get_master_reagent_name()
+				P.name = "[name] patch"
+				P.pixel_x = rand(-7, 7) //random position
+				P.pixel_y = rand(-7, 7)
+				reagents.trans_to(P,amount_per_patch)
+				src.updateUsrDialog()
 		else if (href_list["createbottle"] || href_list["createbottle_multiple"])
 			if(!condi)
 				var/name = reject_bad_text(input(usr,"Name:","Name your bottle!",reagents.get_master_reagent_name()))
@@ -623,6 +651,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			dat += {"<HR><BR><A href='?src=\ref[src];createpill=1'>Create single pill (50 units max)</A><BR><A href='?src=\ref[src];createpill_multiple=1'>Create multiple pills (50 units max each; 20 max)</A><BR>
 				<A href='?src=\ref[src];createbottle=1'>Create bottle (30 units max)</A><BR><A href='?src=\ref[src];createbottle_multiple=1'>Create multiple bottles (30 units max each; 4 max)</A><BR>"}
 			// END AUTOFIX
+			dat += "<HR><BR><A href='?src=\ref[src];createpatch=1'>Create patch (50 units max)</A><BR>"
+			dat += "<A href='?src=\ref[src];createpatch_multiple=1'>Create multiple patches</A><BR>"
 		else
 			dat += "<A href='?src=\ref[src];createbottle=1'>Create bottle (50 units max)</A>"
 	if(!condi)

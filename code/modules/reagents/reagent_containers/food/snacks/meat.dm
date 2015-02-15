@@ -6,6 +6,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 3)
+		reagents.add_reagent("cholesterol", 3)
 		src.bitesize = 3
 
 
