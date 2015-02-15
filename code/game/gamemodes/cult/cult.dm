@@ -100,8 +100,7 @@
 		cultists_possible -= cultist
 		cult += cultist
 
-	//return (cult.len > 0)
-	return 1
+	return (cult.len > 0)
 
 /datum/game_mode/cult/proc/blood_check()
 	if((objectives[current_objective] == "bloodspill") && (bloody_floors.len >= spilltarget) && !spilled_blood)
@@ -151,6 +150,9 @@
 		var/list/unconvertables = get_unconvertables()
 		if(unconvertables.len < (cult.len * 2))//if cultists are getting radically outnumbered, they get a free pass to the summon objective.
 			new_objective = pick_objective()
+
+	if(!sacrificed.len && (new_objective != "sacrifice"))
+		sacrifice_target = null
 
 	if(new_objective == "eldergod")
 		second_phase()
@@ -487,16 +489,16 @@
 			var/explanation
 			switch(objectives[obj_count])
 				if("convert")//convert half the crew
-					if(cult.len >= convert_target)
-						explanation = "Convert [convert_target] crewmembers ([cult.len] converted). <font color='green'><B>Success!</B></font>"
+					if(obj_count < objectives.len)
+						explanation = "Convert [convert_target] crewmembers ([cult.len] cultists at round end). <font color='green'><B>Success!</B></font>"
 						feedback_add_details("cult_objective","cult_convertion|SUCCESS")
 					else
-						explanation = "Convert [convert_target] crewmembers ([cult.len] converted). <font color='red'><B>Fail!</B></font>"
+						explanation = "Convert [convert_target] crewmembers ([cult.len] total cultists). <font color='red'><B>Fail!</B></font>"
 						feedback_add_details("cult_objective","cult_convertion|FAIL")
 
 				if("bloodspill")//cover a large portion of the station in blood
-					if(bloody_floors.len >= spilltarget)
-						explanation = "Cover [spilltarget] tiles of the station in blood ([bloody_floors.len] tiles covered). <font color='green'><B>Success!</B></font>"
+					if(obj_count < objectives.len)
+						explanation = "Cover [spilltarget] tiles of the station in blood ([bloody_floors.len] tiles covered at round end). <font color='green'><B>Success!</B></font>"
 						feedback_add_details("cult_objective","cult_bloodspill|SUCCESS")
 					else
 						explanation = "Cover [spilltarget] tiles of the station in blood ([bloody_floors.len] tiles covered). <font color='red'><B>Fail!</B></font>"
