@@ -42,6 +42,54 @@
 
 	return ..()
 
+	
+//BS12: Species-restricted clothing check.
+/obj/item/clothing/proc/refit_for_species(var/target_species)
+	if(!species_restricted)
+		return //this item doesn't use the species_restricted system
+
+	//Set species_restricted list
+	switch(target_species)
+		if("Human", "Skrell")	//humanoid bodytypes
+			species_restricted = list("exclude","Unathi","Tajara","Diona","Vox", "Xenomorph", "Xenomorph Drone", "Xenomorph Hunter", "Xenomorph Sentinel", "Xenomorph Queen")
+		else
+			species_restricted = list(target_species)
+
+	//Set icon
+	if (sprite_sheets_refit && (target_species in sprite_sheets_refit))
+		icon_override = sprite_sheets_refit[target_species]
+	else
+		icon_override = initial(icon_override)
+
+	if (sprite_sheets_obj && (target_species in sprite_sheets_obj))
+		icon = sprite_sheets_obj[target_species]
+	else
+		icon = initial(icon)
+
+/obj/item/clothing/head/helmet/refit_for_species(var/target_species)
+	if(!species_restricted)
+		return //this item doesn't use the species_restricted system
+	
+	//Set species_restricted list
+	switch(target_species)
+		if("Skrell")
+			species_restricted = list("exclude","Unathi","Tajara","Diona","Vox", "Xenomorph", "Xenomorph Drone", "Xenomorph Hunter", "Xenomorph Sentinel", "Xenomorph Queen")
+		if("Human")
+			species_restricted = list("exclude","Skrell","Unathi","Tajara","Diona","Vox", "Xenomorph", "Xenomorph Drone", "Xenomorph Hunter", "Xenomorph Sentinel", "Xenomorph Queen")
+		else
+			species_restricted = list(target_species)
+
+	//Set icon
+	if (sprite_sheets_refit && (target_species in sprite_sheets_refit))
+		icon_override = sprite_sheets_refit[target_species]
+	else
+		icon_override = initial(icon_override)
+
+	if (sprite_sheets_obj && (target_species in sprite_sheets_obj))
+		icon = sprite_sheets_obj[target_species]
+	else
+		icon = initial(icon)
+		
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
 	name = "ears"
