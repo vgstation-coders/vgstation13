@@ -11,6 +11,8 @@
 	volume = 50
 	m_amt = 5
 	w_type = RECYK_METAL
+	var/apply_type = INGEST
+	var/apply_method = "swallow"
 
 	New()
 		..()
@@ -21,10 +23,10 @@
 		return
 	attack(mob/M as mob, mob/user as mob, def_zone)
 		if(M == user)
-			M << "\blue You swallow [src]."
+			M << "\blue You [apply_method] [src]."
 			M.drop_from_inventory(src) //icon update
 			if(reagents.total_volume)
-				reagents.reaction(M, INGEST)
+				reagents.reaction(M, apply_type)
 				spawn(5)
 					reagents.trans_to(M, reagents.total_volume)
 					del(src)
@@ -35,13 +37,13 @@
 		else if(istype(M, /mob/living/carbon/human) )
 
 			for(var/mob/O in viewers(world.view, user))
-				O.show_message("\red [user] attempts to force [M] to swallow [src].", 1)
+				O.show_message("\red [user] attempts to force [M] to [apply_method] [src].", 1)
 
 			if(!do_mob(user, M)) return
 
 			user.drop_from_inventory(src) //icon update
 			for(var/mob/O in viewers(world.view, user))
-				O.show_message("\red [user] forces [M] to swallow [src].", 1)
+				O.show_message("\red [user] forces [M] to [apply_method] [src].", 1)
 
 			M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed [src.name] by [user.name] ([user.ckey]) Reagents: [reagentlist(src)]</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [M.name] by [M.name] ([M.ckey]) Reagents: [reagentlist(src)]</font>")
@@ -52,7 +54,7 @@
 				M.LAssailant = user
 
 			if(reagents.total_volume)
-				reagents.reaction(M, INGEST)
+				reagents.reaction(M, apply_type)
 				spawn(5)
 					reagents.trans_to(M, reagents.total_volume)
 					del(src)

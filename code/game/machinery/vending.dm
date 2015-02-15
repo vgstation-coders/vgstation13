@@ -816,6 +816,8 @@
 	req_access_txt = "5"
 	products = list(
 		/obj/item/weapon/reagent_containers/glass/bottle/antitoxin = 4,
+		/obj/item/weapon/reagent_containers/glass/bottle/morphine = 10,
+		/obj/item/weapon/reagent_containers/glass/bottle/insulin = 10,
 		/obj/item/weapon/reagent_containers/glass/bottle/inaprovaline = 4,
 		/obj/item/weapon/reagent_containers/glass/bottle/stoxin = 4,
 		/obj/item/weapon/reagent_containers/glass/bottle/toxin = 4,

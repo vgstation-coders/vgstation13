@@ -236,3 +236,25 @@
 		return
 
 	..()
+
+/obj/item/weapon/reagent_containers/spray/chemsprayer/colorful
+	name = "colorful sprayer"
+/obj/item/weapon/reagent_containers/spray/chemsprayer/colorful/New()
+	..()
+	reagents.add_reagent("colorful_reagent", 600)
+
+/obj/item/weapon/reagent_containers/spray/chemsprayer/clf3
+	name = "CLF3 sprayer"
+/obj/item/weapon/reagent_containers/spray/chemsprayer/clf3/New()
+	..()
+	reagents.add_reagent("clf3", 600)
+
+/obj/item/weapon/reagent_containers/spray/chemsprayer/hell
+	name = "hell sprayer"
+	volume = 900
+/obj/item/weapon/reagent_containers/spray/chemsprayer/hell/New()
+	..()
+	reagents.add_reagent("clf3", 300)
+	reagents.add_reagent("liquid_dark_matter", 300)
+	reagents.add_reagent("pacid", 150)
+	reagents.add_reagent("polonium", 150)
