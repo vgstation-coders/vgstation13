@@ -143,4 +143,9 @@ var/const/SURROUND_CAP = 7
 			if ("gib") soundin = pick(gib_sound)
 			if ("mommicomment") soundin = pick(mommicomment_sound)
 			//if ("gunshot") soundin = pick(gun_sound)
+			if (AIRLOCK_OPEN)
+				soundin = sounds[AIRLOCK_OPEN]
+			if (AIRLOCK_CLOSE)
+				soundin = sounds[AIRLOCK_CLOSE]
+
 	return soundin
