@@ -12,6 +12,10 @@ datum
 		var/total_volume = 0
 		var/maximum_volume = 100
 		var/atom/my_atom = null
+		var/chem_temp = 150
+		var/last_tick = 1
+		var/addiction_tick = 1
+		var/list/datum/reagent/addiction_list = new/list()
 
 		New(maximum=100)
 			maximum_volume = maximum
@@ -261,13 +265,6 @@ datum
 				return total_transfered
 */
 
-			metabolize(var/mob/M, var/alien)
-				for(var/A in reagent_list)
-					var/datum/reagent/R = A
-					if(M && R)
-						R.on_mob_life(M, alien)
-				update_total()
-
 			update_aerosol(var/mob/M)
 				for(var/A in reagent_list)
 					var/datum/reagent/R = A
@@ -315,6 +312,7 @@ datum
 							var/matching_container = 0
 							var/matching_other = 0
 							var/list/multipliers = new/list()
+							var/required_temp = C.required_temp
 
 							for(var/B in C.required_reagents)
 								if(!has_reagent(B, C.required_reagents[B]))	break
@@ -346,7 +344,11 @@ datum
 									if(M.Uses > 0) // added a limit to slime cores -- Muskets requested this
 										matching_other = 1
 
-							if(total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && matching_other)
+							if(required_temp == 0)
+								required_temp = chem_temp
+
+
+							if(total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && matching_other && chem_temp >= required_temp)
 								var/multiplier = min(multipliers)
 								var/preserved_data = null
 								for(var/B in C.required_reagents)
@@ -370,7 +372,7 @@ datum
 								else if	(istype(my_atom, /mob/living/carbon/human))
 									my_atom.visible_message("<span class='notice'>[my_atom] shudders a little.</span>","<span class='notice'>You shudder a little.</span>")
 								else
-									my_atom.visible_message("<span class='notice'>\icon[my_atom] The solution begins to bubble.</span>")
+									my_atom.visible_message("<span class='notice'>\icon[my_atom] [C.mix_message].</span>")
 
 								if(istype(my_atom, /obj/item/slime_extract))
 									var/obj/item/slime_extract/ME2 = my_atom

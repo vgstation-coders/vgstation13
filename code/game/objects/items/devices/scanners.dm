@@ -158,8 +158,6 @@ REAGENT SCANNER
 		OX = fake_oxy > 50 ? 		"\red Severe oxygen deprivation detected\blue" 	: 	"Subject bloodstream oxygen level normal"
 	user.show_message("[OX] | [TX] | [BU] | [BR]")
 	if (istype(M, /mob/living/carbon))
-		if(M:reagents.total_volume > 0)
-			user.show_message(text("\red Warning: Unknown substance detected in subject's blood."))
 		if(M:virus2.len)
 			var/mob/living/carbon/C = M
 			for (var/ID in C.virus2)
@@ -213,6 +211,22 @@ REAGENT SCANNER
 			else
 				user.show_message("\blue Blood Level Normal: [blood_percent]% [blood_volume]cl")
 		user.show_message("\blue Subject's pulse: <font color='[H.pulse == PULSE_THREADY || H.pulse == PULSE_NONE ? "red" : "blue"]'>[H.get_pulse(GETPULSE_TOOL)] bpm.</font>")
+	// Reagent Scanning - Iamgoofball
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.reagents)
+			if(H.reagents.reagent_list.len)
+				user.show_message("<span class='notice'>Subject contains the following reagents:</span>")
+				for(var/datum/reagent/R in H.reagents.reagent_list)
+					user.show_message("<span class='notice'>[R.volume]u of [R.name][R.overdosed == 1 ? "</span> - <span class = 'userdanger'>OVERDOSING</span>" : ".</span>"]")
+			else
+				user.show_message("<span class = 'notice'>Subject contains no reagents.</span>")
+			if(H.reagents.addiction_list.len)
+				user.show_message("<span class='userdanger'>Subject is addicted to the following reagents:</span>")
+				for(var/datum/reagent/R in H.reagents.addiction_list)
+					user.show_message("<span class='danger'>[R.name]</span>")
+			else
+				user.show_message("<span class='notice'>Subject is not addicted to any reagents.</span>")
 	src.add_fingerprint(user)
 	return
 
