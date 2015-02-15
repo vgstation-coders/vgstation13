@@ -18,6 +18,8 @@
 #define SOUND_GLASS_BREAK_ONE "glass_break_one"
 #define SOUND_GLASS_BREAK_TWO "glass_break_two"
 #define SOUND_GLASS_BREAK_THREE "glass_break_three"
+#define SOUND_MECH_STEP_ONE "mech_step_one"
+#define SOUND_MECH_STEP_TWO "mech_step_two"
 #define SOUND_PAGE_TURN_ONE "page_turn_one"
 #define SOUND_PAGE_TURN_TWO "page_turn_two"
 #define SOUND_PUNCH_MISS "punch_miss"
@@ -33,6 +35,7 @@
 
 #define SOUND_CLOWN_STEP "clown_step"
 #define SOUND_EXPLOSION "explosion"
+#define SOUND_MECH_STEP "mech_step"
 #define SOUND_PAGE_TURN "page_turn"
 #define SOUND_SHATTER "shatter"
 #define SOUND_SPARK "spark"
@@ -64,6 +67,8 @@ proc/gen_sounds()
 	sounds[SOUND_GLASS_BREAK_ONE] = sound('sound/effects/Glassbr1.ogg')
 	sounds[SOUND_GLASS_BREAK_TWO] = sound('sound/effects/Glassbr2.ogg')
 	sounds[SOUND_GLASS_BREAK_THREE] = sound('sound/effects/Glassbr3.ogg')
+	sounds[SOUND_MECH_STEP_ONE] = sound('sound/mecha/mechstep1.ogg')
+	sounds[SOUND_MECH_STEP_TWO] = sound('sound/mecha/mechstep2.ogg')
 	sounds[SOUND_PAGE_TURN_ONE] = sound('sound/effects/pageturn1.ogg')
 	sounds[SOUND_PAGE_TURN_TWO] = sound('sound/effects/pageturn2.ogg')
 	sounds[SOUND_PUNCH_MISS] = sound('sound/weapons/punchmiss.ogg')
@@ -79,6 +84,7 @@ proc/gen_sounds()
 
 	sounds[SOUND_CLOWN_STEP] = list(sounds[SOUND_CLOWN_STEP_ONE], sounds[SOUND_CLOWN_STEP_TWO])
 	sounds[SOUND_EXPLOSION] = list(sounds[SOUND_EXPLOSION_ONE], sounds[SOUND_EXPLOSION_TWO], sounds[SOUND_EXPLOSION_THREE], sounds[SOUND_EXPLOSION_FOUR], sounds[SOUND_EXPLOSION_FIVE], sounds[SOUND_EXPLOSION_SIX])
+	sounds[SOUND_MECH_STEP] = list(sounds[SOUND_MECH_STEP_ONE], sounds[SOUND_MECH_STEP_TWO])
 	sounds[SOUND_PAGE_TURN] = list(sounds[SOUND_PAGE_TURN_ONE], sounds[SOUND_PAGE_TURN_TWO])
 	sounds[SOUND_SHATTER] = list(sounds[SOUND_GLASS_BREAK_ONE], sounds[SOUND_GLASS_BREAK_TWO], sounds[SOUND_GLASS_BREAK_THREE])
 	sounds[SOUND_SPARK] = list(sounds[SOUND_SPARK_ONE], sounds[SOUND_SPARK_TWO], sounds[SOUND_SPARK_THREE], sounds[SOUND_SPARK_FOUR])
