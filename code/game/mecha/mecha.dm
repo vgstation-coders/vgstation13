@@ -321,7 +321,7 @@
 	var/result = step_rand(src)
 
 	if(result)
-	 	playsound(src, SOUND_MECH_STEP, 40, 1)
+		playsound(src, SOUND_MECH_STEP, 40, 1)
 
 	return result
 

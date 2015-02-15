@@ -54,7 +54,7 @@
 
 			if(M_HULK in M.mutations)			damage += 5
 
-			playsound(loc, "punch", 25, 1, -1)
+			playsound(loc, SOUND_PUNCH, 25, 1, -1)
 
 			visible_message("\red <B>[M] has punched [src]!</B>")
 
@@ -187,7 +187,7 @@
 
 
 			if(M.species.attack_verb == "punch")
-				playsound(loc, "punch", 25, 1, -1)
+				playsound(loc, SOUND_PUNCH, 25, 1, -1)
 			else
 				playsound(loc, 'sound/weapons/slice.ogg', 25, 1, -1)
 

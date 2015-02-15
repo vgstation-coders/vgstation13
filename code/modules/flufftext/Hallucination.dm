@@ -308,7 +308,7 @@ proc/check_panel(mob/M)
 							if(!locate(/obj/effect/overlay) in my_target.loc)
 								fake_blood(my_target)
 					else
-						my_target << sound(pick('sound/weapons/punch1.ogg','sound/weapons/punch2.ogg','sound/weapons/punch3.ogg','sound/weapons/punch4.ogg'))
+						my_target << get_sfx(SOUND_PUNCH)
 						my_target.show_message("\red <B>[src.name] has punched [my_target]!</B>", 1)
 						my_target.halloss += 4
 						if(prob(33))

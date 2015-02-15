@@ -26,6 +26,10 @@
 #define SOUND_PAGE_TURN_ONE "page_turn_one"
 #define SOUND_PAGE_TURN_TWO "page_turn_two"
 #define SOUND_PUNCH_MISS "punch_miss"
+#define SOUND_PUNCH_ONE "punch_one"
+#define SOUND_PUNCH_TWO "punch_two"
+#define SOUND_PUNCH_TREE "punch_three"
+#define SOUND_PUNCH_FOUR "punch_four"
 #define SOUND_RATCHET "ratchet"
 #define SOUND_SCREWDRIVER "screwdriver"
 #define SOUND_SLIP "slip"
@@ -41,6 +45,7 @@
 #define SOUND_GIB "gib"
 #define SOUND_MECH_STEP "mech_step"
 #define SOUND_PAGE_TURN "page_turn"
+#define SOUND_PUNCH "punch"
 #define SOUND_SHATTER "shatter"
 #define SOUND_SPARK "spark"
 
@@ -79,6 +84,10 @@ proc/gen_sounds()
 	sounds[SOUND_PAGE_TURN_ONE] = sound('sound/effects/pageturn1.ogg')
 	sounds[SOUND_PAGE_TURN_TWO] = sound('sound/effects/pageturn2.ogg')
 	sounds[SOUND_PUNCH_MISS] = sound('sound/weapons/punchmiss.ogg')
+	sounds[SOUND_PUNCH_ONE] = sound('sound/weapons/punch1.ogg')
+	sounds[SOUND_PUNCH_TWO] = sound('sound/weapons/punch2.ogg')
+	sounds[SOUND_PUNCH_THREE] = sound('sound/weapons/punch3.ogg')
+	sounds[SOUND_PUNCH_FOUR] = sound('sound/weapons/punch4.ogg')
 	sounds[SOUND_RATCHET] = sound('sound/items/Ratchet.ogg')
 	sounds[SOUND_SCREWDRIVER] = sound('sound/items/Screwdriver.ogg')
 	sounds[SOUND_SLIP] = sound('sound/misc/slip.ogg')
@@ -94,5 +103,6 @@ proc/gen_sounds()
 	sounds[SOUND_GIB] = list(sounds[SOUND_GIB_ONE], sounds[SOUND_GIB_TWO], sounds[SOUND_GIB_THREE])
 	sounds[SOUND_MECH_STEP] = list(sounds[SOUND_MECH_STEP_ONE], sounds[SOUND_MECH_STEP_TWO])
 	sounds[SOUND_PAGE_TURN] = list(sounds[SOUND_PAGE_TURN_ONE], sounds[SOUND_PAGE_TURN_TWO])
+	sounds[SOUND_PUNCH] = list(sounds[SOUND_PUNCH_ONE], sounds[SOUND_PUNCH_TWO], sounds[SOUND_PUNCH_THREE], sounds[SOUND_PUNCH_FOUR])
 	sounds[SOUND_SHATTER] = list(sounds[SOUND_GLASS_BREAK_ONE], sounds[SOUND_GLASS_BREAK_TWO], sounds[SOUND_GLASS_BREAK_THREE])
 	sounds[SOUND_SPARK] = list(sounds[SOUND_SPARK_ONE], sounds[SOUND_SPARK_TWO], sounds[SOUND_SPARK_THREE], sounds[SOUND_SPARK_FOUR])

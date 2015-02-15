@@ -245,7 +245,7 @@
 						step_away(src,M,15)
 						sleep(3)
 						step_away(src,M,15)
-				playsound(loc, "punch", 25, 1, -1)
+				playsound(loc, SOUND_PUNCH, 25, 1, -1)
 				visible_message("<span class='danger'>[M] has punched \the [src] !</span>")
 				if(damage > 4.9)
 					Weaken(rand(10,15))
