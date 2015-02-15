@@ -37,35 +37,27 @@
 /datum/reagent/clf3/reaction_turf(var/turf/simulated/T, var/volume)
 	if(istype(T, /turf/simulated/floor/))
 		var/turf/simulated/floor/F = T
-		if(prob(66))
+		if(prob(volume/10))
 			F.make_plating()
-		if(prob(1))
+		if(prob(volume/20))
 			F.ChangeTurf(/turf/space)
 		if(istype(F, /turf/simulated/floor/))
 			new /obj/fire(F)
 	if(istype(T, /turf/simulated/wall/))
 		var/turf/simulated/wall/W = T
-		if(prob(66))
+		if(prob(volume/10))
 			W.ChangeTurf(/turf/simulated/floor)
 	if(istype(T, /turf/simulated/floor/plating))
 		var/turf/simulated/floor/plating/F = T
-		if(prob(1))
+		if(prob(volume/20))
 			F.ChangeTurf(/turf/space)
 	return
 
 /datum/reagent/clf3/reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)
-	if(!istype(M, /mob/living))
-		return
-	if(method == TOUCH)
+	if(method == TOUCH && ishuman(M))
 		M.adjust_fire_stacks(20)
 		M.IgniteMob()
 		new /obj/fire(M.loc)
-		return
-
-/datum/reagent/clf3/reaction_obj(var/obj/O, var/volume)
-	// slags objects if it can
-	if(istype(O, /obj/) && prob(10)) // slag everything
-		O.melt()
 		return
 
 
