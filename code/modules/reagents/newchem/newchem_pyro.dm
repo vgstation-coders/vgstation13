@@ -158,7 +158,6 @@ proc/goonchem_vortex(var/turf/simulated/T, var/setting_type, var/range, var/pull
 	result = "blackpowder"
 	required_reagents = list("saltpetre" = 1, "charcoal" = 1, "sulfur" = 1)
 	result_amount = 3
-	required_temp = 474
 
 /datum/chemical_reaction/blackpowder_explosion
 	name = "Black Powder Kaboom"
@@ -166,15 +165,15 @@ proc/goonchem_vortex(var/turf/simulated/T, var/setting_type, var/range, var/pull
 	result = null
 	required_reagents = list("blackpowder" = 1)
 	result_amount = 1
-	required_temp = 500
+	required_temp = 474
 
 /datum/chemical_reaction/blackpowder_explosion/on_reaction(var/datum/reagents/holder, var/created_volume)
-	var/turf/simulated/T = get_turf(holder.my_atom)
 	holder.my_atom.visible_message("<span class = 'userdanger'>Sparks come out of [holder.my_atom]!</span>")
 	sleep(rand(10,30))
+	var/turf/simulated/T = get_turf(holder.my_atom)
 	var/ex_severe = round(created_volume / 10)
 	var/ex_heavy = round(created_volume / 8)
 	var/ex_light = round(created_volume / 6)
 	var/ex_flash = round(created_volume / 4)
-	explosion(T,ex_severe,ex_heavy,ex_light,ex_flash)
+	explosion(T,ex_severe,ex_heavy,ex_light,ex_flash, 1, 1)
 	return
