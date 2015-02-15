@@ -441,7 +441,7 @@
 		overlays += emag
 		overlays += sparks
 		spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
-		playsound(get_turf(src), "sparks", 60, 1)
+		playsound(get_turf(src), SOUND_SPARK, 60, 1)
 		src.locked = 0
 		src.broken = 1
 		user << "<span class='notice'>You unlock \the [src].</span>"
@@ -498,7 +498,7 @@
 			overlays += emag
 			overlays += sparks
 			spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
-			playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+			playsound(get_turf(src), SOUND_SPARK_FOUR, 75, 1)
 			src.locked = 0
 	if(!opened && prob(20/severity))
 		if(!locked)

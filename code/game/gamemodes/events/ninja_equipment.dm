@@ -979,7 +979,7 @@ ________________________________________________________________________________
 						maxcapacity = 1//Reached maximum battery capacity.
 					if (do_after(U,10))
 						spark_system.start()
-						playsound(A.loc, "sparks", 50, 1)
+						playsound(A.loc, SOUND_SPARK, 50, 1)
 						A.cell.charge-=drain
 						S.cell.charge+=drain
 						totaldrain+=drain
@@ -1007,7 +1007,7 @@ ________________________________________________________________________________
 						maxcapacity = 1
 					if (do_after(U,10))
 						spark_system.start()
-						playsound(A.loc, "sparks", 50, 1)
+						playsound(A.loc, SOUND_SPARK, 50, 1)
 						A.charge-=drain
 						S.cell.charge+=drain
 						totaldrain+=drain
@@ -1134,7 +1134,7 @@ ________________________________________________________________________________
 						maxcapacity = 1
 					if (do_after(U,10))
 						A.spark_system.start()
-						playsound(A.loc, "sparks", 50, 1)
+						playsound(A.loc, SOUND_SPARK, 50, 1)
 						A.cell.use(drain)
 						S.cell.charge+=drain
 						totaldrain+=drain
@@ -1157,7 +1157,7 @@ ________________________________________________________________________________
 						maxcapacity = 1
 					if (do_after(U,10))
 						A.spark_system.start()
-						playsound(A.loc, "sparks", 50, 1)
+						playsound(A.loc, SOUND_SPARK, 50, 1)
 						A.cell.charge-=drain
 						S.cell.charge+=drain
 						totaldrain+=drain
@@ -1368,7 +1368,7 @@ It is possible to destroy the net by the occupant or someone else.
 				M.drop_from_inventory(W)
 
 			spawn(0)
-				playsound(M.loc, 'sound/effects/sparks4.ogg', 50, 1)
+				playsound(M.loc, SOUND_SPARK_FOUR, 50, 1)
 				anim(M.loc,M,'icons/mob/mob.dmi',,"phaseout",,M.dir)
 
 			M.loc = pick(holdingfacility)//Throw mob in to the holding facility.
@@ -1379,7 +1379,7 @@ It is possible to destroy the net by the occupant or someone else.
 				spark_system.set_up(5, 0, M.loc)
 				spark_system.start()
 				playsound(M.loc, 'sound/effects/phasein.ogg', 25, 1)
-				playsound(M.loc, 'sound/effects/sparks2.ogg', 50, 1)
+				playsound(M.loc, SOUND_SPARK_TWO, 50, 1)
 				anim(M.loc,M,'icons/mob/mob.dmi',,"phasein",,M.dir)
 				del(src)//Wait for everything to finish, delete the net. Else it will stop everything once net is deleted, including the spawn(0).
 

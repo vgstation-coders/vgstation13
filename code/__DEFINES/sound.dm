@@ -20,11 +20,16 @@
 #define SOUND_RATCHET "ratchet"
 #define SOUND_SCREWDRIVER "screwdriver"
 #define SOUND_SLIP "slip"
+#define SOUND_SPARK_ONE "spark_one"
+#define SOUND_SPARK_TWO "spark_two"
+#define SOUND_SPARK_THREE "spark_three"
+#define SOUND_SPARK_FOUR "spark_four"
 #define SOUND_TOOL_HIT "tool_hit"
 #define SOUND_WIRECUTTER "wirecutter"
 
 #define SOUND_EXPLOSION "explosion"
 #define SOUND_SHATTER "shatter"
+#define SOUND_SPARK "spark"
 
 /world/New()
 	..()
@@ -55,8 +60,13 @@ proc/gen_sounds()
 	sounds[SOUND_RATCHET] = sound('sound/items/Ratchet.ogg')
 	sounds[SOUND_SCREWDRIVER] = sound('sound/items/Screwdriver.ogg')
 	sounds[SOUND_SLIP] = sound('sound/misc/slip.ogg')
+	sounds[SOUND_SPARK_ONE] = sound('sound/effects/sparks1.ogg')
+	sounds[SOUND_SPARK_TWO] = sound('sound/effects/sparks2.ogg')
+	sounds[SOUND_SPARK_THREE] = sound('sound/effects/sparks3.ogg')
+	sounds[SOUND_SPARK_FOUR] = sound('sound/effects/sparks4.ogg')
 	sounds[SOUND_TOOL_HIT] = sound('sound/weapons/toolhit.ogg')
 	sounds[SOUND_WIRECUTTER] = sound('sound/items/Wirecutter.ogg')
 
 	sounds[SOUND_EXPLOSION] = list(sounds[SOUND_EXPLOSION_ONE], sounds[SOUND_EXPLOSION_TWO], sounds[SOUND_EXPLOSION_THREE], sounds[SOUND_EXPLOSION_FOUR], sounds[SOUND_EXPLOSION_FIVE], sounds[SOUND_EXPLOSION_SIX])
 	sounds[SOUND_SHATTER] = list(sounds[SOUND_GLASS_BREAK_ONE], sounds[SOUND_GLASS_BREAK_TWO], sounds[SOUND_GLASS_BREAK_THREE])
+	sounds[SOUND_SPARK] = list(sounds[SOUND_SPARK_ONE], sounds[SOUND_SPARK_TWO], sounds[SOUND_SPARK_THREE], sounds[SOUND_SPARK_FOUR])

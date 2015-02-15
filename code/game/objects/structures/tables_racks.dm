@@ -361,7 +361,7 @@
 		spark_system.set_up(5, 0, src.loc)
 		spark_system.start()
 		playsound(get_turf(src), 'sound/weapons/blade1.ogg', 50, 1)
-		playsound(get_turf(src), "sparks", 50, 1)
+		playsound(get_turf(src), SOUND_SPARK, 50, 1)
 		for(var/mob/O in viewers(user, 4))
 			O.show_message("\blue The [src] was sliced apart by [user]!", 1, "\red You hear [src] coming apart.", 2)
 		destroy()

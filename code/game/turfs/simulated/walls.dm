@@ -204,7 +204,7 @@
 
 			EB.spark_system.start()
 			user << "<span class='notice'>You slash \the [src] with \the [EB]; the thermite ignites!</span>"
-			playsound(src, "sparks", 50, 1)
+			playsound(src, SOUND_SPARK, 50, 1)
 			playsound(src, 'sound/weapons/blade1.ogg', 50, 1)
 
 			thermitemelt(user)
@@ -262,7 +262,7 @@
 
 		EB.spark_system.start()
 		user << "<span class='notice'>You stab \the [EB] into the wall and begin to slice it apart.</span>"
-		playsound(src, "sparks", 50, 1)
+		playsound(src, SOUND_SPARK, 50, 1)
 
 		sleep(70)
 		if(mineral == "diamond")
@@ -271,7 +271,7 @@
 
 		if( user.loc == T && user.get_active_hand() == W )
 			EB.spark_system.start()
-			playsound(src, "sparks", 50, 1)
+			playsound(src, SOUND_SPARK, 50, 1)
 			playsound(src, 'sound/weapons/blade1.ogg', 50, 1)
 			dismantle_wall(1)
 			var/pdiff=performWallPressureCheck(src.loc)

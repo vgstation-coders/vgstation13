@@ -45,7 +45,7 @@
 				spark_system.set_up(5, 0, src.loc)
 				spark_system.start()
 				playsound(get_turf(src), 'sound/weapons/blade1.ogg', 50, 1)
-				playsound(get_turf(src), "sparks", 50, 1)
+				playsound(get_turf(src), SOUND_SPARK, 50, 1)
 				user << "You slice through the lock on [src]."
 			else
 				user << "You short out the lock on [src]."

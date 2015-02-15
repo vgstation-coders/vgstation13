@@ -387,7 +387,7 @@
 		var/obj/effect/portal/jaunt_tunnel/J = new /obj/effect/portal/jaunt_tunnel(get_turf(src))
 		J.target = chosen_beacon
 		try_move_adjacent(J)
-		playsound(src,'sound/effects/sparks4.ogg',50,1)
+		playsound(src,SOUND_SPARK_FOUR,50,1)
 		del(src) //Single-use
 
 /obj/effect/portal/jaunt_tunnel
@@ -489,7 +489,7 @@
 		return
 	if(istype(proj_turf, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = proj_turf
-		playsound(src,'sound/effects/sparks4.ogg',50,1)
+		playsound(src,SOUND_SPARK_FOUR,50,1)
 		M.GetDrilled()
 		spawn(5)
 			del(src)
@@ -500,7 +500,7 @@
 			name = "strong resonance field"
 			resonance_damage = 60
 		spawn(50)
-			playsound(src,'sound/effects/sparks4.ogg',50,1)
+			playsound(src,SOUND_SPARK_FOUR,50,1)
 			if(creator)
 				for(var/mob/living/L in src.loc)
 					add_logs(creator, L, "used a resonator field on", object="resonator")

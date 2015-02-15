@@ -248,7 +248,7 @@
 
 	emag(mob/user)
 		if(!emagged)
-			playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+			playsound(get_turf(src), SOUND_SPARK_FOUR, 75, 1)
 			emagged = 1
 			user << "\blue You you disable the security protocols"
 			return 1

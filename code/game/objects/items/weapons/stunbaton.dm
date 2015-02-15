@@ -91,7 +91,7 @@
 	if(bcell && bcell.charge >= hitcost)
 		status = !status
 		user << "<span class='notice'>[src] is now [status ? "on" : "off"].</span>"
-		playsound(loc, "sparks", 75, 1, -1)
+		playsound(loc, SOUND_SPARK, 75, 1, -1)
 		update_icon()
 	else
 		status = 0

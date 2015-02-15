@@ -360,7 +360,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 
 /obj/machinery/autolathe/emag(mob/user)
 	if(!hacked && !emagged)
-		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+		playsound(get_turf(src), SOUND_SPARK_FOUR, 75, 1)
 		emagged = 1
 		hacked = emagged
 

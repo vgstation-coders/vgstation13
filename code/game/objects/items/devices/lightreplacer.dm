@@ -179,7 +179,7 @@
 
 /obj/item/device/lightreplacer/proc/Emag()
 	emagged = !emagged
-	playsound(get_turf(src), "sparks", 100, 1)
+	playsound(get_turf(src), SOUND_SPARK, 100, 1)
 	if(emagged)
 		name = "Shortcircuited [initial(name)]"
 	else

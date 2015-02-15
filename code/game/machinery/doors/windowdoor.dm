@@ -241,7 +241,7 @@
 		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
 		spark_system.set_up(5, 0, src.loc)
 		spark_system.start()
-		playsound(get_turf(src), "sparks", 50, 1)
+		playsound(get_turf(src), SOUND_SPARK, 50, 1)
 		playsound(get_turf(src), 'sound/weapons/blade1.ogg', 50, 1)
 		visible_message("<span class='warning'>The glass door was sliced open by [user]!</span>")
 	flick("[src.base_state]spark", src)

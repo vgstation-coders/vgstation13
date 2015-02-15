@@ -194,7 +194,7 @@ steam.start() -- spawns the effect
 	else
 		directions = alldirs.Copy()
 
-	playsound(location, "sparks", 100, 1)
+	playsound(location, SOUND_SPARK, 100, 1)
 	for (var/i = 1 to number)
 		var/nextdir=pick_n_take(directions)
 		if(nextdir)
