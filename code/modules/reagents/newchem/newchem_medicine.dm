@@ -166,28 +166,10 @@ var/global/list/banned_mob_spawns = list(/mob/living/simple_animal/hostile,
 /datum/reagent/omnizine
 	name = "Omnizine"
 	id = "omnizine"
-	description = "Heals one each of OXY, TOX, BRUTE and BURN per cycle."
+	description = "A chemical."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 	custom_metabolism = 0.2
-	overdose_threshold = 30
-
-/datum/reagent/omnizine/on_mob_life(var/mob/living/M as mob)
-	if(!M) M = holder.my_atom
-	M.adjustToxLoss(-1*REM)
-	M.adjustOxyLoss(-1*REM)
-	M.adjustBruteLoss(-1*REM)
-	M.adjustFireLoss(-1*REM)
-	..()
-	return
-
-/datum/reagent/omnizine/overdose_process(var/mob/living/M as mob)
-	M.adjustToxLoss(3*REM)
-	M.adjustOxyLoss(3*REM)
-	M.adjustBruteLoss(3*REM)
-	M.adjustFireLoss(3*REM)
-	..()
-	return
 
 /datum/reagent/calomel
 	name = "Calomel"
@@ -195,6 +177,7 @@ var/global/list/banned_mob_spawns = list(/mob/living/simple_animal/hostile,
 	description = "Increases all depletion rates by 5. +5 TOX damage while health > 20."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
+	custom_metabolism = 2
 
 /datum/reagent/calomel/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
@@ -213,6 +196,30 @@ var/global/list/banned_mob_spawns = list(/mob/living/simple_animal/hostile,
 	required_reagents = list("mercury" = 1, "chlorine" = 1)
 	result_amount = 2
 	required_temp = 374
+
+/datum/reagent/hunchback
+	name = "Hunchback"
+	id = "hunchback"
+	description = "Increases all depletion rates by 8. +2 TOX damage while health > 0."
+	reagent_state = LIQUID
+	color = "#C8A5DC" // rgb: 200, 165, 220
+
+/datum/reagent/hunchback/on_mob_life(var/mob/living/M as mob)
+	if(!M) M = holder.my_atom
+	for(var/datum/reagent/R in M.reagents.reagent_list)
+		if(R != src)
+			M.reagents.remove_reagent(R.id,8)
+	if(M.health > 0)
+		M.adjustToxLoss(2*REM)
+	..()
+	return
+
+/datum/chemical_reaction/hunchback
+	name = "Hunchback"
+	id = "hunchback"
+	result = "hunchback"
+	required_reagents = list("vodka" = 1, "cola" = 1, "tomatojuice" = 1)
+	result_amount = 3
 
 /datum/reagent/potass_iodide
 	name = "Potassium Iodide"
