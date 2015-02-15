@@ -92,11 +92,10 @@ var/const/SURROUND_CAP = 7
 
 	soundin = get_sfx(soundin)
 
-	var/sound/S
+	var/sound/S = soundin
 
-	if (istype(/sound, soundin))
-		world << "aaa"
-		S = soundin
+	if (istype(soundin))
+		world << "woop"
 	else
 		S = sound(soundin)
 

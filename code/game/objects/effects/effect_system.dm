@@ -815,7 +815,7 @@ steam.start() -- spawns the effect
 
 		M.stop_pulling()
 		M << "\blue You slipped on the foam!"
-		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+		playsound(get_turf(src), SOUND_SLIP, 50, 1, -3)
 		M.Stun(5)
 		M.Weaken(2)
 
