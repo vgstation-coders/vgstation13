@@ -60,15 +60,6 @@ Attach to transfer valve and open. BOOM.
 	if(autoignition_temperature && !on_fire && exposed_temperature > autoignition_temperature)
 		ignite(exposed_temperature)
 		return 1
-	if(melt_temperature)
-		if(melt_temperature <= exposed_temperature && !molten && prob(5))
-			molten=1
-			melt()
-			return 1
-		if(melt_temperature > exposed_temperature && molten && prob(5))
-			molten=0
-			solidify()
-			return 1
 	return 0
 
 /turf
