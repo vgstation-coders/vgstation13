@@ -1,0 +1,5 @@
+author: Vasby
+delete-after: true
+changes:
+  - tweak: Outpost: replaced rigsuits on racks with suit storage units (magboots available).
+  - tweak: Moved the research shuttle closer to science and tweaked maint around it.
