@@ -97,6 +97,12 @@
 	required_reagents = list("fuel" = 1, "carbon" = 1, "hydrogen" = 1)
 	result_amount = 3
 
+/datum/reagent/oil/reaction_turf(var/turf/T, var/volume)
+	if(T && !istype(T, /turf/space))
+		new /obj/effect/decal/cleanable/blood/oil(T)
+	..()
+	return
+
 /datum/chemical_reaction/phenol
 	name = "phenol"
 	id = "phenol"
@@ -170,6 +176,7 @@
 	description = "A slippery solution."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
+	addiction_threshold = 20
 
 /datum/chemical_reaction/corn_syrup
 	name = "corn_syrup"
