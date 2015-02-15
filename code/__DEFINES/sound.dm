@@ -21,6 +21,10 @@
 #define SOUND_GLASS_BREAK_ONE "glass_break_one"
 #define SOUND_GLASS_BREAK_TWO "glass_break_two"
 #define SOUND_GLASS_BREAK_THREE "glass_break_three"
+#define SOUND_HISS_ONE "hiss_one"
+#define SOUND_HISS_TWO "hiss_two"
+#define SOUND_HISS_THREE "hiss_three"
+#define SOUND_HISS_FOUR "hiss_four"
 #define SOUND_MECH_STEP_ONE "mech_step_one"
 #define SOUND_MECH_STEP_TWO "mech_step_two"
 #define SOUND_PAGE_TURN_ONE "page_turn_one"
@@ -51,6 +55,7 @@
 #define SOUND_CLOWN_STEP "clown_step"
 #define SOUND_EXPLOSION "explosion"
 #define SOUND_GIB "gib"
+#define SOUND_HISS "hiss"
 #define SOUND_MECH_STEP "mech_step"
 #define SOUND_PAGE_TURN "page_turn"
 #define SOUND_PUNCH "punch"
@@ -89,6 +94,10 @@ proc/gen_sounds()
 	sounds[SOUND_GLASS_BREAK_ONE] = sound('sound/effects/Glassbr1.ogg')
 	sounds[SOUND_GLASS_BREAK_TWO] = sound('sound/effects/Glassbr2.ogg')
 	sounds[SOUND_GLASS_BREAK_THREE] = sound('sound/effects/Glassbr3.ogg')
+	sounds[SOUND_HISS_ONE] = sound('sound/voice/hiss1.ogg')
+	sounds[SOUND_HISS_TWO] = sound('sound/voice/hiss2.ogg')
+	sounds[SOUND_HISS_THREE] = sound('sound/voice/hiss3.ogg')
+	sounds[SOUND_HISS_FOUR] = sound('sound/voice/hiss4.ogg')
 	sounds[SOUND_MECH_STEP_ONE] = sound('sound/mecha/mechstep1.ogg')
 	sounds[SOUND_MECH_STEP_TWO] = sound('sound/mecha/mechstep2.ogg')
 	sounds[SOUND_PAGE_TURN_ONE] = sound('sound/effects/pageturn1.ogg')
@@ -119,6 +128,7 @@ proc/gen_sounds()
 	sounds[SOUND_CLOWN_STEP] = list(sounds[SOUND_CLOWN_STEP_ONE], sounds[SOUND_CLOWN_STEP_TWO])
 	sounds[SOUND_EXPLOSION] = list(sounds[SOUND_EXPLOSION_ONE], sounds[SOUND_EXPLOSION_TWO], sounds[SOUND_EXPLOSION_THREE], sounds[SOUND_EXPLOSION_FOUR], sounds[SOUND_EXPLOSION_FIVE], sounds[SOUND_EXPLOSION_SIX])
 	sounds[SOUND_GIB] = list(sounds[SOUND_GIB_ONE], sounds[SOUND_GIB_TWO], sounds[SOUND_GIB_THREE])
+	sounds[SOUND_HISS] = list(sounds[SOUND_HISS_ONE], sounds[SOUND_HISS_TWO], sounds[SOUND_HISS_THREE], sounds[SOUND_HISS_FOUR])
 	sounds[SOUND_MECH_STEP] = list(sounds[SOUND_MECH_STEP_ONE], sounds[SOUND_MECH_STEP_TWO])
 	sounds[SOUND_PAGE_TURN] = list(sounds[SOUND_PAGE_TURN_ONE], sounds[SOUND_PAGE_TURN_TWO])
 	sounds[SOUND_PUNCH] = list(sounds[SOUND_PUNCH_ONE], sounds[SOUND_PUNCH_TWO], sounds[SOUND_PUNCH_THREE], sounds[SOUND_PUNCH_FOUR])
