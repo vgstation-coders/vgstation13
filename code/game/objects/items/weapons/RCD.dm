@@ -143,7 +143,7 @@ RCD
 			return
 
 /obj/item/weapon/rcd/proc/activate()
-	playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 
 
 /obj/item/weapon/rcd/afterattack(atom/A, mob/user)

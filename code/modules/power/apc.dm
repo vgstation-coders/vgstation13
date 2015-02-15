@@ -467,7 +467,7 @@
 			user << "\red You need more wires."
 			return
 		user << "You start adding cables to the APC frame..."
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 		if(do_after(user, 20) && C.amount >= 10)
 			var/turf/T = get_turf(src)
 			var/obj/structure/cable/N = T.get_cable_node()
@@ -487,7 +487,7 @@
 			user << "\red You must remove the floor plating in front of the APC first."
 			return
 		user << "You begin to cut the cables..."
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 		if(do_after(user, 50))
 			if (prob(50) && electrocute_mob(usr, terminal.powernet, terminal))
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
@@ -501,7 +501,7 @@
 			del(terminal)
 	else if (istype(W, /obj/item/weapon/module/power_control) && opened && has_electronics==0 && !((stat & BROKEN) || malfhack))
 		user << "You trying to insert the power control board into the frame..."
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 		if(do_after(user, 10))
 			has_electronics = 1
 			user << "You place the power control board inside the frame."

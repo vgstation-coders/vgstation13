@@ -21,7 +21,7 @@
 			return
 		user.drop_item()
 		var/obj/structure/stool/bed/chair/e_chair/E = new /obj/structure/stool/bed/chair/e_chair(src.loc)
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 		E.dir = dir
 		E.part = SK
 		SK.loc = E

@@ -490,7 +490,7 @@ turf/simulated/floor/proc/update_icon()
 				user << "<span class='notice'>Reinforcing the floor...</span>"
 				if(do_after(user, 30) && R && R.amount >= 2 && is_plating())
 					ChangeTurf(/turf/simulated/floor/engine)
-					playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
+					playsound(src, SOUND_DECONSTRUCT, 80, 1)
 					R.use(2)
 					return
 			else

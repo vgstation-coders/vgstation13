@@ -50,7 +50,7 @@
 			M.amount = sheets_refunded
 			user.visible_message("[user.name] deconstructs [src].", \
 				"You deconstruct [src].", "You hear a noise.")
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 75, 1)
+			playsound(get_turf(src), SOUND_DECONSTRUCT, 75, 1)
 			del(src)
 		if (src.stage == 2)
 			usr << "You have to remove the wires first."

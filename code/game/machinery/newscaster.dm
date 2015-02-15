@@ -891,7 +891,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			stack.use(2)
 			src.hitstaken = 0
 			stat &= ~BROKEN
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 80, 1)
+			playsound(get_turf(src), SOUND_DECONSTRUCT, 80, 1)
 
 	else if (stat & BROKEN)
 		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 100, 1)

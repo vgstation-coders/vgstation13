@@ -77,7 +77,7 @@
 				if(istype(W, /obj/item/weapon/cable_coil))
 					var/obj/item/weapon/cable_coil/C=W
 					user << "You start adding cables to \the [src]..."
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 					if(do_after(user, 20) && C.amount >= 10)
 						C.use(5)
 						build++

@@ -305,7 +305,7 @@
 						if(disabled) return
 						chassis.spark_system.start()
 						target:ChangeTurf(/turf/simulated/floor/plating)
-						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+						playsound(target, SOUND_DECONSTRUCT, 50, 1)
 						chassis.use_power(energy_drain)
 				else if (istype(target, /turf/simulated/floor))
 					occupant_message("Deconstructing [target]...")
@@ -314,7 +314,7 @@
 						if(disabled) return
 						chassis.spark_system.start()
 						target:ChangeTurf(/turf/space)
-						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+						playsound(target, SOUND_DECONSTRUCT, 50, 1)
 						chassis.use_power(energy_drain)
 				else if (istype(target, /obj/machinery/door/airlock))
 					occupant_message("Deconstructing [target]...")
@@ -323,7 +323,7 @@
 						if(disabled) return
 						chassis.spark_system.start()
 						del(target)
-						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+						playsound(target, SOUND_DECONSTRUCT, 50, 1)
 						chassis.use_power(energy_drain)
 			if(1)
 				if(istype(target, /turf/space))
@@ -332,7 +332,7 @@
 					if(do_after_cooldown(target))
 						if(disabled) return
 						target:ChangeTurf(/turf/simulated/floor/plating/airless)
-						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+						playsound(target, SOUND_DECONSTRUCT, 50, 1)
 						chassis.spark_system.start()
 						chassis.use_power(energy_drain*2)
 				else if(istype(target, /turf/simulated/floor))
@@ -341,7 +341,7 @@
 					if(do_after_cooldown(target))
 						if(disabled) return
 						target:ChangeTurf(/turf/simulated/wall)
-						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+						playsound(target, SOUND_DECONSTRUCT, 50, 1)
 						chassis.spark_system.start()
 						chassis.use_power(energy_drain*2)
 			if(2)
@@ -353,7 +353,7 @@
 						chassis.spark_system.start()
 						var/obj/machinery/door/airlock/T = new /obj/machinery/door/airlock(target)
 						T.autoclose = 1
-						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+						playsound(target, SOUND_DECONSTRUCT, 50, 1)
 						playsound(target, 'sound/effects/sparks2.ogg', 50, 1)
 						chassis.use_power(energy_drain*2)
 		return

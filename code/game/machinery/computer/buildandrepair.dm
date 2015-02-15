@@ -309,7 +309,7 @@
 			if(istype(P, /obj/item/weapon/circuitboard) && !circuit)
 				var/obj/item/weapon/circuitboard/B = P
 				if(B.board_type == "computer")
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 					user << "<span class='notice'>You place the circuit board inside the frame.</span>"
 					src.icon_state = "1"
 					src.circuit = P
@@ -341,7 +341,7 @@
 				return 1
 			if(istype(P, /obj/item/weapon/cable_coil))
 				if(P:amount >= 5)
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 					if(do_after(user, 20))
 						if(P)
 							P:amount -= 5
@@ -362,7 +362,7 @@
 
 			if(istype(P, /obj/item/stack/sheet/glass/glass))
 				if(P:amount >= 2)
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 					if(do_after(user, 20))
 						if(P)
 							P:use(2)

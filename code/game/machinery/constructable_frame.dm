@@ -43,7 +43,7 @@
 				if(istype(P, /obj/item/weapon/cable_coil))
 					var/obj/item/weapon/cable_coil/C = P
 					if(C.amount >= 5)
-						playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+						playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 						user << "<span class='notice'>You start to add cables to the frame.</span>"
 						if(do_after(user, 20))
 							if(C && C.amount >= 5) // Check again
@@ -58,7 +58,7 @@
 						return
 					G.use(1)
 					user << "<span class='notice'>You add the glass to the frame.</span>"
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 					new /obj/structure/displaycase_frame(src.loc)
 					del(src)
 					return
@@ -74,7 +74,7 @@
 				if(istype(P, /obj/item/weapon/circuitboard))
 					var/obj/item/weapon/circuitboard/B = P
 					if(B.board_type == "machine")
-						playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+						playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 						user << "<span class='notice'>You add the circuit board to the frame.</span>"
 						circuit = P
 						user.drop_item()
@@ -152,7 +152,7 @@
 						if(istype(P, /obj/item/weapon)||istype(P, /obj/item/stack))
 							for(var/I in req_components)
 								if(istype(P, text2path(I)) && (req_components[I] > 0))
-									playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+									playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 									if(istype(P, /obj/item/weapon/cable_coil))
 										var/obj/item/weapon/cable_coil/CP = P
 										if(CP.amount >= req_components[I])

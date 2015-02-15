@@ -43,7 +43,7 @@
 			if(solar_assembly)
 				solar_assembly.loc = T
 				solar_assembly.give_glass()
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 			user.visible_message("<span class='notice'>[user] takes the [initial(G.name)] off the [src].</span>",\
 			"<span class='notice'>You takes the [initial(G.name)] off the [src].</span>")
 			qdel(src)

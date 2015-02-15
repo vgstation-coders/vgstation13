@@ -159,5 +159,7 @@ var/const/SURROUND_CAP = 7
 				soundin = sounds[SOUND_RATCHET]
 			if (SOUND_CLICK)
 				soundin = sounds[SOUND_CLICK]
+			if (SOUND_DECONSTRUCT)
+				soundin = sounds[SOUND_DECONSTRUCT)
 
 	return soundin

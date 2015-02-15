@@ -95,7 +95,7 @@
 			for(var/obj/item/weapon/intercom_electronics/board in src)
 				user << "\red There's already an intercom electronics board inside!"
 				return 1
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 			if(do_after(user, 10))
 				user.drop_item()
 				W.loc=src
@@ -127,7 +127,7 @@
 			if(!b_stat)
 				return ..()
 			user << "You begin removing the electronics..."
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 			if(do_after(user, 10))
 				new /obj/item/weapon/intercom_electronics(src.loc)
 				user << "\blue The circuitboard pops out!"

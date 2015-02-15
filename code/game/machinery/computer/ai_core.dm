@@ -41,7 +41,7 @@
 					anchored = 0
 					state = 0
 			if(istype(P, /obj/item/weapon/circuitboard/aicore) && !circuit)
-				playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
+				playsound(loc, SOUND_DECONSTRUCT, 50, 1)
 				user << "<span class='notice'>You place the circuit board inside the frame.</span>"
 				icon_state = "1"
 				circuit = P
@@ -67,7 +67,7 @@
 				icon_state = "1"
 			if(istype(P, /obj/item/weapon/cable_coil))
 				if(P:amount >= 5)
-					playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(loc, SOUND_DECONSTRUCT, 50, 1)
 					if(do_after(user, 20))
 						P:amount -= 5
 						if(!P:amount) del(P)
@@ -88,7 +88,7 @@
 
 			if(istype(P, /obj/item/stack/sheet/glass/rglass))
 				if(P:amount >= 2)
-					playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(loc, SOUND_DECONSTRUCT, 50, 1)
 					if(do_after(user, 20))
 						if (P)
 							P:amount -= 2

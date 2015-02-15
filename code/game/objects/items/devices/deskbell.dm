@@ -279,7 +279,7 @@
 					user.visible_message(
 						"<span class='warning'>[user.name] has added cables to \the [src]!</span>",
 						"You add cables to \the [src].")
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 					C.use(1)
 					build_step++
 					update_icon()

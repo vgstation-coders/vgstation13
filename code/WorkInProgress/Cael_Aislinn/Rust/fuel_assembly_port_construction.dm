@@ -73,7 +73,7 @@
 			user << "\red You need more wires."
 			return
 		user << "You start adding cables to the frame..."
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 		if(do_after(user, 20) && C.amount >= 10)
 			C.use(10)
 			user.visible_message(\
@@ -84,7 +84,7 @@
 
 	else if (istype(W, /obj/item/weapon/wirecutters) && opened && (has_electronics & 2))
 		user << "You begin to cut the cables..."
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 		if(do_after(user, 50))
 			new /obj/item/weapon/cable_coil(loc,10)
 			user.visible_message(\
@@ -95,7 +95,7 @@
 
 	else if (istype(W, /obj/item/weapon/module/rust_fuel_port) && opened && !(has_electronics & 1))
 		user << "You trying to insert the port control board into the frame..."
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 		if(do_after(user, 10))
 			has_electronics &= 1
 			user << "You place the port control board inside the frame."

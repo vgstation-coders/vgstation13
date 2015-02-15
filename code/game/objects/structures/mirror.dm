@@ -83,7 +83,7 @@
 			stack.use(2)
 			shattered = 0
 			icon_state = "mirror"
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 80, 1)
+			playsound(get_turf(src), SOUND_DECONSTRUCT, 80, 1)
 
 	else if(shattered)
 		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
