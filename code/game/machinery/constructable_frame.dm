@@ -109,7 +109,7 @@
 
 			if(3)
 				if(istype(P, /obj/item/weapon/crowbar))
-					playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+					playsound(get_turf(src), CROWBAR, 50, 1)
 					state = 2
 					circuit.loc = src.loc
 					circuit = null

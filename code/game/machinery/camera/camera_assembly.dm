@@ -131,7 +131,7 @@
 		var/obj/U = locate(/obj) in upgrades
 		if(U)
 			user << "You unattach an upgrade from the assembly."
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+			playsound(get_turf(src), CROWBAR, 50, 1)
 			U.loc = get_turf(src)
 			upgrades -= U
 		return

@@ -60,7 +60,7 @@
 					user << "You need more cable"
 			if(istype(P, /obj/item/weapon/crowbar))
 				user << "You begin prying out the circuit board and components..."
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(get_turf(src), CROWBAR, 50, 1)
 				if(do_after(user,60))
 					user << "You finish prying out the components."
 

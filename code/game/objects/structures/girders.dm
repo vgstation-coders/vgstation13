@@ -62,7 +62,7 @@
 			update_icon()
 
 	else if(istype(W, /obj/item/weapon/crowbar) && state == 0 && anchored )
-		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 100, 1)
+		playsound(get_turf(src), CROWBAR, 100, 1)
 		user << "<span class='info'>Now dislodging the girder</span>"
 		if(do_after(user, 40))
 			if(!src) return

@@ -94,7 +94,7 @@
 	digspeed = 30
 	desc = "A smaller, more precise version of the pickaxe (30 centimetre excavation depth)."
 	excavation_amount = 15
-	drill_sound = 'sound/items/Crowbar.ogg'
+	drill_sound = CROWBAR
 	drill_verb = "clearing"
 	w_class = 3
 

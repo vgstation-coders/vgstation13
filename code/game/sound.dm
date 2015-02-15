@@ -147,5 +147,7 @@ var/const/SURROUND_CAP = 7
 				soundin = sounds[AIRLOCK_OPEN]
 			if (AIRLOCK_CLOSE)
 				soundin = sounds[AIRLOCK_CLOSE]
+			if (CROWBAR)
+				soundin = sounds[CROWBAR]
 
 	return soundin

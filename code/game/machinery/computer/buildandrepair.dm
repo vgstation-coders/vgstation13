@@ -325,7 +325,7 @@
 				src.icon_state = "2"
 				return 1
 			if(istype(P, /obj/item/weapon/crowbar) && circuit)
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(get_turf(src), CROWBAR, 50, 1)
 				user << "<span class='notice'>You remove the circuit board.</span>"
 				src.state = 1
 				src.icon_state = "0"
@@ -372,7 +372,7 @@
 				return 1
 		if(4)
 			if(istype(P, /obj/item/weapon/crowbar))
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(get_turf(src), CROWBAR, 50, 1)
 				user << "<span class='notice'>You remove the glass panel.</span>"
 				src.state = 3
 				src.icon_state = "3"

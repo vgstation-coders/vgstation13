@@ -192,7 +192,7 @@
 			user << "\red You cannot disassemble this [src], it's occupado."
 			return
 		if (opened)
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+			playsound(get_turf(src), CROWBAR, 50, 1)
 			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
 			M.state = 2
 			M.icon_state = "box_1"

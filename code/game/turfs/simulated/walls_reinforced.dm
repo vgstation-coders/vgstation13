@@ -159,7 +159,7 @@
 			if (istype(W, /obj/item/weapon/crowbar))
 
 				user << "<span class='notice'>You struggle to pry off the cover.</span>"
-				playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+				playsound(src, CROWBAR, 100, 1)
 
 				sleep(100)
 				if( !istype(src, /turf/simulated/wall/r_wall) || !user || !W || !T )	return
@@ -224,7 +224,7 @@
 			if( istype(W, /obj/item/weapon/crowbar) )
 
 				user << "<span class='notice'>You struggle to pry off the outer sheath.</span>"
-				playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+				playsound(src, CROWBAR, 100, 1)
 
 				sleep(100)
 				if( !istype(src, /turf/simulated/wall/r_wall) || !user || !W || !T )	return
