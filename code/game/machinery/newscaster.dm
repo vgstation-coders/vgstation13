@@ -908,7 +908,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				if(src.hitstaken==3)
 					visible_message("[user.name] smashes the [src]!")
 					stat |= BROKEN
-					playsound(get_turf(src), 'sound/effects/Glassbr3.ogg', 100, 1)
+					playsound(get_turf(src), SOUND_SHATTER, 100, 1)
 				else
 					visible_message("[user.name] forcefully slams the [src.name] with the [I.name]!")
 					playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 100, 1)

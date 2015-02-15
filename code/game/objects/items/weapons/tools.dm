@@ -48,7 +48,7 @@
 	desc = "You can be totally screwy with this."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "screwdriver"
-	hitsound = 'sound/weapons/toolhit.ogg'
+	hitsound = SOUND_TOOL_HIT
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1
@@ -135,7 +135,7 @@
 	desc = "This cuts wires."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "cutters"
-	hitsound = 'sound/weapons/toolhit.ogg'
+	hitsound = SOUND_TOOL_HIT
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1
@@ -175,7 +175,7 @@
 	name = "welding tool"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "welder"
-	hitsound = 'sound/weapons/toolhit.ogg'
+	hitsound = SOUND_TOOL_HIT
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT

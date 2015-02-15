@@ -328,7 +328,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 						visible_message("\red <B>[user] has disarmed [src]!</B>")
 					else
-						playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+						playsound(loc, SOUND_PUNCH_MISS, 25, 1, -1)
 						visible_message("\red <B>[user] attempted to disarm [src]!</B>")
 					return
 			if (I_HELP)

@@ -265,7 +265,7 @@
 	qdel(src)
 
 /obj/item/stack/sheet/snow/throw_at(atom/target, range, speed)
-	playsound(src.loc, 'sound/weapons/punchmiss.ogg', 50, 1)
+	playsound(src.loc, SOUND_PUNCH_MISS, 50, 1)
 	..()
 
 /obj/item/stack/sheet/snow/throw_impact(atom/hit_atom)

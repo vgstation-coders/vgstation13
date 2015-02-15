@@ -112,30 +112,28 @@ mob/living/carbon/proc/handle_hallucinations()
 				//Strange audio
 				//src << "Strange Audio"
 				if(client)
-					switch(rand(1,12))
+					switch(rand(1, 10))
 						if(1) src << 'sound/machines/airlock.ogg'
 						if(2)
 							if(prob(50))src << 'sound/effects/Explosion1.ogg'
 							else src << 'sound/effects/Explosion2.ogg'
 						if(3) src << 'sound/effects/explosionfar.ogg'
-						if(4) src << 'sound/effects/Glassbr1.ogg'
-						if(5) src << 'sound/effects/Glassbr2.ogg'
-						if(6) src << 'sound/effects/Glassbr3.ogg'
-						if(7) src << 'sound/machines/twobeep.ogg'
-						if(8) src << 'sound/machines/windowdoor.ogg'
-						if(9)
+						if(4) src << get_sfx(SOUND_LIST_SHATTER)
+						if(5) src << 'sound/machines/twobeep.ogg'
+						if(6) src << 'sound/machines/windowdoor.ogg'
+						if(7)
 							//To make it more realistic, I added two gunshots (enough to kill)
 							src << 'sound/weapons/Gunshot.ogg'
 							spawn(rand(10,30))
 								src << 'sound/weapons/Gunshot.ogg'
-						if(10) src << 'sound/weapons/smash.ogg'
-						if(11)
+						if(8) src << 'sound/weapons/smash.ogg'
+						if(9)
 							//Same as above, but with tasers.
 							src << 'sound/weapons/Taser.ogg'
 							spawn(rand(10,30))
 								src << 'sound/weapons/Taser.ogg'
 					//Rare audio
-						if(12)
+						if(10)
 	//These sounds are (mostly) taken from Hidden: Source
 							var/list/creepyasssounds = list('sound/effects/ghost.ogg', 'sound/effects/ghost2.ogg', 'sound/effects/Heart Beat.ogg', 'sound/effects/screech.ogg',\
 								'sound/hallucinations/behind_you1.ogg', 'sound/hallucinations/behind_you2.ogg', 'sound/hallucinations/far_noise.ogg', 'sound/hallucinations/growl1.ogg', 'sound/hallucinations/growl2.ogg',\

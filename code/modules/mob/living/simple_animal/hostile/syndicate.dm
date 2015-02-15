@@ -146,7 +146,7 @@
 	melee_damage_lower = 15
 	melee_damage_upper = 15
 	attacktext = "cuts"
-	attack_sound = 'sound/weapons/bladeslice.ogg'
+	attack_sound = SOUND_BLADE_SLICE
 	faction = "syndicate"
 	min_oxy = 0
 	max_oxy = 0

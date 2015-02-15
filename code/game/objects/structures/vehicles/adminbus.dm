@@ -236,7 +236,7 @@
 				if(L.flags & INVULNERABLE)
 					continue
 				L.gib()
-				playsound(src, 'sound/weapons/bloodyslice.ogg', 50, 0, 0)
+				playsound(src, SOUND_BLOODY_SLICE, 50, 0, 0)
 			for(var/obj/machinery/bot/B in S)
 				if(B.flags & INVULNERABLE)
 					continue

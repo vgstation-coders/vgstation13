@@ -275,7 +275,7 @@
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
-				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+				playsound(loc, SOUND_PUNCH_MISS, 25, 1, -1)
 				visible_message("<span class='danger'>[M] has attempted to punch \the [src] !</span>")
 
 		if(I_DISARM)
@@ -290,7 +290,7 @@
 						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 						visible_message("<span class='danger'>[M] has disarmed \the [src] !</span>")
 					else
-						playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+						playsound(loc, SOUND_PUNCH_MISS, 25, 1, -1)
 						visible_message("<span class='danger'>[M] has attempted to disarm \the [src] !</span>")
 	return
 

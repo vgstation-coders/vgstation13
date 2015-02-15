@@ -21,7 +21,7 @@
 	ranged = 1
 	retreat_distance = 5
 	minimum_distance = 3
-	projectilesound = 'sound/weapons/punchmiss.ogg'
+	projectilesound = SOUND_PUNCH_MISS
 	projectiletype = /obj/item/projectile/snowball
 	environment_smash = 0
 

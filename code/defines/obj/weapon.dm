@@ -693,7 +693,7 @@
 	attack_verb = list("chopped", "torn", "cut")
 
 /obj/item/weapon/hatchet/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
+	playsound(loc, SOUND_BLADE_SLICE, 50, 1, -1)
 	return ..()
 
 /obj/item/weapon/hatchet/unathiknife

@@ -1,4 +1,3 @@
-var/list/shatter_sound = list('sound/effects/Glassbr1.ogg','sound/effects/Glassbr2.ogg','sound/effects/Glassbr3.ogg')
 var/list/explosion_sound = list('sound/effects/Explosion1.ogg','sound/effects/Explosion2.ogg','sound/effects/Explosion3.ogg','sound/effects/Explosion4.ogg','sound/effects/Explosion5.ogg','sound/effects/Explosion6.ogg')
 var/list/spark_sound = list('sound/effects/sparks1.ogg','sound/effects/sparks2.ogg','sound/effects/sparks3.ogg','sound/effects/sparks4.ogg')
 var/list/rustle_sound = list('sound/effects/rustle1.ogg','sound/effects/rustle2.ogg','sound/effects/rustle3.ogg','sound/effects/rustle4.ogg','sound/effects/rustle5.ogg')
@@ -16,7 +15,7 @@ var/list/mommicomment_sound = list('sound/voice/mommi_comment1.ogg', 'sound/voic
 //space sounds have no gas modification, for example. Though >space sounds
 /proc/playsound(var/atom/source, soundin, vol as num, vary, extrarange as num, falloff, var/gas_modified = 1)
 
-	soundin = get_sfx(soundin) // same sound for everyone
+	//soundin = get_sfx(soundin) // same sound for everyone
 
 	if(isarea(source))
 		error("[source] is an area and is trying to make the sound: [soundin]")
@@ -133,41 +132,10 @@ var/const/SURROUND_CAP = 7
 /proc/get_rand_frequency()
 	return rand(32000, 55000) //Frequency stuff only works with 45kbps oggs.
 
-/proc/get_sfx(soundin)
-	if(istext(soundin))
-		switch(soundin)
-			if ("shatter") soundin = pick(shatter_sound)
-			if ("explosion") soundin = pick(explosion_sound)
-			if ("sparks") soundin = pick(spark_sound)
-			if ("rustle") soundin = pick(rustle_sound)
-			if ("punch") soundin = pick(punch_sound)
-			if ("clownstep") soundin = pick(clown_sound)
-			if ("swing_hit") soundin = pick(swing_hit_sound)
-			if ("hiss") soundin = pick(hiss_sound)
-			if ("pageturn") soundin = pick(page_sound)
-			if ("mechstep") soundin = pick(mechstep_sound)
-			if ("gib") soundin = pick(gib_sound)
-			if ("mommicomment") soundin = pick(mommicomment_sound)
-			//if ("gunshot") soundin = pick(gun_sound)
-			if (SOUND_AIRLOCK)
-				soundin = sounds[SOUND_AIRLOCK]
-			if (SOUND_CROWBAR)
-				soundin = sounds[SOUND_CROWBAR]
-			if (SOUND_SLIP)
-				soundin = sounds[SOUND_SLIP]
-			if (SOUND_RATCHET)
-				soundin = sounds[SOUND_RATCHET]
-			if (SOUND_CLICK)
-				soundin = sounds[SOUND_CLICK]
-			if (SOUND_DECONSTRUCT)
-				soundin = sounds[SOUND_DECONSTRUCT]
-			if (SOUND_SCREWDRIVER)
-				soundin = sounds[SOUND_SCREWDRIVER]
-			if (SOUND_BANG)
-				soundin = sounds[SOUND_BANG]
-			if (SOUND_FLASH)
-				soundin = sounds[SOUND_FLASH]
-			if (SOUND_WIRECUTTER)
-				soundin = sounds[SOUND_WIRECUTTER]
+/proc/get_sfx(sound_name)
+	var/sound = sounds[sound_name]
 
-	return soundin
+	if (islist(sound))
+		sound = pick(sound)
+
+	return sound

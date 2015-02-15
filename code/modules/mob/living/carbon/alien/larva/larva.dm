@@ -253,7 +253,7 @@
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
-				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+				playsound(loc, SOUND_PUNCH_MISS, 25, 1, -1)
 				visible_message("<span class='danger'>[M] has attempted to punch \the [src] !</span>")
 	return
 

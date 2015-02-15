@@ -15,7 +15,7 @@
 	attacktext = "slammed its enormous claws into"
 	speed = -1
 	environment_smash = 2 // WALLS
-	attack_sound = 'sound/weapons/bladeslice.ogg'
+	attack_sound = SOUND_BLADE_SLICE
 	status_flags = 0
 	languages = HUMAN
 
