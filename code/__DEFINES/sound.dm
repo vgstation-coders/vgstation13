@@ -31,6 +31,11 @@
 #define SOUND_PUNCH_THREE "punch_three"
 #define SOUND_PUNCH_FOUR "punch_four"
 #define SOUND_RATCHET "ratchet"
+#define SOUND_RUSTLE_ONE "rustle_one"
+#define SOUND_RUSTLE_TWO "rustle_two"
+#define SOUND_RUSTLE_THREE "rustle_three"
+#define SOUND_RUSTLE_FOUR "rustle_four"
+#define SOUND_RUSTLE_FIVE "rustle_five"
 #define SOUND_SCREWDRIVER "screwdriver"
 #define SOUND_SLIP "slip"
 #define SOUND_SPARK_ONE "spark_one"
@@ -49,6 +54,7 @@
 #define SOUND_MECH_STEP "mech_step"
 #define SOUND_PAGE_TURN "page_turn"
 #define SOUND_PUNCH "punch"
+#define SOUND_RUSTLE "rustle"
 #define SOUND_SHATTER "shatter"
 #define SOUND_SPARK "spark"
 #define SOUND_SWING_HIT "swing_hit"
@@ -93,6 +99,11 @@ proc/gen_sounds()
 	sounds[SOUND_PUNCH_THREE] = sound('sound/weapons/punch3.ogg')
 	sounds[SOUND_PUNCH_FOUR] = sound('sound/weapons/punch4.ogg')
 	sounds[SOUND_RATCHET] = sound('sound/items/Ratchet.ogg')
+	sounds[SOUND_RUSTLE_ONE] = sound('sound/effects/rustle1.ogg')
+	sounds[SOUND_RUSTLE_TWO] = sound('sound/effects/rustle2.ogg')
+	sounds[SOUND_RUSTLE_THREE] = sound('sound/effects/rustle3.ogg')
+	sounds[SOUND_RUSTLE_FOUR] = sound('sound/effects/rustle4.ogg')
+	sounds[SOUND_RUSTLE_FIVE] = sound('sound/effects/rustle5.ogg')
 	sounds[SOUND_SCREWDRIVER] = sound('sound/items/Screwdriver.ogg')
 	sounds[SOUND_SLIP] = sound('sound/misc/slip.ogg')
 	sounds[SOUND_SPARK_ONE] = sound('sound/effects/sparks1.ogg')
@@ -111,6 +122,7 @@ proc/gen_sounds()
 	sounds[SOUND_MECH_STEP] = list(sounds[SOUND_MECH_STEP_ONE], sounds[SOUND_MECH_STEP_TWO])
 	sounds[SOUND_PAGE_TURN] = list(sounds[SOUND_PAGE_TURN_ONE], sounds[SOUND_PAGE_TURN_TWO])
 	sounds[SOUND_PUNCH] = list(sounds[SOUND_PUNCH_ONE], sounds[SOUND_PUNCH_TWO], sounds[SOUND_PUNCH_THREE], sounds[SOUND_PUNCH_FOUR])
+	sounds[SOUND_RUSTLE] = list(sounds[SOUND_RUSTLE_ONE], sounds[SOUND_RUSTLE_TWO], sounds[SOUND_RUSTLE_THREE], sounds[SOUND_RUSTLE_FOUR], sounds[SOUND_RUSTLE_FIVE])
 	sounds[SOUND_SHATTER] = list(sounds[SOUND_GLASS_BREAK_ONE], sounds[SOUND_GLASS_BREAK_TWO], sounds[SOUND_GLASS_BREAK_THREE])
 	sounds[SOUND_SPARK] = list(sounds[SOUND_SPARK_ONE], sounds[SOUND_SPARK_TWO], sounds[SOUND_SPARK_THREE], sounds[SOUND_SPARK_FOUR])
 	sounds[SOUND_SWING_HIT] = list(sounds[SOUND_SWING_HIT_ONE], sounds[SOUND_SWING_HIT_TWO], sounds[SOUND_SWING_HIT_THREE])

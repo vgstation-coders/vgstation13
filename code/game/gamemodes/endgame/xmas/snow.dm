@@ -73,7 +73,7 @@
 /obj/structure/snow/attack_hand(mob/user)
 	if(snow_amount != SNOWCOVERING_FULL)
 		return
-	playsound(get_turf(src), "rustle", 50, 1)
+	playsound(get_turf(src), SOUND_RUSTLE, 50, 1)
 	user << "<span class='notice'>You start digging the snow with your hands.</span>"
 	if(do_after(user,30))
 		snow_amount = SNOWCOVERING_MEDIUM

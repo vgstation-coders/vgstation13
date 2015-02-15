@@ -113,7 +113,7 @@ mob/living/carbon/proc/handle_hallucinations()
 				//src << "Strange Audio"
 				if(client)
 					switch(rand(1, 10))
-						if(1) src << 'sound/machines/airlock.ogg'
+						if(1) src << get_sfx(SOUND_AIRLOCK)
 						if(2)
 							if(prob(50))src << get_sfx(SOUND_EXPLOSION_ONE)
 							else src << get_sfx(SOUND_EXPLOSION_TWO)

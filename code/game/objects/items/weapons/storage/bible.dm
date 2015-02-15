@@ -118,5 +118,5 @@
 			A.reagents.add_reagent("holywater",water2holy)
 
 /obj/item/weapon/storage/bible/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	playsound(get_turf(src), "rustle", 50, 1, -5)
+	playsound(get_turf(src), SOUND_RUSTLE, 50, 1, -5)
 	..()
