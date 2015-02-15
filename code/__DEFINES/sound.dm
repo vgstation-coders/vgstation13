@@ -27,6 +27,14 @@
 #define SOUND_HISS_FOUR "hiss_four"
 #define SOUND_MECH_STEP_ONE "mech_step_one"
 #define SOUND_MECH_STEP_TWO "mech_step_two"
+#define SOUND_MOMMI_COMMENT_ONE "mommi_comment_one"
+#define SOUND_MOMMI_COMMENT_TWO "mommi_comment_two"
+#define SOUND_MOMMI_COMMENT_THREE "mommi_comment_three"
+#define SOUND_MOMMI_COMMENT_FOUR "mommi_comment_four"
+#define SOUND_MOMMI_COMMENT_FIVE "mommi_comment_five"
+#define SOUND_MOMMI_COMMENT_SIX "mommi_comment_six"
+#define SOUND_MOMMI_COMMENT_SEVEN "mommi_comment_seven"
+#define SOUND_MOMMI_COMMENT_EIGHT "mommi_comment_eight"
 #define SOUND_PAGE_TURN_ONE "page_turn_one"
 #define SOUND_PAGE_TURN_TWO "page_turn_two"
 #define SOUND_PUNCH_MISS "punch_miss"
@@ -57,6 +65,7 @@
 #define SOUND_GIB "gib"
 #define SOUND_HISS "hiss"
 #define SOUND_MECH_STEP "mech_step"
+#define SOUND_MOMMI_COMMENT "mommi_comment"
 #define SOUND_PAGE_TURN "page_turn"
 #define SOUND_PUNCH "punch"
 #define SOUND_RUSTLE "rustle"
@@ -100,6 +109,14 @@ proc/gen_sounds()
 	sounds[SOUND_HISS_FOUR] = sound('sound/voice/hiss4.ogg')
 	sounds[SOUND_MECH_STEP_ONE] = sound('sound/mecha/mechstep1.ogg')
 	sounds[SOUND_MECH_STEP_TWO] = sound('sound/mecha/mechstep2.ogg')
+	sounds[SOUND_MOMMI_ONE] = sound('sound/voice/mommi_comment1.ogg')
+	sounds[SOUND_MOMMI_TWO] = sound('sound/voice/mommi_comment2.ogg')
+	sounds[SOUND_MOMMI_THREE] = sound('sound/voice/mommi_comment3.ogg')
+	sounds[SOUND_MOMMI_FOUR] = sound('sound/voice/mommi_comment4.ogg')
+	sounds[SOUND_MOMMI_FIVE] = sound('sound/voice/mommi_comment5.ogg')
+	sounds[SOUND_MOMMI_SIX] = sound('sound/voice/mommi_comment6.ogg')
+	sounds[SOUND_MOMMI_SEVEN] = sound('sound/voice/mommi_comment7.ogg')
+	sounds[SOUND_MOMMI_EIGHT] = sound('sound/voice/mommi_comment8.ogg')
 	sounds[SOUND_PAGE_TURN_ONE] = sound('sound/effects/pageturn1.ogg')
 	sounds[SOUND_PAGE_TURN_TWO] = sound('sound/effects/pageturn2.ogg')
 	sounds[SOUND_PUNCH_MISS] = sound('sound/weapons/punchmiss.ogg')
@@ -130,6 +147,7 @@ proc/gen_sounds()
 	sounds[SOUND_GIB] = list(sounds[SOUND_GIB_ONE], sounds[SOUND_GIB_TWO], sounds[SOUND_GIB_THREE])
 	sounds[SOUND_HISS] = list(sounds[SOUND_HISS_ONE], sounds[SOUND_HISS_TWO], sounds[SOUND_HISS_THREE], sounds[SOUND_HISS_FOUR])
 	sounds[SOUND_MECH_STEP] = list(sounds[SOUND_MECH_STEP_ONE], sounds[SOUND_MECH_STEP_TWO])
+	sounds[SOUND_MOMMI_COMMEN] = list(sounds[SOUND_MOMMI_ONE], sounds[SOUND_MOMMI_TWO], sounds[SOUND_MOMMI_THREE], sounds[SOUND_MOMMI_FOUR], sounds[SOUND_MOMMI_FIVE], sounds[SOUND_MOMMI_SIX], sounds[SOUND_MOMMI_SEVEN], sounds[SOUND_MOMMI_EIGHT])
 	sounds[SOUND_PAGE_TURN] = list(sounds[SOUND_PAGE_TURN_ONE], sounds[SOUND_PAGE_TURN_TWO])
 	sounds[SOUND_PUNCH] = list(sounds[SOUND_PUNCH_ONE], sounds[SOUND_PUNCH_TWO], sounds[SOUND_PUNCH_THREE], sounds[SOUND_PUNCH_FOUR])
 	sounds[SOUND_RUSTLE] = list(sounds[SOUND_RUSTLE_ONE], sounds[SOUND_RUSTLE_TWO], sounds[SOUND_RUSTLE_THREE], sounds[SOUND_RUSTLE_FOUR], sounds[SOUND_RUSTLE_FIVE])

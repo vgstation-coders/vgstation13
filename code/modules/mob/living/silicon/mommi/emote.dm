@@ -230,7 +230,7 @@
 				message = "<B>[src]</B> cheerily vocalizes at [param]."
 			else
 				message = "<B>[src]</B> vocalizes."
-			playsound(src, get_sfx("mommicomment"),50, 0)
+			playsound(src, SOUND_MOMMI_COMMENT, 50, 0)
 			m_type = VISIBLE
 
 		else
