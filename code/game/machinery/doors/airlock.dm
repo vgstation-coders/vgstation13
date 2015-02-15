@@ -50,7 +50,7 @@
 	var/hasShocked = 0 //Prevents multiple shocks from happening
 	autoclose = 1
 	var/busy = 0
-	soundeffect = 'sound/machines/airlock.ogg'
+	soundeffect = AIRLOCK
 
 	emag_cost = 1 // in MJ
 
@@ -1109,7 +1109,7 @@ About the new airlock wires panel:
 		if( !arePowerSystemsOn() || (stat & NOPOWER) || isWireCut(AIRLOCK_WIRE_OPEN_DOOR) )
 			return 0
 	use_power(50)
-	playsound(get_turf(src), AIRLOCK_OPEN, 30, 1)
+	playsound(get_turf(src), soundeffect, 30, 1)
 	if(src.closeOther != null && istype(src.closeOther, /obj/machinery/door/airlock/) && !src.closeOther.density)
 		src.closeOther.close()
 	// This worries me - N3X
@@ -1170,7 +1170,7 @@ About the new airlock wires panel:
 				if (istype(loc, /turf/simulated))
 					T.add_blood(L)
 
-	playsound(get_turf(src), AIRLOCK_CLOSE, 30, 1)
+	playsound(get_turf(src), soundeffect, 30, 1)
 
 	for(var/turf/T in loc)
 		var/obj/structure/window/W = locate(/obj/structure/window) in T
