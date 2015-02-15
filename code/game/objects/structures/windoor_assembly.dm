@@ -197,7 +197,7 @@ obj/structure/windoor_assembly/Destroy()
 					usr << "<span class='rose'>The assembly is missing electronics.</span>"
 					return
 				usr << browse(null, "window=windoor_access")
-				playsound(get_turf(src), CROWBAR, 100, 1)
+				playsound(get_turf(src), SOUND_CROWBAR, 100, 1)
 				user.visible_message("[user] pries the windoor into the frame.", "You start prying the windoor into the frame.")
 
 				if(do_after(user, 40))

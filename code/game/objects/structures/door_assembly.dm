@@ -237,7 +237,7 @@
 
 	else if(istype(W, /obj/item/weapon/crowbar) && state == 2 )
 		busy = 1
-		playsound(get_turf(src), CROWBAR, 100, 1)
+		playsound(get_turf(src), SOUND_CROWBAR, 100, 1)
 		user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to install electronics into the airlock assembly.")
 
 		if(do_after(user, 40))
@@ -260,7 +260,7 @@
 			if (S.amount>=1)
 				busy = 1
 				if(istype(S, /obj/item/stack/sheet/glass/rglass))
-					playsound(get_turf(src), CROWBAR, 100, 1)
+					playsound(get_turf(src), SOUND_CROWBAR, 100, 1)
 					user.visible_message("[user] adds [S.name] to the airlock assembly.", "You start to install [S.name] into the airlock assembly.")
 					if(do_after(user, 40))
 						user << "<span class='notice'>You installed reinforced glass windows into the airlock assembly!</span>"
@@ -269,7 +269,7 @@
 				else if(istype(S, /obj/item/stack/sheet/mineral) && S.sheettype)
 					var/M = S.sheettype
 					if(S.amount>=2)
-						playsound(get_turf(src), CROWBAR, 100, 1)
+						playsound(get_turf(src), SOUND_CROWBAR, 100, 1)
 						user.visible_message("[user] adds [S.name] to the airlock assembly.", "You start to install [S.name] into the airlock assembly.")
 						if(do_after(user, 40))
 							user << "<span class='notice'>You installed [M] plating into the airlock assembly!</span>"

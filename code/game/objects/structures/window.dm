@@ -245,7 +245,7 @@
 					log_admin("Window with pdiff [pdiff] deanchored by [user.real_name] ([user.ckey]) at [loc]!")
 	else if(istype(W, /obj/item/weapon/crowbar) && reinf && state <= 1)
 		state = 1 - state
-		playsound(loc, CROWBAR, 75, 1)
+		playsound(loc, SOUND_CROWBAR, 75, 1)
 		user << (state ? "<span class='notice'>You have pried the window into the frame.</span>" : "<span class='notice'>You have pried the window out of the frame.</span>")
 	else if(istype(W, /obj/item/weapon/weldingtool) && !anchored && (!state || !reinf))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)

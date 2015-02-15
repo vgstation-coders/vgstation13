@@ -876,7 +876,7 @@
 
 			else if(istype(W, /obj/item/weapon/crowbar))
 				user << "You start prying out the circuit."
-				playsound(get_turf(src), CROWBAR, 50, 1)
+				playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 				if(do_after(user,20))
 					user << "You pry out the circuit!"
 					var/obj/item/weapon/circuitboard/air_alarm/circuit = new /obj/item/weapon/circuitboard/air_alarm()
@@ -1021,7 +1021,7 @@ FIRE ALARM
 
 				else if(istype(W, /obj/item/weapon/crowbar))
 					user << "You pry out the circuit!"
-					playsound(get_turf(src), CROWBAR, 50, 1)
+					playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 					spawn(20)
 						var/obj/item/weapon/circuitboard/fire_alarm/circuit = new /obj/item/weapon/circuitboard/fire_alarm()
 						circuit.loc = user.loc

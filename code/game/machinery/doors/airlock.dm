@@ -50,7 +50,7 @@
 	var/hasShocked = 0 //Prevents multiple shocks from happening
 	autoclose = 1
 	var/busy = 0
-	soundeffect = AIRLOCK
+	soundeffect = SOUND_AIRLOCK
 
 	emag_cost = 1 // in MJ
 
@@ -1018,7 +1018,7 @@ About the new airlock wires panel:
 		else
 			beingcrowbarred = 0
 		if( beingcrowbarred && (operating == -1 || density && welded && !operating && src.panel_open && (!src.arePowerSystemsOn() || stat & NOPOWER) && !src.locked) )
-			playsound(src.loc, CROWBAR, 100, 1)
+			playsound(src.loc, SOUND_CROWBAR, 100, 1)
 			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 			// TODO: refactor the called proc
 			if (do_after(user, 40))

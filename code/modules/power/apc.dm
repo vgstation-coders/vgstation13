@@ -357,7 +357,7 @@
 			if (terminal)
 				user << "\red Disconnect wires first."
 				return
-			playsound(get_turf(src), CROWBAR, 50, 1)
+			playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 			user << "You are trying to remove the power control board..." //lpeters - fixed grammar issues
 			if(do_after(user, 50))
 				has_electronics = 0

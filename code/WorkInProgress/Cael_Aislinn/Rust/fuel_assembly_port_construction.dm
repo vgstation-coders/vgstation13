@@ -45,7 +45,7 @@
 	if (istype(W, /obj/item/weapon/crowbar))
 		if(opened)
 			if(has_electronics & 1)
-				playsound(get_turf(src), CROWBAR, 50, 1)
+				playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 				user << "You begin removing the circuitboard" //lpeters - fixed grammar issues
 				if(do_after(user, 50))
 					user.visible_message(\

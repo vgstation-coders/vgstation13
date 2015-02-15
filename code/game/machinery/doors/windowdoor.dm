@@ -178,7 +178,7 @@
 	// Make emagged/open doors able to be deconstructed
 	if (!src.density && src.operating != 1 && istype(I, /obj/item/weapon/crowbar))
 		user.visible_message("[user] removes the electronics from the windoor assembly.", "You start to remove the electronics from the windoor assembly.")
-		playsound(get_turf(src), CROWBAR, 100, 1)
+		playsound(get_turf(src), SOUND_CROWBAR, 100, 1)
 		if (do_after(user, 40) && src && !src.density && src.operating != 1)
 			user << "<span class='notice'>You removed the windoor electronics!</span>"
 			make_assembly(user)

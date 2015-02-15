@@ -705,7 +705,7 @@ Status: []<BR>"},
 				return
 
 			else if(istype(W, /obj/item/weapon/crowbar) && !anchored)
-				playsound(get_turf(src), CROWBAR, 75, 1)
+				playsound(get_turf(src), SOUND_CROWBAR, 75, 1)
 				user << "You dismantle the turret construction."
 				//new /obj/item/stack/sheet/metal( loc, 5)
 				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, loc)
@@ -834,7 +834,7 @@ Status: []<BR>"},
 					qdel(src)
 
 			else if(istype(W, /obj/item/weapon/crowbar))
-				playsound(get_turf(src), CROWBAR, 75, 1)
+				playsound(get_turf(src), SOUND_CROWBAR, 75, 1)
 				user << "You pry off the turret's exterior armor."
 				//new /obj/item/stack/sheet/metal( loc, 2)
 				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,loc)

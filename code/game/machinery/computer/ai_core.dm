@@ -53,7 +53,7 @@
 				state = 2
 				icon_state = "2"
 			if(istype(P, /obj/item/weapon/crowbar) && circuit)
-				playsound(loc, CROWBAR, 50, 1)
+				playsound(loc, SOUND_CROWBAR, 50, 1)
 				user << "<span class='notice'>You remove the circuit board.</span>"
 				state = 1
 				icon_state = "0"
@@ -145,7 +145,7 @@
 				icon_state = "3b"
 
 			if(istype(P, /obj/item/weapon/crowbar) && brain)
-				playsound(loc, CROWBAR, 50, 1)
+				playsound(loc, SOUND_CROWBAR, 50, 1)
 				user << "<span class='notice'>You remove the brain.</span>"
 				brain.loc = loc
 				brain = null
@@ -153,7 +153,7 @@
 
 		if(4)
 			if(istype(P, /obj/item/weapon/crowbar))
-				playsound(loc, CROWBAR, 50, 1)
+				playsound(loc, SOUND_CROWBAR, 50, 1)
 				user << "<span class='notice'>You remove the glass panel.</span>"
 				state = 3
 				if (brain)

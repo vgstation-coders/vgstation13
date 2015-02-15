@@ -420,7 +420,7 @@ Class Procs:
 	user.visible_message(	"[user] begins to pry out the circuitboard from \the [src].",
 							"You begin to pry out the circuitboard from \the [src]...")
 	if(do_after(user, 40))
-		playsound(get_turf(src), CROWBAR, 50, 1)
+		playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 		dropFrame()
 		for(var/obj/I in component_parts)
 			if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker) && src:reagents && src:reagents.total_volume)

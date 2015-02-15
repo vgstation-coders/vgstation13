@@ -20,7 +20,7 @@
 				new /obj/machinery/constructable_frame/machine_frame(T)
 				new /obj/item/stack/sheet/glass/glass(T)
 				del(src)
-				playsound(get_turf(src), CROWBAR, 50, 1)
+				playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 				return
 
 		if(1)
@@ -39,7 +39,7 @@
 				circuit.loc=T
 				circuit=null
 				state--
-				playsound(get_turf(src), CROWBAR, 50, 1)
+				playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 	if(pstate!=state)
 		pstate=state
 		update_icon()
@@ -190,7 +190,7 @@
 			"You pry \the [src] apart.", \
 			"You hear something pop.")
 		var/turf/T=get_turf(src)
-		playsound(T, CROWBAR, 50, 1)
+		playsound(T, SOUND_CROWBAR, 50, 1)
 		dump()
 		var/obj/item/weapon/circuitboard/airlock/C=circuit
 		if(!C)

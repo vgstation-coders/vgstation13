@@ -92,7 +92,14 @@ var/const/SURROUND_CAP = 7
 
 	soundin = get_sfx(soundin)
 
-	var/sound/S = sound(soundin)
+	var/sound/S
+
+	if (istype(/sound, soundin))
+		world << "aaa"
+		S = soundin
+	else
+		S = sound(soundin)
+
 	S.wait = 0 //No queue
 	S.channel = 0 //Any channel
 	S.volume = vol
@@ -143,11 +150,9 @@ var/const/SURROUND_CAP = 7
 			if ("gib") soundin = pick(gib_sound)
 			if ("mommicomment") soundin = pick(mommicomment_sound)
 			//if ("gunshot") soundin = pick(gun_sound)
-			if (AIRLOCK_OPEN)
-				soundin = sounds[AIRLOCK_OPEN]
-			if (AIRLOCK_CLOSE)
-				soundin = sounds[AIRLOCK_CLOSE]
-			if (CROWBAR)
-				soundin = sounds[CROWBAR]
+			if (SOUND_AIRLOCK)
+				soundin = sounds[SOUND_AIRLOCK]
+			if (SOUND_CROWBAR)
+				soundin = sounds[SOUND_CROWBAR]
 
 	return soundin
