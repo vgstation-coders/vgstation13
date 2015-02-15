@@ -100,7 +100,7 @@
 						user << "<span class='warning'>This frame does not accept circuit boards of this type!</span>"
 				else
 					if(istype(P, /obj/item/weapon/wirecutters))
-						playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+						playsound(get_turf(src), SOUND_WIRECUTTER, 50, 1)
 						user << "<span class='notice'>You remove the cables.</span>"
 						state = 1
 						icon_state = "box_0"

@@ -71,7 +71,7 @@
 		new /obj/item/weapon/cable_coil(get_turf(src.loc), 1, "red")
 		user.visible_message("[user.name] removes the wiring from [src].", \
 			"You remove the wiring from [src].", "You hear a noise.")
-		playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
+		playsound(get_turf(src), SOUND_WIRECUTTER, 100, 1)
 		return
 
 	if(istype(W, /obj/item/weapon/cable_coil))

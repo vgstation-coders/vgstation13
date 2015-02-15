@@ -58,7 +58,7 @@
 			playsound(holder, SOUND_SCREWDRIVER, 50, 1)
 
 		else if(istype(used_atom, /obj/item/weapon/wirecutters))
-			playsound(holder, 'sound/items/Wirecutter.ogg', 50, 1)
+			playsound(holder, SOUND_WIRECUTTER, 50, 1)
 
 		else if(istype(used_atom, /obj/item/weapon/cable_coil))
 			var/obj/item/weapon/cable_coil/C = used_atom

@@ -195,7 +195,7 @@ var/list/camera_names=list()
 				add_hiddenprint(user)
 			else
 				visible_message("<span class='warning'> \The [src] deactivates!</span>")
-			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_WIRECUTTER, 100, 1)
 			icon_state = "[initial(icon_state)]1"
 			add_hiddenprint(user)
 		else
@@ -204,7 +204,7 @@ var/list/camera_names=list()
 				add_hiddenprint(user)
 			else
 				visible_message("<span class='warning'> \the [src] reactivates!</span>")
-			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_WIRECUTTER, 100, 1)
 			icon_state = initial(icon_state)
 			add_hiddenprint(user)
 	// now disconnect anyone using the camera

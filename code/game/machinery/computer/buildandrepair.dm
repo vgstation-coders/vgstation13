@@ -352,7 +352,7 @@
 				return 1
 		if(3)
 			if(istype(P, /obj/item/weapon/wirecutters))
-				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_WIRECUTTER, 50, 1)
 				user << "<span class='notice'>You remove the cables.</span>"
 				src.state = 2
 				src.icon_state = "2"

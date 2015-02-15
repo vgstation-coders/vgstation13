@@ -119,7 +119,7 @@
 	user.delayNextAttack(8)
 	if(iswirecutter(W))
 		if(!shock(user, 100))
-			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
+			playsound(loc, SOUND_WIRECUTTER, 100, 1)
 			new /obj/item/stack/rods(loc, 2)
 			returnToPool(src)
 	else if((isscrewdriver(W)) && (istype(loc, /turf/simulated) || anchored))

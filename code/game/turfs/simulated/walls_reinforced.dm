@@ -88,7 +88,7 @@
 	switch(d_state)
 		if(0)
 			if (istype(W, /obj/item/weapon/wirecutters))
-				playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
+				playsound(src, SOUND_WIRECUTTER, 100, 1)
 				src.d_state = 1
 				src.icon_state = "r_wall-1"
 				new /obj/item/stack/rods( src )

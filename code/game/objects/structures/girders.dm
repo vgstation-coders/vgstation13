@@ -53,7 +53,7 @@
 			update_icon()
 
 	else if(istype(W, /obj/item/weapon/wirecutters) && state == 1)
-		playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
+		playsound(get_turf(src), SOUND_WIRECUTTER, 100, 1)
 		user << "<span class='info'>Now removing support struts</span>"
 		if(do_after(user,40))
 			if(!src || !get_turf(src)) return

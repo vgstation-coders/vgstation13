@@ -44,7 +44,7 @@
 		return
 	if(!active_dummy)
 		if(istype(target, /obj/item) && !istype(target, /obj/item/weapon/disk/nuclear) || istype(target, /mob))
-			playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1, -6)
+			playsound(get_turf(src), SOUND_FLASH, 100, 1, -6)
 			user << "<span class='notice'>Scanned [target].</span>"
 			saved_item = target.type
 			saved_icon = target.icon

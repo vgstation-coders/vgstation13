@@ -130,7 +130,7 @@
 
 		if (H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
 			// TODO: analyze the called proc
-			playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
+			playsound(get_turf(src), SOUND_BANG, 25, 1)
 
 			if (!istype(H.head, /obj/item/clothing/head/helmet))
 				visible_message("\red [user] headbutts the airlock.")

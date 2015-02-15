@@ -85,7 +85,7 @@
 			if(!circuitry_installed)
 				user << "\red You need to install intercom electronics first!"
 				return 1
-			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_WIRECUTTER, 50, 1)
 			if(do_after(user, 10))
 				installed=1
 				b_stat=0

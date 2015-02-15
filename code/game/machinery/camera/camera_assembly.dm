@@ -113,7 +113,7 @@
 			else if(iswirecutter(W))
 
 				new/obj/item/weapon/cable_coil(get_turf(src), 2)
-				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_WIRECUTTER, 50, 1)
 				user << "You cut the wires from the circuits."
 				state = 2
 				return

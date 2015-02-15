@@ -346,7 +346,7 @@
 			target.paralysis += 3
 			target.weakened += 5
 			container.visible_message("<span class='warning'><b>[container]</b> emits a loud thump and rattles a bit.</span>")
-			playsound(target.loc, 'sound/effects/bang.ogg', 50, 1)
+			playsound(target.loc, SOUND_BANG, 50, 1)
 			var/wiggle = 6
 			while(wiggle > 0)
 				wiggle--

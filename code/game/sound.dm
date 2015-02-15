@@ -163,5 +163,11 @@ var/const/SURROUND_CAP = 7
 				soundin = sounds[SOUND_DECONSTRUCT]
 			if (SOUND_SCREWDRIVER)
 				soundin = sounds[SOUND_SCREWDRIVER]
+			if (SOUND_BANG)
+				soundin = sounds[SOUND_BANG]
+			if (SOUND_FLASH)
+				soundin = sounds[SOUND_FLASH]
+			if (SOUND_WIRECUTTER)
+				soundin = sounds[SOUND_WIRECUTTER]
 
 	return soundin

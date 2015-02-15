@@ -146,7 +146,7 @@ obj/structure/windoor_assembly/Destroy()
 
 			//Removing wire from the assembly. Step 5 undone.
 			if(istype(W, /obj/item/weapon/wirecutters))
-				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_WIRECUTTER, 100, 1)
 				user.visible_message("[user] cuts the wires from the airlock assembly.", "You start to cut the wires from airlock assembly.")
 
 				if(do_after(user, 40))

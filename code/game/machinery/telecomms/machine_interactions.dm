@@ -39,7 +39,7 @@
 				playsound(get_turf(src), SOUND_RATCHET, 75, 1)
 				construct_op --
 			if(istype(P, /obj/item/weapon/wirecutters))
-				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_WIRECUTTER, 50, 1)
 				user << "You remove the cables."
 				construct_op ++
 				var/obj/item/weapon/cable_coil/A = new /obj/item/weapon/cable_coil( user.loc )
