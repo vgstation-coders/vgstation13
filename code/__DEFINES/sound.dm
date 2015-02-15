@@ -15,6 +15,9 @@
 #define SOUND_EXPLOSION_SIX "explosion_six"
 #define SOUND_EXPLOSION_FAR "explosion_far"
 #define SOUND_FLASH "flash"
+#define SOUND_GIB_ONE "gib_one"
+#define SOUND_GIB_TWO "gib_two"
+#define SOUND_GIB_THREE "gib_three"
 #define SOUND_GLASS_BREAK_ONE "glass_break_one"
 #define SOUND_GLASS_BREAK_TWO "glass_break_two"
 #define SOUND_GLASS_BREAK_THREE "glass_break_three"
@@ -35,6 +38,7 @@
 
 #define SOUND_CLOWN_STEP "clown_step"
 #define SOUND_EXPLOSION "explosion"
+#define SOUND_GIB "gib"
 #define SOUND_MECH_STEP "mech_step"
 #define SOUND_PAGE_TURN "page_turn"
 #define SOUND_SHATTER "shatter"
@@ -64,6 +68,9 @@ proc/gen_sounds()
 	sounds[SOUND_EXPLOSION_SIX] = sound('sound/effects/Explosion6.ogg')
 	sounds[SOUND_EXPLOSION_FAR] = sound('sound/effects/explosionfar.ogg')
 	sounds[SOUND_FLASH] = sound('sound/weapons/flash.ogg')
+	sounds[SOUND_GIB_ONE] = sound('sound/effects/gib1.ogg')
+	sounds[SOUND_GIB_TWO] = sound('sound/effects/gib2.ogg')
+	sounds[SOUND_GIB_THREE] = sound('sound/effects/gib3.ogg')
 	sounds[SOUND_GLASS_BREAK_ONE] = sound('sound/effects/Glassbr1.ogg')
 	sounds[SOUND_GLASS_BREAK_TWO] = sound('sound/effects/Glassbr2.ogg')
 	sounds[SOUND_GLASS_BREAK_THREE] = sound('sound/effects/Glassbr3.ogg')
@@ -84,6 +91,7 @@ proc/gen_sounds()
 
 	sounds[SOUND_CLOWN_STEP] = list(sounds[SOUND_CLOWN_STEP_ONE], sounds[SOUND_CLOWN_STEP_TWO])
 	sounds[SOUND_EXPLOSION] = list(sounds[SOUND_EXPLOSION_ONE], sounds[SOUND_EXPLOSION_TWO], sounds[SOUND_EXPLOSION_THREE], sounds[SOUND_EXPLOSION_FOUR], sounds[SOUND_EXPLOSION_FIVE], sounds[SOUND_EXPLOSION_SIX])
+	sounds[SOUND_GIB] = list(sounds[SOUND_GIB_ONE], sounds[SOUND_GIB_TWO], sounds[SOUND_GIB_THREE])
 	sounds[SOUND_MECH_STEP] = list(sounds[SOUND_MECH_STEP_ONE], sounds[SOUND_MECH_STEP_TWO])
 	sounds[SOUND_PAGE_TURN] = list(sounds[SOUND_PAGE_TURN_ONE], sounds[SOUND_PAGE_TURN_TWO])
 	sounds[SOUND_SHATTER] = list(sounds[SOUND_GLASS_BREAK_ONE], sounds[SOUND_GLASS_BREAK_TWO], sounds[SOUND_GLASS_BREAK_THREE])

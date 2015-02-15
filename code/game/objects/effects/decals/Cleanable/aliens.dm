@@ -33,7 +33,7 @@
 
 /obj/effect/decal/cleanable/blood/gibs/xeno/core/New()
 	..()
-	playsound(src, get_sfx("gib"),50,1)
+	playsound(src, SOUND_GIB, 50, 1)
 
 /obj/effect/decal/cleanable/blood/xtracks
 	basecolor = "#05EE05"

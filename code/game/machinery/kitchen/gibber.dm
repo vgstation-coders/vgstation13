@@ -323,7 +323,7 @@ obj/machinery/gibber/New()
 			O.New(Tx,2)
 	del(victim)
 	spawn(src.gibtime)
-		playsound(get_turf(src), 'sound/effects/gib2.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_GIB_TWO, 50, 1)
 		operating = 0
 		for (var/i=1 to totalslabs)
 			var/obj/item/meatslab = allmeat[i]
