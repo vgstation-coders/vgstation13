@@ -28,7 +28,7 @@
 #define SOUND_PUNCH_MISS "punch_miss"
 #define SOUND_PUNCH_ONE "punch_one"
 #define SOUND_PUNCH_TWO "punch_two"
-#define SOUND_PUNCH_TREE "punch_three"
+#define SOUND_PUNCH_THREE "punch_three"
 #define SOUND_PUNCH_FOUR "punch_four"
 #define SOUND_RATCHET "ratchet"
 #define SOUND_SCREWDRIVER "screwdriver"
@@ -37,6 +37,9 @@
 #define SOUND_SPARK_TWO "spark_two"
 #define SOUND_SPARK_THREE "spark_three"
 #define SOUND_SPARK_FOUR "spark_four"
+#define SOUND_SWING_HIT_ONE "swing_hit_one"
+#define SOUND_SWING_HIT_TWO "swing_hit_two"
+#define SOUND_SWING_HIT_THREE "swing_hit_three"
 #define SOUND_TOOL_HIT "tool_hit"
 #define SOUND_WIRECUTTER "wirecutter"
 
@@ -48,6 +51,7 @@
 #define SOUND_PUNCH "punch"
 #define SOUND_SHATTER "shatter"
 #define SOUND_SPARK "spark"
+#define SOUND_SWING_HIT "swing_hit"
 
 /world/New()
 	..()
@@ -95,6 +99,9 @@ proc/gen_sounds()
 	sounds[SOUND_SPARK_TWO] = sound('sound/effects/sparks2.ogg')
 	sounds[SOUND_SPARK_THREE] = sound('sound/effects/sparks3.ogg')
 	sounds[SOUND_SPARK_FOUR] = sound('sound/effects/sparks4.ogg')
+	sounds[SOUND_SWING_HIT_ONE] = sound('sound/weapons/genhit1.ogg')
+	sounds[SOUND_SWING_HIT_TWO] = sound('sound/weapons/genhit2.ogg')
+	sounds[SOUND_SWING_HIT_THREE] = sound('sound/weapons/genhit3.ogg')
 	sounds[SOUND_TOOL_HIT] = sound('sound/weapons/toolhit.ogg')
 	sounds[SOUND_WIRECUTTER] = sound('sound/items/Wirecutter.ogg')
 
@@ -106,3 +113,4 @@ proc/gen_sounds()
 	sounds[SOUND_PUNCH] = list(sounds[SOUND_PUNCH_ONE], sounds[SOUND_PUNCH_TWO], sounds[SOUND_PUNCH_THREE], sounds[SOUND_PUNCH_FOUR])
 	sounds[SOUND_SHATTER] = list(sounds[SOUND_GLASS_BREAK_ONE], sounds[SOUND_GLASS_BREAK_TWO], sounds[SOUND_GLASS_BREAK_THREE])
 	sounds[SOUND_SPARK] = list(sounds[SOUND_SPARK_ONE], sounds[SOUND_SPARK_TWO], sounds[SOUND_SPARK_THREE], sounds[SOUND_SPARK_FOUR])
+	sounds[SOUND_SWING_HIT] = list(sounds[SOUND_SWING_HIT_ONE], sounds[SOUND_SWING_HIT_TWO], sounds[SOUND_SWING_HIT_THREE])

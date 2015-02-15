@@ -404,7 +404,7 @@ LOOK FOR SURGERY.DM*/
 	desc = "Cut, cut, and once more cut."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "scalpel"
-	hitsound = "sound/weapons/bladeslice.ogg"
+	hitsound = SOUND_BLADE_SLICE
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1.5

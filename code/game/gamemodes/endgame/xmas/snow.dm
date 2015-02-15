@@ -275,12 +275,12 @@
 			C.stuttering = 1
 		C.Weaken(1)
 		C.Stun(1)
-		playsound(C.loc, "swing_hit", 50, 1)
+		playsound(C.loc, SOUND_SWING_HIT, 50, 1)
 		if(C.bodytemperature >= 265)
 			C.bodytemperature -= 5
 	else if(istype(hit_atom,/mob/living/simple_animal/hostile/retaliate/snowman))
 		var/mob/living/simple_animal/hostile/retaliate/snowman/S = hit_atom
-		playsound(S.loc, "swing_hit", 50, 1)
+		playsound(S.loc, SOUND_SWING_HIT, 50, 1)
 		if(S.enemies.len)
 			if(prob(10))
 				S.enemies = list()

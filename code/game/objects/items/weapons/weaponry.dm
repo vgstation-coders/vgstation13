@@ -92,7 +92,7 @@
 	desc = "What are you standing around staring at this for? Get to killing!"
 	icon_state = "claymore"
 	item_state = "claymore"
-	hitsound = "sound/weapons/bloodyslice.ogg"
+	hitsound = SOUND_BLOODY_SLICE
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
@@ -121,7 +121,7 @@
 	desc = "Woefully underpowered in D20"
 	icon_state = "katana"
 	item_state = "katana"
-	hitsound = "sound/weapons/bloodyslice.ogg"
+	hitsound = SOUND_BLOODY_SLICE
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT | SLOT_BACK
@@ -147,7 +147,7 @@
 	desc = "Tharr she blows!"
 	icon_state = "harpoon"
 	item_state = "harpoon"
-	hitsound = "sound/weapons/bladeslice.ogg"
+	hitsound = SOUND_BLADE_SLICE
 	force = 20
 	throwforce = 15
 	w_class = 3

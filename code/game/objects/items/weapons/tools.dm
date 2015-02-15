@@ -262,7 +262,7 @@
 				src.force = 3
 				src.damtype = "brute"
 				src.icon_state = "welder"
-				src.hitsound = "sound/weapons/toolhit.ogg"
+				src.hitsound = SOUND_TOOL_HIT
 				src.welding = 0
 			processing_objects.Remove(src)
 			return
@@ -499,7 +499,7 @@
 	desc = "Used to hit floors"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "crowbar"
-	hitsound = "sound/weapons/toolhit.ogg"
+	hitsound = SOUND_TOOL_HIT
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT

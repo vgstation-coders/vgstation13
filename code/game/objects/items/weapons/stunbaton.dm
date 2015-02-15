@@ -118,7 +118,7 @@
 
 	if(user.a_intent == I_HURT)
 		..()
-		playsound(loc, "swing_hit", 50, 1, -1)
+		playsound(loc, SOUND_SWING_HIT, 50, 1, -1)
 
 	else if(!status)
 		L.visible_message("<span class='attack'>[L] has been prodded with the [src] by [user]. Luckily it was off.</span>")
