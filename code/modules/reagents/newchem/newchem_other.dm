@@ -144,7 +144,7 @@
 	..()
 	return
 /datum/reagent/colorful_reagent/reaction_turf(var/turf/T, var/volume)
-	if(T)
+	if(T && !istype(T, /turf/space))
 		T.color = pick(potential_colors)
 	..()
 	return

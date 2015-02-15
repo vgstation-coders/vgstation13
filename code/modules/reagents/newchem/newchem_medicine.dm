@@ -764,10 +764,56 @@ proc/chemical_mob_spawn(var/datum/reagents/holder, var/amount_to_spawn, var/reac
 	description = "Increases sugar depletion rates."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
+
 /datum/reagent/insulin/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	if(M.sleeping)
 		M.sleeping--
 	M.reagents.remove_reagent("sugar", 5)
+	..()
+	return
+
+/datum/chemical_reaction/mutadone
+	name = "Mutadone"
+	id = "mutadone"
+	result = "mutadone"
+	required_reagents = list("mutagen" = 1, "acetone" = 1, "bromine" = 1)
+	result_amount = 3
+
+
+/datum/reagent/mutadone
+	name = "Mutadone"
+	id = "mutadone"
+	description = "Chance to remove genetic disabilities."
+	color = "#C8A5DC" // rgb: 200, 165, 220
+
+/datum/reagent/mutadone/on_mob_life(var/mob/living/M as mob)
+
+	if(!holder) return
+	if(!M) M = holder.my_atom
+
+	var/needs_update = M.mutations.len > 0
+	if(ishuman(M))
+		M:hulk_time = 0
+	for(var/datum/dna/gene/G in dna_genes)
+		if(G.is_active(M))
+			if(G.name == "Hulk" && ishuman(M))
+				G.OnMobLife(M)
+			G.deactivate(M)
+	M.alpha = 255
+	M.mutations = list()
+	M.active_genes = list()
+
+	M.disabilities = 0
+	M.sdisabilities = 0
+
+	//Makes it more obvious that it worked.
+	M.jitteriness = 0
+
+	// Might need to update appearance for hulk etc.
+	if(needs_update && ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.update_mutations()
+
 	..()
 	return
