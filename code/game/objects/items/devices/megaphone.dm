@@ -80,7 +80,7 @@
 	var/spam_flag = 0 //To prevent mashing the button to cause annoyance like a huge idiot.
 	var/sound_flag = 1
 	var/list/sound_list
-	sound_list=list('sound/items/bikehorn.ogg', 'sound/effects/bubbles.ogg', get_sfx(SOUND_EXPLOSION_ONE),\
+	sound_list=list('sound/items/bikehorn.ogg', 'sound/effects/bubbles.ogg', SOUND_EXPLOSION_ONE,\
 		'sound/mecha/nominal.ogg', 'sound/effects/alert.ogg', 'sound/items/AirHorn.ogg', 'sound/misc/sadtrombone.ogg',\
 		SOUND_DECONSTRUCT, 'sound/items/Welder.ogg', 'sound/hallucinations/turn_around1.ogg', \
 		'sound/machines/ding.ogg', 'sound/effects/awooga.ogg', 'sound/machines/disposalflush.ogg', 'sound/machines/twobeep.ogg')
@@ -147,6 +147,6 @@ And backwards
 					playing_sound = sound_list[sound_flag+1]
 				else return
 			spam_flag = world.timeofday
-			M << playing_sound
+			M << get_sfx(playing_sound)
 
 #undef SOUND_NUM

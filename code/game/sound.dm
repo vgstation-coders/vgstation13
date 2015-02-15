@@ -12,17 +12,16 @@ var/list/mommicomment_sound = list('sound/voice/mommi_comment1.ogg', 'sound/voic
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
 //space sounds have no gas modification, for example. Though >space sounds
-/proc/playsound(var/atom/source, soundin, vol as num, vary, extrarange as num, falloff, var/gas_modified = 1)
+/proc/playsound(var/atom/source, soundin, volume = 100, vary = FALSE, extrarange = 0, falloff = FALSE, gas_modified = TRUE)
 
-	soundin = get_sfx(soundin)
+	soundin = get_sfx(soundin) // Same sound for everybody.
 
 	if(isarea(source))
 		error("[source] is an area and is trying to make the sound: [soundin]")
 		return
 
-	var/frequency = get_rand_frequency() // Same frequency for everybody
+	var/frequency = get_rand_frequency() // Same frequency for everybody.
 	var/turf/turf_source = get_turf(source)
-
 
 /* What's going on in this block?
 	If the proc isn't set to not be modified by air, the following steps occur:
@@ -32,11 +31,6 @@ var/list/mommicomment_sound = list('sound/voice/mommi_comment1.ogg', 'sound/voic
 	- If the proc has NO extrarange, the fraction of the 7 range is used, so a sound only trasmits to those in the screen at regular pressure
 	- This means that at low or 0 pressure, sound doesn't trasmit from the tile at all! How cool is that?
 */
-	if(!extrarange)
-		extrarange = 0
-	if(!vol) //don't do that
-		return
-
 	if(gas_modified && turf_source && !turf_source.c_airblock(turf_source)) //if the sound is modified by air, and we are on an airflowing tile
 		var/atmosphere = 0
 		var/datum/gas_mixture/current_air = turf_source.return_air()
@@ -50,7 +44,7 @@ var/list/mommicomment_sound = list('sound/voice/mommi_comment1.ogg', 'sound/voic
 		var/total_range = world.view + extrarange //this must be positive.
 		total_range = min ( round( (total_range) * sqrt(atmos_modifier), 1 ), (total_range * 2)  ) //upper range of twice the original range. Range technically falls off with the root of pressure (see Newtonian sound)
 		extrarange = total_range - world.view
-		vol = min( round( (vol) * atmos_modifier, 1 ), vol * 2) //upper range of twice the volume. Trust me, otherwise you get 10000 volume in a plasmafire
+		volume = min( round( (volume) * atmos_modifier, 1 ), volume * 2) //upper range of twice the volume. Trust me, otherwise you get 10000 volume in a plasmafire
 		//message_admins("We've adjusted the sound of [source] at [turf_source.loc] to have a range of [7 + extrarange] and a volume of [vol]")
 
  	// Looping through the player list has the added bonus of working for mobs inside containers
@@ -61,13 +55,13 @@ var/list/mommicomment_sound = list('sound/voice/mommi_comment1.ogg', 'sound/voic
 		if(get_dist(M, turf_source) <= world.view + extrarange)
 			var/turf/T = get_turf(M)
 			if(T && T.z == turf_source.z)
-				M.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, gas_modified)
+				M.playsound_local(turf_source, soundin, volume, vary, frequency, falloff, gas_modified)
 
 var/const/FALLOFF_SOUNDS = 1
 var/const/SURROUND_CAP = 7
 
 #define MIN_SOUND_PRESSURE	2 //2 kPa of pressure required to at least hear sound
-/mob/proc/playsound_local(var/turf/turf_source, soundin, vol as num, vary, frequency, falloff, gas_modified)
+/mob/proc/playsound_local(var/turf/turf_source, soundin, volume = 100, vary = FALSE, frequency = FALSE, falloff = FALSE, gas_modified = FALSE)
 	if(!src.client || ear_deaf > 0)
 		return
 
@@ -83,9 +77,9 @@ var/const/SURROUND_CAP = 7
 
 		/// Local sound modifications ///
 		if(atmosphere < MIN_SOUND_PRESSURE) //no sound reception in space, boyos
-			vol = 0
+			volume = 0
 		else
-			vol = min( vol * atmosphere / ONE_ATMOSPHERE, vol) //sound can't be amplified from low to high pressure, but can be reduced
+			volume = min( volume * atmosphere / ONE_ATMOSPHERE, volume) //sound can't be amplified from low to high pressure, but can be reduced
 		/// end ///
 
 	if (istext(soundin))
@@ -94,7 +88,7 @@ var/const/SURROUND_CAP = 7
 	var/sound/S = soundin
 	S.wait = 0 // No queue.
 	S.channel = 0 // Any channel.
-	S.volume = vol
+	S.volume = volume
 
 	if (vary)
 		if(frequency)
