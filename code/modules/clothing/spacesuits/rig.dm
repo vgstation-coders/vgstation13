@@ -13,7 +13,6 @@
 	action_button_name = "Toggle Helmet Light"
 	heat_protection = HEAD
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	pressure_resistance = 200 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/rig/attack_self(mob/user)
 	if(!isturf(user.loc))
@@ -49,7 +48,6 @@
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/weapon/rcd, /obj/item/weapon/wrench/socket)
 	heat_protection = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	pressure_resistance = 200 * ONE_ATMOSPHERE
 
 //Chief Engineer's rig
 /obj/item/clothing/head/helmet/space/rig/elite
@@ -60,7 +58,7 @@
 	_color = "white"
 	species_restricted = list("exclude","Vox")
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
-	flags = FPRINT  | PLASMAGUARD
+	flags = FPRINT  | STOPSPRESSUREDMG | PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/elite
 	icon_state = "rig-white"
@@ -69,7 +67,7 @@
 	desc = "An advanced suit that protects against hazardous, low pressure environments. Shines with a high polish."
 	item_state = "ce_hardsuit"
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	flags = FPRINT  | PLASMAGUARD
+	flags = FPRINT  | STOPSPRESSUREDMG | PLASMAGUARD
 
 
 //Mining rig
@@ -80,7 +78,6 @@
 	item_state = "mining_helm"
 	_color = "mining"
 	species_restricted = list("exclude","Vox")
-	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/suit/space/rig/mining
 	icon_state = "rig-mining"
@@ -88,7 +85,6 @@
 	desc = "A special suit that protects against hazardous, low pressure environments. Has reinforced plating."
 	item_state = "mining_hardsuit"
 	species_restricted = list("exclude","Vox")
-	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 
 //Syndicate rig
@@ -102,7 +98,6 @@
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 60)
 	siemens_coefficient = 0.6
 	var/obj/machinery/camera/camera
-	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/rig/syndi/attack_self(mob/user)
 	if(camera)
@@ -130,7 +125,6 @@
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 60)
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs)
 	siemens_coefficient = 0.6
-	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 
 //Wizard Rig
@@ -169,7 +163,6 @@
 	item_state = "medical_helm"
 	_color = "medical"
 	species_restricted = list("exclude","Vox")
-	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/suit/space/rig/medical
 	icon_state = "rig-medical"
@@ -178,7 +171,6 @@
 	item_state = "medical_hardsuit"
 	species_restricted = list("exclude","Vox")
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
-	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 
 	//Security
@@ -191,7 +183,6 @@
 	species_restricted = list("exclude","Vox")
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
 	siemens_coefficient = 0.7
-	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/suit/space/rig/security
 	icon_state = "rig-sec"
@@ -202,7 +193,7 @@
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
 	siemens_coefficient = 0.7
-	pressure_resistance = 40 * ONE_ATMOSPHERE
+
 
 //Atmospherics Rig (BS12)
 /obj/item/clothing/head/helmet/space/rig/atmos
@@ -212,7 +203,7 @@
 	item_state = "atmos_helm"
 	_color = "atmos"
 	species_restricted = list("exclude","Vox")
-	flags = FPRINT  | PLASMAGUARD
+	flags = FPRINT  | STOPSPRESSUREDMG | PLASMAGUARD
 	armor = list(melee = 40, bullet = 0, laser = 0, energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 
@@ -222,7 +213,7 @@
 	name = "atmos hardsuit"
 	item_state = "atmos_hardsuit"
 	species_restricted = list("exclude","Vox")
-	flags = FPRINT  |  PLASMAGUARD
+	flags = FPRINT  | STOPSPRESSUREDMG | PLASMAGUARD
 	armor = list(melee = 40, bullet = 0, laser = 0, energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 
@@ -260,7 +251,6 @@
 	species_restricted = list("exclude","Vox")//GAS THE VOX
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	_color = "nazi"
-	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/suit/space/rig/nazi
 	name = "nazi hardsuit"
@@ -271,7 +261,6 @@
 	species_restricted = list("exclude","Vox")//GAS THE VOX
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
-	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/rig/soviet
 	name = "soviet hardhelmet"
@@ -281,7 +270,6 @@
 	species_restricted = list("exclude","Vox")//HET
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	_color = "soviet"
-	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/suit/space/rig/soviet
 	name = "soviet hardsuit"
@@ -292,7 +280,6 @@
 	species_restricted = list("exclude","Vox")//HET
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
-	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 
 //Death squad rig
@@ -306,7 +293,7 @@
 	siemens_coefficient = 0.2
 	species_restricted = list("exclude","Vox")
 	_color = "deathsquad"
-	flags = FPRINT | PLASMAGUARD
+	flags = FPRINT | STOPSPRESSUREDMG | PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/deathsquad
 	name = "deathsquad suit"
@@ -318,4 +305,4 @@
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.5
 	species_restricted = list("exclude","Vox")
-	flags = FPRINT | PLASMAGUARD
+	flags = FPRINT | STOPSPRESSUREDMG | PLASMAGUARD

@@ -139,7 +139,6 @@
 	)
 	yieldtype=/obj/item/stack/sheet/mineral/plastic
 
-/*
 /datum/smelting_recipe/pharosium
 	name="pharosium"
 	ingredients=list(
@@ -230,4 +229,3 @@
 		"uqill"=1
 	)
 	yieldtype=/obj/item/stack/sheet/mineral/uqill
-*/

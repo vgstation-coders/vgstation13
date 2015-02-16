@@ -41,7 +41,4 @@
 	return query
 
 /datum/migration/proc/hasTable(var/tableName)
-	return hasResult("SHOW TABLES LIKE '[tableName]'")
-
-/datum/migration/proc/hasColumn(var/tableName, var/columnName)
-	return hasResult("SHOW COLUMNS FROM [tableName] LIKE '[columnName]'")
+	return hasResult("SHOW TABLES LIKE '[tableName]")

@@ -16,15 +16,13 @@
 		return
 
 	if(istype(W, /obj/item/weapon/wirecutters))
-		user << "<span class='notice'>These cables are too tough to be cut with those [W.name].</span>"
+		usr << "\blue These cables are too tough to be cut with those [W.name]."
 		return
-	else if(W.type == /obj/item/weapon/cable_coil)
-		user << "<span class='notice'>You will need heavier cables to connect to these.</span>"
+	else if(istype(W, /obj/item/weapon/cable_coil))
+		usr << "\blue You will need heavier cables to connect to these."
 		return
 	else
 		..()
 
 /obj/structure/cable/heavyduty/cableColor(var/colorC)
-	_color = "red"
-	l_color = "red"
 	return

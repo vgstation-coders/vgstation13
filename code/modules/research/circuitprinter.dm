@@ -25,7 +25,6 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 		/obj/item/stack/sheet/mineral/diamond,
 		/obj/item/stack/sheet/mineral/uranium,
 		/obj/item/stack/sheet/mineral/plasma,
-/*
 		/obj/item/stack/sheet/mineral/pharosium,
 		/obj/item/stack/sheet/mineral/char,
 		/obj/item/stack/sheet/mineral/claretine,
@@ -39,7 +38,6 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 		/obj/item/stack/sheet/mineral/cerenkite,
 		/obj/item/stack/sheet/mineral/molitz,
 		/obj/item/stack/sheet/mineral/uqill
-*/
 	)
 
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/New()

@@ -16,12 +16,11 @@
 	duration = 10
 	proj_step_delay = 5
 
-/spell/targeted/projectile/magic_missile/prox_cast(var/list/targets, atom/spell_holder)
+/spell/targeted/projectile/magic_missile/prox_cast(var/list/targets)
 	targets = ..()
-	spell_holder.visible_message("<span class='danger'>\The [spell_holder] pops with a flash!</span>")
 	for(var/mob/living/M in targets)
-		M.Stun(3)
-		M.Weaken(3)
+		M.Stun(5)
+		M.Weaken(5)
 		M.adjustFireLoss(10)
 	return
 

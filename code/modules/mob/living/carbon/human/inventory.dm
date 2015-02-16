@@ -51,15 +51,13 @@
 	if(!filter || !istype(filter))
 		filter = get_all_slots()
 	filter -= list(back,
-				handcuffed,
-				legcuffed,
-				belt,
-				wear_id,
-				l_hand,
-				r_hand,
-				l_store,
-				r_store,
-				s_store)
+					handcuffed,
+					legcuffed,
+					belt,
+					wear_id,
+					l_store,
+					r_store,
+					s_store)
 	return filter
 
 /mob/living/carbon/human/proc/check_obscured_slots()
@@ -221,7 +219,8 @@
 	if (W == wear_suit)
 		if(s_store)
 			u_equip(s_store)
-		success = 1
+		if(W)
+			success = 1
 		wear_suit = null
 		update_inv_wear_suit()
 	else if (W == w_uniform)
@@ -246,6 +245,8 @@
 		update_inv_glasses()
 	else if (W == head)
 		head = null
+		if(W.flags_inv & HIDEHAIR)
+			update_hair(0)	//rebuild hair
 		success = 1
 		update_inv_head()
 	else if(W == ears)
@@ -263,6 +264,8 @@
 	else if (W == wear_mask)
 		wear_mask = null
 		success = 1
+		if(W.flags_inv & HIDEHAIR)
+			update_hair(0)	//rebuild hair
 		if(internal)
 			if(internals)
 				internals.icon_state = "internal0"
@@ -308,9 +311,6 @@
 		return 0
 
 	if(success)
-		update_hidden_item_icons(W)
-
-	if(success)
 		if (W)
 			if (client)
 				client.screen -= W
@@ -342,6 +342,8 @@
 			update_inv_back(redraw_mob)
 		if(slot_wear_mask)
 			src.wear_mask = W
+			if(wear_mask.flags_inv & HIDEHAIR)
+				update_hair(redraw_mob)	//rebuild hair
 			update_inv_wear_mask(redraw_mob)
 		if(slot_handcuffed)
 			src.handcuffed = W
@@ -404,8 +406,6 @@
 		else
 			src << "\red You are trying to equip this item to an unsupported inventory slot. Report this to a coder!"
 			return
-
-	update_hidden_item_icons(W)
 
 	W.layer = 20
 	W.equipped(src, slot)

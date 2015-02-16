@@ -2,9 +2,7 @@
 	desc = "Magnetic boots, often used during extravehicular activity to ensure the user remains safely attached to the vehicle."
 	name = "magboots"
 	icon_state = "magboots0"
-	var/base_state = "magboots"
 	var/magpulse = 0
-	var/mag_slow = 2
 //	flags = NOSLIP //disabled by default
 	action_button_name = "Toggle Magboots"
 	species_fit = list("Vox")
@@ -19,13 +17,13 @@
 		src.flags &= ~NOSLIP
 		src.slowdown = SHOES_SLOWDOWN
 		src.magpulse = 0
-		icon_state = "[base_state]0"
+		icon_state = "magboots0"
 		usr << "You disable the mag-pulse traction system."
 	else
 		src.flags |= NOSLIP
-		src.slowdown = mag_slow
+		src.slowdown = 2
 		src.magpulse = 1
-		icon_state = "[base_state]1"
+		icon_state = "magboots1"
 		usr << "You enable the mag-pulse traction system."
 	usr.update_inv_shoes()	//so our mob-overlays update
 
@@ -46,20 +44,43 @@
 	desc = "Advanced magnetic boots, often used during extravehicular activity to ensure the user remains safely attached to the vehicle."
 	name = "advanced magboots"
 	icon_state = "CE-magboots0"
-	base_state = "CE-magboots"
-	mag_slow = 1
 
-//Atmos techies die angry
-/obj/item/clothing/shoes/magboots/atmos
-	desc = "Magnetic boots, often used during extravehicular activity to ensure the user remains safely attached to the vehicle. These are painted in the colors of an atmospheric technician."
-	name = "atmospherics magboots"
-	icon_state = "atmosmagboots0"
-	base_state = "atmosmagboots"
+/obj/item/clothing/shoes/magboots/elite/toggle()
+	if(usr.stat)
+		return
+	if(src.magpulse)
+		src.flags &= ~NOSLIP
+		src.slowdown = SHOES_SLOWDOWN
+		src.magpulse = 0
+		icon_state = "CE-magboots0"
+		usr << "You disable the mag-pulse traction system."
+	else
+		src.flags |= NOSLIP
+		src.slowdown = 1
+		src.magpulse = 1
+		icon_state = "CE-magboots1"
+		usr << "You enable the mag-pulse traction system."
+	usr.update_inv_shoes()	//so our mob-overlays update
 
 //Death squad
 /obj/item/clothing/shoes/magboots/deathsquad
 	desc = "Very expensive and advanced magnetic boots, used only by the elite during extravehicular activity to ensure the user remains safely attached to the vehicle."
 	name = "deathsquad magboots"
 	icon_state = "DS-magboots0"
-	base_state = "DS-magboots"
-	mag_slow = 0
+
+/obj/item/clothing/shoes/magboots/deathsquad/toggle()
+	if(usr.stat)
+		return
+	if(src.magpulse)
+		src.flags &= ~NOSLIP
+		src.slowdown = SHOES_SLOWDOWN
+		src.magpulse = 0
+		icon_state = "DS-magboots0"
+		usr << "You disable the mag-pulse traction system."
+	else
+		src.flags |= NOSLIP
+		src.slowdown = 0
+		src.magpulse = 1
+		icon_state = "DS-magboots1"
+		usr << "You enable the mag-pulse traction system."
+	usr.update_inv_shoes()	//so our mob-overlays update

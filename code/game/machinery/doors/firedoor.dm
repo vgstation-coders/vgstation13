@@ -294,7 +294,7 @@
 			if(alarmed && !density)
 				close()
 /obj/machinery/door/firedoor/open()
-	if(!loc || blocked)
+	if(!loc)
 		return
 	..()
 	latetoggle()
@@ -307,8 +307,6 @@
 			close()
 
 /obj/machinery/door/firedoor/close()
-	if(blocked || !loc)
-		return
 	..()
 	latetoggle()
 	layer = 3.1

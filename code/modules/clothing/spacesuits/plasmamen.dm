@@ -10,8 +10,7 @@
 	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_restricted = list("Plasmaman")
-	flags = FPRINT  | PLASMAGUARD
-	pressure_resistance = 40 * ONE_ATMOSPHERE //we can't change, so some resistance is needed
+	flags = FPRINT  | STOPSPRESSUREDMG | PLASMAGUARD
 
 	icon_state = "plasmaman_suit"
 	item_state = "plasmaman_suit"
@@ -36,8 +35,7 @@
 		H.ExtinguishMob()
 
 /obj/item/clothing/head/helmet/space/plasmaman
-	flags = FPRINT | PLASMAGUARD
-	pressure_resistance = 40 * ONE_ATMOSPHERE
+	flags = FPRINT  | STOPSPRESSUREDMG | PLASMAGUARD
 	species_restricted = list("Plasmaman")
 
 	icon_state = "plasmaman_helmet0"

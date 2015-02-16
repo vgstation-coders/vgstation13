@@ -985,7 +985,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 		process_grasp(owner.l_hand, "left hand")
 
 /datum/organ/external/head
-	icon_position = HEAD //these are datums not objects.
 	name = "head"
 	icon_name = "head"
 	display_name = "head"
@@ -1106,7 +1105,6 @@ obj/item/weapon/organ/r_leg
 	icon_state = "r_leg"
 
 obj/item/weapon/organ/head
-	dir = NORTH
 	name = "head"
 	icon_state = "head_m"
 	var/mob/living/carbon/brain/brainmob
