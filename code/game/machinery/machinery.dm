@@ -579,7 +579,7 @@ Class Procs:
 			playsound(get_turf(src), 'sound/machines/notify.ogg', 50, 0)
 		if("beep")
 			src.visible_message("<span class='notice'>\icon[src] \The [src] beeps.</span>")
-			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 50, 0)
+			playsound(get_turf(src), SOUND_TWO_BEEP, 50, 0)
 		if("buzz")
 			src.visible_message("<span class='notice'>\icon[src] \The [src] buzzes.</span>")
 			playsound(get_turf(src), 'sound/machines/buzz-two.ogg', 50, 0)

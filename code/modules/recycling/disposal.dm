@@ -1055,7 +1055,7 @@
 
 			if(O.currTag > 0)// Tag set
 				sortType = O.currTag
-				playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_TWO_BEEP, 100, 1)
 				var/tag = uppertext(TAGGERLOCATIONS[O.currTag])
 				user << "\blue Changed filter to [tag]"
 				updatedesc()

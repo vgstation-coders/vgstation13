@@ -119,7 +119,7 @@ mob/living/carbon/proc/handle_hallucinations()
 							else src << get_sfx(SOUND_EXPLOSION_TWO)
 						if(3) src << get_sfx(SOUND_EXPLOSION_FAR)
 						if(4) src << get_sfx(SOUND_SHATTER)
-						if(5) src << 'sound/machines/twobeep.ogg'
+						if(5) src << get_sfx(SOUND_TWO_BEEP)
 						if(6) src << 'sound/machines/windowdoor.ogg'
 						if(7)
 							//To make it more realistic, I added two gunshots (enough to kill)

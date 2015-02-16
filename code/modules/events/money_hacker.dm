@@ -52,7 +52,7 @@
 					Console.newmessagepriority = 2
 					Console.icon_state = "req_comp2"
 				if(!Console.silent)
-					playsound(Console.loc, 'sound/machines/twobeep.ogg', 50, 1)
+					playsound(Console.loc, SOUND_TWO_BEEP, 50, 1)
 					for (var/mob/O in hearers(5, Console.loc))
 						O.show_message(text("\icon[Console] *The Requests Console beeps: 'PRIORITY Alert in [my_department]'"))
 				Console.messages += "<B><FONT color='red'>High Priority message from [my_department]</FONT></B><BR>[sending]"
@@ -108,7 +108,7 @@
 						Console.newmessagepriority = 2
 						Console.icon_state = "req_comp2"
 					if(!Console.silent)
-						playsound(Console.loc, 'sound/machines/twobeep.ogg', 50, 1)
+						playsound(Console.loc, SOUND_TWO_BEEP, 50, 1)
 						for (var/mob/O in hearers(5, Console.loc))
 							O.show_message(text("\icon[Console] *The Requests Console beeps: 'PRIORITY Alert in [my_department]'"))
 					Console.messages += "<B><FONT color='red'>High Priority message from [my_department]</FONT></B><BR>[sending]"

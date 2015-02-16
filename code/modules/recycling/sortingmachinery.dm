@@ -26,7 +26,7 @@
 			var/tag = uppertext(TAGGERLOCATIONS[O.currTag])
 			user << "\<span class='notice'>*[tag]*</span>"
 			src.sortTag = O.currTag
-			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_TWO_BEEP, 100, 1)
 			overlays = 0
 			overlays += "deliverytag"
 			src.desc = "A big wrapped package. It has a label reading [tag]"
@@ -70,7 +70,7 @@
 			var/tag = uppertext(TAGGERLOCATIONS[O.currTag])
 			user << "<span class='notice'>*[tag]*</span>"
 			src.sortTag = O.currTag
-			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_TWO_BEEP, 100, 1)
 			overlays = 0
 			overlays += "deliverytag"
 			src.desc = "A small wrapped package. It has a label reading [tag]"

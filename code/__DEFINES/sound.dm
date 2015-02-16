@@ -59,6 +59,7 @@
 #define SOUND_SWING_HIT_TWO "swing_hit_two"
 #define SOUND_SWING_HIT_THREE "swing_hit_three"
 #define SOUND_TOOL_HIT "tool_hit"
+#define SOUND_TWO_BEEP "two_beep"
 #define SOUND_WIRECUTTER "wirecutter"
 
 #define SOUND_CLOWN_STEP "clown_step"
@@ -142,6 +143,7 @@ proc/gen_sounds()
 	sounds[SOUND_SWING_HIT_TWO] = sound('sound/weapons/genhit2.ogg')
 	sounds[SOUND_SWING_HIT_THREE] = sound('sound/weapons/genhit3.ogg')
 	sounds[SOUND_TOOL_HIT] = sound('sound/weapons/toolhit.ogg')
+	sounds[SOUND_TWO_BEEP] = sound('sound/machines/twobeep.ogg')
 	sounds[SOUND_WIRECUTTER] = sound('sound/items/Wirecutter.ogg')
 
 	sounds[SOUND_CLOWN_STEP] = list(sounds[SOUND_CLOWN_STEP_ONE], sounds[SOUND_CLOWN_STEP_TWO])

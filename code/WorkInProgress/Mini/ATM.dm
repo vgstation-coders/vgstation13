@@ -285,7 +285,7 @@ log transactions
 							usr << "\red \icon[src] incorrect pin/account combination entered."
 							number_incorrect_tries = 0
 					else
-						playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
+						playsound(src, SOUND_TWO_BEEP, 50, 1)
 						ticks_left_timeout = 120
 						view_screen = NO_SCREEN
 

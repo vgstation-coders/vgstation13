@@ -1161,7 +1161,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		spawn(300)
 			src.alert = 0
 			src.update_icon()
-		playsound(get_turf(src), 'sound/machines/twobeep.ogg', 75, 1)
+		playsound(get_turf(src), SOUND_TWO_BEEP, 75, 1)
 	else
 		for(var/mob/O in hearers(world.view-1, T))
 		say("Attention! Wanted issue distributed!")

@@ -547,7 +547,7 @@ ________________________________________________________________________________
 				return
 			P.tnote += "<i><b>&larr; From [!s_control?(A):"an unknown source"]:</b></i><br>[t]<br>"
 			if (!P.silent)
-				playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
+				playsound(P.loc, SOUND_TWO_BEEP, 50, 1)
 				for (var/mob/O in hearers(3, P.loc))
 					O.show_message(text("\icon[P] *[P.ttone]*"))
 			P.overlays.len = 0
