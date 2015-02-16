@@ -48,7 +48,7 @@
 		if(istype(used_atom, /obj/item/weapon/weldingtool))
 			var/obj/item/weapon/weldingtool/W = used_atom
 			if (W.remove_fuel(0, user))
-				playsound(holder, 'sound/items/Welder2.ogg', 50, 1)
+				playsound(holder, SOUND_WELDER_TWO, 50, 1)
 			else
 				return 0
 		else if(istype(used_atom, /obj/item/weapon/wrench))

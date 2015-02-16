@@ -28,7 +28,7 @@
 /turf/simulated/wall/proc/dismantle_wall(devastated=0, explode=0)
 	if(istype(src,/turf/simulated/wall/r_wall))
 		if(!devastated)
-			playsound(src, 'sound/items/Welder.ogg', 100, 1)
+			playsound(src, SOUND_WELDER_ONE, 100, 1)
 			new /obj/structure/girder/reinforced(src)
 			new /obj/item/stack/sheet/plasteel( src )
 		else
@@ -37,7 +37,7 @@
 			new /obj/item/stack/sheet/plasteel( src )
 	else if(istype(src,/turf/simulated/wall/cult))
 		if(!devastated)
-			playsound(src, 'sound/items/Welder.ogg', 100, 1)
+			playsound(src, SOUND_WELDER_ONE, 100, 1)
 			var/obj/effect/decal/cleanable/blood/B = getFromPool(/obj/effect/decal/cleanable/blood,src) //new /obj/effect/decal/cleanable/blood(src)
 			B.New(src)
 			new /obj/structure/cultgirder(src)
@@ -48,7 +48,7 @@
 
 	else
 		if(!devastated)
-			playsound(src, 'sound/items/Welder.ogg', 100, 1)
+			playsound(src, SOUND_WELDER_ONE, 100, 1)
 			new /obj/structure/girder(src)
 			if (mineral == "metal")
 				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
@@ -167,7 +167,7 @@
 			var/obj/item/weapon/weldingtool/WT = W
 			if( WT.remove_fuel(0,user) )
 				user << "<span class='notice'>You burn away the fungi with \the [WT].</span>"
-				playsound(src, 'sound/items/Welder.ogg', 10, 1)
+				playsound(src, SOUND_WELDER_ONE, 10, 1)
 				for(var/obj/effect/E in src) if(E.name == "Wallrot")
 					qdel(E)
 				rotting = 0
@@ -217,7 +217,7 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		if( WT.remove_fuel(0,user) )
 			user << "<span class='notice'>You begin slicing through the outer plating.</span>"
-			playsound(src, 'sound/items/Welder.ogg', 100, 1)
+			playsound(src, SOUND_WELDER_ONE, 100, 1)
 
 			sleep(100)
 			if( !istype(src, /turf/simulated/wall) || !user || !WT || !WT.isOn() || !T )	return

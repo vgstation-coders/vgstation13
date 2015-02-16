@@ -45,7 +45,7 @@
 			var/obj/item/weapon/weldingtool/WT = W
 			if( WT.remove_fuel(0,user) )
 				user << "<span class='notice'>You burn away the fungi with \the [WT].</span>"
-				playsound(src, 'sound/items/Welder.ogg', 10, 1)
+				playsound(src, SOUND_WELDER_ONE, 10, 1)
 				for(var/obj/effect/E in src) if(E.name == "Wallrot")
 					del E
 				rotting = 0
@@ -128,7 +128,7 @@
 				if( WT.remove_fuel(0,user) )
 
 					user << "<span class='notice'>You begin slicing through the metal cover.</span>"
-					playsound(src, 'sound/items/Welder.ogg', 100, 1)
+					playsound(src, SOUND_WELDER_ONE, 100, 1)
 
 					sleep(60)
 					if( !istype(src, /turf/simulated/wall/r_wall) || !user || !WT || !WT.isOn() || !T )	return
@@ -144,7 +144,7 @@
 			if( istype(W, /obj/item/weapon/pickaxe/plasmacutter) )
 
 				user << "<span class='notice'>You begin slicing through the metal cover.</span>"
-				playsound(src, 'sound/items/Welder.ogg', 100, 1)
+				playsound(src, SOUND_WELDER_ONE, 100, 1)
 
 				sleep(40)
 				if( !istype(src, /turf/simulated/wall/r_wall) || !user || !W || !T )	return
@@ -191,7 +191,7 @@
 				if( WT.remove_fuel(0,user) )
 
 					user << "<span class='notice'>You begin slicing through the support rods.</span>"
-					playsound(src, 'sound/items/Welder.ogg', 100, 1)
+					playsound(src, SOUND_WELDER_ONE, 100, 1)
 
 					sleep(100)
 					if( !istype(src, /turf/simulated/wall/r_wall) || !user || !WT || !WT.isOn() || !T )	return
@@ -208,7 +208,7 @@
 			if( istype(W, /obj/item/weapon/pickaxe/plasmacutter) )
 
 				user << "<span class='notice'>You begin slicing through the support rods.</span>"
-				playsound(src, 'sound/items/Welder.ogg', 100, 1)
+				playsound(src, SOUND_WELDER_ONE, 100, 1)
 
 				sleep(70)
 				if( !istype(src, /turf/simulated/wall/r_wall) || !user || !W || !T )	return

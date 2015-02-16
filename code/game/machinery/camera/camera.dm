@@ -290,7 +290,7 @@ var/list/camera_names=list()
 
 	// Do after stuff here
 	user << "<span class='notice'>You start to weld the [src].</span>"
-	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_WELDER_ONE, 50, 1)
 	WT.eyecheck(user)
 	busy = 1
 	if(do_after(user, 100))

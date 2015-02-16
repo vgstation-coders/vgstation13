@@ -108,7 +108,7 @@
 			user << "\blue You need more welding fuel to complete this task."
 			return
 		user << "You start welding the port frame..."
-		playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_WELDER_ONE, 50, 1)
 		if(do_after(user, 50))
 			if(!src || !WT.remove_fuel(3, user)) return
 			new /obj/item/mounted/frame/rust_fuel_assembly_port(loc)

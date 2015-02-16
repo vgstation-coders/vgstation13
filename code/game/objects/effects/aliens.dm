@@ -299,7 +299,7 @@ Alien plants should do something if theres a lot of poison
 
 		if(WT.remove_fuel(0, user))
 			damage = 15
-			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+			playsound(loc, SOUND_WELDER_ONE, 100, 1)
 
 	health -= damage
 	healthcheck()
@@ -488,7 +488,7 @@ Alien plants should do something if theres a lot of poison
 
 		if(WT.remove_fuel(0, user))
 			damage = 15
-			playsound(get_turf(src), 'sound/items/Welder.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_WELDER_ONE, 100, 1)
 
 	src.health -= damage
 	src.healthcheck()

@@ -340,7 +340,7 @@
 	else if(istype(I,/obj/item/weapon/weldingtool) && c_mode==1)
 		var/obj/item/weapon/weldingtool/W = I
 		if(W.remove_fuel(0,user))
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_WELDER_TWO, 100, 1)
 			user << "You start slicing the floorweld off the delivery chute."
 			if(do_after(user,20))
 				if(!src || !W.isOn()) return

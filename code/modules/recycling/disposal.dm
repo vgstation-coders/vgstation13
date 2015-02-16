@@ -102,7 +102,7 @@
 					return
 				var/obj/item/weapon/weldingtool/W = I
 				if(W.remove_fuel(0,user))
-					playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
+					playsound(get_turf(src), SOUND_WELDER_TWO, 100, 1)
 					user << "You start slicing the floorweld off the disposal unit."
 
 					if(do_after(user,20))
@@ -902,7 +902,7 @@
 			var/obj/item/weapon/weldingtool/W = I
 
 			if(W.remove_fuel(0,user))
-				playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_WELDER_TWO, 100, 1)
 				// check if anything changed over 2 seconds
 				var/turf/uloc = user.loc
 				var/atom/wloc = W.loc
@@ -1243,7 +1243,7 @@
 		var/obj/item/weapon/weldingtool/W = I
 
 		if(W.remove_fuel(0,user))
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_WELDER_TWO, 100, 1)
 			// check if anything changed over 2 seconds
 			var/turf/uloc = user.loc
 			var/atom/wloc = W.loc
@@ -1387,7 +1387,7 @@
 		else if(istype(I,/obj/item/weapon/weldingtool) && mode==1)
 			var/obj/item/weapon/weldingtool/W = I
 			if(W.remove_fuel(0,user))
-				playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_WELDER_TWO, 100, 1)
 				user << "You start slicing the floorweld off the disposal outlet."
 				if(do_after(user,20))
 					if(!src || !W.isOn()) return

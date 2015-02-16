@@ -65,7 +65,7 @@ obj/structure/windoor_assembly/Destroy()
 				var/obj/item/weapon/weldingtool/WT = W
 				if (WT.remove_fuel(0,user))
 					user.visible_message("[user] dissassembles the windoor assembly.", "You start to dissassemble the windoor assembly.")
-					playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_WELDER_TWO, 50, 1)
 
 					if(do_after(user, 40))
 						if(!src || !WT.isOn()) return

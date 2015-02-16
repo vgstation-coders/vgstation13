@@ -556,7 +556,7 @@ turf/simulated/floor/proc/update_icon()
 			if(broken || burnt)
 				if(welder.remove_fuel(0,user))
 					user << "<span class='warning'>You fix some dents on the broken plating.</span>"
-					playsound(src, 'sound/items/Welder.ogg', 80, 1)
+					playsound(src, SOUND_WELDER_ONE, 80, 1)
 					icon_state = "plating"
 					burnt = 0
 					broken = 0

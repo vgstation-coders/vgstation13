@@ -72,7 +72,7 @@
 			user << "<span class = 'caution'> You screw in the telepad's tracking beacon.</span>"
 			stage = 0
 	if(istype(W, /obj/item/weapon/weldingtool) && stage == 1)
-		playsound(src, 'sound/items/Welder.ogg', 50, 1)
+		playsound(src, SOUND_WELDER_ONE, 50, 1)
 		user << "<span class = 'caution'> You disassemble the telepad.</span>"
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 		M.amount = 1

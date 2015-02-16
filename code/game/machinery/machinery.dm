@@ -474,7 +474,7 @@ Class Procs:
 		user << "You need to secure \the [src] before it can be welded."
 		return -1
 	if (WT.remove_fuel(0,user))
-		playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_WELDER_TWO, 50, 1)
 		user.visible_message("[user.name] starts to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
 				"You start to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
 				"You hear welding.")

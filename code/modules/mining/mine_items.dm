@@ -236,7 +236,7 @@ proc/move_mining_shuttle()
 	desc = "A rock cutter that uses bursts of hot plasma. You could use it to cut limbs off of xenos! Or, you know, mine stuff."
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
-	drill_sound = 'sound/items/Welder.ogg'
+	drill_sound = SOUND_WELDER_ONE
 
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"

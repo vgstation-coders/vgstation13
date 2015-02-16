@@ -152,7 +152,7 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0, user))
 			busy = 1
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_WELDER_TWO, 50, 1)
 			if(istext(glass))
 				user.visible_message("[user] welds the [glass] plating off the airlock assembly.", "You start to weld the [glass] plating off the airlock assembly.")
 				if(do_after(user, 40))

@@ -63,20 +63,23 @@
 #define SOUND_SWING_HIT_THREE "swing_hit_three"
 #define SOUND_TOOL_HIT "tool_hit"
 #define SOUND_TWO_BEEP "two_beep"
+#define SOUND_WELDER_ONE "welder_one"
+#define SOUND_WELDER_TWO "welder_two"
 #define SOUND_WIRECUTTER "wirecutter"
 
-#define SOUND_CLOWN_STEP "clown_step"
-#define SOUND_EXPLOSION "explosion"
-#define SOUND_GIB "gib"
-#define SOUND_HISS "hiss"
-#define SOUND_MECH_STEP "mech_step"
-#define SOUND_MOMMI_COMMENT "mommi_comment"
-#define SOUND_PAGE_TURN "page_turn"
-#define SOUND_PUNCH "punch"
-#define SOUND_RUSTLE "rustle"
-#define SOUND_SHATTER "shatter"
-#define SOUND_SPARK "spark"
-#define SOUND_SWING_HIT "swing_hit"
+#define SOUND_CLOWN_STEP "list_clown_step"
+#define SOUND_EXPLOSION "list_explosion"
+#define SOUND_GIB "list_gib"
+#define SOUND_HISS "list_hiss"
+#define SOUND_MECH_STEP "list_mech_step"
+#define SOUND_MOMMI_COMMENT "list_mommi_comment"
+#define SOUND_PAGE_TURN "list_page_turn"
+#define SOUND_PUNCH "list_punch"
+#define SOUND_RUSTLE "list_rustle"
+#define SOUND_SHATTER "list_shatter"
+#define SOUND_SPARK "list_spark"
+#define SOUND_SWING_HIT "list_swing_hit"
+#define SOUND_LIST_WELDER "list_welder"
 
 /world/New()
 	..()
@@ -150,6 +153,8 @@ proc/gen_sounds()
 	sounds[SOUND_SWING_HIT_THREE] = sound('sound/weapons/genhit3.ogg')
 	sounds[SOUND_TOOL_HIT] = sound('sound/weapons/toolhit.ogg')
 	sounds[SOUND_TWO_BEEP] = sound('sound/machines/twobeep.ogg')
+	sounds[SOUND_WELDER_ONE] = sound('sound/items/Welder.ogg')
+	sounds[SOUND_WELDER_TWO] = sound('sound/items/Welder2.ogg')
 	sounds[SOUND_WIRECUTTER] = sound('sound/items/Wirecutter.ogg')
 
 	sounds[SOUND_CLOWN_STEP] = list(sounds[SOUND_CLOWN_STEP_ONE], sounds[SOUND_CLOWN_STEP_TWO])
@@ -164,3 +169,4 @@ proc/gen_sounds()
 	sounds[SOUND_SHATTER] = list(sounds[SOUND_GLASS_BREAK_ONE], sounds[SOUND_GLASS_BREAK_TWO], sounds[SOUND_GLASS_BREAK_THREE])
 	sounds[SOUND_SPARK] = list(sounds[SOUND_SPARK_ONE], sounds[SOUND_SPARK_TWO], sounds[SOUND_SPARK_THREE], sounds[SOUND_SPARK_FOUR])
 	sounds[SOUND_SWING_HIT] = list(sounds[SOUND_SWING_HIT_ONE], sounds[SOUND_SWING_HIT_TWO], sounds[SOUND_SWING_HIT_THREE])
+	sounds[SOUND_LIST_WELDER] = list(sounds[SOUND_WELDER_ONE], sounds[SOUND_WELDER_TWO])

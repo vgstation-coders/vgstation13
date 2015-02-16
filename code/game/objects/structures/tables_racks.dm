@@ -529,14 +529,14 @@
 		if(WT.remove_fuel(0, user))
 			if(src.status == 2)
 				user << "\blue Now weakening the reinforced table"
-				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_WELDER_ONE, 50, 1)
 				if (do_after(user, 50))
 					if(!src || !WT.isOn()) return
 					user << "\blue Table weakened"
 					src.status = 1
 			else
 				user << "\blue Now strengthening the reinforced table"
-				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_WELDER_ONE, 50, 1)
 				if (do_after(user, 50))
 					if(!src || !WT.isOn()) return
 					user << "\blue Table strengthened"

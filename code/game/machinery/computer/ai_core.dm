@@ -27,7 +27,7 @@
 				if(!WT.isOn())
 					user << "The welder must be on for this task."
 					return
-				playsound(loc, 'sound/items/Welder.ogg', 50, 1)
+				playsound(loc, SOUND_WELDER_ONE, 50, 1)
 				if(do_after(user, 20))
 					if(!src || !WT.remove_fuel(0, user)) return
 					user << "<span class='notice'>You deconstruct the frame.</span>"

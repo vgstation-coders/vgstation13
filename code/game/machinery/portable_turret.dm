@@ -746,7 +746,7 @@ Status: []<BR>"},
 					user << "\red You need more fuel to complete this task."
 					return
 
-				playsound(get_turf(src), pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
+				playsound(get_turf(src), SOUND_LIST_WELDER, 50, 1)
 				if(do_after(user, 20))
 					if(!src || !WT.remove_fuel(5, user)) return
 					build_step = 1
@@ -815,7 +815,7 @@ Status: []<BR>"},
 				if (WT.get_fuel() < 5)
 					user << "\red You need more fuel to complete this task."
 
-				playsound(get_turf(src), pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
+				playsound(get_turf(src), SOUND_LIST_WELDER, 50, 1)
 				if(do_after(user, 30))
 					if(!src || !WT.remove_fuel(5, user)) return
 					build_step = 8

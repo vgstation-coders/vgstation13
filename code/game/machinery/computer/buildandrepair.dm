@@ -289,7 +289,7 @@
 				if(!WT.remove_fuel(0, user))
 					user << "The welding tool must be on to complete this task."
 					return 1
-				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_WELDER_ONE, 50, 1)
 				if(do_after(user, 10))
 					if(!src || !WT.isOn()) return
 					user << "<span class='notice'>You deconstruct the frame.</span>"

@@ -114,7 +114,7 @@
 			var/obj/item/weapon/weldingtool/WT=W
 			if(circuitry_installed)
 				return ..()
-			playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_WELDER_ONE, 50, 1)
 			if(!WT.remove_fuel(3, user))
 				user << "\red You're out of welding fuel."
 				return 1

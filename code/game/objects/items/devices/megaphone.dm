@@ -82,7 +82,7 @@
 	var/list/sound_list
 	sound_list=list('sound/items/bikehorn.ogg', 'sound/effects/bubbles.ogg', SOUND_EXPLOSION_ONE,\
 		'sound/mecha/nominal.ogg', 'sound/effects/alert.ogg', 'sound/items/AirHorn.ogg', 'sound/misc/sadtrombone.ogg',\
-		SOUND_DECONSTRUCT, 'sound/items/Welder.ogg', 'sound/hallucinations/turn_around1.ogg', \
+		SOUND_DECONSTRUCT, SOUND_WELDER_ONE, 'sound/hallucinations/turn_around1.ogg', \
 		'sound/machines/ding.ogg', 'sound/effects/awooga.ogg', 'sound/machines/disposalflush.ogg', SOUND_TWO_BEEP)
 	var/list/sound_names
 	sound_names=list("Honk","Bubbles","Boom","Startup","Alert","Airhorn","Trombone",\
