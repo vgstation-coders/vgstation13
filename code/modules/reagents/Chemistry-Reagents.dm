@@ -24,6 +24,7 @@
 	var/overdose_threshold = 0
 	var/addiction_threshold = 0
 	var/addiction_stage = 0
+	var/shock_reduction = 0
 	var/overdosed = 0 // You fucked up and this is now triggering it's overdose_threshold effects, purge that shit quick.
 
 /datum/reagent/proc/reaction_mob(var/mob/M, var/method=TOUCH, var/volume)
@@ -116,6 +117,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	if(prob(30))
 		M << "<span class = 'userdanger'>You're not feeling good at all! You really need some [name].</span>"
 	return
+
 
 /datum/reagent/muhhardcores
 	name = "Hardcores"
@@ -470,23 +472,6 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	..()
 	return
 
-/datum/reagent/cyanide
-	// Fast and lethal
-	name = "Cyanide"
-	id = "cyanide"
-	description = "A highly toxic chemical."
-	reagent_state = LIQUID
-	color = "#CF3600" // rgb: 207, 54, 0
-	custom_metabolism = 0.4
-
-/datum/reagent/cyanide/on_mob_life(var/mob/living/M as mob)
-	if(!M) M = holder.my_atom
-	M.adjustToxLoss(4)
-	M.adjustOxyLoss(4)
-	M.sleeping += 1
-	..()
-	return
-
 /datum/reagent/chefspecial
 	// Quiet and lethal, needs atleast 4 units in the person before they'll die
 	name = "Chef's Special"
@@ -657,6 +642,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 	overdose_threshold = REAGENTS_OVERDOSE*2
+	shock_reduction = 25
 
 /datum/reagent/inaprovaline/on_mob_life(var/mob/living/M as mob, var/alien)
 
@@ -1298,6 +1284,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	reagent_state = LIQUID
 	color = "#C855DC"
 	overdose_threshold = 0
+	shock_reduction = 50
 
 /datum/reagent/paracetamol/on_mob_life(var/mob/living/M as mob)
 
@@ -1339,6 +1326,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	description = "A simple, yet effective painkiller."
 	reagent_state = LIQUID
 	color = "#C8A5DC"
+	shock_reduction = 80
 
 /datum/reagent/oxycodone
 	name = "Oxycodone"
@@ -1346,6 +1334,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	description = "An effective and very addictive painkiller."
 	reagent_state = LIQUID
 	color = "#C805DC"
+	shock_reduction = 200
 
 /datum/reagent/virus_food
 	name = "Virus Food"
@@ -1881,6 +1870,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	color = "#C8A5DC" // rgb: 200, 165, 220
 	custom_metabolism = 0.01
 	overdose_threshold = REAGENTS_OVERDOSE
+	shock_reduction = 40
 
 /datum/reagent/synaptizine/on_mob_life(var/mob/living/M as mob)
 
@@ -1963,6 +1953,7 @@ datum/reagent/proc/addiction_act_stage4(var/mob/living/M as mob)
 	color = "#C8A5DC" // rgb: 200, 165, 220
 	custom_metabolism = 0.05
 	overdose_threshold = REAGENTS_OVERDOSE
+	shock_reduction = 10
 
 /datum/reagent/alkysine/on_mob_life(var/mob/living/M as mob)
 
