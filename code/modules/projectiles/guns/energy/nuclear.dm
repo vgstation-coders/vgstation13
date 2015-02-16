@@ -3,7 +3,7 @@
 	desc = "A basic energy-based gun with two settings: Stun and kill."
 	icon_state = "energystun100"
 	item_state = null	//so the human update icon uses the icon_state instead.
-	fire_sound = 'sound/weapons/Taser.ogg'
+	fire_sound = SOUND_TASER_ONE
 
 	charge_cost = 100 //How much energy is needed to fire.
 	projectile_type = "/obj/item/projectile/energy/electrode"
@@ -25,7 +25,7 @@
 			if(1)
 				mode = 0
 				charge_cost = 100
-				fire_sound = 'sound/weapons/Taser.ogg'
+				fire_sound = SOUND_TASER_ONE
 				user << "\red [src.name] is now set to stun."
 				projectile_type = "/obj/item/projectile/energy/electrode"
 				modifystate = "energystun"

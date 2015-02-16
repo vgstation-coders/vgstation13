@@ -651,7 +651,7 @@ Status: []<BR>"},
 	else
 		icon_state = "[lasercolor]orange_target_prism"
 	if(sound)
-		playsound(get_turf(src), 'sound/weapons/Taser.ogg', 75, 1)
+		playsound(get_turf(src), SOUND_TASER_ONE, 75, 1)
 	var/obj/item/projectile/A
 	if(emagged)
 		A = new eprojectile( loc )

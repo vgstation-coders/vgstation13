@@ -78,7 +78,7 @@
 	icon_state = "pod_taser"
 	projectile_type = "/obj/item/projectile/energy/electrode"
 	shot_cost = 10
-	fire_sound = "sound/weapons/Taser.ogg"
+	fire_sound = SOUND_TASER_ONE
 
 /obj/item/device/spacepod_equipment/weaponry/taser/proc/fire_weapon_system()
 	set category = "Spacepod"

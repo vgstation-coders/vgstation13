@@ -129,9 +129,9 @@ mob/living/carbon/proc/handle_hallucinations()
 						if(8) src << 'sound/weapons/smash.ogg'
 						if(9)
 							//Same as above, but with tasers.
-							src << 'sound/weapons/Taser.ogg'
+							src << get_sfx(SOUND_TASER_ONE)
 							spawn(rand(10,30))
-								src << 'sound/weapons/Taser.ogg'
+								src << get_sfx(SOUND_TASER_ONE)
 					//Rare audio
 						if(10)
 	//These sounds are (mostly) taken from Hidden: Source

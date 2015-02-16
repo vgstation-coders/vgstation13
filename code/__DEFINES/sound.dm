@@ -67,6 +67,8 @@
 #define SOUND_SWING_HIT_ONE "swing_hit_one"
 #define SOUND_SWING_HIT_TWO "swing_hit_two"
 #define SOUND_SWING_HIT_THREE "swing_hit_three"
+#define SOUND_TASER_ONE "taser_one"
+#define SOUND_TASER_TWO "taser_two"
 #define SOUND_TOOL_HIT "tool_hit"
 #define SOUND_TWO_BEEP "two_beep"
 #define SOUND_WELDER_ONE "welder_one"
@@ -164,6 +166,8 @@ proc/gen_sounds()
 	sounds[SOUND_SWING_HIT_ONE] = sound('sound/weapons/genhit1.ogg')
 	sounds[SOUND_SWING_HIT_TWO] = sound('sound/weapons/genhit2.ogg')
 	sounds[SOUND_SWING_HIT_THREE] = sound('sound/weapons/genhit3.ogg')
+	sounds[SOUND_TASER_ONE] = sound('sound/weapons/Taser.ogg')
+	sounds[SOUND_TASER_TWO] = sound('sound/weapons/taser2.ogg')
 	sounds[SOUND_TOOL_HIT] = sound('sound/weapons/toolhit.ogg')
 	sounds[SOUND_TWO_BEEP] = sound('sound/machines/twobeep.ogg')
 	sounds[SOUND_WELDER_ONE] = sound('sound/items/Welder.ogg')

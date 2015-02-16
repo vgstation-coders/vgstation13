@@ -95,7 +95,7 @@
 	energy_drain = 20
 	equip_cooldown = 8
 	projectile = /obj/item/projectile/energy/electrode
-	fire_sound = 'sound/weapons/Taser.ogg'
+	fire_sound = SOUND_TASER_ONE
 
 
 /obj/item/mecha_parts/mecha_equipment/weapon/honker
