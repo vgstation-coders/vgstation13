@@ -67,6 +67,7 @@
 #define SOUND_SPARK_THREE "spark_three"
 #define SOUND_SPARK_FOUR "spark_four"
 #define SOUND_SPLAT "splat"
+#define SOUND_SUPERMATTER "supermatter"
 #define SOUND_SWING_HIT_ONE "swing_hit_one"
 #define SOUND_SWING_HIT_TWO "swing_hit_two"
 #define SOUND_SWING_HIT_THREE "swing_hit_three"
@@ -169,6 +170,7 @@ proc/gen_sounds()
 	sounds[SOUND_SPARK_THREE] = sound('sound/effects/sparks3.ogg')
 	sounds[SOUND_SPARK_FOUR] = sound('sound/effects/sparks4.ogg')
 	sounds[SOUND_SPLAT] = sound('sound/effects/splat.ogg')
+	sounds[SOUND_SUPERMATTER] = sound('sound/effects/supermatter.ogg')
 	sounds[SOUND_SWING_HIT_ONE] = sound('sound/weapons/genhit1.ogg')
 	sounds[SOUND_SWING_HIT_TWO] = sound('sound/weapons/genhit2.ogg')
 	sounds[SOUND_SWING_HIT_THREE] = sound('sound/weapons/genhit3.ogg')

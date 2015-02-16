@@ -81,7 +81,7 @@
 		"<span class=\"danger\">You reach out and touch \the [src]. Everything immediately goes quiet. Your last thought is \"That was not a wise decision.\"</span>",\
 		"<span class=\"warning\">You hear an unearthly noise.</span>")
 
-	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+	playsound(src, SOUND_SUPERMATTER, 50, 1)
 
 	Consume(user)
 
@@ -90,7 +90,7 @@
 		"<span class=\"danger\">You touch \the [W] to \the [src] when everything suddenly goes silent.\"</span>\n<span class=\"notice\">\The [W] flashes into dust as you flinch away from \the [src].</span>",\
 		"<span class=\"warning\">Everything suddenly goes silent.</span>")
 
-	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+	playsound(src, SOUND_SUPERMATTER, 50, 1)
 
 	user.drop_from_inventory(W)
 	Consume(W)
@@ -105,7 +105,7 @@
 		AM.visible_message("<span class=\"warning\">\The [AM] smacks into \the [src] and rapidly flashes to ash.</span>",\
 		"<span class=\"warning\">You hear a loud crack as you are washed with a wave of heat.</span>")
 
-	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+	playsound(src, SOUND_SUPERMATTER, 50, 1)
 
 	Consume(AM)
 
