@@ -41,6 +41,8 @@
 #define SOUND_MOMMI_COMMENT_EIGHT "mommi_comment_eight"
 #define SOUND_PAGE_TURN_ONE "page_turn_one"
 #define SOUND_PAGE_TURN_TWO "page_turn_two"
+#define SOUND_POLAROID_ONE "polaroid_one"
+#define SOUND_POLAROID_TWO "polaroid_two"
 #define SOUND_PHASE_IN "phase_in"
 #define SOUND_PUNCH_MISS "punch_miss"
 #define SOUND_PUNCH_ONE "punch_one"
@@ -79,6 +81,7 @@
 #define SOUND_MOMMI_COMMENT "list_mommi_comment"
 #define SOUND_PAGE_TURN "list_page_turn"
 #define SOUND_PUNCH "list_punch"
+#define SOUND_LIST_POLAROID "list_polaroid"
 #define SOUND_RUSTLE "list_rustle"
 #define SOUND_SHATTER "list_shatter"
 #define SOUND_SPARK "list_spark"
@@ -142,6 +145,8 @@ proc/gen_sounds()
 	sounds[SOUND_PUNCH_TWO] = sound('sound/weapons/punch2.ogg')
 	sounds[SOUND_PUNCH_THREE] = sound('sound/weapons/punch3.ogg')
 	sounds[SOUND_PUNCH_FOUR] = sound('sound/weapons/punch4.ogg')
+	sounds[SOUND_POLAROID_ONE] = sound('sound/items/polaroid1.ogg')
+	sounds[SOUND_POLAROID_TWO] = sound('sound/items/polaroid2.ogg')
 	sounds[SOUND_RATCHET] = sound('sound/items/Ratchet.ogg')
 	sounds[SOUND_RUSTLE_ONE] = sound('sound/effects/rustle1.ogg')
 	sounds[SOUND_RUSTLE_TWO] = sound('sound/effects/rustle2.ogg')
@@ -172,6 +177,7 @@ proc/gen_sounds()
 	sounds[SOUND_MECH_STEP] = list(sounds[SOUND_MECH_STEP_ONE], sounds[SOUND_MECH_STEP_TWO])
 	sounds[SOUND_MOMMI_COMMENT] = list(sounds[SOUND_MOMMI_COMMENT_ONE], sounds[SOUND_MOMMI_COMMENT_TWO], sounds[SOUND_MOMMI_COMMENT_THREE], sounds[SOUND_MOMMI_COMMENT_FOUR], sounds[SOUND_MOMMI_COMMENT_FIVE], sounds[SOUND_MOMMI_COMMENT_SIX], sounds[SOUND_MOMMI_COMMENT_SEVEN], sounds[SOUND_MOMMI_COMMENT_EIGHT])
 	sounds[SOUND_PAGE_TURN] = list(sounds[SOUND_PAGE_TURN_ONE], sounds[SOUND_PAGE_TURN_TWO])
+	sounds[SOUND_LIST_POLAROID] = list(sounds[SOUND_POLAROID_ONE], sounds[SOUND_POLAROID_TWO])
 	sounds[SOUND_PUNCH] = list(sounds[SOUND_PUNCH_ONE], sounds[SOUND_PUNCH_TWO], sounds[SOUND_PUNCH_THREE], sounds[SOUND_PUNCH_FOUR])
 	sounds[SOUND_RUSTLE] = list(sounds[SOUND_RUSTLE_ONE], sounds[SOUND_RUSTLE_TWO], sounds[SOUND_RUSTLE_THREE], sounds[SOUND_RUSTLE_FOUR], sounds[SOUND_RUSTLE_FIVE])
 	sounds[SOUND_SHATTER] = list(sounds[SOUND_GLASS_BREAK_ONE], sounds[SOUND_GLASS_BREAK_TWO], sounds[SOUND_GLASS_BREAK_THREE])
