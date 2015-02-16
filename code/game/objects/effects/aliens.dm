@@ -100,7 +100,7 @@
 		tforce = 10
 	else
 		tforce = AM:throwforce
-	playsound(loc, 'sound/effects/attackblob.ogg', 100, 1)
+	playsound(loc, SOUND_ATTACK_BLOB, 100, 1)
 	health = max(0, health - tforce)
 	healthcheck()
 	..()
@@ -130,7 +130,7 @@
 	usr << "\green You claw at the [name]."
 	for(var/mob/O in oviewers(src))
 		O.show_message("\red [usr] claws at the resin!", 1)
-	playsound(loc, 'sound/effects/attackblob.ogg', 100, 1)
+	playsound(loc, SOUND_ATTACK_BLOB, 100, 1)
 	health -= rand(40, 60)
 	if(health <= 0)
 		usr << "\green You slice the [name] to pieces."
@@ -163,7 +163,7 @@
 	user.delayNextAttack(10)
 	var/aforce = W.force
 	health = max(0, health - aforce)
-	playsound(loc, 'sound/effects/attackblob.ogg', 100, 1)
+	playsound(loc, SOUND_ATTACK_BLOB, 100, 1)
 	healthcheck()
 	..()
 	return

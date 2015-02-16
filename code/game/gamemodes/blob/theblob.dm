@@ -171,7 +171,7 @@
 
 /obj/effect/blob/attackby(var/obj/item/weapon/W, var/mob/user)
 	user.delayNextAttack(10)
-	playsound(get_turf(src), 'sound/effects/attackblob.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_ATTACK_BLOB, 50, 1)
 	src.visible_message("\red <B>The [src.name] has been attacked with \the [W][(user ? " by [user]." : ".")]")
 	var/damage = 0
 	switch(W.damtype)
