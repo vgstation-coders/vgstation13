@@ -139,7 +139,7 @@
 			if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
 				return
 			if(health > 0)
-				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
+				playsound(loc, SOUND_BITE, 50, 1, -1)
 				visible_message("<span class='danger'>\The [M] has bit \the [src] !</span>")
 				adjustBruteLoss(rand(1, 3))
 				updatehealth()
@@ -281,7 +281,7 @@
 
 		else
 			if(health > 0)
-				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
+				playsound(loc, SOUND_BITE, 50, 1, -1)
 				var/damage = rand(1, 3)
 				for(var/mob/O in viewers(src, null))
 					if((O.client && !( O.blinded )))

@@ -2,6 +2,7 @@
 #define SOUND_ALARM "alarm"
 #define SOUND_ATTACK_BLOB " attack_blob"
 #define SOUND_BANG "bang"
+#define SOUND_BITE "bite"
 #define SOUND_BLADE_SLICE "blade_slice"
 #define SOUND_BLOODY_SLICE "bloody_slice"
 #define SOUND_CLICK "click"
@@ -93,6 +94,7 @@ proc/gen_sounds()
 	sounds[SOUND_ALARM] = sound('sound/machines/Alarm.ogg')
 	sounds[SOUND_ATTACK_BLOB] = sound('sound/effects/attackblob.ogg')
 	sounds[SOUND_BANG] = sound('sound/effects/bang.ogg')
+	sounds[SOUND_BITE] = sound('sound/weapons/bite.ogg')
 	sounds[SOUND_BLADE_SLICE] = sound('sound/weapons/bladeslice.ogg')
 	sounds[SOUND_BLOODY_SLICE] = sound('sound/weapons/bloodyslice.ogg')
 	sounds[SOUND_CLICK] = sound('sound/machines/click.ogg')

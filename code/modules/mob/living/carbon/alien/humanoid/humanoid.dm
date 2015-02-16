@@ -119,7 +119,7 @@
 			if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
 				return
 			if(health > 0)
-				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
+				playsound(loc, SOUND_BITE, 50, 1, -1)
 				visible_message("<span class='danger'>\The [M] has bit \the [src]!</span>")
 				adjustBruteLoss(rand(1, 3))
 				updatehealth()
@@ -322,7 +322,7 @@ In all, this is a lot like the monkey code. /N
 			visible_message("<span class='notice'>[M] nuzzles [src] trying to wake it up !</span>")
 		else
 			if(health > 0)
-				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
+				playsound(loc, SOUND_BITE, 50, 1, -1)
 				var/damage = rand(1, 3)
 				visible_message("<span class='danger'>\The [M] has bit [src]!</span>")
 				adjustBruteLoss(damage)

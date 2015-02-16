@@ -351,7 +351,7 @@
 				return
 			if (health > 0)
 				attacked += 10
-				//playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
+				//playsound(loc, SOUND_BITE, 50, 1, -1)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("\red <B>[M.name] has attacked [src]!</B>"), 1)

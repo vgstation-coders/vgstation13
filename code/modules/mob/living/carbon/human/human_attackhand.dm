@@ -141,7 +141,7 @@
 					break
 			if(can_bite)
 				if ((prob(75) && health > 0))
-					playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
+					playsound(loc, SOUND_BITE, 50, 1, -1)
 					for(var/mob/O in viewers(src, null))
 						O.show_message("\red <B>[M.name] has bit [name]!</B>", 1)
 					var/damage = rand(1, 5)

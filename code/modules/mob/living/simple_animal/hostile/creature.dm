@@ -10,7 +10,7 @@
 	melee_damage_lower = 25
 	melee_damage_upper = 50
 	attacktext = "chomps"
-	attack_sound = 'sound/weapons/bite.ogg'
+	attack_sound = SOUND_BITE
 	faction = "creature"
 	speed = 4
 
