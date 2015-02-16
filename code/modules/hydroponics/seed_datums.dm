@@ -981,7 +981,7 @@ proc/populate_seed_list()
 	mutants = null
 	packet_icon = "seed-ambrosiadeus"
 	plant_icon = "ambrosiadeus"
-	chems = list("nutriment" = list(1), "bicaridine" = list(1,8), "synaptizine" = list(1), "hyperzine" = list(1,10,1), "space_drugs" = list(1,10))
+	chems = list("nutriment" = list(1), "omnizine" = list(1,8), "synaptizine" = list(1), "hyperzine" = list(1,10,1), "space_drugs" = list(1,10))
 
 //Mushrooms/varieties.
 /datum/seed/mushroom
@@ -1176,7 +1176,7 @@ proc/populate_seed_list()
 	packet_icon = "seed-poppy"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/poppy)
 	plant_icon = "poppy"
-	chems = list("nutriment" = list(1,20), "bicaridine" = list(1,10))
+	chems = list("nutriment" = list(1,20), "morphine" = list(1,10))
 
 	lifespan = 25
 	potency = 20
