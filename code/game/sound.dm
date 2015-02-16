@@ -3,9 +3,6 @@
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
 //space sounds have no gas modification, for example. Though >space sounds
 /proc/playsound(var/atom/source, soundin, volume = 100, vary = FALSE, extrarange = 0, falloff = FALSE, gas_modified = TRUE)
-
-	soundin = get_sfx(soundin) // Same sound for everybody.
-
 	if(isarea(source))
 		error("[source] is an area and is trying to make the sound: [soundin]")
 		return
@@ -36,6 +33,8 @@
 		extrarange = total_range - world.view
 		volume = min( round( (volume) * atmos_modifier, 1 ), volume * 2) //upper range of twice the volume. Trust me, otherwise you get 10000 volume in a plasmafire
 		//message_admins("We've adjusted the sound of [source] at [turf_source.loc] to have a range of [7 + extrarange] and a volume of [vol]")
+
+	soundin = get_sfx(soundin, 0, 0, 0, volume) // Same sound for everybody.
 
  	// Looping through the player list has the added bonus of working for mobs inside containers
 	for (var/P in player_list)
@@ -73,12 +72,9 @@ var/const/SURROUND_CAP = 7
 		/// end ///
 
 	if (istext(soundin))
-		soundin = get_sfx(soundin)
+		soundin = get_sfx(soundin, 0, 0, 0, volume)
 
 	var/sound/S = soundin
-	S.wait = 0 // No queue.
-	S.channel = 0 // Any channel.
-	S.volume = volume
 
 	if (vary)
 		if(frequency)
@@ -111,11 +107,27 @@ var/const/SURROUND_CAP = 7
 	return rand(32000, 55000) //Frequency stuff only works with 45kbps oggs.
 
 /proc/get_sfx(filename, repeat = 0, wait = 0, channel = 0, volume = 100)
-	var/sound = sounds[filename]
-
-	world << filename
+	var/sound/sound = sounds[filename]
 
 	if (islist(sound))
 		sound = pick(sound)
+
+	world << "[sound.file]"
+
+	sound.falloff = 1
+	sound.frequency = 0
+	sound.pan = 0
+	sound.priority = 0
+	sound.status = 0
+	sound.x = 0
+	sound.y = 0
+	sound.z = 0
+	sound.environment = -1
+	sound.echo = null
+
+	sound.repeat = repeat
+	sound.wait = wait
+	sound.channel = channel
+	sound.volume = volume
 
 	return sound
