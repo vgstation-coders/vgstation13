@@ -202,14 +202,6 @@
 	required_reagents = list("fuel" = 1, "ammonia" = 1, "charcoal" = 1)
 	result_amount = 3
 
-/datum/chemical_reaction/facid
-	name = "Fluorosulfuric acid"
-	id = "facid"
-	result = "facid"
-	required_reagents = list("sacid" = 1, "fluorine" = 1, "hydrogen" = 1, "potassium" = 1)
-	result_amount = 4
-	required_temp = 380
-
 /datum/reagent/cholesterol
 	name = "Cholesterol"
 	id = "cholesterol"
