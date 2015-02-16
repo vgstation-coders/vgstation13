@@ -229,7 +229,7 @@
 				L.Stun(5)
 				L.Weaken(5)
 				L.apply_effect(STUTTER, 5)
-				playsound(src, SOUND_SWING_HIT, 50, 0, 0)
+				playsound(src, SOUND_LIST_SWING_HIT, 50, 0, 0)
 		if(3)
 			for(var/mob/living/L in S)
 				if(L.flags & INVULNERABLE)

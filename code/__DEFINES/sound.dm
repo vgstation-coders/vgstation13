@@ -10,6 +10,7 @@
 #define SOUND_CLOWN_STEP_TWO "clown_step_two"
 #define SOUND_CROWBAR "crowbar"
 #define SOUND_DECONSTRUCT "deconstruct"
+#define SOUND_DRINK "drink"
 #define SOUND_EXPLOSION_ONE "explosion_one"
 #define SOUND_EXPLOSION_TWO "explosion_two"
 #define SOUND_EXPLOSION_THREE "explosion_three"
@@ -69,8 +70,8 @@
 #define SOUND_WELDER_TWO "welder_two"
 #define SOUND_WIRECUTTER "wirecutter"
 
-#define SOUND_CLOWN_STEP "list_clown_step"
-#define SOUND_EXPLOSION "list_explosion"
+#define SOUND_LIST_CLOWN_STEP "list_clown_step"
+#define SOUND_LIST_EXPLOSION "list_explosion"
 #define SOUND_GIB "list_gib"
 #define SOUND_HISS "list_hiss"
 #define SOUND_MECH_STEP "list_mech_step"
@@ -80,7 +81,7 @@
 #define SOUND_RUSTLE "list_rustle"
 #define SOUND_SHATTER "list_shatter"
 #define SOUND_SPARK "list_spark"
-#define SOUND_SWING_HIT "list_swing_hit"
+#define SOUND_LIST_SWING_HIT "list_swing_hit"
 #define SOUND_LIST_WELDER "list_welder"
 
 /world/New()
@@ -102,6 +103,7 @@ proc/gen_sounds()
 	sounds[SOUND_CLOWN_STEP_TWO] = ('sound/effects/clownstep2.ogg')
 	sounds[SOUND_CROWBAR] = sound('sound/items/Crowbar.ogg')
 	sounds[SOUND_DECONSTRUCT] = sound('sound/items/Deconstruct.ogg')
+	sounds[SOUND_DRINK] = sound('sound/items/drink.ogg')
 	sounds[SOUND_EXPLOSION_ONE] = sound('sound/effects/Explosion1.ogg')
 	sounds[SOUND_EXPLOSION_TWO] = sound('sound/effects/Explosion2.ogg')
 	sounds[SOUND_EXPLOSION_THREE] = sound('sound/effects/Explosion3.ogg')
@@ -161,8 +163,8 @@ proc/gen_sounds()
 	sounds[SOUND_WELDER_TWO] = sound('sound/items/Welder2.ogg')
 	sounds[SOUND_WIRECUTTER] = sound('sound/items/Wirecutter.ogg')
 
-	sounds[SOUND_CLOWN_STEP] = list(sounds[SOUND_CLOWN_STEP_ONE], sounds[SOUND_CLOWN_STEP_TWO])
-	sounds[SOUND_EXPLOSION] = list(sounds[SOUND_EXPLOSION_ONE], sounds[SOUND_EXPLOSION_TWO], sounds[SOUND_EXPLOSION_THREE], sounds[SOUND_EXPLOSION_FOUR], sounds[SOUND_EXPLOSION_FIVE], sounds[SOUND_EXPLOSION_SIX])
+	sounds[SOUND_LIST_CLOWN_STEP] = list(sounds[SOUND_CLOWN_STEP_ONE], sounds[SOUND_CLOWN_STEP_TWO])
+	sounds[SOUND_LIST_EXPLOSION] = list(sounds[SOUND_EXPLOSION_ONE], sounds[SOUND_EXPLOSION_TWO], sounds[SOUND_EXPLOSION_THREE], sounds[SOUND_EXPLOSION_FOUR], sounds[SOUND_EXPLOSION_FIVE], sounds[SOUND_EXPLOSION_SIX])
 	sounds[SOUND_GIB] = list(sounds[SOUND_GIB_ONE], sounds[SOUND_GIB_TWO], sounds[SOUND_GIB_THREE])
 	sounds[SOUND_HISS] = list(sounds[SOUND_HISS_ONE], sounds[SOUND_HISS_TWO], sounds[SOUND_HISS_THREE], sounds[SOUND_HISS_FOUR])
 	sounds[SOUND_MECH_STEP] = list(sounds[SOUND_MECH_STEP_ONE], sounds[SOUND_MECH_STEP_TWO])
@@ -172,5 +174,5 @@ proc/gen_sounds()
 	sounds[SOUND_RUSTLE] = list(sounds[SOUND_RUSTLE_ONE], sounds[SOUND_RUSTLE_TWO], sounds[SOUND_RUSTLE_THREE], sounds[SOUND_RUSTLE_FOUR], sounds[SOUND_RUSTLE_FIVE])
 	sounds[SOUND_SHATTER] = list(sounds[SOUND_GLASS_BREAK_ONE], sounds[SOUND_GLASS_BREAK_TWO], sounds[SOUND_GLASS_BREAK_THREE])
 	sounds[SOUND_SPARK] = list(sounds[SOUND_SPARK_ONE], sounds[SOUND_SPARK_TWO], sounds[SOUND_SPARK_THREE], sounds[SOUND_SPARK_FOUR])
-	sounds[SOUND_SWING_HIT] = list(sounds[SOUND_SWING_HIT_ONE], sounds[SOUND_SWING_HIT_TWO], sounds[SOUND_SWING_HIT_THREE])
+	sounds[SOUND_LIST_SWING_HIT] = list(sounds[SOUND_SWING_HIT_ONE], sounds[SOUND_SWING_HIT_TWO], sounds[SOUND_SWING_HIT_THREE])
 	sounds[SOUND_LIST_WELDER] = list(sounds[SOUND_WELDER_ONE], sounds[SOUND_WELDER_TWO])

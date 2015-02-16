@@ -169,7 +169,7 @@
 			spawn(600)
 				R.add_reagent(refill, fillevel)
 
-		playsound(M.loc,'sound/items/drink.ogg', rand(10,50), 1)
+		playsound(M.loc, SOUND_DRINK, rand(10,50), 1)
 		return 1
 
 	return 0
@@ -246,7 +246,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/imbibe(mob/user) //drink the liquid within
 	user << "<span  class='notice'>You swallow a gulp of [src].</span>"
-	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
+	playsound(user.loc, SOUND_DRINK, rand(10,50), 1)
 
 	if(isrobot(user))
 		reagents.remove_any(gulp_size)

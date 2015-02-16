@@ -132,11 +132,11 @@
 		if(H.m_intent == "run")
 			if(footstep > 1)
 				footstep = 0
-				playsound(H, SOUND_CLOWN_STEP, 50, 1) // this will get annoying very fast.
+				playsound(H, SOUND_LIST_CLOWN_STEP, 50, 1) // this will get annoying very fast.
 			else
 				footstep++
 		else
-			playsound(H, SOUND_CLOWN_STEP, 20, 1)
+			playsound(H, SOUND_LIST_CLOWN_STEP, 20, 1)
 
 /obj/item/clothing/shoes/jackboots
 	name = "jackboots"
