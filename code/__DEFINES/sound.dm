@@ -1,4 +1,5 @@
 #define SOUND_AIRLOCK "airlock"
+#define SOUND_ALARM "alarm"
 #define SOUND_BANG "bang"
 #define SOUND_BLADE_SLICE "blade_slice"
 #define SOUND_BLOODY_SLICE "bloody_slice"
@@ -84,6 +85,7 @@ var/list/sounds = list()
 
 proc/gen_sounds()
 	sounds[SOUND_AIRLOCK] = sound('sound/machines/airlock.ogg')
+	sounds[SOUND_ALARM] = sound('sound/machines/Alarm.ogg')
 	sounds[SOUND_BANG] = sound('sound/effects/bang.ogg')
 	sounds[SOUND_BLADE_SLICE] = sound('sound/weapons/bladeslice.ogg')
 	sounds[SOUND_BLOODY_SLICE] = sound('sound/weapons/bloodyslice.ogg')
