@@ -121,7 +121,7 @@ RCD
 
 /obj/item/weapon/rcd/attack_self(mob/user)
 	//Change the mode
-	playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+	playsound(get_turf(src), SOUND_POP, 50, 0)
 	switch(mode)
 		if(1)
 			mode = 2

@@ -52,7 +52,7 @@ RSF
 		return
 
 /obj/item/weapon/rsf/attack_self(mob/user as mob)
-	playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+	playsound(get_turf(src), SOUND_POP, 50, 0)
 	mode++
 	if(mode>modes.len) mode = 1
 	user << "Now dispensing [modes[mode]]!"

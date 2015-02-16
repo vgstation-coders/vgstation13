@@ -56,7 +56,7 @@
 		return
 	if(active_dummy)
 		eject_all()
-		//playsound(get_turf(src), 'sound/effects/pop.ogg', 100, 1, -6)
+		//playsound(get_turf(src), SOUND_POP, 100, 1, -6)
 		del(active_dummy)
 		active_dummy = null
 		usr << "<span class='notice'>You deactivate [src].</span>"
@@ -69,7 +69,7 @@
 		spawn(20) //Stop spamming this shit
 			can_use = 1
 	else
-		//playsound(get_turf(src), 'sound/effects/pop.ogg', 100, 1, -6)
+		//playsound(get_turf(src), SOUND_POP, 100, 1, -6)
 		var/obj/O = new saved_item(src)
 		if(!O)
 			return

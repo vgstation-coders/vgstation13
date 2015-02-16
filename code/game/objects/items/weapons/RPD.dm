@@ -416,7 +416,7 @@ var/global/list/RPD_recipes=list(
 		p_conntype=-1
 		p_dir=1
 		src.spark_system.start()
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(get_turf(src), SOUND_POP, 50, 0)
 		show_menu(usr)
 
 	if(href_list["paintpipes"])
@@ -424,13 +424,13 @@ var/global/list/RPD_recipes=list(
 		p_conntype=-1
 		p_dir=1
 		src.spark_system.start()
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(get_turf(src), SOUND_POP, 50, 0)
 		show_menu(usr)
 
 	if(href_list["set_color"])
 		paint_color=href_list["set_color"]
 		src.spark_system.start()
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(get_turf(src), SOUND_POP, 50, 0)
 		show_menu(usr)
 
 	if(href_list["makepipe"])
@@ -439,7 +439,7 @@ var/global/list/RPD_recipes=list(
 		p_conntype = text2num(href_list["type"])
 		p_class = 0
 		src.spark_system.start()
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(get_turf(src), SOUND_POP, 50, 0)
 		show_menu(usr)
 
 	if(href_list["makemeter"])
@@ -447,7 +447,7 @@ var/global/list/RPD_recipes=list(
 		p_conntype=-1
 		p_dir=1
 		src.spark_system.start()
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(get_turf(src), SOUND_POP, 50, 0)
 		show_menu(usr)
 
 	if(href_list["makegsensor"])
@@ -455,7 +455,7 @@ var/global/list/RPD_recipes=list(
 		p_conntype=-1
 		p_dir=1
 		src.spark_system.start()
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(get_turf(src), SOUND_POP, 50, 0)
 		show_menu(usr)
 
 	if(href_list["dmake"])
@@ -464,7 +464,7 @@ var/global/list/RPD_recipes=list(
 		p_dir = 1
 		p_class = 2
 		src.spark_system.start()
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(get_turf(src), SOUND_POP, 50, 0)
 		show_menu(usr)
 
 

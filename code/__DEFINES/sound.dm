@@ -47,6 +47,7 @@
 #define SOUND_PUNCH_TWO "punch_two"
 #define SOUND_PUNCH_THREE "punch_three"
 #define SOUND_PUNCH_FOUR "punch_four"
+#define SOUND_POP "pop"
 #define SOUND_RATCHET "ratchet"
 #define SOUND_RUSTLE_ONE "rustle_one"
 #define SOUND_RUSTLE_TWO "rustle_two"
@@ -135,6 +136,7 @@ proc/gen_sounds()
 	sounds[SOUND_PAGE_TURN_ONE] = sound('sound/effects/pageturn1.ogg')
 	sounds[SOUND_PAGE_TURN_TWO] = sound('sound/effects/pageturn2.ogg')
 	sounds[SOUND_PHASE_IN] = sound('sound/effects/phasein.ogg')
+	sounds[SOUND_POP] = sound('sound/effects/pop.ogg')
 	sounds[SOUND_PUNCH_MISS] = sound('sound/weapons/punchmiss.ogg')
 	sounds[SOUND_PUNCH_ONE] = sound('sound/weapons/punch1.ogg')
 	sounds[SOUND_PUNCH_TWO] = sound('sound/weapons/punch2.ogg')

@@ -958,7 +958,7 @@
 					user.drop_item()
 					_circuitboard=C
 					C.loc=src
-					playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+					playsound(get_turf(src), SOUND_POP, 50, 0)
 					build++
 					update_icon()
 				return 1
@@ -966,7 +966,7 @@
 			if(istype(W, /obj/item/weapon/crowbar))
 				usr << "You begin to pry out \the [W] into \the [src]."
 				if(do_after(user, 10))
-					playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+					playsound(get_turf(src), SOUND_POP, 50, 0)
 					build--
 					update_icon()
 					var/obj/item/weapon/circuitboard/C
