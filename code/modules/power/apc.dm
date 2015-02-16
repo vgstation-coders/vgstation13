@@ -624,7 +624,7 @@
 		return
 	user.delayNextAttack(8)
 	user.visible_message("\red [user.name] slashes at the [src.name]!", "\blue You slash at the [src.name]!")
-	playsound(get_turf(src), 'sound/weapons/slash.ogg', 100, 1)
+	playsound(get_turf(src), SOUND_SLASH, 100, 1)
 
 	var/allcut = wires.IsAllCut()
 

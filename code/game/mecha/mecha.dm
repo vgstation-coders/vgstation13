@@ -441,12 +441,12 @@
 	if(!prob(src.deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-		playsound(get_turf(src), 'sound/weapons/slash.ogg', 50, 1, -1)
+		playsound(get_turf(src), SOUND_SLASH, 50, 1, -1)
 		user << "<span class='warning'>You slash at the armored suit!</span>"
 		visible_message("<span class='warning'>The [user] slashes at [src.name]'s armor!</span>")
 	else
 		src.log_append_to_last("Armor saved.")
-		playsound(get_turf(src), 'sound/weapons/slash.ogg', 50, 1, -1)
+		playsound(get_turf(src), SOUND_SLASH, 50, 1, -1)
 		user << "\green Your claws had no effect!"
 		src.occupant_message("<span class='notice'>The [user]'s claws are stopped by the armor.</span>")
 		visible_message("<span class='notice'>The [user] rebounds off [src.name]'s armor!</span>")
@@ -466,7 +466,7 @@
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
 		else
 			src.log_append_to_last("Armor saved.")
-			playsound(get_turf(src), 'sound/weapons/slash.ogg', 50, 1, -1)
+			playsound(get_turf(src), SOUND_SLASH, 50, 1, -1)
 			src.occupant_message("<span class='notice'>The [user]'s attack is stopped by the armor.</span>")
 			visible_message("<span class='notice'>The [user] rebounds off [src.name]'s armor!</span>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")

@@ -49,6 +49,7 @@
 #define SOUND_RUSTLE_FOUR "rustle_four"
 #define SOUND_RUSTLE_FIVE "rustle_five"
 #define SOUND_SCREWDRIVER "screwdriver"
+#define SOUND_SLASH "slash"
 #define SOUND_SLIP "slip"
 #define SOUND_SPARK_ONE "spark_one"
 #define SOUND_SPARK_TWO "spark_two"
@@ -133,6 +134,7 @@ proc/gen_sounds()
 	sounds[SOUND_RUSTLE_FOUR] = sound('sound/effects/rustle4.ogg')
 	sounds[SOUND_RUSTLE_FIVE] = sound('sound/effects/rustle5.ogg')
 	sounds[SOUND_SCREWDRIVER] = sound('sound/items/Screwdriver.ogg')
+	sounds[SOUND_SLASH] = sound('sound/weapons/slash.ogg')
 	sounds[SOUND_SLIP] = sound('sound/misc/slip.ogg')
 	sounds[SOUND_SPARK_ONE] = sound('sound/effects/sparks1.ogg')
 	sounds[SOUND_SPARK_TWO] = sound('sound/effects/sparks2.ogg')

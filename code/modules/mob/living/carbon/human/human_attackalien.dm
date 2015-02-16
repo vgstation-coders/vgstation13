@@ -54,7 +54,7 @@
 					M.Weaken(rand(4,5))
 			else
 				if (prob(80))
-					playsound(loc, 'sound/weapons/slash.ogg', 25, 1, -1)
+					playsound(loc, SOUND_SLASH, 25, 1, -1)
 					drop_item()
 					visible_message(text("\red <B>[] disarmed []!</B>", M, src))
 				else

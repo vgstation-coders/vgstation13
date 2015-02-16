@@ -453,7 +453,7 @@
 
 /obj/machinery/turret/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	if(!(stat & BROKEN))
-		playsound(get_turf(src), 'sound/weapons/slash.ogg', 25, 1, -1)
+		playsound(get_turf(src), SOUND_SLASH, 25, 1, -1)
 		visible_message("\red <B>[] has slashed at []!</B>", M, src)
 		src.health -= 15
 		if (src.health <= 0)
