@@ -134,8 +134,9 @@
 	result_amount = 5
 
 /datum/reagent/colorful_reagent/on_mob_life(var/mob/living/M as mob)
-	if(M && isliving(M))
-		M.color = pick(potential_colors)
+	if(M && ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.species.blood_color = pick(potential_colors)
 	..()
 	return
 
