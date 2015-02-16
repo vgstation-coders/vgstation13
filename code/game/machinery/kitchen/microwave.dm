@@ -23,6 +23,7 @@
 	var/list/holdingitems = list()
 	var/limit = 100
 	var/speed_multiplier = 1
+	var/scanning_power = 0
 
 // see code/modules/food/recipes_microwave.dm for recipes
 //Cannot use tools - screwdriver and crowbar for recipes. Or at least fix things before you do
