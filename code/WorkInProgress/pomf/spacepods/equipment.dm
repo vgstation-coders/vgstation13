@@ -101,7 +101,7 @@
 	icon_state = "pod_w_laser"
 	projectile_type = "/obj/item/projectile/beam"
 	shot_cost = 15
-	fire_sound = 'sound/weapons/Laser.ogg'
+	fire_sound = SOUND_LASER_ONE
 	fire_delay = 25
 
 /obj/item/device/spacepod_equipment/weaponry/laser/proc/fire_weapon_system()

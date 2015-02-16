@@ -560,7 +560,7 @@
 	ranged_message = "shoots"
 	ranged_cooldown_cap = 3
 	projectiletype = /obj/item/projectile/beam
-	projectilesound = 'sound/weapons/Laser.ogg'
+	projectilesound = SOUND_LASER_ONE
 	wanted_objects = list(/obj/item/weapon/ore)
 
 /mob/living/simple_animal/hostile/mining_drone/attackby(obj/item/I as obj, mob/user as mob)

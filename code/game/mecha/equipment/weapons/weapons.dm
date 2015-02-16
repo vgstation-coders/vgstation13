@@ -45,7 +45,7 @@
 	icon_state = "mecha_laser"
 	energy_drain = 30
 	projectile = /obj/item/projectile/beam
-	fire_sound = 'sound/weapons/Laser.ogg'
+	fire_sound = SOUND_LASER_ONE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser/heavy
 	equip_cooldown = 15

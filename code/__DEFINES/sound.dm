@@ -29,6 +29,9 @@
 #define SOUND_HISS_TWO "hiss_two"
 #define SOUND_HISS_THREE "hiss_three"
 #define SOUND_HISS_FOUR "hiss_four"
+#define SOUND_LASER_ONE "laser_one"
+#define SOUND_LASER_TWO "laser_two"
+#define SOUND_LASER_THREE "laser_three"
 #define SOUND_MECH_STEP_ONE "mech_step_one"
 #define SOUND_MECH_STEP_TWO "mech_step_two"
 #define SOUND_MOMMI_COMMENT_ONE "mommi_comment_one"
@@ -128,6 +131,9 @@ proc/gen_sounds()
 	sounds[SOUND_HISS_TWO] = sound('sound/voice/hiss2.ogg')
 	sounds[SOUND_HISS_THREE] = sound('sound/voice/hiss3.ogg')
 	sounds[SOUND_HISS_FOUR] = sound('sound/voice/hiss4.ogg')
+	sounds[SOUND_LASER_ONE] = sound('sound/weapons/Laser.ogg')
+	sounds[SOUND_LASER_TWO] = sound('sound/weapons/Laser2.ogg')
+	sounds[SOUND_LASER_THREE] = sound('sound/weapons/laser3.ogg')
 	sounds[SOUND_MECH_STEP_ONE] = sound('sound/mecha/mechstep1.ogg')
 	sounds[SOUND_MECH_STEP_TWO] = sound('sound/mecha/mechstep2.ogg')
 	sounds[SOUND_MOMMI_COMMENT_ONE] = sound('sound/voice/mommi_comment1.ogg')

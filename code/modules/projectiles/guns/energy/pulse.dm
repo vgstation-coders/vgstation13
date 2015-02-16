@@ -22,7 +22,7 @@
 			if(0)
 				mode = 1
 				charge_cost = 100
-				fire_sound = 'sound/weapons/Laser.ogg'
+				fire_sound = SOUND_LASER_ONE
 				user << "\red [src.name] is now set to kill."
 				projectile_type = "/obj/item/projectile/beam"
 			if(1)
