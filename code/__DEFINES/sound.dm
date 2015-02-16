@@ -1,6 +1,45 @@
 #define SOUND_AIRLOCK "airlock"
 #define SOUND_ALARM "alarm"
 #define SOUND_ATTACK_BLOB " attack_blob"
+#define SOUND_AMBIENCE_CHAPEL_ONE "ambience_chapel_one"
+#define SOUND_AMBIENCE_CHAPEL_TWO "ambience_chapel_two"
+#define SOUND_AMBIENCE_CHAPEL_THREE "ambience_chapel_three"
+#define SOUND_AMBIENCE_CHAPEL_FOUR "ambience_chapel_four"
+#define SOUND_AMBIENCE_DERELICT_ONE "ambience_derelict_one"
+#define SOUND_AMBIENCE_DERELICT_TWO "ambience_derelict_two"
+#define SOUND_AMBIENCE_DERELICT_THREE "ambience_derelict_three"
+#define SOUND_AMBIENCE_DERELICT_FOUR "ambience_derelict_four"
+#define SOUND_AMBIENCE_ENGINEERING_ONE "ambience_engineering_one"
+#define SOUND_AMBIENCE_ENGINEERING_TWO "ambience_engineering_two"
+#define SOUND_AMBIENCE_ENGINEERING_THREE "ambience_engineering_three"
+#define SOUND_AMBIENCE_ENGINEERING_FOUR "ambience_engineering_four"
+#define SOUND_AMBIENCE_GENERAL_ONE "ambience_general_one"
+#define SOUND_AMBIENCE_GENERAL_TWO "ambience_general_two"
+#define SOUND_AMBIENCE_GENERAL_THREE "ambience_general_three"
+#define SOUND_AMBIENCE_GENERAL_FOUR "ambience_general_four"
+#define SOUND_AMBIENCE_GENERAL_FIVE "ambience_general_five"
+#define SOUND_AMBIENCE_GENERAL_SIX "ambience_general_six"
+#define SOUND_AMBIENCE_GENERAL_SEVEN "ambience_general_seven"
+#define SOUND_AMBIENCE_GENERAL_EIGHT "ambience_general_eight"
+#define SOUND_AMBIENCE_GENERAL_NINE "ambience_general_nine"
+#define SOUND_AMBIENCE_GENERAL_TEN "ambience_general_ten"
+#define SOUND_AMBIENCE_GENERAL_ELEVEN "ambience_general_eleven"
+#define SOUND_AMBIENCE_GENERAL_TWELVE "ambience_general_twelve"
+#define SOUND_AMBIENCE_GENERAL_THIRTEEN "ambience_general_thirteen"
+#define SOUND_AMBIENCE_GENERAL_FOURTEEN "ambience_general_fourteen"
+#define SOUND_AMBIENCE_GHETTO_BAR "ambience_ghetto_bar"
+#define SOUND_AMBIENCE_MAINTENANCE_SPOOKY_ONE "ambience_maintenance_spooky_one"
+#define SOUND_AMBIENCE_MAINTENANCE_SPOOKY_TWO "ambience_maintenance_spooky_two"
+#define SOUND_AMBIENCE_MALFUNCTION "ambience_malfunction"
+#define SOUND_AMBIENCE_MORGUE_ONE "ambience_morgue_one"
+#define SOUND_AMBIENCE_MORGUE_TWO "ambience_morgue_two"
+#define SOUND_AMBIENCE_MINE "ambience_mine"
+#define SOUND_AMBIENCE_SONG_GAME "ambience_song_game"
+#define SOUND_AMBIENCE_SHIP "ambience_ship"
+#define SOUND_AMBIENCE_SIGNAL "ambience_signal"
+#define SOUND_AMBIENCE_SPACE "ambience_space"
+#define SOUND_AMBIENCE_SPACE_SPOOKY_ONE "ambience_space_spooky_one"
+#define SOUND_AMBIENCE_SPACE_SPOOKY_TWO "ambience_space_spooky_one"
 #define SOUND_BANG "bang"
 #define SOUND_BITE "bite"
 #define SOUND_BLADE_SLICE "blade_slice"
@@ -80,6 +119,15 @@
 #define SOUND_WELDER_TWO "welder_two"
 #define SOUND_WIRECUTTER "wirecutter"
 
+#define SOUND_LIST_AMBIENCE_CHAPEL "list_ambience_chapel"
+#define SOUND_LIST_AMBIENCE_DERELICT "list_ambience_derelict"
+#define SOUND_LIST_AMBIENCE_ENGINEERING "list_ambience_engineering"
+#define SOUND_LIST_AMBIENCE_GENERAL "list_ambience_general"
+#define SOUND_LIST_AMBIENCE_MAINTENANCE_SPOOKY "list_ambience_maintenance_spooky"
+#define SOUND_LIST_AMBIENCE_MORGUE "list_ambience_morgue"
+#define SOUND_LIST_AMBIENCE_MINE "list_ambience_mine"
+#define SOUND_LIST_AMBIENCE_SPACE_SPOOKY "list_ambience_space_spooky"
+#define SOUND_LIST_AMBIENCE_SPACE "list_ambience_space"
 #define SOUND_LIST_CLOWN_STEP "list_clown_step"
 #define SOUND_LIST_EXPLOSION "list_explosion"
 #define SOUND_GIB "list_gib"
@@ -102,6 +150,45 @@
 var/list/sounds = list()
 
 proc/gen_sounds()
+	sounds[SOUND_AMBIENCE_CHAPEL_ONE] = sound('sound/ambience/ambicha1.ogg')
+	sounds[SOUND_AMBIENCE_CHAPEL_TWO] = sound('sound/ambience/ambicha2.ogg')
+	sounds[SOUND_AMBIENCE_CHAPEL_THREE] = sound('sound/ambience/ambicha3.ogg')
+	sounds[SOUND_AMBIENCE_CHAPEL_FOUR] = sound('sound/ambience/ambicha4.ogg')
+	sounds[SOUND_AMBIENCE_DERELICT_ONE] = sound('sound/ambience/derelict1.ogg')
+	sounds[SOUND_AMBIENCE_DERELICT_TWO] = sound('sound/ambience/derelict2.ogg')
+	sounds[SOUND_AMBIENCE_DERELICT_THREE] = sound('sound/ambience/derelict3.ogg')
+	sounds[SOUND_AMBIENCE_DERELICT_FOUR] = sound('sound/ambience/derelict4.ogg')
+	sounds[SOUND_AMBIENCE_ENGINEERING_ONE] = sound('sound/ambience/ambisin1.ogg')
+	sounds[SOUND_AMBIENCE_ENGINEERING_TWO] = sound('sound/ambience/ambisin2.ogg')
+	sounds[SOUND_AMBIENCE_ENGINEERING_THREE] = sound('sound/ambience/ambisin3.ogg')
+	sounds[SOUND_AMBIENCE_ENGINEERING_FOUR] = sound('sound/ambience/ambisin4.ogg')
+	sounds[SOUND_AMBIENCE_GENERAL_ONE] = sound('sound/ambience/ambigen1.ogg')
+	sounds[SOUND_AMBIENCE_GENERAL_TWO] = sound('sound/ambience/ambigen2.ogg')
+	sounds[SOUND_AMBIENCE_GENERAL_THREE] = sound('sound/ambience/ambigen3.ogg')
+	sounds[SOUND_AMBIENCE_GENERAL_FOUR] = sound('sound/ambience/ambigen4.ogg')
+	sounds[SOUND_AMBIENCE_GENERAL_FIVE] = sound('sound/ambience/ambigen5.ogg')
+	sounds[SOUND_AMBIENCE_GENERAL_SIX] = sound('sound/ambience/ambigen6.ogg')
+	sounds[SOUND_AMBIENCE_GENERAL_SEVEN] = sound('sound/ambience/ambigen7.ogg')
+	sounds[SOUND_AMBIENCE_GENERAL_EIGHT] = sound('sound/ambience/ambigen8.ogg')
+	sounds[SOUND_AMBIENCE_GENERAL_NINE] = sound('sound/ambience/ambigen9.ogg')
+	sounds[SOUND_AMBIENCE_GENERAL_TEN] = sound('sound/ambience/ambigen10.ogg')
+	sounds[SOUND_AMBIENCE_GENERAL_ELEVEN] = sound('sound/ambience/ambigen11.ogg')
+	sounds[SOUND_AMBIENCE_GENERAL_TWELVE] = sound('sound/ambience/ambigen12.ogg')
+	sounds[SOUND_AMBIENCE_GENERAL_THIRTEEN] = sound('sound/ambience/ambigen13.ogg')
+	sounds[SOUND_AMBIENCE_GENERAL_FOURTEEN] = sound('sound/ambience/ambigen14.ogg')
+	sounds[SOUND_AMBIENCE_GHETTO_BAR] = sound('sound/ambience/ghetto.ogg')
+	sounds[SOUND_AMBIENCE_MAINTENANCE_SPOOKY_ONE] = sound('sound/ambience/spookymaint1.ogg')
+	sounds[SOUND_AMBIENCE_MAINTENANCE_SPOOKY_TWO] = sound('sound/ambience/spookymaint2.ogg')
+	sounds[SOUND_AMBIENCE_MALFUNCTION] = sound('sound/ambience/ambimalf.ogg')
+	sounds[SOUND_AMBIENCE_MORGUE_ONE] = sound('sound/ambience/ambimo1.ogg')
+	sounds[SOUND_AMBIENCE_MORGUE_TWO] = sound('sound/ambience/ambimo2.ogg')
+	sounds[SOUND_AMBIENCE_MINE] = sound('sound/ambience/ambimine.ogg')
+	sounds[SOUND_AMBIENCE_SONG_GAME] = sound('sound/ambience/song_game.ogg')
+	sounds[SOUND_AMBIENCE_SHIP] = sound('sound/ambience/shipambience.ogg')
+	sounds[SOUND_AMBIENCE_SIGNAL] = sound('sound/ambience/signal.ogg')
+	sounds[SOUND_AMBIENCE_SPACE] = sound('sound/ambience/ambispace.ogg')
+	sounds[SOUND_AMBIENCE_SPACE_SPOOKY_ONE] = sound('sound/ambience/spookyspace1.ogg')
+	sounds[SOUND_AMBIENCE_SPACE_SPOOKY_TWO] = sound('sound/ambience/spookyspace2.ogg')
 	sounds[SOUND_AIRLOCK] = sound('sound/machines/airlock.ogg')
 	sounds[SOUND_ALARM] = sound('sound/machines/Alarm.ogg')
 	sounds[SOUND_ATTACK_BLOB] = sound('sound/effects/attackblob.ogg')
@@ -184,6 +271,15 @@ proc/gen_sounds()
 	sounds[SOUND_WELDER_TWO] = sound('sound/items/Welder2.ogg')
 	sounds[SOUND_WIRECUTTER] = sound('sound/items/Wirecutter.ogg')
 
+	sounds[SOUND_LIST_AMBIENCE_CHAPEL] = list(sounds[SOUND_AMBIENCE_CHAPEL_ONE], sounds[SOUND_AMBIENCE_CHAPEL_TWO], sounds[SOUND_AMBIENCE_CHAPEL_THREE], sounds[SOUND_AMBIENCE_CHAPEL_FOUR])
+	sounds[SOUND_LIST_AMBIENCE_DERELICT] = list(sounds[SOUND_AMBIENCE_DERELICT_ONE], sounds[SOUND_AMBIENCE_DERELICT_TWO], sounds[SOUND_AMBIENCE_DERELICT_THREE], sounds[SOUND_AMBIENCE_DERELICT_FOUR])
+	sounds[SOUND_LIST_AMBIENCE_ENGINEERING] = list(sounds[SOUND_AMBIENCE_ENGINEERING_ONE], sounds[SOUND_AMBIENCE_ENGINEERING_TWO], sounds[SOUND_AMBIENCE_ENGINEERING_THREE], sounds[SOUND_AMBIENCE_ENGINEERING_FOUR])
+	sounds[SOUND_LIST_AMBIENCE_GENERAL] = list(sounds[SOUND_AMBIENCE_GENERAL_ONE], sounds[SOUND_AMBIENCE_GENERAL_TWO], sounds[SOUND_AMBIENCE_GENERAL_THREE], sounds[SOUND_AMBIENCE_GENERAL_FOUR], sounds[SOUND_AMBIENCE_GENERAL_FIVE], sounds[SOUND_AMBIENCE_GENERAL_SIX], sounds[SOUND_AMBIENCE_GENERAL_SEVEN], sounds[SOUND_AMBIENCE_GENERAL_EIGHT], sounds[SOUND_AMBIENCE_GENERAL_NINE], sounds[SOUND_AMBIENCE_GENERAL_TEN], sounds[SOUND_AMBIENCE_GENERAL_ELEVEN], sounds[SOUND_AMBIENCE_GENERAL_TWELVE], sounds[SOUND_AMBIENCE_GENERAL_THIRTEEN], sounds[SOUND_AMBIENCE_GENERAL_FOURTEEN])
+	sounds[SOUND_LIST_AMBIENCE_MAINTENANCE_SPOOKY] = list(sounds[SOUND_AMBIENCE_MAINTENANCE_SPOOKY_ONE], sounds[SOUND_AMBIENCE_MAINTENANCE_SPOOKY_TWO])
+	sounds[SOUND_LIST_AMBIENCE_MORGUE] = list(sounds[SOUND_AMBIENCE_MORGUE_ONE], sounds[SOUND_AMBIENCE_MORGUE_TWO])
+	sounds[SOUND_LIST_AMBIENCE_MINE] = list(sounds[SOUND_AMBIENCE_MINE], sounds[SOUND_AMBIENCE_SONG_GAME])
+	sounds[SOUND_LIST_AMBIENCE_SPACE_SPOOKY] = list(sounds[SOUND_AMBIENCE_SPACE_SPOOKY_ONE], sounds[SOUND_AMBIENCE_SPACE_SPOOKY_TWO])
+	sounds[SOUND_LIST_AMBIENCE_SPACE] = list(sounds[SOUND_AMBIENCE_SPACE], sounds[SOUND_LIST_AMBIENCE_SPACE_SPOOKY])
 	sounds[SOUND_LIST_CLOWN_STEP] = list(sounds[SOUND_CLOWN_STEP_ONE], sounds[SOUND_CLOWN_STEP_TWO])
 	sounds[SOUND_LIST_EXPLOSION] = list(sounds[SOUND_EXPLOSION_ONE], sounds[SOUND_EXPLOSION_TWO], sounds[SOUND_EXPLOSION_THREE], sounds[SOUND_EXPLOSION_FOUR], sounds[SOUND_EXPLOSION_FIVE], sounds[SOUND_EXPLOSION_SIX])
 	sounds[SOUND_GIB] = list(sounds[SOUND_GIB_ONE], sounds[SOUND_GIB_TWO], sounds[SOUND_GIB_THREE])

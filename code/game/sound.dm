@@ -110,10 +110,10 @@ var/const/SURROUND_CAP = 7
 /proc/get_rand_frequency()
 	return rand(32000, 55000) //Frequency stuff only works with 45kbps oggs.
 
-/proc/get_sfx(sound_name)
-	var/sound = sounds[sound_name]
+/proc/get_sfx(filename, repeat = 0, wait = 0, channel = 0, volume = 100)
+	var/sound = sounds[filename]
 
-	world << sound_name
+	world << filename
 
 	if (islist(sound))
 		sound = pick(sound)

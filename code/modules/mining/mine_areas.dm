@@ -2,7 +2,7 @@
 
 /area/mine
 	icon_state = "mining"
-	music = 'sound/ambience/song_game.ogg'
+	music = SOUND_LIST_AMBIENCE_MINE
 
 	general_area = /area/mine
 	general_area_name = "Mining Station"

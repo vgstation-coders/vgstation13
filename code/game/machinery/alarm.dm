@@ -1157,7 +1157,7 @@ FIRE ALARM
 		return
 	areaMaster.firealert()
 	update_icon()
-	//playsound(get_turf(src), 'sound/ambience/signal.ogg', 75, 0)
+	//playsound(get_turf(src), SOUND_AMBIENCE_SIGNAL, 75, 0)
 	return
 
 /obj/machinery/firealarm/New(loc, dir, building)

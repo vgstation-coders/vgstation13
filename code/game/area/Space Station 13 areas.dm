@@ -2,12 +2,12 @@
 
 ### This file contains a list of all the areas in your station. Format is as follows:
 
-/area/CATEGORY/OR/DESCRIPTOR/NAME 	(you can make as many subdivisions as you want)
-	name = "NICE NAME" 				(not required but makes things really nice)
-	icon = "ICON FILENAME" 			(defaults to areas.dmi)
-	icon_state = "NAME OF ICON" 	(defaults to "unknown" (blank))
-	requires_power = 0 				(defaults to 1)
-	music = "music/music.ogg"		(defaults to "music/music.ogg")
+/area/CATEGORY/OR/DESCRIPTOR/NAME			(you can make as many subdivisions as you want)
+	name = "NICE NAME"						(not required but makes things really nice)
+	icon = "ICON FILENAME"					(defaults to areas.dmi)
+	icon_state = "NAME OF ICON" 			(defaults to "unknown" (blank))
+	requires_power = 0 						(defaults to 1)
+	music = SOUND_LIST_AMBIENCE_GENERAL		(see code/__DEFINES/sound.dm)
 
 NOTE: there are two lists of areas in the end of this file: centcom and station itself. Please maintain these lists valid. --rastaf0
 
@@ -39,7 +39,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/power_equip = 1
 	var/power_light = 1
 	var/power_environ = 1
-	var/music = null
+	var/music = SOUND_LIST_AMBIENCE_GENERAL
 	var/used_equip = 0
 	var/used_light = 0
 	var/used_environ = 0
@@ -119,7 +119,8 @@ proc/process_adminbus_teleport_locs()
 /area/station//TODO: make every area in the MAIN station inherit from this.
 	name = "Station"
 
-/area/engineering/
+/area/engineering
+	music = SOUND_LIST_AMBIENCE_ENGINEERING
 
 /area/turret_protected/
 
@@ -159,7 +160,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape
 	name = "\improper Emergency Shuttle"
-	music = "music/escape.ogg"
 
 /area/shuttle/escape/station
 	name = "\improper Emergency Shuttle Station"
@@ -175,7 +175,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod1
 	name = "\improper Escape Pod One"
-	music = "music/escape.ogg"
 
 /area/shuttle/escape_pod1/station
 	icon_state = "shuttle2"
@@ -188,7 +187,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod2
 	name = "\improper Escape Pod Two"
-	music = "music/escape.ogg"
 
 /area/shuttle/escape_pod2/station
 	icon_state = "shuttle2"
@@ -201,7 +199,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod3
 	name = "\improper Escape Pod Three"
-	music = "music/escape.ogg"
 
 /area/shuttle/escape_pod3/station
 	icon_state = "shuttle2"
@@ -214,7 +211,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod5 //Pod 4 was lost to meteors
 	name = "\improper Escape Pod Five"
-	music = "music/escape.ogg"
 
 /area/shuttle/escape_pod5/station
 	icon_state = "shuttle2"
@@ -227,7 +223,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/mining
 	name = "\improper Mining Shuttle"
-	music = "music/escape.ogg"
 
 /area/shuttle/mining/station
 	icon_state = "shuttle2"
@@ -320,7 +315,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/research
 	name = "\improper Research Shuttle"
-	music = "music/escape.ogg"
 
 /area/shuttle/research/station
 	icon_state = "shuttle2"
@@ -734,6 +728,9 @@ proc/process_adminbus_teleport_locs()
 
 //Maintenance
 
+/area/maintenance
+	music = SOUND_LIST_AMBIENCE_MAINTENANCE_SPOOKY
+
 /area/maintenance/fpmaint
 	name = "Fore Port Maintenance"
 	icon_state = "fpmaint"
@@ -813,6 +810,7 @@ proc/process_adminbus_teleport_locs()
 /area/maintenance/ghettobar
 	name = "Ghetto Bar"
 	icon_state = "ghettobar"
+	music = SOUND_AMBIENCE_GHETTO_BAR
 
 //Defficiency
 
@@ -895,13 +893,11 @@ proc/process_adminbus_teleport_locs()
 /area/bridge
 	name = "\improper Bridge"
 	icon_state = "bridge"
-	music = "signal"
 	jammed=1
 
 /area/bridge/meeting_room
 	name = "\improper Heads of Staff Meeting Room"
 	icon_state = "bridge"
-	music = null
 	jammed=0
 
 /area/crew_quarters/captain
@@ -1017,6 +1013,9 @@ proc/process_adminbus_teleport_locs()
 /area/library
  	name = "\improper Library"
  	icon_state = "library"
+
+/area/chapel
+	music = SOUND_LIST_AMBIENCE_CHAPEL
 
 /area/chapel/main
 	name = "\improper Chapel"
@@ -1256,46 +1255,39 @@ proc/process_adminbus_teleport_locs()
 /area/teleporter
 	name = "\improper Teleporter"
 	icon_state = "teleporter"
-	music = "signal"
 	jammed=1
 
 /area/gateway
 	name = "\improper Gateway"
 	icon_state = "teleporter"
-	music = "signal"
 
 /area/AIsattele
 	name = "\improper AI Satellite Teleporter Room"
 	icon_state = "teleporter"
-	music = "signal"
+	music = SOUND_AMBIENCE_MALFUNCTION
 
 //MedBay
 
 /area/medical/medbay
 	name = "Medbay"
 	icon_state = "medbay"
-	music = 'sound/ambience/signal.ogg'
 
 //Medbay is a large area, these additional areas help level out APC load.
 /area/medical/medbay2
 	name = "Medbay"
 	icon_state = "medbay2"
-	music = 'sound/ambience/signal.ogg'
 
 /area/medical/surgery_ghetto
 	name = "Ghetto Surgery"
 	icon_state = "medbay_ghetto"
-	music = 'sound/ambience/signal.ogg'
 
 /area/medical/medbay3
 	name = "Medbay"
 	icon_state = "medbay3"
-	music = 'sound/ambience/signal.ogg'
 
 /area/medical/break_room
 	name = "Medbay Break Room"
 	icon_state = "medbay_break"
-	music = 'sound/ambience/signal.ogg'
 
 /area/medical/patients_rooms
 	name = "\improper Patient's Rooms"
@@ -1702,6 +1694,7 @@ proc/process_adminbus_teleport_locs()
 /area/derelict
 	name = "\improper Derelict Station"
 	icon_state = "storage"
+	music = SOUND_LIST_AMBIENCE_DERELICT
 
 	general_area = /area/derelict
 	general_area_name = "Derelict Station"
@@ -1767,6 +1760,7 @@ proc/process_adminbus_teleport_locs()
 /area/derelict/medical/morgue
 	name = "\improper Derelict Morgue"
 	icon_state = "morgue"
+	music = SOUND_LIST_AMBIENCE_MORGUE
 
 /area/derelict/medical/chapel
 	name = "\improper Derelict Chapel"
@@ -1856,15 +1850,18 @@ proc/process_adminbus_teleport_locs()
 /area/turret_protected/ai_upload
 	name = "\improper AI Upload Chamber"
 	icon_state = "ai_upload"
+	music = SOUND_AMBIENCE_MALFUNCTION
 	jammed=1
 
 /area/turret_protected/ai_upload_foyer
 	name = "AI Upload Access"
 	icon_state = "ai_foyer"
+	music = SOUND_AMBIENCE_MALFUNCTION
 
 /area/turret_protected/ai
 	name = "\improper AI Chamber"
 	icon_state = "ai_chamber"
+	music = SOUND_AMBIENCE_MALFUNCTION
 	jammed=1
 
 /area/turret_protected/aisat
@@ -2010,18 +2007,22 @@ proc/process_adminbus_teleport_locs()
 /area/turret_protected/tcomsat
 	name = "\improper Satellite Entrance"
 	icon_state = "tcomsatlob"
+	music = SOUND_AMBIENCE_SIGNAL
 
 /area/turret_protected/tcomfoyer
 	name = "\improper Telecoms Foyer"
 	icon_state = "tcomsatentrance"
+	music = SOUND_AMBIENCE_SIGNAL
 
 /area/turret_protected/tcomwest
 	name = "\improper Telecommunications Satellite West Wing"
 	icon_state = "tcomsatwest"
+	music = SOUND_AMBIENCE_SIGNAL
 
 /area/turret_protected/tcomeast
 	name = "\improper Telecommunications Satellite East Wing"
 	icon_state = "tcomsateast"
+	music = SOUND_AMBIENCE_SIGNAL
 
 /area/tcommsat/computer
 	name = "\improper Satellite Control Room"
