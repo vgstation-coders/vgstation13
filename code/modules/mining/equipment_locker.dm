@@ -436,7 +436,7 @@
 					L.adjustToxLoss(-3)
 					var/turf/V = get_turf(L) //V for Vomit
 					V.add_vomit_floor(L)
-					playsound(V, 'sound/effects/splat.ogg', 50, 1)
+					playsound(V, SOUND_SPLAT, 50, 1)
 					return
 	return
 

@@ -1103,7 +1103,7 @@
 					src.visible_message("<span class='warning'>[src] hacks up a hairball!</span>","<span class='warning'>You hack up a hairball!</span>")
 				else
 					src.visible_message("<span class='warning'>[src] throws up!</span>","<span class='warning'>You throw up!</span>")
-				playsound(loc, 'sound/effects/splat.ogg', 50, 1)
+				playsound(loc, SOUND_SPLAT, 50, 1)
 
 				var/turf/location = loc
 				if (istype(location, /turf/simulated))

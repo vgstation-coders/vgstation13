@@ -747,7 +747,7 @@ var/global/mulebot_count = 0
 // when mulebot is in the same loc
 /obj/machinery/bot/mulebot/proc/RunOver(var/mob/living/carbon/human/H)
 	src.visible_message("\red [src] drives over [H]!")
-	playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_SPLAT, 50, 1)
 
 	var/damage = rand(5,15)
 	H.apply_damage(2*damage, BRUTE, "head")
@@ -763,7 +763,7 @@ var/global/mulebot_count = 0
 
 /obj/machinery/bot/mulebot/proc/RunOverCreature(var/mob/living/H,var/bloodcolor)
 	src.visible_message("\red [src] drives over [H]!")
-	playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_SPLAT, 50, 1)
 	bloodiness += 4
 	currentBloodColor=bloodcolor // For if species get different blood colors.
 

@@ -660,7 +660,7 @@
 			B.numChildren++
 
 			new /obj/effect/decal/cleanable/vomit(get_turf(src))
-			playsound(loc, 'sound/effects/splat.ogg', 50, 1)
+			playsound(loc, SOUND_SPLAT, 50, 1)
 
 			var/mob/living/simple_animal/borer/nB = new (get_turf(src),by_gamemode=1) // We've already chosen.
 			nB.transfer_personality(O.client)

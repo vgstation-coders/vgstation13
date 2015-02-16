@@ -374,7 +374,7 @@
 	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/muck_start()
-	playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1) // Play a splat sound
+	playsound(get_turf(src), SOUND_SPLAT, 50, 1) // Play a splat sound
 	src.icon_state = "mwbloody1" // Make it look dirty!!
 
 /obj/machinery/microwave/proc/muck_finish()
