@@ -38,6 +38,7 @@
 #define SOUND_MOMMI_COMMENT_EIGHT "mommi_comment_eight"
 #define SOUND_PAGE_TURN_ONE "page_turn_one"
 #define SOUND_PAGE_TURN_TWO "page_turn_two"
+#define SOUND_PHASE_IN "phase_in"
 #define SOUND_PUNCH_MISS "punch_miss"
 #define SOUND_PUNCH_ONE "punch_one"
 #define SOUND_PUNCH_TWO "punch_two"
@@ -124,6 +125,7 @@ proc/gen_sounds()
 	sounds[SOUND_MOMMI_COMMENT_EIGHT] = sound('sound/voice/mommi_comment8.ogg')
 	sounds[SOUND_PAGE_TURN_ONE] = sound('sound/effects/pageturn1.ogg')
 	sounds[SOUND_PAGE_TURN_TWO] = sound('sound/effects/pageturn2.ogg')
+	sounds[SOUND_PHASE_IN] = sound('sound/effects/phasein.ogg')
 	sounds[SOUND_PUNCH_MISS] = sound('sound/weapons/punchmiss.ogg')
 	sounds[SOUND_PUNCH_ONE] = sound('sound/weapons/punch1.ogg')
 	sounds[SOUND_PUNCH_TWO] = sound('sound/weapons/punch2.ogg')

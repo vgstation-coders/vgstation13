@@ -1378,7 +1378,7 @@ It is possible to destroy the net by the occupant or someone else.
 				var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
 				spark_system.set_up(5, 0, M.loc)
 				spark_system.start()
-				playsound(M.loc, 'sound/effects/phasein.ogg', 25, 1)
+				playsound(M.loc, SOUND_PHASE_IN, 25, 1)
 				playsound(M.loc, SOUND_SPARK_TWO, 50, 1)
 				anim(M.loc,M,'icons/mob/mob.dmi',,"phasein",,M.dir)
 				del(src)//Wait for everything to finish, delete the net. Else it will stop everything once net is deleted, including the spawn(0).

@@ -88,7 +88,7 @@ Not sure why this would be useful (it's not) but whatever. Ninjas need their smo
 
 			spawn(0)
 				spark_system.start()
-				playsound(U.loc, 'sound/effects/phasein.ogg', 25, 1)
+				playsound(U.loc, SOUND_PHASE_IN, 25, 1)
 				playsound(U.loc, SOUND_SPARK, 50, 1)
 				anim(U.loc,U,'icons/mob/mob.dmi',,"phasein",,U.dir)
 
@@ -122,7 +122,7 @@ Not sure why this would be useful (it's not) but whatever. Ninjas need their smo
 
 			spawn(0)
 				spark_system.start()
-				playsound(U.loc, 'sound/effects/phasein.ogg', 25, 1)
+				playsound(U.loc, SOUND_PHASE_IN, 25, 1)
 				playsound(U.loc, SOUND_SPARK_TWO, 50, 1)
 				anim(U.loc,U,'icons/mob/mob.dmi',,"phasein",,U.dir)
 
@@ -346,7 +346,7 @@ Or otherwise known as anime mode. Which also happens to be ridiculously powerful
 
 			spawn(0)
 				spark_system.start()
-				playsound(U.loc, 'sound/effects/phasein.ogg', 25, 1)
+				playsound(U.loc, SOUND_PHASE_IN, 25, 1)
 				playsound(U.loc, SOUND_SPARK, 50, 1)
 				anim(U.loc,U,'icons/mob/mob.dmi',,"phasein",,U.dir)
 			s_coold = 1
@@ -420,7 +420,7 @@ This is so anime it hurts. But that's the point.*/
 
 				spawn(0)
 					spark_system.start()
-					playsound(U.loc, 'sound/effects/phasein.ogg', 25, 1)
+					playsound(U.loc, SOUND_PHASE_IN, 25, 1)
 					playsound(U.loc, SOUND_SPARK, 50, 1)
 					anim(U.loc,U,'icons/mob/mob.dmi',,"phasein",,U.dir)
 				s_coold = 1

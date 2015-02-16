@@ -21,7 +21,7 @@
 	del(src)
 
 /obj/item/bluespace_crystal/proc/blink_mob(var/mob/living/L)
-	do_teleport(L, get_turf(L), blink_range, asoundin = 'sound/effects/phasein.ogg')
+	do_teleport(L, get_turf(L), blink_range, asoundin = SOUND_PHASE_IN)
 
 /obj/item/bluespace_crystal/throw_impact(atom/hit_atom)
 	..()

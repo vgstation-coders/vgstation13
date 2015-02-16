@@ -87,7 +87,7 @@
 					M << "[user] activates the power sink!"
 				mode = 2
 				icon_state = "powersink1"
-				playsound(get_turf(src), 'sound/effects/phasein.ogg', 30, 1)
+				playsound(get_turf(src), SOUND_PHASE_IN, 30, 1)
 				processing_objects.Add(src)
 
 			if(2)  //This switch option wasn't originally included. It exists now. --NeoFite

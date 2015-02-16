@@ -55,7 +55,7 @@
 			var/turf/FROM = T // the turf of origin we're travelling FROM
 			var/turf/TO = get_turf(chosen)			 // the turf of origin we're travelling TO
 
-			playsound(TO, 'sound/effects/phasein.ogg', 100, 1)
+			playsound(TO, SOUND_PHASE_IN, 100, 1)
 
 			var/list/flashers = list()
 			for(var/mob/living/carbon/human/M in viewers(TO, null))

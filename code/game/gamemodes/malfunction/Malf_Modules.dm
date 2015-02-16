@@ -169,7 +169,7 @@ rcd light flash thingy on matter drain
 
 	// All clear, place the transformer
 	new /obj/machinery/transformer/conveyor(middle)
-	playsound(middle, 'sound/effects/phasein.ogg', 100, 1)
+	playsound(middle, SOUND_PHASE_IN, 100, 1)
 	src.can_shunt = 0
 	PCT.uses -= 1
 	src << "You cannot shunt anymore."

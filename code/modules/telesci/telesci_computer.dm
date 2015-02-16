@@ -218,7 +218,7 @@
 				/mob/living/simple_animal/hostile/retaliate/clown,
 				/mob/living/simple_animal/hostile/giant_spider/nurse)
 			var/list/hostiles = typesof(/mob/living/simple_animal/hostile) - blocked
-			playsound(L, 'sound/effects/phasein.ogg', 100, 1, extrarange = 3, falloff = 5)
+			playsound(L, SOUND_PHASE_IN, 100, 1, 3, 5)
 			for(var/mob/living/carbon/human/M in viewers(L, null))
 				flick("e_flash", M.flash)
 			var/chosen = pick(hostiles)
