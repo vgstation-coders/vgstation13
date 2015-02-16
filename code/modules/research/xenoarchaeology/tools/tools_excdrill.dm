@@ -7,14 +7,14 @@
 	excavation_amount = 0.5
 	digspeed = 30
 	desc = "Advanced archaeological drill combining ultrasonic excitation and bluespace manipulation to provide extreme precision. The diamond tip is adjustable from 1 to 30 cms."
-	drill_sound = 'sound/weapons/thudswoosh.ogg'
+	drill_sound = SOUND_THUD_SWOOSH
 	drill_verb = "drilling"
 	force = 15.0
 	w_class = 2
 	w_type = RECYK_ELECTRONIC
 	attack_verb = list("drilled")
 	hitsound = 'sound/weapons/circsawhit.ogg'
-	
+
 /obj/item/weapon/pickaxe/excavationdrill/attack_self(mob/user as mob)
 	var/depth = input("Put the desired depth (1-30 centimeters).", "Set Depth", excavation_amount*2) as num
 	if(depth>30 || depth<1)

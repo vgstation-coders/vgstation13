@@ -232,7 +232,7 @@
 
 			LAssailant = M
 
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 			visible_message("<span class='warning'>[M] has grabbed \the [src] passively !</span>")
 
 		else

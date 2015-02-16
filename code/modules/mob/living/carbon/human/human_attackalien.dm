@@ -20,7 +20,7 @@
 			G.synch()
 			LAssailant = M
 
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 			visible_message(text("\red [] has grabbed [] passively!", M, src))
 
 		if(I_HURT)

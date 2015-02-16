@@ -290,7 +290,7 @@
 
 	duration = 10 //used for jump distance here
 
-	cast_sound = 'sound/weapons/thudswoosh.ogg'
+	cast_sound = SOUND_THUD_SWOOSH
 
 /spell/targeted/leap/cast(list/targets, mob/user)
 	for(var/mob/living/target in targets)
@@ -313,7 +313,7 @@
 				failed_leap = 1
 
 			target.visible_message("<span class='warning'><b>[target.name]</b> takes a huge leap!</span>")
-			playsound(target.loc, 'sound/weapons/thudswoosh.ogg', 50, 1)
+			playsound(target.loc, SOUND_THUD_SWOOSH, 50, 1)
 			if(failed_leap)
 				target.Weaken(5)
 				target.Stun(5)

@@ -111,7 +111,7 @@
 			G.synch()
 			LAssailant = M
 
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 			visible_message("\red [M] has grabbed [src] passively!")
 			return 1
 
@@ -246,7 +246,7 @@
 			var/randn = rand(1, 100)
 			if (randn <= 25)
 				apply_effect(4, WEAKEN, run_armor_check(affecting, "melee"))
-				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+				playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 				visible_message("\red <B>[M] has pushed [src]!</B>")
 				M.attack_log += text("\[[time_stamp()]\] <font color='red'>Pushed [src.name] ([src.ckey])</font>")
 				src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been pushed by [M.name] ([M.ckey])</font>")
@@ -287,7 +287,7 @@
 				if(!talked)	//BubbleWrap
 					drop_item()
 					visible_message("\red <B>[M] has disarmed [src]!</B>")
-				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+				playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 				return
 
 

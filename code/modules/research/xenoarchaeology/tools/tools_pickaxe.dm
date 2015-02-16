@@ -10,7 +10,7 @@
 	digspeed = 20
 	desc = "Thick metallic wires for clearing away dust and loose scree (1 centimetre excavation depth)."
 	excavation_amount = 0.5
-	drill_sound = 'sound/weapons/thudswoosh.ogg'
+	drill_sound = SOUND_THUD_SWOOSH
 	drill_verb = "brushing"
 	w_class = 2
 
