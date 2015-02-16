@@ -66,6 +66,10 @@ var/global/list/image/fluidtrack_cache=list()
 	* @param goingdir Direction tracks are going to (or 0).
 	* @param bloodcolor Color of the blood when wet.
 	*/
+/obj/effect/decal/cleanable/blood/tracks/resetVariables()
+	if(!stack) stack = list()
+	else stack.len = 0
+	..("stack")
 /obj/effect/decal/cleanable/blood/tracks/proc/AddTracks(var/list/DNA, var/comingdir, var/goingdir, var/bloodcolor="#A10808")
 	var/updated=0
 	// Shift our goingdir 4 spaces to the left so it's in the GOING bitblock.
@@ -94,6 +98,8 @@ var/global/list/image/fluidtrack_cache=list()
 				// Remove existing stack entry
 				stack.Remove(track)
 			track=new /datum/fluidtrack(b,bloodcolor,t)
+			if(!stack)
+				stack = list()
 			stack.Add(track)
 			setdirs["[b]"]=stack.Find(track)
 			updatedtracks |= b

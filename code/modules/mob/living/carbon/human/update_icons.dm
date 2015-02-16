@@ -139,59 +139,53 @@ Please contact me on #coderbus IRC. ~Carn x
 var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/proc/get_damage_icon_part(damage_state, body_part,species_blood = "")
-	if(damage_icon_parts["[damage_state]/[body_part]/[species_blood]"] == null)
-		var/image/I	= image("icon"='icons/mob/dam_human.dmi', "icon_state"="blank")
-		I.blend_mode = BLEND_MULTIPLY
-		//var/icon/DI = icon('icons/mob/dam_human.dmi', damage_state)			// the damage icon for whole human
-		//DI.Blend(icon('icons/mob/dam_mask.dmi', body_part), ICON_MULTIPLY)	// mask with this organ's pixels
-		var/tbrute = copytext(damage_state,1,2)
-		var/tburn = copytext(damage_state,2)
-		if(text2num(tbrute))
-			var/image/II = image("icon"='icons/mob/dam_human.dmi', "icon_state"="[body_part]_[text2num(tbrute)]0")
-			II.blend_mode = BLEND_MULTIPLY
-			I.overlays	+= II	//we're adding icon_states of the base image as overlays
-		if(text2num(tburn))
-			var/image/II = image("icon"='icons/mob/dam_human.dmi', "icon_state"="[body_part]_0[text2num(tburn)]")
-			II.blend_mode = BLEND_MULTIPLY
-			I.overlays += II
-		//if(species_blood)
-			//DI.Blend(species_blood, ICON_MULTIPLY)							// mask with this species's blood color
-		damage_icon_parts["[damage_state]/[body_part]/[species_blood]"] = I
-		return I
+	var/icon/I = damage_icon_parts["[damage_state]/[body_part]/[species_blood]"]
+	if(!I)
+		var/icon/DI = icon('icons/mob/dam_human.dmi', damage_state)			// the damage icon for whole human
+		DI.Blend(icon('icons/mob/dam_mask.dmi', body_part), ICON_MULTIPLY)	// mask with this organ's pixels
+		if(species_blood)
+			DI.Blend(species_blood, ICON_MULTIPLY)							// mask with this species's blood color
+		damage_icon_parts["[damage_state]/[body_part]/[species_blood]"] = DI
+		return DI
 	else
-		return damage_icon_parts["[damage_state]/[body_part]/[species_blood]"]
+		return I
 
-var/list/overlay_exclusions = list("groin", "l_hand", "r_hand", "l_foot", "r_foot")
 //DAMAGE OVERLAYS
 //constructs damage icon for each organ from mask * damage field and saves it in our overlays_ lists
 /mob/living/carbon/human/UpdateDamageIcon(var/update_icons=1)
 	// first check whether something actually changed about damage appearance
-	var/damage_appearance = ""
-
-	for(var/datum/organ/external/O in organs)
+	/*for(var/datum/organ/external/O in organs)
 		if(O.status & ORGAN_DESTROYED) damage_appearance += "d"
 		else
 			damage_appearance += O.damage_state
+
 
 	if(damage_appearance == previous_damage_appearance)
 		// nothing to do here
 		return
 
 	previous_damage_appearance = damage_appearance
+	*/
 
-	overlays -= obj_overlays[DAMAGE_LAYER]
-	var/obj/Overlays/O = obj_overlays[DAMAGE_LAYER]
-	O.overlays.len = 0
-	O.blend_mode = BLEND_MULTIPLY
+	var/icon/standing = icon('icons/mob/dam_human.dmi', "00")
+
+	var/image/standing_image = image("icon" = standing)
+
 	// blend the individual damage states with our icons
-	for(var/datum/organ/external/OR in organs)
-		if(!(OR.status & ORGAN_DESTROYED))
-			OR.update_icon()
-			if(OR.damage_state == "00" || (OR.icon_name in overlay_exclusions)) continue
-			var/image/I = get_damage_icon_part(OR.damage_state, OR.icon_name, (species.blood_color == "#A10808" ? "" : species.blood_color))
+	for(var/datum/organ/external/O in organs)
+		if(!(O.status & ORGAN_DESTROYED))
+			O.update_icon()
+			if(O.damage_state == "00") continue
 
-			O.overlays += I
+			var/icon/DI
 
+			DI = get_damage_icon_part(O.damage_state, O.icon_name, (species.blood_color == "#A10808" ? "" : species.blood_color))
+
+			standing_image.overlays += DI
+	var/obj/Overlays/O = obj_overlays[DAMAGE_LAYER]
+	overlays -= O
+	O.overlays.len = 0
+	O.overlays += standing_image
 	overlays += O
 	obj_overlays[DAMAGE_LAYER] = O
 	//overlays_standing[DAMAGE_LAYER]	= standing_image
@@ -326,7 +320,7 @@ var/list/overlay_exclusions = list("groin", "l_hand", "r_hand", "l_foot", "r_foo
 
 	if(f_style && !check_hidden_head_flags(HIDEBEARDHAIR))
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[f_style]
-		if(facial_hair_style && src.species.name in facial_hair_style.species_allowed)
+		if((facial_hair_style) && (src.species.name in facial_hair_style.species_allowed))
 			var/icon/facial_s = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
 			if(facial_hair_style.do_colouration)
 				facial_s.Blend(rgb(r_facial, g_facial, b_facial), ICON_ADD)
@@ -336,7 +330,7 @@ var/list/overlay_exclusions = list("groin", "l_hand", "r_hand", "l_foot", "r_foo
 
 	if(h_style && !check_hidden_head_flags(HIDEHEADHAIR))
 		var/datum/sprite_accessory/hair_style = hair_styles_list[h_style]
-		if(hair_style && src.species.name in hair_style.species_allowed)
+		if((hair_style) && (src.species.name in hair_style.species_allowed))
 			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
 			if(hair_style.do_colouration)
 				hair_s.Blend(rgb(r_hair, g_hair, b_hair), ICON_ADD)
@@ -543,8 +537,8 @@ var/list/overlay_exclusions = list("groin", "l_hand", "r_hand", "l_foot", "r_foo
 		else
 			standing.icon	= 'icons/mob/uniform.dmi'
 
-		var/obj/item/I = w_uniform
-		if(species.name in I.species_fit) //Allows clothes to display differently for multiple species
+		var/obj/item/clothing/under/under_uniform = w_uniform
+		if(species.name in under_uniform.species_fit) //Allows clothes to display differently for multiple species
 			if(species.uniform_icons)
 				standing.icon = species.uniform_icons
 
@@ -557,10 +551,12 @@ var/list/overlay_exclusions = list("groin", "l_hand", "r_hand", "l_foot", "r_foo
 			//standing.overlays	+= bloodsies
 			O.overlays += bloodsies
 
-		if(w_uniform:hastie)	//WE CHECKED THE TYPE ABOVE. THIS REALLY SHOULD BE FINE.
-			var/tie_color = w_uniform:hastie._color
-			if(!tie_color) tie_color = w_uniform:hastie.icon_state
-			O.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[tie_color]")
+		if(under_uniform.accessories.len)	//Runtime operator is not permitted, typecast
+			for(var/obj/item/clothing/accessory/accessory in under_uniform.accessories)
+				var/tie_color = accessory._color
+				if(!tie_color)
+					tie_color = accessory.icon_state
+				O.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[tie_color]")
 
 
 		O.icon = standing
@@ -845,7 +841,7 @@ var/list/overlay_exclusions = list("groin", "l_hand", "r_hand", "l_foot", "r_foo
 
 /mob/living/carbon/human/update_inv_wear_mask(var/update_icons=1)
 	overlays -= obj_overlays[FACEMASK_LAYER]
-	if( wear_mask && ( istype(wear_mask, /obj/item/clothing/mask) || istype(wear_mask, /obj/item/clothing/tie) ) )
+	if( wear_mask && ( istype(wear_mask, /obj/item/clothing/mask) || istype(wear_mask, /obj/item/clothing/accessory) ) )
 		var/obj/Overlays/O = obj_overlays[FACEMASK_LAYER]
 		O.overlays.len = 0
 		wear_mask.screen_loc = ui_mask	//TODO
