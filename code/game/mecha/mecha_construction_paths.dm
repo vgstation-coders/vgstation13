@@ -770,7 +770,7 @@
 			return 0
 
 		if(istype(used_atom, /obj/item/weapon/bikehorn))
-			playsound(holder, 'sound/items/bikehorn.ogg', 50, 1)
+			playsound(holder, SOUND_HORN_BIKE, 50, 1)
 			user.visible_message("HONK!")
 
 		//TODO: better messages.

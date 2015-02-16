@@ -34,7 +34,7 @@
 	melee_damage_lower = 0
 	melee_damage_upper = 0.1
 	attacktext = "honks at"
-	attack_sound = 'sound/items/bikehorn.ogg'
+	attack_sound = SOUND_HORN_BIKE
 
 	min_oxy = 5
 	max_oxy = 0

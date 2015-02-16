@@ -68,7 +68,7 @@
 					else if(dist <= far_dist)
 						var/far_volume = far_dist // Volume is based on explosion size and dist
 						far_volume += (dist <= far_dist * 0.5 ? 50 : 0) // add 50 volume if the mob is pretty close to the explosion
-						M.playsound_local(epicenter, SOUND_EXPLOSION_FAR, far_volume, 1, frequency, falloff = 5)
+						M.playsound_local(epicenter, SOUND_EXPLOSION_FAR, far_volume, 1, frequency, 5)
 
 		var/close = trange(world.view+round(devastation_range,1), epicenter)
 		// to all distanced mobs play a different sound

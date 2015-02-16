@@ -15,7 +15,7 @@
 
 	prime()
 		..()
-		playsound(get_turf(src), 'sound/items/bikehorn.ogg', 25, -3)
+		playsound(get_turf(src), SOUND_HORN_BIKE, 25, -3)
 		/*
 		for(var/turf/simulated/floor/T in view(affected_area, src.loc))
 			if(prob(75))

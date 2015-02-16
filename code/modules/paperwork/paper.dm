@@ -82,7 +82,7 @@
 	if(rigged && (Holiday == "April Fool's Day"))
 		if(spam_flag == 0)
 			spam_flag = 1
-			playsound(loc, 'sound/items/bikehorn.ogg', 50, 1)
+			playsound(loc, SOUND_HORN_BIKE, 50, 1)
 			spawn(20)
 				spam_flag = 0
 	return

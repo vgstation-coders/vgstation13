@@ -190,7 +190,7 @@
 	if(prob(5))
 		// HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONK
 		for(var/mob/living/carbon/M in hearers(src, null))
-			M << sound('sound/items/AirHorn.ogg')
+			M << get_sfx(SOUND_HORN_AIR)
 			if(istype(M, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = M
 				if(H.is_on_ears(/obj/item/clothing/ears/earmuffs))

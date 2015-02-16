@@ -268,7 +268,7 @@
 	name = "Bananium Airlock"
 	icon = 'icons/obj/doors/Doorbananium.dmi'
 	mineral = "clown"
-	soundeffect = 'sound/items/bikehorn.ogg'
+	soundeffect = SOUND_HORN_BIKE
 
 /obj/machinery/door/airlock/sandstone
 	name = "Sandstone Airlock"
