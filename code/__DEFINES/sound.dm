@@ -11,6 +11,7 @@
 #define SOUND_CROWBAR "crowbar"
 #define SOUND_DECONSTRUCT "deconstruct"
 #define SOUND_DRINK "drink"
+#define SOUND_EMP_PULSE "emp_pulse"
 #define SOUND_EXPLOSION_ONE "explosion_one"
 #define SOUND_EXPLOSION_TWO "explosion_two"
 #define SOUND_EXPLOSION_THREE "explosion_three"
@@ -114,6 +115,7 @@ proc/gen_sounds()
 	sounds[SOUND_CROWBAR] = sound('sound/items/Crowbar.ogg')
 	sounds[SOUND_DECONSTRUCT] = sound('sound/items/Deconstruct.ogg')
 	sounds[SOUND_DRINK] = sound('sound/items/drink.ogg')
+	sounds[SOUND_EMP_PULSE] = sound('sound/effects/EMPulse.ogg')
 	sounds[SOUND_EXPLOSION_ONE] = sound('sound/effects/Explosion1.ogg')
 	sounds[SOUND_EXPLOSION_TWO] = sound('sound/effects/Explosion2.ogg')
 	sounds[SOUND_EXPLOSION_THREE] = sound('sound/effects/Explosion3.ogg')

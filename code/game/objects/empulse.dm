@@ -21,7 +21,7 @@ proc/empulse(turf/epicenter, heavy_range, light_range, log=0)
 		light_range = heavy_range
 
 	for(var/mob/M in range(heavy_range, epicenter))
-		M << 'sound/effects/EMPulse.ogg'
+		M << get_sfx(SOUND_EMP_PULSE)
 
 	for(var/atom/T in range(light_range, epicenter))
 		var/distance = get_dist(epicenter, T)

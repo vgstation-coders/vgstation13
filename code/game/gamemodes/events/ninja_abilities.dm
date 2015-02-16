@@ -145,7 +145,7 @@ Not sure why this would be useful (it's not) but whatever. Ninjas need their smo
 	var/C = 250
 	if(!ninjacost(C,1))
 		var/mob/living/carbon/human/U = affecting
-		playsound(U.loc, 'sound/effects/EMPulse.ogg', 60, 2)
+		playsound(U.loc, SOUND_EMP_PULSE, 60, 2)
 		empulse(U, 4, 6) //Procs sure are nice. Slightly weaker than wizard's disable tch.
 		s_coold = 2
 		cell.charge-=(C*10)
