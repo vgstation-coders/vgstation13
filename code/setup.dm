@@ -187,8 +187,6 @@ var/MAX_EXPLOSION_RANGE = 14
 #define SLOT_LEGS = 16384
 
 //FLAGS BITMASK
-#define STOPSPRESSUREDMG 1	//This flag is used on the flags variable for SUIT and HEAD items which stop pressure damage. Note that the flag 1 was previous used as ONBACK, so it is possible for some code to use (flags & 1) when checking if something can be put on your back. Replace this code with (inv_flags & SLOT_BACK) if you see it anywhere
-                                //To successfully stop you taking all pressure damage you must have both a suit and head item with this flag.
 
 #define MASKINTERNALS	8	// mask allows internals
 //#define SUITSPACE		8	// suit protects against space
@@ -1074,3 +1072,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define IGNOREDENSE		64	//are dense turfs ignored in selection?
 #define IGNORESPACE		128	//are space turfs ignored in selection?
 
+//Some alien checks for reagents for alien races.
+#define IS_DIONA 1
+#define IS_VOX 2
+#define IS_PLASMA 3
