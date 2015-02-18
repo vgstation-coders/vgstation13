@@ -205,3 +205,4 @@
 	id = "virusfood"
 	required_reagents = list("water" = 1, "milk" = 1, "oxygen" = 1)
 	results = list("virusfood" = 3)
+
