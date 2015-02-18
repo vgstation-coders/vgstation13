@@ -78,24 +78,20 @@
 /datum/chemical_reaction/acetone
 	name = "acetone"
 	id = "acetone"
-	result = "acetone"
 	required_reagents = list("oil" = 1, "fuel" = 1, "oxygen" = 1)
-	result_amount = 3
+	results = list("acetone" = 3)
 
 /datum/chemical_reaction/carpet
 	name = "carpet"
 	id = "carpet"
-	result = "carpet"
 	required_reagents = list("space_drugs" = 1, "blood" = 1)
-	result_amount = 2
-
+	results = list("carpet" = 2)
 
 /datum/chemical_reaction/oil
 	name = "Oil"
 	id = "oil"
-	result = "oil"
 	required_reagents = list("fuel" = 1, "carbon" = 1, "hydrogen" = 1)
-	result_amount = 3
+	results = list("oil" = 3)
 
 /datum/reagent/oil/reaction_turf(var/turf/T, var/volume)
 	if(T && !istype(T, /turf/space))
@@ -106,17 +102,15 @@
 /datum/chemical_reaction/phenol
 	name = "phenol"
 	id = "phenol"
-	result = "phenol"
 	required_reagents = list("water" = 1, "chlorine" = 1, "oil" = 1)
-	result_amount = 3
+	results = list("phenol" = 3)
 
 /datum/chemical_reaction/ash
 	name = "Ash"
 	id = "ash"
-	result = "ash"
 	required_reagents = list("oil" = 1)
-	result_amount = 1
-	required_temp = 480
+	results = list("ash" = 1)
+	min_temperature = 480
 
 /datum/reagent/colorful_reagent
 	name = "Colorful Reagent"
@@ -129,9 +123,8 @@
 /datum/chemical_reaction/colorful_reagent
 	name = "colorful_reagent"
 	id = "colorful_reagent"
-	result = "colorful_reagent"
 	required_reagents = list("stable_plasma" = 1, "radium" = 1, "space_drugs" = 1, "cryoxadone" = 1, "triple_citrus" = 1)
-	result_amount = 5
+	results = list("colorful_reagent" = 5)
 
 /datum/reagent/colorful_reagent/on_mob_life(var/mob/living/M as mob)
 	if(M && ishuman(M))
@@ -167,9 +160,8 @@
 /datum/chemical_reaction/triple_citrus
 	name = "triple_citrus"
 	id = "triple_citrus"
-	result = "triple_citrus"
 	required_reagents = list("lemonjuice" = 1, "limejuice" = 1, "orangejuice" = 1)
-	result_amount = 5
+	results = list("triple_citrus" = 3) // Was 5 - N3X
 
 /datum/reagent/corn_starch
 	name = "Corn Starch"
@@ -182,10 +174,9 @@
 /datum/chemical_reaction/corn_syrup
 	name = "corn_syrup"
 	id = "corn_syrup"
-	result = "corn_syrup"
 	required_reagents = list("corn_starch" = 1, "sacid" = 1)
-	result_amount = 5
-	required_temp = 374
+	results = list("corn_syrup" = 5)
+	min_temperature = 374
 
 /datum/reagent/corn_syrup
 	name = "Corn Syrup"
@@ -204,10 +195,9 @@
 /datum/chemical_reaction/corgium
 	name = "corgium"
 	id = "corgium"
-	result = "corgium"
 	required_reagents = list("nutriment" = 1, "colorful_reagent" = 1, "strange_reagent" = 1, "blood" = 1)
-	result_amount = 3
-	required_temp = 374
+	results = list("corgium" = 3)
+	min_temperature = 374
 
 /datum/reagent/corgium
 	name = "Corgium"
@@ -232,9 +222,8 @@
 /datum/chemical_reaction/hair_dye
 	name = "hair_dye"
 	id = "hair_dye"
-	result = "hair_dye"
 	required_reagents = list("colorful_reagent" = 1, "radium" = 1, "space_drugs" = 1)
-	result_amount = 5
+	results = list("hair_dye" = 3) // Was 5 - N3X
 
 /datum/reagent/hair_dye/on_mob_life(var/mob/living/M as mob)
 	if(M && ishuman(M))
@@ -272,9 +261,8 @@
 /datum/chemical_reaction/barbers_aid
 	name = "barbers_aid"
 	id = "barbers_aid"
-	result = "barbers_aid"
 	required_reagents = list("carpet" = 1, "radium" = 1, "space_drugs" = 1)
-	result_amount = 5
+	results = list("barbers_aid" = 3) // Was 5 - N3X
 
 /datum/reagent/barbers_aid/reaction_mob(var/mob/living/M, var/volume)
 	if(M && ishuman(M))
@@ -290,16 +278,15 @@
 /datum/reagent/concentrated_barbers_aid
 	name = "Concentrated Barber's Aid"
 	id = "concentrated_barbers_aid"
-	description = "A concentrated solution to hair loss across the world."
+	description = "A concentrated solution to hair loss across the galaxy."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 
 /datum/chemical_reaction/concentrated_barbers_aid
 	name = "concentrated_barbers_aid"
 	id = "concentrated_barbers_aid"
-	result = "concentrated_barbers_aid"
 	required_reagents = list("barbers_aid" = 1, "mutagen" = 1)
-	result_amount = 2
+	results = list("concentrated_barbers_aid" = 2)
 
 /datum/reagent/concentrated_barbers_aid/reaction_mob(var/mob/living/M, var/volume)
 	if(M && ishuman(M))
@@ -320,9 +307,8 @@
 /datum/chemical_reaction/untable_mutagen
 	name = "untable_mutagen"
 	id = "untable_mutagen"
-	result = "untable_mutagen"
 	required_reagents = list("liquid_dark_matter" = 1, "iron" = 1, "mutagen" = 1)
-	result_amount = 3
+	results = list("untable_mutagen" = 3)
 
 /datum/reagent/untable_mutagen/reaction_obj(var/obj/O, var/volume)
 	if(istype(O, /obj/structure/table))
@@ -331,3 +317,4 @@
 		qdel(O)
 	..()
 	return
+

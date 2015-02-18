@@ -226,6 +226,8 @@
 ! Result"}
 	for(var/path in paths)
 		var/datum/chemical_reaction/R = new path()
+		if(!R.document)
+			continue
 		str += {"
 |-
 ! [R.name]"}
@@ -238,8 +240,15 @@
 			str += "</ul>"
 		else
 			str += "\n|''None!''"
-		if(R.result)
-			str += "\n|{{reagent|[R.result_amount]|[R.result]}}"
+		str += "\n|"
+		if(R.results)
+			str += "<ul>"
+			for(var/result_id in R.results)
+				str += "<li>{{reagent|[R.results[result_id]]|[result_id]}}</li>"
+			str += "</ul>"
 		else
-			str += "\n|''(Check [R.type]/on_reaction()!)''"
+			if(R.reaction_description)
+				str += "''(Check [R.type]/on_reaction()!)''"
+			else:
+				str += R.reaction_description
 	text2file(str+"\n|}","chemistry-recipes.wiki")
