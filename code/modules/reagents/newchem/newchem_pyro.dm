@@ -14,10 +14,9 @@
 /datum/chemical_reaction/clf3
 	name = "Chlorine Trifluoride"
 	id = "clf3"
-	result = "clf3"
 	required_reagents = list("chlorine" = 1, "fluorine" = 3)
-	result_amount = 4
-	required_temp = 424
+	min_temperature = 424
+	results = list("clf3" = 4)
 
 /datum/reagent/clf3/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
@@ -71,10 +70,9 @@
 /datum/chemical_reaction/sorium
 	name = "Sorium"
 	id = "sorium"
-	result = "sorium"
 	required_reagents = list("mercury" = 1, "oxygen" = 1, "nitrogen" = 1, "carbon" = 1)
-	result_amount = 4
-	required_temp = 474
+	min_temperature = 474
+	results = list("sorium" = 4)
 
 /datum/reagent/sorium/reaction_turf(var/turf/simulated/T, var/volume)
 	if(istype(T, /turf/simulated/floor/))
@@ -101,10 +99,9 @@
 /datum/chemical_reaction/liquid_dark_matter
 	name = "Liquid Dark Matter"
 	id = "liquid_dark_matter"
-	result = "liquid_dark_matter"
 	required_reagents = list("stable_plasma" = 1, "radium" = 1, "carbon" = 1)
-	result_amount = 3
-	required_temp = 474
+	min_temperature = 474
+	results = list("liquid_dark_matter" = 3)
 
 /datum/reagent/liquid_dark_matter/reaction_turf(var/turf/simulated/T, var/volume)
 	if(istype(T, /turf/simulated/floor/))
@@ -122,7 +119,8 @@
 	goonchem_vortex(T, 0, 5, 6)
 	return
 
-proc/goonchem_vortex(var/turf/simulated/T, var/setting_type, var/range, var/pull_times)
+
+/proc/goonchem_vortex(var/turf/simulated/T, var/setting_type, var/range, var/pull_times)
 	for(var/atom/movable/X in orange(range, T))
 		if(istype(X, /obj/effect))
 			continue  //stop pulling smoke and hotspots please
@@ -147,17 +145,15 @@ proc/goonchem_vortex(var/turf/simulated/T, var/setting_type, var/range, var/pull
 /datum/chemical_reaction/blackpowder
 	name = "Black Powder"
 	id = "blackpowder"
-	result = "blackpowder"
 	required_reagents = list("saltpetre" = 1, "charcoal" = 1, "sulfur" = 1)
-	result_amount = 3
+	results = list("blackpowder" = 3)
 
 /datum/chemical_reaction/blackpowder_explosion
 	name = "Black Powder Kaboom"
 	id = "blackpowder_explosion"
-	result = null
 	required_reagents = list("blackpowder" = 1)
-	result_amount = 1
-	required_temp = 474
+	min_temperature = 474
+	results = list(null = 1)
 
 /datum/chemical_reaction/blackpowder_explosion/on_reaction(var/datum/reagents/holder, var/created_volume)
 	holder.my_atom.visible_message("<span class = 'userdanger'>Sparks come out of [holder.my_atom]!</span>")
@@ -175,3 +171,4 @@ proc/goonchem_vortex(var/turf/simulated/T, var/setting_type, var/range, var/pull
 		ex_severe = 14
 	explosion(T,ex_severe,ex_heavy,ex_light,ex_flash, 1, 1)
 	return
+
