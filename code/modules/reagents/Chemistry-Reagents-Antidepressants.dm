@@ -26,9 +26,8 @@ Methylphenidate
 /datum/chemical_reaction/methylphenidate
 	name = "Methylphenidate"
 	id = "methylphenidate"
-	result = "methylphenidate"
 	required_reagents = list("mindbreaker" = 1, "hydrogen" = 1)
-	result_amount = 3
+	results = list("methylphenidate" = 3)
 
 /datum/reagent/antidepressant/citalopram
 	name = "Citalopram"
@@ -54,9 +53,8 @@ Methylphenidate
 /datum/chemical_reaction/citalopram
 	name = "Citalopram"
 	id = "citalopram"
-	result = "citalopram"
 	required_reagents = list("mindbreaker" = 1, "carbon" = 1)
-	result_amount = 3
+	results = list("citalopram" = 3)
 
 
 /datum/reagent/antidepressant/paroxetine
@@ -87,6 +85,5 @@ Methylphenidate
 /datum/chemical_reaction/paroxetine
 	name = "Paroxetine"
 	id = "paroxetine"
-	result = "paroxetine"
 	required_reagents = list("mindbreaker" = 1, "oxygen" = 1, "inaprovaline" = 1)
-	result_amount = 3
+	results = list("paroxetine" = 3)
