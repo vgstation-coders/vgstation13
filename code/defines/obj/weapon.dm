@@ -350,7 +350,6 @@
 				playsound(usr, SOUND_WIRECUTTER, 50, 1)
 				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(user.loc) //we get back the wire lengths we put in
 				var /obj/item/stack/cable_coil/S = new /obj/item/weapon/screwdriver(user.loc)
->>>>>>> upstream/Bleeding-Edge
 				C.amount = 10
 				C._color = cable_color
 				C.icon_state = "coil_[C._color]"
