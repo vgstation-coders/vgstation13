@@ -70,10 +70,9 @@
 /datum/chemical_reaction/formaldehyde
 	name = "formaldehyde"
 	id = "Formaldehyde"
-	result = "formaldehyde"
 	required_reagents = list("ethanol" = 1, "oxygen" = 1, "silver" = 1)
-	result_amount = 3
-	required_temp = 420
+	min_temperature = 420
+	results = list("formaldehyde" = 3)
 
 /datum/reagent/venom
 	name = "Venom"
@@ -114,10 +113,9 @@
 /datum/chemical_reaction/neurotoxin2
 	name = "neurotoxin2"
 	id = "neurotoxin2"
-	result = "neurotoxin2"
 	required_reagents = list("space_drugs" = 1)
-	result_amount = 1
-	required_temp = 200
+	min_temperature = 200
+	results = list("neurotoxin2" = 1)
 
 /datum/reagent/cyanide
 	name = "Cyanide"
@@ -143,12 +141,11 @@
 /datum/chemical_reaction/cyanide
 	name = "Cyanide"
 	id = "cyanide"
-	result = "cyanide"
 	required_reagents = list("oil" = 1, "ammonia" = 1, "oxygen" = 1)
-	result_amount = 3
-	required_temp = 380
+	min_temperature = 380
+	results = list("cyanide" = 3)
 
-/datum/reagent/questionmark // food poisoning
+/datum/reagent/questionmark
 	name = "Bad Food"
 	id = "????"
 	description = "????"
@@ -198,9 +195,8 @@
 /datum/chemical_reaction/itching_powder
 	name = "Itching Powder"
 	id = "itching_powder"
-	result = "itching_powder"
 	required_reagents = list("fuel" = 1, "ammonia" = 1, "charcoal" = 1)
-	result_amount = 3
+	results = list("itching_powder" = 3)
 
 /datum/reagent/cholesterol
 	name = "Cholesterol"
@@ -251,34 +247,44 @@
 	name = "polonium bottle"
 	desc = "A small bottle. Contains Polonium."
 	icon_state = "bottle16"
-	New()
-		..()
-		reagents.add_reagent("polonium", 60)
+
+/obj/item/weapon/reagent_containers/glass/bottle/polonium/New()
+	..()
+	reagents.add_reagent("polonium", 60)
+
 /obj/item/weapon/reagent_containers/glass/bottle/venom
 	name = "venom bottle"
 	desc = "A small bottle. Contains Venom."
 	icon_state = "bottle16"
-	New()
-		..()
-		reagents.add_reagent("venom", 60)
+
+/obj/item/weapon/reagent_containers/glass/bottle/venom/New()
+	..()
+	reagents.add_reagent("venom", 60)
+
 /obj/item/weapon/reagent_containers/glass/bottle/neurotoxin2
 	name = "neurotoxin bottle"
 	desc = "A small bottle. Contains Neurotoxin."
 	icon_state = "bottle16"
-	New()
-		..()
-		reagents.add_reagent("neurotoxin2", 60)
+
+/obj/item/weapon/reagent_containers/glass/bottle/neurotoxin2/New()
+	..()
+	reagents.add_reagent("neurotoxin2", 60)
+
 /obj/item/weapon/reagent_containers/glass/bottle/formaldehyde
 	name = "formaldehyde bottle"
 	desc = "A small bottle. Contains Formaldehyde."
 	icon_state = "bottle16"
-	New()
-		..()
-		reagents.add_reagent("formaldehyde", 60)
+
+/obj/item/weapon/reagent_containers/glass/bottle/formaldehyde/New()
+	..()
+	reagents.add_reagent("formaldehyde", 60)
+
 /obj/item/weapon/reagent_containers/glass/bottle/histamine
 	name = "histamine bottle"
 	desc = "A small bottle. Contains Histamine."
 	icon_state = "bottle16"
-	New()
-		..()
-		reagents.add_reagent("histamine", 60)
+
+/obj/item/weapon/reagent_containers/glass/bottle/histamine/New()
+	..()
+	reagents.add_reagent("histamine", 60)
+
