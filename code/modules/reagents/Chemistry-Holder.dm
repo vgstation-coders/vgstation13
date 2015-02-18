@@ -312,7 +312,6 @@ datum
 							var/matching_container = 0
 							var/matching_other = 0
 							var/list/multipliers = new/list()
-							var/required_temp = C.required_temp
 
 							for(var/B in C.required_reagents)
 								if(!has_reagent(B, C.required_reagents[B]))	break
@@ -344,11 +343,7 @@ datum
 									if(M.Uses > 0) // added a limit to slime cores -- Muskets requested this
 										matching_other = 1
 
-							if(required_temp == 0)
-								required_temp = chem_temp
-
-
-							if(total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && matching_other && chem_temp >= required_temp)
+							if(total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && matching_other && chem_temp >= C.min_temperature && chem_temp <= C.max_temperature)
 								var/multiplier = min(multipliers)
 								var/preserved_data = null
 								for(var/B in C.required_reagents)
@@ -356,16 +351,16 @@ datum
 										preserved_data = get_data(B)
 									remove_reagent(B, (multiplier * C.required_reagents[B]), safety = 1)
 
-								var/created_volume = C.result_amount*multiplier
-								if(C.result)
-									feedback_add_details("chemical_reaction","[C.result]|[C.result_amount*multiplier]")
-									multiplier = max(multiplier, 1) //this shouldnt happen ...
-									add_reagent(C.result, C.result_amount*multiplier)
-									set_data(C.result, preserved_data)
-
-									//add secondary products
-									for(var/S in C.secondary_results)
-										add_reagent(S, C.result_amount * C.secondary_results[S] * multiplier)
+								var/created_volume = 0
+								if(C.results)
+									for(var/new_chem_id in C.results)
+										var/new_chem_amt = C.results[new_chem_id]
+										feedback_add_details("chemical_reaction","[new_chem_id]|[new_chem_amt*multiplier]")
+										multiplier = max(multiplier, 1) //this shouldnt happen ...
+										var/new_amount = new_chem_amt*multiplier
+										add_reagent(new_chem_id, new_amount)
+										set_data(new_chem_id, preserved_data)
+										created_volume += new_amount
 
 								if	(istype(my_atom, /obj/item/weapon/grenade/chem_grenade))
 									my_atom.visible_message("<span class='caution'>\icon[my_atom] Something comes out of \the [my_atom].</span>")

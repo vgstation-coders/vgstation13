@@ -77,11 +77,10 @@
 /datum/chemical_reaction/crank
 	name = "Crank"
 	id = "crank"
-	result = "crank"
 	required_reagents = list("diphenhydramine" = 1, "ammonia" = 1, "lithium" = 1, "sacid" = 1, "fuel" = 1)
-	result_amount = 5
+	results = list("crank" = 5)
 	mix_message = "The mixture violently reacts, leaving behind a few crystalline shards."
-	required_temp = 390
+	min_temperature = 390
 
 /datum/reagent/krokodil
 	name = "Krokodil"
@@ -134,11 +133,10 @@
 /datum/chemical_reaction/krokodil
 	name = "Krokodil"
 	id = "krokodil"
-	result = "krokodil"
 	required_reagents = list("diphenhydramine" = 1, "morphine" = 1, "cleaner" = 1, "potassium" = 1, "phosphorus" = 1, "fuel" = 1)
-	result_amount = 6
+	results = list("krokodil" = 6)
 	mix_message = "The mixture dries into a pale blue powder."
-	required_temp = 380
+	min_temperature = 380
 
 /datum/reagent/methamphetamine
 	name = "Methamphetamine"
@@ -220,18 +218,15 @@
 /datum/chemical_reaction/methamphetamine
 	name = "methamphetamine"
 	id = "methamphetamine"
-	result = "methamphetamine"
 	required_reagents = list("ephedrine" = 1, "iodine" = 1, "phosphorus" = 1, "hydrogen" = 1)
-	result_amount = 4
-	required_temp = 374
+	min_temperature = 374
 
 /datum/chemical_reaction/methamphetamine_two
 	name = "methamphetamine_two"
 	id = "methamphetamine_two"
-	result = "methamphetamine"
 	required_reagents = list("muriatic_acid" = 1, "caustic_soda" = 1, "hydrogen_chloride" = 1)
-	result_amount = 3
-	required_temp = 374
+	results = list("methamphetamine" = 3)
+	min_temperature = 374
 
 /datum/reagent/muriatic_acid
 	name = "Muriatic Acid"
@@ -243,47 +238,42 @@
 /datum/reagent/caustic_soda
 	name = "Caustic Soda"
 	id = "caustic_soda"
-	description = "Fuck me, we needed those cooks."
+	description = "Not the kind you drink."
 	reagent_state = LIQUID
 	color = "#60A584" // rgb: 96, 165, 132
 
 /datum/reagent/hydrogen_chloride
 	name = "Hydrogen Chloride"
 	id = "hydrogen_chloride"
-	description = "Fuck me, we needed those cooks."
 	reagent_state = LIQUID
 	color = "#60A584" // rgb: 96, 165, 132
 
 /datum/chemical_reaction/muriatic_acid
 	name = "muriatic_acid"
 	id = "muriatic_acid"
-	result = "muriatic_acid"
 	required_reagents = list("mutadone" = 1, "sacid" = 1)
-	result_amount = 2
-	required_temp = 500
+	results = list("muriatic_acid" = 2)
+	min_temperature = 500
 
 /datum/chemical_reaction/caustic_soda
 	name = "caustic_soda"
 	id = "caustic_soda"
-	result = "caustic_soda"
 	required_reagents = list("sacid" = 1, "cola" = 1)
-	result_amount = 2
-	required_temp = 500
+	results = list("caustic_soda" = 2)
+	min_temperature = 500
 
 /datum/chemical_reaction/hydrogen_chloride
 	name = "hydrogen_chloride"
 	id = "hydrogen_chloride"
-	result = "hydrogen_chloride"
 	required_reagents = list("hydrogen" = 1, "chlorine" = 1)
-	result_amount = 2
-	required_temp = 500
+	results = list("hydrogen_chloride" = 2)
+	min_temperature = 500
 
 /datum/chemical_reaction/saltpetre
 	name = "saltpetre"
 	id = "saltpetre"
-	result = "saltpetre"
 	required_reagents = list("potassium" = 1, "nitrogen" = 1, "oxygen" = 3)
-	result_amount = 3
+	results = list("saltpetre" = 3)
 
 /datum/reagent/saltpetre
 	name = "Saltpetre"
@@ -322,10 +312,9 @@
 /datum/chemical_reaction/bath_salts
 	name = "bath_salts"
 	id = "bath_salts"
-	result = "bath_salts"
 	required_reagents = list("????" = 1, "saltpetre" = 1, "nutriment" = 1, "cleaner" = 1, "tea" = 1, "mercury" = 1)
-	result_amount = 6
-	required_temp = 374
+	results = list("bath_salts" = 6)
+	min_temperature = 374
 
 /datum/reagent/bath_salts/overdose_process(var/mob/living/M as mob)
 	M.hallucination += 10
@@ -393,9 +382,8 @@
 /datum/chemical_reaction/aranesp
 	name = "aranesp"
 	id = "aranesp"
-	result = "aranesp"
 	required_reagents = list("epinephrine" = 1, "atropine" = 1, "morphine" = 1)
-	result_amount = 3
+	results = list("aranesp" = 3)
 
 /datum/reagent/aranesp
 	name = "Aranesp"
@@ -421,25 +409,30 @@
 	desc = "Fuck me, we needed those cooks."
 	icon_state = "chem_jug"
 	item_state = "carton"
-	New()
-		..()
-		reagents.add_reagent("muriatic_acid", 50)
+
+/obj/item/weapon/reagent_containers/food/drinks/muriatic_acid/New()
+	..()
+	reagents.add_reagent("muriatic_acid", 50)
+
 /obj/item/weapon/reagent_containers/food/drinks/caustic_soda
 	name = "jug of caustic soda"
 	desc = "Fuck me, we needed those cooks."
 	icon_state = "chem_jug"
 	item_state = "carton"
-	New()
-		..()
-		reagents.add_reagent("caustic_soda", 50)
+
+/obj/item/weapon/reagent_containers/food/drinks/caustic_soda/New()
+	..()
+	reagents.add_reagent("caustic_soda", 50)
+
 /obj/item/weapon/reagent_containers/food/drinks/hydrogen_chloride
 	name = "jug of hydrogen chloride"
 	desc = "Fuck me, we needed those cooks."
 	icon_state = "chem_jug"
 	item_state = "carton"
-	New()
-		..()
-		reagents.add_reagent("hydrogen_chloride", 50)
+
+/obj/item/weapon/reagent_containers/food/drinks/hydrogen_chloride/New()
+	..()
+	reagents.add_reagent("hydrogen_chloride", 50)
 
 /datum/reagent/cocaine
 	name = "Cocaine"
@@ -500,3 +493,4 @@
 		M.adjustBruteLoss(80) // don't do drugs kids
 	..()
 	return
+
