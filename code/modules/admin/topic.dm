@@ -1434,7 +1434,7 @@
 			return
 
 		if(config.allow_admin_rev)
-			L.revive()
+			L.revive(0)
 			message_admins("\red Admin [key_name_admin(usr)] healed / revived [key_name_admin(L)]!", 1)
 			log_admin("[key_name(usr)] healed / Rrvived [key_name(L)]")
 		else
@@ -1761,7 +1761,7 @@
 
 		var/customname = input(src.owner, "Pick a title for the report", "Title") as text|null
 
-		for(var/obj/machinery/faxmachine/F in machines)
+		for(var/obj/machinery/faxmachine/F in allfaxes)
 			if(! (F.stat & (BROKEN|NOPOWER) ) )
 
 				// animate! it's alive!

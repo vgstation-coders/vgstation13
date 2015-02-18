@@ -97,7 +97,7 @@
 	for(var/obj/O in src)
 		if(!istype(O,/obj/item/weapon/circuitboard/clonescanner) && \
 		   !istype(O,/obj/item/weapon/stock_parts) && \
-		   !istype(O,/obj/item/weapon/cable_coil) && \
+		   !istype(O,/obj/item/stack/cable_coil) && \
 		   O != beaker)
 			O.loc = get_turf(src)//Ejects items that manage to get in there (exluding the components and beaker)
 	if(!occupant)
@@ -172,6 +172,8 @@
 	if(L == user)
 		return
 	visible_message("[user] puts [L.name] into the DNA Scanner.", 3)
+	if(user.pulling == L)
+		user.stop_pulling()
 	put_in(L)
 	if(user.pulling == L)
 		user.pulling = null
