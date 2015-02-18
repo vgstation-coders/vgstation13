@@ -223,7 +223,7 @@
 				var/obj/o = target
 				o.reagents.trans_to(src, 200)
 				occupant_message("\blue Extinguisher refilled")
-				playsound(chassis, 'sound/effects/refill.ogg', 50, 1, -6)
+				playsound(chassis, SOUND_REFILL, 50, 1, -6)
 			else
 				if(src.reagents.total_volume > 0)
 					playsound(chassis, 'sound/effects/extinguish.ogg', 75, 1, -3)

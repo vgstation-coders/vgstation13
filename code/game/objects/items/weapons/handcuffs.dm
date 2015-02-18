@@ -23,7 +23,7 @@
 		if(!C.handcuffed)
 			var/turf/p_loc = user.loc
 			var/turf/p_loc_m = C.loc
-			playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+			playsound(get_turf(src), SOUND_HANDCUFFS, 30, 1, -2)
 			for(var/mob/O in viewers(user, null))
 				O.show_message("\red <B>[user] is trying to put handcuffs on [C]!</B>", 1)
 			spawn(30)
@@ -77,7 +77,7 @@
 						playsound(get_turf(src), 'sound/weapons/cablecuff.ogg', 30, 1, -2)
 					else
 						feedback_add_details("handcuffs","H")
-						playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+						playsound(get_turf(src), SOUND_HANDCUFFS, 30, 1, -2)
 					O.process()
 			return
 		else
@@ -94,7 +94,7 @@
 					if(istype(src, /obj/item/weapon/handcuffs/cable))
 						playsound(get_turf(src), 'sound/weapons/cablecuff.ogg', 30, 1, -2)
 					else
-						playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+						playsound(get_turf(src), SOUND_HANDCUFFS, 30, 1, -2)
 					O.process()
 			return
 	return
@@ -152,7 +152,7 @@
 		if(!C.handcuffed)
 			var/turf/user_loc = user.loc
 			var/turf/C_loc = C.loc
-			playsound(loc, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+			playsound(loc, SOUND_HANDCUFFS, 30, 1, -2)
 			C.visible_message("<span class='danger'>[user] is trying to put handcuffs on [C]!</span>", \
 								"<span class='userdanger'>[user] is trying to put handcuffs on [C]!</span>")
 			if(do_after(user, 30))

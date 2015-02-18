@@ -299,7 +299,7 @@
 	if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && !src.welding)
 		O.reagents.trans_to(src, max_fuel)
 		user << "<span class='notice'>Welder refueled</span>"
-		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+		playsound(get_turf(src), SOUND_REFILL, 50, 1, -6)
 		return
 	else if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && src.welding)
 		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")

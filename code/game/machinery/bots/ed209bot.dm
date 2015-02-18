@@ -351,7 +351,7 @@ Auto Patrol: []"},
 
 			if(istype(src.target,/mob/living/carbon))
 				if (!src.target.handcuffed && !src.arrest_type)
-					playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+					playsound(get_turf(src), SOUND_HANDCUFFS, 30, 1, -2)
 					mode = SECBOT_ARREST
 					visible_message("\red <B>[src] is trying to put handcuffs on [src.target]!</B>")
 

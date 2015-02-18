@@ -684,7 +684,7 @@
 					log_game("[user] has revived hostile mob [target] with a lazarus injector")
 				loaded = 0
 				user.visible_message("<span class='notice'>[user] injects [M] with [src], reviving it.</span>")
-				playsound(src,'sound/effects/refill.ogg',50,1)
+				playsound(src, SOUND_REFILL, 50, 1)
 				icon_state = "lazarus_empty"
 				return
 			else

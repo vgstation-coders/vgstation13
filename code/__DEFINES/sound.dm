@@ -65,6 +65,7 @@
 #define SOUND_GLASS_BREAK_ONE "glass_break_one"
 #define SOUND_GLASS_BREAK_TWO "glass_break_two"
 #define SOUND_GLASS_BREAK_THREE "glass_break_three"
+#define SOUND_HANDCUFFS "handcuffs"
 #define SOUND_HISS_ONE "hiss_one"
 #define SOUND_HISS_TWO "hiss_two"
 #define SOUND_HISS_THREE "hiss_three"
@@ -96,6 +97,7 @@
 #define SOUND_PUNCH_FOUR "punch_four"
 #define SOUND_POP "pop"
 #define SOUND_RATCHET "ratchet"
+#define SOUND_REFILL "refill"
 #define SOUND_RUSTLE_ONE "rustle_one"
 #define SOUND_RUSTLE_TWO "rustle_two"
 #define SOUND_RUSTLE_THREE "rustle_three"
@@ -221,6 +223,7 @@ proc/gen_sounds()
 	sounds[SOUND_GLASS_BREAK_ONE] = sound('sound/effects/Glassbr1.ogg')
 	sounds[SOUND_GLASS_BREAK_TWO] = sound('sound/effects/Glassbr2.ogg')
 	sounds[SOUND_GLASS_BREAK_THREE] = sound('sound/effects/Glassbr3.ogg')
+	sounds[SOUND_HANDCUFFS] = sound('sound/weapons/handcuffs.ogg')
 	sounds[SOUND_HISS_ONE] = sound('sound/voice/hiss1.ogg')
 	sounds[SOUND_HISS_TWO] = sound('sound/voice/hiss2.ogg')
 	sounds[SOUND_HISS_THREE] = sound('sound/voice/hiss3.ogg')
@@ -252,6 +255,7 @@ proc/gen_sounds()
 	sounds[SOUND_POLAROID_ONE] = sound('sound/items/polaroid1.ogg')
 	sounds[SOUND_POLAROID_TWO] = sound('sound/items/polaroid2.ogg')
 	sounds[SOUND_RATCHET] = sound('sound/items/Ratchet.ogg')
+	sounds[SOUND_REFILL] = sound('sound/effects/refill.ogg')
 	sounds[SOUND_RUSTLE_ONE] = sound('sound/effects/rustle1.ogg')
 	sounds[SOUND_RUSTLE_TWO] = sound('sound/effects/rustle2.ogg')
 	sounds[SOUND_RUSTLE_THREE] = sound('sound/effects/rustle3.ogg')

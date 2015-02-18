@@ -114,7 +114,7 @@
 				log_game("[user.name] ([user.ckey]) filled \a [src] with [o.reagents.get_reagent_ids()] [hl]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			o.reagents.trans_to(src, 50)
 			user << "<span class='notice'>\The [src] is now refilled</span>"
-			playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+			playsound(get_turf(src), SOUND_REFILL, 50, 1, -6)
 			return
 
 		if(is_open_container() && reagents.total_volume)
@@ -230,7 +230,7 @@
 			var/obj/o = target
 			o.reagents.trans_to(src, 50)
 			user << "<span class='notice'>\The [src] is now refilled</span>"
-			playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+			playsound(get_turf(src), SOUND_REFILL, 50, 1, -6)
 			return
 
 	if (!safety && !is_open_container())
