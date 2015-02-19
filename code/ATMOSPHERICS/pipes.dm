@@ -33,6 +33,8 @@
 		"purple"=PIPE_COLOR_PURPLE
 	)
 
+/obj/machinery/atmospherics/pipe/singularity_pull(/obj/machinery/singularity/S, size)
+	return
 /obj/machinery/atmospherics/pipe/proc/pipeline_expansion()
 	return null
 
@@ -1121,9 +1123,10 @@
 			"[user] unfastens \the [src].", \
 			"<span class='notice'>You have unfastened \the [src].</span>", \
 			"You hear a ratchet.")
-		new /obj/item/pipe(loc, make_from=src)
+		var/obj/item/pipe/P = getFromPool(/obj/item/pipe,loc)
+		P.New(loc, make_from=src) //new /obj/item/pipe(loc, make_from=src)
 		for (var/obj/machinery/meter/meter in T)
 			if (meter.target == src)
 				new /obj/item/pipe_meter(T)
-				del(meter)
+				qdel(meter)
 		qdel(src)

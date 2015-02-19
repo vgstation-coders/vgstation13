@@ -368,6 +368,7 @@
 	src.throw_icon.icon_state = "act_throw_off"
 
 /mob/living/carbon/proc/throw_mode_on()
+	if(gcDestroyed) return
 	src.in_throw_mode = 1
 	src.throw_icon.icon_state = "act_throw_on"
 
@@ -486,8 +487,7 @@
 	else if (W == legcuffed)
 		legcuffed = null
 		update_inv_legcuffed()
-	else
-	 ..()
+	..()
 
 	return
 /*
