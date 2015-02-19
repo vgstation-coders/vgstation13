@@ -63,7 +63,7 @@
 		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return
 
-	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_WELDER_ONE, 50, 1)
 	H.emote("scream",,, 1) // It is painful
 	H.adjustBruteLoss(max(0, 80 - H.getBruteLoss())) // Hurt the human, don't try to kill them though.
 	H.handle_regular_hud_updates() // Make sure they see the pain.

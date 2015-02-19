@@ -295,7 +295,7 @@
 		else
 			user << "<span class='notice'>This cartridge is not yet ready for replacement! Use up the rest of the toner.</span>"
 	else if(istype(O, /obj/item/weapon/wrench))
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(loc, SOUND_RATCHET, 50, 1)
 		anchored = !anchored
 		user << "<span class='notice'>You [anchored ? "wrench" : "unwrench"] [src].</span>"
 	else if(istype(O, /obj/item/weapon/grab)) //For ass-copying.
@@ -328,7 +328,7 @@
 	if(opened)
 		if(istype(O, /obj/item/weapon/crowbar))
 			user << "You begin to remove the circuits from the [src]."
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 			if(do_after(user, 50))
 				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
 				M.state = 2

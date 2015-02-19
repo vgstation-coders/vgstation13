@@ -20,7 +20,7 @@
 	melee_damage_lower = 10
 	melee_damage_upper = 10
 	attacktext = "bites"
-	attack_sound = 'sound/weapons/bite.ogg'
+	attack_sound = SOUND_BITE
 
 	//Space carp aren't affected by atmos.
 	min_oxy = 0

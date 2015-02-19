@@ -1774,7 +1774,7 @@
 					P.info = input
 					P.update_icon()
 
-					playsound(F.loc, "sound/items/polaroid1.ogg", 50, 1)
+					playsound(F.loc, SOUND_POLAROID_ONE, 50, 1)
 
 					// Stamps
 					var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
@@ -2697,7 +2697,7 @@
 				message_admins("[key_name_admin(usr)] improvised himself as Micheal Bay and triggered [round(choice)] fake explosions.")
 				log_admin("[key_name_admin(usr)] improvised himself as Micheal Bay and triggered [round(choice)] fake explosions.")
 				for(var/i = 1 to choice)
-					world << sound('sound/effects/explosionfar.ogg')
+					world << get_sfx(SOUND_EXPLOSION_FAR)
 					sleep(rand(2, 10)) //Sleep 0.2 to 1 second
 		if(usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsfun"]]")

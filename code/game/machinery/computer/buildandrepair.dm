@@ -278,7 +278,7 @@
 	switch(state)
 		if(0)
 			if(istype(P, /obj/item/weapon/wrench))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 				if(do_after(user, 5))
 					user << "<span class='notice'>You wrench the frame into place.</span>"
 					src.anchored = 1
@@ -289,7 +289,7 @@
 				if(!WT.remove_fuel(0, user))
 					user << "The welding tool must be on to complete this task."
 					return 1
-				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_WELDER_ONE, 50, 1)
 				if(do_after(user, 10))
 					if(!src || !WT.isOn()) return
 					user << "<span class='notice'>You deconstruct the frame.</span>"
@@ -300,7 +300,7 @@
 				return 1
 		if(1)
 			if(istype(P, /obj/item/weapon/wrench))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 				if(do_after(user, 20))
 					user << "<span class='notice'>You unfasten the frame.</span>"
 					src.anchored = 0
@@ -309,7 +309,7 @@
 			if(istype(P, /obj/item/weapon/circuitboard) && !circuit)
 				var/obj/item/weapon/circuitboard/B = P
 				if(B.board_type == "computer")
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 					user << "<span class='notice'>You place the circuit board inside the frame.</span>"
 					src.icon_state = "1"
 					src.circuit = P
@@ -319,13 +319,13 @@
 					user << "<span class='warning'>This frame does not accept circuit boards of this type!</span>"
 				return 1
 			if(istype(P, /obj/item/weapon/screwdriver) && circuit)
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				user << "<span class='notice'>You screw the circuit board into place.</span>"
 				src.state = 2
 				src.icon_state = "2"
 				return 1
 			if(istype(P, /obj/item/weapon/crowbar) && circuit)
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 				user << "<span class='notice'>You remove the circuit board.</span>"
 				src.state = 1
 				src.icon_state = "0"
@@ -334,14 +334,14 @@
 				return 1
 		if(2)
 			if(istype(P, /obj/item/weapon/screwdriver) && circuit)
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				user << "<span class='notice'>You unfasten the circuit board.</span>"
 				src.state = 1
 				src.icon_state = "1"
 				return 1
 			if(istype(P, /obj/item/stack/cable_coil))
 				if(P:amount >= 5)
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 					if(do_after(user, 20))
 						if(P)
 							P:amount -= 5
@@ -352,7 +352,7 @@
 				return 1
 		if(3)
 			if(istype(P, /obj/item/weapon/wirecutters))
-				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_WIRECUTTER, 50, 1)
 				user << "<span class='notice'>You remove the cables.</span>"
 				src.state = 2
 				src.icon_state = "2"
@@ -362,7 +362,7 @@
 
 			if(istype(P, /obj/item/stack/sheet/glass/glass))
 				if(P:amount >= 2)
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 					if(do_after(user, 20))
 						if(P)
 							P:use(2)
@@ -372,14 +372,14 @@
 				return 1
 		if(4)
 			if(istype(P, /obj/item/weapon/crowbar))
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 				user << "<span class='notice'>You remove the glass panel.</span>"
 				src.state = 3
 				src.icon_state = "3"
 				new /obj/item/stack/sheet/glass/glass( src.loc, 2 )
 				return 1
 			if(istype(P, /obj/item/weapon/screwdriver))
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				user << "<span class='notice'>You connect the monitor.</span>"
 				var/B = new src.circuit.build_path ( src.loc )
 				if(circuit.powernet) B:powernet = circuit.powernet

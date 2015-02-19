@@ -3,7 +3,7 @@
 	desc = "a basic weapon designed kill with concentrated energy bolts"
 	icon_state = "laser"
 	item_state = "laser"
-	fire_sound = 'sound/weapons/Laser.ogg'
+	fire_sound = SOUND_LASER_ONE
 	w_class = 3.0
 	m_amt = 2000
 	w_type = RECYK_ELECTRONIC

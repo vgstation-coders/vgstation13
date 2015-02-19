@@ -179,7 +179,7 @@
 				message = "<B>[src]</B> beeps at [param]."
 			else
 				message = "<B>[src]</B> beeps."
-			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 50, 0)
+			playsound(get_turf(src), SOUND_TWO_BEEP, 50, 0)
 			m_type = VISIBLE
 
 		if("ping")
@@ -230,7 +230,7 @@
 				message = "<B>[src]</B> cheerily vocalizes at [param]."
 			else
 				message = "<B>[src]</B> vocalizes."
-			playsound(src, get_sfx("mommicomment"),50, 0)
+			playsound(src, SOUND_MOMMI_COMMENT, 50, 0)
 			m_type = VISIBLE
 
 		else

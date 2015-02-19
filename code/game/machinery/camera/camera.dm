@@ -121,7 +121,7 @@ var/list/camera_names=list()
 		return
 	status = 0
 	visible_message("<span class='warning'>\The [user] slashes at [src]!</span>")
-	playsound(get_turf(src), 'sound/weapons/slash.ogg', 100, 1)
+	playsound(get_turf(src), SOUND_SLASH, 100, 1)
 	icon_state = "[initial(icon_state)]1"
 	add_hiddenprint(user)
 	deactivate(user,0)
@@ -179,7 +179,7 @@ var/list/camera_names=list()
 		spark_system.set_up(5, 0, loc)
 		spark_system.start()
 		playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
-		playsound(loc, "sparks", 50, 1)
+		playsound(loc, SOUND_SPARK, 50, 1)
 		visible_message("<span class='notice'>The camera has been sliced apart by [] with an energy blade!</span>")
 		del(src)
 	else
@@ -195,7 +195,7 @@ var/list/camera_names=list()
 				add_hiddenprint(user)
 			else
 				visible_message("<span class='warning'> \The [src] deactivates!</span>")
-			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_WIRECUTTER, 100, 1)
 			icon_state = "[initial(icon_state)]1"
 			add_hiddenprint(user)
 		else
@@ -204,7 +204,7 @@ var/list/camera_names=list()
 				add_hiddenprint(user)
 			else
 				visible_message("<span class='warning'> \the [src] reactivates!</span>")
-			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_WIRECUTTER, 100, 1)
 			icon_state = initial(icon_state)
 			add_hiddenprint(user)
 	// now disconnect anyone using the camera
@@ -290,7 +290,7 @@ var/list/camera_names=list()
 
 	// Do after stuff here
 	user << "<span class='notice'>You start to weld the [src].</span>"
-	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_WELDER_ONE, 50, 1)
 	WT.eyecheck(user)
 	busy = 1
 	if(do_after(user, 100))

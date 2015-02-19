@@ -61,7 +61,7 @@
 	if(shattered)	return
 	shattered = 1
 	icon_state = "mirror_broke"
-	playsound(src, "shatter", 70, 1)
+	playsound(src, SOUND_SHATTER, 70, 1)
 	desc = "Oh no, seven years of bad luck!"
 
 
@@ -83,7 +83,7 @@
 			stack.use(2)
 			shattered = 0
 			icon_state = "mirror"
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 80, 1)
+			playsound(get_turf(src), SOUND_DECONSTRUCT, 80, 1)
 
 	else if(shattered)
 		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)

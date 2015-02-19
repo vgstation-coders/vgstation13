@@ -212,7 +212,7 @@
 		else
 			M.LAssailant = user
 
-		playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
+		playsound(loc, SOUND_BLADE_SLICE, 50, 1, -1)
 
 		M.eye_blurry += force/7
 		if(prob(20))

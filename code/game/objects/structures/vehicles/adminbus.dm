@@ -220,7 +220,6 @@
 				if(passengers.len < MAX_CAPACITY)
 					capture_mob(B)
 		if(2)
-			var/hit_sound = list('sound/weapons/genhit1.ogg','sound/weapons/genhit2.ogg','sound/weapons/genhit3.ogg')
 			for(var/mob/living/L in S)
 				if(L.flags & INVULNERABLE)
 					continue
@@ -230,13 +229,13 @@
 				L.Stun(5)
 				L.Weaken(5)
 				L.apply_effect(STUTTER, 5)
-				playsound(src, pick(hit_sound), 50, 0, 0)
+				playsound(src, SOUND_LIST_SWING_HIT, 50, 0, 0)
 		if(3)
 			for(var/mob/living/L in S)
 				if(L.flags & INVULNERABLE)
 					continue
 				L.gib()
-				playsound(src, 'sound/weapons/bloodyslice.ogg', 50, 0, 0)
+				playsound(src, SOUND_BLOODY_SLICE, 50, 0, 0)
 			for(var/obj/machinery/bot/B in S)
 				if(B.flags & INVULNERABLE)
 					continue

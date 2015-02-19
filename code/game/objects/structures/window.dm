@@ -221,12 +221,12 @@
 	if(istype(W, /obj/item/weapon/screwdriver))
 		if(reinf && state >= 1)
 			state = 3 - state
-			playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+			playsound(loc, SOUND_SCREWDRIVER, 75, 1)
 			user << (state == 1 ? "<span class='notice'>You have unfastened the window from the frame.</span>" : "<span class='notice'>You have fastened the window to the frame.</span>")
 		else if(reinf && state == 0)
 			anchored = !anchored
 			update_nearby_icons()
-			playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+			playsound(loc, SOUND_SCREWDRIVER, 75, 1)
 			user << (anchored ? "<span class='notice'>You have fastened the frame to the floor.</span>" : "<span class='notice'>You have unfastened the frame from the floor.</span>")
 			if(!anchored)
 				var/pdiff=performWallPressureCheck(src.loc)
@@ -236,7 +236,7 @@
 		else if(!reinf)
 			anchored = !anchored
 			update_nearby_icons()
-			playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+			playsound(loc, SOUND_SCREWDRIVER, 75, 1)
 			user << (anchored ? "<span class='notice'>You have fastened the window to the floor.</span>" : "<span class='notice'>You have unfastened the window.</span>")
 			if(!anchored)
 				var/pdiff=performWallPressureCheck(src.loc)
@@ -245,10 +245,10 @@
 					log_admin("Window with pdiff [pdiff] deanchored by [user.real_name] ([user.ckey]) at [loc]!")
 	else if(istype(W, /obj/item/weapon/crowbar) && reinf && state <= 1)
 		state = 1 - state
-		playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
+		playsound(loc, SOUND_CROWBAR, 75, 1)
 		user << (state ? "<span class='notice'>You have pried the window into the frame.</span>" : "<span class='notice'>You have pried the window out of the frame.</span>")
 	else if(istype(W, /obj/item/weapon/weldingtool) && !anchored && (!state || !reinf))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 		user << "<span class='notice'>Now disassembling the window...</span>"
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
@@ -352,7 +352,7 @@
 	density = 0
 	update_nearby_tiles()
 	if(loc)
-		playsound(get_turf(src), "shatter", 70, 1)
+		playsound(get_turf(src), SOUND_SHATTER, 70, 1)
 	update_nearby_icons()
 	..()
 

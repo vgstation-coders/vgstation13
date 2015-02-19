@@ -113,7 +113,7 @@
 		return
 	if(istype(C, /obj/item/weapon/wrench))
 		user << "<span class='notice'>Removing rods...</span>"
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 80, 1)
+		playsound(get_turf(src), SOUND_RATCHET, 80, 1)
 		if(do_after(user, 30))
 			new /obj/item/stack/rods(src, 2)
 			ChangeTurf(/turf/simulated/floor)
@@ -381,7 +381,7 @@
 			return 0
 		if(istype(C, /obj/item/weapon/screwdriver))
 			user << "<span class='notice'>You begin undoing the screws holding the catwalk together.</span>"
-			playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
+			playsound(src, SOUND_SCREWDRIVER, 80, 1)
 			if(do_after(user, 30))
 				user << "<span class='notice'>You finish taking taking the catwalk apart.</span>"
 				new /obj/item/stack/rods(src, 2)

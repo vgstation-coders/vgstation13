@@ -113,7 +113,7 @@ RCD
 		user.drop_item()
 		del(W)
 		matter += 10
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_CLICK, 50, 1)
 		user << "<span class='notice'>The RCD now holds [matter]/[max_matter] matter-units.</span>"
 		desc = "A RCD. It currently holds [matter]/[max_matter] matter-units."
 		return
@@ -121,7 +121,7 @@ RCD
 
 /obj/item/weapon/rcd/attack_self(mob/user)
 	//Change the mode
-	playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+	playsound(get_turf(src), SOUND_POP, 50, 0)
 	switch(mode)
 		if(1)
 			mode = 2
@@ -143,7 +143,7 @@ RCD
 			return
 
 /obj/item/weapon/rcd/proc/activate()
-	playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 
 
 /obj/item/weapon/rcd/afterattack(atom/A, mob/user)
@@ -169,7 +169,7 @@ RCD
 			if(istype(A, /turf/simulated/floor))
 				if(checkResource(wall_cost, user))
 					user << "Building Wall ..."
-					playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_CLICK, 50, 1)
 					if(do_after(user, 20))
 						if(!useResource(wall_cost, user)) return 0
 						activate()
@@ -180,7 +180,7 @@ RCD
 		if(2)
 			if(checkResource(airlock_cost, user))
 				user << "Building Airlock..."
-				playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_CLICK, 50, 1)
 				if(do_after(user, 50))
 					if(!useResource(airlock_cost, user)) return 0
 					if(locate(/obj/machinery/door/airlock) in A) return 0
@@ -197,7 +197,7 @@ RCD
 					return 0
 				if(checkResource(decon_cost, user))
 					user << "Deconstructing Wall..."
-					playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_CLICK, 50, 1)
 					if(do_after(user, 40))
 						if(!useResource(decon_cost, user)) return 0
 						activate()
@@ -208,7 +208,7 @@ RCD
 			if(istype(A, /turf/simulated/floor))
 				if(checkResource(decon_cost, user))
 					user << "Deconstructing Floor..."
-					playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_CLICK, 50, 1)
 					if(do_after(user, 50))
 						if(!useResource(decon_cost, user)) return 0
 						activate()
@@ -219,7 +219,7 @@ RCD
 			if(istype(A, /obj/machinery/door/airlock))
 				if(checkResource((decon_cost * 2), user))
 					user << "Deconstructing Airlock..."
-					playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_CLICK, 50, 1)
 					if(do_after(user, 50))
 						if(!useResource((decon_cost * 2), user)) return 0
 						activate()

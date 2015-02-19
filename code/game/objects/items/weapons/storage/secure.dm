@@ -45,7 +45,7 @@
 				spark_system.set_up(5, 0, src.loc)
 				spark_system.start()
 				playsound(get_turf(src), 'sound/weapons/blade1.ogg', 50, 1)
-				playsound(get_turf(src), "sparks", 50, 1)
+				playsound(get_turf(src), SOUND_SPARK, 50, 1)
 				user << "You slice through the lock on [src]."
 			else
 				user << "You short out the lock on [src]."
@@ -160,7 +160,7 @@
 	if ((src.loc == user) && (src.locked == 1))
 		usr << "<span class='warning'>[src] is locked and cannot be opened!</span>"
 	else if ((src.loc == user) && (!src.locked))
-		playsound(get_turf(src), "rustle", 50, 1, -5)
+		playsound(get_turf(src), SOUND_RUSTLE, 50, 1, -5)
 		if (user.s_active)
 			user.s_active.close(user) //Close and re-open
 		src.show_to(user)

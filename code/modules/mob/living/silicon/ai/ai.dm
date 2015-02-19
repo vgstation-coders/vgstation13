@@ -442,7 +442,7 @@ var/list/ai_list = list()
 		else //harm
 			var/damage = rand(10, 20)
 			if (prob(90))
-				playsound(loc, 'sound/weapons/slash.ogg', 25, 1, -1)
+				playsound(loc, SOUND_SLASH, 25, 1, -1)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("\red <B>[] has slashed at []!</B>", M, src), 1)

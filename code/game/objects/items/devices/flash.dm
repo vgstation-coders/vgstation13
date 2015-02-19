@@ -71,7 +71,7 @@
 			user << "<span class='warning'>*click* *click*</span>"
 			return
 
-	playsound(get_turf(user), 'sound/weapons/flash.ogg', 100, 1)
+	playsound(get_turf(user), SOUND_FLASH, 100, 1)
 
 	var/flashfail = FALSE
 
@@ -150,7 +150,7 @@
 		else	//can only use it  5 times a minute
 			user.show_message("<span class='warning'>*click* *click*</span>", 2)
 			return
-	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
+	playsound(get_turf(src), SOUND_FLASH, 100, 1)
 	flick("flash2", src)
 	if(user && isrobot(user))
 		spawn(0)

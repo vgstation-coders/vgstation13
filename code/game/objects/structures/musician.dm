@@ -428,7 +428,7 @@
 /obj/structure/device/piano/attackby(obj/item/O as obj, mob/user as mob)
 	if (istype(O, /obj/item/weapon/wrench))
 		if (anchored)
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 			user << "\blue You begin to loosen \the [src]'s casters..."
 			if (do_after(user, 40))
 				user.visible_message( \
@@ -437,7 +437,7 @@
 					"You hear ratchet.")
 				src.anchored = 0
 		else
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 			user << "\blue You begin to tighten \the [src] to the floor..."
 			if (do_after(user, 20))
 				user.visible_message( \

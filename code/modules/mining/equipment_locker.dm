@@ -387,7 +387,7 @@
 		var/obj/effect/portal/jaunt_tunnel/J = new /obj/effect/portal/jaunt_tunnel(get_turf(src))
 		J.target = chosen_beacon
 		try_move_adjacent(J)
-		playsound(src,'sound/effects/sparks4.ogg',50,1)
+		playsound(src,SOUND_SPARK_FOUR,50,1)
 		del(src) //Single-use
 
 /obj/effect/portal/jaunt_tunnel
@@ -436,7 +436,7 @@
 					L.adjustToxLoss(-3)
 					var/turf/V = get_turf(L) //V for Vomit
 					V.add_vomit_floor(L)
-					playsound(V, 'sound/effects/splat.ogg', 50, 1)
+					playsound(V, SOUND_SPLAT, 50, 1)
 					return
 	return
 
@@ -489,7 +489,7 @@
 		return
 	if(istype(proj_turf, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = proj_turf
-		playsound(src,'sound/effects/sparks4.ogg',50,1)
+		playsound(src,SOUND_SPARK_FOUR,50,1)
 		M.GetDrilled()
 		spawn(5)
 			del(src)
@@ -500,7 +500,7 @@
 			name = "strong resonance field"
 			resonance_damage = 60
 		spawn(50)
-			playsound(src,'sound/effects/sparks4.ogg',50,1)
+			playsound(src,SOUND_SPARK_FOUR,50,1)
 			if(creator)
 				for(var/mob/living/L in src.loc)
 					add_logs(creator, L, "used a resonator field on", object="resonator")
@@ -560,7 +560,7 @@
 	ranged_message = "shoots"
 	ranged_cooldown_cap = 3
 	projectiletype = /obj/item/projectile/beam
-	projectilesound = 'sound/weapons/Laser.ogg'
+	projectilesound = SOUND_LASER_ONE
 	wanted_objects = list(/obj/item/weapon/ore)
 
 /mob/living/simple_animal/hostile/mining_drone/attackby(obj/item/I as obj, mob/user as mob)
@@ -684,7 +684,7 @@
 					log_game("[user] has revived hostile mob [target] with a lazarus injector")
 				loaded = 0
 				user.visible_message("<span class='notice'>[user] injects [M] with [src], reviving it.</span>")
-				playsound(src,'sound/effects/refill.ogg',50,1)
+				playsound(src, SOUND_REFILL, 50, 1)
 				icon_state = "lazarus_empty"
 				return
 			else

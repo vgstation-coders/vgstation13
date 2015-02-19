@@ -528,7 +528,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 /obj/item/device/pda/ai/attack_self(mob/user as mob)
 	if ((honkamt > 0) && (prob(60)))//For clown virus.
 		honkamt--
-		playsound(loc, 'sound/items/bikehorn.ogg', 30, 1)
+		playsound(loc, SOUND_HORN_BIKE, 30, 1)
 	return
 
 
@@ -1172,7 +1172,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					scanmode = 4
 			if("Honk")
 				if ( !(last_honk && world.time < last_honk + 20) )
-					playsound(loc, 'sound/items/bikehorn.ogg', 50, 1)
+					playsound(loc, SOUND_HORN_BIKE, 50, 1)
 					last_honk = world.time
 			if("Gas Scan")
 				if(scanmode == 5)
@@ -1331,7 +1331,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 	if ((honkamt > 0) && (prob(60)))//For clown virus.
 		honkamt--
-		playsound(loc, 'sound/items/bikehorn.ogg', 30, 1)
+		playsound(loc, SOUND_HORN_BIKE, 30, 1)
 
 	if(U.machine == src && href_list["skiprefresh"]!="1")//Final safety.
 		attack_self(U)//It auto-closes the menu prior if the user is not in range and so on.
@@ -1415,7 +1415,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					ai.show_message("<i>Intercepted message from <b>[who]</b>: [t]</i>")
 
 		if (!P.silent)
-			playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
+			playsound(P.loc, SOUND_TWO_BEEP, 50, 1)
 		for (var/mob/O in hearers(3, P.loc))
 			if(!P.silent) O.show_message(text("\icon[P] *[P.ttone]*"))
 		//Search for holder of the PDA.
@@ -1729,7 +1729,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 		M.stop_pulling()
 		M << "\blue You slipped on the PDA!"
-		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+		playsound(get_turf(src), SOUND_SLIP, 50, 1, -3)
 		M.Stun(8)
 		M.Weaken(5)
 

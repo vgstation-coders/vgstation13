@@ -46,7 +46,7 @@
 		s.set_up(5, 1, src)
 		s.start()
 		return 1
-	playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+	playsound(get_turf(src), SOUND_SPARK_FOUR, 75, 1)
 	return
 
 /obj/machinery/shield_capacitor/wrenchAnchor(mob/user)

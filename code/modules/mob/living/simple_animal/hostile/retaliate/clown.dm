@@ -22,7 +22,7 @@
 	melee_damage_lower = 10
 	melee_damage_upper = 10
 	attacktext = "attacks"
-	attack_sound = 'sound/items/bikehorn.ogg'
+	attack_sound = SOUND_HORN_BIKE
 
 	min_oxy = 5
 	max_oxy = 0

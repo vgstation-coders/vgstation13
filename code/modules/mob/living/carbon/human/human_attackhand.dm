@@ -46,7 +46,7 @@
 
 			var/damage = rand(0, 9)
 			if(!damage)
-				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+				playsound(loc, SOUND_PUNCH_MISS, 25, 1, -1)
 				visible_message("\red <B>[M] has attempted to punch [src]!</B>")
 				return 0
 			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
@@ -54,7 +54,7 @@
 
 			if(M_HULK in M.mutations)			damage += 5
 
-			playsound(loc, "punch", 25, 1, -1)
+			playsound(loc, SOUND_PUNCH, 25, 1, -1)
 
 			visible_message("\red <B>[M] has punched [src]!</B>")
 
@@ -111,7 +111,7 @@
 			G.synch()
 			LAssailant = M
 
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 			visible_message("\red [M] has grabbed [src] passively!")
 			return 1
 
@@ -141,7 +141,7 @@
 					break
 			if(can_bite)
 				if ((prob(75) && health > 0))
-					playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
+					playsound(loc, SOUND_BITE, 50, 1, -1)
 					for(var/mob/O in viewers(src, null))
 						O.show_message("\red <B>[M.name] has bit [name]!</B>", 1)
 					var/damage = rand(1, 5)
@@ -172,7 +172,7 @@
 			var/damage = rand(0, M.species.max_hurt_damage)//BS12 EDIT // edited again by Iamgoofball to fix species attacks
 			if(!damage)
 				if(M.species.attack_verb == "punch")
-					playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+					playsound(loc, SOUND_PUNCH_MISS, 25, 1, -1)
 				else
 					playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
 
@@ -187,7 +187,7 @@
 
 
 			if(M.species.attack_verb == "punch")
-				playsound(loc, "punch", 25, 1, -1)
+				playsound(loc, SOUND_PUNCH, 25, 1, -1)
 			else
 				playsound(loc, 'sound/weapons/slice.ogg', 25, 1, -1)
 
@@ -246,7 +246,7 @@
 			var/randn = rand(1, 100)
 			if (randn <= 25)
 				apply_effect(4, WEAKEN, run_armor_check(affecting, "melee"))
-				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+				playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 				visible_message("\red <B>[M] has pushed [src]!</B>")
 				M.attack_log += text("\[[time_stamp()]\] <font color='red'>Pushed [src.name] ([src.ckey])</font>")
 				src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been pushed by [M.name] ([M.ckey])</font>")
@@ -287,11 +287,11 @@
 				if(!talked)	//BubbleWrap
 					drop_item()
 					visible_message("\red <B>[M] has disarmed [src]!</B>")
-				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+				playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 				return
 
 
-			playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+			playsound(loc, SOUND_PUNCH_MISS, 25, 1, -1)
 			visible_message("\red <B>[M] attempted to disarm [src]!</B>")
 	return
 

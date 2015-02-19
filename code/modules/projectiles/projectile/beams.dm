@@ -175,7 +175,7 @@ var/list/beam_master = list()
 	on_hit(atom/target, blocked = 0)
 		if(istype(target, /mob/living))
 			var/mob/living/M = target
-			M.playsound_local(src, "explosion", 50, 1)
+			M.playsound_local(src, SOUND_LIST_EXPLOSION, 50, 1)
 		..()
 
 /obj/item/projectile/beam

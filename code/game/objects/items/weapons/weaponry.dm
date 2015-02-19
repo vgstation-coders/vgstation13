@@ -83,7 +83,7 @@
 		return(BRUTELOSS)
 
 /obj/item/weapon/sord/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	playsound(get_turf(src), 'sound/weapons/bladeslice.ogg', 50, 1, -1)
+	playsound(get_turf(src), SOUND_BLADE_SLICE, 50, 1, -1)
 	user.adjustBruteLoss(0.5)
 	return ..()
 
@@ -92,7 +92,7 @@
 	desc = "What are you standing around staring at this for? Get to killing!"
 	icon_state = "claymore"
 	item_state = "claymore"
-	hitsound = "sound/weapons/bloodyslice.ogg"
+	hitsound = SOUND_BLOODY_SLICE
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
@@ -113,7 +113,7 @@
 	..()
 
 /obj/item/weapon/claymore/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	playsound(loc, 'sound/weapons/bloodyslice.ogg', 50, 1, -1)
+	playsound(loc, SOUND_BLOODY_SLICE, 50, 1, -1)
 	return ..()
 
 /obj/item/weapon/katana
@@ -121,7 +121,7 @@
 	desc = "Woefully underpowered in D20"
 	icon_state = "katana"
 	item_state = "katana"
-	hitsound = "sound/weapons/bloodyslice.ogg"
+	hitsound = SOUND_BLOODY_SLICE
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT | SLOT_BACK
@@ -138,7 +138,7 @@
 		return 1
 
 /obj/item/weapon/katana/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	playsound(loc, 'sound/weapons/bloodyslice.ogg', 50, 1, -1)
+	playsound(loc, SOUND_BLOODY_SLICE, 50, 1, -1)
 	return ..()
 
 /obj/item/weapon/harpoon
@@ -147,7 +147,7 @@
 	desc = "Tharr she blows!"
 	icon_state = "harpoon"
 	item_state = "harpoon"
-	hitsound = "sound/weapons/bladeslice.ogg"
+	hitsound = SOUND_BLADE_SLICE
 	force = 20
 	throwforce = 15
 	w_class = 3

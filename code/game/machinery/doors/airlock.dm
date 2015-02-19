@@ -50,7 +50,7 @@
 	var/hasShocked = 0 //Prevents multiple shocks from happening
 	autoclose = 1
 	var/busy = 0
-	soundeffect = 'sound/machines/airlock.ogg'
+	soundeffect = SOUND_AIRLOCK
 
 	emag_cost = 1 // in MJ
 
@@ -268,7 +268,7 @@
 	name = "Bananium Airlock"
 	icon = 'icons/obj/doors/Doorbananium.dmi'
 	mineral = "clown"
-	soundeffect = 'sound/items/bikehorn.ogg'
+	soundeffect = SOUND_HORN_BIKE
 
 /obj/machinery/door/airlock/sandstone
 	name = "Sandstone Airlock"
@@ -1018,7 +1018,7 @@ About the new airlock wires panel:
 		else
 			beingcrowbarred = 0
 		if( beingcrowbarred && (operating == -1 || density && welded && !operating && src.panel_open && (!src.arePowerSystemsOn() || stat & NOPOWER) && !src.locked) )
-			playsound(src.loc, 'sound/items/Crowbar.ogg', 100, 1)
+			playsound(src.loc, SOUND_CROWBAR, 100, 1)
 			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 			// TODO: refactor the called proc
 			if (do_after(user, 40))
@@ -1170,7 +1170,7 @@ About the new airlock wires panel:
 				if (istype(loc, /turf/simulated))
 					T.add_blood(L)
 
-	playsound(get_turf(src),soundeffect, 30, 1)
+	playsound(get_turf(src), soundeffect, 30, 1)
 
 	for(var/turf/T in loc)
 		var/obj/structure/window/W = locate(/obj/structure/window) in T

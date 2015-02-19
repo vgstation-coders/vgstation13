@@ -119,7 +119,7 @@
 			if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
 				return
 			if(health > 0)
-				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
+				playsound(loc, SOUND_BITE, 50, 1, -1)
 				visible_message("<span class='danger'>\The [M] has bit \the [src]!</span>")
 				adjustBruteLoss(rand(1, 3))
 				updatehealth()
@@ -254,7 +254,7 @@
 
 			LAssailant = M
 
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 			visible_message("<span class='warning'>[M] has grabbed \the [src] passively!</span>")
 
 		if(I_HURT)
@@ -267,7 +267,7 @@
 						step_away(src, M, 15)
 						sleep(3)
 						step_away(src, M, 15)
-				playsound(loc, "punch", 25, 1, -1)
+				playsound(loc, SOUND_PUNCH, 25, 1, -1)
 				visible_message("<span class='danger'>[M] has punched \the [src] !</span>")
 				if(damage > 9 ||prob(5))//Regular humans have a very small chance of weakening an alien.
 					Weaken(1, 5)
@@ -275,22 +275,22 @@
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
-				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+				playsound(loc, SOUND_PUNCH_MISS, 25, 1, -1)
 				visible_message("<span class='danger'>[M] has attempted to punch \the [src] !</span>")
 
 		if(I_DISARM)
 			if(!lying)
 				if(prob(5)) //Very small chance to push an alien down.
 					Weaken(2)
-					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+					playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 					visible_message("<span class='danger'>[M] has pushed down \the [src] !</span>")
 				else
 					if(prob(50))
 						drop_item()
-						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+						playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 						visible_message("<span class='danger'>[M] has disarmed \the [src] !</span>")
 					else
-						playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+						playsound(loc, SOUND_PUNCH_MISS, 25, 1, -1)
 						visible_message("<span class='danger'>[M] has attempted to disarm \the [src] !</span>")
 	return
 
@@ -322,7 +322,7 @@ In all, this is a lot like the monkey code. /N
 			visible_message("<span class='notice'>[M] nuzzles [src] trying to wake it up !</span>")
 		else
 			if(health > 0)
-				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
+				playsound(loc, SOUND_BITE, 50, 1, -1)
 				var/damage = rand(1, 3)
 				visible_message("<span class='danger'>\The [M] has bit [src]!</span>")
 				adjustBruteLoss(damage)

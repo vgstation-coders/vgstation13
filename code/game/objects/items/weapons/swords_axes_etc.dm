@@ -48,7 +48,7 @@
 */
 	if (user.a_intent == I_HURT)
 		if(!..()) return
-		playsound(get_turf(src), "swing_hit", 50, 1, -1)
+		playsound(get_turf(src), SOUND_LIST_SWING_HIT, 50, 1, -1)
 		if (M.stuttering < 8 && (!(M_HULK in M.mutations))  /*&& (!istype(H:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
 			M.stuttering = 8
 		M.Stun(8)
@@ -135,7 +135,7 @@
 		if (user.a_intent == I_HURT)
 			if(!..()) return
 			if(!isrobot(target))
-				playsound(get_turf(src), "swing_hit", 50, 1, -1)
+				playsound(get_turf(src), SOUND_LIST_SWING_HIT, 50, 1, -1)
 				//target.Stun(4)	//naaah
 				target.Weaken(4)
 		else

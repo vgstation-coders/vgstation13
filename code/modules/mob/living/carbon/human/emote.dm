@@ -608,7 +608,7 @@
 					if(!miming)
 						message = "<b>[src]</b> [fart]."
 						if(mind && mind.assigned_role == "Clown")
-							playsound(get_turf(src), pick('sound/items/bikehorn.ogg','sound/items/AirHorn.ogg'), 50, 1)
+							playsound(get_turf(src), SOUND_LIST_HORN, 50, 1)
 						else
 							playsound(get_turf(src), 'sound/misc/fart.ogg', 50, 1)
 					else

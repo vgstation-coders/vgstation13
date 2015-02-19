@@ -351,7 +351,7 @@ Auto Patrol: []"},
 
 			if(istype(src.target,/mob/living/carbon))
 				if (!src.target.handcuffed && !src.arrest_type)
-					playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+					playsound(get_turf(src), SOUND_HANDCUFFS, 30, 1, -2)
 					mode = SECBOT_ARREST
 					visible_message("\red <B>[src] is trying to put handcuffs on [src.target]!</B>")
 
@@ -1024,7 +1024,7 @@ Auto Patrol: []"},
 
 		if(8)
 			if( istype(W, /obj/item/weapon/screwdriver) )
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 100, 1)
 				var/turf/T = get_turf(user)
 				user << "<span class='notice'>Now attaching the gun to the frame...</span>"
 				sleep(40)

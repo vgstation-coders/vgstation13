@@ -48,7 +48,7 @@
 /obj/machinery/door_control/emag(mob/user)
 	req_access = list()
 	req_one_access = list()
-	playsound(get_turf(src), "sparks", 100, 1)
+	playsound(get_turf(src), SOUND_SPARK, 100, 1)
 
 /obj/machinery/door_control/attackby(obj/item/weapon/W, mob/user as mob)
 	..()

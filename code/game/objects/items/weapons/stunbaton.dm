@@ -91,7 +91,7 @@
 	if(bcell && bcell.charge >= hitcost)
 		status = !status
 		user << "<span class='notice'>[src] is now [status ? "on" : "off"].</span>"
-		playsound(loc, "sparks", 75, 1, -1)
+		playsound(loc, SOUND_SPARK, 75, 1, -1)
 		update_icon()
 	else
 		status = 0
@@ -118,7 +118,7 @@
 
 	if(user.a_intent == I_HURT)
 		..()
-		playsound(loc, "swing_hit", 50, 1, -1)
+		playsound(loc, SOUND_LIST_SWING_HIT, 50, 1, -1)
 
 	else if(!status)
 		L.visible_message("<span class='attack'>[L] has been prodded with the [src] by [user]. Luckily it was off.</span>")

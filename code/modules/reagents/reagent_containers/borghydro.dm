@@ -82,7 +82,7 @@
 		user << "<span class='notice'>[transferred] units injected. [reagents.total_volume] units remaining.</span>"
 
 /obj/item/weapon/reagent_containers/borghypo/attack_self(mob/user as mob)
-	playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0) // change the mode
+	playsound(get_turf(src), SOUND_POP, 50, 0) // change the mode
 
 	if(++mode > reagent_list.len)
 		mode = 1

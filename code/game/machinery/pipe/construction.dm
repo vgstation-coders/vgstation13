@@ -453,7 +453,7 @@ var/global/list/nlist = list( \
 			P=new /obj/machinery/atmospherics/pipe/manifold4w/insulated(src.loc)
 
 	if(P.buildFrom(usr,src))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 		user.visible_message( \
 			"[user] fastens \the [src].", \
 			"\blue You have fastened \the [src].", \
@@ -486,7 +486,7 @@ var/global/list/nlist = list( \
 		user << "\red You need to fasten it to a pipe"
 		return 1
 	new/obj/machinery/meter( src.loc )
-	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 	user << "\blue You have fastened the meter to the pipe"
 	del(src)
 
@@ -505,6 +505,6 @@ var/global/list/nlist = list( \
 	if (!istype(W, /obj/item/weapon/wrench))
 		return ..()
 	new/obj/machinery/air_sensor( src.loc )
-	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 	user << "\blue You have fastened the gas sensor"
 	del(src)

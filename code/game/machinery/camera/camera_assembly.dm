@@ -31,7 +31,7 @@
 		if(0)
 			// State 0
 			if(iswrench(W) && isturf(src.loc))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 				user << "You wrench the assembly into place."
 				anchored = 1
 				state = 1
@@ -49,7 +49,7 @@
 				return
 
 			else if(iswrench(W))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 				user << "You unattach the assembly from it's place."
 				anchored = 0
 				update_icon()
@@ -77,7 +77,7 @@
 		if(3)
 			// State 3
 			if(isscrewdriver(W))
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 
 				var/input = strip_html(input(usr, "Which networks would you like to connect this camera to? Seperate networks with a comma. No Spaces!\nFor example: SS13,Security,Secret ", "Set Network", "SS13"))
 				if(!input)
@@ -113,7 +113,7 @@
 			else if(iswirecutter(W))
 
 				new/obj/item/stack/cable_coil(get_turf(src), 2)
-				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_WIRECUTTER, 50, 1)
 				user << "You cut the wires from the circuits."
 				state = 2
 				return
@@ -131,7 +131,7 @@
 		var/obj/U = locate(/obj) in upgrades
 		if(U)
 			user << "You unattach an upgrade from the assembly."
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 			U.loc = get_turf(src)
 			upgrades -= U
 		return
@@ -156,7 +156,7 @@
 		return 0
 
 	user << "<span class='notice'>You start to weld the [src]..</span>"
-	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_WELDER_ONE, 50, 1)
 	WT.eyecheck(user)
 	busy = 1
 	if(do_after(user, 20))

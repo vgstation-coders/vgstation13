@@ -73,7 +73,7 @@
 /obj/structure/snow/attack_hand(mob/user)
 	if(snow_amount != SNOWCOVERING_FULL)
 		return
-	playsound(get_turf(src), "rustle", 50, 1)
+	playsound(get_turf(src), SOUND_RUSTLE, 50, 1)
 	user << "<span class='notice'>You start digging the snow with your hands.</span>"
 	if(do_after(user,30))
 		snow_amount = SNOWCOVERING_MEDIUM
@@ -265,7 +265,7 @@
 	qdel(src)
 
 /obj/item/stack/sheet/snow/throw_at(atom/target, range, speed)
-	playsound(src.loc, 'sound/weapons/punchmiss.ogg', 50, 1)
+	playsound(src.loc, SOUND_PUNCH_MISS, 50, 1)
 	..()
 
 /obj/item/stack/sheet/snow/throw_impact(atom/hit_atom)
@@ -275,12 +275,12 @@
 			C.stuttering = 1
 		C.Weaken(1)
 		C.Stun(1)
-		playsound(C.loc, "swing_hit", 50, 1)
+		playsound(C.loc, SOUND_LIST_SWING_HIT, 50, 1)
 		if(C.bodytemperature >= 265)
 			C.bodytemperature -= 5
 	else if(istype(hit_atom,/mob/living/simple_animal/hostile/retaliate/snowman))
 		var/mob/living/simple_animal/hostile/retaliate/snowman/S = hit_atom
-		playsound(S.loc, "swing_hit", 50, 1)
+		playsound(S.loc, SOUND_LIST_SWING_HIT, 50, 1)
 		if(S.enemies.len)
 			if(prob(10))
 				S.enemies = list()

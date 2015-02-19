@@ -48,7 +48,7 @@
 	desc = "You can be totally screwy with this."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "screwdriver"
-	hitsound = 'sound/weapons/toolhit.ogg'
+	hitsound = SOUND_TOOL_HIT
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1
@@ -135,7 +135,7 @@
 	desc = "This cuts wires."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "cutters"
-	hitsound = 'sound/weapons/toolhit.ogg'
+	hitsound = SOUND_TOOL_HIT
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1
@@ -175,7 +175,7 @@
 	name = "welding tool"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "welder"
-	hitsound = 'sound/weapons/toolhit.ogg'
+	hitsound = SOUND_TOOL_HIT
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
@@ -262,7 +262,7 @@
 				src.force = 3
 				src.damtype = "brute"
 				src.icon_state = "welder"
-				src.hitsound = "sound/weapons/toolhit.ogg"
+				src.hitsound = SOUND_TOOL_HIT
 				src.welding = 0
 			processing_objects.Remove(src)
 			return
@@ -299,7 +299,7 @@
 	if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && !src.welding)
 		O.reagents.trans_to(src, max_fuel)
 		user << "<span class='notice'>Welder refueled</span>"
-		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+		playsound(get_turf(src), SOUND_REFILL, 50, 1, -6)
 		return
 	else if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && src.welding)
 		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
@@ -499,7 +499,7 @@
 	desc = "Used to hit floors"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "crowbar"
-	hitsound = "sound/weapons/toolhit.ogg"
+	hitsound = SOUND_TOOL_HIT
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT

@@ -651,7 +651,7 @@ Status: []<BR>"},
 	else
 		icon_state = "[lasercolor]orange_target_prism"
 	if(sound)
-		playsound(get_turf(src), 'sound/weapons/Taser.ogg', 75, 1)
+		playsound(get_turf(src), SOUND_TASER_ONE, 75, 1)
 	var/obj/item/projectile/A
 	if(emagged)
 		A = new eprojectile( loc )
@@ -698,14 +698,14 @@ Status: []<BR>"},
 	switch(build_step)
 		if(0) // first step
 			if(istype(W, /obj/item/weapon/wrench) && !anchored)
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 				user << "\blue You secure the external bolts."
 				anchored = 1
 				build_step = 1
 				return
 
 			else if(istype(W, /obj/item/weapon/crowbar) && !anchored)
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
+				playsound(get_turf(src), SOUND_CROWBAR, 75, 1)
 				user << "You dismantle the turret construction."
 				//new /obj/item/stack/sheet/metal( loc, 5)
 				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, loc)
@@ -725,7 +725,7 @@ Status: []<BR>"},
 					return
 
 			else if(istype(W, /obj/item/weapon/wrench))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 75, 1)
 				user << "You unfasten the external bolts."
 				anchored = 0
 				build_step = 0
@@ -734,7 +734,7 @@ Status: []<BR>"},
 
 		if(2)
 			if(istype(W, /obj/item/weapon/wrench))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 				user << "\blue You bolt the metal armor into place."
 				build_step = 3
 				return
@@ -746,7 +746,7 @@ Status: []<BR>"},
 					user << "\red You need more fuel to complete this task."
 					return
 
-				playsound(get_turf(src), pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
+				playsound(get_turf(src), SOUND_LIST_WELDER, 50, 1)
 				if(do_after(user, 20))
 					if(!src || !WT.remove_fuel(5, user)) return
 					build_step = 1
@@ -769,7 +769,7 @@ Status: []<BR>"},
 				return
 
 			else if(istype(W, /obj/item/weapon/wrench))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 				user << "You remove the turret's metal armor bolts."
 				build_step = 2
 				return
@@ -785,7 +785,7 @@ Status: []<BR>"},
 
 		if(5)
 			if(istype(W, /obj/item/weapon/screwdriver))
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 100, 1)
 				build_step = 6
 				user << "\blue You close the internal access hatch."
 				return
@@ -803,7 +803,7 @@ Status: []<BR>"},
 					return
 
 			else if(istype(W, /obj/item/weapon/screwdriver))
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 100, 1)
 				build_step = 5
 				user << "You open the internal access hatch."
 				return
@@ -815,7 +815,7 @@ Status: []<BR>"},
 				if (WT.get_fuel() < 5)
 					user << "\red You need more fuel to complete this task."
 
-				playsound(get_turf(src), pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
+				playsound(get_turf(src), SOUND_LIST_WELDER, 50, 1)
 				if(do_after(user, 30))
 					if(!src || !WT.remove_fuel(5, user)) return
 					build_step = 8
@@ -834,7 +834,7 @@ Status: []<BR>"},
 					qdel(src)
 
 			else if(istype(W, /obj/item/weapon/crowbar))
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
+				playsound(get_turf(src), SOUND_CROWBAR, 75, 1)
 				user << "You pry off the turret's exterior armor."
 				//new /obj/item/stack/sheet/metal( loc, 2)
 				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,loc)

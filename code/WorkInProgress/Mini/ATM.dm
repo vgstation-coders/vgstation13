@@ -71,9 +71,9 @@ log transactions
 				cash_found+=S
 			if(cash_found.len>0)
 				if(prob(50))
-					playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
+					playsound(loc, SOUND_POLAROID_ONE, 50, 1)
 				else
-					playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
+					playsound(loc, SOUND_POLAROID_TWO, 50, 1)
 				var/amount = count_cash(cash_found)
 				for(var/obj/item/weapon/spacecash/S in cash_found)
 					qdel(S)
@@ -101,9 +101,9 @@ log transactions
 			//consume the money
 			authenticated_account.money += I:worth * I:amount
 			if(prob(50))
-				playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
+				playsound(loc, SOUND_POLAROID_ONE, 50, 1)
 			else
-				playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
+				playsound(loc, SOUND_POLAROID_TWO, 50, 1)
 
 			//create a transaction log entry
 			var/datum/transaction/T = new()
@@ -285,7 +285,7 @@ log transactions
 							usr << "\red \icon[src] incorrect pin/account combination entered."
 							number_incorrect_tries = 0
 					else
-						playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
+						playsound(src, SOUND_TWO_BEEP, 50, 1)
 						ticks_left_timeout = 120
 						view_screen = NO_SCREEN
 
@@ -352,9 +352,9 @@ log transactions
 					R.stamps += "<HR><i>This paper has been stamped by the Automatic Teller Machine.</i>"
 
 				if(prob(50))
-					playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
+					playsound(loc, SOUND_POLAROID_ONE, 50, 1)
 				else
-					playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
+					playsound(loc, SOUND_POLAROID_TWO, 50, 1)
 			if("insert_card")
 				if(held_card)
 					held_card.loc = src.loc

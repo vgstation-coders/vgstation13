@@ -404,7 +404,7 @@ LOOK FOR SURGERY.DM*/
 	desc = "Cut, cut, and once more cut."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "scalpel"
-	hitsound = "sound/weapons/bladeslice.ogg"
+	hitsound = SOUND_BLADE_SLICE
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1.5
@@ -935,7 +935,7 @@ LOOK FOR SURGERY.DM*/
 		target.AdjustParalysis(-3)
 		target.AdjustStunned(-3)
 		target.AdjustWeakened(-3)
-		playsound(get_turf(target), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+		playsound(get_turf(target), SOUND_THUD_SWOOSH, 50, 1, -1)
 		target.visible_message(
 			"<span class='notice'>[user] prods [target] trying to wake \him up!</span>",
 			"<span class='notice'>You prod [target] trying to wake \him up!</span>",

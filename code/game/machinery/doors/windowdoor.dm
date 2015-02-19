@@ -29,7 +29,7 @@
 /obj/machinery/door/window/Destroy()
 	density = 0
 	if (!dismantled)
-		playsound(src, "shatter", 70, 1)
+		playsound(src, SOUND_SHATTER, 70, 1)
 	..()
 
 /obj/machinery/door/window/Bumped(atom/movable/AM as mob|obj)
@@ -178,7 +178,7 @@
 	// Make emagged/open doors able to be deconstructed
 	if (!src.density && src.operating != 1 && istype(I, /obj/item/weapon/crowbar))
 		user.visible_message("[user] removes the electronics from the windoor assembly.", "You start to remove the electronics from the windoor assembly.")
-		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 100, 1)
+		playsound(get_turf(src), SOUND_CROWBAR, 100, 1)
 		if (do_after(user, 40) && src && !src.density && src.operating != 1)
 			user << "<span class='notice'>You removed the windoor electronics!</span>"
 			make_assembly(user)
@@ -241,7 +241,7 @@
 		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
 		spark_system.set_up(5, 0, src.loc)
 		spark_system.start()
-		playsound(get_turf(src), "sparks", 50, 1)
+		playsound(get_turf(src), SOUND_SPARK, 50, 1)
 		playsound(get_turf(src), 'sound/weapons/blade1.ogg', 50, 1)
 		visible_message("<span class='warning'>The glass door was sliced open by [user]!</span>")
 	flick("[src.base_state]spark", src)

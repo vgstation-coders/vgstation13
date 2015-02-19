@@ -15,7 +15,7 @@
 /obj/structure/coatrack/attack_hand(mob/user)
 	if(suit)
 		user << "<span class='notice'>You pick up the [suit] from the [src]</span>"
-		playsound(get_turf(src), "rustle", 50, 1, -5)
+		playsound(get_turf(src), SOUND_RUSTLE, 50, 1, -5)
 		suit.loc = get_turf(src)
 		if(!user.get_active_hand())
 			user.put_in_hands(suit)
@@ -25,7 +25,7 @@
 
 	if(hat)
 		user << "<span class='notice'>You pick up the [hat] from the [src]</span>"
-		playsound(get_turf(src), "rustle", 50, 1, -5)
+		playsound(get_turf(src), SOUND_RUSTLE, 50, 1, -5)
 		hat.loc = get_turf(src)
 		if(!user.get_active_hand())
 			user.put_in_hands(hat)
@@ -36,7 +36,7 @@
 /obj/structure/coatrack/attackby(obj/item/clothing/C, mob/user)
 	if (istype(C, /obj/item/clothing/suit/storage/det_suit) && !suit)
 		user << "<span class='notice'>You place your [C] on the [src]</span>"
-		playsound(get_turf(src), "rustle", 50, 1, -5)
+		playsound(get_turf(src), SOUND_RUSTLE, 50, 1, -5)
 		user.drop_item()
 		C.loc = src
 		suit = C
@@ -44,7 +44,7 @@
 
 	else if (istype(C, /obj/item/clothing/head/det_hat) && !hat)
 		user << "<span class='notice'>You place your [C] on the [src]</span>"
-		playsound(get_turf(src), "rustle", 50, 1, -5)
+		playsound(get_turf(src), SOUND_RUSTLE, 50, 1, -5)
 		user.drop_item()
 		C.loc = src
 		hat = C

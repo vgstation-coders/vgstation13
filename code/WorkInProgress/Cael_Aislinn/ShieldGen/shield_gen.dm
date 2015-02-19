@@ -55,7 +55,7 @@
 		s.set_up(5, 1, src)
 		s.start()
 		return 1
-	playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+	playsound(get_turf(src), SOUND_SPARK_FOUR, 75, 1)
 	return
 
 /obj/machinery/shield_gen/wrenchAnchor(mob/user)
@@ -99,7 +99,7 @@
 /obj/machinery/shield_gen/attack_ghost(mob/user)
 	if(isAdminGhost(user)) src.attack_hand(user)
 	return
-	
+
 /obj/machinery/shield_gen/interact(mob/user)
 	if ( (get_dist(src, user) > 1 ) || (stat & (BROKEN|NOPOWER)) )
 		if (!istype(user, /mob/living/silicon))

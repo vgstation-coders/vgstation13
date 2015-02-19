@@ -50,8 +50,8 @@ proc/explosion_rec(turf/epicenter, power)
 	message_admins("Explosion with size ([power]) in area [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>)")
 	log_game("Explosion with size ([power]) in area [epicenter.loc.name] ")
 
-	playsound(epicenter, 'sound/effects/explosionfar.ogg', 100, 1, round(power*2,1) )
-	playsound(epicenter, "explosion", 100, 1, round(power,1) )
+	playsound(epicenter, SOUND_EXPLOSION_FAR, 100, 1, round(power*2,1) )
+	playsound(epicenter, SOUND_LIST_EXPLOSION, 100, 1, round(power,1) )
 
 	explosion_in_progress = 1
 	explosion_turfs = list()

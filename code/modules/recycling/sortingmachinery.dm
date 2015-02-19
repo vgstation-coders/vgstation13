@@ -26,7 +26,7 @@
 			var/tag = uppertext(TAGGERLOCATIONS[O.currTag])
 			user << "\<span class='notice'>*[tag]*</span>"
 			src.sortTag = O.currTag
-			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_TWO_BEEP, 100, 1)
 			overlays = 0
 			overlays += "deliverytag"
 			src.desc = "A big wrapped package. It has a label reading [tag]"
@@ -70,7 +70,7 @@
 			var/tag = uppertext(TAGGERLOCATIONS[O.currTag])
 			user << "<span class='notice'>*[tag]*</span>"
 			src.sortTag = O.currTag
-			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_TWO_BEEP, 100, 1)
 			overlays = 0
 			overlays += "deliverytag"
 			src.desc = "A small wrapped package. It has a label reading [tag]"
@@ -329,18 +329,18 @@
 	if(istype(I, /obj/item/weapon/screwdriver))
 		if(c_mode==0)
 			c_mode=1
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 			user << "You remove the screws around the power connection."
 			return
 		else if(c_mode==1)
 			c_mode=0
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 			user << "You attach the screws around the power connection."
 			return
 	else if(istype(I,/obj/item/weapon/weldingtool) && c_mode==1)
 		var/obj/item/weapon/weldingtool/W = I
 		if(W.remove_fuel(0,user))
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_WELDER_TWO, 100, 1)
 			user << "You start slicing the floorweld off the delivery chute."
 			if(do_after(user,20))
 				if(!src || !W.isOn()) return

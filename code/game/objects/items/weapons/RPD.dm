@@ -416,7 +416,7 @@ var/global/list/RPD_recipes=list(
 		p_conntype=-1
 		p_dir=1
 		src.spark_system.start()
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(get_turf(src), SOUND_POP, 50, 0)
 		show_menu(usr)
 
 	if(href_list["paintpipes"])
@@ -424,13 +424,13 @@ var/global/list/RPD_recipes=list(
 		p_conntype=-1
 		p_dir=1
 		src.spark_system.start()
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(get_turf(src), SOUND_POP, 50, 0)
 		show_menu(usr)
 
 	if(href_list["set_color"])
 		paint_color=href_list["set_color"]
 		src.spark_system.start()
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(get_turf(src), SOUND_POP, 50, 0)
 		show_menu(usr)
 
 	if(href_list["makepipe"])
@@ -439,7 +439,7 @@ var/global/list/RPD_recipes=list(
 		p_conntype = text2num(href_list["type"])
 		p_class = 0
 		src.spark_system.start()
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(get_turf(src), SOUND_POP, 50, 0)
 		show_menu(usr)
 
 	if(href_list["makemeter"])
@@ -447,7 +447,7 @@ var/global/list/RPD_recipes=list(
 		p_conntype=-1
 		p_dir=1
 		src.spark_system.start()
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(get_turf(src), SOUND_POP, 50, 0)
 		show_menu(usr)
 
 	if(href_list["makegsensor"])
@@ -455,7 +455,7 @@ var/global/list/RPD_recipes=list(
 		p_conntype=-1
 		p_dir=1
 		src.spark_system.start()
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(get_turf(src), SOUND_POP, 50, 0)
 		show_menu(usr)
 
 	if(href_list["dmake"])
@@ -464,7 +464,7 @@ var/global/list/RPD_recipes=list(
 		p_dir = 1
 		p_class = 2
 		src.spark_system.start()
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(get_turf(src), SOUND_POP, 50, 0)
 		show_menu(usr)
 
 
@@ -490,7 +490,7 @@ var/global/list/RPD_recipes=list(
 			if(!(paint_color in P.available_colors))
 				user << "\red This [P] can't be painted [paint_color]. Available colors: [english_list(P.available_colors)]"
 				return 0
-			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_CLICK, 50, 1)
 			P._color = paint_color
 			user.visible_message("<span class='notice'>[user] paints \the [P] [paint_color].</span>","<span class='notice'>You paint \the [P] [paint_color].</span>")
 			P.update_icon()
@@ -499,7 +499,7 @@ var/global/list/RPD_recipes=list(
 			// Must click on an actual pipe or meter.
 			if(istype(A,/obj/item/pipe) || istype(A,/obj/item/pipe_meter) || istype(A,/obj/structure/disposalconstruct) || istype(A,/obj/item/pipe_gsensor))
 				user << "Destroying Pipe..."
-				playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_CLICK, 50, 1)
 				if(do_after(user, 5))
 					if(A)
 						activate()
@@ -518,10 +518,10 @@ var/global/list/RPD_recipes=list(
 				user << "The [src]'s error light flickers."
 				return 0
 			user << "Building Pipes ..."
-			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_CLICK, 50, 1)
 			if(do_after(user, 20))
 				activate()
-				var/obj/item/pipe/P = getFromPool(/obj/item/pipe, A) 
+				var/obj/item/pipe/P = getFromPool(/obj/item/pipe, A)
 				P.New(A,pipe_type=p_type,dir=p_dir) //new (A, pipe_type=p_type, dir=p_dir)
 				P.update()
 				P.add_fingerprint(usr)
@@ -533,7 +533,7 @@ var/global/list/RPD_recipes=list(
 				user << "The [src]'s error light flickers."
 				return 0
 			user << "Building Meter..."
-			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_CLICK, 50, 1)
 			if(do_after(user, 20))
 				activate()
 				new /obj/item/pipe_meter(A)
@@ -545,7 +545,7 @@ var/global/list/RPD_recipes=list(
 				user << "The [src]'s error light flickers."
 				return 0
 			user << "Building Pipes..."
-			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_CLICK, 50, 1)
 			if(do_after(user, 20))
 				activate()
 				var/obj/structure/disposalconstruct/C = new (A)
@@ -581,7 +581,7 @@ var/global/list/RPD_recipes=list(
 				user << "The [src]'s error light flickers."
 				return 0
 			user << "Building Sensor..."
-			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_CLICK, 50, 1)
 			if(do_after(user, 20))
 				activate()
 				new /obj/item/pipe_gsensor(A)
@@ -593,5 +593,5 @@ var/global/list/RPD_recipes=list(
 
 
 /obj/item/weapon/pipe_dispenser/proc/activate()
-	playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 

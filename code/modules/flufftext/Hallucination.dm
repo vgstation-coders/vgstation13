@@ -112,30 +112,28 @@ mob/living/carbon/proc/handle_hallucinations()
 				//Strange audio
 				//src << "Strange Audio"
 				if(client)
-					switch(rand(1,12))
-						if(1) src << 'sound/machines/airlock.ogg'
+					switch(rand(1, 10))
+						if(1) src << get_sfx(SOUND_AIRLOCK)
 						if(2)
-							if(prob(50))src << 'sound/effects/Explosion1.ogg'
-							else src << 'sound/effects/Explosion2.ogg'
-						if(3) src << 'sound/effects/explosionfar.ogg'
-						if(4) src << 'sound/effects/Glassbr1.ogg'
-						if(5) src << 'sound/effects/Glassbr2.ogg'
-						if(6) src << 'sound/effects/Glassbr3.ogg'
-						if(7) src << 'sound/machines/twobeep.ogg'
-						if(8) src << 'sound/machines/windowdoor.ogg'
-						if(9)
+							if(prob(50))src << get_sfx(SOUND_EXPLOSION_ONE)
+							else src << get_sfx(SOUND_EXPLOSION_TWO)
+						if(3) src << get_sfx(SOUND_EXPLOSION_FAR)
+						if(4) src << get_sfx(SOUND_SHATTER)
+						if(5) src << get_sfx(SOUND_TWO_BEEP)
+						if(6) src << 'sound/machines/windowdoor.ogg'
+						if(7)
 							//To make it more realistic, I added two gunshots (enough to kill)
 							src << 'sound/weapons/Gunshot.ogg'
 							spawn(rand(10,30))
 								src << 'sound/weapons/Gunshot.ogg'
-						if(10) src << 'sound/weapons/smash.ogg'
-						if(11)
+						if(8) src << 'sound/weapons/smash.ogg'
+						if(9)
 							//Same as above, but with tasers.
-							src << 'sound/weapons/Taser.ogg'
+							src << get_sfx(SOUND_TASER_ONE)
 							spawn(rand(10,30))
-								src << 'sound/weapons/Taser.ogg'
+								src << get_sfx(SOUND_TASER_ONE)
 					//Rare audio
-						if(12)
+						if(10)
 	//These sounds are (mostly) taken from Hidden: Source
 							var/list/creepyasssounds = list('sound/effects/ghost.ogg', 'sound/effects/ghost2.ogg', 'sound/effects/Heart Beat.ogg', 'sound/effects/screech.ogg',\
 								'sound/hallucinations/behind_you1.ogg', 'sound/hallucinations/behind_you2.ogg', 'sound/hallucinations/far_noise.ogg', 'sound/hallucinations/growl1.ogg', 'sound/hallucinations/growl2.ogg',\
@@ -302,7 +300,7 @@ proc/check_panel(mob/M)
 			else
 				if(prob(15))
 					if(weapon_name)
-						my_target << sound(pick('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg'))
+						my_target << get_sfx(SOUND_LIST_SWING_HIT)
 						my_target.show_message("\red <B>[my_target] has been attacked with [weapon_name] by [src.name] </B>", 1)
 						my_target.halloss += 8
 						if(prob(20)) my_target.eye_blurry += 3
@@ -310,7 +308,7 @@ proc/check_panel(mob/M)
 							if(!locate(/obj/effect/overlay) in my_target.loc)
 								fake_blood(my_target)
 					else
-						my_target << sound(pick('sound/weapons/punch1.ogg','sound/weapons/punch2.ogg','sound/weapons/punch3.ogg','sound/weapons/punch4.ogg'))
+						my_target << get_sfx(SOUND_PUNCH)
 						my_target.show_message("\red <B>[src.name] has punched [my_target]!</B>", 1)
 						my_target.halloss += 4
 						if(prob(33))

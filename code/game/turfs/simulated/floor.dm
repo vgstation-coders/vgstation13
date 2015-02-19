@@ -461,7 +461,7 @@ turf/simulated/floor/proc/update_icon()
 
 		make_plating()
 		// Can't play sounds from areas. - N3X
-		playsound(src, 'sound/items/Crowbar.ogg', 80, 1)
+		playsound(src, SOUND_CROWBAR, 80, 1)
 
 		return
 
@@ -475,12 +475,12 @@ turf/simulated/floor/proc/update_icon()
 					new floor_tile.type(src)
 
 			make_plating()
-			playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
+			playsound(src, SOUND_SCREWDRIVER, 80, 1)
 		if(is_catwalk())
 			if(broken) return
 			ReplaceWithLattice()
 			user << "<span class='notice'>You begin dismantling the catwalk.</span>"
-			playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
+			playsound(src, SOUND_SCREWDRIVER, 80, 1)
 		return
 
 	if(istype(C, /obj/item/stack/rods))
@@ -490,7 +490,7 @@ turf/simulated/floor/proc/update_icon()
 				user << "<span class='notice'>Reinforcing the floor...</span>"
 				if(do_after(user, 30) && R && R.amount >= 2 && is_plating())
 					ChangeTurf(/turf/simulated/floor/engine)
-					playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
+					playsound(src, SOUND_DECONSTRUCT, 80, 1)
 					R.use(2)
 					return
 			else
@@ -556,7 +556,7 @@ turf/simulated/floor/proc/update_icon()
 			if(broken || burnt)
 				if(welder.remove_fuel(0,user))
 					user << "<span class='warning'>You fix some dents on the broken plating.</span>"
-					playsound(src, 'sound/items/Welder.ogg', 80, 1)
+					playsound(src, SOUND_WELDER_ONE, 80, 1)
 					icon_state = "plating"
 					burnt = 0
 					broken = 0

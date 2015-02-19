@@ -16,13 +16,13 @@
 			if(2)
 				mode = 0
 				charge_cost = 100
-				fire_sound = 'sound/weapons/Taser.ogg'
+				fire_sound = SOUND_TASER_ONE
 				user << "\red [src.name] is now set to stun."
 				projectile_type = "/obj/item/projectile/energy/electrode"
 			if(0)
 				mode = 1
 				charge_cost = 100
-				fire_sound = 'sound/weapons/Laser.ogg'
+				fire_sound = SOUND_LASER_ONE
 				user << "\red [src.name] is now set to kill."
 				projectile_type = "/obj/item/projectile/beam"
 			if(1)

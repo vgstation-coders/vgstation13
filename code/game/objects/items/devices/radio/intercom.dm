@@ -85,7 +85,7 @@
 			if(!circuitry_installed)
 				user << "\red You need to install intercom electronics first!"
 				return 1
-			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_WIRECUTTER, 50, 1)
 			if(do_after(user, 10))
 				installed=1
 				b_stat=0
@@ -95,7 +95,7 @@
 			for(var/obj/item/weapon/intercom_electronics/board in src)
 				user << "\red There's already an intercom electronics board inside!"
 				return 1
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 			if(do_after(user, 10))
 				user.drop_item()
 				W.loc=src
@@ -103,7 +103,7 @@
 			return 1
 		if(istype(W,/obj/item/weapon/screwdriver))
 			for(var/obj/item/weapon/intercom_electronics/board in src)
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				if(do_after(user, 10))
 					del(board)
 					circuitry_installed=1
@@ -114,7 +114,7 @@
 			var/obj/item/weapon/weldingtool/WT=W
 			if(circuitry_installed)
 				return ..()
-			playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_WELDER_ONE, 50, 1)
 			if(!WT.remove_fuel(3, user))
 				user << "\red You're out of welding fuel."
 				return 1
@@ -127,7 +127,7 @@
 			if(!b_stat)
 				return ..()
 			user << "You begin removing the electronics..."
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 			if(do_after(user, 10))
 				new /obj/item/weapon/intercom_electronics(src.loc)
 				user << "\blue The circuitboard pops out!"

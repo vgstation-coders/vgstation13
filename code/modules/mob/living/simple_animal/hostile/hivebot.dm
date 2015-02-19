@@ -85,7 +85,7 @@
 		smoke.set_up(5, 0, src.loc)
 		smoke.start()
 		visible_message("\red <B>The [src] warps in!</B>")
-		playsound(get_turf(src), 'sound/effects/EMPulse.ogg', 25, 1)
+		playsound(get_turf(src), SOUND_EMP_PULSE, 25, 1)
 
 	warpbots()
 		icon_state = "def_radar"

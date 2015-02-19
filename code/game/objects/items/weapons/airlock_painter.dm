@@ -65,12 +65,12 @@
 		W.loc = src
 		user << "<span class='notice'>You install \the [W] into \the [name].</span>"
 		ink = W
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_CLICK, 50, 1)
 
 
 /obj/item/weapon/airlock_painter/attack_self(mob/user)
 	if(ink)
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_CLICK, 50, 1)
 		ink.loc = user.loc
 		user.put_in_hands(ink)
 		user << "<span class='notice'>You remove \the [ink] from \the [name].</span>"

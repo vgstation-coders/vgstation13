@@ -15,12 +15,12 @@
 				circuit=W
 				circuit.loc=src
 				state++
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 			if(istype(W, /obj/item/weapon/crowbar))
 				new /obj/machinery/constructable_frame/machine_frame(T)
 				new /obj/item/stack/sheet/glass/glass(T)
 				del(src)
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 				return
 
 		if(1)
@@ -32,14 +32,14 @@
 				else
 					C.req_access = circuit.conf_access
 					C.req_one_access = null
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				del(src)
 				return
 			if(istype(W, /obj/item/weapon/crowbar))
 				circuit.loc=T
 				circuit=null
 				state--
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 	if(pstate!=state)
 		pstate=state
 		update_icon()
@@ -148,7 +148,7 @@
 			src.density = 0
 			src.destroyed = 1
 			getFromPool(/obj/item/weapon/shard, loc)
-			playsound(get_turf(src), "shatter", 70, 1)
+			playsound(get_turf(src), SOUND_SHATTER, 70, 1)
 			update_icon()
 	else
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
@@ -190,7 +190,7 @@
 			"You pry \the [src] apart.", \
 			"You hear something pop.")
 		var/turf/T=get_turf(src)
-		playsound(T, 'sound/items/Crowbar.ogg', 50, 1)
+		playsound(T, SOUND_CROWBAR, 50, 1)
 		dump()
 		var/obj/item/weapon/circuitboard/airlock/C=circuit
 		if(!C)

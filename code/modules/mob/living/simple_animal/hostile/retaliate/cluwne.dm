@@ -34,7 +34,7 @@
 	melee_damage_lower = 0
 	melee_damage_upper = 0.1
 	attacktext = "honks at"
-	attack_sound = 'sound/items/bikehorn.ogg'
+	attack_sound = SOUND_HORN_BIKE
 
 	min_oxy = 5
 	max_oxy = 0
@@ -303,8 +303,8 @@
 		if(m_intent == "run")
 			if(footstep > 1)
 				footstep = 0
-				playsound(src, "clownstep", 50, 1) // this will get annoying very fast.
+				playsound(src, SOUND_LIST_CLOWN_STEP, 50, 1) // this will get annoying very fast.
 			else
 				footstep++
 		else
-			playsound(src, "clownstep", 20, 1)
+			playsound(src, SOUND_LIST_CLOWN_STEP, 20, 1)

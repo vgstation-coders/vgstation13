@@ -13,7 +13,7 @@
 	throwforce = 10
 	w_class = 3
 	var/charged = 1
-	hitsound = 'sound/weapons/bladeslice.ogg'
+	hitsound = SOUND_BLADE_SLICE
 
 /obj/effect/rend
 	name = "tear in the fabric of reality"

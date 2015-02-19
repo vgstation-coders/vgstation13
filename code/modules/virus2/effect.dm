@@ -329,7 +329,7 @@
 /datum/disease2/effect/spawn/activate(var/mob/living/carbon/mob,var/multiplier)
 	//var/mob/living/carbon/human/H = mob
 	var/placemob = locate(mob.x + pick(1,-1), mob.y, mob.z)
-	playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
+	playsound(mob.loc, SOUND_SPLAT, 50, 1)
 
 	new /mob/living/simple_animal/hostile/giant_spider/spiderling(placemob)
 	mob.emote("me",1,"vomits up a live spiderling!")

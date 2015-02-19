@@ -32,7 +32,7 @@
 	if(!isturf(O.loc))
 		user << "<span class='warning'>[O] must be safely placed on the ground for modification.</span>"
 		return
-	playsound(user.loc, 'sound/items/Screwdriver.ogg', 100, 1)
+	playsound(user.loc, SOUND_SCREWDRIVER, 100, 1)
 	var/N = new to_type(O.loc)
 	user.visible_message("\red [user] opens \the [src] and modifies \the [O] into \the [N].","\red You open \the [src] and modify \the [O] into \the [N].")
 	del(O)

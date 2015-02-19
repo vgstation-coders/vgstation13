@@ -59,7 +59,7 @@
 		else
 			ready = !ready
 			user << "<span class='notice'>You turn [src] [ready? "on and take the paddles out" : "off and put the paddles back in"].</span>"
-			playsound(get_turf(src),"sparks",75,1,-1)
+			playsound(get_turf(src),SOUND_SPARK,75,1,-1)
 			update_icon()
 	else
 		user << "<span class='warning'>[src] is out of charges.</span>"

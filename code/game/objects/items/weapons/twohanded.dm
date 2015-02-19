@@ -166,7 +166,7 @@
 	slot_flags = SLOT_BACK
 	throwforce = 15
 	flags = TWOHANDABLE
-	hitsound = 'sound/weapons/bladeslice.ogg'
+	hitsound = SOUND_BLADE_SLICE
 	attack_verb = list("attacked", "poked", "jabbed", "torn", "gored")
 
 /obj/item/weapon/spear/update_wield(mob/user)

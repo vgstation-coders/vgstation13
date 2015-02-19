@@ -33,7 +33,7 @@
 				spawn(5)
 					reagents.trans_to(M, 10)
 
-			playsound(M.loc,'sound/items/drink.ogg', rand(10,50), 1)
+			playsound(M.loc, SOUND_DRINK, rand(10,50), 1)
 			return 1
 		else if( istype(M, /mob/living/carbon/human) )
 
@@ -57,7 +57,7 @@
 				spawn(5)
 					reagents.trans_to(M, 10)
 
-			playsound(M.loc,'sound/items/drink.ogg', rand(10,50), 1)
+			playsound(M.loc, SOUND_DRINK, rand(10,50), 1)
 			return 1
 		return 0
 

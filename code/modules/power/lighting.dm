@@ -42,7 +42,7 @@
 	src.add_fingerprint(user)
 	if (istype(W, /obj/item/weapon/wrench))
 		if (src.stage == 1)
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			playsound(get_turf(src), SOUND_RATCHET, 75, 1)
 			usr << "You begin deconstructing [src]."
 			if (!do_after(usr, 30))
 				return
@@ -50,7 +50,7 @@
 			M.amount = sheets_refunded
 			user.visible_message("[user.name] deconstructs [src].", \
 				"You deconstruct [src].", "You hear a noise.")
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 75, 1)
+			playsound(get_turf(src), SOUND_DECONSTRUCT, 75, 1)
 			del(src)
 		if (src.stage == 2)
 			usr << "You have to remove the wires first."
@@ -71,7 +71,7 @@
 		new /obj/item/stack/cable_coil(get_turf(src.loc), 1, "red")
 		user.visible_message("[user.name] removes the wiring from [src].", \
 			"You remove the wiring from [src].", "You hear a noise.")
-		playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
+		playsound(get_turf(src), SOUND_WIRECUTTER, 100, 1)
 		return
 
 	if(istype(W, /obj/item/stack/cable_coil))
@@ -98,7 +98,7 @@
 			src.stage = 3
 			user.visible_message("[user.name] closes [src]'s casing.", \
 				"You close [src]'s casing.", "You hear a noise.")
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 75, 1)
+			playsound(get_turf(src), SOUND_SCREWDRIVER, 75, 1)
 
 			switch(fixture_type)
 
@@ -347,7 +347,7 @@
 	// attempt to stick weapon into light socket
 	else if(status == LIGHT_EMPTY)
 		if(istype(W, /obj/item/weapon/screwdriver)) //If it's a screwdriver open it.
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 75, 1)
+			playsound(get_turf(src), SOUND_SCREWDRIVER, 75, 1)
 			user.visible_message("[user.name] opens [src]'s casing.", \
 				"You open [src]'s casing.", "You hear a noise.")
 			var/obj/machinery/light_construct/newlight = null

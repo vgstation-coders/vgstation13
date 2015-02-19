@@ -199,7 +199,7 @@
 	prefix = "resin"
 	hardness = 1.5
 	var/close_delay = 100
-	soundeffect = 'sound/effects/attackblob.ogg'
+	soundeffect = SOUND_ATTACK_BLOB
 
 /obj/machinery/door/mineral/resin/TryToSwitchState(atom/user)
 	if(isalien(user))

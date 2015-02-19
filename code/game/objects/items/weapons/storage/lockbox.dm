@@ -44,7 +44,7 @@
 			spark_system.set_up(5, 0, src.loc)
 			spark_system.start()
 			playsound(get_turf(src), 'sound/weapons/blade1.ogg', 50, 1)
-			playsound(get_turf(src), "sparks", 50, 1)
+			playsound(get_turf(src), SOUND_SPARK, 50, 1)
 			for(var/mob/O in viewers(user, 3))
 				O.show_message(text("<span class='notice'>The locker has been sliced open by [] with an energy blade!</span>", user), 1, text("<span class='warning>You hear metal being sliced and sparks flying.</span>"), 2)
 		else

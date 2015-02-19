@@ -420,7 +420,7 @@ Class Procs:
 	user.visible_message(	"[user] begins to pry out the circuitboard from \the [src].",
 							"You begin to pry out the circuitboard from \the [src]...")
 	if(do_after(user, 40))
-		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 		dropFrame()
 		for(var/obj/I in component_parts)
 			if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker) && src:reagents && src:reagents.total_volume)
@@ -448,7 +448,7 @@ Class Procs:
 		icon_state = initial(icon_state)
 	user << "<span class='notice'>\icon[src] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>"
 	if(istype(toggleitem, /obj/item/weapon/screwdriver))
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(src.loc, SOUND_SCREWDRIVER, 50, 1)
 	update_icon()
 	return 1
 
@@ -458,7 +458,7 @@ Class Procs:
 		return -1 //state set to 2, can't do it
 	user.visible_message(	"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 							"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts...")
-	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	playsound(loc, SOUND_RATCHET, 50, 1)
 	if(do_after(user, 30))
 		anchored = !anchored
 		state = anchored //since these values will match as long as state isn't 2, we can do this safely
@@ -474,7 +474,7 @@ Class Procs:
 		user << "You need to secure \the [src] before it can be welded."
 		return -1
 	if (WT.remove_fuel(0,user))
-		playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_WELDER_TWO, 50, 1)
 		user.visible_message("[user.name] starts to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
 				"You start to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
 				"You hear welding.")
@@ -579,7 +579,7 @@ Class Procs:
 			playsound(get_turf(src), 'sound/machines/notify.ogg', 50, 0)
 		if("beep")
 			src.visible_message("<span class='notice'>\icon[src] \The [src] beeps.</span>")
-			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 50, 0)
+			playsound(get_turf(src), SOUND_TWO_BEEP, 50, 0)
 		if("buzz")
 			src.visible_message("<span class='notice'>\icon[src] \The [src] buzzes.</span>")
 			playsound(get_turf(src), 'sound/machines/buzz-two.ogg', 50, 0)

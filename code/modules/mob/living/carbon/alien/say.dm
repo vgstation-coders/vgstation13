@@ -1,7 +1,7 @@
 /mob/living/carbon/alien/say(var/message)
 	. = ..(message, "A")
 	if(.)
-		playsound(loc, "hiss", 25, 1, 1)
+		playsound(loc, SOUND_HISS, 25, 1, 1)
 
 /mob/living/proc/alien_talk(var/message)
 

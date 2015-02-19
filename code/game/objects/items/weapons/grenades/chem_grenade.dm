@@ -60,7 +60,7 @@
 			return
 		path = 1
 		user << "<span class='notice'> You add [W] to the metal casing.</span>"
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 25, -3)
+		playsound(get_turf(src), SOUND_SCREWDRIVER, 25, -3)
 		user.remove_from_mob(det)
 		det.loc = src
 		detonator = det
@@ -77,7 +77,7 @@
 //					user << "<span class='warning'> You need to add at least one beaker before locking the assembly.</span>"
 				user << "<span class='warning'> You lock the empty assembly.</span>"
 				name = "fake grenade"
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 25, -3)
+			playsound(get_turf(src), SOUND_SCREWDRIVER, 25, -3)
 			icon_state = initial(icon_state) +"_locked"
 			stage = 2
 		else if(stage == 2)
@@ -87,7 +87,7 @@
 				return
 			else
 				user << "<span class='notice'> You unlock the assembly.</span>"
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 25, -3)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 25, -3)
 				name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
 				icon_state = initial(icon_state) + (detonator?"_ass":"")
 				stage = 1
@@ -256,7 +256,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 			return
 		path = 1
 		user << "<span class='notice'> You insert [W] into the grenade.</span>"
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 25, -3)
+		playsound(get_turf(src), SOUND_SCREWDRIVER, 25, -3)
 		user.remove_from_mob(det)
 		det.loc = src
 		detonator = det
@@ -272,7 +272,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 			else
 				user << "<span class='notice'> You lock the empty assembly.</span>"
 				name = "fake grenade"
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 25, -3)
+			playsound(get_turf(src), SOUND_SCREWDRIVER, 25, -3)
 			icon_state = initial(icon_state) +"_locked"
 			stage = 2
 		else if(stage == 2)
@@ -282,7 +282,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 				return
 			else
 				user << "<span class='notice'> You unlock the assembly.</span>"
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 25, -3)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 25, -3)
 				name = "unsecured EX grenade with [beakers.len] containers[detonator?" and detonator":""]"
 				icon_state = initial(icon_state) + (detonator?"_ass":"")
 				stage = 1

@@ -304,7 +304,7 @@
 	else
 		if ((M.a_intent == I_HURT && !( istype(wear_mask, /obj/item/clothing/mask/muzzle) )))
 			if ((prob(75) && health > 0))
-				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
+				playsound(loc, SOUND_BITE, 50, 1, -1)
 				for(var/mob/O in viewers(src, null))
 					O.show_message("\red <B>[M.name] has bit [name]!</B>", 1)
 				var/damage = rand(1, 5)
@@ -355,7 +355,7 @@
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("\red <B>[] has punched [name]!</B>", M), 1)
 
-				playsound(loc, "punch", 25, 1, -1)
+				playsound(loc, SOUND_PUNCH, 25, 1, -1)
 				var/damage = rand(5, 10)
 				if (prob(40))
 					damage = rand(10, 15)
@@ -369,7 +369,7 @@
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
-				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+				playsound(loc, SOUND_PUNCH_MISS, 25, 1, -1)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("\red <B>[] has attempted to punch [name]!</B>", M), 1)
@@ -387,20 +387,20 @@
 
 				LAssailant = M
 
-				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+				playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 				for(var/mob/O in viewers(src, null))
 					O.show_message(text("\red [] has grabbed [name] passively!", M), 1)
 			else
 				if (!( paralysis ))
 					if (prob(25))
 						Paralyse(2)
-						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+						playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 						for(var/mob/O in viewers(src, null))
 							if ((O.client && !( O.blinded )))
 								O.show_message(text("\red <B>[] has pushed down [name]!</B>", M), 1)
 					else
 						drop_item()
-						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+						playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 						for(var/mob/O in viewers(src, null))
 							if ((O.client && !( O.blinded )))
 								O.show_message(text("\red <B>[] has disarmed [name]!</B>", M), 1)
@@ -456,7 +456,7 @@
 
 			LAssailant = M
 
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 			for(var/mob/O in viewers(src, null))
 				O.show_message(text("\red [] has grabbed [name] passively!", M), 1)
 

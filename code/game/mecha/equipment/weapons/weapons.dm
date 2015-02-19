@@ -45,7 +45,7 @@
 	icon_state = "mecha_laser"
 	energy_drain = 30
 	projectile = /obj/item/projectile/beam
-	fire_sound = 'sound/weapons/Laser.ogg'
+	fire_sound = SOUND_LASER_ONE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser/heavy
 	equip_cooldown = 15
@@ -95,7 +95,7 @@
 	energy_drain = 20
 	equip_cooldown = 8
 	projectile = /obj/item/projectile/energy/electrode
-	fire_sound = 'sound/weapons/Taser.ogg'
+	fire_sound = SOUND_TASER_ONE
 
 
 /obj/item/mecha_parts/mecha_equipment/weapon/honker
@@ -119,7 +119,7 @@
 	if(!equip_ready)
 		return 0
 
-	playsound(chassis, 'sound/items/AirHorn.ogg', 100, 1)
+	playsound(chassis, SOUND_HORN_AIR, 100, 1)
 	chassis.occupant_message("<font color='red' size='5'>HONK</font>")
 	for(var/mob/living/carbon/M in ohearers(6, chassis))
 		if(istype(M, /mob/living/carbon/human))
@@ -343,7 +343,7 @@
 	name = "Banana Mortar"
 	icon_state = "mecha_bananamrtr"
 	projectile = /obj/item/weapon/bananapeel
-	fire_sound = 'sound/items/bikehorn.ogg'
+	fire_sound = SOUND_HORN_BIKE
 	projectiles = 15
 	missile_speed = 1.5
 	projectile_energy_cost = 100
@@ -371,7 +371,7 @@
 	name = "Mousetrap Mortar"
 	icon_state = "mecha_mousetrapmrtr"
 	projectile = /obj/item/device/assembly/mousetrap
-	fire_sound = 'sound/items/bikehorn.ogg'
+	fire_sound = SOUND_HORN_BIKE
 	projectiles = 15
 	missile_speed = 1.5
 	projectile_energy_cost = 100

@@ -190,7 +190,7 @@
 	if(bomb_set)	//If the bomb is set, lead to the shuttle
 		mode = 1	//Ensures worklocation() continues to work
 		worklocation()
-		playsound(loc, 'sound/machines/twobeep.ogg', 50, 1)	//Plays a beep
+		playsound(loc, SOUND_TWO_BEEP, 50, 1)	//Plays a beep
 		visible_message("Shuttle Locator active.")			//Lets the mob holding it know that the mode has changed
 		return		//Get outta here
 	if(!the_disk)
@@ -224,7 +224,7 @@
 	if(!bomb_set)
 		mode = 0
 		workdisk()
-		playsound(loc, 'sound/machines/twobeep.ogg', 50, 1)
+		playsound(loc, SOUND_TWO_BEEP, 50, 1)
 		visible_message("<span class='notice'>Authentication Disk Locator active.</span>")
 		return
 	if(!home)

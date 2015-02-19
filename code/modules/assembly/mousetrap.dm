@@ -65,7 +65,7 @@
 		user << "<span class='notice'>You disarm [src].</span>"
 	armed = !armed
 	update_icon()
-	playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
+	playsound(user.loc, SOUND_HANDCUFFS, 30, 1, -3)
 
 
 /obj/item/device/assembly/mousetrap/attack_hand(mob/living/user as mob)

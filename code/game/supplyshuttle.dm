@@ -570,7 +570,7 @@ var/list/mechtoys = list(
 		hacked = 1
 		return
 	if(istype(I, /obj/item/weapon/screwdriver))
-		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(loc, SOUND_SCREWDRIVER, 50, 1)
 		if(do_after(user, 20))
 			if (stat & BROKEN)
 				user << "\blue The broken glass falls out."

@@ -20,7 +20,7 @@
 			G.synch()
 			LAssailant = M
 
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 			visible_message(text("\red [] has grabbed [] passively!", M, src))
 
 		if(I_HURT)
@@ -54,7 +54,7 @@
 					M.Weaken(rand(4,5))
 			else
 				if (prob(80))
-					playsound(loc, 'sound/weapons/slash.ogg', 25, 1, -1)
+					playsound(loc, SOUND_SLASH, 25, 1, -1)
 					drop_item()
 					visible_message(text("\red <B>[] disarmed []!</B>", M, src))
 				else

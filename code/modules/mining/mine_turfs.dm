@@ -486,7 +486,7 @@
 			return
 
 		user << "<span class='rose'>You start digging.<span>"
-		playsound(get_turf(src), 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
+		playsound(get_turf(src), SOUND_RUSTLE_ONE, 50, 1) //russle sounds sounded better
 
 		if(do_after(user, used_digging.digspeed) && user) //the better the drill, the faster the digging
 			user << "<span class='notice'>You dug a hole.</span>"

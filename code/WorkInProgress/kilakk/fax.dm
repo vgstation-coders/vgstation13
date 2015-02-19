@@ -185,7 +185,7 @@ var/list/alldepartments = list("Central Command")
 			scan = idcard
 
 	else if(istype(O, /obj/item/weapon/wrench))
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(loc, SOUND_RATCHET, 50, 1)
 		anchored = !anchored
 		user << "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>"
 	return
@@ -212,4 +212,4 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt)
 					P.info = "[sent]"
 					P.update_icon()
 
-					playsound(F.loc, "sound/items/polaroid1.ogg", 50, 1)
+					playsound(F.loc, SOUND_POLAROID_ONE, 50, 1)

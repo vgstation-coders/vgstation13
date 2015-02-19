@@ -470,7 +470,7 @@ var/global/list/paint_variants = list(
 		pname = "Commemorative Plaque"
 
 	user << "Painting floor..."
-	playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+	playsound(get_turf(src), SOUND_CLICK, 50, 1)
 	if(do_after(user, 20))
 		activate()
 		var/turf/simulated/floor/T = get_turf(A)

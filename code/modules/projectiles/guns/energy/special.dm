@@ -215,7 +215,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	desc = "A prototype weapon recovered from the ruins of Research-Station Epsilon."
 	icon_state = "xray"
 	projectile_type = "/obj/item/projectile/beam/mindflayer"
-	fire_sound = 'sound/weapons/Laser.ogg'
+	fire_sound = SOUND_LASER_ONE
 
 obj/item/weapon/gun/energy/staff/focus
 	name = "mental focus"

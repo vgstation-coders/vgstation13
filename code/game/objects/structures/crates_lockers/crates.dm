@@ -13,8 +13,8 @@
 	flags = FPRINT
 //	mouse_drag_pointer = MOUSE_ACTIVE_POINTER	//???
 	var/rigged = 0
-	var/sound_effect_open = 'sound/machines/click.ogg'
-	var/sound_effect_close = 'sound/machines/click.ogg'
+	var/sound_effect_open = SOUND_CLICK
+	var/sound_effect_close = SOUND_CLICK
 
 /obj/structure/closet/pcrate
 	name = "plastic crate"
@@ -29,8 +29,8 @@
 	flags = FPRINT
 //	mouse_drag_pointer = MOUSE_ACTIVE_POINTER	//???
 	var/rigged = 0
-	var/sound_effect_open = 'sound/machines/click.ogg'
-	var/sound_effect_close = 'sound/machines/click.ogg'
+	var/sound_effect_open = SOUND_CLICK
+	var/sound_effect_close = SOUND_CLICK
 
 /obj/structure/closet/crate/internals
 	desc = "A internals crate."
@@ -441,7 +441,7 @@
 		overlays += emag
 		overlays += sparks
 		spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
-		playsound(get_turf(src), "sparks", 60, 1)
+		playsound(get_turf(src), SOUND_SPARK, 60, 1)
 		src.locked = 0
 		src.broken = 1
 		user << "<span class='notice'>You unlock \the [src].</span>"
@@ -473,7 +473,7 @@
 	else if(istype(W, /obj/item/weapon/wirecutters))
 		if(rigged)
 			user  << "<span class='notice'>You cut away the wiring.</span>"
-			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
+			playsound(loc, SOUND_WIRECUTTER, 100, 1)
 			rigged = 0
 			return
 	else if(!place(user, W))
@@ -492,7 +492,7 @@
 			overlays += emag
 			overlays += sparks
 			spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
-			playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+			playsound(get_turf(src), SOUND_SPARK_FOUR, 75, 1)
 			src.locked = 0
 	if(!opened && prob(20/severity))
 		if(!locked)

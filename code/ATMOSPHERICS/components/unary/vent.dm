@@ -87,7 +87,7 @@
 		user << "\red You cannot remove this [src], it too exerted due to internal pressure."
 		add_fingerprint(user)
 		return 1
-	playsound(T, 'sound/items/Ratchet.ogg', 50, 1)
+	playsound(T, SOUND_RATCHET, 50, 1)
 	user << "\blue You begin to unfasten \the [src]..."
 	if (do_after(user, 40))
 		user.visible_message( \

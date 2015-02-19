@@ -80,7 +80,7 @@ Not sure why this would be useful (it's not) but whatever. Ninjas need their smo
 		var/turf/mobloc = get_turf(U.loc)//To make sure that certain things work properly below.
 		if(destination&&istype(mobloc, /turf))//The turf check prevents unusual behavior. Like teleporting out of cryo pods, cloners, mechs, etc.
 			spawn(0)
-				playsound(U.loc, "sparks", 50, 1)
+				playsound(U.loc, SOUND_SPARK, 50, 1)
 				anim(mobloc,src,'icons/mob/mob.dmi',,"phaseout",,U.dir)
 
 			handle_teleport_grab(destination, U)
@@ -88,8 +88,8 @@ Not sure why this would be useful (it's not) but whatever. Ninjas need their smo
 
 			spawn(0)
 				spark_system.start()
-				playsound(U.loc, 'sound/effects/phasein.ogg', 25, 1)
-				playsound(U.loc, "sparks", 50, 1)
+				playsound(U.loc, SOUND_PHASE_IN, 25, 1)
+				playsound(U.loc, SOUND_SPARK, 50, 1)
 				anim(U.loc,U,'icons/mob/mob.dmi',,"phasein",,U.dir)
 
 			spawn(0)
@@ -114,7 +114,7 @@ Not sure why this would be useful (it's not) but whatever. Ninjas need their smo
 		var/turf/mobloc = get_turf(U.loc)//To make sure that certain things work properly below.
 		if((!T.density)&&istype(mobloc, /turf))
 			spawn(0)
-				playsound(U.loc, 'sound/effects/sparks4.ogg', 50, 1)
+				playsound(U.loc, SOUND_SPARK_FOUR, 50, 1)
 				anim(mobloc,src,'icons/mob/mob.dmi',,"phaseout",,U.dir)
 
 			handle_teleport_grab(T, U)
@@ -122,8 +122,8 @@ Not sure why this would be useful (it's not) but whatever. Ninjas need their smo
 
 			spawn(0)
 				spark_system.start()
-				playsound(U.loc, 'sound/effects/phasein.ogg', 25, 1)
-				playsound(U.loc, 'sound/effects/sparks2.ogg', 50, 1)
+				playsound(U.loc, SOUND_PHASE_IN, 25, 1)
+				playsound(U.loc, SOUND_SPARK_TWO, 50, 1)
 				anim(U.loc,U,'icons/mob/mob.dmi',,"phasein",,U.dir)
 
 			spawn(0)//Any living mobs in teleport area are gibbed.
@@ -145,7 +145,7 @@ Not sure why this would be useful (it's not) but whatever. Ninjas need their smo
 	var/C = 250
 	if(!ninjacost(C,1))
 		var/mob/living/carbon/human/U = affecting
-		playsound(U.loc, 'sound/effects/EMPulse.ogg', 60, 2)
+		playsound(U.loc, SOUND_EMP_PULSE, 60, 2)
 		empulse(U, 4, 6) //Procs sure are nice. Slightly weaker than wizard's disable tch.
 		s_coold = 2
 		cell.charge-=(C*10)
@@ -166,7 +166,7 @@ Not sure why this would be useful (it's not) but whatever. Ninjas need their smo
 			if(!U.get_active_hand()&&!istype(U.get_inactive_hand(), /obj/item/weapon/melee/energy/blade))
 				var/obj/item/weapon/melee/energy/blade/W = new()
 				spark_system.start()
-				playsound(U.loc, "sparks", 50, 1)
+				playsound(U.loc, SOUND_SPARK, 50, 1)
 				U.put_in_hands(W)
 				cell.charge-=(C*10)
 			else
@@ -179,7 +179,7 @@ Not sure why this would be useful (it's not) but whatever. Ninjas need their smo
 				var/obj/item/weapon/melee/energy/blade/W = new()
 				U.put_in_inactive_hand(W)
 			spark_system.start()
-			playsound(U.loc, "sparks", 50, 1)
+			playsound(U.loc, SOUND_SPARK, 50, 1)
 			s_coold = 1
 	return
 
@@ -330,7 +330,7 @@ Or otherwise known as anime mode. Which also happens to be ridiculously powerful
 		if(destination&&istype(mobloc, /turf))
 			U.say("Ai Satsugai!")
 			spawn(0)
-				playsound(U.loc, "sparks", 50, 1)
+				playsound(U.loc, SOUND_SPARK, 50, 1)
 				anim(mobloc,U,'icons/mob/mob.dmi',,"phaseout",,U.dir)
 
 			spawn(0)
@@ -346,8 +346,8 @@ Or otherwise known as anime mode. Which also happens to be ridiculously powerful
 
 			spawn(0)
 				spark_system.start()
-				playsound(U.loc, 'sound/effects/phasein.ogg', 25, 1)
-				playsound(U.loc, "sparks", 50, 1)
+				playsound(U.loc, SOUND_PHASE_IN, 25, 1)
+				playsound(U.loc, SOUND_SPARK, 50, 1)
 				anim(U.loc,U,'icons/mob/mob.dmi',,"phasein",,U.dir)
 			s_coold = 1
 		else
@@ -402,7 +402,7 @@ This is so anime it hurts. But that's the point.*/
 				U.say("Kumo no Shinkiro!")
 				var/turf/picked = locate(locx,locy,mobloc.z)
 				spawn(0)
-					playsound(U.loc, "sparks", 50, 1)
+					playsound(U.loc, SOUND_SPARK, 50, 1)
 					anim(mobloc,U,'icons/mob/mob.dmi',,"phaseout",,U.dir)
 
 				spawn(0)
@@ -420,8 +420,8 @@ This is so anime it hurts. But that's the point.*/
 
 				spawn(0)
 					spark_system.start()
-					playsound(U.loc, 'sound/effects/phasein.ogg', 25, 1)
-					playsound(U.loc, "sparks", 50, 1)
+					playsound(U.loc, SOUND_PHASE_IN, 25, 1)
+					playsound(U.loc, SOUND_SPARK, 50, 1)
 					anim(U.loc,U,'icons/mob/mob.dmi',,"phasein",,U.dir)
 				s_coold = 1
 			else

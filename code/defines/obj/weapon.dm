@@ -347,7 +347,7 @@
 		if(istype(I, /obj/item/weapon/wirecutters)) //allows you to convert the wire back to a cable coil
 			if(!weight1 && !weight2) //if there's nothing attached
 				user.show_message("<span class='notice'>You cut the knot in the [src].</span>")
-				playsound(usr, 'sound/items/Wirecutter.ogg', 50, 1)
+				playsound(usr, SOUND_WIRECUTTER, 50, 1)
 				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(user.loc) //we get back the wire lengths we put in
 				var /obj/item/stack/cable_coil/S = new /obj/item/weapon/screwdriver(user.loc)
 				C.amount = 10
@@ -368,7 +368,7 @@
 				if(weight2)
 					weight2.loc = get_turf(usr)
 					weight2 = null
-				playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
+				playsound(user, SOUND_WIRECUTTER, 50, 1)
 				update_icon()
 				return
 		if(I.w_class) //if it has a defined weight
@@ -693,7 +693,7 @@
 	attack_verb = list("chopped", "torn", "cut")
 
 /obj/item/weapon/hatchet/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
+	playsound(loc, SOUND_BLADE_SLICE, 50, 1, -1)
 	return ..()
 
 /obj/item/weapon/hatchet/unathiknife

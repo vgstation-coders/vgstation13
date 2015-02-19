@@ -51,7 +51,7 @@
 				for(var/mob/M in viewers(user, null))
 					if(M.client)
 						M.show_message(text("\red <B>[user] attacks [src]'s stomach wall with the [I.name]!"), 2)
-				playsound(user.loc, 'sound/effects/attackblob.ogg', 50, 1)
+				playsound(user.loc, SOUND_ATTACK_BLOB, 50, 1)
 
 				if(prob(src.getBruteLoss() - 50))
 					for(var/atom/movable/A in stomach_contents)
@@ -214,7 +214,7 @@
 			AdjustParalysis(-3)
 			AdjustStunned(-3)
 			AdjustWeakened(-3)
-			playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			playsound(get_turf(src), SOUND_THUD_SWOOSH, 50, 1, -1)
 			M.visible_message( \
 				"\blue [M] shakes [src] trying to wake [t_him] up!", \
 				"\blue You shake [src] trying to wake [t_him] up!", \
@@ -224,7 +224,7 @@
 			if (istype(src,/mob/living/carbon/human) && src:w_uniform)
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)
-			playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			playsound(get_turf(src), SOUND_THUD_SWOOSH, 50, 1, -1)
 			M.visible_message( \
 				"\blue [M] gives [src] a [pick("hug","warm embrace")].", \
 				"\blue You hug [src].", \
@@ -660,7 +660,7 @@
 			B.numChildren++
 
 			new /obj/effect/decal/cleanable/vomit(get_turf(src))
-			playsound(loc, 'sound/effects/splat.ogg', 50, 1)
+			playsound(loc, SOUND_SPLAT, 50, 1)
 
 			var/mob/living/simple_animal/borer/nB = new (get_turf(src),by_gamemode=1) // We've already chosen.
 			nB.transfer_personality(O.client)

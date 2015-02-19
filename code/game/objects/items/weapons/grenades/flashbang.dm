@@ -28,7 +28,7 @@
 			S.icon_state = "shield0"
 
 	M << "\red <B>BANG</B>"
-	playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
+	playsound(get_turf(src), SOUND_BANG, 25, 1)
 
 //Checking for protections
 	var/eye_safety = 0

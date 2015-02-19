@@ -226,7 +226,7 @@
 				user << "\blue Now welding the vent."
 				if(do_after(user, 20))
 					if(!src || !WT.isOn()) return
-					playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_WELDER_TWO, 50, 1)
 					if(!welded)
 						user.visible_message("[user] welds the vent shut.", "You weld the vent shut.", "You hear welding.")
 						welded = 1
@@ -258,7 +258,7 @@
 			user << "\red You cannot unwrench this [src], it too exerted due to internal pressure."
 			add_fingerprint(user)
 			return 1
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 		user << "\blue You begin to unfasten \the [src]..."
 		if (do_after(user, 40))
 			user.visible_message( \

@@ -119,7 +119,7 @@
 				user << "<span class='warning'>You must remove the floor plating in front of the SMES first.</span>"
 				return
 			user << "You begin to cut the cables..."
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 			if(do_after(user, 50))
 				if (prob(50) && electrocute_mob(usr, terminal.powernet, terminal))
 					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread

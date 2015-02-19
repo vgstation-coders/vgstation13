@@ -923,7 +923,7 @@
 
 			grabbed_by += G
 			G.synch()
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			playsound(loc, SOUND_THUD_SWOOSH, 50, 1, -1)
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
 					O.show_message(text("<span class='attack'>[] has grabbed [] passively!</span>", M, src), 1)
@@ -939,7 +939,7 @@
 						stunned = max(stunned,4)
 				What is this?*/
 
-				playsound(loc, 'sound/weapons/slash.ogg', 25, 1, -1)
+				playsound(loc, SOUND_SLASH, 25, 1, -1)
 				for(var/mob/O in viewers(src, null))
 					O.show_message(text("<span class='danger'>[] has slashed at []!</span>", M, src), 1)
 				if(prob(8))

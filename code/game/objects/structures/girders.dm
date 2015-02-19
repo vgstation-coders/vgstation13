@@ -8,7 +8,7 @@
 /obj/structure/girder/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/wrench) && state == 0)
 		if(anchored && !istype(src,/obj/structure/girder/displaced))
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 			user << "<span class='info'>Now disassembling the girder</span>"
 			if(do_after(user,40))
 				if(!src) return
@@ -18,7 +18,7 @@
 				M.amount = 1
 				qdel(src)
 		else if(!anchored)
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+			playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 			user << "\<span class='info'>Now securing the girder</span>"
 			if(get_turf(user, 40))
 				user << "<span class='info'>You secured the girder!</span>"
@@ -44,7 +44,7 @@
 			qdel(src)
 
 	else if(istype(W, /obj/item/weapon/screwdriver) && state == 2)
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+		playsound(get_turf(src), SOUND_SCREWDRIVER, 100, 1)
 		user << "<span class='info'>Now unsecuring support struts.</span>"
 		if(do_after(user,40))
 			if(!src || !get_turf(src)) return
@@ -53,7 +53,7 @@
 			update_icon()
 
 	else if(istype(W, /obj/item/weapon/wirecutters) && state == 1)
-		playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
+		playsound(get_turf(src), SOUND_WIRECUTTER, 100, 1)
 		user << "<span class='info'>Now removing support struts</span>"
 		if(do_after(user,40))
 			if(!src || !get_turf(src)) return
@@ -62,7 +62,7 @@
 			update_icon()
 
 	else if(istype(W, /obj/item/weapon/crowbar) && state == 0 && anchored )
-		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 100, 1)
+		playsound(get_turf(src), SOUND_CROWBAR, 100, 1)
 		user << "<span class='info'>Now dislodging the girder</span>"
 		if(do_after(user, 40))
 			if(!src) return
@@ -254,7 +254,7 @@
 
 /obj/structure/cultgirder/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/wrench))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		playsound(get_turf(src), SOUND_RATCHET, 100, 1)
 		user << "<span class='info'>Now disassembling the girder</span>"
 		if(do_after(user,40))
 			if(!src || !get_turf(src)) return

@@ -882,7 +882,7 @@
 	if(do_after(user, 40))
 		user.visible_message(	"[user] detaches the NanoMed from the wall.",
 								"You detach the NanoMed from the wall.")
-		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 		new /obj/item/mounted/frame/wallmed(src.loc)
 
 		for(var/obj/I in src)
@@ -900,7 +900,7 @@
 	if(do_after(user, 40))
 		user.visible_message(	"[user] detaches the NanoMed from the wall.",
 								"You detach the NanoMed from the wall.")
-		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+		playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 		new /obj/item/mounted/frame/wallmed(src.loc)
 
 		for(var/obj/I in src)
@@ -943,7 +943,7 @@
 				usr << "You begin removing screws from \the [src] backplate..."
 				if(do_after(user, 50))
 					usr << "<span class='notice'>You unscrew \the [src] from the wall.</span>"
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 					new /obj/item/mounted/frame/wallmed(get_turf(src))
 					del(src)
 				return 1
@@ -958,7 +958,7 @@
 					user.drop_item()
 					_circuitboard=C
 					C.loc=src
-					playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+					playsound(get_turf(src), SOUND_POP, 50, 0)
 					build++
 					update_icon()
 				return 1
@@ -966,7 +966,7 @@
 			if(istype(W, /obj/item/weapon/crowbar))
 				usr << "You begin to pry out \the [W] into \the [src]."
 				if(do_after(user, 10))
-					playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+					playsound(get_turf(src), SOUND_POP, 50, 0)
 					build--
 					update_icon()
 					var/obj/item/weapon/circuitboard/C
@@ -983,7 +983,7 @@
 			if(istype(W, /obj/item/stack/cable_coil))
 				var/obj/item/stack/cable_coil/C=W
 				user << "You start adding cables to \the [src]..."
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_DECONSTRUCT, 50, 1)
 				if(do_after(user, 20) && C.amount >= 5)
 					C.use(5)
 					build++
@@ -1004,7 +1004,7 @@
 				return 1
 			if(istype(W, /obj/item/weapon/screwdriver))
 				user << "You begin to complete \the [src]..."
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				if(do_after(user, 20))
 					if(!_circuitboard)
 						_circuitboard=new boardtype(src)
@@ -1017,7 +1017,7 @@
 		if(3) // Waiting for a recharge pack
 			if(istype(W, /obj/item/weapon/screwdriver))
 				user << "You begin to unscrew \the [src]..."
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_SCREWDRIVER, 50, 1)
 				if(do_after(user, 30))
 					build--
 					update_icon()

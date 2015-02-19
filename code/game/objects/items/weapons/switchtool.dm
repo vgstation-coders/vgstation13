@@ -109,7 +109,7 @@
 			stored_modules[module] = null
 			break
 	user << "You successfully remove \the [deployed] from \the [src]."
-	playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
+	playsound(get_turf(src), SOUND_SCREWDRIVER, 10, 1)
 	undeploy()
 	return 1
 

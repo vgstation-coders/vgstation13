@@ -189,7 +189,7 @@ var/global/list/image/splatter_cache=list()
 
 /obj/effect/decal/cleanable/blood/gibs/core/New()
 	..()
-	playsound(src, get_sfx("gib"),50,1)
+	playsound(src, SOUND_GIB, 50, 1)
 
 
 

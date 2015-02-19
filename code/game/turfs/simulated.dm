@@ -69,7 +69,7 @@
 						H.stop_pulling()
 						step(H, H.dir)
 						H << "<span class='notice'>You tripped over your hair!</span>"
-						playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+						playsound(get_turf(src), SOUND_SLIP, 50, 1, -3)
 						H.Stun(4)
 						H.Weaken(5)
 
@@ -80,7 +80,7 @@
 						M.stop_pulling()
 						step(M, M.dir)
 						M << "<span class='notice'>You slipped on the wet floor!</span>"
-						playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+						playsound(get_turf(src), SOUND_SLIP, 50, 1, -3)
 						M.Stun(5)
 						M.Weaken(3)
 					else
@@ -91,7 +91,7 @@
 						M.stop_pulling()
 						step(M, M.dir)
 						M << "<span class='notice'>You slipped on the wet floor!</span>"
-						playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+						playsound(get_turf(src), SOUND_SLIP, 50, 1, -3)
 						M.Stun(5)
 						M.Weaken(3)
 					else
@@ -108,7 +108,7 @@
 					spawn(4) step(M, M.dir)
 					M.take_organ_damage(2) // Was 5 -- TLE
 					M << "<span class='notice'>You slipped on the floor!</span>"
-					playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+					playsound(get_turf(src), SOUND_SLIP, 50, 1, -3)
 					M.Weaken(10)
 			if(3) // Ice
 				if(istype(M, /mob/living/carbon/human)) // Added check since monkeys don't have shoes
@@ -116,7 +116,7 @@
 						M.stop_pulling()
 						step(M, M.dir)
 						M << "<span class='notice'>You slipped on the icy floor!</span>"
-						playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+						playsound(get_turf(src), SOUND_SLIP, 50, 1, -3)
 						M.Stun(4)
 						M.Weaken(3)
 					else
@@ -127,7 +127,7 @@
 						M.stop_pulling()
 						step(M, M.dir)
 						M << "<span class='notice'>You slipped on the icy floor!</span>"
-						playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+						playsound(get_turf(src), SOUND_SLIP, 50, 1, -3)
 						M.Stun(4)
 						M.Weaken(3)
 					else

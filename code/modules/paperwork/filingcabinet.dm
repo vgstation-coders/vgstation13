@@ -43,7 +43,7 @@
 		icon_state = initial(icon_state)
 		updateUsrDialog()
 	else if(istype(P, /obj/item/weapon/wrench))
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(loc, SOUND_RATCHET, 50, 1)
 		anchored = !anchored
 		user << "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>"
 	else

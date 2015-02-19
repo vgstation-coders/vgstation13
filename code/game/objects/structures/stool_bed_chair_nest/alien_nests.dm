@@ -59,7 +59,7 @@
 /obj/structure/stool/bed/nest/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	var/aforce = W.force
 	health = max(0, health - aforce)
-	playsound(loc, 'sound/effects/attackblob.ogg', 100, 1)
+	playsound(loc, SOUND_ATTACK_BLOB, 100, 1)
 	for(var/mob/M in viewers(src, 7))
 		M.show_message("<span class='warning'>[user] hits [src] with [W]!</span>", 1)
 	healthcheck()

@@ -876,7 +876,7 @@
 
 			else if(istype(W, /obj/item/weapon/crowbar))
 				user << "You start prying out the circuit."
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 				if(do_after(user,20))
 					user << "You pry out the circuit!"
 					var/obj/item/weapon/circuitboard/air_alarm/circuit = new /obj/item/weapon/circuitboard/air_alarm()
@@ -895,7 +895,7 @@
 			else if(istype(W, /obj/item/weapon/wrench))
 				user << "You remove the air alarm assembly from the wall!"
 				new /obj/item/mounted/frame/alarm_frame(get_turf(user))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 				qdel(src)
 				return
 
@@ -1003,7 +1003,7 @@ FIRE ALARM
 						user.visible_message("<span class='attack'>[user] has cut the wiring from \the [src]!</span>", "You have cut the last of the wiring from \the [src].")
 						update_icon()
 						new /obj/item/stack/cable_coil(user.loc,5)
-						playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+						playsound(get_turf(src), SOUND_WIRECUTTER, 50, 1)
 			if(1)
 				if(istype(W, /obj/item/stack/cable_coil))
 					var/obj/item/stack/cable_coil/coil = W
@@ -1021,7 +1021,7 @@ FIRE ALARM
 
 				else if(istype(W, /obj/item/weapon/crowbar))
 					user << "You pry out the circuit!"
-					playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_CROWBAR, 50, 1)
 					spawn(20)
 						var/obj/item/weapon/circuitboard/fire_alarm/circuit = new /obj/item/weapon/circuitboard/fire_alarm()
 						circuit.loc = user.loc
@@ -1037,7 +1037,7 @@ FIRE ALARM
 				else if(istype(W, /obj/item/weapon/wrench))
 					user << "You remove the fire alarm assembly from the wall!"
 					new /obj/item/mounted/frame/firealarm(get_turf(user))
-					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+					playsound(get_turf(src), SOUND_RATCHET, 50, 1)
 					qdel(src)
 		return
 
@@ -1157,7 +1157,7 @@ FIRE ALARM
 		return
 	areaMaster.firealert()
 	update_icon()
-	//playsound(get_turf(src), 'sound/ambience/signal.ogg', 75, 0)
+	//playsound(get_turf(src), SOUND_AMBIENCE_SIGNAL, 75, 0)
 	return
 
 /obj/machinery/firealarm/New(loc, dir, building)
