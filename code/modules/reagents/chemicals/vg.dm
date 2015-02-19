@@ -31,3 +31,20 @@ var/global/list/charcoal_doesnt_remove=list(
 	return
 
 */
+
+/datum/reagent/muhhardcores
+	name = "Hardcores"
+	id = "bustanut"
+	description = "Concentrated hardcore beliefs."
+	reagent_state = LIQUID
+	color = "#FFF000"
+	custom_metabolism = 0.01
+
+/datum/reagent/muhhardcores/on_mob_life(var/mob/living/M)
+	if(prob(1))
+		if(prob(90))
+			M << "<span class='notice'>[pick("You feel quite hardcore","Coderbased is your god", "Fucking kickscammers Bustration will be the best")]."
+		else
+			M.say(pick("Muh hardcores.", "Falling down is a feature", "Gorrillionaires and Booty Borgs when?"))
+	..()
+	return
