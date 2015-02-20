@@ -166,6 +166,9 @@
 	if(!sacrificed.len && (new_objective != "sacrifice"))
 		sacrifice_target = null
 
+	if(!sacrificed.len && (new_objective != "sacrifice"))
+		sacrifice_target = null
+
 	if(new_objective == "eldergod")
 		second_phase()
 		return
