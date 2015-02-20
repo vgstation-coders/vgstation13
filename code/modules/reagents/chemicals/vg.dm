@@ -34,3 +34,5 @@ var/global/list/charcoal_doesnt_remove=list(
 	return
 
 */
+/datum/reagent/proc/reagent_deleted()
+	return
