@@ -557,7 +557,22 @@
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
 					// END AUTOFIX
 			dat += "</table>"
+
 			var/datum/game_mode/cult/mode_ticker = ticker.mode
+
+			var/living_crew = 0
+			var/living_cultists = 0
+			for(var/mob/living/L in player_list)
+				if(L.stat != DEAD)
+					if(L.mind in mode_ticker.cult)
+						living_cultists++
+					else
+						if(istype(L, /mob/living/carbon))
+							living_crew++
+
+			dat += "<br>[living_cultists] living cultists."
+			dat += "<br>[living_crew] living non-cultists."
+
 			dat += "<br><B>Cult Objectives:</B>"
 
 			for(var/obj_count=1, obj_count <= mode_ticker.objectives.len, obj_count++)

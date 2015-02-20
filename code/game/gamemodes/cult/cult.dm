@@ -245,15 +245,20 @@
 	if(!mass_convert)
 		var/living_crew = 0
 		var/living_cultists = 0
-		for(var/mob/living/carbon/C in player_list)
-			if(C.stat != DEAD)
-				living_crew++
-				if(C.mind in cult)
+		for(var/mob/living/L in player_list)
+			if(L.stat != DEAD)
+				if(L.mind in cult)
 					living_cultists++
-		if ((living_crew > 25) && (living_crew < 50))
-			if ((living_cultists * 2) < living_crew)
+				else
+					if(istype(L, /mob/living/carbon))
+						living_crew++
+
+		var/total = living_crew + living_cultists
+
+		if((living_cultists * 2) < total)
+			if ((total > 15) && (total < 50))
 				possible_objectives |= "convert"
-				convert_target = round(living_crew / 2)
+				convert_target = round(total / 2)
 
 	if(!possible_objectives.len)//No more possible objectives, time to summon Nar-Sie
 		return "eldergod"
