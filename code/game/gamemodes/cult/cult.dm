@@ -100,8 +100,7 @@
 		cultists_possible -= cultist
 		cult += cultist
 
-	//return (cult.len > 0)
-	return 1
+	return (cult.len > 0)
 
 /datum/game_mode/cult/proc/blood_check()
 	if((objectives[current_objective] == "bloodspill") && (bloody_floors.len >= spilltarget) && !spilled_blood)
@@ -151,6 +150,9 @@
 		var/list/unconvertables = get_unconvertables()
 		if(unconvertables.len < (cult.len * 2))//if cultists are getting radically outnumbered, they get a free pass to the summon objective.
 			new_objective = pick_objective()
+
+	if(!sacrificed.len && (new_objective != "sacrifice"))
+		sacrifice_target = null
 
 	if(new_objective == "eldergod")
 		second_phase()
@@ -243,15 +245,20 @@
 	if(!mass_convert)
 		var/living_crew = 0
 		var/living_cultists = 0
-		for(var/mob/living/carbon/C in player_list)
-			if(C.stat != DEAD)
-				living_crew++
-				if(C.mind in cult)
+		for(var/mob/living/L in player_list)
+			if(L.stat != DEAD)
+				if(L.mind in cult)
 					living_cultists++
-		if ((living_crew > 25) && (living_crew < 50))
-			if ((living_cultists * 2) < living_crew)
+				else
+					if(istype(L, /mob/living/carbon))
+						living_crew++
+
+		var/total = living_crew + living_cultists
+
+		if((living_cultists * 2) < total)
+			if ((total > 15) && (total < 50))
 				possible_objectives |= "convert"
-				convert_target = round(living_crew / 2)
+				convert_target = round(total / 2)
 
 	if(!possible_objectives.len)//No more possible objectives, time to summon Nar-Sie
 		return "eldergod"
@@ -488,16 +495,16 @@
 			var/explanation
 			switch(objectives[obj_count])
 				if("convert")//convert half the crew
-					if(cult.len >= convert_target)
-						explanation = "Convert [convert_target] crewmembers ([cult.len] converted). <font color='green'><B>Success!</B></font>"
+					if(obj_count < objectives.len)
+						explanation = "Convert [convert_target] crewmembers ([cult.len] cultists at round end). <font color='green'><B>Success!</B></font>"
 						feedback_add_details("cult_objective","cult_convertion|SUCCESS")
 					else
-						explanation = "Convert [convert_target] crewmembers ([cult.len] converted). <font color='red'><B>Fail!</B></font>"
+						explanation = "Convert [convert_target] crewmembers ([cult.len] total cultists). <font color='red'><B>Fail!</B></font>"
 						feedback_add_details("cult_objective","cult_convertion|FAIL")
 
 				if("bloodspill")//cover a large portion of the station in blood
-					if(bloody_floors.len >= spilltarget)
-						explanation = "Cover [spilltarget] tiles of the station in blood ([bloody_floors.len] tiles covered). <font color='green'><B>Success!</B></font>"
+					if(obj_count < objectives.len)
+						explanation = "Cover [spilltarget] tiles of the station in blood ([bloody_floors.len] tiles covered at round end). <font color='green'><B>Success!</B></font>"
 						feedback_add_details("cult_objective","cult_bloodspill|SUCCESS")
 					else
 						explanation = "Cover [spilltarget] tiles of the station in blood ([bloody_floors.len] tiles covered). <font color='red'><B>Fail!</B></font>"
