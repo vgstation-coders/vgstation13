@@ -169,11 +169,6 @@ var/global/narsie_cometh = 0
 			if(M.flags & INVULNERABLE)
 				return 0
 
-			if((M in player_list) && (ticker.mode.name == "cult"))
-				var/datum/game_mode/cult/mode_ticker = ticker.mode
-				if(M.mind && (!(M.mind in mode_ticker.cult)))
-					mode_ticker.harvested++
-
 			M.cultify()
 
 	//ITEM PROCESSING
