@@ -1580,6 +1580,14 @@
 	else if(href_list["check_antagonist"])
 		check_antagonists()
 
+	else if(href_list["cult_nextobj"])
+		if(alert(usr, "Validate the current Cult objective and unlock the next one?", "Cult Cheat Code", "Yes", "No") != "Yes")
+			return
+
+		var/datum/game_mode/cult/mode_ticker = ticker.mode
+		mode_ticker.additional_phase()
+		check_antagonists()
+
 	else if(href_list["adminplayerobservecoodjump"])
 		if(!check_rights(R_ADMIN))	return
 

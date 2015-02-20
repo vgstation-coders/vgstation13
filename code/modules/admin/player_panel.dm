@@ -595,6 +595,9 @@
 
 				dat += "<br><B>Objective #[obj_count]</B>: [explanation]"
 
+			if(!mode_ticker.narsie_condition_cleared)
+				dat += "<br><a href='?src=\ref[src];cult_nextobj=\ref[src]'>complete objective (debug)</a>"
+
 		/*if(istype(ticker.mode, /datum/game_mode/anti_revolution) && ticker.mode:heads.len)	//comment out anti-revolution
 			dat += "<br><table cellspacing=5><tr><td><B>Corrupt Heads</B></td><td></td></tr>"
 			for(var/datum/mind/N in ticker.mode:heads)
