@@ -419,3 +419,12 @@
 	desc = "Do I look like a waiter?"
 	icon_state = "kefkarobe"
 	item_state = "kefkarobe"
+
+/obj/item/clothing/suit/storage/draculacoat
+	name = "Vampire Coat"
+	desc = "What is a man? A miserable little pile of secrets."
+	icon_state = "draculacoat"
+	item_state = "draculacoat"
+	blood_overlay_type = "coat"
+	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
+	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
