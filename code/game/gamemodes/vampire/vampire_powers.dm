@@ -111,60 +111,7 @@
 
 	if(M.current.vampire_power(0, 3))
 		M.current.remove_vampire_blood(M.vampire.bloodusable)
-		dead_mob_list -= M.current
-		living_mob_list |= list(M.current)
-		M.current.stat = CONSCIOUS
-		M.current.tod = null
-		M.current.setToxLoss(0)
-		M.current.setOxyLoss(0)
-		M.current.setCloneLoss(0)
-		M.current.setBrainLoss(0)
-		M.current.SetParalysis(0)
-		M.current.SetStunned(0)
-		M.current.SetWeakened(0)
-		M.current.radiation = 0
-		M.current.heal_overall_damage(M.current.getBruteLoss(), M.current.getFireLoss())
-		M.current.reagents.clear_reagents()
-		M.current.germ_level = 0
-		M.current.next_pain_time = 0
-		M.current.traumatic_shock = 0
-		if(ishuman(M.current))
-			var/mob/living/carbon/human/H = M.current
-			H.timeofdeath = 0
-			H.vessel.reagent_list = list()
-			H.vessel.add_reagent("blood",560)
-			H.shock_stage = 0
-			spawn(1)
-				H.fixblood()
-			for(var/organ_name in H.organs_by_name)
-				var/datum/organ/external/O = H.organs_by_name[organ_name]
-				for(var/obj/item/weapon/shard/shrapnel/s in O.implants)
-					if(istype(s))
-						O.implants -= s
-						H.contents -= s
-						del(s)
-				O.amputated = 0
-				O.brute_dam = 0
-				O.burn_dam = 0
-				O.damage_state = "00"
-				O.germ_level = 0
-				O.hidden = null
-				O.number_wounds = 0
-				O.open = 0
-				O.perma_injury = 0
-				O.stage = 0
-				O.status = 0
-				O.trace_chemicals = list()
-				O.wounds = list()
-				O.wound_update_accuracy = 1
-			for(var/organ_name in H.internal_organs_by_name)
-				var/datum/organ/internal/IO = H.internal_organs_by_name[organ_name]
-				IO.damage = 0
-				IO.trace_chemicals.len = 0
-				IO.germ_level = 0
-				IO.status = 0
-				IO.robotic = 0
-			H.updatehealth()
+		M.rejuvenate(0)
 		M.current << "<span class='sinister'>You awaken, ready to strike fear into the hearts of mortals once again.</span>"
 		M.current.update_canmove()
 		M.current.make_vampire()
@@ -296,7 +243,7 @@
 			C.Stun(distance_value)
 			if(distance_value > 1)
 				C.Weaken(distance_value)
-			C.stuttering += 5+distance_value * (VAMP_CHARISMA in M.vampire.powers ? 2 : 1) //double stutter time with Charisma
+			C.stuttering += 5+distance_value * ((VAMP_CHARISMA in M.vampire.powers) ? 2 : 1) //double stutter time with Charisma
 			if(!C.blinded) C.blinded = 1
 			C.blinded += max(1, distance_value)
 		(dist_mobs + close_mobs) << "<span class='warning'>You are blinded by [M.current.name]'s glare</span>"
@@ -355,13 +302,14 @@
 		M.current << "<span class='warning'>You can only enthrall humans.</span>"
 		return
 
-	if(M.current.can_enthrall(C) && do_mob(M.current, C, VAMP_CHARISMA in M.vampire.powers ? 25 : 50)) //takes half the time with Charisma unlocked
-		if(M.current.can_enthrall(C) && M.current.vampire_power(300, 0)) // recheck
+	if(M.current.can_enthrall(C) && do_mob(M.current, C, (VAMP_CHARISMA in M.vampire.powers) ? 25 : 50)) //takes half the time with Charisma unlocked
+		if(!M.current.can_enthrall(C))
+			M.current << "<span class='warning'>Either you or your target moved, and you couldn't finish enthralling them!</span>"
+			return
+		if(!M.current.vampire_power(300, 0)) // recheck
 			M.current.handle_enthrall(C)
 			M.current.verbs -= /client/proc/vampire_enthrall
-			spawn(VAMP_CHARISMA in M.vampire.powers ? 600 : 1800) M.current.verbs += /client/proc/vampire_enthrall
-		else
-			M.current << "<span class='warning'>Either you or your target moved, or you aren't strong enough at the moment.</span>"
+			spawn((VAMP_CHARISMA in M.vampire.powers) ? 600 : 1800) M.current.verbs += /client/proc/vampire_enthrall
 			return
 
 
@@ -440,7 +388,7 @@
 	ticker.mode.enthralled.Add(H.mind)
 	ticker.mode.enthralled[H.mind] = src.mind
 	H.mind.special_role = "VampThrall"
-	H << "<b><span class='sinister'>You have been Enthralled by [name]. Follow their every command.</b></span>"
+	H << "<span class='sinister'>You have been Enthralled by [name]. Follow their every command.</span>"
 	src << "<span class='warning'>You have successfully Enthralled [H.name]. <i>If they refuse to do as you say just adminhelp.</i></span>"
 	ticker.mode.update_vampire_icons_added(H.mind)
 	ticker.mode.update_vampire_icons_added(src.mind)
