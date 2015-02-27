@@ -273,7 +273,9 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	src.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [H.name] ([H.ckey]) in the neck and draining their blood</font>")
 	H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [src.name] ([src.ckey])</font>")
 	log_attack("[src.name] ([src.ckey]) bit [H.name] ([H.ckey]) in the neck")
-	src.visible_message("<span class='danger'>[src.name] bites [H.name]'s neck!</span>", "<span class='danger'>You bite [H.name]'s neck and begin to drain their blood.</span>", "<span class='notice'>You hear a soft puncture and a wet sucking noise.</span>")
+	src.visible_message("<span class='danger'>[src.name] bites [H.name]'s neck!</span>",
+	"<span class='danger'>You bite [H.name]'s neck and begin to drain their blood.</span>",
+	"<span class='notice'>You hear a soft puncture and a wet sucking noise.</span>")
 	if(!iscarbon(src))
 		H.LAssailant = null
 	else
@@ -321,57 +323,57 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 
 	// TIER 1
 	if(vamp.bloodtotal >= 100)
-		if(!(VAMP_VISION in vamp.powers))
+		if(!(vamp.powers |= VAMP_VISION))
 			vamp.powers.Add(VAMP_VISION)
-		if(!(VAMP_SHAPE in vamp.powers))
+		if(!(vamp.powers |= VAMP_SHAPE))
 			vamp.powers.Add(VAMP_SHAPE)
 
 	// TIER 2
 	if(vamp.bloodtotal >= 150)
-		if(!(VAMP_CLOAK in vamp.powers))
+		if(!(vamp.powers |= VAMP_CLOAK))
 			vamp.powers.Add(VAMP_CLOAK)
-		if(!(VAMP_DISEASE in vamp.powers))
+		if(!(vamp.powers |= VAMP_DISEASE))
 			vamp.powers.Add(VAMP_DISEASE)
 
 	// TIER 3
 	if(vamp.bloodtotal >= 200)
-		if(!(VAMP_BATS in vamp.powers))
+		if(!(vamp.powers |= VAMP_BATS))
 			vamp.powers.Add(VAMP_BATS)
-		if(!(VAMP_SCREAM in vamp.powers))
+		if(!(vamp.powers |= VAMP_SCREAM))
 			vamp.powers.Add(VAMP_SCREAM)
 		// Commented out until we can figured out a way to stop this from spamming.
 		//src << "\blue Your rejuvination abilities have improved and will now heal you over time when used."
 
 	// TIER 3.5 (/vg/)
 	if(vamp.bloodtotal >= 250)
-		if(!(VAMP_BLINK in vamp.powers))
+		if(!(vamp.powers |= VAMP_BLINK))
 			vamp.powers.Add(VAMP_BLINK)
 
 	// TIER 4
 	if(vamp.bloodtotal >= 300)
-		if(!(VAMP_JAUNT in vamp.powers))
+		if(!(vamp.powers |= VAMP_JAUNT))
 			vamp.powers.Add(VAMP_JAUNT)
-		if(!(VAMP_SLAVE in vamp.powers))
+		if(!(vamp.powers |= VAMP_SLAVE))
 			vamp.powers.Add(VAMP_SLAVE)
 
 	// TIER 5 (/vg/)
 	if(vamp.bloodtotal >= 400)
-		if(!(VAMP_MATURE in vamp.powers))
+		if(!(vamp.powers |= VAMP_MATURE))
 			vamp.powers.Add(VAMP_MATURE)
 
 	// TIER 6 (/vg/)
 	if(vamp.bloodtotal >= 450)
-		if(!(VAMP_SHADOW in vamp.powers))
+		if(!(vamp.powers |= VAMP_SHADOW))
 			vamp.powers.Add(VAMP_SHADOW)
 
 	// TIER 66 (/vg/)
 	if(vamp.bloodtotal >= 500)
-		if(!(VAMP_CHARISMA in vamp.powers))
+		if(!(vamp.powers |= VAMP_CHARISMA))
 			vamp.powers.Add(VAMP_CHARISMA)
 
 	// TIER 666 (/vg/)
 	if(vamp.bloodtotal >= 666)
-		if(!(VAMP_UNDYING in vamp.powers))
+		if(!(vamp.powers |= VAMP_UNDYING))
 			vamp.powers.Add(VAMP_UNDYING)
 
 	announce_new_power(old_powers, vamp.powers)
@@ -533,17 +535,17 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		if(prob(35))
 			src << "<span class='danger'>This ground is blessed. Get away, or splatter it with blood to make it safe for you.</span>"
 
-	if(istype(loc.loc, /area/chapel)) //stay out of the chapel unless you want to turn into a pile of ashes
+	if(get_area(src) == /area/chapel) //stay out of the chapel unless you want to turn into a pile of ashes
 		smitetemp += (vampcoat ? 5 : 15)
 		if(prob(35))
 			src << "<span class='sinister'>Burn, wretch.</span>"
 
 	if(!mind.vampire.nullified) //Checks to see if you can benefit from your vamp powers here
-		if(VAMP_MATURE in mind.vampire.powers)
+		if(mind.vampire.powers |= VAMP_MATURE)
 			smitetemp -= 1
-		if(VAMP_SHADOW in mind.vampire.powers)
+		if(mind.vampire.powers |= VAMP_SHADOW)
 			var/turf/simulated/T = get_turf(src)
-			if(T.lighting_lumcount > 2)
+			if(T.lighting_lumcount < 2)
 				smitetemp -= 1
 		if(VAMP_UNDYING in mind.vampire.powers)
 			smitetemp -= 1
