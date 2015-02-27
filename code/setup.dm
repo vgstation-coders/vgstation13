@@ -874,13 +874,13 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define VAMP_CLOAK    7
 #define VAMP_BATS     8
 #define VAMP_SCREAM   9
-#define VAMP_JAUNT    12
-#define VAMP_SLAVE    13
-#define VAMP_BLINK    14
-#define VAMP_MATURE   15
-#define VAMP_SHADOW   16
-#define VAMP_CHARISMA 17
-#define VAMP_UNDYING  18
+#define VAMP_JAUNT    10
+#define VAMP_SLAVE    11
+#define VAMP_BLINK    12
+#define VAMP_MATURE   13
+#define VAMP_SHADOW   14
+#define VAMP_CHARISMA 15
+#define VAMP_UNDYING  16
 
 // Moved from machine_interactions.dm
 #define STATION_Z  1
@@ -929,14 +929,14 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define MELTPOINT_STEEL   1510+T0C
 #define MELTPOINT_SILICON 1687 // KELVIN
 #define MELTPOINT_PLASTIC 180+T0C
-#define MELTPOINT_SNOW	304.15	//about 30캜
+#define MELTPOINT_SNOW	304.15	//about 30째C
 
 // snow business
-#define SNOWBALL_MINIMALTEMP 265	//about -10캜, the minimal temperature at which a thrown snowball can cool you down.
+#define SNOWBALL_MINIMALTEMP 265	//about -10째C, the minimal temperature at which a thrown snowball can cool you down.
 #define SNOWBALL_TIMELIMIT 400	//in deciseconds, how long after being spawn does the snowball disappears if it hasn't been picked up
 
-#define SNOWSPREAD_MAXTEMP 296.15	//23캜, the maximal temperature (in Kelvin) at which cosmic snow will spread to adjacent tiles
-#define COSMICSNOW_MINIMALTEMP 233	//-40캜, the lowest temperature at which Cosmic snow will cool down its surroundings
+#define SNOWSPREAD_MAXTEMP 296.15	//23째C, the maximal temperature (in Kelvin) at which cosmic snow will spread to adjacent tiles
+#define COSMICSNOW_MINIMALTEMP 233	//-40째C, the lowest temperature at which Cosmic snow will cool down its surroundings
 
 //the following defines refer to the number of cosmic snow tiles in the world.
 #define COSMICFREEZE_LEVEL_1 300	//Cosmic snow now has a chance to spawn a sappling upon spreading.
