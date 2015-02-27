@@ -53,6 +53,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/fireloss_mult = 1
 
 	var/darksight = 2
+	var/max_dark_adjust = 3
+	var/min_dark_adjust = -3 //we can actually get too used to bright light
 	var/throw_mult = 1 // Default mob throw_mult.
 
 	var/hazard_high_pressure = HAZARD_HIGH_PRESSURE   // Dangerously high pressure.

@@ -60,6 +60,9 @@
 
 	var/failed_last_breath = 0 //This is used to determine if the mob failed a breath. If they did fail a brath, they will attempt to breathe each tick, otherwise just once per 4 ticks.
 
+	var/adjusted_darkness_sight = 0
+	var/get_adjust_message = 0 //whether or not we'll be spammed by the adjustment messages
+
 	var/last_dam = -1	//Used for determining if we need to process all organs or just some or even none.
 	var/list/bad_external_organs = list()// organs we check until they are good.
 
@@ -74,6 +77,7 @@
 
 	var/lastFart = 0 // Toxic fart cooldown.
 	var/lastScream = 0 // Prevent scream spam in some situations
+	var/lastDarknessAdjust = 0
 
 
 	fire_dmi = 'icons/mob/OnFire.dmi'
