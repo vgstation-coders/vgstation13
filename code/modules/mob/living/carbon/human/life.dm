@@ -679,7 +679,7 @@ var/global/list/organ_damage_overlays = list(
 /mob/living/carbon/human/verb/adjust_eyes_light_messages()
 	set name = "See Eyes Adjustment"
 	set desc = "Toggle the messages for your eyes adjusting to the light or not."
-	set category = "Player"
+	set category = "IC"
 	src.get_adjust_message = !src.get_adjust_message
 	src << "You will now [!get_adjust_message ? "not " : ""]receive messages when your vision adjusts to the ambient lighting."
 
