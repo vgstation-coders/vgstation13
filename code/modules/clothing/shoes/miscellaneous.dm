@@ -14,7 +14,7 @@
 
 /obj/item/clothing/shoes/syndigaloshes/New()
 	..()
-	for(var/Type in typesof(/obj/item/clothing/shoes) - /obj/item/clothing/shoes)
+	for(var/Type in typesof(/obj/item/clothing/shoes) - list(/obj/item/clothing/shoes, /obj/item/clothing/shoes/syndigaloshes))
 		clothing_choices += new Type
 	return
 
@@ -214,3 +214,16 @@
 	desc = "As worn by the clowns of old."
 	icon_state = "jestershoes"
 	item_state = "jestershoes"
+
+/obj/item/clothing/shoes/aviatorboots
+	name = "Aviator Boots"
+	desc = "Boots suitable for just about any occasion"
+	icon_state = "aviator_boots"
+	item_state = "aviator_boots"
+	species_restricted = list("exclude","Vox")
+
+/obj/item/clothing/shoes/libertyshoes
+	name = "Liberty Shoes"
+	desc = "Freedom isn't free, neither were these shoes."
+	icon_state = "libertyshoes"
+	item_state = "libertyshoes"
