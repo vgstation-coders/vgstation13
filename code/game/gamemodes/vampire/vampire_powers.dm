@@ -111,7 +111,7 @@
 
 	if(M.current.vampire_power(0, 3))
 		M.current.remove_vampire_blood(M.vampire.bloodusable)
-		M.rejuvenate(0)
+		M.current.revive(0)
 		M.current << "<span class='sinister'>You awaken, ready to strike fear into the hearts of mortals once again.</span>"
 		M.current.update_canmove()
 		M.current.make_vampire()
