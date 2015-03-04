@@ -260,6 +260,13 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 				verbs += /client/proc/vampire_enthrall
 			if(VAMP_MATURE)
 				continue
+			if(VAMP_SHADOW)
+				verbs += /client/proc/vampire_shadowmenace
+			if(VAMP_CHARISMA)
+				continue
+			if(VAMP_UNDYING)
+				verbs += /client/proc/vampire_undeath
+				verbs += /client/proc/vampire_spawncape
 /mob/proc/remove_vampire_powers()
 	for(var/handler in typesof(/client/proc))
 		if(findtext("[handler]","vampire_"))
@@ -324,57 +331,44 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	// TIER 1
 	if(vamp.bloodtotal >= 100)
 		if(!(vamp.powers |= VAMP_VISION))
-			vamp.powers.Add(VAMP_VISION)
 		if(!(vamp.powers |= VAMP_SHAPE))
-			vamp.powers.Add(VAMP_SHAPE)
 
 	// TIER 2
 	if(vamp.bloodtotal >= 150)
 		if(!(vamp.powers |= VAMP_CLOAK))
-			vamp.powers.Add(VAMP_CLOAK)
 		if(!(vamp.powers |= VAMP_DISEASE))
-			vamp.powers.Add(VAMP_DISEASE)
 
 	// TIER 3
 	if(vamp.bloodtotal >= 200)
 		if(!(vamp.powers |= VAMP_BATS))
-			vamp.powers.Add(VAMP_BATS)
 		if(!(vamp.powers |= VAMP_SCREAM))
-			vamp.powers.Add(VAMP_SCREAM)
 		// Commented out until we can figured out a way to stop this from spamming.
 		//src << "\blue Your rejuvination abilities have improved and will now heal you over time when used."
 
 	// TIER 3.5 (/vg/)
 	if(vamp.bloodtotal >= 250)
 		if(!(vamp.powers |= VAMP_BLINK))
-			vamp.powers.Add(VAMP_BLINK)
 
 	// TIER 4
 	if(vamp.bloodtotal >= 300)
 		if(!(vamp.powers |= VAMP_JAUNT))
-			vamp.powers.Add(VAMP_JAUNT)
 		if(!(vamp.powers |= VAMP_SLAVE))
-			vamp.powers.Add(VAMP_SLAVE)
 
 	// TIER 5 (/vg/)
 	if(vamp.bloodtotal >= 400)
 		if(!(vamp.powers |= VAMP_MATURE))
-			vamp.powers.Add(VAMP_MATURE)
 
 	// TIER 6 (/vg/)
 	if(vamp.bloodtotal >= 450)
 		if(!(vamp.powers |= VAMP_SHADOW))
-			vamp.powers.Add(VAMP_SHADOW)
 
 	// TIER 66 (/vg/)
 	if(vamp.bloodtotal >= 500)
 		if(!(vamp.powers |= VAMP_CHARISMA))
-			vamp.powers.Add(VAMP_CHARISMA)
 
 	// TIER 666 (/vg/)
 	if(vamp.bloodtotal >= 666)
 		if(!(vamp.powers |= VAMP_UNDYING))
-			vamp.powers.Add(VAMP_UNDYING)
 
 	announce_new_power(old_powers, vamp.powers)
 
@@ -541,9 +535,9 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			src << "<span class='sinister'>Burn, wretch.</span>"
 
 	if(!mind.vampire.nullified) //Checks to see if you can benefit from your vamp powers here
-		if(mind.vampire.powers |= VAMP_MATURE)
+		if(VAMP_MATURE in mind.vampire.powers)
 			smitetemp -= 1
-		if(mind.vampire.powers |= VAMP_SHADOW)
+		if(VAMP_SHADOW in mind.vampire.powers)
 			var/turf/simulated/T = get_turf(src)
 			if(T.lighting_lumcount < 2)
 				smitetemp -= 1
