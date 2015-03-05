@@ -1803,7 +1803,7 @@ var/global/list/organ_damage_overlays = list(
 			temp = PULSE_NONE
 
 		if(R.id in cheartstopper)  //Conditional heart-stoppage
-			if(R.volume >= R.overdose)
+			if(R.volume >= R.overdose_threshold)
 				temp = PULSE_NONE
 
 	return temp

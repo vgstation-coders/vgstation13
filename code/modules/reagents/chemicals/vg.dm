@@ -1,3 +1,5 @@
+/* Swapped for new charcoal in newchem_medicine.dm - Iamgoofball
+
 var/global/list/charcoal_doesnt_remove=list(
 	"charcoal",
 	"blood"
@@ -29,4 +31,8 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	M.adjustToxLoss(-2*REM)
 	..()
+	return
+
+*/
+/datum/reagent/proc/reagent_deleted()
 	return

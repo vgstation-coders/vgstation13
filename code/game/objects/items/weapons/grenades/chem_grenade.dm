@@ -170,7 +170,8 @@
 	visible_message("<span class='warning'>\icon[src] \The [src] bursts open.</span>")
 
 	reservoir = new /obj/item/weapon/reagent_containers/glass/beaker/noreactgrenade() //acts like a stasis beaker, so the chemical reactions don't occur before all the slime reactions have occured
-
+	for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
+		reservoir.reagents.chem_temp += G.reagents.chem_temp // we need to add up temperature before moving reagents for proper reactions
 	for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
 		G.reagents.trans_to(reservoir, G.reagents.total_volume)
 	for(var/obj/item/slime_extract/S in beakers)		//checking for reagents inside the slime extracts

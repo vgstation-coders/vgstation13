@@ -409,6 +409,7 @@
 		create_reagents(1000)
 	else
 		reagents.clear_reagents()
+		reagents.addiction_list.len = 0
 	heal_overall_damage(1000, 1000)
 	ExtinguishMob()
 	fire_stacks = 0
