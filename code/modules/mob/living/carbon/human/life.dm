@@ -1428,13 +1428,6 @@ var/global/list/organ_damage_overlays = list(
 				if("shadow")
 					see_in_dark = 8
 					see_invisible = SEE_INVISIBLE_LEVEL_ONE
-		if(mind && mind.vampire)
-			if((VAMP_VISION in mind.vampire.powers) && !(VAMP_MATURE in mind.vampire.powers))
-				sight |= SEE_MOBS
-			if((VAMP_MATURE in mind.vampire.powers))
-				sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
-				see_in_dark = 8
-				if(!druggy)		see_invisible = SEE_INVISIBLE_LEVEL_TWO
 		if(M_XRAY in mutations)
 			sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
 			see_in_dark = 8

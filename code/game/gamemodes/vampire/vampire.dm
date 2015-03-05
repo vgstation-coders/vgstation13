@@ -221,11 +221,12 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 /datum/vampire/New(gend = FEMALE)
 	gender = gend
 
-/mob/proc/make_vampire()
+/mob/living/proc/make_vampire()
 	if(!mind)				return
 	if(!mind.vampire)
 		mind.vampire = new /datum/vampire(gender)
 		mind.vampire.owner = src
+	callOnLife += list("\ref[src]" = "OnLife()")
 	verbs += /client/proc/vampire_rejuvinate
 	verbs += /client/proc/vampire_hypnotise
 	verbs += /client/proc/vampire_glare
@@ -271,6 +272,16 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	for(var/handler in typesof(/client/proc))
 		if(findtext("[handler]","vampire_"))
 			verbs -= handler
+
+/datum/vampire/proc/OnLife()
+	var/datum/mind/M = usr.mind
+	if(!M) return
+	if(VAMP_MATURE in powers)
+		M.current.sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
+		M.current.see_in_dark = 8
+	else if(VAMP_VISION in powers)
+		M.current.sight |= SEE_MOBS
+	if(!M.current.druggy) M.current.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
 /mob/proc/handle_bloodsucking(mob/living/carbon/human/H)
 	src.mind.vampire.draining = H
@@ -479,6 +490,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	enthralled -= vampire_mind
 	vampire_mind.special_role = null
 	update_vampire_icons_removed(vampire_mind)
+	vampire_mind.current.unsubLife(src)
 	//world << "Removed [vampire_mind.current.name] from vampire shit"
 	vampire_mind.current << "\red <FONT size = 3><B>The fog clouding your mind clears. You remember nothing from the moment you were enthralled until now.</B></FONT>"
 
