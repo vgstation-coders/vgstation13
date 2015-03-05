@@ -29,3 +29,4 @@ info.json
 /bot/data
 /analysis
 /code-fixed
+*.fixed
