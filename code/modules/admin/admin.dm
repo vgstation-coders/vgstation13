@@ -1102,10 +1102,9 @@ var/global/floorIsLava = 0
 
 	if(!check_rights(R_SPAWN))	return
 
-	var/list/types = typesof(/atom)
 	var/list/matches = new()
 
-	for(var/path in types)
+	for(var/path in typesof(/atom))
 		if(findtext("[path]", object))
 			matches += path
 
@@ -1318,8 +1317,8 @@ proc/formatLocation(location)
 		loc = get_turf(location)
 
 	var/area/A = get_area(location)
-
-	return "[A.name] - [loc.x],[loc.y],[loc.z]"
+	var/answer = "[istype(A) ? "[A.name]" : "UNKNOWN"] - [istype(loc) ? "[loc.x],[loc.y],[loc.z]" : "UNKNOWN"]"
+	return answer
 
 proc/formatPlayerPanel(var/mob/U,var/text="PP")
 	return "<A HREF='?_src_=holder;adminplayeropts=\ref[U]'>[text]</A>"

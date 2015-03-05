@@ -26,6 +26,7 @@
 	var/addiction_stage = 0
 	var/shock_reduction = 0
 	var/overdosed = 0 // You fucked up and this is now triggering it's overdose_threshold effects, purge that shit quick.
+	var/heat_capacity = 4.184 // Joules?
 
 /datum/reagent/proc/reaction_mob(var/mob/M, var/method=TOUCH, var/volume)
  //By default we have a chance to transfer some

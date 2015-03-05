@@ -464,7 +464,7 @@
 				reagents.add_reagent("space_drugs", 20)
 			if(4)
 				name = "Grifeo: Rich"
-				reagents.add_reagent("tequilla", 10)
+				reagents.add_reagent("tequila", 10)
 				reagents.add_reagent("chemical_waste", 10)
 			if(5)
 				name = "Grifeo: Pure"
@@ -797,15 +797,15 @@
 		..()
 		reagents.add_reagent("vodka", 100)
 
-/obj/item/weapon/reagent_containers/food/drinks/bottle/tequilla
-	name = "Caccavo Guaranteed Quality Tequilla"
+/obj/item/weapon/reagent_containers/food/drinks/bottle/tequila
+	name = "Caccavo Guaranteed Quality Tequila"
 	desc = "Made from premium petroleum distillates, pure thalidomide and other fine quality ingredients!"
-	icon_state = "tequillabottle"
+	icon_state = "tequilabottle"
 	isGlass = 1
 	molotov = -1
 	New()
 		..()
-		reagents.add_reagent("tequilla", 100)
+		reagents.add_reagent("tequila", 100)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing
 	name = "Bottle of Nothing"
@@ -820,7 +820,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/patron
 	name = "Wrapp Artiste Patron"
-	desc = "Silver laced tequilla, served in space night clubs across the galaxy."
+	desc = "Silver laced tequila, served in space night clubs across the galaxy."
 	icon_state = "patronbottle"
 	bottleheight = 26 //has a cork but for now it goes on top of the cork
 	molotov = -1
