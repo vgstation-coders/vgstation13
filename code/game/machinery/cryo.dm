@@ -98,6 +98,8 @@
 		return
 
 	if(occupant)
+		if(occupant.health == occupant.maxhealth) //Is the occupant at full health? If so, ding!
+			playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
 		if(occupant.stat != 2)
 			process_occupant()
 
