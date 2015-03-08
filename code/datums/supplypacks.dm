@@ -43,6 +43,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate
 	containername = "Toner Cartridges"
 	group = "Supplies"
+	
+/datum/supply_packs/labels
+	name = "Label Rolls"
+	contains = list(/obj/item/weapon/storage/box/labels,
+					/obj/item/weapon/storage/box/labels, //21 label rolls is enough to label Beepsky "SHITCURITRON" 375 times,
+					/obj/item/weapon/storage/box/labels) //so this might be a bit excessive.
+	cost = 10
+	containertype = /obj/structure/closet/crate
+	containername = "Label Rolls"
+	group = "Supplies"
 
 /datum/supply_packs/internals
 	name = "Internals crate"
