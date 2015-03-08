@@ -114,9 +114,7 @@
 	set src in view(1)
 	set category = "Object"
 	var/atom/A = src
-	var cut_start = findtextEx(A.name,A.labeled)
-	var cut_end = cut_start + lentext(A.labeled)
-	A.name = copytext(A.name,1,cut_start) + copytext(A.name,cut_end)
+	A.name = replacetext(A.name, A.labeled, "")
 	A.labeled = null
 	A.verbs -= /atom/proc/remove_label
 
