@@ -43,7 +43,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate
 	containername = "Toner Cartridges"
 	group = "Supplies"
-
+	
 /datum/supply_packs/labels
 	name = "Label Rolls"
 	contains = list(/obj/item/weapon/storage/box/labels,
