@@ -449,7 +449,7 @@
 			mech = "Assisted:"
 		if(i.robotic == 2)
 			mech = "Mechanical:"
-		if(istype(i,/datum/organ/internal/mami))
+		if(istype(i,/datum/organ/internal/brain) && i.robotic == 2)
 			mech = "Error: Non-Organic Brain Detected?"
 
 		var/infection = "None"
