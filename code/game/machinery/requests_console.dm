@@ -383,7 +383,12 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				icon_state="req_comp_open"
 		else
 			user << "You can't do much with that."*/
-
+	if(iswrench(I))
+		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		new /obj/item/stack/sheet/metal (src.loc,2)
+		qdel(src)
+		return
 	if (istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))
 		if(screen == 9)
 			var/obj/item/weapon/card/id/ID = O.GetID()

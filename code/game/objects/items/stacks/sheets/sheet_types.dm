@@ -79,6 +79,10 @@ var/global/list/datum/stack_recipe/metal_recipes = list ( \
 	new/datum/stack_recipe("lightswitch frame", /obj/item/mounted/frame/light_switch, 2), \
 	new/datum/stack_recipe("intercom frame", /obj/item/mounted/frame/intercom, 2), \
 	null, \
+	new/datum/stack_recipe("sink", /obj/structure/sink, 2, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("shower", /obj/structure/shower, 2, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("toilet", /obj/structure/toilet, 2, one_per_turf = 1, on_floor = 1), \
+	null, \
 	new/datum/stack_recipe("iron door", /obj/machinery/door/mineral/iron, 20, one_per_turf = 1, on_floor = 1), \
 )
 

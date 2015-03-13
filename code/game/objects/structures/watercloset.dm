@@ -44,6 +44,12 @@
 	icon_state = "toilet[open][cistern]"
 
 /obj/structure/toilet/attackby(obj/item/I as obj, mob/living/user as mob)
+	if(iswrench(I))
+		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		new /obj/item/stack/sheet/metal (src.loc,2)
+		qdel(src)
+		return
 	if(istype(I, /obj/item/weapon/crowbar))
 		user << "<span class='notice'>You start to [cistern ? "replace the lid on the cistern" : "lift the lid off the cistern"].</span>"
 		playsound(loc, 'sound/effects/stonedoor_openclose.ogg', 50, 1)
@@ -160,6 +166,12 @@
 			G.clean_blood()
 
 /obj/machinery/shower/attackby(obj/item/I as obj, mob/user as mob)
+	if(isscrewdriver(I))
+		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		new /obj/item/stack/sheet/metal (src.loc,2)
+		qdel(src)
+		return
 	if(I.type == /obj/item/device/analyzer)
 		user << "<span class='notice'>The water temperature seems to be [watertemp].</span>"
 	if(istype(I, /obj/item/weapon/wrench))
@@ -366,6 +378,13 @@
 /obj/structure/sink/attackby(obj/item/O as obj, mob/user as mob)
 	if(busy)
 		user << "\red Someone's already washing here."
+		return
+
+	if(iswrench(I))
+		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		new /obj/item/stack/sheet/metal (src.loc,2)
+		qdel(src)
 		return
 
 	if (istype(O, /obj/item/weapon/reagent_containers))

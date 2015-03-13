@@ -185,6 +185,11 @@
 	add_fingerprint(user)
 	if(operating)
 		return//Already doing something.
+	if(istype(C, /obj/item/weapon/wrench/socket) && blocked = 1)
+		user.visible_message("<span class='notice'>[user] unscrews [src]'s the secure, airtight bolts!</span>", "<span class='notice'>You unscrew the [src]'s secure, airtight bolts.</span>")
+		new /obj/item/stack/sheet/metal (src.loc,4)
+		qdel(src)
+		return
 	if(istype(C, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/W = C
 		if(W.remove_fuel(0, user))

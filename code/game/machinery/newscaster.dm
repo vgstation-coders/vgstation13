@@ -883,6 +883,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				src.scanned_user = text("[T.registered_name] ([T.assignment])")
 				src.screen=2*/  //Obsolete after autorecognition
 
+	if(iswrench(I))
+		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		new /obj/item/stack/sheet/metal (src.loc,2)
+		qdel(src)
+		return
+
 	if ((stat & BROKEN) && (istype(I, /obj/item/stack/sheet/glass/glass)))
 		var/obj/item/stack/sheet/glass/glass/stack = I
 		if ((stack.amount - 2) < 0)
