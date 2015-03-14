@@ -61,6 +61,7 @@ var/global/list/datum/stack_recipe/metal_recipes = list ( \
 		new/datum/stack_recipe("airtight hatch assembly",        /obj/structure/door_assembly/door_assembly_hatch,        4, time = 50, one_per_turf = 1, on_floor = 1), \
 		new/datum/stack_recipe("maintenance hatch assembly",     /obj/structure/door_assembly/door_assembly_mhatch,       4, time = 50, one_per_turf = 1, on_floor = 1), \
 		new/datum/stack_recipe("high security airlock assembly", /obj/structure/door_assembly/door_assembly_highsecurity, 4, time = 50, one_per_turf = 1, on_floor = 1), \
+		new/datum/stack_recipe("shutter assembly",               /obj/structure/firedoor_assembly/,                       4, time = 50, one_per_turf = 1, on_floor = 1), \
 /*		new/datum/stack_recipe("multi-tile airlock assembly",    /obj/structure/door_assembly/multi_tile,                 4, time = 50, one_per_turf = 1, on_floor = 1), \ */
 		), 4), \
 	null, \
@@ -80,7 +81,7 @@ var/global/list/datum/stack_recipe/metal_recipes = list ( \
 	new/datum/stack_recipe("intercom frame", /obj/item/mounted/frame/intercom, 2), \
 	null, \
 	new/datum/stack_recipe("sink", /obj/structure/sink, 2, one_per_turf = 1, on_floor = 1), \
-	new/datum/stack_recipe("shower", /obj/structure/shower, 2, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("shower", /obj/machinery/shower, 2, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("toilet", /obj/structure/toilet, 2, one_per_turf = 1, on_floor = 1), \
 	null, \
 	new/datum/stack_recipe("iron door", /obj/machinery/door/mineral/iron, 20, one_per_turf = 1, on_floor = 1), \

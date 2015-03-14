@@ -383,7 +383,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				icon_state="req_comp_open"
 		else
 			user << "You can't do much with that."*/
-	if(iswrench(I))
+	if(iswrench(O))
 		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 		new /obj/item/stack/sheet/metal (src.loc,2)
