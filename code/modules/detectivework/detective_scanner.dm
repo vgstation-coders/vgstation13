@@ -87,85 +87,6 @@
 				extracted_fibers[fiber]=A.suit_fibers[fiber]
 		return extracted_fibers
 
-	afterattack(atom/A as obj|turf|area, mob/user as mob)
-		if(!in_range(A,user))
-			return
-		if(loc != user)
-			return
-		if(istype(A,/obj/machinery/computer/forensic_scanning)) //breaks shit.
-			return
-		if(istype(A,/obj/item/weapon/f_card))
-			user << "The scanner displays on the screen: \"ERROR 43: Object on Excluded Object List.\""
-			return
-
-		add_fingerprint(user)
-
-		var/list/blood_DNA_found    = src.extract_blood(A)
-		var/list/fingerprints_found = src.extract_fingerprints(A)
-		var/list/fibers_found       = src.extract_fibers(A)
-
-		// Blood/vomit splatters no longer clickable, so scan the entire turf.
-		if (istype(A,/turf))
-			var/turf/T=A
-			for(var/atom/O in T)
-				// Blood splatters, runes.
-				if (istype(O, /obj/effect/decal/cleanable/blood) || istype(O, /obj/effect/rune))
-					blood_DNA_found    += extract_blood(O)
-					//fingerprints_found += extract_fingerprints(O)
-					//fibers_found       += extract_fibers(O)
-		//General
-		if (fingerprints_found.len == 0 && blood_DNA_found.len == 0 && fibers_found.len == 0)
-			user.visible_message("\The [user] scans \the [A] with \a [src], the air around [user.gender == MALE ? "him" : "her"] humming[prob(70) ? " gently." : "."]" ,\
-			"\blue Unable to locate any fingerprints, materials, fibers, or blood on [A]!",\
-			"You hear a faint hum of electrical equipment.")
-			return 0
-
-		if(add_data(A,blood_DNA_found,fingerprints_found,fibers_found))
-			user << "\blue Object already in internal memory. Consolidating data..."
-			return
-
-		//PRINTS
-		if(fingerprints_found.len>0)
-			user << "\blue Isolated [fingerprints_found.len] fingerprints: Data Stored: Scan with Hi-Res Forensic Scanner to retrieve."
-			playsound(get_turf(src), 'sound/items/detscan.ogg', 50, 1)
-
-			var/list/complete_prints = list()
-			for(var/i in fingerprints_found)
-				var/print = fingerprints_found[i]
-				if(stringpercent(print) <= FINGERPRINT_COMPLETE)
-					complete_prints += print
-
-			if(complete_prints.len < 1)
-				user << "\blue &nbsp;&nbsp;No intact prints found"
-			else
-				user << "\blue &nbsp;&nbsp;Found [complete_prints.len] intact prints"
-				for(var/i in complete_prints)
-					user << "\blue &nbsp;&nbsp;&nbsp;&nbsp;[i]"
-
-		//FIBERS
-		if(fibers_found.len)
-			user << "\blue Fibers/Materials Data Stored: Scan with Hi-Res Forensic Scanner to retrieve."
-			playsound(get_turf(src), 'sound/items/detscan.ogg', 50, 1)
-
-		//Blood
-		if (blood_DNA_found.len)
-			user << "\blue Blood found on [A]. Analysing..."
-			spawn(15)
-				for(var/blood in blood_DNA_found)
-					user << "Blood type: \red [blood_DNA_found[blood]] \t \black DNA: \red [blood]"
-
-		if(prob(80) || !fingerprints_found.len)
-			user.visible_message("\The [user] scans \the [A] with \a [src], the air around [user.gender == MALE ? "him" : "her"] humming[prob(70) ? " gently." : "."]" ,\
-			"You finish scanning \the [A].",\
-			"You hear a faint hum of electrical equipment.")
-			return 0
-		else
-			user.visible_message("\The [user] scans \the [A] with \a [src], the air around [user.gender == MALE ? "him" : "her"] humming[prob(70) ? " gently." : "."]\n[user.gender == MALE ? "He" : "She"] seems to perk up slightly at the readout." ,\
-			"The results of the scan pique your interest.",\
-			"You hear a faint hum of electrical equipment, and someone making a thoughtful noise.")
-			return 0
-		return
-
 	proc/add_data(var/atom/A, var/list/blood_DNA_found,var/list/fingerprints_found,var/list/fibers_found)
 		//I love associative lists.
 		var/list/data_entry = stored["\ref [A]"]
@@ -201,6 +122,92 @@
 		sum_list[3] = blood_DNA_found.Copy()
 		sum_list[4] = "\The [A] in \the [get_area(A)]"
 		stored["\ref [A]"] = sum_list
+		return 0
+
+/obj/item/device/detective_scanner/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if (!proximity_flag)
+		return
+
+	if (loc != user)
+		return
+
+	if (istype(target, /obj/machinery/computer/forensic_scanning)) //breaks shit.
+		return
+
+	if (istype(target, /obj/item/weapon/f_card))
+		user << "The scanner displays on the screen: \"ERROR 43: Object on Excluded Object List.\""
+		return
+
+	add_fingerprint(user)
+
+	var/list/blood_DNA_found    = src.extract_blood(target)
+	var/list/fingerprints_found = src.extract_fingerprints(target)
+	var/list/fibers_found       = src.extract_fibers(target)
+
+	// Blood/vomit splatters no longer clickable, so scan the entire turf.
+	if (istype(target, /turf))
+		var/turf/T = target
+
+		for (var/atom/O in T)
+			// Blood splatters, runes.
+			if (istype(O, /obj/effect/decal/cleanable/blood) || istype(O, /obj/effect/rune))
+				blood_DNA_found    += extract_blood(O)
+				//fingerprints_found += extract_fingerprints(O)
+				//fibers_found       += extract_fibers(O)
+	//General
+	if (fingerprints_found.len == 0 && blood_DNA_found.len == 0 && fibers_found.len == 0)
+		user.visible_message("\The [user] scans \the [target] with \a [src], the air around [user.gender == MALE ? "him" : "her"] humming[prob(70) ? " gently." : "."]" ,\
+		"<SPAN CLASS='notice'>Unable to locate any fingerprints, materials, fibers, or blood on [target]!</SPAN>",\
+		"You hear a faint hum of electrical equipment.")
+		return 0
+
+	if (add_data(target, blood_DNA_found, fingerprints_found, fibers_found))
+		user << "<SPAN CLASS='notice'>Object already in internal memory. Consolidating data...</SPAN>"
+		return
+
+	//PRINTS
+	if (fingerprints_found.len>0)
+		user << "<SPAN CLASS='notice'>Isolated [fingerprints_found.len] fingerprints: Data Stored: Scan with Hi-Res Forensic Scanner to retrieve.</SPAN>"
+		playsound(get_turf(src), 'sound/items/detscan.ogg', 50, 1)
+
+		var/list/complete_prints = list()
+
+		for (var/i in fingerprints_found)
+			var/print = fingerprints_found[i]
+
+			if (stringpercent(print) <= FINGERPRINT_COMPLETE)
+				complete_prints += print
+
+		if (complete_prints.len < 1)
+			user << "<SPAN CLASS='notice'>&nbsp;&nbsp;No intact prints found</SPAN>"
+		else
+			user << "<SPAN CLASS='notice'>&nbsp;&nbsp;Found [complete_prints.len] intact prints</SPAN>"
+
+			for (var/i in complete_prints)
+				user << "<SPAN CLASS='notice'>&nbsp;&nbsp;&nbsp;&nbsp;[i]</SPAN>"
+
+	//FIBERS
+	if (fibers_found.len)
+		user << "<SPAN CLASS='notice'>Fibers/Materials Data Stored: Scan with Hi-Res Forensic Scanner to retrieve.</SPAN>"
+		playsound(get_turf(src), 'sound/items/detscan.ogg', 50, 1)
+
+	//Blood
+	if (blood_DNA_found.len)
+		user << "<SPAN CLASS='notice'>Blood found on [target]. Analysing...</SPAN>"
+
+		spawn(15)
+			for (var/blood in blood_DNA_found)
+				user << "Blood type: <SPAN CLASS='alert'> [blood_DNA_found[blood]]</SPAN> \t  DNA: <SPAN CLASS='alert'> [blood]</SPAN>"
+
+	if (prob(80) || !fingerprints_found.len)
+		user.visible_message("\The [user] scans \the [target] with \a [src], the air around [user.gender == MALE ? "him" : "her"] humming[prob(70) ? " gently." : "."]" ,\
+		"You finish scanning \the [target].",\
+		"You hear a faint hum of electrical equipment.")
+		return 0
+	else
+		user.visible_message("\The [user] scans \the [target] with \a [src], the air around [user.gender == MALE ? "him" : "her"] humming[prob(70) ? " gently." : "."]\n[user.gender == MALE ? "He" : "She"] seems to perk up slightly at the readout." ,\
+		"The results of the scan pique your interest.",\
+		"You hear a faint hum of electrical equipment, and someone making a thoughtful noise.")
 		return 0
 
 /proc/get_timestamp()
