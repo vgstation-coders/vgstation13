@@ -145,7 +145,7 @@
 	var/list/fibers_found       = src.extract_fibers(target)
 
 	// Blood/vomit splatters no longer clickable, so scan the entire turf.
-	if (istype(target, /turf))
+	if (isturf(target))
 		var/turf/T = target
 
 		for (var/atom/O in T)
@@ -166,7 +166,7 @@
 		return
 
 	//PRINTS
-	if (fingerprints_found.len>0)
+	if (fingerprints_found.len > 0)
 		user << "<SPAN CLASS='notice'>Isolated [fingerprints_found.len] fingerprints: Data Stored: Scan with Hi-Res Forensic Scanner to retrieve.</SPAN>"
 		playsound(get_turf(src), 'sound/items/detscan.ogg', 50, 1)
 
