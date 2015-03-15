@@ -58,23 +58,39 @@ var/list/department_radio_keys = list(
 
 	  //kinda localization -- rastaf0
 	  //same keys as above, but on russian keyboard layout. This file uses cp1251 as encoding.
-	  ":ê" = "right ear",	"#ê" = "right ear",		".ê" = "right ear",
-	  ":ä" = "left ear",	"#ä" = "left ear",		".ä" = "left ear",
-	  ":ø" = "intercom",	"#ø" = "intercom",		".ø" = "intercom",
-	  ":ð" = "department",	"#ð" = "department",	".ð" = "department",
-	  ":ñ" = "Command",		"#ñ" = "Command",		".ñ" = "Command",
-	  ":ò" = "Science",		"#ò" = "Science",		".ò" = "Science",
-	  ":ü" = "Medical",		"#ü" = "Medical",		".ü" = "Medical",
-	  ":ó" = "Engineering",	"#ó" = "Engineering",	".ó" = "Engineering",
-	  ":û" = "Security",	"#û" = "Security",		".û" = "Security",
-	  ":ö" = "whisper",		"#ö" = "whisper",		".ö" = "whisper",
-	  ":è" = "binary",		"#è" = "binary",		".è" = "binary",
-	  ":ô" = "alientalk",	"#ô" = "alientalk",		".ô" = "alientalk",
-	  ":å" = "Syndicate",	"#å" = "Syndicate",		".å" = "Syndicate",
-	  ":é" = "Supply",		"#é" = "Supply",		".é" = "Supply",
-	  ":â" = "Service",     "#â" = "Service",       ".â" = "Service",
-	  ":ï" = "changeling",	"#ï" = "changeling",	".ï" = "changeling"
+	  ":Ãª" = "right ear",	"#Ãª" = "right ear",		".Ãª" = "right ear",
+	  ":Ã¤" = "left ear",	"#Ã¤" = "left ear",		".Ã¤" = "left ear",
+	  ":Ã¸" = "intercom",	"#Ã¸" = "intercom",		".Ã¸" = "intercom",
+	  ":Ã°" = "department",	"#Ã°" = "department",	".Ã°" = "department",
+	  ":Ã±" = "Command",		"#Ã±" = "Command",		".Ã±" = "Command",
+	  ":Ã²" = "Science",		"#Ã²" = "Science",		".Ã²" = "Science",
+	  ":Ã¼" = "Medical",		"#Ã¼" = "Medical",		".Ã¼" = "Medical",
+	  ":Ã³" = "Engineering",	"#Ã³" = "Engineering",	".Ã³" = "Engineering",
+	  ":Ã»" = "Security",	"#Ã»" = "Security",		".Ã»" = "Security",
+	  ":Ã¶" = "whisper",		"#Ã¶" = "whisper",		".Ã¶" = "whisper",
+	  ":Ã¨" = "binary",		"#Ã¨" = "binary",		".Ã¨" = "binary",
+	  ":Ã´" = "alientalk",	"#Ã´" = "alientalk",		".Ã´" = "alientalk",
+	  ":Ã¥" = "Syndicate",	"#Ã¥" = "Syndicate",		".Ã¥" = "Syndicate",
+	  ":Ã©" = "Supply",		"#Ã©" = "Supply",		".Ã©" = "Supply",
+	  ":Ã¢" = "Service",     "#Ã¢" = "Service",       ".Ã¢" = "Service",
+	  ":Ã¯" = "changeling",	"#Ã¯" = "changeling",	".Ã¯" = "changeling"
 )
+
+
+//language list
+var/list/language_keys = list(
+	":j" = "Siik'tajr"	"#j" = "Siik'tajr"	".j" = "Siik'tajr"
+	":J" = "Siik'tajr"	"#J" = "Siik'tajr"	".J" = "Siik'tajr"
+	":k" = "Skrellian"	"#k" = "Skrellian"	".k" = "Skrellian"
+	":K" = "Skrellian"	"#K" = "Skrellian"	".K" = "Skrellian"
+	":o" = "Sinta'unathi"	"#o" = "Sinta'unathi" 	".o" = "Sinta'unathi"
+	":O" = "Sinta'unathi"	"#O" = "Sinta'unathi"	".O" = "Sinta'unathi"
+	":q" = "rootspeak"	"#q" = "rootspeak"	".q" = "rootspeak"
+	":Q" = "rootspeak"	"#Q" = "rootspeak"	".Q" = "rootspeak"
+	":v" = "Vox-pidgin"	"#v" = "Vox-pidgin"	".v" = "Vox-pidgin"
+	":V" = "Vox-pidgin"	"#V" = "Vox-pidgin"	".V" = "Vox-pidgin"
+)
+
 
 /mob/living/proc/binarycheck()
 	return 0
@@ -233,6 +249,18 @@ var/list/department_radio_keys = list(
 		return MODE_HEADSET
 	else if(length(message) > 2)
 		return department_radio_keys[copytext(message, 1, 3)]
+
+/mob/living/proc/lang_treat(message, atom/movable/speaker, message_langs, raw_message)
+	if(message_mode == MODE_LANGUAGE)
+		if language == message_langs
+			M << "<i><font color=#800080>[src]:[speech_verb][message]</font></i>"
+		
+		else copytext(stars(message))
+		return 1
+	return 0
+
+
+
 
 /mob/living/proc/handle_inherent_channels(message, message_mode)
 	if(message_mode == MODE_CHANGELING)
