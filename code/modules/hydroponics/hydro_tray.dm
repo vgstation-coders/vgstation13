@@ -300,7 +300,7 @@
 	var/light_available
 
 	if (areaMaster.lighting_use_dynamic)
-		light_available = max(0, min(10, T.lighting_lumcount) - 5)
+		light_available = Clamp(T.lighting_lumcount, 0, 10) - 5
 	else
 		light_available =  5
 
@@ -791,7 +791,7 @@
 			var/light_available
 
 			if (areaMaster.lighting_use_dynamic)
-				light_available = max(0, min(10, T.lighting_lumcount) - 5)
+				light_available = Clamp(T.lighting_lumcount, 0 , 10) - 5
 			else
 				light_available =  5
 
