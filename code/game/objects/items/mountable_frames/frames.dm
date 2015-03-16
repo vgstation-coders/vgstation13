@@ -25,3 +25,16 @@
 			user << "<span class='rose'>[src] cannot be placed in this area.</span>"
 			return
 		return 1
+
+/obj/item/mounted/frame/newscaster
+	name = "Unhinged Newscaster"
+	desc = "A functional, if currently mobile, newscaster. You can pretty much pop it up anywhere."
+	icon = 'icons/obj/terminals.dmi'
+	icon_state = "newscaster_off"
+	flags = FPRINT
+	w_type=2*RECYK_METAL
+	mount_reqs = list("nospace", "simfloor")
+
+/obj/item/mounted/frame/newscaster/do_build(turf/on_wall, mob/user)
+	new /obj/machinery/newscaster(get_turf(src), get_dir(user, on_wall))
+	qdel(src)

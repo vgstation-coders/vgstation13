@@ -883,10 +883,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				src.scanned_user = text("[T.registered_name] ([T.assignment])")
 				src.screen=2*/  //Obsolete after autorecognition
 
-	if(iswrench(I))
-		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-		new /obj/item/stack/sheet/metal (src.loc,2)
+	if(isscrewdriver(I))
+		user.visible_message("<span class='notice'>[user] takes down the [src]!</span>", "<span class='notice'>You take down the [src]</span>")
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+		new /obj/item/mounted/frame/newscaster (src.loc)
 		qdel(src)
 		return
 
