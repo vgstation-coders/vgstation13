@@ -164,7 +164,8 @@ RCD
 				if (useResource(floor_cost, user))
 					user << "Building Floor..."
 					activate()
-					target:ChangeTurf(/turf/simulated/floor/plating/airless)
+					var/turf/space/space = target
+					space.ChangeTurf(/turf/simulated/floor/plating/airless)
 					return 1
 
 				return 0
@@ -179,7 +180,8 @@ RCD
 							return 0
 
 						activate()
-						target:ChangeTurf(/turf/simulated/wall)
+						var/turf/simulated/floor/floor = target
+						floor.ChangeTurf(/turf/simulated/wall)
 						return 1
 
 				return 0
@@ -219,7 +221,8 @@ RCD
 							return 0
 
 						activate()
-						target:ChangeTurf(/turf/simulated/floor/plating)
+						var/turf/simulated/wall/wall = target
+						wall.ChangeTurf(/turf/simulated/floor/plating)
 						return 1
 
 				return 0
@@ -234,7 +237,8 @@ RCD
 							return 0
 
 						activate()
-						target:ChangeTurf(target:under_turf)
+						var/turf/simulated/floor/floor = target
+						floor.ChangeTurf(target:under_turf)
 						return 1
 
 				return 0
