@@ -101,7 +101,6 @@
 	icon = 'icons/obj/doors/Doorglass.dmi'
 	opacity = 0
 	glass = 1
-	soundeffect = 'sound/machines/windowdoor.ogg'
 	pitch = 100
 
 /obj/machinery/door/airlock/centcom
@@ -647,6 +646,7 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/Topic(href, href_list, var/nowindow = 0)
 	// If you add an if(..()) check you must first remove the var/nowindow parameter.
 	// Otherwise it will runtime with this kind of error: null.Topic()
+	if(!isAI(usr) && usr.z != z) return 1
 	if(!nowindow)
 		..()
 	if(!isAdminGhost(usr))

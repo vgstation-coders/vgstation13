@@ -39,6 +39,11 @@
 	gcDestroyed = "Bye, world!"
 	tag = null
 	loc = null
+	if(contents)
+		for(var/thing in contents)
+			if(istype(thing, /obj/item/weapon/disk/nuclear))
+				qdel(thing)
+		contents.len = 0
 	..()
 
 /proc/delete_profile(var/type, code = 0)
@@ -287,9 +292,9 @@
 	. = ..()
 	verbs.len = 0
 
-/atom/movable/overlay/attackby(a, b)
+/atom/movable/overlay/attackby(a, b, c)
 	if (src.master)
-		return src.master.attackby(a, b)
+		return src.master.attackby(a, b, c)
 	return
 
 /atom/movable/overlay/attack_paw(a, b, c)
