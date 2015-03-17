@@ -28,7 +28,7 @@
 
 /obj/item/mounted/frame/newscaster
 	name = "Unhinged Newscaster"
-	desc = "A functional, if currently mobile, newscaster. You can pretty much pop it up anywhere."
+	desc = "The difference between an unhinged newscaster and a journalist is that one of them is actually crazy."
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "newscaster_off"
 	flags = FPRINT

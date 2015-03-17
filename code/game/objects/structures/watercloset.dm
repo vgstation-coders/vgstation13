@@ -45,10 +45,9 @@
 
 /obj/structure/toilet/attackby(obj/item/I as obj, mob/living/user as mob)
 	if(iswrench(I))
-		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-		new /obj/item/stack/sheet/metal (src.loc,2)
-		qdel(src)
+		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+		anchored = !anchored
+		user << "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>"
 		return
 	if(istype(I, /obj/item/weapon/crowbar))
 		user << "<span class='notice'>You start to [cistern ? "replace the lid on the cistern" : "lift the lid off the cistern"].</span>"
@@ -380,11 +379,10 @@
 		user << "\red Someone's already washing here."
 		return
 
-	if(iswrench(O))
-		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-		new /obj/item/stack/sheet/metal (src.loc,2)
-		qdel(src)
+	if(iswrench(I))
+		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+		anchored = !anchored
+		user << "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>"
 		return
 
 	if (istype(O, /obj/item/weapon/reagent_containers))

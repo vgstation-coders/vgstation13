@@ -62,3 +62,23 @@
 		for(var/i = 0, i < num, i++)
 			new /mob/living/simple_animal/chick(loc)
 	..()
+
+/obj/structure/largecrate/sink
+	name = "sink crate"
+	icon_state = "densecrate"
+
+/obj/structure/largecrate/sink/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/weapon/crowbar))
+		var/obj/structure/sink/S = new /obj/structure/sink(loc)
+		S.anchored = 0
+	..()
+
+/obj/structure/largecrate/toilet
+	name = "toilet crate"
+	icon_state = "densecrate"
+
+/obj/structure/largecrate/toilet/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/weapon/crowbar))
+		var/obj/structure/toilet/T = new /obj/structure/toilet(loc)
+		T.anchored = 0
+	..()
