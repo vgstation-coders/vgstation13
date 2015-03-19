@@ -1,6 +1,6 @@
 /turf/simulated/wall/r_wall
 	name = "reinforced wall"
-	desc = "A huge chunk of reinforced metal used to seperate rooms."
+	desc = "A huge chunk of reinforced metal and anchored rods used to seperate rooms and keep all but the most equipped crewmen out."
 	icon_state = "r_wall"
 	opacity = 1
 	density = 1
@@ -9,23 +9,49 @@
 
 	var/d_state = 0
 
+/turf/simulated/wall/r_wall/examine(mob/user)
+	..()
+	if(d_state)
+		switch(d_state) //How fucked or unfinished is our wall
+			if(1)
+				desc += "It has no outer grille"
+			if(2)
+				desc += "It has no outer grille and the external reinforced cover is exposed"
+			if(3)
+				desc += "It has no outer grille and the external reinforced cover has been welded into"
+			if(4)
+				desc += "It has no outer grille or no external reinforced cover and the external support rods are exposed"
+			if(5)
+				desc += "It has no outer grille or no external reinforced cover and the external support rods are loose"
+			if(6)
+				desc += "It has no outer grille, external reinforced cover or external support rods, the inner reinforced cover is exposed" //And that's terrible
+
+/turf/simulated/wall/r_wall/proc/update_icon()
+	if(!d_state) //Are we under construction or deconstruction ?
+		relativewall_neighbours() //Well isn't that odd, let's pass this to smoothwall.dm
+		return //Now fuck off
+	icon_state = "r_wall-[d_state]"  //You can thank me later
+
 /turf/simulated/wall/r_wall/attack_hand(mob/user as mob)
 	user.delayNextAttack(8)
-	if (M_HULK in user.mutations)
-		if (prob(10) || rotting)
-			usr << text("\blue You smash through the wall.")
-			usr.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+	if(M_HULK in user.mutations)
+		if(prob(10) || rotting)
 			dismantle_wall(1)
+			usr.visible_message("<span class='danger'>[usr] smashes through \the [src].</span>", \
+			"<span class='notice'>You smash through \the [src].</span>")
+			usr.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 			return
 		else
-			usr << text("\blue You punch the wall.")
+			usr.visible_message("<span class='warning'>[src] punches \the [src].</span>", \
+			"<span class='notice'>You punch \the [src].</span>")
 			return
 
 	if(rotting)
-		user << "<span class='notice'>This wall feels rather unstable.</span>"
+		user << "<span class='notice'>This [src] feels rather unstable.</span>"
 		return
 
-	user << "<span class='notice'>You push the wall but nothing happens!</span>"
+	user.visible_message("<span class='notice'>[user] pushes \the [src].</span>", \
+	"<span class='notice'>You push \the [src] but nothing happens!</span>")
 	playsound(src, 'sound/weapons/Genhit.ogg', 25, 1)
 	src.add_fingerprint(user)
 	return
@@ -33,249 +59,265 @@
 
 /turf/simulated/wall/r_wall/attackby(obj/item/W as obj, mob/user as mob)
 
-	if (!(istype(user, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
+	if(!(istype(user, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
 		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
 		return
 
-	//get the user's location
-	if( !istype(user.loc, /turf) )	return	//can't do this stuff whilst inside objects and such
+	//Get the user's location
+	if(!istype(user.loc, /turf))
+		return	//Can't do this stuff whilst inside objects and such //Thanks BYOND
 
 	if(rotting)
-		if(istype(W, /obj/item/weapon/weldingtool) )
-			var/obj/item/weapon/weldingtool/WT = W
-			if( WT.remove_fuel(0,user) )
-				user << "<span class='notice'>You burn away the fungi with \the [WT].</span>"
-				playsound(src, 'sound/items/Welder.ogg', 10, 1)
-				for(var/obj/effect/E in src) if(E.name == "Wallrot")
-					del E
-				rotting = 0
-				return
+		if(W.is_hot()) //Yes, you can do it with a welding tool, or a lighter, or a candle, or an energy sword
+			user.visible_message("<span class='notice'>[user] burns the fungi away with \the [W].</span>", \
+			"<span class='notice'>You burn the fungi away with \the [W].</span>")
+			playsound(src, 'sound/items/Welder.ogg', 10, 1)
+			for(var/obj/effect/E in src) //WHYYYY
+				if(E.name == "Wallrot") //WHYYYYYYYYY
+					qdel(E)
+			rotting = 0
+			return
+		if(istype(W,/obj/item/weapon/soap))
+			user.visible_message("<span class='notice'>[user] forcefully scrubs the fungi away with \his [W].</span>", \
+			"<span class='notice'>You forcefully scrub the fungi away with your [W].</span>")
+			for(var/obj/effect/E in src)
+				if(E.name == "Wallrot")
+					qdel(E)
+			rotting = 0
+			return
 		else if(!W.is_sharp() && W.force >= 10 || W.force >= 20)
-			user << "<span class='notice'>\The [src] crumbles away under the force of your [W.name].</span>"
+			user.visible_message("<span class='warning'>With one strong swing, [user] destroys the rotting [src] with his [W].</span>", \
+			"<span class='notice'>With one strong swing, the rotting [src] crumbles away under your [W].</span>")
 			src.dismantle_wall()
 			return
 
 	//THERMITE related stuff. Calls src.thermitemelt() which handles melting simulated walls and the relevant effects
-	if( thermite )
-		if( istype(W, /obj/item/weapon/weldingtool) )
-			var/obj/item/weapon/weldingtool/WT = W
-			if( WT.remove_fuel(0,user) )
-				thermitemelt(user)
-				return
-
-		else if(istype(W, /obj/item/weapon/pickaxe/plasmacutter))
-			thermitemelt(user)
+	if(thermite)
+		if(W.is_hot()) //HEY CAN THIS SET THE THERMITE ON FIRE ?
+			thermitemelt(user) //There, I just saved you fifty lines of redundant typechecks and awful snowflake coding
+			user.visible_message("<span class='warning'>[user] sets \the [src] ablaze with a swing of \his [W]</span>", \
+			"<span class='warning'>You set \the [src] ablaze with a swing of your [W]</span>")
 			return
 
-		else if( istype(W, /obj/item/weapon/melee/energy/blade) )
-			var/obj/item/weapon/melee/energy/blade/EB = W
-
-			EB.spark_system.start()
-			user << "<span class='notice'>You slash \the [src] with \the [EB]; the thermite ignites!</span>"
-			playsound(src, "sparks", 50, 1)
-			playsound(src, 'sound/weapons/blade1.ogg', 50, 1)
-
-			thermitemelt(user)
-			return
-
-	else if(istype(W, /obj/item/weapon/melee/energy/blade))
-		user << "<span class='notice'>This wall is too thick to slice through. You will need to find a different path.</span>"
-		return
-
-	var/turf/T = user.loc	//get user's location for delay checks
-
-	//DECONSTRUCTION
+	//Deconstruction and reconstruction
 	switch(d_state)
 		if(0)
-			if (istype(W, /obj/item/weapon/wirecutters))
+			if(istype(W, /obj/item/weapon/wirecutters))
 				playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
 				src.d_state = 1
-				src.icon_state = "r_wall-1"
-				new /obj/item/stack/rods( src )
-				user << "<span class='notice'>You cut the outer grille.</span>"
+				update_icon()
+				var/obj/item/stack/rods/O = getFromPool(/obj/item/stack/rods, get_turf(src))
+				O.amount = 2
+				new /obj/item/stack/rods(src)
+				user.visible_message("<span class='warning'>[user] cuts out the outer grille.</span>", \
+				"<span class='notice'>You cut out the outer grille, exposing the reinforced cover.</span>")
 				return
 
 		if(1)
-			if (istype(W, /obj/item/weapon/screwdriver))
-				user << "<span class='notice'>You begin removing the support lines.</span>"
+			if(istype(W, /obj/item/weapon/screwdriver))
+				user.visible_message("<span class='notice'>[user] begins unsecuring the reinforced cover.</span>", \
+				"<span class='notice'>You begin unsecuring the reinforced cover.</span>")
 				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 
-				sleep(40)
-				if( !istype(src, /turf/simulated/wall/r_wall) || !user || !W || !T )	return
-
-				if( d_state == 1 && user.loc == T && user.get_active_hand() == W )
+				if(do_after(user, 40))
 					src.d_state = 2
-					src.icon_state = "r_wall-2"
-					user << "<span class='notice'>You remove the support lines.</span>"
+					update_icon()
+					user.visible_message("<span class='warning'>[user] unsecures the reinforced cover.</span>", \
+					"<span class='notice'>You unsecure the reinforced cover.</span>")
 				return
 
-			//REPAIRING (replacing the outer grille for cosmetic damage)
-			else if( istype(W, /obj/item/stack/rods) )
-				var/obj/item/stack/O = W
+			//Repairing or fourth step to finish reinforced wall construction
+			else if(istype(W, /obj/item/stack/rods))
+				var/obj/item/stack/rods/O = W
+				if(O.amount < 2)
+					return
+				O.use(2)
 				src.d_state = 0
-				src.icon_state = "r_wall"
-				relativewall_neighbours()	//call smoothwall stuff
-				user << "<span class='notice'>You replace the outer grille.</span>"
-				if (O.amount > 1)
-					O.amount--
-				else
-					del(O)
+				update_icon()	//Call smoothwall.dm, goes through update_icon()
+				user.visible_message("<span class='notice'>[user] adds an outer grille to the reinforced cover.</span>", \
+				"<span class='notice'>You add an outer grille to the reinforced cover.</span>")
 				return
 
 		if(2)
-			if( istype(W, /obj/item/weapon/weldingtool) )
-				var/obj/item/weapon/weldingtool/WT = W
-				if( WT.remove_fuel(0,user) )
+			if(istype(W, /obj/item/weapon/weldingtool))
 
-					user << "<span class='notice'>You begin slicing through the metal cover.</span>"
+				var/obj/item/weapon/weldingtool/WT = W
+				if(WT.remove_fuel(0, user))
+					user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s cover.</span>", \
+					"<span class='notice'>You begin slicing through \the [src]'s cover.</span>", \
+					"<span class='warning'>You hear welding noises.</span>")
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
 
-					sleep(60)
-					if( !istype(src, /turf/simulated/wall/r_wall) || !user || !WT || !WT.isOn() || !T )	return
-
-					if( d_state == 2 && user.loc == T && user.get_active_hand() == WT )
+					if(do_after(user, 60))
+						playsound(src, 'sound/items/Welder.ogg', 100, 1) //Not an error, play welder sound again
 						src.d_state = 3
-						src.icon_state = "r_wall-3"
-						user << "<span class='notice'>You press firmly on the cover, dislodging it.</span>"
+						update_icon()
+						user.visible_message("<span class='warning'>[user] finishes weakening \the [src]'s cover.</span>", \
+						"<span class='notice'>You finish weakening \the [src]'s cover.</span>", \
+						"<span class='warning'>You hear welding noises.</span>")
 				else
 					user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
 				return
 
-			if( istype(W, /obj/item/weapon/pickaxe/plasmacutter) )
+			if(istype(W, /obj/item/weapon/pickaxe/plasmacutter)) //Ah, snowflake coding, my favorite
 
-				user << "<span class='notice'>You begin slicing through the metal cover.</span>"
+				user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s cover.</span>", \
+					"<span class='notice'>You begin slicing through \the [src]'s cover.</span>", \
+					"<span class='warning'>You hear welding noises.</span>")
 				playsound(src, 'sound/items/Welder.ogg', 100, 1)
 
-				sleep(40)
-				if( !istype(src, /turf/simulated/wall/r_wall) || !user || !W || !T )	return
-
-				if( d_state == 2 && user.loc == T && user.get_active_hand() == W )
+				if(do_after(user, 40))
+					playsound(src, 'sound/items/Welder.ogg', 100, 1) //Not an error, play welder sound again
 					src.d_state = 3
-					src.icon_state = "r_wall-3"
-					user << "<span class='notice'>You press firmly on the cover, dislodging it.</span>"
+					update_icon()
+					user.visible_message("<span class='warning'>[user] finishes weakening \the [src]'s cover.</span>", \
+						"<span class='notice'>You finish weakening \the [src]'s cover.</span>", \
+						"<span class='warning'>You hear welding noises.</span>")
 				return
 
 		if(3)
-			if (istype(W, /obj/item/weapon/crowbar))
+			if(istype(W, /obj/item/weapon/crowbar))
 
-				user << "<span class='notice'>You struggle to pry off the cover.</span>"
+				user.visible_message("<span class='warning'>[user] starts prying off \the [src]'s cover.</span>", \
+				"<span class='notice'>You struggle to pry off \the [src]'s cover.</span>", \
+				"<span class='warning'>You hear a crowbar.</span>")
 				playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 
-				sleep(100)
-				if( !istype(src, /turf/simulated/wall/r_wall) || !user || !W || !T )	return
-
-				if( d_state == 3 && user.loc == T && user.get_active_hand() == W )
+				if(do_after(user, 100))
+					playsound(src, 'sound/items/Deconstruct.ogg', 100, 1) //SLAM
 					src.d_state = 4
-					src.icon_state = "r_wall-4"
-					user << "<span class='notice'>You pry off the cover.</span>"
+					update_icon()
+					user.visible_message("<span class='warning'>[user] pries off \the [src]'s cover.</span>", \
+					"<span class='notice'>You pry off \the [src]'s cover.</span>")
 				return
 
 		if(4)
-			if (istype(W, /obj/item/weapon/wrench))
+			if(istype(W, /obj/item/weapon/wrench))
 
-				user << "<span class='notice'>You start loosening the anchoring bolts which secure the support rods to their frame.</span>"
+				user.visible_message("<span class='warning'>[user] starts removing the bolts anchoring the support rods.</span>", \
+				"<span class='notice'>You start removing the bolts anchoring the support rods.</span>")
 				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 
-				sleep(40)
-				if( !istype(src, /turf/simulated/wall/r_wall) || !user || !W || !T )	return
-
-				if( d_state == 4 && user.loc == T && user.get_active_hand() == W )
+				if(do_after(user, 40))
 					src.d_state = 5
-					src.icon_state = "r_wall-5"
-					user << "<span class='notice'>You remove the bolts anchoring the support rods.</span>"
+					update_icon()
+					user.visible_message("<span class='warning'>[user] removes the bolts anchoring the support rods.</span>", \
+					"<span class='notice'>You remove the bolts anchoring the support rods.</span>")
+				return
+
+			//Third construction step, add the second plasteel sheet
+			else if(istype(W, /obj/item/stack/sheet/plasteel))
+				var/obj/item/stack/sheet/plasteel/P = W
+				user.visible_message("<span class='notice'>[user] starts installing a reinforced cover.</span>", \
+				"<span class='notice'>You start installing a reinforced cover.</span>")
+				playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
+
+				if(do_after(user, 50))
+					P.use(1)
+					src.d_state = 1 //A new pristine reinforced cover, go straight to finishing the wall with rods
+					update_icon()
+					user.visible_message("<span class='notice'>[user] finishes installing a reinforced cover.</span>", \
+					"<span class='notice'>You finish installing a reinforced cover.</span>")
 				return
 
 		if(5)
-			if( istype(W, /obj/item/weapon/weldingtool) )
-				var/obj/item/weapon/weldingtool/WT = W
-				if( WT.remove_fuel(0,user) )
+			if(istype(W, /obj/item/weapon/weldingtool))
 
-					user << "<span class='notice'>You begin slicing through the support rods.</span>"
+				var/obj/item/weapon/weldingtool/WT = W
+				if(WT.remove_fuel(0,user))
+					user.visible_message("<span class='warning'>[user] begins slicing through the external support rods.</span>", \
+					"<span class='notice'>You begin slicing through the external support rods.</span>")
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
 
-					sleep(100)
-					if( !istype(src, /turf/simulated/wall/r_wall) || !user || !WT || !WT.isOn() || !T )	return
-
-					if( d_state == 5 && user.loc == T && user.get_active_hand() == WT )
+					if(do_after(user, 100))
+						playsound(src, 'sound/items/Welder.ogg', 100, 1) //Not an error, play welder sound again
 						src.d_state = 6
-						src.icon_state = "r_wall-6"
-						new /obj/item/stack/rods( src )
-						user << "<span class='notice'>The support rods drop out as you cut them loose from the frame.</span>"
+						update_icon()
+						new /obj/item/stack/rods(src)
+						user.visible_message("<span class='warning'>[user] slices through the external support rods.</span>", \
+						"<span class='notice'>You slice through the external support rods, exposing the last reinforced sheath.</span>")
 				else
 					user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
 				return
 
-			if( istype(W, /obj/item/weapon/pickaxe/plasmacutter) )
+			if(istype(W, /obj/item/weapon/pickaxe/plasmacutter))
 
-				user << "<span class='notice'>You begin slicing through the support rods.</span>"
+				user.visible_message("<span class='warning'>[user] begins slicing through the external support rods.</span>", \
+				"<span class='notice'>You begin slicing through the external support rods.</span>")
 				playsound(src, 'sound/items/Welder.ogg', 100, 1)
 
-				sleep(70)
-				if( !istype(src, /turf/simulated/wall/r_wall) || !user || !W || !T )	return
-
-				if( d_state == 5 && user.loc == T && user.get_active_hand() == W )
+				if(do_after(user, 70))
+					playsound(src, 'sound/items/Welder.ogg', 100, 1)
 					src.d_state = 6
-					src.icon_state = "r_wall-6"
-					new /obj/item/stack/rods( src )
-					user << "<span class='notice'>The support rods drop out as you cut them loose from the frame.</span>"
+					update_icon()
+					new /obj/item/stack/rods(src)
+					user.visible_message("<span class='warning'>[user] slices through the external support rods.</span>", \
+					"<span class='notice'>You slice through the external support rods, exposing the inner reinforced cover.</span>")
+				return
+
+			//Second construction or repair step, tighten the anchoring bolts
+			else if(istype(W, /obj/item/weapon/wrench))
+
+				user.visible_message("<span class='notice'>[user] starts tightening the bolts anchoring the support rods.</span>", \
+				"<span class='notice'>You start tightening the bolts anchoring the support rods.</span>")
+				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+
+				if(do_after(user, 40))
+					src.d_state = 4
+					update_icon()
+					user.visible_message("<span class='notice'>[user] tightens the bolts anchoring the support rods.</span>", \
+					"<span class='notice'>You tighten the bolts anchoring the support rods.</span>")
 				return
 
 		if(6)
-			if( istype(W, /obj/item/weapon/crowbar) )
+			if(istype(W, /obj/item/weapon/crowbar))
 
-				user << "<span class='notice'>You struggle to pry off the outer sheath.</span>"
+				user.visible_message("<span class='warning'>[user] starts prying off the inner reinforced cover.</span>", \
+				"<span class='notice'>You struggle to pry off the inner reinforced cover.</span>")
 				playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 
-				sleep(100)
-				if( !istype(src, /turf/simulated/wall/r_wall) || !user || !W || !T )	return
-
-				if( user.loc == T && user.get_active_hand() == W )
-					user << "<span class='notice'>You pry off the outer sheath.</span>"
-					dismantle_wall()
+				if(do_after(user, 100))
+					user.visible_message("<span class='warning'>[user] pries off the inner reinforced cover.</span>", \
+					"<span class='notice'>You pry off the inner reinforced cover.</span>")
+					dismantle_wall() //Mr. Engineer, break down that reinforced wall
 				return
 
-//vv OK, we weren't performing a valid deconstruction step or igniting thermite,let's check the other possibilities vv
+			//Repairing and starting reinforced wall construction (after finishing the girder fluff)
+			else if(istype(W, /obj/item/stack/rods))
+				var/obj/item/stack/rods/O = W
+				if(O.amount < 2)
+					return
+				O.use(2)
+				src.d_state = 5
+				update_icon()
+				user.visible_message("<span class='notice'>[user] installs external support rods on the reinforced cover.</span>", \
+				"<span class='notice'>You install external support rods on the reinforced cover.</span>")
+				return
 
-	//DRILLING
-	if (istype(W, /obj/item/weapon/pickaxe))
+//This is where we perform actions that aren't deconstructing, constructing or thermiting the reinforced wall
+
+	//Drilling
+	//Needs a diamond drill or equivalent
+	if(istype(W, /obj/item/weapon/pickaxe))
 
 		var/obj/item/weapon/pickaxe/PK = W
 		if(!(PK.diggables & DIG_RWALLS))
 			return
 
-		user << "<span class='notice'>You begin [PK.drill_verb] through the outer plating.</span>"
+		user.visible_message("<span class='warning'>[user] begins [PK.drill_verb] straight into \the [src].</span>", \
+		"<span class='notice'>You begin [PK.drill_verb] straight into \the [src].</span>")
 		playsound(src, PK.drill_sound, 100, 1)
-		sleep(PK.digspeed * 50)
-
-		if( !istype(src, /turf/simulated/wall/r_wall) || !user || !PK || !T )	return
-
-		if( user.loc == T && user.get_active_hand() == PK )
-			user << "<span class='notice'>Your [src] tears though the last of the reinforced plating.</span>"
+		if(do_after(user, PK.digspeed * 50))
+			user.visible_message("<span class='notice'>[user]'s [PK] tears though the last of \the [src], leaving nothing but a girder.</span>", \
+			"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
 			dismantle_wall()
-
-	//REPAIRING
-	else if( istype(W, /obj/item/stack/sheet/metal) && d_state )
-		var/obj/item/stack/sheet/metal/MS = W
-
-		user << "<span class='notice'>You begin patching-up the wall with \a [MS].</span>"
-
-		sleep( max(20*d_state,100) )	//time taken to repair is proportional to the damage! (max 10 seconds)
-		if( !istype(src, /turf/simulated/wall/r_wall) || !user || !MS || !T )	return
-
-		if( user.loc == T && user.get_active_hand() == MS && d_state )
-			src.d_state = 0
-			src.icon_state = "r_wall"
-			relativewall_neighbours()	//call smoothwall stuff
-			user << "<span class='notice'>You repair the last of the damage.</span>"
-			if (MS.amount > 1)
-				MS.amount--
-			else
-				returnToPool(MS)
+		return
 
 	else if(istype(W, /obj/item/mounted))
 		return
 
 	//Finally, CHECKING FOR FALSE WALLS if it isn't damaged
+	//This is obsolete since reinforced false walls were commented out, but gotta slap the wall with my hand anyways !
 	else if(!d_state)
 		return attack_hand(user)
 	return
