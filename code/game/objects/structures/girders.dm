@@ -68,11 +68,11 @@
 
 	else if(istype(W, /obj/item/weapon/wirecutters) && state == 1) //Removing support struts, stage 1 to 0 (normal girder)
 		playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
-		user.visible_message("<span class='warning'>[user] starts removing the internal support struts from \the [src]</span>", \
-		"<span class='notice'>You start removing the internal support struts from \the [src]</span>")
+		user.visible_message("<span class='warning'>[user] starts removing \the [src]'s internal support struts.</span>", \
+		"<span class='notice'>You start removing \the [src]'s internal support struts.</span>")
 		if(do_after(user, 40))
-			user.visible_message("<span class='warning'>[user] removes the internal support struts from \the [src]</span>", \
-			"<span class='notice'>You remove the internal support struts from \the [src]</span>")
+			user.visible_message("<span class='warning'>[user] removes \the [src]'s internal support struts.</span>", \
+			"<span class='notice'>You remove \the [src]'s internal support struts.</span>")
 			add_hiddenprint(user)
 			add_fingerprint(user)
 			getFromPool(/obj/item/stack/rods, get_turf(src), 2)
@@ -84,16 +84,16 @@
 		if(R.amount < 2) //Do a first check BEFORE the user begins, in case he's using a single rod
 			user << "<span class='warning'>You need more rods to finish the support struts</span>"
 			return
-		user.visible_message("<span class='notice'>[user] starts inserting support struts into \the [src]</span>", \
-		"<span class='notice'>You start inserting support struts into \the [src]</span>")
+		user.visible_message("<span class='notice'>[user] starts inserting internal support struts into \the [src]</span>", \
+		"<span class='notice'>You start inserting internal support struts into \the [src]</span>")
 		if(do_after(user,40))
 			var/obj/item/stack/rods/O = W
 			if(O.amount < 2) //In case our user is trying to be tricky
 				user << "<span class='warning'>You need more rods to finish the support struts</span>"
 				return
 			O.use(2)
-			user.visible_message("<span class='notice'>[user] inserts support struts into \the [src]</span>", \
-			"<span class='notice'>You insert support struts into \the [src]</span>")
+			user.visible_message("<span class='notice'>[user] inserts internal support struts into \the [src]</span>", \
+			"<span class='notice'>You insert internal support struts into \the [src]</span>")
 			add_hiddenprint(user)
 			add_fingerprint(user)
 			state = 1
@@ -294,6 +294,7 @@
 	anchored = 0
 
 /obj/structure/girder/reinforced
+	name = "reinforced girder"
 	icon_state = "reinforced"
 	state = 2
 
@@ -331,8 +332,8 @@
 	return
 
 /obj/structure/cultgirder
-	icon= 'icons/obj/cult.dmi'
-	icon_state= "cultgirder"
+	icon = 'icons/obj/cult.dmi'
+	icon_state = "cultgirder"
 	anchored = 1
 	density = 1
 	layer = 2

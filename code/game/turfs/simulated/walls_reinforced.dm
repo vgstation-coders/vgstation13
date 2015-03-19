@@ -29,7 +29,8 @@
 
 /turf/simulated/wall/r_wall/proc/update_icon()
 	if(!d_state) //Are we under construction or deconstruction ?
-		relativewall_neighbours() //Well isn't that odd, let's pass this to smoothwall.dm
+		relativewall() //Well isn't that odd, let's pass this to smoothwall.dm
+		relativewall_neighbours() //Let's make sure the other walls know about this travesty
 		return //Now fuck off
 	icon_state = "r_wall-[d_state]"  //You can thank me later
 
@@ -54,16 +55,16 @@
 			rotting = 0
 			return
 		if(istype(W,/obj/item/weapon/soap))
-			user.visible_message("<span class='notice'>[user] forcefully scrubs the fungi away with \his [W].</span>", \
-			"<span class='notice'>You forcefully scrub the fungi away with your [W].</span>")
+			user.visible_message("<span class='notice'>[user] forcefully scrubs the fungi away with \the [W].</span>", \
+			"<span class='notice'>You forcefully scrub the fungi away with \the [W].</span>")
 			for(var/obj/effect/E in src)
 				if(E.name == "Wallrot")
 					qdel(E)
 			rotting = 0
 			return
 		else if(!W.is_sharp() && W.force >= 10 || W.force >= 20)
-			user.visible_message("<span class='warning'>With one strong swing, [user] destroys the rotting [src] with his [W].</span>", \
-			"<span class='notice'>With one strong swing, the rotting [src] crumbles away under your [W].</span>")
+			user.visible_message("<span class='warning'>With one strong swing, [user] destroys the rotting [src] with \the [W].</span>", \
+			"<span class='notice'>With one strong swing, the rotting [src] crumbles away under \the [W].</span>")
 			src.dismantle_wall()
 
 			var/pdiff = performWallPressureCheck(src.loc)
@@ -74,10 +75,13 @@
 	//THERMITE related stuff. Calls src.thermitemelt() which handles melting simulated walls and the relevant effects
 	if(thermite)
 		if(W.is_hot()) //HEY CAN THIS SET THE THERMITE ON FIRE ?
-			thermitemelt(user) //There, I just saved you fifty lines of redundant typechecks and awful snowflake coding
-			user.visible_message("<span class='warning'>[user] sets \the [src] ablaze with a swing of \his [W]</span>", \
-			"<span class='warning'>You set \the [src] ablaze with a swing of your [W]</span>")
-			return
+			user.visible_message("<span class='warning'>[user] applies \the [W] to the thermite coating \the [src] and waits</span>", \
+			"<span class='warning'>You apply \the [W] to the thermite coating \the [src] and wait</span>")
+			if(do_after(user, 100) && W.is_hot()) //Thermite is hard to light up
+				thermitemelt(user) //There, I just saved you fifty lines of redundant typechecks and awful snowflake coding
+				user.visible_message("<span class='warning'>[user] sets \the [src] ablaze with \the [W]</span>", \
+				"<span class='warning'>You set \the [src] ablaze with \the [W]</span>")
+				return
 
 	//Deconstruction and reconstruction
 	switch(d_state)
@@ -87,21 +91,21 @@
 				src.d_state = 1
 				update_icon()
 				getFromPool(/obj/item/stack/rods, get_turf(src), 2)
-				user.visible_message("<span class='warning'>[user] cuts out the outer grille.</span>", \
-				"<span class='notice'>You cut out the outer grille, exposing the reinforced cover.</span>")
+				user.visible_message("<span class='warning'>[user] cuts out \the [src]'s outer grille.</span>", \
+				"<span class='notice'>You cut out \the [src]'s outer grille, exposing the external cover.</span>")
 				return
 
 		if(1)
 			if(istype(W, /obj/item/weapon/screwdriver))
-				user.visible_message("<span class='notice'>[user] begins unsecuring the reinforced cover.</span>", \
-				"<span class='notice'>You begin unsecuring the reinforced cover.</span>")
+				user.visible_message("<span class='notice'>[user] begins unsecuring \the [src]'s external cover.</span>", \
+				"<span class='notice'>You begin unsecuring \the [src]'s external cover.</span>")
 				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 
 				if(do_after(user, 40))
 					src.d_state = 2
 					update_icon()
-					user.visible_message("<span class='warning'>[user] unsecures the reinforced cover.</span>", \
-					"<span class='notice'>You unsecure the reinforced cover.</span>")
+					user.visible_message("<span class='warning'>[user] unsecures \the [src]'s external cover.</span>", \
+					"<span class='notice'>You unsecure \the [src]'s external cover.</span>")
 				return
 
 			//Repairing or fourth step to finish reinforced wall construction
@@ -112,8 +116,8 @@
 				O.use(2)
 				src.d_state = 0
 				update_icon()	//Call smoothwall.dm, goes through update_icon()
-				user.visible_message("<span class='notice'>[user] adds an outer grille to the reinforced cover.</span>", \
-				"<span class='notice'>You add an outer grille to the reinforced cover.</span>")
+				user.visible_message("<span class='notice'>[user] adds an outer grille to \the [src].</span>", \
+				"<span class='notice'>You add an outer grille to \the [src].</span>")
 				return
 
 		if(2)
@@ -121,8 +125,8 @@
 
 				var/obj/item/weapon/weldingtool/WT = W
 				if(WT.remove_fuel(0, user))
-					user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s cover.</span>", \
-					"<span class='notice'>You begin slicing through \the [src]'s cover.</span>", \
+					user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s external cover.</span>", \
+					"<span class='notice'>You begin slicing through \the [src]'s external cover.</span>", \
 					"<span class='warning'>You hear welding noises.</span>")
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
 
@@ -130,8 +134,8 @@
 						playsound(src, 'sound/items/Welder.ogg', 100, 1) //Not an error, play welder sound again
 						src.d_state = 3
 						update_icon()
-						user.visible_message("<span class='warning'>[user] finishes weakening \the [src]'s cover.</span>", \
-						"<span class='notice'>You finish weakening \the [src]'s cover.</span>", \
+						user.visible_message("<span class='warning'>[user] finishes weakening \the [src]'s external cover.</span>", \
+						"<span class='notice'>You finish weakening \the [src]'s external cover.</span>", \
 						"<span class='warning'>You hear welding noises.</span>")
 				else
 					user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
@@ -139,8 +143,8 @@
 
 			if(istype(W, /obj/item/weapon/pickaxe/plasmacutter)) //Ah, snowflake coding, my favorite
 
-				user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s cover.</span>", \
-					"<span class='notice'>You begin slicing through \the [src]'s cover.</span>", \
+				user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s external cover.</span>", \
+					"<span class='notice'>You begin slicing through \the [src]'s external cover.</span>", \
 					"<span class='warning'>You hear welding noises.</span>")
 				playsound(src, 'sound/items/Welder.ogg', 100, 1)
 
@@ -148,16 +152,16 @@
 					playsound(src, 'sound/items/Welder.ogg', 100, 1) //Not an error, play welder sound again
 					src.d_state = 3
 					update_icon()
-					user.visible_message("<span class='warning'>[user] finishes weakening \the [src]'s cover.</span>", \
-						"<span class='notice'>You finish weakening \the [src]'s cover.</span>", \
+					user.visible_message("<span class='warning'>[user] finishes weakening \the [src]'s external cover.</span>", \
+						"<span class='notice'>You finish weakening \the [src]'s external cover.</span>", \
 						"<span class='warning'>You hear welding noises.</span>")
 				return
 
 		if(3)
 			if(istype(W, /obj/item/weapon/crowbar))
 
-				user.visible_message("<span class='warning'>[user] starts prying off \the [src]'s cover.</span>", \
-				"<span class='notice'>You struggle to pry off \the [src]'s cover.</span>", \
+				user.visible_message("<span class='warning'>[user] starts prying off \the [src]'s external cover.</span>", \
+				"<span class='notice'>You struggle to pry off \the [src]'s external cover.</span>", \
 				"<span class='warning'>You hear a crowbar.</span>")
 				playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 
@@ -166,37 +170,37 @@
 					src.d_state = 4
 					update_icon()
 					getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src))
-					user.visible_message("<span class='warning'>[user] pries off \the [src]'s cover.</span>", \
-					"<span class='notice'>You pry off \the [src]'s cover.</span>")
+					user.visible_message("<span class='warning'>[user] pries off \the [src]'s external cover.</span>", \
+					"<span class='notice'>You pry off \the [src]'s external cover.</span>")
 				return
 
 		if(4)
 			if(istype(W, /obj/item/weapon/wrench))
 
-				user.visible_message("<span class='warning'>[user] starts removing the bolts anchoring the support rods.</span>", \
-				"<span class='notice'>You start removing the bolts anchoring the support rods.</span>")
+				user.visible_message("<span class='warning'>[user] starts removing the bolts anchoring \the [src]'s external support rods.</span>", \
+				"<span class='notice'>You start removing the bolts anchoring \the [src]'s external support rods.</span>")
 				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 
 				if(do_after(user, 40))
 					src.d_state = 5
 					update_icon()
-					user.visible_message("<span class='warning'>[user] removes the bolts anchoring the support rods.</span>", \
-					"<span class='notice'>You remove the bolts anchoring the support rods.</span>")
+					user.visible_message("<span class='warning'>[user] removes the bolts anchoring \the [src]'s external support rods.</span>", \
+					"<span class='notice'>You remove the bolts anchoring \the [src]'s external support rods.</span>")
 				return
 
 			//Third construction step, add the second plasteel sheet
 			else if(istype(W, /obj/item/stack/sheet/plasteel))
 				var/obj/item/stack/sheet/plasteel/P = W
-				user.visible_message("<span class='notice'>[user] starts installing a reinforced cover.</span>", \
-				"<span class='notice'>You start installing a reinforced cover.</span>")
+				user.visible_message("<span class='notice'>[user] starts installing an external cover to \the [src].</span>", \
+				"<span class='notice'>You start installing an external cover to \the [src].</span>")
 				playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
 
 				if(do_after(user, 50))
 					P.use(1)
 					src.d_state = 1 //A new pristine reinforced cover, go straight to finishing the wall with rods
 					update_icon()
-					user.visible_message("<span class='notice'>[user] finishes installing a reinforced cover.</span>", \
-					"<span class='notice'>You finish installing a reinforced cover.</span>")
+					user.visible_message("<span class='notice'>[user] finishes installing an external cover to \the [src].</span>", \
+					"<span class='notice'>You finish installing an external cover to \the [src].</span>")
 				return
 
 		if(5)
@@ -204,8 +208,8 @@
 
 				var/obj/item/weapon/weldingtool/WT = W
 				if(WT.remove_fuel(0,user))
-					user.visible_message("<span class='warning'>[user] begins slicing through the external support rods.</span>", \
-					"<span class='notice'>You begin slicing through the external support rods.</span>")
+					user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s external support rods.</span>", \
+					"<span class='notice'>You begin slicing through \the [src]'s external support rods.</span>")
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
 
 					if(do_after(user, 100))
@@ -214,16 +218,16 @@
 						update_icon()
 						var/obj/item/stack/rods/R = getFromPool(/obj/item/stack/rods, get_turf(src))
 						R.amount = 2
-						user.visible_message("<span class='warning'>[user] slices through the external support rods.</span>", \
-						"<span class='notice'>You slice through the external support rods, exposing the last reinforced sheath.</span>")
+						user.visible_message("<span class='warning'>[user] slices through \the [src]'s external support rods.</span>", \
+						"<span class='notice'>You slice through \the [src]'s external support rods, exposing its internal cover.</span>")
 				else
 					user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
 				return
 
 			if(istype(W, /obj/item/weapon/pickaxe/plasmacutter))
 
-				user.visible_message("<span class='warning'>[user] begins slicing through the external support rods.</span>", \
-				"<span class='notice'>You begin slicing through the external support rods.</span>")
+				user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s external support rods.</span>", \
+				"<span class='notice'>You begin slicing through \the [src]'s external support rods.</span>")
 				playsound(src, 'sound/items/Welder.ogg', 100, 1)
 
 				if(do_after(user, 70))
@@ -231,34 +235,34 @@
 					src.d_state = 6
 					update_icon()
 					new /obj/item/stack/rods(src)
-					user.visible_message("<span class='warning'>[user] slices through the external support rods.</span>", \
-					"<span class='notice'>You slice through the external support rods, exposing the inner reinforced cover.</span>")
+					user.visible_message("<span class='warning'>[user] slices through \the [src]'s external support rods.</span>", \
+					"<span class='notice'>You slice through \the [src]'s external support rods, exposing its internal cover.</span>")
 				return
 
 			//Second construction or repair step, tighten the anchoring bolts
 			else if(istype(W, /obj/item/weapon/wrench))
 
-				user.visible_message("<span class='notice'>[user] starts tightening the bolts anchoring the support rods.</span>", \
-				"<span class='notice'>You start tightening the bolts anchoring the support rods.</span>")
+				user.visible_message("<span class='notice'>[user] starts tightening the bolts anchoring \the [src]'s external support rods.</span>", \
+				"<span class='notice'>You start tightening the bolts anchoring \the [src]'s external support rods.</span>")
 				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 
 				if(do_after(user, 40))
 					src.d_state = 4
 					update_icon()
-					user.visible_message("<span class='notice'>[user] tightens the bolts anchoring the support rods.</span>", \
-					"<span class='notice'>You tighten the bolts anchoring the support rods.</span>")
+					user.visible_message("<span class='notice'>[user] tightens the bolts anchoring \the [src]'s external support rods.</span>", \
+					"<span class='notice'>You tighten the bolts anchoring \the [src]'s external support rods.</span>")
 				return
 
 		if(6)
 			if(istype(W, /obj/item/weapon/crowbar))
 
-				user.visible_message("<span class='warning'>[user] starts prying off the inner reinforced cover.</span>", \
-				"<span class='notice'>You struggle to pry off the inner reinforced cover.</span>")
+				user.visible_message("<span class='warning'>[user] starts prying off [src]'s internal cover.</span>", \
+				"<span class='notice'>You struggle to pry off [src]'s internal cover.</span>")
 				playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 
 				if(do_after(user, 100))
-					user.visible_message("<span class='warning'>[user] pries off the inner reinforced cover.</span>", \
-					"<span class='notice'>You pry off the inner reinforced cover.</span>")
+					user.visible_message("<span class='warning'>[user] pries off [src]'s internal cover.</span>", \
+					"<span class='notice'>You pry off [src]'s internal cover.</span>")
 					dismantle_wall() //Mr. Engineer, break down that reinforced wall
 				return
 
@@ -270,8 +274,8 @@
 				O.use(2)
 				src.d_state = 5
 				update_icon()
-				user.visible_message("<span class='notice'>[user] installs external support rods on the reinforced cover.</span>", \
-				"<span class='notice'>You install external support rods on the reinforced cover.</span>")
+				user.visible_message("<span class='notice'>[user] installs external support rods to [src]'s internal cover.</span>", \
+				"<span class='notice'>You install external support rods to [src]'s internal cover.</span>")
 				return
 
 //This is where we perform actions that aren't deconstructing, constructing or thermiting the reinforced wall

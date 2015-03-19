@@ -173,16 +173,16 @@
 			rotting = 0
 			return
 		if(istype(W,/obj/item/weapon/soap))
-			user.visible_message("<span class='notice'>[user] forcefully scrubs the fungi away with \his [W].</span>", \
-			"<span class='notice'>You forcefully scrub the fungi away with your [W].</span>")
+			user.visible_message("<span class='notice'>[user] forcefully scrubs the fungi away with \the [W].</span>", \
+			"<span class='notice'>You forcefully scrub the fungi away with \the [W].</span>")
 			for(var/obj/effect/E in src)
 				if(E.name == "Wallrot")
 					qdel(E)
 			rotting = 0
 			return
 		else if(!W.is_sharp() && W.force >= 10 || W.force >= 20)
-			user.visible_message("<span class='warning'>With one strong swing, [user] destroys the rotting [src] with his [W].</span>", \
-			"<span class='notice'>With one strong swing, the rotting [src] crumbles away under your [W].</span>")
+			user.visible_message("<span class='warning'>With one strong swing, [user] destroys the rotting [src] with \the [W].</span>", \
+			"<span class='notice'>With one strong swing, the rotting [src] crumbles away under \the [W].</span>")
 			src.dismantle_wall(1)
 
 			var/pdiff = performWallPressureCheck(src.loc)
@@ -193,10 +193,13 @@
 	//THERMITE related stuff. Calls src.thermitemelt() which handles melting simulated walls and the relevant effects
 	if(thermite)
 		if(W.is_hot()) //HEY CAN THIS SET THE THERMITE ON FIRE ?
-			thermitemelt(user) //There, I just saved you fifty lines of redundant typechecks and awful snowflake coding
-			user.visible_message("<span class='warning'>[user] sets \the [src] ablaze with a swing of \his [W]</span>", \
-			"<span class='warning'>You set \the [src] ablaze with a swing of your [W]</span>")
-			return
+			user.visible_message("<span class='warning'>[user] applies \the [W] to the thermite coating \the [src] and waits</span>", \
+			"<span class='warning'>You apply \the [W] to the thermite coating \the [src] and wait</span>")
+			if(do_after(user, 100) && W.is_hot()) //Thermite is hard to light up
+				thermitemelt(user) //There, I just saved you fifty lines of redundant typechecks and awful snowflake coding
+				user.visible_message("<span class='warning'>[user] sets \the [src] ablaze with \the [W]</span>", \
+				"<span class='warning'>You set \the [src] ablaze with \the [W]</span>")
+				return
 
 	//Deconstruction
 	if(istype(W, /obj/item/weapon/weldingtool))
@@ -322,6 +325,7 @@
 	if(pdiff)
 		message_admins("[user.real_name] ([formatPlayerPanel(user,user.ckey)]) thermited a wall with a pdiff of [pdiff] at [formatJumpTo(loc)]!")
 
+	hotspot_expose(3000, 125, surfaces = 1) //Only works once when the thermite is created, but else it would need to not be an effect to work
 	spawn(100)
 		if(O)
 			visible_message("<span class='danger'>\The [O] melts right through \the [src].</span>")
