@@ -6,6 +6,7 @@
 	density = 1
 
 	walltype = "rwall"
+	hardness = 90
 
 	var/d_state = 0
 
@@ -14,48 +15,23 @@
 	if(d_state)
 		switch(d_state) //How fucked or unfinished is our wall
 			if(1)
-				desc += "It has no outer grille"
+				user << "It has no outer grille"
 			if(2)
-				desc += "It has no outer grille and the external reinforced cover is exposed"
+				user << "It has no outer grille and the external reinforced cover is exposed"
 			if(3)
-				desc += "It has no outer grille and the external reinforced cover has been welded into"
+				user << "It has no outer grille and the external reinforced cover has been welded into"
 			if(4)
-				desc += "It has no outer grille or no external reinforced cover and the external support rods are exposed"
+				user << "It has no outer grille or no external reinforced cover and the external support rods are exposed"
 			if(5)
-				desc += "It has no outer grille or no external reinforced cover and the external support rods are loose"
+				user << "It has no outer grille or no external reinforced cover and the external support rods are loose"
 			if(6)
-				desc += "It has no outer grille, external reinforced cover or external support rods, the inner reinforced cover is exposed" //And that's terrible
+				user << "It has no outer grille, external reinforced cover or external support rods and the inner reinforced cover is exposed" //And that's terrible
 
 /turf/simulated/wall/r_wall/proc/update_icon()
 	if(!d_state) //Are we under construction or deconstruction ?
 		relativewall_neighbours() //Well isn't that odd, let's pass this to smoothwall.dm
 		return //Now fuck off
 	icon_state = "r_wall-[d_state]"  //You can thank me later
-
-/turf/simulated/wall/r_wall/attack_hand(mob/user as mob)
-	user.delayNextAttack(8)
-	if(M_HULK in user.mutations)
-		if(prob(10) || rotting)
-			dismantle_wall(1)
-			usr.visible_message("<span class='danger'>[usr] smashes through \the [src].</span>", \
-			"<span class='notice'>You smash through \the [src].</span>")
-			usr.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-			return
-		else
-			usr.visible_message("<span class='warning'>[src] punches \the [src].</span>", \
-			"<span class='notice'>You punch \the [src].</span>")
-			return
-
-	if(rotting)
-		user << "<span class='notice'>This [src] feels rather unstable.</span>"
-		return
-
-	user.visible_message("<span class='notice'>[user] pushes \the [src].</span>", \
-	"<span class='notice'>You push \the [src] but nothing happens!</span>")
-	playsound(src, 'sound/weapons/Genhit.ogg', 25, 1)
-	src.add_fingerprint(user)
-	return
-
 
 /turf/simulated/wall/r_wall/attackby(obj/item/W as obj, mob/user as mob)
 
@@ -89,6 +65,10 @@
 			user.visible_message("<span class='warning'>With one strong swing, [user] destroys the rotting [src] with his [W].</span>", \
 			"<span class='notice'>With one strong swing, the rotting [src] crumbles away under your [W].</span>")
 			src.dismantle_wall()
+
+			var/pdiff = performWallPressureCheck(src.loc)
+			if(pdiff)
+				message_admins("[user.real_name] ([formatPlayerPanel(user,user.ckey)]) broke a rotting reinforced wall with a pdiff of [pdiff] at [formatJumpTo(loc)]!")
 			return
 
 	//THERMITE related stuff. Calls src.thermitemelt() which handles melting simulated walls and the relevant effects
@@ -106,9 +86,7 @@
 				playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
 				src.d_state = 1
 				update_icon()
-				var/obj/item/stack/rods/O = getFromPool(/obj/item/stack/rods, get_turf(src))
-				O.amount = 2
-				new /obj/item/stack/rods(src)
+				getFromPool(/obj/item/stack/rods, get_turf(src), 2)
 				user.visible_message("<span class='warning'>[user] cuts out the outer grille.</span>", \
 				"<span class='notice'>You cut out the outer grille, exposing the reinforced cover.</span>")
 				return
@@ -187,6 +165,7 @@
 					playsound(src, 'sound/items/Deconstruct.ogg', 100, 1) //SLAM
 					src.d_state = 4
 					update_icon()
+					getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src))
 					user.visible_message("<span class='warning'>[user] pries off \the [src]'s cover.</span>", \
 					"<span class='notice'>You pry off \the [src]'s cover.</span>")
 				return
@@ -233,7 +212,8 @@
 						playsound(src, 'sound/items/Welder.ogg', 100, 1) //Not an error, play welder sound again
 						src.d_state = 6
 						update_icon()
-						new /obj/item/stack/rods(src)
+						var/obj/item/stack/rods/R = getFromPool(/obj/item/stack/rods, get_turf(src))
+						R.amount = 2
 						user.visible_message("<span class='warning'>[user] slices through the external support rods.</span>", \
 						"<span class='notice'>You slice through the external support rods, exposing the last reinforced sheath.</span>")
 				else
@@ -326,3 +306,29 @@
 	if(current_size >= STAGE_FIVE)
 		if(prob(30))
 			dismantle_wall()
+
+/turf/simulated/wall/r_wall/ex_act(severity)
+	if(rotting)
+		severity = 1.0
+	switch(severity)
+		if(1.0)
+			if(prob(66)) //It's "bomb-proof"
+				dismantle_wall(1,1) //So it isn't completely destroyed, nice uh ?
+			else
+				dismantle_wall(0,1) //Fuck it up nicely
+		if(2.0)
+			if(prob(25)) //Fairly likely to stand, point-blank damage is "gone"
+				dismantle_wall(0,1)
+			else
+				src.d_state = 4
+				update_icon()
+				getFromPool(/obj/item/stack/rods, get_turf(src)) //Lose one rod, because it blasted right through
+				getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src))
+		if(3.0)
+			if(prob(15))
+				dismantle_wall(0,1)
+			else //If prob fails, break the outer safety grille to look like scrap damage
+				src.d_state = 1
+				update_icon()
+				getFromPool(/obj/item/stack/rods, get_turf(src), 2)
+	return

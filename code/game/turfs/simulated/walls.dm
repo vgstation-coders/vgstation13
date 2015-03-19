@@ -12,7 +12,7 @@
 	heat_capacity = 312500 //a little over 5 cm thick , 312500 for 1 m by 2.5 m by 0.25 m plasteel wall
 
 	var/walltype = "metal"
-	var/hardness = 40 //lower numbers are harder. Used to determine the probability of a hulk smashing through.
+	var/hardness = 60 //Higher numbers are harder (so that it actually makes sense). Walls are 60 hardness, reinforced walls are 90 hardness. No hardness over 100, PLEASE
 	var/engraving, engraving_quality //engraving on the wall
 	var/del_suppress_resmoothing = 0 // Do not resmooth neighbors on Destroy. (smoothwall.dm)
 
@@ -23,9 +23,9 @@
 /turf/simulated/wall/examine(mob/user)
 	..()
 	if(rotting)
-		desc += "It is covered in wallrot and looks weakened"
+		user << "It is covered in wallrot and looks weakened"
 	if(thermite)
-		desc += "<span class='danger'>It's doused in thermite!</span>"
+		user << "<span class='danger'>It's doused in thermite!</span>"
 	if(src.engraving)
 		user << src.engraving
 
@@ -33,22 +33,19 @@
 	if(istype(src, /turf/simulated/wall/r_wall)) //Reinforced girder has deconstruction steps too. If no girder, drop ONE plasteel sheet AND rods
 		if(!devastated)
 			playsound(src, 'sound/items/Welder.ogg', 100, 1)
-			var/obj/item/stack/sheet/plasteel/P = getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src))
-			P.amount = 1
+			getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src))
 			new /obj/structure/girder/reinforced(src)
 		else
-			var/obj/item/stack/rods/R = getFromPool(/obj/item/stack/rods, get_turf(src))
-			R.amount = 2
-			var/obj/item/stack/sheet/plasteel/P = getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src))
-			P.amount = 1
+			getFromPool(/obj/item/stack/rods, get_turf(src), 2)
+			getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src))
 	else if(istype(src,/turf/simulated/wall/cult))
 		if(!devastated)
 			playsound(src, 'sound/items/Welder.ogg', 100, 1)
-			var/obj/effect/decal/cleanable/blood/B = getFromPool(/obj/effect/decal/cleanable/blood,src)
+			var/obj/effect/decal/cleanable/blood/B = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(src))
 			B.New(src)
 			new /obj/structure/cultgirder(src)
 		else
-			var/obj/effect/decal/cleanable/blood/B = getFromPool(/obj/effect/decal/cleanable/blood,src)
+			var/obj/effect/decal/cleanable/blood/B = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(src))
 			B.New(src)
 			new /obj/effect/decal/remains/human(src)
 
@@ -57,22 +54,19 @@
 			playsound(src, 'sound/items/Welder.ogg', 100, 1)
 			new /obj/structure/girder(src)
 			if(mineral == "metal")
-				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-				M.amount = 2
+				getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 2)
 			else
 				var/M = text2path("/obj/item/stack/sheet/mineral/[mineral]")
 				new M(src)
 				new M(src)
 		else
 			if(mineral == "metal")
-				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-				M.amount = 3
+				getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 3)
 			else
 				var/M = text2path("/obj/item/stack/sheet/mineral/[mineral]")
 				new M(src)
 				new M(src)
-				var/obj/item/stack/sheet/metal/MM = getFromPool(/obj/item/stack/sheet/metal, src)
-				MM.amount = 1
+				getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 
 	for(var/obj/O in src.contents) //Eject contents!
 		if(istype(O,/obj/structure/sign/poster))
@@ -83,46 +77,27 @@
 	ChangeTurf(/turf/simulated/floor/plating)
 
 /turf/simulated/wall/ex_act(severity)
-	if(rotting) severity = 1.0
+	if(rotting)
+		severity = 1.0
 	switch(severity)
 		if(1.0)
-			src.ChangeTurf(under_turf)
+			src.ChangeTurf(under_turf) //You get NOTHING, you LOSE
 			return
 		if(2.0)
 			if(prob(50))
 				dismantle_wall(0,1)
 			else
 				dismantle_wall(1,1)
+			return
 		if(3.0)
-			var/proba
-			if(istype(src, /turf/simulated/wall/r_wall))
-				proba = 15
-			else
-				proba = 40
-			if(prob(proba))
+			if(prob(40))
 				dismantle_wall(0,1)
-		else
+			return
 	return
 
 /turf/simulated/wall/blob_act()
 	if(prob(50) || rotting)
 		dismantle_wall()
-
-/turf/simulated/wall/attack_paw(mob/user as mob)
-	user.delayNextAttack(8)
-	if((M_HULK in user.mutations))
-		if(prob(hardness))
-			dismantle_wall(1)
-			usr.visible_message("<span class='danger'>[usr] smashes through \the [src].</span>", \
-			"<span class='notice'>You smash through \the [src].</span>")
-			usr.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-			return
-		else
-			usr.visible_message("<span class='warning'>[src] punches \the [src].</span>", \
-			"<span class='notice'>You punch \the [src].</span>")
-			return
-
-	return src.attack_hand(user)
 
 /turf/simulated/wall/attack_animal(var/mob/living/simple_animal/M)
 	M.delayNextAttack(8)
@@ -140,31 +115,43 @@
 			"<span class='attack'>You smash through \the [src].</span>")
 			return
 
+/turf/simulated/wall/attack_paw(mob/user as mob)
+
+	return src.attack_hand(user)
+
 /turf/simulated/wall/attack_hand(mob/user as mob)
 	user.delayNextAttack(8)
 	if(M_HULK in user.mutations)
-		if(prob(hardness) || rotting)
+		if(prob(100 - hardness) || rotting)
 			dismantle_wall(1)
-			usr.visible_message("<span class='danger'>[usr] smashes through \the [src].</span>", \
+			user.visible_message("<span class='danger'>[user] smashes through \the [src].</span>", \
 			"<span class='notice'>You smash through \the [src].</span>")
 			usr.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 			return
 		else
-			usr.visible_message("<span class='warning'>[src] punches \the [src].</span>", \
+			user.visible_message("<span class='warning'>[user] punches \the [src].</span>", \
 			"<span class='notice'>You punch \the [src].</span>")
 			return
 
 	if(rotting)
-		user.visible_message("<span class='warning'>\The [src] crumbles under [user]'s touch.</span>", \
-		"<span class='notice'>\The [src] crumbles under your touch.</span>")
-		dismantle_wall()
-		return
+		return src.attack_rotting(user) //Stop there, we aren't slamming our hands on a dirty rotten wall
 
 	user.visible_message("<span class='notice'>[user] pushes \the [src].</span>", \
 	"<span class='notice'>You push \the [src] but nothing happens!</span>")
 	playsound(src, 'sound/weapons/Genhit.ogg', 25, 1)
 	src.add_fingerprint(user)
 	return ..()
+
+/turf/simulated/wall/proc/attack_rotting(mob/user as mob)
+	if(istype(src, /turf/simulated/wall/r_wall)) //I wish I didn't have to do typechecks
+		user << "<span class='notice'>This [src] feels rather unstable.</span>"
+		return
+	else
+		//Should be a normal wall or a mineral wall, SHOULD
+		user.visible_message("<span class='warning'>\The [src] crumbles under [user]'s touch.</span>", \
+		"<span class='notice'>\The [src] crumbles under your touch.</span>")
+		dismantle_wall()
+		return
 
 /turf/simulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
@@ -194,7 +181,8 @@
 			rotting = 0
 			return
 		else if(!W.is_sharp() && W.force >= 10 || W.force >= 20)
-			user << "<span class='notice'>\The [src] crumbles away under the force of your [W.name].</span>"
+			user.visible_message("<span class='warning'>With one strong swing, [user] destroys the rotting [src] with his [W].</span>", \
+			"<span class='notice'>With one strong swing, the rotting [src] crumbles away under your [W].</span>")
 			src.dismantle_wall(1)
 
 			var/pdiff = performWallPressureCheck(src.loc)
@@ -365,13 +353,15 @@
 	return 0
 
 /turf/simulated/wall/Destroy()
-	for(var/obj/effect/E in src) if(E.name == "Wallrot")
-		qdel(E)
+	for(var/obj/effect/E in src)
+		if(E.name == "Wallrot")
+			qdel(E)
 	..()
 
 /turf/simulated/wall/ChangeTurf(var/newtype)
-	for(var/obj/effect/E in src) if(E.name == "Wallrot")
-		qdel(E)
+	for(var/obj/effect/E in src)
+		if(E.name == "Wallrot")
+			qdel(E)
 	..(newtype)
 
 /turf/simulated/wall/cultify()

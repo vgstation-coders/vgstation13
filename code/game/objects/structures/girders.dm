@@ -7,16 +7,16 @@
 
 /obj/structure/girder/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/wrench) && state == 0)
-		if(anchored && !istype(src,/obj/structure/girder/displaced))
+		if(anchored && !istype(src, /obj/structure/girder/displaced))
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 			user.visible_message("<span class='notice'>[user] starts disassembling \the [src]</span>", \
 			"<span class='notice'>You start disassembling \the [src]</span>")
-			if(do_after(user,40))
+			if(do_after(user, 40))
 				user.visible_message("<span class='warning'>[src] dissasembles \the [src]</span>", \
 				"<span class='notice'>You dissasemble \the [src]</span>")
-				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-				M.amount = 1
+				getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 				qdel(src)
+
 		else if(!anchored)
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 			user.visible_message("<span class='notice'>[user] starts securing \the [src]</span>", \
@@ -36,20 +36,21 @@
 
 		user.visible_message("<span class='warning'>[user] starts [PK.drill_verb] \the [src] with \the [PK]</span>", \
 		"<span class='notice'>You start [PK.drill_verb] \the [src] with \the [PK]</span>")
-		if(do_after(user,30))
+		if(do_after(user, 30))
 			user.visible_message("<span class='warning'>[user] destroys \the [src]!</span>", \
 			"<span class='notice'>You start [PK.drill_verb] \the [src] with \the [PK]</span>")
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-			M.amount = 1
+			getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 			qdel(src)
 
 	else if(istype(W, /obj/item/weapon/screwdriver) && state == 2) //Unsecuring support struts, stage 2 to 1
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] starts unsecuring \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start unsecuring \the [src]'s internal support struts.</span>")
-		if(do_after(user,40))
+		if(do_after(user, 40))
 			user.visible_message("<span class='warning'>[user] unsecures \the [src]'s internal support struts.</span>", \
 			"<span class='notice'>You unsecure \the [src]'s internal support struts.</span>")
+			add_hiddenprint(user)
+			add_fingerprint(user)
 			state = 1
 			update_icon()
 
@@ -57,9 +58,11 @@
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
 		user.visible_message("<span class='notice'>[user] starts securing \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start securing \the [src]'s internal support struts.</span>")
-		if(do_after(user,40))
+		if(do_after(user, 40))
 			user.visible_message("<span class='notice'>[user] secures \the [src]'s internal support struts.</span>", \
 			"<span class='notice'>You secure \the [src]'s internal support struts.</span>")
+			add_hiddenprint(user)
+			add_fingerprint(user)
 			state = 2
 			update_icon()
 
@@ -67,11 +70,12 @@
 		playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] starts removing the internal support struts from \the [src]</span>", \
 		"<span class='notice'>You start removing the internal support struts from \the [src]</span>")
-		if(do_after(user,40))
+		if(do_after(user, 40))
 			user.visible_message("<span class='warning'>[user] removes the internal support struts from \the [src]</span>", \
 			"<span class='notice'>You remove the internal support struts from \the [src]</span>")
-			var/obj/item/stack/rods/R = getFromPool(/obj/item/stack/rods, get_turf(src))
-			R.amount = 2
+			add_hiddenprint(user)
+			add_fingerprint(user)
+			getFromPool(/obj/item/stack/rods, get_turf(src), 2)
 			state = 0
 			update_icon()
 
@@ -90,6 +94,8 @@
 			O.use(2)
 			user.visible_message("<span class='notice'>[user] inserts support struts into \the [src]</span>", \
 			"<span class='notice'>You insert support struts into \the [src]</span>")
+			add_hiddenprint(user)
+			add_fingerprint(user)
 			state = 1
 			update_icon()
 
@@ -119,6 +125,7 @@
 						"<span class='notice'>You create a false wall. Push on it to open or close the passage.</span>")
 						var/obj/structure/falsewall/FW = new /obj/structure/falsewall (src.loc)
 						FW.add_hiddenprint(user)
+						FW.add_fingerprint(user)
 						qdel(src)
 					else
 						user << "<span class='warning'>There is too much air moving through the gap!  The door wouldn't stay closed if you built it.</span>"
@@ -130,8 +137,8 @@
 						return ..() // ?
 					user.visible_message("<span class='notice'>[user] starts installing plating to \the [src]</span>", \
 					"<span class='notice'>You start installing plating to \the [src]</span>")
-					if(do_after(user,40))
-						if(!src || !S || S.amount < 2 || !get_turf(src))
+					if(do_after(user, 40))
+						if(S.amount < 2) //User being tricky
 							return
 						S.use(2)
 						user.visible_message("<span class='notice'>[user] finishes installing plating to \the [src]</span>", \
@@ -202,6 +209,7 @@
 					var/F = text2path("/obj/structure/falsewall/[M]")
 					var/obj/structure/falsewall/FW = new F (src.loc)
 					FW.add_hiddenprint(user)
+					FW.add_fingerprint(user)
 					qdel(src)
 				else
 					user << "<span class='warning'>There is too much air moving through the gap!  The door wouldn't stay closed if you built it.</span>"
@@ -257,19 +265,17 @@
 		if(2.0)
 			if(prob(30))
 				if(prob(50))
-					new /obj/item/stack/rods(loc)
+					getFromPool(/obj/item/stack/rods, get_turf(src))
 				else
-					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-					M.amount = 1
+					getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 				qdel(src)
 			return
 		if(3.0)
 			if(prob(5))
 				if(prob(50))
-					new /obj/item/stack/rods(loc)
+					getFromPool(/obj/item/stack/rods, get_turf(src))
 				else
-					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-					M.amount = 1
+					getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 				qdel(src)
 			return
 	return
@@ -290,6 +296,39 @@
 /obj/structure/girder/reinforced
 	icon_state = "reinforced"
 	state = 2
+
+/obj/structure/girder/reinforced/ex_act(severity)
+
+	switch(severity)
+		if(1.0)
+			if(prob(25) && state == 2) //Strong enough to have a chance to stand if finished, but not in one piece
+				getFromPool(/obj/item/stack/rods, get_turf(src)) //Lose one rod
+				state = 0
+				update_icon()
+			else //Not finished or not lucky
+				qdel(src) //No scraps
+			return
+		if(2.0)
+			if(prob(30)) //Hit it nicely
+				if(state == 2)
+					state = 1
+					update_icon()
+				if(state == 1)
+					getFromPool(/obj/item/stack/rods, get_turf(src)) //Still some loss
+					state = 0
+					update_icon()
+			return
+		if(3.0)
+			if(prob(15)) //Scrap the painting off
+				if(state == 2)
+					state = 1
+					update_icon()
+				if(state == 1)
+					getFromPool(/obj/item/stack/rods, get_turf(src), 2)
+					state = 0
+					update_icon()
+			return
+	return
 
 /obj/structure/cultgirder
 	icon= 'icons/obj/cult.dmi'
