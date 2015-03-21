@@ -3134,6 +3134,13 @@
 	M.adjustToxLoss(-2*REM)
 	..()
 	return
+
+/datum/reagent/vinegar //Eventually there will be a way of making vinegar.
+	name = "Vinegar"
+	id = "vinegar"
+	reagent_state = LIQUID
+	color = "#3F1900" // rgb: 63, 25, 0
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum//////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4467,3 +4474,18 @@
 	if(istype(holder))
 		holder.reagent_list -= src
 		holder = null
+
+/datum/reagent/honkserum
+	name = "Honk Serum"
+	id = "honkserum"
+	description = "Concentrated honking"
+	reagent_state = LIQUID
+	color = "#F2C900" // rgb: 242, 201, 0
+	custom_metabolism = 0.01
+
+/datum/reagent/honkserum/on_mob_life(var/mob/living/M)
+	if(prob(1))
+		if(prob(90))
+			M.say(pick("Honk", "HONK", "Hoooonk", "Honk?", "Henk", "Hunke?", "Honk!"))
+	..()
+	return
