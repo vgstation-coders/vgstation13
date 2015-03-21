@@ -3232,7 +3232,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno
 	name = "Xeno Raiders"
-	desc = "A great tast that is out of this world!"
+	desc = "A great taste that is out of this world!"
 	icon_state = "xeno_chips"
 	item_state = "xeno_chips"
 
