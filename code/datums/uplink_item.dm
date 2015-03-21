@@ -117,6 +117,13 @@ var/list/uplink_items = list()
 	cost = 4
 	job = list("Clown")
 
+/datum/uplink_item/jobspecific/clownvoicechanger
+	name = "Clown Voice Changer"
+	desc = "Like a normal voice changer that mimics the voice named on your identification card, but disguised as a clown mask instead. When no identification is worn, the mask will render your voice unrecognizable."
+	item = /obj/item/clothing/mask/gas/voice/clown_hat
+	cost = 4
+	job = list("Clown")
+
 //Detective
 /datum/uplink_item/jobspecific/evidenceforger
 	name = "Evidence Forger"
@@ -162,7 +169,6 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/caution/proximity_sign
 	cost = 2
 	job = list("Janitor")
-
 
 //Assistant
 /datum/uplink_item/jobspecific/pickpocketgloves

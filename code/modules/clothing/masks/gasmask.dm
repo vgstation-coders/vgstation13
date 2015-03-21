@@ -88,6 +88,12 @@
 	item_state = A.item_state
 	usr.update_inv_wear_mask(1)	//so our overlays update.
 
+/obj/item/clothing/mask/gas/voice/clown_hat
+	name ="clown wig and mask"
+	desc = "A true prankster's facial attire. A clown is incomplete without his wig and mask."
+	icon_state = "clown"
+	item_state = "clown_hat"
+
 /obj/item/clothing/mask/gas/voice/attack_self(mob/user)
 	vchange = !vchange
 	user << "<span class='notice'>The voice changer is now [vchange ? "on" : "off"]!</span>"
