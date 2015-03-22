@@ -4484,8 +4484,7 @@
 	custom_metabolism = 0.01
 
 /datum/reagent/honkserum/on_mob_life(var/mob/living/M)
-	if(prob(1))
-		if(prob(90))
-			M.say(pick("Honk", "HONK", "Hoooonk", "Honk?", "Henk", "Hunke?", "Honk!"))
+	if(prob(0.9))
+		M.say(pick("Honk", "HONK", "Hoooonk", "Honk?", "Henk", "Hunke?", "Honk!"))
 	..()
 	return

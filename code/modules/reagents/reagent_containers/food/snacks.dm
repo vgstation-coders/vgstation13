@@ -3166,11 +3166,12 @@
 	desc = "Where did the bag come from?"
 	icon_state = "plain_chips"
 	item_state = "plain_chips"
+	trash = null
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/New()
 	..()
-	reagents.add_reagent("nutriment", 6)
-	bitesize = 2
+	reagents.add_reagent("nutriment", 4)
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar
 	name = "Salt and Vinegar Chips"
@@ -3180,8 +3181,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar/New()
 	..()
-	reagents.add_reagent("nutriment", 6)
-	bitesize = 2
+	reagents.add_reagent("nutriment", 4)
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar
 	name = "Cheddar Chips"
@@ -3191,8 +3192,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar/New()
 	..()
-	reagents.add_reagent("nutriment", 6)
-	bitesize = 2
+	reagents.add_reagent("nutriment", 4)
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/clown
 	name = "Banana Chips"
@@ -3202,8 +3203,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chip/scookable/clown/New()
 	..()
-	reagents.add_reagent("nutriment", 6)
-	reagents.add_reagent("honkserum", 10)
+	reagents.add_reagent("nutriment", 4)
+	reagents.add_reagent("honkserum", 4)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear
@@ -3214,7 +3215,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear/New()
 	..()
-	reagents.add_reagent("nutriment", 6)
+	reagents.add_reagent("nutriment", 4)
 	reagents.add_reagent("nuka_cola", 4)
 	bitesize = 2
 
@@ -3226,9 +3227,9 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/communist/New()
 	..()
-	reagents.add_reagent("nutriment", 6)
-	reagents.add_reagent("vodka", 10)
-	bitesize = 4
+	reagents.add_reagent("nutriment", 4)
+	reagents.add_reagent("vodka", 4)
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno
 	name = "Xeno Raiders"
@@ -3238,5 +3239,5 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno/New()
 	..()
-	reagents.add_reagent("nutriment", 14)
-	bitesize = 4
+	reagents.add_reagent("nutriment", 8)
+	bitesize = 2
