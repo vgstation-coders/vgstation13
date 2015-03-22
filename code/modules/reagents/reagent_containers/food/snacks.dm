@@ -3170,7 +3170,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/New()
 	..()
-	reagents.add_reagent("nutriment", 4)
+	reagents.add_reagent("nutriment", 5)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar
@@ -3181,7 +3181,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar/New()
 	..()
-	reagents.add_reagent("nutriment", 4)
+	reagents.add_reagent("nutriment", 5)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar
@@ -3192,7 +3192,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar/New()
 	..()
-	reagents.add_reagent("nutriment", 4)
+	reagents.add_reagent("nutriment", 5)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/clown
@@ -3203,8 +3203,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chip/scookable/clown/New()
 	..()
-	reagents.add_reagent("nutriment", 4)
-	reagents.add_reagent("honkserum", 4)
+	reagents.add_reagent("nutriment", 5)
+	reagents.add_reagent("honkserum", 5)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear
@@ -3215,8 +3215,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear/New()
 	..()
-	reagents.add_reagent("nutriment", 4)
-	reagents.add_reagent("nuka_cola", 4)
+	reagents.add_reagent("nutriment", 5)
+	reagents.add_reagent("nuka_cola", 5)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/communist
@@ -3227,8 +3227,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/communist/New()
 	..()
-	reagents.add_reagent("nutriment", 4)
-	reagents.add_reagent("vodka", 4)
+	reagents.add_reagent("nutriment", 5)
+	reagents.add_reagent("vodka", 5)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno
@@ -3239,5 +3239,5 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno/New()
 	..()
-	reagents.add_reagent("nutriment", 8)
+	reagents.add_reagent("nutriment", 10)
 	bitesize = 2
