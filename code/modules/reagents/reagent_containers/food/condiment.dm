@@ -91,7 +91,7 @@
 			user << "\blue You transfer [trans] units of the condiment to [target]."
 
 	on_reagent_change()
-		if(icon_state == "saltshakersmall" || icon_state == "peppermillsmall")
+		if(icon_state == "saltshakersmall" || icon_state == "peppermillsmall" || icon_state == "vinegar_container")
 			return
 		if(reagents.reagent_list.len > 0)
 			switch(reagents.get_master_reagent_id())
@@ -189,3 +189,14 @@
 	New()
 		..()
 		reagents.add_reagent("chefspecial", 20)
+
+/obj/item/weapon/reagent_containers/food/condiment/vinegar
+	name = "Malt Vinegar Bottle"
+	desc = "perfect for fish and chips."
+	icon_state = "vinegar_container"
+	possible_transfer_amounts = list(1,5,10)
+	volume = 50
+	New()
+		..()
+		reagents.add_reagent("vinegar", 50)
+
