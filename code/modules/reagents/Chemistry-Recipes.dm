@@ -2268,7 +2268,7 @@ datum
 			result_amount = 2
 
 		cafe_latte
-			name = "Cafe Latte"
+			name = "Latte"
 			id = "cafe_latte"
 			result = "cafe_latte"
 			required_reagents = list("espresso" = 1, "milk" = 1)
@@ -2482,7 +2482,7 @@ datum
 			id = "cappuccino"
 			result = "cappuccino"
 			required_reagents = list("espresso" = 1, "cream" = 1)
-			result_amount = 3
+			result_amount = 2
 
 		tonio
 			name = "Tonio"
@@ -2496,7 +2496,7 @@ datum
 			id = "doppio"
 			result = "doppio"
 			required_reagents = list("coffee" = 5, "redtea" = 5, "greentea" = 5)
-			result_amount = 5
+			result_amount = 10
 
 		passione
 			name = "Passione"
