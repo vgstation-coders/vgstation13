@@ -3336,6 +3336,7 @@
 
 		holder.remove_reagent(src.id, 0.1)
 
+/*
 /datum/reagent/drink/coffee/icecoffee
 	name = "Iced Coffee"
 	id = "icecoffee"
@@ -3350,6 +3351,7 @@
 	color = "#664300" // rgb: 102, 67, 0
 	adj_sleepy = 0
 	adj_temp = 5
+*/
 
 /datum/reagent/drink/coffee/soy_latte/on_mob_life(var/mob/living/M as mob)
 		..()
@@ -4467,3 +4469,275 @@
 	if(istype(holder))
 		holder.reagent_list -= src
 		holder = null
+
+
+
+//Tea and Coffee, hopefully
+
+
+/datum/reagent/drink/tea
+	name = "Tea"
+	id = "tea"
+	description = "Tasty black tea, it has antioxidants, it's good for you!"
+	color = "#101000" // rgb: 16, 16, 0
+	adj_dizzy = -2
+	adj_drowsy = -1
+	adj_sleepy = -3
+	adj_temp = 20
+
+/datum/reagent/drink/tea/on_mob_life(var/mob/living/M as mob)
+
+	if(!holder) return
+	..()
+	if(M.getToxLoss() && prob(20))
+		M.adjustToxLoss(-1)
+	return
+
+/datum/reagent/drink/tea/icetea
+	name = "Iced Tea"
+	id = "icetea"
+	description = "No relation to a certain rapper or actor."
+	color = "#104038" // rgb: 16, 64, 56
+	adj_temp = -5
+
+/datum/reagent/drink/tea/greentea
+	name = "Green Tea"
+	id = "greentea"
+	description = "Delicious green tea."
+
+/datum/reagent/drink/tea/redtea
+	name = "Red Tea"
+	id = "redtea"
+	description = "Tasty red tea."
+
+/datum/reagent/drink/tea/singularitea
+	name = "Singularitea"
+	id = "singularitea"
+	description = "Swirly!"
+
+var/global/list/chifir_doesnt_remove=list(
+	"chifir",
+	"blood"
+)
+
+
+/datum/reagent/drinks/tea/chifir
+	name = "Chifir"
+	id = "chifir"
+	description = "Strong Russian tea, it'll help you remember what you had for lunch!"
+
+/datum/reagent/chifir/on_mob_life(var/mob/living/M as mob)
+	if(!M) M = holder.my_atom
+
+	if(ishuman(M) && prob(5))
+		var/mob/living/carbon/human/H=M
+		H.vomit()
+		holder.remove_reagent("chifir",volume) // Remove all charcoal.
+		return
+
+	for(var/datum/reagent/reagent in holder.reagent_list)
+		if(reagent.id in chifir_doesnt_remove)
+			continue
+		holder.remove_reagent(reagent.id, 3*REM)
+
+	M.adjustToxLoss(-2*REM)
+	..()
+	return
+
+/datum/reagent/drink/tea/acidtea
+	name = "Earl's Grey Tea"
+	id = "acidtea"
+	description = "Get in touch with your Roswellian side!"
+
+/datum/reagent/drink/tea/yinyang
+	name = "Zen Tea"
+	id = "yinyang"
+	description = "Find inner peace."
+
+/datum/reagent/drink/tea/gyro
+	name = "Gyro"
+	id = "gyro"
+	description = "Nyo ho ho~"
+
+/datum/reagent/drink/tea/dantea
+	name = "Discount Dan's Green Flavor Tea"
+	id = "dantea"
+	description = "Not safe for children above or under the age of 12."
+
+/datum/reagent/drink/tea/mint
+	name = "Groans Tea: Minty Delight Flavor"
+	id = "mint"
+	description = "Very filling!"
+
+/datum/reagent/drink/tea/chamomile
+	name = "Groans Tea: Chamomile Flavor"
+	id = "chamomile"
+	description = "Enjoy a good night's sleep."
+
+/datum/reagent/drink/tea/exchamomile
+	name = "Tea"
+	id = "exchamomile"
+	description = "Who needs to wake up anyway?"
+
+/datum/reagent/drink/tea/fancydan
+	name = "Groans Banned Tea: Fancy Dan Flavor"
+	id = "fancydan"
+	description = "Full of that patented Dan taste you love!"
+
+/datum/reagent/drink/tea/plasma
+	name = "Plasma Pekoe"
+	id = "plasma"
+	description = "Probably not the safest beverage."
+
+/datum/reagent/drink/hot_coco
+	name = "Hot Chocolate"
+	id = "hot_coco"
+	description = "Made with love! And coco beans."
+	nutriment_factor = 2 * FOOD_METABOLISM
+	color = "#403010" // rgb: 64, 48, 16
+	adj_temp = 5
+
+/datum/reagent/drink/coffee
+	name = "Coffee"
+	id = "coffee"
+	description = "Coffee is a brewed drink prepared from roasted seeds, commonly called coffee beans, of the coffee plant."
+	color = "#482000" // rgb: 72, 32, 0
+	adj_dizzy = -5
+	adj_drowsy = -3
+	adj_sleepy = -2
+	adj_temp = 25
+
+/datum/reagent/drink/coffee/on_mob_life(var/mob/living/M as mob)
+
+	if(!holder) return
+	..()
+	if(!holder)
+		holder = M.reagents
+	if(holder)
+		M.Jitter(5)
+		if(adj_temp > 0 && holder.has_reagent("frostoil"))
+			holder.remove_reagent("frostoil", 10*REAGENTS_METABOLISM)
+
+		holder.remove_reagent(src.id, 0.1)
+
+/datum/reagent/drink/coffee/icecoffee
+	name = "Iced Coffee"
+	id = "icecoffee"
+	description = "Coffee and ice, refreshing and cool."
+	color = "#102838" // rgb: 16, 40, 56
+	adj_temp = -5
+
+/datum/reagent/drink/coffee/soy_latte
+	name = "Soy Latte"
+	id = "soylatte"
+	description = "A nice and tasty beverage while you are reading your hippie books."
+	color = "#664300" // rgb: 102, 67, 0
+	adj_sleepy = 0
+	adj_temp = 5
+
+/datum/reagent/drink/coffee/soy_latte/on_mob_life(var/mob/living/M as mob)
+		..()
+		M.sleeping = 0
+		if(M.getBruteLoss() && prob(20)) M.heal_organ_damage(1,0)
+		return
+
+/datum/reagent/drink/coffee/latte
+	name = "Latte"
+	id = "latte"
+	description = "A nice, strong and tasty beverage while you are reading."
+	color = "#664300" // rgb: 102, 67, 0
+	adj_sleepy = 0
+	adj_temp = 5
+
+/datum/reagent/drink/coffee/latte/on_mob_life(var/mob/living/M as mob)
+
+	if(!holder) return
+	..()
+	M.sleeping = 0
+	if(M.getBruteLoss() && prob(20)) M.heal_organ_damage(1,0)
+	return
+
+/datum/reagent/drink/coffee/espresso
+	name = "Espresso"
+	id = "espresso"
+	description = "Coffee made with water."
+
+//Let's hope this one works
+var/global/list/tonio_doesnt_remove=list(
+	"tonio",
+	"blood"
+)
+
+
+/datum/reagent/drink/coffee/tonio
+	name = "Tonio"
+	id = "tonio"
+	nutriment_factor = 1 * FOOD_METABOLISM
+
+
+
+/datum/reagent/tonio/on_mob_life(var/mob/living/M as mob)
+	if(!M) M = holder.my_atom
+
+	if(ishuman(M) && prob(5))
+		var/mob/living/carbon/human/H=M
+		H.vomit()
+		holder.remove_reagent("tonio",volume) // Remove all charcoal.
+		return
+
+	for(var/datum/reagent/reagent in holder.reagent_list)
+		if(reagent.id in tonio_doesnt_remove)
+			continue
+		holder.remove_reagent(reagent.id, 3*REM)
+
+	M.adjustToxLoss(-2*REM)
+	..()
+	return
+
+	if(!holder) return
+	M:nutrition += nutriment_factor
+	holder.remove_reagent(src.id, FOOD_METABOLISM)
+	if(!M) M = holder.my_atom
+	if(M:getOxyLoss() && prob(50)) M:adjustOxyLoss(-2)
+	if(M:getBruteLoss() && prob(60)) M:heal_organ_damage(2,0)
+	if(M:getFireLoss() && prob(50)) M:heal_organ_damage(0,2)
+	if(M:getToxLoss() && prob(50)) M:adjustToxLoss(-2)
+	if(M.dizziness !=0) M.dizziness = max(0,M.dizziness-15)
+	if(M.confused !=0) M.confused = max(0,M.confused - 5)
+	..()
+	return
+
+/datum/reagent/drink/coffee/cappuccino
+	name = "Cappuccino"
+	id = "cappuccino"
+	description = "Espresso with milk."
+
+/datum/reagent/drink/coffee/doppio
+	name = "Doppio"
+	id = "doppio"
+	description = "Double shot of espresso."
+
+/datum/reagent/drink/coffee/passione
+	name = "Passione"
+	id = "passione"
+	description = "Rejuvinating!"
+
+/datum/reagent/drink/coffee/seccoffee
+	name = "Wake up call"
+	id = "seccoffee"
+	description = "All the essentials."
+
+/datum/reagent/drink/coffee/medcoffee
+	name = "Lifeline"
+	id = "medcoffee"
+	description = "Tastes like it's got iron in it or something."
+
+/datum/reagent/drink/coffee/detcoffee
+	name = "Joe"
+	id = "detcoffee"
+	description = "Bitter, black, and tasteless. It's the way I've always had my joe, and the way I was having it when one of the officers came running toward me. The chief medical officer got axed, and no one knew who did it. I reluctantly took one last drink before putting on my coat and heading out. I knew that by the time I was finished, my joe would have fallen to a dreadfully low temperature, but I had work to do."
+
+/datum/reagent/drink/coffee/etank
+	name = "Recharger"
+	id = "etank"
+	description = "Regardless of how energized this coffee makes you feel, jumping against doors will still never be a viable way to open them."
