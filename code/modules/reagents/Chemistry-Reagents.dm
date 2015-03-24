@@ -4469,7 +4469,6 @@
 		holder.reagent_list -= src
 		holder = null
 
-<<<<<<< HEAD
 /datum/reagent/vinegar //Eventually there will be a way of making vinegar.
 	name = "Vinegar"
 	id = "vinegar"
@@ -4489,7 +4488,6 @@
 		M.say(pick("Honk", "HONK", "Hoooonk", "Honk?", "Henk", "Hunke?", "Honk!"))
 	..()
 	return
-=======
 
 
 //Tea and Coffee, hopefully
@@ -4625,12 +4623,7 @@ var/global/list/tonio_doesnt_remove=list(
 	M:nutrition += nutriment_factor
 	holder.remove_reagent(src.id, FOOD_METABOLISM)
 	if(!M) M = holder.my_atom
-	if(M:getOxyLoss() && prob(50)) M:adjustOxyLoss(-2)
 	if(M:getBruteLoss() && prob(60)) M:heal_organ_damage(2,0)
-	if(M:getFireLoss() && prob(50)) M:heal_organ_damage(0,2)
-	if(M:getToxLoss() && prob(50)) M:adjustToxLoss(-2)
-	if(M.dizziness !=0) M.dizziness = max(0,M.dizziness-15)
-	if(M.confused !=0) M.confused = max(0,M.confused - 5)
 	..()
 	return
 
@@ -4668,4 +4661,3 @@ var/global/list/tonio_doesnt_remove=list(
 	name = "Recharger"
 	id = "etank"
 	description = "Regardless of how energized this coffee makes you feel, jumping against doors will still never be a viable way to open them."
->>>>>>> 4b712f6... Cafe stuff!

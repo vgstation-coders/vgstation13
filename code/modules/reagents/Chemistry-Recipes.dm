@@ -2414,7 +2414,6 @@ datum
 			required_reagents = list("spacemountainwind" = 1, "coffee" = 1)
 			result_amount = 2
 
-<<<<<<< HEAD
 		vinegar
 			name = "Vinegar"
 			id = "vinegar"
@@ -2422,7 +2421,6 @@ datum
 			required_reagents = list("wine" = 5)
 			required_catalysts = list("enzyme" = 5)
 			result_amount = 5
-=======
 
 //cafe stuff!
 
@@ -2532,4 +2530,4 @@ datum
 			result = "etank"
 			required_reagents = list("coffee" = 1, "iron" = 1, "lithium" = 1, "fuel" = 1, "aluminum" = 1)
 			result_amount = 5
->>>>>>> 4b712f6... Cafe stuff!
+
