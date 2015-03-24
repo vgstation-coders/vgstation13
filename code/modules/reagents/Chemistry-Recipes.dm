@@ -2260,21 +2260,20 @@ datum
 			result = "grog"
 			required_reagents = list("rum" = 1, "water" = 1)
 			result_amount = 2
-/* Hope nobody minds if I move these recipes over to the cafe stuff
 		soy_latte
 			name = "Soy Latte"
 			id = "soy_latte"
 			result = "soy_latte"
-			required_reagents = list("coffee" = 1, "soymilk" = 1)
+			required_reagents = list("espresso" = 1, "soymilk" = 1)
 			result_amount = 2
 
 		cafe_latte
 			name = "Cafe Latte"
 			id = "cafe_latte"
 			result = "cafe_latte"
-			required_reagents = list("coffee" = 1, "milk" = 1)
+			required_reagents = list("espresso" = 1, "milk" = 1)
 			result_amount = 2
-*/
+
 		acidspit
 			name = "Acid Spit"
 			id = "acidspit"
@@ -2468,25 +2467,12 @@ datum
 			required_reagents = list("coffee" = 1, "water" = 1)
 			result_amount = 2
 
-		latte
-			name = "Latte"
-			id = "latte"
-			result = "latte"
-			required_reagents = list("espresso" = 1, "milk" = 1)
-			result_amount = 2
-
-		soylatte
-			name = "Soy Latte"
-			id = "soylatte"
-			result = "soylatte"
-			required_reagents = list("espresso" = 1, "soymilk" = 1)
-			result_amount = 2
 
 		cappuccino
 			name = "Cappuccino"
 			id = "cappuccino"
 			result = "cappuccino"
-			required_reagents = list("espresso" = 1, "milk" = 1, "cream" = 1)
+			required_reagents = list("espresso" = 1, "cream" = 1)
 			result_amount = 3
 
 		tonio

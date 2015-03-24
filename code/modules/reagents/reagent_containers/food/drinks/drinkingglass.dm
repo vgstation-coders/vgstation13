@@ -361,9 +361,9 @@
 					icon_state = "soy_latte"
 					name = "soy latte"
 					desc = "A nice and refrshing beverage while you are reading."
-				if("cafe_latte")
-					icon_state = "cafe_latte"
-					name = "cafe latte"
+				if("latte")
+					icon_state = "latte"
+					name = "Latte"
 					desc = "A nice, strong and refreshing beverage while you are reading."
 				if("acidspit")
 					icon_state = "acidspitglass"
@@ -562,11 +562,11 @@
 					icon_state = "coffee"
 					name = "Coffee"
 					desc = "A warm mug of coffee."
-				if("latte")
+				if("cafe_latte")
 					icon_state = "latte"
 					name = "Latte"
 					desc = "Coffee made with espresso and milk."
-				if("soylatte")
+				if("soy_latte")
 					icon_state = "soylatte"
 					name = "Soy Latte"
 					desc = "Latte made with soy milk."

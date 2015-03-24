@@ -3336,7 +3336,6 @@
 
 		holder.remove_reagent(src.id, 0.1)
 
-/*
 /datum/reagent/drink/coffee/icecoffee
 	name = "Iced Coffee"
 	id = "icecoffee"
@@ -3351,7 +3350,7 @@
 	color = "#664300" // rgb: 102, 67, 0
 	adj_sleepy = 0
 	adj_temp = 5
-*/
+
 
 /datum/reagent/drink/coffee/soy_latte/on_mob_life(var/mob/living/M as mob)
 		..()
@@ -3360,7 +3359,7 @@
 		return
 
 /datum/reagent/drink/coffee/cafe_latte
-	name = "Cafe Latte"
+	name = "Latte"
 	id = "cafe_latte"
 	description = "A nice, strong and tasty beverage while you are reading."
 	color = "#664300" // rgb: 102, 67, 0
@@ -4475,31 +4474,6 @@
 //Tea and Coffee, hopefully
 
 
-/datum/reagent/drink/tea
-	name = "Tea"
-	id = "tea"
-	description = "Tasty black tea, it has antioxidants, it's good for you!"
-	color = "#101000" // rgb: 16, 16, 0
-	adj_dizzy = -2
-	adj_drowsy = -1
-	adj_sleepy = -3
-	adj_temp = 20
-
-/datum/reagent/drink/tea/on_mob_life(var/mob/living/M as mob)
-
-	if(!holder) return
-	..()
-	if(M.getToxLoss() && prob(20))
-		M.adjustToxLoss(-1)
-	return
-
-/datum/reagent/drink/tea/icetea
-	name = "Iced Tea"
-	id = "icetea"
-	description = "No relation to a certain rapper or actor."
-	color = "#104038" // rgb: 16, 64, 56
-	adj_temp = -5
-
 /datum/reagent/drink/tea/greentea
 	name = "Green Tea"
 	id = "greentea"
@@ -4521,18 +4495,18 @@ var/global/list/chifir_doesnt_remove=list(
 )
 
 
-/datum/reagent/drinks/tea/chifir
+/datum/reagent/drink/tea/chifir
 	name = "Chifir"
 	id = "chifir"
 	description = "Strong Russian tea, it'll help you remember what you had for lunch!"
 
-/datum/reagent/chifir/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/drink/tea/chifir/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 
 	if(ishuman(M) && prob(5))
 		var/mob/living/carbon/human/H=M
 		H.vomit()
-		holder.remove_reagent("chifir",volume) // Remove all charcoal.
+		holder.remove_reagent(id,volume) // Remove all charcoal.
 		return
 
 	for(var/datum/reagent/reagent in holder.reagent_list)
@@ -4588,74 +4562,6 @@ var/global/list/chifir_doesnt_remove=list(
 	name = "Plasma Pekoe"
 	id = "plasma"
 	description = "Probably not the safest beverage."
-
-/datum/reagent/drink/hot_coco
-	name = "Hot Chocolate"
-	id = "hot_coco"
-	description = "Made with love! And coco beans."
-	nutriment_factor = 2 * FOOD_METABOLISM
-	color = "#403010" // rgb: 64, 48, 16
-	adj_temp = 5
-
-/datum/reagent/drink/coffee
-	name = "Coffee"
-	id = "coffee"
-	description = "Coffee is a brewed drink prepared from roasted seeds, commonly called coffee beans, of the coffee plant."
-	color = "#482000" // rgb: 72, 32, 0
-	adj_dizzy = -5
-	adj_drowsy = -3
-	adj_sleepy = -2
-	adj_temp = 25
-
-/datum/reagent/drink/coffee/on_mob_life(var/mob/living/M as mob)
-
-	if(!holder) return
-	..()
-	if(!holder)
-		holder = M.reagents
-	if(holder)
-		M.Jitter(5)
-		if(adj_temp > 0 && holder.has_reagent("frostoil"))
-			holder.remove_reagent("frostoil", 10*REAGENTS_METABOLISM)
-
-		holder.remove_reagent(src.id, 0.1)
-
-/datum/reagent/drink/coffee/icecoffee
-	name = "Iced Coffee"
-	id = "icecoffee"
-	description = "Coffee and ice, refreshing and cool."
-	color = "#102838" // rgb: 16, 40, 56
-	adj_temp = -5
-
-/datum/reagent/drink/coffee/soy_latte
-	name = "Soy Latte"
-	id = "soylatte"
-	description = "A nice and tasty beverage while you are reading your hippie books."
-	color = "#664300" // rgb: 102, 67, 0
-	adj_sleepy = 0
-	adj_temp = 5
-
-/datum/reagent/drink/coffee/soy_latte/on_mob_life(var/mob/living/M as mob)
-		..()
-		M.sleeping = 0
-		if(M.getBruteLoss() && prob(20)) M.heal_organ_damage(1,0)
-		return
-
-/datum/reagent/drink/coffee/latte
-	name = "Latte"
-	id = "latte"
-	description = "A nice, strong and tasty beverage while you are reading."
-	color = "#664300" // rgb: 102, 67, 0
-	adj_sleepy = 0
-	adj_temp = 5
-
-/datum/reagent/drink/coffee/latte/on_mob_life(var/mob/living/M as mob)
-
-	if(!holder) return
-	..()
-	M.sleeping = 0
-	if(M.getBruteLoss() && prob(20)) M.heal_organ_damage(1,0)
-	return
 
 /datum/reagent/drink/coffee/espresso
 	name = "Espresso"
