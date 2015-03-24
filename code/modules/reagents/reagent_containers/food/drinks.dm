@@ -727,6 +727,17 @@
 	icon_state = "britcup"
 	volume = 30
 
+/obj/item/weapon/reagent_containers/food/drinks/americup
+	name = "cup"
+	desc = "A cup with the American flag emblazoned on it."
+	icon_state = "americup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/empty
+	name = "cup"
+	desc = "An empty mug"
+	icon_state = "mug_empty"
+	volume = 30
 
 ///////////////////////////////////////////////Alchohol bottles! -Agouri //////////////////////////
 //Functionally identical to regular drinks. The only difference is that the default bottle size is 100. - Darem
