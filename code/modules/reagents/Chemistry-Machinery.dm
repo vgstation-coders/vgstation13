@@ -279,30 +279,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	max_energy = 100
 	energy = 100
 
-/obj/machinery/chem_dispenser/brewer/togglePanelOpen(var/obj/toggleitem, mob/user)
-	if(beaker)
-		user << "You can't reach the maintenance panel with a kettle in the way!"
-		return
-	return ..()
-
-/obj/machinery/chem_dispenser/brewer/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob) //to be worked on
-
-
-	if(istype(D, /obj/item/weapon/reagent_containers/glass/kettle))
-		if(src.beaker)
-			user << "There's already a kettle inside!"
-			return
-		else if(!panel_open)
-			src.beaker =  D
-			user.drop_item(src)
-			user << "You place the kettle inside the machine!"
-			nanomanager.update_uis(src) // update all UIs attached to src
-			return 1
-		else
-			user <<"You can't put a kettle in the machine while the panel is open."
-			return
-
-	ui_interact(user)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
