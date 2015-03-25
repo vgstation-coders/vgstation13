@@ -3351,7 +3351,6 @@
 	adj_sleepy = 0
 	adj_temp = 5
 
-
 /datum/reagent/drink/coffee/soy_latte/on_mob_life(var/mob/living/M as mob)
 		..()
 		M.sleeping = 0
@@ -4489,8 +4488,7 @@
 	..()
 	return
 
-
-//Tea and Coffee, hopefully
+//Cafe drinks
 
 
 /datum/reagent/drink/tea/greentea
@@ -4623,12 +4621,7 @@ var/global/list/tonio_doesnt_remove=list(
 	M:nutrition += nutriment_factor
 	holder.remove_reagent(src.id, FOOD_METABOLISM)
 	if(!M) M = holder.my_atom
-	if(M:getOxyLoss() && prob(50)) M:adjustOxyLoss(-2)
-	if(M:getBruteLoss() && prob(60)) M:heal_organ_damage(2,0)
-	if(M:getFireLoss() && prob(50)) M:heal_organ_damage(0,2)
-	if(M:getToxLoss() && prob(50)) M:adjustToxLoss(-2)
-	if(M.dizziness !=0) M.dizziness = max(0,M.dizziness-15)
-	if(M.confused !=0) M.confused = max(0,M.confused - 5)
+	if(M.getBruteLoss() && prob(20)) M.heal_organ_damage(1,0)
 	..()
 	return
 

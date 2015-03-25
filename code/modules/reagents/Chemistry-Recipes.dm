@@ -2260,6 +2260,7 @@ datum
 			result = "grog"
 			required_reagents = list("rum" = 1, "water" = 1)
 			result_amount = 2
+
 		soy_latte
 			name = "Soy Latte"
 			id = "soy_latte"
@@ -2422,8 +2423,6 @@ datum
 			required_catalysts = list("enzyme" = 5)
 			result_amount = 5
 
-
-
 //cafe stuff!
 
 
@@ -2431,8 +2430,8 @@ datum
 			name = "Earl's Grey Tea"
 			id = "acidtea"
 			result = "acidtea"
-			required_reagents = list("sacid" = 5, "tea" = 5)
-			result_amount = 10
+			required_reagents = list("sacid" = 1, "tea" = 1)
+			result_amount = 2
 
 		chifir
 			name = "Chifir"
