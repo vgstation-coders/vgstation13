@@ -1,3 +1,11 @@
+//Config stuff
+#define SUPPLY_DOCKZ 2          //Z-level of the Dock.
+#define SUPPLY_STATIONZ 1       //Z-level of the Station.
+#define SUPPLY_STATION_AREATYPE "/area/supply/station" //Type of the supply shuttle area for station
+#define SUPPLY_DOCK_AREATYPE "/area/supply/dock"	//Type of the supply shuttle area for dock
+#define SUPPLY_TAX 10 // Credits to charge per order.
+var/datum/controller/supply_shuttle/supply_shuttle = new
+
 var/list/mechtoys = list(
 	/obj/item/toy/prize/ripley,
 	/obj/item/toy/prize/fireripley,
@@ -11,13 +19,6 @@ var/list/mechtoys = list(
 	/obj/item/toy/prize/odysseus,
 	/obj/item/toy/prize/phazon
 )
-//Config stuff
-#define SUPPLY_DOCKZ 2          //Z-level of the Dock.
-#define SUPPLY_STATIONZ 1       //Z-level of the Station.
-#define SUPPLY_STATION_AREATYPE "/area/supply/station" //Type of the supply shuttle area for station
-#define SUPPLY_DOCK_AREATYPE "/area/supply/dock"	//Type of the supply shuttle area for dock
-#define SUPPLY_TAX 10 // Credits to charge per order.
-var/datum/controller/supply_shuttle/supply_shuttle = new
 
 /area/supply/station //DO NOT TURN THE lighting_use_dynamic STUFF ON FOR SHUTTLES. IT BREAKS THINGS.
 	name = "supply shuttle"
@@ -53,7 +54,7 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 	var/eta_timeofday
 	var/eta
 	var/datum/materials/materials_list = new
-	
+
 /datum/controller/supply_shuttle/New()
 	ordernum = rand(1,9000)
 
@@ -80,6 +81,37 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 
 			sleep(processing_interval)
 
+/datum/controller/supply_shuttle/proc/send()
+	var/area/from
+	var/area/dest
+	var/area/the_shuttles_way
+	switch(at_station)
+		if(1)
+			from = locate(SUPPLY_STATION_AREATYPE)
+			dest = locate(SUPPLY_DOCK_AREATYPE)
+			the_shuttles_way = from
+			at_station = 0
+		if(0)
+			from = locate(SUPPLY_DOCK_AREATYPE)
+			dest = locate(SUPPLY_STATION_AREATYPE)
+			the_shuttles_way = dest
+			at_station = 1
+	moving = 0
+
+	//Do I really need to explain this loop?
+	if(at_station)
+		for(var/atom/A in the_shuttles_way)
+			if(istype(A,/mob/living))
+				var/mob/living/unlucky_person = A
+				unlucky_person.gib()
+			// Weird things happen when this shit gets in the way.
+			if(istype(A,/obj/structure/lattice) \
+					|| istype(A, /obj/structure/window) \
+				|| istype(A, /obj/structure/grille))
+				del(A)
+
+	from.move_contents_to(dest)
+
 	//Check whether the shuttle is allowed to move
 /datum/controller/supply_shuttle/proc/can_move()
 	if(moving) return 0
@@ -90,7 +122,7 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 	if(forbidden_atoms_check(shuttle))
 		return 0
 
-	return 1
+	return
 
 	//To stop things being sent to centcomm which should not be sent to centcomm. Recursively checks for these types.
 /datum/controller/supply_shuttle/proc/forbidden_atoms_check(atom/A)

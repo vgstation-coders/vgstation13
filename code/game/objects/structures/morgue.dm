@@ -388,17 +388,30 @@
 	if (user != O)
 		for(var/mob/B in viewers(user, 3))
 			if ((B.client && !( B.blinded )))
-				B << text("\red [] stuffs [] into []!", user, O, src)
+				B << text("<span class='danger'>[] stuffs [] into []!</span>", user, O, src)
 			//Foreach goto(99)
 	return
 
 /obj/machinery/crema_switch/attack_hand(mob/user as mob)
-	if(src.allowed(usr))
+	if(src.allowed(user))
 		for (var/obj/structure/crematorium/C in world)
 			if (C.id == id)
 				if (!C.cremating)
 					C.cremate(user)
 	else
-		usr << "\red Access denied."
-	return
+		user << "<span class='warning'>Access denied.</span>"
+	
 
+/obj/machinery/crema_switch
+	desc = "Burn baby burn!"
+	name = "crematorium igniter"
+	icon = 'icons/obj/power.dmi'
+	icon_state = "crema_switch"
+	anchored = 1.0
+	req_access = list(access_crematorium)
+	var/on = 0
+	var/otherarea = null
+	var/id = 1
+
+	ghost_read = 0 // Deactivate ghost touching.
+	ghost_write = 0
