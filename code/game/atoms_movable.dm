@@ -7,6 +7,10 @@
 	layer = 3
 	var/last_move = null
 	var/languages = ALL
+	var/verb_say = "says"
+	var/verb_ask = "asks"
+	var/verb_yell = "yells"
+	
 	var/anchored = 0
 	var/move_speed = 10
 	var/l_move_time = 1
