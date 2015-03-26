@@ -275,6 +275,20 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Grass Crate"
 	group = "Supplies"
 
+/datum/supply_packs/sink
+	name = "Sink Crate"
+	cost = 8
+	containertype = /obj/structure/largecrate/sink
+	containername = "Sink Crate"
+	group = "Supplies"
+
+/datum/supply_packs/sink
+	name = "Toilet Crate"
+	cost = 8
+	containertype = /obj/structure/largecrate/toilet
+	containername = "Sink Crate"
+	group = "Supplies"
+
 //////CLOTHING//////
 
 /datum/supply_packs/costume

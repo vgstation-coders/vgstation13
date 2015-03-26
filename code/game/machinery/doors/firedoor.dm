@@ -57,6 +57,7 @@
 
 	var/blocked = 0
 	var/lockdown = 0 // When the door has detected a problem, it locks.
+	var/decon = 0 //Becomes 1 when bolts removed w/ socket wrench
 	var/pdiff_alert = 0
 	var/pdiff = 0
 	var/nextstate = null
@@ -185,6 +186,23 @@
 	add_fingerprint(user)
 	if(operating)
 		return//Already doing something.
+	if(decon && iscrowbar(C))
+		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 100, 1)
+		user.visible_message("<span class='notice'>[user] begins to pry the [src] free of its tracks...</span>", "<span class='notice'>You begin to pry the [src] off its tracks.</span>")
+		if(do_after(user, 40))
+			if(!src) return
+			user << "<span class='notice'>You pull apart the [src].</span>"
+			var/obj/structure/firedoor_assembly/FA = new /obj/structure/firedoor_assembly(src.loc)
+			FA.anchored = 1
+			qdel(src)
+			return
+	if(istype(C, /obj/item/weapon/wrench/socket) && blocked)
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		user.visible_message("<span class='notice'>[user] begins to [decon ? "remove" : "replace"] the [src]'s secure, airtight bolts...</span>", "<span class='notice'>You begin to strain [decon ? "against" : "to secure"] the airtight bolts.</span>")
+		if (do_after(user, 80))
+			user.visible_message("<span class='notice'>[user] [decon ? "un" : ""]screws the [src]'s secure, airtight bolts!</span>", "<span class='notice'>You [decon ? "un" : ""]screw the [src]'s secure, airtight bolts.</span>")
+			decon = !decon
+			return
 	if(istype(C, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/W = C
 		if(W.remove_fuel(0, user))
@@ -430,3 +448,50 @@
 /obj/machinery/door/firedoor/multi_tile
 	icon = 'icons/obj/doors/DoorHazard2x1.dmi'
 	width = 2
+
+/obj/structure/firedoor_assembly
+	icon = 'icons/obj/doors/DoorHazard.dmi'
+	name = "Shutter Assembly"
+	icon_state = "door_assembly"
+	anchored = 0
+	density = 1
+	var/busy = 0
+
+/obj/structure/firedoor_assembly/attackby(obj/item/W as obj, mob/user as mob)
+	if(busy) return
+	else if(!anchored && iswelder(W))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(WT.remove_fuel(0, user))
+			busy = 1
+			playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+			user.visible_message("<span class='notice'>[user] begins to melt down the assembly.</span>", "<span class='notice'>You start to melt the assembly.</span>")
+			if(do_after(user, 40))
+				user << "<span class='notice'>You reduce the assembly to scrap.</span>"
+				new /obj/item/stack/sheet/metal(src.loc, 4)
+				qdel(src)
+				return
+	else if(iswrench(W))
+		busy = 1
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		if(anchored)
+			user.visible_message("<span class='notice'>[user] unsecures the shutter assembly from the floor.</span>", "<span class='notice'>You start to unsecure the shutter assembly from the floor.</span>")
+		else
+			user.visible_message("<span class='notice'>[user] secures the shutter assembly to the floor.</span>", "<span class='notice'>You start to secure the shutter assembly to the floor.</span>")
+		if(do_after(user, 40))
+			if(!src) return
+			user << "<span class='notice'>You [anchored? "un" : ""]secured the shutter assembly!</span>"
+			anchored = !anchored
+			busy = 0
+			return
+	else if(anchored && iscrowbar(W))
+		busy = 1
+		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 100, 1)
+		user.visible_message("[user] begins to slide the shutters into their tracks.", "You start to force the shutters onto their tracks.")
+		if(do_after(user, 40))
+			if(!src) return
+			user << "<span class='notice'>You aligned the shutters with the mechanism.</span>"
+			new /obj/machinery/door/firedoor(src.loc)
+			qdel(src)
+			return
+	else
+		..()

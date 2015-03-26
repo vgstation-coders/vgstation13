@@ -883,6 +883,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				src.scanned_user = text("[T.registered_name] ([T.assignment])")
 				src.screen=2*/  //Obsolete after autorecognition
 
+	if(isscrewdriver(I) && !(stat & BROKEN))
+		user.visible_message("<span class='notice'>[user] takes down the [src]!</span>", "<span class='notice'>You take down the [src]</span>")
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+		new /obj/item/mounted/frame/newscaster (src.loc)
+		qdel(src)
+		return
+
 	if ((stat & BROKEN) && (istype(I, /obj/item/stack/sheet/glass/glass)))
 		var/obj/item/stack/sheet/glass/glass/stack = I
 		if ((stack.amount - 2) < 0)
