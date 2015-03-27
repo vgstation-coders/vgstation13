@@ -193,20 +193,6 @@
 				linked_db = DB
 				break
 
-/obj/machinery/vending/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-				return
-		if(3.0)
-			if(prob(25))
-				malfunction()
-
-
 /obj/machinery/vending/blob_act()
 	if(prob(75))
 		malfunction()

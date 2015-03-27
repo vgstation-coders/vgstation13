@@ -99,16 +99,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	recharge()
 	dispensable_reagents = sortList(dispensable_reagents)
 
-/obj/machinery/chem_dispenser/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-				return
-
 /obj/machinery/chem_dispenser/blob_act()
 	if (prob(50))
 		del(src)
@@ -351,16 +341,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	var/image/overlay = image('icons/obj/chemical.dmi', src, "[icon_state]_overlay")
 	overlays += overlay
-
-/obj/machinery/chem_master/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-				return
 
 /obj/machinery/chem_master/blob_act()
 	if (prob(50))

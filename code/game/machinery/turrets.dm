@@ -317,8 +317,7 @@
 	..()
 
 /obj/machinery/turret/ex_act(severity)
-	if(severity < 3)
-		src.die()
+	src.die()
 
 /obj/machinery/turret/proc/die()
 	src.health = 0

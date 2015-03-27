@@ -117,9 +117,12 @@ In short:
 		if(!T.holy && prob(1))
 			new /obj/effect/gateway/active/cult(T)
 
-	for (var/obj/machinery/firealarm/alm in machines)
-		if (!(alm.stat & BROKEN))
+	/*
+	//ex_act() is not a valid proc for non-explosive interaction !
+	for(var/obj/machinery/firealarm/alm in machines)
+		if(!(alm.stat & BROKEN))
 			alm.ex_act(2)
+	*/
 
 /datum/universal_state/hell/proc/APCSet()
 	for (var/obj/machinery/power/apc/APC in power_machines)

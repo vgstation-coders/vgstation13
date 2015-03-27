@@ -91,20 +91,14 @@ for reference:
 			..()
 
 	ex_act(severity)
-		switch(severity)
-			if(1.0)
-				visible_message("\red <B>The barricade is blown apart!</B>")
-				qdel(src)
-				return
-			if(2.0)
-				src.health -= 25
-				if (src.health <= 0)
-					visible_message("\red <B>The barricade is blown apart!</B>")
-					new /obj/item/stack/sheet/wood(get_turf(src))
-					new /obj/item/stack/sheet/wood(get_turf(src))
-					new /obj/item/stack/sheet/wood(get_turf(src))
-					qdel(src)
-				return
+		health -= severity
+		if(src.health <= 0)
+			visible_message("\red <B>The barricade is blown apart!</B>")
+			new /obj/item/stack/sheet/wood(get_turf(src))
+			new /obj/item/stack/sheet/wood(get_turf(src))
+			new /obj/item/stack/sheet/wood(get_turf(src))
+			qdel(src)
+		return
 
 	meteorhit()
 		visible_message("\red <B>The barricade is smashed apart!</B>")
@@ -230,15 +224,10 @@ for reference:
 		..()
 
 /obj/machinery/deployable/barrier/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			src.explode()
-			return
-		if(2.0)
-			src.health -= 25
-			if (src.health <= 0)
-				src.explode()
-			return
+	src.health -= severity
+	if(src.health <= 0)
+		src.explode()
+		return
 
 /obj/machinery/deployable/barrier/emp_act(severity)
 	if(stat & (BROKEN|NOPOWER))

@@ -68,16 +68,7 @@
 	return
 
 /obj/effect/alien/resin/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			health-=50
-		if(2.0)
-			health-=50
-		if(3.0)
-			if (prob(50))
-				health-=50
-			else
-				health-=25
+	health -= severity
 	healthcheck()
 	return
 
@@ -274,15 +265,8 @@ Alien plants should do something if theres a lot of poison
 
 
 /obj/effect/alien/weeds/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-		if(3.0)
-			if (prob(5))
-				qdel(src)
+	if(prob(min(severity, 100)))
+		qdel(src)
 	return
 
 /obj/effect/alien/weeds/attackby(var/obj/item/weapon/W, var/mob/user)

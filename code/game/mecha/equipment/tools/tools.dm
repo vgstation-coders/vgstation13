@@ -128,8 +128,9 @@
 							M.LAssailant = null
 						else
 							M.LAssailant = chassis.occupant
-					log_message("Drilled through [target]")
-					target.ex_act(2)
+						log_message("Drilled through [target]")
+						//target.ex_act(2) //WHY
+						M.apply_damage(100, BRUTE) //This will do for now
 		return 1
 
 	can_attach(obj/mecha/M as obj)
@@ -162,7 +163,8 @@
 				if(istype(target, /turf/simulated/wall/r_wall))
 					if(do_after_cooldown(target))//To slow down how fast mechs can drill through the station
 						log_message("Drilled through [target]")
-						target.ex_act(3)
+						//target.ex_act(3) //WHY WHY WHY
+						target:dismantle_wall()
 				else if(istype(target, /turf/unsimulated/mineral))
 					for(var/turf/unsimulated/mineral/M in range(chassis,1))
 						if(get_dir(chassis,M)&chassis.dir)
@@ -196,8 +198,9 @@
 							M.LAssailant = null
 						else
 							M.LAssailant = chassis.occupant
-					log_message("Drilled through [target]")
-					target.ex_act(2)
+						log_message("Drilled through [target]")
+						//target.ex_act(2) //STOP
+						M.apply_damage(125, BRUTE)
 		return 1
 
 	can_attach(obj/mecha/M as obj)

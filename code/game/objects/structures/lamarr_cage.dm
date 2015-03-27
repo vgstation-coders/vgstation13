@@ -11,20 +11,8 @@
 	var/destroyed = 0
 
 /obj/structure/lamarr/ex_act(severity)
-	switch(severity)
-		if (1)
-			getFromPool(/obj/item/weapon/shard, loc)
-			Break()
-			qdel(src)
-		if (2)
-			if (prob(50))
-				src.health -= 15
-				src.healthcheck()
-		if (3)
-			if (prob(50))
-				src.health -= 5
-				src.healthcheck()
-
+	health -= severity
+	healthcheck()
 
 /obj/structure/lamarr/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage

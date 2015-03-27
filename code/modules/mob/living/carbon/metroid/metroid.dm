@@ -212,35 +212,20 @@
 	if(flags & INVULNERABLE)
 		return
 
-
-	if (stat == 2 && client)
+	if(stat == 2 && client)
 		return
 
-	else if (stat == 2 && !client)
+	else if(stat == 2 && !client)
 		del(src)
 		return
 
-	var/b_loss = null
-	var/f_loss = null
-	switch (severity)
-		if (1.0)
-			b_loss += 500
-			return
-
-		if (2.0)
-
-			b_loss += 60
-			f_loss += 60
-
-
-		if(3.0)
-			b_loss += 30
+	var/b_loss = severity*0.8
+	var/f_loss = severity*0.2
 
 	adjustBruteLoss(b_loss)
 	adjustFireLoss(f_loss)
 
 	updatehealth()
-
 
 /mob/living/carbon/slime/blob_act()
 	if(flags & INVULNERABLE)

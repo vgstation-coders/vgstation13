@@ -98,7 +98,7 @@
 	if(!target)
 		target = src
 	if(location)
-		explosion(location, -1, -1, 2, 3)
+		explosion(location, 0, 0, 2, 3) //NO NEGATIVE VALUES, THANK YOU
 
 	if(target)
 		if(!(target.singuloCanEat()))//mostly adminbus objects. It'd make sense though that C4 can't destroy what even a singulo can't eat.
@@ -107,8 +107,8 @@
 			return
 		if (istype(target, /turf/simulated/wall))
 			target:dismantle_wall(1)
-		else
-			target.ex_act(1)
+		//else //Obsolete, please check if C4 still behaves correctly
+			//target.ex_act(1)
 		if (isobj(target))
 			if (target)
 				del(target)

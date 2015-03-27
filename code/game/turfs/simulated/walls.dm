@@ -74,22 +74,17 @@
 	ChangeTurf(/turf/simulated/floor/plating)
 
 /turf/simulated/wall/ex_act(severity)
-	if(rotting)
-		severity = 1.0
-	switch(severity)
-		if(1.0)
-			src.ChangeTurf(under_turf) //You get NOTHING, you LOSE
-			return
-		if(2.0)
-			if(prob(50))
-				dismantle_wall(0,1)
-			else
-				dismantle_wall(1,1)
-			return
-		if(3.0)
-			if(prob(40))
-				dismantle_wall(0,1)
-			return
+	if(rotting || prob(min(severity, 100)))
+		if(prob(66))
+			src.ReplaceWithLattice()
+			if(prob(33))
+				getFromPool(/obj/item/stack/tile/plasteel, get_turf(src))
+		else
+			src.ChangeTurf(under_turf)
+	else if(prob(min(severity, 100)))
+		dismantle_wall(1, 1)
+	else if(prob(min(severity, 100)))
+		dismantle_wall(0, 1)
 	return
 
 /turf/simulated/wall/blob_act()

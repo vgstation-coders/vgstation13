@@ -61,7 +61,7 @@
 
 /turf/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam/pulse))
-		src.ex_act(2)
+		src.ex_act(50) //I really wish I didn't have to do this
 	..()
 	return 0
 

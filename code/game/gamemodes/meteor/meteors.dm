@@ -115,8 +115,7 @@
 
 /obj/effect/meteor/ex_act(severity)
 
-	if(severity < 4)
-		qdel(src)
+	qdel(src)
 	return
 
 /obj/effect/meteor/small
@@ -141,7 +140,8 @@
 	pass_flags = 0 //Nope, you're not dodging that table
 
 /obj/effect/meteor/big/ex_act(severity)
-		return
+
+	return //Not a good idea if two big meteors bump into eachother, but sure
 
 /obj/effect/meteor/big/Bump(atom/A)
 	spawn(0)

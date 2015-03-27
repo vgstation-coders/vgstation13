@@ -86,15 +86,8 @@ Buildable meters
 	level = 2
 
 /obj/item/pipe/ex_act(severity)
-	switch(severity)
-		if(1)
-			returnToPool(src)
-		if(2)
-			if(prob(40))
-				returnToPool(src)
-		if(3)
-			if(prob(10))
-				returnToPool(src)
+	if(prob(min(severity, 100)))
+		returnToPool(src)
 
 /obj/item/pipe/blob_act()
 	returnToPool(src)

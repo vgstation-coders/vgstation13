@@ -51,20 +51,6 @@
 	else
 		return ..()
 
-/obj/structure/coatrack/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-				return
-		if(3.0)
-			if (prob(5))
-				qdel(src)
-				return
-
 /obj/structure/coatrack/Destroy()
 	if(loc)
 		if(suit)

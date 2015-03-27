@@ -407,9 +407,9 @@ Status: []<BR>"},
 	..()
 
 /obj/machinery/porta_turret/ex_act(severity)
-	if(severity >= 3) // turret dies if an explosion touches it!
+	if(prob(min(severity, 100)))
 		qdel(src)
-	else
+	else //Turret dies if an explosion touches it but doesn't destroy it outright
 		src.die()
 
 /obj/machinery/porta_turret/proc/die() // called when the turret dies, ie, health <= 0

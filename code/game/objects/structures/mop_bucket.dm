@@ -37,16 +37,3 @@
 			user << "<span class='notice'>Nothing left to wet [M] with!</span>"
 	return 1
 
-/obj/structure/mopbucket/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-				return
-		if(3.0)
-			if (prob(5))
-				qdel(src)
-				return

@@ -563,25 +563,15 @@
 	return
 
 /obj/mecha/ex_act(severity)
-	src.log_message("Affected by explosion of severity: [severity].",1)
+	src.log_message("Affected by explosion of energy: [severity].", 1)
 	if(prob(src.deflect_chance))
-		severity++
-		src.log_append_to_last("Armor saved, changing severity to [severity].")
-	switch(severity)
-		if(1.0)
-			src.destroy()
-		if(2.0)
-			if (prob(30))
-				src.destroy()
-			else
-				src.take_damage(initial(src.health)/2)
-				src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
-		if(3.0)
-			if (prob(5))
-				src.destroy()
-			else
-				src.take_damage(initial(src.health)/5)
-				src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
+		severity = severity/2 //The way explosions work changed, so this is valid
+		src.log_append_to_last("Armor deflected main impact, energy now is [severity].")
+	if(prob(min(severity, 100)))
+		src.destroy()
+	else
+		src.take_damage(initial(src.health)/2)
+		src.check_for_internal_damage(list(MECHA_INT_FIRE, MECHA_INT_TEMP_CONTROL, MECHA_INT_TANK_BREACH, MECHA_INT_CONTROL_LOST, MECHA_INT_SHORT_CIRCUIT), 1)
 	return
 
 /*Will fix later -Sieve
@@ -610,9 +600,12 @@
 	take_damage(30, "brute")
 	return
 
+
 //TODO
 /obj/mecha/meteorhit()
-	return ex_act(rand(1,3))//should do for now
+	//return ex_act(rand(1,3))//should do for now //NO, NO IT WON'T DO FOR NOW OLDCODER
+	return src.destroy() //YOU LOSE SIRE
+
 
 /obj/mecha/emp_act(severity)
 	if(get_charge())

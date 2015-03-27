@@ -86,15 +86,8 @@
 	return 0
 
 /obj/effect/biomass/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-		if(2.0)
-			if(prob(90))
-				qdel(src)
-		if(3.0)
-			if(prob(50))
-				qdel(src)
+	if(prob(min(severity, 100)))
+		qdel(src)
 
 /obj/effect/biomass/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume) //hotspots kill biomass
 	qdel(src)

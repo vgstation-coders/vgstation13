@@ -107,21 +107,8 @@
 	occupant_overlay=null
 
 /obj/structure/displaycase/ex_act(severity)
-	switch(severity)
-		if (1)
-			getFromPool(/obj/item/weapon/shard, loc)
-			if (occupant)
-				dump()
-			qdel(src)
-		if (2)
-			if (prob(50))
-				src.health -= 15
-				src.healthcheck()
-		if (3)
-			if (prob(50))
-				src.health -= 5
-				src.healthcheck()
-
+	src.health -= severity
+	src.healthcheck()
 
 /obj/structure/displaycase/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage

@@ -150,21 +150,9 @@
 	if(!blinded)
 		flick("flash", src.flash)
 
-	switch(severity)
-		if(1.0)
-			if (src.stat != 2)
-				adjustBruteLoss(100)
-				adjustFireLoss(100)
-		if(2.0)
-			if (src.stat != 2)
-				adjustBruteLoss(60)
-				adjustFireLoss(60)
-		if(3.0)
-			if (src.stat != 2)
-				adjustBruteLoss(30)
-
+	adjustBruteLoss(severity*0.8)
+	adjustFireLoss(severity*0.2)
 	src.updatehealth()
-
 
 // See software.dm for Topic()
 

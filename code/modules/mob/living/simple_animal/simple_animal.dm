@@ -490,18 +490,13 @@
 		return
 
 	..()
-	switch (severity)
-		if (1.0)
-			adjustBruteLoss(500)
-			gib()
-			return
 
-		if (2.0)
-			adjustBruteLoss(60)
+	if(severity > 500)
+		gib()
+		return
 
-
-		if(3.0)
-			adjustBruteLoss(30)
+	adjustBruteLoss(severity*0.8)
+	adjustFireLoss(severity*0.2)
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 	health = Clamp(health - damage, 0, maxHealth)

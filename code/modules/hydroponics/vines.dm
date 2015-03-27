@@ -242,18 +242,8 @@
 
 // Explosion damage.
 /obj/effect/plantsegment/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			die()
-			return
-		if(2.0)
-			if (prob(90))
-				die()
-				return
-		if(3.0)
-			if (prob(50))
-				die()
-				return
+	if(prob(min(severity, 100)))
+		die()
 	return
 
 // Hotspots kill vines.

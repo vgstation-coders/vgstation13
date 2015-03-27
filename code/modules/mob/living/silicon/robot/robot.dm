@@ -569,20 +569,12 @@
 	if(!blinded)
 		flick("flash", flash)
 
-	switch(severity)
-		if(1.0)
-			if (stat != 2)
-				adjustBruteLoss(100)
-				adjustFireLoss(100)
-				gib()
-				return
-		if(2.0)
-			if (stat != 2)
-				adjustBruteLoss(60)
-				adjustFireLoss(60)
-		if(3.0)
-			if (stat != 2)
-				adjustBruteLoss(30)
+	if(severity > 250)
+		gib()
+		return
+
+	adjustBruteLoss(severity*0.8)
+	adjustFireLoss(severity*0.2)
 
 	updatehealth()
 

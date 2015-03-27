@@ -152,7 +152,7 @@
 	return
 
 /obj/singularity_act()
-	ex_act(1)
+	//ex_act(1) //NO
 	if(src)
 		qdel(src)
 	return 2
