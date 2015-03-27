@@ -122,7 +122,7 @@
 		//Explanations on multiplier values : 1 point of ex_output = 1 % probability of destruction or one point of health damage
 		//Stacks quickly if you're very close to a strong explosion, but decreases quickly from there, especially once you're out of the devastation_range
 		var/ex_damage //Allows us to send one exact damage output through ex_act to other atoms
-		var/ex_output = (50 * devastation_range + 20 * heavy_impact_range + 5 * light_impact_range) //First helper, this is a constant for this particular explosion, the energy at the epicenter
+		var/ex_output = (40 * devastation_range + 15 * heavy_impact_range + 5 * light_impact_range) //First helper, this is a constant for this particular explosion, the energy at the epicenter
 		var/ex_output_loss //Second helper, this will be useful below
 		for(var/i = 0; i <= max_range; i++) //Let's set up a basic index list to loop through
 			for(var/turf/T in view(epicenter, i) - view(epicenter, i-1)) //Then, let's loop through tiles in view, while making sure we only deal with the maximum external "tile in view circle"
@@ -131,7 +131,7 @@
 				//We now calculate damage. It is now longer a step system, but instead a decreasing linear progression from epicenter to last light damage tile
 				//Since we now know what tile we are dealing with, let's figure out what the explosive loss will be
 				//We need to account for the fact each damage range has a hard cap ! In this case, the minimum is the correct value, and the damage values stack !
-				ex_output_loss = min(45 * dist, 45 * devastation_range) + min(20 * dist, 20 * heavy_impact_range) + min(10 * dist, 10 *  light_impact_range)
+				ex_output_loss = min(40 * dist, 40 * devastation_range) + min(15 * dist, 15 * heavy_impact_range) + min(5 * dist, 5 *  light_impact_range)
 
 				//And now, we put it together
 				//Values : Welder Tank (1, 2, 4) = 34
