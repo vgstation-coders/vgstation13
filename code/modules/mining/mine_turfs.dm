@@ -134,16 +134,8 @@
 	*/
 
 /turf/unsimulated/mineral/ex_act(severity)
-	switch(severity)
-		if(3.0)
-			if (prob(75))
-				GetDrilled()
-		if(2.0)
-			if (prob(90))
-				GetDrilled()
-		if(1.0)
-			GetDrilled()
-
+	if(prob(min(severity, 100)))
+		GetDrilled()
 
 /turf/unsimulated/mineral/Bumped(AM)
 	. = ..()
@@ -457,14 +449,8 @@
 	updateMineralOverlays()
 
 /turf/unsimulated/floor/asteroid/ex_act(severity)
-	switch(severity)
-		if(3.0)
-			return
-		if(2.0)
-			if (prob(70))
-				gets_dug()
-		if(1.0)
-			gets_dug()
+	if(prob(min(severity, 100)))
+		gets_dug()
 	return
 
 /turf/unsimulated/floor/asteroid/attackby(obj/item/weapon/W as obj, mob/user as mob)

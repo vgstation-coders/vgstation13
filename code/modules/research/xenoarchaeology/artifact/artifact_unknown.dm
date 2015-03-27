@@ -355,6 +355,7 @@ var/list/valid_secondary_effect_types = list(\
 		if(secondary_effect && secondary_effect.trigger == TRIGGER_ENERGY && prob(25))
 			secondary_effect.ToggleActivate(0)
 
+//OH GOD FUCKING ARTIFACTS
 /obj/machinery/artifact/ex_act(severity)
 	switch(severity)
 		if(1.0) qdel(src)

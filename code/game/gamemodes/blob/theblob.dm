@@ -152,8 +152,8 @@
 
 
 /obj/effect/blob/ex_act(severity)
-	var/damage = 150
-	health -= ((damage/brute_resist) - (severity * 5))
+
+	health -= (severity) //Solid bombs sent on the core will do enough damage as is
 	update_icon()
 	return
 

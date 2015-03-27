@@ -68,17 +68,19 @@
 /obj/machinery/singularity/ex_act(severity)
 	if(current_size == 11)//IT'S UNSTOPPABLE
 		return
-	switch(severity)
-		if(1.0)
-			if(prob(25))
-				investigation_log(I_SINGULO,"has been destroyed by an explosion.")
-				qdel(src)
-				return
-			else
-				energy += 50
-		if(2.0 to 3.0)
-			energy += round((rand(20,60)/2),1)
+
+	//Due to the explosions rework, we're going to do a little crafting here
+	if(severity > energy) //Bomb energy clearly over total singularity energy, just cut here
+		investigation_log(I_SINGULO,"has been destroyed by an explosion of explosive energy [severity].")
+		qdel(src)
+		return
+	else if(severity > energy/10) //Same as above, but up to 1/10th of singularity energy
+		if(prob((energy/severity)*100)) //Good old percentage
+			investigation_log(I_SINGULO,"has been destroyed by an explosion of explosive energy [severity].")
+			qdel(src)
 			return
+	else
+		energy += severity //Have the singularity eat everything
 
 /obj/machinery/singularity/bullet_act(obj/item/projectile/P)
 	return 0 // Will there be an impact? Who knows. Will we see it? No.

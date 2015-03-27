@@ -136,24 +136,6 @@
 			src.isopen = 1
 			src.update_icon()
 
-
-/obj/machinery/suit_storage_unit/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			if(prob(50))
-				src.dump_everything() //So suits dont survive all the time
-			qdel(src)
-			return
-		if(2.0)
-			if(prob(50))
-				src.dump_everything()
-				qdel(src)
-			return
-		else
-			return
-	return
-
-
 /obj/machinery/suit_storage_unit/attack_hand(mob/user as mob)
 	var/dat
 	if(..())

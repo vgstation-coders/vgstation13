@@ -261,32 +261,20 @@
 		qdel(src)
 
 /obj/structure/girder/bullet_act(var/obj/item/projectile/Proj)
-	if(istype(Proj ,/obj/item/projectile/beam/pulse))
-		src.ex_act(2)
+	if(istype(Proj ,/obj/item/projectile/beam/pulse)) //There are no words for the amount of fucking snowflake this contains
+		qdel()
 	..()
 	return 0
 
 /obj/structure/girder/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if(prob(30))
-				if(prob(50))
-					getFromPool(/obj/item/stack/rods, get_turf(src))
-				else
-					getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-				qdel(src)
-			return
-		if(3.0)
-			if(prob(5))
-				if(prob(50))
-					getFromPool(/obj/item/stack/rods, get_turf(src))
-				else
-					getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-				qdel(src)
-			return
+	if(prob(min(severity, 100)))
+		qdel(src)
+	else if(prob(min(severity, 100)))
+		if(prob(33))
+			getFromPool(/obj/item/stack/rods, get_turf(src))
+		else
+			getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		qdel(src)
 	return
 
 /obj/structure/girder/update_icon()
@@ -318,35 +306,18 @@
 
 /obj/structure/girder/reinforced/ex_act(severity)
 
-	switch(severity)
-		if(1.0)
-			if(prob(25) && state == 2) //Strong enough to have a chance to stand if finished, but not in one piece
-				getFromPool(/obj/item/stack/rods, get_turf(src)) //Lose one rod
-				state = 0
-				update_icon()
-			else //Not finished or not lucky
-				qdel(src) //No scraps
-			return
-		if(2.0)
-			if(prob(30)) //Hit it nicely
-				if(state == 2)
-					state = 1
-					update_icon()
-				if(state == 1)
-					getFromPool(/obj/item/stack/rods, get_turf(src)) //Still some loss
-					state = 0
-					update_icon()
-			return
-		if(3.0)
-			if(prob(15)) //Scrap the painting off
-				if(state == 2)
-					state = 1
-					update_icon()
-				if(state == 1)
-					getFromPool(/obj/item/stack/rods, get_turf(src), 2)
-					state = 0
-					update_icon()
-			return
+	if(prob(min(severity, 100)))
+		qdel(src)
+	else if(prob(min(severity, 100)) && state > 0)
+		getFromPool(/obj/item/stack/rods, get_turf(src), 2) //Lose one rod
+		state = 0
+	else if(state > 0)
+		--state
+		if(state == 0) //Obviously went from state 1 to 0
+			getFromPool(/obj/item/stack/rods, get_turf(src), 2) //Lose one rod
+	else
+		qdel(src)
+	update_icon()
 	return
 
 /obj/structure/cultgirder
@@ -386,18 +357,8 @@
 		del(src)
 
 /obj/structure/cultgirder/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(30))
-				new /obj/effect/decal/remains/human(loc)
-				qdel(src)
-			return
-		if(3.0)
-			if (prob(5))
-				new /obj/effect/decal/remains/human(loc)
-				qdel(src)
-			return
+	var/turf/oldloc = src.loc
+	..()
+	if(!src)
+		new /obj/effect/decal/remains/human(oldloc)
 	return

@@ -6,16 +6,13 @@ obj/structure/blob_act()
 		del(src)
 
 obj/structure/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if(prob(50))
-				qdel(src)
-				return
-		if(3.0)
-			return
+	if(prob(min(severity, 100)))
+		if(contents)
+			for(var/atom/movable/A in contents)
+				A.loc = src.loc
+				A.ex_act(severity)
+		qdel(src)
+	return
 
 obj/structure/meteorhit(obj/O as obj)
 	del(src)

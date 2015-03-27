@@ -29,7 +29,8 @@
 	icon='icons/fence-ns.dmi'
 
 /obj/structure/grille/ex_act(severity)
-	returnToPool(src)
+	if(prob(min(severity, 100)))
+		returnToPool(src)
 
 /obj/structure/grille/blob_act()
 	returnToPool(src)

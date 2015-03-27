@@ -588,23 +588,15 @@
 	if(!blinded)
 		flick("flash", flash)
 
-	switch(severity)
-		if(1.0)
-			if (stat != 2)
-				adjustBruteLoss(200)
-				health = 100 - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
-		if(2.0)
-			if (stat != 2)
-				adjustBruteLoss(60)
-				adjustFireLoss(60)
-				health = 100 - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
-		if(3.0)
-			if (stat != 2)
-				adjustBruteLoss(30)
-				health = 100 - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
-			if (prob(50))
-				Paralyse(10)
-		else
+	if(prob(max(severity, 100)))
+		Paralyse(10)
+
+	var/b_loss = severity*0.8
+	var/f_loss = severity*0.2
+
+	adjustBruteLoss(b_loss)
+	adjustFireLoss(f_loss)
+
 	return
 
 /mob/living/carbon/monkey/blob_act()

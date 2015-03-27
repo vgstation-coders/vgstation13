@@ -43,24 +43,12 @@
 
 
 /obj/machinery/computer/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(25))
-				qdel(src)
-				return
-			if (prob(50))
-				for(var/x in verbs)
-					verbs -= x
-				set_broken()
-		if(3.0)
-			if (prob(25))
-				for(var/x in verbs)
-					verbs -= x
-				set_broken()
-		else
+	if(prob(min(severity, 100)))
+		qdel(src)
+	else //You have no other options, sorry man
+		for(var/x in verbs)
+		verbs -= x
+		set_broken()
 	return
 
 /obj/machinery/computer/bullet_act(var/obj/item/projectile/Proj)

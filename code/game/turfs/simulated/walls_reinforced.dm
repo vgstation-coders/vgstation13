@@ -365,27 +365,18 @@
 			dismantle_wall()
 
 /turf/simulated/wall/r_wall/ex_act(severity)
-	if(rotting)
-		severity = 1.0
-	switch(severity)
-		if(1.0)
-			if(prob(66)) //It's "bomb-proof"
-				dismantle_wall(0,1) //So it isn't completely destroyed, nice uh ?
-			else
-				dismantle_wall(1,1) //Fuck it up nicely
-		if(2.0)
-			if(prob(25)) //Fairly likely to stand, point-blank damage is "gone"
-				dismantle_wall(0,1)
-			else
-				src.d_state = WALLCOVERREMOVED
-				update_icon()
-				getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src)) //Lose the plasteel needed to get there
-		if(3.0)
-			if(prob(15))
-				dismantle_wall(0,1)
-			else //If prob fails, break the outer safety grille to look like scrap damage
-				src.d_state = WALLCOVEREXPOSED
-				update_icon()
+	if(rotting || prob(min(severity, 100)))
+		if(prob(66))
+			src.ReplaceWithLattice()
+			if(prob(33))
+				getFromPool(/obj/item/stack/tile/plasteel, get_turf(src))
+		else
+			src.ChangeTurf(under_turf)
+	else if(prob(min(severity, 100)))
+		dismantle_wall(1, 1)
+	else if(prob(min(severity, 100)))
+		getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src)) //Lose the plasteel needed to get there
+		dismantle_wall(0, 1)
 	return
 #undef WALLCOMPLETED
 #undef WALLCOVEREXPOSED

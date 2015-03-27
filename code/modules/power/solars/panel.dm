@@ -139,24 +139,13 @@
 		kill()
 
 /obj/machinery/power/solar/panel/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			solar_assembly.glass_type = null //The glass you're looking for is below pal
-			if(prob(15))
-				getFromPool(/obj/item/weapon/shard, loc)
-			kill()
-		if(2.0)
-			if(prob(25))
-				solar_assembly.glass_type = null //The glass you're looking for is below pal
-				getFromPool(/obj/item/weapon/shard, loc)
-				kill()
-			else
-				broken()
-		if(3.0)
-			if(prob(35))
-				broken()
-			else
-				health-- //Let shrapnel have its effect
+	health -= severity
+	if(health <= 0)
+		solar_assembly.glass_type = null //The glass you're looking for is below pal
+		getFromPool(/obj/item/weapon/shard, loc)
+		kill()
+	else if(health < 5)
+		broken()
 
 /obj/machinery/power/solar/panel/proc/kill() //To make sure you eliminate the assembly as well
 	if(solar_assembly)

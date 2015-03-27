@@ -32,24 +32,6 @@
 	src.go_out()
 	..()
 
-
-/obj/machinery/recharge_station/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				new /obj/item/weapon/circuitboard/recharge_station(src.loc)
-				qdel(src)
-				return
-		if(3.0)
-			if (prob(25))
-				src.anchored = 0
-				src.build_icon()
-		else
-	return
-
 /obj/machinery/recharge_station/process()
 	process_upgrade()
 	if(stat & (NOPOWER|BROKEN) || !anchored)

@@ -313,21 +313,9 @@ var/list/ai_list = list()
 	if(!blinded)
 		flick("flash", flash)
 
-	switch(severity)
-		if(1.0)
-			if (stat != 2)
-				adjustBruteLoss(100)
-				adjustFireLoss(100)
-		if(2.0)
-			if (stat != 2)
-				adjustBruteLoss(60)
-				adjustFireLoss(60)
-		if(3.0)
-			if (stat != 2)
-				adjustBruteLoss(30)
-
+	adjustBruteLoss(severity*0.8)
+	adjustFireLoss(severity*0.2)
 	updatehealth()
-
 
 /mob/living/silicon/ai/Topic(href, href_list)
 	if(usr != src)

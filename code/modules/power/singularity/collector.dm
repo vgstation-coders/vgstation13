@@ -104,9 +104,8 @@ var/global/list/rad_collectors = list()
 	return -1
 
 /obj/machinery/power/rad_collector/ex_act(severity)
-	switch(severity)
-		if(2, 3)
-			eject()
+	if(prob(max(severity, 100)))
+		eject()
 
 	return ..()
 

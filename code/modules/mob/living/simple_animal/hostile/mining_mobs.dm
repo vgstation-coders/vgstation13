@@ -102,13 +102,12 @@
 	if(flags & INVULNERABLE)
 		return
 
-	switch(severity)
-		if(1.0)
-			gib()
-		if(2.0)
-			adjustBruteLoss(140)
-		if(3.0)
-			adjustBruteLoss(110)
+	if(severity > 250)
+		gib()
+		return
+
+	adjustBruteLoss(severity*0.8)
+	adjustFireLoss(severity*0.2)
 
 /mob/living/simple_animal/hostile/asteroid/basilisk/Die()
 	var/counter

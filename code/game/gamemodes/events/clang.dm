@@ -7,6 +7,8 @@ In my current plan for it, 'solid' will be defined as anything with density == 1
 --NEOFite
 */
 
+//I wish I could bother to go through all ex_act instances in this file to update them, but I really can't
+//If someone ever ends up drunk and decides to update this event, check explosion.dm, or just have it delete everything in its path
 /obj/effect/immovablerod
 	name = "Immovable Rod"
 	desc = "What the fuck is that?"

@@ -61,32 +61,20 @@ var/image/list/w_overlays = list("wet" = image('icons/effects/water.dmi',icon_st
 //	return ..()
 
 /turf/simulated/floor/ex_act(severity)
-	//set src in oview(1)
-	switch(severity)
-		if(1.0)
+	//Yes, four fucking times in a row
+	//That's what you get for not having health values and a complex deconstruction system
+	if(prob(min(severity, 100)))
+		if(prob(66))
+			src.ReplaceWithLattice()
+			if(prob(33))
+				getFromPool(/obj/item/stack/tile/plasteel, get_turf(src))
+		else
 			src.ChangeTurf(under_turf)
-		if(2.0)
-			switch(pick(1,2;75,3))
-				if (1)
-					src.ReplaceWithLattice()
-					if(prob(33))
-						var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-						M.amount = 1
-				if(2)
-					src.ChangeTurf(under_turf)
-				if(3)
-					if(prob(80))
-						src.break_tile_to_plating()
-					else
-						src.break_tile()
-					src.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
-					if(prob(33))
-						var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-						M.amount = 1
-		if(3.0)
-			if (prob(50))
-				src.break_tile()
-				src.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
+	else if(prob(min(severity, 100)))
+		src.break_tile_to_plating()
+	else if(prob(min(severity, 100)))
+		src.break_tile()
+		src.hotspot_expose(1000, CELL_VOLUME, surfaces = 1)
 	return
 
 /turf/simulated/floor/blob_act()

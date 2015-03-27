@@ -96,20 +96,7 @@
 	update_icons()
 
 /obj/spacepod/ex_act(severity)
-	switch(severity)
-		if(1)
-			var/mob/living/carbon/human/H = occupant
-			if(H)
-				H.loc = get_turf(src)
-				H.ex_act(severity + 1)
-				H << "<span class='warning'>You are forcefully thrown from \the [src]!</span>"
-			del(ion_trail)
-			del(src)
-		if(2)
-			deal_damage(100)
-		if(3)
-			if(prob(40))
-				deal_damage(50)
+	deal_damage(severity)
 
 /obj/spacepod/attackby(obj/item/W as obj, mob/user as mob)
 	if(iscrowbar(W))

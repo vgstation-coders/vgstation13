@@ -27,6 +27,8 @@
  */
 
 //This proc is fairly important, so let's go through a thorough explanation of what is happening here
+//Important note : The "damage ranges" are obsolete in theory. In practice, they provide an easy way of calculating bomb power, when creating or detonating them
+//We now use a raw, precise damage output based on those three ranges and the absolute distance from epicenter, with the last tile of light impact being the last point of potential damage (1 raw damage)
 /proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, squelch = 0)
 
 	src = null	//So we don't abort once src is deleted
@@ -117,24 +119,29 @@
 		//New, improved explosion proc that accounts for blocking the explosion with bomb-proof material, without using A*
 		//Note that see-through tiles do NOT block explosions since we use oview. Yes, looking at you, plasma windows. This is the only downside of this
 		//This also causes a significant hang if the explosion is REALLY big (over a few dozen tiles), especially if it triggers more explosions along the way, so watch those 50 dev !
+		//Explanations on multiplier values : 1 point of ex_output = 1 % probability of destruction or one point of health damage
+		//Stacks quickly if you're very close to a strong explosion, but decreases quickly from there, especially once you're out of the devastation_range
+		var/ex_damage //Allows us to send one exact damage output through ex_act to other atoms
+		var/ex_output = (50 * devastation_range + 20 * heavy_impact_range + 5 * light_impact_range) //First helper, this is a constant for this particular explosion, the energy at the epicenter
+		var/ex_output_loss //Second helper, this will be useful below
 		for(var/i = 0; i <= max_range; i++) //Let's set up a basic index list to loop through
 			for(var/turf/T in view(epicenter, i) - view(epicenter, i-1)) //Then, let's loop through tiles in view, while making sure we only deal with the maximum external "tile in view circle"
 				var/dist = cheap_pythag(T.x - x0, T.y - y0) //Use more helper procs to quickly slash through this list of turfs
 
-				if(dist < devastation_range)
-					dist = 1
-				else if(dist < heavy_impact_range)
-					dist = 2
-				else if(dist < light_impact_range)
-					dist = 3
-				else
-					continue
+				//We now calculate damage. It is now longer a step system, but instead a decreasing linear progression from epicenter to last light damage tile
+				//Since we now know what tile we are dealing with, let's figure out what the explosive loss will be
+				//We need to account for the fact each damage range has a hard cap ! In this case, the minimum is the correct value, and the damage values stack !
+				ex_output_loss = min(45 * dist, 45 * devastation_range) + min(20 * dist, 20 * heavy_impact_range) + min(10 * dist, 10 *  light_impact_range)
+
+				//And now, we put it together
+				//Values : Welder Tank (1, 2, 4) = 34
+				ex_damage = ex_output - ex_output_loss
 
 				//And finally, here it is. Find all atoms that can receive an ex_act instruction by definition, and let's explode some shit
 				for(var/atom/movable/A in T.contents)
-					A.ex_act(dist) //Boom
+					A.ex_act(severity = ex_damage) //Boom
 
-				T.ex_act(dist) //Don't forget the turfs, now that'd be silly
+				T.ex_act(severity = ex_damage) //Don't forget the turfs, now that'd be silly
 
 		//Extra notes. This, in theory, works as a "bomb-proof material blocks explosions" (which doesn't work for transparent bomb-proof material, henk)
 		//The idea is that the explosion progresses through every "ring of tiles" and fires ex_act
