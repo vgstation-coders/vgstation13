@@ -231,17 +231,6 @@ Manual Tracking Direction:"}
 	broken()
 	return
 
-/obj/machinery/power/solar/control/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-		if(2.0)
-			if (prob(50))
-				broken()
-		if(3.0)
-			if (prob(25))
-				broken()
-
 /obj/machinery/power/solar/control/blob_act()
 	if(prob(75))
 		broken()

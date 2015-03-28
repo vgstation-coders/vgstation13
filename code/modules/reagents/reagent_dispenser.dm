@@ -37,21 +37,10 @@
 		amount_per_transfer_from_this = N
 
 /obj/structure/reagent_dispensers/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				new /obj/effect/effect/water(src.loc)
-				qdel(src)
-				return
-		if(3.0)
-			if (prob(5))
-				new /obj/effect/effect/water(src.loc)
-				qdel(src)
-				return
-		else
+	var/oldloc = src.loc
+	..()
+	if(!src)
+		new /obj/effect/effect/water(oldloc)
 	return
 
 /obj/structure/reagent_dispensers/blob_act()
@@ -146,7 +135,7 @@
 /obj/structure/reagent_dispensers/fueltank/blob_act()
 	explode()
 
-/obj/structure/reagent_dispensers/fueltank/ex_act()
+/obj/structure/reagent_dispensers/fueltank/ex_act(severity)
 	explode()
 
 /obj/structure/reagent_dispensers/fueltank/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)

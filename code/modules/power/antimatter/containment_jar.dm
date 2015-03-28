@@ -25,16 +25,8 @@
 	if(src) qdel(src)
 
 /obj/item/weapon/am_containment/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			boom()
-		if(2.0)
-			if(prob((fuel/10)-stability))
-				boom()
-			stability -= 40
-		if(3.0)
-			stability -= 20
-	//check_stability()
+
+	stability -= severity
 	return
 
 /obj/item/weapon/am_containment/proc/usefuel(var/wanted)

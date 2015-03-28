@@ -69,15 +69,20 @@
 /obj/effect/bhole/proc/affect_coord(var/x, var/y, var/ex_act_force, var/pull_chance, var/turf_removal_chance)
 	//Get turf at coordinate
 	var/turf/T = locate(x, y, z)
-	if(isnull(T))	return
+	if(isnull(T))
+		return
 
 	//Pulling and/or ex_act-ing movable atoms in that turf
-	if( prob(pull_chance) )
+	if(prob(pull_chance))
 		for(var/obj/O in T.contents)
+			/*
+			//Nope, not even going to bother, does this event even fire anymore ?
 			if(O.anchored)
 				O.ex_act(ex_act_force)
 			else
 				step_towards(O,src)
+			*/
+			step_towards(O, src)
 		for(var/mob/living/M in T.contents)
 			step_towards(M,src)
 

@@ -28,19 +28,11 @@
 	return ..()
 
 /obj/structure/catwalk/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-		if(2.0)
-			if(prob(75))
-				qdel(src)
-			else
-				new /obj/structure/lattice(src.loc)
-				qdel(src)
-		if(3.0)
-			if(prob(10))
-				new /obj/structure/lattice(src.loc)
-				qdel(src)
+	if(prob(min(severity, 100)))
+		qdel(src)
+	else if(prob(min(severity, 100))) //Fairly dumb, but it should work
+		new /obj/structure/lattice(src.loc)
+		qdel(src)
 
 /obj/structure/catwalk/attackby(obj/item/C as obj, mob/user as mob)
 	if(!C || !user)

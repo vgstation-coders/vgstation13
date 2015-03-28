@@ -32,13 +32,6 @@
 /obj/structure/lattice/blob_act()
 	qdel(src)
 
-/obj/structure/lattice/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-		if(2.0)
-			qdel(src)
-
 /obj/structure/lattice/attackby(obj/item/C as obj, mob/user as mob)
 	if(iswelder(C))
 		var/obj/item/weapon/weldingtool/WeldingTool = C

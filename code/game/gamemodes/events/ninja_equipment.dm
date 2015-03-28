@@ -1399,13 +1399,7 @@ It is possible to destroy the net by the occupant or someone else.
 		return 0
 
 	ex_act(severity)
-		switch(severity)
-			if(1.0)
-				health-=50
-			if(2.0)
-				health-=50
-			if(3.0)
-				health-=prob(50)?50:25
+		health -= severity //Let's hpope that'll do
 		healthcheck()
 		return
 

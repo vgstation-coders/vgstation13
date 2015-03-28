@@ -49,7 +49,7 @@
 
 	AreaSet()
 	OverlaySet()
-	MiscSet()
+	//MiscSet()
 	APCSet()
 	AmbientSet()
 
@@ -133,10 +133,13 @@ AUTOMATED ALERT: Link to [command_name()] lost."}
 		if(T.z != map.zCentcomm)
 			T.update_lumcount(1, 160, 255, 0, 0)
 
+/*
+//ex_act is not a valid proc for non-explosive interaction !
 /datum/universal_state/supermatter_cascade/proc/MiscSet()
-	for (var/obj/machinery/firealarm/alm in world)
-		if (!(alm.stat & BROKEN))
+	for(var/obj/machinery/firealarm/alm in world)
+		if(!(alm.stat & BROKEN))
 			alm.ex_act(2)
+*/
 
 /datum/universal_state/supermatter_cascade/proc/APCSet()
 	for (var/obj/machinery/power/apc/APC in world)

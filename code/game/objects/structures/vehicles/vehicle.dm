@@ -300,13 +300,7 @@
 		die()
 
 /obj/structure/stool/bed/chair/vehicle/ex_act(severity)
-	switch (severity)
-		if(1.0)
-			health -= 100
-		if(2.0)
-			health -= 75
-		if(3.0)
-			health -= 45
+	health -= severity
 	HealthCheck()
 
 /obj/structure/stool/bed/chair/vehicle/proc/die() //called when health <= 0

@@ -55,6 +55,7 @@
 
 		..()
 
+	//Yeah okay I'm not unfucking that
 	ex_act(var/severity,var/child=null)
 		var/child_severity=severity
 		if(!child)
@@ -870,20 +871,8 @@
 
 	// pipe affected by explosion
 	ex_act(severity)
-
-		switch(severity)
-			if(1.0)
-				broken(0)
-				return
-			if(2.0)
-				health -= rand(5,15)
-				healthcheck()
-				return
-			if(3.0)
-				health -= rand(0,15)
-				healthcheck()
-				return
-
+		health -= severity
+		healthcheck()
 
 	// test health for brokenness
 	proc/healthcheck()

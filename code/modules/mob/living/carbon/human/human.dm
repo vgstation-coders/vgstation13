@@ -174,51 +174,33 @@
 	if(!blinded)
 		flick("flash", flash)
 
-	var/shielded = 0
-	var/b_loss = null
-	var/f_loss = null
-	switch (severity)
-		if (1.0)
-			b_loss += 500
-			if (!prob(getarmor(null, "bomb")))
-				gib()
-				return
-			else
-				var/atom/target = get_edge_target_turf(src, get_dir(src, get_step_away(src, src)))
-				throw_at(target, 200, 4)
-			//return
-//				var/atom/target = get_edge_target_turf(user, get_dir(src, get_step_away(user, src)))
-				//user.throw_at(target, 200, 4)
+	//Gibbing can only happen if the bomb has enough damage to kill in one hit
+	//Compatibility fix
+	if(severity > 200)
+		if(!prob(getarmor(null, "bomb"))) //Bomb armor needs clutch coding, for now
+			gib()
+			return
+		else
+			var/atom/target = get_edge_target_turf(src, get_dir(src, get_step_away(src, src)))
+			throw_at(target, 200, 4)
 
-		if (2.0)
-			if (!shielded)
-				b_loss += 60
+	if(!istype(ears, /obj/item/clothing/ears/earmuffs))
+		ear_damage = severity/2
+		ear_deaf = severity * 2
 
-			f_loss += 60
+	if(prob(max(severity, 100)))
+		Paralyse(10)
 
-			if (prob(getarmor(null, "bomb")))
-				b_loss = b_loss/1.5
-				f_loss = f_loss/1.5
+	var/b_loss = severity * 0.8
+	var/f_loss = severity * 0.2
 
-			if (!istype(l_ear, /obj/item/clothing/ears/earmuffs) && !istype(r_ear, /obj/item/clothing/ears/earmuffs))
-				ear_damage += 30
-				ear_deaf += 120
-			if (prob(70) && !shielded)
-				Paralyse(10)
-
-		if(3.0)
-			b_loss += 30
-			if (prob(getarmor(null, "bomb")))
-				b_loss = b_loss/2
-			if (!istype(ears, /obj/item/clothing/ears/earmuffs))
-				ear_damage += 15
-				ear_deaf += 60
-			if (prob(50) && !shielded)
-				Paralyse(10)
+	if(prob(getarmor(null, "bomb")))
+		b_loss = b_loss/2
+		f_loss = f_loss/2
 
 	var/update = 0
 
-	// focus most of the blast on one organ
+	//Focus most of the blast on one organ
 	var/datum/organ/external/take_blast = pick(organs)
 	update |= take_blast.take_damage(b_loss * 0.9, f_loss * 0.9, used_weapon = "Explosive blast")
 

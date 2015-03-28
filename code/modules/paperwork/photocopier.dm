@@ -342,23 +342,13 @@
 	return
 
 /obj/machinery/photocopier/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-		if(2.0)
-			if(prob(50))
-				qdel(src)
-			else
-				if(toner > 0)
-					var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
-					O.New(O.loc)
-					toner = 0
-		else
-			if(prob(50))
-				if(toner > 0)
-					var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
-					O.New(O.loc)
-					toner = 0
+	if(prob(max(severity, 100)))
+		qdel(src)
+	else
+		if(toner > 0)
+			var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
+			O.New(O.loc)
+			toner = 0
 	return
 
 /obj/machinery/photocopier/blob_act()

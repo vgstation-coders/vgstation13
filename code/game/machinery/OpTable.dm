@@ -23,24 +23,6 @@
 //	spawn(100) //Wont the MC just call this process() before and at the 10 second mark anyway?
 //		process()
 
-/obj/machinery/optable/ex_act(severity)
-
-	switch(severity)
-		if(1.0)
-			//SN src = null
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				//SN src = null
-				qdel(src)
-				return
-		if(3.0)
-			if (prob(25))
-				src.density = 0
-		else
-	return
-
 /obj/machinery/optable/blob_act()
 	if(prob(75))
 		del(src)

@@ -27,13 +27,10 @@
 	loc.assume_air(air_contents)
 
 /obj/item/latexballon/ex_act(severity)
-	burst()
-	switch(severity)
-		if (1)
-			qdel(src)
-		if (2)
-			if (prob(50))
-				qdel(src)
+	if(prob(min(severity, 100)))
+		qdel(src)
+	else
+		burst()
 
 /obj/item/latexballon/bullet_act()
 	burst()

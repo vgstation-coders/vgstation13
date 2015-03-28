@@ -78,15 +78,6 @@
 		del(src)
 	return
 
-/obj/item/weapon/storage/lockbox/ex_act(severity)
-	var/newsev = max(3,severity+1)
-	for(var/atom/movable/A as mob|obj in src)//pulls everything out of the locker and hits it with an explosion
-		A.loc = src.loc
-		A.ex_act(newsev)
-	newsev=4-severity
-	if(prob(newsev*25)+25) // 1=100, 2=75, 3=50
-		qdel(src)
-
 /obj/item/weapon/storage/lockbox/emp_act(severity)
 	..()
 	if(!broken)

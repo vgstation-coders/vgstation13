@@ -102,19 +102,9 @@
 	qdel(src)
 	return
 
-/obj/machinery/door/mineral/ex_act(severity = 1)
-	switch(severity)
-		if(1)
-			Dismantle(1)
-		if(2)
-			if(prob(20))
-				Dismantle(1)
-			else
-				hardness--
-				CheckHardness()
-		if(3)
-			hardness -= 0.1
-			CheckHardness()
+/obj/machinery/door/mineral/ex_act(severity)
+	hardness -= severity //Apparently that's a health value ?
+	CheckHardness()
 	return
 
 

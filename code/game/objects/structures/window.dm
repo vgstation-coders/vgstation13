@@ -105,19 +105,8 @@
 //This ex_act just removes health to be fully modular with "bomb-proof" windows
 /obj/structure/window/ex_act(severity)
 
-	switch(severity)
-		if(1.0)
-			health -= rand(100, 150)
-			healthcheck()
-			return
-		if(2.0)
-			health -= rand(20, 50)
-			healthcheck()
-			return
-		if(3.0)
-			health -= rand(5, 15)
-			healthcheck()
-			return
+	health -= severity
+	healthcheck()
 
 /obj/structure/window/blob_act()
 

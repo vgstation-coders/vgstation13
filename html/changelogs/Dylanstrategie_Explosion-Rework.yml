@@ -1,0 +1,7 @@
+author: Dylanstrategie
+delete-after: True
+changes:
+  - experimental: Explosions are now directional and progressive. They no longer just magically apply but "progress" through rings corresponding to explosion range
+  - experimental: If an explosion can't punch through something, the explosion stops here. This has notable effect with reinforced walls on lower ex_act settings (might be a bit unstable however)
+  - rscdel: Since "view" was used to simplify explosive penetration, any transparent bomb-proof material, isn't (this notably includes plasma windows, henk)
+  - tweak: Replace sleep(8) argument in explosion.dm with spawn() for delaying the lighting and power rebuild, might help with process lag
