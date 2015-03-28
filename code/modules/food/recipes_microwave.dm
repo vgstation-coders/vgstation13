@@ -1380,7 +1380,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/cookiebowl
 
-/datum/recipe/chococherryecake
+/datum/recipe/chococherrycake
 	reagents = list("milk" = 5, "flour" = 15)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
@@ -1394,10 +1394,9 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/chococherrycake
 
 /datum/recipe/pumpkinbread
+	reagents = list("flour" = 15)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin,
-		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
-		/obj/item/weapon/reagent_containers/food/snacks/breadslice
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pumpkinbread
 
