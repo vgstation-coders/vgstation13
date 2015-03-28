@@ -1,0 +1,4 @@
+author: Dylanstrategie
+delete-after: True
+changes:
+  - bugfix: Fix being able to build up flatpacks with a shut-down welding tool. Welding noises still fire, but it's the intent that counts !

@@ -104,14 +104,25 @@
 /datum/construction/flatpack_unpack/set_desc(index as num)
 	return
 
-/datum/construction/flatpack_unpack/check_step(atom/used_atom,mob/user as mob) //check last step only
+/datum/construction/flatpack_unpack/check_step(atom/used_atom, mob/user as mob) //check last step only
 	var/valid_step = is_right_key(user,used_atom)
 	if(valid_step)
 		if(custom_action(valid_step, used_atom, user))
 			var/list/step = steps[steps.len]
+			//We are forced to drop a snowflake right here because welding tools are more complex than the other steps
+			if(step["key"] == /obj/item/weapon/weldingtool) //Make sure we're dealing with a welding tool
+				var/obj/item/weapon/weldingtool/WT = used_atom //Typecast
+				if(!WT.remove_fuel(0, user)) //Failed to check for welding tool being on and fueled !
+					user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
+					return //Abort
 			user.show_message("You begin to [step["action"]]...")
 			assemble_busy = 1
 			if(do_after(user, 30))
+				if(step["key"] == /obj/item/weapon/weldingtool) //And again
+					var/obj/item/weapon/weldingtool/WT = used_atom //Typecast
+					if(!WT.remove_fuel(0, user)) //Failed to check for welding tool being on and fueled !
+						user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
+						return //Abort
 				assemble_busy = 0
 				user.show_message("You successfully [step["action"]] in the assembly.")
 				next_step(user)
