@@ -65,7 +65,7 @@
 	attack_hand(user)
 
 /obj/structure/grille/attack_hand(mob/user as mob)
-	var/humanverb = list("kick", "slam", "elbow") //Only verbs with a third person "s", thank you
+	var/humanverb = pick(list("kick", "slam", "elbow")) //Only verbs with a third person "s", thank you
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user] [pick(humanverb)]s \the [src].</span>", \
 	"<span class='warning'>You [pick(humanverb)] \the [src].</span>", \
@@ -80,7 +80,7 @@
 /obj/structure/grille/attack_alien(mob/user as mob)
 	if(istype(user, /mob/living/carbon/alien/larva))
 		return
-	var/alienverb = list("slam", "rip", "claw") //See above
+	var/alienverb = pick(list("slam", "rip", "claw")) //See above
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user] [pick(alienverb)]s \the [src].</span>", \
 						 "<span class='warning'>You [pick(alienverb)] \the [src].</span>", \
@@ -256,7 +256,7 @@
 	icon_state = "grillecult"
 	health = 40 //Make it strong enough to avoid people breaking in too easily
 
-/obj/structure/grille/CanPass(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+/obj/structure/grille/cult/CanPass(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || !broken)
 		return 0 //Make sure air doesn't drain
 	..()
