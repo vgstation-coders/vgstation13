@@ -80,7 +80,7 @@
 /obj/structure/grille/attack_alien(mob/user as mob)
 	if(istype(user, /mob/living/carbon/alien/larva))
 		return
-	var/alienverb = list("slash", "slam", "rip", "claw") //See above
+	var/alienverb = list("slam", "rip", "claw") //See above
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user] [pick(alienverb)]s \the [src].</span>", \
 						 "<span class='warning'>You [pick(alienverb)] \the [src].</span>", \
