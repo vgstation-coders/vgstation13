@@ -6,6 +6,7 @@
 /obj/structure/window/full
 
 	name = "window"
+	desc = "A silicate barrier, used to keep things out and in sight. Fragile."
 	icon_state = "window"
 	sheetamount = 2
 	mouse_opacity = 2 // Complete opacity //What in the name of everything is this variable ?
@@ -56,7 +57,7 @@
 
 /obj/structure/window/full/reinforced
 	name = "reinforced window"
-	desc = "It looks rather strong. Might take a few good hits to shatter it."
+	desc = "A window with a rod matrice. It looks more solid than the average window."
 	icon_state = "rwindow"
 	sheettype = /obj/item/stack/sheet/glass/rglass
 	health = 40
