@@ -90,7 +90,7 @@
 	if(locate(/obj/structure/grille, user.loc))
 		for(var/obj/structure/grille/G in user.loc)
 			if(G.broken)
-				G.health = initial(health)
+				G.health = initial(G.health)
 				G.density = 1
 				G.broken = 0
 				G.icon_state = "[initial(icon_state)]"
