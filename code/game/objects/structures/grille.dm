@@ -50,11 +50,11 @@
 	return
 
 /obj/structure/grille/blob_act()
-	health -= rand(15, 30) //Grille will always be blasted, but chances of leaving things over
+	health -= rand(initial(health)*0.8, initial(health)) //Grille will always be blasted, but chances of leaving things over
 	healthcheck(hitsound = 1)
 
 /obj/structure/grille/meteorhit()
-	health -= rand(15, 30)
+	health -= rand(initial(health)*0.8, initial(health))
 	healthcheck(hitsound = 1)
 
 /obj/structure/grille/Bumped(atom/user)
