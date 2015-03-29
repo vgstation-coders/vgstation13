@@ -67,8 +67,8 @@
 /obj/structure/grille/attack_hand(mob/user as mob)
 	var/humanverb = pick(list("kick", "slam", "elbow")) //Only verbs with a third person "s", thank you
 	user.delayNextAttack(8)
-	user.visible_message("<span class='warning'>[user] [pick(humanverb)]s \the [src].</span>", \
-	"<span class='warning'>You [pick(humanverb)] \the [src].</span>", \
+	user.visible_message("<span class='warning'>[user] [humanverb]s \the [src].</span>", \
+	"<span class='warning'>You [humanverb] \the [src].</span>", \
 	"<span class='warning'>You hear twisting metal.</span>")
 	if(M_HULK in user.mutations)
 		health -= 5 //Fair hit
@@ -82,8 +82,8 @@
 		return
 	var/alienverb = pick(list("slam", "rip", "claw")) //See above
 	user.delayNextAttack(8)
-	user.visible_message("<span class='warning'>[user] [pick(alienverb)]s \the [src].</span>", \
-						 "<span class='warning'>You [pick(alienverb)] \the [src].</span>", \
+	user.visible_message("<span class='warning'>[user] [alienverb]s \the [src].</span>", \
+						 "<span class='warning'>You [alienverb] \the [src].</span>", \
 						 "You hear twisting metal.")
 	health -= 5
 	healthcheck(hitsound = 1)
