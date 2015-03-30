@@ -85,6 +85,7 @@
 			return 1
 
 		var/dir_sum = 0
+		var/in_cardinal = 0
 		for(var/direction in alldirs)
 			var/skip_sum = 0
 			for(var/obj/structure/window/W in src.loc)
@@ -116,110 +117,103 @@
 			if(!skip_sum) //means there is a window between the two tiles in this direction
 				var/obj/structure/table/T = locate(/obj/structure/table,get_step(src,direction))
 				if(T && !T.flipped)
-					if(direction <5)
+					if(direction in cardinal)
 						dir_sum += direction
+						in_cardinal = 1 //we have a table in a cardinal direction
 					else
 						if(direction == 5)	//This permits the use of all table directions. (Set up so clockwise around the central table is a higher value, from north)
-							dir_sum += 16
+							dir_sum += 16 //NE (1 + 4)
 						if(direction == 6)
-							dir_sum += 32
-						if(direction == 8)	//Aherp and Aderp.  Jezes I am stupid.  -- SkyMarshal
-							dir_sum += 8
+							dir_sum += 32 //SE (2 + 4)
 						if(direction == 10)
-							dir_sum += 64
+							dir_sum += 64 //SW (2 + 8)
 						if(direction == 9)
-							dir_sum += 128
+							dir_sum += 128 //NW (1 + 8)
 
-		var/table_type = 0 //stand_alone table
-		if(dir_sum%16 in cardinal)
-			table_type = 1 //endtable
-			dir_sum %= 16
-		if(dir_sum%16 in list(3,12))
-			table_type = 2 //1 tile thick, streight table
-			if(dir_sum%16 == 3) //3 doesn't exist as a dir
-				dir_sum = 2
-			if(dir_sum%16 == 12) //12 doesn't exist as a dir.
-				dir_sum = 4
-		if(dir_sum%16 in list(5,6,9,10))
-			if(locate(/obj/structure/table,get_step(src.loc,dir_sum%16)))
-				table_type = 3 //full table (not the 1 tile thick one, but one of the 'tabledir' tables)
-			else
-				table_type = 2 //1 tile thick, corner table (treated the same as streight tables in code later on)
-			dir_sum %= 16
-		if(dir_sum%16 in list(13,14,7,11)) //Three-way intersection
-			table_type = 5 //full table as three-way intersections are not sprited, would require 64 sprites to handle all combinations.  TOO BAD -- SkyMarshal
-			switch(dir_sum%16)	//Begin computation of the special type tables.  --SkyMarshal
-				if(7)
-					if(dir_sum == 23)
-						table_type = 6
-						dir_sum = 8
-					else if(dir_sum == 39)
-						dir_sum = 4
-						table_type = 6
-					else if(dir_sum == 55 || dir_sum == 119 || dir_sum == 247 || dir_sum == 183)
-						dir_sum = 4
-						table_type = 3
+		if(!dir_sum || !in_cardinal) //if there are no cardinal tables, no reason to draw the sprite
+			overlays.len = 0
+			icon_state = "[initial(icon_state)]"
+
+		else
+			icon_state = "[initial(icon_state)]_base"
+			overlays.len = 0
+
+			if(dir_sum & 1) //north - this builds top and middle connections
+				overlays += icon(src.icon, "[initial(icon_state)]_plane", 1) //we extend northwards
+				if(dir_sum & 4) //if we have east
+					overlays += icon(src.icon, "[initial(icon_state)]_plane", 4) //add the connector for east
+					if(dir_sum & 16) //if we have east AND northeast - see above as to why this is 16
+						overlays += icon(src.icon, "[initial(icon_state)]_plane", 5) //we connect to the northeast as well
 					else
-						dir_sum = 4
-				if(11)
-					if(dir_sum == 75)
-						dir_sum = 5
-						table_type = 6
-					else if(dir_sum == 139)
-						dir_sum = 9
-						table_type = 6
-					else if(dir_sum == 203 || dir_sum == 219 || dir_sum == 251 || dir_sum == 235)
-						dir_sum = 8
-						table_type = 3
+						overlays += icon(src.icon, "[initial(icon_state)]_icorner", 5) //inverted corner - we only go north and east
+				else
+					overlays += icon(src.icon, "[initial(icon_state)]_vert", 5) //insert the stopblock for northeast
+					overlays += icon(src.icon, "[initial(icon_state)]_vert", 4) //and for east
+
+				if(dir_sum & 8) //this section is the same, but for west(8) and northwest(9)
+					overlays += icon(src.icon, "[initial(icon_state)]_plane", 8)
+					if(dir_sum & 128)
+						overlays += icon(src.icon, "[initial(icon_state)]_plane", 9)
 					else
-						dir_sum = 8
-				if(13)
-					if(dir_sum == 29)
-						dir_sum = 10
-						table_type = 6
-					else if(dir_sum == 141)
-						dir_sum = 6
-						table_type = 6
-					else if(dir_sum == 189 || dir_sum == 221 || dir_sum == 253 || dir_sum == 157)
-						dir_sum = 1
-						table_type = 3
+						overlays += icon(src.icon, "[initial(icon_state)]_icorner", 9)
+				else
+					overlays += icon(src.icon, "[initial(icon_state)]_vert", 9)
+					overlays += icon(src.icon, "[initial(icon_state)]_vert", 8)
+
+			else //we don't connect diagonally (NE, NW) without north, so that doesn't need handling
+				overlays += icon(src.icon, "[initial(icon_state)]_horiz", 1) //we stopcap the north end
+				if(dir_sum & 4) //if we extend east
+					overlays += icon(src.icon, "[initial(icon_state)]_horiz", 5) // we stopcap northeast
+					overlays += icon(src.icon, "[initial(icon_state)]_plane", 4) //and add the connector for east
+				else
+					overlays += icon(src.icon, "[initial(icon_state)]_corner", 5) //corner the dorner
+					overlays += icon(src.icon, "[initial(icon_state)]_vert", 4) //cap the east end
+
+				if(dir_sum & 8) //same as above, but for west (8) and northwest (9)
+					overlays += icon(src.icon, "[initial(icon_state)]_horiz", 9)
+					overlays += icon(src.icon, "[initial(icon_state)]_plane", 8)
+				else
+					overlays += icon(src.icon, "[initial(icon_state)]_corner", 9)
+					overlays += icon(src.icon, "[initial(icon_state)]_vert", 8)
+
+			if(dir_sum & 2) //south - this forms the lower third of the connectors
+				overlays += icon(src.icon, "[initial(icon_state)]_plane", 2)
+				if(dir_sum & 4) //east - remember, the connector eastwards has been set already
+					if(dir_sum & 32) //if we go southeast as well
+						overlays += icon(src.icon, "[initial(icon_state)]_plane", 6) //add that connector
 					else
-						dir_sum = 1
-				if(14)
-					if(dir_sum == 46)
-						dir_sum = 1
-						table_type = 6
-					else if(dir_sum == 78)
-						dir_sum = 2
-						table_type = 6
-					else if(dir_sum == 110 || dir_sum == 254 || dir_sum == 238 || dir_sum == 126)
-						dir_sum = 2
-						table_type = 3
+						overlays += icon(src.icon, "[initial(icon_state)]_icorner", 6) //inverted corner
+				else
+					overlays += icon(src.icon, "[initial(icon_state)]_vert", 6) //connects southwards
+
+				if(dir_sum & 8) //west - see above
+					if(dir_sum & 64)
+						overlays += icon(src.icon, "[initial(icon_state)]_plane", 10)
 					else
-						dir_sum = 2 //These translate the dir_sum to the correct dirs from the 'tabledir' icon_state.
-		if(dir_sum%16 == 15)
-			table_type = 4 //4-way intersection, the 'middle' table sprites will be used.
-		switch(table_type)
-			if(0)
-				icon_state = "[initial(icon_state)]"
-			if(1)
-				icon_state = "[initial(icon_state)]_1tileendtable"
-			if(2)
-				icon_state = "[initial(icon_state)]_1tilethick"
-			if(3)
-				icon_state = "[initial(icon_state)]_dir"
-			if(4)
-				icon_state = "[initial(icon_state)]_middle"
-			if(5)
-				icon_state = "[initial(icon_state)]_dir2"
-			if(6)
-				icon_state = "[initial(icon_state)]_dir3"
+						overlays += icon(src.icon, "[initial(icon_state)]_icorner", 10)
+				else
+					overlays += icon(src.icon, "[initial(icon_state)]_vert", 10)
+
+			else //we only connect diagonally if we go southwards, so we only worry about if we extend east and/or west
+				overlays += icon(src.icon, "[initial(icon_state)]_horiz", 2) //cap the south
+
+				if(dir_sum & 4) //east
+					overlays += icon(src.icon, "[initial(icon_state)]_horiz", 6) //this is the extending eastwards icon
+				else
+					overlays += icon(src.icon, "[initial(icon_state)]_corner", 6) //cap with a corner - remember, the eastwards cap was already put down
+
+				if(dir_sum & 8) //same for west
+					overlays += icon(src.icon, "[initial(icon_state)]_horiz", 10)
+				else
+					overlays += icon(src.icon, "[initial(icon_state)]_corner", 10)
+
+
 		if (dir_sum in alldirs)
 			dir = dir_sum
 		else
 			dir = 2
 
-	clicked = new/icon(src.icon, src.icon_state, src.dir) //giving you runtime icon access is too byond Byond
+	clicked = new/icon(src.icon, initial(src.icon_state), src.dir) //giving you runtime icon access is too byond Byond
 
 /obj/structure/table/ex_act(severity)
 	switch(severity)
@@ -525,7 +519,7 @@
 /obj/structure/table/reinforced
 	name = "reinforced table"
 	desc = "A version of the four legged table. It is stronger."
-	icon_state = "reinftable"
+	icon_state = "reinf"
 	parts = /obj/item/weapon/table_parts/reinforced
 	var/status = 2
 
