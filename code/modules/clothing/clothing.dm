@@ -2,6 +2,7 @@
 	name = "clothing"
 	var/list/species_restricted = null //Only these species can wear this kit.
 	var/wizard_garb = 0 // Wearing this empowers a wizard.
+	var/rangedattack = 0 //Does this have a ranged attack(similar to laser eyes or telekinesis)
 	var/eyeprot = 0 //for head and eyewear
 
 	//temperatures in Kelvin. These default values won't affect protections in any way.
@@ -35,6 +36,9 @@
 				return 0
 
 	return ..()
+
+/obj/item/clothing/proc/ranged_weapon(var/atom/A, mob/living/carbon/human/wearer as mob)
+	return
 
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears

@@ -204,7 +204,7 @@
 								ticker.mode:add_cultist(Z.mind)
 							else
 								ticker.mode.cult+=Z.mind
-							ticker.mode.update_cult_icons_added(Z.mind)
+							ticker.mode.update_antag_icons_added(Z.mind, ticker.mode.cult, "cult")
 						qdel(T)
 						Z << "<B>You are a Juggernaut. Though slow, your shell can withstand extreme punishment, create shield walls and even deflect energy weapons, and rip apart enemies and walls alike.</B>"
 						Z << "<B>You are still bound to serve your creator, follow their orders and help them complete their goals at all costs.</B>"
@@ -219,7 +219,7 @@
 								ticker.mode:add_cultist(Z.mind)
 							else
 								ticker.mode.cult+=Z.mind
-							ticker.mode.update_cult_icons_added(Z.mind)
+							ticker.mode.update_antag_icons_added(Z.mind, ticker.mode.cult, "cult")
 						qdel(T)
 						Z << "<B>You are a Wraith. Though relatively fragile, you are fast, deadly, and even able to phase through walls.</B>"
 						Z << "<B>You are still bound to serve your creator, follow their orders and help them complete their goals at all costs.</B>"
@@ -234,7 +234,7 @@
 								ticker.mode:add_cultist(Z.mind)
 							else
 								ticker.mode.cult+=Z.mind
-							ticker.mode.update_cult_icons_added(Z.mind)
+							ticker.mode.update_antag_icons_added(Z.mind, ticker.mode.cult, "cult")
 						qdel(T)
 						Z << "<B>You are an Artificer. You are incredibly weak and fragile, but you are able to construct fortifications, use magic missile, repair allied constructs (by clicking on them), </B><I>and most important of all create new constructs</I><B> (Use your Artificer spell to summon a new construct shell and Summon Soulstone to create a new soulstone).</B>"
 						Z << "<B>You are still bound to serve your creator, follow their orders and help them complete their goals at all costs.</B>"

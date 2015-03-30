@@ -39,6 +39,7 @@
 	return
 
 /mob/living/carbon/human/RangedAttack(var/atom/A)
+	handle_ranged_equip(A)
 	if(!gloves && !mutations.len) return
 	if(gloves)
 		var/obj/item/clothing/gloves/G = gloves

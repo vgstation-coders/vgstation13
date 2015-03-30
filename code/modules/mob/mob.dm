@@ -1374,16 +1374,19 @@ var/list/slot_equipment_priority = list( \
 /mob/proc/Stun(amount)
 	if(status_flags & CANSTUN)
 		stunned = max(max(stunned,amount),0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
+		update_canmove()	//updates lying, canmove and icons
 	return
 
 /mob/proc/SetStunned(amount) //if you REALLY need to set stun to a set amount without the whole "can't go below current stunned"
 	if(status_flags & CANSTUN)
 		stunned = max(amount,0)
+		update_canmove()	//updates lying, canmove and icons
 	return
 
 /mob/proc/AdjustStunned(amount)
 	if(status_flags & CANSTUN)
 		stunned = max(stunned + amount,0)
+		update_canmove()	//updates lying, canmove and icons
 	return
 
 /mob/proc/Weaken(amount)

@@ -155,7 +155,7 @@
 	animals lunging, etc.
 */
 /mob/proc/RangedAttack(var/atom/A, var/params)
-	if(!mutations || !mutations.len) return
+	if(!mutations) return
 	if((M_LASER in mutations) && a_intent == I_HURT)
 		LaserEyes(A) // moved into a proc below
 	else if(M_TK in mutations)
@@ -250,6 +250,7 @@
 	Misc helpers
 
 	Laser Eyes: as the name implies, handles this since nothing else does currently
+	handle_ranged_equip: handles special ranged "attacks" possessed by clothing
 	face_atom: turns the mob towards what you clicked on
 */
 /mob/proc/LaserEyes(atom/A)
@@ -282,6 +283,16 @@
 		handle_regular_hud_updates()
 	else
 		src << "<span class='warning'>You're out of energy!  You need food!</span>"
+
+/mob/proc/handle_ranged_equip(atom/A)
+	if(isobj(A) && istype(A, /obj/screen)) return 1
+	return 0
+
+/mob/living/carbon/human/handle_ranged_equip(atom/A)
+	if(..()) return 1
+	for(var/obj/item/clothing/C in src.get_equipped_items())
+		if(C.rangedattack)
+			C.ranged_weapon(A, src)
 
 // Simple helper to face what you clicked on, in case it should be needed in more than one place
 /mob/proc/face_atom(var/atom/A)

@@ -61,7 +61,7 @@
 	// the world.time since the mob has been brigged, or -1 if not at all
 	var/brigged_since = -1
 
-		//put this here for easier tracking ingame
+	//put this here for easier tracking ingame
 	var/datum/money_account/initial_account
 	var/list/uplink_items_bought = list()
 	var/total_TC = 0
@@ -70,10 +70,8 @@
 	//fix scrying raging mages issue.
 	var/isScrying = 0
 
-
 /datum/mind/New(var/key)
 	src.key = key
-
 
 /datum/mind/proc/transfer_to(mob/living/new_character)
 	if(!istype(new_character))
@@ -135,6 +133,7 @@
 		"hasborer",
 		"revolution",
 		"cult",
+		"machinegod",
 		"wizard",
 		"changeling",
 		"vampire",
@@ -216,6 +215,24 @@
 		else
 			text += "head|officer|<b>EMPLOYEE</b>|<a href='?src=\ref[src];cult=cultist'>cultist</a>"
 		sections["cult"] = text
+
+		/** MACHINEGOD ***/
+		text = "clockcult"
+		if (ticker.mode.config_tag=="machinegod")
+			text = uppertext(text)
+		text = "<i><b>[text]</b></i>: "
+		if (assigned_role in command_positions)
+			text += "<b>HEAD</b>|officer|employee|clockcult"
+		else if (assigned_role in list("Security Officer", "Detective", "Warden"))
+			text += "head|<b>OFFICER</b>|employee|clockcult"
+		else if (src in ticker.mode.clockcult)
+
+			text += {"head|officer|<a href='?src=\ref[src];machinegod=clear'>employee</a>|<b>CLOCKCULT</b>
+				<br>Give <a href='?src=\ref[src];cult=slab'>slab</a>."}
+
+		else
+			text += "head|officer|<b>EMPLOYEE</b>|<a href='?src=\ref[src];machinegod=clockcult'>clockcult</a>"
+		sections["machinegod"] = text
 
 		/** WIZARD ***/
 		text = "wizard"
@@ -685,7 +702,7 @@
 			if("clear")
 				if(src in ticker.mode.cult)
 					ticker.mode.cult -= src
-					ticker.mode.update_cult_icons_removed(src)
+					ticker.mode.update_antag_icons_removed(src, ticker.mode.cult, "cult")
 					special_role = null
 					var/datum/game_mode/cult/cult = ticker.mode
 					if (istype(cult))
@@ -698,7 +715,7 @@
 			if("cultist")
 				if(!(src in ticker.mode.cult))
 					ticker.mode.cult += src
-					ticker.mode.update_cult_icons_added(src)
+					ticker.mode.update_antag_icons_added(src, ticker.mode.cult, "cult")
 					special_role = "Cultist"
 					current << "<span class='sinister'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>"
 					current << "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>"
@@ -738,7 +755,7 @@
 					special_role = null
 					current.spellremove(current, config.feature_object_spell_system? "object":"verb")
 					current << "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a wizard!</FONT></span>"
-					ticker.mode.update_wizard_icons_removed(src)
+					ticker.mode.update_antag_icons_removed(src, ticker.mode.wizards, "wizard")
 					log_admin("[key_name_admin(usr)] has de-wizard'ed [current].")
 			if("wizard")
 				if(!(src in ticker.mode.wizards))
@@ -746,7 +763,7 @@
 					special_role = "Wizard"
 					//ticker.mode.learn_basic_spells(current)
 					current << "<span class='danger'>You are the Space Wizard!</span>"
-					ticker.mode.update_wizard_icons_added(src)
+					ticker.mode.update_antag_icons_added(src, ticker.mode.wizards, "wizard")
 					log_admin("[key_name_admin(usr)] has wizard'ed [current].")
 			if("lair")
 				current.loc = pick(wizardstart)
@@ -757,7 +774,7 @@
 			if("autoobjectives")
 				ticker.mode.forge_wizard_objectives(src)
 				usr << "<span class='notice'>The objectives for wizard [key] have been generated. You can edit them and anounce manually.</span>"
-		ticker.mode.update_all_wizard_icons()
+		ticker.mode.update_all_antag_icons(ticker.mode.wizards, "wizard")
 
 	else if (href_list["changeling"])
 		switch(href_list["changeling"])
@@ -819,12 +836,35 @@
 				ticker.mode.forge_vampire_objectives(src)
 				usr << "<span class='notice'>The objectives for vampire [key] have been generated. You can edit them and announce manually.</span>"
 
+
+	else if (href_list["changeling"])
+		switch(href_list["changeling"])
+			if("clear")
+				if(src in ticker.mode.changelings)
+					ticker.mode.changelings -= src
+					special_role = null
+					current.remove_changeling_powers()
+					current.verbs -= /datum/changeling/proc/EvolutionMenu
+					if(changeling)	del(changeling)
+					current << "<FONT color='red' size = 3><B>You grow weak and lose your powers! You are no longer a changeling and are stuck in your current form!</B></FONT>"
+					log_admin("[key_name_admin(usr)] has de-changeling'ed [current].")
+			if("changeling")
+				if(!(src in ticker.mode.changelings))
+					ticker.mode.changelings += src
+					ticker.mode.grant_changeling_powers(current)
+					special_role = "Changeling"
+					current << "<B><font color='red'>Your powers are awoken. A flash of memory returns to us...we are a changeling!</font></B>"
+					log_admin("[key_name_admin(usr)] has changeling'ed [current].")
+			if("autoobjectives")
+				ticker.mode.forge_changeling_objectives(src)
+				usr << "<span class='notice'>The objectives for changeling [key] have been generated. You can edit them and anounce manually.</span>"
+
 	else if (href_list["nuclear"])
 		switch(href_list["nuclear"])
 			if("clear")
 				if(src in ticker.mode.syndicates)
 					ticker.mode.syndicates -= src
-					ticker.mode.update_synd_icons_removed(src)
+					ticker.mode.update_antag_icons_removed(src, ticker.mode.syndicates, "synd")
 					special_role = null
 					for (var/datum/objective/nuclear/O in objectives)
 						objectives-=O
@@ -833,7 +873,7 @@
 			if("nuclear")
 				if(!(src in ticker.mode.syndicates))
 					ticker.mode.syndicates += src
-					ticker.mode.update_synd_icons_added(src)
+					ticker.mode.update_antag_icons_added(src, ticker.mode.syndicates, "synd")
 					if (ticker.mode.syndicates.len==1)
 						ticker.mode.prepare_syndicate_leader(src)
 					else
@@ -1159,7 +1199,7 @@ proc/clear_memory(var/silent = 1)
 /datum/mind/proc/make_Nuke()
 	if(!(src in ticker.mode.syndicates))
 		ticker.mode.syndicates += src
-		ticker.mode.update_synd_icons_added(src)
+		ticker.mode.update_antag_icons_added(src, ticker.mode.syndicates, "synd")
 		if (ticker.mode.syndicates.len==1)
 			ticker.mode.prepare_syndicate_leader(src)
 		else
@@ -1199,7 +1239,7 @@ proc/clear_memory(var/silent = 1)
 		special_role = "Wizard"
 		assigned_role = "MODE"
 		//ticker.mode.learn_basic_spells(current)
-		ticker.mode.update_wizard_icons_added(src)
+		ticker.mode.update_antag_icons_added(src, ticker.mode.wizards, "wizard")
 		if(!wizardstart.len)
 			current.loc = pick(latejoin)
 			current << "HOT INSERTION, GO GO GO"
@@ -1212,13 +1252,13 @@ proc/clear_memory(var/silent = 1)
 		ticker.mode.name_wizard(current)
 		ticker.mode.forge_wizard_objectives(src)
 		ticker.mode.greet_wizard(src)
-		ticker.mode.update_all_wizard_icons()
+		ticker.mode.update_all_antag_icons(ticker.mode.wizards, "wizard")
 
 
 /datum/mind/proc/make_Cultist()
 	if(!(src in ticker.mode.cult))
 		ticker.mode.cult += src
-		ticker.mode.update_cult_icons_added(src)
+		ticker.mode.update_antag_icons_added(src, ticker.mode.cult, "cult")
 		special_role = "Cultist"
 		current << "<span class='sinister'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>"
 		current << "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>"
@@ -1252,6 +1292,40 @@ proc/clear_memory(var/silent = 1)
 
 	if (!ticker.mode.equip_cultist(current))
 		H << "Spawning an amulet from your Master failed."
+
+/datum/mind/proc/make_Clockcult()
+	if(!(src in ticker.mode.clockcult))
+		ticker.mode.clockcult += src
+		ticker.mode.update_antag_icons_added(src, ticker.mode.clockcult, "clockcult")
+		special_role = "Machinegod"
+		current << "<span class='sinister'>Your mind is racing! Your body feels incredibly light! Your world glows a brilliant yellow! All at once everything connects to you. The clockwork justiciar lies in exile, derelict and forgotten in an unseen realm.</span>"
+		current << "<span class='sinister'>Assist your new compatriots in their righteous efforts. Their goal is yours, and yours is theirs. You serve the Justiciar above all else. Bring Him back.</span>"
+		var/datum/game_mode/machinegod/machinegod = ticker.mode
+		if (istype(machinegod))
+			machinegod.memoize_clockcult_objectives(src)
+		else
+			var/explanation = "Summon Ratvar by constructing the Ark. Sacrifice non-cultists and amass Components until you have the means to do so."
+			current << "<B>Objective #1</B>: [explanation]"
+			current.memory += "<B>Objective #1</B>: [explanation]<BR>"
+
+	/*var/mob/living/carbon/human/H = current
+	if (istype(H))
+		var/obj/item/weapon/clockslab/C = new(H)
+
+		var/list/slots = list (
+			"backpack" = slot_in_backpack,
+			"left pocket" = slot_l_store,
+			"right pocket" = slot_r_store,
+			"left hand" = slot_l_hand,
+			"right hand" = slot_r_hand,
+		)
+		var/where = H.equip_in_one_of_slots(C, slots)
+		if (!where)
+		else
+			H << "A slab, your covenant with your new master, appears in your [where]."
+
+	if (!ticker.mode.equip_clockcult(current))
+		H << "Spawning an amulet from your Master failed."*/
 
 /datum/mind/proc/make_Rev()
 	if (ticker.mode.head_revolutionaries.len>0)
