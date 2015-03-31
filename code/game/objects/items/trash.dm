@@ -57,7 +57,7 @@
 
 /obj/item/trash/plate
 	name = "plate"
-	desc = "The disgruntled's consumer best weapon"
+	desc = "The disgruntled consumer's best weapon"
 	icon_state = "plate"
 	throwforce = 15 //Hits really fucking hard, aerodymanics and stuff
 	throw_speed = 6 //It's fast too, blame flying saucers
