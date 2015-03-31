@@ -1,78 +1,89 @@
-//Items labled as 'trash' for the trash bag.
-//TODO: Make this an item var or something...
+//Litter, and generally things that aren't particularly useful in any fashion
+//Used to be exclusive to items that can be put in the trash bag, but now everything is trash to the trash bag
 
 //Added by Jack Rost
 /obj/item/trash
 	icon = 'icons/obj/trash.dmi'
 	w_class = 1.0
 	desc = "This is rubbish."
-	w_type=NOT_RECYCLABLE
-	autoignition_temperature = AUTOIGNITION_PAPER
+	w_type = NOT_RECYCLABLE
+	autoignition_temperature = AUTOIGNITION_PAPER //This is dumb, but it's better than nothing
 	fire_fuel = 1
+	attack_verb = list("slapped", "whacked", "tapped")
 
 /obj/item/trash/bustanuts
-	name = "Busta-Nuts"
+	name = "\improper Busta-Nuts"
 	icon_state = "busta_nut"
 
 /obj/item/trash/raisins
-	name = "4no raisins"
+	name = "\improper 4no raisins"
 	icon_state= "4no_raisins"
 
 /obj/item/trash/candy
-	name = "Candy"
+	name = "candy"
 	icon_state= "candy"
 
 /obj/item/trash/cheesie
-	name = "Cheesie honkers"
+	name = "\improper Cheesie Honkers"
 	icon_state = "cheesie_honkers"
 
 /obj/item/trash/chips
-	name = "Chips"
+	name = "chips"
 	icon_state = "chips"
 
 /obj/item/trash/popcorn
-	name = "Popcorn"
+	name = "popcorn"
 	icon_state = "popcorn"
 
 /obj/item/trash/sosjerky
-	name = "Scaredy's Private Reserve Beef Jerky"
+	name = "\improper Scaredy's Private Reserve Beef Jerky"
 	icon_state = "sosjerky"
 
 /obj/item/trash/syndi_cakes
-	name = "Syndi cakes"
+	name = "\improper Syndicakes"
 	icon_state = "syndi_cakes"
 
 /obj/item/trash/discountchocolate
-	name = "Discount Dan's Chocolate Bar"
+	name = "\improper Discount Dan's Chocolate Bar"
 	icon_state = "danbar"
 
 /obj/item/trash/danitos
-	name = "Danitos"
+	name = "\improper Danitos"
 	icon_state = "danitos"
 
 /obj/item/trash/waffles
-	name = "Waffles"
+	name = "waffles"
 	icon_state = "waffles"
 
 /obj/item/trash/plate
-	name = "Plate"
+	name = "plate"
+	desc = "The disgruntled's consumer best weapon"
 	icon_state = "plate"
+	throwforce = 15 //Hits really fucking hard, aerodymanics and stuff
+	throw_speed = 6 //It's fast too, blame flying saucers
+	attack_verb = list("bludgeoned", "whacked", "slashed")
 
 /obj/item/trash/snack_bowl
-	name = "Snack bowl"
+	name = "snack bowl"
 	icon_state	= "snack_bowl"
 
 /obj/item/trash/pistachios
-	name = "Pistachios pack"
+	name = "pistachios pack"
 	icon_state = "pistachios_pack"
 
 /obj/item/trash/semki
-	name = "Semki pack"
+	name = "semki pack"
 	icon_state = "semki_pack"
 
 /obj/item/trash/tray
-	name = "Tray"
+	name = "tray"
+	desc = "When a large ham isn't enough"
 	icon_state = "tray"
+	force = 10 //WAM
+	throwforce = 7 //DOUBLE WAM
+	throw_speed = 3
+	throw_range = 4 //Good luck sending it anywhere fast
+	attack_verb = list("slammed")
 
 /obj/item/trash/candle
 	name = "candle"
@@ -84,8 +95,24 @@
 	icon_state = "liquidfood"
 
 /obj/item/trash/chicken_bucket
-	name = "Chicken bucket"
+	name = "chicken bucket"
 	icon_state = "kfc_bucket"
 
-/obj/item/trash/attack(mob/M as mob, mob/living/user as mob)
-	return
+//Special behavior below if warranted
+
+//Is someone being a cunt at the table again ?
+/obj/item/trash/plate/attack(mob/M as mob, mob/living/user as mob)
+	user.delayNextAttack(10)
+	user.visible_message("<span class='danger'>[user] shatters \the [src] on [M]'s head</span>", "<span class='warning'>You shatter \the [src] on [M]'s head</span>")
+	if(isliving(M))
+		var/mob/living/L = M
+		L.apply_damage(20, BRUTE, "head")
+	playsound(get_turf(src), "shatter", 70, 1)
+	if(ishuman(M))
+		var/mob/living/carbon/H = M
+		H.Stun(3)
+		H.emote("scream",,, 1)
+	for(var/mob/O in viewers(M, null))
+		shake_camera(O, 2, 3)
+	user.drop_item(src)
+	returnToPool()
