@@ -1,0 +1,5 @@
+author: Dylanstrategie
+delete-after: True
+changes:
+  - tweak: All branded trash is now improper, and you can now attack with them (though mostly for no damage)
+  - rscadd: You can now shatter plates on people and throw them for serious damage. Trays also do damage in both cases
