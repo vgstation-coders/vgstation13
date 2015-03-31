@@ -114,5 +114,5 @@
 		H.emote("scream",,, 1)
 	for(var/mob/O in viewers(M, null))
 		shake_camera(O, 2, 3)
-	user.drop_item(src)
+	user.drop_item(get_turf(src))
 	returnToPool()
