@@ -1,3 +1,7 @@
+//Needed for deconstruction, see buildandrepair.dm
+#define COMPUTERWIRED 3
+#define COMPUTERSCREENUNSECURED 4
+
 /obj/machinery/computer
 	name = "computer"
 	icon = 'icons/obj/computer.dmi'
@@ -38,9 +42,9 @@
 
 
 /obj/machinery/computer/emp_act(severity)
-	if(prob(20/severity)) set_broken()
+	if(prob(20/severity))
+		set_broken()
 	..()
-
 
 /obj/machinery/computer/ex_act(severity)
 	switch(severity)
@@ -48,15 +52,15 @@
 			qdel(src)
 			return
 		if(2.0)
-			if (prob(25))
+			if(prob(25))
 				qdel(src)
 				return
-			if (prob(50))
+			if(prob(50))
 				for(var/x in verbs)
 					verbs -= x
 				set_broken()
 		if(3.0)
-			if (prob(25))
+			if(prob(25))
 				for(var/x in verbs)
 					verbs -= x
 				set_broken()
@@ -70,7 +74,7 @@
 
 
 /obj/machinery/computer/blob_act()
-	if (prob(75))
+	if(prob(75))
 		for(var/x in verbs)
 			verbs -= x
 		set_broken()
@@ -79,16 +83,14 @@
 /obj/machinery/computer/update_icon()
 	..()
 	icon_state = initial(icon_state)
-	// Broken
+	//Broken
 	if(stat & BROKEN)
 		icon_state += "b"
 
-	// Powered
+	//Powered
 	else if(stat & NOPOWER)
 		icon_state = initial(icon_state)
 		icon_state += "0"
-
-
 
 /obj/machinery/computer/power_change()
 	..()
@@ -104,26 +106,28 @@
 	update_icon()
 
 /obj/machinery/computer/togglePanelOpen(var/obj/toggleitem, mob/user)
-	if(!circuit) //we can't disassemble with no circuit, so add some fucking circuits if you want disassembly
+	if(!circuit) //We can't disassemble with no circuit, if this happens you need to add a valid circuit to the computer code
 		return
 	playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-	user.visible_message(	"[user] begins to unscrew \the [src]'s monitor.",
-							"You begin to unscrew the monitor...")
+	user.visible_message("<span class='warning'>[user] starts disconnecting \the [src]'s monitor.</span>", \
+	"<span class='notice'>You start disconnecting \the [src]'s monitor.</span>")
 	if(do_after(user, 20))
-		var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-		var/obj/item/weapon/circuitboard/M = new circuit( A )
+		var/obj/structure/computerframe/A = new /obj/structure/computerframe(src.loc)
+		var/obj/item/weapon/circuitboard/M = new circuit(A)
 		A.circuit = M
 		A.anchored = 1
-		for (var/obj/C in src)
+		for(var/obj/C in src)
 			C.loc = src.loc
-		if (src.stat & BROKEN)
-			user << "<span class='notice'>\icon[src] The broken glass falls out.</span>"
+		if(stat & BROKEN)
+			user.visible_message("<span class='warning'>[user] clears up \the [src]'s broken monitor.</span>", \
+			"<span class='notice'>You clear up \the [src]'s broken monitor.</span>")
 			getFromPool(/obj/item/weapon/shard, loc)
-			A.state = 3
+			A.state = COMPUTERWIRED
 			A.icon_state = "3"
 		else
-			user << "<span class='notice'>\icon[src] You disconnect the monitor.</span>"
-			A.state = 4
+			user.visible_message("<span class='warning'>[user] disconnects \the [src]'s monitor.</span>", \
+			"<span class='notice'>You disconnect \the [src]'s monitor.</span>")
+			A.state = COMPUTERSCREENUNSECURED
 			A.icon_state = "4"
 		Destroy(src)
 		return 1
@@ -135,3 +139,6 @@
 	else
 		src.attack_hand(user)
 	return
+
+#undef COMPUTERWIRED
+#undef COMPUTERSCREENUNSECURED

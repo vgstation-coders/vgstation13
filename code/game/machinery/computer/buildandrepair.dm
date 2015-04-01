@@ -1,5 +1,11 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
+#define COMPUTERLOOSE 0
+#define COMPUTERSECURED 1
+#define COMPUTERCIRCUITSECURED 2 //Circuit added and secured on the same step
+#define COMPUTERWIRED 3
+#define COMPUTERSCREENUNSECURED 4
+
 /obj/structure/computerframe
 	density = 1
 	anchored = 0
@@ -8,7 +14,6 @@
 	icon_state = "0"
 	var/state = 0
 	var/obj/item/weapon/circuitboard/circuit = null
-//	weight = 1.0E8
 
 /obj/item/weapon/circuitboard
 	density = 0
@@ -19,7 +24,7 @@
 	icon_state = "id_mod"
 	item_state = "circuitboard"
 	origin_tech = "programming=2"
-	g_amt=2000 // Recycle glass only
+	g_amt = 2000 // Recycle glass only
 	w_type = RECYK_ELECTRONIC
 
 	var/id_tag = null
@@ -266,128 +271,149 @@
 			opposite_catastasis = "BROAD"
 			catastasis = "STANDARD"
 
-		switch( alert("Current receiver spectrum is set to: [catastasis]","Multitool-Circuitboard interface","Switch to [opposite_catastasis]","Cancel") )
-		//switch( alert("Current receiver spectrum is set to: " {(src.contraband_enabled) ? ("BROAD") : ("STANDARD")} , "Multitool-Circuitboard interface" , "Switch to " {(src.contraband_enabled) ? ("STANDARD") : ("BROAD")}, "Cancel") )
-			if("Switch to STANDARD","Switch to BROAD")
-				src.contraband_enabled = !src.contraband_enabled
+		switch(alert("Current receiver spectrum is set to: [catastasis]","Multitool-Circuitboard interface", "Switch to [opposite_catastasis]","Cancel"))
 
+			if("Switch to STANDARD", "Switch to BROAD")
+				contraband_enabled = !contraband_enabled
 			if("Cancel")
 				return
-			else
-				user << "DERP! BUG! Report this (And what you were doing to cause it) to Agouri"
 	return
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
-		if(0)
+		if(COMPUTERLOOSE)
 			if(istype(P, /obj/item/weapon/wrench))
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				if(do_after(user, 5))
-					user << "<span class='notice'>You wrench the frame into place.</span>"
-					src.anchored = 1
-					src.state = 1
+				user.visible_message("<span class='notice'>[user] starts anchoring \the [src].</span>", \
+				"<span class='notice'>You start anchoring \the [src].</span>")
+				if(do_after(user, 20) && COMPUTERLOOSE)
+					user.visible_message("<span class='notice'>[user] anchors \the [src].</span>", \
+					"<span class='notice'>You anchor \the [src].</span>")
+					anchored = 1
+					state = COMPUTERSECURED
 				return 1
 			if(istype(P, /obj/item/weapon/weldingtool))
 				var/obj/item/weapon/weldingtool/WT = P
-				if(!WT.remove_fuel(0, user))
-					user << "The welding tool must be on to complete this task."
-					return 1
-				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-				if(do_after(user, 10))
-					if(!src || !WT.isOn()) return
-					user << "<span class='notice'>You deconstruct the frame.</span>"
-					//new /obj/item/stack/sheet/metal( src.loc, 5 )
-					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, src.loc)
-					M.amount = 5
-					qdel(src)
+				if(WT.remove_fuel(0))
+					playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+					user.visible_message("<span class='warning'>[user] starts dismantling \the [src].</span>", \
+					"<span class='notice'>You start dismantling \the [src].</span>")
+					if(do_after(user, 40))
+						user.visible_message("<span class='warning'>[user] dismantles \the [src].</span>", \
+						"<span class='notice'>You dismantle \the [src].</span>")
+						getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
+						returnToPool()
+				else
+					user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
 				return 1
-		if(1)
+		if(COMPUTERSECURED)
 			if(istype(P, /obj/item/weapon/wrench))
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				if(do_after(user, 20))
-					user << "<span class='notice'>You unfasten the frame.</span>"
-					src.anchored = 0
-					src.state = 0
+				user.visible_message("<span class='warning'>[user] starts unanchoring \the [src].</span>", \
+				"<span class='notice'>You start unanchoring \the [src].</span>")
+				if(do_after(user, 20) && COMPUTERSECURED)
+					user.visible_message("<span class='warning'>[user] unanchors \the [src].</span>", \
+					"<span class='notice'>You unanchor \the [src].</span>")
+					anchored = 0
+					state = COMPUTERLOOSE
 				return 1
 			if(istype(P, /obj/item/weapon/circuitboard) && !circuit)
 				var/obj/item/weapon/circuitboard/B = P
 				if(B.board_type == "computer")
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-					user << "<span class='notice'>You place the circuit board inside the frame.</span>"
-					src.icon_state = "1"
-					src.circuit = P
+					user.visible_message("<span class='notice'>[user] adds \a [B]  to \the [src].</span>", \
+					"<span class='notice'>You add \a [B] to \the [src].</span>")
+					icon_state = "1"
 					user.drop_item(src)
+					circuit = P
 				else
 					user << "<span class='warning'>This frame does not accept circuit boards of this type!</span>"
 				return 1
 			if(istype(P, /obj/item/weapon/screwdriver) && circuit)
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-				user << "<span class='notice'>You screw the circuit board into place.</span>"
-				src.state = 2
-				src.icon_state = "2"
+				user.visible_message("<span class='notice'>[user] secures \the [src]'s circuit board.</span>", \
+				"<span class='notice'>You secure \the [src]'s circuit board.</span>")
+				state = COMPUTERCIRCUITSECURED
+				icon_state = "2"
 				return 1
 			if(istype(P, /obj/item/weapon/crowbar) && circuit)
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				user << "<span class='notice'>You remove the circuit board.</span>"
-				src.state = 1
-				src.icon_state = "0"
+				user.visible_message("<span class='warning'>[user] removes \the [src]'s circuit board.</span>", \
+				"<span class='notice'>You remove \the [src]'s circuit board.</span>")
+				state = COMPUTERSECURED
+				icon_state = "0"
 				circuit.loc = src.loc
-				src.circuit = null
+				circuit = null
 				return 1
-		if(2)
+		if(COMPUTERCIRCUITSECURED)
 			if(istype(P, /obj/item/weapon/screwdriver) && circuit)
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-				user << "<span class='notice'>You unfasten the circuit board.</span>"
-				src.state = 1
-				src.icon_state = "1"
+				user.visible_message("<span class='warning'>[user] unsecures \the [src]'s circuit board.</span>", \
+				"<span class='notice'>You unsecure \the [src]'s circuit board.</span>")
+				state = COMPUTERSECURED
+				icon_state = "1"
 				return 1
 			if(istype(P, /obj/item/stack/cable_coil))
 				if(P:amount >= 5)
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-					if(do_after(user, 20))
+					if(do_after(user, 20) && COMPUTERCIRCUITSECURED)
 						if(P)
 							P:amount -= 5
-							if(!P:amount) del(P)
-							user << "<span class='notice'>You add cables to the frame.</span>"
-							src.state = 3
-							src.icon_state = "3"
+							if(!P:amount)
+								del(P)
+							user.visible_message("<span class='notice'>[user] adds wiring to \the [src].</span>", \
+							"<span class='notice'>You add wiring to \the [src].</span>")
+							state = COMPUTERWIRED
+							icon_state = "3"
 				return 1
-		if(3)
+		if(COMPUTERWIRED)
 			if(istype(P, /obj/item/weapon/wirecutters))
 				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
-				user << "<span class='notice'>You remove the cables.</span>"
-				src.state = 2
-				src.icon_state = "2"
-				var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( src.loc )
+				user.visible_message("<span class='warning'>[user] removes \the [src]'s wiring.</span>", \
+				"<span class='notice'>You remove \the [src]'s wiring.</span>")
+				state = COMPUTERCIRCUITSECURED
+				icon_state = "2"
+				var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil(get_turf(src))
 				A.amount = 5
 				return 1
 
 			if(istype(P, /obj/item/stack/sheet/glass/glass))
 				if(P:amount >= 2)
+					user.visible_message("<span class='notice'>[user] starts adding \a [P] to \the [src].</span>", \
+					"<span class='notice'>You start adding \a [P] to \the [src].</span>")
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-					if(do_after(user, 20))
+					if(do_after(user, 20) && COMPUTERWIRED)
 						if(P)
 							P:use(2)
-							user << "<span class='notice'>You put in the glass panel.</span>"
-							src.state = 4
-							src.icon_state = "4"
+							user.visible_message("<span class='notice'>[user] adds \a [P] to \the [src].</span>", \
+							"<span class='notice'>You add \a [P] to \the [src].</span>")
+							state = COMPUTERSCREENUNSECURED
+							icon_state = "4"
 				return 1
-		if(4)
+		if(COMPUTERSCREENUNSECURED)
 			if(istype(P, /obj/item/weapon/crowbar))
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				user << "<span class='notice'>You remove the glass panel.</span>"
-				src.state = 3
-				src.icon_state = "3"
-				new /obj/item/stack/sheet/glass/glass( src.loc, 2 )
+				user.visible_message("<span class='warning'>[user] removes \the [src]'s monitor.</span>", \
+				"<span class='notice'>You remove \the [src]'s monitor.</span>")
+				state = COMPUTERWIRED
+				icon_state = "3"
+				new /obj/item/stack/sheet/glass/glass(src.loc, 2)
 				return 1
 			if(istype(P, /obj/item/weapon/screwdriver))
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-				user << "<span class='notice'>You connect the monitor.</span>"
-				var/B = new src.circuit.build_path ( src.loc )
-				if(circuit.powernet) B:powernet = circuit.powernet
-				if(circuit.id_tag) B:id_tag = circuit.id_tag
-				if(circuit.records) B:records = circuit.records
-				if(circuit.frequency) B:frequency = circuit.frequency
+				user.visible_message("<span class='notice'>[user] connects \the [src]'s monitor.</span>", \
+				"<span class='notice'>You connect \the [src]'s monitor.</span>")
+
+				var/B = new circuit.build_path(src.loc)
+				//Snowflake dump
+				if(circuit.powernet)
+					B:powernet = circuit.powernet
+				if(circuit.id_tag)
+					B:id_tag = circuit.id_tag
+				if(circuit.records)
+					B:records = circuit.records
+				if(circuit.frequency)
+					B:frequency = circuit.frequency
 				if(istype(circuit,/obj/item/weapon/circuitboard/supplycomp))
 					var/obj/machinery/computer/supplycomp/SC = B
 					var/obj/item/weapon/circuitboard/supplycomp/C = circuit
@@ -395,3 +421,9 @@
 				del(src)
 				return 1
 	return 0
+
+#undef COMPUTERLOOSE
+#undef COMPUTERSECURED
+#undef COMPUTERCIRCUITSECURED
+#undef COMPUTERWIRED
+#undef COMPUTERSCREENUNSECURED
