@@ -89,7 +89,7 @@ rcd light flash thingy on matter drain
 		else src << "Out of uses."
 
 /datum/AI_Module/small/overload_machine
-	module_name = "Machine overload"
+	module_name = "Machine Overload"
 	mod_pick_name = "overload"
 	description = "Overloads an electrical machine, causing a small explosion. 2 uses."
 	uses = 2
@@ -99,18 +99,18 @@ rcd light flash thingy on matter drain
 
 /mob/living/silicon/ai/proc/overload_machine(obj/machinery/M as obj in world)
 	set name = "Overload Machine"
-	set category = "Malfunction"
-	if (istype(M, /obj/machinery))
+	if(istype(M, /obj/machinery))
 		for(var/datum/AI_Module/small/overload_machine/overload in current_modules)
 			if(overload.uses > 0)
-				overload.uses --
-				for(var/mob/V in hearers(M, null))
-					V.show_message("\blue You hear a loud electrical buzzing sound!", 2)
+				overload.uses--
+				visible_message("<span class='warning'>\The [M] starts buzzing and sparkling</span>")
 				spawn(50)
 					explosion(get_turf(M), -1, 1, 2, 3) //C4 Radius + 1 Dest for the machine
 					qdel(M)
-			else src << "Out of uses."
-	else src << "That's not a machine."
+			else
+				src << "<span class='warning'>Machine Overload uses exhausted.</span>"
+	else
+		src << "<span class='warning'>This isn't a machine.</span>"
 
 
 /datum/AI_Module/large/place_cyborg_transformer
