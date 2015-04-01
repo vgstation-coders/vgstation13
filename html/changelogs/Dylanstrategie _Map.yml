@@ -1,0 +1,6 @@
+author: Dylanstrategie
+delete-after: True
+changes:
+  - rscadd : Add lightswitch to Kitchen and kitchen sink to Bar Counter
+  - tweak: Move Bar's lightswitch to Bartender's backroom
+  - tweak: Change layout of Mech Bay to be more of an actual bay for Mechs and less of a maintenance closet with a window
