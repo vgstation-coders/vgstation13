@@ -59,7 +59,7 @@
 	name = "plate"
 	desc = "The disgruntled consumer's best weapon"
 	icon_state = "plate"
-	throwforce = 15 //Hits really fucking hard, aerodymanics and stuff
+	throwforce = 8 //Hits really fucking hard, aerodymanics and stuff
 	throw_speed = 6 //It's fast too, blame flying saucers
 	attack_verb = list("bludgeoned", "whacked", "slashed")
 
@@ -80,7 +80,7 @@
 	desc = "When a large ham isn't enough"
 	icon_state = "tray"
 	force = 10 //WAM
-	throwforce = 7 //DOUBLE WAM
+	throwforce = 5 //DOUBLE WAM
 	throw_speed = 3
 	throw_range = 4 //Good luck sending it anywhere fast
 	attack_verb = list("slammed")
@@ -106,7 +106,7 @@
 	user.visible_message("<span class='danger'>[user] shatters \the [src] on [M]'s head</span>", "<span class='warning'>You shatter \the [src] on [M]'s head</span>")
 	if(isliving(M))
 		var/mob/living/L = M
-		L.apply_damage(20, BRUTE, "head")
+		L.apply_damage(15, BRUTE, "head")
 	playsound(get_turf(src), "shatter", 70, 1)
 	if(ishuman(M))
 		var/mob/living/carbon/H = M
