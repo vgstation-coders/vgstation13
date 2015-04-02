@@ -1,0 +1,4 @@
+author: Dylanstrategie
+delete-after: True
+changes:
+  - tweak: Remove Overload Machine verb from Malfunction tab. This verb should only be castable via right-click now
