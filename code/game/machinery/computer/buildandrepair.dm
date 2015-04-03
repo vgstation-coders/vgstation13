@@ -302,7 +302,7 @@
 						user.visible_message("<span class='warning'>[user] dismantles \the [src].</span>", \
 						"<span class='notice'>You dismantle \the [src].</span>")
 						getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
-						returnToPool()
+						returnToPool(src)
 				else
 					user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
 				return 1
