@@ -217,14 +217,18 @@
 //		return ..()
 */
 
-/obj/mecha/proc/click_action(atom/target,mob/user)
-	if(!src.occupant || src.occupant != user ) return
-	if(user.stat) return
+/obj/mecha/proc/click_action(atom/target, mob/user)
+	if(!src.occupant || src.occupant != user )
+		return
+	if(user.stat)
+		return
 	if(state)
 		occupant_message("<font color='red'>Maintenance protocols in effect</font>")
 		return
-	if(!get_charge()) return
-	if(src == target) return
+	if(!get_charge())
+		return
+	if(src == target)
+		return
 	var/dir_to_target = get_dir(src,target)
 	if(dir_to_target && !(dir_to_target & src.dir))//wrong direction
 		return
@@ -232,6 +236,9 @@
 		target = safepick(view(3,target))
 		if(!target)
 			return
+	if(istype(target, /obj/machinery/door_control))
+		var/obj/machinery/door_control/button = target
+		return button.attack_hand(user)
 	if(get_dist(src, target)>1)
 		if(selected && selected.is_ranged())
 			selected.action(target)
