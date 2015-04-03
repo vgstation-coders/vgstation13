@@ -112,7 +112,7 @@
 		var/mob/living/carbon/H = M
 		H.Stun(3)
 		H.emote("scream",,, 1)
-	for(var/mob/O in viewers(M, null))
+	for(var/mob/O in viewers(null, M))
 		shake_camera(O, 2, 3)
 	user.drop_item(get_turf(src))
-	returnToPool()
+	returnToPool(src)
