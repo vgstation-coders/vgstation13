@@ -10,6 +10,8 @@
 	idle_power_usage = 1000
 	var/list/obj/item/commstone/allstones = list()
 	var/remaining = 6
+	ghost_read = 0
+	machine_flags = WRENCHMOVE
 
 /obj/machinery/communication/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/commstone))
