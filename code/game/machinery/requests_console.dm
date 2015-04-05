@@ -249,6 +249,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		for(var/mob/M in player_list)
 			if(!istype(M,/mob/new_player) && M.client)
 				M << "<b><font size = 3><font color = red>[department] announcement:</font color> [message]</font size></b>"
+				world << sound('sound/misc/notice.ogg')
 		announceAuth = 0
 		message = ""
 		screen = 0
