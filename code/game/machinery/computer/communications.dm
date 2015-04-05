@@ -143,8 +143,8 @@ var/shuttle_call/shuttle_calls[0]
 				for(var/mob/M in player_list)
 					if(!istype(M, /mob/new_player) && M.client)
 						var/turf/mobloc = get_turf(M)
-							if(mobloc.z == commsloc.z)
-							M << sound('sound/misc/announce.ogg')
+						if(mobloc.z == commsloc.z)
+						M << sound('sound/misc/announce.ogg')
 							message_admins("[key_name_admin(usr)] has made a captain announcement.", 1)
 							message_cooldown = 1
 							spawn(600)//One minute cooldown
