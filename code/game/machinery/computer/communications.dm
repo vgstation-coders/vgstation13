@@ -139,12 +139,12 @@ var/shuttle_call/shuttle_calls[0]
 					return
 				captain_announce(input)//This should really tell who is, IE HoP, CE, HoS, RD, Captain
 				log_say("[key_name(usr)] (@[usr.x],[usr.y],[usr.z]) has made a captain announcement: [input]")
-				var/turf/commsloc = get_turf(src)
-				for(var/mob/M in player_list)
-					if(!istype(M, /mob/new_player) && M.client)
-						var/turf/mobloc = get_turf(M)
-						if(mobloc.z == commsloc.z)
-						M << sound('sound/misc/announce.ogg')
+				//var/turf/commsloc = get_turf(src)
+				//for(var/mob/M in player_list)
+					//if(!istype(M, /mob/new_player) && M.client)
+					//var/turf/mobloc = get_turf(M)
+						//if(mobloc.z == commsloc.z)
+						//M << sound('sound/misc/announce.ogg')
 							message_admins("[key_name_admin(usr)] has made a captain announcement.", 1)
 							message_cooldown = 1
 							spawn(600)//One minute cooldown
