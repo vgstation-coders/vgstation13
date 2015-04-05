@@ -145,10 +145,10 @@ var/shuttle_call/shuttle_calls[0]
 				message_cooldown = 0
 				var/turf/commsloc = get_turf(src)
  				for(var/mob/M in player_list)
- 					if(!istype(M, /mob/new_player) && M.client)
- 						var/turf/mobloc = get_turf(M)
-							if(mobloc.z == commsloc.z)
-							M << sound('sound/misc/announce.ogg')
+ 				if(!istype(M, /mob/new_player) && M.client)
+ 				var/turf/mobloc = get_turf(M)
+				if(mobloc.z == commsloc.z)
+					M << sound('sound/misc/announce.ogg')
 				
 
 		if("emergency_screen")
