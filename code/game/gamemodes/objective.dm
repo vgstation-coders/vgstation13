@@ -7,7 +7,7 @@ var/list/potential_theft_objectives=list(
 	"salvage" = typesof(/datum/theft_objective/number/salvage) - /datum/theft_objective/number/salvage
 )
 
-datum/objective
+/datum/objective
 	var/datum/mind/owner = null			//Who owns the objective.
 	var/explanation_text = "Nothing"	//What that person is supposed to do.
 	var/datum/mind/target = null		//If they are focused on a particular person.
@@ -15,29 +15,40 @@ datum/objective
 	var/completed = 0					//currently only used for custom objectives.
 	var/blocked = 0                     // Universe fucked, you lost.
 
-	New(var/text)
-		if(text)
-			explanation_text = text
+/datum/objective/New(var/text)
+	if(text)
+		explanation_text = text
 
-	proc/check_completion()
-		return completed
+/datum/objective/proc/check_completion()
+	return completed
 
-	proc/find_target()
-		var/list/possible_targets = list()
-		for(var/datum/mind/possible_target in ticker.minds)
-			if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.stat != 2))
-				possible_targets += possible_target
-		if(possible_targets.len > 0)
+/datum/objective/proc/find_target()
+	if (isnull(target))
+		var/list/possible_targets = new/list()
+
+		for (var/datum/mind/possible_target in ticker.minds)
+			if (possible_target != owner)
+				if (ishuman(possible_target.current))
+					var/mob/living/carbon/human/target_human = possible_target.current
+
+					if (target_human.stat != DEAD)
+						possible_targets += possible_target
+
+		if (possible_targets.len > 0)
 			target = pick(possible_targets)
 
-
-	proc/find_target_by_role(role, role_type=0)//Option sets either to check assigned role or special role. Default to assigned.
-		for(var/datum/mind/possible_target in ticker.minds)
-			if((possible_target != owner) && ishuman(possible_target.current) && ((role_type ? possible_target.special_role : possible_target.assigned_role) == role) )
-				target = possible_target
-				break
-
-
+/**
+ * Option sets either to check assigned role or special role.
+ * Default to assigned.
+ */
+/datum/objective/proc/find_target_by_role(role, role_type = 0)
+		if (isnull(target))
+			for (var/datum/mind/possible_target in ticker.minds)
+				if (possible_target != owner)
+					if (ishuman(possible_target.current))
+						if ((role_type ? possible_target.special_role : possible_target.assigned_role) == role)
+							target = possible_target
+							break
 
 datum/objective/assassinate
 	find_target()

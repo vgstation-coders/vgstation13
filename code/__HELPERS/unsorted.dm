@@ -210,7 +210,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		var/search_pda = TRUE
 
 		for (var/object in get_contents_in_object(src, /atom/movable))
-			if (search_id && istype(A, /obj/item/weapon/card/id))
+			if (search_id && istype(object, /obj/item/weapon/card/id))
 				var/obj/item/weapon/card/id/ID = object
 
 				if (ID.registered_name == oldname)
@@ -221,7 +221,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 						break
 
 					search_id = FALSE
-			else if (search_pda && istype(A, /obj/item/device/pda))
+			else if (search_pda && istype(object, /obj/item/device/pda))
 				var/obj/item/device/pda/PDA = object
 
 				if (PDA.owner == oldname)
@@ -234,18 +234,12 @@ Turf and target are seperate in case you want to teleport some distance from a t
 					search_pda = FALSE
 
 		// fixes renames not being reflected in objective text
-		var/length
-		var/pos
-
-		for (var/datum/objective/objective in typesof(/datum/objective) - /datum/objective)
-			if (objective.target != mind)
-				continue
-
-			length = length(oldname)
-
-			pos = findtextEx(objective.explanation_text, oldname)
-
-			objective.explanation_text = copytext(objective.explanation_text, 1, pos) + newname + copytext(objective.explanation_text, length + pos)
+		if (ticker)
+			for (var/datum/mind/mind in ticker.minds)
+				if (mind)
+					for (var/datum/objective/objective in mind.objectives)
+						if (objective && objective.target == mind)
+							objective.find_target()
 
 	return 1
 
