@@ -639,6 +639,50 @@ var/global/list/organ_damage_overlays = list(
 	// Health is in deep shit and we're not already dead
 	return health <= config.health_threshold_crit && stat != 2
 
+//Lighting changes and their effect on vision
+#define ADJUST_DARKNESS_LUMCOUNT_THRESHOLD	5 //how dark we get before humans start adjusting to darkness
+#define ADJUST_DARKNESS_INCREMENT			1.5 //how much darkness a single point will drop the threshold by
+#define ADJUST_DARKNESS_MAX_INFLICT			3 //how blurry or blind we can get from being exposed to light
+#define ADJUST_DARKNESS_BLURRY_SIGHT		16 //how high a combination of bright + adjusted has to be to make vision blurry
+#define ADJUST_DARKNESS_BLIND_SIGHT			22 //how high a combination of bright + adjusted has to be to blind the human
+#define ADJUST_DARKNESS_MAX_ADJUST			3 //normally set by species, but this is the default
+#define ADJUST_DARKNESS_DELAY				30 //in deciseconds, how long we wait between adjusting darkness
+
+/mob/living/carbon/human/proc/handle_eyes_lighting(turf_change = 0)
+	if(!species.has_organ["eyes"])
+		return
+
+	var/turf/light_turf = get_turf(src)
+	if(!blinded && light_turf && light_turf.lighting_lumcount <= (ADJUST_DARKNESS_LUMCOUNT_THRESHOLD - adjusted_darkness_sight*ADJUST_DARKNESS_INCREMENT))
+		if(adjusted_darkness_sight < (species ? species.max_dark_adjust : ADJUST_DARKNESS_MAX_ADJUST) && (turf_change || (lastDarknessAdjust + ADJUST_DARKNESS_DELAY < world.time))) //we can increase, and we've waited long enough
+			adjusted_darkness_sight++
+			lastDarknessAdjust = world.time
+			if(adjusted_darkness_sight == (species ? species.max_dark_adjust : ADJUST_DARKNESS_MAX_ADJUST) && get_adjust_message)
+				src.show_message("Your eyes fully adjust to the darkness.")
+	else if(light_turf && light_turf.lighting_lumcount > ADJUST_DARKNESS_LUMCOUNT_THRESHOLD) //lighting is higher than the threshold, no need to check
+		if(!blinded && turf_change || (lastDarknessAdjust + ADJUST_DARKNESS_DELAY < world.time))
+			if(adjusted_darkness_sight > 0 && light_turf.lighting_lumcount + adjusted_darkness_sight >= ADJUST_DARKNESS_BLIND_SIGHT && !eye_blind)
+				eye_blind += rand(0, ADJUST_DARKNESS_MAX_INFLICT)
+				src.show_message("<span class='rose'>The sudden brightness blinds you!</span>")
+			else if(adjusted_darkness_sight > 0 && light_turf.lighting_lumcount + adjusted_darkness_sight >= ADJUST_DARKNESS_BLURRY_SIGHT && !eye_blurry && !eye_blind)
+				eye_blurry += rand(0, ADJUST_DARKNESS_MAX_INFLICT)
+				src.show_message("<span class='rose'>The sudden brightness blurs your vision!</span>")
+		if(adjusted_darkness_sight > (species ? species.min_dark_adjust : 0))
+			adjusted_darkness_sight--
+			lastDarknessAdjust = world.time
+			if(adjusted_darkness_sight == (species ? species.min_dark_adjust : 0) && get_adjust_message)
+				src.show_message("Your eyes fully adjust to the light.")
+
+
+/mob/living/carbon/human/verb/adjust_eyes_light_messages()
+	set name = "See Eyes Adjustment"
+	set desc = "Toggle the messages for your eyes adjusting to the light or not."
+	set category = "IC"
+	src.get_adjust_message = !src.get_adjust_message
+	src << "You will now [!get_adjust_message ? "not " : ""]receive messages when your vision adjusts to the ambient lighting."
+
+//Breathing
+
 /mob/living/carbon/human/proc/handle_breath(var/datum/gas_mixture/breath)
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
 		return 0
@@ -1129,7 +1173,6 @@ var/global/list/organ_damage_overlays = list(
 
 	return //TODO: DEFERRED
 
-
 /mob/living/carbon/human/proc/handle_regular_status_updates()
 	if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
 		blinded = 1
@@ -1227,11 +1270,13 @@ var/global/list/organ_damage_overlays = list(
 		else if(eye_blind)		       // Blindness, heals slowly over time
 			eye_blind =  max(eye_blind-1,0)
 			blinded =    1
-		else if(istype(glasses, /obj/item/clothing/glasses/sunglasses/blindfold))	//resting your eyes with a blindfold heals blurry eyes faster
-			eye_blurry = max(eye_blurry-3, 0)
-			blinded =    1
-		else if(eye_blurry)	           // Blurry eyes heal slowly
-			eye_blurry = max(eye_blurry-1, 0)
+		else if(eye_blurry)
+			if(istype(glasses, /obj/item/clothing/glasses/sunglasses/blindfold))	//resting your eyes with a blindfold heals blurry eyes faster
+				eye_blurry = max(eye_blurry-3, 0)
+				blinded =    1
+			else // Blurry eyes heal slowly
+				eye_blurry = max(eye_blurry-1, 0)
+		handle_eyes_lighting(0)
 
 		//Ears
 		if(sdisabilities & DEAF)	//disabled-deaf, doesn't get better on its own
@@ -1416,15 +1461,18 @@ var/global/list/organ_damage_overlays = list(
 		if(healths)		healths.icon_state = "health7"	//DEAD healthmeter
 	else
 		sight &= ~(SEE_TURFS|SEE_MOBS|SEE_OBJS)
-		see_in_dark = species.darksight
-		see_invisible = see_in_dark>2 ? SEE_INVISIBLE_LEVEL_ONE : SEE_INVISIBLE_LIVING
+		see_in_dark = species.darksight + adjusted_darkness_sight
+		if(see_in_dark > 2)
+			see_invisible = SEE_INVISIBLE_LEVEL_ONE
+		else
+			see_invisible = SEE_INVISIBLE_LIVING
 		if(dna)
 			switch(dna.mutantrace)
 				if("slime")
-					see_in_dark = 3
+					see_in_dark = 3 + adjusted_darkness_sight
 					see_invisible = SEE_INVISIBLE_LEVEL_ONE
 				if("shadow")
-					see_in_dark = 8
+					see_in_dark = 8 + adjusted_darkness_sight
 					see_invisible = SEE_INVISIBLE_LEVEL_ONE
 		if(M_XRAY in mutations)
 			sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
@@ -1485,9 +1533,6 @@ var/global/list/organ_damage_overlays = list(
 				O.process_hud(src)
 				if(!druggy)
 					see_invisible = SEE_INVISIBLE_LIVING
-
-		else if(!seer)
-			see_invisible = SEE_INVISIBLE_LIVING
 
 		if(healths)
 			healths.overlays.len = 0

@@ -98,10 +98,15 @@
 	prob_slip = round(prob_slip)
 	return(prob_slip)
 
-/mob/living/carbon/human/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)
+#define ADJUST_DARKNESS_LIGHT_CHANGE	10
+
+/mob/living/carbon/human/Move(turf/NewLoc, Dir = 0, step_x = 0, step_y = 0)
+	var/turf/OldLoc = get_turf(src)
 	. = ..(NewLoc, Dir, step_x, step_y)
 
 	if(.)
 		if(shoes && istype(shoes, /obj/item/clothing/shoes))
 			var/obj/item/clothing/shoes/S = shoes
 			S.step_action()
+		if(NewLoc.lighting_lumcount - OldLoc.lighting_lumcount > ADJUST_DARKNESS_LIGHT_CHANGE)
+			handle_eyes_lighting(1) //the one forces an update
