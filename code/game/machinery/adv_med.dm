@@ -9,8 +9,13 @@
 	anchored = 1
 	idle_power_usage = 125
 	active_power_usage = 250
-	machine_flags = 0
-
+	machine_flags = SCREWTOGGLE | CROWDESTROY
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/fullbodyscanner,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module
+	)
 	var/mob/living/carbon/occupant
 	var/locked
 
@@ -185,6 +190,29 @@
 			A.loc = src.loc
 		qdel(src)
 
+
+/obj/machinery/body_scanconsole
+	var/obj/machinery/bodyscanner/connected
+	var/known_implants = list(/obj/item/weapon/implant/chem, /obj/item/weapon/implant/death_alarm, /obj/item/weapon/implant/loyalty, /obj/item/weapon/implant/tracking)
+	var/delete
+	var/temphtml
+	name = "body scanner console"
+	icon = 'icons/obj/Cryogenic2.dmi'
+	icon_state = "body_scannerconsole"
+	density = 1
+	anchored = 1
+	var/orient = "LEFT"
+
+/obj/machinery/body_scanconsole/New()
+	..()
+	spawn(5)
+		if(orient == "RIGHT")
+			icon_state = "body_scannerconsole-r"
+			src.connected = locate(/obj/machinery/bodyscanner, get_step(src, EAST))
+		else
+			src.connected = locate(/obj/machinery/bodyscanner, get_step(src, WEST))
+	return
+
 /obj/machinery/body_scanconsole/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -203,33 +231,23 @@
 
 /obj/machinery/body_scanconsole/power_change()
 	if(stat & BROKEN)
-		icon_state = "body_scannerconsole-p"
+		if(orient == "LEFT")
+			icon_state = "body_scannerconsole-p"
+		else
+			icon_state = "body_scannerconsole-p-r"
 	else if(powered())
-		icon_state = initial(icon_state)
+		if(orient == "LEFT")
+			icon_state = "body_scannerconsole"
+		else
+			icon_state = "body_scannerconsole-r"
 		stat &= ~NOPOWER
 	else
 		spawn(rand(0, 15))
-			src.icon_state = "body_scannerconsole-p"
+			if(orient == "LEFT")
+				icon_state = "body_scannerconsole-p"
+			else
+				icon_state = "body_scannerconsole-p-r"
 			stat |= NOPOWER
-
-/obj/machinery/body_scanconsole
-	var/obj/machinery/bodyscanner/connected
-	var/known_implants = list(/obj/item/weapon/implant/chem, /obj/item/weapon/implant/death_alarm, /obj/item/weapon/implant/loyalty, /obj/item/weapon/implant/tracking)
-	var/delete
-	var/temphtml
-	name = "body scanner console"
-	icon = 'icons/obj/Cryogenic2.dmi'
-	icon_state = "body_scannerconsole"
-	density = 1
-	anchored = 1
-
-
-/obj/machinery/body_scanconsole/New()
-	..()
-	spawn(5)
-		src.connected = locate(/obj/machinery/bodyscanner, get_step(src, WEST))
-		return
-	return
 
 /obj/machinery/body_scanconsole/process()
 	if (stat & (BROKEN | NOPOWER | MAINT | EMPED))
@@ -247,6 +265,13 @@
 /obj/machinery/body_scanconsole/attack_ai(user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)
+
+/obj/machinery/body_scanconsole/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(iswrench(W)&&!connected)
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+		qdel(src)
+	else
+		return ..()
 
 /obj/machinery/body_scanconsole/attack_hand(user as mob)
 	if(..())

@@ -33,9 +33,15 @@
 			src.connected = locate(/obj/machinery/sleeper, get_step(src, EAST))
 		else
 			src.connected = locate(/obj/machinery/sleeper, get_step(src, WEST))
-
 		return
 	return
+
+/obj/machinery/sleep_console/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(iswrench(W)&&!connected)
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+		qdel(src)
+	else
+		return ..()
 
 /obj/machinery/sleep_console/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
@@ -134,7 +140,13 @@
 	var/mob/living/occupant = null
 	var/available_chemicals = list("inaprovaline" = "Inaprovaline", "stoxin" = "Soporific", "dermaline" = "Dermaline", "bicaridine" = "Bicaridine", "dexalin" = "Dexalin")
 	var/amounts = list(5, 10)
-
+	machine_flags = SCREWTOGGLE | CROWDESTROY
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/sleeper,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator
+	)
 	l_color = "#7BF9FF"
 	power_change()
 		..()
@@ -145,11 +157,45 @@
 
 /obj/machinery/sleeper/New()
 	..()
+	RefreshParts()
 	spawn( 5 )
 		if(orient == "RIGHT")
 			icon_state = "sleeper_0-r"
+			generate_console(get_step(get_turf(src), EAST))
+		else
+			generate_console(get_step(get_turf(src), WEST))
 		return
 	return
+
+/obj/machinery/sleeper/proc/generate_console(turf/T as turf)
+	if(!T.density && !T.contents.len)
+		var/obj/machinery/sleep_console/SC = new /obj/machinery/sleep_console(T.loc)
+		SC.orient = src.orient
+		return 1
+	else
+		var/obj/machinery/exists = locate(/obj/machinery/sleep_console/, T.loc)
+		if(exists)
+			//We have a console already. Kill it and replace it.
+			qdel(exists)
+			var/obj/machinery/sleep_console/SC = new /obj/machinery/sleep_console(T.loc)
+			SC.orient = src.orient
+			return 1
+		else
+			//Failed to generate console
+			return 0
+
+/obj/machinery/sleeper/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		T += SP.rating
+
+	if(T >= 6 && T<9)
+		available_chemicals = list("inaprovaline" = "Inaprovaline", "stoxin" = "Soporific", "dermaline" = "Dermaline", "bicaridine" = "Bicaridine", "dexalin" = "Dexalin", "phalanximine" = "Phalanximine")
+	else if(T < 6)
+		available_chemicals = list("inaprovaline" = "Inaprovaline", "stoxin" = "Soporific", "dermaline" = "Dermaline", "bicaridine" = "Bicaridine", "dexalin" = "Dexalin")
+	else
+		available_chemicals = list("inaprovaline" = "Inaprovaline", "stoxin" = "Soporific", "dermaline" = "Dermaline", "bicaridine" = "Bicaridine", "dexalin" = "Dexalin", "phalanximine" = "Phalanximine", "spaceacillin" = "Spaceacillin")
+
 
 /obj/machinery/sleeper/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
 	if(!ismob(O)) //mobs only
@@ -229,7 +275,24 @@
 	return
 
 
-/obj/machinery/sleeper/attackby(obj/item/weapon/grab/G as obj, mob/user as mob)
+/obj/machinery/sleeper/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(iswrench(W))
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		if(orient == "RIGHT")
+			orient = "LEFT"
+			if(generate_console())
+				qdel(locate(/obj/machinery/sleeper, get_step(src, EAST)))
+			else
+				orient = "RIGHT"
+				visible_message("<span class='warning'>[user] wants to be hardcore, but his CMO won't let him.</span>","<span class='warning'>There is no space!</span>")
+		else
+			orient = "RIGHT"
+			if(generate_console())
+				qdel(locate(/obj/machinery/sleeper, get_step(src, WEST)))
+			else
+				orient = "LEFT"
+				visible_message("<span class='warning'>[user] wants to be hardcore, but his CMO won't let him.</span>","<span class='warning'>There is no space!</span>")
+		return
 	if((!( istype(G, /obj/item/weapon/grab)) || !( ismob(G.affecting))))
 		return
 	if(G.affecting.buckled) return
