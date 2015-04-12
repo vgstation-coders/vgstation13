@@ -29,6 +29,7 @@ notifications:
   irc:
     channels:
       - "irc.rizon.net#vgstation"
+    use_notice: true
     template:
       - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
       - "Change view : %{compare_url}"
