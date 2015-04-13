@@ -37,7 +37,7 @@
 				if(src.mind in ticker.mode.traitors)
 					ticker.mode.traitors -= src.mind
 					special_role = null
-					current << "\red <FONT size = 3><B>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</B></FONT>"
+					current << "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</FONT></span>"
 				*/
 
 // Apply connect damage
@@ -299,15 +299,6 @@
 			if(istype(D.wrapped, /obj/item/weapon/storage)) //this should never happen
 				L += get_contents(D.wrapped)
 		return L
-
-/mob/living/check_contents_for(A)
-	var/list/L = src.get_contents()
-
-	for(var/obj/B in L)
-		if(B.type == A)
-			return B
-	return 0
-
 
 /mob/living/proc/can_inject()
 	return 1

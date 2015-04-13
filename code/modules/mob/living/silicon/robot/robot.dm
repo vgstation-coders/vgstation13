@@ -303,7 +303,6 @@
 			module_sprites["Marina-CB"] = "marinaCB"
 			module_sprites["Squadbot"] = "squats"
 			module_sprites["#41"] = "servbot-combat"
-			module_sprites["#32"] = "servbot-combat2"
 			speed = -1
 
 	//Custom_sprite check and entry
@@ -728,7 +727,7 @@
 				C.installed = 1
 				C.wrapped = W
 				C.install()
-				user.drop_item()
+				user.drop_item(W)
 				W.loc = null
 
 				usr << "<span class='notice'>You install the [W.name].</span>"
@@ -819,7 +818,7 @@
 		else if(cell)
 			user << "There is a power cell already installed."
 		else
-			user.drop_item(src)
+			user.drop_item(W, src)
 			cell = W
 			user << "You insert the power cell."
 
@@ -867,17 +866,17 @@
 	else if(istype(W, /obj/item/borg/upgrade/))
 		var/obj/item/borg/upgrade/U = W
 		if(!opened)
-			usr << "You must access the borgs internals!"
+			user << "You must access the borgs internals!"
 		else if(!src.module && U.require_module)
-			usr << "The borg must choose a module before he can be upgraded!"
+			user << "The borg must choose a module before he can be upgraded!"
 		else if(U.locked)
-			usr << "The upgrade is locked and cannot be used yet!"
+			user << "The upgrade is locked and cannot be used yet!"
 		else
 			if(U.action(src))
-				usr << "You apply the upgrade to [src]!"
-				usr.drop_item(src)
+				user << "You apply the upgrade to [src]!"
+				user.drop_item(U, src)
 			else
-				usr << "Upgrade error!"
+				user << "Upgrade error!"
 
 	else if(istype(W, /obj/item/device/camera_bug))
 		help_shake_act(user)
