@@ -18,7 +18,7 @@
 	var/battery_needed = 1 //Penlights and flares shouldn't use batteries, the rest should
 	var/obj/item/weapon/cell/fcell = null //That's our cell !
 	var/panelopen = 0 //The battery panel is open or closed, not used if there's no battery
-	var/powercost = 3 //How much juice does it use per tick when lit ? For reference, the starting cell has 1000 W, and the next step is 10000 W
+	var/powercost = 2 //How much juice does it use per tick when lit ? For reference, the starting cell has 1000 W, and the next step is 10000 W
 	var/flickerprob = 0 //How likely that we go through flickering
 	var/flickering = 0 //Used to avoid spam
 	var/flickerthreshold = 60 //To make sure full flashlight batteries don't cause flickering
@@ -225,6 +225,15 @@
 	if(on)
 		user.SetLuminosity(user.luminosity - brightness_on)
 		SetLuminosity(brightness_on)
+
+//This is the type for constructed flashlights (autolathes). No free cells
+/obj/item/device/flashlight/empty
+	panelopen = 1 //Have the panel start open to make the lack of a power cell evident
+
+/obj/item/device/flashlight/empty/New() //We don't want a cell here, we really don't
+	..() //Call parent first
+	fcell = null //Cell-b-gone
+	update_icon() //Update the icon to see that beautiful no cell in the flashlight
 
 //Penlights, runs on magic and the tormented souls of the patients stuck in the cryo cells
 /obj/item/device/flashlight/pen
