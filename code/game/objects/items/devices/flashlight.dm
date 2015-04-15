@@ -1,6 +1,6 @@
 /obj/item/device/flashlight
 	name = "flashlight"
-	desc = "A hand-held emergency light. Runs on batteries, and usually runs out of power when least convenient."
+	desc = "A hand-held emergency light. Runs on batteries, and usually runs out of power whenever least convenient."
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "flashlight"
 	item_state = "flashlight"
@@ -229,7 +229,7 @@
 //Penlights, runs on magic and the tormented souls of the patients stuck in the cryo cells
 /obj/item/device/flashlight/pen
 	name = "penlight"
-	desc = "A pen-sized light, used by medical staff."
+	desc = "A pen-sized light, used by medical staff to check someone's sight, and blind them along the way."
 	icon_state = "penlight"
 	item_state = ""
 	flags = FPRINT
@@ -265,7 +265,7 @@
 //Have them start off, otherwise they'll drain their battery real quick
 /obj/item/device/flashlight/lamp
 	name = "desk lamp"
-	desc = "A desk lamp with an adjustable mount."
+	desc = "A desk lamp with an adjustable mount. Runs on a battery, lamps connected to the powernet became obsolete centuries ago."
 	icon_state = "lamp"
 	item_state = "lamp"
 	brightness_on = 4 //This is a desk lamp, not a nuclear spotlight
@@ -279,7 +279,7 @@
 
 //Green-shaded desk lamp
 /obj/item/device/flashlight/lamp/green
-	desc = "A classic green-shaded desk lamp."
+	desc = "A novelty green-shaded desk lamp. Runs on a battery, lamps connected to the powernet became obsolete centuries ago."
 	icon_state = "lampgreen"
 	item_state = "lampgreen"
 
@@ -295,7 +295,7 @@
 //FLARES. Who doesn't like flares ?
 /obj/item/device/flashlight/flare
 	name = "flare"
-	desc = "A red Nanotrasen issued flare. There are pictograms on the side, it reads 'pull cord, makes light'."
+	desc = "A red Nanotrasen issued flare. There are pictograms on the side, they read 'pull cord, make light'."
 	w_class = 2.0
 	brightness_on = 6 //Pretty bright, but not blinding. This is updated down below !
 	icon_state = "flare"
@@ -390,7 +390,7 @@
 // SLIME LAMP
 /obj/item/device/flashlight/lamp/slime
 	name = "slime lamp"
-	desc = "A lamp powered by a slime core. You can adjust its brightness by touching it."
+	desc = "A lamp powered by a slime core. You can adjust its brightness by touching it, SCIENCE!"
 	icon_state = "slimelamp"
 	item_state = ""
 	l_color = "#333300"
