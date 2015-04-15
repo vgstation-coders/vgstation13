@@ -164,3 +164,13 @@
 /obj/effect/decal/cleanable/soot/New()
 	..()
 	dir = pick(cardinal)
+
+/obj/effect/decal/lspaceclutter
+	name = "clutter"
+	desc = "Someone should clean that up."
+	gender = PLURAL
+	density = 0
+	anchored = 1
+	layer = 2
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "lspaceclutter"
