@@ -13,6 +13,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	anchored = 1.0
 	layer = 2.8
 
+	var/cooldown = 0
 	var/on = 0
 	var/temperature_archived
 	var/mob/living/carbon/occupant = null
@@ -106,6 +107,12 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return
 
 	if(occupant)
+		if(occupant.health == occupant.maxHealth) //Is the occupant at full health? If so, ding!
+			if(cooldown == 0)
+				playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
+				cooldown=5
+			else
+				cooldown--
 		if(occupant.stat != 2)
 			process_occupant()
 
