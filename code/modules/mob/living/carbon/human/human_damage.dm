@@ -341,7 +341,7 @@ This function restores all organs.
 			visible_message("<span class='danger'>The flare sticks in the wound!</span>")
 			FS.add_blood(src)
 			FS.luminosity = 4 //not so bright, because it's inside them
-			FS.Light(src) //Now they glow, because the flare is lit
+			FS.light(src) //Now they glow, because the flare is lit
 			if(prob(80)) //tends to happen, which is good
 				visible_message("<span class='danger'><b>[name]</b> bursts into flames!</span>", "<span class='danger'>You burst into flames!</span>")
 				on_fire = 1

@@ -161,8 +161,10 @@ proc/move_mining_shuttle()
 /obj/item/device/flashlight/lantern
 	name = "lantern"
 	icon_state = "lantern"
+	item_state = "lantern"
 	desc = "A mining lantern."
-	brightness_on = 6			// luminosity when on
+	brightness_on = 6 //Luminosity when on
+	flickerthreshold = 80 //Will only flicker at 20 % charge and lower
 
 /*****************************Pickaxe********************************/
 
