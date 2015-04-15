@@ -165,9 +165,8 @@
 	..()
 	dir = pick(cardinal)
 
-/obj/effect/decal/lspaceclutter
+/obj/effect/decal/cleanable/lspaceclutter
 	name = "clutter"
-	desc = "Someone should clean that up."
 	gender = PLURAL
 	density = 0
 	anchored = 1
