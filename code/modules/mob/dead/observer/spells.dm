@@ -39,7 +39,7 @@ var/global/list/boo_phrases_silicon=list(
 	charge_max = 600
 	invocation = ""
 	invocation_type = SpI_NONE
-	range = 1 // Or maybe 3?
+	range = 1 //Or maybe 3?
 
 	override_base = "grey"
 	hud_state = "boo"
@@ -48,28 +48,34 @@ var/global/list/boo_phrases_silicon=list(
 	for(var/turf/T in targets)
 		for(var/atom/A in T.contents)
 
-			// Bug humans
+			//Bug humans
 			if(ishuman(A))
 				var/mob/living/carbon/human/H = A
 				if(H && H.client)
 					H << "<i>[pick(boo_phrases)]</i>"
 
+			//Bug robutts
 			if(isrobot(A))
 				var/mob/living/silicon/S = A
 				if(S && S.client)
 					S << "<i>[pick(boo_phrases_silicon)]</i>"
 
-			// Blessed object? Skippit.
+			//Blessed object? Skippit.
 			if(isobj(A) && A:blessed)
 				continue
 
-			// Flicker unblessed lights in range
+			//Flicker unblessed lights in range
 			if(istype(A,/obj/machinery/light))
 				var/obj/machinery/light/L = A
 				if(L)
 					L.flicker()
 
-			// OH GOD BLUE APC (single animation cycle)
+			//Flicker more unblessed lights in range
+			if(istype(A, /obj/item/device/flashlight))
+				var/obj/item/device/flashlight/F = A
+				F.flicker()
+
+			//OH GOD BLUE APC (single animation cycle)
 			if(istype(A, /obj/machinery/power/apc))
 				A:spookify()
 

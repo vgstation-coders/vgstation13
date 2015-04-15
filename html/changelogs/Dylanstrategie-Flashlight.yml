@@ -1,0 +1,10 @@
+author: Dylanstrategie
+delete-after: True
+changes:
+  - experimental: Flashlights, lamps and lanterns now run on batteries (standard 1000 W cells, consumes 5 W a tick). This means you can't light up areas forever magically
+  - experimental: Flares now start brighter than current but fade out as their fuel runs out
+  - experimental: Added in_hand sprites for lanterns and all flashlight-type items (on and off) save for the penlight
+  - experimental: Flashlights, lamps and lanterns flicker when their battery is low (quickly turns on and off for a small bit, always ends up on), 
+  - experimental: All flashlight items except for the flare and the slime lamp can be boo'ed to generate the same effect as light tubes
+  - experimental: Experimental recode of lighting adjustment code when mobs carry lit objects around, please signal any strange behavior
+  - rscadd: You can change batteries by opening the cover (screwdriver), removing the old battery and adding a new one

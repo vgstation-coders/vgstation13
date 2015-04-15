@@ -3,7 +3,7 @@
 var/global/list/autolathe_recipes = list( \
 		new /obj/item/weapon/reagent_containers/glass/bucket(), \
 		new /obj/item/weapon/crowbar(), \
-		new /obj/item/device/flashlight(), \
+		new /obj/item/device/flashlight/empty(), \
 		new /obj/item/weapon/storage/fancy/flares(), \
 		new /obj/item/weapon/extinguisher(), \
 		new /obj/item/device/multitool(), \
