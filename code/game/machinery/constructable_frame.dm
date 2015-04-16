@@ -499,6 +499,14 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/scanning_module" = 1,
 							"/obj/item/weapon/stock_parts/manipulator" = 2)
 
+/obj/item/weapon/circuitboard/morgue
+	name = "Circuit board (Morgue Tray)"
+	build_path = "/obj/structure/morgue/"
+	board_type = "machine"
+	origin_tech = "biotech=3"
+	frame_desc = "Requires nothing."
+	req_components = list()
+
 /obj/item/weapon/circuitboard/biogenerator
 	name = "Circuit Board (Biogenerator)"
 	build_path = "/obj/machinery/biogenerator"
