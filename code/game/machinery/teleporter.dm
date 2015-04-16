@@ -126,14 +126,6 @@
 		src.id = t
 	return
 
-/proc/find_loc(obj/R as obj)
-	if (!R)	return null
-	var/turf/T = R.loc
-	while(!istype(T, /turf))
-		T = T.loc
-		if(!T || istype(T, /area))	return null
-	return T
-
 /obj/machinery/teleport
 	name = "teleport"
 	icon = 'icons/obj/stationobjs.dmi'
@@ -227,7 +219,7 @@
 		return
 	if (istype(M, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite
 		for(var/mob/O in viewers(M, null))
-			O.show_message(text("<span class='warning'><B>The [] bounces off of the portal!</B></span>", M.name), 1)
+			O.show_message(text("<span class='danger'>The [] bounces off of the portal!</span>", M.name), 1)
 		return
 	if (istype(M, /mob/living))
 		var/mob/living/MM = M
@@ -252,7 +244,7 @@
 				disky = 1
 	if (disky)
 		for(var/mob/P in viewers(M, null))
-			P.show_message(text("<span class='warning'><B>The [] bounces off of the portal!</B></span>", M.name), 1)
+			P.show_message(text("<span class='danger'>The [] bounces off of the portal!</span>", M.name), 1)
 		return
 
 //Bags of Holding cause bluespace teleportation to go funky. --NeoFite

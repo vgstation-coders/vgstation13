@@ -110,6 +110,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/delete_all_adminbus,
 	/client/proc/delete_all_bomberman,
 	/client/proc/create_bomberman_arena,
+	/client/proc/control_bomberman_arena,
 	/client/proc/gib_money, // /vg/
 	/client/proc/smissmas,
 	)
@@ -398,7 +399,7 @@ var/list/admin_verbs_mod = list(
 	if(holder && mob)
 		if(mob.invisibility == INVISIBILITY_OBSERVER)
 			mob.invisibility = initial(mob.invisibility)
-			mob << "<span class='warning'><b>Invisimin off. Invisibility reset.</b></span>"
+			mob << "<span class='danger'>Invisimin off. Invisibility reset.</span>"
 			mob.icon_state = "ghost"
 			mob.icon = 'icons/mob/human.dmi'
 			mob.update_icons()

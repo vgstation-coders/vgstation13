@@ -500,7 +500,7 @@
 				notes_add(M.ckey, "Appearance banned - [reason]")
 				message_admins("<span class='notice'>[key_name_admin(usr)] appearance banned [key_name_admin(M)]</span>", 1)
 				M << "<span class='warning'><BIG><B>You have been appearance banned by [usr.client.ckey].</B></BIG></span>"
-				M << "<span class='warning'><B>The reason is: [reason]</B></span>"
+				M << "<span class='danger'>The reason is: [reason]</span>"
 				M << "<span class='warning'>Appearance ban can be lifted only upon request.</span>"
 				if(config.banappeals)
 					M << "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>"
@@ -895,7 +895,7 @@
 					notes_add(M.ckey, "Banned  from [msg] - [reason]")
 					message_admins("<span class='notice'>[key_name_admin(usr)] banned [key_name_admin(M)] from [msg] for [mins] minutes</span>", 1)
 					M << "<span class='warning'><BIG><B>You have been jobbanned by [usr.client.ckey] from: [msg].</B></BIG></span>"
-					M << "<span class='warning'><B>The reason is: [reason]</B></span>"
+					M << "<span class='danger'>The reason is: [reason]</span>"
 					M << "<span class='warning'>This jobban will be lifted in [mins] minutes.</span>"
 					href_list["jobban2"] = 1 // lets it fall through and refresh
 					return 1
@@ -915,7 +915,7 @@
 						notes_add(M.ckey, "Banned  from [msg] - [reason]")
 						message_admins("<span class='notice'>[key_name_admin(usr)] banned [key_name_admin(M)] from [msg]</span>", 1)
 						M << "<span class='warning'><BIG><B>You have been jobbanned by [usr.client.ckey] from: [msg].</B></BIG></span>"
-						M << "<span class='warning'><B>The reason is: [reason]</B></span>"
+						M << "<span class='danger'>The reason is: [reason]</span>"
 						M << "<span class='warning'>Jobban can be lifted only upon request.</span>"
 						href_list["jobban2"] = 1 // lets it fall through and refresh
 						return 1
@@ -2215,46 +2215,50 @@
 				for(var/obj/machinery/computer/prison_shuttle/PS in world)
 					PS.allowedtocall = !(PS.allowedtocall)
 					message_admins("<span class='notice'>[key_name_admin(usr)] toggled status of prison shuttle to [PS.allowedtocall].</span>", 1)
-			if("prisonwarp")
-				if(!ticker)
+			if ("prisonwarp")
+				if (!ticker)
 					alert("The game hasn't started yet!", null, null, null, null, null)
 					return
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","PW")
+
+				feedback_inc("admin_secrets_fun_used", 1)
+
+				feedback_add_details("admin_secrets_fun_used", "PW")
+
 				message_admins("<span class='notice'>[key_name_admin(usr)] teleported all players to the prison station.</span>", 1)
-				for(var/mob/living/carbon/human/H in mob_list)
-					var/turf/loc = find_loc(H)
-					var/security = 0
-					if(loc.z > 1 || prisonwarped.Find(H))
-//don't warp them if they aren't ready or are already there
-						continue
-					H.Paralyse(5)
-					if(H.wear_id)
-						var/obj/item/weapon/card/id/id = H.get_idcard()
-						for(var/A in id.access)
-							if(A == access_security)
-								security++
-					if(!security)
-						//strip their stuff before they teleport into a cell :downs:
-						for(var/obj/item/weapon/W in H)
-							if(istype(W, /datum/organ/external))
-								continue
-								//don't strip organs
-							H.u_equip(W)
-							if (H.client)
-								H.client.screen -= W
-							if (W)
-								W.loc = H.loc
-								W.dropped(H)
-								W.layer = initial(W.layer)
-						//teleport person to cell
-						H.loc = pick(prisonwarp)
-						H.equip_to_slot_or_del(new /obj/item/clothing/under/color/prisoner(H), slot_w_uniform)
-						H.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(H), slot_shoes)
-					else
-						//teleport security person
-						H.loc = pick(prisonsecuritywarp)
-					prisonwarped += H
+
+				var/security
+
+				for (var/mob/living/carbon/human/H in mob_list)
+					if (H)
+						if (H in prisonwarped) // don't warp them if they aren't ready or are already there
+							continue
+
+						security = FALSE
+
+						H.Paralyse(5)
+
+						if (H.wear_id)
+							var/obj/item/weapon/card/id/id = H.get_idcard()
+
+							for (var/A in id.access)
+								if (A == access_security)
+									security = TRUE
+									break
+
+						if (!security)
+							// strip their stuff before they teleport into a cell :downs:
+							for (var/obj/item/I in H.get_all_slots())
+								H.drop_from_inventory(I)
+
+							H.loc = pick(prisonwarp) // teleport person to cell
+
+							H.equip_to_slot_or_del(new /obj/item/clothing/under/color/prisoner(H), slot_w_uniform)
+
+							H.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(H), slot_shoes)
+						else
+							H.loc = pick(prisonsecuritywarp) // teleport security person
+
+						prisonwarped += H
 			if("traitor_all")
 				if(!ticker)
 					alert("The game hasn't started yet!")
@@ -2327,7 +2331,7 @@
 				var/range_dev = MAX_EXPLOSION_RANGE *0.25
 				var/range_high = MAX_EXPLOSION_RANGE *0.5
 				var/range_low = MAX_EXPLOSION_RANGE
-				message_admins("<span class='warning'><b> [key_name_admin(usr)] changed the bomb cap to [range_dev], [range_high], [range_low]</b></span>", 1)
+				message_admins("<span class='danger'> [key_name_admin(usr)] changed the bomb cap to [range_dev], [range_high], [range_low]</span>", 1)
 				log_admin("[key_name_admin(usr)] changed the bomb cap to [MAX_EXPLOSION_RANGE]")
 
 			if("flicklights")
@@ -2363,11 +2367,11 @@
 						M.show_message(text("<span class='notice'>The chilling wind suddenly stops...</span>"), 1)
 /*				if("shockwave")
 				ok = 1
-				world << "<span class='warning'><B><big>ALERT: STATION STRESS CRITICAL</big></B></span>"
+				world << "<span class='danger'><big>ALERT: STATION STRESS CRITICAL</big></span>"
 				sleep(60)
-				world << "<span class='warning'><B><big>ALERT: STATION STRESS CRITICAL. TOLERABLE LEVELS EXCEEDED!</big></B></span>"
+				world << "<span class='danger'><big>ALERT: STATION STRESS CRITICAL. TOLERABLE LEVELS EXCEEDED!</big></span>"
 				sleep(80)
-				world << "<span class='warning'><B><big>ALERT: STATION STRUCTURAL STRESS CRITICAL. SAFETY MECHANISMS FAILED!</big></B></span>"
+				world << "<span class='danger'><big>ALERT: STATION STRUCTURAL STRESS CRITICAL. SAFETY MECHANISMS FAILED!</big></span>"
 				sleep(40)
 				for(var/mob/M in world)
 					shake_camera(M, 400, 1)
@@ -2586,7 +2590,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RET")
 				for(var/mob/living/carbon/human/H in player_list)
-					H << "<span class='warning'><B>You suddenly feel stupid.</B></span>"
+					H << "<span class='danger'>You suddenly feel stupid.</span>"
 					H.setBrainLoss(60)
 				message_admins("[key_name_admin(usr)] made everybody retarded")
 			if("fakeguns")
@@ -2766,6 +2770,7 @@
 				feedback_add_details("admin_secrets_fun_used","BBM")
 				var/choice = alert("Dress every player like Bomberman and give them BBDs?","Bomberman Mode Activation","Confirm","Cancel")
 				if(choice=="Confirm")
+					bomberman_mode = 1
 					world << sound('sound/bomberman/start.ogg')
 					for(var/mob/living/carbon/human/M in player_list)
 						if(M.wear_suit)
@@ -2785,6 +2790,7 @@
 						M << "Wait...what?"
 						spawn(50)
 							M << "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>"
+							M << "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>"
 
 				message_admins("[key_name_admin(usr)] turned everyone into Bomberman!")
 				log_admin("[key_name_admin(usr)] turned everyone into Bomberman!")
@@ -2793,8 +2799,10 @@
 				feedback_add_details("admin_secrets_fun_used","BBH")
 				var/choice = alert("Activate Cuban Pete mode? Note that newly spawned BBD will still have player damage deactivated.","Activating Bomberman Bombs Player Damage","Confirm","Cancel")
 				if(choice=="Confirm")
+					bomberman_hurt = 1
 					for(var/obj/item/weapon/bomberman/B in world)
-						B.hurt_players = 1
+						if(!B.arena)
+							B.hurt_players = 1
 				message_admins("[key_name_admin(usr)] enabled the player damage of the Bomberman Bomb Dispensers currently in the world. Cuban Pete approves.")
 				log_admin("[key_name_admin(usr)] enabled the player damage of the Bomberman Bomb Dispensers currently in the world. Cuban Pete approves.")
 			if("bomberdestroy")
@@ -2802,8 +2810,10 @@
 				feedback_add_details("admin_secrets_fun_used","BBD")
 				var/choice = alert("Activate Michael Bay mode? Note that newly spawned BBD will still have environnement damage deactivated.","Activating Bomberman Bombs Environnement Damage","Confirm","Cancel")
 				if(choice=="Confirm")
+					bomberman_destroy = 1
 					for(var/obj/item/weapon/bomberman/B in world)
-						B.destroy_environnement = 1
+						if(!B.arena)
+							B.destroy_environnement = 1
 				message_admins("[key_name_admin(usr)] enabled the environnement damage of the Bomberman Bomb Dispensers currently in the world. Michael Bay approves.")
 				log_admin("[key_name_admin(usr)] enabled the environnement damage of the Bomberman Bomb Dispensers currently in the world. Michael Bay approves.")
 			if("bombernohurt")
@@ -2811,8 +2821,10 @@
 				feedback_add_details("admin_secrets_fun_used","BBNH")
 				var/choice = alert("Disable Cuban Pete mode.","Disable Bomberman Bombs Player Damage","Confirm","Cancel")
 				if(choice=="Confirm")
+					bomberman_hurt = 0
 					for(var/obj/item/weapon/bomberman/B in world)
-						B.hurt_players = 0
+						if(!B.arena)
+							B.hurt_players = 0
 				message_admins("[key_name_admin(usr)] disabled the player damage of the Bomberman Bomb Dispensers currently in the world.")
 				log_admin("[key_name_admin(usr)] disabled the player damage of the Bomberman Bomb Dispensers currently in the world.")
 			if("bombernodestroy")
@@ -2820,8 +2832,10 @@
 				feedback_add_details("admin_secrets_fun_used","BBND")
 				var/choice = alert("Disable Michael Bay mode?","Disable Bomberman Bombs Environnement Damage","Confirm","Cancel")
 				if(choice=="Confirm")
+					bomberman_destroy = 0
 					for(var/obj/item/weapon/bomberman/B in world)
-						B.destroy_environnement = 0
+						if(!B.arena)
+							B.destroy_environnement = 0
 				message_admins("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
 				log_admin("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
 		if(usr)
