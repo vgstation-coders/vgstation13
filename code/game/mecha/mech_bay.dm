@@ -18,6 +18,8 @@
 								/obj/item/weapon/stock_parts/capacitor,
 								/obj/item/weapon/stock_parts/capacitor)
 
+	RefreshParts()
+
 /obj/machinery/mech_bay_recharge_floor/Crossed(var/obj/mecha/mecha)
 	. = ..()
 	if(istype(mecha))
@@ -76,7 +78,8 @@
 								/obj/item/weapon/stock_parts/console_screen)
 
 	pr_recharger = new /datum/global_iterator/mech_bay_recharger(null,0)
-	return
+
+	RefreshParts()
 
 /obj/machinery/mech_bay_recharge_port/proc/start_charge(var/obj/mecha/recharging_mecha)
 	if(stat&(NOPOWER|BROKEN))
