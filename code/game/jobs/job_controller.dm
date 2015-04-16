@@ -17,7 +17,7 @@ var/global/datum/controller/occupations/job_master
 		occupations = list()
 		var/list/all_jobs = typesof(/datum/job)
 		if(!all_jobs.len)
-			world << "<span class='warning'><B>Error setting up jobs, no job datums found</span></B>"
+			world << "<span class='danger'>Error setting up jobs, no job datums found</span>"
 			return 0
 		for(var/J in all_jobs)
 			var/datum/job/job = new J()
@@ -385,7 +385,7 @@ var/global/datum/controller/occupations/job_master
 				H.mind.store_memory(remembered_info)
 
 			spawn(0)
-				H << "<span class='warning'><b>Your account number is: [M.account_number], your account pin is: [M.remote_access_pin]</b></span>"
+				H << "<span class='danger'>Your account number is: [M.account_number], your account pin is: [M.remote_access_pin]</span>"
 
 		var/alt_title = null
 		if(H.mind)

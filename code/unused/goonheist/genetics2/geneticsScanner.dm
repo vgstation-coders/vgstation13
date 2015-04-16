@@ -112,10 +112,10 @@ var/list/genescanner_addresses = list()
 		set src in oview(1)
 
 		if(!iscarbon(usr))
-			usr << "<span class='warning'><B>The scanner supports only carbon based lifeforms.</B></span>"
+			usr << "<span class='danger'>The scanner supports only carbon based lifeforms.</span>"
 			return
 
-		if (usr.stat != 0)
+		if (usr.stat != 0 || (usr.status_flags & FAKEDEATH))
 			return
 
 		if (src.occupant)
@@ -123,7 +123,7 @@ var/list/genescanner_addresses = list()
 			return
 
 		if (src.locked)
-			usr << "<span class='warning'><B>You need to unlock the scanner first.</B></span>"
+			usr << "<span class='danger'>You need to unlock the scanner first.</span>"
 			return
 
 		usr.pulling = null
@@ -144,11 +144,11 @@ var/list/genescanner_addresses = list()
 			return
 
 		if (src.occupant)
-			user << "<span class='warning'><B>The scanner is already occupied!</B></span>"
+			user << "<span class='danger'>The scanner is already occupied!</span>"
 			return
 
 		if (src.locked)
-			usr << "<span class='warning'><B>You need to unlock the scanner first.</B></span>"
+			usr << "<span class='danger'>You need to unlock the scanner first.</span>"
 			return
 
 		if(!iscarbon(G.affecting))
@@ -174,10 +174,10 @@ var/list/genescanner_addresses = list()
 		set name = "Eject Occupant"
 		set src in oview(1)
 
-		if (usr.stat != 0)
+		if (usr.stat != 0 || (usr.status_flags & FAKEDEATH))
 			return
 		if (src.locked)
-			usr << "<span class='warning'><b>The scanner door is locked!</b></span>"
+			usr << "<span class='danger'>The scanner door is locked!</span>"
 			return
 
 		src.go_out()
@@ -188,10 +188,10 @@ var/list/genescanner_addresses = list()
 		set name = "Scanner Lock"
 		set src in oview(1)
 
-		if (usr.stat != 0)
+		if (usr.stat != 0 || (usr.status_flags & FAKEDEATH))
 			return
 		if (usr == src.occupant)
-			usr << "<span class='warning'><b>You can't reach the scanner lock from the inside.</b></span>"
+			usr << "<span class='danger'>You can't reach the scanner lock from the inside.</span>"
 			return
 
 		playsound(src.loc, 'click.ogg', 50, 1)

@@ -655,7 +655,7 @@ var/list/slot_equipment_priority = list( \
 	set name = "Point To"
 	set category = "Object"
 
-	if(!src || !isturf(src.loc) || !(A in view(src.loc)))
+	if(!src || usr.stat || (usr.status_flags & FAKEDEATH) || !isturf(src.loc) || !(A in view(src.loc)))
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
@@ -1424,9 +1424,9 @@ var/list/slot_equipment_priority = list( \
 		return
 
 	if(self)
-		visible_message("<span class='warning'><b>[src] rips [selection] out of their body.</b></span>","<span class='warning'><b>You rip [selection] out of your body.</b></span>")
+		visible_message("<span class='danger'><b>[src] rips [selection] out of their body.</b></span>","<span class='warning'>You rip [selection] out of your body.</span>")
 	else
-		visible_message("<span class='warning'><b>[usr] rips [selection] out of [src]'s body.</b></span>","<span class='warning'><b>[usr] rips [selection] out of your body.</b></span>")
+		visible_message("<span class='danger'><b>[usr] rips [selection] out of [src]'s body.</b></span>","<span class='warning'>[usr] rips [selection] out of your body.</span>")
 
 	selection.loc = get_turf(src)
 

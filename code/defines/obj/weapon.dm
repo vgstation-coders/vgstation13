@@ -14,7 +14,7 @@
 	hitsound = 'sound/weapons/ring.ogg'
 
 	suicide_act(mob/user)
-		viewers(user) << "<span class='warning'><b>[user] wraps the cord of the [src.name] around \his neck! It looks like \he's trying to commit suicide.</b></span>"
+		viewers(user) << "<span class='danger'>[user] wraps the cord of the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>"
 		return(OXYLOSS)
 
 /*/obj/item/weapon/syndicate_uplink
@@ -60,7 +60,7 @@
 	throw_range = 20
 
 	suicide_act(mob/user)
-		viewers(user) << "<span class='warning'><b>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </b></span>"
+		viewers(user) << "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>"
 		return(OXYLOSS)
 
 /obj/item/weapon/corncob
@@ -212,7 +212,7 @@
 	var/thrown_from
 
 /obj/item/weapon/legcuffs/bolas/suicide_act(mob/living/user)
-		viewers(user) << "<span class='warning'><b>[user] is wrapping the [src.name] around \his neck! It looks like \he's trying to commit suicide.</b></span>"
+		viewers(user) << "<span class='danger'>[user] is wrapping the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>"
 		return(OXYLOSS)
 
 /obj/item/weapon/legcuffs/bolas/throw_at(var/atom/A, throw_range, throw_speed)
@@ -341,6 +341,8 @@
 
 /obj/item/weapon/legcuffs/bolas/cable/attackby(var/obj/O, mob/user)
 	if(istype(O, /obj/item))
+		if(istype(O, /obj/item/weapon/gift) || istype(O,/obj/item/smallDelivery))
+			return
 		var/obj/item/I = O
 		if(istype(O, /obj/item/weapon/legcuffs/bolas)) //don't stack into infinity
 			return
@@ -373,14 +375,14 @@
 				return
 		if(I.w_class) //if it has a defined weight
 			if(I.w_class == 2.0 || I.w_class == 3.0) //just one is too specific, so don't change this
-				if(weight1 == null)
+				if(!weight1)
 					user.drop_item(I, src)
 					weight1 = I
 					user.show_message("<span class='notice'>You tie [weight1] to the [src].</span>")
 					update_icon()
 					//del(I)
 					return
-				if(weight2 == null) //just in case
+				if(!weight2) //just in case
 					user.drop_item(I, src)
 					weight2 = I
 					user.show_message("<span class='notice'>You tie [weight2] to the [src].</span>")
@@ -407,7 +409,7 @@
 	var/obj/item/weapon/grenade/iedcasing/IED = null
 
 	suicide_act(mob/user)
-		viewers(user) << "<span class='warning'><b>[user] is putting the [src.name] on \his head! It looks like \he's trying to commit suicide.</b></span>"
+		viewers(user) << "<span class='danger'>[user] is putting the [src.name] on \his head! It looks like \he's trying to commit suicide.</span>"
 		return (BRUTELOSS)
 
 /obj/item/weapon/legcuffs/beartrap/attack_self(mob/user as mob)
@@ -478,7 +480,7 @@
 					for(var/mob/O in viewers(H, null))
 						if(O == H)
 							continue
-						O.show_message("<span class='warning'><B>[H] steps on \the [src].</B></span>", 1)
+						O.show_message("<span class='danger'>[H] steps on \the [src].</span>", 1)
 		if(isanimal(AM) && !istype(AM, /mob/living/simple_animal/parrot) && !istype(AM, /mob/living/simple_animal/construct) && !istype(AM, /mob/living/simple_animal/shade) && !istype(AM, /mob/living/simple_animal/hostile/viscerator))
 			armed = 0
 			var/mob/living/simple_animal/SA = AM
@@ -672,7 +674,7 @@
 	attack_verb = list("whipped", "lashed", "disciplined", "tickled")
 
 	suicide_act(mob/user)
-		viewers(user) << "<span class='warning'><b>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</b></span>"
+		viewers(user) << "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>"
 		return (OXYLOSS)
 
 /obj/item/weapon/module

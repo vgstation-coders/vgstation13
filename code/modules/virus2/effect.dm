@@ -123,6 +123,17 @@
 			if(h.set_species("Tajaran"))
 				h.regenerate_icons()
 
+/datum/disease2/effect/voxpox
+	name = "Vox Pox"
+	stage = 4
+	badness = 2
+/datum/disease2/effect/voxpox/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(istype(mob,/mob/living/carbon/human))
+		var/mob/living/carbon/human/h = mob
+		if(h.species.name != "Vox")
+			if(h.set_species("Vox"))
+				h.regenerate_icons()
+
 /datum/disease2/effect/suicide
 	name = "Suicidal Syndrome"
 	stage = 4
@@ -130,7 +141,7 @@
 /datum/disease2/effect/suicide/activate(var/mob/living/carbon/mob,var/multiplier)
 	mob.suiciding = 1
 	//instead of killing them instantly, just put them at -175 health and let 'em gasp for a while
-	viewers(mob) << "<span class='warning'><b>[mob.name] is holding \his breath. It looks like \he's trying to commit suicide.</b></span>"
+	viewers(mob) << "<span class='danger'>[mob.name] is holding \his breath. It looks like \he's trying to commit suicide.</span>"
 	mob.adjustOxyLoss(175 - mob.getToxLoss() - mob.getFireLoss() - mob.getBruteLoss() - mob.getOxyLoss())
 	mob.updatehealth()
 	spawn(200) //in case they get revived by cryo chamber or something stupid like that, let them suicide again in 20 seconds
@@ -321,6 +332,14 @@
 
 
 
+/datum/disease2/effect/delightful
+	name = "Delightful Effect"
+	stage = 4
+/datum/disease2/effect/delightful/activate(var/mob/living/carbon/mob,var/multiplier)
+	mob << "<span class = 'notice'> You feel delightful!</span>"
+	if (mob.reagents.get_reagent_amount("doctorsdelight") < 1)
+		mob.reagents.add_reagent("doctorsdelight", 1)
+
 
 
 /datum/disease2/effect/spawn
@@ -443,6 +462,17 @@
 	stage = 3
 /datum/disease2/effect/giggle/activate(var/mob/living/carbon/mob,var/multiplier)
 	mob.say("*giggle")
+
+/datum/disease2/effect/chickenpox
+	name = "Chicken Pox"
+	stage = 3
+/datum/disease2/effect/chickenpox/activate(var/mob/living/carbon/mob,var/multiplier)
+	if (prob(10))
+		mob.say(pick("BAWWWK!", "BAAAWWK!", "CLUCK!", "CLUUUCK!", "BAAAAWWWK!"))
+	if (prob(5))
+		mob.emote("me",1,"vomits up a chicken egg!")
+		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
+		new /obj/item/weapon/reagent_containers/food/snacks/egg(get_turf(mob))
 
 /datum/disease2/effect/confusion
 	name = "Topographical Cretinism"
