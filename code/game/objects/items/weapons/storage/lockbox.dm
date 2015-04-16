@@ -12,6 +12,7 @@
 	req_access = list(access_armory)
 	var/locked = 1
 	var/broken = 0
+	var/indestructible = 0
 	var/icon_locked = "lockbox+l"
 	var/icon_closed = "lockbox"
 	var/icon_broken = "lockbox+b"
@@ -39,7 +40,7 @@
 				return
 		else
 			user << "<span class='warning'>Access Denied</span>"
-	else if((istype(W, /obj/item/weapon/card/emag)||istype(W, /obj/item/weapon/melee/energy/blade)) && !src.broken)
+	else if((istype(W, /obj/item/weapon/card/emag)||istype(W, /obj/item/weapon/melee/energy/blade)) && !src.broken && !src.indestructible)
 		broken = 1
 		locked = 0
 		desc = "It appears to be broken."
@@ -74,27 +75,28 @@
 	// WHY MUST WE DO THIS
 	// WHY
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lastertag) && !istype(Proj ,/obj/item/projectile/beam/practice) && !Proj.nodamage)
+		if(!istype(Proj ,/obj/item/projectile/beam/lastertag) && !istype(Proj ,/obj/item/projectile/beam/practice) && !Proj.nodamage && !src.indestructible)
 			health -= Proj.damage
 	..()
-	if(health <= 0)
+	if(health <= 0 && !src.indestructible)
 		for(var/atom/movable/A as mob|obj in src)
 			A.loc = src.loc
 		del(src)
 	return
 
 /obj/item/weapon/storage/lockbox/ex_act(severity)
-	var/newsev = max(3,severity+1)
-	for(var/atom/movable/A as mob|obj in src)//pulls everything out of the locker and hits it with an explosion
-		A.loc = src.loc
-		A.ex_act(newsev)
-	newsev=4-severity
-	if(prob(newsev*25)+25) // 1=100, 2=75, 3=50
-		qdel(src)
+	if (!src.indestructible)
+		var/newsev = max(3,severity+1)
+		for(var/atom/movable/A as mob|obj in src)//pulls everything out of the locker and hits it with an explosion
+			A.loc = src.loc
+			A.ex_act(newsev)
+		newsev=4-severity
+		if(prob(newsev*25)+25) // 1=100, 2=75, 3=50
+			qdel(src)
 
 /obj/item/weapon/storage/lockbox/emp_act(severity)
 	..()
-	if(!broken)
+	if(!broken && !src.indestructible)
 		switch(severity)
 			if(1)
 				if(prob(80))
@@ -206,7 +208,6 @@
 	storage_slots = 20
 	req_access = list(access_qm)
 	locked = 1
-	broken = 0
 	icon_locked = "coinbox+l"
 	icon_closed = "coinbox"
-	icon_broken = "coinbox+b"
+	indestructible = 1
