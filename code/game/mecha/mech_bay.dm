@@ -18,6 +18,8 @@
 								/obj/item/weapon/stock_parts/capacitor,
 								/obj/item/weapon/stock_parts/capacitor)
 
+	RefreshParts()
+
 /obj/machinery/mech_bay_recharge_floor/Crossed(var/obj/mecha/mecha)
 	. = ..()
 	if(istype(mecha))
