@@ -62,7 +62,9 @@
 
 /datum/game_mode/traitor/post_setup()
 	for (var/datum/mind/player in modePlayer)
-		player.make_traitor()
+		if (player)
+			spawn (0)
+				player.make_traitor()
 
 	if (!mixed)
 		spawn (rand(waittime_l, waittime_h))
