@@ -46,7 +46,7 @@
 		for (var/datum/mind/possible_traitor in possible_traitors)
 			if (possible_traitor)
 				for (var/restricted_job in restricted_jobs)
-					if (possible_traitor.assigned_role == restricted_job)
+					if (cmptext(possible_traitor.assigned_role, restricted_job))
 						possible_traitors.Remove(possible_traitor)
 
 		for (var/i = 1 to num_traitors)
