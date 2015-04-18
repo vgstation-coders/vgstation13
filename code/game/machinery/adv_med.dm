@@ -9,6 +9,8 @@
 	anchored = 1
 	idle_power_usage = 125
 	active_power_usage = 250
+	var/orient = "LEFT"
+	var/scanning = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/fullbodyscanner,
@@ -20,6 +22,41 @@
 	var/locked
 
 	l_color = "#00FF00"
+
+/obj/machinery/bodyscanner/New()
+	..()
+	RefreshParts()
+	spawn( 5 )
+		if(orient == "RIGHT")
+			icon_state = "body_scanner_0-r"
+			generate_console(get_step(get_turf(src), WEST))
+		else
+			generate_console(get_step(get_turf(src), EAST))
+		return
+	return
+
+/obj/machinery/bodyscanner/proc/generate_console(turf/T as turf)
+	if(!T.density && !T.contents.len)
+		var/obj/machinery/body_scanconsole/SC = new /obj/machinery/body_scanconsole(T.loc)
+		SC.orient = src.orient
+		return 1
+	else
+		var/obj/machinery/exists = locate(/obj/machinery/body_scanconsole/, T.loc)
+		if(exists)
+			//We have a console already. Kill it and replace it.
+			qdel(exists)
+			var/obj/machinery/body_scanconsole/SC = new /obj/machinery/body_scanconsole(T.loc)
+			SC.orient = src.orient
+			return 1
+		else
+			//Failed to generate console
+			return 0
+
+/obj/machinery/bodyscanner/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		T += SP.rating
+	scanning = round(T/3) //9 = virals, BAC, Blood Type; 6 = Blood Type; 3 = basic
 
 /obj/machinery/bodyscanner/power_change()
 	..()
@@ -134,8 +171,29 @@
 	src.icon_state = "body_scanner_0"
 	return
 
-/obj/machinery/bodyscanner/attackby(obj/item/weapon/grab/G as obj, user as mob)
-	..()
+/obj/machinery/bodyscanner/attackby(obj/item/weapon/W as obj, user as mob)
+	if(iscrowbar(W) && occupant)
+		return
+	if(iswrench(W))
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		if(orient == "RIGHT")
+			orient = "LEFT"
+			if(generate_console(get_step(get_turf(src), WEST)))
+				qdel(locate(/obj/machinery/bodyscanner, get_step(src, EAST)))
+			else
+				orient = "RIGHT"
+				visible_message("<span class='warning'>There is no space!</span>","<span class='warning'>[user] wants to be hardcore, but his CMO won't let him.</span>")
+		else
+			orient = "RIGHT"
+			if(generate_console(get_step(get_turf(src), EAST)))
+				qdel(locate(/obj/machinery/bodyscanner, get_step(src, WEST)))
+			else
+				orient = "LEFT"
+				visible_message("<span class='warning'>There is no space!</span>","<span class='warning'>[user] wants to be hardcore, but his CMO won't let him.</span>")
+		return
+	if(!istype(W, /obj/item/weapon/grab))
+		return ..()
+	var/obj/item/weapon/grab/G = W
 	if((!( istype(G, /obj/item/weapon/grab) ) || !( ismob(G.affecting) )))
 		return
 	if(src.occupant)
@@ -294,8 +352,10 @@
 		if(src.connected) //Is something connected?
 			dat = format_occupant_data(src.connected.get_occupant_data())
 			dat += "<HR><A href='?src=\ref[src];print=1'>Print</A><BR>"
+			if(connected.scanning==3)
+				dat += "<font color='red'>Voice recognition active. Activatation key: 'Scanner, print'.</font>"
 		else
-			dat = "<font color='red'> Error: No Body Scanner connected.</font>"
+			dat = "<font color='red'>Error: No Body Scanner connected.</font>"
 
 	dat += text("<BR><A href='?src=\ref[];mach_close=scanconsole'>Close</A>", user)
 	user << browse(dat, "window=scanconsole;size=430x600")
@@ -347,6 +407,8 @@
 		"bicaridine_amount" = H.reagents.get_reagent_amount("bicaridine"),
 		"dermaline_amount" = H.reagents.get_reagent_amount("dermaline"),
 		"blood_amount" = H.vessel.get_reagent_amount("blood"),
+		"all_chems" = H.reagents.reagent_list,
+		"btype" = H.dna.b_type,
 		"disabilities" = H.sdisabilities,
 		"tg_diseases_list" = H.viruses,
 		"lung_ruptured" = H.is_lung_ruptured(),
@@ -385,6 +447,8 @@
 		dat += "Large growth detected in frontal lobe, possibly cancerous. Surgical removal is recommended.<br>"
 
 	dat += text("[]\tBlood Level %: [] ([] units)</FONT><BR>", (occ["blood_amount"] > 448 ?"<font color='blue'>" : "<font color='red'>"), occ["blood_amount"]*100 / 560, occ["blood_amount"])
+	if(connected.scanning>=2)
+		dat += text("<font color='blue'>\tBlood Type: []</FONT><BR>", occ["btype"])
 
 	dat += text("Inaprovaline: [] units<BR>", occ["inaprovaline_amount"])
 	dat += text("Soporific: [] units<BR>", occ["stoxin_amount"])
@@ -392,9 +456,14 @@
 	dat += text("[]\tBicaridine: [] units<BR>", (occ["bicaridine_amount"] < 30 ? "<font color='black'>" : "<font color='red'>"), occ["bicaridine_amount"])
 	dat += text("[]\tDexalin: [] units<BR>", (occ["dexalin_amount"] < 30 ? "<font color='black'>" : "<font color='red'>"), occ["dexalin_amount"])
 
+	if(connected.scanning>2)
+		for(var/datum/reagent/R in occ["all_chems"])
+			if(R.id == "blood" || R.id == "inaprovaline" || R.id == "stoxin" || R.id == "dermaline" || R.id == "bicaridine" || R.id == "dexalin") return //no repeats
+			else
+				dat += text("<font color='black'>Detected</font> <font color='blue'>[R.volume]</font> <font color='black'>units of</font> <font color='blue'>[R.name]</font><BR>")
 	for(var/datum/disease/D in occ["tg_diseases_list"])
 		if(!D.hidden[SCANNER])
-			dat += text("<font color='red'><B>Warning: [D.form] Detected</B>\nName: [D.name].\nType: [D.spread].\nStage: [D.stage]/[D.max_stages].\nPossible Cure: [D.cure]</FONT><BR>")
+			dat += text("<BR><font color='red'><B>Warning: [D.form] Detected</B>\nName: [D.name].\nType: [D.spread].\nStage: [D.stage]/[D.max_stages].\nPossible Cure: [D.cure]</FONT><BR>")
 
 	dat += "<HR><table border='1'>"
 	dat += "<tr>"
@@ -500,3 +569,14 @@
 	if(occ["sdisabilities"] & NEARSIGHTED)
 		dat += text("<font color='red'>Retinal misalignment detected.</font><BR>")
 	return dat
+
+/obj/machinery/body_scanconsole/Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq)
+	if(!src.connected || src.connected.scanning<3)
+		return
+	if(speaker in range(3) && findtext(message, "scanner, print"))
+		var/mob/living/carbon/human/occupant = src.connected.occupant
+		if(!src.connected.occupant||!istype(occupant,/mob/living/carbon/human))
+			return
+		var/obj/item/weapon/paper/R = new(src.loc)
+		R.name = "paper - 'body scan report'"
+		R.info = format_occupant_data(src.connected.get_occupant_data())

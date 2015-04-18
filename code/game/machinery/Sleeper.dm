@@ -276,26 +276,29 @@
 
 
 /obj/machinery/sleeper/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(iscrowbar(W) && occupant)
+		return
 	if(iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		if(orient == "RIGHT")
 			orient = "LEFT"
-			if(generate_console())
+			if(generate_console(get_step(get_turf(src), WEST)))
 				qdel(locate(/obj/machinery/sleeper, get_step(src, EAST)))
 			else
 				orient = "RIGHT"
-				visible_message("<span class='warning'>[user] wants to be hardcore, but his CMO won't let him.</span>","<span class='warning'>There is no space!</span>")
+				visible_message("<span class='warning'>There is no space!</span>","<span class='warning'>[user] wants to be hardcore, but his CMO won't let him.</span>")
 		else
 			orient = "RIGHT"
-			if(generate_console())
+			if(generate_console(get_step(get_turf(src), EAST)))
 				qdel(locate(/obj/machinery/sleeper, get_step(src, WEST)))
 			else
 				orient = "LEFT"
-				visible_message("<span class='warning'>[user] wants to be hardcore, but his CMO won't let him.</span>","<span class='warning'>There is no space!</span>")
+				visible_message("<span class='warning'>There is no space!</span>","<span class='warning'>[user] wants to be hardcore, but his CMO won't let him.</span>")
 		return
-	if((!( istype(G, /obj/item/weapon/grab)) || !( ismob(G.affecting))))
-		return
-	if(G.affecting.buckled) return
+	if(!istype(W, /obj/item/weapon/grab))
+		return ..()
+	var/obj/item/weapon/grab/G = W
+	if(!(ismob(G.affecting)) || G.affecting.buckled) return
 	if(src.occupant)
 		user << "\blue <B>The sleeper is already occupied!</B>"
 		return

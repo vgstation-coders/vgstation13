@@ -482,7 +482,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/fullbodyscanner
 	name = "Circuit board (Full Body Scanner)"
-	build_path = "obj/machinery/bodyscanner"
+	build_path = "/obj/machinery/bodyscanner"
 	board_type = "machine"
 	origin_tech = "programming=3;biotech=3"
 	frame_desc = "Requires 3 Scanning Module"
@@ -491,7 +491,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/sleeper
 	name = "Circuit board (Sleeper)"
-	build_path = "/obj/machinery/sleeper/"
+	build_path = "/obj/machinery/sleeper"
 	board_type = "machine"
 	origin_tech = "programming=3;biotech=3"
 	frame_desc = "Requires 2 Manipulator, 1 Scanning Module"
