@@ -8009,7 +8009,7 @@
 "cYa" = (/obj/machinery/door/airlock/glass{name = "Pod Bay"},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/derelict/ship)
 "cYb" = (/obj/effect/decal/remains/human,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/derelict/ship)
 "cYc" = (/turf/simulated/shuttle/plating,/turf/simulated/shuttle/wall{icon_state = "swall_f10"},/area/derelict/ship)
-"cYd" = (/obj/machinery/computer/pod{id_tag = "oldship_gun"},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/derelict/ship)
+"cYd" = (/obj/machinery/computer/pod{id_tags = list("oldship_gun")},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/derelict/ship)
 "cYe" = (/obj/structure/table,/obj/item/weapon/screwdriver,/obj/machinery/light,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/derelict/ship)
 "cYf" = (/obj/structure/table,/obj/item/device/radio/off,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/derelict/ship)
 "cYg" = (/obj/structure/grille,/turf/simulated/floor/plating/airless,/area)

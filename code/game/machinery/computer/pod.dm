@@ -7,7 +7,6 @@
 	circuit = /obj/item/weapon/circuitboard/pod
 	var/list/id_tags = list()
 	var/list/door_only_tags = list()
-	var/id_tag = ""
 	var/list/synced = list()
 	var/list/timings = list()
 	var/list/times = list()
@@ -35,11 +34,13 @@
 				timings[ident_tag] = 0.0
 				times += ident_tag
 				times[ident_tag] = 30.0
+				break
 	for(var/obj/machinery/door/poddoor/M in world)
 		if(M.z != src.z)	continue
 		for(var/ident_tag in id_tags)
 			if((M.id_tag == ident_tag) && !(ident_tag in synced))
 				door_only_tags += ident_tag
+				break
 
 	return
 
