@@ -478,7 +478,34 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/scanning_module" = 1,
 							"/obj/item/weapon/stock_parts/manipulator" = 1,
 							"/obj/item/weapon/stock_parts/micro_laser" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 1,)
+							"/obj/item/weapon/stock_parts/console_screen" = 1)
+
+/obj/item/weapon/circuitboard/fullbodyscanner
+	name = "Circuit board (Full Body Scanner)"
+	build_path = "/obj/machinery/bodyscanner"
+	board_type = "machine"
+	origin_tech = "programming=3;biotech=3"
+	frame_desc = "Requires 3 Scanning Module"
+	req_components = list(
+							"/obj/item/weapon/stock_parts/scanning_module" = 3)
+
+/obj/item/weapon/circuitboard/sleeper
+	name = "Circuit board (Sleeper)"
+	build_path = "/obj/machinery/sleeper"
+	board_type = "machine"
+	origin_tech = "programming=3;biotech=3"
+	frame_desc = "Requires 2 Manipulator, 1 Scanning Module"
+	req_components = list(
+							"/obj/item/weapon/stock_parts/scanning_module" = 1,
+							"/obj/item/weapon/stock_parts/manipulator" = 2)
+
+/obj/item/weapon/circuitboard/morgue
+	name = "Circuit board (Morgue Tray)"
+	build_path = "/obj/structure/morgue/"
+	board_type = "machine"
+	origin_tech = "biotech=3"
+	frame_desc = "Requires nothing."
+	req_components = list()
 
 /obj/item/weapon/circuitboard/biogenerator
 	name = "Circuit Board (Biogenerator)"
