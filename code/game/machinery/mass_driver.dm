@@ -108,7 +108,7 @@
 					user << "The welding tool must be on to complete this task."
 					return 1
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-				usr << "You begin to cut the frame apart..."
+				user << "You begin to cut the frame apart..."
 				if(do_after(user, 30) && (build == 0))
 					user << "<span class='notice'>You detach the plasteel sheets from each others.</span>"
 					new /obj/item/stack/sheet/plasteel(get_turf(src),3)
