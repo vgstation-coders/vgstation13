@@ -43,9 +43,11 @@
 	var/obj/screen/m_suitclothesbg = null
 	var/obj/screen/m_hat = null
 	var/obj/screen/m_hatbg = null
+	var/obj/screen/m_glasses = null
+	var/obj/screen/m_glassesbg = null
 
 	//spells hud icons - this interacts with add_spell and remove_spell
-	var/obj/screen/movable/spell_master/spell_master = null
+	var/list/obj/screen/movable/spell_master/spell_masters = null
 
 	//thou shall always be able to see the Geometer of Blood
 	var/image/narsimage = null

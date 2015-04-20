@@ -114,7 +114,7 @@ var/global/list/whitelisted_species = list("Human")
 	//If we will apply mutant race overlays or not.
 	var/has_mutant_race = 1
 
-/datum/species/proc/handle_speech(var/message, var/mob/living/carbon/human/H)
+/datum/species/proc/handle_speech(message, mob/living/carbon/human/H)
 	if(H.dna)
 		if(length(message) >= 2)
 			for(var/datum/dna/gene/gene in dna_genes)
@@ -272,13 +272,13 @@ var/global/list/whitelisted_species = list("Human")
 		if(H.status_flags & GODMODE)	return 1	//godmode
 		if(breath.temperature < cold_level_1)
 			if(prob(20))
-				H << "\red You feel your face freezing and an icicle forming in your lungs!"
+				H << "<span class='warning'>You feel your face freezing and an icicle forming in your lungs!</span>"
 		else if(breath.temperature > heat_level_1)
 			if(prob(20))
 				if(H.dna.mutantrace == "slime")
-					H << "\red You feel supercharged by the extreme heat!"
+					H << "<span class='warning'>You feel supercharged by the extreme heat!</span>"
 				else
-					H << "\red You feel your face burning and a searing heat in your lungs!"
+					H << "<span class='warning'>You feel your face burning and a searing heat in your lungs!</span>"
 
 		if(H.dna.mutantrace == "slime")
 			if(breath.temperature < cold_level_1)
@@ -329,9 +329,6 @@ var/global/list/whitelisted_species = list("Human")
 	*/
 	return
 
-/datum/species/proc/say_filter(mob/M, message, datum/language/speaking)
-	return message
-
 /datum/species/proc/equip(var/mob/living/carbon/human/H)
 
 /datum/species/human
@@ -373,10 +370,8 @@ var/global/list/whitelisted_species = list("Human")
 
 	flesh_color = "#34AF10"
 
-/datum/species/unathi/say_filter(mob/M, message, datum/language/speaking)
-	if(copytext(message, 1, 2) != "*")
-		message = replacetext(message, "s", stutter("ss"))
-	return message
+/datum/species/unathi/handle_speech(message, mob/living/carbon/human/H)
+	return ..(replacetext(message, "s", stutter("ss")), H)
 
 /datum/species/skellington // /vg/
 	name = "Skellington"
@@ -389,11 +384,11 @@ var/global/list/whitelisted_species = list("Human")
 
 	default_mutations=list(SKELETON)
 
-/datum/species/skellington/say_filter(mob/M, message, datum/language/speaking)
-	// 25% chance of adding ACK ACK! to the end of a message.
-	if(copytext(message, 1, 2) != "*" && prob(25))
+/datum/species/skellington/handle_speech(message, mob/living/carbon/human/H)
+	if (prob(25))
 		message += "  ACK ACK!"
-	return message
+
+	return ..(message, H)
 
 /datum/species/tajaran
 	name = "Tajaran"
@@ -443,24 +438,18 @@ var/global/list/whitelisted_species = list("Human")
 	filter.addReplacement("god","gosh")
 	filter.addWordReplacement("(ass|butt)", "rump")
 
-/datum/species/tajaran/say_filter(mob/M, message, datum/language/speaking)
-	if(prob(15))
+/datum/species/tajaran/handle_speech(message, mob/living/carbon/human/H)
+	if (prob(15))
 		message = ""
-		if(prob(50))
-			message = pick(
-				"GOD, PLEASE",
-				"NO, GOD",
-				"AGGGGGGGH",
-			)+" "
-		message += pick(
-			"KILL ME",
-			"END MY SUFFERING",
-			"I CAN'T DO THIS ANYMORE",
-		)
-		return message
-	if(copytext(message, 1, 2) != "*")
-		message = filter.FilterSpeech(message)
-	return message
+
+		if (prob(50))
+			message = pick("GOD, PLEASE", "NO, GOD", "AGGGGGGGH") + " "
+
+		message += pick("KILL ME", "END MY SUFFERING", "I CAN'T DO THIS ANYMORE")
+
+		return ..(message, H)
+
+	return ..(filter.FilterSpeech(message), H)
 
 /datum/species/grey // /vg/
 	name = "Grey"

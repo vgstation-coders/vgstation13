@@ -17,7 +17,7 @@ var/global/datum/controller/occupations/job_master
 		occupations = list()
 		var/list/all_jobs = typesof(/datum/job)
 		if(!all_jobs.len)
-			world << "\red \b Error setting up jobs, no job datums found"
+			world << "<span class='danger'>Error setting up jobs, no job datums found</span>"
 			return 0
 		for(var/J in all_jobs)
 			var/datum/job/job = new J()
@@ -211,17 +211,6 @@ var/global/datum/controller/occupations/job_master
 
 		HandleFeedbackGathering()
 
-		//People who wants to be assistants, sure, go on.
-		Debug("DO, Running Assistant Check 1")
-		var/datum/job/assist = new /datum/job/assistant()
-		var/list/assistant_candidates = FindOccupationCandidates(assist, 3)
-		Debug("AC1, Candidates: [assistant_candidates.len]")
-		for(var/mob/new_player/player in assistant_candidates)
-			Debug("AC1 pass, Player: [player]")
-			AssignRole(player, "Assistant")
-			assistant_candidates -= player
-		Debug("DO, AC1 end")
-
 		//Select one head
 		Debug("DO, Running Head Check")
 		FillHeadPosition()
@@ -274,6 +263,30 @@ var/global/datum/controller/occupations/job_master
 
 		// Hand out random jobs to the people who didn't get any in the last check
 		// Also makes sure that they got their preference correct
+
+		//People who wants to be assistants, sure, go on.
+		var/count = 0
+		var/datum/job/officer = job_master.GetJob("Security Officer")
+		var/datum/job/warden = job_master.GetJob("Warden")
+		var/datum/job/hos = job_master.GetJob("Head of Security")
+		count = (officer.current_positions + warden.current_positions + hos.current_positions)
+		Debug("DO, Running Assistant Check 1")
+		var/datum/job/assist = new /datum/job/assistant()
+		var/datum/job/master_assistant = GetJob("Assistant")
+		var/list/assistant_candidates = FindOccupationCandidates(assist, 3)
+		assistant_candidates = shuffle(assistant_candidates)
+		Debug("AC1, Candidates: [assistant_candidates.len]")
+		for(var/mob/new_player/player in assistant_candidates)
+			Debug("AC1 pass, Player: [player]")
+			if(config.assistantlimit)
+				if(master_assistant.current_positions > (config.assistantratio * count))
+					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
+						break
+			AssignRole(player, "Assistant")
+			assistant_candidates -= player
+		unassigned |= assistant_candidates
+		Debug("DO, AC1 end")
+
 		for(var/mob/new_player/player in unassigned)
 			if(player.client.prefs.alternate_option == GET_RANDOM_JOB)
 				GiveRandomJob(player)
@@ -302,6 +315,13 @@ var/global/datum/controller/occupations/job_master
 		// For those who wanted to be assistant if their preferences were filled, here you go.
 		for(var/mob/new_player/player in unassigned)
 			if(player.client.prefs.alternate_option == BE_ASSISTANT)
+				if(config.assistantlimit)
+					count = (officer.current_positions + warden.current_positions + hos.current_positions)
+					if(master_assistant.current_positions > (config.assistantratio * count))
+						if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
+							player.ready = 0
+							unassigned -= player
+							continue
 				Debug("AC2 Assistant located, Player: [player]")
 				AssignRole(player, "Assistant")
 
@@ -365,7 +385,7 @@ var/global/datum/controller/occupations/job_master
 				H.mind.store_memory(remembered_info)
 
 			spawn(0)
-				H << "\blue<b>Your account number is: [M.account_number], your account pin is: [M.remote_access_pin]</b>"
+				H << "<span class='danger'>Your account number is: [M.account_number], your account pin is: [M.remote_access_pin]</span>"
 
 		var/alt_title = null
 		if(H.mind)

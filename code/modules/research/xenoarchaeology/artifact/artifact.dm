@@ -15,13 +15,14 @@
 	artifact_find_type = pick(\
 	5;/obj/structure/constructshell,\
 	5;/obj/machinery/syndicate_beacon,\
-	25;/obj/machinery/power/supermatter/shard,\
+	25;/obj/machinery/power/supermatter,\
 	50;/obj/structure/cult/pylon,\
 	100;/obj/machinery/auto_cloner,\
 	100;/obj/machinery/giga_drill,\
 	100;/obj/mecha/working/hoverpod,\
 	100;/obj/machinery/replicator,\
 	150;/obj/structure/crystal,\
+	100;/obj/machinery/communication,\
 	1000;/obj/machinery/artifact)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +61,7 @@
 
 	if (istype(W, /obj/item/device/measuring_tape))
 		var/obj/item/device/measuring_tape/P = W
-		user.visible_message("<span class='notice>[user] extends [P] towards [src].","\blue You extend [P] towards [src].</span>")
+		user.visible_message("<span class='notice>[user] extends [P] towards [src].","<span class='notice'>You extend [P] towards [src].</span></span>")
 		if(do_after(user,40))
 			user << "<span class='notice'>\icon[P] [src] has been excavated to a depth of [2*src.excavation_level]cm.</span>"
 		return

@@ -76,6 +76,11 @@
 	else
 		return 1
 
+//used in the AStar algorithm to determinate if the turf the door is on is passable
+/obj/machinery/door/window/CanAStarPass(var/obj/item/weapon/card/id/ID, var/to_dir)
+	return !density || (dir != to_dir) || check_access(ID)
+
+
 /obj/machinery/door/window/CheckExit(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
@@ -203,7 +208,7 @@
 		if(I.damtype == BRUTE || I.damtype == BURN)
 			src.health = max(0, src.health - aforce)
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
-		visible_message("\red <B>[src] was hit by [I].</B>")
+		visible_message("<span class='danger'>[src] was hit by [I].</span>")
 		if (src.health <= 0)
 			getFromPool(shard, loc)
 			getFromPool(/obj/item/stack/cable_coil, src.loc, 2)

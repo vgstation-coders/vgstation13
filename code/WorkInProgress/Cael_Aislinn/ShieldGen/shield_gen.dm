@@ -82,7 +82,7 @@
 			user << "Controls are now [src.locked ? "locked." : "unlocked."]"
 			updateDialog()
 		else
-			user << "\red Access denied."
+			user << "<span class='warning'>Access denied.</span>"
 
 /obj/machinery/shield_gen/attack_paw(user as mob)
 	return src.attack_hand(user)
@@ -189,7 +189,7 @@
 
 /obj/machinery/shield_gen/Topic(href, href_list[])
 	if(!isAI(usr) && usr.z != z) return 1
-	..()
+	if(..()) return 1
 	if( href_list["close"] )
 		usr << browse(null, "window=shield_generator")
 		usr.unset_machine()

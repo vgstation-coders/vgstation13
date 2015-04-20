@@ -47,6 +47,7 @@
 
 #define ui_monkey_uniform "3:14,1:5"//monkey
 #define ui_monkey_hat "4:14,1:5"	//monkey
+#define ui_monkey_glasses "2:14,1:5"	//monkey
 #define ui_monkey_mask "5:14,1:5"	//monkey
 #define ui_monkey_back "6:14,1:5"	//monkey
 
@@ -94,6 +95,7 @@
 #define ui_construct_pull "14:28,2:10" //above the zone_sel icon
 
 #define ui_spell_master "14:16,14:16"
+#define ui_genetic_master "14:16,12:16"
 
 //Pop-up inventory
 #define ui_shoes "2:8,1:5"

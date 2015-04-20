@@ -77,7 +77,7 @@
 	var/usealienwhitelist = 0
 	var/limitalienplayers = 0
 	var/alien_to_human_ratio = 0.5
-	
+
 	//used to determine if cyborgs/AI can speak
 	var/silent_ai = 0
 	var/silent_borg = 0
@@ -85,7 +85,7 @@
 	var/server
 	var/banappeals
 	var/wikiurl = "http://baystation12.net/wiki/index.php?title=Main_Page"
-	var/vgws_base_url = "http://vg13.undo.it" // No hanging slashes.
+	var/vgws_base_url = "http://ss13.pomf.se" // No hanging slashes.
 	var/forumurl = "http://baystation12.net/forums/"
 
 	var/media_base_url = "" // http://ss13.nexisonline.net/media
@@ -143,6 +143,7 @@
 	var/ghost_interaction = 0
 
 	var/comms_password = ""
+	var/paperwork_library = 0 //use the library DLL.
 
 	var/use_irc_bot = 0
 	var/irc_bot_host = "localhost"
@@ -159,6 +160,9 @@
 	var/emag_recharge_ticks = 0
 
 	var/map_voting = 0
+	var/renders_url = ""
+
+	var/default_ooc_color = "#002eb8"
 
 /datum/configuration/New()
 	. = ..()
@@ -475,6 +479,9 @@
 
 				if("comms_password")
 					config.comms_password = value
+					
+				if("paperwork_library")
+					config.paperwork_library = 1
 
 				if("irc_bot_host")
 					config.irc_bot_host = value
@@ -513,6 +520,8 @@
 					vgws_base_url = value
 				if("map_voting")
 					map_voting = 1
+				if("renders_url")
+					renders_url = value
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

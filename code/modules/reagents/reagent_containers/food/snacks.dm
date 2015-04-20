@@ -135,18 +135,19 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/examine(mob/user)
 	..()
-	if(bitecount == 1)
-		user << "<span class='info'>\The [src] was bitten by someone!</span>"
-	else if(bitecount > 1 && bitecount <= 3)
-		user << "<span class='info'>\The [src] was bitten [bitecount] times!</span>"
-	else
-		user << "<span class='info'>\The [src] was bitten multiple times!</span>"
+	if (bitecount)
+		if(bitecount == 1)
+			user << "<span class='info'>\The [src] was bitten by someone!</span>"
+		else if(bitecount > 1 && bitecount <= 3)
+			user << "<span class='info'>\The [src] was bitten [bitecount] times!</span>"
+		else
+			user << "<span class='info'>\The [src] was bitten multiple times!</span>"
 
 /obj/item/weapon/reagent_containers/food/snacks/attackby(obj/item/weapon/W, mob/user)
 
 	if(istype(W,/obj/item/weapon/pen)) //Renaming food
-		var/n_name = copytext(sanitize(input(user, "What would you like to name this dish?", "Food Renaming", null)  as text), 1, MAX_NAME_LEN)
-		if((loc == user && user.stat == 0))
+		var/n_name = copytext(sanitize(input(user, "What would you like to name this dish?", "Food Renaming", null) as text|null), 1, MAX_NAME_LEN)
+		if(n_name && Adjacent(user) && !user.stat)
 			name = "[n_name]"
 		return
 	if(istype(W,/obj/item/weapon/storage))
@@ -164,7 +165,7 @@
 		if(!iscarbon(user))
 			return 0
 		user << "<span class='notice'>You slip [W] inside [src].</span>"
-		user.drop_item(src)
+		user.drop_item(W, src)
 		add_fingerprint(user)
 		contents += W
 		return 1 //No afterattack here
@@ -302,16 +303,6 @@
 		reagents.add_reagent("nutriment", 4)
 		reagents.add_reagent("sugar", 2)
 		bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/chips
-	name = "chips"
-	desc = "Commander Riker's What-The-Crisps"
-	icon_state = "chips"
-	trash = /obj/item/trash/chips
-	New()
-		..()
-		reagents.add_reagent("nutriment", 3)
-		bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/cookie
 	name = "cookie"
@@ -524,10 +515,10 @@
 		var/clr = C.colourName
 
 		if(!(clr in list("blue", "green", "mime", "orange", "purple", "rainbow", "red", "yellow")))
-			usr << "<span class='notice'>[src] refuses to take on this colour!</span>"
+			user << "<span class='notice'>[src] refuses to take on this colour!</span>"
 			return
 
-		usr << "<span class='notice'>You colour [src] [clr].</span>"
+		user << "<span class='notice'>You colour [src] [clr].</span>"
 		icon_state = "egg-[clr]"
 		_color = clr
 	else
@@ -1162,6 +1153,7 @@
 		..()
 		reagents.add_reagent("nutriment", 6)
 		reagents.add_reagent("bustanut", 6)
+		reagents.add_reagent("sodiumchloride", 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/spacetwinkie
 	name = "space twinkie"
@@ -2684,7 +2676,7 @@
 				boxestoadd += i
 
 			if( (boxes.len+1) + boxestoadd.len <= 5 )
-				user.drop_item(src)
+				user.drop_item(I, src)
 
 				box.boxes = list() // Clear the box boxes so we don't have boxes inside boxes. - Xzibit
 				src.boxes.Add( boxestoadd )
@@ -2703,7 +2695,7 @@
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/)) // Long ass fucking object name
 		if(src.pizza) user << "<span class='warning'>[src] already has a pizza in it.</span>"
 		else if(src.open)
-			user.drop_item(src)
+			user.drop_item(I, src)
 			src.pizza = I
 			src.update_icon()
 			user << "<span class='notice'>You put [I] in [src].</span>"
@@ -2716,6 +2708,7 @@
 			return
 
 		var/t = input("Enter what you want to add to the tag:", "Write", null, null) as text
+		if (!Adjacent(user) || user.stat) return
 
 		var/obj/item/pizzabox/boxtotagto = src
 		if( boxes.len > 0 )
@@ -3150,3 +3143,298 @@
 	bitesize = 3
 
 
+//////////////////CHIPS//////////////////
+
+
+/obj/item/weapon/reagent_containers/food/snacks/chips
+	name = "chips"
+	desc = "Commander Riker's What-The-Crisps"
+	icon_state = "chips"
+	trash = /obj/item/trash/chips
+	New()
+		..()
+		reagents.add_reagent("nutriment", 3)
+		bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable
+	name = "Plain Chips"
+	desc = "Where did the bag come from?"
+	icon_state = "plain_chips"
+	item_state = "plain_chips"
+	trash = null
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/New()
+	..()
+	reagents.add_reagent("nutriment", 5)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar
+	name = "Salt and Vinegar Chips"
+	desc = "The objectively best flavour."
+	icon_state = "salt_vinegar_chips"
+	item_state = "salt_vinegar_chips"
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar/New()
+	..()
+	reagents.add_reagent("nutriment", 5)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar
+	name = "Cheddar Chips"
+	desc = "Dangerously cheesy."
+	icon_state = "cheddar_chips"
+	item_state = "cheddar_chips"
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar/New()
+	..()
+	reagents.add_reagent("nutriment", 5)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/clown
+	name = "Banana Chips"
+	desc = "A clown's favourite snack!"
+	icon_state = "clown_chips"
+	item_state = "clown_chips"
+
+/obj/item/weapon/reagent_containers/food/snacks/chip/cookable/clown/New()
+	..()
+	reagents.add_reagent("nutriment", 5)
+	reagents.add_reagent("honkserum", 5)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear
+	name = "Nuclear Chips"
+	desc = "Radioactive taste!"
+	icon_state = "nuclear_chips"
+	item_state = "nuclear_chips"
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear/New()
+	..()
+	reagents.add_reagent("nutriment", 5)
+	reagents.add_reagent("nuka_cola", 5)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/communist
+	name = "Communist Chips"
+	desc = "A perfect snack to share with the party!"
+	icon_state = "commie_chips"
+	item_state = "commie_chips"
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/communist/New()
+	..()
+	reagents.add_reagent("nutriment", 5)
+	reagents.add_reagent("vodka", 5)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno
+	name = "Xeno Raiders"
+	desc = "A great taste that is out of this world!"
+	icon_state = "xeno_chips"
+	item_state = "xeno_chips"
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno/New()
+	..()
+	reagents.add_reagent("nutriment", 10)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/gigapuddi
+	name = "Giga Puddi"
+	desc = "A large crème caramel"
+	icon_state = "gigapuddi"
+	trash = /obj/item/trash/plate
+	New()
+		..()
+		reagents.add_reagent("nutriment", 20)
+		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/gigapuddi/happy
+	desc = "A large crème caramel made with extra love"
+	icon_state = "happypuddi"
+
+/obj/item/weapon/reagent_containers/food/snacks/gigapuddi/anger
+	desc = "A large crème caramel made with extra hate"
+	icon_state = "angerpuddi"
+
+/obj/item/weapon/reagent_containers/food/snacks/flan
+	name = "Flan"
+	desc = "A small crème caramel"
+	icon_state = "flan"
+	trash = /obj/item/trash/plate
+	New()
+		..()
+		reagents.add_reagent("nutriment", 10)
+		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/omurice
+	name = "omelette rice"
+	desc = "Just like your Japanese animes!"
+	icon_state = "omurice"
+	trash = /obj/item/trash/plate
+
+	New()
+		..()
+		reagents.add_reagent("nutriment", 8)
+		bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/omurice/heart
+	icon_state = "omuriceheart"
+
+/obj/item/weapon/reagent_containers/food/snacks/muffin/bluespace
+	name = "Bluespace-berry Muffin"
+	desc = "Just like a normal blueberry muffin, except with completely unnecessary floaty things!"
+	icon_state = "bluespace"
+
+/obj/item/weapon/reagent_containers/food/snacks/yellowcake
+	name = "Yellowcake"
+	desc = "For Fat Men."
+	icon_state = "yellowcake"
+	New()
+		..()
+		reagents.add_reagent("nutriment", 40)
+		reagents.add_reagent("radium", 10)
+		reagents.add_reagent("uranium", 5)
+		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/yellowcupcake
+	name = "Yellowcupcake"
+	desc = "For Little Boys."
+	icon_state = "yellowcupcake"
+	New()
+		..()
+		reagents.add_reagent("nutriment", 15)
+		reagents.add_reagent("radium", 5)
+		reagents.add_reagent("uranium", 2)
+		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/cookiebowl
+	name = "Bowl of cookies"
+	desc = "A bowl full of small cookies."
+	icon_state = "cookiebowl"
+	trash = /obj/item/trash/snack_bowl
+	New()
+		..()
+		reagents.add_reagent("nutriment", 5)
+		reagents.add_reagent("sugar", 5)
+		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/chococherrycake
+	name = "chocolate-cherry cake"
+	desc = "A chocolate cake with icing and cherries."
+	icon_state = "chococherrycake"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/chococherrycakeslice
+	slices_num = 5
+	New()
+		..()
+		reagents.add_reagent("nutriment", 20)
+
+/obj/item/weapon/reagent_containers/food/snacks/chococherrycakeslice
+	name = "chocolate-cherry cake slice"
+	desc = "Just a slice of cake, it is enough for everyone."
+	icon_state = "chococherrycake_slice"
+	trash = /obj/item/trash/plate
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/pumpkinbread
+	name = "Pumpkin Bread"
+	desc = "A loaf of pumpkin bread."
+	icon_state = "pumpkinbread"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/pumpkinbreadslice
+	slices_num = 5
+	New()
+		..()
+		reagents.add_reagent("nutriment", 15)
+
+/obj/item/weapon/reagent_containers/food/snacks/pumpkinbreadslice
+	name = "Pumpkin Bread slice"
+	desc = "A slice of pumpkin bread."
+	icon_state = "pumpkinbreadslice"
+	bitesize = 2
+
+////////////////SLIDERS////////////////
+
+/obj/item/weapon/reagent_containers/food/snacks/slider
+	name = "slider"
+	desc = "It's so tiny!"
+	icon_state = "slider"
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/New()
+	..()
+	reagents.add_reagent("nutriment", 2.5)
+	bitesize = 1.5
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/synth
+	name = "synth slider"
+	desc = "It's made to be tiny!"
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/xeno
+	name = "xeno slider"
+	desc = "It's green!"
+	icon_state = "slider_xeno"
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/xeno/New()
+	..()
+	reagents.add_reagent("nutriment", 1)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/chicken
+	name = "chicken slider"
+	desc = "Chicken sliders? That's new."
+	icon_state = "slider_chicken"
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/chicken/New()
+	..()
+	reagents.add_reagent("nutriment", 1)
+	bitesize = 2
+/
+/obj/item/weapon/reagent_containers/food/snacks/slider/carp
+	name = "carp slider"
+	desc = "I wonder how it tastes!"
+	icon_state = "slider_carp"
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/carp/New()
+	..()
+	reagents.add_reagent("nutriment", 1)
+	reagents.add_reagent("toxin", 1)
+	bitesize = 2.5
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/carp/spider
+	name = "spidey slidey"
+	desc = "I think there's still a leg in there!"
+	icon_state = "slider_spider"
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/clown
+	name = "honky slider"
+	desc = "HONK!"
+	icon_state = "slider_clown"
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/clown/New()
+	..()
+	reagents.add_reagent("honkserum", 2.5)
+	bitesize = 2.5
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/mime
+	name = "quiet Slider"
+	desc = "..."
+	icon_state = "slider_mime"
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/slippery
+	name = "slippery slider"
+	desc = "It's so slippery!"
+	icon_state = "slider_slippery"
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/slippery/Crossed(atom/movable/O) //exactly the same as soap
+	if (istype(O, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = O
+
+		if (H.shoes && H.shoes.flags & NOSLIP)
+			return
+
+		H.stop_pulling()
+		H << "<SPAN CLASS='notice'>You slipped on the [name]!</SPAN>"
+		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+		H.Stun(3)
+		H.Weaken(2)
+
+
+
+////////////////SLIDERS END////////////////

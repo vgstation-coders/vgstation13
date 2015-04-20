@@ -109,18 +109,19 @@
 	range = -2 //the world
 	max_targets = 1
 	selection_type = "view"
+	spell_flags = SELECTABLE
 
 	override_base = "genetic"
 	hud_state = "gen_project"
 
-	compatible_mobs = list(/mob/living/carbon)
+	compatible_mobs = list(/mob/living/carbon/human)
 
-/spell/targeted/remotesay/choose_targets(mob/living/carbon/human/user)
+/spell/targeted/remotesay/choose_targets(var/mob/living/carbon/human/user)
 	if(!istype(user))
 		return list()
 
 	var/list/targets = ..()
-	for(var/mob/living/carbon/M in targets)
+	for(var/mob/living/carbon/human/M in targets)
 		if(!user.can_mind_interact(M))
 			targets -= M
 
@@ -130,13 +131,11 @@
 	if(!targets || !targets.len || !user || !istype(user))
 		return
 
-	if(user.stat!=CONSCIOUS)
-		user.reset_view(0)
-		user.remoteview_target = null
+	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
+	if(!say)
 		return
 
-	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
-	for(var/mob/living/carbon/target in targets)
+	for(var/mob/living/carbon/human/target in targets)
 		if(M_REMOTE_TALK in target.mutations)
 			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: [say]</span>")
 		else
@@ -269,7 +268,7 @@
 			M.dna.SetSEState(HULKBLOCK,0)
 			M.update_mutations()		//update our mutation overlays
 			M.update_body()
-			M << "\red You suddenly feel very weak."
+			M << "<span class='warning'>You suddenly feel very weak.</span>"
 			M.Weaken(3)
 			M.emote("collapse")
 */

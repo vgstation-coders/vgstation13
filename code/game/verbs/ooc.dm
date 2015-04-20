@@ -1,11 +1,9 @@
-var/global/normal_ooc_colour = "#002eb8"
-
 /client/verb/ooc(msg as text)
 	set name = "OOC" //Gave this shit a shorter name so you only have to time out "ooc" rather than "ooc message" to use it --NeoFite
 	set category = "OOC"
 
 	if(say_disabled)	//This is here to try to identify lag problems
-		usr << "\red Speech is currently admin-disabled."
+		usr << "<span class='warning'>Speech is currently admin-disabled.</span>"
 		return
 
 	if(!mob)	return
@@ -17,18 +15,18 @@ var/global/normal_ooc_colour = "#002eb8"
 	if(!msg)	return
 
 	if(!(prefs.toggles & CHAT_OOC))
-		src << "\red You have OOC muted."
+		src << "<span class='warning'>You have OOC muted.</span>"
 		return
 
 	if(!holder)
 		if(!ooc_allowed)
-			src << "\red OOC is globally muted"
+			src << "<span class='warning'>OOC is globally muted</span>"
 			return
 		if(!dooc_allowed && (mob.stat == DEAD))
-			usr << "\red OOC for dead mobs has been turned off."
+			usr << "<span class='warning'>OOC for dead mobs has been turned off.</span>"
 			return
 		if(prefs.muted & MUTE_OOC)
-			src << "\red You cannot use OOC (muted)."
+			src << "<span class='warning'>You cannot use OOC (muted).</span>"
 			return
 		if(handle_spam_prevention(msg,MUTE_OOC))
 			return
@@ -40,7 +38,7 @@ var/global/normal_ooc_colour = "#002eb8"
 
 	log_ooc("[mob.name]/[key] (@[mob.x],[mob.y],[mob.z]): [msg]")
 
-	var/display_colour = normal_ooc_colour
+	var/display_colour = config.default_ooc_color
 	if(holder && !holder.fakekey)
 		display_colour = "#0099cc"	//light blue
 		if(holder.rights & R_MOD && !(holder.rights & R_ADMIN))
@@ -83,7 +81,8 @@ var/global/normal_ooc_colour = "#002eb8"
 	set name = "Set Player OOC Colour"
 	set desc = "Set to yellow for eye burning goodness."
 	set category = "Fun"
-	normal_ooc_colour = newColor
+
+	config.default_ooc_color = newColor
 
 // Stealing it back :3c -Nexypoo
 /client/verb/looc(msg as text)
@@ -92,7 +91,7 @@ var/global/normal_ooc_colour = "#002eb8"
 	set category = "OOC"
 
 	if(say_disabled)	//This is here to try to identify lag problems
-		usr << "\red Speech is currently admin-disabled."
+		usr << "<span class='warning'>Speech is currently admin-disabled.</span>"
 		return
 
 	if(!mob)	return
@@ -104,18 +103,18 @@ var/global/normal_ooc_colour = "#002eb8"
 	if(!msg)	return
 
 	if(!(prefs.toggles & CHAT_LOOC))
-		src << "\red You have LOOC muted."
+		src << "<span class='warning'>You have LOOC muted.</span>"
 		return
 
 	if(!holder)
 		if(!ooc_allowed)
-			src << "\red LOOC is globally muted"
+			src << "<span class='warning'>LOOC is globally muted</span>"
 			return
 		if(!dooc_allowed && (mob.stat == DEAD))
-			usr << "\red LOOC for dead mobs has been turned off."
+			usr << "<span class='warning'>LOOC for dead mobs has been turned off.</span>"
 			return
 		if(prefs.muted & MUTE_OOC)
-			src << "\red You cannot use LOOC (muted)."
+			src << "<span class='warning'>You cannot use LOOC (muted).</span>"
 			return
 		if(handle_spam_prevention(msg,MUTE_OOC))
 			return

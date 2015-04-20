@@ -13,7 +13,7 @@
 				user.visible_message("<span class='notice'>[user] starts disassembling \the [src]</span>", \
 				"<span class='notice'>You start disassembling \the [src]</span>")
 				if(do_after(user, 40))
-					user.visible_message("<span class='warning'>[src] dissasembles \the [src]</span>", \
+					user.visible_message("<span class='warning'>[user] dissasembles \the [src]</span>", \
 					"<span class='notice'>You dissasemble \the [src]</span>")
 					getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 					qdel(src)
@@ -250,7 +250,7 @@
 	else if(istype(W, /obj/item/pipe))
 		var/obj/item/pipe/P = W
 		if(P.pipe_type in list(0, 1, 5))	//Simple pipes, simple bends, and simple manifolds.
-			user.drop_item(src.loc)
+			user.drop_item(P, src.loc)
 			user.visible_message("<span class='warning'>[user] fits \the [P] into \the [src]</span>", \
 			"<span class='notice'>You fit \the [P] into \the [src]</span>")
 	else

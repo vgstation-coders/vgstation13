@@ -43,8 +43,8 @@
 	canister_color = "blue"
 	can_label = 0
 
-/obj/machinery/portable_atmospherics/canister/toxins
-	name = "Canister \[Toxin (Bio)\]"
+/obj/machinery/portable_atmospherics/canister/plasma
+	name = "Canister \[Plasma\]"
 	icon_state = "orange"
 	canister_color = "orange"
 	can_label = 0
@@ -190,14 +190,14 @@
 /obj/machinery/portable_atmospherics/canister/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if(iswelder(W) && src.destroyed)
 		if(weld(W, user))
-			user << "\blue You salvage whats left of \the [src]"
+			user << "<span class='notice'>You salvage whats left of \the [src]</span>"
 			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))//new /obj/item/stack/sheet/metal(src.loc)
 			M.amount = 3
 			del src
 		return
 
 	if(!istype(W, /obj/item/weapon/wrench) && !istype(W, /obj/item/weapon/tank) && !istype(W, /obj/item/device/analyzer) && !istype(W, /obj/item/device/pda))
-		visible_message("\red [user] hits the [src] with a [W]!")
+		visible_message("<span class='warning'>[user] hits the [src] with a [W]!</span>")
 		investigation_log(I_ATMOS, "<span style='danger'>was smacked with \a [W] by [key_name(user)]</span>")
 		src.health -= W.force
 		src.add_fingerprint(user)
@@ -278,10 +278,23 @@
 		return 0
 	if(!isAI(usr) && usr.z != z) return 1
 
-	if(!usr.canmove || usr.stat || usr.restrained() || !in_range(loc, usr)) // exploit protection -walter0o
-		usr << browse(null, "window=canister")
-		onclose(usr, "canister")
-		return
+	var/ghost_flags=0
+	if(ghost_write)
+		ghost_flags |= PERMIT_ALL
+	if(!canGhostWrite(usr,src,"",ghost_flags))
+		if(usr.restrained() || usr.lying || usr.stat || !usr.canmove)
+			usr << browse(null, "window=canister")
+			onclose(usr, "canister")
+			return 1
+
+		if(!Adjacent(usr))
+			if(usr.mutations && usr.mutations.len)
+				if(!(M_TK in usr.mutations))
+					usr << browse(null, "window=canister")
+					onclose(usr, "canister")
+					return 1
+	else if(!custom_aghost_alerts)
+		log_adminghost("[key_name(usr)] screwed with [src] ([href])!")
 
 	if(href_list["toggle"])
 		var/datum/gas/sleeping_agent/S = locate() in src.air_contents.trace_gases
@@ -336,7 +349,7 @@
 				"\[N2O\]" = "redws", \
 				"\[N2\]" = "red", \
 				"\[O2\]" = "blue", \
-				"\[Toxin (Bio)\]" = "orange", \
+				"\[Plasma\]" = "orange", \
 				"\[CO2\]" = "black", \
 				"\[Air\]" = "grey", \
 				"\[CAUTION\]" = "yellow", \
@@ -348,11 +361,12 @@
 				src.name = "Canister: [label]"
 
 	src.add_fingerprint(usr)
+	src.add_hiddenprint(usr)
 	update_icon()
 
 	return 1
 
-/obj/machinery/portable_atmospherics/canister/toxins/New(loc)
+/obj/machinery/portable_atmospherics/canister/plasma/New(loc)
 	..(loc)
 	air_contents.adjust(tx = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()

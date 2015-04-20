@@ -78,7 +78,7 @@
 	"}
 
 /obj/machinery/power/emitter/proc/update_beam()
-	if(active)
+	if(active && powered)
 		if(!beam)
 			beam = new (loc)
 			beam.dir=dir
@@ -122,7 +122,7 @@
 	..()
 
 /obj/machinery/power/emitter/update_icon()
-	if (active && powernet && avail(active_power_usage))
+	if (powered && get_powernet() && avail(active_power_usage))
 		icon_state = "emitter_+a"
 	else
 		icon_state = "emitter"
@@ -134,7 +134,7 @@
 		return
 	src.add_fingerprint(user)
 	if(state == 2)
-		if(!powernet)
+		if(!get_powernet())
 			user << "The emitter isn't connected to a wire."
 			return 1
 		if(!src.locked)
@@ -155,9 +155,9 @@
 			update_icon()
 			update_beam()
 		else
-			user << "\red The controls are locked!"
+			user << "<span class='warning'>The controls are locked!</span>"
 	else
-		user << "\red The [src] needs to be firmly secured to the floor first."
+		user << "<span class='warning'>The [src] needs to be firmly secured to the floor first.</span>"
 		return 1
 
 
@@ -173,7 +173,7 @@
 	return 0
 
 /obj/machinery/power/emitter/process()
-	if(!anchored)
+	if(!anchored) //If it got unanchored "inexplicably"... fucking badmins
 		active = 0
 		update_icon()
 		update_beam()
@@ -181,23 +181,24 @@
 	if(stat & BROKEN)
 		return
 
-	if(state != 2 || (!powernet && active_power_usage))
+	if(state != 2 || (!powernet && active_power_usage)) //Not welded to the floor, or no more wire underneath and requires power
 		active = 0
 		update_icon()
 		update_beam()
 		return
 
-	if(((last_shot + fire_delay) <= world.time) && (active == 1))
-		if(!active_power_usage || avail(active_power_usage))
-			add_load(active_power_usage)
-
-			if(!powered)
+	if(((last_shot + fire_delay) <= world.time) && (active == 1)) //It's currently activated and it hasn't processed in a bit
+		if(!active_power_usage || avail(active_power_usage)) //Doesn't require power or powernet has enough supply
+			add_load(active_power_usage) //Drain it then bitch
+			if(!powered) //Yay its powered
 				powered = 1
 				update_icon()
+				update_beam()
 				investigation_log(I_SINGULO,"regained power and turned <font color='green'>on</font>")
 		else
-			if(powered)
-				powered = 0
+			if(powered) //Fuck its not anymore
+				powered = 0 //Whelp time to kill it then
+				update_beam() //Update its beam and icon
 				update_icon()
 				investigation_log(I_SINGULO,"lost power and turned <font color='red'>off</font>")
 			return
@@ -226,7 +227,7 @@
 	if(!emagged)
 		locked = 0
 		emagged = 1
-		user.visible_message("[user.name] emags the [src.name].","\red You short out the lock.")
+		user.visible_message("[user.name] emags the [src.name].","<span class='warning'>You short out the lock.</span>")
 		return
 
 /obj/machinery/power/emitter/wrenchAnchor(mob/user)
@@ -254,7 +255,7 @@
 
 	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
 		if(emagged)
-			user << "\red The lock seems to be broken"
+			user << "<span class='warning'>The lock seems to be broken</span>"
 			return
 		if(src.allowed(user))
 			if(active)
@@ -262,9 +263,9 @@
 				user << "The controls are now [src.locked ? "locked." : "unlocked."]"
 			else
 				src.locked = 0 //just in case it somehow gets locked
-				user << "\red The controls can only be locked when the [src] is online"
+				user << "<span class='warning'>The controls can only be locked when the [src] is online</span>"
 		else
-			user << "\red Access denied."
+			user << "<span class='warning'>Access denied.</span>"
 		return
 
 /obj/effect/beam/emitter

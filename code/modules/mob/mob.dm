@@ -79,30 +79,44 @@
 
 /mob/proc/show_message(msg, type, alt, alt_type)//Message, type of message (1 or 2), alternative message, alt message type (1 or 2)
 
-	if(!client)	return
+	//Because the person who made this is a fucking idiot, let's clarify. 1 is sight-related messages (aka emotes in general), 2 is hearing-related (aka HEY DUMBFUCK I'M TALKING TO YOU)
+
+	if(!client) //We dun goof
+		return
 
 	msg = copytext(msg, 1, MAX_MESSAGE_LEN)
 
-	if (type)
-		if(type & 1 && (sdisabilities & BLIND || blinded || paralysis) )//Vision related
-			if (!( alt ))
+	if(type)
+		if((type & 1) && (sdisabilities & BLIND || blinded || paralysis)) //Vision related //We can't see all those emotes no-one ever does !
+			if(!(alt))
 				return
 			else
 				msg = alt
 				type = alt_type
-		if (type & 2 && (sdisabilities & DEAF || ear_deaf))//Hearing related
-			if (!( alt ))
-				return
+		if((type & 2) && (sdisabilities & DEAF || ear_deaf)) //Hearing related //We can't hear what the person is saying. Too bad
+			if(!(alt))
+				src << "<span class='notice'>You can almost hear someone talking.</span>" //Well, not THAT deaf
+				return //And that does it
 			else
 				msg = alt
 				type = alt_type
-				if ((type & 1 && sdisabilities & BLIND))
+				if((type & 1) && (sdisabilities & BLIND || blinded || paralysis)) //Since the alternative is sight-related, make sure we can see
 					return
-	// Added voice muffling for Issue 41.
-	if(stat == UNCONSCIOUS || sleeping > 0)
-		src << "<I>... You can almost hear someone talking ...</I>"
-	else
-		src << msg
+	//Added voice muffling for Issue 41.
+	//This has been changed to only work with audible messages, because you can't hear a frown
+	//This blocks "audible" emotes like gasping and screaming, but that's such a small loss. Who wants to hear themselves gasping to death ? I don't
+	if(stat == UNCONSCIOUS || sleeping > 0) //No-one's home
+		if((type & 1)) //This is an emote
+			if(!(alt)) //No alternative message
+				return //We can't see it, we're a bit too dying over here
+			else //Hey look someone passed an alternative message
+				src << "<span class='notice'>You can almost hear someone talking.</span>" //Now we can totally not hear it!
+				return //And we're good
+		else //This is not an emote
+			src << "<span class='notice'>You can almost hear someone talking.</span>" //The sweet silence of death
+			return //All we ever needed to hear
+	else //We're fine
+		src << msg //Send it
 	return
 
 // Show a message to all mobs in sight of this one
@@ -139,8 +153,9 @@
 	return 0
 
 /mob/proc/Life()
-	if(spell_master)
-		spell_master.update_spells(0, src)
+	if(spell_masters && spell_masters.len)
+		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+			spell_master.update_spells(0, src)
 	return
 
 /mob/proc/see_narsie(var/obj/machinery/singularity/narsie/large/N, var/dir)
@@ -293,7 +308,7 @@
 							if(EQUIP_FAILACTION_DROP)
 								W.loc=get_turf(src) // I think.
 						return
-					drop_item()
+					drop_item(W)
 					if(!(put_in_active_hand(wearing)))
 						equip_to_slot(wearing, slot, redraw_mob)
 						switch(act_on_fail)
@@ -654,7 +669,7 @@ var/list/slot_equipment_priority = list( \
 	set name = "Point To"
 	set category = "Object"
 
-	if(!src || !isturf(src.loc) || !(A in view(src.loc)))
+	if(!src || usr.stat || (usr.status_flags & FAKEDEATH) || !isturf(src.loc) || !(A in view(src.loc)))
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
@@ -1097,7 +1112,7 @@ var/list/slot_equipment_priority = list( \
 			else
 				stat(null, "Garbage Controller is not running.")
 
-			if(processScheduler.getIsRunning())
+			if(processScheduler && processScheduler.getIsRunning())
 				var/datum/controller/process/process
 
 				process = processScheduler.getProcess("vote")
@@ -1220,8 +1235,7 @@ var/list/slot_equipment_priority = list( \
 		if(ishuman(src))
 			layer = 3.9
 		density = 0
-		drop_l_hand()
-		drop_r_hand()
+		drop_hands()
 	else
 		if(ishuman(src))
 			layer = 4
@@ -1424,9 +1438,9 @@ var/list/slot_equipment_priority = list( \
 		return
 
 	if(self)
-		visible_message("<span class='warning'><b>[src] rips [selection] out of their body.</b></span>","<span class='warning'><b>You rip [selection] out of your body.</b></span>")
+		visible_message("<span class='danger'><b>[src] rips [selection] out of their body.</b></span>","<span class='warning'>You rip [selection] out of your body.</span>")
 	else
-		visible_message("<span class='warning'><b>[usr] rips [selection] out of [src]'s body.</b></span>","<span class='warning'><b>[usr] rips [selection] out of your body.</b></span>")
+		visible_message("<span class='danger'><b>[usr] rips [selection] out of [src]'s body.</b></span>","<span class='warning'>[usr] rips [selection] out of your body.</span>")
 
 	selection.loc = get_turf(src)
 

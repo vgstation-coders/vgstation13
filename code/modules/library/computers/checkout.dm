@@ -206,7 +206,7 @@
 /obj/machinery/computer/library/checkout/emag(mob/user)
 	if(!emagged)
 		src.emagged = 1
-		user << "\blue You override the library computer's printing restrictions."
+		user << "<span class='notice'>You override the library computer's printing restrictions.</span>"
 		return 1
 	return
 
@@ -410,6 +410,6 @@
 		B.title = newbook.title
 		B.author = newbook.author
 		B.dat = http
-		B.icon_state = "book[rand(1,7)]"
+		B.icon_state = "book[rand(1,9)]"
 	src.visible_message("[src]'s printer hums as it produces a completely bound book. How did it do that?")
 

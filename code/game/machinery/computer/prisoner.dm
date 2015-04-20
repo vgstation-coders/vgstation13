@@ -82,8 +82,8 @@
 
 	Topic(href, href_list)
 		if(..())
-			return
-		if((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+			return 1
+		else
 			usr.set_machine(src)
 
 			if(href_list["inject1"])
@@ -110,7 +110,7 @@
 				var/obj/item/weapon/implant/I = locate(href_list["warn"])
 				if((I)&&(I.imp_in))
 					var/mob/living/carbon/R = I.imp_in
-					R << "\green You hear a voice in your head saying: '[warning]'"
+					R << "<span class='good'>You hear a voice in your head saying: '[warning]'</span>"
 
 			src.add_fingerprint(usr)
 		src.updateUsrDialog()

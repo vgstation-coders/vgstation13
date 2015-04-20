@@ -46,7 +46,7 @@ obj/item/proc/get_clamped_volume()
 	//var/messagesource = M
 	if (can_operate(M))        //Checks if mob is lying down on table for surgery
 		if (do_surgery(M,user,src))
-			return
+			return 1
 	//if (istype(M,/mob/living/carbon/brain))
 	//	messagesource = M:container
 	if (hitsound)
@@ -69,7 +69,7 @@ obj/item/proc/get_clamped_volume()
 		if(istype(M, /mob/living/carbon/slime))
 			var/mob/living/carbon/slime/slime = M
 			if(prob(25))
-				user << "\red [src] passes right through [M]!"
+				user << "<span class='warning'>[src] passes right through [M]!</span>"
 				return
 
 			if(power > 0)
@@ -155,12 +155,13 @@ obj/item/proc/get_clamped_volume()
 
 		if(!showname && user)
 			if(user.client)
-				user << "\red <B>You attack [M] with [src]. </B>"
+				user << "<span class='danger'>You attack [M] with [src]. </span>"
 
 
 
 	if(istype(M, /mob/living/carbon/human))
-		M:attacked_by(src, user, def_zone)
+		var/mob/living/carbon/human/H = M
+		H.attacked_by(src, user, def_zone)
 	else
 		switch(damtype)
 			if("brute")
@@ -168,7 +169,9 @@ obj/item/proc/get_clamped_volume()
 					M.adjustBrainLoss(power)
 
 				else
-
+					if(istype(M, /mob/living/carbon/monkey))
+						var/mob/living/carbon/monkey/K = M
+						power = K.defense(power,def_zone)
 					M.take_organ_damage(power)
 					if (prob(33) && src.force) // Added blood for whacking non-humans too
 						var/turf/location = M.loc
@@ -176,6 +179,9 @@ obj/item/proc/get_clamped_volume()
 							location:add_blood_floor(M)
 			if("fire")
 				if (!(M_RESIST_COLD in M.mutations))
+					if(istype(M, /mob/living/carbon/monkey))
+						var/mob/living/carbon/monkey/K
+						power = K.defense(power,def_zone)
 					M.take_organ_damage(0, power)
 					M << "Aargh it burns!"
 		M.updatehealth()

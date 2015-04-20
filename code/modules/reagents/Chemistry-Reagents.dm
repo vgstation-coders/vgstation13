@@ -115,7 +115,7 @@
 /datum/reagent/slimejelly/on_mob_life(var/mob/living/M as mob,var/alien)
 	if(M.dna.mutantrace != "slime" || !istype(M, /mob/living/carbon/slime))
 		if(prob(10))
-			M << "\red Your insides are burning!"
+			M << "<span class='warning'>Your insides are burning!</span>"
 			M.adjustToxLoss(rand(20,60)*REM)
 	if(prob(40))
 		M.heal_organ_damage(5*REM,0)
@@ -269,11 +269,11 @@
 		if(H.species.name=="Grey")
 			if(method == TOUCH)
 				if(H.wear_mask)
-					H << "\red Your mask protects you from the water!"
+					H << "<span class='warning'>Your mask protects you from the water!</span>"
 					return
 
 				if(H.head)
-					H << "\red Your helmet protects you from the water!"
+					H << "<span class='warning'>Your helmet protects you from the water!</span>"
 					return
 				if(!M.unacidable)
 					if(prob(15) && volume >= 30)
@@ -516,7 +516,7 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/human = M
 		if(human.dna.mutantrace == null)
-			M << "\red Your flesh rapidly mutates!"
+			M << "<span class='warning'>Your flesh rapidly mutates!</span>"
 			human.dna.mutantrace = "slime"
 			human.update_mutantrace()
 	..()
@@ -710,7 +710,7 @@
 						return
 
 					if(H.head)
-						H << "<span class='warning'>\red Your helmet protects you from the holy water!</span>"
+						H << "<span class='warning'><span class='warning'>Your helmet protects you from the holy water!</span></span>"
 						return
 					if(!M.unacidable)
 						if(prob(15) && volume >= 30)
@@ -1010,18 +1010,18 @@
 				if(!H.wear_mask.unacidable)
 					del (H.wear_mask)
 					H.update_inv_wear_mask()
-					H << "\red Your mask melts away but protects you from the acid!"
+					H << "<span class='warning'>Your mask melts away but protects you from the acid!</span>"
 				else
-					H << "\red Your mask protects you from the acid!"
+					H << "<span class='warning'>Your mask protects you from the acid!</span>"
 				return
 
 			if(H.head && !istype(H.head, /obj/item/weapon/reagent_containers/glass/bucket))
 				if(prob(15) && !H.head.unacidable)
 					del(H.head)
 					H.update_inv_head()
-					H << "\red Your helmet melts away but protects you from the acid"
+					H << "<span class='warning'>Your helmet melts away but protects you from the acid</span>"
 				else
-					H << "\red Your helmet protects you from the acid!"
+					H << "<span class='warning'>Your helmet protects you from the acid!</span>"
 				return
 
 		else if(ismonkey(M))
@@ -1030,9 +1030,9 @@
 				if(!MK.wear_mask.unacidable)
 					del (MK.wear_mask)
 					MK.update_inv_wear_mask()
-					MK << "\red Your mask melts away but protects you from the acid!"
+					MK << "<span class='warning'>Your mask melts away but protects you from the acid!</span>"
 				else
-					MK << "\red Your mask protects you from the acid!"
+					MK << "<span class='warning'>Your mask protects you from the acid!</span>"
 				return
 
 		if(!M.unacidable)
@@ -1064,7 +1064,7 @@
 			var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
 			I.desc = "Looks like this was \an [O] some time ago."
 			for(var/mob/M in viewers(5, O))
-				M << "\red \the [O] melts."
+				M << "<span class='warning'>\the [O] melts.</span>"
 			del(O)
 
 /datum/reagent/pacid
@@ -1093,18 +1093,18 @@
 				if(!H.wear_mask.unacidable)
 					del (H.wear_mask)
 					H.update_inv_wear_mask()
-					H << "\red Your mask melts away but protects you from the acid!"
+					H << "<span class='warning'>Your mask melts away but protects you from the acid!</span>"
 				else
-					H << "\red Your mask protects you from the acid!"
+					H << "<span class='warning'>Your mask protects you from the acid!</span>"
 				return
 
 			if(H.head && !istype(H.head, /obj/item/weapon/reagent_containers/glass/bucket))
 				if(prob(15) && !H.head.unacidable)
 					del(H.head)
 					H.update_inv_head()
-					H << "\red Your helmet melts away but protects you from the acid"
+					H << "<span class='warning'>Your helmet melts away but protects you from the acid</span>"
 				else
-					H << "\red Your helmet protects you from the acid!"
+					H << "<span class='warning'>Your helmet protects you from the acid!</span>"
 				return
 
 			if(!H.unacidable)
@@ -1119,9 +1119,9 @@
 				if(!MK.wear_mask.unacidable)
 					del (MK.wear_mask)
 					MK.update_inv_wear_mask()
-					MK << "\red Your mask melts away but protects you from the acid!"
+					MK << "<span class='warning'>Your mask melts away but protects you from the acid!</span>"
 				else
-					MK << "\red Your mask protects you from the acid!"
+					MK << "<span class='warning'>Your mask protects you from the acid!</span>"
 				return
 
 			if(!MK.unacidable)
@@ -1144,7 +1144,7 @@
 			var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
 			I.desc = "Looks like this was \an [O] some time ago."
 			for(var/mob/M in viewers(5, O))
-				M << "\red \the [O] melts."
+				M << "<span class='warning'>\the [O] melts.</span>"
 			del(O)
 
 /datum/reagent/glycerol
@@ -1549,7 +1549,7 @@
 			for(var/obj/effect/E in W) if(E.name == "Wallrot") del E
 
 			for(var/mob/O in viewers(W, null))
-				O.show_message(text("\blue The fungi are completely dissolved by the solution!"), 1)
+				O.show_message(text("<span class='notice'>The fungi are completely dissolved by the solution!</span>"), 1)
 
 /datum/reagent/toxin/plantbgone/reaction_obj(var/obj/O, var/volume)
 	if(istype(O,/obj/effect/alien/weeds/))
@@ -3358,7 +3358,7 @@
 		return
 
 /datum/reagent/drink/coffee/cafe_latte
-	name = "Cafe Latte"
+	name = "Latte"
 	id = "cafe_latte"
 	description = "A nice, strong and tasty beverage while you are reading."
 	color = "#664300" // rgb: 102, 67, 0
@@ -4099,28 +4099,38 @@
 	reagent_state = LIQUID
 	color = "#664300" // rgb: 102, 67, 0
 
-/datum/reagent/ethanol/deadrum/doctor_delight
+/datum/reagent/drink/doctor_delight
 	name = "The Doctor's Delight"
 	id = "doctorsdelight"
 	description = "A gulp a day keeps the MediBot away. That's probably for the best."
 	reagent_state = LIQUID
-	nutriment_factor = 1 * FOOD_METABOLISM
+	nutriment_factor = FOOD_METABOLISM
 	color = "#664300" // rgb: 102, 67, 0
 
-/datum/reagent/ethanol/deadrum/doctor_delight/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/drink/doctor_delight/on_mob_life(var/mob/living/M as mob)
 
-	if(!holder) return
-	M:nutrition += nutriment_factor
-	holder.remove_reagent(src.id, FOOD_METABOLISM)
-	if(!M) M = holder.my_atom
-	if(M:getOxyLoss() && prob(50)) M:adjustOxyLoss(-2)
-	if(M:getBruteLoss() && prob(60)) M:heal_organ_damage(2,0)
-	if(M:getFireLoss() && prob(50)) M:heal_organ_damage(0,2)
-	if(M:getToxLoss() && prob(50)) M:adjustToxLoss(-2)
-	if(M.dizziness !=0) M.dizziness = max(0,M.dizziness-15)
-	if(M.confused !=0) M.confused = max(0,M.confused - 5)
-	..()
-	return
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!holder)
+			return
+		H.nutrition += nutriment_factor
+		holder.remove_reagent(src.id, FOOD_METABOLISM)
+		if(!H)
+			H = holder.my_atom
+		if(H.getOxyLoss() && prob(50))
+			H.adjustOxyLoss(-2)
+		if(H.getBruteLoss() && prob(60))
+			H.heal_organ_damage(2, 0)
+		if(H.getFireLoss() && prob(50))
+			H.heal_organ_damage(0, 2)
+		if(H.getToxLoss() && prob(50))
+			H.adjustToxLoss(-2)
+		if(H.dizziness != 0)
+			H.dizziness = max(0, H.dizziness - 15)
+		if(H.confused != 0)
+			H.confused = max(0, H.confused - 5)
+		..()
+		return
 
 /datum/reagent/ethanol/deadrum/changelingsting
 	name = "Changeling Sting"
@@ -4467,3 +4477,195 @@
 	if(istype(holder))
 		holder.reagent_list -= src
 		holder = null
+
+/datum/reagent/vinegar //Eventually there will be a way of making vinegar.
+	name = "Vinegar"
+	id = "vinegar"
+	reagent_state = LIQUID
+	color = "#3F1900" // rgb: 63, 25, 0
+
+/datum/reagent/honkserum
+	name = "Honk Serum"
+	id = "honkserum"
+	description = "Concentrated honking"
+	reagent_state = LIQUID
+	color = "#F2C900" // rgb: 242, 201, 0
+	custom_metabolism = 0.01
+
+/datum/reagent/honkserum/on_mob_life(var/mob/living/M)
+	if(prob(0.9))
+		M.say(pick("Honk", "HONK", "Hoooonk", "Honk?", "Henk", "Hunke?", "Honk!"))
+	..()
+	return
+
+//Cafe drinks
+
+
+/datum/reagent/drink/tea/greentea
+	name = "Green Tea"
+	id = "greentea"
+	description = "Delicious green tea."
+
+/datum/reagent/drink/tea/redtea
+	name = "Red Tea"
+	id = "redtea"
+	description = "Tasty red tea."
+
+/datum/reagent/drink/tea/singularitea
+	name = "Singularitea"
+	id = "singularitea"
+	description = "Swirly!"
+
+var/global/list/chifir_doesnt_remove=list(
+	"chifir",
+	"blood"
+)
+
+
+/datum/reagent/drink/tea/chifir
+	name = "Chifir"
+	id = "chifir"
+	description = "Strong Russian tea, it'll help you remember what you had for lunch!"
+
+/datum/reagent/drink/tea/chifir/on_mob_life(var/mob/living/M as mob)
+	if(!M) M = holder.my_atom
+
+	if(ishuman(M) && prob(5))
+		var/mob/living/carbon/human/H=M
+		H.vomit()
+		holder.remove_reagent(id,volume)
+		return
+
+	for(var/datum/reagent/reagent in holder.reagent_list)
+		if(reagent.id in chifir_doesnt_remove)
+			continue
+		holder.remove_reagent(reagent.id, 3*REM)
+
+	M.adjustToxLoss(-2*REM)
+	..()
+	return
+
+/datum/reagent/drink/tea/acidtea
+	name = "Earl's Grey Tea"
+	id = "acidtea"
+	description = "Get in touch with your Roswellian side!"
+
+/datum/reagent/drink/tea/yinyang
+	name = "Zen Tea"
+	id = "yinyang"
+	description = "Find inner peace."
+
+/datum/reagent/drink/tea/gyro
+	name = "Gyro"
+	id = "gyro"
+	description = "Nyo ho ho~"
+
+/datum/reagent/drink/tea/dantea
+	name = "Discount Dan's Green Flavor Tea"
+	id = "dantea"
+	description = "Not safe for children above or under the age of 12."
+
+/datum/reagent/drink/tea/mint
+	name = "Groans Tea: Minty Delight Flavor"
+	id = "mint"
+	description = "Very filling!"
+
+/datum/reagent/drink/tea/chamomile
+	name = "Groans Tea: Chamomile Flavor"
+	id = "chamomile"
+	description = "Enjoy a good night's sleep."
+
+/datum/reagent/drink/tea/exchamomile
+	name = "Tea"
+	id = "exchamomile"
+	description = "Who needs to wake up anyway?"
+
+/datum/reagent/drink/tea/fancydan
+	name = "Groans Banned Tea: Fancy Dan Flavor"
+	id = "fancydan"
+	description = "Full of that patented Dan taste you love!"
+
+/datum/reagent/drink/tea/plasmatea
+	name = "Plasma Pekoe"
+	id = "plasmatea"
+	description = "Probably not the safest beverage."
+
+/datum/reagent/drink/coffee/espresso
+	name = "Espresso"
+	id = "espresso"
+	description = "Coffee made with water."
+
+//Let's hope this one works
+var/global/list/tonio_doesnt_remove=list(
+	"tonio",
+	"blood"
+)
+
+
+/datum/reagent/drink/coffee/tonio
+	name = "Tonio"
+	id = "tonio"
+	nutriment_factor = 1 * FOOD_METABOLISM
+
+
+
+/datum/reagent/tonio/on_mob_life(var/mob/living/M as mob)
+	if(!M) M = holder.my_atom
+
+	if(ishuman(M) && prob(5))
+		var/mob/living/carbon/human/H=M
+		H.vomit()
+		holder.remove_reagent("tonio",volume)
+		return
+
+	for(var/datum/reagent/reagent in holder.reagent_list)
+		if(reagent.id in tonio_doesnt_remove)
+			continue
+		holder.remove_reagent(reagent.id, 3*REM)
+
+	M.adjustToxLoss(-2*REM)
+	..()
+	return
+
+	if(!holder) return
+	M:nutrition += nutriment_factor
+	holder.remove_reagent(src.id, FOOD_METABOLISM)
+	if(!M) M = holder.my_atom
+	if(M.getBruteLoss() && prob(20)) M.heal_organ_damage(1,0)
+	..()
+	return
+
+/datum/reagent/drink/coffee/cappuccino
+	name = "Cappuccino"
+	id = "cappuccino"
+	description = "Espresso with milk."
+
+/datum/reagent/drink/coffee/doppio
+	name = "Doppio"
+	id = "doppio"
+	description = "Double shot of espresso."
+
+/datum/reagent/drink/coffee/passione
+	name = "Passione"
+	id = "passione"
+	description = "Rejuvinating!"
+
+/datum/reagent/drink/coffee/seccoffee
+	name = "Wake Up Call"
+	id = "seccoffee"
+	description = "All the essentials."
+
+/datum/reagent/drink/coffee/medcoffee
+	name = "Lifeline"
+	id = "medcoffee"
+	description = "Tastes like it's got iron in it or something."
+
+/datum/reagent/drink/coffee/detcoffee
+	name = "Joe"
+	id = "detcoffee"
+	description = "Bitter, black, and tasteless. It's the way I've always had my joe, and the way I was having it when one of the officers came running toward me. The chief medical officer got axed, and no one knew who did it. I reluctantly took one last drink before putting on my coat and heading out. I knew that by the time I was finished, my joe would have fallen to a dreadfully low temperature, but I had work to do."
+
+/datum/reagent/drink/coffee/etank
+	name = "Recharger"
+	id = "etank"
+	description = "Regardless of how energized this coffee makes you feel, jumping against doors will still never be a viable way to open them."

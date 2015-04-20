@@ -43,24 +43,26 @@
 /obj/structure/stool/bed/chair/vehicle/janicart/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/mecha_parts/janicart_upgrade) && !upgraded && !destroyed)
-		user.drop_item()
+		user.drop_item(W)
 		del(W)
 		user << "<span class='notice'>You upgrade the Pussy Wagon.</span>"
 		upgraded = 1
 		name = "upgraded janicart"
 		icon_state = "pussywagon_upgraded"
-	if(istype(W, /obj/item/weapon/mop))
+	else if(istype(W, /obj/item/weapon/storage/bag/trash))
+		user << "<span class='notice'>You hook the trashbag onto the pimpin' ride.</span>"
+		user.drop_item(W, src)
+		mybag = W
+
+/obj/structure/stool/bed/chair/vehicle/janicart/mop_act(obj/item/weapon/mop/M, mob/user)
+	if(istype(M))
 		if(reagents.total_volume >= 2)
-			reagents.trans_to(W, 2)
+			reagents.trans_to(M, 3)
 			user << "<span class='notice'>You wet the mop in the pimpin' ride.</span>"
 			playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 		if(reagents.total_volume < 1)
 			user << "<span class='notice'>This pimpin' ride is out of water!</span>"
-	else if(istype(W, /obj/item/weapon/storage/bag/trash))
-		user << "<span class='notice'>You hook the trashbag onto the pimpin' ride.</span>"
-		user.drop_item(src)
-		mybag = W
-
+	return 1
 
 /obj/structure/stool/bed/chair/vehicle/janicart/attack_hand(mob/user)
 	if(mybag)

@@ -79,7 +79,7 @@
 						playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 						user << "<span class='notice'>You add the circuit board to the frame.</span>"
 						circuit = P
-						user.drop_item(src)
+						user.drop_item(B, src)
 						icon_state = "box_2"
 						build_state = 3
 						components = list()
@@ -183,7 +183,7 @@
 											break
 										else
 											user << "<span class='warning'>You do not have enough [P]!</span>"
-									user.drop_item(src)
+									user.drop_item(P, src)
 									components += P
 									req_components[I]--
 									update_desc()
@@ -404,10 +404,11 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/recharge_station"
 	board_type = "machine"
 	origin_tech = "powerstorage=4;programming=3"
-	frame_desc = "Requires 2 manipulators, and 2 matter bins."
+	frame_desc = "Requires 2 capacitors, 1 manipulator, and 1 matter bin."
 	req_components = list (
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/matter_bin" = 2)
+							"/obj/item/weapon/stock_parts/capacitor" = 2,
+							"/obj/item/weapon/stock_parts/manipulator" = 1,
+							"/obj/item/weapon/stock_parts/matter_bin" = 1)
 
 /obj/item/weapon/circuitboard/heater
 	name = "Circuit Board (Heater)"
@@ -591,6 +592,32 @@ obj/item/weapon/circuitboard/rdserver
 /obj/item/weapon/circuitboard/processor
 	name = "Circuit Board (Food Processor)"
 	build_path = "/obj/machinery/processor"
+	board_type = "machine"
+	origin_tech = "programming=3;engineering=2;biotech=3;powerstorage=2"
+	frame_desc = "Requires 2 Matter Bins, 1 Capacitors, 1 Scanning Module, 2 Manipulator and 2 High Powered Micro-Lasers   "
+	req_components = list(
+							"/obj/item/weapon/stock_parts/matter_bin" = 2,
+							"/obj/item/weapon/stock_parts/capacitor" = 1,
+							"/obj/item/weapon/stock_parts/scanning_module" = 1,
+							"/obj/item/weapon/stock_parts/manipulator" = 2,
+							"/obj/item/weapon/stock_parts/micro_laser/high" = 2)
+
+/obj/item/weapon/circuitboard/monkey_recycler
+	name = "Circuit Board (Monkey Recycler)"
+	build_path = "/obj/machinery/monkey_recycler"
+	board_type = "machine"
+	origin_tech = "programming=3;engineering=2;biotech=3;powerstorage=2"
+	frame_desc = "Requires 2 Matter Bins, 1 Capacitors, 1 Scanning Module, 2 Manipulator and 2 High Powered Micro-Lasers   "
+	req_components = list(
+							"/obj/item/weapon/stock_parts/matter_bin" = 2,
+							"/obj/item/weapon/stock_parts/capacitor" = 1,
+							"/obj/item/weapon/stock_parts/scanning_module" = 1,
+							"/obj/item/weapon/stock_parts/manipulator" = 2,
+							"/obj/item/weapon/stock_parts/micro_laser/high" = 2)
+
+/obj/item/weapon/circuitboard/chicken_processor
+	name = "Circuit Board (Chicken Processor)"
+	build_path = "/obj/machinery/chicken_processor"
 	board_type = "machine"
 	origin_tech = "programming=3;engineering=2;biotech=3;powerstorage=2"
 	frame_desc = "Requires 2 Matter Bins, 1 Capacitors, 1 Scanning Module, 2 Manipulator and 2 High Powered Micro-Lasers   "

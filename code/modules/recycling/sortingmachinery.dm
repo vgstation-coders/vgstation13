@@ -9,6 +9,11 @@
 	flags = FPRINT
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 
+/obj/structure/bigDelivery/attack_robot(mob/user)
+	if(!Adjacent(user))
+		return
+	attack_hand(user)
+
 /obj/structure/bigDelivery/attack_hand(mob/user as mob)
 	if(wrapped) //sometimes items can disappear. For example, bombs. --rastaf0
 		wrapped.loc = (get_turf(src.loc))
@@ -33,12 +38,13 @@
 
 	else if(istype(W, /obj/item/weapon/pen))
 		var/str = copytext(sanitize(input(usr,"Label text?","Set label","")),1,MAX_NAME_LEN)
+		if (!Adjacent(user) || user.stat) return
 		if(!str || !length(str))
 			usr << "<span class='warning'>Invalid text.</span>"
 			return
 		for(var/mob/M in viewers())
 			M << "<span class='notice'>[user] labels [src] as [str].</span>"
-		src.name = "[src.name] ([str])"
+		src.name = "[src.name] ([str])" //needs updating
 	return
 
 /obj/item/smallDelivery
@@ -77,12 +83,13 @@
 
 	else if(istype(W, /obj/item/weapon/pen))
 		var/str = copytext(sanitize(input(usr,"Label text?","Set label","")),1,MAX_NAME_LEN)
+		if (!Adjacent(user) || user.stat) return
 		if(!str || !length(str))
 			usr << "<span class='warning'>Invalid text.</span>"
 			return
 		for(var/mob/M in viewers())
 			M << "<span class='notice'>[user] labels [src] as [str].</span>"
-		src.name = "[src.name] ([str])"
+		src.name = "[src.name] ([str])" //also needs updating
 	return
 
 
@@ -101,6 +108,7 @@
 		/obj/item/weapon/gift,//real presents are given directly
 		/obj/item/weapon/winter_gift,
 		/obj/item/weapon/evidencebag,
+		/obj/item/weapon/legcuffs/bolas,
 		)
 
 /obj/item/weapon/packageWrap/afterattack(var/obj/target as obj, mob/user as mob)

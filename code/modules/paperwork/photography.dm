@@ -43,7 +43,7 @@
 	if(istype(P, /obj/item/weapon/pen) || istype(P, /obj/item/toy/crayon))
 		var/txt = sanitize(input(user, "What would you like to write on the back?", "Photo Writing", null)  as text)
 		txt = copytext(txt, 1, 128)
-		if(loc == user && user.stat == 0)
+		if(Adjacent(user) && !user.stat)
 			scribble = txt
 	..()
 
@@ -73,7 +73,7 @@
 
 	var/n_name = copytext(sanitize(input(usr, "What would you like to label the photo?", "Photo Labelling", null)  as text), 1, MAX_NAME_LEN)
 	//loc.loc check is for making possible renaming photos in clipboards
-	if((loc == usr || loc.loc && loc.loc == usr) && usr.stat == 0)
+	if((loc == usr || loc.loc && loc.loc == usr) && !usr.stat && !(usr.status_flags & FAKEDEATH))
 		name = "photo[(n_name ? text("- '[n_name]'") : null)]"
 	add_fingerprint(usr)
 
@@ -157,7 +157,7 @@
 			user << "<span class='notice'>[src] still has some film in it!</span>"
 			return
 		user << "<span class='notice'>You insert [I] into [src].</span>"
-		user.drop_item()
+		user.drop_item(I)
 		qdel(I)
 		pictures_left = pictures_max
 		icon_state = icon_on

@@ -76,7 +76,7 @@
 			user << "A beaker is already loaded into the machine."
 			return
 		src.beaker = B
-		user.drop_item(src)
+		user.drop_item(B, src)
 		user << "You add the beaker to the machine!"
 		src.updateUsrDialog()
 		update_icon()
@@ -85,9 +85,7 @@
 		..()
 
 /obj/machinery/snackbar_machine/Topic(href, href_list)
-	if(stat & (BROKEN|NOPOWER)) 		return
-	if(usr.stat || usr.restrained())	return
-	if(!in_range(src, usr)) 			return
+	if(..()) return 1
 
 	src.add_fingerprint(usr)
 	usr.set_machine(src)

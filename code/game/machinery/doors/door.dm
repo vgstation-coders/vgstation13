@@ -133,7 +133,7 @@
 			playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
 
 			if (!istype(H.head, /obj/item/clothing/head/helmet))
-				visible_message("\red [user] headbutts the airlock.")
+				visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
 				H.Stun(8)
 				H.Weaken(5)
 				var/datum/organ/external/O = H.get_organ("head")
@@ -144,7 +144,7 @@
 					O = null
 			else
 				// TODO: fix sentence
-				visible_message("\red [user] headbutts the airlock. Good thing they're wearing a helmet.")
+				visible_message("<span class='warning'>[user] headbutts the airlock. Good thing they're wearing a helmet.</span>")
 
 			H = null
 			return
@@ -341,6 +341,10 @@
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return !opacity
 	return !density
+
+/obj/machinery/door/proc/CanAStarPass(var/obj/item/weapon/card/id/ID)
+	return !density || check_access(ID)
+
 
 /obj/machinery/door/emp_act(severity)
 	if(prob(20/severity) && (istype(src,/obj/machinery/door/airlock) || istype(src,/obj/machinery/door/window)) )

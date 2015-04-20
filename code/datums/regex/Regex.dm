@@ -672,8 +672,11 @@ regex
 										if(ch2>=97 && ch2<=102) ch2-=87
 										else break
 								while(p.start<=e)
+							if(ch == 47)
+								goto slash
 							p.pattern=ascii2text(ch)
 							continue
+						slash:
 						p.pattern=copytext(p.pattern,p.start,e)
 					if(5)
 						p.pattern=copytext(p.pattern,p.start,e)

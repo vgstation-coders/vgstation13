@@ -962,6 +962,8 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define EJECTNOTDEL		32 //when we destroy the machine, does it remove all its items or destroy them?
 #define WELD_FIXED		64 //if it is attacked by a welder and is anchored, it'll toggle between welded and unwelded to the floor
 
+#define MAX_N_OF_ITEMS 999 // Used for certain storage machinery, BYOND infinite loop detector doesn't look things over 1000.
+
 //gun shit - prepare to have various things added to this
 #define SILENCECOMP  1 		//Silencer-compatible
 #define AUTOMAGDROP  2		//Does the mag drop when it's empty?
@@ -1114,3 +1116,9 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define BUILD_FAILURE 0				//We failed so give an error message
 #define BUILD_SUCCESS 1			//Looks for a lattice to build.
 #define BUILD_IGNORE 2		//Ignores the need for lattice to build.
+
+
+#define ARENA_SETUP 0		//under construction/resetting the arena
+#define ARENA_AVAILABLE 1	//arena is ready for a new game
+#define ARENA_INGAME 2		//a game is currently being played in the arena
+#define ARENA_ENDGAME 3		//a game just finished and the arena is about to reset

@@ -2,12 +2,13 @@
 #define M_UNIFORM_LAYER			1
 #define M_MASK_LAYER			2
 #define M_BACK_LAYER			3
-#define M_HAT_LAYER				4
-#define M_HANDCUFF_LAYER		5
-#define M_L_HAND_LAYER			6
-#define M_R_HAND_LAYER			7
-#define M_FIRE_LAYER			8
-#define TARGETED_LAYER			9
+#define M_GLASSES_LAYER			4
+#define M_HAT_LAYER				5
+#define M_HANDCUFF_LAYER		6
+#define M_L_HAND_LAYER			7
+#define M_R_HAND_LAYER			8
+#define M_FIRE_LAYER			9
+#define TARGETED_LAYER			10
 #define M_TOTAL_LAYERS			10
 /////////////////////////////////
 
@@ -20,6 +21,7 @@
 	update_inv_uniform(0)
 	update_inv_wear_mask(0)
 	update_inv_back(0)
+	update_inv_glasses(0)
 	update_inv_hat(0)
 	update_inv_r_hand(0)
 	update_inv_l_hand(0)
@@ -65,6 +67,14 @@
 		overlays_standing[M_HAT_LAYER]	= null
 	if(update_icons)		update_icons()
 
+/mob/living/carbon/monkey/update_inv_glasses(var/update_icons=1)
+	if(glasses)
+		var/t_state = glasses.icon_state
+		overlays_standing[M_GLASSES_LAYER]	= image("icon" = 'icons/mob/monkey_eyes.dmi', "icon_state" = t_state)
+	else
+		overlays_standing[M_GLASSES_LAYER]	= null
+	if(update_icons)		update_icons()
+
 /mob/living/carbon/monkey/update_inv_wear_mask(var/update_icons=1)
 	if( wear_mask && istype(wear_mask, /obj/item/clothing/mask) )
 		overlays_standing[M_MASK_LAYER]	= image("icon" = 'icons/mob/monkey.dmi', "icon_state" = "[wear_mask.icon_state]")
@@ -81,7 +91,8 @@
 		if(!t_state)	t_state = r_hand.icon_state
 		overlays_standing[M_R_HAND_LAYER]	= image("icon" = t_inhand_states, "icon_state" = t_state)
 		r_hand.screen_loc = ui_rhand
-		if (handcuffed) drop_r_hand()
+		if (handcuffed)
+			drop_item(r_hand)
 	else
 		overlays_standing[M_R_HAND_LAYER]	= null
 	if(update_icons)		update_icons()
@@ -94,7 +105,8 @@
 		if(!t_state)	 t_state = l_hand.icon_state
 		overlays_standing[M_L_HAND_LAYER]	= image("icon" = t_inhand_state, "icon_state" = t_state)
 		l_hand.screen_loc = ui_lhand
-		if (handcuffed) drop_l_hand()
+		if (handcuffed)
+			drop_item(l_hand)
 	else
 		overlays_standing[M_L_HAND_LAYER]	= null
 	if(update_icons)		update_icons()
@@ -111,8 +123,7 @@
 
 /mob/living/carbon/monkey/update_inv_handcuffed(var/update_icons=1)
 	if(handcuffed)
-		drop_r_hand()
-		drop_l_hand()
+		drop_hands()
 		stop_pulling()
 		overlays_standing[M_HANDCUFF_LAYER]	= image("icon" = 'icons/mob/monkey.dmi', "icon_state" = "handcuff1")
 	else
@@ -136,6 +147,12 @@
 			else
 				m_suitclothes.icon_state = "none"
 
+		if(m_glasses)
+			if(glasses)
+				m_glasses.icon_state = glasses.icon_state
+			else
+				m_glasses.icon_state = "none"
+
 //Call when target overlay should be added/removed
 /mob/living/carbon/monkey/update_targeted(var/update_icons=1)
 	if (targeted_by && target_locked)
@@ -156,6 +173,7 @@
 
 //Monkey Overlays Indexes////////
 #undef M_HAT_LAYER
+#undef M_GLASSES_LAYER
 #undef M_UNIFORM_LAYER
 #undef M_FIRE_LAYER
 #undef M_MASK_LAYER

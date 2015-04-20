@@ -126,8 +126,8 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 /datum/game_mode/proc/greet_changeling(var/datum/mind/changeling, var/you_are=1)
 	if (you_are)
-		changeling.current << "<B>\red You are a changeling!</B>"
-	changeling.current << "<b>\red Use say \":g message\" to communicate with your fellow changelings. Remember: you get all of their absorbed DNA if you absorb them.</b>"
+		changeling.current << "<span class='danger'>You are a changeling!</span>"
+	changeling.current << "<span class='danger'>Use say \":g message\" to communicate with your fellow changelings. Remember: you get all of their absorbed DNA if you absorb them.</span>"
 	changeling.current << "<B>You must complete the following tasks:</B>"
 
 	if (changeling.current.mind)
@@ -214,7 +214,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 			if(changeling.total_TC)
 				if(changeling.spent_TC)
-					text += "<br><span class='sinister'>TC: [changeling.spent_TC]/[changeling.total_TC] - The tools used by the Changeling were: [list2text(changeling.uplink_items_bought, ", ")]</span>"
+					text += "<br><span class='sinister'>TC Remaining: [changeling.total_TC - changeling.spent_TC]/[changeling.total_TC] - The tools used by the Changeling were: [list2text(changeling.uplink_items_bought, ", ")]</span>"
 				else
 					text += "<span class='sinister'>The Changeling was a smooth operator this round (did not purchase any uplink items)</span>"
 
@@ -250,9 +250,8 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 		changelingID = "[honorific] [rand(1,999)]"
 
 /datum/changeling/proc/regenerate()
-	chem_charges = min(max(0, chem_charges+chem_recharge_rate), chem_storage)
+	chem_charges = Clamp(chem_charges + chem_recharge_rate, 0, chem_storage)
 	geneticdamage = max(0, geneticdamage-1)
-
 
 /datum/changeling/proc/GetDNA(var/dna_owner)
 	var/datum/dna/chosen_dna

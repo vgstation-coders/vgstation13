@@ -17,10 +17,8 @@
 	heat_level_2 = 400  // Heat damage level 2 above this point.
 	heat_level_3 = 500  // Heat damage level 3 above this point.
 
-/datum/species/plasmaman/say_filter(mob/M, message, datum/language/speaking)
-	if(copytext(message, 1, 2) != "*")
-		message = replacetext(message, "s", stutter("ss"))
-	return message
+/datum/species/plasmaman/handle_speech(message, mob/living/carbon/human/H)
+	return ..(replacetext(message, "s", stutter("ss")), H)
 
 /datum/species/plasmaman/equip(var/mob/living/carbon/human/H)
 	H.fire_sprite = "Plasmaman"
@@ -107,7 +105,7 @@
 	H.equip_or_collect(new suit(H), slot_wear_suit)
 	H.equip_or_collect(new helm(H), slot_head)
 	H.equip_or_collect(new/obj/item/weapon/tank/plasma/plasmaman(H), tank_slot) // Bigger plasma tank from Raggy.
-	H << "\blue You are now running on plasma internals from the [H.s_store] in your [tank_slot_name].  You must breathe plasma in order to survive, and are extremely flammable."
+	H << "<span class='notice'>You are now running on plasma internals from the [H.s_store] in your [tank_slot_name].  You must breathe plasma in order to survive, and are extremely flammable.</span>"
 	H.internal = H.get_item_by_slot(tank_slot)
 	if (H.internals)
 		H.internals.icon_state = "internal1"
@@ -186,13 +184,13 @@
 			return 1	//godmode
 		if(breath.temperature < cold_level_1)
 			if(prob(20))
-				src << "\red You feel your face freezing and an icicle forming in your lungs!"
+				src << "<span class='warning'>You feel your face freezing and an icicle forming in your lungs!</span>"
 		else if(breath.temperature > heat_level_1)
 			if(prob(20))
 				if(H.dna.mutantrace == "slime")
-					src << "\red You feel supercharged by the extreme heat!"
+					src << "<span class='warning'>You feel supercharged by the extreme heat!</span>"
 				else
-					src << "\red You feel your face burning and a searing heat in your lungs!"
+					src << "<span class='warning'>You feel your face burning and a searing heat in your lungs!</span>"
 		if(H.dna.mutantrace == "slime")
 			if(breath.temperature < cold_level_1)
 				H.adjustToxLoss(round(cold_level_1 - breath.temperature))

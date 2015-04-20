@@ -42,7 +42,7 @@ var/global/list/ghdel_profiling = list()
 	var/event/on_moved = new()
 
 	var/labeled //Stupid and ugly way to do it, but the alternative would probably require rewriting everywhere a name is read.
-	var/min_harm_label = 0 //Minimum langth of harm-label to be effective. 0 means it cannot be harm-labeled. If any label should work, set this to 1 or 2. 
+	var/min_harm_label = 0 //Minimum langth of harm-label to be effective. 0 means it cannot be harm-labeled. If any label should work, set this to 1 or 2.
 	var/harm_labeled = 0 //Length of current harm-label. 0 if it doesn't have one.
 	var/list/harm_label_examine //Messages that appears when examining the item if it is harm-labeled. Message in position 1 is if it is harm-labeled but the label is too short to work, while message in position 2 is if the harm-label works.
 	//var/harm_label_icon_state //Makes sense to have this, but I can't sprite. May be added later.
@@ -317,13 +317,16 @@ its easier to just keep the beam vertical.
 	if(desc)
 		user << desc
 
-	if(reagents && is_open_container()) //is_open_container() isn't really the right proc for this, but w/e
-		user << "It contains:"
-		if(reagents.reagent_list.len)
-			for(var/datum/reagent/R in reagents.reagent_list)
-				user << "<span class='info'>[R.volume] units of [R.name]</span>"
+	if(reagents && is_open_container() && !ismob(src)) //is_open_container() isn't really the right proc for this, but w/e
+		if(get_dist(user,src) > 3)
+			user << "<span class='info'>You can't make out the contents.</span>"
 		else
-			user << "<span class='info'>Nothing.</span>"
+			user << "It contains:"
+			if(reagents.reagent_list.len)
+				for(var/datum/reagent/R in reagents.reagent_list)
+					user << "<span class='info'>[R.volume] units of [R.name]</span>"
+			else
+				user << "<span class='info'>Nothing.</span>"
 	if(on_fire)
 		user << "<span class='danger'>OH SHIT! IT'S ON FIRE!</span>"
 
@@ -435,7 +438,7 @@ its easier to just keep the beam vertical.
 	if (!(istype(W, /obj/item/weapon/grab) ) && !(istype(W, /obj/item/weapon/plastique)) && !(istype(W, /obj/item/weapon/reagent_containers/spray)) && !(istype(W, /obj/item/weapon/packageWrap)) && !istype(W, /obj/item/device/detective_scanner))
 		for(var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
-				O << "\red <B>[src] has been hit by [user] with [W]</B>"
+				O << "<span class='danger'>[src] has been hit by [user] with [W]</span>"
 	return
 */
 /atom/proc/add_hiddenprint(mob/living/M as mob)
@@ -631,3 +634,6 @@ its easier to just keep the beam vertical.
 	var/old_gender = src.gender
 	src.gender = gend
 	testing("Set [src]'s gender to [gend], old gender [old_gender] previous gender [prev_gender]")
+
+/atom/proc/mop_act(obj/item/weapon/mop/M, mob/user)
+	return 0

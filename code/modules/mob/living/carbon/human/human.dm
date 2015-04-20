@@ -304,7 +304,7 @@
 		var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
 		var/armor = run_armor_check(affecting, "melee")
 		apply_damage(damage, BRUTE, affecting, armor)
-		src.visible_message("<span class='danger'>[M] [M.attacktext] [src] in \the [affecting.display_name]!</span>", 1)
+		src.visible_message("<span class='danger'>[M] [M.attacktext] [src] in \the [affecting.display_name]!</span>")
 
 
 /mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
@@ -1034,24 +1034,21 @@
 
 	return
 
-///eyecheck()
-///Returns a number between -1 to 2
+/**
+ * Returns a number between -1 to 2.
+ * TODO: What's the default return value?
+ */
 /mob/living/carbon/human/eyecheck()
-	var/number = 0
-	if(istype(src.head, /obj/item/clothing/head/welding))
-		if(!src.head:up)
-			number += 2
-	if(istype(src.head, /obj/item/clothing/head/helmet/space))
-		number += 2
-	if(istype(src.glasses, /obj/item/clothing/glasses/thermal))
-		number -= 1
-	if(istype(src.glasses, /obj/item/clothing/glasses/sunglasses))
-		number += 1
-	if(istype(src.glasses, /obj/item/clothing/glasses/welding))
-		var/obj/item/clothing/glasses/welding/W = src.glasses
-		if(!W.up)
-			number += 2
-	return number
+	var/obj/item/clothing/head/headwear = src.head
+	var/obj/item/clothing/glasses/eyewear = src.glasses
+
+	if (istype(headwear))
+		. += headwear.eyeprot
+
+	if (istype(eyewear))
+		. += eyewear.eyeprot
+
+	return Clamp(., -1, 2)
 
 
 /mob/living/carbon/human/IsAdvancedToolUser()
@@ -1092,29 +1089,30 @@
 			xylophone=0
 	return
 
-/mob/living/carbon/human/proc/vomit(hairball=0)
+/mob/living/carbon/human/proc/vomit(hairball = 0)
 	if(!lastpuke)
 		lastpuke = 1
-		src << "<spawn class='warning'>You feel nauseous..."
+		src << "<spawn class='warning'>You feel nauseous...</span>"
 		spawn(150)	//15 seconds until second warning
-			src << "<spawn class='warning'>You feel like you are about to throw up!"
-			spawn(100)	//and you have 10 more for mad dash to the bucket
+			src << "<spawn class='danger'>You feel like you are about to throw up!</span>"
+			spawn(100)	//And you have 10 more seconds to move it to the bathrooms
 				Stun(5)
 
 				if(hairball)
-					src.visible_message("<span class='warning'>[src] hacks up a hairball!</span>","<span class='warning'>You hack up a hairball!</span>")
+					src.visible_message("<span class='warning'>[src] hacks up a hairball!</span>","<span class='danger'>You hack up a hairball!</span>")
 				else
-					src.visible_message("<span class='warning'>[src] throws up!</span>","<span class='warning'>You throw up!</span>")
+					src.visible_message("<span class='warning'>[src] throws up!</span>","<span class='danger'>You throw up!</span>")
 				playsound(loc, 'sound/effects/splat.ogg', 50, 1)
 
 				var/turf/location = loc
-				if (istype(location, /turf/simulated))
+				if(istype(location, /turf/simulated))
 					location.add_vomit_floor(src, 1)
 
 				if(!hairball)
 					nutrition -= 40
 					adjustToxLoss(-3)
-				spawn(350)	//wait 35 seconds before next volley
+
+				spawn(350)	//Wait 35 seconds before next volley
 					lastpuke = 0
 
 /mob/living/carbon/human/proc/morph()
@@ -1195,14 +1193,22 @@
 	check_dna()
 
 	visible_message("<span class='notice'>\The [src] morphs and changes [get_visible_gender() == MALE ? "his" : get_visible_gender() == FEMALE ? "her" : "their"] appearance!</span>", "<span class='notice'>You change your appearance!</span>", "<span class='warning'>Oh, god!  What the hell was that?  It sounded like flesh getting squished and bone ground into a different shape!</span>")
-/mob/living/carbon/human/proc/can_mind_interact(mob/M)
+/mob/living/carbon/human/proc/can_mind_interact(var/mob/M)
+	//world << "Starting can interact on [M]"
 	if(!ishuman(M)) return 0 //Can't see non humans with your fancy human mind.
+	//world << "[M] is a human"
 	var/turf/temp_turf = get_turf(M)
+	var/turf/our_turf = get_turf(src)
 	if(!temp_turf)
+		//world << "[M] is in null space"
 		return 0
-	if((temp_turf.z != 1 && temp_turf.z != 5) || M.stat!=CONSCIOUS) //Not on mining or the station. Or dead
+	if((temp_turf.z != our_turf.z) || M.stat!=CONSCIOUS) //Not on the same zlevel as us or they're dead.
+		//world << "[(temp_turf.z != our_turf.z) ? "not on the same zlevel as [M]" : "[M] is not concious"]"
+		src << "Cannot establish a telepathic link with [M]."
 		return 0
 	if(M_PSY_RESIST in M.mutations)
+		//world << "[M] has psy resist"
+		src << "Cannot maintain a telepathic link with [M]."
 		return 0
 	return 1
 
@@ -1330,7 +1336,7 @@
 		return
 	usr.delayNextMove(20)
 
-	if(usr.stat == 1)
+	if(usr.stat == 1 || (usr.status_flags & FAKEDEATH))
 		usr << "You are unconcious and cannot do that!"
 		return
 
@@ -1376,9 +1382,9 @@
 		return
 
 	if(self)
-		visible_message("<span class='warning'><b>[src] rips [selection] out of their [affected.display_name] in a welter of blood.</b></span>","<span class='warning'><b>You rip [selection] out of your [affected] in a welter of blood.</b></span>")
+		visible_message("<span class='danger'><b>[src] rips [selection] out of their [affected.display_name] in a welter of blood.</b></span>","<span class='warning'>You rip [selection] out of your [affected] in a welter of blood.</span>")
 	else
-		visible_message("<span class='warning'><b>[usr] rips [selection] out of [src]'s [affected.display_name] in a welter of blood.</b></span>","<span class='warning'><b>[usr] rips [selection] out of your [affected] in a welter of blood.</b></span>")
+		visible_message("<span class='danger'><b>[usr] rips [selection] out of [src]'s [affected.display_name] in a welter of blood.</b></span>","<span class='warning'>[usr] rips [selection] out of your [affected] in a welter of blood.</span>")
 
 	selection.loc = get_turf(src)
 	affected.implants -= selection
@@ -1441,7 +1447,7 @@
 	set src in view(1)
 	var/self = 0
 
-	if(usr.stat == 1 || usr.restrained() || !isliving(usr)) return
+	if(usr.stat == 1 || usr.restrained() || !isliving(usr) || (usr.status_flags & FAKEDEATH)) return
 
 	if(usr == src)
 		self = 1
@@ -1486,7 +1492,9 @@
 	else					src.see_invisible = SEE_INVISIBLE_LIVING
 	if((src.species.default_mutations.len > 0) || (src.species.default_blocks.len > 0))
 		src.do_deferred_species_setup = 1
-	spawn()	src.update_icons()
+	spawn()
+		src.dna.species = new_species_name
+		src.update_icons()
 	src.species.handle_post_spawn(src)
 	return 1
 

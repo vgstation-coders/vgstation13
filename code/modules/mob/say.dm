@@ -24,6 +24,8 @@
 		usr << "<span class='danger'>Speech is currently admin-disabled.</span>"
 		return
 
+	if(!usr.stat && (usr.status_flags & FAKEDEATH))
+		usr << "<span class='danger'>Doing this will give us away!</span>"
 	message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
 
 	if(ishuman(src) || isrobot(src))
@@ -83,4 +85,10 @@
 	return 0
 
 /mob/proc/construct_chat_check(var/setting)
+	return 0
+
+/mob/proc/hivecheck()
+	return 0
+
+/mob/proc/binarycheck()
 	return 0

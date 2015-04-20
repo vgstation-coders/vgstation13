@@ -83,7 +83,9 @@
 	activate(var/mob/M, var/connected, var/flags)
 		..(M,connected,flags)
 		var/spell/granted = new spelltype
-		M.add_spell(granted, "genetic_spell_ready")
+		M.add_spell(granted, "genetic_spell_ready", /obj/screen/movable/spell_master/genetic)
+		if(!granted_spells)
+			granted_spells = list()
 		granted_spells += granted
 		return 1
 
@@ -144,7 +146,7 @@
 	..()
 	for(var/mob/living/carbon/target in targets)
 		if (M_RESIST_COLD in target.mutations)
-			target.visible_message("\red A cloud of fine ice crystals engulfs [target.name], but disappears almost instantly!")
+			target.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [target.name], but disappears almost instantly!</span>")
 			return
 		var/handle_suit = 0
 		if(ishuman(target))
@@ -153,10 +155,10 @@
 				if(istype(H.wear_suit, /obj/item/clothing/suit/space))
 					handle_suit = 1
 					if(H.internal)
-						H.visible_message("\red A cloud of fine ice crystals engulfs [H]!",
+						H.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [H]!</span>",
 											"<span class='notice'>A cloud of fine ice crystals cover your [H.head]'s visor.</span>")
 					else
-						H.visible_message("\red A cloud of fine ice crystals engulfs [H]!",
+						H.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [H]!</span>",
 											"<span class='warning'>A cloud of fine ice crystals cover your [H.head]'s visor and make it into your air vents!.</span>")
 						H.bodytemperature = max(0, H.bodytemperature - 50)
 						H.adjustFireLoss(5)
@@ -165,7 +167,7 @@
 			target.adjustFireLoss(10)
 			target.ExtinguishMob()
 
-			target.visible_message("\red A cloud of fine ice crystals engulfs [target]!")
+			target.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [target]!</span>")
 
 		new/obj/effects/self_deleting(target.loc, icon('icons/effects/genetics.dmi', "cryokinesis"))
 	return
@@ -255,7 +257,9 @@
 
 			if(possible_targets.len)
 				if(spell_flags & SELECTABLE) //if we are allowed to choose. see setup.dm for details
-					targets += input("Choose the target for the spell.", "Targeting") as anything in possible_targets
+					var/atom/movable/M = input("Choose something to eat.", "Targeting") as null|anything in possible_targets
+					if(M)
+						targets += M
 				else
 					targets += pick(possible_targets)
 			//Adds a safety check post-input to make sure those targets are actually in range.
@@ -269,7 +273,9 @@
 
 		if(spell_flags & SELECTABLE)
 			for(var/i = 1; i<=max_targets, i++)
-				var/atom/movable/M = input("Choose the target for the spell.", "Targeting") as anything in possible_targets
+				var/atom/movable/M = input("Choose something to eat.", "Targeting") as null|anything in possible_targets
+				if(!M)
+					break
 				if(M in view_or_range(range, user, selection_type))
 					targets += M
 					possible_targets -= M
@@ -300,7 +306,10 @@
 			targets -= I
 
 	return targets
+
 /spell/targeted/eat/cast(list/targets, mob/user)
+	if(!targets || !targets.len)
+		return 0
 	var/atom/movable/the_item = targets[1]
 	if(!the_item || !the_item.Adjacent(usr))
 		return
@@ -326,11 +335,11 @@
 			// Bullshit, but prevents being able to instagib someone.
 			user << "<span class='warning'> You try to put their [limb] in your mouth, but it's too big to fit!</span>"
 			return 0
-		usr.visible_message("<span class='warning'> <b>[usr] begins stuffing [the_item]'s [limb.display_name] into [m_his] gaping maw!</b></span>")
+		usr.visible_message("<span class='danger'>[usr] begins stuffing [the_item]'s [limb.display_name] into [m_his] gaping maw!</span>")
 		if(!do_mob(user,the_item,EAT_MOB_DELAY))
-			user << "<span class='warning'> You were interrupted before you could eat [the_item]!</span>"
+			user << "<span class='warning'>You were interrupted before you could eat [the_item]!</span>"
 		else
-			user.visible_message("\red [user] eats \the [limb].")
+			user.visible_message("<span class='warning'>[user] eats \the [limb].</span>")
 			limb.droplimb("override" = 1, "spawn_limb" = 0)
 			doHeal(user)
 	else
@@ -425,7 +434,7 @@
 
 		if (istype(target.loc,/obj/))
 			var/obj/container = target.loc
-			target << "\red You leap and slam your head against the inside of [container]! Ouch!"
+			target << "<span class='warning'>You leap and slam your head against the inside of [container]! Ouch!</span>"
 			target.paralysis += 3
 			target.weakened += 5
 			container.visible_message("<span class='warning'><b>[container]</b> emits a loud thump and rattles a bit.</span>")

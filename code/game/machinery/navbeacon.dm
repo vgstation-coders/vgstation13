@@ -114,7 +114,7 @@
 					src.locked = !src.locked
 					user << "Controls are now [src.locked ? "locked." : "unlocked."]"
 				else
-					user << "\red Access denied."
+					user << "<span class='warning'>Access denied.</span>"
 				updateDialog()
 			else
 				user << "You must open the cover first!"
@@ -188,9 +188,7 @@ Transponder Codes:<UL>"}
 
 	Topic(href, href_list)
 		if(..()) return 1
-		if (usr.stat)
-			return
-		if ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon)))
+		else
 			if(panel_open && !locked)
 				usr.set_machine(src)
 

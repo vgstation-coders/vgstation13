@@ -186,6 +186,13 @@ datum
 			required_reagents = list("hydrogen" = 2, "oxygen" = 1)
 			result_amount = 1
 
+		sacid
+			name = "Sulphuric Acid"
+			id = "sacid"
+			result = "sacid"
+			required_reagents = list("sulphur" = 2, "oxygen" = 3, "water" = 2)
+			result_amount = 2
+
 		thermite
 			name = "Thermite"
 			id = "thermite"
@@ -651,12 +658,12 @@ datum
 
 				var/location = get_turf(holder.my_atom)
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution violently bubbles!"
+					M << "<span class='warning'>The solution violently bubbles!</span>"
 
 				location = get_turf(holder.my_atom)
 
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution spews out foam!"
+					M << "<span class='warning'>The solution spews out foam!</span>"
 
 				//world << "Holder volume is [holder.total_volume]"
 				//for(var/datum/reagent/R in holder.reagent_list)
@@ -681,7 +688,7 @@ datum
 				var/location = get_turf(holder.my_atom)
 
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution spews out a metalic foam!"
+					M << "<span class='warning'>The solution spews out a metalic foam!</span>"
 
 				var/datum/effect/effect/system/foam_spread/s = new()
 				s.set_up(created_volume, location, holder, 1)
@@ -701,7 +708,7 @@ datum
 				var/location = get_turf(holder.my_atom)
 
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution spews out a metalic foam!"
+					M << "<span class='warning'>The solution spews out a metalic foam!</span>"
 
 				var/datum/effect/effect/system/foam_spread/s = new()
 				s.set_up(created_volume, location, holder, 2)
@@ -1013,12 +1020,12 @@ datum
 
 				var/location = get_turf(holder.my_atom)
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution violently bubbles!"
+					M << "<span class='warning'>The solution violently bubbles!</span>"
 
 				location = get_turf(holder.my_atom)
 
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution spews out foam!"
+					M << "<span class='warning'>The solution spews out foam!</span>"
 
 				//world << "Holder volume is [holder.total_volume]"
 				//for(var/datum/reagent/R in holder.reagent_list)
@@ -1377,7 +1384,7 @@ datum
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 				for(var/mob/living/M in range (get_turf(holder.my_atom), 7))
 					M.bodytemperature -= 240
-					M << "\blue You feel a chill!"
+					M << "<span class='notice'>You feel a chill!</span>"
 
 //Orange
 		slimecasp
@@ -2265,14 +2272,14 @@ datum
 			name = "Soy Latte"
 			id = "soy_latte"
 			result = "soy_latte"
-			required_reagents = list("coffee" = 1, "soymilk" = 1)
+			required_reagents = list("espresso" = 1, "soymilk" = 1)
 			result_amount = 2
 
 		cafe_latte
-			name = "Cafe Latte"
+			name = "Latte"
 			id = "cafe_latte"
 			result = "cafe_latte"
-			required_reagents = list("coffee" = 1, "milk" = 1)
+			required_reagents = list("espresso" = 1, "milk" = 1)
 			result_amount = 2
 
 		acidspit
@@ -2414,3 +2421,120 @@ datum
 			result = "rewriter"
 			required_reagents = list("spacemountainwind" = 1, "coffee" = 1)
 			result_amount = 2
+
+		vinegar
+			name = "Vinegar"
+			id = "vinegar"
+			result = "vinegar"
+			required_reagents = list("wine" = 5)
+			required_catalysts = list("enzyme" = 5)
+			result_amount = 5
+
+			//cafe stuff!
+
+
+		acidtea
+			name = "Earl's Grey Tea"
+			id = "acidtea"
+			result = "acidtea"
+			required_reagents = list("sacid" = 1, "tea" = 1)
+			result_amount = 2
+
+		chifir
+			name = "Chifir"
+			id = "chifir"
+			result = "chifir"
+			required_reagents = list("tea" = 5, "redtea" = 5, "greentea" = 5)
+			result_amount = 15
+
+		yinyang
+			name = "Zen Tea"
+			id = "yinyang"
+			result = "yinyang"
+			required_reagents = list("tea" = 5, "nothing" = 5)
+			result_amount = 10
+
+		singularitea
+			name = "Singularitea"
+			id = "singularitea"
+			result = "singularitea"
+			required_reagents = list("radium" = 1, "tea" = 5, "redtea" = 5)
+			result_amount = 10
+
+		gyro
+			name = "Gyro"
+			id = "gyro"
+			result = "gyro"
+			required_reagents = list("greentea" = 5, "whiskey" = 5, "iron" = 1)
+			result_amount = 10
+
+		plasmatea
+			name = "Plasma Pekoe"
+			id = "plasmatea"
+			result = "plasmatea"
+			required_reagents = list("tea" = 5, "plasma" = 5)
+			result_amount = 10
+
+		espresso
+			name = "Espresso"
+			id = "espresso"
+			result = "espresso"
+			required_reagents = list("coffee" = 1, "water" = 1)
+			result_amount = 2
+
+
+		cappuccino
+			name = "Cappuccino"
+			id = "cappuccino"
+			result = "cappuccino"
+			required_reagents = list("espresso" = 1, "cream" = 1)
+			result_amount = 2
+
+		tonio
+			name = "Tonio"
+			id = "tonio"
+			result = "tonio"
+			required_reagents = list("coffee" = 5, "limejuice" = 1, "tomatojuice" = 1, "lemonjuice" = 1, "watermelonjuice" = 1, "honey" = 1)
+			result_amount = 10
+
+		doppio
+			name = "Doppio"
+			id = "doppio"
+			result = "doppio"
+			required_reagents = list("coffee" = 5, "redtea" = 5, "greentea" = 5)
+			result_amount = 10
+
+		passione
+			name = "Passione"
+			id = "passione"
+			result = "passione"
+			required_reagents = list("cappuccino" = 5, "gold" = 1, "honey" =5)
+			result_amount = 10
+
+		seccoffee
+			name = "Wake up call"
+			id = "seccoffee"
+			result = "seccoffee"
+			required_reagents = list("coffee" = 5, "sprinkles" = 1, "beepskysmash" = 5)
+			result_amount = 10
+
+		medcoffee
+			name = "Lifeline"
+			id = "medcoffee"
+			result = "medcoffee"
+			required_reagents = list("coffee" = 5, "doctorsdelight" = 5, "blood" = 1)
+			result_amount = 10
+
+		detcoffee
+			name = "Joe"
+			id = "detcoffee"
+			result = "detcoffee"
+			required_reagents = list("coffee" = 5, "whiskey" = 5)
+			result_amount = 5
+
+		etank
+			name = "Recharger"
+			id = "tank"
+			result = "etank"
+			required_reagents = list("coffee" = 1, "iron" = 1, "lithium" = 1, "fuel" = 1, "aluminum" = 1)
+			result_amount = 5

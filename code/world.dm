@@ -73,7 +73,7 @@
 
 	library_catalog.initialize()
 
-	copy_logs() // Just copy the logs.
+	spawn() copy_logs() // Just copy the logs.
 	if(config && config.log_runtimes)
 		log = file("data/logs/runtime/[time2text(world.realtime,"YYYY-MM-DD")]-runtime.log")
 	if(config && config.server_name != null && config.server_suffix && world.port > 0)
@@ -85,6 +85,7 @@
 	src.update_status()
 
 	makepowernets()
+	paperwork_setup()
 
 	//sun = new /datum/sun()
 	radio_controller = new /datum/controller/radio()
@@ -188,6 +189,12 @@
 		s["ai"] = config.allow_ai
 		s["host"] = host ? host : null
 		s["players"] = list()
+		s["map_name"] = map.nameLong
+		s["gamestate"] = 1
+		if(ticker)
+			s["gamestate"] = ticker.current_state
+		s["active_players"] = get_active_player_count()
+		s["revision"] = return_revision()
 		var/n = 0
 		var/admins = 0
 
@@ -204,6 +211,9 @@
 		s["admins"] = admins
 
 		return list2params(s)
+	else if (findtext(T,"notes:"))
+		var/notekey = copytext(T, 7)
+		return list2params(exportnotes(notekey))
 
 
 /world/Reboot(reason)
@@ -230,6 +240,7 @@
 			sleep(60)
 
 	processScheduler.stop()
+	paperwork_stop()
 
 	spawn(0)
 		world << sound(pick('sound/AI/newroundsexy.ogg','sound/misc/apcdestroyed.ogg','sound/misc/bangindonk.ogg','sound/misc/slugmissioncomplete.ogg')) // random end sounds!! - LastyBatsy

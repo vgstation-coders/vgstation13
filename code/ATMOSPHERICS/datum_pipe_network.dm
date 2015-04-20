@@ -1,5 +1,3 @@
-var/global/list/datum/pipe_network/pipe_networks = list()
-
 /datum/pipe_network
 	var/list/datum/gas_mixture/gases = list() //All of the gas_mixtures continuously connected in this network
 
@@ -9,22 +7,23 @@ var/global/list/datum/pipe_network/pipe_networks = list()
 
 	var/update = 1
 	var/datum/gas_mixture/air_transient = null
+	var/datum/gas_mixture/radiate = null
 
 /datum/pipe_network/New()
+
 	air_transient = new()
 
 	..()
 
 /datum/pipeline/Del()
-	Destroy()
-	return ..()
+	pipe_networks -= src
+	..()
 
 /datum/pipe_network/Destroy()
 	for(var/datum/pipeline/pipeline in line_members) //This will remove the pipeline references for us
 		pipeline.network = null
 	for(var/obj/machinery/atmospherics/objects in normal_members) //Procs for the different bases will remove the references
 		objects.unassign_network(src)
-	pipe_networks -= src //Final ref
 
 /datum/pipe_network/resetVariables()
 	..("gases", "normal_members", "line_members")
@@ -37,6 +36,7 @@ var/global/list/datum/pipe_network/pipe_networks = list()
 	if(update)
 		update = 0
 		reconcile_air() //equalize_gases(gases)
+		radiate = null //Reset our last ticks calculation for the post-radiate() gases inside a thermal plate
 
 #ifdef ATMOS_PIPELINE_PROCESSING
 	//Give pipelines their process call for pressure checking and what not. Have to remove pressure checks for the time being as pipes dont radiate heat - Mport
@@ -49,16 +49,17 @@ var/global/list/datum/pipe_network/pipe_networks = list()
 	//Notes: Assuming that members will add themselves to appropriate roster in network_expandz()
 
 	if(!start_normal)
-		qdel(src)
+		returnToDPool(src)
 
 	start_normal.network_expand(src, reference)
 
 	update_network_gases()
 
 	if((normal_members.len>0)||(line_members.len>0))
-		pipe_networks += src
+		if(!(src in pipe_networks)) //Pooling makes it disposed, which causes it to no longer process while pooled
+			pipe_networks += src
 	else
-		qdel(src)
+		returnToDPool(src)
 
 /datum/pipe_network/proc/merge(datum/pipe_network/giver)
 	if(giver==src) return 0

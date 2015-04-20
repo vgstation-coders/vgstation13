@@ -73,7 +73,7 @@
 	return attack_hand(user)
 
 /obj/item/device/deskbell/attack_animal(var/mob/user)
-	return attack_hand(user)
+	return
 
 /obj/item/device/deskbell/attack_hand(var/mob/user)
 	ring()
@@ -320,7 +320,7 @@
 						code = 0
 					else
 						code = S.code
-					user.drop_item()
+					user.drop_item(W)
 					del(W)
 					has_signaler = 1
 					update_icon()

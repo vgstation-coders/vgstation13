@@ -108,6 +108,9 @@ var/list/admin_verbs_fun = list(
 	/client/proc/editappear,
 	/client/proc/commandname,
 	/client/proc/delete_all_adminbus,
+	/client/proc/delete_all_bomberman,
+	/client/proc/create_bomberman_arena,
+	/client/proc/control_bomberman_arena,
 	/client/proc/gib_money, // /vg/
 	/client/proc/smissmas,
 	)
@@ -158,7 +161,8 @@ var/list/admin_verbs_debug = list(
 	/client/proc/qdel_toggle,              // /vg/
 	/client/proc/cmd_admin_dump_instances, // /vg/
 	/client/proc/cmd_admin_dump_machine_type_list, // /vg/
-	/client/proc/disable_bloodvirii,       // /vg/
+	/client/proc/disable_bloodvirii,       // /vg
+	/client/proc/handle_paperwork, //this is completely experimental
 	/client/proc/reload_style_sheet,
 	/client/proc/reset_style_sheet,
 	/client/proc/test_movable_UI,
@@ -173,6 +177,7 @@ var/list/admin_verbs_debug = list(
 #ifdef PROFILE_MACHINES
 	/client/proc/cmd_admin_dump_macprofile,
 #endif
+	/client/proc/debugNatureMapGenerator
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -394,13 +399,13 @@ var/list/admin_verbs_mod = list(
 	if(holder && mob)
 		if(mob.invisibility == INVISIBILITY_OBSERVER)
 			mob.invisibility = initial(mob.invisibility)
-			mob << "\red <b>Invisimin off. Invisibility reset.</b>"
+			mob << "<span class='danger'>Invisimin off. Invisibility reset.</span>"
 			mob.icon_state = "ghost"
 			mob.icon = 'icons/mob/human.dmi'
 			mob.update_icons()
 		else
 			mob.invisibility = INVISIBILITY_OBSERVER
-			mob << "\blue <b>Invisimin on. You are now as invisible as a ghost.</b>"
+			mob << "<span class='notice'><b>Invisimin on. You are now as invisible as a ghost.</b></span>"
 			mob.icon_state = "ghost"
 			mob.icon = 'icons/mob/mob.dmi'
 
@@ -599,7 +604,7 @@ var/list/admin_verbs_mod = list(
 			var/light_impact_range = input("Light impact range (in tiles):") as num
 			var/flash_range = input("Flash range (in tiles):") as num
 			explosion(epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range)
-	message_admins("\blue [ckey] creating an admin explosion at [epicenter.loc].")
+	message_admins("<span class='notice'>[ckey] creating an admin explosion at [epicenter.loc].</span>")
 	feedback_add_details("admin_verb","DB") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/give_spell(mob/T as mob in mob_list) // -- Urist
@@ -611,7 +616,7 @@ var/list/admin_verbs_mod = list(
 	T.spell_list += new S
 	feedback_add_details("admin_verb","GS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] gave [key_name(T)] the spell [S].")
-	message_admins("\blue [key_name_admin(usr)] gave [key_name(T)] the spell [S].", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] gave [key_name(T)] the spell [S].</span>", 1)
 
 /client/proc/give_disease(mob/T as mob in mob_list) // -- Giacom
 	set category = "Fun"
@@ -622,7 +627,7 @@ var/list/admin_verbs_mod = list(
 	T.contract_disease(new D, 1)
 	feedback_add_details("admin_verb","GD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] gave [key_name(T)] the disease [D].")
-	message_admins("\blue [key_name_admin(usr)] gave [key_name(T)] the disease [D].", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] gave [key_name(T)] the disease [D].</span>", 1)
 
 /client/proc/make_sound(var/obj/O in world) // -- TLE
 	set category = "Special Verbs"
@@ -675,13 +680,15 @@ var/list/admin_verbs_mod = list(
 		usr << "<b>Disabled air processing.</b>"
 	feedback_add_details("admin_verb","KA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] used 'kill air'.")
-	message_admins("\blue [key_name_admin(usr)] used 'kill air'.", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] used 'kill air'.</span>", 1)
 
 /client/proc/deadmin_self()
 	set name = "De-admin self"
 	set category = "Admin"
 
 	if(holder)
+		if(alert("Are you sure you want to deadmin?","Deadmin","Yes","No")=="No")
+			return
 		log_admin("[src] deadminned themself.")
 		message_admins("[src] deadminned themself.")
 		deadmin()
@@ -726,7 +733,7 @@ var/list/admin_verbs_mod = list(
 	if(!check_rights(R_FUN))	return
 
 	if(!istype(M, /mob/living/carbon/human))
-		usr << "\red You can only do this to humans!"
+		usr << "<span class='warning'>You can only do this to humans!</span>"
 		return
 	switch(alert("Are you sure you wish to edit this mob's appearance? Skrell, Unathi, Vox and Tajaran can result in unintended consequences.",,"Yes","No"))
 		if("No")
@@ -838,7 +845,7 @@ var/list/admin_verbs_mod = list(
 	T << "<span class='notice'>Move on.</span>"
 
 	log_admin("[key_name(usr)] told [key_name(T)] to man up and deal with it.")
-	message_admins("\blue [key_name_admin(usr)] told [key_name(T)] to man up and deal with it.", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] told [key_name(T)] to man up and deal with it.</span>", 1)
 
 /client/proc/global_man_up()
 	set category = "Fun"
@@ -850,7 +857,7 @@ var/list/admin_verbs_mod = list(
 		T << 'sound/voice/ManUp1.ogg'
 
 	log_admin("[key_name(usr)] told everyone to man up and deal with it.")
-	message_admins("\blue [key_name_admin(usr)] told everyone to man up and deal with it.", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] told everyone to man up and deal with it.</span>", 1)
 
 
 /client/proc/readmin()
@@ -873,19 +880,26 @@ var/list/admin_verbs_mod = list(
 		var/sql_ckey = sanitizeSQL(ckey)
 		var/DBQuery/query = dbcon.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin WHERE ckey = [sql_ckey]")
 		query.Execute()
+		usr << "Query executed"
 		while(query.NextRow())
 			var/ckey = query.item[1]
+			usr << "[ckey]"
 			var/rank = query.item[2]
+			usr << "[rank]"
 			if(rank == "Removed")	continue	//This person was de-adminned. They are only in the admin list for archive purposes.
 
 			var/rights = query.item[4]
+			usr << "[rights]"
 			if(istext(rights))	rights = text2num(rights)
 			D = new /datum/admins(rank, rights, ckey)
+			usr << "[D.rank],[D.rights]"
 
 			//find the client for a ckey if they are connected and associate them with the new admin datum
 			D.associate(src)
+			usr << "[D.owner]"
 			message_admins("[src] re-adminned themselves.")
 			log_admin("[src] re-adminned themselves.")
 			feedback_add_details("admin_verb","RAS")
 			verbs -= /client/proc/readmin
 			return
+		usr << "query.nextrow() failed"
