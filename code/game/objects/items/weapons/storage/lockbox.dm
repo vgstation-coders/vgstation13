@@ -17,11 +17,13 @@
 	var/icon_closed = "lockbox"
 	var/icon_broken = "lockbox+b"
 	var/tracked_access = "It doesn't look like it's ever been used."
-
+	var/canbednalocked = 0
+	var/dnalocked = 0
+	var/dnastring = null
 
 
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/card/id))
+	if (istype(W, /obj/item/weapon/card/id) && !canbednalocked)
 		var/obj/item/weapon/card/id/ID = W
 		if(src.broken)
 			user << "<span class='rose'>It appears to be broken.</span>"
@@ -57,15 +59,34 @@
 			for(var/mob/O in viewers(user, 3))
 				O.show_message(text("<span class='notice'>The locker has been broken by [] with an electromagnetic card!</span>", user), 1, text("You hear a faint electrical spark."), 2)
 
+	else if (canbednalocked && istype(W, /obj/item/device/multitool))
+		if ((!dnalocked)|| (src.dnastring == user.dna.unique_enzymes))
+			if (src.dnalocked == 0)
+				user << "<span class='rose'>The lockbox scans your fingerprint and saves it for later.</span>"
+				src.dnastring = user.dna.unique_enzymes
+				src.dnalocked = 1
+				tracked_access = "This Lockbox is registered to: [dnastring]"
+			locked = !locked
+			else if (src.locked == 0)
+				user << "<span class='rose'>The Lockbox scans your fingerprint and unlocks.</span>"
+				src.icon_state = src.icon_closed
+			else if (src.locked == 1)
+				user << "<span class='rose'>The Lockbox scans your fingerprint and locks.</span>"
+				src.icon_state = src.icon_locked
+
+		else
+			user << "<span class='warning'>The lockbox scans your fingerprint, and rudely buzzes!</span>"
 	if(!locked)
 		..()
+	else if (locked && !canbednalocked)
+		user << "<span class='warning'>It's locked!</span>"
 	else
-		user << "<span class='warning'>Its locked!</span>"
+		..()
 	return
 
 
 /obj/item/weapon/storage/lockbox/show_to(mob/user as mob)
-	if(locked)
+	if((locked && !canbednalocked) || (locked && canbednalocked && dnastring != null))
 		user << "<span class='warning'>Its locked!</span>"
 	else
 		..()
@@ -79,7 +100,7 @@
 			health -= Proj.damage
 	..()
 	if(health <= 0 && !src.indestructible)
-		for(var/atom/movable/A as mob|obj in src)
+		for(var/atom/movable/A)
 			A.loc = src.loc
 		del(src)
 	return
@@ -172,7 +193,7 @@
 
 /obj/item/weapon/storage/lockbox/examine(mob/user)
 	..()
-	user << "<span class='info'>tracked_access</span>"
+	user << "<span class='info'>[tracked_access]</span>"
 
 /obj/item/weapon/storage/lockbox/unlockable/attackby(obj/O as obj, mob/user as mob)
 	if (istype(O, /obj/item/weapon/card/id))
@@ -180,7 +201,7 @@
 		if(src.broken)
 			user << "<span class='rose'>It appears to be broken.</span>"
 			return
-		else
+		else if (!canbednalocked)
 			src.locked = !( src.locked )
 			if(src.locked)
 				src.icon_state = src.icon_locked
@@ -196,18 +217,26 @@
 		..()
 
 /obj/item/weapon/storage/lockbox/coinbox
-	name = "coinbox"
+	name = "Coinbox"
 	desc = "A secure container for the profits of a vending machine."
-	icon_state = "coinbox+l"
+	icon_state = "coinbox"
+	tracked_access = "This Lockbox is unregistered! Apply a multitool to register it as your own."
+	canbednalocked = 1
+	dnastring = null
 	w_class = 5
 	max_w_class = 4
 	max_combined_w_class = 30
 	force = 15
 	throwforce = 10
 	flags = TWOHANDABLE | MUSTTWOHAND //big sucka
-	storage_slots = 20
+	storage_slots = 21
 	req_access = list(access_qm)
-	locked = 1
+	locked = 0
 	icon_locked = "coinbox+l"
 	icon_closed = "coinbox"
+
+/obj/item/weapon/storage/lockbox/coinbox/productbox
+	name = "Product Box"
+	desc = "A secure container for the contents of a vending machine."
+	storage_slots = 49
 	indestructible = 1

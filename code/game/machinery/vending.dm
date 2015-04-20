@@ -3,13 +3,30 @@
 #define CAT_COIN   3
 
 /datum/data/vending_product
-	var/product_name = "generic"
+	var/product_name = "Generic Shite"
 	var/product_path = null
 	var/original_amount = 0
 	var/amount = 0
 	var/price = 0
 	var/display_color = "blue"
 	var/category = CAT_NORMAL
+	var/Contraband = 0
+	var/IDrequired = 0
+	var/IDaccess = null
+
+datum/data/VendingMachineGlobalSettings
+	var/AccountID = 0
+	var/DNAlocked = 0
+	var/DNAstring = null
+	var/Slogans = list()
+	var/MessageOnExit = null
+	var/GlobalShutUp = 0
+	var/MachineDesc = null
+	var/MachineName = null
+	var/AllowCoins = 1
+	var/GlobalContrabandHidden = 1
+	var/Wares = list()
+
 
 /* TODO: Add this to deconstruction for vending machines
 /obj/item/compressed_vend
@@ -35,6 +52,9 @@
 	var/active = 1		//No sales pitches if off!
 	var/vend_ready = 1	//Are we ready to vend?? Is it time??
 	var/vend_delay = 10	//How long does it take to vend?
+	var/datum/data/VendingMachineGlobalSettings/VendingMachineGlobalSettings
+	var/Synched = 0
+	var/SynchID = 0
 	var/datum/data/vending_product/currently_vending = null // A /datum/data/vending_product instance of what we're paying for right now.
 	var/delay_product_spawn // If set, uses sleep() in product spawn proc (mostly for seeds to retrieve correct names).
 	// To be filled out at compile time
@@ -42,7 +62,6 @@
 	var/list/contraband	= list()	// list(/type/path = amount,/type/path2 = amount2)
 	var/list/premium 	= list()	// No specified amount = only one in stock
 	var/list/prices     = list()	// Prices for each item, list(/type/path = price), items not in the list don't have a price.
-
 	var/product_slogans = ""	//String of slogans separated by semicolons, optional
 	var/product_ads = ""		//String of small ad messages in the vending screen - random chance
 	var/list/product_records = list()
@@ -65,9 +84,9 @@
 	var/obj/item/weapon/coin/coin
 	var/datum/wires/vending/wires = null
 	var/list/overlays_vending[2]//1 is the panel layer, 2 is the dangermode layer
-
 	var/list/vouchers
 	var/obj/item/weapon/storage/lockbox/coinbox/coinbox
+	var/obj/item/weapon/storage/lockbox/coinbox/productbox/productbox
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 	languages = HUMAN
@@ -81,13 +100,15 @@
 
 /obj/machinery/vending/New()
 	..()
-
+//	datum/data/VendingMachineGlobalSettings = new datum/data/VendingMachineGlobalSettings
 	overlays_vending[1] = "[icon_state]-panel"
-
+	coinbox = new(src)
+	productbox = new(src)
 	component_parts = newlist(\
-		/obj/item/weapon/storage/lockbox/coinbox
+		/obj/item/weapon/circuitboard/vendomat,\
 	)
-
+	component_parts += coinbox
+	component_parts += productbox
 	RefreshParts()
 
 	wires = new(src)
@@ -99,19 +120,30 @@
 		// so if slogantime is 10 minutes, it will say it at somewhere between 10 and 20 minutes after the machine is crated.
 		src.last_slogan = world.time + rand(0, slogan_delay)
 
-		src.build_inventory(products)
-		 //Add hidden inventory
-		src.build_inventory(contraband, 1)
-		src.build_inventory(premium, 0, 1)
 		power_change()
 
 		reconnect_database()
 		linked_account = vendor_account
 
 	coinbox.req_access |= src.req_access
-
+	for(var/product_path_products in products)
+		for(var/i = 1 to products[product_path_products])
+			new product_path_products(productbox)
+//	world << "Machine [src] (\ref[src]) contraband -> [contraband] (\ref[contraband])"
+	for(var/product_path_contraband in contraband)
+		for(var/i = 1 to contraband[product_path_contraband])
+			new product_path_contraband(productbox)
+	for(var/product_path_premium in premium)
+		for(var/i = 1 to premium[product_path_premium])
+			new product_path_premium(productbox)
+	src.build_inventory(products)
+	//Add hidden inventory
+	src.build_inventory(contraband, 1)
+	src.build_inventory(premium, 0, 1)
+	contraband = list()
+	products = list()
+	premium = list()
 	return
-
 /obj/machinery/vending/Destroy()
 	if(wires)
 		wires.Destroy()
@@ -1380,9 +1412,6 @@
 	icon_state = "discount"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/discountchocolate = 6,/obj/item/weapon/reagent_containers/food/snacks/danitos =6,
 					/obj/item/weapon/reagent_containers/food/snacks/discountburger = 6,/obj/item/weapon/reagent_containers/food/drinks/discount_ramen = 6,/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 6)
-	prices = list(/obj/item/weapon/reagent_containers/food/snacks/discountchocolate = 10,/obj/item/weapon/reagent_containers/food/snacks/danitos = 15,
-					/obj/item/weapon/reagent_containers/food/snacks/discountburger = 20,/obj/item/weapon/reagent_containers/food/drinks/discount_ramen = 10,/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 10)
-
 	pack = /obj/structure/vendomatpack/discount
 
 /obj/machinery/vending/groans
@@ -1393,5 +1422,4 @@
 	vend_reply = "No refunds."
 	icon_state = "groans"
 	products = list(/obj/item/weapon/reagent_containers/food/drinks/groans = 10,/obj/item/weapon/reagent_containers/food/drinks/filk = 10,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/grifeo = 10,/obj/item/weapon/reagent_containers/food/drinks/mannsdrink = 10)
-	prices = list(/obj/item/weapon/reagent_containers/food/drinks/groans = 20,/obj/item/weapon/reagent_containers/food/drinks/filk = 20,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/grifeo = 30,/obj/item/weapon/reagent_containers/food/drinks/mannsdrink = 10,/obj/item/weapon/reagent_containers/food/drinks/groansbanned = 50)
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/groansbanned = 10)
