@@ -66,14 +66,14 @@
 				src.dnastring = user.dna.unique_enzymes
 				src.dnalocked = 1
 				tracked_access = "This Lockbox is registered to: [dnastring]"
-			locked = !locked
 			else if (src.locked == 0)
-				user << "<span class='rose'>The Lockbox scans your fingerprint and unlocks.</span>"
-				src.icon_state = src.icon_closed
-			else if (src.locked == 1)
 				user << "<span class='rose'>The Lockbox scans your fingerprint and locks.</span>"
 				src.icon_state = src.icon_locked
-
+				locked = !locked
+			else if (src.locked == 1)
+				user << "<span class='rose'>The Lockbox scans your fingerprint and unlocks.</span>"
+				src.icon_state = src.icon_closed
+				locked = !locked
 		else
 			user << "<span class='warning'>The lockbox scans your fingerprint, and rudely buzzes!</span>"
 	if(!locked)
