@@ -858,10 +858,11 @@ obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (Vending Machine)"
 	build_path = "/obj/machinery/vending"
 	board_type = "machine"
-	origin_tech = "	materials=1;engineering=1;powerstorage=1"
-	frame_desc = "Just add a Coinbox. Capitalism, Ho!"
+	origin_tech = "materials=1;engineering=1;powerstorage=1"
+	frame_desc = "Requires a Coinbox and a Product Box. Capitalism, Ho!"
 	req_components = list(
-							"/obj/item/weapon/storage/lockbox/coinbox" = 1)
+							"/obj/item/weapon/storage/lockbox/coinbox" = 1,
+							"/obj/item/weapon/storage/lockbox/coinbox/productbox" = 1)
 
 /obj/item/weapon/circuitboard/pdapainter
 	name = "Circuit Board (PDA Painter)"

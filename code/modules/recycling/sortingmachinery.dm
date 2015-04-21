@@ -69,7 +69,6 @@
 				I.dropped(M)
 			if(ismob(T))
 				M = T
-				I.pickup(M)
 				M.put_in_active_hand(I)
 			else
 				I.loc = T

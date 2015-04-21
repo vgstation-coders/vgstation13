@@ -108,7 +108,7 @@
 /obj/item/weapon/storage/lockbox/ex_act(severity)
 	if (!src.indestructible)
 		var/newsev = max(3,severity+1)
-		for(var/atom/movable/A as mob|obj in src)//pulls everything out of the locker and hits it with an explosion
+		for(var/atom/movable/A in src)//pulls everything out of the locker and hits it with an explosion
 			A.loc = src.loc
 			A.ex_act(newsev)
 		newsev=4-severity
