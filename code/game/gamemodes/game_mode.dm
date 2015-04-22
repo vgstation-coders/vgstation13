@@ -329,10 +329,18 @@
 			. ++
 
 /datum/game_mode/proc/Clean_Antags() //Cleans out the genetic defects of all antagonists
-	for(var/mob/living/A in player_list)
-		if((istype(A)) && A.mind && A.mind.special_role)
-			if(A.dna)
-				A.dna.ResetSE()
+	for (var/datum/mind/player in modePlayer)
+		if (player)
+			var/mob/living/body = player.current
+
+			if (iscarbon(body))
+				var/mob/living/carbon/carbon = body
+
+				var/datum/dna/carbon_dna = carbon.dna
+
+				if (carbon_dna)
+					spawn (0)
+						carbon_dna.ResetSE()
 
 ///////////////////////////////////
 //Keeps track of all living heads//

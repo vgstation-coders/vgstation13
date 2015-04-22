@@ -30,52 +30,48 @@
 
 
 /datum/game_mode/traitor/pre_setup()
-
-	if(config.protect_roles_from_antagonist)
-		restricted_jobs += protected_jobs
-
 	var/list/possible_traitors = get_players_for_role(ROLE_TRAITOR)
 
-	// stop setup if no possible traitors
-	if(!possible_traitors.len)
-		return 0
+	if (length(possible_traitors) > 0)
+		if (config.protect_roles_from_antagonist)
+			restricted_jobs.Add(protected_jobs)
 
-	var/num_traitors = 1
+		var/num_traitors = 0
 
-	if(config.traitor_scaling)
-		num_traitors = max(1, round((num_players())/(traitor_scaling_coeff)))
-	else
-		num_traitors = max(1, min(num_players(), traitors_possible))
+		if (config.traitor_scaling)
+			num_traitors = max(1, round(num_players() / traitor_scaling_coeff))
+		else
+			num_traitors = Clamp(num_players(), 1, traitors_possible)
 
-	for(var/datum/mind/player in possible_traitors)
-		for(var/job in restricted_jobs)
-			if(player.assigned_role == job)
-				possible_traitors -= player
+		for (var/datum/mind/possible_traitor in possible_traitors)
+			if (possible_traitor)
+				for (var/restricted_job in restricted_jobs)
+					if (cmptext(possible_traitor.assigned_role, restricted_job))
+						possible_traitors.Remove(possible_traitor)
 
-	for(var/j = 0, j < num_traitors, j++)
-		if (!possible_traitors.len)
-			break
-		var/datum/mind/traitor = pick(possible_traitors)
-		traitors += traitor
-		traitor.special_role = "traitor"
-		possible_traitors.Remove(traitor)
+		for (var/i = 1 to num_traitors)
+			if (length(possible_traitors) > 0)
+				modePlayer.Add(pick_n_take(possible_traitors))
+			else
+				break
 
-	if(!traitors.len)
-		return 0
-	return 1
+		if (length(modePlayer) > 0)
+			return TRUE
 
+	return FALSE
 
 /datum/game_mode/traitor/post_setup()
-	for(var/datum/mind/traitor in traitors)
-		forge_traitor_objectives(traitor)
-		spawn(rand(10,100))
-			finalize_traitor(traitor)
-			greet_traitor(traitor)
-	modePlayer += traitors
-	if(!mixed)
+	for (var/datum/mind/player in modePlayer)
+		if (player)
+			spawn (0)
+				player.make_traitor()
+
+	if (!mixed)
 		spawn (rand(waittime_l, waittime_h))
 			send_intercept()
+
 	..()
+
 	return 1
 
 
