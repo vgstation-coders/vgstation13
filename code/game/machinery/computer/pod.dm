@@ -5,7 +5,6 @@
 	desc = "A controll for launching pods. Some people prefer firing Mechas."
 	icon_state = "mass_drivers"
 	circuit = /obj/item/weapon/circuitboard/pod
-	var/id_tag
 	var/list/id_tags = list()
 	var/list/door_only_tags = list()
 	var/list/synced = list()
@@ -32,7 +31,7 @@
 	for(var/obj/machinery/mass_driver/M in world)
 		if(M.z != src.z)	continue
 		for(var/ident_tag in id_tags)
-			if(M.id_tag == ident_tag)
+			if((M.id_tag == ident_tag) && !(ident_tag in synced))
 				synced += ident_tag
 				timings += ident_tag
 				timings[ident_tag] = 0.0
@@ -48,7 +47,7 @@
 	for(var/obj/machinery/door/poddoor/M in world)
 		if(M.z != src.z)	continue
 		for(var/ident_tag in id_tags)
-			if((M.id_tag == ident_tag) && !(ident_tag in synced))
+			if((M.id_tag == ident_tag) && !(ident_tag in synced) && !(ident_tag in door_only_tags))
 				door_only_tags += ident_tag
 				break
 
@@ -57,7 +56,7 @@
 /obj/machinery/computer/pod/proc/solo_sync(var/ident_tag)
 	for(var/obj/machinery/mass_driver/M in world)
 		if(M.z != src.z)	continue
-		if(M.id_tag == ident_tag)
+		if((M.id_tag == ident_tag) && !(ident_tag in synced))
 			synced += ident_tag
 			timings += ident_tag
 			timings[ident_tag] = 0.0
@@ -73,7 +72,7 @@
 	if(!(ident_tag in synced))
 		for(var/obj/machinery/door/poddoor/M in world)
 			if(M.z != src.z)	continue
-			if(M.id_tag == ident_tag)
+			if((M.id_tag == ident_tag) && !(ident_tag in synced) && !(ident_tag in door_only_tags))
 				door_only_tags += ident_tag
 				break
 
