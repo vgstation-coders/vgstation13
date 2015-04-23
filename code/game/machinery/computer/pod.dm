@@ -7,12 +7,14 @@
 	circuit = /obj/item/weapon/circuitboard/pod
 	var/list/id_tags = list()
 	var/list/door_only_tags = list()
-	var/id_tag = ""
 	var/list/synced = list()
 	var/list/timings = list()
 	var/list/times = list()
+	var/list/maxtimes = list()
+	var/list/powers = list()
+	var/list/loopings = list()
 
-	l_color = "#50AB00"
+	l_color = "#555555"
 
 /obj/machinery/computer/pod/New()
 	..()
@@ -29,34 +31,48 @@
 	for(var/obj/machinery/mass_driver/M in world)
 		if(M.z != src.z)	continue
 		for(var/ident_tag in id_tags)
-			if(M.id_tag == ident_tag)
+			if((M.id_tag == ident_tag) && !(ident_tag in synced))
 				synced += ident_tag
 				timings += ident_tag
 				timings[ident_tag] = 0.0
 				times += ident_tag
 				times[ident_tag] = 30.0
+				maxtimes += ident_tag
+				maxtimes[ident_tag] = 30.0
+				powers += ident_tag
+				powers[ident_tag] = 1.0
+				loopings += ident_tag
+				loopings[ident_tag] = 0
+				break
 	for(var/obj/machinery/door/poddoor/M in world)
 		if(M.z != src.z)	continue
 		for(var/ident_tag in id_tags)
-			if((M.id_tag == ident_tag) && !(ident_tag in synced))
+			if((M.id_tag == ident_tag) && !(ident_tag in synced) && !(ident_tag in door_only_tags))
 				door_only_tags += ident_tag
+				break
 
 	return
 
 /obj/machinery/computer/pod/proc/solo_sync(var/ident_tag)
 	for(var/obj/machinery/mass_driver/M in world)
 		if(M.z != src.z)	continue
-		if(M.id_tag == ident_tag)
+		if((M.id_tag == ident_tag) && !(ident_tag in synced))
 			synced += ident_tag
 			timings += ident_tag
 			timings[ident_tag] = 0.0
 			times += ident_tag
 			times[ident_tag] = 30.0
+			maxtimes += ident_tag
+			maxtimes[ident_tag] = 30.0
+			powers += ident_tag
+			powers[ident_tag] = 1.0
+			loopings += ident_tag
+			loopings[ident_tag] = 0
 			break
 	if(!(ident_tag in synced))
 		for(var/obj/machinery/door/poddoor/M in world)
 			if(M.z != src.z)	continue
-			if(M.id_tag == ident_tag)
+			if((M.id_tag == ident_tag) && !(ident_tag in synced) && !(ident_tag in door_only_tags))
 				door_only_tags += ident_tag
 				break
 
@@ -130,11 +146,17 @@
 				d2 = "<A href='?src=\ref[src];time=1;driver=[ident_tag]'>Initiate Time Launch</A>"
 			var/second = times[ident_tag] % 60
 			var/minute = (times[ident_tag] - second) / 60
-			dat += "<HR>\nTimer System: [d2]\nTime Left: [minute ? "[minute]:" : null][second] <A href='?src=\ref[src];tp=-30;driver=[ident_tag]'>-</A> <A href='?src=\ref[src];tp=-1;driver=[ident_tag]'>-</A> <A href='?src=\ref[src];tp=1;driver=[ident_tag]'>+</A> <A href='?src=\ref[src];tp=30;driver=[ident_tag]'>+</A>"
+			var/maxsecond = maxtimes[ident_tag] % 60
+			var/maxminute = (maxtimes[ident_tag] - maxsecond) / 60
+			dat += "<HR>\nTimer System: [d2]\nTime Left: [minute ? "[minute]:" : null][second]/[maxminute ? "[maxminute]:" : null][maxsecond] <A href='?src=\ref[src];tp=-30;driver=[ident_tag]'>-</A> <A href='?src=\ref[src];tp=-1;driver=[ident_tag]'>-</A> <A href='?src=\ref[src];tp=1;driver=[ident_tag]'>+</A> <A href='?src=\ref[src];tp=30;driver=[ident_tag]'>+</A>"
+			dat += "<BR>Set timer to loop: [loopings[ident_tag] ? "<A href = '?src=\ref[src];loop=0;driver=[ident_tag]'>Yes</A>" : "<A href = '?src=\ref[src];loop=1;driver=[ident_tag]'>No</A>"]"
 			var/temp = ""
 			var/list/L = list( 0.25, 0.5, 1, 2, 4, 8, 16 )
 			for(var/t in L)
-				temp += "<A href = '?src=\ref[src];power=[t];driver=[ident_tag]'>[t]</A> "
+				if( powers[ident_tag] == t)
+					temp += "<B><A href = '?src=\ref[src];power=[t];driver=[ident_tag]'>[t]</A></B> "
+				else
+					temp += "<A href = '?src=\ref[src];power=[t];driver=[ident_tag]'>[t]</A> "
 			dat += "<HR>\nPower Level: [temp]<BR>\n<A href = '?src=\ref[src];launch=1;driver=[ident_tag]'><B>Fire Drive!</B></A><BR>\n<A href = '?src=\ref[src];door=1;driver=[ident_tag]'>Toggle Pod Doors</A><BR>"
 
 	for(var/ident_tag in door_only_tags)
@@ -159,10 +181,16 @@
 				times[ident_tag] = round(times[ident_tag]) - 1
 				timing = 1
 			else
-				launch_sequence(ident_tag)
-				times[ident_tag] = 0
-				timings[ident_tag] = 0
-			updateDialog()
+				spawn()
+					launch_sequence(ident_tag)
+				if(loopings[ident_tag])
+					times[ident_tag] = maxtimes[ident_tag]
+				else
+					times[ident_tag] = 0
+					timings[ident_tag] = 0
+		else
+			times[ident_tag] = maxtimes[ident_tag]
+		updateDialog()
 	if(timing)
 		icon_state = "mass_drivers_timing"
 	else
@@ -186,6 +214,10 @@
 				synced -= ident_tag
 			if(ident_tag in door_only_tags)
 				door_only_tags -= ident_tag
+			timings -= ident_tag
+			times -= ident_tag
+			powers -= ident_tag
+			loopings -= ident_tag
 			id_tags -= ident_tag
 		if(href_list["teleporter"])
 			var/choices = list(0)
@@ -204,18 +236,22 @@
 			for(var/obj/machinery/mass_driver/M in world)
 				if(M.id_tag == ident_tag)
 					M.power = t
+			powers[ident_tag] = t
 		if(href_list["launch"])
 			launch_sequence(href_list["driver"])
 		if(href_list["time"])
 			var/ident_tag = href_list["driver"]
 			timings[ident_tag] = text2num(href_list["time"])
+		if(href_list["loop"])
+			var/ident_tag = href_list["driver"]
+			loopings[ident_tag] = text2num(href_list["loop"])
 		if(href_list["sync"])
 			driver_sync()
 		if(href_list["tp"])
 			var/ident_tag = href_list["driver"]
 			var/tp = text2num(href_list["tp"])
-			times[ident_tag] += tp
-			times[ident_tag] = min(max(round(times[ident_tag]), 0), 120)
+			maxtimes[ident_tag] += tp
+			maxtimes[ident_tag] = min(max(round(maxtimes[ident_tag]), 0), 120)
 		if(href_list["door"])
 			var/ident_tag = href_list["driver"]
 			for(var/obj/machinery/door/poddoor/M in world)

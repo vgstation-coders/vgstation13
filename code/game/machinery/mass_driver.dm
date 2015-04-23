@@ -44,7 +44,7 @@
 /obj/machinery/mass_driver/proc/drive(amount)
 	if(stat & (BROKEN|NOPOWER))
 		return
-	use_power(500)
+	use_power(500*power)
 	var/O_limit = 0
 	var/atom/target = get_edge_target_turf(src, dir)
 	for(var/atom/movable/O in loc)
@@ -74,6 +74,20 @@
 		return 1
 	return -1
 
+////////////////MASS BUMPER///////////////////
+
+/obj/machinery/mass_driver/bumper
+	name = "mass bumper"
+	desc = "Now you're here, now you're over there."
+	density = 1
+
+/obj/machinery/mass_driver/bumper/Bumped(M as mob|obj)
+	density = 0
+	step(M, get_dir(M,src))
+	spawn(1)
+		density = 1
+	drive()
+	return
 
 ////////////////MASS DRIVER FRAME///////////////////
 
@@ -94,8 +108,8 @@
 					user << "The welding tool must be on to complete this task."
 					return 1
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-				usr << "You begin to cut the frame apart..."
-				if(do_after(user, 30))
+				user << "You begin to cut the frame apart..."
+				if(do_after(user, 30) && (build == 0))
 					user << "<span class='notice'>You detach the plasteel sheets from each others.</span>"
 					new /obj/item/stack/sheet/plasteel(get_turf(src),3)
 					del(src)
@@ -103,7 +117,7 @@
 			if(istype(W, /obj/item/weapon/wrench))
 				user << "You begin to anchor \the [src] on the floor."
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				if(do_after(user, 10))
+				if(do_after(user, 10) && (build == 0))
 					user << "<span class='notice'>You anchor \the [src]!</span>"
 					anchored = 1
 					build++
@@ -113,7 +127,7 @@
 			if(istype(W, /obj/item/weapon/wrench))
 				user << "You begin to de-anchor \the [src] from the floor."
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				if(do_after(user, 10))
+				if(do_after(user, 10) && (build == 1))
 					build--
 					update_icon()
 					anchored = 0
@@ -126,7 +140,7 @@
 					return 1
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 				user << "You begin to weld \the [src] to the floor..."
-				if(do_after(user, 40))
+				if(do_after(user, 40) && (build == 1))
 					user << "<span class='notice'>You welded \the [src] to the floor.</span>"
 					build++
 					update_icon()
@@ -139,7 +153,7 @@
 					return 1
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 				user << "You begin to unweld \the [src] to the floor..."
-				if(do_after(user, 40))
+				if(do_after(user, 40) && (build == 2))
 					user << "<span class='notice'>You unwelded \the [src] to the floor.</span>"
 					build--
 					update_icon()
@@ -147,7 +161,7 @@
 				var/obj/item/stack/cable_coil/C=W
 				user << "You start adding cables to \the [src]..."
 				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-				if(do_after(user, 20) && (C.amount >= 3))
+				if(do_after(user, 20) && (C.amount >= 3) && (build == 2))
 					C.use(3)
 					user << "<span class='notice'>You've added cables to \the [src].</span>"
 					build++
@@ -155,7 +169,7 @@
 		if(3) // Wired
 			if(istype(W, /obj/item/weapon/wirecutters))
 				user << "You begin to remove the wiring from \the [src]."
-				if(do_after(user, 10))
+				if(do_after(user, 10) && (build == 3))
 					new /obj/item/stack/cable_coil(loc,3)
 					playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
 					user << "<span class='notice'>You've removed the cables from \the [src].</span>"
@@ -166,7 +180,7 @@
 				var/obj/item/stack/rods/R=W
 				user << "You begin to complete \the [src]..."
 				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-				if(do_after(user, 20) && (R.amount >= 2))
+				if(do_after(user, 20) && (R.amount >= 2) && (build == 3))
 					R.use(3)
 					user << "<span class='notice'>You've added the grille to \the [src].</span>"
 					build++
@@ -176,7 +190,7 @@
 			if(istype(W, /obj/item/weapon/crowbar))
 				user << "You begin to pry off the grille from \the [src]..."
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				if(do_after(user, 30))
+				if(do_after(user, 30) && (build == 4))
 					new /obj/item/stack/rods(loc,2)
 					build--
 					update_icon()
