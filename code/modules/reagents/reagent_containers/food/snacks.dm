@@ -1257,8 +1257,8 @@
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/fries
-	name = "Space Fries"
-	desc = "AKA: French Fries, Freedom Fries, etc"
+	name = "Freedom Fries"
+	desc = "AKA: French Fries, etc"
 	icon_state = "fries"
 	trash = /obj/item/trash/plate
 	New()
