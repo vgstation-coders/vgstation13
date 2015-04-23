@@ -5,6 +5,7 @@
 	desc = "A controll for launching pods. Some people prefer firing Mechas."
 	icon_state = "mass_drivers"
 	circuit = /obj/item/weapon/circuitboard/pod
+	var/id_tag
 	var/list/id_tags = list()
 	var/list/door_only_tags = list()
 	var/list/synced = list()
