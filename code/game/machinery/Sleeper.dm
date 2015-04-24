@@ -28,14 +28,32 @@
 /obj/machinery/sleep_console/New()
 	..()
 	spawn( 5 )
+		update_icon()
 		if(orient == "RIGHT")
-			icon_state = "sleeperconsole-r"
 			src.connected = locate(/obj/machinery/sleeper, get_step(src, EAST))
 		else
 			src.connected = locate(/obj/machinery/sleeper, get_step(src, WEST))
-
-		return
 	return
+
+/obj/machinery/sleep_console/update_icon()
+	if((stat & BROKEN)||(!powered()))
+		if(orient == "LEFT")
+			icon_state = "sleeperconsole-p"
+		else
+			icon_state = "sleeperconsole-p-r"
+	else
+		if(orient == "LEFT")
+			icon_state = "sleeperconsole"
+		else
+			icon_state = "sleeperconsole-r"
+
+/obj/machinery/sleep_console/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(iswrench(W))
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+		if(do_after(user,50))
+			qdel(src)
+	else
+		return ..()
 
 /obj/machinery/sleep_console/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
@@ -94,11 +112,11 @@
 			if (src.connected)
 				if (src.connected.occupant)
 					if (src.connected.occupant.stat == DEAD)
-						usr << "<span class='danger'>This person has no life for to preserve anymore. Take them to a department capable of reanimating them.</span>"
+						usr << "\red \b This person has no life for to preserve anymore. Take them to a department capable of reanimating them."
 					else if(src.connected.occupant.health > 0 || href_list["chemical"] == "inaprovaline")
 						src.connected.inject_chemical(usr,href_list["chemical"],text2num(href_list["amount"]))
 					else
-						usr << "<span class='danger'>This person is not in good enough condition for sleepers to be effective! Use another means of treatment, such as cryogenics!</span>"
+						usr << "\red \b This person is not in good enough condition for sleepers to be effective! Use another means of treatment, such as cryogenics!"
 		if (href_list["refresh"])
 			src.updateUsrDialog()
 		src.add_fingerprint(usr)
@@ -134,7 +152,14 @@
 	var/mob/living/occupant = null
 	var/available_chemicals = list("inaprovaline" = "Inaprovaline", "stoxin" = "Soporific", "dermaline" = "Dermaline", "bicaridine" = "Bicaridine", "dexalin" = "Dexalin")
 	var/amounts = list(5, 10)
-
+	var/obj/machinery/sleep_console/connected = null
+	machine_flags = SCREWTOGGLE | CROWDESTROY
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/sleeper,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator
+	)
 	l_color = "#7BF9FF"
 	power_change()
 		..()
@@ -145,11 +170,51 @@
 
 /obj/machinery/sleeper/New()
 	..()
+	RefreshParts()
 	spawn( 5 )
+		update_icon()
 		if(orient == "RIGHT")
-			icon_state = "sleeper_0-r"
+			generate_console(get_step(get_turf(src), EAST))
+		else
+			generate_console(get_step(get_turf(src), WEST))
 		return
 	return
+
+/obj/machinery/sleeper/update_icon()
+	if(occupant)
+		if(orient == "LEFT")
+			icon_state = "sleeper_1"
+		else
+			icon_state = "sleeper_1-r"
+	else
+		if(orient == "LEFT")
+			icon_state = "sleeper_0"
+		else
+			icon_state = "sleeper_0-r"
+
+/obj/machinery/sleeper/proc/generate_console(turf/T as turf)
+	if(connected)
+		qdel(connected)
+	if(!T.density)
+		connected = new /obj/machinery/sleep_console(T)
+		connected.orient = src.orient
+		connected.update_icon()
+		return 1
+	else
+		return 0
+
+/obj/machinery/sleeper/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		T += SP.rating
+
+	if(T >= 6 && T<9)
+		available_chemicals = list("inaprovaline" = "Inaprovaline", "stoxin" = "Soporific", "dermaline" = "Dermaline", "bicaridine" = "Bicaridine", "dexalin" = "Dexalin", "phalanximine" = "Phalanximine")
+	else if(T < 6)
+		available_chemicals = list("inaprovaline" = "Inaprovaline", "stoxin" = "Soporific", "dermaline" = "Dermaline", "bicaridine" = "Bicaridine", "dexalin" = "Dexalin")
+	else
+		available_chemicals = list("inaprovaline" = "Inaprovaline", "stoxin" = "Soporific", "dermaline" = "Dermaline", "bicaridine" = "Bicaridine", "dexalin" = "Dexalin", "phalanximine" = "Phalanximine", "spaceacillin" = "Spaceacillin")
+
 
 /obj/machinery/sleeper/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
 	if(!ismob(O)) //mobs only
@@ -177,7 +242,7 @@
 	if(!istype(L) || L.buckled)
 		return
 	if(L.abiotic())
-		user << "<span class='notice'><B>Subject cannot have abiotic items on.</B></span>"
+		user << "\blue <B>Subject cannot have abiotic items on.</B>"
 		return
 	for(var/mob/living/carbon/slime/M in range(1,L))
 		if(M.Victim == L)
@@ -190,7 +255,7 @@
 
 	if(do_after(user, 20))
 		if(src.occupant)
-			user << "<span class='notice'><B>The sleeper is already occupied!</B></span>"
+			user << "\blue <B>The sleeper is already occupied!</B>"
 			return
 		if(!L || L.buckled) return
 
@@ -199,10 +264,8 @@
 			L.client.eye = src
 		L.loc = src
 		src.occupant = L
-		src.icon_state = "sleeper_1"
-		if(orient == "RIGHT")
-			icon_state = "sleeper_1-r"
-		L << "<span class='notice'><b>You feel cool air surround you. You go numb as your senses turn inward.</b></span>"
+		update_icon()
+		L << "\blue <b>You feel cool air surround you. You go numb as your senses turn inward.</b>"
 		for(var/obj/OO in src)
 			OO.loc = src.loc
 		src.add_fingerprint(user)
@@ -229,12 +292,32 @@
 	return
 
 
-/obj/machinery/sleeper/attackby(obj/item/weapon/grab/G as obj, mob/user as mob)
-	if((!( istype(G, /obj/item/weapon/grab)) || !( ismob(G.affecting))))
+/obj/machinery/sleeper/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(iscrowbar(W) && occupant)
 		return
-	if(G.affecting.buckled) return
+	if(iswrench(W)&&!occupant)
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		if(orient == "RIGHT")
+			orient = "LEFT"
+			if(generate_console(get_step(get_turf(src), EAST)))
+				update_icon()
+			else
+				orient = "RIGHT"
+				visible_message("<span class='warning'>There is no space!</span>","<span class='warning'>[user] wants to be hardcore, but his CMO won't let him.</span>")
+		else
+			orient = "RIGHT"
+			if(generate_console(get_step(get_turf(src), WEST)))
+				update_icon()
+			else
+				orient = "LEFT"
+				visible_message("<span class='warning'>There is no space!</span>","<span class='warning'>[user] wants to be hardcore, but his CMO won't let him.</span>")
+		return
+	if(!istype(W, /obj/item/weapon/grab))
+		return ..()
+	var/obj/item/weapon/grab/G = W
+	if(!(ismob(G.affecting)) || G.affecting.buckled) return
 	if(src.occupant)
-		user << "<span class='notice'><B>The sleeper is already occupied!</B></span>"
+		user << "\blue <B>The sleeper is already occupied!</B>"
 		return
 
 	for(var/mob/living/carbon/slime/M in range(1,G.affecting))
@@ -246,7 +329,7 @@
 
 	if(do_after(user, 20))
 		if(src.occupant)
-			user << "<span class='notice'><B>The sleeper is already occupied!</B></span>"
+			user << "\blue <B>The sleeper is already occupied!</B>"
 			return
 		if(!G || !G.affecting) return
 		var/mob/M = G.affecting
@@ -257,11 +340,9 @@
 			M.client.eye = src
 		M.loc = src
 		src.occupant = M
-		src.icon_state = "sleeper_1"
-		if(orient == "RIGHT")
-			icon_state = "sleeper_1-r"
+		update_icon()
 
-		M << "<span class='notice'><b>You feel cool air surround you. You go numb as your senses turn inward.</b></span>"
+		M << "\blue <b>You feel cool air surround you. You go numb as your senses turn inward.</b>"
 
 		for(var/obj/O in src)
 			O.loc = src.loc
@@ -331,8 +412,7 @@
 		src.occupant.client.perspective = MOB_PERSPECTIVE
 	src.occupant.loc = src.loc
 	src.occupant = null
-	if(orient == "RIGHT")
-		icon_state = "sleeper_0-r"
+	update_icon()
 	return
 
 
@@ -347,7 +427,7 @@
 
 /obj/machinery/sleeper/proc/check(mob/living/user as mob)
 	if(src.occupant)
-		user << text("<span class='notice'><B>Occupant ([]) Statistics:</B></span>", src.occupant)
+		user << text("\blue <B>Occupant ([]) Statistics:</B>", src.occupant)
 		var/t1
 		switch(src.occupant.stat)
 			if(0.0)
@@ -357,16 +437,16 @@
 			if(2.0)
 				t1 = "*dead*"
 			else
-		user << text("[]\t Health %: [] ([])", (src.occupant.health > 50 ? "<span class='notice'></span>" : "<span class='danger'></span>"), src.occupant.health, t1)
+		user << text("[]\t Health %: [] ([])", (src.occupant.health > 50 ? "\blue " : "\red "), src.occupant.health, t1)
 		user << text("[]\t -Core Temperature: []&deg;C ([]&deg;F)</FONT><BR>", (src.occupant.bodytemperature > 50 ? "<font color='blue'>" : "<font color='red'>"), src.occupant.bodytemperature-T0C, src.occupant.bodytemperature*1.8-459.67)
-		user << text("[]\t -Brute Damage %: []", (src.occupant.getBruteLoss() < 60 ? "<span class='notice'></span>" : "<span class='danger'></span>"), src.occupant.getBruteLoss())
-		user << text("[]\t -Respiratory Damage %: []", (src.occupant.getOxyLoss() < 60 ? "<span class='notice'></span>" : "<span class='danger'></span>"), src.occupant.getOxyLoss())
-		user << text("[]\t -Toxin Content %: []", (src.occupant.getToxLoss() < 60 ? "<span class='notice'></span>" : "<span class='danger'></span>"), src.occupant.getToxLoss())
-		user << text("[]\t -Burn Severity %: []", (src.occupant.getFireLoss() < 60 ? "<span class='notice'></span>" : "<span class='danger'></span>"), src.occupant.getFireLoss())
-		user << "<span class='notice'>Expected time till occupant can safely awake: (note: If health is below 20% these times are inaccurate)</span>"
-		user << text("<span class='notice'>\t [] second\s (if around 1 or 2 the sleeper is keeping them asleep.)</span>", src.occupant.paralysis / 5)
+		user << text("[]\t -Brute Damage %: []", (src.occupant.getBruteLoss() < 60 ? "\blue " : "\red "), src.occupant.getBruteLoss())
+		user << text("[]\t -Respiratory Damage %: []", (src.occupant.getOxyLoss() < 60 ? "\blue " : "\red "), src.occupant.getOxyLoss())
+		user << text("[]\t -Toxin Content %: []", (src.occupant.getToxLoss() < 60 ? "\blue " : "\red "), src.occupant.getToxLoss())
+		user << text("[]\t -Burn Severity %: []", (src.occupant.getFireLoss() < 60 ? "\blue " : "\red "), src.occupant.getFireLoss())
+		user << "\blue Expected time till occupant can safely awake: (note: If health is below 20% these times are inaccurate)"
+		user << text("\blue \t [] second\s (if around 1 or 2 the sleeper is keeping them asleep.)", src.occupant.paralysis / 5)
 	else
-		user << "<span class='notice'>There is no one inside!</span>"
+		user << "\blue There is no one inside!"
 	return
 
 
@@ -374,11 +454,8 @@
 	set name = "Eject Sleeper"
 	set category = "Object"
 	set src in oview(1)
-	if(usr.stat != 0 || (usr.status_flags & FAKEDEATH))
+	if(usr.stat != 0)
 		return
-	if(orient == "RIGHT")
-		icon_state = "sleeper_0-r"
-	src.icon_state = "sleeper_0"
 	src.go_out()
 	add_fingerprint(usr)
 	return
@@ -388,13 +465,13 @@
 	set name = "Enter Sleeper"
 	set category = "Object"
 	set src in oview(1)
-	if(usr.stat != 0 || !(ishuman(usr) || ismonkey(usr)) || (usr.status_flags & FAKEDEATH))
+	if(usr.stat != 0 || !(ishuman(usr) || ismonkey(usr)))
 		return
 
 	if(src.occupant)
-		usr << "<span class='notice'><B>The sleeper is already occupied!</B></span>"
+		usr << "\blue <B>The sleeper is already occupied!</B>"
 		return
-	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting || (usr.status_flags & FAKEDEATH)) //are you cuffed, dying, lying, stunned or other
+	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
 		return
 	for(var/mob/living/carbon/slime/M in range(1,usr))
 		if(M.Victim == usr)
@@ -405,7 +482,7 @@
 	visible_message("[usr] starts climbing into the sleeper.", 3)
 	if(do_after(usr, 20))
 		if(src.occupant)
-			usr << "<span class='notice'><B>The sleeper is already occupied!</B></span>"
+			usr << "\blue <B>The sleeper is already occupied!</B>"
 			return
 		if(usr.buckled)
 			return
@@ -414,9 +491,7 @@
 		usr.client.eye = src
 		usr.loc = src
 		src.occupant = usr
-		src.icon_state = "sleeper_1"
-		if(orient == "RIGHT")
-			icon_state = "sleeper_1-r"
+		update_icon()
 
 		for(var/obj/O in src)
 			del(O)
