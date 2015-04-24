@@ -57,14 +57,21 @@
 	flags = FPRINT
 
 
-/obj/item/smallDelivery/attack_self(mob/user as mob)
-	if (src.wrapped) //sometimes items can disappear. For example, bombs. --rastaf0
-		wrapped.loc = user.loc
-		if(ishuman(user))
-			user.put_in_hands(wrapped)
-		else
-			wrapped.loc = get_turf(src)
-
+/obj/item/smallDelivery/attack_self(mob/user as mob) // why the fuck is this mot a child of storage? oh well
+	if((!ishuman(user) && (src.loc != user)) || user.stat || user.restrained())
+		return
+	var/turf/T = get_turf(src)
+	for(var/obj/item/I in contents)
+		if(T)
+			var/mob/M
+			if(ismob(loc))
+				M = loc
+				I.dropped(M)
+			if(ismob(T))
+				M = T
+				M.put_in_active_hand(I)
+			else
+				I.loc = T
 	del(src)
 	return
 

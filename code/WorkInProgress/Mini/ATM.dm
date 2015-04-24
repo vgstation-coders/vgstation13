@@ -206,6 +206,7 @@ log transactions
 						<A href='?src=\ref[src];choice=view_screen;view_screen=2'>Make transfer</a><br>
 						<A href='?src=\ref[src];choice=view_screen;view_screen=3'>View transaction log</a><br>
 						<A href='?src=\ref[src];choice=balance_statement'>Print balance statement</a><br>
+						<A href='?src=\ref[src];choice=vending_machine'>Acquire a Vending Machine Package</a><br>
 						<A href='?src=\ref[src];choice=logout'>Logout</a><br>"}
 		else if(linked_db)
 			dat += {"<form name='atm_auth' action='?src=\ref[src]' method='get'>
@@ -337,10 +338,10 @@ log transactions
 			if("balance_statement")
 				if(authenticated_account)
 					if(world.timeofday < lastprint + PRINT_DELAY)
-						usr << "<span class='notice'>The [src.name] flashes an error on its display.</span>"
+						usr << "<span class='notice'>The [src.name] flashes an error on its display; its printer is recharging.</span>"
 						return
 					lastprint = world.timeofday
-					var/obj/item/weapon/paper/R = new(src.loc)
+					var/obj/item/weapon/paper/R = new /obj/item/weapon/paper(src.loc)
 					R.name = "Account balance: [authenticated_account.owner_name]"
 					R.info = {"<b>NT Automated Teller Account Statement</b><br><br>
 						<i>Account holder:</i> [authenticated_account.owner_name]<br>
@@ -362,6 +363,54 @@ log transactions
 					playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
 				else
 					playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
+			if("vending_machine")
+				if(authenticated_account)
+					if(world.timeofday < lastprint + PRINT_DELAY)
+						usr << "<span class='notice'>The [src.name] flashes an error on its display; its printer is recharging.</span>"
+						return
+					lastprint = world.timeofday
+					var/obj/item/smallDelivery/P = new /obj/item/smallDelivery(src.loc)
+					var/obj/item/weapon/storage/lockbox/coinbox/coinbox = new /obj/item/weapon/storage/lockbox/coinbox(P)
+					new /obj/item/weapon/circuitboard/vendomat(P)
+					new /obj/item/weapon/storage/lockbox/coinbox/productbox(P)
+					P.name = "Large Parcel"
+					P.desc = "It's a rather heavy parcel with a tag: Capitalism, Ho!"
+					P.w_class = coinbox.w_class
+					P.force = coinbox.force
+					P.throwforce = coinbox.throwforce
+					P.flags = coinbox.flags
+					var/obj/item/weapon/paper/R = new /obj/item/weapon/paper(P)
+					P.wrapped = R
+					R.name = "Receipt"
+					R.info = {"<h2>NT Automated Teller Machine Reciept</h2><hr><br>
+												Dear [authenticated_account.owner_name],<br>
+						Thank for purchasing our Deluxe <i>Vending Machine Package.</i>. Included within are the following products:
+						<ul><li> Nanotrasen <i>Extra-Secure</i> (tm) 'Coinbox'
+						<li> Nanotrasen DNA-Locked <i>Extra-Secure</i> (tm) 'Product Box'
+						<li> Your <i>very own</i> Nanotrasen Premium <i>Vendoboard</i> (tm).
+						<li> This receipt, with complementary balance information.
+						</ul>
+						To build your vending machine, simply build a machine frame from metal, add some wires, slot your <i>Vendoboard</i> (tm) in, Then configure your 'Product Box' and coinbox to your Account ID, which is [authenticated_account.account_number] using a multitool, slot them both in, and finally finish off by simply screwing the frame in, It just couldn't be simpler!<br>
+						Attached is your complementary balance information, please use the account number for your 'Product Box':<br><hr><b>
+						<h3> Balance Information</h3>
+						<i>Account holder:</i> [authenticated_account.owner_name]<br>
+						<i>Account number:</i> [authenticated_account.account_number]<br>
+						<i>Balance:</i> $[authenticated_account.money]<br>
+						<i>Date and time:</i> [worldtime2text()], [current_date_string]<br>
+						<i>Service terminal ID:</i> [machine_id]</b><br>"}
+					//stamp the paper
+					var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
+					stampoverlay.icon_state = "paper_stamp-cent"
+					if(!R.stamped)
+						R.stamped = new
+					R.stamped += /obj/item/weapon/stamp
+					R.overlays += stampoverlay
+					R.stamps += "<HR><i>This paper has been stamped by the Automatic Teller Machine.</i>"
+				if(prob(50))
+					playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
+				else
+					playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
+
 			if("insert_card")
 				if(held_card)
 					held_card.loc = src.loc

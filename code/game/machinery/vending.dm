@@ -3,13 +3,30 @@
 #define CAT_COIN   3
 
 /datum/data/vending_product
-	var/product_name = "generic"
+	var/product_name = "Generic Shite"
 	var/product_path = null
 	var/original_amount = 0
 	var/amount = 0
 	var/price = 0
 	var/display_color = "blue"
 	var/category = CAT_NORMAL
+	var/Contraband = 0
+	var/IDrequired = 0
+	var/IDaccess = null
+
+datum/data/VendingMachineGlobalSettings
+	var/AccountID = 0
+	var/DNAlocked = 0
+	var/DNAstring = null
+	var/Slogans = list()
+	var/MessageOnExit = null
+	var/GlobalShutUp = 0
+	var/MachineDesc = null
+	var/MachineName = null
+	var/AllowCoins = 1
+	var/GlobalContrabandHidden = 1
+	var/Wares = list()
+
 
 /* TODO: Add this to deconstruction for vending machines
 /obj/item/compressed_vend
@@ -25,7 +42,7 @@
 
 /obj/machinery/vending
 	name = "Empty vending machine"
-	desc = "Just add some capitalism."
+	desc = "Capitalism, Ho!"
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "empty"
 	var/obj/structure/vendomatpack/pack = null
@@ -35,6 +52,9 @@
 	var/active = 1		//No sales pitches if off!
 	var/vend_ready = 1	//Are we ready to vend?? Is it time??
 	var/vend_delay = 10	//How long does it take to vend?
+	var/datum/data/VendingMachineGlobalSettings/VendingMachineGlobalSettings
+	var/Synched = 0
+	var/SynchID = 0
 	var/datum/data/vending_product/currently_vending = null // A /datum/data/vending_product instance of what we're paying for right now.
 	var/delay_product_spawn // If set, uses sleep() in product spawn proc (mostly for seeds to retrieve correct names).
 	// To be filled out at compile time
@@ -42,7 +62,6 @@
 	var/list/contraband	= list()	// list(/type/path = amount,/type/path2 = amount2)
 	var/list/premium 	= list()	// No specified amount = only one in stock
 	var/list/prices     = list()	// Prices for each item, list(/type/path = price), items not in the list don't have a price.
-
 	var/product_slogans = ""	//String of slogans separated by semicolons, optional
 	var/product_ads = ""		//String of small ad messages in the vending screen - random chance
 	var/list/product_records = list()
@@ -65,11 +84,11 @@
 	var/obj/item/weapon/coin/coin
 	var/datum/wires/vending/wires = null
 	var/list/overlays_vending[2]//1 is the panel layer, 2 is the dangermode layer
-
 	var/list/vouchers
 	var/obj/item/weapon/storage/lockbox/coinbox/coinbox
+	var/obj/item/weapon/storage/lockbox/coinbox/productbox/productbox
 
-	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 	languages = HUMAN
 
 	var/obj/machinery/account_database/linked_db
@@ -81,16 +100,15 @@
 
 /obj/machinery/vending/New()
 	..()
-
+//	datum/data/VendingMachineGlobalSettings = new datum/data/VendingMachineGlobalSettings
 	overlays_vending[1] = "[icon_state]-panel"
-
+	coinbox = new(src)
+	productbox = new(src)
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/vendomat,\
-		/obj/item/weapon/stock_parts/matter_bin,\
-		/obj/item/weapon/stock_parts/manipulator,\
-		/obj/item/weapon/stock_parts/scanning_module\
 	)
-
+	component_parts += coinbox
+	component_parts += productbox
 	RefreshParts()
 
 	wires = new(src)
@@ -102,20 +120,30 @@
 		// so if slogantime is 10 minutes, it will say it at somewhere between 10 and 20 minutes after the machine is crated.
 		src.last_slogan = world.time + rand(0, slogan_delay)
 
-		src.build_inventory(products)
-		 //Add hidden inventory
-		src.build_inventory(contraband, 1)
-		src.build_inventory(premium, 0, 1)
 		power_change()
 
 		reconnect_database()
 		linked_account = vendor_account
 
-	coinbox = new(src)
 	coinbox.req_access |= src.req_access
-
+	for(var/product_path_products in products)
+		for(var/i = 1 to products[product_path_products])
+			new product_path_products(productbox)
+//	world << "Machine [src] (\ref[src]) contraband -> [contraband] (\ref[contraband])"
+	for(var/product_path_contraband in contraband)
+		for(var/i = 1 to contraband[product_path_contraband])
+			new product_path_contraband(productbox)
+	for(var/product_path_premium in premium)
+		for(var/i = 1 to premium[product_path_premium])
+			new product_path_premium(productbox)
+	src.build_inventory(products)
+	//Add hidden inventory
+	src.build_inventory(contraband, 1)
+	src.build_inventory(premium, 0, 1)
+	contraband = list()
+	products = list()
+	premium = list()
 	return
-
 /obj/machinery/vending/Destroy()
 	if(wires)
 		wires.Destroy()
@@ -738,7 +766,6 @@
  */
 
 /*
-
 /obj/machinery/vending/[vendors name here]   // --vending machine template   :)
 	name = ""
 	desc = ""
@@ -748,7 +775,6 @@
 	products = list()
 	contraband = list()
 	premium = list()
-
 */
 
 /*
@@ -784,7 +810,6 @@
 	product_ads = "Drink up!;Booze is good for you!;Alcohol is humanity's best friend.;Quite delighted to serve you!;Care for a nice, cold beer?;Nothing cures you like booze!;Have a sip!;Have a drink!;Have a beer!;Beer is good for you!;Only the finest alcohol!;Best quality booze since 2053!;Award-winning wine!;Maximum alcohol!;Man loves beer.;A toast for progress!"
 	req_access_txt = "25"
 	pack = /obj/structure/vendomatpack/boozeomat
-
 /obj/machinery/vending/assist
 	name = "Vendomat"
 	desc = "A generic vending machine."
@@ -794,7 +819,6 @@
 	contraband = list(/obj/item/device/flashlight = 5,/obj/item/device/assembly/timer = 2)
 	product_ads = "Only the finest!;Have some tools.;The most robust equipment.;The finest gear in space!"
 	pack = /obj/structure/vendomatpack/assist
-
 /obj/machinery/vending/coffee
 	name = "Hot Drinks machine"
 	desc = "A vending machine which dispenses hot drinks."
@@ -805,11 +829,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/drinks/coffee = 25,/obj/item/weapon/reagent_containers/food/drinks/tea = 25,/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 25)
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/ice = 10)
 	prices = list(/obj/item/weapon/reagent_containers/food/drinks/coffee = 25, /obj/item/weapon/reagent_containers/food/drinks/tea = 25, /obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 25)
-
 	pack = /obj/structure/vendomatpack/coffee
-
-
-
 /obj/machinery/vending/snack
 	name = "Getmore Chocolate Corp"
 	desc = "A snack machine courtesy of the Getmore Chocolate Corporation, based out of Mars"
@@ -825,10 +845,7 @@
 					/obj/item/weapon/reagent_containers/food/snacks/sosjerky = 30,/obj/item/weapon/reagent_containers/food/snacks/no_raisin = 20,/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie = 30,
 					/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 25,
 					/obj/item/weapon/reagent_containers/food/snacks/bustanuts = 0)
-
 	pack = /obj/structure/vendomatpack/snack
-
-
 /obj/machinery/vending/cola
 	name = "Robust Softdrinks"
 	desc = "A softdrink vendor provided by Robust Industries, LLC."
@@ -842,9 +859,7 @@
 	prices = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 20,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind = 20,
 					/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb = 20,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist = 20,
 					/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up = 20)
-
 	pack = /obj/structure/vendomatpack/cola
-
 //This one's from bay12
 /obj/machinery/vending/cart
 	name = "PTech"
@@ -855,9 +870,7 @@
 	products = list(/obj/item/weapon/cartridge/medical = 10,/obj/item/weapon/cartridge/engineering = 10,/obj/item/weapon/cartridge/security = 10,
 					/obj/item/weapon/cartridge/janitor = 10,/obj/item/weapon/cartridge/signal/toxins = 10,/obj/item/device/pda/heads = 10,
 					/obj/item/weapon/cartridge/captain = 3,/obj/item/weapon/cartridge/quartermaster = 10)
-
 	pack = /obj/structure/vendomatpack/undefined
-
 /obj/machinery/vending/cigarette
 	name = "Cigarette machine" //OCD had to be uppercase to look nice with the new formating
 	desc = "If you want to get cancer, might as well do it in style"
@@ -869,9 +882,7 @@
 	contraband = list(/obj/item/weapon/lighter/zippo = 4)
 	premium = list(/obj/item/clothing/mask/cigarette/cigar/havana = 2)
 	prices = list(/obj/item/weapon/storage/fancy/cigarettes = 60,/obj/item/weapon/storage/box/matches = 10,/obj/item/weapon/lighter/random = 60)
-
 	pack = /obj/structure/vendomatpack/cigarette
-
 /obj/machinery/vending/medical
 	name = "NanoMed Plus"
 	desc = "Medical drug dispenser."
@@ -891,9 +902,7 @@
 		/obj/item/weapon/reagent_containers/glass/beaker = 4,
 		/obj/item/weapon/reagent_containers/dropper = 2)
 	contraband = list(/obj/item/weapon/reagent_containers/pill/tox = 3,/obj/item/weapon/reagent_containers/pill/stox = 4,/obj/item/weapon/reagent_containers/pill/antitox = 6)
-
 	pack = /obj/structure/vendomatpack/medical
-
 //This one's from bay12
 /obj/machinery/vending/plasmaresearch
 	name = "Toximate 3000"
@@ -901,9 +910,7 @@
 	products = list(/obj/item/clothing/under/rank/scientist = 6,/obj/item/clothing/suit/bio_suit = 6,/obj/item/clothing/head/bio_hood = 6,
 					/obj/item/device/transfer_valve = 6,/obj/item/device/assembly/timer = 6,/obj/item/device/assembly/signaler = 6,
 					/obj/item/device/assembly/prox_sensor = 6,/obj/item/device/assembly/igniter = 6)
-
 	pack = /obj/structure/vendomatpack/undefined
-
 /obj/machinery/vending/wallmed1
 	name = "NanoMed"
 	desc = "Wall-mounted Medical Equipment dispenser."
@@ -914,10 +921,8 @@
 	density = 0 //It is wall-mounted, and thus, not dense. --Superxpdude
 	products = list(/obj/item/stack/medical/bruise_pack = 2,/obj/item/stack/medical/ointment = 2,/obj/item/weapon/reagent_containers/syringe/inaprovaline = 4,/obj/item/device/healthanalyzer = 1)
 	contraband = list(/obj/item/weapon/reagent_containers/syringe/antitoxin = 4,/obj/item/weapon/reagent_containers/syringe/antiviral = 4,/obj/item/weapon/reagent_containers/pill/tox = 1)
-
 	pack = /obj/structure/vendomatpack/medical//can be reloaded with NanoMed Plus packs
 	component_parts = 0
-
 /obj/machinery/vending/wallmed2
 	name = "NanoMed"
 	desc = "Wall-mounted Medical Equipment dispenser."
@@ -929,18 +934,14 @@
 					/obj/item/stack/medical/ointment =3,/obj/item/device/healthanalyzer = 3)
 	contraband = list(/obj/item/weapon/reagent_containers/pill/tox = 3)
 	component_parts = 0
-
 	pack = /obj/structure/vendomatpack/medical//can be reloaded with NanoMed Plus packs
-
 ////////WALL-MOUNTED NANOMED FRAME//////
 /obj/machinery/vending/wallmed1/New(turf/loc)
 	..()
 	component_parts = 0
-
 /obj/machinery/vending/wallmed2/New(turf/loc)
 	..()
 	component_parts = 0
-
 /obj/machinery/vending/wallmed1/crowbarDestroy(mob/user)
 	user.visible_message(	"[user] begins to pry out the NanoMed from the wall.",
 							"You begin to pry out the NanoMed from the wall...")
@@ -949,16 +950,12 @@
 								"You detach the NanoMed from the wall.")
 		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 		new /obj/item/mounted/frame/wallmed(src.loc)
-
 		for(var/obj/I in src)
 			qdel(I)
-
 		new /obj/item/weapon/circuitboard/vendomat(src.loc)
 		new /obj/item/stack/cable_coil(loc,5)
-
 		return 1
 	return -1
-
 /obj/machinery/vending/wallmed2/crowbarDestroy(mob/user)
 	user.visible_message(	"[user] begins to pry out the NanoMed from the wall.",
 							"You begin to pry out the NanoMed from the wall...")
@@ -967,29 +964,22 @@
 								"You detach the NanoMed from the wall.")
 		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 		new /obj/item/mounted/frame/wallmed(src.loc)
-
 		for(var/obj/I in src)
 			qdel(I)
-
 		new /obj/item/weapon/circuitboard/vendomat(src.loc)
 		new /obj/item/stack/cable_coil(loc,5)
-
 		return 1
 	return -1
-
 /obj/machinery/wallmed_frame
 	name = "NanoMed frame"
 	desc = "Wall-mounted Medical Equipment dispenser."
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "wallmed_frame0"
 	anchored = 1
-
 	var/on = 1
-
 	var/build = 0        // Build state
 	var/boardtype=/obj/item/weapon/circuitboard/vendomat
 	var/obj/item/weapon/circuitboard/_circuitboard
-
 /obj/machinery/wallmed_frame/New(turf/loc, var/ndir)
 	..()
 	// offset 32 pixels in direction of dir
@@ -997,10 +987,8 @@
 	dir = ndir
 	pixel_x = (dir & 3)? 0 : (dir == 4 ? 30 : -30)
 	pixel_y = (dir & 3)? (dir ==1 ? 30 : -30) : 0
-
 /obj/machinery/wallmed_frame/update_icon()
 	icon_state = "wallmed_frame[build]"
-
 /obj/machinery/wallmed_frame/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	switch(build)
 		if(0) // Empty hull
@@ -1087,7 +1075,6 @@
 					update_icon()
 				return 1
 	..()
-
 /obj/machinery/wallmed_frame/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
 	if(build==3)
 		if(istype(O,/obj/structure/vendomatpack))
@@ -1114,10 +1101,7 @@
 					qdel(src)
 			else
 				user << "<span class='warning'>This recharge pack isn't meant for this kind of vending machines.</span>"
-
 ////////////////////////////////////////
-
-
 /obj/machinery/vending/security
 	name = "SecTech"
 	desc = "A security equipment vendor"
@@ -1129,9 +1113,7 @@
 					/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 12,/obj/item/weapon/storage/box/evidence = 6,
 					/obj/item/weapon/legcuffs/bolas = 2)
 	contraband = list(/obj/item/clothing/glasses/sunglasses = 2,/obj/item/weapon/storage/fancy/donut_box = 2)
-
 	pack = /obj/structure/vendomatpack/security
-
 /obj/machinery/vending/hydronutrients
 	name = "NutriMax"
 	desc = "A plant nutrients vendor"
@@ -1142,9 +1124,7 @@
 	products = list(/obj/item/beezeez = 45,/obj/item/weapon/reagent_containers/glass/fertilizer/ez = 35,/obj/item/weapon/reagent_containers/glass/fertilizer/l4z = 25,/obj/item/weapon/reagent_containers/glass/fertilizer/rh = 15,/obj/item/weapon/plantspray/pests = 20,
 					/obj/item/weapon/reagent_containers/syringe = 5,/obj/item/weapon/storage/bag/plants = 5)
 	contraband = list(/obj/item/weapon/reagent_containers/glass/bottle/ammonia = 10,/obj/item/weapon/reagent_containers/glass/bottle/diethylamine = 5)
-
 	pack = /obj/structure/vendomatpack/hydronutrients
-
 /obj/machinery/vending/hydroseeds
 	name = "MegaSeed Servitor"
 	desc = "When you need seeds fast!"
@@ -1160,9 +1140,7 @@
 	contraband = list(/obj/item/seeds/amanitamycelium = 2,/obj/item/seeds/glowshroom = 2,/obj/item/seeds/libertymycelium = 2,/obj/item/seeds/nettleseed = 2,
 						/obj/item/seeds/plumpmycelium = 2,/obj/item/seeds/reishimycelium = 2,/obj/item/seeds/harebell = 3)//,/obj/item/seeds/synthbuttseed = 3)
 	premium = list(/obj/item/toy/waterflower = 1)
-
 	pack = /obj/structure/vendomatpack/hydroseeds
-
 /obj/machinery/vending/magivend
 	name = "MagiVend"
 	desc = "A magic vending machine."
@@ -1182,7 +1160,6 @@
 		/obj/item/clothing/shoes/sandal = 1,
 		/obj/item/weapon/staff = 2)
 	contraband = list(/obj/item/weapon/reagent_containers/glass/bottle/wizarditis = 1)	//No one can get to the machine to hack it anyways; for the lulz - Microwave
-
 	pack = /obj/structure/vendomatpack/magivend											//Who's laughing now? - Deity Link
 
 /obj/machinery/vending/dinnerware
@@ -1397,12 +1374,8 @@
 	product_slogans = "Craftink in Motherland herself!"
 	products = list(/obj/item/clothing/under/soviet = 20, /obj/item/clothing/head/ushanka = 20, /obj/item/clothing/shoes/jackboots = 20, /obj/item/clothing/head/squatter_hat = 20, /obj/item/clothing/under/squatter_outfit = 20, /obj/item/clothing/under/russobluecamooutfit = 20, /obj/item/clothing/head/russobluecamohat = 20)
 	contraband = list(/obj/item/clothing/under/syndicate/tacticool = 4, /obj/item/clothing/mask/balaclava = 4, /obj/item/clothing/suit/russofurcoat = 4, /obj/item/clothing/head/russofurhat = 4)
-
 	pack = /obj/structure/vendomatpack/sovietvend
-
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | EMAGGABLE
-
-
 /obj/machinery/vending/sovietvend/emag(mob/user)
 	if(!emagged)
 		user << "<span class='warning'>As you slide the emag on the machine, you can hear something unlocking inside, and the machine starts emitting an evil glow.</span>"
@@ -1418,14 +1391,11 @@
 		update_icon()
 		return 1
 	return
-
 //SovietVend++
 /obj/machinery/vending/sovietvend/DANGERMODE
 	products = list(/obj/item/clothing/under/soviet = 20, /obj/item/clothing/head/ushanka = 20, /obj/item/clothing/shoes/jackboots = 20, /obj/item/clothing/head/squatter_hat = 20, /obj/item/clothing/under/squatter_outfit = 20, /obj/item/clothing/under/russobluecamooutfit = 20, /obj/item/clothing/head/russobluecamohat = 20)
 	contraband = list(/obj/item/clothing/under/syndicate/tacticool = 4, /obj/item/clothing/mask/balaclava = 4, /obj/item/clothing/suit/russofurcoat = 4, /obj/item/clothing/head/russofurhat = 4, /obj/item/clothing/head/helmet/space/rig/soviet = 3, /obj/item/clothing/suit/space/rig/soviet = 3, /obj/item/weapon/gun/energy/laser/LaserAK = 4)
-
 	pack = /obj/structure/vendomatpack/sovietvend//can be reloaded with the same packs as the regular one
-
 /obj/machinery/vending/sovietvend/DANGERMODE/New()
 	..()
 	emagged = 1
@@ -1433,7 +1403,6 @@
 	var/image/dangerlay = image(icon,"[icon_state]-dangermode",LIGHTING_LAYER+1)
 	overlays_vending[2] = dangerlay
 	update_icon()
-
 /obj/machinery/vending/discount
 	name = "Discount Dan's"
 	desc = "A snack machine owned by the infamous 'Discount Dan' franchise."
@@ -1443,9 +1412,6 @@
 	icon_state = "discount"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/discountchocolate = 6,/obj/item/weapon/reagent_containers/food/snacks/danitos =6,
 					/obj/item/weapon/reagent_containers/food/snacks/discountburger = 6,/obj/item/weapon/reagent_containers/food/drinks/discount_ramen = 6,/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 6)
-	prices = list(/obj/item/weapon/reagent_containers/food/snacks/discountchocolate = 10,/obj/item/weapon/reagent_containers/food/snacks/danitos = 15,
-					/obj/item/weapon/reagent_containers/food/snacks/discountburger = 20,/obj/item/weapon/reagent_containers/food/drinks/discount_ramen = 10,/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 10)
-
 	pack = /obj/structure/vendomatpack/discount
 
 /obj/machinery/vending/groans
@@ -1456,7 +1422,4 @@
 	vend_reply = "No refunds."
 	icon_state = "groans"
 	products = list(/obj/item/weapon/reagent_containers/food/drinks/groans = 10,/obj/item/weapon/reagent_containers/food/drinks/filk = 10,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/grifeo = 10,/obj/item/weapon/reagent_containers/food/drinks/mannsdrink = 10)
-	prices = list(/obj/item/weapon/reagent_containers/food/drinks/groans = 20,/obj/item/weapon/reagent_containers/food/drinks/filk = 20,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/grifeo = 30,/obj/item/weapon/reagent_containers/food/drinks/mannsdrink = 10,/obj/item/weapon/reagent_containers/food/drinks/groansbanned = 50)
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/groansbanned = 10)
-
-	pack = /obj/structure/vendomatpack/groans
