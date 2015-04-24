@@ -72,31 +72,36 @@
 		"cold"
 	)
 
-/obj/machinery/door/firedoor/New()
-	. = ..()
-	for(var/obj/machinery/door/firedoor/F in loc)
-		if(F != src)
-			spawn(1)
-				del src
-			return .
-	var/area/A = get_area(src)
-	ASSERT(istype(A))
+/obj/machinery/door/firedoor/New(loc)
+	..(loc)
 
-	A.all_doors.Add(src)
-	areas_added = list(A)
+	if (ticker)
+		initialize()
 
-	for(var/direction in cardinal)
-		A = get_area(get_step(src,direction))
-		if(istype(A) && !(A in areas_added))
-			A.all_doors.Add(src)
-			areas_added += A
+/obj/machinery/door/firedoor/initialize()
+	var/area/A = get_areaa()
 
+	if (A)
+		A.all_doors += src
+		areas_added = list(A)
+
+		var/atom/T
+
+		for (var/direction in cardinal)
+			T = get_step(src, direction)
+
+			if (T)
+				A = T.get_areaa()
+
+				if (!(A in areas_added))
+					A.all_doors += src
+					areas_added += A
 
 /obj/machinery/door/firedoor/Destroy()
-	for(var/area/A in areas_added)
-		A.all_doors.Remove(src)
-	. = ..()
+	for (var/area/A in areas_added)
+		A.all_doors -= src
 
+	..()
 
 /obj/machinery/door/firedoor/examine(mob/user)
 	. = ..()
