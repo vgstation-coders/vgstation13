@@ -85,7 +85,7 @@
 		A.all_doors += src
 		areas_added = list(A)
 
-		var/atom/T
+		var/turf/T
 
 		for (var/direction in cardinal)
 			T = get_step(src, direction)
