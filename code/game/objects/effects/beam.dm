@@ -18,7 +18,7 @@
 
 #ifdef BEAM_DEBUG
 # warning SOME ASSHOLE FORGOT TO COMMENT BEAM_DEBUG BEFORE COMMITTING
-# define beam_testing(x) testing(x)
+# define beam_testing(x) testing("(Line: [__LINE__]) [x]")
 #else
 # define beam_testing(x)
 #endif
@@ -65,11 +65,18 @@
 		master.target_moved(args)
 		return
 
+	var/event/E = args["event"]
 	if(!targetMoveKey)
 		beam_testing("Uh oh, got a target_moved when we weren't listening for one.")
+		E.handlers.Remove("\ref[src]:target_moved")
 		return
 
 	var/turf/T = args["loc"]
+
+	if(E.holder != target)
+		beam_testing("Received erroneous event, killing")
+		E.handlers.Remove("\ref[src]:target_moved")
+		return
 	beam_testing("Target now at [T.x],[T.y],[T.z]")
 	if(T != targetContactLoc && T != loc)
 		beam_testing("Disconnecting: Target moved.")
@@ -83,10 +90,16 @@
 		master.target_destroyed(args)
 		return
 
+	var/event/E = args["event"]
+
 	if(!targetDestroyKey)
+		E.handlers.Remove("\ref[src]:target_destroyed")
 		beam_testing("Uh oh, got a target_destroyed when we weren't listening for one.")
 		return
 
+	if(E.holder != target)
+		E.handlers.Remove("\ref[src]:target_destroyed")
+		return
 	beam_testing("\ref[src] Disconnecting: \ref[target] Target destroyed.")
 	// Disconnect and re-emit.
 	disconnect()
@@ -98,9 +111,12 @@
 		return
 	beam_testing("Bumped by [AM]")
 	am_connector=1
-	connect_to(AM)
-	//BEAM_DEL(src)
+	var/obj/effect/beam/OB = master
+	if(!OB) OB = src
 	qdel(src)
+	OB.connect_to(AM)
+	//BEAM_DEL(src)
+	
 
 /obj/effect/beam/proc/get_master()
 	var/master_ref = "\ref[master]"
@@ -124,12 +140,13 @@
 	if(BM.target)
 		beam_testing("\ref[BM] - Disconnecting [BM.target]: target changed.")
 		BM.disconnect(0)
-	AM.beam_connect(BM)
 	BM.target=AM
 	BM.targetMoveKey    = AM.on_moved.Add(BM,    "target_moved")
 	BM.targetDestroyKey = AM.on_destroyed.Add(BM,"target_destroyed")
 	BM.targetContactLoc = AM.loc
 	beam_testing("\ref[BM] - Connected to [AM]")
+	AM.beam_connect(BM)
+
 
 /obj/effect/beam/blob_act()
 	// Act like Crossed.
@@ -177,9 +194,10 @@
 
 	beam_testing(" Connecting!")
 	am_connector=1
-	connect_to(AM)
-	//BEAM_DEL(src)
+	var/obj/effect/beam/OB = master
+	if(!OB) OB = src
 	qdel(src)
+	OB.connect_to(AM)
 
 /obj/effect/beam/proc/HasSource(var/atom/source)
 	return source in sources
@@ -195,22 +213,25 @@
 
 	if(_range==-1)
 #ifdef BEAM_DEBUG
-		var/str_sources=text2list(sources,", ") // This will not work as an embedded statement.
+		var/str_sources=list2text(sources,", ") // This will not work as an embedded statement.
 		beam_testing("\ref[src] - emit(), sources=[str_sources]")
 #endif
 		_range=max_range
 
 	if(next && next.loc)
+		beam_testing("\ref[src] we have next \ref[next]")
 		next.emit(sources,_range-1)
 		return
 
 	if(!loc)
 		//BEAM_DEL(src)
+		beam_testing("\ref[src] no loc")
 		qdel(src)
 		return
 
 	if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
 		//BEAM_DEL(src)
+		beam_testing("\ref[src] end of world")
 		qdel(src)
 		return
 
@@ -223,11 +244,14 @@
 
 	if(!stepped)
 		// Reset bumped
+		density = 1
 		bumped=0
 
 		step(src, dir) // Move.
 
+		density = 0
 		if(bumped)
+			beam_testing("\ref[src] Bumped")
 			//BEAM_DEL(src)
 			qdel(src)
 			return
@@ -235,6 +259,7 @@
 		stepped=1
 
 		if(_range-- < 1)
+			beam_testing("\ref[src] ran out")
 			//BEAM_DEL(src)
 			qdel(src)
 			return
@@ -320,4 +345,7 @@
 	..()
 
 /obj/effect/beam/singularity_pull()
+	return
+
+/obj/effect/beam/ex_act(severity)
 	return

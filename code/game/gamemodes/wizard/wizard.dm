@@ -235,26 +235,39 @@
 /datum/game_mode/wizard/declare_completion(var/ragin = 0)
 	if(finished && !ragin)
 		feedback_set_details("round_end_result","loss - wizard killed")
-		world << "<span class='warning'><FONT size = 3><B> The wizard[(wizards.len>1)?"s":""] has been killed by the crew! The Space Wizards Federation has been taught a lesson they will not soon forget!</B></FONT></span>"
+		completion_text += "<br><span class='warning'><FONT size = 3><B> The wizard[(wizards.len>1)?"s":""] has been killed by the crew! The Space Wizards Federation has been taught a lesson they will not soon forget!</B></FONT></span>"
 	..()
 	return 1
 
 
 /datum/game_mode/proc/auto_declare_completion_wizard()
+	var/text = ""
 	if(wizards.len)
-		var/text = "<br><font size=3><b>the wizards/witches were:</b></font>"
+		var/icon/logo = icon('icons/mob/mob.dmi', "wizard-logo")
+		end_icons += logo
+		var/tempstate = end_icons.len
+		text += {"<br><img src="logo_[tempstate].png"> <font size=2><b>the wizards/witches were:</b></font> <img src="logo_[tempstate].png">"}
 
 		for(var/datum/mind/wizard in wizards)
 
-			text += "<br><b>[wizard.key]</b> was <b>[wizard.name]</b> ("
 			if(wizard.current)
+				var/icon/flat = getFlatIcon(wizard.current, SOUTH, 1, 1)
+				end_icons += flat
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[wizard.key]</b> was <b>[wizard.name]</b> ("}
 				if(wizard.current.stat == DEAD)
 					text += "died"
+					flat.Turn(90)
+					end_icons[tempstate] = flat
 				else
 					text += "survived"
 				if(wizard.current.real_name != wizard.name)
 					text += " as <b>[wizard.current.real_name]</b>"
 			else
+				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
+				end_icons += sprotch
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[wizard.key]</b> was <b>[wizard.name]</b> ("}
 				text += "body destroyed"
 			text += ")"
 
@@ -280,14 +293,16 @@
 				text += "<br><B>[wizard.name] used the following spells: </B>"
 				var/i = 1
 				for(var/spell/S in wizard.current.spell_list)
-					text += "[S.name]"
+					var/icon/spellicon = icon('icons/mob/screen_spells.dmi', S.hud_state)
+					end_icons += spellicon
+					tempstate = end_icons.len
+					text += {"<br><img src="logo_[tempstate].png"> [S.name]"}
 					if(wizard.current.spell_list.len > i)
 						text += ", "
 					i++
 			text += "<br>"
-
-		world << text
-	return 1
+		text += "<HR>"
+	return text
 
 //OTHER PROCS
 

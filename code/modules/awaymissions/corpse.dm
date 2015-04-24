@@ -28,6 +28,7 @@
 	M.dna.mutantrace = mutantrace
 	M.real_name = src.name
 	M.adjustOxyLoss(200) //Kills the new mob
+	M.iscorpse = 1
 	if(src.corpseuniform)
 		M.equip_to_slot_or_del(new src.corpseuniform(M), slot_w_uniform)
 	if(src.corpsesuit)

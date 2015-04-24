@@ -41,7 +41,7 @@ var/list/exception = list(
 	/obj/structure/window/full
 	)
 
-proc/getFlatIcon(atom/A, dir, cache=1) // 1 = use cache, 2 = override cache, 0 = ignore cache
+proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override cache, 0 = ignore cache	//exact = 1 means the atom won't be rotated if it's a lying mob/living/carbon
 
 	var/list/layers = list() // Associative list of [overlay = layer]
 	var/hash = "" // Hash of overlay combination
@@ -144,13 +144,27 @@ proc/getFlatIcon(atom/A, dir, cache=1) // 1 = use cache, 2 = override cache, 0 =
 		         , 1
 		         , 0)
 
-		if(iscarbon(A))
+		if(I:name == "damage layer")
+			var/mob/living/carbon/human/H = A
+			for(var/datum/organ/external/O in H.organs)
+				if(!(O.status & ORGAN_DESTROYED))
+					if(O.damage_state == "00") continue
+					var/icon/DI
+					DI = H.get_damage_icon_part(O.damage_state, O.icon_name, (H.species.blood_color == "#A10808" ? "" : H.species.blood_color))
+					add.Blend(DI,ICON_OVERLAY)
+
+		if(!exact && iscarbon(A))
 			var/mob/living/carbon/C = A
 			if(C.lying && !isalienadult(C))//because adult aliens have their own resting sprite
 				add.Turn(90)
 
 		if(isobserver(A))
 			add.ChangeOpacity(0.5)
+
+		// Apply any color or alpha settings
+		if(I:color || I:alpha != 255)
+			var/rgba = (I:color || "#FFFFFF") + copytext(rgb(0,0,0,I:alpha), 8)
+			add.Blend(rgba, ICON_MULTIPLY)
 
 		// Find the new dimensions of the flat icon to fit the added overlay
 		addX1 = min(flatX1, I:pixel_x+1)

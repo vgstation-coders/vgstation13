@@ -190,7 +190,7 @@ datum
 			name = "Sulphuric Acid"
 			id = "sacid"
 			result = "sacid"
-			required_reagents = list("sulphur" = 2, "oxygen" = 3, "water" = 2)
+			required_reagents = list("sulfur" = 2, "oxygen" = 3, "water" = 2)
 			result_amount = 2
 
 		thermite
@@ -2538,3 +2538,9 @@ datum
 			result = "etank"
 			required_reagents = list("coffee" = 1, "iron" = 1, "lithium" = 1, "fuel" = 1, "aluminum" = 1)
 			result_amount = 5
+
+		greytea
+			name = "Tide"
+			id = "greytea"
+			result = "greytea"
+			required_reagents = list("water" = 5, "fuel" = 5)

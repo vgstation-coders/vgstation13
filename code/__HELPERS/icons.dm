@@ -32,12 +32,51 @@ proc
 	flat_icon.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
 	return flat_icon
 
+/proc/getStaticIcon(icon/A, safety=1)
+	var/icon/flat_icon = safety ? A : new(A)
+	flat_icon.Blend(rgb(255, 255, 255))
+	flat_icon.BecomeAlphaMask()
+	var/icon/static_icon = new/icon('icons/effects/effects.dmi', "static_base")
+	static_icon.AddAlphaMask(flat_icon)
+	return static_icon
+
+/proc/getBlankIcon(icon/A, safety=1)
+	var/icon/flat_icon = safety ? A : new(A)
+	flat_icon.Blend(rgb(255, 255, 255))
+	flat_icon.BecomeAlphaMask()
+	var/icon/blank_icon = new/icon('icons/effects/effects.dmi', "blank_base")
+	blank_icon.AddAlphaMask(flat_icon)
+	return blank_icon
+
+/proc/getLetterImage(atom/A, letter = "", uppercase = 0)
+	if(!A)
+		return
+
+	var/icon/atom_icon = new(A.icon, A.icon_state)
+
+	if(!letter)
+		letter = copytext(A.name, 1, 2)
+		if(uppercase == 1)
+			letter = uppertext(letter)
+		else if(uppercase == -1)
+			letter = lowertext(letter)
+
+	var/image/text_image = new(loc = A)
+	text_image.maptext = "<font size = 4><b>[letter]</b></font>"
+	text_image.color = AverageColor(atom_icon)
+	text_image.pixel_x = 6
+	text_image.pixel_y = 5
+	del(atom_icon)
+	return text_image
+
 //For photo camera.
 /proc/build_composite_icon(atom/A)
 	var/icon/composite = icon(A.icon, A.icon_state, A.dir, 1)
 	for(var/O in A.overlays)
 		var/image/I = O
-		composite.Blend(icon(I.icon, I.icon_state, I.dir, 1), ICON_OVERLAY)
+		var/icon/C = icon(I.icon, I.icon_state, I.dir, 1)
+		C.Blend(I.color, ICON_MULTIPLY)
+		composite.Blend(C, ICON_OVERLAY)
 	return composite
 
 proc/adjust_brightness(var/color, var/value)
@@ -49,3 +88,42 @@ proc/adjust_brightness(var/color, var/value)
 	RGB[2] = Clamp(RGB[2]+value,0,255)
 	RGB[3] = Clamp(RGB[3]+value,0,255)
 	return rgb(RGB[1],RGB[2],RGB[3])
+
+/proc/ListColors(var/icon/I, var/ignoreGreyscale = 0)
+	var/list/colors = list()
+	for(var/x_pixel = 1 to I.Width())
+		for(var/y_pixel = 1 to I.Height())
+			var/this_color = I.GetPixel(x_pixel, y_pixel)
+			if(this_color)
+				if (ignoreGreyscale && ReadHSV(RGBtoHSV(this_color))[2] == 0) //If saturation is 0, must be greyscale
+					continue
+				colors.Add(this_color)
+	return colors
+
+/proc/AverageColor(var/icon/I, var/accurate = 0, var/ignoreGreyscale = 0)
+//Accurate: Use more accurate color averaging, usually has better results and prevents muddied or overly dark colors. Mad thanks to wwjnc.
+//ignoreGreyscale: Excempts greyscale colors from the color list, useful for filtering outlines or plate overlays.
+	var/list/colors = ListColors(I, ignoreGreyscale)
+	if(!colors.len)
+		return null
+
+	var/list/colorsum = list(0, 0, 0) //Holds the sum of the RGB values to calculate the average
+	var/list/RGB = list(0, 0, 0) //Temp list for each color
+	var/total = colors.len
+
+	var/final_average
+	if (accurate) //keeping it legible
+		for(var/i = 1 to total)
+			RGB = ReadRGB(colors[i])
+			colorsum[1] += RGB[1]*RGB[1]
+			colorsum[2] += RGB[2]*RGB[2]
+			colorsum[3] += RGB[3]*RGB[3]
+		final_average = rgb(sqrt(colorsum[1]/total), sqrt(colorsum[2]/total), sqrt(colorsum[3]/total))
+	else
+		for(var/i = 1 to total)
+			RGB = ReadRGB(colors[i])
+			colorsum[1] += RGB[1]
+			colorsum[2] += RGB[2]
+			colorsum[3] += RGB[3]
+		final_average = rgb(colorsum[1]/total, colorsum[2]/total, colorsum[3]/total)
+	return final_average

@@ -48,9 +48,9 @@
 		user.visible_message("<span class='warning'>[user] forces [M] to swallow \the [src].</span>", \
 		"<span class='notice'>You force [M] to swallow \the [src].</span>")
 
-		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed [src.name] by [user.name] ([user.ckey]) Reagents: [reagentlist(src)]</font>")
-		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [M.name] by [M.name] ([M.ckey]) Reagents: [reagentlist(src)]</font>")
-		msg_admin_attack("[user.name] ([user.ckey]) fed [M.name] ([M.ckey]) with [src.name] Reagents: [reagentlist(src)] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+		M.attack_log += "\[[time_stamp()]\] <font color='orange'>Has been fed [src.name] by [key_name(user)] Reagents: [reagentlist(src)]</font>"
+		user.attack_log += "\[[time_stamp()]\] <font color='red'>Fed [key_name(M)] by [src.name] Reagents: [reagentlist(src)]</font>"
+		msg_admin_attack("[key_name_admin(user)] fed [key_name_admin(M)] with [src.name] Reagents: [reagentlist(src)] (INTENT: [uppertext(user.a_intent)]) ([formatJumpTo(user)])")
 
 		if(!iscarbon(user))
 			M.LAssailant = null
@@ -75,9 +75,9 @@
 		var/trans = reagents.trans_to(target, reagents.total_volume)
 
 		// /vg/: Logging transfers of bad things
-		if(istype(target.reagents_to_log) && target.reagents_to_log.len)
+		if(istype(reagents_to_log) && reagents_to_log.len && target.log_reagents)
 			var/list/badshit = list()
-			for(var/bad_reagent in target.reagents_to_log)
+			for(var/bad_reagent in reagents_to_log)
 				if(reagents.has_reagent(bad_reagent))
 					badshit += reagents_to_log[bad_reagent]
 			if(badshit.len)

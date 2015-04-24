@@ -115,7 +115,7 @@
 		"radium" =         list( -1.5,  0,   0.2 ),
 		"adminordrazine" = list(  1,    1,   1   ),
 		"robustharvest" =  list(  0,    0.2, 0   ),
-		"left4zed" =       list(  0,    0,   0.2 )
+		"left4zed" =       list( -0.1, -0.2, 2   )
 		)
 
 	// Mutagen list specifies minimum value for the mutation to take place, rather
@@ -381,7 +381,7 @@
 			if(weedkiller_reagents[R.id])
 				weedlevel -= weedkiller_reagents[R.id] * reagent_total
 			if(pestkiller_reagents[R.id])
-				pestlevel -= pestkiller_reagents[R.id] * reagent_total
+				pestlevel += pestkiller_reagents[R.id] * reagent_total //Pest reducing reagents have negative pest level
 
 			// Beneficial reagents have a few impacts along with health buffs.
 			if(beneficial_reagents[R.id])

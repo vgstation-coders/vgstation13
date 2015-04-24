@@ -80,6 +80,89 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 		-->
 		<div class="commit sansserif">
 
+			<h2 class="date">2015.05.04</h2>
+			<h3 class="author">Comic updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="experimental">MoMMIs have an overlay of static over non silicon mobs. For funsies you can change between blackout, static, or MUD/Dorf mode. More info here https://github.com/d3athrow/vgstation13/pull/3116</li>
+			</ul>
+
+			<h2 class="date">2015.04.24</h2>
+			<h3 class="author">Pomf123 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed the crawl through vent verb popping up with a list of literally everything on the station.</li>
+			</ul>
+
+			<h2 class="date">2015.04.23</h2>
+			<h3 class="author">Deity Link updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Moved all the End Round information from the chat window to the popup browser. Easier to read, and allows you to check antags and other info such as silicon laws and antag objectives completions while keeping up with the chat.</li>
+				<li class="imageadd">Added a few icons to illustrate the End Round popup. Antags are now displayed as they are next to their name.</li>
+				<li class="bugfix">Fixed Photography, again, injuries now properly show up on people.</li>
+				<li class="rscadd">Harvested Plants are now properly counted and credited for in the End Round popup (and Crew Score)</li>
+				<li class="rscadd">Smelted Ores (not just mined) are now properly counted and credited for in the End Round popup (and Crew Score). Whether you smelt them with the Ore Redemption Machine or the Conveyor on the Asteroid doesn't change anything.</li>
+				<li class="rscadd">The Round End popup now displays how many rounds of Arena Bomberman occurred during the round, and who won most of them (and how many)</li>
+			</ul>
+			<h3 class="author">Kurfurst updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">New Cargo Conveyor belt "QMLoad3"</li>
+				<li class="tweak">Fixed Mail to broken locations (Security, HoS, Bar, Theater, Atmospherics, CE, Chemistry, Medbay, CMO, Janitor, Cargo Bay) - should work everywhere now</li>
+				<li class="tweak">Silicons can now use the Smartfridge</li>
+				<li class="tweak">Soda Dispenser formatting (Bartenders, pray for 'soda_dispenser', 'booze_dispenser', and 'brewer'!)</li>
+				<li class="tweak">Steal AI objective now checks to see if you have a living AI on your Intellicard</li>
+				<li class="tweak">Airlock Electronics may once again be printed at the Circuit Printer.</li>
+				<li class="tweak">Intercom Electronics are now properly labeled at the Circuit Printer.</li>
+				<li class="tweak">Handcuffed people can no longer be handed items</li>
+				<li class="tweak">You should no longer encounter null blood</li>
+				<li class="tweak">Monkeys now get a random blood type</li>
+				<li class="tweak">Sulphuric Acid bug fixed; may now be properly made from its formula (and therefore electrolyzed properly)</li>
+				<li class="tweak">Empty blood bags now properly spawn on the map</li>
+			</ul>
+			<h3 class="author">Pomf123 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed being able to equip borg vision module and enable a sensor aug at the same time.</li>
+			</ul>
+
+			<h2 class="date">2015.04.22</h2>
+			<h3 class="author">Comic updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Ventcrawling now works through manual movement rather than a teleport menu.</li>
+				<li class="bugfix">MoMMIs can no longer examine mobs. This includes seeing human equipment.</li>
+				<li class="tweak">Certain machines will now lose power if they are unwrenched, and regain power when wrenched down.</li>
+			</ul>
+			<h3 class="author">Pomf123 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">moving along an emitter beam's path, away from the source, will no longer cause you to phase through the beam.</li>
+				<li class="bugfix">Can no longer use photocopiers as a shield from the AI turrets</li>
+				<li class="bugfix">Fixed emagging doors not showing the proper animation before opening the door.</li>
+				<li class="bugfix">Fixed emitter beams not interacting with canisters or fuel tanks.</li>
+			</ul>
+
+			<h2 class="date">2015.04.21</h2>
+			<h3 class="author">Deity Link updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Admins with +FUN now have a Give Achievement verb for giggles. Includes a custom golden trophy, and a summary of all the achievement winners on round end.</li>
+				<li class="imageadd">Added tons of icons to the end-round summary.</li>
+				<li class="tweak">teaked the end-round summary for the sake of clarity (added line breaks between purchased traitor items and spells for instance)</li>
+			</ul>
+			<h3 class="author">Pomf123 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed erroneously getting an [open] and tracking link when hearing the AI speak when you're not an AI.</li>
+				<li class="bugfix">Fixed the [open] and tracking links not working when you hear a mob from something other than a radio.</li>
+				<li class="bugfix">Fix rags being terrible to use, smothering requires targetting mouth, can wipe down anything so long as you have reagents, no more long range wiping.</li>
+				<li class="tweak">Left4Zed's mutation increase is now 10x more potent, as a result it now lowers overall health and yield as well.</li>
+				<li class="bugfix">Peg limbs properly destroy on damage, and when dropped drop wood instead of meaty limbs.</li>
+				<li class="bugfix">Fixed moving shuttles not properly copying over variables on move resulting in some oddities like corner pieces having black backgrounds.</li>
+				<li class="bugfix">Fixed losing your wizard spells when getting cloned.</li>
+				<li class="bugfix">Fixed being ripped from your new body if you had a preexisting DNA record in the cloning machine and somebody set it to clone.</li>
+			</ul>
+
+			<h2 class="date">2015.04.20</h2>
+			<h3 class="author">Dylanstrategie updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fix relativewall_neighbours() ignoring limitations on unfinished reinforced walls by adding more exceptions. Should be fool-proof to relativewall() to boot</li>
+				<li class="imageadd">Unfuck reinforced table sprites in depth, and currently ONLY reinforced table sprites, so that they link correctly. Not enough time to do the rest yet, I have actual work to do. Use this as a guideline</li>
+			</ul>
+
 			<h2 class="date">2015.04.19</h2>
 			<h3 class="author">Dylanstrategie updated:</h3>
 			<ul class="changes bgimages16">
