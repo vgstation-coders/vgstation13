@@ -112,11 +112,11 @@
 			if (src.connected)
 				if (src.connected.occupant)
 					if (src.connected.occupant.stat == DEAD)
-						usr << "\red \b This person has no life for to preserve anymore. Take them to a department capable of reanimating them."
+						usr << "<span class='danger'>This person has no life for to preserve anymore. Take them to a department capable of reanimating them.</span>"
 					else if(src.connected.occupant.health > 0 || href_list["chemical"] == "inaprovaline")
 						src.connected.inject_chemical(usr,href_list["chemical"],text2num(href_list["amount"]))
 					else
-						usr << "\red \b This person is not in good enough condition for sleepers to be effective! Use another means of treatment, such as cryogenics!"
+						usr << "<span class='danger'>This person is not in good enough condition for sleepers to be effective! Use another means of treatment, such as cryogenics!</span>"
 		if (href_list["refresh"])
 			src.updateUsrDialog()
 		src.add_fingerprint(usr)
@@ -174,9 +174,9 @@
 	spawn( 5 )
 		update_icon()
 		if(orient == "RIGHT")
-			generate_console(get_step(get_turf(src), EAST))
-		else
 			generate_console(get_step(get_turf(src), WEST))
+		else
+			generate_console(get_step(get_turf(src), EAST))
 		return
 	return
 
@@ -242,7 +242,7 @@
 	if(!istype(L) || L.buckled)
 		return
 	if(L.abiotic())
-		user << "\blue <B>Subject cannot have abiotic items on.</B>"
+		user << "<span class='notice'><B>Subject cannot have abiotic items on.</B></span>"
 		return
 	for(var/mob/living/carbon/slime/M in range(1,L))
 		if(M.Victim == L)
@@ -255,7 +255,7 @@
 
 	if(do_after(user, 20))
 		if(src.occupant)
-			user << "\blue <B>The sleeper is already occupied!</B>"
+			user << "<span class='notice'><B>The sleeper is already occupied!</B></span>"
 			return
 		if(!L || L.buckled) return
 
@@ -265,7 +265,7 @@
 		L.loc = src
 		src.occupant = L
 		update_icon()
-		L << "\blue <b>You feel cool air surround you. You go numb as your senses turn inward.</b>"
+		L << "<span class='notice'><b>You feel cool air surround you. You go numb as your senses turn inward.</b></span>"
 		for(var/obj/OO in src)
 			OO.loc = src.loc
 		src.add_fingerprint(user)
@@ -317,7 +317,7 @@
 	var/obj/item/weapon/grab/G = W
 	if(!(ismob(G.affecting)) || G.affecting.buckled) return
 	if(src.occupant)
-		user << "\blue <B>The sleeper is already occupied!</B>"
+		user << "<span class='notice'><B>The sleeper is already occupied!</B></span>"
 		return
 
 	for(var/mob/living/carbon/slime/M in range(1,G.affecting))
@@ -329,7 +329,7 @@
 
 	if(do_after(user, 20))
 		if(src.occupant)
-			user << "\blue <B>The sleeper is already occupied!</B>"
+			user << "<span class='notice'><B>The sleeper is already occupied!</B></span>"
 			return
 		if(!G || !G.affecting) return
 		var/mob/M = G.affecting
@@ -342,7 +342,7 @@
 		src.occupant = M
 		update_icon()
 
-		M << "\blue <b>You feel cool air surround you. You go numb as your senses turn inward.</b>"
+		M << "<span class='notice'><b>You feel cool air surround you. You go numb as your senses turn inward.</b></span>"
 
 		for(var/obj/O in src)
 			O.loc = src.loc
@@ -427,7 +427,7 @@
 
 /obj/machinery/sleeper/proc/check(mob/living/user as mob)
 	if(src.occupant)
-		user << text("\blue <B>Occupant ([]) Statistics:</B>", src.occupant)
+		user << text("<span class='notice'><B>Occupant ([]) Statistics:</B></span>", src.occupant)
 		var/t1
 		switch(src.occupant.stat)
 			if(0.0)
@@ -437,16 +437,16 @@
 			if(2.0)
 				t1 = "*dead*"
 			else
-		user << text("[]\t Health %: [] ([])", (src.occupant.health > 50 ? "\blue " : "\red "), src.occupant.health, t1)
-		user << text("[]\t -Core Temperature: []&deg;C ([]&deg;F)</FONT><BR>", (src.occupant.bodytemperature > 50 ? "<font color='blue'>" : "<font color='red'>"), src.occupant.bodytemperature-T0C, src.occupant.bodytemperature*1.8-459.67)
-		user << text("[]\t -Brute Damage %: []", (src.occupant.getBruteLoss() < 60 ? "\blue " : "\red "), src.occupant.getBruteLoss())
-		user << text("[]\t -Respiratory Damage %: []", (src.occupant.getOxyLoss() < 60 ? "\blue " : "\red "), src.occupant.getOxyLoss())
-		user << text("[]\t -Toxin Content %: []", (src.occupant.getToxLoss() < 60 ? "\blue " : "\red "), src.occupant.getToxLoss())
-		user << text("[]\t -Burn Severity %: []", (src.occupant.getFireLoss() < 60 ? "\blue " : "\red "), src.occupant.getFireLoss())
-		user << "\blue Expected time till occupant can safely awake: (note: If health is below 20% these times are inaccurate)"
-		user << text("\blue \t [] second\s (if around 1 or 2 the sleeper is keeping them asleep.)", src.occupant.paralysis / 5)
+		user << text("[]\t Health %: [] ([])</span>", (src.occupant.health > 50 ? "<span class='notice'>" : "<span class='warning'> "), src.occupant.health, t1)
+		user << text("[]\t -Core Temperature: []&deg;C ([]&deg;F)</FONT><BR></span>", (src.occupant.bodytemperature > 50 ? "<font color='blue'>" : "<font color='red'>"), src.occupant.bodytemperature-T0C, src.occupant.bodytemperature*1.8-459.67)
+		user << text("[]\t -Brute Damage %: []</span>", (src.occupant.getBruteLoss() < 60 ? "<span class='notice'>" : "<span class='warning'> "), src.occupant.getBruteLoss())
+		user << text("[]\t -Respiratory Damage %: []</span>", (src.occupant.getOxyLoss() < 60 ? "<span class='notice'>" : "<span class='warning'> "), src.occupant.getOxyLoss())
+		user << text("[]\t -Toxin Content %: []</span>", (src.occupant.getToxLoss() < 60 ? "<span class='notice'>" : "<span class='warning'> "), src.occupant.getToxLoss())
+		user << text("[]\t -Burn Severity %: []</span>", (src.occupant.getFireLoss() < 60 ? "<span class='notice'>" : "<span class='warning'> "), src.occupant.getFireLoss())
+		user << "<span class='notice'>Expected time till occupant can safely awake: (note: If health is below 20% these times are inaccurate)</span>"
+		user << text("<span class='notice'>\t [] second\s (if around 1 or 2 the sleeper is keeping them asleep.)</span>", src.occupant.paralysis / 5)
 	else
-		user << "\blue There is no one inside!"
+		user << "<span class='notice'>There is no one inside!</span>"
 	return
 
 
@@ -469,7 +469,7 @@
 		return
 
 	if(src.occupant)
-		usr << "\blue <B>The sleeper is already occupied!</B>"
+		usr << "<span class='notice'><B>The sleeper is already occupied!</B></span>"
 		return
 	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
 		return
@@ -482,7 +482,7 @@
 	visible_message("[usr] starts climbing into the sleeper.", 3)
 	if(do_after(usr, 20))
 		if(src.occupant)
-			usr << "\blue <B>The sleeper is already occupied!</B>"
+			usr << "<span class='notice'><B>The sleeper is already occupied!</B></span>"
 			return
 		if(usr.buckled)
 			return

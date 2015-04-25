@@ -367,7 +367,7 @@
 			dat = format_occupant_data(src.connected.get_occupant_data())
 			dat += "<HR><A href='?src=\ref[src];print=1'>Print</A><BR>"
 			if(connected.scanning==3)
-				dat += "<font color='red'>Voice recognition active. Activatation key: 'Scanner, print'.</font>"
+				dat += "<font color='red'>Voice recognition active. Activatation key: 'scanner, print'.</font>"
 		else
 			dat = "<font color='red'>Error: No Body Scanner connected.</font>"
 
@@ -587,7 +587,7 @@
 /obj/machinery/body_scanconsole/Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq)
 	if(!src.connected || src.connected.scanning<3)
 		return
-	if(speaker in range(3) && findtext(message, "scanner, print"))
+	if(speaker in range(3) && findtext(raw_message, "scanner, print"))
 		if(!src.connected.occupant||!istype(src.connected.occupant,/mob/living/carbon/human))
 			return
 		var/obj/item/weapon/paper/R = new(src.loc)
