@@ -63,7 +63,7 @@
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		T += SP.rating
-	scanning = round(T/3) //9 = virals, BAC, Blood Type; 6 = Blood Type; 3 = basic
+	scanning = round(T/3) //9 = Reagent details, Blood Type; 6 = Blood Type; 3 = basic
 
 /obj/machinery/bodyscanner/power_change()
 	..()
