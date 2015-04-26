@@ -1,0 +1,10 @@
+# Your name.  
+author: Comic
+
+# Optional: Remove this file after generating master changelog.  Useful for PR changelogs that won't get used again.
+delete-after: True
+
+
+changes: 
+  - rscadd: Stungloves will now shock the user if their gloves are conductive, as well as shocking the target.
+  - tweak: Stungloves now multiply conductivity, rather than adding it. This means stungloves made from insulated gloves remain insulated.
