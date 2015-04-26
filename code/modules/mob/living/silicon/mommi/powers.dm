@@ -3,8 +3,19 @@
 	set desc = "Enter an air vent and crawl through the pipe system."
 	set category = "Robot Commands"
 	var/mob/living/silicon/robot/mommi/R = src
-	if(R.canmove)
-		handle_ventcrawl()
+	var/atom/pipe
+	var/list/pipes = list()
+	for(var/obj/machinery/atmospherics/unary/U in view(1))
+		if((istype(U, /obj/machinery/atmospherics/unary/vent_pump) || istype(U,/obj/machinery/atmospherics/unary/vent_scrubber)) && Adjacent(U))
+			pipes |= U
+	if(!pipes || !pipes.len)
+		return
+	if(pipes.len == 1)
+		pipe = pipes[1]
+	else
+		pipe = input("Crawl Through Vent", "Pick a pipe") as null|anything in pipes
+	if(R.canmove && pipe)
+		handle_ventcrawl(pipe)
 
 
 /mob/living/silicon/robot/mommi/verb/hide()
@@ -20,16 +31,17 @@
 
 	if (layer != TURF_LAYER+0.2)
 		layer = TURF_LAYER+0.2
-		src << text("\blue You are now hiding.")
+		src << text("<span class='notice'>You are now hiding.</span>")
 		for(var/mob/O in oviewers(src, null))
 			if ((O.client && !( O.blinded )))
 				O << "<B>[src] tries to hide itself!</B>"
 	else
 		layer = MOB_LAYER
-		src << text("\blue You have stopped hiding.")
+		src << text("<span class='notice'>You have stopped hiding.</span>")
 		for(var/mob/O in oviewers(src, null))
 			if ((O.client && !( O.blinded )))
 				O << "[src] slowly peeks up..."
+	updateicon()
 
 /mob/living/silicon/robot/mommi/verb/park()
 	set name = "Toggle Parking Brake"

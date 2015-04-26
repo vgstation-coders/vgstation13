@@ -4,8 +4,6 @@
 
 var/global/datum/controller/game_controller/master_controller //Set in world.New()
 
-var/global/controller_iteration = 0
-var/global/last_tick_timeofday = world.timeofday
 var/global/last_tick_duration = 0
 
 var/global/air_processing_killed = 0
@@ -16,8 +14,7 @@ var/global/pipe_processing_killed = 0
 var/list/machine_profiling=list()
 #endif
 
-datum/controller/game_controller
-	var/processing = 0
+/datum/controller/game_controller
 	var/breather_ticks = 2		//a somewhat crude attempt to iron over the 'bumps' caused by high-cpu use by letting the MC have a breather for this many ticks after every loop
 	var/minimum_ticks = 20		//The minimum length of time between MC ticks
 
@@ -32,32 +29,41 @@ datum/controller/game_controller
 	var/nano_cost		= 0
 	var/events_cost		= 0
 	var/ticker_cost		= 0
-	var/gc_cost         = 0
+	var/garbageCollectorCost = 0
 	var/total_cost		= 0
 
 	var/last_thing_processed
 	var/mob/list/expensive_mobs = list()
 	var/rebuild_active_areas = 0
 
+	var/global/datum/garbage_collector/garbageCollector
+
 datum/controller/game_controller/New()
-	//There can be only one master_controller. Out with the old and in with the new.
-	if(master_controller != src)
+	. = ..()
+
+	// There can be only one master_controller. Out with the old and in with the new.
+	if (master_controller != src)
 		log_debug("Rebuilding Master Controller")
-		if(istype(master_controller))
-			Recover()
-			del(master_controller)
+
+		if (istype(master_controller))
+			recover()
+			qdel(master_controller)
+
 		master_controller = src
 
-	if(!job_master)
+	if (isnull(job_master))
 		job_master = new /datum/controller/occupations()
 		job_master.SetupOccupations()
 		job_master.LoadJobs("config/jobs.txt")
-		world << "\red \b Job setup complete"
+		world << "<span class='danger'>Job setup complete</span>"
 
 	if(!syndicate_code_phrase)		syndicate_code_phrase	= generate_code_phrase()
 	if(!syndicate_code_response)	syndicate_code_response	= generate_code_phrase()
-	if(!emergency_shuttle)			emergency_shuttle = new /datum/shuttle_controller/emergency_shuttle()
-
+	/*if(!emergency_shuttle)			emergency_shuttle = new /datum/shuttle_controller/emergency_shuttle()*/
+/*
+	if(global.garbageCollector)
+		garbageCollector = global.garbageCollector
+*/
 datum/controller/game_controller/proc/setup()
 	world.tick_lag = config.Ticklag
 
@@ -66,7 +72,7 @@ datum/controller/game_controller/proc/setup()
 	socket_talk.send_raw("type=startup")
 
 	createRandomZlevel()
-
+/*
 	if(!air_master)
 		air_master = new /datum/controller/air_system()
 		air_master.Setup()
@@ -74,40 +80,75 @@ datum/controller/game_controller/proc/setup()
 	if(!ticker)
 		ticker = new /datum/controller/gameticker()
 
-	if(!garbage)
-		garbage = new /datum/controller/garbage_collector()
-
+	if(!global.garbageCollector)
+		global.garbageCollector = new
+		garbageCollector = global.garbageCollector
+*/
 	setup_objects()
 	setupgenetics()
 	setupfactions()
 	setup_economy()
 	SetupXenoarch()
-
+	cachedamageicons()
+	world << "<span class='danger'>Caching Jukebox playlists...</span>"
+	load_juke_playlists()
+	world << "<span class='danger'>Caching Jukebox playlists complete.</span>"
+	//if(map && map.dorf)
+		//mining_surprises = typesof(/mining_surprise/dorf) - /mining_surprise/dorf
+		//max_secret_rooms += 2
 	for(var/i=0, i<max_secret_rooms, i++)
+		//if(map && map.dorf)
+			//make_dorf_secret()
+		//else
 		make_mining_asteroid_secret()
 
 	//if(config.socket_talk)
 	//	keepalive()
-
+/*
 	spawn(0)
 		if(ticker)
 			ticker.pregame()
 
 	lighting_controller.Initialize()
-
+*/
+datum/controller/game_controller/proc/cachedamageicons()
+	var/mob/living/carbon/human/H = new(locate(1,1,2))
+	var/datum/species/list/slist = list(new /datum/species/human, new /datum/species/vox, new /datum/species/diona)
+	var/icon/DI
+	var/species_blood
+	for(var/datum/species/S in slist)
+		species_blood = (S.blood_color == "#A10808" ? "" : S.blood_color)
+		testing("Generating [S], Blood([species_blood])")
+		for(var/datum/organ/external/O in H.organs)
+			testing("[O] part")
+			for(var/brute = 1 to 3)
+				for(var/burn = 1 to 3)
+					var/damage_state = "[brute][burn]"
+					DI = icon('icons/mob/dam_human.dmi', "[damage_state]")			// the damage icon for whole human
+					DI.Blend(icon('icons/mob/dam_mask.dmi', O.icon_name), ICON_MULTIPLY)
+					if(species_blood)
+						DI.Blend(S.blood_color, ICON_MULTIPLY)
+					testing("Completed [damage_state]/[O.icon_name]/[species_blood]")
+					damage_icon_parts["[damage_state]/[O.icon_name]/[species_blood]"] = DI
+	del(H)
 
 datum/controller/game_controller/proc/setup_objects()
-	world << "\red \b Initializing objects"
+	world << "<span class='danger'>Initializing objects</span>"
 	sleep(-1)
+	//var/last_init_type = null
 	for(var/atom/movable/object in world)
+		//if(last_init_type != object.type)
+		//	testing("Initializing [object.type]")
+		//	last_init_type = object.type
 		object.initialize()
 
-	world << "\red \b Initializing pipe networks"
+
+	world << "<span class='danger'>Initializing pipe networks</span>"
 	sleep(-1)
 	for(var/obj/machinery/atmospherics/machine in machines)
 		machine.build_network()
 
-	world << "\red \b Initializing atmos machinery."
+	world << "<span class='danger'>Initializing atmos machinery.</span>"
 	sleep(-1)
 	for(var/obj/machinery/atmospherics/unary/U in machines)
 		if(istype(U, /obj/machinery/atmospherics/unary/vent_pump))
@@ -117,25 +158,24 @@ datum/controller/game_controller/proc/setup_objects()
 			var/obj/machinery/atmospherics/unary/vent_scrubber/T = U
 			T.broadcast_status()
 
-	world << "\red \b Initializations complete."
+	world << "<span class='danger'>Initializations complete.</span>"
 	sleep(-1)
 
 
-datum/controller/game_controller/proc/process()
+/datum/controller/game_controller/proc/process()
 	processing = 1
-	spawn(0)
-		//set background = 1
-		while(1)	//far more efficient than recursively calling ourself
-			if(!Failsafe)	new /datum/controller/failsafe()
 
-			var/currenttime = world.timeofday
-			last_tick_duration = (currenttime - last_tick_timeofday) / 10
-			last_tick_timeofday = currenttime
+	spawn (0)
+		set background = BACKGROUND_ENABLED
 
-			if(processing)
+		while (1) // Far more efficient than recursively calling ourself.
+			if (isnull(failsafe))
+				new /datum/controller/failsafe()
+
+			if (processing)
+				iteration++
 				var/timer
 				var/start_time = world.timeofday
-				controller_iteration++
 
 				vote.process()
 				//process_newscaster()
@@ -229,14 +269,13 @@ datum/controller/game_controller/proc/process()
 				ticker.process()
 				ticker_cost = (world.timeofday - timer) / 10
 
-				// GC
 				timer = world.timeofday
-				last_thing_processed = garbage.type
-				garbage.process()
-				gc_cost = (world.timeofday - timer) / 10
+				last_thing_processed = garbageCollector.type
+				garbageCollector.process()
+				garbageCollectorCost = (world.timeofday - timer) / 10
 
 				//TIMING
-				total_cost = air_cost + sun_cost + mobs_cost + diseases_cost + machines_cost + objects_cost + networks_cost + powernets_cost + nano_cost + events_cost + ticker_cost + gc_cost
+				total_cost = air_cost + sun_cost + mobs_cost + diseases_cost + machines_cost + objects_cost + networks_cost + powernets_cost + nano_cost + events_cost + ticker_cost + garbageCollectorCost
 
 				var/end_time = world.timeofday
 				if(end_time < start_time)
@@ -247,7 +286,7 @@ datum/controller/game_controller/proc/process()
 
 datum/controller/game_controller/proc/processMobs()
 	var/i = 1
-	expensive_mobs.Cut()
+	expensive_mobs.len = 0
 	while(i<=mob_list.len)
 		var/mob/M = mob_list[i]
 		if(M)
@@ -258,7 +297,8 @@ datum/controller/game_controller/proc/processMobs()
 				expensive_mobs += M
 			i++
 			continue
-		mob_list.Cut(i,i+1)
+		if(!mob_list.Remove(null))
+			mob_list.Cut(i,i+1)
 
 /datum/controller/game_controller/proc/processDiseases()
 	for (var/datum/disease/Disease in active_diseases)
@@ -271,7 +311,7 @@ datum/controller/game_controller/proc/processMobs()
 
 /datum/controller/game_controller/proc/processMachines()
 	#ifdef PROFILE_MACHINES
-	machine_profiling.Cut()
+	machine_profiling.len = 0
 	#endif
 
 	for (var/obj/machinery/Machinery in machines)
@@ -283,17 +323,20 @@ datum/controller/game_controller/proc/processMobs()
 			#endif
 
 			if(PROCESS_KILL == Machinery.process())
-				Machinery.removeAtProcessing()
+				Machinery.inMachineList = 0
+				machines.Remove(Machinery)
 				continue
 
 			if (Machinery && Machinery.use_power)
 				Machinery.auto_use_power()
 
 			#ifdef PROFILE_MACHINES
-			if(!(Machinery.type in machine_profiling))
+			var/end = world.timeofday
+
+			if (!(Machinery.type in machine_profiling))
 				machine_profiling[Machinery.type] = 0
 
-			machine_profiling[Machinery.type] += world.timeofday - start
+			machine_profiling[Machinery.type] += (end - start)
 			#endif
 
 
@@ -305,6 +348,15 @@ datum/controller/game_controller/proc/processMobs()
 			continue
 
 		processing_objects -= Object
+
+	// Hack.
+	for (var/turf/unsimulated/wall/supermatter/SM in processing_objects)
+		if (SM)
+			last_thing_processed = SM.type
+			SM.process()
+			continue
+
+		processing_objects -= SM
 
 /datum/controller/game_controller/proc/processPipenets()
 	last_thing_processed = /datum/pipe_network
@@ -346,11 +398,12 @@ datum/controller/game_controller/proc/processMobs()
 
 	checkEvent()
 
-datum/controller/game_controller/proc/Recover()		//Mostly a placeholder for now.
+datum/controller/game_controller/recover()		//Mostly a placeholder for now.
+	. = ..()
 	var/msg = "## DEBUG: [time2text(world.timeofday)] MC restarted. Reports:\n"
 	for(var/varname in master_controller.vars)
 		switch(varname)
-			if("tag","bestF","type","parent_type","vars")	continue
+			if("tag","type","parent_type","vars")	continue
 			else
 				var/varval = master_controller.vars[varname]
 				if(istype(varval,/datum))

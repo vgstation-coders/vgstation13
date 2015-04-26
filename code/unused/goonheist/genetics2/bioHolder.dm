@@ -213,7 +213,7 @@ var/list/bioEffectList = null
 		var/list/filteredGood = new/list()
 		var/list/filteredBad = new/list()
 
-		effectPool.Cut()
+		effectPool.len = 0
 
 		if (!bioEffectList || !bioEffectList.len)
 			debug_log.Add("<b>Genetics:</b> Tried to build effect pool for [owner ? "\ref[owner] [owner.name]" : "*NULL*"], but bioEffectList is empty!")
@@ -285,7 +285,7 @@ var/list/bioEffectList = null
 			age = toCopy.age
 
 		if(copyActiveEffects)
-			effects.Cut()
+			effects.len = 0
 
 			for(var/datum/bioEffect/curr in toCopy.effects)
 				if (!curr.can_copy)
@@ -342,7 +342,7 @@ var/list/bioEffectList = null
 				newEffect.owner = owner
 				newEffect.holder = src
 				newEffect.OnAdd()
-				if(lentext(newEffect.msgGain) > 0) owner << "\blue [newEffect.msgGain]"
+				if(lentext(newEffect.msgGain) > 0) owner << "<span class='notice'>[newEffect.msgGain]</span>"
 				mobAppearance.UpdateMob()
 				return newEffect
 
@@ -352,7 +352,7 @@ var/list/bioEffectList = null
 		for(var/datum/bioEffect/D in effects)
 			if(lowertext(D.id) == lowertext(id))
 				D.OnRemove()
-				if(lentext(D.msgLose) > 0) owner << "\red [D.msgLose]"
+				if(lentext(D.msgLose) > 0) owner << "<span class='warning'>[D.msgLose]</span>"
 				return effects.Remove(D)
 		return 0
 

@@ -8,6 +8,7 @@
 	m_amt = 50
 	g_amt = 50
 	w_type = RECYK_ELECTRONIC
+	melt_temperature = MELTPOINT_SILICON
 
 	req_access = list(access_engine)
 
@@ -26,11 +27,11 @@
 	attack_self(mob/user as mob)
 		if (!ishuman(user) && !isrobot(user))
 			return ..(user)
-		
+
 		// Can't manipulate it when broken (e.g. emagged)
 		if (icon_state == "door_electronics_smoked")
 			return
-		
+
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			if(H.getBrainLoss() >= 60)
@@ -73,7 +74,7 @@
 		onclose(user, "airlock")
 
 	Topic(href, href_list)
-		..()
+		if(..()) return 1
 		if (usr.stat || usr.restrained() || (!ishuman(usr) && !isrobot(usr)) || icon_state == "door_electronics_smoked")
 			return
 		if (href_list["close"])
@@ -84,6 +85,8 @@
 			if(ishuman(usr))
 				var/mob/living/carbon/human/H=usr
 				var/obj/item/I = usr.get_active_hand()
+				if(!istype(I, /obj/item/weapon/card) || !istype(I, /obj/item/device/pda))
+					I = H.wear_id
 				if(!I && (istype(H.wear_id,/obj/item/weapon/card) || istype(H.wear_id, /obj/item/device/pda)))
 					I = H.wear_id
 				if (istype(I, /obj/item/device/pda))

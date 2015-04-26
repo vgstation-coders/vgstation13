@@ -76,9 +76,13 @@
 	var/mineral = "metal"
 	var/opening = 0
 
+	// WHY DO WE SMOOTH WITH FALSE R-WALLS WHEN WE DON'T SMOOTH WITH REAL R-WALLS.
+	canSmoothWith = "/turf/simulated/wall=0&/obj/structure/falsewall=0&/obj/structure/falserwall=0"
+
 /obj/structure/falsewall/New()
-	relativewall_neighbours()
 	..()
+	relativewall()
+	relativewall_neighbours()
 
 /obj/structure/falsewall/Destroy()
 
@@ -102,22 +106,8 @@
 		icon_state = "[mineral]fwall_open"
 		return
 
-	var/junction = 0 //will be used to determine from which side the wall is connected to other walls
-
-	for(var/turf/simulated/wall/W in orange(src,1))
-		if(abs(src.x-W.x)-abs(src.y-W.y)) //doesn't count diagonal walls
-			if(src.mineral == W.mineral)//Only 'like' walls connect -Sieve
-				junction |= get_dir(src,W)
-	for(var/obj/structure/falsewall/W in orange(src,1))
-		if(abs(src.x-W.x)-abs(src.y-W.y)) //doesn't count diagonal walls
-			if(src.mineral == W.mineral)
-				junction |= get_dir(src,W)
-	for(var/obj/structure/falserwall/W in orange(src,1))
-		if(abs(src.x-W.x)-abs(src.y-W.y)) //doesn't count diagonal walls
-			if(src.mineral == W.mineral)
-				junction |= get_dir(src,W)
+	var/junction=findSmoothingNeighbors()
 	icon_state = "[mineral][junction]"
-	return
 
 /obj/structure/falsewall/attack_ai(mob/user as mob)
 	if(isMoMMI(user))
@@ -156,13 +146,13 @@
 
 /obj/structure/falsewall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opening)
-		user << "\red You must wait until the door has stopped moving."
+		user << "<span class='warning'>You must wait until the door has stopped moving.</span>"
 		return
 
 	if(density)
 		var/turf/T = get_turf(src)
 		if(T.density)
-			user << "\red The wall is blocked!"
+			user << "<span class='warning'>The wall is blocked!</span>"
 			return
 		if(istype(W, /obj/item/weapon/screwdriver))
 			user.visible_message("[user] tightens some bolts on the wall.", "You tighten the bolts on the wall.")
@@ -184,9 +174,12 @@
 					T.attackby(W,user)
 				del(src)
 	else
-		user << "\blue You can't reach, close it first!"
+		user << "<span class='notice'>You can't reach, close it first!</span>"
 
-	if( istype(W, /obj/item/weapon/pickaxe/plasmacutter) )
+	if( istype(W, /obj/item/weapon/pickaxe) )
+		var/obj/item/weapon/pickaxe/used_pick = W
+		if(!(used_pick.diggables & DIG_WALLS))
+			return
 		var/turf/T = get_turf(src)
 		if(!mineral)
 			T.ChangeTurf(/turf/simulated/wall)
@@ -195,17 +188,6 @@
 		if(mineral != "plasma")
 			T = get_turf(src)
 			T.attackby(W,user)
-		del(src)
-
-	//DRILLING
-	else if (istype(W, /obj/item/weapon/pickaxe/diamonddrill))
-		var/turf/T = get_turf(src)
-		if(!mineral)
-			T.ChangeTurf(/turf/simulated/wall)
-		else
-			T.ChangeTurf(text2path("/turf/simulated/wall/mineral/[mineral]"))
-		T = get_turf(src)
-		T.attackby(W,user)
 		del(src)
 
 	else if( istype(W, /obj/item/weapon/melee/energy/blade) )
@@ -241,6 +223,9 @@
 	anchored = 1
 	var/mineral = "metal"
 	var/opening = 0
+
+	// WHY DO WE SMOOTH WITH FALSE R-WALLS WHEN WE DON'T SMOOTH WITH REAL R-WALLS.
+	canSmoothWith = "/turf/simulated/wall=0&/obj/structure/falsewall=0&/obj/structure/falserwall=0"
 
 /obj/structure/falserwall/New()
 	relativewall_neighbours()
@@ -280,29 +265,12 @@
 	if(!density)
 		icon_state = "frwall_open"
 		return
-
-	var/junction = 0 //will be used to determine from which side the wall is connected to other walls
-
-	for(var/turf/simulated/wall/W in orange(src,1))
-		if(abs(src.x-W.x)-abs(src.y-W.y)) //doesn't count diagonal walls
-			if(src.mineral == W.mineral)//Only 'like' walls connect -Sieve
-				junction |= get_dir(src,W)
-	for(var/obj/structure/falsewall/W in orange(src,1))
-		if(abs(src.x-W.x)-abs(src.y-W.y)) //doesn't count diagonal walls
-			if(src.mineral == W.mineral)
-				junction |= get_dir(src,W)
-	for(var/obj/structure/falserwall/W in orange(src,1))
-		if(abs(src.x-W.x)-abs(src.y-W.y)) //doesn't count diagonal walls
-			if(src.mineral == W.mineral)
-				junction |= get_dir(src,W)
+	var/junction=findSmoothingNeighbors()
 	icon_state = "rwall[junction]"
-	return
-
-
 
 /obj/structure/falserwall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opening)
-		user << "\red You must wait until the door has stopped moving."
+		user << "<span class='warning'>You must wait until the door has stopped moving.</span>"
 		return
 
 	if(istype(W, /obj/item/weapon/screwdriver))
@@ -320,15 +288,10 @@
 			T.attackby(W,user)
 			del(src)
 
-	else if( istype(W, /obj/item/weapon/pickaxe/plasmacutter) )
-		var/turf/T = get_turf(src)
-		T.ChangeTurf(/turf/simulated/wall)
-		T = get_turf(src)
-		T.attackby(W,user)
-		del(src)
-
-	//DRILLING
-	else if (istype(W, /obj/item/weapon/pickaxe/diamonddrill))
+	else if( istype(W, /obj/item/weapon/pickaxe) )
+		var/obj/item/weapon/pickaxe/used_pick = W
+		if(!(used_pick.diggables & DIG_WALLS))
+			return
 		var/turf/T = get_turf(src)
 		T.ChangeTurf(/turf/simulated/wall)
 		T = get_turf(src)

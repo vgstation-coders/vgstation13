@@ -9,20 +9,19 @@ var/global/list/all_money_accounts = list()
 
 /proc/create_station_account()
 	if(!station_account)
-		next_account_number = rand(111111, 999999)
-
+		next_account_number = rand(11111, 99999)
 		station_account = new()
 		station_account.owner_name = "[station_name()] Station Account"
-		station_account.account_number = rand(111111, 999999)
-		station_account.remote_access_pin = rand(1111, 111111)
-		station_account.money = 75000
+		station_account.account_number = rand(11111, 99999)
+		station_account.remote_access_pin = rand(1111, 9999)
+		station_account.money = 5000
 
 		//create an entry in the account transaction log for when it was created
 		var/datum/transaction/T = new()
 		T.target_name = station_account.owner_name
 		T.purpose = "Account creation"
-		T.amount = 75000
-		T.date = "2nd April, 2555"
+		T.amount = 5000
+		T.date = "2nd April, [game_year]"
 		T.time = "11:24"
 		T.source_terminal = "Biesel GalaxyNet Terminal #277"
 
@@ -35,8 +34,8 @@ var/global/list/all_money_accounts = list()
 
 	var/datum/money_account/department_account = new()
 	department_account.owner_name = "[department] Account"
-	department_account.account_number = rand(111111, 999999)
-	department_account.remote_access_pin = rand(1111, 111111)
+	department_account.account_number = rand(11111, 99999)
+	department_account.remote_access_pin = rand(1111, 9999)
 	department_account.money = 5000
 
 	//create an entry in the account transaction log for when it was created
@@ -44,7 +43,7 @@ var/global/list/all_money_accounts = list()
 	T.target_name = department_account.owner_name
 	T.purpose = "Account creation"
 	T.amount = department_account.money
-	T.date = "2nd April, 2555"
+	T.date = "2nd April, [game_year]"
 	T.time = "11:24"
 	T.source_terminal = "Biesel GalaxyNet Terminal #277"
 
@@ -62,7 +61,7 @@ var/global/list/all_money_accounts = list()
 	//create a new account
 	var/datum/money_account/M = new()
 	M.owner_name = new_owner_name
-	M.remote_access_pin = rand(1111, 111111)
+	M.remote_access_pin = rand(1111, 9999)
 	M.money = starting_funds
 
 	//create an entry in the account transaction log for when it was created
@@ -72,11 +71,12 @@ var/global/list/all_money_accounts = list()
 	T.amount = starting_funds
 	if(!source_db)
 		//set a random date, time and location some time over the past few decades
-		T.date = "[num2text(rand(1,31))] [pick("January","February","March","April","May","June","July","August","September","October","November","December")], 25[rand(10,56)]"
-		T.time = "[rand(0,24)]:[rand(11,59)]"
-		T.source_terminal = "NTGalaxyNet Terminal #[rand(111,1111)]"
+		var/DD = text2num(time2text(world.timeofday, "DD"))											//For muh lore we'll pretend that Nanotrasen changed its account policy
+		T.date = "[(DD == 1) ? "31" : "[DD-1]"] [time2text(world.timeofday, "Month")], [game_year]"	//shortly before the events of the round,
+		T.time = "[rand(0,24)]:[rand(11,59)]"														//prompting everyone to get a new account one day prior.
+		T.source_terminal = "NTGalaxyNet Terminal #[rand(111,1111)]"								//The point being to partly to justify the transaction history being empty at the beginning of the round.
 
-		M.account_number = rand(111111, 999999)
+		M.account_number = rand(11111, 99999)
 	else
 		T.date = current_date_string
 		T.time = worldtime2text()
@@ -128,6 +128,10 @@ var/global/list/all_money_accounts = list()
 							//1 - require manual login / account number and pin
 							//2 - require card and manual login
 
+/datum/money_account/New()
+	..()
+	security_level = pick (0,1) //Stealing is now slightly viable
+
 /datum/transaction
 	var/target_name = ""
 	var/purpose = ""
@@ -154,8 +158,9 @@ var/global/list/all_money_accounts = list()
 	ghost_read=0
 	ghost_write=0
 
-/obj/machinery/account_database/New()
-	..()
+/obj/machinery/account_database/New(loc)
+	..(loc)
+
 	if(!station_account)
 		create_station_account()
 
@@ -167,9 +172,26 @@ var/global/list/all_money_accounts = list()
 		vendor_account = department_accounts["Vendor"]
 
 	if(!current_date_string)
-		current_date_string = "[num2text(rand(1,31))] [pick("January","February","March","April","May","June","July","August","September","October","November","December")], 2557"
+		current_date_string = "[time2text(world.timeofday, "DD")] [time2text(world.timeofday, "Month")], [game_year]"
 
 	machine_id = "[station_name()] Acc. DB #[num_financial_terminals++]"
+
+	account_DBs += src
+
+	if(ticker)
+		initialize()
+
+/obj/machinery/account_database/initialize()
+	..()
+
+	if(z == CENTCOMM_Z && isnull(centcomm_account_db))
+		centcomm_account_db = src
+
+/obj/machinery/account_database/Destroy()
+	if(centcomm_account_db == src)
+		centcomm_account_db = null
+
+	..()
 
 /obj/machinery/account_database/attack_hand(mob/user as mob)
 	if(ishuman(user) && !user.stat && get_dist(src,user) <= 1)
@@ -197,8 +219,9 @@ var/global/list/all_money_accounts = list()
 					<input type='hidden' name='src' value='\ref[src]'>
 					<input type='hidden' name='choice' value='finalise_create_account'>
 					<b>Holder name:</b> <input type='text' id='holder_name' name='holder_name' style='width:250px; background-color:white;'><br>
-					<b>Initial funds:</b> <input type='text' id='starting_funds' name='starting_funds' style='width:250px; background-color:white;'> (subtracted from station account)<br>
+					<b>Initial funds:</b> <input type='text' id='starting_funds' name='starting_funds' style='width:250px; background-color:white;'> (subtracted from station account.)<br>
 					<i>New accounts are automatically assigned a secret number and pin, which are printed separately in a sealed package.</i><br>
+					<b>Ensure that the station account has enough money to create the account, or it will not be created</b>
 					<input type='submit' value='Create'><br>
 					</form>"}
 				// END AUTOFIX
@@ -210,7 +233,7 @@ var/global/list/all_money_accounts = list()
 					dat += {"<br>
 						<a href='?src=\ref[src];choice=view_accounts_list;'>Return to accounts list</a><hr>
 						<b>Account number:</b> #[detailed_account_view.account_number]<br>
-						<b>Account holder:</b> [detailed_account_view.owner_name]<br>
+						<b>Account holder:<	/b> [detailed_account_view.owner_name]<br>
 						<b>Account balance:</b> $[detailed_account_view.money]<br>
 						<table border=1 style='width:100%'>
 						<tr>
@@ -255,7 +278,6 @@ var/global/list/all_money_accounts = list()
 							</tr>"}
 						// END AUTOFIX
 					dat += "</table>"
-
 		user << browse(dat,"window=account_db;size=700x650")
 	else
 		user << browse(null,"window=account_db")
@@ -263,9 +285,13 @@ var/global/list/all_money_accounts = list()
 /obj/machinery/account_database/attackby(O as obj, user as mob)//TODO:SANITY
 	if(istype(O, /obj/item/weapon/card))
 		var/obj/item/weapon/card/id/idcard = O
+		if(access_level == 3)
+			return attack_hand(user)
+		if(istype(idcard, /obj/item/weapon/card/emag))
+			emag(user)
+			return
 		if(!held_card)
-			usr.drop_item()
-			idcard.loc = src
+			usr.drop_item(O, src)
 			held_card = idcard
 
 			if(access_cent_captain in idcard.access)
@@ -275,8 +301,26 @@ var/global/list/all_money_accounts = list()
 	else
 		..()
 
+/obj/machinery/account_database/emag(mob/user)
+	if(emagged)
+		emagged = 0
+		access_level = 0
+		if(held_card)
+			var/obj/item/weapon/card/id/C = held_card
+			if(access_cent_captain in C.access)
+				access_level = 2
+			else if(access_hop in C.access || access_captain in C.access)
+				access_level = 1
+		attack_hand(user)
+		user << "<span class='notice'>You re-enable the security checks of [src].</span>"
+	else
+		emagged = 1
+		access_level = 3
+		user << "<span class='warning'>You disable the security checks of [src].</span>"
+	return
+
 /obj/machinery/account_database/Topic(var/href, var/href_list)
-	..()
+	if(..()) return 1
 	if(href_list["toggle_activated"])
 		activated = !activated
 
@@ -287,43 +331,42 @@ var/global/list/all_money_accounts = list()
 			if("finalise_create_account")
 				var/account_name = href_list["holder_name"]
 				var/starting_funds = max(text2num(href_list["starting_funds"]), 0)
-				create_account(account_name, starting_funds, src)
-				if(starting_funds > 0)
-					//subtract the money
+				if ((station_account.money - starting_funds) > 0)
 					station_account.money -= starting_funds
-
-					//create a transaction log entry
-					var/datum/transaction/T = new()
-					T.target_name = account_name
-					T.purpose = "New account funds initialisation"
-					T.amount = "([starting_funds])"
-					T.date = current_date_string
-					T.time = worldtime2text()
-					T.source_terminal = machine_id
-					station_account.transaction_log.Add(T)
-
-				creating_new_account = 0
+					if(starting_funds >0)
+						//Create a transaction log entry if you need to
+						var/datum/transaction/T = new()
+						T.target_name = account_name
+						T.purpose = "New account funds initialisation"
+						T.amount = "([starting_funds])"
+						T.date = current_date_string
+						T.time = worldtime2text()
+						T.source_terminal = machine_id
+						station_account.transaction_log.Add(T)
+					create_account(account_name, starting_funds, src)
+					creating_new_account = 0
 			if("insert_card")
 				if(held_card)
 					held_card.loc = src.loc
-
 					if(ishuman(usr) && !usr.get_active_hand())
 						usr.put_in_hands(held_card)
 					held_card = null
-					access_level = 0
-
+					if(access_level < 3)
+						access_level = 0
 				else
 					var/obj/item/I = usr.get_active_hand()
+					if(isEmag(I))
+						emag(usr)
+						return
 					if (istype(I, /obj/item/weapon/card/id))
 						var/obj/item/weapon/card/id/C = I
-						usr.drop_item()
-						C.loc = src
+						usr.drop_item(C, src)
 						held_card = C
-
-						if(access_cent_captain in C.access)
-							access_level = 2
-						else if(access_hop in C.access || access_captain in C.access)
-							access_level = 1
+						if(access_level < 3)
+							if(access_cent_captain in C.access)
+								access_level = 2
+							else if(access_hop in C.access || access_captain in C.access)
+								access_level = 1
 			if("view_account_detail")
 				var/index = text2num(href_list["account_index"])
 				if(index && index <= all_money_accounts.len)

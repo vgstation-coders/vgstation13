@@ -1,7 +1,7 @@
 /**********************Mineral deposits**************************/
 
-/datum/controller/game_controller/var/list/artifact_spawning_turfs = list()
-var/list/artifact_spawn = list() // Runtime fix for geometry loading before controller is instantiated.
+/datum/controller/game_controller
+	var/list/artifact_spawning_turfs = list()
 
 /turf/unsimulated/mineral //wall piece
 	name = "Rock"
@@ -18,7 +18,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 	var/last_act = 0
 	var/datum/geosample/geologic_data
 	var/excavation_level = 0
-	var/list/finds
+	var/list/finds = list()//no longer null to prevent those pesky runtime errors
 	var/next_rock = 0
 	var/archaeo_overlay = ""
 	var/excav_overlay = ""
@@ -149,15 +149,15 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 	. = ..()
 	if(istype(AM,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = AM
-		if((istype(H.l_hand,/obj/item/weapon/pickaxe)) && (!H.hand))
-			attackby(H.l_hand,H)
-		else if((istype(H.r_hand,/obj/item/weapon/pickaxe)) && H.hand)
-			attackby(H.r_hand,H)
+		if(istype(H.get_active_hand(),/obj/item/weapon/pickaxe))
+			attackby(H.get_active_hand(), H)
+		else if(istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe))
+			attackby(H.get_inactive_hand(), H)
 
 	else if(istype(AM,/mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = AM
 		if(istype(R.module_active,/obj/item/weapon/pickaxe))
-			attackby(R.module_active,R)
+			attackby(R.module_active, R)
 
 	else if(istype(AM,/obj/mecha))
 		var/obj/mecha/M = AM
@@ -189,10 +189,12 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 /turf/unsimulated/mineral/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 	if (!(istype(usr, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
-		usr << "\red You don't have the dexterity to do this!"
+		usr << "<span class='warning>You don't have the dexterity to do this!</span>"
 		return
 
 	if (istype(W, /obj/item/device/core_sampler))
+		if(!geologic_data)
+			geologic_data = new/datum/geosample(src)
 		geologic_data.UpdateNearbyArtifactInfo(src)
 		var/obj/item/device/core_sampler/C = W
 		C.sample_item(src, user)
@@ -205,24 +207,23 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 
 	if (istype(W, /obj/item/device/measuring_tape))
 		var/obj/item/device/measuring_tape/P = W
-		user.visible_message("\blue[user] extends [P] towards [src].","\blue You extend [P] towards [src].")
+		user.visible_message("<span class='notice'>[user] extends [P] towards [src].</span>","<span class='notice'>You extend [P] towards [src].</span>")
 		if(do_after(user,25))
-			user << "\blue \icon[P] [src] has been excavated to a depth of [2*excavation_level]cm."
+			user << "<span class='notice'>\icon[P] [src] has been excavated to a depth of [2*excavation_level]cm.</span>"
 		return
 
 	if (istype(W, /obj/item/weapon/pickaxe))
-		var/turf/T = user.loc
-		if (!( istype(T, /turf) ))
-			return
-	/*
-		if (istype(W, /obj/item/weapon/pickaxe/radius))
-			var/turf/T = user.loc
-			if (!( istype(T, /turf) ))
-				return
-	*/
-	//Watch your tabbing, microwave. --NEO
+		if(user.loc != get_turf(user))
+			return //if we aren't in the tile we are located in, return
 
 		var/obj/item/weapon/pickaxe/P = W
+
+		if(!istype(P))
+			return
+
+		if(!(P.diggables & DIG_ROCKS))
+			return
+
 		if(last_act + P.digspeed > world.time)//prevents message spam
 			return
 		last_act = world.time
@@ -230,14 +231,14 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 		playsound(user, P.drill_sound, 20, 1)
 
 		//handle any archaeological finds we might uncover
-		var/fail_message
+		var/fail_message = ""
 		if(finds && finds.len)
 			var/datum/find/F = finds[1]
 			if(excavation_level + P.excavation_amount > F.excavation_required)
 
 				fail_message = ", <b>[pick("there is a crunching noise","[W] collides with some different rock","part of the rock face crumbles away","something breaks under [W]")]</b>"
 
-		user << "\red You start [P.drill_verb][fail_message ? fail_message : ""]."
+		user << "<span class='rose'>You start [P.drill_verb][fail_message].</span>"
 
 		if(fail_message && prob(90))
 			if(prob(25))
@@ -247,8 +248,8 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 				if(prob(50))
 					artifact_debris()
 
-		if(do_after(user,P.digspeed))
-			user << "\blue You finish [P.drill_verb] the rock."
+		if(do_after(user,P.digspeed) && user)
+			user << "<span class='notice'>You finish [P.drill_verb] the rock.</span>"
 
 			if(finds && finds.len)
 				var/datum/find/F = finds[1]
@@ -275,8 +276,8 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 							B.artifact_find = artifact_find
 					else
 						artifact_debris(1)
-				else if(prob(15))
 
+				else if(prob(15))
 					B = new(src)
 
 				if(B)
@@ -293,17 +294,13 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 					archaeo_overlay = "overlay_archaeo[rand(1,3)]"
 					overlays += archaeo_overlay
 
-			//there's got to be a better way to do this
 			var/update_excav_overlay = 0
-			if(excavation_level >= 75)
-				if(excavation_level - P.excavation_amount < 75)
-					update_excav_overlay = 1
-			else if(excavation_level >= 50)
-				if(excavation_level - P.excavation_amount < 50)
-					update_excav_overlay = 1
-			else if(excavation_level >= 25)
-				if(excavation_level - P.excavation_amount < 25)
-					update_excav_overlay = 1
+
+			var/subtractions = 0
+			while(excavation_level - 25*(subtractions + 1) >= 0 && subtractions < 3)
+				subtractions++
+			if(excavation_level - P.excavation_amount < subtractions * 25)
+				update_excav_overlay = 1
 
 			//update overlays displaying excavation level
 			if( !(excav_overlay && excavation_level > 0) || update_excav_overlay )
@@ -311,25 +308,18 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 				excav_overlay = "overlay_excv[excav_quadrant]_[rand(1,3)]"
 				overlays += excav_overlay
 
-			/*
-			//extract pesky minerals while we're excavating
-			while(excavation_minerals.len && excavation_level > excavation_minerals[excavation_minerals.len])
-				DropMineral()
-				pop(excavation_minerals)
-				mineralAmt--
-			*/
-
 			//drop some rocks
 			next_rock += P.excavation_amount * 10
 			while(next_rock > 100)
 				next_rock -= 100
 				var/obj/item/weapon/ore/O = new(src)
+				if(!geologic_data)
+					geologic_data = new/datum/geosample(src)
 				geologic_data.UpdateNearbyArtifactInfo(src)
 				O.geologic_data = geologic_data
 
 	else
 		return attack_hand(user)
-
 
 /turf/unsimulated/mineral/proc/DropMineral()
 	if(!mineral)
@@ -337,6 +327,8 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 
 	var/obj/item/weapon/ore/O = new mineral.ore (src)
 	if(istype(O))
+		if(!geologic_data)
+			geologic_data = new/datum/geosample(src)
 		geologic_data.UpdateNearbyArtifactInfo(src)
 		O.geologic_data = geologic_data
 	return O
@@ -349,12 +341,9 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
 	if(artifact_find && artifact_fail)
-		var/pain = 0
-		if(prob(50))
-			pain = 1
 		for(var/mob/living/M in range(src, 200))
 			M << "<font color='red'><b>[pick("A high pitched [pick("keening","wailing","whistle")]","A rumbling noise like [pick("thunder","heavy machinery")]")] somehow penetrates your mind before fading away!</b></font>"
-			if(pain)
+			if(prob(50)) //pain
 				flick("pain",M.pain)
 				if(prob(50))
 					M.adjustBruteLoss(5)
@@ -382,7 +371,9 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 	if(prob_clean)
 		X = new /obj/item/weapon/archaeological_find(src, new_item_type = F.find_type)
 	else
-		X = new /obj/item/weapon/ore/strangerock(src, inside_item_type = F.find_type)
+		X = new /obj/item/weapon/strangerock(src, inside_item_type = F.find_type)
+		if(!geologic_data)
+			geologic_data = new/datum/geosample(src)
 		geologic_data.UpdateNearbyArtifactInfo(src)
 		X:geologic_data = geologic_data
 
@@ -399,7 +390,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 		var/obj/effect/suspension_field/S = locate() in src
 		if(!S || S.field_type != get_responsive_reagent(F.find_type))
 			if(X)
-				visible_message("\red<b>[pick("[display_name] crumbles away into dust","[display_name] breaks apart")].</b>")
+				visible_message("<span class='danger'>[pick("[display_name] crumbles away into dust","[display_name] breaks apart")].</span>")
 				del(X)
 
 	finds.Remove(F)
@@ -416,8 +407,8 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 				R.amount = rand(1,5)
 
 			if(3)
-				var/obj/item/stack/sheet/metal/R = new(src)
-				R.amount = rand(5,25)
+				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, (src))
+				M.amount = rand(5,25)
 
 			if(4)
 				var/obj/item/stack/sheet/plasteel/R = new(src)
@@ -463,8 +454,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 
 	if(prob(20))
 		icon_state = "asteroid[rand(0,12)]"
-	spawn(2)
-		updateMineralOverlays()
+	updateMineralOverlays()
 
 /turf/unsimulated/floor/asteroid/ex_act(severity)
 	switch(severity)
@@ -482,63 +472,25 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 	if(!W || !user)
 		return 0
 
-	if ((istype(W, /obj/item/weapon/shovel)))
-		var/turf/T = user.loc
-		if (!( istype(T, /turf) ))
+	if (istype(W, /obj/item/weapon/pickaxe))
+		var/obj/item/weapon/pickaxe/used_digging = W //cast for dig speed and flags
+		if (get_turf(user) != user.loc) //if we aren't somehow on the turf we're in
+			return
+
+		if(!(used_digging.diggables & DIG_SOIL)) //if the pickaxe can't dig soil, we don't
+			user << "<span class='rose'>You can't dig soft soil with \the [W].</span>"
 			return
 
 		if (dug)
-			user << "\red This area has already been dug"
+			user << "<span class='rose'>This area has already been dug.</span>"
 			return
 
-		user << "\red You start digging."
+		user << "<span class='rose'>You start digging.<span>"
 		playsound(get_turf(src), 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
 
-		sleep(40)
-		if ((user.loc == T && user.get_active_hand() == W))
-			user << "\blue You dug a hole."
+		if(do_after(user, used_digging.digspeed) && user) //the better the drill, the faster the digging
+			user << "<span class='notice'>You dug a hole.</span>"
 			gets_dug()
-
-	if ((istype(W,/obj/item/weapon/pickaxe/drill)))
-		var/turf/T = user.loc
-		if (!( istype(T, /turf) ))
-			return
-
-		if (dug)
-			user << "\red This area has already been dug"
-			return
-
-		user << "\red You start digging."
-		playsound(get_turf(src), 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
-
-		sleep(30)
-		if ((user.loc == T && user.get_active_hand() == W))
-			user << "\blue You dug a hole."
-			gets_dug()
-
-	if ((istype(W,/obj/item/weapon/pickaxe/diamonddrill)) || (istype(W,/obj/item/weapon/pickaxe/borgdrill)))
-		var/turf/T = user.loc
-		if (!( istype(T, /turf) ))
-			return
-
-		if (dug)
-			user << "\red This area has already been dug"
-			return
-
-		user << "\red You start digging."
-		playsound(get_turf(src), 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
-
-		sleep(0)
-		if ((user.loc == T && user.get_active_hand() == W))
-			user << "\blue You dug a hole."
-			gets_dug()
-
-	if(istype(W,/obj/item/weapon/storage/bag/ore))
-		var/obj/item/weapon/storage/bag/ore/S = W
-		if(S.collection_mode)
-			for(var/obj/item/weapon/ore/O in contents)
-				O.attackby(W,user)
-				return
 
 	else
 		..(W,user)
@@ -558,7 +510,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 	return
 
 /turf/unsimulated/floor/asteroid/proc/updateMineralOverlays()
-	src.overlays.Cut()
+	src.overlays.len = 0
 
 	if(istype(get_step(src, NORTH), /turf/unsimulated/mineral))
 		src.overlays += image('icons/turf/walls.dmi', "rock_side_n")
@@ -597,31 +549,32 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 		A.updateMineralOverlays()
 	src.updateMineralOverlays()
 
-/turf/unsimulated/floor/asteroid/Entered(atom/movable/M as mob|obj)
-	..()
-	if(istype(M,/mob/living/silicon/robot))
-		var/mob/living/silicon/robot/R = M
-		if(istype(R.module, /obj/item/weapon/robot_module/miner))
-			if(istype(R.module_state_1,/obj/item/weapon/storage/bag/ore))
-				attackby(R.module_state_1,R)
-			else if(istype(R.module_state_2,/obj/item/weapon/storage/bag/ore))
-				attackby(R.module_state_2,R)
-			else if(istype(R.module_state_3,/obj/item/weapon/storage/bag/ore))
-				attackby(R.module_state_3,R)
-			else
-				return
-
 /turf/unsimulated/mineral/random
 	name = "Mineral deposit"
 	var/mineralSpawnChanceList = list(
-		"Uranium" = 5,
-		"Iron" = 50,
-		"Diamond" = 1,
-		"Gold" = 5,
-		"Silver" = 5,
-		"Plasma" = 25,
+		"Iron"      = 50,
+		"Plasma"    = 25,
+		"Uranium"   = 5,
+		"Gold"      = 5,
+		"Silver"    = 5,
 		"Gibtonite" = 5,
-		"Cave" = 1
+		"Diamond"   = 1,
+		"Cave"      = 1,
+		/*
+		"Pharosium"  = 5,
+		"Char"  = 5,
+		"Claretine"  = 5,
+		"Bohrum"  = 5,
+		"Syreline"  = 5,
+		"Erebite"  = 5,
+		"Uqill"  = 5,
+		"Telecrystal"  = 5,
+		"Mauxite"  = 5,
+		"Cobryl"  = 5,
+		"Cerenkite"  = 5,
+		"Molitz"  = 5,
+		"Cytine"  = 5
+		*/
 	)
 	//Currently, Adamantine won't spawn as it has no uses. -Durandan
 	var/mineralChance = 10  //means 10% chance of this plot changing to a mineral deposit
@@ -634,10 +587,12 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 		if(!name_to_mineral)
 			SetupMinerals()
 
-		if (mineral_name && mineral_name in name_to_mineral)
-			mineral = name_to_mineral[mineral_name]
-			mineral.UpdateTurf(src)
-
+		if (mineral_name)
+			if(mineral_name in name_to_mineral)
+				mineral = name_to_mineral[mineral_name]
+				mineral.UpdateTurf(src)
+			else
+				warning("Unknown mineral ID: [mineral_name]")
 
 	. = ..()
 
@@ -651,6 +606,21 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 		"Gold"    = 10,
 		"Silver"  = 10,
 		"Plasma"  = 25,
+		/*
+		"Pharosium"  = 5,
+		"Char"  = 5,
+		"Claretine"  = 5,
+		"Bohrum"  = 5,
+		"Syreline"  = 5,
+		"Erebite"  = 5,
+		"Uqill"  = 5,
+		"Telecrystal"  = 5,
+		"Mauxite"  = 5,
+		"Cobryl"  = 5,
+		"Cerenkite"  = 5,
+		"Molitz"  = 5,
+		"Cytine"  = 5
+		*/
 	)
 
 /turf/unsimulated/mineral/random/high_chance_clown
@@ -662,9 +632,24 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 		"Diamond" = 2,
 		"Gold"    = 5,
 		"Silver"  = 5,
+		/*
+		"Pharosium"  = 1,
+		"Char"  = 1,
+		"Claretine"  = 1,
+		"Bohrum"  = 1,
+		"Syreline"  = 1,
+		"Erebite"  = 1,
+		"Uqill"  = 1,
+		"Telecrystal"  = 1,
+		"Mauxite"  = 1,
+		"Cobryl"  = 1,
+		"Cerenkite"  = 1,
+		"Molitz"  = 1,
+		"Cytine"  = 1,
+		*/
 		"Plasma"  = 25,
 		"Clown"   = 15,
-		"Phazite" = 10
+		"Phazon"  = 10
 	)
 
 /turf/unsimulated/mineral/random/Destroy()
@@ -724,6 +709,71 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 	mineral = new /mineral/phazon
 	scan_state = "rock_Phazon"
 
+/turf/unsimulated/mineral/pharosium
+	name = "Pharosium deposit"
+	icon_state = "rock_Pharosium"
+	mineral = new /mineral/pharosium
+
+/turf/unsimulated/mineral/char
+	name = "Char deposit"
+	icon_state = "rock_Char"
+	mineral = new /mineral/char
+
+/turf/unsimulated/mineral/claretine
+	name = "Claretine deposit"
+	icon_state = "rock_Claretine"
+	mineral = new /mineral/claretine
+
+/turf/unsimulated/mineral/bohrum
+	name = "Bohrum deposit"
+	icon_state = "rock_Bohrum"
+	mineral = new /mineral/bohrum
+
+/turf/unsimulated/mineral/syreline
+	name = "Syreline deposit"
+	icon_state = "rock_Syreline"
+	mineral = new /mineral/syreline
+
+/turf/unsimulated/mineral/erebite
+	name = "Erebite deposit"
+	icon_state = "rock_Erebite"
+	mineral = new /mineral/erebite
+
+/turf/unsimulated/mineral/cytine
+	name = "Cytine deposit"
+	icon_state = "rock_Cytine"
+	mineral = new /mineral/cytine
+
+/turf/unsimulated/mineral/uqill
+	name = "Uqill deposit"
+	icon_state = "rock_Uqill"
+	mineral = new /mineral/uqill
+
+/turf/unsimulated/mineral/telecrystal
+	name = "Telecrystal deposit"
+	icon_state = "rock_Telecrystal"
+	mineral = new /mineral/telecrystal
+
+/turf/unsimulated/mineral/mauxite
+	name = "Mauxite deposit"
+	icon_state = "rock_Mauxite"
+	mineral = new /mineral/mauxite
+
+/turf/unsimulated/mineral/cobryl
+	name = "Cobryl deposit"
+	icon_state = "rock_Cobryl"
+	mineral = new /mineral/cobryl
+
+/turf/unsimulated/mineral/cerenkite
+	name = "Cerenkite deposit"
+	icon_state = "rock_Cerenkite"
+	mineral = new /mineral/cerenkite
+
+/turf/unsimulated/mineral/molitz
+	name = "Molitz deposit"
+	icon_state = "rock_Molitz"
+	mineral = new /mineral/molitz
+
 ////////////////////////////////Gibtonite
 /turf/unsimulated/mineral/gibtonite
 	name = "Diamond deposit" //honk
@@ -740,8 +790,33 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 	det_time = rand(8,10) //So you don't know exactly when the hot potato will explode
 	..()
 
+/turf/unsimulated/mineral/gibtonite/Bumped(AM)
+	var/bump_reject = 0
+	if(istype(AM,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = AM
+		if((istype(H.get_active_hand(),/obj/item/weapon/pickaxe) || istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe)) && src.stage == 1)
+			H << "<span class='warning'>You don't think that's a good idea...</span>"
+			bump_reject = 1
+
+	else if(istype(AM,/mob/living/silicon/robot))
+		var/mob/living/silicon/robot/R = AM
+		if(istype(R.module_active, /obj/item/weapon/pickaxe))
+			R << "<span class='warning'>You don't think that's a good idea...</span>"
+			bump_reject = 1
+		else if(istype(R.module_active, /obj/item/device/mining_scanner))
+			attackby(R.module_active, R) //let's bump to disable. This is kinder, because borgs need some love
+
+	else if(istype(AM,/obj/mecha))
+		var/obj/mecha/M = AM
+		if(istype(M.selected, /obj/item/mecha_parts/mecha_equipment/tool/drill))
+			M.occupant_message("<span class='warning'>Safety features prevent this action.</span>")
+			bump_reject = 1
+
+	if(!bump_reject) //if we haven't been pushed off, we do the drilling bit
+		return ..()
+
 /turf/unsimulated/mineral/gibtonite/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/device/mining_scanner) && stage == 1)
+	if(((istype(I, /obj/item/device/mining_scanner)) || (istype(I, /obj/item/device/depth_scanner))) && stage == 1)
 		user.visible_message("<span class='notice'>You use [I] to locate where to cut off the chain reaction and attempt to stop it...</span>")
 		defuse()
 	if(istype(I, /obj/item/weapon/pickaxe))
@@ -776,7 +851,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 
 /turf/unsimulated/mineral/gibtonite/proc/defuse()
 	if(stage == 1)
-		icon_state = "rock_Gibtonite_inactive"
+		icon_state = "rock_Gibtonite" //inactive does not exist. The other icon is active.
 		desc = "An inactive gibtonite reserve. The ore can be extracted."
 		stage = 2
 		if(det_time < 0)
@@ -793,7 +868,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 		mineral.result_amount = 0
 		explosion(bombturf,1,2,5, adminlog = 0)
 	if(stage == 2) //Gibtonite deposit is now benign and extractable. Depending on how close you were to it blowing up before defusing, you get better quality ore.
-		var/obj/item/weapon/twohanded/required/gibtonite/G = new /obj/item/weapon/twohanded/required/gibtonite/(src)
+		var/obj/item/weapon/gibtonite/G = new /obj/item/weapon/gibtonite/(src)
 		if(det_time <= 0)
 			G.quality = 3
 			G.icon_state = "Gibtonite ore 3"
@@ -902,3 +977,18 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 /turf/unsimulated/floor/asteroid/plating
 	intact=0
 	icon_state="asteroidplating"
+
+/turf/unsimulated/floor/asteroid/canBuildCatwalk()
+	return BUILD_FAILURE
+
+/turf/unsimulated/floor/asteroid/canBuildLattice()
+	if(!(locate(/obj/structure/lattice) in contents))
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
+/turf/unsimulated/floor/asteroid/canBuildPlating()
+	if(!dug)
+		return BUILD_IGNORE
+	if(locate(/obj/structure/lattice) in contents)
+		return BUILD_SUCCESS
+	return BUILD_FAILURE

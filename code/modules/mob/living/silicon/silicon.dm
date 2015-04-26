@@ -1,15 +1,30 @@
 /mob/living/silicon
 	gender = NEUTER
-	robot_talk_understand = 1
 	voice_name = "synthesized voice"
+	languages = ROBOT | HUMAN | MONKEY | ALIEN
 	var/syndicate = 0
 	var/datum/ai_laws/laws = null//Now... THEY ALL CAN ALL HAVE LAWS
 	var/list/alarms_to_show = list()
 	var/list/alarms_to_clear = list()
+
 	immune_to_ssd = 1
 
+	var/obj/item/device/radio/borg/radio = null //AIs dont use this but this is at the silicon level to advoid copypasta in say()
+
+	var/sensor_mode = 0 //Determines the current HUD.
+	#define SEC_HUD 1 //Security HUD mode
+	#define MED_HUD 2 //Medical HUD mode
+	#define MESON_VISION 3 // Engineering borg and mommis
+	#define NIGHT 4 // night vision
+	#define THERMAL_VISION 5 // combat borgs thermals
 	var/list/alarm_types_show = list("Motion" = 0, "Fire" = 0, "Atmosphere" = 0, "Power" = 0, "Camera" = 0)
 	var/list/alarm_types_clear = list("Motion" = 0, "Fire" = 0, "Atmosphere" = 0, "Power" = 0, "Camera" = 0)
+
+/mob/living/silicon/hasFullAccess()
+	return 1
+
+/mob/living/silicon/GetAccess()
+	return get_all_accesses()
 
 /mob/living/silicon/proc/cancelAlarm()
 	return
@@ -19,6 +34,11 @@
 
 /mob/living/silicon/proc/show_laws()
 	return
+
+/mob/living/silicon/proc/write_laws()
+	if(laws)
+		var/text = src.laws.write_laws()
+		return text
 
 /mob/living/silicon/proc/queueAlarm(var/message, var/type, var/incoming = 1)
 	var/in_cooldown = (alarms_to_show.len > 0 || alarms_to_clear.len > 0)
@@ -93,7 +113,13 @@
 /mob/living/silicon/drop_item()
 	return
 
+/mob/living/silicon/generate_static_overlay()
+	return
+
 /mob/living/silicon/emp_act(severity)
+	if(flags & INVULNERABLE)
+		return
+
 	switch(severity)
 		if(1)
 			src.take_organ_damage(20)
@@ -102,8 +128,8 @@
 			src.take_organ_damage(10)
 			Stun(rand(1,5))
 	flick("noise", src:flash)
-	src << "\red <B>*BZZZT*</B>"
-	src << "\red Warning: Electromagnetic pulse detected."
+	src << "<span class='danger'>*BZZZT*</span>"
+	src << "<span class='warning'>Warning: Electromagnetic pulse detected.</span>"
 	..()
 
 /mob/living/silicon/proc/damage_mob(var/brute = 0, var/fire = 0, var/tox = 0)
@@ -145,44 +171,43 @@
 	if (bot.connected_ai == ai)
 		return 1
 	return 0
-	
-	
-// this function shows the health of the pAI in the Status panel
+
+/mob/living/silicon/proc/system_integrity()
+	return round((health / maxHealth) * 100)
+
+// this function shows the health of a silicon in the Status panel
 /mob/living/silicon/proc/show_system_integrity()
-	if(!src.stat)
-		stat(null, text("System integrity: [(src.health+100)/2]%"))
+	if(stat == CONSCIOUS)
+		stat(null, text("System integrity: [system_integrity()]%"))
 	else
 		stat(null, text("Systems nonfunctional"))
 
-	
 // This is a pure virtual function, it should be overwritten by all subclasses
 /mob/living/silicon/proc/show_malf_ai()
 	return 0
 
-	
 // this function displays the station time in the status panel
 /mob/living/silicon/proc/show_station_time()
 	stat(null, "Station Time: [worldtime2text()]")
-	
-	
+
+
 // this function displays the shuttles ETA in the status panel if the shuttle has been called
 /mob/living/silicon/proc/show_emergency_shuttle_eta()
 	if(emergency_shuttle.online && emergency_shuttle.location < 2)
 		var/timeleft = emergency_shuttle.timeleft()
 		if (timeleft)
 			stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
-				
-				
+
+
 // This adds the basic clock, shuttle recall timer, and malf_ai info to all silicon lifeforms
 /mob/living/silicon/Stat()
 	..()
-	statpanel("Status")
-	if (src.client.statpanel == "Status")
+	if(statpanel("Status"))
 		show_station_time()
 		show_emergency_shuttle_eta()
 		show_system_integrity()
 		show_malf_ai()
-		
+
 // this function displays the stations manifest in a separate window
 /mob/living/silicon/proc/show_station_manifest()
 	var/dat
@@ -192,3 +217,36 @@
 	dat += "<br>"
 	src << browse(dat, "window=airoster")
 	onclose(src, "airoster")
+
+/mob/living/silicon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
+	if(istype(source, /obj/machinery/containment_field))
+		var/damage = shock_damage * siemens_coeff * 0.75 // take reduced damage
+
+		if(damage <= 0)
+			damage = 0
+
+		if(take_overall_damage(0, damage, "[source]") == 0) // godmode
+			return 0
+
+		visible_message( \
+			"<span class='warning'>[src] was shocked by the [source]!</span>", \
+			"<span class='danger'>Energy pulse detected, system damaged!</span>", \
+			"<span class='warning'>You hear a heavy electrical crack.</span>" \
+		)
+
+		if(prob(20))
+			Stun(2)
+
+		var/datum/effect/effect/system/spark_spread/SparkSpread = new
+		SparkSpread.set_up(5, 1, loc)
+		SparkSpread.start()
+
+		return damage
+
+	return 0
+
+/mob/living/silicon/assess_threat() //Secbots will not target silicons!
+	return -10
+
+/mob/living/silicon/put_in_hand_check(var/obj/item/W)
+	return 0

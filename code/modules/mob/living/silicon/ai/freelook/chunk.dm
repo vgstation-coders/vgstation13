@@ -68,8 +68,6 @@
 
 /datum/camerachunk/proc/update()
 
-	//set background = 1
-
 	var/list/newVisibleTurfs = list()
 
 	for(var/camera in cameras)

@@ -1,16 +1,17 @@
 /var/global/sent_aliens_to_station = 0
 
 /datum/event/alien_infestation
-	announceWhen	= 400
-	oneShot			= 1
+	announceWhen	= 450
 
 	var/spawncount = 1
 	var/successSpawn = 0	//So we don't make a command report if nothing gets spawned.
+	var/player_factor = 1
 
 
 /datum/event/alien_infestation/setup()
-	announceWhen = rand(announceWhen, announceWhen + 50)
-	spawncount = rand(1, 2)
+	announceWhen = rand(300, 600)
+	player_factor = round(player_list.len/10) //One bonus starting alium for 10 players
+	spawncount = rand(1, 2)+player_factor
 	sent_aliens_to_station = 1
 
 /datum/event/alien_infestation/announce()
@@ -26,14 +27,14 @@
 			if(temp_vent.network.normal_members.len > 50)	//Stops Aliens getting stuck in small networks. See: Security, Virology
 				vents += temp_vent
 
-	var/list/candidates = get_alien_candidates()
+	var/list/candidates = get_active_candidates(ROLE_ALIEN, buffer=ALIEN_SELECT_AFK_BUFFER, poll=1)
 
 	while(spawncount > 0 && vents.len && candidates.len)
 		var/obj/vent = pick(vents)
-		var/candidate = pick(candidates)
+		var/mob/candidate = pick(candidates)
 
 		var/mob/living/carbon/alien/larva/new_xeno = new(vent.loc)
-		new_xeno.key = candidate
+		new_xeno.key = candidate.key
 
 		candidates -= candidate
 		vents -= vent

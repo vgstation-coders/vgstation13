@@ -1,7 +1,26 @@
 
 // reference: /client/proc/modify_variables(var/atom/O, var/param_var_name = null, var/autodetect_class = 0)
-
 client
+	proc/debug_reagents(datum/D in world)
+		set category = "Debug"
+		set name = "Add Reagent"
+
+		if(!usr.client || !usr.client.holder)
+			usr << "<span class='warning'>You need to be an administrator to access this.</span>"
+			return
+
+		if(!D) return
+		if(istype(D, /atom))
+			var/atom/A = D
+			var/reagentDatum = input(usr,"Reagent","Insert Reagent","") as text|null
+			if(reagentDatum)
+				var/reagentAmount = input(usr, "Amount", "Insert Amount", "") as num
+				if(A.reagents.add_reagent(reagentDatum, reagentAmount))
+					usr << "<span class='warning'>[reagentDatum] doesn't exist.</span>"
+					return
+				log_admin("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] ")
+				message_admins("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] ")
+
 	proc/debug_variables(datum/D in world)
 		set category = "Debug"
 		set name = "View Variables"
@@ -9,7 +28,7 @@ client
 
 
 		if(!usr.client || !usr.client.holder)
-			usr << "\red You need to be an administrator to access this."
+			usr << "<span class='warning'>You need to be an administrator to access this.</span>"
 			return
 
 
@@ -275,7 +294,8 @@ client
 					<option value='?_src_=vars;makerobot=\ref[D]'>Make cyborg</option>
 					<option value='?_src_=vars;makemonkey=\ref[D]'>Make monkey</option>
 					<option value='?_src_=vars;makealien=\ref[D]'>Make alien</option>
-					<option value='?_src_=vars;makeslime=\ref[D]'>Make slime</option>"}
+					<option value='?_src_=vars;makeslime=\ref[D]'>Make slime</option>
+					<option value='?_src_=vars;makecluwne=\ref[D]'>Make cluwne</option>"}
 			// END AUTOFIX
 
 			// AUTOFIXED BY fix_string_idiocy.py
@@ -419,7 +439,23 @@ client
 
 		else
 			html += "[name] = <span class='value'>[value]</span>"
-
+			/*
+			// Bitfield stuff
+			if(round(value)==value) // Require integers.
+				var/idx=0
+				var/bit=0
+				var/bv=0
+				html += "<div class='value binary'>"
+				for(var/block=0;block<8;block++)
+					html += " <span class='block'>"
+					for(var/i=0;i<4;i++)
+						idx=(block*4)+i
+						bit=1 << idx
+						bv=value & bit
+						html += "<a href='?_src_=vars;togbit=[idx];var=[name];subject=\ref[DA]' title='bit [idx] ([bit])'>[bv?1:0]</a>"
+					html += "</span>"
+				html += "</div>"
+			*/
 		html += "</li>"
 
 		return html
@@ -456,6 +492,20 @@ client
 			return
 
 		modify_variables(D, href_list["varnameedit"], 1)
+
+	else if(href_list["togbit"])
+		if(!check_rights(R_VAREDIT))	return
+
+		var/atom/D = locate(href_list["subject"])
+		if(!istype(D,/datum) && !istype(D,/client))
+			usr << "This can only be used on instances of types /client or /datum"
+			return
+		if(!(href_list["var"] in D.vars))
+			usr << "Unable to find variable specified."
+			return
+		var/value = D.vars[href_list["var"]]
+		value ^= 1 << text2num(href_list["togbit"])
+		D.vars[href_list["var"]] = value
 
 	else if(href_list["varnamechange"] && href_list["datumchange"])
 		if(!check_rights(R_VAREDIT))	return
@@ -611,23 +661,23 @@ client
 				for(var/obj/Obj in world)
 					if(Obj.type == O_type)
 						i++
-						del(Obj)
+						qdel(Obj)
 				if(!i)
 					usr << "No objects of this type exist"
 					return
 				log_admin("[key_name(usr)] deleted all objects of type [O_type] ([i] objects deleted) ")
-				message_admins("\blue [key_name(usr)] deleted all objects of type [O_type] ([i] objects deleted) ")
+				message_admins("<span class='notice'>[key_name(usr)] deleted all objects of type [O_type] ([i] objects deleted) </span>")
 			if("Type and subtypes")
 				var/i = 0
 				for(var/obj/Obj in world)
 					if(istype(Obj,O_type))
 						i++
-						del(Obj)
+						qdel(Obj)
 				if(!i)
 					usr << "No objects of this type exist"
 					return
 				log_admin("[key_name(usr)] deleted all objects of type or subtype of [O_type] ([i] objects deleted) ")
-				message_admins("\blue [key_name(usr)] deleted all objects of type or subtype of [O_type] ([i] objects deleted) ")
+				message_admins("<span class='notice'>[key_name(usr)] deleted all objects of type or subtype of [O_type] ([i] objects deleted) </span>")
 
 	else if(href_list["explode"])
 		if(!check_rights(R_DEBUG|R_FUN))	return
@@ -786,7 +836,7 @@ client
 		else
 			usr << "Failed! Something went wrong."
 
-	else if(href_list["addlanguage"])
+	/*else if(href_list["addlanguage"])
 		if(!check_rights(R_SPAWN))	return
 
 		var/mob/H = locate(href_list["addlanguage"])
@@ -823,11 +873,11 @@ client
 			usr << "Mob doesn't exist anymore"
 			return
 
-		if(H.remove_language(rem_language.name))
-			usr << "Removed [rem_language] from [H]."
+		//if(H.remove_language(rem_language.name))
+		//	usr << "Removed [rem_language] from [H]."
 		else
 			usr << "Mob doesn't know that language."
-
+	*/
 	else if(href_list["regenerateicons"])
 		if(!check_rights(0))	return
 
@@ -864,7 +914,7 @@ client
 
 		if(amount != 0)
 			log_admin("[key_name(usr)] dealt [amount] amount of [Text] damage to [L] ")
-			message_admins("\blue [key_name(usr)] dealt [amount] amount of [Text] damage to [L] ")
+			message_admins("<span class='notice'>[key_name(usr)] dealt [amount] amount of [Text] damage to [L] </span>")
 			href_list["datumrefresh"] = href_list["mobToDamage"]
 
 	if(href_list["datumrefresh"])

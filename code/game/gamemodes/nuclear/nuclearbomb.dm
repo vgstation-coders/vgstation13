@@ -38,8 +38,7 @@ var/bomb_set
 /obj/machinery/nuclearbomb/attackby(obj/item/weapon/O as obj, mob/user as mob)
 	if (src.extended)
 		if (istype(O, /obj/item/weapon/disk/nuclear))
-			usr.drop_item()
-			O.loc = src
+			usr.drop_item(O, src)
 			src.auth = O
 			src.add_fingerprint(user)
 			return
@@ -52,7 +51,7 @@ var/bomb_set
 					var/obj/item/weapon/weldingtool/WT = O
 					if(!WT.isOn()) return
 					if (WT.get_fuel() < 5) // uses up 5 fuel.
-						user << "\red You need more fuel to complete this task."
+						user << "<span class='warning'>You need more fuel to complete this task.</span>"
 						return
 
 					user.visible_message("[user] starts cutting loose the anchoring bolt covers on [src].", "You start cutting loose the anchoring bolt covers with [O]...")
@@ -79,7 +78,7 @@ var/bomb_set
 					var/obj/item/weapon/weldingtool/WT = O
 					if(!WT.isOn()) return
 					if (WT.get_fuel() < 5) // uses up 5 fuel.
-						user << "\red You need more fuel to complete this task."
+						user << "<span class='notice'>You need more fuel to complete this task.</span>"
 						return
 
 					user.visible_message("[user] starts cutting apart the anchoring system sealant on [src].", "You start cutting apart the anchoring system's sealant with [O]...")
@@ -115,7 +114,12 @@ var/bomb_set
 	..()
 
 /obj/machinery/nuclearbomb/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
+
+/obj/machinery/nuclearbomb/attack_ghost(mob/user as mob) //prevents ghosts from deploying the nuke
+	if (src.extended) //if the nuke is set
+		return attack_hand(user) //continue as normal
+	return 0 //otherwise nothing
 
 /obj/machinery/nuclearbomb/attack_hand(mob/user as mob)
 	if (src.extended)
@@ -142,9 +146,9 @@ var/bomb_set
 	else if (src.deployable)
 		if(removal_stage < 5)
 			src.anchored = 1
-			visible_message("\red With a steely snap, bolts slide out of [src] and anchor it to the flooring!")
+			visible_message("<span class='notice'>With a steely snap, bolts slide out of [src] and anchor it to the flooring!</span>")
 		else
-			visible_message("\red \The [src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut.")
+			visible_message("<span class='notice'>\The [src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut.</span>")
 		flick("nuclearbombc", src)
 		src.icon_state = "nuclearbomb1"
 		src.extended = 1
@@ -155,21 +159,26 @@ var/bomb_set
 	set name = "Make Deployable"
 	set src in oview(1)
 
+	if (!usr || usr.stat || usr.lying || (usr.status_flags & FAKEDEATH)) return
+	if (!ishuman(usr))
+		usr << "<span class='warning'>You don't have the dexterity to do this!</span>"
+		return
+
 	if (src.deployable)
-		usr << "\red You close several panels to make [src] undeployable."
+		usr << "<span class='notice'>You close several panels to make [src] undeployable.</span>"
 		src.deployable = 0
 	else
-		usr << "\red You adjust some panels to make [src] deployable."
+		usr << "<span class='notice'>You adjust some panels to make [src] deployable.</span>"
 		src.deployable = 1
 
 /obj/machinery/nuclearbomb/Topic(href, href_list)
-	..()
+	if(..()) return 1
 	if (!usr.canmove || usr.stat || usr.restrained())
 		return
 	if (!ishuman(usr))
-		usr << "\red You don't have the dexterity to do this!"
+		usr << "<span class='warning'>You don't have the dexterity to do this!</span>"
 		return 1
-	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))))
+	if (istype(src.loc, /turf))
 		usr.set_machine(src)
 		if (href_list["auth"])
 			if (src.auth)
@@ -179,8 +188,7 @@ var/bomb_set
 			else
 				var/obj/item/I = usr.get_active_hand()
 				if (istype(I, /obj/item/weapon/disk/nuclear))
-					usr.drop_item()
-					I.loc = src
+					usr.drop_item(I, src)
 					src.auth = I
 		if (src.auth)
 			if (href_list["type"])
@@ -207,7 +215,7 @@ var/bomb_set
 					if (src.timing == -1.0)
 						return
 					if (src.safety)
-						usr << "\red The safety is still on."
+						usr << "<span class='warning'>The safety is still on.</span>"
 						return
 					src.timing = !( src.timing )
 					if (src.timing)
@@ -228,14 +236,15 @@ var/bomb_set
 
 					if(removal_stage == 5)
 						src.anchored = 0
-						visible_message("\red \The [src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut.")
+						visible_message("<span class='warning'>\The [src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut.</span>")
 						return
 
 					src.anchored = !( src.anchored )
 					if(src.anchored)
-						visible_message("\red With a steely snap, bolts slide out of [src] and anchor it to the flooring.")
+						visible_message("<span class='warning'>With a steely snap, bolts slide out of [src] and anchor it to the flooring.</span>")
+						playsound(src,'sound/effects/bolt.ogg', 70, 1)
 					else
-						visible_message("\red The anchoring bolts slide back into the depths of [src].")
+						visible_message("<span class='warning'>The anchoring bolts slide back into the depths of [src].</span>")
 
 		src.add_fingerprint(usr)
 		for(var/mob/M in viewers(1, src))
@@ -307,8 +316,10 @@ var/bomb_set
 				if(blackbox)
 					blackbox.save_all_data_to_sql()
 
+				CallHook("Reboot",list())
+
 				if (watchdog.waiting)
-					world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
+					world << "<span class='notice'><B>Server will shut down for an automatic update in a few seconds.</B></span>"
 					watchdog.signal_ready()
 					return
 				sleep(300)
@@ -316,10 +327,21 @@ var/bomb_set
 				world.Reboot()
 				return
 	return
-
-/obj/item/weapon/disk/nuclear/Destroy()
+/**
+ * NOTE: Don't change it to Destroy().
+ */
+/obj/item/weapon/disk/nuclear/Del()
 	if(blobstart.len > 0)
-		var/obj/D = new /obj/item/weapon/disk/nuclear(pick(blobstart))
-		message_admins("[src] has been destroyed. Spawning [D] at ([D.x], [D.y], [D.z]).")
-		log_game("[src] has been destroyed. Spawning [D] at ([D.x], [D.y], [D.z]).")
+		var/picked_turf = get_turf(pick(blobstart))
+
+		var/picked_area = formatLocation(picked_turf)
+
+		var/log_message = "[type] has been destroyed. Creating one at"
+
+		log_game("[log_message] [picked_area]")
+
+		message_admins("[log_message] [formatJumpTo(picked_turf, picked_area)]")
+
+		new /obj/item/weapon/disk/nuclear(picked_turf)
+
 	..()

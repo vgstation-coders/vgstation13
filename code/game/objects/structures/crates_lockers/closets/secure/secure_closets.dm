@@ -58,16 +58,7 @@
 
 /obj/structure/closet/secure_closet/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(src.opened)
-		if(istype(W, /obj/item/weapon/grab))
-			if(src.large)
-				src.MouseDrop_T(W:affecting, user)	//act like they were dragged onto the closet
-			else
-				user << "<span class='notice'>The locker is too small to stuff [W] into!</span>"
-		if(isrobot(user))
-			return
-		user.drop_item()
-		if(W)
-			W.loc = src.loc
+		return ..()
 	else if(src.broken)
 		user << "<span class='notice'>The locker appears to be broken.</span>"
 		return
@@ -88,6 +79,7 @@
 		else
 			for(var/mob/O in viewers(user, 3))
 				O.show_message("<span class='warning'>The locker has been broken by [user] with an electromagnetic card!</span>", 1, "You hear a faint electrical spark.", 2)
+		update_icon()
 	else
 		if(istype(W, /obj/item/weapon/weldingtool))
 			var/obj/item/weapon/weldingtool/WT = W
@@ -105,7 +97,7 @@
 	if(user.stat || !isturf(src.loc))
 		return
 
-	if(!(src.locked))
+	if(!(src.locked) && !(src.welded))
 		for(var/obj/item/I in src)
 			I.loc = src.loc
 		for(var/mob/M in src)
@@ -118,7 +110,10 @@
 		src.density = 0
 		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
 	else
-		user << "<span class='notice'>The locker is locked!</span>"
+		if(!can_open())
+			user << "<span class='notice'>It won't budge!</span>"
+		else
+			user << "<span class='notice'>The locker is locked!</span>"
 		if(world.time > lastbang+5)
 			lastbang = world.time
 			for(var/mob/M in hearers(src, null))
@@ -126,6 +121,8 @@
 	return
 
 /obj/structure/closet/secure_closet/attack_hand(mob/user as mob)
+	if(!Adjacent(user))
+		return
 	src.add_fingerprint(user)
 
 	if(!src.toggle())
@@ -139,7 +136,7 @@
 	set category = "Object"
 	set name = "Toggle Lock"
 
-	if(!usr.canmove || usr.stat || usr.restrained()) // Don't use it if you're not able to! Checks for stuns, ghost and restrain
+	if(!usr.canmove || usr.stat || usr.restrained() || (usr.status_flags & FAKEDEATH)) // Don't use it if you're not able to! Checks for stuns, ghost and restrain
 		return
 
 	if(get_dist(usr, src) != 1)
@@ -155,10 +152,12 @@
 		usr << "<span class='warning'>This mob type can't use this verb.</span>"
 
 /obj/structure/closet/secure_closet/update_icon()//Putting the welded stuff in updateicon() so it's easy to overwrite for special cases (Fridges, cabinets, and whatnot)
-	overlays.Cut()
+	overlays.len = 0
 	if(!opened)
 		if(locked)
 			icon_state = icon_locked
+		else if(broken)
+			icon_state = icon_off
 		else
 			icon_state = icon_closed
 		if(welded)

@@ -5,9 +5,11 @@
 	//Not given any special protective value since the magic robes are full-body protection --NEO
 	siemens_coefficient = 0.8
 
+	wizard_garb = 1
+
 /obj/item/clothing/head/wizard/red
 	name = "red wizard hat"
-	desc = "Strange-looking, red, hat-wear that most certainly belongs to a real magic user."
+	desc = "Strange-looking red hat-wear that most certainly belongs to a real magic user."
 	icon_state = "redwizard"
 	siemens_coefficient = 0.8
 
@@ -29,10 +31,24 @@
 	item_state = "magus"
 	siemens_coefficient = 0.8
 
+/obj/item/clothing/head/wizard/clown
+	name = "purple wizard hat"
+	desc = "Strange-looking purple hat-wear that most certainly belongs to a real magic user."
+	icon_state = "wizhatclown"
+	item_state = "wizhatclown" // cheating
+	siemens_coefficient = 0.8
+
 /obj/item/clothing/head/wizard/amp
 	name = "psychic amplifier"
 	desc = "A crown-of-thorns psychic amplifier. Kind of looks like a tiara having sex with an industrial robot."
 	icon_state = "amp"
+	siemens_coefficient = 0.8
+
+/obj/item/clothing/head/wizard/necro
+	name = "Hood of Necromancy"
+	desc = "An elegant hood woven with the souls of the undying."
+	icon_state = "necromancer"
+	item_state = "necrohood"
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/suit/wizrobe
@@ -48,12 +64,13 @@
 	flags_inv = HIDEJUMPSUIT
 	siemens_coefficient = 0.8
 
+	wizard_garb = 1
+
 /obj/item/clothing/suit/wizrobe/red
 	name = "red wizard robe"
 	desc = "A magnificant, red, gem-lined robe that seems to radiate power."
 	icon_state = "redwizard"
 	item_state = "redwizrobe"
-
 
 /obj/item/clothing/suit/wizrobe/marisa
 	name = "Witch Robe"
@@ -73,6 +90,12 @@
 	icon_state = "magusred"
 	item_state = "magusred"
 
+/obj/item/clothing/suit/wizrobe/clown
+	name = "Clown Robe"
+	desc = "A set of armoured robes that seem to radiate a dark power.  That, and bad fashion decisions."
+	icon_state = "wizzclown"
+	item_state = "clownwizrobe"
+
 /obj/item/clothing/suit/wizrobe/psypurple
 	name = "purple robes"
 	desc = "Heavy, royal purple robes threaded with psychic amplifiers and weird, bulbous lenses. Do not machine wash."
@@ -87,6 +110,12 @@
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 1.0
+
+/obj/item/clothing/suit/wizrobe/necro
+	name = "Robe of Necromancy"
+	desc = "An elegant robe woven with the souls of the undying."
+	icon_state = "necromancer"
+	item_state = "necrorobe"
 
 /obj/item/clothing/head/wizard/marisa/fake
 	name = "Witch Hat"

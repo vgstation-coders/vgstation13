@@ -51,23 +51,21 @@
 		if(scan_process++ > target_scan_ticks)
 			FinishScan()
 		else if(temperature > 400)
-			src.visible_message("\blue \icon[src] shuts down from the heat!", 2)
+			src.visible_message("<span class='notice'>\icon[src] shuts down from the heat!</span>", 2)
 			scan_process = 0
 		else if(temperature > 350 && prob(10))
-			src.visible_message("\blue \icon[src] bleets plaintively.", 2)
+			src.visible_message("<span class='notice'>\icon[src] bleets plaintively.</span>", 2)
 			if(temperature > 400)
 				scan_process = 0
 
 		//show we're busy
 		if(prob(5))
-			src.visible_message("\blue \icon[src] [pick("whirrs","chuffs","clicks")][pick(" quietly"," softly"," sadly"," excitedly"," energetically"," angrily"," plaintively")].", 2)
+			src.visible_message("<span class='notice'>\icon[src] [pick("whirrs","chuffs","clicks")][pick(" quietly"," softly"," sadly"," excitedly"," energetically"," angrily"," plaintively")].</span>", 2)
 
 		use_power = 2
 
 	else
 		use_power = 1
-
-	auto_use_power()
 
 	//Add 3000 joules when active.  This is about 0.6 degrees per tick.
 	//May need adjustment
@@ -89,7 +87,7 @@
 			removed.temperature = max(TCMB, removed.temperature + heat_added/heat_capacity)
 
 			if(temperature_difference > 10 && prob(5))
-				src.visible_message("\blue \icon[src] hisses softly.", 2)
+				src.visible_message("<span class='notice'>\icon[src] hisses softly.</span>", 2)
 
 		else
 			//heat up to match the air
@@ -97,7 +95,7 @@
 			removed.temperature = max(TCMB, removed.temperature - heat_added/heat_capacity)
 
 			if(temperature_difference > 10 && prob(5))
-				src.visible_message("\blue \icon[src] plinks quietly.", 2)
+				src.visible_message("<span class='notice'>\icon[src] plinks quietly.</span>", 2)
 
 		env.merge(removed)
 
@@ -136,21 +134,21 @@ obj/machinery/anomaly/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	if(istype(W, /obj/item/weapon/reagent_containers/glass))
 		//var/obj/item/weapon/reagent_containers/glass/G = W
 		if(held_container)
-			user << "\red You must remove the [held_container] first."
+			user << "<span class='warning'>You must remove the [held_container] first.</span>"
 		else
-			user << "\blue You put the [W] into the [src]."
-			user.drop_item(W)
+			user << "<span class='notice'>You put the [W] into the [src].</span>"
+			user.drop_item(W, src)
+
 			held_container = W
-			held_container.loc = src
 			updateDialog()
 
 	/*else if(istype(W, /obj/item/weapon/tank))
 		//var/obj/item/weapon/reagent_containers/glass/G = W
 		if(fuel_container)
-			user << "\red You must remove the [fuel_container] first."
+			user << "<span class='warning'>You must remove the [fuel_container] first.</span>"
 		else
-			user << "\blue You put the [fuel_container] into the [src]."
-			user.drop_item(W)
+			user << "<span class='notice'>You put the [fuel_container] into the [src].</span>"
+			user.drop_item(W, src)
 			fuel_container.loc = src
 			fuel_container = W
 			updateDialog()*/
@@ -159,7 +157,7 @@ obj/machinery/anomaly/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
 obj/machinery/anomaly/proc/ScanResults()
 	//instantiate in children to produce unique scan behaviour
-	return "\red Error initialising scanning components."
+	return "<span class='warning'>Error initialising scanning components.</span>"
 
 obj/machinery/anomaly/proc/FinishScan()
 	scan_process = 0
@@ -167,14 +165,14 @@ obj/machinery/anomaly/proc/FinishScan()
 
 	//determine the results and print a report
 	if(held_container)
-		src.visible_message("\blue \icon[src] makes an insistent chime.", 2)
+		src.visible_message("<span class='notice'>\icon[src] makes an insistent chime.</span>", 2)
 		var/obj/item/weapon/paper/P = new(src.loc)
 		P.name = "[src] report #[++report_num]"
 		P.info = "<b>[src] analysis report #[report_num]</b><br><br>" + ScanResults()
 		P.stamped = list(/obj/item/weapon/stamp)
 		P.overlays = list("paper_stamped")
 	else
-		src.visible_message("\blue \icon[src] makes a low buzzing noise.", 2)
+		src.visible_message("<span class='notice'>\icon[src] makes a low buzzing noise.</span>", 2)
 
 obj/machinery/anomaly/Topic(href, href_list)
 	if(..()) return
@@ -191,7 +189,7 @@ obj/machinery/anomaly/Topic(href, href_list)
 	if(href_list["begin"])
 		if(temperature >= 350)
 			var/proceed = input("Unsafe internal temperature detected, enter YES below to continue.","Warning")
-			if(proceed == "YES" && get_dist(src, usr) <= 1)
+			if(proceed == "YES" && !..()) //call parent again to run distance and power checks again.
 				scan_process = 1
 		else
 			scan_process = 1

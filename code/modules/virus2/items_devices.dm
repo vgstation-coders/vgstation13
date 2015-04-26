@@ -1,7 +1,3 @@
-/obj/machinery/proc/state(var/msg)
-	for(var/mob/O in hearers(src, null))
-		O.show_message("\icon[src] <span class = 'notice'>[msg]</span>", 2)
-
 ///////////////ANTIBODY SCANNER///////////////
 
 /obj/item/device/antibody_scanner
@@ -10,7 +6,8 @@
 	icon_state = "antibody"
 	w_class = 2.0
 	item_state = "electronic"
-	flags = FPRINT | TABLEPASS | CONDUCT | USEDELAY
+	flags = FPRINT
+	siemens_coefficient = 1
 
 
 /obj/item/device/antibody_scanner/attack(mob/living/carbon/M as mob, mob/user as mob)
@@ -35,15 +32,13 @@
 	var/info = 0
 	var/analysed = 0
 
-	reagents = list()
-
 /obj/item/weapon/virusdish/random
 	name = "Virus Sample"
 
-/obj/item/weapon/virusdish/random/New()
-	..()
-	src.virus2 = new /datum/disease2/disease
-	src.virus2.makerandom()
+/obj/item/weapon/virusdish/random/New(loc)
+	..(loc)
+	virus2 = new /datum/disease2/disease
+	virus2.makerandom()
 	growth = rand(5, 50)
 
 /obj/item/weapon/virusdish/attackby(var/obj/item/weapon/W as obj,var/mob/living/carbon/user as mob)
@@ -56,14 +51,14 @@
 			for(var/mob/living/carbon/target in view(1, get_turf(src)))
 				if(airborne_can_reach(get_turf(src), get_turf(target)))
 					if(get_infection_chance(target))
-						infect_virus2(target,src.virus2)
+						infect_virus2(target,src.virus2, notes="([src] attacked by [key_name(user)])")
 		del src
 
-/obj/item/weapon/virusdish/examine()
-	usr << "This is a virus containment dish"
+/obj/item/weapon/virusdish/examine(mob/user)
+	..()
 	if(src.info)
-		usr << "It has the following information about its contents"
-		usr << src.info
+		user << "<span class='info'>It has the following information about its contents</span>"
+		user << src.info
 
 ///////////////GNA DISK///////////////
 

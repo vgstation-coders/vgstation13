@@ -85,8 +85,13 @@ Class Procs:
 
 /connection_edge/proc/tick()
 
-/connection_edge/proc/flow(list/movable, differential, repelled)
+/connection_edge/proc/flow(list/movable, differential, repelled, flipped = 0)
+	//Flipped tells us if we are going from A to B or from B to A.
+	if(!zas_settings.Get(/datum/ZAS_Setting/airflow_push))
+		return
 	for(var/atom/movable/M in movable)
+		if(!M.AirflowCanPush())
+			continue
 		//If they're already being tossed, don't do it again.
 		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
 			continue
@@ -110,11 +115,20 @@ Class Procs:
 			M.airflow_dest = pick(close_turfs) //Pick a random midpoint to fly towards.
 
 			if(M)
-				// THERE WAS A SPAWN HERE.  STOP DOING THIS SHIT. - N3X
 				if(repelled)
+					if(flipped)
+						if(!(M.loc in src:A.contents))
+							continue
+					else if(!(M.loc in src:B.contents))
+						continue
 					M.RepelAirflowDest(differential/5)
 				else
-					M.GotoAirflowDest(differential/10)
+					if(flipped)
+						if(!(M.loc in src:B.contents))
+							continue
+					else if(!(M.loc in src:A.contents))
+						continue
+						M.GotoAirflowDest(differential/10)
 
 
 
@@ -173,15 +187,17 @@ Class Procs:
 
 	var/list/attracted
 	var/list/repelled
+	var/flipped = 0
 	if(differential > 0)
 		attracted = A.movables()
 		repelled = B.movables()
 	else
+		flipped = 1
 		attracted = B.movables()
 		repelled = A.movables()
 
-	flow(attracted, abs(differential), 0)
-	flow(repelled, abs(differential), 1)
+	flow(attracted, abs(differential), 0, flipped)
+	flow(repelled, abs(differential), 1, flipped)
 
 //Helper proc to get connections for a zone.
 /connection_edge/zone/proc/get_connected_zone(zone/from)

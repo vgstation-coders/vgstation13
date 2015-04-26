@@ -14,8 +14,7 @@
 		var/mob/living/carbon/C = user
 		if(!container)
 			container = I
-			C.drop_item()
-			I.loc = src
+			C.drop_item(I, src)
 	if(istype(I,/obj/item/weapon/virusdish))
 		if(virusing)
 			user << "<b>The pathogen materializer is still recharging.."
@@ -29,7 +28,7 @@
 		virusing = 1
 		spawn(1200) virusing = 0
 
-		state("The [src.name] Buzzes", "blue")
+		alert_noise("buzz")
 		return
 	src.attack_hand(user)
 	return
@@ -110,4 +109,4 @@
 	data["antibodies"] = B.data["antibodies"]
 	product.reagents.add_reagent("antibodies",30,data)
 
-	state("\The [src.name] buzzes", "blue")
+	alert_noise("buzz")

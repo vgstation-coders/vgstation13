@@ -25,10 +25,12 @@
 		new /obj/item/weapon/cartridge/ce(src)
 		new /obj/item/device/radio/headset/heads/ce(src)
 		new /obj/item/weapon/storage/toolbox/mechanical(src)
+		new /obj/item/device/device_analyser/advanced(src)
 		new /obj/item/clothing/suit/storage/hazardvest(src)
 		new /obj/item/clothing/mask/gas(src)
 		new /obj/item/device/multitool(src)
 		new /obj/item/device/flash(src)
+		new /obj/item/device/gps/engineering(src)
 		return
 
 
@@ -114,6 +116,72 @@
 		new /obj/item/clothing/glasses/meson(src)
 		new /obj/item/taperoll/engineering(src)
 		new /obj/item/taperoll/engineering(src)
+		new /obj/item/device/gps/engineering(src)
+		return
+
+/obj/structure/closet/secure_closet/engineering_atmos
+	name = "Atmospheric Technician's Locker"
+	req_access = list(access_atmospherics)
+	icon_state = "secureatmos1"
+	icon_closed = "secureatmos"
+	icon_locked = "secureatmos1"
+	icon_opened = "secureatmosopen"
+	icon_broken = "secureatmosbroken"
+	icon_off = "secureatmosoff"
+
+	New()
+		..()
+		sleep(2)
+		if(prob(50))
+			new /obj/item/weapon/storage/backpack(src)
+		else
+			new /obj/item/weapon/storage/backpack/satchel_norm(src)
+		new /obj/item/clothing/under/rank/atmospheric_technician(src)
+		new /obj/item/clothing/shoes/black(src)
+		new /obj/item/weapon/storage/toolbox/mechanical(src)
+		new /obj/item/weapon/extinguisher/foam(src)
+		// new /obj/item/weapon/cartridge/engineering(src)
+		new /obj/item/device/radio/headset/headset_eng(src)
+		new /obj/item/clothing/suit/storage/hazardvest(src)
+		new /obj/item/clothing/mask/gas(src)
+		new /obj/item/taperoll/atmos(src)
+		new /obj/item/weapon/wrench/socket(src)
+		new /obj/item/weapon/gun/projectile/flare(src) //yay for emergency lighting
+		new /obj/item/ammo_storage/box/flare(src)
+		new /obj/item/weapon/pipe_dispenser(src)
+		new /obj/item/device/analyzer(src)
+		return
+
+/obj/structure/closet/secure_closet/engineering_mechanic
+	name = "Mechanic's Locker"
+	req_access = list(access_mechanic)
+	icon_state = "securemechni1"
+	icon_closed = "securemechni"
+	icon_locked = "securemechni1"
+	icon_opened = "securemechniopen"
+	icon_broken = "securemechnibroken"
+	icon_off = "securemechnioff"
+
+	New()
+		..()
+		sleep(2)
+		if(prob(50))
+			new /obj/item/weapon/storage/backpack/industrial(src)
+		else
+			new /obj/item/weapon/storage/backpack/satchel_eng(src)
+		new /obj/item/clothing/under/rank/mechanic(src)
+		new /obj/item/clothing/shoes/white(src)
+		new /obj/item/weapon/storage/toolbox/mechanical(src)
+		//new /obj/item/device/component_exchanger(src)
+		new /obj/item/device/radio/headset/headset_engsci(src)
+		new /obj/item/clothing/suit/storage/hazardvest(src)
+		new /obj/item/device/device_analyser(src)
+		new /obj/item/weapon/soap/nanotrasen(src)
+		new /obj/item/clothing/gloves/black(src)
+		if(prob(50))
+			new /obj/item/clothing/head/welding(src)
+		else
+			new /obj/item/clothing/glasses/welding(src)
 		return
 
 /obj/structure/closet/secure_closet/engineering_general
@@ -125,3 +193,11 @@
 	icon_opened = "secureengopen"
 	icon_broken = "secureengbroken"
 	icon_off = "secureengoff"
+
+
+/obj/structure/closet/crate/secure/large/reinforced/shard
+	name = "Supermatter Shard Crate"
+	New()
+		..()
+		sleep(2)
+		new /obj/machinery/power/supermatter/shard(src)

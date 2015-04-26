@@ -10,18 +10,16 @@
 	ghost_read=0 // #430
 	ghost_write=0
 
+	l_color = "#0000FF"
+
 /obj/machinery/computer/teleporter/New()
-	src.id = "[rand(1000, 9999)]"
-	..()
-	component_parts = list()
-	component_parts += new /obj/item/weapon/circuitboard/teleporter
-	RefreshParts()
-
-	return
-
+	. = ..()
+	id = "[rand(1000, 9999)]"
 
 /obj/machinery/computer/teleporter/attackby(I as obj, mob/living/user as mob)
-	if(istype(I, /obj/item/weapon/card/data/))
+	if(..())
+		return 1
+	else if(istype(I, /obj/item/weapon/card/data/))
 		var/obj/item/weapon/card/data/C = I
 		if(stat & (NOPOWER|BROKEN) & (C.function != "teleporter"))
 			src.attack_hand()
@@ -41,14 +39,14 @@
 		if(istype(L, /obj/effect/landmark/) && istype(L.loc, /turf))
 			usr << "You insert the coordinates into the machine."
 			usr << "A message flashes across the screen reminding the traveller that the nuclear authentication disk is to remain on the station at all times."
-			user.drop_item()
-			del(I)
+			user.drop_item(I)
+			qdel(I)
 
 			/* FUCK YOU
 			if(C.data == "Clown Land")
 				//whoops
 				for(var/mob/O in hearers(src, null))
-					O.show_message("\red Incoming bluespace portal detected, unable to lock in.", 2)
+					O.show_message("<span class='warning'>Incoming bluespace portal detected, unable to lock in.</span>", 2)
 
 				for(var/obj/machinery/teleport/hub/H in range(1))
 					var/amount = rand(2,5)
@@ -58,14 +56,11 @@
 			else
 			*/
 			for(var/mob/O in hearers(src, null))
-				O.show_message("\blue Locked In", 2)
+				O.show_message("<span class='notice'>Locked In</span>", 2)
 			src.locked = L
 			one_time_use = 1
 
 			src.add_fingerprint(usr)
-	else
-		..()
-
 	return
 
 /obj/machinery/computer/teleporter/attack_paw(var/mob/user)
@@ -115,7 +110,7 @@
 	var/desc = input("Please select a location to lock in.", "Locking Computer") in L
 	src.locked = L[desc]
 	for(var/mob/O in hearers(src, null))
-		O.show_message("\blue Locked In", 2)
+		O.show_message("<span class='notice'>Locked In</span>", 2)
 	src.add_fingerprint(usr)
 	return
 
@@ -130,14 +125,6 @@
 	if (t)
 		src.id = t
 	return
-
-/proc/find_loc(obj/R as obj)
-	if (!R)	return null
-	var/turf/T = R.loc
-	while(!istype(T, /turf))
-		T = T.loc
-		if(!T || istype(T, /area))	return null
-	return T
 
 /obj/machinery/teleport
 	name = "teleport"
@@ -158,59 +145,44 @@
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 2000
+	var/engaged = 0
+
+	machine_flags = SCREWTOGGLE | CROWDESTROY
 
 /obj/machinery/teleport/hub/attackby(obj/item/weapon/O as obj, mob/user as mob)
-	if (istype(O, /obj/item/weapon/screwdriver))
-		if (!opened)
-			src.opened = 1
-			user << "You open the maintenance hatch of [src]."
-			//src.icon_state = "autolathe_t"
-		else
-			src.opened = 0
-			user << "You close the maintenance hatch of [src]."
-			//src.icon_state = "autolathe"
-			return 1
-	else if(istype(O, /obj/item/weapon/crowbar))
-		if (opened)
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-			return 1
+	return(..())
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
 /obj/machinery/teleport/hub/New()
-	..()
-	component_parts = list()
-	component_parts += new /obj/item/weapon/circuitboard/telehub
-	component_parts += new /obj/item/weapon/stock_parts/scanning_module/phasic
-	component_parts += new /obj/item/weapon/stock_parts/scanning_module/phasic
-	component_parts += new /obj/item/weapon/stock_parts/capacitor/super
-	component_parts += new /obj/item/weapon/stock_parts/capacitor/super
-	component_parts += new /obj/item/weapon/stock_parts/capacitor/super
-	component_parts += new /obj/item/weapon/stock_parts/subspace/ansible
-	component_parts += new /obj/item/weapon/stock_parts/subspace/ansible
-	component_parts += new /obj/item/weapon/stock_parts/subspace/filter
-	component_parts += new /obj/item/weapon/stock_parts/subspace/filter
-	component_parts += new /obj/item/weapon/stock_parts/subspace/treatment
-	component_parts += new /obj/item/weapon/stock_parts/subspace/crystal
-	component_parts += new /obj/item/weapon/stock_parts/subspace/crystal
-	component_parts += new /obj/item/weapon/stock_parts/subspace/transmitter
-	component_parts += new /obj/item/weapon/stock_parts/subspace/transmitter
-	component_parts += new /obj/item/weapon/stock_parts/subspace/transmitter
-	component_parts += new /obj/item/weapon/stock_parts/subspace/transmitter
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/telehub,
+		/obj/item/weapon/stock_parts/scanning_module/phasic,
+		/obj/item/weapon/stock_parts/scanning_module/phasic,
+		/obj/item/weapon/stock_parts/capacitor/super,
+		/obj/item/weapon/stock_parts/capacitor/super,
+		/obj/item/weapon/stock_parts/capacitor/super,
+		/obj/item/weapon/stock_parts/subspace/ansible,
+		/obj/item/weapon/stock_parts/subspace/ansible,
+		/obj/item/weapon/stock_parts/subspace/filter,
+		/obj/item/weapon/stock_parts/subspace/filter,
+		/obj/item/weapon/stock_parts/subspace/treatment,
+		/obj/item/weapon/stock_parts/subspace/crystal,
+		/obj/item/weapon/stock_parts/subspace/crystal,
+		/obj/item/weapon/stock_parts/subspace/transmitter,
+		/obj/item/weapon/stock_parts/subspace/transmitter,
+		/obj/item/weapon/stock_parts/subspace/transmitter,
+		/obj/item/weapon/stock_parts/subspace/transmitter
+	)
+
 	RefreshParts()
 
 /obj/machinery/teleport/hub/Bumped(M as mob|obj)
 	spawn()
-		if (src.icon_state == "tele1")
+		if (src.engaged)
 			teleport(M)
 			use_power(5000)
 	return
@@ -222,7 +194,7 @@
 		return
 	if (!com.locked)
 		for(var/mob/O in hearers(src, null))
-			O.show_message("\red Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.")
+			O.show_message("<span class='warning'>Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.</span>")
 		return
 	if (istype(M, /atom/movable))
 		if(prob(5) && !accurate) //oh dear a problem, put em in deep space
@@ -238,7 +210,7 @@
 		s.set_up(5, 1, src)
 		s.start()
 		for(var/mob/B in hearers(src, null))
-			B.show_message("\blue Test fire completed.")
+			B.show_message("<span class='notice'>Test fire completed.</span>")
 	return
 /*
 /proc/do_teleport(atom/movable/M as mob|obj, atom/destination, precision)
@@ -247,12 +219,12 @@
 		return
 	if (istype(M, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite
 		for(var/mob/O in viewers(M, null))
-			O.show_message(text("\red <B>The [] bounces off of the portal!</B>", M.name), 1)
+			O.show_message(text("<span class='danger'>The [] bounces off of the portal!</span>", M.name), 1)
 		return
 	if (istype(M, /mob/living))
 		var/mob/living/MM = M
 		if(MM.check_contents_for(/obj/item/weapon/disk/nuclear))
-			MM << "\red Something you are carrying seems to be unable to pass through the portal. Better drop it if you want to go through."
+			MM << "<span class='warning'>Something you are carrying seems to be unable to pass through the portal. Better drop it if you want to go through.</span>"
 			return
 	var/disky = 0
 	for (var/atom/O in M.contents) //I'm pretty sure this accounts for the maximum amount of container in container stacking. --NeoFite
@@ -272,14 +244,14 @@
 				disky = 1
 	if (disky)
 		for(var/mob/P in viewers(M, null))
-			P.show_message(text("\red <B>The [] bounces off of the portal!</B>", M.name), 1)
+			P.show_message(text("<span class='danger'>The [] bounces off of the portal!</span>", M.name), 1)
 		return
 
 //Bags of Holding cause bluespace teleportation to go funky. --NeoFite
 	if (istype(M, /mob/living))
 		var/mob/living/MM = M
 		if(MM.check_contents_for(/obj/item/weapon/storage/backpack/holding))
-			MM << "\red The Bluespace interface on your Bag of Holding interferes with the teleport!"
+			MM << "<span class='warning'>The Bluespace interface on your Bag of Holding interferes with the teleport!</span>"
 			precision = rand(1,100)
 	if (istype(M, /obj/item/weapon/storage/backpack/holding))
 		precision = rand(1,100)
@@ -338,51 +310,36 @@
 	idle_power_usage = 10
 	active_power_usage = 2000
 
+	machine_flags = SCREWTOGGLE | CROWDESTROY
+
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
 obj/machinery/teleport/station/New()
-	..()
-	component_parts = list()
-	component_parts += new /obj/item/weapon/circuitboard/telestation
-	component_parts += new /obj/item/weapon/stock_parts/scanning_module/phasic
-	component_parts += new /obj/item/weapon/stock_parts/scanning_module/phasic
-	component_parts += new /obj/item/weapon/stock_parts/capacitor/super
-	component_parts += new /obj/item/weapon/stock_parts/capacitor/super
-	component_parts += new /obj/item/weapon/stock_parts/subspace/ansible
-	component_parts += new /obj/item/weapon/stock_parts/subspace/ansible
-	component_parts += new /obj/item/weapon/stock_parts/subspace/analyzer
-	component_parts += new /obj/item/weapon/stock_parts/subspace/analyzer
-	component_parts += new /obj/item/weapon/stock_parts/subspace/analyzer
-	component_parts += new /obj/item/weapon/stock_parts/subspace/analyzer
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/telestation,
+		/obj/item/weapon/stock_parts/scanning_module/phasic,
+		/obj/item/weapon/stock_parts/scanning_module/phasic,
+		/obj/item/weapon/stock_parts/capacitor/super,
+		/obj/item/weapon/stock_parts/capacitor/super,
+		/obj/item/weapon/stock_parts/subspace/ansible,
+		/obj/item/weapon/stock_parts/subspace/ansible,
+		/obj/item/weapon/stock_parts/subspace/analyzer,
+		/obj/item/weapon/stock_parts/subspace/analyzer,
+		/obj/item/weapon/stock_parts/subspace/analyzer,
+		/obj/item/weapon/stock_parts/subspace/analyzer
+	)
+
 	RefreshParts()
 
-
 /obj/machinery/teleport/station/attackby(var/obj/item/weapon/W, var/mob/user as mob)
-	if (istype(W, /obj/item/weapon/screwdriver))
-		if (!opened)
-			src.opened = 1
-			user << "You open the maintenance hatch of [src]."
-			//src.icon_state = "autolathe_t"
-		else
-			src.opened = 0
-			user << "You close the maintenance hatch of [src]."
-			//src.icon_state = "autolathe"
-			return 1
-	else if(istype(W, /obj/item/weapon/crowbar))
-		if (opened)
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-			return 1
-	else src.attack_hand()
+	if (..())
+		return 1
+	else
+		src.attack_hand()
 
 /obj/machinery/teleport/station/attack_paw(var/mob/user)
 	src.attack_hand(user)
@@ -403,10 +360,12 @@ obj/machinery/teleport/station/New()
 	var/atom/l = src.loc
 	var/atom/com = locate(/obj/machinery/teleport/hub, locate(l.x + 1, l.y, l.z))
 	if (com)
-		com.icon_state = "tele1"
+		var/obj/machinery/teleport/hub/H = com
+		H.engaged = 1
+		H.icon_state = "tele1"
 		use_power(5000)
 		for(var/mob/O in hearers(src, null))
-			O.show_message("\blue Teleporter engaged!", 2)
+			O.show_message("<span class='notice'>Teleporter engaged!</span>", 2)
 	src.add_fingerprint(usr)
 	src.engaged = 1
 	return
@@ -418,9 +377,11 @@ obj/machinery/teleport/station/New()
 	var/atom/l = src.loc
 	var/atom/com = locate(/obj/machinery/teleport/hub, locate(l.x + 1, l.y, l.z))
 	if (com)
-		com.icon_state = "tele0"
+		var/obj/machinery/teleport/hub/H = com
+		H.engaged = 0
+		H.icon_state = "tele0"
 		for(var/mob/O in hearers(src, null))
-			O.show_message("\blue Teleporter disengaged!", 2)
+			O.show_message("<span class='notice'>Teleporter disengaged!</span>", 2)
 	src.add_fingerprint(usr)
 	src.engaged = 0
 	return
@@ -438,7 +399,7 @@ obj/machinery/teleport/station/New()
 	if (com && !active)
 		active = 1
 		for(var/mob/O in hearers(src, null))
-			O.show_message("\blue Test firing!", 2)
+			O.show_message("<span class='notice'>Test firing!</span>", 2)
 		com.teleport()
 		use_power(5000)
 

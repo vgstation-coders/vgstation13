@@ -15,16 +15,19 @@
 	name = "welding helmet"
 	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye."
 	icon_state = "welding"
-	flags = (FPRINT | TABLEPASS | HEADCOVERSEYES | HEADCOVERSMOUTH)
+	flags = FPRINT
 	item_state = "welding"
 	m_amt = 3000
 	g_amt = 1000
 	w_type = RECYK_MISC
 	var/up = 0
+	eyeprot = 3
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	flags_inv = (HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE)
-	icon_action_button = "action_welding"
+	body_parts_covered = HEAD|EYES|MOUTH|EARS //using this instead of FULL_HEAD to show how the flags change in the code
+	action_button_name = "Toggle Welding Helmet"
 	siemens_coefficient = 0.9
+	species_fit = list("Vox")
 
 /obj/item/clothing/head/welding/attack_self()
 	toggle()
@@ -38,17 +41,20 @@
 	if(usr.canmove && !usr.stat && !usr.restrained())
 		if(src.up)
 			src.up = !src.up
-			src.flags |= (HEADCOVERSEYES | HEADCOVERSMOUTH)
+			src.body_parts_covered |= (EYES|MOUTH|EARS)
 			flags_inv |= (HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE)
+			eyeprot = 3
 			icon_state = initial(icon_state)
 			usr << "You flip the [src] down to protect your eyes."
 		else
 			src.up = !src.up
-			src.flags &= ~(HEADCOVERSEYES | HEADCOVERSMOUTH)
+			src.body_parts_covered &= ~(EYES|MOUTH|EARS)
 			flags_inv &= ~(HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE)
 			icon_state = "[initial(icon_state)]up"
+			eyeprot = 0
 			usr << "You push the [src] up out of your face."
 		usr.update_inv_head()	//so our mob-overlays update
+		usr.update_inv_wear_mask()
 
 
 /*
@@ -58,7 +64,8 @@
 	name = "cake-hat"
 	desc = "It's tasty looking!"
 	icon_state = "cake0"
-	flags = FPRINT|TABLEPASS|HEADCOVERSEYES
+	flags = FPRINT
+	body_parts_covered = HEAD|EYES
 	var/onfire = 0.0
 	var/status = 0
 	var/fire_resist = T0C+1300	//this is the max temp it can stand before you start to cook. although it might not burn away, you take damage
@@ -72,8 +79,11 @@
 	var/turf/location = src.loc
 	if(istype(location, /mob/))
 		var/mob/living/carbon/human/M = location
-		if(M.l_hand == src || M.r_hand == src || M.head == src)
-			location = M.loc
+		if(istype(M))
+			if(M.l_hand == src || M.r_hand == src || M.head == src)
+				location = M.loc
+		else
+			return
 
 	if (istype(location, /turf))
 		location.hotspot_expose(700, 1)
@@ -122,8 +132,9 @@
 	icon_state = "hardhat0_pumpkin"//Could stand to be renamed
 	item_state = "hardhat0_pumpkin"
 	_color = "pumpkin"
-	flags = FPRINT | TABLEPASS | HEADCOVERSEYES | HEADCOVERSMOUTH | BLOCKHAIR
-	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
+	flags = FPRINT
+	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR
+	body_parts_covered = FULL_HEAD
 	var/brightness_on = 2 //luminosity when on
 	var/on = 0
 
@@ -157,7 +168,7 @@
 	name = "kitty ears"
 	desc = "A pair of kitty ears. Meow!"
 	icon_state = "kitty"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	var/icon/mob
 	var/icon/mob2
 	siemens_coefficient = 1.5
@@ -173,3 +184,29 @@
 		var/icon/earbit2 = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner2")
 		mob.Blend(earbit, ICON_OVERLAY)
 		mob2.Blend(earbit2, ICON_OVERLAY)
+
+
+
+
+
+/obj/item/clothing/head/butt
+	name = "butt"
+	desc = "So many butts, so little time."
+	icon_state = "butt"
+	item_state = "butt"
+	flags = 0
+	force = 4.0
+	w_class = 1.0
+	throwforce = 2
+	throw_speed = 3
+	throw_range = 5
+
+	wizard_garb = 1
+
+	var/s_tone = 0.0
+	var/created_name = "Buttbot"
+
+	proc
+		transfer_buttdentity(var/mob/living/carbon/H)
+			name = "[H]'s butt"
+			return

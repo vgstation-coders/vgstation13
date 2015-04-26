@@ -177,6 +177,8 @@ datum/hud/New(mob/owner)
 		human_hud(ui_style, ui_color, ui_alpha) // Pass the player the UI style chosen in preferences
 	else if(ismonkey(mymob))
 		monkey_hud(ui_style)
+	else if(iscorgi(mymob))
+		corgi_hud()
 	else if(isbrain(mymob))
 		brain_hud(ui_style)
 	else if(islarva(mymob))
@@ -193,6 +195,12 @@ datum/hud/New(mob/owner)
 		ghost_hud()
 	else if(isovermind(mymob))
 		blob_hud()
+	else if(isshade(mymob))
+		shade_hud()
+	else if(isconstruct(mymob))
+		construct_hud()
+	else if(isobserver(mymob))
+		ghost_hud()
 
 
 //Triggered when F12 is pressed (Unless someone changed something in the DMF)
@@ -242,6 +250,6 @@ datum/hud/New(mob/owner)
 			hud_used.persistant_inventory_update()
 			update_action_buttons()
 		else
-			usr << "\red Inventory hiding is currently only supported for human mobs, sorry."
+			usr << "<span class='warning'>Inventory hiding is currently only supported for human mobs, sorry.</span>"
 	else
-		usr << "\red This mob type does not use a HUD."
+		usr << "<span class='warning'>This mob type does not use a HUD.</span>"

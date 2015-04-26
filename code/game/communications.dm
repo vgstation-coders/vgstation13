@@ -60,7 +60,28 @@
       If receiving object don't know right key, it must ignore encrypted signal in its receive_signal.
 
 */
+var/list/all_radios = list()
+/proc/add_radio(var/obj/item/radio, freq)
+	if(!freq || !radio)
+		return
+	if(!all_radios["[freq]"])
+		all_radios["[freq]"] = list(radio)
+		return freq
 
+	all_radios["[freq]"] |= radio
+	return freq
+
+/proc/remove_radio(var/obj/item/radio, freq)
+	if(!freq || !radio)
+		return
+	if(!all_radios["[freq]"])
+		return
+
+	all_radios["[freq]"] -= radio
+
+/proc/remove_radio_all(var/obj/item/radio)
+	for(var/freq in all_radios)
+		all_radios["[freq]"] -= radio
 /*
 Frequency range: 1200 to 1600
 Radiochat range: 1441 to 1489 (most devices refuse to be tune to other frequency, even during mapmaking)
@@ -74,7 +95,7 @@ Radio:
 1359 - Security
 1441 - death squad
 1443 - Confession Intercom
-1349 - Miners
+1349 - Botany, chef, bartender
 1347 - Cargo techs
 
 Devices:
@@ -99,27 +120,42 @@ On the map:
 
 var/list/radiochannels = list(
 	"Common" = 1459,
-	"Science" = 1351,
+	"AI Private" = 1447,
+	"Deathsquad" = 1441,
+	"Security" = 1359,
+	"Engineering" = 1357,
 	"Command" = 1353,
 	"Medical" = 1355,
-	"Engineering" = 1357,
-	"Security" = 1359,
-	"Response Team" = 1345,
-	"Deathsquad" = 1341,
-	"Syndicate" = 1213,
+	"Science" = 1351,
+	"Service" = 1349,
 	"Supply" = 1347,
+	"Response Team" = 1345,
+	"Syndicate" = 1213
 )
+
+var/list/radiochannelsreverse = list(
+	"1213" = "Syndicate",
+	"1345" = "Response Team",
+	"1347" = "Supply",
+	"1349" = "Service",
+	"1351" = "Science",
+	"1355" = "Medical",
+	"1353" = "Command",
+	"1357" = "Engineering",
+	"1359" = "Security",
+	"1441" = "Deathsquad",
+	"1447" = "AI Private",
+	"1459" = "Common"
+)
+
+
 //depenging helpers
-var/list/DEPT_FREQS = list(
-	1351,
-	1355,
-	1357,
-	1359,
-	1213,
-	1345,
-	1341,
-	1347
-)
+var/const/SUPP_FREQ = 1347 //supply, coloured light brown in chat window
+var/const/SERV_FREQ = 1349 //service, coloured green in chat window
+var/const/DSQUAD_FREQ = 1441 //death squad frequency, coloured grey in chat window
+var/const/RESTEAM_FREQ = 1345 //response team frequency, uses the deathsquad color at the moment.
+var/const/AIPRIV_FREQ = 1447 //AI private, colored magenta in chat window
+
 
 // central command channels, i.e deathsquid & response teams
 var/list/CENT_FREQS = list(1345, 1341)
@@ -133,6 +169,7 @@ var/const/ENG_FREQ = 1357
 var/const/SCI_FREQ = 1351
 var/const/MED_FREQ = 1355
 var/const/SUP_FREQ = 1347
+var/const/SER_FREQ = 1349
 
 #define TRANSMISSION_WIRE	0
 #define TRANSMISSION_RADIO	1
@@ -140,7 +177,7 @@ var/const/SUP_FREQ = 1347
 /* filters */
 var/const/RADIO_TO_AIRALARM = "1"
 var/const/RADIO_FROM_AIRALARM = "2"
-var/const/RADIO_CHAT = "3"
+var/const/RADIO_CHAT = "3" //deprecated
 var/const/RADIO_ATMOSIA = "4"
 var/const/RADIO_NAVBEACONS = "5"
 var/const/RADIO_AIRLOCK = "6"
@@ -151,44 +188,33 @@ var/const/RADIO_CONVEYORS = "10"
 
 var/global/datum/controller/radio/radio_controller
 
-datum/controller/radio
-	var/list/datum/radio_frequency/frequencies = list()
+/datum/controller/radio
+	var/list/datum/radio_frequency/frequencies = new
 
-	proc/add_object(obj/device as obj, var/new_frequency as num, var/filter = null as text|null)
-		var/f_text = num2text(new_frequency)
-		var/datum/radio_frequency/frequency = frequencies[f_text]
+/datum/controller/radio/proc/add_object(const/obj/device, const/_frequency, var/filter = null as text|null)
+	var/datum/radio_frequency/frequency = return_frequency(_frequency)
 
-		if(!frequency)
-			frequency = new
-			frequency.frequency = new_frequency
-			frequencies[f_text] = frequency
+	if(isnull(frequency))
+		frequency = new
+		frequency.frequency = _frequency
+		frequencies[num2text(_frequency)] = frequency
 
-		frequency.add_listener(device, filter)
-		return frequency
+	frequency.add_listener(device, filter)
+	return frequency
 
-	proc/remove_object(obj/device, old_frequency)
-		var/f_text = num2text(old_frequency)
-		var/datum/radio_frequency/frequency = frequencies[f_text]
+/datum/controller/radio/proc/remove_object(const/obj/device, const/_frequency)
+	var/datum/radio_frequency/frequency = return_frequency(_frequency)
 
-		if(frequency)
-			frequency.remove_listener(device)
+	if(frequency)
+		frequency.remove_listener(device)
 
-			if(frequency.devices.len == 0)
-				del(frequency)
-				frequencies -= f_text
+		if(frequency.devices.len <= 0)
+			frequencies.Remove(num2text(_frequency))
 
-		return 1
+	return 1
 
-	proc/return_frequency(var/new_frequency as num)
-		var/f_text = num2text(new_frequency)
-		var/datum/radio_frequency/frequency = frequencies[f_text]
-
-		if(!frequency)
-			frequency = new
-			frequency.frequency = new_frequency
-			frequencies[f_text] = frequency
-
-		return frequency
+/datum/controller/radio/proc/return_frequency(const/_frequency)
+	return frequencies[num2text(_frequency)]
 
 datum/radio_frequency
 	var/frequency as num
@@ -252,30 +278,33 @@ datum/radio_frequency
 
 //			del(signal)
 
-		add_listener(obj/device as obj, var/filter as text|null)
-			if (!filter)
-				filter = "_default"
-			//log_admin("add_listener(device=[device],filter=[filter]) frequency=[frequency]")
-			var/list/obj/devices_line = devices[filter]
-			if (!devices_line)
-				devices_line = new
-				devices[filter] = devices_line
-			devices_line+=device
-//			var/list/obj/devices_line___ = devices[filter_str]
-//			var/l = devices_line___.len
-			//log_admin("DEBUG: devices_line.len=[devices_line.len]")
-			//log_admin("DEBUG: devices(filter_str).len=[l]")
+/datum/radio_frequency/proc/add_listener(const/obj/device, var/filter)
+	if(!filter) // FIXME
+		filter = "_default"
 
-		remove_listener(obj/device)
-			for (var/devices_filter in devices)
-				var/list/devices_line = devices[devices_filter]
-				devices_line-=device
-				while (null in devices_line)
-					devices_line -= null
-				if (devices_line.len==0)
-					devices -= devices_filter
-					del(devices_line)
+	var/list/devices_at_filter = devices[filter]
 
+	if(isnull(devices_at_filter))
+		devices_at_filter = new
+		devices[filter] = devices_at_filter
+
+	devices_at_filter.Add(device)
+
+/datum/radio_frequency/proc/remove_listener(const/obj/device, const/filter)
+	var/list/devices_at_filter = devices[filter]
+
+	// 1. check if it's an object
+	// 2. check if it has contents
+	// 3. check if the device is in contents
+	if(devices_at_filter && devices_at_filter.len && devices_at_filter.Find(device))
+		devices_at_filter.Remove(device)
+
+		if(devices_at_filter.len <= 0)
+			devices.Remove(filter)
+
+/datum/radio_frequency/remove_listener(const/obj/device)
+	for(var/filter in devices)
+		..(device, filter)
 
 var/list/pointers = list()
 
@@ -294,7 +323,7 @@ var/list/pointers = list()
 			src << S.debug_print()
 
 /obj/proc/receive_signal(datum/signal/signal, receive_method, receive_param)
-	return null
+	return
 
 /datum/signal
 	var/obj/source

@@ -1,15 +1,13 @@
-/mob/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/mob/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 
 	if(ismob(mover))
 		var/mob/moving_mob = mover
+
 		if ((other_mobs && moving_mob.other_mobs))
 			return 1
-		return (!mover.density || !density || lying)
-	else
-		return (!mover.density || !density || lying)
-	return
 
+	return (!mover.density || !density || lying)
 
 /client/North()
 	..()
@@ -42,7 +40,7 @@
 		var/mob/living/carbon/C = usr
 		C.toggle_throw_mode()
 	else
-		usr << "\red This mob type cannot throw items."
+		usr << "<span class='warning'>This mob type cannot throw items.</span>"
 	return
 
 
@@ -50,11 +48,22 @@
 	if(iscarbon(usr))
 		var/mob/living/carbon/C = usr
 		if(!C.get_active_hand())
-			usr << "\red You have nothing to drop in your hand."
+			usr << "<span class='warning'> You have nothing to drop in your hand.</span>"
 			return
 		drop_item()
+	else if(isMoMMI(usr))
+		var/mob/living/silicon/robot/mommi/M = usr
+		if(!M.get_active_hand())
+			M << "<span class='warning'> You have nothing to drop or store.</span>"
+			return
+		M.uneq_active()
+	else if(isrobot(usr))
+		var/mob/living/silicon/robot/R = usr
+		if(!R.module_active)
+			return
+		R.uneq_active()
 	else
-		usr << "\red This mob type cannot drop items."
+		usr << "<span class='warning'> This mob type cannot drop items.</span>"
 	return
 
 //This gets called when you press the delete button.
@@ -62,7 +71,7 @@
 	set hidden = 1
 
 	if(!usr.pulling)
-		usr << "\blue You are not pulling anything."
+		usr << "<span class='notice'> You are not pulling anything.</span>"
 		return
 	usr.stop_pulling()
 
@@ -176,43 +185,6 @@
 	*/
 	return
 
-
-/atom/movable/Move(NewLoc, direct)
-	if (direct & (direct - 1))
-		if (direct & 1)
-			if (direct & 4)
-				if (step(src, NORTH))
-					step(src, EAST)
-				else
-					if (step(src, EAST))
-						step(src, NORTH)
-			else
-				if (direct & 8)
-					if (step(src, NORTH))
-						step(src, WEST)
-					else
-						if (step(src, WEST))
-							step(src, NORTH)
-		else
-			if (direct & 2)
-				if (direct & 4)
-					if (step(src, SOUTH))
-						step(src, EAST)
-					else
-						if (step(src, EAST))
-							step(src, SOUTH)
-				else
-					if (direct & 8)
-						if (step(src, SOUTH))
-							step(src, WEST)
-						else
-							if (step(src, WEST))
-								step(src, SOUTH)
-	else
-		. = ..()
-	return
-
-
 /client/proc/Move_object(direct)
 	if(mob && mob.control_object)
 		if(mob.control_object.density)
@@ -223,18 +195,27 @@
 			mob.control_object.loc = get_step(mob.control_object,direct)
 	return
 
+/client/Move(loc,dir)
+	if(!mob)
+		return // Moved here to avoid nullrefs below. - N3X
 
-/client/Move(n, direct)
+	// USE /event
+	call(/datum/pda_app/station_map/proc/minimap_update)(mob)
 
-	if(mob.control_object)	Move_object(direct)
+	// /vg/ - Deny clients from moving certain mobs. (Like cluwnes :^)
+	if(mob.deny_client_move)
+		src << "<span class='warning'>You cannot move this mob.</span>"
+		return
 
-	if(isobserver(mob))	return mob.Move(n,direct)
+	if(mob.control_object)	Move_object(dir)
+
+	if(mob.incorporeal_move)
+		Process_Incorpmove(dir)
+		return
 
 	if(moving)	return 0
 
-	if(world.time < move_delay)	return
-
-	if(!mob)	return
+	if(move_delayer.blocked()) return
 
 	if(locate(/obj/effect/stop/, mob.loc))
 		for(var/obj/effect/stop/S in mob.loc)
@@ -243,36 +224,29 @@
 
 	if(mob.stat==2)	return
 
-	if(isAI(mob))	return AIMove(n,direct,mob)
+	if(isAI(mob))	return AIMove(loc,dir,mob)
 
 	if(mob.monkeyizing)	return//This is sota the goto stop mobs from moving var
 
-	if(isliving(mob))
-		var/mob/living/L = mob
-		if(L.incorporeal_move)//Move though walls
-			Process_Incorpmove(direct)
-			return
+
 
 	if(Process_Grab())	return
 
 	if(mob.buckled)							//if we're buckled to something, tell it we moved.
-		return mob.buckled.relaymove(mob, direct)
+		return mob.buckled.relaymove(mob, dir)
 
 	if(!mob.canmove)	return
 
 	//if(istype(mob.loc, /turf/space) || (mob.flags & NOGRAV))
 	//	if(!mob.Process_Spacemove(0))	return 0
 
-	if(!mob.lastarea)
-		mob.lastarea = get_area(mob.loc)
-
-	if((istype(mob.loc, /turf/space)) || (mob.lastarea.has_gravity == 0))
-		if(!mob.Process_Spacemove(0))	return 0
-
+	if((istype(mob.loc, /turf/space)) || ((mob.areaMaster && mob.areaMaster.has_gravity == 0) && (!istype(mob.loc, /obj/spacepod))))  // last section of if statement prevents spacepods being unable to move when the gravity goes down
+		if(!mob.Process_Spacemove(0))
+			return 0
 
 	if(isobj(mob.loc) || ismob(mob.loc))//Inside an object, tell it we moved
 		var/atom/O = mob.loc
-		return O.relaymove(mob, direct)
+		return O.relaymove(mob, dir)
 
 	if(isturf(mob.loc))
 
@@ -280,16 +254,18 @@
 			for(var/mob/M in range(mob, 1))
 				if(M.pulling == mob)
 					if(!M.restrained() && M.stat == 0 && M.canmove && mob.Adjacent(M))
-						src << "\blue You're restrained! You can't move!"
+						src << "<span class='notice'> You're restrained! You can't move!</span>"
 						return 0
 					else
 						M.stop_pulling()
 
 		if(mob.pinned.len)
-			src << "\blue You're pinned to a wall by [mob.pinned[1]]!"
+			src << "<span class='notice'> You're pinned to a wall by [mob.pinned[1]]!</span>"
 			return 0
 
-		move_delay = world.time//set move delay
+		// COMPLEX MOVE DELAY SHIT
+		////////////////////////////
+		var/move_delay=0 // set move delay
 		mob.last_move_intent = world.time + 10
 		switch(mob.m_intent)
 			if("run")
@@ -301,25 +277,21 @@
 		move_delay += mob.movement_delay()
 
 		if(config.Tickcomp)
-			move_delay -= 1.3
-			var/tickcomp = ((1/(world.tick_lag))*1.3)
-			move_delay = move_delay + tickcomp
-
-
-
+			move_delay += ((1/(world.tick_lag))*1.3) - 1.3
 
 		//We are now going to move
 		moving = 1
+		mob.delayNextMove(move_delay)
 		//Something with pulling things
 		if(locate(/obj/item/weapon/grab, mob))
-			move_delay = max(move_delay, world.time + 7)
+			mob.delayNextMove(7)
 			var/list/L = mob.ret_grab()
 			if(istype(L, /list))
 				if(L.len == 2)
 					L -= mob
 					var/mob/M = L[1]
 					if(M)
-						if ((get_dist(mob, M) <= 1 || M.loc == mob.loc))
+						if ((mob.Adjacent(M) || M.loc == mob.loc))
 							var/turf/T = mob.loc
 							. = ..()
 							if (isturf(M.loc))
@@ -336,7 +308,7 @@
 							M.animate_movement = 3
 					for(var/mob/M in L)
 						spawn( 0 )
-							step(M, direct)
+							step(M, dir)
 							return
 						spawn( 1 )
 							M.other_mobs = null
@@ -344,7 +316,7 @@
 							return
 
 		else if(mob.confused)
-			step(mob, pick(cardinal))
+			step_rand(mob)
 			mob.last_movement=world.time
 		else
 			. = ..()
@@ -370,16 +342,16 @@
 			var/obj/item/weapon/grab/G = mob.r_hand
 			grabbing += G.affecting
 		for(var/obj/item/weapon/grab/G in mob.grabbed_by)
-			if((G.state == 1)&&(!grabbing.Find(G.assailant)))	del(G)
-			if(G.state == 2)
-				move_delay = world.time + 10
+			if((G.state == GRAB_PASSIVE)&&(!grabbing.Find(G.assailant)))	del(G)
+			if(G.state == GRAB_AGGRESSIVE)
+				mob.delayNextMove(10)
 				if(!prob(25))	return 1
-				mob.visible_message("\red [mob] has broken free of [G.assailant]'s grip!")
+				mob.visible_message("<span class='warning'> [mob] has broken free of [G.assailant]'s grip!</span>")
 				del(G)
-			if(G.state == 3)
-				move_delay = world.time + 10
+			if(G.state == GRAB_NECK)
+				mob.delayNextMove(10)
 				if(!prob(5))	return 1
-				mob.visible_message("\red [mob] has broken free of [G.assailant]'s headlock!")
+				mob.visible_message("<span class='warning'> [mob] has broken free of [G.assailant]'s headlock!</span>")
 				del(G)
 	return 0
 
@@ -389,13 +361,19 @@
 ///Allows mobs to run though walls
 /client/proc/Process_Incorpmove(direct)
 	var/turf/mobloc = get_turf(mob)
-	if(!isliving(mob))
-		return
-	var/mob/living/L = mob
-	switch(L.incorporeal_move)
+
+	switch(mob.incorporeal_move)
 		if(1)
-			L.loc = get_step(L, direct)
-			L.dir = direct
+			var/turf/T = get_step(mob, direct)
+			var/area/A = get_area(T)
+			if(A && A.anti_ethereal && !isAdminGhost(mob))
+				mob << "<span class='sinister'>A dark forcefield prevents you from entering the area.</span>"
+			else
+				if((T && T.holy) && isobserver(mob) && ((mob.invisibility == 0) || (ticker.mode && (mob.mind in ticker.mode.cult))))
+					mob << "<span class='warning'>You cannot get past holy grounds while you are in this plane of existence!</span>"
+				else
+					mob.loc = get_step(mob, direct)
+					mob.dir = direct
 		if(2)
 			if(prob(50))
 				var/locx
@@ -423,19 +401,30 @@
 							return
 					else
 						return
-				L.loc = locate(locx,locy,mobloc.z)
+				mob.loc = locate(locx,locy,mobloc.z)
 				spawn(0)
 					var/limit = 2//For only two trailing shadows.
-					for(var/turf/T in getline(mobloc, L.loc))
+					for(var/turf/T in getline(mobloc, mob.loc))
 						spawn(0)
-							anim(T,L,'icons/mob/mob.dmi',,"shadow",,L.dir)
+							anim(T,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
 						limit--
 						if(limit<=0)	break
 			else
 				spawn(0)
-					anim(mobloc,mob,'icons/mob/mob.dmi',,"shadow",,L.dir)
-				L.loc = get_step(L, direct)
-			L.dir = direct
+					anim(mobloc,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
+				mob.loc = get_step(mob, direct)
+			mob.dir = direct
+	// Crossed is always a bit iffy
+	for(var/obj/S in mob.loc)
+		if(istype(S,/obj/effect/step_trigger) || istype(S,/obj/effect/beam))
+			S.Crossed(mob)
+
+	var/area/A = get_area_master(mob)
+	if(A)
+		A.Entered(mob)
+	if(isturf(mob.loc))
+		var/turf/T = mob.loc
+		T.Entered(mob)
 	return 1
 
 
@@ -460,12 +449,12 @@
 			continue
 
 		if(istype(src,/mob/living/carbon/human/))  // Only humans can wear magboots, so we give them a chance to.
-			if((istype(turf,/turf/simulated/floor)) && (src.lastarea.has_gravity == 0) && !(istype(src:shoes, /obj/item/clothing/shoes/magboots) && (src:shoes:flags & NOSLIP)))
+			if((istype(turf,/turf/simulated/floor)) && (src.areaMaster.has_gravity == 0) && !(istype(src:shoes, /obj/item/clothing/shoes/magboots) && (src:shoes:flags & NOSLIP)))
 				continue
 
 
 		else
-			if((istype(turf,/turf/simulated/floor)) && (src.lastarea.has_gravity == 0)) // No one else gets a chance.
+			if((istype(turf,/turf/simulated/floor)) && (src.areaMaster.has_gravity == 0)) // No one else gets a chance.
 				continue
 
 
@@ -480,6 +469,8 @@
 		break
 
 	if(!dense_object && (locate(/obj/structure/lattice) in oview(1, src)))
+		dense_object++
+	if(!dense_object && (locate(/obj/structure/catwalk) in oview(1, src)))
 		dense_object++
 
 	//Lastly attempt to locate any dense objects we could push off of
@@ -499,7 +490,7 @@
 
 	//Check to see if we slipped
 	if(prob(Process_Spaceslipping(5)))
-		src << "\blue <B>You slipped!</B>"
+		src << "<span class='notice'> <B>You slipped!</B></span>"
 		src.inertia_dir = src.last_move
 		step(src, src.inertia_dir)
 		return 0
@@ -516,3 +507,28 @@
 
 	prob_slip = round(prob_slip)
 	return(prob_slip)
+
+
+/mob/proc/Move_Pulled(var/atom/A)
+	if (!canmove || restrained() || !pulling)
+		return
+	if (pulling.anchored)
+		return
+	if (!pulling.Adjacent(src))
+		return
+	if(!isturf(pulling.loc))
+		return
+	if (A == loc && pulling.density)
+		return
+	if (!Process_Spacemove(get_dir(pulling.loc, A)))
+		return
+	if (ismob(pulling))
+		var/mob/M = pulling
+		var/atom/movable/t = M.pulling
+		M.stop_pulling()
+		step(pulling, get_dir(pulling.loc, A))
+		if(M)
+			M.start_pulling(t)
+	else
+		step(pulling, get_dir(pulling.loc, A))
+	return

@@ -1,28 +1,28 @@
 /obj/item/weapon/gun/projectile/shotgun/pump
 	name = "shotgun"
 	desc = "Useful for sweeping alleys."
+	fire_sound = 'sound/weapons/shotgun.ogg'
 	icon_state = "shotgun"
-	item_state = "shotgun"
+	item_state = null
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 4
 	w_class = 4.0
 	force = 10
-	flags =  FPRINT | TABLEPASS | CONDUCT | USEDELAY
+	flags = FPRINT
+	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
-	caliber = "shotgun"
+	caliber = list("shotgun" = 1, "flare" = 1) //flare shells are still shells
 	origin_tech = "combat=4;materials=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
 
+
+	gun_flags = 0
+
 	isHandgun()
 		return 0
-
-	load_into_chamber()
-		if(in_chamber)
-			return 1
-		return 0
-
 
 	attack_self(mob/living/user as mob)
 		if(recentpump)	return
@@ -32,6 +32,16 @@
 			recentpump = 0
 		return
 
+	process_chambered()
+		if(in_chamber)
+			return 1
+		else if(current_shell && current_shell.BB)
+			in_chamber = current_shell.BB //Load projectile into chamber.
+			current_shell.BB.loc = src //Set projectile loc to gun.
+			current_shell.BB = null
+			current_shell.update_icon()
+			return 1
+		return 0
 
 	proc/pump(mob/M as mob)
 		playsound(M, 'sound/weapons/shotgunpump.ogg', 60, 1)
@@ -41,18 +51,19 @@
 			current_shell = null
 			if(in_chamber)
 				in_chamber = null
-		if(!loaded.len)	return 0
+		if(!getAmmo())
+			return 0
 		var/obj/item/ammo_casing/AC = loaded[1] //load next casing.
 		loaded -= AC //Remove casing from loaded list.
 		current_shell = AC
-		if(AC.BB)
-			in_chamber = AC.BB //Load projectile into chamber.
 		update_icon()	//I.E. fix the desc
 		return 1
 
 /obj/item/weapon/gun/projectile/shotgun/pump/combat
 	name = "combat shotgun"
 	icon_state = "cshotgun"
+	item_state = null
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 8
 	origin_tech = "combat=5;materials=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun"
@@ -66,37 +77,30 @@
 	max_shells = 2
 	w_class = 4.0
 	force = 10
-	flags =  FPRINT | TABLEPASS | CONDUCT | USEDELAY
+	flags = FPRINT
+	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
-	caliber = "shotgun"
+	caliber = list("shotgun" = 1, "flare" = 1)
 	origin_tech = "combat=3;materials=1"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 
-	New()
-		for(var/i = 1, i <= max_shells, i++)
-			loaded += new ammo_type(src)
-
-		update_icon()
-		return
-
-	load_into_chamber()
+	process_chambered()
 		if(in_chamber)
 			return 1
-		if(!loaded.len)
+		if(!getAmmo())
 			return 0
-
 		var/obj/item/ammo_casing/AC = loaded[1] //load next casing.
 		loaded -= AC //Remove casing from loaded list.
-		AC.desc = "[initial(AC.desc)] This one is spent."
-
 		if(AC.BB)
 			in_chamber = AC.BB //Load projectile into chamber.
 			AC.BB.loc = src //Set projectile loc to gun.
+			AC.BB = null
+			AC.update_icon()
 			return 1
 		return 0
 
 	attack_self(mob/living/user as mob)
-		if(!(locate(/obj/item/ammo_casing/shotgun) in src) && !loaded.len)
+		if(!(locate(/obj/item/ammo_casing/shotgun) in src) && !getAmmo())
 			user << "<span class='notice'>\The [src] is empty.</span>"
 			return
 
@@ -109,18 +113,12 @@
 		update_icon()
 
 	attackby(var/obj/item/A as obj, mob/user as mob)
-		if(istype(A, /obj/item/ammo_casing) && !load_method)
-			var/obj/item/ammo_casing/AC = A
-			if(AC.caliber == caliber && (loaded.len < max_shells) && (contents.len < max_shells))	//forgive me father, for i have sinned
-				user.drop_item()
-				AC.loc = src
-				loaded += AC
-				user << "<span class='notice'>You load a shell into \the [src]!</span>"
+		..()
 		A.update_icon()
 		update_icon()
 		if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
 			user << "<span class='notice'>You begin to shorten the barrel of \the [src].</span>"
-			if(loaded.len)
+			if(getAmmo())
 				afterattack(user, user)	//will this work?
 				afterattack(user, user)	//it will. we call it twice, for twice the FUN
 				playsound(user, fire_sound, 50, 1)

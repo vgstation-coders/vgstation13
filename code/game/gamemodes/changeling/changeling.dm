@@ -49,7 +49,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	if(config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
 
-	var/list/datum/mind/possible_changelings = get_players_for_role(BE_CHANGELING)
+	var/list/datum/mind/possible_changelings = get_players_for_role(ROLE_CHANGELING)
 
 	for(var/datum/mind/player in possible_changelings)
 		for(var/job in restricted_jobs)//Removing robots from the list
@@ -126,8 +126,8 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 /datum/game_mode/proc/greet_changeling(var/datum/mind/changeling, var/you_are=1)
 	if (you_are)
-		changeling.current << "<B>\red You are a changeling!</B>"
-	changeling.current << "<b>\red Use say \":g message\" to communicate with your fellow changelings. Remember: you get all of their absorbed DNA if you absorb them.</b>"
+		changeling.current << "<span class='danger'>You are a changeling!</span>"
+	changeling.current << "<span class='danger'>Use say \":g message\" to communicate with your fellow changelings. Remember: you get all of their absorbed DNA if you absorb them.</span>"
 	changeling.current << "<B>You must complete the following tasks:</B>"
 
 	if (changeling.current.mind)
@@ -168,20 +168,36 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	changeling_mob.make_changeling()
 
 /datum/game_mode/proc/auto_declare_completion_changeling()
+	var/text = ""
 	if(changelings.len)
-		var/text = "<FONT size = 2><B>The changelings were:</B></FONT>"
+		var/icon/logoa = icon('icons/mob/mob.dmi', "change-logoa")
+		var/icon/logob = icon('icons/mob/mob.dmi', "change-logob")
+		end_icons += logoa
+		var/tempstatea = end_icons.len
+		end_icons += logob
+		var/tempstateb = end_icons.len
+		text += {"<BR><img src="logo_[tempstatea].png"> <FONT size = 2><B>The changelings were:</B></FONT> <img src="logo_[tempstateb].png">"}
 		for(var/datum/mind/changeling in changelings)
 			var/changelingwin = 1
 
-			text += "<br><br>[changeling.key] was [changeling.name] ("
 			if(changeling.current)
+				var/icon/flat = getFlatIcon(changeling.current, SOUTH, 1, 1)
+				end_icons += flat
+				var/tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[changeling.key]</b> was <b>[changeling.name]</b> ("}
 				if(changeling.current.stat == DEAD)
 					text += "died"
+					flat.Turn(90)
+					end_icons[tempstate] = flat
 				else
 					text += "survived"
 				if(changeling.current.real_name != changeling.name)
 					text += " as [changeling.current.real_name]"
 			else
+				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
+				end_icons += sprotch
+				var/tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[changeling.key]</b> was <b>[changeling.name]</b> ("}
 				text += "body destroyed"
 				changelingwin = 0
 			text += ")"
@@ -212,10 +228,15 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 				text += "<br><font color='red'><B>The changeling has failed.</B></font>"
 				feedback_add_details("changeling_success","FAIL")
 
-		world << text
-
-
-	return 1
+			if(changeling.total_TC)
+				if(changeling.spent_TC)
+					text += "<br><span class='sinister'>TC Remaining: [changeling.total_TC - changeling.spent_TC]/[changeling.total_TC] - The tools used by the Changeling were: "
+					for(var/entry in changeling.uplink_items_bought)
+						text += "<br>[entry]"
+				else
+					text += "<br><span class='sinister'>The Changeling was a smooth operator this round (did not purchase any uplink items)</span>"
+		text += "<BR><HR>"
+	return text
 
 /datum/changeling //stores changeling powers, changeling recharge thingie, changeling absorbed DNA and changeling ID (for changeling hivemind)
 	var/list/absorbed_dna = list()
@@ -244,9 +265,8 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 		changelingID = "[honorific] [rand(1,999)]"
 
 /datum/changeling/proc/regenerate()
-	chem_charges = min(max(0, chem_charges+chem_recharge_rate), chem_storage)
+	chem_charges = Clamp(chem_charges + chem_recharge_rate, 0, chem_storage)
 	geneticdamage = max(0, geneticdamage-1)
-
 
 /datum/changeling/proc/GetDNA(var/dna_owner)
 	var/datum/dna/chosen_dna

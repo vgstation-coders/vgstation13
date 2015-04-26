@@ -7,7 +7,7 @@
 	for(var/mob/living/carbon/human/H in player_list)
 		if(H.stat == 2 || !(H.client)) continue
 		if(is_special_character(H)) continue
-		if(prob(25) && !(H.mind in ticker.mode.traitors))
+		if(prob(35) && !(H.mind in ticker.mode.traitors))
 			ticker.mode.traitors += H.mind
 			H.mind.special_role = "traitor"
 			var/datum/objective/survive/survive = new
@@ -45,7 +45,7 @@
 					new /obj/item/weapon/gun/energy/pulse_rifle(get_turf(H))
 				if("silenced")
 					new /obj/item/weapon/gun/projectile/pistol(get_turf(H))
-					new /obj/item/weapon/silencer(get_turf(H))
+					new /obj/item/gun_part/silencer(get_turf(H))
 				if("cannon")
 					new /obj/item/weapon/gun/energy/lasercannon(get_turf(H))
 				if("doublebarrel")
@@ -110,4 +110,4 @@
 						H.sight |= (SEE_MOBS|SEE_OBJS|SEE_TURFS)
 						H.see_in_dark = 8
 						H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-						H << "\blue The walls suddenly disappear."
+						H << "<span class='notice'>The walls suddenly disappear.</span>"

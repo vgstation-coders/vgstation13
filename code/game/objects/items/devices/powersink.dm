@@ -6,12 +6,14 @@
 	icon_state = "powersink0"
 	item_state = "electronic"
 	w_class = 4.0
-	flags = FPRINT | TABLEPASS | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	throwforce = 5
 	throw_speed = 1
 	throw_range = 2
 	m_amt = 750
 	w_type = RECYK_ELECTRONIC
+	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "powerstorage=3;syndicate=5"
 	var/drain_rate = 600000		// amount of power to drain per tick
 	var/power_drained = 0 		// has drained this much power
@@ -85,6 +87,7 @@
 					M << "[user] activates the power sink!"
 				mode = 2
 				icon_state = "powersink1"
+				playsound(get_turf(src), 'sound/effects/phasein.ogg', 30, 1)
 				processing_objects.Add(src)
 
 			if(2)  //This switch option wasn't originally included. It exists now. --NeoFite
@@ -95,6 +98,7 @@
 				mode = 1
 				SetLuminosity(0)
 				icon_state = "powersink0"
+				playsound(get_turf(src), 'sound/effects/teleport.ogg', 50, 1)
 				processing_objects.Remove(src)
 
 	process()
@@ -106,7 +110,7 @@
 				// found a powernet, so drain up to max power from it
 
 				var/drained = min ( drain_rate, PN.avail )
-				PN.newload += drained
+				PN.load += drained
 				power_drained += drained
 
 				// if tried to drain more than available on powernet
@@ -118,6 +122,8 @@
 							if(A.operating && A.cell)
 								A.cell.charge = max(0, A.cell.charge - 50)
 								power_drained += 50
+								if(A.charging == 2)
+									A.charging = 1
 
 
 			if(power_drained > max_power * 0.95)

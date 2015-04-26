@@ -25,8 +25,8 @@
 	if(!melee_can_hit || !istype(target, /atom)) return
 	if(istype(target, /mob/living))
 		var/mob/living/M = target
-		if(src.occupant.a_intent == "hurt")
-			playsound(src, 'sound/weapons/punch4.ogg', 50, 1)
+		if(src.occupant.a_intent == I_HURT)
+			playsound(src, 'sound/mecha/mechsmash.ogg', 50, 1)
 			if(damtype == "brute")
 				step_away(M,src,15)
 			/*
@@ -58,7 +58,7 @@
 									H.reagents.add_reagent("cryptobiolin", force)
 						else
 							return
-					if(update)	H.UpdateDamageIcon()
+					if(update)	H.UpdateDamageIcon(1)
 				H.updatehealth()
 
 			else
@@ -99,7 +99,7 @@
 						target:attackby(src,src.occupant)
 					else if(prob(5))
 						target:dismantle_wall(1)
-						src.occupant_message("\blue You smash through the wall.")
+						src.occupant_message("<span class='notice'>You smash through the wall.</span>")
 						src.visible_message("<b>[src.name] smashes through the wall</b>")
 						playsound(src, 'sound/weapons/smash.ogg', 50, 1)
 					melee_can_hit = 0
@@ -113,7 +113,7 @@
 	if(!istype(target, /obj) && !istype(target, /mob)) return
 	if(istype(target, /mob))
 		var/mob/M = target
-		M.make_dizzy(3)
+		M.Dizzy(3)
 		M.adjustBruteLoss(1)
 		M.updatehealth()
 		for (var/mob/V in viewers(src))

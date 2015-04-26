@@ -11,6 +11,7 @@ log transactions
 #define CHANGE_SECURITY_LEVEL 1
 #define TRANSFER_FUNDS 2
 #define VIEW_TRANSACTION_LOGS 3
+#define PRINT_DELAY 100
 
 /obj/item/weapon/card/id/var/money = 2000
 
@@ -33,6 +34,7 @@ log transactions
 	var/obj/item/weapon/card/held_card
 	var/editing_security_level = 0
 	var/view_screen = NO_SCREEN
+	var/lastprint = 0 // Printer needs time to cooldown
 
 /obj/machinery/atm/New()
 	..()
@@ -49,7 +51,7 @@ log transactions
 	if(linked_db && ( (linked_db.stat & NOPOWER) || !linked_db.activated ) )
 		linked_db = null
 		authenticated_account = null
-		src.visible_message("\red \icon[src] [src] buzzes rudely, \"Connection to remote database lost.\"")
+		src.visible_message("<span class='warning'>\icon[src] [src] buzzes rudely, \"Connection to remote database lost.\"</span>")
 		updateDialog()
 
 	if(ticks_left_timeout > 0)
@@ -78,17 +80,26 @@ log transactions
 				authenticated_account.charge(-amount,null,"Credit deposit",terminal_id=machine_id,dest_name = "Terminal")
 
 /obj/machinery/atm/proc/reconnect_database()
-	for(var/obj/machinery/account_database/DB in world) //Hotfix until someone finds out why it isn't in 'machines'
-		if( DB.z == src.z && !(DB.stat & NOPOWER) && DB.activated )
-			linked_db = DB
-			break
+	for(var/obj/machinery/account_database/DB in account_DBs)
+		//Checks for a database on its Z-level, else it checks for a database at the main Station.
+		if((DB.z == src.z) || (DB.z == STATION_Z))
+			if(!(DB.stat & NOPOWER) && DB.activated )//If the database if damaged or not powered, people won't be able to use the ATM anymore
+				linked_db = DB
+				break
 
 /obj/machinery/atm/attackby(obj/item/I as obj, mob/user as mob)
+	if(iswrench(I))
+		user.visible_message("<span class='notice'>[user] begins to take apart the [src]!</span>", "<span class='notice'>You start to take apart the [src]</span>")
+		if(do_after(user, 40))
+			user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+			new /obj/item/stack/sheet/metal (src.loc,2)
+			qdel(src)
+			return
 	if(istype(I, /obj/item/weapon/card))
 		var/obj/item/weapon/card/id/idcard = I
 		if(!held_card)
-			usr.drop_item()
-			idcard.loc = src
+			usr.drop_item(idcard, src)
 			held_card = idcard
 			if(authenticated_account && held_card.associated_account_number != authenticated_account.account_number)
 				authenticated_account = null
@@ -119,7 +130,7 @@ log transactions
 
 /obj/machinery/atm/attack_hand(mob/user as mob)
 	if(istype(user, /mob/living/silicon))
-		user << "\red Artificial unit recognized. Artificial units do not currently receive monetary compensation, as per NanoTrasen regulation #1005."
+		user << "<span class='warning'>Artificial unit recognized. Artificial units do not currently receive monetary compensation, as per NanoTrasen regulation #1005.</span>"
 		return
 	if(get_dist(src,user) <= 1)
 		//check to see if the user has low security enabled
@@ -274,11 +285,11 @@ log transactions
 									T.time = worldtime2text()
 									failed_account.transaction_log.Add(T)
 							else
-								usr << "\red \icon[src] Incorrect pin/account combination entered, [max_pin_attempts - number_incorrect_tries] attempts remaining."
+								usr << "<span class='warning'>\icon[src] Incorrect pin/account combination entered, [max_pin_attempts - number_incorrect_tries] attempts remaining.</span>"
 								previous_account_number = tried_account_num
 								playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 1)
 						else
-							usr << "\red \icon[src] incorrect pin/account combination entered."
+							usr << "<span class='warning'>\icon[src] incorrect pin/account combination entered.</span>"
 							number_incorrect_tries = 0
 					else
 						playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
@@ -294,7 +305,7 @@ log transactions
 						T.time = worldtime2text()
 						authenticated_account.transaction_log.Add(T)
 
-						usr << "\blue \icon[src] Access granted. Welcome user '[authenticated_account.owner_name].'"
+						usr << "<span class='notice'>\icon[src] Access granted. Welcome user '[authenticated_account.owner_name].'</span>"
 
 					previous_account_number = tried_account_num
 			if("withdrawal")
@@ -307,7 +318,7 @@ log transactions
 
 						//remove the money
 						if(amount > 10000) // prevent crashes
-							usr << "\blue The ATM's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'"
+							usr << "<span class='notice'>The ATM's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'</span>"
 							amount = 10000
 						authenticated_account.money -= amount
 						withdraw_arbitrary_sum(amount)
@@ -325,6 +336,10 @@ log transactions
 						usr << "\icon[src]<span class='warning'>You don't have enough funds to do that!</span>"
 			if("balance_statement")
 				if(authenticated_account)
+					if(world.timeofday < lastprint + PRINT_DELAY)
+						usr << "<span class='notice'>The [src.name] flashes an error on its display.</span>"
+						return
+					lastprint = world.timeofday
 					var/obj/item/weapon/paper/R = new(src.loc)
 					R.name = "Account balance: [authenticated_account.owner_name]"
 					R.info = {"<b>NT Automated Teller Account Statement</b><br><br>
@@ -359,8 +374,7 @@ log transactions
 				else
 					var/obj/item/I = usr.get_active_hand()
 					if (istype(I, /obj/item/weapon/card/id))
-						usr.drop_item()
-						I.loc = src
+						usr.drop_item(I, src)
 						held_card = I
 			if("logout")
 				authenticated_account = null
@@ -370,7 +384,7 @@ log transactions
 
 //create the most effective combination of notes to make up the requested amount
 /obj/machinery/atm/proc/withdraw_arbitrary_sum(var/arbitrary_sum)
-	dispense_cash(arbitrary_sum,get_turf(src))
+	dispense_cash(arbitrary_sum,get_step(get_turf(src),turn(dir,180))) // Spawn on the ATM.
 
 //stolen wholesale and then edited a bit from newscasters, which are awesome and by Agouri
 /obj/machinery/atm/proc/scan_user(mob/living/carbon/human/human_user as mob)
@@ -385,7 +399,7 @@ log transactions
 			if(I)
 				authenticated_account = linked_db.attempt_account_access(I.associated_account_number)
 				if(authenticated_account)
-					human_user << "\blue \icon[src] Access granted. Welcome user '[authenticated_account.owner_name].'"
+					human_user << "<span class='notice'>\icon[src] Access granted. Welcome user '[authenticated_account.owner_name].'</span>"
 
 					//create a transaction log entry
 					var/datum/transaction/T = new()

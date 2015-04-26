@@ -49,10 +49,16 @@
 	D.name = "small parcel - 'EFTPOS access code'"
 
 /obj/item/device/eftpos/proc/reconnect_database()
-	for(var/obj/machinery/account_database/DB in world)
-		if(DB.z == src.z)
-			linked_db = DB
-			break
+	var/turf/location = get_turf(src)
+	if(!location)
+		return
+
+	for(var/obj/machinery/account_database/DB in account_DBs)
+		//Checks for a database on its Z-level, else it checks for a database at the main Station.
+		if((DB.z == src.z) || (DB.z == STATION_Z))
+			if(!(DB.stat & NOPOWER) && DB.activated )//If the database if damaged or not powered, people won't be able to use the EFTPOS anymore
+				linked_db = DB
+				break
 
 /obj/item/device/eftpos/attack_self(mob/user as mob)
 	if(get_dist(src,user) <= 1)

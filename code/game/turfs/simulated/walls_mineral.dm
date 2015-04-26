@@ -84,8 +84,8 @@
 	mineral = "plasma"
 
 /turf/simulated/wall/mineral/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(is_hot(W) > 300)//If the temperature of the object is over 300, then ignite
-		ignite(is_hot(W))
+	if(W.is_hot() > 300)//If the temperature of the object is over 300, then ignite
+		ignite(W.is_hot())
 		return
 	..()
 
@@ -104,8 +104,8 @@
 		napalm.toxins = toxinsToDeduce
 		napalm.temperature = 400+T0C
 		target_tile.assume_air(napalm)
-		spawn (0) target_tile.hotspot_expose(temperature, 400)
-	for(var/obj/structure/falsewall/plasma/F in range(3,src))//Hackish as fuck, but until temperature_expose works, there is nothing I can do -Sieve
+		spawn (0) target_tile.hotspot_expose(temperature, 400,surfaces=1)
+	for(var/obj/structure/falsewall/plasma/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve
 		var/turf/T = get_turf(F)
 		T.ChangeTurf(/turf/simulated/wall/mineral/plasma/)
 		del (F)
@@ -114,11 +114,11 @@
 	for(var/obj/machinery/door/airlock/plasma/D in range(3,src))
 		D.ignite(temperature/4)
 
-/turf/simulated/wall/mineral/plasma/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)//Doesn't fucking work because walls don't interact with air :(
+/turf/simulated/wall/mineral/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)//Doesn't fucking work because walls don't interact with air :(
 	if(exposed_temperature > 300)
 		PlasmaBurn(exposed_temperature)
 
-/turf/simulated/wall/mineral/plasma/proc/ignite(exposed_temperature)
+/turf/simulated/wall/mineral/plasma/ignite(exposed_temperature)
 	if(exposed_temperature > 300)
 		PlasmaBurn(exposed_temperature)
 

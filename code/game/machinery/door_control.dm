@@ -8,7 +8,6 @@
 	var/id_tag = null
 	var/range = 10
 	var/normaldoorcontrol = 0
-	var/desiredstate = 0 // Zero is closed, 1 is open.
 	var/specialfunctions = 1
 	/*
 	Bitflag, 	1= open
@@ -34,6 +33,8 @@
 	ghost_read=0
 	ghost_write=0
 
+	machine_flags = EMAGGABLE
+
 /obj/machinery/door_control/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
 	if(wires & 2)
@@ -44,7 +45,14 @@
 /obj/machinery/door_control/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
+/obj/machinery/door_control/emag(mob/user)
+	req_access = list()
+	req_one_access = list()
+	playsound(get_turf(src), "sparks", 100, 1)
+
 /obj/machinery/door_control/attackby(obj/item/weapon/W, mob/user as mob)
+	..()
+	..()
 	/* For later implementation
 	if (istype(W, /obj/item/weapon/screwdriver))
 	{
@@ -61,10 +69,6 @@
 	*/
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
-	if(istype(W, /obj/item/weapon/card/emag))
-		req_access = list()
-		req_one_access = list()
-		playsound(get_turf(src), "sparks", 100, 1)
 	return src.attack_hand(user)
 
 /obj/machinery/door_control/attack_hand(mob/user as mob)
@@ -73,7 +77,7 @@
 		return
 
 	if(!allowed(user) && (wires & 1))
-		user << "\red Access Denied"
+		user << "<span class='warning'>Access Denied</span>"
 		flick("doorctrl-denied",src)
 		return
 
@@ -84,38 +88,21 @@
 	if(normaldoorcontrol)
 		for(var/obj/machinery/door/airlock/D in range(range))
 			if(D.id_tag == src.id_tag)
-				if(desiredstate == 1)
-					if(specialfunctions & OPEN)
-						if (D.density)
-							spawn( 0 )
-								D.open()
-								return
-					if(specialfunctions & IDSCAN)
-						D.aiDisabledIdScanner = 1
-					if(specialfunctions & BOLTS)
-						D.locked = 1
+				spawn(0)
+				if(D)
+					if(D.density)	D.open()
+					else			D.close()
+					return
+				if(specialfunctions & IDSCAN)
+					D.aiDisabledIdScanner = !D.aiDisabledIdScanner
+				if(specialfunctions & BOLTS)
+					if(!D.isWireCut(4) && D.arePowerSystemsOn())
+						D.locked = !D.locked
 						D.update_icon()
-					if(specialfunctions & SHOCK)
-						D.secondsElectrified = -1
-					if(specialfunctions & SAFE)
-						D.safe = 0
-
-				else
-					if(specialfunctions & OPEN)
-						if (!D.density)
-							spawn( 0 )
-								D.close()
-								return
-					if(specialfunctions & IDSCAN)
-						D.aiDisabledIdScanner = 0
-					if(specialfunctions & BOLTS)
-						if(!D.isWireCut(4) && D.arePowerSystemsOn())
-							D.locked = 0
-							D.update_icon()
-					if(specialfunctions & SHOCK)
-						D.secondsElectrified = 0
-					if(specialfunctions & SAFE)
-						D.safe = 1
+				if(specialfunctions & SHOCK)
+					D.secondsElectrified = D.secondsElectrified ? 0 : -1
+				if(specialfunctions & SAFE)
+					D.safe = !D.safe
 
 	else
 		for(var/obj/machinery/door/poddoor/M in world)
@@ -128,8 +115,6 @@
 					spawn( 0 )
 						M.close()
 						return
-
-	desiredstate = !desiredstate
 	spawn(15)
 		if(!(stat & NOPOWER))
 			icon_state = "doorctrl0"
@@ -152,7 +137,27 @@
 
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
+
+	if(istype(W, /obj/item/device/multitool))
+		update_multitool_menu(user)
+		return 1
+
+	if(istype(W, /obj/item/weapon/wrench))
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		if(do_after(user, 30))
+			user << "<span class='notice'>You detach \the [src] from the wall.</span>"
+			new/obj/item/mounted/frame/driver_button(get_turf(src))
+			del(src)
+		return 1
+
 	return src.attack_hand(user)
+
+
+/obj/machinery/driver_button/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+	return {"
+	<ul>
+	<li>[format_tag("ID Tag","id_tag")]</li>
+	</ul>"}
 
 /obj/machinery/driver_button/attack_hand(mob/user as mob)
 
@@ -165,14 +170,18 @@
 
 	use_power(5)
 
+	launch_sequence()
+
+	return
+
+/obj/machinery/driver_button/proc/launch_sequence()
 	active = 1
 	icon_state = "launcheract"
 
-	for(var/obj/machinery/door/poddoor/M in world)
+	for(var/obj/machinery/door/poddoor/M in range(src,7))
 		if (M.id_tag == src.id_tag)
-			spawn( 0 )
+			spawn()
 				M.open()
-				return
 
 	sleep(20)
 
@@ -184,11 +193,9 @@
 
 	for(var/obj/machinery/door/poddoor/M in world)
 		if (M.id_tag == src.id_tag)
-			spawn( 0 )
+			spawn()
 				M.close()
 				return
 
 	icon_state = "launcherbtt"
 	active = 0
-
-	return

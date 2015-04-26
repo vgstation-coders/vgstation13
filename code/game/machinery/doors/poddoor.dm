@@ -11,6 +11,11 @@
 	animation_delay = 18
 	animation_delay_2 = 5
 
+/obj/machinery/door/poddoor/preopen
+	icon_state = "pdoor0"
+	density = 0
+	opacity = 0
+
 /obj/machinery/door/poddoor/New()
 	. = ..()
 	if(density)
@@ -27,7 +32,7 @@
 
 /obj/machinery/door/poddoor/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	src.add_fingerprint(user)
-	if (!( istype(C, /obj/item/weapon/crowbar) || (istype(C, /obj/item/weapon/twohanded/fireaxe) && C:wielded == 1) ))
+	if (!( istype(C, /obj/item/weapon/crowbar) || (istype(C, /obj/item/weapon/fireaxe) && C.wielded == 1) ))
 		return
 	if ((src.density && (stat & NOPOWER) && !( src.operating )))
 		spawn( 0 )

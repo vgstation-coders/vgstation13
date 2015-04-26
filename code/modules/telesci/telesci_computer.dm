@@ -9,11 +9,13 @@
 	var/teles_left	// How many teleports left until it becomes uncalibrated
 	var/x_off	// X offset
 	var/y_off	// Y offset
+	var x_player_off // x offset set by player
+	var y_player_off // y offset set by player
 	var/x_co = 1	// X coordinate
 	var/y_co = 1	// Y coordinate
 	var/z_co = 1	// Z coordinate
 
-	use_power = 0
+	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 300
 	power_channel = EQUIP
@@ -21,13 +23,17 @@
 	var/teleport_cell_usage=1000 // 100% of a standard cell
 	processing=1
 
+	l_color = "#0000FF"
+
 /obj/machinery/computer/telescience/New()
 	..()
 	cell=new/obj/item/weapon/cell()
-	cell.charge=0
-	teles_left = rand(8,12)
+	cell.charge = 0
+	teles_left = rand(12,14)
 	x_off = rand(-10,10)
 	y_off = rand(-10,10)
+	x_player_off = 0
+	y_player_off = 0
 	initialize()
 
 /obj/machinery/computer/telescience/initialize()
@@ -44,23 +50,23 @@
 	if(stat & BROKEN)
 		return
 
+	if(..())
+		return
+
 	if(istype(W, /obj/item/weapon/cell) && anchored)
 		if(cell)
-			user << "\red There is already a cell in \the [name]."
+			user << "<span class='warning'>There is already a cell in \the [name].</span>"
 			return
 		else
-			var/area/a = loc.loc // Gets our locations location, like a dream within a dream
-			if(!isarea(a))
-				return
-			if(a.power_equip == 0) // There's no APC in this area, don't try to cheat power!
-				user << "\red \The [name] blinks red as you try to insert the cell!"
+			if(areaMaster.power_equip == 0) // There's no APC in this area, don't try to cheat power!
+				user << "<span class='warning'>\The [name] blinks red as you try to insert the cell!</span>"
 				return
 
-			user.drop_item()
-			W.loc = src
+			user.drop_item(W, src)
 			cell = W
 			user.visible_message("[user] inserts a cell into the [src].", "You insert a cell into the [src].")
 		update_icon()
+
 /obj/machinery/computer/telescience/update_icon()
 	if(stat & BROKEN)
 		icon_state = "teleportb"
@@ -82,7 +88,7 @@
   *
   * @return nothing
   */
-/obj/machinery/computer/telescience/ui_interact(mob/user, ui_key = "main")
+/obj/machinery/computer/telescience/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 	if(stat & (BROKEN|NOPOWER)) return
 	if(user.stat || user.restrained()) return
 
@@ -94,24 +100,25 @@
 			"maxcharge" = cell.maxcharge
 		)
 	var/list/data=list(
+		"pOffsetX" = x_player_off,
+		"pOffsetY" = y_player_off,
 		"coordx" = x_co,
 		"coordy" = y_co,
 		"coordz" = z_co,
 		"cell" = cell_data
 	)
 
-	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, ui_key)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+
 	if (!ui)
 		// the ui does not exist, so we'll create a new one
 		ui = new(user, src, ui_key, "telescience_console.tmpl", name, 380, 210)
 		// When the UI is first opened this is the data it will use
 		ui.set_initial_data(data)
-		ui.set_auto_update(1) // Charging action
+		// Open the new ui window.
 		ui.open()
-	else
-		// The UI is already open so push the new data to it
-		ui.push_data(data)
-		return
+		// Auto update every Master Controller tick.
+		ui.set_auto_update(1)
 
 /obj/machinery/computer/telescience/attack_paw(mob/user)
 	user << "You are too primitive to use this computer."
@@ -139,7 +146,7 @@
 	if(prob(95))
 		sparks()
 		for(var/mob/O in hearers(src, null))
-			O.show_message("\red The telepad weakly fizzles.", 2)
+			O.show_message("<span class='warning'>The telepad weakly fizzles.</span>", 2)
 		return
 	if(prob(5))
 		// Irradiate everyone in telescience!
@@ -148,14 +155,14 @@
 			sparks()
 			for(var/mob/living/carbon/human/M in viewers(L, null))
 				M.apply_effect((rand(10, 20)), IRRADIATE, 0)
-				M << "\red You feel strange."
+				M << "<span class='warning'>You feel strange.</span>"
 		return
 	/* Lets not, for now.  - N3X
 	if(prob(1))
 		// AI CALL SHUTTLE I SAW RUNE, SUPER LOW CHANCE, CAN HARDLY HAPPEN
 		for(var/mob/living/carbon/O in viewers(src, null))
 			var/datum/game_mode/cult/temp = new
-			O.show_message("\red The telepad flashes with a strange light, and you have a sudden surge of allegiance toward the true dark one!", 2)
+			O.show_message("<span class='warning'>The telepad flashes with a strange light, and you have a sudden surge of allegiance toward the true dark one!</span>", 2)
 			O.mind.make_Cultist()
 			temp.grant_runeword(O)
 			sparks()
@@ -163,7 +170,7 @@
 	if(prob(1))
 		// VIVA LA FUCKING REVOLUTION BITCHES, SUPER LOW CHANCE, CAN HARDLY HAPPEN
 		for(var/mob/living/carbon/O in viewers(src, null))
-			O.show_message("\red The telepad flashes with a strange light, and you see all kind of images flash through your mind, of murderous things Nanotrasen has done, and you decide to rebel!", 2)
+			O.show_message("<span class='warning'>The telepad flashes with a strange light, and you see all kind of images flash through your mind, of murderous things Nanotrasen has done, and you decide to rebel!</span>", 2)
 			O.mind.make_Rev()
 			sparks()
 		return
@@ -171,7 +178,7 @@
 	if(prob(1))
 		// The OH SHIT FUCK GOD DAMN IT LYNCH THE SCIENTISTS event.
 		for(var/mob/living/carbon/O in viewers(src, null))
-			O.show_message("\red The telepad changes colors rapidly, and opens a portal, and you see what your mind seems to think is the very threads that hold the pattern of the universe together, and a eerie sense of paranoia creeps into you.", 2)
+			O.show_message("<span class='warning'>The telepad changes colors rapidly, and opens a portal, and you see what your mind seems to think is the very threads that hold the pattern of the universe together, and a eerie sense of paranoia creeps into you.</span>", 2)
 			spacevine_infestation()
 			sparks()
 		return
@@ -192,7 +199,7 @@
 				M.Stun(10)
 				M.Paralyse(4)
 			else
-				M.make_jittery(500)
+				M.Jitter(500)
 			sparks()
 		return
 	if(prob(1))
@@ -215,10 +222,16 @@
 			return
 		return
 	return
-
+var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
+										/obj/machinery/the_singularitygen,
+										/obj/item/weapon/grenade,
+										/obj/item/device/transfer_valve,
+										/obj/item/device/fuse_bomb,
+										/obj/item/device/onetankbomb,
+										/obj/machinery/portable_atmospherics/canister)
 /obj/machinery/computer/telescience/proc/doteleport(mob/user)
-	var/trueX = x_co + x_off + WORLD_X_OFFSET
-	var/trueY = y_co + y_off + WORLD_Y_OFFSET
+	var/trueX = x_co + x_off - x_player_off + WORLD_X_OFFSET
+	var/trueY = y_co + y_off - y_player_off + WORLD_Y_OFFSET
 	trueX = Clamp(trueX, 1, world.maxx)
 	trueY = Clamp(trueY, 1, world.maxy)
 	if(telepad)
@@ -226,10 +239,11 @@
 		var/area/A=target.loc
 		if(A && A.jammed)
 			if(!telepad.amplifier || A.jammed==SUPER_JAMMED)
-				src.visible_message("\red \icon[src] [src] turns on and the lights dim.  You can see a faint shape, but it loses focus and the telepad shuts off with a buzz.  Perhaps you need more signal strength?", "\icon[src]\red You hear something buzz.")
+				src.visible_message("<span class='warning'>\icon[src] [src] turns on and the lights dim.  You can see a faint shape, but it loses focus and the telepad shuts off with a buzz.  Perhaps you need more signal strength?", "\icon[src]<span class='warning'>You hear something buzz.</span></span>")
 				return
-			del(telepad.amplifier)
-			src.visible_message("\icon[src]\blue You hear something shatter.","\icon[src]\blue You hear something shatter.")
+			if(prob(25))
+				del(telepad.amplifier)
+				src.visible_message("\icon[src]<span class='notice'>You hear something shatter.</span>","\icon[src]<span class='notice'>You hear something shatter.</span>")
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(5, 1, telepad)
 		s.start()
@@ -247,6 +261,9 @@
 		var/things=0
 		for(var/atom/movable/ROI in source)
 			if(ROI.anchored || things>=10) continue
+			if(is_type_in_list(ROI,telesci_warnings))
+				message_admins("[user.real_name]/([formatPlayerPanel(user,user.ckey)]) teleported a [ROI] to [formatJumpTo(dest)] from [formatJumpTo(source)]")
+			log_admin("[user.real_name]/([formatPlayerPanel(user,user.ckey)]) teleported a [ROI] to [formatJumpTo(dest)] from [formatJumpTo(source)]")
 			do_teleport(ROI, dest, 0)
 			things++
 		return
@@ -272,6 +289,25 @@
 /obj/machinery/computer/telescience/Topic(href, href_list)
 	if(stat & (NOPOWER|BROKEN))
 		return 0
+	if(href_list["close"])
+		if(usr.machine == src) usr.unset_machine()
+		return 1
+	if(href_list["setPOffsetX"])
+		var/new_x = input("Please input desired X offset.", name, x_player_off) as num
+		if(new_x < -10 || new_x > 10)
+			usr << "<span class='caution'>Error: Invalid X offset (-10 to 10)</span>"
+		else
+			x_player_off = new_x
+		return 1
+
+	if(href_list["setPOffsetY"])
+		var/new_y = input("Please input desired X offset.", name, y_player_off) as num
+		if(new_y < -10 || new_y > 10)
+			usr << "<span class='caution'>Error: Invalid Y offset (-10 to 10)</span>"
+		else
+			y_player_off = new_y
+		return 1
+
 
 	if(href_list["setx"])
 		var/new_x = input("Please input desired X coordinate.", name, x_co) as num
@@ -324,7 +360,7 @@
 		return 1
 
 	if(href_list["recal"])
-		teles_left = rand(9,12)
+		teles_left = rand(12,14)
 		x_off = rand(-10,10)
 		y_off = rand(-10,10)
 		sparks()

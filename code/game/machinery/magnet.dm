@@ -178,7 +178,7 @@
 			center = locate(x+center_x, y+center_y, z)
 			if(center)
 				for(var/obj/M in orange(magnetic_field, center))
-					if(!M.anchored && (M.flags & CONDUCT))
+					if(!M.anchored && (M.is_conductor()))
 						step_towards(M, center)
 
 				for(var/mob/living/silicon/S in orange(magnetic_field, center))
@@ -278,8 +278,8 @@
 		onclose(user, "magnet")
 
 	Topic(href, href_list)
-		if(stat & (BROKEN|NOPOWER))
-			return
+		if(..())
+			return 1
 		usr.set_machine(src)
 		src.add_fingerprint(usr)
 

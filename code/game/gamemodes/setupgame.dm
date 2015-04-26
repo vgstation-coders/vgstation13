@@ -74,11 +74,14 @@
 	TOXICFARTBLOCK = getAssignedBlock("TOXICFART",  numsToAssign, good=1)
 	STRONGBLOCK    = getAssignedBlock("STRONG",     numsToAssign, good=1)
 	HORNSBLOCK     = getAssignedBlock("HORNS",      numsToAssign)
+	SMILEBLOCK     = getAssignedBlock("SMILE",      numsToAssign)
+	ELVISBLOCK     = getAssignedBlock("ELVIS",      numsToAssign)
 
 	// Powers
 	SOBERBLOCK     = getAssignedBlock("SOBER",      numsToAssign, good=1)
 	PSYRESISTBLOCK = getAssignedBlock("PSYRESIST",  numsToAssign, DNA_HARD_BOUNDS, good=1)
-	SHADOWBLOCK    = getAssignedBlock("SHADOW",     numsToAssign, DNA_HARDER_BOUNDS, good=1)
+	//SHADOWBLOCK  = getAssignedBlock("SHADOW",     numsToAssign, DNA_HARDER_BOUNDS, good=1)
+	FARSIGHTBLOCK  = getAssignedBlock("FARSIGHT",   numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	CHAMELEONBLOCK = getAssignedBlock("CHAMELEON",  numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	CRYOBLOCK      = getAssignedBlock("CRYO",       numsToAssign, DNA_HARD_BOUNDS, good=1)
 	EATBLOCK       = getAssignedBlock("EAT",        numsToAssign, DNA_HARD_BOUNDS, good=1)
@@ -88,6 +91,17 @@
 	EMPATHBLOCK    = getAssignedBlock("EMPATH",     numsToAssign, DNA_HARD_BOUNDS, good=1)
 	SUPERFARTBLOCK = getAssignedBlock("SUPERFART",  numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	POLYMORPHBLOCK = getAssignedBlock("POLYMORPH",  numsToAssign, DNA_HARDER_BOUNDS, good=1)
+
+	//
+	// /vg/ Blocks
+	/////////////////////////////////////////////
+
+	// Disabilities
+	LOUDBLOCK      = getAssignedBlock("LOUD",       numsToAssign)
+	WHISPERBLOCK   = getAssignedBlock("WHISPER",    numsToAssign)
+	DIZZYBLOCK     = getAssignedBlock("DIZZY",      numsToAssign)
+	SANSBLOCK      = getAssignedBlock("SANS",	numsToAssign)
+
 
 	//
 	// Static Blocks
@@ -110,6 +124,15 @@
 			assignedToBlock.Add(G.name)
 			blocks_assigned[G.block]=assignedToBlock
 
+	// I WILL HAVE A LIST OF GENES THAT MATCHES THE RANDOMIZED BLOCKS GODDAMNIT!
+	for(var/block=1;block<=DNA_SE_LENGTH;block++)
+		var/name = assigned_blocks[block]
+		for(var/datum/dna/gene/gene in dna_genes)
+			if(gene.name == name || gene.block == block)
+				if(gene.block in assigned_gene_blocks)
+					warning("DNA2: Gene [gene.name] trying to add to already assigned gene block list (used by [english_list(assigned_gene_blocks[block])])")
+				assigned_gene_blocks[block] = gene
+
 	testing("DNA2: [numsToAssign.len] blocks are unused: [english_list(numsToAssign)]")
 
 // Run AFTER genetics setup and AFTER species setup.
@@ -120,7 +143,7 @@
 		var/datum/species/species = all_species[name]
 		if(species.default_block_names.len>0)
 			testing("Setting up genetics for [species.name] (needs [english_list(species.default_block_names)])")
-			species.default_blocks.Cut()
+			species.default_blocks.len = 0
 			for(var/block=1;block<DNA_SE_LENGTH;block++)
 				if(assigned_blocks[block] in species.default_block_names)
 					testing("  Found [assigned_blocks[block]] ([block])")

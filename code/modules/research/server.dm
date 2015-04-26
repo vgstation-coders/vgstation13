@@ -15,12 +15,15 @@
 	req_access = list(access_rd) //Only the R&D can change server settings.
 
 /obj/machinery/r_n_d/server/New()
-	..()
-	component_parts = list()
-	component_parts += new /obj/item/weapon/circuitboard/rdserver(src)
-	component_parts += new /obj/item/weapon/stock_parts/scanning_module(src)
-	component_parts += new /obj/item/weapon/stock_parts/capacitor(src)
-	component_parts += new /obj/item/weapon/stock_parts/capacitor(src)
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/rdserver,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/capacitor
+	)
+
 	RefreshParts()
 	src.initialize(); //Agouri
 
@@ -54,7 +57,7 @@
 		if(0 to T0C)
 			health = min(100, health + 1)
 		if(T0C to (T20C + 20))
-			health = between(0, health, 100)
+			health = Clamp(health, 0, 100)
 		if((T20C + 20) to INFINITY)
 			health = max(0, health - 1)
 	if(health <= 0)
@@ -123,35 +126,6 @@
 
 				env.merge(removed)
 
-/obj/machinery/r_n_d/server/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if (disabled)
-		return
-	if (shocked)
-		shock(user,50)
-	if (istype(O, /obj/item/weapon/screwdriver))
-		if (!opened)
-			opened = 1
-			icon_state = "server_o"
-			user << "You open the maintenance hatch of [src]."
-		else
-			opened = 0
-			icon_state = "server"
-			user << "You close the maintenance hatch of [src]."
-		return
-	if (opened)
-		if(istype(O, /obj/item/weapon/crowbar))
-			griefProtection()
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-			return 1
-
 /obj/machinery/r_n_d/server/attack_hand(mob/user as mob)
 	if (disabled)
 		return
@@ -205,6 +179,8 @@
 	var/list/consoles = list()
 	var/badmin = 0
 
+	l_color = "#CD00CD"
+
 /obj/machinery/computer/rdservercontrol/Topic(href, href_list)
 	if(..())
 		return
@@ -212,7 +188,7 @@
 	add_fingerprint(usr)
 	usr.set_machine(src)
 	if(!src.allowed(usr) && !emagged)
-		usr << "\red You do not have the required access level"
+		usr << "<span class='warning'>You do not have the required access level</span>"
 		return
 
 	if(href_list["main"])
@@ -327,7 +303,7 @@
 
 			// AUTOFIXED BY fix_string_idiocy.py
 			// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\research\server.dm:316: dat += "[temp_server.name] Data ManagementP<BR><BR>"
-			dat += {"[temp_server.name] Data ManagementP<BR><BR>
+			dat += {"[temp_server.name] Data Management<BR><BR>
 				Known Technologies<BR>"}
 			// END AUTOFIX
 			for(var/datum/tech/T in temp_server.files.known_tech)
@@ -335,7 +311,7 @@
 				// AUTOFIXED BY fix_string_idiocy.py
 				// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\research\server.dm:319: dat += "* [T.name] "
 				dat += {"* [T.name]
-					<A href='?src=\ref[src];reset_tech=[T.id]'>(Reset)</A><BR>" //FYI, these are all strings"}
+					<A href='?src=\ref[src];reset_tech=[T.id]'>(Reset)</A><BR>"} //FYI, these are all strings
 				// END AUTOFIX
 			dat += "Known Designs<BR>"
 			for(var/datum/design/D in temp_server.files.known_designs)
@@ -366,7 +342,7 @@
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, 20))
 			if (src.stat & BROKEN)
-				user << "\blue The broken glass falls out."
+				user << "<span class='notice'>The broken glass falls out.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				getFromPool(/obj/item/weapon/shard, loc)
 				var/obj/item/weapon/circuitboard/rdservercontrol/M = new /obj/item/weapon/circuitboard/rdservercontrol( A )
@@ -378,7 +354,7 @@
 				A.anchored = 1
 				del(src)
 			else
-				user << "\blue You disconnect the monitor."
+				user << "<span class='notice'>You disconnect the monitor.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				var/obj/item/weapon/circuitboard/rdservercontrol/M = new /obj/item/weapon/circuitboard/rdservercontrol( A )
 				for (var/obj/C in src)
@@ -391,7 +367,7 @@
 	else if(istype(D, /obj/item/weapon/card/emag) && !emagged)
 		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
-		user << "\blue You you disable the security protocols"
+		user << "<span class='notice'>You you disable the security protocols</span>"
 	src.updateUsrDialog()
 	return
 
@@ -399,7 +375,7 @@
 /obj/machinery/r_n_d/server/robotics
 	name = "Robotics R&D Server"
 	id_with_upload_string = "1;2"
-	id_with_download_string = "1;2"
+	id_with_download_string = "1;2;3;4;5"
 	server_id = 2
 
 

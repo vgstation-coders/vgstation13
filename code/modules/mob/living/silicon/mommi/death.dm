@@ -18,11 +18,9 @@
 	dead_mob_list -= src
 	if(src.module && istype(src.module))
 		var/obj/item/found = locate(tool_state) in src.module.modules
-		if(!found)
+		if(!found && tool_state != src.module.emag)
 			var/obj/item/TS = tool_state
-			drop_item()
-			if(TS && TS.loc)
-				TS.loc = src.loc
+			drop_item(TS)
 	spawn(15)
 		if(animation)	del(animation)
 		if(src)			del(src)
@@ -60,6 +58,9 @@
 
 	if(in_contents_of(/obj/machinery/recharge_station))//exit the recharge station
 		var/obj/machinery/recharge_station/RC = loc
+		if(RC.upgrading)
+			RC.upgrading = 0
+			RC.upgrade_finished = -1
 		RC.go_out()
 
 	if(blind)	blind.layer = 0

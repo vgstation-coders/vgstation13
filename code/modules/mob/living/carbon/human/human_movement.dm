@@ -60,6 +60,13 @@
 	if(M_RUN in mutations)
 		tally = 0
 
+	var/skate_bonus = 0
+	var/disease_slow = 0
+	for(var/obj/item/weapon/bomberman/dispenser in src)
+		disease_slow = max(disease_slow, dispenser.slow)
+		skate_bonus = max(skate_bonus, dispenser.speed_bonus)//if the player is carrying multiple BBD for some reason, he'll benefit from the speed bonus of the most upgraded one
+	tally = tally - skate_bonus + (6 * disease_slow)
+
 	return (tally+config.human_delay)
 
 /mob/living/carbon/human/Process_Spacemove(var/check_drift = 0)
@@ -97,3 +104,15 @@
 
 	prob_slip = round(prob_slip)
 	return(prob_slip)
+
+/mob/living/carbon/human/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)
+	. = ..(NewLoc, Dir, step_x, step_y)
+
+	if(.)
+		if(shoes && istype(shoes, /obj/item/clothing/shoes))
+			var/obj/item/clothing/shoes/S = shoes
+			S.step_action()
+
+		for(var/obj/item/weapon/bomberman/dispenser in src)
+			if(dispenser.spam_bomb)
+				dispenser.attack_self(src)

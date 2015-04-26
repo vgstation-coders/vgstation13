@@ -14,7 +14,7 @@
 
 		if (src.malfhack)
 			if (src.malfhack.aidisabled)
-				src << "\red ERROR: APC access disabled, hack attempt canceled."
+				src << "<span class='warning'>ERROR: APC access disabled, hack attempt canceled.</span>"
 				src.malfhacking = 0
 				src.malfhack = null
 
@@ -162,10 +162,10 @@
 
 /mob/living/silicon/ai/updatehealth()
 	if(status_flags & GODMODE)
-		health = 100
+		health = maxHealth
 		stat = CONSCIOUS
 	else
 		if(fire_res_on_core)
-			health = 100 - getOxyLoss() - getToxLoss() - getBruteLoss()
+			health = maxHealth - getOxyLoss() - getToxLoss() - getBruteLoss()
 		else
-			health = 100 - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
+			health = maxHealth - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()

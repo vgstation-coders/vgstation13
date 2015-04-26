@@ -12,58 +12,46 @@
 	var/mob/living/occupant // Mob who has been put inside
 	var/opened = 0.0
 	use_power = 1
-	idle_power_usage = 2
+	idle_power_usage = 20
 	active_power_usage = 500
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
 obj/machinery/gibber/New()
-	..()
-	component_parts = list()
-	component_parts += new /obj/item/weapon/circuitboard/gibber
-	component_parts += new /obj/item/weapon/stock_parts/matter_bin
-	component_parts += new /obj/item/weapon/stock_parts/matter_bin
-	component_parts += new /obj/item/weapon/stock_parts/capacitor
-	component_parts += new /obj/item/weapon/stock_parts/capacitor
-	component_parts += new /obj/item/weapon/stock_parts/scanning_module
-	component_parts += new /obj/item/weapon/stock_parts/scanning_module
-	component_parts += new /obj/item/weapon/stock_parts/manipulator
-	component_parts += new /obj/item/weapon/stock_parts/manipulator
-	component_parts += new /obj/item/weapon/stock_parts/manipulator
-	component_parts += new /obj/item/weapon/stock_parts/manipulator
-	component_parts += new /obj/item/weapon/stock_parts/micro_laser/high
-	component_parts += new /obj/item/weapon/stock_parts/micro_laser/high
-	component_parts += new /obj/item/weapon/stock_parts/micro_laser/high
-	component_parts += new /obj/item/weapon/stock_parts/micro_laser/high
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/gibber,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/micro_laser/high,
+		/obj/item/weapon/stock_parts/micro_laser/high,
+		/obj/item/weapon/stock_parts/micro_laser/high,
+		/obj/item/weapon/stock_parts/micro_laser/high
+	)
+
 	RefreshParts()
 
 /obj/machinery/gibber/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if (istype(O, /obj/item/weapon/screwdriver))
-		if (!opened)
-			user << "You open the maintenance hatch of [src]."
-			//src.icon_state = "autolathe_t"
-		else
-			user << "You close the maintenance hatch of [src]."
-			//src.icon_state = "autolathe"
-		opened = !opened
-		return 1
-	else if(istype(O, /obj/item/weapon/crowbar))
-		if (opened)
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-			return 1
+	if(operating)
+		user << "<span class='notice'>[src] is currently gibbing something!</span>"
+		return
+
+	..()
 	if(istype(O,/obj/item/weapon/grab))
 		return handleGrab(O,user)
 	else
-		user << "\red This item is not suitable for the gibber!"
+		user << "<span class='warning'>This item is not suitable for the gibber!</span>"
 
 //auto-gibs anything that bumps into it
 /obj/machinery/gibber/autogibber
@@ -83,7 +71,7 @@ obj/machinery/gibber/New()
 				if(input_obj)
 					if(isturf(input_obj.loc))
 						input_plate = input_obj.loc
-						del(input_obj)
+						qdel(input_obj)
 						break
 
 			if(!input_plate)
@@ -117,7 +105,7 @@ obj/machinery/gibber/New()
 	src.overlays += image('icons/obj/kitchen.dmi', "grjam")
 
 /obj/machinery/gibber/update_icon()
-	overlays.Cut()
+	overlays.len = 0
 	if (dirty)
 		src.overlays += image('icons/obj/kitchen.dmi', "grbloody")
 	if(stat & (NOPOWER|BROKEN))
@@ -139,28 +127,37 @@ obj/machinery/gibber/New()
 /obj/machinery/gibber/attack_hand(mob/user as mob)
 	if(stat & (NOPOWER|BROKEN))
 		return
+	if(!anchored)
+		user << "<span class='warning'>[src] must be anchored first!</span>"
+		return
 	if(operating)
-		user << "\red It's locked and running"
+		user << "<span class='warning'>[src] is locked and running</span>"
+		return
+	if(!(src.occupant))
+		user << "<span class='warning'>[src] is empty!</span>"
 		return
 	else
 		src.startgibbing(user)
 
 // OLD /obj/machinery/gibber/attackby(obj/item/weapon/grab/G as obj, mob/user as mob)
 /obj/machinery/gibber/proc/handleGrab(obj/item/weapon/grab/G as obj, mob/user as mob)
+	if(!anchored)
+		user << "<span class='warning'>[src] must be anchored first!</span>"
+		return
 	if(src.occupant)
-		user << "\red The gibber is full, empty it first!"
+		user << "<span class='warning'>[src] is full! Empty it first.</span>"
 		return
 	if (!( istype(G, /obj/item/weapon/grab)) || !(istype(G.affecting, /mob/living/carbon/human)))
-		user << "\red This item is not suitable for the gibber!"
+		user << "<span class='warning'>This item is not suitable for [src]!</span>"
 		return
 	if(G.affecting.abiotic(1))
-		user << "\red Subject may not have abiotic items on."
+		user << "<span class='warning'>Subject may not have abiotic items on.</span>"
 		return
 
-	user.visible_message("\red [user] starts to put [G.affecting] into the gibber!")
+	user.visible_message("<span class='warning'>[user] starts to put [G.affecting] into the gibber!</span>")
 	src.add_fingerprint(user)
 	if(do_after(user, 30) && G && G.affecting && !occupant)
-		user.visible_message("\red [user] stuffs [G.affecting] into the gibber!")
+		user.visible_message("<span class='warning'>[user] stuffs [G.affecting] into the gibber!</span>")
 		var/mob/M = G.affecting
 		if(M.client)
 			M.client.perspective = EYE_PERSPECTIVE
@@ -173,18 +170,21 @@ obj/machinery/gibber/New()
 /obj/machinery/gibber/MouseDrop_T(mob/target, mob/user)
 	if(target != user || !istype(user, /mob/living/carbon/human) || user.stat || user.weakened || user.stunned || user.paralysis || user.buckled || get_dist(user, src) > 1)
 		return
+	if(!anchored)
+		user << "<span class='warning'>[src] must be anchored first!</span>"
+		return
 	if(src.occupant)
-		user << "\red The gibber is full, empty it first!"
+		user << "<span class='warning'>[src] is full! Empty it first.</span>"
 		return
 	if(user.abiotic(1))
-		user << "\red Subject may not have abiotic items on."
+		user << "<span class='warning'>Subject may not have abiotic items on.</span>"
 		return
 
 	src.add_fingerprint(user)
-	user.visible_message("\red [user.name] starts climbing into the [src].", "\red You start climbing into the [src].")
+	user.visible_message("<span class='warning'>[user.name] starts climbing into the [src].</span>", "<span class='warning'>You start climbing into the [src].</span>")
 
-	if(do_after(user, 30) && user && !occupant)
-		user.visible_message("\red [user] climbs into the [src]", "\red You climb into the [src].")
+	if(do_after(user, 30) && user && !occupant && !isnull(src.loc))
+		user.visible_message("<span class='warning'>[user] climbs into the [src]</span>", "<span class='warning'>You climb into the [src].</span>")
 		if(user.client)
 			user.client.perspective = EYE_PERSPECTIVE
 			user.client.eye = src
@@ -197,7 +197,7 @@ obj/machinery/gibber/New()
 	set name = "Empty Gibber"
 	set src in oview(1)
 
-	if (usr.stat != 0)
+	if (usr.stat != 0 || (usr.status_flags & FAKEDEATH))
 		return
 	src.go_out()
 	add_fingerprint(usr)
@@ -221,10 +221,10 @@ obj/machinery/gibber/New()
 	if(src.operating)
 		return
 	if(!src.occupant)
-		visible_message("\red You hear a loud metallic grinding sound.")
+		visible_message("<span class='warning'>You hear a loud metallic grinding sound.</span>")
 		return
 	use_power(1000)
-	visible_message("\red You hear a loud squelchy grinding sound.")
+	visible_message("<span class='warning'>You hear a loud squelchy grinding sound.</span>")
 	src.operating = 1
 	update_icon()
 	var/sourcename = src.occupant.real_name
@@ -243,9 +243,9 @@ obj/machinery/gibber/New()
 		src.occupant.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
 		allmeat[i] = newmeat
 
-	src.occupant.attack_log += "\[[time_stamp()]\] Was gibbed by <b>[user]/[user.ckey]</b>" //One shall not simply gib a mob unnoticed!
-	user.attack_log += "\[[time_stamp()]\] Gibbed <b>[src.occupant]/[src.occupant.ckey]</b>"
-	log_attack("\[[time_stamp()]\] <b>[user]/[user.ckey]</b> gibbed <b>[src.occupant]/[src.occupant.ckey]</b>")
+	src.occupant.attack_log += "\[[time_stamp()]\] Was gibbed by <B>[key_name(user)]</B>" //One shall not simply gib a mob unnoticed!
+	user.attack_log += "\[[time_stamp()]\] Gibbed <B>[key_name(src.occupant)]</B>"
+	log_attack("<B>[key_name(user)]</B> gibbed <B>[key_name(src.occupant)]</B>")
 
 	if(!iscarbon(user))
 		src.occupant.LAssailant = null
@@ -256,7 +256,6 @@ obj/machinery/gibber/New()
 	src.occupant.ghostize()
 	del(src.occupant)
 	spawn(src.gibtime)
-		playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
 		operating = 0
 		for (var/i=1 to totalslabs)
 			var/obj/item/meatslab = allmeat[i]
@@ -264,7 +263,8 @@ obj/machinery/gibber/New()
 			meatslab.loc = src.loc
 			meatslab.throw_at(Tx,i,3)
 			if (!Tx.density)
-				new /obj/effect/decal/cleanable/blood/gibs(Tx,i)
+				var/obj/effect/decal/cleanable/blood/gibs/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
+				O.New(Tx,i)
 		src.operating = 0
 		update_icon()
 
@@ -272,10 +272,10 @@ obj/machinery/gibber/New()
 	if(src.operating)
 		return
 	if(!victim)
-		visible_message("\red You hear a loud metallic grinding sound.")
+		visible_message("<span class='warning'>You hear a loud metallic grinding sound.</span>")
 		return
 	use_power(1000)
-	visible_message("\red You hear a loud squelchy grinding sound.")
+	visible_message("<span class='warning'>You hear a loud squelchy grinding sound.</span>")
 	src.operating = 1
 	update_icon()
 	var/sourcename = victim.real_name
@@ -306,22 +306,24 @@ obj/machinery/gibber/New()
 		victim.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
 		allmeat[i] = newmeat
 
-	victim.attack_log += "\[[time_stamp()]\] Was auto-gibbed by <b>[src]</b>" //One shall not simply gib a mob unnoticed!
-	log_attack("\[[time_stamp()]\] <b>[src]</b> auto-gibbed <b>[victim]/[victim.ckey]</b>")
+	victim.attack_log += "\[[time_stamp()]\] Was auto-gibbed by <B>[src]</B>" //One shall not simply gib a mob unnoticed!
+	log_attack("<B>[src]</B> auto-gibbed <B>[key_name(victim)]</B>")
 	victim.death(1)
 	if(ishuman(victim) || ismonkey(victim) || isalien(victim))
-		var/obj/item/brain/B = new(src.loc)
+		var/obj/item/organ/brain/B = new(src.loc)
 		B.transfer_identity(victim)
 		var/turf/Tx = locate(src.x - 2, src.y, src.z)
 		B.loc = src.loc
 		B.throw_at(Tx,2,3)
 		if(isalien(victim))
-			new /obj/effect/decal/cleanable/blood/gibs/xeno(Tx,2)
+			var/obj/effect/decal/cleanable/blood/gibs/xeno/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs/xeno, Tx)
+			O.New(Tx,2)
 		else
-			new /obj/effect/decal/cleanable/blood/gibs(Tx,2)
+			var/obj/effect/decal/cleanable/blood/gibs/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
+			O.New(Tx,2)
 	del(victim)
 	spawn(src.gibtime)
-		playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
+		playsound(get_turf(src), 'sound/effects/gib2.ogg', 50, 1)
 		operating = 0
 		for (var/i=1 to totalslabs)
 			var/obj/item/meatslab = allmeat[i]
@@ -329,7 +331,8 @@ obj/machinery/gibber/New()
 			meatslab.loc = src.loc
 			meatslab.throw_at(Tx,i,3)
 			if (!Tx.density)
-				new /obj/effect/decal/cleanable/blood/gibs(Tx,i)
+				var/obj/effect/decal/cleanable/blood/gibs/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
+				O.New(Tx,i)
 		src.operating = 0
 		update_icon()
 

@@ -4,7 +4,8 @@
 	icon = 'icons/obj/storage.dmi'
 	name = "Money bag"
 	icon_state = "moneybag"
-	flags = FPRINT | TABLEPASS| CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	force = 10.0
 	throwforce = 2.0
 	w_class = 4.0
@@ -35,14 +36,13 @@
 	..()
 	if (istype(W, /obj/item/weapon/coin))
 		var/obj/item/weapon/coin/C = W
-		user << "\blue You add the [C.name] into the bag."
-		usr.drop_item()
-		contents += C
+		user << "<span class='notice'>You add the [C.name] into the bag.</span>"
+		usr.drop_item(W, src)
 	if (istype(W, /obj/item/weapon/moneybag))
 		var/obj/item/weapon/moneybag/C = W
 		for (var/obj/O in C.contents)
 			contents += O;
-		user << "\blue You empty the [C.name] into the bag."
+		user << "<span class='notice'>You empty the [C.name] into the bag.</span>"
 	return
 
 /obj/item/weapon/moneybag/Topic(href, href_list)
@@ -55,9 +55,16 @@
 		var/obj/item/weapon/coin/COIN=locate(typepath, src.contents)
 		if(!COIN)
 			return
-		COIN.loc = src.loc
+		COIN.loc = get_turf(src)
+		if(!usr.get_active_hand())
+			usr.put_in_hands(COIN)
 	return
 
+/obj/item/weapon/moneybag/MouseDrop(obj/over_object as obj)
+	if(ishuman(usr))
+		if(over_object == usr)
+			var/mob/living/carbon/human/H = usr
+			H.put_in_hands(src)
 
 
 /obj/item/weapon/moneybag/vault

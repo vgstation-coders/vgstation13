@@ -12,7 +12,7 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 
 /datum/event/heist
 	var/list/raid_objectives = list()     //Raid objectives.
-	var/list/obj/cortical_stacks = list() //Stacks for 'leave nobody behind' objective.
+	var/list/raiders = list() // Mobs for 'leave nobody behind' objective.
 
 	announceWhen	= 600
 	oneShot			= 1
@@ -34,7 +34,7 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 	if(!..())
 		return 0
 
-	var/list/candidates = get_candidates(BE_RAIDER)
+	var/list/candidates = get_candidates(ROLE_VOXRAIDER)
 	var/raider_num = 0
 
 	//Check that we have enough vox.
@@ -79,24 +79,14 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 		raider.current.loc = raider_spawn[index]
 		index++
 
-		var/sounds = rand(2,8)
-		var/i = 0
-		var/newname = ""
-
-		while(i<=sounds)
-			i++
-			newname += pick(list("ti","hi","ki","ya","ta","ha","ka","ya","chi","cha","kah"))
-
 		var/mob/living/carbon/human/vox = raider.current
-
-		vox.real_name = capitalize(newname)
-		vox.name = vox.real_name
 		vox.age = rand(12,20)
 		vox.dna.mutantrace = "vox"
 		vox.set_species("Vox")
-		vox.languages = list() // Removing language from chargen.
+		vox.generate_name()
+		vox.languages = HUMAN // Removing language from chargen.
 		vox.flavor_text = ""
-		vox.add_language("Vox-pidgin")
+		//vox.add_language("Vox-pidgin")
 		vox.h_style = "Short Vox Quills"
 		vox.f_style = "Shaved"
 		for(var/datum/organ/external/limb in vox.organs)
@@ -111,17 +101,20 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 
 /datum/event/heist/proc/is_raider_crew_safe()
 
-	if(cortical_stacks.len == 0)
+	if(raiders.len == 0)
 		return 0
 
-	for(var/obj/stack in cortical_stacks)
-		if (get_area(stack) != locate(/area/shuttle/vox/station))
+	for(var/datum/mind/M in raiders)
+		if(!M || !M.current) continue
+		if (get_area(M.current) != locate(/area/shuttle/vox/station))
 			return 0
 	return 1
 
 /datum/event/heist/proc/is_raider_crew_alive()
-
+	if(raiders.len == 0)
+		return 0
 	for(var/datum/mind/raider in raiders)
+		if(!raider || !raider.current) continue
 		if(raider.current)
 			if(istype(raider.current,/mob/living/carbon/human) && raider.current.stat != 2)
 				return 1
@@ -157,21 +150,24 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 
 	if(prob(25)) // This is an asspain.
 		raid_objectives += new /datum/objective/heist/kidnap
-	raid_objectives += new /datum/objective/heist/loot
-	raid_objectives += new /datum/objective/heist/salvage
+	raid_objectives += new /datum/objective/steal/heist
+	raid_objectives += new /datum/objective/steal/salvage
 	raid_objectives += new /datum/objective/heist/inviolate_crew
 	raid_objectives += new /datum/objective/heist/inviolate_death
 
 	for(var/datum/objective/heist/O in raid_objectives)
 		O.choose_target()
 
+	for(var/datum/objective/steal/O in raid_objectives)
+		O.find_target()
+
 	return raid_objectives
 
 /datum/event/heist/proc/greet_vox(var/datum/mind/raider)
-	raider.current << {"\blue <B>You are a Vox Raider, fresh from the Shoal!</b>
+	raider.current << {"<span class='notice'><B>You are a Vox Raider, fresh from the Shoal!</b>
 The Vox are a race of cunning, sharp-eyed nomadic raiders and traders endemic to Tau Ceti and much of the unexplored galaxy. You and the crew have come to the [station_name()] for plunder, trade or both.
 Vox are cowardly and will flee from larger groups, but corner one or find them en masse and they are vicious.
-Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to turn on your nitrogen internals!</b>"}
+Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to turn on your nitrogen internals!</b></span>"}
 	var/obj_count = 1
 	for(var/datum/objective/objective in raider.objectives)
 		raider.current << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
@@ -229,8 +225,8 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 		else
 			win_msg += "<B>The Vox Raiders were repelled!</B>"
 
-	world << {"\red <FONT size = 3><B>[win_type] [win_group] victory!</B></FONT>
-		[win_msg]"}
+	world << {"<span class='danger'><FONT size = 3>[win_type] [win_group] victory!</FONT>
+		[win_msg]</span>"}
 	feedback_set_details("round_end_result","heist - [win_type] [win_group]")
 
 	var/count = 1

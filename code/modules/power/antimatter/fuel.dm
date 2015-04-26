@@ -68,16 +68,15 @@
 
 
 /obj/item/weapon/fuel/examine()
-	set src in view(1)
-	if(usr && !usr.stat)
-		usr << "A magnetic storage ring, it contains [fuel]kg of [content ? content : "nothing"]."
+	..()
+	user << "<span class='info'>A magnetic storage ring, it contains [fuel]kg of [content ? content : "nothing"].</span>"
 
 /obj/item/weapon/fuel/proc/injest(mob/M as mob)
 	switch(content)
 		if("Anti-Hydrogen")
 			M.gib()
 		if("Hydrogen")
-			M << "\blue You feel very light, as if you might just float away..."
+			M << "<span class='notice'>You feel very light, as if you might just float away...</span>"
 	del(src)
 	return
 
@@ -96,5 +95,5 @@
 			return
 	else
 		for(var/mob/O in viewers(M, null))
-			O.show_message(text("\red [M] ate the [content ? content : "empty canister"]!"), 1)
+			O.show_message(text("<span class='warning'>[M] ate the [content ? content : "empty canister"]!</span>"), 1)
 		src.injest(M)

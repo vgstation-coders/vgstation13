@@ -2,14 +2,14 @@
 	name = "Human Resources: Demotion Fax Key"
 	info = "<center><B>Fax Machine Demotion Key</B></center><BR><BR>This document is intended for use in the station fax machines.<br><ol><li>Insert into fax with your Internal Affairs ID.</li><li>Select NANOTRASEN HR to send to; Requires official Agent authorization.</li><li>Use the printed chip to carefully set a name.</li></ol> Remember to probably capitolize the employee name. Acquire Heads of Staff stamps to bar respective access, and once you have completed gathering authorizations you can apply the chip to the intended ID card.<br><br>In case of a mistake, acquire a new ID card as Identification Computers cannot bypass the chip."
 	icon = 'icons/obj/bureaucracy.dmi'
-	icon_state = "paper_words"
+	icon_state = "paper"
 	stamps = "<br><br><i>This document has an intricate Nanontrasen logo in magnetic ink. It looks impossible to forge.</i>"
 
 /obj/item/weapon/paper/commendation_key
 	name = "Human Resources: Commendation Fax Key"
 	info = "<center><B>Fax Machine Commendation Key</B></center><BR><BR>This document is intended for use in the station fax machines.<br><ol><li>Insert into fax with your Internal Affairs ID.</li><li>Select NANOTRASEN HR to send to; Requires official Agent authorization.</li><li>Take the printed sticker and give cordially to valued employee.</li></ol> Commendations should only be given to outstanding crew members and those who exhibit positive, productive qualities."
 	icon = 'icons/obj/bureaucracy.dmi'
-	icon_state = "paper_words"
+	icon_state = "paper"
 	stamps = "<br><br><i>This document has an intricate Nanontrasen logo in magnetic ink. It looks impossible to forge.</i>"
 
 
@@ -37,7 +37,8 @@
 		user << "<span class='notice'>The target name cannot be reset!</span>"
 		return
 	else
-		var/str = copytext(reject_bad_text(input(user,"Enter the properly capitolized name for demotion","Set name","")),1,MAX_NAME_LEN)
+		var/str = copytext(reject_bad_text(input(user,"Enter the properly capitalized name for demotion","Set name","") as text|null),1,MAX_NAME_LEN)
+		if (!Adjacent(user) || user.stat) return
 		if(!str)
 			alert("Invalid name.")
 			target_name = null
@@ -45,7 +46,7 @@
 		target_name = str
 		name = "[target_name]'s demotion microchip"
 		desc = desc + " Stamped by:"
-		user << "\blue The demotion microchip for [src.target_name] is now ready to be stamped."
+		user << "<span class='notice'>The demotion microchip for [src.target_name] is now ready to be stamped.</span>"
 
 /obj/item/demote_chip/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/stamp))
@@ -55,39 +56,39 @@
 				if(cap == 0)
 					desc = desc + "/Captain"
 				cap = 1
-				user << "\blue You stamp the demotion microchip of [target_name]."
+				user << "<span class='notice'>You stamp the demotion microchip of [target_name].</span>"
 			if(istype(S, /obj/item/weapon/stamp/hop))
 				if(hop == 0)
 					desc = desc + "/HoP"
 				hop = 1
-				user << "\blue You stamp the demotion microchip of [target_name]."
+				user << "<span class='notice'>You stamp the demotion microchip of [target_name].</span>"
 			if(istype(S, /obj/item/weapon/stamp/hos))
 				if(hos == 0)
 					desc = desc + "/HoS"
 				hos = 1
-				user << "\blue You stamp the demotion microchip of [target_name]."
+				user << "<span class='notice'>You stamp the demotion microchip of [target_name].</span>"
 			if(istype(S, /obj/item/weapon/stamp/ce))
 				if(ce == 0)
 					desc = desc + "/CE"
 				ce = 1
-				user << "\blue You stamp the demotion microchip of [target_name]."
+				user << "<span class='notice'>You stamp the demotion microchip of [target_name].</span>"
 			if(istype(S, /obj/item/weapon/stamp/rd))
 				if(rd == 0)
 					desc = desc + "/RD"
 				rd = 1
-				user << "\blue You stamp the demotion microchip of [target_name]."
+				user << "<span class='notice'>You stamp the demotion microchip of [target_name].</span>"
 			if(istype(S, /obj/item/weapon/stamp/cmo))
 				if(cmo == 0)
 					desc = desc + "/CMO"
 				cmo = 1
-				user << "\blue You stamp the demotion microchip of [target_name]."
+				user << "<span class='notice'>You stamp the demotion microchip of [target_name].</span>"
 			if(istype(S, /obj/item/weapon/stamp/clown))
 				if(clown == 0)
 					desc = desc + "/HONK"
 				clown = 1
-				user << "\blue You stamp the demotion microchip of [target_name]."
+				user << "<span class='notice'>You stamp the demotion microchip of [target_name].</span>"
 		else
-			user << "\blue The chip has not been initialized."
+			user << "<span class='notice'>The chip has not been initialized.</span>"
 	else
 		return ..()
 
@@ -96,9 +97,9 @@
 	if(istype(I, /obj/item/demote_chip/))
 		var/obj/item/demote_chip/DE = I
 		if(registered_name != DE.target_name)
-			user << "\blue Failed to apply, names do not match."
+			user << "<span class='notice'>Failed to apply, names do not match.</span>"
 		else if(bans != null)
-			user << "\blue This card already has a microchip applied"
+			user << "<span class='notice'>This card already has a microchip applied</span>"
 		else
 			icon_state = "centcom_old"
 			bans = "9" //if get_region_accesses ever uses 9 we're fucked
@@ -111,11 +112,11 @@
 	if(istype(I, /obj/item/demote_chip))
 		var/obj/item/demote_chip/D = I
 		if(registered_name != D.target_name)
-			user << "\blue Failed to apply, names do not match."
+			user << "<span class='notice'>Failed to apply, names do not match.</span>"
 		else if(bans != null)
-			user << "\blue This card already has a microchip applied"
+			user << "<span class='notice'>This card already has a microchip applied</span>"
 		else if(icon_state == "gold")
-			user << "\blue This microchip cannot apply to this card type."
+			user << "<span class='notice'>This microchip cannot apply to this card type.</span>"
 		else
 
 			if(D.cap == 1)
@@ -138,7 +139,7 @@
 				access -= get_region_accesses(2)
 				bans = bans + "2"
 			if(bans == null)
-				user << "\blue You require at least one stamp."
+				user << "<span class='notice'>You require at least one stamp.</span>"
 				return
 			icon_state = "centcom_old"
 			del(D)

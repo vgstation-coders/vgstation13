@@ -5,24 +5,33 @@
 	damage_type = BURN
 	nodamage = 1
 	flag = "energy"
+	var/changetype=null
 
-	on_hit(var/atom/change)
-		wabbajack(change)
+/obj/item/projectile/change/on_hit(var/atom/change)
+	wabbajack(change)
 
 
-/obj/item/projectile/change/proc/wabbajack (mob/M as mob in living_mob_list)
+/obj/item/projectile/change/proc/wabbajack(var/mob/M) //WHY: as mob in living_mob_list
 	if(istype(M, /mob/living) && M.stat != DEAD)
-		if(M.monkeyizing)	return
-		if(M.has_brain_worms()) return //Borer stuff - RR
+		if(M.monkeyizing)
+			return
+		if(M.has_brain_worms())
+			return //Borer stuff - RR
+		if(istype(M, /mob/living/carbon/human/manifested))
+			visible_message("<span class='caution'>The bolt of change doesn't seem to affect [M] in any way.</span>")
+			return
+
+		// TODO: This needs to be standardized, sort of a premorph() proc or something.
 		M.monkeyizing = 1
 		M.canmove = 0
 		M.icon = null
-		M.overlays.Cut()
+		M.overlays.len = 0
 		M.invisibility = 101
 
 		if(istype(M, /mob/living/silicon/robot))
 			var/mob/living/silicon/robot/Robot = M
-			if(Robot.mmi)	del(Robot.mmi)
+			if(Robot.mmi)
+				del(Robot.mmi)
 		else
 			for(var/obj/item/W in M)
 				if(istype(W, /obj/item/weapon/implant))	//TODO: Carn. give implants a dropped() or something
@@ -31,27 +40,32 @@
 				W.layer = initial(W.layer)
 				W.loc = M.loc
 				W.dropped(M)
+		// END TODO
 
 		var/mob/living/new_mob
 
-		var/randomize = pick("monkey","robot","slime","xeno","human")
+		// Random chance of fucking up
+		if(changetype!=null && prob(10))
+			changetype = null
+
+		var/randomize = changetype==null?pick(available_staff_transforms):changetype
 
 		switch(randomize)
 			if("monkey")
 				new_mob = new /mob/living/carbon/monkey(M.loc)
-				new_mob.universal_speak = 1
+				new_mob.languages |= HUMAN
 			if("robot")
 				new_mob = new /mob/living/silicon/robot(M.loc)
-				new_mob.gender = M.gender
+				new_mob.setGender(M.gender)
 				new_mob.invisibility = 0
 				new_mob.job = "Cyborg"
 				var/mob/living/silicon/robot/Robot = new_mob
 				Robot.mmi = new /obj/item/device/mmi(new_mob)
 				Robot.mmi.transfer_identity(M)	//Does not transfer key/client.
-				new_mob.universal_speak = 1
+				new_mob.languages |= HUMAN
 			if("mommi")
 				new_mob = new /mob/living/silicon/robot/mommi(M.loc)
-				new_mob.gender = M.gender
+				new_mob.setGender(M.gender)
 				new_mob.invisibility = 0
 				new_mob.job = "MoMMI"
 				var/mob/living/silicon/robot/mommi/MoMMI = new_mob
@@ -86,7 +100,7 @@
 
 				slimey = text2path("/mob/living/carbon/slime[slimey]")
 				new_mob = new slimey(M.loc)
-				new_mob.universal_speak = 1
+				new_mob.languages |= HUMAN
 			if("xeno")
 				var/alien_caste = pick("Hunter","Sentinel","Drone","Larva")
 				switch(alien_caste)
@@ -94,17 +108,11 @@
 					if("Sentinel")	new_mob = new /mob/living/carbon/alien/humanoid/sentinel(M.loc)
 					if("Drone")		new_mob = new /mob/living/carbon/alien/humanoid/drone(M.loc)
 					else			new_mob = new /mob/living/carbon/alien/larva(M.loc)
-				new_mob.universal_speak = 1
+				new_mob.languages |= HUMAN
 			if("human")
-				new_mob = new /mob/living/carbon/human(M.loc)
-				if(M.gender == MALE)
-					new_mob.gender = MALE
-					new_mob.name = pick(first_names_male)
-				else
-					new_mob.gender = FEMALE
-					new_mob.name = pick(first_names_female)
-				new_mob.name += " [pick(last_names)]"
-				new_mob.real_name = new_mob.name
+				new_mob = new /mob/living/carbon/human(M.loc, delay_ready_dna=1)
+
+				new_mob.setGender(M.gender)
 
 				var/datum/preferences/A = new()	//Randomize appearance for the human
 				A.randomize_appearance_for(new_mob)
@@ -112,13 +120,35 @@
 				var/mob/living/carbon/human/H = new_mob
 				var/newspecies = pick(all_species)
 				H.set_species(newspecies)
+				H.generate_name()
+			if("furry")
+				new_mob = new /mob/living/carbon/human(M.loc, delay_ready_dna=1)
+
+				new_mob.setGender(M.gender)
+
+				var/datum/preferences/A = new()	//Randomize appearance for the human
+				A.randomize_appearance_for(new_mob)
+
+				var/mob/living/carbon/human/H = new_mob
+				H.set_species("Tajaran") // idfk
+				H.generate_name()
+			/* RIP
+			if("cluwne")
+				new_mob = new /mob/living/simple_animal/hostile/retaliate/cluwne(M.loc)
+				new_mob.setGender(gender)
+				new_mob.name = pick(clown_names)
+				new_mob.real_name = new_mob.name
+				new_mob.mutations += M_CLUMSY
+				new_mob.mutations += M_FAT
+				new_mob.setBrainLoss(100)
+			*/
 			else
 				return
 
-		for (var/obj/effect/proc_holder/spell/S in M.spell_list)
+		for (var/spell/S in M.spell_list)
 			new_mob.spell_list += new S.type
 
-		new_mob.a_intent = "hurt"
+		new_mob.a_intent = I_HURT
 		if(M.mind)
 			M.mind.transfer_to(new_mob)
 		else

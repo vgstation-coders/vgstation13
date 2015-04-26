@@ -26,6 +26,9 @@
 	item_state = "syringe_kit"
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
 
+	autoignition_temperature = 522 // Kelvin
+	fire_fuel = 2
+
 /obj/item/weapon/storage/box/large
 	name = "large box"
 	desc = "You could build a fort with this."
@@ -37,7 +40,10 @@
 	storage_slots = 21
 	max_combined_w_class = 42 // 21*2
 
-/obj/item/weapon/storage/box/surveillance/
+	autoignition_temperature = 530 // Kelvin
+	fire_fuel = 3
+
+/obj/item/weapon/storage/box/surveillance
 	name = "\improper DromedaryCo packet"
 	desc = "A packet of six imported DromedaryCo cancer sticks. A label on the packaging reads, \"Wouldn't a slow death make a change?\""
 	icon = 'icons/obj/cigarettes.dmi'
@@ -52,7 +58,7 @@
 		for(var/i = 1 to 5)
 			new /obj/item/device/camera_bug(src)
 
-/obj/item/weapon/storage/box/survival/
+/obj/item/weapon/storage/box/survival
 	New()
 		..()
 		contents = list()
@@ -83,6 +89,8 @@
 /obj/item/weapon/storage/box/gloves
 	name = "box of latex gloves"
 	desc = "Contains white gloves."
+	icon_state = "latex"
+
 	New()
 		..()
 		new /obj/item/clothing/gloves/latex(src)
@@ -183,6 +191,20 @@
 		new /obj/item/weapon/grenade/flashbang(src)
 		new /obj/item/weapon/grenade/flashbang(src)
 
+/obj/item/weapon/storage/box/smokebombs
+	name = "box of smokebombs"
+	icon_state = "smokebomb"
+
+	New()
+		..()
+		new /obj/item/weapon/grenade/smokebomb(src)
+		new /obj/item/weapon/grenade/smokebomb(src)
+		new /obj/item/weapon/grenade/smokebomb(src)
+		new /obj/item/weapon/grenade/smokebomb(src)
+		new /obj/item/weapon/grenade/smokebomb(src)
+		new /obj/item/weapon/grenade/smokebomb(src)
+		new /obj/item/weapon/grenade/smokebomb(src)
+
 /obj/item/weapon/storage/box/emps
 	name = "emp grenades"
 	desc = "A box with 5 emp grenades."
@@ -226,6 +248,21 @@
 		new /obj/item/weapon/implantcase/chem(src)
 		new /obj/item/weapon/implanter(src)
 		new /obj/item/weapon/implantpad(src)
+
+/obj/item/weapon/storage/box/bolas
+	name = "bolas box"
+	desc = "Box of bolases. Make sure to take them out before throwing them."
+	icon_state = "bolas"
+
+	New()
+		..()
+		new /obj/item/weapon/legcuffs/bolas(src)
+		new /obj/item/weapon/legcuffs/bolas(src)
+		new /obj/item/weapon/legcuffs/bolas(src)
+		new /obj/item/weapon/legcuffs/bolas(src)
+		new /obj/item/weapon/legcuffs/bolas(src)
+		new /obj/item/weapon/legcuffs/bolas(src)
+		new /obj/item/weapon/legcuffs/bolas(src)
 
 
 /obj/item/weapon/storage/box/rxglasses
@@ -426,6 +463,103 @@
 		new /obj/item/weapon/storage/pill_bottle( src )
 		new /obj/item/weapon/storage/pill_bottle( src )
 
+/obj/item/weapon/storage/box/lethalshells
+	name = "lethal shells"
+	icon_state = "lethal shells"
+
+	New()
+		..()
+		new /obj/item/ammo_casing/shotgun(src)
+		new /obj/item/ammo_casing/shotgun(src)
+		new /obj/item/ammo_casing/shotgun(src)
+		new /obj/item/ammo_casing/shotgun(src)
+		new /obj/item/ammo_casing/shotgun(src)
+		new /obj/item/ammo_casing/shotgun(src)
+		new /obj/item/ammo_casing/shotgun(src)
+		new /obj/item/ammo_casing/shotgun(src)
+		new /obj/item/ammo_casing/shotgun(src)
+		new /obj/item/ammo_casing/shotgun(src)
+		new /obj/item/ammo_casing/shotgun(src)
+		new /obj/item/ammo_casing/shotgun(src)
+		new /obj/item/ammo_casing/shotgun(src)
+		new /obj/item/ammo_casing/shotgun(src)
+		new /obj/item/ammo_casing/shotgun(src)
+
+/obj/item/weapon/storage/box/beanbagshells
+	name = "bean bag shells"
+	icon_state = "bean bag shells"
+
+	New()
+		..()
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+
+/obj/item/weapon/storage/box/stunshells
+	name = "stun shells"
+	icon_state = "stun shells"
+
+	New()
+		..()
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		new /obj/item/ammo_casing/shotgun/stunshell(src)
+
+/obj/item/weapon/storage/box/dartshells
+	name = "shotgun darts"
+	icon_state = "dart shells"
+
+	New()
+		..()
+		new /obj/item/ammo_casing/shotgun/dart(src)
+		new /obj/item/ammo_casing/shotgun/dart(src)
+		new /obj/item/ammo_casing/shotgun/dart(src)
+		new /obj/item/ammo_casing/shotgun/dart(src)
+		new /obj/item/ammo_casing/shotgun/dart(src)
+		new /obj/item/ammo_casing/shotgun/dart(src)
+		new /obj/item/ammo_casing/shotgun/dart(src)
+		new /obj/item/ammo_casing/shotgun/dart(src)
+		new /obj/item/ammo_casing/shotgun/dart(src)
+		new /obj/item/ammo_casing/shotgun/dart(src)
+		new /obj/item/ammo_casing/shotgun/dart(src)
+		new /obj/item/ammo_casing/shotgun/dart(src)
+		new /obj/item/ammo_casing/shotgun/dart(src)
+		new /obj/item/ammo_casing/shotgun/dart(src)
+		new /obj/item/ammo_casing/shotgun/dart(src)
+
+/obj/item/weapon/storage/box/labels
+	name = "label roll box"
+	desc = "A box of refill rolls for a hand labeler."
+	icon_state = "labels"
+	
+	New()
+		..()
+		for(var/i=1; i <= storage_slots; i++)
+			new /obj/item/device/label_roll(src)
 
 /obj/item/weapon/storage/box/snappops
 	name = "snap pop box"
@@ -447,7 +581,7 @@
 	item_state = "zippo"
 	storage_slots = 10
 	w_class = 1
-	flags = TABLEPASS
+	flags = 0
 	slot_flags = SLOT_BELT
 
 	New()

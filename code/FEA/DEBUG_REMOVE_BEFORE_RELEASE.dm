@@ -48,7 +48,7 @@ obj/item/weapon/tank
 		adjust_mixture(temperature as num, target_toxin_pressure as num, target_oxygen_pressure as num)
 			set src in world
 			if(!air_contents)
-				usr << "\red ERROR: no gas_mixture associated with this tank"
+				usr << "<span class='warning'>ERROR: no gas_mixture associated with this tank</span>"
 				return null
 
 			air_contents.temperature = temperature
@@ -74,7 +74,7 @@ turf/simulated/floor
 				else
 					usr << "Space Borders: None"
 			else
-				usr << "\blue [x],[y] has no parent air group."
+				usr << "<span class='notice'>[x],[y] has no parent air group.</span>"
 
 	verb
 		create_wall()
@@ -329,7 +329,7 @@ obj/machinery/atmospherics
 				set src in world
 				set category = "Minor"
 
-				world << "\blue [x],[y]"
+				world << "<span class='notice'>[x],[y]</span>"
 				world << "network 1: [network_node1.normal_members.len], [network_node1.line_members.len]"
 				for(var/obj/O in network_node1.normal_members)
 					world << "member: [O.x], [O.y]"
@@ -368,7 +368,7 @@ mob
 				network.marker = rand(1,4)
 
 			for(var/obj/machinery/atmospherics/pipe/P in world)
-				P.overlays.Cut()
+				P.overlays.len = 0
 
 				var/datum/pipe_network/master = P.return_network()
 				if(master)
@@ -377,8 +377,8 @@ mob
 					world << "error"
 					P.overlays += icon('icons/Testing/atmos_testing.dmi',"marker0")
 
-			for(var/obj/machinery/atmospherics/valve/V in world)
-				V.overlays.Cut()
+			for(var/obj/machinery/atmospherics/binary/valve/V in world)
+				V.overlays.len = 0
 
 				if(V.network_node1)
 					V.overlays += icon('icons/Testing/atmos_testing.dmi',"marker[V.network_node1.marker]")
@@ -396,7 +396,7 @@ turf/simulated
 	verb
 		mark_direction()
 			set src in world
-			overlays.Cut()
+			overlays.len = 0
 			for(var/direction in list(NORTH,SOUTH,EAST,WEST))
 				if(group_border&direction)
 					overlays += icon('icons/Testing/turf_analysis.dmi',"red_arrow",direction)
@@ -406,7 +406,7 @@ turf/simulated
 			set src in world
 			set category = "Minor"
 			var/datum/gas_mixture/GM = return_air()
-			usr << "\blue @[x],[y] ([GM.group_multiplier]): O:[GM.oxygen] T:[GM.toxins] N:[GM.nitrogen] C:[GM.carbon_dioxide] w [GM.temperature] Kelvin, [GM.return_pressure()] kPa [(active_hotspot)?("\red BURNING"):(null)]"
+			usr << "<span class='notice'>@[x],[y] ([GM.group_multiplier]): O:[GM.oxygen] T:[GM.toxins] N:[GM.nitrogen] C:[GM.carbon_dioxide] w [GM.temperature] Kelvin, [GM.return_pressure()] kPa [(active_hotspot)?("<span class='warning'>BURNING</span>"):(null)]</span>"
 			for(var/datum/gas/trace_gas in GM.trace_gases)
 				usr << "[trace_gas.type]: [trace_gas.moles]"
 
@@ -515,7 +515,7 @@ mob
 
 		fire_report()
 			set category = "Debug"
-			usr << "\b \red Fire Report"
+			usr << "<B><span class='warning'>Fire Report</span></B>"
 			for(var/obj/effect/hotspot/flame in world)
 				usr << "[flame.x],[flame.y]: [flame.temperature]K, [flame.volume] L - [flame.loc:air:temperature]"
 

@@ -36,7 +36,7 @@
 	if(sdisability)
 		M.sdisabilities|=sdisability
 	if(activation_message)
-		M << "\red [activation_message]"
+		M << "<span class='warning'>[activation_message]</span>"
 	else
 		testing("[name] has no activation message.")
 
@@ -48,7 +48,7 @@
 	if(sdisability)
 		M.sdisabilities &= ~sdisability
 	if(deactivation_message)
-		M << "\red [deactivation_message]"
+		M << "<span class='warning'>[deactivation_message]</span>"
 	else
 		testing("[name] has no deactivation message.")
 
@@ -107,6 +107,12 @@
 
 	New()
 		block=NERVOUSBLOCK
+
+/datum/dna/gene/disability/nervousness/OnMobLife(mob/living/carbon/carbon)
+	..()
+
+	if(prob(10))
+		carbon.stuttering = max(10, carbon.stuttering)
 
 /datum/dna/gene/disability/blindness
 	name="Blindness"

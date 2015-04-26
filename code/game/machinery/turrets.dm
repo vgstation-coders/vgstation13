@@ -298,8 +298,9 @@
 	return
 
 /obj/machinery/turret/attackby(obj/item/weapon/W, mob/user)//I can't believe no one added this before/N
-	user.changeNext_move(10)
-	..()
+	user.delayNextAttack(10)
+	if(..())
+		return 1
 	playsound(get_turf(src), 'sound/weapons/smash.ogg', 60, 1)
 	src.spark_system.start()
 	src.health -= W.force * 0.5
@@ -346,6 +347,8 @@
 
 	ghost_read=0
 
+	machine_flags = EMAGGABLE
+
 /obj/machinery/turretid/New()
 	..()
 	if(!control_area)
@@ -362,21 +365,24 @@
 	//don't have to check if control_area is path, since get_area_all_atoms can take path.
 	return
 
+/obj/machinery/turretid/emag(mob/user)
+	if(!emagged)
+		user << "<span class='warning'>You short out the turret controls' access analysis module.</span>"
+		emagged = 1
+		locked = 0
+		if(user.machine==src)
+			src.attack_hand(user)
+		return 1
+	return
+
 /obj/machinery/turretid/attackby(obj/item/weapon/W, mob/user)
 	if(stat & BROKEN) return
 	if (istype(user, /mob/living/silicon))
 		return src.attack_hand(user)
 
-	if (istype(W, /obj/item/weapon/card/emag) && !emagged)
-		user << "\red You short out the turret controls' access analysis module."
-		emagged = 1
-		locked = 0
-		if(user.machine==src)
-			src.attack_hand(user)
+	..()
 
-		return
-
-	else if( get_dist(src, user) == 0 )		// trying to unlock the interface
+	if( get_dist(src, user) == 0 )		// trying to unlock the interface
 		if (src.allowed(usr))
 			if(emagged)
 				user << "<span class='notice'>The turret control is unresponsive.</span>"
@@ -432,14 +438,14 @@
 /obj/machinery/turret/attack_animal(mob/living/simple_animal/M as mob)
 	if(M.melee_damage_upper == 0)	return
 	if(!(stat & BROKEN))
-		visible_message("\red <B>[M] [M.attacktext] [src]!</B>")
+		visible_message("<span class='danger'>[M] [M.attacktext] [src]!</span>")
 		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
 		//src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 		src.health -= M.melee_damage_upper
 		if (src.health <= 0)
 			src.die()
 	else
-		M << "\red That object is useless to you."
+		M << "<span class='warning'>That object is useless to you.</span>"
 	return
 
 
@@ -448,18 +454,19 @@
 /obj/machinery/turret/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	if(!(stat & BROKEN))
 		playsound(get_turf(src), 'sound/weapons/slash.ogg', 25, 1, -1)
-		visible_message("\red <B>[] has slashed at []!</B>", M, src)
+		visible_message("<span class='danger'>[] has slashed at []!</span>", M, src)
 		src.health -= 15
 		if (src.health <= 0)
 			src.die()
 	else
-		M << "\green That object is useless to you."
+		M << "<span class='good'>That object is useless to you.</span>"
 	return
 
 
 
 /obj/machinery/turretid/Topic(href, href_list)
-	..()
+	if(..())
+		return 1
 	if (src.locked)
 		if (!istype(usr, /mob/living/silicon))
 			usr << "Control panel is locked!"
@@ -581,7 +588,7 @@
 					if(src)
 						src.process()
 		if(href_list["scan_range"])
-			src.scan_range = between(1,src.scan_range+text2num(href_list["scan_range"]),8)
+			src.scan_range = Clamp(src.scan_range + text2num(href_list["scan_range"]), 1, 8)
 		if(href_list["scan_for"])
 			if(href_list["scan_for"] in scan_for)
 				scan_for[href_list["scan_for"]] = !scan_for[href_list["scan_for"]]

@@ -32,7 +32,7 @@
 	// also make sure that there's at least one borer and one host
 	recommended_enemies = max(src.num_players() / 20 * 2, 2)
 
-	var/list/datum/mind/possible_borers = get_players_for_role(BE_ALIEN)
+	var/list/datum/mind/possible_borers = get_players_for_role(ROLE_BORER)
 
 	if(possible_borers.len < 2)
 		log_admin("MODE FAILURE: BORER. NOT ENOUGH BORER CANDIDATES.")
@@ -41,6 +41,10 @@
 	for(var/obj/machinery/atmospherics/unary/vent_pump/v in world)
 		if(!v.welded && v.z == STATION_Z && v.canSpawnMice==1) // No more spawning in atmos.  Assuming the mappers did their jobs, anyway.
 			found_vents.Add(v)
+
+	if(found_vents.len < 2)
+		log_admin("MODE FAILURE: BORER. NOT ENOUGH VENTS.")
+		return 0 // not enough candidates for borer
 
 	// for each 2 possible borers, add one borer and one host
 	while(possible_borers.len >= 2)
@@ -66,7 +70,6 @@
 /datum/game_mode/borer/pre_setup()
 	return 1
 
-
 /datum/game_mode/borer/post_setup()
 	// create a borer and enter it
 	for(var/datum/mind/borer in borers)
@@ -86,31 +89,22 @@
 
 		// get the host for this borer
 		var/datum/mind/first_host = assigned_hosts[borer.key]
+
 		// this is a redundant check, but I don't think the above works..
 		// if picking hosts works with this method, remove the method above
 		if(!first_host)
 			first_host = pick(first_hosts)
 			first_hosts.Remove(first_host)
-		M.perform_infestation(first_host.current)
-		forge_borer_objectives(borer, first_host)
 
-		del original
+		M.perform_infestation(first_host.current)
+
+		del(original)
 
 	log_admin("Created [borers.len] borers.")
 
 	spawn (rand(waittime_l, waittime_h))
 		send_intercept()
 	..()
-	return
-
-/datum/game_mode/proc/greet_borer(var/datum/mind/borer, var/you_are=1)
-	if (you_are)
-		borer.current << "<B>\red You are a Cortical Borer!</B>"
-
-	var/obj_count = 1
-	for(var/datum/objective/objective in borer.objectives)
-		borer.current << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
-		obj_count++
 	return
 
 /datum/game_mode/borer/check_finished()
@@ -131,16 +125,16 @@
 	for(var/datum/mind/borer in borers)
 		var/borerwin = 1
 		if((borer.current) && istype(borer.current,/mob/living/simple_animal/borer))
-			world << "<B>The borer was [borer.current.key].</B>"
-			world << "<B>The last host was [borer.current:host.key].</B>"
+			completion_text += "<br><B>The borer was [borer.current.key].</B>"
+			completion_text += "<br><B>The last host was [borer.current:host.key].</B>"
 
 			var/count = 1
 			for(var/datum/objective/objective in borer.objectives)
 				if(objective.check_completion())
-					world << "<B>Objective #[count]</B>: [objective.explanation_text] \green <B>Success</B>"
+					completion_text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <span class='good'><B>Success</B></span>"
 					feedback_add_details("borer_objective","[objective.type]|SUCCESS")
 				else
-					world << "<B>Objective #[count]</B>: [objective.explanation_text] \red Failed"
+					completion_text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <span class='warning'>Failed</span>"
 					feedback_add_details("borer_objective","[objective.type]|FAIL")
 					borerwin = 0
 				count++
@@ -149,18 +143,9 @@
 			borerwin = 0
 
 		if(borerwin)
-			world << "<B>The borer was successful!<B>"
+			completion_text += "<br><B>The borer was successful!<B>"
 			feedback_add_details("borer_success","SUCCESS")
 		else
-			world << "<B>The borer has failed!<B>"
+			completion_text += "<br><B>The borer has failed!<B>"
 			feedback_add_details("borer_success","FAIL")
-	return 1
-
-/datum/game_mode/proc/forge_borer_objectives(var/datum/mind/borer, var/datum/mind/first_host)
-	var/datum/objective/survive/survive_objective = new
-	survive_objective.owner = borer
-	borer.objectives += survive_objective
-
-	greet_borer(borer)
-
-	return
+	return completion_text

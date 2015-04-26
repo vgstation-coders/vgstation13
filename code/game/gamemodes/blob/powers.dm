@@ -267,3 +267,12 @@
 			BS.LoseTarget()
 			BS.Goto(pick(surrounding_turfs), BS.move_to_delay)
 	return
+
+/mob/camera/blob/verb/telepathy(message as text)
+	set category = "Blob"
+	set name = "Psionic Message (15)"
+	set desc = "Give a psionic message to all creatures on and around the station."
+
+	world << "<span class='warning'>Your vision becomes cloudy, and your mind becomes clear.</span>"
+	spawn(5)
+	world << "<span class='blob'>[message]</span>"

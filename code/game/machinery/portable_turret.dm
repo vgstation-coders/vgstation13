@@ -57,6 +57,8 @@
 
 	var/datum/effect/effect/system/spark_spread/spark_system // the spark system, used for generating... sparks?
 
+	machine_flags = EMAGGABLE
+
 	New()
 		..()
 		icon_state = "[lasercolor]grey_target_prism"
@@ -178,7 +180,7 @@
 
 	Destroy()
 		// deletes its own cover with it
-		del(cover)
+		qdel(cover)
 		..()
 
 
@@ -241,7 +243,7 @@ Status: []<BR>"},
 		if(anchored) // you can't turn a turret on/off if it's not anchored/secured
 			on = !on // toggle on/off
 		else
-			usr << "\red It has to be secured first!"
+			usr << "<span class='warning'>It has to be secured first!</span>"
 
 		updateUsrDialog()
 		return
@@ -284,8 +286,16 @@ Status: []<BR>"},
 				src.icon_state = "[lasercolor]grey_target_prism"
 				stat |= NOPOWER
 
-
-
+/obj/machinery/porta_turret/emag(mob/user)
+	if(!emagged)
+		user << "<span class='warning'>You short out [src]'s threat assessment circuits.</span>"
+		spawn(0)
+			for(var/mob/O in hearers(src, null))
+				O.show_message("<span class='warning'>[src] hums oddly...</span>", 1)
+		emagged = 1
+		src.on = 0 // turns off the turret temporarily
+		sleep(60) // 6 seconds for the traitor to gtfo of the area before the turret decides to ruin his shit
+		on = 1 // turns it back on. The cover popUp() popDown() are automatically called in process(), no need to define it here
 /obj/machinery/porta_turret/attackby(obj/item/W as obj, mob/user as mob)
 	if(stat & BROKEN)
 		if(istype(W, /obj/item/weapon/crowbar))
@@ -301,27 +311,18 @@ Status: []<BR>"},
 					Gun.power_supply.charge=gun_charge
 					Gun.update_icon()
 					lasercolor = null
-				if(prob(50)) new /obj/item/stack/sheet/metal( loc, rand(1,4))
+				if(prob(50))
+					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,loc)
+					M.amount = rand(1,4)
 				if(prob(50)) new /obj/item/device/assembly/prox_sensor(locate(x,y,z))
 			else
 				user << "You remove the turret but did not manage to salvage anything."
-			del(src)
+			qdel(src)
+		return
 
+	..()
 
-	if ((istype(W, /obj/item/weapon/card/emag)) && (!src.emagged))
-		// Emagging the turret makes it go bonkers and stun everyone. It also makes
-		// the turret shoot much, much faster.
-
-		user << "\red You short out [src]'s threat assessment circuits."
-		spawn(0)
-			for(var/mob/O in hearers(src, null))
-				O.show_message("\red [src] hums oddly...", 1)
-		emagged = 1
-		src.on = 0 // turns off the turret temporarily
-		sleep(60) // 6 seconds for the traitor to gtfo of the area before the turret decides to ruin his shit
-		on = 1 // turns it back on. The cover popUp() popDown() are automatically called in process(), no need to define it here
-
-	else if((istype(W, /obj/item/weapon/wrench)) && (!on))
+	if((istype(W, /obj/item/weapon/wrench)) && (!on))
 		if(raised) return
 		// This code handles moving the turret around. After all, it's a portable turret!
 
@@ -337,7 +338,7 @@ Status: []<BR>"},
 			user << "You unsecure the exterior bolts on the turret."
 			icon_state = "turretCover"
 			invisibility = 0
-			del(cover) // deletes the cover, and the turret instance itself becomes its own cover.
+			qdel(cover) // deletes the cover, and the turret instance itself becomes its own cover.
 
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		// Behavior lock/unlock mangement
@@ -345,10 +346,10 @@ Status: []<BR>"},
 			locked = !src.locked
 			user << "Controls are now [locked ? "locked." : "unlocked."]"
 		else
-			user << "\red Access denied."
+			user << "<span class='warning'>Access denied.</span>"
 
 	else
-		user.changeNext_move(10)
+		user.delayNextAttack(10)
 		// if the turret was attacked with the intention of harming it:
 		src.health -= W.force * 0.5
 		if (src.health <= 0)
@@ -359,7 +360,6 @@ Status: []<BR>"},
 				spawn()
 					sleep(60)
 					attacked = 0
-		..()
 
 
 
@@ -431,7 +431,7 @@ Status: []<BR>"},
 
 	if(src.cover==null && anchored) // if it has no cover and is anchored
 		if (stat & BROKEN) // if the turret is borked
-			del(cover) // delete its cover, assuming it has one. Workaround for a pesky little bug
+			qdel(cover) // delete its cover, assuming it has one. Workaround for a pesky little bug
 		else
 
 			src.cover = new /obj/machinery/porta_turret_cover(src.loc) // if the turret has no cover and is anchored, give it a cover
@@ -455,7 +455,7 @@ Status: []<BR>"},
 			if(C.stat)
 				continue
 			// Ignore lazarus-injected mobs.
-			if(C.faction == "lazarus")
+			if(dd_hasprefix(C.faction, "lazarus"))
 				continue
 			targets += C
 
@@ -699,7 +699,7 @@ Status: []<BR>"},
 		if(0) // first step
 			if(istype(W, /obj/item/weapon/wrench) && !anchored)
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-				user << "\blue You secure the external bolts."
+				user << "<span class='notice'>You secure the external bolts.</span>"
 				anchored = 1
 				build_step = 1
 				return
@@ -707,19 +707,21 @@ Status: []<BR>"},
 			else if(istype(W, /obj/item/weapon/crowbar) && !anchored)
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
 				user << "You dismantle the turret construction."
-				new /obj/item/stack/sheet/metal( loc, 5)
-				del(src)
+				//new /obj/item/stack/sheet/metal( loc, 5)
+				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, loc)
+				M.amount = 5
+				qdel(src)
 				return
 
 		if(1)
 			if(istype(W, /obj/item/stack/sheet/metal))
 				if(W:amount>=2) // requires 2 metal sheets
-					user << "\blue You add some metal armor to the interior frame."
+					user << "<span class='notice'>You add some metal armor to the interior frame.</span>"
 					build_step = 2
 					W:amount -= 2
 					icon_state = "turret_frame2"
 					if(W:amount <= 0)
-						del(W)
+						returnToPool(W)
 					return
 
 			else if(istype(W, /obj/item/weapon/wrench))
@@ -733,7 +735,7 @@ Status: []<BR>"},
 		if(2)
 			if(istype(W, /obj/item/weapon/wrench))
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-				user << "\blue You bolt the metal armor into place."
+				user << "<span class='notice'>You bolt the metal armor into place.</span>"
 				build_step = 3
 				return
 
@@ -741,7 +743,7 @@ Status: []<BR>"},
 				var/obj/item/weapon/weldingtool/WT = W
 				if(!WT.isOn()) return
 				if (WT.get_fuel() < 5) // uses up 5 fuel.
-					user << "\red You need more fuel to complete this task."
+					user << "<span class='warning'>You need more fuel to complete this task.</span>"
 					return
 
 				playsound(get_turf(src), pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
@@ -749,7 +751,9 @@ Status: []<BR>"},
 					if(!src || !WT.remove_fuel(5, user)) return
 					build_step = 1
 					user << "You remove the turret's interior metal armor."
-					new /obj/item/stack/sheet/metal( loc, 2)
+					//new /obj/item/stack/sheet/metal( loc, 2)
+					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,loc)
+					M.amount = 2
 					return
 
 
@@ -759,9 +763,9 @@ Status: []<BR>"},
 				var/obj/item/weapon/gun/energy/E = W // typecasts the item to an energy gun
 				installation = W.type // installation becomes W.type
 				gun_charge = E.power_supply.charge // the gun's charge is stored in src.gun_charge
-				user << "\blue You add \the [W] to the turret."
+				user << "<span class='notice'>You add \the [W] to the turret.</span>"
 				build_step = 4
-				del(W) // delete the gun :(
+				qdel(W) // delete the gun :(
 				return
 
 			else if(istype(W, /obj/item/weapon/wrench))
@@ -773,8 +777,8 @@ Status: []<BR>"},
 		if(4)
 			if(isprox(W))
 				build_step = 5
-				user << "\blue You add the prox sensor to the turret."
-				del(W)
+				user << "<span class='notice'>You add the prox sensor to the turret.</span>"
+				qdel(W)
 				return
 
 			// attack_hand() removes the gun
@@ -783,7 +787,7 @@ Status: []<BR>"},
 			if(istype(W, /obj/item/weapon/screwdriver))
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
 				build_step = 6
-				user << "\blue You close the internal access hatch."
+				user << "<span class='notice'>You close the internal access hatch.</span>"
 				return
 
 			// attack_hand() removes the prox sensor
@@ -791,11 +795,11 @@ Status: []<BR>"},
 		if(6)
 			if(istype(W, /obj/item/stack/sheet/metal))
 				if(W:amount>=2)
-					user << "\blue You add some metal armor to the exterior frame."
+					user << "<span class='notice'>You add some metal armor to the exterior frame.</span>"
 					build_step = 7
 					W:amount -= 2
 					if(W:amount <= 0)
-						del(W)
+						qdel(W)
 					return
 
 			else if(istype(W, /obj/item/weapon/screwdriver))
@@ -809,13 +813,13 @@ Status: []<BR>"},
 				var/obj/item/weapon/weldingtool/WT = W
 				if(!WT.isOn()) return
 				if (WT.get_fuel() < 5)
-					user << "\red You need more fuel to complete this task."
+					user << "<span class='warning'>You need more fuel to complete this task.</span>"
 
 				playsound(get_turf(src), pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
 				if(do_after(user, 30))
 					if(!src || !WT.remove_fuel(5, user)) return
 					build_step = 8
-					user << "\blue You weld the turret's armor down."
+					user << "<span class='notice'>You weld the turret's armor down.</span>"
 
 					// The final step: create a full turret
 					var/obj/machinery/porta_turret/Turret = new/obj/machinery/porta_turret(locate(x,y,z))
@@ -827,12 +831,14 @@ Status: []<BR>"},
 //					Turret.cover.Parent_Turret=Turret
 //					Turret.cover.name = finish_name
 					Turret.New()
-					del(src)
+					qdel(src)
 
 			else if(istype(W, /obj/item/weapon/crowbar))
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
 				user << "You pry off the turret's exterior armor."
-				new /obj/item/stack/sheet/metal( loc, 2)
+				//new /obj/item/stack/sheet/metal( loc, 2)
+				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,loc)
+				M.amount = 2
 				build_step = 6
 				return
 
@@ -988,7 +994,7 @@ Status: []<BR>"},
 			else
 				Parent_Turret.on=1
 		else
-			usr << "\red It has to be secured first!"
+			usr << "<span class='warning'>It has to be secured first!</span>"
 
 		updateUsrDialog()
 		return
@@ -1012,10 +1018,10 @@ Status: []<BR>"},
 /obj/machinery/porta_turret_cover/attackby(obj/item/W as obj, mob/user as mob)
 
 	if ((istype(W, /obj/item/weapon/card/emag)) && (!Parent_Turret.emagged))
-		user << "\red You short out [Parent_Turret]'s threat assessment circuits."
+		user << "<span class='warning'>You short out [Parent_Turret]'s threat assessment circuits.</span>"
 		spawn(0)
 			for(var/mob/O in hearers(Parent_Turret, null))
-				O.show_message("\red [Parent_Turret] hums oddly...", 1)
+				O.show_message("<span class='warning'>[Parent_Turret] hums oddly...</span>", 1)
 		Parent_Turret.emagged = 1
 		Parent_Turret.on = 0
 		sleep(40)
@@ -1034,7 +1040,7 @@ Status: []<BR>"},
 			user << "You unsecure the exterior bolts on the turret."
 			Parent_Turret.icon_state = "turretCover"
 			Parent_Turret.invisibility = 0
-			del(src)
+			qdel(src)
 
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if (Parent_Turret.allowed(user))
@@ -1042,7 +1048,7 @@ Status: []<BR>"},
 			user << "Controls are now [Parent_Turret.locked ? "locked." : "unlocked."]"
 			updateUsrDialog()
 		else
-			user << "\red Access denied."
+			user << "<span class='warning'>Access denied.</span>"
 
 	else
 		Parent_Turret.health -= W.force * 0.5

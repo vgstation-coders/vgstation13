@@ -3,6 +3,7 @@
 
 #define TURF_FLOOR 0
 #define TURF_WALL 1
+
 var/global/list/mining_surprises = typesof(/mining_surprise)-/mining_surprise
 
 /surprise_turf_info
@@ -54,8 +55,10 @@ var/global/list/mining_surprises = typesof(/mining_surprise)-/mining_surprise
 	proc/UpdateTurf(var/turf/T, var/no_adjacent=0)
 		// List types in this turf.
 		var/surprise_turf_info/sti = GetTurfInfo(T)
-
-		sti.types=0
+		if(!istype(sti.types) || isnull(sti.types))
+			sti.types = new/list()
+		else
+			sti.types.len = 0
 		for(var/atom/A in T.contents)
 			sti.types |= A.type
 

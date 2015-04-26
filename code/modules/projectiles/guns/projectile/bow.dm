@@ -5,10 +5,10 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "bolt"
 	item_state = "bolt"
-	flags =  FPRINT | TABLEPASS
+	flags = FPRINT
 	throwforce = 8
 	w_class = 3.0
-	sharp = 1
+	sharpness = 1
 
 /obj/item/weapon/arrow/proc/removed() //Helper for metal rods falling apart.
 	return
@@ -43,7 +43,8 @@
 	icon_state = "crossbow"
 	item_state = "crossbow-solid"
 	w_class = 5.0
-	flags =  FPRINT | TABLEPASS | CONDUCT |  USEDELAY
+	flags = FPRINT
+	siemens_coefficient = 1
 	slot_flags = SLOT_BELT | SLOT_BACK
 
 	w_class = 3.0
@@ -58,9 +59,8 @@
 /obj/item/weapon/crossbow/attackby(obj/item/W as obj, mob/user as mob)
 	if(!arrow)
 		if (istype(W,/obj/item/weapon/arrow))
-			user.drop_item()
+			user.drop_item(W, src)
 			arrow = W
-			arrow.loc = src
 			user.visible_message("[user] slides [arrow] into [src].","You slide [arrow] into [src].")
 			icon_state = "crossbow-nocked"
 			return
@@ -82,8 +82,7 @@
 
 	if(istype(W, /obj/item/weapon/cell))
 		if(!cell)
-			user.drop_item()
-			W.loc = src
+			user.drop_item(W, src)
 			cell = W
 			user << "<span class='notice'>You jam [cell] into [src] and wire it to the firing coil.</span>"
 			if(arrow)

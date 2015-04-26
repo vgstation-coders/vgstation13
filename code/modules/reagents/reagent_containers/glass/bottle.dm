@@ -9,21 +9,37 @@
 	item_state = "atoxinbottle"
 	amount_per_transfer_from_this = 10
 	possible_transfer_amounts = list(5,10,15,25,30)
-	flags = FPRINT | TABLEPASS | OPENCONTAINER
+	flags = FPRINT  | OPENCONTAINER
 	volume = 30
-	g_amt=1000 // Half of a circuit board
+	g_amt = 1000 // Half of a circuit board
+	w_type = RECYK_GLASS
+	melt_temperature = MELTPOINT_GLASS
 
-	New()
-		..()
-		if(!icon_state)
-			icon_state = "bottle[rand(1,20)]"
+/obj/item/weapon/reagent_containers/glass/bottle/mop_act(obj/item/weapon/mop/M, mob/user)
+	if(..())
+		if (src.reagents.total_volume >= 1)
+			if(M.reagents.total_volume >= 1)
+				user << "<span class='notice'>You dip \the [M]'s tip into \the [src] but don't soak anything up.</span>"
+				return 1
+			else
+				src.reagents.trans_to(M, 1)
+				user << "<span class='notice'>You barely manage to wet [M]</span>"
+				playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+		else
+			user << "<span class='notice'>Nothing left to wet [M] with!</span>"
+		return 1
 
-	update_icon()
-		overlays.Cut()
+/obj/item/weapon/reagent_containers/glass/bottle/New()
+	..()
+	if(!icon_state)
+		icon_state = "bottle[rand(1,20)]"
 
-		if (!is_open_container())
-			var/image/lid = image(icon, src, "lid_bottle")
-			overlays += lid
+/obj/item/weapon/reagent_containers/glass/bottle/update_icon()
+	overlays.len = 0
+
+	if (!is_open_container())
+		var/image/lid = image(icon, src, "lid_bottle")
+		overlays += lid
 
 /obj/item/weapon/reagent_containers/glass/bottle/inaprovaline
 	name = "inaprovaline bottle"
@@ -77,7 +93,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate
 	name = "Chloral Hydrate Bottle"
-	desc = "A small bottle of Choral Hydrate. Mickey's Favorite!"
+	desc = "A small bottle of Chloral Hydrate. Mickey's Favorite!"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle20"
 

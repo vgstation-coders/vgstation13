@@ -16,12 +16,9 @@
 	icon_state = "ash"
 	anchored = 1
 
-/obj/effect/decal/cleanable/greenglow
-
-	New()
-		..()
-		spawn(1200)// 2 minutes
-			qdel(src)
+/obj/effect/decal/cleanable/ash/attack_hand(mob/user as mob)
+	user.visible_message("<span class='notice'>[user] wipes away \the [src].</span>")
+	qdel(src)
 
 /obj/effect/decal/cleanable/dirt
 	name = "dirt"
@@ -103,27 +100,27 @@
 			D.holder = null
 		..()
 
-/obj/effect/decal/cleanable/vomit/HasEntered(mob/living/carbon/human/perp)
+/obj/effect/decal/cleanable/vomit/Crossed(mob/living/carbon/human/perp)
 	if (!istype(perp))
 		return
 	if(amount < 1)
 		return
 
 	if(perp.shoes)
-		perp.shoes:track_blood = max(amount,perp.shoes:track_blood)		//Adding blood to shoes
+		perp.shoes:track_blood = max(amount,perp.shoes:track_blood)		//Adding vomit to shoes
 		if(!perp.shoes.blood_overlay)
 			perp.shoes.generate_blood_overlay()
 		if(!perp.shoes.blood_DNA)
 			perp.shoes.blood_DNA = list()
-			perp.shoes.overlays += perp.shoes.blood_overlay
-			perp.update_inv_shoes(1)
-		//perp.shoes.blood_DNA |= blood_DNA.Copy()
+		perp.shoes.overlays -= perp.shoes.blood_overlay
+		perp.shoes.blood_overlay.color = basecolor
+		perp.shoes.overlays += perp.shoes.blood_overlay
 		perp.shoes.blood_color=basecolor
+		perp.update_inv_shoes(1)
 	else
 		perp.track_blood = max(amount,perp.track_blood)				//Or feet
 		if(!perp.feet_blood_DNA)
 			perp.feet_blood_DNA = list()
-		//perp.feet_blood_DNA |= blood_DNA.Copy()
 		perp.feet_blood_color=basecolor
 
 	amount--
@@ -154,3 +151,16 @@
 	layer = 2
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("smashed_pie")
+
+/obj/effect/decal/cleanable/soot
+	name = "soot"
+	desc = "One hell of a party..."
+	gender = PLURAL
+	icon = 'icons/effects/tile_effects.dmi'
+	icon_state = "tile_soot"
+	anchored = 1
+	layer=2
+
+/obj/effect/decal/cleanable/soot/New()
+	..()
+	dir = pick(cardinal)

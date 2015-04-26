@@ -40,13 +40,12 @@
 	var/list/air_scrub_info = list()
 
 /obj/machinery/alarm
-	name = "alarm"
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "alarm0"
 	anchored = 1
 	use_power = 1
-	idle_power_usage = 4
-	active_power_usage = 8
+	idle_power_usage = 100
+	active_power_usage = 200
 	power_channel = ENVIRON
 	req_one_access = list(access_atmospherics, access_engine_equip)
 	var/frequency = 1439
@@ -62,15 +61,10 @@
 	var/AAlarmwires = 31
 	var/shorted = 0
 
-	// Waiting on a device to respond.
-	// Specifies an id_tag.  NULL means we aren't waiting.
-	var/waiting_on_device=null
-
 	var/mode = AALARM_MODE_SCRUBBING
 	var/preset = AALARM_PRESET_HUMAN
 	var/screen = AALARM_SCREEN_MAIN
 	var/area_uid
-	var/area/alarm_area
 	var/local_danger_level = 0
 	var/alarmActivated = 0 // Manually activated (independent from danger level)
 	var/danger_averted_confidence=0
@@ -99,7 +93,7 @@
 
 /obj/machinery/alarm/proc/apply_preset(var/no_cycle_after=0)
 	// Propogate settings.
-	for (var/area/A in alarm_area.related)
+	for (var/area/A in areaMaster.related)
 		for (var/obj/machinery/alarm/AA in A)
 			if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted && AA.preset != src.preset)
 				AA.preset=preset
@@ -111,7 +105,7 @@
 	TLV["plasma"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
 	TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 	TLV["pressure"] =		list(ONE_ATMOSPHERE*0.80,ONE_ATMOSPHERE*0.90,ONE_ATMOSPHERE*1.10,ONE_ATMOSPHERE*1.20) /* kpa */
-	TLV["temperature"] =	list(T0C-26, T0C, T0C+40, T0C+66) // K
+	TLV["temperature"] =	list(T0C-30, T0C, T0C+40, T0C+70) // K
 	target_temperature = T0C+20
 	switch(preset)
 		if(AALARM_PRESET_VOX) // Same as usual, s/nitrogen/oxygen
@@ -152,14 +146,20 @@
 
 	first_run()
 
+/obj/machinery/alarm/Destroy()
+	if(wires)
+		wires.Destroy()
+		wires = null
+	for(var/obj/machinery/computer/atmoscontrol/AC in atmos_controllers)
+		if(AC.current == src)
+			AC.current = null
+			nanomanager.update_uis(src)
+
+	..()
 
 /obj/machinery/alarm/proc/first_run()
-	alarm_area = get_area(src)
-	if (alarm_area.master)
-		alarm_area = alarm_area.master
-	area_uid = alarm_area.uid
-	if (name == "alarm")
-		name = "[alarm_area.name] Air Alarm"
+	area_uid = areaMaster.uid
+	name = "[areaMaster.name] Air Alarm"
 
 	// breathable air according to human/Life()
 	/*
@@ -182,6 +182,7 @@
 
 /obj/machinery/alarm/process()
 	if((stat & (NOPOWER|BROKEN)) || shorted || buildstage != 2)
+		use_power = 0
 		return
 
 	var/turf/simulated/location = loc
@@ -189,7 +190,7 @@
 
 	var/datum/gas_mixture/environment = location.return_air()
 
-	//Handle temperature adjustment here.
+	// Handle temperature adjustment here.
 	if(environment.temperature < target_temperature - 2 || environment.temperature > target_temperature + 2 || regulating_temperature)
 		//If it goes too far, we should adjust ourselves back before stopping.
 		if(get_danger_level(target_temperature, TLV["temperature"]))
@@ -206,37 +207,39 @@
 		if(target_temperature < T0C + MIN_TEMPERATURE)
 			target_temperature = T0C + MIN_TEMPERATURE
 
-		var/datum/gas_mixture/gas = location.remove_air(0.25*environment.total_moles)
-		var/heat_capacity = gas.heat_capacity()
-		var/energy_used = max( abs( heat_capacity*(gas.temperature - target_temperature) ), MAX_ENERGY_CHANGE)
+		var/datum/gas_mixture/gas = location.remove_air(0.25 * environment.total_moles)
+		if(gas)
+			var/heat_capacity = gas.heat_capacity()
+			var/energy_used = min(abs(heat_capacity * (gas.temperature - target_temperature)), MAX_ENERGY_CHANGE)
 
-		//Use power.  Assuming that each power unit represents 1000 watts....
-		use_power(energy_used/1000, ENVIRON)
+			// We need to cool ourselves.
+			if (environment.temperature > target_temperature)
+				gas.temperature -= energy_used / heat_capacity
+			else
+				gas.temperature += energy_used / heat_capacity
 
-		//We need to cool ourselves.
-		if(environment.temperature > target_temperature)
-			gas.temperature -= energy_used/heat_capacity
-		else
-			gas.temperature += energy_used/heat_capacity
+			environment.merge(gas)
 
-		environment.merge(gas)
-
-		if(abs(environment.temperature - target_temperature) <= 0.5)
-			regulating_temperature = 0
-			visible_message("\The [src] clicks quietly as it stops [environment.temperature > target_temperature ? "cooling" : "heating"] the room.",\
-			"You hear a click as a faint electronic humming stops.")
+			if (abs(environment.temperature - target_temperature) <= 0.5)
+				regulating_temperature = 0
+				visible_message("\The [src] clicks quietly as it stops [environment.temperature > target_temperature ? "cooling" : "heating"] the room.",\
+				"You hear a click as a faint electronic humming stops.")
 
 	var/old_level = local_danger_level
-	var/new_danger = calculate_local_danger_level()
-	if(new_danger < old_level)
+	var/new_danger = calculate_local_danger_level(environment)
+
+	if (new_danger < old_level)
 		danger_averted_confidence++
+		use_power = 1
+
 	// Only change danger level if:
 	// we're going up a level
 	// OR if we're going down a level and have sufficient confidence (prevents spamming update_icon).
 	if (old_level < new_danger || (danger_averted_confidence >= 5 && new_danger < old_level))
 		setDangerLevel(new_danger)
 		update_icon()
-		danger_averted_confidence=0 // Reset counter.
+		danger_averted_confidence = 0 // Reset counter.
+		use_power = 2
 
 	if (mode==AALARM_MODE_CYCLE && environment.return_pressure()<ONE_ATMOSPHERE*0.05)
 		mode=AALARM_MODE_FILL
@@ -254,17 +257,14 @@
 				remote_control = 0
 		if(RCON_YES)
 			remote_control = 1
-	if(screen == AALARM_SCREEN_MAIN)
-		updateDialog()
 	return
 
-/obj/machinery/alarm/proc/calculate_local_danger_level()
-	if(wires.IsIndexCut(AALARM_WIRE_AALARM))
-		return 2 // MAXIMUM ALARM (With gravelly voice) - N3X
-	var/turf/simulated/location = loc
-	if(!istype(location))	return//returns if loc is not simulated
+/obj/machinery/alarm/proc/calculate_local_danger_level(const/datum/gas_mixture/environment)
+	if (wires.IsIndexCut(AALARM_WIRE_AALARM))
+		return 2 // MAXIMUM ALARM (With gravelly voice) - N3X.
 
-	var/datum/gas_mixture/environment = location.return_air()
+	if (isnull(environment))
+		return 0
 
 	var/partial_pressure = R_IDEAL_GAS_EQUATION*environment.temperature/environment.volume
 	var/environment_pressure = environment.return_pressure()
@@ -291,22 +291,25 @@
 		)
 
 /obj/machinery/alarm/proc/master_is_operating()
-	return alarm_area.master_air_alarm && !(alarm_area.master_air_alarm.stat & (NOPOWER|BROKEN))
+	return areaMaster.master_air_alarm && !(areaMaster.master_air_alarm.stat & (NOPOWER|BROKEN))
 
 
 /obj/machinery/alarm/proc/elect_master()
-	for (var/area/A in alarm_area.related)
+	for (var/area/A in areaMaster.related)
 		for (var/obj/machinery/alarm/AA in A)
 			if (!(AA.stat & (NOPOWER|BROKEN)))
-				alarm_area.master_air_alarm = AA
+				areaMaster.master_air_alarm = AA
 				return 1
 	return 0
 
-/obj/machinery/alarm/proc/get_danger_level(var/current_value, var/list/danger_levels)
-	if((current_value >= danger_levels[4] && danger_levels[4] > 0) || current_value <= danger_levels[1])
+/obj/machinery/alarm/proc/get_danger_level(const/current_value, const/list/danger_levels)
+	if(!danger_levels || !danger_levels.len)
+		return 0
+	if ((current_value >= danger_levels[4] && danger_levels[4] > 0) || current_value <= danger_levels[1])
 		return 2
-	if((current_value >= danger_levels[3] && danger_levels[3] > 0) || current_value <= danger_levels[2])
+	if ((current_value >= danger_levels[3] && danger_levels[3] > 0) || current_value <= danger_levels[2])
 		return 1
+
 	return 0
 
 /obj/machinery/alarm/update_icon()
@@ -317,7 +320,7 @@
 		icon_state = "alarmp"
 		return
 
-	switch(max(local_danger_level, alarm_area.atmosalm-1))
+	switch(max(local_danger_level, areaMaster.atmosalm-1))
 		if (0)
 			icon_state = "alarm0"
 		if (1)
@@ -326,13 +329,13 @@
 			icon_state = "alarm1"
 
 /obj/machinery/alarm/receive_signal(datum/signal/signal)
-	if(stat & (NOPOWER|BROKEN) || !alarm_area)
+	if(stat & (NOPOWER|BROKEN) || !areaMaster)
 		return
-	if (alarm_area.master_air_alarm != src)
+	if (areaMaster.master_air_alarm != src)
 		if (master_is_operating())
 			return
 		elect_master()
-		if (alarm_area.master_air_alarm != src)
+		if (areaMaster.master_air_alarm != src)
 			return
 	if(!signal || signal.encryption)
 		return
@@ -345,40 +348,35 @@
 		return
 
 	var/dev_type = signal.data["device"]
-	if(!(id_tag in alarm_area.air_scrub_names) && !(id_tag in alarm_area.air_vent_names))
+	if(!(id_tag in areaMaster.air_scrub_names) && !(id_tag in areaMaster.air_vent_names))
 		register_env_machine(id_tag, dev_type)
-	var/got_update=0
+
 	if(dev_type == "AScr")
-		alarm_area.air_scrub_info[id_tag] = signal.data
-		got_update=1
+		areaMaster.air_scrub_info[id_tag] = signal.data
 	else if(dev_type == "AVP")
-		alarm_area.air_vent_info[id_tag] = signal.data
-		got_update=1
-	if(got_update && waiting_on_device==id_tag)
-		updateUsrDialog()
-		waiting_on_device=null
+		areaMaster.air_vent_info[id_tag] = signal.data
 
 /obj/machinery/alarm/proc/register_env_machine(var/m_id, var/device_type)
 	var/new_name
 	if (device_type=="AVP")
-		new_name = "[alarm_area.name] Vent Pump #[alarm_area.air_vent_names.len+1]"
-		alarm_area.air_vent_names[m_id] = new_name
+		new_name = "[areaMaster.name] Vent Pump #[areaMaster.air_vent_names.len+1]"
+		areaMaster.air_vent_names[m_id] = new_name
 	else if (device_type=="AScr")
-		new_name = "[alarm_area.name] Air Scrubber #[alarm_area.air_scrub_names.len+1]"
-		alarm_area.air_scrub_names[m_id] = new_name
+		new_name = "[areaMaster.name] Air Scrubber #[areaMaster.air_scrub_names.len+1]"
+		areaMaster.air_scrub_names[m_id] = new_name
 	else
 		return
 	spawn (10)
 		send_signal(m_id, list("init" = new_name) )
 
 /obj/machinery/alarm/proc/refresh_all()
-	for(var/id_tag in alarm_area.air_vent_names)
-		var/list/I = alarm_area.air_vent_info[id_tag]
+	for(var/id_tag in areaMaster.air_vent_names)
+		var/list/I = areaMaster.air_vent_info[id_tag]
 		if (I && I["timestamp"]+AALARM_REPORT_TIMEOUT/2 > world.time)
 			continue
 		send_signal(id_tag, list("status") )
-	for(var/id_tag in alarm_area.air_scrub_names)
-		var/list/I = alarm_area.air_scrub_info[id_tag]
+	for(var/id_tag in areaMaster.air_scrub_names)
+		var/list/I = areaMaster.air_scrub_info[id_tag]
 		if (I && I["timestamp"]+AALARM_REPORT_TIMEOUT/2 > world.time)
 			continue
 		send_signal(id_tag, list("status") )
@@ -406,37 +404,37 @@
 	return 1
 
 /obj/machinery/alarm/proc/apply_mode()
-	var/current_pressures = TLV["pressure"]
+	var/list/current_pressures = TLV["pressure"]
 	var/target_pressure = (current_pressures[2] + current_pressures[3])/2
 	switch(mode)
 		if(AALARM_MODE_SCRUBBING)
-			for(var/device_id in alarm_area.air_scrub_names)
+			for(var/device_id in areaMaster.air_scrub_names)
 				send_signal(device_id, list("power"= 1, "co2_scrub"= 1, "o2_scrub"=(preset==AALARM_PRESET_VOX), "n2_scrub"=0, "scrubbing"= 1, "panic_siphon"= 0) )
-			for(var/device_id in alarm_area.air_vent_names)
+			for(var/device_id in areaMaster.air_vent_names)
 				send_signal(device_id, list("power"= 1, "checks"= 1, "set_external_pressure"= target_pressure) )
 
 		if(AALARM_MODE_PANIC, AALARM_MODE_CYCLE)
-			for(var/device_id in alarm_area.air_scrub_names)
+			for(var/device_id in areaMaster.air_scrub_names)
 				send_signal(device_id, list("power"= 1, "panic_siphon"= 1) )
-			for(var/device_id in alarm_area.air_vent_names)
+			for(var/device_id in areaMaster.air_vent_names)
 				send_signal(device_id, list("power"= 0) )
 
 		if(AALARM_MODE_REPLACEMENT)
-			for(var/device_id in alarm_area.air_scrub_names)
+			for(var/device_id in areaMaster.air_scrub_names)
 				send_signal(device_id, list("power"= 1, "panic_siphon"= 1) )
-			for(var/device_id in alarm_area.air_vent_names)
+			for(var/device_id in areaMaster.air_vent_names)
 				send_signal(device_id, list("power"= 1, "checks"= 1, "set_external_pressure"= target_pressure) )
 
 		if(AALARM_MODE_FILL)
-			for(var/device_id in alarm_area.air_scrub_names)
+			for(var/device_id in areaMaster.air_scrub_names)
 				send_signal(device_id, list("power"= 0) )
-			for(var/device_id in alarm_area.air_vent_names)
+			for(var/device_id in areaMaster.air_vent_names)
 				send_signal(device_id, list("power"= 1, "checks"= 1, "set_external_pressure"= target_pressure) )
 
 		if(AALARM_MODE_OFF)
-			for(var/device_id in alarm_area.air_scrub_names)
+			for(var/device_id in areaMaster.air_scrub_names)
 				send_signal(device_id, list("power"= 0) )
-			for(var/device_id in alarm_area.air_vent_names)
+			for(var/device_id in areaMaster.air_vent_names)
 				send_signal(device_id, list("power"= 0) )
 
 // This sets our danger level, and, if it's changed, forces a new election of danger levels.
@@ -444,7 +442,7 @@
 	if(local_danger_level==new_danger_level)
 		return
 	local_danger_level=new_danger_level
-	if(alarm_area.updateDangerLevel())
+	if(areaMaster.updateDangerLevel())
 		post_alert(new_danger_level)
 
 /obj/machinery/alarm/proc/post_alert(alert_level)
@@ -455,7 +453,7 @@
 	var/datum/signal/alert_signal = new
 	alert_signal.source = src
 	alert_signal.transmission_method = 1
-	alert_signal.data["zone"] = alarm_area.name
+	alert_signal.data["zone"] = areaMaster.name
 	alert_signal.data["type"] = "Atmospheric"
 
 	if(alert_level==2)
@@ -468,46 +466,22 @@
 	frequency.post_signal(src, alert_signal)
 
 /obj/machinery/alarm/proc/air_doors_close(manual)
-	var/area/A = get_area(src)
-	A.master.CloseFirelocks()
+	areaMaster.CloseFirelocks()
 
 /obj/machinery/alarm/proc/air_doors_open(manual)
-	var/area/A = get_area(loc)
-	A.master.OpenFirelocks()
+	areaMaster.OpenFirelocks()
 
-
-
-/obj/machinery/alarm/proc/shock(mob/user, prb)
-	if((stat & (NOPOWER)))		// unpowered, no shock
-		return 0
-	if(!prob(prb))
-		return 0 //you lucked out, no shock for you
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(5, 1, src)
-	s.start() //sparks always.
-	if (electrocute_mob(user, get_area(src), src))
-		return 1
-	else
-		return 0
 ///////////////
 //END HACKING//
 ///////////////
 
-/obj/machinery/alarm/attack_ai(mob/user)
-	src.add_hiddenprint(user)
-	return ui_interact(user)
-
-/obj/machinery/alarm/attack_robot(mob/user)
-	if(isMoMMI(user) && !wiresexposed)
-		return interact(user)
-	else
-		return attack_ai(user)
-
 /obj/machinery/alarm/attack_hand(mob/user)
 	. = ..()
+
 	if (.)
 		return
-	return interact(user)
+
+	interact(user)
 
 /obj/machinery/alarm/proc/ui_air_status()
 	var/turf/location = get_turf(src)
@@ -588,7 +562,7 @@
 
 	data["rcon"]=rcon_setting
 	data["target_temp"] = target_temperature - T0C
-	data["atmos_alarm"] = alarm_area.atmosalm
+	data["atmos_alarm"] = areaMaster.atmosalm
 	data["modes"] = list(
 		AALARM_MODE_SCRUBBING   = list("name"="Filtering",   "desc"="Scrubs out contaminants"),\
 		AALARM_MODE_REPLACEMENT = list("name"="Replace Air", "desc"="Siphons out air while replacing"),\
@@ -605,11 +579,11 @@
 	data["screen"]=screen
 
 	var/list/vents=list()
-	if(alarm_area.air_vent_names.len)
-		for(var/id_tag in alarm_area.air_vent_names)
+	if(areaMaster.air_vent_names.len)
+		for(var/id_tag in areaMaster.air_vent_names)
 			var/vent_info[0]
-			var/long_name = alarm_area.air_vent_names[id_tag]
-			var/list/vent_data = alarm_area.air_vent_info[id_tag]
+			var/long_name = areaMaster.air_vent_names[id_tag]
+			var/list/vent_data = areaMaster.air_vent_info[id_tag]
 			if(!vent_data)
 				continue
 			vent_info["id_tag"]=id_tag
@@ -619,10 +593,10 @@
 	data["vents"]=vents
 
 	var/list/scrubbers=list()
-	if(alarm_area.air_scrub_names.len)
-		for(var/id_tag in alarm_area.air_scrub_names)
-			var/long_name = alarm_area.air_scrub_names[id_tag]
-			var/list/scrubber_data = alarm_area.air_scrub_info[id_tag]
+	if(areaMaster.air_scrub_names.len)
+		for(var/id_tag in areaMaster.air_scrub_names)
+			var/long_name = areaMaster.air_scrub_names[id_tag]
+			var/list/scrubber_data = areaMaster.air_scrub_info[id_tag]
 			if(!scrubber_data)
 				continue
 			scrubber_data["id_tag"]=id_tag
@@ -632,40 +606,27 @@
 	return data
 
 
-/obj/machinery/alarm/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
-	if(user.stat && !isobserver(user))
-		return
-
+/obj/machinery/alarm/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 	var/list/data=src.get_nano_data(user,FALSE)
 
-	if (!ui) // no ui has been passed, so we'll search for one
-	{
-		ui = nanomanager.get_open_ui(user, src, ui_key)
-	}
-	if (!ui)
-		// the ui does not exist, so we'll create a new one
-		ui = new(user, src, ui_key, "air_alarm.tmpl", name, 550, 410)
-		// When the UI is first opened this is the data it will use
-		ui.set_initial_data(data)
-		ui.open()
-		// Auto update every Master Controller tick
-		ui.set_auto_update(1)
-	else
-		// The UI is already open so push the new data to it
-		ui.push_data(data)
-		return
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 
+	if (!ui)
+		// The ui does not exist, so we'll create a new one.
+		ui = new(user, src, ui_key, "air_alarm.tmpl", name, 550, 410)
+		// When the UI is first opened this is the data it will use.
+		ui.set_initial_data(data)
+		// Open the new ui window.
+		ui.open()
+		// Auto update every Master Controller tick.
+		ui.set_auto_update(1)
 
 /obj/machinery/alarm/interact(mob/user)
-	user.set_machine(src)
-
 	if(buildstage!=2)
 		return
 
 	if ( (get_dist(src, user) > 1 ))
 		if (!istype(user, /mob/living/silicon))
-			user.machine = null
-			user << browse(null, "window=air_alarm")
 			user << browse(null, "window=AAlarmwires")
 			return
 
@@ -681,21 +642,15 @@
 		ui_interact(user)
 
 /obj/machinery/alarm/Topic(href, href_list)
-	var/changed=0
-
+	if(href_list["close"])
+		if(usr.machine == src) usr.unset_machine()
+		return 1
+	if(..())
+		return 1
 	if(href_list["rcon"])
 		rcon_setting = text2num(href_list["rcon"])
-		changed=1
-
-	if ( (get_dist(src, usr) > 1 ))
-		if (!istype(usr, /mob/living/silicon))
-			usr.machine = null
-			usr << browse(null, "window=air_alarm")
-			usr << browse(null, "window=AAlarmwires")
-			return
 
 	add_fingerprint(usr)
-	usr.machine = src
 
 	//testing(href)
 	if(href_list["command"])
@@ -727,8 +682,6 @@
 					val = newval
 
 				send_signal(device_id, list(href_list["command"] = val ) )
-				changed=0 // We wait for the device to reply.
-				waiting_on_device=device_id
 
 			if("set_threshold")
 				var/env = href_list["env"]
@@ -779,40 +732,32 @@
 						selected[3] = selected[4]
 
 				apply_mode()
-				ui_interact(usr)
 				return 1
 
 	if(href_list["screen"])
-		var/prevscreen=screen
 		screen = text2num(href_list["screen"])
-		if(prevscreen==screen) return 0
-		ui_interact(usr)
 		return 1
 
 	if(href_list["atmos_alarm"])
 		alarmActivated=1
-		alarm_area.updateDangerLevel()
+		areaMaster.updateDangerLevel()
 		update_icon()
-		ui_interact(usr)
 		return 1
 
 	if(href_list["atmos_reset"])
 		alarmActivated=0
-		alarm_area.updateDangerLevel()
+		areaMaster.updateDangerLevel()
 		update_icon()
-		ui_interact(usr)
 		return 1
 
 	if(href_list["mode"])
 		mode = text2num(href_list["mode"])
 		apply_mode()
-		ui_interact(usr)
 		return 1
 
 	if(href_list["preset"])
 		preset = text2num(href_list["preset"])
 		apply_preset()
-		ui_interact(usr)
 		return 1
 
 	if(href_list["temperature"])
@@ -826,92 +771,82 @@
 			usr << "Temperature must be between [min_temperature]C and [max_temperature]C"
 		else
 			target_temperature = input_temperature + T0C
-		ui_interact(usr)
 		return 1
-	if(changed)
-		updateUsrDialog()
-
 
 /obj/machinery/alarm/attackby(obj/item/W as obj, mob/user as mob)
-/*	if (istype(W, /obj/item/weapon/wirecutters))
-		stat ^= BROKEN
-		add_fingerprint(user)
-		for(var/mob/O in viewers(user, null))
-			O.show_message(text("\red [] has []activated []!", user, (stat&BROKEN) ? "de" : "re", src), 1)
-		update_icon()
-		return
-*/
 	src.add_fingerprint(user)
 
 	switch(buildstage)
 		if(2)
-			if(istype(W, /obj/item/weapon/screwdriver))  // Opening that Air Alarm up.
-				//user << "You pop the Air Alarm's maintence panel open."
+			if(isscrewdriver(W))  // Opening that Air Alarm up.
 				wiresexposed = !wiresexposed
-				user << "The wires have been [wiresexposed ? "exposed" : "unexposed"]"
+				user << "The wires have been [wiresexposed ? "exposed" : "unexposed"]."
+				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				update_icon()
 				return
 
-			if (wiresexposed && ((istype(W, /obj/item/device/multitool) || istype(W, /obj/item/weapon/wirecutters))))
+			if(wiresexposed && !wires.IsAllCut() && (ismultitool(W) || (iswirecutter(W))))
 				return attack_hand(user)
-
-			if (istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))// trying to unlock the interface with an ID card
+			else if(wiresexposed && wires.IsAllCut() && iswirecutter(W))
+				buildstage = 1
+				update_icon()
+				user.visible_message("<span class='attack'>[user] has cut the wiring from \the [src]!</span>", "You have cut the last of the wiring from \the [src].")
+				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+				getFromPool(/obj/item/stack/cable_coil, get_turf(user), 5)
+				return
+			if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))// trying to unlock the interface with an ID card
 				if(stat & (NOPOWER|BROKEN))
 					user << "It does nothing"
 					return
 				else
-					if(allowed(usr) && !wires.IsIndexCut(AALARM_WIRE_IDSCAN))
+					if(allowed(user) && !wires.IsIndexCut(AALARM_WIRE_IDSCAN))
 						locked = !locked
-						user << "\blue You [ locked ? "lock" : "unlock"] the Air Alarm interface."
-						updateUsrDialog()
+						user << "<span class='notice'>You [ locked ? "lock" : "unlock"] the Air Alarm interface.</span>"
 					else
-						user << "\red Access denied."
+						user << "<span class='warning'>Access denied.</span>"
 			return
 
 		if(1)
-			if(istype(W, /obj/item/weapon/cable_coil))
-				var/obj/item/weapon/cable_coil/coil = W
+			if(iscoil(W))
+				var/obj/item/stack/cable_coil/coil = W
 				if(coil.amount < 5)
 					user << "You need more cable for this!"
 					return
+				for(var/i, i<= 5, i++)
+					wires.UpdateCut(i,1)
 
 				user << "You wire \the [src]!"
-				coil.amount -= 5
-				if(!coil.amount)
-					del(coil)
-
+				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				coil.use(5)
 				buildstage = 2
 				update_icon()
 				first_run()
 				return
 
-			else if(istype(W, /obj/item/weapon/crowbar))
-				user << "You start prying out the circuit."
+			else if(iscrowbar(W))
+				user << "You start prying out the circuit..."
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				if(do_after(user,20))
+				if(do_after(user,20) && buildstage == 1)
 					user << "You pry out the circuit!"
-					var/obj/item/weapon/circuitboard/air_alarm/circuit = new /obj/item/weapon/circuitboard/air_alarm()
-					circuit.loc = user.loc
+					new /obj/item/weapon/circuitboard/air_alarm(get_turf(user))
 					buildstage = 0
 					update_icon()
 				return
 		if(0)
 			if(istype(W, /obj/item/weapon/circuitboard/air_alarm))
 				user << "You insert the circuit!"
-				del(W)
+				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				qdel(W)
 				buildstage = 1
 				update_icon()
 				return
 
-			else if(istype(W, /obj/item/weapon/wrench))
-				user << "You remove the fire alarm assembly from the wall!"
-				var/obj/item/alarm_frame/frame = new /obj/item/alarm_frame()
-				frame.loc = user.loc
+			else if(iswrench(W))
+				user << "You remove the air alarm assembly from the wall!"
+				new /obj/item/mounted/frame/alarm_frame(get_turf(user))
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				del(src)
+				qdel(src)
 				return
-
-	return ..()
 
 /obj/machinery/alarm/power_change()
 	if(powered(power_channel))
@@ -921,64 +856,19 @@
 	spawn(rand(0,15))
 		update_icon()
 
-/obj/machinery/alarm/examine()
+/obj/machinery/alarm/examine(mob/user)
 	..()
 	if (buildstage < 2)
-		usr << "It is not wired."
+		user << "<span class='info'>It is not wired.</span>"
 	if (buildstage < 1)
-		usr << "The circuit is missing."
-
-/*
-AIR ALARM ITEM
-Handheld air alarm frame, for placing on walls
-Code shamelessly copied from apc_frame
-*/
-/obj/item/alarm_frame
-	name = "air alarm frame"
-	desc = "Used for building Air Alarms"
-	icon = 'icons/obj/monitors.dmi'
-	icon_state = "alarm_bitem"
-	flags = FPRINT | TABLEPASS| CONDUCT
-	m_amt = 2*CC_PER_SHEET_METAL
-	w_type = RECYK_METAL
-
-/obj/item/alarm_frame/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/wrench))
-		new /obj/item/stack/sheet/metal( get_turf(src.loc), 2 )
-		del(src)
-		return
-	..()
-
-/obj/item/alarm_frame/proc/try_build(turf/on_wall)
-	if (get_dist(on_wall,usr)>1)
-		return
-
-	var/ndir = get_dir(on_wall,usr)
-	if (!(ndir in cardinal))
-		return
-
-	var/turf/loc = get_turf_loc(usr)
-	var/area/A = loc.loc
-	if (!istype(loc, /turf/simulated/floor))
-		usr << "\red Air Alarm cannot be placed on this spot."
-		return
-	if (A.requires_power == 0 || A.name == "Space")
-		usr << "\red Air Alarm cannot be placed in this area."
-		return
-
-	if(gotwallitem(loc, ndir))
-		usr << "\red There's already an item on this wall!"
-		return
-
-	new /obj/machinery/alarm(loc, ndir, 1)
-	del(src)
+		user << "<span class='info'>The circuit is missing.</span>"
 
 /*
 FIRE ALARM
 */
 /obj/machinery/firealarm
-	name = "fire alarm"
-	desc = "<i>\"Pull this in case of emergency\"<i>. Thus, keep pulling it forever."
+	name = "Fire Alarm"
+	desc = "<i>\"Pull this in case of emergency\"</i>. Thus, keep pulling it forever."
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "fire0"
 	var/detecting = 1.0
@@ -994,14 +884,6 @@ FIRE ALARM
 	var/last_process = 0
 	var/wiresexposed = 0
 	var/buildstage = 2 // 2 = complete, 1 = no wires,  0 = circuit gone
-
-	var/area/master_area
-
-/obj/machinery/firealarm/New()
-	var/area/A = get_area_master(src)
-	if (!( istype(A, /area) ))
-		return
-	master_area=A
 
 /obj/machinery/firealarm/update_icon()
 
@@ -1025,9 +907,9 @@ FIRE ALARM
 	else
 		icon_state = "fire0"
 
-/obj/machinery/firealarm/temperature_expose(datum/gas_mixture/air, temperature, volume)
+/obj/machinery/firealarm/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(src.detecting)
-		if(temperature > T0C+200)
+		if(exposed_temperature > T0C+200)
 			src.alarm()			// added check of detector status here
 	return
 
@@ -1050,65 +932,62 @@ FIRE ALARM
 
 	if (istype(W, /obj/item/weapon/screwdriver) && buildstage == 2)
 		wiresexposed = !wiresexposed
+		user << "The wires have been [wiresexposed ? "exposed" : "unexposed"]."
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		update_icon()
 		return
 
 	if(wiresexposed)
 		switch(buildstage)
 			if(2)
-				if (istype(W, /obj/item/device/multitool))
+				if (ismultitool(W))
 					src.detecting = !( src.detecting )
-					if (src.detecting)
-						user.visible_message("\red [user] has reconnected [src]'s detecting unit!", "You have reconnected [src]'s detecting unit.")
-					else
-						user.visible_message("\red [user] has disconnected [src]'s detecting unit!", "You have disconnected [src]'s detecting unit.")
-				if(istype(W, /obj/item/weapon/wirecutters))
-					if(do_after(user,50))
+					user.visible_message("<span class='attack'>[user] has [detecting ? "re" : "dis"]connected [src]'s detecting unit!</span>", "You have [detecting ? "re" : "dis"]reconnected [src]'s detecting unit.")
+					playsound(get_turf(src), 'sound/items/healthanalyzer.ogg', 50, 1)
+				if(iswirecutter(W))
+					user << "You begin to cut the wiring..."
+					playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+					if (do_after(user, 50) && buildstage == 2 && wiresexposed)
 						buildstage=1
-						user.visible_message("\red [user] has cut the wiring from \the [src]!", "You have cut the last of the wiring from \the [src].")
+						user.visible_message("<span class='attack'>[user] has cut the wiring from \the [src]!</span>", "You have cut the last of the wiring from \the [src].")
 						update_icon()
-						new /obj/item/weapon/cable_coil(user.loc,5)
-						playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+						getFromPool(/obj/item/stack/cable_coil, get_turf(user), 5)
 			if(1)
-				if(istype(W, /obj/item/weapon/cable_coil))
-					var/obj/item/weapon/cable_coil/coil = W
+				if(iscoil(W))
+					var/obj/item/stack/cable_coil/coil = W
 					if(coil.amount < 5)
 						user << "You need more cable for this!"
 						return
-
-					coil.amount -= 5
-					if(!coil.amount)
-						del(coil)
+					coil.use(5)
 
 					buildstage = 2
 					user << "You wire \the [src]!"
 					update_icon()
 
 				else if(istype(W, /obj/item/weapon/crowbar))
-					user << "You pry out the circuit!"
+					user << "You start prying out the circuit..."
 					playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-					spawn(20)
-						var/obj/item/weapon/circuitboard/fire_alarm/circuit = new /obj/item/weapon/circuitboard/fire_alarm()
-						circuit.loc = user.loc
+					if (do_after(user, 20) && buildstage == 1)
+						user << "You pry out the circuit!"
+						new /obj/item/weapon/circuitboard/fire_alarm(get_turf(user))
 						buildstage = 0
 						update_icon()
 			if(0)
 				if(istype(W, /obj/item/weapon/circuitboard/fire_alarm))
 					user << "You insert the circuit!"
-					del(W)
+					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					qdel(W)
 					buildstage = 1
 					update_icon()
 
-				else if(istype(W, /obj/item/weapon/wrench))
+				else if(iswrench(W))
 					user << "You remove the fire alarm assembly from the wall!"
-					var/obj/item/firealarm_frame/frame = new /obj/item/firealarm_frame()
-					frame.loc = user.loc
+					new /obj/item/mounted/frame/firealarm(get_turf(user))
 					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-					del(src)
+					qdel(src)
 		return
 
 	src.alarm()
-	return
 
 /obj/machinery/firealarm/process()//Note: this processing was mostly phased out due to other code, and only runs when needed
 	if(stat & (NOPOWER|BROKEN))
@@ -1149,9 +1028,9 @@ FIRE ALARM
 	user.set_machine(src)
 	var/d1
 	var/d2
-	if (istype(user, /mob/living/carbon/human) || istype(user, /mob/living/silicon))
+	if (istype(user, /mob/living/carbon/human) || istype(user, /mob/living/silicon) || isobserver(user))
 
-		if (master_area.fire)
+		if (areaMaster.fire)
 			d1 = text("<A href='?src=\ref[];reset=1'>Reset - Lockdown</A>", src)
 		else
 			d1 = text("<A href='?src=\ref[];alarm=1'>Alarm - Lockdown</A>", src)
@@ -1165,7 +1044,7 @@ FIRE ALARM
 		user << browse(dat, "window=firealarm")
 		onclose(user, "firealarm")
 	else
-		if (master_area.fire)
+		if (areaMaster.fire)
 			d1 = text("<A href='?src=\ref[];reset=1'>[]</A>", src, stars("Reset - Lockdown"))
 		else
 			d1 = text("<A href='?src=\ref[];alarm=1'>[]</A>", src, stars("Alarm - Lockdown"))
@@ -1181,7 +1060,7 @@ FIRE ALARM
 	return
 
 /obj/machinery/firealarm/Topic(href, href_list)
-	..()
+	if(..()) return 1
 	if (usr.stat || stat & (BROKEN|NOPOWER))
 		return
 
@@ -1214,21 +1093,21 @@ FIRE ALARM
 /obj/machinery/firealarm/proc/reset()
 	if (!( src.working ))
 		return
-	master_area.firereset()
+	areaMaster.firereset()
 	update_icon()
 	return
 
 /obj/machinery/firealarm/proc/alarm()
 	if (!( src.working ))
 		return
-	master_area.firealert()
+	areaMaster.firealert()
 	update_icon()
 	//playsound(get_turf(src), 'sound/ambience/signal.ogg', 75, 0)
 	return
 
 /obj/machinery/firealarm/New(loc, dir, building)
 	..()
-
+	name = "[areaMaster.name] fire alarm"
 	if(loc)
 		src.loc = loc
 
@@ -1247,55 +1126,8 @@ FIRE ALARM
 		else
 			src.overlays += image('icons/obj/monitors.dmi', "overlay_green")
 
+	machines.Remove(src)
 	update_icon()
-
-
-/*
-FIRE ALARM ITEM
-Handheld fire alarm frame, for placing on walls
-Code shamelessly copied from apc_frame
-*/
-/obj/item/firealarm_frame
-	name = "fire alarm frame"
-	desc = "Used for building Fire Alarms"
-	icon = 'icons/obj/monitors.dmi'
-	icon_state = "fire_bitem"
-	flags = FPRINT | TABLEPASS| CONDUCT
-	m_amt=2*CC_PER_SHEET_METAL
-	w_type = RECYK_METAL
-
-/obj/item/firealarm_frame/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/wrench))
-		new /obj/item/stack/sheet/metal( get_turf(src.loc), 2 )
-		del(src)
-		return
-	..()
-
-/obj/item/firealarm_frame/proc/try_build(turf/on_wall)
-	if (get_dist(on_wall,usr)>1)
-		return
-
-	var/ndir = get_dir(on_wall,usr)
-	if (!(ndir in cardinal))
-		return
-
-	var/turf/loc = get_turf_loc(usr)
-	var/area/A = loc.loc
-	if (!istype(loc, /turf/simulated/floor))
-		usr << "\red Fire Alarm cannot be placed on this spot."
-		return
-	if (A.requires_power == 0 || A.name == "Space")
-		usr << "\red Fire Alarm cannot be placed in this area."
-		return
-
-	if(gotwallitem(loc, ndir))
-		usr << "\red There's already an item on this wall!"
-		return
-
-	new /obj/machinery/firealarm(loc, ndir, 1)
-
-	del(src)
-
 
 /obj/machinery/partyalarm
 	name = "\improper PARTY BUTTON"
@@ -1312,13 +1144,9 @@ Code shamelessly copied from apc_frame
 	idle_power_usage = 2
 	active_power_usage = 6
 
-	var/area/master_area
-
 /obj/machinery/partyalarm/New()
-	var/area/A = get_area_master(src)
-	if (!( istype(A, /area) ))
-		return
-	master_area=A
+	..()
+	name = "[areaMaster.name] party alarm"
 
 /obj/machinery/partyalarm/attack_paw(mob/user as mob)
 	return attack_hand(user)
@@ -1331,7 +1159,7 @@ Code shamelessly copied from apc_frame
 	var/d1
 	var/d2
 	if (istype(user, /mob/living/carbon/human) || istype(user, /mob/living/silicon/ai))
-		if (master_area.party)
+		if (areaMaster.party)
 			d1 = text("<A href='?src=\ref[];reset=1'>No Party :(</A>", src)
 		else
 			d1 = text("<A href='?src=\ref[];alarm=1'>PARTY!!!</A>", src)
@@ -1345,7 +1173,7 @@ Code shamelessly copied from apc_frame
 		user << browse(dat, "window=partyalarm")
 		onclose(user, "partyalarm")
 	else
-		if (master_area.fire)
+		if (areaMaster.fire)
 			d1 = text("<A href='?src=\ref[];reset=1'>[]</A>", src, stars("No Party :("))
 		else
 			d1 = text("<A href='?src=\ref[];alarm=1'>[]</A>", src, stars("PARTY!!!"))
@@ -1363,38 +1191,35 @@ Code shamelessly copied from apc_frame
 /obj/machinery/partyalarm/proc/reset()
 	if (!( working ))
 		return
-	master_area.partyreset()
+	areaMaster.partyreset()
 	return
 
 /obj/machinery/partyalarm/proc/alarm()
 	if (!( working ))
 		return
-	master_area.partyalert()
+	areaMaster.partyalert()
 	return
 
 /obj/machinery/partyalarm/Topic(href, href_list)
-	..()
+	if(..()) return 1
 	if (usr.stat || stat & (BROKEN|NOPOWER))
 		return
-	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
-		usr.machine = src
-		if (href_list["reset"])
-			reset()
-		else
-			if (href_list["alarm"])
-				alarm()
-			else
-				if (href_list["time"])
-					timing = text2num(href_list["time"])
-				else
-					if (href_list["tp"])
-						var/tp = text2num(href_list["tp"])
-						time += tp
-						time = min(max(round(time), 0), 120)
-		updateUsrDialog()
 
-		add_fingerprint(usr)
+	usr.machine = src
+	if (href_list["reset"])
+		reset()
 	else
-		usr << browse(null, "window=partyalarm")
-		return
+		if (href_list["alarm"])
+			alarm()
+		else
+			if (href_list["time"])
+				timing = text2num(href_list["time"])
+			else
+				if (href_list["tp"])
+					var/tp = text2num(href_list["tp"])
+					time += tp
+					time = min(max(round(time), 0), 120)
+	updateUsrDialog()
+
+	add_fingerprint(usr)
 	return

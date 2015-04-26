@@ -1,8 +1,10 @@
 /obj/machinery/computer/merch
 	name = "Merch Computer"
 	icon = 'icons/obj/computer.dmi'
-	icon_state = "comm_logs"
+	icon_state = "store"
 	circuit = "/obj/item/weapon/circuitboard/merch"
+
+	l_color = "#993300"
 
 /obj/item/weapon/circuitboard/merch
 	name = "\improper Merchandise Computer Circuitboard"
@@ -141,9 +143,9 @@ td.cost.toomuch {
 			updateUsrDialog()
 			return
 		if(!centcomm_store.PlaceOrder(usr,itemID))
-			usr << "\red Unable to charge your account."
+			usr << "<span class='warning'>Unable to charge your account.</span>"
 		else
-			usr << "\blue You've successfully purchased the item.  It should be in your hands or on the floor."
+			usr << "<span class='notice'>You've successfully purchased the item.  It should be in your hands or on the floor.</span>"
 	src.updateUsrDialog()
 	return
 

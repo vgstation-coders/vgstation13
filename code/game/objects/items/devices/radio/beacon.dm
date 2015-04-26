@@ -6,7 +6,7 @@
 	var/code = "electronic"
 	origin_tech = "bluespace=1"
 
-/obj/item/device/radio/beacon/hear_talk()
+/obj/item/device/radio/beacon/Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq)
 	return
 
 
@@ -42,7 +42,7 @@
 
 /obj/item/device/radio/beacon/syndicate/attack_self(mob/user as mob)
 	if(user)
-		user << "\blue Locked In"
+		user << "<span class='notice'>Locked In</span>"
 		new /obj/machinery/singularity_beacon/syndicate( user.loc )
 		playsound(src, 'sound/effects/pop.ogg', 100, 1, 1)
 		del(src)

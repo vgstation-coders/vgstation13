@@ -37,7 +37,7 @@
 	if (src.on && !(stat & NOPOWER) )
 		var/turf/location = src.loc
 		if (isturf(location))
-			location.hotspot_expose(1000,500,1)
+			location.hotspot_expose(1000,500,1,surfaces=0)
 	return 1
 
 /obj/machinery/igniter/proc/toggle_state()
@@ -61,17 +61,17 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0,user))
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
-			user << "\blue You begin to cut \the [src] off the floor..."
+			user << "<span class='notice'>You begin to cut \the [src] off the floor...</span>"
 			if (do_after(user, 40))
 				user.visible_message( \
 					"[user] disassembles \the [src].", \
-					"\blue You have disassembled \the [src].", \
+					"<span class='notice'>You have disassembled \the [src].</span>", \
 					"You hear welding.")
 				src.assembly.loc=src.loc
 				del(src)
 				return
 		else:
-			user << "\red You need more welder fuel to do that."
+			user << "<span class='warning'>You need more welder fuel to do that.</span>"
 			return 1
 
 
@@ -111,10 +111,10 @@
 		add_fingerprint(user)
 		src.disable = !src.disable
 		if (src.disable)
-			user.visible_message("\red [user] has disabled the [src]!", "\red You disable the connection to the [src].")
+			user.visible_message("<span class='warning'>[user] has disabled the [src]!</span>", "<span class='warning'>You disable the connection to the [src].</span>")
 			icon_state = "[base_state]-d"
 		if (!src.disable)
-			user.visible_message("\red [user] has reconnected the [src]!", "\red You fix the connection to the [src].")
+			user.visible_message("<span class='warning'>[user] has reconnected the [src]!</span>", "<span class='warning'>You fix the connection to the [src].</span>")
 			if(src.powered())
 				icon_state = "[base_state]"
 			else
@@ -122,11 +122,11 @@
 
 /obj/machinery/sparker/attack_ai()
 	if (src.anchored)
-		return src.ignite()
+		return src.spark()
 	else
 		return
 
-/obj/machinery/sparker/proc/ignite()
+/obj/machinery/sparker/proc/spark()
 	if (!(powered()))
 		return
 
@@ -142,14 +142,14 @@
 	use_power(1000)
 	var/turf/location = src.loc
 	if (isturf(location))
-		location.hotspot_expose(1000,500,1)
+		location.hotspot_expose(1000,500,1,surfaces=0)
 	return 1
 
 /obj/machinery/sparker/emp_act(severity)
 	if(stat & (BROKEN|NOPOWER))
 		..(severity)
 		return
-	ignite()
+	spark()
 	..(severity)
 
 /obj/machinery/ignition_switch/attack_ai(mob/user as mob)
@@ -177,7 +177,7 @@
 	for(var/obj/machinery/sparker/M in world)
 		if (M.id_tag == src.id_tag)
 			spawn( 0 )
-				M.ignite()
+				M.spark()
 
 	for(var/obj/machinery/igniter/M in world)
 		if(M.id_tag == src.id_tag)

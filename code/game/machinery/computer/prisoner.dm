@@ -13,6 +13,7 @@
 	var/stop = 0.0
 	var/screen = 0 // 0 - No Access Denied, 1 - Access allowed
 
+	l_color = "#B40000"
 
 	attack_ai(var/mob/user as mob)
 		src.add_hiddenprint(user)
@@ -41,7 +42,7 @@
 
 				// AUTOFIXED BY fix_string_idiocy.py
 				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\computer\prisoner.dm:41: dat += "[C.imp_in.name] | Remaining Units: [C.reagents.total_volume] | Inject: "
-				dat += {"[C.imp_in.name] | Remaining Units: [C.reagents.total_volume] | Inject: 
+				dat += {"[C.imp_in.name] | Remaining Units: [C.reagents.total_volume] | Inject:
 					<A href='?src=\ref[src];inject1=\ref[C]'>(<font color=red>(1)</font>)</A>
 					<A href='?src=\ref[src];inject5=\ref[C]'>(<font color=red>(5)</font>)</A>
 					<A href='?src=\ref[src];inject10=\ref[C]'>(<font color=red>(10)</font>)</A><BR>
@@ -55,7 +56,7 @@
 				var/loc_display = "Unknown"
 				var/mob/living/carbon/M = T.imp_in
 				if(M.z == 1 && !istype(M.loc, /turf/space))
-					var/turf/mob_loc = get_turf_loc(M)
+					var/turf/mob_loc = get_turf(M)
 					loc_display = mob_loc.loc
 				if(T.malfunction)
 					loc_display = pick(teleportlocs)
@@ -81,8 +82,8 @@
 
 	Topic(href, href_list)
 		if(..())
-			return
-		if((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+			return 1
+		else
 			usr.set_machine(src)
 
 			if(href_list["inject1"])
@@ -109,7 +110,7 @@
 				var/obj/item/weapon/implant/I = locate(href_list["warn"])
 				if((I)&&(I.imp_in))
 					var/mob/living/carbon/R = I.imp_in
-					R << "\green You hear a voice in your head saying: '[warning]'"
+					R << "<span class='good'>You hear a voice in your head saying: '[warning]'</span>"
 
 			src.add_fingerprint(usr)
 		src.updateUsrDialog()

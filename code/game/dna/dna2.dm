@@ -32,13 +32,14 @@
 #define DNA_UI_HAIR_STYLE  13
 #define DNA_UI_LENGTH      13 // Update this when you add something, or you WILL break shit.
 
-#define DNA_SE_LENGTH 50 // Was STRUCDNASIZE, size 27. 15 new blocks added = 42, plus room to grow.
+#define DNA_SE_LENGTH 54 // Was STRUCDNASIZE, size 27. 15 new blocks added = 42, plus room to grow.
 
 // Defines which values mean "on" or "off".
 //  This is to make some of the more OP superpowers a larger PITA to activate,
 //  and to tell our new DNA datum which values to set in order to turn something
 //  on or off.
 var/global/list/dna_activity_bounds[DNA_SE_LENGTH]
+var/global/list/assigned_gene_blocks[DNA_SE_LENGTH]
 
 // Used to determine what each block means (admin hax and species stuff on /vg/, mostly)
 var/global/list/assigned_blocks[DNA_SE_LENGTH]
@@ -47,6 +48,42 @@ var/global/list/datum/dna/gene/dna_genes[0]
 
 var/global/list/good_blocks[0]
 var/global/list/bad_blocks[0]
+
+var/global/list/skin_styles_female_list = list() //Unused
+
+// Hair Lists //////////////////////////////////////////////////
+
+var/global/list/hair_styles_list				= list()
+var/global/list/hair_styles_male_list			= list()
+var/global/list/hair_styles_female_list			= list()
+var/global/list/facial_hair_styles_list			= list()
+var/global/list/facial_hair_styles_male_list	= list()
+var/global/list/facial_hair_styles_female_list	= list()
+
+/proc/buildHairLists()
+	var/list/paths
+	var/datum/sprite_accessory/hair/H
+	paths = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
+	for(. in paths)
+		H = new .
+		hair_styles_list[H.name] = H
+		switch(H.gender)
+			if(MALE)	hair_styles_male_list += H.name
+			if(FEMALE)	hair_styles_female_list += H.name
+			else
+				hair_styles_male_list += H.name
+				hair_styles_female_list += H.name
+	paths = typesof(/datum/sprite_accessory/facial_hair) - /datum/sprite_accessory/facial_hair
+	for(. in paths)
+		H = new .
+		facial_hair_styles_list[H.name] = H
+		switch(H.gender)
+			if(MALE)	facial_hair_styles_male_list += H.name
+			if(FEMALE)	facial_hair_styles_female_list += H.name
+			else
+				facial_hair_styles_male_list += H.name
+				facial_hair_styles_female_list += H.name
+	return
 
 /////////////////
 // GENE DEFINES
@@ -279,7 +316,7 @@ var/global/list/bad_blocks[0]
 	if (block<=0) return 0
 	var/list/BOUNDS=GetDNABounds(block)
 	var/value=GetSEValue(block)
-	return (value > BOUNDS[DNA_ON_LOWERBOUND])
+	return (value >= BOUNDS[DNA_ON_LOWERBOUND])
 
 // Set a block "on" or "off".
 /datum/dna/proc/SetSEState(var/block,var/on,var/defer=0)
@@ -325,6 +362,9 @@ var/global/list/bad_blocks[0]
 
 
 /proc/EncodeDNABlock(var/value)
+	if(!isnum(value))
+		WARNING("Expected a number, got [value]")
+		return 0
 	return add_zero2(num2hex(value,1), 3)
 
 /datum/dna/proc/UpdateUI()

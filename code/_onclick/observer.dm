@@ -13,13 +13,21 @@
 
 	// Otherwise jump
 	else
-		loc = get_turf(A)
+		var/turf/targetloc = get_turf(A)
+		var/area/targetarea = get_area(A)
+		if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
+			usr << "<span class='sinister'>A dark forcefield prevents you from entering the area.<span>"
+		else
+			if(targetloc.holy && ((src.invisibility == 0) || iscult(src)))
+				usr << "<span class='warning'>These are sacred grounds, you cannot go there!</span>"
+			else
+				loc = targetloc
 
 /mob/dead/observer/ClickOn(var/atom/A, var/params)
 	if(client.buildmode)
 		build_click(src, client.buildmode, params, A)
 		return
-	if(world.time <= next_move)
+	if(attack_delayer.blocked())
 		return
 	//next_move = world.time + 8
 
@@ -42,7 +50,7 @@
 
 // We don't need a fucking toggle.
 /mob/dead/observer/ShiftClickOn(var/atom/A)
-	A.examine()
+	examination(A)
 
 /atom/proc/attack_ghost(mob/user as mob)
 	var/ghost_flags = 0
@@ -51,7 +59,7 @@
 	if(canGhostRead(user,src,ghost_flags))
 		src.attack_ai(user)
 	else
-		src.examine()
+		user.examination(src)
 
 /* Bay edition
 // Oh by the way this didn't work with old click code which is why clicking shit didn't spam you

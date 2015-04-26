@@ -1,10 +1,11 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
-var/list/potential_theft_objectives=typesof(/datum/theft_objective) \
-	- /datum/theft_objective \
-	- /datum/theft_objective/special \
-	- /datum/theft_objective/number \
-	- /datum/theft_objective/number/special
+var/list/potential_theft_objectives=list(
+	"traitor" = typesof(/datum/theft_objective/traitor) - /datum/theft_objective/traitor,
+	"special" = typesof(/datum/theft_objective/special) - /datum/theft_objective/special,
+	"heist"   = typesof(/datum/theft_objective/number/heist) - /datum/theft_objective/number/heist,
+	"salvage" = typesof(/datum/theft_objective/number/salvage) - /datum/theft_objective/number/salvage
+)
 
 datum/objective
 	var/datum/mind/owner = null			//Who owns the objective.
@@ -12,6 +13,7 @@ datum/objective
 	var/datum/mind/target = null		//If they are focused on a particular person.
 	var/target_amount = 0				//If they are focused on a particular number. Steal objectives have their own counter.
 	var/completed = 0					//currently only used for custom objectives.
+	var/blocked = 0                     // Universe fucked, you lost.
 
 	New(var/text)
 		if(text)
@@ -57,7 +59,7 @@ datum/objective/assassinate
 
 
 	check_completion()
-		if(target && target.current)
+		if(target && target.current && !blocked)
 			if(target.current.stat == DEAD || issilicon(target.current) || isbrain(target.current) || target.current.z > 6 || !target.current.ckey) //Borgs/brains/AIs count as dead for traitor objectives. --NeoFite
 				return 1
 			return 0
@@ -84,7 +86,7 @@ datum/objective/mutiny
 		return target
 
 	check_completion()
-		if(target && target.current)
+		if(target && target.current && !blocked)
 			if(target.current.stat == DEAD || !ishuman(target.current) || !target.current.ckey)
 				return 1
 			var/turf/T = get_turf(target.current)
@@ -114,7 +116,7 @@ datum/objective/mutiny/rp
 	// less violent rev objectives
 	check_completion()
 		var/rval = 1
-		if(target && target.current)
+		if(target && target.current && !blocked)
 			//assume that only carbon mobs can become rev heads for now
 			if(target.current.stat == DEAD || target.current:handcuffed || !ishuman(target.current))
 				return 1
@@ -174,6 +176,7 @@ datum/objective/anti_revolution/brig
 		return target
 
 	check_completion()
+		if(blocked) return 0
 		if(already_completed)
 			return 1
 
@@ -204,6 +207,7 @@ datum/objective/anti_revolution/demote
 		return target
 
 	check_completion()
+		if(blocked) return 0
 		if(target && target.current && istype(target,/mob/living/carbon/human))
 			var/obj/item/weapon/card/id/I = target.current:wear_id
 			if(istype(I, /obj/item/device/pda))
@@ -237,6 +241,7 @@ datum/objective/debrain//I want braaaainssss
 		return target
 
 	check_completion()
+		if(blocked) return 0
 		if(!target)//If it's a free objective.
 			return 1
 		if( !owner.current || owner.current.stat==DEAD )//If you're otherwise dead.
@@ -270,6 +275,7 @@ datum/objective/protect//The opposite of killing a dude.
 		return target
 
 	check_completion()
+		if(blocked) return 0
 		if(!target)			//If it's a free objective.
 			return 1
 		if(target.current)
@@ -283,6 +289,7 @@ datum/objective/hijack
 	explanation_text = "Hijack the emergency shuttle by escaping without any organic life-forms, other than yourself."
 
 	check_completion()
+		if(blocked) return 0
 		if(!owner.current || owner.current.stat)
 			return 0
 		if(emergency_shuttle.location<2)
@@ -308,6 +315,7 @@ datum/objective/block
 	explanation_text = "Do not allow any organic lifeforms to escape on the shuttle alive."
 
 	check_completion()
+		if(blocked) return 0
 		if(!istype(owner.current, /mob/living/silicon))
 			return 0
 		if(emergency_shuttle.location<2)
@@ -328,6 +336,7 @@ datum/objective/silence
 	explanation_text = "Do not allow anyone to escape the station.  Only allow the shuttle to be called when everyone is dead and your story is the only one left."
 
 	check_completion()
+		if(blocked) return 0
 		if(emergency_shuttle.location<2)
 			return 0
 
@@ -348,6 +357,7 @@ datum/objective/escape
 	explanation_text = "Escape on the shuttle or an escape pod alive and free."
 
 	check_completion()
+		if(blocked) return 0
 		if(issilicon(owner.current))
 			return 0
 		if(isbrain(owner.current))
@@ -397,11 +407,31 @@ datum/objective/survive
 	explanation_text = "Stay alive until the end."
 
 	check_completion()
+		if(blocked) return 0
 		if(!owner.current || owner.current.stat == DEAD || isbrain(owner.current))
 			return 0		//Brains no longer win survive objectives. --NEO
 		if(issilicon(owner.current) && owner.current != owner.original)
 			return 0
 		return 1
+
+
+
+datum/objective/multiply
+	explanation_text = "Procreate, and protect your spawn."
+	var/already_completed=0
+	check_completion()
+		if(blocked) return 0
+		if(already_completed)
+			return 1
+		if(!owner.current)
+			return 0
+		var/mob/living/simple_animal/borer/B=owner.current
+		if(!istype(B))
+			return 0
+		if(B.numChildren>0)
+			already_completed=1
+			return 1
+		return 0
 
 // Similar to the anti-rev objective, but for traitors
 datum/objective/brig
@@ -425,6 +455,7 @@ datum/objective/brig
 		return target
 
 	check_completion()
+		if(blocked) return 0
 		if(already_completed)
 			return 1
 
@@ -460,6 +491,7 @@ datum/objective/harm
 		return target
 
 	check_completion()
+		if(blocked) return 0
 		if(already_completed)
 			return 1
 
@@ -487,31 +519,34 @@ datum/objective/nuclear
 
 
 
-datum/objective/steal
+/datum/objective/steal
+	var/target_category = "traitor"
 	var/datum/theft_objective/steal_target
 
-	find_target(var/special_only=0)
-		var/loop=50
-		while(!steal_target && loop > 0)
-			loop--
-			var/thefttype = pick(potential_theft_objectives)
-			var/datum/theft_objective/O = new thefttype
-			if(owner.assigned_role in O.protected_jobs)
+	find_target()
+		var/list/possibleObjectives = potential_theft_objectives[target_category]
+		var/loopSanity = possibleObjectives.len
+
+		while(isnull(steal_target) && loopSanity > 0)
+			loopSanity--
+
+			var/pickedObjective = pick(possibleObjectives)
+			var/datum/theft_objective/objective = new pickedObjective
+
+			if(owner && owner.assigned_role in objective.protected_jobs)
 				continue
-			if(special_only)
-				if(!(O.flags & 1)) // THEFT_FLAG_SPECIAL
-					continue
-			else
-				if(O.flags & 1) // THEFT_FLAG_SPECIAL
-					continue
-			steal_target=O
-			explanation_text = "Steal [O]."
+
+			steal_target = objective
+			explanation_text = format_explanation()
 			return
+
 		explanation_text = "Free Objective."
 
+	proc/format_explanation()
+		return "Steal [steal_target.name]."
 
 	proc/select_target()
-		var/list/possible_items_all = potential_theft_objectives+"custom"
+		var/list/possible_items_all = potential_theft_objectives[target_category]+"custom"
 		var/new_target = input("Select target:", "Objective target", null) as null|anything in possible_items_all
 		if (!new_target) return
 		if (new_target == "custom")
@@ -520,20 +555,20 @@ datum/objective/steal
 			if (!O.typepath) return
 			var/tmp_obj = new O.typepath
 			var/custom_name = tmp_obj:name
-			del(tmp_obj)
-			O.name = copytext(sanitize(input("Enter target name:", "Objective target", custom_name) as text|null),1,MAX_MESSAGE_LEN)
+			qdel(tmp_obj)
+			O.name = copytext(sanitize(input("Enter target name:", "Objective target", custom_name) as text|null),1,MAX_NAME_LEN)
 			if (!O.name) return
 			steal_target = O
-			explanation_text = "Steal [O.name]."
+			explanation_text = format_explanation()
 		else
 			steal_target = new new_target
-			explanation_text = "Steal [steal_target.name]."
+			explanation_text = format_explanation()
 		return steal_target
 
 	check_completion()
+		if(blocked) return 0
 		if(!steal_target) return 1 // Free Objective
 		return steal_target.check_completion(owner)
-
 
 datum/objective/download
 	proc/gen_amount_goal()
@@ -543,6 +578,7 @@ datum/objective/download
 
 
 	check_completion()
+		if(blocked) return 0
 		if(!ishuman(owner.current))
 			return 0
 		if(!owner.current || owner.current.stat == 2)
@@ -569,6 +605,7 @@ datum/objective/capture
 
 
 	check_completion()//Basically runs through all the mobs in the area to determine how much they are worth.
+		if(blocked) return 0
 		var/captured_amount = 0
 		var/area/centcom/holding/A = locate()
 		for(var/mob/living/carbon/human/M in A)//Humans.
@@ -606,6 +643,7 @@ datum/objective/blood
 		return target_amount
 
 	check_completion()
+		if(blocked) return 0
 		if(owner && owner.vampire && owner.vampire.bloodtotal && owner.vampire.bloodtotal >= target_amount)
 			return 1
 		else
@@ -629,6 +667,7 @@ datum/objective/absorb
 		return target_amount
 
 	check_completion()
+		if(blocked) return 0
 		if(owner && owner.changeling && owner.changeling.absorbed_dna && (owner.changeling.absorbedcount >= target_amount))
 			return 1
 		else
@@ -694,8 +733,9 @@ datum/objective/absorb
 */
 
 // /vg/; Vox Inviolate for humans :V
-datum/objective/minimize_casualties
+/datum/objective/minimize_casualties
 	explanation_text = "Minimise casualties."
 	check_completion()
+		if(blocked) return 0
 		if(owner.kills.len>5) return 0
 		return 1

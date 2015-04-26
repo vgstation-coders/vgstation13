@@ -38,7 +38,7 @@
 		name = "[name] (ID [id])"
 
 	attack_hand(var/mob/user as mob)
-		usr << "\blue You can't directly interact with this machine. Use the area atmos computer."
+		usr << "<span class='notice'>You can't directly interact with this machine. Use the area atmos computer.</span>"
 
 	update_icon()
 		src.overlays = 0
@@ -51,12 +51,12 @@
 	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 		if(istype(W, /obj/item/weapon/wrench))
 			if(on)
-				user << "\blue Turn it off first!"
+				user << "<span class='notice'>Turn it off first!</span>"
 				return
 
 			anchored = !anchored
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-			user << "\blue You [anchored ? "wrench" : "unwrench"] \the [src]."
+			user << "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>"
 
 			return
 
@@ -67,7 +67,7 @@
 
 	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 		if(istype(W, /obj/item/weapon/wrench))
-			user << "\blue The bolts are too tight for you to unscrew!"
+			user << "<span class='notice'>The bolts are too tight for you to unscrew!</span>"
 			return
 
 		..()
@@ -179,11 +179,12 @@ Power regulator: <A href='?src=\ref[src];volume_adj=-1000'>-</A> <A href='?src=\
 	return
 
 /obj/machinery/portable_atmospherics/scrubber/Topic(href, href_list)
+	if(!isAI(usr) && usr.z != z) return 1
 	..()
 	if (usr.stat || usr.restrained())
 		return
 
-	if (((get_dist(src, usr) <= 1) && istype(src.loc, /turf)))
+	if (istype(src.loc, /turf))
 		usr.set_machine(src)
 
 		if(href_list["power"])

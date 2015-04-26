@@ -8,14 +8,15 @@
 /*
  * Banana Peals
  */
-/obj/item/weapon/bananapeel/HasEntered(AM as mob|obj)
+/obj/item/weapon/bananapeel/Crossed(AM as mob|obj)
 	if (istype(AM, /mob/living/carbon))
 		var/mob/M =	AM
+		if(M.lying) return
 		if (istype(M, /mob/living/carbon/human) && (isobj(M:shoes) && M:shoes.flags&NOSLIP))
 			return
 
 		M.stop_pulling()
-		M << "\blue You slipped on the [name]!"
+		M << "<span class='notice'> You slipped on the [name]!</span>"
 		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
 		M.Stun(2)
 		M.Weaken(2)
@@ -23,28 +24,30 @@
 /*
  * Soap
  */
-/obj/item/weapon/soap/HasEntered(AM as mob|obj) //EXACTLY the same as bananapeel for now, so it makes sense to put it in the same dm -- Urist
+/obj/item/weapon/soap/Crossed(AM as mob|obj) //EXACTLY the same as bananapeel for now, so it makes sense to put it in the same dm -- Urist
 	if (istype(AM, /mob/living/carbon))
 		var/mob/M =	AM
+		if(M.lying) return
 		if (istype(M, /mob/living/carbon/human) && (isobj(M:shoes) && M:shoes.flags&NOSLIP))
 			return
 
 		M.stop_pulling()
-		M << "\blue You slipped on the [name]!"
+		M << "<span class='notice'> You slipped on the [name]!</span>"
 		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
 		M.Stun(3)
 		M.Weaken(2)
 
 /obj/item/weapon/soap/afterattack(atom/target, mob/user as mob)
-	//I couldn't feasibly  fix the overlay bugs caused by cleaning items we are wearing.
+	//I couldn't feasibly fix the overlay bugs caused by cleaning items we are wearing.
 	//So this is a workaround. This also makes more sense from an IC standpoint. ~Carn
+	//Overlay bugs can probably be fixed by updating the user's icon, see watercloset.dm
 	if(!user.Adjacent(target))
 		return
-	if(user.client && (target in user.client.screen))
+	if(user.client && (target in user.client.screen) && !(user.l_hand == target || user.r_hand == target))
 		user << "<span class='notice'>You need to take that [target.name] off before cleaning it.</span>"
 	else if(istype(target,/obj/effect/decal/cleanable))
 		user << "<span class='notice'>You scrub \the [target.name] out.</span>"
-		del(target)
+		returnToPool(target)
 	else if(istype(target,/turf/simulated))
 		var/turf/simulated/T = target
 		var/list/cleanables = list()
@@ -62,7 +65,7 @@
 				C = d
 				break
 		user << "<span class='notice'>You scrub \the [C.name] out.</span>"
-		del(C)
+		returnToPool(C)
 	else
 		user << "<span class='notice'>You clean \the [target.name].</span>"
 		target.clean_blood()
@@ -70,7 +73,7 @@
 
 /obj/item/weapon/soap/attack(mob/target as mob, mob/user as mob)
 	if(target && user && ishuman(target) && !target.stat && !user.stat && user.zone_sel &&user.zone_sel.selecting == "mouth" )
-		user.visible_message("\red \the [user] washes \the [target]'s mouth out with soap!")
+		user.visible_message("<span class='warning'>\the [user] washes \the [target]'s mouth out with soap!</span>")
 		return
 	..()
 

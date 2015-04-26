@@ -6,9 +6,21 @@
 			log_admin("[key_name(usr)] has left build mode.")
 			M.client.buildmode = 0
 			M.client.show_popup_menus = 1
+			/*
+			var/list/bmholders = list()
 			for(var/obj/effect/bmode/buildholder/H)
 				if(H.cl == M.client)
-					del(H)
+					//del(H)
+					bmholders += H
+			for(var/obj/effect/bmode/bm)
+				for(var/obj/effect/bmode/buildholder/HH in bmholders)
+					if(bm.master == HH) del(bm)
+			for(var/obj/effect/bmode/buildholder/HH in bmholders)
+				del(HH)
+				*/
+			if(M.client.buildmode_objs && M.client.buildmode_objs.len)
+				for(var/BM in M.client.buildmode_objs)
+					del(BM)
 		else
 			log_admin("[key_name(usr)] has entered build mode.")
 			M.client.buildmode = 1
@@ -33,6 +45,7 @@
 			M.client.screen += C
 			M.client.screen += D
 			H.cl = M.client
+			M.client.buildmode_objs |= list(H,A,B,C,D)
 
 /obj/effect/bmode//Cleaning up the tree a bit
 	density = 1
@@ -66,35 +79,35 @@
 	Click()
 		switch(master.cl.buildmode)
 			if(1)
-				usr << "\blue ***********************************************************"
-				usr << "\blue Left Mouse Button        = Construct / Upgrade"
-				usr << "\blue Right Mouse Button       = Deconstruct / Delete / Downgrade"
-				usr << "\blue Left Mouse Button + ctrl = R-Window"
-				usr << "\blue Left Mouse Button + alt  = Airlock"
+				usr << "<span class='notice'>***********************************************************</span>"
+				usr << "<span class='notice'>Left Mouse Button        = Construct / Upgrade</span>"
+				usr << "<span class='notice'>Right Mouse Button       = Deconstruct / Delete / Downgrade</span>"
+				usr << "<span class='notice'>Left Mouse Button + ctrl = R-Window</span>"
+				usr << "<span class='notice'>Left Mouse Button + alt  = Airlock</span>"
 				usr << ""
-				usr << "\blue Use the button in the upper left corner to"
-				usr << "\blue change the direction of built objects."
-				usr << "\blue ***********************************************************"
+				usr << "<span class='notice'>Use the button in the upper left corner to</span>"
+				usr << "<span class='notice'>change the direction of built objects.</span>"
+				usr << "<span class='notice'>***********************************************************</span>"
 			if(2)
-				usr << "\blue ***********************************************************"
-				usr << "\blue Right Mouse Button on buildmode button = Set object type"
-				usr << "\blue Left Mouse Button on turf/obj          = Place objects"
-				usr << "\blue Right Mouse Button                     = Delete objects"
+				usr << "<span class='notice'>***********************************************************</span>"
+				usr << "<span class='notice'>Right Mouse Button on buildmode button = Set object type</span>"
+				usr << "<span class='notice'>Left Mouse Button on turf/obj          = Place objects</span>"
+				usr << "<span class='notice'>Right Mouse Button                     = Delete objects</span>"
 				usr << ""
-				usr << "\blue Use the button in the upper left corner to"
-				usr << "\blue change the direction of built objects."
-				usr << "\blue ***********************************************************"
+				usr << "<span class='notice'>Use the button in the upper left corner to</span>"
+				usr << "<span class='notice'>change the direction of built objects.</span>"
+				usr << "<span class='notice'>***********************************************************</span>"
 			if(3)
-				usr << "\blue ***********************************************************"
-				usr << "\blue Right Mouse Button on buildmode button = Select var(type) & value"
-				usr << "\blue Left Mouse Button on turf/obj/mob      = Set var(type) & value"
-				usr << "\blue Right Mouse Button on turf/obj/mob     = Reset var's value"
-				usr << "\blue ***********************************************************"
+				usr << "<span class='notice'>***********************************************************</span>"
+				usr << "<span class='notice'>Right Mouse Button on buildmode button = Select var(type) & value</span>"
+				usr << "<span class='notice'>Left Mouse Button on turf/obj/mob      = Set var(type) & value</span>"
+				usr << "<span class='notice'>Right Mouse Button on turf/obj/mob     = Reset var's value</span>"
+				usr << "<span class='notice'>***********************************************************</span>"
 			if(4)
-				usr << "\blue ***********************************************************"
-				usr << "\blue Left Mouse Button on turf/obj/mob      = Select"
-				usr << "\blue Right Mouse Button on turf/obj/mob     = Throw"
-				usr << "\blue ***********************************************************"
+				usr << "<span class='notice'>***********************************************************</span>"
+				usr << "<span class='notice'>Left Mouse Button on turf/obj/mob      = Select</span>"
+				usr << "<span class='notice'>Right Mouse Button on turf/obj/mob     = Throw</span>"
+				usr << "<span class='notice'>***********************************************************</span>"
 		return 1
 
 /obj/effect/bmode/buildquit
@@ -181,41 +194,49 @@
 			break
 	if(!holder) return
 	var/list/pa = params2list(params)
-
+	var/turf/RT = get_turf(object)
 	switch(buildmode)
 		if(1)
 			if(istype(object,/turf) && pa.Find("left") && !pa.Find("alt") && !pa.Find("ctrl") )
 				if(istype(object,/turf/space))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/floor)
+					log_admin("[key_name(usr)] made a floor at [formatJumpTo(T)]")
 					return
 				else if(istype(object,/turf/simulated/floor))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/wall)
+					log_admin("[key_name(usr)] made a wall at [formatJumpTo(T)]")
 					return
 				else if(istype(object,/turf/simulated/wall))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/wall/r_wall)
+					log_admin("[key_name(usr)] made a rwall at [formatJumpTo(T)]")
 					return
 			else if(pa.Find("right"))
 				if(istype(object,/turf/simulated/wall))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/floor)
+					log_admin("[key_name(usr)] removed a wall at [formatJumpTo(T)]")
 					return
 				else if(istype(object,/turf/simulated/floor))
 					var/turf/T = object
 					T.ChangeTurf(/turf/space)
+					log_admin("[key_name(usr)] removed flooring at [formatJumpTo(T)]")
 					return
 				else if(istype(object,/turf/simulated/wall/r_wall))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/wall)
+					log_admin("[key_name(usr)] downgraded an rwall at [formatJumpTo(T)]")
 					return
 				else if(istype(object,/obj))
 					del(object)
 					return
 			else if(istype(object,/turf) && pa.Find("alt") && pa.Find("left"))
 				new/obj/machinery/door/airlock(get_turf(object))
+				log_admin("[key_name(usr)] made an airlock at [formatJumpTo(RT)]")
 			else if(istype(object,/turf) && pa.Find("ctrl") && pa.Find("left"))
+				log_admin("[key_name(usr)] made a window at [formatJumpTo(RT)]")
 				switch(holder.builddir.dir)
 					if(NORTH)
 						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
@@ -238,8 +259,11 @@
 					T.ChangeTurf(holder.buildmode.objholder)
 				else
 					var/obj/A = new holder.buildmode.objholder (get_turf(object))
-					A.dir = holder.builddir.dir
+					if(istype(A))
+						A.dir = holder.builddir.dir
+				log_admin("[key_name(usr)] made a [holder.buildmode.objholder] at [formatJumpTo(RT)]")
 			else if(pa.Find("right"))
+				log_admin("[key_name(usr)] deleted a [object] at [formatJumpTo(RT)]")
 				if(isobj(object)) del(object)
 
 		if(3)
@@ -248,18 +272,20 @@
 					log_admin("[key_name(usr)] modified [object.name]'s [holder.buildmode.varholder] to [holder.buildmode.valueholder]")
 					object.vars[holder.buildmode.varholder] = holder.buildmode.valueholder
 				else
-					usr << "\red [initial(object.name)] does not have a var called '[holder.buildmode.varholder]'"
+					usr << "<span class='warning'>[initial(object.name)] does not have a var called '[holder.buildmode.varholder]'</span>"
 			if(pa.Find("right"))
 				if(object.vars.Find(holder.buildmode.varholder))
 					log_admin("[key_name(usr)] modified [object.name]'s [holder.buildmode.varholder] to [holder.buildmode.valueholder]")
 					object.vars[holder.buildmode.varholder] = initial(object.vars[holder.buildmode.varholder])
 				else
-					usr << "\red [initial(object.name)] does not have a var called '[holder.buildmode.varholder]'"
+					usr << "<span class='warning'>[initial(object.name)] does not have a var called '[holder.buildmode.varholder]'</span>"
 
 		if(4)
 			if(pa.Find("left"))
+				log_admin("[key_name(usr)] is selecting [object] for throwing at [formatJumpTo(RT)]")
 				holder.throw_atom = object
 			if(pa.Find("right"))
 				if(holder.throw_atom)
 					holder.throw_atom.throw_at(object, 10, 1)
+					log_admin("[key_name(usr)] is throwing a [holder.throw_atom] at [object] - [formatJumpTo(RT)]")
 

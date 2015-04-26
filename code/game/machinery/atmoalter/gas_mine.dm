@@ -5,10 +5,11 @@
 	icon_state = "miner"
 	power_channel=ENVIRON
 
-	m_amt=10*CC_PER_SHEET_METAL
-	w_type = RECYK_METAL
+	m_amt = 0 // fuk u
+	w_type = NOT_RECYCLABLE
 
 	var/datum/gas_mixture/air_contents
+	var/datum/gas_mixture/pumping = new //used in transfering air around
 
 	var/on=1
 
@@ -16,6 +17,8 @@
 	var/internal_pressure=4500 // Bottleneck
 
 	var/light_color = "#FFFFFF"
+
+	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/atmospherics/miner/New()
 	..()
@@ -25,6 +28,12 @@
 	AddAir()
 	air_contents.update_values()
 	update_icon()
+
+/obj/machinery/atmospherics/miner/wrenchAnchor(mob/user)
+	..()
+	if(on)
+		on = 0
+		update_icon()
 
 // Critical equipment.
 /obj/machinery/atmospherics/miner/ex_act(severity)
@@ -43,8 +52,9 @@
 
 /obj/machinery/atmospherics/miner/attack_hand(var/mob/user)
 	..()
-	on=!on
-	update_icon()
+	if(anchored)
+		on=!on
+		update_icon()
 
 /obj/machinery/atmospherics/miner/attack_ai(var/mob/user)
 	..()
@@ -88,17 +98,20 @@
 	var/datum/gas_mixture/environment = loc.return_air()
 	var/environment_pressure = environment.return_pressure()
 
-	var/datum/gas_mixture/pumped = new
-	pumped.copy_from(air_contents)
+	pumping.copy_from(air_contents)
 
 	var/pressure_delta = 10000
 
-	pressure_delta = min(pressure_delta, (internal_pressure - environment_pressure))
+	// External pressure bound
+	pressure_delta = min(pressure_delta, (max_external_pressure - environment_pressure))
+
+	// Internal pressure bound (screwed up calc, won't be used anyway)
+	//pressure_delta = min(pressure_delta, (internal_pressure - environment_pressure))
 
 	if(pressure_delta > 0.1)
-		var/transfer_moles = pressure_delta*environment.volume/(pumped.temperature * R_IDEAL_GAS_EQUATION)
+		var/transfer_moles = pressure_delta*environment.volume/(pumping.temperature * R_IDEAL_GAS_EQUATION)
 
-		var/datum/gas_mixture/removed = pumped.remove(transfer_moles)
+		var/datum/gas_mixture/removed = pumping.remove(transfer_moles)
 
 		loc.assume_air(removed)
 
@@ -142,7 +155,7 @@
 
 /obj/machinery/atmospherics/miner/air
 	name = "\improper Air Miner"
-	desc = "You fucking cheater."
+	desc = "You fucking <em>cheater</em>."
 	light_color = "#70DBDB"
 
 	on = 0

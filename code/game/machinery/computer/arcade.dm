@@ -1,10 +1,10 @@
 /obj/machinery/computer/arcade
 	name = "arcade machine"
-	desc = "Does not support Pin ball."
+	desc = "Does not support pinball."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "arcade"
 	circuit = "/obj/item/weapon/circuitboard/arcade"
-	var/enemy_name = "Space Villian"
+	var/enemy_name = "Space Villain"
 	var/temp = "Winners Don't Use Spacedrugs" //Temporary message, for attack messages, etc
 	var/player_hp = 30 //Player health/attack points
 	var/player_mp = 10
@@ -12,7 +12,14 @@
 	var/enemy_mp = 20
 	var/gameover = 0
 	var/blocked = 0 //Player cannot attack/heal while set
+
+	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	emag_cost = 0 // because fun
+
+	l_color = "#00FF00"
+
 	var/list/prizes = list(	/obj/item/weapon/storage/box/snappops			= 2,
+							/obj/item/toy/cards								= 2,
 							/obj/item/toy/blink								= 2,
 							/obj/item/clothing/under/syndicate/tacticool	= 2,
 							/obj/item/toy/sword								= 2,
@@ -21,6 +28,8 @@
 							/obj/item/clothing/suit/syndicatefake			= 2,
 							/obj/item/weapon/storage/fancy/crayons			= 2,
 							/obj/item/toy/spinningtoy						= 2,
+							/obj/item/toy/minimeteor					= 2,
+							/obj/item/device/whisperphone					= 2,
 							/obj/item/toy/prize/ripley						= 1,
 							/obj/item/toy/prize/fireripley					= 1,
 							/obj/item/toy/prize/deathripley					= 1,
@@ -163,6 +172,8 @@
 				feedback_inc("arcade_win_emagged")
 				new /obj/effect/spawner/newbomb/timer/syndicate(src.loc)
 				new /obj/item/clothing/head/collectable/petehat(src.loc)
+				new /obj/item/device/maracas(src.loc)
+				new /obj/item/device/maracas(src.loc)
 				message_admins("[key_name_admin(usr)] has outbombed Cuban Pete and been awarded a bomb.")
 				log_game("[key_name_admin(usr)] has outbombed Cuban Pete and been awarded a bomb.")
 				src.New()
@@ -226,45 +237,22 @@
 	src.blocked = 0
 	return
 
+/obj/machinery/computer/arcade/emag(mob/user as mob)
+	temp = "If you die in the game, you die for real!"
+	player_hp = 30
+	player_mp = 10
+	enemy_hp = 45
+	enemy_mp = 20
+	gameover = 0
+	blocked = 0
 
-/obj/machinery/computer/arcade/attackby(I as obj, user as mob)
-	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
-		temp = "If you die in the game, you die for real!"
-		player_hp = 30
-		player_mp = 10
-		enemy_hp = 45
-		enemy_mp = 20
-		gameover = 0
-		blocked = 0
+	emagged = 1
 
-		emagged = 1
+	enemy_name = "Cuban Pete"
+	name = "Outbomb Cuban Pete"
 
-		enemy_name = "Cuban Pete"
-		name = "Outbomb Cuban Pete"
+	src.updateUsrDialog()
 
-
-		src.updateUsrDialog()
-	else if(istype(I, /obj/item/weapon/screwdriver))
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-		if(do_after(user, 20))
-			var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-			var/obj/item/weapon/circuitboard/arcade/M = new /obj/item/weapon/circuitboard/arcade( A )
-			for (var/obj/C in src)
-				C.loc = src.loc
-			A.circuit = M
-			A.anchored = 1
-
-			if (src.stat & BROKEN)
-				user << "\blue The broken glass falls out."
-				getFromPool(/obj/item/weapon/shard, loc)
-				A.state = 3
-				A.icon_state = "3"
-			else
-				user << "\blue You disconnect the monitor."
-				A.state = 4
-				A.icon_state = "4"
-
-			del(src)
 /obj/machinery/computer/arcade/emp_act(severity)
 	if(stat & (NOPOWER|BROKEN))
 		..(severity)

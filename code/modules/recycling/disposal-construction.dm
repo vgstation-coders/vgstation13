@@ -86,9 +86,10 @@
 	// flip and rotate verbs
 	verb/rotate()
 		set name = "Rotate Pipe"
+		set category = "Object"
 		set src in view(1)
 
-		if(usr.stat)
+		if(usr.stat || (usr.status_flags & FAKEDEATH))
 			return
 
 		if(anchored)
@@ -100,8 +101,9 @@
 
 	verb/flip()
 		set name = "Flip Pipe"
+		set category = "Object"
 		set src in view(1)
-		if(usr.stat)
+		if(usr.stat || (usr.status_flags & FAKEDEATH))
 			return
 
 		if(anchored)

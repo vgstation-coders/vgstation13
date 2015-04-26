@@ -25,17 +25,61 @@
 
 /obj/item/projectile/temp
 	name = "freeze beam"
-	icon_state = "ice_2"
+	icon_state = "temp_4"
 	damage = 0
 	damage_type = BURN
 	nodamage = 1
 	flag = "energy"
 	var/temperature = 300
+	var/obj/item/weapon/gun/energy/temperature/T = null
+
+	OnFired()
+		T = shot_from
+		temperature = T.temperature
+		switch(temperature)
+			if(501 to INFINITY)
+				name = "searing beam"	//if emagged
+				icon_state = "temp_8"
+			if(400 to 500)
+				name = "burning beam"	//temp at which mobs start taking HEAT_DAMAGE_LEVEL_2
+				icon_state = "temp_7"
+			if(360 to 400)
+				name = "hot beam"		//temp at which mobs start taking HEAT_DAMAGE_LEVEL_1
+				icon_state = "temp_6"
+			if(335 to 360)
+				name = "warm beam"		//temp at which players get notified of their high body temp
+				icon_state = "temp_5"
+			if(295 to 335)
+				name = "ambient beam"
+				icon_state = "temp_4"
+			if(260 to 295)
+				name = "cool beam"		//temp at which players get notified of their low body temp
+				icon_state = "temp_3"
+			if(200 to 260)
+				name = "cold beam"		//temp at which mobs start taking COLD_DAMAGE_LEVEL_1
+				icon_state = "temp_2"
+			if(120 to 260)
+				name = "ice beam"		//temp at which mobs start taking COLD_DAMAGE_LEVEL_2
+				icon_state = "temp_1"
+			if(-INFINITY to 120)
+				name = "freeze beam"	//temp at which mobs start taking COLD_DAMAGE_LEVEL_3
+				icon_state = "temp_0"
+			else
+				name = "temperature beam"//failsafe
+				icon_state = "temp_4"
+
 
 	on_hit(var/atom/target, var/blocked = 0)//These two could likely check temp protection on the mob
 		if(istype(target, /mob/living))
-			var/mob/M = target
+			var/mob/living/M = target
+			if(M.flags & INVULNERABLE)
+				return 0
 			M.bodytemperature = temperature
+			if(temperature > 500)//emagged
+				M.adjust_fire_stacks(0.5)
+				M.on_fire = 1
+				M.update_icon = 1
+				playsound(M.loc, 'sound/effects/bamf.ogg', 50, 0)
 		return 1
 
 /obj/item/projectile/meteor
@@ -86,10 +130,10 @@
 					M.apply_effect((rand(30,80)),IRRADIATE)
 					M.Weaken(5)
 					for (var/mob/V in viewers(src))
-						V.show_message("\red [M] writhes in pain as \his vacuoles boil.", 3, "\red You hear the crunching of leaves.", 2)
+						V.show_message("<span class='warning'>[M] writhes in pain as \his vacuoles boil.</span>", 3, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
 				if(prob(35))
 				//	for (var/mob/V in viewers(src)) //Public messages commented out to prevent possible metaish genetics experimentation and stuff. - Cheridan
-				//		V.show_message("\red [M] is mutated by the radiation beam.", 3, "\red You hear the snapping of twigs.", 2)
+				//		V.show_message("<span class='warning'>[M] is mutated by the radiation beam.</span>", 3, "<span class='warning'>You hear the snapping of twigs.</span>", 2)
 					if(prob(80))
 						randmutb(M)
 						domutcheck(M,null)
@@ -98,13 +142,13 @@
 						domutcheck(M,null)
 				else
 					M.adjustFireLoss(rand(5,15))
-					M.show_message("\red The radiation beam singes you!")
+					M.show_message("<span class='warning'>The radiation beam singes you!</span>")
 				//	for (var/mob/V in viewers(src))
-				//		V.show_message("\red [M] is singed by the radiation beam.", 3, "\red You hear the crackle of burning leaves.", 2)
+				//		V.show_message("<span class='warning'>[M] is singed by the radiation beam.</span>", 3, "<span class='warning'>You hear the crackle of burning leaves.</span>", 2)
 		else if(istype(target, /mob/living/carbon/))
 		//	for (var/mob/V in viewers(src))
 		//		V.show_message("The radiation beam dissipates harmlessly through [M]", 3)
-			M.show_message("\blue The radiation beam dissipates harmlessly through your body.")
+			M.show_message("<span class='notice'>The radiation beam dissipates harmlessly through your body.</span>")
 		else
 			return 1
 
@@ -124,7 +168,7 @@
 			if((H.species.flags & IS_PLANT) && (M.nutrition < 500))
 				M.nutrition += 30
 		else if (istype(target, /mob/living/carbon/))
-			M.show_message("\blue The radiation beam dissipates harmlessly through your body.")
+			M.show_message("<span class='notice'>The radiation beam dissipates harmlessly through your body.</span>")
 		else
 			return 1
 
@@ -193,7 +237,7 @@ obj/item/projectile/kinetic/New()
 			if(!isturf(A))
 				..(A)
 			//qdel(src) // Comment this out if you want to shoot through the asteroid, ERASER-style.
-			returnToPool(src) // Comment this out if you want to shoot through the asteroid, ERASER-style.
+			returnToPool(src)
 			return 1
 	else
 		//qdel(src)
@@ -207,5 +251,6 @@ obj/item/projectile/kinetic/New()
 	layer = 4.1
 
 /obj/item/effect/kinetic_blast/New()
+	..()
 	spawn(4)
 		del(src)

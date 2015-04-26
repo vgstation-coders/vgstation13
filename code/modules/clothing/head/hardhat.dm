@@ -2,14 +2,14 @@
 	name = "hard hat"
 	desc = "A piece of headgear used in dangerous working conditions to protect the head. Comes with a built-in flashlight."
 	icon_state = "hardhat0_yellow"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	item_state = "hardhat0_yellow"
 	var/brightness_on = 4 //luminosity when on
 	var/on = 0
 	_color = "yellow" //Determines used sprites: hardhat[on]_[_color] and hardhat[on]_[_color]2 (lying down sprite)
 	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
 	flags_inv = 0
-	icon_action_button = "action_hardhat"
+	action_button_name = "Toggle Helmet Light"
 	siemens_coefficient = 0.9
 
 	attack_self(mob/user)
@@ -46,17 +46,19 @@
 	item_state = "hardhat0_red"
 	_color = "red"
 	name = "firefighter helmet"
-	flags = FPRINT | TABLEPASS | STOPSPRESSUREDMAGE
+	flags = FPRINT
 	heat_protection = HEAD
-	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECITON_TEMPERATURE
+	pressure_resistance = 3 * ONE_ATMOSPHERE
+	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/head/hardhat/white
 	icon_state = "hardhat0_white"
 	item_state = "hardhat0_white"
 	_color = "white"
-	flags = FPRINT | TABLEPASS | STOPSPRESSUREDMAGE
+	flags = FPRINT
 	heat_protection = HEAD
-	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECITON_TEMPERATURE
+	pressure_resistance = 3 * ONE_ATMOSPHERE
+	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/head/hardhat/dblue
 	icon_state = "hardhat0_dblue"

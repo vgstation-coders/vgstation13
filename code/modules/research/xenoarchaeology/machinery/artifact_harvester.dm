@@ -12,6 +12,7 @@
 	var/obj/item/weapon/anobattery/inserted_battery
 	var/obj/machinery/artifact/cur_artifact
 	var/obj/machinery/artifact_scanpad/owned_scanner = null
+	var/chargerate = 0
 
 /obj/machinery/artifact_harvester/New()
 	..()
@@ -23,13 +24,12 @@
 /obj/machinery/artifact_harvester/attackby(var/obj/I as obj, var/mob/user as mob)
 	if(istype(I,/obj/item/weapon/anobattery))
 		if(!inserted_battery)
-			user << "\blue You insert [I] into [src]."
-			user.drop_item()
-			I.loc = src
+			user << "<span class='notice'>You insert [I] into [src].</span>"
+			user.drop_item(I, src)
 			src.inserted_battery = I
 			updateDialog()
 		else
-			user << "\red There is already a battery in [src]."
+			user << "<span class='warning'>There is already a battery in [src].</span>"
 	else
 		return..()
 
@@ -74,11 +74,13 @@
 		return
 
 	if(harvesting > 0)
-		//gain a bit of charge
-		inserted_battery.stored_charge += 0.5
+		//chargerate is chargemaxlevel/effectrange
+		//creates variable charging rates, with the minimum being 0.5
+		inserted_battery.stored_charge += chargerate
 
 		//check if we've finished
 		if(inserted_battery.stored_charge >= inserted_battery.capacity)
+			inserted_battery.stored_charge = inserted_battery.capacity //Prevents overcharging
 			use_power = 1
 			harvesting = 0
 			cur_artifact.anchored = 0
@@ -95,17 +97,18 @@
 			inserted_battery.battery_effect.process()
 
 			//if the effect works by touch, activate it on anyone viewing the console
-			if(inserted_battery.battery_effect.effect == 0)
+			/*if(inserted_battery.battery_effect.effect == 0)
 				var/list/nearby = viewers(1, src)
 				for(var/mob/M in nearby)
 					if(M.machine == src)
-						inserted_battery.battery_effect.DoEffectTouch(M)
+						inserted_battery.battery_effect.DoEffectTouch(M) THIS IS RETARDED! - Angelite */
 
 		//if there's no charge left, finish
 		if(inserted_battery.stored_charge <= 0)
 			use_power = 1
 			inserted_battery.stored_charge = 0
 			harvesting = 0
+			cur_artifact.anchored = 0
 			if(inserted_battery.battery_effect && inserted_battery.battery_effect.activated)
 				inserted_battery.battery_effect.ToggleActivate()
 			src.visible_message("<b>[name]</b> states, \"Battery dump completed.\"")
@@ -113,6 +116,7 @@
 
 /obj/machinery/artifact_harvester/Topic(href, href_list)
 
+	if(..()) return
 	if (href_list["harvest"])
 		//locate artifact on analysis pad
 		cur_artifact = null
@@ -158,6 +162,7 @@
 				if(inserted_battery.battery_effect)
 					matching_effecttype = (inserted_battery.battery_effect.type == cur_artifact.my_effect.type)
 				if(!inserted_battery.battery_effect || (matching_id && matching_effecttype))
+					chargerate = cur_artifact.my_effect.chargelevelmax / cur_artifact.my_effect.effectrange
 					harvesting = 1
 					use_power = 2
 					cur_artifact.anchored = 1
@@ -204,6 +209,7 @@
 	if (href_list["ejectbattery"])
 		src.inserted_battery.loc = src.loc
 		src.inserted_battery = null
+		cur_artifact.anchored = 0
 
 	if (href_list["drainbattery"])
 		if(inserted_battery)
@@ -213,6 +219,7 @@
 						inserted_battery.battery_effect.ToggleActivate(0)
 					harvesting = -1
 					use_power = 2
+					cur_artifact.anchored = 0
 					icon_state = "incubator_on"
 					var/message = "<b>[src]</b> states, \"Warning, battery charge dump commencing.\""
 					src.visible_message(message)

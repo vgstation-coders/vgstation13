@@ -23,23 +23,18 @@
 			return
 
 		if(M == user)
-			user.visible_message("\red <b>[user.name] injects \himself with [src]!</b>")
+			user.visible_message("<span class='danger'>[user.name] injects \himself with [src]!</span>")
 			src.injected(user,user)
 		else
-			user.visible_message("\red <b>[user.name] is trying to inject [M.name] with [src]!</b>")
+			user.visible_message("<span class='danger'>[user.name] is trying to inject [M.name] with [src]!</span>")
 			if (do_mob(user,M,30))
-				user.visible_message("\red <b>[user.name] injects [M.name] with [src].</b>")
+				user.visible_message("<span class='danger'>[user.name] injects [M.name] with [src].</span>")
 				src.injected(M, user)
 			else
-				user << "\red You failed to inject [M.name]."
+				user << "<span class='warning'>You failed to inject [M.name].</span>"
 
 	proc/injected(var/mob/living/carbon/target, var/mob/living/carbon/user)
-		if(target.gender == MALE)
-			target.name = pick(first_names_male)
-		else
-			target.name = pick(first_names_female)
-
-		target.name += " [pick(last_names)]"
+		target.generate_name()
 		target.real_name = target.name
 
 		scramble(1, target, 100)

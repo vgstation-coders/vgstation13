@@ -1,4 +1,3 @@
-
 /obj/item/queen_bee
 	name = "queen bee packet"
 	desc = "Place her into an apiary so she can get busy."
@@ -21,9 +20,9 @@
 		if(B.feral < 0)
 			caught_bees += B.strength
 			del(B)
-			user.visible_message("\blue [user] nets some bees.","\blue You net up some of the becalmed bees.")
+			user.visible_message("<span class='notice'>[user] nets some bees.</span>","<span class='notice'>You net up some of the becalmed bees.</span>")
 		else
-			user.visible_message("\red [user] swings at some bees, they don't seem to like it.","\red You swing at some bees, they don't seem to like it.")
+			user.visible_message("<span class='warning'>[user] swings at some bees, they don't seem to like it.</span>","<span class='warning'>You swing at some bees, they don't seem to like it.</span>")
 			B.feral = 5
 			B.target = user
 
@@ -65,21 +64,20 @@
 	name = "bottle of BeezEez"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle17"
-	flags = FPRINT |  TABLEPASS
-	New()
-		src.pixel_x = rand(-5.0, 5)
-		src.pixel_y = rand(-5.0, 5)
+	flags = FPRINT
+
+/obj/item/beezeez/New()
+	. = ..()
+	pixel_x = rand(-5.0, 5)
+	pixel_y = rand(-5.0, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb
 	name = "honeycomb"
 	icon_state = "honeycomb"
 	desc = "Dripping with sugary sweetness."
 
-	New()
-		..()
-
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb/New()
-	..()
+	. = ..()
 	reagents.add_reagent("honey",10)
 	reagents.add_reagent("nutriment", 0.5)
 	reagents.add_reagent("sugar", 2)

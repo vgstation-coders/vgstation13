@@ -11,7 +11,7 @@
 	amount_per_transfer_from_this = 5
 	volume = 30
 	possible_transfer_amounts = null
-	flags = FPRINT | TABLEPASS | OPENCONTAINER
+	flags = FPRINT  | OPENCONTAINER
 	slot_flags = SLOT_BELT
 
 /obj/item/weapon/reagent_containers/hypospray/attack_paw(mob/user as mob)
@@ -23,15 +23,21 @@
 	reagents.add_reagent("doctorsdelight", 30)
 	return
 
+/obj/item/weapon/reagent_containers/hypospray/creatine/New() // TESTING!
+	..()
+	reagents.add_reagent("creatine", 30)
+	return
+
 /obj/item/weapon/reagent_containers/hypospray/attack(mob/M as mob, mob/user as mob)
 	if(!reagents.total_volume)
-		user << "\red [src] is empty."
+		user << "<span class='warning'>[src] is empty.</span>"
 		return
 	if (!( istype(M, /mob) ))
 		return
 	if (reagents.total_volume)
-		user << "\blue You inject [M] with [src]."
-		M << "\red You feel a tiny prick!"
+		user << "<span class='notice'>You inject [M] with [src].</span>"
+		M << "<span class='warning'>You feel a tiny prick!</span>"
+		playsound(get_turf(src), 'sound/items/hypospray.ogg', 50, 1)
 
 		src.reagents.reaction(M, INGEST)
 		if(M.reagents)
@@ -50,7 +56,7 @@
 				M.LAssailant = user
 
 			var/trans = reagents.trans_to(M, amount_per_transfer_from_this)
-			user << "\blue [trans] units injected. [reagents.total_volume] units remaining in [src]."
+			user << "<span class='notice'>[trans] units injected. [reagents.total_volume] units remaining in [src].</span>"
 
 	return
 
@@ -82,9 +88,9 @@
 	else
 		icon_state = "[initial(icon_state)]0"
 
-/obj/item/weapon/reagent_containers/hypospray/autoinjector/examine()
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/examine(mob/user)
 	..()
 	if(reagents && reagents.reagent_list.len)
-		usr << "\blue It is currently loaded."
+		user << "<span class='info'>It ready for injection.</span>"
 	else
-		usr << "\blue It is spent."
+		user << "<span class='info'>The autoinjector has been spent.</span>"

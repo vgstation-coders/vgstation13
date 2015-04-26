@@ -94,14 +94,20 @@
 
 	..()
 	if(isrobot(user))
-		user << "\blue You're a robot. No."
-		return //Robots can't interact with storage items.
+		if(isMoMMI(user))
+			var/mob/living/silicon/robot/mommi/M = user
+			if(M.is_in_modules(W))
+				user << "<span class='notice'>You can't throw away something built into you.</span>"
+				return //Mommis cant give away their modules but can place other items
+		else
+			user << "<span class='notice'> You're a robot. No.</span>"
+			return //Robots can't interact with storage items.
 
 	if(src.loc == W)
 		return //Means the item is already in the storage item
 
 	if(contents.len >= storage_slots)
-		user << "\red \The [src] is full, make some space."
+		user << "<span class='warning'>The [src] is full, make some space.</span>"
 		return //Storage item is full
 
 	if(can_hold.len)
@@ -111,16 +117,16 @@
 				ok = 1
 				break
 		if(!ok)
-			user << "\red \The [src] cannot hold \the [W]."
+			user << "<span class='warning'>The [src] cannot hold \the [W].</span>"
 			return
 
 	for(var/A in cant_hold) //Check for specific items which this container can't hold.
 		if(istype(W, text2path(A) ))
-			user << "\red \The [src] cannot hold \the [W]."
+			user << "<span class='warning'>The [src] cannot hold \the [W].</span>"
 			return
 
 	if (W.w_class > max_w_class)
-		user << "\red \The [W] is too big for \the [src]"
+		user << "<span class='warning'>The [W] is too big for \the [src].</span>"
 		return
 
 	var/sum_w_class = W.w_class
@@ -128,12 +134,12 @@
 		sum_w_class += I.w_class //Adds up the combined w_classes which will be in the storage item if the item is added to it.
 
 	if(sum_w_class > max_combined_w_class)
-		user << "\red \The [src] is full, make some space."
+		user << "<span class='warning'>The [src] is full, make some space.</span>"
 		return
 
 	if(W.w_class >= src.w_class && (istype(W, /obj/item/weapon/storage)))
 		if(!istype(src, /obj/item/weapon/storage/backpack/holding))	//bohs should be able to hold backpacks again. The override for putting a boh in a boh is in backpack.dm.
-			user << "\red \The [src] cannot hold \the [W] as it's a storage item of the same size."
+			user << "<span class='warning'>The [src] cannot hold \the [W] as it's a storage item of the same size.</span>"
 			return //To prevent the stacking of the same sized items.
 
 	user.u_equip(W)
@@ -145,10 +151,6 @@
 	W.dropped(user)
 	add_fingerprint(user)
 	show_to(user)
-
-
-/obj/item/weapon/storage/dropped(mob/user as mob)
-	return
 
 /obj/item/clothing/suit/storage/MouseDrop(atom/over_object)
 	if(ishuman(usr))
@@ -197,28 +199,28 @@
 	return
 
 /obj/item/clothing/suit/storage/New()
-
-	src.boxes = new /obj/screen/storage(  )
-	src.boxes.name = "storage"
-	src.boxes.master = src
-	src.boxes.icon_state = "block"
-	src.boxes.screen_loc = "7,7 to 10,8"
-	src.boxes.layer = 19
-	src.closer = new /obj/screen/close(  )
-	src.closer.master = src
-	src.closer.icon_state = "x"
-	src.closer.layer = 20
+	. = ..()
+	boxes = new /obj/screen/storage(  )
+	boxes.name = "storage"
+	boxes.master = src
+	boxes.icon_state = "block"
+	boxes.screen_loc = "7,7 to 10,8"
+	boxes.layer = 19
+	closer = new /obj/screen/close(  )
+	closer.master = src
+	closer.icon_state = "x"
+	closer.layer = 20
 	orient2hud()
-	return
 
 /obj/item/clothing/suit/emp_act(severity)
 	if(!istype(src.loc, /mob/living))
 		for(var/obj/O in contents)
 			O.emp_act(severity)
 	..()
-
+/*
 /obj/item/clothing/suit/hear_talk(mob/M, var/msg)
 	for (var/atom/A in src)
 		if(istype(A,/obj/))
 			var/obj/O = A
 			O.hear_talk(M, msg)
+*/

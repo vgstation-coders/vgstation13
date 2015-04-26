@@ -20,6 +20,13 @@
 	OnSay(var/mob/M, var/message)
 		return ""
 
+	activate(var/mob/M, var/connected, var/flags)
+		..()
+		M.sdisabilities |= MUTE
+
+	deactivate(var/mob/M, var/connected, var/flags)
+		..()
+		M.sdisabilities &= ~MUTE
 ////////////////////////////////////////
 // Harmful to others as well as self
 ////////////////////////////////////////
@@ -39,7 +46,7 @@
 		owner.radiation = max(owner.radiation, 20)
 		for(var/mob/living/L in range(1, owner))
 			if(L == owner) continue
-			L << "\red You are enveloped by a soft green glow emanating from [owner]."
+			L << "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>"
 			L.radiation += 5
 		return
 
@@ -59,6 +66,14 @@
 
 	mutation = M_OBESITY
 
+	can_activate(var/mob/M, var/flags)
+		if(!ishuman(M)) return 0
+
+		var/mob/living/carbon/human/H = M
+		if(H.species && !(H.species.flags & CAN_BE_FAT)) return 0
+
+		return 1
+
 	New()
 		..()
 		block=FATBLOCK
@@ -67,50 +82,73 @@
 // SPEECH MANIPULATORS //
 /////////////////////////
 
-/* Duplicate
-// WAS: /datum/bioEffect/stutter
-/datum/dna/gene/disability/stutter
-	name = "Stutter"
-	desc = "Hinders nerve transmission to and from the speech center of the brain, resulting in faltering speech."
-	activation_message = "Y-you f.. feel a.. a bit n-n-nervous."
-	deactivation_message = "You don't feel nervous anymore."
-
-	New()
-		..()
-		block=STUTTERBLOCK
-
-	OnMobLife(var/mob/owner)
-		if (prob(10))
-			owner:stuttering = max(10, owner:stuttering)
-
-/datum/dna/gene/disability/speech
-	can_activate(var/mob/M, var/flags)
-		// Can only activate one of these at a time.
-		if(is_type_in_list(/datum/dna/gene/disability/speech,M.active_genes))
-			return 0
-		return ..(M,flags)
-*/
-
-/* Figure out what the fuck this one does.
 // WAS: /datum/bioEffect/smile
 /datum/dna/gene/disability/speech/smile
 	name = "Smile"
-	desc = "Causes the speech center of the subject's brain to produce large amounts of seratonin when engaged."
-	activation_message = "You feel like you want to smile and smile and smile forever :)"
-	deactivation_message = "You don't feel like smiling anymore. :("
+	desc = "Causes the speech center of the subject's brain to produce large amounts of seratonin and a chemical resembling ecstacy when engaged."
+	activation_message = "You feel so happy. Nothing can be wrong with anything :)"
+	deactivation_message = "Everything is terrible again. :("
 
 	New()
 		..()
 		block=SMILEBLOCK
 
 	OnSay(var/mob/M, var/message)
+		//Time for a friendly game of SS13
+		message = replacetext(message,"stupid","smart")
+		message = replacetext(message,"retard","genius")
+		message = replacetext(message,"unrobust","robust")
+		message = replacetext(message,"dumb","smart")
+		message = replacetext(message,"awful","great")
+		message = replacetext(message,"gay",pick("nice","ok","alright"))
+		message = replacetext(message,"horrible","fun")
+		message = replacetext(message,"terrible","terribly fun")
+		message = replacetext(message,"terrifying","wonderful")
+		message = replacetext(message,"gross","cool")
+		message = replacetext(message,"disgusting","amazing")
+		message = replacetext(message,"loser","winner")
+		message = replacetext(message,"useless","useful")
+		message = replacetext(message,"oh god","cheese and crackers")
+		message = replacetext(message,"jesus","gee wiz")
+		message = replacetext(message,"weak","strong")
+		message = replacetext(message,"kill","hug")
+		message = replacetext(message,"murder","tease")
+		message = replacetext(message,"ugly","beutiful")
+		message = replacetext(message,"douchbag","nice guy")
+		message = replacetext(message,"whore","lady")
+		message = replacetext(message,"nerd","smart guy")
+		message = replacetext(message,"moron","fun person")
+		message = replacetext(message,"IT'S LOOSE","EVERYTHING IS FINE")
+		message = replacetext(message,"rape","hug fight")
+		message = replacetext(message,"idiot","genius")
+		message = replacetext(message,"fat","thin")
+		message = replacetext(message,"beer","water with ice")
+		message = replacetext(message,"drink","water")
+		message = replacetext(message,"feminist","empowered woman")
+		message = replacetext(message,"i hate you","you're mean")
+		message = replacetext(message,"nigger","african american")
+		message = replacetext(message,"jew","jewish")
+		message = replacetext(message,"shit","shiz")
+		message = replacetext(message,"crap","poo")
+		message = replacetext(message,"slut","tease")
+		message = replacetext(message,"ass","butt")
+		message = replacetext(message,"damn","dang")
+		message = replacetext(message,"fuck","")
+		message = replacetext(message,"penis","privates")
+		message = replacetext(message,"cunt","privates")
+		message = replacetext(message,"dick","jerk")
+		message = replacetext(message,"vagina","privates")
+//		message += "[pick(":)",":^)",":*)")]"             : ^ (
+		if(prob(30))
+			message += " check your privilege."
 		return message
+
 
 // WAS: /datum/bioEffect/elvis
 /datum/dna/gene/disability/speech/elvis
 	name = "Elvis"
-	desc = "Forces the language center of the subject's brain to drawl out sentences in a funky manner."
-	activation_message = "You feel funky."
+	desc = "Forces the language center and primary motor cortex of the subject's brain to talk and act like the King of Rock and Roll."
+	activation_message = "You feel pretty good, honeydoll."
 	deactivation_message = "You feel a little less conversation would be great."
 
 	New()
@@ -118,8 +156,35 @@
 		block=ELVISBLOCK
 
 	OnSay(var/mob/M, var/message)
-		return message
-*/
+		message = replacetext(message,"im not","I ain't")
+		message = replacetext(message,"i'm not","I aint")
+		message = replacetext(message," girl ",pick(" honey "," baby "," baby doll "))
+		message = replacetext(message," man ",pick(" son "," buddy "," brother ", " pal ", " friendo "))
+		message = replacetext(message,"out of","outta")
+		message = replacetext(message,"thank you","thank you, thank you very much")
+		message = replacetext(message,"what are you","whatcha")
+		message = replacetext(message,"yes",pick("sure", "yea"))
+		message = replacetext(message,"faggot","square")
+		message = replacetext(message,"muh valids","getting my kicks")
+		message = replacetext(message," vox ","bird")
+
+		if(prob(5))
+			return ""
+			M.visible_message("<b>[M]</b> [pick("rambles to themselves.","begins talking to themselves.")]")
+		else
+			return message
+
+	OnMobLife(var/mob/M)
+		switch(pick(1,2))
+			if(1)
+				if(prob(15))
+					var/list/dancetypes = list("swinging", "fancy", "stylish", "20'th century", "jivin'", "rock and roller", "cool", "salacious", "bashing", "smashing")
+					var/dancemoves = pick(dancetypes)
+					M.visible_message("<b>[M]</b> busts out some [dancemoves] moves!")
+			if(2)
+				if(prob(15))
+					M.visible_message("<b>[M]</b> [pick("jiggles their hips", "rotates their hips", "gyrates their hips", "taps their foot", "dances to an imaginary song", "jiggles their legs", "snaps their fingers")]")
+
 
 // WAS: /datum/bioEffect/chav
 /datum/dna/gene/disability/speech/chav
@@ -171,7 +236,7 @@
 		block=SWEDEBLOCK
 
 	OnSay(var/mob/M, var/message)
-		// svedish
+		// svedish!
 		message = replacetext(message,"w","v")
 		if(prob(30))
 			message += " Bork[pick("",", bork",", bork, bork")]!"
@@ -209,7 +274,7 @@
 				suffix = copytext(cword,length(cword)-1,length(cword)  )
 			if(length(cword))
 				rearranged += cword
-		return "[prefix][uppertext(dd_list2text(rearranged," "))]!!"
+		return "[prefix][uppertext(list2text(rearranged," "))]!!"
 
 // WAS: /datum/bioEffect/toxic_farts
 /datum/dna/gene/disability/toxic_farts
@@ -229,19 +294,6 @@
 // USELESS SHIT //
 //////////////////
 
-// WAS: /datum/bioEffect/strong
-/datum/dna/gene/disability/strong
-	// pretty sure this doesn't do jack shit, putting it here until it does
-	name = "Strong"
-	desc = "Enhances the subject's ability to build and retain heavy muscles."
-	activation_message = "You feel buff!"
-	deactivation_message = "You feel wimpy and weak."
-
-	mutation = M_STRONG
-
-	New()
-		..()
-		block=STRONGBLOCK
 
 // WAS: /datum/bioEffect/horns
 /datum/dna/gene/disability/horns
@@ -281,9 +333,9 @@
 				if (C == owner)
 					continue
 				if (src.variant == 2)
-					C << "\red [src.personalized_stink]"
+					C << "<span class='warning'>[src.personalized_stink]</span>"
 				else
-					C << "\red [stinkString()]"
+					C << "<span class='warning'>[stinkString()]</span>"
 */
 
 
@@ -296,76 +348,93 @@
 	activation_messages = list("You suddenly feel rather hot.")
 	deactivation_messages = list("You no longer feel uncomfortably hot.")
 
-	spelltype=/obj/effect/proc_holder/spell/targeted/immolate
+	spelltype = /spell/targeted/immolate
 
 	New()
 		..()
 		block = IMMOLATEBLOCK
 
-/obj/effect/proc_holder/spell/targeted/immolate
+/spell/targeted/immolate
 	name = "Incendiary Mitochondria"
 	desc = "The subject becomes able to convert excess cellular energy into thermal energy."
 	panel = "Mutant Powers"
 
-	charge_type = "recharge"
+	charge_type = Sp_RECHARGE
 	charge_max = 600
 
-	clothes_req = 0
-	stat_allowed = 0
-	invocation_type = "none"
+	spell_flags = INCLUDEUSER
+	invocation_type = SpI_NONE
 	range = -1
+	max_targets = 1
 	selection_type = "range"
-	var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
-	include_user = 1
+	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
+	cast_sound = 'sound/effects/bamf.ogg'
 
-/obj/effect/proc_holder/spell/targeted/immolate/cast(list/targets)
-	var/mob/living/L = usr
+	hud_state = "gen_immolate"
+	override_base = "genetic"
 
-	L.adjust_fire_stacks(0.5) // Same as walking into fire. Was 100 (goon fire)
-	L.visible_message("\red <b>[L.name]</b> suddenly bursts into flames!")
-	L.on_fire = 1
-	L.update_icon = 1
-	playsound(L.loc, 'sound/effects/bamf.ogg', 50, 0)
+/spell/targeted/immolate/cast(list/targets)
+	..()
+	for(var/mob/living/target in targets)
+		target.adjust_fire_stacks(0.5) // Same as walking into fire. Was 100 (goon fire)
+		target.visible_message("<span class='danger'><b>[target.name]</b> suddenly bursts into flames!</span>")
+		target.on_fire = 1
+		target.update_icon = 1
 
 ////////////////////////////////////////////////////////////////////////
 
 // WAS: /datum/bioEffect/melt
-/datum/dna/gene/basic/grant_verb/melt
+/datum/dna/gene/basic/grant_spell/melt
 	name = "Self Biomass Manipulation"
 	desc = "The subject becomes able to transform the matter of their cells into a liquid state."
 	flags = GENE_UNNATURAL
 	activation_messages = list("You feel strange and jiggly.")
 	deactivation_messages = list("You feel more solid.")
 
-	verbtype=/proc/bioproc_melt
+	spelltype = /spell/targeted/melt
 
 	New()
 		..()
 		block = MELTBLOCK
 
-/proc/bioproc_melt()
-	set name = "Dissolve"
-	set desc = "Transform yourself into a liquified state."
-	set category = "Mutant Abilities"
+/spell/targeted/melt
+	name = "Dissolve"
+	desc = "Transform yourself into a liquified state."
+	panel = "Mutant Powers"
 
-	if (istype(usr,/mob/living/carbon/human/))
-		var/mob/living/carbon/human/H = usr
+	charge_type = Sp_CHARGES
+	charge_max = 1
 
-		H.visible_message("\red <b>[H.name]'s flesh melts right off! Holy shit!</b>")
-		//if (H.gender == "female")
-		//	playsound(H.loc, 'female_fallscream.ogg', 50, 0)
-		//else
-		//	playsound(H.loc, 'male_fallscream.ogg', 50, 0)
-		//playsound(H.loc, 'bubbles.ogg', 50, 0)
-		//playsound(H.loc, 'loudcrunch2.ogg', 50, 0)
-		var/mob/living/carbon/human/skellington/nH = new /mob/living/carbon/human/skellington(H.loc)
-		nH.real_name = H.real_name
-		nH.name = "[H.name]'s skeleton"
-		//H.decomp_stage = 4
-		nH.brain_op_stage = 4
-		H.gib(1)
-	else
-		usr.visible_message("\red <b>[usr.name] melts into a pile of bloody viscera!</b>")
-		usr.gib(1)
+	spell_flags = INCLUDEUSER
+	invocation_type = SpI_NONE
+	range = -1
+	max_targets = 1
+	selection_type = "range"
 
-	return
+	override_base = "genetic"
+	hud_state = "gen_dissolve"
+
+/spell/targeted/melt/cast(var/list/targets, mob/user)
+	for(var/mob/M in targets)
+		if (istype(M,/mob/living/carbon/human/))
+			var/mob/living/carbon/human/H = M
+
+			H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
+			//if (H.gender == "female")
+			//	playsound(H.loc, 'female_fallscream.ogg', 50, 0)
+			//else
+			//	playsound(H.loc, 'male_fallscream.ogg', 50, 0)
+			//playsound(H.loc, 'bubbles.ogg', 50, 0)
+			//playsound(H.loc, 'loudcrunch2.ogg', 50, 0)
+			var/mob/living/carbon/human/skellington/nH = new /mob/living/carbon/human/skellington(H.loc, delay_ready_dna=1)
+			if(nH.has_brain())
+				var/datum/organ/internal/brain/skellBrain = nH.internal_organs_by_name["brain"]
+				del(skellBrain)
+			nH.real_name = H.real_name
+			nH.name = "[H.name]'s skeleton"
+			//H.decomp_stage = 4
+			H.gib(1)
+		else
+			M.visible_message("<span class='danger'>[usr.name] melts into a pile of bloody viscera!</span>")
+			M.gib(1)
+

@@ -94,12 +94,18 @@ datum
 
 				return the_id
 
-			trans_to(var/obj/target, var/amount=1, var/multiplier=1, var/preserve_data=1)//if preserve_data=0, the reagents data will be lost. Usefull if you use data for some strange stuff and don't want it to be transferred.
-				if (!target )
+			trans_to(var/target, var/amount=1, var/multiplier=1, var/preserve_data=1)//if preserve_data=0, the reagents data will be lost. Usefull if you use data for some strange stuff and don't want it to be transferred.
+				if (!target)
 					return
-				if (!target.reagents || src.total_volume<=0)
-					return
-				var/datum/reagents/R = target.reagents
+				var/datum/reagents/R
+				if (istype(target, /datum/reagents))
+					R = target
+				else
+					var/atom/movable/AM = target
+					if (!AM.reagents || src.total_volume<=0)
+						return
+					else
+						R = AM.reagents
 				amount = min(min(amount, src.total_volume), R.maximum_volume-R.total_volume)
 				var/part = amount / src.total_volume
 				var/trans_data = null
@@ -109,6 +115,29 @@ datum
 					if (current_reagent.id == "blood" && ishuman(target))
 						var/mob/living/carbon/human/H = target
 						H.inject_blood(my_atom, amount)
+						continue
+					var/current_reagent_transfer = current_reagent.volume * part
+					if(preserve_data)
+						trans_data = current_reagent.data
+
+					R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data)
+					src.remove_reagent(current_reagent.id, current_reagent_transfer)
+
+				// Called from add/remove_agent. -- N3X
+				//src.update_total()
+				//R.update_total()
+				R.handle_reactions()
+				src.handle_reactions()
+				return amount
+			trans_to_holder(var/datum/reagents/target, var/amount=1, var/multiplier=1, var/preserve_data=1)//if preserve_data=0, the reagents data will be lost. Usefull if you use data for some strange stuff and don't want it to be transferred.
+				if (!target || src.total_volume<=0)
+					return
+				var/datum/reagents/R = target
+				amount = min(min(amount, src.total_volume), R.maximum_volume-R.total_volume)
+				var/part = amount / src.total_volume
+				var/trans_data = null
+				for (var/datum/reagent/current_reagent in src.reagent_list)
+					if (!current_reagent)
 						continue
 					var/current_reagent_transfer = current_reagent.volume * part
 					if(preserve_data)
@@ -232,11 +261,11 @@ datum
 				return total_transfered
 */
 
-			metabolize(var/mob/M)
+			metabolize(var/mob/M, var/alien)
 				for(var/A in reagent_list)
 					var/datum/reagent/R = A
 					if(M && R)
-						R.on_mob_life(M)
+						R.on_mob_life(M, alien)
 				update_total()
 
 			update_aerosol(var/mob/M)
@@ -336,18 +365,21 @@ datum
 									for(var/S in C.secondary_results)
 										add_reagent(S, C.result_amount * C.secondary_results[S] * multiplier)
 
-								var/list/seen = viewers(4, get_turf(my_atom))
-								for(var/mob/M in seen)
-									M << "\blue \icon[my_atom] The solution begins to bubble."
+								if	(istype(my_atom, /obj/item/weapon/grenade/chem_grenade))
+									my_atom.visible_message("<span class='caution'>\icon[my_atom] Something comes out of \the [my_atom].</span>")
+								else if	(istype(my_atom, /mob/living/carbon/human))
+									my_atom.visible_message("<span class='notice'>[my_atom] shudders a little.</span>","<span class='notice'>You shudder a little.</span>")
+								else
+									my_atom.visible_message("<span class='notice'>\icon[my_atom] The solution begins to bubble.</span>")
 
 								if(istype(my_atom, /obj/item/slime_extract))
 									var/obj/item/slime_extract/ME2 = my_atom
 									ME2.Uses--
 									if(ME2.Uses <= 0) // give the notification that the slime core is dead
-										for(var/mob/M in seen)
-											M << "\blue \icon[my_atom] The [my_atom]'s power is consumed in the reaction."
-											ME2.name = "used slime extract"
-											ME2.desc = "This extract has been used up."
+										if (!istype(ME2.loc, /obj/item/weapon/grenade/chem_grenade))
+											ME2.visible_message("<span class='notice'>\icon[my_atom.icon_state] \The [my_atom]'s power is consumed in the reaction.</span>")
+										ME2.name = "used slime extract"
+										ME2.desc = "This extract has been used up."
 
 								playsound(get_turf(my_atom), 'sound/effects/bubbles.ogg', 80, 1)
 
@@ -373,6 +405,7 @@ datum
 				for(var/A in reagent_list)
 					var/datum/reagent/R = A
 					if (R.id == reagent)
+						R.reagent_deleted()
 						reagent_list -= A
 						R.holder = null
 						total_dirty=1
@@ -385,7 +418,7 @@ datum
 
 			update_total()
 				total_volume = 0
-				amount_cache.Cut()
+				amount_cache.len = 0
 				for(var/datum/reagent/R in reagent_list)
 					if(R.volume < 0.1)
 						del_reagent(R.id,update_totals=0)
@@ -395,12 +428,13 @@ datum
 				return 0
 
 			clear_reagents()
-				amount_cache.Cut()
+				amount_cache.len = 0
 				for(var/datum/reagent/R in reagent_list)
 					del_reagent(R.id,update_totals=0)
 				// Only call ONCE. -- N3X
 				update_total()
-				my_atom.on_reagent_change()
+				if(my_atom)
+					my_atom.on_reagent_change()
 				return 0
 
 			reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0)
@@ -437,6 +471,8 @@ datum
 				return
 
 			add_reagent(var/reagent, var/amount, var/list/data=null)
+				if(!my_atom)
+					return 0
 				if(!isnum(amount)) return 1
 				update_total()
 				if(total_volume + amount > maximum_volume)
@@ -603,18 +639,20 @@ datum
 						//world << "reagent data set ([reagent_id])"
 						D.data = new_data
 
-			delete()
-				for(var/datum/reagent/R in reagent_list)
-					R.holder = null
-				if(my_atom)
-					my_atom.reagents = null
+/datum/reagents/Destroy()
+	for(var/datum/reagent/reagent in reagent_list)
+		reagent.Destroy()
 
+	if(my_atom)
+		my_atom = null
 
 ///////////////////////////////////////////////////////////////////////////////////
 
 
-// Convenience proc to create a reagents holder for an atom
-// Max vol is maximum volume of holder
-atom/proc/create_reagents(var/max_vol)
+/*
+ * Convenience proc to create a reagents holder for an atom
+ * max_vol is maximum volume of holder
+ */
+/atom/proc/create_reagents(const/max_vol)
 	reagents = new/datum/reagents(max_vol)
 	reagents.my_atom = src

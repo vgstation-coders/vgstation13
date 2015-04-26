@@ -14,6 +14,8 @@
 	var/obj/item/weapon/disk/data/diskette = null //Mostly so the geneticist can steal everything.
 	var/loading = 0 // Nice loading text
 
+	l_color = "#0000FF"
+
 /obj/machinery/computer/cloning/New()
 	..()
 	spawn(5)
@@ -47,7 +49,7 @@
 /obj/machinery/computer/cloning/proc/findcloner()
 	var/obj/machinery/clonepod/podf = null
 
-	for(dir in list(NORTH,EAST,SOUTH,WEST))
+	for(dir in cardinal)
 
 		podf = locate(/obj/machinery/clonepod, get_step(src, dir))
 
@@ -59,8 +61,7 @@
 /obj/machinery/computer/cloning/attackby(obj/item/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/disk/data)) //INSERT SOME DISKETTES
 		if (!src.diskette)
-			user.drop_item()
-			W.loc = src
+			user.drop_item(W, src)
 			src.diskette = W
 			user << "You insert [W]."
 			src.updateUsrDialog()
@@ -126,9 +127,9 @@
 
 				dat += "Lock status: <a href='byond://?src=\ref[src];lock=1'>[src.scanner.locked ? "Locked" : "Unlocked"]</a><br>"
 
-/*			if (!isnull(src.pod1))
+			if (!isnull(src.pod1))
 				dat += "Biomass: <i>[src.pod1.biomass]</i><br>"
-*/
+
 			// Database
 
 			// AUTOFIXED BY fix_string_idiocy.py
@@ -148,7 +149,7 @@
 				<a href='byond://?src=\ref[src];menu=1'>Back</a><br><ul>"}
 			// END AUTOFIX
 			for(var/datum/dna2/record/R in src.records)
-				dat += "<li><a href='byond://?src=\ref[src];view_rec=\ref[R]'>[R.dna.real_name]</a><li>"
+				dat += "<li><a href='byond://?src=\ref[src];view_rec=\ref[R]'>[R.dna.real_name && R.dna.real_name != "" ? R.dna.real_name : "Unknown"]</a></li>"
 
 		if(3)
 
@@ -163,7 +164,7 @@
 				// AUTOFIXED BY fix_string_idiocy.py
 				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\computer\cloning.dm:229: dat += "<br><font size=1><a href='byond://?src=\ref[src];del_rec=1'>Delete Record</a></font><br>"
 				dat += {"<br><font size=1><a href='byond://?src=\ref[src];del_rec=1'>Delete Record</a></font><br>
-					<b>Name:</b> [src.active_record.dna.real_name]<br>"}
+					<b>Name:</b> [src.active_record.dna.real_name && src.active_record.dna.real_name != "" ? src.active_record.dna.real_name : "Unknown"]<br>"}
 				// END AUTOFIX
 				var/obj/item/weapon/implant/health/H = null
 				if(src.active_record.implant)
@@ -190,8 +191,10 @@
 				dat += {"<b>UI:</b> [src.active_record.dna.uni_identity]<br>
 				<b>SE:</b> [src.active_record.dna.struc_enzymes]<br><br>"}
 
-				if(pod1)
+				if(pod1 && pod1.biomass >= CLONE_BIOMASS)
 					dat += {"<a href='byond://?src=\ref[src];clone=\ref[src.active_record]'>Clone</a><br>"}
+				else
+					dat += {"<b>Insufficient biomass</b><br>"}
 
 		if(4)
 			if (!src.active_record)
@@ -302,7 +305,7 @@
 				src.diskette.buf.types=DNA2_BUF_UI|DNA2_BUF_UE
 			if("se")
 				src.diskette.buf.types=DNA2_BUF_SE
-		src.diskette.name = "data disk - '[src.active_record.dna.real_name]'"
+		src.diskette.name = "data disk - '[src.active_record.dna.real_name && src.active_record.dna.real_name != "" ? src.active_record.dna.real_name : "Unknown"]'"
 		src.temp = "Save \[[href_list["save_disk"]]\] successful."
 
 	else if (href_list["refresh"])
@@ -317,12 +320,15 @@
 				temp = "Error: No Clonepod detected."
 			else if(pod1.occupant)
 				temp = "Error: Clonepod is currently occupied."
+			else if(pod1.biomass < CLONE_BIOMASS)
+				temp = "Error: Not enough biomass."
 			else if(pod1.mess)
 				temp = "Error: Clonepod malfunction."
 			else if(!config.revival_cloning)
 				temp = "Error: Unable to initiate cloning cycle."
 
-			else if(pod1.growclone(C))
+			var/success = pod1.growclone(C)
+			if(success)
 				temp = "Initiating cloning cycle..."
 				records.Remove(C)
 				del(C)
@@ -330,6 +336,9 @@
 			else
 
 				var/mob/selected = find_dead_player("[C.ckey]")
+				if(!selected)
+					temp = "Initiating cloning cycle...<br>Error: Post-initialisation failed. Cloning cycle aborted."
+					return
 				selected << 'sound/machines/chime.ogg'	//probably not the best sound but I think it's reasonable
 				var/answer = alert(selected,"Do you want to return to life?","Cloning","Yes","No")
 				if(answer != "No" && pod1.growclone(C))
@@ -351,10 +360,10 @@
 	return
 
 /obj/machinery/computer/cloning/proc/scan_mob(mob/living/carbon/human/subject as mob)
-	if ((isnull(subject)) || (!(ishuman(subject))) || (!subject.dna))
+	if ((isnull(subject)) || (!(ishuman(subject))) || (!subject.dna) || (istype(subject, /mob/living/carbon/human/manifested)))
 		scantemp = "Error: Unable to locate valid genetic data."
 		return
-	if (subject.brain_op_stage == 4.0)
+	if (!subject.has_brain())
 		scantemp = "Error: No signs of intelligence detected."
 		return
 	if (subject.suiciding == 1)
@@ -371,11 +380,20 @@
 		return
 
 	subject.dna.check_integrity()
+	var/datum/organ/internal/brain/Brain = subject.internal_organs_by_name["brain"]
+	// Borer sanity checks.
+	var/mob/living/simple_animal/borer/B=subject.has_brain_worms()
+	if(B && B.controlling)
+		// This shouldn't happen, but lolsanity.
+		subject.do_release_control(1)
 
 	var/datum/dna2/record/R = new /datum/dna2/record()
-	R.dna=subject.dna
+	if(!isnull(Brain.owner_dna) && Brain.owner_dna != subject.dna)
+		R.dna = Brain.owner_dna
+	else
+		R.dna=subject.dna
 	R.ckey = subject.ckey
-	R.id= copytext(md5(subject.real_name), 2, 6)
+	R.id= copytext(md5(R.dna.real_name), 2, 6)
 	R.name=R.dna.real_name
 	R.types=DNA2_BUF_UI|DNA2_BUF_UE|DNA2_BUF_SE
 

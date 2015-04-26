@@ -1,17 +1,36 @@
 /turf/simulated/var/zone/zone
 /turf/simulated/var/open_directions
-/turf/simulated/var/gas_graphic
+/turf/simulated/var/list/gasGraphics
 
 /turf/var/needs_air_update = 0
 /turf/var/datum/gas_mixture/air
 
-/turf/simulated/proc/set_graphic(new_graphic)
-	if(isnum(new_graphic))
-		if(new_graphic == 1) new_graphic = plmaster
-		else if(new_graphic == 2) new_graphic = slmaster
-	if(gas_graphic) overlays -= gas_graphic
-	if(new_graphic) overlays += new_graphic
-	gas_graphic = new_graphic
+/turf/simulated/proc/set_graphic(const/newGraphics)
+	if (!isnum(newGraphics))
+		return
+
+	if (!newGraphics) // Clear overlay, or simply 0.
+		if (gasGraphics)
+			overlays -= gasGraphics
+			gasGraphics = null
+
+		return
+
+	var/list/overlayGraphics = list()
+
+	if (GRAPHICS_PLASMA & newGraphics)
+		overlayGraphics += plmaster
+
+	if (GRAPHICS_N2O & newGraphics)
+		overlayGraphics += slmaster
+
+	if (overlayGraphics.len)
+		if (gasGraphics)
+			overlays -= gasGraphics
+			gasGraphics = null
+
+		overlays += overlayGraphics
+		gasGraphics = overlayGraphics.Copy()
 
 /turf/proc/update_air_properties()
 	var/block = c_airblock(src)
@@ -26,6 +45,10 @@
 	#endif
 
 		var/turf/unsim = get_step(src, d)
+
+		if(!unsim) // Edge of map.
+			continue
+
 		block = unsim.c_airblock(src)
 
 		if(block & AIR_BLOCKED)
@@ -75,6 +98,10 @@
 	#endif
 
 		var/turf/unsim = get_step(src, d)
+
+		if(!unsim) // Edge of map.
+			continue
+
 		var/block = unsim.c_airblock(src)
 		if(block & AIR_BLOCKED)
 
@@ -238,3 +265,7 @@
 	if(!air) air = new/datum/gas_mixture
 	air.copy_from(zone.air)
 	air.group_multiplier = 1
+
+
+/turf/attack_hand(mob/user as mob)
+	user.Move_Pulled(src)

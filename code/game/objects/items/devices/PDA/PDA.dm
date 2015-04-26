@@ -1,3 +1,4 @@
+#define MAX_DESIGNS 10
 
 //The advanced pea-green monochrome lcd of tomorrow.
 
@@ -6,12 +7,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 /obj/item/device/pda
 	name = "\improper PDA"
-	desc = "A portable microcomputer by Thinktronic Systems, LTD. Functionality determined by a preprogrammed ROM cartridge."
+	desc = "A portable microcomputer by Thinktronic Systems, LTD. Functionality determined by a preprogrammed ROM cartridge. Can download additional applications from PDA terminals."
 	icon = 'icons/obj/pda.dmi'
 	icon_state = "pda"
 	item_state = "electronic"
 	w_class = 1.0
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	slot_flags = SLOT_ID | SLOT_BELT
 
 	//Main variables
@@ -21,9 +22,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/mode = 0 //Controls what menu the PDA will display. 0 is hub; the rest are either built in or based on cartridge.
 
 	//Secondary variables
-	var/scanmode = 0 //1 is medical scanner, 2 is forensics, 3 is reagent scanner.
+	var/scanmode = 0 //1 is medical scanner, 2 is forensics, 3 is reagent scanner, 4 is halogen counter, 5 is gas scanner, 6 is device analyser -- keep this list updated if you add one
 	var/fon = 0 //Is the flashlight function on?
-	var/f_lum = 4 //Luminosity for the flashlight function
+	l_color = "#D8FFF2" //Related to the flashlight function. We Fallout now
+	var/f_lum = 2 //Luminosity for the flashlight function
 	var/silent = 0 //To beep or not to beep, that is the question
 	var/toff = 0 //If 1, messenger disabled
 	var/tnote = null //Current Texts
@@ -43,92 +45,316 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/ownjob = null //related to above
 
 	var/obj/item/device/paicard/pai = null	// A slot for a personal AI device
+	var/obj/item/device/analyzer/atmos_analys = new
+	var/obj/item/device/device_analyser/dev_analys = null
+
+	var/MM = null
+	var/DD = null
+
+	var/list/applications = list()
+
+	var/list/currentevents1 = list("The Prime Minister of Space Australia has announced today a new policy to hand out fake dollar bills to the poor.",
+		"The President of Space America issued a press release today stating that he is not in fact, a Tajaran in disguise.",
+		"The Prime Minister of Space England is in hot water today after he announced that space tea would now be made with 20% more nuclear waste.",
+		"The Czar of the Space Soviet Union has issued a press release stating 'Spess Amerikans suck cocks!' we're working on a translation.",
+		"Space Israel has not gotten into trouble for bombing dirty Space Palestine again today. Don't be so anti-semitic.",
+		"Our sources tell us that the Earth country Poland has issued a press release stating that 'they didn't want to go to space anyway' and that 'space sucks'. More at eleven.",
+		"Sources are saying that the Earth country Poland has issued another press release saying they were sorry and would very much like to be in space. The Intergalactic Empire responded with the word 'No'.",
+		"The President of Space America has come under fire recently for stating that god was a chicken.",
+		"The Intergalactic Empire is in hot water this week after proposing to rename Space-Milk to Milk. The newsroom would like to apologize to any readers offended by this news.",
+		"The Prime Minister of Space Scotland has announced that 'Freedom Day' did not go as planned. Our sources report that over 2000 human heads are now being returned to their loved ones.",
+		"The Prime Minister of Space Australia has come under fire for stating 'Women are in the kitchen, men are on the sofa, jews are in the oven. My country is doing well.",
+		"Dirty Space Palestine just declared Jihad on Mighty Space Israel. For shame, Space Palestine.",
+		"The President of Space America was questioned today about his reaction to the Space Superstorm Baldman disaster, he replied 'I didn't send anybody since I figured it would quit about three quarters through.",
+		"The President of Space America was photographed today kicking a dog to death while muttering about how he liked cats better.",
+		"The President of Space America was photographed today with a fairly obvious tail protruding out of his pants, he denies the photo is real, saying 'I, president T'jkar Aw'krejn, am no Tajaran-- I mean catbeast.",
+		"The votes have come in, and the new Prime Minister of Space Uzbekistan is Kthchichikachi Breekikikiki. When questioned about his landslide victory, he replied 'SQAAAAAAAK'. His only opponent, Er'p Fh'goot, was the first openly gay catbeast to run for office.",
+		"The President of Space America has issued a press release asking for more chips in his office.",
+		"The Prime Minister of Space Uzbekistan has issued a press release, stating that 'SQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK BAWWK BAAWWWWKK'. We would like to say that Faux News does not condone or support the words of Mr. Breekikikiki.",
+		"The Prime Minister of Space Australia has come under fire for stating he was very upset with how many black people there was in his country.",
+		"The Czar of Space Russia has accused the President of Space America of being a dirty catbeast. The President wiggled his trademark ears and said that if he was a Tajaran, the Czar was a space shark. The President is being treated for bite wounds.",
+		"The 'Universes Largest Oven' has been completed today in Space Germany. Prime Minister Adole Himmler has invited Space Isreal to see the oven first at its grand opening."
+		)
+	var/list/currentevents2 = list("CEO Discount Dan has been sued. Again.",
+		"NanoTrasen has inducted a new policy wherein clowns will be spanked for stealing milk.",
+		"Discount Dan's has created a new line of Discountu Danu food product for Space Japan. The food is comprised of Space Carp on rice. More at ten.",
+		"Discount Dan's has come under fire for their new 'Horsemeat Lasagna'",
+		"NanoTrasen's official website has been hacked this morning. The site read 'NT SUXZ, GO SYNDIEKATTZ!!1!1!!' for 48 hours until the site was fixed.",
+		"Read the all new book by a former unnamed syndicate, 'NanoTrasen sucks but the dental is good so whatever.'",
+		"NanoTrasen has released a new study that has been made useless by the internet.",
+		"Discount Dan's 'Spooky Dan' line of product has come under fire for being unintentionally racist toward ghosts.",
+		"Discount Dan's 'Discounto Danito' line of product has come out with a new 'fiesta size' burrito. CEO Discount Dan has been quoted as saying, 'A big 'ol clot for a big 'ol family!'",
+		"The Syndicate has issued a press release stating that 'NanoTrasen sucks dicks.'",
+		"NanoTrasen CEO Johnson Lovelocker has been photographed kicking a Tajaran to death. This shameful publicity stunt is part of the new 'NT Hates Catbeasts, do you?' campaign.",
+		"NanoTrasen CEO Johnson Lovelocker has been photographed kicking a Vox in the cloaca. He commented that, 'BIRDS BELONG IN MY FUCKING MEALS DAMN IT'.",
+		"NanoTrasen CEO Johnson Lovelocker is in hot water for an alleged sex scandal with a confused syndicate woman that took the motto 'Fuck NT' too seriously.",
+		"NanoTrasen CEO Johnson Lovelocker issued a press release stating, 'Anybody who's fucking impersonating me is going to get fucking bluespaced unto a spike.'. We do not condone Lovelocker's use of foul language in the newsroom.",
+		"NanoTrasen CEO Johnson Lovelocker and Discount Dan's CEO Discount Dan have been photographed buying a new friend necklace. The Syndicate issued a statement that 'That's totally gay.'",
+		"Discount Dan has been photographed this evening hunting the endangered albino space panda. When questioned, he replied that the endangered animal was 'Good eats'.",
+		"NanoTrasen's head programmer quit this evening when people did not respond well to his new features on NTOS. Said features included the ability to instantly transmit pictures of your butt to people by blinking.",
+		"NanoTrasen CEO Johnson Lovelocker was photographed this morning celebrating his birthday will well deserved hookers and blow.",
+		"Discount Dan's stock has risen 20 points today after CEO Discount Dan promised to include a free toy in every 'Happy Dan' meal. In other news, we have over 300 confirmed reports of broken teeth and lead poisoning in children 6 and under.",
+		"Discount Dan has come under fire today after trying to hug a plasmaman whilst smoking a cigar. He is being treated for 3rd degree burns at the moment, and we at the newsroom wish him luck.",
+		"NanoTrasen's treasurer Shlomo Goldburginstein died today in a tragic cooking incident with NT Officer Gass Judenraigh."
+		)
+	var/list/currentevents3 = list("Border patrol around Space America has tightened today after a wave of Tajarans yiffed their way across. We have reports of over 2000 molested Space Americans. More to come at seven.",
+		"Tajarans continue to protest in their 'Trillion Fur March' today. We have reports that the Space American army is giving a KOS order on all non-humans in the area.",
+		"Read the all new book by known Plasmaman rights activist Spookler Boney, 'AGHGHHGHGH KILL ME IT BURNS AGHHHHHHH'",
+		"Read the all new book by the worlds most renown skeleton Johnny Hips, 'It aint easy, being bony.'",
+		"Scientists in Space Austria have found a chicken with the ability to warp space-time. More at ten.",
+		"Scientists working on at the Bluespace Portal Research Facility (BPRF), have looked into the fabric of reality. They report that all it is out there is a bunch of fat nerds and a chicken.",
+		"Scientists working at the Large Hadron Collider have discovered nothing today. A sceptical scientist was quoted as saying, 'It could be nothing, but it's probably just something again.'",
+		"Johnny Hips has released a new album today, 'Tibia Blues'. The songs include classics such as 'I aint got money for milk.', 'Skeleton Rock', and a new song named, 'Bone Marrow'.",
+		"Doctors have discovered that clowns indeed do have a funny bone.",
+		"Renowned mime scientist Free Shrugs has discovered a new element today. He has named it '  ', he also says that it has the properties of '   '.",
+		"Archaeologists have discovered god's final message to his creation today. The message reads, 'bawk'.",
+		"Scientists have discovered a new type of elementary particle today. Our sources say it has a bad atitude, and enjoys the color blue.",
+		"Today, a man was discovered to be living with a 20 year old ghost in his house. When the ghost was questioned who killed him, he responded 'A FAGGOT!'. More at four.",
+		"Scientists report that ghosts do in fact exist, however, they are huge assholes.",
+		"Supermatter researchers today have reported that the substance is highly volatile and could possibly rip apart the universe in large quantities. Discount Dan has been reported as ordering over 1000 pounds of supermatter shards.",
+		"Scientists working at the BPRF have discovered a pocket universe comprised fully of dead clown souls today. 40 scientists are being treated for madness."
+		)
+	var/list/history = list("Adolf Hitler's cyborg body was lain to rest after the ending of WW4.",
+		"World War Buttbot began, the following war claimed the asses of over 500000 young gentlemen.",
+		"The 54th President of the United States of Space America was shot in the dick. He succumbed to his injuries after medbay threw him in cryo for an entire day.",
+		"The first great zombie apocalypse began on Venus.",
+		"The first man to step on Pluto slipped and was impaled on an ice spike shortly after landing.",
+		"North Korea became the first country to land a rocket on the sun.",
+		"Kim Jong Long Dong Silver, 58th generation leader of North Korea, died after being shot seventy two times in the chest.",
+		"NanoTrasen's new 'Space Station 13' project was announced.",
+		"Jupiter and Neptune became sentient for a period of 78 hours, Jupiter was heard screaming 'WHY AM I ALIVE DEAR GOD.', whilst curiously, Neptune only said 'Well here we go again.'.",
+		"The first furry in space was thrown out an airlock, along with his fursuit.",
+		"The 89th President of Space America read Woody's Got Wood aloud in his first State of the Union, and was beaten to death shortly after.",
+		"Space France surrendered for the 10124th time, making it the most invaded country in the galaxy.",
+		"Our glorious leader Karl Pilkington the 24th was crowned emperor of the Intergalactic Human Empire.",
+		"Everyone in the universe said 'Dave sucks.' at the same time. The cause of this event was unknown, but over 200000 men named Dave were murdered.",
+		"A cult religion following the belief god was a chicken was created.",
+		)
+	var/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, you have $1.19. You also have the largest amount of money in coins without being able to make change for a dollar.",
+		"The numbers '172' can be found on the back of the U.S. $5 dollar bill in the bushes at the base of the Lincoln Memorial.",
+		"President Kennedy was the fastest random speaker in the world with upwards of 350 words per minute.",
+		"In the average lifetime, a person will walk the equivalent of 5 times around the equator.",
+		"Odontophobia is the fear of teeth.",
+		"The surface area of an average-sized brick is 79 cm squared.",
+		"According to suicide statistics, Monday is the favoured day for self-destruction.",
+		"When you die your hair still grows for a couple of months.",
+		"The Neanderthal's brain was bigger than yours is.",
+		"The pancreas produces Insulin.",
+		"The word 'lethologica' describes the state of not being able to remember the word you want.",
+		"Every year about 98% of the atoms in your body are replaced.",
+		"The international telephone dialing code for Antarctica is 672.",
+		"Women are 37% more likely to go to a psychiatrist than men are.",
+		"The human heart creates enough pressure to squirt blood 30 feet (9 m).",
+		"When snakes are born with two heads, they fight each other for food.",
+		"Stressed is Desserts spelled backwards.",
+		"The word 'nerd' was first coined by Dr. Seuss in 'If I Ran the Zoo.'",
+		"Revolvers cannot be silenced because of all the noisy gasses which escape the cylinder gap at the rear of the barrel.",
+		"Every human spent about half an hour as a single cell.",
+		"7.5 million toothpicks can be created from a cord of wood.",
+		"If the Earth's sun were just inch in diameter, the nearest star would be 445 miles away.",
+		"There is no word in the English language that rhymes with month, orange, silver or purple.",
+		"Starfish have no brains.",
+		"2 and 5 are the only prime numbers that end in 2 or 5.",
+		"'Pronunciation' is the word which is mispronounced the most in the English language.",
+		"Women blink nearly twice as much as men.",
+		"Owls are the only birds who can see the color blue.",
+		"A pizza that has radius 'z' and height 'a' has volume Pi × z × z × a.",
+		"Months that begin on a Sunday will always have a 'Friday the 13th.'",
+		"Zero is an even number.",
+		"The longest English word that can be spelled without repeating any letters is 'uncopyrightable'.",
+		"10! (Ten factorial) seconds equals exactly six Earth weeks.",
+		"Moths don't have a stomach or mouth. They never eat again after undergoing metamorphosis.",
+		"'J' is the only letter that doesn't appear in the Periodic Table of Elements.",
+		"Want to remember the first digits of Pi easily? You can do it by counting each word's letters in 'May I have a large container of plasma?'"
+		)
+	var/currentevent1 = null
+	var/currentevent2 = null
+	var/currentevent3 = null
+	var/onthisday = null
+	var/didyouknow = null
+
+
+/obj/item/device/pda/GetJobName() //Used in secHUD icon generation
+	if(!src.id)
+		return "Unknown"
+
+	return src.id.GetJobName() //isn't it beautiful?
+
 
 /obj/item/device/pda/medical
+	name = "Medical PDA"
 	default_cartridge = /obj/item/weapon/cartridge/medical
 	icon_state = "pda-m"
 
+/obj/item/device/pda/medical/New()
+	..()
+	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
+	app.onInstall(src)
+	app.frequency = deskbell_freq_medbay
+
 /obj/item/device/pda/viro
+	name = "Virology PDA"
 	default_cartridge = /obj/item/weapon/cartridge/medical
 	icon_state = "pda-v"
 
+/obj/item/device/pda/viro/New()
+	..()
+	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
+	app.onInstall(src)
+	app.frequency = deskbell_freq_medbay
+
 /obj/item/device/pda/engineering
+	name = "Engineering PDA"
 	default_cartridge = /obj/item/weapon/cartridge/engineering
 	icon_state = "pda-e"
 
 /obj/item/device/pda/security
+	name = "Security PDA"
 	default_cartridge = /obj/item/weapon/cartridge/security
 	icon_state = "pda-s"
 
+/obj/item/device/pda/security/New()
+	..()
+	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
+	app.onInstall(src)
+	app.frequency = deskbell_freq_brig
+
 /obj/item/device/pda/detective
+	name = "Detective PDA"
 	default_cartridge = /obj/item/weapon/cartridge/detective
 	icon_state = "pda-det"
 
+/obj/item/device/pda/detective/New()
+	..()
+	var/datum/pda_app/light_upgrade/app1 = new /datum/pda_app/light_upgrade()
+	app1.onInstall(src)
+	var/datum/pda_app/balance_check/app2 = new /datum/pda_app/balance_check()
+	app2.onInstall(src)
+
 /obj/item/device/pda/warden
+	name = "Warden PDA"
 	default_cartridge = /obj/item/weapon/cartridge/security
 	icon_state = "pda-warden"
 
+/obj/item/device/pda/warden/New()
+	..()
+	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
+	app.onInstall(src)
+	app.frequency = deskbell_freq_brig
+
 /obj/item/device/pda/janitor
+	name = "Janitor PDA"
 	default_cartridge = /obj/item/weapon/cartridge/janitor
 	icon_state = "pda-j"
 	ttone = "slip"
 
 /obj/item/device/pda/toxins
+	name = "Science PDA"
 	default_cartridge = /obj/item/weapon/cartridge/signal/toxins
 	icon_state = "pda-tox"
 	ttone = "boom"
 
+/obj/item/device/pda/toxins/New()
+	..()
+	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
+	app.onInstall(src)
+	app.frequency = deskbell_freq_rnd
+
 /obj/item/device/pda/clown
+	name = "Clown PDA"
 	default_cartridge = /obj/item/weapon/cartridge/clown
 	icon_state = "pda-clown"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. The surface is coated with polytetrafluoroethylene and banana drippings."
 	ttone = "honk"
 
 /obj/item/device/pda/mime
+	name = "Mime PDA"
 	default_cartridge = /obj/item/weapon/cartridge/mime
 	icon_state = "pda-mime"
 	silent = 1
 	ttone = "silence"
 
 /obj/item/device/pda/heads
+	name = "Head of department PDA"
 	default_cartridge = /obj/item/weapon/cartridge/head
 	icon_state = "pda-h"
 
 /obj/item/device/pda/heads/hop
+	name = "Head of Personnel PDA"
 	default_cartridge = /obj/item/weapon/cartridge/hop
 	icon_state = "pda-hop"
 
+/obj/item/device/pda/heads/hop/New()
+	..()
+	var/datum/pda_app/ringer/app1 = new /datum/pda_app/ringer()
+	app1.onInstall(src)
+	app1.frequency = deskbell_freq_hop
+	var/datum/pda_app/balance_check/app2 = new /datum/pda_app/balance_check()
+	app2.onInstall(src)
+
 /obj/item/device/pda/heads/hos
+	name = "Head of Security PDA"
 	default_cartridge = /obj/item/weapon/cartridge/hos
 	icon_state = "pda-hos"
 
+/obj/item/device/pda/heads/hos/New()
+	..()
+	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
+	app.onInstall(src)
+	app.frequency = deskbell_freq_brig
+
 /obj/item/device/pda/heads/ce
+	name = "Chief Engineer PDA"
 	default_cartridge = /obj/item/weapon/cartridge/ce
 	icon_state = "pda-ce"
 
 /obj/item/device/pda/heads/cmo
+	name = "Chief Medical Officer PDA"
 	default_cartridge = /obj/item/weapon/cartridge/cmo
 	icon_state = "pda-cmo"
 
+/obj/item/device/pda/heads/cmo/New()
+	..()
+	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
+	app.onInstall(src)
+	app.frequency = deskbell_freq_medbay
+
 /obj/item/device/pda/heads/rd
+	name = "Research Director PDA"
 	default_cartridge = /obj/item/weapon/cartridge/rd
 	icon_state = "pda-rd"
 
+/obj/item/device/pda/heads/rd/New()
+	..()
+	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
+	app.onInstall(src)
+	app.frequency = deskbell_freq_rnd
+
 /obj/item/device/pda/captain
+	name = "Captain PDA"
 	default_cartridge = /obj/item/weapon/cartridge/captain
 	icon_state = "pda-c"
 	detonate = 0
 	//toff = 1
 
+/obj/item/device/pda/captain/New()
+	..()
+	for(var/app_type in (typesof(/datum/pda_app) - /datum/pda_app))	//yes, the captain is such a baller that his PDA has all the apps by default.
+		var/datum/pda_app/app = new app_type()						//will have to edit that when emagged/hidden apps get added.
+		app.onInstall(src)
+
 /obj/item/device/pda/cargo
+	name = "Cargo PDA"
 	default_cartridge = /obj/item/weapon/cartridge/quartermaster
 	icon_state = "pda-cargo"
 
 /obj/item/device/pda/quartermaster
+	name = "Quartermaster PDA"
 	default_cartridge = /obj/item/weapon/cartridge/quartermaster
 	icon_state = "pda-q"
 
 /obj/item/device/pda/shaftminer
+	name = "Mining PDA"
 	icon_state = "pda-miner"
 
 /obj/item/device/pda/syndicate
@@ -139,22 +365,27 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	hidden = 1
 
 /obj/item/device/pda/chaplain
+	name = "Chaplain PDA"
 	icon_state = "pda-holy"
 	ttone = "holy"
 
 /obj/item/device/pda/lawyer
+	name = "Lawyer PDA"
 	default_cartridge = /obj/item/weapon/cartridge/lawyer
 	icon_state = "pda-lawyer"
 	ttone = "..."
 
 /obj/item/device/pda/botanist
+	name = "Botany PDA"
 	//default_cartridge = /obj/item/weapon/cartridge/botanist
 	icon_state = "pda-hydro"
 
 /obj/item/device/pda/roboticist
+	name = "Robotics PDA"
 	icon_state = "pda-robot"
 
 /obj/item/device/pda/librarian
+	name = "Librarian PDA"
 	icon_state = "pda-libb"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. This is model is a WGW-11 series e-reader."
 	note = "Congratulations, your station has chosen the Thinktronic 5290 WGW-11 Series E-reader and Personal Data Assistant!"
@@ -166,20 +397,31 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	note = "Congratulations, you have chosen the Thinktronic 5230 Personal Data Assistant Deluxe Special Max Turbo Limited Edition!"
 
 /obj/item/device/pda/chef
+	name = "Chef PDA"
+	default_cartridge = /obj/item/weapon/cartridge/chef
 	icon_state = "pda-chef"
 
 /obj/item/device/pda/bar
+	name = "Bartender PDA"
 	icon_state = "pda-bar"
 
 /obj/item/device/pda/atmos
+	name = "Atmospherics PDA"
 	default_cartridge = /obj/item/weapon/cartridge/atmos
 	icon_state = "pda-atmo"
 
+/obj/item/device/pda/mechanic
+	name = "Mechanic PDA"
+	default_cartridge = /obj/item/weapon/cartridge/mechanic
+	icon_state = "pda-atmo"
+
 /obj/item/device/pda/chemist
+	name = "Chemistry PDA"
 	default_cartridge = /obj/item/weapon/cartridge/chemistry
 	icon_state = "pda-chem"
 
 /obj/item/device/pda/geneticist
+	name = "Genetics PDA"
 	default_cartridge = /obj/item/weapon/cartridge/medical
 	icon_state = "pda-gene"
 
@@ -190,6 +432,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	ttone = "data"
 	detonate = 0
 
+/obj/item/device/pda/ai/New()
+	..()
+	var/datum/pda_app/spam_filter/app = new /datum/pda_app/spam_filter()
+	app.onInstall(src)
+
 
 /obj/item/device/pda/ai/proc/set_name_and_job(newname as text, newjob as text)
 	owner = newname
@@ -198,11 +445,49 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 
 //AI verb and proc for sending PDA messages.
+/mob/living/silicon/ai/proc/cmd_send_pdamesg()
+	var/list/names = list()
+	var/list/plist = list()
+	var/list/namecounts = list()
+
+	if(usr.stat == 2)
+		usr << "You can't send PDA messages because you are dead!"
+		return
+
+	if(src.aiPDA.toff)
+		usr << "Turn on your receiver in order to send messages."
+		return
+
+	for (var/obj/item/device/pda/P in get_viewable_pdas())
+		if (P == src)
+			continue
+		else if (P == src.aiPDA)
+			continue
+
+		var/name = P.owner
+		if (name in names)
+			namecounts[name]++
+			name = text("[name] ([namecounts[name]])")
+		else
+			names.Add(name)
+			namecounts[name] = 1
+
+		plist[text("[name]")] = P
+
+	var/c = input(usr, "Please select a PDA") as null|anything in sortList(plist)
+
+	if (!c)
+		return
+
+	var/selected = plist[c]
+	src.aiPDA.create_message(src, selected)
+
+//AI verb and proc for sending PDA messages.
 /obj/item/device/pda/ai/verb/cmd_send_pdamesg()
-	set category = "AI IM"
+	set category = "AI Commands"
 	set name = "Send Message"
 	set src in usr
-	if(usr.stat == 2)
+	if(usr.stat == 2 || (usr.status_flags & FAKEDEATH))
 		usr << "You can't send PDA messages because you are dead!"
 		return
 	var/list/plist = available_pdas()
@@ -215,10 +500,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 
 /obj/item/device/pda/ai/verb/cmd_toggle_pda_receiver()
-	set category = "AI IM"
+	set category = "AI Commands"
 	set name = "Toggle Sender/Receiver"
 	set src in usr
-	if(usr.stat == 2)
+	if(usr.stat == 2 || (usr.status_flags & FAKEDEATH))
 		usr << "You can't do that because you are dead!"
 		return
 	toff = !toff
@@ -226,10 +511,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 
 /obj/item/device/pda/ai/verb/cmd_toggle_pda_silent()
-	set category = "AI IM"
+	set category = "AI Commands"
 	set name = "Toggle Ringer"
 	set src in usr
-	if(usr.stat == 2)
+	if(usr.stat == 2 || (usr.status_flags & FAKEDEATH))
 		usr << "You can't do that because you are dead!"
 		return
 	silent=!silent
@@ -237,16 +522,24 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 
 /obj/item/device/pda/ai/verb/cmd_show_message_log()
-	set category = "AI IM"
+	set category = "AI Commands"
 	set name = "Show Message Log"
 	set src in usr
-	if(usr.stat == 2)
+	if(usr.stat == 2 || (usr.status_flags & FAKEDEATH))
 		usr << "You can't do that because you are dead!"
 		return
 	var/HTML = "<html><head><title>AI PDA Message Log</title></head><body>[tnote]</body></html>"
 	usr << browse(HTML, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
 
-
+/mob/living/silicon/ai/proc/cmd_show_message_log()
+	if(usr.stat == 2)
+		usr << "You can't do that because you are dead!"
+		return
+	if(!isnull(aiPDA))
+		var/HTML = "<html><head><title>AI PDA Message Log</title></head><body>[aiPDA.tnote]</body></html>"
+		usr << browse(HTML, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
+	else
+		usr << "You do not have a PDA. You should make an issue report about this."
 
 /obj/item/device/pda/ai/attack_self(mob/user as mob)
 	if ((honkamt > 0) && (prob(60)))//For clown virus.
@@ -278,6 +571,13 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	if(default_cartridge)
 		cartridge = new default_cartridge(src)
 	new /obj/item/weapon/pen(src)
+	MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
+	DD = text2num(time2text(world.timeofday, "DD")) 	// get the day
+	currentevent1 = pick(currentevents1)
+	currentevent2 = pick(currentevents2)
+	currentevent3 = pick(currentevents3)
+	onthisday = pick(history)
+	didyouknow = pick(facts)
 
 /obj/item/device/pda/proc/can_use(mob/user)
 	if(user && ismob(user))
@@ -338,8 +638,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			if (0)
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\PDA.dm:331: dat += "<h2>PERSONAL DATA ASSISTANT v.1.2</h2>"
-				dat += {"<h2>PERSONAL DATA ASSISTANT v.1.2</h2>
+				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\PDA.dm:331: dat += "<h2>PERSONAL DATA ASSISTANT v.1.3</h2>"
+				dat += {"<h2>PERSONAL DATA ASSISTANT v.1.3</h2>
 					Owner: [owner], [ownjob]<br>"}
 				// END AUTOFIX
 				dat += text("ID: <A href='?src=\ref[src];choice=Authenticate'>[id ? "[id.registered_name], [id.assignment]" : "----------"]")
@@ -353,27 +653,47 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					<h4>General Functions</h4>
 					<ul>
 					<li><a href='byond://?src=\ref[src];choice=1'><img src=pda_notes.png> Notekeeper</a></li>
-					<li><a href='byond://?src=\ref[src];choice=2'><img src=pda_mail.png> Messenger</a></li>"}
+					<li><a href='byond://?src=\ref[src];choice=2'><img src=pda_mail.png> Messenger</a></li>
+					<li><a href='byond://?src=\ref[src];choice=50'><img src=pda_clock.png> Current Events</a></li>"}
 				// END AUTOFIX
-				//dat += "<li><a href='byond://?src=\red[src];choice=chatroom'><img src=pda_chatroom.png> Nanotrasen Relay Chat</a></li>"
+				//dat += "<li><a href='byond://?src=[src];choice=chatroom'><img src=pda_chatroom.png> Nanotrasen Relay Chat</a></li>"
+
+				dat += "<li><a href='byond://?src=\ref[src];choice=41'><img src=pda_notes.png> View Crew Manifest</a></li>"
 
 				if (cartridge)
 					if (cartridge.access_clown)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Honk'><img src=pda_honk.png> Honk Synthesizer</a></li>"
-					if (cartridge.access_manifest)
-						dat += "<li><a href='byond://?src=\ref[src];choice=41'><img src=pda_notes.png> View Crew Manifest</a></li>"
 					if(cartridge.access_status_display)
 						dat += "<li><a href='byond://?src=\ref[src];choice=42'><img src=pda_status.png> Set Status Display</a></li>"
-					dat += "</ul>"
-					if (cartridge.access_engine)
 
-						// AUTOFIXED BY fix_string_idiocy.py
-						// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\PDA.dm:355: dat += "<h4>Engineering Functions</h4>"
+				dat += "</ul>"
+				dat += {"<h4>Applications</h4>"}
+
+				if(applications.len == 0)
+					dat += {"<i>No application currently installed.</i>"}
+				else
+					dat += {"<ul>"}
+					for(var/datum/pda_app/app in applications)
+						if(app.menu)
+							dat += {"<li><a href='byond://?src=\ref[src];choice=[app.menu]'>[app.name]</a></li>"}
+						else
+							dat += {"<li>[app.name]</li>"}
+					dat += {"</ul>"}
+
+				if (cartridge)
+					if (cartridge.access_engine || cartridge.access_atmos)
 						dat += {"<h4>Engineering Functions</h4>
 							<ul>
 							<li><a href='byond://?src=\ref[src];choice=43'><img src=pda_power.png> Power Monitor</a></li>
+							<li><a href='byond://?src=\ref[src];choice=53'><img src=pda_alert.png> Alert Monitor</a></li>
 							</ul>"}
-						// END AUTOFIX
+
+					if (cartridge.access_mechanic)
+						dat += {"<h4>Mechanic Functions</h4>
+							<ul>
+							<li><a href='byond://?src=\ref[src];choice=Device Analyser'><img src=pda_scanner.png> [scanmode == 6 ? "Disable" : "Enable" ] Device Analyser</a></li>
+							</ul>"}
+
 					if (cartridge.access_medical)
 
 						// AUTOFIXED BY fix_string_idiocy.py
@@ -483,7 +803,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				var/count = 0
 
 				if (!toff)
-					for (var/obj/item/device/pda/P in sortAtom(get_viewable_pdas()))
+					for (var/obj/item/device/pda/P in sortNames(get_viewable_pdas()))
 						if (P == src)	continue
 						if(P.hidden) continue
 						dat += "<li><a href='byond://?src=\ref[src];choice=Message;target=\ref[P]'>[P]</a>"
@@ -556,7 +876,157 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dat += " <img src=pda_locked.png>"
 					dat += "</li>"
 
+			if (41) //Allows everyone to access crew
 
+				// AUTOFIXED BY fix_string_idiocy.py
+				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:281: menu = "<h4><img src=pda_notes.png> Crew Manifest</h4>"
+				dat += {"<h4><img src=pda_notes.png> Crew Manifest</h4>
+					Entries cannot be modified from this terminal.<br><br>"}
+				// END AUTOFIX
+				if(data_core)
+					dat += data_core.get_manifest(1) // make it monochrome
+				dat += "<br>"
+
+			if (50) //Current events.
+				dat += {"<h4><img src=pda_clock.png> Current Events</h4>
+					Station Time: <b>[worldtime2text()]</b>.<br>
+					Empire Date: <b>[MM]/[DD]/[game_year]</b>.<br><br>
+					<b>Current Events,</b><br>
+					<li>[currentevent1]</li<br>
+					<li>[currentevent2]</li><br>
+					<li>[currentevent3]</li><br><br>
+					<b>On this day,</b><br>
+					<li>[onthisday]</li><br><br>
+					<b>Did you know...</b><br>
+					<li>[didyouknow]</li><br>"}
+
+			if (101)//Ringer app
+				var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+				dat += {"<h4>Ringer Application</h4>"}
+				if(app)
+					dat += {"
+					Status: <a href='byond://?src=\ref[src];choice=toggleDeskRinger'>[app.status ? "On" : "Off"]</a><br>
+					Frequency:
+						<a href='byond://?src=\ref[src];choice=ringerFrequency;rfreq=-10'>-</a>
+						<a href='byond://?src=\ref[src];choice=ringerFrequency;rfreq=-2'>-</a>
+						[format_frequency(app.frequency)]
+						<a href='byond://?src=\ref[src];choice=ringerFrequency;rfreq=2'>+</a>
+						<a href='byond://?src=\ref[src];choice=ringerFrequency;rfreq=10'>+</a><br>
+						<br>
+					"}
+
+			if (102)//Spam filter app
+				var/datum/pda_app/spam_filter/app = locate(/datum/pda_app/spam_filter) in applications
+				dat += {"<h4>Spam Filtering Application</h4>"}
+				if(app)
+					dat += {"
+					<ul>
+					<li>[(app.function == 2) ? "<b>Block the spam.</b>" : "<a href='byond://?src=\ref[src];choice=setFilter;filter=2'>Block the spam.</a>"]</li>
+					<li>[(app.function == 1) ? "<b>Conceal the spam.</b>" : "<a href='byond://?src=\ref[src];choice=setFilter;filter=1'>Conceal the spam.</a>"]</li>
+					<li>[(app.function == 0) ? "<b>Do nothing.</b>" : "<a href='byond://?src=\ref[src];choice=setFilter;filter=0'>Do nothing.</a>"]</li>
+					</ul>
+					"}
+
+			if (103)//Balance check app
+				var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in applications
+				dat += {"<h4>Balance Check Application</h4>"}
+				if(app)
+					if(!id)
+						dat += {"<i>Insert an ID card linked to the account to check.</i>"}
+					else
+						if(!(app.linked_db))
+							app.reconnect_database()
+						if(app.linked_db)
+							if(app.linked_db.activated)
+								var/datum/money_account/D = app.linked_db.attempt_account_access(id.associated_account_number, 0, 2, 0)
+								if(D)
+									dat += {"Owner: <b>[D.owner_name]</b><br>
+										Current Balance: <b>[D.money]</b>$
+										<h5>Transaction History</h5>
+										On [MM]/[DD]/[game_year]:
+										<ul>"}
+									var/list/t_log = list()
+									for(var/e in D.transaction_log)
+										t_log += e
+									for(var/datum/transaction/T in reverseRange(t_log))
+										if(T.purpose == "Account creation")//always the last element of the reverse transaction_log
+											dat += {"</ul>
+												On [(DD == 1) ? "[((MM-2)%12)+1]" : "[MM]"]/[((DD-2)%30)+1]/[(DD == MM == 1) ? "[game_year - 1]" : "[game_year]"]:
+												<ul>
+												<li>\[[T.time]\] [T.amount]$, [T.purpose] at [T.source_terminal]</li>
+												</ul>"}
+										else
+											dat += {"<li>\[[T.time]\] [T.amount]$, [T.purpose] at [T.source_terminal]</li>"}
+									if(!D.transaction_log.len)
+										dat += {"</ul>"}
+								else
+									dat += {"<i>Unable to access account. Either its security settings don't allow remote checking or the account is nonexistent.</i>"}
+							else
+								dat += {"<i>Unfortunately your station's Accounts Database doesn't allow remote access. Negociate with your HoP or Captain to solve this issue.</i>"}
+						else
+							dat += {"<i>Unable to connect to accounts database. The database is either nonexistent, inoperative, or too far away.</i>"}
+
+			if (104)//Station map app
+				var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
+				dat += {"<h4>Station Map Application</h4>"}
+				if(app)
+					var/turf/T = get_turf(src.loc)
+
+					if(!fexists("icons/pda_icons/pda_minimap_[map.nameShort].png"))
+						dat += {"<span class='warning'>It appears that our services have yet to produce a minimap of this station. We apologize for the inconvenience.</span>"}
+
+					if(T.z == map.zMainStation)
+						dat += {"Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET],[T.y-WORLD_Y_OFFSET],1)</b><br>"}	//it's a "Station Map" app, so it only gives information reguarding
+					else																									//the station's z-level
+						dat += {"Current Location: <b>Unknown</b><br>"}
+
+					if(fexists("icons/pda_icons/pda_minimap_[map.nameShort].png"))
+						dat += {"
+						<div style="position: relative; left: 0; top: 0;">
+						<img src="pda_minimap_[map.nameShort].png" style="position: relative; top: 0; left: 0;"/>
+						"}
+						if(T.z == map.zMainStation)
+							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + 247]px; left: [T.x-8]px;"/>"}
+						for(var/datum/minimap_marker/mkr in app.markers)
+							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET) * -1) + 247]px; left: [mkr.x+WORLD_X_OFFSET-8]px;"/>"}
+						dat += {"</div>"}
+
+					else
+						dat += {"
+						<div style="position: relative; left: 0; top: 0;">
+						<img src="pda_minimap_bg_notfound.png" style="position: relative; top: 0; left: 0;"/>
+						"}
+						if(T.z == map.zMainStation)
+							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + 247]px; left: [T.x-8]px;"/>"}
+						for(var/datum/minimap_marker/mkr in app.markers)
+							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET) * -1) + 247]px; left: [mkr.x+WORLD_X_OFFSET-8]px;"/>"}
+						dat += {"</div>"}
+
+/*
+					dat += {"
+					<div style="position: relative; left: 0; top: 0;">
+					<img src="pda_minimap_bg.png" style="position: relative; top: 0; left: 0;"/>
+					"}
+					if(T.z == map.zMainStation)
+						dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + 247]px; left: [T.x-8]px;"/>"}
+					for(var/datum/minimap_marker/mkr in app.markers)
+						dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET) * -1) + 247]px; left: [mkr.x+WORLD_X_OFFSET-8]px;"/>"}
+
+					dat += {"</div>"}
+*/
+					dat += {"<h5>Markers</h5>
+					<a href='byond://?src=\ref[src];choice=minimapMarker;mMark=x'>X=[app.markx]</a>;
+					<a href='byond://?src=\ref[src];choice=minimapMarker;mMark=y'>Y=[app.marky]</a>;
+					<a href='byond://?src=\ref[src];choice=minimapMarker;mMark=add'>Add New Marker</a>
+					"}
+
+					if(!(app.markers.len))
+						dat += {"<br><span class='warning'>no markers</span>"}
+					else
+						dat +={"<ul>"}
+						for(var/datum/minimap_marker/mkr in app.markers)
+							dat += {"<li>[mkr.name] ([mkr.x]/[mkr.y]) <a href='byond://?src=\ref[src];choice=removeMarker;rMark=[mkr.num]'>remove</a></li>"}
+						dat += {"</ul>"}
 
 			else//Else it links to the cart menu proc. Although, it really uses menu hub 4--menu 4 doesn't really exist as it simply redirects to hub.
 				dat += cart
@@ -585,13 +1055,13 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				return
 			if("Refresh")//Refresh, goes to the end of the proc.
 			if("Return")//Return
-				if(mode<=9)
+				if((mode<=9) || (locate(mode) in pda_app_menus))
 					mode = 0
 				else
-					mode = round(mode/10)
-					if(mode==4)//Fix for cartridges. Redirects to hub.
+					mode = round(mode/10)//TODO: fix this shit up
+					if((mode==4) || (mode==5))//Fix for cartridges. Redirects to hub.
 						mode = 0
-					else if(mode >= 40 && mode <= 49)//Fix for cartridges. Redirects to refresh the menu.
+					else if(mode >= 40 && mode <= 53)//Fix for cartridges. Redirects to refresh the menu.
 						cartridge.mode = mode
 						cartridge.unlock()
 			if ("Authenticate")//Checks for ID
@@ -624,9 +1094,71 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				mode = 3
 			if("4")//Redirects to hub
 				mode = 0
+			if("41")
+				mode = 41
 			if("chatroom") // chatroom hub
 				mode = 5
 
+//APPLICATIONS FUNCTIONS===========================
+
+			if("101")
+				mode = 101
+			if("toggleDeskRinger")
+				var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+				if(app)
+					app.status = !(app.status)
+			if("ringerFrequency")
+				var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+				if(app)
+					var/i = app.frequency + text2num(href_list["rfreq"])
+					if(i < MINIMUM_FREQUENCY)
+						i = 1201
+					if(i > MAXIMUM_FREQUENCY)
+						i = 1599
+					app.frequency = i
+			if("102")
+				mode = 102
+			if("setFilter")
+				var/datum/pda_app/spam_filter/app = locate(/datum/pda_app/spam_filter) in applications
+				if(app)
+					app.function = text2num(href_list["filter"])
+			if("103")
+				mode = 103
+
+			if("104")
+				mode = 104
+
+			if("minimapMarker")
+				var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
+				switch(href_list["mMark"])
+					if("x")
+						var/new_x = input("Please input desired X coordinate.", "Station Map App", app.markx) as num
+						var/x_validate=new_x+WORLD_X_OFFSET
+						if(x_validate < 1 || x_validate > 255)
+							usr << "<span class='caution'>Error: Invalid X coordinate.</span>"
+						else
+							app.markx = new_x
+					if("y")
+						var/new_y = input("Please input desired Y coordinate.", "Station Map App", app.marky) as num
+						var/y_validate=new_y+WORLD_Y_OFFSET
+						if(y_validate < 1 || y_validate > 255)
+							usr << "<span class='caution'>Error: Invalid Y coordinate.</span>"
+						else
+							app.marky = new_y
+					if("add")
+						var/marker_name = copytext(sanitize(input("Give a name to your marker", "Station Map App", "default marker") as null|text),1,MAX_NAME_LEN)
+						var/datum/minimap_marker/mkr = new/datum/minimap_marker()
+						mkr.x = app.markx
+						mkr.y = app.marky
+						mkr.name = marker_name
+						app.markers += mkr
+						mkr.num = app.markers.len
+
+			if("removeMarker")
+				var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
+				var/to_remove = text2num(href_list["rMark"])
+				var/datum/minimap_marker/mkr = app.markers[to_remove]
+				del(mkr)
 
 //MAIN FUNCTIONS===================================
 
@@ -663,6 +1195,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					scanmode = 0
 				else if((!isnull(cartridge)) && (cartridge.access_atmos))
 					scanmode = 5
+			if("Device Analyser")
+				if(scanmode == 6)
+					scanmode = 0
+				else if((!isnull(cartridge)) && (cartridge.access_mechanic))
+					if(!dev_analys)
+						dev_analys = new(src) //let's create that device analyser
+						dev_analys.max_designs = 5
+					scanmode = 6
 
 //MESSENGER/NOTE FUNCTIONS===================================
 
@@ -706,7 +1246,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if(!isnull(P))
 						if (!P.toff && cartridge:honk_charges > 0)
 							cartridge:honk_charges--
-							U.show_message("\blue Virus sent!", 1)
+							U.show_message("<span class='notice'>Virus sent!</span>", 1)
 							P.honkamt = (rand(15,20))
 					else
 						U << "PDA not found."
@@ -719,7 +1259,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if(!isnull(P))
 						if (!P.toff && cartridge:mime_charges > 0)
 							cartridge:mime_charges--
-							U.show_message("\blue Virus sent!", 1)
+							U.show_message("<span class='notice'>Virus sent!</span>", 1)
 							P.silent = 1
 							P.ttone = "silence"
 					else
@@ -760,15 +1300,15 @@ var/global/list/obj/item/device/pda/PDAs = list()
 								difficulty += 2
 
 							if(prob(difficulty * 12) || (P.hidden_uplink))
-								U.show_message("\red An error flashes on your [src].", 1)
+								U.show_message("<span class='warning'>An error flashes on your [src].</span>", 1)
 							else if (prob(difficulty * 3))
-								U.show_message("\red Energy feeds back into your [src]!", 1)
+								U.show_message("<span class='warning'>Energy feeds back into your [src]!</span>", 1)
 								U << browse(null, "window=pda")
 								explode()
 								log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge but failed, blowing themselves up")
 								message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge but failed, blowing themselves up", 1)
 							else
-								U.show_message("\blue Success!", 1)
+								U.show_message("<span class='notice'>Success!</span>", 1)
 								log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge and succeded")
 								message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge and succeded", 1)
 								P.explode()
@@ -793,8 +1333,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 			else//Cartridge menu linking
 				mode = text2num(href_list["choice"])
-				cartridge.mode = mode
-				cartridge.unlock()
+				if(cartridge)
+					cartridge.mode = mode
+					cartridge.unlock()
 	else//If not in range, can't interact or not using the pda.
 		U.unset_machine()
 		U << browse(null, "window=pda")
@@ -803,7 +1344,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 //EXTRA FUNCTIONS===================================
 
 	if (mode == 2||mode == 21)//To clear message overlays.
-		overlays.Cut()
+		overlays.len = 0
 
 	if ((honkamt > 0) && (prob(60)))//For clown virus.
 		honkamt--
@@ -877,7 +1418,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		tnote += "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
 		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[src]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
 		for(var/mob/dead/observer/M in player_list)
-			if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTEARS)) // src.client is so that ghosts don't have to listen to mice
+			if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
 				M.show_message("<span class='game say'>PDA Message - <span class='name'>[owner]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
 
 
@@ -903,10 +1444,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			L = get(P, /mob/living/silicon)
 
 		if(L)
-			L << "\icon[P] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)"
+			L.show_message("\icon[P] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)", 2)
 
 		log_pda("[usr] (PDA: [src.name]) sent \"[t]\" to [P.name]")
-		P.overlays.Cut()
+		P.overlays.len = 0
 		P.overlays += image('icons/obj/pda.dmi', "pda-r")
 	else
 		U << "<span class='notice'>ERROR: Messaging server is not responding.</span>"
@@ -959,15 +1500,13 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		else
 			var/obj/item/I = user.get_active_hand()
 			if (istype(I, /obj/item/weapon/card/id))
-				user.drop_item()
-				I.loc = src
+				user.drop_item(I, src)
 				id = I
 	else
 		var/obj/item/weapon/card/I = user.get_active_hand()
 		if (istype(I, /obj/item/weapon/card/id) && I:registered_name)
 			var/obj/old_id = id
-			user.drop_item()
-			I.loc = src
+			user.drop_item(I, src)
 			id = I
 			user.put_in_hands(old_id)
 	return
@@ -977,8 +1516,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	..()
 	if(istype(C, /obj/item/weapon/cartridge) && !cartridge)
 		cartridge = C
-		user.drop_item()
-		cartridge.loc = src
+		user.drop_item(C, src)
 		user << "<span class='notice'>You insert [cartridge] into [src].</span>"
 		if(cartridge.radio)
 			cartridge.radio.hostpda = src
@@ -1003,8 +1541,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			return	//Return in case of failed check or when successful.
 		updateSelfDialog()//For the non-input related code.
 	else if(istype(C, /obj/item/device/paicard) && !src.pai)
-		user.drop_item()
-		C.loc = src
+		user.drop_item(C, src)
 		pai = C
 		user << "<span class='notice'>You slot \the [C] into [src].</span>"
 		updateUsrDialog()
@@ -1013,8 +1550,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if(O)
 			user << "<span class='notice'>There is already a pen in \the [src].</span>"
 		else
-			user.drop_item()
-			C.loc = src
+			user.drop_item(C, src)
 			user << "<span class='notice'>You slide \the [C] into \the [src].</span>"
 	return
 
@@ -1023,58 +1559,35 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		switch(scanmode)
 
 			if(1)
-
-				for (var/mob/O in viewers(C, null))
-					O.show_message("\red [user] has analyzed [C]'s vitals!", 1)
-
-				user.show_message("\blue Analyzing Results for [C]:")
-				user.show_message("\blue \t Overall Status: [C.stat > 1 ? "dead" : "[C.health - C.halloss]% healthy"]", 1)
-				user.show_message("\blue \t Damage Specifics: [C.getOxyLoss() > 50 ? "\red" : "\blue"][C.getOxyLoss()]-[C.getToxLoss() > 50 ? "\red" : "\blue"][C.getToxLoss()]-[C.getFireLoss() > 50 ? "\red" : "\blue"][C.getFireLoss()]-[C.getBruteLoss() > 50 ? "\red" : "\blue"][C.getBruteLoss()]", 1)
-				user.show_message("\blue \t Key: Suffocation/Toxin/Burns/Brute", 1)
-				user.show_message("\blue \t Body Temperature: [C.bodytemperature-T0C]&deg;C ([C.bodytemperature*1.8-459.67]&deg;F)", 1)
-				if(C.tod && (C.stat == DEAD || (C.status_flags & FAKEDEATH)))
-					user.show_message("\blue \t Time of Death: [C.tod]")
-				if(istype(C, /mob/living/carbon/human))
-					var/mob/living/carbon/human/H = C
-					var/list/damaged = H.get_damaged_organs(1,1)
-					user.show_message("\blue Localized Damage, Brute/Burn:",1)
-					if(length(damaged)>0)
-						for(var/datum/organ/external/org in damaged)
-							user.show_message(text("\blue \t []: []\blue-[]",capitalize(org.display_name),(org.brute_dam > 0)?"\red [org.brute_dam]":0,(org.burn_dam > 0)?"\red [org.burn_dam]":0),1)
-					else
-						user.show_message("\blue \t Limbs are OK.",1)
-
-				for(var/datum/disease/D in C.viruses)
-					if(!D.hidden[SCANNER])
-						user.show_message(text("\red <b>Warning: [D.form] Detected</b>\nName: [D.name].\nType: [D.spread].\nStage: [D.stage]/[D.max_stages].\nPossible Cure: [D.cure]"))
+				healthanalyze(C,user,0)
 
 			if(2)
 				if (!istype(C:dna, /datum/dna))
-					user << "\blue No fingerprints found on [C]"
+					user << "<span class='notice'>No fingerprints found on [C]</span>"
 				else if(!istype(C, /mob/living/carbon/monkey))
 					if(!isnull(C:gloves))
-						user << "\blue No fingerprints found on [C]"
+						user << "<span class='notice'>No fingerprints found on [C]</span>"
 				else
-					user << text("\blue [C]'s Fingerprints: [md5(C:dna.uni_identity)]")
+					user << text("<span class='notice'>[C]'s Fingerprints: [md5(C:dna.uni_identity)]</span>")
 				if ( !(C:blood_DNA) )
-					user << "\blue No blood found on [C]"
+					user << "<span class='notice'>No blood found on [C]</span>"
 					if(C:blood_DNA)
 						del(C:blood_DNA)
 				else
-					user << "\blue Blood found on [C]. Analysing..."
+					user << "<span class='notice'>Blood found on [C]. Analysing...</span>"
 					spawn(15)
 						for(var/blood in C:blood_DNA)
-							user << "\blue Blood type: [C:blood_DNA[blood]]\nDNA: [blood]"
+							user << "<span class='notice'>Blood type: [C:blood_DNA[blood]]\nDNA: [blood]</span>"
 
 			if(4)
 				for (var/mob/O in viewers(C, null))
-					O.show_message("\red [user] has analyzed [C]'s radiation levels!", 1)
+					O.show_message("<span class='warning'>[user] has analyzed [C]'s radiation levels!</span>", 1)
 
-				user.show_message("\blue Analyzing Results for [C]:")
+				user.show_message("<span class='notice'>Analyzing Results for [C]:</span>")
 				if(C.radiation)
-					user.show_message("\green Radiation Level: \black [C.radiation]")
+					user.show_message("<span class='good'>Radiation Level: </span>[C.radiation]")
 				else
-					user.show_message("\blue No radiation detected.")
+					user.show_message("<span class='notice'>No radiation detected.</span>")
 
 /obj/item/device/pda/afterattack(atom/A as mob|obj|turf|area, mob/user as mob)
 	switch(scanmode)
@@ -1083,76 +1596,29 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			if(!isnull(A.reagents))
 				if(A.reagents.reagent_list.len > 0)
 					var/reagents_length = A.reagents.reagent_list.len
-					user << "\blue [reagents_length] chemical agent[reagents_length > 1 ? "s" : ""] found."
+					user << "<span class='notice'>[reagents_length] chemical agent[reagents_length > 1 ? "s" : ""] found.</span>"
 					for (var/re in A.reagents.reagent_list)
-						user << "\blue \t [re]"
+						user << "<span class='notice'>\t [re]</span>"
 				else
-					user << "\blue No active chemical agents found in [A]."
+					user << "<span class='notice'>No active chemical agents found in [A].</span>"
 			else
-				user << "\blue No significant chemical agents found in [A]."
+				user << "<span class='notice'>No significant chemical agents found in [A].</span>"
 
 		if(5)
-			if((istype(A, /obj/item/weapon/tank)) || (istype(A, /obj/machinery/portable_atmospherics)))
-				var/obj/icon = A
-				for (var/mob/O in viewers(user, null))
-					O << "\red [user] has used [src] on \icon[icon] [A]"
-				var/pressure = A:air_contents.return_pressure()
-
-				var/total_moles = A:air_contents.total_moles()
-
-				user << "\blue Results of analysis of \icon[icon]"
-				if (total_moles>0)
-					var/o2_concentration = A:air_contents.oxygen/total_moles
-					var/n2_concentration = A:air_contents.nitrogen/total_moles
-					var/co2_concentration = A:air_contents.carbon_dioxide/total_moles
-					var/plasma_concentration = A:air_contents.toxins/total_moles
-
-					var/unknown_concentration =  1-(o2_concentration+n2_concentration+co2_concentration+plasma_concentration)
-
-					user << "\blue Pressure: [round(pressure,0.1)] kPa"
-					user << "\blue Nitrogen: [round(n2_concentration*100)]%"
-					user << "\blue Oxygen: [round(o2_concentration*100)]%"
-					user << "\blue CO2: [round(co2_concentration*100)]%"
-					user << "\blue Plasma: [round(plasma_concentration*100)]%"
-					if(unknown_concentration>0.01)
-						user << "\red Unknown: [round(unknown_concentration*100)]%"
-					user << "\blue Temperature: [round(A:air_contents.temperature-T0C)]&deg;C"
-				else
-					user << "\blue Tank is empty!"
-
-			if (istype(A, /obj/machinery/atmospherics/pipe/tank))
-				var/obj/icon = A
-				for (var/mob/O in viewers(user, null))
-					O << "\red [user] has used [src] on \icon[icon] [A]"
-
-				var/obj/machinery/atmospherics/pipe/tank/T = A
-				var/pressure = T.parent.air.return_pressure()
-				var/total_moles = T.parent.air.total_moles()
-
-				user << "\blue Results of analysis of \icon[icon]"
-				if (total_moles>0)
-					var/o2_concentration = T.parent.air.oxygen/total_moles
-					var/n2_concentration = T.parent.air.nitrogen/total_moles
-					var/co2_concentration = T.parent.air.carbon_dioxide/total_moles
-					var/plasma_concentration = T.parent.air.toxins/total_moles
-
-					var/unknown_concentration =  1-(o2_concentration+n2_concentration+co2_concentration+plasma_concentration)
-
-					user << "\blue Pressure: [round(pressure,0.1)] kPa"
-					user << "\blue Nitrogen: [round(n2_concentration*100)]%"
-					user << "\blue Oxygen: [round(o2_concentration*100)]%"
-					user << "\blue CO2: [round(co2_concentration*100)]%"
-					user << "\blue Plasma: [round(plasma_concentration*100)]%"
-					if(unknown_concentration>0.01)
-						user << "\red Unknown: [round(unknown_concentration*100)]%"
-					user << "\blue Temperature: [round(T.parent.air.temperature-T0C)]&deg;C"
-				else
-					user << "\blue Tank is empty!"
+			if(atmos_analys)
+				if(A.Adjacent(user))
+					if(!A.attackby(atmos_analys, user))
+						atmos_analys.afterattack(A, user, 1)
 
 	if (!scanmode && istype(A, /obj/item/weapon/paper) && owner)
 		note = A:info
-		user << "\blue Paper scanned." //concept of scanning paper copyright brainoblivion 2009
+		user << "<span class='notice'>Paper scanned.</span>" //concept of scanning paper copyright brainoblivion 2009
 
+/obj/item/device/pda/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
+	if (scanmode == 6)
+		if(dev_analys) //let's use this instead. Much neater
+			if(A.Adjacent(user))
+				return dev_analys.preattack(A, user, 1)
 
 /obj/item/device/pda/proc/explode() //This needs tuning.
 	if(!src.detonate) return
@@ -1160,10 +1626,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 	if (ismob(loc))
 		var/mob/M = loc
-		M.show_message("\red Your [src] explodes!", 1)
+		M.show_message("<span class='warning'>Your [src] explodes!</span>", 1)
 
 	if(T)
-		T.hotspot_expose(700,125)
+		T.hotspot_expose(700,125,surfaces=istype(loc,/turf))
 
 		explosion(T, -1, -1, 2, 3)
 
@@ -1178,10 +1644,19 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		src.pai.loc = get_turf(src.loc)
 	..()
 
-/obj/item/device/pda/clown/HasEntered(AM as mob|obj) //Clown PDA is slippery.
+/obj/item/device/pda/Del()
+	var/loop_count = 0
+	while(null in PDAs)
+		PDAs.Remove(null)
+		if(loop_count > 10) break
+		loop_count++
+	PDAs -= src
+	..()
+
+/obj/item/device/pda/clown/Crossed(AM as mob|obj) //Clown PDA is slippery.
 	if (istype(AM, /mob/living/carbon))
 		var/mob/M =	AM
-		if ((istype(M, /mob/living/carbon/human) && (istype(M:shoes, /obj/item/clothing/shoes) && M:shoes.flags&NOSLIP)) || M.m_intent == "walk")
+		if ((istype(M, /mob/living/carbon/human) && (istype(M:shoes, /obj/item/clothing/shoes) && M:shoes.flags&NOSLIP)) || M.m_intent == "walk" || M.lying)
 			return
 
 		if ((istype(M, /mob/living/carbon/human) && (M.real_name != src.owner) && (istype(src.cartridge, /obj/item/weapon/cartridge/clown))))
@@ -1189,7 +1664,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				src.cartridge:honk_charges++
 
 		M.stop_pulling()
-		M << "\blue You slipped on the PDA!"
+		M << "<span class='notice'>You slipped on the PDA!</span>"
 		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
 		M.Stun(8)
 		M.Weaken(5)

@@ -104,14 +104,14 @@
 				t += "<td><a href='?src=\ref[src];show_net=[curNetId]'>\[+\]</a> <b>" + curNetId + "<b></td>"
 		t += "</table>"
 		if(empty)
-			t += "\red No networks connected.<br>"
+			t += "<span class='warning'>No networks connected.<br></span>"
 		t += "<A href='?src=\ref[src];refresh=1'>Refresh</A><BR>"
 		t += "<A href='?src=\ref[src];close=1'>Close</A><BR>"
 		user << browse(t, "window=lockdown;size=550x600")
 		onclose(user, "lockdown")
 
 	Topic(href, href_list)
-		..()
+		if(..()) return 1
 
 		if( href_list["close"] )
 			usr << browse(null, "window=lockdown")

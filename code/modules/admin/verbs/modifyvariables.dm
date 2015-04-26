@@ -44,7 +44,7 @@ var/list/forbidden_varedit_object_types = list(
 	switch(class)
 
 		if("text")
-			var_value = input("Enter new text:","Text") as null|text
+			var_value = input("Enter new text:","Text") as null|message
 
 		if("num")
 			var_value = input("Enter new number:","Num") as null|num
@@ -93,7 +93,7 @@ var/list/forbidden_varedit_object_types = list(
 	switch(class)
 
 		if("text")
-			var_value = input("Enter new text:","Text") as text
+			var_value = input("Enter new text:","Text") as message
 
 		if("num")
 			var_value = input("Enter new number:","Num") as num
@@ -241,7 +241,7 @@ var/list/forbidden_varedit_object_types = list(
 			return
 
 		if("text")
-			L[L.Find(variable)] = input("Enter new text:","Text") as text
+			L[L.Find(variable)] = input("Enter new text:","Text") as message
 
 		if("num")
 			L[L.Find(variable)] = input("Enter new number:","Num") as num
@@ -272,7 +272,7 @@ var/list/forbidden_varedit_object_types = list(
 
 	for(var/p in forbidden_varedit_object_types)
 		if( istype(O,p) )
-			usr << "\red It is forbidden to edit this object's variables."
+			usr << "<span class='warning'>It is forbidden to edit this object's variables.</span>"
 			return
 
 	var/class
@@ -443,7 +443,7 @@ var/list/forbidden_varedit_object_types = list(
 			return .(O.vars[variable])
 
 		if("text")
-			var/var_new = input("Enter new text:","Text",O.vars[variable]) as null|text
+			var/var_new = input("Enter new text:","Text",O.vars[variable]) as null|message
 			if(var_new==null) return
 			O.vars[variable] = var_new
 

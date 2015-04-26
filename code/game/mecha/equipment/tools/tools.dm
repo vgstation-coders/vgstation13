@@ -53,12 +53,12 @@
 		else if(istype(target,/mob/living))
 			var/mob/living/M = target
 			if(M.stat>1) return
-			if(chassis.occupant.a_intent == "hurt")
+			if(chassis.occupant.a_intent == I_HURT)
 				M.take_overall_damage(dam_force)
 				M.adjustOxyLoss(round(dam_force/2))
 				M.updatehealth()
-				occupant_message("\red You squeeze [target] with [src.name]. Something cracks.")
-				chassis.visible_message("\red [chassis] squeezes [target].")
+				occupant_message("<span class='warning'>You squeeze [target] with [src.name]. Something cracks.</span>")
+				chassis.visible_message("<span class='warning'>[chassis] squeezes [target].</span>")
 				M.attack_log +="\[[time_stamp()]\]<font color='orange'> Mech Squeezed by [chassis.occupant.name] ([chassis.occupant.ckey]) with [src.name]</font>"
 				chassis.occupant.attack_log += "\[[time_stamp()]\]<font color='red'> Mech Squeezed [M.name] ([M.ckey]) with [src.name]</font>"
 				log_attack("<font color='red'>[chassis.occupant.name] ([chassis.occupant.ckey]) mech squeezed [M.name] ([M.ckey]) with [src.name]</font>" )
@@ -143,7 +143,6 @@
 	desc = "This is an upgraded version of the drill that'll pierce the heavens! (Can be attached to: Combat and Engineering Exosuits)"
 	icon_state = "mecha_diamond_drill"
 	origin_tech = "materials=4;engineering=3"
-	construction_cost = list("iron"=10000,"diamond"=6500)
 	equip_cooldown = 20
 	force = 15
 
@@ -215,13 +214,6 @@
 	energy_drain = 0
 	range = MELEE|RANGED
 
-	New()
-		reagents = new/datum/reagents(200)
-		reagents.my_atom = src
-		reagents.add_reagent("water", 200)
-		..()
-		return
-
 	action(atom/target) //copypasted from extinguisher. TODO: Rewrite from scratch.
 		if(!action_checks(target) || get_dist(chassis, target)>3) return
 		if(get_dist(chassis, target)>2) return
@@ -230,7 +222,7 @@
 			if(istype(target, /obj/structure/reagent_dispensers/watertank) && get_dist(chassis,target) <= 1)
 				var/obj/o = target
 				o.reagents.trans_to(src, 200)
-				occupant_message("\blue Extinguisher refilled")
+				occupant_message("<span class='notice'>Extinguisher refilled</span>")
 				playsound(chassis, 'sound/effects/refill.ogg', 50, 1, -6)
 			else
 				if(src.reagents.total_volume > 0)
@@ -278,6 +270,10 @@
 				return 1
 		return 0
 
+/obj/item/mecha_parts/mecha_equipment/tool/extinguisher/New()
+	. = ..()
+	create_reagents(200)
+	reagents.add_reagent("water", 200)
 
 /obj/item/mecha_parts/mecha_equipment/tool/rcd
 	name = "Mounted RCD"
@@ -287,8 +283,6 @@
 	equip_cooldown = 10
 	energy_drain = 250
 	range = MELEE|RANGED
-	construction_time = 1200
-	construction_cost = list("iron"=30000,"plasma"=25000,"silver"=20000,"gold"=20000)
 	var/mode = 0 //0 - deconstruct, 1 - wall or floor, 2 - airlock.
 	var/disabled = 0 //malf
 
@@ -319,7 +313,7 @@
 					if(do_after_cooldown(target))
 						if(disabled) return
 						chassis.spark_system.start()
-						target:ChangeTurf(/turf/space)
+						target:ChangeTurf(target:under_turf)
 						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
 						chassis.use_power(energy_drain)
 				else if (istype(target, /obj/machinery/door/airlock))
@@ -337,7 +331,7 @@
 					set_ready_state(0)
 					if(do_after_cooldown(target))
 						if(disabled) return
-						target:ChangeTurf(/turf/simulated/floor/plating)
+						target:ChangeTurf(/turf/simulated/floor/plating/airless)
 						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
 						chassis.spark_system.start()
 						chassis.use_power(energy_drain*2)
@@ -538,7 +532,6 @@
 	equip_cooldown = 10
 	energy_drain = 50
 	range = 0
-	construction_cost = list("iron"=20000,"silver"=5000)
 	var/deflect_coeff = 1.15
 	var/damage_coeff = 0.8
 
@@ -568,7 +561,7 @@
 			return chassis.dynattackby(W,user)
 		chassis.log_message("Attacked by [W]. Attacker - [user]")
 		if(prob(chassis.deflect_chance*deflect_coeff))
-			user << "\red The [W] bounces off [chassis] armor."
+			user << "<span class='warning'>The [W] bounces off [chassis] armor.</span>"
 			chassis.log_append_to_last("Armor saved.")
 		else
 			chassis.occupant_message("<font color='red'><b>[user] hits [chassis] with [W].</b></font>")
@@ -589,7 +582,6 @@
 	equip_cooldown = 10
 	energy_drain = 50
 	range = 0
-	construction_cost = list("iron"=20000,"gold"=5000)
 	var/deflect_coeff = 1.15
 	var/damage_coeff = 0.8
 
@@ -620,7 +612,7 @@
 		if(!action_checks(src))
 			return chassis.dynbulletdamage(Proj)
 		if(prob(chassis.deflect_chance*deflect_coeff))
-			chassis.occupant_message("\blue The armor deflects incoming projectile.")
+			chassis.occupant_message("<span class='notice'>The armor deflects incoming projectile.</span>")
 			chassis.visible_message("The [chassis.name] armor deflects the projectile")
 			chassis.log_append_to_last("Armor saved.")
 		else
@@ -636,7 +628,7 @@
 		if(!action_checks(A))
 			return chassis.dynhitby(A)
 		if(prob(chassis.deflect_chance*deflect_coeff) || istype(A, /mob/living) || istype(A, /obj/item/mecha_parts/mecha_tracking))
-			chassis.occupant_message("\blue The [A] bounces off the armor.")
+			chassis.occupant_message("<span class='notice'>The [A] bounces off the armor.</span>")
 			chassis.visible_message("The [A] bounces off the [chassis] armor")
 			chassis.log_append_to_last("Armor saved.")
 			if(istype(A, /mob/living))
@@ -661,7 +653,6 @@
 	equip_cooldown = 20
 	energy_drain = 100
 	range = 0
-	construction_cost = list("iron"=10000,"gold"=1000,"silver"=2000,"glass"=5000)
 	var/health_boost = 2
 	var/datum/global_iterator/pr_repair_droid
 	var/icon/droid_overlay
@@ -751,7 +742,6 @@
 	equip_cooldown = 10
 	energy_drain = 0
 	range = 0
-	construction_cost = list("iron"=10000,"gold"=2000,"silver"=3000,"glass"=2000)
 	var/datum/global_iterator/pr_energy_relay
 	var/coeff = 100
 	var/list/use_channels = list(EQUIP,ENVIRON,LIGHT)
@@ -863,7 +853,6 @@
 	equip_cooldown = 10
 	energy_drain = 0
 	range = MELEE
-	construction_cost = list("iron"=10000,"silver"=500,"glass"=1000)
 	var/datum/global_iterator/pr_mech_generator
 	var/coeff = 100
 	var/obj/item/stack/sheet/fuel
@@ -1000,7 +989,6 @@
 	desc = "Generates power using uranium. Pollutes the environment."
 	icon_state = "tesla"
 	origin_tech = "powerstorage=3;engineering=3"
-	construction_cost = list("iron"=10000,"silver"=500,"glass"=1000)
 	max_fuel = 50000
 	fuel_per_cycle_idle = 10
 	fuel_per_cycle_active = 30
@@ -1082,12 +1070,12 @@
 		else if(istype(target,/mob/living))
 			var/mob/living/M = target
 			if(M.stat>1) return
-			if(chassis.occupant.a_intent == "hurt")
-				chassis.occupant_message("\red You obliterate [target] with [src.name], leaving blood and guts everywhere.")
-				chassis.visible_message("\red [chassis] destroys [target] in an unholy fury.")
-			if(chassis.occupant.a_intent == "disarm")
-				chassis.occupant_message("\red You tear [target]'s limbs off with [src.name].")
-				chassis.visible_message("\red [chassis] rips [target]'s arms off.")
+			if(chassis.occupant.a_intent == I_HURT)
+				chassis.occupant_message("<span class='warning'>You obliterate [target] with [src.name], leaving blood and guts everywhere.</span>")
+				chassis.visible_message("<span class='warning'>[chassis] destroys [target] in an unholy fury.</span>")
+			if(chassis.occupant.a_intent == I_DISARM)
+				chassis.occupant_message("<span class='warning'>You tear [target]'s limbs off with [src.name].</span>")
+				chassis.visible_message("<span class='warning'>[chassis] rips [target]'s arms off.</span>")
 			else
 				step_away(M,chassis)
 				chassis.occupant_message("You smash into [target], sending them flying.")

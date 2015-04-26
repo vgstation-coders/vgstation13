@@ -16,6 +16,8 @@
 	var/temp = null
 	var/printing = null
 
+	l_color = "#0000FF"
+
 /obj/machinery/computer/med_data/attack_ai(user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)
@@ -158,8 +160,7 @@
 			else
 				var/obj/item/I = usr.get_active_hand()
 				if (istype(I, /obj/item/weapon/card/id))
-					usr.drop_item()
-					I.loc = src
+					usr.drop_item(I, src)
 					src.scan = I
 		else if (href_list["logout"])
 			src.authenticated = null
@@ -436,8 +437,9 @@
 					src.active2.fields[text("com_[]", href_list["del_c"])] = "<B>Deleted</B>"
 
 			if (href_list["search"])
+				var/norange = (usr.mutations && usr.mutations.len && (M_TK in usr.mutations))
 				var/t1 = input("Search String: (Name, DNA, or ID)", "Med. records", null, null)  as text
-				if ((!( t1 ) || usr.stat || !( src.authenticated ) || usr.restrained() || ((!in_range(src, usr)) && (!istype(usr, /mob/living/silicon)))))
+				if ((!( t1 ) || usr.stat || !( src.authenticated ) || usr.restrained() || ((!in_range(src, usr)) && (!istype(usr, /mob/living/silicon)) && !norange)))
 					return
 				src.active1 = null
 				src.active2 = null
@@ -516,3 +518,12 @@
 	name = "Medical Laptop"
 	desc = "Cheap Nanotrasen Laptop."
 	icon_state = "medlaptop"
+
+	machine_flags = 0
+
+	anchored = 0
+	density = 0
+
+	l_color = "#00FF00"
+
+

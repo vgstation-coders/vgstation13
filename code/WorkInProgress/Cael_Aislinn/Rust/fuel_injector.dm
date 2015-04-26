@@ -6,7 +6,6 @@
 
 	density = 1
 	anchored = 0
-	var/state = 0
 	var/locked = 0
 	req_access = list(access_engine)
 
@@ -19,10 +18,11 @@
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 500
-	directwired = 0
 	var/remote_access_enabled = 1
 	var/cached_power_avail = 0
 	var/emergency_insert_ready = 0
+
+	machine_flags = WRENCHMOVE | FIXED2WORK | WELD_FIXED | EMAGGABLE
 
 /obj/machinery/power/rust_fuel_injector/process()
 	if(injecting)
@@ -33,91 +33,48 @@
 
 	cached_power_avail = avail()
 
+/obj/machinery/power/rust_fuel_injector/wrenchAnchor(mob/user)
+	if(injecting)
+		user << "Turn off the [src] first."
+		return -1
+	return ..()
+
+/obj/machinery/power/rust_fuel_injector/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
+	if(..() == 1)
+		switch(state)
+			if(1)
+				disconnect_from_network()
+			if(2)
+				connect_to_network()
+		return 1
+	return -1
+
+/obj/machinery/power/rust_fuel_injector/emag(mob/user)
+	if(!emagged)
+		locked = 0
+		emagged = 1
+		user.visible_message("[user.name] emags the [src.name].","<span class='warning'>You short out the lock.</span>")
+		return 1
+	return -1
 /obj/machinery/power/rust_fuel_injector/attackby(obj/item/W, mob/user)
-
-	if(istype(W, /obj/item/weapon/wrench))
-		if(injecting)
-			user << "Turn off the [src] first."
-			return
-		switch(state)
-			if(0)
-				state = 1
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
-				user.visible_message("[user.name] secures [src.name] to the floor.", \
-					"You secure the external reinforcing bolts to the floor.", \
-					"You hear a ratchet")
-				src.anchored = 1
-			if(1)
-				state = 0
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
-				user.visible_message("[user.name] unsecures [src.name] reinforcing bolts from the floor.", \
-					"You undo the external reinforcing bolts.", \
-					"You hear a ratchet")
-				src.anchored = 0
-			if(2)
-				user << "\red The [src.name] needs to be unwelded from the floor."
-		return
-
-	if(istype(W, /obj/item/weapon/weldingtool))
-		var/obj/item/weapon/weldingtool/WT = W
-		if(injecting)
-			user << "Turn off the [src] first."
-			return
-		switch(state)
-			if(0)
-				user << "\red The [src.name] needs to be wrenched to the floor."
-			if(1)
-				if (WT.remove_fuel(0,user))
-					playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
-					user.visible_message("[user.name] starts to weld the [src.name] to the floor.", \
-						"You start to weld the [src] to the floor.", \
-						"You hear welding")
-					if (do_after(user,20))
-						if(!src || !WT.isOn()) return
-						state = 2
-						user << "You weld the [src] to the floor."
-						connect_to_network()
-						//src.directwired = 1
-				else
-					user << "\red You need more welding fuel to complete this task."
-			if(2)
-				if (WT.remove_fuel(0,user))
-					playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
-					user.visible_message("[user.name] starts to cut the [src.name] free from the floor.", \
-						"You start to cut the [src] free from the floor.", \
-						"You hear welding")
-					if (do_after(user,20))
-						if(!src || !WT.isOn()) return
-						state = 1
-						user << "You cut the [src] free from the floor."
-						disconnect_from_network()
-						//src.directwired = 0
-				else
-					user << "\red You need more welding fuel to complete this task."
-		return
+	if(..())
+		return 1
 
 	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
 		if(emagged)
-			user << "\red The lock seems to be broken"
+			user << "<span class='warning'>The lock seems to be broken</span>"
 			return
 		if(src.allowed(user))
 			src.locked = !src.locked
 			user << "The controls are now [src.locked ? "locked." : "unlocked."]"
 		else
-			user << "\red Access denied."
-		return
-
-	if(istype(W, /obj/item/weapon/card/emag) && !emagged)
-		locked = 0
-		emagged = 1
-		user.visible_message("[user.name] emags the [src.name].","\red You short out the lock.")
+			user << "<span class='warning'>Access denied.</span>"
 		return
 
 	if(istype(W, /obj/item/weapon/fuel_assembly) && !cur_assembly)
 		if(emergency_insert_ready)
 			cur_assembly = W
-			user.drop_item()
-			W.loc = src
+			user.drop_item(W, src)
 			emergency_insert_ready = 0
 			return
 
@@ -179,7 +136,7 @@
 	user.set_machine(src)
 
 /obj/machinery/power/rust_fuel_injector/Topic(href, href_list)
-	..()
+	if(..()) return 1
 
 	if( href_list["modify_tag"] )
 		id_tag = input("Enter new ID tag", "Modifying ID tag") as text|null
@@ -207,7 +164,7 @@
 	if( href_list["fuel_usage"] )
 		var/new_usage = text2num(input("Enter new fuel usage (0.01% - 100%)", "Modifying fuel usage", fuel_usage * 100))
 		if(!new_usage)
-			usr << "\red That's not a valid number."
+			usr << "<span class='warning'>That's not a valid number.</span>"
 			return
 		new_usage = max(new_usage, 0.01)
 		new_usage = min(new_usage, 100)
@@ -288,17 +245,17 @@
 
 		break
 	if(success)
-		src.visible_message("\blue \icon[src] a green light flashes on [src].")
+		src.visible_message("<span class='notice'>\icon[src] a green light flashes on [src].</span>")
 		updateDialog()
 	else
-		src.visible_message("\red \icon[src] a red light flashes on [src].")
+		src.visible_message("<span class='warning'>\icon[src] a red light flashes on [src].</span>")
 
 /obj/machinery/power/rust_fuel_injector/verb/rotate_clock()
 	set category = "Object"
 	set name = "Rotate Generator (Clockwise)"
 	set src in view(1)
 
-	if (usr.stat || usr.restrained()  || anchored)
+	if (usr.stat || usr.restrained()  || anchored || (usr.status_flags & FAKEDEATH))
 		return
 
 	src.dir = turn(src.dir, 90)
@@ -308,7 +265,7 @@
 	set name = "Rotate Generator (Counterclockwise)"
 	set src in view(1)
 
-	if (usr.stat || usr.restrained()  || anchored)
+	if (usr.stat || usr.restrained()  || anchored || (usr.status_flags & FAKEDEATH))
 		return
 
 	src.dir = turn(src.dir, -90)

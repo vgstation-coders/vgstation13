@@ -1,12 +1,7 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
-
-
-
-
-
 /obj/machinery/computer/telecomms/traffic
 	name = "Telecommunications Traffic Control"
 	icon_state = "computer_generic"
+	circuit = "/obj/item/weapon/circuitboard/comm_traffic"
 
 	var/screen = 0				// the screen number:
 	var/list/servers = list()	// the servers located by the computer
@@ -22,6 +17,8 @@
 	var/obj/item/weapon/card/id/auth = null
 	var/list/access_log = list()
 	var/process = 0
+
+	l_color = "#50AB00"
 
 	req_access = list(access_tcomsat)
 
@@ -58,6 +55,8 @@
 		return
 
 	// For the typer, the input is enabled. Buffer the typed text
+	if(!istype(editingcode))
+		return
 	storedcode = "[winget(editingcode, "tcscode", "text")]"
 	winset(editingcode, "tcscode", "is-disabled=false")
 
@@ -186,8 +185,7 @@
 				var/obj/item/weapon/card/id/I = C.get_active_hand()
 				if(istype(I))
 					if(check_access(I))
-						C.drop_item()
-						I.loc = src
+						C.drop_item(I, src)
 						auth = I
 						create_log("has logged in.", usr)
 			else
@@ -203,7 +201,7 @@
 		return
 
 	if(!auth && !issilicon(usr) && !emagged)
-		usr << "\red ACCESS DENIED."
+		usr << "<span class='warning'>ACCESS DENIED.</span>"
 		return
 
 	if(href_list["viewserver"])
@@ -287,39 +285,15 @@
 	return
 
 /obj/machinery/computer/telecomms/traffic/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
-	if(istype(D, /obj/item/weapon/screwdriver))
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-		if(do_after(user, 20))
-			if (src.stat & BROKEN)
-				user << "\blue The broken glass falls out."
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-				getFromPool(/obj/item/weapon/shard, loc)
-				var/obj/item/weapon/circuitboard/comm_traffic/M = new /obj/item/weapon/circuitboard/comm_traffic( A )
-				for (var/obj/C in src)
-					C.loc = src.loc
-				A.circuit = M
-				A.state = 3
-				A.icon_state = "3"
-				A.anchored = 1
-				del(src)
-			else
-				user << "\blue You disconnect the monitor."
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-				var/obj/item/weapon/circuitboard/comm_traffic/M = new /obj/item/weapon/circuitboard/comm_traffic( A )
-				for (var/obj/C in src)
-					C.loc = src.loc
-				A.circuit = M
-				A.state = 4
-				A.icon_state = "4"
-				A.anchored = 1
-				del(src)
-	else if(istype(D, /obj/item/weapon/card/emag) && !emagged)
+	return ..()
+
+/obj/machinery/computer/telecomms/emag(mob/user)
+	if(!emagged)
 		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
-		user << "\blue You you disable the security protocols"
+		user << "<span class='notice'>You you disable the security protocols</span>"
 	src.updateUsrDialog()
-	return
-
+	return 1
 /obj/machinery/computer/telecomms/traffic/proc/canAccess(var/mob/user)
 	if(issilicon(user) || in_range(user, src))
 		return 1

@@ -1,3 +1,4 @@
+
 /*
  * Use: Caches beam state images and holds turfs that had these images overlaid.
  * Structure:
@@ -114,7 +115,7 @@ var/list/beam_master = list()
 					del(X)
 				break
 		spawn
-			while(src) //Move until we hit something
+			while(loc) //Move until we hit something
 				if(first)
 					icon = midicon
 				if((!( current ) || loc == current)) //If we pass our target
@@ -129,7 +130,7 @@ var/list/beam_master = list()
 					var/turf/simulated/floor/f = current
 					if(f && istype(f))
 						f.break_tile()
-						f.hotspot_expose(1000,CELL_VOLUME)
+						f.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
 				if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
 					//world << "deleting"
 					//del(src) //Delete if it passes the world edge
@@ -180,6 +181,8 @@ var/list/beam_master = list()
 /obj/item/projectile/beam
 	name = "laser"
 	icon_state = "laser"
+	invisibility = 101
+
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
 	damage = 30
 	damage_type = BURN
@@ -188,10 +191,10 @@ var/list/beam_master = list()
 	var/frequency = 1
 
 	process()
+		var/lastposition = loc
 		var/reference = "\ref[src]" //So we do not have to recalculate it a ton
 		var/first = 1 //So we don't make the overlay in the same tile as the firer
-		spawn while(src) //Move until we hit something
-
+		spawn while(loc) //Move until we hit something
 			if((!( current ) || loc == current)) //If we pass our target
 				current = locate(min(max(x + xo, 1), world.maxx), min(max(y + yo, 1), world.maxy), z)
 			if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
@@ -200,9 +203,11 @@ var/list/beam_master = list()
 				return
 			step_towards(src, current) //Move~
 
-			if (isnull(loc))
+			if(isnull(loc))
 				return
-
+			if(lastposition == loc)
+				kill_count = 0
+			lastposition = loc
 			if(kill_count < 1)
 				//del(src)
 				returnToPool(src)
@@ -241,72 +246,65 @@ var/list/beam_master = list()
 				first = 0
 		cleanup(reference)
 		return
-	dumbfire(var/dir)
-		var/reference = "\ref[src]" //So we do not have to recalculate it a ton
-		var/first = 1 //So we don't make the overlay in the same tile as the firer
-		if(!dir)
-			//del(src)
-			returnToPool(src)
-		spawn while(src) //Move until we hit something
+
+/obj/item/projectile/beam/dumbfire(var/dir)
+	var/reference = "\ref[src]" // So we do not have to recalculate it a ton.
+
+	spawn(0)
+		var/target_dir = dir ? dir : src.dir// TODO: remove dir arg. Or don't because the way this was set up without it broke spacepods.
+
+		while(loc) // Move until we hit something.
 			if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
-				//del(src) //Delete if it passes the world edge
 				returnToPool(src)
-				return
-			var/turf/T = get_step(src, dir)
-			step_towards(src, T) //Move~
+				break
 
-			if(kill_count < 1)
-				//del(src)
+			step(src, target_dir) // Move.
+
+			if(bumped)
+				break
+
+			if(kill_count-- < 1)
 				returnToPool(src)
-			kill_count--
+				break
 
-			if(!bumped && !isturf(original))
-				if(loc == get_turf(original))
-					if(!(original in permutated))
-						Bump(original)
+			// Add the overlay as we pass over tiles.
 
-			if(!first) //Add the overlay as we pass over tiles
-				var/target_dir = dir //So we don't call this too much
+			// If the icon has not been added yet.
+			if(!beam_master.Find("[icon_state][target_dir]"))
+				beam_master["[icon_state][target_dir]"] = image(icon, icon_state, 10, target_dir) // Generate, and cache it!
 
-				//If the icon has not been added yet
-				if( !("[icon_state][target_dir]" in beam_master) )
-					var/image/I = image(icon,icon_state,10,target_dir) //Generate it.
-					beam_master["[icon_state][target_dir]"] = I //And cache it!
+			// Finally add the overlay
+			loc.overlays.Add(beam_master["[icon_state][target_dir]"])
 
-				//Finally add the overlay
-				src.loc.overlays += beam_master["[icon_state][target_dir]"]
+			// Add the turf to a list in the beam master so they can be cleaned up easily.
+			if(beam_master.Find(reference))
+				var/list/turf_master = beam_master[reference]
 
-				//Add the turf to a list in the beam master so they can be cleaned up easily.
-				if(reference in beam_master)
-					var/list/turf_master = beam_master[reference]
-					if("[icon_state][target_dir]" in turf_master)
-						var/list/turfs = turf_master["[icon_state][target_dir]"]
-						turfs += loc
-					else
-						turf_master["[icon_state][target_dir]"] = list(loc)
+				if(turf_master.Find("[icon_state][target_dir]"))
+					turf_master["[icon_state][target_dir]"] += loc
 				else
-					var/list/turfs = list()
-					turfs["[icon_state][target_dir]"] = list(loc)
-					beam_master[reference] = turfs
+					turf_master["[icon_state][target_dir]"] = list(loc)
 			else
-				first = 0
-		cleanup(reference)
-		return
+				var/list/turfs = new
+				turfs["[icon_state][target_dir]"] = list(loc)
+				beam_master[reference] = turfs
 
+	cleanup(reference)
 
-	Destroy()
-		cleanup("\ref[src]")
-		..()
+/obj/item/projectile/beam/proc/cleanup(const/reference)
+	src = null // Redundant.
+				// No, if it's not set to null this proc will be silently killed.
 
-	proc/cleanup(reference) //Waits .3 seconds then removes the overlay.
-		src = null // Redundant.
-		spawn(3)
-			var/list/turf_master = beam_master[reference]
-			for(var/laser_state in turf_master)
-				var/list/turfs = turf_master[laser_state]
-				for(var/turf/T in turfs)
-					T.overlays -= beam_master[laser_state]
-		return
+	spawn(3) // Waits .3 seconds then removes the overlay.
+		var/list/turf_master = beam_master[reference]
+
+		for(var/laser_state in turf_master)
+			var/list/turfs = turf_master[laser_state]
+
+			for(var/turf/T in turfs)
+				T.overlays.Remove(beam_master[laser_state])
+
+			turfs.len = 0
 
 /obj/item/projectile/beam/practice
 	name = "laser"
@@ -344,6 +342,8 @@ var/list/beam_master = list()
 	icon_state = "emitter"
 	damage = 30
 
+/obj/item/projectile/beam/emitter/singularity_pull()
+	return
 
 /obj/item/projectile/beam/lastertag/blue
 	name = "lasertag beam"

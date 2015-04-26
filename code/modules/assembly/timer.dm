@@ -60,7 +60,7 @@
 
 
 	update_icon()
-		overlays.Cut()
+		overlays.len = 0
 		attached_overlays = list()
 		if(timing)
 			overlays += "timer_timing"
@@ -72,7 +72,7 @@
 
 	interact(mob/user as mob)//TODO: Have this use the wires
 		if(!secured)
-			user.show_message("\red The [name] is unsecured!")
+			user.show_message("<span class='warning'>The [name] is unsecured!</span>")
 			return 0
 		var/second = time % 60
 		var/minute = (time - second) / 60

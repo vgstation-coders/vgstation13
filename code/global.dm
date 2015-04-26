@@ -1,23 +1,22 @@
-//#define TESTING
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
+//List of ckeys that have de-adminned themselves during this round
+var/global/list/deadmins = list()
 
 // List of types and how many instances of each type there are.
 var/global/list/type_instances[0]
+
+/var/global/datum/map/active/map = new() //Current loaded map
+//Defined in its .dm, see maps/_map.dm for more info.
 
 var/global/obj/effect/datacore/data_core = null
 var/global/obj/effect/overlay/plmaster = null
 var/global/obj/effect/overlay/slmaster = null
 
+var/global/list/account_DBs = list()
 
-var/global/list/machines = list()
-var/global/list/processing_objects = list()
-var/global/list/active_diseases = list()
-var/global/list/events = list()
-		//items that ask to be called every cycle
-
-var/global/defer_powernet_rebuild = 0		// true if net rebuild will be called manually after an event
-
+// Used only by space turfs. TODO: Remove.
+// The comment below is no longer accurate.
 var/global/list/global_map = null
+
 	//list/global_map = list(list(1,5),list(4,3))//an array of map Z levels.
 	//Resulting sector map looks like
 	//|_1_|_4_|
@@ -28,8 +27,8 @@ var/global/list/global_map = null
 	//3 - AI satellite
 	//5 - empty space
 
+var/global/datum/universal_state/universe = new
 
-	//////////////
 var/list/paper_tag_whitelist = list("center","p","div","span","h1","h2","h3","h4","h5","h6","hr","pre",	\
 	"big","small","font","i","u","b","s","sub","sup","tt","br","hr","ol","ul","li","caption","col",	\
 	"table","td","th","tr")
@@ -50,7 +49,7 @@ var/GLASSESBLOCK = 0
 var/EPILEPSYBLOCK = 0
 var/TWITCHBLOCK = 0
 var/NERVOUSBLOCK = 0
-var/MONKEYBLOCK = 50 // Monkey block will always be the DNA_SE_LENGTH
+var/MONKEYBLOCK = 54 // Monkey block will always be the DNA_SE_LENGTH
 
 var/BLOCKADD = 0
 var/DIFFMUT = 0
@@ -82,11 +81,14 @@ var/SCRAMBLEBLOCK = 0
 var/TOXICFARTBLOCK = 0
 var/STRONGBLOCK = 0
 var/HORNSBLOCK = 0
+var/SMILEBLOCK = 0
+var/ELVISBLOCK = 0
 
 // Powers
 var/SOBERBLOCK = 0
 var/PSYRESISTBLOCK = 0
-var/SHADOWBLOCK = 0
+//var/SHADOWBLOCK = 0
+var/FARSIGHTBLOCK = 0
 var/CHAMELEONBLOCK = 0
 var/CRYOBLOCK = 0
 var/EATBLOCK = 0
@@ -96,6 +98,17 @@ var/EMPATHBLOCK = 0
 var/SUPERFARTBLOCK = 0
 var/IMMOLATEBLOCK = 0
 var/POLYMORPHBLOCK = 0
+
+///////////////////////////////
+// /vg/ Mutations
+///////////////////////////////
+var/LOUDBLOCK = 0
+var/WHISPERBLOCK = 0
+var/DIZZYBLOCK = 0
+var/SANSBLOCK = 0
+
+
+
 
 var/skipupdate = 0
 	///////////////
@@ -109,9 +122,10 @@ var/midicon = null
 var/endicon = null
 var/diary = null
 var/diaryofmeanpeople = null
+var/admin_diary = null
 var/href_logfile = null
 var/station_name = null
-var/game_version = "adsfasdfasdf"
+var/game_version = "veegee"
 var/changelog_hash = ""
 var/game_year = (text2num(time2text(world.realtime, "YYYY")) + 544)
 
@@ -167,7 +181,19 @@ var/list/latejoin = list()
 var/list/prisonwarp = list()	//prisoners go to these
 var/list/holdingfacility = list()	//captured people go here
 var/list/xeno_spawn = list()//Aliens spawn at these.
-//	list/mazewarp = list()
+var/list/endgame_safespawns = list()
+var/list/endgame_exits = list()
+var/list/meteor_materialkit = list()
+var/list/meteor_bombkit = list()
+var/list/meteor_bombkitextra = list()
+var/list/meteor_tankkit = list()
+var/list/meteor_canisterkit = list()
+var/list/meteor_buildkit = list()
+var/list/meteor_pizzakit = list()
+var/list/meteor_panickit = list()
+var/list/meteor_shieldkit = list()
+var/list/meteor_genkit = list()
+var/list/meteor_breachkit = list()
 var/list/tdome1 = list()
 var/list/tdome2 = list()
 var/list/tdomeobserve = list()
@@ -180,17 +206,18 @@ var/list/ninjastart = list()
 var/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
 var/list/alldirs = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
 
+
+var/global/universal_cult_chat = 0 //if set to 1, even human cultists can use cultchat
+
 var/datum/station_state/start_state = null
 var/datum/configuration/config = null
-var/datum/sun/sun = null
 
 var/list/combatlog = list()
 var/list/IClog = list()
 var/list/OOClog = list()
 var/list/adminlog = list()
 
-
-var/list/powernets = list()
+var/suspend_alert = 0
 
 var/Debug = 0	// global debug switch
 var/Debug2 = 0
@@ -273,3 +300,83 @@ var/DBConnection/dbcon_old = new()	//Tgstation database (Old database) - See the
 
 // Recall time limit:  2 hours
 var/recall_time_limit=72000
+
+//Goonstyle scoreboard
+// NOW AN ASSOCIATIVE LIST
+// NO FUCKING EXCUSE FOR THE ATROCITY THAT WAS
+var/list/score=list(
+	"crewscore"      = 0, // this is the overall var/score for the whole round
+	"stuffshipped"   = 0, // how many useful items have cargo shipped out?
+	"stuffharvested" = 0, // how many harvests have hydroponics done?
+	"oremined"       = 0, // obvious
+	"researchdone"   = 0,
+	"eventsendured"  = 0, // how many random events did the station survive?
+	"powerloss"      = 0, // how many APCs have poor charge?
+	"escapees"       = 0, // how many people got out alive?
+	"deadcrew"       = 0, // dead bodies on the station, oh no
+	"mess"           = 0, // how much poo, puke, gibs, etc went uncleaned
+	"meals"          = 0,
+	"disease"        = 0, // how many rampant, uncured diseases are on board the station
+	"deadcommand"    = 0, // used during rev, how many command staff perished
+	"arrested"       = 0, // how many traitors/revs/whatever are alive in the brig
+	"traitorswon"    = 0, // how many traitors were successful?
+	"allarrested"    = 0, // did the crew catch all the enemies alive?
+	"opkilled"       = 0, // used during nuke mode, how many operatives died?
+	"disc"           = 0, // is the disc safe and secure?
+	"nuked"          = 0, // was the station blown into little bits?
+
+	// these ones are mainly for the stat panel
+	"powerbonus"    = 0, // if all APCs on the station are running optimally, big bonus
+	"messbonus"     = 0, // if there are no messes on the station anywhere, huge bonus
+	"deadaipenalty" = 0, // is the AI dead? if so, big penalty
+	"foodeaten"     = 0, // nom nom nom
+	"clownabuse"    = 0, // how many times a clown was punched, struck or otherwise maligned
+	"richestname"   = null, // this is all stuff to show who was the richest alive on the shuttle
+	"richestjob"    = null,  // kinda pointless if you dont have a money system i guess
+	"richestcash"   = 0,
+	"richestkey"    = null,
+	"dmgestname"    = null, // who had the most damage on the shuttle (but was still alive)
+	"dmgestjob"     = null,
+	"dmgestdamage"  = 0,
+	"dmgestkey"     = null,
+
+	"arenafights"   = 0,
+	"arenabest"		= null,
+)
+
+// Mostly used for ban systems.
+// Initialized on world/New()
+var/global/event/on_login
+var/global/event/on_ban
+var/global/event/on_unban
+
+// List of /plugins
+var/global/list/plugins = list()
+
+// Space get this to return for things i guess?
+var/global/datum/gas_mixture/space_gas = new
+
+//Announcement intercom
+var/global/obj/item/device/radio/intercom/universe/announcement_intercom = new
+
+//used by jump-to-area etc. Updated by area/updateName()
+var/list/sortedAreas = list()
+
+var/global/bomberman_mode = 0
+var/global/bomberman_hurt = 0
+var/global/bomberman_destroy = 0
+
+var/global/list/volunteer_gladiators = list()
+var/global/list/ready_gladiators = list()
+var/global/list/never_gladiators = list()
+
+var/global/list/achievements = list()
+
+//icons that appear on the Round End pop-up browser
+var/global/list/end_icons = list()
+
+var/global/list/arena_leaderboard = list()
+var/arena_rounds = 0
+var/arena_top_score = 0
+
+var/endgame_info_logged = 0

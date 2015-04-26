@@ -5,7 +5,7 @@
 // I genuinely tried to Add and Remove them from var and proc lists, but just couldn't get it working
 
 /obj/item/weapon
-	var/list/heard_words = list()
+	var/list/heard_words
 	var/lastsaid
 	var/listening_to_players = 0
 	var/speaking_to_players = 0
@@ -27,7 +27,7 @@
 		else if(findtext(msg," ")==0)
 			return
 		else
-			/*var/l = lentext(msg)
+			/*var/l = length(msg)
 			if(findtext(msg," ",l,l+1)==0)
 				msg+=" "*/
 			seperate = text2list(msg, " ")
@@ -47,7 +47,7 @@
 			spawn(2) SaySomething(pick(seperate))
 	if(prob(30))
 		for(var/mob/O in viewers(src))
-			O.show_message("\blue [src] hums for bit then stops...", 1)
+			O.show_message("<span class='notice'>[src] hums for bit then stops...</span>", 1)
 
 /*/obj/item/weapon/talkingcrystal/proc/debug()
 	//set src in view()
@@ -66,12 +66,12 @@
 		text = "[pick(heard_words)]"
 	else
 		text = pick(text2list(word, " "))
-	if(lentext(text)==1)
+	if(length(text)==1)
 		text=uppertext(text)
 	else
 		var/cap = copytext(text,1,2)
 		cap = uppertext(cap)
-		cap += copytext(text,2,lentext(text)+1)
+		cap += copytext(text,2,length(text)+1)
 		text=cap
 	var/q = 0
 	msg+=text
@@ -105,5 +105,5 @@
 			listening|=M
 
 	for(var/mob/M in listening)
-		M << "<b>[src]</b> reverberates, \blue\"[msg]\""
+		M << "<b>[src]</b> reverberates, <span class='warning'>\"[msg]\"</span>"
 	lastsaid = world.timeofday + rand(300,800)

@@ -17,7 +17,7 @@
 	response_disarm = "shoves"
 	response_harm = "strikes"
 	status_flags = 0
-	a_intent = "harm"
+	a_intent = I_HURT
 	var/throw_message = "bounces off of"
 	var/icon_aggro = null // for swapping to when we get aggressive
 
@@ -71,8 +71,8 @@
 	melee_damage_lower = 12
 	melee_damage_upper = 12
 	attacktext = "bites into"
-	a_intent = "harm"
-	attack_sound = 'sound/weapons/bladeslice.ogg'
+	a_intent = I_HURT
+	attack_sound = 'sound/weapons/spiderlunge.ogg'
 	ranged_cooldown_cap = 4
 	aggro_vision_range = 9
 	idle_vision_range = 2
@@ -99,6 +99,9 @@
 	return
 
 /mob/living/simple_animal/hostile/asteroid/basilisk/ex_act(severity)
+	if(flags & INVULNERABLE)
+		return
+
 	switch(severity)
 		if(1.0)
 			gib()
@@ -134,7 +137,7 @@
 	melee_damage_lower = 0
 	melee_damage_upper = 0
 	attacktext = "barrels into"
-	a_intent = "help"
+	a_intent = I_HELP
 	throw_message = "sinks in slowly, before being pushed out of "
 	status_flags = CANPUSH
 	search_objects = 1
@@ -195,7 +198,7 @@
 	for(var/R in ore_types_eaten)
 		for(counter=0, counter < ore_eaten, counter++)
 			new R(src.loc)
-	ore_types_eaten.Cut()
+	ore_types_eaten.len = 0
 	ore_eaten = 0
 
 
@@ -324,7 +327,7 @@
 	icon_aggro = "Goliath_alert"
 	icon_dead = "Goliath_dead"
 	icon_gib = "syndicate_gib"
-	attack_sound = 'sound/weapons/punch4.ogg'
+	attack_sound = 'sound/weapons/heavysmash.ogg'
 	mouse_opacity = 2
 	move_to_delay = 40
 	ranged = 1
@@ -344,6 +347,7 @@
 
 /mob/living/simple_animal/hostile/asteroid/goliath/OpenFire()
 	visible_message("<span class='warning'>The [src.name] digs its tentacles under [target.name]!</span>")
+	playsound(loc, 'sound/weapons/whip.ogg', 50, 1, -1)
 	var/tturf = get_turf(target)
 	new /obj/effect/goliath_tentacle/original(tturf)
 	ranged_cooldown = ranged_cooldown_cap
@@ -359,6 +363,7 @@
 	icon_state = "Goliath_tentacle"
 
 /obj/effect/goliath_tentacle/New()
+	..()
 	var/turftype = get_turf(src)
 	if(istype(turftype, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = turftype
@@ -382,13 +387,14 @@
 	for(var/mob/living/M in src.loc)
 		M.Weaken(5)
 		visible_message("<span class='warning'>The [src.name] knocks [M.name] down!</span>")
-	del(src)
 
-/obj/effect/goliath_tentacle/Crossed(AM as mob|obj)
-	if(isliving(AM))
+	qdel(src)
+
+/obj/effect/goliath_tentacle/Crossed(atom/movable/O)
+	..(O)
+
+	if(isliving(O))
 		Trip()
-		return
-	..()
 
 /mob/living/simple_animal/hostile/asteroid/goliath/Die()
 	var/obj/item/asteroid/goliath_hide/G = new /obj/item/asteroid/goliath_hide(src.loc)
@@ -405,7 +411,7 @@
 
 /obj/item/asteroid/goliath_hide/afterattack(atom/target, mob/user, proximity_flag)
 	if(proximity_flag)
-		if(istype(target, /obj/item/clothing/suit/space/rig/mining) || istype(target, /obj/item/clothing/head/helmet/space/rig/mining))
+		if(istype(target, /obj/item/clothing/suit/space/rig/mining) || istype(target, /obj/item/clothing/head/helmet/space/rig/mining) || istype(target, /obj/item/clothing/suit/space/plasmaman/miner) || istype(target, /obj/item/clothing/head/helmet/space/plasmaman/miner))
 			var/obj/item/clothing/C = target
 			var/current_armor = C.armor
 			if(current_armor.["melee"] < 90)

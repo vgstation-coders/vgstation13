@@ -22,12 +22,15 @@
 	var/isopen = 0
 	var/islocked = 0
 	var/isUV = 0
-	var/ispowered = 1 //starts powered
-	var/isbroken = 0
+	//var/ispowered = 1 //starts powered
+	//var/isbroken = 0
+	//OBSOLETE: That's what the NOPOWER and BROKEN stat bitflags are for
 	var/issuperUV = 0
 	var/panelopen = 0
 	var/safetieson = 1
 	var/cycletime_left = 0
+
+	machine_flags = SCREWTOGGLE
 
 
 //The units themselves/////////////////
@@ -42,7 +45,7 @@
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig/atmos
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/atmos
 	MASK_TYPE = /obj/item/clothing/mask/breath
-	BOOT_TYPE = /obj/item/clothing/shoes/magboots
+	BOOT_TYPE = /obj/item/clothing/shoes/magboots/atmos
 
 /obj/machinery/suit_storage_unit/engie
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig
@@ -54,10 +57,40 @@
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig/elite
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/elite
 	MASK_TYPE = /obj/item/clothing/mask/breath
+	BOOT_TYPE = /obj/item/clothing/shoes/magboots/elite
+
+/obj/machinery/suit_storage_unit/mining
+	SUIT_TYPE = /obj/item/clothing/suit/space/rig/mining
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/mining
+	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
+/obj/machinery/suit_storage_unit/excavation
+	SUIT_TYPE = /obj/item/clothing/suit/space/anomaly
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/anomaly
+	MASK_TYPE = /obj/item/clothing/mask/breath
+	BOOT_TYPE = /obj/item/clothing/shoes/magboots
+
+/obj/machinery/suit_storage_unit/security
+	SUIT_TYPE = /obj/item/clothing/suit/space/rig/security
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/security
+	MASK_TYPE = /obj/item/clothing/mask/breath
+	BOOT_TYPE = /obj/item/clothing/shoes/magboots
+
+/obj/machinery/suit_storage_unit/medical
+	SUIT_TYPE = /obj/item/clothing/suit/space/rig/medical
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/medical
+	MASK_TYPE = /obj/item/clothing/mask/breath
+	BOOT_TYPE = /obj/item/clothing/shoes/magboots
+
+/obj/machinery/suit_storage_unit/meteor_eod //Used for meteor rounds
+	SUIT_TYPE = /obj/item/clothing/suit/bomb_suit
+	HELMET_TYPE = /obj/item/clothing/head/bomb_hood
+	MASK_TYPE = /obj/item/clothing/mask/gas
+	BOOT_TYPE = /obj/item/clothing/shoes/jackboots
 
 /obj/machinery/suit_storage_unit/New()
+	. = ..()
 	src.update_icon()
 	if(SUIT_TYPE)
 		SUIT = new SUIT_TYPE(src)
@@ -72,27 +105,35 @@
 	var/hashelmet = 0
 	var/hassuit = 0
 	var/hashuman = 0
-	if(HELMET)
+	var/full = 0
+	if(HELMET && (!stat & NOPOWER))
 		hashelmet = 1
-	if(SUIT)
+	if(SUIT && (!stat & NOPOWER))
 		hassuit = 1
-	if(OCCUPANT)
+	if(OCCUPANT && (!stat & NOPOWER))
 		hashuman = 1
-	icon_state = text("suitstorage[][][][][][][][][]",hashelmet,hassuit,hashuman,src.isopen,src.islocked,src.isUV,src.ispowered,src.isbroken,src.issuperUV)
-
+	if((HELMET || SUIT || OCCUPANT) && (stat & NOPOWER))
+		full = 1
+	icon_state = text("suitstorage[][][][][][][][][]",
+					hashelmet,
+					hassuit,
+					hashuman,
+					src.isopen,
+					src.islocked,
+					src.isUV,
+					(full||!(stat & NOPOWER)),
+					stat & BROKEN,
+					src.issuperUV)
 
 /obj/machinery/suit_storage_unit/power_change()
 	if( powered() )
-		src.ispowered = 1
 		stat &= ~NOPOWER
 		src.update_icon()
 	else
 		spawn(rand(0, 15))
-			src.ispowered = 0
 			stat |= NOPOWER
 			src.islocked = 0
 			src.isopen = 1
-			src.dump_everything()
 			src.update_icon()
 
 
@@ -144,7 +185,7 @@
 		//onclose(user, "ssu_cycling_panel")
 
 	else
-		if(!src.isbroken)
+		if(!(stat & BROKEN))
 
 			// AUTOFIXED BY fix_string_idiocy.py
 			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\suit_storage_unit.dm:117: dat+= "<HEAD><TITLE>Suit storage unit</TITLE></HEAD>"
@@ -199,8 +240,8 @@
 
 /obj/machinery/suit_storage_unit/Topic(href, href_list) //I fucking HATE this proc
 	if(..())
-		return
-	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
+		return 1
+	else
 		usr.set_machine(src)
 		if (href_list["toggleUV"])
 			src.toggleUV(usr)
@@ -395,21 +436,25 @@
 			if(src.issuperUV)
 				var/burndamage = rand(28,35)
 				OCCUPANT.take_organ_damage(0,burndamage)
-				OCCUPANT.emote("scream")
+				OCCUPANT.emote("scream",,, 1)
 			else
 				var/burndamage = rand(6,10)
 				OCCUPANT.take_organ_damage(0,burndamage)
-				OCCUPANT.emote("scream")
+				OCCUPANT.emote("scream",,, 1)
 		if(i==3) //End of the cycle
 			if(!src.issuperUV)
 				if(src.HELMET)
 					HELMET.clean_blood()
+					HELMET.decontaminate()
 				if(src.SUIT)
 					SUIT.clean_blood()
+					SUIT.decontaminate()
 				if(src.MASK)
 					MASK.clean_blood()
+					MASK.decontaminate()
 				if(src.BOOTS)
 					BOOTS.clean_blood()
+					BOOTS.decontaminate()
 			else //It was supercycling, destroy everything
 				if(src.HELMET)
 					src.HELMET = null
@@ -420,44 +465,13 @@
 				if(src.BOOTS)
 					src.BOOTS = null
 				visible_message("<font color='red'>With a loud whining noise, the Suit Storage Unit's door grinds open. Puffs of ashen smoke come out of its chamber.</font>", 3)
-				src.isbroken = 1
+				stat |= BROKEN
 				src.isopen = 1
 				src.islocked = 0
 				src.eject_occupant(OCCUPANT) //Mixing up these two lines causes bug. DO NOT DO IT.
 			src.isUV = 0 //Cycle ends
 	src.update_icon()
 	src.updateUsrDialog()
-	return
-
-/*	spawn(200) //Let's clean dat shit after 20 secs  //Eh, this doesn't work
-		if(src.HELMET)
-			HELMET.clean_blood()
-		if(src.SUIT)
-			SUIT.clean_blood()
-		if(src.MASK)
-			MASK.clean_blood()
-		src.isUV = 0 //Cycle ends
-		src.update_icon()
-		src.updateUsrDialog()
-
-	var/i
-	for(i=0,i<4,i++) //Gradually give the guy inside some damaged based on the intensity
-		spawn(50)
-			if(src.OCCUPANT)
-				if(src.issuperUV)
-					OCCUPANT.take_organ_damage(0,40)
-					user << "Test. You gave him 40 damage"
-				else
-					OCCUPANT.take_organ_damage(0,8)
-					user << "Test. You gave him 8 damage"
-	return*/
-
-
-/obj/machinery/suit_storage_unit/proc/cycletimeleft()
-	if(src.cycletime_left >= 1)
-		src.cycletime_left--
-	return src.cycletime_left
-
 
 /obj/machinery/suit_storage_unit/proc/eject_occupant(mob/user as mob)
 	if (src.islocked)
@@ -489,7 +503,7 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if (usr.stat != 0)
+	if (usr.stat != 0 || (usr.status_flags & FAKEDEATH))
 		return
 	src.eject_occupant(usr)
 	add_fingerprint(usr)
@@ -503,12 +517,12 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if (usr.stat != 0)
+	if (usr.stat != 0 || (usr.status_flags & FAKEDEATH))
 		return
 	if (!src.isopen)
 		usr << "<font color='red'>The unit's doors are shut.</font>"
 		return
-	if (!src.ispowered || src.isbroken)
+	if ((stat & NOPOWER) || (stat & BROKEN))
 		usr << "<font color='red'>The unit is not operational.</font>"
 		return
 	if ( (src.OCCUPANT) || (src.HELMET) || (src.SUIT) || BOOTS )
@@ -535,16 +549,21 @@
 		src.OCCUPANT = null //Testing this as a backup sanity test
 	return
 
+/obj/machinery/suit_storage_unit/togglePanelOpen(var/obj/toggleitem, mob/user)
+	..()
+	src.updateUsrDialog()
 
 /obj/machinery/suit_storage_unit/attackby(obj/item/I as obj, mob/user as mob)
-	if(!src.ispowered)
+	if((stat & NOPOWER) && iscrowbar(I) && !islocked)
+		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		user << "<span class='notice'>You begin prying the equipment out of the suit storage unit</span>"
+		if(do_after(user,20))
+			dump_everything()
+			update_icon()
+	if(stat & NOPOWER)
 		return
-	if(istype(I, /obj/item/weapon/screwdriver))
-		src.panelopen = !src.panelopen
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
-		user << text("<font color='blue'>You [] the unit's maintenance panel.</font>",(src.panelopen ? "open up" : "close") )
-		src.updateUsrDialog()
-		return
+	if(..())
+		return 1
 	if ( istype(I, /obj/item/weapon/grab) )
 		var/obj/item/weapon/grab/G = I
 		if( !(ismob(G.affecting)) )
@@ -552,7 +571,7 @@
 		if (!src.isopen)
 			usr << "<font color='red'>The unit's doors are shut.</font>"
 			return
-		if (!src.ispowered || src.isbroken)
+		if ((stat & NOPOWER) || (stat & BROKEN))
 			usr << "<font color='red'>The unit is not operational.</font>"
 			return
 		if ( (src.OCCUPANT) || (src.HELMET) || (src.SUIT) || BOOTS) //Unit needs to be absolutely empty
@@ -585,8 +604,7 @@
 			user << "<font color='blue'>The unit already contains a suit.</font>"
 			return
 		user << "You load the [S.name] into the storage compartment."
-		user.drop_item()
-		S.loc = src
+		user.drop_item(S, src)
 		src.SUIT = S
 		src.update_icon()
 		src.updateUsrDialog()
@@ -599,8 +617,7 @@
 			user << "<font color='blue'>The unit already contains a helmet.</font>"
 			return
 		user << "You load the [H.name] into the storage compartment."
-		user.drop_item()
-		H.loc = src
+		user.drop_item(H, src)
 		src.HELMET = H
 		src.update_icon()
 		src.updateUsrDialog()
@@ -613,8 +630,7 @@
 			user << "<font color='blue'>The unit already contains a mask.</font>"
 			return
 		user << "You load the [M.name] into the storage compartment."
-		user.drop_item()
-		M.loc = src
+		user.drop_item(M, src)
 		src.MASK = M
 		src.update_icon()
 		src.updateUsrDialog()
@@ -627,8 +643,7 @@
 			user << "<font color='blue'>The unit already contains shoes.</font>"
 			return
 		user << "You load \the [M.name] into the storage compartment."
-		user.drop_item()
-		M.loc = src
+		user.drop_item(M, src)
 		src.BOOTS = M
 		src.update_icon()
 		src.updateUsrDialog()

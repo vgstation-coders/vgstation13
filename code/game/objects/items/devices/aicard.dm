@@ -4,7 +4,7 @@
 	icon_state = "aicard" // aicard-full
 	item_state = "electronic"
 	w_class = 2.0
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	slot_flags = SLOT_BELT
 	var/flush = null
 	origin_tech = "programming=4;materials=4"
@@ -20,14 +20,9 @@
 		log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to card [M.name] ([M.ckey])</font>")
 
 		transfer_ai("AICORE", "AICARD", M, user)
-		return
 
-	attack(mob/living/silicon/decoy/M as mob, mob/user as mob)
-		if (!istype (M, /mob/living/silicon/decoy))
-			return ..()
-		else
-			M.death()
-			user << "<b>ERROR ERROR ERROR</b>"
+		playsound(get_turf(src), 'sound/machines/paistartup.ogg', 50, 1)
+		return
 
 	attack_self(mob/user)
 		if (!in_range(src, user))
@@ -36,16 +31,18 @@
 		var/dat = "<TT><B>Intelicard</B><BR>"
 		var/laws
 		for(var/mob/living/silicon/ai/A in src)
-			dat += "Stored AI: [A.name]<br>System integrity: [(A.health+100)/2]%<br>"
+			dat += "Stored AI: [A.name]<br>System integrity: [A.system_integrity()]%<br>"
 
-			for (var/index = 1, index <= A.laws.ion.len, index++)
-				var/law = A.laws.ion[index]
-				if (length(law) > 0)
-					var/num = ionnum()
-					laws += "[num]. [law]"
+			//AI DIDN'T KILL SOMEONE FOR ME, CARD HER TO CHECK HER LAWS
 
-			if (A.laws.zeroth)
-				laws += "0: [A.laws.zeroth]<BR>"
+			//for (var/index = 1, index <= A.laws.ion.len, index++)
+				//var/law = A.laws.ion[index]
+				//if (length(law) > 0)
+					//var/num = ionnum()
+					//laws += "[num]. [law]"
+
+			//if (A.laws.zeroth)
+				//laws += "0: [A.laws.zeroth]<BR>"
 
 			var/number = 1
 			for (var/index = 1, index <= A.laws.inherent.len, index++)

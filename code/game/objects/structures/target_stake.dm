@@ -5,7 +5,8 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "target_stake"
 	density = 1
-	flags = CONDUCT
+	flags = 0
+	siemens_coefficient = 1
 	var/obj/item/target/pinned_target // the current pinned target
 
 	Move()
@@ -26,8 +27,7 @@
 		if(istype(W, /obj/item/target))
 			density = 0
 			W.density = 1
-			user.drop_item(src)
-			W.loc = loc
+			user.drop_item(W, src.loc)
 			W.layer = 3.1
 			pinned_target = W
 			user << "You slide the target into the stake."
@@ -46,7 +46,7 @@
 					user.put_in_hands(pinned_target)
 					user << "You take the target out of the stake."
 			else
-				pinned_target.loc = get_turf_loc(user)
+				pinned_target.loc = get_turf(user)
 				user << "You take the target out of the stake."
 
 			pinned_target = null

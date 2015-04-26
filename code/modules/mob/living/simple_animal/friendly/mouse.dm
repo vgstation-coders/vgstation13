@@ -26,7 +26,7 @@
 	min_oxy = 16 //Require atleast 16kPA oxygen
 	minbodytemp = 223		//Below -50 Degrees Celcius
 	maxbodytemp = 323	//Above 50 Degrees Celcius
-	universal_speak = 0
+	languages = SIMPLE_ANIMAL
 
 /mob/living/simple_animal/mouse/Life()
 	..()
@@ -73,67 +73,30 @@
 /mob/living/simple_animal/mouse/verb/ventcrawl()
 	set name = "Crawl through Vent"
 	set desc = "Enter an air vent and crawl through the pipe system."
-	set category = "Mouse"
-
-//	if(!istype(V,/obj/machinery/atmoalter/siphs/fullairsiphon/air_vent))
-//		return
-
-	if(src.stat != CONSCIOUS)	return
-
-	var/obj/machinery/atmospherics/unary/vent_pump/vent_found
-	var/welded = 0
-	for(var/obj/machinery/atmospherics/unary/vent_pump/v in range(1,src))
-		if(!v.welded)
-			vent_found = v
-			break
-		else
-			welded = 1
-	if(vent_found)
-		if(vent_found.network&&vent_found.network.normal_members.len)
-			var/list/vents = list()
-			for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in vent_found.network.normal_members)
-				if(temp_vent.loc == loc)
-					continue
-				vents.Add(temp_vent)
-			var/list/choices = list()
-			for(var/obj/machinery/atmospherics/unary/vent_pump/vent in vents)
-				if(vent.loc.z != loc.z)
-					continue
-				var/atom/a = get_turf(vent)
-				choices.Add(a.loc)
-			var/turf/startloc = loc
-			if(!choices)
-				src << "\red This vent isn't connected to anything."
-			var/obj/selection = input("Select a destination.", "Duct System") in choices
-			var/selection_position = choices.Find(selection)
-			if(loc==startloc)
-				var/obj/target_vent = vents[selection_position]
-				if(target_vent)
-					/*
-					for(var/mob/O in oviewers(src, null))
-						if ((O.client && !( O.blinded )))
-							O.show_message(text("<B>[src] scrambles into the ventillation ducts!</B>"), 1)
-					*/
-					loc = target_vent.loc
-			else
-				src << "\blue You need to remain still while entering a vent."
-		else
-			src << "\blue This vent is not connected to anything."
-	else if(welded)
-		src << "\red That vent is welded."
+	set category = "Object"
+	var/atom/pipe
+	var/list/pipes = list()
+	for(var/obj/machinery/atmospherics/unary/U in range(1))
+		if((istype(U, /obj/machinery/atmospherics/unary/vent_pump) || istype(U,/obj/machinery/atmospherics/unary/vent_scrubber)) && Adjacent(U))
+			pipes |= U
+	if(!pipes || !pipes.len)
+		return
+	if(pipes.len == 1)
+		pipe = pipes[1]
 	else
-		src << "\blue You must be standing on or beside an air vent to enter it."
-	return
+		pipe = input("Crawl Through Vent", "Pick a pipe") as null|anything in pipes
+	if(pipe)
+		handle_ventcrawl(pipe)
 
 //copy paste from alien/larva, if that func is updated please update this one alsoghost
 /mob/living/simple_animal/mouse/verb/hide()
 	set name = "Hide"
 	set desc = "Allows to hide beneath tables or certain items. Toggled on or off."
-	set category = "Mouse"
+	set category = "Object"
 
 	if (layer != TURF_LAYER+0.2)
 		layer = TURF_LAYER+0.2
-		src << text("\blue You are now hiding.")
+		src << text("<span class='notice'>You are now hiding.</span>")
 		/*
 		for(var/mob/O in oviewers(src, null))
 			if ((O.client && !( O.blinded )))
@@ -141,7 +104,7 @@
 		*/
 	else
 		layer = MOB_LAYER
-		src << text("\blue You have stopped hiding.")
+		src << text("<span class='notice'>You have stopped hiding.</span>")
 		/*
 		for(var/mob/O in oviewers(src, null))
 			if ((O.client && !( O.blinded )))
@@ -175,11 +138,11 @@
 	src << "<span class='warning'>You are too small to pull anything.</span>"
 	return
 
-/mob/living/simple_animal/mouse/HasEntered(AM as mob|obj)
+/mob/living/simple_animal/mouse/Crossed(AM as mob|obj)
 	if( ishuman(AM) )
 		if(!stat)
 			var/mob/M = AM
-			M << "\blue \icon[src] Squeek!"
+			M << "<span class='notice'>\icon[src] Squeek!</span>"
 			M << 'sound/effects/mousesqueek.ogg'
 	..()
 
@@ -211,3 +174,8 @@
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm   = "splats"
+
+/mob/living/simple_animal/mouse/say_quote(text)
+	if(!text)
+		return "squeaks, \"...\"";	//not the best solution, but it will stop a large number of runtimes. The cause is somewhere in the Tcomms code
+	return "squeaks, \"[text]\"";

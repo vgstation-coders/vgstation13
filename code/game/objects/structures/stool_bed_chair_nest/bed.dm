@@ -30,8 +30,13 @@
 	manual_unbuckle(user)
 	return
 
-/obj/structure/stool/bed/attack_robot(mob/user as mob)
+/obj/structure/stool/bed/attack_animal(mob/user as mob)
 	manual_unbuckle(user)
+	return
+
+/obj/structure/stool/bed/attack_robot(mob/user as mob)
+	if(get_dist(src,user)<=1)
+		manual_unbuckle(user)
 	return
 
 /obj/structure/stool/bed/MouseDrop(atom/over_object)
@@ -56,12 +61,12 @@
 		if(buckled_mob.buckled == src)
 			if(buckled_mob != user)
 				buckled_mob.visible_message(\
-					"\blue [buckled_mob.name] was unbuckled by [user.name]!",\
+					"<span class='notice'>[buckled_mob.name] was unbuckled by [user.name]!</span>",\
 					"You were unbuckled from [src] by [user.name].",\
 					"You hear metal clanking")
 			else
 				buckled_mob.visible_message(\
-					"\blue [buckled_mob.name] unbuckled \himself!",\
+					"<span class='notice'>[buckled_mob.name] unbuckled \himself!</span>",\
 					"You unbuckle yourself from [src].",\
 					"You hear metal clanking")
 			unbuckle()
@@ -71,7 +76,7 @@
 /obj/structure/stool/bed/proc/buckle_mob(mob/M as mob, mob/user as mob)
 	if (!ticker)
 		user << "You can't buckle anyone in before the game starts."
-	if ( !ismob(M) || (get_dist(src, user) > 1) || (M.loc != src.loc) || user.restrained() || user.lying || user.stat || M.buckled || istype(user, /mob/living/silicon/pai) )
+	if ( !ismob(M) || isanimal(M) || (get_dist(src, user) > 1) || (M.loc != src.loc) || user.restrained() || user.lying || user.stat || M.buckled || istype(user, /mob/living/silicon/pai) )
 		return
 
 	if (istype(M, /mob/living/carbon/slime))
@@ -82,12 +87,12 @@
 
 	if (M == usr)
 		M.visible_message(\
-			"\blue [M.name] buckles in!",\
+			"<span class='notice'>[M.name] buckles in!</span>",\
 			"You buckle yourself to [src].",\
 			"You hear metal clanking")
 	else
 		M.visible_message(\
-			"\blue [M.name] is buckled in to [src] by [user.name]!",\
+			"<span class='notice'>[M.name] is buckled in to [src] by [user.name]!</span>",\
 			"You are buckled in to [src] by [user.name].",\
 			"You hear metal clanking")
 	M.buckled = src
@@ -134,20 +139,19 @@
 /obj/structure/stool/bed/roller/buckle_mob(mob/M as mob, mob/user as mob)
 	if ( !ismob(M) || (get_dist(src, user) > 1) || (M.loc != src.loc) || user.restrained() || user.lying || user.stat || M.buckled || istype(usr, /mob/living/silicon/pai) )
 		return
-	M.pixel_y = 6
+	M.pixel_y += 6
 	density = 1
 	icon_state = "up"
 	..()
 	return
 
 /obj/structure/stool/bed/roller/manual_unbuckle(mob/user as mob)
-	if(buckled_mob)
-		if(buckled_mob.buckled == src)	//this is probably unneccesary, but it doesn't hurt
-			buckled_mob.pixel_y = 0
-			buckled_mob.anchored = initial(buckled_mob.anchored)
-			buckled_mob.buckled = null
-			buckled_mob.update_canmove()
-			buckled_mob = null
+	if(buckled_mob) //Failsafe in case the roller bed is somehow "buckled" without a valid mob
+		buckled_mob.pixel_y -= 6
+		buckled_mob.anchored = initial(buckled_mob.anchored)
+		buckled_mob.buckled = null
+		buckled_mob.update_canmove()
+		buckled_mob = null
 	density = 0
 	icon_state = "down"
 	..()

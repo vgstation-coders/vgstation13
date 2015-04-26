@@ -28,15 +28,6 @@
 	damage_type = CLONE
 	irradiate = 40
 
-
-/obj/item/projectile/energy/dart
-	name = "dart"
-	icon_state = "toxin"
-	damage = 5
-	damage_type = TOX
-	weaken = 5
-
-
 /obj/item/projectile/energy/bolt
 	name = "bolt"
 	icon_state = "cbbolt"
@@ -51,6 +42,45 @@
 	name = "largebolt"
 	damage = 20
 
+/obj/item/projectile/energy/plasma
+	name = "plasma"
+	icon_state = "plasma"
+	var/knockdown_chance = 0
+
+/obj/item/projectile/energy/plasma/on_hit(var/atom/target, var/blocked = 0)
+	if (..(target, blocked))
+		var/mob/living/L = target
+		L.contaminate()
+		if(prob(knockdown_chance))
+			if(istype(target, /mob/living/carbon/))
+				shake_camera(L, 3, 2)
+				L.apply_effect(2, WEAKEN)
+				L << "<span class = 'alert'> The force of the bolt knocks you off your feet!"
+		return 1
+	return 0
+
+/obj/item/projectile/energy/plasma/pistol
+	damage = 12
+	icon_state = "plasma1"
+	irradiate = 12
+
+/obj/item/projectile/energy/plasma/light
+	damage = 25
+	icon_state = "plasma2"
+	knockdown_chance = 30
+
+/obj/item/projectile/energy/plasma/rifle
+	damage = 40
+	icon_state = "plasma3"
+	irradiate = 35
+	knockdown_chance = 50
+
+/obj/item/projectile/energy/plasma/MP40k
+	damage = 35
+	eyeblur = 4
+	irradiate = 25
+	knockdown_chance = 40
+	icon_state = "plasma3"
 
 /obj/item/projectile/energy/neurotoxin
 	name = "neuro"
@@ -63,7 +93,7 @@
 	name = "rad"
 	icon_state = "rad"
 	damage = 30
-	damage_type = BURN
+	damage_type = TOX
 	nodamage = 0
 	weaken = 10
 	stutter = 10
@@ -73,13 +103,7 @@
 
 			var/mob/living/carbon/human/H = hit
 
-			if(H.gender == MALE)
-				H.name = pick(first_names_male)
-			else
-				H.name = pick(first_names_female)
-
-			H.name += " [pick(last_names)]"
-			H.real_name = H.name
+			H.generate_name()
 
 			scramble(1, H, 100) // Scramble all UIs
 			scramble(null, H, 5) // Scramble SEs, 5% chance for each block

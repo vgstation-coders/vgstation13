@@ -1,5 +1,6 @@
 /mob/living
 	see_invisible = SEE_INVISIBLE_LIVING
+	languages = HUMAN
 
 	//Health and life related vars
 	var/maxHealth = 100 //Maximum health that should be possible.
@@ -16,15 +17,11 @@
 	var/brainloss = 0	//'Retardation' damage caused by someone hitting you in the head with a bible or being infected with brainrot.
 	var/halloss = 0		//Hallucination damage. 'Fake' damage obtained through hallucinating or the holodeck. Sleeping should cause it to wear off.
 
-
 	var/hallucination = 0 //Directly affects how long a mob will hallucinate for
 	var/list/atom/hallucinations = list() //A list of hallucinated people that try to attack the mob. See /obj/effect/fake_attacker in hallucinations.dm
 
 
-	var/last_special = 0 //Used by the resist verb, likely used to prevent players from bypassing next_move by logging in/out.
-
-	//Allows mobs to move through dense areas without restriction. For instance, in space or out of holder objects.
-	var/incorporeal_move = 0 //0 is off, 1 is normal, 2 is for ninjas.
+	var/list/image/static_overlays = list()
 
 	var/t_plasma = null
 	var/t_oxygen = null
@@ -32,13 +29,16 @@
 	var/t_n2 = null
 
 	var/now_pushing = null
+	var/mob_bump_flag = 0
+	var/mob_swap_flags = 0
+	var/mob_push_flags = 0
 
 	var/cameraFollow = null
 
 	var/tod = null // Time of death
 	var/update_slimes = 1
 
-	var/on_fire = 0 //The "Are we on fire?" var
+	on_fire = 0 //The "Are we on fire?" var
 	var/fire_stacks = 0 //Tracks how many stacks of fire we have on, max is usually 20
 
 	var/specialsauce = 0 //Has this person consumed enough special sauce? IF so they're a ticking time bomb of death.
@@ -47,3 +47,17 @@
 	var/silent = null 		//Can't talk. Value goes down every life proc.
 
 	var/locked_to_z = 0 // Locked to a Z-level if nonzero.
+
+	// Fix ashifying in hot fires.
+	//autoignition_temperature=0
+	//fire_fuel=0
+
+	var/list/icon/pipes_shown = list()
+	var/last_played_vent
+
+	//
+	var/list/callOnLife = list() //
+
+/mob/living/proc/unsubLife(datum/sub)
+	while("\ref[sub]" in callOnLife)
+		callOnLife -= "\ref[sub]"

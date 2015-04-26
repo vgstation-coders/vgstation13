@@ -48,6 +48,10 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 			var/list/wires = same_wires[holder_type]
 			src.wires = wires // Reference the wires list.
 
+/datum/wires/Destroy()
+	if(holder)
+		holder = null
+
 /datum/wires/proc/GenerateWires()
 	var/list/colours_to_pick = wireColours.Copy() // Get a copy, not a reference.
 	var/list/indexes_to_pick = list()
@@ -67,7 +71,8 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 		//wires = shuffle(wires)
 
 /datum/wires/proc/Interact(var/mob/living/user)
-
+	if(!istype(user))
+		return 0
 	var/html = null
 	if(holder && CanUse(user))
 		html = GetInteractWindow()
@@ -136,7 +141,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 				// Attach
 				else
 					if(istype(I, /obj/item/device/assembly/signaler))
-						L.drop_item()
+						L.drop_item(I)
 						Attach(colour, I)
 					else
 						L << "<span class='error'>You need a remote signaller!</span>"

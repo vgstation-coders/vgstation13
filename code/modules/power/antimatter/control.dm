@@ -6,7 +6,7 @@
 	icon_state = "control"
 	var/icon_mod = "on" // on, critical, or fuck
 	var/old_icon_mod = "on"
-	anchored = 1
+	anchored = 0
 	density = 1
 	use_power = 1
 	idle_power_usage = 100
@@ -173,12 +173,12 @@
 			src.anchored = 0
 			disconnect_from_network()
 		else
-			user << "\red Once bolted and linked to a shielding unit it the [src.name] is unable to be moved!"
+			user << "<span class='warning'>Once bolted and linked to a shielding unit it the [src.name] is unable to be moved!</span>"
 		return
 
 	if(istype(W, /obj/item/weapon/am_containment))
 		if(fueljar)
-			user << "\red There is already a [fueljar] inside!"
+			user << "<span class='warning'>There is already a [fueljar] inside!</span>"
 			return
 		fueljar = W
 		if(user.client)
@@ -335,9 +335,12 @@
 
 
 /obj/machinery/power/am_control_unit/Topic(href, href_list)
-	..()
+	if(..()) return 1
+	if(href_list["close"])
+		if(usr.machine == src) usr.unset_machine()
+		return 1
 	//Ignore input if we are broken or guy is not touching us, AI can control from a ways away
-	if(stat & (BROKEN|NOPOWER) || (get_dist(src, usr) > 1 && !istype(usr, /mob/living/silicon/ai)))
+	if(stat & (BROKEN|NOPOWER))
 		usr.unset_machine()
 		usr << browse(null, "window=AMcontrol")
 		return

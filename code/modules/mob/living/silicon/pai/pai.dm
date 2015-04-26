@@ -3,7 +3,6 @@
 	icon = 'icons/mob/mob.dmi'//
 	icon_state = "shadow"
 
-	robot_talk_understand = 0
 	emote_type = 2		// pAIs emotes are heard, not seen, so they can be seen through a container (eg. person)
 
 	var/network = list("SS13")
@@ -13,7 +12,6 @@
 	var/list/software = list()
 	var/userDNA		// The DNA string of our assigned user
 	var/obj/item/device/paicard/card	// The card we inhabit
-	var/obj/item/device/radio/radio		// Our primary radio
 
 	var/speakStatement = "states"
 	var/speakExclamation = "declares"
@@ -86,13 +84,12 @@
 
 /mob/living/silicon/pai/Stat()
 	..()
-	statpanel("Status")
-	if (src.client.statpanel == "Status")
+	if(statpanel("Status"))
 		show_silenced()
 
-	if (proc_holder_list.len)//Generic list for proc_holder objects.
-		for(var/obj/effect/proc_holder/P in proc_holder_list)
-			statpanel("[P.panel]","",P)
+		if (proc_holder_list.len)//Generic list for proc_holder objects.
+			for(var/spell/P in proc_holder_list)
+				statpanel("[P.panel]","",P)
 
 /mob/living/silicon/pai/check_eye(var/mob/user as mob)
 	if (!src.current)
@@ -101,6 +98,8 @@
 	return 1
 
 /mob/living/silicon/pai/blob_act()
+	if(flags & INVULNERABLE)
+		return
 	if (src.stat != 2)
 		src.adjustBruteLoss(60)
 		src.updatehealth()
@@ -111,6 +110,9 @@
 	return 0
 
 /mob/living/silicon/pai/emp_act(severity)
+	if(flags & INVULNERABLE)
+		return
+
 	// Silence for 2 minutes
 	// 20% chance to kill
 		// 33% chance to unbind
@@ -120,9 +122,9 @@
 	src.silence_time = world.timeofday + 120 * 10		// Silence for 2 minutes
 	src << "<font color=green><b>Communication circuit overload. Shutting down and reloading communication circuits - speech and messaging functionality will be unavailable until the reboot is complete.</b></font>"
 	if(prob(20))
-		var/turf/T = get_turf_or_move(src.loc)
+		var/turf/T = get_turf(src.loc)
 		for (var/mob/M in viewers(T))
-			M.show_message("\red A shower of sparks spray from [src]'s inner workings.", 3, "\red You hear and smell the ozone hiss of electrical sparks being expelled violently.", 2)
+			M.show_message("<span class='warning'>A shower of sparks spray from [src]'s inner workings.</span>", 3, "<span class='warning'>You hear and smell the ozone hiss of electrical sparks being expelled violently.</span>", 2)
 		return src.death(0)
 
 	switch(pick(1,2,3))
@@ -142,6 +144,9 @@
 			src << "<font color=green>You feel an electric surge run through your circuitry and become acutely aware at how lucky you are that you can still feel at all.</font>"
 
 /mob/living/silicon/pai/ex_act(severity)
+	if(flags & INVULNERABLE)
+		return
+
 	if(!blinded)
 		flick("flash", src.flash)
 
@@ -164,8 +169,10 @@
 // See software.dm for Topic()
 
 /mob/living/silicon/pai/meteorhit(obj/O as obj)
+	if(flags & INVULNERABLE)
+		return
 	for(var/mob/M in viewers(src, null))
-		M.show_message(text("\red [] has been hit by []", src, O), 1)
+		M.show_message(text("<span class='warning'>[] has been hit by []</span>", src, O), 1)
 	if (src.health > 0)
 		src.adjustBruteLoss(30)
 		if ((O.icon_state == "flaming"))
@@ -186,10 +193,10 @@
 
 	switch(M.a_intent)
 
-		if ("help")
+		if (I_HELP)
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
-					O.show_message(text("\blue [M] caresses [src]'s casing with its scythe like arm."), 1)
+					O.show_message(text("<span class='notice'>[M] caresses [src]'s casing with its scythe like arm.</span>"), 1)
 
 		else //harm
 			var/damage = rand(10, 20)
@@ -197,7 +204,7 @@
 				playsound(get_turf(src), 'sound/weapons/slash.ogg', 25, 1, -1)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>[] has slashed at []!</B>", M, src), 1)
+						O.show_message(text("<span class='danger'>[] has slashed at []!</span>", M, src), 1)
 				if(prob(8))
 					flick("noise", src.flash)
 				src.adjustBruteLoss(damage)
@@ -206,7 +213,7 @@
 				playsound(get_turf(src), 'sound/weapons/slashmiss.ogg', 25, 1, -1)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>[] took a swipe at []!</B>", M, src), 1)
+						O.show_message(text("<span class='danger'>[] took a swipe at []!</span>", M, src), 1)
 	return
 
 ///mob/living/silicon/pai/attack_hand(mob/living/carbon/M as mob)
@@ -244,7 +251,7 @@
 	src:cameraFollow = null
 	var/cameralist[0]
 
-	if(usr.stat == 2)
+	if(usr.stat == 2 || (usr.status_flags & FAKEDEATH))
 		usr << "You can't change your camera network because you are dead!"
 		return
 
@@ -256,7 +263,7 @@
 				cameralist[C.network] = C.network
 
 	src.network = input(usr, "Which network would you like to view?") as null|anything in cameralist
-	src << "\blue Switched to [src.network] camera network."
+	src << "<span class='notice'>Switched to [src.network] camera network.</span>"
 //End of code by Mord_Sith
 */
 

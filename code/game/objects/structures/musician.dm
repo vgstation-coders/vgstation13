@@ -18,6 +18,7 @@
 	var/repeat = 0
 
 /obj/structure/device/piano/New()
+	..()
 	if(prob(50))
 		name = "space minimoog"
 		desc = "This is a minimoog, like a space piano, but more spacey!"
@@ -228,13 +229,13 @@
 					if(!playing || !anchored)//If the piano is playing, or is loose
 						playing = 0
 						return
-					if(lentext(note) == 0)
+					if(length(note) == 0)
 						continue
 					//world << "Parse: [copytext(note,1,2)]"
 					var/cur_note = text2ascii(note) - 96
 					if(cur_note < 1 || cur_note > 7)
 						continue
-					for(var/i=2 to lentext(note))
+					for(var/i=2 to length(note))
 						var/ni = copytext(note,i,i+1)
 						if(!text2num(ni))
 							if(ni == "#" || ni == "b" || ni == "n")
@@ -320,11 +321,12 @@
 	onclose(user, "piano")
 
 /obj/structure/device/piano/Topic(href, href_list)
-
-	if(!in_range(src, usr) || issilicon(usr) || !anchored || !usr.canmove || usr.restrained())
-		usr << browse(null, "window=piano;size=700x300")
-		onclose(usr, "piano")
+	if(..())
 		return
+	if(issilicon(usr) || !anchored || !usr.canmove)
+		return
+
+	usr.set_machine(src)
 
 	if(href_list["newsong"])
 		song = new()
@@ -354,7 +356,7 @@
 				return
 			if(song.lines.len > 50)
 				return
-			if(lentext(newline) > 50)
+			if(length(newline) > 50)
 				newline = copytext(newline, 1, 50)
 			song.lines.Add(newline)
 
@@ -369,7 +371,7 @@
 			var/content = html_encode(input("Enter your line: ", "Piano", song.lines[num]) as text|null)
 			if(!content)
 				return
-			if(lentext(content) > 50)
+			if(length(content) > 50)
 				content = copytext(content, 1, 50)
 			if(num > song.lines.len || num < 1)
 				return
@@ -391,11 +393,11 @@
 				if (!in_range(src, usr))
 					return
 
-				if(lentext(t) >= 3072)
+				if(length(t) >= 3072)
 					var/cont = input(usr, "Your message is too long! Would you like to continue editing it?", "", "yes") in list("yes", "no")
 					if(cont == "no")
 						break
-			while(lentext(t) > 3072)
+			while(length(t) > 3072)
 
 			//split into lines
 			spawn()
@@ -409,7 +411,7 @@
 					lines.Cut(51)
 				var/linenum = 1
 				for(var/l in lines)
-					if(lentext(l) > 50)
+					if(length(l) > 50)
 						usr << "Line [linenum] too long!"
 						lines.Remove(l)
 					else
@@ -417,30 +419,30 @@
 				song = new()
 				song.lines = lines
 				song.tempo = tempo
-				updateUsrDialog()
+				src.updateUsrDialog()
 
 	add_fingerprint(usr)
-	updateUsrDialog()
+	src.updateUsrDialog()
 	return
 
 /obj/structure/device/piano/attackby(obj/item/O as obj, mob/user as mob)
 	if (istype(O, /obj/item/weapon/wrench))
 		if (anchored)
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-			user << "\blue You begin to loosen \the [src]'s casters..."
+			user << "<span class='notice'>You begin to loosen \the [src]'s casters...</span>"
 			if (do_after(user, 40))
 				user.visible_message( \
 					"[user] loosens \the [src]'s casters.", \
-					"\blue You have loosened \the [src]. Now it can be pulled somewhere else.", \
+					"<span class='notice'>You have loosened \the [src]. Now it can be pulled somewhere else.</span>", \
 					"You hear ratchet.")
 				src.anchored = 0
 		else
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-			user << "\blue You begin to tighten \the [src] to the floor..."
+			user << "<span class='notice'>You begin to tighten \the [src] to the floor...</span>"
 			if (do_after(user, 20))
 				user.visible_message( \
 					"[user] tightens \the [src]'s casters.", \
-					"\blue You have tightened \the [src]'s casters. Now it can be played again.", \
+					"<span class='notice'>You have tightened \the [src]'s casters. Now it can be played again.</span>", \
 					"You hear ratchet.")
 				src.anchored = 1
 	else

@@ -91,15 +91,15 @@
 //Step one - dehairing.
 
 /obj/item/stack/sheet/animalhide/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(	istype(W, /obj/item/weapon/kitchenknife) || \
+	if(	istype(W, /obj/item/weapon/kitchen/utensil/knife/large) || \
 		istype(W, /obj/item/weapon/kitchen/utensil/knife) || \
-		istype(W, /obj/item/weapon/twohanded/fireaxe) || \
+		istype(W, /obj/item/weapon/fireaxe) || \
 		istype(W, /obj/item/weapon/hatchet) )
 
 		//visible message on mobs is defined as visible_message(var/message, var/self_message, var/blind_message)
-		usr.visible_message("\blue \the [usr] starts cutting hair off \the [src]", "\blue You start cutting the hair off \the [src]", "You hear the sound of a knife rubbing against flesh")
+		usr.visible_message("<span class='notice'>\the [usr] starts cutting hair off \the [src]</span>", "<span class='notice'>You start cutting the hair off \the [src]</span>", "You hear the sound of a knife rubbing against flesh")
 		if(do_after(user,50))
-			usr << "\blue You cut the hair from this [src.singular_name]"
+			usr << "<span class='notice'>You cut the hair from this [src.singular_name]</span>"
 			//Try locating an exisitng stack on the tile and add to there if possible
 			for(var/obj/item/stack/sheet/hairlesshide/HS in usr.loc)
 				if(HS.amount < 50)
@@ -117,7 +117,7 @@
 //Step two - washing..... it's actually in washing machine code.
 
 //Step three - drying
-/obj/item/stack/sheet/wetleather/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/obj/item/stack/sheet/wetleather/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	..()
 	if(exposed_temperature >= drying_threshold_temperature)
 		wetness--

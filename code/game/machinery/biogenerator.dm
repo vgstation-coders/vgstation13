@@ -38,31 +38,41 @@
 	name="Slab of meat"
 	cost=50
 	other_amounts=list(5)
-	result=/obj/item/weapon/reagent_containers/food/snacks/meat
+	result=/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh
 
 /datum/biogen_recipe/nutrient
 	category="Nutrients"
 
 /datum/biogen_recipe/nutrient/ez
 	id="ez"
-	cost=10
 	name="E-Z-Nutrient"
+	reagent="eznutrient"
+	cost=10
+	amount_per_unit=10
 	other_amounts=list(5)
-	result=/obj/item/nutrient/ez
 
 /datum/biogen_recipe/nutrient/l4z
 	id="l4z"
-	cost=20
 	name="Left 4 Zed"
+	reagent="left4zed"
+	cost=20
+	amount_per_unit=10
 	other_amounts=list(5)
-	result=/obj/item/nutrient/l4z
 
 /datum/biogen_recipe/nutrient/rh
 	id="rh"
-	cost=25
 	name="Robust Harvest"
+	reagent="robustharvest"
+	cost=25
+	amount_per_unit=10
 	other_amounts=list(5)
-	result=/obj/item/nutrient/rh
+
+/datum/biogen_recipe/nutrient/beez
+	cost=40
+	id="beez"
+	name="Bottle of BeezEez"
+	other_amounts=list(5)
+	result=/obj/item/beezeez
 
 /datum/biogen_recipe/leather
 	category="Leather"
@@ -91,11 +101,70 @@
 	name="Plant Bag"
 	result=/obj/item/weapon/storage/bag/plants
 
+/datum/biogen_recipe/leather/gadget
+	cost=350
+	id="gadget"
+	name="Gadget Bag"
+	result=/obj/item/weapon/storage/bag/gadgets
+
+/datum/biogen_recipe/leather/ore
+	cost=350
+	id="ore"
+	name="Mining Satchel"
+	result=/obj/item/weapon/storage/bag/ore
+
 /datum/biogen_recipe/leather/satchel
 	cost=400
 	id="satchel"
 	name="Leather Satchel"
 	result=/obj/item/weapon/storage/backpack/satchel
+
+/datum/biogen_recipe/leather/briefcase
+	cost=400
+	id="briefcase"
+	name="Leather Briefcase"
+	result=/obj/item/weapon/storage/briefcase/biogen
+
+/datum/biogen_recipe/paper
+	category="Paper"
+
+/datum/biogen_recipe/paper/papersheet
+	cost=15
+	id="papersheet"
+	name="Paper Sheet"
+	other_amounts=list(5,10)
+	result=/obj/item/weapon/paper
+
+/datum/biogen_recipe/paper/clipboard
+	cost=75
+	id="clipboard"
+	name="Clipboard"
+	result=/obj/item/weapon/clipboard
+
+/datum/biogen_recipe/paper/cardboard
+	cost=100
+	id="cardboard"
+	name="Cardboard Sheet"
+	other_amounts=list(5,10)
+	result=/obj/item/stack/sheet/cardboard
+
+/datum/biogen_recipe/paper/giftwrap
+	cost=300
+	id="giftwrap"
+	name="Wrapping Paper"
+	result=/obj/item/weapon/wrapping_paper
+
+/datum/biogen_recipe/paper/packagewrap
+	cost=350
+	id="packagewrap"
+	name="Package Wrapper"
+	result=/obj/item/weapon/packageWrap
+
+/datum/biogen_recipe/paper/paperbin
+	cost=550 //100 from the cardboard, 30*15=450 from the paper
+	id="paperbin"
+	name="Paper Bin (30 sheets)"
+	result=/obj/item/weapon/paper_bin
 
 /datum/biogen_recipe/misc
 	category="Misc."
@@ -105,21 +174,14 @@
 	id="pest"
 	name="Pest Spray"
 	other_amounts=list(5)
-	result=/obj/item/weapon/pestspray
+	result=/obj/item/weapon/plantspray/pests
 
-/datum/biogen_recipe/misc/beez
-	cost=40
-	id="beez"
-	name="BeezEez"
+/datum/biogen_recipe/misc/candle
+	cost=50
+	id="candle"
+	name="Red Candle"
 	other_amounts=list(5)
-	result=/obj/item/beezeez
-
-/datum/biogen_recipe/misc/cardboard
-	cost=200
-	id="cardboard"
-	name="Cardboard Sheet"
-	other_amounts=list(5,10)
-	result=/obj/item/stack/sheet/cardboard
+	result=/obj/item/candle
 
 /datum/biogen_recipe/misc/charcoal
 	cost=100
@@ -128,13 +190,17 @@
 	other_amounts=list(5,10)
 	result=/obj/item/stack/sheet/charcoal
 
-/datum/biogen_recipe/misc/paper
-	cost=75
-	id="paper"
-	name="Sheet of Paper"
-	other_amounts=list(5,10)
-	result=/obj/item/weapon/paper
+/datum/biogen_recipe/misc/soap
+	cost=250
+	id="soap"
+	name="Bar of Soap"
+	result=/obj/item/weapon/soap/nanotrasen
 
+/datum/biogen_recipe/misc/crayons
+	cost=400
+	id="crayons"
+	name="Box of Crayons"
+	result=/obj/item/weapon/storage/fancy/crayons
 
 /obj/machinery/biogenerator
 	name = "Biogenerator"
@@ -145,7 +211,6 @@
 	anchored = 1
 	use_power = 1
 	idle_power_usage = 40
-	var/opened = 0.0
 	var/processing = 0
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/points = 0
@@ -153,114 +218,123 @@
 	var/list/recipes[0]
 	var/list/recipe_categories[0]
 
-	New()
-		..()
-		var/datum/reagents/R = new/datum/reagents(1000)
-		reagents = R
-		R.my_atom = src
-		beaker = new /obj/item/weapon/reagent_containers/glass/beaker/large(src)
-		component_parts = list()
-		component_parts += new /obj/item/weapon/circuitboard/biogenerator
-		component_parts += new /obj/item/weapon/stock_parts/manipulator
-		component_parts += new /obj/item/weapon/stock_parts/manipulator
-		component_parts += new /obj/item/weapon/stock_parts/matter_bin
-		component_parts += new /obj/item/weapon/stock_parts/matter_bin
-		component_parts += new /obj/item/weapon/stock_parts/micro_laser
-		component_parts += new /obj/item/weapon/stock_parts/micro_laser
-		component_parts += new /obj/item/weapon/stock_parts/micro_laser
-		component_parts += new /obj/item/weapon/stock_parts/scanning_module
-		component_parts += new /obj/item/weapon/stock_parts/scanning_module
-		component_parts += new /obj/item/weapon/stock_parts/console_screen
-		component_parts += new /obj/item/weapon/stock_parts/console_screen
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
-		RefreshParts()
+	l_color = "#7BF9FF"
 
-		for(var/biotype in typesof(/datum/biogen_recipe))
-			var/datum/biogen_recipe/recipe = new biotype
-			if(recipe.id=="") continue
-			if(!(recipe.category in recipe_categories))
-				recipe_categories[recipe.category]=list()
-			recipe_categories[recipe.category] += recipe.id
-			recipes[recipe.id]=recipe
+/obj/machinery/biogenerator/power_change()
+	..()
+	if(!(stat & (BROKEN|NOPOWER)))
+		SetLuminosity(2)
+	else
+		SetLuminosity(0)
 
-	on_reagent_change()			//When the reagents change, change the icon as well.
-		update_icon()
-
+/obj/machinery/biogenerator/on_reagent_change()			//When the reagents change, change the icon as well.
 	update_icon()
-		if(!src.beaker)
-			icon_state = "biogen-empty"
-		else if(!src.processing)
-			icon_state = "biogen-stand"
-		else
-			icon_state = "biogen-work"
-		return
 
+/obj/machinery/biogenerator/update_icon()
+	if(!src.beaker)
+		icon_state = "biogen-empty"
+	else if(!src.processing)
+		icon_state = "biogen-stand"
+	else
+		icon_state = "biogen-work"
+	return
+
+/obj/machinery/biogenerator/New()
+	. = ..()
+	create_reagents(1000)
+	beaker = new /obj/item/weapon/reagent_containers/glass/beaker/large(src)
+
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/biogenerator,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/manipulator,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/matter_bin,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/console_screen,\
+		/obj/item/weapon/stock_parts/console_screen\
+	)
+
+	RefreshParts()
+
+	for(var/biotype in typesof(/datum/biogen_recipe))
+		var/datum/biogen_recipe/recipe = new biotype
+		if(recipe.id=="") continue
+		if(!(recipe.category in recipe_categories))
+			recipe_categories[recipe.category]=list()
+		recipe_categories[recipe.category] += recipe.id
+		recipes[recipe.id]=recipe
 
 /obj/machinery/biogenerator/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/reagent_containers/glass))
+	if(..())
+		return 1
+	else if(istype(O, /obj/item/weapon/reagent_containers/glass))
 		if(beaker)
-			user << "\red The biogenerator already occuped."
+			user << "<span class='warning'>The biogenerator already occuped.</span>"
+		else if(panel_open)
+			user << "<span class='rose'>The biogenerator's maintenance panel must be closed first.</span>"
 		else
 			user.before_take_item(O)
 			O.loc = src
 			beaker = O
 			updateUsrDialog()
 	else if(processing)
-		user << "\red The biogenerator is currently processing."
+		user << "<span class='warning'>The biogenerator is currently processing.</span>"
 	else if(istype(O, /obj/item/weapon/storage/bag/plants))
 		var/i = 0
 		for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in contents)
 			i++
-		if(i >= 10)
-			user << "\red The biogenerator is already full! Activate it."
+		if(i >= 20)
+			user << "<span class='warning'>The biogenerator is already full! Activate it.</span>"
 		else
+			var/obj/item/weapon/storage/bag/B = O
 			for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in O.contents)
-				G.loc = src
+				B.remove_from_storage(G,src)
 				i++
-				if(i >= 10)
-					user << "\blue You fill the biogenerator to its capacity."
+				if(i >= 20)
+					user << "<span class='notice'>You fill the biogenerator to its capacity.</span>"
 					break
-			if(i<10)
-				user << "\blue You empty the plant bag into the biogenerator."
-	else if (istype(O, /obj/item/weapon/screwdriver))
-		if (!opened)
-			src.opened = 1
-			user << "You open the maintenance hatch of [src]."
-			//src.icon_state = "autolathe_t"
-		else
-			src.opened = 0
-			user << "You close the maintenance hatch of [src]."
-			//src.icon_state = "autolathe"
-			return 1
-	else if(istype(O, /obj/item/weapon/crowbar))
-		if (opened)
-			if(beaker)
-				user << "\red A beaker is loaded, you cannot deconstruct [src]."
-				return 1
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-			return 1
+			if(i<20)
+				user << "<span class='notice'>You empty the plant bag into the biogenerator.</span>"
 
 	else if(!istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
-		user << "\red You cannot put this in [src.name]"
+		user << "<span class='warning'>You cannot put this in [src.name]</span>"
 	else
 		var/i = 0
 		for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in contents)
 			i++
-		if(i >= 10)
-			user << "\red The biogenerator is full! Activate it."
+		if(i >= 20)
+			user << "<span class='warning'>The biogenerator is full! Activate it.</span>"
 		else
 			user.before_take_item(O)
 			O.loc = src
-			user << "\blue You put [O.name] in [src.name]"
+			user << "<span class='notice'>You put [O.name] in [src.name]</span>"
 	update_icon()
+	return
+
+/obj/machinery/biogenerator/crowbarDestroy(mob/user)
+	if(beaker)
+		user << "<span class='warning'>A beaker is loaded, you cannot deconstruct \the [src].</span>"
+		return
+	return ..()
+
+/obj/machinery/biogenerator/togglePanelOpen(var/obj/toggleitem, mob/user)
+	if(beaker)
+		user << "<span class='rose'>You can't open \the [src]'s maintenance panel while a beaker is loaded.</span>"
+		return
+	if(..())
+		if(panel_open)
+			overlays += "biogen-open"
+		else
+			overlays -= "biogen-open"
+		update_icon()
+		return 1
 	return
 
 /obj/machinery/biogenerator/interact(mob/user as mob)
@@ -324,7 +398,7 @@
 	if (src.stat != 0) //NOPOWER etc
 		return
 	if(src.processing)
-		usr << "\red The biogenerator is in the process of working."
+		usr << "<span class='warning'>The biogenerator is in the process of working.</span>"
 		return
 	var/S = 0
 	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/I in contents)
@@ -332,7 +406,7 @@
 		if(I.reagents.get_reagent_amount("nutriment") < 0.1)
 			points += 1
 		else points += I.reagents.get_reagent_amount("nutriment")*10
-		del(I)
+		qdel(I)
 	if(S)
 		processing = 1
 		update_icon()
@@ -378,9 +452,8 @@
 	return 1
 
 /obj/machinery/biogenerator/Topic(href, href_list)
-	if(stat & BROKEN) return
-	if(usr.stat || usr.restrained()) return
-	if(!in_range(src, usr)) return
+
+	if(..()) return 1
 
 	usr.set_machine(src)
 

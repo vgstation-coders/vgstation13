@@ -19,6 +19,7 @@ var/list/ai_list = list()
 	anchored = 1 // -- TLE
 	density = 1
 	status_flags = CANSTUN|CANPARALYSE
+	force_compose = 1
 	var/list/network = list("SS13")
 	var/obj/machinery/camera/current = null
 	var/list/connected_robots = list()
@@ -48,9 +49,10 @@ var/list/ai_list = list()
 	var/explosive = 0 //does the AI explode when it dies?
 
 	var/mob/living/silicon/ai/parent = null
+	var/camera_light_on = 0
+	var/list/obj/machinery/camera/lit_cameras = list()
 
-	var/camera_light_on = 0	//Defines if the AI toggled the light on the camera it's looking through.
-	var/datum/trackable/track = null
+	var/datum/trackable/track = new()
 
 	var/last_paper_seen = null
 	var/can_shunt = 1
@@ -78,11 +80,9 @@ var/list/ai_list = list()
 
 	proc_holder_list = new()
 
-	if(L)
-		if (istype(L, /datum/ai_laws))
-			laws = L
-	else
-		laws = new base_law_type
+	//Determine the AI's lawset
+	if(L && istype(L,/datum/ai_laws)) src.laws = L
+	else src.laws = getLawset(src)
 
 	verbs += /mob/living/silicon/ai/proc/show_laws_verb
 
@@ -95,10 +95,9 @@ var/list/ai_list = list()
 	aicamera = new/obj/item/device/camera/ai_camera(src)
 
 	if (istype(loc, /turf))
-		verbs.Add(/mob/living/silicon/ai/proc/ai_call_shuttle,/mob/living/silicon/ai/proc/ai_camera_track, \
-		/mob/living/silicon/ai/proc/ai_camera_list, /mob/living/silicon/ai/proc/ai_network_change, \
-		/mob/living/silicon/ai/proc/ai_statuschange, /mob/living/silicon/ai/proc/ai_hologram_change, \
-		/mob/living/silicon/ai/proc/toggle_camera_light)
+		verbs.Add(/mob/living/silicon/ai/proc/ai_network_change, \
+		/mob/living/silicon/ai/proc/ai_statuschange, \
+		/mob/living/silicon/ai/proc/ai_hologram_change)
 
 	if(!safety)//Only used by AIize() to successfully spawn an AI.
 		if (!B)//If there is no player/brain inside.
@@ -122,11 +121,6 @@ var/list/ai_list = list()
 	ai_list += src
 	..()
 	return
-
-/mob/living/silicon/ai/Destroy()
-	ai_list -= src
-	..()
-
 
 /mob/living/silicon/ai/verb/pick_icon()
 	set category = "AI Commands"
@@ -155,7 +149,7 @@ var/list/ai_list = list()
 	var/icontype = ""
 	/* Nuked your hidden shit.*/
 	if (custom_sprite == 1) icontype = ("Custom")//automagically selects custom sprite if one is available
-	else icontype = input("Select an icon!", "AI", null, null) in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static")
+	else icontype = input("Select an icon!", "AI", null, null) in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man")
 	switch(icontype)
 		if("Custom") icon_state = "[src.ckey]-ai"
 		if("Clown") icon_state = "ai-clown2"
@@ -177,6 +171,16 @@ var/list/ai_list = list()
 		if("Ravensdale") icon_state = "ai-ravensdale"
 		if("Serithi") icon_state = "ai-serithi"
 		if("Static") icon_state = "ai-fuzz"
+		if("Wasp") icon_state = "ai-wasp"
+		if("Robert House") icon_state = "ai-president"
+		if("Red October") icon_state = "ai-soviet"
+		if("Girl") icon_state = "ai-girl"
+		if("Girl Malf") icon_state = "ai-girl-malf"
+		if("Boy") icon_state = "ai-boy"
+		if("Boy Malf") icon_state = "ai-boy-malf"
+		if("Fabulous") icon_state = "ai-fabulous"
+		if("Four-Leaf") icon_state = "ai-4chan"
+		if("Yes Man") icon_state = "yes-man"
 		else icon_state = "ai"
 	//else
 			//usr <<"You can only change your display once!"
@@ -194,9 +198,6 @@ var/list/ai_list = list()
 
 
 /mob/living/silicon/ai/proc/ai_alerts()
-	set category = "AI Commands"
-	set name = "Show Alerts"
-
 
 	// AUTOFIXED BY fix_string_idiocy.py
 	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\ai\ai.dm:195: var/dat = "<HEAD><TITLE>Current Station Alerts</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n"
@@ -235,13 +236,9 @@ var/list/ai_list = list()
 
 // this verb lets the ai see the stations manifest
 /mob/living/silicon/ai/proc/ai_roster()
-	set category = "AI Commands"
-	set name = "Show Crew Manifest"
 	show_station_manifest()
 
 /mob/living/silicon/ai/proc/ai_call_shuttle()
-	set category = "AI Commands"
-	set name = "Call Emergency Shuttle"
 	if(src.stat == 2)
 		src << "You can't call the shuttle because you are dead!"
 		return
@@ -254,7 +251,8 @@ var/list/ai_list = list()
 	var/confirm = alert("Are you sure you want to call the shuttle?", "Confirm Shuttle Call", "Yes", "No")
 
 	if(confirm == "Yes")
-		call_shuttle_proc(src)
+		var/justification = stripped_input(usr, "Please input a concise justification for the shuttle call. Note that failure to properly justify a shuttle call may lead to recall or termination", "Nanotrasen Anti-Comdom Systems")
+		call_shuttle_proc(src, justification)
 
 	// hack to display shuttle timer
 	if(emergency_shuttle.online)
@@ -284,6 +282,8 @@ var/list/ai_list = list()
 	return 1
 
 /mob/living/silicon/ai/blob_act()
+	if(flags & INVULNERABLE)
+		return
 	if (stat != 2)
 		adjustBruteLoss(60)
 		updatehealth()
@@ -294,6 +294,9 @@ var/list/ai_list = list()
 	return 0
 
 /mob/living/silicon/ai/emp_act(severity)
+	if(flags & INVULNERABLE)
+		return
+
 	if (prob(30))
 		switch(pick(1,2))
 			if(1)
@@ -303,6 +306,9 @@ var/list/ai_list = list()
 	..()
 
 /mob/living/silicon/ai/ex_act(severity)
+	if(flags & INVULNERABLE)
+		return
+
 	if(!blinded)
 		flick("flash", flash)
 
@@ -396,11 +402,20 @@ var/list/ai_list = list()
 
 		return
 
+	if (href_list["open"])
+		var/mob/target = locate(href_list["open"])
+		var/mob/living/silicon/ai/A = locate(href_list["open2"])
+		if(A && target)
+			A.open_nearest_door(target)
+		return
+
 	return
 
 /mob/living/silicon/ai/meteorhit(obj/O as obj)
+	if(flags & INVULNERABLE)
+		return
 	for(var/mob/M in viewers(src, null))
-		M.show_message(text("\red [] has been hit by []", src, O), 1)
+		M.show_message(text("<span class='warning'>[] has been hit by []</span>", src, O), 1)
 		//Foreach goto(19)
 	if (health > 0)
 		adjustBruteLoss(30)
@@ -425,10 +440,10 @@ var/list/ai_list = list()
 
 	switch(M.a_intent)
 
-		if ("help")
+		if (I_HELP)
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
-					O.show_message(text("\blue [M] caresses [src]'s plating with its scythe like arm."), 1)
+					O.show_message(text("<span class='notice'>[M] caresses [src]'s plating with its scythe like arm.</span>"), 1)
 
 		else //harm
 			var/damage = rand(10, 20)
@@ -436,7 +451,7 @@ var/list/ai_list = list()
 				playsound(loc, 'sound/weapons/slash.ogg', 25, 1, -1)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>[] has slashed at []!</B>", M, src), 1)
+						O.show_message(text("<span class='danger'>[] has slashed at []!</span>", M, src), 1)
 				if(prob(8))
 					flick("noise", flash)
 				adjustBruteLoss(damage)
@@ -445,7 +460,7 @@ var/list/ai_list = list()
 				playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>[] took a swipe at []!</B>", M, src), 1)
+						O.show_message(text("<span class='danger'>[] took a swipe at []!</span>", M, src), 1)
 	return
 
 /mob/living/silicon/ai/attack_hand(mob/living/carbon/M as mob)
@@ -454,18 +469,20 @@ var/list/ai_list = list()
 			if(M:wear_suit:s_control)
 				M:wear_suit:transfer_ai("AICORE", "NINJASUIT", src, M)
 			else
-				M << "\red <b>ERROR</b>: \black Remote access channel disabled."
+				M << "<span class='danger'>ERROR: </span>Remote access channel disabled."
 	return
 
 
 /mob/living/silicon/ai/attack_animal(mob/living/simple_animal/M as mob)
+	if(!istype(M))
+		return
 	if(M.melee_damage_upper == 0)
 		M.emote("[M.friendly] [src]")
 	else
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
-			O.show_message("\red <B>[M]</B> [M.attacktext] [src]!", 1)
+			O.show_message("<span class='warning'><B>[M]</B> [M.attacktext] [src]!</span>", 1)
 		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
 		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
@@ -473,14 +490,11 @@ var/list/ai_list = list()
 		updatehealth()
 
 /mob/living/silicon/ai/reset_view(atom/A)
-	if(current)
-		current.SetLuminosity(0)
+	if (camera_light_on)
+		light_cameras()
 	if(istype(A,/obj/machinery/camera))
 		current = A
 	..()
-	if(istype(A,/obj/machinery/camera))
-		if(camera_light_on)	A.SetLuminosity(AI_CAMERA_LUMINOSITY)
-		else				A.SetLuminosity(0)
 
 
 /mob/living/silicon/ai/proc/switchCamera(var/obj/machinery/camera/C)
@@ -554,10 +568,6 @@ var/list/ai_list = list()
 	return !cleared
 
 /mob/living/silicon/ai/cancel_camera()
-	set category = "AI Commands"
-	set name = "Cancel Camera View"
-
-	//src.cameraFollow = null
 	src.view_core()
 
 
@@ -571,7 +581,7 @@ var/list/ai_list = list()
 	src.cameraFollow = null
 	var/cameralist[0]
 
-	if(usr.stat == 2)
+	if(usr.stat == 2 || (usr.status_flags & FAKEDEATH))
 		usr << "You can't change your camera network because you are dead!"
 		return
 
@@ -601,7 +611,7 @@ var/list/ai_list = list()
 			if(network in C.network)
 				U.eyeobj.setLoc(get_turf(C))
 				break
-	src << "\blue Switched to [network] camera network."
+	src << "<span class='notice'>Switched to [network] camera network.</span>"
 //End of code by Mord_Sith
 
 
@@ -615,7 +625,7 @@ var/list/ai_list = list()
 	set category = "AI Commands"
 	set name = "AI Status"
 
-	if(usr.stat == 2)
+	if(usr.stat == 2 || (usr.status_flags & FAKEDEATH))
 		usr <<"You cannot change your emotional status because you are dead!"
 		return
 	var/list/ai_emotions = list("Very Happy", "Happy", "Neutral", "Unsure", "Confused", "Sad", "BSOD", "Blank", "Problems?", "Awesome", "Facepalm", "Friend Computer")
@@ -659,17 +669,45 @@ var/list/ai_list = list()
 
 	else
 		var/icon_list[] = list(
-		"default",
-		"floating face"
+		"Default",
+		"Floating face",
+		"Cortano",
+		"Spoopy",
+		"343",
+		"Auto",
+		"Four-Leaf",
+		"Yotsuba",
+		"Girl",
+		"Boy",
+		"SHODAN"
 		)
 		input = input("Please select a hologram:") as null|anything in icon_list
 		if(input)
 			del(holo_icon)
 			switch(input)
-				if("default")
+				if("Default")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo1"))
-				if("floating face")
+				if("Floating face")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo2"))
+				if("Cortano")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo3"))
+				if("Spoopy")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo4"))
+				if("343")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo5"))
+				if("Auto")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo6"))
+				if("Four-Leaf")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo7"))
+				if("Yotsuba")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo8"))
+				if("Girl")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo9"))
+				if("Boy")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo10"))
+				if("SHODAN")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo11"))
+
 	return
 
 /mob/living/silicon/ai/proc/corereturn()
@@ -678,67 +716,73 @@ var/list/ai_list = list()
 
 	var/obj/machinery/power/apc/apc = src.loc
 	if(!istype(apc))
-		src << "\blue You are already in your Main Core."
+		src << "<span class='notice'>You are already in your Main Core.</span>"
 		return
 	apc.malfvacate()
 
 //Toggles the luminosity and applies it by re-entereing the camera.
-/mob/living/silicon/ai/proc/toggle_camera_light()
+/mob/living/silicon/ai/verb/toggle_camera_light()
 	set name = "Toggle Camera Light"
-	set desc = "Toggles the light on the camera the AI is looking through."
+	set desc = "Toggle internal infrared camera light"
 	set category = "AI Commands"
+	if(stat != CONSCIOUS)
+		return
 
 	camera_light_on = !camera_light_on
-	src << "Camera lights [camera_light_on ? "activated" : "deactivated"]."
-	if(!camera_light_on)
-		if(src.current)
-			src.current.SetLuminosity(0)
-	else
-		src.lightNearbyCamera()
 
+	if (!camera_light_on)
+		src << "Camera lights deactivated."
 
+		for (var/obj/machinery/camera/C in lit_cameras)
+			C.SetLuminosity(0)
+			lit_cameras = list()
 
-// Handled camera lighting, when toggled.
-// It will get the nearest camera from the eyeobj, lighting it.
+		return
 
-/mob/living/silicon/ai/proc/lightNearbyCamera()
-	if(camera_light_on && camera_light_on < world.timeofday)
-		if(src.current)
-			var/obj/machinery/camera/camera = near_range_camera(src.eyeobj)
-			if(camera && src.current != camera)
-				src.current.SetLuminosity(0)
-				if(!camera.light_disabled)
-					src.current = camera
-					src.current.SetLuminosity(AI_CAMERA_LUMINOSITY)
-				else
-					src.current = null
-			else if(isnull(camera))
-				src.current.SetLuminosity(0)
-				src.current = null
-		else
-			var/obj/machinery/camera/camera = near_range_camera(src.eyeobj)
-			if(camera && !camera.light_disabled)
-				src.current = camera
-				src.current.SetLuminosity(AI_CAMERA_LUMINOSITY)
-		camera_light_on = world.timeofday + 1 * 20 // Update the light every 2 seconds.
+	light_cameras()
+
+	src << "Camera lights activated."
+	return
+
+//AI_CAMERA_LUMINOSITY
+
+/mob/living/silicon/ai/proc/light_cameras()
+	var/list/obj/machinery/camera/add = list()
+	var/list/obj/machinery/camera/remove = list()
+	var/list/obj/machinery/camera/visible = list()
+	for (var/datum/camerachunk/CC in eyeobj.visibleCameraChunks)
+		for (var/obj/machinery/camera/C in CC.cameras)
+			if (!C.can_use() || C.light_disabled || get_dist(C, eyeobj) > 7)
+				continue
+			visible |= C
+
+	add = visible - lit_cameras
+	remove = lit_cameras - visible
+
+	for (var/obj/machinery/camera/C in remove)
+		C.SetLuminosity(0)
+		lit_cameras -= C
+	for (var/obj/machinery/camera/C in add)
+		C.SetLuminosity(AI_CAMERA_LUMINOSITY)
+		lit_cameras |= C
 
 
 /mob/living/silicon/ai/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/wrench))
 		if(anchored)
-			user.visible_message("\blue \The [user] starts to unbolt \the [src] from the plating...")
+			user.visible_message("<span class='notice'>\The [user] starts to unbolt \the [src] from the plating...</span>")
 			if(!do_after(user,40))
-				user.visible_message("\blue \The [user] decides not to unbolt \the [src].")
+				user.visible_message("<span class='notice'>\The [user] decides not to unbolt \the [src].</span>")
 				return
-			user.visible_message("\blue \The [user] finishes unfastening \the [src]!")
+			user.visible_message("<span class='notice'>\The [user] finishes unfastening \the [src]!</span>")
 			anchored = 0
 			return
 		else
-			user.visible_message("\blue \The [user] starts to bolt \the [src] to the plating...")
+			user.visible_message("<span class='notice'>\The [user] starts to bolt \the [src] to the plating...</span>")
 			if(!do_after(user,40))
-				user.visible_message("\blue \The [user] decides not to bolt \the [src].")
+				user.visible_message("<span class='notice'>\The [user] decides not to bolt \the [src].</span>")
 				return
-			user.visible_message("\blue \The [user] finishes fastening down \the [src]!")
+			user.visible_message("<span class='notice'>\The [user] finishes fastening down \the [src]!</span>")
 			anchored = 1
 			return
 	else
@@ -747,3 +791,7 @@ var/list/ai_list = list()
 
 /mob/living/silicon/ai/get_multitool(var/active_only=0)
 	return aiMulti
+
+// An AI doesn't become inoperable until -100% (or whatever config.health_threshold_dead is set to)
+/mob/living/silicon/ai/system_integrity()
+	return (health - config.health_threshold_dead) / 2

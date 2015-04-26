@@ -32,7 +32,6 @@
 			if(ore_datum.cointype)
 				ore[ore_datum.id]=ore_datum
 
-		processing_objects.Add(src)
 		return
 	return
 
@@ -160,12 +159,12 @@ a.notsmelting {
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
 	if(processing==1)
-		usr << "\blue The machine is processing."
+		usr << "<span class='notice'>The machine is processing.</span>"
 		return
 	if(href_list["choose"])
 		chosen = href_list["choose"]
 	if(href_list["chooseAmt"])
-		coinsToProduce = between(0, coinsToProduce + text2num(href_list["chooseAmt"]), 1000)
+		coinsToProduce = Clamp(coinsToProduce + text2num(href_list["chooseAmt"]), 0, 1000)
 	if(href_list["makeCoins"])
 		var/temp_coins = coinsToProduce
 		if (src.output)

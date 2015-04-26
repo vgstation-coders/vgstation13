@@ -1,5 +1,5 @@
 /datum/event/pda_spam
-	endWhen = 6000
+	endWhen = 900 //No need to overdo it
 	var/time_failed = 0
 	var/obj/machinery/message_server/useMS
 
@@ -25,7 +25,7 @@
 			// /obj/machinery/message_server/proc/send_pda_message(var/recipient = "",var/sender = "",var/message = "")
 			var/obj/item/device/pda/P
 			var/list/viables = list()
-			for(var/obj/item/device/pda/check_pda in sortAtom(PDAs))
+			for(var/obj/item/device/pda/check_pda in sortNames(PDAs))
 				if (!check_pda.owner||check_pda.toff||check_pda == src||check_pda.hidden)
 					continue
 				viables.Add(check_pda)
@@ -33,6 +33,10 @@
 			if(!viables.len)
 				return
 			P = pick(viables)
+
+			var/datum/pda_app/spam_filter/filter_app = locate(/datum/pda_app/spam_filter) in P.applications
+			if(filter_app && (filter_app.function == 2))
+				return//spam blocked!
 
 			var/sender
 			var/message
@@ -99,10 +103,11 @@
 
 			P.tnote += "<i><b>&larr; From [sender] (Unknown / spam?):</b></i><br>[message]<br>"
 
-			if (!P.silent)
-				playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
-			for (var/mob/O in hearers(3, P.loc))
-				if(!P.silent) O.show_message(text("\icon[P] *[P.ttone]*"))
+			if(!filter_app || (filter_app.function == 0))//checking if the PDA has the spam filtering app installed
+				if (!P.silent)
+					playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
+				for (var/mob/O in hearers(3, P.loc))
+					if(!P.silent) O.show_message(text("\icon[P] *[P.ttone]*"))
 			//Search for holder of the PDA.
 			var/mob/living/L = null
 			if(P.loc && isliving(P.loc))
@@ -111,7 +116,7 @@
 			else
 				L = get(P, /mob/living/silicon)
 
-			if(L)
+			if(L && (!filter_app || (filter_app.function == 0)))//the owner will still be able to manually read the spam in his Message log.
 				L << "\icon[P] <b>Message from [sender] (Unknown / spam?), </b>\"[message]\" (Unable to Reply)"
 	else if(world.time > time_failed + 1200)
 		//if there's no server active for two minutes, give up

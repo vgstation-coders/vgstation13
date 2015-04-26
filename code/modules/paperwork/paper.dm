@@ -5,18 +5,20 @@
 
 /obj/item/weapon/paper
 	name = "paper"
-	gender = PLURAL
+	gender = NEUTER
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "paper"
 	throwforce = 0
 	w_class = 1.0
 	throw_range = 1
 	throw_speed = 1
-	layer = 4
+	layer = 3.9
 	pressure_resistance = 1
 	slot_flags = SLOT_HEAD
 	body_parts_covered = HEAD
-	attack_verb = list("")
+	attack_verb = list("slapped")
+	autoignition_temperature = AUTOIGNITION_PAPER
+	fire_fuel = 1
 
 	var/info		//What's actually written on the paper.
 	var/info_links	//A different version of the paper which includes html links at fields and EOF
@@ -26,9 +28,8 @@
 	var/rigged = 0
 	var/spam_flag = 0
 
-	var/const/deffont = "Verdana"
-	var/const/signfont = "Times New Roman"
-	var/const/crayonfont = "Comic Sans MS"
+	var/log=""
+	var/obj/item/weapon/photo/img
 
 //lipstick wiping is in code/game/objects/items/weapons/cosmetics.dm!
 
@@ -42,27 +43,25 @@
 		return
 
 /obj/item/weapon/paper/update_icon()
+	icon_state=initial(icon_state)
 	if(info)
-		icon_state = "paper_words"
-		return
-	icon_state = "paper"
+		icon_state += "_words"
 
-/obj/item/weapon/paper/examine()
-	set src in oview(1)
-
-//	..()	//We don't want them to see the dumb "this is a paper" thing every time.
-// I didn't like the idea that people can read tiny pieces of paper from across the room.
-// Now you need to be next to the paper in order to read it.
-	if(in_range(usr, src))
-		if(!(istype(usr, /mob/living/carbon/human) || istype(usr, /mob/dead/observer) || istype(usr, /mob/living/silicon)))
-			usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[stars(info)][stamps]</BODY></HTML>", "window=[name]")
-			onclose(usr, "[name]")
+/obj/item/weapon/paper/examine(mob/user)
+	if(in_range(user, src))
+		var/info_2 = ""
+		if(img)
+			user << browse_rsc(img.img, "tmp_photo.png")
+			info_2 = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
+		if(!(istype(user, /mob/living/carbon/human) || istype(user, /mob/dead/observer) || istype(user, /mob/living/silicon)))
+			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_2][stars(info)][stamps]</BODY></HTML>", "window=[name]")
+			onclose(user, "[name]")
 		else
-			usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info][stamps]</BODY></HTML>", "window=[name]")
-			onclose(usr, "[name]")
+			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_2][info][stamps]</BODY></HTML>", "window=[name]")
+			onclose(user, "[name]")
 	else
-		usr << "<span class='notice'>It is too far away.</span>"
-	return
+		..() //Only show a regular description if it is too far away to read.
+		user << "<span class='notice'>It is too far away.</span>"
 
 /obj/item/weapon/paper/verb/rename()
 	set name = "Rename paper"
@@ -70,16 +69,16 @@
 	set src in usr
 
 	if((M_CLUMSY in usr.mutations) && prob(50))
-		usr << "<span class='warning'>You cut yourself on the paper.</span>"
+		usr << "<span class='warning'>You cut yourself on [src].</span>"
 		return
-	var/n_name = copytext(sanitize(input(usr, "What would you like to label the paper?", "Paper Labelling", null)  as text), 1, MAX_NAME_LEN)
-	if((loc == usr && usr.stat == 0))
+	var/n_name = copytext(sanitize(input(usr, "What would you like to label [src]?", "Paper Labelling", null)  as text), 1, MAX_NAME_LEN)
+	if((loc == usr && !usr.stat && !(usr.status_flags & FAKEDEATH)))
 		name = "paper[(n_name ? text("- '[n_name]'") : null)]"
 	add_fingerprint(usr)
 	return
 
 /obj/item/weapon/paper/attack_self(mob/living/user as mob)
-	examine()
+	user.examination(src)
 	if(rigged && (Holiday == "April Fool's Day"))
 		if(spam_flag == 0)
 			spam_flag = 1
@@ -106,7 +105,12 @@
 	var/locid = 0
 	var/laststart = 1
 	var/textindex = 1
+	var/softcount = 0
 	while(1) // I know this can cause infinite loops and fuck up the whole server, but the if(istart==0) should be safe as fuck
+		if(softcount>50)
+			break
+		if(softcount%25 == 0)
+			sleep(1)
 		var/istart = 0
 		if(links)
 			istart = findtext(info_links, "<span class=\"paper_field\">", laststart)
@@ -116,6 +120,7 @@
 		if(istart==0)
 			return // No field found with matching id
 
+		softcount++
 		laststart = istart+1
 		locid++
 		if(locid == id)
@@ -143,65 +148,33 @@
 	info_links = info
 	var/i = 0
 	for(i=1,i<=fields,i++)
-		addtofield(i, "<font face=\"[deffont]\"><A href='?src=\ref[src];write=[i]'>write</A></font>", 1)
-	info_links = info_links + "<font face=\"[deffont]\"><A href='?src=\ref[src];write=end'>write</A></font>"
-
+		if(i>=50)
+			break //abandon ship
+		if(i%25 == 0)
+			sleep(1)
+		addtofield(i, "<A href='?src=\ref[src];write=[i]'>write</A> ", 1)
+		addtofield(i, "<A href='?src=\ref[src];help=[i]'>help</A> ", 1)
+	info_links +="<A href='?src=\ref[src];write=end'>write</A> "
+	info_links +="<A href='?src=\ref[src];help=end'>help</A> "
 
 /obj/item/weapon/paper/proc/clearpaper()
 	info = null
 	stamps = null
 	stamped = list()
-	overlays.Cut()
+	overlays.len = 0
 	updateinfolinks()
 	update_icon()
 
 
-/obj/item/weapon/paper/proc/parsepencode(var/t, var/obj/item/weapon/pen/P, mob/user as mob, var/iscrayon = 0)
-//	t = copytext(sanitize(t),1,MAX_MESSAGE_LEN)
+/obj/item/weapon/paper/proc/parsepencode(var/mob/user,var/obj/item/i, var/t)
+	if(istype(i,/obj/item/weapon/pen))
+		//t = parsepencode(t, i, usr, iscrayon) // Encode everything from pencode to html
+		var/obj/item/weapon/pen/P=i
+		t=P.Format(user,t,src)
 
-	t = replacetext(t, "\[center\]", "<center>")
-	t = replacetext(t, "\[/center\]", "</center>")
-	t = replacetext(t, "\[br\]", "<BR>")
-	t = replacetext(t, "\[b\]", "<B>")
-	t = replacetext(t, "\[/b\]", "</B>")
-	t = replacetext(t, "\[i\]", "<I>")
-	t = replacetext(t, "\[/i\]", "</I>")
-	t = replacetext(t, "\[u\]", "<U>")
-	t = replacetext(t, "\[/u\]", "</U>")
-	t = replacetext(t, "\[large\]", "<font size=\"4\">")
-	t = replacetext(t, "\[/large\]", "</font>")
-	t = replacetext(t, "\[sign\]", "<font face=\"[signfont]\"><i>[user.real_name]</i></font>")
-	t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
-
-	if(!iscrayon)
-		t = replacetext(t, "\[*\]", "<li>")
-		t = replacetext(t, "\[hr\]", "<HR>")
-		t = replacetext(t, "\[small\]", "<font size = \"1\">")
-		t = replacetext(t, "\[/small\]", "</font>")
-		t = replacetext(t, "\[list\]", "<ul>")
-		t = replacetext(t, "\[/list\]", "</ul>")
-
-		t = "<font face=\"[deffont]\" color=[P.colour]>[t]</font>"
-	else // If it is a crayon, and he still tries to use these, make them empty!
-		t = replacetext(t, "\[*\]", "")
-		t = replacetext(t, "\[hr\]", "")
-		t = replacetext(t, "\[small\]", "")
-		t = replacetext(t, "\[/small\]", "")
-		t = replacetext(t, "\[list\]", "")
-		t = replacetext(t, "\[/list\]", "")
-
-		t = "<font face=\"[crayonfont]\" color=[P.colour]><b>[t]</b></font>"
-
-//	t = replacetext(t, "#", "") // Junk converted to nothing!
-
-//Count the fields
-	var/laststart = 1
-	while(1)
-		var/i = findtext(t, "<span class=\"paper_field\">", laststart)
-		if(i==0)
-			break
-		laststart = i+1
-		fields++
+	else if(istype(i,/obj/item/toy/crayon))
+		var/obj/item/toy/crayon/C=i
+		t=C.Format(user,t,src)
 
 	return t
 
@@ -224,7 +197,8 @@
 		\[small\] - \[/small\] : Decreases the <font size = \"1\">size</font> of the text.<br>
 		\[list\] - \[/list\] : A list.<br>
 		\[*\] : A dot used for lists.<br>
-		\[hr\] : Adds a horizontal rule.
+		\[hr\] : Adds a horizontal rule.<br>
+		\[img\]http://url\[/img\] : add an image
 	</BODY></HTML>"}, "window=paper_help")
 
 
@@ -233,44 +207,54 @@
 	if(!usr || (usr.stat || usr.restrained()))
 		return
 
+	if(href_list["picture"])
+		if(!ishuman(usr))
+			return
+		var/mob/living/carbon/human/H = usr
+		H.put_in_hands(img)
+		img = null
+
 	if(href_list["write"])
 		var/id = href_list["write"]
 		//var/t = strip_html_simple(input(usr, "What text do you wish to add to " + (id=="end" ? "the end of the paper" : "field "+id) + "?", "[name]", null),8192) as message
 		//var/t =  strip_html_simple(input("Enter what you want to write:", "Write", null, null)  as message, MAX_MESSAGE_LEN)
-		var/t =  input("Enter what you want to write:", "Write", null, null)  as message
+		var/t = sanitize(input("Enter what you want to write:", "Write", null, null) as message, MAX_MESSAGE_LEN)
 		var/obj/item/i = usr.get_active_hand() // Check to see if he still got that darn pen, also check if he's using a crayon or pen.
-		var/iscrayon = 0
-		if(!istype(i, /obj/item/weapon/pen))
-			if(!istype(i, /obj/item/toy/crayon))
-				return
-			iscrayon = 1
-
-
-		if((!in_range(src, usr) && loc != usr && !( istype(loc, /obj/item/weapon/clipboard) ) && loc.loc != usr && usr.get_active_hand() != i)) // Some check to see if he's allowed to write
+		if(!istype(i,/obj/item/weapon/pen) && !istype(i,/obj/item/toy/crayon))
+			usr << "<span class='warning'>Please ensure your pen is in your active hand and that you're holding the paper.</span>"
 			return
 
-		t = checkhtml(t)
+		if(!Adjacent(usr, 1)) //the 1 means that the paper can be in one other item and be written on
+			return
 
-		// check for exploits
-		for(var/bad in paper_blacklist)
-			if(findtext(t,bad))
-				usr << "\blue You think to yourself, \"Hm.. this is only paper...\""
-				log_admin("PAPER: [usr] ([usr.ckey]) tried to use forbidden word in [src]: [bad].")
-				message_admins("PAPER: [usr] ([usr.ckey]) tried to use forbidden word in [src]: [bad].")
-				return
+		log += "<br />\[[time_stamp()]] [key_name(usr)] added: [t]"
 
 		t = replacetext(t, "\n", "<BR>")
-		t = parsepencode(t, i, usr, iscrayon) // Encode everything from pencode to html
 
-		if(id!="end")
-			addtofield(text2num(id), t) // He wants to edit a field, let him.
-		else
-			info += t // Oh, he wants to edit to the end of the file, let him.
-			updateinfolinks()
+		spawn()
+			t = parsepencode(usr,i,t)
 
-		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_links][stamps]</BODY></HTML>", "window=[name]") // Update the window
+			//Count the fields
+			var/laststart = 1
+			while(1)
+				var/j = findtext(t, "<span class=\"paper_field\">", laststart)
+				if(j==0)
+					break
+				laststart = j+1
+				fields++
 
-		update_icon()
+			if(id!="end")
+				addtofield(text2num(id), t) // He wants to edit a field, let him.
+			else
+				info += t // Oh, he wants to edit to the end of the file, let him.
+				updateinfolinks()
+
+			usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_links][stamps]</BODY></HTML>", "window=[name]") // Update the window
+
+			update_icon()
+
+	if(href_list["help"])
+		openhelp(usr)
 
 
 /obj/item/weapon/paper/attackby(obj/item/weapon/P as obj, mob/user as mob)
@@ -286,21 +270,19 @@
 			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_links][stamps]</BODY></HTML>", "window=[name]")
 		//openhelp(user)
 		return
+
 	else if(istype(P, /obj/item/weapon/stamp))
-		if((!in_range(src, usr) && loc != user && !( istype(loc, /obj/item/weapon/clipboard) ) && loc.loc != user && user.get_active_hand() != P))
+		//if((!in_range(src, user) && loc != user && !( istype(loc, /obj/item/weapon/clipboard) ) && loc.loc != user && user.get_active_hand() != P)) return //What the actual FUCK
+
+		if(istype(P, /obj/item/weapon/stamp/clown) && !clown)
+			user << "<span class='notice'>You are totally unable to use the stamp. HONK!</span>"
 			return
 
-		stamps += (stamps=="" ? "<HR>" : "<BR>") + "<i>This paper has been stamped with the [P.name].</i>"
+		stamps += (stamps=="" ? "<HR>" : "<BR>") + "<i>This [src.name] has been stamped with the [P.name].</i>"
 
 		var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
 		stampoverlay.pixel_x = rand(-2, 2)
 		stampoverlay.pixel_y = rand(-3, 2)
-
-		if(istype(P, /obj/item/weapon/stamp/clown))
-			if(!clown)
-				user << "<span class='notice'>You are totally unable to use the stamp. HONK!</span>"
-				return
-
 		stampoverlay.icon_state = "paper_[P.icon_state]"
 
 		if(!stamped)
@@ -308,8 +290,15 @@
 		stamped += P.type
 		overlays += stampoverlay
 
-		user << "<span class='notice'>You stamp the paper with your rubber stamp.</span>"
+		user << "<span class='notice'>You stamp [src] with your rubber stamp.</span>"
 
+	else if(istype(P, /obj/item/weapon/photo))
+		if(img)
+			user << "<span class='notice'>This paper already has a photo attached.</span>"
+			return
+		img = P
+		user.drop_item(P, src)
+		user << "<span class='notice'>You attach the photo to the piece of paper.</span>"
 	add_fingerprint(user)
 	return
 

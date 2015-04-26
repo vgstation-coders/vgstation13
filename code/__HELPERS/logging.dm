@@ -2,7 +2,10 @@
 /proc/error(msg)
 	world.log << "## ERROR: [msg]"
 
-//print a warning message to world.log
+/*
+ * print a warning message to world.log
+ */
+#define WARNING(MSG) warning("[MSG] in [__FILE__] at line [__LINE__] src: [src] usr: [usr].")
 /proc/warning(msg)
 	world.log << "## WARNING: [msg]"
 
@@ -10,11 +13,16 @@
 /proc/testing(msg)
 	world.log << "## TESTING: [msg]"
 
-/proc/log_admin(text)
-	admin_log.Add(text)
-	if (config.log_admin)
-		diary << "\[[time_stamp()]]ADMIN: [text]"
+/proc/log_admin(raw_text)
+	var/text_to_log = "\[[time_stamp()]]ADMIN: [raw_text]"
 
+	admin_log.Add(text_to_log)
+
+	if(config.log_admin)
+		diary << text_to_log
+
+	if(config.log_admin_only)
+		admin_diary << text_to_log
 
 /proc/log_debug(text)
 	if (config.log_debug)

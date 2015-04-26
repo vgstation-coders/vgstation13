@@ -1,4 +1,7 @@
 // honk
+#define DAMAGE			1
+#define FIRE			2
+
 /obj/spacepod
 	name = "\improper space pod"
 	desc = "A space pod meant for space travel."
@@ -14,28 +17,99 @@
 	var/obj/item/weapon/cell/high/battery
 	var/datum/gas_mixture/cabin_air
 	var/obj/machinery/portable_atmospherics/canister/internal_tank
-	var/datum/effect/effect/system/ion_trail_follow/space_trail/ion_trail
+	var/datum/effect/effect/system/trail/space_trail/ion_trail
 	var/use_internal_tank = 0
 	var/datum/global_iterator/pr_int_temp_processor //normalizes internal air mixture temperature
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
 	var/inertia_dir = 0
 	var/hatch_open = 0
 	var/next_firetime = 0
+	var/list/pod_overlays
+	var/health = 400
 
 /obj/spacepod/New()
+	. = ..()
+	if(!pod_overlays)
+		pod_overlays = new/list(2)
+		pod_overlays[DAMAGE] = image(icon, icon_state="pod_damage")
+		pod_overlays[FIRE] = image(icon, icon_state="pod_fire")
 	bound_width = 64
 	bound_height = 64
 	dir = EAST
 	battery = new()
 	add_cabin()
 	add_airtank()
-	src.ion_trail = new /datum/effect/effect/system/ion_trail_follow/space_trail()
+	src.ion_trail = new /datum/effect/effect/system/trail/space_trail()
 	src.ion_trail.set_up(src)
 	src.ion_trail.start()
 	src.use_internal_tank = 1
 	pr_int_temp_processor = new /datum/global_iterator/pod_preserve_temp(list(src))
 	pr_give_air = new /datum/global_iterator/pod_tank_give_air(list(src))
 	equipment_system = new(src)
+
+/obj/spacepod/proc/update_icons()
+	if(!pod_overlays)
+		pod_overlays = new/list(2)
+		pod_overlays[DAMAGE] = image(icon, icon_state="pod_damage")
+		pod_overlays[FIRE] = image(icon, icon_state="pod_fire")
+
+	if(health <= round(initial(health)/2))
+		overlays += pod_overlays[DAMAGE]
+		if(health <= round(initial(health)/4))
+			overlays += pod_overlays[FIRE]
+		else
+			overlays -= pod_overlays[FIRE]
+	else
+		overlays -= pod_overlays[DAMAGE]
+
+/obj/spacepod/bullet_act(var/obj/item/projectile/P)
+	if(P.damage && !P.nodamage)
+		deal_damage(P.damage)
+
+/obj/spacepod/proc/deal_damage(var/damage)
+	var/oldhealth = health
+	health = max(0, health - damage)
+	var/percentage = (health / initial(health)) * 100
+	if(occupant && oldhealth > health && percentage <= 25 && percentage > 0)
+		var/sound/S = sound('sound/effects/engine_alert2.ogg')
+		S.wait = 0 //No queue
+		S.channel = 0 //Any channel
+		S.volume = 50
+		occupant << S
+	if(occupant && oldhealth > health && !health)
+		var/sound/S = sound('sound/effects/engine_alert1.ogg')
+		S.wait = 0
+		S.channel = 0
+		S.volume = 50
+		occupant << S
+	if(!health)
+		spawn(0)
+			if(occupant)
+				occupant << "<big><span class='warning'>Critical damage to the vessel detected, core explosion imminent!</span></big>"
+				for(var/i = 10, i >= 0; --i)
+					if(occupant)
+						occupant << "<span class='warning'>[i]</span>"
+					if(i == 0)
+						explosion(loc, 2, 4, 8)
+					sleep(10)
+
+	update_icons()
+
+/obj/spacepod/ex_act(severity)
+	switch(severity)
+		if(1)
+			var/mob/living/carbon/human/H = occupant
+			if(H)
+				H.loc = get_turf(src)
+				H.ex_act(severity + 1)
+				H << "<span class='warning'>You are forcefully thrown from \the [src]!</span>"
+			del(ion_trail)
+			del(src)
+		if(2)
+			deal_damage(100)
+		if(3)
+			if(prob(40))
+				deal_damage(50)
 
 /obj/spacepod/attackby(obj/item/W as obj, mob/user as mob)
 	if(iscrowbar(W))
@@ -47,9 +121,8 @@
 		if(battery)
 			user << "<span class='notice'>The pod already has a battery.</span>"
 			return
-		user.drop_item(W)
+		user.drop_item(W, src)
 		battery = W
-		W.loc = src
 		return
 	if(istype(W, /obj/item/device/spacepod_equipment))
 		if(!hatch_open)
@@ -63,17 +136,18 @@
 				return
 			else
 				user << "<span class='notice'>You insert \the [W] into the equipment system.</span>"
-				user.drop_item(W)
-				W.loc = equipment_system
+				user.drop_item(W, equipment_system)
 				equipment_system.weapon_system = W
-				verbs += /obj/spacepod/proc/fire_weapons
+				equipment_system.weapon_system.my_atom = src
+				new/obj/item/device/spacepod_equipment/weaponry/proc/fire_weapon_system(src, equipment_system.weapon_system.verb_name, equipment_system.weapon_system.verb_desc) //Yes, it has to be referenced like that. W.verb_name/desc doesn't compile.
 				return
+
 
 /obj/spacepod/attack_hand(mob/user as mob)
 	if(!hatch_open)
 		return ..()
 	if(!equipment_system || !istype(equipment_system))
-		user << "<span class='warning'>The pod has no equpment datum, or is the wrong type, yell at pomf.</span>"
+		user << "<span class='warning'>The pod has no equipment datum, or is the wrong type, yell at pomf.</span>"
 		return
 	var/list/possible = list()
 	if(battery)
@@ -96,7 +170,9 @@
 			SPE = equipment_system.weapon_system
 			if(user.put_in_any_hand_if_possible(SPE))
 				user << "<span class='notice'>You remove \the [SPE] from the equipment system.</span>"
+				SPE.my_atom = null
 				equipment_system.weapon_system = null
+				verbs -= typesof(/obj/item/device/spacepod_equipment/weaponry/proc)
 			else
 				user << "<span class='warning'>You need an open hand to do that.</span>"
 		/*
@@ -148,7 +224,7 @@
 	set popup_menu = 0
 	if(usr!=src.occupant)
 		return
-	use_internal_tank = !use_internal_tank
+	src.use_internal_tank = !src.use_internal_tank
 	src.occupant << "<span class='notice'>Now taking air from [use_internal_tank?"internal airtank":"environment"].</span>"
 	return
 
@@ -227,71 +303,21 @@
 		return
 	move_inside(M, user)
 
-/obj/spacepod/proc/fire_weapons()
-	set category = "Spacepod"
-	set name = "Fire Weapon System"
-	set desc = "Fire ze missiles(or lasers)"
-	set src = usr.loc
-
-	if(next_firetime > world.time)
-		usr << "<span class='warning'>Your weapons are recharging.</span>"
-		return
-	var/turf/firstloc
-	var/turf/secondloc
-	if(!equipment_system || !equipment_system.weapon_system)
-		usr << "<span class='warning'>Missing equipment or weapons.</span>"
-		src.verbs -= /obj/spacepod/proc/fire_weapons
-		return
-	battery.use(equipment_system.weapon_system.shot_cost)
-	var/olddir
-	for(var/i = 0; i < equipment_system.weapon_system.shots_per; i++)
-		if(olddir != dir)
-			switch(dir)
-				if(NORTH)
-					firstloc = get_step(src, NORTH)
-					secondloc = get_step(firstloc,EAST)
-				if(SOUTH)
-					firstloc = get_turf(src)
-					secondloc = get_step(firstloc,EAST)
-				if(EAST)
-					firstloc = get_turf(src)
-					firstloc = get_step(firstloc, EAST)
-					secondloc = get_step(firstloc,NORTH)
-				if(WEST)
-					firstloc = get_turf(src)
-					secondloc = get_step(firstloc,NORTH)
-		olddir = dir
-		var/obj/item/projectile/projone = new equipment_system.weapon_system.projectile_type(firstloc)
-		var/obj/item/projectile/projtwo = new equipment_system.weapon_system.projectile_type(secondloc)
-		projone.starting = get_turf(src)
-		projone.shot_from = src
-		projone.firer = usr
-		projone.def_zone = "chest"
-		projtwo.starting = get_turf(src)
-		projtwo.shot_from = src
-		projtwo.firer = usr
-		projtwo.def_zone = "chest"
-		spawn()
-			playsound(src, equipment_system.weapon_system.fire_sound, 50, 1)
-			projone.dumbfire(dir)
-			projtwo.dumbfire(dir)
-		sleep(1)
-	next_firetime = world.time + equipment_system.weapon_system.fire_delay
 /obj/spacepod/verb/move_inside()
 	set category = "Object"
 	set name = "Enter Pod"
 	set src in oview(1)
 
-	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
+	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting || (usr.status_flags & FAKEDEATH)) //are you cuffed, dying, lying, stunned or other
 		return
 	if (usr.stat || !ishuman(usr))
 		return
 	if (src.occupant)
-		usr << "\blue <B>The [src.name] is already occupied!</B>"
+		usr << "<span class='notice'><B>The [src.name] is already occupied!</B></span>"
 		return
 /*
 	if (usr.abiotic())
-		usr << "\blue <B>Subject cannot have abiotic items on.</B>"
+		usr << "<span class='notice'><B>Subject cannot have abiotic items on.</B></span>"
 		return
 */
 	for(var/mob/living/carbon/slime/M in range(1,usr))
@@ -300,7 +326,7 @@
 			return
 //	usr << "You start climbing into [src.name]"
 
-	visible_message("\blue [usr] starts to climb into [src.name]")
+	visible_message("<span class='notice'>[usr] starts to climb into [src.name]</span>")
 
 	if(enter_after(40,usr))
 		if(!src.occupant)
@@ -318,7 +344,7 @@
 
 	if(usr != src.occupant)
 		return
-	inertia_dir = 0 // engage reverse thruster and power down pod
+	src.inertia_dir = 0 // engage reverse thruster and power down pod
 	src.occupant.loc = src.loc
 	src.occupant = null
 	usr << "<span class='notice'>You climb out of the pod</span>"
@@ -379,9 +405,10 @@
 		return
 
 /obj/spacepod/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)
-	..()
-	if(dir == 1 || dir == 4)
-		src.loc.Entered(src)
+	var/oldloc = src.loc
+	. = ..()
+	if(dir && (oldloc != NewLoc))
+		src.loc.Entered(src, oldloc)
 /obj/spacepod/proc/Process_Spacemove(var/check_drift = 0, mob/user)
 	var/dense_object = 0
 	if(!user)
@@ -397,32 +424,41 @@
 	return 1
 
 /obj/spacepod/relaymove(mob/user, direction)
-	if(battery && battery.charge)
+	var/moveship = 1
+	if(battery && battery.charge >= 3 && health)
 		src.dir = direction
 		switch(direction)
 			if(1)
 				if(inertia_dir == 2)
 					inertia_dir = 0
-					return 0
+					moveship = 0
 			if(2)
 				if(inertia_dir == 1)
 					inertia_dir = 0
-					return 0
+					moveship = 0
 			if(4)
 				if(inertia_dir == 8)
 					inertia_dir = 0
-					return 0
+					moveship = 0
 			if(8)
 				if(inertia_dir == 4)
 					inertia_dir = 0
-					return 0
-		step(src, direction)
-		if(istype(src.loc, /turf/space))
-			inertia_dir = direction
+					moveship = 0
+		if(moveship)
+			Move(get_step(src,direction), direction)
+			if(istype(src.loc, /turf/space))
+				inertia_dir = direction
 	else
-		user << "<span class='warning'>She's dead, Jim</span>"
+		if(!battery)
+			user << "<span class='warning'>No energy cell detected.</span>"
+		else if(battery.charge < 3)
+			user << "<span class='warning'>Not enough charge left.</span>"
+		else if(!health)
+			user << "<span class='warning'>She's dead, Jim</span>"
+		else
+			user << "<span class='warning'>Unknown error has occurred, yell at pomf.</span>"
 		return 0
-	battery.use(3)
+	battery.charge = max(0, battery.charge - 3)
 
 /obj/effect/landmark/spacepod/random
 	name = "spacepod spawner"
@@ -433,3 +469,6 @@
 
 /obj/effect/landmark/spacepod/random/New()
 	..()
+
+#undef DAMAGE
+#undef FIRE

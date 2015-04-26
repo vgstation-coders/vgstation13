@@ -8,8 +8,8 @@
 	spawn_positions = 1
 	supervisors = "the head of personnel"
 	selection_color = "#dddddd"
-	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue)
-	minimal_access = list(access_bar)
+	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_weapons)
+	minimal_access = list(access_bar,access_weapons)
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/bar
@@ -20,6 +20,7 @@
 			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
 			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
 			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		H.equip_or_collect(new /obj/item/device/radio/headset/headset_service(H), slot_ears)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/suit/armor/vest(H), slot_wear_suit)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/bartender(H), slot_w_uniform)
@@ -65,6 +66,7 @@
 
 	equip(var/mob/living/carbon/human/H)
 		if(!H)	return 0
+		H.equip_or_collect(new /obj/item/device/radio/headset/headset_service(H), slot_ears)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/chef(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/suit/chef(H), slot_wear_suit)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
@@ -96,7 +98,12 @@
 
 	equip(var/mob/living/carbon/human/H)
 		if(!H)	return 0
-		H.equip_or_collect(new /obj/item/clothing/under/rank/hydroponics(H), slot_w_uniform)
+		H.equip_or_collect(new /obj/item/device/radio/headset/headset_service(H), slot_ears)
+		switch(H.mind.role_alt_title)
+			if("Hydroponicist")
+				H.equip_or_collect(new /obj/item/clothing/under/rank/hydroponics(H), slot_w_uniform)
+			if("Botanist")
+				H.equip_or_collect(new /obj/item/clothing/under/rank/botany(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/gloves/botanic_leather(H), slot_gloves)
 		H.equip_or_collect(new /obj/item/clothing/suit/apron(H), slot_wear_suit)
@@ -121,8 +128,8 @@
 	supervisors = "the head of personnel"
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/supply
-	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
-	minimal_access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
+	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station, access_taxi)
+	minimal_access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station, access_taxi)
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/quartermaster
@@ -154,8 +161,8 @@
 	supervisors = "the quartermaster and the head of personnel"
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/supply
-	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
-	minimal_access = list(access_maint_tunnels, access_cargo, access_cargo_bot, access_mailsorting)
+	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station, access_taxi)
+	minimal_access = list(access_maint_tunnels, access_cargo, access_cargo_bot, access_mailsorting, access_taxi)
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/cargo
@@ -224,6 +231,7 @@
 	idtype = /obj/item/weapon/card/id/clown
 	access = list(access_clown, access_theatre, access_maint_tunnels)
 	minimal_access = list(access_clown, access_theatre)
+	alt_titles = list("Jester")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/clown
@@ -232,8 +240,6 @@
 		if(!H)	return 0
 		H.equip_or_collect(new /obj/item/weapon/storage/backpack/clown(H), slot_back)
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		H.equip_or_collect(new /obj/item/clothing/under/rank/clown(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/shoes/clown_shoes(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/clown(H), slot_belt)
 		H.equip_or_collect(new /obj/item/clothing/mask/gas/clown_hat(H), slot_wear_mask)
 		H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(H), slot_in_backpack)
@@ -243,6 +249,17 @@
 		H.equip_or_collect(new /obj/item/weapon/storage/fancy/crayons(H), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/toy/waterflower(H), slot_in_backpack)
 		H.mutations.Add(M_CLUMSY)
+		if (H.mind.role_alt_title)
+			switch(H.mind.role_alt_title)
+				if("Jester")
+					H.equip_or_collect(new /obj/item/clothing/under/jester(H), slot_w_uniform)
+					H.equip_or_collect(new /obj/item/clothing/shoes/jestershoes(H), slot_shoes)
+					H.equip_or_collect(new /obj/item/clothing/head/jesterhat(H), slot_head)
+				else
+					H.equip_or_collect(new /obj/item/clothing/under/rank/clown(H), slot_w_uniform)
+					H.equip_or_collect(new /obj/item/clothing/shoes/clown_shoes(H), slot_shoes)
+		H.real_name = pick(clown_names)
+		H.rename_self("clown")
 		return 1
 
 
@@ -268,7 +285,7 @@
 		if(H.backbag == 2) H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
 		if(H.backbag == 3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
 		H.equip_or_collect(new /obj/item/clothing/under/mime(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
+		H.equip_or_collect(new /obj/item/clothing/shoes/mime(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/mime(H), slot_belt)
 		H.equip_or_collect(new /obj/item/clothing/gloves/white(H), slot_gloves)
 		H.equip_or_collect(new /obj/item/clothing/mask/gas/mime(H), slot_wear_mask)
@@ -282,13 +299,10 @@
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 			H.equip_or_collect(new /obj/item/toy/crayon/mime(H), slot_in_backpack)
 			H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing(H), slot_in_backpack)
-		H.verbs += /client/proc/mimespeak
-		H.verbs += /client/proc/mimewall
-		H.mind.special_verbs += /client/proc/mimespeak
-		H.mind.special_verbs += /client/proc/mimewall
+		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 		H.miming = 1
+		H.rename_self("mime")
 		return 1
-
 
 
 /datum/job/janitor
@@ -332,7 +346,7 @@
 	selection_color = "#dddddd"
 	access = list(access_library, access_maint_tunnels)
 	minimal_access = list(access_library)
-	alt_titles = list("Journalist")
+	alt_titles = list("Journalist", "Game Master")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/librarian
@@ -364,6 +378,7 @@
 	selection_color = "#dddddd"
 	access = list(access_lawyer, access_court, access_sec_doors, access_maint_tunnels, access_cargo, access_medical,  access_bar, access_kitchen, access_hydroponics)
 	minimal_access = list(access_lawyer, access_court, access_sec_doors, access_cargo,  access_bar, access_kitchen)
+	alt_titles = list("Lawyer")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/lawyer
@@ -374,6 +389,12 @@
 			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
 			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
 			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if (H.mind.role_alt_title)
+			switch(H.mind.role_alt_title)
+				if("Lawyer")
+					H.equip_or_collect(new /obj/item/clothing/under/lawyer/bluesuit(H), slot_w_uniform)
+					H.equip_or_collect(new /obj/item/clothing/suit/storage/lawyer/bluejacket(H), slot_wear_suit)
+					H.equip_or_collect(new /obj/item/clothing/shoes/leather(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/internalaffairs(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/suit/storage/internalaffairs(H), slot_wear_suit)
 		H.equip_or_collect(new /obj/item/clothing/shoes/centcom(H), slot_shoes)
@@ -388,5 +409,3 @@
 		L.imp_in = H
 		L.implanted = 1
 		return 1
-
-

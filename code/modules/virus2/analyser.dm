@@ -5,21 +5,37 @@
 	anchored = 1
 	density = 1
 
+	machine_flags = SCREWTOGGLE | CROWDESTROY
+
 	var/scanning = 0
 	var/pause = 0
 
 	var/obj/item/weapon/virusdish/dish = null
 
+/obj/machinery/disease2/diseaseanalyser/New()
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/diseaseanalyser,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module,
+	)
+
+	RefreshParts()
+
 /obj/machinery/disease2/diseaseanalyser/attackby(var/obj/I as obj, var/mob/user as mob)
+	..()
 	if(istype(I,/obj/item/weapon/virusdish))
 		var/mob/living/carbon/c = user
 		if(!dish)
 			dish = I
-			c.drop_item()
-			I.loc = src
+			c.drop_item(I, src)
 			for(var/mob/M in viewers(src))
 				if(M == user)	continue
-				M.show_message("\blue [user.name] inserts the [dish.name] in the [src.name]", 3)
+				M.show_message("<span class='notice'>[user.name] inserts the [dish.name] in the [src.name]</span>", 3)
 		else
 			user << "There is already a dish inserted"
 	return
@@ -40,12 +56,12 @@
 			dish.info = r
 			dish.analysed = 1
 			if (dish.virus2.addToDB())
-				src.state("\The [src.name] states, \"Added new pathogen to database.\"")
+				say("Added new pathogen to database.")
 			dish.loc = src.loc
 			dish = null
 			icon_state = "analyser"
 
-			src.state("\The [src.name] prints a sheet of paper")
+			visible_message("\The [src.name] prints a sheet of paper")
 
 	else if(dish && !scanning && !pause)
 		if(dish.virus2 && dish.growth > 50)
@@ -57,6 +73,6 @@
 			spawn(25)
 				dish.loc = src.loc
 				dish = null
-				src.state("\The [src.name] buzzes")
+				alert_noise("buzz")
 				pause = 0
 	return

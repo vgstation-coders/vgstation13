@@ -7,23 +7,26 @@
 	src:Topic(href, href_list)
 	return null
 
-/proc/get_area(O)
-	var/atom/location = O
-	var/i
-	for(i=1, i<=20, i++)
-		if(isarea(location))
-			return location
-		else if (istype(location))
-			location = location.loc
-		else
-			return null
-	return 0
+/proc/get_area(const/atom/O)
+	if (isnull(O))
+		return
 
-/proc/get_area_master(O)
+	var/atom/A = O
+
+	for (var/i = 0, ++i <= 16)
+		if (isarea(A))
+			return A
+
+		if (istype(A))
+			A = A.loc
+		else
+			return
+
+/proc/get_area_master(const/O)
 	var/area/A = get_area(O)
-	if(A && A.master)
-		A = A.master
-	return A
+
+	if (isarea(A))
+		return A.master
 
 /proc/get_area_name(N) //get area by its name
 	for(var/area/A in world)
@@ -38,11 +41,16 @@
 	return 0 //not in range and not telekinetic
 
 // Like view but bypasses luminosity check
-/proc/hear(var/range, var/atom/source)
+/proc/get_hear(var/range, var/atom/source)
+
 	var/lum = source.luminosity
 	source.luminosity = 6
-	. = view(range, source)
+
+	var/list/heard = view(range, source)
 	source.luminosity = lum
+
+	return heard
+
 
 /proc/alone_in_area(var/area/the_area, var/mob/must_be_alone, var/check_type = /mob/living/carbon)
 	var/area/our_area = get_area_master(the_area)
@@ -54,19 +62,6 @@
 		if(our_area == get_area_master(C))
 			return 0
 	return 1
-
-
-//Magic constants obtained by using linear regression on right-angled triangles of sides 0<x<1, 0<y<1
-//They should approximate pythagoras theorem well enough for our needs.
-#define k1 0.934
-#define k2 0.427
-/proc/cheap_hypotenuse(Ax,Ay,Bx,By) // T is just the second atom to check distance to center with
-	var/dx = abs(Ax - Bx)	//sides of right-angled triangle
-	var/dy = abs(Ay - By)
-	if(dx>=dy)	return (k1*dx) + (k2*dy)	//No sqrt or powers :)
-	else		return (k2*dx) + (k1*dy)
-#undef k1
-#undef k2
 
 /proc/circlerange(center=usr,radius=3)
 
@@ -133,6 +128,47 @@
 	return turfs
 
 
+//This is the new version of recursive_mob_check, used for say().
+//The other proc was left intact because morgue trays use it.
+/proc/recursive_hear_check(atom/O)
+	var/list/processing_list = list(O)
+	var/list/processed_list = list()
+	var/found_atoms = list()
+
+	while (processing_list.len)
+		var/atom/A = processing_list[1]
+
+		if (A.flags & HEAR)
+			found_atoms |= A
+
+		for (var/atom/B in A)
+			if (!processed_list[B])
+				processing_list |= B
+
+		processing_list.Cut(1, 2)
+		processed_list[A] = A
+
+	return found_atoms
+
+/proc/recursive_type_check(atom/O, type = /atom)
+	var/list/processing_list = list(O)
+	var/list/processed_list = new/list()
+	var/found_atoms = new/list()
+
+	while (processing_list.len)
+		var/atom/A = processing_list[1]
+
+		if (istype(A, type))
+			found_atoms |= A
+
+		for (var/atom/B in A)
+			if (!processed_list[B])
+				processing_list |= B
+
+		processing_list.Cut(1, 2)
+		processed_list[A] = A
+
+	return found_atoms
 
 //var/debug_mob = 0
 
@@ -140,85 +176,92 @@
 // It will keep doing this until it checks every content possible. This will fix any problems with mobs, that are inside objects,
 // being unable to hear people due to being in a box within a bag.
 
-/proc/recursive_mob_check(var/atom/O,  var/list/L = list(), var/recursion_limit = 3, var/client_check = 1, var/sight_check = 1, var/include_radio = 1)
+/proc/recursive_mob_check(var/atom/O,var/client_check=1,var/sight_check=1,var/include_radio=1)
 
-	//debug_mob += O.contents.len
-	if(!recursion_limit)
-		return L
-	for(var/atom/movable/A in O.contents)
+	var/list/processing_list = list(O)
+	var/list/processed_list = list()
+	var/list/found_mobs = list()
+
+	while(processing_list.len)
+
+		var/atom/A = processing_list[1]
+		var/passed = 0
 
 		if(ismob(A))
-			var/mob/M = A
-			if(client_check && !M.client)
-				L = recursive_mob_check(A, L, recursion_limit - 1, client_check, sight_check, include_radio)
-				continue
-			if(sight_check && !isInSight(A, O))
-				continue
-			L |= M
-			//world.log << "[recursion_limit] = [M] - [get_turf(M)] - ([M.x], [M.y], [M.z])"
+			var/mob/A_tmp = A
+			passed=1
+
+			if(client_check && !A_tmp.client)
+				passed=0
+
+			if(sight_check && !isInSight(A_tmp, O))
+				passed=0
 
 		else if(include_radio && istype(A, /obj/item/device/radio))
+			passed=1
+
 			if(sight_check && !isInSight(A, O))
-				continue
-			L |= A
+				passed=0
 
-		L = recursive_mob_check(A, L, recursion_limit - 1, client_check, sight_check, include_radio)
+		if(passed)
+			found_mobs |= A
 
-	return L
+		for(var/atom/B in A)
+			if(!processed_list[B])
+				processing_list |= B
+
+		processing_list.Cut(1, 2)
+		processed_list[A] = A
+
+	return found_mobs
 
 // The old system would loop through lists for a total of 5000 per function call, in an empty server.
 // This new system will loop at around 1000 in an empty server.
 
-/proc/get_mobs_in_view(var/R, var/atom/source)
-	// Returns a list of mobs in range of R from source. Used in radio and say code.
-
+/proc/get_hearers_in_view(var/R, var/atom/source)
+	// Returns a list of hearers in range of R from source. Used in saycode.
 	var/turf/T = get_turf(source)
 	var/list/hear = list()
 
 	if(!T)
 		return hear
 
-	var/list/range = hear(R, T)
-
+	var/list/range = get_hear(R, T)
 	for(var/atom/movable/A in range)
-		if(ismob(A))
-			var/mob/M = A
-			if(M.client)
-				hear += M
-			//world.log << "Start = [M] - [get_turf(M)] - ([M.x], [M.y], [M.z])"
-		else if(istype(A, /obj/item/device/radio))
-			hear += A
-
-		hear = recursive_mob_check(A, hear, 3, 1, 0, 1)
+		hear |= recursive_hear_check(A)
 
 	return hear
 
-/proc/get_mobs_in_radio_ranges(var/list/obj/item/device/radio/radios)
+/proc/get_contents_in_object(atom/O, type_path = /atom/movable)
+	if (O)
+		return recursive_type_check(O, type_path) - O
+	else
+		return new/list()
+
+/proc/get_movables_in_radio_ranges(var/list/obj/item/device/radio/radios)
 
 	//set background = 1
 
 	. = list()
 	// Returns a list of mobs who can hear any of the radios given in @radios
-	var/list/speaker_coverage = list()
 	for(var/i = 1; i <= radios.len; i++)
 		var/obj/item/device/radio/R = radios[i]
 		if(R)
-			var/turf/speaker = get_turf(R)
-			if(speaker)
-				for(var/turf/T in hear(R.canhear_range,speaker))
-					speaker_coverage[T] = T
-
-
-	// Try to find all the players who can hear the message
-	for(var/i = 1; i <= player_list.len; i++)
-		var/mob/M = player_list[i]
-		if(M)
-			var/turf/ear = get_turf(M)
-			if(ear)
-				// Ghostship is magic: Ghosts can hear radio chatter from anywhere
-				if(speaker_coverage[ear] || (istype(M, /mob/dead/observer) && (M.client) && (M.client.prefs.toggles & CHAT_GHOSTRADIO)))
-					. |= M		// Since we're already looping through mobs, why bother using |= ? This only slows things down.
+			. |= get_hearers_in_view(R)
+	. |= get_mobs_in_radio_ranges(radios)
 	return .
+
+/**
+ * Returns a list of mobs who can hear any of the radios given in @radios.
+ */
+/proc/get_mobs_in_radio_ranges(list/obj/item/device/radio/radios)
+	set background = BACKGROUND_ENABLED
+
+	. = new/list()
+
+	for (var/obj/item/device/radio/R in radios)
+		if (R)
+			. |= get_hearers_in_view(R.canhear_range, R)
 
 #define SIGN(X) ((X<0)?-1:1)
 
@@ -315,7 +358,6 @@ var/list/DummyCache = list()
 	D.flags=initial(D.flags)
 	D.pass_flags=initial(D.pass_flags)
 	if(pass_flags&PASSTABLE)
-		D.flags      |= TABLEPASS
 		D.pass_flags |= PASSTABLE
 
 	if(targetturf.density && targetturf != get_turf(target))
@@ -341,39 +383,45 @@ var/list/DummyCache = list()
 	DummyCache.Add(D)
 	return 1
 
+// Comment out when done testing shit.
+//#define DEBUG_ROLESELECT
+
+#ifdef DEBUG_ROLESELECT
+# define roleselect_debug(x) testing(x)
+# warning DEBUG_ROLESELECT is defined!
+#else
+# define roleselect_debug(x)
+#endif
+
 // Will return a list of active candidates. It increases the buffer 5 times until it finds a candidate which is active within the buffer.
-/proc/get_active_candidates(var/buffer = 1)
-
-	var/list/candidates = list() //List of candidate KEYS to assume control of the new larva ~Carn
+/proc/get_active_candidates(var/role_id=null, var/buffer=ROLE_SELECT_AFK_BUFFER, var/poll=0)
+	var/list/candidates = list() //List of candidate mobs to assume control of the new larva ~fuck you
 	var/i = 0
 	while(candidates.len <= 0 && i < 5)
+		roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Player list is [player_list.len] items long.")
 		for(var/mob/dead/observer/G in player_list)
-			if(((G.client.inactivity/10)/60) <= buffer + i) // the most active players are more likely to become an alien
-				if(!(G.mind && G.mind.current && G.mind.current.stat != DEAD))
-					candidates += G.key
+			if(G.mind && G.mind.current && G.mind.current.stat != DEAD)
+				roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Skipping [G]  - Shitty candidate.")
+				continue
+
+			if(!G.client.desires_role(role_id,display_to_user=(poll!=0 && i==0) ? poll : 0)) // Only ask once.
+				roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Skipping [G]  - Doesn't want role.")
+				continue
+
+			if(((G.client.inactivity/10)/60) > buffer + i) // the most active players are more likely to become an alien
+				roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Skipping [G]  - Inactive.")
+				continue
+
+			roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Selected [G] as candidate.")
+			candidates += G
 		i++
 	return candidates
 
-// Same as above but for alien candidates.
-
-/proc/get_alien_candidates()
-
-	var/list/candidates = list() //List of candidate KEYS to assume control of the new larva ~Carn
-	var/i = 0
-	while(candidates.len <= 0 && i < 5)
-		for(var/mob/dead/observer/G in player_list)
-			if(G.client.prefs.be_special & BE_ALIEN)
-				if(((G.client.inactivity/10)/60) <= ALIEN_SELECT_AFK_BUFFER + i) // the most active players are more likely to become an alien
-					if(!(G.mind && G.mind.current && G.mind.current.stat != DEAD))
-						candidates += G.key
-		i++
-	return candidates
-
-/proc/get_candidates(be_special_flag=0)
+/proc/get_candidates(var/role_id=null)
 	. = list()
 	for(var/mob/dead/observer/G in player_list)
 		if(!(G.mind && G.mind.current && G.mind.current.stat != DEAD))
-			if(!G.client.is_afk() && (G.client.prefs.be_special & be_special_flag))
+			if(!G.client.is_afk() && (role_id==null || G.client.desires_role(role_id)))
 				. += G.client
 
 /proc/ScreenText(obj/O, maptext="", screen_loc="CENTER-7,CENTER-7", maptext_height=480, maptext_width=480)
@@ -465,3 +513,63 @@ var/list/DummyCache = list()
 			continue
 		mobs_found += M
 	return mobs_found
+
+/proc/GetRedPart(const/hexa)
+	return hex2num(copytext(hexa, 2, 4))
+
+/proc/GetGreenPart(const/hexa)
+	return hex2num(copytext(hexa, 4, 6))
+
+/proc/GetBluePart(const/hexa)
+	return hex2num(copytext(hexa, 6, 8))
+
+/proc/GetHexColors(const/hexa)
+	return list(\
+		GetRedPart(hexa),\
+		GetGreenPart(hexa),\
+		GetBluePart(hexa)\
+	)
+
+/proc/MixColors(const/list/colors)
+	var/list/reds = new
+	var/list/blues = new
+	var/list/greens = new
+	var/list/weights = new
+
+	for (var/i = 0, ++i <= colors.len)
+		reds.Add(GetRedPart(colors[i]))
+		blues.Add(GetBluePart(colors[i]))
+		greens.Add(GetGreenPart(colors[i]))
+		weights.Add(1)
+
+	var/r = mixOneColor(weights, reds)
+	var/g = mixOneColor(weights, greens)
+	var/b = mixOneColor(weights, blues)
+	return rgb(r,g,b)
+
+/proc/mixOneColor(var/list/weight, var/list/color)
+	if(!weight || !color || length(weight) != length(color))
+		return 0
+
+	var/contents = length(weight)
+
+	// normalize weights
+	var/listsum = 0
+
+	for(var/i = 1, i <= contents, i++)
+		listsum += weight[i]
+
+	for(var/i = 1, i <= contents, i++)
+		weight[i] /= listsum
+
+	// mix them
+	var/mixedcolor = 0
+
+	for(var/i = 1, i <= contents, i++)
+		mixedcolor += weight[i] * color[i]
+
+	// until someone writes a formal proof for this algorithm, let's keep this in
+	//if(mixedcolor<0x00 || mixedcolor>0xFF)
+	//	return 0
+	// that's not the kind of operation we are running here, nerd
+	return Clamp(round(mixedcolor), 0, 255)

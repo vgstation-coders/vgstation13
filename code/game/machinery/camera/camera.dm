@@ -3,7 +3,6 @@ var/list/camera_names=list()
 	name = "security camera"
 	desc = "It's used to monitor rooms."
 	icon = 'icons/obj/monitors.dmi'
-	var/obj/item/device/camera_bug/hasbug = null
 	icon_state = "camera"
 	use_power = 2
 	idle_power_usage = 5
@@ -19,6 +18,9 @@ var/list/camera_names=list()
 	var/invuln = null
 	var/bugged = 0
 	var/obj/item/weapon/camera_assembly/assembly = null
+	var/light_on = 0
+
+	machine_flags = SCREWTOGGLE
 
 	//OTHER
 
@@ -58,6 +60,15 @@ var/list/camera_names=list()
 			suffix++
 	..()
 
+/obj/machinery/camera/Destroy()
+	deactivate(null, 0) //kick anyone viewing out
+	if(assembly)
+		qdel(assembly)
+		assembly = null
+	wires = null
+	cameranet.removeCamera(src) //Will handle removal from the camera network and the chunks, so we don't need to worry about that
+	..()
+
 /obj/machinery/camera/emp_act(severity)
 	if(!isEmpProof())
 		if(prob(100/severity))
@@ -93,20 +104,22 @@ var/list/camera_names=list()
 	return
 
 /obj/machinery/camera/blob_act()
-	del(src)
+	qdel(src)
 	return
 
 /obj/machinery/camera/proc/setViewRange(var/num = 7)
 	src.view_range = num
 	cameranet.updateVisibility(src, 0)
 
-/obj/machinery/camera/proc/shock(var/mob/living/user)
+/obj/machinery/camera/shock(var/mob/living/user)
 	if(!istype(user))
 		return
 	user.electrocute_act(10, src)
 
 /obj/machinery/camera/attack_paw(mob/living/carbon/alien/humanoid/user as mob)
 	if(!istype(user))
+		return
+	if(!status)
 		return
 	status = 0
 	visible_message("<span class='warning'>\The [user] slashes at [src]!</span>")
@@ -121,10 +134,7 @@ var/list/camera_names=list()
 	if(istype(W, /obj/item/weapon/screwdriver))
 		//user << "<span class='notice'>You start to [panel_open ? "close" : "open"] the camera's panel.</span>"
 		//if(toggle_panel(user)) // No delay because no one likes screwdrivers trying to be hip and have a duration cooldown
-		panel_open = !panel_open
-		user.visible_message("<span class='warning'>[user] screws the camera's panel [panel_open ? "open" : "closed"]!</span>",
-		"<span class='notice'>You screw the camera's panel [panel_open ? "open" : "closed"].</span>")
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+		togglePanelOpen(W, user, icon_state, icon_state)
 
 	else if((istype(W, /obj/item/weapon/wirecutters) || istype(W, /obj/item/device/multitool)) && panel_open)
 		wires.Interact(user)
@@ -132,13 +142,16 @@ var/list/camera_names=list()
 	else if(istype(W, /obj/item/weapon/weldingtool) && wires.CanDeconstruct())
 		if(weld(W, user))
 			if(assembly)
-				assembly.loc = src.loc
 				assembly.state = 1
-			del(src)
+				assembly.loc = src.loc
+				assembly = null
+
+			qdel(src)
 
 
 	// OTHER
 	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
+		user.delayNextAttack(5)
 		var/mob/living/U = user
 		var/obj/item/weapon/paper/X = null
 		var/obj/item/device/pda/P = null
@@ -156,8 +169,8 @@ var/list/camera_names=list()
 		U << "You hold \a [itemname] up to the camera ..."
 		for(var/mob/living/silicon/ai/O in living_mob_list)
 			if(!O.client) continue
-			if(U.name == "Unknown") O << "<b>[U]</b> holds \a [itemname] up to one of your cameras ..."
-			else O << "<b><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></b> holds \a [itemname] up to one of your cameras ..."
+			if(U.name == "Unknown") O << "<span class='name'>[U]</span> holds \a [itemname] up to one of your cameras ..."
+			else O << "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds \a [itemname] up to one of your cameras ..."
 			O << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", itemname, info), text("window=[]", itemname))
 		for(var/mob/O in player_list)
 			if (istype(O.machine, /obj/machinery/computer/security))
@@ -165,26 +178,6 @@ var/list/camera_names=list()
 				if (S.current == src)
 					O << "[U] holds \a [itemname] up to one of the cameras ..."
 					O << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", itemname, info), text("window=[]", itemname))
-	else if (istype(W, /obj/item/device/camera_bug) && panel_open)
-		if (!src.can_use())
-			user << "\blue Camera non-functional"
-			return
-		else
-			user << "\blue Camera bugged."
-			user.drop_item(W)
-			hasbug = W
-			contents += W
-			if(prob(15))
-				spawn(30)
-					if(src.can_use() && hasbug)
-						desc += "<br>The power light on the camera is blinking"
-						triggerCameraAlarm()
-	else if (iscrowbar(W) && panel_open && src.hasbug)
-		user << "\blue You retrieve \the [hasbug]"
-		user.put_in_hands(hasbug)
-		contents -= hasbug
-		hasbug = null
-		deactivatebug(user)
 	else if(istype(W, /obj/item/weapon/melee/energy/blade))//Putting it here last since it's a special case. I wonder if there is a better way to do these than type casting.
 		deactivate(user,2)//Here so that you can disconnect anyone viewing the camera, regardless if it's on or off.
 		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
@@ -192,38 +185,30 @@ var/list/camera_names=list()
 		spark_system.start()
 		playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 		playsound(loc, "sparks", 50, 1)
-		visible_message("\blue The camera has been sliced apart by [] with an energy blade!")
+		visible_message("<span class='notice'>The camera has been sliced apart by [] with an energy blade!</span>")
 		del(src)
 	else
 		..()
 	return
 
-/obj/machinery/camera/proc/deactivatebug(user as mob)
-	for(var/mob/O in player_list)
-		if(istype(O.machine, /obj/item/device/handtv))
-			var/obj/item/device/handtv/S = O.machine
-			if (S.current == src)
-				O.unset_machine()
-				O.reset_view(null)
-				O << "The screen bursts into static."
 /obj/machinery/camera/proc/deactivate(user as mob, var/choice = 1)
 	if(choice==1)
 		status = !( src.status )
 		if (!(src.status))
 			if(user)
-				visible_message("\red [user] has deactivated [src]!")
+				visible_message("<span class='warning'>[user] has deactivated [src]!</span>")
 				add_hiddenprint(user)
 			else
-				visible_message("\red \The [src] deactivates!")
+				visible_message("<span class='warning'> \The [src] deactivates!</span>")
 			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
 			icon_state = "[initial(icon_state)]1"
 			add_hiddenprint(user)
 		else
 			if(user)
-				visible_message("\red [user] has reactivated [src]!")
+				visible_message("<span class='warning'> [user] has reactivated [src]!</span>")
 				add_hiddenprint(user)
 			else
-				visible_message("\red \the [src] reactivates!")
+				visible_message("<span class='warning'> \the [src] reactivates!</span>")
 			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
 			icon_state = initial(icon_state)
 			add_hiddenprint(user)
@@ -241,13 +226,13 @@ var/list/camera_names=list()
 /obj/machinery/camera/proc/triggerCameraAlarm()
 	alarm_on = 1
 	for(var/mob/living/silicon/S in mob_list)
-		S.triggerAlarm("Camera", get_area(src), list(src), src)
+		S.triggerAlarm("Camera", areaMaster, list(src), src)
 
 
 /obj/machinery/camera/proc/cancelCameraAlarm()
 	alarm_on = 0
 	for(var/mob/living/silicon/S in mob_list)
-		S.cancelAlarm("Camera", get_area(src), list(src), src)
+		S.cancelAlarm("Camera", areaMaster, list(src), src)
 
 /obj/machinery/camera/proc/can_use()
 	if(!status)
@@ -262,7 +247,7 @@ var/list/camera_names=list()
 	if(isXRay())
 		see = range(view_range, pos)
 	else
-		see = hear(view_range, pos)
+		see = get_hear(view_range, pos)
 	return see
 
 /atom/proc/auto_turn()
@@ -309,7 +294,7 @@ var/list/camera_names=list()
 		return 0
 
 	// Do after stuff here
-	user << "<span class='notice'>You start to weld the [src]..</span>"
+	user << "<span class='notice'>You start to weld the [src].</span>"
 	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 	WT.eyecheck(user)
 	busy = 1
@@ -320,3 +305,4 @@ var/list/camera_names=list()
 		return 1
 	busy = 0
 	return 0
+

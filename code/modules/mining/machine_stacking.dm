@@ -92,7 +92,6 @@
 		for (var/dir in cardinal)
 			src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
 			if(src.output) break
-		processing_objects.Add(src)
 		return
 	return
 
@@ -112,11 +111,11 @@
 					stack=stacks["[O.type]"]
 					stack.amount += O:amount
 				stacks["[O.type]"]=stack
-				del(O)
+				qdel(O)
 				continue
-			if (istype(O,/obj/item/weapon/ore/slag))
-				del(O)
-				continue
+			//if (istype(O,/obj/item/weapon/ore/slag))
+			//	qdel(O)
+			//	continue
 			O.loc = src.output.loc
 		for(var/typepath in stacks)
 			stack=stacks[typepath]

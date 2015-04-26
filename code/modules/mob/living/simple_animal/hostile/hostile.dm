@@ -3,6 +3,7 @@
 	mouse_opacity = 2 //This makes it easier to hit hostile mobs, you only need to click on their tile, and is set back to 1 when they die
 	stop_automated_movement_when_pulled = 0
 	environment_smash = 1 //Set to 1 to break closets,tables,racks, etc; 2 for walls; 3 for rwalls
+
 	var/stance = HOSTILE_STANCE_IDLE	//Used to determine behavior
 	var/atom/target // /vg/ edit:  Removed type specification so spiders can target doors.
 	var/attack_same = 0 //Set us to 1 to allow us to attack our own faction, or 2, to only ever attack our own faction
@@ -29,12 +30,13 @@
 	var/attack_faction = null //Put a faction string here to have a mob only ever attack a specific faction
 
 /mob/living/simple_animal/hostile/Life()
-
 	. = ..()
+	if(istype(loc, /obj/item/device/mobcapsule))
+		return 0
 	if(!.)
 		walk(src, 0)
 		return 0
-	if(client)
+	if(client && !deny_client_move)
 		return 0
 	if(!stat)
 		switch(stance)
@@ -45,12 +47,14 @@
 				GiveTarget(new_target)
 
 			if(HOSTILE_STANCE_ATTACK)
-				MoveToTarget()
-				DestroySurroundings()
+				if(!(flags & INVULNERABLE))
+					MoveToTarget()
+					DestroySurroundings()
 
 			if(HOSTILE_STANCE_ATTACKING)
-				AttackTarget()
-				DestroySurroundings()
+				if(!(flags & INVULNERABLE))
+					AttackTarget()
+					DestroySurroundings()
 
 		if(ranged)
 			ranged_cooldown--
@@ -81,6 +85,8 @@
 			Targets = FoundTarget
 			break
 		if(CanAttack(A))//Can we attack it?
+			if(isMoMMI(A))
+				continue
 			if(istype(src, /mob/living/simple_animal/hostile/scarybat))
 				if(A == src:owner)
 					continue
@@ -111,13 +117,27 @@
 		var/mob/living/L = the_target
 		if(L.stat > stat_attack || L.stat != stat_attack && stat_exclusive == 1)
 			return 0
+		if(L.flags & INVULNERABLE)
+			return 0
 		if(L.faction == src.faction && !attack_same || L.faction != src.faction && attack_same == 2 || L.faction != attack_faction && attack_faction)
 			return 0
+		if(iscultist(L) && (faction == "cult"))
+			return 0
+		if(isslime(L) && (faction == "slimesummon"))
+			return 0
+		if((istype(L,/mob/living/simple_animal/corgi/Ian) || istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
+			return 0
+		if(ishuman(L))
+			var/mob/living/carbon/human/H = L
+			if(H.dna)
+				if((H.dna.mutantrace == "slime") && (faction == "slimesummon"))
+					return 0
 		if(L in friends)
 			return 0
 		return 1
 	if(isobj(the_target))
-		if(the_target.type in wanted_objects)
+		//if(the_target.type in wanted_objects)
+		if(is_type_in_list(the_target,wanted_objects))
 			return 1
 		if(istype(the_target, /obj/mecha) && search_objects < 2)
 			var/obj/mecha/M = the_target
@@ -143,15 +163,12 @@
 		if(ranged)//We ranged? Shoot at em
 			if(target_distance >= 2 && ranged_cooldown <= 0)//But make sure they're a tile away at least, and our range attack is off cooldown
 				OpenFire(target)
-		if(retreat_distance != null)//If we have a retreat distance, check if we need to run from our target
-			if(target_distance <= retreat_distance)//If target's closer than our retreat distance, run
-				walk_away(src,target,retreat_distance,move_to_delay)
-			else
-				Goto(target,move_to_delay,minimum_distance)//Otherwise, get to our minimum distance so we chase them
-		else
-			Goto(target,move_to_delay,minimum_distance)
 		if(isturf(loc) && target.Adjacent(src))	//If they're next to us, attack
 			AttackingTarget()
+		if(retreat_distance != null && target_distance <= retreat_distance) //If we have a retreat distance, check if we need to run from our target
+			walk_away(src,target,retreat_distance,move_to_delay)
+		else
+			Goto(target,move_to_delay,minimum_distance)//Otherwise, get to our minimum distance so we chase them
 		return
 	if(target.loc != null && get_dist(src, target.loc) <= vision_range)//We can't see our target, but he's in our vision range still
 		if(FindHidden(target) && environment_smash)//Check if he tried to hide in something to lose us
@@ -224,27 +241,28 @@
 	..()
 	walk(src, 0)
 
-/mob/living/simple_animal/hostile/proc/OpenFire(var/the_target)
-
-	var/target = the_target
-	visible_message("\red <b>[src]</b> [ranged_message] at [target]!", 1)
+/mob/living/simple_animal/hostile/proc/OpenFire(var/target)
 
 	var/tturf = get_turf(target)
 	if(rapid)
 		spawn(1)
 			Shoot(tturf, src.loc, src)
+			visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
 			if(casingtype)
 				new casingtype(get_turf(src))
 		spawn(4)
 			Shoot(tturf, src.loc, src)
+			visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
 			if(casingtype)
 				new casingtype(get_turf(src))
 		spawn(6)
 			Shoot(tturf, src.loc, src)
+			visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
 			if(casingtype)
 				new casingtype(get_turf(src))
 	else
 		Shoot(tturf, src.loc, src)
+		visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
 		if(casingtype)
 			new casingtype
 	ranged_cooldown = ranged_cooldown_cap
