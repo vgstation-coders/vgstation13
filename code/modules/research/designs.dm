@@ -2717,14 +2717,14 @@ k
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/reagentgrinder
 
-/datum/design/smartfridge
+/*/datum/design/smartfridge
 	name = "Circuit Design (SmartFridge)"
 	desc = "Allows for the construction of circuit boards used to build a smartfridge."
 	id = "smartfridge"
 	req_tech = list("programming" = 3,"engineering" = 2)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
-	build_path = /obj/item/weapon/circuitboard/smartfridge
+	build_path = /obj/item/weapon/circuitboard/smartfridge*/
 
 /datum/design/hydroponics
 	name = "Circuit Design (Hydroponics Tray)"

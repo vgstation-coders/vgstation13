@@ -3,16 +3,13 @@
 #define CAT_COIN   3
 
 /datum/data/vending_product
-	var/product_name = "Generic Shite"
+	var/product_name = "OH FUCK WHAT DID YOU DO"
 	var/product_path = null
 	var/original_amount = 0
 	var/amount = 0
 	var/price = 0
 	var/display_color = "blue"
 	var/category = CAT_NORMAL
-	var/Contraband = 0
-	var/IDrequired = 0
-	var/IDaccess = null
 
 datum/data/VendingMachineGlobalSettings
 	var/AccountID = 0
@@ -41,7 +38,7 @@ datum/data/VendingMachineGlobalSettings
 */
 
 /obj/machinery/vending
-	name = "Empty vending machine"
+	name = "Empty Vending machine"
 	desc = "Capitalism, Ho!"
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "empty"
@@ -64,10 +61,10 @@ datum/data/VendingMachineGlobalSettings
 	var/list/prices     = list()	// Prices for each item, list(/type/path = price), items not in the list don't have a price.
 	var/product_slogans = ""	//String of slogans separated by semicolons, optional
 	var/product_ads = ""		//String of small ad messages in the vending screen - random chance
-	var/list/product_records = list()
-	var/list/hidden_records = list()
-	var/list/coin_records = list()
+	var/list/product_records[0]
 	var/list/slogan_list = list()
+	var/list/item_quants = list()
+	var/list/accepted_types = list()
 	var/list/small_ads = list()	//Small ad messages in the vending screen - random chance of popping up whenever you open it
 	var/vend_reply				//Thank you for shopping!
 	var/last_reply = 0
@@ -81,6 +78,7 @@ datum/data/VendingMachineGlobalSettings
 	var/shut_up = 0				//Stop spouting those godawful pitches!
 	var/extended_inventory = 0	//can we access the hidden inventory?
 	var/scan_id = 1
+	var/smartfridge = 0
 	var/obj/item/weapon/coin/coin
 	var/datum/wires/vending/wires = null
 	var/list/overlays_vending[2]//1 is the panel layer, 2 is the dangermode layer
@@ -136,10 +134,7 @@ datum/data/VendingMachineGlobalSettings
 	for(var/product_path_premium in premium)
 		for(var/i = 1 to premium[product_path_premium])
 			new product_path_premium(productbox)
-	src.build_inventory(products)
-	//Add hidden inventory
-	src.build_inventory(contraband, 1)
-	src.build_inventory(premium, 0, 1)
+	src.build_inventory(productbox.contents)
 	contraband = list()
 	products = list()
 	premium = list()
@@ -156,6 +151,8 @@ datum/data/VendingMachineGlobalSettings
 */
 	if(coinbox)
 		coinbox.loc = get_turf(src)
+	if(productbox)
+		productbox.loc = get_turf(src)
 	..()
 
 /obj/machinery/vending/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
@@ -200,10 +197,10 @@ datum/data/VendingMachineGlobalSettings
 				if (user.loc == user_loc && P.loc == pack_loc && anchored && self_loc == src.loc && !(user.stat) && (!user.stunned && !user.weakened && !user.paralysis && !user.lying))
 					user << "<span class='notice'>\icon[src] You finish refilling the vending machine.</span>"
 					playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
-					for (var/datum/data/vending_product/D in product_records)
-						D.amount = D.original_amount
-					for (var/datum/data/vending_product/D in hidden_records)
-						D.amount = D.original_amount
+				//	for (var/datum/data/vending_product/D in product_records)
+				//		D.amount = D.original_amount
+				//	for (var/datum/data/vending_product/D in hidden_records)
+				//		D.amount = D.original_amount
 					var/obj/item/emptyvendomatpack/emptypack = new /obj/item/emptyvendomatpack(P.loc)
 					emptypack.icon_state = P.icon_state
 					emptypack.overlays += image('icons/obj/vending_pack.dmi',"emptypack")
@@ -242,40 +239,35 @@ datum/data/VendingMachineGlobalSettings
 		del(src)
 
 
-/obj/machinery/vending/proc/build_inventory(var/list/productlist,hidden=0,req_coin=0)
-	for(var/typepath in productlist)
-		var/amount = productlist[typepath]
-		var/price = prices[typepath]
-		if(isnull(amount)) amount = 1
-
-		var/atom/temp = new typepath(null)
-		var/datum/data/vending_product/R = new /datum/data/vending_product()
-		R.product_path = typepath
-		R.amount = amount
-		R.original_amount = amount
-		R.price = price
-		R.display_color = pick("red","blue","green")
-
-		if(hidden)
-			R.category=CAT_HIDDEN
-			hidden_records  += R
-		else if(req_coin)
-			R.category=CAT_COIN
-			coin_records    += R
-		else
-			R.category=CAT_NORMAL
-			product_records += R
-
-		if(delay_product_spawn)
-			sleep(1)
-			R.product_name = temp.name
-		else
-			R.product_name = temp.name
+/obj/machinery/vending/proc/build_inventory(var/list/productlist)
+	for(var/obj/product in productlist)
+		if(!(product.type in src.product_records))
+			var/Amount = 0
+			for(var/I = 1; I < productlist.len; I++)
+				if(productlist[I] == product.type)
+					Amount++
+			var/price = prices[product.type]
+			var/datum/data/vending_product/R = new /datum/data/vending_product()
+			R.product_path = product.type
+			R.amount  = Amount
+			R.original_amount = Amount
+			R.price = price
+			R.display_color = pick("red","blue","green")
+			product_records[product.type] = R
+			if(product in contraband)
+				R.category=CAT_HIDDEN
+			else if(product in premium)
+				R.category=CAT_COIN
+			if(delay_product_spawn)
+				sleep(1)
+				R.product_name = product.name
+			else
+				R.product_name = product.name
 
 /obj/machinery/vending/proc/get_item_by_type(var/this_type)
 	var/list/datum_products = list()
-	datum_products |= hidden_records
-	datum_products |= coin_records
+//	datum_products |= hidden_records
+//	datum_products |= coin_records
 	datum_products |= product_records
 	for(var/datum/data/vending_product/product in datum_products)
 		if(product.product_path == this_type)
@@ -324,31 +316,97 @@ datum/data/VendingMachineGlobalSettings
 			voucher.loc = coinbox
 	return 1
 
+/obj/machinery/vending/proc/accept_check(var/obj/item/O as obj, var/mob/user as mob)
+	for(var/ac_type in accepted_types)
+		if(istype(O, ac_type))
+			return 1
+
 /obj/machinery/vending/attackby(obj/item/weapon/W, mob/user)
 	. = ..()
 	if(.)
 		return .
-	if(istype(W, /obj/item/device/multitool)||istype(W, /obj/item/weapon/wirecutters))
-		if(panel_open)
-			attack_hand(user)
-		return
-	else if(istype(W, /obj/item/weapon/coin) && premium.len > 0)
-		if (isnull(coin))
-			user.drop_item(W, src)
-			coin = W
-			user << "<span class='notice'>You insert a coin into [src].</span>"
-		else
-			user << "<SPAN CLASS='notice'>There's already a coin in [src].</SPAN>"
+	if(stat & NOPOWER)
+		user << "<span class='notice'>\The [src] is unpowered and useless.</span>"
+		return 1
+	if(..())
+		return 1
+	else
+	 	/*************************
+	 	******* LOADING ********** - Stolen and adapted from the smartfridge code.
+	 	*************************/
 
-		return
-	else if(istype(W, /obj/item/voucher))
-		if(can_accept_voucher(W, user))
-			user.drop_item(W, src)
-			user << "<span class='notice'>You insert [W] into [src].</span>"
-			return voucher_act(W, user)
+		if((accept_check(W) || !smartfridge) && !isnull(productbox))
+			if(!panel_open && !(istype(W, /obj/item/weapon/storage/bag)))
+				if(src.productbox.contents.len >= MAX_N_OF_ITEMS)
+					user << "<span class='notice'>\The [src] is full.</span>"
+					return 1
+				else
+					user.before_take_item(W)
+					W.loc = src.productbox
+					var/sanitized_name = sanitize(W.name, list("\"" = "", "'" = "", "+" = "plus", ";" = "", "^" = "", "&" = "", "<" = "", ">" = ""))
+					W.name = sanitized_name
+					if(item_quants[sanitized_name])
+						item_quants[sanitized_name]++
+					else
+						item_quants[sanitized_name] = 1
+					if (isnull(prices[W.type]))
+						prices[W.type] = (input(user,"What price do you want to set for the[W]?","Price Setting",0,) as num)
+					else
+						user.visible_message("<span class='notice'>[user] has added \the [W] to \the [src].", \
+										 "<span class='notice'>You add \the [W] to \the [src].")
+					src.build_inventory(productbox.contents)
+			if(istype(W, /obj/item/weapon/storage/bag))
+				var/obj/item/weapon/storage/bag/bag = W
+				var/objects_loaded 	= 0
+				for(var/obj/G in bag.contents)
+					if(accept_check(G) || !smartfridge)
+						if(contents.len >= MAX_N_OF_ITEMS)
+							user << "<span class='notice'>\The [src] is full.</span>"
+							return 1
+						else
+							bag.remove_from_storage(G,src.productbox)
+							var/sanitized_name = sanitize(G.name, list("\"" = "", "'" = "", "+" = "plus", ";" = "", "^" = "", "&" = "", "<" = "", ">" = ""))
+							G.name = sanitized_name
+							if(item_quants[sanitized_name])
+								item_quants[sanitized_name]++
+							else
+								item_quants[sanitized_name] = 1
+							objects_loaded++
+				if(objects_loaded)
+					user.visible_message("<span class='notice'>[user] loads \the [src] with \the [bag].</span>", \
+									 "<span class='notice'>You load \the [src] with \the [bag].</span>")
+				if(bag.contents.len > 0)
+					user << "<span class='notice'>Some items are refused.</span>"
+				item_quants = sortList(item_quants)
+				src.build_inventory(productbox.contents)
+				updateUsrDialog()
 		else
-			user << "<span class='notice'>\The [src] refuses to take [W].</span>"
+			user << "<span class='notice'>You can't find anywhere to fit [W] in the [src].</span>"
 			return 1
+		return 1
+		//Loading stuff stops here.
+
+		if(istype(W, /obj/item/device/multitool)||istype(W, /obj/item/weapon/wirecutters))
+			if(panel_open)
+				attack_hand(user)
+			return
+		else if(istype(W, /obj/item/weapon/coin) && premium.len > 0)
+			if (isnull(coin))
+				user.drop_item(W, src)
+				coin = W
+				user << "<span class='notice'>You insert a coin into [src].</span>"
+			else
+				user << "<SPAN CLASS='notice'>There's already a coin in [src].</SPAN>"
+
+			return
+		else if(istype(W, /obj/item/voucher))
+			if(can_accept_voucher(W, user))
+				user.drop_item(W, src)
+				user << "<span class='notice'>You insert [W] into [src].</span>"
+				return voucher_act(W, user)
+			else
+				user << "<span class='notice'>\The [src] refuses to take [W].</span>"
+				return 1
 	/*else if(istype(W, /obj/item/weapon/card) && currently_vending)
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(!linked_db)
@@ -438,9 +496,9 @@ datum/data/VendingMachineGlobalSettings
 		if(CAT_NORMAL)
 			plist=product_records
 		if(CAT_HIDDEN)
-			plist=hidden_records
+	//		plist=hidden_records
 		if(CAT_COIN)
-			plist=coin_records
+	//		plist=coin_records
 		else
 			warning("UNKNOWN CATEGORY [P.category] IN TYPE [P.product_path] INSIDE [type]!")
 	return plist.Find(P)
@@ -450,9 +508,9 @@ datum/data/VendingMachineGlobalSettings
 		if(CAT_NORMAL)
 			return product_records[pid]
 		if(CAT_HIDDEN)
-			return hidden_records[pid]
+	//		return hidden_records[pid]
 		if(CAT_COIN)
-			return coin_records[pid]
+	//		return coin_records[pid]
 		else
 			warning("UNKNOWN PRODUCT: PID: [pid], CAT: [category] INSIDE [type]!")
 			return null
@@ -471,7 +529,7 @@ datum/data/VendingMachineGlobalSettings
 
 	var/vendorname = (src.name)  //import the machine's name
 
-	if(src.currently_vending)
+	/*	if(src.currently_vending)
 		var/dat = "<TT><center><b>[vendorname]</b></center><hr /><br>" //display the name, and added a horizontal rule
 
 		// AUTOFIXED BY fix_string_idiocy.py
@@ -516,7 +574,38 @@ datum/data/VendingMachineGlobalSettings
 				dat += " <font color = 'red'>SOLD OUT</font>"
 			dat += "<br>"
 
-		dat += "</TT>"
+		dat += "</TT>" */
+	var/dat = "<TT><center><b>[vendorname]</b></center><hr /><br>"
+	dat += "<TT><b>Select an item:</b><br>"
+
+	if (productbox != null)
+		if(productbox.contents.len == 0)
+			dat += "<font color = 'red'>No Products Loaded!</font>"
+		if(productbox.contents.len > 0)
+			for (var/O in product_records)
+				var/datum/data/vending_product/N = product_records[O]
+				if (N.amount <= 0)
+					// AUTOFIXED BY fix_string_idiocy.py
+					// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\kitchen\smartfridge.dm:140: dat += "<FONT color = 'blue'><B>[capitalize(O)]</B>:"
+					dat += {"<FONT color = 'blue'><B>[capitalize(O)]</B>:
+						[N.product_name] </font>
+						<a href='byond://?src=\ref[src];vend=[O];amount=1'>Buy</A> "}
+					// END AUTOFIX
+					if(N.amount > 5)
+						dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=5'>x5</A>)"
+						if(N.amount > 10)
+							dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=10'>x10</A>)"
+							if(N.amount > 25)
+								dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=25'>x25</A>)"
+					if(N.amount > 1)
+						dat += "(<a href='?src=\ref[src];vend=[O];amount=[N]'>All</A>)"
+						dat += "<br>"
+				dat += "</TT>"
+	else
+		dat += "<font color = 'red'><b>ERROR:</b> The Product Box is Missing!</font>"
+	user << browse("<HEAD><TITLE>[src] Supplies</TITLE></HEAD><TT>[dat]</TT>", "window=smartfridge")
+	onclose(user, "smartfridge")
+	return
 
 	if(panel_open)
 		dat += wires()
@@ -528,12 +617,35 @@ datum/data/VendingMachineGlobalSettings
 	onclose(user, "vending")
 	return
 
+/obj/machinery/vending/Topic(href, href_list)
+	if(..())
+		return
+	usr.set_machine(src)
+
+	var/N = href_list["vend"]
+	var/amount = text2num(href_list["amount"])
+
+	if(item_quants[N] <= 0) // Sanity check, there are probably ways to press the button when it shouldn't be possible.
+		return
+
+	item_quants[N] = max(item_quants[N] - amount, 0)
+
+	var/i = amount
+	for(var/obj/O in productbox.contents)
+		if(O.name == N)
+			O.loc = src.loc
+			i--
+			if(i <= 0)
+				break
+
+	src.updateUsrDialog()
+	return
 
 // returns the wire panel text
 /obj/machinery/vending/proc/wires()
 	return wires.GetInteractWindow()
 
-/obj/machinery/vending/Topic(href, href_list)
+/*/obj/machinery/vending/Topic(href, href_list)
 	if(..())
 		usr << browse(null, "window=vending")
 		return 1
@@ -620,7 +732,7 @@ datum/data/VendingMachineGlobalSettings
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
 
-	return
+	return */
 
 /obj/machinery/vending/proc/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
 	if (!allowed(user) && !emagged && wires.IsIndexCut(VENDING_WIRE_IDSCAN)) //For SECURE VENDING MACHINES YEAH
@@ -629,7 +741,7 @@ datum/data/VendingMachineGlobalSettings
 		return
 	src.vend_ready = 0 //One thing at a time!!
 
-	if (!by_voucher && (R in coin_records))
+/*	if (!by_voucher && (R in coin_records))
 		if (isnull(coin))
 			user << "<SPAN CLASS='notice'>You need to insert a coin to get this item.</SPAN>"
 			return
@@ -646,7 +758,7 @@ datum/data/VendingMachineGlobalSettings
 				coinbox.handle_item_insertion(coin, TRUE)
 
 		coin = null
-
+*/
 	R.amount--
 
 	if(((src.last_reply + (src.vend_delay + 200)) <= world.time) && src.vend_reply)
@@ -1141,6 +1253,7 @@ datum/data/VendingMachineGlobalSettings
 						/obj/item/seeds/plumpmycelium = 2,/obj/item/seeds/reishimycelium = 2,/obj/item/seeds/harebell = 3)//,/obj/item/seeds/synthbuttseed = 3)
 	premium = list(/obj/item/toy/waterflower = 1)
 	pack = /obj/structure/vendomatpack/hydroseeds
+	delay_product_spawn = 1
 /obj/machinery/vending/magivend
 	name = "MagiVend"
 	desc = "A magic vending machine."
@@ -1340,7 +1453,7 @@ datum/data/VendingMachineGlobalSettings
 		contraband[/obj/item/clothing/head/helmet/space/rig/nazi] = 3
 		contraband[/obj/item/clothing/suit/space/rig/nazi] = 3
 		contraband[/obj/item/weapon/gun/energy/plasma/MP40k] = 4
-		src.build_inventory(contraband, 1)
+		src.build_inventory(contraband)
 		emagged = 1
 		overlays = 0
 		var/image/dangerlay = image(icon,"[icon_state]-dangermode",LIGHTING_LAYER+1)
@@ -1383,7 +1496,7 @@ datum/data/VendingMachineGlobalSettings
 		contraband[/obj/item/clothing/head/helmet/space/rig/soviet] = 3
 		contraband[/obj/item/clothing/suit/space/rig/soviet] = 3
 		contraband[/obj/item/weapon/gun/energy/laser/LaserAK] = 4
-		src.build_inventory(contraband, 1)
+		src.build_inventory(contraband)
 		emagged = 1
 		overlays = 0
 		var/image/dangerlay = image(icon,"[icon_state]-dangermode",LIGHTING_LAYER+1)

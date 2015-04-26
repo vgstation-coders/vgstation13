@@ -76,11 +76,11 @@
 				locked = !locked
 		else
 			user << "<span class='warning'>The lockbox scans your fingerprint, and rudely buzzes!</span>"
-	if(!locked)
+	if(!locked && (!(istype(W, /obj/item/device/multitool) && dnalocked)))
 		..()
 	else if (locked && !canbednalocked)
 		user << "<span class='warning'>It's locked!</span>"
-	else
+	else if (!(istype(W, /obj/item/device/multitool) && dnalocked))
 		..()
 	return
 

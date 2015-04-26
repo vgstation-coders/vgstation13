@@ -531,9 +531,9 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/scanning_module" = 1,
 							"/obj/item/weapon/reagent_containers/glass/beaker/large" = 1)
 
-/obj/item/weapon/circuitboard/smartfridge
+/*/obj/item/weapon/circuitboard/smartfridge
 	name = "Circuit Board (SmartFridge)"
-	build_path = "/obj/machinery/smartfridge"
+	build_path = "/obj/machinery/vending/smartfridge"
 	board_type = "machine"
 	origin_tech = "programming=3;engineering=2"
 	frame_desc = "Requires 2 Manipulators, 4 Matter Bins, ,1 Scanning Module, and 2 Console Screens.   "
@@ -545,24 +545,24 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/smartfridge/medbay
 	name = "Circuit Board (Medbay SmartFridge)"
-	build_path = "/obj/machinery/smartfridge/secure/medbay"
+	build_path = "/obj/machinery/vending/smartfridge/secure/medbay"
 
 /obj/item/weapon/circuitboard/smartfridge/chemistry
 	name = "Circuit Board (Chemical SmartFridge)"
-	build_path = "/obj/machinery/smartfridge/chemistry"
+	build_path = "/obj/machinery/vending/smartfridge/chemistry"
 
 /obj/item/weapon/circuitboard/smartfridge/extract
 	name = "Circuit Board (Extract SmartFridge)"
-	build_path = "/obj/machinery/smartfridge/extract"
+	build_path = "/obj/machinery/vending/smartfridge/extract"
 
 /obj/item/weapon/circuitboard/smartfridge/seeds
 	name = "Circuit Board (Megaseed Servitor)"
-	build_path = "/obj/machinery/smartfridge/seeds"
+	build_path = "/obj/machinery/vending/smartfridge/seeds"
 
 /obj/item/weapon/circuitboard/smartfridge/drinks
 	name = "Circuit Board (Drinks Showcase)"
-	build_path = "/obj/machinery/smartfridge/drinks"
-
+	build_path = "/obj/machinery/vending/smartfridge/drinks"
+*/
 /obj/item/weapon/circuitboard/hydroponics
 	name = "Circuit Board (Hydroponics Tray)"
 	build_path = "/obj/machinery/portable_atmospherics/hydroponics"
