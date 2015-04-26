@@ -131,8 +131,31 @@ BLIND     // can't see anything
 	..()
 
 // Called just before an attack_hand(), in mob/UnarmedAttack()
-/obj/item/clothing/gloves/proc/Touch(var/atom/A, var/proximity)
-	return 0 // return 1 to cancel attack_hand()
+/obj/item/clothing/gloves/proc/Touch(var/atom/A, var/mob/user, var/proximity)
+	var/mob/living/carbon/M = A
+	if(!istype(M))
+		return
+
+	if(cell)
+		if(user.a_intent == I_HURT)//Stungloves. Any contact will stun
+			user.visible_message("<span class='danger'>[M] has been touched with the stun gloves by [user]!</span>")
+			if(cell.charge > 0)
+				electrocute_mob(M, cell, src)
+				electrocute_mob(user, cell, src) //haha, suck the live wire!
+				user.delayNextAttack(8)
+				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Stungloved [M.name] ([M.ckey])</font>")
+				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stungloved by [user.name] ([user.ckey])</font>")
+				if(!iscarbon(user))
+					M.LAssailant = null
+				else
+					M.LAssailant = user
+
+				log_attack("<font color='red'>[user.name] ([user.ckey]) stungloved [M.name] ([M.ckey])</font>")
+				return 1
+			else
+				user << "<span class='warning'>Not enough charge! </span>"
+			return 0
+	return 0
 
 //Head
 /obj/item/clothing/head
