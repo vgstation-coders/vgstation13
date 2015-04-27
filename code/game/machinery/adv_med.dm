@@ -190,6 +190,7 @@
 			else
 				orient = "RIGHT"
 				visible_message("<span class='warning'>There is no space!</span>","<span class='warning'>[user] wants to be hardcore, but his CMO won't let him.</span>")
+				generate_console(get_step(get_turf(src), WEST))
 		else
 			orient = "RIGHT"
 			if(generate_console(get_step(get_turf(src), WEST)))
@@ -197,6 +198,7 @@
 			else
 				orient = "LEFT"
 				visible_message("<span class='warning'>There is no space!</span>","<span class='warning'>[user] wants to be hardcore, but his CMO won't let him.</span>")
+				generate_console(get_step(get_turf(src), EAST))
 		return
 	if(!istype(W, /obj/item/weapon/grab))
 		return ..()
@@ -366,8 +368,6 @@
 		if(src.connected) //Is something connected?
 			dat = format_occupant_data(src.connected.get_occupant_data())
 			dat += "<HR><A href='?src=\ref[src];print=1'>Print</A><BR>"
-			if(connected.scanning==3)
-				dat += "<font color='red'>Voice recognition active. Activatation key: 'scanner, print'.</font>"
 		else
 			dat = "<font color='red'>Error: No Body Scanner connected.</font>"
 
@@ -472,7 +472,7 @@
 
 	if(connected.scanning>2)
 		for(var/datum/reagent/R in occ["all_chems"])
-			if(R.id == "blood" || R.id == "inaprovaline" || R.id == "stoxin" || R.id == "dermaline" || R.id == "bicaridine" || R.id == "dexalin") return //no repeats
+			if(R.id == "blood" || R.id == "inaprovaline" || R.id == "stoxin" || R.id == "dermaline" || R.id == "bicaridine" || R.id == "dexalin") continue //no repeats
 			else
 				dat += text("<font color='black'>Detected</font> <font color='blue'>[R.volume]</font> <font color='black'>units of</font> <font color='blue'>[R.name]</font><BR>")
 	for(var/datum/disease/D in occ["tg_diseases_list"])
@@ -587,7 +587,7 @@
 /obj/machinery/body_scanconsole/Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq)
 	if(!src.connected || src.connected.scanning<3)
 		return
-	if(speaker in range(3) && findtext(raw_message, "scanner, print"))
+	if(speaker in range(src,3) && findtext(raw_message, "scanner, print"))
 		if(!src.connected.occupant||!istype(src.connected.occupant,/mob/living/carbon/human))
 			return
 		var/obj/item/weapon/paper/R = new(src.loc)
