@@ -25,15 +25,16 @@ var/global/list/rnd_machines = list()
 
 	var/nano_file = ""
 
-	var/list/datum/materials/materials = list()
+	var/list/datum/materials/materials
 	var/max_material_storage = 0
 	var/list/allowed_materials[0]
 
 	var/research_flags //see setup.dm for details of these
 
-/obj/machinery/r_n_d/New()
-	rnd_machines |= src
-	..()
+/obj/machinery/r_n_d/New(loc)
+	..(loc)
+	rnd_machines += src
+
 	wires["Red"] = 0
 	wires["Blue"] = 0
 	wires["Green"] = 0
@@ -48,20 +49,28 @@ var/global/list/rnd_machines = list()
 	src.disable_wire = pick(w)
 	w -= src.disable_wire
 
+	if (ticker)
+		initialize()
+
+/obj/machinery/r_n_d/initialize()
 	base_state = icon_state
 	icon_state_open = "[base_state]_t"
+	materials = new()
+	var/datum/material/material
 
-	for(var/oredata in typesof(/datum/material) - /datum/material)
-		var/datum/material/ore_datum = new oredata
-		materials[ore_datum.id]=ore_datum
+	for (var/material_data in typesof(/datum/material) - /datum/material)
+		material = new material_data
+		materials[material.id] = material
 
-	// Define initial output.
-	if(research_flags &HASOUTPUT)
+	if (research_flags & HASOUTPUT)
 		output = src
-		for(var/direction in cardinal)
-			var/O = locate(/obj/machinery/mineral/output, get_step(src, dir))
-			if(O)
-				output=O
+		var/mineral_output
+
+		for (var/direction in cardinal)
+			mineral_output = locate(/obj/machinery/mineral/output, get_step(src, direction))
+
+			if(mineral_output)
+				output = mineral_output
 				break
 
 /obj/machinery/r_n_d/Destroy()
