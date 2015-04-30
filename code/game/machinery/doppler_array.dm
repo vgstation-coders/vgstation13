@@ -54,8 +54,7 @@ var/list/doppler_arrays = list()
 	data["explosions"]=explosions
 	data["explosion_cap"] = MAX_EXPLOSION_RANGE
 
-	if (!ui) // no ui has been passed, so we'll search for one
-		ui = nanomanager.get_open_ui(user, src, ui_key)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
 
 	if (!ui)
 		// the ui does not exist, so we'll create a new one
@@ -73,10 +72,6 @@ var/list/doppler_arrays = list()
 		ui.open()
 		// Auto update every Master Controller tick
 		ui.set_auto_update(1)
-	else
-		// The UI is already open so push the new data to it
-		ui.push_data(data)
-		return
 
 /obj/machinery/computer/bhangmeter/interact(mob/user as mob)
 	var/listing={"
