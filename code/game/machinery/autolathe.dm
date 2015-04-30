@@ -133,7 +133,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 	if (hacked)
 		recipes += hacked_recipes
 
-	for(var/obj/t in recipes)
+	for (var/obj/t in recipes)
 		var/title = "[t.name] ([t.m_amt] m /[t.g_amt] g)"
 		if(m_amount < t.m_amt || g_amount < t.g_amt)
 			dat += title + "<br>"
@@ -267,7 +267,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 			if(!attempting_to_build)
 				return
 
-			if (locate(attempting_to_build) in regular_recipes || locate(attempting_to_build) in hacked_recipes) // see if the requested object is in one of the construction lists, if so, it is legit -walter0o
+			if (attempting_to_build in regular_recipes || attempting_to_build in hacked_recipes) // see if the requested object is in one of the construction lists, if so, it is legit -walter0o
 				template = attempting_to_build
 
 			else // somebody is trying to exploit, alert admins -walter0o
