@@ -21,20 +21,22 @@ datum
 			var/message_prefix = "\A [reaction_name] reaction has occured"
 			var/message="[message_prefix]"
 			var/atom/A = holder.my_atom
-			if(A)
-				var/turf/T = get_turf(A)
-				var/area/my_area = get_area(T)
 
-				message += " in [formatJumpTo(T)]. (<A HREF='?_src_=vars;Vars=\ref[A]'>VV</A>)"
+			if (A)
+				var/location = get_turf(A)
+				var/location_info = formatLocation(location)
+				message += " in [formatJumpTo(location, location_info)]. (<A HREF='?_src_=vars;Vars=\ref[A]'>VV</A>)"
 				var/mob/M = get(A, /mob)
-				if(M)
-					message += " - Carried By: [M.real_name] ([M.key]) (<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
-					log_game("[message_prefix] in [my_area.name] ([T.x],[T.y],[T.z]) - Carried by [M.real_name] ([M.key])")
+
+				if (M)
+					message += " - Carried By: [key_name_admin(M)] (<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
+					log_game("[message_prefix] in [location_info] - Carried by [key_name(M)]")
 				else
 					message += " - Last Fingerprint: [(A.fingerprintslast ? A.fingerprintslast : "N/A")]"
-					log_game("[message_prefix] in [my_area.name] ([T.x],[T.y],[T.z]) - last fingerprint  [(A.fingerprintslast ? A.fingerprintslast : "N/A")]")
+					log_game("[message_prefix] in [location_info] - last fingerprint  [(A.fingerprintslast ? A.fingerprintslast : "N/A")]")
 			else
 				message += "."
+
 			message_admins(message, 0, 1)
 
 		proc/on_reaction(var/datum/reagents/holder, var/created_volume)
