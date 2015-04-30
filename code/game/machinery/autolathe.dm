@@ -267,7 +267,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 			if(!attempting_to_build)
 				return
 
-			if (attempting_to_build in regular_recipes || attempting_to_build in hacked_recipes) // see if the requested object is in one of the construction lists, if so, it is legit -walter0o
+			if ((attempting_to_build in regular_recipes) || (attempting_to_build in hacked_recipes)) // see if the requested object is in one of the construction lists, if so, it is legit -walter0o
 				template = attempting_to_build
 
 			else // somebody is trying to exploit, alert admins -walter0o
