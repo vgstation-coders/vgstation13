@@ -590,11 +590,11 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	force = 3.0
+	sharpness = 1
 	throwforce = 5.0
 	throw_speed = 1
 	throw_range = 5
 	w_class = 2.0
-	sharpness = 0.8
 	m_amt = 70
 	g_amt = 30
 	w_type = RECYK_MISC
