@@ -598,11 +598,9 @@
 	m_amt = 70
 	g_amt = 30
 	w_type = RECYK_MISC
-	melt_temperature = MELTPOINT_PLASTIC
+	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "engineering=1"
-
-	var/status = 1 		//Whether the welder is secured or unsecured (able to attach rods to it to make a flamethrower)
-	var/max_fuel = 20 	//The max amount of fuel the welder can hold
+	var/max_fuel = 20 	//The max amount of acid stored
 
 /obj/item/weapon/solder/New()
 	. = ..()
@@ -611,16 +609,17 @@
 
 /obj/item/weapon/solder/update_icon()
 	..()
-	if(reagents.get_reagent_amount("sacid")>15)
-		icon_state = "solder-20"
-	else if(reagents.get_reagent_amount("sacid")>10)
-		icon_state = "solder-15"
-	else if(reagents.get_reagent_amount("sacid")>5)
-		icon_state = "solder-10"
-	else if(reagents.get_reagent_amount("sacid")>0)
-		icon_state = "solder-5"
-	else
-		icon_state = "solder-0"
+	switch(reagents.get_reagent_amount("sacid"))
+		if(16 to INFINITY)
+			icon_state = "solder-20"
+		if(11 to 15)
+			icon_state = "solder-15"
+		if(6 to 10)
+			icon_state = "solder-10"
+		if(1 to 5)
+			icon_state = "solder-5"
+		if(0)
+			icon_state = "solder-0"
 
 /obj/item/weapon/solder/examine(mob/user)
 	..()

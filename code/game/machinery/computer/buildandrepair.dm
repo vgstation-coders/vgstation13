@@ -261,21 +261,34 @@
 	if(issolder(I))
 		var/obj/item/weapon/solder/S = I
 		if(S.remove_fuel(2,user))
-			if(istype(src,/obj/item/weapon/circuitboard/supplycomp))
-				var/obj/item/weapon/circuitboard/supplycomp/SC = src
-				SC.contraband_enabled = !SC.contraband_enabled
-				user << "<span class='notice'>You [SC.contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>"
-			if(istype(src,/obj/item/weapon/circuitboard/security))
-				new /obj/item/weapon/circuitboard/security/advanced(src.loc)
-				qdel(src)
-				return
+			solder_improve()
 	else if(iswelder(I))
 		var/obj/item/weapon/weldingtool/WT = I
 		if(WT.remove_fuel(1,user))
-			new /obj/item/weapon/circuitboard/blank(src.loc)
+			var/obj/item/weapon/circuitboard/blank/B = new /obj/item/weapon/circuitboard/blank(src.loc)
+			user.put_in_hands(B)
 			qdel(src)
 			return
 	return
+
+/obj/item/weapon/circuitboard/proc/solder_improve(mob/user as mob)
+	user << "<span class='warning'>You fiddle with a few random fuses but can't find a routing that doesn't short the board.</span>"
+	return
+
+/obj/item/weapon/circuitboard/supplycomp/solder_improve(mob/user as mob)
+	user << "<span class='notice'>You [contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>"
+	contraband_enabled = !contraband_enabled
+	return
+
+/obj/item/weapon/circuitboard/security/solder_improve(mob/user as mob)
+	if(istype(src,/obj/item/weapon/circuitboard/security/advanced))
+		return ..()
+	else
+		user << "<span class='notice'>You locate a short that makes the feed circuitry more elegant.</span>"
+		var/obj/item/weapon/circuitboard/security/advanced/A = new /obj/item/weapon/circuitboard/security/advanced(src.loc)
+		user.put_in_hands(A)
+		qdel(src)
+		return
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)

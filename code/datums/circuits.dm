@@ -5,10 +5,15 @@
 #define ETA 16
 #define THETA 32
 #define IOTA 64
+#define CHOOSE_FUSES 5 //Change this to affect how many fuses are needed to make a board.
 
+/*
+* A NOTE ON EDITING: We use 7 choose 5 to give 21 combinations. Be careful about expanding this. 9 choose 5 = 126 which would be insufferable to research through.
+* You can increase the number of fuses needed by editing CHOOSE_FUSES. Increase the number of fuse options by adding fuse_point_names in the datum and newhash proc
+* You can easily change the possible boards by adding, changing, or subtracting from the possible boards list, but if you go over the combination max (default 21), it will cause an infinite loop.
+*/
 /datum/circuits
 	var/atom/holder = null //Which specific board are we pointing at?
-	var/total_fuse_points = 7 //You could increase this for more board options. 7 Choose 5 = 21. 9 Choose 5 = 126
 	var/list/fuse_point_names = list("Alpha" = ALPHA, "Beta" = BETA, "Gamma" = GAMMA, "Delta" = DELTA, "Eta" = ETA, "Theta" = THETA, "Iota" = IOTA)
 	var/list/possible_boards = list(/obj/item/weapon/circuitboard/autolathe,/obj/item/weapon/circuitboard/seed_extractor,/obj/item/weapon/circuitboard/conveyor,/obj/item/weapon/circuitboard/air_alarm,/obj/item/weapon/circuitboard/fire_alarm,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/power_control,/obj/item/weapon/circuitboard/vendomat,/obj/item/weapon/circuitboard/microwave)
 	var/global/list/assigned_boards = list()
@@ -29,9 +34,9 @@
 
 /datum/circuits/proc/generate_schema()
 	for(var/C in possible_boards)
-		var/newbit = newhash()
+		var/newbit = newhash(CHOOSE_FUSES)
 		while(!check_config(newbit))
-			newbit = newhash()
+			newbit = newhash(CHOOSE_FUSES)
 		assigned_boards["[newbit]"] = C
 	return
 
@@ -41,10 +46,9 @@
 			return 0
 	return 1
 
-/datum/circuits/proc/newhash() //Returns a bitflag
+/datum/circuits/proc/newhash(var/choose) //Returns a bitflag
 	var/list/fuse_point_list = list(ALPHA,BETA,GAMMA,DELTA,ETA,THETA,IOTA)
 	var/build = 0
-	var/choose = 5 //change this to change the number of fuse points needed for a board
 	var/choice = null
 	while(choose>0)
 		choice = pick_n_take(fuse_point_list)
@@ -71,7 +75,7 @@
 	if(holder)
 		html = GetInteractWindow()
 	if(html)
-		user.set_machine(holder) //I have no idea what this does... I should probably remove it
+		user.set_machine(holder)
 	var/datum/browser/popup = new(user, "circuits", holder.name, window_x, window_y)
 	popup.set_content(html)
 	popup.set_title_image(user.browse_rsc_icon(holder.icon, holder.icon_state))
