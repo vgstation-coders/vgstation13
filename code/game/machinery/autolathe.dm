@@ -86,8 +86,8 @@ var/global/list/autolathe_recipes_hidden = list( \
 
 	var/operating = 0.0
 	anchored = 1.0
-	var/list/L = list()
-	var/list/LL = list()
+	var/list/regular_recipes
+	var/list/hacked_recipes
 	var/hacked = 0
 	var/disabled = 0
 	var/shocked = 0
@@ -128,11 +128,12 @@ var/global/list/autolathe_recipes_hidden = list( \
 /obj/machinery/autolathe/proc/regular_win(mob/user as mob)
 	var/dat as text
 	dat = text("<B>Metal Amount:</B> [src.m_amount] cm<sup>3</sup> (MAX: [max_m_amount])<BR>\n<FONT color=blue><B>Glass Amount:</B></FONT> [src.g_amount] cm<sup>3</sup> (MAX: [max_g_amount])<HR>")
-	var/list/objs = list()
-	objs += src.L
-	if(src.hacked)
-		objs += src.LL
-	for(var/obj/t in objs)
+	var/recipes = regular_recipes
+
+	if (hacked)
+		recipes += hacked_recipes
+
+	for(var/obj/t in recipes)
 		var/title = "[t.name] ([t.m_amt] m /[t.g_amt] g)"
 		if(m_amount < t.m_amt || g_amount < t.g_amt)
 			dat += title + "<br>"
@@ -266,7 +267,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 			if(!attempting_to_build)
 				return
 
-			if(locate(attempting_to_build, src.L) || locate(attempting_to_build, src.LL)) // see if the requested object is in one of the construction lists, if so, it is legit -walter0o
+			if (locate(attempting_to_build) in regular_recipes || locate(attempting_to_build) in hacked_recipes) // see if the requested object is in one of the construction lists, if so, it is legit -walter0o
 				template = attempting_to_build
 
 			else // somebody is trying to exploit, alert admins -walter0o
@@ -393,8 +394,9 @@ var/global/list/autolathe_recipes_hidden = list( \
 
 	RefreshParts()
 
-	src.L = autolathe_recipes
-	src.LL = autolathe_recipes_hidden
+	if (ticker)
+		initialize()
+
 	src.wires["Light Red"] = 0
 	src.wires["Dark Red"] = 0
 	src.wires["Blue"] = 0
@@ -412,3 +414,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 	w -= src.shock_wire
 	src.disable_wire = pick(w)
 	w -= src.disable_wire
+
+/obj/machinery/autolathe/initialize()
+	regular_recipes = autolathe_recipes.Copy()
+	hacked_recipes = autolathe_recipes_hidden.Copy()
