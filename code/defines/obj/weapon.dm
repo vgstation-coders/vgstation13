@@ -692,6 +692,14 @@
 	desc = "An electronic module for reading data and ID cards."
 
 /obj/item/weapon/module/power_control
+	desc = "Legacy placeholder" //For mapping
+
+/obj/item/weapon/module/power_control/New()
+	new /obj/item/weapon/circuitboard/power_control(src.loc)
+	qdel(src)
+
+/obj/item/weapon/circuitboard/power_control
+	icon = 'icons/obj/module.dmi'
 	name = "power control module"
 	icon_state = "power_mod"
 	desc = "Heavy-duty switching circuits for power control."

@@ -60,8 +60,17 @@
 	if(src.opened)
 		return ..()
 	else if(src.broken)
-		user << "<span class='notice'>The locker appears to be broken.</span>"
-		return
+		if(issolder(W))
+			var/obj/item/weapon/solder/S = W
+			if(!S.remove_fuel(4,user))
+				return
+			if(do_after(user,40))
+				broken = 0
+				user << "<span class='notice'>You repair the electronics inside the locking mechanism!</span>"
+				src.icon_state = src.icon_closed
+		else
+			user << "<span class='notice'>The locker appears to be broken.</span>"
+			return
 	else if((istype(W, /obj/item/weapon/card/emag)||istype(W, /obj/item/weapon/melee/energy/blade)) && !src.broken)
 		broken = 1
 		locked = 0

@@ -32,7 +32,6 @@
 	var/frame_desc = null
 	var/contain_parts = 1
 
-
 /obj/item/weapon/circuitboard/message_monitor
 	name = "Circuit board (Message Monitor)"
 	build_path = "/obj/machinery/computer/message_monitor"
@@ -258,26 +257,24 @@
 	origin_tech = "programming=2"
 
 
-/obj/item/weapon/circuitboard/supplycomp/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I,/obj/item/device/multitool))
-		var/catastasis = src.contraband_enabled
-		var/opposite_catastasis
-		if(catastasis)
-			opposite_catastasis = "STANDARD"
-			catastasis = "BROAD"
-		else
-			opposite_catastasis = "BROAD"
-			catastasis = "STANDARD"
-
-		switch( alert("Current receiver spectrum is set to: [catastasis]","Multitool-Circuitboard interface","Switch to [opposite_catastasis]","Cancel") )
-		//switch( alert("Current receiver spectrum is set to: " {(src.contraband_enabled) ? ("BROAD") : ("STANDARD")} , "Multitool-Circuitboard interface" , "Switch to " {(src.contraband_enabled) ? ("STANDARD") : ("BROAD")}, "Cancel") )
-			if("Switch to STANDARD","Switch to BROAD")
-				src.contraband_enabled = !src.contraband_enabled
-
-			if("Cancel")
+/obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
+	if(issolder(I))
+		var/obj/item/weapon/solder/S = I
+		if(S.remove_fuel(2,user))
+			if(istype(src,/obj/item/weapon/circuitboard/supplycomp))
+				var/obj/item/weapon/circuitboard/supplycomp/SC = src
+				SC.contraband_enabled = !SC.contraband_enabled
+				user << "<span class='notice'>You [SC.contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>"
+			if(istype(src,/obj/item/weapon/circuitboard/security))
+				new /obj/item/weapon/circuitboard/security/advanced(src.loc)
+				qdel(src)
 				return
-			else
-				user << "DERP! BUG! Report this (And what you were doing to cause it) to Agouri"
+	else if(iswelder(I))
+		var/obj/item/weapon/weldingtool/WT = I
+		if(WT.remove_fuel(1,user))
+			new /obj/item/weapon/circuitboard/blank(src.loc)
+			qdel(src)
+			return
 	return
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
