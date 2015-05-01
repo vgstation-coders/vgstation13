@@ -4,7 +4,7 @@
 #define HOURS   * 36000
 
 /proc/get_configuration_hour_start()
-	return configuration.hour_start
+	return config.hour_start
 
 /proc/timestamp2text(timestamp = 0, hour_to_add = 0)
 	return "[round(timestamp / 36000) + hour_to_add]:[(timestamp / 600 % 60) < 10 ? add_zero(timestamp / 600 % 60, 1) : timestamp / 600 % 60]"
