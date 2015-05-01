@@ -650,3 +650,19 @@ its easier to just keep the beam vertical.
 
 /atom/proc/mop_act(obj/item/weapon/mop/M, mob/user)
 	return 0
+
+/atom/proc/get_areaa()
+
+/area/get_areaa()
+	return src
+
+/turf/get_areaa()
+	return loc
+
+/atom/movable/get_areaa()
+	var/atom/temp = loc
+
+	while (temp && !isarea(temp))
+		temp = temp.loc
+
+	return temp
