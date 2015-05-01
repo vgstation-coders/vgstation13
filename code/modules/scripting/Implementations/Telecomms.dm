@@ -205,8 +205,7 @@
 		// End of Donkie~
 
 		// Time
-		interpreter.SetProc("time", /proc/time)
-		interpreter.SetProc("timestamp", /proc/timestamp)
+		interpreter.SetProc("time", /proc/worldtime2text)
 
 		// Run the compiled code
 		interpreter.Run()
