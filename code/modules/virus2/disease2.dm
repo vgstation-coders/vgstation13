@@ -17,7 +17,7 @@ var/global/list/disease2_list = list()
 
 /datum/disease2/disease/New(var/notes="No notes.")
 	uniqueID = rand(0,10000)
-	log += "<br />[timestamp()] CREATED - [notes]<br>"
+	log += "<br />[worldtime2text()] CREATED - [notes]<br>"
 	disease2_list["[uniqueID]"] = src
 	..()
 
@@ -89,7 +89,7 @@ var/global/list/disease2_list = list()
 	if(mob.radiation > 50)
 		if(prob(1))
 			majormutate()
-			log += "<br />[timestamp()] MAJORMUTATE (rads)!"
+			log += "<br />[worldtime2text()] MAJORMUTATE (rads)!"
 
 
 	//Space antibiotics stop disease completely (temporary)
@@ -100,7 +100,7 @@ var/global/list/disease2_list = list()
 	if(mob.reagents.has_reagent("virusfood"))
 		mob.reagents.remove_reagent("virusfood",0.1)
 		if(!logged_virusfood)
-			log += "<br />[timestamp()] Virus Fed ([mob.reagents.get_reagent_amount("virusfood")]U)"
+			log += "<br />[worldtime2text()] Virus Fed ([mob.reagents.get_reagent_amount("virusfood")]U)"
 			logged_virusfood=1
 		clicks += 10
 	else
@@ -111,10 +111,10 @@ var/global/list/disease2_list = list()
 		if(stage == max_stage)
 			src.cure(mob)
 			mob.antibodies |= src.antigen
-			log += "<br />[timestamp()] STAGEMAX ([stage])"
+			log += "<br />[worldtime2text()] STAGEMAX ([stage])"
 		else
 			stage++
-			log += "<br />[timestamp()] NEXT STAGE ([stage])"
+			log += "<br />[worldtime2text()] NEXT STAGE ([stage])"
 			clicks = 0
 
 	//Do nasty effects
@@ -141,7 +141,7 @@ var/global/list/disease2_list = list()
 	var/datum/disease2/effectholder/holder = pick(effects)
 	holder.minormutate()
 	infectionchance = min(50,infectionchance + rand(0,10))
-	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
+	log += "<br />[worldtime2text()] Infection chance now [infectionchance]%"
 
 /datum/disease2/disease/proc/majormutate()
 	uniqueID = rand(0,10000)

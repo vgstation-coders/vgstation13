@@ -19,9 +19,9 @@
 
 /datum/disease2/effectholder/proc/getrandomeffect(var/badness = 1)
 	if(effect)
-		virus.log += "<br />[timestamp()] Effect [effect.name] [chance]% is now "
+		virus.log += "<br />[worldtime2text()] Effect [effect.name] [chance]% is now "
 	else
-		virus.log += "<br />[timestamp()] Added effect "
+		virus.log += "<br />[worldtime2text()] Added effect "
 	var/list/datum/disease2/effect/list = list()
 	for(var/e in (typesof(/datum/disease2/effect) - /datum/disease2/effect))
 		var/datum/disease2/effect/f = new e
