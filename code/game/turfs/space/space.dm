@@ -57,7 +57,7 @@
 			if(istype(A, /obj/structure/stool/bed/chair/vehicle))
 				var/obj/structure/stool/bed/chair/vehicle/B = A
 				if(B.buckled_mob)
-					disks_list = recursive_type_check(B.buckled_mob, /obj/item/weapon/disk/nuclear)
+					specials_list = recursive_type_check(B.buckled_mob, /obj/item/weapon/disk/nuclear)
 
 			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
 
