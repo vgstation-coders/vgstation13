@@ -53,6 +53,7 @@
 				return
 
 			var/disks_list = recursive_type_check(A, /obj/item/weapon/disk/nuclear)
+			var/list/MoMMI_list = recursive_type_check(A, /mob/living/silicon/robot/mommi)
 
 			if(istype(A, /obj/structure/stool/bed/chair/vehicle))
 				var/obj/structure/stool/bed/chair/vehicle/B = A
@@ -76,14 +77,13 @@
 			var/move_to_z = src.z
 
 			// Prevent MoMMIs from leaving the derelict.
-			if(istype(A, /mob/living))
-				var/mob/living/MM = A
-				if(MM.locked_to_z!=0)
-					if(src.z == MM.locked_to_z)
+			for(var/mob/living/silicon/robot/mommi in MoMMI_list)
+				if(mommi.locked_to_z != 0)
+					if(src.z == mommi.locked_to_z)
 						locked_to_current_z = 1
 					else
-						MM << "<span class='warning'>You find your way back.</span"
-						move_to_z=MM.locked_to_z
+						mommi << "<span class='warning'>You find your way back.</span"
+						move_to_z = mommi.locked_to_z
 
 			var/safety = 1
 
