@@ -164,6 +164,8 @@
 
 	var/default_ooc_color = "#002eb8"
 
+	var/hour_start = 12
+
 /datum/configuration/New()
 	. = ..()
 	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
@@ -479,7 +481,7 @@
 
 				if("comms_password")
 					config.comms_password = value
-					
+
 				if("paperwork_library")
 					config.paperwork_library = 1
 
@@ -699,3 +701,6 @@
 			runnable_modes[M] = probabilities[M.config_tag]
 			//world << "DEBUG: runnable_mode\[[runnable_modes.len]\] = [M.config_tag]"
 	return runnable_modes
+
+/datum/configuration/proc/get_hour_start()
+	return hour_start

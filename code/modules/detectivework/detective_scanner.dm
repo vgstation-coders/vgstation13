@@ -203,9 +203,6 @@
 		stored["\ref [A]"] = sum_list
 		return 0
 
-/proc/get_timestamp()
-	return time2text(world.time + 432000, "hh:mm:ss")
-
 /obj/item/device/detective_scanner/forger
 	var/list/custom_forgery[3]
 	var/forging = 0

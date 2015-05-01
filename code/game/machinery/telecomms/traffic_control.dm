@@ -162,7 +162,7 @@
 		else
 			error("There is a null auth while the user isn't a silicon! ([user.name], [user.type])")
 			return
-	access_log += "\[[get_timestamp()]\] [id] [entry]"
+	access_log += "\[[worldtime2text()]\] [id] [entry]"
 
 /obj/machinery/computer/telecomms/traffic/proc/print_logs()
 	. = "<center><h2>Traffic Control Telecomms System Log</h2></center><HR>"
