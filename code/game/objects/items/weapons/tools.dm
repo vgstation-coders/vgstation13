@@ -629,16 +629,16 @@
 	if(istype(W,/obj/item/weapon/reagent_containers/glass/))
 		var/obj/item/weapon/reagent_containers/glass/G = W
 		if(G.reagents.reagent_list.len>1)
-			user << "<span class='warn'>The mixture is rejected by the tool.</span>"
+			user << "<span class='warning'>The mixture is rejected by the tool.</span>"
 			return
 		var/datum/reagent/R = G.reagents.reagent_list[1]
 		if(R.id != "sacid")
-			user << "<span class='warn'>The tool is not compatible with that.</span>"
+			user << "<span class='warning'>The tool is not compatible with that.</span>"
 			return
 		else
 			var/space = max_fuel - reagents.total_volume
 			if(!space)
-				user << "<span class='warn'>The tool is full!</span>"
+				user << "<span class='warning'>The tool is full!</span>"
 				return
 			var/transfer_amount = min(G.amount_per_transfer_from_this,space)
 			user << "<span class='info'>You transfer [transfer_amount] units to the [src].</span>"

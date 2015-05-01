@@ -30,6 +30,7 @@
 		if(icon_state == "door_electronics_smoked")
 			if(!S.remove_fuel(4,user))
 				return
+			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 			if(do_after(user,40))
 				playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 				icon_state = "door_electronics"
