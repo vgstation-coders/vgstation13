@@ -29,7 +29,7 @@
 /datum/circuits/New(var/atom/homeboard)
 	..()
 	holder = homeboard
-	if(!(src.assigned_boards.len))
+	if(!(assigned_boards.len))
 		generate_schema()
 
 /datum/circuits/proc/generate_schema()

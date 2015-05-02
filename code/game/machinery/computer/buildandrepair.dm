@@ -266,7 +266,9 @@
 		var/obj/item/weapon/weldingtool/WT = I
 		if(WT.remove_fuel(1,user))
 			var/obj/item/weapon/circuitboard/blank/B = new /obj/item/weapon/circuitboard/blank(src.loc)
-			user.put_in_hands(B)
+			if(user.get_inactive_hand() == src)
+				user.before_take_item(src)
+				user.put_in_hands(B)
 			qdel(src)
 			return
 	return

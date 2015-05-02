@@ -2779,7 +2779,7 @@
 "bbw" = (/obj/structure/reagent_dispensers/watertank,/turf/simulated/floor,/area/storage/tools)
 "bbx" = (/turf/simulated/floor,/area/storage/tools)
 "bby" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/emergency,/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor,/area/storage/tools)
-"bbz" = (/obj/structure/table,/obj/item/weapon/module/power_control,/obj/item/weapon/circuitboard/airlock,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 5},/turf/simulated/floor,/area/storage/tools)
+"bbz" = (/obj/structure/table,/obj/item/weapon/circuitboard/power_control,/obj/item/weapon/circuitboard/airlock,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 5},/turf/simulated/floor,/area/storage/tools)
 "bbA" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 10},/turf/simulated/floor,/area/storage/tools)
 "bbB" = (/obj/structure/table,/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/metal{amount = 50},/turf/simulated/floor,/area/storage/tools)
 "bbC" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/storage/tools)
