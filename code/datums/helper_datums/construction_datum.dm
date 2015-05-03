@@ -14,8 +14,10 @@
 #define Co_NEXTSTEP		"nextstep"
 #define Co_BACKSTEP		"backstep"
 
-#define Co_CON_SPEED	"construct"		//For tools. See tools.dm
-#define Co_DECON_SPEED	"deconstruct"	//For tools. See tools.dm
+//For tools. See tools.dm
+#define Co_CON_SPEED	"construct"
+#define Co_DECON_SPEED	"deconstruct"
+#define Co_EFFICIENCY	"efficiency"
 
 /datum/construction
 	var/list/steps
@@ -142,11 +144,23 @@
 
 
 	var/delay = 0
+	var/dead = FALSE
 	if(Co_DELAY in given_step)
 		delay = given_step[Co_DELAY] * used_atom.construction_delay_mult[Co_CON_SPEED]
 	if(delay > 0)
+		if(used_atom.construction_delay_mult[Co_EFFICIENCY])
+			if(!used_atom.getcharge())
+				user << "<span class='warning'>\The [used_atom] has no charge!</span>"
+				return 0
+			if(!used_atom.usecharge(used_atom.construction_delay_mult[Co_EFFICIENCY] * delay))
+				dead = TRUE
+				delay = used_atom.getcharge() / used_atom.construction_delay_mult[Co_EFFICIENCY]
 		start_construct_message(given_step, user, used_atom)
 		if(!do_after(user, delay, needhand = 1))
+			return 0
+		if(dead)
+			user << "<span class='warning'>\The [used_atom] runs out of charge!</span>"
+			used_atom.usecharge(used_atom.getcharge())
 			return 0
 
 	var/amount = 0
@@ -310,11 +324,21 @@
 		current_step[Co_AMOUNT] = current_step[Co_MAX_AMOUNT]
 
 	var/delay = 0
-	if(Co_DELAY in given_step)
-		delay = given_step[Co_DELAY] * used_atom.construction_delay_mult[diff == FORWARD ? Co_CON_SPEED : Co_DECON_SPEED]
+	var/dead = FALSE
 	if(delay > 0)
+		if(used_atom.construction_delay_mult[Co_EFFICIENCY])
+			if(!used_atom.getcharge())
+				user << "<span class='warning'>\The [used_atom] has no charge!</span>"
+				return 0
+			if(!used_atom.usecharge(used_atom.construction_delay_mult[Co_EFFICIENCY] * delay))
+				dead = TRUE
+				delay = used_atom.getcharge() / used_atom.construction_delay_mult[Co_EFFICIENCY]
 		start_construct_message(given_step, user, used_atom)
 		if(!do_after(user, delay, needhand = 1))
+			return 0
+		if(dead)
+			user << "<span class='warning'>\The [used_atom] runs out of charge!</span>"
+			used_atom.usecharge(used_atom.getcharge())
 			return 0
 
 	var/amount = 0
