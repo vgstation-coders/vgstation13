@@ -686,7 +686,7 @@ var/global/floorIsLava = 0
 		dat += {"
 			<A href='?src=\ref[src];secretsfun=spawnadminbus'>Spawn an Adminbus</A><BR>
 			"}
-	if(check_rights(R_FUN,0))
+	if(check_rights(R_ADMIN,0))
 		dat += {"
 			<A href='?src=\ref[src];secretsfun=spawnselfdummy'>Spawn yourself as a Test Dummy</A><BR>
 			<BR>

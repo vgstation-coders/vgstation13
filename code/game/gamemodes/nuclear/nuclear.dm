@@ -128,22 +128,23 @@
 	var/spawnpos = 1
 
 	for(var/datum/mind/synd_mind in syndicates)
-		if(spawnpos > synd_spawn.len)
-			spawnpos = 1
-		synd_mind.current.loc = synd_spawn[spawnpos]
+		spawn()
+			if(spawnpos > synd_spawn.len)
+				spawnpos = 1
+			synd_mind.current.loc = synd_spawn[spawnpos]
 
-		forge_syndicate_objectives(synd_mind)
-		greet_syndicate(synd_mind)
-		equip_syndicate(synd_mind.current)
+			forge_syndicate_objectives(synd_mind)
+			greet_syndicate(synd_mind)
+			equip_syndicate(synd_mind.current)
 
-		if(!leader_selected)
-			prepare_syndicate_leader(synd_mind, nuke_code)
-			leader_selected = 1
-		else
-			synd_mind.current.real_name = "[syndicate_name()] Operative #[agent_number]"
-			agent_number++
-		spawnpos++
-		update_synd_icons_added(synd_mind)
+			if(!leader_selected)
+				prepare_syndicate_leader(synd_mind, nuke_code)
+				leader_selected = 1
+			else
+				synd_mind.current.real_name = "[syndicate_name()] Operative #[agent_number]"
+				agent_number++
+			spawnpos++
+			update_synd_icons_added(synd_mind)
 
 	update_all_synd_icons()
 
@@ -193,6 +194,25 @@
 	syndobj.owner = syndicate
 	syndicate.objectives += syndobj
 
+/datum/game_mode/proc/set_prefs_syndicate(mob/living/carbon/human/synd_mob)
+	var/prefix = "Nuke"
+	var/client/C = synd_mob.client
+	var/final_name = ""
+	var/slotnum
+
+	var/list/preset_slots = C.prefs.check_name_prefix(synd_mob,prefix)
+	if(preset_slots.len)
+		final_name = input("Which one", "Choose Slot") in preset_slots
+		for(var/counter=1; counter <= MAX_SAVE_SLOTS;counter++)
+			if(final_name && (final_name == preset_slots[counter]))
+				slotnum = counter
+				break
+	if(slotnum)
+		C.prefs.load_save_sqlite(synd_mob.ckey, synd_mob, slotnum)
+		C.prefs.copy_to(synd_mob)
+		synd_mob.real_name = final_name
+		synd_mob.name = final_name
+
 
 /datum/game_mode/proc/greet_syndicate(var/datum/mind/syndicate, var/you_are=1)
 	if (you_are)
@@ -211,6 +231,8 @@
 /datum/game_mode/proc/equip_syndicate(mob/living/carbon/human/synd_mob)
 	var/radio_freq = SYND_FREQ
 	var/tank_slot = slot_r_hand
+
+	set_prefs_syndicate(synd_mob)
 
 	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/syndicate(synd_mob)
 	R.set_frequency(radio_freq)
@@ -381,6 +403,9 @@
 
 
 /proc/nukelastname(var/mob/M as mob) //--All praise goes to NEO|Phyte, all blame goes to DH, and it was Cindi-Kate's idea. Also praise Urist for copypasta ho.
+	var/client/C = M.client
+	if(findtext(C.prefs.real_name,"Nuke"))
+		return ""
 	var/randomname = pick(last_names)
 	var/newname = copytext(sanitize(input(M,"You are the nuke operative [pick("Czar", "Boss", "Commander", "Chief", "Kingpin", "Director", "Overlord")]. Please choose a last name for your family.", "Name change",randomname)),1,MAX_NAME_LEN)
 
@@ -396,6 +421,8 @@
 
 /proc/NukeNameAssign(var/lastname,var/list/syndicates)
 	for(var/datum/mind/synd_mind in syndicates)
+		var/client/C = synd_mind.current.client
+		if(findtext(C.prefs.real_name,"Nuke"))	continue
 		switch(synd_mind.current.gender)
 			if(MALE)
 				synd_mind.name = "[pick(first_names_male)] [lastname]"

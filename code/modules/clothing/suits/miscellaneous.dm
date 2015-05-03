@@ -152,6 +152,12 @@
 	flags_inv = HIDESHOES|HIDEJUMPSUIT
 	siemens_coefficient = 2.0
 
+/obj/item/clothing/suit/chickensuit/white
+	name = "White Chicken Suit"
+	desc = "Silky Smooth. The feathers of legend...could it be..."
+	icon_state = "chickensuit_white"
+	item_state = "chickensuit_white"
+
 
 /obj/item/clothing/suit/monkeysuit
 	name = "Monkey Suit"
