@@ -22,7 +22,7 @@
  * Might work for borg stack modules, though. Worth looking into.
  */
 /atom
-	var/list/construction_delay_mult = list(Co_CON_SPEED = 1, Co_DECON_SPEED = 1)
+	var/list/construction_delay_mult = list(Co_CON_SPEED = 1.0, Co_DECON_SPEED = 1.0)
 
 /*
  * Wrench
@@ -51,8 +51,7 @@
 	desc = "A wrench intended to be wrenchier than other wrenches. It's the wrenchiest."
 	icon_state = "socket_wrench"
 	w_class = 4.0 //big shit, to balance its power
-	construction_delay_mult[Co_CON_SPEED] = 0.5   //So it is actually better other than for one single thing
-	construction_delay_mult[Co_DECON_SPEED] = 0.5 //So it is actually better other than for one single thing
+	construction_delay_mult = list(Co_CON_SPEED = 0.5, Co_DECON_SPEED = 0.5) //So it is actually better other than for one single thing
 
 /*
  * Screwdriver
