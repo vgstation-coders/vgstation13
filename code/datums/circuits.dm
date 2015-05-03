@@ -98,7 +98,8 @@
 	return html
 
 /datum/circuits/Topic(href, href_list)
-	..()
+	if(..())
+    	return 1
 	if(in_range(holder, usr) && isliving(usr))
 
 		var/mob/living/L = usr
