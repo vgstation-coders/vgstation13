@@ -20,9 +20,16 @@
  * Since this is a variable of /atom, it can technically be applied to any item used in construction, as long as the construction is based on construction datums.
  * Yes, this allows for hyperspeed building stacks, but I wouldn't recommend that, as it doesn't carry over too well when stacks are merged or separated.
  * Might work for borg stack modules, though. Worth looking into.
+ * The value for the key Co_EFFICIENCY is the charge used per tick of delay.
+ * It's all used at once, but based on the delay time.
+ * getcharge() gets the tool's charge and usecharge(amount) uses amount charge. Exactly how it does this is defined per tool.
  */
 /atom
-	var/list/construction_delay_mult = list(Co_CON_SPEED = 1.0, Co_DECON_SPEED = 1.0)
+	var/list/construction_delay_mult = list(Co_CON_SPEED = 1.0, Co_DECON_SPEED = 1.0, Co_EFFICIENCY = 0.0)
+/atom/proc/getcharge()
+	return 0
+/atom/proc/usecharge(var/amount)
+	return 0
 
 /*
  * Wrench
@@ -140,6 +147,58 @@
 			usr << "<span class='warning'>You cannot do that.</span>"
 	else
 		..()
+
+/obj/item/weapon/screwdriver/power
+	name = "power screwdriver"
+	desc = "Much faster than a standard screwdriver, as long as it's charged up."
+	w_class = 3.0 //Oh no, can't pocket it
+	construction_delay_mult = list(Co_CON_SPEED = 0.25, Co_DECON_SPEED = 0.25, Co_EFFICIENCY = 15.0) //ULTRA FAST
+	var/obj/item/weapon/cell/cell = null
+
+/obj/item/weapon/screwdriver/power/attackby(obj/item/weapon/W, mob/user) //Stolen shamelessly from stunbatons
+	if(istype(W, /obj/item/weapon/cell))
+		if(!cell)
+			user.drop_item(W, src)
+			cell = W
+			user << "<span class='notice'>You install a cell in \the [src].</span>"
+			//update_icon()
+		else
+			user << "<span class='notice'>\The [src] already has a cell.</span>"
+
+/obj/item/weapon/screwdriver/power/attack_hand(mob/user) //Also stolen from stunbatons, but altered more significantly.
+	if(cell && user.get_inactive_hand() == src)
+		cell.updateicon()
+		user.put_in_hands(cell)
+		cell = null
+		user << "<span class='notice'>You remove the cell from \the [src].</span>"
+		//status = 0
+		//update_icon()
+		return
+	..()
+
+/obj/item/weapon/screwdriver/power/New()
+	..()
+	cell = new(src)
+	cell.charge = cell.maxcharge
+	icon_state = "pdriver" //Setting it in the definition is useless because the screwdriver's randomized sprite instantly replaces it
+
+/obj/item/weapon/screwdriver/power/examine(mob/user)
+	..()
+	if(!cell)
+		user << "<span class='info'>It has no power cell.</span>"
+		return
+	user << "<span class='info'>Its power cell has [cell.charge]/[cell.maxcharge] charge.</span>"
+
+/obj/item/weapon/screwdriver/power/getcharge()
+	if(cell)
+		return cell.charge
+	return 0
+
+/obj/item/weapon/screwdriver/power/usecharge(var/amount)
+	if(cell)
+		return cell.use(amount)
+	return 0
+
 /*
  * Wirecutters
  */
