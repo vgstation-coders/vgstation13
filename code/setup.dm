@@ -240,6 +240,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define ROBOT 8
 #define SLIME 16
 #define SIMPLE_ANIMAL 32
+#define SPOOKY 128
 
 #define ALLMOBS 63 //update this
 
@@ -1064,6 +1065,21 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 
 //COMMENT IF YOUR DREAMDAEMON VERSION IS BELOW 507.1248
 #define BORDER_USE_TURF_EXIT 1
+
+////////////////////////
+////PDA APPS DEFINES////
+////////////////////////
+#define PDA_APP_RINGER			101
+#define PDA_APP_SPAMFILTER		102
+#define PDA_APP_BALANCECHECK	103
+#define PDA_APP_STATIONMAP		104
+#define PDA_APP_SNAKEII			105
+#define PDA_APP_MINESWEEPER		106
+#define PDA_APP_SPESSPETS		107
+
+#define PDA_APP_SNAKEII_MAXSPEED		9
+#define PDA_APP_SNAKEII_MAXLABYRINTH	8
+
 
 ////////////////////////
 ////WIZARD SHIT GO//////

@@ -81,7 +81,7 @@
 	if(!use_power)
 		return 1
 
-	if(isnull(areaMaster))
+	if(isnull(src.areaMaster) || !src.areaMaster)
 		return 0						// if not, then not powered.
 
 	if((machine_flags & FIXED2WORK) && !anchored)
@@ -92,10 +92,13 @@
 // increment the power usage stats for an area
 // defaults to power_channel
 /obj/machinery/proc/use_power(amount, chan = power_channel)
+	if(isnull(src.areaMaster) || !src.areaMaster)
+		return 0						// if not, then not powered.
+
 	if(!powered(chan)) //no point in trying if we don't have power
 		return 0
 
-	areaMaster.use_power(amount, chan)
+	src.areaMaster.use_power(amount, chan)
 
 // called whenever the power settings of the containing area change
 // by default, check equipment channel & set flag
@@ -109,10 +112,7 @@
 
 // connect the machine to a powernet if a node cable is present on the turf
 /obj/machinery/power/proc/connect_to_network()
-	var/turf/T = src.loc
-
-	if(!T || !istype(T))
-		return 0
+	var/turf/T = get_turf(src)
 
 	var/obj/structure/cable/C = T.get_cable_node() // check if we have a node cable on the machine turf, the first found is picked
 
@@ -188,9 +188,6 @@
 // return a knot cable (O-X) if one is present in the turf
 // null if there's none
 /turf/proc/get_cable_node()
-	if(!istype(src, /turf/simulated/floor))
-		return null
-
 	for(var/obj/structure/cable/C in src)
 		if(C.d1 == 0)
 			return C

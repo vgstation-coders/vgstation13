@@ -1,3 +1,6 @@
+//Content of the Round End Information window
+var/round_end_info = ""
+
 //List of ckeys that have de-adminned themselves during this round
 var/global/list/deadmins = list()
 
@@ -380,3 +383,15 @@ var/arena_rounds = 0
 var/arena_top_score = 0
 
 var/endgame_info_logged = 0
+
+//PDA games vars
+//Snake II leaderboard
+var/global/list/snake_station_highscores = list()
+var/global/list/snake_best_players = list()
+
+//Minesweeper leaderboard
+var/global/list/minesweeper_station_highscores = list()
+var/global/list/minesweeper_best_players = list()
+
+var/nanocoins_rates = 1
+var/nanocoins_lastchange = 0

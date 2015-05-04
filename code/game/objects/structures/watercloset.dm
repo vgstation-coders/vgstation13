@@ -47,6 +47,11 @@
 	icon_state = "toilet[open][cistern]"
 
 /obj/structure/toilet/attackby(obj/item/I as obj, mob/living/user as mob)
+	if(iswrench(I))
+		user << "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>"
+		anchored = !anchored
+	if(anchored == 0)
+		return
 	if(open && cistern && state == NORODS && istype(I,/obj/item/stack/rods)) //State = 0 if no rods
 		var/obj/item/stack/rods/R = I
 		if(R.amount < 2) return
@@ -177,6 +182,11 @@
 			G.clean_blood()
 
 /obj/machinery/shower/attackby(obj/item/I as obj, mob/user as mob)
+	if(isscrewdriver(I)&&!on)
+		user << "<span class='notice'>You disassemble \the [src].</span>"
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		new /obj/item/stack/sheet/metal (src.loc,2)
+		qdel(src)
 	if(I.type == /obj/item/device/analyzer)
 		user << "<span class='notice'>The water temperature seems to be [watertemp].</span>"
 	if(istype(I, /obj/item/weapon/wrench))
@@ -362,6 +372,9 @@
 	if(!Adjacent(M))
 		return
 
+	if(anchored == 0)
+		return
+
 	if(busy)
 		M << "<span class='warning'>Someone's already washing here.</span>"
 		return
@@ -400,6 +413,12 @@
 		user << "<span class='warning'>Someone's already washing here.</span>"
 		return
 
+	if(iswrench(O))
+		user << "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>"
+		anchored = !anchored
+	if(anchored == 0)
+		return
+
 	if(istype(O, /obj/item/weapon/mop)) return
 
 	if (istype(O, /obj/item/weapon/reagent_containers))
@@ -425,27 +444,20 @@
 				"<span class='warning'>You have wet \the [O], it shocks you!</span>")
 			return
 
-	var/turf/location = user.loc
-	if(!isturf(location)) return
+	if (!isturf(user.loc))
+		return
 
-	var/obj/item/I = O
-	if(!I || !istype(I,/obj/item)) return
+	if (isitem(O))
+		user << "<span class='notice'>You start washing \the [O].</span>"
+		busy = TRUE
 
-	usr << "<span class='notice'>You start washing \the [I].</span>"
+		if (do_after(user, 40))
+			O.clean_blood()
+			user.visible_message( \
+				"<span class='notice'>[user] washes \a [O] using \the [src].</span>", \
+				"<span class='notice'>You wash \a [O] using \the [src].</span>")
 
-	busy = 1
-	sleep(40)
-	busy = 0
-
-	if(user.loc != location) return				//User has moved
-	if(!I) return 								//Item's been destroyed while washing
-	if(user.get_active_hand() != I) return		//Person has switched hands or the item in their hands
-
-	O.clean_blood()
-	user.visible_message( \
-		"<span class='notice'>[user] washes \a [I] using \the [src].</span>", \
-		"<span class='notice'>You wash \a [I] using \the [src].</span>")
-
+		busy = FALSE
 
 /obj/structure/sink/kitchen
 	name = "kitchen sink"

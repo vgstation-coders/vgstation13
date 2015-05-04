@@ -53,6 +53,7 @@
 	// Mice IDs
 	if(name == initial(name))
 		name = "[name] ([rand(1, 1000)])"
+	real_name = name
 	if(!_color)
 		_color = pick( list("brown","gray","white") )
 	icon_state = "mouse_[_color]"
@@ -81,7 +82,10 @@
 			pipes |= U
 	if(!pipes || !pipes.len)
 		return
-	pipe = input("Crawl Through Vent", "Pick a pipe") as null|anything in pipes
+	if(pipes.len == 1)
+		pipe = pipes[1]
+	else
+		pipe = input("Crawl Through Vent", "Pick a pipe") as null|anything in pipes
 	if(pipe)
 		handle_ventcrawl(pipe)
 

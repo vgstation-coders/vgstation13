@@ -44,24 +44,35 @@
       </div>
     </div>
     <hr>
-
     {{if data.authenticated}}
       <script type="text/javascript">
         function markRed(){
           var nameField = document.getElementById('namefield');
           nameField.style.backgroundColor = "#FFDDDD";
+          var elem = document.getElementById("regid");
+          var body = $('body');
+          elem.value = body.data('urlParameters')["src"];
         }
         function markGreen(){
           var nameField = document.getElementById('namefield');
           nameField.style.backgroundColor = "#DDFFDD";
+          var elem = document.getElementById("regid");
+          var body = $('body');
+          elem.value = body.data('urlParameters')["src"];
         }
         function markAccountGreen(){
           var nameField = document.getElementById('accountfield');
           nameField.style.backgroundColor = "#DDFFDD";
+          var elem = document.getElementById("accid");
+          var body = $('body');
+          elem.value = body.data('urlParameters')["src"];
         }
         function markAccountRed(){
           var nameField = document.getElementById('accountfield');
           nameField.style.backgroundColor = "#FFDDDD";
+          var elem = document.getElementById("accid");
+          var body = $('body');
+          elem.value = body.data('urlParameters')["src"];
         }
         function showAll(){
           var allJobsSlot = document.getElementById('allvalue.jobsslot');
@@ -85,7 +96,7 @@
         <form name='cardcomp' action='?src={{:data.src}}' method='get'>
           <div class='item'>
             <div class='itemLabel'>
-              <input type='hidden' name='src' value='{{:data.src}}'>
+              <input type='hidden' name='src' value='' id='regid'>
               <input type='hidden' name='choice' value='reg'>
               Registered Name:
             </div>
@@ -99,7 +110,7 @@
         <form name='accountnum' action='?src={{:data.src}}' method='get'>
           <div class='item'>
             <div class='itemLabel'>
-              <input type='hidden' name='src' value='{{:data.src}}'>
+              <input type='hidden' name='src' value='' id='accid'>
               <input type='hidden' name='choice' value='account'>
               Account Number:
             </div>
@@ -187,7 +198,7 @@
                     {{/for}}
                   </td>
                 </tr>
-	      {{/if}}
+             {{/if}}
             </table>
           </div>
         </div>
@@ -199,9 +210,17 @@
           <div class='item' style='width: 100%'>
             {{for data.all_centcom_access}}
               <div class='itemContentWide'>
-              {{:helper.link(value.desc, '', {'choice' : 'access', 'access_target' : value.ref, 'allowed' : allowed}, null, value.allowed ? 'selected' : null)}}
+              {{:helper.link(value.desc, '', {'choice' : 'access', 'access_target' : value.ref, 'allowed' : value.allowed}, null, value.allowed ? 'selected' : null)}}
               </div>
             {{/for}}
+          </div>
+          <div style='float: left; width: 175px; min-height: 250px'>
+           <div class='average'><b>Card Skin</b></div>
+          {{for data.cent_card_skins}}
+              <div class='itemContentWide'>
+                {{:helper.link(value.display_name, '', {'choice' : 'skin', 'skin_target' : value.skin}, null,(data.current_skin == value.skin) ? 'selected' : null )}}
+              </div>
+           {{/for}}
           </div>
         {{else}}
           <div class='item'>
@@ -216,17 +235,17 @@
                     {{:helper.link(accessValue.desc, '', {'choice' : 'access', 'access_target' : accessValue.ref, 'allowed' : accessValue.allowed}, null, accessValue.allowed ? 'selected' : null)}}
                   </div>
                 {{/for}}
-	      </div>
-	    {{/for}}
-            <div style='float: left; width: 175px; min-height: 250px'>
-	    <div class='average'><b>Card Skin</b></div>
-	      {{for data.card_skins}}
-		<div class='itemContentWide'>
-		  {{:helper.link(value.display_name, '', {'choice' : 'skin', 'skin_target' : value.skin}, null,(data.current_skin == value.skin) ? 'selected' : null )}}
-	 	</div>
-	      {{/for}}
-	    </div>
+              </div>
+            {{/for}}
           </div>
+          <div style='float: left; width: 175px; min-height: 250px'>
+	         <div class='average'><b>Card Skin</b></div>
+	        {{for data.card_skins}}
+		          <div class='itemContentWide'>
+		            {{:helper.link(value.display_name, '', {'choice' : 'skin', 'skin_target' : value.skin}, null,(data.current_skin == value.skin) ? 'selected' : null )}}
+	          	</div>
+	         {{/for}}
+	        </div>
         {{/if}}
       {{/if}}
     {{/if}}

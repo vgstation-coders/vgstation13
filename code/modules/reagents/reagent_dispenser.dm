@@ -153,6 +153,10 @@
 /obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))
 		if(!istype(Proj ,/obj/item/projectile/beam/lastertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
+			Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
+			msg_admin_attack("[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)") //BS12 EDIT ALG
+
 			explode()
 
 /obj/structure/reagent_dispensers/fueltank/blob_act()
@@ -201,12 +205,12 @@
 	icon_state = "water_cooler"
 	possible_transfer_amounts = null
 	anchored = 1
-
+	var/addedliquid = 500
 	var/paper_cups = 10
 
 /obj/structure/reagent_dispensers/water_cooler/New()
 	. = ..()
-	reagents.add_reagent("water", 500)
+	reagents.add_reagent("water", addedliquid)
 	desc = "[initial(desc)] There's [paper_cups] paper cups stored inside."
 
 /obj/structure/reagent_dispensers/water_cooler/attack_hand(mob/user as mob)

@@ -28,6 +28,7 @@
 		/obj/structure/sink,
 		/obj/structure/centrifuge/,
 		/obj/item/weapon/storage,
+		/obj/item/weapon/solder,
 		/obj/machinery/atmospherics/unary/cryo_cell,
 		/obj/machinery/dna_scannernew,
 		/obj/item/weapon/grenade/chem_grenade,
@@ -261,6 +262,13 @@
 	g_amt = 1500
 	volume = 100
 	possible_transfer_amounts = list(5,10,15,25,30,50,100)
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg
+	var/obj/item/weapon/robot_module/holder
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/New(loc,_holder)
+	..()
+	holder = _holder
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact
 	name = "stasis beaker"
