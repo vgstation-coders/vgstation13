@@ -1,4 +1,6 @@
 //todo: toothbrushes, and some sort of "toilet-filthinator" for the hos
+#define NORODS 0
+#define RODSADDED 1
 
 /obj/structure/toilet
 	name = "toilet"
@@ -7,6 +9,7 @@
 	icon_state = "toilet00"
 	density = 0
 	anchored = 1
+	var/state = 0			//1 if rods added; 0 if not
 	var/open = 0			//if the lid is up
 	var/cistern = 0			//if the cistern bit is open
 	var/w_items = 0			//the combined w_class of all the items in the cistern
@@ -44,6 +47,25 @@
 	icon_state = "toilet[open][cistern]"
 
 /obj/structure/toilet/attackby(obj/item/I as obj, mob/living/user as mob)
+	if(iswrench(I))
+		user << "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>"
+		anchored = !anchored
+	if(anchored == 0)
+		return
+	if(open && cistern && state == NORODS && istype(I,/obj/item/stack/rods)) //State = 0 if no rods
+		var/obj/item/stack/rods/R = I
+		if(R.amount < 2) return
+		user << "<span class='notice'>You add the rods to the toilet, creating flood avenues.</span>"
+		R.use(2)
+		state = RODSADDED //State 0 -> 1
+		return
+	if(open && cistern && state == RODSADDED && istype(I,/obj/item/weapon/paper)) //State = 1 if rods are added
+		user << "<span class='notice'>You create a filter with the paper and insert it.</span>"
+		var/obj/structure/centrifuge/C = new /obj/structure/centrifuge(src.loc)
+		C.dir = src.dir
+		qdel(I)
+		qdel(src)
+		return
 	if(istype(I, /obj/item/weapon/crowbar))
 		user << "<span class='notice'>You start to [cistern ? "replace the lid on the cistern" : "lift the lid off the cistern"].</span>"
 		playsound(loc, 'sound/effects/stonedoor_openclose.ogg', 50, 1)
@@ -160,6 +182,11 @@
 			G.clean_blood()
 
 /obj/machinery/shower/attackby(obj/item/I as obj, mob/user as mob)
+	if(isscrewdriver(I)&&!on)
+		user << "<span class='notice'>You disassemble \the [src].</span>"
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		new /obj/item/stack/sheet/metal (src.loc,2)
+		qdel(src)
 	if(I.type == /obj/item/device/analyzer)
 		user << "<span class='notice'>The water temperature seems to be [watertemp].</span>"
 	if(istype(I, /obj/item/weapon/wrench))
@@ -345,6 +372,9 @@
 	if(!Adjacent(M))
 		return
 
+	if(anchored == 0)
+		return
+
 	if(busy)
 		M << "<span class='warning'>Someone's already washing here.</span>"
 		return
@@ -383,6 +413,12 @@
 		user << "<span class='warning'>Someone's already washing here.</span>"
 		return
 
+	if(iswrench(O))
+		user << "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>"
+		anchored = !anchored
+	if(anchored == 0)
+		return
+
 	if(istype(O, /obj/item/weapon/mop)) return
 
 	if (istype(O, /obj/item/weapon/reagent_containers))
@@ -408,27 +444,20 @@
 				"<span class='warning'>You have wet \the [O], it shocks you!</span>")
 			return
 
-	var/turf/location = user.loc
-	if(!isturf(location)) return
+	if (!isturf(user.loc))
+		return
 
-	var/obj/item/I = O
-	if(!I || !istype(I,/obj/item)) return
+	if (isitem(O))
+		user << "<span class='notice'>You start washing \the [O].</span>"
+		busy = TRUE
 
-	usr << "<span class='notice'>You start washing \the [I].</span>"
+		if (do_after(user, 40))
+			O.clean_blood()
+			user.visible_message( \
+				"<span class='notice'>[user] washes \a [O] using \the [src].</span>", \
+				"<span class='notice'>You wash \a [O] using \the [src].</span>")
 
-	busy = 1
-	sleep(40)
-	busy = 0
-
-	if(user.loc != location) return				//User has moved
-	if(!I) return 								//Item's been destroyed while washing
-	if(user.get_active_hand() != I) return		//Person has switched hands or the item in their hands
-
-	O.clean_blood()
-	user.visible_message( \
-		"<span class='notice'>[user] washes \a [I] using \the [src].</span>", \
-		"<span class='notice'>You wash \a [I] using \the [src].</span>")
-
+		busy = FALSE
 
 /obj/structure/sink/kitchen
 	name = "kitchen sink"

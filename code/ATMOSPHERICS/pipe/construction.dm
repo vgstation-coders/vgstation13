@@ -209,7 +209,7 @@ var/global/list/pipeID2State = list(
 	"cap",
 	"thermalplate",
 	"injector",
-	"binary vent",
+	"dual-port vent",
 	"passive vent",
 	"dtvalve",
 	"insulated_manifold",
@@ -262,7 +262,7 @@ var/global/list/nlist = list( \
 	set name = "Rotate Pipe"
 	set src in view(1)
 
-	if ( usr.stat || usr.restrained() )
+	if ( usr.stat || usr.restrained()  || (usr.status_flags & FAKEDEATH))
 		return
 
 	src.dir = turn(src.dir, -90)
@@ -301,7 +301,8 @@ var/global/list/nlist = list( \
 			PIPE_VOLUME_PUMP ,\
 			PIPE_PASSIVE_GATE ,\
 			PIPE_MVALVE, \
-			PIPE_DVALVE \
+			PIPE_DVALVE, \
+			PIPE_DP_VENT \
 		)
 			return dir|flip
 		if(PIPE_SIMPLE_BENT, PIPE_INSULATED_BENT, PIPE_HE_BENT)

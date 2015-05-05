@@ -43,6 +43,8 @@
 	var/obj/screen/m_suitclothesbg = null
 	var/obj/screen/m_hat = null
 	var/obj/screen/m_hatbg = null
+	var/obj/screen/m_glasses = null
+	var/obj/screen/m_glassesbg = null
 
 	//spells hud icons - this interacts with add_spell and remove_spell
 	var/list/obj/screen/movable/spell_master/spell_masters = null
@@ -255,3 +257,5 @@
 	var/origin_x = 0
 	var/origin_y = 0
 	var/origin_z = 0
+
+	var/iscorpse = 0 //Keeps track of whether this was spawned from a landmark or not.

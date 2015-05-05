@@ -460,7 +460,7 @@ k
 	req_tech = list("powerstorage"=2)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
-	build_path = /obj/item/weapon/module/power_control
+	build_path = /obj/item/weapon/circuitboard/power_control
 
 /datum/design/solarcontrol
 	name = "Circuit Design (Solar Control)"
@@ -607,6 +607,15 @@ k
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/pda_terminal
+
+/datum/design/pod
+	name = "Circuit Design (Mass Driver and Pod Doors Control)"
+	desc = "Allows for the construction of circuit boards used to build a Mass Driver and Pod Doors Control."
+	id = "pod"
+	req_tech = list("programming" = 2,"engineering" = 4)
+	build_type = IMPRINTER
+	materials = list("$glass" = 2000, "sacid" = 20)
+	build_path = /obj/item/weapon/circuitboard/pod
 
 /datum/design/pipedispenser
 	name = "Circuit Design (Pipe Dispenser)"
@@ -1761,7 +1770,7 @@ k
 	name = "PDA Painter Board"
 	desc = "The circuit board for a PDA Painter."
 	id = "pdapainter"
-	req_tech = list("programming" = 2, "engineering" = 2)
+	req_tech = list("programming" = 3, "engineering" = 2)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/pdapainter
@@ -2473,11 +2482,11 @@ k
 /datum/design/component_exchanger
 	name = "Rapid Machinery Component Exchanger"
 	desc = "A device that allows to quickly replace machinery components, useful for upgrading."
-	id = "deviceanalyser"
+	id = "componentexchanger"
 	req_tech = list("magnets"=2, "engineering"=4, "materials"=5, "programming"=3)
 	build_type = PROTOLATHE
 	materials = list("$iron" = 500, "$glass" = 1000, "$gold" = 200, "$silver" = 200)
-	build_path = /obj/item/device/component_exchanger
+	build_path = /obj/item/weapon/storage/component_exchanger
 
 /////////////////////////////////////////
 //////////////////Security///////////////
@@ -2703,7 +2712,7 @@ k
 	name = "Circuit Design (Microwave)"
 	desc = "Allows for the construction of circuit boards used to build a Microwave."
 	id = "microwave"
-	req_tech = list("programming" = 3,"engineering" = 2,"magnets" = 3)
+	req_tech = list("programming" = 2,"engineering" = 2,"magnets" = 3)
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/microwave
@@ -2798,7 +2807,7 @@ k
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/airlock
 
-/datum/design/airlock
+/datum/design/intercom
 	name = "Circuit Design (Intercom)"
 	desc = "Allows for the construction of circuit boards used to build an intercom."
 	id = "intercom"

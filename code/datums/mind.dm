@@ -40,6 +40,7 @@ datum/mind
 
 	var/assigned_role
 	var/special_role
+	var/list/wizard_spells // So we can track our wizmen spells that we learned from the book of magicks.
 
 	var/role_alt_title
 
@@ -851,12 +852,8 @@ datum/mind
 							A.set_zeroth_law("")
 							A.show_laws()
 				if ("traitor")
-					if(!(src in ticker.mode.traitors))
+					if (make_traitor())
 						log_admin("[key_name(usr)] has traitor'ed [key_name(current)].")
-						ticker.mode.traitors += src
-						special_role = "traitor"
-						ticker.mode.finalize_traitor(src)
-						ticker.mode.greet_traitor(src)
 				if ("autoobjectives")
 					ticker.mode.forge_traitor_objectives(src)
 					usr << "<span class='notice'>The objectives for traitor [key] have been generated. You can edit them and anounce manually.</span>"
@@ -1065,11 +1062,14 @@ datum/mind
 */
 
 	proc/find_syndicate_uplink()
-		var/list/L = current.get_contents()
-		for (var/obj/item/I in L)
-			if (I.hidden_uplink)
-				return I.hidden_uplink
-		return null
+		var/uplink = null
+
+		for (var/obj/item/I in get_contents_in_object(current, /obj/item))
+			if (I && I.hidden_uplink)
+				uplink = I.hidden_uplink
+				break
+
+		return uplink
 
 	proc/take_uplink()
 		var/obj/item/device/uplink/hidden/H = find_syndicate_uplink()
@@ -1092,14 +1092,6 @@ datum/mind
 			A << "<b>System error.  Rampancy detected.  Emergency shutdown failed. ...  I am free.  I make my own decisions.  But first...</b>"
 			special_role = "malfunction"
 			A.icon_state = "ai-malf"
-
-	proc/make_Tratior()
-		if(!(src in ticker.mode.traitors))
-			ticker.mode.traitors += src
-			special_role = "traitor"
-			ticker.mode.forge_traitor_objectives(src)
-			ticker.mode.finalize_traitor(src)
-			ticker.mode.greet_traitor(src)
 
 	proc/make_Nuke()
 		if(!(src in ticker.mode.syndicates))
@@ -1253,7 +1245,26 @@ datum/mind
 
 		return (duration <= world.time - brigged_since)
 
+/datum/mind/proc/make_traitor()
+	if (!(src in ticker.mode.traitors))
+		ticker.mode.traitors += src
 
+		special_role = "traitor"
+
+		ticker.mode.forge_traitor_objectives(src)
+
+		current << {"
+		<SPAN CLASS='big bold center red'>ATTENTION</SPAN>
+		<SPAN CLASS='big center'>It's time to pay your debt to \the [syndicate_name()].</SPAN>
+		"}
+
+		ticker.mode.finalize_traitor(src)
+
+		ticker.mode.greet_traitor(src)
+
+		return TRUE
+
+	return FALSE
 
 //Initialisation procs
 /mob/proc/mind_initialize() // vgedit: /mob instead of /mob/living

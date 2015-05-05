@@ -123,6 +123,17 @@
 			if(h.set_species("Tajaran"))
 				h.regenerate_icons()
 
+/datum/disease2/effect/voxpox
+	name = "Vox Pox"
+	stage = 4
+	badness = 2
+/datum/disease2/effect/voxpox/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(istype(mob,/mob/living/carbon/human))
+		var/mob/living/carbon/human/h = mob
+		if(h.species.name != "Vox")
+			if(h.set_species("Vox"))
+				h.regenerate_icons()
+
 /datum/disease2/effect/suicide
 	name = "Suicidal Syndrome"
 	stage = 4
@@ -321,6 +332,14 @@
 
 
 
+/datum/disease2/effect/delightful
+	name = "Delightful Effect"
+	stage = 4
+/datum/disease2/effect/delightful/activate(var/mob/living/carbon/mob,var/multiplier)
+	mob << "<span class = 'notice'> You feel delightful!</span>"
+	if (mob.reagents.get_reagent_amount("doctorsdelight") < 1)
+		mob.reagents.add_reagent("doctorsdelight", 1)
+
 
 
 /datum/disease2/effect/spawn
@@ -372,11 +391,11 @@
 		return
 	var/datum/gas_mixture/GM = new
 	if(prob(10))
-		GM.toxins += 100
+		GM.adjust_gas(PLASMA, 100, 1, 0)
 		//GM.temperature = 1500+T0C //should be enough to start a fire
 		mob << "<span class='warning'>You exhale a large plume of toxic gas!</span>"
 	else
-		GM.toxins += 10
+		GM.adjust_gas(PLASMA, 10, 1, 0)
 		GM.temperature = istype(T) ? T.air.temperature : T20C
 		mob << "<span class = 'warning'> A toxic gas emanates from your pores!</span>"
 	T.assume_air(GM)
@@ -443,6 +462,17 @@
 	stage = 3
 /datum/disease2/effect/giggle/activate(var/mob/living/carbon/mob,var/multiplier)
 	mob.say("*giggle")
+
+/datum/disease2/effect/chickenpox
+	name = "Chicken Pox"
+	stage = 3
+/datum/disease2/effect/chickenpox/activate(var/mob/living/carbon/mob,var/multiplier)
+	if (prob(30))
+		mob.say(pick("BAWWWK!", "BAAAWWK!", "CLUCK!", "CLUUUCK!", "BAAAAWWWK!"))
+	if (prob(15))
+		mob.emote("me",1,"vomits up a chicken egg!")
+		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
+		new /obj/item/weapon/reagent_containers/food/snacks/egg(get_turf(mob))
 
 /datum/disease2/effect/confusion
 	name = "Topographical Cretinism"

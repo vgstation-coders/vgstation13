@@ -186,6 +186,13 @@ datum
 			required_reagents = list("hydrogen" = 2, "oxygen" = 1)
 			result_amount = 1
 
+		sacid
+			name = "Sulphuric Acid"
+			id = "sacid"
+			result = "sacid"
+			required_reagents = list("sulfur" = 2, "oxygen" = 3, "water" = 2)
+			result_amount = 2
+
 		thermite
 			name = "Thermite"
 			id = "thermite"
@@ -460,9 +467,7 @@ datum
 				for(var/turf/simulated/floor/target_tile in range(0,location))
 
 					var/datum/gas_mixture/napalm = new
-					var/datum/gas/volatile_fuel/fuel = new
-					fuel.moles = created_volume
-					napalm.trace_gases += fuel
+					napalm.set_gas(VOLATILE_FUEL, created_volume, 0)
 
 					napalm.temperature = 400+T0C
 					napalm.update_values()
@@ -1412,7 +1417,7 @@ datum
 
 					var/datum/gas_mixture/napalm = new
 
-					napalm.toxins = 25
+					napalm.set_gas("plasma", 25, 0)
 					napalm.temperature = 1400
 
 					target_tile.assume_air(napalm)
@@ -2531,3 +2536,9 @@ datum
 			result = "etank"
 			required_reagents = list("coffee" = 1, "iron" = 1, "lithium" = 1, "fuel" = 1, "aluminum" = 1)
 			result_amount = 5
+
+		greytea
+			name = "Tide"
+			id = "greytea"
+			result = "greytea"
+			required_reagents = list("water" = 5, "fuel" = 5)

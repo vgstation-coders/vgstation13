@@ -32,7 +32,28 @@
 	<ul>
 		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)</li>
 		<li>[format_tag("ID Tag","id_tag")]</li>
+		<li>Monitor Pressure: <a href="?src=\ref[src];toggle_out_flag=1">[output&1 ? "Yes" : "No"]</a>
+		<li>Monitor Temperature: <a href="?src=\ref[src];toggle_out_flag=2">[output&2 ? "Yes" : "No"]</a>
+		<li>Monitor Oxygen Concentration: <a href="?src=\ref[src];toggle_out_flag=4">[output&4 ? "Yes" : "No"]</a>
+		<li>Monitor Plasma Concentration: <a href="?src=\ref[src];toggle_out_flag=8">[output&8 ? "Yes" : "No"]</a>
+		<li>Monitor Nitrogen Concentration: <a href="?src=\ref[src];toggle_out_flag=16">[output&16 ? "Yes" : "No"]</a>
+		<li>Monitor Carbon Dioxide Concentration: <a href="?src=\ref[src];toggle_out_flag=32">[output&32 ? "Yes" : "No"]</a>
 	</ul>"}
+
+/obj/machinery/air_sensor/multitool_topic(var/mob/user, var/list/href_list, var/obj/item/device/multitool/P)
+	. = ..()
+	if(.)
+		return .
+
+	if("toggle_out_flag" in href_list)
+		var/bitflag_value = text2num(href_list["toggle_out_flag"])//this is a string normally
+		if(!test_bitflag(bitflag_value) && bitflag_value <= 32) //Here to prevent breaking the sensors with HREF exploits
+			return 0
+		if(output&bitflag_value)//the bitflag is on ATM
+			output &= ~bitflag_value
+		else//can't not be off
+			output |= bitflag_value
+		return MT_UPDATE
 
 /obj/machinery/air_sensor/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	if(istype(W, /obj/item/device/multitool))
@@ -61,18 +82,19 @@
 			var/total_moles = air_sample.total_moles()
 			if(total_moles > 0)
 				if(output&4)
-					signal.data["oxygen"] = round(100*air_sample.oxygen/total_moles,0.1)
+					signal.data[OXYGEN] = round(100*air_sample.get_moles_by_id(OXYGEN)/total_moles,0.1)
 				if(output&8)
-					signal.data["toxins"] = round(100*air_sample.toxins/total_moles,0.1)
+					signal.data[PLASMA] = round(100*air_sample.get_moles_by_id(PLASMA)/total_moles,0.1)
 				if(output&16)
-					signal.data["nitrogen"] = round(100*air_sample.nitrogen/total_moles,0.1)
+					signal.data[NITROGEN] = round(100*air_sample.get_moles_by_id(NITROGEN)/total_moles,0.1)
 				if(output&32)
-					signal.data["carbon_dioxide"] = round(100*air_sample.carbon_dioxide/total_moles,0.1)
+					signal.data[CARBON_DIOXIDE] = round(100*air_sample.get_moles_by_id(CARBON_DIOXIDE)/total_moles,0.1)
 			else
-				signal.data["oxygen"] = 0
-				signal.data["toxins"] = 0
-				signal.data["nitrogen"] = 0
-				signal.data["carbon_dioxide"] = 0
+				signal.data[OXYGEN] = 0
+				signal.data[PLASMA] = 0
+				signal.data[NITROGEN] = 0
+				signal.data[CARBON_DIOXIDE] = 0
+
 		signal.data["sigtype"]="status"
 		radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
 
@@ -151,16 +173,16 @@
 						sensor_part += "<tr><th>Pressure:</th><td>[data["pressure"]] kPa</td></tr>"
 					if(data["temperature"])
 						sensor_part += "<tr><th>Temperature:</th><td>[data["temperature"]] K</td></tr>"
-					if(data["oxygen"]||data["toxins"]||data["nitrogen"]||data["carbon_dioxide"])
+					if(data[OXYGEN]||data[PLASMA]||data[NITROGEN]||data[CARBON_DIOXIDE])
 						sensor_part += "<tr><th>Gas Composition :</th><td><ul>"
-						if(data["oxygen"])
-							sensor_part += "<li>[data["oxygen"]]% O<sub>2</sub></li>"
-						if(data["nitrogen"])
-							sensor_part += "<li>[data["nitrogen"]]% N</li>"
-						if(data["carbon_dioxide"])
-							sensor_part += "<li>[data["carbon_dioxide"]]% CO<sub>2</sub></li>"
-						if(data["toxins"])
-							sensor_part += "<li>[data["toxins"]]% Plasma</li>"
+						if(data[OXYGEN])
+							sensor_part += "<li>[data[OXYGEN]]% O<sub>2</sub></li>"
+						if(data[NITROGEN])
+							sensor_part += "<li>[data[NITROGEN]]% N</li>"
+						if(data[CARBON_DIOXIDE])
+							sensor_part += "<li>[data[CARBON_DIOXIDE]]% CO<sub>2</sub></li>"
+						if(data[PLASMA])
+							sensor_part += "<li>[data[PLASMA]]% Plasma</li>"
 						sensor_part += "</ul></td></tr>"
 					sensor_part += "</table>"
 

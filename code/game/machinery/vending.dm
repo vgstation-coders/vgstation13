@@ -890,7 +890,7 @@
 		/obj/item/device/healthanalyzer = 5,
 		/obj/item/weapon/reagent_containers/glass/beaker = 4,
 		/obj/item/weapon/reagent_containers/dropper = 2)
-	contraband = list(/obj/item/weapon/reagent_containers/pill/tox = 3,/obj/item/weapon/reagent_containers/pill/stox = 4,/obj/item/weapon/reagent_containers/pill/antitox = 6)
+	contraband = list(/obj/item/weapon/reagent_containers/pill/tox = 3,/obj/item/weapon/reagent_containers/pill/stox = 4,/obj/item/weapon/reagent_containers/pill/antitox = 6, /obj/item/weapon/reagent_containers/blood/OMinus = 1)
 
 	pack = /obj/structure/vendomatpack/medical
 
@@ -1213,7 +1213,7 @@
 	icon_deny = "tool-deny"
 	//req_access_txt = "12" //Maintenance access
 	products = list(/obj/item/stack/cable_coil/random = 10,/obj/item/weapon/crowbar = 5,/obj/item/weapon/weldingtool = 3,/obj/item/weapon/wirecutters = 5,
-					/obj/item/weapon/wrench = 5,/obj/item/device/analyzer = 5,/obj/item/device/t_scanner = 5,/obj/item/weapon/screwdriver = 5)
+					/obj/item/weapon/wrench = 5,/obj/item/device/analyzer = 5,/obj/item/device/t_scanner = 5,/obj/item/weapon/screwdriver = 5,/obj/item/weapon/solder = 3)
 	contraband = list(/obj/item/weapon/weldingtool/hugetank = 2,/obj/item/clothing/gloves/fyellow = 2)
 	premium = list(/obj/item/clothing/gloves/yellow = 1)
 
@@ -1225,7 +1225,7 @@
 	icon_state = "engivend"
 	icon_deny = "engivend-deny"
 	req_access_txt = "11" //Engineering Equipment access
-	products = list(/obj/item/clothing/glasses/meson = 2,/obj/item/device/multitool = 4,/obj/item/weapon/circuitboard/airlock = 10,/obj/item/weapon/module/power_control = 10,/obj/item/weapon/circuitboard/air_alarm = 10,/obj/item/weapon/intercom_electronics = 10,/obj/item/weapon/cell/high = 10, /obj/item/mounted/frame/newscaster = 10)
+	products = list(/obj/item/clothing/glasses/meson = 2,/obj/item/device/multitool = 4,/obj/item/weapon/circuitboard/airlock = 10,/obj/item/weapon/circuitboard/power_control = 10,/obj/item/weapon/circuitboard/air_alarm = 10,/obj/item/weapon/intercom_electronics = 10,/obj/item/weapon/cell/high = 10, /obj/item/mounted/frame/newscaster = 10)
 	contraband = list(/obj/item/weapon/cell/potato = 3)
 	premium = list(/obj/item/weapon/storage/belt/utility = 3)
 
@@ -1238,12 +1238,15 @@
 	icon_state = "engi"
 	icon_deny = "engi-deny"
 	req_access_txt = "11"
-	products = list(/obj/item/clothing/under/rank/chief_engineer = 4,/obj/item/clothing/under/rank/engineer = 4,/obj/item/clothing/shoes/orange = 4,/obj/item/clothing/head/hardhat = 4,
+	products = list(/obj/item/clothing/under/rank/engineer = 4,/obj/item/clothing/under/rank/atmospheric_technician = 4,/obj/item/clothing/under/rank/maintenance_tech/ = 4,/obj/item/clothing/under/rank/engine_tech = 4,/obj/item/clothing/under/rank/electrician = 4,
+					/obj/item/clothing/shoes/orange = 4,/obj/item/clothing/head/hardhat = 4,/obj/item/clothing/head/hardhat/orange = 4,/obj/item/clothing/head/hardhat/red = 4,/obj/item/clothing/head/hardhat/white = 4,/obj/item/clothing/head/hardhat/dblue = 4,
 					/obj/item/weapon/storage/belt/utility = 4,/obj/item/clothing/glasses/meson = 4,/obj/item/clothing/gloves/yellow = 4, /obj/item/weapon/screwdriver = 12,
 					/obj/item/weapon/crowbar = 12,/obj/item/weapon/wirecutters = 12,/obj/item/device/multitool = 12,/obj/item/weapon/wrench = 12,/obj/item/device/t_scanner = 12,
 					/obj/item/stack/cable_coil/heavyduty = 8, /obj/item/weapon/cell = 8, /obj/item/weapon/weldingtool = 8,/obj/item/clothing/head/welding = 8,
 					/obj/item/weapon/light/tube = 10,/obj/item/clothing/suit/fire = 4, /obj/item/weapon/stock_parts/scanning_module = 5,/obj/item/weapon/stock_parts/micro_laser = 5,
 					/obj/item/weapon/stock_parts/matter_bin = 5,/obj/item/weapon/stock_parts/manipulator = 5,/obj/item/weapon/stock_parts/console_screen = 5)
+	contraband = list(/obj/item/weapon/wrench/socket = 1, /obj/item/weapon/extinguisher/foam = 1, /obj/item/device/device_analyser = 2)
+	premium = list(/obj/item/clothing/under/rank/chief_engineer = 2, /obj/item/weapon/storage/belt = 2) //belt is the best belt in the game.				
 	// There was an incorrect entry (cablecoil/power).  I improvised to cablecoil/heavyduty.
 	// Another invalid entry, /obj/item/weapon/circuitry.  I don't even know what that would translate to, removed it.
 	// The original products list wasn't finished.  The ones without given quantities became quantity 5.  -Sayu

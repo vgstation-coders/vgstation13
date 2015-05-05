@@ -75,9 +75,10 @@ obj/structure/ex_act(severity)
 
 /obj/structure/transit_tube_pod/New()
 	. = ..()
-	air_contents.oxygen = MOLES_O2STANDARD * 2
-	air_contents.nitrogen = MOLES_N2STANDARD
+	air_contents.adjust_gas(OXYGEN, MOLES_O2STANDARD * 2, 0)
+	air_contents.adjust_gas(NITROGEN, MOLES_N2STANDARD, 0)
 	air_contents.temperature = T20C
+	air_contents.update_values()
 
 	// Give auto tubes time to align before trying to start moving
 	spawn (5)
@@ -90,11 +91,28 @@ obj/structure/ex_act(severity)
 		init_dirs()
 
 /obj/structure/transit_tube/Bumped(mob/AM as mob|obj)
-	var/obj/structure/transit_tube/T = locate() in AM.loc
-	if(T)
+	var/obj/structure/transit_tube/tube = locate() in AM.loc
+	if(tube)
 		AM << "<span class='warning'>The tube's support pylons block your way.</span>"
 		return ..()
 	else
+		var/turf/T = get_turf(src)
+		var/list/large_dense = list()
+		for(var/atom/movable/border_obstacle in T)
+			if(border_obstacle.flags&ON_BORDER)
+				if(!border_obstacle.CanPass(AM, AM.loc) && AM != border_obstacle)
+					return ..()
+			else if(border_obstacle != src)
+				large_dense += border_obstacle
+
+		//Then, check the turf itself
+		if (!T.CanPass(AM, T))
+			return ..()
+
+		//Finally, check objects/mobs to block entry that are not on the border
+		for(var/atom/movable/obstacle in large_dense)
+			if(!obstacle.CanPass(AM, AM.loc) && AM != obstacle)
+				return ..()
 		AM.loc = src.loc
 		AM << "<span class='info'>You slip under the tube.</span>"
 
@@ -347,11 +365,7 @@ obj/structure/ex_act(severity)
 //  datum, there might be problems if I don't...
 /obj/structure/transit_tube_pod/return_air()
 	var/datum/gas_mixture/GM = new()
-	GM.oxygen			= air_contents.oxygen
-	GM.carbon_dioxide	= air_contents.carbon_dioxide
-	GM.nitrogen			= air_contents.nitrogen
-	GM.toxins			= air_contents.toxins
-	GM.temperature		= air_contents.temperature
+	GM.copy_from(air_contents)
 	return GM
 
 // For now, copying what I found in an unused FEA file (and almost identical in a

@@ -40,16 +40,15 @@
 	if(!(src.on))
 		return 0
 	if((num < 0.005 || src.air_contents.total_moles() < num))
-		src.ion_trail.stop()
+		src.toggle()
 		return 0
 
 	var/datum/gas_mixture/G = src.air_contents.remove(num)
 
-	var/allgases = G.carbon_dioxide + G.nitrogen + G.oxygen + G.toxins	//fuck trace gases	-Pete
-	if(allgases >= 0.005)
+	if(G.total_moles() >= 0.005)
 		return 1
 
-	del(G)
+	G = null //let the GC get it
 	return
 
 /obj/item/weapon/tank/jetpack/ui_action_click()

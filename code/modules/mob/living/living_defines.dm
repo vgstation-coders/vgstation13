@@ -20,6 +20,9 @@
 	var/hallucination = 0 //Directly affects how long a mob will hallucinate for
 	var/list/atom/hallucinations = list() //A list of hallucinated people that try to attack the mob. See /obj/effect/fake_attacker in hallucinations.dm
 
+
+	var/list/image/static_overlays = list()
+
 	var/t_plasma = null
 	var/t_oxygen = null
 	var/t_sl_gas = null
@@ -49,8 +52,8 @@
 	//autoignition_temperature=0
 	//fire_fuel=0
 
-	// For beam damage stuff
-	var/list/last_beamchecks=list() // world.time of the last time a beam was checked (for fractional damage)
+	var/list/icon/pipes_shown = list()
+	var/last_played_vent
 
 	//
 	var/list/callOnLife = list() //

@@ -32,7 +32,6 @@
 	var/frame_desc = null
 	var/contain_parts = 1
 
-
 /obj/item/weapon/circuitboard/message_monitor
 	name = "Circuit board (Message Monitor)"
 	build_path = "/obj/machinery/computer/message_monitor"
@@ -110,6 +109,9 @@
 /obj/item/weapon/circuitboard/pod
 	name = "Circuit board (Massdriver control)"
 	build_path = "/obj/machinery/computer/pod"
+/obj/item/weapon/circuitboard/pod/deathsquad
+	name = "Circuit board (Deathsquad Massdriver control)"
+	build_path = "/obj/machinery/computer/pod/deathsquad"
 /obj/item/weapon/circuitboard/robotics
 	name = "Circuit board (Robotics Control)"
 	build_path = "/obj/machinery/computer/robotics"
@@ -217,7 +219,7 @@
 	build_path = "/obj/machinery/computer/diseasesplicer"
 	origin_tech = "programming=3;biotech=4"
 /obj/item/weapon/circuitboard/centrifuge
-	name = "Circuit board (Disease Splicer)"
+	name = "Circuit board (Isolation Centrifuge)"
 	build_path = "/obj/machinery/computer/centrifuge"
 	origin_tech = "programming=3;biotech=3"
 
@@ -255,34 +257,47 @@
 	origin_tech = "programming=2"
 
 
-/obj/item/weapon/circuitboard/supplycomp/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I,/obj/item/device/multitool))
-		var/catastasis = src.contraband_enabled
-		var/opposite_catastasis
-		if(catastasis)
-			opposite_catastasis = "STANDARD"
-			catastasis = "BROAD"
-		else
-			opposite_catastasis = "BROAD"
-			catastasis = "STANDARD"
-
-		switch( alert("Current receiver spectrum is set to: [catastasis]","Multitool-Circuitboard interface","Switch to [opposite_catastasis]","Cancel") )
-		//switch( alert("Current receiver spectrum is set to: " {(src.contraband_enabled) ? ("BROAD") : ("STANDARD")} , "Multitool-Circuitboard interface" , "Switch to " {(src.contraband_enabled) ? ("STANDARD") : ("BROAD")}, "Cancel") )
-			if("Switch to STANDARD","Switch to BROAD")
-				src.contraband_enabled = !src.contraband_enabled
-
-			if("Cancel")
-				return
-			else
-				user << "DERP! BUG! Report this (And what you were doing to cause it) to Agouri"
+/obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
+	if(issolder(I))
+		var/obj/item/weapon/solder/S = I
+		if(S.remove_fuel(2,user))
+			solder_improve()
+	else if(iswelder(I))
+		var/obj/item/weapon/weldingtool/WT = I
+		if(WT.remove_fuel(1,user))
+			var/obj/item/weapon/circuitboard/blank/B = new /obj/item/weapon/circuitboard/blank(src.loc)
+			if(user.get_inactive_hand() == src)
+				user.before_take_item(src)
+				user.put_in_hands(B)
+			qdel(src)
+			return
 	return
+
+/obj/item/weapon/circuitboard/proc/solder_improve(mob/user as mob)
+	user << "<span class='warning'>You fiddle with a few random fuses but can't find a routing that doesn't short the board.</span>"
+	return
+
+/obj/item/weapon/circuitboard/supplycomp/solder_improve(mob/user as mob)
+	user << "<span class='notice'>You [contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>"
+	contraband_enabled = !contraband_enabled
+	return
+
+/obj/item/weapon/circuitboard/security/solder_improve(mob/user as mob)
+	if(istype(src,/obj/item/weapon/circuitboard/security/advanced))
+		return ..()
+	else
+		user << "<span class='notice'>You locate a short that makes the feed circuitry more elegant.</span>"
+		var/obj/item/weapon/circuitboard/security/advanced/A = new /obj/item/weapon/circuitboard/security/advanced(src.loc)
+		user.put_in_hands(A)
+		qdel(src)
+		return
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
 		if(0)
 			if(istype(P, /obj/item/weapon/wrench))
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				if(do_after(user, 5))
+				if(do_after(user, 5) && state == 0)
 					user << "<span class='notice'>You wrench the frame into place.</span>"
 					src.anchored = 1
 					src.state = 1
@@ -293,18 +308,18 @@
 					user << "The welding tool must be on to complete this task."
 					return 1
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-				if(do_after(user, 10))
+				if(do_after(user, 10) && state == 0)
 					if(!src || !WT.isOn()) return
 					user << "<span class='notice'>You deconstruct the frame.</span>"
-					//new /obj/item/stack/sheet/metal( src.loc, 5 )
 					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, src.loc)
 					M.amount = 5
+					state = -1
 					qdel(src)
 				return 1
 		if(1)
 			if(istype(P, /obj/item/weapon/wrench))
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				if(do_after(user, 20))
+				if(do_after(user, 20) && state == 1)
 					user << "<span class='notice'>You unfasten the frame.</span>"
 					src.anchored = 0
 					src.state = 0
@@ -342,15 +357,18 @@
 				src.icon_state = "1"
 				return 1
 			if(istype(P, /obj/item/stack/cable_coil))
-				if(P:amount >= 5)
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-					if(do_after(user, 20))
-						if(P)
-							P:amount -= 5
-							if(!P:amount) del(P)
-							user << "<span class='notice'>You add cables to the frame.</span>"
-							src.state = 3
-							src.icon_state = "3"
+				var/obj/item/stack/cable_coil/C = P
+				if (C.amount < 5)
+					user << "<span class='warning'>You need at least 5 lengths of cable coil for this!</span>"
+					return 1
+
+				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				if (do_after(user, 20) && state == 2 && C.amount >= 5)
+					C.use(5)
+					user << "<span class='notice'>You add cables to the frame.</span>"
+					src.state = 3
+					src.icon_state = "3"
+
 				return 1
 		if(3)
 			if(istype(P, /obj/item/weapon/wirecutters))
@@ -358,19 +376,22 @@
 				user << "<span class='notice'>You remove the cables.</span>"
 				src.state = 2
 				src.icon_state = "2"
-				var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( src.loc )
-				A.amount = 5
+				getFromPool(/obj/item/stack/cable_coil, get_turf(src), 5)
 				return 1
 
 			if(istype(P, /obj/item/stack/sheet/glass/glass))
-				if(P:amount >= 2)
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-					if(do_after(user, 20))
-						if(P)
-							P:use(2)
-							user << "<span class='notice'>You put in the glass panel.</span>"
-							src.state = 4
-							src.icon_state = "4"
+				var/obj/item/stack/sheet/glass/glass/G = P
+				if (G.amount < 2)
+					user << "<span class='warning'>You need at least 2 sheets of glass for this!</span>"
+					return 1
+
+				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				if(do_after(user, 20) && state == 3 && G.amount >= 2)
+					G.use(2)
+					user << "<span class='notice'>You put in the glass panel.</span>"
+					src.state = 4
+					src.icon_state = "4"
+
 				return 1
 		if(4)
 			if(istype(P, /obj/item/weapon/crowbar))

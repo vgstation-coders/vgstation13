@@ -101,7 +101,7 @@
 	icon = 'icons/obj/doors/Doorglass.dmi'
 	opacity = 0
 	glass = 1
-	pitch = 100
+	//pitch = 100
 
 /obj/machinery/door/airlock/centcom
 	name = "Airlock"
@@ -250,7 +250,7 @@
 //			target_tile.parent.suspend_group_processing()
 		var/datum/gas_mixture/napalm = new
 		var/toxinsToDeduce = 35
-		napalm.toxins = toxinsToDeduce
+		napalm.adjust_gas(PLASMA, toxinsToDeduce)
 		napalm.temperature = 400+T0C
 		target_tile.assume_air(napalm)
 		spawn (0)
@@ -1091,8 +1091,10 @@ About the new airlock wires panel:
 		src.busy = 0
 	else if (istype(I, /obj/item/weapon/card/emag) || istype(I, /obj/item/weapon/melee/energy/blade))
 		if (!operating)
+			operating = -1
 			if(density)
 				door_animate("spark")
+				sleep(6)
 				open(1)
 			operating = -1
 	else
@@ -1106,7 +1108,7 @@ About the new airlock wires panel:
 	..()
 
 /obj/machinery/door/airlock/open(var/forced=0)
-	if(operating || locked || welded)
+	if((operating && !forced) || locked || welded)
 		return 0
 	if(!forced)
 		if( !arePowerSystemsOn() || (stat & NOPOWER) || isWireCut(AIRLOCK_WIRE_OPEN_DOOR) )

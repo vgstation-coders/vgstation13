@@ -146,7 +146,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/attackby(obj/item/weapon/W, mob/user)
 
 	if(istype(W,/obj/item/weapon/pen)) //Renaming food
-		var/n_name = copytext(sanitize(input(user, "What would you like to name this dish?", "Food Renaming", null) as text|null), 1, MAX_NAME_LEN)
+		var/n_name = copytext(sanitize(input(user, "What would you like to name this dish?", "Food Renaming", null) as text|null), 1, MAX_NAME_LEN*3)
 		if(n_name && Adjacent(user) && !user.stat)
 			name = "[n_name]"
 		return
@@ -505,11 +505,13 @@
 	_color = "yellow"
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/flour))
-		new /obj/item/weapon/reagent_containers/food/snacks/dough(src)
-		user << "You make some dough."
-		del(W)
-		del(src)
+	if (istype(W, /obj/item/weapon/reagent_containers))
+		if(W.reagents.amount_cache.len == 1 && W.reagents.has_reagent("flour", 5))
+			W.reagents.remove_reagent("flour",5)
+			new /obj/item/weapon/reagent_containers/food/snacks/dough(src)
+			user << "You make some dough."
+			qdel(src)
+			return 1
 	else if (istype(W, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/C = W
 		var/clr = C.colourName
@@ -521,15 +523,6 @@
 		user << "<span class='notice'>You colour [src] [clr].</span>"
 		icon_state = "egg-[clr]"
 		_color = clr
-	else
-		..()
-
-/obj/item/weapon/reagent_containers/food/snacks/flour/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/egg))
-		new /obj/item/weapon/reagent_containers/food/snacks/dough(src)
-		user << "You make some dough."
-		del(W)
-		del(src)
 	else
 		..()
 
@@ -1153,6 +1146,7 @@
 		..()
 		reagents.add_reagent("nutriment", 6)
 		reagents.add_reagent("bustanut", 6)
+		reagents.add_reagent("sodiumchloride", 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/spacetwinkie
 	name = "space twinkie"
@@ -2344,7 +2338,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
 	name = "cheese wheel"
-	desc = "A big wheel of delcious Cheddar."
+	desc = "A big wheel of delicious Cheddar."
 	icon_state = "cheesewheel"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cheesewedge
 	slices_num = 5
@@ -3003,7 +2997,7 @@
 		reagents.add_reagent("nutriment", 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/bun
-	name = "bun"
+	name = "burger bun"
 	desc = "A base for any self-respecting burger."
 	icon = 'icons/obj/food_ingredients.dmi'
 	icon_state = "bun"
@@ -3278,6 +3272,9 @@
 /obj/item/weapon/reagent_containers/food/snacks/omurice/heart
 	icon_state = "omuriceheart"
 
+/obj/item/weapon/reagent_containers/food/snacks/omurice/face
+	icon_state = "omuriceface"
+
 /obj/item/weapon/reagent_containers/food/snacks/muffin/bluespace
 	name = "Bluespace-berry Muffin"
 	desc = "Just like a normal blueberry muffin, except with completely unnecessary floaty things!"
@@ -3348,6 +3345,25 @@
 	desc = "A slice of pumpkin bread."
 	icon_state = "pumpkinbreadslice"
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/corndog
+	name = "Corndog"
+	desc = "Battered hotdog on a stick!"
+	icon_state = "corndog"
+	New()
+		..()
+		reagents.add_reagent("nutriment", 5)
+		bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/cornydog
+	name = "CORNY DOG"
+	desc = "This is just ridiculous."
+	icon_state = "cornydog"
+	trash = /obj/item/stack/rods  //no fun allowed
+	New()
+		..()
+		reagents.add_reagent("nutriment", 15)
+		bitesize = 5
 
 ////////////////SLIDERS////////////////
 
@@ -3437,3 +3453,26 @@
 
 
 ////////////////SLIDERS END////////////////
+
+/obj/item/weapon/reagent_containers/food/snacks/higashikata
+	name = "Higashikata Special"
+	desc = "9 layer parfait, very expensive."
+	icon_state = "higashikata"
+	New()
+		..()
+		reagents.add_reagent("nutriment", 10)
+		reagents.add_reagent("sugar", 10)
+		reagents.add_reagent("ice", 10)
+		reagents.add_reagent("melonjuice", 5)
+		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sundae
+	name = "Sundae"
+	desc = "A colorful ice cream treat."
+	icon_state = "sundae"
+	New()
+		..()
+		reagents.add_reagent("nutriment", 5)
+		reagents.add_reagent("sugar", 5)
+		reagents.add_reagent("ice", 5)
+		bitesize = 3

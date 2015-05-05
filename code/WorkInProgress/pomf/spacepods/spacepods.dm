@@ -14,7 +14,7 @@
 	infra_luminosity = 15
 	var/mob/living/carbon/occupant
 	var/datum/spacepod/equipment/equipment_system
-	var/obj/item/weapon/cell/high/battery
+	var/obj/item/weapon/cell/battery
 	var/datum/gas_mixture/cabin_air
 	var/obj/machinery/portable_atmospherics/canister/internal_tank
 	var/datum/effect/effect/system/trail/space_trail/ion_trail
@@ -36,7 +36,7 @@
 	bound_width = 64
 	bound_height = 64
 	dir = EAST
-	battery = new()
+	battery = new /obj/item/weapon/cell/high()
 	add_cabin()
 	add_airtank()
 	src.ion_trail = new /datum/effect/effect/system/trail/space_trail()
@@ -232,8 +232,8 @@
 	cabin_air = new
 	cabin_air.temperature = T20C
 	cabin_air.volume = 200
-	cabin_air.oxygen = O2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature)
-	cabin_air.nitrogen = N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature)
+	cabin_air.adjust_gas(OXYGEN, O2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature))
+	cabin_air.adjust_gas(NITROGEN, N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature))
 	return cabin_air
 
 /obj/spacepod/proc/add_airtank()
@@ -308,7 +308,7 @@
 	set name = "Enter Pod"
 	set src in oview(1)
 
-	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
+	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting || (usr.status_flags & FAKEDEATH)) //are you cuffed, dying, lying, stunned or other
 		return
 	if (usr.stat || !ishuman(usr))
 		return

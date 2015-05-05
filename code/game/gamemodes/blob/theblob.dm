@@ -12,17 +12,15 @@
 	var/brute_resist = 4
 	var/fire_resist = 1
 
-	var/list/last_beamchecks=list()
-
 	// A note to the beam processing shit.
 	var/custom_process=0
 
 /obj/effect/blob/New(loc)
 	blobs += src
-	var/datum/game_mode/blob/B
-	if(B)
-		if((blobs.len >= B.blobnukeposs) && prob(1))
-			B.stage(2)
+	if(istype(ticker.mode,/datum/game_mode/blob))
+		var/datum/game_mode/blob/blobmode = ticker.mode
+		if((blobs.len >= blobmode.blobnukeposs) && prob(3))
+			blobmode.stage(2)
 	src.dir = pick(1, 2, 4, 8)
 	src.update_icon()
 	..(loc)
@@ -57,7 +55,7 @@
 		if(!custom_process && src in processing_objects)
 			processing_objects.Remove(src)
 
-/obj/effect/blob/proc/apply_beam_damage(var/obj/effect/beam/B)
+/obj/effect/blob/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
 
 	// Standard damage formula / 2
@@ -69,14 +67,14 @@
 	// Update check time.
 	last_beamchecks["\ref[B]"]=world.time
 
-/obj/effect/blob/proc/process_beams()
+/obj/effect/blob/handle_beams()
 	// New beam damage code (per-tick)
 	for(var/obj/effect/beam/B in beams)
 		apply_beam_damage(B)
 	update_icon()
 
 /obj/effect/blob/process()
-	process_beams()
+	handle_beams()
 	Life()
 	return
 

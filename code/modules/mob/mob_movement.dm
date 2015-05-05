@@ -372,7 +372,7 @@
 				if((T && T.holy) && isobserver(mob) && ((mob.invisibility == 0) || (ticker.mode && (mob.mind in ticker.mode.cult))))
 					mob << "<span class='warning'>You cannot get past holy grounds while you are in this plane of existence!</span>"
 				else
-					mob.loc = get_step(mob, direct)
+					mob.forceEnter(get_step(mob, direct))
 					mob.dir = direct
 		if(2)
 			if(prob(50))
@@ -412,19 +412,13 @@
 			else
 				spawn(0)
 					anim(mobloc,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
-				mob.loc = get_step(mob, direct)
+				mob.forceEnter(get_step(mob, direct))
 			mob.dir = direct
 	// Crossed is always a bit iffy
 	for(var/obj/S in mob.loc)
 		if(istype(S,/obj/effect/step_trigger) || istype(S,/obj/effect/beam))
 			S.Crossed(mob)
 
-	var/area/A = get_area_master(mob)
-	if(A)
-		A.Entered(mob)
-	if(isturf(mob.loc))
-		var/turf/T = mob.loc
-		T.Entered(mob)
 	return 1
 
 
@@ -432,7 +426,7 @@
 ///Called by /client/Move()
 ///For moving in space
 ///Return 1 for movement 0 for none
-/mob/proc/Process_Spacemove(var/check_drift = 0)
+/mob/proc/Process_Spacemove(var/check_drift = 0,var/ignore_slip = 0)
 	//First check to see if we can do things
 	if(restrained())
 		return 0
@@ -448,22 +442,9 @@
 		if(istype(turf,/turf/space))
 			continue
 
-		if(istype(src,/mob/living/carbon/human/))  // Only humans can wear magboots, so we give them a chance to.
-			if((istype(turf,/turf/simulated/floor)) && (src.areaMaster.has_gravity == 0) && !(istype(src:shoes, /obj/item/clothing/shoes/magboots) && (src:shoes:flags & NOSLIP)))
-				continue
-
-
-		else
-			if((istype(turf,/turf/simulated/floor)) && (src.areaMaster.has_gravity == 0)) // No one else gets a chance.
-				continue
-
-
-
-		/*
-		if(istype(turf,/turf/simulated/floor) && (src.flags & NOGRAV))
+		var/mob/living/carbon/human/H = src
+		if(istype(turf,/turf/simulated/floor) && (src.areaMaster.has_gravity == 0) && !(istype(H) && istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.flags & NOSLIP)))
 			continue
-		*/
-
 
 		dense_object++
 		break
@@ -489,7 +470,7 @@
 
 
 	//Check to see if we slipped
-	if(prob(Process_Spaceslipping(5)))
+	if(!ignore_slip && prob(Process_Spaceslipping(5)))
 		src << "<span class='notice'> <B>You slipped!</B></span>"
 		src.inertia_dir = src.last_move
 		step(src, src.inertia_dir)
@@ -510,19 +491,19 @@
 
 
 /mob/proc/Move_Pulled(var/atom/A)
-	if (!canmove || restrained() || !pulling)
+	if(!canmove || restrained() || !pulling)
 		return
-	if (pulling.anchored)
+	if(pulling.anchored)
 		return
-	if (!pulling.Adjacent(src))
+	if(!pulling.Adjacent(src))
 		return
 	if(!isturf(pulling.loc))
 		return
-	if (A == loc && pulling.density)
+	if(A == loc && pulling.density)
 		return
-	if (!Process_Spacemove(get_dir(pulling.loc, A)))
+	if(!Process_Spacemove(,1))
 		return
-	if (ismob(pulling))
+	if(ismob(pulling))
 		var/mob/M = pulling
 		var/atom/movable/t = M.pulling
 		M.stop_pulling()

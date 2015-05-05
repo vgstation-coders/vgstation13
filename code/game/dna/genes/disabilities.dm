@@ -41,8 +41,13 @@
 		testing("[name] has no activation message.")
 
 /datum/dna/gene/disability/deactivate(var/mob/M, var/connected, var/flags)
-	if(mutation && (mutation in M.mutations))
-		M.mutations.Remove(mutation)
+	if(flags & GENE_NATURAL)
+		//testing("[name]([type]) has natural flag.")
+		return 0
+	M.mutations.Remove(mutation)
+	M.active_genes.Remove(src.type)
+
+		//testing("[M] [mut ? "" : "un"]successfully removed [src.name] from mutations")
 	if(disability)
 		M.disabilities &= ~disability
 	if(sdisability)
@@ -51,6 +56,7 @@
 		M << "<span class='warning'>[deactivation_message]</span>"
 	else
 		testing("[name] has no deactivation message.")
+	..()
 
 /datum/dna/gene/disability/hallucinate
 	name="Hallucinate"

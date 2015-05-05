@@ -20,10 +20,15 @@
 	var/sname = "glass"
 	var/shard_type = /obj/item/weapon/shard
 
+	siemens_coefficient = 0 //does not conduct
+
 /obj/item/stack/sheet/glass/attack_self(mob/user as mob)
 	construct_window(user)
 
 /obj/item/stack/sheet/glass/attackby(obj/item/W, mob/user)
+	if(issolder(W))
+		src.use(1)
+		new /obj/item/weapon/circuitboard/blank(user.loc)
 	if(istype(W, /obj/item/stack/rods) && !reinforced)
 		var/obj/item/stack/rods/V  = W
 		var/obj/item/stack/sheet/glass/RG = new rglass(user.loc)

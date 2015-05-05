@@ -61,8 +61,8 @@ var/list/freqtoname = list(
 	var/endspanpart = "</span>"
 	//Message
 	var/messagepart = "<span class='message'>[lang_treat(speaker, message_langs, raw_message)]</span></span>"
-
-	return "[spanpart1][spanpart2][compose_track_href(speaker, message_langs, raw_message, radio_freq)][namepart]\icon[speaker.GetRadio()][freqpart][compose_job(speaker, message_langs, raw_message, radio_freq)][endspanpart][messagepart]"
+	var/trackingpart = compose_track_href(speaker, message_langs, raw_message, radio_freq)
+	return "[spanpart1][spanpart2][trackingpart][namepart][trackingpart ? "</a>" : ""]\icon[speaker.GetRadio()][freqpart][compose_job(speaker, message_langs, raw_message, radio_freq)][endspanpart][messagepart]"
 
 /atom/movable/proc/compose_track_href(atom/movable/speaker, message_langs, raw_message, radio_freq)
 	return ""
@@ -80,7 +80,7 @@ var/list/freqtoname = list(
 		return "exclaims, \"[text]\""
 
 	return "says, \"[text]\""
-
+var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost")
 /atom/movable/proc/lang_treat(atom/movable/speaker, message_langs, raw_message)
 	if(languages & message_langs)
 		var/atom/movable/AM = speaker.GetSource()
@@ -98,6 +98,8 @@ var/list/freqtoname = list(
 			if(languages & SIMPLE_ANIMAL)
 				return speaker.say_quote(raw_message)
 			return speaker.say_quote(stars(raw_message))
+	else if(message_langs & SPOOKY)
+		return "\icon[ghostimg] <span class='sinister'>Too spooky...</span> \icon[ghostimg]"
 	else if(message_langs & MONKEY)
 		return "chimpers."
 	else if(message_langs & ALIEN)

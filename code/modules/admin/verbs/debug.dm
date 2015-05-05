@@ -143,14 +143,9 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 	var/t = ""
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\verbs\debug.dm:145: t+= "Nitrogen : [env.nitrogen]\n"
-	t += {"Nitrogen : [env.nitrogen]
-Oxygen : [env.oxygen]
-Plasma : [env.toxins]
-CO2: [env.carbon_dioxide]
-Pressure: [env.return_pressure()]"}
-	// END AUTOFIX
+	for(var/gasid in env.gases)
+		var/datum/gas/gas = env.get_gas_by_id(gasid)
+		t += "[gas.display_name] : [env.get_moles_by_id(gasid)]<br>"
 	usr.show_message(t, 1)
 	feedback_add_details("admin_verb","ASL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -1034,7 +1029,7 @@ Pressure: [env.return_pressure()]"}
 		if(Rad.anchored)
 			if(!Rad.P)
 				var/obj/item/weapon/tank/plasma/Plasma = new/obj/item/weapon/tank/plasma(Rad)
-				Plasma.air_contents.toxins = 70
+				Plasma.air_contents.set_gas(PLASMA,  70)
 				Rad.drain_ratio = 0
 				Rad.P = Plasma
 				Plasma.loc = Rad
@@ -1425,6 +1420,10 @@ client/proc/control_bomberman_arena()
 
 	if(!check_rights(R_FUN)) return
 
+	if(!arenas.len)
+		usr << "There are no arenas in the world!"
+		return
+
 	var/datum/bomberman_arena/arena_target = input("Which arena do you wish to control?", "Arena Control Panel") in arenas
 	usr << "Arena Control Panel: [arena_target]"
 	var/arena_status = ""
@@ -1435,19 +1434,24 @@ client/proc/control_bomberman_arena()
 			arena_status = "AVAILABLE"
 		if(ARENA_INGAME)
 			arena_status = "IN-GAME"
+		if(ARENA_ENDGAME)
+			arena_status = "END-GAME"
 	usr << "status: [arena_status]"
 	usr << "violence mode: [arena_target.violence ? "ON" : "OFF"]"
 	usr << "opacity mode: [arena_target.opacity ? "ON" : "OFF"]"
+	if(arena_status == "SETUP")
+		usr << "Arena Under Construction"
 	if(arena_status == "AVAILABLE")
 		var/i = 0
 		for(var/datum/bomberman_spawn/S in arena_target.spawns)
 			if(S.availability)
 				i++
 		usr << "available spawn points: [i]"
-	if(arena_status == "IN-GAME")
+	if((arena_status == "IN-GAME") || (arena_status == "END-GAME"))
 		var/j = "players: "
 		for(var/datum/bomberman_spawn/S in arena_target.spawns)
-			j += "[S.player.name], "
+			if(S.player)
+				j += "[S.player.name], "
 		usr << "[j]"
 
 	var/list/choices = list(
@@ -1474,8 +1478,12 @@ client/proc/control_bomberman_arena()
 			return
 		if("Close Arena(space)")
 			arena_target.close()
+			if(arena_target in arenas)
+				arenas -= arena_target
 		if("Close Arena(floors)")
 			arena_target.close(0)
+			if(arena_target in arenas)
+				arenas -= arena_target
 		if("Reset Arena (remove players)")
 			arena_target.reset()
 		if("Recruit Gladiators (among the observers)")

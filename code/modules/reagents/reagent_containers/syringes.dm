@@ -44,12 +44,12 @@
 			return
 	update_icon()
 
-/obj/item/weapon/reagent_containers/syringe/attack_hand()
+/obj/item/weapon/reagent_containers/syringe/attack_hand(var/mob/user)
 	..()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/syringe/attack_paw()
-	return attack_hand()
+/obj/item/weapon/reagent_containers/syringe/attack_paw(var/mob/user)
+	return attack_hand(user)
 
 /obj/item/weapon/reagent_containers/syringe/attackby(obj/item/I as obj, mob/user as mob)
 	return
@@ -192,9 +192,9 @@
 
 				if(isobj(target))
 					// /vg/: Logging transfers of bad things
-					if(istype(target.reagents_to_log) && target.reagents_to_log.len)
+					if(istype(reagents_to_log) && reagents_to_log.len && target.log_reagents)
 						var/list/badshit=list()
-						for(var/bad_reagent in target.reagents_to_log)
+						for(var/bad_reagent in reagents_to_log)
 							if(reagents.has_reagent(bad_reagent))
 								badshit += reagents_to_log[bad_reagent]
 						if(badshit.len)

@@ -87,21 +87,34 @@
 	..()
 	return
 
-/datum/game_mode/proc/auto_declare_completion_vampire()
+/datum/game_mode/proc/vampire_completion()
+	var/text = ""
 	if(vampires.len)
-		var/text = "<FONT size = 2><B>The vampires were:</B></FONT>"
+		var/icon/logo = icon('icons/mob/mob.dmi', "vampire-logo")
+		end_icons += logo
+		var/tempstate = end_icons.len
+		text += {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The vampires were:</B></FONT> <img src="logo_[tempstate].png">"}
 		for(var/datum/mind/vampire in vampires)
 			var/traitorwin = 1
 
-			text += "<br>[vampire.key] was [vampire.name] ("
 			if(vampire.current)
+				var/icon/flat = getFlatIcon(vampire.current)
+				end_icons += flat
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> [vampire.key] was [vampire.name] ("}
 				if(vampire.current.stat == DEAD)
 					text += "died"
+					flat.Turn(90)
+					end_icons[tempstate] = flat
 				else
 					text += "survived"
 				if(vampire.current.real_name != vampire.name)
 					text += " as [vampire.current.real_name]"
 			else
+				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
+				end_icons += sprotch
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> [vampire.key] was [vampire.name] ("}
 				text += "body destroyed"
 			text += ")"
 
@@ -124,9 +137,12 @@
 				special_role_text = "antagonist"
 			if(vampire.total_TC)
 				if(vampire.spent_TC)
-					text += "<br><span class='sinister'>TC Remaining: [vampire.total_TC - vampire.spent_TC]/[vampire.total_TC] - The tools used by the Vampire were: [list2text(vampire.uplink_items_bought, ", ")]</span>"
+					text += "<br><span class='sinister'>TC Remaining: [vampire.total_TC - vampire.spent_TC]/[vampire.total_TC] - The tools used by the Vampire were:"
+					for(var/entry in vampire.uplink_items_bought)
+						text += "<br>[entry]"
+					text += "</span>"
 				else
-					text += "<span class='sinister'>The Vampire was a smooth operator this round (did not purchase any uplink items)</span>"
+					text += "<br><span class='sinister'>The Vampire was a smooth operator this round<br>(did not purchase any uplink items)</span>"
 			if(traitorwin)
 				text += "<br><font color='green'><B>The [special_role_text] was successful!</B></font>"
 				feedback_add_details("traitor_success","SUCCESS")
@@ -134,22 +150,34 @@
 				text += "<br><font color='red'><B>The [special_role_text] has failed!</B></font>"
 				feedback_add_details("traitor_success","FAIL")
 
-		world << text
-	return 1
+	return text
 
 /datum/game_mode/proc/auto_declare_completion_enthralled()
+	var/text = vampire_completion()
 	if(enthralled.len)
-		var/text = "<FONT size = 2><B>The Enthralled were:</B></FONT>"
+		var/icon/logo = icon('icons/mob/mob.dmi', "thrall-logo")
+		end_icons += logo
+		var/tempstate = end_icons.len
+		text += {"<FONT size = 2><img src="logo_[tempstate].png"> <B>The Enthralled were:</B> <img src="logo_[tempstate].png"></FONT>"}
 		for(var/datum/mind/Mind in enthralled)
-			text += "<br>[Mind.key] was [Mind.name] ("
 			if(Mind.current)
+				var/icon/flat = getFlatIcon(Mind.current)
+				end_icons += flat
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> [Mind.key] was [Mind.name] ("}
 				if(Mind.current.stat == DEAD)
 					text += "died"
+					flat.Turn(90)
+					end_icons[tempstate] = flat
 				else
 					text += "survived"
 				if(Mind.current.real_name != Mind.name)
 					text += " as [Mind.current.real_name]"
 			else
+				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
+				end_icons += sprotch
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> [Mind.key] was [Mind.name] ("}
 				text += "body destroyed"
 			text += ")"
 
@@ -158,9 +186,11 @@
 					text += "<br><span class='sinister'>TC Remaining: [Mind.total_TC - Mind.spent_TC]/[Mind.total_TC] - The tools used by the Enthralled were: [list2text(Mind.uplink_items_bought, ", ")]</span>"
 				else
 					text += "<span class='sinister'>The Enthralled was a smooth operator this round (did not purchase any uplink items)</span>"
-
-		world << text
-	return 1
+		text += "<BR><HR>"
+	else
+		if(text)
+			text += "<BR><HR>"
+	return text
 
 /datum/game_mode/proc/forge_vampire_objectives(var/datum/mind/vampire)
 	//Objectives are traitor objectives plus blood objectives
@@ -302,9 +332,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	src.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [H.name] ([H.ckey]) in the neck and draining their blood</font>")
 	H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [src.name] ([src.ckey])</font>")
 	log_attack("[src.name] ([src.ckey]) bit [H.name] ([H.ckey]) in the neck")
-	src.visible_message("<span class='danger'>[src.name] bites [H.name]'s neck!</span>",
-	"<span class='danger'>You bite [H.name]'s neck and begin to drain their blood.</span>",
-	"<span class='notice'>You hear a soft puncture and a wet sucking noise.</span>")
+	src.visible_message("<span class='danger'>[src.name] bites [H.name]'s neck!</span>", "<span class='danger'>You bite [H.name]'s neck and begin to drain their blood.</span>", "<span class='notice'>You hear a soft puncture and a wet sucking noise.</span>")
 	if(!iscarbon(src))
 		H.LAssailant = null
 	else
@@ -619,7 +647,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			hud_used.vampire_hud()
 			//hud_used.human_hud(hud_used.ui_style)
 		hud_used.vampire_blood_display.maptext_width = 64
-		hud_used.vampire_blood_display.maptext_height = 64
+		hud_used.vampire_blood_display.maptext_height = 32
 		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'> U:<font color='#33FF33' size='1'>[mind.vampire.bloodusable]</font><br> T:<font color='#FFFF00' size='1'>[mind.vampire.bloodtotal]</font></div>"
 	handle_vampire_cloak()
 	handle_vampire_menace()

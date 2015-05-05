@@ -35,30 +35,25 @@
 	return L
 
 /datum/theft_objective/proc/check_completion(datum/mind/owner)
-	//testing("Checking completion for [src.name] ([typepath])")
 	if (owner && owner.current)
-		//testing("Mind datum([owner]) and mob([owner.current]) is good.")
-		var/list/all_items = new/list()
+		var/all_items = new/list()
 
 		if (isliving(owner.current))
 			all_items += get_contents_in_object(owner.current)
-		//testing("Got [all_items.len] objects in [owner.current]")
 
-		if(areas && areas.len)
-			for (var/area_type in areas)
-				all_items += get_contents_in_object(locate(area_type), /obj)
-		//testing("Starting to check the list for [typepath]")
+		for (var/area_type in areas)
+			all_items += get_contents_in_object(locate(area_type), /obj)
+
 		for (var/obj/O in all_items)
-			//testing("Checking [O]([O.type])")
+
 			if (istype(O, typepath))
-				//testing("[O] matched our type of [typepath]")
 				if (istype(O, /obj/item/weapon/reagent_containers/hypospray/autoinjector)) // stealing the cheap autoinjector doesn't count
-					//testing("[O] wasn't good enough for us though so skipping...")
 					continue
 
 				if (areas.len)
 					if (!is_type_in_list(get_area_master(O), areas))
 						continue
+
 				return 1
 
 	return 0
@@ -196,6 +191,16 @@
 				//Stealing the cheap autoinjector doesn't count
 				if(istype(I, /obj/item/weapon/reagent_containers/hypospray/autoinjector))
 					continue
+				if(istype(I,/obj/item/device/aicard))
+					var/obj/item/device/aicard/C = I
+					if(!C.contents.len)
+						continue //Stealing a card with no contents doesn't count
+					var/is_at_least_one_alive = 0
+					for(var/mob/living/silicon/ai/A in C)
+						if(A.stat != DEAD)
+							is_at_least_one_alive++
+					if(!is_at_least_one_alive)
+						continue
 				if(areas.len)
 					if(!is_type_in_list(get_area_master(I),areas))
 						continue
@@ -214,7 +219,7 @@
 	max=28
 
 /datum/theft_objective/number/traitor/plasma_gas/getAmountStolen(var/obj/item/I)
-	return I:air_contents:toxins
+	return I:air_contents:get_moles_by_id(PLASMA)
 
 /datum/theft_objective/number/traitor/coins
 	name = "credits of coins (in bag)"

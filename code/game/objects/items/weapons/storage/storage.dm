@@ -334,6 +334,8 @@
 
 //This proc is called when you want to place an item into the storage item.
 /obj/item/weapon/storage/attackby(obj/item/W as obj, mob/user as mob)
+	if(!Adjacent(user,MAX_ITEM_DEPTH))
+		return
 	..()
 
 	// /vg/ #11: Recursion.
@@ -413,6 +415,10 @@
 /obj/item/weapon/storage/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
+/obj/item/weapon/storage/throw_at()
+	close_all() //How are you going to see whats inside this thing while throwing it
+	..()
+
 /obj/item/weapon/storage/verb/toggle_gathering_mode()
 	set name = "Switch Gathering Method"
 	set category = "Object"
@@ -429,7 +435,7 @@
 	set name = "Empty Contents"
 	set category = "Object"
 
-	if((!ishuman(usr) && (src.loc != usr)) || usr.stat || usr.restrained())
+	if((!ishuman(usr) && (src.loc != usr)) || usr.stat || usr.restrained() || (usr.status_flags & FAKEDEATH))
 		return
 
 	var/turf/T = get_turf(src)

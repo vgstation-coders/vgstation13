@@ -47,6 +47,19 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	RefreshParts()
 
 	initialize_directions = dir
+	initialize()
+	build_network()
+	if (node)
+		node.initialize()
+		node.build_network()
+
+/obj/machinery/atmospherics/unary/cryo_cell/initialize()
+	if(node) return
+	for(var/cdir in cardinal)
+		node = findConnecting(cdir)
+		if(node)
+			break
+	update_icon()
 
 /obj/machinery/atmospherics/unary/cryo_cell/Destroy()
 	go_out()
@@ -272,6 +285,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		beaker =  G
 		user.drop_item(G, src)
 		user.visible_message("[user] adds \a [G] to \the [src]!", "You add \a [G] to \the [src]!")
+	if(istype(G, /obj/item/weapon/wrench))//FUCK YOU PARENT, YOU AREN'T MY REAL DAD
+		return
 	if(..())
 		return
 	if (panel_open)
@@ -335,7 +350,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(occupant.bodytemperature < T0C)
 			occupant.sleeping = max(5, (1/occupant.bodytemperature)*2000)
 			occupant.Paralyse(max(5, (1/occupant.bodytemperature)*3000))
-			if(air_contents.oxygen > 2)
+			if(air_contents.get_moles_by_id(OXYGEN) > 2)
 				if(occupant.getOxyLoss()) occupant.adjustOxyLoss(-1)
 			else
 				occupant.adjustOxyLoss(-1)
@@ -424,7 +439,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	set category = "Object"
 	set src in oview(1)
 	if(usr == occupant)//If the user is inside the tube...
-		if (usr.stat == 2)//and he's not dead....
+		if (usr.stat == 2 || (usr.status_flags & FAKEDEATH))//and he's not dead....
 			return
 		usr << "<span class='notice'>Release sequence activated. This will take two minutes.</span>"
 		sleep(1200)
@@ -432,7 +447,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			return
 		go_out()//and release him from the eternal prison.
 	else
-		if (usr.stat != 0 || istype(usr, /mob/living/simple_animal))
+		if (usr.stat != 0 || istype(usr, /mob/living/simple_animal) || (usr.status_flags & FAKEDEATH))
 			return
 		go_out()
 	add_fingerprint(usr)
@@ -442,13 +457,13 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	set name = "Move Inside"
 	set category = "Object"
 	set src in oview(1)
-	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting || usr.buckled) //are you cuffed, dying, lying, stunned or other
+	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting || usr.buckled || (usr.status_flags & FAKEDEATH)) //are you cuffed, dying, lying, stunned or other
 		return
 	for(var/mob/living/carbon/slime/M in range(1,usr))
 		if(M.Victim == usr)
 			usr << "You're too busy getting your life sucked out of you."
 			return
-	if (usr.stat != 0 || stat & (NOPOWER|BROKEN))
+	if (usr.stat != 0 || stat & (NOPOWER|BROKEN) || (usr.status_flags & FAKEDEATH))
 		return
 	put_mob(usr)
 	return

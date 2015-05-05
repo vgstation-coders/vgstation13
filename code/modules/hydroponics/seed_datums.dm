@@ -194,12 +194,12 @@ proc/populate_seed_list()
 
 	if(prob(5))
 		consume_gasses = list()
-		var/gas = pick("oxygen","nitrogen","plasma","carbon_dioxide")
+		var/gas = pick(OXYGEN,NITROGEN,PLASMA,CARBON_DIOXIDE)
 		consume_gasses[gas] = rand(3,9)
 
 	if(prob(5))
 		exude_gasses = list()
-		var/gas = pick("oxygen","nitrogen","plasma","carbon_dioxide")
+		var/gas = pick(OXYGEN,NITROGEN,PLASMA,CARBON_DIOXIDE)
 		exude_gasses[gas] = rand(3,9)
 
 	chems = list()
@@ -624,6 +624,8 @@ proc/populate_seed_list()
 			else if(istype(product,/obj/item/weapon/grown))
 				var/obj/item/weapon/grown/current_product = product
 				current_product.plantname = name
+
+			score["stuffharvested"] += 1
 
 
 // When the seed in this machine mutates/is modified, the tray seed value

@@ -3,8 +3,19 @@
 	set desc = "Enter an air vent and crawl through the pipe system."
 	set category = "Robot Commands"
 	var/mob/living/silicon/robot/mommi/R = src
-	if(R.canmove)
-		handle_ventcrawl()
+	var/atom/pipe
+	var/list/pipes = list()
+	for(var/obj/machinery/atmospherics/unary/U in view(1))
+		if((istype(U, /obj/machinery/atmospherics/unary/vent_pump) || istype(U,/obj/machinery/atmospherics/unary/vent_scrubber)) && Adjacent(U))
+			pipes |= U
+	if(!pipes || !pipes.len)
+		return
+	if(pipes.len == 1)
+		pipe = pipes[1]
+	else
+		pipe = input("Crawl Through Vent", "Pick a pipe") as null|anything in pipes
+	if(R.canmove && pipe)
+		handle_ventcrawl(pipe)
 
 
 /mob/living/silicon/robot/mommi/verb/hide()

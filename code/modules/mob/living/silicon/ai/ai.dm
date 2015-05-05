@@ -85,7 +85,6 @@ var/list/ai_list = list()
 	else src.laws = getLawset(src)
 
 	verbs += /mob/living/silicon/ai/proc/show_laws_verb
-	verbs -= /mob/living/silicon/verb/sensor_mode
 
 	aiPDA = new/obj/item/device/pda/ai(src)
 	aiPDA.owner = name
@@ -403,6 +402,13 @@ var/list/ai_list = list()
 
 		return
 
+	if (href_list["open"])
+		var/mob/target = locate(href_list["open"])
+		var/mob/living/silicon/ai/A = locate(href_list["open2"])
+		if(A && target)
+			A.open_nearest_door(target)
+		return
+
 	return
 
 /mob/living/silicon/ai/meteorhit(obj/O as obj)
@@ -575,7 +581,7 @@ var/list/ai_list = list()
 	src.cameraFollow = null
 	var/cameralist[0]
 
-	if(usr.stat == 2)
+	if(usr.stat == 2 || (usr.status_flags & FAKEDEATH))
 		usr << "You can't change your camera network because you are dead!"
 		return
 
@@ -619,7 +625,7 @@ var/list/ai_list = list()
 	set category = "AI Commands"
 	set name = "AI Status"
 
-	if(usr.stat == 2)
+	if(usr.stat == 2 || (usr.status_flags & FAKEDEATH))
 		usr <<"You cannot change your emotional status because you are dead!"
 		return
 	var/list/ai_emotions = list("Very Happy", "Happy", "Neutral", "Unsure", "Confused", "Sad", "BSOD", "Blank", "Problems?", "Awesome", "Facepalm", "Friend Computer")

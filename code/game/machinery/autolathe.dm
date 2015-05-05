@@ -13,6 +13,7 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/weapon/screwdriver(), \
 		new /obj/item/weapon/wirecutters(), \
 		new /obj/item/weapon/wrench(), \
+		new /obj/item/weapon/solder(),\
 		new /obj/item/clothing/head/welding(), \
 		new /obj/item/weapon/stock_parts/console_screen(), \
 		getFromPool(/obj/item/stack/sheet/metal,null), \
@@ -168,12 +169,12 @@ var/global/list/autolathe_recipes_hidden = list( \
 	return
 
 /obj/machinery/autolathe/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(stat)
-		return 1
 	if(busy)
 		user << "<span class='warning'>\The [src] is busy. Please wait for the completion of previous operation.</span>"
 		return 1
-	if(..())
+	if(..()) //this has to be above the stat check, because it doesn't require power
+		return 1
+	if(stat & (BROKEN|NOPOWER))
 		return 1
 	if(isrobot(user))
 		if(!isMoMMI(user))

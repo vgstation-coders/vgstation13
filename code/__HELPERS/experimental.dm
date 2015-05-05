@@ -2,35 +2,6 @@
  * Experimental procs by ESwordTheCat!
  */
 
-/*
- * Get index of last char occurence to string.
- *
- * @args
- * A, string to be search
- * B, char used for search
- *
- * @return
- * >0, index of char at string
- *  0, char not found
- * -1, parameter B is not a char
- * -2, parameter A is not a string
- */
-/proc/strpos(const/A, const/B)
-	if (istext(A) == 0 || length(A) < 1)
-		return -2
-
-	if (istext(B) == 0 || length(B) > 1)
-		return -1
-
-	var/i = findtext(A, B)
-
-	if (0 == i)
-		return 0
-
-	while (i)
-		. = i
-		i = findtext(A, B, i + 1)
-
 /**
  * Object pooling.
  *
@@ -113,7 +84,7 @@ var/list/exclude = list("inhand_states", "loc", "locs", "parent_type", "vars", "
 
 	AM.Destroy()
 	AM.resetVariables()
-	masterPool["[AM.type]"] += AM
+	masterPool["[AM.type]"] |= AM
 
 	#ifdef DEBUG_OBJECT_POOL
 	world << text("DEBUG_OBJECT_POOL: returnToPool([]) [] left.", AM.type, length(masterPool["[AM.type]"]))
@@ -159,6 +130,8 @@ var/list/exclude = list("inhand_states", "loc", "locs", "parent_type", "vars", "
 		vars[key] = initial(vars[key])
 
 /proc/isInTypes(atom/Object, types)
+	if(!Object)
+		return 0
 	var/prototype = Object.type
 	Object = null
 

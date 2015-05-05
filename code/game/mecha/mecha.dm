@@ -121,8 +121,8 @@
 	cabin_air = new
 	cabin_air.temperature = T20C
 	cabin_air.volume = 200
-	cabin_air.oxygen = O2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature)
-	cabin_air.nitrogen = N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature)
+	cabin_air.adjust_gas(OXYGEN, O2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature))
+	cabin_air.adjust_gas(NITROGEN, N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature))
 	return cabin_air
 
 /obj/mecha/proc/add_radio()
@@ -323,6 +323,8 @@
 
 /obj/mecha/Bump(var/atom/obstacle)
 //	src.inertia_dir = null
+	if(src.throwing)
+		src.throwing = 0//so mechas don't get stuck when landing after being sent by a Mass Driver
 	if(istype(obstacle, /obj))
 		var/obj/O = obstacle
 		if(istype(O, /obj/effect/portal)) //derpfix
@@ -950,7 +952,7 @@
 	set name = "Enter Exosuit"
 	set src in oview(1)
 
-	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
+	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting || (usr.status_flags & FAKEDEATH)) //are you cuffed, dying, lying, stunned or other
 		return
 	if (usr.stat || !ishuman(usr))
 		return
@@ -1442,7 +1444,7 @@
 		return
 	if(href_list["close"])
 		return
-	if(usr.stat > 0)
+	if(usr.stat != 0 || (usr.status_flags & FAKEDEATH))
 		return
 	var/datum/topic_input/filter = new /datum/topic_input(href,href_list)
 	if(href_list["select_equip"])

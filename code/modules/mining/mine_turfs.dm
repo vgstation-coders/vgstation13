@@ -7,8 +7,8 @@
 	name = "Rock"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "rock"
-	oxygen = 0
-	nitrogen = 0
+	starting_gases = list(OXYGEN = 0.01,
+						NITROGEN = 0.01)
 	opacity = 1
 	density = 1
 	blocks_air = 1
@@ -432,16 +432,16 @@
 /**********************Asteroid**************************/
 
 /turf/unsimulated/floor/airless //floor piece
-	oxygen = 0.01
-	nitrogen = 0.01
+	starting_gases = list(OXYGEN = 0.01,
+						NITROGEN = 0.01)
 	temperature = TCMB
 
 /turf/unsimulated/floor/asteroid //floor piece
 	name = "Asteroid"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "asteroid"
-	oxygen = 0.01
-	nitrogen = 0.01
+	starting_gases = list(OXYGEN = 0.01,
+						NITROGEN = 0.01)
 	temperature = TCMB
 	//icon_plating = "asteroid"
 	var/dug = 0       //0 = has not yet been dug, 1 = has already been dug
@@ -491,13 +491,6 @@
 		if(do_after(user, used_digging.digspeed) && user) //the better the drill, the faster the digging
 			user << "<span class='notice'>You dug a hole.</span>"
 			gets_dug()
-
-	if(istype(W,/obj/item/weapon/storage/bag/ore))
-		var/obj/item/weapon/storage/bag/ore/S = W
-		if(S.collection_mode)
-			for(var/obj/item/weapon/ore/O in contents)
-				O.attackby(W,user)
-				return
 
 	else
 		..(W,user)
@@ -555,20 +548,6 @@
 		A = get_step(src, SOUTH)
 		A.updateMineralOverlays()
 	src.updateMineralOverlays()
-
-/turf/unsimulated/floor/asteroid/Entered(atom/movable/M as mob|obj)
-	..()
-	if(istype(M,/mob/living/silicon/robot))
-		var/mob/living/silicon/robot/R = M
-		if(istype(R.module, /obj/item/weapon/robot_module/miner))
-			if(istype(R.module_state_1,/obj/item/weapon/storage/bag/ore))
-				attackby(R.module_state_1,R)
-			else if(istype(R.module_state_2,/obj/item/weapon/storage/bag/ore))
-				attackby(R.module_state_2,R)
-			else if(istype(R.module_state_3,/obj/item/weapon/storage/bag/ore))
-				attackby(R.module_state_3,R)
-			else
-				return
 
 /turf/unsimulated/mineral/random
 	name = "Mineral deposit"
@@ -1008,8 +987,8 @@
 	return BUILD_FAILURE
 
 /turf/unsimulated/floor/asteroid/canBuildPlating()
-	if(locate(/obj/structure/lattice) in contents)
-		return BUILD_FAILURE
 	if(!dug)
 		return BUILD_IGNORE
-	return 0
+	if(locate(/obj/structure/lattice) in contents)
+		return BUILD_SUCCESS
+	return BUILD_FAILURE

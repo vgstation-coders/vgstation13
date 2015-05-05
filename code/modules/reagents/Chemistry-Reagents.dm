@@ -1217,10 +1217,14 @@
 		if(G.is_active(M))
 			if(G.name == "Hulk" && ishuman(M))
 				G.OnMobLife(M)
-			G.deactivate(M)
+			var/tempflag = 0
+			if(ishuman(M) && M:species && (G.block in M:species:default_blocks))
+				tempflag |= GENE_NATURAL
+			if(G.can_deactivate(M, tempflag))
+				G.deactivate(M,0, tempflag)
 	M.alpha = 255
-	M.mutations = list()
-	M.active_genes = list()
+	//M.mutations = list()
+	//M.active_genes = list()
 
 	M.disabilities = 0
 	M.sdisabilities = 0
@@ -1612,17 +1616,13 @@
 	var/turf/the_turf = get_turf(O)
 	if(!the_turf) return 0
 	var/datum/gas_mixture/napalm = new
-	var/datum/gas/volatile_fuel/fuel = new
-	fuel.moles = 5
-	napalm.trace_gases += fuel
+	napalm.set_gas(VOLATILE_FUEL, 5, 0)
 	the_turf.assume_air(napalm)
 
 /datum/reagent/plasma/reaction_turf(var/turf/T, var/volume)
 	src = null
 	var/datum/gas_mixture/napalm = new
-	var/datum/gas/volatile_fuel/fuel = new
-	fuel.moles = 5
-	napalm.trace_gases += fuel
+	napalm.set_gas(VOLATILE_FUEL, 5, 0)
 	T.assume_air(napalm)
 	return
 
@@ -4589,6 +4589,11 @@ var/global/list/chifir_doesnt_remove=list(
 	name = "Plasma Pekoe"
 	id = "plasmatea"
 	description = "Probably not the safest beverage."
+
+/datum/reagent/drink/tea/greytea
+	name = "Tide"
+	id = "greytea"
+	description = "This probably shouldn't even be considered tea..."
 
 /datum/reagent/drink/coffee/espresso
 	name = "Espresso"

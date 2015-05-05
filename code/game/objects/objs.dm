@@ -1,3 +1,4 @@
+var/global/list/reagents_to_log = list("fuel"  =  "welder fuel", "plasma"=  "plasma", "pacid" =  "polytrinic acid", "sacid" =  "sulphuric acid" )
 /obj
 	var/origin_tech = null	//Used by R&D to determine what research bonuses it grants.
 	var/reliability = 100	//Used by SOME devices to determine how reliable they are.
@@ -15,14 +16,8 @@
 	var/damtype = "brute"
 	var/force = 0
 
-	// What reagents should be logged when transferred TO this object?
-	// Reagent ID => friendly name
-	var/global/list/reagents_to_log = list( \
-		"fuel"  =  "welder fuel", \
-		"plasma"=  "plasma", \
-		"pacid" =  "polytrinic acid", \
-		"sacid" =  "sulphuric acid" \
-	)
+	//Should we alert about reagents that should be logged?
+	var/log_reagents = 1
 
 	var/list/mob/_using // All mobs dicking with us.
 
@@ -224,12 +219,14 @@ a {
 	dat += multitool_menu(user,P)
 	if(P)
 		if(P.buffer)
-			var/id="???"
+			var/id = null
 			if(istype(P.buffer, /obj/machinery/telecomms))
-				id=P.buffer:id
-			else
-				id=P.buffer:id_tag
-			dat += "<p><b>MULTITOOL BUFFER:</b> [P.buffer] ([id])"
+				var/obj/machinery/telecomms/buffer = P.buffer//Casting is better than using colons
+				id = buffer.id
+			else if(P.buffer.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
+				id = P.buffer:id_tag//sadly, : is needed
+
+			dat += "<p><b>MULTITOOL BUFFER:</b> [P.buffer] [id ? "([id])" : ""]"//If you can't into the ? operator, that will make it not display () if there's no ID.
 
 			dat += linkMenu(P.buffer)
 

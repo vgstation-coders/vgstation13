@@ -110,7 +110,7 @@ var/global/list/organ_damage_overlays = list(
 	if (monkeyizing)	return
 	if(!loc)			return	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
 
-	..()
+
 
 	if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
 		src << "Successfully called parent."
@@ -319,6 +319,7 @@ var/global/list/organ_damage_overlays = list(
 		update_overlays = 0
 		UpdateDamageIcon()
 	cycle++
+	..()
 
 
 
@@ -595,13 +596,13 @@ var/global/list/organ_damage_overlays = list(
 	if(species.name=="Plasmaman")
 
 		// Check if we're wearing our biosuit and mask.
-		if (!istype(wear_suit,/obj/item/clothing/suit/space/plasmaman) || !istype(head,/obj/item/clothing/head/helmet/space/plasmaman))
+		if (!(istype(wear_suit,/obj/item/clothing/suit/space/plasmaman) || istype(wear_suit,/obj/item/clothing/suit/space/bomberman)) || !(istype(head,/obj/item/clothing/head/helmet/space/plasmaman) || istype(head,/obj/item/clothing/head/helmet/space/bomberman)))
 			//testing("Plasmaman [src] leakin'.  coverflags=[cover_flags]")
 			// OH FUCK HE LEAKIN'.
 			// This was OP.
 			//environment.adjust(tx = environment.total_moles()*BREATH_PERCENTAGE) // About one breath's worth. (I know we aren't breathing it out, but this should be about the right amount)
 			if(environment)
-				if(environment.oxygen && environment.total_moles() && (environment.oxygen / environment.total_moles()) >= OXYCONCEN_PLASMEN_IGNITION) //how's the concentration doing?
+				if(environment.total_moles() && (environment.get_moles_by_id(OXYGEN) / environment.total_moles()) >= OXYCONCEN_PLASMEN_IGNITION) //how's the concentration doing?
 					if(!on_fire)
 						src << "<span class='warning'>Your body reacts with the atmosphere and bursts into flame!</span>"
 					adjust_fire_stacks(0.5)
@@ -758,7 +759,7 @@ var/global/list/organ_damage_overlays = list(
 		else
 			pressure_alert = -1
 
-	if(environment.toxins > MOLES_PLASMA_VISIBLE)
+	if(environment.get_moles_by_id(PLASMA) > MOLES_PLASMA_VISIBLE)
 		pl_effects()
 	return
 
@@ -1577,8 +1578,22 @@ var/global/list/organ_damage_overlays = list(
 			else
 				client.screen += global_hud.vimpaired
 
-		if(eye_blurry)			client.screen += global_hud.blurry
-		if(druggy)				client.screen += global_hud.druggy
+		if(eye_blurry)
+			if(!istype(global_hud.blurry,/obj/screen))
+				global_hud.blurry = new /obj/screen()
+				global_hud.blurry.screen_loc = "WEST,SOUTH to EAST,NORTH"
+				global_hud.blurry.icon_state = "blurry"
+				global_hud.blurry.layer = 17
+				global_hud.blurry.mouse_opacity = 0
+			client.screen += global_hud.blurry
+		if(druggy)
+			if(!istype(global_hud.druggy,/obj/screen))
+				global_hud.druggy = new /obj/screen()
+				global_hud.druggy.screen_loc = "WEST,SOUTH to EAST,NORTH"
+				global_hud.druggy.icon_state = "druggy"
+				global_hud.druggy.layer = 17
+				global_hud.druggy.mouse_opacity = 0
+			client.screen += global_hud.druggy
 
 		var/masked = 0
 
@@ -1611,7 +1626,8 @@ var/global/list/organ_damage_overlays = list(
 
 				// Not on the station or mining?
 				var/turf/temp_turf = get_turf(remoteview_target)
-				if((temp_turf.z != 1 && temp_turf.z != 5) || remoteview_target.stat!=CONSCIOUS)
+
+				if(temp_turf && (temp_turf.z != 1 && temp_turf.z != 5) || remoteview_target.stat!=CONSCIOUS)
 					src << "<span class='warning'>Your psy-connection grows too faint to maintain!</span>"
 					isRemoteObserve = 0
 			if(!isRemoteObserve && client && !client.adminobs && !iscamera(client.eye))

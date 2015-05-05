@@ -72,7 +72,7 @@
 		usr << "<span class='warning'>You cut yourself on [src].</span>"
 		return
 	var/n_name = copytext(sanitize(input(usr, "What would you like to label [src]?", "Paper Labelling", null)  as text), 1, MAX_NAME_LEN)
-	if((loc == usr && usr.stat == 0))
+	if((loc == usr && !usr.stat && !(usr.status_flags & FAKEDEATH)))
 		name = "paper[(n_name ? text("- '[n_name]'") : null)]"
 	add_fingerprint(usr)
 	return
@@ -105,7 +105,12 @@
 	var/locid = 0
 	var/laststart = 1
 	var/textindex = 1
+	var/softcount = 0
 	while(1) // I know this can cause infinite loops and fuck up the whole server, but the if(istart==0) should be safe as fuck
+		if(softcount>50)
+			break
+		if(softcount%25 == 0)
+			sleep(1)
 		var/istart = 0
 		if(links)
 			istart = findtext(info_links, "<span class=\"paper_field\">", laststart)
@@ -115,6 +120,7 @@
 		if(istart==0)
 			return // No field found with matching id
 
+		softcount++
 		laststart = istart+1
 		locid++
 		if(locid == id)
@@ -142,6 +148,10 @@
 	info_links = info
 	var/i = 0
 	for(i=1,i<=fields,i++)
+		if(i>=50)
+			break //abandon ship
+		if(i%25 == 0)
+			sleep(1)
 		addtofield(i, "<A href='?src=\ref[src];write=[i]'>write</A> ", 1)
 		addtofield(i, "<A href='?src=\ref[src];help=[i]'>help</A> ", 1)
 	info_links +="<A href='?src=\ref[src];write=end'>write</A> "
@@ -221,26 +231,27 @@
 
 		t = replacetext(t, "\n", "<BR>")
 
-		t = parsepencode(usr,i,t)
+		spawn()
+			t = parsepencode(usr,i,t)
 
-		//Count the fields
-		var/laststart = 1
-		while(1)
-			var/j = findtext(t, "<span class=\"paper_field\">", laststart)
-			if(j==0)
-				break
-			laststart = j+1
-			fields++
+			//Count the fields
+			var/laststart = 1
+			while(1)
+				var/j = findtext(t, "<span class=\"paper_field\">", laststart)
+				if(j==0)
+					break
+				laststart = j+1
+				fields++
 
-		if(id!="end")
-			addtofield(text2num(id), t) // He wants to edit a field, let him.
-		else
-			info += t // Oh, he wants to edit to the end of the file, let him.
-			updateinfolinks()
+			if(id!="end")
+				addtofield(text2num(id), t) // He wants to edit a field, let him.
+			else
+				info += t // Oh, he wants to edit to the end of the file, let him.
+				updateinfolinks()
 
-		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_links][stamps]</BODY></HTML>", "window=[name]") // Update the window
+			usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_links][stamps]</BODY></HTML>", "window=[name]") // Update the window
 
-		update_icon()
+			update_icon()
 
 	if(href_list["help"])
 		openhelp(usr)

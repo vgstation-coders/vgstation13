@@ -66,43 +66,53 @@
 
 	// AUTOFIXED BY fix_string_idiocy.py
 	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\mob.dm:25: t+= "<span class='warning'> Temperature: [environment.temperature] \n"
-	t += {"<span class='warning'> Temperature: [environment.temperature] \n</span>
-<span class='notice'> Nitrogen: [environment.nitrogen] \n</span>
-<span class='notice'> Oxygen: [environment.oxygen] \n</span>
-<span class='notice'> Plasma : [environment.toxins] \n</span>
-<span class='notice'> Carbon Dioxide: [environment.carbon_dioxide] \n</span>"}
+	t += {"<span class='warning'> Temperature: [environment.temperature] \n</span>"}
+	for(var/gasid in environment.gases)
+		var/datum/gas/gas = environment.get_gas_by_id(gasid)
+		t += {"<span class='notice'> [gas.display_name]: [environment.get_moles_by_id(gasid)] \n</span>"}
 	// END AUTOFIX
-	for(var/datum/gas/trace_gas in environment.trace_gases)
-		usr << "<span class='notice'> [trace_gas.type]: [trace_gas.moles] \n</span>"
-
 	usr.show_message(t, 1)
 
 /mob/proc/show_message(msg, type, alt, alt_type)//Message, type of message (1 or 2), alternative message, alt message type (1 or 2)
 
-	if(!client)	return
+	//Because the person who made this is a fucking idiot, let's clarify. 1 is sight-related messages (aka emotes in general), 2 is hearing-related (aka HEY DUMBFUCK I'M TALKING TO YOU)
+
+	if(!client) //We dun goof
+		return
 
 	msg = copytext(msg, 1, MAX_MESSAGE_LEN)
 
-	if (type)
-		if(type & 1 && (sdisabilities & BLIND || blinded || paralysis) )//Vision related
-			if (!( alt ))
+	if(type)
+		if((type & 1) && (sdisabilities & BLIND || blinded || paralysis)) //Vision related //We can't see all those emotes no-one ever does !
+			if(!(alt))
 				return
 			else
 				msg = alt
 				type = alt_type
-		if (type & 2 && (sdisabilities & DEAF || ear_deaf))//Hearing related
-			if (!( alt ))
-				return
+		if((type & 2) && (sdisabilities & DEAF || ear_deaf)) //Hearing related //We can't hear what the person is saying. Too bad
+			if(!(alt))
+				src << "<span class='notice'>You can almost hear someone talking.</span>" //Well, not THAT deaf
+				return //And that does it
 			else
 				msg = alt
 				type = alt_type
-				if ((type & 1 && sdisabilities & BLIND))
+				if((type & 1) && (sdisabilities & BLIND || blinded || paralysis)) //Since the alternative is sight-related, make sure we can see
 					return
-	// Added voice muffling for Issue 41.
-	if(stat == UNCONSCIOUS || sleeping > 0)
-		src << "<I>... You can almost hear someone talking ...</I>"
-	else
-		src << msg
+	//Added voice muffling for Issue 41.
+	//This has been changed to only work with audible messages, because you can't hear a frown
+	//This blocks "audible" emotes like gasping and screaming, but that's such a small loss. Who wants to hear themselves gasping to death ? I don't
+	if(stat == UNCONSCIOUS || sleeping > 0) //No-one's home
+		if((type & 1)) //This is an emote
+			if(!(alt)) //No alternative message
+				return //We can't see it, we're a bit too dying over here
+			else //Hey look someone passed an alternative message
+				src << "<span class='notice'>You can almost hear someone talking.</span>" //Now we can totally not hear it!
+				return //And we're good
+		else //This is not an emote
+			src << "<span class='notice'>You can almost hear someone talking.</span>" //The sweet silence of death
+			return //All we ever needed to hear
+	else //We're fine
+		src << msg //Send it
 	return
 
 // Show a message to all mobs in sight of this one
@@ -150,6 +160,9 @@
 			del(narsimage)
 			del(narglow)
 		return
+
+	//No need to make an exception for mechas, as they get deleted as soon as they get in view of narnar
+
 	if((N.z == src.z)&&(get_dist(N,src) <= (N.consume_range+10)) && !(N in view(src)))
 		if(!narsimage) //Create narsimage
 			narsimage = image('icons/obj/narsie.dmi',src.loc,"narsie",9,1)
@@ -216,19 +229,19 @@
 			del(narglow)
 
 /mob/proc/see_rift(var/obj/machinery/singularity/narsie/large/exit/R)
-	if((R.z == src.z) && (get_dist(R,src) <= (R.consume_range+10)) && !(R in view(src)))
+	var/turf/T_mob = get_turf(src)
+	if((R.z == T_mob.z) && (get_dist(R,T_mob) <= (R.consume_range+10)) && !(R in view(T_mob)))
 		if(!riftimage)
-			riftimage = image('icons/obj/rift.dmi',src.loc,"rift",LIGHTING_LAYER+2,1)
+			riftimage = image('icons/obj/rift.dmi',T_mob,"rift",LIGHTING_LAYER+2,1)
 			riftimage.mouse_opacity = 0
 
-		var/new_x = 32 * (R.x - src.x) + R.pixel_x
-		var/new_y = 32 * (R.y - src.y) + R.pixel_y
+		var/new_x = 32 * (R.x - T_mob.x) + R.pixel_x
+		var/new_y = 32 * (R.y - T_mob.y) + R.pixel_y
 		riftimage.pixel_x = new_x
 		riftimage.pixel_y = new_y
-		riftimage.loc = src.loc
+		riftimage.loc = T_mob
 
 		src << riftimage
-
 	else
 		if(riftimage)
 			del(riftimage)
@@ -655,7 +668,7 @@ var/list/slot_equipment_priority = list( \
 	set name = "Point To"
 	set category = "Object"
 
-	if(!src || !isturf(src.loc) || !(A in view(src.loc)))
+	if(!src || usr.stat || (usr.status_flags & FAKEDEATH) || !isturf(src.loc) || !(A in view(src.loc)))
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
@@ -713,6 +726,7 @@ var/list/slot_equipment_priority = list( \
 	set name = "Activate Held Object"
 	set category = "IC"
 	set src = usr
+
 
 	if(istype(loc,/obj/mecha)) return
 

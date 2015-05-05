@@ -3,7 +3,6 @@
 	name = "Food Processor"
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "processor"
-	layer = 2.9
 	density = 1
 	anchored = 1
 	var/broken = 0
@@ -162,7 +161,8 @@
 	if(what == user.get_active_hand())
 		user.drop_item(what, src)
 	else
-		user.drop_item(O)
+		if(O.loc == user)
+			user.drop_item(O)
 		what.loc = src
 	return
 
