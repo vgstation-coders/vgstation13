@@ -98,6 +98,9 @@
 		return
 
 
+/obj/item/weapon/gun/energy/crossbow/ninja
+	name = "energy dart thrower"
+	projectile_type = "/obj/item/projectile/energy/dart"
 
 /obj/item/weapon/gun/energy/crossbow/largecrossbow
 	name = "Energy Crossbow"
@@ -107,5 +110,3 @@
 	m_amt = 200000
 	w_type = RECYK_ELECTRONIC
 	projectile_type = "/obj/item/projectile/energy/bolt/large"
-
-

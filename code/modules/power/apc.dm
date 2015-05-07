@@ -95,6 +95,23 @@
 
 	var/is_critical = 0 // Endgame scenarios will not destroy this APC.
 
+
+/obj/machinery/power/apc/drain_power(var/drain_check, var/surge)
+	if(drain_check)
+		return 1
+
+	if(!cell)
+		return 0
+
+	if(surge && !emagged)
+		flick("apc-spark", src)
+		emagged = 1
+		locked = 0
+		update_icon()
+		return 0
+
+	return cell.drain_power(drain_check)
+
 /obj/machinery/power/apc/New(loc, var/ndir, var/building=0)
 	..(loc)
 	wires = new(src)
@@ -617,11 +634,6 @@
 			return
 		if(stat & (BROKEN|MAINT))
 			return
-
-		if(ishuman(user))
-			if(istype(user:gloves, /obj/item/clothing/gloves/space_ninja)&&user:gloves:candrain&&!user:gloves:draining)
-				call(/obj/item/clothing/gloves/space_ninja/proc/drain)("APC",src,user:wear_suit)
-				return
 	// do APC interaction
 	src.interact(user)
 

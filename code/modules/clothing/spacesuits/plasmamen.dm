@@ -47,8 +47,7 @@
 	icon_state = "plasmaman_helmet0"
 	item_state = "plasmaman_helmet0"
 	var/base_state = "plasmaman_helmet"
-	var/brightness_on = 4 //luminosity when on
-	var/on = 0
+	brightness_on = 4 //luminosity when on
 	var/no_light=0 // Disable the light on the atmos suit
 	action_button_name = "Toggle Helmet Light"
 

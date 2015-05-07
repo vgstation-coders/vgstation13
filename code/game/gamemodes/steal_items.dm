@@ -104,7 +104,7 @@
 
 /datum/theft_objective/traitor/voidsuit
 	name = "a nasa voidsuit"
-	typepath = /obj/item/clothing/suit/space/nasavoid
+	typepath = /obj/item/clothing/suit/space/void
 	protected_jobs = list("Research Director")
 
 /datum/theft_objective/traitor/slime_extract

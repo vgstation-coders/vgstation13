@@ -77,6 +77,24 @@
 	var/ioncheck[1]
 
 
+/mob/living/silicon/robot/drain_power(var/drain_check)
+
+	if(drain_check)
+		return 1
+
+	if(!cell || !cell.charge)
+		return 0
+
+	if(cell.charge)
+		src << "<span class='danger'>Warning: Unauthorized access through power channel 12 detected.</span>"
+		var/drained_power = rand(200,400)
+		if(cell.charge < drained_power)
+			drained_power = cell.charge
+			cell.use(drained_power)
+			return drained_power
+
+	return 0
+
 /mob/living/silicon/robot/New(loc,var/syndie = 0,var/unfinished = 0,var/startup_sound='sound/voice/liveagain.ogg')
 	spark_system = new /datum/effect/effect/system/spark_spread()
 	spark_system.set_up(5, 0, src)

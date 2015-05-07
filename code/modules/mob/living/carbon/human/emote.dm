@@ -626,7 +626,7 @@
 					var/wearing_mask=0
 					if(wear_suit && wear_suit.body_parts_covered & LOWER_TORSO)
 						wearing_suit=1
-						if (internal != null && wear_mask && (wear_mask.flags & MASKINTERNALS))
+						if (internal != null && wear_mask && (wear_mask.flags & AIRTIGHT))
 							wearing_mask=1
 
 					// Process toxic farts first.
@@ -640,7 +640,7 @@
 						else
 							// Was /turf/, now /mob/
 							for(var/mob/M in view(location,aoe_range))
-								if (M.internal != null && M.wear_mask && (M.wear_mask.flags & MASKINTERNALS))
+								if (M.internal != null && M.wear_mask && (M.wear_mask.flags & AIRTIGHT))
 									continue
 								if(!airborne_can_reach(location,get_turf(M),aoe_range))
 									continue

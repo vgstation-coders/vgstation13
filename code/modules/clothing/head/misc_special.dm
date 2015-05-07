@@ -135,8 +135,7 @@
 	flags = FPRINT
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR
 	body_parts_covered = FULL_HEAD
-	var/brightness_on = 2 //luminosity when on
-	var/on = 0
+	brightness_on = 2 //luminosity when on
 
 	attack_self(mob/user)
 		if(!isturf(user.loc))

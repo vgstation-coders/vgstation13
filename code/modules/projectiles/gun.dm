@@ -55,7 +55,10 @@
 		for(var/obj/O in contents)
 			O.emp_act(severity)
 
-/obj/item/weapon/gun/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/proc/load_into_chamber()
+	return 0
+
+/obj/item/weapon/gun/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
 	if(flag)	return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
 		user << "<span class='warning'>A label sticks the trigger to the trigger guard!</span>" //Such a new feature, the player might not know what's wrong if it doesn't tell them.

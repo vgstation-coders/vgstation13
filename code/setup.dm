@@ -216,9 +216,12 @@ var/MAX_EXPLOSION_RANGE = 14
 #define SLOT_TWOEARS 8192
 #define SLOT_LEGS = 16384
 
+
+
 //FLAGS BITMASK
 
-#define MASKINTERNALS	8	// mask allows internals
+                                //To successfully stop you taking all pressure damage you must have both a suit and head item with this flag.
+#define AIRTIGHT	8	// mask allows internals
 //#define SUITSPACE		8	// suit protects against space
 
 #define TWOHANDABLE		32

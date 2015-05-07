@@ -321,7 +321,20 @@ var/global/list/organ_damage_overlays = list(
 	cycle++
 	..()
 
+/mob/living/carbon/human/proc/get_pressure_weakness()
+	var/pressure_adjustment_coefficient = 1 //assume no protection at first
 
+	if(wear_suit && (wear_suit.flags & STOPSPRESSUREDMG) && head && (head.flags & STOPSPRESSUREDMG))
+		pressure_adjustment_coefficient = 0
+
+		//handles breaches in your space suit. 10 suit damage equals a 100% loss in pressure protection.
+		if(istype(wear_suit,/obj/item/clothing/suit/space))
+			var/obj/item/clothing/suit/space/S = wear_suit
+			if(S.can_breach && S.damage)
+				pressure_adjustment_coefficient += S.damage * 0.1
+	pressure_adjustment_coefficient = Clamp(pressure_adjustment_coefficient,0,1)
+
+	return pressure_adjustment_coefficient
 
 /mob/living/carbon/human/calculate_affecting_pressure(var/pressure)
 	..()
@@ -627,7 +640,7 @@ var/global/list/organ_damage_overlays = list(
 	if(internal)
 		if (!contents.Find(internal))
 			internal = null
-		if (!wear_mask || !(wear_mask.flags & MASKINTERNALS) )
+		if (!wear_mask || !(wear_mask.flags & AIRTIGHT) )
 			internal = null
 		if(internal)
 			return internal.remove_air_volume(volume_needed)
@@ -1437,27 +1450,6 @@ var/global/list/organ_damage_overlays = list(
 				see_invisible = SEE_INVISIBLE_LIVING
 				seer = 0
 
-		if(istype(wear_mask, /obj/item/clothing/mask/gas/voice/space_ninja))
-			var/obj/item/clothing/mask/gas/voice/space_ninja/O = wear_mask
-			switch(O.mode)
-				if(0)
-					var/target_list[] = list()
-					for(var/mob/living/target in oview(src))
-						if( target.mind&&(target.mind.special_role||issilicon(target)) )//They need to have a mind.
-							target_list += target
-					if(target_list.len)//Everything else is handled by the ninja mask proc.
-						O.assess_targets(target_list, src)
-					if(!druggy)		see_invisible = SEE_INVISIBLE_LIVING
-				if(1)
-					see_in_dark = 5
-					if(!druggy)		see_invisible = SEE_INVISIBLE_LIVING
-				if(2)
-					sight |= SEE_MOBS
-					if(!druggy)		see_invisible = SEE_INVISIBLE_LEVEL_TWO
-				if(3)
-					sight |= SEE_TURFS
-					if(!druggy)		see_invisible = SEE_INVISIBLE_LIVING
-
 		if(glasses)
 			var/obj/item/clothing/glasses/G = glasses
 			if(istype(G))
@@ -1597,7 +1589,7 @@ var/global/list/organ_damage_overlays = list(
 
 		var/masked = 0
 
-		if( istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/unathi))
+		if( istype(head, /obj/item/clothing/head/welding))
 			var/obj/item/clothing/head/welding/O = head
 			if(!O.up && tinted_weldhelh)
 				client.screen += global_hud.darkMask

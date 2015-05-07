@@ -143,6 +143,20 @@ Class Procs:
 
 	var/inMachineList = 1 // For debugging.
 
+
+/obj/machinery/drain_power(var/drain_check)
+	if(drain_check)
+		return 1
+	if(!powered())
+		return 0
+	var/area/area = get_area(src)
+	if(!area)
+		return 0
+	var/obj/machinery/power/apc/apc = area.get_apc()
+	if(!apc)
+		return 0
+	return apc.drain_power()
+
 /obj/machinery/cultify()
 	var/list/random_structure = list(
 		/obj/structure/cult/talisman,

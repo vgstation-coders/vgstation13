@@ -197,15 +197,19 @@ var/list/ai_list = list()
 			//return
 
 
-// displays the malf_ai information if the AI is the malf
-/mob/living/silicon/ai/show_malf_ai()
+/mob/living/silicon/ai/proc/is_malf()
 	if(ticker.mode.name == "AI malfunction")
 		var/datum/game_mode/malfunction/malf = ticker.mode
 		for (var/datum/mind/malfai in malf.malf_ai)
-			if (mind == malfai) // are we the evil one?
-				if (malf.apcs >= 3)
-					stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
+			if (mind == malfai)
+				return malf
+	return 0
 
+// displays the malf_ai information if the AI is the malf
+/mob/living/silicon/ai/show_malf_ai()
+	var/datum/game_mode/malfunction/malf = is_malf()
+	if(malf && malf.apcs >= 3)
+		stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
 
 /mob/living/silicon/ai/proc/ai_alerts()
 
@@ -475,11 +479,7 @@ var/list/ai_list = list()
 
 /mob/living/silicon/ai/attack_hand(mob/living/carbon/M as mob)
 	if(ishuman(M))//Checks to see if they are ninja
-		if(istype(M:gloves, /obj/item/clothing/gloves/space_ninja)&&M:gloves:candrain&&!M:gloves:draining)
-			if(M:wear_suit:s_control)
-				M:wear_suit:transfer_ai("AICORE", "NINJASUIT", src, M)
-			else
-				M << "<span class='danger'>ERROR: </span>Remote access channel disabled."
+		M << "<span class='danger'>ERROR</span>: Remote access channel disabled."
 	return
 
 

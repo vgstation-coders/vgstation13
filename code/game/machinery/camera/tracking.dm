@@ -119,12 +119,14 @@
 			if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
 				src << "Unable to locate an airlock"
 				return
-			if(istype(H.head, /obj/item/clothing/head/helmet/space/space_ninja) && !H.head.canremove)
-				src << "Unable to locate an airlock"
-				return
-			if(H.digitalcamo)
-				src << "Unable to locate an airlock"
-				return
+			if(istype(H.head, /obj/item/clothing/head/helmet/space/rig))
+				var/obj/item/clothing/head/helmet/space/rig/helmet = H.head
+				if(helmet.prevent_track())
+					src << "Unable to locate an airlock"
+					return
+				if(H.digitalcamo)
+					src << "Unable to locate an airlock"
+					return
 		if (!near_camera(target))
 			src << "Target is not near any active cameras."
 			return
@@ -172,21 +174,19 @@
 			if (istype(target, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = target
 				if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
-					U << "Follow camera mode terminated."
-					U.cameraFollow = null
+					U.ai_cancel_tracking(1)
 					return
-		 		if(istype(H.head, /obj/item/clothing/head/helmet/space/space_ninja) && !H.head.canremove)
-		 			U << "Follow camera mode terminated."
-					U.cameraFollow = null
-					return
+				if(istype(H.head, /obj/item/clothing/head/helmet/space/rig))
+					var/obj/item/clothing/head/helmet/space/rig/helmet = H.head
+					if(helmet.prevent_track())
+						U.ai_cancel_tracking(1)
+						return
 				if(H.digitalcamo)
-					U << "Follow camera mode terminated."
-					U.cameraFollow = null
+					U.ai_cancel_tracking(1)
 					return
 
 			if(istype(target.loc,/obj/effect/dummy))
-				U << "Follow camera mode ended."
-				U.cameraFollow = null
+				U.ai_cancel_tracking()
 				return
 
 			if (!near_camera(target))
@@ -222,6 +222,12 @@
 
 /mob/living/silicon/ai/attack_ai(var/mob/user as mob)
 	ai_camera_list()
+
+/mob/living/silicon/ai/proc/ai_cancel_tracking(var/forced = 0)
+	if(!cameraFollow)
+		return
+	src << "Follow camera mode [forced ? "terminated" : "ended"]."
+	cameraFollow = null
 
 /proc/camera_sort(list/L)
 	var/obj/machinery/camera/a
