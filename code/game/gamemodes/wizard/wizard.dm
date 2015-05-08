@@ -69,7 +69,7 @@
 			//learn_basic_spells(wizard.current)
 			equip_wizard(wizard.current)
 			var/client/C = wizard.current.client
-			if(!findtext(C.prefs.real_name,"Wizard"))
+			if(!findtext(C.prefs.real_name,"WIZ"))
 				name_wizard(wizard.current)
 			greet_wizard(wizard)
 			update_wizard_icons_added(wizard)
@@ -129,7 +129,7 @@
 	return
 
 /datum/game_mode/proc/set_prefs_wizard(mob/living/carbon/human/wizard_mob)
-	var/prefix = "Wizard"
+	var/prefix = "WIZ"
 	var/client/C = wizard_mob.client
 	var/final_name = ""
 	var/slotnum

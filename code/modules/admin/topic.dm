@@ -2685,7 +2685,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TD")
 
-				var/prefix = "Admin"
+				var/prefix = "ADM"
 				var/mob/M = usr
 				var/client/C = M.client
 				var/final_name = ""

@@ -195,7 +195,7 @@
 	syndicate.objectives += syndobj
 
 /datum/game_mode/proc/set_prefs_syndicate(mob/living/carbon/human/synd_mob)
-	var/prefix = "Nuke"
+	var/prefix = "NUK"
 	var/client/C = synd_mob.client
 	var/final_name = ""
 	var/slotnum
@@ -404,7 +404,7 @@
 
 /proc/nukelastname(var/mob/M as mob) //--All praise goes to NEO|Phyte, all blame goes to DH, and it was Cindi-Kate's idea. Also praise Urist for copypasta ho.
 	var/client/C = M.client
-	if(findtext(C.prefs.real_name,"Nuke"))
+	if(findtext(C.prefs.real_name,"NUK"))
 		return ""
 	var/randomname = pick(last_names)
 	var/newname = copytext(sanitize(input(M,"You are the nuke operative [pick("Czar", "Boss", "Commander", "Chief", "Kingpin", "Director", "Overlord")]. Please choose a last name for your family.", "Name change",randomname)),1,MAX_NAME_LEN)
