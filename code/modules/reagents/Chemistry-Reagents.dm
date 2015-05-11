@@ -1616,13 +1616,17 @@
 	var/turf/the_turf = get_turf(O)
 	if(!the_turf) return 0
 	var/datum/gas_mixture/napalm = new
-	napalm.set_gas(VOLATILE_FUEL, 5, 0)
+	var/datum/gas/volatile_fuel/fuel = new
+	fuel.moles = 5
+	napalm.trace_gases += fuel
 	the_turf.assume_air(napalm)
 
 /datum/reagent/plasma/reaction_turf(var/turf/T, var/volume)
 	src = null
 	var/datum/gas_mixture/napalm = new
-	napalm.set_gas(VOLATILE_FUEL, 5, 0)
+	var/datum/gas/volatile_fuel/fuel = new
+	fuel.moles = 5
+	napalm.trace_gases += fuel
 	T.assume_air(napalm)
 	return
 
@@ -2542,6 +2546,13 @@
 	if(prob(5))
 		M.visible_message("<span class='warning'>[M] [pick("dry heaves!","coughs!","splutters!")]</span>")
 	return
+
+/datum/reagent/blackcolor
+	name = "Black Food Coloring"
+	id = "blackcolor"
+	description = "A black coloring used to dye food and drinks."
+	reagent_state = LIQUID
+	color = "#000000"
 
 /datum/reagent/frostoil
 	name = "Frost Oil"

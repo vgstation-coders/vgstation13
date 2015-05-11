@@ -143,9 +143,14 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 	var/t = ""
 
-	for(var/gasid in env.gases)
-		var/datum/gas/gas = env.get_gas_by_id(gasid)
-		t += "[gas.display_name] : [env.get_moles_by_id(gasid)]<br>"
+	// AUTOFIXED BY fix_string_idiocy.py
+	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\verbs\debug.dm:145: t+= "Nitrogen : [env.nitrogen]\n"
+	t += {"Nitrogen : [env.nitrogen]
+Oxygen : [env.oxygen]
+Plasma : [env.toxins]
+CO2: [env.carbon_dioxide]
+Pressure: [env.return_pressure()]"}
+	// END AUTOFIX
 	usr.show_message(t, 1)
 	feedback_add_details("admin_verb","ASL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -347,6 +352,8 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			if(M.mind)
 				M.mind.special_role = "Cultist"
 				ticker.mode.cult += M.mind
+				M << "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>"
+				M.add_language("Cult")
 			src << "Made [M] a cultist."
 */
 
@@ -1029,7 +1036,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		if(Rad.anchored)
 			if(!Rad.P)
 				var/obj/item/weapon/tank/plasma/Plasma = new/obj/item/weapon/tank/plasma(Rad)
-				Plasma.air_contents.set_gas(PLASMA,  70)
+				Plasma.air_contents.toxins = 70
 				Rad.drain_ratio = 0
 				Rad.P = Plasma
 				Plasma.loc = Rad
@@ -1365,25 +1372,25 @@ client/proc/delete_all_bomberman()
 	for(var/obj/item/weapon/bomberman/O in world)
 		if(istype(O.loc, /mob/living/carbon/))
 			var/mob/living/carbon/C = O.loc
-			C.u_equip(O)
+			C.u_equip(O,1)
 			O.loc = C.loc
-			O.dropped(C)
+			//O.dropped(C)
 		qdel(O)
 
 	for(var/obj/item/clothing/suit/space/bomberman/O in world)
 		if(istype(O.loc, /mob/living/carbon/))
 			var/mob/living/carbon/C = O.loc
-			C.u_equip(O)
+			C.u_equip(O,1)
 			O.loc = C.loc
-			O.dropped(C)
+			//O.dropped(C)
 		qdel(O)
 
 	for(var/obj/item/clothing/head/helmet/space/bomberman/O in world)
 		if(istype(O.loc, /mob/living/carbon/))
 			var/mob/living/carbon/C = O.loc
-			C.u_equip(O)
+			C.u_equip(O,1)
 			O.loc = C.loc
-			O.dropped(C)
+			//O.dropped(C)
 		qdel(O)
 
 	for(var/obj/structure/softwall/O in world)
@@ -1558,6 +1565,73 @@ client/proc/mob_list()
 	if(foundnull)
 		usr << "Found [foundnull] null entries in the mob list, running null clearer."
 		listclearnulls(mob_list)
+
+client/proc/check_bomb()
+	set name = "Check Bomb Impact"
+	set category = "Debug"
+
+	var/newmode = alert("Use the new method?","Check Bomb Impact", "Yes","No")
+
+
+	var/turf/epicenter = get_turf(usr)
+	var/devastation_range = 0
+	var/heavy_impact_range = 0
+	var/light_impact_range = 0
+	var/list/choices = list("Small Bomb", "Medium Bomb", "Big Bomb", "Custom Bomb")
+	var/choice = input("What size explosion would you like to produce?") in choices
+	switch(choice)
+		if(null)
+			return 0
+		if("Small Bomb")
+			devastation_range = 1
+			heavy_impact_range = 2
+			light_impact_range = 3
+		if("Medium Bomb")
+			devastation_range = 2
+			heavy_impact_range = 3
+			light_impact_range = 4
+		if("Big Bomb")
+			devastation_range = 3
+			heavy_impact_range = 5
+			light_impact_range = 7
+		if("Custom Bomb")
+			devastation_range = input("Devastation range (in tiles):") as num
+			heavy_impact_range = input("Heavy impact range (in tiles):") as num
+			light_impact_range = input("Light impact range (in tiles):") as num
+
+	var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)
+
+	var/x0 = epicenter.x
+	var/y0 = epicenter.y
+
+	var/list/wipe_colors = list()
+	for (var/turf/T in trange(max_range, epicenter))
+		wipe_colors += T
+		var/dist = cheap_pythag(T.x - x0, T.y - y0)
+
+		if(newmode == "Yes")
+			var/turf/Trajectory = T
+			while(Trajectory != epicenter)
+				Trajectory = get_step_towards(Trajectory,epicenter)
+				if(Trajectory.density && Trajectory.explosion_block)
+					dist += Trajectory.explosion_block
+
+				for (var/obj/machinery/door/D in Trajectory.contents)
+					if(D.density && D.explosion_block)
+						dist += D.explosion_block
+
+		if (dist < devastation_range)
+			T.color = "red"
+		else if (dist < heavy_impact_range)
+			T.color = "yellow"
+		else if (dist < light_impact_range)
+			T.color = "blue"
+		else
+			continue
+
+	sleep(100)
+	for (var/turf/T in wipe_colors)
+		T.color = null
 
 client/proc/cure_disease()
 	set name = "Cure Disease"

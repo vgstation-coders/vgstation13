@@ -1,8 +1,8 @@
 /turf/simulated/floor/airless
 	icon_state = "floor"
 	name = "airless floor"
-	starting_gases = list(OXYGEN = 0.01, // BIRDS HATE OXYGEN FOR SOME REASON
-						NITROGEN = 0.01)
+	oxygen = 0.01
+	nitrogen = 0.01
 	temperature = TCMB
 
 	New()
@@ -15,8 +15,8 @@
 	icon_state = "plating"
 	name = "vox plating"
 	//icon = 'icons/turf/shuttle-debug.dmi'
-	starting_gases = list(OXYGEN = 0, // BIRDS HATE OXYGEN FOR SOME REASON
-						NITROGEN = MOLES_O2STANDARD+MOLES_N2STANDARD) // So it totals to the same pressure
+	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON
+	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD // So it totals to the same pressure
 
 	New()
 		..()
@@ -26,8 +26,8 @@
 	icon_state = "floor"
 	name = "vox floor"
 	//icon = 'icons/turf/shuttle-debug.dmi'
-	starting_gases = list(OXYGEN = 0, // BIRDS HATE OXYGEN FOR SOME REASON
-						NITROGEN = MOLES_O2STANDARD+MOLES_N2STANDARD) // So it totals to the same pressure
+	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON
+	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD // So it totals to the same pressure
 
 	New()
 		..()
@@ -114,12 +114,32 @@
 	if(istype(C, /obj/item/weapon/wrench))
 		user << "<span class='notice'>Removing rods...</span>"
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 80, 1)
-		if(do_after(user, 30))
+		if(do_after(user, 30) && istype(src, /turf/simulated/floor/engine)) // Somehow changing the turf does NOT kill the current running proc.
 			new /obj/item/stack/rods(src, 2)
 			ChangeTurf(/turf/simulated/floor)
 			var/turf/simulated/floor/F = src
 			F.make_plating()
 			return
+
+/turf/simulated/floor/engine/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			if(prob(80))
+				src.ReplaceWithLattice()
+			else if(prob(50))
+				src.ChangeTurf(under_turf)
+			else
+				var/turf/simulated/floor/F = src
+				F.make_plating()
+		if(2.0)
+			if(prob(50))
+				var/turf/simulated/floor/F = src
+				F.make_plating()
+			else
+				return
+		if(3.0)
+			return
+	return
 
 /turf/simulated/floor/engine/cult
 	name = "engraved floor"
@@ -129,18 +149,24 @@
 	return
 
 /turf/simulated/floor/engine/airless
-	starting_gases = list(OXYGEN = 0.01,
-						NITROGEN = 0.01)
+	oxygen = 0.01
+	nitrogen = 0.01
 
 /turf/simulated/floor/engine/n20
-
-
+	New()
+		..()
+		if(src.air)
+			// EXACTLY the same code as fucking roomfillers.  If this doesn't work, something's fucked.
+			var/datum/gas/sleeping_agent/trace_gas = new
+			air.trace_gases += trace_gas
+			trace_gas.moles = 9*4000
+			air.update_values()
 
 /turf/simulated/floor/engine/vacuum
 	name = "vacuum floor"
 	icon_state = "engine"
-	starting_gases = list(OXYGEN = 0,
-						NITROGEN = 0.001)
+	oxygen = 0
+	nitrogen = 0.001
 	temperature = TCMB
 
 /turf/simulated/floor/plating
@@ -158,8 +184,8 @@
 /turf/simulated/floor/plating/airless
 	icon_state = "plating"
 	name = "airless plating"
-	starting_gases = list(OXYGEN = 0.01,
-						NITROGEN = 0.01)
+	oxygen = 0.01
+	nitrogen = 0.01
 	temperature = TCMB
 
 	New()
@@ -191,6 +217,7 @@
 	opacity = 1
 	density = 1
 	blocks_air = 1
+	explosion_block = 2
 
 /turf/simulated/shuttle/wall/cultify()
 	ChangeTurf(/turf/simulated/wall/cult)
@@ -200,6 +227,19 @@
 /turf/simulated/shuttle/floor
 	name = "floor"
 	icon_state = "floor"
+
+/turf/simulated/shuttle/floor/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			new/obj/effect/decal/cleanable/soot(src)
+		if(2.0)
+			if(prob(65))
+				new/obj/effect/decal/cleanable/soot(src)
+		if(3.0)
+			if(prob(20))
+				new/obj/effect/decal/cleanable/soot(src)
+			return
+	return
 
 /turf/simulated/shuttle/floor/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
@@ -216,6 +256,19 @@
 /turf/simulated/shuttle/floor4 // Added this floor tile so that I have a seperate turf to check in the shuttle -- Polymorph
 	name = "Brig floor"        // Also added it into the 2x3 brig area of the shuttle.
 	icon_state = "floor4"
+
+/turf/simulated/shuttle/floor4/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			new/obj/effect/decal/cleanable/soot(src)
+		if(2.0)
+			if(prob(65))
+				new/obj/effect/decal/cleanable/soot(src)
+		if(3.0)
+			if(prob(20))
+				new/obj/effect/decal/cleanable/soot(src)
+			return
+	return
 
 /turf/simulated/shuttle/floor4/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
@@ -320,11 +373,11 @@
 
 // VOX SHUTTLE SHIT
 /turf/simulated/shuttle/floor/vox
-	starting_gases = list(OXYGEN = 0, // BIRDS HATE OXYGEN FOR SOME REASON
-						NITROGEN = MOLES_O2STANDARD+MOLES_N2STANDARD) // So it totals to the same pressure
+	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON
+	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD // So it totals to the same pressure
 	//icon = 'icons/turf/shuttle-debug.dmi'
 
 /turf/simulated/shuttle/plating/vox
-	starting_gases = list(OXYGEN = 0, // BIRDS HATE OXYGEN FOR SOME REASON
-						NITROGEN = MOLES_O2STANDARD+MOLES_N2STANDARD) // So it totals to the same pressure
+	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON
+	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD // So it totals to the same pressure
 	//icon = 'icons/turf/shuttle-debug.dmi'

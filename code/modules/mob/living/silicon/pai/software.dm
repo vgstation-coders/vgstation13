@@ -276,7 +276,8 @@
 				src.medHUD = !src.medHUD
 		if("translator")
 			if(href_list["toggle"])
-				languages = languages == ALL ? HUMAN & ROBOT : ALL
+				universal_speak = !universal_speak
+				universal_understand = !universal_understand
 		if("doorjack")
 			if(href_list["jack"])
 				if(src.cable && src.cable.machine)
@@ -339,7 +340,7 @@
 		if(s == "medical HUD")
 			dat += "<a href='byond://?src=\ref[src];software=medicalhud;sub=0'>Medical Analysis Suite</a> <br>"
 		if(s == "universal translator")
-			dat += "<a href='byond://?src=\ref[src];software=translator;sub=0'>Universal Translator</a>[(languages == ALL) ? "<font color=#55FF55>•</font>" : "<font color=#FF5555>•</font>"] <br>"
+			dat += "<a href='byond://?src=\ref[src];software=translator;sub=0'>Universal Translator</a>[(universal_understand) ? "<font color=#55FF55>•</font>" : "<font color=#FF5555>•</font>"] <br>"
 		if(s == "projection array")
 			dat += "<a href='byond://?src=\ref[src];software=projectionarray;sub=0'>Projection Array</a> <br>"
 		if(s == "camera jack")
@@ -501,7 +502,7 @@
 /mob/living/silicon/pai/proc/softwareTranslator()
 	var/dat = {"<h3>Universal Translator</h3><br>
 				When enabled, this device will automatically convert all spoken and written language into a format that any known recipient can understand.<br><br>
-				The device is currently [ (languages == ALL) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br>
+				The device is currently [ (universal_understand) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br>
 				<a href='byond://?src=\ref[src];software=translator;sub=0;toggle=1'>Toggle Device</a><br>
 				"}
 	return dat
@@ -568,7 +569,28 @@
 	else
 		var/datum/gas_mixture/environment = T.return_air()
 
-		dat += analyzer.output_gas_scan(environment, T, 1)
+		var/pressure = environment.return_pressure()
+		var/total_moles = environment.total_moles()
+
+		dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"
+
+		if (total_moles)
+			var/o2_level = environment.oxygen/total_moles
+			var/n2_level = environment.nitrogen/total_moles
+			var/co2_level = environment.carbon_dioxide/total_moles
+			var/plasma_level = environment.toxins/total_moles
+			var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
+
+			// AUTOFIXED BY fix_string_idiocy.py
+			// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:547: dat += "Nitrogen: [round(n2_level*100)]%<br>"
+			dat += {"Nitrogen: [round(n2_level*100)]%<br>
+				Oxygen: [round(o2_level*100)]%<br>
+				Carbon Dioxide: [round(co2_level*100)]%<br>
+				Plasma: [round(plasma_level*100)]%<br>"}
+			// END AUTOFIX
+			if(unknown_level > 0.01)
+				dat += "OTHER: [round(unknown_level)]%<br>"
+		dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 
 	// AUTOFIXED BY fix_string_idiocy.py
 	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:554: dat += "<a href='byond://?src=\ref[src];software=atmosensor;sub=0'>Refresh Reading</a> <br>"

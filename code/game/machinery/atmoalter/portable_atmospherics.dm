@@ -13,7 +13,6 @@
 
 /obj/machinery/portable_atmospherics/New()
 	..()
-
 	air_contents.volume = volume
 	air_contents.temperature = T20C
 
@@ -36,7 +35,7 @@
 
 /obj/machinery/portable_atmospherics/Destroy()
 	del(air_contents)
-
+	atmos_machines -= src
 	..()
 
 /obj/machinery/portable_atmospherics/update_icon()
@@ -103,14 +102,9 @@
 			if(possible_port)
 				if(connect(possible_port))
 					user << "<span class='notice'>You connect [name] to the port.</span>"
-					var/list/contents_l=list()
-					for(var/gasid in src.air_contents.gases)
-						var/datum/gas/gas = air_contents.get_gas_by_id(gasid)
-						if(gas.gas_flags & AUTO_LOGGING && air_contents.get_moles_by_id(gasid) > 0)
-							contents_l += "<span class='danger'>[gas.display_name]</span>"
-					var/contents_str = english_list(contents_l)
-					if(contents_l.len>0)
-						log_admin("[key_name(user)]) opened a connected a container that contains [contents_str] to a connector at [loc.x], [loc.y], [loc.z]")
+					var/datum/gas/sleeping_agent/S = locate() in src.air_contents.trace_gases
+					if(src.air_contents.toxins > 0 || (istype(S)))
+						log_admin("[usr]([ckey(usr.key)]) connected a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] to a connector_port at [loc.x], [loc.y], [loc.z]")
 					update_icon()
 					return 1
 				else

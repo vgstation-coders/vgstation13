@@ -19,11 +19,7 @@ client/proc/Zone_Info(turf/T as null|turf)
 			mob << "No zone here."
 			var/datum/gas_mixture/mix = T.return_air()
 			mob << "[mix.return_pressure()] kPa [mix.temperature]C"
-			var/message = ""
-			for(var/gasid in mix.gases)
-				var/datum/gas/gas = mix.get_gas_by_id(gasid)
-				message += "[gas.display_short]: [mix.get_moles_by_id(gasid)]"
-			mob << message
+			mob << "O2: [mix.oxygen] N2: [mix.nitrogen] CO2: [mix.carbon_dioxide] TX: [mix.toxins]"
 	else
 		if(zone_debug_images)
 			for(var/zone in  zone_debug_images)

@@ -50,8 +50,6 @@
 
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller
 
-	var/obj/item/device/analyzer/analyzer = new //scanner for air
-
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
 	canmove = 0
@@ -70,6 +68,11 @@
 		pda.owner = text("[]", src)
 		pda.name = pda.owner + " (" + pda.ownjob + ")"
 		pda.toff = 1
+
+	add_language("Sol Common", 1)
+	add_language("Tradeband", 1)
+	add_language("Gutter", 1)
+
 	..()
 
 /mob/living/silicon/pai/Login()

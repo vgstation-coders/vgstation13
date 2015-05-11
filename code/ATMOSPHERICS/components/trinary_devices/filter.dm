@@ -54,15 +54,15 @@ obj/machinery/atmospherics/trinary/filter/power_change()
 		update_icon()
 
 obj/machinery/atmospherics/trinary/filter/process()
-	..()
+	. = ..()
 	if(!on)
-		return 0
+		return
 
 	var/output_starting_pressure = air3.return_pressure()
 
 	if(output_starting_pressure >= target_pressure || air2.return_pressure() >= target_pressure )
 		//No need to mix if target is already full!
-		return 1
+		return
 
 	//Calculate necessary moles to transfer using PV=nRT
 
@@ -82,30 +82,39 @@ obj/machinery/atmospherics/trinary/filter/process()
 		var/datum/gas_mixture/filtered_out = new
 		filtered_out.temperature = removed.temperature
 
-		var/list/gases_to_remove
-
 		switch(filter_type)
 			if(0) //removing hydrocarbons
-				gases_to_remove = list(PLASMA /*, OXYGEN_AGENT_B*/)
+				filtered_out.toxins = removed.toxins
+				removed.toxins = 0
+
+				if(removed.trace_gases.len>0)
+					for(var/datum/gas/trace_gas in removed.trace_gases)
+						if(istype(trace_gas, /datum/gas/oxygen_agent_b))
+							removed.trace_gases -= trace_gas
+							filtered_out.trace_gases += trace_gas
 
 			if(1) //removing O2
-				gases_to_remove = list(OXYGEN)
+				filtered_out.oxygen = removed.oxygen
+				removed.oxygen = 0
 
 			if(2) //removing N2
-				gases_to_remove = list(NITROGEN)
+				filtered_out.nitrogen = removed.nitrogen
+				removed.nitrogen = 0
 
 			if(3) //removing CO2
-				gases_to_remove = list(CARBON_DIOXIDE)
+				filtered_out.carbon_dioxide = removed.carbon_dioxide
+				removed.carbon_dioxide = 0
 
 			if(4)//removing N2O
-				gases_to_remove = list(NITROUS_OXIDE)
+				if(removed.trace_gases.len>0)
+					for(var/datum/gas/trace_gas in removed.trace_gases)
+						if(istype(trace_gas, /datum/gas/sleeping_agent))
+							removed.trace_gases -= trace_gas
+							filtered_out.trace_gases += trace_gas
 
 			else
 				filtered_out = null
 
-		for(var/gasid in gases_to_remove)
-			filtered_out.adjust_gas(gasid, removed.get_moles_by_id(gasid), 0)
-			removed.set_gas(gasid, 0, 0)
 
 		air2.merge(filtered_out)
 		air3.merge(removed)

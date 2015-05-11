@@ -727,11 +727,11 @@
 
 				if(do_mob(usr, src, HUMAN_STRIP_DELAY))
 					if(id_item)
-						u_equip(id_item)
+						u_equip(id_item,0)
 						if(pickpocket) usr.put_in_hands(id_item)
 					else
 						if(place_item)
-							usr.u_equip(place_item)
+							usr.u_equip(place_item,1)
 							equip_to_slot_if_possible(place_item, slot_wear_id, 0, 1)
 					// Update strip window
 					if(in_range(src, usr))
@@ -765,11 +765,11 @@
 
 		if(do_mob(usr, src, HUMAN_STRIP_DELAY))
 			if(pocket_item)
-				u_equip(pocket_item)
+				u_equip(pocket_item,1)
 				if(pickpocket) usr.put_in_hands(pocket_item)
 			else
 				if(place_item)
-					usr.u_equip(place_item)
+					usr.u_equip(place_item,1)
 					equip_to_slot_if_possible(place_item, pocket_id, 0, 1)
 			// Update strip window
 			if(in_range(src, usr))
@@ -1496,7 +1496,15 @@
 	if(src.species)
 		//if(src.species.language)	src.remove_language(species.language)
 		if(src.species.abilities)	src.verbs -= species.abilities
+		if(species.language)
+			remove_language(species.language)
+
 	src.species = all_species[new_species_name]
+
+	if(species.language)
+		add_language(species.language)
+	if(species.default_language)
+		add_language(species.default_language)
 	if(src.species.abilities)
 		//if(src.species.language)	src.add_language(species.language)
 		if(src.species.abilities)	src.verbs |= species.abilities
@@ -1506,7 +1514,6 @@
 	else					src.see_invisible = SEE_INVISIBLE_LIVING
 	if((src.species.default_mutations.len > 0) || (src.species.default_blocks.len > 0))
 		src.do_deferred_species_setup = 1
-	src.toxic_to_breathe = species.species_toxic_to_breathe //stops Vox breathing out of oxy tanks
 	spawn()
 		src.dna.species = new_species_name
 		src.update_icons()
@@ -1711,10 +1718,18 @@
 	if(current_size >= STAGE_THREE)
 		var/list/handlist = list(l_hand, r_hand)
 		for(var/obj/item/hand in handlist)
-			if(prob(current_size*5) && hand.w_class >= ((11-current_size)/2) && u_equip(hand))
+			if(prob(current_size*5) && hand.w_class >= ((11-current_size)/2) && u_equip(hand,1))
 				step_towards(hand, src)
 				src << "<span class = 'warning'>The [S] pulls \the [hand] from your grip!</span>"
 	apply_effect(current_size * 3, IRRADIATE)
 	if(shoes)
 		if(shoes.flags & NOSLIP) return 0
 	..()
+
+/mob/living/carbon/human/get_default_language()
+	. = ..()
+	if(.)
+		return .
+	if(!species)
+		return null
+	return species.default_language ? all_languages[species.default_language] : null
