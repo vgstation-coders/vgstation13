@@ -360,15 +360,15 @@ var/global/ingredientLimit = 10
 	if(istype(src.ingredient,/obj/item/weapon/reagent_containers/food/snacks))
 		if(cooks_in_reagents)
 			src.transfer_reagents_to_food(src.ingredient)
-		src.ingredient.name = "deep fried [src.ingredient.name]"
-		src.ingredient.color = "#FFAD33"
+		src.ingredient.name = "[get_master_reagent_name()] battered deep fried [src.ingredient.name]"
+		src.ingredient.color = mix_color_from_reagents(reagents.reagent_list)
 		src.ingredient.loc = src.loc
 	else //some admin enabled funfood and we're frying the captain's ID or someshit
 		var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
 		if(cooks_in_reagents)
 			src.transfer_reagents_to_food(D)
-		D.name = "deep fried [src.ingredient.name]"
-		D.color = "#FFAD33"
+		D.name = "[get_master_reagent_name()] battered deep fried [src.ingredient.name]"
+		D.color = mix_color_from_reagents(reagents.reagent_list)
 		D.icon = src.ingredient.icon
 		D.icon_state = src.ingredient.icon_state
 		D.overlays = src.ingredient.overlays
