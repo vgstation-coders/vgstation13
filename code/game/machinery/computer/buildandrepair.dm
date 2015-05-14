@@ -383,7 +383,7 @@
 				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 				if(do_after(user, 20) && state == 3)
 					qdel(P)
-					user << "<span class='notice'>You put in \the [src].</span>"
+					user << "<span class='notice'>You put in \the [P].</span>"
 					src.state = 4
 					src.icon_state = "4"
 
