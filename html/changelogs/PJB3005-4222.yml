@@ -1,0 +1,6 @@
+author: PJB3005
+delete-after: true
+changes:
+  - rscadd: Adds an SM shard to the derelict on all maps (deff already had one).
+  - tweak: The SM shard's rad wave now only affects the Z level it was blown up on.
+  - tweak: The SM stability alerts now only get broadcasted to the Z level the SM is on.
