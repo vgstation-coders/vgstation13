@@ -118,7 +118,7 @@
 			C.loc = src.loc
 		if (src.stat & BROKEN)
 			user << "<span class='notice'>\icon[src] The broken glass falls out.</span>"
-			getFromPool(/obj/item/weapon/shard, loc)
+			//getFromPool(/obj/item/weapon/shard, loc) //Uses console screens, a shard is too much glass
 			A.state = 3
 			A.icon_state = "3"
 		else

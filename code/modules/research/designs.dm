@@ -1436,6 +1436,15 @@ k
 /////////////Stock Parts////////////////
 ////////////////////////////////////////
 
+/datum/design/console_screen
+	name = "Console Screen"
+	desc = "A stock part used in the construction of various devices."
+	id = "basic_console_screen"
+	req_tech = list("materials" = 1)
+	build_type = PROTOLATHE | AUTOLATHE
+	materials = list("$glass" = 200)
+	build_path = /obj/item/weapon/stock_parts/console_screen
+
 /datum/design/basic_capacitor
 	name = "Basic Capacitor"
 	desc = "A stock part used in the construction of various devices."
