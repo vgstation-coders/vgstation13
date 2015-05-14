@@ -171,7 +171,7 @@
 			else
 				warning = "[short_name] hyperstructure returning to safe operating levels. Instability: [stability]%"
 			//radio.say(warning, "Supermatter [short_name] Monitor")
-			Broadcast_Message(radio, all_languages[LANGUAGE_SOL_COMMON], null, radio, warning, "Supermatter [short_name] Monitor", "Automated Announcement", "Supermatter [short_name] Monitor", 0, 0, list(0,1), 1459)
+			Broadcast_Message(radio, all_languages[LANGUAGE_SOL_COMMON], null, radio, warning, "Supermatter [short_name] Monitor", "Automated Announcement", "Supermatter [short_name] Monitor", 0, 0, list(src.z), 1459)
 
 			lastwarning = world.timeofday - offset
 
@@ -184,6 +184,8 @@
 
 		if(damage > explosion_point)
 			for(var/mob/living/mob in living_mob_list)
+				if(mob.z != src.z)//only make it effect mobs on the current Z level.
+					continue
 				if(istype(mob, /mob/living/carbon/human))
 					//Hilariously enough, running into a closet should make you get hit the hardest.
 					mob:hallucination += max(50, min(300, DETONATION_HALLUCINATION * sqrt(1 / (get_dist(mob, src) + 1)) ) )
