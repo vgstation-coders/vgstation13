@@ -379,16 +379,11 @@
 				getFromPool(/obj/item/stack/cable_coil, get_turf(src), 5)
 				return 1
 
-			if(istype(P, /obj/item/stack/sheet/glass/glass))
-				var/obj/item/stack/sheet/glass/glass/G = P
-				if (G.amount < 2)
-					user << "<span class='warning'>You need at least 2 sheets of glass for this!</span>"
-					return 1
-
+			if(istype(P, /obj/item/weapon/stock_parts/console_screen))
 				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-				if(do_after(user, 20) && state == 3 && G.amount >= 2)
-					G.use(2)
-					user << "<span class='notice'>You put in the glass panel.</span>"
+				if(do_after(user, 20) && state == 3)
+					qdel(P)
+					user << "<span class='notice'>You put in \the [P].</span>"
 					src.state = 4
 					src.icon_state = "4"
 
@@ -396,10 +391,10 @@
 		if(4)
 			if(istype(P, /obj/item/weapon/crowbar))
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				user << "<span class='notice'>You remove the glass panel.</span>"
+				user << "<span class='notice'>You remove the console screen.</span>"
 				src.state = 3
 				src.icon_state = "3"
-				new /obj/item/stack/sheet/glass/glass( src.loc, 2 )
+				new /obj/item/weapon/stock_parts/console_screen(src.loc)
 				return 1
 			if(istype(P, /obj/item/weapon/screwdriver))
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)

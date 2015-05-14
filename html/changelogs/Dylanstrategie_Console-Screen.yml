@@ -1,0 +1,5 @@
+author: Dylanstrategie
+delete-after: True
+changes:
+  - rscadd: Protolathes can now make console screens directly
+  - tweak: Console screens are now used in computer construction instead of glass sheets (for obvious reasons)
