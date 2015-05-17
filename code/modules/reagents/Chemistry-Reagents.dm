@@ -18,9 +18,10 @@
 	var/list/data = null
 	var/volume = 0
 	var/nutriment_factor = 0
-	var/custom_metabolism = REAGENTS_METABOLISM
-	var/overdose = 0
-	var/overdose_dam = 1
+	var/metabolization_rate = REAGENTS_METABOLISM
+	var/overdose_dam = 1 // generic damage for chems without custom overdoses
+	var/effect_speed = 0
+	var/ignore_slowdown = 1
 	//var/list/viruses = list()
 	var/color = "#000000" // rgb: 0, 0, 0 (does not support alpha channels - yet!)
 
@@ -68,12 +69,11 @@
 	return
 
 /datum/reagent/proc/on_mob_life(var/mob/living/M as mob, var/alien)
-	if(!istype(M, /mob/living))
+	if(!istype(M, /mob/living)) // YOU'RE A FUCKING RETARD NEO WHY CAN'T YOU JUST FIX THE PROBLEM ON THE REAGENT - Iamgoofball
 		return //Noticed runtime errors from pacid trying to damage ghosts, this should fix. --NEO
-	if( (overdose > 0) && (volume >= overdose))//Overdosing, wooo
-		M.adjustToxLoss(overdose_dam)
 	if(!holder) return
-	holder.remove_reagent(src.id, custom_metabolism) //By default it slowly disappears.
+	holder.remove_reagent(src.id, metabolization_rate) //By default it slowly disappears.
+	current_cycle++
 	return
 
 /datum/reagent/proc/on_move(var/mob/M)
@@ -96,7 +96,7 @@
 	description = "Concentrated hardcore beliefs."
 	reagent_state = LIQUID
 	color = "#FFF000"
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/muhhardcores/on_mob_life(var/mob/living/M)
 	if(prob(1))
@@ -234,7 +234,7 @@
 	description = "A ubiquitous chemical substance that is composed of hydrogen and oxygen."
 	reagent_state = LIQUID
 	color = "#0064C8" // rgb: 0, 100, 200
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/water/on_mob_life(var/mob/living/M as mob,var/alien)
 	if(ishuman(M))
@@ -347,7 +347,7 @@
 	description = "Lubricant is a substance introduced between two moving surfaces to reduce the friction and wear between them. giggity."
 	reagent_state = LIQUID
 	color = "#009CA8" // rgb: 0, 156, 168
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/lube/reaction_turf(var/turf/simulated/T, var/volume)
 	if (!istype(T)) return
@@ -421,7 +421,7 @@
 	description = "A Toxic chemical."
 	reagent_state = LIQUID
 	color = "#CF3600" // rgb: 207, 54, 0
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/toxin/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
@@ -436,7 +436,7 @@
 	description = "Liquid plastic, do not eat."
 	reagent_state = LIQUID
 	color = "#CF3600" // rgb: 207, 54, 0
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/plasticide/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
@@ -452,7 +452,7 @@
 	description = "A highly toxic chemical."
 	reagent_state = LIQUID
 	color = "#CF3600" // rgb: 207, 54, 0
-	custom_metabolism = 0.4
+	metabolization_rate = 0.4
 
 /datum/reagent/cyanide/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
@@ -469,7 +469,7 @@
 	description = "An extremely toxic chemical that will surely end in death."
 	reagent_state = LIQUID
 	color = "#CF3600" // rgb: 207, 54, 0
-	custom_metabolism = 0.39
+	metabolization_rate = 0.39
 
 /datum/reagent/chefspecial/on_mob_life(var/mob/living/M as mob,var/alien)
 	var/random = rand(150,180)
@@ -505,7 +505,7 @@
 	description = "A corruptive toxin produced by slimes."
 	reagent_state = LIQUID
 	color = "#13BC5E" // rgb: 19, 188, 94
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/slimetoxin/on_mob_life(var/mob/living/M as mob)
 	if(!M)
@@ -530,7 +530,7 @@
 	description = "An advanced corruptive toxin produced by slimes."
 	reagent_state = LIQUID
 	color = "#13BC5E" // rgb: 19, 188, 94
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/aslimetoxin/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
@@ -572,7 +572,7 @@
 	reagent_state = LIQUID
 	color = "#E895CC" // rgb: 232, 149, 204
 
-	custom_metabolism = 0.1
+	metabolization_rate = 0.1
 
 /datum/reagent/stoxin/on_mob_life(var/mob/living/M as mob,var/alien)
 	if(!M) M = holder.my_atom
@@ -595,7 +595,7 @@
 	description = "Put people to sleep, and heals them."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/srejuvenate/on_mob_life(var/mob/living/M as mob)
 
@@ -631,7 +631,7 @@
 	description = "Inaprovaline is a synaptic stimulant and cardiostimulant. Commonly used to stabilize patients."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
-	overdose = REAGENTS_OVERDOSE*2
+	overdose_threshold = REAGENTS_OVERDOSE*2
 
 /datum/reagent/inaprovaline/on_mob_life(var/mob/living/M as mob, var/alien)
 
@@ -653,7 +653,7 @@
 			description = "An illegal chemical compound used as drug."
 			reagent_state = LIQUID
 			color = "#60A584" // rgb: 96, 165, 132
-			overdose = REAGENTS_OVERDOSE
+			overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/space_drugs/on_mob_life(var/mob/living/M as mob)
 
@@ -746,7 +746,7 @@
 	description = "A chemical compound that promotes concentrated production of the serotonin neurotransmitter in humans."
 	reagent_state = LIQUID
 	color = "#202040" // rgb: 20, 20, 40
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/serotrotium/on_mob_life(var/mob/living/M as mob)
 
@@ -799,7 +799,7 @@
 	reagent_state = GAS
 	color = "#808080" // rgb: 128, 128, 128
 
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/oxygen/on_mob_life(var/mob/living/M as mob, var/alien)
 
@@ -817,7 +817,7 @@
 	description = "A highly ductile metal."
 	color = "#6E3B08" // rgb: 110, 59, 8
 
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/nitrogen
 	name = "Nitrogen"
@@ -826,7 +826,7 @@
 	reagent_state = GAS
 	color = "#808080" // rgb: 128, 128, 128
 
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/nitrogen/on_mob_life(var/mob/living/M as mob, var/alien)
 
@@ -846,7 +846,7 @@
 	reagent_state = GAS
 	color = "#808080" // rgb: 128, 128, 128
 
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/potassium
 	name = "Potassium"
@@ -855,7 +855,7 @@
 	reagent_state = SOLID
 	color = "#A0A0A0" // rgb: 160, 160, 160
 
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/mercury
 	name = "Mercury"
@@ -863,7 +863,7 @@
 	description = "A chemical element."
 	reagent_state = LIQUID
 	color = "#484848" // rgb: 72, 72, 72
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/mercury/on_mob_life(var/mob/living/M as mob)
 
@@ -883,7 +883,7 @@
 	reagent_state = SOLID
 	color = "#BF8C00" // rgb: 191, 140, 0
 
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/carbon
 	name = "Carbon"
@@ -892,7 +892,7 @@
 	reagent_state = SOLID
 	color = "#1C1300" // rgb: 30, 20, 0
 
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/carbon/reaction_turf(var/turf/T, var/volume)
 	src = null
@@ -906,7 +906,7 @@
 	description = "A chemical element with a characteristic odour."
 	reagent_state = GAS
 	color = "#808080" // rgb: 128, 128, 128
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/chlorine/on_mob_life(var/mob/living/M as mob)
 
@@ -922,7 +922,7 @@
 	description = "A highly-reactive chemical element."
 	reagent_state = GAS
 	color = "#808080" // rgb: 128, 128, 128
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/fluorine/on_mob_life(var/mob/living/M as mob)
 
@@ -939,7 +939,7 @@
 	reagent_state = SOLID
 	color = "#808080" // rgb: 128, 128, 128
 
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/phosphorus
 	name = "Phosphorus"
@@ -948,7 +948,7 @@
 	reagent_state = SOLID
 	color = "#832828" // rgb: 131, 40, 40
 
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/lithium
 	name = "Lithium"
@@ -956,7 +956,7 @@
 	description = "A chemical element, used as antidepressant."
 	reagent_state = SOLID
 	color = "#808080" // rgb: 128, 128, 128
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/lithium/on_mob_life(var/mob/living/M as mob)
 
@@ -977,6 +977,13 @@
 
 /datum/reagent/sugar/on_mob_life(var/mob/living/M as mob)
 	M.nutrition += 1*REM
+	..()
+	return
+
+/datum/reagent/sugar/overdose_process(var/mob/living/M as mob)
+	if(volume > 200)
+		M << "<span class = 'danger'>You pass out from hyperglycemic shock!</span>"
+		M.sleeping++
 	..()
 	return
 
@@ -1161,7 +1168,7 @@
 	description = "Glycerol is a simple polyol compound. Glycerol is sweet-tasting and of low toxicity."
 	reagent_state = LIQUID
 	color = "#808080" // rgb: 128, 128, 128
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/nitroglycerin
 	name = "Nitroglycerin"
@@ -1169,7 +1176,7 @@
 	description = "Nitroglycerin is a heavy, colorless, oily, explosive liquid obtained by nitrating glycerol."
 	reagent_state = LIQUID
 	color = "#808080" // rgb: 128, 128, 128
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/radium
 	name = "Radium"
@@ -1211,7 +1218,7 @@
 	description = "Ryetalyn can cure all genetic abnomalities."
 	reagent_state = SOLID
 	color = "#C8A5DC" // rgb: 200, 165, 220
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/ryetalyn/on_mob_life(var/mob/living/M as mob)
 
@@ -1279,7 +1286,7 @@
 	reagent_state = LIQUID
 	color = "#C855DC"
 	overdose_dam = 0
-	overdose = 0
+	overdose_threshold = 0
 
 /datum/reagent/paracetamol/on_mob_life(var/mob/living/M as mob)
 
@@ -1867,8 +1874,8 @@
 	description = "Synaptizine is used to treat various diseases."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
-	custom_metabolism = 0.01
-	overdose = REAGENTS_OVERDOSE
+	metabolization_rate = 0.01
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/synaptizine/on_mob_life(var/mob/living/M as mob)
 
@@ -1891,7 +1898,7 @@
 	description = "Impedrezene is a narcotic that impedes one's ability by slowing down the higher brain cell functions."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/impedrezene/on_mob_life(var/mob/living/M as mob)
 
@@ -1910,8 +1917,8 @@
 	description = "Hyronalin is a medicinal drug used to counter the effect of radiation poisoning."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
-	custom_metabolism = 0.05
-	overdose = REAGENTS_OVERDOSE
+	metabolization_rate = 0.05
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/hyronalin/on_mob_life(var/mob/living/M as mob)
 
@@ -1927,8 +1934,8 @@
 	description = "Arithrazine is an unstable medication used for the most extreme cases of radiation poisoning."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
-	custom_metabolism = 0.05
-	overdose = REAGENTS_OVERDOSE
+	metabolization_rate = 0.05
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/arithrazine/on_mob_life(var/mob/living/M as mob)
 
@@ -1949,8 +1956,8 @@
 	description = "Alkysine is a drug used to lessen the damage to neurological tissue after a catastrophic injury. Can heal brain tissue."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
-	custom_metabolism = 0.05
-	overdose = REAGENTS_OVERDOSE
+	metabolization_rate = 0.05
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/alkysine/on_mob_life(var/mob/living/M as mob)
 
@@ -1966,7 +1973,7 @@
 	description = "Heals eye damage"
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/imidazoline/on_mob_life(var/mob/living/M as mob)
 
@@ -1989,7 +1996,7 @@
 	description = "Rapidly heals ear damage"
 	reagent_state = LIQUID
 	color = "#6600FF" // rgb: 100, 165, 255
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/inacusiate/on_mob_life(var/mob/living/M as mob)
 
@@ -2006,7 +2013,7 @@
 	description = "Used to encourage recovery of internal organs and nervous systems. Medicate cautiously."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
-	overdose = 10
+	overdose_threshold = 10
 
 /datum/reagent/peridaxon/on_mob_life(var/mob/living/M as mob)
 
@@ -2027,7 +2034,7 @@
 	description = "Bicaridine is an analgesic medication and can be used to treat blunt trauma."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/bicaridine/on_mob_life(var/mob/living/M as mob, var/alien)
 
@@ -2046,8 +2053,9 @@
 	description = "Hyperzine is a highly effective, long lasting, muscle stimulant."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
-	custom_metabolism = 0.03
-	overdose = REAGENTS_OVERDOSE/2
+	metabolization_rate = 0.03
+	overdose_threshold = REAGENTS_OVERDOSE/2
+	effect_speed = -1
 
 /datum/reagent/hyperzine/on_mob_life(var/mob/living/M as mob)
 
@@ -2101,7 +2109,7 @@
 	description = "A powder derived from fish toxin, this substance can effectively treat genetic damage in humanoids, though excessive consumption has side effects."
 	reagent_state = SOLID
 	color = "#669900" // rgb: 102, 153, 0
-	overdose = REAGENTS_OVERDOSE
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/rezadone/on_mob_life(var/mob/living/M as mob)
 
@@ -2131,8 +2139,8 @@
 	description = "An all-purpose antiviral agent."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
-	custom_metabolism = 0.01
-	overdose = REAGENTS_OVERDOSE
+	metabolization_rate = 0.01
+	overdose_threshold = REAGENTS_OVERDOSE
 
 /datum/reagent/spaceacillin/on_mob_life(var/mob/living/M as mob)
 
@@ -2191,7 +2199,7 @@
 	description = "A powerful hallucinogen. Not a thing to be messed with."
 	reagent_state = LIQUID
 	color = "#B31008" // rgb: 139, 166, 233
-	custom_metabolism = 0.05
+	metabolization_rate = 0.05
 
 /datum/reagent/mindbreaker/on_mob_life(var/mob/living/M)
 
@@ -2207,7 +2215,7 @@
 	description = "An extremely dangerous hallucinogen often used for torture. Extracted from the leaves of the rare Ambrosia Cruciatus plant."
 	reagent_state = LIQUID
 	color = "3B0805" // rgb: 59, 8, 5
-	custom_metabolism = 0.05
+	metabolization_rate = 0.05
 
 /datum/reagent/spiritbreaker/on_mob_life(var/mob/living/M as mob)
 
@@ -2634,7 +2642,7 @@
 	var/has_ripped_and_torn=0 // We've applied permanent damage.
 	var/hulked_at = 0 // World.time
 
-	custom_metabolism=0.1
+	metabolization_rate=0.1
 /datum/reagent/creatine/reagent_deleted()
 	..()
 	if(!holder) return
@@ -2767,7 +2775,7 @@
 	id = "amanatin"
 	description = "A deadly poison derived from certain species of Amanita. Sits in the victim's system for a long period of time, then ravages the body."
 	color = "#792300" // rgb: 121, 35, 0
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 	var/activated = 0
 
 /datum/reagent/amanatin/on_mob_life(var/mob/living/M as mob)
@@ -3484,6 +3492,7 @@
 	description = "Cola, cola never changes."
 	color = "#100800" // rgb: 16, 8, 0
 	adj_sleepy = -2
+	effect_speed = -1
 
 /datum/reagent/drink/cold/nuke_cola/on_mob_life(var/mob/living/M as mob)
 
@@ -4519,7 +4528,7 @@
 	description = "Concentrated honking"
 	reagent_state = LIQUID
 	color = "#F2C900" // rgb: 242, 201, 0
-	custom_metabolism = 0.01
+	metabolization_rate = 0.01
 
 /datum/reagent/honkserum/on_mob_life(var/mob/living/M)
 	if(prob(0.9))

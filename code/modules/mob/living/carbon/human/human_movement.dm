@@ -11,14 +11,6 @@
 	if(flying)
 		return -1
 
-	if(reagents.has_reagent("hyperzine"))
-		if(dna.mutantrace == "slime")
-			tally *= 2
-		else
-			return -1
-
-	if(reagents.has_reagent("nuka_cola")) return -1
-
 	if((M_RUN in mutations)) return -1
 
 	if (istype(loc, /turf/space)) return -1 // It's hard to be slowed down in space by... anything
@@ -69,6 +61,15 @@
 		disease_slow = max(disease_slow, dispenser.slow)
 		skate_bonus = max(skate_bonus, dispenser.speed_bonus)//if the player is carrying multiple BBD for some reason, he'll benefit from the speed bonus of the most upgraded one
 	tally = tally - skate_bonus + (6 * disease_slow)
+
+	for(var/datum/reagent/R in reagents.reagent_list)
+		if(R.effect_speed)
+			tally += R.effect_speed
+
+	for(var/datum/reagent/R in reagents.reagent_list)
+		if(R.ignore_slowdown)
+			tally = 0
+			break
 
 	return (tally+config.human_delay)
 

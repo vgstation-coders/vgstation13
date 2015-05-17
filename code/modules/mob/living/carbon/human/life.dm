@@ -240,6 +240,11 @@ var/global/list/organ_damage_overlays = list(
 			src << "Successfully handled equipment"
 			last_processed = "Handle equip"
 
+		handle_heartattack()
+		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
+			src << "Successfully handled heart attacks"
+			last_processed = "Handle heart attacks"
+
 	handle_stasis_bag()
 
 	if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
@@ -1809,7 +1814,7 @@ var/global/list/organ_damage_overlays = list(
 			temp = PULSE_NONE
 
 		if(R.id in cheartstopper)  //Conditional heart-stoppage
-			if(R.volume >= R.overdose)
+			if(R.volume >= R.overdose_threshold)
 				temp = PULSE_NONE
 
 	return temp
@@ -1983,6 +1988,14 @@ var/global/list/organ_damage_overlays = list(
 				visible_message("<span class='warning'>The bucket's content spills on [src]</span>")
 				spawn(5) B.reagents.clear_reagents()
 
+/mob/living/carbon/human/proc/handle_heartattack()
+	if(!heart_attack)
+		return
+	else
+		losebreath += 5
+		adjustOxyLoss(5)
+		adjustBrainLoss(10) // without oxygin brain dont evoluiate
+	return
 
 
 // Need this in species.

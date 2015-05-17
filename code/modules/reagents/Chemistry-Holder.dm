@@ -261,13 +261,6 @@ datum
 				return total_transfered
 */
 
-			metabolize(var/mob/M, var/alien)
-				for(var/A in reagent_list)
-					var/datum/reagent/R = A
-					if(M && R)
-						R.on_mob_life(M, alien)
-				update_total()
-
 			update_aerosol(var/mob/M)
 				for(var/A in reagent_list)
 					var/datum/reagent/R = A
@@ -300,13 +293,6 @@ datum
 
 							var/datum/chemical_reaction/C = reaction
 
-							//check if this recipe needs to be heated to mix
-							if(C.requires_heating)
-								if(istype(my_atom.loc, /obj/machinery/bunsen_burner))
-									if(!my_atom.loc:heated)
-										continue
-								else
-									continue
 
 							var/total_required_reagents = C.required_reagents.len
 							var/total_matching_reagents = 0
@@ -314,6 +300,7 @@ datum
 							var/total_matching_catalysts= 0
 							var/matching_container = 0
 							var/matching_other = 0
+							var/required_temp = C.required_temp
 							var/list/multipliers = new/list()
 
 							for(var/B in C.required_reagents)
@@ -346,7 +333,9 @@ datum
 									if(M.Uses > 0) // added a limit to slime cores -- Muskets requested this
 										matching_other = 1
 
-							if(total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && matching_other)
+							if(!required_temp)
+								required_temp = chem_temp
+							if(total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && matching_other && chem_temp >= required_temp)
 								var/multiplier = min(multipliers)
 								var/preserved_data = null
 								for(var/B in C.required_reagents)
@@ -370,7 +359,7 @@ datum
 								else if	(istype(my_atom, /mob/living/carbon/human))
 									my_atom.visible_message("<span class='notice'>[my_atom] shudders a little.</span>","<span class='notice'>You shudder a little.</span>")
 								else
-									my_atom.visible_message("<span class='notice'>\icon[my_atom] The solution begins to bubble.</span>")
+									my_atom.visible_message("<span class='notice'>\icon[my_atom] [C.mix_message]</span>")
 
 								if(istype(my_atom, /obj/item/slime_extract))
 									var/obj/item/slime_extract/ME2 = my_atom
