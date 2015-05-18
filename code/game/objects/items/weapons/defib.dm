@@ -130,12 +130,17 @@
 /obj/item/weapon/melee/defibrillator/proc/attemptDefib(mob/living/carbon/human/target,mob/user)
 	user.visible_message("<span class='notice'>[user] starts setting up the paddles on [target]'s chest</span>", \
 	"<span class='notice'>You start setting up the paddles on [target]'s chest</span>")
+	if(target.heart_attack)
+		target.visible_message("<span class='notice'>[src] beeps: Patient is experiencing fibrillation.</span>")
 	if(do_after(user,30))
 		sparks.start()
 		playsound(get_turf(src),'sound/items/defib.ogg',50,1)
 		charges--
 		update_icon()
 		user << "<span class='notice'>You shock [target] with the paddles.</span>"
+		if(target.heart_attack)
+			target.heart_attack = 0
+			target.visible_message("<span class='notice'>[src] beeps: Defibrillation successful.</span>")
 		if(target.mind && !target.client)
 			for(var/mob/dead/observer/ghost in player_list)
 				if(ghost.mind == target.mind && ghost.can_reenter_corpse)

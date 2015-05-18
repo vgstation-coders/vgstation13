@@ -11,6 +11,9 @@
 	volume = 50
 	m_amt = 5
 	w_type = RECYK_METAL
+	var/apply_type = INGEST
+	var/apply_method = "swallow"
+	var/apply_method_plural = "swallows"
 
 	New()
 		..()
@@ -24,21 +27,21 @@
 /obj/item/weapon/reagent_containers/pill/attack(mob/M as mob, mob/user as mob, def_zone)
 	// Feeding others needs time to succeed
 	if (user != M && (ishuman(M) || ismonkey(M)))
-		user.visible_message("<span class='warning'>[user] attempts to force [M] to swallow \the [src].</span>", "<span class='notice'>You attempt to force [M] to swallow \the [src].</span>")
+		user.visible_message("<span class='warning'>[user] attempts to force [M] to [apply_method] \the [src].</span>", "<span class='notice'>You attempt to force [M] to [apply_method] \the [src].</span>")
 
 		if (!do_mob(user, M))
 			return 1
 
-		user.visible_message("<span class='warning'>[user] forces [M] to swallow \the [src].</span>", "<span class='notice'>You force [M] to swallow \the [src].</span>")
+		user.visible_message("<span class='warning'>[user] forces [M] to [apply_method] \the [src].</span>", "<span class='notice'>You force [M] to [apply_method] \the [src].</span>")
 		add_attacklogs(user, M, "fed", object = src, addition = "Reagents: [english_list(reagentlist(src))]", admin_warn = TRUE)
 	else if (user == M)
-		user.visible_message("<span class='notice'>[user] swallows \the [src].</span>", "<span class='notice'>You swallow \the [src].</span>")
+		user.visible_message("<span class='notice'>[user] [apply_method_plural] \the [src].</span>", "<span class='notice'>You [apply_method] \the [src].</span>")
 	else
 		return 0
 
 	user.drop_from_inventory(src) // Update icon
 	if (!src.is_empty())
-		reagents.reaction(M, INGEST)
+		reagents.reaction(M, apply_type)
 		reagents.trans_to(M, reagents.total_volume)
 
 	qdel(src)

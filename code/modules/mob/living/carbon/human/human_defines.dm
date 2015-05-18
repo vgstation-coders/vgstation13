@@ -73,7 +73,7 @@
 
 	var/lastFart = 0 // Toxic fart cooldown.
 	var/lastScream = 0 // Prevent scream spam in some situations
-
+	var/heart_attack = 0
 
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"
