@@ -1,0 +1,4 @@
+author: Dylanstrategie
+delete-after: True
+changes:
+  - experiment: All square roots from 1 to 100 are now defined with one decimal place. Please notify of any strange mathematical behavior
