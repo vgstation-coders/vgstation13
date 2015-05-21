@@ -2684,10 +2684,27 @@
 			if("spawnselfdummy")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TD")
-				message_admins("[key_name_admin(usr)] spawned himself as a Test Dummy.")
+
+				var/prefix = "ADM"
+				var/mob/M = usr
+				var/client/C = M.client
+				var/final_name = ""
+				var/slotnum = 0
+
+				var/list/preset_slots = C.prefs.check_name_prefix(M,prefix)
+				if(preset_slots.len)
+					final_name = input("Which one", "Choose Slot") in preset_slots
+					for(var/counter=1; counter <= MAX_SAVE_SLOTS;counter++)
+						if(final_name && (final_name == preset_slots[counter]))
+							slotnum = counter
+							break
 				var/turf/T = get_turf(usr)
-				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
-				usr.client.cmd_assume_direct_control(D)
+				var/mob/living/carbon/human/dummy/D = new/mob/living/carbon/human/dummy(T)
+				C.cmd_assume_direct_control(D)
+				if(slotnum > 0)
+					C.prefs.load_save_sqlite(D.ckey, D, slotnum)
+					C.prefs.copy_to(D)
+
 				D.equip_to_slot_or_del(new /obj/item/clothing/under/color/black(D), slot_w_uniform)
 				D.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(D), slot_shoes)
 				D.equip_to_slot_or_del(new /obj/item/weapon/card/id/admin(D), slot_wear_id)
@@ -2695,14 +2712,22 @@
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(D), slot_back)
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/engineer(D.back), slot_in_backpack)
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg')
-				D.name = "Admin"
-				D.real_name = "Admin"
-				var/newname = ""
-				newname = copytext(sanitize(input(D, "Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
-				if (!newname)
-					newname = "Admin"
-				D.name = newname
-				D.real_name = newname
+				D.real_name = "[slotnum ? "[final_name]" : "Admin"]"
+				D.name = "[slotnum ? "[final_name]" : "Admin"]"
+
+				if((final_name == "Pomf") || (final_name == "Pomf Chicken") || (final_name == "Chickenmin") || (final_name == "Chicken Pomf"))
+					D.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/richard(D), slot_head)
+					D.equip_to_slot_or_del(new /obj/item/clothing/suit/chickensuit/white(D), slot_wear_suit)
+
+				if(!slotnum)
+					var/newname = ""
+					newname = copytext(sanitize(input(D, "Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
+					if (!newname)
+						newname = "Admin"
+					D.name = newname
+					D.real_name = newname
+				message_admins("[key_name_admin(usr)] spawned himself as a Test Dummy.")
+
 			//False flags and bait below. May cause mild hilarity or extreme pain. Now in one button
 			if("fakealerts")
 				feedback_inc("admin_secrets_fun_used",1)

@@ -1352,6 +1352,37 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 			message_admins("[character] ([character.ckey]) has spawned with their gender as plural or neuter. Please notify coders.")
 			character.setGender(MALE)
 
+/datum/preferences/proc/check_name_prefix(mob/user,var/prefix)
+	if(!prefix || !user)	return
+
+
+	var/database/query/q = new
+	var/list/name_list[MAX_SAVE_SLOTS]
+
+	q.Add("select real_name, player_slot from players where player_ckey=?", user.ckey)
+	if(q.Execute(db))
+		while(q.NextRow())
+			name_list[q.GetColumn(2)] = q.GetColumn(1)
+	else
+		message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
+		warning("Error #:[q.Error()] - [q.ErrorMsg()]")
+		return 0
+
+	var/list/preset_slots[MAX_SAVE_SLOTS]
+	var/prefix_len = lentext(prefix) + 2
+
+	for(var/counter=1; counter <= MAX_SAVE_SLOTS;counter++)
+		if(!name_list[counter])
+			continue
+		else
+			var/slot_name = "[name_list[counter]]"
+			var/found = findtext(slot_name,prefix)
+			if(found == 1)
+				var/actual_name = copytext(slot_name,prefix_len)
+				preset_slots[counter] = actual_name
+
+	return preset_slots
+
 /datum/preferences/proc/open_load_dialog(mob/user)
 
 	var/database/query/q = new

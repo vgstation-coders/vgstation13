@@ -64,12 +64,15 @@
 
 /datum/game_mode/wizard/post_setup()
 	for(var/datum/mind/wizard in wizards)
-		forge_wizard_objectives(wizard)
-		//learn_basic_spells(wizard.current)
-		equip_wizard(wizard.current)
-		name_wizard(wizard.current)
-		greet_wizard(wizard)
-		update_wizard_icons_added(wizard)
+		spawn()
+			forge_wizard_objectives(wizard)
+			//learn_basic_spells(wizard.current)
+			equip_wizard(wizard.current)
+			var/client/C = wizard.current.client
+			if(!findtext(C.prefs.real_name,"WIZ"))
+				name_wizard(wizard.current)
+			greet_wizard(wizard)
+			update_wizard_icons_added(wizard)
 	update_all_wizard_icons()
 	if(!mixed)
 		spawn (rand(waittime_l, waittime_h))
@@ -125,6 +128,24 @@
 				wizard.objectives += hijack_objective
 	return
 
+/datum/game_mode/proc/set_prefs_wizard(mob/living/carbon/human/wizard_mob)
+	var/prefix = "WIZ"
+	var/client/C = wizard_mob.client
+	var/final_name = ""
+	var/slotnum
+
+	var/list/preset_slots = C.prefs.check_name_prefix(wizard_mob,prefix)
+	if(preset_slots.len)
+		final_name = input(wizard_mob,"Which one", "Choose Slot") in preset_slots
+		for(var/counter=1; counter <= MAX_SAVE_SLOTS;counter++)
+			if(final_name && (final_name == preset_slots[counter]))
+				slotnum = counter
+				break
+	if(slotnum)
+		C.prefs.load_save_sqlite(wizard_mob.ckey, wizard_mob, slotnum)
+		C.prefs.copy_to(wizard_mob)
+		wizard_mob.real_name = final_name
+		wizard_mob.name = final_name
 
 /datum/game_mode/proc/name_wizard(mob/living/carbon/human/wizard_mob)
 	//Allows the wizard to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.
@@ -169,6 +190,8 @@
 /datum/game_mode/proc/equip_wizard(mob/living/carbon/human/wizard_mob)
 	if (!istype(wizard_mob))
 		return
+
+	set_prefs_wizard(wizard_mob)
 
 	//So zards properly get their items when they are admin-made.
 	qdel(wizard_mob.wear_suit)
