@@ -1,5 +1,9 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
+#define REPEAT_OFF 0
+#define REPEAT_TOGGLE 1
+#define REPEAT_NONSTOP 2
+
 var/global/list/autolathe_recipes = list( \
 		new /obj/item/weapon/reagent_containers/glass/bucket(), \
 		new /obj/item/weapon/crowbar(), \
@@ -97,10 +101,12 @@ var/global/list/autolathe_recipes_hidden = list( \
 	var/hacked = 0
 	var/disabled = 0
 	var/shocked = 0
+	var/repeat = 0
 	var/list/wires = list()
 	var/hack_wire
 	var/disable_wire
 	var/shock_wire
+	var/repeat_wire
 	use_power = 1
 	idle_power_usage = 50
 	active_power_usage = 500
@@ -128,6 +134,14 @@ var/global/list/autolathe_recipes_hidden = list( \
 	dat += text("The red light is [src.disabled ? "off" : "on"].<BR>")
 	dat += text("The green light is [src.shocked ? "off" : "on"].<BR>")
 	dat += text("The blue light is [src.hacked ? "off" : "on"].<BR>")
+	switch(src.repeat)
+		if(REPEAT_OFF)
+			dat += text("The yellow light is off.<BR>")
+		if(REPEAT_TOGGLE)
+			dat += text("The yellow light is flashing.<BR>")
+		if(REPEAT_NONSTOP)
+			dat += text("The yellow light is on.<BR>")
+
 	user << browse("<HTML><HEAD><TITLE>Autolathe Hacking</TITLE></HEAD><BODY>[dat]</BODY></HTML>","window=autolathe_hack")
 	onclose(user, "autolathe_hack")
 
@@ -255,6 +269,65 @@ var/global/list/autolathe_recipes_hidden = list( \
 	user.set_machine(src)
 	interact(user)
 
+/obj/machinery/autolathe/proc/build(var/attempting_to_build, var/turf/T, var/multiplier, var/mob/user)
+	if(!attempting_to_build) return
+	if(!user) return
+	if(!T)
+		T = get_step(src.loc, get_dir(src,user))
+
+	var/obj/item/template = null
+	if(locate(attempting_to_build, src.L) || locate(attempting_to_build, src.LL)) // see if the requested object is in one of the construction lists, if so, it is legit -walter0o
+		template = attempting_to_build
+	else // somebody is trying to exploit, alert admins -walter0o
+		var/turf/LOC = get_turf(user)
+		message_admins("[key_name_admin(user)] tried to exploit an autolathe to duplicate <a href='?_src_=vars;Vars=\ref[attempting_to_build]'>[attempting_to_build]</a> ! ([LOC ? "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[LOC.x];Y=[LOC.y];Z=[LOC.z]'>JMP</a>" : "null"])", 0)
+		log_admin("EXPLOIT : [key_name(user)] tried to exploit an autolathe to duplicate [attempting_to_build] !")
+		return
+
+	if(!multiplier) multiplier = 1
+	var/max_multiplier = 1 // now check for legit multiplier, also only stacks should pass with one to prevent raw-materials-manipulation -walter0o
+	if(istype(template, /obj/item/stack)) // stacks are the only items which can have a multiplier higher than 1 -walter0o
+		var/obj/item/stack/S = template
+		max_multiplier = min(S.max_amount, S.m_amt?round(m_amount/S.m_amt):INFINITY, S.g_amt?round(g_amount/S.g_amt):INFINITY)  // pasta from regular_win() to make sure the numbers match -walter0o
+
+	if((multiplier > max_multiplier) || (multiplier <= 0)) // somebody is trying to exploit, alert admins-walter0o
+		var/turf/LOC = get_turf(user)
+		message_admins("[key_name_admin(user)] tried to exploit an autolathe with multiplier set to <u>[multiplier]</u> on <u>[template]</u>  ! ([LOC ? "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[LOC.x];Y=[LOC.y];Z=[LOC.z]'>JMP</a>" : "null"])" , 0)
+		log_admin("EXPLOIT : [key_name(user)] tried to exploit an autolathe with multiplier set to [multiplier] on [template]  !")
+		return
+
+	var/power = max(2000, (template.m_amt+template.g_amt)*multiplier/5)
+	if(src.m_amount >= template.m_amt*multiplier && src.g_amount >= template.g_amt*multiplier)
+		if(!use_power(power)) return
+		busy = 1
+		icon_state = "autolathe"
+		flick("autolathe_n",src)
+		spawn(15)
+			if(!use_power(power))
+				busy = 0
+				return
+			spawn(round(build_delay/time_coeff))
+				if(!use_power(power))
+					busy = 0
+					return
+				spawn(round(build_delay/time_coeff))
+					src.m_amount -= template.m_amt*multiplier
+					src.g_amount -= template.g_amt*multiplier
+					if(src.m_amount < 0)
+						src.m_amount = 0
+					if(src.g_amount < 0)
+						src.g_amount = 0
+					var/obj/new_item
+					if(istype(template, /obj/item/stack/sheet/metal))
+						new_item = getFromPool(/obj/item/stack/sheet/metal, T)
+					else new_item = new template.type(T)
+					if (multiplier>1)
+						var/obj/item/stack/S = new_item
+						S.amount = multiplier
+					busy = 0
+					src.updateUsrDialog()
+					if(repeat)
+						build(attempting_to_build,T,multiplier,user)
 
 /obj/machinery/autolathe/Topic(href, href_list)
 	if(..())
@@ -266,66 +339,11 @@ var/global/list/autolathe_recipes_hidden = list( \
 			var/turf/T = get_step(src.loc, get_dir(src,usr))
 
 			// critical exploit fix start -walter0o
-			var/obj/item/template = null
 			var/attempting_to_build = locate(href_list["make"])
-
-			if(!attempting_to_build)
-				return
-
-			if(locate(attempting_to_build, src.L) || locate(attempting_to_build, src.LL)) // see if the requested object is in one of the construction lists, if so, it is legit -walter0o
-				template = attempting_to_build
-
-			else // somebody is trying to exploit, alert admins -walter0o
-
-				var/turf/LOC = get_turf(usr)
-				message_admins("[key_name_admin(usr)] tried to exploit an autolathe to duplicate <a href='?_src_=vars;Vars=\ref[attempting_to_build]'>[attempting_to_build]</a> ! ([LOC ? "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[LOC.x];Y=[LOC.y];Z=[LOC.z]'>JMP</a>" : "null"])", 0)
-				log_admin("EXPLOIT : [key_name(usr)] tried to exploit an autolathe to duplicate [attempting_to_build] !")
-				return
-
-			// now check for legit multiplier, also only stacks should pass with one to prevent raw-materials-manipulation -walter0o
-
 			var/multiplier = text2num(href_list["multiplier"])
 
-			if(!multiplier) multiplier = 1
-			var/max_multiplier = 1
+			build(attempting_to_build, T, multiplier, usr)
 
-			if(istype(template, /obj/item/stack)) // stacks are the only items which can have a multiplier higher than 1 -walter0o
-				var/obj/item/stack/S = template
-				max_multiplier = min(S.max_amount, S.m_amt?round(m_amount/S.m_amt):INFINITY, S.g_amt?round(g_amount/S.g_amt):INFINITY)  // pasta from regular_win() to make sure the numbers match -walter0o
-
-			if((multiplier > max_multiplier) || (multiplier <= 0)) // somebody is trying to exploit, alert admins-walter0o
-
-				var/turf/LOC = get_turf(usr)
-				message_admins("[key_name_admin(usr)] tried to exploit an autolathe with multiplier set to <u>[multiplier]</u> on <u>[template]</u>  ! ([LOC ? "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[LOC.x];Y=[LOC.y];Z=[LOC.z]'>JMP</a>" : "null"])" , 0)
-				log_admin("EXPLOIT : [key_name(usr)] tried to exploit an autolathe with multiplier set to [multiplier] on [template]  !")
-				return
-
-			var/power = max(2000, (template.m_amt+template.g_amt)*multiplier/5)
-			if(src.m_amount >= template.m_amt*multiplier && src.g_amount >= template.g_amt*multiplier)
-				busy = 1
-				use_power(power)
-				icon_state = "autolathe"
-				flick("autolathe_n",src)
-				spawn(15)
-					use_power(power)
-					spawn(round(build_delay/time_coeff))
-						use_power(power)
-						spawn(round(build_delay/time_coeff))
-							src.m_amount -= template.m_amt*multiplier
-							src.g_amount -= template.g_amt*multiplier
-							if(src.m_amount < 0)
-								src.m_amount = 0
-							if(src.g_amount < 0)
-								src.g_amount = 0
-							var/obj/new_item
-							if(istype(template, /obj/item/stack/sheet/metal))
-								new_item = getFromPool(/obj/item/stack/sheet/metal, T)
-							else new_item = new template.type(T)
-							if (multiplier>1)
-								var/obj/item/stack/S = new_item
-								S.amount = multiplier
-							busy = 0
-							src.updateUsrDialog()
 		if(href_list["act"])
 			var/temp_wire = href_list["wire"]
 			if(href_list["act"] == "pulse")
@@ -346,6 +364,9 @@ var/global/list/autolathe_recipes_hidden = list( \
 							src.shocked = !src.shocked
 							src.shock(usr,50)
 							spawn(100) src.shocked = !src.shocked
+						if(src.repeat_wire == temp_wire)
+							src.repeat = !src.repeat
+
 			if(href_list["act"] == "wire")
 				if (!istype(usr.get_active_hand(), /obj/item/weapon/wirecutters))
 					usr << "<span class='warning'>You need wirecutters!</span>"
@@ -359,8 +380,14 @@ var/global/list/autolathe_recipes_hidden = list( \
 					if(src.shock_wire == temp_wire)
 						src.shocked = !src.shocked
 						src.shock(usr,50)
+					if(src.repeat_wire == temp_wire)
+						src.repeat = REPEAT_NONSTOP
 	else
-		usr << "<span class='warning'>\The [src] is busy. Please wait for the completion of previous operation.</span>"
+		if(repeat != REPEAT_TOGGLE)
+			usr << "<span class='warning'>\The [src] is busy. Please wait for the completion of previous operation.</span>"
+		else
+			src.repeat = REPEAT_OFF
+			usr << "<span class='notice'>\The [src] stops manufacturing. It can be used again now.</span>"
 	src.updateUsrDialog()
 	return
 
@@ -418,3 +445,9 @@ var/global/list/autolathe_recipes_hidden = list( \
 	w -= src.shock_wire
 	src.disable_wire = pick(w)
 	w -= src.disable_wire
+	src.repeat_wire = pick(w)
+	w -= src.repeat_wire
+
+#undef REPEAT_OFF
+#undef REPEAT_TOGGLE
+#undef REPEAT_NONSTOP
