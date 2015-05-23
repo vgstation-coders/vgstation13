@@ -1,0 +1,4 @@
+author: Dylanstrategie
+delete-after: True
+changes:
+  - experiment: All Chaplain-related code has been moved to the Religion module. This module will handle everything Chaplain-related
