@@ -1,0 +1,165 @@
+/obj/item/weapon/storage/bible
+	name = "bible"
+	desc = "Apply to person's head repeatedly."
+	icon_state = "bible"
+	throw_speed = 1
+	throw_range = 5
+	w_class = 3.0
+	force = 2.5 //A big book, solely used for non-Chaplains trying to use it on people
+	flags = FPRINT
+	attack_verb = list("whack", "slap", "slam")
+	var/mob/affecting = null
+	var/deity_name = "Christ"
+
+	autoignition_temperature = 522 // Kelvin
+	fire_fuel = 2
+
+/obj/item/weapon/storage/bible/suicide_act(mob/living/user)
+	viewers(user) << "<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>"
+	user.emote("fart")
+	spawn(10) //Wait for it
+		user.fire_stacks += 5
+		user.IgniteMob()
+		user.emote("scream",,, 1)
+		return FIRELOSS //Set ablaze and burned to crisps
+
+//"Special" Bible with a little gift on introduction
+/obj/item/weapon/storage/bible/booze
+
+	autoignition_temperature = 0 //Not actually paper
+	fire_fuel = 0
+
+/obj/item/weapon/storage/bible/booze/New()
+	. = ..()
+	new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
+	new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
+	new /obj/item/weapon/spacecash(src)
+	new /obj/item/weapon/spacecash(src)
+	new /obj/item/weapon/spacecash(src)
+
+//What happens when you slap things with the Bible in general
+/obj/item/weapon/storage/bible/attack(mob/living/M as mob, mob/living/user as mob)
+
+	var/chaplain = 0 //Are we the Chaplain ? Used for simplification
+	if(user.mind && (user.mind.assigned_role == "Chaplain"))
+		chaplain = 1 //Indeed we are
+
+	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
+
+	if(!iscarbon(user))
+		M.LAssailant = null
+	else
+		M.LAssailant = user
+
+	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
+
+	if(ismonkey(user) && ticker.mode.name != "monkey") //Shitty proc that shouldn't exist, but Monkey Epidemic happened
+		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
+		return
+
+	if(!chaplain) //The user is not a Chaplain. BLASPHEMY !
+		//Using the Bible as a member of the occult will get you smithed, aka holy cleansing fire. You'd have to be stupid to remotely consider it
+		if(M.mind && M.mind.vampire) //Vampire trying to use it
+			user << "<span class='danger'>[deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>"
+			user.fire_stacks += 5
+			user.IgniteMob()
+			user.emote("scream",,, 1)
+			M.mind.vampire.smitecounter += 50 //Once we are extinguished, we will be quite vulnerable regardless
+		else if(iscult(M)) //Cultist trying to use it
+			user << "<span class='danger'>[deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>"
+			user.fire_stacks += 5
+			user.IgniteMob()
+			user.emote("scream",,, 1)
+		else //Literally anyone else than a Cultist using it, at this point it's just a big book
+			..() //WHACK
+		return //Chaplains can't use the holy book, at least not properly
+
+	if((M_CLUMSY in user.mutations) && prob(50)) //Using it while clumsy, let's have some fun
+		user.visible_message("<span class='warning'>\The [src] slips out of [user]'s hands and hits his head.</span>",
+		"<span class='warning'>\The [src] slips out of your hands and hits your head.</span>")
+		user.apply_damage(10, BRUTE, "head")
+		user.Stun(5)
+		return
+
+	//From this point onwards we are done with the user, let's check whoever is on the receiving end
+	//Let us also note that if we made it this far, the user IS a Chaplain. No need to check
+	//Worthy of note, blessings are done on craniums. I guess this is the best way to send the message across
+
+	if(M == user) //We are trying to smack ourselves
+		return //That's dumb, don't do it
+
+	if(ishuman(M) && istype(M:head, /obj/item/clothing/head/helmet) || istype(M:head, /obj/item/clothing/head/hardhat) || istype(M:head, /obj/item/clothing/head/fedora)) //Blessing blocked
+		user.visible_message("<span class='warning'>[user] [attack_verb]s [M]'s head with \the [src], but their headgear blocks the hit.</span>",
+		"<span class='warning'>You [attack_verb] [M]'s head with \the [src], but their headgear blocks the blessing. Blasphemy!</span>")
+		return //That's it. Helmets are very haram
+
+	if(M.stat == DEAD) //Our target is dead. RIP in peace
+		user.visible_message("<span class='warning'>[user] [attack_verb]s [M]'s lifeless body with \the [src].</span>",
+		"<span class='warning'>You [attack_verb] [M]'s lifeless body with \the [src], trying to conjure [deity_name]'s mercy on them.</span>")
+		playsound(get_turf(src), "punch", 25, 1, -1)
+
+		//TODO : Way to bring people back from death if they are your followers
+		return //Otherwise, there's so little we can do
+
+	//Our target is alive, prepare the blessing
+	user.visible_message("<span class='warning'>[user] [attack_verb]s [M]'s head with \the [src].</span>",
+	"<span class='warning'>You [attack_verb] [M]'s head with \the [src]. In the name of [deity_name], bless thee!</span>")
+	playsound(get_turf(src), "punch", 25, 1, -1)
+
+	if(M.mind && M.mind.vampire && !(VAMP_MATURE in M.mind.vampire.powers)) //The user is a "young" Vampire, fuck up his vampiric powers and hurt his head
+		if(ishuman(M))
+			M << "<span class='warning'>[deity_name]'s power nullifies your own!</span>"
+			if(M.mind.vampire.nullified < 5) //Don't actually reduce their debuff if it's over 5
+				M.mind.vampire.nullified = max(5, M.mind.vampire.nullified + 2)
+			M.mind.vampire.smitecounter += 10 //Better get out of here quickly before the problem shows. Ten hits and you are literal toast
+
+	if(iscult(M)) //The user is a Cultist. We are thus deconverting him
+		if(prob(20))
+			M << "<span class='notice'>The power of [deity_name] suddenly clears your mind of heresy. Your allegiance to Nar'Sie wanes!</span>"
+			user << "<span class='notice'>You see [M]'s eyes become clear. Nar'Sie no longer controls his mind, [deity_name] saved him!</span>"
+			ticker.mode.remove_cultist(M.mind)
+		else //We aren't deconverting him this time, give the Cultist a fair warning
+			M << "<span class='warning'>The power of [deity_name] is overwhelming you. Your mind feverishly questions Nar'Sie's teachings!</span>"
+
+	if(ishuman(M)) //Only humans can be blessed and yaddi yadda
+		bless(user, M) //Let's outsource the healing code, because we can
+
+//Bless thee. Heals followers fairly, potentially heals everyone a bit (or gives them brain damage)
+/obj/item/weapon/storage/bible/proc/bless(mob/living/carbon/human/user, mob/living/carbon/human/M)
+	var/datum/organ/internal/brain/sponge = M.internal_organs_by_name["brain"]
+	if(sponge && sponge.damage >= 60) //Massive brain damage
+		user << "<span class='warning'>[M] responds to \the [src]'s blessing with drooling and an empty stare. [deity_name]'s teachings appear to be lost on this poor soul.</span>"
+	//TODO: Put code for followers right here
+	if(prob(20)) //1/5 chance of adding some brain damage. You can't just heal people for free
+		M.adjustBrainLoss(5)
+	if(prob(50)) //1/2 chance of healing at all
+		for(var/datum/organ/external/affecting in M.organs)
+			if(affecting.heal_damage(5, 5)) //5 brute and burn healed per bash. Not wonderful, but it can help if someone has Alkyzine handy
+				M.UpdateDamageIcon()
+	return //Nothing else to add
+
+//We're done working on mobs, let's check if we're blessing something else
+/obj/item/weapon/storage/bible/afterattack(atom/A, mob/user as mob)
+	user.delayNextAttack(5) //Extra delay
+	if(user.mind && (user.mind.assigned_role == "Chaplain")) //Make sure we still are a Chaplain, just in case
+		if(A.reagents && A.reagents.has_reagent("water")) //Blesses all the water in the holder
+			user.visible_message("<span class='notice'>[user] blesses \the [A].</span>",
+			"<span class='notice'>You bless \the [A].</span>")
+			//Ugly but functional conversion proc
+			var/water2holy = A.reagents.get_reagent_amount("water")
+			A.reagents.del_reagent("water")
+			A.reagents.add_reagent("holywater", water2holy)
+
+/obj/item/weapon/storage/bible/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	playsound(get_turf(src), "rustle", 50, 1, -5)
+	..()
+
+/obj/item/weapon/storage/bible/pickup(mob/living/user as mob)
+	if(user.mind && user.mind.assigned_role == "Chaplain") //We are the Chaplain, yes we are
+		user << "<span class ='notice'>You feel [deity_name]'s holy presence as you pick up \the [src].</span>"
+	if(user.mind && user.mind.vampire && (!VAMP_UNDYING in user.mind.vampire.powers)) //We are a Vampire, we aren't very smart
+		user << "<span class ='danger'>[deity_name]'s power channels through \the [src]. You feel extremely uneasy as you grab it!</span>"
+		user.mind.vampire.smitecounter += 10
+	if(iscult(user)) //We are a Cultist, we aren't very smart either, but at least there will be no consequences for us
+		user << "<span class ='danger'>[deity_name]'s power channels through \the [src]. You feel uneasy as you grab it, but Nar'Sie protects you from its influence!</span>"
