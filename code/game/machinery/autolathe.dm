@@ -327,6 +327,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 					busy = 0
 					src.updateUsrDialog()
 					if(repeat)
+						if(istype(attempting_to_build,/obj/item/stack/sheet)) return
 						build(attempting_to_build,T,multiplier,user)
 
 /obj/machinery/autolathe/Topic(href, href_list)
