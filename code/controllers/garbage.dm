@@ -115,13 +115,6 @@ var/soft_dels = 0
 
 /datum/controller/proc/recover() // If we are replacing an existing controller (due to a crash) we attempt to preserve as much as we can.
 
-/*
- * Like Del(), but for qdel.
- * Called BEFORE qdel moves shit.
- */
-/datum/proc/Destroy()
-	del(src)
-
 /client/proc/qdel_toggle()
 	set name = "Toggle qdel Behavior"
 	set desc = "Toggle qdel usage between normal and force del()."
