@@ -183,6 +183,14 @@ turf/simulated/floor/proc/update_icon()
 			if( !(icon_state in wood_icons) )
 				icon_state = "wood"
 				//world << "[icon_state]y's got [icon_state]"
+	else if(is_mineral_floor())
+		if(!broken && !burnt)
+			if(is_silver_floor()) icon_state="silver"
+			if(is_gold_floor()) icon_state="gold"
+			if(is_plasma_floor()) icon_state="plasma"
+			if(is_bananium_floor()) icon_state="bananium"
+			if(is_diamond_floor()) icon_state="diamond"
+			if(is_uranium_floor()) icon_state="uranium"
 	/*spawn(1)
 		if(istype(src,/turf/simulated/floor)) //Was throwing runtime errors due to a chance of it changing to space halfway through.
 			if(air)
@@ -252,6 +260,41 @@ turf/simulated/floor/proc/update_icon()
 
 /turf/simulated/floor/is_plating()
 	if(!floor_tile)
+		return 1
+	return 0
+
+/turf/simulated/floor/is_mineral_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/mineral))
+		return 1
+	return 0
+
+/turf/simulated/floor/is_gold_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/mineral/gold))
+		return 1
+	return 0
+
+/turf/simulated/floor/is_silver_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/mineral/silver))
+		return 1
+	return 0
+
+/turf/simulated/floor/is_bananium_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/mineral/clown))
+		return 1
+	return 0
+
+/turf/simulated/floor/is_uranium_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/mineral/uranium))
+		return 1
+	return 0
+
+/turf/simulated/floor/is_plasma_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/mineral/plasma))
+		return 1
+	return 0
+
+/turf/simulated/floor/is_diamond_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/mineral/diamond))
 		return 1
 	return 0
 
