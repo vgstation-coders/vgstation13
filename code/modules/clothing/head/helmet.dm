@@ -189,3 +189,11 @@
 	armor = list(melee = 50, bullet = 40, laser = 40,energy = 40, bomb = 5, bio = 0, rad = 0)
 	flags_inv = HIDEEARS|HIDEHAIR
 	siemens_coefficient = 1
+
+/obj/item/clothing/head/helmet/apa
+	name = "Advanced Power Armor MK.II helmet"
+	desc = "Space Station 13 isn't going anywhere from here"
+	icon_state = "APA"
+	armor = list(melee = 50, bullet = 50, laser = 90, energy = 100, bomb = 0, bio = 100, rad = 100)
+	flags_inv = HIDEMASK|HIDEEARS|HIDEHAIR|HIDEEYES
+	body_parts_covered = FULL_HEAD

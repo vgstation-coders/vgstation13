@@ -86,7 +86,7 @@
 		/obj/item/clothing/suit/armor/riot,
 		/obj/item/clothing/suit/armor/bulletproof,
 		/obj/item/clothing/suit/armor/laserproof,
-		/obj/item/clothing/suit/armor/heavy,
+		/obj/item/clothing/suit/armor/apa,
 		/obj/item/clothing/suit/armor/reactive,
 		)
 
