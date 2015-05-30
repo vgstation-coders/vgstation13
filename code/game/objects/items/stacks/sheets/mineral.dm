@@ -51,6 +51,7 @@ var/global/list/datum/stack_recipe/sandstone_recipes = list ( \
  */
 /obj/item/stack/sheet/mineral/diamond
 	name = "diamond"
+	singular_name = "diamond sheet"
 	icon_state = "sheet-diamond"
 	force = 5.0
 	throwforce = 5
@@ -79,6 +80,7 @@ var/global/list/datum/stack_recipe/diamond_recipes = list ( \
  */
 /obj/item/stack/sheet/mineral/uranium
 	name = "uranium"
+	singular_name = "uranium sheet"
 	icon_state = "sheet-uranium"
 	force = 5.0
 	throwforce = 5
@@ -108,6 +110,7 @@ var/global/list/datum/stack_recipe/uranium_recipes = list ( \
  */
 /obj/item/stack/sheet/mineral/plasma
 	name = "solid plasma"
+	singular_name = "plasma sheet"
 	icon_state = "sheet-plasma"
 	force = 5.0
 	throwforce = 5
@@ -135,6 +138,7 @@ var/global/list/datum/stack_recipe/plasma_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/plastic
 	name = "plastic"
+	singular_name = "plastic sheet"
 	icon_state = "sheet-plastic"
 	force = 5.0
 	throwforce = 5
@@ -172,6 +176,7 @@ var/global/list/datum/stack_recipe/plastic_recipes = list ( \
  */
 /obj/item/stack/sheet/mineral/gold
 	name = "gold"
+	singular_name = "gold sheet"
 	icon_state = "sheet-gold"
 	force = 5.0
 	throwforce = 5
@@ -200,7 +205,9 @@ var/global/list/datum/stack_recipe/gold_recipes = list ( \
 /*
  * Phazon
  */
-var/global/list/datum/stack_recipe/phazon_recipes = list()
+var/global/list/datum/stack_recipe/phazon_recipes = list( \
+	new/datum/stack_recipe("phazon floor tile", /obj/item/stack/tile/mineral/phazon, 1, 4, 20), \
+	)
 
 /obj/item/stack/sheet/mineral/phazon
 	name = "phazon"
@@ -229,6 +236,7 @@ var/global/list/datum/stack_recipe/phazon_recipes = list()
  */
 /obj/item/stack/sheet/mineral/silver
 	name = "silver"
+	singular_name = "silver sheet"
 	icon_state = "sheet-silver"
 	force = 5.0
 	throwforce = 5
@@ -257,6 +265,7 @@ var/global/list/datum/stack_recipe/silver_recipes = list ( \
  */
 /obj/item/stack/sheet/mineral/clown
 	name = "bananium"
+	singular_name = "bananium sheet"
 	icon_state = "sheet-clown"
 	force = 5.0
 	throwforce = 5
