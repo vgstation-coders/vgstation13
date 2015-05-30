@@ -320,7 +320,7 @@
 	L.update_brightness()
 	src.modules += L
 
-	src.modules += new /obj/item/weapon/tray/robotray(src)
+	src.modules += new /obj/item/weapon/storage/tray/robotray(src)
 
 	src.modules += new /obj/item/weapon/reagent_containers/food/drinks/shaker(src)
 
