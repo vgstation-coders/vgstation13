@@ -15,6 +15,8 @@
 	siemens_coefficient = 1
 	max_amount = 60
 
+	material = "metal"
+
 /obj/item/stack/tile/use(var/amount)
 	ASSERT(isnum(src.amount))
 	if(src.amount>=amount)

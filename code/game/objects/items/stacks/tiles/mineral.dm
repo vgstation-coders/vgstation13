@@ -1,3 +1,5 @@
+/obj/item/stack/tile/mineral
+
 /obj/item/stack/tile/mineral/plasma
 	name = "plasma tile"
 	singular_name = "plasma floor tile"
@@ -9,6 +11,8 @@
 	throw_speed = 3
 	throw_range = 7
 	max_amount = 60
+
+	material = "plasma"
 
 /obj/item/stack/tile/mineral/uranium
 	name = "uranium tile"
@@ -22,6 +26,8 @@
 	throw_range = 7
 	max_amount = 60
 
+	material = "uranium"
+
 /obj/item/stack/tile/mineral/gold
 	name = "gold tile"
 	singular_name = "gold floor tile"
@@ -33,6 +39,8 @@
 	throw_speed = 3
 	throw_range = 7
 	max_amount = 60
+
+	material = "gold"
 
 /obj/item/stack/tile/mineral/silver
 	name = "silver tile"
@@ -46,6 +54,8 @@
 	throw_range = 7
 	max_amount = 60
 
+	material = "silver"
+
 /obj/item/stack/tile/mineral/diamond
 	name = "diamond tile"
 	singular_name = "diamond floor tile"
@@ -58,6 +68,8 @@
 	throw_range = 7
 	max_amount = 60
 
+	material = "diamond"
+
 /obj/item/stack/tile/mineral/clown
 	name = "bananium tile"
 	singular_name = "bananium floor tile"
@@ -69,3 +81,20 @@
 	throw_speed = 3
 	throw_range = 7
 	max_amount = 60
+
+	material = "bananium"
+	var/spam_flag = 0
+
+/obj/item/stack/tile/mineral/phazon
+	name = "phazon tile"
+	singular_name = "phazon floor tile"
+	desc = "A floor tile made out of phazon. It's very light and brittle."
+	icon_state = "tile_phazon"
+	w_class = 1.0
+	throwforce = 1.0
+	throw_speed = 1
+	throw_range = 2
+	max_amount = 60
+	origin_tech = "materials=9"
+
+	material = "phazon"
