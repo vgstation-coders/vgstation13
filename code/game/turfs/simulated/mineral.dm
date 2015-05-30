@@ -1,11 +1,5 @@
-/turf/simulated/floor/mineral
-	name = "mineral floor"
-	icon_state = ""
-
-
-
-/turf/simulated/floor/mineral/New()
-	..()
+//MINERAL FLOORS ARE HERE
+//Includes: PLASMA, GOLD, SILVER, BANANIUM, DIAMOND, URANIUM, PHAZON
 
 //PLASMA
 
@@ -55,7 +49,6 @@
 	name = "bananium floor"
 	icon_state = "bananium"
 	floor_tile = /obj/item/stack/tile/mineral/clown
-	var/spam_flag = 0
 
 	New()
 		if(floor_tile)
@@ -63,41 +56,6 @@
 			floor_tile = null
 		floor_tile = getFromPool(/obj/item/stack/tile/mineral/clown, null)
 		..()
-
-/turf/simulated/floor/mineral/clown/Entered(var/mob/AM)
-	.=..()
-	if(!.)
-		if(istype(AM))
-			squeek()
-
-/turf/simulated/floor/mineral/clown/attackby(obj/item/weapon/W, mob/user, params)
-	.=..()
-	if(!.)
-		honk()
-
-/turf/simulated/floor/mineral/clown/attack_hand(mob/user)
-	.=..()
-	if(!.)
-		honk()
-
-/turf/simulated/floor/mineral/clown/attack_paw(mob/user)
-	.=..()
-	if(!.)
-		honk()
-
-/turf/simulated/floor/mineral/clown/proc/honk()
-	if(!spam_flag)
-		spam_flag = 1
-		playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
-		spawn(20)
-			spam_flag = 0
-
-/turf/simulated/floor/mineral/clown/proc/squeek()
-	if(!spam_flag)
-		spam_flag = 1
-		playsound(src, "clownstep", 50, 1)
-		spawn(10)
-			spam_flag = 0
 
 //DIAMOND
 
@@ -125,4 +83,18 @@
 			returnToPool(floor_tile)
 			floor_tile = null
 		floor_tile = getFromPool(/obj/item/stack/tile/mineral/uranium, null)
+		..()
+
+//PHAZON
+
+/turf/simulated/floor/mineral/phazon
+	name = "phazon floor"
+	icon_state = "phazon"
+	floor_tile = /obj/item/stack/tile/mineral/phazon
+
+	New()
+		if(floor_tile)
+			returnToPool(floor_tile)
+			floor_tile = null
+		floor_tile = getFromPool(/obj/item/stack/tile/mineral/phazon, null)
 		..()
