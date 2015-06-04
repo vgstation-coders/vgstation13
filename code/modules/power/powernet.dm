@@ -324,6 +324,9 @@ var/global/powernets_broke = 0
 		var/drained_power = drained_energy / CELLRATE						// convert from "joules" to "watts"
 		PN.load += drained_power
 	else if(istype(power_source, /obj/item/weapon/cell))
-		cell.use(drained_energy)
+		if(istype(source, /obj/item/clothing/gloves))
+			cell.use(min(2500, cell.charge))
+		else
+			cell.use(drained_energy)
 
 	return drained_energy

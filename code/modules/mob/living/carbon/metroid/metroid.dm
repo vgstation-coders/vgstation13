@@ -433,23 +433,6 @@
 
 			return
 
-
-
-
-	if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves))
-		var/obj/item/clothing/gloves/G = M.gloves
-		if(G.cell)
-			if(M.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
-				if(G.cell.charge >= 2500)
-					G.cell.use(2500)
-					for(var/mob/O in viewers(src, null))
-						if ((O.client && !( O.blinded )))
-							O.show_message("<span class='danger'>[src] has been touched with the stun gloves by [M]!</span>", 1, "<span class='warning'>You hear someone fall.</span>", 2)
-					return
-				else
-					M << "<span class='warning'>Not enough charge! </span>"
-					return
-
 	switch(M.a_intent)
 
 		if (I_HELP)
