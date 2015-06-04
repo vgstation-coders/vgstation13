@@ -136,11 +136,18 @@ By design, d1 is the smallest direction and d2 is the highest
 
 	update_icon()
 
-/obj/structure/cable/update_icon()
+/obj/structure/cable/update_icon() //TODO: Refactor d2 to be controlled squarely by dir
+	if(d1 == 10) //Saves an extra 8 directional icon_state
+		d1 = d2
+		d2 = 10
 	if(invisibility)
-		icon_state = "[d1]-[d2]-f"
+		icon_state = "[d1]-f"
 	else
-		icon_state = "[d1]-[d2]"
+		icon_state = "[d1]"
+	if(d2 == 10)
+		d2 = d1
+		d1 = 10
+	dir = d2
 
 //Provides sanity for cases in which there may not be a powernet
 //Not necessary for checking powernet during process() of power_machines as it is guaranteed to have a powernet at that time

@@ -26,44 +26,54 @@
 
 
 /client/Northeast()
-	swap_hand()
+	treat_hotkeys(NORTHEAST,src.dir)
 	return
-
 
 /client/Southeast()
-	attack_self()
+	treat_hotkeys(SOUTHEAST,src.dir)
 	return
-
 
 /client/Southwest()
-	if(iscarbon(usr))
-		var/mob/living/carbon/C = usr
-		C.toggle_throw_mode()
-	else
-		to_chat(usr, "<span class='warning'>This mob type cannot throw items.</span>")
+	treat_hotkeys(SOUTHWEST,src.dir)
 	return
 
-
 /client/Northwest()
-	if(iscarbon(usr))
-		var/mob/living/carbon/C = usr
-		if(!C.get_active_hand())
-			to_chat(usr, "<span class='warning'>You have nothing to drop in your hand.</span>")
-			return
-		drop_item()
-	else if(isMoMMI(usr))
-		var/mob/living/silicon/robot/mommi/M = usr
-		if(!M.get_active_hand())
-			to_chat(M, "<span class='warning'>You have nothing to drop or store.</span>")
-			return
-		M.uneq_active()
-	else if(isrobot(usr))
-		var/mob/living/silicon/robot/R = usr
-		if(!R.module_active)
-			return
-		R.uneq_active()
-	else
-		to_chat(usr, "<span class='warning'>This mob type cannot drop items.</span>")
+	treat_hotkeys(NORTHWEST,src.dir)
+	return
+
+/client/proc/treat_hotkeys(var/keypress,var/dir)
+	keypress = angle2dir((dir2angle(keypress)+dir2angle(dir))%360) //This can be done in an easier way
+	switch(keypress)
+		if(NORTHEAST)
+			swap_hand()
+		if(SOUTHEAST)
+			attack_self()
+		if(SOUTHWEST)
+			if(iscarbon(usr))
+				var/mob/living/carbon/C = usr
+				C.toggle_throw_mode()
+			else
+				usr << "<span class='warning'>This mob type cannot throw items.</span>"
+		if(NORTHWEST)
+			if(iscarbon(usr))
+				var/mob/living/carbon/C = usr
+				if(!C.get_active_hand())
+					usr << "<span class='warning'> You have nothing to drop in your hand.</span>"
+					return
+				drop_item()
+			else if(isMoMMI(usr))
+				var/mob/living/silicon/robot/mommi/M = usr
+				if(!M.get_active_hand())
+					M << "<span class='warning'> You have nothing to drop or store.</span>"
+					return
+				M.uneq_active()
+			else if(isrobot(usr))
+				var/mob/living/silicon/robot/R = usr
+				if(!R.module_active)
+					return
+				R.uneq_active()
+			else
+				usr << "<span class='warning'> This mob type cannot drop items.</span>"
 	return
 
 //This gets called when you press the delete button.

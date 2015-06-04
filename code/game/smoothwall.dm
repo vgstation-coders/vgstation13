@@ -10,17 +10,20 @@
 	// THIS IS A BITMAP BECAUSE NORTH/SOUTH/ETC ARE ALL BITFLAGS BECAUSE BYOND IS DUMB AND
 	// DOESN'T FUCKING MAKE SENSE, BUT IT WORKS TO OUR ADVANTAGE
 	var/junction = 0
+	var/dirs = 0
 	for(var/cdir in cardinal)
 		var/turf/T = get_step(src,cdir)
 		if(isSmoothableNeighbor(T))
 			junction |= cdir
+			dirs++
 			continue // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 		for(var/atom/A in T)
 			if(isSmoothableNeighbor(A))
 				junction |= cdir
+				dirs++
 				break // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 
-	return junction
+	return list(junction,dirs)
 
 /atom/proc/isSmoothableNeighbor(atom/A)
 	if(!A)
@@ -60,8 +63,22 @@
  * WE COULD STANDARDIZE THIS BUT EVERYONE'S A FUCKING SNOWFLAKE
  */
 /turf/simulated/wall/relativewall()
-	var/junction=findSmoothingNeighbors()
-	icon_state = "[walltype][junction]" // WHY ISN'T THIS IN UPDATE_ICON OR SIMILAR
+	var/list/wallinfo = findSmoothingNeighbors()
+	var/junction = wallinfo[0]
+	switch(wallinfo[1])
+		if(0)
+			dir = 1
+		if(1)
+			dir = junction
+		if(2)
+			if(junction & ((NORTH & SOUTH) | (EAST & WEST)))
+				junction = (junction ^ 10) //Convert it into NORTH and EAST only
+			dir = junction //Bent walls are the diagonals
+		if(3)
+			dir = ~junction //This is the simplest way, sprites are oriented so their empty side is facing out
+		if(4)
+			dir = 1
+	icon_state = "[walltype]-[wallinfo[1]]" // WHY ISN'T THIS IN UPDATE_ICON OR SIMILAR
 
 // AND NOW WE HAVE TO YELL AT THE NEIGHBORS FOR BEING LOUD AND NOT PAINTING WITH HOA-APPROVED COLORS
 /atom/proc/relativewall_neighbours(var/at=null)

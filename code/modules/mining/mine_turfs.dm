@@ -559,13 +559,13 @@
 	src.overlays.len = 0
 
 	if(istype(get_step(src, NORTH), /turf/unsimulated/mineral))
-		src.overlays += image('icons/turf/walls.dmi', "rock_side_n")
+		src.overlays += image('icons/turf/walls.dmi', "rock_side_n",,dir = 1)
 	if(istype(get_step(src, SOUTH), /turf/unsimulated/mineral))
-		src.overlays += image('icons/turf/walls.dmi', "rock_side_s", layer=6)
+		src.overlays += image('icons/turf/walls.dmi', "rock_side_s", layer=6, dir = 2)
 	if(istype(get_step(src, EAST), /turf/unsimulated/mineral))
-		src.overlays += image('icons/turf/walls.dmi', "rock_side_e", layer=6)
+		src.overlays += image('icons/turf/walls.dmi', "rock_side_e", layer=6, dir = 4)
 	if(istype(get_step(src, WEST), /turf/unsimulated/mineral))
-		src.overlays += image('icons/turf/walls.dmi', "rock_side_w", layer=6)
+		src.overlays += image('icons/turf/walls.dmi', "rock_side_w", layer=6, dir = 8)
 
 /turf/unsimulated/floor/asteroid/proc/fullUpdateMineralOverlays()
 	var/turf/unsimulated/floor/asteroid/A
