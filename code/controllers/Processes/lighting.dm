@@ -11,7 +11,7 @@
 
 	for(var/datum/light_source/L in lighting_controller.lights)
 		if(L && L.check())
-			lighting_controller.lights.Remove(L)
+			return_to_pool(L)
 
 		scheck()
 

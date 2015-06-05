@@ -35,8 +35,8 @@
 
 datum/light_source
 	var/atom/owner
-	var/changed = 1
-	var/list/effect = list()
+	var/changed = TRUE
+	var/list/effect
 	var/__x = 0		// x coordinate at last update
 	var/__y = 0		// y coordinate at last update
 	var/__z = 0		// z coordinate at last update
@@ -45,19 +45,6 @@ datum/light_source
 	var/col_r
 	var/col_g
 	var/col_b
-
-	New(atom/A)
-		if(!istype(A))
-			CRASH("The first argument to the light object's constructor must be the atom that is the light source. Expected atom, received '[A]' instead.")
-		..()
-		owner = A
-		readrgb(owner.l_color)
-		__x = owner.x
-		__y = owner.y
-		__z = owner.z
-		// the lighting object maintains a list of all light sources
-		lighting_controller.lights += src
-
 
 	//Check a light to see if its effect needs reprocessing. If it does, remove any old effect and create a new one
 	proc/check()
@@ -70,13 +57,13 @@ datum/light_source
 			__x = owner.x
 			__y = owner.y
 			__z = owner.z
-			changed = 1
+			changed = TRUE
 
 		if (owner.l_color != _l_color)
-			changed = 1
+			changed = TRUE
 
 		if(changed)
-			changed = 0
+			changed = FALSE
 			remove_effect()
 			return add_effect()
 		return 0
@@ -91,7 +78,7 @@ datum/light_source
 		// only do this if the light is turned on and is on the map
 		if(owner.loc && owner.luminosity > 0)
 			readrgb(owner.l_color)
-			effect = list()
+
 			for(var/turf/T in view(owner.get_light_range(), get_turf(owner)))
 				var/delta_lumen = lum(T)
 				if(delta_lumen > 0)
@@ -100,7 +87,6 @@ datum/light_source
 
 			return 0
 		else
-			owner.light = null
 			return 1	//cause the light to be removed from the lights list and garbage collected once it's no
 						//longer referenced by the queue
 
@@ -131,6 +117,31 @@ datum/light_source
 		else
 			col_r = null
 
+
+/datum/light_source/New(atom/A)
+	if (!istype(A))
+		CRASH("The first argument to the light object's constructor must be the atom that is the light source. Expected atom, received '[A]' instead.")
+
+	..(null)
+	owner = A
+	effect = new/list()
+	__x = owner.x
+	__y = owner.y
+	__z = owner.z
+	readrgb(owner.l_color)
+	lighting_controller.lights += src // the lighting object maintains a list of all light sources
+
+/datum/light_source/resetVariables()
+	..("effect")
+
+/datum/light_source/Destroy()
+	if (owner)
+		owner.light = null
+		owner = null
+
+	lighting_controller.lights -= src
+	..()
+
 atom
 	var/datum/light_source/light
 	var/trueLuminosity = 0  // Typically 'luminosity' squared.  The builtin luminosity must remain linear.
@@ -144,7 +155,7 @@ turf/New()
 	if(luminosity)
 		if(light)	WARNING("[type] - Don't set lights up manually during New(), We do it automatically.")
 		trueLuminosity = luminosity * luminosity
-		light = new(src)
+		light = get_from_pool(/datum/light_source, src)
 
 //Movable atoms with opacity when they are constructed will trigger nearby lights to update
 //Movable atoms with luminosity when they are constructed will create a light_source automatically
@@ -157,7 +168,7 @@ atom/movable/New()
 	if(luminosity)
 		if(light)	WARNING("[type] - Don't set lights up manually during New(), We do it automatically.")
 		trueLuminosity = luminosity * luminosity
-		light = new(src)
+		light = get_from_pool(/datum/light_source, src)
 
 //Sets our luminosity.
 //If we have no light it will create one.
@@ -171,10 +182,10 @@ atom/proc/SetLuminosity(new_luminosity, trueLum = FALSE)
 		new_luminosity *= new_luminosity
 	if(light)
 		if(trueLuminosity != new_luminosity)	//non-luminous lights are removed from the lights list in add_effect()
-			light.changed = 1
+			light.changed = TRUE
 	else
 		if(new_luminosity)
-			light = new(src)
+			light = get_from_pool(/datum/light_source, src)
 	trueLuminosity = new_luminosity
 	if (trueLuminosity < 1)
 		luminosity = 0
@@ -441,7 +452,7 @@ area
 atom/proc/UpdateAffectingLights()
 	for(var/atom/A in oview(LIGHTING_MAX_LUMINOSITY_STATIC-1,src))
 		if(A.light)
-			A.light.changed = 1			//force it to update at next process()
+			A.light.changed = TRUE			//force it to update at next process()
 
 //caps luminosity effects max-range based on what type the light's owner is.
 atom/proc/get_light_range()

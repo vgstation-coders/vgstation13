@@ -127,6 +127,8 @@ var/global/list/ghdel_profiling = list()
 		beams.len = 0
 	*/
 
+	..()
+
 /atom/New()
 	on_destroyed = new("owner"=src)
 	on_moved = new("owner"=src)

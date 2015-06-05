@@ -36,7 +36,6 @@
 			if(loc:lighting_lumcount > 1)
 				UpdateAffectingLights()
 	gcDestroyed = "Bye, world!"
-	tag = null
 	loc = null
 
 	..()
