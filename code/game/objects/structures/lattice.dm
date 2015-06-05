@@ -15,13 +15,12 @@
 
 	icon = 'icons/obj/smoothlattice.dmi'
 
-	relativewall()
+	icon_smoothing()
 
 	relativewall_neighbours()
 
-/obj/structure/lattice/relativewall()
-	var/junction = findSmoothingNeighbors()
-	icon_state = "lattice[junction]"
+/obj/structure/lattice/icon_smoothing()
+	smooth_icon("lattice")
 
 /obj/structure/lattice/isSmoothableNeighbor(atom/A)
 	if (istype(A, /turf/space))

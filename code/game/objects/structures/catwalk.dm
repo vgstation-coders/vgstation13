@@ -13,13 +13,11 @@
 
 	..(loc)
 
-	relativewall()
+	icon_smoothing()
 	relativewall_neighbours()
 
-/obj/structure/catwalk/relativewall()
-
-	var/junction = findSmoothingNeighbors()
-	icon_state = "catwalk[junction]"
+/obj/structure/catwalk/icon_smoothing()
+	smooth_icon("catwalk")
 
 /obj/structure/catwalk/isSmoothableNeighbor(atom/A)
 

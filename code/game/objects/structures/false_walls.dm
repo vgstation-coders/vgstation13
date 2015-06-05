@@ -81,7 +81,7 @@
 
 /obj/structure/falsewall/New()
 	..()
-	relativewall()
+	icon_smoothing()
 	relativewall_neighbours()
 
 /obj/structure/falsewall/Destroy()
@@ -90,24 +90,23 @@
 
 	spawn(10)
 		for(var/turf/simulated/wall/W in range(temploc,1))
-			W.relativewall()
+			W.icon_smoothing()
 
 		for(var/obj/structure/falsewall/W in range(temploc,1))
-			W.relativewall()
+			W.icon_smoothing()
 
 		for(var/obj/structure/falserwall/W in range(temploc,1))
-			W.relativewall()
+			W.icon_smoothing()
 	..()
 
 
-/obj/structure/falsewall/relativewall()
+/obj/structure/falsewall/icon_smoothing()
 
 	if(!density)
 		icon_state = "[mineral]fwall_open"
 		return
 
-	var/junction=findSmoothingNeighbors()
-	icon_state = "[mineral][junction]"
+	smooth_icon("metal")
 
 /obj/structure/falsewall/attack_ai(mob/user as mob)
 	if(isMoMMI(user))
@@ -140,7 +139,7 @@
 	..()
 	if(density)
 		icon_state = "[mineral]0"
-		src.relativewall()
+		src.icon_smoothing()
 	else
 		icon_state = "[mineral]fwall_open"
 
@@ -194,7 +193,7 @@
 	..()
 	if(density)
 		icon_state = "[mineral]0"
-		src.relativewall()
+		src.icon_smoothing()
 	else
 		icon_state = "[mineral]fwall_open"
 
@@ -249,13 +248,12 @@
 		relativewall()
 		opening = 0
 
-/obj/structure/falserwall/relativewall()
+/obj/structure/falserwall/icon_smoothing()
 
 	if(!density)
 		icon_state = "frwall_open"
 		return
-	var/junction=findSmoothingNeighbors()
-	icon_state = "rwall[junction]"
+	icon_state = smooth_icon("rwall")
 
 /obj/structure/falserwall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opening)
