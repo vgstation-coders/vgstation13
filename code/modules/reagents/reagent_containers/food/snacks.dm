@@ -172,7 +172,7 @@
 	if(W.is_sharp() < 0.8) //At this point we are slicing food, so if our item isn't sharp enough, just abort
 		return 0
 
-	if(!isturf(src.loc) || !(locate(/obj/structure/table) in src.loc) && !(locate(/obj/item/weapon/tray) in src.loc))
+	if(!isturf(src.loc) || !(locate(/obj/structure/table) in src.loc) && !(locate(/obj/item/weapon/storage/tray) in src.loc))
 		user << "<span class='notice'>You cannot slice \the [src] here! You need a table or at least a tray.</span>"
 		return 1
 

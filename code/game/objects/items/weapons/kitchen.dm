@@ -293,7 +293,9 @@
 /*
  * Trays - Agouri
  */
-/obj/item/weapon/tray
+
+#define TRAY_BASH_COOLDOWN	25
+/obj/item/weapon/storage/tray
 	name = "tray"
 	icon = 'icons/obj/food.dmi'
 	icon_state = "tray"
@@ -308,25 +310,18 @@
 	m_amt = 3000
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	var/list/carrying = list() // List of things on the tray. - Doohl
-	var/max_carry = 10 // w_class = 1 -- takes up 1
-					   // w_class = 2 -- takes up 3
-					   // w_class = 3 -- takes up 5
 
-/obj/item/weapon/tray/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+	var/list/carried_images = list() //assoc list of refs and images
 
-	// Drop all the things. All of them.
-	overlays.len = 0
-	for(var/obj/item/I in carrying)
-		I.loc = M.loc
-		carrying.Remove(I)
-		if(isturf(I.loc))
-			spawn()
-				for(var/i = 1, i <= rand(1,2), i++)
-					if(I)
-						step(I, pick(NORTH,SOUTH,EAST,WEST))
-						sleep(rand(2,4))
+	can_hold = list("/obj/item/weapon/reagent_containers/food")
+	max_combined_w_class = 10
 
+	var/cooldown = 0	//shield bash cooldown. based on world.time
+
+
+/obj/item/weapon/storage/tray/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+
+	drop_all()
 
 	if((M_CLUMSY in user.mutations) && prob(50))              //What if he's a clown?
 		M << "<span class='warning'>You accidentally slam yourself with the [src]!</span>"
@@ -434,124 +429,90 @@
 				return
 			return
 
-/obj/item/weapon/tray/var/cooldown = 0	//shield bash cooldown. based on world.time
-
-/obj/item/weapon/tray/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/storage/tray/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/kitchen/rollingpin))
-		if(cooldown < world.time - 25)
+		if(cooldown < world.time - TRAY_BASH_COOLDOWN)
 			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
 			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
 			cooldown = world.time
 	else
 		..()
 
+#undef TRAY_BASH_COOLDOWN
+
+/obj/item/weapon/storage/tray/update_icon()
+	overlays.len = 0
+	for(var/i = 1 to carried_images.len)
+		var/ref_text = carried_images[i]
+		var/image/I = carried_images[ref_text]
+		I.pixel_x = 4 + i * (-1 ** i)
+		I.layer = src.layer + (1 + (0.1 * i * (-1 ** i)))
+		I.pixel_y = 2
+		overlays += I
+
 /*
-===============~~~~~================================~~~~~====================
-=																			=
-=  Code for trays carrying things. By Doohl for Doohl erryday Doohl Doohl~  =
-=																			=
-===============~~~~~================================~~~~~====================
+===============~~~~~=================
+=									=
+=  Code for trays carrying things.  =
+=									=
+===============~~~~~=================
 */
-/obj/item/weapon/tray/proc/calc_carry()
-	// calculate the weight of the items on the tray
-	var/val = 0 // value to return
-
-	for(var/obj/item/I in carrying)
-		if(I.w_class == 1.0)
-			val ++
-		else if(I.w_class == 2.0)
-			val += 3
-		else
-			val += 5
-
-	return val
-
-/obj/item/weapon/tray/pickup(mob/user)
+/obj/item/weapon/storage/tray/pickup(mob/user)
 
 	if(!isturf(loc))
-		return
+		return ..()
 
 	for(var/obj/item/I in loc)
-		if( I != src && !I.anchored && !istype(I, /obj/item/clothing/under) && !istype(I, /obj/item/clothing/suit) && !istype(I, /obj/item/projectile) )
-			var/add = 0
-			if(I.w_class == 1.0)
-				add = 1
-			else if(I.w_class == 2.0)
-				add = 3
-			else
-				add = 5
-			if(calc_carry() + add >= max_carry)
-				break
+		if( I != src && !I.anchored && !istype(I, /obj/item/projectile) && !I.throwing)
+			if(can_be_inserted(I, 1))
+				handle_item_insertion(I, 1)
 
-			I.loc = src
-			carrying.Add(I)
-			overlays += image("icon" = I.icon, "icon_state" = I.icon_state, "layer" = 30 + I.layer)
 
-/obj/item/weapon/tray/dropped(mob/user)
+	. = ..()
+	update_icon() //because its layer changes
 
-	var/mob/living/M
-	for(M in src.loc) //to handle hand switching
-		return
+/obj/item/weapon/storage/tray/handle_item_insertion(obj/item/I, prevent_warning)
+	. = ..()
 
-	var/foundtable = 0
-	for(var/obj/structure/table/T in loc)
-		foundtable = 1
+	var/icon/new_icon = icon(I.icon, I.icon_state)
+	new_icon.Scale(24, 24)
+	var/image/new_image = image(new_icon)
+	new_image.pixel_x = 0
+	new_image.pixel_y = 0
+	carried_images += list("\ref[I]" = new_image)
+
+	update_icon()
+
+/obj/item/weapon/storage/tray/remove_from_storage(obj/item/I, atom/new_location)
+	for(var/ref_text in carried_images)
+		if(locate(ref_text) == I)
+			carried_images.Remove(ref_text)
+
+	update_icon()
+
+	return ..()
+
+/obj/item/weapon/storage/tray/dropped(mob/user)
+
+	if(!isturf(loc)) //if we get dropped to go somewhere that isn't the floor, we don't care
+		return ..()
+
+	for(var/obj/structure/table in src.loc)
+		drop_all(1)
 		break
 
-	overlays.len = 0
+	if(contents.len)
+		drop_all()
 
-	for(var/obj/item/I in carrying)
-		I.loc = loc
-		carrying.Remove(I)
-		if(!foundtable && isturf(loc))
-			// if no table, presume that the person just shittily dropped the tray on the ground and made a mess everywhere!
+
+/obj/item/weapon/storage/tray/proc/drop_all(no_mess = 0, atom/target_loc = get_turf(src)) //if you don't set no_mess, the items spill everywhere
+	for(var/obj/item/I in contents)
+		remove_from_storage(I, target_loc)
+
+		if(!no_mess && isturf(I.loc))
+			// if messy, presume that the person just shittily dropped the tray on the ground and made a mess everywhere!
 			spawn()
 				for(var/i = 1, i <= rand(1,2), i++)
 					if(I)
-						step(I, pick(NORTH,SOUTH,EAST,WEST))
+						step(I, pick(cardinal))
 						sleep(rand(2,4))
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////
-//Enough with the violent stuff, here's what happens if you try putting food on it
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-/*/obj/item/weapon/tray/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/kitchen/utensil/fork))
-		if (W.icon_state == "forkloaded")
-			user << "<span class='warning'>You already have omelette on your fork.</span>"
-			return
-		W.icon = 'icons/obj/kitchen.dmi'
-		W.icon_state = "forkloaded"
-		viewers(3,user) << "[user] takes a piece of omelette with his fork!"
-		reagents.remove_reagent("nutriment", 1)
-		if (reagents.total_volume <= 0)
-			del(src)*/
-
-
-/*			if (prob(33))
-						var/turf/location = H.loc
-						if (istype(location, /turf/simulated))
-							location.add_blood(H)
-					if (H.wear_mask)
-						H.wear_mask.add_blood(H)
-					if (H.head)
-						H.head.add_blood(H)
-					if (H.glasses && prob(33))
-						H.glasses.add_blood(H)
-					if (istype(user, /mob/living/carbon/human))
-						var/mob/living/carbon/human/user2 = user
-						if (user2.gloves)
-							user2.gloves.add_blood(H)
-						else
-							user2.add_blood(H)
-						if (prob(15))
-							if (user2.wear_suit)
-								user2.wear_suit.add_blood(H)
-							else if (user2.w_uniform)
-								user2.w_uniform.add_blood(H)*/
