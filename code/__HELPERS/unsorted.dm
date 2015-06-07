@@ -1357,18 +1357,13 @@ proc/find_holder_of_type(var/atom/reference,var/typepath) //Returns the first ob
 	if(!center)
 		return
 
-	var/global/mob/dview/DV
-	if(!DV)
-		DV = new
-
-	DV.loc = center
-
+	var/mob/dview/DV = getFromPool(/mob/dview, center) //Yes, pooling, honk
 	DV.see_in_dark = range
 	DV.see_invisible = invis_flags
 
 	. = view(range, DV)
-	DV.loc = null
-	
+	returnToPool(DV)
+
 /mob/dview
 	invisibility = 101
 	density = 0
