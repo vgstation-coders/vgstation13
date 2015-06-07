@@ -7,6 +7,7 @@
 	anchored = 1.0
 	layer = 2.3 //under pipes
 	//	flags = CONDUCT
+	var/base_icon = "lattice"
 
 	canSmoothWith = "/obj/structure/lattice=0&/obj/structure/catwalk=0&/turf=0"
 
@@ -14,13 +15,12 @@
 	..(loc)
 
 	icon = 'icons/obj/smoothlattice.dmi'
+	if(ticker)
+		initialize()
+		relativewall_neighbours()
 
+/obj/structure/lattice/initialize()
 	icon_smoothing()
-
-	relativewall_neighbours()
-
-/obj/structure/lattice/icon_smoothing()
-	smooth_icon("lattice")
 
 /obj/structure/lattice/isSmoothableNeighbor(atom/A)
 	if (istype(A, /turf/space))

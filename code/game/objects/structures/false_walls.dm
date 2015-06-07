@@ -132,7 +132,7 @@
 		density = 1
 		sleep(15)
 		set_opacity(1)
-		src.relativewall()
+		src.icon_smoothing()
 		opening = 0
 
 /obj/structure/falsewall/update_icon()//Calling icon_update will refresh the smoothwalls if it's closed, otherwise it will make sure the icon is correct if it's open
@@ -245,7 +245,7 @@
 		density = 1
 		sleep(15)
 		set_opacity(1)
-		relativewall()
+		icon_smoothing()
 		opening = 0
 
 /obj/structure/falserwall/icon_smoothing()

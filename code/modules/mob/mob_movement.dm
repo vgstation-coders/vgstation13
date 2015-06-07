@@ -42,7 +42,7 @@
 	return
 
 /client/proc/treat_hotkeys(var/keypress,var/dir)
-	keypress = angle2dir((dir2angle(keypress)+dir2angle(dir))%360) //This can be done in an easier way
+	keypress = turn(keypress,dir) //This can be done in an easier way
 	switch(keypress)
 		if(NORTHEAST)
 			swap_hand()

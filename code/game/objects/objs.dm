@@ -93,9 +93,6 @@ var/global/list/reagents_to_log = list("fuel"  =  "welder fuel", "plasma"=  "pla
 	else
 		return null
 
-/atom/movable/proc/initialize()
-	return
-
 /obj/proc/updateUsrDialog()
 	if(in_use)
 		var/is_in_use = 0

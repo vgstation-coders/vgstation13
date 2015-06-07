@@ -170,6 +170,9 @@ var/global/list/ghdel_profiling = list()
 			materials.addAmount(matID, starting_materials[matID])
 	AddToProfiler()
 
+/atom/proc/initialize()
+	return
+
 /atom/proc/assume_air(datum/gas_mixture/giver)
 	return null
 
