@@ -83,19 +83,7 @@
 /obj/item/device/lightreplacer/borg/New() //Contains a box of mixed lights and a special recycling box.
 	..()
 	supply = new /obj/item/weapon/storage/box/lights/mixed(src)
-	waste = new /obj/item/weapon/storage/box/lights/lrdisposal(src)
-
-/obj/item/weapon/storage/box/lights/lrdisposal
-	name = "light recycler"
-	desc = "A special unit capable of recycling lights into glass. Unfortunately, the metal is lost."
-
-/obj/item/weapon/storage/box/lights/lrdisposal/handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
-	. = ..()
-	if(!istype(loc, /obj/item/device/lightreplacer) || !istype(W, /obj/item/weapon/light))
-		return
-	var/obj/item/device/lightreplacer/LR = loc
-	LR.add_glass(W.g_amt, 2)
-	del(W)
+	waste = new /obj/item/weapon/storage/box/lights(src)
 
 /obj/item/device/lightreplacer/examine(mob/user)
 	..()
