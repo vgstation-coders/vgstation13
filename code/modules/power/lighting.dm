@@ -621,6 +621,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	name = "high efficiency light tube"
 	desc = "An efficient light used to reduce strain on the station's power grid."
 	base_state = "hetube"
+	g_amt = 300
 	cost = 2
 
 /obj/item/weapon/light/tube/large
@@ -628,6 +629,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	name = "large light tube"
 	brightness_range = 15
 	brightness_power = 4
+	g_amt = 200
+	m_amt = 100
 	cost = 15
 
 /obj/item/weapon/light/bulb
@@ -637,7 +640,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	base_state = "bulb"
 	item_state = "contvapour"
 	fitting = "bulb"
-	g_amt = 100
+	m_amt = 30
+	g_amt = 50
 	brightness_range = 5
 	brightness_power = 2
 	brightness_color = "#a0a080"
@@ -649,6 +653,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	desc = "An efficient light used to reduce strain on the station's power grid."
 	base_state = "hebulb"
 	cost = 1
+	g_amt = 150
 	brightness_color = null//These should be white
 
 /obj/item/weapon/light/throw_impact(atom/hit_atom)
@@ -661,7 +666,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	icon_state = "fbulb"
 	base_state = "fbulb"
 	item_state = "egg4"
-	g_amt = 100
+	g_amt = 300
 	brightness_range = 5
 	brightness_power = 2
 

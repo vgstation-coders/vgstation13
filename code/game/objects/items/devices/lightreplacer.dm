@@ -9,14 +9,15 @@
 //
 // HOW IT WORKS
 //
-// You attack a light fixture with it, if the light fixture is broken it will replace the
-// light fixture with a working light; the broken light is then placed on the floor for the
-// user to then pickup with a trash bag. If it's empty then it will just place a light in the fixture.
+// You attack a light fixture with it. If the light fixture is broken, it will replace the
+// light fixture with a working light. The broken light is then placed into the device's waste box.
+// If the fixture is empty then it will just place a light in the fixture.
 //
 // HOW TO REFILL THE DEVICE
 //
-// It will need to be manually refilled with lights.
-// If it's part of a robot module, it will charge when the Robot is inside a Recharge Station.
+// The supply box can be removed and replaced to refill the whole thing at once or lights can be inserted into the device.
+// Additionally, it can process glass into any type of light, though it uses much more than other methods of making lights
+// and lights made this way start out with a high switchcount.
 //
 // EMAGGED FEATURES
 //
@@ -54,8 +55,18 @@
 
 	var/obj/item/weapon/storage/box/lights/supply = null //Takes bulbs from here to replace
 	var/obj/item/weapon/storage/box/lights/waste = null //Places replaced bulbs here
+	var/glass_stor = 0 //How much glass it contains for producing lights
+	var/glass_stor_max = 5 * CC_PER_SHEET_GLASS //Max glass it can hold
+	var/prod_quality = 30 //Starting switchcount for lights this builds out of glass
+	var/prod_eff = 10 //How many times more glass it uses to build lights than would an autolathe
 	var/emagged = 0
 	var/charge = 1
+
+/obj/item/device/lightreplacer/borg //Since it will mainly be loaded by processing glass, it is MUCH better at it than the standard version.
+	glass_stor = 10 * CC_PER_SHEET_GLASS //Twice the capacity of the standard version
+	glass_stor_max = 10 * CC_PER_SHEET_GLASS //Starts full
+	prod_quality = 0 //Just as good as lights from a box/autolathe
+	prod_eff = 5 //Half the glass per light as the standard version
 
 /obj/item/device/lightreplacer/loaded/New() //Contains only a waste box. Exists mainly just as a parent of the other loaded ones, but I guess you can use it.
 	..()
@@ -69,6 +80,22 @@
 	..()
 	supply = new /obj/item/weapon/storage/box/lights/he(src)
 
+/obj/item/device/lightreplacer/borg/New() //Contains a box of mixed lights and a special recycling box.
+	..()
+	supply = new /obj/item/weapon/storage/box/lights/mixed(src)
+	waste = new /obj/item/weapon/storage/box/lights/lrdisposal(src)
+
+/obj/item/weapon/storage/box/lights/lrdisposal
+	name = "light recycler"
+	desc = "A special unit capable of recycling lights into glass. Unfortunately, the metal is lost."
+
+/obj/item/weapon/storage/box/lights/lrdisposal/handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
+	. = ..()
+	if(!istype(loc, /obj/item/device/lightreplacer) || !istype(W, /obj/item/weapon/light))
+		return
+	var/obj/item/device/lightreplacer/LR = loc
+	LR.add_glass(W.g_amt, 2)
+	del(W)
 
 /obj/item/device/lightreplacer/examine(mob/user)
 	..()
@@ -209,6 +236,8 @@
 		L1.brightness_range = target.brightness_range
 		L1.brightness_power = target.brightness_power
 		L1.brightness_color = target.brightness_color
+		L1.cost = target.cost
+		L1.base_state = target.base_state
 		L1.switchcount = target.switchcount
 		target.switchcount = 0
 		L1.update()
@@ -249,7 +278,7 @@
 //Attempts to insert a light into the light replacer's storage.
 //If the light works, attempts to place it in the supply box. Otherwise, attempts to place it in the waste box.
 //Fails if the light cannot be placed into the correct box for any reason.
-//Returns 0 if the light is successfully inserted into the correct box, 1 if the insertion fails, and null if the item to be inserted is not a light or something very strange happens.
+//Returns 1 if the light is successfully inserted into the correct box, 0 if the insertion fails, and null if the item to be inserted is not a light or something very strange happens.
 /obj/item/device/lightreplacer/proc/insert_if_possible(var/obj/item/weapon/light/L) 
 	if(!istype(L))
 		return
@@ -297,7 +326,7 @@
 	if(tested:status) //Is tested empty? If so, either it must be a tie or comparison wins, so tested cannot win.
 		return 0
 
-	//Now we know both work, so all that is left is to test is if tested wins by being HE.
+	//Now we know both work, so all that is left is to test if tested wins by being HE.
 	if(findtextEx(tested:base_state, "he", 1, 3) && !findtextEx(comparison:base_state, "he", 1, 3))
 		return 1
 	else
@@ -309,6 +338,21 @@
 /obj/item/device/lightreplacer/proc/CanUse(var/mob/living/user)
 	src.add_fingerprint(user)
 	//Not sure what else to check for. Maybe if clumsy?
+	return 1
+
+//Adds amt glass to the glass storage if possible.
+//If force_fill is 0, fails if there is not enough room for all of amt.
+//If force_fill is 1, fails only if amt is totally full.
+//If force_fill is 2, never fails.
+//Returns 1 on success and 0 on fail.
+/obj/item/device/lightreplacer/proc/add_glass(var/amt, var/force_fill = 0)
+	if(!force_fill)
+		if(glass_stor + amt > glass_stor_max)
+			return 0
+	else if(force_fill == 1)
+		if(glass_stor >= glass_stor_max)
+			return 0
+	glass_stor = min(glass_stor_max, glass_stor + amt)
 	return 1
 
 /obj/item/device/lightreplacer/Topic(href, href_list)
