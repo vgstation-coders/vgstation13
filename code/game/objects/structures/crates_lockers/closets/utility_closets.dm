@@ -144,6 +144,8 @@
 		new /obj/item/clothing/gloves/yellow(src)
 	if(prob(40))
 		new /obj/item/clothing/head/hardhat(src)
+	if(prob(30))
+		new /obj/item/stack/sheet/cloth(src,20)
 
 
 /*

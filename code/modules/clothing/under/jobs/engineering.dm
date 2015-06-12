@@ -8,6 +8,7 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 10)
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list("Vox")
+	allowed_to_rip = 0
 
 /obj/item/clothing/under/rank/atmospheric_technician
 	desc = "It's a jumpsuit worn by atmospheric technicians."

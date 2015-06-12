@@ -282,6 +282,7 @@ BLIND     // can't see anything
 		3 = Report location
 		*/
 	var/displays_id = 1
+	var/allowed_to_rip = 1 //0 for head suits
 
 /obj/item/clothing/under/emp_act(severity)
 	for(var/obj/item/clothing/accessory/accessory in accessories)
@@ -435,4 +436,22 @@ BLIND     // can't see anything
 	. = ..()
 	sensor_mode = pick(0, 1, 2, 3)
 
+/obj/item/clothing/under/proc/rip(mob/user)
+	user.visible_message("<span class='warning'>[user.name] is ripping apart the [src]!</span>", \
+			"<span class='warning'>You begin to rip apart the [src].</span>", \
+			"You hear an audible ripping.")
+	if(do_after(user,40))
+		new /obj/item/stack/sheet/cloth(user.loc,4)
+		qdel(src)
 
+/obj/item/clothing/under/verb/rip_up()
+	set name = "Rip up clothing"
+	set category = "Object"
+	set src in usr
+	if(src != usr.get_active_hand())
+		usr << "<span class='warning'>[src] needs to be in your hand to rip it up.</span>"
+		return
+	if(allowed_to_rip)
+		rip(usr)
+	else
+		usr << "<span class='warning'>You wouldn't dare rip that apart.</span>"

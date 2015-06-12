@@ -85,7 +85,7 @@
 	flags = FPRINT  | ONESIZEFITSALL
 	siemens_coefficient = 0.8
 	species_fit = list("Vox")
-
+	allowed_to_rip = 0
 
 /obj/item/clothing/head/helmet/HoS
 	name = "Head of Security Hat"

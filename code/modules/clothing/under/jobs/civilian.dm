@@ -18,7 +18,7 @@
 	_color = "captain"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list("Vox")
-
+	allowed_to_rip = 0
 
 /obj/item/clothing/under/rank/cargo
 	name = "quartermaster's jumpsuit"
@@ -76,7 +76,7 @@
 	_color = "hop"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list("Vox")
-
+	allowed_to_rip = 0
 
 /obj/item/clothing/under/rank/hydroponics
 	desc = "It's a jumpsuit designed to protect against minor plant-related hazards."
