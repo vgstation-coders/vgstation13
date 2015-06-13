@@ -263,7 +263,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 	src.add_fingerprint(usr)
 	if(!busy)
 		if(href_list["make"])
-			var/turf/T = get_step(src.loc, get_dir(src,usr))
+			var/turf/T = loc
 
 			// critical exploit fix start -walter0o
 			var/obj/item/template = null
