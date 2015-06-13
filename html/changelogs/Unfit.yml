@@ -1,3 +1,4 @@
 author: Unid
 changes: 
   - bugfix: Fixed stacks not disappearing from silicons when used up.
+  - rscadd: Added a repeat wire to autolathes. If cut, the autolathe will produce an item infinitely without stopping. If pulsed, the autolathe will produce an item infinitely until somebody interacts with it.

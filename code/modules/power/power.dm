@@ -123,7 +123,7 @@
 		return 0
 
 	src.areaMaster.use_power(amount, chan)
-
+	return 1
 // called whenever the power settings of the containing area change
 // by default, check equipment channel & set flag
 // can override if needed
