@@ -188,6 +188,7 @@
 		if(stored.charge<stored.maxcharge)
 			stored.charge += 10
 			state = !state
+			update_icon()
 			if(stored.charge>stored.maxcharge) stored.charge = stored.maxcharge
 	else
 		user << "<span class='warning'>There is no cell loaded!</span>"
