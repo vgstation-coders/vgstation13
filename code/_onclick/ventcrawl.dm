@@ -1,5 +1,7 @@
 var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump, /obj/machinery/atmospherics/unary/vent_scrubber)
 
+/mob/living/var/ventcrawl_layer = PIPING_LAYER_DEFAULT
+
 /mob/living/carbon/slime/AltClickOn(var/atom/A)
 	if(is_type_in_list(A,ventcrawl_machinery))
 		src.handle_ventcrawl(A)
@@ -115,7 +117,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 
 					visible_message("<B>[src] scrambles into the ventilation ducts!</B>", "You climb into the ventilation system.")
 
-					loc = vent_found
+					forceMove(vent_found)
 					add_ventcrawl(vent_found)
 
 				else
