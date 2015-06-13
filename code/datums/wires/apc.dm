@@ -57,6 +57,11 @@ var/const/APC_WIRE_AI_CONTROL = 8
 	var/obj/machinery/power/apc/A = holder
 
 	switch(index)
+		if(APC_WIRE_IDSCAN)
+			if(A.coverlocked)
+				for(var/mob/M in range(1, A))
+					M << "You hear a click from the side of the APC cover."
+				A.coverlocked = 0
 		if(APC_WIRE_MAIN_POWER1, APC_WIRE_MAIN_POWER2)
 
 			if(!mended)

@@ -140,3 +140,63 @@
 		charging.give(transfer_rate*transfer_rate_coeff*(transfer_efficiency+transfer_efficiency_bonus)) //Inefficiency (Joule effect + other shenanigans)
 
 	updateicon()
+
+//Emergency Charger
+//Found in emergency toolboxes
+
+/obj/item/device/crank_charger
+	name = "crank charger"
+	desc = "A device which employs mechanical energy (i.e.: spinning the crank) to restore electrical energy to a power cell."
+	icon = 'icons/obj/power.dmi'
+	icon_state = "crankcharger"
+	flags = FPRINT
+	siemens_coefficient = 1
+	force = 5.0
+	w_class = 2.0
+	throwforce = 5.0
+	throw_range = 15
+	throw_speed = 3
+	m_amt = 100
+	w_type = RECYK_ELECTRONIC
+	melt_temperature = MELTPOINT_SILICON
+	origin_tech = "powerstorage=2"
+	var/obj/item/weapon/cell/stored = null
+	var/state = 0 //0 if up, 1 if down; only used for icons
+
+/obj/item/device/crank_charger/update_icon()
+	if(stored)
+		icon_state = "crankcharger[state ? "-1" : "-0"]"
+	else
+		icon_state = "crankcharger"
+
+/obj/item/device/crank_charger/examine(mob/user)
+	if(stored)
+		user << "<span class='info'>The readout displays: [round(stored.charge/stored.maxcharge*100)]%.</span>"
+	else
+		user << "<span class='info'>There is no cell loaded.</span>"
+
+/obj/item/device/crank_charger/attackby(obj/item/W, mob/user)
+	if(!stored && istype(W,/obj/item/weapon/cell))
+		stored = W
+		user.drop_item(W,src)
+		update_icon()
+	else
+		..()
+
+/obj/item/device/crank_charger/attack_self(mob/user)
+	if(stored)
+		if(stored.charge<stored.maxcharge)
+			stored.charge += 10
+			state = !state
+			if(stored.charge>stored.maxcharge) stored.charge = stored.maxcharge
+	else
+		user << "<span class='warning'>There is no cell loaded!</span>"
+
+/obj/item/device/crank_charger/attack_hand(mob/user)
+	if(stored)
+		stored.loc = user.loc
+		user.put_in_hands(stored)
+		stored = null
+		update_icon()
+	else
+		..()

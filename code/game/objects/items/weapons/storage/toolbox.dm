@@ -36,7 +36,6 @@
 
 	New()
 		..()
-		new /obj/item/weapon/crowbar/red(src)
 		new /obj/item/weapon/extinguisher/mini(src)
 		var/lighting = pick( //emergency lighting yay
 			20;/obj/item/device/flashlight,
@@ -44,6 +43,10 @@
 			50;/obj/item/device/flashlight/flare)
 		new lighting(src)
 		new /obj/item/device/radio(src)
+		new /obj/item/device/crank_charger(src)
+		new /obj/item/weapon/wirecutters(src)
+		new /obj/item/weapon/screwdriver(src)
+		new /obj/item/weapon/crowbar/red(src)
 
 /obj/item/weapon/storage/toolbox/mechanical
 	name = "mechanical toolbox"
