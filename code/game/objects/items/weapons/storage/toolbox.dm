@@ -43,9 +43,6 @@
 			50;/obj/item/device/flashlight/flare)
 		new lighting(src)
 		new /obj/item/device/radio(src)
-		new /obj/item/device/crank_charger(src)
-		new /obj/item/weapon/wirecutters(src)
-		new /obj/item/weapon/screwdriver(src)
 		new /obj/item/weapon/crowbar/red(src)
 
 /obj/item/weapon/storage/toolbox/mechanical

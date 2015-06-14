@@ -186,6 +186,7 @@
 /obj/item/device/crank_charger/attack_self(mob/user)
 	if(stored)
 		if(stored.charge<stored.maxcharge)
+			user.delayNextAttack(1)
 			stored.charge += 10
 			state = !state
 			update_icon()
@@ -194,7 +195,7 @@
 		user << "<span class='warning'>There is no cell loaded!</span>"
 
 /obj/item/device/crank_charger/attack_hand(mob/user)
-	if(stored)
+	if(stored && user.get_inactive_hand() == src)
 		stored.loc = user.loc
 		user.put_in_hands(stored)
 		stored = null

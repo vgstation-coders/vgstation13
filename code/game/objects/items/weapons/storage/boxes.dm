@@ -649,3 +649,17 @@
 		new /obj/item/weapon/light/tube/he(src)
 	for(var/i = 0; i < 7; i++)
 		new /obj/item/weapon/light/bulb/he(src)
+
+/obj/item/weapon/storage/box/blackout
+	name = "blackout response tools"
+	desc = "A box of supplies intended to aid in survival of a blackout scenario."
+
+/obj/item/weapon/storage/box/blackout/New()
+	..()
+	new /obj/item/device/crank_charger(src)
+	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/weapon/screwdriver(src)
+	new /obj/item/weapon/paper/blackout(src)
+	new /obj/item/weapon/light/tube(src)
+	new /obj/item/weapon/light/tube(src)
+	new /obj/item/device/flashlight/flare(src)

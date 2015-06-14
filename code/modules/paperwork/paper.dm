@@ -428,3 +428,7 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/crumpled/bloody
 	icon_state = "scrap_bloodied"
+
+/obj/item/weapon/paper/blackout
+	name = "paper - 'Blackout Safety Procedure'"
+	info = "If you are reading this, there is a high chance you are experiencing a blackout. If this is the case, do not panic. Follow these easy steps to restore local power.<BR>1. Find your local Area Power Controller (APC).<BR>2. Unscrew the APC cover.<BR>3. Cut the ID-Scan Wire, releasing the cover. Do not cut either power wire, as the APC will short out. The ID-Scan wire will not shock you.<BR>4. Once unlocked, crowbar open the battery compartment and remove the power cell.<BR>5. Use the provided hand crank to manually charge the cell by inserting it, then pumping repeatedly until charged. Examine closely for a readout of charge percentile.<BR>6. Return the cell to its chamber. Unless the APC has been damaged, power should return thereafter."
