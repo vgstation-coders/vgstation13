@@ -640,7 +640,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	g_amt = 100
 	brightness_range = 5
 	brightness_power = 2
-	brightness_color = "#a0a080"
+	brightness_color = LIGHT_COLOR_TUNGSTEN
 	cost = 5
 	w_type = RECYK_GLASS
 
