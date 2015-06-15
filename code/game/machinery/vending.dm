@@ -1234,7 +1234,7 @@
 					/obj/item/weapon/light/tube = 10,/obj/item/clothing/suit/fire = 4, /obj/item/weapon/stock_parts/scanning_module = 5,/obj/item/weapon/stock_parts/micro_laser = 5,
 					/obj/item/weapon/stock_parts/matter_bin = 5,/obj/item/weapon/stock_parts/manipulator = 5,/obj/item/weapon/stock_parts/console_screen = 5)
 	contraband = list(/obj/item/weapon/wrench/socket = 1, /obj/item/weapon/extinguisher/foam = 1, /obj/item/device/device_analyser = 2)
-	premium = list(/obj/item/clothing/under/rank/chief_engineer = 2, /obj/item/weapon/storage/belt = 2) //belt is the best belt in the game.
+	premium = list(/obj/item/clothing/under/rank/chief_engineer = 2, /obj/item/weapon/storage/belt = 2, /obj/item/weapon/storage/belt/utility/chief = 1) //belt is the best belt in the game. Just kidding it turns out CE toolbelt is now.
 	// There was an incorrect entry (cablecoil/power).  I improvised to cablecoil/heavyduty.
 	// Another invalid entry, /obj/item/weapon/circuitry.  I don't even know what that would translate to, removed it.
 	// The original products list wasn't finished.  The ones without given quantities became quantity 5.  -Sayu
