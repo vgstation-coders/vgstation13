@@ -80,7 +80,7 @@
 	..()
 	supply = new /obj/item/weapon/storage/box/lights/he(src)
 
-/obj/item/device/lightreplacer/borg/New() //Contains a box of mixed lights and a special recycling box.
+/obj/item/device/lightreplacer/borg/New() //Contains a box of mixed lights and a waste box.
 	..()
 	supply = new /obj/item/weapon/storage/box/lights/mixed(src)
 	waste = new /obj/item/weapon/storage/box/lights(src)
@@ -89,16 +89,18 @@
 	..()
 	if(supply)
 		if(supply.contents.len)
-			user << "<span class='info'>It has [supply.contents.len] light\s remaining. Check its interface to see what type[supply.contents.len ? "s" : ""].</span>"
+			user << "<span class='info'>It has [supply.contents.len] light[supply.contents.len == 1 ? "" : "s"] remaining. Check its interface to see what type[supply.contents.len == 1 ? "" : "s"].</span>"
 		else
 			user << "<span class='info'>Its supply container is empty.</span>"
 	else
 		user << "<span class='info'>It has no supply container.</span>"
 
 	if(waste)
-		user << "<span class='info'>Its waste container has [waste.contents.len] slots full.</span>"
+		user << "<span class='info'>Its waste container has [waste.contents.len] slot[waste.contents.len == 1 ? "" : "s"] full.</span>"
 	else
 		user << "<span class='info'>It has no waste container.</span>"
+
+	user << "<span class='info'>Its glass storage contains [glass_stor] unit[waste.contents.len == 1 ? "" : "s"].</span>"
 
 
 /obj/item/device/lightreplacer/attackby(obj/item/W, mob/user)
@@ -106,32 +108,25 @@
 		Emag()
 		return
 
-/* //May or may not be added back in, but not just yet.
 	if(istype(W, /obj/item/stack/sheet/glass/glass))
-		var/obj/item/stack/sheet/glass/glass/G = W
-		if(G.amount - decrement >= 0 && uses < max_uses)
-			var/remaining = max(G.amount - decrement, 0)
-			if(!remaining && !(G.amount - decrement) == 0)
-				user << "There isn't enough glass."
-				return
-			G.amount = remaining
-			if(!G.amount)
-				user.drop_item(G)
-				del(G)
-			AddUses(increment)
-			user << "You insert a piece of glass into the [src.name]. You have [uses] lights remaining."
+		if(!add_glass(CC_PER_SHEET_GLASS))
+			user << "<span class='warning'>\The [src] can't hold any more glass!</span>"
 			return
-*/
+		var/obj/item/stack/sheet/glass/glass/G = W
+		G.use(1)
+		user << "<span class='notice'>You insert \the [G] into \the [src].</span>"
+		return
 
 	if(istype(W, /obj/item/weapon/light))
-		switch(insert_if_possible(W))
+		var/obj/item/weapon/light/L = W
+		switch(insert_if_possible(L))
 			if(0)
-				if(W:status ? istype(waste) : istype(supply)) //The expression returns true if the correct box for the light is valid, which implies that it is full.
-					user << "<span class='warning'>\The [src]'s [W:status ? "waste" : "supply"] container is full!</span>"
+				if(L.status ? istype(waste) : istype(supply)) //The expression returns true if the correct box for the light is valid, which implies that it is full because the insertion failed.
+					user << "<span class='warning'>\The [src]'s [L.status ? "waste" : "supply"] container is full!</span>"
 				else
-					user << "<span class='warning'>\The [src] has no [W:status ? "waste" : "supply"] container!</span>"
+					user << "<span class='warning'>\The [src] has no [L.status ? "waste" : "supply"] container!</span>"
 			if(1)
-				user.visible_message("[user] inserts \a [W] into \the [src]", "You insert \the [W] into \the [src]'s [W:status ? "waste" : "supply"] container.")
+				user.visible_message("[user] inserts \a [L] into \the [src]", "You insert \the [L] into \the [src]'s [L.status ? "waste" : "supply"] container.")
 			else
 				user << "<span class='bnotice'>Something very strange has happened. Please adminhelp and ask someone to view the variables of that light, especially status.</span>"
 		return
@@ -162,10 +157,15 @@
 			return
 	*/
 
-	var/dat = "<TITLE>Light Replacer Interface</TITLE>"
+	var/dat = {"<TITLE>Light Replacer Interface</TITLE>
+
+	Glass storage: [glass_stor]/[glass_stor_max]<br>"}
 
 	if(supply)
-		dat += "<h3>Supply Container:</h3>"
+		dat += {"<a href='?src=\ref[src];build=tube'>Fabricate Tube</a>
+		<a href='?src=\ref[src];build=bulb'>Fabricate Bulb</a>
+
+		<h3>Supply Container:</h3>"} //It's not clear here, but the argument to build is the part of the typepath after /obj/item/weapon/light/
 		var/list/light_types = new()
 		for(var/obj/item/weapon/light/L in supply)
 			if(!light_types[L.name])
@@ -343,6 +343,13 @@
 	glass_stor = min(glass_stor_max, glass_stor + amt)
 	return 1
 
+//Attempts to use amt glass from storage. Returns 1 on success and 0 on failure.
+/obj/item/device/lightreplacer/proc/use_glass(var/amt)
+	if(amt > glass_stor)
+		return 0
+	glass_stor -= amt
+	return 1
+
 /obj/item/device/lightreplacer/Topic(href, href_list)
 	if(..()) return 1
 
@@ -368,6 +375,22 @@
 				waste = null
 				if(usr) attack_self(usr)
 				return 1
+
+	if(href_list["build"])
+		var/lightpath = text2path("/obj/item/weapon/light/[href_list["build"]]")
+		if(lightpath)
+			var/obj/item/weapon/light/L = new lightpath()
+			if(!use_glass(L.g_amt * prod_eff))
+				del(L)
+				if(usr) usr << "<span class='warning'>\The [src] doesn't have enough glass to make that!</span>"
+				return 1
+			L.switchcount = prod_quality
+			if(!insert_if_possible(L))
+				L.loc = get_turf(src)
+				if(usr) usr << "<span class='notice'>\The [src] successfully fabricates \a [L], but it drops it on the floor.</span>"
+			else if(usr) usr << "<span class='notice'>\The [src] successfully fabricates \a [L].</span>"
+			if(usr) attack_self(usr)
+			return 1
 
 
 #undef LIGHT_OK
