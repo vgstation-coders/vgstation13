@@ -60,11 +60,10 @@
 	var/prod_quality = 30 //Starting switchcount for lights this builds out of glass
 	var/prod_eff = 10 //How many times more glass it uses to build lights than would an autolathe
 	var/emagged = 0
-	var/charge = 1
 
 /obj/item/device/lightreplacer/borg //Since it will mainly be loaded by processing glass, it is MUCH better at it than the standard version.
-	glass_stor = 10 * CC_PER_SHEET_GLASS //Twice the capacity of the standard version
-	glass_stor_max = 10 * CC_PER_SHEET_GLASS //Starts full
+	glass_stor_max = 10 * CC_PER_SHEET_GLASS //Twice the capacity of the standard version
+	glass_stor = 0 //Actually starts full, but this is done in New()
 	prod_quality = 0 //Just as good as lights from a box/autolathe
 	prod_eff = 5 //Half the glass per light as the standard version
 
@@ -80,10 +79,11 @@
 	..()
 	supply = new /obj/item/weapon/storage/box/lights/he(src)
 
-/obj/item/device/lightreplacer/borg/New() //Contains a box of mixed lights and a waste box.
+/obj/item/device/lightreplacer/borg/New() //Contains a box of mixed lights and a waste box and starts full of glass.
 	..()
 	supply = new /obj/item/weapon/storage/box/lights/mixed(src)
 	waste = new /obj/item/weapon/storage/box/lights(src)
+	glass_stor = glass_stor_max
 
 /obj/item/device/lightreplacer/examine(mob/user)
 	..()
@@ -194,11 +194,6 @@
 /obj/item/device/lightreplacer/update_icon()
 	icon_state = "lightreplacer[emagged]"
 
-
-/obj/item/device/lightreplacer/proc/Charge(var/mob/user)
-	charge += 1
-	if(charge > 7)
-		charge = 1
 
 /obj/item/device/lightreplacer/proc/ReplaceLight(var/obj/machinery/light/target, var/mob/living/user)
 	var/obj/item/weapon/light/best_light = get_best_light(target)

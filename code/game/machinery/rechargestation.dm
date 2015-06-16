@@ -305,7 +305,7 @@
 					//Janitor
 					if(istype(O, /obj/item/device/lightreplacer))
 						var/obj/item/device/lightreplacer/LR = O
-						LR.Charge(R)
+						LR.add_glass(500) //Note: Adjust if the default borg light replacer efficiency is changed.
 
 				if(R)
 					if(R.module)
