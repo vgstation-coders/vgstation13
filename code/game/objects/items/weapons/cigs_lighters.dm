@@ -30,6 +30,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	w_class = 1.0
 	origin_tech = "materials=1"
 	attack_verb = list("burnt", "singed")
+	light_color = LIGHT_COLOR_TUNGSTEN
 
 /obj/item/weapon/match/New()
 
@@ -148,6 +149,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	body_parts_covered = null
 	attack_verb = list("burnt", "singed")
 	heat_production = 1000
+	light_color = LIGHT_COLOR_TUNGSTEN
 	var/lit = 0
 	var/overlay_on = "ciglit" //Apparently not used
 	var/type_butt = /obj/item/weapon/cigbutt
@@ -499,6 +501,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	item_state = "pipe"
 	overlay_on = "pipelit"
 	smoketime = 100
+	light_color = LIGHT_COLOR_TUNGSTEN
 
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")
 	if(!src.lit)
@@ -575,6 +578,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	heat_production = 1500
 	slot_flags = SLOT_BELT
 	attack_verb = list("burnt", "singed")
+	light_color = LIGHT_COLOR_TUNGSTEN
 	var/lit = 0
 
 /obj/item/weapon/lighter/zippo
