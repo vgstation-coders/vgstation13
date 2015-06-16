@@ -66,15 +66,10 @@
 		if ( !tank ) //An admin must have spawned the farmbot! Better give it a tank.
 			tank = new /obj/structure/reagent_dispensers/watertank(src)
 
-/obj/machinery/bot/farmbot/Bump(M as mob|obj) //Leave no door unopened!
-	spawn(0)
-		if ((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
-			var/obj/machinery/door/D = M
-			if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(src.botcard))
-				D.open()
-				src.frustration = 0
-		return
-	return
+/obj/machinery/bot/farmbot/Bump(M as mob|obj) //Leave no door unpanel_opened!
+	. = ..()
+	if(.)
+		frustration = 0
 
 /obj/machinery/bot/farmbot/turn_on()
 	. = ..()
@@ -183,7 +178,7 @@
 	else
 		..()
 
-/obj/machinery/bot/farmbot/Emag(mob/user as mob)
+/obj/machinery/bot/farmbot/emag(mob/user as mob)
 	..()
 	if(user) user << "<span class='warning'>You short out [src]'s plant identifier circuits.</span>"
 	spawn(0)
@@ -221,7 +216,7 @@
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 	s.set_up(3, 1, src)
 	s.start()
-	del(src)
+	..()
 	return
 
 /obj/machinery/bot/farmbot/process()
@@ -292,7 +287,8 @@
 	if ( mode == FARMBOT_MODE_REFILL )
 		refill()
 
-
+/obj/machinery/bot/farmbot/click_action(var/atom/target, mob/user) //You can't handle the farmbot
+	return
 
 
 /obj/machinery/bot/farmbot/proc/find_target()

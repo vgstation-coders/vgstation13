@@ -9,6 +9,13 @@
 
 	return (!mover.density || !density || lying)
 
+/mob/Move(NewLoc, Dir)
+	if(isobj(src.loc) || ismob(src.loc))//Inside an object, tell it we moved
+		var/atom/O = src.loc
+		O.relaymove(src, Dir)
+		return //We aren't moving ourselves, so we don't return a value
+	return ..()
+
 /client/North()
 	..()
 
@@ -244,10 +251,6 @@
 		if(!mob.Process_Spacemove(0))
 			return 0
 
-	if(isobj(mob.loc) || ismob(mob.loc))//Inside an object, tell it we moved
-		var/atom/O = mob.loc
-		return O.relaymove(mob, dir)
-
 	if(isturf(mob.loc))
 
 		if(mob.restrained())//Why being pulled while cuffed prevents you from moving
@@ -325,6 +328,8 @@
 		moving = 0
 
 		return .
+	else
+		return ..()
 
 	return
 

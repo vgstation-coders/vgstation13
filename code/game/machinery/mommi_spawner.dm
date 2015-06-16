@@ -104,7 +104,7 @@
 			if(!mmi.brainmob)
 				user << "<span class='warning'>\The [mmi] appears to be devoid of any soul.</span>"
 				return 1
-			if(!mmi.brainmob.key)
+			if(!mmi.usable_brain())
 				var/ghost_can_reenter = 0
 				if(mmi.brainmob.mind)
 					for(var/mob/dead/observer/G in player_list)
@@ -165,6 +165,7 @@
 	user.loc = M//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
 
 	M.mmi = new /obj/item/device/mmi(M)
+	M.mmi.brainmob.controlling = M
 	M.mmi.transfer_identity(user)
 	M.Namepick()
 	M.updatename()
