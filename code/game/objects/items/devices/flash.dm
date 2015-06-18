@@ -84,25 +84,6 @@
 		if(safe <= 0)
 			Subject.Weaken(10)
 			flick("e_flash", Subject.flash)
-
-			if(user.mind && isrevhead(user)) // alien revhead when?
-				if(ishuman(Subject))
-					if(Subject.stat != DEAD)
-						Subject.mind_initialize() // give them a mind datum if they don't have one
-
-						var/result = ticker.mode.add_revolutionary(Subject.mind)
-
-						if(result == 1)
-							log_admin("[key_name(user)] has converted [key_name(Subject)] to the revolution at [formatLocation(Subject.loc)]")
-							Subject.mind.has_been_rev = TRUE
-						else if(result == -1 || Subject.mind.has_been_rev) // command positions or has been rev before (according to old code you cannot attempt to rev people that has been deconverted, can be remove)
-							user << "<span class=\"warning\">This mind seems resistant to the flash!</span>"
-						else if(result == -2) // rev jobbanned
-							user << "<span class=\"warning\">This mind seems resistant to the flash! (OOC INFO: REVOLUTIONARY JOBBANNED)</span>"
-						else if(result == -3) // loyalty implanted
-							user << "<span class=\"warning\">Something seems to be blocking the flash!</span>"
-					else
-						user << "<span class=\"warning\">This mind is so vacant that it is not susceptible to influence!</span>"
 		else
 			flashfail = TRUE
 	else if(issilicon(M))

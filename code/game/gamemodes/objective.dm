@@ -77,7 +77,7 @@ datum/objective/mutiny
 		return target
 
 
-	find_target_by_role(role, role_type=0)
+	find_target_by_role(role, role_type = 0)
 		..(role, role_type)
 		if(target && target.current)
 			explanation_text = "Assassinate [target.current.real_name], the [!role_type ? target.assigned_role : target.special_role]."
@@ -86,15 +86,15 @@ datum/objective/mutiny
 		return target
 
 	check_completion()
+		//Note : "Fleeing" the station no longer counts as an objective completion. Heads that drag on the round by hiding should be dealt with OOC
 		if(target && target.current && !blocked)
 			if(target.current.stat == DEAD || !ishuman(target.current) || !target.current.ckey)
 				return 1
-			var/turf/T = get_turf(target.current)
-			if(T && (T.z != 1))			//If they leave the station they count as dead for this
-				return 2
 			return 0
 		return 1
 
+/*
+ * Anti-Rev and Rev-RP no longer exists, but code can be re-used (for isntance, demote and brig objectives)
 datum/objective/mutiny/rp
 	find_target()
 		..()
@@ -221,6 +221,7 @@ datum/objective/anti_revolution/demote
 			else
 				return 0
 		return 1
+*/
 
 datum/objective/debrain//I want braaaainssss
 	find_target()
