@@ -146,7 +146,8 @@
 
 	mob.equip_to_slot_or_del(new /obj/item/device/flash(mob), slot_in_backpack)
 	mob.equip_to_slot_or_del(new /obj/item/weapon/storage/lockbox/revolution(mob), slot_in_backpack)
-	mob.equip_to_slot_or_del(new /obj/item/weapon/implanter(mob), slot_in_backpack)
+	mob.equip_to_slot_or_del(new /obj/item/weapon/storage/lockbox/revolution(mob), slot_in_backpack)
+	mob.equip_to_slot_or_del(new /obj/item/weapon/pen/sleepypen(mob), slot_in_backpack) //Otherwise first convert is a bit too hardcore
 	var/obj/item/weapon/implant/revolution/head/revhead = new/obj/item/weapon/implant/revolution/head(mob)
 	revhead.imp_in = mob
 	revhead.implanted = 1
@@ -591,10 +592,10 @@
 
 	switch(severity)
 		if(1)
-			if(prob(80))
+			if(prob(30)) //Less than 1/3 prob
 				meltdown()
 		if(2)
-			if(prob(15))
+			if(prob(5)) //Basically nothing
 				meltdown()
 
 /obj/item/weapon/implant/revolution/meltdown()
@@ -664,4 +665,4 @@
 	new /obj/item/weapon/implantcase/revolution(src)
 	new /obj/item/weapon/implantcase/revolution(src)
 	new /obj/item/weapon/implantcase/revolution(src)
-	new /obj/item/weapon/implantcase/revolution(src)
+	new /obj/item/weapon/implanter(src)
