@@ -460,9 +460,11 @@
 	//Lastly attempt to locate any dense objects we could push off of
 	//TODO: If we implement objects drifing in space this needs to really push them
 	//Due to a few issues only anchored and dense objects will now work.
+	//Non-anchored objects will now work, simply because this otherwise turns lockers and ore boxes into borg killers
+	//Someone should rewrite this entire fucking proc anyways. Like, who thought any of this shit was a good idea ?
 	if(!dense_object)
 		for(var/obj/O in oview(1, src))
-			if((O) && (O.density) && (O.anchored))
+			if((O) && (O.density))
 				dense_object++
 				break
 
