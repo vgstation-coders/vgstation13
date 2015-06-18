@@ -163,7 +163,14 @@
 	else if(check_heads_victory())
 		finished = 2
 	else if(emergency_shuttle.location == 2)
-		finished = 3
+		var/area/shuttle = locate(/area/shuttle/escape/centcom)
+		for(var/mob/living/player in player_list)
+			if(player.mind && player.mind.assigned_role in command_positions)
+				if(player.stat != DEAD)	//They're not dead!
+					if(get_turf(player) in shuttle)
+						finished = 3 //At least one head extracted on the shuttle
+						return
+		finished = 4 //No heads on the shuttle
 	return
 
 ///////////////////////////////
@@ -388,6 +395,9 @@
 	else if(finished == 3)
 		feedback_set_details("round_end_result","Crew Minor Victory - Station Evacuated")
 		completion_text = "<br><span class='danger'>The station has been evacuated. Nanotrasen will protect the loyal crew, and court-martial the terrorists!</span>"
+	else if(finished == 4)
+		feedback_set_details("round_end_result","Revolution Minor Victory - No Heads Extracted")
+		completion_text = "<br><span class='danger'>The station has been evacuated but the station's command staff is nowhere to be seen!</span>"
 	..()
 	return 1
 
