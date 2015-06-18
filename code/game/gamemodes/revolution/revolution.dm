@@ -147,7 +147,7 @@
 	mob.equip_to_slot_or_del(new /obj/item/device/flash(mob), slot_in_backpack)
 	mob.equip_to_slot_or_del(new /obj/item/weapon/storage/lockbox/revolution(mob), slot_in_backpack)
 	mob.equip_to_slot_or_del(new /obj/item/weapon/storage/lockbox/revolution(mob), slot_in_backpack)
-	mob.equip_to_slot_or_del(new /obj/item/weapon/pen/sleepypen(mob), slot_in_backpack) //Otherwise first convert is a bit too hardcore
+	mob.equip_to_slot_or_del(new /obj/item/weapon/pen/sleepypen/rev(mob), slot_in_backpack) //Otherwise first convert is a bit too hardcore
 	var/obj/item/weapon/implant/revolution/head/revhead = new/obj/item/weapon/implant/revolution/head(mob)
 	revhead.imp_in = mob
 	revhead.implanted = 1
@@ -666,3 +666,19 @@
 	new /obj/item/weapon/implantcase/revolution(src)
 	new /obj/item/weapon/implantcase/revolution(src)
 	new /obj/item/weapon/implanter(src)
+
+/obj/item/weapon/pen/sleepypen/rev
+
+/obj/item/weapon/pen/sleepypen/rev/New()
+	. = ..()
+	create_reagents(30) //Used to be 300
+	reagents.add_reagent("chloralhydrate", 10) //We don't use those to kill people, but to subdue them
+
+/obj/item/weapon/pen/sleepypen/rev/attack(mob/M as mob, mob/user as mob)
+	if(!(istype(M,/mob)))
+		return
+	..()
+	if(reagents.total_volume)
+		if(M.reagents)
+			reagents.trans_to(M, 5) //Transfer five units per stab
+	return
