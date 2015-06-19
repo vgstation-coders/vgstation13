@@ -530,3 +530,37 @@
 		else
 			if(M && stat != DEAD) // Same check here, even though emote checks it as well (poor form to check it only in the help case)
 				emote("growls")
+
+
+//Sasha isn't even a corgi you dummy!
+/mob/living/simple_animal/corgi/Sasha
+	name = "Sasha"
+	real_name = "Sasha"
+	gender = FEMALE
+	desc = "It's a doberman, how intimidating!"
+	icon_state = "doby"
+	icon_living = "doby"
+	icon_dead = "doby_dead"
+	response_help  = "pets"
+	response_disarm = "bops"
+	response_harm   = "kicks"
+	var/turns_since_scan = 0
+
+//Sasha can't wear hats!
+/mob/living/simple_animal/corgi/Sasha/Topic(href, href_list)
+	if(href_list["remove_inv"] || href_list["add_inv"])
+		usr << "<span class='warning'>[src] won't wear that!</span>"
+		return
+	..()
+
+/mob/living/simple_animal/corgi/Sasha/Life()
+	..()
+
+	if(!stat && !resting && !buckled)
+		if(prob(1))
+			if (ckey == null)
+				emote(pick("dances around","chases her nub of a tail"))
+				spawn(0)
+					for(var/i in list(1,2,4,8,4,2,1,2,4,8,4,2,1,2,4,8,4,2))
+						dir = i
+						sleep(1)
