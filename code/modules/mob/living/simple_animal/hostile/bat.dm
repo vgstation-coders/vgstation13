@@ -154,6 +154,7 @@ mob/living/simple_animal/hostile/scarybat/book/New()
 	icon_living = "bookbat_woody"
 	icon_dead = "bookbat_woody_dead"
 	icon_gib = "bookbat_woody_dead"
+	book_cover = "woody"
 	environment_smash = 0
 	harm_intent_damage = 0
 	melee_damage_lower = 0
