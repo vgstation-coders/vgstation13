@@ -12,6 +12,7 @@
  * 		Revolver Conversion Kit(made sense)
  *		Soldering Tool
  *		Fuel Can
+ *		Carabiner
  */
 
 /* Used for fancy tool subtypes that are faster or slower than the standard tool.
@@ -722,3 +723,68 @@
 
 /obj/item/weapon/reagent_containers/glass/fuelcan/update_icon()
 	icon_state = "fueljar[slot]"
+
+////
+//C-Clip
+//
+////
+
+/obj/item/device/carabiner
+	name = "carabiner"
+	desc = "A carabiner, or Karabinerhaken, is used to secure precious cargo. It is compatible with crates, air pumps, air scrubbers, space heaters, air conditioners, and canisters."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "carabiner-open"
+	hitsound = "sound/weapons/toolhit.ogg"
+	flags = FPRINT
+	siemens_coefficient = 1
+	slot_flags = SLOT_BELT
+	force = 3.0
+	throwforce = 5.0
+	item_state = "syringe_kit"
+	w_class = 2.0
+	starting_materials = list(MAT_IRON = 50)
+	w_type = RECYK_METAL
+	melt_temperature = MELTPOINT_STEEL
+	origin_tech = "engineering=1"
+	var/can_pull = list(/obj/structure/closet/crate,/obj/machinery/portable_atmospherics/pump,/obj/machinery/portable_atmospherics/scrubber,/obj/machinery/portable_atmospherics/canister,/obj/machinery/space_heater,/obj/machinery/space_heater/air_conditioner,/obj/structure/stool/bed/roller)
+	var/obj/clip = null //This is what we're pulling
+
+/obj/item/device/carabiner/Destroy()
+	clip = null
+	..()
+
+/obj/item/device/carabiner/update_icon()
+	icon_state = "carabiner-[clip ? "closed" : "open"]"
+
+/obj/item/device/carabiner/examine(mob/user)
+	..()
+	user << "<span class='info'>It is currently attached to [clip ? "[clip]" : "nothing"].</span>"
+
+/obj/item/device/carabiner/preattack(atom/movable/target, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag) return
+	if(target == clip) return attack_self(user)
+	if(!is_type_in_list(target,can_pull)) return
+	//var/turf/t0 = get_turf(target)
+	//var/turf/t1 = get_turf(user)
+	//if(t0.x!=t1.x&&t0.y!=t1.y) return //Kill diagonals - this is like the adjacent code but only partial
+	//mob_movement.dm should stop moving the puller
+	if(clip)
+		user << "<span class='warning'>The [clip] is already attached!</span>"
+		return
+	user << "<span class='notice'>You clip onto the [target.name].</span>"
+	clip = target
+	clip.clippedon = src
+	user.start_pulling(clip)
+	update_icon()
+	return 1
+
+/obj/item/device/carabiner/attack_self(mob/user)
+	if(clip)
+		user << "<span class='notice'>The [clip] pops off of the [src].</span>"
+		clip.clippedon = null
+		clip = null
+		user.stop_pulling()
+	update_icon()
+
+/obj/item/device/carabiner/dropped(mob/user) //Not called if put into pocket, but yes called if put into bag
+	attack_self(user)

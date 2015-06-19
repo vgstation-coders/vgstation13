@@ -793,6 +793,9 @@ var/list/slot_equipment_priority = list( \
 
 		// If we're pulling something then drop what we're currently pulling and pull this instead.
 		if(pulling)
+			if(pulling.clippedon) //Are we trying to pull something when we've got something else pulled? If so, stop.
+				usr << "<span class='warning'>Something is already clipped on!</span>"
+				return
 			// Are we trying to pull something we are already pulling? Then just stop here, no need to continue
 			var/temp_P = pulling
 			stop_pulling()
@@ -816,10 +819,10 @@ var/list/slot_equipment_priority = list( \
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/verb/stop_pulling()  called tick#: [world.time]")
 
 	if(pulling)
+		if(pulling.clippedon)
+			pulling.clippedon.attack_self(usr)
 		pulling.pulledby = null
 		pulling = null
-
-
 
 /mob/verb/mode()
 	set name = "Activate Held Object"

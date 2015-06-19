@@ -242,6 +242,9 @@
 	equipped -= list(get_active_hand(), get_inactive_hand())
 	return equipped
 
+/mob/proc/get_nonclothing_items()
+	return list(l_hand, r_hand)
+
 /mob/living/carbon/human/proc/equip_if_possible(obj/item/W, slot, act_on_fail = EQUIP_FAILACTION_DELETE) // since byond doesn't seem to have pointers, this seems like the best way to do this :/
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/equip_if_possible() called tick#: [world.time]")
 	//warning: icky code

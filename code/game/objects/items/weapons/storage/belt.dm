@@ -44,7 +44,8 @@
 		"/obj/item/weapon/rcd_ammo",
 		"/obj/item/weapon/reagent_containers/glass/fuelcan",
 		"/obj/item/device/lightreplacer",
-		"/obj/item/device/device_analyser"
+		"/obj/item/device/device_analyser",
+		"/obj/item/device/carabiner"
 		)
 
 /obj/item/weapon/storage/belt/utility/complete/New()
@@ -104,6 +105,7 @@
 		"/obj/item/weapon/storage/component_exchanger",
 		"/obj/item/weapon/rcd_ammo",
 		"/obj/item/weapon/reagent_containers/glass/fuelcan",
+		"/obj/item/device/carabiner",
 		"/obj/item/blueprints",
 		"/obj/item/device/lightreplacer",
 		"/obj/item/device/device_analyser",
