@@ -58,11 +58,8 @@
 		"Phazon"=list(
 		),
 		"Exosuit_Tools"=list(
-			/obj/item/mecha_parts/mecha_equipment/tool/sleeper,
-			/obj/item/mecha_parts/mecha_equipment/tool/syringe_gun,
 		),
 		"Exosuit_Modules"=list(
-			/obj/item/mecha_parts/part/phazon_phase_array
 		),
 		"Exosuit_Weapons"=list(
 		),
