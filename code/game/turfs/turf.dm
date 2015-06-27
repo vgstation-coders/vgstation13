@@ -38,8 +38,11 @@
 	// holy water
 	var/holy = 0
 
-	// For building on the asteroid.
+/*
+ * Technically obsoleted by base_turf
+	//For building on the asteroid.
 	var/under_turf = /turf/space
+ */
 
 	var/explosion_block = 0
 
@@ -426,8 +429,8 @@
 */
 
 /turf/proc/ReplaceWithLattice()
-	src.ChangeTurf(/turf/space)
-	new /obj/structure/lattice( locate(src.x, src.y, src.z) )
+	src.ChangeTurf(get_base_turf(src.z))
+	new /obj/structure/lattice(locate(src.x, src.y, src.z))
 
 /turf/proc/kill_creatures(mob/U = null)//Will kill people/creatures and damage mechs./N
 //Useful to batch-add creatures to the list.
@@ -544,7 +547,7 @@
 
 
 /turf/proc/cultify()
-	ChangeTurf(/turf/space)
+	ChangeTurf(get_base_turf(src.z))
 	return
 
 /turf/singularity_act()
@@ -554,7 +557,7 @@
 				continue
 			if(O.invisibility == 101)
 				O.singularity_act()
-	ChangeTurf(/turf/space)
+	ChangeTurf(get_base_turf(src.z))
 	return(2)
 
 //Return a lattice to allow catwalk building
