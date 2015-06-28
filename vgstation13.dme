@@ -227,7 +227,6 @@
 #include "code\game\asteroid.dm"
 #include "code\game\atoms.dm"
 #include "code\game\atoms_movable.dm"
-#include "code\game\base_turf.dm"
 #include "code\game\centcomm_orders.dm"
 #include "code\game\communications.dm"
 #include "code\game\data_huds.dm"
