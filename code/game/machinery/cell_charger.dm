@@ -170,6 +170,7 @@
 		icon_state = "crankcharger"
 
 /obj/item/device/crank_charger/examine(mob/user)
+	..()
 	if(stored)
 		user << "<span class='info'>The readout displays: [round(stored.charge/stored.maxcharge*100)]%.</span>"
 	else

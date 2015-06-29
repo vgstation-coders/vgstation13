@@ -42,7 +42,8 @@
 		"/obj/item/weapon/extinguisher",
 		"/obj/item/weapon/rcd_ammo",
 		"/obj/item/weapon/reagent_containers/glass/fuelcan",
-		"/obj/item/device/lightreplacer")
+		"/obj/item/device/lightreplacer",
+		"/obj/item/device/crank_charger")
 
 /obj/item/weapon/storage/belt/utility/complete/New()
 	..()
@@ -102,7 +103,8 @@
 		"/obj/item/weapon/rcd_ammo",
 		"/obj/item/weapon/reagent_containers/glass/fuelcan",
 		"/obj/item/blueprints",
-		"/obj/item/device/lightreplacer"
+		"/obj/item/device/lightreplacer",
+		"/obj/item/device/crank_charger"
 		)
 
 /obj/item/weapon/storage/belt/utility/chief/New()

@@ -58,7 +58,7 @@ var/const/APC_WIRE_AI_CONTROL = 8
 
 	switch(index)
 		if(APC_WIRE_IDSCAN)
-			if(A.coverlocked)
+			if(A.coverlocked&&IsIndexCut(APC_WIRE_IDSCAN))
 				for(var/mob/M in range(1, A))
 					M << "You hear a click from the side of the APC cover."
 				A.coverlocked = 0
