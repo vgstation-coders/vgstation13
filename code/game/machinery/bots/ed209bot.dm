@@ -663,7 +663,7 @@ Auto Patrol: []"},
 		if((src.lasercolor) && (C.lying))
 			continue//Does not shoot at people lyind down when in lasertag mode, because it's just annoying, and they can fire once they get up.
 
-		if ((C.name == src.oldtarget_name) && (world.time < src.last_found + 100))
+		if ((C.name == src.oldtarget_name) && timedelay(-10 SECONDS) > src.last_found)
 			continue
 
 		if (istype(C, /mob/living/carbon/human))
@@ -833,7 +833,7 @@ Auto Patrol: []"},
 
 
 /obj/machinery/bot/ed209/proc/shootAt(var/mob/target)
-	if(lastfired && world.time - lastfired < shot_delay)
+	if(lastfired && timedelay(-shot_delay) > lastfired)
 		return
 	lastfired = world.time
 	var/turf/T = loc

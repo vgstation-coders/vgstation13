@@ -86,7 +86,7 @@ var/global/list/image/fluidtrack_cache=list()
 	var/realgoing=goingdir<<4
 
 	// When tracks will start to dry out
-	var/t=world.time + TRACKS_CRUSTIFY_TIME
+	var/t=timedelay(TRACKS_CRUSTIFY_TIME)
 
 	var/datum/fluidtrack/track
 

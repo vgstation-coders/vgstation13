@@ -61,7 +61,7 @@ var/list/all_doors = list()
 
 		// can bump open one airlock per second
 		// this is to prevent shock spam
-		if(world.time - M.last_bumped <= 10)
+		if(timedelay(-1 SECONDS) <= M.last_bumped)
 			return
 
 		M.last_bumped = world.time
@@ -105,7 +105,7 @@ var/list/all_doors = list()
 
 /obj/machinery/door/proc/bump_open(mob/user as mob)
 	// TODO: analyze this
-	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //Fakkit
+	if(timedelay(-zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) < user.last_airflow) //Fakkit
 		return
 
 	add_fingerprint(user)

@@ -598,7 +598,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/gravcatapult/action(atom/movable/target)
 
-	if(world.time >= last_fired + fire_delay)
+	if(timedelay(-fire_delay) >= last_fired)
 		last_fired = world.time
 	else
 		if (world.time % 3)

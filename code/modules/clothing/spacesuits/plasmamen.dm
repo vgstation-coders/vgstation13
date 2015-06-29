@@ -32,7 +32,7 @@
 		if(next_extinguish > world.time)
 			return
 
-		next_extinguish = world.time + extinguish_cooldown
+		next_extinguish = timedelay(extinguish_cooldown)
 		extinguishes_left--
 		H << "<span class='warning'>Your suit automatically extinguishes the fire.</span>"
 		H.ExtinguishMob()

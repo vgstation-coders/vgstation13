@@ -134,7 +134,7 @@
 	var/datum/disease2/disease/V = patient_zero.virus2["[lethal.uniqueID]"]
 	V.stage = 3
 
-	cruiser_arrival = world.time + (10 * 90 * 60)
+	cruiser_arrival = timedelay(10 * 90 * 60)
 	stage = 1
 
 	spawn (rand(waittime_l, waittime_h))

@@ -55,7 +55,7 @@
 /obj/machinery/atmospherics/binary/circulator/process()
 	. = ..()
 
-	if(last_worldtime_transfer < world.time - 50)
+	if(last_worldtime_transfer < timedelay(-50))
 		recent_moles_transferred = 0
 		update_icon()
 

@@ -27,7 +27,7 @@
 /obj/item/device/flash/proc/flash_recharge()
 	//capacitor recharges over time
 	for(var/i=0, i<3, i++)
-		if(last_used+600 > world.time)
+		if(timedelay(-1 MINUTES) < last_used)
 			break
 		last_used += 600
 		times_used -= 2

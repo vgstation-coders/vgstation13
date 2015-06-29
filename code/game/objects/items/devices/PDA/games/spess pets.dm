@@ -97,7 +97,7 @@
 
 
 /datum/pda_app/spesspets/proc/button_walk()
-	if(!walk_target || ((world.time - last_walk_start) > 36000))
+	if(!walk_target || timedelay(1 HOURS) > last_walk_start)
 		last_walk_start = world.time
 		var/list/valid_area_types = list()
 		switch(race)

@@ -21,7 +21,7 @@
 
 /obj/machinery/computer/syndicate_station/proc/syndicate_move_to(area/destination as area)
 	if(moving)	return
-	if(lastMove + SYNDICATE_SHUTTLE_COOLDOWN > world.time)	return
+	if(timedelay(-SYNDICATE_SHUTTLE_COOLDOWN) < lastMove)	return
 	var/area/dest_location = locate(destination)
 	if(curr_location == dest_location)	return
 
@@ -58,8 +58,9 @@
 
 	user.set_machine(src)
 
+	var/movetime = lastMove - timedelay(-SYNDICATE_SHUTTLE_COOLDOWN)
 	var/dat = {"Location: [curr_location]<br>
-	Ready to move[max(lastMove + SYNDICATE_SHUTTLE_COOLDOWN - world.time, 0) ? " in [max(round((lastMove + SYNDICATE_SHUTTLE_COOLDOWN - world.time) * 0.1), 0)] seconds" : ": now"]<br>
+	Ready to move[movetime > 0 ? " in [max(round(0.1 * movetime / world.tick_lag), 0)] seconds" : ": now"]<br>
 	<a href='?src=\ref[src];syndicate=1'>Syndicate Space</a><br>
 	<a href='?src=\ref[src];station_nw=1'>North West of SS13</a> |
 	<a href='?src=\ref[src];station_n=1'>North of SS13</a> |

@@ -289,7 +289,7 @@ Auto Patrol: []"},
 					else if(istype(src.target,/mob/living/simple_animal))
 						//just harmbaton them until dead
 						if(world.time > next_harm_time)
-							next_harm_time = world.time + 15
+							next_harm_time = timedelay(15)
 							playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
 							visible_message("<span class='danger'>[src] beats [src.target] with the stun baton!</span>")
 							src.icon_state = "secbot-c"
@@ -638,7 +638,7 @@ Auto Patrol: []"},
 			if((C.stat) || (C.handcuffed))
 				continue
 
-			if((C.name == src.oldtarget_name) && (world.time < src.last_found + 100))
+			if((C.name == src.oldtarget_name) && timedelay(-10 SECONDS) > src.last_found)
 				continue
 
 			if(istype(C, /mob/living/carbon/human))

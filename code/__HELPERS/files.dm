@@ -81,6 +81,6 @@
 	if(time_to_wait > 0)
 		src << "<font color='red'>Error: file_spam_check(): Spam. Please wait [round(time_to_wait/10)] seconds.</font>"
 		return 1
-	fileaccess_timer = world.time + FTPDELAY
+	fileaccess_timer = timedelay(FTPDELAY)
 	return 0
 #undef FTPDELAY

@@ -316,7 +316,7 @@
 	icon_state = ""
 	mineral = "uranium"
 	var/active = null
-	var/last_event = 0
+	var/next_event = 0
 
 /obj/structure/falsewall/uranium/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	radiate()
@@ -328,13 +328,13 @@
 
 /obj/structure/falsewall/uranium/proc/radiate()
 	if(!active)
-		if(world.time > last_event+15)
+		if(next_event > world.time)
 			active = 1
 			for(var/mob/living/L in range(3,src))
 				L.apply_effect(12,IRRADIATE,0)
 			for(var/turf/simulated/wall/mineral/uranium/T in range(3,src))
 				T.radiate()
-			last_event = world.time
+			next_event = timedelay(1.5 SECONDS)
 			active = null
 			return
 	return

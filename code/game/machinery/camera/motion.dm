@@ -13,8 +13,7 @@
 		. = PROCESS_KILL
 		return
 	if (detectTime > 0)
-		var/elapsed = world.time - detectTime
-		if (elapsed > alarm_delay)
+		if (timedelay(-alarm_delay) > detectTime)
 			triggerAlarm()
 	else if (detectTime == -1)
 		for (var/mob/target in motionTargets)

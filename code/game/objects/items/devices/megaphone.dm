@@ -44,9 +44,8 @@
 				O.show_message("<B>[user]</B> broadcasts, <FONT size=3>\"[message]\"</FONT>",2) // 2 stands for hearable message
 
 		spamcheck = 1
-		spawn(20)
-			spamcheck = 0
-		return
+		sleep(20)
+		spamcheck = 0
 
 /obj/item/device/megaphone/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
@@ -127,13 +126,13 @@ And backwards
 			return
 
 /obj/item/device/soundsynth/attack_self(mob/user as mob)
-	if(spam_flag + 20 < world.timeofday)
+	if(world.time > spam_flag)
 		var/tmp/playing_sound
 		switch(sound_flag)
 			if(0 to SOUND_NUM)
 				playing_sound = sound_list[sound_flag+1]
 			else return
-		spam_flag = world.timeofday
+		spam_flag = timedelay(2 SECONDS)
 		playsound(get_turf(src), playing_sound, 50, 1)
 
 /obj/item/device/soundsynth/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
@@ -142,13 +141,13 @@ And backwards
 		if(sound_flag > SOUND_NUM) sound_flag = 0
 		usr << "Sound switched to [sound_names[1+sound_flag]]!"
 	else
-		if(spam_flag + 20 < world.timeofday)
+		if(world.time > spam_flag)
 			var/tmp/playing_sound
 			switch(sound_flag)
 				if(0 to SOUND_NUM)
 					playing_sound = sound_list[sound_flag+1]
 				else return
-			spam_flag = world.timeofday
+			spam_flag = timedelay(2 SECONDS)
 			M << playing_sound
 
 #undef SOUND_NUM

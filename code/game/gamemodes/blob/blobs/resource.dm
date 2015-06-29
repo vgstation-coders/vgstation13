@@ -18,7 +18,7 @@
 	if(resource_delay > world.time)
 		return 0
 
-	resource_delay = world.time + (4 SECONDS)
+	resource_delay = timedelay(4 SECONDS)
 
 	if(overmind)
 		overmind.add_points(1)

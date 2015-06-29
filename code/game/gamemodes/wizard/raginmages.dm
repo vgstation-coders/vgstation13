@@ -1,3 +1,5 @@
+# define MAGE_COOLDOWN 5 MINUTES
+
 /datum/game_mode/wizard/raginmages
 	name = "Ragin' Mages"
 	config_tag = "raginmages"
@@ -51,7 +53,7 @@
 
 	if (wizards_alive)
 		if(!time_checked) time_checked = world.time
-		if(world.time > time_checked + 3000 && (mages_made < max_mages))
+		if(timedelay(-MAGE_COOLDOWN) > world.time && (mages_made < max_mages))
 			time_checked = world.time
 			make_more_mages()
 	else

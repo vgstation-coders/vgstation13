@@ -57,7 +57,7 @@
 			L.xo = U.x - T.x
 			spawn L.process()
 		user.delayNextAttack(12)
-		next_shock = world.time + time
+		next_shock = timedelay(time)
 		return 1
 	return
 

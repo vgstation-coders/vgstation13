@@ -279,7 +279,7 @@
 		user << "You climb out from [src]"
 		return 0
 	if(connected_port)
-		if(world.time - last_message > 20)
+		if(timedelay(-2 SECONDS) > last_message)
 			src.occupant_message("Unable to move while connected to the air system port")
 			last_message = world.time
 		return 0

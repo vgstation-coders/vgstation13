@@ -78,7 +78,7 @@ Obviously, requires DNA2.
 		usr << "<span class='warning'>You can't hulk out right now!</span>"
 		return
 	for(var/mob/living/carbon/human/M in targets)
-		M.hulk_time = world.time + src.duration
+		M.hulk_time = timedelay(src.duration)
 		M.mutations.Add(M_HULK)
 		M.update_mutations()		//update our mutation overlays
 		M.update_body()

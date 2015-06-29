@@ -131,7 +131,7 @@
 			bees_in_hive += B.strength
 			returnToPool(B)
 
-	if(world.time > (lastcycle + cycledelay))
+	if(timedelay(-cycledelay) > lastcycle)
 		lastcycle = world.time
 		if(health < 0)
 			return

@@ -99,7 +99,7 @@ var/const/tk_maxrange = 15
 		if(user)
 			user.delayNextAttack(8)
 		if(!target || !user)	return
-		if(last_throw+3 > world.time)	return
+		if(last_throw > delay(-3))	return
 		if(!host || host != user)
 			del(src)
 			return

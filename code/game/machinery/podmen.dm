@@ -118,7 +118,7 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 
 		if(observer.key)
 			if(!isnull(hasbeendiona[observer.key]))
-				if((world.time + DIONA_COOLDOWN) < hasbeendiona[observer.key])
+				if(timedelay(-DIONA_COOLDOWN) > hasbeendiona[observer.key])
 					continue
 
 		if(observer.client && observer.client.prefs && observer.client.prefs.be_special & BE_PLANT)

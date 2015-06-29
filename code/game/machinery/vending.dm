@@ -53,7 +53,7 @@
 	var/list/small_ads = list()	//Small ad messages in the vending screen - random chance of popping up whenever you open it
 	var/vend_reply				//Thank you for shopping!
 	var/last_reply = 0
-	var/last_slogan = 0			//When did we last pitch?
+	var/slogan_time = 0			//When did we last pitch?
 	var/slogan_delay = 6000		//How long until we can pitch again?
 	var/icon_vend				//Icon_state when vending!
 	var/icon_deny				//Icon_state when vending!
@@ -101,7 +101,7 @@
 		// So not all machines speak at the exact same time.
 		// The first time this machine says something will be at slogantime + this random value,
 		// so if slogantime is 10 minutes, it will say it at somewhere between 10 and 20 minutes after the machine is crated.
-		src.last_slogan = world.time + rand(0, slogan_delay)
+		src.slogan_time = timedelay(rand(0, slogan_delay) + slogan_delay)
 
 		if(!product_records.len)
 			src.build_inventory(products)
@@ -695,7 +695,7 @@
 
 	R.amount--
 
-	if(((src.last_reply + (src.vend_delay + 200)) <= world.time) && src.vend_reply)
+	if((timedelay(-(src.vend_delay + 20 SECONDS)) >= src.last_reply) && src.vend_reply)
 		spawn(0)
 			src.speak(src.vend_reply)
 			src.last_reply = world.time
@@ -721,10 +721,10 @@
 		src.seconds_electrified--
 
 	//Pitch to the people!  Really sell it!
-	if(((src.last_slogan + src.slogan_delay) <= world.time) && (src.slogan_list.len > 0) && (!src.shut_up) && prob(5))
+	if((slogan_time <= world.time) && (src.slogan_list.len > 0) && (!src.shut_up) && prob(5))
 		var/slogan = pick(src.slogan_list)
 		src.speak(slogan)
-		src.last_slogan = world.time
+		src.slogan_time = timedelay(slogan_delay)
 
 	if(src.shoot_inventory && prob(2))
 		src.throw_item()

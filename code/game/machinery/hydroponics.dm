@@ -69,7 +69,7 @@ obj/machinery/hydroponics/process()
 	if(myseed && (myseed.loc != src))
 		myseed.loc = src
 
-	if(world.time > (lastcycle + cycledelay))
+	if(timedelay(-cycledelay) > lastcycle)
 		lastcycle = world.time
 		if(planted && !dead)
 			// Advance age

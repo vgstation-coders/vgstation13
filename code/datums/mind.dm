@@ -66,7 +66,7 @@
 	var/list/uplink_items_bought = list()
 	var/total_TC = 0
 	var/spent_TC = 0
-	
+
 	//fix scrying raging mages issue.
 	var/isScrying = 0
 
@@ -1311,7 +1311,7 @@ proc/clear_memory(var/silent = 1)
 	if(brigged_since == -1)
 		brigged_since = world.time
 
-	return (duration <= world.time - brigged_since)
+	return (delay(-duration) >= brigged_since)
 
 /datum/mind/proc/make_traitor()
 	if (!(src in ticker.mode.traitors))

@@ -703,9 +703,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(location)
 		location.hotspot_expose(700, 5, surfaces = istype(loc, /turf))
 	if(!fueltime)
-		fueltime = world.time + 100
+		fueltime = timedelay(100)
 	if(world.time > fueltime)
-		fueltime = world.time + 100
+		fueltime = timedelay(100)
 		--fuel
 		if(!fuel)
 			lit = 0

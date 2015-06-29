@@ -304,4 +304,4 @@ mob/living/carbon/human/proc
 				else if(choice == "No!")
 					M << "<span class='warning'>You reject this traitorous cause!</span>"
 					src << "<span class='danger'>[M] does not support the revolution!</span>"
-				M.mind.rev_cooldown = world.time+50
+				M.mind.rev_cooldown = timedelay(5 SECONDS)

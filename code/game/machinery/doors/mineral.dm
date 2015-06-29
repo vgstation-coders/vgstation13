@@ -28,9 +28,9 @@
 		open()
 	else if(ismob(user))
 		var/mob/M = user
-		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //This is what we call blind trust
+		if(timedelay(-zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) < M.last_airflow) //This is what we call blind trust
 			return
-		if(world.time - M.last_bumped <= 10) //It was 60 previously, damn thats slow
+		if(timedelay(-1 SECONDS) <= M.last_bumped) //It was 60 previously, damn thats slow
 			return
 		M.last_bumped = world.time
 		TryToSwitchState(user)

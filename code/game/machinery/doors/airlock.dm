@@ -225,7 +225,7 @@
 	var/last_event = 0
 
 /obj/machinery/door/airlock/uranium/process()
-	if(world.time > last_event+20)
+	if(timedelay(-2 SECONDS) > last_event)
 		if(prob(50))
 			radiate()
 		last_event = world.time

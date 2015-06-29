@@ -89,7 +89,7 @@
 			R.weakened = 0
 
 	// Activate the cooldown
-	cooldown_time = world.time + cooldown_duration
+	cooldown_time = timedelay(cooldown_duration)
 	cooldown_state = 1
 	update_icon()
 
@@ -124,7 +124,7 @@
 /obj/machinery/transformer/interact(var/mob/user)
 	var/data=""
 	if(cooldown_state)
-		data += {"<b>Recalibrating.</b> Time left: [(cooldown_time - world.time)/10] seconds."}
+		data += {"<b>Recalibrating.</b> Time left: [(cooldown_time - world.time)/(10 * world.tick_lag)] seconds."}
 	else
 		data += {"<p style="color:red;font-weight:bold;"><blink>ROBOTICIZER ACTIVE.</blink></p>"}
 	data += {"

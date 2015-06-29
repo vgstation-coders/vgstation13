@@ -113,8 +113,8 @@
 			. = 0
 
 
-	proc/timeset(var/seconds)
-		releasetime=world.time+seconds*10
+	proc/timeset(var/time)
+		releasetime=timedelay(time SECONDS)
 		return
 
 

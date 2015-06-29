@@ -5,7 +5,7 @@ var/list/event_last_fired = list()
 	if(!config.allow_random_events || map && map.dorf)
 		return
 
-	var/minutes_passed = world.time/600
+	var/minutes_passed = timeat(world.time)/(1 MINUTES) //Amount of minutes passed at this point
 	var/roundstart_delay = 50
 
 	if(minutes_passed < roundstart_delay) //Self-explanatory

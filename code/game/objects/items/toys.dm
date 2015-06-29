@@ -537,14 +537,14 @@
 
 //all credit to skasi for toy mech fun ideas
 /obj/item/toy/prize/attack_self(mob/user as mob)
-	if(cooldown < world.time - 8)
+	if(timedelay(-8) > cooldown)
 		user << "<span class='notice'>You play with [src].</span>"
 		playsound(user, 'sound/mecha/mechstep.ogg', 20, 1)
 		cooldown = world.time
 
 /obj/item/toy/prize/attack_hand(mob/user as mob)
 	if(loc == user)
-		if(cooldown < world.time - 8)
+		if(timedelay(-8) > cooldown)
 			user << "<span class='notice'>You play with [src].</span>"
 			playsound(user, 'sound/mecha/mechturn.ogg', 20, 1)
 			cooldown = world.time
@@ -867,13 +867,13 @@
 	icon_state = "minislime"
 
 /obj/item/toy/gasha/AI/attack_self(mob/user as mob)
-	if(cooldown < world.time - 8)
+	if(timedelay(-8) > cooldown)
 		playsound(user, 'sound/vox/doop.wav', 20, 1)
 		cooldown = world.time
 
 /obj/item/toy/gasha/AI/attack_hand(mob/user as mob)
 	if(loc == user)
-		if(cooldown < world.time - 8)
+		if(timedelay(-8) > cooldown)
 			playsound(user, 'sound/vox/doop.wav', 20, 1)
 			cooldown = world.time
 			return
@@ -890,13 +890,13 @@
 	icon_state = "malfAI"
 
 /obj/item/toy/gasha/minibutt/attack_self(mob/user as mob)
-	if(cooldown < world.time - 8)
+	if(timedelay(-8) > cooldown)
 		playsound(user, 'sound/misc/fart.ogg', 20, 1)
 		cooldown = world.time
 
 /obj/item/toy/gasha/minibutt/attack_hand(mob/user as mob)
 	if(loc == user)
-		if(cooldown < world.time - 8)
+		if(timedelay(-8) > cooldown)
 			playsound(user, 'sound/misc/fart.ogg', 20, 1)
 			cooldown = world.time
 			return
@@ -914,13 +914,13 @@
 
 
 /obj/item/toy/gasha/fingerbox/attack_self(mob/user as mob)
-	if(cooldown < world.time - 8)
+	if(timedelay(-8) > cooldown)
 		playsound(user, 'sound/weapons/switchblade.ogg', 20, 1)
 		cooldown = world.time
 
 /obj/item/toy/gasha/fingerbox/attack_hand(mob/user as mob)
 	if(loc == user)
-		if(cooldown < world.time - 8)
+		if(timedelay(-8) > cooldown)
 			playsound(user, 'sound/weapons/switchblade.ogg', 20, 1)
 			cooldown = world.time
 			return

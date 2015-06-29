@@ -81,7 +81,7 @@
 	return
 
 /obj/item/device/deskbell/proc/ring()
-	if(world.time - last_ring_time >= ring_delay)
+	if(timedelay(-ring_delay) >= last_ring_time)
 		last_ring_time = world.time
 		flick("[icon_state]-push", src)
 		playsound(src, 'sound/machines/ding2.ogg', 50, 1)
