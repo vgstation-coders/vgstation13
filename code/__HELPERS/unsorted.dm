@@ -990,7 +990,7 @@ var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "typ
 							T.icon = 'icons/turf/snow.dmi'
 							T.icon_state = "snow"
 						else
-							T.ChangeTurf(/turf/space)
+							T.ChangeTurf(get_base_turf(T.z))
 							switch(universe.name)	//for some reason using OnTurfChange doesn't actually do anything in this case.
 								if("Hell Rising")
 									T.overlays += "hell01"

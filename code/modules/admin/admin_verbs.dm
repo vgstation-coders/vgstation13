@@ -392,7 +392,7 @@ var/list/admin_verbs_mod = list(
 		var/mob/body = mob
 		if(body.mind) body.mind.isScrying = 1
 		body.ghostize(1)
-		
+
 		if(body && !body.key)
 			body.key = "@[key]"	//Haaaaaaaack. But the people have spoken. If it breaks; blame adminbus
 		feedback_add_details("admin_verb","O") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -474,7 +474,7 @@ var/list/admin_verbs_mod = list(
 /client/proc/secrets()
 	set name = "Secrets"
 	set category = "Admin"
-	if (holder)
+	if(holder)
 		holder.Secrets()
 	feedback_add_details("admin_verb","S") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
