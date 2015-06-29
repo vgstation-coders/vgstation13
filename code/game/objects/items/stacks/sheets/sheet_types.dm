@@ -264,8 +264,7 @@ var/global/list/datum/stack_recipe/charcoal_recipes = list ()
 var/global/list/datum/stack_recipe/cloth_recipes = list ( \
 	new/datum/stack_recipe("gauze", /obj/item/stack/medical/bruise_pack), \
 	new/datum/stack_recipe("rag", /obj/item/weapon/reagent_containers/glass/rag/), \
-	new/datum/stack_recipe("jumpsuit", /obj/item/clothing/under/color/white,4), \
-	new/datum/stack_recipe("gloves", /obj/item/clothing/gloves/white,2), \
+	new/datum/stack_recipe("jumpsuit", /obj/item/clothing/under/color/patchwork,4), \
 	new/datum/stack_recipe("surgical mask", /obj/item/clothing/mask/surgical), \
 	new/datum/stack_recipe("cap", /obj/item/clothing/head/soft/mime,2), \
 )

@@ -440,14 +440,17 @@ BLIND     // can't see anything
 	user.visible_message("<span class='warning'>[user.name] is ripping apart the [src]!</span>", \
 			"<span class='warning'>You begin to rip apart the [src].</span>", \
 			"You hear an audible ripping.")
+	playsound(get_turf(src), 'sound/effects/rustle1.ogg', 50, 1)
 	if(do_after(user,40))
-		new /obj/item/stack/sheet/cloth(user.loc,4)
+		playsound(get_turf(src), 'sound/effects/rustle1.ogg', 50, 1)
+		getFromPool(/obj/item/stack/sheet/cloth,user.loc,4)
 		qdel(src)
 
 /obj/item/clothing/under/verb/rip_up()
 	set name = "Rip up clothing"
 	set category = "Object"
 	set src in usr
+	if(usr.stat || usr.restrained()) return
 	if(src != usr.get_active_hand())
 		usr << "<span class='warning'>[src] needs to be in your hand to rip it up.</span>"
 		return
