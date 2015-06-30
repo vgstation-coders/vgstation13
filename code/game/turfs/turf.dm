@@ -430,7 +430,7 @@
 
 /turf/proc/ReplaceWithLattice()
 	src.ChangeTurf(get_base_turf(src.z))
-	new /obj/structure/lattice(locate(src.x, src.y, src.z))
+	new /obj/structure/lattice(src)
 
 /turf/proc/kill_creatures(mob/U = null)//Will kill people/creatures and damage mechs./N
 //Useful to batch-add creatures to the list.
