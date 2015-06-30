@@ -991,11 +991,12 @@ var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "typ
 							T.icon_state = "snow"
 						else
 							T.ChangeTurf(get_base_turf(T.z))
-							switch(universe.name)	//for some reason using OnTurfChange doesn't actually do anything in this case.
-								if("Hell Rising")
-									T.overlays += "hell01"
-								if("Supermatter Cascade")
-									T.overlays += "end01"
+							if(istype(T, /turf/space))
+								switch(universe.name)	//for some reason using OnTurfChange doesn't actually do anything in this case.
+									if("Hell Rising")
+										T.overlays += "hell01"
+									if("Supermatter Cascade")
+										T.overlays += "end01"
 
 
 					refined_src -= T
