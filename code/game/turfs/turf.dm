@@ -547,10 +547,14 @@
 
 
 /turf/proc/cultify()
+	if(istype(src, get_base_turf(src.z))) //Don't cultify the base turf, ever
+		return
 	ChangeTurf(get_base_turf(src.z))
 	return
 
 /turf/singularity_act()
+	if(istype(src, get_base_turf(src.z))) //Don't singulo the base turf, ever
+		return
 	if(intact)
 		for(var/obj/O in contents)
 			if(O.level != 1)
