@@ -785,10 +785,6 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=fakeguns'>Make all items look like guns</A><BR>
 			<A href='?src=\ref[src];secretsfun=schoolgirl'>Japanese Animes Mode</A><BR>
 			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode</A><BR>
-			<A href='?src=\ref[src];secretsfun=moveadminshuttle'>Move Administration Shuttle</A><BR>
-			<A href='?src=\ref[src];secretsfun=moveferry'>Move Ferry</A><BR>
-			<A href='?src=\ref[src];secretsfun=movealienship'>Move Alien Dinghy</A><BR>
-			<A href='?src=\ref[src];secretsfun=moveminingshuttle'>Move Mining Shuttle</A><BR>
 			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=floorlava'>The floor is lava! (DANGEROUS: extremely lame)</A><BR>
@@ -839,7 +835,45 @@ var/global/floorIsLava = 0
 	usr << browse(dat, "window=secrets")
 	return
 
+/datum/admins/proc/shuttle_magic()
+	var/dat = "<h3>GENERAL STUFF:</h3><hr><br>"
+	dat +="<a href='?src=\ref[src];shuttle_extend_area=normal'> Add a new area to a shuttle</a><br>"
+	dat +={"<i>Once you select a shuttle, an area with the same shape as the shuttle's current area will be created centered on you, and automatically added to the shuttle's areas. Use a shuttle control console to
+		move the shuttle to that area, or (if extending either the emergency or cargo shuttle) use a shuttle core computer to change which areas the shuttle considers to be centcomm/station.</i>
+		The shuttle which is being extended MUST have either a linked shuttle core computer or a shuttle control console aboard. The turf on which it is located will be considered the shuttle's center.<br>"}
 
+	dat +="<a href='?src=\ref[src];shuttle_open_core=1'> Get a shuttle's core computer</a><br>"
+	dat +={"<i>Once you select a shuttle, you will teleport to its core computer, allowing you to change its parameters and areas. If the shuttle has no core computer linked to it,
+		a new one will be created <b>at your location</b>.</i><br>"}
+
+	dat +="<a href='?src=\ref[src];shuttle_open_travel=1'> Get a shuttle's control console</a><br>"
+	dat +={"<i>Once you select a shuttle, you will teleport to one of its control consoles, allowing you to move it to another area. If the shuttle has no control consoles linked to it,
+		a new one will be created <b>at your location</b>.</i><br>"}
+
+	dat +="<a href='?src=\ref[src];shuttle_move_to=1'> Move a shuttle</a><br>"
+	dat +={"<i>This command allows you to move any shuttle to any of its areas. Lockdown, cooldown and other factors are ignored; the shuttle is moved instantly without regard for that.</i><br>"}
+
+	dat +="<a href='?src=\ref[src];shuttle_teleport_to=1'> Teleport to a shuttle</a><br>"
+	dat +={"<i>Once you select a shuttle, you will instantly teleport to its current location.</i><br>"}
+
+	dat +={"<h3>FUN STUFF:</h3>
+		<b>WARNING:</b> may result in unintended features!<hr><br>"}
+
+	dat +="<a href='?src=\ref[src];shuttle_custom=1'> Turn an area into a shuttle</a><br>"
+	dat +="<i>The area you're standing on will become a shuttle. Use the commands in the general section to give it more areas or to create a shuttle control console.</i><br>"
+
+	dat +="<a href='?src=\ref[src];shuttle_extend_area=force'> Add a new area to a shuttle (BY FORCE)</a><br>"
+	dat +={"<i>This works just like the 'Add a new area to a shuttle' command above, but the area will be created even if it would overlap with another area.</i><br>"}
+
+	dat +="<h3>EMERGENCY STUFF:</h3><hr><br>"
+
+	dat +="<a href='?src=\ref[src];shuttle_lockdown=1'><font color='red'> Lockdown a shuttle</font></a><br>"
+	dat +="<i>Once you select a shuttle, it will be locked down (or, if it already is, its lockdown will be lifted). It won't be able to move until the lockdown is lifted. The emergency shuttle can't be locked down.</i><br>"
+
+	dat +="<a href='?src=\ref[src];shuttle_delete=1'><font color='red'> Delete a shuttle</font></a><br>"
+	dat +="<i>Once you select a shuttle, it will be deleted. Deleting all linked to it machinery and turfs is optional (mobs won't be affected). The emergency shuttle, cargo shuttle and vox shuttle can't be deleted.</i><br>"
+
+	usr << browse(dat, "window=shuttlemagic")
 
 /////////////////////////////////////////////////////////////////////////////////////////////////admins2.dm merge
 //i.e. buttons/verbs
@@ -1459,5 +1493,3 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 	tomob.ckey = frommob.ckey
 	qdel(frommob)
 	return 1
-
-

@@ -171,6 +171,11 @@ You must kill it all while minimizing the damage to the station."}
 				var/T = M.loc
 				if((istype(T, /turf/space)) || ((istype(T, /turf)) && (M.z!=1)))
 					pre_escapees += M
+			//Lock some shuttles down
+			var/lockdown_message = "Under directive 7-10, [station_name()] is quarantined until further notice."
+			research_shuttle.lockdown = lockdown_message
+			mining_shuttle.lockdown = lockdown_message
+
 			send_intercept(1)
 			outbreak = 1
 		if (2)

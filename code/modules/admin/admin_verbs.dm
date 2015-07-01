@@ -60,6 +60,7 @@ var/list/admin_verbs_admin = list(
 	/datum/admins/proc/toggleoocdead,	/*toggles ooc on/off for everyone who is dead*/
 	/client/proc/game_panel,			/*game panel, allows to change game-mode etc*/
 	/client/proc/cmd_admin_say,			/*admin-only ooc chat*/
+	/client/proc/shuttle_magic,			/*various commands for fucking with shuttles*/
 	/datum/admins/proc/PlayerNotes,
 	/client/proc/cmd_mod_say,
 	/client/proc/cmd_mod_window,
@@ -259,6 +260,7 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/air_report,
 	/client/proc/enable_debug_verbs,
 	/client/proc/mob_list,
+	/client/proc/shuttle_magic,
 	/proc/possess,
 	/proc/release
 	)
@@ -1013,3 +1015,13 @@ var/list/admin_verbs_mod = list(
 			M.add_static_overlays()
 		else
 			M.remove_static_overlays()
+
+/client/proc/shuttle_magic()
+	set name = "Shuttle Magic"
+	set desc = "Open a menu with magic"
+	set category = "Admin"
+
+	if(!holder || !config)
+		return
+
+	holder.shuttle_magic()

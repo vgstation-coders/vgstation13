@@ -2305,7 +2305,8 @@
 					ticker.mode.finalize_traitor(A.mind)
 				message_admins("<span class='notice'>[key_name_admin(usr)] used everyone is a traitor secret. Objective is [objective]</span>", 1)
 				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")
-			if("moveminingshuttle")
+			//The following is obsolete with the new shuttle datums
+			/*if("moveminingshuttle")
 				if(mining_shuttle_moving)
 					return
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2330,7 +2331,7 @@
 				feedback_add_details("admin_secrets_fun_used","ShX")
 				move_alien_ship()
 				message_admins("<span class='notice'>[key_name_admin(usr)] moved the alien dinghy</span>", 1)
-				log_admin("[key_name(usr)] moved the alien dinghy")
+				log_admin("[key_name(usr)] moved the alien dinghy")*/
 			if("togglebombcap")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BC")
@@ -3256,3 +3257,205 @@
 			if("list")
 				PlayerNotesPage(text2num(href_list["index"]))
 		return
+
+	if(href_list["shuttle_extend_area"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","EXT")
+
+		var/datum/shuttle/S = select_shuttle_from_all(usr, "Select a shuttle to extend", "Admin abuse")
+		if(!S) return
+
+		var/list/dead_areas = list()
+		var/list/result
+		if(href_list["shuttle_extend_area"] == "force")
+			result = S.add_area(new_area_center = get_turf(usr), force = 1)
+			if(!result)
+				return
+		else
+			result = S.add_area(new_area_center = get_turf(usr))
+			if(!result)
+				return
+			else
+				dead_areas += S.add_area(new_area_center = get_turf(usr))
+
+		var/killed_areas = ""
+		for(var/area/A in dead_areas)
+			killed_areas += " [A.name] "
+		message_admins("<span class='notice'>[key_name_admin(usr)] has created a new [capitalize(S.name)] area[(href_list["shuttle_extended_area"]=="force") ? " (FORCE = 1)" : ""]. [dead_areas.len ? "Areas damaged: [killed_areas]" : ""]</span>", 1)
+		log_admin("[key_name_admin(usr)] has created a new [capitalize(S.name)] area[(href_list["shuttle_extended_area"]=="force") ? " (FORCE = 1)" : ""]. [dead_areas.len ? "Areas damaged: [killed_areas]" : ""]</span>")
+
+	if(href_list["shuttle_lockdown"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","LD")
+
+		var/datum/shuttle/S = select_shuttle_from_all(usr, "Select a shuttle to extend", "Shuttle lockdown", omit_shuttles=list(/datum/shuttle/emergency), show_lockdown = 1)
+		if(!S) return
+
+		if(S.lockdown)
+			S.lockdown = 0
+			usr << "The lockdown from [S.name] has been lifted."
+			message_admins("<span class='notice'>[key_name_admin(usr)] has lifted [capitalize(S.name)]'s lockdown.</span>", 1)
+			log_admin("[key_name(usr)] has locked [capitalize(S.name)] down. [(length(S.lockdown)>=1) ? "Reason: [S.lockdown]" : ""]")
+		else
+			S.lockdown = 1
+			usr << "[S.name] has been locked down."
+			var/reason = input(usr,"Would you like to provide additional information, which will be shown on [capitalize(S.name)]'s control consoles?","Shuttle lockdown") in list("Yes","No")
+			if(reason == "Yes")
+				reason = input(usr,"Please type additional information about the lockdown of [capitalize(S.name)].","Shuttle lockdown")
+				if(length(reason)>=1)
+					S.lockdown = reason
+			message_admins("<span class='notice'>[key_name_admin(usr)] has locked [capitalize(S.name)] down. [(length(S.lockdown)>=1) ? "Reason: [S.lockdown]" : ""]</span>", 1)
+			log_admin("[key_name(usr)] has locked [capitalize(S.name)] down. [(length(S.lockdown)>=1) ? "Reason: [S.lockdown]" : ""]")
+
+	if(href_list["shuttle_move_to"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","MV")
+
+		var/datum/shuttle/S = select_shuttle_from_all(usr, "Select a shuttle to extend", "Shuttle movement", show_lockdown = 1)
+		if(!S) return
+
+		var/list/possible_areas = list()
+		for(var/area/A in S.areas)
+			var/areaname = A.name
+			possible_areas += areaname
+			possible_areas[areaname] = A
+
+		var/choice = input(usr, "Select an area for [capitalize(S.name)] to travel to", "Shuttle movement") in possible_areas
+		var/area/target_area = possible_areas[choice]
+
+		if( !target_area || !istype(target_area, /area/) )
+			return
+
+		S.complete_movement(target_area)
+
+		message_admins("<span class='notice'>[key_name_admin(usr)] has moved [capitalize(S.name)] to [target_area.name]</span>")
+		log_admin("[key_name(usr)] has moved [capitalize(S.name)] to [target_area.name]")
+
+	if(href_list["shuttle_custom"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","SC")
+
+		var/area/our_area = get_area(usr)
+		if(!our_area) return
+
+		var/change_params = input(usr, "Set [our_area] to be always powered and remove dynamic lighting? (NOT DOING SO WILL BREAK LIGHTS)", "Shuttlifying") in list("Yes", "No")
+		if(change_params == "Yes")
+			our_area.requires_power = 0
+			our_area.lighting_use_dynamic = 0
+
+		var/datum/shuttle/custom/S = new
+		S.current_area = our_area
+		S.areas = list(our_area)
+		S.name = our_area.name
+		S.cooldown = 0
+		S.movement_delay = 0
+		usr << "[our_area] has been turned into a shuttle!"
+
+		message_admins("<span class='notice'>[key_name_admin(usr)] has turned [our_area.name] into a shuttle!</span>", 1)
+		log_admin("[key_name(usr)]  has turned [our_area.name] into a shuttle!")
+
+	if(href_list["shuttle_delete"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","DEL")
+
+		var/datum/shuttle/S = select_shuttle_from_all(usr, "Select a shuttle to delete", "Shuttle deletion")
+		if(!S) return
+
+		var/killed_objs = 0
+
+		if( (input(usr,"Please type \"Yes\" to confirm that you want to delete [capitalize(S)]. This process can't be reverted!","Shuttle deletion","No") as text) != "Yes" )
+			return
+
+		if(S.has_defined_areas())
+			usr << "This shuttle can't be deleted. Use the lockdown function instead."
+			return
+
+		var/choice = (input(usr,"Would you like to delete all turfs and objects in the shuttle's current area ([S.current_area.name])? Mobs will not be affected.") in list("Yes","No","Cancel") )
+		if(choice == "Cancel")
+			return
+		else if(choice == "Yes")
+			killed_objs = 1
+
+		if(S.current_area)
+			if(killed_objs == 1)
+				for(var/turf/T in S.current_area)
+					if(istype(T, /turf/simulated))
+						qdel(T)
+				for(var/obj/O in S.current_area)
+					if(istype(O, /obj/item) || istype(O, /obj/machinery) || istype(O, /obj/structure))
+						qdel(O)
+				usr << "All turfs and objects deleted from [S.current_area]."
+
+		message_admins("<span class='notice'>[key_name_admin(usr)] has deleted [capitalize(S.name)] ([S.type]). Objects and turfs [(killed_objs) ? "deleted" : "not deleted"].</span>")
+		log_admin("[key_name(usr)]  has deleted [capitalize(S.name)]! Objects and turfs [(killed_objs) ? "deleted" : "not deleted"].")
+
+		qdel(S)
+
+	if(href_list["shuttle_teleport_to"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","TP")
+
+		var/datum/shuttle/S = select_shuttle_from_all(usr, "Select a shuttle to teleport to", "Finding a shuttle")
+		if(!S) return
+
+		if(!S.current_area || !istype(S.current_area, /area/))
+			usr << "The shuttle is in the middle of nowhere! (The 'current_area' variable is either null or not an area, please report this)"
+			return
+
+		var/turf/T = locate(/turf/) in S.current_area
+		usr.forceMove(T)
+		usr << "You have teleported to [capitalize(S.name)]"
+
+	if(href_list["shuttle_open_core"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","OC")
+
+		var/datum/shuttle/S = select_shuttle_from_all(usr, "Select a shuttle", "Shuttle core access")
+		if(!S) return
+
+		if(!S.core_computer)
+
+			var/choice = input(usr,"There is no core computer linked to [capitalize(S.name)]. Would you like to create one at your current location?","Shuttle core access") in list("Yes","No")
+			if(choice == "Yes")
+				var/turf/usr_loc = get_turf(usr)
+				var/obj/machinery/computer/shuttle_core/C = new(usr_loc)
+				if(C)
+					C.link_to(S)
+					usr << "A new shuttle core computer has been created."
+					message_admins("[key_name_admin(usr)] has created a new shuttle core connected to [capitalize(S.name)] in [get_area(usr_loc)].")
+					log_admin("[key_name(usr)] has created a new shuttle core connected to [capitalize(S.name)] in [get_area(usr_loc)].")
+			else
+				return
+
+		else
+
+			var/obj/machinery/computer/shuttle_core/C = S.core_computer
+			if(C)
+				usr.loc = C.loc
+
+	if(href_list["shuttle_open_travel"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","OT")
+
+		var/datum/shuttle/S = select_shuttle_from_all(usr, "Select a shuttle", "Shuttle control access")
+		if(!S) return
+
+		if(!S.control_consoles.len)
+
+			var/choice = input(usr,"There is no control console linked to [capitalize(S.name)]. Would you like to create one at your current location?","Shuttle control access") in list("Yes","No")
+			if(choice == "Yes")
+				var/turf/usr_loc = get_turf(usr)
+				var/obj/machinery/computer/shuttle_control/C = new(usr_loc)
+				if(C)
+					C.link_to(S)
+					usr << "A new shuttle control console has been created."
+					message_admins("[key_name_admin(usr)] has created a new shuttle control console connected to [capitalize(S.name)] in [get_area(usr_loc)].")
+					log_admin("[key_name(usr)] has created a new shuttle control console connected to [capitalize(S.name)] in [get_area(usr_loc)].")
+			else
+				return
+
+		else
+
+			var/obj/machinery/computer/shuttle_control/C = pick(S.control_consoles)
+			if(C)
+				usr.loc = C.loc
