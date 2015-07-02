@@ -197,22 +197,27 @@
 
 	var/find_prob = 0
 
-	if (affected.implants.len)
+	if(affected.implants.len)
 
 		var/obj/item/obj = affected.implants[1]
 
-		if(istype(obj,/obj/item/weapon/implant))
+		if(istype(obj, /obj/item/weapon/implant))
 			var/obj/item/weapon/implant/imp = obj
-			if (imp.islegal())
+			if(imp.islegal())
 				find_prob +=60
 			else
 				find_prob +=40
 		else
 			find_prob +=50
 
-		if (prob(find_prob))
+		if(prob(find_prob))
+			if(istype(obj, /obj/item/weapon/implant/revolution))
+				var/obj/item/weapon/implant/revolution/revimp = obj
+				user.visible_message("<span class='notice'>[user] tries to take something out of [target]'s [affected.display_name] with \the [tool], but it suddenly melts down.</span>", \
+				"<span class='notice'>You try to take [revimp] out of incision on [target]'s [affected.display_name]s with \the [tool], but it suddenly melts down.</span>")
+				revimp.meltdown()
 			user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
-			"<span class='notice'>You take [obj] out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
+			"<span class='notice'>You take [obj] out of incision on [target]'s [affected.display_name]s with \the [tool].</span>")
 			affected.implants -= obj
 
 			//Handle possessive brain borers.
