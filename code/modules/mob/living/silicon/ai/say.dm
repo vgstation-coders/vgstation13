@@ -173,7 +173,7 @@ var/const/VOX_DELAY = 600
 		src << "<span class='notice'>These words are not available on the announcement system: [english_list(incorrect_words)].</span>"
 		return
 
-	announcing_vox = world.time + VOX_DELAY
+	announcing_vox = timedelay(VOX_DELAY)
 
 	log_game("[key_name_admin(src)] made a vocal announcement with the following message: [message].")
 

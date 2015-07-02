@@ -205,7 +205,7 @@
 		update_beam()
 		return
 
-	if(((last_shot + fire_delay) <= world.time) && (active == 1)) //It's currently activated and it hasn't processed in a bit
+	if((timedelay(-fire_delay) >= last_shot) && (active == 1)) //It's currently activated and it hasn't processed in a bit
 		if(!active_power_usage || avail(active_power_usage)) //Doesn't require power or powernet has enough supply
 			add_load(active_power_usage) //Drain it then bitch
 			if(!powered) //Yay its powered

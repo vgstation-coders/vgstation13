@@ -48,7 +48,7 @@
 
 
 /mob/proc/death(gibbed)
-	timeofdeath = world.time
+	timeofdeath = realtimeat(world.time)
 
 	living_mob_list -= src
 	dead_mob_list += src

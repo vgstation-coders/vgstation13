@@ -253,9 +253,9 @@ datum/signal
 
 			var/obj/machinery/telecomms/server/S = data["server"]
 
-			if(S.last_signal + SIGNAL_COOLDOWN > world.timeofday && S.last_signal < MIDNIGHT_ROLLOVER)
+			if(timedelay(-SIGNAL_COOLDOWN) > S.last_signal)
 				return
-			S.last_signal = world.timeofday
+			S.last_signal = world.time
 
 			var/datum/radio_frequency/connection = radio_controller.return_frequency(freq)
 

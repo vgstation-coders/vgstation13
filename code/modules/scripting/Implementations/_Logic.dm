@@ -143,7 +143,7 @@
 	return world.timeofday
 
 /proc/timestamp(var/format = "hh:mm:ss") // Get the game time in text
-	return time2text(world.time + 432000, format)
+	return time2text(realtimeat(world.time) + 432000, format)
 
 /*
 //Makes a list where all indicies in a string is a seperate index in the list

@@ -213,7 +213,7 @@
 	if (!(powered()))
 		return
 
-	if ((src.disable) || (src.last_read && timedelay(-20 SECONDS) > src.last_read))
+	if ((src.disable) || (src.last_read && timedelay(-2 SECONDS) > src.last_read))
 		return
 
 
@@ -284,7 +284,7 @@
 	..(severity)
 
 /obj/machinery/detector/HasProximity(atom/movable/AM as mob|obj)
-	if ((src.disable) || (src.last_read && timedelay(-30 SECONDS) > src.last_read))
+	if ((src.disable) || (src.last_read && timedelay(-3 SECONDS) > src.last_read))
 		return
 
 	if(istype(AM, /mob/living/carbon))

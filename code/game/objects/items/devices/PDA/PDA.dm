@@ -1204,7 +1204,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					dat += {"<img src="minesweeper_counter_[mine_counter % 10].png" style="position: absolute; top: -32px; left: 48px;"/>"}
 
 					dat += {"<img src="minesweeper_frame_counter.png" style="position: absolute; top: -33px; left: [(app.minesweeper_game.columns * 16)-30]px;"/>"}
-					var/time_counter = round((world.time - app.minesweeper_game.timer)/10)
+					var/time_counter = round((realtimeat(world.time) - app.minesweeper_game.timer)/10)
 					time_counter = min(999,time_counter)
 					if(!app.ingame || app.minesweeper_game.gameover)
 						time_counter = app.minesweeper_game.end_timer

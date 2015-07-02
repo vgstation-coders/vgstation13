@@ -3,14 +3,17 @@
 // /vg/ MODULARIZED DELAYS - by N3X15
 //////////////////////////////////
 
-/proc/timeat(var/time)
-	. = world.time / world.tick_lag
+/proc/realtimeat(var/time)
+	. = time / world.tick_lag
+
+/proc/worldtimeat(var/time)
+	. = time * world.tick_lag
 
 /proc/timeuntil(var/final_time, var/units = 1) //The real time until this point
 	. = round((final_time - world.time) / world.tick_lag, units)
 
 /proc/timedelay(var/duration) //The world time until some duration has passed
-	. = (duration + world.time) / world.tick_lag
+	. = (duration / world.tick_lag) + world.time
 
 // Reduces duplicated code by quite a bit.
 /datum/delay_controller

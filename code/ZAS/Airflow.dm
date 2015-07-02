@@ -52,7 +52,7 @@ mob/var/tmp/last_airflow_stun = 0
 mob/proc/airflow_stun()
 	if(stat == 2)
 		return 0
-	if(last_airflow_stun > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))	return 0
+	if(timedelay(-zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown)) < last_airflow_stun)	return 0
 	if(!(status_flags & CANSTUN) && !(status_flags & CANWEAKEN))
 		src << "<span class='notice'>You stay upright as the air rushes past you.</span>"
 		return 0
@@ -69,7 +69,7 @@ mob/living/carbon/metroid/airflow_stun()
 	return
 
 mob/living/carbon/human/airflow_stun()
-	if(last_airflow_stun > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))	return 0
+	if(timedelay(-zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown)) < last_airflow_stun)	return 0
 	if(buckled) return 0
 	if(shoes)
 		if(shoes.flags & NOSLIP) return 0

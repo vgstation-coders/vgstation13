@@ -39,7 +39,7 @@
 
 /datum/minesweeper_game/proc/game_start(var/datum/mine_tile/first_T)
 	first_T.selected = 1
-	timer = world.time
+	timer = realtimeat(world.time)
 	while(mine_count < initial_mines)
 		var/datum/mine_tile/T = pick(tiles)
 		if(!T.mined && !T.selected)
@@ -62,7 +62,7 @@
 	T.dug = 1
 	if(T.mined)
 		face = "dead"
-		end_timer = min(999,round((world.time - timer)/10))
+		end_timer = min(999,round((realtimeat(world.time) - timer)/10))
 		gameover = 1
 	else
 		holes++
@@ -71,7 +71,7 @@
 				if(other_T.mined)
 					other_T.flagged = 1
 			face = "win"
-			end_timer = min(999,round((world.time - timer)/10))
+			end_timer = min(999,round((realtimeat(world.time) - timer)/10))
 			gameover = 1
 	var/list/neighbors = list()
 	for(var/datum/mine_tile/near_T in tiles)

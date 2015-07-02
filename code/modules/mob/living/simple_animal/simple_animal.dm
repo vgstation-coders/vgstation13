@@ -80,7 +80,7 @@
 /mob/living/simple_animal/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
 
-	var/damage = ((world.time - lastcheck)/10)  * (B.get_damage()/2)
+	var/damage = realtimeat(((world.time - lastcheck)/10))  * (B.get_damage()/2)
 
 	// Actually apply damage
 	health -= damage

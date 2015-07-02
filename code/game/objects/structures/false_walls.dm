@@ -328,7 +328,7 @@
 
 /obj/structure/falsewall/uranium/proc/radiate()
 	if(!active)
-		if(next_event > world.time)
+		if(world.time > next_event)
 			active = 1
 			for(var/mob/living/L in range(3,src))
 				L.apply_effect(12,IRRADIATE,0)

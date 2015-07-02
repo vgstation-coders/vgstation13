@@ -638,7 +638,7 @@ Auto Patrol: []"},
 			if((C.stat) || (C.handcuffed))
 				continue
 
-			if((C.name == src.oldtarget_name) && timedelay(-10 SECONDS) > src.last_found)
+			if((C.name == src.oldtarget_name) && timedelay(-10 SECONDS) < src.last_found)
 				continue
 
 			if(istype(C, /mob/living/carbon/human))

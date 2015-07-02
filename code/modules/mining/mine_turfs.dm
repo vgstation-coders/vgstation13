@@ -224,7 +224,7 @@
 		if(!(P.diggables & DIG_ROCKS))
 			return
 
-		if(last_act + P.digspeed > world.time)//prevents message spam
+		if(timedelay(-P.digspeed) < last_act)//prevents message spam
 			return
 		last_act = world.time
 

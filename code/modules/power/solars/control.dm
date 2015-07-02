@@ -66,7 +66,7 @@
 
 	if(track == 1 && nexttime < world.time && trackdir * trackrate)
 		// Increments nexttime using itself and not world.time to prevent drift
-		nexttime = nexttime + 6000 / trackrate
+		nexttime = timedelay(10 MINUTES/trackrate)
 		// Nudges array 1 degree in desired direction
 		cdir = (cdir + trackdir + 360) % 360
 		set_panels(cdir)
@@ -189,11 +189,11 @@ Manual Tracking Direction:"}
 		if(href_list["tdir"])
 			trackrate = Clamp(trackrate + text2num(href_list["tdir"]), 0, 360)
 			if(trackrate)
-				nexttime = world.time + 6000 / trackrate
+				nexttime = timedelay(10 MINUTES/trackrate)
 
 	if(href_list["track"])
 		if(trackrate)
-			nexttime = world.time + 6000 / trackrate
+			nexttime = timedelay(10 MINUTES/trackrate)
 
 		track = text2num(href_list["track"])
 

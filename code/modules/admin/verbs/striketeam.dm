@@ -7,7 +7,7 @@ var/global/sent_strike_team = 0
 	if(!ticker)
 		usr << "<font color='red'>The game hasn't started yet!</font>"
 		return
-	if(world.time < timeat(10 MINUTES))
+	if(world.time < worldtimeat(10 MINUTES))
 		usr << "<font color='red'>There are [timeuntil(10 MINUTES,1 SECONDS)] seconds remaining before it may be called.</font>"
 		return
 	if(sent_strike_team == 1)

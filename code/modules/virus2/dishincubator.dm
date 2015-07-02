@@ -166,7 +166,7 @@
 			if(dish.growth >= 100)
 				if(icon_state != "incubator_fed")
 					icon_state = "incubator_fed"
-				if(last_notice + FED_PING_DELAY < world.time)
+				if(timedelay(-FED_PING_DELAY) > last_notice)
 					last_notice = world.time
 					alert_noise("ping")
 		if(radiation)

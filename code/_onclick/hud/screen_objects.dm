@@ -501,7 +501,7 @@
 				AI.aicamera.viewpictures()
 
 		if("Allow Walking")
-			if(timedelay(-30) > gun_click_time)	//give them 3 seconds between mode changes.
+			if(timedelay(-3 SECONDS) > gun_click_time)	//give them 3 seconds between mode changes.
 				return
 			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
 				usr << "You need your gun in your active hand to do that!"
@@ -510,7 +510,7 @@
 			gun_click_time = world.time
 
 		if("Disallow Walking")
-			if(timedelay(-30) > gun_click_time)	//give them 3 seconds between mode changes.
+			if(timedelay(-3 SECONDS) > gun_click_time)	//give them 3 seconds between mode changes.
 				return
 			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
 				usr << "You need your gun in your active hand to do that!"
@@ -519,7 +519,7 @@
 			gun_click_time = world.time
 
 		if("Allow Running")
-			if(timedelay(-30) > gun_click_time)	//give them 3 seconds between mode changes.
+			if(timedelay(-3 SECONDS) > gun_click_time)	//give them 3 seconds between mode changes.
 				return
 			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
 				usr << "You need your gun in your active hand to do that!"
@@ -528,7 +528,7 @@
 			gun_click_time = world.time
 
 		if("Disallow Running")
-			if(timedelay(-30) > gun_click_time)	//give them 3 seconds between mode changes.
+			if(timedelay(-3 SECONDS) > gun_click_time)	//give them 3 seconds between mode changes.
 				return
 			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
 				usr << "You need your gun in your active hand to do that!"
@@ -537,7 +537,7 @@
 			gun_click_time = world.time
 
 		if("Allow Item Use")
-			if(timedelay(-30) > gun_click_time)	//give them 3 seconds between mode changes.
+			if(timedelay(-3 SECONDS) > gun_click_time)	//give them 3 seconds between mode changes.
 				return
 			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
 				usr << "You need your gun in your active hand to do that!"
@@ -547,7 +547,7 @@
 
 
 		if("Disallow Item Use")
-			if(timedelay(-30) > gun_click_time)	//give them 3 seconds between mode changes.
+			if(timedelay(-3 SECONDS) > gun_click_time)	//give them 3 seconds between mode changes.
 				return
 			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
 				usr << "You need your gun in your active hand to do that!"

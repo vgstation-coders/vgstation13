@@ -84,7 +84,7 @@
 	if(src.state != 2)
 		src.active = 0
 		return
-	if(((src.last_shot + src.fire_delay) <= world.time) && (src.active == 1))
+	if((timedelay(-src.fire_delay) >= src.last_shot) && (src.active == 1))
 		src.last_shot = world.time
 		if(src.shot_number < 3)
 			src.fire_delay = 2

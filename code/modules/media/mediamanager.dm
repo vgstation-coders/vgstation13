@@ -166,7 +166,7 @@ function SetMusic(url, time, volume) {
 		if(!(owner.prefs.toggles & SOUND_STREAMING) && url != "")
 			return // Nope.
 		MP_DEBUG("<span class='good'>Sending update to VLC ([url])...</span>")
-		owner << output(list2params(list(url, (world.time - start_time) / 10, volume*source_volume)), "[window]:SetMusic")
+		owner << output(list2params(list(url, (world.timeofday - start_time) / 10, volume*source_volume)), "[window]:SetMusic")
 
 	proc/push_music(var/targetURL,var/targetStartTime,var/targetVolume)
 		if (url != targetURL || abs(targetStartTime - start_time) > 1 || abs(targetVolume - source_volume) > 0.1 /* 10% */)

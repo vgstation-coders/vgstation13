@@ -77,7 +77,7 @@
 			overlays += "[state_base]-running"
 
 /obj/machinery/media/tapedeck/proc/check_reload()
-	return world.time > last_reload + JUKEBOX_RELOAD_COOLDOWN
+	return timedelay(-JUKEBOX_RELOAD_COOLDOWN) > last_reload
 
 /obj/machinery/media/tapedeck/attack_hand(var/mob/user)
 	if(stat & NOPOWER)
@@ -316,7 +316,7 @@
 		var/datum/song_info/song
 		if(current_song)
 			song = playlist[current_song]
-		if(!current_song || (song && world.time >= media_start_time + song.length))
+		if(!current_song || (song && world.timeofday >= media_start_time + song.length))
 			current_song=1
 			if(next_song)
 				current_song = next_song
@@ -337,7 +337,7 @@
 	if(current_song && playing)
 		var/datum/song_info/song = playlist[current_song]
 		media_url = song.url
-		media_start_time = world.time
+		media_start_time = world.timeofday
 		visible_message("<span class='notice'>\icon[src] \The [src] begins to play [song.display()].</span>","<em>You hear music.</em>")
 		//visible_message("<span class='notice'>\icon[src] \The [src] warbles: [song.length/10]s @ [song.url]</notice>")
 	else

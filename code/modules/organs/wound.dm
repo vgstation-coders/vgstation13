@@ -52,7 +52,7 @@
 	var/tmp/list/damage_list = list()
 	New(var/damage)
 
-		created = world.time
+		created = realtimeat(world.time)
 
 		// reading from a list("stage" = damage) is pretty difficult, so build two separate
 		// lists from them instead

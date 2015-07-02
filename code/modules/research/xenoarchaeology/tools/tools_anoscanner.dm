@@ -23,9 +23,9 @@
 
 	user << "<span class='info'>[message]</span>"
 
-	if(world.time - last_scan_time >= scan_delay)
-		spawn(0)
-			scan()
+	if(timedelay(-scan_delay) >= last_scan_time)
+		sleep()
+		scan()
 
 /obj/item/device/ano_scanner/proc/scan()
 	last_scan_time = world.time

@@ -113,7 +113,7 @@
 				else
 					scanned_object = O
 					scan_in_progress = 1
-					scan_completion_time = world.time + scan_duration
+					scan_completion_time = timedelay(scan_duration)
 					src.visible_message("<b>[name]</b> states, \"Scanning begun.\"")
 				break
 			if(!scanned_object)

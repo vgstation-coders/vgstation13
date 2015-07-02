@@ -106,7 +106,7 @@
 		return
 	// src.next_process == 0 is in place to make it update the first time around, then wait until someone watches
 	if ((!src.next_process || src.interface.isUsed()) && world.time >= src.next_process)
-		src.next_process = world.time + 30
+		src.next_process = timedelay(3 SECONDS)
 		var/t
 	//	t += "<BR><HR><A href='?src=\ref[src.interface];update=1'>Refresh</A>"
 	//	t += "<BR><HR><A href='?src=\ref[src.interface];close=1'>Close</A>"

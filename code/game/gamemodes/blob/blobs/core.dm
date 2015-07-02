@@ -43,7 +43,7 @@
 		create_overmind()
 	else
 		if(world.time >= resource_delay)
-			resource_delay = timedelay(10) // 1 second
+			resource_delay = timedelay(1 SECONDS) // 1 second
 			overmind.add_points(point_rate)
 	health = min(initial(health), health + 1)
 	var/turf/T = get_turf(overmind) //The overmind's mind can expand the blob

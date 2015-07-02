@@ -124,7 +124,7 @@
 /obj/machinery/transformer/interact(var/mob/user)
 	var/data=""
 	if(cooldown_state)
-		data += {"<b>Recalibrating.</b> Time left: [(cooldown_time - world.time)/(10 * world.tick_lag)] seconds."}
+		data += {"<b>Recalibrating.</b> Time left: [realtimeat(cooldown_time - world.time)/(1 SECONDS)] seconds."}
 	else
 		data += {"<p style="color:red;font-weight:bold;"><blink>ROBOTICIZER ACTIVE.</blink></p>"}
 	data += {"

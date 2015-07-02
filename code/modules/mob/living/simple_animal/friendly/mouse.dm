@@ -70,7 +70,7 @@
 	src.icon_dead = "mouse_[_color]_splat"
 	src.icon_state = "mouse_[_color]_splat"
 	if(client)
-		client.time_died_as_mouse = world.time
+		client.time_died_as_mouse = realtimeat(world.time)
 
 //copy paste from alien/larva, if that func is updated please update this one also
 /mob/living/simple_animal/mouse/verb/ventcrawl()
@@ -151,7 +151,7 @@
 
 /mob/living/simple_animal/mouse/Die()
 	if(client)
-		client.time_died_as_mouse = world.time
+		client.time_died_as_mouse = realtimeat(world.time)
 	..()
 
 /*

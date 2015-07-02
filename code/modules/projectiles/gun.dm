@@ -39,7 +39,7 @@
 	var/last_fired = 0
 
 	proc/ready_to_fire()
-		if(world.time >= last_fired + fire_delay)
+		if(timedelay(-fire_delay) >= last_fired)
 			last_fired = world.time
 			return 1
 		else

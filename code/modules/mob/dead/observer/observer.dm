@@ -293,9 +293,9 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		resting = 1
 		if(client && key)
 			var/mob/dead/observer/ghost = ghostize(0)						//0 parameter is so we can never re-enter our body, "Charlie, you can never come baaaack~" :3
-			ghost.timeofdeath = world.time // Because the living mob won't have a time of death and we want the respawn timer to work properly.
+			ghost.timeofdeath = realtimeat(world.time) // Because the living mob won't have a time of death and we want the respawn timer to work properly.
 			if(ghost.client)
-				ghost.client.time_died_as_mouse = world.time //We don't want people spawning infinite mice on the station
+				ghost.client.time_died_as_mouse = realtimeat(world.time) //We don't want people spawning infinite mice on the station
 	return
 
 // Check for last poltergeist activity.
@@ -307,7 +307,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	return 0
 
 /mob/dead/observer/proc/start_poltergeist_cooldown()
-	next_poltergeist=world.time + POLTERGEIST_COOLDOWN
+	next_poltergeist= timedelay(POLTERGEIST_COOLDOWN)
 
 /mob/dead/observer/proc/reset_poltergeist_cooldown()
 	next_poltergeist=0
@@ -630,10 +630,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		src << "<span class='warning'>Respawning as mouse is disabled..</span>"
 		return
 
-	var/timedifference = world.time - client.time_died_as_mouse
-	if(client.time_died_as_mouse && timedifference <= mouse_respawn_time * 600)
+	var/timedifference = realtimeat(world.time) - client.time_died_as_mouse
+	if(client.time_died_as_mouse && timedifference <= mouse_respawn_time MINUTES)
 		var/timedifference_text
-		timedifference_text = time2text(mouse_respawn_time * 600 - timedifference,"mm:ss")
+		timedifference_text = time2text(mouse_respawn_time MINUTES - timedifference,"mm:ss")
 		src << "<span class='warning'>You may only spawn again as a mouse more than [mouse_respawn_time] minutes after your death. You have [timedifference_text] left.</span>"
 		return
 
@@ -757,10 +757,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		src << "<span class='warning'>Respawning as MoMMI is disabled..</span>"
 		return
 
-	var/timedifference = world.time - client.time_died_as_mouse
-	if(client.time_died_as_mouse && timedifference <= mouse_respawn_time * 600)
+	var/timedifference = realtimeat(world.time) - client.time_died_as_mouse
+	if(client.time_died_as_mouse && timedifference <= mouse_respawn_time MINUTES)
 		var/timedifference_text
-		timedifference_text = time2text(mouse_respawn_time * 600 - timedifference,"mm:ss")
+		timedifference_text = time2text(mouse_respawn_time MINUTES - timedifference,"mm:ss")
 		src << "<span class='warning'>You may only spawn again as a mouse or MoMMI more than [mouse_respawn_time] minutes after your death. You have [timedifference_text] left.</span>"
 		return
 

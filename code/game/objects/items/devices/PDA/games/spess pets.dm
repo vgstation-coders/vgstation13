@@ -196,7 +196,7 @@
 	var/list/possible_challengers = list()
 	for(var/obj/item/device/pda/check_pda in PDAs)
 		var/datum/pda_app/spesspets/pet_app = locate(/datum/pda_app/spesspets) in check_pda.applications
-		if(pet_app && (pet_app.game_state == 2) && !pet_app.isfighting && (!challenged[pet_app.petID] || (world.time - challenged[pet_app.petID] >= 6000)))
+		if(pet_app && (pet_app.game_state == 2) && !pet_app.isfighting && (!challenged[pet_app.petID] || realtimeat((world.time - challenged[pet_app.petID]) >= 10 MINUTES)))
 			var/turf/T2 = get_turf(check_pda)
 			if(T2 in range(T,3))
 				possible_challengers += pet_app
@@ -253,7 +253,7 @@
 	var/list/possible_visitors = list()
 	for(var/obj/item/device/pda/check_pda in PDAs)
 		var/datum/pda_app/spesspets/pet_app = locate(/datum/pda_app/spesspets) in check_pda.applications
-		if(pet_app && (pet_app.game_state == 2) && !pet_app.isvisiting &&(!visited[pet_app.petID] || (world.time - visited[pet_app.petID] >= 6000)))
+		if(pet_app && (pet_app.game_state == 2) && !pet_app.isvisiting &&(!visited[pet_app.petID] || realtimeat((world.time - visited[pet_app.petID]) >= 10 MINUTES)))
 			var/turf/T2 = get_turf(check_pda)
 			if(T2 in range(T,3))
 				possible_visitors += pet_app
