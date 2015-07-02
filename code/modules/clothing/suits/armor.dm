@@ -160,17 +160,18 @@
 
 /obj/item/clothing/suit/armor/apa
 	name = "heavy armor"
-	desc = "A suit of power armor that protects against lasers, radiation and stuns. Forged from plasteel and carbon nanotubes with cutting edge servos, it turns the wearer into a walking tank. Time for talking is over."
+	desc = "The ultimate armor. A suit of power armor that protects against lasers, radiation and stuns. Forged from plasteel and carbon nanotubes with cutting edge servos, it turns the wearer into a walking tank. Time for talking is over."
 	icon_state = "APA"
 	item_state = "APA"
 	w_class = 4//bulky item
 	gas_transfer_coefficient = 0.90
 	armor = list(melee = 50, bullet = 50, laser = 90, energy = 100, bomb = 10, bio = 100, rad = 100)
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
-	slowdown = 6
+	slowdown = 7
 	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
 	siemens_coefficient = 0
-	slot_flags = SLOT_BACK|SLOT_BELT
+
+
 
 /obj/item/clothing/suit/armor/tdome
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
