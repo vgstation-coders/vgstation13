@@ -86,7 +86,7 @@ Attach to transfer valve and open. BOOM.
 	var/obj/effect/effect/foam/fire/W = locate() in contents
 	if(istype(W))
 		return 0
-	if(fire_protection > world.time-300)
+	if(timedelay(-30 SECONDS) < fire_protection)
 		return 0
 	if(locate(/obj/fire) in src)
 		return 1
@@ -216,7 +216,7 @@ Attach to transfer valve and open. BOOM.
 				if(istype(W))
 					firelevel -= 3
 					continue
-				if(enemy_tile.fire_protection > world.time-30)
+				if(timedelay(-3 SECONDS) > enemy_tile.fire_protection)
 					firelevel -= 1.5
 					continue
 

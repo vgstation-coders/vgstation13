@@ -42,7 +42,7 @@ var/const/HOLOPAD_MODE = 0
 	if(!istype(user))
 		return
 	if(alert(user,"Would you like to request an AI's presence?",,"Yes","No") == "Yes")
-		if(last_request + 200 < world.time) //don't spam the AI with requests you jerk!
+		if(timedelay(-20 SECONDS) > last_request) //don't spam the AI with requests you jerk!
 			last_request = world.time
 			user << "<span class='notice'>You request an AI's presence.</span>"
 			var/area/area = get_area(src)

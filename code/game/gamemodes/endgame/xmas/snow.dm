@@ -67,7 +67,7 @@
 			icon_state = "snow"
 			snow_amount = SNOWCOVERING_FULL
 			processing_objects.Remove(src)
-	next_update=world.time + TICK_JIGGLE(300) // 30 seconds
+	next_update=timedelay(TICK_JIGGLE(30 SECONDS)) // 30 seconds
 
 
 /obj/structure/snow/attack_hand(mob/user)

@@ -281,8 +281,8 @@
 
 /obj/machinery/computer/HolodeckControl/proc/loadProgram(var/area/A)
 
-	if(world.time < (last_change + 25))
-		if(world.time < (last_change + 15))//To prevent super-spam clicking, reduced process size and annoyance -Sieve
+	if(timedelay(-2.5 SECONDS) > last_change)
+		if(timedelay(-1.5 SECONDS) > last_change)//To prevent super-spam clicking, reduced process size and annoyance -Sieve
 			return
 		for(var/mob/M in range(3,src))
 			M.show_message("<B>ERROR. Recalibrating projetion apparatus.</B>")

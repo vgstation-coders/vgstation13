@@ -46,7 +46,7 @@
 			data = -1
 			M << "<span class='warning'>Your mind feels a little less stable..</span>"
 		else
-			if(world.time > data + ANTIDEPRESSANT_MESSAGE_DELAY)
+			if(timedelay(-ANTIDEPRESSANT_MESSAGE_DELAY) > data)
 				data = world.time
 				M << "<span class='notice'>Your mind feels stable.. a little stable.</span>"
 		..()
@@ -75,7 +75,7 @@
 			data = -1
 			M << "<span class='warning'>Your mind feels much less stable..</span>"
 		else
-			if(world.time > data + ANTIDEPRESSANT_MESSAGE_DELAY)
+			if(timedelay(-ANTIDEPRESSANT_MESSAGE_DELAY) > data)
 				data = world.time
 				if(prob(90))
 					M << "<span class='notice'>Your mind feels much more stable.</span>"

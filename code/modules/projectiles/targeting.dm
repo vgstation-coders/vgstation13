@@ -43,8 +43,7 @@
 //Compute how to fire.....
 /obj/item/weapon/gun/proc/PreFire(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, params, struggle = 0)
 	//Lets not spam it.
-	if(lock_time > world.time - 2) return
-	.
+	if(timedelay(-2) < lock_time) return
 	if(ismob(A) && isliving(A) && !(A in target))
 		Aim(A) 	//Clicked a mob, aim at them
 	else  		//Didn't click someone, check if there is anyone along that guntrace
@@ -161,7 +160,7 @@ mob/living/proc/Targeted(var/obj/item/weapon/gun/I) //Self explanitory.
 
 	if(!targeted_by) targeted_by = list()
 	targeted_by += I
-	I.lock_time = world.time + 20 //Target has 2 second to realize they're targeted and stop (or target the opponent).
+	I.lock_time = timedelay(2 SECONDS) //Target has 2 second to realize they're targeted and stop (or target the opponent).
 	src << "((<span class='danger'>Your character is being targeted. They have 2 seconds to stop any click or move actions. </span>While targeted, they may \
 	drag and drop items in or into the map, speak, and click on interface buttons. Clicking on the map objects (floors and walls are fine), their items \
 	 (other than a weapon to de-target), or moving will result in being fired upon. <span class='warning'>The aggressor may also fire manually, </span>\

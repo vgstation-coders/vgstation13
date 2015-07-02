@@ -48,7 +48,7 @@ mob/living/carbon/proc/pain(var/partname, var/amount, var/force, var/burning = 0
 	if(msg && (msg != last_pain_message || prob(10)))
 		last_pain_message = msg
 		src << msg
-	next_pain_time = world.time + (100 - amount)
+	next_pain_time = timedelay(100 - amount)
 
 
 // message is the custom message to be displayed
@@ -72,7 +72,7 @@ mob/living/carbon/human/proc/custom_pain(var/message, var/flash_strength)
 	if(msg && ((msg != last_pain_message) || (world.time >= next_pain_time)))
 		last_pain_message = msg
 		src << msg
-	next_pain_time = world.time + 100
+	next_pain_time = timedelay(10 SECONDS)
 
 mob/living/carbon/human/proc/handle_pain()
 	// not when sleeping

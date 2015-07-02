@@ -246,7 +246,7 @@ var/global/list/organ_damage_overlays = list(
 		src << "Successfully handled stasis"
 		last_processed = "Handle stasis"
 
-	if(life_tick > 5 && timeofdeath && (timeofdeath < 5 || world.time - timeofdeath > 6000))	//We are long dead, or we're junk mobs spawned like the clowns on the clown shuttle
+	if(life_tick > 5 && timeofdeath && (timeofdeath < worldtimeat(6 MINUTES) || realtimeat(world.time) - timeofdeath > 10 MINUTES))	//We are long dead, or we're junk mobs spawned like the clowns on the clown shuttle
 
 		if(client && client.prefs.toggles & CHAT_DEBUGLOGS)
 			src << "We have been dead for too long, we stop here."
@@ -1252,22 +1252,22 @@ var/global/list/organ_damage_overlays = list(
 			dizziness = max(dizziness-1, 0)
 			if(C)
 				var/oldsrc = src
-				var/amplitude = dizziness*(sin(dizziness * 0.044 * world.time) + 1) / 70 // This shit is annoying at high strength
+				var/amplitude = dizziness*(sin(dizziness * 0.044 * realtimeat(world.time)) + 1) / 70 // This shit is annoying at high strength
 				src = null
 				spawn(0)
 					if(C)
-						temp = amplitude * sin(0.008 * saved_dizz * world.time)
+						temp = amplitude * sin(0.008 * saved_dizz * realtimeat(world.time))
 						pixel_x_diff += temp
 						C.pixel_x += temp
-						temp = amplitude * cos(0.008 * saved_dizz * world.time)
+						temp = amplitude * cos(0.008 * saved_dizz * realtimeat(world.time))
 						pixel_y_diff += temp
 						C.pixel_y += temp
 						sleep(3)
 						if(C)
-							temp = amplitude * sin(0.008 * saved_dizz * world.time)
+							temp = amplitude * sin(0.008 * saved_dizz * realtimeat(world.time))
 							pixel_x_diff += temp
 							C.pixel_x += temp
-							temp = amplitude * cos(0.008 * saved_dizz * world.time)
+							temp = amplitude * cos(0.008 * saved_dizz * realtimeat(world.time))
 							pixel_y_diff += temp
 							C.pixel_y += temp
 						sleep(3)

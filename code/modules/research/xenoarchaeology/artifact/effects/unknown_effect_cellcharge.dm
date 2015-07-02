@@ -27,7 +27,7 @@
 				if(world.time >= next_message)
 					M << "<span class='notice'>SYSTEM ALERT: Energy boost detected!</span>"
 		if(world.time >= next_message)
-			next_message = world.time + 100
+			next_message = timedelay(10 SECONDS)
 		return 1
 
 /datum/artifact_effect/cellcharge/DoEffectPulse()

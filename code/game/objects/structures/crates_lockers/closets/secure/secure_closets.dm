@@ -125,7 +125,7 @@
 			user << "<span class='notice'>It won't budge!</span>"
 		else
 			user << "<span class='notice'>The locker is locked!</span>"
-		if(world.time > lastbang+5)
+		if(timedelay(-5) > lastbang)
 			lastbang = world.time
 			for(var/mob/M in hearers(src, null))
 				M << "<FONT size=[max(0, 5 - get_dist(src, M))]>BANG, bang!</FONT>"

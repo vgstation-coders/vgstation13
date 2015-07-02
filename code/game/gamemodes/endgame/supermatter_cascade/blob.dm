@@ -34,7 +34,7 @@
 		return 1
 
 	// We're checking, reset the timer.
-	next_check = world.time+5 SECONDS
+	next_check = timedelay(5 SECONDS)
 
 	// Choose a direction.
 	var/pdir = pick(avail_dirs)

@@ -100,7 +100,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 			changetype=null
 		else
 			changetype=selected
-	next_changetype=world.time+SOC_CHANGETYPE_COOLDOWN
+	next_changetype = timedelay(SOC_CHANGETYPE_COOLDOWN)
 
 /obj/item/weapon/gun/energy/staff/animate
 	name = "staff of animation"

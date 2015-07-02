@@ -249,7 +249,7 @@ its easier to just keep the beam vertical.
 	//Icon is obviously which icon to use for the beam, default is beam.dmi
 	//Icon_state is what icon state is used. Default is b_beam which is a blue beam.
 	//Maxdistance is the longest range the beam will persist before it gives up.
-	var/EndTime=world.time+time
+	var/EndTime=timedelay(time)
 	var/broken = 0
 	var/obj/item/projectile/beam/lightning/light = getFromPool(/obj/item/projectile/beam/lightning)
 	while(BeamTarget&&world.time<EndTime&&get_dist(src,BeamTarget)<maxdistance&&z==BeamTarget.z)

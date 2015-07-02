@@ -205,7 +205,7 @@ Pipelines + Other Objects -> Pipe network
 				user.add_ventcrawl(target_move)
 			user.loc = target_move
 			user.client.eye = target_move //if we don't do this, Byond only updates the eye every tick - required for smooth movement
-			if(world.time - user.last_played_vent > VENT_SOUND_DELAY)
+			if(delay(-VENT_SOUND_DELAY) > user.last_played_vent)
 				user.last_played_vent = world.time
 				playsound(src, 'sound/machines/ventcrawl.ogg', 50, 1, -3)
 	else

@@ -39,7 +39,7 @@ var/global/list/taxi_computers = list()
 /obj/machinery/computer/taxi_shuttle/proc/taxi_move_to(area/destination as area, area/transit as area, var/wait_time)
 	if(moving)
 		return
-	if(lastMove + TAXI_SHUTTLE_COOLDOWN > world.time)
+	if(timedelay(-TAXI_SHUTTLE_COOLDOWN) < lastMove)
 		return
 	var/area/dest_location = locate(destination)
 	if(curr_location == dest_location)
@@ -87,8 +87,9 @@ var/global/list/taxi_computers = list()
 
 	var/dat = ""
 	if(allowed(user))
+		var/movetime = lastMove - timedelay(-TAXI_SHUTTLE_COOLDOWN)
 		dat = {"Location: [curr_location]<br>
-		Ready to move[max(lastMove + TAXI_SHUTTLE_COOLDOWN - world.time, 0) ? " in [max(round((lastMove + TAXI_SHUTTLE_COOLDOWN - world.time) * 0.1), 0)] seconds" : ": now"]<br><br>
+		Ready to move[movetime > 0 ? " in [max(round(0.1 * movetime / world.tick_lag), 0)] seconds" : ": now"]<br><br>
 		<a href='?src=\ref[src];med_sili=1'>Medical and Silicon Station</a><br>
 		<a href='?src=\ref[src];engi_cargo=1'>Engineering and Cargo Station</a><br>
 		<a href='?src=\ref[src];sec_sci=1'>Security and Science Station</a><br>

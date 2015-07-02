@@ -129,7 +129,7 @@
 			usr << "<span class='warning'>\The [src] is empty.</span>"
 			return
 
-		if (world.time < src.last_use + 20)
+		if (timedelay(-2 SECONDS) < src.last_use)
 			return
 		user.delayNextAttack(5, 1)
 		var/list/badshit=list()
@@ -237,7 +237,7 @@
 			usr << "<span class='warning'>\The [src] is empty.</span>"
 			return
 
-		if (world.time < src.last_use + 20)
+		if (timedelay(-2 SECONDS) < src.last_use)
 			return
 		user.delayNextAttack(5, 1)
 		src.last_use = world.time

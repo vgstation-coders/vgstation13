@@ -58,7 +58,7 @@
 				Console.messages += "<B><FONT color='red'>High Priority message from [my_department]</FONT></B><BR>[sending]"
 
 /datum/event/money_hacker/tick()
-	if(world.time > time_start + time_duration)
+	if(timedelay(-time_duration) > time_start)
 		var/message
 		if(affected_account && affected_db && affected_db.activated && !(affected_db.stat & (NOPOWER|BROKEN)) )
 			//hacker wins

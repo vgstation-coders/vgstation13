@@ -108,13 +108,13 @@
 
 
 	proc/timeleft()
-		. = (releasetime-world.time)/10
+		. = realtimeat(releasetime-world.time)/10
 		if(. < 0)
 			. = 0
 
 
-	proc/timeset(var/seconds)
-		releasetime=world.time+seconds*10
+	proc/timeset(var/time)
+		releasetime=timedelay(time SECONDS)
 		return
 
 
@@ -153,7 +153,7 @@
 			<a href='?src=\ref[src];tp=-60'>-</a> <a href='?src=\ref[src];tp=-1'>-</a> <a href='?src=\ref[src];tp=1'>+</a> <A href='?src=\ref[src];tp=60'>+</a><br/>"}
 		// END AUTOFIX
 		for(var/obj/machinery/flasher/F in targets)
-			if(F.last_flash && (F.last_flash + 150) > world.time)
+			if(F.last_flash && timedelay(-15 SECONDS) < F.last_flash)
 				dat += "<br/><A href='?src=\ref[src];fc=1'>Flash Charging</A>"
 			else
 				dat += "<br/><A href='?src=\ref[src];fc=1'>Activate Flash</A>"

@@ -179,7 +179,7 @@
 	// Update values every cycle rather than every process() tick.
 	if(force_update)
 		force_update = 0
-	else if(world.time < (lastcycle + cycledelay))
+	else if(timedelay(-cycledelay) < lastcycle)
 		return
 	lastcycle = world.time
 

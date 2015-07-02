@@ -32,7 +32,7 @@ var/scheduledEvent = null
 		//Then, let's slowly ramp up events as the round goes on, SLOWLY I SAID
 		//world.time is the number of ticks (1/10 of a second) since game start for reference
 		var/roundlength_modifier = 1
-		switch(world.time)
+		switch(realtimeat(world.time))
 			if(0 to 18000) //30 first minutes
 				roundlength_modifier = 1 //Don't particularly speed up event rate
 			if(18000 to 36000) //Next thirty minutes

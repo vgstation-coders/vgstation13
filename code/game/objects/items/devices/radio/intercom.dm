@@ -143,8 +143,8 @@
 	icon_state = "intercom[!on?"-p":""][b_stat ? "-open":""]"
 
 /obj/item/device/radio/intercom/process()
-	if(((world.timeofday - last_tick) > 30) || ((world.timeofday - last_tick) < 0))
-		last_tick = world.timeofday
+	if(timedelay(-3 SECONDS) > last_tick)
+		last_tick = world.time
 		if(!areaMaster)
 			on = 0
 			update_icon()

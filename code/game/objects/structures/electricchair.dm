@@ -4,7 +4,7 @@
 	icon_state = "echair0"
 	var/on = 0
 	var/obj/item/assembly/shock_kit/part = null
-	var/last_time = 1.0
+	var/next_time = 1.0
 
 /obj/structure/stool/bed/chair/e_chair/New()
 	..()
@@ -19,7 +19,7 @@
 		part.loc = loc
 		part.master = null
 		part = null
-		del(src)
+		qdel(src)
 		return
 	return
 
@@ -46,9 +46,9 @@
 /obj/structure/stool/bed/chair/e_chair/proc/shock()
 	if(!on)
 		return
-	if(last_time + 50 > world.time)
+	if(next_time > world.time)
 		return
-	last_time = world.time
+	next_time = timedelay(5 SECONDS)
 
 	// special power handling
 	var/area/A = get_area(src)

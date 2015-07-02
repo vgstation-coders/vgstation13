@@ -21,7 +21,7 @@
 
 /obj/machinery/computer/salvage_ship/proc/salvage_move_to(area/destination as area)
 	if(moving)	return
-	if(lastMove + SALVAGE_SHIP_COOLDOWN > world.time)	return
+	if(timedelay(-SALVAGE_SHIP_COOLDOWN) < lastMove)	return
 	var/area/dest_location = locate(destination)
 	if(curr_location == dest_location)	return
 
@@ -57,9 +57,9 @@
 		return
 
 	user.set_machine(src)
-
+	var/movetime = lastMove - timedelay(-SALVAGE_SHIP_COOLDOWN)
 	var/dat = {"Location: [curr_location]<br>
-	Ready to move[max(lastMove + SALVAGE_SHIP_COOLDOWN - world.time, 0) ? " in [max(round((lastMove + SALVAGE_SHIP_COOLDOWN - world.time) * 0.1), 0)] seconds" : ": now"]<br>
+	Ready to move[movetime > 0 ? " in [max(round(0.1 * movetime / world.tick_lag), 0)] seconds" : ": now"]<br>
 	<a href='?src=\ref[src];start=1'>Middle of Nowhere</a><br>
 	<a href='?src=\ref[src];arrivals=1'>Station Auxiliary Docking</a> |
 	<a href='?src=\ref[src];north=1'>North of the Station</a> |

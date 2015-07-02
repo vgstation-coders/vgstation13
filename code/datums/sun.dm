@@ -28,7 +28,7 @@ var/global/datum/sun/sun
  * Calculate the sun's position given the time of day.
  */
 /datum/sun/proc/calc_position()
-	var/time = world.time
+	var/time = realtimeat(world.time)
 	angle = ((rotationRate * time / 100) % 360 + 360) % 360
 
 	if(angle != lastAngle)

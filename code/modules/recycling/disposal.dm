@@ -378,7 +378,7 @@
 	air_contents = new()		// new empty gas resv.
 
 	sleep(10)
-	if(last_sound < world.time + 1)
+	if(timedelay(-1) > last_sound)
 		playsound(src, 'sound/machines/disposalflush.ogg', 50, 0, 0)
 		last_sound = world.time
 	sleep(5) // wait for animation to finish

@@ -26,7 +26,7 @@
 
 /obj/mecha/combat/durand/relaymove(mob/user,direction)
 	if(defence)
-		if(world.time - last_message > 20)
+		if(timedelay(-2 SECONDS) > last_message)
 			src.occupant_message("<font color='red'>Unable to move while in defence mode</font>")
 			last_message = world.time
 		return 0

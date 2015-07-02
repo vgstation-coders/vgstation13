@@ -155,14 +155,14 @@ Feel free to do whatever with this if you think it lacks.
 	if(busy)
 		usr << "\The [src] is busy, try again later."
 		return
-	if(last_print + 300 < world.timeofday)
+	if(timedelay(-30 SECONDS) > last_print)
 		src.visible_message("<span class='notice'>\The [src] begins to hum lightly.</span>")
 		busy = 1
 		sleep(build_time)
 		src.visible_message("<span class='notice'>\The [src] rattles and shakes, spitting out a new PDA.</span>")
 		busy = 0
 		new /obj/item/device/pda(get_turf(src))
-		last_print = world.timeofday
+		last_print = world.time
 	else
 		usr << "\The [src] is not ready to print again."
 

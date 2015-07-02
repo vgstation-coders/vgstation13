@@ -10,7 +10,7 @@
 	var/state = GRAB_PASSIVE
 
 	var/allow_upgrade = 1
-	var/last_upgrade = 0
+//	var/last_upgrade = 0
 
 	layer = 21
 	abstract = 1
@@ -118,7 +118,7 @@
 		returnToPool(src)
 		return
 
-	last_upgrade = world.time
+//	last_upgrade = world.time
 	if(state < GRAB_AGGRESSIVE)
 		if(!allow_upgrade)
 			return
@@ -224,3 +224,6 @@
 		returnToPool(hud)
 	hud = null
 	..()
+
+#undef UPGRADE_COOLDOWN
+#undef UPGRADE_KILL_TIMER

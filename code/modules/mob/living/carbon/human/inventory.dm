@@ -805,7 +805,7 @@ It can still be worn/put on as normal.
 					S.inuse = 0
 					qdel(src)
 				S.inject(target, source)
-				if (S.s_time >= world.time + 30)
+				if (timedelay(-3 SECONDS) >= S.s_time)
 					S.inuse = 0
 					qdel(src)
 				S.s_time = world.time

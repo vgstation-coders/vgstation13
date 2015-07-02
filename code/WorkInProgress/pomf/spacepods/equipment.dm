@@ -47,7 +47,7 @@
 			projone.dumbfire(dir)
 			projtwo.dumbfire(dir)
 		sleep(1)
-	my_atom.next_firetime = world.time + fire_delay
+	my_atom.next_firetime = timedelay(fire_delay)
 
 /datum/spacepod/equipment
 	var/obj/spacepod/my_atom

@@ -370,12 +370,12 @@
 /obj/machinery/alarm/proc/refresh_all()
 	for(var/id_tag in areaMaster.air_vent_names)
 		var/list/I = areaMaster.air_vent_info[id_tag]
-		if (I && I["timestamp"]+AALARM_REPORT_TIMEOUT/2 > world.time)
+		if (I && timedelay(-AALARM_REPORT_TIMEOUT/2) < I["timestamp"])
 			continue
 		send_signal(id_tag, list("status") )
 	for(var/id_tag in areaMaster.air_scrub_names)
 		var/list/I = areaMaster.air_scrub_info[id_tag]
-		if (I && I["timestamp"]+AALARM_REPORT_TIMEOUT/2 > world.time)
+		if (I && timedelay(-AALARM_REPORT_TIMEOUT/2) < I["timestamp"])
 			continue
 		send_signal(id_tag, list("status") )
 

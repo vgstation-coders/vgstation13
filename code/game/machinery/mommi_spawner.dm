@@ -46,10 +46,10 @@
 		user << "<span class='warning'>\The [src] is busy building something already.</span>"
 		return 1
 
-	var/timedifference = world.time - user.client.time_died_as_mouse
-	if(user.client.time_died_as_mouse && timedifference <= mouse_respawn_time * 600)
+	var/timedifference = realtimeat(world.time) - user.client.time_died_as_mouse
+	if(user.client.time_died_as_mouse && timedifference <= mouse_respawn_time MINUTES)
 		var/timedifference_text
-		timedifference_text = time2text(mouse_respawn_time * 600 - timedifference,"mm:ss")
+		timedifference_text = time2text(mouse_respawn_time MINUTES - timedifference,"mm:ss")
 		user << "<span class='warning'>You may only spawn again as a mouse or MoMMI more than [mouse_respawn_time] minutes after your death. You have [timedifference_text] left.</span>"
 		return
 	/*

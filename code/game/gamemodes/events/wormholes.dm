@@ -17,7 +17,7 @@
 			var/event_duration = 3000	//~5 minutes in ticks
 			var/number_of_selections = (pick_turfs.len/5)+1	//+1 to avoid division by zero!
 			var/sleep_duration = round( event_duration / number_of_selections )
-			var/end_time = world.time + event_duration	//the time by which the event should have ended
+			var/end_time = timedelay(event_duration)	//the time by which the event should have ended
 
 			var/increment =	max(1,round(number_of_selections/50))
 //			world << "DEBUG: number_of_selections: [number_of_selections] | sleep_duration: [sleep_duration]"

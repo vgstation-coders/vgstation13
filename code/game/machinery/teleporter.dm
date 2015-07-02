@@ -153,7 +153,7 @@
 		else
 			var/mob/M = I.loc
 			if (M.stat == 2)
-				if (M.timeofdeath + 6000 < world.time)
+				if (timedelay(-10 MINUTES) > M.timeofdeath)
 					continue
 			var/turf/T = get_turf(M)
 			if(T)	continue

@@ -74,7 +74,7 @@ var/list/obj/machinery/flasher/flashers = list()
 	if (!(powered()))
 		return
 
-	if ((src.disable) || (src.last_flash && world.time < src.last_flash + 150))
+	if ((src.disable) || (src.last_flash && timedelay(-15 SECONDS) < src.last_flash))
 		return
 
 	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
@@ -117,7 +117,7 @@ var/list/obj/machinery/flasher/flashers = list()
 	..(severity)
 
 /obj/machinery/flasher/portable/HasProximity(atom/movable/AM as mob|obj)
-	if ((src.disable) || (src.last_flash && world.time < src.last_flash + 150))
+	if ((src.disable) || (src.last_flash && timedelay(-15 SECONDS) < src.last_flash))
 		return
 
 	if(istype(AM, /mob/living/carbon))

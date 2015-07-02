@@ -116,7 +116,7 @@
 
 	// Figure out how much damage to deal.
 	// Formula: (deciseconds_since_connect/10 deciseconds)*B.get_damage()
-	var/damage = ((world.time - lastcheck)/10)  * B.get_damage()
+	var/damage = realtimeat(((world.time - lastcheck)/10))  * B.get_damage()
 
 	// Actually apply damage
 	apply_damage(damage, B.damage_type, B.def_zone)

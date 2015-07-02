@@ -1204,7 +1204,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					dat += {"<img src="minesweeper_counter_[mine_counter % 10].png" style="position: absolute; top: -32px; left: 48px;"/>"}
 
 					dat += {"<img src="minesweeper_frame_counter.png" style="position: absolute; top: -33px; left: [(app.minesweeper_game.columns * 16)-30]px;"/>"}
-					var/time_counter = round((world.time - app.minesweeper_game.timer)/10)
+					var/time_counter = round((realtimeat(world.time) - app.minesweeper_game.timer)/10)
 					time_counter = min(999,time_counter)
 					if(!app.ingame || app.minesweeper_game.gameover)
 						time_counter = app.minesweeper_game.end_timer
@@ -1629,7 +1629,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				else if((!isnull(cartridge)) && (cartridge.access_engine))
 					scanmode = 4
 			if("Honk")
-				if ( !(last_honk && world.time < last_honk + 20) )
+				if (!last_honk || timedelay(-2 SECONDS) > last_honk)
 					playsound(loc, 'sound/items/bikehorn.ogg', 50, 1)
 					last_honk = world.time
 			if("Gas Scan")
@@ -1813,15 +1813,15 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 	var/t = input(U, "Please enter message", name, null) as text
 	t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
-	if (!t || !istype(P))
+	if(!t || !istype(P))
 		return
-	if (!in_range(src, U) && loc != U)
-		return
-
-	if (isnull(P)||P.toff || toff)
+	if(!in_range(src, U) && loc != U)
 		return
 
-	if (last_text && world.time < last_text + 5)
+	if(isnull(P)||P.toff || toff)
+		return
+
+	if(last_text && timedelay(-5) < last_text)
 		return
 
 	if(!can_use(U))
@@ -1832,7 +1832,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	//var/telecomms_intact = telecomms_process(P.owner, owner, t)
 	var/obj/machinery/message_server/useMS = null
 	if(message_servers)
-		for (var/obj/machinery/message_server/MS in message_servers)
+		for(var/obj/machinery/message_server/MS in message_servers)
 		//PDAs are now dependant on the Message Server.
 			if(MS.active)
 				useMS = MS

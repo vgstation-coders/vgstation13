@@ -279,7 +279,7 @@
 			if ((C.stat == 2) || !istype(C, /mob/living/carbon/human))
 				continue
 
-			if ((C == src.oldpatient) && (world.time < src.last_found + 100))
+			if ((C == src.oldpatient) && timedelay(-10 SECONDS) > src.last_found)
 				continue
 
 			if(src.assess_patient(C))
@@ -287,7 +287,7 @@
 				src.oldpatient = C
 				src.last_found = world.time
 				spawn(0)
-					if((src.last_newpatient_speak + 100) < world.time) //Don't spam these messages!
+					if(timedelay(-10 SECONDS) > src.last_newpatient_speak) //Don't spam these messages!
 						var/message = pick("Hey, you! Hold on, I'm coming.","Wait! I want to help!","You appear to be injured!")
 						src.speak(message)
 						src.last_newpatient_speak = world.time

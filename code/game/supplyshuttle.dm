@@ -489,7 +489,7 @@ var/list/mechtoys = list(
 		var/datum/supply_packs/P = supply_shuttle.supply_packs[href_list["doorder"]]
 		if(!istype(P))	return
 
-		var/timeout = world.time + 600
+		var/timeout = timedelay(600)
 		var/reason = copytext(sanitize(input(usr,"Reason:","Why do you require this item?","") as null|text),1,MAX_MESSAGE_LEN)
 		if(world.time > timeout)	return
 		if(!reason)	return
@@ -533,7 +533,7 @@ var/list/mechtoys = list(
 			STAMP BELOW TO APPROVE THIS REQUISITION:<br>"}
 		// END AUTOFIX
 		reqform.update_icon()	//Fix for appearing blank when printed.
-		reqtime = (world.time + 5) % 1e5
+		reqtime = timedelay(5) % 1e5
 
 		//make our supply_order datum
 		var/datum/supply_order/O = new /datum/supply_order()
@@ -710,7 +710,7 @@ var/list/mechtoys = list(
 		var/datum/supply_packs/P = supply_shuttle.supply_packs[href_list["doorder"]]
 		if(!istype(P))	return
 
-		var/timeout = world.time + 600
+		var/timeout = timedelay(600)
 		var/reason = copytext(sanitize(input(usr,"Reason:","Why do you require this item?","") as null|text),1,MAX_MESSAGE_LEN)
 		if(world.time > timeout)	return
 		if(!reason)	return
@@ -754,7 +754,7 @@ var/list/mechtoys = list(
 			STAMP BELOW TO APPROVE THIS REQUISITION:<br>"}
 		// END AUTOFIX
 		reqform.update_icon()	//Fix for appearing blank when printed.
-		reqtime = (world.time + 5) % 1e5
+		reqtime = timedelay(5) % 1e5
 
 		//make our supply_order datum
 		var/datum/supply_order/O = new /datum/supply_order()

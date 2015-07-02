@@ -69,7 +69,7 @@
 		block=CHAMELEONBLOCK
 
 	OnMobLife(var/mob/M)
-		if((world.time - M.last_movement) >= 30 && !M.stat && M.canmove && !M.restrained())
+		if(timedelay(-30) >= M.last_movement && !M.stat && M.canmove && !M.restrained())
 			M.alpha -= 25
 		else
 			M.alpha = round(255 * 0.80)

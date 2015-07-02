@@ -65,11 +65,11 @@
 			// Checked Out
 			dat += "<h3>Checked Out Books</h3><BR>"
 			for(var/datum/borrowbook/b in checkouts)
-				var/timetaken = world.time - b.getdate
+				var/timetaken = realtimeat(world.time) - b.getdate
 				//timetaken *= 10
 				timetaken /= 600
 				timetaken = round(timetaken)
-				var/timedue = b.duedate - world.time
+				var/timedue = b.duedate - realtimeat(world.time)
 				//timedue *= 10
 				timedue /= 600
 				if(timedue <= 0)
@@ -93,8 +93,8 @@
 				<A href='?src=\ref[src];editbook=1'>\[Edit\]</A><BR>
 				Recipient: [src.buffer_mob]
 				<A href='?src=\ref[src];editmob=1'>\[Edit\]</A><BR>
-				Checkout Date : [world.time/600]<BR>
-				Due Date: [(world.time + checkoutperiod)/600]<BR>
+				Checkout Date : [realtimeat(world.time)/600]<BR>
+				Due Date: [(realtimeat(world.time + checkoutperiod))/600]<BR>
 				(Checkout Period: [checkoutperiod] minutes) (<A href='?src=\ref[src];increasetime=1'>+</A>/<A href='?src=\ref[src];decreasetime=1'>-</A>)
 				<A href='?src=\ref[src];checkout=1'>(Commit Entry)</A><BR>
 				<A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"}
@@ -366,8 +366,8 @@
 		var/datum/borrowbook/b = new /datum/borrowbook
 		b.bookname = sanitize(buffer_book)
 		b.mobname = sanitize(buffer_mob)
-		b.getdate = world.time
-		b.duedate = world.time + (checkoutperiod * 600)
+		b.getdate = realtimeat(world.time)
+		b.duedate = realtimeat(world.time + (checkoutperiod * 600))
 		checkouts.Add(b)
 	if(href_list["checkin"])
 		var/datum/borrowbook/b = locate(href_list["checkin"])

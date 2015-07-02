@@ -909,7 +909,7 @@ var/list/slot_equipment_priority = list( \
 		usr << "<span class='notice'> Respawn is disabled.</span>"
 		return
 	else
-		var/deathtime = world.time - src.timeofdeath
+		var/deathtime = realtimeat(world.time) - src.timeofdeath
 		if(istype(src,/mob/dead/observer))
 			var/mob/dead/observer/G = src
 			if(G.has_enabled_antagHUD == 1 && config.antag_hud_restricted)

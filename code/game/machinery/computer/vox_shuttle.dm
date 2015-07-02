@@ -18,7 +18,7 @@ var/global/vox_shuttle_location
 	if(moving)
 		return
 
-	if(lastMove + VOX_SHUTTLE_COOLDOWN > world.time)
+	if(timedelay(-VOX_SHUTTLE_COOLDOWN) < lastMove)
 		return
 
 	var/area/dest_location = locate(destination)
@@ -58,10 +58,10 @@ var/global/vox_shuttle_location
 		return
 
 	user.set_machine(src)
-
+	var/movetime = lastMove - timedelay(-VOX_SHUTTLE_COOLDOWN)
 	var/dat = {"
 		Location: [areaMaster]<br>
-		Ready to move[max(lastMove + VOX_SHUTTLE_COOLDOWN - world.time, 0) ? " in [max(round((lastMove + VOX_SHUTTLE_COOLDOWN - world.time) * 0.1), 0)] seconds" : ": now"]<br>
+		Ready to move[movetime > 0 ? " in [max(round(0.1 * movetime / world.tick_lag), 0)] seconds" : ": now"]<br>
 		<a href='?src=\ref[src];move=start'>Return to dark space</a><br>
 		<a href='?src=\ref[src];move=solars_fore_port'>Fore port solar</a> |
 		<a href='?src=\ref[src];move=solars_aft_port'>Aft port solar</a> |

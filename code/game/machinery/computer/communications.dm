@@ -174,8 +174,8 @@ var/shuttle_call/shuttle_calls[0]
 				usr << "<span class='warning'>PKI AUTH ERROR: SERVER REPORTS BLACKLISTED COMMUNICATION KEY PLEASE CONTACT SERVICE TECHNICIAN</span>"
 				return
 
-			if(world.time < 6000)
-				usr << "<span class='notice'>The emergency response team is away on another mission, Please wait another [round((6000-world.time)/600)] minute\s before trying again.</span>"
+			if(world.time < worldtimeat(10 MINUTES))
+				usr << "<span class='notice'>The emergency response team is away on another mission, Please wait another [round((10 MINUTES)-realtimeat(world.time))/(1 MINUTES)] minute\s before trying again.</span>"
 				return
 			if(emergency_shuttle.online)
 				usr << "The emergency shuttle is already on its way."
@@ -378,7 +378,7 @@ var/shuttle_call/shuttle_calls[0]
 		var/timeleft=emergency_shuttle.timeleft()
 		shuttle["eta"]="[timeleft / 60 % 60]:[add_zero(num2text(timeleft % 60), 2)]"
 	shuttle["pos"] = emergency_shuttle.location
-	shuttle["can_recall"]=!(recall_time_limit && world.time >= recall_time_limit)
+	shuttle["can_recall"]=!(recall_time_limit && realtimeat(world.time) >= recall_time_limit) //TODO: What the fuck does this do???
 
 	data["shuttle"]=shuttle
 
@@ -457,8 +457,8 @@ var/shuttle_call/shuttle_calls[0]
 		user << "Centcom will not allow the shuttle to be called. Consider all contracts terminated."
 		return
 
-	if(world.time < 6000) // Ten minute grace period to let the game get going without lolmetagaming. -- TLE
-		user << "The emergency shuttle is refueling. Please wait another [round((6000-world.time)/600)] minute\s before trying again."
+	if(world.time < worldtimeat(10 MINUTES)) // Ten minute grace period to let the game get going without lolmetagaming. -- TLE
+		user << "The emergency shuttle is refueling. Please wait another [round(((10 MINUTES)-realtimeat(world.time))/(1 MINUTES))] minute\s before trying again."
 		return
 
 	if(emergency_shuttle.direction == -1)
@@ -508,8 +508,8 @@ var/shuttle_call/shuttle_calls[0]
 			user << "Centcom will not allow the shuttle to be called. Consider all contracts terminated."
 			return
 
-		if(world.time < 54000) // 30 minute grace period to let the game get going
-			user << "The shuttle is refueling. Please wait another [round((54000-world.time)/600)] minutes before trying again."//may need to change "/600"
+		if(world.time < worldtimeat(30 MINUTES)) // 30 minute grace period to let the game get going
+			user << "The shuttle is refueling. Please wait another [round(((30 MINUTES)-realtimeat(world.time))/(1 MINUTES))] minutes before trying again."//may need to change "/600"
 			return
 
 		if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction" || ticker.mode.name == "sandbox")

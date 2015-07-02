@@ -392,10 +392,11 @@
 	if (ticker && ticker.current_state >= GAME_STATE_PLAYING)
 		var/dat = "<html><head><title>Round Status</title></head><body><h1><B>Round Status</B></h1>"
 
+		var/time = realtimeat(world.time)
 		// AUTOFIXED BY fix_string_idiocy.py
 		// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:386: dat += "Current Game Mode: <B>[ticker.mode.name]</B><BR>"
 		dat += {"Current Game Mode: <B>[ticker.mode.name]</B><BR>
-			Round Duration: <B>[round(world.time / 36000)]:[add_zero(world.time / 600 % 60, 2)]:[world.time / 100 % 6][world.time / 100 % 10]</B><BR>
+			Round Duration: <B>[round(time / (1 HOURS))]:[add_zero(time / (1 MINUTES) % 60, 2)]:[time / 100 % 6][time / 100 % 10]</B><BR>
 			<B>Emergency shuttle</B><BR>"}
 		// END AUTOFIX
 		if (!emergency_shuttle.online)

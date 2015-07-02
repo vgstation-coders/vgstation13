@@ -232,10 +232,10 @@ var/global/list/whitelisted_species = list("Human")
 	if(CO2_pp > safe_co2_max)
 		if(!H.co2overloadtime) // If it's the first breath with too much CO2 in it, lets start a counter, then have them pass out after 12s or so.
 			H.co2overloadtime = world.time
-		else if(world.time - H.co2overloadtime > 120)
+		else if(timedelay(-12 SECONDS) > H.co2overloadtime)
 			H.Paralyse(3)
 			H.adjustOxyLoss(3) // Lets hurt em a little, let them know we mean business
-			if(world.time - H.co2overloadtime > 300) // They've been in here 30s now, lets start to kill them for their own good!
+			if(timedelay(-30 SECONDS) > H.co2overloadtime) // They've been in here 30s now, lets start to kill them for their own good!
 				H.adjustOxyLoss(8)
 		if(prob(20)) // Lets give them some chance to know somethings not right though I guess.
 			spawn(0) H.emote("cough")

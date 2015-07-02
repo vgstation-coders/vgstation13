@@ -365,7 +365,7 @@ var/global/datum/controller/gameticker/ticker
 	mode.process()
 
 	if(world.time > nanocoins_lastchange)
-		nanocoins_lastchange = world.time + rand(3000,15000)
+		nanocoins_lastchange = timedelay(rand(3000,15000))
 		nanocoins_rates = (rand(1,30))/10
 
 	/*emergency_shuttle.process()*/

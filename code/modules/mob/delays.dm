@@ -3,6 +3,18 @@
 // /vg/ MODULARIZED DELAYS - by N3X15
 //////////////////////////////////
 
+/proc/realtimeat(var/time)
+	. = time / world.tick_lag
+
+/proc/worldtimeat(var/time)
+	. = time * world.tick_lag
+
+/proc/timeuntil(var/final_time, var/units = 1) //The real time until this point
+	. = round((final_time - world.time) / world.tick_lag, units)
+
+/proc/timedelay(var/duration) //The world time until some duration has passed
+	. = (duration / world.tick_lag) + world.time
+
 // Reduces duplicated code by quite a bit.
 /datum/delay_controller
 	// Delay clamps (for adminbus, effects)
@@ -15,12 +27,12 @@
 	min_delay=min
 	max_delay=max
 
-/datum/delay_controller/proc/setDelay(var/delay)
-	next_allowed = world.time + Clamp(delay,min_delay,max_delay)
+/datum/delay_controller/proc/setDelay(var/delay = 0)
+	next_allowed = timedelay(Clamp(delay,min_delay,max_delay))
 
-/datum/delay_controller/proc/addDelay(var/delay)
-	var/current_delay = max(0,next_allowed - world.time)
-	setDelay(current_delay+delay)
+/datum/delay_controller/proc/addDelay(var/delay = 0)
+	var/current_delay = max(0,next_allowed - world.time) * world.tick_lag //Convert back to real time
+	setDelay(current_delay+delay) //Convert to world.time
 
 // Proxy for delayNext*(), to reduce duplicated code.
 /datum/delay_controller/proc/delayNext(var/delay, var/additive)
@@ -30,7 +42,7 @@
 		setDelay(delay)
 
 /datum/delay_controller/proc/blocked()
-	return next_allowed > world.time
+	. = (next_allowed > world.time)
 
 // Constructor args are currently all the same, but placed here for ease of tuning.
 /client // Yep, clients are snowflakes.

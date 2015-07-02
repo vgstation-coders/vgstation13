@@ -60,7 +60,7 @@
 
 	W.hits += 1
 	W.damage += damage
-	W.time_inflicted = world.time
+	W.time_inflicted = realtimeat(world.time)
 
 /mob/living/carbon/human/var/list/organs = list()
 /mob/living/carbon/human/var/list/organs_by_name = list() // map organ names to organs

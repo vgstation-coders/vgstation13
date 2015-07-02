@@ -2681,7 +2681,7 @@
 				var/mob/living/carbon/human/H=M
 				if(H.species.name!="Dionae") // Dionae are broken as fuck
 					if(H.hulk_time<world.time && !has_been_hulk)
-						H.hulk_time = world.time + (30 SECONDS)
+						H.hulk_time = timedelay(30 SECONDS)
 						hulked_at = H.hulk_time
 						if(!(M_HULK in H.mutations))
 							has_been_hulk=1

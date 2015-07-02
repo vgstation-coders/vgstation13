@@ -56,7 +56,7 @@
 	..()
 	if(!active) return
 
-	if(world.time > last_action + action_time)
+	if(timedelay(-action_time) > last_action)
 		finished_task()
 
 /obj/machinery/botany/attack_paw(mob/user as mob)

@@ -27,7 +27,7 @@
 	edges = list()
 
 /datum/pipeline/proc/process()//This use to be called called from the pipe networks
-	if((world.timeofday - last_pressure_check) / 10 >= PRESSURE_CHECK_DELAY)
+	if(timedelay(-10*PRESSURE_CHECK_DELAY) >= last_pressure_check )
 		//Check to see if pressure is within acceptable limits
 		var/pressure = air.return_pressure()
 		if(pressure > alert_pressure)
