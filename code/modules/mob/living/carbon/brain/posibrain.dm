@@ -43,6 +43,7 @@
 		if(O.client)
 			if(check_observer(O))
 				O << "<span class=\"recruit\">You are a possible candidate for \a [src]. Get ready. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Retract</a>)</span>"
+				O << 'sound/effects/adminhelp.ogg' //Warn them if they are tabbed out and idling, so they have a chance to retract
 				ghost_volunteers += O
 
 /obj/item/device/mmi/posibrain/proc/check_observer(var/mob/dead/observer/O)
