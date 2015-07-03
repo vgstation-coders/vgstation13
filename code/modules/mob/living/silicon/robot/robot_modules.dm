@@ -248,7 +248,7 @@
 
 
 /obj/item/weapon/robot_module/security
-	name = "security robot module"
+	name = "peacekeeper robot module"
 
 /obj/item/weapon/robot_module/security/New()
 	..()
