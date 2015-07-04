@@ -119,6 +119,7 @@ var/list/SPS_list = list()
 	gpstag = "SEC0"
 
 /obj/item/device/gps/secure/New()
+	..()
 	SPS_list.Add(src)
 	gpstag = "SEC0"
 	name = "secure positioning system ([gpstag])"

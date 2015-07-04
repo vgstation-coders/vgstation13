@@ -88,6 +88,7 @@ obj/item/weapon/gun/energy/laser/retro/sc_retro
 /obj/item/weapon/gun/projectile/shotgun/pump/sc_pump
 
 /obj/item/weapon/gun/projectile/shotgun/pump/sc_pump/New()
+	..()
 	for(var/ammo in loaded)
 		if(prob(95)) //95% chance
 			loaded -= ammo
