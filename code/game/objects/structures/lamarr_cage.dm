@@ -92,6 +92,3 @@
 	desc = "The worst she might do is attempt to... couple with your head."//hope we don't get sued over a harmless reference, rite?
 	sterile = 1
 	setGender(FEMALE)
-
-/obj/item/clothing/mask/facehugger/lamarr/New()//to prevent deleting it if aliums are disabled
-	return
