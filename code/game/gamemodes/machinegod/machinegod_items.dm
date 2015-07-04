@@ -515,7 +515,7 @@
 	//checks and shit
 	var/turf/castspot = user.loc
 	var/channeldur = 0
-	user.color = red
+	user.color = "#FF0000"
 	for(var/i = 0 to 30)
 		if(user.stat != CONSCIOUS)
 			break
@@ -538,7 +538,7 @@
 
 			var/turf/T = get_turf(H)
 			if(T.c_animation)
-				returnToPool(c_animation)
+				returnToPool(T.c_animation)
 				T.c_animation = null
 			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/siphon.ogg',"#FF0000")
 
