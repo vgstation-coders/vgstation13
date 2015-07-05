@@ -37,7 +37,12 @@
 	var/overlay_layer = LIGHTING_LAYER + 1
 	if(layer != MOB_LAYER)
 		overlay_layer=TURF_LAYER+0.2
-	overlays += image(icon,"eyes-[subtype][emagged?"-emagged":""]",overlay_layer)
+
+	var/icon/eye_icon = icon(icon, "eyes-[subtype][emagged?"-emagged":""]")
+	if(!emagged && mmi && mmi.brainmob && mmi.brainmob.connected_to)
+		eye_icon.ColorTone(CONTROLLED_ROBOT_EYE)
+	overlays += image(eye_icon, layer = overlay_layer)
+
 	if(anchored)
 		overlays += image(icon,"[subtype]-park",overlay_layer)
 

@@ -231,7 +231,7 @@
 //		return ..()
 */
 
-/obj/mecha/proc/click_action(atom/target,mob/user)
+/obj/mecha/click_action(atom/target,mob/user)
 	if(!src.occupant || src.occupant != user ) return
 	if(user.stat) return
 	if(state)
@@ -1097,7 +1097,7 @@
 		return 0
 
 /obj/mecha/proc/mmi_move_inside(var/obj/item/device/mmi/mmi_as_oc as obj,mob/user as mob)
-	if(!mmi_as_oc.brainmob || !mmi_as_oc.brainmob.client)
+	if(!mmi_as_oc.usable_brain())
 		user << "Consciousness matrix not detected."
 		return 0
 	else if(mmi_as_oc.brainmob.stat)
@@ -1125,14 +1125,14 @@
 
 /obj/mecha/proc/mmi_moved_inside(var/obj/item/device/mmi/mmi_as_oc as obj,mob/user as mob)
 	if(!isnull(src.loc) && mmi_as_oc && user in range(1))
-		if(!mmi_as_oc.brainmob || !mmi_as_oc.brainmob.client)
+		if(!mmi_as_oc.usable_brain())
 			user << "Consciousness matrix not detected."
 			return 0
 		else if(mmi_as_oc.brainmob.stat)
 			user << "Beta-rhythm below acceptable level."
 			return 0
 		user.drop_from_inventory(mmi_as_oc)
-		var/mob/brainmob = mmi_as_oc.brainmob
+		var/mob/living/carbon/brain/brainmob = mmi_as_oc.brainmob
 		brainmob.reset_view(src)
 	/*
 		brainmob.client.eye = src
@@ -1141,8 +1141,8 @@
 		occupant = brainmob
 		brainmob.loc = src //should allow relaymove
 		brainmob.canmove = 1
+		brainmob.controlling = src
 		mmi_as_oc.loc = src
-		mmi_as_oc.mecha = src
 		src.verbs -= /obj/mecha/verb/eject
 		src.Entered(mmi_as_oc)
 		src.Move(src.loc)
@@ -1253,7 +1253,7 @@
 			var/obj/item/device/mmi/mmi = mob_container
 			if(mmi.brainmob)
 				occupant.loc = mmi
-			mmi.mecha = null
+				mmi.brainmob.controlling = null
 			src.occupant.canmove = 0
 			src.verbs += /obj/mecha/verb/eject
 		src.occupant = null

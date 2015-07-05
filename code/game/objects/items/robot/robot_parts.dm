@@ -166,7 +166,7 @@
 			if(!M.brainmob)
 				user << "<span class='warning'>Sticking an empty [W] into the frame would sort of defeat the purpose.</span>"
 				return
-			if(!M.brainmob.key)
+			if(!M.usable_brain())
 				var/ghost_can_reenter = 0
 				if(M.brainmob.mind)
 					for(var/mob/dead/observer/G in player_list)
@@ -202,11 +202,13 @@
 			user.drop_item(W)
 
 			O.mmi = W
+			O.mmi.brainmob.controlling = O
 			O.invisibility = 0
 			O.custom_name = created_name
 			O.updatename("Default")
 
-			M.brainmob.mind.transfer_to(O)
+			if(M.brainmob.mind)
+				M.brainmob.mind.transfer_to(O)
 
 			if(O.mind && O.mind.special_role)
 				O.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")

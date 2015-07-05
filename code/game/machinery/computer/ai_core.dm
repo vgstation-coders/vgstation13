@@ -139,6 +139,8 @@
 
 				user.drop_item(P, src)
 				brain = P
+				if(brain.brainmob)
+					brain.brainmob.controlling = src
 				usr << "Added [P]."
 				icon_state = "3b"
 

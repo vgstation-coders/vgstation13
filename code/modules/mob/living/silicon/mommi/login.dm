@@ -8,6 +8,10 @@
 		ticker.mode.remove_revolutionary(mind)
 	return
 	*/
+
+	if(mmi && mmi.brainmob && mmi.brainmob.connected_to)
+		keeper = 0
+
 	if(can_see_static())
 		add_static_overlays()
 
