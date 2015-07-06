@@ -77,6 +77,14 @@
 /mob/living/simple_animal/cat/Proc
 	name = "Proc"
 
+/mob/living/simple_animal/cat/Salem
+	name = "Salem"
+	desc = "Meow."
+	icon_state = "salem"
+	icon_living= "salem"
+	icon_dead= "salem_dead"
+	gender = FEMALE
+
 /mob/living/simple_animal/cat/kitten
 	name = "kitten"
 	desc = "D'aaawwww"
