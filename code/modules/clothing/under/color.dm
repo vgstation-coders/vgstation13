@@ -73,6 +73,15 @@
 	_color = "white"
 	flags = FPRINT  | ONESIZEFITSALL
 
+/obj/item/clothing/under/color/patchwork
+	name = "patchwork jumpsuit"
+	desc = "This is a hastily patched together jumpsuit. The color has faded from whatever cloth was used to make it."
+	icon_state = "patchwork"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/altsuits.dmi', "right_hand" = 'icons/mob/in-hand/right/altsuits.dmi')
+	item_state = "patch_suit"
+	_color = "patchwork"
+	flags = FPRINT | ONESIZEFITSALL
+
 /obj/item/clothing/under/color/yellow
 	name = "yellow jumpsuit"
 	icon_state = "yellow"

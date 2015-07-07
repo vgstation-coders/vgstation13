@@ -5,6 +5,7 @@
  *		Wood
  *		Cloth
  *		Cardboard
+ *		Cloth
  */
 
 /*
@@ -208,16 +209,6 @@ var/global/list/datum/stack_recipe/wood_recipes = list ( \
 	return ..()
 
 /*
- * Cloth
- */
-/obj/item/stack/sheet/cloth
-	name = "cloth"
-	desc = "This roll of cloth is made from only the finest chemicals and bunny rabbits."
-	singular_name = "cloth roll"
-	icon_state = "sheet-cloth"
-	origin_tech = "materials=2"
-
-/*
  * Cardboard
  */
 var/global/list/datum/stack_recipe/cardboard_recipes = list ( \
@@ -266,4 +257,27 @@ var/global/list/datum/stack_recipe/charcoal_recipes = list ()
 
 /obj/item/stack/sheet/charcoal/New(var/loc, var/amount=null)
 		recipes = charcoal_recipes
+		return ..()
+
+/*
+ * Cloth
+ */
+var/global/list/datum/stack_recipe/cloth_recipes = list ( \
+	new/datum/stack_recipe("gauze", /obj/item/stack/medical/bruise_pack), \
+	new/datum/stack_recipe("rag", /obj/item/weapon/reagent_containers/glass/rag/), \
+	new/datum/stack_recipe("jumpsuit", /obj/item/clothing/under/color/patchwork,4), \
+	new/datum/stack_recipe("surgical mask", /obj/item/clothing/mask/surgical), \
+	new/datum/stack_recipe("cap", /obj/item/clothing/head/soft/mime,2), \
+)
+
+/obj/item/stack/sheet/cloth
+	name = "cloth"
+	desc = "Bolts of cloth, ready to be reshaped."
+	singular_name = "cloth bolt"
+	icon_state = "sheet-cloth"
+	flags = FPRINT
+	origin_tech = "materials=1"
+
+/obj/item/stack/sheet/cloth/New(var/loc, var/amount=null)
+		recipes = cloth_recipes
 		return ..()

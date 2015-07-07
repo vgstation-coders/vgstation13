@@ -10,6 +10,7 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list("Vox")
+	allowed_to_rip = 0
 
 /obj/item/clothing/under/rank/scientist
 	desc = "It's made of a special fiber that provides minor protection against bombs. It has markings that denote the wearer as a scientist."
@@ -96,6 +97,7 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list("Vox")
+	allowed_to_rip = 0
 
 /obj/item/clothing/under/rank/geneticist
 	desc = "It's made of a special fiber that gives special protection against biohazards. It has a genetics rank stripe on it."
