@@ -63,11 +63,12 @@
 	..()
 	if(iscultist(M))
 		M << "<span class='sinister'>\"Watch your step, wretch.\"</span>"
-		M.Weaken(3)
-		M.Stun(4)
 	else
-		M.Stun(4)
 		M << "<span class='warning'>An unseen force renders you motionless!</span>"
+	M.Stun(4)
+	if(prob(iscultist(M) ? 65 : 35))
+		M.adjustBruteLoss(10)
+		H << "<span class='danger'>It hurts.</span>"
 
 
 /obj/effect/sigil/transmission
