@@ -269,14 +269,6 @@
 	maxhealth = 500
 	sheetamount = 3
 
-	CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)//So bullets will fly over and stuff.
-		if(air_group || (height==0))
-			return 1
-		if(istype(mover) && mover.checkpass(PASSTABLE))
-			return 1
-		else
-			return 0
-
 /obj/structure/barricade/full/New(loc)
 
 	..(loc)
