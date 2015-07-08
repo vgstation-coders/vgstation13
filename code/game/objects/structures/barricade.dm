@@ -14,8 +14,8 @@
 	anchored = 1
 	density = 1
 	layer = 3.2 //Same as windows
-	var/health = 100 //Pretty strong
-	var/maxhealth = 100
+	var/health = 60 //Fairly strong
+	var/maxhealth = 60
 	var/sheetamount = 1 //Number of sheets needed to build this barricade (determines how much shit is spawned via Destroy())
 	var/busy = 0 //Oh god fucking do_after's
 
@@ -264,8 +264,8 @@
 	name = "wood barricade"
 	desc = "A barricade made out of wood planks, it is very likely going to be a tough nut to crack"
 	icon_state = "barricade_full"
-	health = 500
-	maxhealth = 500
+	health = 150
+	maxhealth = 150
 	sheetamount = 3
 
 /obj/structure/barricade/full/New(loc)
@@ -294,7 +294,7 @@
 /obj/structure/barricade/full/block //Used by the barricade kit when it is placed on airlocks or windows
 
 	icon_state = "barricade_block"
-	health = 50 //Can take a few hits, but not very robust
-	maxhealth = 50
+	health = 35 //Can take a few hits, but not very robust at all
+	maxhealth = 35
 	sheetamount = 1
 	opacity = 0 //You CAN see through this one, because it's just two wood planks hastily nailed onto the airlock/window
