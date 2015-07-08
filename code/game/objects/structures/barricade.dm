@@ -217,7 +217,6 @@
 			playsound(loc, 'sound/items/Deconstruct.ogg', 75, 1)
 			user.visible_message("<span class='warning'>[user] finishes turning \the [src] back into planks.</span>", \
 			"<span class='notice'>You finish turning \the [src] back into planks.</span>")
-			getFromPool(/obj/item/stack/sheet/wood, get_turf(src), sheetamount)
 			busy = 0
 			qdel(src)
 			return
