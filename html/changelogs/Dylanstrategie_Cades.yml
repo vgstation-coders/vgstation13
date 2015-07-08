@@ -1,0 +1,10 @@
+author: Dylanstrategie
+delete-after: True
+changes:
+  - rscadd: Added directional barricades. Barricade kits now build like windows (outside of building on windows or airlocks, which is still done via bashing them)
+  - rscadd: You can now deconstruct barricades using a crowbar instead of bashing them into pieces. This takes ten seconds but it just works, and is much faster than bashing it into pieces
+  - rscadd: Many procs and standardized procs borrowed from windows, notably allowing barricade slamming and examining to check health
+  - tweak: All barricade types no longer let air pass but are all transparent. The former is intentional (although the on-airlock and on-window sprite doesn't look very isolating), second is due to opacity problems
+  - tweak: All barricades are now more robust again explosions. Full-tile breaks in 4-5 direct hits (yes, that's pretty robust), directional and on-airlock/on-window in one. Full-tile does cost a shitton of wood per though
+  - bugfix: Attack delays have been included. No more lighting-fast destruction
+  - imageadd: Changed most barricade sprites to include nails and have the same color tone as wood planks. Custom sprite for barricade kit

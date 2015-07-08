@@ -311,8 +311,8 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	icon_state = "snowbarricade"
 	anchored = 1.0
 	density = 1.0
-	var/health = 50.0
-	var/maxhealth = 50.0
+	health = 50.0
+	maxhealth = 50.0
 
 /obj/structure/barricade/snow/attackby(obj/item/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/stack/sheet/snow))
