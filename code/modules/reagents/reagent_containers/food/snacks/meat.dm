@@ -24,7 +24,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/corgi
 	name = "Corgi meat"
 	desc = "Tastes like... well you know..."
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken
 	name = "raw chicken"
 	desc = "This better be delicious."
@@ -34,7 +34,7 @@
 	..()
 	reagents.add_reagent("nutriment", 3)
 	bitesize = 1
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
 	name = "carp fillet"
 	desc = "A fillet of spess carp meat"
@@ -49,7 +49,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/imitation
 	name = "imitation carp fillet"
 	desc = "Almost just like the real thing, kinda."
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
 	name = "xenomeat"
 	desc = "A slab of xeno meat"
@@ -58,7 +58,16 @@
 		..()
 		reagents.add_reagent("nutriment", 3)
 		src.bitesize = 6
-		
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/dionameat
+	name = "diona meat"
+	desc = "Delicious nymph meat"
+	icon_state = "dionameat"
+	New()
+		..()
+		reagents.add_reagent("nutriment", 3)
+		src.bitesize = 6
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat
 	name = "spider meat"
 	desc = "A slab of spider meat."
