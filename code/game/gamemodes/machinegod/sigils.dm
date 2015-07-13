@@ -59,16 +59,16 @@
 	actcolor = "#FF0000"
 
 
-/obj/effect/sigil/transgression/activation(var/mob/M as mob)
+/obj/effect/sigil/transgression/activation(var/mob/living/L as mob)
 	..()
-	if(iscultist(M))
-		M << "<span class='sinister'>\"Watch your step, wretch.\"</span>"
+	if(iscultist(L))
+		L << "<span class='sinister'>\"Watch your step, wretch.\"</span>"
 	else
-		M << "<span class='warning'>An unseen force renders you motionless!</span>"
-	M.Stun(4)
-	if(prob(iscultist(M) ? 65 : 35))
-		M.adjustBruteLoss(10)
-		H << "<span class='danger'>It hurts.</span>"
+		L << "<span class='warning'>An unseen force renders you motionless!</span>"
+	L.Stun(4)
+	if(prob(iscultist(L) ? 65 : 35))
+		L.adjustBruteLoss(10)
+		L << "<span class='danger'>It hurts.</span>"
 
 
 /obj/effect/sigil/transmission

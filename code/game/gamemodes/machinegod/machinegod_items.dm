@@ -134,7 +134,7 @@
 		var/datum/organ/internal/eyes/E = H.internal_organs["eyes"]
 		if(!(H.sdisabilities & BLIND))
 			if(iscultist(H))
-				H << "<span class='sinister'>\"Looks like Nar'sie's dogs really don't value their eyes.\"</span>"
+				H << "<span class='clockwork'>\"Looks like Nar'sie's dogs really don't value their eyes.\"</span>"
 				E.damage += E.min_broken_damage
 				H << "<span class='danger'>You go blind!</span>"
 				H.sdisabilities |= BLIND
@@ -245,7 +245,7 @@
 	playsound(src,'sound/effects/EMPulse.ogg',80,1)
 	for(var/turf/T in range(1, src))
 		if(findNullRod(T))
-			creator << "<span class='sinister'>The visor's power has been negated!</span>"
+			creator << "<span class='clockwork'>The visor's power has been negated!</span>"
 			returnToPool(src)
 	flick("judgemarker", src)
 	for(var/mob/living/L in range(1,src))
@@ -268,7 +268,7 @@
 		spawn(15)
 			for(var/turf/T in range(1, src))
 				if(findNullRod(T))
-					creator << "<span class='sinister'>The visor's power has been negated!</span>"
+					creator << "<span class='clockwork'>The visor's power has been negated!</span>"
 					returnToPool(src)
 
 			for(var/mob/living/L in range(1,src))
@@ -279,11 +279,11 @@
 				if(iscultist(L))
 					L.adjust_fire_stacks(5)
 					L.IgniteMob()
-					L << "<span class='sinister'>\"There is nowhere the disciples of Nar'sie may hide from me! Burn!\"</span>"
+					L << "<span class='clockwork'>\"There is nowhere the disciples of Nar'sie may hide from me! Burn!\"</span>"
 				judgetotal += 1
 
 			if(creator)
-				creator << "<span class='sinister'>[judgetotal] target\s judged.</span>"
+				creator << "<span class='clockwork'>[judgetotal] target\s judged.</span>"
 			returnToPool(src)
 
 
@@ -314,7 +314,7 @@
 	if(iscultist(user))
 		user.Paralyse(5)
 		user << "<span class='warning'>An unexplicable force powerfully repels the spear from [target]!</span>"
-		user << "<span class='sinister'>\"You're liable to put your eye out like that.\"</span>"
+		user << "<span class='clockwork'>\"You're liable to put your eye out like that.\"</span>"
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			var/datum/organ/external/affecting = H.get_organ(organ)
@@ -449,7 +449,7 @@
 	var/list/L = list()
 	var/list/areaindex = list()
 
-	for(var/obj/machinery/clockobelisk/C in world)
+	for(var/obj/machinery/clockobelisk/C in machines)
 		var/turf/T = get_turf(C)
 		if (!T)
 			continue
@@ -512,14 +512,16 @@
 /obj/item/weapon/clockcheat/belligerent/attack_self(mob/living/user as mob)
 	if(!..()) return
 
-	//checks and shit
 	var/turf/castspot = user.loc
+	var/holding = user.get_active_hand()
 	var/channeldur = 0
 	user.color = "#FF0000"
 	for(var/i = 0 to 30)
-		if(user.stat != CONSCIOUS)
+		if(!user || user.stat != CONSCIOUS || user.weakened || user.stunned)
 			break
-		if(castspot && user.loc != castspot)
+		if(user.loc != castspot)
+			break
+		if(!(user.get_active_hand() == holding))
 			break
 		if(!isclockcult(user))
 			break
@@ -548,10 +550,60 @@
 					H << "<span class='clockwork'>\"Kneel.\"</span>"
 			else
 				H << "<span class='danger'>A mighty force impedes your movements.</span>"
-		sleep(15)
+		sleep(20)
 
 	user << "<span class='warning'>Ratvar's fury overwhelms you, preventing you from moving.</span>"
-	user.color = "#FFFFFF"
 	var/turf/T = get_turf(user)
 	T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/siphon.ogg',"#FF0000")
 	user.Stun(channeldur)
+	spawn(channeldur)
+		user.color = "#FFFFFF"
+
+
+/obj/item/weapon/clockcheat/voltvoid
+	color = "#FF9900"
+
+/obj/item/weapon/clockcheat/voltvoid/attack_self(mob/living/user as mob)
+	if(!..()) return
+
+	var/turf/castspot = user.loc
+	var/holding = user.get_active_hand()
+	user.color = "#FF9900"
+	playsound(get_turf(user), 'sound/effects/EMPulse.ogg', 100, 1)
+	for(var/i = 0 to 30)
+		if(!user || user.stat != CONSCIOUS || user.stunned)
+			break
+		if(castspot && user.loc != castspot)
+			break
+		if(!(user.get_active_hand() == holding))
+			break
+		if(!isclockcult(user))
+			break
+
+		var/list/powercells = list()
+		for(var/obj/machinery/M in range(9, user))
+			powercells += recursive_type_check(M, /obj/item/weapon/cell)
+		for(var/obj/mecha/A in range(9,user))
+			powercells += recursive_type_check(A, /obj/item/weapon/cell)
+		for(var/mob/living/L in range(9,user))
+			powercells += recursive_type_check(L, /obj/item/weapon/cell)
+			if(istype(L, /mob/living/silicon))
+				var/mob/living/silicon/S = L
+				S << "<span class='warning'>SYSTEM ALERT: Energy drain detected!</span>"
+
+		for(var/obj/item/weapon/cell/PC in powercells)
+			if(PC.charge <= 0)
+				powercells -= PC
+				continue
+			PC.use(500)
+
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			var/datum/organ/external/O = pick(H.organs)
+			if(O.status & ORGAN_ROBOT)
+				O.heal_damage(2, 1, 1, 1)
+			else
+				O.take_damage(0, powercells.len)
+		sleep(20)
+
+	user.color = "#FFFFFF"
