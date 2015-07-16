@@ -4,14 +4,7 @@
 		M << "No attacking people at spawn, you jackass."
 		return
 
-	var/datum/organ/external/temp = M:organs_by_name["r_hand"]
-	if (M.hand)
-		temp = M:organs_by_name["l_hand"]
-	if(temp && !temp.is_usable())
-		M << "<span class='warning'>You can't use your [temp.display_name].</span>"
-		return
-
-	..()
+	..() //Checks hand validity and shares contact diseases; also exits if attacker not carbon
 
 	if((M != src) && check_shields(0, M.name))
 		visible_message("<span class='danger'>[M] attempted to touch [src]!</span>")
@@ -303,5 +296,13 @@
 	return
 
 /mob/living/carbon/human/proc/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, inrange, params)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/afterattack() called tick#: [world.time]")
 	return
+
+/mob/living/carbon/human/is_hand_valid_for_attack()
+	var/datum/organ/external/temp = organs_by_name["r_hand"]
+	if (hand)
+		temp = organs_by_name["l_hand"]
+	if(temp && !temp.is_usable())
+		src << "<span class='warning'>You can't use your [temp.display_name].</span>"
+		return 0
+	return 1
