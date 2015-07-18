@@ -36,6 +36,9 @@
 			log_admin("[key_name(src)] has attempted to advertise in OOC: [msg]")
 			message_admins("[key_name_admin(src)] has attempted to advertise in OOC: [msg]")
 			return
+	var/msg_style = ""
+	if(findtext(trim(msg), "&gt;", 1, 5))
+		msg_style = "style='color: #00c000;'" //greentext
 
 	log_ooc("[mob.name]/[key] (@[mob.x],[mob.y],[mob.z]): [msg]")
 
@@ -61,7 +64,7 @@
 						display_name = "[holder.fakekey]/([src.key])"
 					else
 						display_name = holder.fakekey
-			C << "<font color='[display_colour]'><span class='ooc'><span class='prefix'>OOC:</span> <EM>[display_name]:</EM> <span class='message'>[msg]</span></span></font>"
+			C << "<font color='[display_colour]'><span class='ooc'><span class='prefix'>OOC:</span> <EM>[display_name]:</EM> <span class='message' [msg_style]>[msg]</span></span></font>"
 			/*
 			if(holder)
 				if(!holder.fakekey || C.holder)
