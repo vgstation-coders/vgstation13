@@ -216,6 +216,21 @@
 		"gal'h'rfikk", "harfrandid", "mud'gib", "fuu", "ma'jin", "dedo", "ol'btoh", "n'ath", "reth", "sh'yro", "eth", \
 		"d'rekkathnor", "khari'd", "gual'te", "nikka", "nikt'o", "barada", "kla'atu", "barhah", "hra" ,"zar'garis")
 
+/datum/language/clockcultcommon
+	name = "Clockcult"
+	desc = "The language of the Justiciar, the incomprehensible."
+	speech_verb = "recites"
+	ask_verb = "chatters"
+	exclaim_verb = "bellows"
+	colour = "clockcult"
+	key = "6"
+	flags = RESTRICTED
+	space_chance = 100
+	syllables = list()
+
+/datum/language/clockcultcommon/say_misunderstood(mob/M, message)
+	//make a rot13 proc and then jumble shit around
+	return speech_verb
 
 // Language handling.
 /mob/proc/add_language(var/language)
