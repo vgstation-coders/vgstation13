@@ -26,7 +26,7 @@ var/global/datum/shuttle/salvage/salvage_shuttle = new
 
 	req_access = list(access_salvage_captain)
 
-	light_color = LIGHT_COLOR_RED
+	l_color = "#B40000"
 
 /obj/machinery/computer/shuttle_control/salvage/New() //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
 	link_to(salvage_shuttle)

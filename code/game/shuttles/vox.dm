@@ -49,7 +49,7 @@ var/global/datum/shuttle/vox/vox_shuttle = new
 
 	req_access = list(access_syndicate)
 
-	light_color = LIGHT_COLOR_RED
+	l_color = "#B40000"
 
 
 /obj/machinery/computer/shuttle_control/vox/New() //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm

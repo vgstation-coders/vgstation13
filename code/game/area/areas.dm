@@ -67,6 +67,21 @@
 
 	return contents
 
+/proc/select_area_from_list(var/mob/user, var/list/areas_list, var/message="Select an area", var/title="Area selection")
+	if(!user) return
+	if(!areas_list) return
+
+	var/list/L = list()
+	for(var/area/A in areas_list)
+		L += A.name
+		L[A.name] = A
+
+	var/choice = input(user,message,title) in areas_list
+
+	if(choice && isarea(L[choice]))
+		return L[choice]
+	return null
+
 /area/proc/poweralert(var/state, var/obj/source as obj)
 	writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/area/proc/poweralert() called tick#: [world.time]")
 	if (suspend_alert) return
