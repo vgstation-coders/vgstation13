@@ -296,7 +296,7 @@ var/bomb_set
 	if(ticker)
 		var/datum/game_mode/nuclear/gamemode = ticker.mode
 		if(ticker.mode && ticker.mode.name == "nuclear emergency")
-			var/obj/machinery/computer/syndicate_station/syndie_location = locate(/obj/machinery/computer/shuttle_control/syndicate)
+			var/obj/machinery/computer/shuttle_control/syndicate/syndie_location = locate(/obj/machinery/computer/shuttle_control/syndicate)
 			if(syndie_location)
 				gamemode.syndies_didnt_escape = (syndie_location.z > 1 ? 0 : 1)	//muskets will make me change this, but it will do for now
 			gamemode.nuke_off_station = off_station
