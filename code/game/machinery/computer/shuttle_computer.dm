@@ -8,7 +8,6 @@
 	circuit = "/obj/item/weapon/circuitboard/mining_shuttle"
 
 	machine_flags = EMAGGABLE | SCREWTOGGLE
-	light_color = LIGHT_COLOR_CYAN
 
 	var/datum/shuttle/shuttle
 
