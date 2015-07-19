@@ -9,6 +9,8 @@
 
 	machine_flags = EMAGGABLE | SCREWTOGGLE
 
+	l_color = "#0000B4"
+
 	var/datum/shuttle/shuttle
 
 	var/area/selected_area
@@ -197,7 +199,7 @@
 	circuit = "/obj/item/weapon/circuitboard/mining_shuttle"
 
 	machine_flags = EMAGGABLE | SCREWTOGGLE
-	light_color = LIGHT_COLOR_GREEN
+	l_color = "#00B400"
 
 	var/list/pending_areas = list()
 	var/datum/shuttle/shuttle
