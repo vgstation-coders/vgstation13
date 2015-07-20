@@ -530,10 +530,10 @@
 		if(A.areaapc == apctoremove)
 			A.areaapc = null
 
-/area/proc/used_by_shuttles()
+/area/proc/used_by_shuttle()
 	for(var/datum/shuttle/S in shuttles)
-		if(src == S.current_area) return 1
-		if(src in S.areas) return 1
+		if(src == S.current_area) return S
+		if(src in S.areas) return S
 	return 0
 
 //This proc checks if the shape of two areas is identical

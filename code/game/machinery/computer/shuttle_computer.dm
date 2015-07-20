@@ -290,7 +290,7 @@
 			return
 
 		if(istype(my_area,/area/shuttle))
-			if(my_area.used_by_shuttles())
+			if(my_area.used_by_shuttle())
 				src.say("This area is already being used by another shuttle.")
 				return
 			var/datum/shuttle/custom/new_shuttle = new
