@@ -139,7 +139,7 @@
 		/obj/item/clothing/mask/cigarette/blunt/deus,
 		/obj/item/clothing/mask/cigarette/blunt/cruciatus,
 		/obj/item/device/paicard,
-		/obj/item/device/violin,
+		/obj/item/device/instrument/violin,
 		/obj/item/weapon/storage/belt/utility/complete,
 		/obj/item/clothing/accessory/tie/horrible,
 		/obj/item/device/maracas,
