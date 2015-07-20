@@ -1,4 +1,3 @@
-
 /obj/item/weapon/clockslab
 	name = "clockwork slab"
 	desc = "An bizarre, ticking, glowing device rapidly displaying information."
@@ -8,6 +7,12 @@
 	throw_range = 5
 	w_class = 2.0
 	flags = FPRINT
+
+	var/datum/html_interface/clockslab/slab/interface
+
+/obj/item/weapon/clockslab/New()
+	. = ..()
+
 
 /obj/item/weapon/clockslab/examine(mob/user)
 	..()
@@ -25,3 +30,13 @@
 	if(isclockcult(user))
 		//interface mumbo jumbo
 */
+
+/obj/item/weapon/clockslab/Topic(var/href, var/list/href_list)
+	. = ..()
+	if(.)
+		return
+
+	if(!isclockcult(usr))
+		usr << "You don't even have any idea what any of this means, better not touch it..."
+		return 1
+
