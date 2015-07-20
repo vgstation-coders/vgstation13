@@ -2461,7 +2461,7 @@
 "aVq" = (/turf/simulated/wall/r_wall,/area/maintenance/fsmaint2)
 "aVr" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/wall/r_wall,/area/engine/reactor_gas{icon_state = "atmos"; name = "Atmospherics Security"})
 "aVs" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/wall/r_wall,/area/engine/reactor_gas{icon_state = "atmos"; name = "Atmospherics Security"})
-"aVt" = (/obj/machinery/computer/research_shuttle{name = "Asteroid Shuttle Console"; req_access = null; req_one_access = list(47,54)},/turf/simulated/shuttle/floor,/area/shuttle/research/station)
+"aVt" = (/obj/machinery/computer/shuttle_controller/research{name = "Asteroid Shuttle Console"; req_access = null; req_one_access = list(47,54)},/turf/simulated/shuttle/floor,/area/shuttle/research/station)
 "aVu" = (/obj/structure/window/reinforced,/obj/structure/stool/bed/chair{dir = 1},/turf/simulated/shuttle/floor,/area/shuttle/research/station)
 "aVv" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/obj/structure/disposalpipe/sortjunction{sort_tag = "THEATRE"},/turf/simulated/floor{icon_state = "neutral"; dir = 1},/area/hallway/primary/port{name = "\improper Service Hallway"})
 "aVw" = (/obj/machinery/light{dir = 4},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/turf/simulated/floor{icon_state = "neutral"; dir = 1},/area/hallway/primary/port{name = "\improper Service Hallway"})
