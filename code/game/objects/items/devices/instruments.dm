@@ -41,8 +41,9 @@
 	icon_state = "violin"
 	item_state = "violin"
 	force = 10
-	hitsound = "swing_hit"
+	attack_verb = list("smashed")
 	instrumentId = "violin"
+	instrumentExt= "mid"
 
 /obj/item/device/instrument/guitar
 	name = "guitar"
@@ -52,5 +53,4 @@
 	item_state = "guitar"
 	force = 10
 	attack_verb = list("played metal on", "serenaded", "crashed", "smashed")
-	hitsound = "swing_hit"
 	instrumentId = "guitar"
