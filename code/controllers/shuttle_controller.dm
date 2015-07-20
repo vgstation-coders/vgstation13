@@ -160,7 +160,8 @@ datum/shuttle_controller/emergency_shuttle/force_shutdown()
 		location = 1
 
 		//main shuttle
-		move_pod(/area/shuttle/escape/transit,/area/shuttle/escape/station,NORTH,1)
+		escape_shuttle.complete_movement(escape_shuttle.area_station)
+		escape_shuttle.open_all_doors()
 
 		//pods
 		move_pod(/area/shuttle/escape_pod1/transit,/area/shuttle/escape_pod1/station, NORTH,1)
@@ -197,7 +198,8 @@ datum/shuttle_controller/emergency_shuttle/process()
 					location = 2
 
 					//main shuttle
-					move_pod(/area/shuttle/escape/transit,/area/shuttle/escape/centcom,NORTH,1)
+					escape_shuttle.complete_movement(escape_shuttle.area_centcomm)
+					escape_shuttle.open_all_doors()
 
 					//pods
 					move_pod(/area/shuttle/escape_pod1/transit,/area/shuttle/escape_pod1/centcom, NORTH,1)
@@ -225,45 +227,8 @@ datum/shuttle_controller/emergency_shuttle/process()
 			/* --- Shuttle has docked with the station - begin countdown to transit --- */
 			else if(timeleft <= 0)
 				location = 1
-				var/area/start_location = locate(/area/shuttle/escape/centcom)
-				var/area/end_location = locate(/area/shuttle/escape/station)
 
-				var/list/dstturfs = list()
-				var/throwy = world.maxy
-
-				for(var/turf/T in end_location)
-					dstturfs += T
-					if(T.y < throwy)
-						throwy = T.y
-
-				// hey you, get out of the way!
-				for(var/turf/T in dstturfs)
-					// find the turf to move things to
-					var/turf/D = locate(T.x, throwy - 1, 1)
-					//var/turf/E = get_step(D, SOUTH)
-					for(var/atom/A as mob|obj in T)
-						if(ismob(A))
-							var/mob/M=A
-							M.gib()
-						else if(istype(A,/atom/movable))
-							var/atom/movable/AM=A
-							AM.Move(D)
-						// Remove windows, grills, lattice, etc.
-						if(istype(A,/obj/structure) || istype(A,/obj/machinery))
-							if(istype(A,/obj/machinery/singularity))
-								continue
-							qdel(A)
-						// NOTE: Commenting this out to avoid recreating mass driver glitch
-						/*
-						spawn(0)
-							AM.throw_at(E, 1, 1)
-							return
-						*/
-
-					if(istype(T, /turf/simulated))
-						del(T)
-
-				start_location.move_contents_to(end_location)
+				escape_shuttle.complete_movement(escape_shuttle.area_station)
 				settimeleft(SHUTTLELEAVETIME)
 				send2mainirc("The Emergency Shuttle has docked with the station.")
 				captain_announce("The Emergency Shuttle has docked with the station. You have [round(timeleft()/60,1)] minutes to board the Emergency Shuttle.")
@@ -309,7 +274,8 @@ datum/shuttle_controller/emergency_shuttle/process()
 				CallHook("EmergencyShuttleDeparture", list())
 
 				//main shuttle
-				move_pod(/area/shuttle/escape/station,/area/shuttle/escape/transit,NORTH,0)
+				escape_shuttle.complete_movement(escape_shuttle.transit_area)
+				escape_shuttle.close_all_doors()
 
 				//pods
 				move_pod(/area/shuttle/escape_pod1/station,/area/shuttle/escape_pod1/transit,NORTH,0)

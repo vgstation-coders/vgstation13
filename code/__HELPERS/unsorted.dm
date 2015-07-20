@@ -829,7 +829,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	return theareas
 
 //Takes: Area type as text string or as typepath OR an instance of the area.
-//Returns: A list of all turfs in areas of that type of that type in the world.
+//Returns: A list of all turfs in areas of that type in the world.
 /proc/get_area_turfs(var/areatype)
 	writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_area_turfs() called tick#: [world.time]")
 	if(!areatype) return null
@@ -861,6 +861,21 @@ proc/GaussRandRound(var/sigma,var/roundto)
 				atoms += A
 	return atoms
 
+//Experimental shit
+/area/proc/get_turfs()
+	var/list/L = list()
+	for(var/turf/T in contents)
+		L |= T
+
+	return L
+
+/area/proc/get_atoms()
+	var/list/L = list()
+	for(var/atom/A in contents)
+		L |= A
+
+	return L
+
 /datum/coords //Simple datum for storing coordinates.
 	var/x_pos = null
 	var/y_pos = null
@@ -874,11 +889,14 @@ var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "typ
 	//Notes: Attempts to move the contents of one area to another area.
 	//       Movement based on lower left corner. Tiles that do not fit
 	//		 into the new area will not be moved.
+	world << "Moving contents to [A.name]..."
+	if(!A || !src)
+		world << "Uh oh!"
+		return 0
 
-	if(!A || !src) return 0
-
-	var/list/turfs_src = get_area_turfs(src.type)
-	var/list/turfs_trg = get_area_turfs(A.type)
+	var/list/turfs_src = src.get_turfs()
+	var/list/turfs_trg = A.get_turfs()
+	world << "[turfs_src.len] turfs in our area, [turfs_trg.len] in theirs"
 
 	var/src_min_x = 0
 	var/src_min_y = 0
@@ -1050,7 +1068,24 @@ var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "typ
 	for(var/obj/O in doors)
 		O:update_nearby_tiles()
 
+/area/proc/displace_contents()
+	var/list/dstturfs = list()
+	var/throwy = world.maxy
 
+	for(var/turf/T in src)
+		dstturfs += T
+		if(T.y < throwy)
+			throwy = T.y
+
+	// hey you, get out of the way!
+	for(var/turf/T in dstturfs)
+			// find the turf to move things to
+		var/turf/D = locate(T.x, throwy - 1, 1)
+					//var/turf/E = get_step(D, SOUTH)
+		for(var/atom/movable/AM as mob|obj in T)
+			AM.Move(D)
+		if(istype(T, /turf/simulated))
+			qdel(T)
 
 proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 	writepanic("[__FILE__].[__LINE__] \\/proc/DuplicateObject() called tick#: [world.time]")

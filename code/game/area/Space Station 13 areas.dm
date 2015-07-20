@@ -233,9 +233,11 @@ proc/process_adminbus_teleport_locs()
 	music = "music/escape.ogg"
 
 /area/shuttle/mining/station
+	name = "\improper Mining Dock"
 	icon_state = "shuttle2"
 
 /area/shuttle/mining/outpost
+	name = "\improper Mining Outpost"
 	icon_state = "shuttle"
 
 /area/shuttle/transport1/centcom
@@ -328,9 +330,11 @@ proc/process_adminbus_teleport_locs()
 	music = "music/escape.ogg"
 
 /area/shuttle/research/station
+	name = "\improper Research Dock"
 	icon_state = "shuttle2"
 
 /area/shuttle/research/outpost
+	name = "\improper Research Outpost"
 	icon_state = "shuttle"
 
 /area/shuttle/vox/station

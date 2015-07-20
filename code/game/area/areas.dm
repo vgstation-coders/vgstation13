@@ -67,6 +67,21 @@
 
 	return contents
 
+/proc/select_area_from_list(var/mob/user, var/list/areas_list, var/message="Select an area", var/title="Area selection")
+	if(!user) return
+	if(!areas_list) return
+
+	var/list/L = list()
+	for(var/area/A in areas_list)
+		L += A.name
+		L[A.name] = A
+
+	var/choice = input(user,message,title) in areas_list
+
+	if(choice && isarea(L[choice]))
+		return L[choice]
+	return null
+
 /area/proc/poweralert(var/state, var/obj/source as obj)
 	writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/area/proc/poweralert() called tick#: [world.time]")
 	if (suspend_alert) return
@@ -514,3 +529,56 @@
 	for(var/area/A in src.related)
 		if(A.areaapc == apctoremove)
 			A.areaapc = null
+
+/area/proc/used_by_shuttle()
+	for(var/datum/shuttle/S in shuttles)
+		if(src == S.current_area) return S
+		if(src in S.areas) return S
+	return 0
+
+//This proc checks if the shape of two areas is identical
+//Will be used in shuttle stuff
+/proc/areas_are_identical(var/area/A1, var/area/A2)
+
+	var/turf/tempT1
+	var/turf/tempT2
+	//First step - get the turfs closest to 0;0 in both areas
+	for(var/turf/T in A1.contents)
+		if(!tempT1 || (T.x < tempT1.x || T.y < tempT1.y) )
+			tempT1 = T
+
+	for(var/turf/T in A2.contents)
+		if(!tempT2 || (T.x < tempT2.x || T.y < tempT2.y) )
+			tempT2 = T
+
+	if(!tempT1)
+		world << "[A1] has no turfs!"
+		return
+	if(!tempT2)
+		world << "[A2] has no turfs!"
+
+	//Now that we have two closest to 0;0 turfs, get the difference in their coordinates
+	var/offsetX = tempT2.x - tempT1.x
+	var/offsetY = tempT2.y - tempT1.y
+
+	//Create a list which holds coordinates of all turfs in A1
+	//Example: "0;0"=(turf); "1;0"=(turf); "2;0"=(turf)
+	var/list/result = list()
+	for(var/turf/T in A1.contents)
+		result += "[T.x];[T.y]"
+		result["[T.x];[T.y]"]=T
+
+	//For all turfs in A2, check if the list from above has an entry for their coordinates (with offset added)
+	var/turf_amount = 0
+	for(var/turf/T in A2.contents)
+		turf_amount++
+		if(!result["[T.x-offsetX];[T.y-offsetY]"])
+			world << "Shapes are not identical!"
+			return 0
+
+	//Lastly, check if there is a same amount of turfs in both areas (result list has all turfs from A1, amount of turfs from A2 is stored in a variable)
+	if(result.len != turf_amount)
+		world << "Turf amounts differ!"
+		return 0
+
+	return 1

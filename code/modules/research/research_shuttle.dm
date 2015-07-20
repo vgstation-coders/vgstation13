@@ -101,7 +101,8 @@ proc/move_research_shuttle()
 		return
 	if(href_list["move"])
 		if(ticker.mode.name == "blob")
-			if(ticker.mode:declared)
+			var/datum/game_mode/blob/B = ticker.mode
+			if(B.declared)
 				usr << "Under directive 7-10, [station_name()] is quarantined until further notice."
 				return
 		var/area/A = locate(/area/shuttle/research/station)

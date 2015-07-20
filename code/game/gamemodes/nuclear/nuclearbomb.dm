@@ -294,16 +294,17 @@ var/bomb_set
 		off_station = 2
 
 	if(ticker)
+		var/datum/game_mode/nuclear/gamemode = ticker.mode
 		if(ticker.mode && ticker.mode.name == "nuclear emergency")
-			var/obj/machinery/computer/syndicate_station/syndie_location = locate(/obj/machinery/computer/syndicate_station)
+			var/obj/machinery/computer/shuttle_control/syndicate/syndie_location = locate(/obj/machinery/computer/shuttle_control/syndicate)
 			if(syndie_location)
-				ticker.mode:syndies_didnt_escape = (syndie_location.z > 1 ? 0 : 1)	//muskets will make me change this, but it will do for now
-			ticker.mode:nuke_off_station = off_station
+				gamemode.syndies_didnt_escape = (syndie_location.z > 1 ? 0 : 1)	//muskets will make me change this, but it will do for now
+			gamemode.nuke_off_station = off_station
 		ticker.station_explosion_cinematic(off_station,null)
 		if(ticker.mode)
 			ticker.mode.explosion_in_progress = 0
 			if(ticker.mode.name == "nuclear emergency")
-				ticker.mode:nukes_left --
+				gamemode.nukes_left --
 			else
 				world << "<B>The station was destoyed by the nuclear blast!</B>"
 

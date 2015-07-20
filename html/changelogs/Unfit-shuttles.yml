@@ -1,0 +1,12 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+  - experiment: Changed most of the shuttles to use a new, datum-based system.
+  - tweak: Shuttles now always gib mobs they collide with, instead of displacing them.
+  - tweak: The former doesn't apply to taxis, which slow down and gently displace mobs.
+  - rscadd: Mining, research, syndicate, vox, salvage shuttle computers have been replaced with a new universal shuttle control console. It can be built and linked freely to the mining and research shuttles, to link it to the salvage shuttle a password is required.
+  - rscadd: Added new 'shuttle magic' menu for admins.
+  - rscadd: Added 8 new admin commands which abuse the new shuttle system to its fullest, allowing easy manipulation and creation of shuttles, as well as extension of already existing shuttles.
+  - wip: Added shuttle core computers and beacon-based area designators, which, when combined, allow creating custom shuttles. These items are admin-spawnable only and are still buggy - use with caution.
