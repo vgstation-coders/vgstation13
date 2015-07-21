@@ -1750,3 +1750,11 @@
 		return 0
 
 	return 1
+
+/mob/living/carbon/human/spook()
+	if(!client) return
+
+	if(!hallucinating())
+		src << "<i>[pick(boo_phrases)]</i>"
+	else
+		src << "<b><font color='[pick("red","orange","yellow","green","blue")]'>[pick(boo_phrases_drugs)]</font></b>"

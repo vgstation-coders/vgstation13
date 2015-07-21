@@ -729,3 +729,9 @@ its easier to just keep the beam vertical.
 		oldarea = "[oldarea.name]"
 	if(istype(newarea))
 		newarea = "[newarea.name]"
+
+//Called in /spell/aoe_turf/boo/cast() (code/modules/mob/dead/observer/spells.dm)
+/atom/proc/spook()
+	if(blessed)
+		return 0
+	return 1
