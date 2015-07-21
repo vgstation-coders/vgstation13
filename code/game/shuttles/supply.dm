@@ -18,7 +18,7 @@ var/global/datum/shuttle/cargo/cargo_shuttle = new
 	if(!areas || !areas.len)
 		return
 
-	area_centcomm = locate(/area/shuttle/supply/centcom) in areas
-	area_station = locate(/area/shuttle/supply/station) in areas
+	area_centcomm = locate(/area/supply/dock) in areas
+	area_station = locate(/area/supply/station) in areas
 
 //Most of the code regarding this baby is in code\game\supplyshuttle.dm
