@@ -6,9 +6,9 @@ var/global/datum/shuttle/cargo/cargo_shuttle = new
 
 /datum/shuttle/cargo/New()
 	.=..()
-	setup_everything(starting_area = /area/shuttle/supply/centcom, \
-		all_areas=list(/area/shuttle/supply/centcom,
-			/area/shuttle/supply/station), \
+	setup_everything(starting_area = /area/supply/dock, \
+		all_areas=list(/area/supply/dock,
+			/area/supply/station), \
 		name = "cargo shuttle", cooldown = 0, delay = 0)
 
 /datum/shuttle/cargo/has_defined_areas()
