@@ -136,10 +136,10 @@
 		dat += "<BR><B><A href='?src=\ref[src];edit=2'>Show Editor</A></B><BR>"
 	else
 		var/bpm = round(600 / tempo)
-		dat += {"<H3>Editing</H3>"
-			<B><A href='?src=\ref[src];edit=1'>Hide Editor</A></B>"
-			 <A href='?src=\ref[src];newsong=1'>Start a New Song</A>"
-			 <A href='?src=\ref[src];import=1'>Import a Song</A><BR><BR>"
+		dat += {"<H3>Editing</H3>
+			<B><A href='?src=\ref[src];edit=1'>Hide Editor</A></B>
+			 <A href='?src=\ref[src];newsong=1'>Start a New Song</A>
+			 <A href='?src=\ref[src];import=1'>Import a Song</A><BR><BR>
 			Tempo: <A href='?src=\ref[src];tempo=[world.tick_lag]'>-</A> [bpm] BPM <A href='?src=\ref[src];tempo=-[world.tick_lag]'>+</A><BR><BR>"}
 		var/linecount = 0
 		for(var/line in lines)
@@ -147,8 +147,7 @@
 			dat += "Line [linecount]: <A href='?src=\ref[src];modifyline=[linecount]'>Edit</A> <A href='?src=\ref[src];deleteline=[linecount]'>X</A> [line]<BR>"
 		dat += "<A href='?src=\ref[src];newline=1'>Add Line</A><BR><BR>"
 		if(help)
-			dat += "<B><A href='?src=\ref[src];help=1'>Hide Help</A></B><BR>"
-			dat += {"
+			dat += {"<B><A href='?src=\ref[src];help=1'>Hide Help</A></B><BR>
 					Lines are a series of chords, separated by commas (,), each with notes seperated by hyphens (-).<br>
 					Every note in a chord will play together, with chord timed by the tempo.<br>
 					<br>
