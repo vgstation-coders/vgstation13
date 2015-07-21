@@ -655,6 +655,28 @@
 	holder.remove_reagent(src.id, 0.5 * REAGENTS_METABOLISM)
 	return
 
+//Not to be confused with inaprovaline
+/datum/reagent/invaprovaline
+	name = "Invaxovaline"
+	id = "inaprovaline_vox"
+	description = "Invaxovaline is a synaptic stimulant and cardiostimulant. Commonly used to stabilize patients. Only works on vox."
+	reagent_state = LIQUID
+	color = "#FAA5C8" // rgb: 250, 165, 200
+	overdose = REAGENTS_OVERDOSE * 2
+
+/datum/reagent/invaprovaline/on_mob_life(var/mob/living/M as mob, var/alien)
+	if(!holder) return
+	if(!M) M = holder.my_atom
+
+	if(!alien || alien != IS_VOX)	//Vox masterrace, SKREEEEEEEEEEEE!
+		return
+
+	if(M.losebreath >= 10)
+		M.losebreath = max(10, M.losebreath - 5)
+
+	holder.remove_reagent(src.id, 0.5 * REAGENTS_METABOLISM)
+	return
+
 /datum/reagent/space_drugs
 			name = "Space drugs"
 			id = "space_drugs"
@@ -835,7 +857,7 @@
 	color = "#808080" // rgb: 128, 128, 128
 
 	custom_metabolism = 0.01
-
+/*
 /datum/reagent/nitrogen/on_mob_life(var/mob/living/M as mob, var/alien)
 
 	if(!holder) return
@@ -846,7 +868,7 @@
 		holder.remove_reagent(src.id, REAGENTS_METABOLISM) //By default it slowly disappears.
 		return
 	..()
-
+*/
 /datum/reagent/hydrogen
 	name = "Hydrogen"
 	id = "hydrogen"
@@ -1627,6 +1649,10 @@
 	if(!M) M = holder.my_atom
 	if(holder.has_reagent("inaprovaline"))
 		holder.remove_reagent("inaprovaline", 2*REM)
+
+	if(holder.has_reagent("invaprovaline"))
+		holder.remove_reagent("invaprovaline", 2*REM)
+
 	M.adjustToxLoss(3*REM)
 	..()
 	return
@@ -1752,17 +1778,19 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 
-/datum/reagent/dexalin/on_mob_life(var/mob/living/M as mob)
-
+/datum/reagent/dexalin/on_mob_life(var/mob/living/M as mob, var/alien)
 	if(!holder) return
-	if(M.stat == 2.0)
-		return  //See above, down and around. --Agouri
 	if(!M) M = holder.my_atom
-	M.adjustOxyLoss(-2*REM)
-	if(holder.has_reagent("lexorin"))
-		holder.remove_reagent("lexorin", 2*REM)
-	..()
-	return
+	if(M.stat == DEAD)
+		return  //See above, down and around. --Agouri
+
+	if(alien && alien == IS_VOX)
+		M.adjustToxLoss(REAGENTS_METABOLISM)
+	else
+		M.adjustOxyLoss(-2 * REM)
+		if(holder.has_reagent("lexorin"))
+			holder.remove_reagent("lexorin", 2 * REM)
+		..()
 
 /datum/reagent/dexalinp
 	name = "Dexalin Plus"
@@ -1771,17 +1799,57 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 
-/datum/reagent/dexalinp/on_mob_life(var/mob/living/M as mob)
-
+/datum/reagent/dexalinp/on_mob_life(var/mob/living/M as mob, var/alien)
 	if(!holder) return
-	if(M.stat == 2.0)
-		return
 	if(!M) M = holder.my_atom
+
+	if(M.stat == DEAD)
+		return
+	if(alien && alien == IS_VOX)
+		M.adjustToxLoss(REAGENTS_METABOLISM * 2)
+	else
+		M.adjustOxyLoss(-M.getOxyLoss())
+		if(holder.has_reagent("lexorin"))
+			holder.remove_reagent("lexorin", 2 * REM)
+		..()
+
+/datum/reagent/vexalin
+	name = "Vexalin"
+	id = "vexalin"
+	description = "Vexalin is used in the treatment of nitrogen deprivation."
+	reagent_state = LIQUID
+	color = "#FAA5C8" // rgb: 250, 165, 200
+
+/datum/reagent/vexalin/on_mob_life(var/mob/living/M as mob, var/alien)
+	if(!holder) return
+	if(!M) M = holder.my_atom
+
+	if(!alien || alien != IS_VOX)	//Vox masterrace, SKREEEEEEEEEEEE!
+		return
+
+	M.adjustOxyLoss(-2 * REM)
+	if(holder.has_reagent("lexorin"))
+		holder.remove_reagent("lexorin", 2 * REM)
+	..()
+
+/datum/reagent/vexalinp
+	name = "Vexalin Plus"
+	id = "vexalinp"
+	description = "Vexalin Plus is used in the treatment of nitrogen deprivation. Its highly effective."
+	reagent_state = LIQUID
+	color = "#FAA5C8" // rgb: 250, 165, 200
+
+/datum/reagent/vexalinp/on_mob_life(var/mob/living/M as mob, var/alien)
+	if(!holder) return
+	if(!M) M = holder.my_atom
+
+	if(!alien || alien != IS_VOX)	//Vox masterrace, SKREEEEEEEEEEEE!
+		return
+
 	M.adjustOxyLoss(-M.getOxyLoss())
 	if(holder.has_reagent("lexorin"))
-		holder.remove_reagent("lexorin", 2*REM)
+		holder.remove_reagent("lexorin", 2 * REM)
 	..()
-	return
 
 /datum/reagent/tricordrazine
 	name = "Tricordrazine"
