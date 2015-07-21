@@ -123,24 +123,24 @@
 	if(lines.len > 0)
 		dat += "<H3>Playback</H3>"
 		if(!playing)
-			dat += "<A href='?src=\ref[src];play=1'>Play</A> <SPAN CLASS='linkOn'>Stop</SPAN><BR><BR>"
-			dat += "Repeat Song: "
-			dat += repeat > 0 ? "<A href='?src=\ref[src];repeat=-10'>-</A><A href='?src=\ref[src];repeat=-1'>-</A>" : "<SPAN CLASS='linkOff'>-</SPAN><SPAN CLASS='linkOff'>-</SPAN>"
-			dat += " [repeat] times "
-			dat += repeat < max_repeats ? "<A href='?src=\ref[src];repeat=1'>+</A><A href='?src=\ref[src];repeat=10'>+</A>" : "<SPAN CLASS='linkOff'>+</SPAN><SPAN CLASS='linkOff'>+</SPAN>"
-			dat += "<BR>"
+			dat += {"<A href='?src=\ref[src];play=1'>Play</A> <SPAN CLASS='linkOn'>Stop</SPAN><BR><BR>
+				Repeat Song:
+				[repeat > 0 ? "<A href='?src=\ref[src];repeat=-10'>-</A><A href='?src=\ref[src];repeat=-1'>-</A>" : "<SPAN CLASS='linkOff'>-</SPAN><SPAN CLASS='linkOff'>-</SPAN>"]
+				 [repeat] times
+				[repeat < max_repeats ? "<A href='?src=\ref[src];repeat=1'>+</A><A href='?src=\ref[src];repeat=10'>+</A>" : "<SPAN CLASS='linkOff'>+</SPAN><SPAN CLASS='linkOff'>+</SPAN>"]
+				<BR>"}
 		else
-			dat += "<SPAN CLASS='linkOn'>Play</SPAN> <A href='?src=\ref[src];stop=1'>Stop</A><BR>"
-			dat += "Repeats left: <B>[repeat]</B><BR>"
+			dat += {"<SPAN CLASS='linkOn'>Play</SPAN> <A href='?src=\ref[src];stop=1'>Stop</A><BR>
+				Repeats left: <B>[repeat]</B><BR>"}
 	if(!edit)
 		dat += "<BR><B><A href='?src=\ref[src];edit=2'>Show Editor</A></B><BR>"
 	else
-		dat += "<H3>Editing</H3>"
-		dat += "<B><A href='?src=\ref[src];edit=1'>Hide Editor</A></B>"
-		dat += " <A href='?src=\ref[src];newsong=1'>Start a New Song</A>"
-		dat += " <A href='?src=\ref[src];import=1'>Import a Song</A><BR><BR>"
 		var/bpm = round(600 / tempo)
-		dat += "Tempo: <A href='?src=\ref[src];tempo=[world.tick_lag]'>-</A> [bpm] BPM <A href='?src=\ref[src];tempo=-[world.tick_lag]'>+</A><BR><BR>"
+		dat += {"<H3>Editing</H3>"
+			<B><A href='?src=\ref[src];edit=1'>Hide Editor</A></B>"
+			 <A href='?src=\ref[src];newsong=1'>Start a New Song</A>"
+			 <A href='?src=\ref[src];import=1'>Import a Song</A><BR><BR>"
+			Tempo: <A href='?src=\ref[src];tempo=[world.tick_lag]'>-</A> [bpm] BPM <A href='?src=\ref[src];tempo=-[world.tick_lag]'>+</A><BR><BR>"}
 		var/linecount = 0
 		for(var/line in lines)
 			linecount += 1
