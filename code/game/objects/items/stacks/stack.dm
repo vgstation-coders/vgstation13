@@ -19,8 +19,9 @@
 
 /obj/item/stack/New(var/loc, var/amount=null)
 	..()
-	if (amount)
+	if(amount)
 		src.amount=amount
+	update_icon()
 	return
 
 /obj/item/stack/Destroy()
@@ -201,6 +202,12 @@
 			usr.before_take_item(src)
 		spawn returnToPool(src)
 
+/obj/item/stack/proc/add(var/amount)
+	if(!isnum(amount)) return
+
+	src.amount += amount
+	return 1
+
 /obj/item/stack/proc/add_to_stacks(mob/usr as mob)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/stack/proc/add_to_stacks() called tick#: [world.time]")
 	for (var/obj/item/stack/item in usr.loc)
@@ -245,7 +252,7 @@
 			to_transfer = 1
 		else
 			to_transfer = min(S.amount, max_amount-amount)
-		amount+=to_transfer
+		src.add(to_transfer)
 		user << "You add [to_transfer] [singular_name] to \the [src]. It now contains [amount] [singular_name]\s."
 		if (S && user.machine==S)
 			spawn(0) interact(user)

@@ -16,9 +16,25 @@
 	w_type=RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 
+/obj/item/stack/rods/New()
+
 /obj/item/stack/rods/recycle(var/datum/materials/rec)
 	rec.addAmount("iron",amount/2)
 	return RECYK_METAL
+
+/obj/item/stack/rods/update_icon()
+	if((amount <= 5) && (amount > 0))
+		icon_state = "rods-[amount]"
+	else
+		icon_state = "rods"
+
+/obj/item/stack/rods/use(amount)
+	.=..(amount)
+	update_icon()
+
+/obj/item/stack/rods/add(amount)
+	.=..(amount)
+	update_icon()
 
 /obj/item/stack/rods/afterattack(atom/Target, mob/user, adjacent, params)
 	var/busy = 0
