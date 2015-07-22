@@ -99,7 +99,16 @@
 
 	//Target a component for production, note that this resets the timer.
 	if(href_list["target"])
-		if(!(href_list["target"] in CLOCK_COMP_IDS))
+		if(!(href_list["target"] in CLOCK_COMP_IDS + "null"))
+			return 1	//Go away href exploiters.
 
+		if(target == "null")
+			target = null
+
+		else
+			target = href_list["target"]
+
+		next_component = target ? CLOCKSLAB_TICKS_TARGETED : CLOCKSLAB_TICKS_UNTARGETED
+		return 1
 
 /obj/item/weapon/clockslab/proc/invoke_power(var/mob/user)
