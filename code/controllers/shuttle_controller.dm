@@ -132,11 +132,10 @@ datum/shuttle_controller/proc/move_pod(var/start_type,var/end_type,var/direction
 
 	for(var/mob/M in end_location)
 		if(M.client)
-			spawn()
-				if(M.buckled)
-					shake_camera(M, 4, 1) // buckled, not a lot of shaking
-				else
-					shake_camera(M, 10, 2) // unbuckled, HOLY SHIT SHAKE THE ROOM
+			if(M.buckled)
+				shake_camera(M, 4, 1) // buckled, not a lot of shaking
+			else
+				shake_camera(M, 10, 2) // unbuckled, HOLY SHIT SHAKE THE ROOM
 		if(istype(M, /mob/living/carbon))
 			if(!M.buckled)
 				M.Weaken(5)
