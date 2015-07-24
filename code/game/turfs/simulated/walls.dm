@@ -358,7 +358,7 @@
 	turf_animation('icons/effects/effects.dmi',"cultwall", 0, 0, MOB_LAYER-1)
 	return
 
-/turf/simulated/wall/attack_construct(mob/user as mob)
+/turf/simulated/wall/attack_construct(mob/user as mob,var/dist)
 	if(istype(user,/mob/living/simple_animal/construct/builder) && (get_dist(src,user) <= 3))
 		var/spell/aoe_turf/conjure/wall/S = locate() in user.spell_list
 		S.perform(user,0,src)
