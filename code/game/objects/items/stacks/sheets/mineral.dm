@@ -272,20 +272,6 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 /****************************** Others ****************************/
 
 /*
- * Enriched Uranium
- */
-/obj/item/stack/sheet/mineral/enruranium
-	name = "enriched uranium"
-	icon_state = "sheet-enruranium"
-	force = 5.0
-	throwforce = 5
-	w_class = 3.0
-	throw_speed = 3
-	throw_range = 3
-	origin_tech = "materials=5"
-	perunit = 1000
-
-/*
  * Adamantine
  */
 /obj/item/stack/sheet/mineral/adamantine
@@ -314,6 +300,19 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	perunit = 2000
 
 /*
+
+/obj/item/stack/sheet/mineral/enruranium
+	name = "enriched uranium"
+	icon_state = "sheet-enruranium"
+	force = 5.0
+	throwforce = 5
+	w_class = 3.0
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = "materials=5"
+	perunit = 1000
+
+
 /obj/item/stack/sheet/mineral/pharosium
 	name = "pharosium"
 	icon_state = "sheet-pharosium"
