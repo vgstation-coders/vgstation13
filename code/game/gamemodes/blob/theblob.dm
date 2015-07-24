@@ -88,7 +88,8 @@
 		update_icon()
 
 /obj/effect/blob/proc/Life()
-	stun_time--
+	if(stun_time)
+		stun_time--
 	if(brute_resist<4 && prob(20))
 		brute_resist++
 	return
@@ -180,7 +181,7 @@
 /obj/effect/blob/attackby(var/obj/item/weapon/W, var/mob/user)
 	user.delayNextAttack(10)
 	playsound(get_turf(src), 'sound/effects/attackblob.ogg', 50, 1)
-	src.visible_message("<span class='warning'><B>The [src.name] has been attacked with \the [W][(user ? " by [user]." : ".")]</span>")
+	src.visible_message("<span class='danger'>[(user ? "[user]" : "The world")] attacks [src.name] with \the [W].</span>")
 	var/damage = 0
 	switch(W.damtype)
 		if("fire")
@@ -196,27 +197,12 @@
 
 /obj/effect/blob/attack_hand(mob/living/carbon/human/H as mob)
 	if(!H.is_hand_valid_for_attack()) return
-	if(H.gloves && istype(H.gloves,/obj/item/clothing/gloves))
-		var/obj/item/clothing/gloves/G = H.gloves
-		if(G.cell)
-			if(H.a_intent == I_HURT) //Stungloves
-				if(G.cell.charge >= 2500)
-					G.cell.use(2500)
-					visible_message("<span class='danger'>[src] has been touched with the stun gloves by [H]!</span>")
-					log_attack("<font color='red'>[H.name] ([H.ckey]) stungloved [src.name].</font>")
-					health -= (15 / max(src.fire_resist,1)) //It burns!
-					update_icon()
-					return 1
-				else
-					H << "<span class='warning'>Not enough charge!</span>"
-					visible_message("<span class='danger'>[src] has been touched with the stun gloves by [H]!</span>")
-					return
 	switch(H.a_intent)
 		if(I_HELP)
-			visible_message("<span class='info'>[H] gave [src] the 'hover hand'.</span>")
+			visible_message("<span class='info'>[H] gives [src] the 'hover hand'.</span>")
 			return
 		if(I_DISARM)
-			visible_message("<span class='danger'>[H] disrupted [src]!</span>")
+			visible_message("<span class='danger'>[H] disrupts [src]!</span>")
 			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			stun_time += 5
 		if(I_GRAB)
@@ -224,10 +210,10 @@
 				brute_resist -= 2
 				brute_resist = max(1,brute_resist)
 			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			visible_message("<span class='danger'>[H] stretched out [src]!</span>")
+			visible_message("<span class='danger'>[H] stretches out [src]!</span>")
 		if(I_HURT)
 			log_attack("[H.name] ([H.ckey]) [H.species.attack_verb]ed [src.name].")
-			visible_message("<span class='danger'>[H] [H.species.attack_verb]ed [src]!</span>")
+			visible_message("<span class='danger'>[H] [H.species.attack_verb]s [src]!</span>")
 			var/damage = rand(0, H.species.max_hurt_damage)
 			if(!damage)
 				if(H.species.attack_verb == "punch")
@@ -235,7 +221,7 @@
 				else
 					playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
 
-				visible_message("<span class='danger'>[H] has attempted to [H.species.attack_verb] [src]!</span>")
+				visible_message("<span class='danger'>[H] attempted to [H.species.attack_verb] [src]!</span>")
 				return 0
 			if(M_HULK in H.mutations)			damage += 5
 
@@ -249,7 +235,7 @@
 			health -= damage
 			update_icon()
 	H << "<span class='warning'>It burns!</span>"
-	H.adjustBruteLoss(rand(0,3))
+	H.adjustBruteLoss(rand(0,5))
 	return 1
 
 /obj/effect/blob/proc/change_to(var/type, var/mob/camera/blob/M = null)

@@ -11,56 +11,8 @@
 		return 0
 
 
-	if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves))
-		var/obj/item/clothing/gloves/G = M.gloves
-		if(G.cell)
-			if(M.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
-				if(G.cell.charge >= 2500)
-					G.cell.use(2500)
-					visible_message("<span class='danger'>[src] has been touched with the stun gloves by [M]!</span>")
-					M.attack_log += text("\[[time_stamp()]\] <font color='red'>Stungloved [src.name] ([src.ckey])</font>")
-					src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stungloved by [M.name] ([M.ckey])</font>")
-					if(!iscarbon(M))
-						LAssailant = null
-					else
-						LAssailant = M
-
-					log_attack("<font color='red'>[M.name] ([M.ckey]) stungloved [src.name] ([src.ckey])</font>")
-
-					var/armorblock = run_armor_check(M.zone_sel.selecting, "energy")
-					apply_effects(5,5,0,0,5,0,0,armorblock)
-					return 1
-				else
-					M << "<span class='warning'>Not enough charge! </span>"
-					visible_message("<span class='danger'>[src] has been touched with the stun gloves by [M]!</span>")
-				return
-
-		if(istype(M.gloves , /obj/item/clothing/gloves/boxing/hologlove))
-
-			var/damage = rand(0, 9)
-			if(!damage)
-				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-				visible_message("<span class='danger'>[M] has attempted to punch [src]!</span>")
-				return 0
-			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
-			var/armor_block = run_armor_check(affecting, "melee")
-
-			if(M_HULK in M.mutations)			damage += 5
-
-			playsound(loc, "punch", 25, 1, -1)
-
-			visible_message("<span class='danger'>[M] has punched [src]!</span>")
-
-			apply_damage(damage, HALLOSS, affecting, armor_block)
-			if(damage >= 9)
-				visible_message("<span class='danger'>[M] has weakened [src]!</span>")
-				apply_effect(4, WEAKEN, armor_block)
-
-			return
-	else
-		if(istype(M,/mob/living/carbon))
-//			log_debug("No gloves, [M] is truing to infect [src]")
-			M.spread_disease_to(src, "Contact")
+	if(!M.gloves && istype(M,/mob/living/carbon))
+		M.spread_disease_to(src, "Contact")
 
 
 	switch(M.a_intent)
