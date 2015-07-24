@@ -168,3 +168,75 @@
 */
 /mob/new_player/ClickOn()
 	return
+
+/*
+	Constructs
+*/
+
+/mob/living/simple_animal/construct/ClickOn( var/atom/A, var/params )
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/construct/ClickOn() called tick#: [world.time]")
+	if(click_delayer.blocked())
+		return
+	click_delayer.setDelay(1)
+
+	if(client.buildmode)
+		build_click(src, client.buildmode, params, A)
+		return
+
+	var/list/modifiers = params2list(params)
+	if(modifiers["middle"])
+		MiddleClickOn(A)
+		return
+	if(modifiers["shift"])
+		ShiftClickOn(A)
+		return
+	if(modifiers["alt"]) // alt and alt-gr (rightalt)
+		AltClickOn(A)
+		return
+	if(modifiers["ctrl"])
+		CtrlClickOn(A)
+		return
+
+	if(stat || paralysis || stunned || weakened)
+		return
+
+	face_atom(A) // change direction to face what you clicked on
+
+	if(attack_delayer.blocked()) // This was next_move.  next_attack makes more sense.
+		return
+
+	if(restrained())
+		RestrainedClickOn(A)
+		return
+
+	if(in_throw_mode)
+		throw_item(A)
+		return
+
+	if(!isturf(loc))
+		return
+
+	if(A.Adjacent(src, MAX_ITEM_DEPTH)) // see adjacent.dm
+		if(ismob(A))
+			delayNextAttack(10)
+		UnarmedAttack(A, 1, params)
+		return
+	else // non-adjacent click
+		if(ismob(A))
+			delayNextAttack(10)
+		RangedAttack(A, params)
+	return
+
+/mob/living/simple_animal/construct/UnarmedAttack(atom/A)
+	if(ismob(A))
+		delayNextAttack(10)
+	if(!A.attack_construct(src))//does attack_construct do something to that atom? if no, just do attack_animal
+		A.attack_animal(src)
+
+/mob/living/simple_animal/construct/RangedAttack(atom/A)
+	if(!A.attack_construct(src,get_dist(src,A)))//does attack_construct do something to that atom? if no, just do attack_animal
+		A.attack_animal(src)
+
+/atom/proc/attack_construct(mob/user as mob,var/dist = null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_construct() called tick#: [world.time]")
+	return 0

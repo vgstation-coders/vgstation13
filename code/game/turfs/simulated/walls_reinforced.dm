@@ -369,6 +369,9 @@
 		return attack_hand(user)
 	return
 
+/turf/simulated/wall/r_wall/attack_construct(mob/user as mob)
+	return 0
+
 /turf/simulated/wall/r_wall/singularity_pull(S, current_size)
 	if(current_size >= STAGE_FIVE)
 		if(prob(30))

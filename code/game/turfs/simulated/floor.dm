@@ -633,6 +633,17 @@ turf/simulated/floor/proc/update_icon()
 			overlays -= wet_overlay
 			wet_overlay = null
 
+/turf/simulated/floor/attack_construct(mob/user as mob)
+	if(istype(user,/mob/living/simple_animal/construct/builder) && (get_dist(src,user) <= 3))
+		if((icon_state != "cult")&&(icon_state != "cult-narsie"))
+			var/spell/aoe_turf/conjure/floor/S = locate() in user.spell_list
+			S.perform(user,0,src)
+			if(user.spell_masters && user.spell_masters.len)
+				for(var/obj/screen/movable/spell_master/spell_master in user.spell_masters)
+					spell_master.update_spells(0, user)
+			return 1
+	return 0
+
 /turf/simulated/floor/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
