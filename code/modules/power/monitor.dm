@@ -29,7 +29,8 @@
 	           if ($(window).width() < window.document.body.scrollWidth){ var width = 0; $(\"span.area\").each(function(){ width = Math.max(width, $(this).parent().outerWidth()); });\
 	           width = Math.round($(window).width() - (window.document.body.scrollWidth - width + 16 + 8));$(\"span.area\").css(\"width\", width + \"px\"); } }\
 	           $(window).on(\"resize\", checkSize); $(window).on(\"onUpdateContent\", checkSize); $(document).on(\"ready\", checkSize);</script>"
-	src.interface = new/datum/html_interface/nanotrasen(src, "Power Monitoring", 420, 600, head)
+
+	src.interface = getFromDPool(/datum/html_interface/nanotrasen, src, "Power Monitoring", 420, 600, head)
 
 	var/obj/structure/cable/attached = null
 	var/turf/T = loc
@@ -37,6 +38,7 @@
 		attached = locate() in T
 	if(attached)
 		powernet = attached.get_powernet()
+
 	html_machines += src
 
 /obj/machinery/power/monitor/attack_ai(mob/user)
@@ -49,6 +51,8 @@
 /obj/machinery/power/monitor/Destroy()
 	..()
 	html_machines -= src
+
+	returnToDPool(interface)
 
 /obj/machinery/power/monitor/attack_hand(mob/user)
 	add_fingerprint(user)

@@ -116,12 +116,12 @@ mob/verb/test()
 	src.height         = height
 	src.head           = head
 
-/datum/html_interface/Del()
+/datum/html_interface/Destroy()
 	src.closeAll()
 
 	html_interfaces.Remove(src)
 
-	return ..()
+	ref = null	//To make the referenced atom pool correctly
 
 /*                 * Hooks */
 /datum/html_interface/proc/specificRenderTitle(datum/html_interface_client/hclient, ignore_cache = FALSE)
