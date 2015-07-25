@@ -387,7 +387,7 @@
 			new /obj/effect/decal/remains/human(loc)
 			del(src)
 
-/obj/structure/cultgirder/attack_animal(mob/user as mob)
+/obj/structure/cultgirder/attack_construct(mob/user as mob)
 	if(istype(user, /mob/living/simple_animal/construct/builder))
 		user << "You start repairing the girder."
 		if(do_after(user,src,30))
