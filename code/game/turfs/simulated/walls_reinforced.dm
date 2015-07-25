@@ -380,18 +380,15 @@
 
 /turf/simulated/wall/r_wall/dismantle_wall(devastated = 0, explode = 0)
 	if(!devastated)
-		getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src))
-		new girder_type(src) //Reinforced girder has deconstruction steps too. If no girder, drop ONE plasteel sheet AND rods
+		getFromPool(/obj/item/stack/sheet/plasteel, src)//Reinforced girder has deconstruction steps too. If no girder, drop ONE plasteel sheet AND rods
 	else
-		getFromPool(/obj/item/stack/rods, get_turf(src), 2)
-		getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src))
+		getFromPool(/obj/item/stack/rods, src, 2)
+		getFromPool(/obj/item/stack/sheet/plasteel, src)
 
 	for(var/obj/O in src.contents) //Eject contents!
 		if(istype(O,/obj/structure/sign/poster))
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
-		else
-			O.loc = src
 
 	ChangeTurf(dismantle_type)
 

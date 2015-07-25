@@ -347,10 +347,6 @@
 						if(istype(get_step(src,direction),/turf/simulated/floor))
 							var/turf/simulated/floor/FF = get_step(src,direction)
 							FF.update_icon() //so siding get updated properly
-
-/turf/simulated/floor/carpet/attack_construct(mob/user as mob)//carpets are cool
-	return 0
-
 /turf/simulated/floor/carpet/cultify()
 	return
 

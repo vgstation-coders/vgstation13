@@ -36,16 +36,16 @@
 
 /turf/simulated/wall/dismantle_wall(devastated = 0, explode = 0)
 	if(mineral == "metal")
-		getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 2)
+		getFromPool(/obj/item/stack/sheet/metal, src, 2)
 	else if(mineral == "wood")
-		getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 2)
+		getFromPool(/obj/item/stack/sheet/wood, src, 2)
 	else
 		var/M = text2path("/obj/item/stack/sheet/mineral/[mineral]")
 		if(M)
-			getFromPool(M, get_turf(src), 2)
+			getFromPool(M, src, 2)
 
 	if(devastated)
-		getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		getFromPool(/obj/item/stack/sheet/metal, src)
 	else
 		new girder_type(src)
 
@@ -53,8 +53,6 @@
 		if(istype(O,/obj/structure/sign/poster))
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
-		else
-			O.loc = src
 
 	ChangeTurf(dismantle_type)
 

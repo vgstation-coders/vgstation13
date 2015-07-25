@@ -11,20 +11,16 @@
 
 /turf/simulated/wall/cult/dismantle_wall(devastated = 0, explode = 0)
 	if(!devastated)
-		var/obj/effect/decal/cleanable/blood/B = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(src))
-		B.New(src)
+		var/obj/effect/decal/cleanable/blood/B = getFromPool(/obj/effect/decal/cleanable/blood, src)
 		new girder_type(src)
 	else
-		var/obj/effect/decal/cleanable/blood/B = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(src))
-		B.New(src)
+		var/obj/effect/decal/cleanable/blood/B = getFromPool(/obj/effect/decal/cleanable/blood, src)
 		new /obj/effect/decal/remains/human(src)
 
 	for(var/obj/O in src.contents) //Eject contents!
 		if(istype(O,/obj/structure/sign/poster))
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
-		else
-			O.loc = src
 
 	ChangeTurf(dismantle_type)
 
