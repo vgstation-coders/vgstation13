@@ -113,3 +113,10 @@
 
 /obj/item/device/radio/off
 	listening = 0
+
+/obj/item/device/radio/borg/ai/
+	name = "AI Integrated Radio"
+
+/obj/item/device/radio/borg/ai/New()
+	keyslot = new /obj/item/device/encryptionkey/heads/captain
+	..()
