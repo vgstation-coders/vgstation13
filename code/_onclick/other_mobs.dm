@@ -183,5 +183,4 @@
 	A.attack_construct(src)
 
 /atom/proc/attack_construct(mob/user as mob,var/dist = null)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_construct() called tick#: [world.time]")
 	return 0

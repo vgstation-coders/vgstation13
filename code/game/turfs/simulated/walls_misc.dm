@@ -11,10 +11,10 @@
 
 /turf/simulated/wall/cult/dismantle_wall(devastated = 0, explode = 0)
 	if(!devastated)
-		var/obj/effect/decal/cleanable/blood/B = getFromPool(/obj/effect/decal/cleanable/blood, src)
+		getFromPool(/obj/effect/decal/cleanable/blood, src)
 		new girder_type(src)
 	else
-		var/obj/effect/decal/cleanable/blood/B = getFromPool(/obj/effect/decal/cleanable/blood, src)
+		getFromPool(/obj/effect/decal/cleanable/blood, src)
 		new /obj/effect/decal/remains/human(src)
 
 	for(var/obj/O in src.contents) //Eject contents!
