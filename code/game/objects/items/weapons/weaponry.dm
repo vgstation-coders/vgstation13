@@ -11,10 +11,9 @@
 	throw_range = 15
 	attack_verb = list("banned")
 
-
-	suicide_act(mob/user)
-		viewers(user) << "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>"
-		return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
+/obj/item/weapon/banhammer/suicide_act(mob/user)
+	viewers(user) << "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>"
+	return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
 
 /obj/item/weapon/nullrod
 	name = "null rod"
@@ -29,9 +28,9 @@
 	throwforce = 10
 	w_class = 1
 
-	suicide_act(mob/user)
-		viewers(user) << "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>"
-		return (BRUTELOSS|FIRELOSS)
+/obj/item/weapon/nullrod/suicide_act(mob/user)
+	viewers(user) << "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>"
+	return (BRUTELOSS|FIRELOSS)
 
 /obj/item/weapon/nullrod/attack(mob/M as mob, mob/living/user as mob) //Paste from old-code to decult with a null rod.
 
@@ -90,9 +89,9 @@
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
 
-	suicide_act(mob/user)
-		viewers(user) << "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>"
-		return(BRUTELOSS)
+/obj/item/weapon/sord/suicide_act(mob/user)
+	viewers(user) << "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>"
+	return(BRUTELOSS)
 
 /obj/item/weapon/sord/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(get_turf(src), 'sound/weapons/bladeslice.ogg', 50, 1, -1)
@@ -113,13 +112,12 @@
 	w_class = 3
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
+/obj/item/weapon/claymore/IsShield()
+	return 1
 
-	IsShield()
-		return 1
-
-	suicide_act(mob/user)
-		viewers(user) << "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>"
-		return(BRUTELOSS)
+/obj/item/weapon/claymore/suicide_act(mob/user)
+	viewers(user) << "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>"
+	return(BRUTELOSS)
 
 /obj/item/weapon/claymore/cultify()
 	new /obj/item/weapon/melee/cultblade(loc)
@@ -143,12 +141,12 @@
 	w_class = 3
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
-	suicide_act(mob/user)
-		viewers(user) << "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"
-		return(BRUTELOSS)
+/obj/item/weapon/katana/suicide_act(mob/user)
+	viewers(user) << "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"
+	return(BRUTELOSS)
 
 /obj/item/weapon/katana/IsShield()
-		return 1
+	return 1
 
 /obj/item/weapon/katana/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(loc, 'sound/weapons/bloodyslice.ogg', 50, 1, -1)
@@ -183,16 +181,18 @@ obj/item/weapon/wirerod
 
 obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	..()
-	if(istype(I, /obj/item/weapon/shard))
+	if(istype(I, /obj/item/weapon/shard) && !istype(I, /obj/item/weapon/shard/shrapnel))
 		var/obj/item/weapon/spear/S = new /obj/item/weapon/spear
+		S.base_force = 5 + I.force
+		S.force = S.base_force
 
 		user.before_take_item(I)
 		user.before_take_item(src)
 
 		user.put_in_hands(S)
 		user << "<span class='notice'>You fasten the glass shard to the top of the rod with the cable.</span>"
-		del(I)
-		del(src)
+		qdel(I)
+		qdel(src)
 
 	else if(istype(I, /obj/item/weapon/wirecutters))
 		var/obj/item/weapon/melee/baton/cattleprod/P = new /obj/item/weapon/melee/baton/cattleprod
@@ -202,5 +202,5 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 
 		user.put_in_hands(P)
 		user << "<span class='notice'>You fasten the wirecutters to the top of the rod with the cable, prongs outward.</span>"
-		del(I)
-		del(src)
+		qdel(I)
+		qdel(src)
