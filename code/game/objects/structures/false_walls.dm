@@ -353,6 +353,12 @@
 	icon_state = ""
 	mineral = "plasma"
 
+/obj/structure/falsewall/plastic
+	name = "plastic wall"
+	desc = "A wall made of cheap plastic. Can be seen through."
+	icon_state = ""
+	mineral = "plastic"
+
 //-----------wtf?-----------start
 /obj/structure/falsewall/clown
 	name = "bananium wall"
