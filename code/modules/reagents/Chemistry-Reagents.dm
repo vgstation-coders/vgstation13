@@ -640,42 +640,29 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 	overdose = REAGENTS_OVERDOSE*2
+	var/list/tox_species		= list(2)
+	var/list/ignore_species		= list()
 
 /datum/reagent/inaprovaline/on_mob_life(var/mob/living/M as mob, var/alien)
-
 	if(!holder) return
 	if(!M) M = holder.my_atom
 
-	if(alien && alien == IS_VOX)
+	if(alien in tox_species)
 		M.adjustToxLoss(REAGENTS_METABOLISM)
-	else
+	else if(!(alien in ignore_species))
 		if(M.losebreath >= 10)
 			M.losebreath = max(10, M.losebreath-5)
 
 	holder.remove_reagent(src.id, 0.5 * REAGENTS_METABOLISM)
-	return
 
 //Not to be confused with inaprovaline
-/datum/reagent/invaprovaline
+/datum/reagent/inaprovaline/vox
 	name = "Invaxovaline"
 	id = "inaprovaline_vox"
 	description = "Invaxovaline is a synaptic stimulant and cardiostimulant. Commonly used to stabilize patients. Only works on vox."
-	reagent_state = LIQUID
 	color = "#FAA5C8" // rgb: 250, 165, 200
-	overdose = REAGENTS_OVERDOSE * 2
-
-/datum/reagent/invaprovaline/on_mob_life(var/mob/living/M as mob, var/alien)
-	if(!holder) return
-	if(!M) M = holder.my_atom
-
-	if(!alien || alien != IS_VOX)	//Vox masterrace, SKREEEEEEEEEEEE!
-		return
-
-	if(M.losebreath >= 10)
-		M.losebreath = max(10, M.losebreath - 5)
-
-	holder.remove_reagent(src.id, 0.5 * REAGENTS_METABOLISM)
-	return
+	tox_species		= list()
+	ignore_species	= list(1, 3)
 
 /datum/reagent/space_drugs
 			name = "Space drugs"
@@ -1650,8 +1637,8 @@
 	if(holder.has_reagent("inaprovaline"))
 		holder.remove_reagent("inaprovaline", 2*REM)
 
-	if(holder.has_reagent("invaprovaline"))
-		holder.remove_reagent("invaprovaline", 2*REM)
+	if(holder.has_reagent("inaprovaline_vox"))
+		holder.remove_reagent("inaprovaline_vox", 2*REM)
 
 	M.adjustToxLoss(3*REM)
 	..()
@@ -1777,6 +1764,8 @@
 	description = "Dexalin is used in the treatment of oxygen deprivation."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
+	var/list/tox_species		= list(2)
+	var/list/ignore_species		= list()
 
 /datum/reagent/dexalin/on_mob_life(var/mob/living/M as mob, var/alien)
 	if(!holder) return
@@ -1784,9 +1773,9 @@
 	if(M.stat == DEAD)
 		return  //See above, down and around. --Agouri
 
-	if(alien && alien == IS_VOX)
+	if(alien in tox_species)
 		M.adjustToxLoss(REAGENTS_METABOLISM)
-	else
+	else if(!(alien in ignore_species))
 		M.adjustOxyLoss(-2 * REM)
 		if(holder.has_reagent("lexorin"))
 			holder.remove_reagent("lexorin", 2 * REM)
@@ -1798,6 +1787,8 @@
 	description = "Dexalin Plus is used in the treatment of oxygen deprivation. Its highly effective."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
+	var/list/tox_species		= list(2)
+	var/list/ignore_species		= list()
 
 /datum/reagent/dexalinp/on_mob_life(var/mob/living/M as mob, var/alien)
 	if(!holder) return
@@ -1805,51 +1796,29 @@
 
 	if(M.stat == DEAD)
 		return
-	if(alien && alien == IS_VOX)
+	if(alien in tox_species)
 		M.adjustToxLoss(REAGENTS_METABOLISM * 2)
-	else
+	else if(!(alien in ignore_species))
 		M.adjustOxyLoss(-M.getOxyLoss())
 		if(holder.has_reagent("lexorin"))
 			holder.remove_reagent("lexorin", 2 * REM)
 		..()
 
-/datum/reagent/vexalin
+/datum/reagent/dexalin/vox
 	name = "Vexalin"
 	id = "vexalin"
 	description = "Vexalin is used in the treatment of nitrogen deprivation."
-	reagent_state = LIQUID
 	color = "#FAA5C8" // rgb: 250, 165, 200
+	tox_species		= list()
+	ignore_species	= list(1, 3)
 
-/datum/reagent/vexalin/on_mob_life(var/mob/living/M as mob, var/alien)
-	if(!holder) return
-	if(!M) M = holder.my_atom
-
-	if(!alien || alien != IS_VOX)	//Vox masterrace, SKREEEEEEEEEEEE!
-		return
-
-	M.adjustOxyLoss(-2 * REM)
-	if(holder.has_reagent("lexorin"))
-		holder.remove_reagent("lexorin", 2 * REM)
-	..()
-
-/datum/reagent/vexalinp
+/datum/reagent/dexalinp/vox
 	name = "Vexalin Plus"
 	id = "vexalinp"
 	description = "Vexalin Plus is used in the treatment of nitrogen deprivation. Its highly effective."
-	reagent_state = LIQUID
 	color = "#FAA5C8" // rgb: 250, 165, 200
-
-/datum/reagent/vexalinp/on_mob_life(var/mob/living/M as mob, var/alien)
-	if(!holder) return
-	if(!M) M = holder.my_atom
-
-	if(!alien || alien != IS_VOX)	//Vox masterrace, SKREEEEEEEEEEEE!
-		return
-
-	M.adjustOxyLoss(-M.getOxyLoss())
-	if(holder.has_reagent("lexorin"))
-		holder.remove_reagent("lexorin", 2 * REM)
-	..()
+	tox_species		= list()
+	ignore_species	= list(1, 3)
 
 /datum/reagent/tricordrazine
 	name = "Tricordrazine"
