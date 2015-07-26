@@ -1,0 +1,9 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+  - tgs: Musical intruments now use TG's code.
+  - rscadd: Added guitars. They can be found in arts and crafts crates from cargo.
+  - tweak: The piano will stop playing if you move away from it.
+  - tweak: Arts and crafts crates price raised to 30$ because guitars are expensive.

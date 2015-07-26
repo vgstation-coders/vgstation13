@@ -214,7 +214,7 @@
 				new /obj/structure/rack(T)
 				new /obj/item/weapon/storage/toolbox/emergency(T)
 				new /obj/item/weapon/storage/toolbox/emergency(T)
-				new /obj/item/device/violin(T) //My tune will go on
+				new /obj/item/device/instrument/violin(T) //My tune will go on
 				new /obj/item/weapon/paper_bin(T) //Any last wishes ?
 				new /obj/item/weapon/pen/red(T)
 
