@@ -132,3 +132,17 @@
 	origin_tech = "materials=9"
 
 	material = "phazon"
+
+/obj/item/stack/tile/mineral/plastic
+	name = "plastic tile"
+	singular_name = "plastic floor tile"
+	desc = "A thin tile made out of shiny plastic. Like wallpaper, but for the floor!"
+	icon_state = "tile_plastic"
+	w_class = 3.0
+	force = 1.0
+	throwforce = 1.0
+	throw_speed = 3
+	throw_range = 7
+	max_amount = 60
+
+	material = "plastic"
