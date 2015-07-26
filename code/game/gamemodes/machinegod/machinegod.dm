@@ -1,11 +1,7 @@
-
 /datum/game_mode
-	var/list/datum/mind/clockcult = list()
-
-
-/proc/isclockcult(mob/living/M)
-	return istype(M) && M.mind && ticker && ticker.mode && (M.mind in ticker.mode.clockcult)
-
+	var/list/datum/mind/clockcult 	= list()	//List of minds that obey Ratvar
+	var/clockcult_tier				= 1			//Tier of powers available to the clockcult.
+	var/clockcult_cv				= 0			//Total value of clockcult constructions.
 
 /datum/game_mode/machinegod
 	name = "machinegod"

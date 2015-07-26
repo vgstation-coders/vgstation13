@@ -1,18 +1,23 @@
-//Component types, use these.
+//Global vars
+/var/global/list/clockobelisks 		= list()
+/var/global/list/tinkcaches			= list()
+/var/global/list/clockcult_powers	= null
 
-#define CLOCK_VANGUARD		"vanguard"
-#define CLOCK_BELLIGERENT	"belligerent"
-#define CLOCK_REPLICANT		"replicant"
-#define CLOCK_HIEROPHANT	"hierophant"
-#define CLOCK_GEIS			"geis"
-
-/var/const/list/CLOCK_COMP_IDS = list(
+//Constants.
+/var/const/list/CLOCK_COMP_IDS 	= list(
 	CLOCK_VANGUARD,
 	CLOCK_BELLIGERENT,
 	CLOCK_REPLICANT,
 	CLOCK_HIEROPHANT,
 	CLOCK_GEIS
 )
+
+//Component types, use these.
+#define CLOCK_VANGUARD		"vanguard"
+#define CLOCK_BELLIGERENT	"belligerent"
+#define CLOCK_REPLICANT		"replicant"
+#define CLOCK_HIEROPHANT	"hierophant"
+#define CLOCK_GEIS			"geis"
 
 //Loudness
 #define CLOCK_WHISPERED		1
@@ -32,3 +37,5 @@
 
 //Slab defines
 #define CLOCKSLAB_CAPACITY				10
+
+

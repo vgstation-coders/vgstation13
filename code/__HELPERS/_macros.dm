@@ -121,6 +121,8 @@
 
 #define isdeathsquad(H) (H.mind in ticker.mode.deathsquads)
 
+#define isclockcult(H) (H.mind in ticker.mode.clockcult)
+
 //1 line helper procs compressed into defines.
 #define Clamp(x, y, z) 	(x <= y ? y : (x >= z ? z : x))
 

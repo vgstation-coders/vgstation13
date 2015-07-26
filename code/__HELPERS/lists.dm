@@ -337,3 +337,17 @@
 			L.Swap(start++,end--)
 
 	return L
+
+//Checks if 2 lists are equal, content wise.
+//Doesn't play nice with lists as indices, sorry.
+/proc/equal_list(var/list/list1, var/list/list2)
+	var/list/diff = list1 ^ list2
+	if(diff || diff.len)			//There is a difference, return 0.
+		return 0
+
+	//Now we need to check assoc values.
+	for(var/key in list1)
+		if(list1[key] != list2[key])
+			return 0
+
+	. = 1

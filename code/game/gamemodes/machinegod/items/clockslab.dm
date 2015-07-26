@@ -8,11 +8,13 @@
 	w_class = 2
 	flags = FPRINT
 
-	var/datum/html_interface/clockslab/slab/interface
+	var/datum/html_interface/clockslab/slab/interface				//HTML interface datum reference.
 
-	var/nextcomponent 		= CLOCKSLAB_TICKS_UNTARGETED	//How much process() calls left before we spit out a new component,
-	var/target_component								//Which component we're targeting to make, slower but targeted.
-	var/list/components = list()
+	var/nextcomponent				= CLOCKSLAB_TICKS_UNTARGETED	//How much process() calls left before we spit out a new component,
+	var/target_component											//Which component we're targeting to make, slower but targeted.
+	var/list/components				= list()						//List of stored components.
+	var/list/selected_components	= list()						//List of selected components (in the recital).
+	var/datum/clockcult_power/selected_power						//Selected power.
 
 /obj/item/weapon/clockslab/New()
 	. = ..()
@@ -21,6 +23,11 @@
 	components = CLOCK_COMP_IDS.Copy()
 	for(var/a in components)	//Make it an assoc list with the assoc value being 0s
 		components[a] = 0
+
+	if(!clockcult_powers)	//Look we're the first slab to be created, populate the global powers list.
+		clockcult_powers = list()
+		for(var/path in typeof(/datum/clockcult_power) - /datum/clockcult_power)
+			clockcult_powers += new path
 
 /obj/item/weapon/clockslab/Destroy()
 	. = ..()
@@ -42,7 +49,7 @@
 	if(nextcomponent++ <= 0)	//Done.
 		create_component(target_component)
 
-//Will spawn a component, random if no ID specified, mob is for overflow handling.
+//Will spawn a component, random if no ID specified, mob is for overflow handling, so we don't run get() again.
 /obj/item/weapon/clockslab/proc/create_component(var/id = pick(CLOCK_COMP_IDS), var/mob/living/carbon/M)
 	var/i = 0	//Get the total amount of components.
 	for(var/c in components)
@@ -112,3 +119,15 @@
 		return 1
 
 /obj/item/weapon/clockslab/proc/invoke_power(var/mob/user)
+	return 1
+
+//Gets the power currently selected with the amounts of parts.
+/obj/item/weapon/clockslab/proc/get_power()
+	for(var/datum/clockcult_power/P in clockcult_powers)
+		if(!equal_list(P.req_components, selected_components))
+			continue
+
+		//Alright we're sure we have the same selected components, return this one.
+		return P
+
+

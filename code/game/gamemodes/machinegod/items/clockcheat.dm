@@ -37,7 +37,7 @@
 	var/list/L = list()
 	var/list/areaindex = list()
 
-	for(var/obj/machinery/clockobelisk/C in machines)
+	for(var/obj/machinery/clockobelisk/C in clockobelisks)
 		var/turf/T = get_turf(C)
 		if (!T)
 			continue

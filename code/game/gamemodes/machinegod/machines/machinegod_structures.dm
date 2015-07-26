@@ -14,6 +14,14 @@
 	light_power_on = 2
 	use_auto_lights = 1
 
+/obj/machinery/clockobelisk/New()
+	. = ..()
+	clockobelisks += src
+
+/obj/machinery/clockobelisk/Destroy()
+	. = ..()
+	clockobelisks -= src
+
 /obj/machinery/s_gateway
 	name = "spatial gateway"
 	desc = "A Spatial Gateway."
