@@ -50,6 +50,7 @@
 	desc = "It's made of wood and has bronze strings."
 	icon = 'icons/obj/musician.dmi'
 	icon_state = "guitar"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	item_state = "guitar"
 	force = 10
 	attack_verb = list("played metal on", "serenaded", "crashed", "smashed")
