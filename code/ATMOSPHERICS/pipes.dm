@@ -943,4 +943,194 @@
 		user << "<span class='notice'>You paint the pipe yellow.</span>"
 		update_icon()
 		return 1
+
+	if(istype(W, /obj/item/pipe_meter))
+		var/obj/item/pipe_meter/meter = W
+		user.drop_item(meter, src.loc)
+		meter.setAttachLayer(src.piping_layer)
 	return ..()
+
+
+/obj/machinery/atmospherics/pipe/layer_manifold
+	name = "pipe-layer manifold"
+
+	icon = 'icons/obj/atmospherics/pipe_manifold.dmi'
+	icon_state = "manifoldlayer"
+	baseicon = "manifoldlayer"
+
+	dir = SOUTH
+	initialize_directions = NORTH|SOUTH
+
+	volume = 260 //6 averaged pipe segments
+
+	pipe_flags = ALL_LAYER
+
+	var/list/layer_nodes = list()
+	var/obj/machinery/atmospherics/other_node = null
+
+/obj/machinery/atmospherics/pipe/layer_manifold/New()
+	for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
+		layer_nodes.Add(null)
+	..()
+
+/obj/machinery/atmospherics/pipe/layer_manifold/setPipingLayer(var/new_layer = PIPING_LAYER_DEFAULT)
+	piping_layer = PIPING_LAYER_DEFAULT
+
+/obj/machinery/atmospherics/pipe/layer_manifold/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+	dir = pipe.dir
+	initialize_directions = pipe.get_pipe_dir()
+	var/turf/T = loc
+	level = T.intact ? 2 : 1
+	initialize(1)
+	if(!(locate(/obj/machinery/atmospherics) in layer_nodes) && !other_node)
+		usr << "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>"
+		return 0
+	update_icon()
+	build_network()
+	for(var/obj/machinery/atmospherics/node in layer_nodes)
+		node.initialize()
+		node.build_network()
+	if (other_node)
+		other_node.initialize()
+		other_node.build_network()
+	return 1
+
+/obj/machinery/atmospherics/pipe/layer_manifold/hide(var/i)
+	if(level == 1 && istype(loc, /turf/simulated))
+		invisibility = i ? 101 : 0
+	update_icon()
+
+/obj/machinery/atmospherics/pipe/layer_manifold/pipeline_expansion()
+	return layer_nodes + other_node
+
+
+/obj/machinery/atmospherics/pipe/layer_manifold/process()
+	if(!parent)
+		. = ..()
+	atmos_machines.Remove(src)
+
+/obj/machinery/atmospherics/pipe/layer_manifold/Destroy()
+	for(var/obj/machinery/atmospherics/node in layer_nodes)
+		node.disconnect(src)
+	if(other_node)
+		other_node.disconnect(src)
+	..()
+
+
+/obj/machinery/atmospherics/pipe/layer_manifold/disconnect(obj/machinery/atmospherics/reference)
+	if(reference == other_node)
+		if(istype(other_node, /obj/machinery/atmospherics/pipe))
+			returnToDPool(parent)
+		other_node = null
+
+	else
+		for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
+			if(reference == layer_nodes[pipelayer])
+				if(istype(layer_nodes[pipelayer], /obj/machinery/atmospherics/pipe))
+					returnToDPool(parent)
+				layer_nodes[pipelayer] = null
+
+	update_icon()
+
+	..()
+
+/obj/machinery/atmospherics/pipe/layer_manifold/update_icon()
+	overlays.len = 0
+	alpha = invisibility ? 128 : 255
+//	color = available_colors[_color]
+	icon_state = baseicon
+	if(other_node)
+		var/icon/con = new/icon(icon,"manifoldl_other_con")
+
+		overlays += new/image(con, dir = turn(src.dir, 180)) //adds the back connector
+
+	for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
+		if(layer_nodes[pipelayer]) //we are connected at this layer
+
+			var/layer_diff = pipelayer - PIPING_LAYER_DEFAULT
+
+			var/image/con = image(icon(src.icon,"manifoldl_con",src.dir))
+			con.pixel_x = layer_diff * PIPING_LAYER_P_X
+			con.pixel_y = layer_diff * PIPING_LAYER_P_Y
+
+			overlays += con
+
+	if(!other_node && !(locate(/obj/machinery/atmospherics) in layer_nodes))
+
+		qdel(src)
+	return
+
+
+/obj/machinery/atmospherics/pipe/layer_manifold/initialize(var/skip_update_icon=0)
+
+	findAllConnections(initialize_directions)
+
+	var/turf/T = src.loc			// hide if turf is not intact
+	hide(T.intact)
+	if(!skip_update_icon)
+		update_icon()
+
+/obj/machinery/atmospherics/pipe/layer_manifold/findAllConnections(var/connect_dirs)
+	for(var/direction in cardinal)
+		if(connect_dirs & direction)
+			if(direction == dir) //we're facing this
+				for(var/i = PIPING_LAYER_MIN; i <= PIPING_LAYER_MAX; i += PIPING_LAYER_INCREMENT)
+					var/obj/machinery/atmospherics/found
+					var/node_type=getNodeType(i)
+					switch(node_type)
+						if(PIPE_TYPE_STANDARD)
+							found = findConnecting(direction, i) //we pass the layer to find the pipe
+						if(PIPE_TYPE_HE)
+							found = findConnectingHE(direction, i)
+						else
+							error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([i]): [node_type]")
+							return
+					if(!found)
+						continue
+					layer_nodes[i] = found //put it in the list
+			else
+				var/obj/machinery/atmospherics/found
+				var/node_type=getNodeType(direction)
+				switch(node_type)
+					if(PIPE_TYPE_STANDARD)
+						found = findConnecting(direction)
+					if(PIPE_TYPE_HE)
+						found = findConnectingHE(direction)
+					else
+						error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([direction]): [node_type]")
+				if(!found)
+					continue
+				other_node = found
+
+/obj/machinery/atmospherics/pipe/layer_manifold/isConnectable(var/obj/machinery/atmospherics/target, var/direction, var/given_layer)
+	if(direction == turn(src.dir, 180))
+		return (given_layer == PIPING_LAYER_DEFAULT)
+	return ..()
+
+/obj/machinery/atmospherics/pipe/layer_manifold/getNodeType()
+	return PIPE_TYPE_STANDARD
+
+//We would normally set layer here, but I don't want to
+/obj/machinery/atmospherics/pipe/layer_manifold/Entered()
+	return
+
+/obj/machinery/atmospherics/pipe/layer_manifold/relaymove(mob/living/user, direction)
+	if(!(direction & initialize_directions)) //can't go in a way we aren't connecting to
+		var/layer_mod = 0
+
+		if(dir & (NORTH|SOUTH))
+			if(direction == EAST) //Going up in layers
+				layer_mod = 1
+			else
+				layer_mod = -1
+		else
+			if(direction == SOUTH) //
+				layer_mod = 1
+			else
+				layer_mod = -1
+
+		user.ventcrawl_layer = Clamp(user.ventcrawl_layer + layer_mod, PIPING_LAYER_MIN, PIPING_LAYER_MAX)
+		user << "You align yourself with the [user.ventcrawl_layer]\th output."
+		return 1
+	else
+		return ..()

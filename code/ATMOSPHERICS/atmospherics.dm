@@ -15,6 +15,7 @@ Pipelines + Other Objects -> Pipe network
 
 //Pipe bitflags
 #define IS_MIRROR	1
+#define ALL_LAYER	2 //if the pipe can connect at any layer, instead of just the specific one
 
 /obj/machinery/atmospherics
 	anchored = 1
@@ -27,8 +28,6 @@ Pipelines + Other Objects -> Pipe network
 	// Which directions can we connect with?
 	var/initialize_directions = 0
 
-	var/obj/machinery/atmospherics/mirror //not actually an object reference, but a type. The reflection of the current pipe
-
 	// Pipe painter color setting.
 	var/_color
 
@@ -38,8 +37,11 @@ Pipelines + Other Objects -> Pipe network
 	var/log
 
 	var/pipe_flags = 0
+	var/obj/machinery/atmospherics/mirror //not actually an object reference, but a type. The reflection of the current pipe
 
 	var/image/pipe_image
+
+	var/piping_layer = PIPING_LAYER_DEFAULT //used in multi-pipe-on-tile - pipes only connect if they're on the same pipe layer
 
 /obj/machinery/atmospherics/New()
 	..()
@@ -55,19 +57,32 @@ Pipelines + Other Objects -> Pipe network
 	atmos_machines -= src
 	..()
 
+/obj/machinery/atmospherics/proc/setPipingLayer(new_layer = PIPING_LAYER_DEFAULT)
+	piping_layer = new_layer
+	pixel_x = (piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X
+	pixel_y = (piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_Y
+	layer = initial(layer) + ((piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_LCHANGE)
+
 // Find a connecting /obj/machinery/atmospherics in specified direction.
-/obj/machinery/atmospherics/proc/findConnecting(var/direction)
+/obj/machinery/atmospherics/proc/findConnecting(var/direction, var/given_layer = src.piping_layer)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/proc/findConnecting() called tick#: [world.time]")
 	for(var/obj/machinery/atmospherics/target in get_step(src,direction))
 		if(target.initialize_directions & get_dir(target,src))
-			return target
+			if(isConnectable(target, direction, given_layer) && target.isConnectable(src, turn(direction, 180), given_layer))
+				return target
 
 // Ditto, but for heat-exchanging pipes.
-/obj/machinery/atmospherics/proc/findConnectingHE(var/direction)
+/obj/machinery/atmospherics/proc/findConnectingHE(var/direction, var/given_layer = src.piping_layer)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/proc/findConnectingHE() called tick#: [world.time]")
 	for(var/obj/machinery/atmospherics/pipe/simple/heat_exchanging/target in get_step(src,direction))
 		if(target.initialize_directions_he & get_dir(target,src))
-			return target
+			if(isConnectable(target, direction, given_layer) && target.isConnectable(src, turn(direction, 180), given_layer))
+				return target
+
+//Called when checking connectability in findConnecting()
+//This is checked for both pipes in establishing a connection - the base behaviour will work fine nearly every time
+/obj/machinery/atmospherics/proc/isConnectable(var/obj/machinery/atmospherics/target, var/direction, var/given_layer)
+	return (target.piping_layer == given_layer || target.pipe_flags & ALL_LAYER)
 
 /obj/machinery/atmospherics/proc/getNodeType(var/node_id)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/proc/getNodeType() called tick#: [world.time]")
@@ -156,6 +171,11 @@ Pipelines + Other Objects -> Pipe network
 
 
 /obj/machinery/atmospherics/attackby(var/obj/item/W, mob/user)
+	if(istype(W, /obj/item/pipe)) //lets you autodrop
+		var/obj/item/pipe/pipe = W
+		user.drop_item(pipe)
+		pipe.setPipingLayer(src.piping_layer) //align it with us
+		return 1
 	if (!istype(W, /obj/item/weapon/wrench))
 		return ..()
 	if(src.machine_flags & WRENCHMOVE)
@@ -201,11 +221,16 @@ Pipelines + Other Objects -> Pipe network
 
 #define VENT_SOUND_DELAY 30
 
+/obj/machinery/atmospherics/Entered(atom/movable/Obj)
+	if(istype(Obj, /mob/living))
+		var/mob/living/L = Obj
+		L.ventcrawl_layer = src.piping_layer
+
 /obj/machinery/atmospherics/relaymove(mob/living/user, direction)
 	if(!(direction & initialize_directions)) //can't go in a way we aren't connecting to
 		return
 
-	var/obj/machinery/atmospherics/target_move = findConnecting(direction)
+	var/obj/machinery/atmospherics/target_move = findConnecting(direction, user.ventcrawl_layer)
 	if(target_move)
 		if(is_type_in_list(target_move, ventcrawl_machinery) && target_move.can_crawl_through())
 			user.remove_ventcrawl()
@@ -215,7 +240,7 @@ Pipelines + Other Objects -> Pipe network
 			if(target_move.return_network(target_move) != return_network(src))
 				user.remove_ventcrawl()
 				user.add_ventcrawl(target_move)
-			user.loc = target_move
+			user.forceMove(target_move)
 			user.client.eye = target_move //if we don't do this, Byond only updates the eye every tick - required for smooth movement
 			if(world.time - user.last_played_vent > VENT_SOUND_DELAY)
 				user.last_played_vent = world.time
