@@ -176,7 +176,7 @@
 /mob/living/simple_animal/construct/UnarmedAttack(atom/A)
 	if(ismob(A))
 		delayNextAttack(10)
-	if(!A.attack_construct(src,get_dist(src,A)))//does attack_construct do something to that atom? if no, just do attack_animal
+	if(!A.attack_construct(src))//does attack_construct do something to that atom? if no, just do attack_animal
 		A.attack_animal(src)
 
 /mob/living/simple_animal/construct/RangedAttack(atom/A)

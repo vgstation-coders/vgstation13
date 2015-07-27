@@ -639,9 +639,8 @@ turf/simulated/floor/proc/update_icon()
 		if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 			var/spell/aoe_turf/conjure/floor/S = locate() in user.spell_list
 			S.perform(user,0,src)
-			if(user.spell_masters && user.spell_masters.len)
-				for(var/obj/screen/movable/spell_master/spell_master in user.spell_masters)
-					spell_master.update_spells(0, user)
+			var/obj/screen/spell/SS = S.connected_button
+			SS.update_charge(1)
 			return 1
 	return 0
 
