@@ -80,6 +80,12 @@
 				instructions.update_icon()
 */
 				machine.forceMove(src.loc)
+				if(istype(machine,/obj/machinery/r_n_d)) //If it's something that outputs, like a fab, reset the output point
+					var/obj/machinery/r_n_d/R = machine
+					if(R.research_flags & HASOUTPUT)
+						if(istype(R.output,/obj/machinery/mineral/output))
+							del(R.output)
+						R.output=R
 				machine = null
 				qdel(src)
 			else
