@@ -972,6 +972,9 @@ default behaviour is:
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/proc/can_move_mob() called tick#: [world.time]")
 	if(!swapped)
 		return 1
+	if(swapped.pulling && swapped.pulling.clippedon)
+		src << "<span class='danger'>You can't push past while [swapped] is clipped to that [swapped.pulling]!</span>"
+		return 0
 	if(!passive)
 		return swapped.can_move_mob(src, swapping, 1)
 	else
@@ -1058,7 +1061,10 @@ default behaviour is:
 				return
 			if (!now_pushing)
 				now_pushing = 1
-
+				if(AM.clippedon)
+					now_pushing = 0
+					if(AM.pulledby != src) src << "<span class='danger'>You can't push past while [AM] is clipped to [AM.pulledby]!</span>"
+					return
 				if (!AM.anchored)
 					var/t = get_dir(src, AM)
 					if(AM.flags & ON_BORDER && !t)

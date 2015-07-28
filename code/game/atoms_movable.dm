@@ -14,6 +14,9 @@
 	var/throw_range = 7
 	var/moved_recently = 0
 	var/mob/pulledby = null
+	var/obj/item/device/carabiner/clippedon = null //This upgrades a pull to a more robust clip. See tools.dm for the carabiner object.
+	//In general, if clippedon isn't null it prevents this movable from being pushed away from pulledby,
+	//in the same way that handcuffs stop pushing past.
 
 	var/area/areaMaster
 
@@ -39,6 +42,7 @@
 	gcDestroyed = "Bye, world!"
 	tag = null
 	loc = null
+	clippedon = null
 	..()
 
 /proc/delete_profile(var/type, code = 0)
