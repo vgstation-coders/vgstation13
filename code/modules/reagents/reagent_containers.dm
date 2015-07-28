@@ -232,6 +232,7 @@ proc/can_consume(var/mob/user, var/mob/eater)
 	if(isnull(cover)) // No mask, do we have any helmet?
 		cover = eater.get_item_by_slot(slot_head)
 		if(istype(cover,/obj/item/clothing/head/space/golem)) //Awful workaround for now (to allow golems to eat)
+			return 1
 	else
 		var/obj/item/clothing/mask/covermask = cover
 		if(covermask.can_eat) // Specific cases, clownmask for example.
