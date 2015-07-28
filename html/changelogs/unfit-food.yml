@@ -1,0 +1,7 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+  - tweak: It's now impossible to eat, drink or swallow pills while wearing mouth-covering masks or helmets.
+  - tweak: Clown, mime and golem masks still allow eating and drinking.

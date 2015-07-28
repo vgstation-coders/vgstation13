@@ -4,6 +4,7 @@
 	icon_state = "muzzle"
 	item_state = "muzzle"
 	flags = FPRINT
+	body_parts_covered = MOUTH
 	w_class = 2
 	gas_transfer_coefficient = 0.90
 	species_fit = list("Vox")
@@ -33,37 +34,43 @@
 	name = "fake moustache"
 	desc = "Warning: moustache is fake."
 	icon_state = "fake-moustache"
+	body_parts_covered = null
 	flags = FPRINT
 	flags_inv = HIDEFACE
 
+	can_eat = 1
+
 //scarves (fit in in mask slot)
 
-/obj/item/clothing/mask/bluescarf
+/obj/item/clothing/mask/scarf
+	name = "scarf"
+	desc = "A blue neck scarf."
+	icon_state = "blueneckscarf"
+	item_state = "blueneckscarf"
+	body_parts_covered = null
+	flags = FPRINT
+	w_class = 2
+	gas_transfer_coefficient = 0.90
+
+	can_eat = 1
+
+/obj/item/clothing/mask/scarf/blue
 	name = "blue neck scarf"
 	desc = "A blue neck scarf."
 	icon_state = "blueneckscarf"
 	item_state = "blueneckscarf"
-	flags = FPRINT
-	w_class = 2
-	gas_transfer_coefficient = 0.90
 
-/obj/item/clothing/mask/redscarf
+/obj/item/clothing/mask/scarf/red
 	name = "red scarf"
 	desc = "A red and white checkered neck scarf."
 	icon_state = "redwhite_scarf"
 	item_state = "redwhite_scarf"
-	flags = FPRINT
-	w_class = 2
-	gas_transfer_coefficient = 0.90
 
-/obj/item/clothing/mask/greenscarf
+/obj/item/clothing/mask/scarf/green
 	name = "green scarf"
 	desc = "A green neck scarf."
 	icon_state = "green_scarf"
 	item_state = "green_scarf"
-	flags = FPRINT
-	w_class = 2
-	gas_transfer_coefficient = 0.90
 
 /obj/item/clothing/mask/pig
 	name = "pig mask"
@@ -108,6 +115,7 @@
 	desc = "A colorful bandana."
 	action_button_name = "Toggle Bandana"
 	flags_inv = HIDEFACE
+	body_parts_covered = MOUTH
 	w_class = 1
 	can_flip = 1
 

@@ -148,6 +148,9 @@
 		imbibe(user)
 		return 0
 
+	else if(!can_consume(user,M))
+		return 0
+
 	else if(istype(M, /mob/living/carbon/human))
 
 		user.visible_message("<span class='danger'>[user] attempts to feed [M] \the [src].</span>", "<span class='danger'>You attempt to feed [M] \the [src].</span>")

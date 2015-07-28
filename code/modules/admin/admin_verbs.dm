@@ -113,7 +113,8 @@ var/list/admin_verbs_fun = list(
 	/client/proc/smissmas,
 	/client/proc/achievement,
 	/client/proc/mommi_static,
-	/client/proc/makepAI
+	/client/proc/makepAI,
+	/client/proc/hardcores
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom,		/*allows us to spawn instances*/
@@ -1015,3 +1016,28 @@ var/list/admin_verbs_mod = list(
 			M.add_static_overlays()
 		else
 			M.remove_static_overlays()
+
+/client/proc/hardcores()
+	set name = "Toggle Hardcore Mode"
+	set desc = "Toggle whether unfun but realistic features are enabled (don't let the category mislead you, it's not fun at all)"
+	set category = "Fun"
+
+	if(!holder || !config)
+		return
+
+	if(!config.hardcore)
+		usr << "<font color='blue'>*----------------------*</font>"
+		usr << "Currently supported hardcore features:<br>"
+		usr << "- Eating, drinking or taking pills while wearing a mouth-covering helmet or mask is <font color='red'>impossible</font>"
+		usr << "<font color='blue'>*----------------------*</font>"
+
+		if(input(usr,"Please type \"Yes\" to confirm activation of hardcores.","Hardcore","No")=="Yes")
+			config.hardcore = 1
+			log_admin("[key_name(src)] turned hardcore mode on!")
+			message_admins("[key_name(src)] turned hardcore mode on!")
+			world << "<b>Hardcore mode has been enabled.</b>"
+	else
+		config.hardcore = 0
+		log_admin("[key_name(src)] turned hardcore mode off.")
+		message_admins("[key_name(src)] turned hardcore mode off.")
+		world << "<b>Hardcore mode has been disabled.</b>"

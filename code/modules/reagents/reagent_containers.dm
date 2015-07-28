@@ -224,3 +224,34 @@ var/list/LOGGED_SPLASH_REAGENTS = list("fuel", "thermite")
 			data += "[R.id]([R.volume] unit\s); " //Using IDs because SOME chemicals(I'm looking at you, chlorhydrate-beer) have the same names as other chemicals.
 		return data
 	else return "No reagents"
+
+proc/can_consume(var/mob/user, var/mob/eater)
+	if(config && !config.hardcore) //If hardcore mode isn't on, you can always eat stuff
+		return 1
+	//Check for covering mask
+	var/obj/item/clothing/cover = eater.get_item_by_slot(slot_wear_mask)
+
+	if(isnull(cover)) // No mask, do we have any helmet?
+		cover = eater.get_item_by_slot(slot_head)
+		if(istype(cover,/obj/item/clothing/head/space/golem)) //Awful workaround for now (to allow golems to eat)
+			return 1
+	else
+		var/obj/item/clothing/mask/covermask = cover
+		if(covermask.can_eat) // Specific cases, clownmask for example.
+			return 1
+
+	if(!isnull(cover))
+		if(cover.body_parts_covered & MOUTH)
+			var/who = (isnull(user) || eater == user) ? "your" : "their"
+			if(isnull(user) || eater == user)
+				who = "your"
+			else
+				who = (eater.gender == MALE) ? "his" : "her"
+
+			if(istype(cover, /obj/item/clothing/mask/))
+				user << "<span class='notice'>You have to remove [who] mask first!</span>"
+			else
+				user << "<span class='notice'>You have to remove [who] helmet first!</span>"
+
+			return 0
+	return 1

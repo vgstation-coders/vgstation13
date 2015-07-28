@@ -153,6 +153,7 @@ BLIND     // can't see anything
 	var/can_flip = null
 	var/is_flipped = 1
 	var/ignore_flip = 0
+	var/can_eat = 0 //Whether you can or can't eat/drink while wearing this
 	action_button_name = "Toggle Mask"
 
 /obj/item/clothing/mask/verb/togglemask()
@@ -175,6 +176,7 @@ BLIND     // can't see anything
 			flags = initial(flags)
 			flags_inv = initial(flags_inv)
 			body_parts_covered = initial(body_parts_covered)
+			can_eat = initial(can_eat)
 			usr << "You push \the [src] back into place."
 			src.is_flipped = 1
 		else
@@ -185,6 +187,7 @@ BLIND     // can't see anything
 			flags = 0
 			flags_inv = null
 			src.is_flipped = 2
+			can_eat = 1
 			body_parts_covered &= ~(MOUTH|HEAD)
 		usr.update_inv_wear_mask()
 

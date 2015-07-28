@@ -61,7 +61,9 @@
 		del(src)
 		return 0
 
-	if(istype(M, /mob/living/carbon)) //Avoid messing with simple mobs
+	if(!can_consume(user,M))
+		return 0
+	else if(istype(M, /mob/living/carbon)) //Avoid messing with simple mobs
 		var/mob/living/carbon/target = M //First definition to avoid colons
 		if(target == user)	//If you're eating it yourself
 			//In that case, target is the user, but we'll still ask "target" to do things
