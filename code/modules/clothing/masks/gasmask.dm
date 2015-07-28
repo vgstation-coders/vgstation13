@@ -100,12 +100,16 @@
 	item_state = "clown_hat"
 	species_fit = list("Vox")
 
+	can_eat = 1 //honk
+
 /obj/item/clothing/mask/gas/clown_hat/wiz
 	name = "clown wig and mask"
 	desc = "Some pranksters are truly magical."
 	icon_state = "wizzclown"
 	item_state = "wizzclown"
 	//TODO species_fit = list("Vox")
+
+	can_eat = 1
 
 /obj/item/clothing/mask/gas/virusclown_hat
 	name = "clown wig and mask"
@@ -114,6 +118,8 @@
 	item_state = "clown_hat"
 	species_fit = list("Vox")
 
+	can_eat = 1
+
 /obj/item/clothing/mask/gas/sexyclown
 	name = "sexy-clown wig and mask"
 	desc = "A feminine clown mask for the dabbling crossdressers or female entertainers."
@@ -121,12 +127,17 @@
 	item_state = "sexyclown"
 	species_fit = list("Vox")
 
+	can_eat = 1
+
 /obj/item/clothing/mask/gas/mime
 	name = "mime mask"
 	desc = "The traditional mime's mask. It has an eerie facial posture."
 	icon_state = "mime"
 	item_state = "mime"
 	species_fit = list("Vox")
+
+	can_eat = 1
+
 	var/muted = 0
 
 /obj/item/clothing/mask/gas/mime/treat_mask_message(var/message)
@@ -147,6 +158,8 @@
 	icon_state = "sexymime"
 	item_state = "sexymime"
 	species_fit = list("Vox")
+
+	can_eat = 1
 
 /obj/item/clothing/mask/gas/death_commando
 	name = "Death Commando Mask"

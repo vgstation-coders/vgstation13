@@ -31,6 +31,9 @@
 		user << "<span class='warning'>\The [src] is empty.</span>"
 		return 0
 
+	if(!can_consume(user,M))
+		return 0
+
 	if(M == user) //user drinking it
 
 		M << "<span class='notice'>You swallow some of the contents of \the [src].</span>"

@@ -24,7 +24,9 @@
 
 /obj/item/weapon/reagent_containers/pill/attack(mob/M as mob, mob/user as mob, def_zone)
 	// Feeding others needs time to succeed
-	if (user != M && (ishuman(M) || ismonkey(M)))
+	if(!can_consume(user,M))
+		return 0
+	else if (user != M && (ishuman(M) || ismonkey(M)))
 		user.visible_message("<span class='warning'>[user] attempts to force [M] to swallow \the [src].</span>", "<span class='notice'>You attempt to force [M] to swallow \the [src].</span>")
 
 		if (!do_mob(user, M))

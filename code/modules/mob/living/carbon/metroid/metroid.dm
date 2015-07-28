@@ -986,16 +986,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	canremove = 0
 	siemens_coefficient = 0
 	unacidable = 1
-
-/obj/item/clothing/mask/gas/golem
-	name = "golem's face"
-	desc = "the imposing face of an adamantine golem"
-	icon_state = "golem"
-	item_state = "golem"
-	canremove = 0
-	siemens_coefficient = 0
-	unacidable = 1
-
+	can_eat = 1
 
 /obj/item/clothing/gloves/golem
 	name = "golem's hands"
@@ -1004,7 +995,6 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	item_state = null
 	siemens_coefficient = 0
 	canremove = 0
-
 
 /obj/item/clothing/head/space/golem
 	icon_state = "golem"
