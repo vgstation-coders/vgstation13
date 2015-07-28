@@ -152,7 +152,7 @@
 				break
 
 		if(!O.contents.len)
-			user << "You empty the [O] into the Microwave."
+			user << "You empty \the [O] into the Microwave."
 			src.updateUsrDialog()
 			return 0
 			if (!is_type_in_list(O.contents))
