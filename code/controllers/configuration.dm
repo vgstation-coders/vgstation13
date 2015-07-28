@@ -165,6 +165,8 @@
 
 	var/mommi_static = 0 //Scrambling mobs for mommis or not
 
+	var/hardcore = 0 //Unfun but realistic features
+
 /datum/configuration/New()
 	. = ..()
 	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
@@ -523,6 +525,8 @@
 					renders_url = value
 				if("mommi_static")
 					mommi_static = 1
+				if("hardcore")
+					config.hardcore = 1
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

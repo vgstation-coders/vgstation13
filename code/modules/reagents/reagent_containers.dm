@@ -226,6 +226,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list("fuel", "thermite")
 	else return "No reagents"
 
 proc/can_consume(var/mob/user, var/mob/eater)
+	if(config && !config.hardcore) //If hardcore mode isn't on, you can always eat stuff
+		return 1
 	//Check for covering mask
 	var/obj/item/clothing/cover = eater.get_item_by_slot(slot_wear_mask)
 
