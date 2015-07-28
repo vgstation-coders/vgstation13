@@ -39,14 +39,6 @@
 		r_store,
 		w_uniform)
 
-/mob/living/carbon/human/get_nonclothing_items() //pockets, hands, belt
-	return list(
-		l_hand,
-		r_hand,
-		l_store,
-		r_store,
-		belt)
-
 /mob/living/carbon/human/proc/get_head_slots()
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/get_head_slots() called tick#: [world.time]")
 	return list(

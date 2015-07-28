@@ -746,7 +746,7 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "engineering=1"
-	var/can_pull = list(/obj/structure/closet/crate,/obj/machinery/portable_atmospherics/pump,/obj/machinery/portable_atmospherics/scrubber,/obj/machinery/portable_atmospherics/canister,/obj/machinery/space_heater,/obj/machinery/space_heater/air_conditioner,/obj/structure/stool/bed/roller)
+	var/can_pull = list(/obj/structure/mopbucket,/obj/structure/closet/crate,/obj/machinery/portable_atmospherics/pump,/obj/machinery/portable_atmospherics/scrubber,/obj/machinery/portable_atmospherics/canister,/obj/machinery/space_heater,/obj/machinery/space_heater/air_conditioner,/obj/structure/stool/bed/roller)
 	var/obj/clip = null //This is what we're pulling
 
 /obj/item/device/carabiner/Destroy()
