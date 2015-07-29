@@ -311,8 +311,7 @@ var/list/score=list(
 	"stuffharvested" = 0, //How many harvests have hydroponics done (per crop)?
 	"oremined"       = 0, //How many chunks of ore were smelted
 	"eventsendured"  = 0, //How many random events did the station endure?
-	"powerloss"      = 0, //How many APCs have poor charge (under 75 %)?
-	"airloss"		 = 0, //How manu air alarms have blinky red lights (direct alert)
+	"powerloss"      = 0, //How many APCs have alarms (under 30 %)?
 	"escapees"       = 0, //How many people got out alive?
 	"deadcrew"       = 0, //Dead bodies anywhere but on Centcomm and the shuttle
 	"mess"           = 0, //How much messes on the floor went uncleaned
@@ -329,7 +328,6 @@ var/list/score=list(
 
 	//These ones are mainly for the stat panel
 	"powerbonus"    = 0, //If all APCs on the station are running optimally, big bonus
-	"atmosbonus"	= 0, //If the atmosphere is flawless on the station, big bonus
 	"messbonus"     = 0, //If there are no messes on the station anywhere, huge bonus
 	"deadaipenalty" = 0, //Is the AI dead? If so, big penalty
 	"foodeaten"     = 0, //How much food was consumed

@@ -35,23 +35,12 @@
 
 	//Score Calculation and Display
 
-	//Who is alive/dead, who escaped
-	for(var/mob/living/silicon/ai/I in mob_list)
-		if(I.client && I.stat == DEAD && I.z != map.zCentcomm) //Dead bodies are never fine unless they are on Centcomm or the shuttle
-			score["deadaipenalty"] = 1
-
-	//Run through silicons for a special and costly deduction
-	for(var/mob/living/silicon/robot/I in mob_list)
-		if(I.client && I.stat == DEAD && I.z != map.zCentcomm) //Ditto above
-			score["deadsilicon"] += 1
-
-	//Run through humans for dead people and diseases, also the Clown
+	//Run through humans for diseases, also the Clown
 	for(var/mob/living/carbon/human/I in mob_list)
-		if(I.stat != DEAD && I.viruses) //Do this guy have any viruses (and is alive for sanity) ?
+		if(I.viruses) //Do this guy have any viruses ?
 			for(var/datum/disease/D in I.viruses) //Alright, start looping through those viruses
 				score["disease"]++ //One point for every disease
-		if(I.stat == DEAD && I.z != map.zCentcomm) //Ditto above
-			score["deadcrew"] += 1
+
 		if(I.job == "Clown")
 			for(var/thing in I.attack_log)
 				if(findtext(thing, "<font color='orange'>")) //I just dropped 10 IQ points from seeing this
@@ -161,12 +150,13 @@
 					if(player.stat == DEAD)
 						score["deadcommand"]++
 
-	//Check for atmospherics alarms and power alarms via station areas
-	for(var/area/A in areas) //Loop through all areas on station
-		if(A.atmosalm) //Atmosphere alarm at the location
-			score["airalarm"] += 1
-		if(A.poweralm) //Power alarm at the location
-			score["powerloss"] += 1
+	//Check station's power levels
+	for(var/obj/machinery/power/apc/A in power_machines)
+		if(A.z != map.zMainStation)
+			continue
+		for(var/obj/item/weapon/cell/C in A.contents)
+			if(C.percent() < 30)
+				score["powerloss"] += 1 //Enough to auto-cut equipment, so alarm
 
 	var/roundlength = world.time/10 //Get a value in seconds
 	score["time"] = round(roundlength) //One point for every five seconds. One minute is 12 points, one hour 720 points
@@ -218,13 +208,13 @@
 	//var/drinks = score["drinks"] * 5 //All drinks that ever existed award five points. No better way to do it yet
 	var/power = score["powerloss"] * 50 //Power issues are BAD, they mean the Engineers aren't doing their job at all
 	var/litter = score["litter"] //Every item listed under /obj/item/trash will cost one point if it exists
-	var/time = score["time"] * 0.2 //Every five seconds the station survives is one point. One minute is 12, one hour 720
+	var/time = round(score["time"] * 0.2) //Every five seconds the station survives is one point. One minute is 12, one hour 720
 	var/messpoints
-	var/atmos
+	//var/atmos
 	if(score["mess"] != 0)
 		messpoints = score["mess"] //If there are any messes, let's count them
-	if(score["airloss"] != 0)
-		atmos = score["airloss"] * 20 //Air issues are bad, but since it's space, don't stress it too much
+	//if(score["airloss"] != 0)
+		//atmos = score["airloss"] * 20 //Air issues are bad, but since it's space, don't stress it too much
 	var/plaguepoints = score["disease"] * 50 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
 
 	//Mode Specific
@@ -263,9 +253,9 @@
 	if(!messpoints && !litter) //Not a single mess or litter on station
 		score["crewscore"] += 10000 //Congrats, not even a dirt patch or chips bag anywhere
 		score["messbonus"] = 1
-	if(!atmos) //No air alarms anywhere
-		score["crewscore"] += 5000 //Give the Atmospheric Technicians a good pat on the back for caring
-		score["atmosbonus"] = 1
+	//if(!atmos) //No air alarms anywhere
+		//score["crewscore"] += 5000 //Give the Atmospheric Technicians a good pat on the back for caring
+		//score["atmosbonus"] = 1
 	if(score["allarrested"])
 		score["crewscore"] *= 3 //This needs to be here for the bonus to be applied properly
 
@@ -275,7 +265,7 @@
 	if(score["deadaipenalty"])
 		score["crewscore"] -= 1000 //Give a harsh punishment for killing the AI
 	score["crewscore"] -= power
-	score["crewscore"] -= atmos
+	//score["crewscore"] -= atmos
 	//if(score["crewscore"] != 0) //Dont divide by zero!
 	//	while(traitorwins > 0)
 	//		score["crewscore"] /= 2
@@ -406,28 +396,25 @@
 		<HR>"}
 
 //	var/totalfunds = wagesystem.station_budget + wagesystem.research_budget + wagesystem.shipping_budget
-	//<B>Useful Items Shipped:</B> [score["stuffshipped"]] ([score["stuffshipped"] * 5] Points)<BR>
 	dat += {"<B><U>GENERAL STATS</U></B><BR>
 
 	<U>THE GOOD:</U><BR>
-	<B>Length of Shift:</B> [round(world.time/600)] Minutes ([score["time"] * 0.2] Points)<BR>
+	<B>Length of Shift:</B> [round(world.time/600)] Minutes ([round(score["time"] * 0.2)] Points)<BR>
 	<B>Hydroponics Harvests:</B> [score["stuffharvested"]] ([score["stuffharvested"] * 1] Points)<BR>
 	<B>Ore Mined:</B> [score["oremined"]] ([score["oremined"] * 1] Points)<BR>
 	<B>Meals Prepared:</B> [score["meals"]] ([score["meals"] * 5] Points)<BR>
 	<B>Shuttle Escapees:</B> [score["escapees"]] ([score["escapees"] * 50] Points)<BR>
 	<B>Random Events Endured:</B> [score["eventsendured"]] ([score["eventsendured"] * 200] Points)<BR>
 	<B>Whole Station Powered:</B> [score["powerbonus"] ? "Yes" : "No"] ([score["powerbonus"] * 2500] Points)<BR>
-	<B>Perfect Station Atmosphere:</B> [score["atmosbonus"] ? "Yes" : "No"] ([score["atmosbonus"] * 5000] Points)<BR>
 	<B>Ultra-Clean Station:</B> [score["mess"] ? "No" : "Yes"] ([score["messbonus"] * 5000] Points)<BR><BR>
 
 	<U>THE BAD:</U><BR>
-	<B>Dead Bodies:</B> [score["deadcrew"]] (-[score["deadcrew"] * 100] Points)<BR>
+	<B>Dead Crewmen:</B> [score["deadcrew"]] (-[score["deadcrew"] * 100] Points)<BR>
 	<B>Destroyed Silicons:</B> [score["deadsilicon"]] (-[score["deadsilicon"] * 250] Points)<BR>
-	<B>AI Destroyed:</B> [score["deadaipenalty"] ? "Yes" : "No"] (-[score["deadaipenalty"] * 1000] Points)<BR>
+	<B>AIs Destroyed:</B> [score["deadaipenalty"]] (-[score["deadaipenalty"] * 1000] Points)<BR>
 	<B>Uncleaned Messes:</B> [score["mess"]] (-[score["mess"]] Points)<BR>
 	<B>Trash on Station:</B> [score["litter"]] (-[score["litter"]] Points)<BR>
 	<B>Station Power Issues:</B> [score["powerloss"]] (-[score["powerloss"] * 50] Points)<BR>
-	<B>Station Atmos Issues:</B> [score["airloss"]] (-[score["airloss"] * 25] Points)<BR>
 	<B>Unique Disease Vectors:</B> [score["disease"]] (-[score["disease"] * 50] Points)<BR><BR>
 
 	<U>THE WEIRD</U><BR>"}
