@@ -240,24 +240,24 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/artscrafts
 	name = "Arts and Crafts supplies"
 	contains = list(/obj/item/weapon/storage/fancy/crayons,
-	/obj/item/device/camera,
-	/obj/item/device/camera_film,
-	/obj/item/device/camera_film,
-	/obj/item/weapon/storage/photo_album,
-	/obj/item/weapon/packageWrap,
-	/obj/item/weapon/reagent_containers/glass/paint/red,
-	/obj/item/weapon/reagent_containers/glass/paint/green,
-	/obj/item/weapon/reagent_containers/glass/paint/blue,
-	/obj/item/weapon/reagent_containers/glass/paint/yellow,
-	/obj/item/weapon/reagent_containers/glass/paint/violet,
-	/obj/item/weapon/reagent_containers/glass/paint/black,
-	/obj/item/weapon/reagent_containers/glass/paint/white,
-	/obj/item/weapon/reagent_containers/glass/paint/remover,
-	/obj/item/mounted/poster,
-	/obj/item/weapon/wrapping_paper,
-	/obj/item/weapon/wrapping_paper,
-	/obj/item/weapon/wrapping_paper,
-	/obj/item/device/instrument/guitar)
+					/obj/item/device/camera,
+					/obj/item/device/camera_film,
+					/obj/item/device/camera_film,
+					/obj/item/weapon/storage/photo_album,
+					/obj/item/weapon/packageWrap,
+					/obj/item/weapon/reagent_containers/glass/paint/red,
+					/obj/item/weapon/reagent_containers/glass/paint/green,
+					/obj/item/weapon/reagent_containers/glass/paint/blue,
+					/obj/item/weapon/reagent_containers/glass/paint/yellow,
+					/obj/item/weapon/reagent_containers/glass/paint/violet,
+					/obj/item/weapon/reagent_containers/glass/paint/black,
+					/obj/item/weapon/reagent_containers/glass/paint/white,
+					/obj/item/weapon/reagent_containers/glass/paint/remover,
+					/obj/item/mounted/poster,
+					/obj/item/weapon/wrapping_paper,
+					/obj/item/weapon/wrapping_paper,
+					/obj/item/weapon/wrapping_paper,
+					/obj/item/device/instrument/guitar)
 	cost = 30
 	containertype = "/obj/structure/closet/crate"
 	containername = "Arts and Crafts crate"
@@ -282,15 +282,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/boxes
 	name = "Empty Box supplies"
 	contains = list(/obj/item/weapon/storage/box,
-	/obj/item/weapon/storage/box,
-	/obj/item/weapon/storage/box,
-	/obj/item/weapon/storage/box,
-	/obj/item/weapon/storage/box,
-	/obj/item/weapon/storage/box,
-	/obj/item/weapon/storage/box,
-	/obj/item/weapon/storage/box,
-	/obj/item/weapon/storage/box,
-	/obj/item/weapon/storage/box)
+					/obj/item/weapon/storage/box,
+					/obj/item/weapon/storage/box,
+					/obj/item/weapon/storage/box,
+					/obj/item/weapon/storage/box,
+					/obj/item/weapon/storage/box,
+					/obj/item/weapon/storage/box,
+					/obj/item/weapon/storage/box,
+					/obj/item/weapon/storage/box,
+					/obj/item/weapon/storage/box)
 	cost = 10
 	containertype = "/obj/structure/closet/crate"
 	containername = "Empty Box crate"
