@@ -37,7 +37,10 @@
 
 		var/start = world.timeofday
 		epicenter = get_turf(epicenter)
-		if(!epicenter) return
+		if(!epicenter)
+			return
+
+		score["explosions"]++ //For the scoreboard
 
 		var/max_range = max(devastation_range, heavy_impact_range, light_impact_range, flash_range)
 //		playsound(epicenter, 'sound/effects/explosionfar.ogg', 100, 1, round(devastation_range*2,1) )
@@ -94,7 +97,7 @@
 		var/y0 = epicenter.y
 		var/z0 = epicenter.z
 
-		for (var/turf/T in trange(max_range, epicenter))
+		for(var/turf/T in trange(max_range, epicenter))
 			var/dist = cheap_pythag(T.x - x0, T.y - y0)
 
 			if(explosion_newmethod)	//realistic explosions that take obstacles into account
@@ -108,23 +111,24 @@
 						if(D.density && D.explosion_block)
 							dist += D.explosion_block
 
-			if (dist < devastation_range)
+			if(dist < devastation_range)
 				dist = 1
-			else if (dist < heavy_impact_range)
+			else if(dist < heavy_impact_range)
 				dist = 2
-			else if (dist < light_impact_range)
+			else if(dist < light_impact_range)
 				dist = 3
 			else
 				continue
 
-			for (var/atom/movable/A in T.contents)
+			for(var/atom/movable/A in T.contents)
 				A.ex_act(dist)
 
 			T.ex_act(dist)
 
 		var/took = (world.timeofday-start)/10
 		//You need to press the DebugGame verb to see these now....they were getting annoying and we've collected a fair bit of data. Just -test- changes  to explosion code using this please so we can compare
-		if(Debug2)	world.log << "## DEBUG: Explosion([x0],[y0],[z0])(d[devastation_range],h[heavy_impact_range],l[light_impact_range]): Took [took] seconds."
+		if(Debug2)
+			world.log << "## DEBUG: Explosion([x0],[y0],[z0])(d[devastation_range],h[heavy_impact_range],l[light_impact_range]): Took [took] seconds."
 
 		//Machines which report explosions.
 		if(!squelch)
