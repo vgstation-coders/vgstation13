@@ -401,7 +401,7 @@
 	<U>THE GOOD:</U><BR>
 	<B>Length of Shift:</B> [round(world.time/600)] Minutes ([round(score["time"] * 0.2)] Points)<BR>
 	<B>Hydroponics Harvests:</B> [score["stuffharvested"]] ([score["stuffharvested"] * 1] Points)<BR>
-	<B>Ore Mined:</B> [score["oremined"]] ([score["oremined"] * 1] Points)<BR>
+	<B>Ore Smelted:</B> [score["oremined"]] ([score["oremined"] * 1] Points)<BR>
 	<B>Meals Prepared:</B> [score["meals"]] ([score["meals"] * 5] Points)<BR>
 	<B>Shuttle Escapees:</B> [score["escapees"]] ([score["escapees"] * 50] Points)<BR>
 	<B>Random Events Endured:</B> [score["eventsendured"]] ([score["eventsendured"] * 200] Points)<BR>
