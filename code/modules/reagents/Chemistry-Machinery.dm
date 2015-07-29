@@ -104,6 +104,14 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			stat |= NOPOWER
 	nanomanager.update_uis(src) // update all UIs attached to src
 
+/obj/machinery/chem_dispenser/proc/can_use(var/mob/living/silicon/robot/R)
+	if(!isMoMMI(R) && !istype(R.module,/obj/item/weapon/robot_module/medical)) //default chem dispenser can only be used by MoMMIs and Mediborgs
+		return 0
+	else
+		if(!isMoMMI(R))
+			targetMoveKey =  R.on_moved.Add(src, "user_moved")
+		return 1
+
 /obj/machinery/chem_dispenser/process()
 	if(recharged < 0)
 		recharge()
@@ -251,11 +259,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		return 1
 
 	if(isrobot(user))
-		// UNLESS MoMMI or medbutt.
-		var/mob/living/silicon/robot/R=user
-		if(!isMoMMI(user) && !istype(R.module,/obj/item/weapon/robot_module/medical))
+		if(!can_use(user))
 			return
-		targetMoveKey =  user.on_moved.Add(src, "user_moved")
 
 	if(istype(D, /obj/item/weapon/reagent_containers/glass))
 		if(src.beaker)
@@ -288,42 +293,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	ui_interact(user)
 //Cafe stuff
 
-/obj/machinery/chem_dispenser/nonmedical/
-//Allowing service borgs to use brewers, soda dispensers, and booze dispensers, but not chem dispensers.
-/obj/machinery/chem_dispenser/nonmedical/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob) //to be worked on
-
-	if(..())
-		return 1
-
-	if(isrobot(user))
-		// UNLESS service borg.
-		var/mob/living/silicon/robot/R=user
-		if(!istype(R.module,/obj/item/weapon/robot_module/butler))
-			return
-		targetMoveKey =  user.on_moved.Add(src, "user_moved")
-
-	if(istype(D, /obj/item/weapon/reagent_containers/glass))
-		if(src.beaker)
-			user << "A beaker is already loaded into the machine."
-			return
-		else if(!panel_open)
-			src.beaker =  D
-			if(user.type == /mob/living/silicon/robot)
-				var/mob/living/silicon/robot/R = user
-				R.uneq_active()
-			user.drop_item(D, src)
-			user << "You add the beaker to the machine!"
-			nanomanager.update_uis(src) // update all UIs attached to src
-			return 1
-		else
-			user <<"You can't add a beaker to the machine while the panel is open."
-			return
-
-/obj/machinery/chem_dispenser/nonmedical/brewer/
+/obj/machinery/chem_dispenser/brewer/
 	name = "Space-Brewery"
 	icon_state = "brewer"
 	dispensable_reagents = list("tea","greentea","redtea", "coffee","milk","cream","water","hot_coco", "soymilk")
-/obj/machinery/chem_dispenser/nonmedical/brewer/New()
+/obj/machinery/chem_dispenser/brewer/New()
 	. = ..()
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/chem_dispenser/brewer,
@@ -338,17 +312,24 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 	RefreshParts()
 
-/obj/machinery/chem_dispenser/nonmedical/brewer/mapping
+/obj/machinery/chem_dispenser/brewer/mapping
 	max_energy = 100
 	energy = 100
 
+/obj/machinery/chem_dispenser/brewer/can_use(var/mob/living/silicon/robot/R)
+	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
+		targetMoveKey =  R.on_moved.Add(src, "user_moved")
+		return 1
+	else
+		return 0
+
 //Soda/booze dispensers.
 
-/obj/machinery/chem_dispenser/nonmedical/soda_dispenser/
+/obj/machinery/chem_dispenser/soda_dispenser/
 	name = "Soda Dispenser"
 	icon_state = "soda_dispenser"
 	dispensable_reagents = list("spacemountainwind", "sodawater", "lemon_lime", "dr_gibb", "cola", "ice", "tonic")
-/obj/machinery/chem_dispenser/nonmedical/soda_dispenser/New()
+/obj/machinery/chem_dispenser/soda_dispenser/New()
 	. = ..()
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/chem_dispenser/soda_dispenser,
@@ -363,15 +344,22 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 	RefreshParts()
 
-/obj/machinery/chem_dispenser/nonmedical/soda_dispenser/mapping
+/obj/machinery/chem_dispenser/soda_dispenser/mapping
 	max_energy = 100
 	energy = 100
 
-/obj/machinery/chem_dispenser/nonmedical/booze_dispenser/
+/obj/machinery/chem_dispenser/soda_dispenser/can_use(var/mob/living/silicon/robot/R)
+	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
+		targetMoveKey =  R.on_moved.Add(src, "user_moved")
+		return 1
+	else
+		return 0
+
+/obj/machinery/chem_dispenser/booze_dispenser/
 	name = "Booze Dispenser"
 	icon_state = "booze_dispenser"
 	dispensable_reagents = list("beer", "whiskey", "tequila", "vodka", "vermouth", "rum", "cognac", "wine", "kahlua", "ale", "ice", "water", "gin", "sodawater", "cola", "cream","tomatojuice","orangejuice","limejuice","tonic")
-/obj/machinery/chem_dispenser/nonmedical/booze_dispenser/New()
+/obj/machinery/chem_dispenser/booze_dispenser/New()
 	. = ..()
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser,
@@ -386,9 +374,16 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 	RefreshParts()
 
-/obj/machinery/chem_dispenser/nonmedical/booze_dispenser/mapping
+/obj/machinery/chem_dispenser/booze_dispenser/mapping
 	max_energy = 100
 	energy = 100
+
+/obj/machinery/chem_dispenser/booze_dispenser/can_use(var/mob/living/silicon/robot/R)
+	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
+		targetMoveKey =  R.on_moved.Add(src, "user_moved")
+		return 1
+	else
+		return 0
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
