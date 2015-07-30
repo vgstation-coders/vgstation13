@@ -1,6 +1,6 @@
 /obj/item/weapon/storage/bible
 	name = "bible"
-	desc = "Apply to a person's head repeatedly."
+	desc = "Apply to head repeatedly."
 	icon_state = "bible"
 	throw_speed = 1
 	throw_range = 5
@@ -54,7 +54,7 @@
 
 	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
-	if(!ishuman(user) && !isbadmonkey(user))
+	if(!user.dexterity_check())
 		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
 		return
 
