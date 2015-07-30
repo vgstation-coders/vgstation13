@@ -381,19 +381,29 @@
 		M << "<span class='warning'>Someone's already washing here.</span>"
 		return
 
-	usr << "<span class='notice'>You start washing your hands.</span>"
+	var/mob/living/L = M
+	if(!L) return
+
+	L << "<span class='notice'>You start washing your [L.getHandAmount()>=2 ? "hands" : "hand"].</span>"
 
 	busy = 1
 	sleep(40)
 	busy = 0
 
-	if(!Adjacent(M)) return		//Person has moved away from the sink
+	if(!Adjacent(L)) return		//Person has moved away from the sink
 
-	M.clean_blood()
-	if(ishuman(M))
-		M:update_inv_gloves()
-	for(var/mob/V in viewers(src, null))
-		V.show_message("<span class='notice'>[M] washes their hands using \the [src].</span>")
+	L.clean_blood()
+	if(ishuman(L))
+		var/mob/living/carbon/human/H = L
+		H.update_inv_gloves()
+
+	switch(L.getHandAmount())
+		if(2 to INFINITY)
+			M.visible_message("<span class='notice'>[M] washes \his hands using \the [src].</span>")
+		if(1)
+			M.visible_message("<span class='notice'>[M] washes \his hand using \the [src].</span>")
+		else
+			return
 
 /obj/structure/sink/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(busy) return 1

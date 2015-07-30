@@ -305,6 +305,9 @@
 /mob/living/proc/getFeetAmount()
 	return 2
 
+/mob/living/proc/getHandAmount()
+	return 2
+
 /mob/proc/get_contents()
 
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/get_contents() called tick#: [world.time]")

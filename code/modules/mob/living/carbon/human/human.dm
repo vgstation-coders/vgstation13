@@ -622,6 +622,17 @@
 
 	return .
 
+/mob/living/carbon/human/getHandAmount()
+	.=2
+
+	var/datum/organ/external/left_hand = get_organ("l_hand")
+	var/datum/organ/external/right_hand = get_organ("r_hand")
+
+	if(!left_hand || left_hand.status & ORGAN_DESTROYED) .--
+	if(!right_hand || right_hand.status & ORGAN_DESTROYED) .--
+
+	return .
+
 //Removed the horrible safety parameter. It was only being used by ninja code anyways.
 //Now checks siemens_coefficient of the affected area by default
 /mob/living/carbon/human/electrocute_act(var/shock_damage, var/obj/source, var/base_siemens_coeff = 1.0, var/def_zone = null)
