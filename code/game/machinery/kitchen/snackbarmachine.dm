@@ -9,22 +9,21 @@
 
 	if(istype(B, /obj/item/weapon/storage/pill_bottle))
 		user << "<span class='warning'>This condiment master does not come with a pill dispenser unit built-in.</span>"
-		return
+		return 1
 
-	..()
+	. = ..()
 
 /obj/machinery/chem_master/snackbar_machine/Topic(href, href_list)
 
 	if(..())
 		return 1
 
-	src.add_fingerprint(usr)
 	usr.set_machine(src)
 
 	if(href_list["close"])
 		usr << browse(null, "window=snackbar_machine")
 		usr.unset_machine()
-		return
+		return 1
 
 	if(beaker)
 		var/datum/reagents/R = beaker.reagents
@@ -32,7 +31,7 @@
 			var/dat = ""
 			dat += "<TITLE>SnackBar Machine</TITLE>Reagent info:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
 			usr << browse(dat, "window=snackbar_machine;size=575x400")
-			return
+			return 1
 
 		else if(href_list["add"])
 
@@ -42,6 +41,7 @@
 				if(amount < 0)
 					return
 				R.trans_id_to(src, id, amount)
+			return 1
 
 		else if(href_list["addcustom"])
 
@@ -49,6 +49,7 @@
 			useramount = input("Select the amount to transfer.", 30, useramount) as num
 			useramount = isgoodnumber(useramount)
 			src.Topic(null, list("amount" = "[useramount]", "add" = "[id]"))
+			return 1
 
 		else if(href_list["remove"])
 
@@ -61,6 +62,7 @@
 					reagents.trans_id_to(beaker, id, amount)
 				else
 					reagents.remove_reagent(id, amount)
+			return 1
 
 		else if(href_list["removecustom"])
 
@@ -68,13 +70,15 @@
 			useramount = input("Select the amount to transfer.", 30, useramount) as num
 			useramount = isgoodnumber(useramount)
 			src.Topic(null, list("amount" = "[useramount]", "remove" = "[id]"))
+			return 1
 
 		else if(href_list["toggle"])
 			mode = !mode
+			return 1
 
 		else if(href_list["main"])
 			attack_hand(usr)
-			return
+			return 1
 
 		else if(href_list["eject"])
 			if(beaker)
@@ -82,10 +86,12 @@
 				beaker = null
 				reagents.clear_reagents()
 				update_icon()
+			return 1
 
 		else if(href_list["createbar"])
 			var/obj/item/weapon/reagent_containers/food/snacks/snackbar/SB = new/obj/item/weapon/reagent_containers/food/snacks/snackbar(src.loc)
 			reagents.trans_to(SB, 10)
+			return 1
 
 	src.updateUsrDialog()
 	return

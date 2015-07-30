@@ -490,10 +490,12 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(loaded_pill_bottle)
 			loaded_pill_bottle.loc = src.loc
 			loaded_pill_bottle = null
+		return 1
+
 	else if(href_list["close"])
 		usr << browse(null, "window=chemmaster")
 		usr.unset_machine()
-		return
+		return 1
 
 	if(beaker)
 		var/datum/reagents/R = beaker.reagents
@@ -515,7 +517,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			else
 				dat += "<TITLE>Condimaster 3000</TITLE>Condiment infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
 			usr << browse(dat, "window=chem_master;size=575x400")
-			return
+			return 1
 
 		else if(href_list["add"])
 
@@ -525,6 +527,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 				if(amount < 0)
 					return
 				R.trans_id_to(src, id, amount)
+			return 1
 
 		else if(href_list["addcustom"])
 
@@ -532,6 +535,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			useramount = input("Select the amount to transfer.", 30, useramount) as num
 			useramount = isgoodnumber(useramount)
 			src.Topic(null, list("amount" = "[useramount]", "add" = "[id]"))
+			return 1
 
 		else if(href_list["remove"])
 
@@ -544,6 +548,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 					reagents.trans_id_to(beaker, id, amount)
 				else
 					reagents.remove_reagent(id, amount)
+			return 1
 
 		else if(href_list["removecustom"])
 
@@ -551,17 +556,20 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			useramount = input("Select the amount to transfer.", 30, useramount) as num
 			useramount = isgoodnumber(useramount)
 			src.Topic(null, list("amount" = "[useramount]", "remove" = "[id]"))
+			return 1
 
 		else if(href_list["toggle"])
 			mode = !mode
+			return 1
 
 		else if(href_list["main"])
 			attack_hand(usr)
-			return
+			return 1
 
 		else if(href_list["eject"])
 			if(beaker)
 				detach()
+			return 1
 
 		else if(href_list["createpill"] || href_list["createpill_multiple"])
 			var/count = 1
@@ -589,6 +597,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 					if(loaded_pill_bottle.contents.len < loaded_pill_bottle.storage_slots)
 						P.loc = loaded_pill_bottle
 						src.updateUsrDialog()
+			return 1
 
 		else if (href_list["createbottle"] || href_list["createbottle_multiple"])
 			if(!condi)
@@ -612,9 +621,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 					P.pixel_y = rand(-7, 7)
 					//P.icon_state = "bottle"+bottlesprite
 					reagents.trans_to(P,amount_per_bottle)
+				return 1
 			else
 				var/obj/item/weapon/reagent_containers/food/condiment/P = new/obj/item/weapon/reagent_containers/food/condiment(src.loc)
 				reagents.trans_to(P, 50)
+				return 1
 
 		else if(href_list["change_pill"])
 			#define MAX_PILL_SPRITE 20 //Max icon state of the pill sprites
@@ -630,7 +641,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 			dat += "</table>"
 			usr << browse(dat, "window=chem_master")
-			return
+			return 1
 
 		/*
 		else if(href_list["change_bottle"])
@@ -652,6 +663,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 		else if(href_list["pill_sprite"])
 			pillsprite = href_list["pill_sprite"]
+			return 1
 
 		/*
 		else if(href_list["bottle_sprite"])
@@ -683,8 +695,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	return src.attack_hand(user)
 
 /obj/machinery/chem_master/attack_hand(mob/user as mob)
-	if(stat & BROKEN)
+
+	. = ..()
+	if(.)
 		return
+
 	user.set_machine(src)
 	if(!(user.client in has_sprites))
 		spawn()
