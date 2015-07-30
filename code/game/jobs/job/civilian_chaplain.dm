@@ -1,5 +1,4 @@
-//Due to how large this one is, it gets its own file
-//Now outsourced due to the creation of the "religion" module
+//Due to how large this one is, it gets its own file from civilian.dm
 /datum/job/chaplain
 	title = "Chaplain"
 	flag = CHAPLAIN
@@ -32,7 +31,7 @@
 
 	spawn(0) //We are done giving earthly belongings, now let's move on to spiritual matters
 
-		var/new_religion = copytext(sanitize(input(H, "You are the crew's Religious Services Chaplain. What religion do you follow and teach? (Please ensure your ID is in your ID slot before confirming)", "Name of Religion", religion_name)), 1, MAX_NAME_LEN)
+		var/new_religion = sanitize(stripped_input(H, "You are the crew's Religious Services Chaplain. What religion do you follow and teach? (Please put your ID in your ID slot to prevent errors)", "Name of Religion", religion_name), 1, MAX_NAME_LEN)
 
 		if(!new_religion)
 			new_religion = religion_name //Give them the default one

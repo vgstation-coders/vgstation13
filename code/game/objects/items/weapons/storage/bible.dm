@@ -1,6 +1,6 @@
 /obj/item/weapon/storage/bible
 	name = "bible"
-	desc = "Apply to person's head repeatedly."
+	desc = "Apply to a person's head repeatedly."
 	icon_state = "bible"
 	throw_speed = 1
 	throw_range = 5
@@ -54,26 +54,26 @@
 
 	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
-	if(ismonkey(user) && ticker.mode.name != "monkey") //Shitty proc that shouldn't exist, but Monkey Epidemic happened
+	if(isbadmonkey(user)) //Shitty proc that shouldn't exist, but Monkey Epidemic happened
 		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
 		return
 
 	if(!chaplain) //The user is not a Chaplain. BLASPHEMY !
 		//Using the Bible as a member of the occult will get you smithed, aka holy cleansing fire. You'd have to be stupid to remotely consider it
-		if(M.mind && M.mind.vampire) //Vampire trying to use it
+		if(isvampire(user)) //Vampire trying to use it
 			user << "<span class='danger'>[deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>"
 			user.fire_stacks += 5
 			user.IgniteMob()
 			user.emote("scream",,, 1)
 			M.mind.vampire.smitecounter += 50 //Once we are extinguished, we will be quite vulnerable regardless
-		else if(iscult(M)) //Cultist trying to use it
+		else if(iscult(user)) //Cultist trying to use it
 			user << "<span class='danger'>[deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>"
 			user.fire_stacks += 5
 			user.IgniteMob()
 			user.emote("scream",,, 1)
 		else //Literally anyone else than a Cultist using it, at this point it's just a big book
 			..() //WHACK
-		return //Chaplains can't use the holy book, at least not properly
+		return //Non-chaplains can't use the holy book, at least not properly
 
 	if((M_CLUMSY in user.mutations) && prob(50)) //Using it while clumsy, let's have some fun
 		user.visible_message("<span class='warning'>\The [src] slips out of [user]'s hands and hits his head.</span>",
@@ -109,7 +109,7 @@
 	"<span class='warning'>You [attack_verb] [M]'s head with \the [src]. In the name of [deity_name], bless thee!</span>")
 	playsound(get_turf(src), "punch", 25, 1, -1)
 
-	if(M.mind && M.mind.vampire && !(VAMP_MATURE in M.mind.vampire.powers)) //The user is a "young" Vampire, fuck up his vampiric powers and hurt his head
+	if(isvampire(M) && !(VAMP_MATURE in M.mind.vampire.powers)) //The user is a "young" Vampire, fuck up his vampiric powers and hurt his head
 		if(ishuman(M))
 			M << "<span class='warning'>[deity_name]'s power nullifies your own!</span>"
 			if(M.mind.vampire.nullified < 5) //Don't actually reduce their debuff if it's over 5
@@ -160,7 +160,7 @@
 /obj/item/weapon/storage/bible/pickup(mob/living/user as mob)
 	if(user.mind && user.mind.assigned_role == "Chaplain") //We are the Chaplain, yes we are
 		user << "<span class ='notice'>You feel [deity_name]'s holy presence as you pick up \the [src].</span>"
-	if(user.mind && user.mind.vampire && (!VAMP_UNDYING in user.mind.vampire.powers)) //We are a Vampire, we aren't very smart
+	if(isvampire(user) && (!VAMP_UNDYING in user.mind.vampire.powers)) //We are a Vampire, we aren't very smart
 		user << "<span class ='danger'>[deity_name]'s power channels through \the [src]. You feel extremely uneasy as you grab it!</span>"
 		user.mind.vampire.smitecounter += 10
 	if(iscult(user)) //We are a Cultist, we aren't very smart either, but at least there will be no consequences for us

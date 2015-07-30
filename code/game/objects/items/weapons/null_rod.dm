@@ -12,8 +12,8 @@
 	w_class = 1
 
 /obj/item/weapon/nullrod/suicide_act(mob/user)
-		viewers(user) << "<span class='danger'>[user] is impaling \himself with \the [src]! It looks like \he's trying to commit suicide.</span>"
-		return (BRUTELOSS|FIRELOSS)
+	viewers(user) << "<span class='danger'>[user] is impaling \himself with \the [src]! It looks like \he's trying to commit suicide.</span>"
+	return (BRUTELOSS|FIRELOSS)
 
 /obj/item/weapon/nullrod/attack(mob/M as mob, mob/living/user as mob) //Paste from old-code to decult with a null rod.
 
@@ -38,7 +38,7 @@
 		user.Stun(5)
 		return
 
-	if(M.mind && M.mind.vampire && ishuman(M) && user.mind && (user.mind.assigned_role == "Chaplain")) //Fuck up vampires by smithing the shit out of them. Shock and Awe!
+	if(isvampire(M) && user.mind && (user.mind.assigned_role == "Chaplain")) //Fuck up vampires by smithing the shit out of them. Shock and Awe!
 		if(!(VAMP_MATURE in M.mind.vampire.powers))
 			M << "<span class='warning'>\The [src]'s power violently interferes with your own!</span>"
 			if(M.mind.vampire.nullified < 5) //Don't actually reduce their debuff if it's over 5
@@ -68,6 +68,6 @@
 	if(user.mind)
 		if(user.mind.assigned_role == "Chaplain")
 			user << "<span class='notice'>The obsidian rod is teeming with divine power. You feel like you could pulverize a horde of undead with this.</span>"
-		if(user.mind.vampire && !(VAMP_UNDYING in user.mind.vampire.powers))
+		if(isvampire(user) && !(VAMP_UNDYING in user.mind.vampire.powers))
 			user.mind.vampire.smitecounter += 60
 			user << "<span class='danger'>You feel an unwanted presence as you pick up the rod. Your body feels like it is burning from the inside!</span>"

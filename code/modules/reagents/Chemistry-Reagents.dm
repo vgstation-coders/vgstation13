@@ -685,7 +685,7 @@
 /datum/reagent/holywater/reaction_obj(var/obj/O, var/volume)
 	src = null //WHAT
 	if(volume >= 1)
-		O.blessed = 1 //You're blessed and shit who cares
+		O.blessed = 1
 
 /datum/reagent/holywater/on_mob_life(var/mob/living/M as mob,var/alien)
 
@@ -700,7 +700,7 @@
 			else //Warn the Cultist that it is fucking him up
 				M << "<span class='danger'>A freezing liquid permeates your bloodstream. Your arcane knowledge is becoming osbscure again.</span>"
 		//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
-		if(M.mind.vampire)
+		if(isvampire(M))
 			if(!M)
 				M = holder.my_atom
 			if(!(VAMP_MATURE in M.mind.vampire.powers))
@@ -716,8 +716,8 @@
 	src = null
 	//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
 	if(ishuman(M))
-		if(M.mind.vampire)
-			var/mob/living/carbon/human/H=M
+		if(isvampire(M))
+			var/mob/living/carbon/human/H = M
 			if(!(VAMP_UNDYING in M.mind.vampire.powers))
 				if(method == TOUCH)
 					if(H.wear_mask)
