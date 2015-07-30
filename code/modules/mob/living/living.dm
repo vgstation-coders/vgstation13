@@ -302,6 +302,8 @@
 
 // ++++ROCKDTBEN++++ MOB PROCS //END
 
+/mob/living/proc/getFeetAmount()
+	return 2
 
 /mob/proc/get_contents()
 
