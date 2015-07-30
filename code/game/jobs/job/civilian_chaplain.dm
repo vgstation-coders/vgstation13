@@ -233,7 +233,7 @@
 					J = "Doctor"
 				//Give them basic medical garb
 				H.equip_or_collect(new /obj/item/clothing/head/surgery/blue(H), slot_head)
-				H.equip_or_collect(new /obj/item/clothing/mask/surgical(H), slot_mask)
+				H.equip_or_collect(new /obj/item/clothing/mask/surgical(H), slot_wear_mask)
 				deity_name = "The Chief Medical Officer"
 			if("busta", "bustatime", "zas", "airflow", "hardcore", "hardcores")
 				B.name = "The Hardcores"
