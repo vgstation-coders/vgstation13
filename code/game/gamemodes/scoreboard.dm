@@ -46,41 +46,40 @@
 				if(findtext(thing, "<font color='orange'>")) //I just dropped 10 IQ points from seeing this
 					score["clownabuse"]++
 
-	for(var/mob/living/player in mob_list)
-		if(player.client)
-			if(player.stat != DEAD)
-				var/turf/T = get_turf(player)
-				if(istype(T.loc, /area/shuttle/escape/centcom) || istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
-					score["escapees"] += 1
+	for(var/mob/living/player in player_list)
+		if(player.stat != DEAD)
+			var/turf/T = get_turf(player)
+			if(istype(T.loc, /area/shuttle/escape/centcom) || istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
+				score["escapees"] += 1
 //					player.unlock_medal("100M Dash", 1)
 //				player.unlock_medal("Survivor", 1)
 //				for(var/obj/item/weapon/gnomechompski/G in player.get_contents())
 //					player.unlock_medal("Guardin' gnome", 1)
 
-					var/cashscore = 0
-					var/dmgscore = 0
+				var/cashscore = 0
+				var/dmgscore = 0
 
 
-					for(var/obj/item/weapon/card/id/C1 in get_contents_in_object(E, /obj/item/weapon/card/id))
-						cashscore += C1.GetBalance()
+				for(var/obj/item/weapon/card/id/C1 in get_contents_in_object(E, /obj/item/weapon/card/id))
+					cashscore += C1.GetBalance()
 
-					for(var/obj/item/weapon/spacecash/C2 in get_contents_in_object(E, /obj/item/weapon/spacecash))
-						cashscore += C2.worth
+				for(var/obj/item/weapon/spacecash/C2 in get_contents_in_object(E, /obj/item/weapon/spacecash))
+					cashscore += C2.worth
 
 //					for(var/datum/data/record/Ba in data_core.bank)
 //						if(Ba.fields["name"] == E.real_name)
 //							cashscore += Ba.fields["current_money"]
-					if(cashscore > score["richestcash"])
-						score["richestcash"] = cashscore
-						score["richestname"] = player.real_name
-						score["richestjob"] = player.job
-						score["richestkey"] = player.key
-					dmgscore = player.bruteloss + player.fireloss + player.toxloss + player.oxyloss
-					if(dmgscore > score["dmgestdamage"])
-						score["dmgestdamage"] = dmgscore
-						score["dmgestname"] = player.real_name
-						score["dmgestjob"] = player.job
-						score["dmgestkey"] = player.key
+				if(cashscore > score["richestcash"])
+					score["richestcash"] = cashscore
+					score["richestname"] = player.real_name
+					score["richestjob"] = player.job
+					score["richestkey"] = player.key
+				dmgscore = player.bruteloss + player.fireloss + player.toxloss + player.oxyloss
+				if(dmgscore > score["dmgestdamage"])
+					score["dmgestdamage"] = dmgscore
+					score["dmgestname"] = player.real_name
+					score["dmgestjob"] = player.job
+					score["dmgestkey"] = player.key
 
 	var/nukedpenalty = 1000
 	if(ticker.mode.config_tag == "nuclear")
@@ -116,15 +115,15 @@
 				score["disc"] = 0
 */
 		if(score["nuked"])
-			for(var/obj/machinery/nuclearbomb/NUKE in machines)
-				if(NUKE.r_code == "Nope")
+			for(var/obj/machinery/nuclearbomb/nuke in machines)
+				if(nuke.r_code == "Nope")
 					continue
-				var/turf/T = NUKE.loc
-				if(istype(T,/area/syndicate_station) || istype(T,/area/wizard_station) || istype(T,/area/solar))
+				var/turf/T = get_turf(nuke)
+				if(istype(T, /area/syndicate_station) || istype(T, /area/wizard_station) || istype(T, /area/solar))
 					nukedpenalty = 1000
-				else if(istype(T,/area/security/main) || istype(T,/area/security/brig) || istype(T,/area/security/armory) || istype(T,/area/security/checkpoint2))
+				else if(istype(T, /area/security/main) || istype(T, /area/security/brig) || istype(T, /area/security/armory) || istype(T, /area/security/checkpoint2))
 					nukedpenalty = 50000
-				else if(istype(T,/area/engine))
+				else if(istype(T, /area/engine))
 					nukedpenalty = 100000
 				else
 					nukedpenalty = 10000
@@ -165,7 +164,8 @@
 	for(var/obj/effect/decal/cleanable/M in decals)
 		if(M.z != map.zMainStation) //Won't work on multi-Z stations, but will do for now
 			continue
-		M.messcheck(M)
+		if(M.messcheck())
+			score["mess"]
 
 	for(var/obj/item/trash/T in trash_items)
 		if(T.z != map.zMainStation) //Won't work on multi-Z stations, but will do for now
