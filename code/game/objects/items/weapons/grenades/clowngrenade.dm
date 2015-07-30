@@ -83,7 +83,7 @@
 					H << "<span class='warning'>Your feet feel like they're on fire!</span>"
 				else if(feet == 1)
 					H << "<span class='warning'>Your foot feels like it's on fire!</span>"
-				else
+				else //If he has no feet and he's not lying, just assume he's floating or something
 					return
 				H.take_overall_damage(0, max(0, (burned - 2)))
 

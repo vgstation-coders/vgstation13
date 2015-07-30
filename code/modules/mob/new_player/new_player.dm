@@ -343,7 +343,7 @@
 	character.loc = pick(latejoin)
 	//Give them their fucking wheelchair where they spawn instead of inside of the splash screen
 
-	if(character.getFeetAmount() == 0)
+	if(character.getFeetAmount() <= 0)
 		var/obj/structure/stool/bed/chair/vehicle/wheelchair/W = new(character.loc)
 		W.buckle_mob(character,character)
 
