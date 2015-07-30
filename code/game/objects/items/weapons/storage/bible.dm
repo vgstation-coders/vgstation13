@@ -15,7 +15,7 @@
 	fire_fuel = 2
 
 /obj/item/weapon/storage/bible/suicide_act(mob/living/user)
-	viewers(user) << "<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>"
+	user.visible_message("<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>")
 	user.emote("fart")
 	spawn(10) //Wait for it
 		user.fire_stacks += 5
@@ -54,7 +54,7 @@
 
 	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
-	if(isbadmonkey(user)) //Shitty proc that shouldn't exist, but Monkey Epidemic happened
+	if(!ishuman(user) && !isbadmonkey(user))
 		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
 		return
 

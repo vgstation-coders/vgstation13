@@ -12,7 +12,7 @@
 	w_class = 1
 
 /obj/item/weapon/nullrod/suicide_act(mob/user)
-	viewers(user) << "<span class='danger'>[user] is impaling \himself with \the [src]! It looks like \he's trying to commit suicide.</span>"
+	user.visible_message("<span class='danger'>[user] is impaling \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return (BRUTELOSS|FIRELOSS)
 
 /obj/item/weapon/nullrod/attack(mob/M as mob, mob/living/user as mob) //Paste from old-code to decult with a null rod.
@@ -27,7 +27,7 @@
 
 	msg_admin_attack("[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
-	if(!(istype(user, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey") //Fucks sakes
+	if(!ishuman(user) && !isbadmonkey(user)) //Fucks sakes
 		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
 		return
 
