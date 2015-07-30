@@ -769,16 +769,18 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	condi = 1
 
 /obj/machinery/chem_master/update_icon()
+
+	overlays.len = 0
+
 	if(beaker)
 		icon_state = "mixer1"
 	else
 		icon_state = "mixer0"
 
-	var/image/overlay = image('icons/obj/chemical.dmi', src, "[icon_state]_overlay")
 	if(reagents.total_volume)
+		var/image/overlay = image('icons/obj/chemical.dmi', src, "[icon_state]_overlay")
 		overlay.icon += mix_color_from_reagents(reagents.reagent_list)
-	overlays.len = 0
-	overlays += overlay
+		overlays += overlay
 
 /obj/machinery/chem_master/on_reagent_change()
 	update_icon()
