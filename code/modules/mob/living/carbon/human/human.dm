@@ -612,24 +612,28 @@
 	return
 
 /mob/living/carbon/human/getFeetAmount()
-	.=2 //probably should use a define but whatever
+	. = 2 //probably should use a define but whatever
 
 	var/datum/organ/external/left_foot = get_organ("l_foot")
 	var/datum/organ/external/right_foot = get_organ("r_foot")
 
-	if(!left_foot || left_foot.status & ORGAN_DESTROYED) .--
-	if(!right_foot || right_foot.status & ORGAN_DESTROYED) .--
+	if(!left_foot || left_foot.status & ORGAN_DESTROYED)
+		. -= 1
+	if(!right_foot || right_foot.status & ORGAN_DESTROYED)
+		. -= 1
 
 	return .
 
 /mob/living/carbon/human/getHandAmount()
-	.=2
+	. = 2
 
 	var/datum/organ/external/left_hand = get_organ("l_hand")
 	var/datum/organ/external/right_hand = get_organ("r_hand")
 
-	if(!left_hand || left_hand.status & ORGAN_DESTROYED) .--
-	if(!right_hand || right_hand.status & ORGAN_DESTROYED) .--
+	if(!left_hand || left_hand.status & ORGAN_DESTROYED)
+		. -= 1
+	if(!right_hand || right_hand.status & ORGAN_DESTROYED)
+		. -= 1
 
 	return .
 
