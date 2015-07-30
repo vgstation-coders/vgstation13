@@ -44,17 +44,17 @@
 			if("christianity")
 				B.name = "The Holy Bible"
 				deity_name = "Space Jesus"
-			if("catholicism", "roman catholicism")
+			if("catholic", "catholicism", "roman catholicism")
 				B.name = "The Catholic Bible"
 				if(H.gender == FEMALE)
 					J = "Nun"
 				else
 					J = "Priest"
 				deity_name = "Jesus Christ"
-			if("gnosticism", "theism")
+			if("theist", "gnosticism", "theism")
 				B.name = pick("The Gnostic Bible", "The Dead Seas Scrolls")
 				deity_name = "God"
-			if("satanism")
+			if("satan", "evil", "satanism")
 				B.name = "The Satanic Bible" //What I found on Google, ergo the truth
 				if(H.gender == FEMALE)
 					J = "Magistra"
@@ -64,7 +64,7 @@
 			if("cthulu", "outer gods", "elder gods", "esoteric order of dagon")
 				B.name = pick("The Necronomicon", "The Book of Eibon", "De Vermis Mysteriis", "Unaussprechlichen Kulten")
 				deity_name = "Cthulu" //I hope it's spelt correctly
-			if("islam")
+			if("islam", "muslim")
 				B.name = "The Quran"
 				J = "Imam"
 				deity_name = "Allah"
@@ -75,7 +75,7 @@
 				else
 					J = "Master of Slam"
 				deity_name = "Charles Barkley"
-			if("judaism")
+			if("jew", "judaism")
 				B.name = pick("The Torah", "The Talmud")
 				J = "Rabbi"
 				deity_name = "Yahweh"
@@ -83,9 +83,9 @@
 				B.name = pick("The Vedas", "The Mahabharata")
 				J = "Guru"
 				deity_name = pick("Brahma", "Vishnu", "Shiva", "Ganesha") //The major ones at least, and yes it's polytheist
-			if("buddahism")
+			if("buddha", "buddahism")
 				B.name = "The Tripitaka"
-				J = "Dalai Lama" //Most likely incorrect, but who cares
+				J = "Monk"
 				deity_name = "Buddha"
 			if("shinto", "shintoism")
 				B.name = "Kojiki"
@@ -94,12 +94,14 @@
 				else
 					J = "Kannushi"
 				deity_name = "Kami" //Polytheist and shit, do I sound like a weeb ?
-			if("mormonism")
+			if("mormon", "mormonism")
 				B.name = "The Book of Mormon"
+				J = "Apostle"
 				deity_name = "God the Father-Elohim"
 			if("confucianism")
 				B.name = pick("The I Ching", "Great Learning")
-				deity_name = "The Tao" //There is no god in this religion, but this spirit is it or something fuck
+				J = "Scholar" //I don't know honestly
+				deity_name = "Tian" //I found this somewhere, I guess that's true
 			if("wicca", "paganism")
 				B.name = "The Book of Shadows"
 				if(H.gender == FEMALE)
@@ -121,6 +123,7 @@
 				deity_name = "Richard Dawkins"
 			if("evolution", "biology", "monkey", "monkeys")
 				B.name = "The Theory of Evolution"
+				J = "Biologist"
 				deity_name = "Charles Darwin"
 			if("scientology")
 				B.name = pick("The Biography of L. Ron Hubbard", "Dianetics")
@@ -135,6 +138,7 @@
 				deity_name = "Haile Selassie I"
 			if("hellenism") //None of that roman copypasta, incidentally
 				B.name = "The Odyssey"
+				J = "Oracle"
 				deity_name = pick("Zeus", "Neptune", "Athena", "Persephone")
 			if("pastafarianism")
 				B.name = "The Gospel of the Flying Spaghetti Monster"
@@ -152,6 +156,7 @@
 				deity_name = "The God-Emperor of Mankind"
 			if("toolboxia", "toolbox")
 				B.name = "The Toolbox Manifesto"
+				J = "Chief Assistant"
 				deity_name = "The Toolbox"
 			if("homosexuality", "faggotry", "gayness")
 				B.name = pick("Guys Gone Wild", "Hunk Rump")
@@ -175,9 +180,11 @@
 				deity_name = pick("Talos", "Akatosh", "Dibella", "Stendarr", "Kynareth", "Mara", "Arkay", "Julianos", "Zenithar")
 			if("daedra")
 				B.name = pick("The Blessings of Sheogorath", "Boethiah's Pillow Book", "Invocation of Azura")
+				J = "Deadra Worshipper"
 				deity_name = pick("Azura", "Boethiah", "Sheogorath", "Sanguine", "Hircine", "Meridia", "Hermaeus Mora", "Nocturnal")
 			if("bokononism")
 				B.name = pick("The Book of Bokonon")
+				J = "Worshipper"
 				deity_name = "Boko-Maru" //Completely wrong, but fuck it
 			if("faith of the seven")
 				B.name = "The Seven-Pointed Star"
@@ -196,18 +203,26 @@
 				deity_name = "The Marker"
 			if("zakarum")
 				B.name = "The Visions of Akarat"
+				J = "Disciple"
 				deity_name = "The Light"
 			if("ianism")
 				B.name = "The Poky Little Puppy"
+				J = "Veterinarian"
 				deity_name = "Ian"
 			if("adminism", "admintology", "admin", "admins", "adminhelp", "adminbus")
 				B.name = "Breaking Through the Fourth Wall"
+				J = "Trial Admin"
 				deity_name = "The Adminbus"
+			if("coding", "coder", "coders")
+				B.name = "Guide to Github"
+				J = "Coder"
+				deity_name = "The Coderbus"
 			if("42")
 				B.name = "The Hitchhiker's Guide to the Galaxy"
 				deity_name = "Arthur Dent" //Don't care
 			if("spook", "spooky", "boo", "ghost")
 				B.name = "The Spooky Spook" //SPOOK
+				J = "Ghost"
 				deity_name = "The Spook" //SPOOK
 				H.equip_or_collect(new /obj/item/clothing/head/pumpkinhead(H), slot_head)
 			if("medbay", "ride", "wild ride", "cryo")
@@ -216,52 +231,65 @@
 					J = "Nurse"
 				else
 					J = "Doctor"
-				//Give them medical garb
+				//Give them basic medical garb
 				H.equip_or_collect(new /obj/item/clothing/head/surgery/blue(H), slot_head)
+				H.equip_or_collect(new /obj/item/clothing/mask/surgical(H), slot_mask)
 				deity_name = "The Chief Medical Officer"
 			if("busta", "bustatime", "zas", "airflow", "hardcore", "hardcores")
 				B.name = "The Hardcores"
 				if(!(M_HARDCORE in H.mutations))
 					H.mutations.Add(M_HARDCORE)
+				J = "Atmospherics Technician"
 				deity_name = "Bustatime"
 			if("me", "i", "narcissism", "self importance", "selfishness")
 				B.name = "The Teachings of [H]" //Quite literally
+				J = "God"
 				deity_name = "[H]" //Very literally, too
 			if("alcohol", "booze", "beer", "wine", "ethanol", "c2h6o")
 				B.name = "The Drunken Ramblings"
+				J = "Drunkard"
 				deity_name = "Hic"
 			if("robust", "robustness", "strength")
 				B.name = "The Rules of Robustness"
+				J = "Robuster"
 				deity_name = "The Robust"
 			if("suicide", "death", "succumb")
 				B.name = "The Sweet Release of Death"
+				J = "Reaper"
 				deity_name = "The Grim Reaper"
 			if("communism", "socialism")
 				B.name = "The Communist Manifesto"
+				J = "Komrade"
 				deity_name = "Karl Max"
 				H.equip_or_collect(new /obj/item/clothing/head/ushanka(H), slot_head)
 			if("capitalism", "free market", "liberalism")
 				B.name = "The Free Market"
+				J = "Stockholder"
 				deity_name = "Adam Smith"
 				H.equip_or_collect(new /obj/item/clothing/head/that(H), slot_head)
 			if("freedom", "america", "muhrica", "usa")
 				B.name = "The Constitution"
+				J = "Senator"
 				deity_name = "George Washington"
 				H.equip_or_collect(new /obj/item/clothing/head/libertyhat(H), slot_head)
 			if("fascism", "nazi", "national socialism")
 				B.name = "Mein Kampf"
+				J = "Feldbischof" //No seriously, that's a thing, look it up
 				deity_name = "Adolf Hitler"
 				H.equip_or_collect(new /obj/item/clothing/head/naziofficer(H), slot_head)
 			if("security", "space law", "law", "nanotrasen", "centcomm")
 				B.name = "Space Law"
+				J = "Nanotrasen Officer"
 				deity_name = "Nanotrasen"
 				H.equip_or_collect(new /obj/item/clothing/head/centhat(H), slot_head)
 			if("syndicate", "traitor", "syndie", "syndies")
 				B.name = "The Syndicate Bundle"
+				J = "Syndicate Agent"
 				deity_name = "The Syndicate"
 				H.equip_or_collect(new /obj/item/clothing/head/syndicatefake(H), slot_head)
 			if("cult", "narsie", "nar'sie", "narnar")
 				B.name = "The Arcane Tome"
+				J = "Cultist"
 				deity_name = "Nar'Sie"
 			else //Boring, give them a stock name
 				B.name = "The Holy Book of [new_religion]"
@@ -284,8 +312,8 @@
 
 	spawn(1)
 
-		//Allow them to change their deity if they believe the deity we game them sucks
-		var/new_deity = copytext(sanitize(input(H, "Would you like to change your deity? Your deity currently is [deity_name] (Leave empty to keep diety name)", "Name of Deity", deity_name)), 1, MAX_NAME_LEN)
+		//Allow them to change their deity if they believe the deity we gave them sucks
+		var/new_deity = copytext(sanitize(input(H, "Would you like to change your deity? Your deity currently is [deity_name] (Leave empty or unchanged to keep diety name)", "Name of Deity", deity_name)), 1, MAX_NAME_LEN)
 
 		if(!length(new_deity))
 			new_deity = deity_name //Just give them what was picked for them already
