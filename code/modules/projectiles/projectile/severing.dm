@@ -18,35 +18,23 @@
 		name = "bolt of slashing"
 		color = "#AA2200"
 
-/obj/item/projectile/severing/on_hit(var/atom/target, var/blocked = 0)
-	if(isliving(target))
-		var/mob/living/L = target
-		if(L.flags & INVULNERABLE)
-			return 0
-		if(sever)
-			if(prob(23))
-				return 0
-			if(ishuman(L))
-				var/mob/living/carbon/human/H = L
-				var/datum/organ/external/O = null
-				switch(def_zone)
-					if("head")
-						O = H.organs_by_name[(pick("l_arm","r_arm","l_hand","r_hand"))]
-					if("chest")
-						O = H.organs_by_name[(pick("l_arm","r_arm","l_hand","r_hand","l_leg","r_leg","l_foot","r_foot"))]
-					if("groin")
-						O = H.organs_by_name[(pick("l_leg","r_leg","l_foot","r_foot"))]
-					else
-						O = H.get_organ(def_zone)
-				if(!(O.status & ORGAN_DESTROYED))
-					O.droplimb(1,1,1)
-					playsound(H.loc, 'sound/weapons/bloodyslice.ogg', 65, 0)
-				else
-					H << "<span class='notice'>You count yourself lucky as the bolt zips past where your [O] should be..</span>"
-			else
-				L.adjustBruteLoss(20)
-				playsound(L.loc, 'sound/weapons/bloodyslice.ogg', 50, 0)
-		else
-			L.adjustBruteLoss(6)
-			playsound(L.loc, 'sound/weapons/bladeslice.ogg', 50, 0)
+/obj/item/projectile/severing/on_hit(var/atom/target,var/blocked)
+	if(!isliving(target)) return 0
+	var/mob/living/L = target
+	if(L.flags & INVULNERABLE) return 0
+	if(sever) //Diffindo: severs limbs
+		if(prob(23)) return 0 //Diffindo has 23% chance to miss
+		if(ishuman(L)) //Limb removal only implemented for humans
+			var/mob/living/carbon/human/H = L
+			var/datum/organ/external/O = null
+			switch(def_zone) //Select target limb, semi-randomly if player isn't aiming at one
+				if("head")  O = H.organs_by_name[pick("l_arm","r_arm","l_hand","r_hand")]
+				if("chest") O = H.organs_by_name[pick("l_arm","r_arm","l_hand","r_hand","l_leg","r_leg","l_foot","r_foot")]
+				if("groin") O = H.organs_by_name[pick("l_leg","r_leg","l_foot","r_foot")]
+				else        O = H.get_organ(def_zone) //They're targeting a specific limb, use it
+			if(!(O.status & ORGAN_DESTROYED)) O.droplimb(1,1,1) //Slice it off
+			else H << "<span class='notice'>You count yourself lucky as the bolt zips past where your [O] should be..</span>"
+		else L.adjustBruteLoss(20) //Not a human: just damage them
+	else L.adjustBruteLoss(6) //Sectumsempra: plain damage
+	playsound(get_turf(L), 'sound/weapons/bladeslice.ogg', 50, 0)
 	return 1
