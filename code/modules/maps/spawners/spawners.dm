@@ -326,7 +326,7 @@
 		/obj/item/device/mmi/radio_enabled,
 		/obj/item/device/powersink,
 		/obj/item/device/reagent_scanner,
-		/obj/item/device/soundsynth,
+		/obj/item/device/assembly/soundsynth,
 		/obj/item/latexballon,
 		/obj/item/weapon/storage/toolbox/electrical,
 		/obj/item/ammo_storage/magazine/a12mm,

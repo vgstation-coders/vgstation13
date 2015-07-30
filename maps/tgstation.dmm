@@ -2404,7 +2404,7 @@
 "aUl" = (/obj/machinery/alarm{dir = 4; pixel_x = -22},/obj/structure/stool/bed/chair/vehicle/clowncart,/turf/simulated/floor/wood,/area/crew_quarters/theatre)
 "aUm" = (/obj/structure/disposalpipe/segment,/obj/effect/landmark{name = "xeno_spawn"; pixel_x = -1},/turf/simulated/floor/wood,/area/crew_quarters/theatre)
 "aUn" = (/turf/simulated/floor/wood,/area/crew_quarters/theatre)
-"aUo" = (/obj/structure/table/woodentable,/obj/item/device/megaphone,/obj/machinery/newscaster{pixel_x = 32},/obj/item/device/soundsynth,/obj/machinery/light{dir = 4},/turf/simulated/floor/wood,/area/crew_quarters/theatre)
+"aUo" = (/obj/structure/table/woodentable,/obj/item/device/megaphone,/obj/machinery/newscaster{pixel_x = 32},/obj/item/device/assembly/soundsynth,/obj/machinery/light{dir = 4},/turf/simulated/floor/wood,/area/crew_quarters/theatre)
 "aUp" = (/obj/structure/closet/secure_closet/freezer/meat,/obj/machinery/light/small{dir = 8},/turf/simulated/floor{icon_state = "showroomfloor"},/area/crew_quarters/kitchen)
 "aUq" = (/obj/structure/disposalpipe/segment,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{icon_state = "showroomfloor"},/area/crew_quarters/kitchen)
 "aUr" = (/obj/machinery/snackbar_machine,/obj/machinery/light/small{dir = 4},/turf/simulated/floor{icon_state = "showroomfloor"},/area/crew_quarters/kitchen)
