@@ -1,3 +1,15 @@
+//This was put here because I don't want to overcomplicate my PR
+/obj/effect/decal
+	//var/global/list/decals = list()
+
+/obj/effect/decal/New()
+	..()
+	decals += src
+
+/obj/effect/decal/Destroy()
+	decals -= src
+	..()
+
 /obj/effect/decal/point
 	name = "arrow"
 	icon = 'icons/mob/screen1.dmi'

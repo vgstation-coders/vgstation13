@@ -313,7 +313,8 @@ var/list/score=list(
 	"eventsendured"  = 0, //How many random events did the station endure?
 	"powerloss"      = 0, //How many APCs have alarms (under 30 %)?
 	"escapees"       = 0, //How many people got out alive?
-	"deadcrew"       = 0, //Dead bodies anywhere but on Centcomm and the shuttle
+	"deadcrew"       = 0, //Humans who died during the round
+	"deadsilicon"	 = 0, //Silicons who died during the round
 	"mess"           = 0, //How much messes on the floor went uncleaned
 	"litter"		 = 0, //How much trash is laying on the station floor
 	"meals"          = 0, //How much food was actively cooked that day
@@ -329,7 +330,7 @@ var/list/score=list(
 	//These ones are mainly for the stat panel
 	"powerbonus"    = 0, //If all APCs on the station are running optimally, big bonus
 	"messbonus"     = 0, //If there are no messes on the station anywhere, huge bonus
-	"deadaipenalty" = 0, //Is the AI dead? If so, big penalty
+	"deadaipenalty" = 0, //AIs who died during the round
 	"foodeaten"     = 0, //How much food was consumed
 	"clownabuse"    = 0, //How many times a clown was punched, struck or otherwise maligned
 	"richestname"   = null, //This is all stuff to show who was the richest alive on the shuttle
@@ -345,6 +346,9 @@ var/list/score=list(
 	"arenafights"   = 0,
 	"arenabest"		= null,
 )
+
+var/list/trash_items = list()
+var/list/decals = list()
 
 // Mostly used for ban systems.
 // Initialized on world/New()

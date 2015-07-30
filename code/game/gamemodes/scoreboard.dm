@@ -1,3 +1,29 @@
+//Pretty compact file, so we'll do this up here
+/datum/controller/gameticker/proc/messcheck(var/obj/effect/decal/cleanable/M)
+
+	if(istype(M, /obj/effect/decal/cleanable/blood))
+		score["mess"]++
+	if(istype(M, /obj/effect/decal/cleanable/vomit))
+		score["mess"]++
+	if(istype(M, /obj/effect/decal/cleanable/mucus))
+		score["mess"]++
+	if(istype(M, /obj/effect/decal/cleanable/dirt))
+		score["mess"]++
+	if(istype(M, /obj/effect/decal/cleanable/liquid_fuel)) //Quite the mess
+		score["mess"]++
+	if(istype(M, /obj/effect/decal/cleanable/ash))
+		score["mess"]++
+	if(istype(M, /obj/effect/decal/cleanable/flour))
+		score["mess"]++
+	if(istype(M, /obj/effect/decal/cleanable/tomato_smudge))
+		score["mess"]++
+	if(istype(M, /obj/effect/decal/cleanable/egg_smudge))
+		score["mess"]++
+	if(istype(M, /obj/effect/decal/cleanable/pie_smudge))
+		score["mess"]++
+	if(istype(M, /obj/effect/decal/cleanable/soot))
+		score["mess"]++
+
 /datum/controller/gameticker/proc/scoreboard(var/completions)
 
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/controller/gameticker/proc/scoreboard() called tick#: [world.time]")
@@ -162,34 +188,12 @@
 	score["time"] = round(roundlength) //One point for every five seconds. One minute is 12 points, one hour 720 points
 
 	//Check how many uncleaned mess are on the station. We can't run through cleanable for reasons, so yeah, long
-	for(var/obj/effect/decal/cleanable/M in world)
+	for(var/obj/effect/decal/cleanable/M in decals)
 		if(M.z != map.zMainStation) //Won't work on multi-Z stations, but will do for now
 			continue
-		if(istype(M, /obj/effect/decal/cleanable/blood))
-			score["mess"]++
-		if(istype(M, /obj/effect/decal/cleanable/vomit))
-			score["mess"]++
-		if(istype(M, /obj/effect/decal/cleanable/mucus))
-			score["mess"]++
-		if(istype(M, /obj/effect/decal/cleanable/dirt))
-			score["mess"]++
-		if(istype(M, /obj/effect/decal/cleanable/liquid_fuel)) //Quite the mess
-			score["mess"]++
-		if(istype(M, /obj/effect/decal/cleanable/ash))
-			score["mess"]++
-		if(istype(M, /obj/effect/decal/cleanable/flour))
-			score["mess"]++
-		if(istype(M, /obj/effect/decal/cleanable/tomato_smudge))
-			score["mess"]++
-		if(istype(M, /obj/effect/decal/cleanable/egg_smudge))
-			score["mess"]++
-		if(istype(M, /obj/effect/decal/cleanable/pie_smudge))
-			score["mess"]++
-		if(istype(M, /obj/effect/decal/cleanable/soot))
-			score["mess"]++
+		messcheck(M)
 
-
-	for(var/obj/item/trash/T in world)
+	for(var/obj/item/trash/T in trash_items)
 		if(T.z != map.zMainStation) //Won't work on multi-Z stations, but will do for now
 			continue
 		score["litter"]++
