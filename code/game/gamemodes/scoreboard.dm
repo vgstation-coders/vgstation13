@@ -50,7 +50,7 @@
 		if(player.stat != DEAD)
 			var/turf/T = get_turf(player)
 			if(istype(T.loc, /area/shuttle/escape/centcom) || istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
-				score["escapees"] += 1
+				score["escapees"]++
 //					player.unlock_medal("100M Dash", 1)
 //				player.unlock_medal("Survivor", 1)
 //				for(var/obj/item/weapon/gnomechompski/G in player.get_contents())
@@ -91,7 +91,7 @@
 				continue
 			var/turf/T = M.current.loc
 			if(T && istype(T.loc, /area/security/brig))
-				score["arrested"] += 1
+				score["arrested"]++
 			else if(M.current.stat == DEAD)
 				score["opkilled"]++
 		if(foecount == score["arrested"])
@@ -115,6 +115,9 @@
 				score["disc"] = 0
 */
 		if(score["nuked"])
+			nukedpenalty = 50000 //Congratulations, your score was nuked
+		/*
+		 * Fuck this shit, who writes this
 			for(var/obj/machinery/nuclearbomb/nuke in machines)
 				if(nuke.r_code == "Nope")
 					continue
@@ -127,6 +130,7 @@
 					nukedpenalty = 100000
 				else
 					nukedpenalty = 10000
+		*/
 
 	if(ticker.mode.config_tag == "revolution")
 		var/foecount = 0
@@ -137,7 +141,7 @@
 				continue
 			var/turf/T = M.current.loc
 			if(istype(T.loc, /area/security/brig))
-				score["arrested"] += 1
+				score["arrested"]++
 			else if (M.current.stat == DEAD)
 				score["opkilled"]++
 		if(foecount == score["arrested"])
@@ -155,7 +159,7 @@
 			continue
 		for(var/obj/item/weapon/cell/C in A.contents)
 			if(C.percent() < 30)
-				score["powerloss"] += 1 //Enough to auto-cut equipment, so alarm
+				score["powerloss"]++ //Enough to auto-cut equipment, so alarm
 
 	var/roundlength = world.time/10 //Get a value in seconds
 	score["time"] = round(roundlength) //One point for every five seconds. One minute is 12 points, one hour 720 points
@@ -165,7 +169,7 @@
 		if(M.z != map.zMainStation) //Won't work on multi-Z stations, but will do for now
 			continue
 		if(M.messcheck())
-			score["mess"]
+			score["mess"]++
 
 	for(var/obj/item/trash/T in trash_items)
 		if(T.z != map.zMainStation) //Won't work on multi-Z stations, but will do for now
