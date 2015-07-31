@@ -81,6 +81,8 @@
 					score["dmgestjob"] = player.job
 					score["dmgestkey"] = player.key
 
+	/*
+
 	var/nukedpenalty = 1000
 	if(ticker.mode.config_tag == "nuclear")
 		var/foecount = 0
@@ -97,7 +99,6 @@
 		if(foecount == score["arrested"])
 			score["allarrested"] = 1
 
-/*
 		score["disc"] = 1
 		for(var/obj/item/weapon/disk/nuclear/A in world)
 			if(A.loc != /mob/living/carbon) continue
@@ -113,11 +114,10 @@
 				score["disc"] = 0
 			if(A.loc.z != 1)
 				score["disc"] = 0
-*/
+
 		if(score["nuked"])
 			nukedpenalty = 50000 //Congratulations, your score was nuked
-		/*
-		 * Fuck this shit, who writes this
+
 			for(var/obj/machinery/nuclearbomb/nuke in machines)
 				if(nuke.r_code == "Nope")
 					continue
@@ -130,7 +130,7 @@
 					nukedpenalty = 100000
 				else
 					nukedpenalty = 10000
-		*/
+
 
 	if(ticker.mode.config_tag == "revolution")
 		var/foecount = 0
@@ -152,6 +152,8 @@
 				if(role in list("Captain", "Head of Security", "Head of Personnel", "Chief Engineer", "Research Director"))
 					if(player.stat == DEAD)
 						score["deadcommand"]++
+
+	*/
 
 	//Check station's power levels
 	for(var/obj/machinery/power/apc/A in power_machines)
@@ -265,7 +267,6 @@
 		if(arena_leaderboard[x] == arena_top_score)
 			score["arenabest"] += "[x] "
 
-
 	//Show the score - might add "ranks" later
 	world << "<b>The crew's final score is:</b>"
 	world << "<b><font size='4'>[score["crewscore"]]</font></b>"
@@ -280,6 +281,9 @@
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/scorestats() called tick#: [world.time]")
 	var/dat = completions
 	dat += {"<BR><h2>Round Statistics and Score</h2>"}
+
+	/*
+
 	if(ticker.mode.name == "nuclear emergency")
 		var/foecount = 0
 		var/crewcount = 0
@@ -296,8 +300,6 @@
 				continue
 			crewcount++
 
-		/*
-		 * WHAT THE FUCK KIND OF CODE IS THIS ?
 		for(var/obj/item/weapon/disk/nuclear/N in world)
 			if(!N)
 				continue
@@ -332,10 +334,12 @@
 
 		<B>Final Location of Nuke:</B> [bombdat]<BR>
 		<B>Final Location of Disk:</B> [diskdat]<BR><BR>
-		*/
+
 		dat += {"<B><U>MODE STATS</U></B><BR>
 		<B>Number of Operatives:</B> [foecount]<BR>
 		<B>Number of Surviving Crew:</B> [crewcount]<BR>
+		<B>Final Location of Nuke:</B> [bombdat]<BR>
+		<B>Final Location of Disk:</B> [diskdat]<BR><BR>
 		<B>Operatives Arrested:</B> [score["arrested"]] ([score["arrested"] * 1000] Points)<BR>
 		<B>Operatives Killed:</B> [score["opkilled"]] ([score["opkilled"] * 250] Points)<BR>
 		<B>Station Destroyed:</B> [score["nuked"] ? "Yes" : "No"] (-[nukedpenalty] Points)<BR>
@@ -380,6 +384,8 @@
 		<B>Revolution Successful:</B> [score["traitorswon"] ? "Yes" : "No"] (-[score["traitorswon"] * revpenalty] Points)<BR>
 		<B>All Revolution Heads Arrested:</B> [score["allarrested"] ? "Yes" : "No"] (Score tripled)<BR>
 		<HR>"}
+
+	*/
 
 //	var/totalfunds = wagesystem.station_budget + wagesystem.research_budget + wagesystem.shipping_budget
 	dat += {"<B><U>GENERAL STATS</U></B><BR>
