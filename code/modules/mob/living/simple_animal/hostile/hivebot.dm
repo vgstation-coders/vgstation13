@@ -59,6 +59,15 @@
 	del src
 	return
 
+//Taken from the sprite
+
+/mob/living/simple_animal/hostile/hivebot/getFeetAmount()
+	return 4
+
+/mob/living/simple_animal/hostile/russian/getHandAmount()
+	return 3
+
+
 /mob/living/simple_animal/hostile/hivebot/tele//this still needs work
 	name = "Beacon"
 	desc = "Some odd beacon thing"

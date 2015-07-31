@@ -46,6 +46,12 @@
 	qdel(src)
 	return
 
+/mob/living/simple_animal/hostile/syndicate/getFeetAmount()
+	return 2
+
+/mob/living/simple_animal/hostile/syndicate/getHandAmount()
+	return 2
+
 ///////////////Sword and shield////////////
 
 /mob/living/simple_animal/hostile/syndicate/melee

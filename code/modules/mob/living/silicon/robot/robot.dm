@@ -1512,3 +1512,9 @@
 /mob/living/silicon/robot/proc/help_shake_act(mob/user)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/robot/proc/help_shake_act() called tick#: [world.time]")
 	user.visible_message("<span class='notice'>[user.name] pats [src.name] on the head.</span>")
+
+/mob/living/silicon/robot/getFeetAmount()
+	return 2
+
+/mob/living/silicon/robot/getHandAmount()
+	return 0

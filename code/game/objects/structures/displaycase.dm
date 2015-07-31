@@ -265,14 +265,10 @@
 				var/mob/living/carbon/human/H = user
 				var/hands = H.getHandAmount()
 
-				if(hands >= 2)
-					user.visible_message("[user] gently runs \his hands over \the [src] in appreciation of its contents.", \
-						"You gently run your hands over \the [src] in appreciation of its contents.", \
-						"You hear someone streaking glass with their greasy hands.")
-				else if(hands == 1)
-					user.visible_message("[user] gently runs \his hand over \the [src] in appreciation of its contents.", \
-						"You gently run your hand over \the [src] in appreciation of its contents.", \
-						"You hear someone streaking glass with their greasy hand.")
+				if(hands > 0)
+					user.visible_message("[user] gently runs \his [hands>1 ? "hands" : "hand"] over \the [src] in appreciation of its contents.", \
+						"You gently run your [hands>1 ? "hands" : "hand"] over \the [src] in appreciation of its contents.", \
+						"You hear someone streaking glass with their greasy [hands>1 ? "hands" : "hand"].")
 				else
 					user.visible_message("[user] stares at \the [src] in appreciation of its contents.", \
 						"You stare at \the [src] in appreciation of its contents.")
