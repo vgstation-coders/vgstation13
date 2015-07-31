@@ -56,3 +56,9 @@
 		new weapon1 (get_turf(src))
 	qdel(src)
 	return
+
+/mob/living/simple_animal/hostile/russian/getFeetAmount()
+	return 2
+
+/mob/living/simple_animal/hostile/russian/getHandAmount()
+	return 2
