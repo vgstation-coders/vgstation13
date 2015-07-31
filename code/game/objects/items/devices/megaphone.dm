@@ -56,10 +56,3 @@
 		insults = rand(1, 3)//to prevent dickflooding
 		return
 	return
-
-
-/*
-	SOUND SYNTH NO LONGER LIVES HERE
-----------------------------------------------
-	HE NOW LIVES IN code/modules/assembly/sound_synth.dm
-*/

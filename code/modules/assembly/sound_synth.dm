@@ -93,3 +93,4 @@ And backwards
 				M << sound(sounds[sound_to_play])
 
 			user << "<span class='notice'>You hold up \the [src] up to [M]'s ear and hit \"Play\"!</span>"
+			M.show_message("<span class='notice'>[user] holds up \the [src] up to your ear and plays a sound.</span>", 1)
