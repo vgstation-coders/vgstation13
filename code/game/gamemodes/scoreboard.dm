@@ -209,8 +209,8 @@
 		var/arrestpoints = score["arrested"] * 1000
 		score["crewscore"] += killpoints
 		score["crewscore"] += arrestpoints
-		if(score["nuked"])
-			score["crewscore"] -= nukedpenalty
+		//if(score["nuked"])
+			//score["crewscore"] -= nukedpenalty
 
 	if(ticker.mode.config_tag == "revolution")
 		var/arrestpoints = score["arrested"] * 1000

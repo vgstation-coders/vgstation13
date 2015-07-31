@@ -319,13 +319,6 @@ var/list/score=list(
 	"litter"		 = 0, //How much trash is laying on the station floor
 	"meals"          = 0, //How much food was actively cooked that day
 	"disease"        = 0, //How many disease vectors in the world (one disease on one person is one)
-	"deadcommand"    = 0, //Used during rev, how many command staff perished
-	"arrested"       = 0, //How many traitors/revs/whatever are alive in the brig
-	"traitorswon"    = 0, //How many traitors were successful?
-	"allarrested"    = 0, //Did the crew catch all the enemies alive?
-	"opkilled"       = 0, //Used during nuke mode, how many operatives died?
-	"disc"           = 0, //Is the disc safe and secure?
-	"nuked"          = 0, //Was the station blown into little bits?
 
 	//These ones are mainly for the stat panel
 	"powerbonus"    = 0, //If all APCs on the station are running optimally, big bonus
