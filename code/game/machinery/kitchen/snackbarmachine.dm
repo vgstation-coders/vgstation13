@@ -25,73 +25,15 @@
 		usr.unset_machine()
 		return 1
 
-	if(beaker)
-		var/datum/reagents/R = beaker.reagents
-		if(href_list["analyze"])
-			var/dat = ""
-			dat += "<TITLE>SnackBar Machine</TITLE>Reagent info:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
-			usr << browse(dat, "window=snackbar_machine;size=575x400")
-			return 1
+	if(href_list["createpill"] || href_list["createpill_multiple"] || href_list["ejectp"] || href_list["change_pill"])
+		return //No href exploits, fuck off
 
-		else if(href_list["add"])
+	..()
 
-			if(href_list["amount"])
-				var/id = href_list["add"]
-				var/amount = text2num(href_list["amount"])
-				if(amount < 0)
-					return
-				R.trans_id_to(src, id, amount)
-			return 1
-
-		else if(href_list["addcustom"])
-
-			var/id = href_list["addcustom"]
-			useramount = input("Select the amount to transfer.", 30, useramount) as num
-			useramount = isgoodnumber(useramount)
-			src.Topic(null, list("amount" = "[useramount]", "add" = "[id]"))
-			return 1
-
-		else if(href_list["remove"])
-
-			if(href_list["amount"])
-				var/id = href_list["remove"]
-				var/amount = text2num(href_list["amount"])
-				if(amount < 0)
-					return
-				if(mode)
-					reagents.trans_id_to(beaker, id, amount)
-				else
-					reagents.remove_reagent(id, amount)
-			return 1
-
-		else if(href_list["removecustom"])
-
-			var/id = href_list["removecustom"]
-			useramount = input("Select the amount to transfer.", 30, useramount) as num
-			useramount = isgoodnumber(useramount)
-			src.Topic(null, list("amount" = "[useramount]", "remove" = "[id]"))
-			return 1
-
-		else if(href_list["toggle"])
-			mode = !mode
-			return 1
-
-		else if(href_list["main"])
-			attack_hand(usr)
-			return 1
-
-		else if(href_list["eject"])
-			if(beaker)
-				beaker:loc = src.loc
-				beaker = null
-				reagents.clear_reagents()
-				update_icon()
-			return 1
-
-		else if(href_list["createbar"])
-			var/obj/item/weapon/reagent_containers/food/snacks/snackbar/SB = new/obj/item/weapon/reagent_containers/food/snacks/snackbar(src.loc)
-			reagents.trans_to(SB, 10)
-			return 1
+	if(beaker && href_list["createbar"])
+		var/obj/item/weapon/reagent_containers/food/snacks/snackbar/SB = new/obj/item/weapon/reagent_containers/food/snacks/snackbar(src.loc)
+		reagents.trans_to(SB, 10)
+		return 1
 
 	src.updateUsrDialog()
 	return
