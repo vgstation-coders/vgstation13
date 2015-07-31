@@ -187,6 +187,10 @@
 
 /client/proc/Move_object(direct)
 	if(mob && mob.control_object)
+		if(istype(mob.control_object,/obj/item/projectile/nikita))
+			var/obj/item/projectile/nikita/N = mob.control_object
+			N.dir = direct
+			return
 		if(mob.control_object.density)
 			step(mob.control_object,direct)
 			if(!mob.control_object)	return

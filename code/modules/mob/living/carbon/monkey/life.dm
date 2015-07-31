@@ -690,7 +690,7 @@
 			if (!( machine.check_eye(src) ))
 				reset_view(null)
 		else
-			if(client && !client.adminobs)
+			if(client && !client.adminobs && !istype(client.eye,/obj/item/projectile/nikita))
 				reset_view(null)
 
 	return 1
