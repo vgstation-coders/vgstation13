@@ -123,11 +123,11 @@
 		shuttle_docking_port.link_to_shuttle(src)
 
 		//The following few lines ensure that if there's a docking port at the shuttle's starting location, the shuttle is docked to it
-		var/turf/check_turf = S.get_docking_turf()
+		var/turf/check_turf = shuttle_docking_port.get_docking_turf()
 		if(check_turf)
 			for(var/obj/structure/docking_port/P in check_turf.contents)
-				S.dock(P)
-				src.current_port = S.docked_with
+				shuttle_docking_port.dock(P)
+				src.current_port = shuttle_docking_port.docked_with
 				break
 
 		if(!src.current_port)

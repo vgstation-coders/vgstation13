@@ -4,6 +4,13 @@
 #define TAXI_A_NAME "taxi A"
 #define TAXI_B_NAME "taxi B"
 
+#define TAXI_A_STARTING_AREA /area/shuttle/taxi_a/engineering_cargo_station
+#define TAXI_B_STARTING_AREA /area/shuttle/taxi_b/engineering_cargo_station
+
+var/global/datum/shuttle/taxi/a/taxi_a = new(starting_area = TAXI_A_STARTING_AREA)
+
+var/global/datum/shuttle/taxi/b/taxi_b = new(starting_area = TAXI_B_STARTING_AREA)
+
 /datum/shuttle/taxi
 	var/move_time_access = 20
 	var/move_time_no_access = 60
