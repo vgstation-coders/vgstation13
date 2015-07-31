@@ -296,6 +296,8 @@
 				continue
 			crewcount++
 
+		/*
+		 * WHAT THE FUCK KIND OF CODE IS THIS ?
 		for(var/obj/item/weapon/disk/nuclear/N in world)
 			if(!N)
 				continue
@@ -310,9 +312,9 @@
 				disk_loc = disk_loc.loc
 			diskdat += "in [disk_loc.loc]"
 			break // Should only need one go-round, probably
-		var/nukedpenalty = 0
-		for(var/obj/machinery/nuclearbomb/NUKE in machines)
-			if(NUKE.r_code == "Nope")
+
+		for(var/obj/machinery/nuclearbomb/nuke in machines)
+			if(nuke.r_code == "Nope")
 				continue
 			var/turf/T = NUKE.loc
 			bombdat = T.loc
@@ -327,11 +329,13 @@
 			break
 		if(!diskdat)
 			diskdat = "Uh oh. Something has fucked up! Report this."
+
+		<B>Final Location of Nuke:</B> [bombdat]<BR>
+		<B>Final Location of Disk:</B> [diskdat]<BR><BR>
+		*/
 		dat += {"<B><U>MODE STATS</U></B><BR>
 		<B>Number of Operatives:</B> [foecount]<BR>
 		<B>Number of Surviving Crew:</B> [crewcount]<BR>
-		<B>Final Location of Nuke:</B> [bombdat]<BR>
-		<B>Final Location of Disk:</B> [diskdat]<BR><BR>
 		<B>Operatives Arrested:</B> [score["arrested"]] ([score["arrested"] * 1000] Points)<BR>
 		<B>Operatives Killed:</B> [score["opkilled"]] ([score["opkilled"] * 250] Points)<BR>
 		<B>Station Destroyed:</B> [score["nuked"] ? "Yes" : "No"] (-[nukedpenalty] Points)<BR>
