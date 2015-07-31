@@ -41,10 +41,10 @@ This is to cycle sounds forward
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/item/device/soundsynth/verb/CycleForward()  called tick#: [world.time]")
 	sound_flag++
 	if(sound_flag >= sounds.len)
-		sound_flag = 0
+		sound_flag = 1
 
-	if(sounds[sound_flag+1])
-		usr << "Sound switched to [sounds[sound_flag+1]]!"
+	if(sounds[sound_flag])
+		usr << "Sound switched to [sounds[sound_flag]]!"
 	else
 		usr << "<span class='notice'>[src]'s screen displays ERROR #[sound_flag]</span>"
 
@@ -57,17 +57,17 @@ And backwards
 
 	sound_flag--
 	if(sound_flag < 0)
-		sound_flag = sounds.len - 1
+		sound_flag = sounds.len
 
-	if(sounds[sound_flag+1])
-		usr << "Sound switched to [sounds[sound_flag+1]]!"
+	if(sounds[sound_flag])
+		usr << "Sound switched to [sounds[sound_flag]]!"
 	else
 		usr << "<span class='notice'>[src]'s screen displays ERROR #[sound_flag]</span>"
 
 /obj/item/device/assembly/soundsynth/proc/play()
 	if(spam_flag + 20 < world.timeofday)
-		if(sounds[sound_flag+1])
-			var/sound_to_play = sounds[sound_flag+1]
+		if(sounds[sound_flag])
+			var/sound_to_play = sounds[sound_flag]
 
 			spam_flag = world.timeofday
 			playsound(get_turf(src), sounds[sound_to_play], 50, 1)
@@ -86,8 +86,8 @@ And backwards
 		return src.CycleForward()
 	else
 		if(spam_flag + 20 < world.timeofday)
-			if(sounds[sound_flag+1])
-				var/sound_to_play = sounds[sound_flag+1]
+			if(sounds[sound_flag])
+				var/sound_to_play = sounds[sound_flag]
 
 				spam_flag = world.timeofday
 				M << sound(sounds[sound_to_play])
