@@ -483,7 +483,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if(..())
 		return 1
 
-	src.add_fingerprint(usr)
 	usr.set_machine(src)
 
 	if(href_list["ejectp"])
