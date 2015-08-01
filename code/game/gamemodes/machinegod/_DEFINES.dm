@@ -20,6 +20,7 @@
 #define CLOCK_GEIS			"geis"
 
 //Loudness
+#define CLOCK_CALC			0
 #define CLOCK_WHISPERED		1
 #define CLOCK_SPOKEN		2
 #define CLOCK_CHANTED		3
