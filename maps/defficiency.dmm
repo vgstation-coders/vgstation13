@@ -5235,7 +5235,7 @@
 "bWI" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor{icon_state = "dark vault full"},/area/crew_quarters/fitness)
 "bWJ" = (/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor{icon_state = "dark"},/area/crew_quarters/fitness)
 "bWK" = (/obj/structure/stool/bed/chair{dir = 4},/turf/simulated/floor{icon_state = "green"; dir = 4},/area/crew_quarters/fitness)
-"bWL" = (/obj/structure/table,/obj/item/weapon/paper{info = "Brusies sustained in the holodeck can be healed simply by sleeping."; name = "Holodeck Disclaimer"},/turf/simulated/floor,/area/crew_quarters/fitness)
+"bWL" = (/obj/structure/table,/obj/item/weapon/paper{info = "Bruises sustained in the holodeck can be healed simply by sleeping."; name = "Holodeck Disclaimer"},/turf/simulated/floor,/area/crew_quarters/fitness)
 "bWM" = (/obj/effect/decal/cleanable/blood{icon_state = "floor2"},/obj/effect/decal/cleanable/blood/gibs{icon_state = "gib4"},/mob/living/simple_animal/hostile/scarybat/cult,/turf/simulated/floor/plating{icon_state = "platingdmg3"},/area/derelictparts/apderelict)
 "bWN" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/space_heater,/turf/simulated/floor/plating,/area/derelictparts/port)
 "bWO" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/effect/nmpi{tag = "icon-maintguide (EAST)"; icon_state = "maintguide"; dir = 4},/turf/simulated/floor/plating,/area/maintenance/port)
