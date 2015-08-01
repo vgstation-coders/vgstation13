@@ -1,7 +1,7 @@
 //Global vars
 /var/global/list/clockobelisks 		= list()
 /var/global/list/tinkcaches			= list()
-/var/global/list/clockcult_powers	= null
+/var/global/list/clockcult_powers	= null		//List of all power datums, initialized when the first slab gets New()'d.
 
 //Constants.
 /var/const/list/CLOCK_COMP_IDS 	= list(

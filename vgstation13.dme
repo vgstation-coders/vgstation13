@@ -324,6 +324,7 @@
 #include "code\game\gamemodes\machinegod\items\machinegod_items.dm"
 #include "code\game\gamemodes\machinegod\machines\machinegod_structures.dm"
 #include "code\game\gamemodes\machinegod\machines\mania.dm"
+#include "code\game\gamemodes\machinegod\powers\drivers.dm"
 #include "code\game\gamemodes\machinegod\powers\power.dm"
 #include "code\game\gamemodes\malfunction\Malf_Modules.dm"
 #include "code\game\gamemodes\malfunction\malfunction.dm"
