@@ -816,7 +816,7 @@
 	last_dir = dir
 
 	if(mob && emagged)
-		for(var/obj/item/W in mob)
+		for(var/obj/item/W in mob.get_all_slots())
 			mob.drop_from_inventory(W)//were you're going you won't need those!
 
 /obj/item/projectile/nikita/emp_act(severity)
