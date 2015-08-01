@@ -201,7 +201,8 @@
 				win_value = max(money_account.money, spin_cost)
 			if(SIX) //Only when emagged
 				explosion(get_turf(src),-1,2,4)
-				new/obj/item/weapon/veilrender/vealrender(get_turf(src))
+				var/obj/item/weapon/veilrender/vealrender/V = new(get_turf(src))
+				V.name = "hellish [V.name]"
 				return qdel(src)
 
 		spawn(10)
@@ -218,8 +219,7 @@
 
 	user.set_machine(src)
 
-	var/dat = {"<html><body[emagged?"bgcolor=\"#E50000\"":""]>
-	<h4><center>Current Jackpot: <b>[money_account ? "$[num2septext(money_account.money)]" : "---ERROR---"]</b></center></h4><br>"}
+	var/dat = {"<h4><center>Current Jackpot: <b>[money_account ? "$[num2septext(money_account.money)]" : "---ERROR---"]</b></center></h4><br>"}
 
 	if(!login)
 		dat+={"Please swipe your ID card to login and begin playing!"}
@@ -238,14 +238,13 @@
 			else
 				dat += {"<br><span style="color:red">You must have at least <b>$[spin_cost]</b> space credits to play.</span>"}
 		else //EMAG STUFF--------------------------------------------------------------------------------------------------------------------
-			dat +={"<span style="color:yellow">Welcome to hell, [login.registered_name]! (you can't escape)<br>
+			dat +={"Welcome to hell, [login.registered_name]! (you can't escape)<br>
 				<a href='?src=\ref[src];spin=1'>Play! (<b>$_free_</b>)</a><br><br>
-				<b>Warning:</b> excessive gambling will turn you into a one-armed bandit."}
+				<b>Warning:</b> a gambling addiction WILL turn you into a one-armed bandit."}
 
-	dat += "</body></html>"
-
-	user << browse(dat, "window=slotmachine")
-	onclose(user, "slotmachine")
+	var/datum/browser/popup = new(user, "slotmachine", "[src]", 500, 300, src)
+	popup.set_content(dat)
+	popup.open()
 
 /obj/machinery/computer/slot_machine/Topic(href, href_list)
 	if(..())
@@ -262,8 +261,6 @@
 			return
 
 		if(login.GetBalance() >= spin_cost)
-			spin()
-
 			if(emagged && usr)
 				if(istype(usr,/mob/living/carbon/human))
 					var/mob/living/carbon/human/H = usr
@@ -273,12 +270,17 @@
 						H << "<span class='notice'>You escape \the [src]'s wrath this time.</span>"
 					else
 						H << "<span class='danger'>[src] consumes your [nom.name]!</span>"
+						H.emote("scream")
+						H.adjustBruteLoss(rand(10,30))
+
 						nom.droplimb(1,0)
 
 				else if(istype(usr,/mob/living))
 					var/mob/living/L = usr
 					L.adjustFireLoss(30)
-					L << "<span class='danger'>You feel your soul burning.</span>"
+					L << "<span class='danger'>You feel your soul being burned by \the [src]!</span>"
+
+			spin()
 
 	src.updateUsrDialog()
 
@@ -294,6 +296,15 @@
 		else
 			login = I
 			user << "You swipe \the [I] at \the [src], and it lights up."
+		src.updateUsrDialog()
+	else if(istype(I,/obj/item/weapon/spacecash))
+		var/obj/item/weapon/spacecash/S = I
+		var/money_add = S.amount * S.worth
+
+		user.drop_item(I)
+		qdel(I)
+
+		src.stored_money += money_add
 		src.updateUsrDialog()
 
 /obj/machinery/computer/slot_machine/emag(mob/user as mob)
