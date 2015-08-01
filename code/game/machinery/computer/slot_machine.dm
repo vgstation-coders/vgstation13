@@ -46,7 +46,7 @@
 
 	id = rand(1,99999)
 
-	money_account = create_account("slot machine ([id])", rand(1000,20000))
+	money_account = create_account("slot machine ([id])", rand(10000,20000))
 
 	update_icon()
 
