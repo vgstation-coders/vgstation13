@@ -318,6 +318,3 @@ var/global/list/PDA_Manifest = list()
 
 /obj/effect/spawner
 	name = "object spawner"
-
-/obj/proc/cultify()
-	qdel(src)

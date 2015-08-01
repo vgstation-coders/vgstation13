@@ -839,10 +839,14 @@
 /obj/item/projectile/nikita/Bump(var/atom/A)
 	if(bumped)
 		return
+	if(emagged && (A == mob))
+		return
 	bumped = 1
 	detonate(get_turf(A))
 
 /obj/item/projectile/nikita/Bumped(var/atom/A)
+	if(emagged && (A == mob))
+		return
 	detonate()
 
 /obj/item/projectile/nikita/process_step()
@@ -869,7 +873,8 @@
 		else
 			mob.dir = get_dir(mob,src)
 
-	kill_count--
+	if(!emagged)
+		kill_count--
 	if(!kill_count)
 		detonate()
 
