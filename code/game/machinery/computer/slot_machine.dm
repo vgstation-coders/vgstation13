@@ -84,11 +84,11 @@
 		icon_state = "[initial_icon]0"
 		remove_overlays()
 	else
-		icon_state = initial_icon
 		init_overlays()
-
-	if(emagged)
-		icon_state = "[initial_icon]_emag"
+		if(emagged)
+			icon_state = "[initial_icon]_emag"
+		else
+			icon_state = initial_icon
 
 /obj/machinery/computer/slot_machine/proc/spin()
 	if(spinning || !login) return
@@ -99,6 +99,7 @@
 
 	spinning = 1
 
+	//Overlays are shit and can't be modified, so remove all overlays
 	remove_overlays()
 
 	value_1 = rand(1,10)
@@ -119,9 +120,16 @@
 			value_2 = 11
 			value_3 = 11
 
-	overlay_1.icon_state="spin"
-	overlay_2.icon_state="spin"
-	overlay_3.icon_state="spin"
+	//If there's only one icon_state for spinning, everything looks weird
+	var/list/spin_states = list("spin1","spin2","spin3")
+	overlay_1.icon_state=pick(spin_states)
+	spin_states -= overlay_1.icon_state
+
+	overlay_2.icon_state=pick(spin_states)
+	spin_states -= overlay_2.icon_state
+
+	overlay_3.icon_state=pick(spin_states)
+	spin_states -= overlay_3.icon_state
 
 	add_overlays()
 
@@ -133,18 +141,18 @@
 		sound_to_play = pick('sound/effects/xylophone1.ogg','sound/effects/xylophone2.ogg','sound/effects/xylophone3.ogg')
 		playsound(get_turf(src),sound(sound_to_play),50,-4)
 
-	var/sleep_time = rand(40,70)
+	var/sleep_time = 60
 
 	sleep(sleep_time/3)
-	update_overlay_icon_state(overlay_1,value_1)
+	update_overlay_icon_state(overlay_1,"[value_1]")
 	playsound(get_turf(src),'sound/machines/chime.ogg',50,-4)
 
 	sleep(sleep_time/3)
-	update_overlay_icon_state(overlay_2,value_2)
+	update_overlay_icon_state(overlay_2,"[value_2]")
 	playsound(get_turf(src),'sound/machines/chime.ogg',50,-4)
 
 	sleep(sleep_time/3)
-	update_overlay_icon_state(overlay_3,value_3)
+	update_overlay_icon_state(overlay_3,"[value_3]")
 	playsound(get_turf(src),'sound/machines/chime.ogg',50,-4)
 
 	check_victory()
