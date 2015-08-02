@@ -10,6 +10,8 @@
 #define TREE		10
 #define SIX			11
 
+#define MINIMUM_WIN_TO_BROADCAST 5000
+
 /obj/machinery/computer/slot_machine
 	name = "one-armed bandit"
 	desc = "The arm is just for decoration."
@@ -41,12 +43,15 @@
 	var/id = 0
 	var/datum/money_account/money_account
 
+	var/obj/item/device/radio/radio
+
 /obj/machinery/computer/slot_machine/New()
 	.=..()
 
 	id = rand(1,99999)
 
 	money_account = create_account("slot machine ([id])", rand(10000,20000))
+	radio = new(src)
 
 	update_icon()
 
@@ -70,8 +75,8 @@
 	overlay_3 = image('icons/obj/slot_machine.dmi',icon_state="[value_3]",loc = src)
 	overlay_3.pixel_x = 8
 
-	//The reason why there guys aren't actually added to the overlays list is that they have to be modified during the spin() proc,
-	//which is impossible if they were in the overlays list
+	//The reason why there guys aren't actually added to the overlays list is that their icon_state has to be changed during the spin() proc,
+	//which would be impossible if they were in the overlays list
 
 /obj/machinery/computer/slot_machine/update_icon()
 	..()
@@ -85,6 +90,7 @@
 		remove_overlays()
 	else
 		init_overlays()
+		add_overlays()
 		if(emagged)
 			icon_state = "[initial_icon]_emag"
 		else
@@ -131,6 +137,7 @@
 	overlay_3.icon_state=pick(spin_states)
 	spin_states -= overlay_3.icon_state
 
+	//Readd all overlays
 	add_overlays()
 
 	var/sound/sound_to_play
@@ -168,42 +175,67 @@
 		overlays |= win_image
 
 		var/win_value = 0
+		var/msg
 
 		switch(value_1)
 			if(SEVEN) //
 				win_value = money_account.money
+				msg="[login.registered_name][login.assignment ? ", [login.assignment]," : "" ] has won [win_value]$ - the entire jackpot! Congratulations!"
+
+				broadcast(msg, win_value)
 			if(CHICKEN)
-				win_value = 0.8 * money_account.money
+				win_value = 0.5 * money_account.money
 				var/mob/living/simple_animal/chicken/C = new(src.loc)
 				C.name = "Pomf chicken"
 				C.body_color = "white"
 				C.icon_state = "chicken_white"
 				C.icon_living = "chicken_white"
 				C.icon_dead = "chicken_white_dead"
+
+				msg="[login.registered_name][login.assignment ? ", [login.assignment]," : "" ] has won [round(win_value)]$ - half of the jackpot! As a bonus, he has received a pet chicken. Congratulations!"
+
+				broadcast(msg, win_value)
 			if(DIAMOND)
-				win_value = 0.75 * money_account.money
+				win_value = 0.4 * money_account.money
+
+				msg="[login.registered_name][login.assignment ? ", [login.assignment]," : "" ] has won [round(win_value)]$! Congratulations!"
+
+				broadcast(msg, win_value)
 			if(CHERRY)
-				win_value = 0.5 * money_account.money
+				win_value = 0.3 * money_account.money
 			if(HEART)
-				win_value = 0.5 * money_account.money
+				win_value = 0.3 * money_account.money
 			if(MELON)
-				win_value = 0.3 * money_account.money
-			if(PLUM)
-				win_value = 0.3 * money_account.money
-			if(BELL)
 				win_value = 0.2 * money_account.money
-			if(MUSHROOM)
+			if(PLUM)
+				win_value = 0.2 * money_account.money
+			if(BELL)
 				win_value = 0.1 * money_account.money
+			if(MUSHROOM)
+				win_value = 0.05 * money_account.money
 				for(var/i, i<rand(5,10), i++)
 					var/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/libertycap/M = new(src.loc)
 					M.name = "victory mushroom"
+
+				msg="You win [round(win_value)]$ and a bonus - victory mushrooms!"
+				src.say(msg)
 			if(TREE)
 				win_value = max(money_account.money, spin_cost)
+
+				msg="You win a full refund on your last spin! Better than nothing, ain't it?"
+				src.say(msg)
 			if(SIX) //Only when emagged
-				explosion(get_turf(src),-1,2,4)
+				explosion(get_turf(src),-1,-1,4,5)
 				var/obj/item/weapon/veilrender/vealrender/V = new(get_turf(src))
 				V.name = "hellish [V.name]"
+
+				msg="Use my gift wisely, mortal."
+				src.say(msg)
 				return qdel(src)
+
+		if(!msg && win_value)
+			msg="[login.registered_name][login.assignment ? ", [login.assignment]," : "" ] has won [round(win_value)]$!"
+			broadcast(msg, win_value)
 
 		spawn(10)
 			dispense_cash(win_value, get_turf(src))
@@ -212,6 +244,33 @@
 		sleep(50)
 
 		overlays -= win_image
+	else if(emagged && usr)
+		if(istype(usr,/mob/living/carbon/human))
+			var/mob/living/carbon/human/H = usr
+
+			var/datum/organ/external/nom = H.get_organ(pick("r_arm","l_arm"))
+			if(!nom || (nom.status & ORGAN_DESTROYED))
+				H << "<span class='notice'>You escape \the [src]'s wrath this time.</span>"
+			else
+				H << "<span class='danger'>[src] consumes your [nom.name]!</span>"
+				H.emote("scream")
+				H.adjustBruteLoss(rand(20,40))
+
+				nom.droplimb(1,0)
+
+		else if(istype(usr,/mob/living))
+			var/mob/living/L = usr
+			L.adjustFireLoss(60)
+			L << "<span class='danger'>You feel your soul being burned by \the [src]!</span>"
+
+//If win_value is above a certain number, the message is broadcast over the radio. Otherwise, the machine just says it.
+/obj/machinery/computer/slot_machine/proc/broadcast(var/message, var/win_value)
+	if(!message) return
+
+	if(win_value >= MINIMUM_WIN_TO_BROADCAST)
+		Broadcast_Message(radio, all_languages[LANGUAGE_SOL_COMMON], null, radio, message, "[capitalize(src.name)]", "Money Snatcher", "Slot machine #[id]", 0, 0, list(0,1), 1459)
+	else
+		src.say(message)
 
 /obj/machinery/computer/slot_machine/attack_hand(mob/user as mob)
 	if(..())
@@ -227,7 +286,7 @@
 		if(!emagged)
 			var/account_money = login.GetBalance()
 			dat +={"Welcome, <b>[login.registered_name]</b>! (<a href='?src=\ref[src];logout=1'>log out</a>)<br>
-			Your account balance is: <span style="color:[account_money<spin_cost?"red":"green"]"><b>[login.GetBalance(1)]</b><br>"}
+			Your account balance is: <span style="color:[account_money<spin_cost?"red":"green"]"><b>[login.GetBalance(1)]</b><br></span>"}
 
 			if(stored_money > 0)
 				dat += {"Additionally, there are <span style="color:[account_money<spin_cost?"red":"green"]"><b>$[num2septext(stored_money)]</b>
@@ -238,9 +297,9 @@
 			else
 				dat += {"<br><span style="color:red">You must have at least <b>$[spin_cost]</b> space credits to play.</span>"}
 		else //EMAG STUFF--------------------------------------------------------------------------------------------------------------------
-			dat +={"Welcome to hell, [login.registered_name]! (you can't escape)<br>
-				<a href='?src=\ref[src];spin=1'>Play! (<b>$_free_</b>)</a><br><br>
-				<b>Warning:</b> a gambling addiction WILL turn you into a one-armed bandit."}
+			dat +={"Welcome, [login.registered_name]! (<a href='?src=\ref[src];logout=1'>log out</a>)<br>
+				<a href='?src=\ref[src];spin=1'>Play! (price: <b>free</b>)</a><br>
+				<b>WARNING:</b> losing isn't fun!"}
 
 	var/datum/browser/popup = new(user, "slotmachine", "[src]", 500, 300, src)
 	popup.set_content(dat)
@@ -261,25 +320,6 @@
 			return
 
 		if(login.GetBalance() >= spin_cost)
-			if(emagged && usr)
-				if(istype(usr,/mob/living/carbon/human))
-					var/mob/living/carbon/human/H = usr
-
-					var/datum/organ/external/nom = H.get_organ(pick("r_hand","l_hand","r_arm","l_arm","r_foot","l_foot","r_leg","l_leg"))
-					if(!nom || (nom.status & ORGAN_DESTROYED))
-						H << "<span class='notice'>You escape \the [src]'s wrath this time.</span>"
-					else
-						H << "<span class='danger'>[src] consumes your [nom.name]!</span>"
-						H.emote("scream")
-						H.adjustBruteLoss(rand(10,30))
-
-						nom.droplimb(1,0)
-
-				else if(istype(usr,/mob/living))
-					var/mob/living/L = usr
-					L.adjustFireLoss(30)
-					L << "<span class='danger'>You feel your soul being burned by \the [src]!</span>"
-
 			spin()
 
 	src.updateUsrDialog()
@@ -315,6 +355,8 @@
 	flags -= SCREWTOGGLE
 
 	update_icon()
+
+#undef MINIMUM_WIN_TO_BROADCAST
 
 #undef SEVEN
 #undef DIAMOND
