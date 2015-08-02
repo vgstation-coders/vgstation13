@@ -182,17 +182,25 @@ obj/item/weapon/wirerod
 obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	..()
 	if(istype(I, /obj/item/weapon/shard) && !istype(I, /obj/item/weapon/shard/shrapnel))
-		var/obj/item/weapon/spear/S = new /obj/item/weapon/spear
-		S.base_force = 5 + I.force
-		S.force = S.base_force
+		user.visible_message("<span class='warning'>[user] starts fastening \the [I] to the top of the wired rod.</span>",\
+			"<span class='notice'>You start fastening \the [I] to the top of the wired rod.</span>")
 
-		user.before_take_item(I)
-		user.before_take_item(src)
+		if(do_after(user,src,50))
+			var/obj/item/weapon/spear/S = new /obj/item/weapon/spear
+			S.base_force = 5 + I.force
+			S.force = S.base_force
 
-		user.put_in_hands(S)
-		user << "<span class='notice'>You fasten the glass shard to the top of the rod with the cable.</span>"
-		qdel(I)
-		qdel(src)
+			user.before_take_item(I)
+			user.before_take_item(src)
+
+			user.put_in_hands(S)
+			user.visible_message("<span class='warning'>[user] has fastened \the [I] to the top of the wired rod, creating a spear!</span>",\
+				"<span class='notice'>You fasten the \the [I] to the top of the wired rod, creating a spear.</span>")
+
+			qdel(I)
+			qdel(src)
+		else
+			user << "<span class='notice'>Your attempt to create a spear was interrupted.</span>"
 
 	else if(istype(I, /obj/item/weapon/wirecutters))
 		var/obj/item/weapon/melee/baton/cattleprod/P = new /obj/item/weapon/melee/baton/cattleprod
