@@ -53,6 +53,9 @@ var/global/list/reagents_to_log = list("fuel"  =  "welder fuel", "plasma"=  "pla
 		return 1
 	return
 
+/obj/proc/cultify()
+	qdel(src)
+
 /obj/proc/is_sharp()
 	return sharpness
 
