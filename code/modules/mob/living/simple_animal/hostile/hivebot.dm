@@ -64,7 +64,7 @@
 /mob/living/simple_animal/hostile/hivebot/getFeetAmount()
 	return 4
 
-/mob/living/simple_animal/hostile/russian/getHandAmount()
+/mob/living/simple_animal/hostile/hivebot/getHandAmount()
 	return 3
 
 
