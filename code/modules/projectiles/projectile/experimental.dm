@@ -795,13 +795,14 @@
 	kill_count = 100
 	layer = 13
 	var/mob/living/carbon/mob = null
-	var/obj/item/weapon/gun/nikita/nikita = null
+	var/obj/item/weapon/gun/projectile/rocketlauncher/nikita/nikita = null
 	var/steps_since_last_turn = 0
 	var/last_dir = null
 	var/emagged = 0//the value is set by the Nikita when it fires it
 
 /obj/item/projectile/nikita/OnFired()
 	nikita = shot_from
+	emagged = nikita.emagged
 
 	if(nikita && istype(nikita.loc,/mob/living/carbon))
 		var/mob/living/carbon/C = nikita.loc
@@ -809,10 +810,10 @@
 			mob = C
 			mob.client.perspective = EYE_PERSPECTIVE
 			mob.client.eye = src
-			mob.control_object = src
+			mob.orient_object = src
 			mob.canmove = 0
 
-	dir = get_dir(starting,original)
+	dir = get_dir_cardinal(starting,original)
 	last_dir = dir
 
 	if(mob && emagged)
@@ -820,7 +821,7 @@
 			mob.drop_from_inventory(W)//were you're going you won't need those!
 
 /obj/item/projectile/nikita/emp_act(severity)
-	new/obj/item/nikita(get_turf(src))
+	new/obj/item/ammo_casing/rocket_rpg/nikita(get_turf(src))
 	if(nikita)
 		nikita.fired = null
 	qdel(src)
@@ -857,7 +858,7 @@
 				mob = C
 				mob.client.perspective = EYE_PERSPECTIVE
 				mob.client.eye = src
-				mob.control_object = src
+				mob.orient_object = src
 				mob.canmove = 0
 
 	if(src.loc)
@@ -911,6 +912,6 @@
 	if(mob && mob.client)
 		mob.client.eye = mob.client.mob
 		mob.client.perspective = MOB_PERSPECTIVE
-		mob.control_object = null
+		mob.orient_object = null
 		mob.canmove = 1
 		mob = null

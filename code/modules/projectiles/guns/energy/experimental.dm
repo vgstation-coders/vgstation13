@@ -507,7 +507,7 @@
 
 #undef MAX_STICKYBOMBS
 
-/obj/item/weapon/gun/nikita
+/obj/item/weapon/gun/projectile/rocketlauncher/nikita
 	name = "\improper Nikita"
 	desc = "A miniature cruise missile launcher. Using a pulsed rocket engine and sophisticated TV guidance system."
 	icon = 'icons/obj/gun_experimental.dmi'
@@ -519,25 +519,22 @@
 	flags = FPRINT
 	w_class = 4.0
 	fire_delay = 2
+	caliber = list("nikita" = 1)
+	origin_tech = null
 	fire_sound = 'sound/weapons/rocket.ogg'
-	var/loaded = 0
+	ammo_type = "/obj/item/ammo_casing/rocket_rpg/nikita"
 	var/obj/item/projectile/nikita/fired = null
 	var/emagged = 0
 
-/obj/item/weapon/gun/nikita/examine(mob/user)
-	..()
-	if(loaded)
-		user << "<span class='info'>It appears to be loaded.</span>"
-
-/obj/item/weapon/gun/nikita/update_icon()
+/obj/item/weapon/gun/projectile/rocketlauncher/nikita/update_icon()
 	return
 
-/obj/item/weapon/gun/nikita/attack_self(mob/user)
+/obj/item/weapon/gun/projectile/rocketlauncher/nikita/attack_self(mob/user)
 	if(fired)
 		playsound(get_turf(src), 'sound/weapons/stickybomb_det.ogg', 30, 1)
 		fired.detonate()
 
-/obj/item/weapon/gun/nikita/suicide_act(var/mob/user)
+/obj/item/weapon/gun/projectile/rocketlauncher/nikita/suicide_act(var/mob/user)
 	if(!loaded)
 		user.visible_message("<span class='danger'>[user] jams down \the [src]'s trigger before noticing it isn't loaded and starts bashing \his head in with it! It looks like \he's trying to commit suicide.</span>")
 		return(BRUTELOSS)
@@ -548,43 +545,24 @@
 			return(BRUTELOSS)
 	return
 
-/obj/item/weapon/gun/nikita/attackby(var/obj/item/A as obj, mob/user as mob)
-	if(istype(A, /obj/item/nikita))
-		if(loaded)
-			user << "<span class='warning'>You cannot fit more than one missile in there!</span>"
-		else
-			user.drop_item(A, src)
-			user << "<span class='notice'>You load \the [A] into \the [src].</span>"
-			loaded = 1
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
-	else if(istype(A, /obj/item/weapon/card/emag) && !emagged)
+/obj/item/weapon/gun/projectile/rocketlauncher/nikita/attackby(var/obj/item/A as obj, mob/user as mob)
+	if(istype(A, /obj/item/weapon/card/emag) && !emagged)
 		emagged = 1
 		user << "<span class='warning'>You disable \the [src]'s idiot security!</span>"
 	else
 		..()
 
-/obj/item/weapon/gun/nikita/process_chambered()
-	if(in_chamber) return 1
-
-	if(loaded && !fired)
-		var/obj/item/projectile/nikita/N = new()
-		N.shot_from = src
-		if(ismob(loc))
-			N.firer = loc
-		in_chamber = N
-		loaded = 0
-		if(emagged)
-			N.emagged = 1
-		else
-			fired = N
+/obj/item/weapon/gun/projectile/rocketlauncher/nikita/process_chambered()
+	if(..())
+		if(!emagged)
+			fired = in_chamber
 		return 1
 	return 0
 
-
-
-/obj/item/nikita
+/obj/item/ammo_casing/rocket_rpg/nikita
 	name = "\improper Nikita missile"
 	desc = "A miniature cruise missile"
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "nikita"
-	w_class = 3.0
+	caliber = "nikita"
+	projectile_type = "/obj/item/projectile/nikita"

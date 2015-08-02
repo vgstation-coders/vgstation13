@@ -187,10 +187,6 @@
 
 /client/proc/Move_object(direct)
 	if(mob && mob.control_object)
-		if(istype(mob.control_object,/obj/item/projectile/nikita))
-			var/obj/item/projectile/nikita/N = mob.control_object
-			N.dir = direct
-			return
 		if(mob.control_object.density)
 			step(mob.control_object,direct)
 			if(!mob.control_object)	return
@@ -198,6 +194,11 @@
 		else
 			mob.control_object.loc = get_step(mob.control_object,direct)
 	return
+
+/client/proc/Dir_object(direct)
+	if(mob && mob.orient_object)
+		var/obj/O = mob.orient_object
+		O.dir = direct
 
 /client/Move(loc,dir)
 	if(!mob)
@@ -213,6 +214,10 @@
 
 	if(mob.control_object)
 		Move_object(dir)
+
+	if(mob.orient_object)
+		Dir_object(dir)
+		return
 
 	if(mob.incorporeal_move)
 		Process_Incorpmove(dir)
