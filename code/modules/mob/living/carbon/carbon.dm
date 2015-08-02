@@ -610,13 +610,6 @@
 
 	return null
 
-/mob/living/carbon/proc/isTeleViewing(var/client_eye)
-	if(istype(client_eye,/obj/machinery/camera))
-		return 1
-	if(istype(client_eye,/obj/item/projectile/nikita))
-		return 1
-	return 0
-
 /mob/living/carbon/html_mob_check(var/typepath)
 	for(var/atom/movable/AM in html_machines)
 		if(typepath == AM.type)
