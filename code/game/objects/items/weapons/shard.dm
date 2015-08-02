@@ -81,7 +81,7 @@
 
 	spawn( 0 )
 		if (prob(20))
-			src.force = initial(src.force) + rand(4,7)
+			src.force = initial(src.force) + rand(1,7)
 		else
 			src.force = 4
 		..()
