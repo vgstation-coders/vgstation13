@@ -573,13 +573,3 @@ var/list/DummyCache = list()
 	//	return 0
 	// that's not the kind of operation we are running here, nerd
 	return Clamp(round(mixedcolor), 0, 255)
-
-// Returns the atom sitting on the turf.
-// For example, using this on a disk, which is in a bag, on a mob, will return the mob because it's on the turf.
-// Stolen graciously from bay.
-/proc/get_atom_on_turf(var/atom/movable/M)
-	var/atom/mloc = M
-	while(mloc && mloc.loc && !istype(mloc.loc, /turf/))
-		mloc = mloc.loc
-	. = mloc
-

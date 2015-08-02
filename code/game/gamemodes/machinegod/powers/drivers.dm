@@ -20,7 +20,7 @@
 
 /datum/clockcult_power/vanguard
 	name				= "Vanguard"
-	desc				= "Blesses the user with stun immunity for 30 seconds, and makes them emanate a faint golden aura. At the end of the 30 seconds, the user is hit with the equivalent of however many stuns they received while protected by [Vanguard]."
+	desc				= "Blesses the user with stun immunity for 30 seconds, and makes them emanate a faint golden aura. At the end of the 30 seconds, the user is hit with the equivalent of however many stuns they received while protected by Vanguard."
 
 	invocation			= "Qr’sraq zr fubeg!"
 	cast_time			= 30
@@ -71,7 +71,7 @@
 
 /datum/clockcult_power/geis
 	name				= "Geis"
-	desc				= "Imbues the slab with divine energy, allowing the user to read from it and convert unprotected targets in an adjacent tile. Implanted targets are immune to conversion by [Geis]. Humans and silicons are both valid targets."
+	desc				= "Imbues the slab with divine energy, allowing the user to read from it and convert unprotected targets in an adjacent tile. Implanted targets are immune to conversion by Geis. Humans and silicons are both valid targets."
 
 	invocation			= "Rayvtugra urngura! Nyy gval orsber Ratvar! Chetr nyy hageh’guf naq ubabe Ratvar."
 	cast_time			= 60

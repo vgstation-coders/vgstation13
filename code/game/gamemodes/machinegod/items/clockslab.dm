@@ -10,7 +10,7 @@
 
 	var/datum/html_interface/clockslab/slab/interface				//HTML interface datum reference.
 
-	var/nextcomponent				= CLOCKSLAB_TICKS_UNTARGETED	//How much process() calls left before we spit out a new component,
+	var/next_component				= CLOCKSLAB_TICKS_UNTARGETED	//How much process() calls left before we spit out a new component,
 	var/target_component											//Which component we're targeting to make, slower but targeted.
 	var/list/components				= list()						//List of stored components.
 	var/list/selected_components	= list()						//List of selected components (in the recital).
@@ -26,7 +26,7 @@
 
 	if(!clockcult_powers)	//Look we're the first slab to be created, populate the global powers list.
 		clockcult_powers = list()
-		for(var/path in typeof(/datum/clockcult_power) - /datum/clockcult_power)
+		for(var/path in typesof(/datum/clockcult_power) - /datum/clockcult_power)
 			clockcult_powers += new path
 
 /obj/item/weapon/clockslab/Destroy()
@@ -46,7 +46,7 @@
 	if(!isclockcult(M))	//The mob doesn't obey Ratvar.
 		return
 
-	if(nextcomponent++ <= 0)	//Done.
+	if(next_component++ <= 0)	//Done.
 		create_component(target_component)
 
 //Will spawn a component, random if no ID specified, mob is for overflow handling, so we don't run get() again.
@@ -56,7 +56,7 @@
 		i += components[c]
 
 	if(i >= CLOCKSLAB_CAPACITY)	//No room, time to handle overflow.
-		var/obj/item/weapon/clock_component/C = getFromPool(get_clockcult_comp_by_id(id))
+		var/obj/item/clock_component/C = getFromPool(get_clockcult_comp_by_id(id))
 		if(!M)	//No mob, this shouldn't happen but just in case let's drop it on the floor.
 			if(!loc)	//Uuuuuuh... this is getting weirder by the minute.
 				qdel(src)
@@ -66,9 +66,9 @@
 			getFromPool(get_clockcult_comp_by_id(id))
 
 		//Try to insert it into a storage obj on the mob.
-		for(var/obj/item/weapon/storage/S in recursive_contents_check(M, /obj/item/weapon/storage))
+		for(var/obj/item/weapon/storage/S in recursive_type_check(M, /obj/item/weapon/storage))
 			if(S.can_be_inserted(C, 1))
-				S.handle_item_insertion(C, 1))
+				S.handle_item_insertion(C, 1)
 				break
 
 		if(!C.loc)	//We didn't manage to insert it somewhere.
@@ -109,13 +109,13 @@
 		if(!(href_list["target"] in CLOCK_COMP_IDS + "null"))
 			return 1	//Go away href exploiters.
 
-		if(target == "null")
-			target = null
+		if(target_component == "null")
+			target_component = null
 
 		else
-			target = href_list["target"]
+			target_component = href_list["target"]
 
-		next_component = target ? CLOCKSLAB_TICKS_TARGETED : CLOCKSLAB_TICKS_UNTARGETED
+		next_component = target_component ? CLOCKSLAB_TICKS_TARGETED : CLOCKSLAB_TICKS_UNTARGETED
 		return 1
 
 /obj/item/weapon/clockslab/proc/invoke_power(var/mob/user)

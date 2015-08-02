@@ -318,6 +318,7 @@
 #include "code\game\gamemodes\machinegod\HELPERS.dm"
 #include "code\game\gamemodes\machinegod\machinegod.dm"
 #include "code\game\gamemodes\machinegod\sigils.dm"
+#include "code\game\gamemodes\machinegod\turfs.dm"
 #include "code\game\gamemodes\machinegod\items\clockcheat.dm"
 #include "code\game\gamemodes\machinegod\items\clockslab.dm"
 #include "code\game\gamemodes\machinegod\items\components.dm"

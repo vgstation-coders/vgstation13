@@ -3,8 +3,13 @@
 /var/global/list/tinkcaches			= list()
 /var/global/list/clockcult_powers	= null		//List of all power datums, initialized when the first slab gets New()'d.
 
-//Constants.
-/var/const/list/CLOCK_COMP_IDS 	= list(
+#define CLOCK_VANGUARD		"vanguard"
+#define CLOCK_BELLIGERENT	"belligerent"
+#define CLOCK_REPLICANT		"replicant"
+#define CLOCK_HIEROPHANT	"hierophant"
+#define CLOCK_GEIS			"geis"
+
+/var/list/CLOCK_COMP_IDS = list(
 	CLOCK_VANGUARD,
 	CLOCK_BELLIGERENT,
 	CLOCK_REPLICANT,
