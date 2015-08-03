@@ -2,6 +2,7 @@
 	name = "Radio Transmitter"
 	desc = "A huge hulk of steel containing high-powered phase-modulating radio transmitting equipment."
 
+	anchored = 1
 	icon = 'icons/obj/machines/broadcast.dmi'
 	icon_state = "broadcaster"
 	light_color = LIGHT_COLOR_BLUE
@@ -20,7 +21,7 @@
 
 	var/const/RADS_PER_TICK=150
 	var/const/MAX_TEMP=70 // Celsius
-	machine_flags = MULTITOOL_MENU | SCREWTOGGLE
+	machine_flags = MULTITOOL_MENU | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/media/transmitter/broadcast/New()
 	..()
