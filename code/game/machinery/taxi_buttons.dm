@@ -45,8 +45,10 @@
 	icon_state = "doorctrl1"
 	add_fingerprint(user)
 
-	spawn if(!connected_computer.callTo(destination, wait_time))
-		src.visible_message("Taxi engines are on cooldown for the next [round((T.cooldown - (world.time - T.last_moved)) / 10)] second\s. Please wait before trying again.")
+	spawn
+		if(!connected_computer.callTo(destination, wait_time))
+			if( (T.cooldown - (world.time - T.last_moved)) > 0) //If it's going to show a negative value, there's something else wrong
+				src.visible_message("Taxi engines are on cooldown for the next [round((T.cooldown - (world.time - T.last_moved)) / 10)] second\s. Please wait before trying again.")
 
 	spawn(30)
 		icon_state = initial(icon_state)

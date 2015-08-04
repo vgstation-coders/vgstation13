@@ -366,7 +366,7 @@
 
 //Gibs or moves mobs and stuff
 /datum/shuttle/proc/collide(var/atom/movable/AM as mob|obj)
-	AM.shuttle_act()
+	AM.shuttle_act(src)
 
 //This is awful
 /datum/shuttle/proc/supercharge()
@@ -443,20 +443,13 @@
 	//this coordinates list stores every coordinate of a moved turf as a string (example: "52;61").
 	var/list/coordinates = list()
 
+	//Go through all turfs in our area
 	for(var/turf/T in linked_area.get_turfs())
 		var/datum/coords/C = new(T.x,T.y)
 		turfs_to_move += C
 		turfs_to_move[C] = T
 
 		coordinates += "[T.x];[T.y];[T.z]"
-
-		//Change old turf areas to space as well
-		space.contents.Add(T)
-		T.change_area(linked_area,space)
-
-		//This is called because not all atoms are moved by shuttles!
-		for(var/atom/allthings in T.contents)
-			allthings.change_area(linked_area,space)
 
 	//Remove all stuff from the area
 	linked_area.contents = list()
@@ -505,7 +498,9 @@
 		if(collision_type != COLLISION_DESTROY)
 			var/turf/displace_to = locate(C.x_pos,throwy,new_center.z)
 			for(var/atom/movable/AM as mob|obj in new_turf.contents)
-				AM.Move(displace_to)
+				if(AM.anchored) continue
+
+				AM.forceMove(displace_to)
 
 		for(var/atom/movable/AM as mob|obj in new_turf.contents)
 			src.collide(AM)
@@ -517,10 +512,26 @@
 		undlay.overlays = new_turf.overlays
 		var/replaced_turf_type = new_turf.type
 
+		//****Add the new turf to shuttle's area****
+
 		linked_area.contents += new_turf
 		new_turf.change_area(old_area,linked_area)
 		new_turf.ChangeTurf(old_turf.type)
 		new_turfs[C] = new_turf
+
+		//***Remove old turf from shuttle's area****
+
+		space.contents += old_turf
+		linked_area.contents -= old_turf
+		old_turf.change_area(linked_area,space)
+
+		//What's the point in changing
+		for(var/atom/movable/AM in old_turf.contents)
+			if(!AM.can_shuttle_move(src))
+				AM.change_area(linked_area,space)
+
+
+		//****Move all variables from the old turf over to the new turf****
 
 		for(var/key in old_turf.vars)
 			if(key in ignored_keys) continue //ignored_keys: code/game/area/areas.dm, 526 (above the move_contents_to proc)
@@ -543,7 +554,8 @@
 		new_turf.icon_state = old_turf.icon_state
 		new_turf.icon = old_turf.icon
 
-		//Moving air
+		//*****Move air*****
+
 		var/turf/simulated/S_OLD = old_turf
 
 		if(istype(S_OLD) && S_OLD.zone)
@@ -555,17 +567,17 @@
 			S_NEW.air.copy_from(S_OLD.zone.air)
 			S_OLD.zone.remove(S_OLD)
 
-		//Moving stuff
+		//*****Move objects and mobs*****
 		for(var/obj/O in old_turf)
 			if(!istype(O,/obj))
 				continue
-			if(istype(O,/obj/structure/docking_port) && !(O in docking_ports_aboard)) //Prevent shuttles from stealing docking ports!!!!!!!!!!
+			if(!O.can_shuttle_move(src))
 				continue
 
 			O.forceMove(new_turf)
 
 		for(var/mob/M in old_turf)
-			if(!M.move_on_shuttle)
+			if(!M.can_shuttle_move(src))
 				continue
 			M.forceMove(new_turf)
 
@@ -587,20 +599,8 @@
 			for(var/obj/machinery/door/D2 in T1)
 				D2.update_nearby_tiles()
 
-	//Add all new turfs to the parent area
-	//for(var/datum/coords/C in new_turfs)
+	//Add objects in all new turfs to the area
 	for(var/turf/T in linked_area.contents.Copy())
-		//var/turf/T = locate(C.x_pos,C.y_pos,new_center.z) //Get each turf in the new area
-		//if(!T)
-		//	world << "Couldn't find a turf at [C.x_pos];[C.y_pos];[new_center.z]"
-		//	continue
-
-		//var/area/old_area = get_area(T)
-		//if(!old_area) old_area = space
-
-		//linked_area.contents += T //Add the new turf to our area
-		//T.change_area(old_area,linked_area)
-
 		for(var/atom/allthings in T.contents)
 			allthings.change_area(space,linked_area)
 

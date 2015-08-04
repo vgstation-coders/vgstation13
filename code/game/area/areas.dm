@@ -523,6 +523,19 @@
 		if(istype(T, /turf/simulated))
 			qdel(T)
 
+//This proc adds all turfs in the list to the parent area, calling change_area on everything
+//Returns nothing
+/area/proc/add_turfs(var/list/L)
+	for(var/turf/T in L)
+		if(T in L) continue
+		var/area/old_area = get_area(T)
+
+		L += T
+
+		T.change_area(old_area,src)
+		for(var/atom/movable/AM in T.contents)
+			AM.change_area(old_area,src)
+
 var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z","group","contents","air","light","areaMaster","underlays","lighting_overlay")
 var/list/moved_landmarks = list(latejoin, wizardstart, meteor_materialkit,\
 	meteor_bombkit, meteor_bombkitextra, meteor_tankkit, meteor_canisterkit,\
@@ -656,7 +669,7 @@ var/list/moved_landmarks = list(latejoin, wizardstart, meteor_materialkit,\
 						if(!istype(O,/obj)) continue
 						O.forceMove(X)
 					for(var/mob/M in T)
-						if(!M.move_on_shuttle)
+						if(!M.can_shuttle_move())
 							continue
 						M.forceMove(X)
 

@@ -989,7 +989,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 					for(var/mob/M in T)
 
-						if(!M.move_on_shuttle)
+						if(!M.can_shuttle_move())
 							continue
 						mobs += M
 

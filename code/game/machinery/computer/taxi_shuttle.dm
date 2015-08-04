@@ -49,6 +49,13 @@ var/global/list/taxi_computers = list()
 
 	if(shuttle.current_port == destination)
 		return 1*/
+	if(shuttle.moving)
+		return
+	if(!shuttle.can_move())
+		return
+	if(shuttle.current_port == destination)
+		return
+
 	shuttle.pre_flight_delay = wait_time
 
 	broadcast("[capitalize(shuttle.name)] will move in [wait_time / 10] second\s.")

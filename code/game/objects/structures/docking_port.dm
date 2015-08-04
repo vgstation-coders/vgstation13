@@ -92,6 +92,11 @@ var/global/list/all_docking_ports = list()
 
 	src.areaname = "unassigned docking port"
 
+/obj/structure/docking_port/shuttle/can_shuttle_move(datum/shuttle/S)
+	if(S.linked_port == src)
+		return 1
+	return 0
+
 //DESTINATION PORTS
 
 /obj/structure/docking_port/destination //this guy is installed on stations and connects to shuttles
@@ -139,6 +144,11 @@ var/global/list/all_docking_ports = list()
 /obj/structure/docking_port/destination/unlink_from_shuttle(var/datum/shuttle/S)
 	..()
 	S.docking_ports -= src
+
+/obj/structure/docking_port/destination/can_shuttle_move(datum/shuttle/S)
+	if(src in S.docking_ports_aboard)
+		return 1
+	return 0
 
 //SILLY PROC
 /proc/select_port_from_list(var/mob/user, var/message="Select a docking port", var/title="Admin abuse", var/list/list) //like input

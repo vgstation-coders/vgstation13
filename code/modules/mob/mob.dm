@@ -1643,3 +1643,6 @@ mob/proc/walking()
 
 /mob/shuttle_act()
 	return
+
+/mob/can_shuttle_move()
+	return 1
