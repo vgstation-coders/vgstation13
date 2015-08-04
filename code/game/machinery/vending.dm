@@ -1437,6 +1437,7 @@
 		/obj/item/clothing/mask/gas/clown_hat/wiz = 1,
 		/obj/item/clothing/suit/wizrobe/magician = 1,
 		/obj/item/clothing/head/wizard/magician = 1,
+		/obj/item/clothing/shoes/sandal/marisa/leather = 1,
 		/obj/item/clothing/shoes/sandal = 1,
 		/obj/item/weapon/staff = 2,
 		/obj/item/weapon/storage/bag/wiz_cards/full = 1,
