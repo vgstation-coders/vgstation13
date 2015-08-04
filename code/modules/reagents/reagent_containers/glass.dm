@@ -22,7 +22,7 @@
 	var/list/can_be_placed_into = list(
 		/obj/machinery/chem_master/,
 		/obj/machinery/chem_dispenser/,
-		/obj/machinery/snackbar_machine/,
+		/obj/machinery/chem_master/snackbar_machine/,
 		/obj/machinery/reagentgrinder,
 		/obj/structure/table,
 		/obj/structure/closet,
