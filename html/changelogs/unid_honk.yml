@@ -1,0 +1,7 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+  - tweak: Sound synthesizers are now assemblies, which means they can be attached to remote signallers, proximity sensors and so on
+  - rscadd: Added sound synthesizers to maps which previously didn't have them (taxistation and defficiency)
