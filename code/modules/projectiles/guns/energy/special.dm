@@ -108,6 +108,54 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	projectile_type = "/obj/item/projectile/animate"
 	charge_cost = 100
 
+
+/obj/item/weapon/gun/energy/severwand
+	name = "wand of severing"
+	desc = "An ancient wooden wand once owned by a prince of some sort. There's a bitter sort of energy surrounding it."
+	icon = 'icons/obj/gun.dmi'
+	icon_state = "woodenwand"
+	item_state = "woodenwand"
+	fire_sound = 'sound/effects/zzzt.ogg'
+	flags = FPRINT
+	siemens_coefficient = 1
+	w_class = 4.0
+	projectile_type = "/obj/item/projectile/severing"
+	charge_cost = 250
+	var/charge_tick = 0
+	var/sever = 1 //0 for sectumsempra(cutting, can cause bleeding), 1 for diffindo(hacks off arms/legs, acts like 0 on nonhumans)
+
+/obj/item/weapon/gun/energy/severwand/New()
+	..()
+	processing_objects.Add(src)
+
+/obj/item/weapon/gun/energy/severwand/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+/obj/item/weapon/gun/energy/severwand/process()
+	charge_tick++
+	if(charge_tick < 4) return 0
+	charge_tick = 0
+	if(!power_supply) return 0
+	power_supply.give(200)
+	return 1
+
+/obj/item/weapon/gun/energy/severwand/attack_self(var/mob/living/user)
+	sever = !sever
+	user << "<span class='[sever ? "danger" : "warning"]'>You will now cast [sever ? "Diffindo" : "Sectumsempra"].</span>"
+	charge_cost = sever ? 250 : 50
+
+/obj/item/weapon/gun/energy/severwand/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+	user.say(sever ? "Diffindo!" : "Sectumsempra!")
+	..()
+
+/obj/item/weapon/gun/energy/severwand/emp_act(severity)
+	return
+
+/obj/item/weapon/gun/energy/severwand/update_icon()
+	return
+
+
 /obj/item/weapon/gun/energy/floragun
 	name = "floral somatoray"
 	desc = "A tool that discharges controlled radiation which induces mutation in plant cells."

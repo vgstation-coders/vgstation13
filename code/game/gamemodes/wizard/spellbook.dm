@@ -43,8 +43,6 @@
 			<I>This spell fires several, slow moving, magic projectiles at nearby targets. If they hit a target, it is paralyzed and takes minor damage.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=fireball'>Fireball</A> (10)<BR>
 			<I>This spell fires a fireball in the direction you're facing and does not require wizard garb. Be careful not to fire it at people that are standing next to you.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=disintegrate'>Disintegrate</A> (60)<BR>
-			<I>This spell instantly kills somebody adjacent to you with the vilest of magick. It has a long cooldown.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=disabletech'>Disable Technology</A> (60)<BR>
 			<I>This spell disables all weapons, cameras and most other technology in range.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=smoke'>Smoke</A> (10)<BR>
@@ -90,6 +88,8 @@
 			<HR>
 			<A href='byond://?src=\ref[src];spell_choice=staffchange'>Staff of Change</A><BR>
 			<I>An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself.</I><BR>
+			<A href='byond://?src=\ref[src];spell_choice=severwand'>Wand of Severing</A><BR>
+			<I>An ancient, forbidden wand that tears limbs off of people, and cuts flesh.</I><BR>
 			<HR>
 			<A href='byond://?src=\ref[src];spell_choice=mentalfocus'>Mental Focus</A><BR>
 			<I>An artefact that channels the will of the user into destructive bolts of force.</I><BR>
@@ -151,7 +151,7 @@
 				uses--
 			/*
 			*/
-				var/list/available_spells = list(magicmissile = "Magic Missile", fireball = "Fireball", disintegrate = "Disintegrate", disabletech = "Disable Tech", smoke = "Smoke", blind = "Blind", subjugation = "Subjugation", mindswap = "Mind Transfer", forcewall = "Forcewall", blink = "Blink", teleport = "Teleport", mutate = "Mutate", etherealjaunt = "Ethereal Jaunt", knock = "Knock", horseman = "Curse of the Horseman", frenchcurse = "The French Curse", summonguns = "Summon Guns", staffchange = "Staff of Change", mentalfocus = "Mental Focus", soulstone = "Six Soul Stone Shards and the spell Artificer", armor = "Mastercrafted Armor Set", staffanimate = "Staff of Animation", noclothes = "No Clothes",fleshtostone = "Flesh to Stone", arsenath = "Butt-Bot's Revenge",)
+				var/list/available_spells = list(magicmissile = "Magic Missile", fireball = "Fireball", severwand = "Wand of Severing", disabletech = "Disable Tech", smoke = "Smoke", blind = "Blind", subjugation = "Subjugation", mindswap = "Mind Transfer", forcewall = "Forcewall", blink = "Blink", teleport = "Teleport", mutate = "Mutate", etherealjaunt = "Ethereal Jaunt", knock = "Knock", horseman = "Curse of the Horseman", frenchcurse = "The French Curse", summonguns = "Summon Guns", staffchange = "Staff of Change", mentalfocus = "Mental Focus", soulstone = "Six Soul Stone Shards and the spell Artificer", armor = "Mastercrafted Armor Set", staffanimate = "Staff of Animation", noclothes = "No Clothes",fleshtostone = "Flesh to Stone", arsenath = "Butt-Bot's Revenge",)
 				var/already_knows = 0
 				for(var/spell/aspell in H.spell_list)
 					if(available_spells[href_list["spell_choice"]] == initial(aspell.name))
@@ -191,10 +191,6 @@
 							feedback_add_details("wizard_spell_learned","FB") //please do not change the abbreviation to keep data processing consistent. Add a unique id to any new spells
 							add_spell(new/spell/targeted/projectile/dumbfire/fireball,H)
 							temp = "You have learned fireball."
-						if("disintegrate")
-							feedback_add_details("wizard_spell_learned","DG") //please do not change the abbreviation to keep data processing consistent. Add a unique id to any new spells
-							add_spell(new/spell/targeted/disintegrate,H)
-							temp = "You have learned disintegrate."
 						if("disabletech")
 							feedback_add_details("wizard_spell_learned","DT") //please do not change the abbreviation to keep data processing consistent. Add a unique id to any new spells
 							add_spell(new/spell/aoe_turf/disable_tech,H)
@@ -305,6 +301,11 @@
 							feedback_add_details("wizard_spell_learned","SA") //please do not change the abbreviation to keep data processing consistent. Add a unique id to any new spells
 							new /obj/item/weapon/gun/energy/staff/animate(get_turf(H))
 							temp = "You have purchased a staff of animation."
+							max_uses--
+						if("severwand")
+							feedback_add_details("wizard_spell_learned","SW") //please do not change the abbreviation to keep data processing consistent. Add a unique id to any new spells
+							new /obj/item/weapon/gun/energy/severwand(get_turf(H))
+							temp = "You have purchased a wand of severing."
 							max_uses--
 						if("staffnecro")
 							feedback_add_details("wizard_spell_learned","SN") //please do not change the abbreviation to keep data processing consistent. Add a unique id to any new spells
