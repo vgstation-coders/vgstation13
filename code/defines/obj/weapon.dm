@@ -487,6 +487,8 @@
 			armed = 0
 			var/mob/living/simple_animal/SA = AM
 			SA.health -= 20
+			if(istype(AM,/mob/living/simple_animal/hostile/bear))
+				SA.death(0)
 	..()
 
 /obj/item/weapon/batteringram
