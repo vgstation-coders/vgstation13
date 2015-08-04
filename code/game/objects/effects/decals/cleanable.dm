@@ -14,3 +14,7 @@
 	if(istype(O,/obj/item/weapon/mop))
 		return ..()
 	return 0 // No more "X HITS THE BLOOD WITH AN RCD"
+
+/obj/effect/decal/cleanable/proc/messcheck(var/obj/effect/decal/cleanable/M)
+
+	return 1

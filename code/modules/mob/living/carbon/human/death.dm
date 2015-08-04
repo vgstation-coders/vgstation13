@@ -77,7 +77,10 @@
 		if(client)	blind.layer = 0
 
 	tod = worldtime2text()		//weasellos time of death patch
-	if(mind)	mind.store_memory("Time of death: [tod]", 0)
+	if(mind)
+		mind.store_memory("Time of death: [tod]", 0)
+		score["deadcrew"]++
+
 	if(ticker && ticker.mode)
 //		world.log << "k"
 		sql_report_death(src)
