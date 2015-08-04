@@ -186,6 +186,8 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 			"<span class='notice'>You start fastening \the [I] to the top of the wired rod.</span>")
 
 		if(do_after(user,src,50))
+			if(!I || !src) return
+
 			var/obj/item/weapon/spear/S = new /obj/item/weapon/spear
 			S.base_force = 5 + I.force
 			S.force = S.base_force
@@ -199,6 +201,9 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 
 			qdel(I)
 			qdel(src)
+
+			I = null
+			src = null
 		else
 			user << "<span class='notice'>Your attempt to create a spear was interrupted.</span>"
 
