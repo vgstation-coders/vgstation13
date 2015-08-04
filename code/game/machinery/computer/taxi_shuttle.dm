@@ -34,7 +34,7 @@ var/global/list/taxi_computers = list()
 
 /obj/machinery/computer/taxi_shuttle/proc/taxi_move_to(var/obj/structure/docking_port/destination/destination, var/wait_time)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/taxi_shuttle/proc/taxi_move_to() called tick#: [world.time]")
-	if(shuttle.moving)
+	/*if(shuttle.moving)
 		return
 	if(!shuttle.can_move())
 		return
@@ -48,7 +48,13 @@ var/global/list/taxi_computers = list()
 	shuttle.move_to_dock(destination)
 
 	if(shuttle.current_port == destination)
-		return 1
+		return 1*/
+	shuttle.pre_flight_delay = wait_time
+
+	broadcast("[capitalize(shuttle.name)] will move in [wait_time / 10] second\s.")
+
+	return shuttle.travel_to(destination)
+
 
 /obj/machinery/computer/taxi_shuttle/proc/broadcast(var/message = "")
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/taxi_shuttle/proc/broadcast() called tick#: [world.time]")
@@ -75,14 +81,27 @@ var/global/list/taxi_computers = list()
 
 	user.set_machine(src)
 
-	var/dat = ""
-	if(allowed(user))
+	var/dat
+
+	if(shuttle.lockdown)
+		dat += "<h2><font color='red'>THIS TAXI IS LOCKED DOWN</font></h2><br>"
+		if(istext(shuttle.lockdown))
+			dat += shuttle.lockdown
+		else
+			dat += "Additional information has not been provided."
+	else if(!shuttle.linked_area)
+		dat = "<h2><font color='red'>UNABLE TO FIND [uppertext(shuttle.name)]</font></h2>"
+	else if(!shuttle.linked_port)	//User friendly interface
+		dat += "<h2><font color='red'>ERROR: Unable to find the docking port. Please contact tech support.</font></h2><br>"
+	else if(shuttle.moving)
+		dat += "<center><h3>Currently moving [shuttle.destination_port.areaname ? "to [shuttle.destination_port.areaname]" : ""]</h3></center>"
+	else
 		dat = {"[shuttle.current_port ? "Location: [shuttle.current_port.areaname]" : "Location: UNKNOWN"]<br>
-		Ready to move[shuttle.can_move() ? ": now" : " in [max(round((shuttle.last_moved + shuttle.cooldown - world.time) * 0.1), 0)] seconds"]<br><br>
-		<a href='?src=\ref[src];med_sili=1'>[shuttle.dock_medical_silicon.areaname]</a><br>
-		<a href='?src=\ref[src];engi_cargo=1'>[shuttle.dock_engineering_cargo.areaname]</a><br>
-		<a href='?src=\ref[src];sec_sci=1'>[shuttle.dock_security_science.areaname]</a><br>
-		[emagged ? "<a href='?src=\ref[src];abandoned=1'>Abandoned Station</a><br>" : ""]"}
+			Ready to move[max(shuttle.last_moved + shuttle.cooldown - world.time, 0) ? " in [max(round((shuttle.last_moved + shuttle.cooldown - world.time) * 0.1), 0)] seconds" : ": now"]<br><br>
+			<a href='?src=\ref[src];med_sili=1'>[shuttle.dock_medical_silicon.areaname]</a><br>
+			<a href='?src=\ref[src];engi_cargo=1'>[shuttle.dock_engineering_cargo.areaname]</a><br>
+			<a href='?src=\ref[src];sec_sci=1'>[shuttle.dock_security_science.areaname]</a><br>
+			[emagged ? "<a href='?src=\ref[src];abandoned=1'>Abandoned Station</a><br>" : ""]"}
 
 	user << browse(dat, "window=computer;size=575x450")
 	onclose(user, "computer")

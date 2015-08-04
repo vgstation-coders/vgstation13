@@ -253,26 +253,27 @@
 	last_moved = world.time
 	moving = 1
 
-	sleep(get_pre_flight_delay())
+	spawn(get_pre_flight_delay())
+		if(transit_port && get_transit_delay())
+			if(broadcast)
+				broadcast.announce( "The shuttle has departed and is now moving towards [D.areaname]." )
+			else if(user)
+				user << "The shuttle has departed towards [D.areaname]"
+		else
+			if(broadcast)
+				broadcast.announce( "The shuttle has arrived at [D.areaname]." )
+			else if(user)
+				user << "The shuttle has arrived at [D.areaname]"
 
-	if(transit_port && get_transit_delay())
-		if(broadcast)
-			broadcast.announce( "The shuttle has departed and is now moving towards [D.areaname]." )
-		else if(user)
-			user << "The shuttle has departed towards [D.areaname]"
-	else
-		if(broadcast)
-			broadcast.announce( "The shuttle has arrived at [D.areaname]." )
-		else if(user)
-			user << "The shuttle has arrived at [D.areaname]"
+		pre_flight()
 
-	return pre_flight()
+	return 1
 
 /datum/shuttle/proc/pre_flight()
 	if(!destination_port) return
 
 	if(transit_port && get_transit_delay())
-		if(use_transit == TRANSIT_ALWAYS || (use_transit == TRANSIT_ACROSS_Z_LEVELS && (linked_area.z != destination_port)))
+		if(use_transit == TRANSIT_ALWAYS || (use_transit == TRANSIT_ACROSS_Z_LEVELS && (linked_area.z != destination_port.z)))
 			move_to_dock(transit_port, throw_dir = turn(src.dir,180)) //Throw everything backwards
 			sleep(get_transit_delay())
 
@@ -467,7 +468,7 @@
 
 		//If any of the new turfs are in the moved shuttle's current area, EMERGENCY ABORT (this leads to the shuttle destroying itself & potentially gibbing everybody inside)
 		if("[new_coords.x_pos];[new_coords.y_pos];[new_center.z]" in coordinates)
-			warning("A shuttle ([src.name]; [src.type]) attempted to move to a turf which was already occupied by it.")
+			warning("Invalid movement by shuttle ([src.name]; [src.type]). Offending turf: [new_coords.x_pos];[new_coords.y_pos];[new_center.z]")
 			return
 
 		new_turfs += new_coords

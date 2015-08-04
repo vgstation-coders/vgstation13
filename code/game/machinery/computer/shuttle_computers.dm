@@ -70,10 +70,7 @@
 			dat += {"<h2><font color='red'>This shuttle has no docking port speciied.</font></h2><br>
 				<a href='?src=\ref[src];link_to_port=1'>Scan for docking ports</a>"}
 		else if(shuttle.moving)
-			if(shuttle.destination_port)
-				dat += "<h3>Currently moving to [shuttle.destination_port.areaname]</h3>"
-			else
-				dat += "<h3>Currently moving</h3>"
+			dat += "<center><h3>Currently moving [shuttle.destination_port.areaname ? "to [shuttle.destination_port.areaname]" : ""]</h3></center>"
 		else
 			if(shuttle.current_port)
 				dat += "Location: <b>[shuttle.current_port.areaname]</b><br>"
