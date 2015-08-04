@@ -413,6 +413,8 @@
 
 	travel_to(target,,user)
 
+//The proc that does most of the work
+//RETURNS: nothing
 /datum/shuttle/proc/move_area_to(var/turf/our_center, var/turf/new_center, var/rotate = 0)
 	if(!our_center) return
 	if(!new_center) return
@@ -433,12 +435,19 @@
 	if(!space)
 		warning("There is no area at 1,1,2!")
 
-	//Make a list of coordinates of turfs to move, and associate the coordinates with their turfs
+	//Make a list of coordinates of turfs to move, and associate the coordinates with the turfs they represent
 	var/list/turfs_to_move = list()
+
+	//Now here's the dumb part - since there's no fast way I know to check if a coord datum has a coord datum with the same values in a list,
+	//this coordinates list stores every coordinate of a moved turf as a string (example: "52;61").
+	var/list/coordinates = list()
+
 	for(var/turf/T in linked_area.get_turfs())
 		var/datum/coords/C = new(T.x,T.y)
 		turfs_to_move += C
 		turfs_to_move[C] = T
+
+		coordinates += "[T.x];[T.y];[T.z]"
 
 		//Change old turf areas to space as well
 		space.contents.Add(T)
@@ -455,6 +464,12 @@
 	var/list/new_turfs = list() //Coordinates of turfs that WILL be created
 	for(var/datum/coords/C in turfs_to_move)
 		var/datum/coords/new_coords = C.add(offset) //Get the coordinates of new turfs by adding offset
+
+		//If any of the new turfs are in the moved shuttle's current area, EMERGENCY ABORT (this leads to the shuttle destroying itself & potentially gibbing everybody inside)
+		if("[new_coords.x_pos];[new_coords.y_pos];[new_center.z]" in coordinates)
+			warning("A shuttle ([src.name]; [src.type]) attempted to move to a turf which was already occupied by it.")
+			return
+
 		new_turfs += new_coords
 		new_turfs[new_coords] = C //Associate the old coordinates with the new ones for an easier time
 

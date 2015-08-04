@@ -38,13 +38,16 @@ var/global/list/taxi_computers = list()
 		return
 	if(!shuttle.can_move())
 		return
+	if(shuttle.current_port == destination)
+		return
+
 	broadcast("[capitalize(shuttle.name)] will move in [wait_time / 10] second\s.")
 
 	sleep(wait_time)
 
 	shuttle.move_to_dock(destination)
 
-	if(shuttle.destination_port)
+	if(shuttle.current_port == destination)
 		return 1
 
 /obj/machinery/computer/taxi_shuttle/proc/broadcast(var/message = "")
@@ -76,17 +79,10 @@ var/global/list/taxi_computers = list()
 	if(allowed(user))
 		dat = {"[shuttle.current_port ? "Location: [shuttle.current_port.areaname]" : "Location: UNKNOWN"]<br>
 		Ready to move[shuttle.can_move() ? ": now" : " in [max(round((shuttle.last_moved + shuttle.cooldown - world.time) * 0.1), 0)] seconds"]<br><br>
-		<a href='?src=\ref[src];med_sili=1'>Medical and Silicon Station</a><br>
-		<a href='?src=\ref[src];engi_cargo=1'>Engineering and Cargo Station</a><br>
-		<a href='?src=\ref[src];sec_sci=1'>Security and Science Station</a><br>
+		<a href='?src=\ref[src];med_sili=1'>[shuttle.dock_medical_silicon.areaname]</a><br>
+		<a href='?src=\ref[src];engi_cargo=1'>[shuttle.dock_engineering_cargo.areaname]</a><br>
+		<a href='?src=\ref[src];sec_sci=1'>[shuttle.dock_security_science.areaname]</a><br>
 		[emagged ? "<a href='?src=\ref[src];abandoned=1'>Abandoned Station</a><br>" : ""]"}
-	else
-		dat = {"[shuttle.current_port ? "Location: [shuttle.current_port.areaname]" : "Location: UNKNOWN"]<br>
-		Ready to move[shuttle.can_move() ? ": now" : " in [max(round((shuttle.last_moved + shuttle.cooldown - world.time) * 0.1), 0)] seconds"]<br><br>
-		<a href='?src=\ref[src];unauthmed_sili=1'>Medical and Silicon Station</a><br>
-		<a href='?src=\ref[src];unauthengi_cargo=1'>Engineering and Cargo Station</a><br>
-		<a href='?src=\ref[src];unauthsec_sci=1'>Security and Science Station</a><br>
-		[emagged ? "<a href='?src=\ref[src];unauthabandoned=1'>Abandoned Station</a><br>" : ""]"}
 
 	user << browse(dat, "window=computer;size=575x450")
 	onclose(user, "computer")
@@ -110,8 +106,8 @@ var/global/list/taxi_computers = list()
 
 	for(var/place in href_list)
 		if(href_list[place])
-			if(copytext(place, 1, 7) == "unauth") // if it's unauthorised, we take longer
-				callTo(copytext(place, 7), shuttle.move_time_no_access)
+			if(!allowed(user))
+				callTo(place, shuttle.move_time_no_access)
 			else
 				callTo(place, shuttle.move_time_access) //otherwise, double quick time
 

@@ -66,31 +66,31 @@ var/global/datum/shuttle/taxi/b/taxi_b = new(starting_area = TAXI_B_STARTING_ARE
 	areaname = "taxi"
 
 /obj/structure/docking_port/destination/taxi/a/medbay_silicon
-	areaname = "Medical and Silicon station"
+	areaname = "Medical and Silicon Station"
 
 /obj/structure/docking_port/destination/taxi/a/engi_cargo
-	areaname = "Engineering and Cargo station"
+	areaname = "Engineering and Cargo Station"
 
 /obj/structure/docking_port/destination/taxi/a/sec_sci
-	areaname = "Security and Science station"
+	areaname = "Security and Science Station"
 
 /obj/structure/docking_port/destination/taxi/a/derelict
-	areaname = "Abandoned station"
+	areaname = "Abandoned Station"
 
 /obj/structure/docking_port/destination/taxi/a/transit
 	areaname = "Hyperspace"
 
 /obj/structure/docking_port/destination/taxi/b/medbay_silicon
-	areaname = "Medical and Silicon station"
+	areaname = "Medical and Silicon Station"
 
 /obj/structure/docking_port/destination/taxi/b/engi_cargo
-	areaname = "Engineering and Cargo station"
+	areaname = "Engineering and Cargo Station"
 
 /obj/structure/docking_port/destination/taxi/b/sec_sci
-	areaname = "Security and Science station"
+	areaname = "Security and Science Station"
 
 /obj/structure/docking_port/destination/taxi/b/derelict
-	areaname = "Abandoned station"
+	areaname = "Abandoned Station"
 
 /obj/structure/docking_port/destination/taxi/b/transit
 	areaname = "Hyperspace"
