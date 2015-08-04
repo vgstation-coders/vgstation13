@@ -1640,3 +1640,6 @@ mob/proc/walking()
 /mob/proc/html_mob_check()
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/html_mob_check() called tick#: [world.time]")
 	return 0
+
+/mob/proc/shuttle_act()
+	return

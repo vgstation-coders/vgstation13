@@ -365,15 +365,7 @@
 
 //Gibs or moves mobs and stuff
 /datum/shuttle/proc/collide(var/atom/movable/AM as mob|obj)
-	if(istype(AM,/mob/living))
-		var/mob/living/M = AM
-
-		M.gib()
-
-	else
-		//Docking ports can't be deleted, singularities too
-		if(!istype(AM,/obj/structure/docking_port) && !istype(AM,/obj/machinery/singularity))
-			qdel(AM)
+	AM.shuttle_act()
 
 //This is awful
 /datum/shuttle/proc/supercharge()

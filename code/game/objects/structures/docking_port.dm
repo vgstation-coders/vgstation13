@@ -34,6 +34,9 @@ var/global/list/all_docking_ports = list()
 /obj/structure/docking_port/cultify()
 	return //we are eternal
 
+/obj/structure/docking_port/shuttle_act()
+	return
+
 /obj/structure/docking_port/proc/link_to_shuttle(var/datum/shuttle/S)
 	used_by_shuttles |= S
 	return

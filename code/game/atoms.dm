@@ -508,6 +508,10 @@ its easier to just keep the beam vertical.
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/singularity_act() called tick#: [world.time]")
 	return
 
+//Called when a shuttle collides with an atom
+/atom/proc/shuttle_act(var/datum/shuttle/S)
+	return
+
 /atom/proc/singularity_pull()
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/singularity_pull() called tick#: [world.time]")
 	return

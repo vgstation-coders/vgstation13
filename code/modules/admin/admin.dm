@@ -839,7 +839,7 @@ var/global/floorIsLava = 0
 	return
 
 /datum/admins/proc/shuttle_magic()
-	var/dat = "<h3>GENERAL COMMANDS:</h3><br>"
+	var/dat = "<b>WARNING:</b> abuse will result in hilarity and removal of your flags.<br><h3>GENERAL COMMANDS:</h3><br>"
 	dat +={"<a href='?src=\ref[src];shuttle_create_destination=1'> Create a destination docking port</a><br>
 	<i>This will create a destination docking port at your location, facing the direction you are currently facing.</i><br>
 
@@ -864,8 +864,7 @@ var/global/floorIsLava = 0
 	<a href='?src=\ref[src];shuttle_show_overlay=1'> Show a shuttle's outline</a><br>
 	<i>This command will create a transparent overlay in the shape of a selected shuttle next to you. Its position is calculated as if it were docked at a docking port at your location. The overlay is only visible to you.</i><br>
 
-	<h3>FUN COMMANDS:</h3>
-		<b>WARNING:</b> server may explode!<br>
+	<h3>FUN COMMANDS:</h3><br>
 
 	<a href='?src=\ref[src];shuttle_shuttlify=1'> Turn current area into a shuttle</a><br>
 
@@ -885,7 +884,7 @@ var/global/floorIsLava = 0
 	<i>You'll have the option of deleting all of its objects and turfs.</i><br>
 
 	<a href='?src=\ref[src];shuttle_reset=1'> Reset a shuttle</a><br>
-	<i>Reset a shuttle to its initial state. Changes to turfs and objects won't be reverted.</i><br>
+	<i>Reset a shuttle to its initial state. Changes to turfs, objects and the shuttle's location won't be reverted.</i><br>
 
 	<a href='?src=\ref[src];shuttle_mass_lockdown=1'> LOCKDOWN ALL SHUTTLES</a><br>
 	<i>IT'S LOOSE</i><br>"}
