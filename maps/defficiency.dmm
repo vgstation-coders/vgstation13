@@ -4672,7 +4672,7 @@
 "bLR" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/turf/simulated/wall,/area/derelictparts/apderelict)
 "bLS" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/obj/machinery/power/apc{dir = 8; pixel_x = -24; pixel_y = 0},/obj/structure/cable,/turf/simulated/floor{icon_state = "floorgrime"},/area/crew_quarters/theatre)
 "bLT" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/obj/machinery/vending/autodrobe,/turf/simulated/floor{icon_state = "floorgrime"},/area/crew_quarters/theatre)
-"bLU" = (/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,/obj/structure/table/woodentable,/turf/simulated/floor{icon_state = "floorgrime"},/area/crew_quarters/theatre)
+"bLU" = (/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,/obj/structure/table/woodentable,/obj/item/device/assembly/soundsynth,/turf/simulated/floor{icon_state = "floorgrime"},/area/crew_quarters/theatre)
 "bLV" = (/obj/structure/rack,/obj/map/spawner/set_spawner/theater,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/turf/simulated/floor{icon_state = "floorgrime"},/area/crew_quarters/theatre)
 "bLW" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/turf/simulated/floor{icon_state = "floorgrime"},/area/crew_quarters/theatre)
 "bLX" = (/obj/machinery/light/small,/obj/structure/rack,/obj/map/spawner/set_spawner/theater,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/turf/simulated/floor{icon_state = "floorgrime"},/area/crew_quarters/theatre)
