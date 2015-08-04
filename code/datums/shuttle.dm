@@ -525,7 +525,7 @@
 		linked_area.contents -= old_turf
 		old_turf.change_area(linked_area,space)
 
-		//What's the point in changing
+		//All objects which aren't going to be moved by the shuttle have their area changed to space!
 		for(var/atom/movable/AM in old_turf.contents)
 			if(!AM.can_shuttle_move(src))
 				AM.change_area(linked_area,space)
