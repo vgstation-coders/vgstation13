@@ -15,11 +15,6 @@
 
 /obj/machinery/chem_master/snackbar_machine/Topic(href, href_list)
 
-	if(..())
-		return 1
-
-	usr.set_machine(src)
-
 	if(href_list["close"])
 		usr << browse(null, "window=snackbar_machine")
 		usr.unset_machine()
@@ -28,7 +23,10 @@
 	if(href_list["createpill"] || href_list["createpill_multiple"] || href_list["ejectp"] || href_list["change_pill"])
 		return //No href exploits, fuck off
 
-	..()
+	if(..())
+		return 1
+
+	usr.set_machine(src)
 
 	if(beaker && href_list["createbar"])
 		var/obj/item/weapon/reagent_containers/food/snacks/snackbar/SB = new/obj/item/weapon/reagent_containers/food/snacks/snackbar(src.loc)
