@@ -170,7 +170,8 @@
 						/obj/item/clothing/suit/cardborg,
 						/obj/item/weapon/tank/oxygen,
 						/obj/item/weapon/tank/air,
-						/obj/item/weapon/extinguisher
+						/obj/item/weapon/extinguisher,
+						/obj/item/corgiclothes/hardsuit
 					)
 
 					if( ! ( item_to_add.type in allowed_types ) )
@@ -332,6 +333,14 @@
 			emote_hear =  list("barks cleverly.")
 			emote_see = list("fiddles around with a sonic-bone", "builds something amazing- thats a poop. He just pooped.")
 			valid = 1
+
+		if(/obj/item/corgiclothes/hardsuithelmet)
+			name = "Spessman [real_name]"
+			desc = "Boldly going where no Corgi has gone before!"
+			valid = 1
+			min_oxy = 0
+			minbodytemp = 0
+			maxbodytemp = 999
 
 		/*
 		if(/obj/item/clothing/head/hardhat/reindeer)
