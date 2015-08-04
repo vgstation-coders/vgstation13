@@ -97,3 +97,9 @@
 		spawn(10)
 			if(!src.stat)
 				horde()
+
+/mob/living/simple_animal/hostile/faithless/getFeetAmount()
+	return 2
+
+/mob/living/simple_animal/hostile/faithless/getHandAmount()
+	return 2

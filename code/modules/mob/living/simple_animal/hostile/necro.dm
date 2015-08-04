@@ -96,3 +96,9 @@
 /mob/living/simple_animal/hostile/necro/copy/ListTargets()
 	. = ..()
 	return . - creator
+
+/mob/living/simple_animal/hostile/necro/getFeetAmount()
+	return 2
+
+/mob/living/simple_animal/hostile/necro/getHandAmount()
+	return 2

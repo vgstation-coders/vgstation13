@@ -310,3 +310,9 @@
 	if(speaking && speaking.name == LANGUAGE_SOL_COMMON)
 		return 1
 	return ..()
+
+/mob/living/carbon/alien/larva/getFeetAmount()
+	return 0
+
+/mob/living/carbon/alien/larva/getHandAmount()
+	return 0

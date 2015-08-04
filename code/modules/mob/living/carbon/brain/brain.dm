@@ -61,3 +61,8 @@
 		return 1
 	return ..()
 
+/mob/living/carbon/brain/getFeetAmount()
+	return 0
+
+/mob/living/carbon/brain/getHandAmount()
+	return 0

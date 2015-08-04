@@ -127,6 +127,11 @@
 			if ((M.client && !( M.blinded )))
 				M.show_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
 
+/mob/living/simple_animal/construct/getFeetAmount()
+	return 0
+
+/mob/living/simple_animal/construct/getHandAmount()
+	return 2
 
 
 /////////////////Juggernaut///////////////

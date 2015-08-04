@@ -145,6 +145,12 @@
 		overlays += amp
 	return
 
+/mob/living/simple_animal/vox/getFeetAmount()
+	return 2
+
+/mob/living/simple_animal/vox/getHandAmount()
+	return 2
+
 /obj/item/vox/armalis_armour
 
 	name = "strange armour"

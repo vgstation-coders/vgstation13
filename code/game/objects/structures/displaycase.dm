@@ -260,8 +260,15 @@
 				else
 					src << "\icon[src] <span class='rose'>\The [src] is empty!</span>"
 		else
-			user.delayNextAttack(10) // prevent spam
-			user.visible_message("[user.name] gently runs their hands over \the [src] in appreciation of its contents.", \
-				"You gently run your hands over \the [src] in appreciation of its contents.", \
-				"You hear someone streaking glass with their greasy hands.")
+			if(ishuman(user))
+				user.delayNextAttack(10) // prevent spam
+				var/mob/living/carbon/human/H = user
+				var/hands = H.getHandAmount()
 
+				if(hands > 0)
+					user.visible_message("[user] gently runs \his [hands>1 ? "hands" : "hand"] over \the [src] in appreciation of its contents.", \
+						"You gently run your [hands>1 ? "hands" : "hand"] over \the [src] in appreciation of its contents.", \
+						"You hear someone streaking glass with their greasy [hands>1 ? "hands" : "hand"].")
+				else
+					user.visible_message("[user] stares at \the [src] in appreciation of its contents.", \
+						"You stare at \the [src] in appreciation of its contents.")

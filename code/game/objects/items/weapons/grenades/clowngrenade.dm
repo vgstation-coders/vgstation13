@@ -73,12 +73,19 @@
 			M << "<span class='danger'>Something burns your back!</span>"
 			return
 		if(ishuman(M))
-			if(isobj(M:shoes))
-				if(M:shoes.flags&NOSLIP)
+			var/mob/living/carbon/human/H = M
+			if(isobj(H.shoes))
+				if(H.shoes.flags&NOSLIP)
 					return
 			else
-				M << "<span class='warning'>Your feet feel like they're on fire!</span>"
-				M.take_overall_damage(0, max(0, (burned - 2)))
+				var/feet = H.getFeetAmount()
+				if(feet > 1)
+					H << "<span class='warning'>Your feet feel like they are on fire!</span>"
+				else if(feet == 1)
+					H << "<span class='warning'>Your foot feels like it is on fire!</span>"
+				else //If he has no feet and he's not lying, just assume he's floating or something
+					return
+				H.take_overall_damage(0, max(0, (burned - 2)))
 
 		if(!istype(M, /mob/living/carbon/slime) && !isrobot(M))
 			M.stop_pulling()

@@ -310,3 +310,9 @@
 			if(max(abs(AM.x-src.x),abs(AM.y-src.y)) <= client.view)
 				return 1
 	return 0
+
+/mob/living/silicon/getFeetAmount()
+	return 0
+
+/mob/living/silicon/getHandAmount()
+	return 0

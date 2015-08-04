@@ -615,3 +615,9 @@
 	if(issilicon(other))
 		return 1
 	return ..()
+
+/mob/living/simple_animal/getFeetAmount()
+	return 0
+
+/mob/living/simple_animal/getHandAmount()
+	return 0
