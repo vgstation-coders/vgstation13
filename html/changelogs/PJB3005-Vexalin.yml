@@ -1,0 +1,9 @@
+author: PJB3005
+delete-after: true
+
+changes:
+  - rscadd: Adds vox variants for dexalin (Vexalin), dexalin plus (vexalin plus) and inaprovaline (invaxovaline).
+  - tweak: recipes for these are the same as their meatbag versions except with nitrogen instead of oxygen.
+  - tweak: Dexalin now properly causes toxin damage on vox.
+  - tweak: Nitrogen (the reagent) no longer heals nitrogen deprevation on vox.
+  - soundadd: Vox now have the ability to shriek with the *scream emote.

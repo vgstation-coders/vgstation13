@@ -554,16 +554,27 @@
 					if (!muzzled)
 						if (auto == 1)
 							if(world.time-lastScream >= 30)//prevent scream spam with things like poly spray
-								message = "<B>[src]</B> screams in agony!"
-								var/list/screamSound = list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg', 'sound/misc/wilhelm.ogg', 'sound/misc/goofy.ogg')
-								if (src.gender == FEMALE) //Females have their own screams. Trannys be damned.
-									screamSound = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
+								var/list/screamSound
+								if(species.name == "Vox")
+									screamSound = list('sound/voice/shriek1.ogg')	//SKREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE!
+									message = "<B>[src]</B> shrieks in agony!"
+								else
+									message = "<B>[src]</B> screams in agony!"
+									screamSound = list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg', 'sound/misc/wilhelm.ogg', 'sound/misc/goofy.ogg')
+									if(gender == FEMALE) //Females have their own screams. Trannys be damned.
+										screamSound = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
+
 								var/scream = pick(screamSound)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
 								playsound(get_turf(src), scream, 50, 0)
 								m_type = HEARABLE
 								lastScream = world.time
 						else
-							message = "<B>[src]</B> screams!"
+							if(species.name == "Vox")
+								message = "<B>[src]</B> shrieks!"
+								playsound(get_turf(src), 'sound/voice/shriek1.ogg', 50, 0)	//SKREEEEEEEEEEEEEEEEEEEE
+							else
+								message = "<B>[src]</B> screams!"
+
 							m_type = HEARABLE
 					else
 						message = "<B>[src]</B> makes a very loud noise."

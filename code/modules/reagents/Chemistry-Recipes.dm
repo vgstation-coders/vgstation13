@@ -137,6 +137,13 @@ datum
 			required_reagents = list("oxygen" = 1, "carbon" = 1, "sugar" = 1)
 			result_amount = 3
 
+		inaprovaline_vox
+			name = "Invaxovaline"
+			id = "inaprovaline_vox"
+			result = "inaprovaline_vox"
+			required_reagents = list("nitrogen" = 1, "carbon" = 1, "sugar" = 1)
+			result_amount = 3
+
 		anti_toxin
 			name = "Anti-Toxin (Dylovene)"
 			id = "anti_toxin"
@@ -309,6 +316,14 @@ datum
 			required_catalysts = list("plasma" = 5)
 			result_amount = 1
 
+		vexalin
+			name = "Vexalin"
+			id = "vexalin"
+			result = "vexalin"
+			required_reagents = list("nitrogen" = 2)
+			required_catalysts = list("plasma" = 5)
+			result_amount = 1
+
 		dermaline
 			name = "Dermaline"
 			id = "dermaline"
@@ -321,6 +336,13 @@ datum
 			id = "dexalinp"
 			result = "dexalinp"
 			required_reagents = list("dexalin" = 1, "carbon" = 1, "iron" = 1)
+			result_amount = 3
+
+		vexalinp
+			name = "Vexalin Plus"
+			id = "vexalinp"
+			result = "vexalinp"
+			required_reagents = list("vexalin" = 1, "carbon" = 1, "iron" = 1)
 			result_amount = 3
 
 		bicaridine
