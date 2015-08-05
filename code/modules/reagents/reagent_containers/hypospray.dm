@@ -34,8 +34,16 @@
 		return
 	if (!( istype(M, /mob) ))
 		return
+
+	var/inject_message = "<span class='notice'>You inject [M] with [src].</span>"
+	if(M == user)
+		inject_message = "<span class='notice'>You inject yourself with [src].</span>"
+	else if((M_CLUMSY in user.mutations) && prob(50))
+		inject_message = "<span class='notice'>Oops! You inject yourself with [src] by accident.</span>"
+		M = user
+
 	if (reagents.total_volume)
-		user << "<span class='notice'>You inject [M] with [src].</span>"
+		user << inject_message
 		M << "<span class='warning'>You feel a tiny prick!</span>"
 		playsound(get_turf(src), 'sound/items/hypospray.ogg', 50, 1)
 
@@ -63,7 +71,7 @@
 /obj/item/weapon/reagent_containers/hypospray/autoinjector
 	name = "autoinjector"
 	desc = "A rapid and safe way to administer small amounts of drugs by untrained or trained personnel."
-	icon_state = "autoinjector"
+	icon_state = "autoinjector1"
 	item_state = "autoinjector"
 	amount_per_transfer_from_this = 5
 	volume = 5
