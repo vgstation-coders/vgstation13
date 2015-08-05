@@ -246,7 +246,7 @@
 	melee_damage_upper = 5
 	attacktext = "rams"
 	speed = 0
-	environment_smash = 2
+	environment_smash = 1
 	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/aoe_turf/conjure/construct/lesser,
 							/spell/aoe_turf/conjure/wall,
