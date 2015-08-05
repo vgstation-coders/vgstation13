@@ -12,20 +12,17 @@
 	tDomeY = 69
 	tDomeZ = 2
 	zLevels = list(
-		/datum/zLevel/station,
+		/datum/zLevel/dorf,
 		/datum/zLevel/centcomm,
-		/datum/zLevel/space{
-			name = "spaceOldSat" ;
-			},
-		/datum/zLevel/space{
-			name = "derelict" ;
-			},
-		/datum/zLevel/mining,
-		/datum/zLevel/space{
-			name = "spacePirateShip" ;
-			},
+		/datum/zLevel/dorf,
+		/datum/zLevel/dorf,
+		/datum/zLevel/dorf,
+		/datum/zLevel/dorf
 		)
-	New()
+
+/datum/zLevel/dorf
+	name = "dorf"
+	base_turf = /turf/unsimulated/floor/asteroid
 
 /proc/make_dorf_secret()
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/proc/make_dorf_secret() called tick#: [world.time]")
@@ -79,7 +76,7 @@
 		/obj/machinery/chem_master						= 6,
 		/obj/machinery/atmospherics/unary/cryo_cell		= 5,
 		/obj/machinery/dna_scannernew					= 5,
-		/obj/machinery/clonepod							= 1,
+		/obj/machinery/cloning/clonepod							= 1,
 		/obj/machinery/bioprinter						= 2,
 		/obj/machinery/computer/cloning					= 3,
 		/obj/machinery/bot/medbot/mysterious			= 1,
@@ -258,4 +255,4 @@
 	flags = CONTIGUOUS_WALLS
 
 ////////////////////////////////////////////////////////////////
-#include "tgstation.dmm"
+#include "dorf.dmm"
