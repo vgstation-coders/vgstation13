@@ -12,11 +12,13 @@
 	if (istype(AM, /mob/living/carbon))
 		var/mob/M =	AM
 		if(!M.walking()) return
-		if (istype(M, /mob/living/carbon/human) && (isobj(M:shoes) && M:shoes.flags&NOSLIP))
+		var/mob/living/carbon/human/H = M
+		if(H && (isobj(H.shoes) && H.shoes.flags&NOSLIP))
 			return
 
 		M.stop_pulling()
-		M << "<span class='notice'> You slipped on the [name]!</span>"
+		M.simple_message("<span class='notice'> You slipped on the [name]!</span>",
+			"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
 		M.Stun(2)
 		M.Weaken(2)
@@ -28,11 +30,13 @@
 	if (istype(AM, /mob/living/carbon))
 		var/mob/M =	AM
 		if(!M.walking()) return
-		if (istype(M, /mob/living/carbon/human) && (isobj(M:shoes) && M:shoes.flags&NOSLIP))
+		var/mob/living/carbon/human/H = M
+		if(H && (isobj(H.shoes) && H.shoes.flags&NOSLIP))
 			return
 
 		M.stop_pulling()
-		M << "<span class='notice'> You slipped on the [name]!</span>"
+		M.simple_message("<span class='notice'> You slipped on the [name]!</span>",
+			"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
 		M.Stun(3)
 		M.Weaken(2)
@@ -44,9 +48,11 @@
 	if(!user.Adjacent(target))
 		return
 	if(user.client && (target in user.client.screen) && !(user.l_hand == target || user.r_hand == target))
-		user << "<span class='notice'>You need to take that [target.name] off before cleaning it.</span>"
+		user.simple_message("<span class='notice'>You need to take that [target.name] off before cleaning it.</span>",
+			"<span class='notice'>You need to take that [target.name] off before destroying it.</span>")
 	else if(istype(target,/obj/effect/decal/cleanable))
-		user << "<span class='notice'>You scrub \the [target.name] out.</span>"
+		user.simple_message("<span class='notice'>You scrub \the [target.name] out.</span>",
+			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
 		returnToPool(target)
 	else if(istype(target,/turf/simulated))
 		var/turf/simulated/T = target
@@ -56,7 +62,8 @@
 				continue
 			cleanables += CC
 		if(!cleanables.len)
-			user << "<span class='notice'>You fail to clean anything.</span>"
+			user.simple_message("<span class='notice'>You fail to clean anything.</span>",
+				"<span class='notice'>There is nothing for you to vandalize.</span>")
 			return
 		cleanables = shuffle(cleanables)
 		var/obj/effect/decal/cleanable/C
@@ -64,10 +71,12 @@
 			if(d && istype(d))
 				C = d
 				break
-		user << "<span class='notice'>You scrub \the [C.name] out.</span>"
+		user.simple_message("<span class='notice'>You scrub \the [C.name] out.</span>",
+			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
 		returnToPool(C)
 	else
-		user << "<span class='notice'>You clean \the [target.name].</span>"
+		user.simple_message("<span class='notice'>You clean \the [target.name].</span>",
+			"<span class='warning'>You [pick("deface","ruin","stain")] \the [target.name].</span>")
 		target.clean_blood()
 	return
 
