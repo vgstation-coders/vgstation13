@@ -25,9 +25,15 @@
 /spell/targeted/equip_item/frenchcurse/cast(list/targets, mob/user = usr)
 	..()
 	for(var/mob/living/carbon/human/target in targets)
-		flick("e_flash", target.flash)
-		target.miming = 1
-		target.add_spell(new /spell/aoe_turf/conjure/forcewall/mime)//They can't even acid the mime mask off, if they're going to be permanently muted they may as well get the benefits of the mime.
+		if(target.mind.assigned_role=="Clown")
+			usr << "<span-class='warning'>Your magic energy is reflected back into you a thousand fold. Uh oh.</span>
+			target << "<span-class='confirm'>The blessing of the honkmother repels the vile assault!</span>
+			sleep(5)
+			usr.gib()
+		else
+			flick("e_flash", target.flash)
+			target.miming = 1
+			target.add_spell(new /spell/aoe_turf/conjure/forcewall/mime)//They can't even acid the mime mask off, if they're going to be permanently muted they may as well get the benefits of the mime.
 
 /spell/targeted/equip_item/frenchcurse/summon_item(var/newtype)
 	var/obj/item/new_item = new newtype
