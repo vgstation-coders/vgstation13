@@ -26,8 +26,8 @@
 	..()
 	for(var/mob/living/carbon/human/target in targets)
 		if(target.mind.assigned_role=="Clown")
-			usr << "<span-class='warning'>Your magic energy is reflected back into you a thousand fold. Uh oh.</span>
-			target << "<span-class='confirm'>The blessing of the honkmother repels the vile assault!</span>
+			usr << "<span-class='warning'>Your magic energy is reflected back into you a thousand fold. Uh oh.</span>"
+			target << "<span-class='confirm'>The blessing of the honkmother repels the vile assault!</span>"
 			sleep(5)
 			usr.gib()
 		else
