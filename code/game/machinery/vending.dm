@@ -2150,6 +2150,7 @@
 		/obj/item/weapon/lazarus_injector = 10,
 		/obj/item/weapon/storage/belt/lazarus = 3,
 		/obj/item/clothing/mask/facehugger/toy = 10,
+		/obj/item/weapon/soap/nanotrasen = 10,
 		/obj/item/weapon/gun/hookshot = 3,
 		)
 	prices = list(
@@ -2165,6 +2166,7 @@
 		/obj/item/weapon/lazarus_injector = 250,
 		/obj/item/weapon/storage/belt/lazarus = 500,
 		/obj/item/clothing/mask/facehugger/toy = 25,
+		/obj/item/weapon/soap/nanotrasen = 10,
 		/obj/item/weapon/gun/hookshot = 1000,
 		)
 
