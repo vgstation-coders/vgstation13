@@ -2,6 +2,7 @@
 /mob/living/simple_animal/corgi
 	name = "\improper corgi"
 	real_name = "corgi"
+
 	desc = "It's a corgi."
 	icon_state = "corgi"
 	icon_living = "corgi"
@@ -15,19 +16,28 @@
 	emote_see = list("shakes its head", "shivers")
 	speak_chance = 1
 	turns_per_move = 10
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/corgi
-	meat_amount = 3
+
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
+
 	response_help  = "pets"
 	response_disarm = "bops"
 	response_harm   = "kicks"
 	see_in_dark = 5
+
 	childtype = /mob/living/simple_animal/corgi/puppy
-	species = /mob/living/simple_animal/corgi
+	species_type = /mob/living/simple_animal/corgi
+	can_breed = 1
+	size = SIZE_SMALL
+
 	var/obj/item/inventory_head
 	var/obj/item/inventory_back
 	var/facehugger
+	var/list/spin_emotes = list("dances around","chases its tail")
 
 /mob/living/simple_animal/corgi/Life()
+	if(timestopped) return 0 //under effects of time magick
+	spinaroo(spin_emotes)
+
 	. = ..()
 	if(.)
 		if(fire)
@@ -53,7 +63,7 @@
 			if(6 to 10)				healths.icon_state = "health5"
 			if(1 to 5)				healths.icon_state = "health6"
 			else					healths.icon_state = "health7"
-	regenerate_icons()
+	//regenerate_icons()
 
 
 /mob/living/simple_animal/corgi/show_inv(mob/user as mob)
@@ -374,9 +384,9 @@
 
 	return valid
 
-/mob/living/simple_animal/corgi/proc/spinaroo(var/list/emotes = list("dances around","chases its tail"))
+/mob/living/simple_animal/corgi/proc/spinaroo(var/list/emotes)
     //writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/corgi/proc/spinaroo() called tick#: [world.time]")
-    if(!stat && !resting && !buckled)
+    if(!stat && !resting && !locked_to)
         if(prob(1))
             if (ckey == null)
                 emote(pick(emotes))
@@ -397,14 +407,15 @@
 	response_help  = "pets"
 	response_disarm = "bops"
 	response_harm   = "kicks"
+	spin_emotes = list("dances around","chases his tail")
 
 /mob/living/simple_animal/corgi/Ian/Life()
+	if(timestopped) return 0 //under effects of time magick
+
 	..()
 
-	spinaroo(list("dances around","chases its tail"))
-
 	//Feeding, chasing food, FOOOOODDDD
-	if(!stat && !resting && !buckled && (ckey == null))
+	if(!stat && !resting && !locked_to && (ckey == null))
 		turns_since_scan++
 		if(turns_since_scan > 5)
 			turns_since_scan = 0
@@ -444,11 +455,6 @@
 						else if(ishuman(movement_target.loc) )
 							if(prob(20))
 								emote("stares at [movement_target.loc]'s [movement_target] with a sad puppy-face")
-
-/obj/item/weapon/reagent_containers/food/snacks/meat/corgi
-	name = "Corgi meat"
-	desc = "Tastes like the tears of the station. Gives off the faint aroma of a valid salad. Just like mom used to make. This revalation horrifies you greatly."
-
 //PC stuff-Sieve
 
 /mob/living/simple_animal/corgi/regenerate_icons()
@@ -489,6 +495,7 @@
 	icon_state = "puppy"
 	icon_living = "puppy"
 	icon_dead = "puppy_dead"
+	size = SIZE_TINY
 
 //puppies cannot wear anything.
 /mob/living/simple_animal/corgi/puppy/Topic(href, href_list)
@@ -512,6 +519,7 @@
 	response_harm   = "kicks"
 	var/turns_since_scan = 0
 	var/puppies = 0
+	spin_emotes = list("dances around","chases her of a tail")
 
 //Lisa already has a cute bow!
 /mob/living/simple_animal/corgi/Lisa/Topic(href, href_list)
@@ -519,12 +527,6 @@
 		usr << "<span class='warning'>[src] already has a cute bow!</span>"
 		return
 	..()
-
-/mob/living/simple_animal/corgi/Lisa/Life()
-	..()
-
-	make_babies()
-	spinaroo(list("dances around","chases her tail"))
 
 /mob/living/simple_animal/corgi/attack_hand(mob/living/carbon/human/M)
 	. = ..()
@@ -553,6 +555,7 @@
 	icon_state = "doby"
 	icon_living = "doby"
 	icon_dead = "doby_dead"
+	spin_emotes = list("prances around","chases her nub of a tail")
 
 //Sasha can't wear hats!
 /mob/living/simple_animal/corgi/sasha/Topic(href, href_list)
@@ -560,9 +563,3 @@
 		usr << "<span class='warning'>[src] won't wear that!</span>"
 		return
 	..()
-
-
-/mob/living/simple_animal/corgi/sasha/Life()
-    ..()
-
-    spinaroo(list("prances around","chases her nub of a tail"))
