@@ -298,7 +298,7 @@ var/bomb_set
 			var/datum/game_mode/nuclear/GM = ticker.mode
 			var/obj/machinery/computer/shuttle_control/syndicate/syndie_location = locate(/obj/machinery/computer/shuttle_control/syndicate)
 			if(syndie_location)
-				GM.syndies_didnt_escape = (syndie_location.z > 1 ? 0 : 1) //Muskets will make me change this, but it will do for now
+				GM.syndies_didnt_escape = (syndie_location.z != map_datum.centcomm_z) //Muskets will make me change this, but it will do for now
 			GM.nuke_off_station = off_station
 		ticker.station_explosion_cinematic(off_station, null)
 		explosion(get_turf(src), 10, 20, 40) //Yes, that's damaging

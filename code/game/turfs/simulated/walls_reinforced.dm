@@ -422,7 +422,7 @@
 			if(prob(15)) //Small probability to do serious damage
 				dismantle_wall(0,1)
 			else
-				if(prob(25)) //Failling that, chance of breaking the outer safety grille
+				if(prob(25)) //Failing that, chance of breaking the outer safety grille
 					src.d_state = WALLCOVEREXPOSED
 					update_icon()
 	return
