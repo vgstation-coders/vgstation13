@@ -2128,3 +2128,58 @@
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum = 5)
 
 	pack = /obj/structure/vendomatpack/nuka
+
+/obj/machinery/vending/mining
+	name = "Dwarven Mining Equipment"
+	desc = "Get your mining equipment here, and above all keep digging!"
+	product_slogans = "This asteroid isn't going to dig itself!;Stay safe in the tunnels, bring two Kinetic Accelerators!;Jetpacks, anyone?"
+	product_ads = "Hungry, thirsty or unequipped? We have your fix!"
+	vend_reply = "What a glorious time to mine!"
+	icon_state = "mining"
+	req_access_txt = "48"
+	products = list(
+		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey = 10,
+		/obj/item/device/wormhole_jaunter = 10,
+		/obj/item/weapon/gun/energy/kinetic_accelerator = 10,
+		/obj/item/weapon/pickaxe/jackhammer = 5,
+		/obj/item/weapon/resonator = 5,
+		/mob/living/simple_animal/hostile/mining_drone/ = 5,
+		/obj/item/weapon/tank/jetpack/carbondioxide/ = 3,
+		/obj/item/device/mobcapsule = 10,
+		/obj/item/weapon/lazarus_injector = 10,
+		/obj/item/weapon/storage/belt/lazarus = 3,
+		/obj/item/clothing/mask/facehugger/toy = 10,
+		/obj/item/weapon/gun/hookshot = 3,
+		)
+	prices = list(
+		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey = 25,
+		/obj/item/device/wormhole_jaunter = 25,
+		/obj/item/weapon/gun/energy/kinetic_accelerator = 150,
+		/obj/item/weapon/pickaxe/jackhammer = 250,
+		/obj/item/weapon/resonator = 50,
+		/mob/living/simple_animal/hostile/mining_drone/ = 100,
+		/obj/item/weapon/tank/jetpack/carbondioxide/ = 500,
+		/obj/item/device/mobcapsule = 50,
+		/obj/item/weapon/lazarus_injector = 250,
+		/obj/item/weapon/storage/belt/lazarus = 500,
+		/obj/item/clothing/mask/facehugger/toy = 25,
+		/obj/item/weapon/gun/hookshot = 1000,
+		)
+
+	pack = /obj/structure/vendomatpack/mining
+
+//Note : Snowflake, but I don't care. Rework the fucking economy
+/obj/machinery/vending/mining/New()
+
+	..()
+
+	if(ticker)
+		initialize()
+
+/obj/machinery/vending/mining/initialize()
+
+	..()
+
+	linked_account = department_accounts["Cargo"]
