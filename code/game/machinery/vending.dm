@@ -2154,20 +2154,20 @@
 		/obj/item/weapon/gun/hookshot = 3,
 		)
 	prices = list(
-		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 10,
-		/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey = 25,
-		/obj/item/device/wormhole_jaunter = 25,
-		/obj/item/weapon/gun/energy/kinetic_accelerator = 150,
-		/obj/item/weapon/pickaxe/jackhammer = 250,
-		/obj/item/weapon/resonator = 50,
-		/mob/living/simple_animal/hostile/mining_drone = 100,
-		/obj/item/weapon/tank/jetpack/carbondioxide = 500,
-		/obj/item/device/mobcapsule = 50,
-		/obj/item/weapon/lazarus_injector = 250,
+		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 100,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey = 150,
+		/obj/item/device/wormhole_jaunter = 250,
+		/obj/item/weapon/gun/energy/kinetic_accelerator = 1000,
+		/obj/item/weapon/pickaxe/jackhammer = 500,
+		/obj/item/weapon/resonator = 750,
+		/mob/living/simple_animal/hostile/mining_drone = 500,
+		/obj/item/weapon/tank/jetpack/carbondioxide = 2000,
+		/obj/item/device/mobcapsule = 250,
+		/obj/item/weapon/lazarus_injector = 1000,
 		/obj/item/weapon/storage/belt/lazarus = 500,
-		/obj/item/clothing/mask/facehugger/toy = 25,
-		/obj/item/weapon/soap/nanotrasen = 10,
-		/obj/item/weapon/gun/hookshot = 1000,
+		/obj/item/clothing/mask/facehugger/toy = 250,
+		/obj/item/weapon/soap/nanotrasen = 150,
+		/obj/item/weapon/gun/hookshot = 3000,
 		)
 
 	pack = /obj/structure/vendomatpack/mining
