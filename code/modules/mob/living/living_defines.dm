@@ -24,6 +24,7 @@
 	var/can_butcher = 1 //Whether it's possible to butcher this mob manually
 	var/meat_taken = 0 //How much meat has been taken from this mob by butchering
 	var/meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
+	var/has_skeleton = 1 //If 1, bones are dropped after getting butchered.
 	var/being_butchered = 0 //To prevent butchering an animal almost instantly
 	var/list/butchering_drops //See code/datums/butchering.dm, stuff like skinning goes here
 

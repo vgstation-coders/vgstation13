@@ -90,7 +90,7 @@
 			else
 				title+= "[R.title]"
 			//title+= " ([R.req_amount] [src.singular_name]\s)"
-			title+= " ([R.req_amount] [CORRECT_STACK_NAME]"
+			title+= " ([R.req_amount] [CORRECT_STACK_NAME])"
 
 			if (can_build)
 				t1 += text("<A href='?src=\ref[src];sublist=[recipes_sublist];make=[i]'>[title]</A>)")

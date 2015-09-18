@@ -10,6 +10,8 @@
 	icon_living = "crate"
 
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat ///obj/item/weapon/reagent_containers/food/snacks/meat/mimic
+	has_skeleton = 0
+
 	response_help = "touches"
 	response_disarm = "pushes"
 	response_harm = "hits"

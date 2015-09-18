@@ -34,7 +34,7 @@
 //==============Teeth============
 
 /datum/butchering_product/teeth
-	result = /obj/item/stack/teeth
+	result = /obj/item/stack/animal/teeth
 	verb_name = "harvest teeth"
 	verb_gerund = "removing teeth from"
 
@@ -71,7 +71,7 @@
 /datum/butchering_product/teeth/spawn_result(location, mob/parent, drop_amount = ALL_TEETH)
 	if(amount <= 0) return
 
-	var/obj/item/stack/teeth/T = new(location)
+	var/obj/item/stack/animal/teeth/T = new(location)
 	T.update_name(parent) //Change name of the teeth - from the default "teeth" to "corgi teeth", for example
 
 	if(drop_amount == ALL_TEETH) //Drop ALL teeth

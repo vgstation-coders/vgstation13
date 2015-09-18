@@ -150,6 +150,7 @@
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	faction = "syndicate"
 	can_butcher = 0
+	has_skeleton = 0
 
 	min_oxy = 0
 	max_oxy = 0

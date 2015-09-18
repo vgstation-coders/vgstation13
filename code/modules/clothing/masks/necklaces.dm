@@ -17,8 +17,8 @@
 /obj/item/clothing/mask/necklace/teeth/attackby(obj/item/W, mob/user)
 	.=..()
 
-	if(istype(W, /obj/item/stack/teeth))
-		var/obj/item/stack/teeth/T = W
+	if(istype(W, /obj/item/stack/animal/teeth))
+		var/obj/item/stack/animal/teeth/T = W
 		if(T.animal_type != src.animal_type) //If the teeth came from a different animal, fuck off
 			return
 

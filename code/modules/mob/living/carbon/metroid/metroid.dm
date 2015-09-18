@@ -20,6 +20,7 @@
 	hasmouth = 0
 
 	can_butcher = 0
+	has_skeleton = 0
 
 	// canstun and canweaken don't affect slimes because they ignore stun and weakened variables
 	// for the sake of cleanliness, though, here they are.

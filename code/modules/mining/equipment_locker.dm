@@ -578,6 +578,9 @@
 	projectilesound = 'sound/weapons/Laser.ogg'
 	wanted_objects = list(/obj/item/weapon/ore)
 
+	can_butcher = 0
+	has_skeleton = 0
+
 /mob/living/simple_animal/hostile/mining_drone/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/W = I

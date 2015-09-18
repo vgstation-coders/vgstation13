@@ -7,6 +7,7 @@
 
 	size = SIZE_TINY
 	can_butcher = 0
+	has_skeleton = 0
 
 	var/strength = 1
 	var/feral = 0

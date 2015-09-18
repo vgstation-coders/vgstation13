@@ -25,7 +25,7 @@
 	attacktext = "bites"
 	attack_sound = 'sound/weapons/bite.ogg'
 
-	//Space carp aren't affected by atmos.
+	//Space trees
 	min_oxy = 0
 	max_oxy = 0
 	min_tox = 0
@@ -35,6 +35,8 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
+
+	has_skeleton = 0
 
 	faction = "forest"
 

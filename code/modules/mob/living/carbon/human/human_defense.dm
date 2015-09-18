@@ -269,7 +269,7 @@ emp_act
 	if(L && M_HULK in L.mutations) //just like the mountain
 		amount += 8
 
-	var/obj/item/stack/teeth/teeth = T.spawn_result(get_turf(src), src, amount)
+	var/obj/item/stack/animal/teeth/teeth = T.spawn_result(get_turf(src), src, amount)
 
 	var/turf/throw_to = get_step(get_turf(src), src.dir) //Throw them in the direction we're facing!
 	teeth.throw_at(throw_to, 2, 2)
