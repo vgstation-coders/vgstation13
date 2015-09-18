@@ -190,3 +190,13 @@
 	armor = list(melee = 50, bullet = 40, laser = 40,energy = 40, bomb = 5, bio = 0, rad = 0)
 	flags_inv = HIDEEARS|HIDEHAIR
 	siemens_coefficient = 1
+
+/obj/item/clothing/head/helmet/skull
+	name = "skull helmet"
+	desc = "A helmet made from a real skull."
+	icon_state = "skull"
+	body_parts_covered = FULL_HEAD
+	item_state = "skull"
+	flags_inv = HIDEMASK|HIDEEARS|HIDEHAIR
+	armor = list(melee = 30, bullet = 0, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
+	siemens_coefficient = 0

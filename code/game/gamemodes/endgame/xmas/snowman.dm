@@ -25,6 +25,7 @@
 	environment_smash = 0
 
 	can_butcher = 0
+	has_skeleton = 0
 
 	minbodytemp = 0
 	maxbodytemp = MELTPOINT_SNOW

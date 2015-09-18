@@ -43,7 +43,10 @@
 	melee_damage_upper = 4
 	attacktext = "hits"
 	attack_sound = 'sound/weapons/rapidslice.ogg'
+
 	can_butcher = 0
+	has_skeleton = 0
+
 	var/obj/effect/blob/factory/factory = null
 	faction = "blob"
 	min_oxy = 0

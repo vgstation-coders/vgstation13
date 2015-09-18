@@ -26,6 +26,7 @@
 	minimum_distance = 3
 	retreat_distance = 2
 	can_butcher = 0
+	has_skeleton = 0
 
 	var/datum/effect/effect/system/trail/ion_trail
 	var/hostile_time = 0

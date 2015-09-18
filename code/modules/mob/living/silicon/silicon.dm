@@ -1,7 +1,10 @@
 /mob/living/silicon
 	gender = NEUTER
 	voice_name = "synthesized voice"
+
 	can_butcher = 0
+	has_skeleton = 0
+
 	var/syndicate = 0
 	var/datum/ai_laws/laws = null//Now... THEY ALL CAN ALL HAVE LAWS
 	var/list/alarms_to_show = list()

@@ -35,7 +35,10 @@
 	emote_see = list("jiggles", "bounces in place")
 
 	size = SIZE_BIG
+
 	can_butcher = 0
+	has_skeleton = 0
+
 	var/colour = "grey"
 
 /mob/living/simple_animal/adultslime/New()

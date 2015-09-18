@@ -1332,4 +1332,18 @@ default behaviour is:
 	can_butcher = 0
 
 	if(istype(src, /mob/living/simple_animal)) //Animals can be butchered completely, humans - not so
+		if(has_skeleton)
+			var/obj/item/stack/animal/dropped_bones = new /obj/item/stack/animal/bones(get_turf(src))
+			dropped_bones.animal_type = src.species_type
+			var/min_bone_amount = size*size			//1, 2, 4, 8, 16 bones
+			var/max_bone_amount = 2*min_bone_amount	//2, 4, 8, 16, 32 bones
+			dropped_bones.amount = rand(min_bone_amount, max_bone_amount)
+			dropped_bones.update_name(src)
+
+			if(size >= SIZE_SMALL) //tiny animals (size 1) have skulls that are too small to work with
+				var/obj/item/skull/skull = new /obj/item/skull(get_turf(src))
+				skull.animal_type = src.species_type
+				skull.update_name(src)
+
 		gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
+		//Drop some bones

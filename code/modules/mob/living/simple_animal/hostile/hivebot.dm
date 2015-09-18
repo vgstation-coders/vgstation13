@@ -16,7 +16,10 @@
 	attacktext = "claws"
 	projectilesound = 'sound/weapons/Gunshot.ogg'
 	projectiletype = /obj/item/projectile/hivebotbullet
+
 	can_butcher = 0
+	has_skeleton = 0
+
 	faction = "hivebot"
 	min_oxy = 0
 	max_oxy = 0

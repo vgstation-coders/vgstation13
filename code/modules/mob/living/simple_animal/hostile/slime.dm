@@ -18,6 +18,7 @@
 	faction = "slimesummon"
 	speed = 4
 	can_butcher = 0
+	has_skeleton = 0
 
 	var/colour = "grey"
 
