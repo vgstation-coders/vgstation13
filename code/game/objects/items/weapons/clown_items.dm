@@ -124,7 +124,7 @@
 
 	if(!proximity_flag && istype(target, /mob) && honk()) //for skilled honking at a range
 		target.visible_message(\
-			"<span class='notice'>[user] honks \the [src] at \the [target].</span>",\
+			"[user] honks \the [src] at \the [target].",\
 			"[user] honks \the [src] at you.")
 
 /obj/item/weapon/bikehorn/proc/honk()
