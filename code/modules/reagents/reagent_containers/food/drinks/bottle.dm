@@ -147,8 +147,8 @@
 		reagents.add_reagent("gin", 100)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey
-	name = "Uncle Git's Special Reserve"
-	desc = "A premium single-malt whiskey, gently matured inside the tunnels of a nuclear shelter. TUNNEL WHISKEY RULES."
+	name = "Ack Daniel's"
+	desc = "A soft silky goodness with hints of calcium. A moment of remembrance."
 	icon_state = "whiskeybottle"
 	New()
 		..()
