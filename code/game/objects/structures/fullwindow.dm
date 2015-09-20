@@ -11,6 +11,7 @@
 	sheetamount = 2
 	mouse_opacity = 2 // Complete opacity //What in the name of everything is this variable ?
 	layer = 3.21 // Windows are at 3.2.
+	health = 25 //Same pattern for all, double + 5 the health of directional
 
 	cracked_base = "fcrack"
 
@@ -61,7 +62,7 @@
 	icon_state = "rwindow0"
 	base_state = "rwindow"
 	sheettype = /obj/item/stack/sheet/glass/rglass
-	health = 40
+	health = 85
 	d_state = WINDOWSECURE
 	reinforced = 1
 
@@ -73,7 +74,7 @@
 	base_state = "plasmawindow"
 	shardtype = /obj/item/weapon/shard/plasma
 	sheettype = /obj/item/stack/sheet/glass/plasmaglass
-	health = 120
+	health = 245
 
 	fire_temp_threshold = 32000
 	fire_volume_mod = 1000
@@ -85,7 +86,7 @@
 	base_state = "plasmarwindow"
 	shardtype = /obj/item/weapon/shard/plasma
 	sheettype = /obj/item/stack/sheet/glass/plasmarglass
-	health = 160
+	health = 325
 
 /obj/structure/window/full/reinforced/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	return
@@ -105,7 +106,7 @@
 	desc = "A window with a rod matrice. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
 	icon_state = "fwindow0"
 	base_state = "fwindow"
-	health = 30
+	health = 65
 	sheettype = /obj/item/stack/sheet/glass/rglass //Ditto above
 
 #undef WINDOWLOOSE

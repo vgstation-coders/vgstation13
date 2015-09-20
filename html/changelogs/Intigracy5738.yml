@@ -1,0 +1,4 @@
+author: Intigracy
+delete-after: True
+changes: 
+  - tweak: Fulltile windows now have double + 5 the health of a regular directional window.
