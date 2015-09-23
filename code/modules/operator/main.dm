@@ -142,7 +142,7 @@ Clothing defines!
 	if(s_control&&!s_busy)
 		deinitialize()
 	else
-		affecting << "\red Catastrophic system error. Cannot proceed."
+		affecting << "<span-class='warn'> Catastrophic system error. Cannot proceed.</span>"
 	return
 
 /obj/item/clothing/suit/space/operator/proc/terminal()
@@ -153,7 +153,7 @@ Clothing defines!
 	if (s_control&&!s_busy)
 		openos()
 	else
-		affecting << "\red Catastrophic system error. Cannot proceed."
+		affecting << "<span=class='warn'>Catastrophic system error. Cannot proceed.</span>"
 	return
 
 /obj/item/clothing/suit/space/operator/proc/stealth()
