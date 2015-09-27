@@ -19,6 +19,7 @@
 		possibleNets["Medbay"] = access_cmo
 
 	proc/updateBuildPath()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/updateBuildPath() called tick#: [world.time]")
 		build_path = ""
 		if(authorised && secured)
 			switch(network)
@@ -45,13 +46,13 @@
 				else
 					return
 				authorised = 1
-				user << "\blue You authorised the circuit network!"
+				user << "<span class='notice'>You authorised the circuit network!</span>"
 				updateDialog()
 			else
-				user << "\blue You must select a camera network circuit!"
+				user << "<span class='notice'>You must select a camera network circuit!</span>"
 		else if(istype(I,/obj/item/weapon/screwdriver))
 			secured = !secured
-			user.visible_message("\blue The [src] can [secured ? "no longer" : "now"] be modified.")
+			user.visible_message("<span class='notice'>The [src] can [secured ? "no longer" : "now"] be modified.</span>")
 			updateBuildPath()
 		return
 
@@ -61,6 +62,7 @@
 			interact(user, 0)
 
 	proc/interact(var/mob/user, var/ai=0)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/interact() called tick#: [world.time]")
 		if(secured)
 			return
 		if (!ishuman(user))
@@ -87,7 +89,7 @@
 		onclose(user, "camcircuit")
 
 	Topic(href, href_list)
-		..()
+		if(..()) return 1
 		if( href_list["close"] )
 			usr << browse(null, "window=camcircuit")
 			usr.machine = null
@@ -114,10 +116,10 @@
 					else
 						return
 					authorised = 1
-					usr << "\blue You authorised the circuit network!"
+					usr << "<span class='notice'>You authorised the circuit network!</span>"
 					updateDialog()
 				else
-					usr << "\blue You must select a camera network circuit!"
+					usr << "<span class='notice'>You must select a camera network circuit!</span>"
 		else if( href_list["removeauth"] )
 			authorised = 0
 		updateDialog()

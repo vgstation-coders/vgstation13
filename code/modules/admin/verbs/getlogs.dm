@@ -1,7 +1,7 @@
 /*
 	HOW DO I LOG RUNTIMES?
 	Firstly, start dreamdeamon if it isn't already running. Then select "world>Log Session" (or press the F3 key)
-	navigate the popup window to the data/logs/runtime/ folder from where your tgstation .dmb is located.
+	navigate the popup window to the data/logs/runtime/ folder from where your vgstation13.dmb is located.
 	(you may have to make this folder yourself)
 
 	OPTIONAL: 	you can select the little checkbox down the bottom to make dreamdeamon save the log everytime you
@@ -22,6 +22,7 @@
 	set name = ".giveruntimelog"
 	set desc = "Give somebody access to any session logfiles saved to the /log/runtime/ folder."
 	set category = null
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/giveruntimelog() called tick#: [world.time]")
 
 	if(!src.holder)
 		src << "<font color='red'>Only Admins may use this command.</font>"
@@ -43,6 +44,7 @@
 	set name = ".getruntimelog"
 	set desc = "Retrieve any session logfiles saved by dreamdeamon."
 	set category = null
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/getruntimelog() called tick#: [world.time]")
 
 	var/path = browse_files("data/logs/runtime/")
 	if(!path)
@@ -52,7 +54,16 @@
 		return
 
 	message_admins("[key_name_admin(src)] accessed file: [path]")
+	#ifdef RUNWARNING
+	#if DM_VERSION > 506 && DM_VERSION < 508
+		#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
+	src << ftp( file(path) )
+	#else
 	src << run( file(path) )
+	#endif
+	#else
+	src << run( file(path) )
+	#endif
 	src << "Attempting to send file, this may take a fair few minutes if the file is very large."
 	return
 
@@ -63,6 +74,7 @@
 	set name = ".getserverlog"
 	set desc = "Fetch logfiles from data/logs"
 	set category = null
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/getserverlog() called tick#: [world.time]")
 
 	var/path = browse_files("data/logs/")
 	if(!path)
@@ -72,7 +84,16 @@
 		return
 
 	message_admins("[key_name_admin(src)] accessed file: [path]")
+	#ifdef RUNWARNING
+	#if DM_VERSION > 506 && DM_VERSION < 508
+		#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
+	src << ftp( file(path) )
+	#else
 	src << run( file(path) )
+	#endif
+	#else
+	src << run( file(path) )
+	#endif
 	src << "Attempting to send file, this may take a fair few minutes if the file is very large."
 	return
 
@@ -84,10 +105,20 @@
 	set category = "Admin"
 	set name = "Show Server Log"
 	set desc = "Shows today's server log."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/view_txt_log() called tick#: [world.time]")
 
 	var/path = "data/logs/[time2text(world.realtime,"YYYY/MM-Month/DD-Day")].log"
 	if( fexists(path) )
+	#ifdef RUNWARNING
+		#if DM_VERSION > 506 && DM_VERSION < 508
+			#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
+		src << ftp( file(path) )
+		#else
 		src << run( file(path) )
+		#endif
+		#else
+		src << run( file(path) )
+		#endif
 	else
 		src << "<font color='red'>Error: view_txt_log(): File not found/Invalid path([path]).</font>"
 		return
@@ -99,12 +130,37 @@
 	set category = "Admin"
 	set name = "Show Server Attack Log"
 	set desc = "Shows today's server attack log."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/view_atk_log() called tick#: [world.time]")
 
 	var/path = "data/logs/[time2text(world.realtime,"YYYY/MM-Month/DD-Day")] Attack.log"
 	if( fexists(path) )
+		#ifdef RUNWARNING
+		#if DM_VERSION > 506 && DM_VERSION < 508
+			#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
+		src << ftp( file(path) )
+		#else
 		src << run( file(path) )
+		#endif
+		#else
+		src << run( file(path) )
+		#endif
 	else
 		src << "<font color='red'>Error: view_atk_log(): File not found/Invalid path([path]).</font>"
 		return
 	feedback_add_details("admin_verb","SSAL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
+
+/datum/admins/proc/view_mob_attack_log(var/mob/M as mob)
+	set category	= "Admin"
+	set name		= "Show mob's attack logs"
+	set desc			= "Shows the (formatted) attack log of a mob in a HTML window."
+
+	if(!istype(M))
+		usr << "That's not a valid mob!"
+		return
+
+	var/datum/browser/clean/popup = new (usr, "\ref[M]_admin_log_viewer", "Attack logs of [M]", 300, 300)
+	popup.set_content(list2text(M.attack_log, "<br/>"))
+	popup.open()
+
+	feedback_add_details("admin_verb","VMAL")

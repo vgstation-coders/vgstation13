@@ -2,6 +2,7 @@
 	var/pushdirection // push things that get caught in the transit tile this direction
 
 /turf/space/transit/New()
+	turfs |= src
 	var/dira=""
 	var/i=0
 	switch(pushdirection)
@@ -31,6 +32,15 @@
 //Overwrite because we dont want people building rods in space.
 /turf/space/transit/attackby(obj/O as obj, mob/user as mob)
 	return
+
+/turf/space/transit/canBuildCatwalk()
+	return BUILD_FAILURE
+
+/turf/space/transit/canBuildLattice()
+	return BUILD_FAILURE
+
+/turf/space/transit/canBuildPlating()
+	return BUILD_SILENT_FAILURE
 
 /turf/space/transit/north // moving to the north
 

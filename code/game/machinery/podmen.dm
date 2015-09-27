@@ -3,7 +3,7 @@ Injecting a pod person with a blood sample will grow a pod person with the memor
 Growing it to term with nothing injected will grab a ghost from the observers. */
 #define DIONA_COOLDOWN 18000 // 30 minutes between being diona
 var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost dionas to be picked again, removes the same guy being diona 5 times in 10 minutes.
-/obj/item/seeds/replicapod
+/*/obj/item/seeds/replicapod
 	name = "pack of dionaea-replicant seeds"
 	desc = "These seeds grow into 'replica pods' or 'dionaea', a form of strange sapient plantlife."
 	icon_state = "seed-replicapod"
@@ -23,10 +23,10 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 	var/ckey = null
 	var/realName = null
 	var/mob/living/carbon/human/source //Donor of blood, if any.
-	gender = MALE
+	setGender(MALE)
 	var/obj/machinery/hydroponics/parent = null
 	var/list/found_player = list()
-	var/beingharvested = 0
+	var/beingharvested = 0*/
 
 /obj/item/seeds/replicapod/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
@@ -47,7 +47,8 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 			if(!source.client && source.mind)
 				for(var/mob/dead/observer/O in player_list)
 					if(O.mind == source.mind && config.revival_pod_plants)
-						O << "<b><font color = #330033><font size = 3>Your blood has been placed into a replica pod seed. Return to your body if you want to be returned to life as a pod person!</b> (Verbs -> Ghost -> Re-enter corpse)</font color>"
+						O << "<span class='interface'><b><font size = 3>Your blood has been placed into a replica pod seed. Return to your body if you want to be returned to life as a pod person!</b> \
+							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[O];reentercorpse=1'>click here!</a>)</font></span>"
 						break
 		else
 			user << "Nothing happens."
@@ -72,9 +73,9 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 
 
 	if(beingharvested)
-		user << ("\red You can only harvest the pod once!")
+		user << ("<span class='warning'>You can only harvest the pod once!</span>")
 	else
-		user.visible_message("\blue [user] carefully begins to open the pod...","\blue You carefully begin to open the pod...")
+		user.visible_message("<span class='notice'>[user] carefully begins to open the pod...</span>","<span class='notice'>You carefully begin to open the pod...</span>")
 		beingharvested = 1
 
 	//If a sample is injected (and revival is allowed) the plant will be controlled by the original donor.
@@ -101,6 +102,7 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 
 
 /obj/item/seeds/replicapod/proc/harvest_failure(mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/seeds/replicapod/proc/harvest_failure() called tick#: [world.time]")
 	parent.visible_message("The pod has formed badly, and all you can do is salvage some of the seeds.")
 	var/seed_count = 1
 	if(prob(yield * parent.yieldmod * 20))
@@ -111,30 +113,35 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 	parent.update_tray()
 
 /obj/item/seeds/replicapod/proc/request_player()
-	for(var/mob/dead/observer/O in player_list)
-		if(O.key in hasbeendiona)
-			if(world.time + DIONA_COOLDOWN < hasbeendiona[O.key])
-				continue
-		if(jobban_isbanned(O, "Dionaea"))
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/seeds/replicapod/proc/request_player() called tick#: [world.time]")
+	for(var/mob/dead/observer/observer in dead_mob_list)
+		if(jobban_isbanned(observer, "Dionaea"))
 			continue
-		if(O.client)
-			if(O.client.prefs.be_special & BE_PLANT)
-				question(O.client)
 
-/obj/item/seeds/replicapod/proc/question(var/client/C)
-	spawn(0)
-		if(!C)	return
-		var/response = alert(C, "Someone is harvesting a replica pod. Would you like to play as a Dionaea? (Please answer within 30 seconds)", "Replica pod harvest", "Yes", "No", "Never for this round.")
-		if(!C || ckey)
-			return
-		if(response == "Yes")
-			//transfer_personality(C)
-			if(!(C in found_player))
-				found_player.Add(C)
-		else if (response == "Never for this round")
-			C.prefs.be_special ^= BE_PLANT
+		if(observer.key)
+			if(!isnull(hasbeendiona[observer.key]))
+				if((world.time + DIONA_COOLDOWN) < hasbeendiona[observer.key])
+					continue
+
+		if(observer.client && observer.client.prefs && observer.client.prefs.be_special & BE_PLANT)
+			spawn()
+				switch(observer.timed_alert( \
+						300, \
+						"Someone is harvesting a replica pod. Would you like to play as a Dionaea? (Please answer within 30 seconds)", \
+						"Replica pod harvest", \
+						"Yes", \
+						"No", \
+						"Never for this round" \
+					))
+					if("Yes")
+						if(!(observer.client in found_player))
+							found_player.Add(observer.client)
+					if("Never for this round")
+						observer.client.prefs.be_special &= ~BE_PLANT
 
 /obj/item/seeds/replicapod/proc/transfer_personality(var/client/player, var/ghost = 0)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/seeds/replicapod/proc/transfer_personality() called tick#: [world.time]")
 
 	if(!player) return 0
 	if(ghost) hasbeendiona[player.key] = world.time
@@ -169,11 +176,12 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 			if ("cult")
 				if (podman.mind in ticker.mode:cult)
 					ticker.mode:add_cultist(podman.mind)
+					podman.add_language("Cult")
 					ticker.mode:update_all_cult_icons() //So the icon actually appears
 		// -- End mode specific stuff
 
 
-	podman << "\green <B>You awaken slowly, feeling your sap stir into sluggish motion as the warm air caresses your bark.</B>"
+	podman << "<span class='good'><B>You awaken slowly, feeling your sap stir into sluggish motion as the warm air caresses your bark.</B></span>"
 	if(source && ckey && podman.ckey == ckey && !ghost)
 		podman << "<B>Memories of a life as [source] drift oddly through a mind unsuited for them, like a skin of oil over a fathomless lake.</B>"
 	podman << "<B>You are now one of the Dionaea, a race of drifting interstellar plantlike creatures that sometimes share their seeds with human traders.</B>"
@@ -183,5 +191,5 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 		if (newname != "")
 			podman.real_name = newname
 
-	parent.visible_message("\blue The pod disgorges a fully-formed plant creature!")
+	parent.visible_message("<span class='notice'>The pod disgorges a fully-formed plant creature!</span>")
 	parent.update_tray()

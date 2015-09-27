@@ -1,5 +1,6 @@
 //handles setting lastKnownIP and computer_id for use by the ban systems as well as checking for multikeying
 /mob/proc/update_Login_details()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/update_Login_details() called tick#: [world.time]")
 	//Multikey checks and logging
 	lastKnownIP	= client.address
 	computer_id	= client.computer_id
@@ -28,21 +29,31 @@
 	update_Login_details()
 	world.update_status()
 
+	if(hud_used)	qdel(hud_used)		//remove the hud objects
 	client.images = null				//remove the images such as AIs being unable to see runes
-	client.screen = null				//remove hud items just in case
-	if(hud_used)	del(hud_used)		//remove the hud objects
-	hud_used = new /datum/hud(src)
 
-	next_move = 1
+	if(spell_masters)
+		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+			spell_master.toggle_open(1)
+			client.screen -= spell_master
+
+	client.reset_screen()				//remove hud items just in case
+	hud_used = new /datum/hud(src)
+	gui_icons = new /datum/ui_icons(src)
+
+	if(round_end_info == "")
+		winset(client, "rpane.round_end", "is-visible=false")
+
+	delayNextMove(0)
+
 	sight |= SEE_SELF
+
 	..()
 
-	if(loc && !isturf(loc))
-		client.eye = loc
-		client.perspective = EYE_PERSPECTIVE
-	else
-		client.eye = src
-		client.perspective = MOB_PERSPECTIVE
+	reset_view()
+
+	if(flags & HEAR)
+		getFromPool(/mob/virtualhearer, src)
 
 	//Clear ability list and update from mob.
 	client.verbs -= ability_verbs
@@ -53,6 +64,24 @@
 	if(istype(src,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = src
 		if(H.species && H.species.abilities)
-			client.verbs |= H.species.abilities
+			H.verbs |= H.species.abilities
+	if(ckey in deadmins)
+		verbs += /client/proc/readmin
 
+	if(client)
+		if(M_FARSIGHT in mutations)
+			client.view = max(client.view, world.view+2)
 	CallHook("Login", list("client" = src.client, "mob" = src))
+
+	if(spell_masters)
+		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+			client.screen += spell_master
+			spell_master.toggle_open(1)
+
+	if (isobj(loc))
+		var/obj/location = loc
+		location.on_log()
+
+	if(client && client.haszoomed && !client.holder)
+		client.view = world.view
+		client.haszoomed = 0

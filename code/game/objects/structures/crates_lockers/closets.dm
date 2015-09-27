@@ -20,13 +20,17 @@
 							  //then open it in a populated area to crash clients.
 	var/breakout_time = 2 //2 minutes by default
 
-	m_amt = 2*CC_PER_SHEET_METAL
+	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 	w_type = RECYK_METAL
+	ignoreinvert = 1
+
 
 /obj/structure/closet/initialize()
 	..()
 	if(!opened)		// if closed, any item at the crate's loc is put in the contents
 		take_contents()
+	else
+		density = 0
 
 // Fix for #383 - C4 deleting fridges with corpses
 /obj/structure/closet/Destroy()
@@ -36,22 +40,33 @@
 /obj/structure/closet/alter_health()
 	return get_turf(src)
 
-/obj/structure/closet/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/closet/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0 || wall_mounted)) return 1
 	return (!density)
 
 /obj/structure/closet/proc/can_open()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/closet/proc/can_open() called tick#: [world.time]")
 	if(src.welded)
 		return 0
 	return 1
 
 /obj/structure/closet/proc/can_close()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/closet/proc/can_close() called tick#: [world.time]")
 	for(var/obj/structure/closet/closet in get_turf(src))
 		if(closet != src)
 			return 0
 	return 1
 
 /obj/structure/closet/proc/dump_contents()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/closet/proc/dump_contents() called tick#: [world.time]")
+	if(usr)
+		var/mob/living/L = usr
+		var/obj/machinery/power/supermatter/SM = locate() in contents
+		if(istype(SM))
+			message_admins("[L.name] ([L.ckey]) opened \the [src] that contained supermatter (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[L.x];Y=[L.y];Z=[L.z]'>JMP</a>)")
+			log_game("[L.name] ([L.ckey]) opened \the [src] that contained supermatter (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[L.x];Y=[L.y];Z=[L.z]'>JMP</a>)")
+
+
 	//Cham Projector Exception
 	for(var/obj/effect/dummy/chameleon/AD in src)
 		AD.loc = src.loc
@@ -66,29 +81,35 @@
 			M.client.perspective = MOB_PERSPECTIVE
 
 /obj/structure/closet/proc/take_contents()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/closet/proc/take_contents() called tick#: [world.time]")
 	for(var/atom/movable/AM in src.loc)
 		if(insert(AM) == -1) // limit reached
 			break
+		INVOKE_EVENT(AM.on_moved,list("loc"=src))
 
 /obj/structure/closet/proc/open()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/closet/proc/open() called tick#: [world.time]")
 	if(src.opened)
 		return 0
 
 	if(!src.can_open())
 		return 0
 
-	src.dump_contents()
 
 	src.icon_state = src.icon_opened
 	src.opened = 1
+	src.density = 0
+	src.dump_contents()
+	INVOKE_EVENT(on_destroyed, list())
 	if(istype(src, /obj/structure/closet/body_bag))
 		playsound(get_turf(src), 'sound/items/zip.ogg', 15, 1, -3)
 	else
 		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
-	density = 0
 	return 1
 
 /obj/structure/closet/proc/insert(var/atom/movable/AM)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/closet/proc/insert() called tick#: [world.time]")
 
 	if(contents.len >= storage_capacity)
 		return -1
@@ -99,7 +120,7 @@
 
 	if(istype(AM, /mob/living))
 		var/mob/living/L = AM
-		if(L.buckled)
+		if(L.locked_to)
 			return 0
 		if(L.client)
 			L.client.perspective = EYE_PERSPECTIVE
@@ -112,6 +133,7 @@
 	return 1
 
 /obj/structure/closet/proc/close()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/closet/proc/close() called tick#: [world.time]")
 	if(!src.opened)
 		return 0
 	if(!src.can_close())
@@ -140,7 +162,7 @@
 			break
 		if(istype (M, /mob/dead/observer))
 			continue
-		if(M.buckled)
+		if(M.locked_to)
 			continue
 
 		if(M.client)
@@ -157,9 +179,12 @@
 	else
 		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
 	density = 1
+	for(var/obj/effect/beam/B in loc)
+		B.Crossed(src)
 	return 1
 
 /obj/structure/closet/proc/toggle()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/closet/proc/toggle() called tick#: [world.time]")
 	if(src.opened)
 		return src.close()
 	return src.open()
@@ -195,6 +220,27 @@
 
 	return
 
+/obj/structure/closet/beam_connect(var/obj/effect/beam/B)
+	if(!processing_objects.Find(src))
+		processing_objects.Add(src)
+		testing("Connected [src] with [B]!")
+	return ..()
+
+/obj/structure/closet/beam_disconnect(var/obj/effect/beam/B)
+	..()
+	if(beams.len==0)
+		// I hope to christ this doesn't break shit.
+		processing_objects.Remove(src)
+
+/obj/structure/closet/process()
+	//..()
+	for(var/obj/effect/beam/B in beams)
+		health -= B.get_damage()
+
+	if(health <= 0)
+		dump_contents()
+		qdel(src)
+
 // This is broken, see attack_ai.
 /obj/structure/closet/attack_robot(mob/living/silicon/robot/user as mob)
 	if(isMoMMI(user))
@@ -212,7 +258,7 @@
 
 /obj/structure/closet/attack_animal(mob/living/simple_animal/user as mob)
 	if(user.environment_smash)
-		visible_message("\red [user] destroys the [src]. ")
+		visible_message("<span class='warning'>[user] destroys the [src]. </span>")
 		for(var/atom/movable/A as mob|obj in src)
 			A.loc = src.loc
 		del(src)
@@ -222,13 +268,6 @@
 	if(prob(75))
 		for(var/atom/movable/A as mob|obj in src)
 			A.loc = src.loc
-		del(src)
-
-/obj/structure/closet/meteorhit(obj/O as obj)
-	if(O.icon_state == "flaming")
-		for(var/mob/M in src)
-			M.meteorhit(O)
-		src.dump_contents()
 		del(src)
 
 /obj/structure/closet/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -247,16 +286,14 @@
 			if(!WT.remove_fuel(0,user))
 				user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
 				return
-			new /obj/item/stack/sheet/metal(src.loc, 2)
+			var/obj/item/stack/sheet/metal/Met = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+			Met.amount = 2
 			for(var/mob/M in viewers(src))
 				M.show_message("<span class='notice'>\The [src] has been cut apart by [user] with \the [WT].</span>", 3, "You hear welding.", 2)
 			del(src)
 			return
 
-		if(isrobot(user))
-			return
-
-		user.drop_item(src)
+		user.drop_item(W, src.loc)
 
 	else if(istype(W, /obj/item/weapon/packageWrap))
 		return
@@ -274,6 +311,7 @@
 	return
 
 /obj/structure/closet/proc/place(var/mob/user, var/obj/item/I)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/closet/proc/place() called tick#: [world.time]")
 	return 0
 
 /obj/structure/closet/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob, var/needs_opened = 1, var/show_message = 1, var/move_them = 1)
@@ -320,6 +358,38 @@
 		return
 	src.add_fingerprint(user)
 
+	var/mob/living/L = user
+	if(src.opened==0 && L && L.client && L.hallucinating()) //If the closet is CLOSED and user is hallucinating
+		if(prob(10))
+			var/client/C = L.client
+			var/image/temp_overlay = image(src.icon, icon_state=src.icon_opened) //Get the closet's OPEN icon
+			temp_overlay.override = 1
+			temp_overlay.loc = src
+
+			var/image/spooky_overlay
+			switch(rand(0,5))
+				if(0) spooky_overlay = image('icons/mob/animal.dmi',icon_state="hunter",dir=turn(L.dir,180))
+				if(1) spooky_overlay = image('icons/mob/animal.dmi',icon_state="zombie",dir=turn(L.dir,180))
+				if(2) spooky_overlay = image('icons/mob/horror.dmi',icon_state="horror_[pick("male","female")]",dir=turn(L.dir,180))
+				if(3) spooky_overlay = image('icons/mob/animal.dmi',icon_state="faithless",dir=turn(L.dir,180))
+				if(4) spooky_overlay = image('icons/mob/animal.dmi',icon_state="carp",dir=turn(L.dir,180))
+				if(5) spooky_overlay = image('icons/mob/animal.dmi',icon_state="skelly",dir=turn(L.dir,180))
+
+			if(!spooky_overlay) return
+
+			temp_overlay.overlays += spooky_overlay
+
+			C.images += temp_overlay
+			L << sound('sound/machines/click.ogg')
+			L << sound('sound/hallucinations/scary.ogg')
+			L.Weaken(5)
+
+			sleep(50)
+
+			if(C)
+				C.images -= temp_overlay
+			return
+
 	if(!src.toggle())
 		usr << "<span class='notice'>It won't budge!</span>"
 
@@ -334,8 +404,9 @@
 	set src in oview(1)
 	set category = "Object"
 	set name = "Toggle Open"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/structure/closet/verb/verb_toggleopen()  called tick#: [world.time]")
 
-	if(!usr.canmove || usr.stat || usr.restrained())
+	if(!usr.canmove || usr.stat || usr.restrained() || (usr.status_flags & FAKEDEATH))
 		return
 
 	if(ishuman(usr) || isMoMMI(usr))
@@ -347,7 +418,7 @@
 		usr << "<span class='warning'>This mob type can't use this verb.</span>"
 
 /obj/structure/closet/update_icon()//Putting the welded stuff in updateicon() so it's easy to overwrite for special cases (Fridges, cabinets, and whatnot)
-	overlays.Cut()
+	overlays.len = 0
 	if(!opened)
 		icon_state = icon_closed
 		if(welded)
@@ -364,21 +435,20 @@
 	return 1
 
 /obj/structure/closet/container_resist()
-	var/mob/living/user = usr
+	var/mob/user = usr
 	var/breakout_time = 2 //2 minutes by default
 
 	if(opened || (!welded && !locked))
 		return  //Door's open, not locked or welded, no point in resisting.
 
 	//okay, so the closet is either welded or locked... resist!!!
-	//user.next_move = world.time + 100
-	user.changeNext_move(100)
-	user.last_special = world.time + 100
+	user.delayNext(DELAY_ALL,100)
+
 	user << "<span class='notice'>You lean on the back of [src] and start pushing the door open. (this will take about [breakout_time] minutes.)</span>"
 	for(var/mob/O in viewers(src))
 		O << "<span class='warning'>[src] begins to shake violently!</span>"
 	var/turf/T = get_turf(src)	//Check for moved locker
-	if(do_after(user,(breakout_time*60*10))) //minutes * 60seconds * 10deciseconds
+	if(do_after(user, src, (breakout_time*60*10))) //minutes * 60seconds * 10deciseconds
 		if(!user || user.stat != CONSCIOUS || user.loc != src || opened || (!locked && !welded) || T != get_turf(src))
 			return
 		//we check after a while whether there is a point of resisting anymore and whether the user is capable of resisting

@@ -14,6 +14,9 @@
 	var/obj/master = null	//A reference to the object in the slot. Grabs or items, generally.
 	var/gun_click_time = -100 //I'm lazy.
 
+/obj/screen/Destroy()
+	master = null
+	..()
 
 /obj/screen/text
 	icon = null
@@ -22,6 +25,29 @@
 	screen_loc = "CENTER-7,CENTER-7"
 	maptext_height = 480
 	maptext_width = 480
+
+/obj/screen/schematics
+	var/datum/rcd_schematic/ourschematic
+
+/obj/screen/schematics/New(var/atom/loc, var/datum/rcd_schematic/ourschematic)
+	..()
+	src.ourschematic = ourschematic
+	icon = ourschematic.icon
+	icon_state = ourschematic.icon_state
+	name = ourschematic.name
+	transform = transform*0.8
+
+/obj/screen/schematics/Click()
+	if(ourschematic)
+		ourschematic.clicked(usr)
+
+/obj/screen/schematics/Destroy()
+	ourschematic = null
+	..()
+
+/obj/screen/proc/pool_on_reset() //This proc should be redefined to 0 for ANY obj/screen that is shared between more than 1 mob, ie storage screens
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/screen/proc/pool_on_reset() called tick#: [world.time]")
+	. = 1
 
 
 /obj/screen/inventory
@@ -39,16 +65,26 @@
 		else if(istype(master,/obj/item/clothing/suit/storage))
 			var/obj/item/clothing/suit/storage/S = master
 			S.close(usr)
+		else if(istype(master, /obj/item/device/rcd))
+			var/obj/item/device/rcd/rcd = master
+			rcd.show_default(usr)
 	return 1
+
+/obj/screen/close/pool_on_reset()
+	. = 0
 
 
 /obj/screen/item_action
 	var/obj/item/owner
 
+/obj/screen/item_action/Destroy()
+	..()
+	owner = null
+
 /obj/screen/item_action/Click()
 	if(!usr || !owner)
 		return 1
-	if(usr.next_move >= world.time)
+	if(usr.attack_delayer.blocked())
 		return
 	//usr.next_move = world.time + 6
 
@@ -63,6 +99,7 @@
 
 //This is the proc used to update all the action buttons. It just returns for all mob types except humans.
 /mob/proc/update_action_buttons()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/update_action_buttons() called tick#: [world.time]")
 	return
 
 
@@ -80,19 +117,12 @@
 /obj/screen/grab/attackby()
 	return
 
-/obj/screen/grab/Destroy()
-	if(master)
-		var/obj/item/weapon/grab/G = master
-		if(G.assailant)
-			G.assailant.client.images -= src
-	..()
-
 /obj/screen/storage
 	name = "storage"
 
-/obj/screen/storage/Click()
-	if(world.time <= usr.next_move)
-		return 1
+/obj/screen/storage/Click(location, control, params)
+	if(usr.attack_delayer.blocked())
+		return
 	if(usr.stat || usr.paralysis || usr.stunned || usr.weakened)
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
@@ -100,9 +130,12 @@
 	if(master)
 		var/obj/item/I = usr.get_active_hand()
 		if(I)
-			master.attackby(I, usr)
+			master.attackby(I, usr, params)
 			//usr.next_move = world.time+2
 	return 1
+
+/obj/screen/storage/pool_on_reset()
+	. = 0
 
 /obj/screen/gun
 	name = "gun"
@@ -199,7 +232,7 @@
 	return 1
 
 /obj/screen/zone_sel/update_icon()
-	overlays.Cut()
+	overlays.len = 0
 	overlays += image('icons/mob/zone_sel.dmi', "[selecting]")
 
 
@@ -294,14 +327,13 @@
 								tankcheck = list (H.s_store, C.back, H.belt, C.r_hand, C.l_hand, H.l_store, H.r_store)
 
 							else
-
 								nicename = list("Right Hand", "Left Hand", "Back")
 								tankcheck = list(C.r_hand, C.l_hand, C.back)
 
 							for(var/i=1, i<tankcheck.len+1, ++i)
 								if(istype(tankcheck[i], /obj/item/weapon/tank))
 									var/obj/item/weapon/tank/t = tankcheck[i]
-									if (!isnull(t.manipulated_by) && t.manipulated_by != C.real_name && findtext(t.desc,breathes))
+									if (!isnull(t.manipulated_by) && t.manipulated_by != C.real_name)
 										contents.Add(t.air_contents.total_moles)	//Someone messed with the tank and put unknown gasses
 										continue					//in it, so we're going to believe the tank is what it says it is
 									switch(breathes)
@@ -323,6 +355,13 @@
 										if ("carbon dioxide")
 											if(t.air_contents.carbon_dioxide && !t.air_contents.toxins)
 												contents.Add(t.air_contents.carbon_dioxide)
+											else
+												contents.Add(0)
+
+										// ACK ACK ACK Plasmen
+										if ("plasma")
+											if(t.air_contents.toxins)
+												contents.Add(t.air_contents.toxins)
 											else
 												contents.Add(0)
 
@@ -358,16 +397,16 @@
 		if("act_intent")
 			usr.a_intent_change("right")
 		if("help")
-			usr.a_intent = "help"
+			usr.a_intent = I_HELP
 			usr.hud_used.action_intent.icon_state = "intent_help"
 		if("harm")
-			usr.a_intent = "hurt"
+			usr.a_intent = I_HURT
 			usr.hud_used.action_intent.icon_state = "intent_hurt"
 		if("grab")
-			usr.a_intent = "grab"
+			usr.a_intent = I_GRAB
 			usr.hud_used.action_intent.icon_state = "intent_grab"
 		if("disarm")
-			usr.a_intent = "disarm"
+			usr.a_intent = I_DISARM
 			usr.hud_used.action_intent.icon_state = "intent_disarm"
 
 		if("pull")
@@ -379,10 +418,12 @@
 			usr.drop_item_v()
 
 		if("module")
-			if(issilicon(usr))
-				if(usr:module)
+			if(isrobot(usr))
+				var/mob/living/silicon/robot/R = usr
+				if(R.module)
+					R.hud_used.toggle_show_robot_modules()
 					return 1
-				usr:pick_module()
+				R:pick_module()
 
 		if("radio")
 			if(issilicon(usr))
@@ -392,8 +433,9 @@
 				usr:installed_modules()
 
 		if("store")
-			if(issilicon(usr))
-				usr:uneq_active()
+			if(isrobot(usr))
+				var/mob/living/silicon/robot/R = usr
+				R.uneq_active()
 
 		if(INV_SLOT_TOOL)
 			if(istype(usr, /mob/living/silicon/robot/mommi))
@@ -415,10 +457,77 @@
 			if(istype(usr, /mob/living/silicon/robot))
 				usr:toggle_module(3)
 
+		if("AI Core")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.view_core()
+
+		if("Show Camera List")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				var/camera = input(AI, "Choose which camera you want to view", "Cameras") as null|anything in AI.get_camera_list()
+				AI.ai_camera_list(camera)
+
+		if("Track With Camera")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				var/target_name = input(AI, "Choose who you want to track", "Tracking") as null|anything in AI.trackable_mobs()
+				AI.ai_camera_track(target_name)
+
+		if("Toggle Camera Light")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.toggle_camera_light()
+
+		if("Show Crew Manifest")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.ai_roster()
+
+		if("Show Alerts")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.ai_alerts()
+
+		if("Announcement")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.announcement()
+
+		if("Call Emergency Shuttle")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.ai_call_shuttle()
+
+		if("State Laws")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.checklaws()
+
+		if("PDA - Send Message")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.cmd_send_pdamesg()
+
+		if("PDA - Show Message Log")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.cmd_show_message_log()
+
+		if("Take Image")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.aicamera.toggle_camera_mode()
+
+		if("View Images")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.aicamera.viewpictures()
+
 		if("Allow Walking")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
 				return
-			if(!istype(usr.equipped(),/obj/item/weapon/gun))
+			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
 				usr << "You need your gun in your active hand to do that!"
 				return
 			usr.client.AllowTargetMove()
@@ -427,7 +536,7 @@
 		if("Disallow Walking")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
 				return
-			if(!istype(usr.equipped(),/obj/item/weapon/gun))
+			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
 				usr << "You need your gun in your active hand to do that!"
 				return
 			usr.client.AllowTargetMove()
@@ -436,7 +545,7 @@
 		if("Allow Running")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
 				return
-			if(!istype(usr.equipped(),/obj/item/weapon/gun))
+			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
 				usr << "You need your gun in your active hand to do that!"
 				return
 			usr.client.AllowTargetRun()
@@ -445,7 +554,7 @@
 		if("Disallow Running")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
 				return
-			if(!istype(usr.equipped(),/obj/item/weapon/gun))
+			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
 				usr << "You need your gun in your active hand to do that!"
 				return
 			usr.client.AllowTargetRun()
@@ -454,7 +563,7 @@
 		if("Allow Item Use")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
 				return
-			if(!istype(usr.equipped(),/obj/item/weapon/gun))
+			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
 				usr << "You need your gun in your active hand to do that!"
 				return
 			usr.client.AllowTargetClick()
@@ -464,7 +573,7 @@
 		if("Disallow Item Use")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
 				return
-			if(!istype(usr.equipped(),/obj/item/weapon/gun))
+			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
 				usr << "You need your gun in your active hand to do that!"
 				return
 			usr.client.AllowTargetClick()
@@ -473,6 +582,170 @@
 		if("Toggle Gun Mode")
 			usr.client.ToggleGunMode()
 
+		if("uniform")
+			if(ismonkey(usr))
+				var/mob/living/carbon/monkey/M = usr
+				if(M.canWearClothes)
+					if (!M.get_active_hand())
+						M.wearclothes(null)
+					else if (istype(M.get_active_hand(), /obj/item/clothing/monkeyclothes))
+						M.wearclothes(M.get_active_hand())
+
+		if("hat")
+			if(ismonkey(usr))
+				var/mob/living/carbon/monkey/M = usr
+				if(M.canWearHats)
+					if (!M.get_active_hand())
+						M.wearhat(null)
+					else if (istype(M.get_active_hand(), /obj/item/clothing/head))
+						M.wearhat(M.get_active_hand())
+
+		if("glasses")
+			if(ismonkey(usr))
+				var/mob/living/carbon/monkey/M = usr
+				if(M.canWearGlasses)
+					if (!M.get_active_hand())
+						M.wearglasses(null)
+					else if (istype(M.get_active_hand(), /obj/item/clothing/glasses))
+						M.wearglasses(M.get_active_hand())
+
+////////////ADMINBUS HUD ICONS////////////
+		if("Delete Bus")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.Adminbus_Deletion(usr)
+		if("Delete Mobs")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.remove_mobs(usr)
+		if("Spawn Clowns")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.spawn_mob(usr,1,5)
+		if("Spawn Carps")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.spawn_mob(usr,2,5)
+		if("Spawn Bears")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.spawn_mob(usr,3,5)
+		if("Spawn Trees")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.spawn_mob(usr,4,5)
+		if("Spawn Spiders")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.spawn_mob(usr,5,5)
+		if("Spawn Large Alien Queen")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.spawn_mob(usr,6,1)
+		if("Spawn Loads of Captain Spare IDs")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.loadsa_goodies(usr,1)
+		if("Spawn Loads of Money")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.loadsa_goodies(usr,2)
+		if("Repair Surroundings")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.Mass_Repair(usr)
+		if("Mass Rejuvination")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.mass_rejuvinate(usr)
+		if("Singularity Hook")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.throw_hookshot(usr)
+		if("Adminbus-mounted Jukebox")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.Mounted_Jukebox(usr)
+		if("Teleportation")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.Teleportation(usr)
+		if("Release Passengers")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.release_passengers(usr)
+		if("Send Passengers Back Home")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.Send_Home(usr)
+		if("Antag Madness!")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.Make_Antag(usr)
+		if("Give Infinite Laser Guns to the Passengers")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.give_lasers(usr)
+		if("Delete the given Infinite Laser Guns")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.delete_lasers(usr)
+		if("Give Fuse-Bombs to the Passengers")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.give_bombs(usr)
+		if("Delete the given Fuse-Bombs")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.delete_bombs(usr)
+		if("Send Passengers to the Thunderdome's Red Team")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.Sendto_Thunderdome_Arena_Red(usr)
+		if("Split the Passengers between the two Thunderdome Teams")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.Sendto_Thunderdome_Arena(usr)
+		if("Send Passengers to the Thunderdome's Green Team")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.Sendto_Thunderdome_Arena_Green(usr)
+		if("Send Passengers to the Thunderdome's Observers' Lodge")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.Sendto_Thunderdome_Obs(usr)
+		if("Capture Mobs")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.toggle_bumpers(usr,1)
+		if("Hit Mobs")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.toggle_bumpers(usr,2)
+		if("Gib Mobs")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.toggle_bumpers(usr,3)
+		if("Close Door")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.toggle_door(usr,0)
+		if("Open Door")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.toggle_door(usr,1)
+		if("Turn Off Headlights")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.toggle_lights(usr,0)
+		if("Dipped Headlights")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.toggle_lights(usr,1)
+		if("Main Headlights")
+			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
+				A.toggle_lights(usr,2)
 		else
 			return 0
 	return 1
@@ -480,8 +753,8 @@
 /obj/screen/inventory/Click()
 	// At this point in client Click() code we have passed the 1/10 sec check and little else
 	// We don't even know if it's a middle click
-	if(world.time <= usr.next_move)
-		return 1
+	if(usr.attack_delayer.blocked())
+		return
 	if(usr.stat || usr.paralysis || usr.stunned || usr.weakened)
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
@@ -505,5 +778,12 @@
 			if(usr.attack_ui(slot_id))
 				usr.update_inv_l_hand(0)
 				usr.update_inv_r_hand(0)
-				usr.next_move = world.time+6
+				usr.delayNextAttack(6)
 	return 1
+
+client/proc/reset_screen()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/reset_screen() called tick#: [world.time]")
+	for(var/obj/screen/objects in src.screen)
+		if(objects.pool_on_reset())
+			returnToPool(objects)
+	src.screen = null

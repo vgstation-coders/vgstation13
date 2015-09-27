@@ -15,7 +15,6 @@
 		return
 
 	if(control_disabled || stat) return
-	//next_move = world.time + 9
 
 	if(ismob(A))
 		ai_actual_track(A)
@@ -24,9 +23,9 @@
 
 
 /mob/living/silicon/ai/ClickOn(var/atom/A, params)
-	if(world.time <= next_click)
+	if(click_delayer.blocked())
 		return
-	next_click = world.time + 1
+	click_delayer.setDelay(1)
 
 	if(client.buildmode) // comes after object.Click to allow buildmode gui objects to be clicked
 		build_click(src, client.buildmode, params, A)
@@ -49,9 +48,8 @@
 		CtrlClickOn(A)
 		return
 
-	if(world.time <= next_move)
+	if(attack_delayer.blocked())
 		return
-	//next_move = world.time + 9
 
 	if(aicamera.in_camera_mode)
 		aicamera.camera_mode_off()
@@ -79,6 +77,7 @@
 	A.attack_ai(src)
 
 /atom/proc/attack_ai(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_ai() called tick#: [world.time]")
 	return
 
 /*
@@ -99,6 +98,7 @@
 */
 
 /atom/proc/AIShiftClick()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/AIShiftClick() called tick#: [world.time]")
 	return
 
 /obj/machinery/door/airlock/AIShiftClick()  // Opens and closes doors!
@@ -110,6 +110,7 @@
 
 
 /atom/proc/AICtrlClick()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/AICtrlClick() called tick#: [world.time]")
 	return
 
 /obj/machinery/door/airlock/AICtrlClick() // Bolts doors
@@ -123,6 +124,7 @@
 
 
 /atom/proc/AIAltClick(var/mob/living/silicon/ai/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/AIAltClick() called tick#: [world.time]")
 	AltClick(user)
 	return
 

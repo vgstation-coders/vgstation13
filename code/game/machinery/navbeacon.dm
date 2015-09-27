@@ -11,7 +11,6 @@
 	layer = 2.5
 	anchored = 1
 
-	var/open = 0		// true if cover is open
 	var/locked = 1		// true if controls are locked
 	var/freq = 1445		// radio frequency
 	var/location = ""	// location response text
@@ -19,6 +18,8 @@
 	var/codes_txt = ""	// codes as set on map: "tag1;tag2" or "tag1=value;tag2=value"
 
 	req_access = list(access_engine)
+
+	machine_flags = SCREWTOGGLE
 
 	New()
 		..()
@@ -34,6 +35,7 @@
 
 	// set the transponder codes assoc list from codes_txt
 	proc/set_codes()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/set_codes() called tick#: [world.time]")
 		if(!codes_txt)
 			return
 
@@ -59,7 +61,8 @@
 
 	// update the icon_state
 	proc/updateicon()
-		var/state="navbeacon[open]"
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/updateicon() called tick#: [world.time]")
+		var/state="navbeacon[panel_open]"
 
 		if(invisibility)
 			icon_state = "[state]-f"	// if invisible, set icon to faded version
@@ -84,11 +87,13 @@
 
 	proc/post_signal()
 
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/post_signal() called tick#: [world.time]")
+
 		var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
 
 		if(!frequency) return
 
-		var/datum/signal/signal = new()
+		var/datum/signal/signal = getFromDPool(/datum/signal)
 		signal.source = src
 		signal.transmission_method = 1
 		signal.data["beacon"] = location
@@ -104,20 +109,16 @@
 		if(T.intact)
 			return		// prevent intraction when T-scanner revealed
 
-		if(istype(I, /obj/item/weapon/screwdriver))
-			open = !open
-
-			user.visible_message("[user] [open ? "opens" : "closes"] the beacon's cover.", "You [open ? "open" : "close"] the beacon's cover.")
-
-			updateicon()
+		if(..())
+			return
 
 		else if (istype(I, /obj/item/weapon/card/id)||istype(I, /obj/item/device/pda))
-			if(open)
+			if(panel_open)
 				if (src.allowed(user))
 					src.locked = !src.locked
 					user << "Controls are now [src.locked ? "locked." : "unlocked."]"
 				else
-					user << "\red Access denied."
+					user << "<span class='warning'>Access denied.</span>"
 				updateDialog()
 			else
 				user << "You must open the cover first!"
@@ -138,7 +139,7 @@
 		if(T.intact)
 			return		// prevent intraction when T-scanner revealed
 
-		if(!open && !ai)	// can't alter controls if not open, unless you're an AI
+		if(!panel_open && !ai)	// can't alter controls if not open, unless you're an AI
 			user << "The beacon's control cover is closed."
 			return
 
@@ -173,7 +174,7 @@ Transponder Codes:<UL>"}
 			for(var/key in codes)
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\navbeacon.dm:174: t += "<LI>[key] ... [codes[key]]"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\navbeacon.dm:174: t += "<LI>[key] ... [codes[key]]"
 				t += {"<LI>[key] ... [codes[key]]
 					<small><A href='byond://?src=\ref[src];edit=1;code=[key]'>(edit)</A>
 					<A href='byond://?src=\ref[src];delete=1;code=[key]'>(delete)</A></small><BR>"}
@@ -181,7 +182,7 @@ Transponder Codes:<UL>"}
 				t += "<LI>[key] ... [codes[key]]"
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\navbeacon.dm:177: t += "<small><A href='byond://?src=\ref[src];add=1;'>(add new)</A></small><BR>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\navbeacon.dm:177: t += "<small><A href='byond://?src=\ref[src];add=1;'>(add new)</A></small><BR>"
 			t += {"<small><A href='byond://?src=\ref[src];add=1;'>(add new)</A></small><BR>
 				<UL></TT>"}
 			// END AUTOFIX
@@ -190,11 +191,9 @@ Transponder Codes:<UL>"}
 		return
 
 	Topic(href, href_list)
-		..()
-		if (usr.stat)
-			return
-		if ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon)))
-			if(open && !locked)
+		if(..()) return 1
+		else
+			if(panel_open && !locked)
 				usr.set_machine(src)
 
 				if (href_list["freq"])

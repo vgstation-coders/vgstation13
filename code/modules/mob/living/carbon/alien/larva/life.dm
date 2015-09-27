@@ -1,5 +1,8 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
 
+//How to copypaste human life code and pretend it won't fuck up everything for ALIEN LARVAE : The Novel : The Story : The Legend : The Epic : The Game
+//But seriously, someone's gonna have to look more in depth into this to get rid of useless shit
+
 /mob/living/carbon/alien/larva
 
 	var/temperature_alert = 0
@@ -8,9 +11,10 @@
 /mob/living/carbon/alien/larva/Life()
 	set invisibility = 0
 	//set background = 1
-
+	if (!loc) return
 	if (monkeyizing)
 		return
+	if(timestopped) return 0 //under effects of time magick
 
 	..()
 	var/datum/gas_mixture/enviroment = loc.return_air()
@@ -66,8 +70,12 @@
 
 	proc/breathe()
 
-		if(reagents.has_reagent("lexorin")) return
-		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)) return
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/breathe() called tick#: [world.time]")
+
+		if(reagents.has_reagent("lexorin"))
+			return
+		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
+			return
 
 		var/datum/gas_mixture/environment = loc.return_air()
 		var/datum/gas_mixture/breath
@@ -124,6 +132,7 @@
 
 
 	proc/get_breath_from_internal(volume_needed)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/get_breath_from_internal() called tick#: [world.time]")
 		if(internal)
 			if (!contents.Find(internal))
 				internal = null
@@ -139,7 +148,8 @@
 		return null
 
 	proc/handle_breath(datum/gas_mixture/breath)
-		if(status_flags & GODMODE)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/handle_breath() called tick#: [world.time]")
+		if((status_flags & GODMODE) || (flags & INVULNERABLE))
 			return
 
 		if(!breath || (breath.total_moles == 0))
@@ -168,7 +178,7 @@
 
 		if(breath.temperature > (T0C+66) && !(M_RESIST_HEAT in mutations)) // Hot air hurts :(
 			if(prob(20))
-				src << "\red You feel a searing heat in your lungs!"
+				src << "<span class='danger'>You feel a searing heat in your lungs !</span>"
 			fire_alert = max(fire_alert, 1)
 		else
 			fire_alert = 0
@@ -179,17 +189,18 @@
 
 
 	proc/handle_chemicals_in_body()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/handle_chemicals_in_body() called tick#: [world.time]")
 		if(reagents) reagents.metabolize(src)
 
 		if(M_FAT in mutations)
 			if(nutrition < 100)
 				if(prob(round((50 - nutrition) / 100)))
-					src << "\blue You feel fit again!"
+					src << "<span class='notice'>You feel fit again !</span>"
 					mutations.Add(M_FAT)
 		else
 			if(nutrition > 500)
 				if(prob(5 + round((nutrition - max_grown) / 2)))
-					src << "\red You suddenly feel blubbery!"
+					src << "<span class='danger'>You suddenly feel blubbery !</span>"
 					mutations.Add(M_FAT)
 
 		if (nutrition > 0)
@@ -216,13 +227,14 @@
 		return //TODO: DEFERRED
 
 	proc/handle_regular_status_updates()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/handle_regular_status_updates() called tick#: [world.time]")
 		updatehealth()
 
 		if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
 			blinded = 1
 			silent = 0
 		else				//ALIVE. LIGHTS ARE ON
-			if(health < -25 || brain_op_stage == 4.0)
+			if(health < -25 || !has_brain())
 				death()
 				blinded = 1
 				silent = 0
@@ -293,6 +305,8 @@
 
 	proc/handle_regular_hud_updates()
 
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/handle_regular_hud_updates() called tick#: [world.time]")
+
 		if (stat == 2 || (M_XRAY in mutations))
 			sight |= SEE_TURFS
 			sight |= SEE_MOBS
@@ -361,10 +375,12 @@
 		return 1
 
 	proc/handle_random_events()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/handle_random_events() called tick#: [world.time]")
 		return
 
 
 	proc/handle_stomach()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/handle_stomach() called tick#: [world.time]")
 		spawn(0)
 			for(var/mob/living/M in stomach_contents)
 				if(M.loc != src)

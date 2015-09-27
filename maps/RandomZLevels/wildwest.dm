@@ -93,7 +93,7 @@
 			if("Peace")
 				user << "<B>Whatever alien sentience that the Wish Granter possesses is satisfied with your wish. There is a distant wailing as the last of the Faithless begin to die, then silence.</B>"
 				user << "You feel as if you just narrowly avoided a terrible fate..."
-				for(var/mob/living/simple_animal/hostile/faithless/F in world)
+				for(var/mob/living/simple_animal/hostile/faithless/F in mob_list)
 					F.health = -10
 					F.stat = 2
 					F.icon_state = "faithless_dead"
@@ -116,7 +116,7 @@
 /obj/effect/meatgrinder/New()
 	icon_state = "blob"
 
-/obj/effect/meatgrinder/HasEntered(AM as mob|obj)
+/obj/effect/meatgrinder/Crossed(AM as mob|obj)
 	Bumped(AM)
 
 /obj/effect/meatgrinder/Bumped(mob/M as mob|obj)
@@ -130,6 +130,7 @@
 		call(src,triggerproc)(M)
 
 /obj/effect/meatgrinder/proc/triggerrad1(mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/meatgrinder/proc/triggerrad1() called tick#: [world.time]")
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 	for(var/mob/O in viewers(world.view, src.loc))
 		s.set_up(3, 1, src)
@@ -149,6 +150,7 @@
 /mob/living/carbon/proc/immortality()
 	set category = "Immortality"
 	set name = "Resurrection"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/proc/immortality() called tick#: [world.time]")
 
 	var/mob/living/carbon/C = usr
 	if(!C.stat)
@@ -158,8 +160,7 @@
 
 	spawn(rand(800,1200))
 		if(C.stat == DEAD)
-			dead_mob_list -= C
-			living_mob_list += C
+			resurrect()
 		C.stat = CONSCIOUS
 		C.tod = null
 		C.setToxLoss(0)

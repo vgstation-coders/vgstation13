@@ -13,13 +13,33 @@
 
 	// Otherwise jump
 	else
-		loc = get_turf(A)
+		var/turf/targetloc = get_turf(A)
+		var/area/targetarea = get_area(A)
+		if(!targetloc)
+			if(!targetarea)
+				return
+			var/list/turfs = list()
+			for(var/turf/T in targetarea)
+				if(T.density)
+					continue
+				turfs.Add(T)
+
+			targetloc = pick_n_take(turfs)
+			if(!targetloc)
+				return
+		if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
+			usr << "<span class='sinister'>A dark forcefield prevents you from entering the area.<span>"
+		else
+			if(targetloc.holy && ((src.invisibility == 0) || iscult(src)))
+				usr << "<span class='warning'>These are sacred grounds, you cannot go there!</span>"
+			else
+				forceEnter(targetloc)
 
 /mob/dead/observer/ClickOn(var/atom/A, var/params)
 	if(client.buildmode)
 		build_click(src, client.buildmode, params, A)
 		return
-	if(world.time <= next_move)
+	if(attack_delayer.blocked())
 		return
 	//next_move = world.time + 8
 
@@ -42,20 +62,22 @@
 
 // We don't need a fucking toggle.
 /mob/dead/observer/ShiftClickOn(var/atom/A)
-	A.examine()
+	examination(A)
 
 /atom/proc/attack_ghost(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_ghost() called tick#: [world.time]")
 	var/ghost_flags = 0
 	if(ghost_read)
 		ghost_flags |= PERMIT_ALL
 	if(canGhostRead(user,src,ghost_flags))
 		src.attack_ai(user)
 	else
-		src.examine()
+		user.examination(src)
 
 /* Bay edition
 // Oh by the way this didn't work with old click code which is why clicking shit didn't spam you
 /atom/proc/attack_ghost(mob/dead/observer/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_ghost() called tick#: [world.time]")
 	if(user.client && user.client.inquisitive_ghost)
 		examine()
 	return
@@ -94,6 +116,7 @@
 // commented out, of course.
 /*
 /atom/proc/attack_admin(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_admin() called tick#: [world.time]")
 	if(!user || !user.client || !user.client.holder)
 		return
 	attack_hand(user)

@@ -33,21 +33,21 @@
 	var/growthstages = 0
 	var/plant_type = 0 // 0 = 'normal plant'; 1 = weed; 2 = shroom
 
-/obj/item/seeds/examine()
+/obj/item/seeds/examine(mob/user)
 	..()
-	usr << "Plant Yield: \blue [(yield != -1) ? yield : "\red ERROR"]"
-	usr << "Plant Potency: \blue [(potency != -1) ? potency : "\red ERROR"]"
+	user << "Plant Yield: <span class='info'>[(yield != -1) ? yield : "<span class='attack'>ERROR</span>"]</span>"
+	user << "Plant Potency: <span class='info'>[(potency != -1) ? potency : "<span class='attack'>ERROR</span>"]</span>"
 
 /obj/item/seeds/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (istype(O, /obj/item/device/analyzer/plant_analyzer))
 		user << "*** <B>[plantname]</B> ***"
-		user << "-Plant Endurance: \blue [endurance]"
-		user << "-Plant Lifespan: \blue [lifespan]"
+		user << "-Plant Endurance: <span class='info'>[endurance]</span>"
+		user << "-Plant Lifespan: <span class='info'>[lifespan]</span>"
 		if(yield != -1)
-			user << "-Plant Yield: \blue [yield]"
-		user << "-Plant Production: \blue [production]"
+			user << "-Plant Yield: <span class='info'>[yield]</span>"
+		user << "-Plant Production: <span class='info'>[production]</span>"
 		if(potency != -1)
-			user << "-Plant Potency: \blue [potency]"
+			user << "-Plant Potency: <span class='info'>[potency]</span>"
 		return
 	..() // Fallthrough to item/attackby() so that bags can pick seeds up
 
@@ -554,7 +554,7 @@
 
 /obj/item/seeds/angelmycelium
 	name = "pack of destroying angel mycelium"
-	desc = "This mycelium grows into something devestating."
+	desc = "This mycelium grows into something devastating."
 	icon_state = "mycelium-angel"
 	mypath = "/obj/item/seeds/angelmycelium"
 	species = "angel"
@@ -1163,12 +1163,63 @@
 	growthstages = 4
 	plant_type = 1
 
+/obj/item/seeds/synthmeatseed
+	name = "pack of synthmeat seeds"
+	desc = "These seeds grow into a synthmeat tree."
+	icon_state = "seed-synthmeat"
+	mypath = "/obj/item/seeds/synthmeatseed"
+	species = "synthmeat"
+	plantname = "Synthmeat Tree"
+	productname = "/obj/item/weapon/reagent_containers/food/snacks/grown/meat"
+	lifespan = 20
+	endurance = 15
+	maturation = 5
+	production = 5
+	yield = 4
+	potency = 10
+	plant_type = 0
+	growthstages = 2
+
+/obj/item/seeds/synthbuttseed //*fart
+	name = "pack of synthbutt seeds"
+	desc = "These butts butt into a synthbutt butt."
+	icon_state = "seed-synthbutt"
+	mypath = "/obj/item/seeds/synthbuttseed"
+	species = "synthbutt"
+	plantname = "Synthbutt Tree"
+	productname = "/obj/item/weapon/reagent_containers/food/snacks/grown/butt"
+	lifespan = 20
+	endurance = 15
+	maturation = 5
+	production = 5
+	yield = 4
+	potency = 10
+	plant_type = 0
+	growthstages = 2
+
+/obj/item/seeds/synthbrainseed
+	name = "pack of synthbrain seeds"
+	desc = "These seeds grow into a synthbrain tree."
+	icon_state = "seed-synthbrain"
+	mypath = "/obj/item/seeds/synthbrainseed"
+	species = "synthbrain"
+	plantname = "Synthbrain Tree"
+	productname = "/obj/item/weapon/reagent_containers/food/snacks/grown/brain"
+	lifespan = 20
+	endurance = 15
+	maturation = 5
+	production = 5
+	yield = 4
+	potency = 10
+	plant_type = 0
+	growthstages = 2
+
 /obj/item/seeds/kudzuseed/attack_self(mob/user as mob)
 	if(istype(user.loc,/turf/space))
 		return
 	user << "<span class='notice'>You plant the kudzu. You monster.</span>"
-	new /obj/effect/spacevine_controller(user.loc)
-	del(src)
+	new /obj/effect/plantsegment_controller(user.loc)
+	qdel(src)
 
 
 
@@ -1233,12 +1284,13 @@
 	var/yield = 2
 	var/potency = 1
 	var/plant_type = 0
-	New()
-		var/datum/reagents/R = new/datum/reagents(50)
-		reagents = R
-		R.my_atom = src
+
+/obj/item/weapon/grown/New()
+	. = ..()
+	create_reagents(50)
 
 /obj/item/weapon/grown/proc/changePotency(newValue) //-QualityVan
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/grown/proc/changePotency() called tick#: [world.time]")
 	potency = newValue
 
 /obj/item/weapon/grown/log
@@ -1257,6 +1309,8 @@
 	seed = "/obj/item/seeds/towermycelium"
 	attack_verb = list("bashed", "battered", "bludgeoned", "whacked")
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\attack_verb = list()  called tick#: [world.time]")
+
 	attackby(obj/item/weapon/W as obj, mob/user as mob)
 		if(istype(W, /obj/item/weapon/circular_saw) || istype(W, /obj/item/weapon/hatchet) || (istype(W, /obj/item/weapon/twohanded/fireaxe) && W:wielded) || istype(W, /obj/item/weapon/melee/energy))
 			user.show_message("<span class='notice'>You make planks out of the [src]!</span>", 1)
@@ -1269,9 +1323,8 @@
 						continue
 					G.attackby(NG, user)
 					usr << "You add the newly-formed wood to the stack. It now contains [NG.amount] planks."
-			del(src)
+			qdel(src)
 			return
-
 
 /obj/item/weapon/grown/sunflower // FLOWER POWER!
 	name = "sunflower"
@@ -1304,12 +1357,14 @@
 	plant_type = 0
 	seed = "/obj/item/seeds/novaflower"
 	attack_verb = list("seared", "heated", "whacked", "steamed")
-	New()
-		..()
-		spawn(5)	//So potency can be set in the proc that creates these crops
-			reagents.add_reagent("nutriment", 1)
-			reagents.add_reagent("capsaicin", round(potency, 1))
-			force = round((5+potency/5), 1)
+
+/obj/item/weapon/grown/novaflower/New()
+	. = ..()
+
+	spawn(5) // So potency can be set in the proc that creates these crops
+		reagents.add_reagent("nutriment", 1)
+		reagents.add_reagent("capsaicin", round(potency, 1))
+		force = round((5 + potency / 5), 1)
 
 /*
 /obj/item/weapon/grown/gibtomato
@@ -1351,15 +1406,17 @@
 	plant_type = 1
 	origin_tech = "combat=1"
 	seed = "/obj/item/seeds/nettleseed"
-	New()
-		..()
-		spawn(5)	//So potency can be set in the proc that creates these crops
-			reagents.add_reagent("nutriment", 1+round((potency / 50), 1))
-			reagents.add_reagent("sacid", round(potency, 1))
-			force = round((5+potency/5), 1)
+
+/obj/item/weapon/grown/nettle/New()
+	. = ..()
+
+	spawn(5) //So potency can be set in the proc that creates these crops
+		reagents.add_reagent("nutriment", 1 + round((potency / 50), 1))
+		reagents.add_reagent("sacid", round(potency, 1))
+		force = round((5 + potency / 5), 1)
 
 /obj/item/weapon/grown/deathnettle // -- Skie
-	desc = "The \red glowing \black nettle incites \red<B>rage</B>\black in you just from looking at it!"
+	desc = "The <span class='attack'>glowing</span> nettle incites <span class='danger'>rage</span> in you just from looking at it!"
 	icon = 'icons/obj/weapons.dmi'
 	name = "deathnettle"
 	icon_state = "deathnettle"
@@ -1374,16 +1431,21 @@
 	seed = "/obj/item/seeds/deathnettleseed"
 	origin_tech = "combat=3"
 	attack_verb = list("stung")
-	New()
-		..()
-		spawn(5)	//So potency can be set in the proc that creates these crops
-			reagents.add_reagent("nutriment", 1+round((potency / 50), 1))
-			reagents.add_reagent("pacid", round(potency, 1))
-			force = round((5+potency/2.5), 1)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\attack_verb = list()  called tick#: [world.time]")
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>"
 		return (BRUTELOSS|TOXLOSS)
+
+/obj/item/weapon/grown/deathnettle/New()
+	. = ..()
+
+	spawn(5) //So potency can be set in the proc that creates these crops
+		reagents.add_reagent("nutriment", 1 + round((potency / 50), 1))
+		reagents.add_reagent("pacid", round(potency, 1))
+		force = round((5 + potency / 2.5), 1)
+
 
 // *************************************
 // Pestkiller defines for hydroponics
@@ -1391,49 +1453,33 @@
 
 /obj/item/pestkiller
 	name = "bottle of pestkiller"
-	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle16"
-	flags = FPRINT |  TABLEPASS
+	flags = FPRINT | TABLEPASS
 	var/toxicity = 0
 	var/PestKillStr = 0
-	New()
-		src.pixel_x = rand(-5.0, 5)
-		src.pixel_y = rand(-5.0, 5)
 
-/obj/item/pestkiller/carbaryl
-	name = "bottle of carbaryl"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle16"
-	flags = FPRINT |  TABLEPASS
-	toxicity = 4
-	PestKillStr = 2
-	New()
-		src.pixel_x = rand(-5.0, 5)
-		src.pixel_y = rand(-5.0, 5)
-
-/obj/item/pestkiller/lindane
-	name = "bottle of lindane"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle18"
-	flags = FPRINT |  TABLEPASS
-	toxicity = 6
-	PestKillStr = 4
-	New()
-		src.pixel_x = rand(-5.0, 5)
-		src.pixel_y = rand(-5.0, 5)
-
-/obj/item/pestkiller/phosmet
-	name = "bottle of phosmet"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle15"
-	flags = FPRINT |  TABLEPASS
-	toxicity = 8
-	PestKillStr = 7
-
-/obj/item/pestkiller/phosmet/New()
+/obj/item/pestkiller/New()
 	. = ..()
 	pixel_x = rand(-5.0, 5)
 	pixel_y = rand(-5.0, 5)
+
+/obj/item/pestkiller/carbaryl
+	name = "bottle of carbaryl"
+	icon_state = "bottle16"
+	toxicity = 4
+	PestKillStr = 2
+
+/obj/item/pestkiller/lindane
+	name = "bottle of lindane"
+	icon_state = "bottle18"
+	toxicity = 6
+	PestKillStr = 4
+
+/obj/item/pestkiller/phosmet
+	name = "bottle of phosmet"
+	icon_state = "bottle15"
+	toxicity = 8
+	PestKillStr = 7
 
 // *************************************
 // Hydroponics Tools
@@ -1455,7 +1501,7 @@
 	var/WeedKillStr = 2
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is huffing the [src.name]! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class='danger'>[user] is huffing the [src.name]! It looks like \he's trying to commit suicide.</span>"
 		return (TOXLOSS)
 
 /obj/item/weapon/pestspray // -- Skie
@@ -1474,7 +1520,7 @@
 	var/PestKillStr = 2
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is huffing the [src.name]! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class='danger'>[user] is huffing the [src.name]! It looks like \he's trying to commit suicide.</span>"
 		return (TOXLOSS)
 
 /obj/item/weapon/minihoe // -- Numbers
@@ -1489,6 +1535,7 @@
 	w_class = 2.0
 	m_amt = 50
 	w_type = RECYK_METAL
+	melt_temperature = MELTPOINT_STEEL
 	attack_verb = list("slashed", "sliced", "cut", "clawed")
 
 // *************************************
@@ -1499,31 +1546,25 @@
 	name = "bottle of weedkiller"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle16"
-	flags = FPRINT |  TABLEPASS
+	flags = FPRINT | TABLEPASS
 	var/toxicity = 0
 	var/WeedKillStr = 0
 
 /obj/item/weedkiller/triclopyr
 	name = "bottle of glyphosate"
-	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle16"
-	flags = FPRINT |  TABLEPASS
 	toxicity = 4
 	WeedKillStr = 2
 
 /obj/item/weedkiller/lindane
 	name = "bottle of triclopyr"
-	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle18"
-	flags = FPRINT |  TABLEPASS
 	toxicity = 6
 	WeedKillStr = 4
 
 /obj/item/weedkiller/D24
 	name = "bottle of 2,4-D"
-	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle15"
-	flags = FPRINT |  TABLEPASS
 	toxicity = 8
 	WeedKillStr = 7
 
@@ -1535,7 +1576,7 @@
 	name = "bottle of nutrient"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle16"
-	flags = FPRINT |  TABLEPASS
+	flags = FPRINT | TABLEPASS
 	w_class = 1.0
 	var/mutmod = 0
 	var/yieldmod = 0
@@ -1547,39 +1588,18 @@
 
 /obj/item/nutrient/ez
 	name = "bottle of E-Z-Nutrient"
-	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle16"
-	flags = FPRINT |  TABLEPASS
 	mutmod = 1
 	yieldmod = 1
 
-/obj/item/nutrient/ez/New()
-	. = ..()
-	pixel_x = rand(-5.0, 5)
-	pixel_y = rand(-5.0, 5)
-
 /obj/item/nutrient/l4z
 	name = "bottle of Left 4 Zed"
-	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle18"
-	flags = FPRINT |  TABLEPASS
 	mutmod = 2
 	yieldmod = 0
 
-/obj/item/nutrient/l4z/New()
-	. = ..()
-	pixel_x = rand(-5.0, 5)
-	pixel_y = rand(-5.0, 5)
-
 /obj/item/nutrient/rh
 	name = "bottle of Robust Harvest"
-	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle15"
-	flags = FPRINT |  TABLEPASS
 	mutmod = 0
 	yieldmod = 2
-
-/obj/item/nutrient/rh/New()
-	. = ..()
-	pixel_x = rand(-5.0, 5)
-	pixel_y = rand(-5.0, 5)

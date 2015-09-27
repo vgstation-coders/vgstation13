@@ -331,10 +331,10 @@
 /obj/structure/closet/crate/secure/New()
 	..()
 	if(locked)
-		overlays.Cut()
+		overlays.len = 0
 		overlays += redlight
 	else
-		overlays.Cut()
+		overlays.len = 0
 		overlays += greenlight
 
 /obj/structure/closet/crate/rcd/New()
@@ -342,7 +342,7 @@
 	new /obj/item/weapon/rcd_ammo(src)
 	new /obj/item/weapon/rcd_ammo(src)
 	new /obj/item/weapon/rcd_ammo(src)
-	new /obj/item/weapon/rcd(src)
+	new /obj/item/device/rcd/matter/engineering(src)
 
 /obj/structure/closet/crate/radiation/New()
 	..()
@@ -355,22 +355,37 @@
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
 
+/obj/structure/closet/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(air_group || (height==0 || wall_mounted)) return 1
+	if(istype(mover, /obj/structure/closet/crate)) return 0
+	return (!density)
+
 /obj/structure/closet/crate/open()
+	if(src.opened)
+		return 0
+	if(!src.can_open())
+		return 0
 	playsound(get_turf(src), sound_effect_open, 15, 1, -3)
 
 	dump_contents()
 
 	icon_state = icon_opened
 	src.opened = 1
+	src.density = 0
 	return 1
 
 /obj/structure/closet/crate/close()
+	if(!src.opened)
+		return 0
+	if(!src.can_close())
+		return 0
 	playsound(get_turf(src), sound_effect_close, 15, 1, -3)
 
 	take_contents()
 
 	icon_state = icon_closed
 	src.opened = 0
+	src.density = 1
 	return 1
 
 /obj/structure/closet/crate/insert(var/atom/movable/AM, var/include_mobs = 0)
@@ -380,7 +395,7 @@
 
 	if(include_mobs && isliving(AM))
 		var/mob/living/L = AM
-		if(L.buckled)
+		if(L.locked_to)
 			return 0
 	else if(isobj(AM))
 		if(AM.density || AM.anchored || istype(AM,/obj/structure/closet))
@@ -388,12 +403,12 @@
 	else
 		return 0
 
-	if(istype(AM, /obj/structure/stool/bed)) //This is only necessary because of rollerbeds and swivel chairs.
-		var/obj/structure/stool/bed/B = AM
-		if(B.buckled_mob)
+	if(istype(AM, /obj/structure/bed)) //This is only necessary because of rollerbeds and swivel chairs.
+		var/obj/structure/bed/B = AM
+		if(B.locked_atoms.len)
 			return 0
 
-	AM.loc = src
+	AM.forceMove(src)
 	return 1
 
 /obj/structure/closet/crate/attack_hand(mob/user as mob)
@@ -406,9 +421,9 @@
 			if(isliving(user))
 				var/mob/living/L = user
 				if(L.electrocute_act(17, src))
-					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-					s.set_up(5, 1, src)
-					s.start()
+					//var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+					//s.set_up(5, 1, src)
+					//s.start()
 					return
 		open()
 	return
@@ -420,7 +435,7 @@
 		if (allowed(user))
 			user << "<span class='notice'>You unlock [src].</span>"
 			src.locked = 0
-			overlays.Cut()
+			overlays.len = 0
 			overlays += greenlight
 			return
 		else
@@ -433,11 +448,11 @@
 	if(istype(W, /obj/item/weapon/card) && src.allowed(user) && !locked && !opened && !broken)
 		user << "<span class='notice'>You lock \the [src].</span>"
 		src.locked = 1
-		overlays.Cut()
+		overlays.len = 0
 		overlays += redlight
 		return
-	else if ( (istype(W, /obj/item/weapon/card/emag)||istype(W, /obj/item/weapon/melee/energy/blade)) && locked &&!broken)
-		overlays.Cut()
+	else if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
+		overlays.len = 0
 		overlays += emag
 		overlays += sparks
 		spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
@@ -446,7 +461,6 @@
 		src.broken = 1
 		user << "<span class='notice'>You unlock \the [src].</span>"
 		return
-
 	return ..()
 
 /obj/structure/closet/crate/attack_paw(mob/user as mob)
@@ -454,27 +468,22 @@
 
 /obj/structure/closet/crate/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opened)
-		if(isrobot(user))
-			return
-		user.drop_item()
-		if(W)
-			W.loc = src.loc
+		return ..()
 	else if(istype(W, /obj/item/weapon/packageWrap))
 		return
-	else if(istype(W, /obj/item/weapon/cable_coil))
+	else if(istype(W, /obj/item/stack/cable_coil))
 		if(rigged)
 			user << "<span class='notice'>[src] is already rigged!</span>"
 			return
 		user  << "<span class='notice'>You rig [src].</span>"
-		user.drop_item()
+		user.drop_item(W)
 		del(W)
 		rigged = 1
 		return
 	else if(istype(W, /obj/item/device/radio/electropack))
 		if(rigged)
 			user  << "<span class='notice'>You attach [W] to [src].</span>"
-			user.drop_item()
-			W.loc = src
+			user.drop_item(W, src.loc)
 			return
 	else if(istype(W, /obj/item/weapon/wirecutters))
 		if(rigged)
@@ -491,10 +500,10 @@
 	if(!broken && !opened  && prob(50/severity))
 		if(!locked)
 			src.locked = 1
-			overlays.Cut()
+			overlays.len = 0
 			overlays += redlight
 		else
-			overlays.Cut()
+			overlays.len = 0
 			overlays += emag
 			overlays += sparks
 			spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
@@ -528,3 +537,85 @@
 			return
 		else
 	return
+
+/obj/structure/closet/crate/secure/weapon/experimental
+	name = "Experimental Weapons Crate"
+	var/chosen_set = null
+
+/obj/structure/closet/crate/secure/weapon/experimental/New()
+	..()
+	if(!chosen_set)
+		chosen_set = pick("ricochet","bison","spur","gatling","stickybomb","nikita","osipr","hecate","gravitywell")
+
+	switch(chosen_set)
+		if("ricochet")
+			new/obj/item/clothing/suit/armor/laserproof(src)
+			new/obj/item/weapon/gun/energy/ricochet(src)
+			new/obj/item/weapon/gun/energy/ricochet(src)
+		if("bison")
+			new/obj/item/clothing/shoes/jackboots(src)
+			new/obj/item/clothing/suit/hgpirate(src)
+			new/obj/item/clothing/head/hgpiratecap(src)
+			new/obj/item/clothing/glasses/eyepatch(src)
+			new/obj/item/weapon/gun/energy/bison(src)
+		if("spur")
+			new/obj/item/clothing/suit/cardborg(src)
+			new/obj/item/clothing/head/cardborg(src)
+			new/obj/item/device/modkit/spur_parts(src)
+			new/obj/item/weapon/gun/energy/polarstar(src)
+		if("gatling")
+			new/obj/item/clothing/suit/armor/riot(src)
+			new/obj/item/clothing/head/helmet/riot(src)
+			new/obj/item/clothing/shoes/swat(src)
+			new/obj/item/clothing/gloves/swat(src)
+			new/obj/item/weapon/gun/gatling(src)
+		if("stickybomb")
+			new/obj/item/clothing/suit/bomb_suit/security(src)
+			new/obj/item/clothing/head/bomb_hood/security(src)
+			new/obj/item/weapon/gun/stickybomb(src)
+			new/obj/item/weapon/storage/box/stickybombs(src)
+		if("nikita")
+			for(var/i=1;i<=5;i++)
+				new/obj/item/ammo_casing/rocket_rpg/nikita(src)
+			new/obj/item/weapon/gun/projectile/rocketlauncher/nikita(src)
+		if("osipr")
+			new/obj/item/clothing/suit/space/syndicate/black(src)
+			new/obj/item/clothing/head/helmet/space/syndicate/black(src)
+			new/obj/item/weapon/gun/osipr(src)
+		if("hecate")
+			new/obj/item/weapon/gun/projectile/hecate(src)
+			new/obj/item/ammo_storage/box/BMG50(src)
+			new/obj/item/device/radio/headset/headset_earmuffs(src)
+			new/obj/item/clothing/glasses/thermal(src)
+		if("gravitywell")
+			new/obj/item/clothing/suit/radiation(src)
+			new/obj/item/clothing/head/radiation(src)
+			new/obj/item/clothing/shoes/magboots(src)
+			new/obj/item/weapon/gun/gravitywell(src)
+
+/obj/structure/closet/crate/secure/weapon/experimental/ricochet
+	chosen_set = "ricochet"
+
+/obj/structure/closet/crate/secure/weapon/experimental/bison
+	chosen_set = "bison"
+
+/obj/structure/closet/crate/secure/weapon/experimental/spur
+	chosen_set = "spur"
+
+/obj/structure/closet/crate/secure/weapon/experimental/gatling
+	chosen_set = "gatling"
+
+/obj/structure/closet/crate/secure/weapon/experimental/stickybomb
+	chosen_set = "stickybomb"
+
+/obj/structure/closet/crate/secure/weapon/experimental/nikita
+	chosen_set = "nikita"
+
+/obj/structure/closet/crate/secure/weapon/experimental/osipr
+	chosen_set = "osipr"
+
+/obj/structure/closet/crate/secure/weapon/experimental/hecate
+	chosen_set = "hecate"
+
+/obj/structure/closet/crate/secure/weapon/experimental/gravitywell
+	chosen_set = "gravitywell"

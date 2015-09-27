@@ -20,6 +20,7 @@
 	reconnect_scanner()
 
 /obj/machinery/artifact_analyser/proc/reconnect_scanner()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/artifact_analyser/proc/reconnect_scanner() called tick#: [world.time]")
 	//connect to a nearby scanner pad
 	owned_scanner = locate(/obj/machinery/artifact_scanpad) in get_step(src, dir)
 	if(!owned_scanner)
@@ -126,20 +127,17 @@
 		usr.unset_machine(src)
 		usr << browse(null, "window=artanalyser")
 
-	..()
 	updateDialog()
 
 //hardcoded responses, oh well
 /obj/machinery/artifact_analyser/proc/get_scan_info(var/obj/scanned_obj)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/artifact_analyser/proc/get_scan_info() called tick#: [world.time]")
 	switch(scanned_obj.type)
 		if(/obj/machinery/auto_cloner)
 			return "Automated cloning pod - appears to rely on organic nanomachines with a self perpetuating \
 			ecosystem involving self cannibalism and a symbiotic relationship with the contained liquid.<br><br>\
 			Structure is composed of a carbo-titanium alloy with interlaced reinforcing energy fields, and the contained liquid \
 			resembles proto-plasmic residue supportive of single cellular developmental conditions."
-		if(/obj/machinery/power/supermatter)
-			return "Super dense plasma clump - Appears to have been shaped or hewn, structure is composed of matter 2000% denser than ordinary carbon matter residue.\
-			Potential application as unrefined plasma source."
 		if(/obj/machinery/power/supermatter)
 			return "Super dense plasma clump - Appears to have been shaped or hewn, structure is composed of matter 2000% denser than ordinary carbon matter residue.\
 			Potential application as unrefined plasma source."
@@ -186,7 +184,7 @@
 				out += " have been detected "
 
 				//how the artifact does it's effect
-				switch(A.my_effect.effect_type)
+				switch(A.my_effect.effect)
 					if(1)
 						out += " emitting in an ambient energy field."
 					if(2)
@@ -204,7 +202,7 @@
 					out += " Unable to determine any data about activation trigger."
 
 			//secondary:
-			if(A.secondary_effect && A.secondary_effect.activated)
+			if(A.secondary_effect)
 				//sciencey words go!
 				out += "<br><br>Warning, internal scans indicate ongoing [pick("subluminous","subcutaneous","superstructural")] activity operating \
 				independantly from primary systems. Auxiliary activity involves "
@@ -229,7 +227,7 @@
 						out += "low level radiation"
 
 				//how the artifact does it's effect
-				switch(A.secondary_effect.effect_type)
+				switch(A.secondary_effect.effect)
 					if(1)
 						out += " emitting in an ambient energy field."
 					if(2)

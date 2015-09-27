@@ -7,6 +7,8 @@
 
 	var/hud_updateflag = 0
 
+	size = SIZE_NORMAL
+
 	//Damage related vars, NOTE: THESE SHOULD ONLY BE MODIFIED BY PROCS
 	var/bruteloss = 0	//Brutal damage caused by brute force (punching, being clubbed by a toolbox ect... this also accounts for pressure damage)
 	var/oxyloss = 0		//Oxygen depravation damage (no air in lungs)
@@ -16,15 +18,16 @@
 	var/brainloss = 0	//'Retardation' damage caused by someone hitting you in the head with a bible or being infected with brainrot.
 	var/halloss = 0		//Hallucination damage. 'Fake' damage obtained through hallucinating or the holodeck. Sleeping should cause it to wear off.
 
-
 	var/hallucination = 0 //Directly affects how long a mob will hallucinate for
 	var/list/atom/hallucinations = list() //A list of hallucinated people that try to attack the mob. See /obj/effect/fake_attacker in hallucinations.dm
 
+	var/can_butcher = 1 //Whether it's possible to butcher this mob manually
+	var/meat_taken = 0 //How much meat has been taken from this mob by butchering
+	var/meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
+	var/being_butchered = 0 //To prevent butchering an animal almost instantly
+	var/list/butchering_drops //See code/datums/butchering.dm, stuff like skinning goes here
 
-	var/last_special = 0 //Used by the resist verb, likely used to prevent players from bypassing next_move by logging in/out.
-
-	//Allows mobs to move through dense areas without restriction. For instance, in space or out of holder objects.
-	var/incorporeal_move = 0 //0 is off, 1 is normal, 2 is for ninjas.
+	var/list/image/static_overlays
 
 	var/t_plasma = null
 	var/t_oxygen = null
@@ -32,13 +35,16 @@
 	var/t_n2 = null
 
 	var/now_pushing = null
+	var/mob_bump_flag = 0
+	var/mob_swap_flags = 0
+	var/mob_push_flags = 0
 
 	var/cameraFollow = null
 
 	var/tod = null // Time of death
 	var/update_slimes = 1
 
-	var/on_fire = 0 //The "Are we on fire?" var
+	on_fire = 0 //The "Are we on fire?" var
 	var/fire_stacks = 0 //Tracks how many stacks of fire we have on, max is usually 20
 
 	var/specialsauce = 0 //Has this person consumed enough special sauce? IF so they're a ticking time bomb of death.
@@ -47,3 +53,22 @@
 	var/silent = null 		//Can't talk. Value goes down every life proc.
 
 	var/locked_to_z = 0 // Locked to a Z-level if nonzero.
+
+	// Fix ashifying in hot fires.
+	//autoignition_temperature=0
+	//fire_fuel=0
+
+	var/list/icon/pipes_shown = list()
+	var/last_played_vent
+	var/is_ventcrawling = 0
+
+	var/species_type
+	//
+	var/list/callOnLife = list() //
+	var/obj/screen/schematics_background
+	var/shown_schematics_background = 0
+
+/mob/living/proc/unsubLife(datum/sub)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/proc/unsubLife() called tick#: [world.time]")
+	while("\ref[sub]" in callOnLife)
+		callOnLife -= "\ref[sub]"

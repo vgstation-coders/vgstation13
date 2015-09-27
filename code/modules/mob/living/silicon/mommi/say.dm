@@ -1,20 +1,3 @@
-/mob/living/silicon/robot/mommi/say_understands(var/other)
-	if (istype(other, /mob/living/silicon/ai))
-		return 1
-	if (istype(other, /mob/living/silicon/decoy))
-		return 1
-	if (istype(other, /mob/living/silicon/robot))
-		return 1
-	if (istype(other, /mob/living/carbon/human))
-		return 1
-	if (istype(other, /mob/living/carbon/brain))
-		return 1
-	if (istype(other, /mob/living/silicon/pai))
-		return 1
-//	if (istype(other, /mob/living/silicon/hivebot))
-//		return 1
-	return ..()
-
 /mob/living/silicon/robot/mommi/say_quote(var/text)
 	var/ending = copytext(text, length(text))
 
@@ -25,22 +8,25 @@
 
 	return "states, \"[text]\"";
 
-/mob/living/silicon/robot/mommi/proc/mommi_talk(var/message)
-	log_say("[key_name(src)] : [message]")
+/mob/living/silicon/robot/mommi/handle_inherent_channels(var/message, var/message_mode, var/datum/language/speaking)
+	. = ..()
+	if(.)
+		return .
+	if(src.keeper)
+		message = trim(message)
+		if (!message)
+			return
 
-	message = trim(message)
+		var/turf/T = get_turf(src)
+		var/msg = !T ? "Nullspace" : "[T.x],[T.y],[T.z]"
+		log_say("[key_name(src)] (@[msg]) Damage Control: [message]")
 
-	if (!message)
-		return
 
-	var/message_a = say_quote(message)
-	var/rendered = "<i><span class='mommi game say'>Damage Control, <span class='name'>[name]</span> <span class='message'>[message_a]</span></span></i>"
+		var/interior_message = say_quote(message)
+		var/rendered = text("<i><span class='mommi game say'>Damage Control, <span class='name'>[]</span> <span class='message'>[]</span></span></i>",name,interior_message)
 
-	for (var/mob/living/silicon/robot/mommi/S in world)
-		if(istype(S))
-			S.show_message(rendered, 2)
-
-	for (var/mob/M in dead_mob_list)
-		if(!istype(M,/mob/new_player) && !istype(M,/mob/living/carbon/brain)) //No meta-evesdropping
-			rendered = "<i><span class='mommi game say'>Damage Control, <span class='name'>[name]</span> <a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a> <span class='message'>[message_a]</span></span></i>"
-			M.show_message(rendered, 2)
+		for (var/mob/S in player_list)
+			var/mob/living/silicon/robot/mommi/test = S
+			if((istype(test) && test.keeper) || istype(S,/mob/dead/observer))
+				handle_render(S,rendered,src)
+		return 1

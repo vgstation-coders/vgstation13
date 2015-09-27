@@ -39,6 +39,7 @@
 		onclose(user, "syndbeacon")
 
 	Topic(href, href_list)
+		if(..()) return 1
 		if(href_list["betraitor"])
 			if(charges < 1)
 				src.updateUsrDialog()
@@ -98,6 +99,7 @@
 
 
 	proc/selfdestruct()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/selfdestruct() called tick#: [world.time]")
 		selfdestructing = 1
 		spawn() explosion(src.loc, 1, rand(1,3), rand(3,8), 10)
 
@@ -122,24 +124,26 @@
 
 
 	proc/Activate(mob/user = null)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/Activate() called tick#: [world.time]")
 		if(!checkWirePower())
-			if(user) user << "\blue The connected wire doesn't have enough current."
+			if(user) user << "<span class='notice'>The connected wire doesn't have enough current.</span>"
 			return
-		for(var/obj/machinery/singularity/singulo in world)
+		for(var/obj/machinery/singularity/singulo in power_machines)
 			if(singulo.z == z)
 				singulo.target = src
 		icon_state = "[icontype]1"
 		active = 1
-		if(user) user << "\blue You activate the beacon."
+		if(user) user << "<span class='notice'>You activate the beacon.</span>"
 
 
 	proc/Deactivate(mob/user = null)
-		for(var/obj/machinery/singularity/singulo in world)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/Deactivate() called tick#: [world.time]")
+		for(var/obj/machinery/singularity/singulo in power_machines)
 			if(singulo.target == src)
 				singulo.target = null
 		icon_state = "[icontype]0"
 		active = 0
-		if(user) user << "\blue You deactivate the beacon."
+		if(user) user << "<span class='notice'>You deactivate the beacon.</span>"
 
 
 	attack_ai(mob/user as mob)
@@ -150,20 +154,20 @@
 		if(stat & SCREWED)
 			return active ? Deactivate(user) : Activate(user)
 		else
-			user << "\red You need to screw the beacon to the floor first!"
+			user << "<span class='warning'>You need to screw the beacon to the floor first!</span>"
 			return
 
 
 	attackby(obj/item/weapon/W as obj, mob/user as mob)
 		if(istype(W,/obj/item/weapon/screwdriver))
 			if(active)
-				user << "\red You need to deactivate the beacon first!"
+				user << "<span class='warning'>You need to deactivate the beacon first!</span>"
 				return
 
 			if(stat & SCREWED)
 				stat &= ~SCREWED
 				anchored = 0
-				user << "\blue You unscrew the beacon from the floor."
+				user << "<span class='notice'>You unscrew the beacon from the floor.</span>"
 				attached = null
 				return
 			else
@@ -175,7 +179,7 @@
 					return
 				stat |= SCREWED
 				anchored = 1
-				user << "\blue You screw the beacon to the floor and attach the cable."
+				user << "<span class='notice'>You screw the beacon to the floor and attach the cable.</span>"
 				return
 		..()
 		return
@@ -194,6 +198,7 @@
 	* - QualityVan, Aug 11 2012
 	*/
 	proc/checkWirePower()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/checkWirePower() called tick#: [world.time]")
 		if(!attached)
 			return 0
 		var/datum/powernet/PN = attached.get_powernet()

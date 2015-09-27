@@ -18,8 +18,8 @@
 	melee_damage_lower = 10
 	melee_damage_upper = 10
 	attacktext = "punches"
-	a_intent = "harm"
-	var/corpse = /obj/effect/landmark/mobcorpse/syndicatesoldier
+	a_intent = I_HURT
+	var/obj/effect/landmark/corpse/corpse = /obj/effect/landmark/corpse/syndicatesoldier
 	var/weapon1
 	var/weapon2
 	min_oxy = 5
@@ -37,12 +37,13 @@
 /mob/living/simple_animal/hostile/syndicate/Die()
 	..()
 	if(corpse)
-		new corpse (src.loc)
+		corpse = new corpse(loc)
+		corpse.createCorpse()
 	if(weapon1)
-		new weapon1 (src.loc)
+		new weapon1 (get_turf(src))
 	if(weapon2)
-		new weapon2 (src.loc)
-	del src
+		new weapon2 (get_turf(src))
+	qdel(src)
 	return
 
 ///////////////Sword and shield////////////
@@ -58,18 +59,19 @@
 	status_flags = 0
 
 /mob/living/simple_animal/hostile/syndicate/melee/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	user.delayNextAttack(8)
 	if(O.force)
 		if(prob(80))
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
 				damage = 0
 			health -= damage
-			visible_message("\red \b [src] has been attacked with [O] by [user]. ")
+			visible_message("<span class='danger'>[src] has been attacked with [O] by [user]. </span>")
 		else
-			visible_message("\red \b [src] blocks [O] with its shield! ")
+			visible_message("<span class='danger'>[src] blocks [O] with its shield! </span>")
 	else
-		usr << "\red This weapon is ineffective, it does no damage."
-		visible_message("\red [user] gently taps [src] with [O]. ")
+		usr << "<span class='warning'>This weapon is ineffective, it does no damage.</span>"
+		visible_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
 
 
 /mob/living/simple_animal/hostile/syndicate/melee/bullet_act(var/obj/item/projectile/Proj)
@@ -77,7 +79,7 @@
 	if(prob(65))
 		src.health -= Proj.damage
 	else
-		visible_message("\red <B>[src] blocks [Proj] with its shield!</B>")
+		visible_message("<span class='danger'>[src] blocks [Proj] with its shield!</span>")
 	return 0
 
 
@@ -94,7 +96,7 @@
 	icon_state = "syndicatemeleespace"
 	icon_living = "syndicatemeleespace"
 	name = "Syndicate Commando"
-	corpse = /obj/effect/landmark/mobcorpse/syndicatecommando
+	corpse = /obj/effect/landmark/corpse/syndicatecommando
 	speed = 0
 
 /mob/living/simple_animal/hostile/syndicate/melee/space/Process_Spacemove(var/check_drift = 0)
@@ -126,7 +128,7 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
-	corpse = /obj/effect/landmark/mobcorpse/syndicatecommando
+	corpse = /obj/effect/landmark/corpse/syndicatecommando
 	speed = 0
 
 /mob/living/simple_animal/hostile/syndicate/ranged/space/Process_Spacemove(var/check_drift = 0)
@@ -147,6 +149,8 @@
 	attacktext = "cuts"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	faction = "syndicate"
+	can_butcher = 0
+
 	min_oxy = 0
 	max_oxy = 0
 	min_tox = 0
@@ -157,8 +161,23 @@
 	max_n2 = 0
 	minbodytemp = 0
 
+/mob/living/simple_animal/hostile/viscerator/Life()
+	..()
+	if(stat == CONSCIOUS)
+		animate(src, pixel_x = rand(-12,12), pixel_y = rand(-12,12), time = 15, easing = SINE_EASING)
+
 /mob/living/simple_animal/hostile/viscerator/Die()
 	..()
-	visible_message("\red <b>[src]</b> is smashed into pieces!")
+	visible_message("<span class='warning'><b>[src]</b> is smashed into pieces!</span>")
 	del src
 	return
+
+/mob/living/simple_animal/hostile/viscerator/CanPass(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+	if(air_group || (height == 0))
+		return 1
+	if(istype(mover, /mob/living/simple_animal/hostile/viscerator))
+		return 1
+	if(istype(mover, /obj/item/projectile))
+		return prob(66)
+	else
+		return !density

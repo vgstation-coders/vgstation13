@@ -3,29 +3,30 @@
 	desc = "Used to separate things with different weight. Spin 'em round, round, right round."
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "centrifuge"
+	circuit = "/obj/item/weapon/circuitboard/centrifuge"
 	var/curing
 	var/isolating
 
 	var/obj/item/weapon/reagent_containers/glass/beaker/vial/sample = null
 	var/datum/disease2/disease/virus2 = null
 
-/obj/machinery/computer/centrifuge/attackby(var/obj/I as obj, var/mob/user as mob)
-	if(istype(I, /obj/item/weapon/screwdriver))
-		return ..(I,user)
+	light_color = null
 
-	if(istype(I,/obj/item/weapon/reagent_containers/glass/beaker/vial))
-		var/mob/living/carbon/C = user
-		if(!sample)
-			sample = I
-			C.drop_item()
-			I.loc = src
+/obj/machinery/computer/centrifuge/attackby(var/obj/item/weapon/reagent_containers/glass/beaker/vial/I, var/mob/user as mob)
+	if(!istype(I))
+		return ..()
 
-	src.attack_hand(user)
-	return
+	var/mob/living/carbon/C = user
+	if(!sample)
+		sample = I
+		C.drop_item(I, src)
+
+	attack_hand(user)
 
 /obj/machinery/computer/centrifuge/update_icon()
 	..()
 	if(! (stat & (BROKEN|NOPOWER)) && (isolating || curing))
+		light_color = LIGHT_COLOR_CYAN
 		icon_state = "centrifuge_moving"
 
 /obj/machinery/computer/centrifuge/attack_hand(var/mob/user as mob)
@@ -101,10 +102,10 @@
 			var/delay = 20
 			var/datum/reagent/blood/B = locate(/datum/reagent/blood) in sample.reagents.reagent_list
 			if (!B)
-				state("\The [src.name] buzzes, \"No antibody carrier detected.\"", "blue")
+				say("No antibody carrier detected.")
 
 			else if(sample.reagents.has_reagent("toxins"))
-				state("\The [src.name] beeps, \"Pathogen purging speed above nominal.\"", "blue")
+				say("Pathogen purging speed above nominal.")
 				delay = delay/2
 
 			else
@@ -122,7 +123,7 @@
 					isolating = 40
 					update_icon()
 				else
-					state("\The [src.name] buzzes, \"No such pathogen detected.\"", "blue")
+					say("No such pathogen detected.")
 
 		if("sample")
 			if(sample)
@@ -136,6 +137,7 @@
 
 
 /obj/machinery/computer/centrifuge/proc/cure()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/centrifuge/proc/cure() called tick#: [world.time]")
 	var/datum/reagent/blood/B = locate(/datum/reagent/blood) in sample.reagents.reagent_list
 	if (!B)
 		return
@@ -145,10 +147,11 @@
 	sample.reagents.remove_reagent("blood",amt)
 	sample.reagents.add_reagent("antibodies",amt,data)
 
-	state("\The [src.name] pings", "blue")
+	alert_noise("ping")
 
 /obj/machinery/computer/centrifuge/proc/isolate()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/centrifuge/proc/isolate() called tick#: [world.time]")
 	var/obj/item/weapon/virusdish/dish = new/obj/item/weapon/virusdish(src.loc)
 	dish.virus2 = virus2
 
-	state("\The [src.name] pings", "blue")
+	alert_noise("ping")

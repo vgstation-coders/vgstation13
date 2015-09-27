@@ -76,6 +76,7 @@
 
 	// returns 1 if there's a next stage, 0 otherwise
 	proc/next_stage()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/next_stage() called tick#: [world.time]")
 		if(current_stage + 1 > src.desc_list.len)
 			return 0
 
@@ -87,11 +88,13 @@
 
 	// returns 1 if the wound has started healing
 	proc/started_healing()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/started_healing() called tick#: [world.time]")
 		return (current_stage > 1)
 
 	// checks whether the wound has been appropriately treated
 	// always returns 1 for wounds that don't need to be treated
 	proc/is_treated()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/is_treated() called tick#: [world.time]")
 		if(!needs_treatment) return 1
 
 		if(damage_type == BRUISE || damage_type == CUT)
@@ -102,6 +105,7 @@
 	// checks if wound is considered open for external infections
 	// untreated cuts (and bleeding bruises) and burns are possibly infectable, chance higher if wound is bigger
 	proc/can_infect()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/can_infect() called tick#: [world.time]")
 		if (is_treated() && damage < 10)
 			return 0
 		if (disinfected)
@@ -119,7 +123,33 @@
 	// heal the given amount of damage, and if the given amount of damage was more
 	// than what needed to be healed, return how much heal was left
 	// set @heals_internal to also heal internal organ damage
+
+	proc/infection_check()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/infection_check() called tick#: [world.time]")
+		if (damage < 10)
+			return 0
+		if (is_treated() && damage < 25)
+			return 0
+		if (disinfected)
+			germ_level = 0
+			return 0
+
+		if(damage_type == BRUISE && !bleeding())
+			return 0
+
+		var/dam_coef = round(damage/10)
+		switch (damage_type)
+			if (BRUISE)
+				return prob(dam_coef*5)
+			if (BURN)
+				return prob(dam_coef*10)
+			if (CUT)
+				return prob(dam_coef*20)
+
+		return 0
+
 	proc/heal_damage(amount, heals_internal = 0)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/heal_damage() called tick#: [world.time]")
 		if(src.internal && !heals_internal)
 			// heal nothing
 			return amount
@@ -138,6 +168,7 @@
 
 	// opens the wound again
 	proc/open_wound(damage)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/open_wound() called tick#: [world.time]")
 		src.damage += damage
 		bleed_timer += damage
 
@@ -148,6 +179,7 @@
 		src.min_damage = damage_list[current_stage]
 
 	proc/bleeding()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/bleeding() called tick#: [world.time]")
 		// internal wounds don't bleed in the sense of this function
 		return ((damage > 30 || bleed_timer > 0) && !(bandaged||clamped) && (damage_type == BRUISE && damage >= 20 || damage_type == CUT && damage >= 5) && current_stage <= max_bleeding_stage && !src.internal)
 

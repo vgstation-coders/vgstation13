@@ -30,27 +30,35 @@
 	add_stylesheet("common", 'html/browser/common.css') // this CSS sheet is common to all UIs
 
 /datum/browser/proc/add_head_content(nhead_content)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/browser/proc/add_head_content() called tick#: [world.time]")
 	head_content = nhead_content
 
 /datum/browser/proc/set_window_options(nwindow_options)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/browser/proc/set_window_options() called tick#: [world.time]")
 	window_options = nwindow_options
 
 /datum/browser/proc/set_title_image(ntitle_image)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/browser/proc/set_title_image() called tick#: [world.time]")
 	//title_image = ntitle_image
 
 /datum/browser/proc/add_stylesheet(name, file)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/browser/proc/add_stylesheet() called tick#: [world.time]")
 	stylesheets[name] = file
 
 /datum/browser/proc/add_script(name, file)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/browser/proc/add_script() called tick#: [world.time]")
 	scripts[name] = file
 
 /datum/browser/proc/set_content(ncontent)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/browser/proc/set_content() called tick#: [world.time]")
 	content = ncontent
 
 /datum/browser/proc/add_content(ncontent)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/browser/proc/add_content() called tick#: [world.time]")
 	content += ncontent
 
 /datum/browser/proc/get_header()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/browser/proc/get_header() called tick#: [world.time]")
 	var/key
 	var/filename
 	for (key in stylesheets)
@@ -80,6 +88,7 @@
 	"}
 
 /datum/browser/proc/get_footer()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/browser/proc/get_footer() called tick#: [world.time]")
 	return {"
 			</div>
 		</div>
@@ -87,6 +96,7 @@
 </html>"}
 
 /datum/browser/proc/get_content()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/browser/proc/get_content() called tick#: [world.time]")
 	return {"
 	[get_header()]
 	[content]
@@ -94,6 +104,7 @@
 	"}
 
 /datum/browser/proc/open(var/use_onclose = 1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/browser/proc/open() called tick#: [world.time]")
 	var/window_size = ""
 	if (width && height)
 		window_size = "size=[width]x[height];"
@@ -102,12 +113,14 @@
 		onclose(user, window_id, ref)
 
 /datum/browser/proc/close()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/browser/proc/close() called tick#: [world.time]")
 	user << browse(null, "window=[window_id]")
 
 // This will allow you to show an icon in the browse window
 // This is added to mob so that it can be used without a reference to the browser object
 // There is probably a better place for this...
 /mob/proc/browse_rsc_icon(icon, icon_state, dir = -1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/browse_rsc_icon() called tick#: [world.time]")
 	/*
 	var/icon/I
 	if (dir >= 0)
@@ -137,9 +150,11 @@
 // Otherwise, the user mob's machine var will be reset directly.
 //
 /proc/format_text(text)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/format_text() called tick#: [world.time]")
 	return replacetext(replacetext(text,"\proper ",""),"\improper ","")
 
 /proc/onclosed(mob/user, windowid, var/atom/ref=null)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/onclosed() called tick#: [world.time]")
 	if(!user.client) return
 	var/param = "null"
 	if(ref)
@@ -159,6 +174,7 @@
 	set hidden = 1						// hide this verb from the user's panel
 	set name = ".windowclose"			// no autocomplete on cmd line
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/verb/windowclosed()  called tick#: [world.time]")
 	//world << "windowclose: [atomref]"
 	if(atomref!="null")				// if passed a real atomref
 		var/hsrc = locate(atomref)	// find the reffed atom
@@ -175,3 +191,39 @@
 		//world << "[src] was [src.mob.machine], setting to null"
 		src.mob.unset_machine()
 	return
+
+///////////////////////
+// CLEAN UI STYLE.
+///////////////////////
+
+/datum/browser/clean/New(nuser, nwindow_id, ntitle = 0, nwidth = 0, nheight = 0, var/atom/nref = null)
+	..(nuser,nwindow_id,ntitle,nwidth,nheight,nref)
+	add_stylesheet("common",'html/browser/clean.css') // Clean style.
+
+// Re-implemented without the extra divs.
+/datum/browser/clean/get_header()
+	var/key
+	var/filename
+	for (key in stylesheets)
+		filename = "[ckey(key)].css"
+		user << browse_rsc(stylesheets[key], filename)
+		head_content += "<link rel='stylesheet' type='text/css' href='[filename]'>"
+
+	for (key in scripts)
+		filename = "[ckey(key)].js"
+		user << browse_rsc(scripts[key], filename)
+		head_content += "<script type='text/javascript' src='[filename]'></script>"
+
+	return {"<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<head>
+		[head_content]
+	</head>
+	<body scroll=auto>
+	"}
+
+/datum/browser/clean/get_footer()
+	return {"
+	</body>
+</html>"}

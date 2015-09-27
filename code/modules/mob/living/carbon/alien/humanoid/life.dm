@@ -7,10 +7,11 @@
 
 	var/temperature_alert = 0
 
-
 /mob/living/carbon/alien/humanoid/Life()
 	set invisibility = 0
 	//set background = 1
+
+	if(timestopped) return 0 //under effects of time magick
 
 	if (monkeyizing)
 		return
@@ -68,28 +69,30 @@
 
 /mob/living/carbon/alien/humanoid
 	proc/handle_disabilities()
-		if (disabilities & EPILEPSY)
-			if ((prob(1) && paralysis < 10))
-				src << "\red You have a seizure!"
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/handle_disabilities() called tick#: [world.time]")
+		if(disabilities & EPILEPSY)
+			if((prob(1) && paralysis < 10))
+				src << "<span class='warning'>You have a seizure !</span>"
 				Paralyse(10)
-		if (disabilities & COUGHING)
-			if ((prob(5) && paralysis <= 1))
+		if(disabilities & COUGHING)
+			if((prob(5) && paralysis <= 1))
 				drop_item()
 				spawn( 0 )
 					emote("cough")
 					return
-		if (disabilities & TOURETTES)
-			if ((prob(10) && paralysis <= 1))
+		if(disabilities & TOURETTES)
+			if((prob(10) && paralysis <= 1))
 				Stun(10)
 				spawn( 0 )
 					emote("twitch")
 					return
-		if (disabilities & NERVOUS)
-			if (prob(10))
+		if(disabilities & NERVOUS)
+			if(prob(10))
 				stuttering = max(10, stuttering)
 
 
 	proc/breathe()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/breathe() called tick#: [world.time]")
 		if(reagents)
 			if(reagents.has_reagent("lexorin")) return
 		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)) return
@@ -149,22 +152,24 @@
 
 
 	proc/get_breath_from_internal(volume_needed)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/get_breath_from_internal() called tick#: [world.time]")
 		if(internal)
-			if (!contents.Find(internal))
+			if(!contents.Find(internal))
 				internal = null
-			if (!wear_mask || !(wear_mask.flags & MASKINTERNALS) )
+			if(!wear_mask || !(wear_mask.flags & MASKINTERNALS) )
 				internal = null
 			if(internal)
-				if (internals)
+				if(internals)
 					internals.icon_state = "internal1"
 				return internal.remove_air_volume(volume_needed)
 			else
-				if (internals)
+				if(internals)
 					internals.icon_state = "internal0"
 		return null
 
 	proc/handle_breath(datum/gas_mixture/breath)
-		if(status_flags & GODMODE)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/handle_breath() called tick#: [world.time]")
+		if((status_flags & GODMODE) || (flags & INVULNERABLE))
 			return
 
 		if(!breath || (breath.total_moles == 0))
@@ -193,7 +198,7 @@
 
 		if(breath.temperature > (T0C+66) && !(M_RESIST_HEAT in mutations)) // Hot air hurts :(
 			if(prob(20))
-				src << "\red You feel a searing heat in your lungs!"
+				src << "<span class='warning'>You feel a searing heat in your lungs !</span>"
 			fire_alert = max(fire_alert, 1)
 		else
 			fire_alert = 0
@@ -202,9 +207,8 @@
 
 		return 1
 
-
-
 	proc/adjust_body_temperature(current, loc_temp, boost)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/adjust_body_temperature() called tick#: [world.time]")
 		var/temperature = current
 		var/difference = abs(current-loc_temp)	//get difference
 		var/increments// = difference/10			//find how many increments apart they are
@@ -223,6 +227,7 @@
 
 	/*
 	proc/get_thermal_protection()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/get_thermal_protection() called tick#: [world.time]")
 		var/thermal_protection = 1.0
 		//Handle normal clothing
 		if(head && (head.body_parts_covered & HEAD))
@@ -243,6 +248,7 @@
 		return thermal_protection
 
 	proc/add_fire_protection(var/temp)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/add_fire_protection() called tick#: [world.time]")
 		var/fire_prot = 0
 		if(head)
 			if(head.protective_temperature > temp)
@@ -260,17 +266,19 @@
 
 	proc/handle_chemicals_in_body()
 
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/handle_chemicals_in_body() called tick#: [world.time]")
+
 		if(reagents) reagents.metabolize(src)
 
 		if(M_FAT in mutations)
 			if(nutrition < 100)
 				if(prob(round((50 - nutrition) / 100)))
-					src << "\blue You feel fit again!"
+					src << "<span class='notice'>You feel fit again!</span>"
 					mutations.Remove(M_FAT)
 		else
 			if(nutrition > 500)
 				if(prob(5 + round((nutrition - 200) / 2)))
-					src << "\red You suddenly feel blubbery!"
+					src << "<span class='warning'>You suddenly feel blubbery!</span>"
 					mutations.Add(M_FAT)
 
 		if (nutrition > 0)
@@ -298,13 +306,14 @@
 
 
 	proc/handle_regular_status_updates()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/handle_regular_status_updates() called tick#: [world.time]")
 		updatehealth()
 
 		if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
 			blinded = 1
 			silent = 0
 		else				//ALIVE. LIGHTS ARE ON
-			if(health < config.health_threshold_dead || brain_op_stage == 4.0)
+			if(health < config.health_threshold_dead || !has_brain())
 				death()
 				blinded = 1
 				stat = DEAD
@@ -378,6 +387,8 @@
 
 	proc/handle_regular_hud_updates()
 
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/handle_regular_hud_updates() called tick#: [world.time]")
+
 		if (stat == 2 || (M_XRAY in mutations))
 			sight |= SEE_TURFS
 			sight |= SEE_MOBS
@@ -440,12 +451,13 @@
 				if (!( machine.check_eye(src) ))
 					reset_view(null)
 			else
-				if(client && !client.adminobs)
+				if(client && !client.adminobs && !isTeleViewing(client.eye))
 					reset_view(null)
 
 		return 1
 
 	proc/handle_stomach()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/handle_stomach() called tick#: [world.time]")
 		spawn(0)
 			for(var/mob/living/M in stomach_contents)
 				if(M.loc != src)

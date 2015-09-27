@@ -3,6 +3,7 @@
 #define ARTIFACT_SPAWN_CHANCE 20
 
 proc/SetupXenoarch()
+	//writepanic("[__FILE__].[__LINE__] \\/proc/SetupXenoarch() called tick#: [world.time]")
 	for(var/turf/unsimulated/mineral/M in block(locate(1,1,1), locate(world.maxx, world.maxy, world.maxz)))
 		if(!prob(XENOARCH_SPAWN_CHANCE))
 			continue
@@ -15,7 +16,7 @@ proc/SetupXenoarch()
 			var/turf/unsimulated/mineral/archeo_turf = turfs_to_process[1]
 
 			for(var/turf/unsimulated/mineral/T in orange(1, archeo_turf))
-				if(T.finds)
+				if(T.finds.len)
 					continue
 
 				if(T in processed_turfs)
@@ -27,8 +28,7 @@ proc/SetupXenoarch()
 			turfs_to_process.Remove(archeo_turf)
 			processed_turfs.Add(archeo_turf)
 
-			if(isnull(archeo_turf.finds))
-				archeo_turf.finds = list()
+			if(!archeo_turf.finds || !archeo_turf.finds.len)
 
 				if(prob(50))
 					archeo_turf.finds.Add(new /datum/find(digsite, rand(5,95)))
@@ -157,7 +157,7 @@ proc/SetupXenoarch()
 		new /obj/item/device/core_sampler(src)
 		new /obj/item/device/gps(src)
 		new /obj/item/device/beacon_locator(src)
-		new /obj/item/device/radio/beacon(src)
+		new /obj/item/beacon(src)
 		new /obj/item/clothing/glasses/meson(src)
 		new /obj/item/weapon/pickaxe(src)
 		new /obj/item/device/measuring_tape(src)

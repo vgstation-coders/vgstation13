@@ -15,19 +15,28 @@
 	pixel_y = rand(-5, 5)
 
 /obj/item/bluespace_crystal/attack_self(var/mob/user)
-	blink_mob(user)
-	user.drop_item()
-	user.visible_message("<span class='notice'>[user] crushes the [src]!</span>")
-	del(src)
+	var/datum/zLevel/L = get_z_level(src)
+	if(L && !L.teleJammed)
+		user.visible_message("<span class='notice'>[user] crushes the [src]!</span>")
+		blink_mob(user)
+	else
+		user.visible_message("<span class='notice'>[user] crushes the [src], but nothing happens!</span>")
+
+	user.drop_item(src)
+	qdel(src)
 
 /obj/item/bluespace_crystal/proc/blink_mob(var/mob/living/L)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/bluespace_crystal/proc/blink_mob() called tick#: [world.time]")
 	do_teleport(L, get_turf(L), blink_range, asoundin = 'sound/effects/phasein.ogg')
 
 /obj/item/bluespace_crystal/throw_impact(atom/hit_atom)
-	..()
-	if(isliving(hit_atom))
+	. = ..()
+	var/datum/zLevel/L = get_z_level(src)
+
+	if(isliving(hit_atom) && L && !L.teleJammed)
 		blink_mob(hit_atom)
-	del(src)
+
+	qdel(src)
 
 // Artifical bluespace crystal, doesn't give you much research.
 

@@ -36,7 +36,8 @@
 	desc = "Yarr."
 	icon_state = "pirate"
 	item_state = "pirate"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
+	species_fit = list("Vox")
 
 
 /obj/item/clothing/suit/hgpirate
@@ -44,8 +45,9 @@
 	desc = "Yarr."
 	icon_state = "hgpirate"
 	item_state = "hgpirate"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	flags_inv = HIDEJUMPSUIT
+	species_fit = list("Vox")
 
 
 /obj/item/clothing/suit/cyborg_suit
@@ -53,7 +55,8 @@
 	desc = "Suit for a cyborg costume."
 	icon_state = "death"
 	item_state = "death"
-	flags = FPRINT | TABLEPASS | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	fire_resist = T0C+5200
 	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
 
@@ -63,7 +66,7 @@
 	desc = "A Nazi great coat"
 	icon_state = "nazi"
 	item_state = "nazi"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 
 
 /obj/item/clothing/suit/johnny_coat
@@ -71,7 +74,7 @@
 	desc = "Johnny~~"
 	icon_state = "johnny"
 	item_state = "johnny"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 
 
 /obj/item/clothing/suit/justice
@@ -79,7 +82,7 @@
 	desc = "this pretty much looks ridiculous"
 	icon_state = "justice"
 	item_state = "justice"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
 
 
@@ -88,7 +91,7 @@
 	desc = "This robe commands authority."
 	icon_state = "judge"
 	item_state = "judge"
-	flags = FPRINT | TABLEPASS | ONESIZEFITSALL
+	flags = FPRINT  | ONESIZEFITSALL
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
 	allowed = list(/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/spacecash)
 	flags_inv = HIDEJUMPSUIT
@@ -117,7 +120,7 @@
 	item_state = "space_suit_syndicate"
 	desc = "A plastic replica of the syndicate space suit, you'll look just like a real murderous syndicate agent in this! This is a toy, it is not made for use in space!"
 	w_class = 3
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
 
@@ -200,8 +203,9 @@
 	set name = "Toggle Jacket Buttons"
 	set category = "Object"
 	set src in usr
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/item/clothing/suit/suit/verb/toggle()  called tick#: [world.time]")
 
-	if(!usr.canmove || usr.stat || usr.restrained())
+	if(!usr.canmove || usr.stat || usr.restrained() || (usr.status_flags & FAKEDEATH))
 		return 0
 
 	if(src.icon_state == "suitjacket_blue_open")
@@ -241,21 +245,21 @@
 	desc = "A long, thick black leather coat."
 	icon_state = "leathercoat"
 	item_state = "leathercoat"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 
 /obj/item/clothing/suit/browncoat
 	name = "brown leather coat"
 	desc = "A long, brown leather coat."
 	icon_state = "browncoat"
 	item_state = "browncoat"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 
 /obj/item/clothing/suit/neocoat
 	name = "black coat"
 	desc = "A flowing, black coat."
 	icon_state = "neocoat"
 	item_state = "neocoat"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 
 //actual suits
 
@@ -264,7 +268,7 @@
 	desc = "A cream coloured, genteel suit."
 	icon_state = "creamsuit"
 	item_state = "creamsuit"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 
 //stripper
 
@@ -355,6 +359,7 @@
 	desc = "Now you too can pierce the heavens"
 	icon_state = "simonjacket"
 	item_state = "simonjacket"
+	species_fit = list("Vox")
 
 /obj/item/clothing/suit/kaminacape
 	name = "Kamina's Cape"
@@ -370,3 +375,107 @@
 	storage_slots = 8
 	max_combined_w_class = 20
 	can_hold = list("/obj/item/ammo_casing/shotgun")
+
+/obj/item/clothing/suit/officercoat
+	name = "Officer's Coat"
+	desc = "Ein Mantel gemacht, um die Juden zu bestrafen."
+	icon_state = "officersuit"
+	item_state = "officersuit"
+
+/obj/item/clothing/suit/soldiercoat
+	name = "Soldier's Coat"
+	desc = "Ein Mantel gemacht, um die Verbündeten zu zerstören."
+	icon_state = "soldiersuit"
+	item_state = "soldiersuit"
+
+/obj/item/clothing/suit/russofurcoat
+	name = "russian fur coat"
+	desc = "Let the land do the fighting for you."
+	icon_state = "russofurcoat"
+	item_state = "russofurcoat"
+	allowed = list(/obj/item/weapon/gun)
+
+/obj/item/clothing/suit/doshjacket
+	name = "Plasterer's Jacket"
+	desc = "Perfect for doing up the house."
+	icon_state = "doshjacket"
+	item_state = "doshjacket"
+
+/obj/item/clothing/suit/lordadmiral
+	name = "Lord Admiral's Coat"
+	desc = "You'll be the Ruler of the King's Navy in no time."
+	icon_state = "lordadmiral"
+	item_state = "lordadmiral"
+	allowed = list (/obj/item/weapon/gun)
+
+/obj/item/clothing/suit/raincoat
+	name = "Raincoat"
+	desc = "Do you like Huey Lewis and the News?"
+	icon_state = "raincoat"
+	item_state = "raincoat"
+	allowed = list (/obj/item/weapon/fireaxe)
+
+/obj/item/clothing/suit/kefkarobe
+	name = "Crazed Jester's Robe"
+	desc = "Do I look like a waiter?"
+	icon_state = "kefkarobe"
+/obj/item/clothing/suit/libertycoat
+	name = "Liberty Coat"
+	desc = "Smells faintly of freedom."
+	icon_state = "libertycoat"
+	item_state = "libertycoat"
+/obj/item/clothing/suit/storage/draculacoat
+	name = "Vampire Coat"
+	desc = "What is a man? A miserable little pile of secrets."
+	icon_state = "draculacoat"
+	item_state = "draculacoat"
+	blood_overlay_type = "coat"
+	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
+	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
+
+/obj/item/clothing/suit/maidapron
+	name = "Apron"
+	desc = "Simple white apron."
+	icon_state = "maidapron"
+	item_state = "maidapron"
+
+/obj/item/clothing/suit/clownpiece
+	name = "small fairy wings"
+	desc = "Some small and translucid insect-like wings."
+	icon_state = "clownpiece"
+	item_state = "clownpiece"
+
+/obj/item/clothing/suit/clownpiece/flying
+	name = "small fairy wings"
+	desc = "Some small and translucid insect-like wings. Looks like these are the real deal!"
+	icon_state = "clownpiece-fly"
+	item_state = "clownpiece"
+
+/obj/item/clothing/suit/clownpiece/flying/attack_hand(var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return ..()
+	if((src == H.wear_suit) && H.flying)
+		H.flying = 0
+		animate(H, pixel_y = pixel_y + 10 , time = 1, loop = 1)
+		animate(H, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
+		animate(H)
+		if(H.lying)//aka. if they have just been stunned
+			H.pixel_y -= 6
+	..()
+
+/obj/item/clothing/suit/clownpiece/flying/equipped(var/mob/user, var/slot)
+	var/mob/living/carbon/human/H = user
+	if(!istype(H)) return
+	if((slot == slot_wear_suit) && !user.flying)
+		user.flying = 1
+		animate(user, pixel_y = pixel_y + 10 , time = 10, loop = 1, easing = SINE_EASING)
+
+/obj/item/clothing/suit/clownpiece/flying/dropped(mob/user as mob)
+	if(user.flying)
+		user.flying = 0
+		animate(user, pixel_y = pixel_y + 10 , time = 1, loop = 1)
+		animate(user, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
+		animate(user)
+		if(user.lying)//aka. if they have just been stunned
+			user.pixel_y -= 6
+	..()

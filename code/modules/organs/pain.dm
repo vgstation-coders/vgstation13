@@ -1,4 +1,5 @@
 mob/proc/flash_pain()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\mob/proc/flash_pain() called tick#: [world.time]")
 	flick("pain",pain)
 
 mob/var/list/pain_stored = list()
@@ -8,6 +9,7 @@ mob/var/next_pain_time = 0
 // partname is the name of a body part
 // amount is a num from 1 to 100
 mob/living/carbon/proc/pain(var/partname, var/amount, var/force, var/burning = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\mob/living/carbon/proc/pain() called tick#: [world.time]")
 	if(stat >= 2) return
 	if(reagents.has_reagent("paracetamol"))
 		return
@@ -19,22 +21,19 @@ mob/living/carbon/proc/pain(var/partname, var/amount, var/force, var/burning = 0
 		return
 	if(world.time < next_pain_time && !force)
 		return
-	if(amount > 10 && istype(src,/mob/living/carbon/human))
-		if(src:paralysis)
-			src:paralysis = max(0, src:paralysis-round(amount/10))
 	if(amount > 50 && prob(amount / 5))
-		src:drop_item()
+		src.drop_item()
 	var/msg
 	if(burning)
 		switch(amount)
 			if(1 to 10)
-				msg = "\red <b>Your [partname] burns.</b>"
+				msg = "<span class='danger'>Your [partname] burns.</span>"
 			if(11 to 90)
 				flash_weak_pain()
-				msg = "\red <b><font size=2>Your [partname] burns badly!</font></b>"
+				msg = "<span class='danger'><font size=2>Your [partname] burns badly!</font></span>"
 			if(91 to 10000)
 				flash_pain()
-				msg = "\red <b><font size=3>OH GOD! Your [partname] is on fire!</font></b>"
+				msg = "<span class='danger'><font size=3>OH GOD! Your [partname] is on fire!</font></span>"
 	else
 		switch(amount)
 			if(1 to 10)
@@ -54,6 +53,7 @@ mob/living/carbon/proc/pain(var/partname, var/amount, var/force, var/burning = 0
 // message is the custom message to be displayed
 // flash_strength is 0 for weak pain flash, 1 for strong pain flash
 mob/living/carbon/human/proc/custom_pain(var/message, var/flash_strength)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\mob/living/carbon/human/proc/custom_pain() called tick#: [world.time]")
 	if(stat >= 1) return
 
 	if(species && species.flags & NO_PAIN) return
@@ -64,9 +64,9 @@ mob/living/carbon/human/proc/custom_pain(var/message, var/flash_strength)
 		return
 	if(analgesic)
 		return
-	var/msg = "\red <b>[message]</b>"
+	var/msg = "<span class='danger'>[message]</span>"
 	if(flash_strength >= 1)
-		msg = "\red <font size=3><b>[message]</b></font>"
+		msg = "<span class='danger'><font size=3>[message]</font></span>"
 
 	// Anti message spam checks
 	if(msg && ((msg != last_pain_message) || (world.time >= next_pain_time)))
@@ -75,6 +75,7 @@ mob/living/carbon/human/proc/custom_pain(var/message, var/flash_strength)
 	next_pain_time = world.time + 100
 
 mob/living/carbon/human/proc/handle_pain()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\mob/living/carbon/human/proc/handle_pain() called tick#: [world.time]")
 	// not when sleeping
 
 	if(species && species.flags & NO_PAIN) return
@@ -102,8 +103,7 @@ mob/living/carbon/human/proc/handle_pain()
 		pain(damaged_organ.display_name, maxdam, 0)
 
 	// Damage to internal organs hurts a lot.
-	for(var/organ_name in internal_organs)
-		var/datum/organ/internal/I = internal_organs[organ_name]
+	for(var/datum/organ/internal/I in internal_organs)
 		if(I.damage > 2) if(prob(2))
 			var/datum/organ/external/parent = get_organ(I.parent_organ)
 			src.custom_pain("You feel a sharp pain in your [parent.display_name]", 1)

@@ -20,14 +20,20 @@
 		- If so, is there any protection against somebody spam-clicking a link?
 	If you have any  questions about this stuff feel free to ask. ~Carn
 	*/
+/client
+	var/account_joined = ""
+	var/account_age
+
 /client/Topic(href, href_list, hsrc)
+	//var/timestart = world.timeofday
+	//testing("topic call for [usr] [href]")
 	if(!usr || usr != mob)	//stops us calling Topic for somebody else's client. Also helps prevent usr=null
 		return
 
 	//Reduces spamming of links by dropping calls that happen during the delay period
-	if(next_allowed_topic_time > world.time)
-		return
-	next_allowed_topic_time = world.time + TOPIC_SPAM_DELAY
+//	if(next_allowed_topic_time > world.time)
+//		return
+	//next_allowed_topic_time = world.time + TOPIC_SPAM_DELAY
 
 	//search the href for script injection
 	if( findtext(href,"<script",1,0) )
@@ -46,8 +52,9 @@
 		return
 
 	//Logs all hrefs
-	if(config && config.log_hrefs && href_logfile)
-		href_logfile << "<small>[time2text(world.timeofday,"hh:mm")] [src] (usr:[usr])</small> || [hsrc ? "[hsrc] " : ""][href]<br>"
+	if(config && config.log_hrefs && investigations[I_HREFS])
+		var/datum/log_controller/I = investigations[I_HREFS]
+		I.write("<small>[time2text(world.timeofday,"hh:mm")] [src] (usr:[usr])</small> || [hsrc ? "[hsrc] " : ""][href]<br />")
 
 	switch(href_list["_src_"])
 		if("holder")	hsrc = holder
@@ -56,16 +63,18 @@
 		if("vars")		return view_var_Topic(href,href_list,hsrc)
 
 	..()	//redirect to hsrc.Topic()
+	//testing("[usr] topic call took [(world.timeofday - timestart)/10] seconds")
 
 /client/proc/handle_spam_prevention(var/message, var/mute_type)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/handle_spam_prevention() called tick#: [world.time]")
 	if(config.automute_on && !holder && src.last_message == message)
 		src.last_message_count++
 		if(src.last_message_count >= SPAM_TRIGGER_AUTOMUTE)
-			src << "\red You have exceeded the spam filter limit for identical messages. An auto-mute was applied."
+			src << "<span class='warning'>You have exceeded the spam filter limit for identical messages. An auto-mute was applied.</span>"
 			cmd_admin_mute(src.mob, mute_type, 1)
 			return 1
 		if(src.last_message_count >= SPAM_TRIGGER_WARNING)
-			src << "\red You are nearing the spam filter limit for identical messages."
+			src << "<span class='warning'>You are nearing the spam filter limit for identical messages.</span>"
 			return 0
 	else
 		last_message = message
@@ -91,7 +100,21 @@
 	//CONNECT//
 	///////////
 /client/New(TopicData)
+	client_cache += src
+	client_cache[src] = list()
+
+	if(config)
+		winset(src, null, "outputwindow.output.style=[config.world_style_config];")
+		winset(src, null, "window1.msay_output.style=[config.world_style_config];") // it isn't possible to set two window elements in the same winset so we need to call it for each element we're assigning a stylesheet.
+	else
+		src << "<span class='warning'>The stylesheet wasn't properly setup call an administrator to reload the stylesheet or relog.</span>"
 	TopicData = null							//Prevent calls to client.Topic from connect
+
+	//Admin Authorisation
+	holder = admin_datums[ckey]
+	if(holder)
+		admins += src
+		holder.owner = src
 
 	if(connection != "seeker")					//Invalid connection type.
 		return null
@@ -108,17 +131,11 @@
 		src.preload_rsc = pick(config.resource_urls)
 	else src.preload_rsc = 1 // If config.resource_urls is not set, preload like normal.
 
-	src << "\red If the title screen is black, resources are still downloading. Please be patient until the title screen appears."
-
+	src << "<span class='warning'>If the title screen is black, resources are still downloading. Please be patient until the title screen appears.</span>"
 
 	clients += src
 	directory[ckey] = src
 
-	//Admin Authorisation
-	holder = admin_datums[ckey]
-	if(holder)
-		admins += src
-		holder.owner = src
 
 	//preferences datum - also holds some persistant data for the client (because we may as well keep these datums to a minimum)
 	prefs = preferences_datums[ckey]
@@ -142,6 +159,7 @@
 
 	if(holder)
 		add_admin_verbs()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\add_admin_verbs()  called tick#: [world.time]")
 		admin_memo_show()
 
 	log_client_to_db()
@@ -150,7 +168,17 @@
 
 	if(prefs.lastchangelog != changelog_hash) //bolds the changelog button on the interface so we know there are updates.
 		winset(src, "rpane.changelog", "background-color=#eaeaea;font-style=bold")
+		prefs.SetChangelog(ckey,changelog_hash)
+		src << "<span class='info'>Changelog has changed since your last visit.</span>"
 
+	//Set map label to correct map name
+	winset(src, "rpane.map", "text=\"[map.nameLong]\"")
+
+	// Notify scanners.
+	INVOKE_EVENT(on_login,list(
+		"client"=src,
+		"admin"=(holder!=null)
+	))
 
 	//////////////
 	//DISCONNECT//
@@ -161,42 +189,57 @@
 		admins -= src
 	directory -= ckey
 	clients -= src
+
+	client_cache -= src
+
 	return ..()
 
-
-
 /client/proc/log_client_to_db()
-
-	if ( IsGuestKey(src.key) )
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/log_client_to_db() called tick#: [world.time]")
+	if(IsGuestKey(key))
 		return
 
 	establish_db_connection()
+
 	if(!dbcon.IsConnected())
 		return
+	var/list/http[] = world.Export("http://www.byond.com/members/[src.key]?format=text")  // Retrieve information from BYOND
+	var/Joined = 2550-01-01
+	if(http && http.len && ("CONTENT" in http))
+		var/String = file2text(http["CONTENT"])  //  Convert the HTML file to text
+		var/JoinPos = findtext(String, "joined")+10  //  Parse for the joined date
+		Joined = copytext(String, JoinPos, JoinPos+10)  //  Get the date in the YYYY-MM-DD format
 
-	var/sql_ckey = sql_sanitize_text(src.ckey)
+	account_joined = Joined
 
-	var/DBQuery/query = dbcon.NewQuery("SELECT id, datediff(Now(),firstseen) as age FROM erro_player WHERE ckey = '[sql_ckey]'")
+	var/sql_ckey = sanitizeSQL(ckey)
+	var/age
+	testing("sql_ckey = [sql_ckey]")
+	var/DBQuery/query = dbcon.NewQuery("SELECT id, datediff(Now(),firstseen) as age, datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
 	query.Execute()
 	var/sql_id = 0
 	while(query.NextRow())
 		sql_id = query.item[1]
 		player_age = text2num(query.item[2])
+		age = text2num(query.item[3])
 		break
 
-	var/DBQuery/query_ip = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE ip = '[address]'")
+	var/sql_address = sanitizeSQL(address)
+
+	var/DBQuery/query_ip = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE ip = '[sql_address]'")
 	query_ip.Execute()
 	related_accounts_ip = ""
 	while(query_ip.NextRow())
 		related_accounts_ip += "[query_ip.item[1]], "
-		break
 
-	var/DBQuery/query_cid = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE computerid = '[computer_id]'")
+
+	var/sql_computerid = sanitizeSQL(computer_id)
+
+	var/DBQuery/query_cid = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE computerid = '[sql_computerid]'")
 	query_cid.Execute()
 	related_accounts_cid = ""
 	while(query_cid.NextRow())
 		related_accounts_cid += "[query_cid.item[1]], "
-		break
 
 	//Just the standard check to see if it's actually a number
 	if(sql_id)
@@ -204,29 +247,52 @@
 			sql_id = text2num(sql_id)
 		if(!isnum(sql_id))
 			return
+	//else
+		//var/url = pick("byond://ss13.nexisonline.net:1336", "byond://ss13.nexisonline.net:1336", "byond://ss13.nexisonline.net:1336", "byond://ss13.nexisonline.net:1336")
+		//src << link(url)
+
+		//var/Server/s = random_server_list[key]
+		//world.log << "Sending [src.key] to random server: [url]"
+		//src << link(s.url)
+		//del(src)
 
 	var/admin_rank = "Player"
-	if(src.holder)
-		admin_rank = src.holder.rank
 
-	var/sql_ip = sql_sanitize_text(src.address)
-	var/sql_computerid = sql_sanitize_text(src.computer_id)
-	var/sql_admin_rank = sql_sanitize_text(admin_rank)
+	if(istype(holder))
+		admin_rank = holder.rank
 
+	var/sql_admin_rank = sanitizeSQL(admin_rank)
 
 	if(sql_id)
 		//Player already identified previously, we need to just update the 'lastseen', 'ip' and 'computer_id' variables
-		var/DBQuery/query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_ip]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]' WHERE id = [sql_id]")
+		var/DBQuery/query_update
+		if(isnum(age))
+			query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]' WHERE id = [sql_id]")
+		else
+			query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]', accountjoined = '[Joined]' WHERE id = [sql_id]")
 		query_update.Execute()
 	else
 		//New player!! Need to insert all the stuff
-		var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO erro_player (id, ckey, firstseen, lastseen, ip, computerid, lastadminrank) VALUES (null, '[sql_ckey]', Now(), Now(), '[sql_ip]', '[sql_computerid]', '[sql_admin_rank]')")
+		var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO erro_player (id, ckey, firstseen, lastseen, ip, computerid, lastadminrank, accountjoined) VALUES (null, '[sql_ckey]', Now(), Now(), '[sql_address]', '[sql_computerid]', '[sql_admin_rank]', '[Joined]')")
 		query_insert.Execute()
 
-	//Logging player access
-	var/serverip = "[world.internet_address]:[world.port]"
-	var/DBQuery/query_accesslog = dbcon.NewQuery("INSERT INTO `erro_connection_log`(`id`,`datetime`,`serverip`,`ckey`,`ip`,`computerid`) VALUES(null,Now(),'[serverip]','[sql_ckey]','[sql_ip]','[sql_computerid]');")
-	query_accesslog.Execute()
+	if(!isnum(age))
+		var/DBQuery/query_age = dbcon.NewQuery("SELECT datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
+		query_age.Execute()
+		while(query_age.NextRow())
+			age = text2num(query_age.item[1])
+	if(age < 14)
+		message_admins("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age]  First seen = [player_age]")
+		log_admin(("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age] First seen = [player_age]"))
+	testing("[src]/[ckey(key)] logged in with age of [age]/[player_age]/[Joined]")
+	account_age = age
+
+	// logging player access
+	var/server_address_port = "[world.internet_address]:[world.port]"
+	var/sql_server_address_port = sanitizeSQL(server_address_port)
+	var/DBQuery/query_connection_log = dbcon.NewQuery("INSERT INTO `erro_connection_log`(`id`,`datetime`,`serverip`,`ckey`,`ip`,`computerid`) VALUES(null,Now(),'[sql_server_address_port]','[sql_ckey]','[sql_address]','[sql_computerid]');")
+
+	query_connection_log.Execute()
 
 
 #undef TOPIC_SPAM_DELAY
@@ -236,6 +302,7 @@
 //checks if a client is afk
 //3000 frames = 5 minutes
 /client/proc/is_afk(duration=3000)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/is_afk() called tick#: [world.time]")
 	if(inactivity > duration)	return inactivity
 	return 0
 
@@ -244,59 +311,70 @@
 	set desc = "Re-send resources for NanoUI. May help those with NanoUI issues."
 	set category = "Preferences"
 
-	usr << "\blue Re-sending NanoUI resources.  This may result in lag."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/verb/resend_resources()  called tick#: [world.time]")
+	usr << "<span class='notice'>Re-sending NanoUI resources.  This may result in lag.</span>"
 	nanomanager.send_resources(src)
 
 //send resources to the client. It's here in its own proc so we can move it around easiliy if need be
 /client/proc/send_resources()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/send_resources() called tick#: [world.time]")
 //	preload_vox() //Causes long delays with initial start window and subsequent windows when first logged in.
-
-	// Send NanoUI resources to this client
-	nanomanager.send_resources(src)
 
 	getFiles(
 		'html/search.js',
 		'html/panels.css',
-		'icons/pda_icons/pda_atmos.png',
-		'icons/pda_icons/pda_back.png',
-		'icons/pda_icons/pda_bell.png',
-		'icons/pda_icons/pda_blank.png',
-		'icons/pda_icons/pda_boom.png',
-		'icons/pda_icons/pda_bucket.png',
-		'icons/pda_icons/pda_crate.png',
-		'icons/pda_icons/pda_cuffs.png',
-		'icons/pda_icons/pda_eject.png',
-		'icons/pda_icons/pda_exit.png',
-		'icons/pda_icons/pda_flashlight.png',
-		'icons/pda_icons/pda_honk.png',
-		'icons/pda_icons/pda_mail.png',
-		'icons/pda_icons/pda_medical.png',
-		'icons/pda_icons/pda_menu.png',
-		'icons/pda_icons/pda_mule.png',
-		'icons/pda_icons/pda_notes.png',
-		'icons/pda_icons/pda_power.png',
-		'icons/pda_icons/pda_rdoor.png',
-		'icons/pda_icons/pda_reagent.png',
-		'icons/pda_icons/pda_refresh.png',
-		'icons/pda_icons/pda_scanner.png',
-		'icons/pda_icons/pda_signaler.png',
-		'icons/pda_icons/pda_status.png',
-		'icons/spideros_icons/sos_1.png',
-		'icons/spideros_icons/sos_2.png',
-		'icons/spideros_icons/sos_3.png',
-		'icons/spideros_icons/sos_4.png',
-		'icons/spideros_icons/sos_5.png',
-		'icons/spideros_icons/sos_6.png',
-		'icons/spideros_icons/sos_7.png',
-		'icons/spideros_icons/sos_8.png',
-		'icons/spideros_icons/sos_9.png',
-		'icons/spideros_icons/sos_10.png',
-		'icons/spideros_icons/sos_11.png',
-		'icons/spideros_icons/sos_12.png',
-		'icons/spideros_icons/sos_13.png',
-		'icons/spideros_icons/sos_14.png',
-		'icons/xenoarch_icons/chart1.jpg',
-		'icons/xenoarch_icons/chart2.jpg',
-		'icons/xenoarch_icons/chart3.jpg',
-		'icons/xenoarch_icons/chart4.jpg'
-		)
+	)
+
+	// Preload the crew monitor. This needs to be done due to BYOND bug http://www.byond.com/forum/?post=1487244
+	//The above bug report thing doesn't exist anymore so uh, whatever.
+	spawn
+		send_html_resources()
+
+	// Send NanoUI resources to this client
+	spawn nanomanager.send_resources(src)
+
+
+/client/proc/send_html_resources()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/send_html_resources() called tick#: [world.time]")
+	if(crewmonitor && minimapinit)
+		crewmonitor.sendResources(src)
+	if(adv_camera && minimapinit)
+		adv_camera.sendResources(src)
+	while(!vote || !vote.interface)
+		sleep(1)
+	vote.interface.sendAssets(src)
+
+/proc/get_role_desire_str(var/rolepref)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_role_desire_str() called tick#: [world.time]")
+	switch(rolepref & ROLEPREF_VALMASK)
+		if(ROLEPREF_NEVER)
+			return "Never"
+		if(ROLEPREF_NO)
+			return "No"
+		if(ROLEPREF_YES)
+			return "Yes"
+		if(ROLEPREF_ALWAYS)
+			return "Always"
+	return "???"
+
+/client/proc/desires_role(var/role_id, var/display_to_user=0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/desires_role() called tick#: [world.time]")
+	var/role_desired = prefs.roles[role_id]
+	if(display_to_user && !(role_desired & ROLEPREF_PERSIST))
+		if(!(role_desired & ROLEPREF_POLLED))
+			spawn
+				var/answer = alert(src,"[role_id]\n\nNOTE:  You will only be polled about this role once per round. To change your choice, use Preferences > Setup Special Roles.  The change will take place AFTER this recruiting period.","Role Recruitment", "Yes","No","Never")
+				switch(answer)
+					if("Never")
+						prefs.roles[role_id] = ROLEPREF_NEVER
+					if("No")
+						prefs.roles[role_id] = ROLEPREF_NO
+					if("Yes")
+						prefs.roles[role_id] = ROLEPREF_YES
+					//if("Always")
+					//	prefs.roles[role_id] = ROLEPREF_ALWAYS
+				//testing("Client [src] answered [answer] to [role_id] poll.")
+				prefs.roles[role_id] |= ROLEPREF_POLLED
+		else
+			src << "<span style='recruit'>The game is currently looking for [role_id] candidates.  Your current answer is <a href='?src=\ref[prefs]&preference=set_role&role_id=[role_id]'>[get_role_desire_str(role_desired)]</a>.</span>"
+	return role_desired & ROLEPREF_ENABLE

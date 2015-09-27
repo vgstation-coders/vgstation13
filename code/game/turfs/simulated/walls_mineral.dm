@@ -2,8 +2,16 @@
 	name = "mineral wall"
 	desc = "This shouldn't exist"
 	icon_state = ""
+	explosion_block = 1
 	var/last_event = 0
 	var/active = null
+
+/turf/simulated/wall/mineral/wood
+	name = "wooden wall"
+	desc = "A wall with wooden plating."
+	icon_state = "wood0"
+	walltype = "wood"
+	mineral = "wood"
 
 /turf/simulated/wall/mineral/gold
 	name = "gold wall"
@@ -29,6 +37,7 @@
 	icon_state = "diamond0"
 	walltype = "diamond"
 	mineral = "diamond"
+	explosion_block = 3
 
 /turf/simulated/wall/mineral/clown
 	name = "bananium wall"
@@ -43,6 +52,7 @@
 	icon_state = "sandstone0"
 	walltype = "sandstone"
 	mineral = "sandstone"
+	explosion_block = 0
 
 /turf/simulated/wall/mineral/uranium
 	name = "uranium wall"
@@ -50,8 +60,10 @@
 	icon_state = "uranium0"
 	walltype = "uranium"
 	mineral = "uranium"
+	explosion_block = 2
 
 /turf/simulated/wall/mineral/uranium/proc/radiate()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/simulated/wall/mineral/uranium/proc/radiate() called tick#: [world.time]")
 	if(!active)
 		if(world.time > last_event+15)
 			active = 1
@@ -84,12 +96,13 @@
 	mineral = "plasma"
 
 /turf/simulated/wall/mineral/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(is_hot(W) > 300)//If the temperature of the object is over 300, then ignite
-		ignite(is_hot(W))
+	if(W.is_hot() > 300)//If the temperature of the object is over 300, then ignite
+		ignite(W.is_hot())
 		return
 	..()
 
 /turf/simulated/wall/mineral/plasma/proc/PlasmaBurn(temperature)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/simulated/wall/mineral/plasma/proc/PlasmaBurn() called tick#: [world.time]")
 	var/pdiff=performWallPressureCheck(src.loc)
 	if(pdiff>0)
 		message_admins("Plasma wall with pdiff [pdiff] at [formatJumpTo(loc)] just caught fire!")
@@ -104,7 +117,7 @@
 		napalm.toxins = toxinsToDeduce
 		napalm.temperature = 400+T0C
 		target_tile.assume_air(napalm)
-		spawn (0) target_tile.hotspot_expose(temperature, 400)
+		spawn (0) target_tile.hotspot_expose(temperature, 400,surfaces=1)
 	for(var/obj/structure/falsewall/plasma/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve
 		var/turf/T = get_turf(F)
 		T.ChangeTurf(/turf/simulated/wall/mineral/plasma/)
@@ -118,7 +131,7 @@
 	if(exposed_temperature > 300)
 		PlasmaBurn(exposed_temperature)
 
-/turf/simulated/wall/mineral/plasma/proc/ignite(exposed_temperature)
+/turf/simulated/wall/mineral/plasma/ignite(exposed_temperature)
 	if(exposed_temperature > 300)
 		PlasmaBurn(exposed_temperature)
 
@@ -131,6 +144,7 @@
 
 /*
 /turf/simulated/wall/mineral/proc/shock()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/simulated/wall/mineral/proc/shock() called tick#: [world.time]")
 	if (electrocute_mob(user, C, src))
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(5, 1, src)
@@ -140,6 +154,7 @@
 		return 0
 
 /turf/simulated/wall/mineral/proc/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/simulated/wall/mineral/proc/attackby() called tick#: [world.time]")
 	if((mineral == "gold") || (mineral == "silver"))
 		if(shocked)
 			shock()

@@ -6,9 +6,10 @@
 	icon_living = "pine_1"
 	icon_dead = "pine_1"
 	icon_gib = "pine_1"
+
+	size = SIZE_HUGE
 	speak_chance = 0
 	turns_per_move = 5
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/carpmeat
 	response_help = "brushes"
 	response_disarm = "pushes"
 	response_harm = "hits"
@@ -35,7 +36,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 
-	faction = "carp"
+	faction = "forest"
 
 /mob/living/simple_animal/hostile/tree/FindTarget()
 	. = ..()
@@ -52,7 +53,7 @@
 
 /mob/living/simple_animal/hostile/tree/Die()
 	..()
-	visible_message("\red <b>[src]</b> is hacked into pieces!")
+	visible_message("<span class='warning'><b>[src]</b> is hacked into pieces!</span>")
 	new /obj/item/stack/sheet/wood(loc)
 	del(src)
 
@@ -65,7 +66,6 @@
 	icon_gib = "festivus_pole"
 
 /mob/living/simple_animal/hostile/tree/festivus/Die()
-	..()
-	visible_message("\red <b>[src]</b> is hacked into pieces!")
-	new /obj/item/stack/rods(loc)
+	visible_message("<span class='warning'><b>[src]</b> is hacked into pieces!</span>")
+	new /obj/item/weapon/nullrod(loc)
 	del(src)

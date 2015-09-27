@@ -1,3 +1,4 @@
+var/global/list/disease2_list = list()
 /datum/disease2/disease
 	var/infectionchance = 70
 	var/speed = 1
@@ -11,13 +12,19 @@
 	var/antigen = 0 // 16 bits describing the antigens, when one bit is set, a cure with that bit can dock here
 	var/max_stage = 4
 
-/datum/disease2/disease/New()
+	var/log = ""
+	var/logged_virusfood=0
+
+/datum/disease2/disease/New(var/notes="No notes.")
 	uniqueID = rand(0,10000)
+	log += "<br />[timestamp()] CREATED - [notes]<br>"
+	disease2_list["[uniqueID]"] = src
 	..()
 
 /datum/disease2/disease/proc/makerandom(var/greater=0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/disease/proc/makerandom() called tick#: [world.time]")
 	for(var/i=1 ; i <= max_stage ; i++ )
-		var/datum/disease2/effectholder/holder = new /datum/disease2/effectholder
+		var/datum/disease2/effectholder/holder = new /datum/disease2/effectholder(src)
 		holder.stage = i
 		if(greater)
 			holder.getrandomeffect(2)
@@ -25,15 +32,56 @@
 			holder.getrandomeffect()
 		effects += holder
 	uniqueID = rand(0,10000)
+	disease2_list["[uniqueID]"] = src
 	infectionchance = rand(60,90)
 	antigen |= text2num(pick(ANTIGENS))
 	antigen |= text2num(pick(ANTIGENS))
 	spreadtype = prob(70) ? "Airborne" : "Contact"
 
+/proc/virus2_make_custom(client/C)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/virus2_make_custom() called tick#: [world.time]")
+	if(!C.holder || !istype(C))
+		return 0
+	if(!(C.holder.rights & R_DEBUG))
+		return 0
+	var/mob/living/carbon/infectedMob = input(C, "Select person to infect", "Infect Person") in (player_list) // get the selected mob
+	if(!istype(infectedMob))
+		return // return if isn't proper mob type
+	var/datum/disease2/disease/D = new /datum/disease2/disease("custom_disease") //set base name
+	for(var/i = 1; i <= D.max_stage; i++)  // run through this loop until everything is set
+		var/datum/disease2/effect/sympton = input(C, "Choose a sympton to add ([5-i] remaining)", "Choose a Sympton") in ((typesof(/datum/disease2/effect) - /datum/disease2/effect)) // choose a sympton from the list of them
+		var/datum/disease2/effectholder/holder = new /datum/disease2/effectholder(infectedMob) // create the infectedMob as a holder for it.
+		holder.stage = i // set the stage of this holder equal to i.
+		var/datum/disease2/effect/f = new sympton // initalize the new sympton
+		holder.effect = f // assign the new sympton to the holder
+		holder.chance = input(C, "Choose chance", "Chance") as num // set the chance of the sympton that can occur
+		if(holder.chance > 100 || holder.chance < 0)
+			return 0
+		D.log += "[f.name] [holder.chance]%<br>"
+		D.effects += holder // add the holder to the disease
+
+	disease2_list -= D.uniqueID
+	D.uniqueID = rand(0, 10000)
+	disease2_list["[D.uniqueID]"] = D
+	D.infectionchance = input(C, "Choose an infection rate percent", "Infection Rate") as num
+	if(D.infectionchance > 100 || D.infectionchance < 0)
+		return 0
+	//pick random antigens for the disease to have
+	D.antigen |= text2num(pick(ANTIGENS))
+	D.antigen |= text2num(pick(ANTIGENS))
+
+	D.spreadtype = input(C, "Select spread type", "Spread Type") in list("Airborne", "Contact") // select how the disease is spread
+	infectedMob.virus2["[D.uniqueID]"] = D // assign the disease datum to the infectedMob/ selected user.
+	log_admin("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID] by [C.ckey]")
+	message_admins("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID] by [C.ckey]")
+	return 1
+
 /datum/disease2/disease/proc/activate(var/mob/living/carbon/mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/disease/proc/activate() called tick#: [world.time]")
 	if(dead)
 		cure(mob)
 		return
+
 
 	if(mob.stat == 2)
 		return
@@ -44,6 +92,8 @@
 	if(mob.radiation > 50)
 		if(prob(1))
 			majormutate()
+			log += "<br />[timestamp()] MAJORMUTATE (rads)!"
+
 
 	//Space antibiotics stop disease completely (temporary)
 	if(mob.reagents.has_reagent("spaceacillin"))
@@ -52,15 +102,24 @@
 	//Virus food speeds up disease progress
 	if(mob.reagents.has_reagent("virusfood"))
 		mob.reagents.remove_reagent("virusfood",0.1)
+		if(!logged_virusfood)
+			log += "<br />[timestamp()] Virus Fed ([mob.reagents.get_reagent_amount("virusfood")]U)"
+			logged_virusfood=1
 		clicks += 10
+	else
+		logged_virusfood=0
 
 	//Moving to the next stage
 	if(clicks > stage*100 && prob(10))
 		if(stage == max_stage)
 			src.cure(mob)
 			mob.antibodies |= src.antigen
-		stage++
-		clicks = 0
+			log += "<br />[timestamp()] STAGEMAX ([stage])"
+		else
+			stage++
+			log += "<br />[timestamp()] NEXT STAGE ([stage])"
+			clicks = 0
+
 	//Do nasty effects
 	for(var/datum/disease2/effectholder/e in effects)
 		e.runeffect(mob,stage)
@@ -69,24 +128,28 @@
 	if(src.spreadtype == "Airborne")
 		for(var/mob/living/carbon/M in oview(1,mob))
 			if(airborne_can_reach(get_turf(mob), get_turf(M)))
-				infect_virus2(M,src)
+				infect_virus2(M,src, notes="(Airborne from [key_name(mob)])")
 
 	//fever
 	mob.bodytemperature = max(mob.bodytemperature, min(310+5*stage ,mob.bodytemperature+5*stage))
 	clicks+=speed
 
 /datum/disease2/disease/proc/cure(var/mob/living/carbon/mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/disease/proc/cure() called tick#: [world.time]")
 	for(var/datum/disease2/effectholder/e in effects)
 		e.effect.deactivate(mob)
 	mob.virus2.Remove("[uniqueID]")
 
 /datum/disease2/disease/proc/minormutate()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/disease/proc/minormutate() called tick#: [world.time]")
 	//uniqueID = rand(0,10000)
 	var/datum/disease2/effectholder/holder = pick(effects)
 	holder.minormutate()
 	infectionchance = min(50,infectionchance + rand(0,10))
+	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
 
 /datum/disease2/disease/proc/majormutate()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/disease/proc/majormutate() called tick#: [world.time]")
 	uniqueID = rand(0,10000)
 	var/datum/disease2/effectholder/holder = pick(effects)
 	holder.majormutate()
@@ -95,7 +158,9 @@
 		antigen |= text2num(pick(ANTIGENS))
 
 /datum/disease2/disease/proc/getcopy()
-	var/datum/disease2/disease/disease = new /datum/disease2/disease
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/disease/proc/getcopy() called tick#: [world.time]")
+	var/datum/disease2/disease/disease = new /datum/disease2/disease("")
+	disease.log=log
 	disease.infectionchance = infectionchance
 	disease.spreadtype = spreadtype
 	disease.stageprob = stageprob
@@ -105,7 +170,7 @@
 	disease.stage = stage
 	disease.clicks = clicks
 	for(var/datum/disease2/effectholder/holder in effects)
-		var/datum/disease2/effectholder/newholder = new /datum/disease2/effectholder
+		var/datum/disease2/effectholder/newholder = new /datum/disease2/effectholder(disease)
 		newholder.effect = new holder.effect.type
 		newholder.chance = holder.chance
 		newholder.cure = holder.cure
@@ -116,6 +181,7 @@
 	return disease
 
 /datum/disease2/disease/proc/issame(var/datum/disease2/disease/disease)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/disease/proc/issame() called tick#: [world.time]")
 	var/list/types = list()
 	var/list/types2 = list()
 	for(var/datum/disease2/effectholder/d in effects)
@@ -134,6 +200,7 @@
 	return equal
 
 /proc/virus_copylist(var/list/datum/disease2/disease/viruses)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/virus_copylist() called tick#: [world.time]")
 	var/list/res = list()
 	for (var/ID in viruses)
 		var/datum/disease2/disease/V = viruses[ID]
@@ -147,12 +214,14 @@
 var/global/list/virusDB = list()
 
 /datum/disease2/disease/proc/name()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/disease/proc/name() called tick#: [world.time]")
 	.= "stamm #[add_zero("[uniqueID]", 4)]"
 	if ("[uniqueID]" in virusDB)
 		var/datum/data/record/V = virusDB["[uniqueID]"]
 		.= V.fields["name"]
 
 /datum/disease2/disease/proc/get_info()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/disease/proc/get_info() called tick#: [world.time]")
 	var/r = "GNAv2 based virus lifeform - [name()], #[add_zero("[uniqueID]", 4)]"
 	r += "<BR>Infection rate : [infectionchance * 10]"
 	r += "<BR>Spread form : [spreadtype]"
@@ -164,6 +233,7 @@ var/global/list/virusDB = list()
 	return r
 
 /datum/disease2/disease/proc/addToDB()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/disease/proc/addToDB() called tick#: [world.time]")
 	if ("[uniqueID]" in virusDB)
 		return 0
 	var/datum/data/record/v = new()
@@ -176,6 +246,7 @@ var/global/list/virusDB = list()
 	return 1
 
 proc/virus2_lesser_infection()
+	//writepanic("[__FILE__].[__LINE__] \\/proc/virus2_lesser_infection() called tick#: [world.time]")
 	var/list/candidates = list()	//list of candidate keys
 
 	for(var/mob/living/carbon/human/G in player_list)
@@ -188,6 +259,7 @@ proc/virus2_lesser_infection()
 	infect_mob_random_lesser(candidates[1])
 
 proc/virus2_greater_infection()
+	//writepanic("[__FILE__].[__LINE__] \\/proc/virus2_greater_infection() called tick#: [world.time]")
 	var/list/candidates = list()	//list of candidate keys
 
 	for(var/mob/living/carbon/human/G in player_list)

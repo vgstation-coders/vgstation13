@@ -22,6 +22,7 @@
 
 // For new turfs
 /turf/proc/copy_air_from(var/turf/T)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/proc/copy_air_from() called tick#: [world.time]")
 	oxygen = T.oxygen
 	carbon_dioxide = T.carbon_dioxide
 	nitrogen = T.nitrogen
@@ -52,6 +53,7 @@
 /turf/simulated/var/tmp/was_icy=0
 
 /turf/simulated/proc/update_visuals()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/simulated/proc/update_visuals() called tick#: [world.time]")
 	overlays = 0
 
 	if(decals.len)
@@ -187,6 +189,9 @@
 		return ..()
 
 /turf/simulated/proc/update_air_properties()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/simulated/proc/update_air_properties() called tick#: [world.time]")
+	if(iscatwalk(src))
+		return ..()
 	var/air_directions_archived = air_check_directions
 	air_check_directions = 0
 
@@ -198,7 +203,7 @@
 		for(var/direction in DoorDirections) //Check door directions first.
 			if(air_check_directions&direction)
 				var/turf/simulated/T = get_step(src,direction)
-				if(!istype(T))
+				if(!istype(T) || iscatwalk(T))
 					continue
 				if(T.zone)
 					T.zone.AddTurf(src)
@@ -207,7 +212,7 @@
 			for(var/direction in CounterDoorDirections) //Check the others second.
 				if(air_check_directions&direction)
 					var/turf/simulated/T = get_step(src,direction)
-					if(!istype(T))
+					if(!istype(T) || iscatwalk(T))
 						continue
 					if(T.zone)
 						T.zone.AddTurf(src)
@@ -241,7 +246,7 @@
 						var/turf/NT = get_step(T, direction)
 
 						//If that turf is in my zone still, rebuild.
-						if(istype(NT,/turf/simulated) && NT in zone.contents)
+						if(istype(NT,/turf/simulated) && !iscatwalk(NT) && NT in zone.contents)
 							zone.rebuild = 1
 
 						//If that is an unsimulated tile in my zone, see if we need to rebuild or just remove.
@@ -265,7 +270,7 @@
 						var/turf/NT = get_step(src, reverse_direction(direction))
 
 						//If I am splitting a zone, rebuild.
-						if(istype(NT,/turf/simulated) && (NT in T.zone.contents || (NT.zone && T in NT.zone.contents)))
+						if(istype(NT,/turf/simulated) && !iscatwalk(NT) && (NT in T.zone.contents || (NT.zone && T in NT.zone.contents)))
 							T.zone.rebuild = 1
 
 						//If NT is unsimulated, parse if I should remove it or rebuild.
@@ -294,7 +299,7 @@
 				var/turf/NT = get_step(T, direction)
 
 				//If the tile is in our own zone, and we cannot connect to it, better rebuild.
-				if(istype(NT,/turf/simulated) && NT in zone.contents)
+				if(istype(NT,/turf/simulated) && !iscatwalk(NT) && NT in zone.contents)
 					zone.rebuild = 1
 
 				//Parse if we need to remove the tile, or rebuild the zone.
@@ -326,6 +331,7 @@
 	return 1
 
 /turf/proc/HasDoor(turf/O)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/proc/HasDoor() called tick#: [world.time]")
 	//Checks for the presence of doors, used for zone spreading and connection.
 	//A positive numerical argument checks only for closed doors.
 	//Another turf as an argument checks for windoors between here and there.
@@ -341,6 +347,7 @@
 			return 1
 
 /turf/proc/ZCanPass(turf/simulated/T, var/include_space = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/proc/ZCanPass() called tick#: [world.time]")
 	//Fairly standard pass checks for turfs, objects and directional windows. Also stops at the edge of space.
 	if(!istype(T))
 		return 0
@@ -366,6 +373,7 @@
 		return 1
 
 /turf/proc/ZAirPass(turf/T)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/proc/ZAirPass() called tick#: [world.time]")
 	//Fairly standard pass checks for turfs, objects and directional windows.
 	if(!istype(T))
 		return 0
@@ -389,6 +397,7 @@
 
 /*UNUSED
 /turf/proc/check_connections()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/proc/check_connections() called tick#: [world.time]")
 	//Checks for new connections that can be made.
 	for(var/d in cardinal)
 		var/turf/simulated/T = get_step(src,d)
@@ -398,6 +407,7 @@
 			ZConnect(src,T)
 
 /turf/proc/check_for_space()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/proc/check_for_space() called tick#: [world.time]")
 	//Checks for space around the turf.
 	for(var/d in cardinal)
 		var/turf/T = get_step(src,d)

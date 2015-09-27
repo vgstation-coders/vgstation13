@@ -1,6 +1,7 @@
 /mob/living/carbon/slime/verb/Feed()
 	set category = "Slime"
 	set desc = "This will let you feed on any valid creature in the surrounding area. This should also be used to halt the feeding process."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/carbon/slime/verb/Feed()  called tick#: [world.time]")
 	if(Victim)
 		Feedstop()
 		return
@@ -27,8 +28,8 @@
 							if(met.Victim == M && met != src)
 								src << "<i>The [met.name] is already feeding on this subject...</i>"
 								return
-						src << "\blue <i>I have latched onto the subject and begun feeding...</i>"
-						M << "\red <b>The [src.name] has latched onto your head!</b>"
+						src << "<span class='notice'><i>I have latched onto the subject and begun feeding...</i></span>"
+						M << "<span class='danger'>The [src.name] has latched onto your head!</span>"
 						Feedon(M)
 
 					else
@@ -43,12 +44,13 @@
 
 
 /mob/living/carbon/slime/proc/Feedon(var/mob/living/carbon/M)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/Feedon() called tick#: [world.time]")
 	Victim = M
 	src.loc = M.loc
 	canmove = 0
 	anchored = 1
 	var/lastnut = nutrition
-	//if(M.client) M << "\red You legs become paralyzed!"
+	//if(M.client) M << "<span class='warning'>You legs become paralyzed!</span>"
 	if(istype(src, /mob/living/carbon/slime/adult))
 		icon_state = "[colour] adult slime eat"
 	else
@@ -62,7 +64,7 @@
 			loc = M.loc
 
 			if(prob(15) && M.client && istype(M, /mob/living/carbon))
-				M << "\red [pick("You can feel your body becoming weak!", \
+				M << "<span class='warning'>[pick("You can feel your body becoming weak!</span>", \
 				"You feel like you're about to die!", \
 				"You feel every part of your body screaming in agony!", \
 				"A low, rolling pain passes through your body!", \
@@ -108,7 +110,7 @@
 
 			else
 				if(prob(25))
-					src << "\red <i>[pick("This subject is incompatable", \
+					src << "<span class='warning'><i>[pick("This subject is incompatable</span>", \
 					"This subject does not have a life energy", "This subject is empty", \
 					"I am not satisified", "I can not feed from this subject", \
 					"I do not feel nourished", "This subject is not food")]...</i>"
@@ -135,7 +137,7 @@
 		if(M.health <= -70)
 			M.canmove = 0
 			if(!client)
-				if(Victim && !rabid && !attacked)
+				if(Victim && !attacked)
 					if(Victim.LAssailant && Victim.LAssailant != Victim)
 						if(prob(50))
 							if(!(Victim.LAssailant in Friends))
@@ -143,7 +145,7 @@
 
 			if(M.client && istype(src, /mob/living/carbon/human))
 				if(prob(85))
-					rabid = 1 // UUUNNBGHHHH GONNA EAT JUUUUUU
+					rabid() // UUUNNBGHHHH GONNA EAT JUUUUUU
 
 			if(client) src << "<i>This subject does not have a strong enough life energy anymore...</i>"
 		else
@@ -156,11 +158,13 @@
 	Victim = null
 
 /mob/living/carbon/slime/proc/Feedstop()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/Feedstop() called tick#: [world.time]")
 	if(Victim)
 		if(Victim.client) Victim << "[src] has let go of your head!"
 		Victim = null
 
 /mob/living/carbon/slime/proc/UpdateFeed(var/mob/M)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/UpdateFeed() called tick#: [world.time]")
 	if(Victim)
 		if(Victim == M)
 			loc = M.loc // simple "attach to head" effect!
@@ -169,6 +173,7 @@
 /mob/living/carbon/slime/verb/Evolve()
 	set category = "Slime"
 	set desc = "This will let you evolve from baby to adult slime."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/carbon/slime/verb/Evolve()  called tick#: [world.time]")
 
 	if(stat)
 		src << "<i>I must be conscious to do this...</i>"
@@ -178,12 +183,12 @@
 			var/mob/living/carbon/slime/adult/new_slime = new adulttype(loc)
 			new_slime.nutrition = nutrition
 			new_slime.powerlevel = max(0, powerlevel-1)
-			new_slime.a_intent = "hurt"
+			new_slime.a_intent = I_HURT
 			if(src.mind)
 				src.mind.transfer_to(new_slime)
 			else
 				new_slime.key = src.key
-			new_slime.universal_speak = universal_speak
+			new_slime.languages = languages.Copy()
 			new_slime << "<B>You are now an adult slime.</B>"
 			del(src)
 		else
@@ -194,6 +199,7 @@
 /mob/living/carbon/slime/verb/Reproduce()
 	set category = "Slime"
 	set desc = "This will make you split into four Slimes. NOTE: this will KILL you, but you will be transferred into one of the babies."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/carbon/slime/verb/Reproduce()  called tick#: [world.time]")
 
 	if(stat)
 		src << "<i>I must be conscious to do this...</i>"
@@ -224,9 +230,8 @@
 				feedback_add_details("slime_babies_born","slimebirth_[replacetext(M.colour," ","_")]")
 
 			var/mob/living/carbon/slime/new_slime = pick(babies)
-			new_slime.a_intent = "hurt"
-			new_slime.universal_speak = universal_speak
-			new_slime.universal_understand = universal_understand
+			new_slime.a_intent = I_HURT
+			new_slime.languages = languages.Copy()
 			if(src.mind)
 				src.mind.transfer_to(new_slime)
 			else
@@ -245,5 +250,18 @@
 	set name = "Crawl through Vent"
 	set desc = "Enter an air vent and crawl through the pipe system."
 	set category = "Object"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/carbon/slime/verb/ventcrawl()  called tick#: [world.time]")
 	if(Victim)	return
-	handle_ventcrawl()
+	var/atom/pipe
+	var/list/pipes = list()
+	for(var/obj/machinery/atmospherics/unary/U in range(1))
+		if((istype(U, /obj/machinery/atmospherics/unary/vent_pump) || istype(U,/obj/machinery/atmospherics/unary/vent_scrubber)) && Adjacent(U))
+			pipes |= U
+	if(!pipes || !pipes.len)
+		return
+	if(pipes.len == 1)
+		pipe = pipes[1]
+	else
+		pipe = input("Crawl Through Vent", "Pick a pipe") as null|anything in pipes
+	if(pipe && !Victim)
+		handle_ventcrawl(pipe)

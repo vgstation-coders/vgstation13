@@ -25,11 +25,6 @@
 		mouse_opacity = 0
 		unacidable = 1//Just to be sure.
 
-/obj/effect/beam
-	name = "beam"
-	unacidable = 1//Just to be sure.
-	var/def_zone
-	pass_flags = PASSTABLE
 
 
 /obj/effect/begin
@@ -54,6 +49,7 @@
 
 
 /obj/effect/datacore/proc/get_manifest(monochrome, OOC)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/datacore/proc/get_manifest() called tick#: [world.time]")
 	var/list/heads = new()
 	var/list/sec = new()
 	var/list/eng = new()
@@ -77,17 +73,22 @@
 	"}
 	var/even = 0
 	// sort mobs
-	for(var/datum/data/record/t in data_core.general)
+	for(var/datum/data/record/t in sortRecord(data_core.general))
 		var/name = t.fields["name"]
 		var/rank = t.fields["rank"]
 		var/real_rank = t.fields["real_rank"]
 		if(OOC)
 			var/active = 0
+			var/SSD = 0
 			for(var/mob/M in player_list)
-				if(M.real_name == name && M.client && M.client.inactivity <= 10 * 60 * 10)
-					active = 1
-					break
-			isactive[name] = active ? "Active" : "Inactive"
+				if(M.real_name == name)
+					if(!M.client)
+						SSD = 1
+						break
+					if(M.client && M.client.inactivity <= 10 * 60 * 10)
+						active = 1
+						break
+			isactive[name] = (SSD ? "SSD" : (active ? "Active" : "Inactive"))
 		else
 			isactive[name] = t.fields["p_stat"]
 			//world << "[name]: [rank]"
@@ -170,11 +171,13 @@ We can't just insert in HTML into the nanoUI so we need the raw data to play wit
 Instead of creating this list over and over when someone leaves their PDA open to the page
 we'll only update it when it changes.  The PDA_Manifest global list is zeroed out upon any change
 using /obj/effect/datacore/proc/manifest_inject( ), or manifest_insert( )
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \using /obj/effect/datacore/proc/manifest_inject() called tick#: [world.time]")
 */
 
 var/global/list/PDA_Manifest = list()
 
 /obj/effect/datacore/proc/get_manifest_json()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/datacore/proc/get_manifest_json() called tick#: [world.time]")
 	if(PDA_Manifest.len)
 		return PDA_Manifest
 	var/heads[0]
@@ -268,50 +271,6 @@ var/global/list/PDA_Manifest = list()
 
 	var/list/container = list(  )
 
-
-/obj/structure/cable
-	level = 1
-	anchored =1
-	var/datum/powernet/powernet
-	name = "power cable"
-	desc = "A flexible superconducting cable for heavy-duty power transfer"
-	icon = 'icons/obj/power_cond_red.dmi'
-	icon_state = "0-1"
-	var/d1 = 0
-	var/d2 = 1
-	layer = 2.44 //Just below unary stuff, which is at 2.45 and above pipes, which are at 2.4
-	var/_color = "red"
-	var/obj/structure/powerswitch/power_switch
-	var/obj/item/device/powersink/attached // holding this here for qdel
-
-/obj/structure/cable/yellow
-	_color = "yellow"
-	icon = 'icons/obj/power_cond_yellow.dmi'
-
-/obj/structure/cable/green
-	_color = "green"
-	icon = 'icons/obj/power_cond_green.dmi'
-
-/obj/structure/cable/blue
-	_color = "blue"
-	icon = 'icons/obj/power_cond_blue.dmi'
-
-/obj/structure/cable/pink
-	_color = "pink"
-	icon = 'icons/obj/power_cond_pink.dmi'
-
-/obj/structure/cable/orange
-	_color = "orange"
-	icon = 'icons/obj/power_cond_orange.dmi'
-
-/obj/structure/cable/cyan
-	_color = "cyan"
-	icon = 'icons/obj/power_cond_cyan.dmi'
-
-/obj/structure/cable/white
-	_color = "white"
-	icon = 'icons/obj/power_cond_white.dmi'
-
 /obj/effect/projection
 	name = "Projection"
 	desc = "This looks like a projection of something."
@@ -346,10 +305,12 @@ var/global/list/PDA_Manifest = list()
 	throwforce = 0.0
 	throw_speed = 1
 	throw_range = 20
-	flags = FPRINT | USEDELAY | TABLEPASS | CONDUCT
-	afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
-		user.drop_item()
-		src.throw_at(target, throw_range, throw_speed)
+	flags = FPRINT
+	siemens_coefficient = 1
+
+/obj/item/weapon/beach_ball/afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
+	user.drop_item(src)
+	src.throw_at(target, throw_range, throw_speed)
 
 /obj/effect/stop
 	var/victim = null
@@ -357,6 +318,41 @@ var/global/list/PDA_Manifest = list()
 	name = "Geas"
 	desc = "You can't resist."
 	// name = ""
+
+/obj/effect/stop/sleeping
+	var/sleeptime
+	icon_state = "empty"
+	name = "Sleepy time"
+	var/datum/mind/owner
+	var/spell/aoe_turf/fall/ourspell
+	invisibility = 100
+	var/theworld
+	ignoreinvert = 1
+
+/obj/effect/stop/sleeping/New(loc, ourtime, mind, var/spell/aoe_turf/fall/F, theworld)
+	..()
+	sleeptime = ourtime
+	owner = mind
+	ourspell = F
+	src.theworld = theworld
+/obj/effect/stop/sleeping/Crossed(atom/movable/A)
+	if(sleeptime > world.time)
+		if(ismob(A))
+			var/mob/living/L = A
+			if(L.mind != owner)
+				if(!L.stat) L.playsound_local(src, theworld == 1 ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
+				//L.Paralyse(round(((sleeptime - world.time)/10)/2, 1))
+				//L.update_canmove()
+				if(!(L in ourspell.affected))
+					invertcolor(L)
+					ourspell.affected += L
+					ourspell.recursive_timestop(L)
+		else
+			if(!(A in ourspell.affected))
+				invertcolor(A)
+				ourspell.affected += A
+				ourspell.recursive_timestop(A)
+
 
 /obj/effect/spawner
 	name = "object spawner"

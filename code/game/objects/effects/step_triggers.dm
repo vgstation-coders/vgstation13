@@ -8,9 +8,10 @@
 	w_type=NOT_RECYCLABLE
 
 /obj/effect/step_trigger/proc/Trigger(var/atom/movable/A)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/step_trigger/proc/Trigger() called tick#: [world.time]")
 	return 0
 
-/obj/effect/step_trigger/HasEntered(H as mob|obj)
+/obj/effect/step_trigger/Crossed(H as mob|obj)
 	..()
 	if(!H)
 		return
@@ -109,6 +110,8 @@
 	var/teleport_z_offset = 0
 
 	Trigger(var/atom/movable/A)
+		if(!istype(A))
+			return
 		if(teleport_x && teleport_y && teleport_z)
 			if(teleport_x_offset && teleport_y_offset && teleport_z_offset)
 

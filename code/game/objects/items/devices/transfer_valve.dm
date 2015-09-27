@@ -10,10 +10,23 @@
 	var/valve_open = 0
 	var/toggle = 1
 
+	flags = FPRINT | PROXMOVE
+
 /obj/item/device/transfer_valve/proc/process_activation(var/obj/item/device/D)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/transfer_valve/proc/process_activation() called tick#: [world.time]")
 
 /obj/item/device/transfer_valve/IsAssemblyHolder()
 	return 1
+
+/obj/item/device/transfer_valve/Crossed(AM as mob|obj)
+	if(attached_device)
+		attached_device.Crossed(AM)
+	..()
+
+/obj/item/device/transfer_valve/on_found(AM as mob|obj)
+	if(attached_device)
+		attached_device.on_found(AM)
+	..()
 
 /obj/item/device/transfer_valve/attackby(obj/item/item, mob/user)
 	if(istype(item, /obj/item/weapon/tank))
@@ -23,17 +36,15 @@
 
 		if(!tank_one)
 			tank_one = item
-			user.drop_item()
-			item.loc = src
+			user.drop_item(item, src)
 			user << "<span class='notice'>You attach the tank to the transfer valve.</span>"
 		else if(!tank_two)
 			tank_two = item
-			user.drop_item()
-			item.loc = src
+			user.drop_item(item, src)
 			user << "<span class='notice'>You attach the tank to the transfer valve.</span>"
 
 		update_icon()
-//TODO: Have this take an assemblyholder
+	//TODO: Have this take an assemblyholder
 	else if(isassembly(item))
 		var/obj/item/device/assembly/A = item
 		if(A.secured)
@@ -115,7 +126,7 @@
 			toggle = 1
 
 /obj/item/device/transfer_valve/update_icon()
-	overlays.Cut()
+	overlays.len = 0
 	underlays = null
 
 	if(!tank_one && !tank_two && !attached_device)
@@ -133,12 +144,14 @@
 		overlays += "device"
 
 /obj/item/device/transfer_valve/proc/merge_gases()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/transfer_valve/proc/merge_gases() called tick#: [world.time]")
 	tank_two.air_contents.volume += tank_one.air_contents.volume
 	var/datum/gas_mixture/temp
 	temp = tank_one.air_contents.remove_ratio(1)
 	tank_two.air_contents.merge(temp)
 
 /obj/item/device/transfer_valve/proc/split_gases()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/transfer_valve/proc/split_gases() called tick#: [world.time]")
 	if (!valve_open || !tank_one || !tank_two)
 		return
 	var/ratio1 = tank_one.air_contents.volume/tank_two.air_contents.volume
@@ -153,6 +166,7 @@
 	*/
 
 /obj/item/device/transfer_valve/proc/toggle_valve()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/transfer_valve/proc/toggle_valve() called tick#: [world.time]")
 	if(valve_open==0 && (tank_one && tank_two))
 		valve_open = 1
 		var/turf/bombturf = get_turf(src)
@@ -193,6 +207,7 @@
  * We destroy any item we're inside of
  */
 /obj/item/device/transfer_valve/proc/child_ruptured(var/obj/item/weapon/tank/tank, var/range)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/transfer_valve/proc/child_ruptured() called tick#: [world.time]")
 	// Old behavior.
 	if(tank_one == tank)
 		tank_one=null
@@ -213,4 +228,5 @@
 // this doesn't do anything but the timer etc. expects it to be here
 // eventually maybe have it update icon to show state (timer, prox etc.) like old bombs
 /obj/item/device/transfer_valve/proc/c_state()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/transfer_valve/proc/c_state() called tick#: [world.time]")
 	return

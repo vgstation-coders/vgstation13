@@ -12,7 +12,7 @@
 
 /obj/structure/morgue
 	name = "morgue"
-	desc = "Used to keep bodies in untill someone fetches them."
+	desc = "Used to keep bodies in until someone fetches them."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "morgue1"
 	dir = EAST
@@ -21,14 +21,22 @@
 	anchored = 1.0
 
 /obj/structure/morgue/proc/update()
-	if (src.connected)
-		src.icon_state = "morgue0"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/morgue/proc/update() called tick#: [world.time]")
+	if (connected)
+		icon_state = "morgue0"
 	else
-		if (src.contents.len)
-			src.icon_state = "morgue2"
+		if (contents.len > 0)
+			var/list/inside = recursive_type_check(src, /mob)
+			if (!inside.len)
+				icon_state = "morgue3" // no mobs at all, but objects inside
+			else
+				for (var/mob/body in inside)
+					if (body && body.client)
+						icon_state = "morgue4" // clone that mofo
+						return
+				icon_state = "morgue2" // dead no-client mob
 		else
-			src.icon_state = "morgue1"
-	return
+			icon_state = "morgue1"
 
 /obj/structure/morgue/ex_act(severity)
 	switch(severity)
@@ -89,11 +97,23 @@
 	return
 
 /obj/structure/morgue/attackby(P as obj, mob/user as mob)
+	if(iscrowbar(P)&&!contents.len)
+		if(do_after(user, src,50))
+			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			new /obj/structure/closet/body_bag(src.loc)
+			new /obj/item/stack/sheet/metal(src.loc,5)
+			qdel(src)
+	if(iswrench(P))
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		if(dir==4)
+			dir=8
+		else
+			dir=4
 	if (istype(P, /obj/item/weapon/pen))
 		var/t = input(user, "What would you like the label to be?", text("[]", src.name), null)  as text
 		if (user.get_active_hand() != P)
 			return
-		if ((!in_range(src, usr) && src.loc != user))
+		if (!Adjacent(user) || user.stat)
 			return
 		t = copytext(sanitize(t),1,MAX_MESSAGE_LEN)
 		if (t)
@@ -122,6 +142,8 @@
 		del(src.connected)
 	return
 
+/obj/structure/morgue/on_log()
+	update()
 
 /*
  * Morgue tray
@@ -136,7 +158,7 @@
 	var/obj/structure/morgue/connected = null
 	anchored = 1.0
 
-/obj/structure/m_tray/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/m_tray/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover, /obj/item/weapon/dummy))
 		return 1
 	else
@@ -168,7 +190,7 @@
 	if (user != O)
 		for(var/mob/B in viewers(user, 3))
 			if ((B.client && !( B.blinded )))
-				B << text("\red [] stuffs [] into []!", user, O, src)
+				B << text("<span class='warning'>[] stuffs [] into []!</span>", user, O, src)
 	return
 
 
@@ -189,14 +211,15 @@
 	var/locked = 0
 
 /obj/structure/crematorium/proc/update()
-	if (src.connected)
-		src.icon_state = "crema0"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/crematorium/proc/update() called tick#: [world.time]")
+	if (cremating)
+		icon_state = "crema_active"
+		return
+
+	if (contents.len > 0)
+		icon_state = "crema2"
 	else
-		if (src.contents.len)
-			src.icon_state = "crema2"
-		else
-			src.icon_state = "crema1"
-	return
+		icon_state = "crema1"
 
 /obj/structure/crematorium/ex_act(severity)
 	switch(severity)
@@ -230,13 +253,13 @@
 
 /obj/structure/crematorium/attack_hand(mob/user as mob)
 //	if (cremating) AWW MAN! THIS WOULD BE SO MUCH MORE FUN ... TO WATCH
-//		user.show_message("\red Uh-oh, that was a bad idea.", 1)
+//		user.show_message("<span class='warning'>Uh-oh, that was a bad idea.</span>", 1)
 //		//usr << "Uh-oh, that was a bad idea."
 //		src:loc:poison += 20000000
 //		src:loc:firelevel = src:loc:poison
 //		return
 	if (cremating)
-		usr << "\red It's locked."
+		usr << "<span class='warning'>It's locked.</span>"
 		return
 	if ((src.connected) && (src.locked == 0))
 		for(var/atom/movable/A as mob|obj in src.connected.loc)
@@ -268,7 +291,7 @@
 		var/t = input(user, "What would you like the label to be?", text("[]", src.name), null)  as text
 		if (user.get_active_hand() != P)
 			return
-		if ((!in_range(src, usr) > 1 && src.loc != user))
+		if (!Adjacent(user) || user.stat)
 			return
 		t = copytext(sanitize(t),1,MAX_MESSAGE_LEN)
 		if (t)
@@ -297,7 +320,8 @@
 		del(src.connected)
 	return
 
-/obj/structure/crematorium/proc/cremate(atom/A, mob/user as mob)
+/obj/structure/crematorium/proc/cremate(mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/crematorium/proc/cremate() called tick#: [world.time]")
 //	for(var/obj/machinery/crema_switch/O in src) //trying to figure a way to call the switch, too drunk to sort it out atm
 //		if(var/on == 1)
 //		return
@@ -306,23 +330,30 @@
 
 	if(contents.len <= 0)
 		for (var/mob/M in viewers(src))
-			M.show_message("\red You hear a hollow crackle.", 1)
+			M.show_message("<span class='warning'>You hear a hollow crackle.</span>", 1)
 			return
 
 	else
-		if(!isemptylist(src.search_contents_for(/obj/item/weapon/disk/nuclear)))
-			usr << "You get the feeling that you shouldn't cremate one of the items in the cremator."
+		var/inside = get_contents_in_object(src)
+
+		if (locate(/obj/item/weapon/disk/nuclear) in inside)
+			user << "<SPAN CLASS='warning'>You get the feeling that you shouldn't cremate one of the items in the cremator.</SPAN>"
 			return
 
 		for (var/mob/M in viewers(src))
-			M.show_message("\red You hear a roar as the crematorium activates.", 1)
+			if(!M.hallucinating())
+				M.show_message("<span class='warning'>You hear a roar as the crematorium activates.</span>", 1)
+			else
+				M.show_message("<span class='notice'>You hear chewing as the crematorium consumes its meal.</span>", 1)
+				M << 'sound/items/eatfood.ogg'
 
-		cremating = 1
 		locked = 1
+		cremating = 1
+		update()
 
-		for(var/mob/living/M in contents)
+		for (var/mob/living/M in inside)
 			if (M.stat!=2)
-				M.emote("scream")
+				M.emote("scream",,, 1)
 			//Logging for this causes runtimes resulting in the cremator locking up. Commenting it out until that's figured out.
 			//M.attack_log += "\[[time_stamp()]\] Has been cremated by <b>[user]/[user.ckey]</b>" //No point in this when the mob's about to be deleted
 			//user.attack_log +="\[[time_stamp()]\] Cremated <b>[M]/[M.ckey]</b>"
@@ -331,12 +362,15 @@
 			M.ghostize()
 			del(M)
 
-		for(var/obj/O in contents) //obj instead of obj/item so that bodybags and ashes get destroyed. We dont want tons and tons of ash piling up
-			del(O)
+		for (var/obj/O in inside) //obj instead of obj/item so that bodybags and ashes get destroyed. We dont want tons and tons of ash piling up
+			qdel(O)
+
+		inside = null
 
 		new /obj/effect/decal/cleanable/ash(src)
 		sleep(30)
 		cremating = 0
+		update()
 		locked = 0
 		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
 	return
@@ -355,7 +389,7 @@
 	var/obj/structure/crematorium/connected = null
 	anchored = 1.0
 
-/obj/structure/c_tray/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/c_tray/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover, /obj/item/weapon/dummy))
 		return 1
 	else
@@ -387,17 +421,15 @@
 	if (user != O)
 		for(var/mob/B in viewers(user, 3))
 			if ((B.client && !( B.blinded )))
-				B << text("\red [] stuffs [] into []!", user, O, src)
+				B << text("<span class='warning'>[] stuffs [] into []!</span>", user, O, src)
 			//Foreach goto(99)
 	return
 
 /obj/machinery/crema_switch/attack_hand(mob/user as mob)
-	if(src.allowed(usr))
+	if (allowed(user))
 		for (var/obj/structure/crematorium/C in world)
 			if (C.id == id)
-				if (!C.cremating)
-					C.cremate(user)
+				C.cremate(user)
 	else
-		usr << "\red Access denied."
+		user << "<SPAN CLASS='alert'>Access denied.</SPAN>"
 	return
-

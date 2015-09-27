@@ -100,6 +100,7 @@ vs_control
 		settings -= "plc"
 
 	proc/ChangeSettingsDialog(mob/user,list/L)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/ChangeSettingsDialog() called tick#: [world.time]")
 		//var/which = input(user,"Choose a setting:") in L
 		var/dat = ""
 		for(var/ch in L)
@@ -122,6 +123,7 @@ vs_control
 		if("changevar" in href_list)
 			ChangeSetting(usr,href_list["changevar"])
 	proc/ChangeSetting(mob/user,ch)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/ChangeSetting() called tick#: [world.time]")
 		var/vw
 		var/how = "Text"
 		var/display_description = ch
@@ -171,12 +173,13 @@ vs_control
 			vars[ch] = vw
 		if(how == "Toggle")
 			newvar = (newvar?"ON":"OFF")
-		world << "\blue <b>[key_name(user)] changed the setting [display_description] to [newvar].</b>"
+		world << "<span class='notice'><b>[key_name(user)] changed the setting [display_description] to [newvar].</b></span>"
 		if(ch in plc.settings)
 			ChangeSettingsDialog(user,plc.settings)
 		else
 			ChangeSettingsDialog(user,settings)
 	proc/RandomizeWithProbability()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/RandomizeWithProbability() called tick#: [world.time]")
 		for(var/V in settings)
 			var/newvalue
 			if("[V]_RANDOM" in vars)
@@ -189,10 +192,12 @@ vs_control
 			V = newvalue
 
 	proc/ChangePlasma()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/ChangePlasma() called tick#: [world.time]")
 		for(var/V in plc.settings)
 			plc.Randomize(V)
 
 	proc/SetDefault(var/mob/user)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/SetDefault() called tick#: [world.time]")
 		var/list/setting_choices = list("Plasma - Standard", "Plasma - Low Hazard", "Plasma - High Hazard", "Plasma - Oh Shit!",\
 		"ZAS - Normal", "ZAS - Forgiving", "ZAS - Dangerous", "ZAS - Hellish")
 		var/def = input(user, "Which of these presets should be used?") as null|anything in setting_choices
@@ -296,7 +301,7 @@ vs_control
 				airflow_mob_slowdown = 3
 
 
-		world << "\blue <b>[key_name(user)] changed the global plasma/ZAS settings to \"[def]\"</b>"
+		world << "<span class='notice'><b>[key_name(user)] changed the global plasma/ZAS settings to \"[def]\"</b></span>"
 
 pl_control
 	var/list/settings = list()
@@ -314,6 +319,7 @@ pl_control
 
 		settings -= "settings"
 	proc/Randomize(V)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/Randomize() called tick#: [world.time]")
 		var/newvalue
 		if("[V]_RANDOM" in vars)
 			if(isnum(vars["[V]_RANDOM"]))

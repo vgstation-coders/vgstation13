@@ -10,7 +10,7 @@
 	icon_state = "crap"
 	item_state = "analyzer"
 	w_class = 1.0
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	slot_flags = SLOT_BELT
 	var/list/positive_locations = list()
 	var/datum/depth_scan/current
@@ -25,14 +25,15 @@
 	var/material = "unknown"
 
 /obj/item/device/depth_scanner/proc/scan_atom(var/mob/user, var/atom/A)
-	user.visible_message("\blue [user] scans [A], the air around them humming gently.")
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/depth_scanner/proc/scan_atom() called tick#: [world.time]")
+	user.visible_message("<span class='notice'>[user] scans [A], the air around them humming gently.</span>")
 	if(istype(A,/turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = A
 		if(M.finds.len || M.artifact_find)
 
 			//create a new scanlog entry
 			var/datum/depth_scan/D = new()
-			D.coords = "[M.x-WORLD_X_OFFSET].[rand(0,9)]:[M.y-WORLD_Y_OFFSET].[rand(0,9)]:[10 * M.z].[rand(0,9)]"
+			D.coords = "[M.x-WORLD_X_OFFSET[M.z]].[rand(0,9)]:[M.y-WORLD_Y_OFFSET[M.z]].[rand(0,9)]:[10 * M.z].[rand(0,9)]"
 			D.time = worldtime2text()
 			D.record_index = positive_locations.len + 1
 			D.material = M.mineral ? M.mineral.display_name : "Rock"
@@ -54,14 +55,14 @@
 			positive_locations.Add(D)
 
 			for(var/mob/L in range(src, 1))
-				L << "\blue \icon[src] [src] pings."
+				L << "<span class='notice'>\icon[src] [src] pings.</span>"
 
 	else if(istype(A,/obj/structure/boulder))
 		var/obj/structure/boulder/B = A
 		if(B.artifact_find)
 			//create a new scanlog entry
 			var/datum/depth_scan/D = new()
-			D.coords = "[10 * (B.x-WORLD_X_OFFSET)].[rand(0,9)]:[10 * (B.y-WORLD_Y_OFFSET)].[rand(0,9)]:[10 * B.z].[rand(0,9)]"
+			D.coords = "[10 * (B.x-WORLD_X_OFFSET[B.z])].[rand(0,9)]:[10 * (B.y-WORLD_Y_OFFSET[B.z])].[rand(0,9)]:[10 * B.z].[rand(0,9)]"
 			D.time = worldtime2text()
 			D.record_index = positive_locations.len + 1
 
@@ -73,7 +74,7 @@
 			positive_locations.Add(D)
 
 			for(var/mob/L in range(src, 1))
-				L << "\blue \icon[src] [src] pings [pick("madly","wildly","excitedly","crazily")]!."
+				L << "<span class='notice'>\icon[src] [src] pings [pick("madly","wildly","excitedly","crazily")]!.</span>"
 
 /obj/item/device/depth_scanner/attack_self(var/mob/user as mob)
 	return src.interact(user)

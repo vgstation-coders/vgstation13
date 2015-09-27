@@ -1,121 +1,5 @@
-
-// fun if you want to typecast humans/monkeys/etc without writing long path-filled lines.
-/proc/ishuman(A)
-	if(istype(A, /mob/living/carbon/human))
-		return 1
-	return 0
-
-/proc/ismonkey(A)
-	if(A && istype(A, /mob/living/carbon/monkey))
-		return 1
-	return 0
-
-/proc/isbrain(A)
-	if(A && istype(A, /mob/living/carbon/brain))
-		return 1
-	return 0
-
-/proc/isalien(A)
-	if(istype(A, /mob/living/carbon/alien))
-		return 1
-	return 0
-
-/proc/isalienadult(A)
-	if(istype(A, /mob/living/carbon/alien/humanoid))
-		return 1
-	return 0
-
-/proc/islarva(A)
-	if(istype(A, /mob/living/carbon/alien/larva))
-		return 1
-	return 0
-
-/proc/isslime(A)
-	if(istype(A, /mob/living/carbon/slime))
-		return 1
-	return 0
-
-/proc/isslimeadult(A)
-	if(istype(A, /mob/living/carbon/slime/adult))
-		return 1
-	return 0
-
-/proc/isrobot(A)
-	if(istype(A, /mob/living/silicon/robot))
-		return 1
-	return 0
-
-/proc/isanimal(A)
-	if(istype(A, /mob/living/simple_animal))
-		return 1
-	return 0
-
-/proc/iscorgi(A)
-	if(istype(A, /mob/living/simple_animal/corgi))
-		return 1
-	return 0
-
-/proc/iscrab(A)
-	if(istype(A, /mob/living/simple_animal/crab))
-		return 1
-	return 0
-
-/proc/iscat(A)
-	if(istype(A, /mob/living/simple_animal/cat))
-		return 1
-	return 0
-
-/proc/ismouse(A)
-	if(istype(A, /mob/living/simple_animal/mouse))
-		return 1
-	return 0
-
-/proc/isbear(A)
-	if(istype(A, /mob/living/simple_animal/hostile/bear))
-		return 1
-	return 0
-
-/proc/iscarp(A)
-	if(istype(A, /mob/living/simple_animal/hostile/carp))
-		return 1
-	return 0
-
-/proc/isclown(A)
-	if(istype(A, /mob/living/simple_animal/hostile/retaliate/clown))
-		return 1
-	return 0
-
-/proc/isAI(A)
-	if(istype(A, /mob/living/silicon/ai))
-		return 1
-	return 0
-
-/proc/isAIEye(A)
-	if(istype(A, /mob/camera/aiEye))
-		return 1
-	return 0
-
-/proc/ispAI(A)
-	if(istype(A, /mob/living/silicon/pai))
-		return 1
-	return 0
-
-/proc/iscarbon(A)
-	if(istype(A, /mob/living/carbon))
-		return 1
-	return 0
-
-/proc/issilicon(A)
-	if(istype(A, /mob/living/silicon))
-		return 1
-	return 0
-
-/proc/isMoMMI(A)
-	if(istype(A, /mob/living/silicon/robot/mommi))
-		return 1
-	return 0
-
 /proc/isAdminGhost(A)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/isAdminGhost() called tick#: [world.time]")
 	if(isobserver(A))
 		var/mob/dead/observer/O = A
 		if(O.check_rights(R_ADMIN|R_FUN))
@@ -124,6 +8,7 @@
 
 
 /proc/canGhostRead(var/mob/A, var/obj/target, var/flags=PERMIT_ALL)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/canGhostRead() called tick#: [world.time]")
 	if(isAdminGhost(A))
 		return 1
 	if(flags & PERMIT_ALL)
@@ -131,6 +16,7 @@
 	return 0
 
 /proc/canGhostWrite(var/mob/A, var/obj/target, var/desc="fucked with", var/flags=0)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/canGhostWrite() called tick#: [world.time]")
 	if(flags & PERMIT_ALL)
 		if(!target.blessed)
 			return 1
@@ -140,40 +26,31 @@
 		return 1
 	return 0
 
-/proc/isliving(A)
-	if(istype(A, /mob/living))
-		return 1
-	return 0
-
-proc/isobserver(A)
-	if(istype(A, /mob/dead/observer))
-		return 1
-	return 0
-
-proc/isovermind(A)
-	if(istype(A, /mob/camera/blob))
-		return 1
-	return 0
-
-proc/isorgan(A)
-	if(istype(A, /datum/organ/external))
-		return 1
-	return 0
-
 /proc/isloyal(A) //Checks to see if the person contains a loyalty implant, then checks that the implant is actually inside of them
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/isloyal() called tick#: [world.time]")
 	for(var/obj/item/weapon/implant/loyalty/L in A)
 		if(L && L.implanted)
 			return 1
 	return 0
 
+/proc/check_holy(var/mob/A) //checks to see if the tile the mob stands on is holy
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/check_holy() called tick#: [world.time]")
+	var/turf/T = get_turf(A)
+	if(!T) return 0
+	if(!T.holy) return 0
+	return 1  //The tile is holy. Beware!
+
 proc/hasorgans(A)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/hasorgans() called tick#: [world.time]")
 	return ishuman(A)
 
 /proc/hsl2rgb(h, s, l)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/hsl2rgb() called tick#: [world.time]")
 	return
 
 
 /proc/check_zone(zone)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/check_zone() called tick#: [world.time]")
 	if(!zone)	return "chest"
 	switch(zone)
 		if("eyes")
@@ -195,6 +72,7 @@ proc/hasorgans(A)
 
 
 /proc/ran_zone(zone, probability)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/ran_zone() called tick#: [world.time]")
 	zone = check_zone(zone)
 	if(!probability)	probability = 90
 	if(probability == 100)	return zone
@@ -214,10 +92,11 @@ proc/hasorgans(A)
 // May return null if missed
 // miss_chance_mod may be negative.
 /proc/get_zone_with_miss_chance(zone, var/mob/target, var/miss_chance_mod = 0)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_zone_with_miss_chance() called tick#: [world.time]")
 	zone = check_zone(zone)
 
 	// you can only miss if your target is standing and not restrained
-	if(!target.buckled && !target.lying)
+	if(!target.locked_to && !target.lying)
 		var/miss_chance = 10
 		switch(zone)
 			if("head")
@@ -258,8 +137,12 @@ proc/hasorgans(A)
 
 	return zone
 
-
+// adds stars to a text to obfuscate it
+// var/n -> text to obfuscate
+// var/pr -> percent of the text to obfuscate
+// return -> obfuscated text
 /proc/stars(n, pr)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/stars() called tick#: [world.time]")
 	if (pr == null)
 		pr = 25
 	if (pr <= 0)
@@ -281,9 +164,10 @@ proc/hasorgans(A)
 	return t
 
 proc/slur(phrase)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/slur() called tick#: [world.time]")
 	phrase = html_decode(phrase)
-	var/leng=lentext(phrase)
-	var/counter=lentext(phrase)
+	var/leng=length(phrase)
+	var/counter=length(phrase)
 	var/newphrase=""
 	var/newletter=""
 	while(counter>=1)
@@ -304,6 +188,7 @@ proc/slur(phrase)
 	return newphrase
 
 /proc/stutter(n)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/stutter() called tick#: [world.time]")
 	var/te = html_decode(n)
 	var/t = ""//placed before the message. Not really sure what it's for.
 	n = length(n)//length of the entire word
@@ -328,6 +213,7 @@ proc/slur(phrase)
 
 
 proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 for p will cause letters to be replaced instead of added
+	//writepanic("[__FILE__].[__LINE__] \\/proc/Gibberish() called tick#: [world.time]")
 	/* Turn text into complete gibberish! */
 	var/returntext = ""
 	for(var/i = 1, i <= length(t), i++)
@@ -344,51 +230,47 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 
 	return returntext
 
+/proc/derpspeech(message, stuttering)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/derpspeech() called tick#: [world.time]")
+	message = replacetext(message, " am ", " ")
+	message = replacetext(message, " is ", " ")
+	message = replacetext(message, " are ", " ")
+	message = replacetext(message, "you", "u")
+	message = replacetext(message, I_HELP, "halp")
+	message = replacetext(message, "grief", "grife")
+	message = replacetext(message, "space", "spess")
+	message = replacetext(message, "carp", "crap")
+	message = replacetext(message, "reason", "raisin")
+	if(prob(50))
+		message = uppertext(message)
+		message += "[stutter(pick("!", "!!", "!!!"))]"
+	if(!stuttering && prob(15))
+		message = stutter(message)
+	return message
 
-/proc/ninjaspeak(n)
-/*
-The difference with stutter is that this proc can stutter more than 1 letter
-The issue here is that anything that does not have a space is treated as one word (in many instances). For instance, "LOOKING," is a word, including the comma.
-It's fairly easy to fix if dealing with single letters but not so much with compounds of letters./N
-*/
-	var/te = html_decode(n)
-	var/t = ""
-	n = length(n)
-	var/p = 1
-	while(p <= n)
-		var/n_letter
-		var/n_mod = rand(1,4)
-		if(p+n_mod>n+1)
-			n_letter = copytext(te, p, n+1)
-		else
-			n_letter = copytext(te, p, p+n_mod)
-		if (prob(50))
-			if (prob(30))
-				n_letter = text("[n_letter]-[n_letter]-[n_letter]")
-			else
-				n_letter = text("[n_letter]-[n_letter]")
-		else
-			n_letter = text("[n_letter]")
-		t = text("[t][n_letter]")
-		p=p+n_mod
-	return copytext(sanitize(t),1,MAX_MESSAGE_LEN)
-
-
-/proc/shake_camera(mob/M, duration, strength=1)
-	if(!M || !M.client || M.shakecamera)
-		return
+/proc/shake_camera(mob/M, duration=0, strength=1)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/shake_camera() called tick#: [world.time]")
 	spawn(1)
+		if(!M || !M.client || M.shakecamera)
+			return
+
 		var/oldeye=M.client.eye
-		var/x
+
 		M.shakecamera = 1
-		for(x=0; x<duration, x++)
-			M.client.eye = locate(dd_range(1,M.loc.x+rand(-strength,strength),world.maxx),dd_range(1,M.loc.y+rand(-strength,strength),world.maxy),M.loc.z)
+
+		for (var/x = 1 to duration)
+			if(!M || !M.client)
+				M.shakecamera = 0
+				return //somebody disconnected while being shaken
+			M.client.eye = locate(Clamp(M.loc.x + rand(-strength, strength), 1, world.maxx), Clamp(M.loc.y + rand(-strength, strength), 1, world.maxy), M.loc.z)
 			sleep(1)
+
 		M.shakecamera = 0
 		M.client.eye=oldeye
 
 
 /proc/findname(msg)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/findname() called tick#: [world.time]")
 	if(!istext(msg))
 		msg = "[msg]"
 	for(var/mob/M in mob_list)
@@ -398,6 +280,7 @@ It's fairly easy to fix if dealing with single letters but not so much with comp
 
 
 /mob/proc/abiotic(var/full_body = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/abiotic() called tick#: [world.time]")
 	if(full_body && ((src.l_hand && !( src.l_hand.abstract )) || (src.r_hand && !( src.r_hand.abstract )) || (src.back || src.wear_mask)))
 		return 1
 
@@ -407,29 +290,31 @@ It's fairly easy to fix if dealing with single letters but not so much with comp
 	return 0
 
 //converts intent-strings into numbers and back
-var/list/intents = list("help","disarm","grab","hurt")
+var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 /proc/intent_numeric(argument)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/intent_numeric() called tick#: [world.time]")
 	if(istext(argument))
 		switch(argument)
-			if("help")		return 0
-			if("disarm")	return 1
-			if("grab")		return 2
+			if(I_HELP)		return 0
+			if(I_DISARM)	return 1
+			if(I_GRAB)		return 2
 			else			return 3
 	else
 		switch(argument)
-			if(0)			return "help"
-			if(1)			return "disarm"
-			if(2)			return "grab"
-			else			return "hurt"
+			if(0)			return I_HELP
+			if(1)			return I_DISARM
+			if(2)			return I_GRAB
+			else			return I_HURT
 
-//change a mob's act-intent. Input the intent as a string such as "help" or use "right"/"left
+//change a mob's act-intent. Input the intent as a string such as I_HELP or use "right"/"left
 /mob/verb/a_intent_change(input as text)
 	set name = "a-intent"
 	set hidden = 1
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/verb/a_intent_change()  called tick#: [world.time]")
 
 	if(ishuman(src) || isalienadult(src) || isbrain(src))
 		switch(input)
-			if("help","disarm","grab","hurt")
+			if(I_HELP,I_DISARM,I_GRAB,I_HURT)
 				a_intent = input
 			if("right")
 				a_intent = intent_numeric((intent_numeric(a_intent)+1) % 4)
@@ -440,18 +325,19 @@ var/list/intents = list("help","disarm","grab","hurt")
 
 	else if(isrobot(src) || ismonkey(src) || islarva(src))
 		switch(input)
-			if("help")
-				a_intent = "help"
-			if("hurt")
-				a_intent = "hurt"
+			if(I_HELP)
+				a_intent = I_HELP
+			if(I_HURT)
+				a_intent = I_HURT
 			if("right","left")
 				a_intent = intent_numeric(intent_numeric(a_intent) - 3)
 		if(hud_used && hud_used.action_intent)
-			if(a_intent == "hurt")
+			if(a_intent == I_HURT)
 				hud_used.action_intent.icon_state = "harm"
 			else
 				hud_used.action_intent.icon_state = "help"
 proc/is_blind(A)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/is_blind() called tick#: [world.time]")
 	if(istype(A, /mob/living/carbon))
 		var/mob/living/carbon/C = A
 		if(C.blinded != null)
@@ -459,6 +345,7 @@ proc/is_blind(A)
 	return 0
 
 /proc/get_multitool(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_multitool() called tick#: [world.time]")
 	// Get tool
 	var/obj/item/device/multitool/P
 	if(isrobot(user) || ishuman(user))
@@ -474,9 +361,18 @@ proc/is_blind(A)
 		return null
 	return P
 
+/proc/broadcast_security_hud_message(var/message, var/broadcast_source)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/broadcast_security_hud_message() called tick#: [world.time]")
+	broadcast_hud_message(message, broadcast_source, sec_hud_users, /obj/item/clothing/glasses/hud/security)
 
+/proc/broadcast_medical_hud_message(var/message, var/broadcast_source)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/broadcast_medical_hud_message() called tick#: [world.time]")
+	broadcast_hud_message(message, broadcast_source, med_hud_users, /obj/item/clothing/glasses/hud/health)
 
-/proc/iscluwne(A)
-	if(A && istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne))
-		return 1
-	return 0
+/proc/broadcast_hud_message(var/message, var/broadcast_source, var/list/targets, var/icon)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/broadcast_hud_message() called tick#: [world.time]")
+	var/turf/sourceturf = get_turf(broadcast_source)
+	for(var/mob/M in targets)
+		var/turf/targetturf = get_turf(M)
+		if((targetturf.z == sourceturf.z))
+			M.show_message("<span class='info'>\icon[icon] [message]</span>", 1)

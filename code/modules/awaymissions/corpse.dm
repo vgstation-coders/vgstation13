@@ -1,8 +1,3 @@
-//These are meant for spawning on maps, namely Away Missions.
-
-//If someone can do this in a neater way, be my guest-Kor
-
-//To do: Allow corpses to appear mangled, bloody, etc. Allow customizing the bodies appearance (they're all bald and white right now).
 
 /obj/effect/landmark/corpse
 	name = "Unknown"
@@ -25,14 +20,20 @@
 	var/corpseidicon = null //For setting it to be a gold, silver, centcomm etc ID
 	var/mutantrace = "human"
 
+/obj/effect/landmark/corpse/New()
+	if(ticker)
+		initialize()
+
 /obj/effect/landmark/corpse/initialize()
 	createCorpse()
 
 /obj/effect/landmark/corpse/proc/createCorpse() //Creates a mob and checks for gear in each slot before attempting to equip it.
-	var/mob/living/carbon/human/M = new /mob/living/carbon/human (src.loc)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/landmark/corpse/proc/createCorpse() called tick#: [world.time]")
+	var/mob/living/carbon/human/M = new /mob/living/carbon/human (loc)
 	M.dna.mutantrace = mutantrace
 	M.real_name = src.name
-	M.death(1) //Kills the new mob
+	M.adjustOxyLoss(200) //Kills the new mob
+	M.iscorpse = 1
 	if(src.corpseuniform)
 		M.equip_to_slot_or_del(new src.corpseuniform(M), slot_w_uniform)
 	if(src.corpsesuit)
@@ -77,7 +78,7 @@
 			W.assignment = corpseidjob
 		W.registered_name = M.real_name
 		M.equip_to_slot_or_del(W, slot_wear_id)
-	del(src)
+	qdel(src)
 
 
 
@@ -201,7 +202,7 @@
 	corpseidaccess = "Scientist"
 
 /obj/effect/landmark/corpse/miner
-	corpseradio = /obj/item/device/radio/headset/headset_cargo
+	corpseradio = /obj/item/device/radio/headset/headset_mining
 	corpseuniform = /obj/item/clothing/under/rank/miner
 	corpsegloves = /obj/item/clothing/gloves/black
 	corpseback = /obj/item/weapon/storage/backpack/industrial
@@ -243,3 +244,33 @@
 	corpseid = 1
 	corpseidjob = "Commander"
 	corpseidaccess = "Captain"
+
+/////////////////Simple-Mob Corpses/////////////////////
+
+/obj/effect/landmark/corpse/pirate
+	name = "Pirate"
+	corpseuniform = /obj/item/clothing/under/pirate
+	corpseshoes = /obj/item/clothing/shoes/jackboots
+	corpseglasses = /obj/item/clothing/glasses/eyepatch
+	corpsehelmet = /obj/item/clothing/head/bandana
+
+/obj/effect/landmark/corpse/pirate
+	name = "Pirate"
+	corpseuniform = /obj/item/clothing/under/pirate
+	corpseshoes = /obj/item/clothing/shoes/jackboots
+	corpseglasses = /obj/item/clothing/glasses/eyepatch
+	corpsehelmet = /obj/item/clothing/head/bandana
+
+/obj/effect/landmark/corpse/pirate/ranged
+	name = "Pirate Gunner"
+	corpsesuit = /obj/item/clothing/suit/pirate
+	corpsehelmet = /obj/item/clothing/head/pirate
+
+/obj/effect/landmark/corpse/russian
+	name = "Russian"
+	corpseuniform = /obj/item/clothing/under/soviet
+	corpseshoes = /obj/item/clothing/shoes/jackboots
+	corpsehelmet = /obj/item/clothing/head/bearpelt/real
+
+/obj/effect/landmark/corpse/russian/ranged
+	corpsehelmet = /obj/item/clothing/head/ushanka

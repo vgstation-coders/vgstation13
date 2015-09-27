@@ -9,7 +9,6 @@
 	icon_state = "off"
 	density = 1
 	anchored = 0
-	directwired = 0
 	var/t_status = 0
 	var/t_per = 5000
 	var/filter = 1
@@ -48,25 +47,29 @@ display round(lastgen) and plasmatank amount
 	icon_state = "portgen0"
 	density = 1
 	anchored = 0
-	directwired = 0
 	use_power = 0
+
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
 	var/active = 0
 	var/power_gen = 5000
-	var/open = 0
 	var/recent_fault = 0
 	var/power_output = 1
 
 /obj/machinery/power/port_gen/proc/HasFuel() //Placeholder for fuel check.
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/port_gen/proc/HasFuel() called tick#: [world.time]")
 	return 1
 
 /obj/machinery/power/port_gen/proc/UseFuel() //Placeholder for fuel use.
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/port_gen/proc/UseFuel() called tick#: [world.time]")
 	return
 
 /obj/machinery/power/port_gen/proc/DropFuel()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/port_gen/proc/DropFuel() called tick#: [world.time]")
 	return
 
 /obj/machinery/power/port_gen/proc/handleInactive()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/port_gen/proc/handleInactive() called tick#: [world.time]")
 	return
 
 /obj/machinery/power/port_gen/process()
@@ -86,12 +89,12 @@ display round(lastgen) and plasmatank amount
 	if(!anchored)
 		return
 
-/obj/machinery/power/port_gen/examine()
-	set src in oview(1)
+/obj/machinery/power/port_gen/examine(mob/user)
+	..()
 	if(active)
-		usr << "\blue The generator is on."
+		usr << "<span class='info'>The generator is on.</span>"
 	else
-		usr << "\blue The generator is off."
+		usr << "<span class='info'>The generator is off.</span>"
 
 /obj/machinery/power/port_gen/pacman
 	name = "P.A.C.M.A.N.-type Portable Generator"
@@ -115,8 +118,8 @@ display round(lastgen) and plasmatank amount
 	component_parts = newlist(
 		/obj/item/weapon/stock_parts/matter_bin,
 		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/cable_coil,
-		/obj/item/weapon/cable_coil,
+		/obj/item/stack/cable_coil,
+		/obj/item/stack/cable_coil,
 		/obj/item/weapon/stock_parts/capacitor,
 		board_path
 	)
@@ -142,10 +145,12 @@ display round(lastgen) and plasmatank amount
 	reliability = min(round(temp_reliability / 4), 100)
 	power_gen = round(initial(power_gen) * (max(2, temp_rating) / 2))
 
-/obj/machinery/power/port_gen/pacman/examine()
+/obj/machinery/power/port_gen/pacman/examine(mob/user)
 	..()
-	usr << "\blue The generator has [sheets] units of [sheet_name] fuel left, producing [power_gen] per cycle."
-	if(crit_fail) usr << "\red The generator seems to have broken down."
+	if(crit_fail)
+		user << "<span class='warning'>The generator seems to have broken down.</span>"
+	else
+		user << "<span class='info'>The generator has [sheets] units of [sheet_name] fuel left, producing [power_gen] per cycle.</span>"
 
 /obj/machinery/power/port_gen/pacman/HasFuel()
 	if(sheets >= 1 / (time_per_sheet / power_output) - sheet_left)
@@ -200,63 +205,50 @@ display round(lastgen) and plasmatank amount
 		src.updateDialog()
 
 /obj/machinery/power/port_gen/pacman/proc/overheat()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/port_gen/pacman/proc/overheat() called tick#: [world.time]")
 	explosion(src.loc, 2, 5, 2, -1)
+
+/obj/machinery/power/port_gen/pacman/emag(mob/user)
+	emagged = 1
+	emp_act(1)
+	return 1
+
+/obj/machinery/power/port_gen/pacman/crowbarDestroy(mob/user) //don't like the copy/paste, but the proc has special handling in the middle so we need it
+	if(..())
+		while ( sheets > 0 )
+			var/obj/item/stack/sheet/G = new sheet_path(src.loc)
+			if ( sheets > 50 )
+				G.amount = 50
+			else
+				G.amount = sheets
+			sheets -= G.amount
+		return 1
+	return -1
+
+/obj/machinery/power/port_gen/pacman/wrenchAnchor(mob/user)
+	if(..() == 1)
+		if(anchored)
+			connect_to_network()
+		else
+			disconnect_from_network()
+		return 1
+	return -1
 
 /obj/machinery/power/port_gen/pacman/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, sheet_path))
 		var/obj/item/stack/addstack = O
 		var/amount = min((max_sheets - sheets), addstack.amount)
 		if(amount < 1)
-			user << "\blue The [src.name] is full!"
+			user << "<span class='notice'>The [src.name] is full!</span>"
 			return
-		user << "\blue You add [amount] sheets to the [src.name]."
+		user << "<span class='notice'>You add [amount] sheets to the [src.name].</span>"
 		sheets += amount
 		addstack.use(amount)
 		updateUsrDialog()
 		return
-	else if (istype(O, /obj/item/weapon/card/emag))
-		emagged = 1
-		emp_act(1)
 	else if(!active)
-
-		if(istype(O, /obj/item/weapon/wrench))
-
-			if(!anchored)
-				connect_to_network()
-				user << "\blue You secure the generator to the floor."
-			else
-				disconnect_from_network()
-				user << "\blue You unsecure the generator from the floor."
-
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-			anchored = !anchored
-
-		else if(istype(O, /obj/item/weapon/screwdriver))
-			open = !open
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-			if(open)
-				user << "\blue You open the access panel."
-			else
-				user << "\blue You close the access panel."
-		else if(istype(O, /obj/item/weapon/crowbar) && open)
-			var/obj/machinery/constructable_frame/machine_frame/new_frame = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			for(var/obj/item/I in component_parts)
-				if(I.reliability < 100)
-					I.crit_fail = 1
-				I.loc = src.loc
-			while ( sheets > 0 )
-				var/obj/item/stack/sheet/G = new sheet_path(src.loc)
-
-				if ( sheets > 50 )
-					G.amount = 50
-				else
-					G.amount = sheets
-
-				sheets -= G.amount
-
-			new_frame.state = 2
-			new_frame.icon_state = "box_1"
-			del(src)
+		if( ..() )
+			return 1
 
 /obj/machinery/power/port_gen/pacman/attack_hand(mob/user as mob)
 	..()

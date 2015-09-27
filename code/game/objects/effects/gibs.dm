@@ -1,13 +1,17 @@
 /proc/gibs(atom/location, var/list/viruses, var/datum/dna/MobDNA)		//CARN MARKER
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/gibs() called tick#: [world.time]")
 	new /obj/effect/gibspawner/generic(get_turf(location),viruses,MobDNA)
 
 /proc/hgibs(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/hgibs() called tick#: [world.time]")
 	new /obj/effect/gibspawner/human(get_turf(location),viruses,MobDNA,fleshcolor,bloodcolor)
 
 /proc/xgibs(atom/location, var/list/viruses)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/xgibs() called tick#: [world.time]")
 	new /obj/effect/gibspawner/xeno(get_turf(location),viruses)
 
 /proc/robogibs(atom/location, var/list/viruses)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/robogibs() called tick#: [world.time]")
 	new /obj/effect/gibspawner/robot(get_turf(location),viruses)
 
 /obj/effect/gibspawner
@@ -19,60 +23,63 @@
 	var/fleshcolor //Used for gibbed humans.
 	var/bloodcolor //Used for gibbed humans.
 
-	New(location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor)
-		..()
+/obj/effect/gibspawner/New(location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor)
+	..()
 
-		if(fleshcolor) src.fleshcolor = fleshcolor
-		if(bloodcolor) src.bloodcolor = bloodcolor
+	if(fleshcolor) src.fleshcolor = fleshcolor
+	if(bloodcolor) src.bloodcolor = bloodcolor
 
-		if(istype(loc,/turf)) //basically if a badmin spawns it
-			Gib(loc,viruses,MobDNA)
+	if(istype(loc,/turf)) //basically if a badmin spawns it
+		Gib(loc,viruses,MobDNA)
 
-	proc/Gib(atom/location, var/list/viruses = list(), var/datum/dna/MobDNA = null)
-		if(gibtypes.len != gibamounts.len || gibamounts.len != gibdirections.len)
-			world << "\red Gib list length mismatch!"
-			return
+/obj/effect/gibspawner/proc/Gib(atom/location, var/list/viruses = list(), var/datum/dna/MobDNA = null)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/obj/effect/gibspawner/proc/Gib() called tick#: [world.time]")
+	if(gibtypes.len != gibamounts.len || gibamounts.len != gibdirections.len)
+		world << "<span class='warning'>Gib list length mismatch!</span>"
+		return
 
-		var/obj/effect/decal/cleanable/blood/gibs/gib = null
-		for(var/datum/disease/D in viruses)
-			if(D.spread_type == SPECIAL)
-				del(D)
+	var/obj/effect/decal/cleanable/blood/gibs/gib = null
+	for(var/datum/disease/D in viruses)
+		if(D.spread_type == SPECIAL)
+			D.cure(1)
+			del(D)
 
-		if(sparks)
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(2, 1, location)
-			s.start()
+	if(sparks)
+		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		s.set_up(2, 1, location)
+		s.start()
 
-		for(var/i = 1, i<= gibtypes.len, i++)
-			if(gibamounts[i])
-				for(var/j = 1, j<= gibamounts[i], j++)
-					var/gibType = gibtypes[i]
-					gib = new gibType(location)
+	for(var/i = 1, i<= gibtypes.len, i++)
+		if(gibamounts[i])
+			for(var/j = 1, j<= gibamounts[i], j++)
+				var/gibType = gibtypes[i]
+				gib = getFromPool(gibType,location)//new gibType(location)
+				gib.New(location)
 
-					// Apply human species colouration to masks.
-					if(fleshcolor)
-						gib.fleshcolor = fleshcolor
-					if(bloodcolor)
-						gib.basecolor = bloodcolor
+				// Apply human species colouration to masks.
+				if(fleshcolor)
+					gib.fleshcolor = fleshcolor
+				if(bloodcolor)
+					gib.basecolor = bloodcolor
 
-					gib.update_icon()
+				gib.update_icon()
 
-					if(viruses.len > 0)
-						for(var/datum/disease/D in viruses)
-							if(prob(virusProb))
-								var/datum/disease/viruus = D.Copy(1)
-								gib.viruses += viruus
-								viruus.holder = gib
+				if(viruses.len > 0)
+					for(var/datum/disease/D in viruses)
+						if(prob(virusProb))
+							var/datum/disease/viruus = D.Copy(1)
+							gib.viruses += viruus
+							viruus.holder = gib
 
-					gib.blood_DNA = list()
-					if(MobDNA)
-						gib.blood_DNA[MobDNA.unique_enzymes] = MobDNA.b_type
-					else if(istype(src, /obj/effect/gibspawner/xeno))
-						gib.blood_DNA["UNKNOWN DNA"] = "X*"
-					else if(istype(src, /obj/effect/gibspawner/human)) // Probably a monkey
-						gib.blood_DNA["Non-human DNA"] = "A+"
-					var/list/directions = gibdirections[i]
-					if(directions.len)
-						gib.streak(directions)
+				gib.blood_DNA = list()
+				if(MobDNA)
+					gib.blood_DNA[MobDNA.unique_enzymes] = MobDNA.b_type
+				else if(istype(src, /obj/effect/gibspawner/xeno))
+					gib.blood_DNA["UNKNOWN DNA"] = "X*"
+				else if(istype(src, /obj/effect/gibspawner/human)) // Probably a monkey
+					gib.blood_DNA["Non-human DNA"] = "A+"
+				var/list/directions = gibdirections[i]
+				if(directions.len)
+					gib.streak(directions)
 
-		qdel(src)
+	qdel(src)

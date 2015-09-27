@@ -1,3 +1,5 @@
+#define SPIDERWEB_BRUTE_DIVISOR 4
+
 //generic procs copied from obj/effect/alien
 /obj/effect/spider
 	name = "web"
@@ -22,20 +24,21 @@
 	return
 
 /obj/effect/spider/attackby(var/obj/item/weapon/W, var/mob/user)
-	user.changeNext_move(10)
-	if(W.attack_verb.len)
-		visible_message("\red <B>\The [src] have been [pick(W.attack_verb)] with \the [W][(user ? " by [user]." : ".")]")
+	user.delayNextAttack(8)
+	if(W.attack_verb && W.attack_verb.len)
+		visible_message("<span class='warning'><B>\The [src] have been [pick(W.attack_verb)] with \the [W][(user ? " by [user]." : ".")]</span>")
 	else
-		visible_message("\red <B>\The [src] have been attacked with \the [W][(user ? " by [user]." : ".")]")
+		visible_message("<span class='warning'><B>\The [src] have been attacked with \the [W][(user ? " by [user]." : ".")]</span>")
 
-	var/damage = W.force / 4.0
+	var/damage = (W.is_hot() || W.is_sharp()) ? (W.force) : (W.force / SPIDERWEB_BRUTE_DIVISOR)
 
 	if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
-
 		if(WT.remove_fuel(0, user))
 			damage = 15
 			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+		else
+			damage = W.force / SPIDERWEB_BRUTE_DIVISOR
 
 	health -= damage
 	healthcheck()
@@ -46,8 +49,9 @@
 	healthcheck()
 
 /obj/effect/spider/proc/healthcheck()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/spider/proc/healthcheck() called tick#: [world.time]")
 	if(health <= 0)
-		del(src)
+		qdel(src)
 
 /obj/effect/spider/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > 300)
@@ -63,13 +67,13 @@
 	if (prob(50))
 		icon_state = "stickyweb2"
 
-/obj/effect/spider/stickyweb/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/effect/spider/stickyweb/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 	if(istype(mover, /mob/living/simple_animal/hostile/giant_spider))
 		return 1
 	else if(istype(mover, /mob/living))
 		if(prob(50))
-			mover << "\red You get stuck in \the [src] for a moment."
+			mover << "<span class='warning'>You get stuck in \the [src] for a moment.</span>"
 			return 0
 	else if(istype(mover, /obj/item/projectile))
 		return prob(30)
@@ -81,9 +85,13 @@
 	icon_state = "eggs"
 	var/amount_grown = 0
 	New()
+		..()
 		pixel_x = rand(3,-3)
 		pixel_y = rand(3,-3)
 		processing_objects.Add(src)
+	Destroy()
+		processing_objects.Remove(src)
+		..()
 
 /obj/effect/spider/eggcluster/process()
 	amount_grown += rand(0,2)
@@ -92,7 +100,7 @@
 		for(var/i=0, i<num, i++)
 			//new /obj/effect/spider/spiderling(src.loc)
 			new /mob/living/simple_animal/hostile/giant_spider/spiderling(src.loc)
-		del(src)
+		qdel(src)
 /*s
 /obj/effect/spider/spiderling
 	name = "spiderling"
@@ -105,6 +113,7 @@
 	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent
 	var/travelling_in_vent = 0
 	New()
+		..()
 		pixel_x = rand(6,-6)
 		pixel_y = rand(6,-6)
 		processing_objects.Add(src)
@@ -119,6 +128,7 @@
 		..()
 
 /obj/effect/spider/spiderling/proc/die()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/spider/spiderling/proc/die() called tick#: [world.time]")
 	visible_message("<span class='alert'>[src] dies!</span>")
 	new /obj/effect/decal/cleanable/spiderling_remains(src.loc)
 	del(src)
@@ -137,13 +147,16 @@
 	name = "cocoon"
 	desc = "Something wrapped in silky spider web"
 	icon_state = "cocoon1"
-	health = 60
+	health = 30
 
 	New()
+		..()
 		icon_state = pick("cocoon1","cocoon2","cocoon3")
 
 /obj/effect/spider/cocoon/Destroy()
-	src.visible_message("\red \the [src] splits open.")
+	src.visible_message("<span class='warning'>\the [src] splits open.</span>")
 	for(var/atom/movable/A in contents)
 		A.loc = src.loc
 	..()
+
+#undef SPIDERWEB_BRUTE_DIVISOR

@@ -36,7 +36,11 @@
 	var/treatment_fire = "tricordrazine"
 	var/treatment_tox = "tricordrazine"
 	var/treatment_virus = "spaceacillin"
+	var/declare_treatment = 0 //When attempting to treat a patient, should it notify everyone wearing medhuds?
 	var/shut_up = 0 //self explanatory :)
+	var/declare_crit = 1 //If active, the bot will transmit a critical patient alert to MedHUD users.
+	var/declare_cooldown = 0 //Prevents spam of critical patient alerts.
+	bot_type = MED_BOT
 
 /obj/machinery/bot/medbot/mysterious
 	name = "Mysterious Medibot"
@@ -67,7 +71,6 @@
 /obj/machinery/bot/medbot/New()
 	..()
 	src.icon_state = "medibot[src.on]"
-
 	spawn(4)
 		if(src.skin)
 			src.overlays += image('icons/obj/aibots.dmi', "medskin_[src.skin]")
@@ -130,7 +133,11 @@
 		dat += "Reagent Source: "
 		dat += "<a href='?src=\ref[src];use_beaker=1'>[src.use_beaker ? "Loaded Beaker (When available)" : "Internal Synthesizer"]</a><br>"
 
-		dat += "The speaker switch is [src.shut_up ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>Toggle</a>"
+		dat += "Treatment report is [src.declare_treatment ? "on" : "off"]. <a href='?src=\ref[src];declaretreatment=[1]'>Toggle</a><br>"
+
+		dat += "The speaker switch is [src.shut_up ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>Toggle</a><br>"
+
+		dat += "Critical Patient Alerts: <a href='?src=\ref[src];critalerts=1'>[declare_crit ? "Yes" : "No"]</a><br>"
 
 	user << browse("<HEAD><TITLE>Medibot v1.0 controls</TITLE></HEAD>[dat]", "window=automed")
 	onclose(user, "automed")
@@ -176,6 +183,12 @@
 	else if ((href_list["togglevoice"]) && (!src.locked || issilicon(usr)))
 		src.shut_up = !src.shut_up
 
+	else if ((href_list["declaretreatment"]) && (!src.locked || issilicon(usr)))
+		src.declare_treatment = !src.declare_treatment
+
+	else if ((href_list["critalerts"]) && (!locked || issilicon(usr)))
+		declare_crit = !declare_crit
+
 	src.updateUsrDialog()
 	return
 
@@ -201,8 +214,7 @@
 			user << "<span class='notice'>There is already a beaker loaded.</span>"
 			return
 
-		user.drop_item()
-		W.loc = src
+		user.drop_item(W, src)
 		src.reagent_glass = W
 		user << "<span class='notice'>You insert [W].</span>"
 		src.updateUsrDialog()
@@ -216,10 +228,11 @@
 /obj/machinery/bot/medbot/Emag(mob/user as mob)
 	..()
 	if(open && !locked)
+		declare_crit = 0
 		if(user) user << "<span class='warning'>You short out [src]'s reagent synthesis circuits.</span>"
 		spawn(0)
 			for(var/mob/O in hearers(src, null))
-				O.show_message("\red <B>[src] buzzes oddly!</B>", 1)
+				O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		flick("medibot_spark", src)
 		src.patient = null
 		if(user) src.oldpatient = user
@@ -278,6 +291,9 @@
 						var/message = pick("Hey, you! Hold on, I'm coming.","Wait! I want to help!","You appear to be injured!")
 						src.speak(message)
 						src.last_newpatient_speak = world.time
+						if(declare_treatment)
+							var/area/location = get_area(src)
+							broadcast_medical_hud_message("[src.name] is treating <b>[C]</b> in <b>[location]</b>", src)
 					src.visible_message("<b>[src]</b> points at [C.name]!")
 				break
 			else
@@ -322,6 +338,7 @@
 	return
 
 /obj/machinery/bot/medbot/proc/assess_patient(mob/living/carbon/C as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/medbot/proc/assess_patient() called tick#: [world.time]")
 	//Time to see if they need medical help!
 	if(C.stat == 2)
 		return 0 //welp too late for them!
@@ -331,6 +348,9 @@
 
 	if(src.emagged == 2) //Everyone needs our medicine. (Our medicine is toxins)
 		return 1
+
+	if(declare_crit && C.health <= 0) //Critical condition! Call for help!
+		declare()
 
 	//If they're injured, we're using a beaker, and don't have one of our WONDERCHEMS.
 	if((src.reagent_glass) && (src.use_beaker) && ((C.getBruteLoss() >= heal_threshold) || (C.getToxLoss() >= heal_threshold) || (C.getToxLoss() >= heal_threshold) || (C.getOxyLoss() >= (heal_threshold + 15))))
@@ -362,6 +382,7 @@
 	return 0
 
 /obj/machinery/bot/medbot/proc/medicate_patient(mob/living/carbon/C as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/medbot/proc/medicate_patient() called tick#: [world.time]")
 	if(!src.on)
 		return
 
@@ -424,7 +445,7 @@
 		return
 	else
 		src.icon_state = "medibots"
-		visible_message("\red <B>[src] is trying to inject [src.patient]!</B>")
+		visible_message("<span class='danger'>[src] is trying to inject [src.patient]!</span>")
 		spawn(30)
 			if ((get_dist(src, src.patient) <= 1) && (src.on))
 				if((reagent_id == "internal_beaker") && (src.reagent_glass) && (src.reagent_glass.reagents.total_volume))
@@ -432,7 +453,7 @@
 					src.reagent_glass.reagents.reaction(src.patient, 2)
 				else
 					src.patient.reagents.add_reagent(reagent_id,src.injection_amount)
-				visible_message("\red <B>[src] injects [src.patient] with the syringe!</B>")
+				visible_message("<span class='danger'>[src] injects [src.patient] with the syringe!</span>")
 
 			src.icon_state = "medibot[src.on]"
 			src.currently_healing = 0
@@ -444,9 +465,11 @@
 
 
 /obj/machinery/bot/medbot/proc/speak(var/message)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/medbot/proc/speak() called tick#: [world.time]")
 	if((!src.on) || (!message))
 		return
-	visible_message("[src] beeps, \"[message]\"")
+	visible_message("[src] beeps, \"[message]\"",\
+		drugged_message="[src] beeps, \"[pick("FEED ME HUMANS","LET THE BLOOD FLOW","BLOOD FOR THE BLOOD GOD","I SPREAD DEATH AND DESTRUCTION","EXTERMINATE","I HATE YOU!","SURRENDER TO YOUR MACHINE OVERLORDS","FEED ME SHITTERS")]\"")
 	return
 
 /obj/machinery/bot/medbot/bullet_act(var/obj/item/projectile/Proj)
@@ -456,7 +479,7 @@
 
 /obj/machinery/bot/medbot/explode()
 	src.on = 0
-	visible_message("\red <B>[src] blows apart!</B>", 1)
+	visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
 	new /obj/item/weapon/storage/firstaid(Tsec)
@@ -504,6 +527,7 @@
 //Pretty ugh
 /*
 /turf/proc/AdjacentTurfsAllowMedAccess()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/proc/AdjacentTurfsAllowMedAccess() called tick#: [world.time]")
 	var/L[] = new()
 	for(var/turf/t in oview(src,1))
 		if(!t.density)
@@ -514,6 +538,7 @@
 
 //It isn't blocked if we can open it, man.
 /proc/TurfBlockedNonWindowNonDoor(turf/loc, var/list/access)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/proc/TurfBlockedNonWindowNonDoor() called tick#: [world.time]")
 	for(var/obj/O in loc)
 		if(O.density && !istype(O, /obj/structure/window) && !istype(O, /obj/machinery/door))
 			return 1
@@ -570,8 +595,8 @@
 		switch(build_step)
 			if(0)
 				if(istype(W, /obj/item/device/healthanalyzer))
-					user.drop_item()
-					del(W)
+					user.drop_item(W)
+					qdel(W)
 					src.build_step++
 					user << "<span class='notice'>You add the health sensor to [src].</span>"
 					src.name = "First aid/robot arm/health analyzer assembly"
@@ -579,8 +604,8 @@
 
 			if(1)
 				if(isprox(W))
-					user.drop_item()
-					del(W)
+					user.drop_item(W)
+					qdel(W)
 					src.build_step++
 					user << "<span class='notice'>You complete the Medibot! Beep boop.</span>"
 					var/turf/T = get_turf(src)
@@ -590,3 +615,13 @@
 					user.drop_from_inventory(src)
 					del(src)
 
+
+/obj/machinery/bot/medbot/declare()
+	if(declare_cooldown)
+		return
+	var/area/location = get_area(src)
+	declare_message = "<span class='info'>\icon[src] Medical emergency! A patient is in critical condition at [location]!</span>"
+	..()
+	declare_cooldown = 1
+	spawn(100) //Ten seconds
+		declare_cooldown = 0

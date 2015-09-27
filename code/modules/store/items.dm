@@ -7,16 +7,19 @@
 	var/typepath=/obj/item/weapon/storage/box
 	var/cost=0
 
-/datum/storeitem/proc/deliver(var/mob/usr)
-	if(!istype(typepath,/obj/item/weapon/storage))
-		var/obj/item/weapon/storage/box/box=new(usr.loc)
+/datum/storeitem/proc/deliver(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/storeitem/proc/deliver() called tick#: [world.time]")
+	if(istype(typepath,/obj/item/weapon/storage))
+		var/thing = new typepath(user.loc)
+		user.put_in_hands(thing)
+	else if(istype(typepath,/obj/item))
+		var/obj/item/weapon/storage/box/box=new(user.loc)
 		new typepath(box)
 		box.name="[name] package"
 		box.desc="A special gift for doing your job."
-		usr.put_in_hands(box)
+		user.put_in_hands(box)
 	else
-		var/thing = new typepath(usr.loc)
-		usr.put_in_hands(thing)
+		new typepath(user.loc)
 
 
 /////////////////////////////
@@ -54,4 +57,10 @@
 	name="Beach Ball"
 	desc="Summer up your office with this cheap vinyl beachball made by prisoners!"
 	typepath=/obj/item/weapon/beach_ball
+	cost = 500
+
+/datum/storeitem/boombox
+	name="Boombox"
+	desc="I ask you a question: is a man not entitled to the beats of his own smooth jazz?"
+	typepath=/obj/machinery/media/receiver/boombox
 	cost = 500

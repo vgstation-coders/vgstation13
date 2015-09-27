@@ -5,22 +5,27 @@
 #define OXYGEN_RELEASE_MODIFIER 750        //Higher == less oxygen released at high temperature/power
 #define REACTION_POWER_MODIFIER 1.1                //Higher == more overall power
 
-
 //These would be what you would get at point blank, decreases with distance
 #define DETONATION_RADS 200
 #define DETONATION_HALLUCINATION 600
 
-
 #define WARNING_DELAY 30 		//seconds between warnings.
+#define AUDIO_WARNING_DELAY 30
 
 /obj/machinery/power/supermatter
-	name = "Supermatter"
-	desc = "A strangely translucent and iridescent crystal. \red You get headaches just from looking at it."
+	name = "Supermatter Crystal"
+	desc = "A strangely translucent and iridescent crystal. <span class='warning'>You get headaches just from looking at it.</span>"
 	icon = 'icons/obj/engine.dmi'
 	icon_state = "darkmatter"
 	density = 1
 	anchored = 0
-	luminosity = 4
+
+	var/max_luminosity = 8 // Now varies based on power.
+
+	light_color = LIGHT_COLOR_YELLOW
+
+	// What it's referred to in the alerts
+	var/short_name = "Crystal"
 
 	var/gasefficency = 0.25
 
@@ -28,11 +33,9 @@
 
 	var/damage = 0
 	var/damage_archived = 0
-	var/safe_alert = "Crystaline hyperstructure returning to safe operating levels."
 	var/warning_point = 100
-	var/warning_alert = "Danger! Crystal hyperstructure instability!"
+	var/audio_warning_point=500
 	var/emergency_point = 700
-	var/emergency_alert = "CRYSTAL DELAMINATION IMMINENT."
 	var/explosion_point = 1000
 
 	var/emergency_issued = 0
@@ -40,7 +43,10 @@
 	var/explosion_power = 8
 
 	var/lastwarning = 0                        // Time in 1/10th of seconds since the last sent warning
+	var/lastaudiowarning = 0
+
 	var/power = 0
+	var/max_power = 2000 // Used for lighting scaling.
 
 	var/oxygen = 0				  // Moving this up here for easier debugging.
 
@@ -54,19 +60,32 @@
 
 	var/obj/item/device/radio/radio
 
-	shard //Small subtype, less efficient and more sensitive, but less boom.
-		name = "Supermatter Shard"
-		desc = "A strangely translucent and iridescent crystal that looks like it used to be part of a larger structure. \red You get headaches just from looking at it."
-		icon_state = "darkmatter_shard"
-		base_icon_state = "darkmatter_shard"
+	// Monitoring shit
+	var/frequency = 0
+	var/id_tag
 
-		warning_point = 50
-		emergency_point = 500
-		explosion_point = 900
+	//Add types to this list so it doesn't make a message or get desroyed by the Supermatter on touch.
+	var/list/message_exclusions = list(/obj/effect/effect/sparks)
+	machine_flags = MULTITOOL_MENU
 
-		gasefficency = 0.125
+/obj/machinery/power/supermatter/shard //Small subtype, less efficient and more sensitive, but less boom.
+	name = "Supermatter Shard"
+	short_name = "Shard"
+	desc = "A strangely translucent and iridescent crystal that looks like it used to be part of a larger structure. <span class='warning'>You get headaches just from looking at it.</span>"
+	icon_state = "darkmatter_shard"
+	base_icon_state = "darkmatter_shard"
 
-		explosion_power = 3 //3,6,9,12? Or is that too small?
+	warning_point = 50
+	audio_warning_point=400
+	emergency_point = 500
+	explosion_point = 900
+
+	gasefficency = 0.125
+
+	explosion_power = 8 // WAS 3 - N3X
+
+	max_luminosity = 5
+	max_power=3000
 
 
 /obj/machinery/power/supermatter/New()
@@ -74,19 +93,53 @@
 	radio = new (src)
 
 
-/obj/machinery/power/supermatter/Del()
-	del radio
+/obj/machinery/power/supermatter/Destroy()
+	qdel(radio)
+	radio = null
 	. = ..()
 
 /obj/machinery/power/supermatter/proc/explode()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/supermatter/proc/explode() called tick#: [world.time]")
 		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
-		del src
+		new /turf/unsimulated/wall/supermatter(get_turf(src))
+		SetUniversalState(/datum/universal_state/supermatter_cascade)
+		qdel(src)
+
+/obj/machinery/power/supermatter/shard/explode()
+		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
+		qdel(src)
 		return
+
+/obj/machinery/power/supermatter/ex_act(severity)
+	switch(severity)
+		if(3.0)
+			return //Should be improved
+		else
+			return explode()
+
+/obj/machinery/power/supermatter/shard/singularity_act()
+	var/prints = ""
+	if(src.fingerprintshidden)
+		prints = ", all touchers : [list2params(src.fingerprintshidden)]"
+	log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
+	message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
+	qdel(src)
+	return 15000
+
+/obj/machinery/power/supermatter/singularity_act()
+	var/prints = ""
+	if(src.fingerprintshidden)
+		prints = ", all touchers : " + src.fingerprintshidden
+	SetUniversalState(/datum/universal_state/supermatter_cascade)
+	//S.expand(STAGE_SUPER, 1)
+	log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
+	message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
+	qdel(src)
+	return 20000
 
 /obj/machinery/power/supermatter/process()
 
 	var/turf/L = loc
-
 	if(isnull(L))		// We have a null turf...something is wrong, stop processing this entity.
 		return PROCESS_KILL
 
@@ -96,22 +149,47 @@
 	if(istype(L, /turf/space))	// Stop processing this stuff if we've been ejected.
 		return
 
+	// Let's add beam energy first.
+	for(var/obj/effect/beam/emitter/B in beams)
+		power += B.get_damage() * config_bullet_energy
+
+	var/stability = round((damage / explosion_point) * 100)
 	if(damage > warning_point) // while the core is still damaged and it's still worth noting its status
+
+		var/list/audio_sounds = list('sound/AI/supermatter_integrity_before.ogg')
+		var/play_alert = 0
+		var/audio_offset = 0
 		if((world.timeofday - lastwarning) / 10 >= WARNING_DELAY)
-			var/stability = num2text(round((damage / explosion_point) * 100))
+			var/warning=""
+			var/offset = 0
 
-			if(damage > emergency_point)
+			audio_sounds += vox_num2list(stability)
+			audio_sounds += list('sound/AI/supermatter_integrity_after.ogg')
 
-				radio.autosay(addtext(emergency_alert, " Instability: ",stability,"%"), "Supermatter Monitor")
-				lastwarning = world.timeofday
+			// Damage still low.
+			if(damage >= damage_archived) // The damage is still going up
+				warning = "Danger! [short_name] hyperstructure instability detected, now at [stability]%."
+				offset=150
 
-			else if(damage >= damage_archived) // The damage is still going up
-				radio.autosay(addtext(warning_alert," Instability: ",stability,"%"), "Supermatter Monitor")
-				lastwarning = world.timeofday - 150
+				if(damage > emergency_point)
+					warning = "[uppertext(short_name)] INSTABILITY AT [stability]%. DELAMINATION IMMINENT - EVACUATE IMMEDIATELY."
+					offset=0
+					audio_sounds += list('sound/AI/supermatter_delam.ogg')
+					//audio_offset = 100
+				play_alert = (damage > audio_warning_point)
+			else
+				warning = "[short_name] hyperstructure returning to safe operating levels. Instability: [stability]%"
+			//radio.say(warning, "Supermatter [short_name] Monitor")
+			Broadcast_Message(radio, all_languages[LANGUAGE_SOL_COMMON], null, radio, warning, "Supermatter [short_name] Monitor", "Automated Announcement", "Supermatter [short_name] Monitor", 0, 0, list(0,1), 1459)
 
-			else                                                 // Phew, we're safe
-				radio.autosay(safe_alert, "Supermatter Monitor")
-				lastwarning = world.timeofday
+			lastwarning = world.timeofday - offset
+
+		if(play_alert && (world.timeofday - lastaudiowarning) / 10 >= AUDIO_WARNING_DELAY)
+			for(var/sf in audio_sounds)
+				var/sound/voice = sound(sf, wait = 1, channel = VOX_CHANNEL)
+				voice.status = SOUND_STREAM
+				world << voice
+			lastaudiowarning = world.timeofday - audio_offset
 
 		if(damage > explosion_point)
 			for(var/mob/living/mob in living_mob_list)
@@ -122,6 +200,24 @@
 				mob.apply_effect(rads, IRRADIATE)
 
 			explode()
+
+	if(frequency)
+		var/datum/radio_frequency/radio_connection = radio_controller.return_frequency(frequency)
+
+		if(!radio_connection) return
+
+		var/datum/signal/signal = getFromDPool(/datum/signal)
+		signal.source = src
+		signal.transmission_method = 1
+		signal.data = list(
+			"tag" = id_tag,
+			"device" = "SM",
+			"instability" = stability,
+			"damage" = damage,
+			"power" = power,
+			"sigtype" = "status"
+		)
+		radio_connection.post_signal(src, signal)
 
 	//Ok, get the air from the turf
 	var/datum/gas_mixture/env = L.return_air()
@@ -185,13 +281,26 @@
 			l.hallucination = max(0, min(200, l.hallucination + power * config_hallucination_power * sqrt( 1 / max(1,get_dist(l, src)) ) ) )
 
 	for(var/mob/living/l in range(src, round((power / 100) ** 0.25)))
-		var/rads = (power / 10) * sqrt( 1 / get_dist(l, src) )
+		var/rads = (power / 10) * sqrt(1/(max(get_dist(l, src), 1)))
 		l.apply_effect(rads, IRRADIATE)
 
 	power -= (power/500)**3
 
+	var/light_value = Clamp(round(Clamp(power / max_power, 0, 1) * max_luminosity), 0, max_luminosity)
+
+	// Lighting based on power output.
+	set_light(light_value, light_value / 2)
+
 	return 1
 
+
+/obj/machinery/power/supermatter/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+	return {"
+	<b>Main</b>
+	<ul>
+		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)</li>
+		<li>[format_tag("ID Tag","id_tag")]</li>
+	</ul>"}
 
 /obj/machinery/power/supermatter/bullet_act(var/obj/item/projectile/Proj)
 	var/turf/L = loc
@@ -215,33 +324,43 @@
 	if(Adjacent(user))
 		return attack_hand(user)
 	else
-		user << "<span class = \"warning\">You attempt to interface with the control circuits but find they are not connected to your network.  Maybe in a future firmware update.</span>"
-	return
+		attack_ai(user)
 
-// /vg/: Don't let ghosts fuck with this.
 /obj/machinery/power/supermatter/attack_ghost(mob/user as mob)
-	src.examine()
+	attack_ai(user)
 
 /obj/machinery/power/supermatter/attack_ai(mob/user as mob)
-	user << "<span class = \"warning\">You attempt to interface with the control circuits but find they are not connected to your network.  Maybe in a future firmware update.</span>"
+	var/stability = num2text(round((damage / explosion_point) * 100))
+	user << "<span class = \"info\">Matrix Instability: [stability]%</span>"
+	user << "<span class = \"info\">Damage: [format_num(damage)]</span>" // idfk what units we're using.
+	user << "<span class = \"info\">Power: [format_num(power)]J</span>" // Same
 
 /obj/machinery/power/supermatter/attack_hand(mob/user as mob)
 	user.visible_message("<span class=\"warning\">\The [user] reaches out and touches \the [src], inducing a resonance... \his body starts to glow and bursts into flames before flashing into ash.</span>",\
 		"<span class=\"danger\">You reach out and touch \the [src]. Everything starts burning and all you can hear is ringing. Your last thought is \"That was not a wise decision.\"</span>",\
-		"<span class=\"warning\">You hear an uneartly ringing, then what sounds like a shrilling kettle as you are washed with a wave of heat.</span>")
+		"<span class=\"warning\">You hear an unearthly noise as a wave of heat washes over you.</span>")
+
+	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
 
 	Consume(user)
 
 /obj/machinery/power/supermatter/proc/transfer_energy()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/supermatter/proc/transfer_energy() called tick#: [world.time]")
 	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
 		if(get_dist(R, src) <= 15) // Better than using orange() every process
 			R.receive_pulse(power)
 	return
 
 /obj/machinery/power/supermatter/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
+	. = ..()
+	if(.)
+		return .
+
 	user.visible_message("<span class=\"warning\">\The [user] touches \a [W] to \the [src] as a silence fills the room...</span>",\
 		"<span class=\"danger\">You touch \the [W] to \the [src] when everything suddenly goes silent.\"</span>\n<span class=\"notice\">\The [W] flashes into dust as you flinch away from \the [src].</span>",\
 		"<span class=\"warning\">Everything suddenly goes silent.</span>")
+
+	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
 
 	user.drop_from_inventory(W)
 	Consume(W)
@@ -253,20 +372,27 @@
 	if(istype(AM, /mob/living))
 		AM.visible_message("<span class=\"warning\">\The [AM] slams into \the [src] inducing a resonance... \his body starts to glow and catch flame before flashing into ash.</span>",\
 		"<span class=\"danger\">You slam into \the [src] as your ears are filled with unearthly ringing. Your last thought is \"Oh, fuck.\"</span>",\
-		"<span class=\"warning\">You hear an uneartly ringing, then what sounds like a shrilling kettle as you are washed with a wave of heat.</span>")
-	else
+		"<span class=\"warning\">You hear an unearthly noise as a wave of heat washes over you.</span>")
+	else if(!is_type_in_list(AM, message_exclusions))
 		AM.visible_message("<span class=\"warning\">\The [AM] smacks into \the [src] and rapidly flashes to ash.</span>",\
 		"<span class=\"warning\">You hear a loud crack as you are washed with a wave of heat.</span>")
+	else
+		return ..()
+
+	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
 
 	Consume(AM)
 
 
 /obj/machinery/power/supermatter/proc/Consume(var/mob/living/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/supermatter/proc/Consume() called tick#: [world.time]")
 	if(istype(user))
 		user.dust()
+		if(istype(user,/mob/living/simple_animal/mouse)) //>implying mice are going to follow the rules
+			return
 		power += 200
 	else
-		del user
+		qdel(user)
 
 	power += 200
 
@@ -278,5 +404,5 @@
 		else
 			l.show_message("<span class=\"warning\">You hear an uneartly ringing and notice your skin is covered in fresh radiation burns.</span>", 2)
 		var/rads = 500 * sqrt( 1 / (get_dist(l, src) + 1) )
-		l.apply_effect(rads, IRRADIATE)
+		l.apply_effect(rads, IRRADIATE, 0) // Permit blocking
 

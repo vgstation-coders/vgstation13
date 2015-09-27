@@ -75,17 +75,20 @@
 
 
 	proc/set_attack()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/set_attack() called tick#: [world.time]")
 		state = 1
 		if(path_idle.len) path_idle = new/list()
 		trg_idle = null
 
 	proc/set_idle()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/set_idle() called tick#: [world.time]")
 		state = 2
 		if (path_target.len) path_target = new/list()
 		target = null
 		frustration = 0
 
 	proc/set_null()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/set_null() called tick#: [world.time]")
 		state = 0
 		if (path_target.len) path_target = new/list()
 		if (path_idle.len) path_idle = new/list()
@@ -94,6 +97,10 @@
 		frustration = 0
 
 	proc/process()
+		if(timestopped)
+			sleep(1)
+			continue
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/process() called tick#: [world.time]")
 		//set background = 1
 		var/quick_move = 1
 		var/slow_move = 0
@@ -143,10 +150,10 @@
 				if(distance <= 1 && !istype(src.wear_mask, /obj/item/clothing/mask))
 					if(prob(25))
 						for(var/mob/O in viewers(world.view,src))
-							O.show_message("\red <B>[src] has attempted to bite [src.target]!</B>", 1, "\red You hear struggling.", 2)
+							O.show_message("<span class='danger'>[src] has attempted to bite [src.target]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
 					else
 						for(var/mob/O in viewers(world.view,src))
-							O.show_message("\red <B>[src.target] has been bitten by [src]!</B>", 1, "\red You hear struggling.", 2)
+							O.show_message("<span class='danger'>[src.target] has been bitten by [src]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
 						var/mob/living/carbon/human/T = target
 						T.bruteloss += rand(1,7)
 						var/datum/organ/external/affecting
@@ -181,10 +188,10 @@
 						A.attack(src.target, src)
 					else if(prob(25))
 						for(var/mob/O in viewers(world.view,src))
-							O.show_message("\red <B>[src] has attempted to claw [src.target]!</B>", 1, "\red You hear struggling.", 2)
+							O.show_message("<span class='danger'>[src] has attempted to claw [src.target]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
 					else
 						for(var/mob/O in viewers(world.view,src))
-							O.show_message("\red <B>[src.target] has been clawed by [src]!</B>", 1, "\red You hear struggling.", 2)
+							O.show_message("<span class='danger'>[src.target] has been clawed by [src]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
 						var/mob/living/carbon/human/T = target
 						T.bruteloss += rand(1,7)
 						var/datum/organ/external/affecting
@@ -273,6 +280,7 @@
 
 
 	proc/idle()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/idle() called tick#: [world.time]")
 		//set background = 1
 		var/quick_move = 0
 
@@ -294,16 +302,19 @@
 				idle()
 
 	proc/path_idle(var/atom/trg)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/path_idle() called tick#: [world.time]")
 		path_idle = AStar(src.loc, get_turf(trg), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 250, null, null)
 		path_idle = reverselist(path_idle)
 
 	proc/path_attack(var/atom/trg)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/path_attack() called tick#: [world.time]")
 		target = trg
 		path_target = AStar(src.loc, target.loc, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 250, null, null)
 		path_target = reverselist(path_target)
 
 
 	proc/healthcheck()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/healthcheck() called tick#: [world.time]")
 		return
 
 
@@ -326,39 +337,39 @@
 	switch(stage)
 		if(1)
 			if (prob(8))
-				affected_mob << pick("\red Something about you doesnt feel right.","\red Your head starts to itch.")
+				affected_mob << pick("<span class='warning'>Something about you doesnt feel right.</span>","<span class='warning'>Your head starts to itch.</span>")
 		if(2)
 			if (prob(8))
-				affected_mob << "\red Your limbs feel numb."
+				affected_mob << "<span class='warning'>Your limbs feel numb.</span>"
 				affected_mob.bruteloss += 1
 				affected_mob.updatehealth()
 			if (prob(9))
-				affected_mob << "\red You feel ill..."
+				affected_mob << "<span class='warning'>You feel ill...</span>"
 			if (prob(9))
-				affected_mob << "\red You feel a pain in your stomache..."
+				affected_mob << "<span class='warning'>You feel a pain in your stomache...</span>"
 		if(3)
 			if (prob(8))
-				affected_mob << text("\red []", pick("owww...","I want...","Please..."))
+				affected_mob << text("<span class='warning'>[]</span>", pick("owww...","I want...","Please..."))
 				affected_mob.bruteloss += 1
 				affected_mob.updatehealth()
 			if (prob(10))
-				affected_mob << "\red You feel very ill."
+				affected_mob << "<span class='warning'>You feel very ill.</span>"
 				affected_mob.bruteloss += 5
 				affected_mob.updatehealth()
 			if (prob(4))
-				affected_mob << "\red You feel a stabbing pain in your head."
+				affected_mob << "<span class='warning'>You feel a stabbing pain in your head.</span>"
 				affected_mob.paralysis += 2
 			if (prob(4))
-				affected_mob << "\red Whats going to happen to me?"
+				affected_mob << "<span class='warning'>Whats going to happen to me?</span>"
 		if(4)
 			if (prob(10))
-				affected_mob << pick("\red You feel violently sick.")
+				affected_mob << pick("<span class='warning'>You feel violently sick.</span>")
 				affected_mob.bruteloss += 8
 				affected_mob.updatehealth()
 			if (prob(20))
 				affected_mob.say(pick("Mmmmm.", "Hey... You look...", "Hsssshhhhh!"))
 			if (prob(8))
-				affected_mob << "\red You cant... feel..."
+				affected_mob << "<span class='warning'>You cant... feel...</span>"
 		if(5)
 			affected_mob.toxloss += 10
 			affected_mob.updatehealth()
@@ -367,6 +378,7 @@
 
 
 /mob/living/carbon/human/proc/Zombify()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/Zombify() called tick#: [world.time]")
 	if (src.monkeyizing)
 		return
 	update_icons() // update_clothing()
@@ -485,9 +497,9 @@ datum/reagent/zed
 		return
 	if (reagents.total_volume)
 		for(var/mob/O in viewers(M, null))
-			O.show_message(text("\blue [] has been stabbed with [] by [].", M, src, user), 1)
-//		user << "\red You stab [M] with the pen."
-//		M << "\red You feel a tiny prick!"
+			O.show_message(text("<span class='notice'>[] has been stabbed with [] by [].</span>", M, src, user), 1)
+//		user << "<span class='warning'>You stab [M] with the pen.</span>"
+//		M << "<span class='warning'>You feel a tiny prick!</span>"
 		if(M.reagents) reagents.trans_to(M, 10)
 		icon_state = "zed_0"
 	return
@@ -526,18 +538,19 @@ datum/reagent/zed
 */
 
 /client/proc/zombie_event()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/zombie_event() called tick#: [world.time]")
 	set category = "Special Verbs"
 	set name = "Spawn Zombies"
 
 //	if(!istype(ticker.mode, /datum/game_mode/biohazard))
 //		if(src)
-//			src << "\red Wrong game mode!"
+//			src << "<span class='warning'>Wrong game mode!</span>"
 //			return
 
 	if(usr) message_admins("[key_name_admin(usr)] has spawned a zombie", 1)
 	biohazard_alert(7)
 	var/list/t = list()
-	for(var/obj/landmark/zspawn/O in world)
+	for(var/obj/landmark/zspawn/O in landmarks_list)
 		t += O
 	if(!t.len)
 		usr<<"No spawn points exist."
@@ -545,7 +558,7 @@ datum/reagent/zed
 	var/obj/landmark/s = pick(t)
 	var/mob/living/carbon/human/zombie/Z = new/mob/living/carbon/human/zombie(s.loc)
 
-	Z.gender = pick(MALE, FEMALE)
+	Z.setGender(pick(MALE, FEMALE))
 
 	/* DNA2 broke this
 	var/flooks = new/list()

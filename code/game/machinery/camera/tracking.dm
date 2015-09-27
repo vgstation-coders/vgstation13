@@ -1,5 +1,9 @@
 /mob/living/silicon/ai/proc/get_camera_list()
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/get_camera_list() called tick#: [world.time]")
+
+	track.cameras.len = 0
+
 	if(src.stat == 2)
 		return
 
@@ -10,31 +14,23 @@
 	camera_sort(L)
 
 	var/list/T = list()
-	T["Cancel"] = "Cancel"
+
 	for (var/obj/machinery/camera/C in L)
 		var/list/tempnetwork = C.network&src.network
 		if (tempnetwork.len)
 			T[text("[][]", C.c_tag, (C.can_use() ? null : " (Deactivated)"))] = C
 
-	track = new()
 	track.cameras = T
 	return T
 
 
-/mob/living/silicon/ai/proc/ai_camera_list(var/camera in get_camera_list())
-	set category = "AI Commands"
-	set name = "Show Camera List"
-
-	if(src.stat == 2)
-		src << "You can't list the cameras because you are dead!"
-		return
-
-	if (!camera || camera == "Cancel")
+/mob/living/silicon/ai/proc/ai_camera_list(var/camera)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/ai_camera_list() called tick#: [world.time]")
+	if (!camera)
 		return 0
 
 	var/obj/machinery/camera/C = track.cameras[camera]
-	track = null
-	src.eyeobj.setLoc(C)
+	src.eyeobj.forceMove(C)
 
 	return
 
@@ -48,10 +44,16 @@
 
 /mob/living/silicon/ai/proc/trackable_mobs()
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/trackable_mobs() called tick#: [world.time]")
+
+	track.names.len = 0
+	track.namecounts.len = 0
+	track.humans.len = 0
+	track.others.len = 0
+
 	if(usr.stat == 2)
 		return list()
 
-	var/datum/trackable/TB = new()
 	for(var/mob/living/M in mob_list)
 		// Easy checks first.
 		// Don't detect mobs on Centcom. Since the wizard den is on Centcomm, we only need this.
@@ -77,10 +79,6 @@
 			//Cameras can't track people wearing an agent card or a ninja hood.
 			if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
 				continue
-			if(istype(H.head, /obj/item/clothing/head/helmet/space/space_ninja))
-				var/obj/item/clothing/head/helmet/space/space_ninja/hood = H.head
-				if(!hood.canremove)
-					continue
 		//Skipping aliens because shit, that's OP
 		if(isalien(M))
 			continue
@@ -89,45 +87,39 @@
 			continue
 
 		var/name = M.name
-		if (name in TB.names)
-			TB.namecounts[name]++
-			name = text("[] ([])", name, TB.namecounts[name])
+		if (name in track.names)
+			track.namecounts[name]++
+			name = text("[] ([])", name, track.namecounts[name])
 		else
-			TB.names.Add(name)
-			TB.namecounts[name] = 1
+			track.names.Add(name)
+			track.namecounts[name] = 1
 		if(human)
-			TB.humans[name] = M
+			track.humans[name] = M
 		else
-			TB.others[name] = M
+			track.others[name] = M
 
-	var/list/targets = sortList(TB.humans) + sortList(TB.others)
-	src.track = TB
+	var/list/targets = sortList(track.humans) + sortList(track.others)
 	return targets
 
-/mob/living/silicon/ai/proc/ai_camera_track(var/target_name in trackable_mobs())
-	set category = "AI Commands"
-	set name = "Track With Camera"
-	set desc = "Select who you would like to track."
+/mob/living/silicon/ai/verb/ai_camera_track(var/target_name as null|anything in trackable_mobs())
+	set name = "track"
+	set hidden = 1 //Don't display it on the verb lists. This verb exists purely so you can type "track Oldman Robustin" and follow his ass
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/silicon/ai/verb/ai_camera_track()  called tick#: [world.time]")
 
-	if(src.stat == 2)
-		src << "You can't track with camera because you are dead!"
-		return
 	if(!target_name)
-		src.cameraFollow = null
+		return
 
 	var/mob/target = (isnull(track.humans[target_name]) ? track.others[target_name] : track.humans[target_name])
-	src.track = null
+
 	ai_actual_track(target)
 
 /mob/living/silicon/ai/proc/open_nearest_door(mob/living/target as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/open_nearest_door() called tick#: [world.time]")
 	if(!istype(target)) return
 	spawn(0)
 		if(istype(target, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = target
 			if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
-				src << "Unable to locate an airlock"
-				return
-			if(istype(H.head, /obj/item/clothing/head/helmet/space/space_ninja) && !H.head.canremove)
 				src << "Unable to locate an airlock"
 				return
 			if(H.digitalcamo)
@@ -157,13 +149,14 @@
 				if("Yes")
 					var/nhref = "src=\ref[tobeopened];aiEnable=7"
 					tobeopened.Topic(nhref, params2list(nhref), tobeopened, 1)
-					src << "\blue You've opened \the [tobeopened] for [target]."
+					src << "<span class='notice'>You've opened \the [tobeopened] for [target].</span>"
 				if("No")
-					src << "\red You deny the request."
+					src << "<span class='warning'>You deny the request.</span>"
 		else
-			src << "\red You've failed to open an airlock for [target]"
+			src << "<span class='warning'>You've failed to open an airlock for [target]</span>"
 		return
 /mob/living/silicon/ai/proc/ai_actual_track(mob/living/target as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/ai_actual_track() called tick#: [world.time]")
 	if(!istype(target))	return
 	var/mob/living/silicon/ai/U = usr
 
@@ -183,10 +176,6 @@
 					U << "Follow camera mode terminated."
 					U.cameraFollow = null
 					return
-		 		if(istype(H.head, /obj/item/clothing/head/helmet/space/space_ninja) && !H.head.canremove)
-		 			U << "Follow camera mode terminated."
-					U.cameraFollow = null
-					return
 				if(H.digitalcamo)
 					U << "Follow camera mode terminated."
 					U.cameraFollow = null
@@ -203,13 +192,14 @@
 				continue
 
 			if(U.eyeobj)
-				U.eyeobj.setLoc(get_turf(target))
+				U.eyeobj.forceMove(get_turf(target))
 			else
 				view_core()
 				return
 			sleep(10)
 
 /proc/near_camera(var/mob/living/M)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/near_camera() called tick#: [world.time]")
 	if (!isturf(M.loc))
 		return 0
 	if(isrobot(M))
@@ -225,13 +215,14 @@
 		return
 	if (!src.can_use())
 		return
-	user.eyeobj.setLoc(get_turf(src))
+	user.eyeobj.forceMove(get_turf(src))
 
 
 /mob/living/silicon/ai/attack_ai(var/mob/user as mob)
 	ai_camera_list()
 
 /proc/camera_sort(list/L)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/camera_sort() called tick#: [world.time]")
 	var/obj/machinery/camera/a
 	var/obj/machinery/camera/b
 

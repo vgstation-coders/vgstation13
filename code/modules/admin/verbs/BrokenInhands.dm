@@ -1,10 +1,12 @@
 /proc/getbrokeninhands()
 	set name = "Broken Sprite List"
 	set category = "Debug"
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/getbrokeninhands() called tick#: [world.time]")
 
-	var/icon/IL = new('icons/mob/items_lefthand.dmi')
+	if(!alert("Are you sure you want to get the broken sprites list?",,"Yes","No") == "Yes") return
+	var/icon/IL = new('icons/mob/in-hand/left/items_lefthand.dmi')
 	var/list/Lstates = IL.IconStates()
-	var/icon/IR = new('icons/mob/items_righthand.dmi')
+	var/icon/IR = new('icons/mob/in-hand/right/items_righthand.dmi')
 	var/list/Rstates = IR.IconStates()
 
 

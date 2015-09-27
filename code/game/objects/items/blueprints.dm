@@ -1,23 +1,25 @@
+# define AREA_ERRNONE	0
+# define AREA_STATION	1
+# define AREA_SPACE		2
+# define AREA_SPECIAL	3
+# define AREA_BLUEPRINTS 4
+
+# define BORDER_ERROR   0
+# define BORDER_NONE    1
+# define BORDER_BETWEEN 2
+# define BORDER_2NDTILE 3
+# define BORDER_SPACE   4
+
+# define ROOM_ERR_LOLWAT    0
+# define ROOM_ERR_SPACE    -1
+# define ROOM_ERR_TOOLARGE -2
+
 /obj/item/blueprints
 	name = "station blueprints"
 	desc = "Blueprints of the station. There is a \"Classified\" stamp and several coffee stains on it."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "blueprints"
 	attack_verb = list("attacked", "bapped", "hit")
-	var/const/AREA_ERRNONE = 0
-	var/const/AREA_STATION = 1
-	var/const/AREA_SPACE =   2
-	var/const/AREA_SPECIAL = 3
-
-	var/const/BORDER_ERROR = 0
-	var/const/BORDER_NONE = 1
-	var/const/BORDER_BETWEEN =   2
-	var/const/BORDER_2NDTILE = 3
-	var/const/BORDER_SPACE = 4
-
-	var/const/ROOM_ERR_LOLWAT = 0
-	var/const/ROOM_ERR_SPACE = -1
-	var/const/ROOM_ERR_TOOLARGE = -2
 
 /obj/item/blueprints/attack_self(mob/M as mob)
 	if (!istype(M,/mob/living/carbon/human))
@@ -27,38 +29,42 @@
 	return
 
 /obj/item/blueprints/Topic(href, href_list)
-	..()
-	if ((usr.restrained() || usr.stat || usr.get_active_hand() != src))
+	. = ..()
+	if(.)
 		return
-	if (!href_list["action"])
-		return
+
 	switch(href_list["action"])
 		if ("create_area")
 			if (get_area_type()!=AREA_SPACE)
 				interact()
-				return
+				return 1
 			create_area()
 		if ("edit_area")
-			if (get_area_type()!=AREA_STATION)
+			if (!(get_area_type() in list(AREA_STATION, AREA_BLUEPRINTS)))
 				interact()
-				return
+				return 1
 			edit_area()
+		if ("delete_area")
+			if (get_area_type()!=AREA_BLUEPRINTS)
+				interact()
+				return 1
+			delete_area(usr)
 
 /obj/item/blueprints/interact()
 	var/area/A = get_area()
 	var/text = {"<HTML><head><title>[src]</title></head><BODY>
 <h2>[station_name()] blueprints</h2>
-<small>Property of Nanotrasen. For heads of staff only. Store in high-secure storage.</small><hr>
+<small>property of Nanotrasen. For heads of staff only. Store in high-secure storage.</small><hr>
 "}
 	switch (get_area_type())
 		if (AREA_SPACE)
 			text += {"
-<p>According the blueprints, you are now in <b>outer space</b>.  Hold your breath.</p>
+<p>According to the blueprints, you are now in <b>outer space</b>.  Hold your breath.</p>
 <p><a href='?src=\ref[src];action=create_area'>Mark this place as new area.</a></p>
 "}
 		if (AREA_STATION)
 			text += {"
-<p>According the blueprints, you are now in <b>\"[A.name]\"</b>.</p>
+<p>According to the blueprints, you are now in <b>\"[A.name]\"</b>.</p>
 <p>You may <a href='?src=\ref[src];action=edit_area'>
 move an amendment</a> to the drawing.</p>
 "}
@@ -66,6 +72,11 @@ move an amendment</a> to the drawing.</p>
 			text += {"
 <p>This place isn't noted on the blueprint.</p>
 "}
+		if (AREA_BLUEPRINTS)
+			text += {"
+<p>According to the blueprints, you are now <b>\"[A.name]\"</b> This place seems to be relatively new on the blueprints.</p>"}
+			text += "<p>You may <a href='?src=\ref[src];action=edit_area'>move an amendment</a> to the drawing.</p>"//, or <a href='?src=\ref[src];action=delete_area'>erase</a> this place from the blueprints."
+
 		else
 			return
 	text += "</BODY></HTML>"
@@ -74,13 +85,18 @@ move an amendment</a> to the drawing.</p>
 
 
 /obj/item/blueprints/proc/get_area()
-	var/turf/T = get_turf_loc(usr)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/blueprints/proc/get_area() called tick#: [world.time]")
+	var/turf/T = get_turf(usr)
 	var/area/A = get_area_master(T)
 	return A
 
 /obj/item/blueprints/proc/get_area_type(var/area/A = get_area())
-	if (A.name == "Space")
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/blueprints/proc/get_area_type() called tick#: [world.time]")
+	if (A.type == /area && A.name == "Space")
 		return AREA_SPACE
+	else if(istype(A, /area/station/custom))
+		return AREA_BLUEPRINTS
+
 	var/list/SPECIALS = list(
 		/area/shuttle,
 		/area/admin,
@@ -99,93 +115,80 @@ move an amendment</a> to the drawing.</p>
 	return AREA_STATION
 
 /obj/item/blueprints/proc/create_area()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/blueprints/proc/create_area() called tick#: [world.time]")
 	//world << "DEBUG: create_area"
-	var/res = detect_room(get_turf_loc(usr))
+	var/res = detect_room(get_turf(usr))
 	if(!istype(res,/list))
 		switch(res)
 			if(ROOM_ERR_SPACE)
-				usr << "\red The new area must be completely airtight!"
+				usr << "<span class='warning'>The new area must be completely airtight!</span>"
 				return
 			if(ROOM_ERR_TOOLARGE)
-				usr << "\red The new area too large!"
+				usr << "<span class='warning'>The new area too large!</span>"
 				return
 			else
-				usr << "\red Error! Please notify administration!"
+				usr << "<span class='warning'>Error! Please notify administration!</span>"
 				return
 	var/list/turf/turfs = res
 	var/str = trim(stripped_input(usr,"New area name:","Blueprint Editing", "", MAX_NAME_LEN))
 	if(!str || !length(str)) //cancel
 		return
 	if(length(str) > 50)
-		usr << "\red Name too long."
+		usr << "<span class='warning'>Name too long.</span>"
 		return
-	var/area/A = new
-	A.name = str
-	A.tag="[A.type]_[md5(str)]" // without this dynamic light system ruin everithing
-	//var/ma
-	//ma = A.master ? "[A.master]" : "(null)"
-	//world << "DEBUG: create_area: <br>A.name=[A.name]<br>A.tag=[A.tag]<br>A.master=[ma]"
-	A.power_equip = 0
-	A.power_light = 0
-	A.power_environ = 0
-	A.always_unpowered = 0
-	A.SetDynamicLighting()
-	move_turfs_to_area(turfs, A)
+	var/area/station/custom/newarea = new
+	var/area/oldarea = get_area(usr)
+	newarea.name = str
+	newarea.tag = "[newarea.type]/[md5(str)]"
+	newarea.contents.Add(turfs)
+	for(var/turf/T in turfs)
+		T.change_area(oldarea,newarea)
+		for(var/atom/allthings in T.contents)
+			allthings.change_area(oldarea,newarea)
+	newarea.addSorted()
 
-	A.always_unpowered = 0
-	for(var/turf/T in A.contents)
-		T.lighting_changed = 1
-		lighting_controller.changed_turfs += T
-
-	spawn(5)
-		//ma = A.master ? "[A.master]" : "(null)"
-		//world << "DEBUG: create_area(5): <br>A.name=[A.name]<br>A.tag=[A.tag]<br>A.master=[ma]"
-		interact()
-	return
-
-
-/obj/item/blueprints/proc/move_turfs_to_area(var/list/turf/turfs, var/area/A)
-	A.contents.Add(turfs)
-		//oldarea.contents.Remove(usr.loc) // not needed
-		//T.loc = A //error: cannot change constant value
-
+	sleep(5)
+	interact()
 
 /obj/item/blueprints/proc/edit_area()
-	var/area/A = get_area()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/blueprints/proc/edit_area() called tick#: [world.time]")
+	var/area/areachanged = get_area()
 	//world << "DEBUG: edit_area"
-	var/prevname = "[A.name]"
+	var/prevname = "[areachanged.name]"
 	var/str = trim(stripped_input(usr,"New area name:","Blueprint Editing", prevname, MAX_NAME_LEN))
 	if(!str || !length(str) || str==prevname) //cancel
 		return
 	if(length(str) > 50)
-		usr << "\red Text too long."
+		usr << "<span class='warning'>Text too long.</span>"
 		return
-	set_area_machinery_title(A,str,prevname)
-	for(var/area/RA in A.related)
-		RA.name = str
-	usr << "\blue You set the area '[prevname]' title to '[str]'."
+	areachanged.name = str
+	for(var/atom/allthings in areachanged.contents)
+		allthings.change_area(prevname,areachanged)
+	usr << "<span class='notice'>You set the area '[prevname]' title to '[str]'.</span>"
 	interact()
-	return
 
+/obj/item/blueprints/proc/delete_area(var/mob/user) //This functionality is currently commented out!
+	var/area/station/custom/areadeleted = get_area()
+	var/area/space = get_area(locate(1,1,2)) //xd
 
-
-/obj/item/blueprints/proc/set_area_machinery_title(var/area/A,var/title,var/oldtitle)
-	if (!oldtitle) // or replacetext goes to infinite loop
+	if(alert(usr,"Are you sure you want to erase \"[areadeleted]\" from the blueprints?","Blueprint Editing","Yes","No") != "Yes")
 		return
-	for(var/area/RA in A.related)
-		for(var/obj/machinery/alarm/M in RA)
-			M.name = replacetext(M.name,oldtitle,title)
-		for(var/obj/machinery/power/apc/M in RA)
-			M.name = replacetext(M.name,oldtitle,title)
-		for(var/obj/machinery/atmospherics/unary/vent_scrubber/M in RA)
-			M.name = replacetext(M.name,oldtitle,title)
-		for(var/obj/machinery/atmospherics/unary/vent_pump/M in RA)
-			M.name = replacetext(M.name,oldtitle,title)
-		for(var/obj/machinery/door/M in RA)
-			M.name = replacetext(M.name,oldtitle,title)
-	//TODO: much much more. Unnamed airlocks, cameras, etc.
+	else
+		if(!Adjacent(user)) return
+		if(!(areadeleted == get_area())) return //if the blueprints are no longer in the area, return
+		if(!istype(areadeleted)) return //to make sure AGAIN that the area we're deleting is blueprint
+
+	var/list/C = areadeleted.contents.Copy() //because areadeleted.contents is slow
+	for(var/turf/T in C)
+		space.contents.Add(T)
+		T.change_area(areadeleted,space)
+
+		for(var/atom/movable/AM in T.contents)
+			AM.change_area(areadeleted,space)
+	usr << "You've erased the \"[areadeleted]\" from the blueprints."
 
 /obj/item/blueprints/proc/check_tile_is_border(var/turf/T2,var/dir)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/blueprints/proc/check_tile_is_border() called tick#: [world.time]")
 	if (istype(T2, /turf/space))
 		return BORDER_SPACE //omg hull breach we all going to die here
 	if (istype(T2, /turf/simulated/shuttle))
@@ -215,6 +218,7 @@ move an amendment</a> to the drawing.</p>
 	return BORDER_NONE
 
 /obj/item/blueprints/proc/detect_room(var/turf/first)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/blueprints/proc/detect_room() called tick#: [world.time]")
 	var/list/turf/found = new
 	var/list/turf/pending = list(first)
 	while(pending.len)

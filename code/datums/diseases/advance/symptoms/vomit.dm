@@ -34,13 +34,15 @@ Bonus
 		var/mob/living/M = A.affected_mob
 		switch(A.stage)
 			if(1, 2, 3, 4)
-				M << "<span class='notice'>[pick("You feel nauseous.", "You feel like you're going to throw up!")]</span>"
+				M << "[pick("<span class='warning'>You feel nauseous...", "<span class='danger'>You feel like you're going to throw up!")]</span>"
 			else
 				Vomit(M)
 
 	return
 
 /datum/symptom/vomit/proc/Vomit(var/mob/living/M)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/symptom/vomit/proc/Vomit() called tick#: [world.time]")
 
 	M.visible_message("<B>[M]</B> vomits on the floor!")
 

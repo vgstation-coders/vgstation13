@@ -8,8 +8,8 @@
 	item_state = ""
 	w_class = 1
 
-/obj/item/weapon/evidencebag/afterattack(obj/item/I, mob/user as mob)
-	if(!in_range(I, user))
+/obj/item/weapon/evidencebag/afterattack(obj/item/I, mob/user, proximity_flag, click_parameters)
+	if(proximity_flag == 0) // not adjacent
 		return
 
 	if(!istype(I) || I.anchored == 1)
@@ -35,12 +35,7 @@
 			var/obj/item/weapon/storage/U = I.loc
 			user.client.screen -= I
 			U.contents.Remove(I)
-		else if(user.l_hand == I)					//in a hand
-			user.drop_l_hand()
-		else if(user.r_hand == I)					//in a hand
-			user.drop_r_hand()
-		else
-			return
+		user.drop_item(I)
 
 	user.visible_message("[user] puts [I] into [src]", "You put [I] inside [src].",\
 	"You hear a rustle as someone puts something into a plastic bag.")
@@ -68,7 +63,7 @@
 		var/obj/item/I = contents[1]
 		user.visible_message("[user] takes [I] out of [src]", "You take [I] out of [src].",\
 		"You hear someone rustle around in a plastic bag, and remove something.")
-		overlays.Cut()	//remove the overlays
+		overlays.len = 0	//remove the overlays
 		user.put_in_hands(I)
 		w_class = 1
 		icon_state = "evidenceobj"
@@ -78,6 +73,15 @@
 		user << "[src] is empty."
 		icon_state = "evidenceobj"
 	return
+
+obj/item/weapon/evidencebag/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
+	if(istype(W, /obj/item/weapon/pen))
+		var/new_label = sanitize(trim(input("What should the new label be", "") as null|text))
+		if(new_label)
+			name = "bag ([new_label])"
+			user << "<span class='notice'>You write on the label of the bag.</span>"
+	else
+		..(W, user)
 
 /obj/item/weapon/storage/box/evidence
 	name = "evidence bag box"

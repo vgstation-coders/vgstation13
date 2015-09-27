@@ -40,6 +40,7 @@ FLOOR SAFES
 
 
 /obj/structure/safe/proc/check_unlocked(mob/user as mob, canhear)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/safe/proc/check_unlocked() called tick#: [world.time]")
 	if(user && canhear)
 		if(tumbler_1_pos == tumbler_1_open)
 			user << "<span class='notice'>You hear a [pick("tonk", "krunk", "plunk")] from [src].</span>"
@@ -52,6 +53,7 @@ FLOOR SAFES
 
 
 /obj/structure/safe/proc/decrement(num)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/safe/proc/decrement() called tick#: [world.time]")
 	num -= 1
 	if(num < 0)
 		num = 71
@@ -59,6 +61,7 @@ FLOOR SAFES
 
 
 /obj/structure/safe/proc/increment(num)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/safe/proc/increment() called tick#: [world.time]")
 	num += 1
 	if(num > 71)
 		num = 0
@@ -76,7 +79,7 @@ FLOOR SAFES
 	user.set_machine(src)
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\structures\safe.dm:77: var/dat = "<center>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\structures\safe.dm:77: var/dat = "<center>"
 	var/dat = {"<center>
 <a href='?src=\ref[src];open=1'>[open ? "Close" : "Open"] [src]</a> | <a href='?src=\ref[src];decrement=1'>-</a> [dial * 5] <a href='?src=\ref[src];increment=1'>+</a>"}
 	// END AUTOFIX
@@ -95,7 +98,7 @@ FLOOR SAFES
 	var/mob/living/carbon/human/user = usr
 
 	var/canhear = 0
-	if(istype(user.l_hand, /obj/item/clothing/tie/stethoscope) || istype(user.r_hand, /obj/item/clothing/tie/stethoscope))
+	if(istype(user.l_hand, /obj/item/clothing/accessory/stethoscope) || istype(user.r_hand, /obj/item/clothing/accessory/stethoscope))
 		canhear = 1
 
 	if(href_list["open"])
@@ -151,8 +154,7 @@ FLOOR SAFES
 	if(open)
 		if(I.w_class + space <= maxspace)
 			space += I.w_class
-			user.drop_item()
-			I.loc = src
+			user.drop_item(I, src)
 			user << "<span class='notice'>You put [I] in [src].</span>"
 			updateUsrDialog()
 			return
@@ -160,7 +162,7 @@ FLOOR SAFES
 			user << "<span class='notice'>[I] won't fit in [src].</span>"
 			return
 	else
-		if(istype(I, /obj/item/clothing/tie/stethoscope))
+		if(istype(I, /obj/item/clothing/accessory/stethoscope))
 			user << "Hold [I] in one of your hands while you manipulate the dial."
 			return
 
@@ -171,11 +173,6 @@ obj/structure/safe/blob_act()
 
 obj/structure/safe/ex_act(severity)
 	return
-
-
-obj/structure/safe/meteorhit(obj/O as obj)
-	return
-
 
 //FLOOR SAFES
 /obj/structure/safe/floor

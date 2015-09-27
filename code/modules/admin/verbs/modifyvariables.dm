@@ -1,11 +1,13 @@
 var/list/forbidden_varedit_object_types = list(
 										/datum/admins,						//Admins editing their own admin-power object? Yup, sounds like a good idea.
 										/obj/machinery/blackbox_recorder,	//Prevents people messing with feedback gathering
-										/datum/feedback_variable			//Prevents people messing with feedback gathering
+										/datum/feedback_variable,			//Prevents people messing with feedback gathering
+										/datum/configuration,	//prevents people from fucking with logging.
 									)
 
 /*
 /client/proc/cmd_modify_object_variables(obj/O as obj|mob|turf|area in world)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_modify_object_variables() called tick#: [world.time]")
 	set category = "Debug"
 	set name = "Edit Variables"
 	set desc="(target) Edit a target item's variables"
@@ -16,6 +18,7 @@ var/list/forbidden_varedit_object_types = list(
 /client/proc/cmd_modify_ticker_variables()
 	set category = "Debug"
 	set name = "Edit Ticker Variables"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_modify_ticker_variables() called tick#: [world.time]")
 
 	if (ticker == null)
 		src << "Game hasn't started yet."
@@ -24,6 +27,8 @@ var/list/forbidden_varedit_object_types = list(
 		feedback_add_details("admin_verb","ETV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/mod_list_add_ass() //haha
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/mod_list_add_ass() called tick#: [world.time]")
 
 	var/class = "text"
 	if(src.holder && src.holder.marked_datum)
@@ -44,7 +49,7 @@ var/list/forbidden_varedit_object_types = list(
 	switch(class)
 
 		if("text")
-			var_value = input("Enter new text:","Text") as null|text
+			var_value = input("Enter new text:","Text") as null|message
 
 		if("num")
 			var_value = input("Enter new number:","Num") as null|num
@@ -74,6 +79,8 @@ var/list/forbidden_varedit_object_types = list(
 
 /client/proc/mod_list_add(var/list/L)
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/mod_list_add() called tick#: [world.time]")
+
 	var/class = "text"
 	if(src.holder && src.holder.marked_datum)
 		class = input("What kind of variable?","Variable Type") as null|anything in list("text",
@@ -93,7 +100,7 @@ var/list/forbidden_varedit_object_types = list(
 	switch(class)
 
 		if("text")
-			var_value = input("Enter new text:","Text") as text
+			var_value = input("Enter new text:","Text") as message
 
 		if("num")
 			var_value = input("Enter new number:","Num") as num
@@ -126,9 +133,14 @@ var/list/forbidden_varedit_object_types = list(
 			L += var_value
 
 /client/proc/mod_list(var/list/L)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/mod_list() called tick#: [world.time]")
 	if(!check_rights(R_VAREDIT))	return
 
-	if(!istype(L,/list)) src << "Not a List."
+	if(!istype(L,/list))
+		if(alert("Make a new list?", "Not a List.", "Yes", "No") == "No")
+			return
+		else
+			L = list()
 
 	var/list/locked = list("vars", "key", "ckey", "client", "firemut", "ishulk", "telekinesis", "xray", "virus", "viruses", "cuffed", "ka", "last_eaten", "urine", "poo", "icon", "icon_state")
 	var/list/names = sortList(L)
@@ -241,39 +253,89 @@ var/list/forbidden_varedit_object_types = list(
 			return
 
 		if("text")
-			L[L.Find(variable)] = input("Enter new text:","Text") as text
+			var/thing = L["[variable]"]
+			var/newText = input("Enter new text:","Text") as null|message
+			if(!newText)
+				return
+			if(!isnull(thing))
+				L["[variable]"] = newText
+			else
+				L[L.Find(variable)] = newText
 
 		if("num")
-			L[L.Find(variable)] = input("Enter new number:","Num") as num
+			var/thing = L["[variable]"]
+			var/newNum = input("Enter new number:","Num") as null|num
+			if(!newNum)
+				return
+			if(!isnull(thing))
+				L["[variable]"] = newNum
+			else
+				L[L.Find(variable)] = newNum
 
 		if("type")
-			L[L.Find(variable)] = input("Enter type:","Type") in typesof(/obj,/mob,/area,/turf)
+			var/thing = L["[variable]"]
+			var/newType = input("Enter type:","Type") in typesof(/obj,/mob,/area,/turf)
+			if(!isnull(thing))
+				L["[variable]"] = newType
+			else
+				L[L.Find(variable)] = newType
 
 		if("reference")
-			L[L.Find(variable)] = input("Select reference:","Reference") as mob|obj|turf|area in world
+			var/thing = L["[variable]"]
+			var/newRef = input("Select reference:","Reference") as null|mob|obj|turf|area in world
+			if(!newRef)
+				return
+			if(!isnull(thing))
+				L["[variable]"] = newRef
+			else
+				L[L.Find(variable)] = newRef
 
 		if("mob reference")
-			L[L.Find(variable)] = input("Select reference:","Reference") as mob in world
+			var/thing = L["[variable]"]
+			var/newMob = input("Select reference:","Reference") as null|mob in world
+			if(!newMob)
+				return
+			if(!isnull(thing))
+				L["[variable]"] = newMob
+			else
+				L[L.Find(variable)] = newMob
 
 		if("file")
-			L[L.Find(variable)] = input("Pick file:","File") as file
+			var/thing = L["[variable]"]
+			var/newFile = input("Pick file:","File") as file
+			if(!isnull(thing))
+				L["[variable]"] = newFile
+			else
+				L[L.Find(variable)] = newFile
 
 		if("icon")
-			L[L.Find(variable)] = input("Pick icon:","Icon") as icon
+			var/thing = L["[variable]"]
+			var/newIcon = input("Pick icon:","Icon") as icon
+			if(!isnull(thing))
+				L["[variable]"] = newIcon
+			else
+				L[L.Find(variable)] = newIcon
 
 		if("marked datum")
-			L[L.Find(variable)] = holder.marked_datum
+			var/thing = L["[variable]"]
+			var/newThing = holder.marked_datum
+			if(!isnull(thing))
+				L["[variable]"] = newThing
+			else
+				L[L.Find(variable)] = newThing
 
 
 /client/proc/modify_variables(var/atom/O, var/param_var_name = null, var/autodetect_class = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/modify_variables() called tick#: [world.time]")
 	if(!check_rights(R_VAREDIT))	return
 
 	var/list/locked = list("vars", "key", "ckey", "client", "firemut", "ishulk", "telekinesis", "xray", "virus", "cuffed", "ka", "last_eaten", "icon", "icon_state", "mutantrace")
 
-	for(var/p in forbidden_varedit_object_types)
-		if( istype(O,p) )
-			usr << "\red It is forbidden to edit this object's variables."
-			return
+	if(holder && !(holder.rights & (R_PERMISSIONS)))
+		for(var/p in forbidden_varedit_object_types)
+			if( istype(O,p) )
+				usr << "<span class='warning'>It is forbidden to edit this object's variables.</span>"
+				return
 
 	var/class
 	var/variable
@@ -443,21 +505,33 @@ var/list/forbidden_varedit_object_types = list(
 			return .(O.vars[variable])
 
 		if("text")
-			var/var_new = input("Enter new text:","Text",O.vars[variable]) as null|text
-			if(var_new==null) return
-			O.vars[variable] = var_new
+			if(variable == "light_color")
+				var/var_new = input("Enter new text:","Text",O.vars[variable]) as null|message
+				if(var_new==null) return
+				O.set_light(l_color = var_new)
+			else
+				var/var_new = input("Enter new text:","Text",O.vars[variable]) as null|message
+				if(var_new==null) return
+				O.vars[variable] = var_new
 
 		if("num")
-			if(variable=="luminosity")
+			if(variable=="light_range")
 				var/var_new = input("Enter new number:","Num",O.vars[variable]) as null|num
 				if(var_new == null) return
-				O.SetLuminosity(var_new)
+				O.set_light(var_new)
+
+			else if(variable=="light_power")
+				var/var_new = input("Enter new number:","Num",O.vars[variable]) as null|num
+				if(var_new == null) return
+				O.set_light(l_power = var_new)
+
 			else if(variable=="stat")
 				var/var_new = input("Enter new number:","Num",O.vars[variable]) as null|num
 				if(var_new == null) return
 				if((O.vars[variable] == 2) && (var_new < 2))//Bringing the dead back to life
-					dead_mob_list -= O
-					living_mob_list += O
+					if(ismob(O))
+						var/mob/M = O
+						M.resurrect()
 				if((O.vars[variable] < 2) && (var_new == 2))//Kill he
 					living_mob_list -= O
 					dead_mob_list += O

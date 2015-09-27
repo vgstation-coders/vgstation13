@@ -7,6 +7,9 @@
 	var/body_part = null
 	var/icon_position = 0
 
+	var/obj/item/organ_item = null //the actual item used to make the organ
+	var/list/slots_to_drop
+
 	var/damage_state = "00"
 	var/brute_dam = 0
 	var/burn_dam = 0
@@ -29,24 +32,23 @@
 	// Internal organs of this body part
 	var/list/datum/organ/internal/internal_organs
 
-	var/damage_msg = "\red You feel an intense pain"
+	var/damage_msg = "<span class='warning'>You feel an intense pain</span>"
 	var/broken_description
 
-	var/status = 0
 	var/open = 0
 	var/stage = 0
 	var/cavity = 0
 	var/sabotaged = 0 //If a prosthetic limb is emagged, it will detonate when it fails.
+	var/encased       // Needs to be opened with a saw to access the organs.
 
 	var/obj/item/hidden = null
 	var/list/implants = list()
-	// INTERNAL germs inside the organ, this is BAD if it's greater 0
-	var/germ_level = 0
 
 	// how often wounds should be updated, a higher number means less often
 	var/wound_update_accuracy = 1
 
 	var/has_fat=0 // Has a _fat variant
+
 
 /datum/organ/external/New(var/datum/organ/external/P)
 	if(P)
@@ -56,11 +58,13 @@
 		parent.children.Add(src)
 	return ..()
 
+
 /****************************************************
 			   DAMAGE PROCS
 ****************************************************/
 
 /datum/organ/external/proc/emp_act(severity)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/emp_act() called tick#: [world.time]")
 	if(!(status & ORGAN_ROBOT))	//meatbags do not care about EMP
 		return
 	var/probability = 30
@@ -73,7 +77,8 @@
 	else
 		take_damage(damage, 0, 1, used_weapon = "EMP")
 
-/datum/organ/external/proc/take_damage(brute, burn, sharp, used_weapon = null, list/forbidden_limbs = list())
+/datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/take_damage() called tick#: [world.time]")
 	if((brute <= 0) && (burn <= 0))
 		return 0
 
@@ -81,12 +86,12 @@
 		return 0
 	if(status & (ORGAN_ROBOT|ORGAN_PEG))
 		brute *= 0.66 //~2/3 damage for ROBOLIMBS
-		burn *= 0.66 //~2/3 damage for ROBOLIMBS
+		burn *= (status & (ORGAN_PEG) ? 2 : 0.66) //~2/3 damage for ROBOLIMBS 2x for peg
 
 	//If limb took enough damage, try to cut or tear it off
 	if(body_part != UPPER_TORSO && body_part != LOWER_TORSO) //as hilarious as it is, getting hit on the chest too much shouldn't effectively gib you.
 		if(config.limbs_can_break && brute_dam >= max_damage * config.organ_health_multiplier)
-			if( (sharp && prob(5 * brute)) || (brute > 20 && prob(2 * brute)) )
+			if( ((sharp || status & ORGAN_PEG) && prob(5 * brute)) || (brute > 20 && prob(2 * brute)) )
 				droplimb(1)
 				return
 
@@ -97,8 +102,8 @@
 		I.take_damage(brute / 2)
 		brute -= brute / 2
 
-	if(status & ORGAN_BROKEN && prob(40) && brute)
-		owner.emote("scream")	//getting hit on broken hand hurts
+	if((status & ORGAN_BROKEN) && prob(40) && brute)
+		owner.emote("scream",,, 1)	//getting hit on broken hand hurts
 	if(used_weapon)
 		add_autopsy_data("[used_weapon]", brute + burn)
 
@@ -150,7 +155,7 @@
 				if(possible_points.len)
 					//And pass the pain around
 					var/datum/organ/external/target = pick(possible_points)
-					target.take_damage(brute, burn, sharp, used_weapon, forbidden_limbs + src)
+					target.take_damage(brute, burn, sharp, edge, used_weapon, forbidden_limbs + src)
 
 	// sync the organ's damage with its wounds
 	src.update_damages()
@@ -160,6 +165,7 @@
 	return result
 
 /datum/organ/external/proc/heal_damage(brute, burn, internal = 0, robo_repair = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/heal_damage() called tick#: [world.time]")
 	if(status & ORGAN_ROBOT && !robo_repair)
 		return
 
@@ -193,6 +199,7 @@
 This function completely restores a damaged organ to perfect condition.
 */
 /datum/organ/external/proc/rejuvenate()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/rejuvenate() called tick#: [world.time]")
 	damage_state = "00"
 	// Robotic organs stay robotic.  Fix because right click rejuvinate makes IPC's organs organic.
 	// N3X: Use bitmask to exclude shit we don't want.
@@ -215,6 +222,7 @@ This function completely restores a damaged organ to perfect condition.
 
 
 /datum/organ/external/proc/createwound(var/type = CUT, var/damage)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/createwound() called tick#: [world.time]")
 	if(damage == 0) return
 
 	// first check whether we can widen an existing wound
@@ -224,8 +232,8 @@ This function completely restores a damaged organ to perfect condition.
 			if(W.amount == 1 && W.started_healing())
 				W.open_wound(damage)
 				if(prob(25))
-					owner.visible_message("\red The wound on [owner.name]'s [display_name] widens with a nasty ripping voice.",\
-					"\red The wound on your [display_name] widens with a nasty ripping voice.",\
+					owner.visible_message("<span class='warning'>The wound on [owner.name]'s [display_name] widens with a nasty ripping sound.</span>",\
+					"<span class='warning'>The wound on your [display_name] widens with a nasty ripping sound.</span>",\
 					"You hear a nasty ripping noise, as if flesh is being torn apart.")
 				return
 
@@ -248,7 +256,7 @@ This function completely restores a damaged organ to perfect condition.
 
 	//Possibly trigger an internal wound, too.
 	var/local_damage = brute_dam + burn_dam + damage
-	if(damage > 10 && type != BURN && local_damage > 20 && prob(damage) && !(status & (ORGAN_ROBOT|ORGAN_PEG)))
+	if(damage > 10 && type != BURN && local_damage > 20 && prob(damage) && !(status & (ORGAN_ROBOT|ORGAN_PEG)) && !(owner.species && owner.species.flags & NO_BLOOD))
 		var/datum/wound/internal_bleeding/I = new (15)
 		wounds += I
 		owner.custom_pain("You feel something rip in your [display_name]!", 1)
@@ -271,7 +279,8 @@ This function completely restores a damaged organ to perfect condition.
 //Determines if we even need to process this organ.
 
 /datum/organ/external/proc/need_process()
-	if(status && status & (ORGAN_ROBOT|ORGAN_PEG)) // If it's robotic OR PEG, that's fine it will have a status.
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/need_process() called tick#: [world.time]")
+	if(status && (status & (ORGAN_ROBOT|ORGAN_PEG))) // If it's robotic OR PEG, that's fine it will have a status.
 		return 1
 	if(brute_dam || burn_dam)
 		return 1
@@ -314,48 +323,120 @@ This function completely restores a damaged organ to perfect condition.
 	return
 
 //Updating germ levels. Handles organ germ levels and necrosis.
-#define GANGREN_LEVEL_ONE		100
-#define GANGREN_LEVEL_TWO		1000
-#define GANGREN_LEVEL_TERMINAL	2500
-#define GERM_TRANSFER_AMOUNT	germ_level/500
+/*
+The INFECTION_LEVEL values defined in setup.dm control the time it takes to reach the different
+infection levels. Since infection growth is exponential, you can adjust the time it takes to get
+from one germ_level to another using the rough formula:
+
+desired_germ_level = initial_germ_level*e^(desired_time_in_seconds/1000)
+
+So if I wanted it to take an average of 15 minutes to get from level one (100) to level two
+I would set INFECTION_LEVEL_TWO to 100*e^(15*60/1000) = 245. Note that this is the average time,
+the actual time is dependent on RNG.
+
+INFECTION_LEVEL_ONE		below this germ level nothing happens, and the infection doesn't grow
+INFECTION_LEVEL_TWO		above this germ level the infection will start to spread to internal and adjacent organs
+INFECTION_LEVEL_THREE	above this germ level the player will take additional toxin damage per second, and will die in minutes without
+						antitox. also, above this germ level you will need to overdose on spaceacillin to reduce the germ_level.
+
+Note that amputating the affected organ does in fact remove the infection from the player's body.
+*/
 /datum/organ/external/proc/update_germs()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/update_germs() called tick#: [world.time]")
 	if(status & (ORGAN_ROBOT|ORGAN_PEG|ORGAN_DESTROYED)) //how does robot limb have da germs?
 		germ_level = 0
 		return
 
-	if(germ_level > 0 && owner.bodytemperature >= 170)	//cryo stops germs from moving and doing their bad stuffs
-		//Syncing germ levels with external wounds
+	if(owner.bodytemperature >= 170)	//cryo stops germs from moving and doing their bad stuffs
+		//** Syncing germ levels with external wounds
+		handle_germ_sync()
+
+		//** Handle antibiotics and curing infections
+		handle_antibiotics()
+
+		//** Handle the effects of infections
+		handle_germ_effects()
+
+/datum/organ/external/proc/handle_germ_sync()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/handle_germ_sync() called tick#: [world.time]")
+	var/antibiotics = owner.reagents.get_reagent_amount("spaceacillin")
+	for(var/datum/wound/W in wounds)
+		//Open wounds can become infected
+		if (owner.germ_level > W.germ_level && W.infection_check())
+			W.germ_level++
+
+	if (antibiotics < 5)
 		for(var/datum/wound/W in wounds)
-			if(!W.bandaged && !W.salved)
-				W.germ_level = max(W.germ_level, germ_level)	//Wounds get all the germs
-				if (W.germ_level > germ_level)	//Badly infected wounds raise internal germ levels
-					germ_level++
+			//Infected wounds raise the organ's germ level
+			if (W.germ_level > germ_level)
+				germ_level++
+				break	//limit increase to a maximum of one per second
 
-		if(germ_level > GANGREN_LEVEL_ONE && prob(round(germ_level/100)))
-			germ_level++
-			owner.adjustToxLoss(1)
+/datum/organ/external/proc/handle_germ_effects()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/handle_germ_effects() called tick#: [world.time]")
+	var/antibiotics = owner.reagents.get_reagent_amount("spaceacillin")
 
-		if(germ_level > GANGREN_LEVEL_TWO)
-			germ_level++
-			owner.adjustToxLoss(1)
-/*
-		if(germ_level > GANGREN_LEVEL_TERMINAL)
-			if (!(status & ORGAN_DEAD))
-				status |= ORGAN_DEAD
-				owner << "<span class='notice'>You can't feel your [display_name] anymore...</span>"
-				owner.update_body(1)
-			if (prob(10))	//Spreading the fun
-				if (children)	//To child organs
-					for (var/datum/organ/external/child in children)
-						if (!(child.status & (ORGAN_DEAD|ORGAN_DESTROYED|ORGAN_ROBOT|ORGAN_PEG)))
-							child.germ_level += round(GERM_TRANSFER_AMOUNT)
-				if (parent)
-					if (!(parent.status & (ORGAN_DEAD|ORGAN_DESTROYED|ORGAN_ROBOT|ORGAN_PEG)))
-						parent.germ_level += round(GERM_TRANSFER_AMOUNT)
-*/
+	if (germ_level > 0 && germ_level < INFECTION_LEVEL_ONE && prob(60))	//this could be an else clause, but it looks cleaner this way
+		germ_level--	//since germ_level increases at a rate of 1 per second with dirty wounds, prob(60) should give us about 5 minutes before level one.
+
+	if(germ_level >= INFECTION_LEVEL_ONE)
+		//having an infection raises your body temperature
+		var/fever_temperature = (owner.species.heat_level_1 - owner.species.body_temperature - 5)* min(germ_level/INFECTION_LEVEL_TWO, 1) + owner.species.body_temperature
+		//need to make sure we raise temperature fast enough to get around environmental cooling preventing us from reaching fever_temperature
+		owner.bodytemperature += Clamp((fever_temperature - T20C) / BODYTEMP_COLD_DIVISOR + 1, 0, fever_temperature - owner.bodytemperature)
+
+		if(prob(round(germ_level/10)))
+			if (antibiotics < 5)
+				germ_level++
+
+			if (prob(10))	//adjust this to tweak how fast people take toxin damage from infections
+				owner.adjustToxLoss(1)
+
+	if(germ_level >= INFECTION_LEVEL_TWO && antibiotics < 5)
+		//spread the infection to internal organs
+		var/datum/organ/internal/target_organ = null	//make internal organs become infected one at a time instead of all at once
+		for (var/datum/organ/internal/I in internal_organs)
+			if (I.germ_level > 0 && I.germ_level < min(germ_level, INFECTION_LEVEL_TWO))	//once the organ reaches whatever we can give it, or level two, switch to a different one
+				if (!target_organ || I.germ_level > target_organ.germ_level)	//choose the organ with the highest germ_level
+					target_organ = I
+
+		if (!target_organ)
+			//figure out which organs we can spread germs to and pick one at random
+			var/list/candidate_organs = list()
+			for (var/datum/organ/internal/I in internal_organs)
+				if (I.germ_level < germ_level)
+					candidate_organs += I
+			if (candidate_organs.len)
+				target_organ = pick(candidate_organs)
+
+		if (target_organ)
+			target_organ.germ_level++
+
+		//spread the infection to child and parent organs
+		if (children)
+			for (var/datum/organ/external/child in children)
+				if (child.germ_level < germ_level && !(child.status & ORGAN_ROBOT))
+					if (child.germ_level < INFECTION_LEVEL_ONE*2 || prob(30))
+						child.germ_level++
+
+		if (parent)
+			if (parent.germ_level < germ_level && !(parent.status & ORGAN_ROBOT))
+				if (parent.germ_level < INFECTION_LEVEL_ONE*2 || prob(30))
+					parent.germ_level++
+
+	if(germ_level >= INFECTION_LEVEL_THREE && antibiotics < 30)	//overdosing is necessary to stop severe infections
+		if (!(status & ORGAN_DEAD))
+			status |= ORGAN_DEAD
+			owner << "<span class='notice'>You can't feel your [display_name] anymore...</span>"
+			owner.update_body(1)
+
+		germ_level++
+		owner.adjustToxLoss(1)
 
 //Updating wounds. Handles wound natural healing, internal bleedings and infections
 /datum/organ/external/proc/update_wounds()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/update_wounds() called tick#: [world.time]")
 
 	if((status & (ORGAN_ROBOT|ORGAN_PEG))) //Robotic limbs don't heal or get worse.
 		return
@@ -368,7 +449,7 @@ This function completely restores a damaged organ to perfect condition.
 			// let the GC handle the deletion of the wound
 
 		// Internal wounds get worse over time. Low temperatures (cryo) stop them.
-		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170)
+		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(owner.species && owner.species.flags & NO_BLOOD))
 			if(!owner.reagents.has_reagent("bicaridine"))	//bicard stops internal wounds from growing bigger with time, and also stop bleeding
 				W.open_wound(0.1 * wound_update_accuracy)
 				owner.vessel.remove_reagent("blood",0.05 * W.damage * wound_update_accuracy)
@@ -411,10 +492,11 @@ This function completely restores a damaged organ to perfect condition.
 	// sync the organ's damage with its wounds
 	src.update_damages()
 	if (update_icon())
-		owner.UpdateDamageIcon(1)
+		owner.UpdateDamageIcon()
 
 //Updates brute_damn and burn_damn from wound damages. Updates BLEEDING status.
 /datum/organ/external/proc/update_damages()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/update_damages() called tick#: [world.time]")
 	number_wounds = 0
 	brute_dam = 0
 	burn_dam = 0
@@ -426,7 +508,7 @@ This function completely restores a damaged organ to perfect condition.
 		else if(W.damage_type == BURN)
 			burn_dam += W.damage
 
-		if(!(status & (ORGAN_ROBOT|ORGAN_PEG)) && W.bleeding())
+		if(!(status & (ORGAN_ROBOT|ORGAN_PEG)) && W.bleeding() && !(owner.species.flags & NO_BLOOD))
 			W.bleed_timer--
 			status |= ORGAN_BLEEDING
 
@@ -434,23 +516,25 @@ This function completely restores a damaged organ to perfect condition.
 
 		number_wounds += W.amount
 
-	if (open && !clamped && !(status & (ORGAN_ROBOT|ORGAN_PEG)))	//things tend to bleed if they are CUT OPEN
+	if (open && !clamped && !(status & (ORGAN_ROBOT|ORGAN_PEG)) && !(owner.species.flags & NO_BLOOD))	//things tend to bleed if they are CUT OPEN
 		status |= ORGAN_BLEEDING
 
 
 // new damage icon system
 // adjusted to set damage_state to brute/burn code only (without r_name0 as before)
 /datum/organ/external/proc/update_icon()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/update_icon() called tick#: [world.time]")
 	var/n_is = damage_state_text()
 	if (n_is != damage_state)
 		damage_state = n_is
-		owner.update_body(1)
+		//owner.update_body(1)
 		return 1
 	return 0
 
 // new damage icon system
 // returns just the brute/burn damage code
 /datum/organ/external/proc/damage_state_text()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/damage_state_text() called tick#: [world.time]")
 	if(status & ORGAN_DESTROYED)
 		return "--"
 
@@ -482,12 +566,14 @@ This function completely restores a damaged organ to perfect condition.
 
 //Recursive setting of all child organs to amputated
 /datum/organ/external/proc/setAmputatedTree()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/setAmputatedTree() called tick#: [world.time]")
 	for(var/datum/organ/external/O in children)
 		O.amputated=amputated
 		O.setAmputatedTree()
 
 //Handles dismemberment
 /datum/organ/external/proc/droplimb(var/override = 0,var/no_explode = 0, var/spawn_limb=1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/droplimb() called tick#: [world.time]")
 	if(destspawn) return
 	if(override)
 		status |= ORGAN_DESTROYED
@@ -498,85 +584,29 @@ This function completely restores a damaged organ to perfect condition.
 		src.status &= ~ORGAN_BROKEN
 		src.status &= ~ORGAN_BLEEDING
 		src.status &= ~ORGAN_SPLINTED
+		src.status &= ~ORGAN_DEAD
 		for(var/implant in implants)
-			del(implant)
+			qdel(implant)
 
 		// If any organs are attached to this, destroy them
-		for(var/datum/organ/external/O in owner.organs)
-			if(O.parent == src)
-				O.droplimb(1)
+		for(var/datum/organ/external/O in children)
+			O.droplimb(1)
 
 		var/obj/organ	//Dropped limb object
+		if(spawn_limb)
+			organ = generate_dropped_organ(organ_item)
+		if(body_part == LOWER_TORSO)
+			owner << "<span class='danger'>You are now sterile.</span>"
 
-		if(status & ORGAN_PEG)
-			owner.visible_message(\
-				"\red \The [owner]'s [display_name] snaps!",\
-				"\red <b>Your [display_name] snaps!</b>",\
-				"You hear wood being split.")
-
-			owner.regenerate_icons()
-			return
-
-		switch(body_part)
-			if(LOWER_TORSO)
-				owner << "\red You are now sterile."
-			if(HEAD)
-				if(spawn_limb)
-					organ= new /obj/item/weapon/organ/head(owner.loc, owner)
-				owner.u_equip(owner.glasses)
-				owner.u_equip(owner.head)
-				owner.u_equip(owner.ears)
-				owner.u_equip(owner.wear_mask)
-			if(ARM_RIGHT)
-				if(spawn_limb)
-					if(status & ORGAN_ROBOT)
-						organ = new /obj/item/robot_parts/r_arm(owner.loc)
-					else
-						organ= new /obj/item/weapon/organ/r_arm(owner.loc, owner)
-			if(ARM_LEFT)
-				if(spawn_limb)
-					if(status & ORGAN_ROBOT)
-						organ= new /obj/item/robot_parts/l_arm(owner.loc)
-					else
-						organ= new /obj/item/weapon/organ/l_arm(owner.loc, owner)
-			if(LEG_RIGHT)
-				if(spawn_limb)
-					if(status & ORGAN_ROBOT)
-						organ = new /obj/item/robot_parts/r_leg(owner.loc)
-					else
-						organ= new /obj/item/weapon/organ/r_leg(owner.loc, owner)
-			if(LEG_LEFT)
-				if(spawn_limb)
-					if(status & ORGAN_ROBOT)
-						organ = new /obj/item/robot_parts/l_leg(owner.loc)
-					else
-						organ= new /obj/item/weapon/organ/l_leg(owner.loc, owner)
-			if(HAND_RIGHT)
-				if(spawn_limb)
-					if(!(status & (ORGAN_ROBOT)))
-						organ= new /obj/item/weapon/organ/r_hand(owner.loc, owner)
-				owner.u_equip(owner.gloves)
-			if(HAND_LEFT)
-				if(spawn_limb)
-					if(!(status & (ORGAN_ROBOT)))
-						organ= new /obj/item/weapon/organ/l_hand(owner.loc, owner)
-				owner.u_equip(owner.gloves)
-			if(FOOT_RIGHT)
-				if(spawn_limb)
-					if(!(status & ORGAN_ROBOT))
-						organ= new /obj/item/weapon/organ/r_foot/(owner.loc, owner)
-				owner.u_equip(owner.shoes)
-			if(FOOT_LEFT)
-				if(spawn_limb)
-					if(!(status & ORGAN_ROBOT))
-						organ = new /obj/item/weapon/organ/l_foot(owner.loc, owner)
-				owner.u_equip(owner.shoes)
+		if(slots_to_drop && slots_to_drop.len)
+			for(var/slot_id in slots_to_drop)
+				owner.u_equip(owner.get_item_by_slot(slot_id),1)
 
 		destspawn = 1
 		//Robotic limbs explode if sabotaged.
 		if(status & ORGAN_ROBOT && !no_explode && sabotaged)
-			owner.visible_message("\red \The [owner]'s [display_name] explodes violently!",\
-			"\red <b>Your [display_name] explodes!</b>",\
+			owner.visible_message("<span class='danger'>\The [owner]'s [display_name] explodes violently!</span>",\
+			"<span class='danger'>Your [display_name] explodes!</span>",\
 			"You hear an explosion followed by a scream!")
 			explosion(get_turf(owner),-1,-1,2,3)
 			var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
@@ -587,22 +617,48 @@ This function completely restores a damaged organ to perfect condition.
 				del(spark_system)
 
 		if(organ)
-			owner.visible_message("\red [owner.name]'s [display_name] flies off in an arc.",\
-			"<span class='moderate'><b>Your [display_name] goes flying off!</b></span>",\
+			owner.visible_message("<span class='danger'>[owner.name]'s [display_name] flies off in an arc.</span>",\
+			"<span class='danger'><b>Your [display_name] goes flying off!</b></span>",\
 			"You hear a terrible sound of ripping tendons and flesh.")
 
 			//Throw organs around
 			var/lol = pick(cardinal)
 			step(organ,lol)
-			owner.regenerate_icons()
-		return organ
 
+		owner.update_body(1)
+
+		// OK so maybe your limb just flew off, but if it was attached to a pair of cuffs then hooray! Freedom!
+		release_restraints()
+
+		if(vital)
+			owner.death()
+
+/datum/organ/external/proc/generate_dropped_organ(var/obj/item/current_organ)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/generate_dropped_organ() called tick#: [world.time]")
+	return current_organ
 
 /****************************************************
 			   HELPERS
 ****************************************************/
 
+/datum/organ/external/proc/release_restraints()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/release_restraints() called tick#: [world.time]")
+	if (owner.handcuffed && body_part in list(ARM_LEFT, ARM_RIGHT, HAND_LEFT, HAND_RIGHT))
+		owner.visible_message(\
+			"\The [owner.handcuffed.name] falls off of [owner.name].",\
+			"\The [owner.handcuffed.name] falls off you.")
+
+		owner.drop_from_inventory(owner.handcuffed)
+
+	if (owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT, LEG_LEFT, LEG_RIGHT))
+		owner.visible_message(\
+			"\The [owner.legcuffed.name] falls off of [owner.name].",\
+			"\The [owner.legcuffed.name] falls off you.")
+
+		owner.drop_from_inventory(owner.legcuffed)
+
 /datum/organ/external/proc/bandage()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/bandage() called tick#: [world.time]")
 	var/rval = 0
 	src.status &= ~ORGAN_BLEEDING
 	for(var/datum/wound/W in wounds)
@@ -611,7 +667,18 @@ This function completely restores a damaged organ to perfect condition.
 		W.bandaged = 1
 	return rval
 
+/datum/organ/external/proc/disinfect()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/disinfect() called tick#: [world.time]")
+	var/rval = 0
+	for(var/datum/wound/W in wounds)
+		if(W.internal) continue
+		rval |= !W.disinfected
+		W.disinfected = 1
+		W.germ_level = 0
+	return rval
+
 /datum/organ/external/proc/clamp()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/clamp() called tick#: [world.time]")
 	var/rval = 0
 	src.status &= ~ORGAN_BLEEDING
 	for(var/datum/wound/W in wounds)
@@ -621,6 +688,7 @@ This function completely restores a damaged organ to perfect condition.
 	return rval
 
 /datum/organ/external/proc/salve()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/salve() called tick#: [world.time]")
 	var/rval = 0
 	for(var/datum/wound/W in wounds)
 		rval |= !W.salved
@@ -628,58 +696,94 @@ This function completely restores a damaged organ to perfect condition.
 	return rval
 
 /datum/organ/external/proc/fracture()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/fracture() called tick#: [world.time]")
 	if(status & ORGAN_BROKEN)
 		return
-	owner.visible_message("\red You hear a loud cracking sound coming from \the [owner].","\red <b>Something feels like it shattered in your [display_name]!</b>","You hear a sickening crack.")
+	owner.visible_message("<span class='danger'>You hear a loud cracking sound coming from \the [owner].","<span class='warning'>Something feels like it shattered in your [display_name]!</span></span>","You hear a sickening crack.")
 
 	if(owner.species && !(owner.species.flags & NO_PAIN))
-		owner.emote("scream")
+		owner.emote("scream",,, 1)
 
 	status |= ORGAN_BROKEN
 	broken_description = pick("broken","fracture","hairline fracture")
 	perma_injury = brute_dam
 
+	// Fractures have a chance of getting you out of restraints
+	if (prob(25))
+		release_restraints()
+
+	return
+
 /datum/organ/external/proc/robotize()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/robotize() called tick#: [world.time]")
 	src.status &= ~ORGAN_BROKEN
 	src.status &= ~ORGAN_BLEEDING
 	src.status &= ~ORGAN_SPLINTED
+	src.status &= ~ORGAN_CUT_AWAY
 	src.status &= ~ORGAN_ATTACHABLE
 	src.status &= ~ORGAN_DESTROYED
 	src.status &= ~ORGAN_PEG
 	src.status |= ORGAN_ROBOT
+	src.destspawn = 0
 	for (var/datum/organ/external/T in children)
 		if(T)
 			T.robotize()
 
 /datum/organ/external/proc/peggify()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/peggify() called tick#: [world.time]")
 	src.status &= ~ORGAN_BROKEN
 	src.status &= ~ORGAN_BLEEDING
+	src.status &= ~ORGAN_CUT_AWAY
 	src.status &= ~ORGAN_SPLINTED
 	src.status &= ~ORGAN_ATTACHABLE
 	src.status &= ~ORGAN_DESTROYED
 	src.status &= ~ORGAN_ROBOT
 	src.status |= ORGAN_PEG
+	src.wounds.len = 0
 	for (var/datum/organ/external/T in children)
 		if(T)
 			if(body_part == ARM_LEFT || body_part == ARM_RIGHT)
 				T.peggify()
 			else
 				T.droplimb(1,1)
+				T.status &= ~ORGAN_BROKEN
+				T.status &= ~ORGAN_BLEEDING
+				T.status &= ~ORGAN_CUT_AWAY
+				T.status &= ~ORGAN_SPLINTED
+				T.status &= ~ORGAN_ATTACHABLE
+				T.status &= ~ORGAN_DESTROYED
+				T.status &= ~ORGAN_ROBOT
+				T.wounds.len = 0
+
+/datum/organ/external/proc/fleshify()
+	src.status &= ~ORGAN_BROKEN
+	src.status &= ~ORGAN_BLEEDING
+	src.status &= ~ORGAN_SPLINTED
+	src.status &= ~ORGAN_CUT_AWAY
+	src.status &= ~ORGAN_ATTACHABLE
+	src.status &= ~ORGAN_DESTROYED
+	src.status &= ~ORGAN_PEG
+	src.status &= ~ORGAN_ROBOT
+	src.destspawn = 0
 
 /datum/organ/external/proc/mutate()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/mutate() called tick#: [world.time]")
 	src.status |= ORGAN_MUTATED
 	owner.update_body()
 
 /datum/organ/external/proc/unmutate()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/unmutate() called tick#: [world.time]")
 	src.status &= ~ORGAN_MUTATED
 	owner.update_body()
 
 /datum/organ/external/proc/get_damage()	//returns total damage
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/get_damage() called tick#: [world.time]")
 	return max(brute_dam + burn_dam - perma_injury, perma_injury)	//could use health?
 
-/datum/organ/external/proc/is_infected()
+/datum/organ/external/proc/has_infected_wound()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/has_infected_wound() called tick#: [world.time]")
 	for(var/datum/wound/W in wounds)
-		if(W.germ_level > 100)
+		if(W.germ_level > INFECTION_LEVEL_ONE)
 			return 1
 	return 0
 
@@ -702,10 +806,54 @@ This function completely restores a damaged organ to perfect condition.
 
 
 /datum/organ/external/proc/is_usable()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/is_usable() called tick#: [world.time]")
 	return !(status & (ORGAN_DESTROYED|ORGAN_MUTATED|ORGAN_DEAD))
 
+/datum/organ/external/proc/is_broken()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/is_broken() called tick#: [world.time]")
+	return ((status & ORGAN_BROKEN) && !(status & ORGAN_SPLINTED))
+
+/datum/organ/external/proc/is_malfunctioning()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/is_malfunctioning() called tick#: [world.time]")
+	return ((status & ORGAN_ROBOT) && prob(brute_dam + burn_dam))
+
 /datum/organ/external/proc/can_use_advanced_tools() // Hook-hands can't pull triggers.
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/can_use_advanced_tools() called tick#: [world.time]")
 	return !(status & (ORGAN_DESTROYED|ORGAN_MUTATED|ORGAN_DEAD|ORGAN_PEG))
+
+/datum/organ/external/proc/process_grasp(var/obj/item/c_hand, var/hand_name)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/process_grasp() called tick#: [world.time]")
+	if (!c_hand)
+		return
+
+	if(is_broken())
+		owner.drop_item(c_hand)
+		var/emote_scream = pick("screams in pain and", "lets out a sharp cry and", "cries out and")
+		owner.emote("me", 1, "[(owner.species && owner.species.flags & NO_PAIN) ? "" : emote_scream ] drops what they were holding in their [hand_name]!")
+	if(is_malfunctioning())
+		owner.u_equip(c_hand,1)
+		owner.emote("me", 1, "drops what they were holding, their [hand_name] malfunctioning!")
+		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
+		spark_system.set_up(5, 0, owner)
+		spark_system.attach(owner)
+		spark_system.start()
+		spawn(10)
+			del(spark_system)
+		if(!isturf(c_hand.loc) || !istype(c_hand.loc, /obj/structure/closet))
+			c_hand.loc = get_turf(c_hand)
+
+/datum/organ/external/proc/embed(var/obj/item/weapon/W, var/silent = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/embed() called tick#: [world.time]")
+	if(!silent)
+		owner.visible_message("<span class='danger'>\The [W] sticks in the wound!</span>")
+	implants += W
+	owner.embedded_flag = 1
+	owner.verbs += /mob/proc/yank_out_object
+	W.add_blood(owner)
+	if(ismob(W.loc))
+		var/mob/living/H = W.loc
+		H.drop_item(W)
+	W.loc = owner
 
 /****************************************************
 			   ORGAN DEFINES
@@ -718,8 +866,9 @@ This function completely restores a damaged organ to perfect condition.
 	max_damage = 150
 	min_broken_damage = 75
 	body_part = UPPER_TORSO
-	has_fat=1
-
+	has_fat = 1
+	vital = 1
+	encased = "ribcage"
 
 /datum/organ/external/groin
 	name = "groin"
@@ -728,6 +877,7 @@ This function completely restores a damaged organ to perfect condition.
 	max_damage = 115
 	min_broken_damage = 70
 	body_part = LOWER_TORSO
+	vital = 1
 
 /datum/organ/external/l_arm
 	name = "l_arm"
@@ -736,6 +886,19 @@ This function completely restores a damaged organ to perfect condition.
 	max_damage = 75
 	min_broken_damage = 30
 	body_part = ARM_LEFT
+
+/datum/organ/external/l_arm/process()
+	..()
+	process_grasp(owner.l_hand, "left hand")
+
+/datum/organ/external/l_arm/generate_dropped_organ(current_organ)
+	if(status & ORGAN_PEG) current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+	if(!current_organ)
+		if(status & ORGAN_ROBOT)
+			current_organ= new /obj/item/robot_parts/l_arm(owner.loc)
+		else
+			current_organ= new /obj/item/weapon/organ/l_arm(owner.loc, owner)
+	return current_organ
 
 /datum/organ/external/l_leg
 	name = "l_leg"
@@ -746,6 +909,15 @@ This function completely restores a damaged organ to perfect condition.
 	body_part = LEG_LEFT
 	icon_position = LEFT
 
+/datum/organ/external/l_leg/generate_dropped_organ(current_organ)
+	if(status & ORGAN_PEG) current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+	if(!current_organ)
+		if(status & ORGAN_ROBOT)
+			current_organ = new /obj/item/robot_parts/l_leg(owner.loc)
+		else
+			current_organ= new /obj/item/weapon/organ/l_leg(owner.loc, owner)
+	return current_organ
+
 /datum/organ/external/r_arm
 	name = "r_arm"
 	display_name = "right arm"
@@ -753,6 +925,19 @@ This function completely restores a damaged organ to perfect condition.
 	max_damage = 75
 	min_broken_damage = 30
 	body_part = ARM_RIGHT
+
+/datum/organ/external/r_arm/process()
+	..()
+	process_grasp(owner.r_hand, "right hand")
+
+/datum/organ/external/r_arm/generate_dropped_organ(current_organ)
+	if(status & ORGAN_PEG) current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+	if(!current_organ)
+		if(status & ORGAN_ROBOT)
+			current_organ = new /obj/item/robot_parts/r_arm(owner.loc)
+		else
+			current_organ= new /obj/item/weapon/organ/r_arm(owner.loc, owner)
+	return current_organ
 
 /datum/organ/external/r_leg
 	name = "r_leg"
@@ -763,6 +948,15 @@ This function completely restores a damaged organ to perfect condition.
 	body_part = LEG_RIGHT
 	icon_position = RIGHT
 
+/datum/organ/external/r_leg/generate_dropped_organ(current_organ)
+	if(status & ORGAN_PEG) current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+	if(!current_organ)
+		if(status & ORGAN_ROBOT)
+			current_organ = new /obj/item/robot_parts/r_leg(owner.loc)
+		else
+			current_organ= new /obj/item/weapon/organ/r_leg(owner.loc, owner)
+	return current_organ
+
 /datum/organ/external/l_foot
 	name = "l_foot"
 	display_name = "left foot"
@@ -771,6 +965,16 @@ This function completely restores a damaged organ to perfect condition.
 	min_broken_damage = 15
 	body_part = FOOT_LEFT
 	icon_position = LEFT
+
+	slots_to_drop = list(slot_shoes,
+						slot_legcuffed)
+
+/datum/organ/external/l_foot/generate_dropped_organ(current_organ)
+	if(status & ORGAN_PEG) current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+	if(!current_organ)
+		if(!(status & ORGAN_ROBOT))
+			current_organ= new /obj/item/weapon/organ/l_foot(owner.loc, owner)
+	return current_organ
 
 /datum/organ/external/r_foot
 	name = "r_foot"
@@ -781,6 +985,16 @@ This function completely restores a damaged organ to perfect condition.
 	body_part = FOOT_RIGHT
 	icon_position = RIGHT
 
+	slots_to_drop = list(slot_shoes,
+						slot_legcuffed)
+
+/datum/organ/external/r_foot/generate_dropped_organ(current_organ)
+	if(status & ORGAN_PEG) current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+	if(!current_organ)
+		if(!(status & ORGAN_ROBOT))
+			current_organ= new /obj/item/weapon/organ/r_foot(owner.loc, owner)
+	return current_organ
+
 /datum/organ/external/r_hand
 	name = "r_hand"
 	display_name = "right hand"
@@ -788,6 +1002,21 @@ This function completely restores a damaged organ to perfect condition.
 	max_damage = 40
 	min_broken_damage = 15
 	body_part = HAND_RIGHT
+
+	slots_to_drop = list(slot_gloves,
+						slot_r_hand,
+						slot_handcuffed)
+
+/datum/organ/external/r_hand/process()
+	..()
+	process_grasp(owner.r_hand, "right hand")
+
+/datum/organ/external/r_hand/generate_dropped_organ(current_organ)
+	if(status & ORGAN_PEG) current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+	if(!current_organ)
+		if(!(status & (ORGAN_ROBOT)))
+			current_organ= new /obj/item/weapon/organ/r_hand(owner.loc, owner)
+	return current_organ
 
 /datum/organ/external/l_hand
 	name = "l_hand"
@@ -797,6 +1026,21 @@ This function completely restores a damaged organ to perfect condition.
 	min_broken_damage = 15
 	body_part = HAND_LEFT
 
+	slots_to_drop = list(slot_gloves,
+						slot_l_hand,
+						slot_handcuffed)
+
+/datum/organ/external/l_hand/process()
+	..()
+	process_grasp(owner.l_hand, "left hand")
+
+/datum/organ/external/l_hand/generate_dropped_organ(current_organ)
+	if(status & ORGAN_PEG) current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+	if(!current_organ)
+		if(!(status & (ORGAN_ROBOT)))
+			current_organ= new /obj/item/weapon/organ/l_hand(owner.loc, owner)
+	return current_organ
+
 /datum/organ/external/head
 	name = "head"
 	icon_name = "head"
@@ -805,6 +1049,31 @@ This function completely restores a damaged organ to perfect condition.
 	min_broken_damage = 40
 	body_part = HEAD
 	var/disfigured = 0
+	vital = 1
+	encased = "skull"
+
+	slots_to_drop = list(slot_glasses,
+						slot_wear_mask,
+						slot_head,
+						slot_ears)
+
+/datum/organ/external/head/generate_dropped_organ(current_organ)
+	if(!current_organ)
+		if(owner.species.flags & IS_SYNTHETIC)
+			current_organ= new /obj/item/weapon/organ/head/posi(owner.loc, owner)
+		else
+			current_organ= new /obj/item/weapon/organ/head(owner.loc, owner)
+	var/datum/organ/internal/brain/B = owner.internal_organs_by_name["brain"]
+	var/obj/item/weapon/organ/head/H = current_organ
+	if(B)
+		H.organ_data = B
+		B.organ_holder = current_organ
+		B.owner_dna = H.owner_dna
+	owner.internal_organs_by_name["brain"] = null
+	owner.internal_organs_by_name -= "brain"
+	owner.internal_organs -= B
+	internal_organs -= B
+	return current_organ
 
 /datum/organ/external/head/get_icon()
 	if (!owner)
@@ -820,8 +1089,8 @@ This function completely restores a damaged organ to perfect condition.
 		baseicon='icons/mob/human_races/o_robot.dmi'
 	return new /icon(baseicon, "[icon_name]_[g]")
 
-/datum/organ/external/head/take_damage(brute, burn, sharp, used_weapon = null, list/forbidden_limbs = list())
-	..(brute, burn, sharp, used_weapon, forbidden_limbs)
+/datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
+	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs)
 	if (!disfigured)
 		if (brute_dam > 40)
 			if (prob(50))
@@ -830,16 +1099,17 @@ This function completely restores a damaged organ to perfect condition.
 			disfigure("burn")
 
 /datum/organ/external/head/proc/disfigure(var/type = "brute")
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/head/proc/disfigure() called tick#: [world.time]")
 	if (disfigured)
 		return
 	if(type == "brute")
-		owner.visible_message("\red You hear a sickening cracking sound coming from \the [owner]'s face.",	\
-		"\red <b>Your face becomes unrecognizible mangled mess!</b>",	\
-		"\red You hear a sickening crack.")
+		owner.visible_message("<span class='warning'>You hear a sickening cracking sound coming from \the [owner]'s face.</span>",	\
+		"<span class='danger'>Your face becomes unrecognizible mangled mess!</span>",	\
+		"<span class='warning'>You hear a sickening crack.</span>")
 	else
-		owner.visible_message("\red [owner]'s face melts away, turning into mangled mess!",	\
-		"\red <b>Your face melts off!</b>",	\
-		"\red You hear a sickening sizzle.")
+		owner.visible_message("<span class='warning'>[owner]'s face melts away, turning into mangled mess!</span>",	\
+		"<span class='danger'>Your face melts off!</span>",	\
+		"<span class='warning'>You hear a sickening sizzle.</span>")
 	disfigured = 1
 
 /****************************************************
@@ -848,12 +1118,23 @@ This function completely restores a damaged organ to perfect condition.
 
 obj/item/weapon/organ
 	icon = 'icons/mob/human_races/r_human.dmi'
+	var/datum/organ/internal/organ_data
+	var/datum/dna/owner_dna
+
+	var/part = "organ"
+
+	//This variable stores "butchering products" - objects of type "/datum/butchering_product" (see  code/datums/helper_datums/butchering.dm)
+	//They are transferred from the mob from which the organ was removed.
+	//
+	//Currently the only "butchering drops" which are going to be stored here are teeth
+	var/list/butchering_drops = list()
 
 obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	..(loc)
 	if(!istype(H))
 		return
 	if(H.dna)
+		owner_dna = H.dna.Clone()
 		if(!blood_DNA)
 			blood_DNA = list()
 		blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
@@ -875,10 +1156,38 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 			else
 				base.Blend(rgb(-H.s_tone,  -H.s_tone,  -H.s_tone), ICON_SUBTRACT)
 
+/*	if(base)
+		//Changing limb's skin color to match owner
+		if(!H.species || H.species.flags & HAS_SKIN_COLOR)
+			base.Blend(rgb(H.r_skin, H.g_skin, H.b_skin), ICON_ADD)*/
+
 	icon = base
 	dir = SOUTH
 	src.transform = turn(src.transform, rand(70,130))
 
+	for(var/datum/butchering_product/B in H.butchering_drops) //Go through all butchering products (like teeth) in the parent
+		if(B.stored_in_organ == src.part) //If they're stored in our organ,
+
+			var/datum/butchering_product/new_bp = new B.type() //Create a new butchering_product datum to go into the head!
+			new_bp.amount = B.amount
+			B.amount = 0 //Transfer the found product's amount to the new datum
+
+			src.butchering_drops += new_bp
+
+			//The reason why B isn't just transferred from H.butchering_drops to src.butchering_drops is:
+			//on examine(), each butchering drop's "desc_modifier()" is added to the description. This adds stuff like "he HAS NO TEETH AT ALL!!!" to the resulting description.
+
+/obj/item/weapon/organ/examine(mob/user)
+	..()
+
+	//Add information about teeth and the such
+
+	var/butchery
+	if(butchering_drops.len)
+		for(var/datum/butchering_product/B in butchering_drops)
+			butchery = "[butchery][B.desc_modifier(src, user)]"
+	if(butchery)
+		user << "<span class='warning'>[butchery]</span>"
 
 /****************************************************
 			   EXTERNAL ORGAN ITEMS DEFINES
@@ -887,32 +1196,48 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 obj/item/weapon/organ/l_arm
 	name = "left arm"
 	icon_state = "l_arm"
+	part = "l_arm"
 obj/item/weapon/organ/l_foot
 	name = "left foot"
 	icon_state = "l_foot"
+	part = "l_foot"
 obj/item/weapon/organ/l_hand
 	name = "left hand"
 	icon_state = "l_hand"
+	part = "l_hand"
 obj/item/weapon/organ/l_leg
 	name = "left leg"
 	icon_state = "l_leg"
+	part = "l_leg"
 obj/item/weapon/organ/r_arm
 	name = "right arm"
 	icon_state = "r_arm"
+	part = "r_arm"
 obj/item/weapon/organ/r_foot
 	name = "right foot"
 	icon_state = "r_foot"
+	part = "r_foot"
 obj/item/weapon/organ/r_hand
 	name = "right hand"
 	icon_state = "r_hand"
+	part = "r_hand"
 obj/item/weapon/organ/r_leg
 	name = "right leg"
 	icon_state = "r_leg"
+	part = "r_leg"
+
 obj/item/weapon/organ/head
+	dir = NORTH
 	name = "head"
 	icon_state = "head_m"
+	part = "head"
 	var/mob/living/carbon/brain/brainmob
 	var/brain_op_stage = 0
+
+//obj/item/weapon/organ/head/with_teeth starts with 32 human teeth!
+/obj/item/weapon/organ/head/with_teeth/New()
+	.=..()
+	butchering_drops += new /datum/butchering_product/teeth/human()
 
 /obj/item/weapon/organ/head/posi
 	name = "robotic head"
@@ -922,7 +1247,7 @@ obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
 		src.icon_state = H.gender == MALE? "head_m" : "head_f"
 	..()
 	//Add (facial) hair.
-	if(H.f_style)
+	if(H.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.f_style]
 		if(facial_hair_style)
 			var/icon/facial = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
@@ -931,12 +1256,14 @@ obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
 
 			overlays.Add(facial) // icon.Blend(facial, ICON_OVERLAY)
 
-	if(H.h_style && !(H.head && (H.head.flags & BLOCKHEADHAIR)))
+	if(H.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
 		var/datum/sprite_accessory/hair_style = hair_styles_list[H.h_style]
 		if(hair_style)
 			var/icon/hair = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
 			if(hair_style.do_colouration)
 				hair.Blend(rgb(H.r_hair, H.g_hair, H.b_hair), ICON_ADD)
+			if(hair_style.additional_accessories)
+				hair.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
 
 			overlays.Add(hair) //icon.Blend(hair, ICON_OVERLAY)
 	spawn(5)
@@ -957,6 +1284,7 @@ obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
 	brainmob.death()
 
 obj/item/weapon/organ/head/proc/transfer_identity(var/mob/living/carbon/human/H)//Same deal as the regular brain proc. Used for human-->head
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/organ/head/proc/transfer_identity() called tick#: [world.time]")
 	brainmob = new(src)
 	brainmob.name = H.real_name
 	brainmob.real_name = H.real_name
@@ -966,53 +1294,60 @@ obj/item/weapon/organ/head/proc/transfer_identity(var/mob/living/carbon/human/H)
 	brainmob.container = src
 
 obj/item/weapon/organ/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/scalpel))
+	if( istype(W,/obj/item/weapon/scalpel) || istype(W,/obj/item/weapon/shard) || (istype(W,/obj/item/weapon/kitchen/utensil/knife/large) && !istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch)) )
 		switch(brain_op_stage)
 			if(0)
 				for(var/mob/O in (oviewers(brainmob) - user))
-					O.show_message("\red [brainmob] is beginning to have \his head cut open with [W] by [user].", 1)
-				brainmob << "\red [user] begins to cut open your head with [W]!"
-				user << "\red You cut [brainmob]'s head open with [W]!"
+					O.show_message("<span class='warning'>[brainmob] is beginning to have \his head cut open with [W] by [user].</span>", 1)
+				brainmob << "<span class='warning'>[user] begins to cut open your head with [W]!</span>"
+				user << "<span class='warning'>You cut [brainmob]'s head open with [W]!</span>"
 
 				brain_op_stage = 1
 
 			if(2)
 				for(var/mob/O in (oviewers(brainmob) - user))
-					O.show_message("\red [brainmob] is having \his connections to the brain delicately severed with [W] by [user].", 1)
-				brainmob << "\red [user] begins to cut open your head with [W]!"
-				user << "\red You cut [brainmob]'s head open with [W]!"
+					O.show_message("<span class='warning'>[brainmob] is having \his connections to the brain delicately severed with [W] by [user].</span>", 1)
+				brainmob << "<span class='warning'>[user] begins to cut open your head with [W]!</span>"
+				user << "<span class='warning'>You cut [brainmob]'s head open with [W]!</span>"
 
 				brain_op_stage = 3.0
 			else
 				..()
-	else if(istype(W,/obj/item/weapon/circular_saw))
+	else if(istype(W,/obj/item/weapon/circular_saw) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch) || istype(W,/obj/item/weapon/hatchet))
 		switch(brain_op_stage)
 			if(1)
 				for(var/mob/O in (oviewers(brainmob) - user))
-					O.show_message("\red [brainmob] has \his head sawed open with [W] by [user].", 1)
-				brainmob << "\red [user] begins to saw open your head with [W]!"
-				user << "\red You saw [brainmob]'s head open with [W]!"
+					O.show_message("<span class='warning'>[brainmob] has \his head sawed open with [W] by [user].</span>", 1)
+				brainmob << "<span class='warning'>[user] begins to saw open your head with [W]!</span>"
+				user << "<span class='warning'>You saw [brainmob]'s head open with [W]!</span>"
 
 				brain_op_stage = 2
 			if(3)
 				for(var/mob/O in (oviewers(brainmob) - user))
-					O.show_message("\red [brainmob] has \his spine's connection to the brain severed with [W] by [user].", 1)
-				brainmob << "\red [user] severs your brain's connection to the spine with [W]!"
-				user << "\red You sever [brainmob]'s brain's connection to the spine with [W]!"
+					O.show_message("<span class='warning'>[brainmob] has \his spine's connection to the brain severed with [W] by [user].</span>", 1)
+				brainmob << "<span class='warning'>[user] severs your brain's connection to the spine with [W]!</span>"
+				user << "<span class='warning'>You sever [brainmob]'s brain's connection to the spine with [W]!</span>"
 
 				user.attack_log += "\[[time_stamp()]\]<font color='red'> Debrained [brainmob.name] ([brainmob.ckey]) with [W.name] (INTENT: [uppertext(user.a_intent)])</font>"
 				brainmob.attack_log += "\[[time_stamp()]\]<font color='orange'> Debrained by [user.name] ([user.ckey]) with [W.name] (INTENT: [uppertext(user.a_intent)])</font>"
 				msg_admin_attack("[user] ([user.ckey]) debrained [brainmob] ([brainmob.ckey]) (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-				if(!iscarbon(user))
-					brainmob.LAssailant = null
-				else
-					brainmob.LAssailant = user
 
-				var/obj/item/brain/B = new(loc)
-				B.transfer_identity(brainmob)
+				//TODO: ORGAN REMOVAL UPDATE.
+				var/turf/T = get_turf(src)
+				if(istype(src,/obj/item/weapon/organ/head/posi))
+					var/obj/item/device/mmi/posibrain/B = new(T)
+					B.transfer_identity(brainmob)
+				else
+					var/obj/item/organ/brain/B = new(T)
+					B.transfer_identity(brainmob)
 
 				brain_op_stage = 4.0
 			else
 				..()
 	else
 		..()
+
+obj/item/weapon/organ/head/Destroy()
+	if(brainmob)
+		brainmob.ghostize()
+	..()

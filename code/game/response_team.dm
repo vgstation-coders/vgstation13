@@ -11,18 +11,19 @@ var/can_call_ert
 	set name = "Dispatch Emergency Response Team"
 	set category = "Special Verbs"
 	set desc = "Send an emergency response team to the station"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/response_team() called tick#: [world.time]")
 
 	if(!holder)
-		usr << "\red Only administrators may use this command."
+		usr << "<span class='warning'>Only administrators may use this command.</span>"
 		return
 	if(!ticker)
-		usr << "\red The game hasn't started yet!"
+		usr << "<span class='warning'>The game hasn't started yet!</span>"
 		return
 	if(ticker.current_state == 1)
-		usr << "\red The round hasn't started yet!"
+		usr << "<span class='warning'>The round hasn't started yet!</span>"
 		return
 	if(send_emergency_team)
-		usr << "\red Central Command has already dispatched an emergency response team!"
+		usr << "<span class='warning'>Central Command has already dispatched an emergency response team!</span>"
 		return
 	if(alert("Do you want to dispatch an Emergency Response Team?",,"Yes","No") != "Yes")
 		return
@@ -31,7 +32,7 @@ var/can_call_ert
 			if("No")
 				return
 	if(send_emergency_team)
-		usr << "\red Looks like somebody beat you to it!"
+		usr << "<span class='warning'>Looks like somebody beat you to it!</span>"
 		return
 
 	message_admins("[key_name_admin(usr)] is dispatching an Emergency Response Team.", 1)
@@ -42,6 +43,7 @@ var/can_call_ert
 client/verb/JoinResponseTeam()
 	set category = "IC"
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\client/verb/JoinResponseTeam()  called tick#: [world.time]")
 	if(istype(usr,/mob/dead/observer) || istype(usr,/mob/new_player))
 		if(!send_emergency_team)
 			usr << "No emergency response team is currently being sent."
@@ -65,12 +67,15 @@ client/verb/JoinResponseTeam()
 			new_commando.mind.key = usr.key
 			new_commando.key = usr.key
 
-			new_commando << "\blue You are [!leader_selected?"a member":"the <B>LEADER</B>"] of an Emergency Response Team, a type of military division, under CentComm's service. There is a code red alert on [station_name()], you are tasked to go and fix the problem."
+			new_commando << "<span class='notice'>You are [!leader_selected?"a member":"the <B>LEADER</B>"] of an Emergency Response Team, a type of military division, under CentComm's service. There is a code red alert on [station_name()], you are tasked to go and fix the problem.</span>"
 			new_commando << "<b>You should first gear up and discuss a plan with your team. More members may be joining, don't move out before you're ready."
 			if(!leader_selected)
 				new_commando << "<b>As member of the Emergency Response Team, you answer only to your leader and CentComm officials.</b>"
 			else
 				new_commando << "<b>As leader of the Emergency Response Team, you answer only to CentComm, and have authority to override the Captain where it is necessary to achieve your mission goals. It is recommended that you attempt to cooperate with the captain where possible, however."
+
+			ticker.mode.ert += new_commando.mind
+
 			return
 
 	else
@@ -78,6 +83,7 @@ client/verb/JoinResponseTeam()
 
 // returns a number of dead players in %
 proc/percentage_dead()
+	//writepanic("[__FILE__].[__LINE__] \\/proc/percentage_dead() called tick#: [world.time]")
 	var/total = 0
 	var/deadcount = 0
 	for(var/mob/living/carbon/human/H in mob_list)
@@ -90,6 +96,7 @@ proc/percentage_dead()
 
 // counts the number of antagonists in %
 proc/percentage_antagonists()
+	//writepanic("[__FILE__].[__LINE__] \\/proc/percentage_antagonists() called tick#: [world.time]")
 	var/total = 0
 	var/antagonists = 0
 	for(var/mob/living/carbon/human/H in mob_list)
@@ -103,6 +110,7 @@ proc/percentage_antagonists()
 // Increments the ERT chance automatically, so that the later it is in the round,
 // the more likely an ERT is to be able to be called.
 proc/increment_ert_chance()
+	//writepanic("[__FILE__].[__LINE__] \\/proc/increment_ert_chance() called tick#: [world.time]")
 	while(send_emergency_team == 0) // There is no ERT at the time.
 		if(get_security_level() == "green")
 			ert_base_chance += 1
@@ -116,6 +124,7 @@ proc/increment_ert_chance()
 
 
 proc/trigger_armed_response_team(var/force = 0)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/trigger_armed_response_team() called tick#: [world.time]")
 	if(!can_call_ert && !force)
 		return
 	if(send_emergency_team)
@@ -142,14 +151,13 @@ proc/trigger_armed_response_team(var/force = 0)
 	sleep(600 * 5)
 	send_emergency_team = 0 // Can no longer join the ERT.
 
-	var/area/storage/nuke_storage/nukeloc = locate()//To find the nuke in the vault
-	var/obj/machinery/nuclearbomb/nuke = locate() in nukeloc
-	if(!nuke)
-		nuke = locate() in world
+	var/nuke_code
+	for(var/obj/machinery/nuclearbomb/nuke in machines)
+		nuke_code = nuke.r_code
 	var/obj/item/weapon/paper/P = new
-	P.info = "Your orders, Commander, are to use all means necessary to return the station to a survivable condition.<br>To this end, you have been provided with the best tools we can give in the three areas of Medicine, Engineering, and Security. The nuclear authorization code is: <b>[ nuke ? nuke.r_code : "AHH, THE NUKE IS GONE!"]</b>. Be warned, if you detonate this without good reason, we will hold you to account for damages. Memorise this code, and then burn this message."
+	P.info = "Your orders, Commander, are to use all means necessary to return the station to a survivable condition.<br>To this end, you have been provided with the best tools we can give in the three areas of Medicine, Engineering, and Security. The nuclear authorization code is: <b>[ nuke_code ? nuke_code : "No Nuke Found, Request Another!"]</b>. Be warned, if you detonate this without good reason, we will hold you to account for damages. Memorise this code, and then burn this message."
 	P.name = "Emergency Nuclear Code, and ERT Orders"
-	for (var/obj/effect/landmark/A in world)
+	for (var/obj/effect/landmark/A in landmarks_list)
 		if (A.name == "nukecode")
 			P.loc = A.loc
 			del(A)
@@ -157,7 +165,9 @@ proc/trigger_armed_response_team(var/force = 0)
 
 /client/proc/create_response_team(obj/spawn_location, leader_selected = 0, commando_name)
 
-	//usr << "\red ERT has been temporarily disabled. Talk to a coder."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/create_response_team() called tick#: [world.time]")
+
+	//usr << "<span class='warning'>ERT has been temporarily disabled. Talk to a coder.</span>"
 	//return
 
 	var/mob/living/carbon/human/M = new(null)
@@ -247,9 +257,9 @@ proc/trigger_armed_response_team(var/force = 0)
 	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
 	if (new_gender)
 		if(new_gender == "Male")
-			M.gender = MALE
+			M.setGender(MALE)
 		else
-			M.gender = FEMALE
+			M.setGender(FEMALE)
 	//M.rebuild_appearance()
 	M.update_hair()
 	M.update_body()
@@ -274,6 +284,8 @@ proc/trigger_armed_response_team(var/force = 0)
 	return M
 
 /mob/living/carbon/human/proc/equip_strike_team(leader_selected = 0)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/equip_strike_team() called tick#: [world.time]")
 
 	//Special radio setup
 	equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(src), slot_ears)
@@ -307,18 +319,22 @@ proc/trigger_armed_response_team(var/force = 0)
 	equip_to_slot_or_del(new /obj/item/weapon/storage/firstaid/regular(src), slot_in_backpack)
 
 	var/obj/item/weapon/card/id/W = new(src)
-	W.assignment = "Emergency Response Team[leader_selected ? " Leader" : ""]"
+	W.assignment = "Emergency Responder[leader_selected ? " Leader" : ""]"
 	W.registered_name = real_name
 	W.name = "[real_name]'s ID Card ([W.assignment])"
-	W.icon_state = "centcom"
-	W.access = get_all_accesses()
-	W.access += get_all_centcom_access()
+	if(!leader_selected)
+		W.access = get_centcom_access("Emergency Responder")
+		W.icon_state = "ERT_empty"	//placeholder until revamp
+	else
+		W.access = get_centcom_access("Emergency Responders Leader")
+		W.icon_state = "ERT_leader"
 	equip_to_slot_or_del(W, slot_wear_id)
 
 	return 1
 
 //debug verb (That is horribly coded, LEAVE THIS OFF UNLESS PRIVATELY TESTING. Seriously.
 /*client/verb/ResponseTeam()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/verb/ResponseTeam()  called tick#: [world.time]")
 	set category = "Admin"
 	if(!send_emergency_team)
 		send_emergency_team = 1*/

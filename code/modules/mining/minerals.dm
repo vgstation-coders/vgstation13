@@ -1,6 +1,7 @@
 var/list/name_to_mineral
 
 proc/SetupMinerals()
+	//writepanic("[__FILE__].[__LINE__] \\/proc/SetupMinerals() called tick#: [world.time]")
 	name_to_mineral = list()
 	for(var/type in typesof(/mineral) - /mineral)
 		var/mineral/new_mineral = new type
@@ -29,6 +30,7 @@ mineral
 			display_name = name
 
 	proc/UpdateTurf(var/turf/unsimulated/mineral/T)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/UpdateTurf() called tick#: [world.time]")
 		T.UpdateMineral()
 
 mineral/uranium
@@ -81,12 +83,90 @@ mineral/phazon
 	spread = 0
 	ore = /obj/item/weapon/ore/phazon
 
+mineral/pharosium
+	name = "Pharosium"
+	result_amount = 5
+	spread_chance = 5
+	ore = /obj/item/weapon/ore/pharosium
+
+mineral/char
+	name = "Char"
+	result_amount = 5
+	spread_chance = 5
+	ore = /obj/item/weapon/ore/char
+
+mineral/claretine
+	name = "Claretine"
+	result_amount = 5
+	spread_chance = 5
+	ore = /obj/item/weapon/ore/claretine
+
+mineral/bohrum
+	name = "Bohrum"
+	result_amount = 5
+	spread_chance = 5
+	ore = /obj/item/weapon/ore/bohrum
+
+mineral/syreline
+	name = "Syreline"
+	result_amount = 5
+	spread_chance = 5
+	ore = /obj/item/weapon/ore/syreline
+
+mineral/erebite
+	name = "Erebite"
+	result_amount = 5
+	spread_chance = 5
+	ore = /obj/item/weapon/ore/erebite
+
+mineral/cytine
+	name = "Cytine"
+	result_amount = 5
+	spread_chance = 5
+	ore = /obj/item/weapon/ore/cytine
+
+mineral/uqill
+	name = "Uqill"
+	result_amount = 5
+	spread_chance = 5
+	ore = /obj/item/weapon/ore/uqill
+
+mineral/telecrystal
+	name = "Telecrystal"
+	result_amount = 5
+	spread_chance = 5
+	ore = /obj/item/weapon/ore/telecrystal
+
+mineral/mauxite
+	name = "Mauxite"
+	result_amount = 5
+	spread_chance = 5
+	ore = /obj/item/weapon/ore/mauxite
+
+mineral/cobryl
+	name = "Cobryl"
+	result_amount = 5
+	spread_chance = 5
+	ore = /obj/item/weapon/ore/cobryl
+
+mineral/cerenkite
+	name = "Cerenkite"
+	result_amount = 5
+	spread_chance = 5
+	ore = /obj/item/weapon/ore/cerenkite
+
+mineral/molitz
+	name = "Molitz"
+	result_amount = 5
+	spread_chance = 5
+	ore = /obj/item/weapon/ore/molitz
+
 mineral/gibtonite
 	display_name = "Gibtonite"
 	name = "Gibtonite"
 	result_amount = 1
 	spread = 1
-	ore = /obj/item/weapon/twohanded/required/gibtonite
+	ore = /obj/item/weapon/gibtonite
 	UpdateTurf(var/turf/T)
 		if(!istype(T,/turf/unsimulated/mineral/gibtonite))
 			T.ChangeTurf(/turf/unsimulated/mineral/gibtonite)

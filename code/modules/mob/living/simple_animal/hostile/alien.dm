@@ -10,14 +10,15 @@
 	response_disarm = "shoves the"
 	response_harm = "hits the"
 	speed = -1
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/xenomeat
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
+	species_type = /mob/living/simple_animal/hostile/alien
 	maxHealth = 100
 	health = 100
 	harm_intent_damage = 5
 	melee_damage_lower = 25
 	melee_damage_upper = 25
 	attacktext = "slashes"
-	a_intent = "harm"
+	a_intent = I_HURT
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	min_oxy = 0
 	max_oxy = 0
@@ -82,6 +83,7 @@
 	move_to_delay = 4
 	maxHealth = 400
 	health = 400
+	pixel_x = -16
 
 /obj/item/projectile/neurotox
 	damage = 30

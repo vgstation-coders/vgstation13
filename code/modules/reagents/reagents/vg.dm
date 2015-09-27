@@ -3,6 +3,10 @@ var/global/list/charcoal_doesnt_remove=list(
 	"blood"
 )
 
+/datum/reagent/proc/reagent_deleted()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/reagent/proc/reagent_deleted() called tick#: [world.time]")
+	return
+
 /datum/reagent/charcoal
 	//data must contain virus type
 	name = "Activated Charcoal"

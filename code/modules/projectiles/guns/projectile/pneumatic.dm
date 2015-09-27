@@ -4,8 +4,9 @@
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "pneumatic"
 	item_state = "pneumatic"
-	w_class = 5.0
-	flags =  FPRINT | TABLEPASS | CONDUCT |  USEDELAY
+	w_class = 4.0
+	flags = FPRINT
+	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	max_w_class = 3
 	max_combined_w_class = 20
@@ -24,9 +25,11 @@
 
 /obj/item/weapon/storage/pneumatic/verb/set_pressure() //set amount of tank pressure.
 
+
 	set name = "Set valve pressure"
 	set category = "Object"
 	set src in range(0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/item/weapon/storage/pneumatic/verb/set_pressure()  called tick#: [world.time]")
 	var/N = input("Percentage of tank used per shot:","[src]") as null|anything in possible_pressure_amounts
 	if (N)
 		pressure_setting = N
@@ -34,9 +37,11 @@
 
 /obj/item/weapon/storage/pneumatic/verb/eject_tank() //Remove the tank.
 
+
 	set name = "Eject tank"
 	set category = "Object"
 	set src in range(0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/item/weapon/storage/pneumatic/verb/eject_tank()  called tick#: [world.time]")
 
 	if(tank)
 		usr << "You twist the valve and pop the tank out of [src]."
@@ -50,9 +55,8 @@
 
 /obj/item/weapon/storage/pneumatic/attackby(obj/item/W as obj, mob/user as mob)
 	if(!tank && istype(W,/obj/item/weapon/tank))
-		user.drop_item()
+		user.drop_item(W, src.tank_container)
 		tank = W
-		tank.loc = src.tank_container
 		user.visible_message("[user] jams [W] into [src]'s valve and twists it closed.","You jam [W] into [src]'s valve and twist it closed.")
 		icon_state = "pneumatic-tank"
 		item_state = "pneumatic-tank"
@@ -60,15 +64,13 @@
 	else
 		..()
 
-/obj/item/weapon/storage/pneumatic/examine()
-	set src in view()
+/obj/item/weapon/storage/pneumatic/examine(mob/user)
 	..()
-	if (!(usr in view(2)) && usr!=src.loc) return
-	usr << "The valve is dialed to [pressure_setting]%."
+	user << "<span class='info'>The valve is dialed to [pressure_setting]%.</span>"
 	if(tank)
-		usr << "The tank dial reads [tank.air_contents.return_pressure()] kPa."
+		user << "<span class='info'>The tank dial reads [tank.air_contents.return_pressure()] kPa.</span>"
 	else
-		usr << "Nothing is attached to the tank valve!"
+		user << "<span class='warning'>Nothing is attached to the tank valve!</span>"
 
 /obj/item/weapon/storage/pneumatic/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
 	if (istype(target, /obj/item/weapon/storage/backpack ))
@@ -91,8 +93,8 @@
 
 /obj/item/weapon/storage/pneumatic/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
 	if (length(contents) > 0)
-		if(user.a_intent == "hurt")
-			user.visible_message("\red <b> \The [user] fires \the [src] point blank at [M]!</b>")
+		if(user.a_intent == I_HURT)
+			user.visible_message("<span class='danger'>\The [user] fires \the [src] point blank at [M]!</span>")
 			Fire(M,user)
 			return
 		else
@@ -100,6 +102,8 @@
 			return
 
 /obj/item/weapon/storage/pneumatic/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/storage/pneumatic/proc/Fire() called tick#: [world.time]")
 
 	if (!tank)
 		user << "There is no gas tank in [src]!"

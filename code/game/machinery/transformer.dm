@@ -1,6 +1,6 @@
 /obj/machinery/transformer
 	name = "Automatic Robotic Factory 5000"
-	desc = "A large metallic machine with an entrance and an exit. A sign on the side reads, 'human goes in, robot comes out'. human must be lying down and alive. Has to cooldown between each use."
+	desc = "A large metallic machine with an entrance and an exit. A sign on the side reads 'human goes in, robot comes out'. Human must be lying down and alive. Has to cooldown between each use."
 	icon = 'icons/obj/recycling.dmi'
 	icon_state = "separator-AO1"
 	layer = MOB_LAYER+1 // Overhead
@@ -39,7 +39,7 @@
 	if(cooldown_state)
 		return
 
-	// HasEntered didn't like people lying down.
+	// Crossed didn't like people lying down.
 	if(ishuman(AM))
 		// Only humans can enter from the west side, while lying down.
 		var/move_dir = get_dir(loc, AM.loc)
@@ -54,6 +54,7 @@
 			AM.loc = src.loc
 
 /obj/machinery/transformer/proc/do_transform(var/mob/living/carbon/human/H)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/transformer/proc/do_transform() called tick#: [world.time]")
 	if(stat & (BROKEN|NOPOWER))
 		return
 	if(cooldown_state)
@@ -64,7 +65,7 @@
 		return
 
 	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-	H.emote("scream") // It is painful
+	H.emote("scream",,, 1) // It is painful
 	H.adjustBruteLoss(max(0, 80 - H.getBruteLoss())) // Hurt the human, don't try to kill them though.
 	H.handle_regular_hud_updates() // Make sure they see the pain.
 
@@ -144,7 +145,7 @@
 
 /obj/machinery/transformer/Topic(href, href_list)
 	if(!isAI(usr))
-		usr << "\red This machine is way above your pay-grade."
+		usr << "<span class='warning'>This machine is way above your pay-grade.</span>"
 		return 0
 	if(!("act" in href_list))
 		return 0

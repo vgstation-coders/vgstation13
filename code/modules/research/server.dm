@@ -57,7 +57,7 @@
 		if(0 to T0C)
 			health = min(100, health + 1)
 		if(T0C to (T20C + 20))
-			health = between(0, health, 100)
+			health = Clamp(health, 0, 100)
 		if((T20C + 20) to INFINITY)
 			health = max(0, health - 1)
 	if(health <= 0)
@@ -75,11 +75,6 @@
 	else
 		produce_heat(heat_gen)
 		delay = initial(delay)
-
-/obj/machinery/r_n_d/server/meteorhit(var/obj/O as obj)
-	griefProtection()
-	..()
-
 
 /obj/machinery/r_n_d/server/emp_act(severity)
 	griefProtection()
@@ -99,6 +94,7 @@
 
 //Backup files to centcomm to help admins recover data after greifer attacks
 /obj/machinery/r_n_d/server/proc/griefProtection()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/r_n_d/server/proc/griefProtection() called tick#: [world.time]")
 	for(var/obj/machinery/r_n_d/server/centcom/C in machines)
 		for(var/datum/tech/T in files.known_tech)
 			C.files.AddTech2Known(T)
@@ -107,6 +103,7 @@
 		C.files.RefreshResearch()
 
 /obj/machinery/r_n_d/server/proc/produce_heat(heat_amt)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/r_n_d/server/proc/produce_heat() called tick#: [world.time]")
 	if(!(stat & (NOPOWER|BROKEN))) //Blatently stolen from space heater.
 		var/turf/simulated/L = loc
 		if(istype(L))
@@ -126,47 +123,11 @@
 
 				env.merge(removed)
 
-/obj/machinery/r_n_d/server/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if (disabled)
-		return
-	if (shocked)
-		shock(user,50)
-	if (istype(O, /obj/item/weapon/screwdriver))
-		if (!opened)
-			opened = 1
-			icon_state = "server_o"
-			user << "You open the maintenance hatch of [src]."
-		else
-			opened = 0
-			icon_state = "server"
-			user << "You close the maintenance hatch of [src]."
-		return
-	if (opened)
-		if(istype(O, /obj/item/weapon/crowbar))
-			griefProtection()
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-			return 1
-
 /obj/machinery/r_n_d/server/attack_hand(mob/user as mob)
 	if (disabled)
 		return
 	if (shocked)
 		shock(user,50)
-	if(ishuman(user))
-		if(istype(user:gloves, /obj/item/clothing/gloves/space_ninja)&&user:gloves:candrain&&!user:gloves:draining)
-			call(/obj/item/clothing/gloves/space_ninja/proc/drain)("RESEARCH",src,user:wear_suit)
-	return
-
-
-
 
 /obj/machinery/r_n_d/server/centcom
 	name = "Centcom Central R&D Database"
@@ -208,6 +169,8 @@
 	var/list/consoles = list()
 	var/badmin = 0
 
+	light_color = LIGHT_COLOR_PINK
+
 /obj/machinery/computer/rdservercontrol/Topic(href, href_list)
 	if(..())
 		return
@@ -215,7 +178,7 @@
 	add_fingerprint(usr)
 	usr.set_machine(src)
 	if(!src.allowed(usr) && !emagged)
-		usr << "\red You do not have the required access level"
+		usr << "<span class='warning'>You do not have the required access level</span>"
 		return
 
 	if(href_list["main"])
@@ -294,7 +257,7 @@
 					continue
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\research\server.dm:289: dat += "[S.name] || "
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\research\server.dm:289: dat += "[S.name] || "
 				dat += {"[S.name] ||
 					<A href='?src=\ref[src];access=[S.server_id]'> Access Rights</A> |
 					<A href='?src=\ref[src];data=[S.server_id]'>Data Management</A>"}
@@ -305,7 +268,7 @@
 		if(1) //Access rights menu
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\research\server.dm:296: dat += "[temp_server.name] Access Rights<BR><BR>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\research\server.dm:296: dat += "[temp_server.name] Access Rights<BR><BR>"
 			dat += {"[temp_server.name] Access Rights<BR><BR>
 				Consoles with Upload Access<BR>"}
 			// END AUTOFIX
@@ -329,22 +292,22 @@
 		if(2) //Data Management menu
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\research\server.dm:316: dat += "[temp_server.name] Data ManagementP<BR><BR>"
-			dat += {"[temp_server.name] Data ManagementP<BR><BR>
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\research\server.dm:316: dat += "[temp_server.name] Data ManagementP<BR><BR>"
+			dat += {"[temp_server.name] Data Management<BR><BR>
 				Known Technologies<BR>"}
 			// END AUTOFIX
 			for(var/datum/tech/T in temp_server.files.known_tech)
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\research\server.dm:319: dat += "* [T.name] "
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\research\server.dm:319: dat += "* [T.name] "
 				dat += {"* [T.name]
-					<A href='?src=\ref[src];reset_tech=[T.id]'>(Reset)</A><BR>" //FYI, these are all strings"}
+					<A href='?src=\ref[src];reset_tech=[T.id]'>(Reset)</A><BR>"} //FYI, these are all strings
 				// END AUTOFIX
 			dat += "Known Designs<BR>"
 			for(var/datum/design/D in temp_server.files.known_designs)
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\research\server.dm:323: dat += "* [D.name] "
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\research\server.dm:323: dat += "* [D.name] "
 				dat += {"* [D.name]
 					<A href='?src=\ref[src];reset_design=[D.id]'>(Delete)</A><BR>"}
 				// END AUTOFIX
@@ -353,7 +316,7 @@
 		if(3) //Server Data Transfer
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\research\server.dm:328: dat += "[temp_server.name] Server to Server Transfer<BR><BR>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\research\server.dm:328: dat += "[temp_server.name] Server to Server Transfer<BR><BR>"
 			dat += {"[temp_server.name] Server to Server Transfer<BR><BR>
 				Send Data to what server?<BR>"}
 			// END AUTOFIX
@@ -367,9 +330,9 @@
 /obj/machinery/computer/rdservercontrol/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
 	if(istype(D, /obj/item/weapon/screwdriver))
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-		if(do_after(user, 20))
+		if(do_after(user, src, 20))
 			if (src.stat & BROKEN)
-				user << "\blue The broken glass falls out."
+				user << "<span class='notice'>The broken glass falls out.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				getFromPool(/obj/item/weapon/shard, loc)
 				var/obj/item/weapon/circuitboard/rdservercontrol/M = new /obj/item/weapon/circuitboard/rdservercontrol( A )
@@ -381,7 +344,7 @@
 				A.anchored = 1
 				del(src)
 			else
-				user << "\blue You disconnect the monitor."
+				user << "<span class='notice'>You disconnect the monitor.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				var/obj/item/weapon/circuitboard/rdservercontrol/M = new /obj/item/weapon/circuitboard/rdservercontrol( A )
 				for (var/obj/C in src)
@@ -394,7 +357,7 @@
 	else if(istype(D, /obj/item/weapon/card/emag) && !emagged)
 		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
-		user << "\blue You you disable the security protocols"
+		user << "<span class='notice'>You you disable the security protocols</span>"
 	src.updateUsrDialog()
 	return
 
@@ -402,7 +365,7 @@
 /obj/machinery/r_n_d/server/robotics
 	name = "Robotics R&D Server"
 	id_with_upload_string = "1;2"
-	id_with_download_string = "1;2"
+	id_with_download_string = "1;2;3;4;5"
 	server_id = 2
 
 

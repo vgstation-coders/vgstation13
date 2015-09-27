@@ -2,7 +2,7 @@
 // It functions almost identically (see code/datums/diseases/alien_embryo.dm)
 
 /obj/item/alien_embryo
-	name = "alien embryo"
+	name = "alien embryo" //The alien embryo, not Alien Embryo
 	desc = "All slimy and yuck."
 	icon = 'icons/mob/alien.dmi'
 	icon_state = "larva0_dead"
@@ -16,10 +16,11 @@
 		affected_mob = loc
 		processing_objects.Add(src)
 
-		for(var/mob/dead/observer/O in player_list)
-			if(O.client && O.client.prefs.be_special & BE_ALIEN)
+		for(var/mob/dead/observer/O in get_active_candidates(ROLE_ALIEN,poll="[affected_mob] has been infected by \a [src]!"))
+			if(O.client && O.client.desires_role(ROLE_ALIEN))
 				if(check_observer(O))
-					O << "<span class=\"recruit\">[affected_mob] has been infected by \a [src]!. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>"
+					O << "<span class=\"recruit\">You have automatically been signed up for \a [src]. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Retract</a>)</span>"
+					ghost_volunteers += O
 		spawn(0)
 			AddInfectionImages(affected_mob)
 	else
@@ -33,20 +34,22 @@
 
 
 /obj/item/alien_embryo/proc/volunteer(var/mob/dead/observer/O)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/alien_embryo/proc/volunteer() called tick#: [world.time]")
 	if(!istype(O))
-		O << "\red NO."
+		O << "<span class='danger'>NO.</span>"
 		return
 	if(O in ghost_volunteers)
-		O << "\blue Removed from registration list."
+		O << "<span class='notice'>You will no longer be considered for this [src]. Click again to volunteer.</span>"
 		ghost_volunteers.Remove(O)
 		return
 	if(!check_observer(O))
-		O << "\red You cannot be \a [src]."
+		O << "<span class='warning'>You cannot be \a [src] in your current condition.</span>"
 		return
-	O << "\blue You've been added to the list of ghosts that may become this [src].  Click again to unvolunteer."
+	O << "<span class='notice'>You have been added to the list of ghosts that may become this [src].  Click again to unvolunteer.</span>"
 	ghost_volunteers.Add(O)
 
 /obj/item/alien_embryo/proc/check_observer(var/mob/dead/observer/O)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/alien_embryo/proc/check_observer() called tick#: [world.time]")
 	if(O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
 		return 0
 	if(jobban_isbanned(O, "Syndicate")) // Antag-banned
@@ -86,46 +89,46 @@
 			if(prob(1))
 				affected_mob.emote("cough")
 			if(prob(1))
-				affected_mob << "\red Your throat feels sore."
+				affected_mob << "<span class='warning'>Your throat feels sore.</span>"
 			if(prob(1))
-				affected_mob << "\red Mucous runs down the back of your throat."
+				affected_mob << "<span class='warning'>Mucous runs down the back of your throat.</span>"
 		if(4)
 			if(prob(1))
 				affected_mob.emote("sneeze")
 			if(prob(1))
 				affected_mob.emote("cough")
 			if(prob(2))
-				affected_mob << "\red Your muscles ache."
+				affected_mob << "<span class='warning'>Your muscles ache.</span>"
 				if(prob(20))
 					affected_mob.take_organ_damage(1)
 			if(prob(2))
-				affected_mob << "\red Your stomach hurts."
+				affected_mob << "<span class='warning'>Your stomach hurts.</span>"
 				if(prob(20))
 					affected_mob.adjustToxLoss(1)
 					affected_mob.updatehealth()
 		if(5)
-			affected_mob << "\red You feel something tearing its way out of your stomach..."
+			affected_mob << "<span class='danger'>You feel something tearing its way out of your stomach...</span>"
 			affected_mob.adjustToxLoss(10)
 			affected_mob.updatehealth()
 			if(prob(50))
 				AttemptGrow()
 
 /obj/item/alien_embryo/proc/AttemptGrow(var/gib_on_success = 1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/alien_embryo/proc/AttemptGrow() called tick#: [world.time]")
 	// To stop clientless larva, we will check that our host has a client
 	// if we find no ghosts to become the alien. If the host has a client
 	// he will become the alien but if he doesn't then we will set the stage
 	// to 2, so we don't do a process heavy check everytime.
 	var/mob/dead/observer/ghostpicked
 	while(ghost_volunteers.len)
-		ghostpicked = pick(ghost_volunteers)
-		ghost_volunteers -= ghostpicked
+		ghostpicked = pick_n_take(ghost_volunteers)
 		if(!istype(ghostpicked))
 			continue
 		break
 	if(!ghostpicked || !istype(ghostpicked))
-		var/list/candidates = get_alien_candidates()
+		var/list/candidates = get_active_candidates(ROLE_ALIEN, buffer=ALIEN_SELECT_AFK_BUFFER, poll=1)
 		if(!candidates.len)
-			picked = affected_mob.key
+			picked = affected_mob.key //Pick the person who was infected
 		else
 			for(var/mob/dead/observer/O in candidates)
 				O << "<span class=\"recruit\">[affected_mob] is about to burst from \a [src]!. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>"
@@ -134,6 +137,9 @@
 		picked = ghostpicked.key
 	if(!picked)
 		stage = 4 // Let's try again later.
+		var/list/candidates = get_active_candidates(ROLE_ALIEN, buffer=ALIEN_SELECT_AFK_BUFFER, poll=1)
+		for(var/mob/dead/observer/O in candidates) //Shiggy
+			O << "<span class=\"recruit\">[affected_mob] is about to burst from \a [src]!. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>"
 		return
 
 	if(affected_mob.lying)
@@ -141,18 +147,20 @@
 	else
 		affected_mob.overlays += image('icons/mob/alien.dmi', loc = affected_mob, icon_state = "burst_stand")
 	spawn(6)
-		var/mob/living/carbon/alien/larva/new_xeno = new(affected_mob.loc)
+		var/mob/living/carbon/alien/larva/new_xeno = new(get_turf(affected_mob))
 		new_xeno.key = picked
 		new_xeno << sound('sound/voice/hiss5.ogg',0,0,0,100)	//To get the player's attention
 		if(gib_on_success)
 			affected_mob.gib()
-		del(src)
+		qdel(src)
 
 /*----------------------------------------
 Proc: RefreshInfectionImage()
+	//writepanic("[__FILE__].[__LINE__] \\/proc: RefreshInfectionImage() called tick#: [world.time]")
 Des: Removes all infection images from aliens and places an infection image on all infected mobs for aliens.
 ----------------------------------------*/
 /obj/item/alien_embryo/proc/RefreshInfectionImage()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/alien_embryo/proc/RefreshInfectionImage() called tick#: [world.time]")
 	for(var/mob/living/carbon/alien/alien in player_list)
 		if(alien.client)
 			for(var/image/I in alien.client.images)
@@ -166,9 +174,11 @@ Des: Removes all infection images from aliens and places an infection image on a
 
 /*----------------------------------------
 Proc: AddInfectionImages(C)
+	//writepanic("[__FILE__].[__LINE__] \\/proc: AddInfectionImages() called tick#: [world.time]")
 Des: Checks if the passed mob (C) is infected with the alien egg, then gives each alien client an infected image at C.
 ----------------------------------------*/
 /obj/item/alien_embryo/proc/AddInfectionImages(var/mob/living/C)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/alien_embryo/proc/AddInfectionImages() called tick#: [world.time]")
 	if(C)
 		for(var/mob/living/carbon/alien/alien in player_list)
 			if(alien.client)
@@ -178,14 +188,17 @@ Des: Checks if the passed mob (C) is infected with the alien egg, then gives eac
 
 /*----------------------------------------
 Proc: RemoveInfectionImage(C)
+	//writepanic("[__FILE__].[__LINE__] \\/proc: RemoveInfectionImage() called tick#: [world.time]")
 Des: Removes the alien infection image from all aliens in the world located in passed mob (C).
 ----------------------------------------*/
 
 /obj/item/alien_embryo/proc/RemoveInfectionImages(var/mob/living/C)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/alien_embryo/proc/RemoveInfectionImages() called tick#: [world.time]")
 	if(C)
 		for(var/mob/living/carbon/alien/alien in player_list)
 			if(alien.client)
 				for(var/image/I in alien.client.images)
 					if(I.loc == C)
 						if(dd_hasprefix_case(I.icon_state, "infected"))
-							del(I)
+							//del(I)
+							alien.client.images -= I

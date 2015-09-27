@@ -5,9 +5,11 @@
 	var/used = 0
 
 /obj/item/weapon/antag_spawner/proc/spawn_antag(var/client/C, var/turf/T, var/type = "")
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/antag_spawner/proc/spawn_antag() called tick#: [world.time]")
 	return
 
 /obj/item/weapon/antag_spawner/proc/equip_antag(mob/target as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/antag_spawner/proc/equip_antag() called tick#: [world.time]")
 	return
 
 /obj/item/weapon/antag_spawner/contract
@@ -54,7 +56,7 @@
 			if (used)
 				H << "You already used this contract!"
 				return
-			var/list/candidates = get_candidates(BE_WIZARD)
+			var/list/candidates = get_candidates(ROLE_WIZARD)
 			if(candidates.len)
 				src.used = 1
 				var/client/C = pick(candidates)
@@ -69,23 +71,23 @@
 	M << "<B>You are the [usr.real_name]'s apprentice! You are bound by magic contract to follow their orders and help them in accomplishing their goals."
 	switch(type)
 		if("destruction")
-			M.spell_list += new /obj/effect/proc_holder/spell/targeted/projectile/magic_missile(M)
-			M.spell_list += new /obj/effect/proc_holder/spell/dumbfire/fireball(M)
+			M.add_spell(new /spell/targeted/projectile/magic_missile)
+			M.add_spell(new /spell/targeted/projectile/dumbfire/fireball)
 			M << "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned powerful, destructive spells. You are able to cast magic missile and fireball."
 		if("bluespace")
-			M.spell_list += new /obj/effect/proc_holder/spell/targeted/area_teleport/teleport(M)
-			M.spell_list += new /obj/effect/proc_holder/spell/targeted/ethereal_jaunt(M)
+			M.add_spell(new /spell/area_teleport)
+			M.add_spell(new /spell/targeted/ethereal_jaunt)
 			M << "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned reality bending mobility spells. You are able to cast teleport and ethereal jaunt."
 		/*
 		if("healing")
 			M.spell_list += new /obj/effect/proc_holder/spell/targeted/charge(M)
-			M.spell_list += new /obj/effect/proc_holder/spell/aoe_turf/conjure/forcewall(M)
+			M.spell_list += new /spell/aoe_turf/conjure/forcewall(M)
 			// TODO M.equip_to_slot_or_del(new /obj/item/weapon/gun/magic/staff/healing(M), slot_r_hand)
 			M << "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned livesaving survival spells. You are able to cast charge and forcewall."
 		*/
 		if("robeless")
-			M.spell_list += new /obj/effect/proc_holder/spell/aoe_turf/knock(M)
-			M.spell_list += new /obj/effect/proc_holder/spell/targeted/mind_transfer(M)
+			M.add_spell(new /spell/aoe_turf/knock)
+			M.add_spell(new /spell/targeted/mind_transfer)
 			M << "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned stealthy, robeless spells. You are able to cast knock and mindswap."
 
 	equip_antag(M)

@@ -12,7 +12,7 @@
 
 /obj/machinery/door/unpowered/attackby(obj/item/I as obj, mob/user as mob)
 	// TODO: is energy blade only attack circuity like emag?
-	if (istype(I, /obj/item/weapon/card/emag) || istype(I, /obj/item/weapon/melee/energy/blade))
+	if (istype(I, /obj/item/weapon/card/emag))
 		return
 
 	if (locked)
@@ -29,4 +29,10 @@
 /obj/machinery/door/unpowered/shuttle
 	icon = 'icons/obj/doors/shuttle.dmi'
 	icon_state = "door_closed"
-	animation_delay = 16
+	animation_delay = 5
+
+	explosion_block = 1
+
+/obj/machinery/door/unpowered/shuttle/cultify()
+	new /obj/machinery/door/mineral/wood(loc)
+	..()

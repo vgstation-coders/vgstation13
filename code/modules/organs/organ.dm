@@ -1,21 +1,56 @@
 /datum/organ
 	var/name = "organ"
 	var/mob/living/carbon/human/owner = null
+	var/status = 0
+	var/vital //Lose a vital limb, die immediately.
 
 	var/list/datum/autopsy_data/autopsy_data = list()
 	var/list/trace_chemicals = list() // traces of chemicals in the organ,
 									  // links chemical IDs to number of ticks for which they'll stay in the blood
+
+	var/germ_level = 0		// INTERNAL germs inside the organ, this is BAD if it's greater than INFECTION_LEVEL_ONE
+
 	proc/process()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/process() called tick#: [world.time]")
 		return 0
 
 	proc/receive_chem(chemical as obj)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/receive_chem() called tick#: [world.time]")
 		return 0
 
-/datum/organ/proc/get_icon()
+	proc/Copy()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/Copy() called tick#: [world.time]")
+		var/datum/organ/I = new type
+		I.vital = vital
+		I.name = name
+		I.owner = owner
+		I.status = status
+		I.autopsy_data = autopsy_data
+		I.trace_chemicals = trace_chemicals
+		I.germ_level = germ_level
+		return I
+/datum/organ/proc/get_icon(var/icon/race_icon, var/icon/deform_icon)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/proc/get_icon() called tick#: [world.time]")
 	return icon('icons/mob/human.dmi',"blank")
+
+//Germs
+/datum/organ/proc/handle_antibiotics()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/proc/handle_antibiotics() called tick#: [world.time]")
+	var/antibiotics = owner.reagents.get_reagent_amount("spaceacillin")
+
+	if (!germ_level || antibiotics < 5)
+		return
+
+	if (germ_level < INFECTION_LEVEL_ONE)
+		germ_level = 0	//cure instantly
+	else if (germ_level < INFECTION_LEVEL_TWO)
+		germ_level -= 6	//at germ_level == 500, this should cure the infection in a minute
+	else
+		germ_level -= 2 //at germ_level == 1000, this will cure the infection in 5 minutes
 
 //Handles chem traces
 /mob/living/carbon/human/proc/handle_trace_chems()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/handle_trace_chems() called tick#: [world.time]")
 	//New are added for reagents to random organs.
 	for(var/datum/reagent/A in reagents.reagent_list)
 		var/datum/organ/O = pick(organs)
@@ -23,6 +58,7 @@
 
 //Adds autopsy data for used_weapon.
 /datum/organ/proc/add_autopsy_data(var/used_weapon, var/damage)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/proc/add_autopsy_data() called tick#: [world.time]")
 	var/datum/autopsy_data/W = autopsy_data[used_weapon]
 	if(!W)
 		W = new()
@@ -37,8 +73,21 @@
 /mob/living/carbon/human/var/list/organs_by_name = list() // map organ names to organs
 /mob/living/carbon/human/var/list/internal_organs_by_name = list() // so internal organs have less ickiness too
 
+/mob/living/carbon/human/proc/can_use_hand(var/this_hand = hand)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/can_use_active_hand() called tick#: [world.time]")
+	if (hasorgans(src))
+		var/datum/organ/external/temp = src.organs_by_name[(this_hand ? "l_hand" : "r_hand")]
+		if(temp && !temp.is_usable())
+			return
+		else if (!temp)
+			return
+	return 1
+
 // Takes care of organ related updates, such as broken and missing limbs
 /mob/living/carbon/human/proc/handle_organs()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/handle_organs() called tick#: [world.time]")
+
 	number_wounds = 0
 	var/leg_tally = 2
 	var/force_process = 0
@@ -46,13 +95,31 @@
 	if(damage_this_tick > last_dam)
 		force_process = 1
 	last_dam = damage_this_tick
-	if(!force_process && !bad_external_organs.len)
-		return
 	if(force_process)
-		bad_external_organs.Cut()
+		bad_external_organs.len = 0
 		for(var/datum/organ/external/Ex in organs)
 			bad_external_organs += Ex
-			
+
+	//processing internal organs is pretty cheap, do that first.
+	for(var/datum/organ/internal/I in internal_organs)
+		I.process()
+
+	// Also handles some internal organ processing when the organs are missing completely.
+	// Only handles missing liver and kidneys for now.
+    // This is a bit harsh, but really if you're missing an entire bodily organ you're in deep shit.
+	if(species.has_organ["liver"])
+		var/datum/organ/internal/liver = internal_organs_by_name["liver"]
+		if(!liver || liver.status & ORGAN_CUT_AWAY)
+			reagents.add_reagent("toxin", rand(1,3))
+
+	if(species.has_organ["kidneys"])
+		var/datum/organ/internal/kidney = internal_organs_by_name["kidneys"]
+		if(!kidney || kidney.status & ORGAN_CUT_AWAY)
+			reagents.add_reagent("toxin", rand(1,3))
+
+	if(!force_process && !bad_external_organs.len)
+		return
+
 	for(var/datum/organ/external/E in bad_external_organs)
 		if(!E)
 			continue
@@ -89,7 +156,7 @@
 					c_hand = r_hand
 
 				if (c_hand)
-					u_equip(c_hand)
+					u_equip(c_hand,1)
 
 					if(broken)
 						emote("me", 1, "[(species && species.flags & NO_PAIN) ? "" : "screams in pain and"] drops what they were holding in their [E.display_name?"[E.display_name]":"[E]"]!")
@@ -101,6 +168,8 @@
 						spark_system.start()
 						spawn(10)
 							del(spark_system)
+					if(!isturf(c_hand.loc) || !istype(c_hand.loc, /obj/structure/closet))
+						c_hand.loc = get_turf(c_hand)
 
 			else if(E.name in list("l_leg","l_foot","r_leg","r_foot") && !lying)
 				if (!E.is_usable() || malfunction || (broken && !(E.status & ORGAN_SPLINTED)))
@@ -109,27 +178,29 @@
 	// standing is poor
 	if(leg_tally <= 0 && !paralysis && !(lying || resting) && prob(5))
 		if(species && species.flags & NO_PAIN)
-			emote("scream")
+			emote("scream",,, 1)
 		emote("collapse")
-		paralysis = 10
-	
+		Paralyse(10)
+
 	//Check arms and legs for existence
-	var/canstand_l = 1  //Can stand on left leg
-	var/canstand_r = 1  //Can stand on right leg
+	//can_stand = 2 //can stand on both legs
+	var/canstand_l = 1
+	var/canstand_r = 1
 	var/legispeg_l=0
 	var/legispeg_r=0
-	var/hasleg_l = 1  //Have left leg
-	var/hasleg_r = 1  //Have right leg
-	var/hasarm_l = 1  //Have left arm
-	var/hasarm_r = 1  //Have right arm
+	var/hasleg_l = 1 //Have left leg
+	var/hasleg_r = 1 //Have right leg
+	var/hasarm_l = 1 //Have left arm
+	var/hasarm_r = 1 //Have right arm
+	//var/datum/organ/external/E = organs_by_name["l_foot"]
 	var/datum/organ/external/E
-	E = get_organ("l_leg")
+	E = organs_by_name["l_leg"]
 	if(E.status & ORGAN_DESTROYED && !(E.status & ORGAN_SPLINTED))
 		canstand_l = 0
 		hasleg_l = 0
 	legispeg_l=E.status & ORGAN_PEG
 
-	E = get_organ("r_leg")
+	E = organs_by_name["r_leg"]
 	if(E.status & ORGAN_DESTROYED && !(E.status & ORGAN_SPLINTED))
 		canstand_r = 0
 		hasleg_r = 0
@@ -137,16 +208,16 @@
 
 
 	// We CAN stand if we're on a peg.
-	E = get_organ("l_foot")
+	E = organs_by_name["l_foot"]
 	if(E.status & ORGAN_DESTROYED && !(E.status & ORGAN_SPLINTED) && !legispeg_l)
 		canstand_l = 0
-	E = get_organ("r_foot")
+	E = organs_by_name["r_foot"]
 	if(E.status & ORGAN_DESTROYED && !(E.status & ORGAN_SPLINTED) && !legispeg_r)
 		canstand_r = 0
-	E = get_organ("l_arm")
+	E = organs_by_name["l_arm"]
 	if(E.status & ORGAN_DESTROYED && !(E.status & ORGAN_SPLINTED))
 		hasarm_l = 0
-	E = get_organ("r_arm")
+	E = organs_by_name["r_arm"]
 	if(E.status & ORGAN_DESTROYED && !(E.status & ORGAN_SPLINTED))
 		hasarm_r = 0
 

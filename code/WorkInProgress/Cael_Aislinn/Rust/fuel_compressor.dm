@@ -38,7 +38,7 @@ var/const/max_assembly_amount = 300
 
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_compressor.dm:39: var/t = "<B>Reactor Fuel Rod Compressor / Assembler</B><BR>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_compressor.dm:39: var/t = "<B>Reactor Fuel Rod Compressor / Assembler</B><BR>"
 	var/t = {"<B>Reactor Fuel Rod Compressor / Assembler</B><BR>
 <A href='?src=\ref[src];close=1'>Close</A><BR>"}
 	// END AUTOFIX
@@ -47,7 +47,7 @@ var/const/max_assembly_amount = 300
 	else
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_compressor.dm:44: t += "Compressed matter in storage: [compressed_matter] <A href='?src=\ref[src];eject_matter=1'>\[Eject all\]</a><br>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_compressor.dm:44: t += "Compressed matter in storage: [compressed_matter] <A href='?src=\ref[src];eject_matter=1'>\[Eject all\]</a><br>"
 		t += {"Compressed matter in storage: [compressed_matter] <A href='?src=\ref[src];eject_matter=1'>\[Eject all\]</a><br>
 			<A href='?src=\ref[src];activate=1'><b>Activate Fuel Synthesis</b></A><BR> (fuel assemblies require no more than [max_assembly_amount] rods).<br>
 			<hr>
@@ -57,7 +57,7 @@ var/const/max_assembly_amount = 300
 			t += "	[reagent] rods: [new_assembly_quantities[reagent]] \[<A href='?src=\ref[src];change_reagent=[reagent]'>Modify</A>\]<br>"
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_compressor.dm:50: t += "<hr>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_compressor.dm:50: t += "<hr>"
 	t += {"<hr>
 		<A href='?src=\ref[src];close=1'>Close</A><BR>"}
 	// END AUTOFIX
@@ -68,7 +68,7 @@ var/const/max_assembly_amount = 300
 	//var/coverlocked
 
 /obj/machinery/rust_fuel_compressor/Topic(href, href_list)
-	..()
+	if(..()) return 1
 	if( href_list["close"] )
 		usr << browse(null, "window=fuelcomp")
 		usr.machine = null
@@ -80,12 +80,12 @@ var/const/max_assembly_amount = 300
 			compressed_matter -= 10
 			ejected = 1
 		if(ejected)
-			usr << "\blue \icon[src] [src] ejects some compressed matter units."
+			usr << "<span class='notice'>\icon[src] [src] ejects some compressed matter units.</span>"
 		else
-			usr << "\red \icon[src] there are no more compressed matter units in [src]."
+			usr << "<span class='warning'>\icon[src] there are no more compressed matter units in [src].</span>"
 
 	if( href_list["activate"] )
-		//world << "\blue New fuel rod assembly"
+		//world << "<span class='notice'>New fuel rod assembly</span>"
 		var/obj/item/weapon/fuel_assembly/F = new(src)
 		var/fail = 0
 		var/old_matter = compressed_matter
@@ -102,11 +102,11 @@ var/const/max_assembly_amount = 300
 				 : (req_matter < compressed_matter ? "req_matter < compressed_matter" : "req_matter == compressed_matter")]"*/
 				fail = 1
 				break
-			//world << "\blue	[reagent]: new_assembly_quantities[reagent]<br>"
+			//world << "<span class='notice'>[reagent]: new_assembly_quantities[reagent]<br></span>"
 		if(fail)
 			del(F)
 			compressed_matter = old_matter
-			usr << "\red \icon[src] [src] flashes red: \'Out of matter.\'"
+			usr << "<span class='warning'>\icon[src] [src] flashes red: \'Out of matter.\'</span>"
 		else
 			F.loc = src.loc//get_step(get_turf(src), src.dir)
 			F.percent_depleted = 0

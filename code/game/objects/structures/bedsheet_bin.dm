@@ -17,9 +17,37 @@ LINEN BINS
 	w_class = 1.0
 	_color = "white"
 
+//cutting the bedsheet into rags
+/obj/item/weapon/bedsheet/attackby(var/obj/item/I, mob/user as mob)
+	var/cut_time=0
+	if(istype(I, /obj/item/weapon/scalpel))
+		cut_time=20
+	else if(istype(I, /obj/item/weapon/kitchen/utensil/knife/large) || istype(I, /obj/item/weapon/kitchen/utensil/knife/large/butch))
+		cut_time=40
+	else if(istype(I, /obj/item/weapon/shard))
+		cut_time=80
+	else if(istype(I, /obj/item/weapon/kitchen/utensil/knife/plastic))
+		cut_time=160
+	if(cut_time)
+		user << "<span  class='notice'>You begin cutting the [src].</span>"
+		if(do_after(user, src, cut_time))
+			if(!src) return
+			user << "<span  class='notice'>You have cut the [src] into rags.</span>"
+			var/turf/location = get_turf(src)
+			for(var/x=0; x<=8; x++)
+				var/obj/item/weapon/reagent_containers/glass/rag/S = new/obj/item/weapon/reagent_containers/glass/rag/(location)
+				S.pixel_x = rand(-5.0, 5)
+				S.pixel_y = rand(-5.0, 5)
+			del(src)
+
+//todo: hold one if possible?
+//todo: coloring and molotov coloring?
+//todo: finger prints?
+//todo: more cutting tools?
+//todo: sharp thing code/game/objects/objs.dm
 
 /obj/item/weapon/bedsheet/attack_self(mob/user as mob)
-	user.drop_item()
+	user.drop_item(src)
 	if(layer == initial(layer))
 		layer = 5
 	else
@@ -51,6 +79,9 @@ LINEN BINS
 /obj/item/weapon/bedsheet/red
 	icon_state = "sheetred"
 	_color = "red"
+
+/obj/item/weapon/bedsheet/red/redcoat
+		_color = "redcoat" //for denied stamp
 
 /obj/item/weapon/bedsheet/yellow
 	icon_state = "sheetyellow"
@@ -92,7 +123,8 @@ LINEN BINS
 	icon_state = "sheetbrown"
 	_color = "brown"
 
-
+/obj/item/weapon/bedsheet/brown/cargo
+	_color = "cargo"		//exists for washing machines, is not different from brown bedsheet in any way
 
 
 /obj/structure/bedsheetbin
@@ -106,15 +138,14 @@ LINEN BINS
 	var/obj/item/hidden = null
 
 
-/obj/structure/bedsheetbin/examine()
-	usr << desc
-	if(amount < 1)
-		usr << "There are no bed sheets in the bin."
-		return
-	if(amount == 1)
-		usr << "There is one bed sheet in the bin."
-		return
-	usr << "There are [amount] bed sheets in the bin."
+/obj/structure/bedsheetbin/examine(mob/user)
+	..()
+	if(amount == 0)
+		user << "<span class='info'>There are no bed sheets in the bin.</span>"
+	else if(amount == 1)
+		user << "<span class='info'>There is one bed sheet in the bin.</span>"
+	else
+		user << "<span class='info'>There are [amount] bed sheets in the bin.</span>"
 
 
 /obj/structure/bedsheetbin/update_icon()
@@ -126,14 +157,12 @@ LINEN BINS
 
 /obj/structure/bedsheetbin/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/bedsheet))
-		user.drop_item()
-		I.loc = src
+		user.drop_item(I, src)
 		sheets.Add(I)
 		amount++
 		user << "<span class='notice'>You put [I] in [src].</span>"
 	else if(amount && !hidden && I.w_class < 4)	//make sure there's sheets to hide it among, make sure nothing else is hidden in there.
-		user.drop_item()
-		I.loc = src
+		user.drop_item(I, src)
 		hidden = I
 		user << "<span class='notice'>You hide [I] among the sheets.</span>"
 
@@ -189,3 +218,4 @@ LINEN BINS
 
 
 	add_fingerprint(user)
+

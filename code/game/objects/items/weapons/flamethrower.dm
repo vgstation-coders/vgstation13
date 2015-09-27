@@ -4,14 +4,16 @@
 	icon = 'icons/obj/flamethrower.dmi'
 	icon_state = "flamethrowerbase"
 	item_state = "flamethrower_0"
-	flags = FPRINT | TABLEPASS| CONDUCT | USEDELAY // USEDELAY flag needed in order to use afterattack() for things that are not in reach. I.E: Shooting flames.
+	flags = FPRINT
+	siemens_coefficient = 1
 	force = 3.0
 	throwforce = 10.0
 	throw_speed = 1
 	throw_range = 5
 	w_class = 3.0
-	m_amt = 500
+	starting_materials = list(MAT_IRON = 500)
 	w_type = RECYK_MISC
+	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "combat=1;plasmatech=1"
 	var/status = 0
 	var/throw_amount = 100
@@ -44,12 +46,12 @@
 		if(M.l_hand == src || M.r_hand == src)
 			location = M.loc
 	if(isturf(location)) //start a fire if possible
-		location.hotspot_expose(700, 2)
+		location.hotspot_expose(700, 2,surfaces=istype(loc,/turf))
 	return
 
 
 /obj/item/weapon/flamethrower/update_icon()
-	overlays.Cut()
+	overlays.len = 0
 	if(igniter)
 		overlays += "+igniter[status]"
 	if(ptank)
@@ -63,6 +65,7 @@
 
 /obj/item/weapon/flamethrower/afterattack(atom/target, mob/user, flag)
 	// Make sure our user is still holding us
+	user.delayNextAttack(8)
 	if(user && user.get_active_hand() == src)
 		var/turf/target_turf = get_turf(target)
 		if(target_turf)
@@ -82,8 +85,8 @@
 		if(ptank)
 			ptank.loc = T
 			ptank = null
-		new /obj/item/stack/rods(T)
-		del(src)
+		getFromPool(/obj/item/stack/rods, T)
+		qdel(src)
 		return
 
 	if(isscrewdriver(W) && igniter && !lit)
@@ -96,8 +99,7 @@
 		var/obj/item/device/assembly/igniter/I = W
 		if(I.secured)	return
 		if(igniter)		return
-		user.drop_item()
-		I.loc = src
+		user.drop_item(I, src)
 		igniter = I
 		update_icon()
 		return
@@ -106,37 +108,15 @@
 		if(ptank)
 			user << "<span class='notice'>There appears to already be a plasma tank loaded in [src]!</span>"
 			return
-		user.drop_item()
+		user.drop_item(W, src)
 		ptank = W
-		W.loc = src
 		update_icon()
 		return
 
 	if(istype(W, /obj/item/device/analyzer) && ptank)
-		var/obj/item/weapon/icon = src
+		var/obj/item/device/analyzer/analyzer = W
 		user.visible_message("<span class='notice'>[user] has used the analyzer on \icon[icon]</span>")
-		var/pressure = ptank.air_contents.return_pressure()
-		var/total_moles = ptank.air_contents.total_moles()
-
-		user << "\blue Results of analysis of \icon[icon]"
-		if(total_moles>0)
-			var/o2_concentration = ptank.air_contents.oxygen/total_moles
-			var/n2_concentration = ptank.air_contents.nitrogen/total_moles
-			var/co2_concentration = ptank.air_contents.carbon_dioxide/total_moles
-			var/plasma_concentration = ptank.air_contents.toxins/total_moles
-
-			var/unknown_concentration =  1-(o2_concentration+n2_concentration+co2_concentration+plasma_concentration)
-
-			user << "\blue Pressure: [round(pressure,0.1)] kPa"
-			user << "\blue Nitrogen: [round(n2_concentration*100)]%"
-			user << "\blue Oxygen: [round(o2_concentration*100)]%"
-			user << "\blue CO2: [round(co2_concentration*100)]%"
-			user << "\blue Plasma: [round(plasma_concentration*100)]%"
-			if(unknown_concentration>0.01)
-				user << "\red Unknown: [round(unknown_concentration*100)]%"
-			user << "\blue Temperature: [round(ptank.air_contents.temperature-T0C)]&deg;C"
-		else
-			user << "\blue Tank is empty!"
+		user.show_message(analyzer.output_gas_scan(ptank.air_contents, src, 0), 1)
 		return
 	..()
 	return
@@ -187,6 +167,7 @@
 
 //Called from turf.dm turf/dblclick
 /obj/item/weapon/flamethrower/proc/flame_turf(turflist)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/flamethrower/proc/flame_turf() called tick#: [world.time]")
 	if(!lit || operating)	return
 	operating = 1
 	for(var/turf/T in turflist)
@@ -208,11 +189,13 @@
 
 
 /obj/item/weapon/flamethrower/proc/ignite_turf(turf/target)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/flamethrower/proc/ignite_turf() called tick#: [world.time]")
 	//TODO: DEFERRED Consider checking to make sure tank pressure is high enough before doing this...
 	//Transfer 5% of current tank air contents to turf
 	var/datum/gas_mixture/air_transfer = ptank.air_contents.remove_ratio(0.02*(throw_amount/100))
 	//air_transfer.toxins = air_transfer.toxins * 5 // This is me not comprehending the air system. I realize this is retarded and I could probably make it work without fucking it up like this, but there you have it. -- TLE
-	new/obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel(target,air_transfer.toxins,get_dir(loc,target))
+	var/plasma_moles = air_transfer.toxins
+	getFromPool(/obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel, target, plasma_moles*10, get_dir(loc, target))
 	air_transfer.toxins = 0
 	target.assume_air(air_transfer)
 	//Burn it based on transfered gas

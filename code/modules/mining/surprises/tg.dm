@@ -19,7 +19,7 @@
 	)
 	fluffitems = list(
 		/obj/effect/decal/cleanable/blood=5,
-		/obj/item/weapon/reagent_containers/food/snacks/appendix=2, // OM NOM
+		/obj/item/weapon/reagent_containers/food/snacks/organ=2, // OM NOM
 		/obj/structure/closet/crate/freezer=2,
 		/obj/machinery/optable=1,
 		/obj/item/weapon/scalpel=1,
@@ -76,7 +76,7 @@
 		// /vg/: /obj/item/key=1
 		/obj/item/clothing/glasses/monocle=5,
 		// /vg/:
-		/obj/structure/stool/bed/chair/vehicle/wizmobile=1
+		/obj/structure/bed/chair/vehicle/wizmobile=1
 	)
 	fluffitems = list(
 		/obj/structure/safe/floor=1,
@@ -106,7 +106,7 @@
 	spawntypes = list(
 		/obj/mecha/working/ripley/mining=1,
 		/obj/item/weapon/pickaxe/jackhammer=2,
-		/obj/item/weapon/pickaxe/diamonddrill=2
+		/obj/item/weapon/pickaxe/drill/diamond=2
 	)
 	fluffitems = list(
 		/obj/effect/decal/cleanable/blood=3,
@@ -171,13 +171,13 @@
 
 	spawntypes = list(
 		/obj/item/weapon/gun/energy/floragun=1,
-		/obj/item/seeds/novaflowerseed=2,
+		//obj/item/seeds/novaflowerseed=2,
 		/obj/item/seeds/bluespacetomatoseed=2
 	)
 	fluffitems = list(
 		// /obj/structure/flora/kirbyplants=1,
 		/obj/structure/table/reinforced=2,
-		/obj/machinery/hydroponics=1,
+		/obj/machinery/portable_atmospherics/hydroponics=1,
 		/obj/effect/glowshroom/single=2,
 		/obj/item/weapon/reagent_containers/syringe/antitoxin=2,
 		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine=3,

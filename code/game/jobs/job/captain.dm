@@ -25,7 +25,9 @@
 			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		var/obj/item/clothing/under/U = new /obj/item/clothing/under/rank/captain(H)
-		U.hastie = new /obj/item/clothing/tie/medal/gold/captain(U)
+		var/obj/item/clothing/accessory/medal/gold/captain/medal = new
+		U.accessories += medal
+		medal.on_attached(null, U)
 		H.equip_or_collect(U, slot_w_uniform)
 		//H.equip_or_collect(new /obj/item/device/pda/captain(H), slot_belt)
 		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
@@ -33,8 +35,10 @@
 		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
 		if(H.backbag == 1)
 			H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H), slot_r_hand)
+			H.equip_or_collect(new /obj/item/weapon/gun/energy/gun(H), slot_l_hand)
 		else
 			H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H.back), slot_in_backpack)
+			H.equip_or_collect(new /obj/item/weapon/gun/energy/gun(H), slot_in_backpack)
 		var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 		L.imp_in = H
 		L.implanted = 1
@@ -61,18 +65,18 @@
 	idtype = /obj/item/weapon/card/id/silver
 	req_admin_notify = 1
 	minimal_player_age = 10
-	access = list(access_security, access_sec_doors, access_brig, access_court, access_forensics_lockers,
+	access = list(access_security, access_sec_doors, access_brig, access_court, access_weapons, access_forensics_lockers,
 			            access_medical, access_engine, access_change_ids, access_ai_upload, access_eva, access_heads,
 			            access_all_personal_lockers, access_maint_tunnels, access_bar, access_janitor, access_construction, access_morgue,
 			            access_crematorium, access_kitchen, access_cargo, access_cargo_bot, access_mailsorting, access_qm, access_hydroponics, access_lawyer,
 			            access_theatre, access_chapel_office, access_library, access_research, access_mining, access_heads_vault, access_mining_station,
-			            access_clown, access_mime, access_hop, access_RC_announce, access_keycard_auth, access_gateway)
-	minimal_access = list(access_security, access_sec_doors, access_brig, access_court, access_forensics_lockers,
+			            access_clown, access_mime, access_hop, access_RC_announce, access_keycard_auth, access_gateway, access_taxi)
+	minimal_access = list(access_security, access_sec_doors, access_brig, access_court, access_weapons, access_forensics_lockers,
 			            access_medical, access_engine, access_change_ids, access_ai_upload, access_eva, access_heads,
 			            access_all_personal_lockers, access_maint_tunnels, access_bar, access_janitor, access_construction, access_morgue,
 			            access_crematorium, access_kitchen, access_cargo, access_cargo_bot, access_mailsorting, access_qm, access_hydroponics, access_lawyer,
 			            access_theatre, access_chapel_office, access_library, access_research, access_mining, access_heads_vault, access_mining_station,
-			            access_clown, access_mime, access_hop, access_RC_announce, access_keycard_auth, access_gateway)
+			            access_clown, access_mime, access_hop, access_RC_announce, access_keycard_auth, access_gateway, access_taxi)
 
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/heads/hop
@@ -91,4 +95,10 @@
 			H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H), slot_r_hand)
 		else
 			H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H.back), slot_in_backpack)
+		var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
+		L.imp_in = H
+		L.implanted = 1
+		var/datum/organ/external/affected = H.get_organ("head")
+		affected.implants += L
+		L.part = affected
 		return 1

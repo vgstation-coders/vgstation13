@@ -10,6 +10,8 @@
 /mob/living/carbon/slime/Life()
 	set invisibility = 0
 	//set background = 1
+	if(timestopped) return 0 //under effects of time magick
+
 
 	if (src.monkeyizing)
 		return
@@ -50,6 +52,8 @@
 
 /mob/living/carbon/slime/proc/AIprocess()  // the master AI process
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/AIprocess() called tick#: [world.time]")
+
 	//world << "AI proc started."
 	if(AIproc || stat == DEAD || client) return
 
@@ -65,8 +69,8 @@
 			if(150 to 900) hungry = 1
 			if(0 to 149) starving = 1
 	AIproc = 1
-	//world << "AIproc [AIproc] && stat != 2 [stat] && (attacked > 0 [attacked] || starving [starving] || hungry [hungry] || rabid [rabid] || Victim [Victim] || Target [Target]"
-	while(AIproc && stat != 2 && (attacked > 0 || starving || hungry || rabid || Victim))
+	//world << "AIproc [AIproc] && stat != 2 [stat] && (attacked > 0 [attacked] || starving [starving] || hungry [hungry] || Victim [Victim] || Target [Target]"
+	while(AIproc && stat != 2 && (attacked > 0 || starving || hungry || Victim))
 		if(Victim) // can't eat AND have this little process at the same time
 			//world << "break 1"
 			break
@@ -151,6 +155,10 @@
 	//world << "AI proc ended."
 
 /mob/living/carbon/slime/proc/handle_environment(datum/gas_mixture/environment)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/handle_environment() called tick#: [world.time]")
+	if(flags & INVULNERABLE)
+		return
+
 	if(!environment)
 		adjustToxLoss(rand(10,20))
 		return
@@ -178,10 +186,6 @@
 	*/
 
 
-	if(loc_temp < 310.15) // a cold place
-		bodytemperature += adjust_body_temperature(bodytemperature, loc_temp, 1)
-	else // a hot place
-		bodytemperature += adjust_body_temperature(bodytemperature, loc_temp, 1)
 
 	/*
 	if(stat==2)
@@ -196,19 +200,27 @@
 
 		if(bodytemperature <= (T0C - 50)) // hurt temperature
 			if(bodytemperature <= 50) // sqrting negative numbers is bad
-				adjustToxLoss(200)
-			else
+				adjustToxLoss(301)				//The config.health_threshold_dead is -100 by default, and slimes have 150hp (200hp for adults),
+			else								//so the ToxLoss needs to be 300 or above to guarrantee an instant death -Deity Link
 				adjustToxLoss(round(sqrt(bodytemperature)) * 2)
-
 	else
 		Tempstun = 0
 
+	/*moved after the temperature damage code so freeze beams can instantly kill slimes -Deity Link*/
+	if(loc_temp < 310.15) // a cold place
+		bodytemperature += adjust_body_temperature(bodytemperature, loc_temp, 1)
+	else // a hot place
+		bodytemperature += adjust_body_temperature(bodytemperature, loc_temp, 1)
+
+
 	updatehealth()
+
 
 	return //TODO: DEFERRED
 
 
 /mob/living/carbon/slime/proc/adjust_body_temperature(current, loc_temp, boost)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/adjust_body_temperature() called tick#: [world.time]")
 	var/temperature = current
 	var/difference = abs(current-loc_temp)	//get difference
 	var/increments// = difference/10			//find how many increments apart they are
@@ -227,6 +239,8 @@
 
 /mob/living/carbon/slime/proc/handle_chemicals_in_body()
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/handle_chemicals_in_body() called tick#: [world.time]")
+
 	if(reagents) reagents.metabolize(src)
 
 
@@ -236,6 +250,8 @@
 
 
 /mob/living/carbon/slime/proc/handle_regular_status_updates()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/handle_regular_status_updates() called tick#: [world.time]")
 
 	if(istype(src, /mob/living/carbon/slime/adult))
 		health = 200 - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
@@ -257,7 +273,7 @@
 
 		if(src.stat != DEAD)	src.stat = UNCONSCIOUS
 
-	if(prob(30))
+	if(prob(30))	//I think this is meant to allow slimes to starve to death -Deity Link
 		adjustOxyLoss(-1)
 		adjustToxLoss(-1)
 		adjustFireLoss(-1)
@@ -317,6 +333,8 @@
 
 /mob/living/carbon/slime/proc/handle_nutrition()
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/handle_nutrition() called tick#: [world.time]")
+
 	if(prob(20))
 		if(istype(src, /mob/living/carbon/slime/adult)) nutrition-=rand(4,6)
 		else nutrition-=rand(2,3)
@@ -350,7 +368,6 @@
 					M.powerlevel = round(powerlevel/4)
 					M.Friends = Friends
 					M.tame = tame
-					M.rabid = rabid
 					M.Discipline = Discipline
 					if(i != 1) step_away(M,src)
 					feedback_add_details("slime_babies_born","slimebirth_[replacetext(M.colour," ","_")]")
@@ -364,11 +381,11 @@
 				A.powerlevel = max(0, powerlevel-1)
 				A.Friends = Friends
 				A.tame = tame
-				A.rabid = rabid
 				del(src)
 
 
 /mob/living/carbon/slime/proc/handle_targets()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/handle_targets() called tick#: [world.time]")
 	if(Tempstun)
 		if(!Victim) // not while they're eating!
 			canmove = 0
@@ -383,12 +400,8 @@
 
 	if(Discipline > 0)
 
-		if(Discipline >= 5 && rabid)
-			if(prob(60)) rabid = 0
-
 		if(prob(10))
 			Discipline--
-
 
 	if(!client)
 
@@ -507,7 +520,7 @@
 					Target = targets[1] // closest target
 
 			if(targets.len > 0)
-				if(attacked > 0 || rabid)
+				if(attacked > 0 )
 					Target = targets[1] //closest mob probably attacked it, so override Target and attack the nearest!
 
 
@@ -522,3 +535,6 @@
 		else
 			if(!AIproc)
 				spawn() AIprocess()
+
+/mob/living/carbon/slime/regular_hud_updates()
+	return

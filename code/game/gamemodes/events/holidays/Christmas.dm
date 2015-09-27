@@ -1,13 +1,15 @@
 /proc/Christmas_Game_Start()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/Christmas_Game_Start() called tick#: [world.time]")
 	for(var/obj/structure/flora/tree/pine/xmas in world)
 		if(xmas.z != 1)	continue
 		for(var/turf/simulated/floor/T in orange(1,xmas))
 			for(var/i=1,i<=rand(1,5),i++)
-				new /obj/item/weapon/a_gift(T)
+				new /obj/item/weapon/winter_gift/regular(T)
 	for(var/mob/living/simple_animal/corgi/Ian/Ian in mob_list)
 		Ian.place_on_head(new /obj/item/clothing/head/helmet/space/santahat(Ian))
 
 /proc/ChristmasEvent()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/ChristmasEvent() called tick#: [world.time]")
 	for(var/obj/structure/flora/tree/pine/xmas in world)
 		var/mob/living/simple_animal/hostile/tree/evil_tree = new /mob/living/simple_animal/hostile/tree(xmas.loc)
 		evil_tree.icon_state = xmas.icon_state
@@ -22,9 +24,6 @@
 	icon_state = "cracker"
 	desc = "Directions for use: Requires two people, one to pull each end."
 	var/cracked = 0
-
-/obj/item/weapon/toy/xmas_cracker/New()
-	..()
 
 /obj/item/weapon/toy/xmas_cracker/attack(mob/target, mob/user)
 	if( !cracked && istype(target,/mob/living/carbon/human) && (target.stat == CONSCIOUS) && !target.get_active_hand() )
@@ -58,6 +57,6 @@
 	icon_state = "xmashat"
 	desc = "A crappy paper hat that you are REQUIRED to wear."
 	flags_inv = 0
-	flags = FPRINT|TABLEPASS
+	flags = FPRINT
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 

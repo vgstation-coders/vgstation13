@@ -13,6 +13,7 @@
 		controller()
 
 /obj/effect/bhole/proc/controller()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/bhole/proc/controller() called tick#: [world.time]")
 	while(src)
 
 		if(!isturf(loc))
@@ -23,9 +24,9 @@
 		for(var/mob/living/M in orange(1,src))
 			del(M)
 		for(var/obj/O in orange(1,src))
-			del(O)
+			qdel(O)
 		for(var/turf/simulated/ST in orange(1,src))
-			ST.ChangeTurf(/turf/space)
+			ST.ChangeTurf(get_base_turf(ST.z))
 
 		sleep(6)
 		grav(10, 4, 10, 0 )
@@ -56,6 +57,7 @@
 			src.anchored = 1
 
 /obj/effect/bhole/proc/grav(var/r, var/ex_act_force, var/pull_chance, var/turf_removal_chance)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/bhole/proc/grav() called tick#: [world.time]")
 	if(!isturf(loc))	//blackhole cannot be contained inside anything. Weird stuff might happen
 		del(src)
 		return
@@ -67,6 +69,7 @@
 	return
 
 /obj/effect/bhole/proc/affect_coord(var/x, var/y, var/ex_act_force, var/pull_chance, var/turf_removal_chance)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/bhole/proc/affect_coord() called tick#: [world.time]")
 	//Get turf at coordinate
 	var/turf/T = locate(x, y, z)
 	if(isnull(T))	return
@@ -84,5 +87,5 @@
 	//Destroying the turf
 	if( T && istype(T,/turf/simulated) && prob(turf_removal_chance) )
 		var/turf/simulated/ST = T
-		ST.ChangeTurf(/turf/space)
+		ST.ChangeTurf(get_base_turf(ST.z))
 	return

@@ -6,37 +6,36 @@
 	desc = "A spring loaded rifle designed to fit syringes, designed to incapacitate unruly patients from a distance."
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "syringegun"
-	item_state = "syringegun"
+	item_state = null
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	w_class = 3.0
 	throw_speed = 2
 	throw_range = 10
 	force = 4.0
 	var/list/syringes = new/list()
 	var/max_syringes = 1
-	m_amt = 2000
+	starting_materials = list(MAT_IRON = 2000)
 	w_type = RECYK_METAL
 
-/obj/item/weapon/gun/syringe/examine()
-	set src in view()
+/obj/item/weapon/gun/syringe/examine(mob/user)
 	..()
-	if (!(usr in view(2)) && usr!=src.loc) return
-	usr << "\blue [syringes.len] / [max_syringes] syringes."
+	user << "<span class='info'>[syringes.len] / [max_syringes] syringes.</span>"
 
 /obj/item/weapon/gun/syringe/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/reagent_containers/syringe))
 		var/obj/item/weapon/reagent_containers/syringe/S = I
 		if(S.mode != 2)//SYRINGE_BROKEN in syringes.dm
 			if(syringes.len < max_syringes)
-				user.drop_item()
-				I.loc = src
+				user.drop_item(I, src)
 				syringes += I
-				user << "\blue You put the syringe in [src]."
-				user << "\blue [syringes.len] / [max_syringes] syringes."
+				user << "<span class='notice'>You put the syringe in [src].</span>"
+				user << "<span class='notice'>[syringes.len] / [max_syringes] syringes.</span>"
 			else
-				usr << "\red [src] cannot hold more syringes."
+				user << "<span class='warning'>[src] cannot hold more syringes.</span>"
 		else
-			usr << "\red This syringe is broken!"
+			user << "<span class='warning'>This syringe is broken!</span>"
 
+		return 1 // Avoid calling the syringe's afterattack()
 
 /obj/item/weapon/gun/syringe/afterattack(obj/target, mob/user , flag)
 	if(/*!isturf(target.loc) || */target == user) return
@@ -48,13 +47,26 @@
 /obj/item/weapon/gun/syringe/can_hit(var/mob/living/target as mob, var/mob/living/user as mob)
 	return 1		//SHOOT AND LET THE GOD GUIDE IT (probably will hit a wall anyway)
 
-/obj/item/weapon/gun/syringe/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0)
+/obj/item/weapon/gun/syringe/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	if(syringes.len)
+		if(M_CLUMSY in user.mutations)
+			if(prob(50))
+				user << "<span class='warning'>You accidentally shoot yourself!</span>"
+				var/obj/item/weapon/reagent_containers/syringe/S = syringes[1]
+				if((!S) || (!S.reagents))
+					user << "<span class='notice'>Thankfully, nothing happens.</span>"
+					return
+				syringes -= S
+				S.reagents.trans_to(user, S.reagents.total_volume)
+				qdel(S)
+				return
+
 		spawn(0) fire_syringe(target,user)
 	else
-		usr << "\red [src] is empty."
+		user << "<span class='warning'>[src] is empty.</span>"
 
 /obj/item/weapon/gun/syringe/proc/fire_syringe(atom/target, mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/gun/syringe/proc/fire_syringe() called tick#: [world.time]")
 	if (locate (/obj/structure/table, src.loc))
 		return
 	else
@@ -79,6 +91,15 @@
 				for(var/mob/living/carbon/M in D.loc)
 					if(!istype(M,/mob/living/carbon)) continue
 					if(M == user) continue
+					var/blocked = 0
+					if(ishuman(M))
+						var/mob/living/carbon/human/H = M
+						if(H.species && (H.species.chem_flags & NO_INJECT))
+							H.visible_message("<span class='warning'>\The [D] bounces harmlessly off of [H].</span>", "<span class='notice'>\The [D] bounces off you harmlessly and breaks as it hits the ground.</span>")
+							qdel(D)
+							return
+
+						blocked = istype(H.wear_suit, /obj/item/clothing/suit/space) // Block the syringe if the guy's wearing a spess suit.
 					//Syringe gun attack logging by Yvarov
 					var/R
 					if(D.reagents)
@@ -86,32 +107,37 @@
 							R += A.id + " ("
 							R += num2text(A.volume) + "),"
 					if (istype(M, /mob))
-						M.attack_log += "\[[time_stamp()]\] <b>[user]/[user.ckey]</b> shot <b>[M]/[M.ckey]</b> with a <b>syringegun</b> ([R])"
-						user.attack_log += "\[[time_stamp()]\] <b>[user]/[user.ckey]</b> shot <b>[M]/[M.ckey]</b> with a <b>syringegun</b> ([R])"
-						msg_admin_attack("[user] ([user.ckey]) shot [M] ([M.ckey]) with a syringegun ([R]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+						M.attack_log += "\[[time_stamp()]\] <b>[user]/[user.ckey]</b> shot <b>[M]/[M.ckey]</b> with a <b>syringegun</b> ([R]) [blocked ? "\[BLOCKED\]" : ""]"
+						user.attack_log += "\[[time_stamp()]\] <b>[user]/[user.ckey]</b> shot <b>[M]/[M.ckey]</b> with a <b>syringegun</b> ([R]) [blocked ? "\[BLOCKED\]" : ""]"
+						msg_admin_attack("[user] ([user.ckey]) shot [M] ([M.ckey]) with a syringegun ([R]) [blocked ? "\[BLOCKED\]" : ""] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 						if(!iscarbon(user))
 							M.LAssailant = null
 						else
 							M.LAssailant = user
 
 					else
-						M.attack_log += "\[[time_stamp()]\] <b>UNKNOWN SUBJECT (No longer exists)</b> shot <b>[M]/[M.ckey]</b> with a <b>syringegun</b> ([R])"
-						msg_admin_attack("UNKNOWN shot [M] ([M.ckey]) with a <b>syringegun</b> ([R]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+						M.attack_log += "\[[time_stamp()]\] <b>UNKNOWN SUBJECT (No longer exists)</b> shot <b>[M]/[M.ckey]</b> with a <b>syringegun</b> ([R]) [blocked ? "\[BLOCKED\]" : ""]"
+						msg_admin_attack("UNKNOWN shot [M] ([M.ckey]) with a <b>syringegun</b> ([R]) [blocked ? "\[BLOCKED\]" : ""] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
-					if(D.reagents)
-						D.reagents.trans_to(M, 15)
-					M.visible_message("<span class='danger'>[M] is hit by the syringe!</span>")
+					if(!blocked)
+						if(D.reagents)
+							D.reagents.trans_to(M, 15)
+						M.visible_message("<span class='danger'>[M] is hit by the syringe!</span>")
 
-					del(D)
+					else
+						var/mob/living/carbon/human/H = M
+						M.visible_message("<span class='danger'>[M] is hit by the syringe, but \his [H.wear_suit] blocked it!</span>") // Fuck you validhunters.
+
+					qdel(D)
 					break
 			if(D)
 				for(var/atom/A in D.loc)
 					if(A == user) continue
-					if(A.density) del(D)
+					if(A.density) qdel(D)
 
 			sleep(1)
 
-		if (D) spawn(10) del(D)
+		if (D) spawn(10) qdel(D)
 
 		return
 

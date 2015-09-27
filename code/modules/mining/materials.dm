@@ -9,51 +9,122 @@
 *
 * Tracks and manages material storage for an object.
 */
-/datum/materials
-	var/list/datum/material/storage[0]
 
-/datum/materials/New()
+proc/initialize_materials()
+	//writepanic("[__FILE__].[__LINE__] \\/proc/initialize_materials() called tick#: [world.time]")
 	for(var/matdata in typesof(/datum/material) - /datum/material)
 		var/datum/material/mat = new matdata
-		storage[mat.id]=mat
+		material_list += list(mat.id = mat)
+		initial_materials += list(mat.id = 0)
+
+var/global/list/material_list		//Stores an instance of all the datums as an assoc with their matids
+var/global/list/initial_materials	//Stores all the matids = 0 in helping New
+
+/datum/materials
+	var/atom/holder
+	var/list/storage
+
+/datum/materials/New(atom/newholder)
+	holder = newholder
+	storage = list()
+
+	if(!material_list)
+		initialize_materials()
+
+	if(!storage.len)
+		storage = initial_materials.Copy()
+
+/datum/materials/Destroy()
+	holder = null
+
+/datum/materials/resetVariables(args)
+	var/newargs
+	if(args)
+		newargs = args + "storage"
+	else
+		newargs = "storage"
+
+	..(arglist(newargs))
+
+	if(!initial_materials)
+		initialize_materials()
+
+	storage = initial_materials.Copy()
 
 /datum/materials/proc/addAmount(var/mat_id,var/amount)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/materials/proc/addAmount() called tick#: [world.time]")
 	if(!(mat_id in storage))
 		warning("addAmount(): Unknown material [mat_id]!")
 		return
 	// I HATE BYOND
 	// storage[mat_id].stored++
-	var/datum/material/mat=storage[mat_id]
-	mat.stored += amount
-	storage[mat_id]=mat
+	storage[mat_id] = max(0, storage[mat_id] + amount)
+
+
+/datum/materials/proc/removeFrom(var/datum/materials/mats)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/materials/proc/removeFrom() called tick#: [world.time]")
+	src.addFrom(mats,zero_after=1)
+
+/datum/materials/proc/addFrom(var/datum/materials/mats, var/zero_after=0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/materials/proc/addFrom() called tick#: [world.time]")
+	if(mats == null)
+		return
+	for(var/mat_id in storage)
+		if(mats.storage[mat_id]>0)
+			storage[mat_id] += mats.storage[mat_id]
+			if(zero_after)
+				mats.storage[mat_id] = 0
+
+/datum/materials/proc/getVolume()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/materials/proc/getVolume() called tick#: [world.time]")
+	var/volume=0
+	for(var/mat_id in storage)
+		volume += storage[mat_id]
+	return volume
+
+//Gives total value, doing mat value * stored mat
+/datum/materials/proc/getValue()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/materials/proc/getValue() called tick#: [world.time]")
+	var/value=0
+	for(var/mat_id in storage)
+		var/datum/material/mat = getMaterial(mat_id)
+		value += mat.value * storage[mat_id]
+	return value
 
 /datum/materials/proc/removeAmount(var/mat_id,var/amount)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/materials/proc/removeAmount() called tick#: [world.time]")
 	if(!(mat_id in storage))
 		warning("removeAmount(): Unknown material [mat_id]!")
 		return
 	addAmount(mat_id,-amount)
 
 /datum/materials/proc/getAmount(var/mat_id)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/materials/proc/getAmount() called tick#: [world.time]")
 	if(!(mat_id in storage))
 		warning("getAmount(): Unknown material [mat_id]!")
 		return 0
 
-	var/datum/material/mat=getMaterial(mat_id)
-	return mat.stored
+	return storage[mat_id]
 
 /datum/materials/proc/getMaterial(var/mat_id)
-	if(!(mat_id in storage))
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/materials/proc/getMaterial() called tick#: [world.time]")
+	if(!(mat_id in material_list))
 		warning("getMaterial(): Unknown material [mat_id]!")
 		return 0
 
-	return storage[mat_id]
+	return material_list[mat_id]
+
+//HOOKS//
+/atom/proc/onMaterialChange(matID, amount)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/onMaterialChange() called tick#: [world.time]")
+	return
 
 
+///MATERIALS///
 /datum/material
 	var/name=""
 	var/processed_name=""
 	var/id=""
-	var/stored=0
 	var/cc_per_sheet=CC_PER_SHEET_MISC
 	var/oretype=null
 	var/sheettype=null
@@ -66,7 +137,7 @@
 
 /datum/material/iron
 	name="Iron"
-	id="iron"
+	id=MAT_IRON
 	value=1
 	cc_per_sheet=CC_PER_SHEET_METAL
 	oretype=/obj/item/weapon/ore/iron
@@ -76,15 +147,15 @@
 /datum/material/glass
 	name="Sand"
 	processed_name="Glass"
-	id="glass"
+	id=MAT_GLASS
 	value=1
 	cc_per_sheet=CC_PER_SHEET_GLASS
 	oretype=/obj/item/weapon/ore/glass
-	sheettype=/obj/item/stack/sheet/glass
+	sheettype=/obj/item/stack/sheet/glass/glass
 
 /datum/material/diamond
 	name="Diamond"
-	id="diamond"
+	id=MAT_DIAMOND
 	value=40
 	oretype=/obj/item/weapon/ore/diamond
 	sheettype=/obj/item/stack/sheet/mineral/diamond
@@ -92,7 +163,7 @@
 
 /datum/material/plasma
 	name="Plasma"
-	id="plasma"
+	id=MAT_PLASMA
 	value=40
 	oretype=/obj/item/weapon/ore/plasma
 	sheettype=/obj/item/stack/sheet/mineral/plasma
@@ -100,7 +171,7 @@
 
 /datum/material/gold
 	name="Gold"
-	id="gold"
+	id=MAT_GOLD
 	value=20
 	oretype=/obj/item/weapon/ore/gold
 	sheettype=/obj/item/stack/sheet/mineral/gold
@@ -108,7 +179,7 @@
 
 /datum/material/silver
 	name="Silver"
-	id="silver"
+	id=MAT_SILVER
 	value=20
 	oretype=/obj/item/weapon/ore/silver
 	sheettype=/obj/item/stack/sheet/mineral/silver
@@ -116,7 +187,7 @@
 
 /datum/material/uranium
 	name="Uranium"
-	id="uranium"
+	id=MAT_URANIUM
 	value=20
 	oretype=/obj/item/weapon/ore/uranium
 	sheettype=/obj/item/stack/sheet/mineral/uranium
@@ -124,7 +195,7 @@
 
 /datum/material/clown
 	name="Bananium"
-	id="clown"
+	id=MAT_CLOWN
 	value=100
 	oretype=/obj/item/weapon/ore/clown
 	sheettype=/obj/item/stack/sheet/mineral/clown
@@ -132,7 +203,7 @@
 
 /datum/material/phazon
 	name="Phazon"
-	id="phazon"
+	id=MAT_PHAZON
 	value=200
 	oretype=/obj/item/weapon/ore/phazon
 	sheettype=/obj/item/stack/sheet/mineral/phazon
@@ -140,8 +211,125 @@
 
 /datum/material/plastic
 	name="Plastic"
-	id="plastic"
+	id=MAT_PLASTIC
 	value=1
 	oretype=null
 	sheettype=/obj/item/stack/sheet/mineral/plastic
 	cointype=null
+
+/* //Commented out to save save space in menus listing materials until they are used
+/datum/material/pharosium
+	name="Pharosium"
+	id="pharosium"
+	value=10
+	oretype=/obj/item/weapon/ore/pharosium
+	sheettype=/obj/item/stack/sheet/mineral/pharosium
+	cointype=null
+
+
+/datum/material/char
+	name="Char"
+	id="char"
+	value=5
+	oretype=/obj/item/weapon/ore/char
+	sheettype=/obj/item/stack/sheet/mineral/char
+	cointype=null
+
+
+/datum/material/claretine
+	name="Claretine"
+	id="claretine"
+	value=50
+	oretype=/obj/item/weapon/ore/claretine
+	sheettype=/obj/item/stack/sheet/mineral/claretine
+	cointype=null
+
+
+/datum/material/bohrum
+	name="Bohrum"
+	id="bohrum"
+	value=50
+	oretype=/obj/item/weapon/ore/bohrum
+	sheettype=/obj/item/stack/sheet/mineral/bohrum
+	cointype=null
+
+
+/datum/material/syreline
+	name="Syreline"
+	id="syreline"
+	value=70
+	oretype=/obj/item/weapon/ore/syreline
+	sheettype=/obj/item/stack/sheet/mineral/syreline
+	cointype=null
+
+
+/datum/material/erebite
+	name="Erebite"
+	id="erebite"
+	value=50
+	oretype=/obj/item/weapon/ore/erebite
+	sheettype=/obj/item/stack/sheet/mineral/erebite
+	cointype=null
+
+
+/datum/material/cytine
+	name="Cytine"
+	id="cytine"
+	value=30
+	oretype=/obj/item/weapon/ore/cytine
+	sheettype=/obj/item/stack/sheet/mineral/cytine
+	cointype=null
+
+
+/datum/material/uqill
+	name="Uqill"
+	id="uqill"
+	value=90
+	oretype=/obj/item/weapon/ore/uqill
+	sheettype=/obj/item/stack/sheet/mineral/uqill
+	cointype=null
+
+
+/datum/material/telecrystal
+	name="Telecrystal"
+	id="telecrystal"
+	value=30
+	oretype=/obj/item/weapon/ore/telecrystal
+	sheettype=/obj/item/stack/sheet/mineral/telecrystal
+	cointype=null
+
+
+/datum/material/mauxite
+	name="Mauxite"
+	id="mauxite"
+	value=5
+	oretype=/obj/item/weapon/ore/mauxite
+	sheettype=/obj/item/stack/sheet/mineral/mauxite
+	cointype=null
+
+
+/datum/material/cobryl
+	name="Cobryl"
+	id="cobryl"
+	value=30
+	oretype=/obj/item/weapon/ore/cobryl
+	sheettype=/obj/item/stack/sheet/mineral/cobryl
+	cointype=null
+
+
+/datum/material/cerenkite
+	name="Cerenkite"
+	id="cerenkite"
+	value=50
+	oretype=/obj/item/weapon/ore/cerenkite
+	sheettype=/obj/item/stack/sheet/mineral/cerenkite
+	cointype=null
+
+/datum/material/molitz
+	name="Molitz"
+	id="molitz"
+	value=10
+	oretype=/obj/item/weapon/ore/molitz
+	sheettype=/obj/item/stack/sheet/mineral/molitz
+	cointype=null
+*/

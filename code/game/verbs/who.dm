@@ -2,6 +2,7 @@
 	set name = "Who"
 	set category = "OOC"
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/verb/who()  called tick#: [world.time]")
 	var/msg = "\n<b>Current Players:</b>\n"
 
 	var/list/Lines = list()
@@ -35,6 +36,8 @@
 
 			entry += " (<A HREF='?_src_=holder;adminmoreinfo=\ref[C.mob]'>?</A>)"
 			Lines += entry
+
+		log_admin("[key_name(usr)] used who verb advanced (shows OOC key - IC name, status and if antagonist)")
 	else
 		for (var/client/C in clients)
 			if (C.holder && C.holder.fakekey)
@@ -52,6 +55,7 @@
 	set category = "Admin"
 	set name = "Adminwho"
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/verb/adminwho()  called tick#: [world.time]")
 	var/aNames = ""
 	var/mNames = ""
 	var/numAdminsOnline = 0

@@ -3,8 +3,8 @@
 /obj/effect/accelerated_particle
 	name = "Accelerated Particles"
 	desc = "Small things moving very fast."
-	icon = 'icons/obj/machines/particle_accelerator.dmi'
-	icon_state = "particle"//Need a new icon for this
+	icon = 'icons/obj/machines/particle_accelerator2.dmi'
+	icon_state = "particle1"//Need a new icon for this
 	anchored = 1
 	density = 1
 	var/movement_range = 10
@@ -18,28 +18,54 @@
 	var/turf/source
 	var/movetotarget = 1
 
+/obj/effect/accelerated_particle/resetVariables()
+	..("movement_range", "target", "ionizing", "particle_type", "source", "movetotarget", args)
+	movement_range = 10
+	target = null
+	ionizing = 0
+	particle_type = null
+	source = null
+	movetotarget = 1
+
 /obj/effect/accelerated_particle/weak
 	movement_range = 8
 	energy = 5
+	icon_state="particle0"
+	resetVariables()
+		..("energy", "movement_range")
+		movement_range = 8
+		energy = 5
 
 /obj/effect/accelerated_particle/strong
 	movement_range = 15
 	energy = 15
+	icon_state="particle2"
+	resetVariables()
+		..("energy", "movement_range")
+		energy = 15
+		movement_range = 15
 
 /obj/effect/accelerated_particle/powerful
 	movement_range = 20
 	energy = 50
+	icon_state="particle3"
+	resetVariables()
+		..("energy", "movement_range")
+		energy = 50
+		movement_range = 20
 
-/obj/effect/accelerated_particle/New(loc, dir = 2)
+/obj/effect/accelerated_particle/New(loc, dir = 2, move = 0)
 	. = ..()
 	src.loc = loc
 	src.dir = dir
 
+/obj/effect/accelerated_particle/proc/startMove(move = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/accelerated_particle/proc/startMove() called tick#: [world.time]")
 	if(movement_range > 20)
 		movement_range = 20
-
-	spawn(0)
-		move(1)
+	if(move)
+		spawn(0)
+			move(1)
 
 /obj/effect/accelerated_particle/Bump(atom/A)
 	if (A)
@@ -70,10 +96,11 @@
 	return
 
 /obj/effect/accelerated_particle/ex_act(severity)
-	qdel(src)
+	returnToPool(src)
 	return
 
 /obj/effect/accelerated_particle/proc/toxmob(var/mob/living/M)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/accelerated_particle/proc/toxmob() called tick#: [world.time]")
 	var/radiation = (energy*2)
 /*			if(istype(M,/mob/living/carbon/human))
 		if(M:wear_suit) //TODO: check for radiation protection
@@ -83,11 +110,13 @@
 			radiation = round(radiation/2,1)*/
 	M.apply_effect((radiation*3),IRRADIATE,0)
 	M.updatehealth()
-	//M << "\red You feel odd."
+	//M << "<span class='warning'>You feel odd.</span>"
 	return
 
 
 /obj/effect/accelerated_particle/proc/move(var/lag)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/accelerated_particle/proc/move() called tick#: [world.time]")
+	if(!loc) return 0
 	if(target)
 		if(movetotarget)
 			if(!step_towards(src,target))
@@ -102,7 +131,9 @@
 			src.loc = get_step(src,dir)
 	movement_range--
 	if(movement_range <= 0)
-		qdel(src)
+		returnToPool(src)
+		loc = null
+		return 0
 	else
 		sleep(lag)
 		move(lag)

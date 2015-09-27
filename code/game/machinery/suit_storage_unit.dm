@@ -7,7 +7,7 @@
 	name = "Suit Storage Unit"
 	desc = "An industrial U-Stor-It Storage unit designed to accomodate all kinds of space suits. Its on-board equipment also allows the user to decontaminate the contents through a UV-ray purging cycle. There's a warning label dangling from the control pad, reading \"STRICTLY NO BIOLOGICALS IN THE CONFINES OF THE UNIT\"."
 	icon = 'icons/obj/suitstorage.dmi'
-	icon_state = "suitstorage000000100" //order is: [has helmet][has suit][has human][is open][is locked][is UV cycling][is powered][is dirty/broken] [is superUVcycling]
+	icon_state = "suitstorage-closed-00" //order is: [has helmet][has suit]
 	anchored = 1
 	density = 1
 	var/mob/living/carbon/human/OCCUPANT = null
@@ -22,12 +22,11 @@
 	var/isopen = 0
 	var/islocked = 0
 	var/isUV = 0
-	var/ispowered = 1 //starts powered
-	var/isbroken = 0
 	var/issuperUV = 0
-	var/panelopen = 0
 	var/safetieson = 1
 	var/cycletime_left = 0
+
+	machine_flags = SCREWTOGGLE
 
 
 //The units themselves/////////////////
@@ -42,7 +41,7 @@
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig/atmos
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/atmos
 	MASK_TYPE = /obj/item/clothing/mask/breath
-	BOOT_TYPE = /obj/item/clothing/shoes/magboots
+	BOOT_TYPE = /obj/item/clothing/shoes/magboots/atmos
 
 /obj/machinery/suit_storage_unit/engie
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig
@@ -74,6 +73,17 @@
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
+/obj/machinery/suit_storage_unit/medical
+	SUIT_TYPE = /obj/item/clothing/suit/space/rig/medical
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/medical
+	MASK_TYPE = /obj/item/clothing/mask/breath
+	BOOT_TYPE = /obj/item/clothing/shoes/magboots
+
+/obj/machinery/suit_storage_unit/meteor_eod //Used for meteor rounds
+	SUIT_TYPE = /obj/item/clothing/suit/bomb_suit
+	HELMET_TYPE = /obj/item/clothing/head/bomb_hood
+	MASK_TYPE = /obj/item/clothing/mask/gas
+	BOOT_TYPE = /obj/item/clothing/shoes/jackboots
 
 /obj/machinery/suit_storage_unit/New()
 	. = ..()
@@ -88,30 +98,23 @@
 		BOOTS = new BOOT_TYPE(src)
 
 /obj/machinery/suit_storage_unit/update_icon()
-	var/hashelmet = 0
-	var/hassuit = 0
-	var/hashuman = 0
-	if(HELMET)
-		hashelmet = 1
-	if(SUIT)
-		hassuit = 1
-	if(OCCUPANT)
-		hashuman = 1
-	icon_state = text("suitstorage[][][][][][][][][]",hashelmet,hassuit,hashuman,src.isopen,src.islocked,src.isUV,src.ispowered,src.isbroken,src.issuperUV)
-
+	if((stat & NOPOWER) || (stat & BROKEN))
+		icon_state = "suitstorage-off"
+		return
+	if(!isopen)
+		icon_state = "suitstorage-closed-[issuperUV][isUV]"
+	else
+		icon_state = "suitstorage-open-[HELMET ? "1" : "0"][SUIT ? "1" : "0"]"
 
 /obj/machinery/suit_storage_unit/power_change()
 	if( powered() )
-		src.ispowered = 1
 		stat &= ~NOPOWER
 		src.update_icon()
 	else
 		spawn(rand(0, 15))
-			src.ispowered = 0
 			stat |= NOPOWER
 			src.islocked = 0
 			src.isopen = 1
-			src.dump_everything()
 			src.update_icon()
 
 
@@ -138,10 +141,10 @@
 		return
 	if(stat & NOPOWER)
 		return
-	if(src.panelopen) //The maintenance panel is open. Time for some shady stuff
+	if(src.panel_open) //The maintenance panel is open. Time for some shady stuff
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\suit_storage_unit.dm:100: dat+= "<HEAD><TITLE>Suit storage unit: Maintenance panel</TITLE></HEAD>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\suit_storage_unit.dm:100: dat+= "<HEAD><TITLE>Suit storage unit: Maintenance panel</TITLE></HEAD>"
 		dat += {"<HEAD><TITLE>Suit storage unit: Maintenance panel</TITLE></HEAD>
 			<Font color ='black'><B>Maintenance panel controls</B></font><HR>
 			<font color ='grey'>The panel is ridden with controls, button and meters, labeled in strange signs and symbols that <BR>you cannot understand. Probably the manufactoring world's language.<BR> Among other things, a few controls catch your eye.<BR><BR>"}
@@ -154,7 +157,7 @@
 	else if(src.isUV) //The thing is running its cauterisation cycle. You have to wait.
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\suit_storage_unit.dm:109: dat += "<HEAD><TITLE>Suit storage unit</TITLE></HEAD>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\suit_storage_unit.dm:109: dat += "<HEAD><TITLE>Suit storage unit</TITLE></HEAD>"
 		dat += {"<HEAD><TITLE>Suit storage unit</TITLE></HEAD>
 			<font color ='red'><B>Unit is cauterising contents with selected UV ray intensity. Please wait.</font></B><BR>"}
 		// END AUTOFIX
@@ -163,10 +166,10 @@
 		//onclose(user, "ssu_cycling_panel")
 
 	else
-		if(!src.isbroken)
+		if(!(stat & BROKEN))
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\suit_storage_unit.dm:117: dat+= "<HEAD><TITLE>Suit storage unit</TITLE></HEAD>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\suit_storage_unit.dm:117: dat+= "<HEAD><TITLE>Suit storage unit</TITLE></HEAD>"
 			dat += {"<HEAD><TITLE>Suit storage unit</TITLE></HEAD>
 				<font color='blue'><font size = 4><B>U-Stor-It Suit Storage Unit, model DS1900</B></FONT><BR>
 				<B>Welcome to the Unit control panel.</B><HR>"}
@@ -186,7 +189,7 @@
 			if(src.OCCUPANT)
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\suit_storage_unit.dm:130: dat+= "<HR><B><font color ='red'>WARNING: Biological entity detected inside the Unit's storage. Please remove.</B></font><BR>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\suit_storage_unit.dm:130: dat+= "<HR><B><font color ='red'>WARNING: Biological entity detected inside the Unit's storage. Please remove.</B></font><BR>"
 				dat += {"<HR><B><font color ='red'>WARNING: Biological entity detected inside the Unit's storage. Please remove.</B></font><BR>
 					<A href='?src=\ref[src];eject_guy=1'>Eject extra load</A>"}
 				// END AUTOFIX
@@ -203,7 +206,7 @@
 		else //Ohhhh shit it's dirty or broken! Let's inform the guy.
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\suit_storage_unit.dm:143: dat+= "<HEAD><TITLE>Suit storage unit</TITLE></HEAD>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\suit_storage_unit.dm:143: dat+= "<HEAD><TITLE>Suit storage unit</TITLE></HEAD>"
 			dat += {"<HEAD><TITLE>Suit storage unit</TITLE></HEAD>
 				<font color='maroon'><B>Unit chamber is too contaminated to continue usage. Please call for a qualified individual to perform maintenance.</font></B><BR><BR>"}
 			// END AUTOFIX
@@ -218,8 +221,8 @@
 
 /obj/machinery/suit_storage_unit/Topic(href, href_list) //I fucking HATE this proc
 	if(..())
-		return
-	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
+		return 1
+	else
 		usr.set_machine(src)
 		if (href_list["toggleUV"])
 			src.toggleUV(usr)
@@ -268,9 +271,10 @@
 
 
 /obj/machinery/suit_storage_unit/proc/toggleUV(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/suit_storage_unit/proc/toggleUV() called tick#: [world.time]")
 //	var/protected = 0
 //	var/mob/living/carbon/human/H = user
-	if(!src.panelopen)
+	if(!src.panel_open)
 		return
 
 	/*if(istype(H)) //Let's check if the guy's wearing electrically insulated gloves
@@ -294,9 +298,10 @@
 
 
 /obj/machinery/suit_storage_unit/proc/togglesafeties(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/suit_storage_unit/proc/togglesafeties() called tick#: [world.time]")
 //	var/protected = 0
 //	var/mob/living/carbon/human/H = user
-	if(!src.panelopen) //Needed check due to bugs
+	if(!src.panel_open) //Needed check due to bugs
 		return
 
 	/*if(istype(H)) //Let's check if the guy's wearing electrically insulated gloves
@@ -315,6 +320,7 @@
 
 
 /obj/machinery/suit_storage_unit/proc/dispense_helmet(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/suit_storage_unit/proc/dispense_helmet() called tick#: [world.time]")
 	if(!src.HELMET)
 		return //Do I even need this sanity check? Nyoro~n
 	else
@@ -324,6 +330,7 @@
 
 
 /obj/machinery/suit_storage_unit/proc/dispense_suit(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/suit_storage_unit/proc/dispense_suit() called tick#: [world.time]")
 	if(!src.SUIT)
 		return
 	else
@@ -333,6 +340,7 @@
 
 
 /obj/machinery/suit_storage_unit/proc/dispense_mask(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/suit_storage_unit/proc/dispense_mask() called tick#: [world.time]")
 	if(!src.MASK)
 		return
 	else
@@ -342,6 +350,7 @@
 
 
 /obj/machinery/suit_storage_unit/proc/dispense_boots(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/suit_storage_unit/proc/dispense_boots() called tick#: [world.time]")
 	if(!src.BOOTS)
 		return
 	else
@@ -351,6 +360,7 @@
 
 
 /obj/machinery/suit_storage_unit/proc/dump_everything()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/suit_storage_unit/proc/dump_everything() called tick#: [world.time]")
 	src.islocked = 0 //locks go free
 	if(src.SUIT)
 		src.SUIT.loc = src.loc
@@ -370,6 +380,7 @@
 
 
 /obj/machinery/suit_storage_unit/proc/toggle_open(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/suit_storage_unit/proc/toggle_open() called tick#: [world.time]")
 	if(src.islocked || src.isUV)
 		user << "<font color='red'>Unable to open unit.</font>"
 		return
@@ -381,6 +392,7 @@
 
 
 /obj/machinery/suit_storage_unit/proc/toggle_lock(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/suit_storage_unit/proc/toggle_lock() called tick#: [world.time]")
 	if(src.OCCUPANT && src.safetieson)
 		user << "<font color='red'>The Unit's safety protocols disallow locking when a biological form is detected inside its compartments.</font>"
 		return
@@ -391,6 +403,7 @@
 
 
 /obj/machinery/suit_storage_unit/proc/start_UV(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/suit_storage_unit/proc/start_UV() called tick#: [world.time]")
 	if(src.isUV || src.isopen) //I'm bored of all these sanity checks
 		return
 	if(src.OCCUPANT && src.safetieson)
@@ -414,21 +427,25 @@
 			if(src.issuperUV)
 				var/burndamage = rand(28,35)
 				OCCUPANT.take_organ_damage(0,burndamage)
-				OCCUPANT.emote("scream")
+				OCCUPANT.emote("scream",,, 1)
 			else
 				var/burndamage = rand(6,10)
 				OCCUPANT.take_organ_damage(0,burndamage)
-				OCCUPANT.emote("scream")
+				OCCUPANT.emote("scream",,, 1)
 		if(i==3) //End of the cycle
 			if(!src.issuperUV)
 				if(src.HELMET)
 					HELMET.clean_blood()
+					HELMET.decontaminate()
 				if(src.SUIT)
 					SUIT.clean_blood()
+					SUIT.decontaminate()
 				if(src.MASK)
 					MASK.clean_blood()
+					MASK.decontaminate()
 				if(src.BOOTS)
 					BOOTS.clean_blood()
+					BOOTS.decontaminate()
 			else //It was supercycling, destroy everything
 				if(src.HELMET)
 					src.HELMET = null
@@ -439,46 +456,16 @@
 				if(src.BOOTS)
 					src.BOOTS = null
 				visible_message("<font color='red'>With a loud whining noise, the Suit Storage Unit's door grinds open. Puffs of ashen smoke come out of its chamber.</font>", 3)
-				src.isbroken = 1
+				stat |= BROKEN
 				src.isopen = 1
 				src.islocked = 0
 				src.eject_occupant(OCCUPANT) //Mixing up these two lines causes bug. DO NOT DO IT.
 			src.isUV = 0 //Cycle ends
 	src.update_icon()
 	src.updateUsrDialog()
-	return
-
-/*	spawn(200) //Let's clean dat shit after 20 secs  //Eh, this doesn't work
-		if(src.HELMET)
-			HELMET.clean_blood()
-		if(src.SUIT)
-			SUIT.clean_blood()
-		if(src.MASK)
-			MASK.clean_blood()
-		src.isUV = 0 //Cycle ends
-		src.update_icon()
-		src.updateUsrDialog()
-
-	var/i
-	for(i=0,i<4,i++) //Gradually give the guy inside some damaged based on the intensity
-		spawn(50)
-			if(src.OCCUPANT)
-				if(src.issuperUV)
-					OCCUPANT.take_organ_damage(0,40)
-					user << "Test. You gave him 40 damage"
-				else
-					OCCUPANT.take_organ_damage(0,8)
-					user << "Test. You gave him 8 damage"
-	return*/
-
-
-/obj/machinery/suit_storage_unit/proc/cycletimeleft()
-	if(src.cycletime_left >= 1)
-		src.cycletime_left--
-	return src.cycletime_left
-
 
 /obj/machinery/suit_storage_unit/proc/eject_occupant(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/suit_storage_unit/proc/eject_occupant() called tick#: [world.time]")
 	if (src.islocked)
 		return
 
@@ -507,8 +494,9 @@
 	set name = "Eject Suit Storage Unit"
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/suit_storage_unit/verb/get_out()  called tick#: [world.time]")
 
-	if (usr.stat != 0)
+	if (usr.stat != 0 || (usr.status_flags & FAKEDEATH))
 		return
 	src.eject_occupant(usr)
 	add_fingerprint(usr)
@@ -521,20 +509,21 @@
 	set name = "Hide in Suit Storage Unit"
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/suit_storage_unit/verb/move_inside()  called tick#: [world.time]")
 
-	if (usr.stat != 0)
+	if (usr.stat != 0 || (usr.status_flags & FAKEDEATH))
 		return
 	if (!src.isopen)
 		usr << "<font color='red'>The unit's doors are shut.</font>"
 		return
-	if (!src.ispowered || src.isbroken)
+	if ((stat & NOPOWER) || (stat & BROKEN))
 		usr << "<font color='red'>The unit is not operational.</font>"
 		return
 	if ( (src.OCCUPANT) || (src.HELMET) || (src.SUIT) || BOOTS )
 		usr << "<font color='red'>It's too cluttered inside for you to fit in!</font>"
 		return
 	visible_message("[usr] starts squeezing into the suit storage unit!", 3)
-	if(do_after(usr, 10))
+	if(do_after(usr, src, 10))
 		usr.stop_pulling()
 		usr.client.perspective = EYE_PERSPECTIVE
 		usr.client.eye = src
@@ -554,16 +543,30 @@
 		src.OCCUPANT = null //Testing this as a backup sanity test
 	return
 
+/obj/machinery/suit_storage_unit/togglePanelOpen(var/obj/toggleitem, mob/user)
+	..()
+	src.updateUsrDialog()
 
 /obj/machinery/suit_storage_unit/attackby(obj/item/I as obj, mob/user as mob)
-	if(!src.ispowered)
+	if((stat & BROKEN) && issolder(I))
+		var/obj/item/weapon/solder/S = I
+		if(!S.remove_fuel(4,user))
+			return
+		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+		if(do_after(user, src,40))
+			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+			stat &= !BROKEN
+			user << "<span class='notice'>You repair the blown out electronics in the suit storage unit.</span>"
+	if((stat & NOPOWER) && iscrowbar(I) && !islocked)
+		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		user << "<span class='notice'>You begin prying the equipment out of the suit storage unit</span>"
+		if(do_after(user, src,20))
+			dump_everything()
+			update_icon()
+	if(stat & NOPOWER)
 		return
-	if(istype(I, /obj/item/weapon/screwdriver))
-		src.panelopen = !src.panelopen
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
-		user << text("<font color='blue'>You [] the unit's maintenance panel.</font>",(src.panelopen ? "open up" : "close") )
-		src.updateUsrDialog()
-		return
+	if(..())
+		return 1
 	if ( istype(I, /obj/item/weapon/grab) )
 		var/obj/item/weapon/grab/G = I
 		if( !(ismob(G.affecting)) )
@@ -571,14 +574,14 @@
 		if (!src.isopen)
 			usr << "<font color='red'>The unit's doors are shut.</font>"
 			return
-		if (!src.ispowered || src.isbroken)
+		if ((stat & NOPOWER) || (stat & BROKEN))
 			usr << "<font color='red'>The unit is not operational.</font>"
 			return
 		if ( (src.OCCUPANT) || (src.HELMET) || (src.SUIT) || BOOTS) //Unit needs to be absolutely empty
 			user << "<font color='red'>The unit's storage area is too cluttered.</font>"
 			return
 		visible_message("[user] starts putting [G.affecting.name] into the Suit Storage Unit.", 3)
-		if(do_after(user, 20))
+		if(do_after(user, src, 20))
 			if(!G || !G.affecting) return //derpcheck
 			var/mob/M = G.affecting
 			if (M.client)
@@ -604,8 +607,7 @@
 			user << "<font color='blue'>The unit already contains a suit.</font>"
 			return
 		user << "You load the [S.name] into the storage compartment."
-		user.drop_item()
-		S.loc = src
+		user.drop_item(S, src)
 		src.SUIT = S
 		src.update_icon()
 		src.updateUsrDialog()
@@ -618,8 +620,7 @@
 			user << "<font color='blue'>The unit already contains a helmet.</font>"
 			return
 		user << "You load the [H.name] into the storage compartment."
-		user.drop_item()
-		H.loc = src
+		user.drop_item(H, src)
 		src.HELMET = H
 		src.update_icon()
 		src.updateUsrDialog()
@@ -632,8 +633,7 @@
 			user << "<font color='blue'>The unit already contains a mask.</font>"
 			return
 		user << "You load the [M.name] into the storage compartment."
-		user.drop_item()
-		M.loc = src
+		user.drop_item(M, src)
 		src.MASK = M
 		src.update_icon()
 		src.updateUsrDialog()
@@ -646,8 +646,7 @@
 			user << "<font color='blue'>The unit already contains shoes.</font>"
 			return
 		user << "You load \the [M.name] into the storage compartment."
-		user.drop_item()
-		M.loc = src
+		user.drop_item(M, src)
 		src.BOOTS = M
 		src.update_icon()
 		src.updateUsrDialog()

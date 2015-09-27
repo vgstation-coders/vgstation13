@@ -1,6 +1,7 @@
 /mob/living/silicon/robot/mommi/Life()
 	set invisibility = 0
 	//set background = 1
+	if(timestopped) return 0 //under effects of time magick
 
 	if (src.monkeyizing)
 		return
@@ -20,6 +21,7 @@
 		process_killswitch()
 		process_locks()
 	update_canmove()
+	handle_beams()
 
 
 
@@ -41,11 +43,8 @@
 		if(src.cell.charge <= 0)
 			uneq_all()
 			src.stat = 1
-		else if (src.cell.charge <= 100)
-			src.module_active = null
-			src.sight_state = null
-			src.tool_state = null
-			src.sight_mode = 0
+		else if (src.cell.charge <= MOMMI_LOW_POWER)
+			uneq_all()
 			src.cell.use(1)
 		else
 			if(src.sight_state)
@@ -131,38 +130,46 @@
 	return 1
 /
 /mob/living/silicon/robot/mommi/handle_regular_hud_updates()
+	handle_sensor_modes()
+	/*src.sight &= ~SEE_MOBS
+	src.sight &= ~SEE_TURFS
+	src.sight &= ~SEE_OBJS
+	src.sight &= ~BLIND
+	src.see_in_dark = 8
+	src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+	if (src.stat == DEAD)
+		sight |= (SEE_TURFS|SEE_MOBS|SEE_OBJS)
+		src.see_in_dark = 8
+		src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+	else
+		if (M_XRAY in mutations || src.sight_mode & BORGXRAY)
+			sight |= (SEE_TURFS|SEE_MOBS|SEE_OBJS)
+			src.see_in_dark = 8
+			src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+		if ((src.sight_mode & BORGTHERM) || sensor_mode == THERMAL_VISION)
+			src.sight |= SEE_MOBS
+			src.see_in_dark = 8
+			src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+		if (sensor_mode == NIGHT)
+			see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
+			see_in_dark = 8
+		if ((src.sight_mode & BORGMESON) || (sensor_mode == MESON_VISION))
+			src.sight |= SEE_TURFS
+			src.see_in_dark = 8
+			see_invisible = SEE_INVISIBLE_MINIMUM
+	*/
 
-	if (src.stat == 2 || M_XRAY in mutations || src.sight_mode & BORGXRAY)
-		src.sight |= SEE_TURFS
-		src.sight |= SEE_MOBS
-		src.sight |= SEE_OBJS
-		src.see_in_dark = 8
-		src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-	else if (src.sight_mode & BORGMESON && src.sight_mode & BORGTHERM)
-		src.sight |= SEE_TURFS
-		src.sight |= SEE_MOBS
-		src.see_in_dark = 8
-		see_invisible = SEE_INVISIBLE_MINIMUM
-	else if (src.sight_mode & BORGMESON)
-		src.sight |= SEE_TURFS
-		src.see_in_dark = 8
-		see_invisible = SEE_INVISIBLE_MINIMUM
-	else if (src.sight_mode & BORGTHERM)
-		src.sight |= SEE_MOBS
-		src.see_in_dark = 8
-		src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-	else if (src.stat != 2)
-		src.sight &= ~SEE_MOBS
-		src.sight &= ~SEE_TURFS
-		src.sight &= ~SEE_OBJS
-		src.see_in_dark = 8
-		src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
 	var/obj/item/borg/sight/hud/hud = (locate(/obj/item/borg/sight/hud) in src)
 	if(hud && hud.hud)	hud.hud.process_hud(src)
+	switch(sensor_mode)
+		if (SEC_HUD)
+			process_sec_hud(src, 1)
+		if (MED_HUD)
+			process_med_hud(src)
 
 	if (src.healths)
-		if (src.stat != 2)
+		if (src.stat != DEAD)
 			switch(health)
 				if(60 to INFINITY)
 					src.healths.icon_state = "health0"
@@ -194,6 +201,10 @@
 			if(!src.mind.special_role)
 				src.mind.special_role = "traitor"
 				ticker.mode.traitors += src.mind
+
+	if(!can_see_static()) //what lets us avoid the overlay
+		if(static_overlays && static_overlays.len)
+			remove_static_overlays()
 
 	if (src.cells)
 		if (src.cell)
@@ -252,7 +263,7 @@
 			if (!( src.machine.check_eye(src) ))
 				src.reset_view(null)
 		else
-			if(!client.adminobs)
+			if(!client.adminobs && !isTeleViewing(client.eye))
 				reset_view(null)
 
 	return 1
@@ -273,7 +284,11 @@
 		src.sight_state:screen_loc = ui_inv1
 	if(src.tool_state)
 		src.tool_state:screen_loc = ui_inv2
+	if(src.head_state)
+		src.head_state:screen_loc = ui_monkey_mask
 
 /mob/living/silicon/robot/mommi/update_canmove()
-	canmove = !(paralysis || stunned || weakened || buckled || lockcharge || anchored)
+	canmove = !(paralysis || stunned || weakened || locked_to || lockcharge || anchored)
 	return canmove
+
+#undef MOMMI_LOW_POWER

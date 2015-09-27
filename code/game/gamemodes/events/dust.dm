@@ -8,6 +8,7 @@ The "dust" will damage the hull of the station causin minor hull breaches.
 */
 
 /proc/dust_swarm(var/strength = "weak")
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/dust_swarm() called tick#: [world.time]")
 	var/numbers = 1
 	switch(strength)
 		if("weak")
@@ -99,7 +100,7 @@ The "dust" will damage the hull of the station causin minor hull breaches.
 				playsound(get_turf(src), 'sound/effects/meteorimpact.ogg', 40, 1)
 
 				if(ismob(A))
-					A.meteorhit(src)//This should work for now I guess
+					A.ex_act(strength)
 				else if(!istype(A,/obj/machinery/power/emitter) && !istype(A,/obj/machinery/field_generator)) //Protect the singularity from getting released every round!
 					A.ex_act(strength) //Changing emitter/field gen ex_act would make it immune to bombs and C4
 
@@ -107,7 +108,7 @@ The "dust" will damage the hull of the station causin minor hull breaches.
 				if(life <= 0)
 					walk(src,0)
 					spawn(1)
-						del(src)
+						qdel(src)
 					return 0
 		return
 

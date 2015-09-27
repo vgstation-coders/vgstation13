@@ -3,13 +3,17 @@
 /datum/medical_effect/var/name = "None"
 /datum/medical_effect/var/strength = 0
 /datum/medical_effect/proc/on_life(mob/living/carbon/human/H, strength)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/medical_effect/proc/on_life() called tick#: [world.time]")
 /datum/medical_effect/proc/cure(mob/living/carbon/human/H)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\datum/medical_effect/proc/cure() called tick#: [world.time]")
 
 
 // MOB HELPERS
 // ===========
 /mob/living/carbon/human/var/list/datum/medical_effect/side_effects = list()
 /mob/proc/add_side_effect(name, strength = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/add_side_effect() called tick#: [world.time]")
 /mob/living/carbon/human/add_side_effect(name, strength = 0)
 	for(var/datum/medical_effect/M in src.side_effects) if(M.name == name)
 		M.strength = max(M.strength, 10)
@@ -24,6 +28,7 @@
 			side_effects += M
 
 /mob/living/carbon/human/proc/handle_medical_side_effects()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/handle_medical_side_effects() called tick#: [world.time]")
 	if(src.reagents.has_reagent("cryoxadone") || src.reagents.get_reagent_amount("bicaridine") >= 15 || src.reagents.get_reagent_amount("tricordrazine") >= 15)
 		src.add_side_effect("Headache")
 
@@ -71,7 +76,7 @@
 
 /datum/medical_effect/headache/cure(mob/living/carbon/human/H)
 	if(H.reagents.has_reagent("alkysine") || H.reagents.has_reagent("tramadol"))
-		//H << "\red Your head stops throbbing.." // Halt spam.
+		//H << "<span class='warning'>Your head stops throbbing..</span>" // Halt spam.
 		return 1
 	return 0
 
@@ -93,7 +98,7 @@
 
 /datum/medical_effect/bad_stomach/cure(mob/living/carbon/human/H)
 	if(H.reagents.has_reagent("anti_toxin"))
-		H << "\red Your stomach feels a little better now.."
+		H << "<span class='warning'>Your stomach feels a little better now..</span>"
 		return 1
 	return 0
 
@@ -118,7 +123,7 @@
 
 /datum/medical_effect/cramps/cure(mob/living/carbon/human/H)
 	if(H.reagents.has_reagent("inaprovaline"))
-		H << "\red The cramps let up.."
+		H << "<span class='warning'>The cramps let up..</span>"
 		return 1
 	return 0
 
@@ -143,6 +148,6 @@
 
 /datum/medical_effect/itch/cure(mob/living/carbon/human/H)
 	if(H.reagents.has_reagent("inaprovaline"))
-		H << "\red The itching stops.."
+		H << "<span class='warning'>The itching stops..</span>"
 		return 1
 	return 0

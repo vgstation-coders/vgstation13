@@ -2,10 +2,12 @@
 	set category = "Admin"
 	set name = "Permissions Panel"
 	set desc = "Edit admin permissions"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/edit_admin_permissions() called tick#: [world.time]")
 	if(!check_rights(R_PERMISSIONS))	return
 	usr.client.holder.edit_admin_permissions()
 
 /datum/admins/proc/edit_admin_permissions()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/edit_admin_permissions() called tick#: [world.time]")
 	if(!check_rights(R_PERMISSIONS))	return
 
 	var/output = {"<!DOCTYPE html>
@@ -38,7 +40,7 @@
 		/*output += "<tr>"
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\permissionverbs\permissionedit.dm:39: output += "<td style='text-align:right;'>[adm_ckey] <a class='small' href='?src=\ref[src];editrights=remove;ckey=[adm_ckey]'>\[-\]</a></td>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\permissionverbs\\\permissionedit.dm:39: output += "<td style='text-align:right;'>[adm_ckey] <a class='small' href='?src=\ref[src];editrights=remove;ckey=[adm_ckey]'>\[-\]</a></td>"
 		output += {"<td style='text-align:right;'>[adm_ckey] <a class='small' href='?src=\ref[src];editrights=remove;ckey=[adm_ckey]'>\[-\]</a></td>
 <td><a href='?src=\ref[src];editrights=rank;ckey=[adm_ckey]'>[rank]</a></td>
 <td><a class='small' href='?src=\ref[src];editrights=permissions;ckey=[adm_ckey]'>[rights]</a></font></td>"}
@@ -54,19 +56,20 @@
 	usr << browse(output,"window=editrights;size=600x500")
 
 /datum/admins/proc/log_admin_rank_modification(var/adm_ckey, var/new_rank)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/log_admin_rank_modification() called tick#: [world.time]")
 	if(config.admin_legacy_system)	return
 
 	if(!usr.client)
 		return
 
 	if(!usr.client.holder || !(usr.client.holder.rights & R_PERMISSIONS))
-		usr << "\red You do not have permission to do this!"
+		usr << "<span class='warning'>You do not have permission to do this!</span>"
 		return
 
 	establish_db_connection()
 
 	if(!dbcon.IsConnected())
-		usr << "\red Failed to establish database connection"
+		usr << "<span class='warning'>Failed to establish database connection</span>"
 		return
 
 	if(!adm_ckey || !new_rank)
@@ -94,28 +97,29 @@
 		insert_query.Execute()
 		var/DBQuery/log_query = dbcon.NewQuery("INSERT INTO `test`.`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , '[usr.ckey]', '[usr.client.address]', 'Added new admin [adm_ckey] to rank [new_rank]');")
 		log_query.Execute()
-		usr << "\blue New admin added."
+		usr << "<span class='notice'>New admin added.</span>"
 	else
 		if(!isnull(admin_id) && isnum(admin_id))
 			var/DBQuery/insert_query = dbcon.NewQuery("UPDATE `erro_admin` SET rank = '[new_rank]' WHERE id = [admin_id]")
 			insert_query.Execute()
 			var/DBQuery/log_query = dbcon.NewQuery("INSERT INTO `test`.`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , '[usr.ckey]', '[usr.client.address]', 'Edited the rank of [adm_ckey] to [new_rank]');")
 			log_query.Execute()
-			usr << "\blue Admin rank changed."
+			usr << "<span class='notice'>Admin rank changed.</span>"
 
 /datum/admins/proc/log_admin_permission_modification(var/adm_ckey, var/new_permission)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/log_admin_permission_modification() called tick#: [world.time]")
 	if(config.admin_legacy_system)	return
 
 	if(!usr.client)
 		return
 
 	if(!usr.client.holder || !(usr.client.holder.rights & R_PERMISSIONS))
-		usr << "\red You do not have permission to do this!"
+		usr << "<span class='warning'>You do not have permission to do this!</span>"
 		return
 
 	establish_db_connection()
 	if(!dbcon.IsConnected())
-		usr << "\red Failed to establish database connection"
+		usr << "<span class='warning'>Failed to establish database connection</span>"
 		return
 
 	if(!adm_ckey || !new_permission)
@@ -149,10 +153,10 @@
 		insert_query.Execute()
 		var/DBQuery/log_query = dbcon.NewQuery("INSERT INTO `test`.`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , '[usr.ckey]', '[usr.client.address]', 'Removed permission [rights2text(new_permission)] (flag = [new_permission]) to admin [adm_ckey]');")
 		log_query.Execute()
-		usr << "\blue Permission removed."
+		usr << "<span class='notice'>Permission removed.</span>"
 	else //This admin doesn't have this permission, so we are adding it.
 		var/DBQuery/insert_query = dbcon.NewQuery("UPDATE `erro_admin` SET flags = '[admin_rights | new_permission]' WHERE id = [admin_id]")
 		insert_query.Execute()
 		var/DBQuery/log_query = dbcon.NewQuery("INSERT INTO `test`.`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , '[usr.ckey]', '[usr.client.address]', 'Added permission [rights2text(new_permission)] (flag = [new_permission]) to admin [adm_ckey]')")
 		log_query.Execute()
-		usr << "\blue Permission added."
+		usr << "<span class='notice'>Permission added.</span>"

@@ -12,6 +12,7 @@ var/const/ROBOTICIST		=(1<<8)
 var/const/AI				=(1<<9)
 var/const/CYBORG			=(1<<10)
 var/const/MOMMI				=(1<<11)
+var/const/MECHANIC			=(1<<12)
 
 
 var/const/MEDSCI			=(1<<1)
@@ -63,6 +64,7 @@ var/list/engineering_positions = list(
 	"Chief Engineer",
 	"Station Engineer",
 	"Atmospheric Technician",
+	"Mechanic"
 )
 
 
@@ -80,7 +82,8 @@ var/list/science_positions = list(
 	"Research Director",
 	"Scientist",
 	"Geneticist",	//Part of both medical and science
-	"Roboticist"
+	"Roboticist",
+	"Mechanic"
 )
 
 //BS12 EDIT
@@ -117,9 +120,11 @@ var/list/nonhuman_positions = list(
 
 
 /proc/guest_jobbans(var/job)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/guest_jobbans() called tick#: [world.time]")
 	return ((job in command_positions) || (job in nonhuman_positions) || (job in security_positions))
 
 /proc/get_job_datums()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_job_datums() called tick#: [world.time]")
 	var/list/occupations = list()
 	var/list/all_jobs = typesof(/datum/job)
 
@@ -131,6 +136,7 @@ var/list/nonhuman_positions = list(
 	return occupations
 
 /proc/get_alternate_titles(var/job)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_alternate_titles() called tick#: [world.time]")
 	var/list/jobs = get_job_datums()
 	var/list/titles = list()
 

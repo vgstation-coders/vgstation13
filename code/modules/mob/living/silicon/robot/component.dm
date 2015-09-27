@@ -20,9 +20,12 @@
 	src.owner = R
 
 /datum/robot_component/proc/install()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/robot_component/proc/install() called tick#: [world.time]")
 /datum/robot_component/proc/uninstall()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\datum/robot_component/proc/uninstall() called tick#: [world.time]")
 
 /datum/robot_component/proc/destroy()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\datum/robot_component/proc/destroy() called tick#: [world.time]")
 	if(wrapped)
 		del wrapped
 
@@ -34,6 +37,7 @@
 	uninstall()
 
 /datum/robot_component/proc/take_damage(brute, electronics, sharp)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/robot_component/proc/take_damage() called tick#: [world.time]")
 	if(installed != 1) return
 
 	brute_damage += brute
@@ -42,6 +46,7 @@
 	if(brute_damage + electronics_damage >= max_damage) destroy()
 
 /datum/robot_component/proc/heal_damage(brute, electronics)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/robot_component/proc/heal_damage() called tick#: [world.time]")
 	if(installed != 1)
 		// If it's not installed, can't repair it.
 		return 0
@@ -50,10 +55,12 @@
 	electronics_damage = max(0, electronics_damage - electronics)
 
 /datum/robot_component/proc/is_powered()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/robot_component/proc/is_powered() called tick#: [world.time]")
 	return (installed == 1) && (brute_damage + electronics_damage < max_damage) && (!energy_consumption || powered)
 
 
 /datum/robot_component/proc/consume_power()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/robot_component/proc/consume_power() called tick#: [world.time]")
 	if(toggled == 0)
 		powered = 0
 		return
@@ -71,7 +78,7 @@
 
 /datum/robot_component/actuator
 	name = "actuator"
-	energy_consumption = 2
+	energy_consumption = 0 // seeing as we can move without any charge...
 	external_type = /obj/item/robot_parts/robot_component/actuator
 	max_damage = 50
 
@@ -82,6 +89,7 @@
 /datum/robot_component/cell/destroy()
 	..()
 	owner.cell = null
+	owner.updateicon()
 
 /datum/robot_component/radio
 	name = "radio"
@@ -103,11 +111,12 @@
 
 /datum/robot_component/diagnosis_unit
 	name = "self-diagnosis unit"
-	energy_consumption = 1
+	energy_consumption = 0
 	external_type = /obj/item/robot_parts/robot_component/diagnosis_unit
 	max_damage = 30
 
 /mob/living/silicon/robot/proc/initialize_components()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/robot/proc/initialize_components() called tick#: [world.time]")
 	// This only initializes the components, it doesn't set them to installed.
 
 	components["actuator"] = new/datum/robot_component/actuator(src)
@@ -119,6 +128,7 @@
 	components["armour"] = new/datum/robot_component/armour(src)
 
 /mob/living/silicon/robot/proc/is_component_functioning(module_name)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/robot/proc/is_component_functioning() called tick#: [world.time]")
 	var/datum/robot_component/C = components[module_name]
 	return C && C.installed == 1 && C.toggled && C.is_powered()
 
@@ -130,8 +140,6 @@
 /obj/item/robot_parts/robot_component
 	icon = 'icons/robot_component.dmi'
 	icon_state = "working"
-	construction_time = 200
-	construction_cost = list("metal"=5000)
 
 /obj/item/robot_parts/robot_component/binary_communication_device
 	name = "binary communication device"
@@ -165,49 +173,50 @@
 	icon_state = "robotanalyzer"
 	item_state = "analyzer"
 	desc = "A hand-held scanner able to diagnose robotic injuries."
-	flags = FPRINT | TABLEPASS | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	throwforce = 3
 	w_class = 1.0
 	throw_speed = 5
 	throw_range = 10
-	m_amt = 200
+	starting_materials = list(MAT_IRON = 200)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = "magnets=3;engineering=3"
 	var/mode = 1;
 
 /obj/item/device/robotanalyzer/attack(mob/living/M as mob, mob/living/user as mob)
 	if(( (M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
-		user << text("\red You try to analyze the floor's vitals!")
+		user << text("<span class='warning'>You try to analyze the floor's vitals!</span>")
 		for(var/mob/O in viewers(M, null))
-			O.show_message(text("\red [user] has analyzed the floor's vitals!"), 1)
-		user.show_message(text("\blue Analyzing Results for The floor:\n\t Overall Status: Healthy"), 1)
-		user.show_message(text("\blue \t Damage Specifics: [0]-[0]-[0]-[0]"), 1)
-		user.show_message("\blue Key: Suffocation/Toxin/Burns/Brute", 1)
-		user.show_message("\blue Body Temperature: ???", 1)
+			O.show_message(text("<span class='warning'>[user] has analyzed the floor's vitals!</span>"), 1)
+		user.show_message(text("<span class='notice'>Analyzing Results for The floor:\n\t Overall Status: Healthy</span>"), 1)
+		user.show_message(text("<span class='notice'>\t Damage Specifics: [0]-[0]-[0]-[0]</span>"), 1)
+		user.show_message("<span class='notice'>Key: Suffocation/Toxin/Burns/Brute</span>", 1)
+		user.show_message("<span class='notice'>Body Temperature: ???</span>", 1)
 		return
-	if(!(istype(user, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
-		user << "\red You don't have the dexterity to do this!"
+	if (!user.dexterity_check())
+		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
 		return
 	if(!istype(M, /mob/living/silicon/robot))
-		user << "\red You can't analyze non-robotic things!"
+		user << "<span class='warning'>You can't analyze non-robotic things!</span>"
 		return
 
 	user.visible_message("<span class='notice'> [user] has analyzed [M]'s components.","<span class='notice'> You have analyzed [M]'s components.")
 	var/BU = M.getFireLoss() > 50 	? 	"<b>[M.getFireLoss()]</b>" 		: M.getFireLoss()
 	var/BR = M.getBruteLoss() > 50 	? 	"<b>[M.getBruteLoss()]</b>" 	: M.getBruteLoss()
-	user.show_message("\blue Analyzing Results for [M]:\n\t Overall Status: [M.stat > 1 ? "fully disabled" : "[M.health - M.halloss]% functional"]")
+	user.show_message("<span class='notice'>Analyzing Results for [M]:\n\t Overall Status: [M.stat > 1 ? "fully disabled" : "[M.health - M.halloss]% functional"]</span>")
 	user.show_message("\t Key: <font color='#FFA500'>Electronics</font>/<font color='red'>Brute</font>", 1)
 	user.show_message("\t Damage Specifics: <font color='#FFA500'>[BU]</font> - <font color='red'>[BR]</font>")
 	if(M.tod && M.stat == DEAD)
-		user.show_message("\blue Time of Disable: [M.tod]")
+		user.show_message("<span class='notice'>Time of Disable: [M.tod]</span>")
 
 	var/mob/living/silicon/robot/H = M
 	var/list/damaged = H.get_damaged_components(1,1,1)
-	user.show_message("\blue Localized Damage:",1)
+	user.show_message("<span class='notice'>Localized Damage:</span>",1)
 	if(length(damaged)>0)
 		for(var/datum/robot_component/org in damaged)
-			user.show_message(text("\blue \t []: [][] - [] - [] - []",	\
+			user.show_message(text("<span class='notice'>\t []: [][] - [] - [] - []</span>",	\
 			capitalize(org.name),					\
 			(org.installed == -1)	?	"<font color='red'><b>DESTROYED</b></font> "							:"",\
 			(org.electronics_damage > 0)	?	"<font color='#FFA500'>[org.electronics_damage]</font>"	:0,	\
@@ -215,8 +224,8 @@
 			(org.toggled)	?	"Toggled ON"	:	"<font color='red'>Toggled OFF</font>",\
 			(org.powered)	?	"Power ON"		:	"<font color='red'>Power OFF</font>"),1)
 	else
-		user.show_message("\blue \t Components are OK.",1)
+		user.show_message("<span class='notice'>\t Components are OK.</span>",1)
 	if(H.emagged && prob(5))
-		user.show_message("\red \t ERROR: INTERNAL SYSTEMS COMPROMISED",1)
+		user.show_message("<span class='warning'>\t ERROR: INTERNAL SYSTEMS COMPROMISED</span>",1)
 	src.add_fingerprint(user)
 	return

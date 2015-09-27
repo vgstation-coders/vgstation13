@@ -1,13 +1,14 @@
 
 
 /mob/proc/rightandwrong(var/summon_type) //0 = Summon Guns, 1 = Summon Magic
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/rightandwrong() called tick#: [world.time]")
 	usr << "<B>You summoned [summon_type ? "magic" : "guns"]!</B>"
 	message_admins("[key_name_admin(usr, 1)] summoned [summon_type ? "magic" : "guns"]!")
 	log_game("[key_name(usr)] summoned [summon_type ? "magic" : "guns"]!")
 	for(var/mob/living/carbon/human/H in player_list)
 		if(H.stat == 2 || !(H.client)) continue
 		if(is_special_character(H)) continue
-		if(prob(25) && !(H.mind in ticker.mode.traitors))
+		if(prob(35) && !(H.mind in ticker.mode.traitors))
 			ticker.mode.traitors += H.mind
 			H.mind.special_role = "traitor"
 			var/datum/objective/survive/survive = new
@@ -19,7 +20,7 @@
 			for(var/datum/objective/OBJ in H.mind.objectives)
 				H << "<B>Objective #[obj_count]</B>: [OBJ.explanation_text]"
 				obj_count++
-		var/randomizeguns = pick("taser","egun","laser","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw")
+		var/randomizeguns = pick("taser","egun","laser","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur", "nagant")
 		var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","charge","wandnothing", "wanddeath", "wandresurrection", "wandpolymorph", "wandteleport", "wanddoor", "wandfireball", "staffchange", "staffhealing", "armor", "scrying")
 		if(!summon_type)
 			switch (randomizeguns)
@@ -45,7 +46,7 @@
 					new /obj/item/weapon/gun/energy/pulse_rifle(get_turf(H))
 				if("silenced")
 					new /obj/item/weapon/gun/projectile/pistol(get_turf(H))
-					new /obj/item/weapon/silencer(get_turf(H))
+					new /obj/item/gun_part/silencer(get_turf(H))
 				if("cannon")
 					new /obj/item/weapon/gun/energy/lasercannon(get_turf(H))
 				if("doublebarrel")
@@ -64,6 +65,23 @@
 					new /obj/item/weapon/gun/energy/crossbow(get_turf(H))
 				if("saw")
 					new /obj/item/weapon/gun/projectile/automatic/l6_saw(get_turf(H))
+				if("hecate")
+					new /obj/item/weapon/gun/projectile/hecate(get_turf(H))
+					new /obj/item/ammo_casing/BMG50(get_turf(H))//can't give a full box of such deadly bullets. 3 shots is plenty.
+					new /obj/item/ammo_casing/BMG50(get_turf(H))
+				if("osipr")
+					new /obj/item/weapon/gun/osipr(get_turf(H))
+				if("gatling")
+					new /obj/item/weapon/gun/gatling(get_turf(H))
+				if("bison")
+					new /obj/item/weapon/gun/energy/bison(get_turf(H))
+				if("ricochet")
+					new /obj/item/weapon/gun/energy/ricochet(get_turf(H))
+				if("spur")
+					new /obj/item/weapon/gun/energy/polarstar(get_turf(H))
+					new /obj/item/device/modkit/spur_parts(get_turf(H))
+				if("nagant")
+					new /obj/item/weapon/gun/projectile/nagant(get_turf(H))
 		else
 			switch (randomizemagic)
 				if("fireball")
@@ -110,4 +128,4 @@
 						H.sight |= (SEE_MOBS|SEE_OBJS|SEE_TURFS)
 						H.see_in_dark = 8
 						H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-						H << "\blue The walls suddenly disappear."
+						H << "<span class='notice'>The walls suddenly disappear.</span>"

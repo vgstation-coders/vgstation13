@@ -34,7 +34,7 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 	if(!..())
 		return 0
 
-	var/list/candidates = get_candidates(BE_RAIDER)
+	var/list/candidates = get_candidates(ROLE_VOXRAIDER)
 	var/raider_num = 0
 
 	//Check that we have enough vox.
@@ -84,7 +84,7 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 		vox.dna.mutantrace = "vox"
 		vox.set_species("Vox")
 		vox.generate_name()
-		vox.languages = list() // Removing language from chargen.
+		//vox.languages = HUMAN // Removing language from chargen.
 		vox.flavor_text = ""
 		vox.add_language("Vox-pidgin")
 		vox.h_style = "Short Vox Quills"
@@ -101,6 +101,8 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 
 /datum/event/heist/proc/is_raider_crew_safe()
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/event/heist/proc/is_raider_crew_safe() called tick#: [world.time]")
+
 	if(raiders.len == 0)
 		return 0
 
@@ -111,6 +113,7 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 	return 1
 
 /datum/event/heist/proc/is_raider_crew_alive()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/event/heist/proc/is_raider_crew_alive() called tick#: [world.time]")
 	if(raiders.len == 0)
 		return 0
 	for(var/datum/mind/raider in raiders)
@@ -121,6 +124,9 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 	return 0
 
 /datum/event/heist/proc/forge_vox_objectives()
+
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/event/heist/proc/forge_vox_objectives() called tick#: [world.time]")
 
 
 	//Commented out for testing.
@@ -164,10 +170,11 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 	return raid_objectives
 
 /datum/event/heist/proc/greet_vox(var/datum/mind/raider)
-	raider.current << {"\blue <B>You are a Vox Raider, fresh from the Shoal!</b>
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/event/heist/proc/greet_vox() called tick#: [world.time]")
+	raider.current << {"<span class='notice'><B>You are a Vox Raider, fresh from the Shoal!</b>
 The Vox are a race of cunning, sharp-eyed nomadic raiders and traders endemic to Tau Ceti and much of the unexplored galaxy. You and the crew have come to the [station_name()] for plunder, trade or both.
 Vox are cowardly and will flee from larger groups, but corner one or find them en masse and they are vicious.
-Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to turn on your nitrogen internals!</b>"}
+Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to turn on your nitrogen internals!</b></span>"}
 	var/obj_count = 1
 	for(var/datum/objective/objective in raider.objectives)
 		raider.current << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
@@ -175,6 +182,8 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 
 
 /datum/event/heist/proc/declare_completion()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/event/heist/proc/declare_completion() called tick#: [world.time]")
 
 	//No objectives, go straight to the feedback.
 	if(!(raid_objectives.len)) return ..()
@@ -225,8 +234,8 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 		else
 			win_msg += "<B>The Vox Raiders were repelled!</B>"
 
-	world << {"\red <FONT size = 3><B>[win_type] [win_group] victory!</B></FONT>
-		[win_msg]"}
+	world << {"<span class='danger'><FONT size = 3>[win_type] [win_group] victory!</FONT>
+		[win_msg]</span>"}
 	feedback_set_details("round_end_result","heist - [win_type] [win_group]")
 
 	var/count = 1
@@ -242,6 +251,7 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 	..()
 
 /datum/event/heist/proc/check_finished()
-	if (!(is_raider_crew_alive()) || (vox_shuttle_location && (vox_shuttle_location == "start")))
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/event/heist/proc/check_finished() called tick#: [world.time]")
+	if (!(is_raider_crew_alive()) || (vox_shuttle && vox_shuttle.returned_home) )
 		return 1
 	return ..()

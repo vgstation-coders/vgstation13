@@ -28,7 +28,7 @@
 	max_co2 = 0
 	max_tox = 0
 
-	a_intent = "harm" //so they don't get pushed around
+	a_intent = I_HURT //so they don't get pushed around
 
 	environment_smash = 2
 
@@ -122,6 +122,7 @@
 		return
 
 	proc/update_icon() //only for the sake of consistency with the other update icon procs
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/update_icon() called tick#: [world.time]")
 		if(stat == CONSCIOUS || stat == UNCONSCIOUS)
 			if(previous) //midsection
 				icon_state = "spaceworm[get_dir(src,previous) | get_dir(src,next)]" //see 3 lines below
@@ -134,11 +135,13 @@
 		return
 
 	proc/AttemptToEat(var/atom/target)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/AttemptToEat() called tick#: [world.time]")
 		if(istype(target,/turf/simulated/wall))
 			if((!istype(target,/turf/simulated/wall/r_wall) && eatingDuration >= 100) || eatingDuration >= 200) //need 20 ticks to eat an rwall, 10 for a regular one
 				var/turf/simulated/wall/wall = target
 				wall.ChangeTurf(/turf/simulated/floor)
-				new /obj/item/stack/sheet/metal(src, flatPlasmaValue)
+				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, src)
+				M.amount = flatPlasmaValue
 				return 1
 		else if(istype(target,/atom/movable))
 			if(istype(target,/mob) || eatingDuration >= 50) //5 ticks to eat stuff like airlocks
@@ -149,6 +152,7 @@
 		return 0
 
 	proc/Attach(var/mob/living/simple_animal/space_worm/attachement)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/Attach() called tick#: [world.time]")
 		if(!attachement)
 			return
 
@@ -158,6 +162,7 @@
 		return
 
 	proc/Detach(die = 0)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/Detach() called tick#: [world.time]")
 		var/mob/living/simple_animal/space_worm/newHead = new /mob/living/simple_animal/space_worm/head(loc,0)
 		var/mob/living/simple_animal/space_worm/newHeadPrevious = previous
 
@@ -171,6 +176,7 @@
 		del(src)
 
 	proc/ProcessStomach()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/ProcessStomach() called tick#: [world.time]")
 		for(var/atom/movable/stomachContent in contents)
 			if(prob(digestionProbability))
 				if(istype(stomachContent,/obj/item/stack)) //converts to plasma, keeping the stack value

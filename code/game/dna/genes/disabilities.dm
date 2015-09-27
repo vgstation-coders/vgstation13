@@ -36,21 +36,27 @@
 	if(sdisability)
 		M.sdisabilities|=sdisability
 	if(activation_message)
-		M << "\red [activation_message]"
+		M << "<span class='warning'>[activation_message]</span>"
 	else
 		testing("[name] has no activation message.")
 
 /datum/dna/gene/disability/deactivate(var/mob/M, var/connected, var/flags)
-	if(mutation && (mutation in M.mutations))
-		M.mutations.Remove(mutation)
+	if(flags & GENE_NATURAL)
+		//testing("[name]([type]) has natural flag.")
+		return 0
+	M.mutations.Remove(mutation)
+	M.active_genes.Remove(src.type)
+
+		//testing("[M] [mut ? "" : "un"]successfully removed [src.name] from mutations")
 	if(disability)
 		M.disabilities &= ~disability
 	if(sdisability)
 		M.sdisabilities &= ~sdisability
 	if(deactivation_message)
-		M << "\red [deactivation_message]"
+		M << "<span class='warning'>[deactivation_message]</span>"
 	else
 		testing("[name] has no deactivation message.")
+	return ..()
 
 /datum/dna/gene/disability/hallucinate
 	name="Hallucinate"
@@ -107,6 +113,12 @@
 
 	New()
 		block=NERVOUSBLOCK
+
+/datum/dna/gene/disability/nervousness/OnMobLife(mob/living/carbon/carbon)
+	..()
+
+	if(prob(10))
+		carbon.stuttering = max(10, carbon.stuttering)
 
 /datum/dna/gene/disability/blindness
 	name="Blindness"

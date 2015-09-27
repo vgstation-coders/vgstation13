@@ -1,3 +1,10 @@
+var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_full"),\
+												"good" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_good"),\
+												"average" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_average"),\
+												"bad" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_bad"),\
+												"worse" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_worse"),\
+												"crit" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_crit"),\
+												"dead" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_dead"))
 /obj/machinery/atmospherics/unary/cryo_cell
 	name = "cryo cell"
 	icon = 'icons/obj/cryogenics.dmi'
@@ -7,12 +14,18 @@
 	layer = 2.8
 
 	var/on = 0
-	var/opened=0
 	var/temperature_archived
 	var/mob/living/carbon/occupant = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 
 	var/current_heat_capacity = 50
+
+	machine_flags = SCREWTOGGLE | CROWDESTROY
+
+	light_color = LIGHT_COLOR_GREEN
+	light_range_on = 1
+	light_power_on = 2
+	use_auto_lights = 1
 
 /obj/machinery/atmospherics/unary/cryo_cell/New()
 	. = ..()
@@ -30,22 +43,35 @@
 	RefreshParts()
 
 	initialize_directions = dir
+	initialize()
+	build_network()
+	if (node)
+		node.initialize()
+		node.build_network()
+
+/obj/machinery/atmospherics/unary/cryo_cell/initialize()
+	if(node) return
+	for(var/cdir in cardinal)
+		node = findConnecting(cdir)
+		if(node)
+			break
+	update_icon()
 
 /obj/machinery/atmospherics/unary/cryo_cell/Destroy()
 	go_out()
-	var/obj/item/weapon/reagent_containers/glass/B = beaker
 	if(beaker)
-		B.loc = get_step(loc, SOUTH) //Beaker is carefully ejected from the wreckage of the cryotube
+		detach()
+		//beaker.loc = get_step(loc, SOUTH) //Beaker is carefully ejected from the wreckage of the cryotube
 	..()
 
 /obj/machinery/atmospherics/unary/cryo_cell/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+	if(!ismob(O)) //humans only
+		return
 	if(O.loc == user) //no you can't pull things out of your ass
 		return
 	if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.resting) //are you cuffed, dying, lying, stunned or other
 		return
 	if(O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
-		return
-	if(!ismob(O)) //humans only
 		return
 	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
 		return
@@ -56,17 +82,18 @@
 	if(!istype(user.loc, /turf) || !istype(O.loc, /turf)) // are you in a container/closet/pod/etc?
 		return
 	if(occupant)
-		user << "\blue <B>The cryo cell is already occupied!</B>"
+		user << "<span class='bnotice'>The cryo cell is already occupied!</span>"
 		return
 	if(isrobot(user))
-		if(!istype(user:module, /obj/item/weapon/robot_module/medical))
+		var/mob/living/silicon/robot/robit = usr
+		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
 			user << "<span class='warning'>You do not have the means to do this!</span>"
 			return
 	var/mob/living/L = O
-	if(!istype(L) || L.buckled)
+	if(!istype(L) || L.locked_to)
 		return
 	if(L.abiotic())
-		user << "\red <B>Subject cannot have abiotic items on.</B>"
+		user << "<span class='danger'>Subject cannot have abiotic items on.</span>"
 		return
 	for(var/mob/living/carbon/slime/M in range(1,L))
 		if(M.Victim == L)
@@ -74,14 +101,38 @@
 			return
 	if(put_mob(L))
 		if(L == user)
-			visible_message("[user] climbs into the cryo cell.", 3)
+			visible_message("[user] climbs into \the [src].", 3)
 		else
-			visible_message("[user] puts [L.name] into the cryo cell.", 3)
+			visible_message("[user] puts [L.name] into \the [src].", 3)
 			if(user.pulling == L)
 				user.pulling = null
 
+/obj/machinery/atmospherics/unary/cryo_cell/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+	if(!ishuman(usr) && !isrobot(usr) || occupant == usr)
+		return
+	if(!occupant)
+		usr << "<span class='warning'>The sleeper is unoccupied!</span>"
+		return
+	if(isrobot(usr))
+		var/mob/living/silicon/robot/robit = usr
+		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+			usr << "<span class='warning'>You do not have the means to do this!</span>"
+			return
+	if(!istype(over_location) || over_location.density)
+		return
+	if(!Adjacent(over_location) || !Adjacent(usr) || !usr.Adjacent(over_location))
+		return
+	for(var/atom/movable/A in over_location.contents)
+		if(A.density)
+			if((A == src) || istype(A, /mob))
+				continue
+			return
+	visible_message("[usr] removes [occupant.name] from \the [src].", 3)
+	go_out(over_location)
+
 /obj/machinery/atmospherics/unary/cryo_cell/process()
 	..()
+	update_icon()
 	if(!node)
 		return
 	if(!on)
@@ -114,19 +165,21 @@
 	go_out()
 	return
 
-/obj/machinery/atmospherics/unary/cryo_cell/examine()
+/obj/machinery/atmospherics/unary/cryo_cell/examine(mob/user)
 	..()
-
-	if(in_range(usr, src))
-		usr << "You can just about make out some loose objects floating in the murk:"
-		for(var/obj/O in src)
-			if(O != beaker)
-				usr << O.name
-		for(var/mob/M in src)
-			if(M != occupant)
-				usr << M.name
+	if(in_range(user,src))
+		if(contents)
+			user << "You can just about make out some properties of the cryo's murky depths:"
+			for(var/atom/movable/floater in (contents - beaker))
+				user << "A figure floats in the depths, they appear to be [floater.name]"
+			if(beaker)
+				user << "A beaker, releasing the following chemicals into the fluids:"
+				for(var/datum/reagent/R in beaker.reagents.reagent_list)
+					user << "<span class='info'>[R.volume] units of [R.name]</span>"
+		else
+			user << "<span class='info'>The chamber appears devoid of anything but its biotic fluids.</span>"
 	else
-		usr << "<span class='notice'>Too far away to view contents.</span>"
+		user << "<span class='notice'>Too far away to view contents.</span>"
 
 /obj/machinery/atmospherics/unary/cryo_cell/attack_hand(mob/user)
 	ui_interact(user)
@@ -193,7 +246,7 @@
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
-        // for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
+        // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
 		ui = new(user, src, ui_key, "cryo.tmpl", "Cryo Cell Control System", 520, 410)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
@@ -209,6 +262,10 @@
 	if(..())
 		return 0 // don't update UIs attached to this object
 
+	if(href_list["close"])
+		if(usr.machine == src) usr.unset_machine()
+		return 1
+
 	if(href_list["switchOn"])
 		on = 1
 		update_icon()
@@ -219,8 +276,7 @@
 
 	if(href_list["ejectBeaker"])
 		if(beaker)
-			beaker.loc = get_step(loc, SOUTH)
-			beaker = null
+			detach()
 
 	if(href_list["ejectOccupant"])
 		if(!occupant || isslime(usr) || ispAI(usr))
@@ -229,54 +285,46 @@
 
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
+/obj/machinery/atmospherics/unary/cryo_cell/proc/detach()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/unary/cryo_cell/proc/detach() called tick#: [world.time]")
+	if(beaker)
+		beaker.loc = get_step(loc, SOUTH)
+		if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
+			var/mob/living/silicon/robot/R = beaker:holder:loc
+			if(R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
+				beaker.loc = R
+			else
+				beaker.loc = beaker:holder
+		beaker = null
+
+/obj/machinery/atmospherics/unary/cryo_cell/crowbarDestroy(mob/user)
+	if(on)
+		user << "[src] is on."
+		return
+	if(occupant)
+		user << "<span class='warning'>[occupant.name] is inside the [src]!</span>"
+		return
+	if(beaker) //special check to avoid destroying this
+		detach()
+	return ..()
 
 /obj/machinery/atmospherics/unary/cryo_cell/attackby(var/obj/item/weapon/G as obj, var/mob/user as mob)
 	if(istype(G, /obj/item/weapon/reagent_containers/glass))
 		if(beaker)
-			user << "\red A beaker is already loaded into the machine."
+			user << "<span class='warning'>A beaker is already loaded into the machine.</span>"
 			return
-
 		beaker =  G
-		user.drop_item()
-		G.loc = src
+		user.drop_item(G, src)
 		user.visible_message("[user] adds \a [G] to \the [src]!", "You add \a [G] to \the [src]!")
-	else if(istype(G, /obj/item/weapon/screwdriver))
-		if(!opened)
-			src.opened = 1
-			//src.icon_state = "cryo_cell_t"
-			user << "You open the maintenance hatch of [src]"
-			return
-		else
-			src.opened = 0
-			//src.icon_state = "cryo_cell"
-			user << "You close the maintenance hatch of [src]"
-			return
+	if(istype(G, /obj/item/weapon/wrench))//FUCK YOU PARENT, YOU AREN'T MY REAL DAD
+		return
+	if(..())
+		return
+	if (panel_open)
+		user.set_machine(src)
+		interact(user)
 		return 1
-	if (opened)
-		if(on)
-			user << "[src] is on."
-			return
-		if(occupant)
-			user << "\red [occupant.name] is inside the [src]!"
-			return
-		if(istype(G, /obj/item/weapon/crowbar)) //beakers are destroyed in the process of destroying the cryo cell
-			user << "You begin to remove the circuits from [src]."
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			if(do_after(user, 50))
-				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-				M.state = 2
-				M.icon_state = "box_1"
-				for(var/obj/I in component_parts)
-					if(I.reliability != 100 && crit_fail)
-						I.crit_fail = 1
-					I.loc = src.loc
-				del(src)
-				return 1
-		else
-			user.set_machine(src)
-			interact(user)
-			return 1
-	else if(istype(G, /obj/item/weapon/grab))
+	if(istype(G, /obj/item/weapon/grab))
 		if(!ismob(G:affecting))
 			return
 		for(var/mob/living/carbon/slime/M in range(1,G:affecting))
@@ -290,8 +338,31 @@
 	return
 
 /obj/machinery/atmospherics/unary/cryo_cell/update_icon()
+	overlays.len = 0
 	if(on)
 		if(occupant)
+			if(occupant.stat == DEAD || !occupant.has_brain())
+				overlays += cryo_health_indicator["dead"]
+			else
+				if(occupant.health >= occupant.maxHealth)
+					overlays += cryo_health_indicator["full"]
+				else
+					if(occupant.health < config.health_threshold_crit)
+						overlays += cryo_health_indicator["crit"]
+					else
+						switch((occupant.health / occupant.maxHealth) * 100) // Get a ratio of health to work with
+							if(100 to INFINITY) // No idea how we got here with the check above...
+								overlays += cryo_health_indicator["full"]
+							if(75 to 100)
+								overlays += cryo_health_indicator["good"]
+							if(50 to 75)
+								overlays += cryo_health_indicator["average"]
+							if(25 to 50)
+								overlays += cryo_health_indicator["bad"]
+							if(1 to 25)
+								overlays += cryo_health_indicator["worse"]
+							else //Shouldn't ever happen.
+								overlays += cryo_health_indicator["dead"]
 			icon_state = "cell-occupied"
 			return
 		icon_state = "cell-on"
@@ -299,6 +370,7 @@
 	icon_state = "cell-off"
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/process_occupant()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/unary/cryo_cell/proc/process_occupant() called tick#: [world.time]")
 	if(air_contents.total_moles() < 10)
 		return
 	if(occupant)
@@ -329,6 +401,7 @@
 			beaker.reagents.reaction(occupant)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/heat_gas_contents()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/unary/cryo_cell/proc/heat_gas_contents() called tick#: [world.time]")
 	if(air_contents.total_moles() < 1)
 		return
 	var/air_heat_capacity = air_contents.heat_capacity()
@@ -338,6 +411,7 @@
 		air_contents.temperature = combined_energy/combined_heat_capacity
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/expel_gas()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/unary/cryo_cell/proc/expel_gas() called tick#: [world.time]")
 	if(air_contents.total_moles() < 1)
 		return
 //	var/datum/gas_mixture/expel_gas = new
@@ -348,41 +422,46 @@
 	//expel_gas.temperature = T20C // Lets expel hot gas and see if that helps people not die as they are removed
 	//loc.assume_air(expel_gas)
 
-/obj/machinery/atmospherics/unary/cryo_cell/proc/go_out()
-	if(!( occupant ))
-		return
+/obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit = src.loc)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/unary/cryo_cell/proc/go_out() called tick#: [world.time]")
+	if(!(occupant))
+		return 0
 	//for(var/obj/O in src)
 	//	O.loc = loc
-	if (occupant.client)
-		occupant.client.eye = occupant.client.mob
-		occupant.client.perspective = MOB_PERSPECTIVE
-	occupant.loc = get_step(loc, SOUTH)	//this doesn't account for walls or anything, but i don't forsee that being a problem.
+	if(exit == loc)
+		occupant.forceMove(get_step(loc, SOUTH))	//this doesn't account for walls or anything, but i don't forsee that being a problem.
+	else
+		occupant.forceMove(exit)
+	occupant.reset_view()
 	if (occupant.bodytemperature < 261 && occupant.bodytemperature > 140) //Patch by Aranclanos to stop people from taking burn damage after being ejected
 		occupant.bodytemperature = 261
 //	occupant.metabslow = 0
 	occupant = null
 	update_icon()
-	return
+	return 1
 /obj/machinery/atmospherics/unary/cryo_cell/proc/put_mob(mob/living/carbon/M as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/unary/cryo_cell/proc/put_mob() called tick#: [world.time]")
 	if (!istype(M))
-		usr << "\red <B>The cryo cell cannot handle such a lifeform!</B>"
+		usr << "<span class='danger'>The cryo cell cannot handle such a lifeform!</span>"
 		return
 	if (occupant)
-		usr << "\red <B>The cryo cell is already occupied!</B>"
+		usr << "<span class='danger'>The cryo cell is already occupied!</span>"
 		return
 	if (M.abiotic())
-		usr << "\red Subject may not have abiotic items on."
+		usr << "<span class='warning'>Subject may not have abiotic items on.</span>"
 		return
+	if(M.locked_to)
+		M.locked_to.unlock_atom(M)
 	if(!node)
-		usr << "\red The cell is not correctly connected to its pipe network!"
+		usr << "<span class='warning'>The cell is not correctly connected to its pipe network!</span>"
 		return
-	if (M.client)
-		M.client.perspective = EYE_PERSPECTIVE
-		M.client.eye = src
+	if(usr.pulling == M)
+		usr.stop_pulling()
 	M.stop_pulling()
 	M.loc = src
+	M.reset_view()
 	if(M.health > -100 && (M.health < 0 || M.sleeping))
-		M << "\blue <b>You feel a cold liquid surround you. Your skin starts to freeze up.</b>"
+		M << "<span class='bnotice'>You feel a cold liquid surround you. Your skin starts to freeze up.</span>"
 	occupant = M
 	//M.metabslow = 1
 	add_fingerprint(usr)
@@ -394,16 +473,17 @@
 	set name = "Eject occupant"
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/atmospherics/unary/cryo_cell/verb/move_eject()  called tick#: [world.time]")
 	if(usr == occupant)//If the user is inside the tube...
-		if (usr.stat == 2)//and he's not dead....
+		if (usr.stat == 2 || (usr.status_flags & FAKEDEATH))//and he's not dead....
 			return
-		usr << "\blue Release sequence activated. This will take two minutes."
+		usr << "<span class='notice'>Release sequence activated. This will take two minutes.</span>"
 		sleep(1200)
 		if(!src || !usr || !occupant || (occupant != usr)) //Check if someone's released/replaced/bombed him already
 			return
 		go_out()//and release him from the eternal prison.
 	else
-		if (usr.stat != 0 || istype(usr, /mob/living/simple_animal))
+		if (usr.stat != 0 || istype(usr, /mob/living/simple_animal) || (usr.status_flags & FAKEDEATH))
 			return
 		go_out()
 	add_fingerprint(usr)
@@ -413,13 +493,14 @@
 	set name = "Move Inside"
 	set category = "Object"
 	set src in oview(1)
-	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/atmospherics/unary/cryo_cell/verb/move_inside()  called tick#: [world.time]")
+	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting || usr.locked_to || (usr.status_flags & FAKEDEATH)) //are you cuffed, dying, lying, stunned or other
 		return
 	for(var/mob/living/carbon/slime/M in range(1,usr))
 		if(M.Victim == usr)
 			usr << "You're too busy getting your life sucked out of you."
 			return
-	if (usr.stat != 0 || stat & (NOPOWER|BROKEN))
+	if (usr.stat != 0 || stat & (NOPOWER|BROKEN) || (usr.status_flags & FAKEDEATH))
 		return
 	put_mob(usr)
 	return
@@ -427,10 +508,13 @@
 
 
 /datum/data/function/proc/reset()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/data/function/proc/reset() called tick#: [world.time]")
 	return
 
 /datum/data/function/proc/r_input(href, href_list, mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/data/function/proc/r_input() called tick#: [world.time]")
 	return
 
 /datum/data/function/proc/display()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/data/function/proc/display() called tick#: [world.time]")
 	return

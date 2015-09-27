@@ -1,12 +1,7 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
-
-
-
-
-
 /obj/machinery/computer/telecomms/traffic
 	name = "Telecommunications Traffic Control"
 	icon_state = "computer_generic"
+	circuit = "/obj/item/weapon/circuitboard/comm_traffic"
 
 	var/screen = 0				// the screen number:
 	var/list/servers = list()	// the servers located by the computer
@@ -23,9 +18,12 @@
 	var/list/access_log = list()
 	var/process = 0
 
+	light_color = LIGHT_COLOR_GREEN
+
 	req_access = list(access_tcomsat)
 
 /obj/machinery/computer/telecomms/traffic/proc/stop_editing()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/telecomms/traffic/proc/stop_editing() called tick#: [world.time]")
 	if(editingcode)
 		if(editingcode.client)
 			winshow(editingcode, "Telecomms IDE", 0) // hide the window!
@@ -58,6 +56,8 @@
 		return
 
 	// For the typer, the input is enabled. Buffer the typed text
+	if(!istype(editingcode))
+		return
 	storedcode = "[winget(editingcode, "tcscode", "text")]"
 	winset(editingcode, "tcscode", "is-disabled=false")
 
@@ -92,7 +92,7 @@
 	var/dat = "<TITLE>Telecommunication Traffic Control</TITLE><center><b>Telecommunications Traffic Control</b></center>"
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\telecomms\traffic_control.dm:93: dat += "<br><b><font color='[(auth ? "green" : "red")]'>[(auth ? "AUTHED" : "NOT AUTHED")]:</font></b> <A href='?src=\ref[src];auth=1'>[(!auth ? "Insert ID" : auth.registered_name)]</A><BR>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\telecomms\traffic_control.dm:93: dat += "<br><b><font color='[(auth ? "green" : "red")]'>[(auth ? "AUTHED" : "NOT AUTHED")]:</font></b> <A href='?src=\ref[src];auth=1'>[(!auth ? "Insert ID" : auth.registered_name)]</A><BR>"
 	dat += {"<br><b><font color='[(auth ? "green" : "red")]'>[(auth ? "AUTHED" : "NOT AUTHED")]:</font></b> <A href='?src=\ref[src];auth=1'>[(!auth ? "Insert ID" : auth.registered_name)]</A><BR>
 		<A href='?src=\ref[src];print=1'>View System Log</A><HR>"}
 	// END AUTOFIX
@@ -106,7 +106,7 @@
 			if(0)
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\telecomms\traffic_control.dm:104: dat += "<br>[temp]<br>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\telecomms\traffic_control.dm:104: dat += "<br>[temp]<br>"
 				dat += {"<br>[temp]<br>
 					<br>Current Network: <a href='?src=\ref[src];network=1'>[network]</a><br>"}
 				// END AUTOFIX
@@ -116,7 +116,7 @@
 						dat += "<li><a href='?src=\ref[src];viewserver=[T.id]'>\ref[T] [T.name]</a> ([T.id])</li>"
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\telecomms\traffic_control.dm:110: dat += "</ul>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\telecomms\traffic_control.dm:110: dat += "</ul>"
 					dat += {"</ul>
 						<br><a href='?src=\ref[src];operation=release'>\[Flush Buffer\]</a>"}
 					// END AUTOFIX
@@ -130,7 +130,7 @@
 				if(SelectedServer)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\telecomms\traffic_control.dm:121: dat += "<br>[temp]<br>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\telecomms\traffic_control.dm:121: dat += "<br>[temp]<br>"
 					dat += {"<br>[temp]<br>
 						<center><a href='?src=\ref[src];operation=mainmenu'>\[Main Menu\]</a>     <a href='?src=\ref[src];operation=refresh'>\[Refresh\]</a></center>
 						<br>Current Network: [network]
@@ -154,6 +154,7 @@
 	return
 
 /obj/machinery/computer/telecomms/traffic/proc/create_log(var/entry, var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/telecomms/traffic/proc/create_log() called tick#: [world.time]")
 	var/id = null
 	if(issilicon(user))
 		id = "System Administrator"
@@ -166,6 +167,7 @@
 	access_log += "\[[get_timestamp()]\] [id] [entry]"
 
 /obj/machinery/computer/telecomms/traffic/proc/print_logs()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/telecomms/traffic/proc/print_logs() called tick#: [world.time]")
 	. = "<center><h2>Traffic Control Telecomms System Log</h2></center><HR>"
 	for(var/entry in access_log)
 		. += entry + "<BR>"
@@ -186,8 +188,7 @@
 				var/obj/item/weapon/card/id/I = C.get_active_hand()
 				if(istype(I))
 					if(check_access(I))
-						C.drop_item()
-						I.loc = src
+						C.drop_item(I, src)
 						auth = I
 						create_log("has logged in.", usr)
 			else
@@ -203,7 +204,7 @@
 		return
 
 	if(!auth && !issilicon(usr) && !emagged)
-		usr << "\red ACCESS DENIED."
+		usr << "<span class='warning'>ACCESS DENIED.</span>"
 		return
 
 	if(href_list["viewserver"])
@@ -287,40 +288,17 @@
 	return
 
 /obj/machinery/computer/telecomms/traffic/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
-	if(istype(D, /obj/item/weapon/screwdriver))
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-		if(do_after(user, 20))
-			if (src.stat & BROKEN)
-				user << "\blue The broken glass falls out."
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-				getFromPool(/obj/item/weapon/shard, loc)
-				var/obj/item/weapon/circuitboard/comm_traffic/M = new /obj/item/weapon/circuitboard/comm_traffic( A )
-				for (var/obj/C in src)
-					C.loc = src.loc
-				A.circuit = M
-				A.state = 3
-				A.icon_state = "3"
-				A.anchored = 1
-				del(src)
-			else
-				user << "\blue You disconnect the monitor."
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-				var/obj/item/weapon/circuitboard/comm_traffic/M = new /obj/item/weapon/circuitboard/comm_traffic( A )
-				for (var/obj/C in src)
-					C.loc = src.loc
-				A.circuit = M
-				A.state = 4
-				A.icon_state = "4"
-				A.anchored = 1
-				del(src)
-	else if(istype(D, /obj/item/weapon/card/emag) && !emagged)
+	return ..()
+
+/obj/machinery/computer/telecomms/emag(mob/user)
+	if(!emagged)
 		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
-		user << "\blue You you disable the security protocols"
+		user << "<span class='notice'>You you disable the security protocols</span>"
 	src.updateUsrDialog()
-	return
-
+	return 1
 /obj/machinery/computer/telecomms/traffic/proc/canAccess(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/telecomms/traffic/proc/canAccess() called tick#: [world.time]")
 	if(issilicon(user) || in_range(user, src))
 		return 1
 	return 0

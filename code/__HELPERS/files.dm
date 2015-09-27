@@ -1,6 +1,7 @@
 //checks if a file exists and contains text
 //returns text as a string if these conditions are met
 /proc/return_file_text(filename)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/return_file_text() called tick#: [world.time]")
 	if(fexists(filename) == 0)
 		error("File not found ([filename])")
 		return
@@ -12,12 +13,41 @@
 
 	return text
 
+/proc/get_maps(root="maps/voting/")
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_maps() called tick#: [world.time]")
+	var/list/maps = list()
+	var/recursion_limit = 20 //lots of maps waiting to be played, feels like TF2
+	//Get our potential maps
+	//testing("starting in [root]")
+	for(var/potential in flist(root))
+		if(copytext(potential,-1,0 != "/")) continue // Not a directory, ignore it.
+		//testing("Inside [root + potential]")
+		if(!recursion_limit) break
+		//our current working directory
+		var/path = root + potential
+		//The DMB that has the map we want.
+		var/binary
+		//Looking for a binary
+		for(var/binaries in flist(path))
+			//testing("Checking file [binaries]")
+			if(copytext(binaries,-4,0) == ".dmb")
+				binary = binaries
+				break
+		if(!binary)
+			warning("Map folder [path] does not contain a valid byond binary, skipping.")
+		else
+			maps[potential] = path + binary
+		recursion_limit--
+	return maps
+
 //Sends resource files to client cache
 /client/proc/getFiles()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/client/proc/getFiles() called tick#: [world.time]")
 	for(var/file in args)
 		src << browse_rsc(file)
 
-/client/proc/browse_files(root="data/logs/", max_iterations=10, list/valid_extensions=list(".txt",".log",".htm"))
+/client/proc/browse_files(root="data/logs/", max_iterations=10, list/valid_extensions=list(".txt",".log",".htm", ".csv"))
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/client/proc/browse_files() called tick#: [world.time]")
 	var/path = root
 
 	for(var/i=0, i<max_iterations, i++)
@@ -51,6 +81,7 @@
 
 	PLEASE USE RESPONSIBLY, Some log files canr each sizes of 4MB!	*/
 /client/proc/file_spam_check()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/client/proc/file_spam_check() called tick#: [world.time]")
 	var/time_to_wait = fileaccess_timer - world.time
 	if(time_to_wait > 0)
 		src << "<font color='red'>Error: file_spam_check(): Spam. Please wait [round(time_to_wait/10)] seconds.</font>"

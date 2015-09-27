@@ -9,6 +9,7 @@
 	standard 0 if fail
 */
 /mob/living/proc/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/used_weapon = null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/proc/apply_damage() called tick#: [world.time]")
 	if(!damage || (blocked >= 2))	return 0
 	switch(damagetype)
 		if(BRUTE)
@@ -29,6 +30,7 @@
 
 
 /mob/living/proc/apply_damages(var/brute = 0, var/burn = 0, var/tox = 0, var/oxy = 0, var/clone = 0, var/halloss = 0, var/def_zone = null, var/blocked = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/proc/apply_damages() called tick#: [world.time]")
 	if(blocked >= 2)	return 0
 	if(brute)	apply_damage(brute, BRUTE, def_zone, blocked)
 	if(burn)	apply_damage(burn, BURN, def_zone, blocked)
@@ -41,30 +43,41 @@
 
 
 /mob/living/proc/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/proc/apply_effect() called tick#: [world.time]")
 	if(!effect || (blocked >= 2))	return 0
+	var/altered = 0
 	switch(effecttype)
 		if(STUN)
-			Stun(effect/(blocked+1))
+			altered = effect/(blocked+1)
+			Stun(altered)
 		if(WEAKEN)
-			Weaken(effect/(blocked+1))
+			altered = effect/(blocked+1)
+			Weaken(altered)
 		if(PARALYZE)
-			Paralyse(effect/(blocked+1))
+			altered = effect/(blocked+1)
+			Paralyse(altered)
 		if(AGONY)
-			halloss += effect // Useful for objects that cause "subdual" damage. PAIN!
+			altered = effect
+			halloss += altered // Useful for objects that cause "subdual" damage. PAIN!
 		if(IRRADIATE)
-			radiation += max((((effect - (effect*(getarmor(null, "rad")/100))))/(blocked+1)),0)//Rads auto check armor
+			altered = max((((effect - (effect*(getarmor(null, "rad")/100))))/(blocked+1)),0)//Rads auto check armor
+			radiation += altered
 		if(STUTTER)
 			if(status_flags & CANSTUN) // stun is usually associated with stutter
-				stuttering = max(stuttering,(effect/(blocked+1)))
+				altered = max(stuttering,(effect/(blocked+1)))
+				stuttering = altered
 		if(EYE_BLUR)
-			eye_blurry = max(eye_blurry,(effect/(blocked+1)))
+			altered = max(eye_blurry,(effect/(blocked+1)))
+			eye_blurry = altered
 		if(DROWSY)
-			drowsyness = max(drowsyness,(effect/(blocked+1)))
+			altered = max(drowsyness,(effect/(blocked+1)))
+			drowsyness = altered
 	updatehealth()
-	return 1
+	return altered
 
 
 /mob/living/proc/apply_effects(var/stun = 0, var/weaken = 0, var/paralyze = 0, var/irradiate = 0, var/stutter = 0, var/eyeblur = 0, var/drowsy = 0, var/agony = 0, var/blocked = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/proc/apply_effects() called tick#: [world.time]")
 	if(blocked >= 2)	return 0
 	if(stun)		apply_effect(stun, STUN, blocked)
 	if(weaken)		apply_effect(weaken, WEAKEN, blocked)
@@ -75,3 +88,6 @@
 	if(drowsy)		apply_effect(drowsy, DROWSY, blocked)
 	if(agony)		apply_effect(agony, AGONY, blocked)
 	return 1
+
+/mob/living/ashify()
+	return //let's not go ashy, shall we?

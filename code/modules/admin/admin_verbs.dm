@@ -44,6 +44,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/admin_call_shuttle,	/*allows us to call the emergency shuttle*/
 	/client/proc/admin_cancel_shuttle,	/*allows us to cancel the emergency shuttle, sending it back to centcomm*/
 	/client/proc/cmd_admin_direct_narrate,	/*send text directly to a player with no padding. Useful for narratives and fluff-text*/
+	/client/proc/cmd_admin_local_narrate,	/*send text locally to all players in view, similar to direct narrate*/
 	/client/proc/cmd_admin_world_narrate,	/*sends text to all players with no padding*/
 	/client/proc/cmd_admin_create_centcom_report,
 	/client/proc/check_words,			/*displays cult-words*/
@@ -55,19 +56,20 @@ var/list/admin_verbs_admin = list(
 	/client/proc/toggle_hear_radio,		/*toggles whether we hear the radio*/
 	/client/proc/investigate_show,		/*various admintools for investigation. Such as a singulo grief-log*/
 	/client/proc/secrets,
+	/client/proc/shuttle_magic,
 	/datum/admins/proc/toggleooc,		/*toggles ooc on/off for everyone*/
 	/datum/admins/proc/toggleoocdead,	/*toggles ooc on/off for everyone who is dead*/
 	/client/proc/game_panel,			/*game panel, allows to change game-mode etc*/
 	/client/proc/cmd_admin_say,			/*admin-only ooc chat*/
 	/datum/admins/proc/PlayerNotes,
 	/client/proc/cmd_mod_say,
+	/client/proc/cmd_mod_window,
 	/datum/admins/proc/show_player_info,
 	/client/proc/free_slot,			/*frees slot for chosen job*/
 	/client/proc/cmd_admin_change_custom_event,
 	/client/proc/cmd_admin_rejuvenate,
 	/client/proc/toggleattacklogs,
 	/client/proc/toggledebuglogs,
-	/datum/admins/proc/show_skills,
 	/client/proc/check_customitem_activity,
 	// /client/proc/man_up,
 	// /client/proc/global_man_up,
@@ -87,15 +89,15 @@ var/list/admin_verbs_sounds = list(
 	/client/proc/play_sound
 	)
 var/list/admin_verbs_fun = list(
+	/datum/admins/proc/media_stop_all,
 	/client/proc/object_talk,
 	/client/proc/cmd_admin_dress,
 	/client/proc/cmd_admin_gib_self,
 	/client/proc/drop_bomb,
 	/client/proc/cinematic,
 	/client/proc/one_click_antag,
+	/client/proc/antag_madness,
 	/datum/admins/proc/toggle_aliens,
-	/datum/admins/proc/toggle_space_ninja,
-	/client/proc/send_space_ninja,
 	// FUUUUCKED /client/proc/zombie_event, // ZOMBB-B-BIES
 	/client/proc/cmd_admin_add_freeform_ai_law,
 	/client/proc/cmd_admin_add_random_ai_law,
@@ -104,10 +106,19 @@ var/list/admin_verbs_fun = list(
 	/client/proc/set_ooc,
 	/client/proc/editappear,
 	/client/proc/commandname,
-	/client/proc/gib_money // /vg/
+	/client/proc/delete_all_adminbus,
+	/client/proc/delete_all_bomberman,
+	/client/proc/create_bomberman_arena,
+	/client/proc/control_bomberman_arena,
+	/client/proc/gib_money, // /vg/
+	/client/proc/smissmas,
+	/client/proc/achievement,
+	/client/proc/mommi_static,
+	/client/proc/makepAI
 	)
 var/list/admin_verbs_spawn = list(
-	/datum/admins/proc/spawn_atom,		/*allows us to spawn instances*/
+	/datum/admins/proc/spawn_atom,		/*	Allows us to spawn instances.							*/
+	/client/proc/spawn_datum,		/*	Allows us to spawn datums to the marked datum buffer.	*/
 	/client/proc/respawn_character
 	)
 var/list/admin_verbs_server = list(
@@ -127,11 +138,12 @@ var/list/admin_verbs_server = list(
 	/datum/admins/proc/adspawn,
 	/datum/admins/proc/adjump,
 	/datum/admins/proc/toggle_aliens,
-	/datum/admins/proc/toggle_space_ninja,
 	/client/proc/toggle_random_events,
-	/client/proc/check_customitem_activity
+	/client/proc/check_customitem_activity,
+	/client/proc/dump_chemreactions,
 	)
 var/list/admin_verbs_debug = list(
+	/client/proc/getSchedulerContext,
 	/client/proc/cmd_admin_list_open_jobs,
 	/proc/getbrokeninhands,
 	/client/proc/Debug2,
@@ -151,10 +163,28 @@ var/list/admin_verbs_debug = list(
 	/client/proc/toggledebuglogs,
 	/client/proc/qdel_toggle,              // /vg/
 	/client/proc/cmd_admin_dump_instances, // /vg/
-	/client/proc/disable_bloodvirii,       // /vg/
+	/client/proc/cmd_admin_dump_machine_type_list, // /vg/
+	/client/proc/disable_bloodvirii,       // /vg
+	/client/proc/handle_paperwork, //this is completely experimental
+	/client/proc/reload_style_sheet,
+	/client/proc/reset_style_sheet,
+	/client/proc/test_movable_UI,
+	/client/proc/test_snap_UI,
+	/client/proc/configFood,
+	/client/proc/debug_reagents,
+	/client/proc/make_invulnerable,
+	/client/proc/cmd_admin_dump_delprofile,
+	/client/proc/mob_list,
+	/client/proc/cure_disease,
+	/client/proc/check_bomb,
+	/client/proc/set_teleport_pref,
+	/client/proc/check_convertables,
+	/client/proc/cmd_admin_find_bad_blood_tracks,
 #ifdef PROFILE_MACHINES
 	/client/proc/cmd_admin_dump_macprofile,
 #endif
+	/client/proc/debugNatureMapGenerator,
+	/client/proc/callatomproc
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -199,8 +229,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/drop_bomb,
 	/client/proc/cinematic,
 	/datum/admins/proc/toggle_aliens,
-	/datum/admins/proc/toggle_space_ninja,
-	/client/proc/send_space_ninja,
 	/client/proc/cmd_admin_add_freeform_ai_law,
 	/client/proc/cmd_admin_add_random_ai_law,
 	/client/proc/cmd_admin_create_centcom_report,
@@ -216,6 +244,7 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/toggle_log_hrefs,
 	/datum/admins/proc/immreboot,
 	/client/proc/everyone_random,
+	/client/proc/shuttle_magic,
 	/datum/admins/proc/toggleAI,
 	/datum/admins/proc/adrev,
 	/datum/admins/proc/adspawn,
@@ -237,6 +266,7 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/cmd_debug_tog_aliens,
 	/client/proc/air_report,
 	/client/proc/enable_debug_verbs,
+	/client/proc/mob_list,
 	/proc/possess,
 	/proc/release
 	)
@@ -248,11 +278,16 @@ var/list/admin_verbs_mod = list(
 	/datum/admins/proc/PlayerNotes,
 	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
 	/client/proc/cmd_mod_say,
+	/client/proc/cmd_mod_window,
 	/datum/admins/proc/show_player_info,
 	/client/proc/player_panel_new,
-	/datum/admins/proc/show_skills
+	/client/proc/vv_marked_datum,
+	/datum/admins/proc/view_mob_attack_log /* Allow you to view attack logs since doing it in VV sucks */
 )
 /client/proc/add_admin_verbs()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/proc/add_admin_verbs()  called tick#: [world.time]")
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/add_admin_verbs() called tick#: [world.time]")
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\\\/client/proc/add_admin_verbs()  called tick#: [world.time]")
 	if(holder)
 		verbs += admin_verbs_default
 		if(holder.rights & R_BUILDMODE)		verbs += /client/proc/togglebuildmodeself
@@ -268,8 +303,12 @@ var/list/admin_verbs_mod = list(
 		if(holder.rights & R_SOUNDS)		verbs += admin_verbs_sounds
 		if(holder.rights & R_SPAWN)			verbs += admin_verbs_spawn
 		if(holder.rights & R_MOD)			verbs += admin_verbs_mod
+		if(holder.rights & R_ADMINBUS)		verbs += /client/proc/secrets
 
 /client/proc/remove_admin_verbs()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/proc/remove_admin_verbs()  called tick#: [world.time]")
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/remove_admin_verbs() called tick#: [world.time]")
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\\\/client/proc/remove_admin_verbs()  called tick#: [world.time]")
 	verbs.Remove(
 		admin_verbs_default,
 		/client/proc/togglebuildmodeself,
@@ -305,13 +344,14 @@ var/list/admin_verbs_mod = list(
 		/client/proc/cmd_admin_grantfullaccess,
 		/client/proc/kaboom,
 		/client/proc/splash,
-		/client/proc/cmd_admin_areatest
+		/client/proc/cmd_admin_areatest,
+		/client/proc/readmin,
 		)
 
 /client/proc/hide_most_verbs()//Allows you to keep some functionality while hiding some verbs
 	set name = "Adminverbs - Hide Most"
 	set category = "Admin"
-
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/proc/hide_most_verbs()  called tick#: [world.time]")
 	verbs.Remove(/client/proc/hide_most_verbs, admin_verbs_hideable)
 	verbs += /client/proc/show_verbs
 
@@ -322,10 +362,9 @@ var/list/admin_verbs_mod = list(
 /client/proc/hide_verbs()
 	set name = "Adminverbs - Hide All"
 	set category = "Admin"
-
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/proc/hide_verbs()  called tick#: [world.time]")
 	remove_admin_verbs()
 	verbs += /client/proc/show_verbs
-
 	src << "<span class='interface'>Almost all of your adminverbs have been hidden.</span>"
 	feedback_add_details("admin_verb","TAVVH") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
@@ -333,10 +372,10 @@ var/list/admin_verbs_mod = list(
 /client/proc/show_verbs()
 	set name = "Adminverbs - Show"
 	set category = "Admin"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/proc/show_verbs()  called tick#: [world.time]")
 
 	verbs -= /client/proc/show_verbs
 	add_admin_verbs()
-
 	src << "<span class='interface'>All of your adminverbs are now visible.</span>"
 	feedback_add_details("admin_verb","TAVVS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -347,6 +386,7 @@ var/list/admin_verbs_mod = list(
 /client/proc/admin_ghost()
 	set category = "Admin"
 	set name = "Aghost"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/admin_ghost() called tick#: [world.time]")
 	if(!holder)	return
 	if(istype(mob,/mob/dead/observer))
 		//re-enter
@@ -359,7 +399,9 @@ var/list/admin_verbs_mod = list(
 	else
 		//ghostize
 		var/mob/body = mob
+		if(body.mind) body.mind.isScrying = 1
 		body.ghostize(1)
+
 		if(body && !body.key)
 			body.key = "@[key]"	//Haaaaaaaack. But the people have spoken. If it breaks; blame adminbus
 		feedback_add_details("admin_verb","O") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -369,16 +411,17 @@ var/list/admin_verbs_mod = list(
 	set name = "Invisimin"
 	set category = "Admin"
 	set desc = "Toggles ghost-like invisibility (Don't abuse this)"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/invisimin() called tick#: [world.time]")
 	if(holder && mob)
 		if(mob.invisibility == INVISIBILITY_OBSERVER)
 			mob.invisibility = initial(mob.invisibility)
-			mob << "\red <b>Invisimin off. Invisibility reset.</b>"
+			mob << "<span class='danger'>Invisimin off. Invisibility reset.</span>"
 			mob.icon_state = "ghost"
 			mob.icon = 'icons/mob/human.dmi'
 			mob.update_icons()
 		else
 			mob.invisibility = INVISIBILITY_OBSERVER
-			mob << "\blue <b>Invisimin on. You are now as invisible as a ghost.</b>"
+			mob << "<span class='notice'><b>Invisimin on. You are now as invisible as a ghost.</b></span>"
 			mob.icon_state = "ghost"
 			mob.icon = 'icons/mob/mob.dmi'
 
@@ -386,6 +429,7 @@ var/list/admin_verbs_mod = list(
 /client/proc/player_panel()
 	set name = "Player Panel"
 	set category = "Admin"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/player_panel() called tick#: [world.time]")
 	if(holder)
 		holder.player_panel_old()
 	feedback_add_details("admin_verb","PP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -394,6 +438,7 @@ var/list/admin_verbs_mod = list(
 /client/proc/player_panel_new()
 	set name = "Player Panel New"
 	set category = "Admin"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/player_panel_new() called tick#: [world.time]")
 	if(holder)
 		holder.player_panel_new()
 	feedback_add_details("admin_verb","PPN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -402,6 +447,7 @@ var/list/admin_verbs_mod = list(
 /client/proc/check_antagonists()
 	set name = "Check Antagonists"
 	set category = "Admin"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/check_antagonists() called tick#: [world.time]")
 	if(holder)
 		holder.check_antagonists()
 		log_admin("[key_name(usr)] checked antagonists.")	//for tsar~
@@ -411,6 +457,7 @@ var/list/admin_verbs_mod = list(
 /client/proc/jobbans()
 	set name = "Display Job bans"
 	set category = "Admin"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/jobbans() called tick#: [world.time]")
 	if(holder)
 		if(config.ban_legacy_system)
 			holder.Jobbans()
@@ -422,6 +469,7 @@ var/list/admin_verbs_mod = list(
 /client/proc/unban_panel()
 	set name = "Unban Panel"
 	set category = "Admin"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/unban_panel() called tick#: [world.time]")
 	if(holder)
 		if(config.ban_legacy_system)
 			holder.unbanpanel()
@@ -433,6 +481,7 @@ var/list/admin_verbs_mod = list(
 /client/proc/game_panel()
 	set name = "Game Panel"
 	set category = "Admin"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/game_panel() called tick#: [world.time]")
 	if(holder)
 		holder.Game()
 	feedback_add_details("admin_verb","GP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -441,6 +490,7 @@ var/list/admin_verbs_mod = list(
 /client/proc/secrets()
 	set name = "Secrets"
 	set category = "Admin"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/secrets() called tick#: [world.time]")
 	if (holder)
 		holder.Secrets()
 	feedback_add_details("admin_verb","S") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -449,17 +499,19 @@ var/list/admin_verbs_mod = list(
 /client/proc/colorooc()
 	set category = "Fun"
 	set name = "OOC Text Color"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/colorooc() called tick#: [world.time]")
 	if(!holder)	return
 	var/new_ooccolor = input(src, "Please select your OOC colour.", "OOC colour") as color|null
 	if(new_ooccolor)
 		prefs.ooccolor = new_ooccolor
-		prefs.save_preferences()
+		prefs.save_preferences_sqlite(src, ckey)
 	feedback_add_details("admin_verb","OC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
 
 /client/proc/stealth()
 	set category = "Admin"
 	set name = "Stealth Mode"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/stealth() called tick#: [world.time]")
 	if(holder)
 		if(holder.fakekey)
 			holder.fakekey = null
@@ -477,13 +529,12 @@ var/list/admin_verbs_mod = list(
 #define AUTOBANTIME 90
 
 /client/proc/warn(warned_ckey)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/warn() called tick#: [world.time]")
 	var/reason = "Autobanning due to too many formal warnings"
 	if(!check_rights(R_ADMIN))	return
 
 	if(!warned_ckey || !istext(warned_ckey))	return
-	/*if(warned_ckey in admin_datums)
-		usr << "<font color='red'>Error: warn(): You can't warn admins.</font>"
-		return*/
+
 
 	var/datum/preferences/D
 	var/client/C = directory[warned_ckey]
@@ -494,33 +545,38 @@ var/list/admin_verbs_mod = list(
 		src << "<font color='red'>Error: warn(): No such ckey found.</font>"
 		return
 
+	var/warn_reason = input("Reason for warning?", "Admin abuuuuuuuse") as null|text
+	if(!warn_reason)
+		return
+	notes_add(warned_ckey,warn_reason,src.mob)
 	if(++D.warns >= MAX_WARNS)					//uh ohhhh...you'reee iiiiin trouuuubble O:)
 		var/bantime = AUTOBANTIME//= (++D.warnbans * AUTOBANTIME)
 		D.warns = 0
 		++D.warnbans
 		for(var/i = 1; i < D.warnbans; i++)
 			bantime *= 2
-		ban_unban_log_save("[ckey] warned [warned_ckey], resulting in a [bantime] minute autoban.")
+		ban_unban_log_save("[ckey] warned [warned_ckey] - [warn_reason], resulting in a [bantime] minute autoban.")
 		if(C)
-			message_admins("[key_name_admin(src)] has warned [key_name_admin(C)] resulting in a [bantime] minute ban.")
-			C << "<font color='red'><BIG><B>You have been autobanned due to a warning by [ckey].</B></BIG><br>This is a temporary ban, it will be removed in [bantime] minutes."
+			message_admins("[key_name_admin(src)] has warned [key_name_admin(C)] - [warn_reason], resulting in a [bantime] minute ban.")
+			C << "<span class='danger'><BIG>You have been autobanned due to a warning by [ckey] - Reason: [warn_reason].</BIG></span><br>This is a temporary ban, it will be removed in [bantime] minutes."
 		else
-			message_admins("[key_name_admin(src)] has warned [warned_ckey] resulting in a [bantime] minute ban.")
-		AddBan(warned_ckey, D.last_id, "Autobanning due to too many formal warnings", ckey, 1, bantime)
-		holder.DB_ban_record(BANTYPE_TEMP, null, bantime, reason, , ,warned_ckey)
+			message_admins("[key_name_admin(src)] has warned [warned_ckey] - [warn_reason], resulting in a [bantime] minute ban.")
+		AddBan(warned_ckey, D.last_id, "Autobanning due to too many formal warnings - [warn_reason]", ckey, 1, bantime)
+		holder.DB_ban_record(BANTYPE_TEMP, null, bantime, "[reason] - [warn_reason]", , ,warned_ckey)
 		feedback_inc("ban_warn",1)
-		D.save_preferences()
+		D.save_preferences_sqlite(C, C.ckey)
 		del(C)
 	else
 		if(C)
-			C << "<font color='red'><BIG><B>You have been formally warned by an administrator.</B></BIG><br>Further warnings will result in an autoban.</font>"
-			message_admins("[key_name_admin(src)] has warned [key_name_admin(C)]. They have [MAX_WARNS-D.warns] strikes remaining. And have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
+			C << "<span class='danger'><BIG>You have been formally warned by an administrator - Reason: [warn_reason].</span></BIG><br>Further warnings will result in an autoban.</font>"
+			message_admins("[key_name_admin(src)] has warned [key_name_admin(C)] - [warn_reason]. They have [MAX_WARNS-D.warns] strikes remaining. And have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
 		else
-			message_admins("[key_name_admin(src)] has warned [warned_ckey] (DC). They have [MAX_WARNS-D.warns] strikes remaining. And have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
-		D.save_preferences()
+			message_admins("[key_name_admin(src)] has warned [warned_ckey] (DC) - [warn_reason]. They have [MAX_WARNS-D.warns] strikes remaining. And have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
+		D.save_preferences_sqlite(C, C.ckey)
 	feedback_add_details("admin_verb","WARN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/unwarn(warned_ckey)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/unwarn() called tick#: [world.time]")
 	if(!check_rights(R_ADMIN))	return
 
 	if(!warned_ckey || !istext(warned_ckey))	return
@@ -548,7 +604,7 @@ var/list/admin_verbs_mod = list(
 		message_admins("[key_name_admin(src)] has unwarned [key_name_admin(C)]. They have [strikesleft] strike(s) remaining, and have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
 	else
 		message_admins("[key_name_admin(src)] has unwarned [warned_ckey] (DC). They have [strikesleft] strike(s) remaining, and have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
-	D.save_preferences()
+	D.save_preferences_sqlite(C, C.ckey)
 	feedback_add_details("admin_verb","UNWARN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 #undef MAX_WARNS
@@ -558,6 +614,7 @@ var/list/admin_verbs_mod = list(
 	set category = "Special Verbs"
 	set name = "Drop Bomb"
 	set desc = "Cause an explosion of varying strength at your location."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/drop_bomb() called tick#: [world.time]")
 
 	var/turf/epicenter = mob.loc
 	var/list/choices = list("Small Bomb", "Medium Bomb", "Big Bomb", "Custom Bomb")
@@ -577,68 +634,91 @@ var/list/admin_verbs_mod = list(
 			var/light_impact_range = input("Light impact range (in tiles):") as num
 			var/flash_range = input("Flash range (in tiles):") as num
 			explosion(epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range)
-	message_admins("\blue [ckey] creating an admin explosion at [epicenter.loc].")
+	message_admins("<span class='notice'>[ckey] creating an admin explosion at [epicenter.loc].</span>")
 	feedback_add_details("admin_verb","DB") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/give_spell(mob/T as mob in mob_list) // -- Urist
 	set category = "Fun"
 	set name = "Give Spell"
 	set desc = "Gives a spell to a mob."
-	var/obj/effect/proc_holder/spell/S = input("Choose the spell to give to that guy", "ABRAKADABRA") as null|anything in spells
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/give_spell() called tick#: [world.time]")
+
+	var/spell/S = input("Choose the spell to give to that guy", "ABRAKADABRA") as null|anything in spells
 	if(!S) return
-	T.spell_list += new S
+	T.add_spell(new S)
 	feedback_add_details("admin_verb","GS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] gave [key_name(T)] the spell [S].")
-	message_admins("\blue [key_name_admin(usr)] gave [key_name(T)] the spell [S].", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] gave [key_name(T)] the spell [S].</span>", 1)
 
 /client/proc/give_disease(mob/T as mob in mob_list) // -- Giacom
 	set category = "Fun"
 	set name = "Give Disease"
 	set desc = "Gives a Disease to a mob."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/give_disease() called tick#: [world.time]")
 	var/datum/disease/D = input("Choose the disease to give to that guy", "ACHOO") as null|anything in diseases
 	if(!D) return
 	T.contract_disease(new D, 1)
 	feedback_add_details("admin_verb","GD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] gave [key_name(T)] the disease [D].")
-	message_admins("\blue [key_name_admin(usr)] gave [key_name(T)] the disease [D].", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] gave [key_name(T)] the disease [D].</span>", 1)
 
 /client/proc/make_sound(var/obj/O in world) // -- TLE
 	set category = "Special Verbs"
 	set name = "Make Sound"
 	set desc = "Display a message to everyone who can hear the target"
-	if(O)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/make_sound() called tick#: [world.time]")
+	if(istype(O))
 		var/message = input("What do you want the message to be?", "Make Sound") as text|null
 		if(!message)
 			return
-		for (var/mob/V in hearers(O))
-			V.show_message(message, 2)
+		var/mob/living/M
+		var/olduniv
+		if(ismob(O))
+			M = O
+			olduniv = M.universal_speak
+			M.universal_speak = 1
+		O.say(message)
+		if(M)
+			M.universal_speak = olduniv
 		log_admin("[key_name(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound")
-		message_admins("\blue [key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound", 1)
+		message_admins("<span class='notice'>[key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound</span>", 1)
 		feedback_add_details("admin_verb","MS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
 /client/proc/togglebuildmodeself()
 	set name = "Toggle Build Mode Self"
 	set category = "Special Verbs"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/togglebuildmodeself() called tick#: [world.time]")
 	if(src.mob)
 		togglebuildmode(src.mob)
 	feedback_add_details("admin_verb","TBMS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/proc/object_talk(var/msg as text) // -- TLE
+/client/proc/object_talk(var/obj/O in world) // -- TLE
 	set category = "Special Verbs"
-	set name = "oSay"
-	set desc = "Display a message to everyone who can hear the target"
-	if(mob.control_object)
-		if(!msg)
-			return
-		for (var/mob/V in hearers(mob.control_object))
-			V.show_message("<b>[mob.control_object.name]</b> says: \"" + msg + "\"", 2)
+	set name = "OSay"
+	set desc = "Make an object say something"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/object_talk() called tick#: [world.time]")
+	var/message = input(usr, "What do you want the message to be?", "Make Sound") as text | null
+	if(!message)
+		return
+	var/mob/living/M
+	var/olduniv
+	if(ismob(O))
+		M = O
+		olduniv = M.universal_speak
+		M.universal_speak = 1
+	O.say(message)
+	if(M)
+		M.universal_speak = olduniv
+	log_admin("[key_name(usr)] made [O] at [O.x], [O.y], [O.z] say \"[message]\"")
+	message_admins("<span class='adminnotice'>[key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. say \"[message]\"</span>", 1)
 	feedback_add_details("admin_verb","OT") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/kill_air() // -- TLE
 	set category = "Debug"
 	set name = "Kill Air"
 	set desc = "Toggle Air Processing"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/kill_air() called tick#: [world.time]")
 	if(air_processing_killed)
 		air_processing_killed = 0
 		usr << "<b>Enabled air processing.</b>"
@@ -647,23 +727,28 @@ var/list/admin_verbs_mod = list(
 		usr << "<b>Disabled air processing.</b>"
 	feedback_add_details("admin_verb","KA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] used 'kill air'.")
-	message_admins("\blue [key_name_admin(usr)] used 'kill air'.", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] used 'kill air'.</span>", 1)
 
 /client/proc/deadmin_self()
 	set name = "De-admin self"
 	set category = "Admin"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/deadmin_self() called tick#: [world.time]")
 
 	if(holder)
-		if(alert("Confirm self-deadmin for the round? You can't re-admin yourself without someont promoting you.",,"Yes","No") == "Yes")
-			log_admin("[src] deadmined themself.")
-			message_admins("[src] deadmined themself.", 1)
-			deadmin()
-			src << "<span class='interface'>You are now a normal player.</span>"
+		if(alert("Are you sure you want to deadmin?","Deadmin","Yes","No")=="No")
+			return
+		log_admin("[src] deadminned themself.")
+		message_admins("[src] deadminned themself.")
+		deadmin()
+		verbs += /client/proc/readmin
+		deadmins += ckey
+		src << "<span class='interface'>You are now a normal player.</span>"
 	feedback_add_details("admin_verb","DAS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/toggle_log_hrefs()
 	set name = "Toggle href logging"
 	set category = "Server"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/toggle_log_hrefs() called tick#: [world.time]")
 	if(!holder)	return
 	if(config)
 		if(config.log_hrefs)
@@ -676,6 +761,7 @@ var/list/admin_verbs_mod = list(
 /client/proc/check_ai_laws()
 	set name = "Check AI Laws"
 	set category = "Admin"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/check_ai_laws() called tick#: [world.time]")
 	if(holder)
 		src.holder.output_ai_laws()
 
@@ -685,19 +771,22 @@ var/list/admin_verbs_mod = list(
 /client/proc/mod_panel()
 	set name = "Moderator Panel"
 	set category = "Admin"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/mod_panel() called tick#: [world.time]")
+
 /*	if(holder)
 		holder.mod_panel()*/
 //	feedback_add_details("admin_verb","MP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
 
-/client/proc/editappear(mob/living/carbon/human/M as mob in world)
+/client/proc/editappear(mob/living/carbon/human/M as mob in mob_list)
 	set name = "Edit Appearance"
 	set category = "Fun"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/editappear() called tick#: [world.time]")
 
 	if(!check_rights(R_FUN))	return
 
 	if(!istype(M, /mob/living/carbon/human))
-		usr << "\red You can only do this to humans!"
+		usr << "<span class='warning'>You can only do this to humans!</span>"
 		return
 	switch(alert("Are you sure you wish to edit this mob's appearance? Skrell, Unathi, Vox and Tajaran can result in unintended consequences.",,"Yes","No"))
 		if("No")
@@ -739,9 +828,9 @@ var/list/admin_verbs_mod = list(
 	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
 	if (new_gender)
 		if(new_gender == "Male")
-			M.gender = MALE
+			M.setGender(MALE)
 		else
-			M.gender = FEMALE
+			M.setGender(FEMALE)
 	M.update_hair()
 	M.update_body()
 	M.check_dna(M)
@@ -749,6 +838,7 @@ var/list/admin_verbs_mod = list(
 /client/proc/playernotes()
 	set name = "Show Player Info"
 	set category = "Admin"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/playernotes() called tick#: [world.time]")
 	if(holder)
 		holder.PlayerNotes()
 	return
@@ -756,6 +846,7 @@ var/list/admin_verbs_mod = list(
 /client/proc/free_slot()
 	set name = "Free Job Slot"
 	set category = "Admin"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/free_slot() called tick#: [world.time]")
 	if(holder)
 		var/list/jobs = list()
 		for (var/datum/job/J in job_master.occupations)
@@ -772,8 +863,10 @@ var/list/admin_verbs_mod = list(
 /client/proc/toggleattacklogs()
 	set name = "Toggle Attack Log Messages"
 	set category = "Preferences"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/toggleattacklogs() called tick#: [world.time]")
 
 	prefs.toggles ^= CHAT_ATTACKLOGS
+	prefs.save_preferences_sqlite(src, ckey)
 	if (prefs.toggles & CHAT_ATTACKLOGS)
 		usr << "You now will get attack log messages"
 	else
@@ -782,6 +875,7 @@ var/list/admin_verbs_mod = list(
 /client/proc/commandname()
 	set name = "Set Command Name"
 	set category = "Fun"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/commandname() called tick#: [world.time]")
 
 	var/text = input(usr,"Please select a new Central Command name.", null)as text|null
 	if(text)
@@ -790,8 +884,10 @@ var/list/admin_verbs_mod = list(
 /client/proc/toggledebuglogs()
 	set name = "Toggle Debug Log Messages"
 	set category = "Preferences"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/toggledebuglogs() called tick#: [world.time]")
 
 	prefs.toggles ^= CHAT_DEBUGLOGS
+	prefs.save_preferences_sqlite(src, ckey)
 	if (prefs.toggles & CHAT_DEBUGLOGS)
 		usr << "You now will get debug log messages"
 	else
@@ -802,21 +898,150 @@ var/list/admin_verbs_mod = list(
 	set category = "Fun"
 	set name = "Man Up"
 	set desc = "Tells mob to man up and deal with it."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/man_up() called tick#: [world.time]")
 
 	T << "<span class='notice'><b><font size=3>Man up and deal with it.</font></b></span>"
 	T << "<span class='notice'>Move on.</span>"
 
 	log_admin("[key_name(usr)] told [key_name(T)] to man up and deal with it.")
-	message_admins("\blue [key_name_admin(usr)] told [key_name(T)] to man up and deal with it.", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] told [key_name(T)] to man up and deal with it.</span>", 1)
 
 /client/proc/global_man_up()
 	set category = "Fun"
 	set name = "Man Up Global"
 	set desc = "Tells everyone to man up and deal with it."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/global_man_up() called tick#: [world.time]")
 
 	for (var/mob/T as mob in mob_list)
 		T << "<br><center><span class='notice'><b><font size=4>Man up.<br> Deal with it.</font></b><br>Move on.</span></center><br>"
 		T << 'sound/voice/ManUp1.ogg'
 
 	log_admin("[key_name(usr)] told everyone to man up and deal with it.")
-	message_admins("\blue [key_name_admin(usr)] told everyone to man up and deal with it.", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] told everyone to man up and deal with it.</span>", 1)
+
+
+/client/proc/readmin()
+	set name = "Re-admin self"
+	set category = "Admin"
+	set desc = "Regain your admin powers."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/readmin() called tick#: [world.time]")
+	var/datum/admins/D = admin_datums[ckey]
+	if(config.admin_legacy_system)
+		src << "<span class='notice'>Legacy admins is not supported yet</span>"
+		return
+	else
+		if(!dbcon.IsConnected())
+			message_admins("Warning, mysql database is not connected.")
+			src << "Warning, mysql database is not connected."
+			return
+		if(D)
+			src << "You are already an admin."
+			verbs -= /client/proc/readmin
+			return
+		var/sql_ckey = sanitizeSQL(ckey(ckey))
+		var/DBQuery/query = dbcon.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin WHERE ckey = '[sql_ckey]'")
+		query.Execute()
+		while(query.NextRow())
+			var/dckey = query.item[1]
+			var/rank = query.item[2]
+			if(rank == "Removed")	continue	//This person was de-adminned. They are only in the admin list for archive purposes.
+
+			var/rights = query.item[4]
+			if(istext(rights))	rights = text2num(rights)
+			D = new /datum/admins(rank, rights, dckey)
+
+			//find the client for a ckey if they are connected and associate them with the new admin datum
+			D.associate(src)
+			message_admins("[src] re-adminned themselves.")
+			log_admin("[src] re-adminned themselves.")
+			feedback_add_details("admin_verb","RAS")
+			verbs -= /client/proc/readmin
+			return
+
+/client/proc/achievement()
+	set name = "Give Achievement"
+	set category = "Fun"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/achievement() called tick#: [world.time]")
+
+	if(!check_rights(R_FUN))	return
+
+	var/achoice = "Cancel"
+
+	if(!player_list.len)
+		usr << "player list is empty!"
+		return
+
+	var/mob/winner = input("Who's a winner?", "Achievement Winner") in player_list
+	var/name = input("What will you call your achievement?", "Achievement Winner", "New Achievement")
+	var/desc = input("What description will you give it?", "Achievement Description", "You Win")
+
+	if(istype(winner, /mob/living))
+		achoice = alert("Give our winner his own trophy?","Achievement Trophy", "Confirm","Cancel")
+
+	var/glob = alert("Announce the achievement globally? (Beware! Ruins immersion!)","Last Question", "No!","Yes!")
+
+	if(achoice == "Confirm")
+		var/obj/item/weapon/reagent_containers/food/drinks/golden_cup/C = new(get_turf(winner))
+		C.name = name
+		C.desc = desc
+		if(iscarbon(winner) && (winner.stat == CONSCIOUS))
+			winner.put_in_hands(C)
+	else
+		winner << "<span class='danger'>You win [name]! [desc]</span>"
+
+	var/icon/cup = icon('icons/obj/drinks.dmi', "golden_cup")
+
+	if(glob == "No!")
+		winner.client << sound('sound/misc/achievement.ogg')
+		for(var/mob/dead/observer/O in player_list)
+			O << "<span class='danger'>\icon[cup] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>"
+	else
+		world  << sound('sound/misc/achievement.ogg')
+		world << "<span class='danger'>\icon[cup] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>"
+
+	winner << "<span class='danger'>Congratulations!</span>"
+
+	achievements += "<b>[winner.key]</b> as <b>[winner.name]</b> won \"<b>[name]</b>\"! \"[desc]\""
+
+	message_admins("[key_name_admin(usr)] has awarded <b>[winner.key]</b>([winner.name]) with the achievement \"<b>[name]</b>\"! \"[desc]\".", 1)
+
+/client/proc/mommi_static()
+	set name = "Toggle MoMMI Static"
+	set desc = "Toggle whether MoMMIs can see mobs or if the mobs are cloaked in static"
+	set category = "Fun"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/mommi_static() called tick#: [world.time]")
+
+	if(!holder || !config)
+		return
+
+	config.mommi_static = !config.mommi_static
+	log_admin("[key_name(src)] turned MoMMI static [config.mommi_static ? "on" : "off"].")
+	message_admins("[key_name(src)] turned MoMMI static [config.mommi_static ? "on" : "off"].")
+	for(var/mob/living/silicon/robot/mommi/M in player_list)
+		if(M.can_see_static())
+			M.add_static_overlays()
+		else
+			M.remove_static_overlays()
+
+/client/proc/shuttle_magic()
+	set name = "Shuttle Magic"
+	set desc = "Open a menu with magic"
+	set category = "Admin"
+
+	if(!holder || !config)
+		return
+
+	holder.shuttle_magic()
+
+
+/datum/admins/proc/media_stop_all()
+	set name = "Stop All Media"
+	set desc = "Stops all music and video."
+	set category = "Fun"
+
+	if(!check_rights(R_FUN))
+		return
+
+	message_admins("[key_name_admin(usr)] has stopped all media.", 1)
+
+	stop_all_media()

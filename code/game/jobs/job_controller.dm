@@ -14,10 +14,11 @@ var/global/datum/controller/occupations/job_master
 
 
 	proc/SetupOccupations(var/faction = "Station")
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/SetupOccupations() called tick#: [world.time]")
 		occupations = list()
 		var/list/all_jobs = typesof(/datum/job)
 		if(!all_jobs.len)
-			world << "\red \b Error setting up jobs, no job datums found"
+			world << "<span class='danger'>Error setting up jobs, no job datums found</span>"
 			return 0
 		for(var/J in all_jobs)
 			var/datum/job/job = new J()
@@ -30,12 +31,14 @@ var/global/datum/controller/occupations/job_master
 
 
 	proc/Debug(var/text)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/Debug() called tick#: [world.time]")
 		if(!Debug2)	return 0
 		job_debug.Add(text)
 		return 1
 
 
 	proc/GetJob(var/rank)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/GetJob() called tick#: [world.time]")
 		if(!rank)	return null
 		for(var/datum/job/J in occupations)
 			if(!J)	continue
@@ -43,9 +46,11 @@ var/global/datum/controller/occupations/job_master
 		return null
 
 	proc/GetPlayerAltTitle(mob/new_player/player, rank)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/GetPlayerAltTitle() called tick#: [world.time]")
 		return player.client.prefs.GetPlayerAltTitle(GetJob(rank))
 
 	proc/AssignRole(var/mob/new_player/player, var/rank, var/latejoin = 0)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/AssignRole() called tick#: [world.time]")
 		Debug("Running AR, Player: [player], Rank: [rank], LJ: [latejoin]")
 		if(player && player.mind && rank)
 			var/datum/job/job = GetJob(rank)
@@ -67,6 +72,7 @@ var/global/datum/controller/occupations/job_master
 		return 0
 
 	proc/FreeRole(var/rank)	//making additional slot on the fly
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/FreeRole() called tick#: [world.time]")
 		var/datum/job/job = GetJob(rank)
 		if(job && job.current_positions >= job.total_positions)
 			job.total_positions++
@@ -74,6 +80,7 @@ var/global/datum/controller/occupations/job_master
 		return 0
 
 	proc/FindOccupationCandidates(datum/job/job, level, flag)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/FindOccupationCandidates() called tick#: [world.time]")
 		Debug("Running FOC, Job: [job], Level: [level], Flag: [flag]")
 		var/list/candidates = list()
 		for(var/mob/new_player/player in unassigned)
@@ -83,7 +90,7 @@ var/global/datum/controller/occupations/job_master
 			if(!job.player_old_enough(player.client))
 				Debug("FOC player not old enough, Player: [player]")
 				continue
-			if(flag && (!player.client.prefs.be_special & flag))
+			if(flag && !player.client.desires_role(job.title))
 				Debug("FOC flag failed, Player: [player], Flag: [flag], ")
 				continue
 			if(player.client.prefs.GetJobDepartment(job, level) & job.flag)
@@ -92,6 +99,7 @@ var/global/datum/controller/occupations/job_master
 		return candidates
 
 	proc/GiveRandomJob(var/mob/new_player/player)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/GiveRandomJob() called tick#: [world.time]")
 		Debug("GRJ Giving random job, Player: [player]")
 		for(var/datum/job/job in shuffle(occupations))
 			if(!job)
@@ -118,6 +126,7 @@ var/global/datum/controller/occupations/job_master
 				break
 
 	proc/ResetOccupations()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/ResetOccupations() called tick#: [world.time]")
 		for(var/mob/new_player/player in player_list)
 			if((player) && (player.mind))
 				player.mind.assigned_role = null
@@ -129,6 +138,7 @@ var/global/datum/controller/occupations/job_master
 
 	///This proc is called before the level loop of DivideOccupations() and will try to select a head, ignoring ALL non-head preferences for every level until it locates a head or runs out of levels to check
 	proc/FillHeadPosition()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/FillHeadPosition() called tick#: [world.time]")
 		for(var/level = 1 to 3)
 			for(var/command_position in command_positions)
 				var/datum/job/job = GetJob(command_position)
@@ -143,6 +153,7 @@ var/global/datum/controller/occupations/job_master
 
 	///This proc is called at the start of the level loop of DivideOccupations() and will cause head jobs to be checked before any other jobs of the same level
 	proc/CheckHeadPositions(var/level)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/CheckHeadPositions() called tick#: [world.time]")
 		for(var/command_position in command_positions)
 			var/datum/job/job = GetJob(command_position)
 			if(!job)	continue
@@ -154,6 +165,7 @@ var/global/datum/controller/occupations/job_master
 
 
 	proc/FillAIPosition()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/FillAIPosition() called tick#: [world.time]")
 		var/ai_selected = 0
 		var/datum/job/job = GetJob("AI")
 		if(!job)	return 0
@@ -163,7 +175,7 @@ var/global/datum/controller/occupations/job_master
 			for(var/level = 1 to 3)
 				var/list/candidates = list()
 				if(ticker.mode.name == "AI malfunction")//Make sure they want to malf if its malf
-					candidates = FindOccupationCandidates(job, level, BE_MALF)
+					candidates = FindOccupationCandidates(job, level, ROLE_MALF)
 				else
 					candidates = FindOccupationCandidates(job, level)
 				if(candidates.len)
@@ -188,6 +200,7 @@ var/global/datum/controller/occupations/job_master
  *  This proc must not have any side effect besides of modifying "assigned_role".
  **/
 	proc/DivideOccupations()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/DivideOccupations() called tick#: [world.time]")
 		//Setup new player list and get the jobs list
 		Debug("Running DO")
 		SetupOccupations()
@@ -202,7 +215,7 @@ var/global/datum/controller/occupations/job_master
 		for(var/mob/new_player/player in player_list)
 			if(player.ready && player.mind && !player.mind.assigned_role)
 				unassigned += player
-				if(player.client.prefs.randomslot) player.client.prefs.random_character()
+				if(player.client.prefs.randomslot) player.client.prefs.random_character_sqlite(player, player.ckey)
 		Debug("DO, Len: [unassigned.len]")
 		if(unassigned.len == 0)	return 0
 
@@ -210,17 +223,6 @@ var/global/datum/controller/occupations/job_master
 		unassigned = shuffle(unassigned)
 
 		HandleFeedbackGathering()
-
-		//People who wants to be assistants, sure, go on.
-		Debug("DO, Running Assistant Check 1")
-		var/datum/job/assist = new /datum/job/assistant()
-		var/list/assistant_candidates = FindOccupationCandidates(assist, 3)
-		Debug("AC1, Candidates: [assistant_candidates.len]")
-		for(var/mob/new_player/player in assistant_candidates)
-			Debug("AC1 pass, Player: [player]")
-			AssignRole(player, "Assistant")
-			assistant_candidates -= player
-		Debug("DO, AC1 end")
 
 		//Select one head
 		Debug("DO, Running Head Check")
@@ -274,6 +276,30 @@ var/global/datum/controller/occupations/job_master
 
 		// Hand out random jobs to the people who didn't get any in the last check
 		// Also makes sure that they got their preference correct
+
+		//People who wants to be assistants, sure, go on.
+		var/count = 0
+		var/datum/job/officer = job_master.GetJob("Security Officer")
+		var/datum/job/warden = job_master.GetJob("Warden")
+		var/datum/job/hos = job_master.GetJob("Head of Security")
+		count = (officer.current_positions + warden.current_positions + hos.current_positions)
+		Debug("DO, Running Assistant Check 1")
+		var/datum/job/assist = new /datum/job/assistant()
+		var/datum/job/master_assistant = GetJob("Assistant")
+		var/list/assistant_candidates = FindOccupationCandidates(assist, 3)
+		assistant_candidates = shuffle(assistant_candidates)
+		Debug("AC1, Candidates: [assistant_candidates.len]")
+		for(var/mob/new_player/player in assistant_candidates)
+			Debug("AC1 pass, Player: [player]")
+			if(config.assistantlimit)
+				if(master_assistant.current_positions > (config.assistantratio * count))
+					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
+						break
+			AssignRole(player, "Assistant")
+			assistant_candidates -= player
+		unassigned |= assistant_candidates
+		Debug("DO, AC1 end")
+
 		for(var/mob/new_player/player in unassigned)
 			if(player.client.prefs.alternate_option == GET_RANDOM_JOB)
 				GiveRandomJob(player)
@@ -302,6 +328,13 @@ var/global/datum/controller/occupations/job_master
 		// For those who wanted to be assistant if their preferences were filled, here you go.
 		for(var/mob/new_player/player in unassigned)
 			if(player.client.prefs.alternate_option == BE_ASSISTANT)
+				if(config.assistantlimit)
+					count = (officer.current_positions + warden.current_positions + hos.current_positions)
+					if(master_assistant.current_positions > (config.assistantratio * count))
+						if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
+							player.ready = 0
+							unassigned -= player
+							continue
 				Debug("AC2 Assistant located, Player: [player]")
 				AssignRole(player, "Assistant")
 
@@ -314,6 +347,7 @@ var/global/datum/controller/occupations/job_master
 
 
 	proc/EquipRank(var/mob/living/carbon/human/H, var/rank, var/joined_late = 0)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/EquipRank() called tick#: [world.time]")
 		if(!H)	return 0
 		var/datum/job/job = GetJob(rank)
 		if(job)
@@ -365,7 +399,7 @@ var/global/datum/controller/occupations/job_master
 				H.mind.store_memory(remembered_info)
 
 			spawn(0)
-				H << "\blue<b>Your account number is: [M.account_number], your account pin is: [M.remote_access_pin]</b>"
+				H << "<span class='danger'>Your account number is: [M.account_number], your account pin is: [M.remote_access_pin]</span>"
 
 		var/alt_title = null
 		if(H.mind)
@@ -374,10 +408,11 @@ var/global/datum/controller/occupations/job_master
 
 			switch(rank)
 				if("Cyborg")
-					H.Robotize()
+					spawn(20)//We need to be absolutely certain the borg is made after AI for law sync reasons.
+						H.Robotize()
 					return 1
 				if("Mobile MMI")
-					H.MoMMIfy()
+					H.MoMMIfy(1)
 					return 1
 				if("AI","Clown")	//don't need bag preference stuff!
 					if(rank=="Clown") // Clowns DO need to breathe, though - N3X
@@ -411,7 +446,7 @@ var/global/datum/controller/occupations/job_master
 			H << "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>"
 
 		spawnId(H, rank, alt_title)
-		H.equip_or_collect(new /obj/item/device/radio/headset(H), slot_ears)
+		H.equip_to_slot_or_del(new /obj/item/device/radio/headset(H), slot_ears)
 
 		//Gives glasses to the vision impaired
 		if(H.disabilities & DISABILITY_FLAG_NEARSIGHTED)
@@ -420,10 +455,19 @@ var/global/datum/controller/occupations/job_master
 				var/obj/item/clothing/glasses/G = H.glasses
 				G.prescription = 1
 //		H.update_icons()
+		//Gives wheelchair to those missing both of their feet
+		var/datum/organ/external/left_leg = H.get_organ("l_foot")
+		var/datum/organ/external/right_leg = H.get_organ("r_foot")
+
+		if(!joined_late) //late joins get their location set elsewhere
+			if( (!left_leg || left_leg.status & ORGAN_DESTROYED) && (!right_leg || right_leg.status & ORGAN_DESTROYED) ) //If the character is missing both of his feet
+				var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
+				W.buckle_mob(H,H)
 		return 1
 
 
 	proc/spawnId(var/mob/living/carbon/human/H, rank, title)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/spawnId() called tick#: [world.time]")
 		if(!H)	return 0
 		var/obj/item/weapon/card/id/C = null
 
@@ -459,12 +503,14 @@ var/global/datum/controller/occupations/job_master
 			pda.owner = H.real_name
 			pda.ownjob = C.assignment
 			pda.name = "PDA-[H.real_name] ([pda.ownjob])"
-
+		H.update_inv_belt()
+		H.update_inv_wear_id()
 		return 1
 
 
 
 	proc/LoadJobs(jobsfile) //ran during round setup, reads info from jobs.txt -- Urist
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/LoadJobs() called tick#: [world.time]")
 		if(!config.load_jobs_from_txt)
 			return 0
 
@@ -500,6 +546,7 @@ var/global/datum/controller/occupations/job_master
 
 
 	proc/HandleFeedbackGathering()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/HandleFeedbackGathering() called tick#: [world.time]")
 		for(var/datum/job/job in occupations)
 			var/tmp_str = "|[job.title]|"
 

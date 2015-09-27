@@ -29,7 +29,7 @@
 	if(istype(ruby))
 		abomination.special_role = "abomination"
 		if(wizardstart.len == 0)
-			wizard.current << "<B>\red A starting location for you could not be found, please report this bug!</B>"
+			wizard.current << "<span class='danger'>A starting location for you could not be found, please report this bug!</span>"
 		else
 			var/starting_loc = pick(wizardstart)
 			wizard.current.loc = starting_loc
@@ -74,9 +74,9 @@
 		var/count = 1
 		for(var/datum/objective/objective in traitor.objectives)
 			if(objective.check_completion())
-				world << "<B>Objective #[count]</B>: [objective.explanation_text] \green <B>Success</B>"
+				world << "<B>Objective #[count]</B>: [objective.explanation_text] <span class='good'><B>Success</B></span>"
 			else
-				world << "<B>Objective #[count]</B>: [objective.explanation_text] \red Failed"
+				world << "<B>Objective #[count]</B>: [objective.explanation_text] <span class='warning'>Failed</span>"
 				traitorwin = 0
 			count++
 
@@ -90,11 +90,15 @@
 
 
 /datum/game_mode/ruby/proc/spawn_macguffin()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/ruby/proc/spawn_macguffin() called tick#: [world.time]")
 
 /datum/game_mode/ruby/proc/get_possible_abominations()
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\datum/game_mode/ruby/proc/get_possible_abominations() called tick#: [world.time]")
+
 
 /mob/proc/make_abomination()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\mob/proc/make_abomination() called tick#: [world.time]")
 	src.see_in_dark = 20
 	src.verbs += /client/proc/planar_shift
 	src.verbs += /client/proc/vile_ressurection
@@ -109,6 +113,7 @@
 
 
 /client/proc/planar_shift()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/planar_shift() called tick#: [world.time]")
 	set name = "Planar Shift"
 	set category = "Abomination"
 	// This is a pretty shitty way to do this. Should use the spell_holder method from Wizard mode
@@ -130,6 +135,7 @@
 	*/
 
 /client/proc/vile_ressurection()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/vile_ressurection() called tick#: [world.time]")
 	set name = "Vile Ressurection"
 	set category = "Abomination"
 	if(src.mob.stat != 2 || !src.mob)
@@ -141,17 +147,19 @@
 		// nope
 
 /client/proc/defile_corpse(var/mob/living/carbon/human/H in view())
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/defile_corpse() called tick#: [world.time]")
 	set name = "Defile Corpse"
 	set category = "Abomination"
 	if(istype(H, /mob/living/carbon/human))
 		var/datum/game_mode/ruby/rmode = ticker.mode
 		rmode.killed.Add(H)
 		ticker.mode:respawns += 1
-	var/fluffmessage = pick("\red <B>[usr] rips the flesh from [H]'s corpse and plucks their eyes from their sockets!</B>", "\red <B>[usr] does unspeakable things to [H]'s corpse!</B>", "\red <B>[usr] binds [H]'s corpse with their own entrails!</B>")
+	var/fluffmessage = pick("<span class='danger'><B>[usr] rips the flesh from [H]'s corpse and plucks their eyes from their sockets!</B>", "<span class='danger'>[usr] does unspeakable things to [H]'s corpse!</span>", "<span class='warning'>[usr] binds [H]'s corpse with their own entrails!</span></span>")
 	usr.visible_message(fluffmessage)
 	// play sound
 
 /client/proc/summon_weapon()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/summon_weapon() called tick#: [world.time]")
 	set name = "Summon Weapon"
 	set category = "Abomination"
 
@@ -168,6 +176,7 @@
 		return
 
 /client/proc/sacrifice_self()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/sacrifice_self() called tick#: [world.time]")
 	set name = "Sacrifice Self"
 	set category = "Abomination"
 	set desc = "Everything must come to an end. After you have freed them, you must free yourself."
@@ -181,6 +190,7 @@
 	ticker.mode:abominationwins = 1
 
 /client/proc/hunt()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/hunt() called tick#: [world.time]")
 	set name = "Hunt"
 	set category = "Abomination"
 	set desc = ""
@@ -192,7 +202,7 @@
 		//if(!H.client) continue
 		candidates.Add(H)
 
-	usr.visible_message(text("\red <B>[usr]'s flesh ripples and parts, revealing dozens of eyes poking from its surface. They all glance wildly around for a few moments before receding again.</B>"))
+	usr.visible_message(text("<span class='danger'>[usr]'s flesh ripples and parts, revealing dozens of eyes poking from its surface. They all glance wildly around for a few moments before receding again.</span>"))
 
 	var/mob/living/carbon/human/H = pick(candidates)
 
@@ -246,11 +256,12 @@
 
 
 /client/proc/howl()	// This is just a way for the Abomination to make the game more atmospheric periodically.
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/howl() called tick#: [world.time]")
 	set name = "Howl"
 	set category = "Abomination"
 	set desc = ""
 
-	usr.visible_message(text("\red <B>[usr]'s form warbles and distorts before settling back into its grotesque shape once more.</B>"))
+	usr.visible_message(text("<span class='danger'>[usr]'s form warbles and distorts before settling back into its grotesque shape once more.</span>"))
 	// Play a random spooky sound - maybe cause some visual, non-mechanical effects to appear at random for a few seconds.
 
 	src.verbs -= /client/proc/howl
@@ -268,6 +279,7 @@
 	var/mob/owner
 
 	proc/check_owner()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/check_owner() called tick#: [world.time]")
 		if(!owner)
 			sleep(300)
 			if(!owner)
@@ -276,6 +288,7 @@
 			spawn(1800) check_owner()
 
 	proc/search_for_new_owner()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/search_for_new_owner() called tick#: [world.time]")
 		var/list/possible_owners = list()
 		for(var/mob/living/carbon/human/H in mob_list)
 			possible_owners.Add(H)

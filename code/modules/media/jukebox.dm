@@ -15,6 +15,87 @@
 
 #define JUKEBOX_RELOAD_COOLDOWN 600 // 60s
 
+var/global/global_playlists = list()
+/proc/load_juke_playlists()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/load_juke_playlists() called tick#: [world.time]")
+	for(var/playlist_id in list("bar", "jazz", "rock", "muzak", "emagged", "endgame", "clockwork", "vidyaone", "vidyatwo", "vidyathree", "vidyafour"))
+		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
+		testing("Updating playlist from [url]...")
+
+		//  Media Server 2 requires a secret key in order to tell the jukebox
+		// where the music files are. It's set in config with MEDIA_SECRET_KEY
+		// and MUST be the same as the media server's.
+		//
+		//  Do NOT log this, it's like a password.
+		if(config.media_secret_key!="")
+			url += "&key=[config.media_secret_key]"
+
+		var/response = world.Export(url)
+		var/list/playlist=list()
+		if(response)
+			var/json = file2text(response["CONTENT"])
+			if("/>" in json)
+				continue
+			var/json_reader/reader = new()
+			reader.tokens = reader.ScanJson(json)
+			reader.i = 1
+			var/songdata = reader.read_value()
+			for(var/list/record in songdata)
+				playlist += new /datum/song_info(record)
+			if(playlist.len==0)
+				continue
+			global_playlists["[playlist_id]"] = playlist.Copy()
+
+/obj/machinery/media/jukebox/proc/retrieve_playlist(var/playlistid = playlist_id)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/jukebox/proc/retrieve_playlist() called tick#: [world.time]")
+	playlist_id = playlistid
+	if(global_playlists["[playlistid]"])
+		var/list/temp = global_playlists["[playlistid]"]
+		playlist = temp.Copy()
+
+	else
+		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
+		testing("[src] - Updating playlist from [url]...")
+
+		//  Media Server 2 requires a secret key in order to tell the jukebox
+		// where the music files are. It's set in config with MEDIA_SECRET_KEY
+		// and MUST be the same as the media server's.
+		//
+		//  Do NOT log this, it's like a password.
+		if(config.media_secret_key!="")
+			url += "&key=[config.media_secret_key]"
+
+		var/response = world.Export(url)
+		playlist=list()
+		if(response)
+			var/json = file2text(response["CONTENT"])
+			if("/>" in json)
+				visible_message("<span class='warning'>\icon[src] \The [src] buzzes, unable to update its playlist.</span>","<em>You hear a buzz.</em>")
+				stat &= BROKEN
+				update_icon()
+				return 0
+			var/json_reader/reader = new()
+			reader.tokens = reader.ScanJson(json)
+			reader.i = 1
+			var/songdata = reader.read_value()
+			for(var/list/record in songdata)
+				playlist += new /datum/song_info(record)
+			if(playlist.len==0)
+				visible_message("<span class='warning'>\icon[src] \The [src] buzzes, unable to update its playlist.</span>","<em>You hear a buzz.</em>")
+				stat &= BROKEN
+				update_icon()
+				return 0
+			visible_message("<span class='notice'>\icon[src] \The [src] beeps, and the menu on its front fills with [playlist.len] items.</span>","<em>You hear a beep.</em>")
+		else
+			testing("[src] failed to update playlist: Response null.")
+			stat &= BROKEN
+			update_icon()
+			return 0
+		global_playlists["[playlistid]"] = playlist.Copy()
+	if(autoplay)
+		playing=1
+		autoplay=0
+	return 1
 // Represents a record returned.
 /datum/song_info
 	var/title  = ""
@@ -36,6 +117,7 @@
 		length = text2num(json["length"])
 
 	proc/display()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/display() called tick#: [world.time]")
 		var/str="\"[title]\""
 		if(artist!="")
 			str += ", by [artist]"
@@ -44,6 +126,7 @@
 		return str
 
 	proc/displaytitle()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/displaytitle() called tick#: [world.time]")
 		if(artist==""&&title=="")
 			return "\[NO TAGS\]"
 		var/str=""
@@ -59,10 +142,10 @@
 		return str
 
 
-var/global/loopModeNames=list(
-	JUKEMODE_SHUFFLE = "Shuffle",
+var/global/list/loopModeNames=list(
+	JUKEMODE_SHUFFLE     = "Shuffle",
 	JUKEMODE_REPEAT_SONG = "Single",
-	JUKEMODE_PLAY_ONCE= "Once",
+	JUKEMODE_PLAY_ONCE   = "Once"
 )
 /obj/machinery/media/jukebox
 	name = "Jukebox"
@@ -74,9 +157,12 @@ var/global/loopModeNames=list(
 	anchored = 1
 	luminosity = 4 // Why was this 16
 
+	custom_aghost_alerts=1 // We handle our own logging.
+
 	playing=0
 
 	var/loop_mode = JUKEMODE_SHUFFLE
+	var/list/allowed_modes = null
 
 	// Server-side playlist IDs this jukebox can play.
 	var/list/playlists=list() // ID = Label
@@ -90,6 +176,7 @@ var/global/loopModeNames=list(
 	var/selected_song = 0 // 0 or the song someone has selected for purchase
 	var/autoplay      = 0 // Start playing after spawn?
 	var/last_reload   = 0 // Reload cooldown.
+	var/last_song     = 0 // ID of previous song (used in shuffle to prevent double-plays)
 
 	var/screen = JUKEBOX_SCREEN_MAIN
 
@@ -97,34 +184,57 @@ var/global/loopModeNames=list(
 	var/credits_needed = 0 // Credits needed to complete purchase.
 	var/change_cost    = 10 // Current cost to change songs.
 	var/list/change_access  = list() // Access required to change songs
-	var/datum/money_account/linked_account
 	var/department // Department that gets the money
 
 	var/state_base = "jukebox2"
 
+	var/datum/wires/jukebox/wires = null
+	var/pick_allowed = 1 //Allows you to pick songs
+	var/access_unlocked = 0 //Allows you to access settings
+
+	machine_flags = WRENCHMOVE | FIXED2WORK | EMAGGABLE | MULTITOOL_MENU | SCREWTOGGLE | SHUTTLEWRENCH
+	mech_flags = MECH_SCAN_FAIL
+	emag_cost = 0 // because fun/unlimited uses.
+
 /obj/machinery/media/jukebox/New(loc)
 	..(loc)
+	allowed_modes = loopModeNames.Copy()
+	wires = new(src)
 	if(department)
 		linked_account = department_accounts[department]
 	else
 		linked_account = station_account
-	update_icon()
+
+/obj/machinery/media/jukebox/Destroy()
+	if(wires)
+		wires.Destroy()
+		wires = null
+	..()
 
 /obj/machinery/media/jukebox/attack_ai(var/mob/user)
 	attack_hand(user)
 
-/obj/machinery/media/jukebox/attack_paw()
-	return
+/obj/machinery/media/jukebox/attack_paw(var/mob/user)
+	if (!user.dexterity_check())
+		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
+		return
+	attack_hand(user)
 
 /obj/machinery/media/jukebox/power_change()
 	..()
-	if(emagged && !(stat & (NOPOWER|BROKEN)))
+	if(emagged && !(stat & (NOPOWER|BROKEN)) && !any_power_cut())
 		playing = 1
+		if(current_song)
+			update_music()
 	update_icon()
+
+/obj/machinery/media/jukebox/proc/any_power_cut()
+	var/total = wires.IsIndexCut(JUKE_POWER_ONE) || wires.IsIndexCut(JUKE_POWER_TWO) || wires.IsIndexCut(JUKE_POWER_THREE)
+	return total
 
 /obj/machinery/media/jukebox/update_icon()
 	overlays = 0
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN) || !anchored || any_power_cut())
 		if(stat & BROKEN)
 			icon_state = "[state_base]-broken"
 		else
@@ -139,28 +249,30 @@ var/global/loopModeNames=list(
 			overlays += "[state_base]-running"
 
 /obj/machinery/media/jukebox/proc/check_reload()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/jukebox/proc/check_reload() called tick#: [world.time]")
 	return world.time > last_reload + JUKEBOX_RELOAD_COOLDOWN
 
 /obj/machinery/media/jukebox/attack_hand(var/mob/user)
-	if(stat & NOPOWER)
-		usr << "\red You don't see anything to mess with."
+	if(stat & NOPOWER || any_power_cut())
+		usr << "<span class='warning'>You don't see anything to mess with.</span>"
 		return
 	if(stat & BROKEN && playlist!=null)
-		user.visible_message("\red <b>[user.name] smacks the side of \the [src.name].</b>","\red You hammer the side of \the [src.name].")
+		user.visible_message("<span class='danger'>[user.name] smacks the side of \the [src.name].</span>","<span class='warning'>You hammer the side of \the [src.name].</span>")
 		stat &= ~BROKEN
 		playlist=null
 		playing=emagged
 		update_icon()
 		return
-
+	if(panel_open)
+		wires.Interact(user)
 	var/t = "<div class=\"navbar\">"
 	t += "<a href=\"?src=\ref[src];screen=[JUKEBOX_SCREEN_MAIN]\">Main</a>"
-	if(allowed(user))
+	if(allowed(user)|| access_unlocked)
 		t += " | <a href=\"?src=\ref[src];screen=[JUKEBOX_SCREEN_SETTINGS]\">Settings</a>"
 	t += "</div>"
 	switch(screen)
-		if(JUKEBOX_SCREEN_MAIN)    t += ScreenMain(user)
-		if(JUKEBOX_SCREEN_PAYMENT) t += ScreenPayment(user)
+		if(JUKEBOX_SCREEN_MAIN)     t += ScreenMain(user)
+		if(JUKEBOX_SCREEN_PAYMENT)  t += ScreenPayment(user)
 		if(JUKEBOX_SCREEN_SETTINGS) t += ScreenSettings(user)
 
 	user.set_machine(src)
@@ -170,13 +282,14 @@ var/global/loopModeNames=list(
 	popup.open()
 
 /obj/machinery/media/jukebox/proc/ScreenMain(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/jukebox/proc/ScreenMain() called tick#: [world.time]")
 	var/t = "<h1>Jukebox Interface</h1>"
 	t += "<b>Power:</b> <a href='?src=\ref[src];power=1'>[playing?"On":"Off"]</a><br />"
-	t += "<b>Play Mode:</b> <a href='?src=\ref[src];mode=1'>[loopModeNames[loop_mode]]</a><br />"
+	t += "<b>Play Mode:</b> <a href='?src=\ref[src];mode=1'>[allowed_modes[loop_mode]]</a><br />"
 	if(playlist == null)
 		t += "\[DOWNLOADING PLAYLIST, PLEASE WAIT\]"
 	else
-		if(req_access.len == 0 || allowed(user))
+		if(req_access.len == 0 || allowed(user) || access_unlocked)
 			if(check_reload())
 				t += "<b>Playlist:</b> "
 				for(var/plid in playlists)
@@ -187,6 +300,11 @@ var/global/loopModeNames=list(
 			t += "<i>You cannot change the playlist.</i>"
 		t += "<br />"
 		if(current_song)
+			if(!playlist.len)
+				playlist=null
+				process()
+				if(!playlist || !playlist.len) return
+			else if(current_song > playlist.len) current_song = playlist.len
 			var/datum/song_info/song=playlist[current_song]
 			t += "<b>Current song:</b> [song.artist] - [song.title]<br />"
 		if(next_song)
@@ -210,6 +328,7 @@ var/global/loopModeNames=list(
 	return t
 
 /obj/machinery/media/jukebox/proc/ScreenPayment(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/jukebox/proc/ScreenPayment() called tick#: [world.time]")
 	var/t = "<h1>Pay for Song</h1>"
 	var/datum/song_info/song=playlist[selected_song]
 	t += {"
@@ -221,6 +340,9 @@ var/global/loopModeNames=list(
 	return t
 
 /obj/machinery/media/jukebox/proc/ScreenSettings(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/jukebox/proc/ScreenSettings() called tick#: [world.time]")
+	if(!linked_account)
+		linked_account = station_account
 	var/dat={"<h1>Settings</h1>
 		<form action="?src=\ref[src]" method="get">
 		<input type="hidden" name="src" value="\ref[src]" />
@@ -259,44 +381,29 @@ var/global/loopModeNames=list(
 
 
 /obj/machinery/media/jukebox/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/weapon/card/emag))
-		current_song = 0
-		if(!emagged)
-			playlist_id = "emagged"
-			last_reload=world.time
-			playlist=null
-			loop_mode = JUKEMODE_SHUFFLE
-			emagged = 1
-			playing = 1
-			user.visible_message("\red [user.name] slides something into the [src.name]'s card-reader.","\red You short out the [src.name].")
-			update_icon()
-			update_music()
-	else if(istype(W,/obj/item/weapon/wrench))
-		var/un = !anchored ? "" : "un"
-		user.visible_message("\blue [user.name] begins [un]locking \the [src.name]'s casters.","\blue You begin [un]locking \the [src.name]'s casters.")
-		if(do_after(user,30))
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-			anchored = !anchored
-			user.visible_message("\blue [user.name] [un]locks \the [src.name]'s casters.","\red You [un]lock \the [src.name]'s casters.")
-			playing = emagged
-			update_music()
-			update_icon()
-	else if(istype(W,/obj/item/weapon/card/id))
+	. = ..()
+	if(.)
+		return .
+	if(istype(W, /obj/item/device/multitool)||istype(W, /obj/item/weapon/wirecutters))
+		if(panel_open)
+			wires.Interact(user)
+		return
+	if(istype(W,/obj/item/weapon/card/id))
 		if(!selected_song || screen!=JUKEBOX_SCREEN_PAYMENT)
-			visible_message("\blue The machine buzzes.","\red You hear a buzz.")
+			visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
 			return
 		var/obj/item/weapon/card/id/I = W
 		if(!linked_account)
-			visible_message("\red The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.","You hear a buzz.")
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
 			return
 		var/datum/money_account/acct = get_card_account(I)
 		if(!acct)
-			visible_message("\red The machine buzzes, and flashes \"NO ACCOUNT\" on the screen.","You hear a buzz.")
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO ACCOUNT\" on the screen.</span>","You hear a buzz.")
 			return
 		if(credits_needed > acct.money)
-			visible_message("\red The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.","You hear a buzz.")
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.</span>","You hear a buzz.")
 			return
-		visible_message("\blue The machine beeps happily.","You hear a beep.")
+		visible_message("<span class='notice'>The machine beeps happily.</span>","You hear a beep.")
 		acct.charge(credits_needed,linked_account,"Song selection at [areaMaster.name]'s [name].")
 		credits_needed = 0
 
@@ -305,15 +412,15 @@ var/global/loopModeNames=list(
 		attack_hand(user)
 	else if(istype(W,/obj/item/weapon/spacecash))
 		if(!selected_song || screen!=JUKEBOX_SCREEN_PAYMENT)
-			visible_message("\blue The machine buzzes.","\red You hear a buzz.")
+			visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
 			return
 		if(!linked_account)
-			visible_message("\red The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.","You hear a buzz.")
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
 			return
 		var/obj/item/weapon/spacecash/C=W
 		credits_held += C.worth*C.amount
 		if(credits_held >= credits_needed)
-			visible_message("\blue The machine beeps happily.","You hear a beep.")
+			visible_message("<span class='notice'>The machine beeps happily.</span>","You hear a beep.")
 			credits_held -= credits_needed
 			credits_needed=0
 			screen=JUKEBOX_SCREEN_MAIN
@@ -327,18 +434,55 @@ var/global/loopModeNames=list(
 			successful_purchase()
 		attack_hand(user)
 
+/obj/machinery/media/jukebox/emag(mob/user)
+	if(!emagged)
+		user.visible_message("<span class='warning'>[user.name] slides something into the [src.name]'s card-reader.</span>","<span class='warning'>You short out the [src.name].</span>")
+		wires.CutWireIndex(JUKE_CONFIG)
+		short()
+	return
+
+/obj/machinery/media/jukebox/proc/short()
+	emagged = !emagged
+	current_song = 0
+	playing = 1
+	if(!wires.IsIndexCut(JUKE_SHUFFLE))
+		loop_mode = JUKEMODE_SHUFFLE
+	if(emagged)
+		playlist_id = "emagged"
+	else
+		playlist_id = playlists[1] //Set to whatever our first is. Usually bar.
+	last_reload=world.time
+	playlist=null
+	update_icon()
+	update_music()
+
+/obj/machinery/media/jukebox/wrenchAnchor(mob/user)
+	if(..())
+		playing = emagged
+		update_music()
+		update_icon()
+
 /obj/machinery/media/jukebox/proc/successful_purchase()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/jukebox/proc/successful_purchase() called tick#: [world.time]")
 		next_song = selected_song
 		selected_song = 0
 		screen = JUKEBOX_SCREEN_MAIN
 
+/obj/machinery/media/jukebox/proc/rad_pulse() //Called by pulsing the transmit wire
+	for(var/mob/living/carbon/M in view(src,3))
+		var/rads = 50 * sqrt( 1 / (get_dist(M, src) + 1) ) //It's like a transmitter, but 1/3 as powerful
+		if(istype(M,/mob/living/carbon/human))
+			M.apply_effect((rads*2),IRRADIATE)
+		else
+			M.radiation += rads
+
 /obj/machinery/media/jukebox/Topic(href, href_list)
 	if(isobserver(usr) && !isAdminGhost(usr))
-		usr << "\red You can't push buttons when your fingers go right through them, dummy."
+		usr << "<span class='warning'>You can't push buttons when your fingers go right through them, dummy.</span>"
 		return
-	..()
+	if(..()) return 1
 	if(emagged)
-		usr << "\red You touch the bluescreened menu. Nothing happens. You feel dumber."
+		usr << "<span class='warning'>You touch the bluescreened menu. Nothing happens. You feel dumber.</span>"
 		return
 
 	if (href_list["power"])
@@ -347,14 +491,20 @@ var/global/loopModeNames=list(
 		update_icon()
 
 	if("screen" in href_list)
+		if(isobserver(usr) && !canGhostWrite(usr,src,""))
+			usr << "<span class='warning'>You can't do that.</span>"
+			return
 		screen=text2num(href_list["screen"])
 
 	if("act" in href_list)
 		switch(href_list["act"])
 			if("Save Settings")
+				if(isobserver(usr) && !canGhostWrite(usr,src,"saved settings for"))
+					usr << "<span class='warning'>You can't do that.</span>"
+					return
 				var/datum/money_account/new_linked_account = get_money_account(text2num(href_list["payableto"]),z)
 				if(!new_linked_account)
-					usr << "\red Unable to link new account. Aborting."
+					usr << "<span class='warning'>Unable to link new account. Aborting.</span>"
 					return
 
 				change_cost = max(0,text2num(href_list["set_change_cost"]))
@@ -367,10 +517,15 @@ var/global/loopModeNames=list(
 				screen=POS_SCREEN_SETTINGS
 
 	if (href_list["playlist"])
+		if(isobserver(usr) && !canGhostWrite(usr,src,""))
+			usr << "<span class='warning'>You can't do that.</span>"
+			return
 		if(!check_reload())
-			usr << "\red You must wait 60 seconds between playlist reloads."
+			usr << "<span class='warning'>You must wait 60 seconds between playlist reloads.</span>"
 			return
 		playlist_id=href_list["playlist"]
+		if(isAdminGhost(usr))
+			message_admins("[key_name_admin(usr)] changed [src] playlist to [playlist_id] at [formatJumpTo(src)]")
 		last_reload=world.time
 		playlist=null
 		current_song = 0
@@ -380,15 +535,24 @@ var/global/loopModeNames=list(
 		update_icon()
 
 	if (href_list["song"])
+		if(wires.IsIndexCut(JUKE_CAPITAL))
+			usr << "<span class='warning'>You select a song, but [src] is unresponsive...</span>"
+			return
+		if(isobserver(usr) && !canGhostWrite(usr,src,""))
+			usr << "<span class='warning'>You can't do that.</span>"
+			return
 		selected_song=Clamp(text2num(href_list["song"]),1,playlist.len)
-		if(!change_cost)
+		if(isAdminGhost(usr))
+			var/datum/song_info/song=playlist[selected_song]
+			log_adminghost("[key_name_admin(usr)] changed [src] next song to #[selected_song] ([song.display()]) at [formatJumpTo(src)]")
+		if(!change_cost || isAdminGhost(usr))
 			next_song = selected_song
 			selected_song = 0
 			if(!current_song)
 				update_music()
 				update_icon()
 		else
-			usr << "\red Swipe card or insert $[num2septext(change_cost)] to set this song."
+			usr << "<span class='warning'>Swipe card or insert $[num2septext(change_cost)] to set this song.</span>"
 			screen = JUKEBOX_SCREEN_PAYMENT
 			credits_needed=change_cost
 
@@ -403,37 +567,11 @@ var/global/loopModeNames=list(
 
 /obj/machinery/media/jukebox/process()
 	if(!playlist)
-		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
-		testing("[src] - Updating playlist from [url]...")
-		var/response = world.Export(url)
-		playlist=list()
-		if(response)
-			var/json = file2text(response["CONTENT"])
-			if("/>" in json)
-				visible_message("<span class='warning'>\icon[src] \The [src] buzzes, unable to update its playlist.</span>","<em>You hear a buzz.</em>")
-				stat &= BROKEN
-				update_icon()
-				return
-			var/json_reader/reader = new()
-			reader.tokens = reader.ScanJson(json)
-			reader.i = 1
-			var/songdata = reader.read_value()
-			for(var/list/record in songdata)
-				playlist += new /datum/song_info(record)
-			if(playlist.len==0)
-				visible_message("<span class='warning'>\icon[src] \The [src] buzzes, unable to update its playlist.</span>","<em>You hear a buzz.</em>")
-				stat &= BROKEN
-				update_icon()
-				return
-			visible_message("<span class='notice'>\icon[src] \The [src] beeps, and the menu on its front fills with [playlist.len] items.</span>","<em>You hear a beep.</em>")
-		else
-			testing("[src] failed to update playlist: Response null.")
-			stat &= BROKEN
-			update_icon()
+		if(!retrieve_playlist())
 			return
 	if(playing)
 		var/datum/song_info/song
-		if(current_song)
+		if(current_song && playlist.len)
 			song = playlist[current_song]
 		if(!current_song || (song && world.time >= media_start_time + song.length))
 			current_song=1
@@ -443,7 +581,10 @@ var/global/loopModeNames=list(
 			else
 				switch(loop_mode)
 					if(JUKEMODE_SHUFFLE)
-						current_song=rand(1,playlist.len)
+						while(1)
+							current_song=rand(1,playlist.len)
+							if(current_song!=last_song || playlist.len<4)
+								break
 					if(JUKEMODE_REPEAT_SONG)
 						current_song=current_song
 					if(JUKEMODE_PLAY_ONCE)
@@ -453,9 +594,16 @@ var/global/loopModeNames=list(
 			update_music()
 
 /obj/machinery/media/jukebox/update_music()
+	if(!playlist)
+		process()
+		if(!playlist || !playlist.len)
+			return
+	if(current_song > playlist.len)
+		current_song = 0
 	if(current_song && playing)
 		var/datum/song_info/song = playlist[current_song]
 		media_url = song.url
+		last_song = current_song
 		media_start_time = world.time
 		visible_message("<span class='notice'>\icon[src] \The [src] begins to play [song.display()].</span>","<em>You hear music.</em>")
 		//visible_message("<span class='notice'>\icon[src] \The [src] warbles: [song.length/10]s @ [song.url]</notice>")
@@ -465,6 +613,7 @@ var/global/loopModeNames=list(
 	..()
 
 /obj/machinery/media/jukebox/proc/stop_playing()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/jukebox/proc/stop_playing() called tick#: [world.time]")
 	//current_song=0
 	playing=0
 	update_music()
@@ -479,7 +628,33 @@ var/global/loopModeNames=list(
 	playlists=list(
 		"bar"  = "Bar Mix",
 		"jazz" = "Jazz",
-		"rock" = "Rock"
+		"rock" = "Rock",
+		"vidyaone" = "Vidya Pt.1",
+		"vidyatwo" = "Vidya Pt.2",
+		"vidyathree" = "Vidya Pt.3",
+		"vidyafour" = "Vidya Pt.4",
+	)
+
+// Relaxing elevator music~
+/obj/machinery/media/jukebox/dj
+
+	playlist_id="muzak"
+	autoplay = 1
+	change_cost = 0
+
+	id_tag="DJ Satellite" // For autolink
+
+	// Must be defined on your server.
+	playlists=list(
+		"bar"  = "Bar Mix",
+		"jazz" = "Jazz",
+		"rock" = "Rock",
+		"muzak" = "Muzak",
+		"thunderdome" = "Thunderdome", // For thunderdome I guess
+		"vidyaone" = "Vidya Pt.1",
+		"vidyatwo" = "Vidya Pt.2",
+		"vidyathree" = "Vidya Pt.3",
+		"vidyafour" = "Vidya Pt.4",
 	)
 
 // So I don't have to do all this shit manually every time someone sacrifices pun-pun.
@@ -489,6 +664,8 @@ var/global/loopModeNames=list(
 	desc = "The ultimate jukebox. Your brain begins to liquify from simply looking at it."
 
 	state_base = "superjuke"
+	icon_state = "superjuke"
+
 	change_cost = 0
 
 	playlist_id="bar"
@@ -497,23 +674,118 @@ var/global/loopModeNames=list(
 		"bar"  = "Bar Mix",
 		"jazz" = "Jazz",
 		"rock" = "Rock",
+		"muzak" = "Muzak",
+
 
 		"emagged" = "Syndie Mix",
 		"shuttle" = "Shuttle",
-		"endgame" = "Apocalypse"
+
+		"endgame" = "Apocalypse",
+		"clockwork" = "Clockwork", // Unfinished new cult stuff
+		"thunderdome" = "Thunderdome", // For thunderdome I guess
+//Vidya musak
+		"vidyaone" = "Vidya Pt.1",
+		"vidyatwo" = "Vidya Pt.2",
+		"vidyathree" = "Vidya Pt.3",
+		"vidyafour" = "Vidya Pt.4",
 	)
 
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)
 	// NO FUN ALLOWED.  Emag list is included, anyway.
 	if(istype(W, /obj/item/weapon/card/emag))
-		user << "\red Your [W] refuses to touch \the [src]!"
+		user << "<span class='warning'>Your [W] refuses to touch \the [src]!</span>"
 		return
 	..()
 
-/obj/machinery/media/jukebox/shuttle
+/obj/machinery/media/jukebox/superjuke/shuttle
 	playlist_id="shuttle"
-	// Must be defined on your server.
-	playlists=list(
-		"shuttle"  = "Shuttle Mix"
-	)
-	invisibility=101 // FAK U NO SONG 4 U
+	id_tag="Shuttle" // For autolink
+
+
+/obj/machinery/media/jukebox/superjuke/thematic
+	playlist_id="endgame"
+
+/obj/machinery/media/jukebox/superjuke/thematic/update_music()
+	if(current_song && playing)
+		var/datum/song_info/song = playlist[current_song]
+		media_url = song.url
+		last_song = current_song
+		media_start_time = world.time
+		visible_message("<span class='notice'>\icon[src] \The [src] begins to play [song.display()].</span>","<em>You hear music.</em>")
+		//visible_message("<span class='notice'>\icon[src] \The [src] warbles: [song.length/10]s @ [song.url]</notice>")
+	else
+		media_url=""
+		media_start_time = 0
+
+	// Send update to clients.
+	for(var/mob/M in mob_list)
+		if(M && M.client)
+			M.force_music(media_url,media_start_time,volume)
+
+/obj/machinery/media/jukebox/superjuke/adminbus
+	name = "adminbus-mounted Jukebox"
+	desc = "It really doesn't get any better."
+	icon = 'icons/obj/bus.dmi'
+	icon_state = ""
+	light_color = LIGHT_COLOR_BLUE
+	luminosity = 0
+	layer = FLY_LAYER+1
+	pixel_x = -32
+	pixel_y = -32
+
+	var/datum/browser/popup = null
+	req_access = list()
+	playlist_id="endgame"
+
+/obj/machinery/media/jukebox/superjuke/adminbus/attack_hand(var/mob/user)
+	var/t = "<div class=\"navbar\">"
+	t += "<a href=\"?src=\ref[src];screen=[JUKEBOX_SCREEN_MAIN]\">Main</a>"
+	t += "</div>"
+	t += ScreenMain(user)
+
+	user.set_machine(src)
+	popup = new (user,"jukebox",name,420,700)
+	popup.set_content(t)
+	popup.set_title_image(user.browse_rsc_icon(icon, icon_state))
+	popup.open()
+
+	if(icon_state != "jukebox")
+		deploy()
+
+/obj/machinery/media/jukebox/superjuke/adminbus/proc/deploy()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/jukebox/superjuke/adminbus/proc/deploy() called tick#: [world.time]")
+	update_media_source()
+	icon_state = "jukebox"
+	set_light(4)
+	flick("deploying",src)
+
+/obj/machinery/media/jukebox/superjuke/adminbus/proc/repack()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/jukebox/superjuke/adminbus/proc/repack() called tick#: [world.time]")
+	if(playing)
+		for(var/mob/M in range (src,1))
+			M << "<span class='notice'>The jukebox turns itself off to protect itself from any cahot induced damage.</span>"
+	if(popup)
+		popup.close()
+	playing = 0
+	set_light(0)
+	icon_state = ""
+	flick("repacking",src)
+	update_music()
+	disconnect_media_source()
+	update_icon()
+
+/obj/machinery/media/jukebox/superjuke/adminbus/update_icon()
+	if(playing)
+		overlays += "beats"
+	else
+		overlays = 0
+	return
+
+/obj/machinery/media/jukebox/superjuke/adminbus/ex_act(severity)
+	return
+
+/obj/machinery/media/jukebox/superjuke/adminbus/cultify()
+	return
+
+/obj/machinery/media/jukebox/superjuke/adminbus/singuloCanEat()
+	return 0

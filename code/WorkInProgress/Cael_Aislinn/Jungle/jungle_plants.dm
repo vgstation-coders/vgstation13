@@ -30,12 +30,12 @@
 	if(istype(I, /obj/item/weapon/hatchet) && !stump)
 		if(indestructable)
 			//this bush marks the edge of the map, you can't destroy it
-			user << "\red You flail away at the undergrowth, but it's too thick here."
+			user << "<span class='warning'>You flail away at the undergrowth, but it's too thick here.</span>"
 		else
-			user.visible_message("\red <b>[user] begins clearing away [src].</b>","\red <b>You begin clearing away [src].</b>")
+			user.visible_message("<span class='danger'><b>[user] begins clearing away [src].</b>","<span class='warning'>You begin clearing away [src].</span></span>")
 			spawn(rand(15,30))
 				if(get_dist(user,src) < 2)
-					user << "\blue You clear away [src]."
+					user << "<span class='notice'>You clear away [src].</span>"
 					var/obj/item/stack/sheet/wood/W = new(src.loc)
 					W.amount = rand(3,15)
 					if(prob(50))
@@ -60,12 +60,12 @@ var/list/reagent_effects = list("toxin","anti_toxin","stoxin","space_drugs","min
 var/jungle_plants_init = 0
 
 /proc/init_jungle_plants()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/proc/init_jungle_plants() called tick#: [world.time]")
 	jungle_plants_init = 1
 	fruit_icon_states = shuffle(fruit_icon_states)
 	reagent_effects = shuffle(reagent_effects)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/jungle_fruit
-	seed = ""
 	name = "jungle fruit"
 	desc = "It smells weird and looks off."
 	icon = 'code/WorkInProgress/Cael_Aislinn/Jungle/jungle.dmi'
@@ -103,7 +103,7 @@ var/jungle_plants_init = 0
 /obj/structure/jungle_plant/attack_hand(var/mob/user as mob)
 	if(fruits_left > 0)
 		fruits_left--
-		user << "\blue You pick a fruit off [src]."
+		user << "<span class='notice'>You pick a fruit off [src].</span>"
 
 		var/obj/item/weapon/reagent_containers/food/snacks/grown/jungle_fruit/J = new (src.loc)
 		J.potency = plant_strength
@@ -117,4 +117,4 @@ var/jungle_plants_init = 0
 		fruit_overlay.Blend(rgb(fruit_r, fruit_g, fruit_b), ICON_ADD)
 		overlays += fruit_overlay
 	else
-		user << "\red There are no fruit left on [src]."
+		user << "<span class='warning'>There are no fruit left on [src].</span>"

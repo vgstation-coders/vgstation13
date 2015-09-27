@@ -18,6 +18,7 @@ datum
 
 		// /vg/: Send admin alerts with standardized code.
 		proc/send_admin_alert(var/datum/reagents/holder, var/reaction_name=src.name)
+			//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/send_admin_alert() called tick#: [world.time]")
 			var/message_prefix = "\A [reaction_name] reaction has occured"
 			var/message="[message_prefix]"
 			var/atom/A = holder.my_atom
@@ -38,6 +39,7 @@ datum
 			message_admins(message, 0, 1)
 
 		proc/on_reaction(var/datum/reagents/holder, var/created_volume)
+			//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/on_reaction() called tick#: [world.time]")
 			return
 
 		//I recommend you set the result amount to the total volume of all components.
@@ -61,6 +63,27 @@ datum
 				e.start()
 				holder.clear_reagents()
 				return
+
+		creatine
+			name = "Creatine"
+			id = "creatine"
+			result = "creatine"
+			required_reagents = list("nutriment"=1, "bicaridine"=1, "hyperzine"=1, "mutagen"=1)
+			result_amount = 2
+
+		discount
+			name = "Discount Dan's Special Sauce"
+			id = "discount"
+			result = "discount"
+			required_reagents = list("irradiatedbeans"=1, "toxicwaste"=1, "refriedbeans"=1, "mutatedbeans"=1, "beff"=1, "horsemeat"=1,"moonrocks"=1, "offcolorcheese"=1, "bonemarrow"=1, "greenramen"=1, "glowingramen"=1, "deepfriedramen"=1)
+			result_amount = 12
+
+		peptobismol
+			name = "Peptobismol"
+			id = "peptobismol"
+			result = "peptobismol"
+			required_reagents = list("anti_toxin"=1, "discount"=1)
+			result_amount = 2
 
 		emp_pulse
 			name = "EMP Pulse"
@@ -149,12 +172,28 @@ datum
 		//	required_reagents = list("hydrogen" = 1, "carbon" = 1, "nitrogen" = 1)
 		//	result_amount = 1
 
-		water //I can't believe we never had this.
+/* You attempt to make water by mixing the ingredients for Hydroperoxyl, but you get a big, whopping sum of nothing!
+		water //Keeping this commented out for posterity.
 			name = "Water"
 			id = "water"
-			result = null
-			required_reagents = list("oxygen" = 2, "hydrogen" = 1)
+			result = null //I can't believe it's not water!
+			required_reagents = list("oxygen" = 2, "hydrogen" = 1) //And there goes the atmosphere, thanks greenhouse gases!
 			result_amount = 1
+*/
+
+		water
+			name = "Water"
+			id = "water"
+			result = "water"
+			required_reagents = list("hydrogen" = 2, "oxygen" = 1)
+			result_amount = 1
+
+		sacid
+			name = "Sulphuric Acid"
+			id = "sacid"
+			result = "sacid"
+			required_reagents = list("sulfur" = 2, "oxygen" = 3, "water" = 2)
+			result_amount = 2
 
 		thermite
 			name = "Thermite"
@@ -230,8 +269,8 @@ datum
 			name = "Virus Food"
 			id = "virusfood"
 			result = "virusfood"
-			required_reagents = list("water" = 1, "milk" = 1)
-			result_amount = 5
+			required_reagents = list("water" = 5, "milk" = 5)
+			result_amount = 15
 
 		leporazine
 			name = "Leporazine"
@@ -401,21 +440,21 @@ datum
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(2, 1, location)
 				s.start()
-				for(var/mob/living/carbon/M in viewers(world.view, location))
-					switch(get_dist(M, location))
-						if(0 to 3)
-							if(hasvar(M, "glasses"))
-								if(istype(M:glasses, /obj/item/clothing/glasses/sunglasses))
-									continue
 
+				playsound(get_turf(src), 'sound/effects/phasein.ogg', 25, 1)
+
+				var/eye_safety = 0
+
+				for(var/mob/living/carbon/M in viewers(get_turf(holder.my_atom), null))
+					if(iscarbon(M))
+						eye_safety = M.eyecheck()
+
+					if (get_dist(M, location) <= 3)
+						if(eye_safety < 1)
 							flick("e_flash", M.flash)
 							M.Weaken(15)
-
-						if(4 to 5)
-							if(hasvar(M, "glasses"))
-								if(istype(M:glasses, /obj/item/clothing/glasses/sunglasses))
-									continue
-
+					else if (get_dist(M, location) <= 5)
+						if(eye_safety < 1)
 							flick("e_flash", M.flash)
 							M.Stun(5)
 
@@ -438,7 +477,7 @@ datum
 					napalm.update_values()
 
 					target_tile.assume_air(napalm)
-					spawn (0) target_tile.hotspot_expose(700, 400)
+					spawn (0) target_tile.hotspot_expose(700, 400,surfaces=1)
 				holder.del_reagent("napalm")
 				return
 
@@ -524,6 +563,13 @@ datum
 			required_reagents = list("sodiumchloride" = 1, "ethanol" = 1, "radium" = 1)
 			result_amount = 3
 
+		carp_pheromones
+			name = "Carp pheromones"
+			id = "carppheromones"
+			result = "carppheromones"
+			required_reagents = list("carpotoxin" = 1, "leporazine" = 1, "carbon" = 1)
+			result_amount = 3
+
 		plasmasolidification
 			name = "Solid Plasma"
 			id = "solidplasma"
@@ -545,12 +591,6 @@ datum
 				new /obj/item/stack/sheet/mineral/plastic(get_turf(holder.my_atom),10)
 				return
 
-		virus_food
-			name = "Virus Food"
-			id = "virusfood"
-			result = "virusfood"
-			required_reagents = list("water" = 5, "milk" = 5, "oxygen" = 5)
-			result_amount = 15
 /*
 		mix_virus
 			name = "Mix Virus"
@@ -597,6 +637,16 @@ datum
 			required_reagents = list("capsaicin" = 2)
 			required_catalysts = list("plasma" = 5)
 			result_amount = 1
+
+		methylin
+			name = "Methylin"
+			id = "methylin"
+			result = "methylin"
+			required_reagents = list("hydrogen" = 1, "chlorine" = 1, "ethanol" = 1)
+			required_catalysts = list("fluorine" = 5)
+			result_amount = 1
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 // foam and foam precursor
@@ -621,12 +671,12 @@ datum
 
 				var/location = get_turf(holder.my_atom)
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution violently bubbles!"
+					M << "<span class='warning'>The solution violently bubbles!</span>"
 
 				location = get_turf(holder.my_atom)
 
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution spews out foam!"
+					M << "<span class='warning'>The solution spews out foam!</span>"
 
 				//world << "Holder volume is [holder.total_volume]"
 				//for(var/datum/reagent/R in holder.reagent_list)
@@ -651,7 +701,7 @@ datum
 				var/location = get_turf(holder.my_atom)
 
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution spews out a metalic foam!"
+					M << "<span class='warning'>The solution spews out a metalic foam!</span>"
 
 				var/datum/effect/effect/system/foam_spread/s = new()
 				s.set_up(created_volume, location, holder, 1)
@@ -671,7 +721,7 @@ datum
 				var/location = get_turf(holder.my_atom)
 
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution spews out a metalic foam!"
+					M << "<span class='warning'>The solution spews out a metalic foam!</span>"
 
 				var/datum/effect/effect/system/foam_spread/s = new()
 				s.set_up(created_volume, location, holder, 2)
@@ -833,9 +883,10 @@ datum
 			on_reaction(var/datum/reagents/holder, var/created_volume)
 
 				// Calculate new position (searches through beacons in world)
-				var/obj/item/device/radio/beacon/chosen
+				var
+				/chosen
 				var/list/possible = list()
-				for(var/obj/item/device/radio/beacon/W in world)
+				for(var/obj/item/beacon/W in beacons)
 					possible += W
 
 				if(possible.len > 0)
@@ -851,14 +902,14 @@ datum
 
 					var/list/flashers = list()
 					for(var/mob/living/carbon/human/M in viewers(TO, null))
-						if(M:eyecheck() <= 0)
+						if(M.eyecheck() <= 0)
 							flick("e_flash", M.flash) // flash dose faggots
 							flashers += M
 
 					var/y_distance = TO.y - FROM.y
 					var/x_distance = TO.x - FROM.x
 					for (var/atom/movable/A in range(2, FROM )) // iterate thru list of mobs in the area
-						if(istype(A, /obj/item/device/radio/beacon)) continue // don't teleport beacons because that's just insanely stupid
+						if(istype(A, /obj/item/beacon)) continue // don't teleport beacons because that's just insanely stupid
 						if( A.anchored && !istype(A, /mob/dead/observer) ) continue // don't teleport anchored things (computers, tables, windows, grilles, etc) because this causes problems!
 						// do teleport ghosts however because hell why not
 
@@ -909,7 +960,7 @@ datum
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
 				for(var/mob/living/carbon/human/M in viewers(get_turf(holder.my_atom), null))
-					if(M:eyecheck() <= 0)
+					if(M.eyecheck() <= 0)
 						flick("e_flash", M.flash)
 
 				for(var/i = 1, i <= created_volume, i++)
@@ -935,7 +986,7 @@ datum
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
 				for(var/mob/living/carbon/human/M in viewers(get_turf(holder.my_atom), null))
-					if(M:eyecheck() <= 0)
+					if(M.eyecheck() <= 0)
 						flick("e_flash", M.flash)
 
 				for(var/i = 1, i <= created_volume + rand(1,2), i++)
@@ -983,12 +1034,12 @@ datum
 
 				var/location = get_turf(holder.my_atom)
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution violently bubbles!"
+					M << "<span class='warning'>The solution violently bubbles!</span>"
 
 				location = get_turf(holder.my_atom)
 
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution spews out foam!"
+					M << "<span class='warning'>The solution spews out foam!</span>"
 
 				//world << "Holder volume is [holder.total_volume]"
 				//for(var/datum/reagent/R in holder.reagent_list)
@@ -1012,13 +1063,18 @@ datum
 			required_container = /obj/item/slime_extract/grey
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
-				send_admin_alert(holder, reaction_name="grey slime")
+				if (istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+					send_admin_alert(holder, reaction_name="grey slime in a grenade")
+				else
+					send_admin_alert(holder, reaction_name="grey slime")
 
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
-				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
-					O.show_message(text("\red Infused with plasma, the core begins to quiver and grow, and soon a new baby slime emerges from it!"), 1)
+				if (istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+					holder.my_atom.visible_message("<span class='rose'>The grenade bursts open and a new baby slime emerges from it!</span>")
+				else
+					holder.my_atom.visible_message("<span class='rose'>Infused with plasma, the core begins to quiver and grow, and soon a new baby slime emerges from it!</span>")
 				var/mob/living/carbon/slime/S = new /mob/living/carbon/slime
-				S.loc = get_turf_loc(holder.my_atom)
+				S.loc = get_turf(holder.my_atom)
 
 		slimemonkey
 			name = "Slime Monkey"
@@ -1031,7 +1087,7 @@ datum
 			on_reaction(var/datum/reagents/holder)
 				for(var/i = 1, i <= 3, i++)
 					var /obj/item/weapon/reagent_containers/food/snacks/monkeycube/M = new /obj/item/weapon/reagent_containers/food/snacks/monkeycube
-					M.loc = get_turf_loc(holder.my_atom)
+					M.loc = get_turf(holder.my_atom)
 
 //Green
 		slimemutate
@@ -1053,12 +1109,11 @@ datum
 			required_container = /obj/item/slime_extract/metal
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
-				var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal
+				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(holder.my_atom))
 				M.amount = 15
-				M.loc = get_turf_loc(holder.my_atom)
 				var/obj/item/stack/sheet/plasteel/P = new /obj/item/stack/sheet/plasteel
 				P.amount = 5
-				P.loc = get_turf_loc(holder.my_atom)
+				P.loc = get_turf(holder.my_atom)
 
 //Gold
 		slimecrit
@@ -1071,9 +1126,12 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
-					O.show_message(text("\red The slime extract begins to vibrate violently !"), 1)
-				sleep(50)
+				if (!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+					holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently !</span>")
+					send_admin_alert(holder, reaction_name="gold slime + plasma")
+					sleep(50)
+				else
+					send_admin_alert(holder, reaction_name="gold slime + plasma in a grenade!!")//expect to this this one spammed in the times to come
 
 				var/blocked = list(/mob/living/simple_animal/hostile,
 					/mob/living/simple_animal/hostile/pirate,
@@ -1087,6 +1145,9 @@ datum
 					/mob/living/simple_animal/hostile/syndicate/ranged/space,
 					/mob/living/simple_animal/hostile/alien/queen/large,
 					/mob/living/simple_animal/hostile/faithless,
+					/mob/living/simple_animal/hostile/faithless/cult,
+					/mob/living/simple_animal/hostile/scarybat/cult,
+					/mob/living/simple_animal/hostile/creature/cult,
 					// /mob/living/simple_animal/hostile/panther,
 					// /mob/living/simple_animal/hostile/snake,
 					/mob/living/simple_animal/hostile/retaliate,
@@ -1098,23 +1159,32 @@ datum
 					/mob/living/simple_animal/hostile/asteroid/goliath,
 					/mob/living/simple_animal/hostile/asteroid/hivelord,
 					/mob/living/simple_animal/hostile/asteroid/hivelordbrood,
-					/mob/living/simple_animal/hostile/carp/holocarp
+					/mob/living/simple_animal/hostile/carp/holocarp,
+					/mob/living/simple_animal/hostile/slime,
+					/mob/living/simple_animal/hostile/slime/adult,
+					/mob/living/simple_animal/hostile/mining_drone,
 					)//exclusion list for things you don't want the reaction to create.
 				var/list/critters = typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
 
-				send_admin_alert(holder, reaction_name="gold slime + plasma")
 
-				playsound(get_turf_loc(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/living/carbon/human/M in viewers(get_turf_loc(holder.my_atom), null))
-					if(M:eyecheck() <= 0)
-						flick("e_flash", M.flash)
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
+					if (istype(O, /mob/living/carbon/human/))
+						var /mob/living/carbon/human/H = O
+						if((H.eyecheck() <= 0)&&(!istype(H.glasses, /obj/item/clothing/glasses/science)))
+							flick("e_flash", O.flash)
+							O << "<span class='danger'>A flash blinds you while you start hearing terrifying noises !</span>"
+						else
+							O << "<span class='danger'>You hear a rumbling as a troup of monsters phases into existence !</span>"
+					else
+						O << "<span class='danger'>You hear a rumbling as a troup of monsters phases into existence !</span>"
 
 				for(var/i = 1, i <= 5, i++)
 					var/chosen = pick(critters)
 					var/mob/living/simple_animal/hostile/C = new chosen
 					C.faction = "slimesummon"
-					C.loc = get_turf_loc(holder.my_atom)
+					C.loc = get_turf(holder.my_atom)
 					if(prob(50))
 						for(var/j = 1, j <= rand(1, 3), j++)
 							step(C, pick(NORTH,SOUTH,EAST,WEST))
@@ -1129,9 +1199,12 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
-				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
-					O.show_message(text("\red The slime extract begins to vibrate violently !"), 1)
-				sleep(50)
+				if (!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+					holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently !</span>")
+					send_admin_alert(holder, reaction_name="gold slime + blood")
+					sleep(50)
+				else
+					send_admin_alert(holder, reaction_name="gold slime + blood in a grenade")
 
 				var/blocked = list(/mob/living/simple_animal/hostile,
 					/mob/living/simple_animal/hostile/pirate,
@@ -1153,7 +1226,14 @@ datum
 					/mob/living/simple_animal/hostile/asteroid/goliath,
 					/mob/living/simple_animal/hostile/asteroid/hivelord,
 					/mob/living/simple_animal/hostile/asteroid/hivelordbrood,
-					/mob/living/simple_animal/hostile/carp/holocarp
+					/mob/living/simple_animal/hostile/carp/holocarp,
+					/mob/living/simple_animal/hostile/faithless/cult,
+					/mob/living/simple_animal/hostile/scarybat/cult,
+					/mob/living/simple_animal/hostile/creature/cult,
+					/mob/living/simple_animal/hostile/slime,
+					/mob/living/simple_animal/hostile/slime/adult,
+					/mob/living/simple_animal/hostile/hivebot/tele,//this thing spawns hostile mobs
+					/mob/living/simple_animal/hostile/mining_drone,
 					)//exclusion list for things you don't want the reaction to create.
 				var/list/critters = typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
 
@@ -1161,9 +1241,16 @@ datum
 
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/living/carbon/human/M in viewers(get_turf(holder.my_atom), null))
-					if(M:eyecheck() <= 0)
-						flick("e_flash", M.flash)
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
+					if (istype(O, /mob/living/carbon/human/))
+						var /mob/living/carbon/human/H = O
+						if((H.eyecheck() <= 0)&&(!istype(H.glasses, /obj/item/clothing/glasses/science)))
+							flick("e_flash", O.flash)
+							O << "<span class='rose'>A flash blinds and you can feel a new presence !</span>"
+						else
+							O << "<span class='rose'>You hear a crackling as a creature manifests before you !</span>"
+					else
+						O << "<span class='rose'>You hear a crackling as a creature manifests before you !</span>"
 
 				var/chosen = pick(critters)
 				var/mob/living/simple_animal/hostile/C = new chosen
@@ -1181,20 +1268,44 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 
-				var/list/borks = typesof(/obj/item/weapon/reagent_containers/food/snacks) - /obj/item/weapon/reagent_containers/food/snacks
+				var/blocked = list(
+					/obj/item/weapon/reagent_containers/food/snacks,
+					/obj/item/weapon/reagent_containers/food/snacks/snackbar,
+					/obj/item/weapon/reagent_containers/food/snacks/grown,
+					)
+
+				var/list/borks = typesof(/obj/item/weapon/reagent_containers/food/snacks) - blocked
 				// BORK BORK BORK
 
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/living/carbon/human/M in viewers(get_turf(holder.my_atom), null))
-					if(M:eyecheck() <= 0)
-						flick("e_flash", M.flash)
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
+					if (istype(O, /mob/living/carbon/human/))
+						var /mob/living/carbon/human/H = O
+						if((H.eyecheck() <= 0)&&(!istype(H.glasses, /obj/item/clothing/glasses/science)))
+							flick("e_flash", O.flash)
+							O << "<span class='caution'>A white light blinds you and you think you can smell some food nearby !</span>"
+						else
+							O << "<span class='notice'>A bunch of snacks appears before your very eyes !</span>"
+					else
+						O << "<span class='notice'>A bunch of snacks appears before your very eyes !</span>"
 
 				for(var/i = 1, i <= 4 + rand(1,2), i++)
 					var/chosen = pick(borks)
 					var/obj/B = new chosen
 					if(B)
 						B.loc = get_turf(holder.my_atom)
+
+						if (istype(B,/obj/item/weapon/reagent_containers/food/snacks/meat/human))
+							B.name = "human-meat"
+						if (istype(B,/obj/item/weapon/reagent_containers/food/snacks/human))
+							B.name = "human-meat burger"
+						if (istype(B,/obj/item/weapon/reagent_containers/food/snacks/fortunecookie))
+							var/obj/item/weapon/paper/paper = new /obj/item/weapon/paper(B)
+							paper.info = pick("power to the slimes","have a slime day","today, you will meet a very special slime","stay away from cold showers")
+							var/obj/item/weapon/reagent_containers/food/snacks/fortunecookie/cookie = B
+							cookie.trash = paper
+
 						if(prob(50))
 							for(var/j = 1, j <= rand(1, 3), j++)
 								step(B, pick(NORTH,SOUTH,EAST,WEST))
@@ -1210,20 +1321,45 @@ datum
 
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
 
-				var/list/borks = typesof(/obj/item/weapon/reagent_containers/food/drinks) - /obj/item/weapon/reagent_containers/food/drinks
+				var/blocked = list(
+					/obj/item/weapon/reagent_containers/food/drinks,
+					)
+				blocked += typesof(/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable)	//silver-slime spawned customizable food is borked
+				blocked += typesof(/obj/item/weapon/reagent_containers/food/drinks/golden_cup)		//was probably never intended to spawn outside admin events
+
+				var/list/borks = typesof(/obj/item/weapon/reagent_containers/food/drinks) - blocked
 				// BORK BORK BORK
 
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/living/carbon/human/M in viewers(get_turf(holder.my_atom), null))
-					if(M:eyecheck() <= 0)
-						flick("e_flash", M.flash)
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
+					if (istype(O, /mob/living/carbon/human/))
+						var /mob/living/carbon/human/H = O
+						if((H.eyecheck() <= 0)&&(!istype(H.glasses, /obj/item/clothing/glasses/science)))
+							flick("e_flash", O.flash)
+							O << "<span class='caution'>A white light blinds you and you think you can hear bottles rolling on the floor !</span>"
+						else
+							O << "<span class='notice'>A bunch of drinks appears before you !</span>"
+					else
+						O << "<span class='notice'>A bunch of drinks appears before you !</span>"
 
 				for(var/i = 1, i <= 4 + rand(1,2), i++)
 					var/chosen = pick(borks)
 					var/obj/B = new chosen
 					if(B)
 						B.loc = get_turf(holder.my_atom)
+
+						if (istype(B,/obj/item/weapon/reagent_containers/food/drinks/sillycup))
+							B.reagents.add_reagent("water", 10)
+
+
+						if (istype(B,/obj/item/weapon/reagent_containers/food/drinks/flask))
+							B.reagents.add_reagent("whiskey", 60)
+
+
+						if (istype(B,/obj/item/weapon/reagent_containers/food/drinks/shaker))
+							B.reagents.add_reagent("gargleblaster", 100)
+
 						if(prob(50))
 							for(var/j = 1, j <= rand(1, 3), j++)
 								step(B, pick(NORTH,SOUTH,EAST,WEST))
@@ -1252,13 +1388,17 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
-				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
-					O.show_message(text("\red The slime extract begins to vibrate violently !"), 1)
-				sleep(50)
+				if (!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+					holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently !</span>")
+					send_admin_alert(holder, reaction_name="dark blue slime + plasma (Freeze)")
+					sleep(50)
+				else
+					send_admin_alert(holder, reaction_name="dark blue slime + plasma (Freeze) in a grenade")
+
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 				for(var/mob/living/M in range (get_turf(holder.my_atom), 7))
 					M.bodytemperature -= 240
-					M << "\blue You feel a chill!"
+					M << "<span class='notice'>You feel a chill!</span>"
 
 //Orange
 		slimecasp
@@ -1282,9 +1422,12 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
-				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
-					O.show_message(text("\red The slime extract begins to vibrate violently !"), 1)
-				sleep(50)
+				if (!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+					holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently !</span>")
+					send_admin_alert(holder, reaction_name="orange slime + plasma (Napalm)")
+					sleep(50)
+				else
+					send_admin_alert(holder, reaction_name="orange slime + plasma (Napalm)in a grenade")
 				var/turf/location = get_turf(holder.my_atom.loc)
 				for(var/turf/simulated/floor/target_tile in range(0,location))
 
@@ -1294,7 +1437,7 @@ datum
 					napalm.temperature = 1400
 
 					target_tile.assume_air(napalm)
-					spawn (0) target_tile.hotspot_expose(700, 400)
+					spawn (0) target_tile.hotspot_expose(700, 400,surfaces=1)
 
 //Yellow
 		slimeoverload
@@ -1307,6 +1450,10 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder, var/created_volume)
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
+				if (!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+					send_admin_alert(holder, reaction_name="yellow slime + blood (EMP)")
+				else
+					send_admin_alert(holder, reaction_name="yellow slime + blood (EMP) in a grenade")
 				empulse(get_turf(holder.my_atom), 3, 7)
 
 
@@ -1323,9 +1470,9 @@ datum
 				var/obj/item/weapon/cell/slime/P = new /obj/item/weapon/cell/slime
 				P.loc = get_turf(holder.my_atom)
 
-		slimeglow
-			name = "Slime Glow"
-			id = "m_glow"
+		slimeglow					//Was a broken recipe that was supposed to make the extract produce some light
+			name = "Slime Glow"		//I changed it, so it now creates an /obj/item/device/flashlight/lamp/slime.
+			id = "m_glow"			//Basically a lamp with two brightness settings. light slightly yellow.
 			result = null
 			required_reagents = list("water" = 5)
 			result_amount = 1
@@ -1333,10 +1480,8 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
-				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
-					O.show_message(text("\red The slime begins to emit a soft light. Squeezing it will cause it to grow brightly."), 1)
-				var/obj/item/slime_extract/yellow/Y = holder
-				Y.luminosity = 6
+				var/obj/item/device/flashlight/lamp/slime/P = new /obj/item/device/flashlight/lamp/slime
+				P.loc = get_turf(holder.my_atom)
 
 //Purple
 
@@ -1363,6 +1508,8 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
+				if (istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+					send_admin_alert(holder, reaction_name="purple slime + sugar (Slime Jelly) in a grenade")
 
 
 //Dark Purple
@@ -1391,6 +1538,8 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
+				if (istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+					send_admin_alert(holder, reaction_name="red slime + plasma (Glycerol) in a grenade")
 
 
 		slimebloodlust
@@ -1403,11 +1552,19 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
+				if (!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+					send_admin_alert(holder, reaction_name="red slime + blood (Slime Frenzy)")
+				else
+					send_admin_alert(holder, reaction_name="red slime + blood (Slime Frenzy) in a grenade")
 				for(var/mob/living/carbon/slime/slime in viewers(get_turf(holder.my_atom), null))
-					slime.tame = 0
-					slime.rabid = 1
-					for(var/mob/O in viewers(get_turf(holder.my_atom), null))
-						O.show_message(text("\red The [slime] is driven into a frenzy!."), 1)
+					slime.rabid()
+					holder.my_atom.visible_message("<span class='warning'>The [slime] is driven into a frenzy !</span>")
+				for(var/mob/living/simple_animal/slime/slime in viewers(get_turf(holder.my_atom), null))
+					slime.rabid()
+					holder.my_atom.visible_message("<span class='warning'>The [slime] is driven into a frenzy !</span>")
+				for(var/mob/living/simple_animal/adultslime/slime in viewers(get_turf(holder.my_atom), null))
+					slime.rabid()
+					holder.my_atom.visible_message("<span class='warning'>The [slime] is driven into a frenzy !</span>")
 
 //Pink
 		slimeppotion
@@ -1435,6 +1592,8 @@ datum
 			required_container = /obj/item/slime_extract/black
 			on_reaction(var/datum/reagents/holder)
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
+				if (istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+					send_admin_alert(holder, reaction_name="black slime + plasma (Mutates to Slime) in a grenade")
 
 //Oil
 		slimeexplosion
@@ -1447,9 +1606,12 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
-				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
-					O.show_message(text("\red The slime extract begins to vibrate violently !"), 1)
-				sleep(50)
+				if (!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+					holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently !</span>")
+					send_admin_alert(holder, reaction_name="oil slime + plasma (Explosion)")
+					sleep(50)
+				else
+					send_admin_alert(holder, reaction_name="oil slime + plasma (Explosion) in a grenade")
 				explosion(get_turf(holder.my_atom), 1 ,3, 6)
 //Light Pink
 		slimepotion2
@@ -1491,11 +1653,14 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder, var/created_volume)
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
-
+				if (!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+					send_admin_alert(holder, reaction_name="bluespace slime + plasma (Mass Teleport)")
+				else
+					send_admin_alert(holder, reaction_name="bluespace slime + plasma (Mass Teleport) in a grenade")
 				// Calculate new position (searches through beacons in world)
-				var/obj/item/device/radio/beacon/chosen
+				var/obj/item/beacon/chosen
 				var/list/possible = list()
-				for(var/obj/item/device/radio/beacon/W in world)
+				for(var/obj/item/beacon/W in beacons)
 					possible += W
 
 				if(possible.len > 0)
@@ -1511,14 +1676,14 @@ datum
 
 					var/list/flashers = list()
 					for(var/mob/living/carbon/human/M in viewers(TO, null))
-						if(M:eyecheck() <= 0)
+						if((M.eyecheck() <= 0)&&(!istype(M.glasses, /obj/item/clothing/glasses/science)))
 							flick("e_flash", M.flash) // flash dose faggots
 							flashers += M
 
 					var/y_distance = TO.y - FROM.y
 					var/x_distance = TO.x - FROM.x
 					for (var/atom/movable/A in range(4, FROM )) // iterate thru list of mobs in the area
-						if(istype(A, /obj/item/device/radio/beacon)) continue // don't teleport beacons because that's just insanely stupid
+						if(istype(A, /obj/item/beacon)) continue // don't teleport beacons because that's just insanely stupid
 						if(A.anchored) continue
 						if(istype(A, /obj/structure/cable )) continue
 
@@ -1569,7 +1734,7 @@ datum
 				var/obj/item/weapon/slimesteroid2/P = new /obj/item/weapon/slimesteroid2
 				P.loc = get_turf(holder.my_atom)
 
-//Sepia
+//sepia
 		slimecamera
 			name = "Slime Camera"
 			id = "m_camera"
@@ -1580,7 +1745,7 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
-				var/obj/item/device/camera/P = new /obj/item/device/camera
+				var/obj/item/device/camera/sepia/P = new /obj/item/device/camera/sepia
 				P.loc = get_turf(holder.my_atom)
 
 		slimefilm
@@ -1741,7 +1906,7 @@ datum
 			name = "Patron"
 			id = "patron"
 			result = "patron"
-			required_reagents = list("tequilla" = 10, "silver" = 1)
+			required_reagents = list("tequila" = 10, "silver" = 1)
 			result_amount = 10
 
 		bilk
@@ -1886,14 +2051,14 @@ datum
 			name = "Brave Bull"
 			id = "bravebull"
 			result = "bravebull"
-			required_reagents = list("tequilla" = 2, "kahlua" = 1)
+			required_reagents = list("tequila" = 2, "kahlua" = 1)
 			result_amount = 3
 
-		tequilla_sunrise
-			name = "Tequilla Sunrise"
-			id = "tequillasunrise"
-			result = "tequillasunrise"
-			required_reagents = list("tequilla" = 2, "orangejuice" = 1)
+		tequila_sunrise
+			name = "Tequila Sunrise"
+			id = "tequilasunrise"
+			result = "tequilasunrise"
+			required_reagents = list("tequila" = 2, "orangejuice" = 1)
 			result_amount = 3
 
 		toxins_special
@@ -1963,14 +2128,14 @@ datum
 			name = "Margarita"
 			id = "margarita"
 			result = "margarita"
-			required_reagents = list("tequilla" = 2, "limejuice" = 1)
+			required_reagents = list("tequila" = 2, "limejuice" = 1)
 			result_amount = 3
 
 		longislandicedtea
 			name = "Long Island Iced Tea"
 			id = "longislandicedtea"
 			result = "longislandicedtea"
-			required_reagents = list("vodka" = 1, "gin" = 1, "tequilla" = 1, "cubalibre" = 1)
+			required_reagents = list("vodka" = 1, "gin" = 1, "tequila" = 1, "cubalibre" = 1)
 			result_amount = 4
 
 		threemileisland
@@ -2121,14 +2286,14 @@ datum
 			name = "Soy Latte"
 			id = "soy_latte"
 			result = "soy_latte"
-			required_reagents = list("coffee" = 1, "soymilk" = 1)
+			required_reagents = list("espresso" = 1, "soymilk" = 1)
 			result_amount = 2
 
 		cafe_latte
-			name = "Cafe Latte"
+			name = "Latte"
 			id = "cafe_latte"
 			result = "cafe_latte"
-			required_reagents = list("coffee" = 1, "milk" = 1)
+			required_reagents = list("espresso" = 1, "milk" = 1)
 			result_amount = 2
 
 		acidspit
@@ -2270,3 +2435,126 @@ datum
 			result = "rewriter"
 			required_reagents = list("spacemountainwind" = 1, "coffee" = 1)
 			result_amount = 2
+
+		vinegar
+			name = "Vinegar"
+			id = "vinegar"
+			result = "vinegar"
+			required_reagents = list("wine" = 5)
+			required_catalysts = list("enzyme" = 5)
+			result_amount = 5
+
+			//cafe stuff!
+
+
+		acidtea
+			name = "Earl's Grey Tea"
+			id = "acidtea"
+			result = "acidtea"
+			required_reagents = list("sacid" = 1, "tea" = 1)
+			result_amount = 2
+
+		chifir
+			name = "Chifir"
+			id = "chifir"
+			result = "chifir"
+			required_reagents = list("tea" = 5, "redtea" = 5, "greentea" = 5)
+			result_amount = 15
+
+		yinyang
+			name = "Zen Tea"
+			id = "yinyang"
+			result = "yinyang"
+			required_reagents = list("tea" = 5, "nothing" = 5)
+			result_amount = 10
+
+		singularitea
+			name = "Singularitea"
+			id = "singularitea"
+			result = "singularitea"
+			required_reagents = list("radium" = 1, "tea" = 5, "redtea" = 5)
+			result_amount = 10
+
+		gyro
+			name = "Gyro"
+			id = "gyro"
+			result = "gyro"
+			required_reagents = list("greentea" = 5, "whiskey" = 5, "iron" = 1)
+			result_amount = 10
+
+		plasmatea
+			name = "Plasma Pekoe"
+			id = "plasmatea"
+			result = "plasmatea"
+			required_reagents = list("tea" = 5, "plasma" = 5)
+			result_amount = 10
+
+		espresso
+			name = "Espresso"
+			id = "espresso"
+			result = "espresso"
+			required_reagents = list("coffee" = 1, "water" = 1)
+			result_amount = 2
+
+
+		cappuccino
+			name = "Cappuccino"
+			id = "cappuccino"
+			result = "cappuccino"
+			required_reagents = list("espresso" = 1, "cream" = 1)
+			result_amount = 2
+
+		tonio
+			name = "Tonio"
+			id = "tonio"
+			result = "tonio"
+			required_reagents = list("coffee" = 5, "limejuice" = 1, "tomatojuice" = 1, "lemonjuice" = 1, "watermelonjuice" = 1, "honey" = 1)
+			result_amount = 10
+
+		doppio
+			name = "Doppio"
+			id = "doppio"
+			result = "doppio"
+			required_reagents = list("coffee" = 5, "redtea" = 5, "greentea" = 5)
+			result_amount = 10
+
+		passione
+			name = "Passione"
+			id = "passione"
+			result = "passione"
+			required_reagents = list("cappuccino" = 5, "gold" = 1, "honey" =5)
+			result_amount = 10
+
+		seccoffee
+			name = "Wake up call"
+			id = "seccoffee"
+			result = "seccoffee"
+			required_reagents = list("coffee" = 5, "sprinkles" = 1, "beepskysmash" = 5)
+			result_amount = 10
+
+		medcoffee
+			name = "Lifeline"
+			id = "medcoffee"
+			result = "medcoffee"
+			required_reagents = list("coffee" = 5, "doctorsdelight" = 5, "blood" = 1)
+			result_amount = 10
+
+		detcoffee
+			name = "Joe"
+			id = "detcoffee"
+			result = "detcoffee"
+			required_reagents = list("coffee" = 5, "whiskey" = 5)
+			result_amount = 5
+
+		etank
+			name = "Recharger"
+			id = "tank"
+			result = "etank"
+			required_reagents = list("coffee" = 1, "iron" = 1, "lithium" = 1, "fuel" = 1, "aluminum" = 1)
+			result_amount = 5
+
+		greytea
+			name = "Tide"
+			id = "greytea"
+			result = "greytea"
+			required_reagents = list("water" = 5, "fuel" = 5)

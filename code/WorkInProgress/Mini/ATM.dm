@@ -23,7 +23,6 @@ log transactions
 	anchored = 1
 	use_power = 1
 	idle_power_usage = 10
-	var/obj/machinery/account_database/linked_db
 	var/datum/money_account/authenticated_account
 	var/number_incorrect_tries = 0
 	var/previous_account_number = 0
@@ -36,13 +35,13 @@ log transactions
 	var/view_screen = NO_SCREEN
 	var/lastprint = 0 // Printer needs time to cooldown
 
+	machine_flags = PURCHASER //not strictly true, but it connects it to the account
+
 /obj/machinery/atm/New()
 	..()
 	machine_id = "[station_name()] RT #[num_financial_terminals++]"
-
-/obj/machinery/atm/initialize()
-	..()
-	reconnect_database()
+	if(ticker)
+		initialize()
 
 /obj/machinery/atm/process()
 	if(stat & NOPOWER)
@@ -51,7 +50,7 @@ log transactions
 	if(linked_db && ( (linked_db.stat & NOPOWER) || !linked_db.activated ) )
 		linked_db = null
 		authenticated_account = null
-		src.visible_message("\red \icon[src] [src] buzzes rudely, \"Connection to remote database lost.\"")
+		src.visible_message("<span class='warning'>\icon[src] [src] buzzes rudely, \"Connection to remote database lost.\"</span>")
 		updateDialog()
 
 	if(ticks_left_timeout > 0)
@@ -79,25 +78,27 @@ log transactions
 					qdel(S)
 				authenticated_account.charge(-amount,null,"Credit deposit",terminal_id=machine_id,dest_name = "Terminal")
 
-/obj/machinery/atm/proc/reconnect_database()
-	for(var/obj/machinery/account_database/DB in world) //Hotfix until someone finds out why it isn't in 'machines'
-		if( DB.z == src.z && !(DB.stat & NOPOWER) && DB.activated )
-			linked_db = DB
-			break
-
 /obj/machinery/atm/attackby(obj/item/I as obj, mob/user as mob)
+	if(iswrench(I))
+		user.visible_message("<span class='notice'>[user] begins to take apart the [src]!</span>", "<span class='notice'>You start to take apart the [src]</span>")
+		if(do_after(user, src, 40))
+			user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+			new /obj/item/stack/sheet/metal (src.loc,2)
+			qdel(src)
+			return
 	if(istype(I, /obj/item/weapon/card))
 		var/obj/item/weapon/card/id/idcard = I
 		if(!held_card)
-			usr.drop_item()
-			idcard.loc = src
+			usr.drop_item(idcard, src)
 			held_card = idcard
 			if(authenticated_account && held_card.associated_account_number != authenticated_account.account_number)
 				authenticated_account = null
 	else if(authenticated_account)
 		if(istype(I,/obj/item/weapon/spacecash))
+			var/obj/item/weapon/spacecash/dosh = I
 			//consume the money
-			authenticated_account.money += I:worth * I:amount
+			authenticated_account.money += dosh.worth * dosh.amount
 			if(prob(50))
 				playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
 			else
@@ -107,7 +108,7 @@ log transactions
 			var/datum/transaction/T = new()
 			T.target_name = authenticated_account.owner_name
 			T.purpose = "Credit deposit"
-			T.amount = I:worth
+			T.amount = dosh.worth * dosh.amount
 			T.source_terminal = machine_id
 			T.date = current_date_string
 			T.time = worldtime2text()
@@ -115,13 +116,16 @@ log transactions
 
 			user << "<span class='info'>You insert [I] into [src].</span>"
 			src.attack_hand(user)
-			del I
+			qdel(I)
 	else
 		..()
 
 /obj/machinery/atm/attack_hand(mob/user as mob)
+	if(isobserver(user))
+		user << "<span class='warning'>Your ghostly limb passes right through \the [src].</span>"
+		return
 	if(istype(user, /mob/living/silicon))
-		user << "\red Artificial unit recognized. Artificial units do not currently receive monetary compensation, as per NanoTrasen regulation #1005."
+		user << "<span class='warning'>Artificial unit recognized. Artificial units do not currently receive monetary compensation, as per NanoTrasen regulation #1005.</span>"
 		return
 	if(get_dist(src,user) <= 1)
 		//check to see if the user has low security enabled
@@ -276,11 +280,11 @@ log transactions
 									T.time = worldtime2text()
 									failed_account.transaction_log.Add(T)
 							else
-								usr << "\red \icon[src] Incorrect pin/account combination entered, [max_pin_attempts - number_incorrect_tries] attempts remaining."
+								usr << "<span class='warning'>\icon[src] Incorrect pin/account combination entered, [max_pin_attempts - number_incorrect_tries] attempts remaining.</span>"
 								previous_account_number = tried_account_num
 								playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 1)
 						else
-							usr << "\red \icon[src] incorrect pin/account combination entered."
+							usr << "<span class='warning'>\icon[src] incorrect pin/account combination entered.</span>"
 							number_incorrect_tries = 0
 					else
 						playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
@@ -296,7 +300,7 @@ log transactions
 						T.time = worldtime2text()
 						authenticated_account.transaction_log.Add(T)
 
-						usr << "\blue \icon[src] Access granted. Welcome user '[authenticated_account.owner_name].'"
+						usr << "<span class='notice'>\icon[src] Access granted. Welcome user '[authenticated_account.owner_name].'</span>"
 
 					previous_account_number = tried_account_num
 			if("withdrawal")
@@ -309,7 +313,7 @@ log transactions
 
 						//remove the money
 						if(amount > 10000) // prevent crashes
-							usr << "\blue The ATM's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'"
+							usr << "<span class='notice'>The ATM's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'</span>"
 							amount = 10000
 						authenticated_account.money -= amount
 						withdraw_arbitrary_sum(amount)
@@ -365,8 +369,7 @@ log transactions
 				else
 					var/obj/item/I = usr.get_active_hand()
 					if (istype(I, /obj/item/weapon/card/id))
-						usr.drop_item()
-						I.loc = src
+						usr.drop_item(I, src)
 						held_card = I
 			if("logout")
 				authenticated_account = null
@@ -376,10 +379,12 @@ log transactions
 
 //create the most effective combination of notes to make up the requested amount
 /obj/machinery/atm/proc/withdraw_arbitrary_sum(var/arbitrary_sum)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atm/proc/withdraw_arbitrary_sum() called tick#: [world.time]")
 	dispense_cash(arbitrary_sum,get_step(get_turf(src),turn(dir,180))) // Spawn on the ATM.
 
 //stolen wholesale and then edited a bit from newscasters, which are awesome and by Agouri
 /obj/machinery/atm/proc/scan_user(mob/living/carbon/human/human_user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atm/proc/scan_user() called tick#: [world.time]")
 	if(!authenticated_account && linked_db)
 		if(human_user.wear_id)
 			var/obj/item/weapon/card/id/I
@@ -391,7 +396,7 @@ log transactions
 			if(I)
 				authenticated_account = linked_db.attempt_account_access(I.associated_account_number)
 				if(authenticated_account)
-					human_user << "\blue \icon[src] Access granted. Welcome user '[authenticated_account.owner_name].'"
+					human_user << "<span class='notice'>\icon[src] Access granted. Welcome user '[authenticated_account.owner_name].'</span>"
 
 					//create a transaction log entry
 					var/datum/transaction/T = new()

@@ -1,6 +1,6 @@
 //affected_mob.contract_disease(new /datum/disease/alien_embryo)
 
-//cael - retained this file for legacy reference, see code\modules\mob\living\carbon\alien\special\alien_embryo.dm for replacement
+//cael - retained this file for legacy reference, see code\\modules\\mob\living\carbon\alien\special\alien_embryo.dm for replacement
 
 //Our own special process so that dead hosts still chestburst
 /datum/disease/alien_embryo/process()
@@ -53,25 +53,25 @@
 			if(prob(1))
 				affected_mob.emote("cough")
 			if(prob(1))
-				affected_mob << "\red Your throat feels sore."
+				affected_mob << "<span class='warning'>Your throat feels sore.</span>"
 			if(prob(1))
-				affected_mob << "\red Mucous runs down the back of your throat."
+				affected_mob << "<span class='warning'>Mucous runs down the back of your throat.</span>"
 		if(4)
 			if(prob(1))
 				affected_mob.emote("sneeze")
 			if(prob(1))
 				affected_mob.emote("cough")
 			if(prob(2))
-				affected_mob << "\red Your muscles ache."
+				affected_mob << "<span class='warning'>Your muscles ache.</span>"
 				if(prob(20))
 					affected_mob.take_organ_damage(1)
 			if(prob(2))
-				affected_mob << "\red Your stomach hurts."
+				affected_mob << "<span class='warning'>Your stomach hurts.</span>"
 				if(prob(20))
 					affected_mob.adjustToxLoss(1)
 					affected_mob.updatehealth()
 		if(5)
-			affected_mob << "\red You feel something tearing its way out of your stomach..."
+			affected_mob << "<span class='warning'>You feel something tearing its way out of your stomach...</span>"
 			affected_mob.adjustToxLoss(10)
 			affected_mob.updatehealth()
 			if(prob(50))
@@ -105,15 +105,18 @@
 
 /*----------------------------------------
 Proc: RefreshInfectionImage()
+	//writepanic("[__FILE__].[__LINE__] \\/proc: RefreshInfectionImage() called tick#: [world.time]")
 Des: Removes all infection images from aliens and places an infection image on all infected mobs for aliens.
 ----------------------------------------*/
 /datum/disease/alien_embryo/proc/RefreshInfectionImage()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease/alien_embryo/proc/RefreshInfectionImage() called tick#: [world.time]")
 	spawn(0)
 		for (var/mob/living/carbon/alien/alien in player_list)
 			if (alien.client)
 				for(var/image/I in alien.client.images)
 					if(dd_hasprefix_case(I.icon_state, "infected"))
-						del(I)
+						//del(I)
+						alien.client.images -= I
 
 		for (var/mob/living/carbon/alien/alien in player_list)
 			if (alien.client)
@@ -126,9 +129,11 @@ Des: Removes all infection images from aliens and places an infection image on a
 
 /*----------------------------------------
 Proc: AddInfectionImages(C)
+	//writepanic("[__FILE__].[__LINE__] \\/proc: AddInfectionImages() called tick#: [world.time]")
 Des: Checks if the passed mob (C) is infected with the alien egg, then gives each alien client an infected image at C.
 ----------------------------------------*/
 /datum/disease/alien_embryo/proc/AddInfectionImages(var/mob/living/carbon/C)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease/alien_embryo/proc/AddInfectionImages() called tick#: [world.time]")
 	if (C)
 		for (var/mob/living/carbon/alien/alien in player_list)
 			if (alien.client)
@@ -139,15 +144,18 @@ Des: Checks if the passed mob (C) is infected with the alien egg, then gives eac
 
 /*----------------------------------------
 Proc: RemoveInfectionImage(C)
+	//writepanic("[__FILE__].[__LINE__] \\/proc: RemoveInfectionImage() called tick#: [world.time]")
 Des: Removes the alien infection image from all aliens in the world located in passed mob (C).
 ----------------------------------------*/
 
 /datum/disease/alien_embryo/proc/RemoveInfectionImages(var/mob/living/carbon/C)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease/alien_embryo/proc/RemoveInfectionImages() called tick#: [world.time]")
 	if (C)
 		for (var/mob/living/carbon/alien/alien in player_list)
 			if (alien.client)
 				for(var/image/I in alien.client.images)
 					if(I.loc == C)
 						if(dd_hasprefix_case(I.icon_state, "infected"))
-							del(I)
+							//del(I)
+							alien.client.images -= I
 	return

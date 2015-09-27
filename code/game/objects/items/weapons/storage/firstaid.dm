@@ -56,7 +56,7 @@
 
 /obj/item/weapon/storage/firstaid/toxin
 	name = "toxin first aid"
-	desc = "Used to treat when you have a high amoutn of toxins in your body."
+	desc = "Used to treat when you have a high amount of toxins in your body."
 	icon_state = "antitoxin"
 	item_state = "firstaid-toxin"
 
@@ -79,7 +79,7 @@
 	name = "oxygen deprivation first aid"
 	desc = "A box full of oxygen goodies."
 	icon_state = "o2"
-	item_state = "firstaid-o2"
+	item_state = "firstaid-oxy"
 
 	New()
 		..()
@@ -124,9 +124,15 @@
 	allow_quick_gather = 1
 	use_to_pickup = 1
 	storage_slots = 14
-	m_amt = 10
-	g_amt = 60
-	
+	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 60)
+	var/image/colour_overlay
+
+/obj/item/weapon/storage/pill_bottle/New()
+	..()
+	colour_overlay = image('icons/obj/chemical.dmi',"bottle_colour")
+	overlays += colour_overlay
+
+
 /obj/item/weapon/storage/pill_bottle/MouseDrop(obj/over_object as obj) //Quick pillbottle fix. -Agouri
 
 	if (ishuman(usr) || ismonkey(usr)) //Can monkeys even place items in the pocket slots? Leaving this in just in case~
@@ -136,10 +142,10 @@
 		if ((!( M.restrained() ) && !( M.stat ) /*&& M.pocket == src*/))
 			switch(over_object.name)
 				if("r_hand")
-					M.u_equip(src)
+					M.u_equip(src,0)
 					M.put_in_r_hand(src)
 				if("l_hand")
-					M.u_equip(src)
+					M.u_equip(src,0)
 					M.put_in_l_hand(src)
 			src.add_fingerprint(usr)
 			return
@@ -149,6 +155,36 @@
 			src.show_to(usr)
 			return
 	return
+
+/obj/item/weapon/storage/pill_bottle/attackby(var/obj/item/I, var/mob/user)
+	if(!I) return
+	if(istype(I, /obj/item/weapon/storage/bag/chem))
+		var/obj/item/weapon/storage/bag/chem/C = I
+		user << "<span class='notice'> You transfer the contents of [C].<span>"
+		for(var/obj/item/O in C.contents)
+			if(can_be_inserted(O))
+				handle_item_insertion(O, 1)
+		return 1
+	return ..()
+var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#00137F","Green" = "#129E0A","Orange" = "#FF6A00","Purple" = "#A17FFF","Red" = "#BE0000","Yellow" = "#FFD800","Grey" = "#9F9F9F","White" = "#FFFFFF","Custom" = "#FFFFFF",)
+/obj/item/weapon/storage/pill_bottle/verb/change()
+	set name = "Add Coloured Label"
+	set category = "Object"
+	set src in usr
+	if(!colour_overlay)
+		return
+	var/bottle_colour
+	bottle_colour = input("Select Colour to change it to", "Pill Bottle Colour", bottle_colour) as null|anything in bottle_colour_choices
+	if(!bottle_colour||(usr.stat))
+		return
+	if(bottle_colour == "Custom")
+		bottle_colour = input("Select Colour to change it to", "Pill Bottle Colour", bottle_colour) as color
+	else
+		bottle_colour = bottle_colour_choices[bottle_colour]
+	overlays -= colour_overlay
+	colour_overlay.color = "[bottle_colour]"
+	overlays += colour_overlay
+
 
 /obj/item/weapon/storage/pill_bottle/kelotane
 	name = "Pill bottle (kelotane)"
@@ -194,13 +230,33 @@
 
 
 /obj/item/weapon/storage/pill_bottle/dice
-	name = "pack of dice"
-	desc = "It's a small container with dice inside."
-	m_amt = 20
-	g_amt = 70
+	name = "bag of dice"
+	desc = "Contains all the luck you'll ever need."
+	icon = 'icons/obj/dice.dmi'
+	icon_state = "dicebag"
+
+
+/obj/item/weapon/storage/pill_bottle/dice/New()
+	..()
+	overlays -= colour_overlay
+	colour_overlay = null
+	new /obj/item/weapon/dice/d4( src )
+	new /obj/item/weapon/dice( src )
+	new /obj/item/weapon/dice/d8( src )
+	new /obj/item/weapon/dice/d10( src )
+	new /obj/item/weapon/dice/d00( src )
+	new /obj/item/weapon/dice/d12( src )
+	new /obj/item/weapon/dice/d20( src )
+
+/obj/item/weapon/storage/pill_bottle/hyperzine
+	name = "Pill bottle (hyperzine)"
+	desc = "Contains pills used to keep you active."
 
 	New()
 		..()
-		new /obj/item/weapon/dice( src )
-		new /obj/item/weapon/dice/d20( src )
-
+		new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
+		new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
+		new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
+		new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
+		new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
+		new /obj/item/weapon/reagent_containers/pill/hyperzine( src )

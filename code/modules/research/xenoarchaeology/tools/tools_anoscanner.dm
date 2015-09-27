@@ -5,7 +5,7 @@
 	icon_state = "ano_scanner"
 	item_state = "lampgreen"
 	w_class = 1.0
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	slot_flags = SLOT_BELT
 	var/nearest_artifact_id = "unknown"
 	var/nearest_artifact_distance = -1
@@ -28,6 +28,7 @@
 			scan()
 
 /obj/item/device/ano_scanner/proc/scan()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/ano_scanner/proc/scan() called tick#: [world.time]")
 	last_scan_time = world.time
 	nearest_artifact_distance = -1
 

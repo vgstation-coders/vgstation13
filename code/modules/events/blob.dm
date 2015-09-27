@@ -1,6 +1,6 @@
 /datum/event/blob
-	announceWhen	= 12
-	endWhen			= 120
+	announceWhen	= 30
+	endWhen			= 150
 
 	var/obj/effect/blob/core/Blob
 	var/list/datum/mind/infected_crew=list()
@@ -13,6 +13,7 @@
 #define ROLE_TYPE_FACE 0
 #define ROLE_TYPE_HEEL 1
 /proc/get_minds_in_role(var/roletype)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_minds_in_role() called tick#: [world.time]")
 	var/antagonist_list[] = list()//The main bad guys. Evil minds that plot destruction.
 	var/protagonist_list[] = ticker.mode.get_living_heads()//The good guys. Mostly Heads. Who are alive.
 
@@ -49,7 +50,7 @@
 	if (!possible_blobs.len)
 		return
 	for(var/mob/living/G in possible_blobs)
-		if(G.client && !G.client.holder && !G.client.is_afk() && G.client.prefs.be_special & BE_ALIEN)
+		if(G.client && !G.client.holder && !G.client.is_afk() && G.client.desires_role(ROLE_BLOB))
 			var/datum/mind/blob = pick(possible_blobs)
 			infected_crew += blob
 			blob.special_role = "Blob"
@@ -63,6 +64,7 @@
 	//	Blob.process()
 
 /datum/event/blob/proc/burst_blobs()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/event/blob/proc/burst_blobs() called tick#: [world.time]")
 	spawn(0)
 		for(var/datum/mind/blob in infected_crew)
 			blob.current.show_message("<span class='alert'>You feel tired and bloated.</span>")
@@ -100,11 +102,12 @@
 		biohazard_alert()
 
 /datum/event/blob/proc/greetblob(user)
-	user << {"<B>\red You are infected by the Blob!</B>
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/event/blob/proc/greetblob() called tick#: [world.time]")
+	user << {"<B><span class='warning'>You are infected by the Blob!</B>
 <b>Your body is ready to give spawn to a new blob core which will eat this station.</b>
 <b>Find a good location to spawn the core and then take control and overwhelm the station!</b>
 <b>When you have found a location, wait until you spawn; this will happen automatically and you cannot speed up the process.</b>
-<b>If you go outside of the station level, or in space, then you will die; make sure your location has lots of ground to cover.</b>"}
+<b>If you go outside of the station level, or in space, then you will die; make sure your location has lots of ground to cover.</b></span>"}
 
 /datum/event/blob/tick()
 	if(!Blob && infected_crew.len == 0)

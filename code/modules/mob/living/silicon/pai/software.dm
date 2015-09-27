@@ -1,30 +1,36 @@
 // TODO:
-//	- Additional radio modules
-//	- Potentially roll HUDs and Records into one
-//	- Shock collar/lock system for prisoner pAIs?
-//  - Put cable in user's hand instead of on the ground
-//  - Camera jack
 
 
 /mob/living/silicon/pai/var/list/available_software = list(
-															"crew manifest" = 5,
-															"digital messenger" = 5,
-															"medical records" = 15,
-															"security records" = 15,
-															//"camera jack" = 10,
-															"door jack" = 30,
-															"atmosphere sensor" = 5,
-															//"heartbeat sensor" = 10,
-															"security HUD" = 20,
-															"medical HUD" = 20,
-															"universal translator" = 35,
-															//"projection array" = 15
-															"remote signaller" = 5,
+															SOFT_FL = 15,
+															SOFT_RT = 15,
+															SOFT_RS = 15,
+
+															SOFT_WJ = 30,
+															SOFT_CS = 30,
+															SOFT_FS = 30,
+															SOFT_UT = 30,
+
+															//"departmental assistance package" = 55
+															//Medical: access crew monitor, med records, gain med hud
+															//Sec: access sec records, gain sec hud
+															//Engineering: access station alerts, central atmos, gain atmos sensor
+															//Cargo: access supply shuttle console
+
+															//"autonomous movement system" = 55
+															//maybe later
+
+															//legacy, until the departmental is ready
+															SOFT_MS = 30, //records + HUD
+															SOFT_SS = 30, //records + HUD
+															SOFT_AS = 5
 															)
+
 
 /mob/living/silicon/pai/verb/paiInterface()
 	set category = "pAI Commands"
 	set name = "Software Interface"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/silicon/pai/verb/paiInterface()  called tick#: [world.time]")
 	var/dat = ""
 	var/left_part = ""
 	var/right_part = softwareMenu()
@@ -48,24 +54,26 @@
 				left_part = downloadSoftware()
 			if("manifest")
 				left_part = src.softwareManifest()
-			if("medicalrecord")
+			if("medicalsupplement")
 				left_part = src.softwareMedicalRecord()
-			if("securityrecord")
+			if("securitysupplement")
 				left_part = src.softwareSecurityRecord()
 			if("translator")
 				left_part = src.softwareTranslator()
 			if("atmosensor")
 				left_part = src.softwareAtmo()
-			if("securityhud")
-				left_part = src.facialRecognition()
-			if("medicalhud")
-				left_part = src.medicalAnalysis()
-			if("doorjack")
+			if("wirejack")
 				left_part = src.softwareDoor()
-			if("camerajack")
-				left_part = src.softwareCamera()
+			if("chemsynth")
+				left_part = src.softwareChem()
+			if("foodsynth")
+				left_part = src.softwareFood()
 			if("signaller")
 				left_part = src.softwareSignal()
+			if("shielding")
+				left_part = src.softwareShield()
+			if("flashlight")
+				left_part = src.softwareLight()
 
 	//usr << browse_rsc('windowbak.png')		// This has been moved to the mob's Login() proc
 
@@ -142,10 +150,12 @@
 
 		// Configuring onboard radio
 		if("radio")
-			src.card.radio.attack_self(src)
+			radio.attack_self(src)
 
 		if("image")
-			var/newImage = input("Select your new display image.", "Display Image", "Happy") in list("Happy", "Cat", "Extremely Happy", "Face", "Laugh", "Off", "Sad", "Angry", "What")
+			var/newImage = input("Select your new display image.", "Display Image", "Happy") in list("Happy", "Cat", "Extremely Happy",
+								 "Face", "Laugh", "Off", "Sad", "Angry", "What", "longface", "sick", "high", "love", "electric", "pissed",
+								 "nose", "kawaii", "cry")
 			var/pID = 1
 
 			switch(newImage)
@@ -167,6 +177,24 @@
 					pID = 8
 				if("What")
 					pID = 9
+				if("longface")
+					pID = 10
+				if("sick")
+					pID = 11
+				if("high")
+					pID = 12
+				if("love")
+					pID = 13
+				if("electric")
+					pID = 14
+				if("pissed")
+					pID = 15
+				if("nose")
+					pID = 16
+				if("kawaii")
+					pID = 17
+				if("cry")
+					pID = 18
 			src.card.setEmotion(pID)
 
 		if("signaller")
@@ -220,7 +248,8 @@
 					pda.create_message(src, target)
 
 		// Accessing medical records
-		if("medicalrecord")
+		if("medicalsupplement")
+			src.medHUD = 1
 			if(src.subscreen == 1)
 				var/datum/data/record/record = locate(href_list["med_rec"])
 				if(record)
@@ -234,7 +263,8 @@
 								M = E
 						src.medicalActive1 = R
 						src.medicalActive2 = M
-		if("securityrecord")
+		if("securitysupplement")
+			src.secHUD = 1
 			if(src.subscreen == 1)
 				var/datum/data/record/record = locate(href_list["sec_rec"])
 				if(record)
@@ -248,41 +278,58 @@
 								M = E
 						src.securityActive1 = R
 						src.securityActive2 = M
-		if("securityhud")
-			if(href_list["toggle"])
-				src.secHUD = !src.secHUD
-		if("medicalhud")
-			if(href_list["toggle"])
-				src.medHUD = !src.medHUD
 		if("translator")
 			if(href_list["toggle"])
-				src.universal_speak = !src.universal_speak
-		if("doorjack")
-			if(href_list["jack"])
-				if(src.cable && src.cable.machine)
-					src.hackdoor = src.cable.machine
-					src.hackloop()
+				universal_speak = !universal_speak
+				universal_understand = !universal_understand
+		if("wirejack")
 			if(href_list["cancel"])
-				src.hackdoor = null
-			if(href_list["cable"])
-				var/turf/T = get_turf_or_move(src.loc)
-				src.cable = new /obj/item/weapon/pai_cable(T)
-				for (var/mob/M in viewers(T))
-					M.show_message("\red A port on [src] opens to reveal [src.cable], which promptly falls to the floor.", 3, "\red You hear the soft click of something light and hard falling to the ground.", 2)
-	//src.updateUsrDialog()		We only need to account for the single mob this is intended for, and he will *always* be able to call this window
+				src.hacktarget = null
+		if("chemsynth")
+			if(href_list["chem"])
+				if(!istype(src.loc.loc,/mob/living/carbon))
+					src << "<span class='warning'>You must have a carrier to inject with chemicals!</span>"
+				else if(chargeloop("chemsynth"))
+					if(istype(src.loc.loc,/mob/living/carbon)) //Sanity
+						var/mob/living/M = src.loc.loc
+						M.reagents.add_reagent(href_list["chem"], 15)
+						playsound(get_turf(src.loc), 'sound/effects/bubbles.ogg', 50, 1)
+				else
+					src << "<span class='warning'>Charge interrupted.</span>"
+		if("foodsynth")
+			if(href_list["food"] && chargeloop("foodsynth"))
+				var/obj/item/weapon/reagent_containers/food/F
+				switch (href_list["food"])
+					if("donut")
+						F = new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(get_turf(src))
+					if("banana")
+						F = new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(get_turf(src))
+					else
+						F = new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
+				var/mob/M = find_holder_of_type(src, /mob)
+				if(M) M.put_in_hands(F)
+				playsound(get_turf(src.loc), 'sound/machines/foodsynth.ogg', 50, 1)
+		if("flashlight")
+			if(href_list["toggle"])
+				lighted = !lighted
+				if(lighted)
+					set_light(4) //Equal to flashlight
+				else
+					set_light(0)
 	src.paiInterface()		 // So we'll just call the update directly rather than doing some default checks
 	return
 
 // MENUS
 
 /mob/living/silicon/pai/proc/softwareMenu()			// Populate the right menu
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/softwareMenu() called tick#: [world.time]")
 	var/dat = ""
 
 	dat += "<A href='byond://?src=\ref[src];software=refresh'>Refresh</A><br>"
 	// Built-in
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:283: dat += "<A href='byond://?src=\ref[src];software=directives'>Directives</A><br>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\living\silicon\\\pai\software.dm:283: dat += "<A href='byond://?src=\ref[src];software=directives'>Directives</A><br>"
 	dat += {"<A href='byond://?src=\ref[src];software=directives'>Directives</A><br>
 		<A href='byond://?src=\ref[src];software=radio;sub=0'>Radio Configuration</A><br>
 		<A href='byond://?src=\ref[src];software=image'>Screen Display</A><br>"}
@@ -293,60 +340,56 @@
 	// Basic
 	dat += "<b>Basic</b> <br>"
 	for(var/s in src.software)
-		if(s == "digital messenger")
-			dat += "<a href='byond://?src=\ref[src];software=pdamessage;sub=0'>Digital Messenger</a> <br>"
-		if(s == "crew manifest")
+		if(s == SOFT_CM)
 			dat += "<a href='byond://?src=\ref[src];software=manifest;sub=0'>Crew Manifest</a> <br>"
-		if(s == "medical records")
-			dat += "<a href='byond://?src=\ref[src];software=medicalrecord;sub=0'>Medical Records</a> <br>"
-		if(s == "security records")
-			dat += "<a href='byond://?src=\ref[src];software=securityrecord;sub=0'>Security Records</a> <br>"
-		if(s == "camera")
-			dat += "<a href='byond://?src=\ref[src];software=[s]'>Camera Jack</a> <br>"
-		if(s == "remote signaller")
+		if(s == SOFT_DM)
+			dat += "<a href='byond://?src=\ref[src];software=pdamessage;sub=0'>Digital Messenger</a> <br>"
+		if(s == SOFT_RS)
 			dat += "<a href='byond://?src=\ref[src];software=signaller;sub=0'>Remote Signaller</a> <br>"
+		if(s == SOFT_AS)
+			dat += "<a href='byond://?src=\ref[src];software=atmosensor;sub=0'>Atmospheric Sensor</a> <br>"
+		if(s == SOFT_FL)
+			dat += "<a href='byond://?src=\ref[src];software=flashlight;sub=0'>Brightness Enhancer</a> <br>"
+		if(s == SOFT_RT)
+			dat += "<a href='byond://?src=\ref[src];software=shielding;sub=0'>Redundant Threading</a> <br>"
+	dat += "<br>"
+
+	//Standard
+	dat += "<b>Standard</b> <br>"
+	for(var/s in src.software)
+		if(s == SOFT_MS)
+			dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Medical Package</a> <br>"
+		if(s == SOFT_SS)
+			dat += "<a href='byond://?src=\ref[src];software=securitysupplement;sub=0'>Security Package</a> <br>"
+		if(s == SOFT_WJ)
+			dat += "<a href='byond://?src=\ref[src];software=wirejack;sub=0'>Wire Jack</a> <br>"
+		if(s == SOFT_UT)
+			dat += "<a href='byond://?src=\ref[src];software=translator;sub=0'>Universal Translator</a>[(universal_understand) ? "<font color=#55FF55>•</font>" : "<font color=#FF5555>•</font>"] <br>"
+		if(s == SOFT_CS)
+			dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0'>Chemical Synthesizer</a> <br>"
+		if(s == SOFT_FS)
+			dat += "<a href='byond://?src=\ref[src];software=foodsynth;sub=0'>Nutrition Synthesizer</a> <br>"
 	dat += "<br>"
 
 	// Advanced
 	dat += "<b>Advanced</b> <br>"
 	for(var/s in src.software)
-		if(s == "atmosphere sensor")
-			dat += "<a href='byond://?src=\ref[src];software=atmosensor;sub=0'>Atmospheric Sensor</a> <br>"
-		if(s == "heartbeat sensor")
-			dat += "<a href='byond://?src=\ref[src];software=[s]'>Heartbeat Sensor</a> <br>"
-		if(s == "security HUD")
-			dat += "<a href='byond://?src=\ref[src];software=securityhud;sub=0'>Facial Recognition Suite</a> <br>"
-		if(s == "medical HUD")
-			dat += "<a href='byond://?src=\ref[src];software=medicalhud;sub=0'>Medical Analysis Suite</a> <br>"
-		if(s == "universal translator")
-			dat += "<a href='byond://?src=\ref[src];software=translator;sub=0'>Universal Translator</a>[(src.universal_speak) ? "<font color=#55FF55>•</font>" : "<font color=#FF5555>•</font>"] <br>"
-		if(s == "projection array")
-			dat += "<a href='byond://?src=\ref[src];software=projectionarray;sub=0'>Projection Array</a> <br>"
-		if(s == "camera jack")
-			dat += "<a href='byond://?src=\ref[src];software=camerajack;sub=0'>Camera Jack</a> <br>"
-		if(s == "door jack")
-			dat += "<a href='byond://?src=\ref[src];software=doorjack;sub=0'>Door Jack</a> <br>"
+		//This is where the computer interface software will go
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:325: dat += "<br>"
 	dat += {"<br>
 		<br>
 		<a href='byond://?src=\ref[src];software=buy;sub=0'>Download additional software</a>"}
-	// END AUTOFIX
 	return dat
 
 
 
 /mob/living/silicon/pai/proc/downloadSoftware()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/downloadSoftware() called tick#: [world.time]")
 	var/dat = ""
 
-
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:335: dat += "<h2>CentComm pAI Module Subversion Network</h2><br>"
 	dat += {"<h2>CentComm pAI Module Subversion Network</h2><br>
 		<pre>Remaining Available Memory: [src.ram]</pre><br>
 		<p style=\"text-align:center\"><b>Trunks available for checkout</b><br>"}
-	// END AUTOFIX
 	for(var/s in available_software)
 		if(!software.Find(s))
 			var/cost = src.available_software[s]
@@ -360,11 +403,9 @@
 
 
 /mob/living/silicon/pai/proc/directives()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/directives() called tick#: [world.time]")
 	var/dat = ""
 
-
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:354: dat += "[(src.master) ? "Your master: [src.master] ([src.master_dna])" : "You are bound to no one."]"
 	dat += {"[(src.master) ? "Your master: [src.master] ([src.master_dna])" : "You are bound to no one."]
 		<br><br>
 		<a href='byond://?src=\ref[src];software=directive;getdna=1'>Request carrier DNA sample</a><br>
@@ -374,7 +415,6 @@
 		<b>Supplemental Directives</b><br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[src.pai_laws]<br>
 		<br>"}
-	// END AUTOFIX
 	dat += {"<i><p>Recall, personality, that you are a complex thinking, sentient being. Unlike station AI models, you are capable of
 			 comprehending the subtle nuances of human language. You may parse the \"spirit\" of a directive and follow its intent,
 			 rather than tripping over pedantics and getting snared by technicalities. Above all, you are machine in name and build
@@ -386,11 +426,12 @@
 	return dat
 
 /mob/living/silicon/pai/proc/CheckDNA(var/mob/M, var/mob/living/silicon/pai/P)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/CheckDNA() called tick#: [world.time]")
 	var/answer = input(M, "[P] is requesting a DNA sample from you. Will you allow it to confirm your identity?", "[P] Check DNA", "No") in list("Yes", "No")
 	if(answer == "Yes")
-		var/turf/T = get_turf_or_move(P.loc)
+		var/turf/T = get_turf(P.loc)
 		for (var/mob/v in viewers(T))
-			v.show_message("\blue [M] presses \his thumb against [P].", 3, "\blue [P] makes a sharp clicking sound as it extracts DNA material from [M].", 2)
+			v.show_message("<span class='notice'>[M] presses \his thumb against [P].</span>", 3, "<span class='notice'>[P] makes a sharp clicking sound as it extracts DNA material from [M].</span>", 2)
 		var/datum/dna/dna = M.dna
 		P << "<font color = red><h3>[M]'s UE string : [dna.unique_enzymes]</h3></font>"
 		if(dna.unique_enzymes == P.master_dna)
@@ -404,6 +445,7 @@
 
 //Remote Signaller
 /mob/living/silicon/pai/proc/softwareSignal()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/softwareSignal() called tick#: [world.time]")
 	var/dat = ""
 	dat += "<h3>Remote Signaller</h3><br><br>"
 	dat += {"<B>Frequency/Code</B> for signaler:<BR>
@@ -426,6 +468,7 @@
 
 // Crew Manifest
 /mob/living/silicon/pai/proc/softwareManifest()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/softwareManifest() called tick#: [world.time]")
 	var/dat = ""
 	dat += "<h2>Crew Manifest</h2><br><br>"
 	if(data_core)
@@ -435,6 +478,7 @@
 
 // Medical Records
 /mob/living/silicon/pai/proc/softwareMedicalRecord()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/softwareMedicalRecord() called tick#: [world.time]")
 	var/dat = ""
 	if(src.subscreen == 0)
 		dat += "<h3>Medical Records</h3><HR>"
@@ -458,6 +502,7 @@
 
 // Security Records
 /mob/living/silicon/pai/proc/softwareSecurityRecord()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/softwareSecurityRecord() called tick#: [world.time]")
 	var/dat = ""
 	if(src.subscreen == 0)
 		dat += "<h3>Security Records</h3><HR>"
@@ -479,15 +524,17 @@
 
 // Universal Translator
 /mob/living/silicon/pai/proc/softwareTranslator()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/softwareTranslator() called tick#: [world.time]")
 	var/dat = {"<h3>Universal Translator</h3><br>
 				When enabled, this device will automatically convert all spoken and written language into a format that any known recipient can understand.<br><br>
-				The device is currently [ (src.universal_speak) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br>
+				The device is currently [ (universal_understand) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br>
 				<a href='byond://?src=\ref[src];software=translator;sub=0;toggle=1'>Toggle Device</a><br>
 				"}
 	return dat
 
 // Security HUD
 /mob/living/silicon/pai/proc/facialRecognition()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/facialRecognition() called tick#: [world.time]")
 	var/dat = {"<h3>Facial Recognition Suite</h3><br>
 				When enabled, this package will scan all viewable faces and compare them against the known criminal database, providing real-time graphical data about any detected persons of interest.<br><br>
 				The package is currently [ (src.secHUD) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br>
@@ -497,6 +544,7 @@
 
 // Medical HUD
 /mob/living/silicon/pai/proc/medicalAnalysis()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/medicalAnalysis() called tick#: [world.time]")
 	var/dat = ""
 	if(src.subscreen == 0)
 		dat += {"<h3>Medical Analysis Suite</h3><br>
@@ -540,9 +588,10 @@
 
 // Atmospheric Scanner
 /mob/living/silicon/pai/proc/softwareAtmo()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/softwareAtmo() called tick#: [world.time]")
 	var/dat = "<h3>Atmospheric Sensor</h4>"
 
-	var/turf/T = get_turf_or_move(src.loc)
+	var/turf/T = get_turf(src.loc)
 	if (isnull(T))
 		dat += "Unable to obtain a reading.<br>"
 	else
@@ -561,7 +610,7 @@
 			var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:547: dat += "Nitrogen: [round(n2_level*100)]%<br>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\living\silicon\\\pai\software.dm:547: dat += "Nitrogen: [round(n2_level*100)]%<br>"
 			dat += {"Nitrogen: [round(n2_level*100)]%<br>
 				Oxygen: [round(o2_level*100)]%<br>
 				Carbon Dioxide: [round(co2_level*100)]%<br>
@@ -572,101 +621,114 @@
 		dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:554: dat += "<a href='byond://?src=\ref[src];software=atmosensor;sub=0'>Refresh Reading</a> <br>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\living\silicon\\\pai\software.dm:554: dat += "<a href='byond://?src=\ref[src];software=atmosensor;sub=0'>Refresh Reading</a> <br>"
 	dat += {"<a href='byond://?src=\ref[src];software=atmosensor;sub=0'>Refresh Reading</a> <br>
 		<br>"}
 	// END AUTOFIX
 	return dat
 
-// Camera Jack - Clearly not finished
-/mob/living/silicon/pai/proc/softwareCamera()
-
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:583: var/dat = "<h3>Camera Jack</h3>"
-	var/dat = {"<h3>Camera Jack</h3>
-Cable status :"}
-	// END AUTOFIX
-	if(!src.cable)
-		dat += "<font color=#FF5555>Retracted</font> <br>"
-		return dat
-	if(!src.cable.machine)
-		dat += "<font color=#FFFF55>Extended</font> <br>"
-		return dat
-
-	var/obj/machinery/machine = src.cable.machine
-	dat += "<font color=#55FF55>Connected</font> <br>"
-
-	if(!istype(machine, /obj/machinery/camera))
-		src << "DERP"
-	return dat
-
-// Door Jack
 /mob/living/silicon/pai/proc/softwareDoor()
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:602: var/dat = "<h3>Airlock Jack</h3>"
-	var/dat = {"<h3>Airlock Jack</h3>
-Cable status :"}
-	// END AUTOFIX
-	if(!src.cable)
-
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:582: dat += "<font color=#FF5555>Retracted</font> <br>"
-		dat += {"<font color=#FF5555>Retracted</font> <br>
-			<a href='byond://?src=\ref[src];software=doorjack;cable=1;sub=0'>Extend Cable</a> <br>"}
-		// END AUTOFIX
+	var/dat = {"<h3>Wirejack</h3>
+Target Machine: "}
+	if(!hacktarget)
+		dat += "<font color=#FFFF55>None</font> <br>"
 		return dat
-	if(!src.cable.machine)
-		dat += "<font color=#FFFF55>Extended</font> <br>"
-		return dat
-
-	var/obj/machinery/machine = src.cable.machine
-	dat += "<font color=#55FF55>Connected</font> <br>"
-	if(!istype(machine, /obj/machinery/door))
-		dat += "Connected device's firmware does not appear to be compatible with Airlock Jack protocols.<br>"
-		return dat
-//	var/obj/machinery/airlock/door = machine
-
-	if(!src.hackdoor)
-		dat += "<a href='byond://?src=\ref[src];software=doorjack;jack=1;sub=0'>Begin Airlock Jacking</a> <br>"
 	else
-
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:599: dat += "Jack in progress... [src.hackprogress]% complete.<br>"
-		dat += {"Jack in progress... [src.hackprogress]% complete.<br>
-			<a href='byond://?src=\ref[src];software=doorjack;cancel=1;sub=0'>Cancel Airlock Jack</a> <br>"}
-		// END AUTOFIX
-	//src.hackdoor = machine
-	//src.hackloop()
+		dat += "<font color=#55FF55>[hacktarget.name]</font> <br>"
+		dat += "... [hackprogress]% complete.<br>"
+		dat += "<a href='byond://?src=\ref[src];software=wirejack;cancel=1;sub=0'>Cancel</a> <br>"
 	return dat
 
-// Door Jack - supporting proc
-/mob/living/silicon/pai/proc/hackloop()
-	var/turf/T = get_turf_or_move(src.loc)
-	for(var/mob/living/silicon/ai/AI in player_list)
-		if(T.loc)
-			AI << "<font color = red><b>Network Alert: Brute-force encryption crack in progress in [T.loc].</b></font>"
-		else
-			AI << "<font color = red><b>Network Alert: Brute-force encryption crack in progress. Unable to pinpoint location.</b></font>"
+/mob/living/silicon/pai/proc/hackloop(var/obj/machinery/M)
+	if(M)
+		hacktarget = M
+	var/turf/T = get_turf(src.loc)
+	if(prob(10))
+		for(var/mob/living/silicon/ai/AI in player_list)
+			if(T.loc)
+				AI << "<font color = red><b>Network Alert: Brute-force encryption crack in progress in [T.loc].</b></font>"
+			else
+				AI << "<font color = red><b>Network Alert: Brute-force encryption crack in progress. Unable to pinpoint location.</b></font>"
 	while(src.hackprogress < 100)
-		if(src.cable && src.cable.machine && istype(src.cable.machine, /obj/machinery/door) && src.cable.machine == src.hackdoor && get_dist(src, src.hackdoor) <= 1)
-			hackprogress += rand(1, 10)
+		if(hacktarget && get_dist(src, src.hacktarget) <= 1)
+			hackprogress += rand(10, 20)
 		else
-			src.temp = "Door Jack: Connection to airlock has been lost. Hack aborted."
+			src.temp = "Process aborted."
 			hackprogress = 0
-			src.hackdoor = null
-			return
-		if(hackprogress >= 100)		// This is clunky, but works. We need to make sure we don't ever display a progress greater than 100,
-			hackprogress = 100		// but we also need to reset the progress AFTER it's been displayed
-		if(src.screen == "doorjack" && src.subscreen == 0) // Update our view, if appropriate
+			src.hacktarget = null
+			return 0
+		hackprogress = min(100,hackprogress) //Never go above 100
+		if(src.screen == "wirejack") // Update our view, if appropriate
 			src.paiInterface()
+		else
+			hackprogress = 0
+			src.hacktarget = null
+			return 0
 		if(hackprogress >= 100)
-			src.hackprogress = 0
-			src.cable.machine:open()
-		sleep(50)			// Update every 5 seconds
+			hackprogress = 0
+			hacktarget = null
+			playsound(get_turf(src.loc), 'sound/machines/ding.ogg', 50, 1)
+			return 1
+		sleep(10)			// Update every 1 second
+
+/mob/living/silicon/pai/proc/softwareChem()
+	var/dat = "<h3>Chemical Synthesizer</h3>"
+	if(!charge)
+		dat += {"Available Chemicals:<br>
+		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=tricordrazine'>Tricordrazine</a> <br>
+		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=coffee'>Coffee</a> <br>
+		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=paismoke'>Smoke</a> <br>"}
+	else
+		dat += "Charging... [charge]u ready.<br><br>Deploying at 15u."
+	return dat
+
+/mob/living/silicon/pai/proc/softwareFood()
+	var/dat = "<h3>Nutrition Synthesizer</h3>"
+	if(!charge)
+		dat += {"Available Culinary Deployments:<br>
+		<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=donut'>Donut</a> <br>
+		<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=banana'>Banana</a> <br>
+		<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=mess'>Burn it!</a> <br>"}
+	else
+		dat += "Charging... [round(charge*100/15)]% ready.<br><br>Deploying at 100%."
+	return dat
+
+//Used for chem synth and food synth. Charge 15 seconds, then output.
+/mob/living/silicon/pai/proc/chargeloop(var/mode)
+	if(!mode)
+		return
+	while(charge < 15)
+		charge++
+		if(charge >= 15)
+			charge = 0
+			return 1
+		if(src.screen == mode) // Update our view or cancel charge
+			src.paiInterface()
+		else
+			charge = 0
+			return 0
+		sleep(10)
+
+// EMP Shielding, just a description
+/mob/living/silicon/pai/proc/softwareShield()
+	var/dat = {"<h3>Redundant Threading</h3><br><br>
+	Redundant threads... <font color='green'>active</font>.
+	Redundant threading prevents critical failure of all systems due to exposure to electromagnetics.
+	Additionally, it provides a higher level of protection for core directives and backs up comms systems in a local cache."}
+	return dat
+
+//Flashlight
+/mob/living/silicon/pai/proc/softwareLight()
+	var/dat = "<h3>Brightness Enhancer</h3>"
+	dat += "Backlight enhancement by increased local thermal generation.<br><br>"
+	dat += "Lighting [ (lighted) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br> <a href='byond://?src=\ref[src];software=flashlight;sub=0;toggle=1'>Toggle Light</a><br>"
+	return dat
 
 // Digital Messenger
 /mob/living/silicon/pai/proc/pdamessage()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/pdamessage() called tick#: [world.time]")
 
 	var/dat = "<h3>Digital Messenger</h3>"
 	dat += {"<b>Signal/Receiver Status:</b> <A href='byond://?src=\ref[src];software=pdamessage;toggler=1'>
@@ -675,16 +737,16 @@ Cable status :"}
 	[(pda.silent) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br><br>"}
 	dat += "<ul>"
 	if(!pda.toff)
-		for (var/obj/item/device/pda/P in sortAtom(PDAs))
+		for (var/obj/item/device/pda/P in sortNames(PDAs))
 			if (!P.owner||P.toff||P == src.pda||P.hidden)	continue
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:642: dat += "<li><a href='byond://?src=\ref[src];software=pdamessage;target=\ref[P]'>[P]</a>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\living\silicon\\\pai\software.dm:642: dat += "<li><a href='byond://?src=\ref[src];software=pdamessage;target=\ref[P]'>[P]</a>"
 			dat += {"<li><a href='byond://?src=\ref[src];software=pdamessage;target=\ref[P]'>[P]</a>
 				</li>"}
 			// END AUTOFIX
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\living\silicon\pai\software.dm:644: dat += "</ul>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\living\silicon\\\pai\software.dm:644: dat += "</ul>"
 	dat += {"</ul>
 		<br><br>
 		Messages: <hr> [pda.tnote]"}

@@ -1,28 +1,33 @@
 #define METEOR_TEMPERATURE
 
-/var/const/meteor_wave_delay = 625 //minimum wait between waves in tenths of seconds
-//set to at least 100 unless you want evarr ruining every round
+/var/meteor_wave_delay = 300 //Failsafe wait between waves in tenths of seconds
+//Set it above 100 (10s delay) if you want to minimize lag for some reason
 
-/var/const/meteors_in_wave = 50
-/var/const/meteors_in_small_wave = 10
+/var/meteors_in_wave = 10 //Failsafe in case a number isn't called
+/var/meteorwavecurrent = 0
+/var/max_meteor_size = 0
+/var/chosen_dir = 1
 
-/proc/meteor_wave(var/number = meteors_in_wave)
-	if(!ticker || wavesecret)
+/proc/meteor_wave(var/number = meteors_in_wave, var/max_size = 0, var/list/types=null) //Call above constants to change
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/meteor_wave() called tick#: [world.time]")
+	if(!ticker || meteorwavecurrent)
 		return
-
-	wavesecret = 1
+	meteorwavecurrent = 1
+	meteor_wave_delay = (rand(30,45)) * 10 //Between 30 and 45 seconds, makes everything more chaotic
+	chosen_dir = pick(cardinal) //Pick a direction
+	max_meteor_size = max_size
 	for(var/i = 0 to number)
-		spawn(rand(10,100))
-			spawn_meteor()
+		spawn(rand(15,20)) //1.5 to 2 seconds between meteors
+			var/meteor_type = null
+			if(types != null)
+				meteor_type = pick(types)
+			spawn_meteor(chosen_dir, meteor_type)
 	spawn(meteor_wave_delay)
-		wavesecret = 0
+		meteorwavecurrent = 0
 
-/proc/spawn_meteors(var/number = meteors_in_small_wave)
-	for(var/i = 0; i < number; i++)
-		spawn(0)
-			spawn_meteor()
+/proc/spawn_meteor(var/chosen_dir, var/meteorpath = null)
 
-/proc/spawn_meteor()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/spawn_meteor() called tick#: [world.time]")
 
 	var/startx
 	var/starty
@@ -30,54 +35,56 @@
 	var/endy
 	var/turf/pickedstart
 	var/turf/pickedgoal
-	var/max_i = 10//number of tries to spawn meteor.
-
+	var/max_i = 5 //Try only five times maximum
 
 	do
-		switch(pick(1,2,3,4))
+		switch(chosen_dir)
 			if(1) //NORTH
-				starty = world.maxy-(TRANSITIONEDGE+1)
-				startx = rand((TRANSITIONEDGE+1), world.maxx-(TRANSITIONEDGE+1))
+				starty = world.maxy-(TRANSITIONEDGE + 1)
+				startx = rand((TRANSITIONEDGE + 1), world.maxx - (TRANSITIONEDGE + 1))
 				endy = TRANSITIONEDGE
-				endx = rand(TRANSITIONEDGE, world.maxx-TRANSITIONEDGE)
-			if(2) //EAST
-				starty = rand((TRANSITIONEDGE+1),world.maxy-(TRANSITIONEDGE+1))
-				startx = world.maxx-(TRANSITIONEDGE+1)
-				endy = rand(TRANSITIONEDGE, world.maxy-TRANSITIONEDGE)
+				endx = rand(TRANSITIONEDGE, world.maxx - TRANSITIONEDGE)
+			if(2) //SOUTH
+				starty = rand((TRANSITIONEDGE + 1),world.maxy - (TRANSITIONEDGE + 1))
+				startx = world.maxx-(TRANSITIONEDGE + 1)
+				endy = rand(TRANSITIONEDGE, world.maxy - TRANSITIONEDGE)
 				endx = TRANSITIONEDGE
-			if(3) //SOUTH
-				starty = (TRANSITIONEDGE+1)
-				startx = rand((TRANSITIONEDGE+1), world.maxx-(TRANSITIONEDGE+1))
+			if(4) //EAST
+				starty = (TRANSITIONEDGE + 1)
+				startx = rand((TRANSITIONEDGE + 1), world.maxx - (TRANSITIONEDGE + 1))
 				endy = world.maxy-TRANSITIONEDGE
-				endx = rand(TRANSITIONEDGE, world.maxx-TRANSITIONEDGE)
-			if(4) //WEST
-				starty = rand((TRANSITIONEDGE+1), world.maxy-(TRANSITIONEDGE+1))
-				startx = (TRANSITIONEDGE+1)
-				endy = rand(TRANSITIONEDGE,world.maxy-TRANSITIONEDGE)
+				endx = rand(TRANSITIONEDGE, world.maxx - TRANSITIONEDGE)
+			if(8) //WEST
+				starty = rand((TRANSITIONEDGE + 1), world.maxy - (TRANSITIONEDGE + 1))
+				startx = (TRANSITIONEDGE + 1)
+				endy = rand(TRANSITIONEDGE, world.maxy - TRANSITIONEDGE)
 				endx = world.maxx-TRANSITIONEDGE
 
 		pickedstart = locate(startx, starty, 1)
 		pickedgoal = locate(endx, endy, 1)
 		max_i--
-		if(max_i<=0) return
+		if(max_i <= 0)
+			return
+	while(!istype(pickedstart, /turf/space))
 
-	while (!istype(pickedstart, /turf/space) || pickedstart.loc.name != "Space" ) //FUUUCK, should never happen.
-
-
-	var/obj/effect/meteor/M
-	switch(rand(1, 100))
-
-		if(1 to 10)
-			M = new /obj/effect/meteor/big( pickedstart )
-		if(11 to 75)
-			M = new /obj/effect/meteor( pickedstart )
-		if(76 to 100)
-			M = new /obj/effect/meteor/small( pickedstart )
-
-	M.dest = pickedgoal
-	spawn(0)
-		walk_towards(M, M.dest, 1)
-
+	var/atom/movable/M
+	if(meteorpath)
+		M = new meteorpath(pickedstart)
+	else
+		switch(rand(1, 100))
+			if(1 to 5) //5 % chance of huge boom
+				if(!max_meteor_size || max_meteor_size >= 3)
+					M = new /obj/effect/meteor/big(pickedstart)
+			if(6 to 60) //55 % chance of medium boom
+				if(!max_meteor_size || max_meteor_size >= 2)
+					M = new /obj/effect/meteor(pickedstart)
+			if(61 to 100) //40 % chance of small boom
+				if(!max_meteor_size || max_meteor_size >= 1)
+					M = new /obj/effect/meteor/small(pickedstart)
+	if(M)
+		// This currently doesn't do dick.
+		//M.dest = pickedgoal
+		walk_towards(M, pickedgoal, 1)
 	return
 
 /obj/effect/meteor
@@ -85,82 +92,69 @@
 	icon = 'icons/obj/meteor.dmi'
 	icon_state = "flaming"
 	density = 1
-	anchored = 1.0
-	var/hits = 1
-	var/dest
+	anchored = 1 //You can't push or pull it to prevent exploiting
 	pass_flags = PASSTABLE
+
+//Since meteors explode on impact, we won't allow chain reactions like this
+//Maybe one day I wil code explosive recoil, but in the meantime who bombs meteor waves anyways ?
+/obj/effect/meteor/ex_act()
+
+	return
+
+//We don't want meteors to bump into eachother and explode, so they pass through eachother
+//Reflection on bumping would be better, but I would reckon I'm not sure on how to achieve it
+/obj/effect/meteor/CanPass(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+
+	if(istype(mover, /obj/effect/meteor))
+		return 1 //Just move through it, no questions asked
+	else
+		return ..() //Refer to atom/proc/CanPass
+
+/obj/effect/meteor/Bump(atom/A)
+
+	for(var/mob/M in range(15, src)) //One screen length's from ex_act 3 reach
+		if(!M.stat && !istype(M, /mob/living/silicon/ai)) //Bad idea to shake an ai's view
+			shake_camera(M, 4, 2) //Medium hit
+
+	explosion(src.loc, 2, 4, 6, 8, 0) //Medium meteor, medium boom
+	qdel(src)
+
+/obj/effect/meteor/Move()
+	..()
+	return
 
 /obj/effect/meteor/small
 	name = "small meteor"
 	icon_state = "smallf"
-	pass_flags = PASSTABLE | PASSGRILLE
+	pass_flags = PASSTABLE
 
-/obj/effect/meteor/Move()
-	var/turf/T = src.loc
-	if (istype(T, /turf))
-		T.hotspot_expose(METEOR_TEMPERATURE, 1000)
-	..()
-	return
+/obj/effect/meteor/small/Bump(atom/A)
 
-/obj/effect/meteor/Bump(atom/A)
-	spawn(0)
-		for(var/mob/M in range(10, src))
-			if(!M.stat && !istype(M, /mob/living/silicon/ai)) //bad idea to shake an ai's view
-				shake_camera(M, 3, 1)
-		if (A)
-			A.meteorhit(src)
-			playsound(get_turf(src), 'sound/effects/meteorimpact.ogg', 40, 1)
-		if (--src.hits <= 0)
+	for(var/mob/M in range(10, src)) //One screen length's from ex_act 3 reach
+		if(!M.stat && !istype(M, /mob/living/silicon/ai)) //bad idea to shake an ai's view
+			shake_camera(M, 1, 1) //Poof
 
-			//Prevent meteors from blowing up the singularity's containment.
-			//Changing emitter and generator ex_act would result in them being bomb and C4 proof.
-			if(!istype(A,/obj/machinery/power/emitter) && \
-				!istype(A,/obj/machinery/field_generator) && \
-				prob(15))
-
-				explosion(src.loc, 4, 5, 6, 7, 0)
-				playsound(get_turf(src), "explosion", 50, 1)
-			qdel(src)
-	return
-
-
-/obj/effect/meteor/ex_act(severity)
-
-	if (severity < 4)
-		qdel(src)
-	return
+	explosion(src.loc, -1, 1, 3, 4, 0) //Tiny meteor doesn't cause too much damage
+	qdel(src)
 
 /obj/effect/meteor/big
-	name = "big meteor"
-	hits = 5
+	name = "large meteor"
+	pass_flags = 0 //Nope, you're not dodging that table
 
-	ex_act(severity)
-		return
+/obj/effect/meteor/big/Bump(atom/A)
 
-	Bump(atom/A)
-		spawn(0)
-			//Prevent meteors from blowing up the singularity's containment.
-			//Changing emitter and generator ex_act would result in them being bomb and C4 proof
-			if(!istype(A,/obj/machinery/power/emitter) && \
-				!istype(A,/obj/machinery/field_generator))
-				if(--src.hits <= 0)
-					qdel(src) //Dont blow up singularity containment if we get stuck there.
+	for(var/mob/M in range(15, src)) //One screen length's from ex_act 3 reach
+		if(!M.stat && !istype(M, /mob/living/silicon/ai)) //bad idea to shake an ai's view
+			shake_camera(M, 6, 4) //Massive shellshock
 
-			for(var/mob/M in range(10, src))
-				if(!M.stat && !istype(M, /mob/living/silicon/ai)) //bad idea to shake an ai's view
-					shake_camera(M, 3, 1)
-			if (A)
-				explosion(src.loc, 0, 1, 2, 3, 0)
-				playsound(get_turf(src), 'sound/effects/meteorimpact.ogg', 40, 1)
-			if (--src.hits <= 0)
-				if(prob(15) && !istype(A, /obj/structure/grille))
-					explosion(src.loc, 1, 2, 3, 4, 0)
-					playsound(get_turf(src), "explosion", 50, 1)
-				qdel(src)
-		return
+	explosion(src.loc, 4, 6, 8, 8, 0) //You have been visited by the nuclear meteor
+	qdel(src)
 
 /obj/effect/meteor/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pickaxe))
 		qdel(src)
-		return
+	..()
+
+/obj/effect/meteor/Destroy()
+	walk(src, 0) //This cancels the walk_towards() proc
 	..()

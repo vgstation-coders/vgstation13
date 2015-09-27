@@ -31,14 +31,24 @@
 	var/uplink_welcome = "Syndicate Uplink Console:"
 	var/uplink_uses = 10
 	var/mixed = 0 // denotes whether its apart of a mixed mode or not
+	var/list/datum/mind/necromancer = list() //Those who use a necromancy staff OR soulstone a shade/construct
+	var/list/datum/mind/risen = list() // Those risen by necromancy or soulstone
+	var/eldergod = 1 // Can cultists spawn Nar-Sie? (Set to 0 on cascade or narsie spawn)
+	var/completion_text = ""
+
+	var/list/datum/mind/deathsquad = list()
+	var/list/datum/mind/ert = list()
+	var/rage = 0
 
 /datum/game_mode/proc/announce() //to be calles when round starts
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/announce() called tick#: [world.time]")
 	world << "<B>Notice</B>: [src] did not define announce()"
 
 
 ///can_start()
 ///Checks to see if the game can be setup and ran with the current number of players or whatnot.
 /datum/game_mode/proc/can_start()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/can_start() called tick#: [world.time]")
 	var/playerC = 0
 	for(var/mob/new_player/player in player_list)
 		if((player.client)&&(player.ready))
@@ -56,12 +66,14 @@
 ///pre_setup()
 ///Attempts to select players for special roles the mode might have.
 /datum/game_mode/proc/pre_setup()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/pre_setup() called tick#: [world.time]")
 	return 1
 
 
 ///post_setup()
 ///Everyone should now be on the station and have their normal gear.  This is the place to give the special roles extra things
 /datum/game_mode/proc/post_setup()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/post_setup() called tick#: [world.time]")
 	spawn (ROUNDSTART_LOGOUT_REPORT_TIME)
 		display_roundstart_logout_report()
 
@@ -77,16 +89,19 @@
 ///process()
 ///Called by the gameticker
 /datum/game_mode/proc/process()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/process() called tick#: [world.time]")
 	return 0
 
 
 /datum/game_mode/proc/check_finished() //to be called by ticker
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/check_finished() called tick#: [world.time]")
 	if(emergency_shuttle.location==2 || station_was_nuked)
 		return 1
 	return 0
 
 
 /datum/game_mode/proc/declare_completion()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/declare_completion() called tick#: [world.time]")
 	var/clients = 0
 	var/surviving_humans = 0
 	var/surviving_total = 0
@@ -158,13 +173,16 @@
 
 
 /datum/game_mode/proc/check_win() //universal trigger to be called at mob death, nuke explosion, etc. To be called from everywhere.
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/check_win() called tick#: [world.time]")
 	return 0
 
 
 /datum/game_mode/proc/send_intercept()
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/send_intercept() called tick#: [world.time]")
+
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\game_mode.dm:230: var/intercepttext = "<FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\game_mode.dm:230: var/intercepttext = "<FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR>"
 	var/intercepttext = {"<FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR>
 <B> In case you have misplaced your copy, attached is a list of personnel whom reliable sources&trade; suspect may be affiliated with the Syndicate:</B><br> <I>Reminder: Acting upon this information without solid evidence will result in termination of your working contract with Nanotrasen.</I></br>"}
 	// END AUTOFIX
@@ -189,10 +207,11 @@
 			if(suplink)
 				var/extra = 4
 				suplink.uses += extra
-				man << "\red We have received notice that enemy intelligence suspects you to be linked with us. We have thus invested significant resources to increase your uplink's capacity."
+				if(man.mind) man.mind.total_TC += extra
+				man << "<span class='warning'>We have received notice that enemy intelligence suspects you to be linked with us. We have thus invested significant resources to increase your uplink's capacity.</span>"
 			else
 				// Give them a warning!
-				man << "\red They are on to you!"
+				man << "<span class='warning'>They are on to you!</span>"
 
 		// Some poor people who were just in the wrong place at the wrong time..
 		else if(prob(10))
@@ -225,22 +244,12 @@
 		set_security_level(SEC_LEVEL_BLUE)*/
 
 
-/datum/game_mode/proc/get_players_for_role(var/role, override_jobbans=1)
+/datum/game_mode/proc/get_players_for_role(var/role, override_jobbans=1, poll=0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/get_players_for_role() called tick#: [world.time]")
 	var/list/players = list()
 	var/list/candidates = list()
 	var/list/drafted = list()
 	var/datum/mind/applicant = null
-
-	var/roletext
-	switch(role)
-		if(BE_CHANGELING)	roletext="changeling"
-		if(BE_TRAITOR)		roletext="traitor"
-		if(BE_OPERATIVE)	roletext="operative"
-		if(BE_WIZARD)		roletext="wizard"
-		if(BE_REV)			roletext="revolutionary"
-		if(BE_CULTIST)		roletext="cultist"
-		if(BE_RAIDER)       roletext="Vox Raider"
-
 
 	// Ultimate randomizing code right here
 	for(var/mob/new_player/player in player_list)
@@ -253,10 +262,10 @@
 
 	for(var/mob/new_player/player in players)
 		if(player.client && player.ready)
-			if(player.client.prefs.be_special & role)
-				if(!jobban_isbanned(player, "Syndicate") && !jobban_isbanned(player, roletext)) //Nodrak/Carn: Antag Job-bans
+			if(player.client.desires_role(role, display_to_user=poll))//if(player.client.prefs.be_special & role)
+				if(!jobban_isbanned(player, "Syndicate") && !jobban_isbanned(player, role)) //Nodrak/Carn: Antag Job-bans
 					candidates += player.mind				// Get a list of all the people who want to be the antagonist for this round
-					log_debug("[player.key] had [roletext] enabled, so drafting them.")
+					log_debug("[player.key] had [role] enabled, so drafting them.")
 
 	if(restricted_jobs)
 		for(var/datum/mind/player in candidates)
@@ -267,8 +276,8 @@
 	if(candidates.len < recommended_enemies)
 		for(var/mob/new_player/player in players)
 			if(player.client && player.ready)
-				if(!(player.client.prefs.be_special & role)) // We don't have enough people who want to be antagonist, make a seperate list of people who don't want to be one
-					if(!jobban_isbanned(player, "Syndicate") && !jobban_isbanned(player, roletext)) //Nodrak/Carn: Antag Job-bans
+				if(player.client.desires_role(role, display_to_user=poll)) // We don't have enough people who want to be antagonist, make a seperate list of people who don't want to be one
+					if(!jobban_isbanned(player, "Syndicate") && !jobban_isbanned(player, role)) //Nodrak/Carn: Antag Job-bans
 						drafted += player.mind
 
 	if(restricted_jobs)
@@ -284,7 +293,7 @@
 			applicant = pick(drafted)
 			if(applicant)
 				candidates += applicant
-				log_debug("[applicant.key] was force-drafted as [roletext], because there aren't enough candidates.")
+				log_debug("[applicant.key] was force-drafted as [role], because there aren't enough candidates.")
 				drafted.Remove(applicant)
 
 		else												// Not enough scrubs, ABORT ABORT ABORT
@@ -293,7 +302,7 @@
 	if(candidates.len < recommended_enemies && override_jobbans) //If we still don't have enough people, we're going to start drafting banned people.
 		for(var/mob/new_player/player in players)
 			if (player.client && player.ready)
-				if(jobban_isbanned(player, "Syndicate") || jobban_isbanned(player, roletext)) //Nodrak/Carn: Antag Job-bans
+				if(jobban_isbanned(player, "Syndicate") || jobban_isbanned(player, role)) //Nodrak/Carn: Antag Job-bans
 					drafted += player.mind
 
 	if(restricted_jobs)
@@ -310,7 +319,7 @@
 			if(applicant)
 				candidates += applicant
 				drafted.Remove(applicant)
-				log_debug("[applicant.key] was force-drafted as [roletext], because there aren't enough candidates.")
+				log_debug("[applicant.key] was force-drafted as [role], because there aren't enough candidates.")
 
 		else												// Not enough scrubs, ABORT ABORT ABORT
 			break
@@ -321,25 +330,35 @@
 
 
 /datum/game_mode/proc/latespawn(var/mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/latespawn() called tick#: [world.time]")
 
 /*
 /datum/game_mode/proc/check_player_role_pref(var/role, var/mob/new_player/player)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/check_player_role_pref() called tick#: [world.time]")
 	if(player.preferences.be_special & role)
 		return 1
 	return 0
 */
 
 /datum/game_mode/proc/num_players()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/num_players() called tick#: [world.time]")
 	. = 0
 	for(var/mob/new_player/P in player_list)
 		if(P.client && P.ready)
 			. ++
 
+/datum/game_mode/proc/Clean_Antags() //Cleans out the genetic defects of all antagonists
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/Clean_Antags() called tick#: [world.time]")
+	for(var/mob/living/A in player_list)
+		if((istype(A)) && A.mind && A.mind.special_role)
+			if(A.dna)
+				A.dna.ResetSE()
 
 ///////////////////////////////////
 //Keeps track of all living heads//
 ///////////////////////////////////
 /datum/game_mode/proc/get_living_heads()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/get_living_heads() called tick#: [world.time]")
 	var/list/heads = list()
 	for(var/mob/living/carbon/human/player in mob_list)
 		if(player.stat!=2 && player.mind && (player.mind.assigned_role in command_positions))
@@ -351,6 +370,7 @@
 //Keeps track of all heads//
 ////////////////////////////
 /datum/game_mode/proc/get_all_heads()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/get_all_heads() called tick#: [world.time]")
 	var/list/heads = list()
 	for(var/mob/player in mob_list)
 		if(player.mind && (player.mind.assigned_role in command_positions))
@@ -364,7 +384,8 @@
 //Reports player logouts//
 //////////////////////////
 proc/display_roundstart_logout_report()
-	var/msg = "\blue <b>Roundstart logout report\n\n"
+	//writepanic("[__FILE__].[__LINE__] \\/proc/display_roundstart_logout_report() called tick#: [world.time]")
+	var/msg = "<span class='notice'><b>Roundstart logout report\n\n</span>"
 	for(var/mob/living/L in mob_list)
 
 		if(L.ckey)
@@ -418,6 +439,7 @@ proc/display_roundstart_logout_report()
 
 
 proc/get_nt_opposed()
+	//writepanic("[__FILE__].[__LINE__] \\/proc/get_nt_opposed() called tick#: [world.time]")
 	var/list/dudes = list()
 	for(var/mob/living/carbon/human/man in player_list)
 		if(man.client)
@@ -427,3 +449,95 @@ proc/get_nt_opposed()
 				dudes += man
 	if(dudes.len == 0) return null
 	return pick(dudes)
+
+
+/datum/game_mode/proc/update_necro_icons_added(datum/mind/owner)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/update_necro_icons_added() called tick#: [world.time]")
+	for(var/headref in necromancer)
+		var/datum/mind/head = locate(headref)
+		for(var/datum/mind/t_mind in necromancer[headref])
+			if(head)
+				if(head.current)
+					if(head.current.client)
+						var/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "minion")
+						head.current.client.images += I
+						//world << "Adding minion overlay to [head.current]"
+				if(t_mind.current)
+					if(t_mind.current.client)
+						var/I = image('icons/mob/mob.dmi', loc = head.current, icon_state = "necromancer")
+						t_mind.current.client.images += I
+						//world << "Adding master overlay to [t_mind.current]"
+				if(t_mind.current)
+					if(t_mind.current.client)
+						var/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "minion")
+						t_mind.current.client.images += I
+						//world << "Adding minion overlay to [t_mind.current]"
+
+/datum/game_mode/proc/update_necro_icons_removed(datum/mind/owner)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/update_necro_icons_removed() called tick#: [world.time]")
+	for(var/headref in necromancer)
+		var/datum/mind/head = locate(headref)
+		for(var/datum/mind/t_mind in necromancer[headref])
+			if(t_mind.current)
+				if(t_mind.current.client)
+					for(var/image/I in t_mind.current.client.images)
+						if((I.icon_state == "minion" || I.icon_state == "necromancer") && I.loc == owner.current)
+							//world << "deleting [t_mind.current] overlay"
+							//del(I)
+							t_mind.current.client.images -= I
+		if(head)
+			//world.log << "found [head.name]"
+			if(head.current)
+				if(head.current.client)
+					for(var/image/I in head.current.client.images)
+						if((I.icon_state == "minion" || I.icon_state == "necromancer") && I.loc == owner.current)
+							//world << "deleting [head.current] overlay"
+							//del(I)
+							head.current.client.images -= I
+	if(owner.current)
+		if(owner.current.client)
+			for(var/image/I in owner.current.client.images)
+				if(I.icon_state == "minion" || I.icon_state == "necromancer")
+					//world << "deleting [owner.current] overlay"
+					//del(I)
+					owner.current.client.images -= I
+
+/datum/game_mode/proc/update_all_necro_icons()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/update_all_necro_icons() called tick#: [world.time]")
+	spawn(0)
+		for(var/headref in necromancer)
+			var/datum/mind/head = locate(headref)
+			if(head.current)
+				if(head.current.client)
+					for(var/image/I in head.current.client.images)
+						if(I.icon_state == "minion" || I.icon_state == "necromancer")
+							//world << "deleting [head.current] overlay"
+							//del(I)
+							head.current.client.images -= I
+			for(var/datum/mind/t_mind in necromancer[headref])
+				if(t_mind.current && t_mind.current.client)
+					for(var/image/I in t_mind.current.client.images)
+						if(I.icon_state == "minion" || I.icon_state == "necromancer")
+							//world << "deleting [t_mind.current] overlay"
+							//del(I)
+							t_mind.current.client.images -= I
+
+		for(var/headref in necromancer)
+			var/datum/mind/head = locate(headref)
+			for(var/datum/mind/t_mind in necromancer[headref])
+				if(head)
+					if(head.current)
+						if(head.current.client)
+							var/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "minion")
+							//world << "Adding minion overlay to [head.current]"
+							head.current.client.images += I
+					if(t_mind.current)
+						if(t_mind.current.client)
+							var/I = image('icons/mob/mob.dmi', loc = head.current, icon_state = "necromancer")
+							t_mind.current.client.images += I
+							//world << "Adding master overlay to [t_mind.current]"
+					if(t_mind.current)
+						if(t_mind.current.client)
+							var/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "minion")
+							t_mind.current.client.images += I
+							//world << "Adding minion overlay to [t_mind.current]"

@@ -14,9 +14,9 @@
 /obj/machinery/computer/curer/attackby(var/obj/I as obj, var/mob/user as mob)
 	/*if(istype(I, /obj/item/weapon/screwdriver))
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-		if(do_after(user, 20))
+		if(do_after(user, src, 20))
 			if (src.stat & BROKEN)
-				user << "\blue The broken glass falls out."
+				user << "<span class='notice'>The broken glass falls out.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				new /obj/item/weapon/shard( src.loc )
 				var/obj/item/weapon/circuitboard/curer/M = new /obj/item/weapon/circuitboard/curer( A )
@@ -28,7 +28,7 @@
 				A.anchored = 1
 				del(src)
 			else
-				user << "\blue You disconnect the monitor."
+				user << "<span class='notice'>You disconnect the monitor.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				var/obj/item/weapon/circuitboard/curer/M = new /obj/item/weapon/circuitboard/curer( A )
 				for (var/obj/C in src)
@@ -134,6 +134,7 @@
 
 
 /obj/machinery/computer/curer/proc/createcure(var/datum/disease2/disease/virus2)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/curer/proc/createcure() called tick#: [world.time]")
 	var/obj/item/weapon/cureimplanter/implanter = new /obj/item/weapon/cureimplanter(src.loc)
 	implanter.resistance = new /datum/disease2/resistance(dish.virus2)
 	if(probG("Virus curing",3))
@@ -143,6 +144,7 @@
 	state("The [src.name] Buzzes")
 
 /obj/machinery/computer/curer/proc/createvirus(var/datum/disease2/disease/virus2)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/curer/proc/createvirus() called tick#: [world.time]")
 	var/obj/item/weapon/cureimplanter/implanter = new /obj/item/weapon/cureimplanter(src.loc)
 	implanter.name = "Viral implanter (MAJOR BIOHAZARD)"
 	implanter.virus2 = dish.virus2.getcopy()
@@ -151,5 +153,6 @@
 
 
 /obj/machinery/computer/curer/proc/state(var/msg)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/curer/proc/state() called tick#: [world.time]")
 	for(var/mob/O in hearers(src, null))
-		O.show_message("\icon[src] \blue [msg]", 2)
+		O.show_message("\icon[src] <span class='notice'>[msg]</span>", 2)

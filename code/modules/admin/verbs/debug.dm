@@ -1,6 +1,7 @@
 /client/proc/Debug2()
 	set category = "Debug"
 	set name = "Debug-Game"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/Debug2() called tick#: [world.time]")
 	if(!check_rights(R_DEBUG))	return
 
 	if(Debug2)
@@ -16,10 +17,10 @@
 
 
 
-/* 21st Sept 2010
+/* 21st sept 2010
 Updated by Skie -- Still not perfect but better!
 Stuff you can't do:
-Call proc /mob/proc/make_dizzy() for some player
+Call proc /mob/proc/Dizzy() for some player
 Because if you select a player mob as owner it tries to do the proc for
 /mob/living/carbon/human/ instead. And that gives a run-time error.
 But you can call procs that are of type /mob/living/carbon/human/proc/ for that player.
@@ -28,6 +29,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 /client/proc/callproc()
 	set category = "Debug"
 	set name = "Advanced ProcCall"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/callproc() called tick#: [world.time]")
 
 	if(!check_rights(R_DEBUG)) return
 
@@ -64,6 +66,10 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
 		if(!procname)	return
 
+		if(target && !hascall(target, procname))
+			usr << "<span style='color: red;'>Error: callproc(): target has no such call [procname].</span>"
+			return
+
 		var/argnum = input("Number of arguments","Number:",0) as num|null
 		if(!argnum && (argnum!=0))	return
 
@@ -73,10 +79,14 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		//this will protect us from a fair few errors ~Carn
 
 		var/i
-		for(i=1, i<argnum+1, i++) // Lists indexed from 1 forwards in byond
+		for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
 
 			// Make a list with each index containing one variable, to be given to the proc
-			class = input("What kind of variable?","Variable Type") in list("text","num","type","reference","mob reference","icon","file","client","mob's area","CANCEL")
+			class = input("What kind of variable?","Variable Type") in list("text","num","type","reference","mob reference","icon","file","client","mob's area", holder.marked_datum ? "marked datum ([holder.marked_datum.type])" : null, "CANCEL")
+
+			if(holder.marked_datum && class == "marked datum ([holder.marked_datum.type])")
+				class = "marked_datum"
+
 			switch(class)
 				if("CANCEL")
 					return
@@ -104,7 +114,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 				if("client")
 					var/list/keys = list()
-					for(var/mob/M in world)
+					for(var/mob/M in mob_list)
 						keys += M.client
 					lst[i] = input("Please, select a player!", "Selection", null, null) as null|anything in keys
 
@@ -112,13 +122,14 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 					var/mob/temp = input("Select mob", "Selection", usr) as mob in world
 					lst[i] = temp.loc
 
+				if("marked_datum")
+					lst[i] = holder.marked_datum
+
 		if(targetselected)
 			if(!target)
 				usr << "<font color='red'>Error: callproc(): owner of proc no longer exists.</font>"
 				return
-			if(!hascall(target,procname))
-				usr << "<font color='red'>Error: callproc(): target has no such call [procname].</font>"
-				return
+
 			log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
 			returnval = call(target,procname)(arglist(lst)) // Pass the lst as an argument list to the proc
 		else
@@ -129,9 +140,91 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		usr << "<font color='blue'>[procname] returned: [returnval ? returnval : "null"]</font>"
 		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+/client/proc/callatomproc(var/datum/target as anything)
+	set category = "Debug"
+	set name = "Atom ProcCall"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/callatomproc() called tick#: [world.time]")
+
+	if(!check_rights(R_DEBUG)) return
+
+	spawn(0)
+		var/lst[] // List reference
+		lst = new/list() // Make the list
+		var/returnval = null
+		var/class = null
+
+		var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
+		if(!procname)	return
+
+		if(!hascall(target, procname))
+			usr << "<span style='color: red;'>Error: callatomproc(): target has no such call [procname].</span>"
+
+		var/argnum = input("Number of arguments","Number:",0) as num|null
+		if(!argnum && (argnum!=0))	return
+
+		lst.len = argnum // Expand to right length
+		//TODO: make a list to store whether each argument was initialised as null.
+		//Reason: So we can abort the proccall if say, one of our arguments was a mob which no longer exists
+		//this will protect us from a fair few errors ~Carn
+
+		var/i
+		for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
+
+			// Make a list with each index containing one variable, to be given to the proc
+			class = input("What kind of variable?","Variable Type") in list("text", "num", "type", "reference", "mob reference", "icon", "file", "client", "mob's area", holder.marked_datum ? "marked datum ([holder.marked_datum.type])" : null, "CANCEL")
+
+			if(holder.marked_datum && class == "marked datum ([holder.marked_datum.type])")
+				class = "marked_datum"
+
+			switch(class)
+				if("CANCEL")
+					return
+
+				if("text")
+					lst[i] = input("Enter new text:","Text",null) as text
+
+				if("num")
+					lst[i] = input("Enter new number:","Num",0) as num
+
+				if("type")
+					lst[i] = input("Enter type:","Type") in typesof(/obj,/mob,/area,/turf)
+
+				if("reference")
+					lst[i] = input("Select reference:","Reference",src) as mob|obj|turf|area in world
+
+				if("mob reference")
+					lst[i] = input("Select reference:","Reference",usr) as mob in world
+
+				if("file")
+					lst[i] = input("Pick file:","File") as file
+
+				if("icon")
+					lst[i] = input("Pick icon:","Icon") as icon
+
+				if("client")
+					var/list/keys = list()
+					for(var/mob/M in mob_list)
+						keys += M.client
+					lst[i] = input("Please, select a player!", "Selection", null, null) as null|anything in keys
+
+				if("mob's area")
+					var/mob/temp = input("Select mob", "Selection", usr) as mob in world
+					lst[i] = temp.loc
+
+				if("marked_datum")
+					lst[i] = holder.marked_datum
+
+		log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
+		returnval = call(target,procname)(arglist(lst)) // Pass the lst as an argument list to the proc
+
+		usr << "<font color='blue'>[procname] returned: [returnval ? returnval : "null"]</font>"
+		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+
 /client/proc/Cell()
 	set category = "Debug"
 	set name = "Air Status in Location"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/Cell() called tick#: [world.time]")
 	if(!mob)
 		return
 	var/turf/T = mob.loc
@@ -144,7 +237,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	var/t = ""
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\verbs\debug.dm:145: t+= "Nitrogen : [env.nitrogen]\n"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\verbs\\debug.dm:145: t+= "Nitrogen : [env.nitrogen]\n"
 	t += {"Nitrogen : [env.nitrogen]
 Oxygen : [env.oxygen]
 Plasma : [env.toxins]
@@ -157,14 +250,14 @@ Pressure: [env.return_pressure()]"}
 /client/proc/cmd_admin_robotize(var/mob/M in mob_list)
 	set category = "Fun"
 	set name = "Make Robot"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_robotize() called tick#: [world.time]")
 
 	if(!ticker)
 		alert("Wait until the game starts")
 		return
 	if(istype(M, /mob/living/carbon/human))
 		log_admin("[key_name(src)] has robotized [M.key].")
-		spawn(10)
-			M:Robotize()
+		. = M:Robotize()
 
 	else
 		alert("Invalid mob")
@@ -172,14 +265,14 @@ Pressure: [env.return_pressure()]"}
 /client/proc/cmd_admin_mommify(var/mob/M in mob_list)
 	set category = "Fun"
 	set name = "Make MoMMI"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_mommify() called tick#: [world.time]")
 
 	if(!ticker)
 		alert("Wait until the game starts")
 		return
 	if(istype(M, /mob/living/carbon/human))
 		log_admin("[key_name(src)] has MoMMIfied [M.key].")
-		spawn(10)
-			M:MoMMIfy()
+		. = M:MoMMIfy()
 
 	else
 		alert("Invalid mob")
@@ -187,6 +280,7 @@ Pressure: [env.return_pressure()]"}
 /client/proc/cmd_admin_animalize(var/mob/M in mob_list)
 	set category = "Fun"
 	set name = "Make Simple Animal"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_animalize() called tick#: [world.time]")
 
 	if(!ticker)
 		alert("Wait until the game starts")
@@ -201,15 +295,17 @@ Pressure: [env.return_pressure()]"}
 		return
 
 	log_admin("[key_name(src)] has animalized [M.key].")
-	spawn(10)
-		M.Animalize()
+	. = M.Animalize()
 
 
-/client/proc/makepAI(var/turf/T in mob_list)
+/client/proc/makepAI(var/turf/T)
 	set category = "Fun"
 	set name = "Make pAI"
 	set desc = "Specify a location to spawn a pAI device, then specify a key to play that pAI"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/makepAI() called tick#: [world.time]")
 
+	if(!T)
+		T = get_turf(usr)
 	var/list/available = list()
 	for(var/mob/C in mob_list)
 		if(C.key)
@@ -235,6 +331,7 @@ Pressure: [env.return_pressure()]"}
 /client/proc/cmd_admin_alienize(var/mob/M in mob_list)
 	set category = "Fun"
 	set name = "Make Alien"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_alienize() called tick#: [world.time]")
 
 	if(!ticker)
 		alert("Wait until the game starts")
@@ -242,16 +339,18 @@ Pressure: [env.return_pressure()]"}
 	if(ishuman(M))
 		log_admin("[key_name(src)] has alienized [M.key].")
 		spawn(10)
-			M:Alienize()
 			feedback_add_details("admin_verb","MKAL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+			return M:Alienize()
+
 		log_admin("[key_name(usr)] made [key_name(M)] into an alien.")
-		message_admins("\blue [key_name_admin(usr)] made [key_name(M)] into an alien.", 1)
+		message_admins("<span class='notice'>[key_name_admin(usr)] made [key_name(M)] into an alien.</span>", 1)
 	else
 		alert("Invalid mob")
 
 /client/proc/cmd_admin_slimeize(var/mob/M in mob_list)
 	set category = "Fun"
 	set name = "Make slime"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_slimeize() called tick#: [world.time]")
 
 	if(!ticker)
 		alert("Wait until the game starts")
@@ -259,15 +358,16 @@ Pressure: [env.return_pressure()]"}
 	if(ishuman(M))
 		log_admin("[key_name(src)] has slimeized [M.key].")
 		spawn(10)
-			M:slimeize()
 			feedback_add_details("admin_verb","MKMET") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+			return M:slimeize()
 		log_admin("[key_name(usr)] made [key_name(M)] into a slime.")
-		message_admins("\blue [key_name_admin(usr)] made [key_name(M)] into a slime.", 1)
+		message_admins("<span class='notice'>[key_name_admin(usr)] made [key_name(M)] into a slime.</span>", 1)
 	else
 		alert("Invalid mob")
 
 /*
 /client/proc/cmd_admin_monkeyize(var/mob/M in world)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_monkeyize() called tick#: [world.time]")
 	set category = "Fun"
 	set name = "Make Monkey"
 
@@ -283,6 +383,7 @@ Pressure: [env.return_pressure()]"}
 		alert("Invalid mob")
 
 /client/proc/cmd_admin_changelinginize(var/mob/M in world)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_changelinginize() called tick#: [world.time]")
 	set category = "Fun"
 	set name = "Make Changeling"
 
@@ -301,6 +402,7 @@ Pressure: [env.return_pressure()]"}
 */
 /*
 /client/proc/cmd_admin_abominize(var/mob/M in world)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_abominize() called tick#: [world.time]")
 	set category = null
 	set name = "Make Abomination"
 
@@ -318,6 +420,7 @@ Pressure: [env.return_pressure()]"}
 */
 /*
 /client/proc/make_cultist(var/mob/M in world) // -- TLE, modified by Urist
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/make_cultist() called tick#: [world.time]")
 	set category = "Fun"
 	set name = "Make Cultist"
 	set desc = "Makes target a cultist"
@@ -328,32 +431,34 @@ Pressure: [env.return_pressure()]"}
 			return
 		else
 			if(alert("Spawn that person a tome?",,"Yes","No")=="Yes")
-				M << "\red You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie. A tome, a message from your new master, appears on the ground."
+				M << "<span class='warning'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie. A tome, a message from your new master, appears on the ground.</span>"
 				new /obj/item/weapon/tome(M.loc)
 			else
-				M << "\red You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie."
+				M << "<span class='warning'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>"
 			var/glimpse=pick("1","2","3","4","5","6","7","8")
 			switch(glimpse)
 				if("1")
-					M << "\red You remembered one thing from the glimpse... [cultwords["travel"]] is travel..."
+					M << "<span class='warning'>You remembered one thing from the glimpse... [cultwords["travel"]] is travel...</span>"
 				if("2")
-					M << "\red You remembered one thing from the glimpse... [cultwords["blood"]] is blood..."
+					M << "<span class='warning'>You remembered one thing from the glimpse... [cultwords["blood"]] is blood...</span>"
 				if("3")
-					M << "\red You remembered one thing from the glimpse... [cultwords["join"]] is join..."
+					M << "<span class='warning'>You remembered one thing from the glimpse... [cultwords["join"]] is join...</span>"
 				if("4")
-					M << "\red You remembered one thing from the glimpse... [cultwords["hell"]] is Hell..."
+					M << "<span class='warning'>You remembered one thing from the glimpse... [cultwords["hell"]] is Hell...</span>"
 				if("5")
-					M << "\red You remembered one thing from the glimpse... [cultwords["destroy"]] is destroy..."
+					M << "<span class='warning'>You remembered one thing from the glimpse... [cultwords["destroy"]] is destroy...</span>"
 				if("6")
-					M << "\red You remembered one thing from the glimpse... [cultwords["technology"]] is technology..."
+					M << "<span class='warning'>You remembered one thing from the glimpse... [cultwords["technology"]] is technology...</span>"
 				if("7")
-					M << "\red You remembered one thing from the glimpse... [cultwords["self"]] is self..."
+					M << "<span class='warning'>You remembered one thing from the glimpse... [cultwords["self"]] is self...</span>"
 				if("8")
-					M << "\red You remembered one thing from the glimpse... [cultwords["see"]] is see..."
+					M << "<span class='warning'>You remembered one thing from the glimpse... [cultwords["see"]] is see...</span>"
 
 			if(M.mind)
 				M.mind.special_role = "Cultist"
 				ticker.mode.cult += M.mind
+				M << "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>"
+				M.add_language("Cult")
 			src << "Made [M] a cultist."
 */
 
@@ -361,6 +466,7 @@ Pressure: [env.return_pressure()]"}
 /client/proc/cmd_debug_del_all()
 	set category = "Debug"
 	set name = "Del-All"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_debug_del_all() called tick#: [world.time]")
 
 	// to prevent REALLY stupid deletions
 	var/blocked = list(/obj, /mob, /mob/living, /mob/living/carbon, /mob/living/carbon/human, /mob/dead, /mob/dead/observer, /mob/living/silicon, /mob/living/silicon/robot, /mob/living/silicon/ai)
@@ -376,6 +482,7 @@ Pressure: [env.return_pressure()]"}
 /client/proc/cmd_debug_make_powernets()
 	set category = "Debug"
 	set name = "Make Powernets"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_debug_make_powernets() called tick#: [world.time]")
 	makepowernets()
 	log_admin("[key_name(src)] has remade the powernet. makepowernets() called.")
 	message_admins("[key_name_admin(src)] has remade the powernets. makepowernets() called.", 0)
@@ -384,6 +491,7 @@ Pressure: [env.return_pressure()]"}
 /client/proc/cmd_debug_tog_aliens()
 	set category = "Server"
 	set name = "Toggle Aliens"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_debug_tog_aliens() called tick#: [world.time]")
 
 	aliens_allowed = !aliens_allowed
 	log_admin("[key_name(src)] has turned aliens [aliens_allowed ? "on" : "off"].")
@@ -393,6 +501,7 @@ Pressure: [env.return_pressure()]"}
 /client/proc/cmd_admin_grantfullaccess(var/mob/M in mob_list)
 	set category = "Admin"
 	set name = "Grant Full Access"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_grantfullaccess() called tick#: [world.time]")
 
 	if (!ticker)
 		alert("Wait until the game starts")
@@ -419,12 +528,13 @@ Pressure: [env.return_pressure()]"}
 		alert("Invalid mob")
 	feedback_add_details("admin_verb","GFA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(src)] has granted [M.key] full access.")
-	message_admins("\blue [key_name_admin(usr)] has granted [M.key] full access.", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] has granted [M.key] full access.</span>", 1)
 
 /client/proc/cmd_assume_direct_control(var/mob/M in mob_list)
 	set category = "Admin"
 	set name = "Assume direct control"
 	set desc = "Direct intervention"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_assume_direct_control() called tick#: [world.time]")
 
 	if(!check_rights(R_DEBUG|R_ADMIN))	return
 	if(M.ckey)
@@ -433,7 +543,7 @@ Pressure: [env.return_pressure()]"}
 		else
 			var/mob/dead/observer/ghost = new/mob/dead/observer(M,1)
 			ghost.ckey = M.ckey
-	message_admins("\blue [key_name_admin(usr)] assumed direct control of [M].", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] assumed direct control of [M].</span>", 1)
 	log_admin("[key_name(usr)] assumed direct control of [M].")
 	var/mob/adminmob = src.mob
 	M.ckey = src.ckey
@@ -441,19 +551,10 @@ Pressure: [env.return_pressure()]"}
 		del(adminmob)
 	feedback_add_details("admin_verb","ADC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/proc/cmd_switch_radio()
-	set category = "Debug"
-	set name = "Switch Radio Mode"
-	set desc = "Toggle between normal radios and experimental radios. Have a coder present if you do this."
-
-	GLOBAL_RADIO_TYPE = !GLOBAL_RADIO_TYPE // toggle
-	log_admin("[key_name(src)] has turned the experimental radio system [GLOBAL_RADIO_TYPE ? "on" : "off"].")
-	message_admins("[key_name_admin(src)] has turned the experimental radio system [GLOBAL_RADIO_TYPE ? "on" : "off"].", 0)
-	feedback_add_details("admin_verb","SRM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
 /client/proc/cmd_admin_areatest()
 	set category = "Mapping"
 	set name = "Test areas"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_areatest() called tick#: [world.time]")
 
 	var/list/areas_all = list()
 	var/list/areas_with_APC = list()
@@ -464,26 +565,26 @@ Pressure: [env.return_pressure()]"}
 	var/list/areas_with_intercom = list()
 	var/list/areas_with_camera = list()
 
-	for(var/area/A in world)
+	for(var/area/A in areas)
 		if(!(A.type in areas_all))
 			areas_all.Add(A.type)
 
-	for(var/obj/machinery/power/apc/APC in world)
+	for(var/obj/machinery/power/apc/APC in power_machines)
 		var/area/A = get_area(APC)
 		if(!(A.type in areas_with_APC))
 			areas_with_APC.Add(A.type)
 
-	for(var/obj/machinery/alarm/alarm in world)
+	for(var/obj/machinery/alarm/alarm in machines)
 		var/area/A = get_area(alarm)
 		if(!(A.type in areas_with_air_alarm))
 			areas_with_air_alarm.Add(A.type)
 
-	for(var/obj/machinery/requests_console/RC in world)
+	for(var/obj/machinery/requests_console/RC in allConsoles)
 		var/area/A = get_area(RC)
 		if(!(A.type in areas_with_RC))
 			areas_with_RC.Add(A.type)
 
-	for(var/obj/machinery/light/L in world)
+	for(var/obj/machinery/light/L in alllights)
 		var/area/A = get_area(L)
 		if(!(A.type in areas_with_light))
 			areas_with_light.Add(A.type)
@@ -498,7 +599,7 @@ Pressure: [env.return_pressure()]"}
 		if(!(A.type in areas_with_intercom))
 			areas_with_intercom.Add(A.type)
 
-	for(var/obj/machinery/camera/C in world)
+	for(var/obj/machinery/camera/C in cameranet.cameras)
 		var/area/A = get_area(C)
 		if(!(A.type in areas_with_camera))
 			areas_with_camera.Add(A.type)
@@ -542,6 +643,8 @@ Pressure: [env.return_pressure()]"}
 /client/proc/cmd_admin_dress(var/mob/living/carbon/human/M in mob_list)
 	set category = "Fun"
 	set name = "Select equipment"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_dress() called tick#: [world.time]")
+
 	if(!ishuman(M))
 		alert("Invalid mob")
 		return
@@ -576,7 +679,9 @@ Pressure: [env.return_pressure()]"}
 		"emergency rescue team",
 		"nanotrasen representative",
 		"nanotrasen officer",
-		"nanotrasen captain"
+		"nanotrasen captain",
+		"Bomberman",
+		"Bomberman(arena)",
 		)
 	var/dostrip = input("Do you want to strip [M] before equipping them? (0=no, 1=yes)", "STRIPTEASE") as null|anything in list(0,1)
 	if(isnull(dostrip))
@@ -643,7 +748,7 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/thunderdome(M), slot_head)
 
 			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/pulse_rifle/destroyer(M), slot_r_hand)
-			M.equip_to_slot_or_del(new /obj/item/weapon/kitchenknife(M), slot_l_hand)
+			M.equip_to_slot_or_del(new /obj/item/weapon/kitchen/utensil/knife/large(M), slot_l_hand)
 			M.equip_to_slot_or_del(new /obj/item/weapon/grenade/smokebomb(M), slot_r_store)
 
 
@@ -658,7 +763,7 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/weapon/cloaking_device(M), slot_r_store)
 
 			M.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile(M), slot_r_hand)
-			M.equip_to_slot_or_del(new /obj/item/ammo_magazine/a357(M), slot_l_store)
+			M.equip_to_slot_or_del(new /obj/item/ammo_storage/box/a357(M), slot_l_store)
 
 		if ("tournament chef") //Steven Seagal FTW
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/chef(M), slot_w_uniform)
@@ -667,9 +772,9 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/chefhat(M), slot_head)
 
 			M.equip_to_slot_or_del(new /obj/item/weapon/kitchen/rollingpin(M), slot_r_hand)
-			M.equip_to_slot_or_del(new /obj/item/weapon/kitchenknife(M), slot_l_hand)
-			M.equip_to_slot_or_del(new /obj/item/weapon/kitchenknife(M), slot_r_store)
-			M.equip_to_slot_or_del(new /obj/item/weapon/kitchenknife(M), slot_s_store)
+			M.equip_to_slot_or_del(new /obj/item/weapon/kitchen/utensil/knife/large(M), slot_l_hand)
+			M.equip_to_slot_or_del(new /obj/item/weapon/kitchen/utensil/knife/large(M), slot_r_store)
+			M.equip_to_slot_or_del(new /obj/item/weapon/kitchen/utensil/knife/large(M), slot_s_store)
 
 		if ("tournament janitor")
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/janitor(M), slot_w_uniform)
@@ -734,7 +839,7 @@ Pressure: [env.return_pressure()]"}
 			W.registered_name = M.real_name
 			M.equip_to_slot_or_del(W, slot_wear_id)
 
-			var/obj/item/weapon/twohanded/fireaxe/fire_axe = new(M)
+			var/obj/item/weapon/fire_axe = new(M)
 			M.equip_to_slot_or_del(fire_axe, slot_r_hand)
 
 		if("masked killer")
@@ -746,10 +851,10 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
 			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/thermal/monocle(M), slot_glasses)
 			M.equip_to_slot_or_del(new /obj/item/clothing/suit/apron(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/weapon/kitchenknife(M), slot_l_store)
+			M.equip_to_slot_or_del(new /obj/item/weapon/kitchen/utensil/knife/large(M), slot_l_store)
 			M.equip_to_slot_or_del(new /obj/item/weapon/scalpel(M), slot_r_store)
 
-			var/obj/item/weapon/twohanded/fireaxe/fire_axe = new(M)
+			var/obj/item/weapon/fire_axe = new(M)
 			M.equip_to_slot_or_del(fire_axe, slot_r_hand)
 
 			for(var/obj/item/carried_item in M.contents)
@@ -773,7 +878,7 @@ Pressure: [env.return_pressure()]"}
 				sec_briefcase.contents += new /obj/item/weapon/spacecash/c1000
 			sec_briefcase.contents += new /obj/item/weapon/gun/energy/crossbow
 			sec_briefcase.contents += new /obj/item/weapon/gun/projectile/mateba
-			sec_briefcase.contents += new /obj/item/ammo_magazine/a357
+			sec_briefcase.contents += new /obj/item/ammo_storage/box/a357
 			sec_briefcase.contents += new /obj/item/weapon/plastique
 			M.equip_to_slot_or_del(sec_briefcase, slot_l_hand)
 
@@ -897,7 +1002,7 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(M), slot_ears)
 			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/thermal/eyepatch(M), slot_glasses)
 			M.equip_to_slot_or_del(new /obj/item/clothing/mask/cigarette/cigar/havana(M), slot_wear_mask)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/deathsquad/beret(M), slot_head)
+			M.equip_to_slot_or_del(new /obj/item/clothing/head/beret/centcom(M), slot_head)
 			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/pulse_rifle/M1911(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/weapon/lighter/zippo(M), slot_r_store)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
@@ -964,85 +1069,123 @@ Pressure: [env.return_pressure()]"}
 			W.assignment = "Admiral"
 			W.registered_name = M.real_name
 			M.equip_to_slot_or_del(W, slot_wear_id)
+		if("Bomberman")
+			M.equip_to_slot_or_del(new /obj/item/clothing/under/darkblue(M), slot_w_uniform)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/purple(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/bomberman(M), slot_head)
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/bomberman(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/purple(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/weapon/bomberman/(M), slot_s_store)
+		if("Bomberman(arena)")	//they have a random color, cannot remove their clothes, and their initial speed is slightly lowered by their suit.
+			M.equip_to_slot_or_del(new /obj/item/clothing/under/darkblue(M), slot_w_uniform)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/purple(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/bomberman(M), slot_head)
+			var/obj/item/clothing/suit/space/bomberman/bombsuit = new /obj/item/clothing/suit/space/bomberman(M)
+			M.equip_to_slot_or_del(bombsuit, slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/purple(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/weapon/bomberman/(M), slot_s_store)
+			bombsuit.slowdown = 1
+			var/list/randomhexes = list(
+				"7",
+				"8",
+				"9",
+				"a",
+				"b",
+				"c",
+				"d",
+				"e",
+				"f",
+				)
+			M.color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
+			for(var/obj/item/clothing/C in M)
+				C.canremove = 0
+			M.name = "Bomberman #[rand(1,999)]"
 
 	M.regenerate_icons()
 
 	log_admin("[key_name(usr)] changed the equipment of [key_name(M)] to [dresscode].")
-	message_admins("\blue [key_name_admin(usr)] changed the equipment of [key_name_admin(M)] to [dresscode]..", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] changed the equipment of [key_name_admin(M)] to [dresscode]..</span>", 1)
 	return
 
 /client/proc/startSinglo()
-
 	set category = "Debug"
 	set name = "Start Singularity"
 	set desc = "Sets up the singularity and all machines to get power flowing through the station"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/startSinglo() called tick#: [world.time]")
 
 	if(alert("Are you sure? This will start up the engine. Should only be used during debug!",,"Yes","No") != "Yes")
 		return
 
 	log_admin("[key_name(usr)] set up the singulo.")
-	message_admins("\blue [key_name_admin(usr)] set up the singulo.", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] set up the singulo.</span>", 1)
 
-	for(var/obj/machinery/power/emitter/E in world)
+	for(var/obj/machinery/power/emitter/E in power_machines)
 		if(E.anchored)
-			E.active = 1
+			//We now have a toggle proc, so here goes
+			E.turn_on()
+			E.investigation_log(I_SINGULO,"turned <font color='green'>on</font> <font color='red'>via Start Singularity Debug verb.</font>")
 
-	for(var/obj/machinery/field_generator/F in world)
+	for(var/obj/machinery/field_generator/F in field_gen_list)
 		if(F.anchored)
-			F.Varedit_start = 1
-	spawn(30)
-		for(var/obj/machinery/the_singularitygen/G in world)
-			if(G.anchored)
-				var/obj/machinery/singularity/S = new /obj/machinery/singularity(get_turf(G), 50)
-				spawn(0)
-					del(G)
-				S.energy = 1750
-				S.current_size = 7
-				S.icon = 'icons/effects/224x224.dmi'
-				S.icon_state = "singularity_s7"
-				S.pixel_x = -96
-				S.pixel_y = -96
-				S.grav_pull = 0
-				//S.consume_range = 3
-				S.dissipate = 0
-				//S.dissipate_delay = 10
-				//S.dissipate_track = 0
-				//S.dissipate_strength = 10
+			//The gentleman who coded this was nice enough to add a proc
+			F.turn_on()
+			F.investigation_log(I_SINGULO,"<font color='green'>activated</font> <font color='red'>via Start Singularity Debug verb.</font>")
 
-	for(var/obj/machinery/power/rad_collector/Rad in world)
+	for(var/obj/machinery/power/rad_collector/Rad in rad_collectors)
 		if(Rad.anchored)
 			if(!Rad.P)
 				var/obj/item/weapon/tank/plasma/Plasma = new/obj/item/weapon/tank/plasma(Rad)
-				Plasma.air_contents.toxins = 70
-				Rad.drainratio = 0
+				Plasma.air_contents.toxins = 100 //Don't need to explain, space magic
+				Plasma.air_contents.temperature = 73.15 //Perfect freezer cooling
+				Rad.drain_ratio = 0
 				Rad.P = Plasma
 				Plasma.loc = Rad
 
 			if(!Rad.active)
 				Rad.toggle_power()
+				Rad.locked = 1
 
-	for(var/obj/machinery/power/smes/SMES in world)
+	sleep(200) //Field generators take 15 seconds to warm up, so we'll give 20
+
+	for(var/obj/machinery/the_singularitygen/G in machines)
+		if(G.anchored)
+			var/obj/machinery/singularity/S = new /obj/machinery/singularity(get_turf(G), 50)
+			spawn(0)
+				del(G)
+			S.energy = 1250 //No energy dissipates
+			S.current_size = 7
+			S.icon = 'icons/effects/224x224.dmi'
+			S.icon_state = "singularity_s7"
+			S.pixel_x = -96
+			S.pixel_y = -96
+			S.grav_pull = 0
+			S.dissipate = 0
+			S.consume_range = 0 //Can't be too sure
+
+	sleep(50) //Extra five seconds for the radiation collectors to get their shit together
+
+	for(var/obj/machinery/power/battery/smes/SMES in power_machines)
 		if(SMES.anchored)
-			SMES.connect_to_network() // Just in case.
+			SMES.connect_to_network() //Just in case.
 			SMES.chargemode = 1
-			SMES.online=1
+			SMES.online = 1
 
 /client/proc/cheat_power()
-
 	set category = "Debug"
 	set name = "Free Power"
 	set desc = "Replaces all SMES on the map with magical ones."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cheat_power() called tick#: [world.time]")
 
 	if(alert("Are you sure? This will completely fuck over your round!",,"Yes","No") != "Yes")
 		return
 
 	log_admin("[key_name(usr)] haxed the powergrid with magic SMES.")
-	message_admins("\blue [key_name_admin(usr)] haxed the powergrid with magic SMES.", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] haxed the powergrid with magic SMES.</span>", 1)
 
-	for(var/obj/machinery/power/smes/SMES in world)
+	for(var/obj/machinery/power/battery/smes/SMES in power_machines)
 		var/turf/T=SMES.loc
 		del(SMES)
-		var/obj/machinery/power/smes/magical/magic = new(T)
+		var/obj/machinery/power/battery/smes/infinite/magic = new(T)
 		// Manually set up our powernets since stupid seems to reign in the powernet code.
 		magic.connect_to_network()
 		magic.output=200000 // AKA rape
@@ -1053,24 +1196,24 @@ Pressure: [env.return_pressure()]"}
 
 // Getting tired of doing this shit every fucking round when I'm testing something atmos-related
 /client/proc/setup_atmos()
-
 	set category = "Debug"
 	set name = "Start Atmos"
 	set desc = "WOW ATMOS DID THEIR JOBS!!!1"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/setup_atmos() called tick#: [world.time]")
 
 	if(alert("Are you sure? This will completely fuck over your round!",,"Yes","No") != "Yes")
 		return
 
 	log_admin("[key_name(usr)] haxed atmos.")
-	message_admins("\blue [key_name_admin(usr)] haxed atmos.", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] haxed atmos.</span>", 1)
 
-	for(var/obj/machinery/atmospherics/binary/pump/P in world)
+	for(var/obj/machinery/atmospherics/binary/pump/P in atmos_machines)
 		//if(p.name == "Air to Distro")
 		P.target_pressure=4500
-	for(var/obj/machinery/atmospherics/unary/vent_pump/high_volume/P in world)
+	for(var/obj/machinery/atmospherics/unary/vent_pump/high_volume/P in atmos_machines)
 		if(P.id_tag=="air_out")
 			P.internal_pressure_bound=4500
-	for(var/obj/machinery/atmospherics/trinary/filter/F in world)
+	for(var/obj/machinery/atmospherics/trinary/filter/F in atmos_machines)
 		F.target_pressure=4500
 
 	//world << "<b>LET THERE BE AIR</b>"
@@ -1080,29 +1223,31 @@ Pressure: [env.return_pressure()]"}
 	set category = "Debug"
 	set name = "Debug Mob Lists"
 	set desc = "For when you just gotta know"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_debug_mob_lists() called tick#: [world.time]")
 
 	switch(input("Which list?") in list("Players","Admins","Mobs","Living Mobs","Dead Mobs", "Clients"))
 		if("Players")
-			usr << dd_list2text(player_list,",")
+			usr << list2text(player_list,",")
 		if("Admins")
-			usr << dd_list2text(admins,",")
+			usr << list2text(admins,",")
 		if("Mobs")
-			usr << dd_list2text(mob_list,",")
+			usr << list2text(mob_list,",")
 		if("Living Mobs")
-			usr << dd_list2text(living_mob_list,",")
+			usr << list2text(living_mob_list,",")
 		if("Dead Mobs")
-			usr << dd_list2text(dead_mob_list,",")
+			usr << list2text(dead_mob_list,",")
 		if("Clients")
-			usr << dd_list2text(clients,",")
+			usr << list2text(clients,",")
 
 
 /client/proc/cmd_admin_toggle_block(var/mob/M,var/block)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_toggle_block() called tick#: [world.time]")
 	if(!ticker)
 		alert("Wait until the game starts")
 		return
 	if(istype(M, /mob/living/carbon))
 		M.dna.SetSEState(block,!M.dna.GetSEState(block))
-		domutcheck(M,null,MUTCHK_FORCED)
+		genemutcheck(M,block,null,MUTCHK_FORCED)
 		M.update_mutations()
 		var/state="[M.dna.GetSEState(block)?"on":"off"]"
 		var/blockname=assigned_blocks[block]
@@ -1116,34 +1261,141 @@ Pressure: [env.return_pressure()]"}
 	set category = "Debug"
 	set name = "Dump Instance Counts"
 	set desc = "MEMORY PROFILING IS TOO HIGH TECH"
-
-	var/F=file("instances.csv")
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_dump_instances() called tick#: [world.time]")
+	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
+	var/F=file("data/logs/profiling/[date_string]_instances.csv")
 	fdel(F)
 	F << "Types,Number of Instances"
 	for(var/key in type_instances)
 		F << "[key],[type_instances[key]]"
 
-	usr << "\blue Dumped to instances.csv."
+	usr << "<span class='notice'>Dumped to [F]</span>"
+
+/client/proc/cmd_admin_find_bad_blood_tracks()
+	set category = "Debug"
+	set name = "Find broken blood tracks"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_find_bad_blood_tracks() called tick#: [world.time]")
+	if(!holder) return
+	message_admins("[src] used find broken blood tracks")
+	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
+	var/F =file("data/logs/profiling/[date_string]_broken_blood.log")
+	fdel(F)
+	for(var/obj/effect/decal/cleanable/blood/tracks/T in blood_list)
+		if(!T.loc)
+			F << "Found [T] in a null location but still in the blood list"
+			F << "--------------------------------------"
+			continue
+		var/dat
+		for(var/b in cardinal)
+			if(isnull(T.setdirs["[b]"]))
+				dat += ("[T] ([formatJumpTo(T)]) had a bad directional [b] or bad list [T.setdirs.len]")
+				dat += ("Setdirs keys:")
+				for(var/key in T.setdirs)
+					dat += (key)
+		dat += "--------------------------------------"
+		F << dat
+
+	usr << "<span class='notice'>Dumped to [F]</span>"
 
 #ifdef PROFILE_MACHINES
 /client/proc/cmd_admin_dump_macprofile()
 	set category = "Debug"
-	set name = "Dump Machine Profiling"
+	set name = "Dump Machine and Object Profiling"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_dump_macprofile() called tick#: [world.time]")
 
-	var/F = file("machine_profiling.csv")
+	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
+	var/F =file("data/logs/profiling/[date_string]_machine_profiling.csv")
 	fdel(F)
 	F << "type,nanoseconds"
 	for(var/typepath in machine_profiling)
 		var/ns = machine_profiling[typepath]
 		F << "[typepath],[ns]"
 
-	usr << "\blue Dumped to machine_profiling.csv."
+	usr << "<span class='notice'>Dumped to [F]</span>"
+	var/FF = file("data/logs/profiling/[date_string]_object_profiling.csv")
+	fdel(FF)
+	FF << "type,nanoseconds"
+	for(var/typepath in object_profiling)
+		var/ns = object_profiling[typepath]
+		FF << "[typepath],[ns]"
+
+	usr << "<span class='notice'>Dumped to [FF].</span>"
+
+
+/client/proc/cmd_admin_dump_machine_type_list()
+	set category = "Debug"
+	set name = "Dump Machine type list"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_dump_machine_type_list() called tick#: [world.time]")
+
+	if(!machines.len && !power_machines.len)
+		usr << "Machines has no length!"
+		return
+	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
+	var/F =file("data/logs/profiling/[date_string]_machine_instances.csv")
+	fdel(F)
+	F << "type,count"
+	var/list/machineinstances = list()
+	for(var/atom/typepath in machines)
+		if(!typepath.type in machineinstances)
+			machineinstances["[typepath.type]"] = 0
+		machineinstances["[typepath.type]"] += 1
+	for(var/T in machineinstances)
+		var/count = machineinstances[T]
+		F << "[T],[count]"
+
+	usr << "<span class='notice'>Dumped to [F].</span>"
+	F =file("data/logs/profiling/[date_string]_power_machine_instances.csv")
+	fdel(F)
+	F << "type,count"
+	machineinstances.len = 0
+	for(var/atom/typepath in power_machines)
+		if(!typepath.type in machineinstances)
+			machineinstances["[typepath.type]"] = 0
+		machineinstances["[typepath.type]"] += 1
+	for(var/T in machineinstances)
+		var/count = machineinstances[T]
+		F << "[T],[count]"
+
+	usr << "<span class='notice'>Dumped to [F].</span>"
 #endif
+
+/client/proc/cmd_admin_dump_delprofile()
+	set category = "Debug"
+	set name = "Dump Del Profiling"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_dump_delprofile() called tick#: [world.time]")
+
+	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
+	var/F =file("data/logs/profiling/[date_string]_del_profiling.csv")
+	fdel(F)
+	F << "type,deletes"
+	for(var/typepath in del_profiling)
+		var/ns = del_profiling[typepath]
+		F << "[typepath],[ns]"
+
+	usr << "<span class='notice'>Dumped to [F].</span>"
+	F =file("data/logs/profiling/[date_string]_gdel_profiling.csv")
+	fdel(F)
+	F << "type,soft deletes"
+	for(var/typepath in gdel_profiling)
+		var/ns = gdel_profiling[typepath]
+		F << "[typepath],[ns]"
+
+	usr << "<span class='notice'>Dumped to [F].</span>"
+
+	F =file("data/logs/profiling/[date_string]_ghdel_profiling.csv")
+	fdel(F)
+	F << "type,hard deletes"
+	for(var/typepath in ghdel_profiling)
+		var/ns = ghdel_profiling[typepath]
+		F << "[typepath],[ns]"
+
+	usr << "<span class='notice'>Dumped to [F].</span>"
 
 /client/proc/gib_money()
 	set category = "Fun"
 	set name = "Dispense Money"
 	set desc = "Honk"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/gib_money() called tick#: [world.time]")
 
 	var/response = input(src,"How much moneys?") as num
 	if( response < 1) return
@@ -1153,8 +1405,9 @@ var/global/blood_virus_spreading_disabled = 0
 /client/proc/disable_bloodvirii()
 	set category = "Debug"
 	set name = "Disable Blood Virus Spreading"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/disable_bloodvirii() called tick#: [world.time]")
 
-	//usr << "\red Proc disabled."
+	//usr << "<span class='warning'>Proc disabled.</span>"
 
 	blood_virus_spreading_disabled = !blood_virus_spreading_disabled
 	if(blood_virus_spreading_disabled)
@@ -1162,16 +1415,439 @@ var/global/blood_virus_spreading_disabled = 0
 	else
 		message_admins("[src.ckey] enabled findAirborneVirii.")
 
+/client/proc/reload_style_sheet()
+	set category = "Server"
+	set name = "Reload Style Sheet"
+	set desc = "Reload the Style Sheet (be careful)."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/reload_style_sheet() called tick#: [world.time]")
+
+	for(var/client/C in clients)
+		winset(C, null, "outputwindow.output.style=[config.world_style_config];")
+	message_admins("The style sheet has been reloaded by [src.ckey]")
+
+/client/proc/reset_style_sheet()
+	set category = "Server"
+	set name = "Reset Style Sheet"
+	set desc = "Reset the Style Sheet (restore to default)."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/reset_style_sheet() called tick#: [world.time]")
+
+	for(var/client/C in clients)
+		winset(C, null, "outputwindow.output.style=[world_style];")
+	config.world_style_config = world_style
+	message_admins("The style sheet has been reset by [src.ckey]")
+
 /client/proc/cmd_admin_cluwneize(var/mob/M in mob_list)
 	set category = "Fun"
 	set name = "Make Cluwne"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_cluwneize() called tick#: [world.time]")
 	if(!ticker)
 		alert("Wait until the game starts")
 		return
 	if(ishuman(M))
-		M:Cluwneize()
-		message_admins("\blue [key_name_admin(usr)] made [key_name(M)] into a cluwne.", 1)
+		return M:Cluwneize()
+		message_admins("<span class='notice'>[key_name_admin(usr)] made [key_name(M)] into a cluwne.</span>", 1)
 		feedback_add_details("admin_verb","MKCLU") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 		log_admin("[key_name(src)] has cluwne-ified [M.key].")
 	else
 		alert("Invalid mob, needs to be a human.")
+
+client/proc/make_invulnerable(var/mob/M in mob_list)
+	set name = "Toggle Invulnerability"
+	set desc = "Make the target atom invulnerable to all form of damage."
+	set category = "Fun"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/make_invulnerable() called tick#: [world.time]")
+	var/isinvuln = 0
+	if(M.flags & INVULNERABLE)
+		isinvuln = 1
+
+	switch(isinvuln)
+		if(0)
+			if(alert(usr, "Make the target atom invulnerable to all form of damage?", "Toggle Invulnerability", "Yes", "No") != "Yes")
+				return
+
+			M.flags |= INVULNERABLE
+		if(1)
+			if(alert(usr, "Make the target atom vulnerable again?", "Toggle Invulnerability", "Yes", "No") != "Yes")
+				return
+
+			M.flags &= ~INVULNERABLE
+	log_admin("[ckey(key)]/([mob]) has toggled [M]'s invulnerability [(M.flags & INVULNERABLE) ? "on" : "off"]")
+	message_admins("[ckey(key)]/([mob]) has toggled [M]'s invulnerability [(M.flags & INVULNERABLE) ? "on" : "off"]")
+
+client/proc/delete_all_adminbus()
+	set name = "Delete every Adminbus"
+	set desc = "When the world cannot handle them anymore."
+	set category = "Fun"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/delete_all_adminbus() called tick#: [world.time]")
+
+	if(alert(usr, "Delete every single Adminbus in the game world?", "Delete Adminbus", "Yes", "No") != "Yes")
+		return
+
+	for(var/obj/structure/bed/chair/vehicle/adminbus/AB in world)
+		AB.Adminbus_Deletion()
+
+client/proc/delete_all_bomberman()
+	set name = "Remove all that Bomberman shit"
+	set desc = "4th wall ointment."
+	set category = "Fun"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/delete_all_bomberman() called tick#: [world.time]")
+
+	if(!check_rights(R_FUN)) return
+
+	if(alert(usr, "Remove all Bomberman-related objects in the game world?", "Remove Bomberman", "Yes", "No") != "Yes")
+		return
+
+	for(var/datum/bomberman_arena/target in arenas)
+		target.close()
+		if(target in arenas)
+			arenas -= target
+
+	for(var/obj/structure/bomberflame/O in bombermangear)
+		qdel(O)
+
+	for(var/obj/structure/bomberman/O in bombermangear)
+		qdel(O)
+
+	for(var/obj/item/weapon/bomberman/O in bombermangear)
+		if(istype(O.loc, /mob/living/carbon/))
+			var/mob/living/carbon/C = O.loc
+			C.u_equip(O,1)
+			O.loc = C.loc
+			//O.dropped(C)
+		qdel(O)
+
+	for(var/obj/item/clothing/suit/space/bomberman/O in bombermangear)
+		if(istype(O.loc, /mob/living/carbon/))
+			var/mob/living/carbon/C = O.loc
+			C.u_equip(O,1)
+			O.loc = C.loc
+			//O.dropped(C)
+		qdel(O)
+
+	for(var/obj/item/clothing/head/helmet/space/bomberman/O in bombermangear)
+		if(istype(O.loc, /mob/living/carbon/))
+			var/mob/living/carbon/C = O.loc
+			C.u_equip(O,1)
+			O.loc = C.loc
+			//O.dropped(C)
+		qdel(O)
+
+	for(var/obj/structure/softwall/O in bombermangear)
+		qdel(O)
+
+	for(var/turf/unsimulated/wall/bomberman/T in turfs)
+		T.ChangeTurf(/turf/simulated/wall)
+
+
+	for(var/obj/structure/powerup/O in bombermangear)
+		qdel(O)
+
+client/proc/create_bomberman_arena()
+	set name = "Create a Bomberman Arena"
+	set desc = "Create a customizable Bomberman-type arena."
+	set category = "Fun"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/create_bomberman_arena() called tick#: [world.time]")
+
+	if(!check_rights(R_FUN)) return
+
+	var/list/arena_sizes = list(
+		"15x13 (2 players)",
+		"15x15 (4 players)",
+		"39x23 (10 players)",
+		)
+	var/arena_type = input("What size for the arena?", "Arena Construction") in arena_sizes
+	var/turf/T = get_turf(src.mob)
+	var/datum/bomberman_arena/A = new /datum/bomberman_arena(T,arena_type,src.mob)
+	arenas += A
+
+client/proc/control_bomberman_arena()
+	set name = "Arena Control Panel"
+	set desc = "Control or Remove an existing Bomberman-type arena."
+	set category = "Fun"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/control_bomberman_arena() called tick#: [world.time]")
+
+	if(!check_rights(R_FUN)) return
+
+	if(!arenas.len)
+		usr << "There are no arenas in the world!"
+		return
+
+	var/datum/bomberman_arena/arena_target = input("Which arena do you wish to control?", "Arena Control Panel") in arenas
+	usr << "Arena Control Panel: [arena_target]"
+	var/arena_status = ""
+	switch(arena_target.status)
+		if(ARENA_SETUP)
+			arena_status = "SETUP"
+		if(ARENA_AVAILABLE)
+			arena_status = "AVAILABLE"
+		if(ARENA_INGAME)
+			arena_status = "IN-GAME"
+		if(ARENA_ENDGAME)
+			arena_status = "END-GAME"
+	usr << "status: <b>[arena_status]</b>"
+	usr << "violence mode: [arena_target.violence ? "ON" : "OFF"]"
+	usr << "opacity mode: [arena_target.opacity ? "ON" : "OFF"]"
+	if(arena_status == "SETUP")
+		usr << "<span class='warning'>Arena Under Construction</span>"
+	if(arena_status == "AVAILABLE")
+		var/i = 0
+		for(var/datum/bomberman_spawn/S in arena_target.spawns)
+			if(S.availability)
+				i++
+		usr << "Available spawn points: <b>[i]</b>"
+	if((arena_status == "IN-GAME") || (arena_status == "END-GAME"))
+		var/j = "players: "
+		for(var/datum/bomberman_spawn/S in arena_target.spawns)
+			if(S.player_client)
+				j += "<b>[S.player_client.key]</b>, "
+		usr << "[j]"
+
+	var/list/choices = list(
+		"CANCEL",
+		"Close Arena(space)",
+		"Close Arena(floors)",
+		"Reset Arena",
+		"Toggle Violence",
+		"Toggle Opacity",
+		"View Variables",
+		)
+
+	if(arena_status == "AVAILABLE")
+		choices += "Force Start"
+
+	var/datum/bomberman_arena/choice = input("Which action do you wish to take?", "Arena Control Panel") in choices
+	switch(choice)
+		if("CANCEL")
+			return
+		if("Close Arena(space)")
+			arena_target.close()
+			if(arena_target in arenas)
+				arenas -= arena_target
+		if("Close Arena(floors)")
+			arena_target.close(0)
+			if(arena_target in arenas)
+				arenas -= arena_target
+		if("Reset Arena")
+			arena_target.reset()
+		if("Toggle Violence")
+			arena_target.violence = !arena_target.violence
+		if("Toggle Opacity")
+			arena_target.opacity = !arena_target.opacity
+			for(var/obj/structure/softwall/L in arena_target.swalls)
+				L.opacity = arena_target.opacity
+			for(var/turf/unsimulated/wall/bomberman/L in arena_target.turfs)
+				L.opacity = arena_target.opacity
+		if("View Variables")
+			debug_variables(arena_target)
+		if("Force Start")
+			arena_target.start()
+
+
+
+client/proc/mob_list()
+	set name = "show mob list"
+	set category = "Debug"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/mob_list() called tick#: [world.time]")
+
+	if(!holder) return
+	usr << "mob list length is [mob_list.len]"
+	var/foundnull = 0
+	for(var/mob/V in mob_list)
+		var/msg = "mob ([V]) is in slot [mob_list.Find(V)]"
+		if(!ismob(V))
+			if(isnull(V))
+				foundnull++
+			msg = "<span class='danger'><font size=3>Non mob found in mob list [isnull(V) ? "null entry found at mob_list.Find(V)" : "[V]'s type is [V.type]"]</span></font>"
+		usr << msg
+	if(foundnull)
+		usr << "Found [foundnull] null entries in the mob list, running null clearer."
+		listclearnulls(mob_list)
+
+client/proc/check_bomb()
+	set name = "Check Bomb Impact"
+	set category = "Debug"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/check_bomb() called tick#: [world.time]")
+
+	var/newmode = alert("Use the new method?","Check Bomb Impact", "Yes","No")
+
+
+	var/turf/epicenter = get_turf(usr)
+	var/devastation_range = 0
+	var/heavy_impact_range = 0
+	var/light_impact_range = 0
+	var/list/choices = list("Small Bomb", "Medium Bomb", "Big Bomb", "Custom Bomb")
+	var/choice = input("What size explosion would you like to produce?") in choices
+	switch(choice)
+		if(null)
+			return 0
+		if("Small Bomb")
+			devastation_range = 1
+			heavy_impact_range = 2
+			light_impact_range = 3
+		if("Medium Bomb")
+			devastation_range = 2
+			heavy_impact_range = 3
+			light_impact_range = 4
+		if("Big Bomb")
+			devastation_range = 3
+			heavy_impact_range = 5
+			light_impact_range = 7
+		if("Custom Bomb")
+			devastation_range = input("Devastation range (in tiles):") as num
+			heavy_impact_range = input("Heavy impact range (in tiles):") as num
+			light_impact_range = input("Light impact range (in tiles):") as num
+
+	var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)
+
+	var/x0 = epicenter.x
+	var/y0 = epicenter.y
+
+	var/list/wipe_colors = list()
+	for (var/turf/T in trange(max_range, epicenter))
+		wipe_colors += T
+		var/dist = cheap_pythag(T.x - x0, T.y - y0)
+
+		if(newmode == "Yes")
+			var/turf/Trajectory = T
+			while(Trajectory != epicenter)
+				Trajectory = get_step_towards(Trajectory,epicenter)
+				if(Trajectory.density && Trajectory.explosion_block)
+					dist += Trajectory.explosion_block
+
+				for (var/obj/machinery/door/D in Trajectory.contents)
+					if(D.density && D.explosion_block)
+						dist += D.explosion_block
+
+		if (dist < devastation_range)
+			T.color = "red"
+		else if (dist < heavy_impact_range)
+			T.color = "yellow"
+		else if (dist < light_impact_range)
+			T.color = "blue"
+		else
+			continue
+
+	sleep(100)
+	for (var/turf/T in wipe_colors)
+		T.color = null
+
+/client/proc/set_teleport_pref()
+	set name = "Set Teleport-Here Preferences"
+	set category = "Debug"
+
+	teleport_here_pref = alert("Do you want to teleport atoms in a flashy way or a discret way?","Teleport-Here Preferences", "Flashy","Stealthy")
+
+	switch(teleport_here_pref)
+		if("Flashy")
+			flashy_level =  input("How much flashy do you want it to be? 0=no effect; 1=flash; 2=screen-shake; 3=global X HAS RISEN announcement","Flashy Preferences") as num
+		if("Stealthy")
+			stealthy_level = input("How long do you want the fade-in to last? (in tenth of seconds)","Stealthy Preferences") as num
+
+client/proc/cure_disease()
+	set name = "Cure Disease"
+	set category = "Debug"
+	if(!holder) return
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/cure_disease() called tick#: [world.time]")
+
+	var/list/disease_by_name = list("-Cure All-" = null) + disease2_list + active_diseases
+
+	var/disease_name = input(src, "Disease to cure?") as null|anything in sortTim(disease_by_name, /proc/cmp_text_asc)
+	if(!disease_name) return
+	var/count = 0
+	if(disease_name == "-Cure All-")
+		for(var/mob/living/carbon/C in mob_list)
+			for(var/ID in C.virus2)
+				if(ID && C.virus2[ID])
+					var/datum/disease2/disease/DD = C.virus2[ID]
+					DD.cure(C)
+					count++
+			for(var/datum/disease/D in C.viruses)
+				if(D)
+					D.cure(1)
+					count++
+					active_diseases -= D
+	else
+		for(var/mob/living/carbon/C in mob_list)
+			for(var/ID in C.virus2)
+				if(ID == disease_name)
+					var/datum/disease2/disease/DD = C.virus2[ID]
+					DD.cure(C)
+					count++
+			for(var/datum/disease/D in C.viruses)
+				if(D && D.name == disease_name)
+					D.cure(1)
+					count++
+					active_diseases -= D
+	src << "<span class='notice'>Cured [count] mob\s of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]</span>"
+	log_admin("[src]/([ckey(src.key)] Cured all mobs of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]")
+	message_admins("[src]/([ckey(src.key)] Cured all mobs of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]")
+
+client/proc/check_convertables()
+	set name = "Check Convertables"
+	set category = "Debug"
+	if(!holder || !ticker || !ticker.mode) return
+
+	var/dat = ""
+	for(var/mob/M in player_list)
+		if(!M.mind)
+			dat += "[M.real_name]/([ckey(M.key)]): <font color=grey><b>NO MIND</b></font></br>"
+		else if(!istype(M,/mob/living/carbon/human))
+			dat += "[M.real_name]/([ckey(M.key)]): <b>NOT HUMAN</b></br>"
+		else if(!is_convertable_to_cult(M.mind))
+			dat += "[M.real_name]/([ckey(M.key)]): <font color=red><b>UNCONVERTABLE</b></font></br>"
+		else if(jobban_isbanned(M, "cultist"))
+			dat += "[M.real_name]/([ckey(M.key)]): <font color=red><b>JOBBANNED</b></font></br>"
+		else if(M.mind in ticker.mode.cult)
+			dat += "[M.real_name]/([ckey(M.key)]): <font color=blue><b>CULTIST</b></font></br>"
+		else
+			dat += "[M.real_name]/([ckey(M.key)]): <font color=green><b>CONVERTABLE</b></font></br>"
+
+	usr << dat
+
+/client/proc/spawn_datum(var/object as text)
+	set category = "Debug"
+	set desc = "(datum path) Spawn a datum (turfs NOT supported)"
+	set name = "Create Datum"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/spawn_atom() called tick#: [world.time]")
+
+	if(!check_rights(R_SPAWN))
+		return
+
+	var/list/matches[0]
+
+	for(var/path in typesof(/datum) - typesof(/turf))
+		if(findtext("[path]", object))
+			matches += path
+
+	if(matches.len == 0)
+		usr << "Unable to find any matches."
+		return
+
+	var/chosen
+	if(matches.len == 1)
+		chosen = matches[1]
+	else
+		chosen = input("Select a datum type", "Spawn Datum", matches[1]) as null|anything in matches
+		if(!chosen)
+			return
+
+	holder.marked_datum = new chosen()
+
+	usr << "<span class='notify'>A reference to the new [chosen] has been stored in your marked datum.</span>"
+
+	log_admin("[key_name(usr)] spawned the datum [chosen] to his marked datum.")
+	feedback_add_details("admin_verb","SD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/client/proc/vv_marked_datum()
+	set category	= "Debug"
+	set desc		= "Opens a VV menu for your marked datum."
+	set name		= "View Marked Datum's Vars"
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	if(!holder.marked_datum)
+		usr << "<span class='warning'>You do not have a marked datum!</span>"
+		return
+
+	debug_variables(holder.marked_datum)

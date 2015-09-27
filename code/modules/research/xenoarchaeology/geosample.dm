@@ -25,9 +25,10 @@
 	var/datum/geosample/geological_data
 
 /obj/item/weapon/rocksliver/New()
+	. = ..()
 	icon_state = "sliver[rand(1,3)]"
-	pixel_x = rand(0,16)-8
-	pixel_y = rand(0,8)-8
+	pixel_x = rand(-8, 8)
+	pixel_y = rand(-8, 0)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Geosample datum
@@ -51,6 +52,7 @@
 
 //this should only need to be called once
 /datum/geosample/proc/UpdateTurf(var/turf/unsimulated/mineral/container)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/geosample/proc/UpdateTurf() called tick#: [world.time]")
 	if(!container || !istype(container))
 		return
 
@@ -119,6 +121,7 @@
 
 //have this separate from UpdateTurf() so that we dont have a billion turfs being updated (redundantly) every time an artifact spawns
 /datum/geosample/proc/UpdateNearbyArtifactInfo(var/turf/unsimulated/mineral/container)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/geosample/proc/UpdateNearbyArtifactInfo() called tick#: [world.time]")
 	if(!container || !istype(container))
 		return
 

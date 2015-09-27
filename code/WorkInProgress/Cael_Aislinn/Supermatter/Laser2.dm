@@ -5,12 +5,12 @@
 	name = "Zero-point laser"
 	desc = "A super-powerful laser"
 	var/visible = 1
-	var/state = 1.0
 	//var/obj/beam/e_beam/first
 	var/power = 500
 	icon = 'icons/obj/engine.dmi'
 	icon_state = "laser"
 	anchored = 1
+	state = 1.0
 	var/id
 	var/on = 0
 	var/freq = 50000
@@ -37,6 +37,7 @@
 			del first*/
 
 /obj/machinery/computer/laser/proc/setpower(var/powera)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/laser/proc/setpower() called tick#: [world.time]")
 	/*src.power = powera
 	if(first)
 		first.setpower(src.power)*/
@@ -58,6 +59,7 @@
 	sd_SetLuminosity(1, 1, 4)
 
 /obj/beam/e_beam/proc/updatebeam()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/beam/e_beam/proc/updatebeam() called tick#: [world.time]")
 	if(!next)
 		if(get_step(src.loc,src.dir))
 			var/obj/beam/e_beam/e = new /obj/beam/e_beam(src.loc)
@@ -86,13 +88,14 @@
 		next.updatebeam()
 
 /atom/proc/laser_act(var/obj/beam/e_beam/b)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/laser_act() called tick#: [world.time]")
 	return
 
 /mob/living/carbon/laser_act(var/obj/beam/e_beam/b)
 	for(var/t in organs)
 		var/datum/organ/external/affecting = organs["[t]"]
 		if (affecting.take_damage(0, b.power/400,0,0))
-			UpdateDamageIcon()
+			UpdateDamageIcon(1)
 		else
 			UpdateDamage()
 
@@ -103,6 +106,7 @@
 
 
 /obj/beam/e_beam/proc/setpower(var/powera)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/beam/e_beam/proc/setpower() called tick#: [world.time]")
 	src.power = powera
 	if(src.next)
 		src.next.setpower(powera)
@@ -111,7 +115,7 @@
 	src.hit()
 	return
 
-/obj/beam/e_beam/HasEntered(atom/movable/AM as mob|obj)
+/obj/beam/e_beam/Crossed(atom/movable/AM as mob|obj)
 	if (istype(AM, /obj/beam))
 		return
 	spawn( 0 )
@@ -127,6 +131,7 @@
 	return
 
 /obj/beam/e_beam/proc/hit()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/beam/e_beam/proc/hit() called tick#: [world.time]")
 	del src
 	return
 	*/

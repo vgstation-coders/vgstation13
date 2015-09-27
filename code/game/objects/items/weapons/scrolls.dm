@@ -4,7 +4,7 @@
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "scroll"
 	var/uses = 4.0
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	w_class = 2.0
 	item_state = "paper"
 	throw_speed = 4
@@ -48,6 +48,8 @@
 
 /obj/item/weapon/teleportation_scroll/proc/teleportscroll(var/mob/user)
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/teleportation_scroll/proc/teleportscroll() called tick#: [world.time]")
+
 	var/A
 
 	A = input(user, "Area to jump to", "BOOYEA", A) in teleportlocs
@@ -77,8 +79,8 @@
 		user <<"The spell matrix was unable to locate a suitable teleport destination for an unknown reason. Sorry."
 		return
 
-	if(user && user.buckled)
-		user.buckled.unbuckle()
+	if(user && user.locked_to)
+		user.locked_to.unlock_atom(user)
 
 	var/list/tempL = L
 	var/attempt = null

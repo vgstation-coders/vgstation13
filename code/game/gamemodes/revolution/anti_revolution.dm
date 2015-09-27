@@ -33,7 +33,7 @@
 //Gets the round setup, cancelling if there's not enough players at the start//
 ///////////////////////////////////////////////////////////////////////////////
 /datum/game_mode/anti_revolution/pre_setup()
-	for(var/mob/new_player/player in world) if(player.mind)
+	for(var/mob/new_player/player in mob_list) if(player.mind)
 		if(player.mind.assigned_role in command_positions)
 			heads += player.mind
 		else
@@ -55,6 +55,7 @@
 
 
 /datum/game_mode/anti_revolution/proc/add_head_objectives(datum/mind/head)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/anti_revolution/proc/add_head_objectives() called tick#: [world.time]")
 	for(var/datum/mind/target in execute_targets)
 		var/datum/objective/anti_revolution/execute/obj = new
 		obj.owner = head
@@ -97,10 +98,11 @@
 
 
 /datum/game_mode/proc/greet_head(var/datum/mind/head_mind, var/you_are=1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/greet_head() called tick#: [world.time]")
 	var/obj_count = 1
 	if (you_are)
-		head_mind.current << "\blue It looks like this shift CentComm has some special orders for you.. check your objectives."
-		head_mind.current << "\blue Note that you can ignore these objectives, but resisting NT's orders probably means demotion or worse."
+		head_mind.current << "<span class='notice'>It looks like this shift CentComm has some special orders for you.. check your objectives.</span>"
+		head_mind.current << "<span class='notice'>Note that you can ignore these objectives, but resisting NT's orders probably means demotion or worse.</span>"
 	for(var/datum/objective/objective in head_mind.objectives)
 		head_mind.current << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
 		head_mind.special_role = "Corrupt Head"
@@ -132,6 +134,7 @@
 //Checks for crew victory//
 //////////////////////////
 /datum/game_mode/anti_revolution/proc/check_crew_victory()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/anti_revolution/proc/check_crew_victory() called tick#: [world.time]")
 	for(var/datum/mind/head_mind in heads)
 		var/turf/T = get_turf(head_mind.current)
 		if((head_mind) && (head_mind.current) && (head_mind.current.stat != 2) && T && (T.z == 1) && !head_mind.is_brigged(600))
@@ -143,6 +146,7 @@
 //Checks for a head victory//
 /////////////////////////////
 /datum/game_mode/anti_revolution/proc/check_head_victory()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/anti_revolution/proc/check_head_victory() called tick#: [world.time]")
 	for(var/datum/mind/head_mind in heads)
 		for(var/datum/objective/objective in head_mind.objectives)
 			if(!(objective.check_completion()))
@@ -155,9 +159,9 @@
 
 	var/text = ""
 	if(finished == 2)
-		world << "\red <FONT size = 3><B> The heads of staff were relieved of their posts! The crew wins!</B></FONT>"
+		world << "<span class='danger'><FONT size = 3> The heads of staff were relieved of their posts! The crew wins!</FONT></span>"
 	else if(finished == 1)
-		world << "\red <FONT size = 3><B> The heads of staff managed to meet the goals set for them by CentComm!</B></FONT>"
+		world << "<span class='danger'><FONT size = 3> The heads of staff managed to meet the goals set for them by CentComm!</FONT></span>"
 
 
 
@@ -206,6 +210,7 @@
 		greet_head(character.mind)
 
 /mob/proc/ResignFromHeadPosition()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/ResignFromHeadPosition() called tick#: [world.time]")
 	set category = "IC"
 	set name = "Resign From Head Position"
 
@@ -219,4 +224,4 @@
 
 	src.verbs -= /mob/proc/ResignFromHeadPosition
 
-	src << "\red You resigned from your position, now you have the consequences."
+	src << "<span class='warning'>You resigned from your position, now you have the consequences.</span>"

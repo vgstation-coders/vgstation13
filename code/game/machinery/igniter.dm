@@ -1,3 +1,4 @@
+var/global/list/igniters = list()
 /obj/machinery/igniter
 	name = "igniter"
 	desc = "It's useful for igniting plasma."
@@ -37,10 +38,11 @@
 	if (src.on && !(stat & NOPOWER) )
 		var/turf/location = src.loc
 		if (isturf(location))
-			location.hotspot_expose(1000,500,1)
+			location.hotspot_expose(1000,500,1,surfaces=0)
 	return 1
 
 /obj/machinery/igniter/proc/toggle_state()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/igniter/proc/toggle_state() called tick#: [world.time]")
 	use_power(50)
 	src.on = !( src.on )
 	src.icon_state = text("igniter[]", src.on)
@@ -49,6 +51,11 @@
 /obj/machinery/igniter/New()
 	..()
 	icon_state = "igniter[on]"
+	igniters += src
+
+/obj/machinery/igniter/Destroy()
+	igniters -= src
+	..()
 
 /obj/machinery/igniter/power_change()
 	if(!( stat & NOPOWER) )
@@ -61,17 +68,17 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0,user))
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
-			user << "\blue You begin to cut \the [src] off the floor..."
-			if (do_after(user, 40))
+			user << "<span class='notice'>You begin to cut \the [src] off the floor...</span>"
+			if (do_after(user, src, 40))
 				user.visible_message( \
 					"[user] disassembles \the [src].", \
-					"\blue You have disassembled \the [src].", \
+					"<span class='notice'>You have disassembled \the [src].</span>", \
 					"You hear welding.")
 				src.assembly.loc=src.loc
 				del(src)
 				return
 		else:
-			user << "\red You need more welder fuel to do that."
+			user << "<span class='warning'>You need more welder fuel to do that.</span>"
 			return 1
 
 
@@ -93,6 +100,11 @@
 
 /obj/machinery/sparker/New()
 	..()
+	igniters += src
+
+/obj/machinery/sparker/Destroy()
+	igniters -= src
+	..()
 
 /obj/machinery/sparker/power_change()
 	if ( powered() && disable == 0 )
@@ -111,10 +123,10 @@
 		add_fingerprint(user)
 		src.disable = !src.disable
 		if (src.disable)
-			user.visible_message("\red [user] has disabled the [src]!", "\red You disable the connection to the [src].")
+			user.visible_message("<span class='warning'>[user] has disabled the [src]!</span>", "<span class='warning'>You disable the connection to the [src].</span>")
 			icon_state = "[base_state]-d"
 		if (!src.disable)
-			user.visible_message("\red [user] has reconnected the [src]!", "\red You fix the connection to the [src].")
+			user.visible_message("<span class='warning'>[user] has reconnected the [src]!</span>", "<span class='warning'>You fix the connection to the [src].</span>")
 			if(src.powered())
 				icon_state = "[base_state]"
 			else
@@ -122,11 +134,12 @@
 
 /obj/machinery/sparker/attack_ai()
 	if (src.anchored)
-		return src.ignite()
+		return src.spark()
 	else
 		return
 
-/obj/machinery/sparker/proc/ignite()
+/obj/machinery/sparker/proc/spark()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/sparker/proc/spark() called tick#: [world.time]")
 	if (!(powered()))
 		return
 
@@ -142,14 +155,14 @@
 	use_power(1000)
 	var/turf/location = src.loc
 	if (isturf(location))
-		location.hotspot_expose(1000,500,1)
+		location.hotspot_expose(1000,500,1,surfaces=1)
 	return 1
 
 /obj/machinery/sparker/emp_act(severity)
 	if(stat & (BROKEN|NOPOWER))
 		..(severity)
 		return
-	ignite()
+	spark()
 	..(severity)
 
 /obj/machinery/ignition_switch/attack_ai(mob/user as mob)
@@ -174,12 +187,12 @@
 	active = 1
 	icon_state = "launcheract"
 
-	for(var/obj/machinery/sparker/M in world)
+	for(var/obj/machinery/sparker/M in igniters)
 		if (M.id_tag == src.id_tag)
 			spawn( 0 )
-				M.ignite()
+				M.spark()
 
-	for(var/obj/machinery/igniter/M in world)
+	for(var/obj/machinery/igniter/M in igniters)
 		if(M.id_tag == src.id_tag)
 			use_power(50)
 			M.on = !( M.on )

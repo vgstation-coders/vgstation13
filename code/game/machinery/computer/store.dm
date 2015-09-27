@@ -1,15 +1,17 @@
 /obj/machinery/computer/merch
 	name = "Merch Computer"
 	icon = 'icons/obj/computer.dmi'
-	icon_state = "comm_logs"
+	icon_state = "store"
 	circuit = "/obj/item/weapon/circuitboard/merch"
+
+	light_color = LIGHT_COLOR_ORANGE
 
 /obj/item/weapon/circuitboard/merch
 	name = "\improper Merchandise Computer Circuitboard"
 	build_path = /obj/machinery/computer/merch
 
-/obj/machinery/computer/merch/New()
-	..()
+/obj/machinery/computer/merch
+	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | PURCHASER
 
 /obj/machinery/computer/merch/attack_paw(mob/user as mob)
 	return attack_hand(user)
@@ -25,10 +27,12 @@
 	if(stat & (BROKEN|NOPOWER))
 		return
 
+	var/obj/item/weapon/card/id/card = user.get_id_card()
+
 	var/balance=0
-	if(user.mind)
-		if(user.mind.initial_account)
-			balance = user.mind.initial_account.money
+
+	if(card)
+		balance = card.GetBalance()
 
 	var/dat = {"
 <html>
@@ -141,9 +145,9 @@ td.cost.toomuch {
 			updateUsrDialog()
 			return
 		if(!centcomm_store.PlaceOrder(usr,itemID))
-			usr << "\red Unable to charge your account."
+			usr << "<span class='warning'>Unable to charge your account.</span>"
 		else
-			usr << "\blue You've successfully purchased the item.  It should be in your hands or on the floor."
+			usr << "<span class='notice'>You've successfully purchased the item.  It should be in your hands or on the floor.</span>"
 	src.updateUsrDialog()
 	return
 

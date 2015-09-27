@@ -10,6 +10,9 @@
 	unacidable = 1
 	use_power = 0
 	luminosity = 4
+
+	flags = FPRINT | PROXMOVE
+
 	var/obj/machinery/field_generator/FG1 = null
 	var/obj/machinery/field_generator/FG2 = null
 	var/hasShocked = 0 //Used to add a delay between shocks. In some cases this used to crash servers by spawning hundreds of sparks every second.
@@ -36,9 +39,6 @@
 /obj/machinery/containment_field/ex_act(severity)
 	return 0
 
-/obj/machinery/containment_field/meteorhit()
-	return 0
-
 /obj/machinery/containment_field/HasProximity(atom/movable/AM as mob|obj)
 	if(istype(AM,/mob/living/silicon) && prob(40))
 		shock(AM)
@@ -50,58 +50,28 @@
 
 
 
-/obj/machinery/containment_field/proc/shock(mob/living/user as mob)
+/obj/machinery/containment_field/shock(const/mob/living/user)
 	if(hasShocked)
 		return 0
-	if(!FG1 || !FG2)
-		del(src)
+
+	if(isnull(FG1) || isnull(FG2))
+		qdel(src)
 		return 0
-	if(iscarbon(user))
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, user.loc)
-		s.start()
 
+	if(isliving(user))
 		hasShocked = 1
-		var/shock_damage = min(rand(30,40),rand(30,40))
-		user.burn_skin(shock_damage)
-		user.updatehealth()
-		user.visible_message("\red [user.name] was shocked by the [src.name]!", \
-			"\red <B>You feel a powerful shock course through your body sending you flying!</B>", \
-			"\red You hear a heavy electrical crack")
+		var/shock_damage = min(rand(30, 40), rand(30, 40))
+		user.electrocute_act(shock_damage, src)
 
-		var/stun = min(shock_damage, 15)
-		user.Stun(stun)
-		user.Weaken(10)
-
-		user.updatehealth()
-		var/atom/target = get_edge_target_turf(user, get_dir(src, get_step_away(user, src)))
-		user.throw_at(target, 200, 4)
+		if(iscarbon(user))
+			var/atom/target = get_edge_target_turf(user, get_dir(src, get_step_away(user, src)))
+			user.throw_at(target, 200, 4)
 
 		sleep(20)
 		hasShocked = 0
-		return
-
-	else if(issilicon(user))
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, user.loc)
-		s.start()
-
-		hasShocked = 1
-		var/shock_damage = rand(15,30)
-		user.take_overall_damage(0,shock_damage)
-		user.visible_message("\red [user.name] was shocked by the [src.name]!", \
-			"\red <B>Energy pulse detected, system damaged!</B>", \
-			"\red You hear an electrical crack")
-		if(prob(20))
-			user.Stun(2)
-
-		sleep(20)
-		hasShocked = 0
-		return
-
-	return
 
 /obj/machinery/containment_field/proc/set_master(var/master1,var/master2)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/containment_field/proc/set_master() called tick#: [world.time]")
 	if(!master1 || !master2)
 		return 0
 	FG1 = master1

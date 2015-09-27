@@ -39,6 +39,7 @@
         range - radius of regular byond's square circle on that z-level. null means everywhere, on all z-levels.
 
   obj/proc/receive_signal(datum/signal/signal, var/receive_method as num, var/receive_param)
+    //writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \  obj/proc/receive_signal() called tick#: [world.time]")
     Handler from received signals. By default does nothing. Define your own for your object.
     Avoid of sending signals directly from this proc, use spawn(-1). Do not use sleep() here please.
       parameters:
@@ -60,7 +61,31 @@
       If receiving object don't know right key, it must ignore encrypted signal in its receive_signal.
 
 */
+var/list/all_radios = list()
+/proc/add_radio(var/obj/item/radio, freq)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/add_radio() called tick#: [world.time]")
+	if(!freq || !radio)
+		return
+	if(!all_radios["[freq]"])
+		all_radios["[freq]"] = list(radio)
+		return freq
 
+	all_radios["[freq]"] |= radio
+	return freq
+
+/proc/remove_radio(var/obj/item/radio, freq)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/remove_radio() called tick#: [world.time]")
+	if(!freq || !radio)
+		return
+	if(!all_radios["[freq]"])
+		return
+
+	all_radios["[freq]"] -= radio
+
+/proc/remove_radio_all(var/obj/item/radio)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/remove_radio_all() called tick#: [world.time]")
+	for(var/freq in all_radios)
+		all_radios["[freq]"] -= radio
 /*
 Frequency range: 1200 to 1600
 Radiochat range: 1441 to 1489 (most devices refuse to be tune to other frequency, even during mapmaking)
@@ -83,6 +108,7 @@ Devices:
 
 On the map:
 1311 for prison shuttle console (in fact, it is not used)
+1367 for recycling/mining processing machinery and conveyors
 1435 for status displays
 1437 for atmospherics/fire alerts
 1439 for engine components
@@ -99,32 +125,47 @@ On the map:
 
 var/list/radiochannels = list(
 	"Common" = 1459,
-	"Science" = 1351,
+	"AI Private" = 1447,
+	"Deathsquad" = 1441,
+	"Security" = 1359,
+	"Engineering" = 1357,
 	"Command" = 1353,
 	"Medical" = 1355,
-	"Engineering" = 1357,
-	"Security" = 1359,
-	"Response Team" = 1345,
-	"Deathsquad" = 1341,
-	"Syndicate" = 1213,
+	"Science" = 1351,
+	"Service" = 1349,
 	"Supply" = 1347,
-	"Service" = 1349
-)
-//depenging helpers
-var/list/DEPT_FREQS = list(
-	1351,
-	1355,
-	1357,
-	1359,
-	1213,
-	1345,
-	1341,
-	1347,
-	1349
+	"Response Team" = 1345,
+	"Syndicate" = 1213,
+	"DJ" = 1201
 )
 
+var/list/radiochannelsreverse = list(
+	"1201" = "DJ",
+	"1213" = "Syndicate",
+	"1345" = "Response Team",
+	"1347" = "Supply",
+	"1349" = "Service",
+	"1351" = "Science",
+	"1355" = "Medical",
+	"1353" = "Command",
+	"1357" = "Engineering",
+	"1359" = "Security",
+	"1441" = "Deathsquad",
+	"1447" = "AI Private",
+	"1459" = "Common"
+)
+
+
+//depenging helpers
+var/const/SUPP_FREQ = 1347 //supply, coloured light brown in chat window
+var/const/SERV_FREQ = 1349 //service, coloured green in chat window
+var/const/DSQUAD_FREQ = 1441 //death squad frequency, coloured grey in chat window
+var/const/RESTEAM_FREQ = 1345 //response team frequency, uses the deathsquad color at the moment.
+var/const/AIPRIV_FREQ = 1447 //AI private, colored magenta in chat window
+var/const/DJ_FREQ = 1201 //Media
+
 // central command channels, i.e deathsquid & response teams
-var/list/CENT_FREQS = list(1345, 1341)
+var/list/CENT_FREQS = list(1345, 1441)
 
 var/const/COMM_FREQ = 1353 //command, colored gold in chat window
 var/const/SYND_FREQ = 1213
@@ -143,7 +184,7 @@ var/const/SER_FREQ = 1349
 /* filters */
 var/const/RADIO_TO_AIRALARM = "1"
 var/const/RADIO_FROM_AIRALARM = "2"
-var/const/RADIO_CHAT = "3"
+var/const/RADIO_CHAT = "3" //deprecated
 var/const/RADIO_ATMOSIA = "4"
 var/const/RADIO_NAVBEACONS = "5"
 var/const/RADIO_AIRLOCK = "6"
@@ -154,137 +195,136 @@ var/const/RADIO_CONVEYORS = "10"
 
 var/global/datum/controller/radio/radio_controller
 
-datum/controller/radio
-	var/list/datum/radio_frequency/frequencies = list()
+/datum/controller/radio
+	var/list/datum/radio_frequency/frequencies = new
 
-	proc/add_object(obj/device as obj, var/new_frequency as num, var/filter = null as text|null)
-		var/f_text = num2text(new_frequency)
-		var/datum/radio_frequency/frequency = frequencies[f_text]
+/datum/controller/radio/proc/add_object(const/obj/device, const/_frequency, var/filter = null as text|null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/controller/radio/proc/add_object() called tick#: [world.time]")
+	var/datum/radio_frequency/frequency = return_frequency(_frequency)
 
-		if(!frequency)
-			frequency = new
-			frequency.frequency = new_frequency
-			frequencies[f_text] = frequency
+	if(isnull(frequency))
+		frequency = new
+		frequency.frequency = _frequency
+		frequencies[num2text(_frequency)] = frequency
 
-		frequency.add_listener(device, filter)
-		return frequency
+	frequency.add_listener(device, filter)
+	return frequency
 
-	proc/remove_object(obj/device, old_frequency)
-		var/f_text = num2text(old_frequency)
-		var/datum/radio_frequency/frequency = frequencies[f_text]
+/datum/controller/radio/proc/remove_object(const/obj/device, const/_frequency)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/controller/radio/proc/remove_object() called tick#: [world.time]")
+	var/datum/radio_frequency/frequency = return_frequency(_frequency)
 
-		if(frequency)
-			frequency.remove_listener(device)
+	if(frequency)
+		frequency.remove_listener(device)
 
-			if(frequency.devices.len == 0)
-				del(frequency)
-				frequencies -= f_text
+		if(frequency.devices.len <= 0)
+			frequencies.Remove(num2text(_frequency))
 
-		return 1
+	return 1
 
-	proc/return_frequency(var/new_frequency as num)
-		var/f_text = num2text(new_frequency)
-		var/datum/radio_frequency/frequency = frequencies[f_text]
+/datum/controller/radio/proc/return_frequency(const/_frequency)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/controller/radio/proc/return_frequency() called tick#: [world.time]")
+	return frequencies[num2text(_frequency)]
 
-		if(!frequency)
-			frequency = new
-			frequency.frequency = new_frequency
-			frequencies[f_text] = frequency
-
-		return frequency
-
-datum/radio_frequency
+/datum/radio_frequency
 	var/frequency as num
 	var/list/list/obj/devices = list()
 
-	proc
-		post_signal(obj/source as obj|null, datum/signal/signal, var/filter = null as text|null, var/range = null as num|null)
-			//log_admin("DEBUG \[[world.timeofday]\]: post_signal {source=\"[source]\", [signal.debug_print()], filter=[filter]}")
-//			var/N_f=0
-//			var/N_nf=0
-//			var/Nt=0
-			var/turf/start_point
+/datum/radio_frequency/proc/post_signal(obj/source as obj|null, datum/signal/signal, var/filter = null as text|null, var/range = null as num|null)
+	//log_admin("DEBUG \[[world.timeofday]\]: post_signal {source=\"[source]\", [signal.debug_print()], filter=[filter]}")
+	//var/N_f=0
+	//var/N_nf=0
+	//var/Nt=0
+	var/turf/start_point
+	if(range)
+		start_point = get_turf(source)
+		if(!start_point)
+			returnToDPool(signal)
+			return 0
+
+	if (filter) //here goes some copypasta. It is for optimisation. -rastaf0
+		for(var/obj/device in devices[filter])
+			if(device == source)
+				continue
 			if(range)
-				start_point = get_turf(source)
-				if(!start_point)
-//					del(signal)
-					return 0
-			if (filter) //here goes some copypasta. It is for optimisation. -rastaf0
-				for(var/obj/device in devices[filter])
-					if(device == source)
+				var/turf/end_point = get_turf(device)
+				if(!end_point)
+					continue
+				//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
+				if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
+					continue
+			device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
+		for(var/obj/device in devices["_default"])
+			if(device == source)
+				continue
+			if(range)
+				var/turf/end_point = get_turf(device)
+				if(!end_point)
+					continue
+				//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
+				if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
+					continue
+			device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
+			//N_f++
+
+	else
+		for (var/next_filter in devices)
+			//var/list/obj/DDD = devices[next_filter]
+			//Nt+=DDD.len
+			for(var/obj/device in devices[next_filter])
+				if(device == source)
+					continue
+				if(range)
+					var/turf/end_point = get_turf(device)
+					if(!end_point)
 						continue
-					if(range)
-						var/turf/end_point = get_turf(device)
-						if(!end_point)
-							continue
-						//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
-						if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
-							continue
-					device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
-				for(var/obj/device in devices["_default"])
-					if(device == source)
+					//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
+					if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
 						continue
-					if(range)
-						var/turf/end_point = get_turf(device)
-						if(!end_point)
-							continue
-						//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
-						if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
-							continue
-					device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
-//					N_f++
-			else
-				for (var/next_filter in devices)
-//					var/list/obj/DDD = devices[next_filter]
-//					Nt+=DDD.len
-					for(var/obj/device in devices[next_filter])
-						if(device == source)
-							continue
-						if(range)
-							var/turf/end_point = get_turf(device)
-							if(!end_point)
-								continue
-							//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
-							if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
-								continue
-						device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
-//						N_nf++
+				device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
+				//N_nf++
 
-//			log_admin("DEBUG: post_signal(source=[source] ([source.x], [source.y], [source.z]),filter=[filter]) frequency=[frequency], N_f=[N_f], N_nf=[N_nf]")
+	//log_admin("DEBUG: post_signal(source=[source] ([source.x], [source.y], [source.z]),filter=[filter]) frequency=[frequency], N_f=[N_f], N_nf=[N_nf]")
 
 
-//			del(signal)
+	returnToDPool(signal)
 
-		add_listener(obj/device as obj, var/filter as text|null)
-			if (!filter)
-				filter = "_default"
-			//log_admin("add_listener(device=[device],filter=[filter]) frequency=[frequency]")
-			var/list/obj/devices_line = devices[filter]
-			if (!devices_line)
-				devices_line = new
-				devices[filter] = devices_line
-			devices_line+=device
-//			var/list/obj/devices_line___ = devices[filter_str]
-//			var/l = devices_line___.len
-			//log_admin("DEBUG: devices_line.len=[devices_line.len]")
-			//log_admin("DEBUG: devices(filter_str).len=[l]")
+/datum/radio_frequency/proc/add_listener(const/obj/device, var/filter)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/radio_frequency/proc/add_listener() called tick#: [world.time]")
+	if(!filter) // FIXME
+		filter = "_default"
 
-		remove_listener(obj/device)
-			for (var/devices_filter in devices)
-				var/list/devices_line = devices[devices_filter]
-				devices_line-=device
-				while (null in devices_line)
-					devices_line -= null
-				if (devices_line.len==0)
-					devices -= devices_filter
-					del(devices_line)
+	var/list/devices_at_filter = devices[filter]
 
+	if(isnull(devices_at_filter))
+		devices_at_filter = new
+		devices[filter] = devices_at_filter
+
+	devices_at_filter.Add(device)
+
+/datum/radio_frequency/proc/remove_listener(const/obj/device, const/filter)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/radio_frequency/proc/remove_listener() called tick#: [world.time]")
+	var/list/devices_at_filter = devices[filter]
+
+	// 1. check if it's an object
+	// 2. check if it has contents
+	// 3. check if the device is in contents
+	if(devices_at_filter && devices_at_filter.len && devices_at_filter.Find(device))
+		devices_at_filter.Remove(device)
+
+		if(devices_at_filter.len <= 0)
+			devices.Remove(filter)
+
+/datum/radio_frequency/remove_listener(const/obj/device)
+	for(var/filter in devices)
+		..(device, filter)
 
 var/list/pointers = list()
 
 /client/proc/print_pointers()
 	set name = "Debug Signals"
 	set category = "Debug"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/print_pointers() called tick#: [world.time]")
 
 	if(!holder)
 		return
@@ -297,7 +337,8 @@ var/list/pointers = list()
 			src << S.debug_print()
 
 /obj/proc/receive_signal(datum/signal/signal, receive_method, receive_param)
-	return null
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/proc/receive_signal() called tick#: [world.time]")
+	return
 
 /datum/signal
 	var/obj/source
@@ -316,11 +357,17 @@ var/list/pointers = list()
 	..()
 	pointers += "\ref[src]"
 
-/datum/signal/Del()
+/datum/signal/Destroy()
 	pointers -= "\ref[src]"
-	..()
+
+/datum/signal/resetVariables()
+	. = ..("data")
+
+	source = null
+	data = list()
 
 /datum/signal/proc/copy_from(datum/signal/model)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/signal/proc/copy_from() called tick#: [world.time]")
 	source = model.source
 	transmission_method = model.transmission_method
 	data = model.data
@@ -328,6 +375,7 @@ var/list/pointers = list()
 	frequency = model.frequency
 
 /datum/signal/proc/debug_print()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/signal/proc/debug_print() called tick#: [world.time]")
 	if (source)
 		. = "signal = {source = '[source]' ([source:x],[source:y],[source:z])\n"
 	else
@@ -340,6 +388,7 @@ var/list/pointers = list()
 				. += "data\[\"[i]\"\] list has: [t]"
 
 /datum/signal/proc/sanitize_data()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/signal/proc/sanitize_data() called tick#: [world.time]")
 	for(var/d in data)
 		var/val = data[d]
 		if(istext(val))

@@ -75,6 +75,22 @@
 /obj/structure/sign/double/map/right
 	icon_state = "map-right"
 
+//For efficiency station
+/obj/structure/sign/map/efficiency
+	name = "station map"
+	desc = "A framed picture of the station."
+	icon_state = "map_efficiency"
+
+/obj/structure/sign/map/meta/left
+	name = "station map"
+	desc = "A framed picture of the station."
+	icon_state = "map-left-MS"
+
+/obj/structure/sign/map/meta/right
+	name = "station map"
+	desc = "A framed picture of the station."
+	icon_state = "map-right-MS"
+
 /obj/structure/sign/securearea
 	name = "\improper SECURE AREA"
 	desc = "A warning sign which reads 'SECURE AREA'."
@@ -141,7 +157,7 @@
 	icon_state = "goldenplaque"
 
 /obj/structure/sign/kiddieplaque
-	name = "AI developers plaque"
+	name = "AI developer's plaque"
 	desc = "Next to the extremely long list of names and job titles, there is a drawing of a little child. The child appears to be retarded. Beneath the image, someone has scratched the word \"PACKETS\""
 	icon_state = "kiddieplaque"
 
@@ -159,6 +175,11 @@
 	name = "\improper CHEMISTRY"
 	desc = "A warning sign which reads 'CHEMISTRY'"
 	icon_state = "chemistry1"
+
+/obj/structure/sign/chemtable
+	name = "\improper The Periodic Table"
+	desc = "A very colorful and detailed table of all the chemical elements you could blow up or burn down a chemistry laboratory with, titled 'The Space Periodic Table - To be continued'. Just the mere sight of it makes you feel smarter."
+	icon_state = "periodic"
 
 /obj/structure/sign/botany
 	name = "\improper HYDROPONICS"

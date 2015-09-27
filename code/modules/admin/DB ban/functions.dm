@@ -1,6 +1,8 @@
 
 /datum/admins/proc/DB_ban_record(var/bantype, var/mob/banned_mob, var/duration = -1, var/reason, var/job = "", var/rounds = 0, var/banckey = null)
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/DB_ban_record() called tick#: [world.time]")
+
 	if(!check_rights(R_BAN))	return
 
 	establish_db_connection()
@@ -82,12 +84,25 @@
 	var/sql = "INSERT INTO erro_ban (`id`,`bantime`,`serverip`,`bantype`,`reason`,`job`,`duration`,`rounds`,`expiration_time`,`ckey`,`computerid`,`ip`,`a_ckey`,`a_computerid`,`a_ip`,`who`,`adminwho`,`edits`,`unbanned`,`unbanned_datetime`,`unbanned_ckey`,`unbanned_computerid`,`unbanned_ip`) VALUES (null, Now(), '[serverip]', '[bantype_str]', '[reason]', '[job]', [(duration)?"[duration]":"0"], [(rounds)?"[rounds]":"0"], Now() + INTERVAL [(duration>0) ? duration : 0] MINUTE, '[ckey]', '[computerid]', '[ip]', '[a_ckey]', '[a_computerid]', '[a_ip]', '[who]', '[adminwho]', '', null, null, null, null, null)"
 	var/DBQuery/query_insert = dbcon.NewQuery(sql)
 	query_insert.Execute()
-	usr << "\blue Ban saved to database."
+	usr << "<span class='notice'>Ban saved to database.</span>"
 	message_admins("[key_name_admin(usr)] has added a [bantype_str] for [ckey] [(job)?"([job])":""] [(duration > 0)?"([duration] minutes)":""] with the reason: \"[reason]\" to the ban database.",1)
+
+	INVOKE_EVENT(on_ban,list(
+		"ckey"=ckey,
+		"computer_id"=computerid,
+		"reason"=reason,
+		"duration"=duration,
+		"ip"=ip,
+		"type"=bantype,
+		"job"=job,
+		"admin"=usr
+	))
 
 
 
 datum/admins/proc/DB_ban_unban(var/ckey, var/bantype, var/job = "")
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\datum/admins/proc/DB_ban_unban() called tick#: [world.time]")
 
 	if(!check_rights(R_BAN))	return
 
@@ -139,22 +154,24 @@ datum/admins/proc/DB_ban_unban(var/ckey, var/bantype, var/job = "")
 		ban_number++;
 
 	if(ban_number == 0)
-		usr << "\red Database update failed due to no bans fitting the search criteria. If this is not a legacy ban you should contact the database admin."
+		usr << "<span class='warning'>Database update failed due to no bans fitting the search criteria. If this is not a legacy ban you should contact the database admin.</span>"
 		return
 
 	if(ban_number > 1)
-		usr << "\red Database update failed due to multiple bans fitting the search criteria. Note down the ckey, job and current time and contact the database admin."
+		usr << "<span class='warning'>Database update failed due to multiple bans fitting the search criteria. Note down the ckey, job and current time and contact the database admin.</span>"
 		return
 
 	if(istext(ban_id))
 		ban_id = text2num(ban_id)
 	if(!isnum(ban_id))
-		usr << "\red Database update failed due to a ban ID mismatch. Contact the database admin."
+		usr << "<span class='warning'>Database update failed due to a ban ID mismatch. Contact the database admin.</span>"
 		return
 
 	DB_ban_unban_by_id(ban_id)
 
 datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\datum/admins/proc/DB_ban_edit() called tick#: [world.time]")
 
 	if(!check_rights(R_BAN))	return
 
@@ -216,6 +233,8 @@ datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
 
 datum/admins/proc/DB_ban_unban_by_id(var/id)
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\datum/admins/proc/DB_ban_unban_by_id() called tick#: [world.time]")
+
 	if(!check_rights(R_BAN))	return
 
 	var/sql = "SELECT ckey FROM erro_ban WHERE id = [id]"
@@ -234,11 +253,11 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 		ban_number++;
 
 	if(ban_number == 0)
-		usr << "\red Database update failed due to a ban id not being present in the database."
+		usr << "<span class='warning'>Database update failed due to a ban id not being present in the database.</span>"
 		return
 
 	if(ban_number > 1)
-		usr << "\red Database update failed due to multiple bans having the same ID. Contact the database admin."
+		usr << "<span class='warning'>Database update failed due to multiple bans having the same ID. Contact the database admin.</span>"
 		return
 
 	if(!src.owner || !istype(src.owner, /client))
@@ -254,19 +273,26 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 	var/DBQuery/query_update = dbcon.NewQuery(sql_update)
 	query_update.Execute()
 
+	INVOKE_EVENT(on_unban,list(
+		"id"=id,
+		"ckey"=pckey,
+
+		"admin"=src.owner
+	))
 
 /client/proc/DB_ban_panel()
 	set category = "Admin"
 	set name = "Banning Panel"
 	set desc = "Edit admin permissions"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/DB_ban_panel() called tick#: [world.time]")
 
 	if(!holder)
 		return
 
 	holder.DB_ban_panel()
 
-
 /datum/admins/proc/DB_ban_panel(var/playerckey = null, var/adminckey = null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/DB_ban_panel() called tick#: [world.time]")
 	if(!usr.client)
 		return
 
@@ -274,14 +300,14 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 
 	establish_db_connection()
 	if(!dbcon.IsConnected())
-		usr << "\red Failed to establish database connection"
+		usr << "<span class='warning'>Failed to establish database connection</span>"
 		return
 
 	var/output = "<div align='center'><table width='90%'><tr>"
 
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\DB ban\functions.dm:282: output += "<td width='35%' align='center'>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\dB ban\functions.dm:282: output += "<td width='35%' align='center'>"
 	output += {"<td width='35%' align='center'>
 		<h1>Banning panel</h1>
 		</td>
@@ -310,7 +336,7 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 		output += "<option value='[j]'>[j]</option>"
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\DB ban\functions.dm:309: output += "</select></td></tr></table>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\dB ban\functions.dm:309: output += "</select></td></tr></table>"
 	output += {"</select></td></tr></table>
 		<b>Reason:<br></b><textarea name='dbbanreason' cols='50'></textarea><br>
 		<input type='submit' value='Add ban'>
@@ -335,7 +361,7 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\DB ban\functions.dm:333: output += "<table width='90%' bgcolor='#e3e3e3' cellpadding='5' cellspacing='0' align='center'>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\dB ban\functions.dm:333: output += "<table width='90%' bgcolor='#e3e3e3' cellpadding='5' cellspacing='0' align='center'>"
 		output += {"<table width='90%' bgcolor='#e3e3e3' cellpadding='5' cellspacing='0' align='center'>
 			<tr>
 			<th width='25%'><b>TYPE</b></th>
@@ -393,7 +419,7 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\DB ban\functions.dm:388: output += "<tr bgcolor='[dcolor]'>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\dB ban\functions.dm:388: output += "<tr bgcolor='[dcolor]'>"
 			output += {"<tr bgcolor='[dcolor]'>
 				<td align='center'>[typedesc]</td>
 				<td align='center'><b>[ckey]</b></td>
@@ -408,7 +434,7 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 			if(edits)
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\DB ban\functions.dm:399: output += "<tr bgcolor='[dcolor]'>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\dB ban\functions.dm:399: output += "<tr bgcolor='[dcolor]'>"
 				output += {"<tr bgcolor='[dcolor]'>
 					<td align='center' colspan='5'><b>EDITS</b></td>
 					</tr>
@@ -419,13 +445,13 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 			if(unbanned)
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\DB ban\functions.dm:406: output += "<tr bgcolor='[dcolor]'>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\dB ban\functions.dm:406: output += "<tr bgcolor='[dcolor]'>"
 				output += {"<tr bgcolor='[dcolor]'>
 					<td align='center' colspan='5' bgcolor=''><b>UNBANNED by admin [unbanckey] on [unbantime]</b></td>
 					</tr>"}
 				// END AUTOFIX
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\DB ban\functions.dm:409: output += "<tr>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\dB ban\functions.dm:409: output += "<tr>"
 			output += {"<tr>
 				<td colspan='5' bgcolor='white'>&nbsp</td>
 				</tr>"}

@@ -16,6 +16,8 @@
 	var/stop = 0.0
 	var/screen = 0 // 0 - Main Menu, 1 - Cyborg Status, 2 - Kill 'em All! -- In text
 
+	light_color = LIGHT_COLOR_PINK
+
 
 /obj/machinery/computer/robotics/attack_ai(var/mob/user as mob)
 	src.add_hiddenprint(user)
@@ -30,7 +32,7 @@
 	if(..())
 		return
 	if (src.z > 6)
-		user << "\red <b>Unable to establish a connection</b>: \black You're too far away from the station!"
+		user << "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!"
 		return
 	user.set_machine(src)
 	var/dat
@@ -40,7 +42,7 @@
 		if(screen == 0)
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\computer\robot.dm:41: dat += "<h3>Cyborg Control Console</h3><BR>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\computer\robot.dm:41: dat += "<h3>Cyborg Control Console</h3><BR>"
 			dat += {"<h3>Cyborg Control Console</h3><BR>
 				<A href='?src=\ref[src];screen=1'>1. Cyborg Status</A><BR>
 				<A href='?src=\ref[src];screen=2'>2. Emergency Full Destruct</A><BR>"}
@@ -81,7 +83,7 @@
 						dat += "<A href='?src=\ref[src];magbot=\ref[R]'>(<font color=blue><i>Hack</i></font>)</A> "
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\computer\robot.dm:78: dat += "<A href='?src=\ref[src];stopbot=\ref[R]'>(<font color=green><i>[R.canmove ? "Lockdown" : "Release"]</i></font>)</A> "
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\computer\robot.dm:78: dat += "<A href='?src=\ref[src];stopbot=\ref[R]'>(<font color=green><i>[R.canmove ? "Lockdown" : "Release"]</i></font>)</A> "
 				dat += {"<A href='?src=\ref[src];stopbot=\ref[R]'>(<font color=green><i>[R.canmove ? "Lockdown" : "Release"]</i></font>)</A>
 					<A href='?src=\ref[src];killbot=\ref[R]'>(<font color=red><i>Destroy</i></font>)</A>
 					<BR>"}
@@ -111,8 +113,8 @@
 
 /obj/machinery/computer/robotics/Topic(href, href_list)
 	if(..())
-		return
-	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+		return 1
+	else
 		usr.set_machine(src)
 
 		if (href_list["eject"])
@@ -128,14 +130,14 @@
 			if (istype(I))
 				if(src.check_access(I))
 					if (!status)
-						message_admins("\blue [key_name_admin(usr)] has initiated the global cyborg killswitch!")
-						log_game("\blue [key_name(usr)] has initiated the global cyborg killswitch!")
+						message_admins("<span class='notice'>[key_name_admin(usr)] has initiated the global cyborg killswitch!</span>")
+						log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
 						src.status = 1
 						src.start_sequence()
 						src.temp = null
 
 				else
-					usr << "\red Access Denied."
+					usr << "<span class='warning'>Access Denied.</span>"
 
 		else if (href_list["stop"])
 			src.temp = {"
@@ -173,11 +175,11 @@
 								R.ResetSecurityCodes()
 
 							else
-								message_admins("\blue [key_name_admin(usr)] detonated [R.name]!")
-								log_game("\blue [key_name_admin(usr)] detonated [R.name]!")
+								message_admins("<span class='notice'>[key_name_admin(usr)] detonated [R.name]!</span>")
+								log_game("<span class='notice'>[key_name_admin(usr)] detonated [R.name]!</span>")
 								R.self_destruct()
 			else
-				usr << "\red Access Denied."
+				usr << "<span class='warning'>Access Denied.</span>"
 
 		else if (href_list["stopbot"])
 			if(src.allowed(usr))
@@ -186,7 +188,7 @@
 					var/choice = input("Are you certain you wish to [R.canmove ? "lock down" : "release"] [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))
-							message_admins("\blue [key_name_admin(usr)] [R.canmove ? "locked down" : "released"] [R.name]!")
+							message_admins("<span class='notice'>[key_name_admin(usr)] [R.canmove ? "locked down" : "released"] [R.name]!</span>")
 							log_game("[key_name(usr)] [R.canmove ? "locked down" : "released"] [R.name]!")
 							R.canmove = !R.canmove
 							if (R.lockcharge)
@@ -199,18 +201,20 @@
 								R << "You have been locked down!"
 
 			else
-				usr << "\red Access Denied."
+				usr << "<span class='warning'>Access Denied.</span>"
 
 		else if (href_list["magbot"])
 			if(src.allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["magbot"])
-				if(R)
+
+				// whatever weirdness this is supposed to be, but that is how the href gets added, so here it is again
+				if(istype(R) && istype(usr, /mob/living/silicon) && usr.mind.special_role && (usr.mind.original == usr) && R.emagged != 1)
 					var/choice = input("Are you certain you wish to hack [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))
-//							message_admins("\blue [key_name_admin(usr)] emagged [R.name] using robotic console!")
+//							message_admins("<span class='notice'>[key_name_admin(usr)] emagged [R.name] using robotic console!</span>")
 							log_game("[key_name(usr)] emagged [R.name] using robotic console!")
-							R.emagged = 1
+							R.SetEmagged(2)
 							if(R.mind.special_role)
 								R.verbs += /mob/living/silicon/robot/proc/ResetSecurityCodes
 
@@ -219,6 +223,8 @@
 	return
 
 /obj/machinery/computer/robotics/proc/start_sequence()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/robotics/proc/start_sequence() called tick#: [world.time]")
 
 	do
 		if(src.stop)

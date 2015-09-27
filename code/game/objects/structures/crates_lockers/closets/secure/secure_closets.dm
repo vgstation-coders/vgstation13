@@ -44,6 +44,7 @@
 	..()
 
 /obj/structure/closet/secure_closet/proc/togglelock(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/closet/secure_closet/proc/togglelock() called tick#: [world.time]")
 	if(src.allowed(user))
 		src.locked = !src.locked
 		for(var/mob/O in viewers(user, 3))
@@ -58,36 +59,30 @@
 
 /obj/structure/closet/secure_closet/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(src.opened)
-		if(istype(W, /obj/item/weapon/grab))
-			if(src.large)
-				src.MouseDrop_T(W:affecting, user)	//act like they were dragged onto the closet
-			else
-				user << "<span class='notice'>The locker is too small to stuff [W] into!</span>"
-		if(isrobot(user))
-			return
-		user.drop_item()
-		if(W)
-			W.loc = src.loc
+		return ..()
 	else if(src.broken)
-		user << "<span class='notice'>The locker appears to be broken.</span>"
-		return
-	else if((istype(W, /obj/item/weapon/card/emag)||istype(W, /obj/item/weapon/melee/energy/blade)) && !src.broken)
+		if(issolder(W))
+			var/obj/item/weapon/solder/S = W
+			if(!S.remove_fuel(4,user))
+				return
+			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+			if(do_after(user, src,40))
+				playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+				broken = 0
+				user << "<span class='notice'>You repair the electronics inside the locking mechanism!</span>"
+				src.icon_state = src.icon_closed
+		else
+			user << "<span class='notice'>The locker appears to be broken.</span>"
+			return
+	else if(istype(W, /obj/item/weapon/card/emag) && !src.broken)
 		broken = 1
 		locked = 0
 		desc = "It appears to be broken."
 		icon_state = icon_off
 		flick(icon_broken, src)
-		if(istype(W, /obj/item/weapon/melee/energy/blade))
-			var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
-			spark_system.set_up(5, 0, src.loc)
-			spark_system.start()
-			playsound(get_turf(src), 'sound/weapons/blade1.ogg', 50, 1)
-			playsound(get_turf(src), "sparks", 50, 1)
-			for(var/mob/O in viewers(user, 3))
-				O.show_message("<span class='warning'>The locker has been sliced open by [user] with an energy blade!</span>", 1, "You hear metal being sliced and sparks flying.", 2)
-		else
-			for(var/mob/O in viewers(user, 3))
-				O.show_message("<span class='warning'>The locker has been broken by [user] with an electromagnetic card!</span>", 1, "You hear a faint electrical spark.", 2)
+		for(var/mob/O in viewers(user, 3))
+			O.show_message("<span class='warning'>The locker has been broken by [user] with an electromagnetic card!</span>", 1, "You hear a faint electrical spark.", 2)
+		update_icon()
 	else
 		if(istype(W, /obj/item/weapon/weldingtool))
 			var/obj/item/weapon/weldingtool/WT = W
@@ -143,8 +138,9 @@
 	set src in oview(1) // One square distance
 	set category = "Object"
 	set name = "Toggle Lock"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/structure/closet/secure_closet/verb/verb_togglelock()  called tick#: [world.time]")
 
-	if(!usr.canmove || usr.stat || usr.restrained()) // Don't use it if you're not able to! Checks for stuns, ghost and restrain
+	if(!usr.canmove || usr.stat || usr.restrained() || (usr.status_flags & FAKEDEATH)) // Don't use it if you're not able to! Checks for stuns, ghost and restrain
 		return
 
 	if(get_dist(usr, src) != 1)
@@ -160,10 +156,12 @@
 		usr << "<span class='warning'>This mob type can't use this verb.</span>"
 
 /obj/structure/closet/secure_closet/update_icon()//Putting the welded stuff in updateicon() so it's easy to overwrite for special cases (Fridges, cabinets, and whatnot)
-	overlays.Cut()
+	overlays.len = 0
 	if(!opened)
 		if(locked)
 			icon_state = icon_locked
+		else if(broken)
+			icon_state = icon_off
 		else
 			icon_state = icon_closed
 		if(welded)

@@ -14,10 +14,10 @@
 	infra_luminosity = 15
 	var/mob/living/carbon/occupant
 	var/datum/spacepod/equipment/equipment_system
-	var/obj/item/weapon/cell/high/battery
+	var/obj/item/weapon/cell/battery
 	var/datum/gas_mixture/cabin_air
 	var/obj/machinery/portable_atmospherics/canister/internal_tank
-	var/datum/effect/effect/system/ion_trail_follow/space_trail/ion_trail
+	var/datum/effect/effect/system/trail/space_trail/ion_trail
 	var/use_internal_tank = 0
 	var/datum/global_iterator/pr_int_temp_processor //normalizes internal air mixture temperature
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
@@ -36,10 +36,10 @@
 	bound_width = 64
 	bound_height = 64
 	dir = EAST
-	battery = new()
+	battery = new /obj/item/weapon/cell/high()
 	add_cabin()
 	add_airtank()
-	src.ion_trail = new /datum/effect/effect/system/ion_trail_follow/space_trail()
+	src.ion_trail = new /datum/effect/effect/system/trail/space_trail()
 	src.ion_trail.set_up(src)
 	src.ion_trail.start()
 	src.use_internal_tank = 1
@@ -48,6 +48,7 @@
 	equipment_system = new(src)
 
 /obj/spacepod/proc/update_icons()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/spacepod/proc/update_icons() called tick#: [world.time]")
 	if(!pod_overlays)
 		pod_overlays = new/list(2)
 		pod_overlays[DAMAGE] = image(icon, icon_state="pod_damage")
@@ -67,6 +68,7 @@
 		deal_damage(P.damage)
 
 /obj/spacepod/proc/deal_damage(var/damage)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/spacepod/proc/deal_damage() called tick#: [world.time]")
 	var/oldhealth = health
 	health = max(0, health - damage)
 	var/percentage = (health / initial(health)) * 100
@@ -86,12 +88,12 @@
 		spawn(0)
 			if(occupant)
 				occupant << "<big><span class='warning'>Critical damage to the vessel detected, core explosion imminent!</span></big>"
-				for(var/i = 10, i >= 0; --i)
-					if(occupant)
-						occupant << "<span class='warning'>[i]</span>"
-					if(i == 0)
-						explosion(loc, 2, 4, 8)
-					sleep(10)
+			for(var/i = 10, i >= 0; --i)
+				if(occupant)
+					occupant << "<span class='warning'>[i]</span>"
+				if(i == 0)
+					explosion(loc, 2, 4, 8)
+				sleep(10)
 
 	update_icons()
 
@@ -121,9 +123,8 @@
 		if(battery)
 			user << "<span class='notice'>The pod already has a battery.</span>"
 			return
-		user.drop_item(W)
+		user.drop_item(W, src)
 		battery = W
-		W.loc = src
 		return
 	if(istype(W, /obj/item/device/spacepod_equipment))
 		if(!hatch_open)
@@ -137,13 +138,10 @@
 				return
 			else
 				user << "<span class='notice'>You insert \the [W] into the equipment system.</span>"
-				user.drop_item(W)
-				W.loc = equipment_system
+				user.drop_item(W, equipment_system)
 				equipment_system.weapon_system = W
 				equipment_system.weapon_system.my_atom = src
-				var/path = text2path("[W.type]/proc/fire_weapon_system")
-				if(path)
-					verbs += path//obj/spacepod/proc/fire_weapons
+				new/obj/item/device/spacepod_equipment/weaponry/proc/fire_weapon_system(src, equipment_system.weapon_system.verb_name, equipment_system.weapon_system.verb_desc) //Yes, it has to be referenced like that. W.verb_name/desc doesn't compile.
 				return
 
 
@@ -151,7 +149,7 @@
 	if(!hatch_open)
 		return ..()
 	if(!equipment_system || !istype(equipment_system))
-		user << "<span class='warning'>The pod has no equpment datum, or is the wrong type, yell at pomf.</span>"
+		user << "<span class='warning'>The pod has no equipment datum, or is the wrong type, yell at pomf.</span>"
 		return
 	var/list/possible = list()
 	if(battery)
@@ -176,6 +174,7 @@
 				user << "<span class='notice'>You remove \the [SPE] from the equipment system.</span>"
 				SPE.my_atom = null
 				equipment_system.weapon_system = null
+				verbs -= typesof(/obj/item/device/spacepod_equipment/weaponry/proc)
 			else
 				user << "<span class='warning'>You need an open hand to do that.</span>"
 		/*
@@ -225,13 +224,15 @@
 	set category = "Spacepod"
 	set src = usr.loc
 	set popup_menu = 0
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/spacepod/verb/toggle_internal_tank()  called tick#: [world.time]")
 	if(usr!=src.occupant)
 		return
-	use_internal_tank = !use_internal_tank
+	src.use_internal_tank = !src.use_internal_tank
 	src.occupant << "<span class='notice'>Now taking air from [use_internal_tank?"internal airtank":"environment"].</span>"
 	return
 
 /obj/spacepod/proc/add_cabin()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/spacepod/proc/add_cabin() called tick#: [world.time]")
 	cabin_air = new
 	cabin_air.temperature = T20C
 	cabin_air.volume = 200
@@ -240,10 +241,12 @@
 	return cabin_air
 
 /obj/spacepod/proc/add_airtank()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/spacepod/proc/add_airtank() called tick#: [world.time]")
 	internal_tank = new /obj/machinery/portable_atmospherics/canister/air(src)
 	return internal_tank
 
 /obj/spacepod/proc/get_turf_air()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/spacepod/proc/get_turf_air() called tick#: [world.time]")
 	var/turf/T = get_turf(src)
 	if(T)
 		. = T.return_air()
@@ -264,6 +267,7 @@
 	return get_turf_air()
 
 /obj/spacepod/proc/return_pressure()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/spacepod/proc/return_pressure() called tick#: [world.time]")
 	. = 0
 	if(use_internal_tank)
 		. =  cabin_air.return_pressure()
@@ -274,6 +278,7 @@
 	return
 
 /obj/spacepod/proc/return_temperature()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/spacepod/proc/return_temperature() called tick#: [world.time]")
 	. = 0
 	if(use_internal_tank)
 		. = cabin_air.return_temperature()
@@ -284,6 +289,7 @@
 	return
 
 /obj/spacepod/proc/moved_inside(var/mob/living/carbon/human/H as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/spacepod/proc/moved_inside() called tick#: [world.time]")
 	if(H && H.client && H in range(1))
 		H.reset_view(src)
 		/*
@@ -310,17 +316,18 @@
 	set category = "Object"
 	set name = "Enter Pod"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/spacepod/verb/move_inside()  called tick#: [world.time]")
 
-	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
+	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting || (usr.status_flags & FAKEDEATH)) //are you cuffed, dying, lying, stunned or other
 		return
 	if (usr.stat || !ishuman(usr))
 		return
 	if (src.occupant)
-		usr << "\blue <B>The [src.name] is already occupied!</B>"
+		usr << "<span class='notice'><B>The [src.name] is already occupied!</B></span>"
 		return
 /*
 	if (usr.abiotic())
-		usr << "\blue <B>Subject cannot have abiotic items on.</B>"
+		usr << "<span class='notice'><B>Subject cannot have abiotic items on.</B></span>"
 		return
 */
 	for(var/mob/living/carbon/slime/M in range(1,usr))
@@ -329,7 +336,7 @@
 			return
 //	usr << "You start climbing into [src.name]"
 
-	visible_message("\blue [usr] starts to climb into [src.name]")
+	visible_message("<span class='notice'>[usr] starts to climb into [src.name]</span>")
 
 	if(enter_after(40,usr))
 		if(!src.occupant)
@@ -344,16 +351,18 @@
 	set name = "Exit pod"
 	set category = "Spacepod"
 	set src = usr.loc
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/spacepod/verb/exit_pod()  called tick#: [world.time]")
 
 	if(usr != src.occupant)
 		return
-	inertia_dir = 0 // engage reverse thruster and power down pod
+	src.inertia_dir = 0 // engage reverse thruster and power down pod
 	src.occupant.loc = src.loc
 	src.occupant = null
 	usr << "<span class='notice'>You climb out of the pod</span>"
 	return
 
 /obj/spacepod/proc/enter_after(delay as num, var/mob/user as mob, var/numticks = 5)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/spacepod/proc/enter_after() called tick#: [world.time]")
 	var/delayfraction = delay/numticks
 
 	var/turf/T = user.loc
@@ -408,10 +417,12 @@
 		return
 
 /obj/spacepod/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)
-	..()
-	if(dir == 1 || dir == 4)
-		src.loc.Entered(src)
+	var/oldloc = src.loc
+	. = ..()
+	if(dir && (oldloc != NewLoc))
+		src.loc.Entered(src, oldloc)
 /obj/spacepod/proc/Process_Spacemove(var/check_drift = 0, mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/spacepod/proc/Process_Spacemove() called tick#: [world.time]")
 	var/dense_object = 0
 	if(!user)
 		for(var/direction in list(NORTH, NORTHEAST, EAST))
@@ -426,28 +437,30 @@
 	return 1
 
 /obj/spacepod/relaymove(mob/user, direction)
-	if(battery && battery.charge && health)
+	var/moveship = 1
+	if(battery && battery.charge >= 3 && health)
 		src.dir = direction
 		switch(direction)
 			if(1)
 				if(inertia_dir == 2)
 					inertia_dir = 0
-					return 0
+					moveship = 0
 			if(2)
 				if(inertia_dir == 1)
 					inertia_dir = 0
-					return 0
+					moveship = 0
 			if(4)
 				if(inertia_dir == 8)
 					inertia_dir = 0
-					return 0
+					moveship = 0
 			if(8)
 				if(inertia_dir == 4)
 					inertia_dir = 0
-					return 0
-		step(src, direction)
-		if(istype(src.loc, /turf/space))
-			inertia_dir = direction
+					moveship = 0
+		if(moveship)
+			Move(get_step(src,direction), direction)
+			if(istype(src.loc, /turf/space))
+				inertia_dir = direction
 	else
 		if(!battery)
 			user << "<span class='warning'>No energy cell detected.</span>"
@@ -458,7 +471,7 @@
 		else
 			user << "<span class='warning'>Unknown error has occurred, yell at pomf.</span>"
 		return 0
-	battery.use(3)
+	battery.charge = max(0, battery.charge - 3)
 
 /obj/effect/landmark/spacepod/random
 	name = "spacepod spawner"

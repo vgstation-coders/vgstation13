@@ -1,4 +1,5 @@
 // It is a gizmo that flashes a small area
+var/list/obj/machinery/flasher/flashers = list()
 
 /obj/machinery/flasher
 	name = "Mounted flash"
@@ -14,6 +15,18 @@
 	anchored = 1
 	ghost_read=0
 	ghost_write=0
+	min_harm_label = 15 //Seems low, but this is going by the sprite. May need to be changed for balance.
+	harm_label_examine = list("<span class='info'>A label is on the bulb, but doesn't cover it.</span>", "<span class='warning'>A label covers the bulb!</span>")
+
+	flags = FPRINT | PROXMOVE
+
+/obj/machinery/flasher/New()
+	..()
+	flashers += src
+
+/obj/machinery/flasher/Destroy()
+	..()
+	flashers -= src
 
 /obj/machinery/flasher/portable //Portable version of the flasher. Only flashes when anchored
 	name = "portable flasher"
@@ -23,6 +36,7 @@
 	anchored = 0
 	base_state = "pflash"
 	density = 1
+	min_harm_label = 35 //A lot. Has to wrap around the bulb, after all.
 
 /*
 /obj/machinery/flasher/New()
@@ -45,9 +59,9 @@
 		add_fingerprint(user)
 		src.disable = !src.disable
 		if (src.disable)
-			user.visible_message("\red [user] has disconnected the [src]'s flashbulb!", "\red You disconnect the [src]'s flashbulb!")
+			user.visible_message("<span class='warning'>[user] has disconnected the [src]'s flashbulb!</span>", "<span class='warning'>You disconnect the [src]'s flashbulb!</span>")
 		if (!src.disable)
-			user.visible_message("\red [user] has connected the [src]'s flashbulb!", "\red You connect the [src]'s flashbulb!")
+			user.visible_message("<span class='warning'>[user] has connected the [src]'s flashbulb!</span>", "<span class='warning'>You connect the [src]'s flashbulb!</span>")
 
 //Let the AI trigger them directly.
 /obj/machinery/flasher/attack_ai()
@@ -57,6 +71,7 @@
 		return
 
 /obj/machinery/flasher/proc/flash()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/flasher/proc/flash() called tick#: [world.time]")
 	if (!(powered()))
 		return
 
@@ -64,9 +79,10 @@
 		return
 
 	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
-	flick("[base_state]_flash", src)
 	src.last_flash = world.time
 	use_power(1000)
+	if(harm_labeled >= min_harm_label)	return //Still "flashes," so power is used and the noise is made, etc., but it doesn't actually flash anyone.
+	flick("[base_state]_flash", src)
 
 	for (var/mob/O in viewers(src, null))
 		if(isobserver(O)) continue
@@ -84,8 +100,8 @@
 		O.Weaken(strength)
 		if (istype(O, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = O
-			var/datum/organ/internal/eyes/E = H.internal_organs["eyes"]
-			if ((E.damage > E.min_bruised_damage && prob(E.damage + 50)))
+			var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+			if (E && (E.damage > E.min_bruised_damage && prob(E.damage + 50)))
 				flick("e_flash", O:flash)
 				E.damage += rand(1, 5)
 		else
@@ -116,11 +132,11 @@
 		src.anchored = !src.anchored
 
 		if (!src.anchored)
-			user.show_message(text("\red [src] can now be moved."))
-			src.overlays.Cut()
+			user.show_message(text("<span class='warning'>[src] can now be moved.</span>"))
+			src.overlays.len = 0
 
 		else if (src.anchored)
-			user.show_message(text("\red [src] is now secured."))
+			user.show_message(text("<span class='warning'>[src] is now secured.</span>"))
 			src.overlays += "[base_state]-s"
 
 /obj/machinery/flasher_button/attack_ai(mob/user as mob)
@@ -145,7 +161,7 @@
 	active = 1
 	icon_state = "launcheract"
 
-	for(var/obj/machinery/flasher/M in world)
+	for(var/obj/machinery/flasher/M in flashers)
 		if(M.id_tag == src.id_tag)
 			spawn()
 				M.flash()

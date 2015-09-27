@@ -34,7 +34,7 @@
 	if(config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
 
-	var/list/possible_traitors = get_players_for_role(BE_TRAITOR)
+	var/list/possible_traitors = get_players_for_role(ROLE_TRAITOR)
 
 	// stop setup if no possible traitors
 	if(!possible_traitors.len)
@@ -43,14 +43,17 @@
 	var/num_traitors = 1
 
 	if(config.traitor_scaling)
-		num_traitors = max(1, round((num_players())/(traitor_scaling_coeff)))
+		num_traitors = max(required_enemies, round((num_players())/(traitor_scaling_coeff)))
 	else
-		num_traitors = max(1, min(num_players(), traitors_possible))
+		num_traitors = Clamp(num_players(), required_enemies, traitors_possible)
 
 	for(var/datum/mind/player in possible_traitors)
 		for(var/job in restricted_jobs)
 			if(player.assigned_role == job)
 				possible_traitors -= player
+
+	if(possible_traitors.len < required_enemies) //fixes double agent starting with 1 traitor
+		return 0
 
 	for(var/j = 0, j < num_traitors, j++)
 		if (!possible_traitors.len)
@@ -80,6 +83,7 @@
 
 
 /datum/game_mode/proc/forge_traitor_objectives(var/datum/mind/traitor)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/forge_traitor_objectives() called tick#: [world.time]")
 	if(istype(traitor.current, /mob/living/silicon))
 		var/datum/objective/assassinate/kill_objective = new
 		kill_objective.owner = traitor
@@ -162,19 +166,27 @@
 
 
 /datum/game_mode/proc/greet_traitor(var/datum/mind/traitor)
-	traitor.current << "<B><font size=3 color=red>You are the traitor.</font></B>"
-	var/obj_count = 1
-	for(var/datum/objective/objective in traitor.objectives)
-		traitor.current << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
-		obj_count++
-	return
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/greet_traitor() called tick#: [world.time]")
+	traitor.current << {"
+	<SPAN CLASS='big bold center red'>You are now a traitor!</SPAN>
+	"}
 
+	var/obj_count = 1
+
+	for (var/datum/objective/objective in traitor.objectives)
+		traitor.current << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
+
+		obj_count++
 
 /datum/game_mode/proc/finalize_traitor(var/datum/mind/traitor)
-	if (istype(traitor.current, /mob/living/silicon))
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/finalize_traitor() called tick#: [world.time]")
+	//We are firing the alert here, because silicons have a special syndicate intro, courtesy of old mysterious content maker
+	if(istype(traitor.current, /mob/living/silicon))
 		add_law_zero(traitor.current)
+		traitor.current << sound('sound/voice/AISyndiHack.ogg')
 	else
 		equip_traitor(traitor.current)
+		traitor.current << sound('sound/voice/syndicate_intro.ogg')
 	return
 
 
@@ -191,6 +203,7 @@
 	return 0
 
 /datum/game_mode/proc/add_law_zero(mob/living/silicon/ai/killer)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/add_law_zero() called tick#: [world.time]")
 	var/law = "Accomplish your objectives at all costs."
 	var/law_borg = "Accomplish your AI's objectives at all costs."
 	killer << "<b>Your laws have been changed!</b>"
@@ -200,12 +213,12 @@
 	//Begin code phrase.
 	killer << "The Syndicate provided you with the following information on how to identify their agents:"
 	if(prob(80))
-		killer << "\red Code Phrase: \black [syndicate_code_phrase]"
+		killer << "<span class='warning'>Code Phrase: </span>[syndicate_code_phrase]"
 		killer.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
 	else
 		killer << "Unfortunately, the Syndicate did not provide you with a code phrase."
 	if(prob(80))
-		killer << "\red Code Response: \black [syndicate_code_response]"
+		killer << "<span class='warning'>Code Response: </span>[syndicate_code_response]"
 		killer.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
 	else
 		killer << "Unfortunately, the Syndicate did not provide you with a code response."
@@ -214,20 +227,34 @@
 
 
 /datum/game_mode/proc/auto_declare_completion_traitor()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/auto_declare_completion_traitor() called tick#: [world.time]")
+	var/text = ""
 	if(traitors.len)
-		var/text = "<FONT size = 2><B>The traitors were:</B></FONT>"
+		var/icon/logo = icon('icons/mob/mob.dmi', "synd-logo")
+		end_icons += logo
+		var/tempstate = end_icons.len
+		text += {"<BR><img src="logo_[tempstate].png"> <FONT size = 2><B>The traitors were:</B></FONT> <img src="logo_[tempstate].png">"}
 		for(var/datum/mind/traitor in traitors)
 			var/traitorwin = 1
 
-			text += "<br>[traitor.key] was [traitor.name] ("
 			if(traitor.current)
+				var/icon/flat = getFlatIcon(traitor.current, SOUTH, 1, 1)
+				end_icons += flat
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[traitor.key]</b> was <b>[traitor.name]</b> ("}
 				if(traitor.current.stat == DEAD)
 					text += "died"
+					flat.Turn(90)
+					end_icons[tempstate] = flat
 				else
 					text += "survived"
 				if(traitor.current.real_name != traitor.name)
 					text += " as [traitor.current.real_name]"
 			else
+				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
+				end_icons += sprotch
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[traitor.key]</b> was <b>[traitor.name]</b> ("}
 				text += "body destroyed"
 			text += ")"
 
@@ -256,11 +283,20 @@
 				text += "<br><font color='red'><B>The [(traitor in implanted) ? "greytide" : special_role_text] has failed!</B></font>"
 				feedback_add_details("traitor_success","FAIL")
 
-		world << text
-	return 1
+			if(traitor.total_TC)
+				if(traitor.spent_TC)
+					text += "<br><span class='sinister'>TC Remaining : [traitor.total_TC - traitor.spent_TC]/[traitor.total_TC] - The tools used by the [(traitor in implanted) ? "greytide" : special_role_text] were:"
+					for(var/entry in traitor.uplink_items_bought)
+						text += "<br>[entry]"
+					text += "</span>"
+				else
+					text += "<br><span class='sinister'>The [(traitor in implanted) ? "greytide" : special_role_text] was a smooth operator this round (did not purchase any uplink items)</span>"
+		text += "<BR><HR>"
+	return text
 
 
 /datum/game_mode/proc/equip_traitor(mob/living/carbon/human/traitor_mob, var/safety = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/equip_traitor() called tick#: [world.time]")
 	if (!istype(traitor_mob))
 		return
 	. = 1
@@ -297,6 +333,7 @@
 			target_radio.traitor_frequency = freq
 			traitor_mob << "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply dial the frequency [format_frequency(freq)] to unlock its hidden features."
 			traitor_mob.mind.store_memory("<B>Radio Freq:</B> [format_frequency(freq)] ([R.name] [loc]).")
+			traitor_mob.mind.total_TC += target_radio.hidden_uplink.uses
 		else if (istype(R, /obj/item/device/pda))
 			// generate a passcode if the uplink is hidden in a PDA
 			var/pda_pass = "[rand(100,999)] [pick("Alpha","Bravo","Delta","Omega")]"
@@ -308,16 +345,17 @@
 
 			traitor_mob << "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply enter the code \"[pda_pass]\" into the ringtone select to unlock its hidden features."
 			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")
+			traitor_mob.mind.total_TC += R.hidden_uplink.uses
 	//Begin code phrase.
 	if(!safety)//If they are not a rev. Can be added on to.
 		traitor_mob << "The Syndicate provided you with the following information on how to identify other agents:"
 		if(prob(80))
-			traitor_mob << "\red Code Phrase: \black [syndicate_code_phrase]"
+			traitor_mob << "<span class='warning'>Code Phrase: </span>[syndicate_code_phrase]"
 			traitor_mob.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
 		else
 			traitor_mob << "Unfortunetly, the Syndicate did not provide you with a code phrase."
 		if(prob(80))
-			traitor_mob << "\red Code Response: \black [syndicate_code_response]"
+			traitor_mob << "<span class='warning'>Code Response: </span>[syndicate_code_response]"
 			traitor_mob.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
 		else
 			traitor_mob << "Unfortunately, the Syndicate did not provide you with a code response."
@@ -331,6 +369,7 @@
 		traitor_mob.mind.store_memory("<b>Potential Collaborator</b>: [M.real_name]")
 
 /datum/game_mode/proc/update_traitor_icons_added(datum/mind/traitor_mind)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/update_traitor_icons_added() called tick#: [world.time]")
 	var/ref = "\ref[traitor_mind]"
 	if(ref in implanter)
 		if(traitor_mind.current)
@@ -338,8 +377,8 @@
 				var/I = image('icons/mob/mob.dmi', loc = traitor_mind.current, icon_state = "greytide_head")
 				traitor_mind.current.client.images += I
 	for(var/headref in implanter)
+		var/datum/mind/head = locate(headref)
 		for(var/datum/mind/t_mind in implanter[headref])
-			var/datum/mind/head = locate(headref)
 			if(head)
 				if(head.current)
 					if(head.current.client)
@@ -355,6 +394,7 @@
 						t_mind.current.client.images += I
 
 /datum/game_mode/proc/update_traitor_icons_removed(datum/mind/traitor_mind)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/update_traitor_icons_removed() called tick#: [world.time]")
 	for(var/headref in implanter)
 		var/datum/mind/head = locate(headref)
 		for(var/datum/mind/t_mind in implanter[headref])
@@ -363,7 +403,8 @@
 					for(var/image/I in t_mind.current.client.images)
 						if((I.icon_state == "greytide" || I.icon_state == "greytide_head") && I.loc == traitor_mind.current)
 							//world.log << "deleting [traitor_mind] overlay"
-							del(I)
+							//del(I)
+							t_mind.current.client.images -= I
 		if(head)
 			//world.log << "found [head.name]"
 			if(head.current)
@@ -371,14 +412,17 @@
 					for(var/image/I in head.current.client.images)
 						if((I.icon_state == "greytide" || I.icon_state == "greytide_head") && I.loc == traitor_mind.current)
 							//world.log << "deleting [traitor_mind] overlay"
-							del(I)
+							//del(I)
+							head.current.client.images -= I
 	if(traitor_mind.current)
 		if(traitor_mind.current.client)
 			for(var/image/I in traitor_mind.current.client.images)
 				if(I.icon_state == "greytide" || I.icon_state == "greytide_head")
-					del(I)
+					//del(I)
+					traitor_mind.current.client.images -= I
 
 /datum/game_mode/proc/remove_traitor_mind(datum/mind/traitor_mind, datum/mind/head)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/remove_traitor_mind() called tick#: [world.time]")
 	//var/list/removal
 	var/ref = "\ref[head]"
 	if(ref in implanter)
@@ -388,4 +432,4 @@
 	traitor_mind.special_role = null
 	update_traitor_icons_removed(traitor_mind)
 	//world << "Removed [traitor_mind.current.name] from traitor shit"
-	traitor_mind.current << "\red <FONT size = 3><B>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now.(You don't remember who implanted you)</B></FONT>"
+	traitor_mind.current << "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now.(You don't remember who implanted you)</FONT></span>"

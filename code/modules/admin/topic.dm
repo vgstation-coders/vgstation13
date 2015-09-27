@@ -6,50 +6,48 @@
 		message_admins("[usr.key] has attempted to override the admin panel!")
 		return
 
+	var/client/CLIENT = usr.client
 	if(href_list["makeAntag"])
 		switch(href_list["makeAntag"])
 			if("1")
 				log_admin("[key_name(usr)] has spawned a traitor.")
 				if(!src.makeTraitors())
-					usr << "\red Unfortunately there weren't enough candidates available."
+					usr << "<span class='warning'>Unfortunately there weren't enough candidates available.</span>"
 			if("2")
 				log_admin("[key_name(usr)] has spawned a changeling.")
 				if(!src.makeChanglings())
-					usr << "\red Unfortunately there weren't enough candidates available."
+					usr << "<span class='warning'>Unfortunately there weren't enough candidates available.</span>"
 			if("3")
 				log_admin("[key_name(usr)] has spawned revolutionaries.")
 				if(!src.makeRevs())
-					usr << "\red Unfortunately there weren't enough candidates available."
+					usr << "<span class='warning'>Unfortunately there weren't enough candidates available.</span>"
 			if("4")
 				log_admin("[key_name(usr)] has spawned a cultists.")
 				if(!src.makeCult())
-					usr << "\red Unfortunately there weren't enough candidates available."
+					usr << "<span class='warning'>Unfortunately there weren't enough candidates available.</span>"
 			if("5")
 				log_admin("[key_name(usr)] has spawned a malf AI.")
 				if(!src.makeMalfAImode())
-					usr << "\red Unfortunately there weren't enough candidates available."
+					usr << "<span class='warning'>Unfortunately there weren't enough candidates available.</span>"
 			if("6")
 				log_admin("[key_name(usr)] has spawned a wizard.")
 				if(!src.makeWizard())
-					usr << "\red Unfortunately there weren't enough candidates available."
+					usr << "<span class='warning'>Unfortunately there weren't enough candidates available.</span>"
 			if("7")
 				log_admin("[key_name(usr)] has spawned a nuke team.")
 				if(!src.makeNukeTeam())
-					usr << "\red Unfortunately there weren't enough candidates available."
-			if("8")
-				log_admin("[key_name(usr)] has spawned a ninja.")
-				src.makeSpaceNinja()
+					usr << "<span class='warning'>Unfortunately there weren't enough candidates available.</span>"
 			if("9")
 				log_admin("[key_name(usr)] has spawned aliens.")
 				src.makeAliens()
 			if("10")
 				log_admin("[key_name(usr)] has spawned a death squad.")
 				if(!makeDeathsquad())
-					usr << "\red Unfortunately, there were no candidates available"
+					usr << "<span class='warning'>Unfortunately, there were no candidates available</span>"
 			if("11")
 				log_admin("[key_name(usr)] has spawned vox raiders.")
 				if(!src.makeVoxRaiders())
-					usr << "\red Unfortunately, there weren't enough candidates available."
+					usr << "<span class='warning'>Unfortunately, there weren't enough candidates available.</span>"
 
 	else if("announce_laws" in href_list)
 		var/mob/living/silicon/S = locate(href_list["mob"])
@@ -65,6 +63,9 @@
 		else
 			S << "<b>Your laws are null.</b> Contact a coder immediately."
 		S << "____________________________________"
+		if(isAI(S))
+			var/mob/living/silicon/ai/AI=S
+			AI.notify_slaved(force_sync=1)
 
 	else if("add_law" in href_list)
 		var/mob/living/silicon/S = locate(href_list["mob"])
@@ -89,6 +90,30 @@
 
 		log_admin("[key_name(usr)] has added a law to [key_name(S)]: \"[newlaw]\"")
 		message_admins("[usr.key] has added a law to [key_name(S)]: \"[newlaw]\"")
+		lawchanges.Add("[key_name(usr)] has added a law to [key_name(S)]: \"[newlaw]\"")
+
+	else if("reset_laws" in href_list)
+		var/mob/living/silicon/S = locate(href_list["mob"])
+		var/lawtypes = typesof(/datum/ai_laws) - /datum/ai_laws
+		var/lawtype = input("Select a lawset.","Law Type",1) as null|anything in lawtypes
+		if(lawtype == null)
+			return
+		testing("Lawtype: [lawtype]")
+
+		var/law_zeroth=null
+		var/law_zeroth_borg=null
+		if(S.laws.zeroth || S.laws.zeroth_borg)
+			if(alert(src,"Do you also wish to clear law zero?","Yes","No") == "No")
+				law_zeroth=S.laws.zeroth
+				law_zeroth_borg=S.laws.zeroth
+
+		S.laws = new lawtype
+		S.laws.zeroth=law_zeroth
+		S.laws.zeroth_borg=law_zeroth_borg
+
+		log_admin("[key_name(usr)] has reset [key_name(S)]: [lawtype]")
+		message_admins("[usr.key] has reset [key_name(S)]: [lawtype]")
+		lawchanges.Add("[key_name(usr)] has reset [key_name(S)]: [lawtype]")
 
 	else if("clear_laws" in href_list)
 		var/mob/living/silicon/S = locate(href_list["mob"])
@@ -102,6 +127,7 @@
 
 		log_admin("[key_name(usr)] has purged [key_name(S)]")
 		message_admins("[usr.key] has purged [key_name(S)]")
+		lawchanges.Add("[key_name(usr)] has purged [key_name(S)]")
 
 	else if(href_list["dbsearchckey"] || href_list["dbsearchadmin"])
 		var/adminckey = href_list["dbsearchadmin"]
@@ -276,7 +302,7 @@
 				emergency_shuttle.incall()
 				captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
 				log_admin("[key_name(usr)] called the Emergency Shuttle")
-				message_admins("\blue [key_name_admin(usr)] called the Emergency Shuttle to the station", 1)
+				message_admins("<span class='notice'>[key_name_admin(usr)] called the Emergency Shuttle to the station</span>", 1)
 
 			if("2")
 				if ((!( ticker ) || emergency_shuttle.location || emergency_shuttle.direction == 0))
@@ -286,11 +312,11 @@
 						emergency_shuttle.incall()
 						captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
 						log_admin("[key_name(usr)] called the Emergency Shuttle")
-						message_admins("\blue [key_name_admin(usr)] called the Emergency Shuttle to the station", 1)
+						message_admins("<span class='notice'>[key_name_admin(usr)] called the Emergency Shuttle to the station</span>", 1)
 					if(1)
 						emergency_shuttle.recall()
 						log_admin("[key_name(usr)] sent the Emergency Shuttle back")
-						message_admins("\blue [key_name_admin(usr)] sent the Emergency Shuttle back", 1)
+						message_admins("<span class='notice'>[key_name_admin(usr)] sent the Emergency Shuttle back</span>", 1)
 
 		href_list["secretsadmin"] = "check_antagonist"
 
@@ -300,7 +326,7 @@
 		emergency_shuttle.settimeleft( input("Enter new shuttle duration (seconds):","Edit Shuttle Timeleft", emergency_shuttle.timeleft() ) as num )
 		log_admin("[key_name(usr)] edited the Emergency Shuttle's timeleft to [emergency_shuttle.timeleft()]")
 		captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
-		message_admins("\blue [key_name_admin(usr)] edited the Emergency Shuttle's timeleft to [emergency_shuttle.timeleft()]", 1)
+		message_admins("<span class='notice'>[key_name_admin(usr)] edited the Emergency Shuttle's timeleft to [emergency_shuttle.timeleft()]</span>", 1)
 		href_list["secretsadmin"] = "check_antagonist"
 
 	else if(href_list["delay_round_end"])
@@ -308,7 +334,7 @@
 
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
-		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
+		message_admins("<span class='notice'>[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].</span>", 1)
 		href_list["secretsadmin"] = "check_antagonist"
 
 	else if(href_list["simplemake"])
@@ -325,32 +351,39 @@
 			if("Yes")		delmob = 1
 
 		log_admin("[key_name(usr)] has used rudimentary transformation on [key_name(M)]. Transforming to [href_list["simplemake"]]; deletemob=[delmob]")
-		message_admins("\blue [key_name_admin(usr)] has used rudimentary transformation on [key_name_admin(M)]. Transforming to [href_list["simplemake"]]; deletemob=[delmob]", 1)
-
+		message_admins("<span class='notice'>[key_name_admin(usr)] has used rudimentary transformation on [key_name_admin(M)]. Transforming to [href_list["simplemake"]]; deletemob=[delmob]</span>", 1)
+		var/mob/new_mob
 		switch(href_list["simplemake"])
-			if("observer")			M.change_mob_type( /mob/dead/observer , null, null, delmob )
-			if("drone")				M.change_mob_type( /mob/living/carbon/alien/humanoid/drone , null, null, delmob )
-			if("hunter")			M.change_mob_type( /mob/living/carbon/alien/humanoid/hunter , null, null, delmob )
-			if("queen")				M.change_mob_type( /mob/living/carbon/alien/humanoid/queen , null, null, delmob )
-			if("sentinel")			M.change_mob_type( /mob/living/carbon/alien/humanoid/sentinel , null, null, delmob )
-			if("larva")				M.change_mob_type( /mob/living/carbon/alien/larva , null, null, delmob )
-			if("human")				M.change_mob_type( /mob/living/carbon/human , null, null, delmob )
-			if("slime")			M.change_mob_type( /mob/living/carbon/slime , null, null, delmob )
-			if("adultslime")		M.change_mob_type( /mob/living/carbon/slime/adult , null, null, delmob )
-			if("monkey")			M.change_mob_type( /mob/living/carbon/monkey , null, null, delmob )
-			if("robot")				M.change_mob_type( /mob/living/silicon/robot , null, null, delmob )
-			if("cat")				M.change_mob_type( /mob/living/simple_animal/cat , null, null, delmob )
-			if("runtime")			M.change_mob_type( /mob/living/simple_animal/cat/Runtime , null, null, delmob )
-			if("corgi")				M.change_mob_type( /mob/living/simple_animal/corgi , null, null, delmob )
-			if("ian")				M.change_mob_type( /mob/living/simple_animal/corgi/Ian , null, null, delmob )
-			if("crab")				M.change_mob_type( /mob/living/simple_animal/crab , null, null, delmob )
-			if("coffee")			M.change_mob_type( /mob/living/simple_animal/crab/Coffee , null, null, delmob )
-			if("parrot")			M.change_mob_type( /mob/living/simple_animal/parrot , null, null, delmob )
-			if("polyparrot")		M.change_mob_type( /mob/living/simple_animal/parrot/Poly , null, null, delmob )
-			if("constructarmoured")	M.change_mob_type( /mob/living/simple_animal/construct/armoured , null, null, delmob )
-			if("constructbuilder")	M.change_mob_type( /mob/living/simple_animal/construct/builder , null, null, delmob )
-			if("constructwraith")	M.change_mob_type( /mob/living/simple_animal/construct/wraith , null, null, delmob )
-			if("shade")				M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
+			if("observer")			new_mob = M.change_mob_type( /mob/dead/observer , null, null, delmob )
+			if("drone")				new_mob = M.change_mob_type( /mob/living/carbon/alien/humanoid/drone , null, null, delmob )
+			if("hunter")			new_mob = M.change_mob_type( /mob/living/carbon/alien/humanoid/hunter , null, null, delmob )
+			if("queen")				new_mob = M.change_mob_type( /mob/living/carbon/alien/humanoid/queen , null, null, delmob )
+			if("sentinel")			new_mob = M.change_mob_type( /mob/living/carbon/alien/humanoid/sentinel , null, null, delmob )
+			if("larva")				new_mob = M.change_mob_type( /mob/living/carbon/alien/larva , null, null, delmob )
+			if("human")				new_mob = M.change_mob_type( /mob/living/carbon/human , null, null, delmob )
+			if("slime")				new_mob = M.change_mob_type( /mob/living/carbon/slime , null, null, delmob )
+			if("adultslime")		new_mob = M.change_mob_type( /mob/living/carbon/slime/adult , null, null, delmob )
+			if("monkey")			new_mob = M.change_mob_type( /mob/living/carbon/monkey , null, null, delmob )
+			if("robot")				new_mob = M.change_mob_type( /mob/living/silicon/robot , null, null, delmob )
+			if("cat")				new_mob = M.change_mob_type( /mob/living/simple_animal/cat , null, null, delmob )
+			if("runtime")			new_mob = M.change_mob_type( /mob/living/simple_animal/cat/Runtime , null, null, delmob )
+			if("corgi")				new_mob = M.change_mob_type( /mob/living/simple_animal/corgi , null, null, delmob )
+			if("ian")				new_mob = M.change_mob_type( /mob/living/simple_animal/corgi/Ian , null, null, delmob )
+			if("crab")				new_mob = M.change_mob_type( /mob/living/simple_animal/crab , null, null, delmob )
+			if("coffee")			new_mob = M.change_mob_type( /mob/living/simple_animal/crab/Coffee , null, null, delmob )
+			if("parrot")			new_mob = M.change_mob_type( /mob/living/simple_animal/parrot , null, null, delmob )
+			if("polyparrot")		new_mob = M.change_mob_type( /mob/living/simple_animal/parrot/Poly , null, null, delmob )
+			if("constructarmoured")	new_mob = M.change_mob_type( /mob/living/simple_animal/construct/armoured , null, null, delmob )
+			if("constructbuilder")	new_mob = M.change_mob_type( /mob/living/simple_animal/construct/builder , null, null, delmob )
+			if("constructwraith")	new_mob = M.change_mob_type( /mob/living/simple_animal/construct/wraith , null, null, delmob )
+			if("shade")				new_mob = M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
+		//world << "Made a [new_mob] [usr ? "usr still exists" : "usr does not exist"]"
+		if(new_mob && new_mob != M)
+			//world << "[new_mob.client] vs [CLIENT] they [new_mob.client == CLIENT ? "match" : "don't match"]"
+			if(new_mob.client == CLIENT)
+				//world << "setting usr to new_mob"
+				usr = new_mob //We probably transformed ourselves
+			show_player_panel(new_mob)
 
 
 	/////////////////////////////////////new ban stuff
@@ -412,7 +445,7 @@
 
 		log_admin("[key_name(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [duration]")
 		ban_unban_log_save("[key_name(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [duration]")
-		message_admins("\blue [key_name_admin(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [duration]", 1)
+		message_admins("<span class='notice'>[key_name_admin(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [duration]</span>", 1)
 		Banlist.cd = "/base/[banfolder]"
 		Banlist["reason"] << reason
 		Banlist["temp"] << temp
@@ -448,8 +481,8 @@
 					feedback_inc("ban_appearance_unban", 1)
 					DB_ban_unban(M.ckey, BANTYPE_APPEARANCE)
 					appearance_unban(M)
-					message_admins("\blue [key_name_admin(usr)] removed [key_name_admin(M)]'s appearance ban", 1)
-					M << "\red<BIG><B>[usr.client.ckey] has removed your appearance ban.</B></BIG>"
+					message_admins("<span class='notice'>[key_name_admin(usr)] removed [key_name_admin(M)]'s appearance ban</span>", 1)
+					M << "<span class='warning'><BIG><B>[usr.client.ckey] has removed your appearance ban.</B></BIG></span>"
 
 		else switch(alert("Appearance ban [M.ckey]?",,"Yes","No", "Cancel"))
 			if("Yes")
@@ -462,14 +495,14 @@
 				DB_ban_record(BANTYPE_APPEARANCE, M, -1, reason)
 				appearance_fullban(M, "[reason]; By [usr.ckey] on [time2text(world.realtime)]")
 				notes_add(M.ckey, "Appearance banned - [reason]")
-				message_admins("\blue [key_name_admin(usr)] appearance banned [key_name_admin(M)]", 1)
-				M << "\red<BIG><B>You have been appearance banned by [usr.client.ckey].</B></BIG>"
-				M << "\red <B>The reason is: [reason]</B>"
-				M << "\red Appearance ban can be lifted only upon request."
+				message_admins("<span class='notice'>[key_name_admin(usr)] appearance banned [key_name_admin(M)]</span>", 1)
+				M << "<span class='warning'><BIG><B>You have been appearance banned by [usr.client.ckey].</B></BIG></span>"
+				M << "<span class='danger'>The reason is: [reason]</span>"
+				M << "<span class='warning'>Appearance ban can be lifted only upon request.</span>"
 				if(config.banappeals)
-					M << "\red To try to resolve this matter head to [config.banappeals]"
+					M << "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>"
 				else
-					M << "\red No ban appeals URL has been set."
+					M << "<span class='warning'>No ban appeals URL has been set.</span>"
 			if("No")
 				return
 
@@ -835,7 +868,7 @@
 			switch(alert("Temporary Ban?",,"Yes","No", "Cancel"))
 				if("Yes")
 					if(config.ban_legacy_system)
-						usr << "\red Your server is using the legacy banning system, which does not support temporary job bans. Consider upgrading. Aborting ban."
+						usr << "<span class='warning'>Your server is using the legacy banning system, which does not support temporary job bans. Consider upgrading. Aborting ban.</span>"
 						return
 					var/mins = input(usr,"How long (in minutes)?","Ban time",1440) as num|null
 					if(!mins)
@@ -857,10 +890,10 @@
 						else
 							msg += ", [job]"
 					notes_add(M.ckey, "Banned  from [msg] - [reason]")
-					message_admins("\blue [key_name_admin(usr)] banned [key_name_admin(M)] from [msg] for [mins] minutes", 1)
-					M << "\red<BIG><B>You have been jobbanned by [usr.client.ckey] from: [msg].</B></BIG>"
-					M << "\red <B>The reason is: [reason]</B>"
-					M << "\red This jobban will be lifted in [mins] minutes."
+					message_admins("<span class='notice'>[key_name_admin(usr)] banned [key_name_admin(M)] from [msg] for [mins] minutes</span>", 1)
+					M << "<span class='warning'><BIG><B>You have been jobbanned by [usr.client.ckey] from: [msg].</B></BIG></span>"
+					M << "<span class='danger'>The reason is: [reason]</span>"
+					M << "<span class='warning'>This jobban will be lifted in [mins] minutes.</span>"
 					href_list["jobban2"] = 1 // lets it fall through and refresh
 					return 1
 				if("No")
@@ -877,10 +910,10 @@
 							if(!msg)	msg = job
 							else		msg += ", [job]"
 						notes_add(M.ckey, "Banned  from [msg] - [reason]")
-						message_admins("\blue [key_name_admin(usr)] banned [key_name_admin(M)] from [msg]", 1)
-						M << "\red<BIG><B>You have been jobbanned by [usr.client.ckey] from: [msg].</B></BIG>"
-						M << "\red <B>The reason is: [reason]</B>"
-						M << "\red Jobban can be lifted only upon request."
+						message_admins("<span class='notice'>[key_name_admin(usr)] banned [key_name_admin(M)] from [msg]</span>", 1)
+						M << "<span class='warning'><BIG><B>You have been jobbanned by [usr.client.ckey] from: [msg].</B></BIG></span>"
+						M << "<span class='danger'>The reason is: [reason]</span>"
+						M << "<span class='warning'>Jobban can be lifted only upon request.</span>"
 						href_list["jobban2"] = 1 // lets it fall through and refresh
 						return 1
 				if("Cancel")
@@ -910,8 +943,8 @@
 					else
 						continue
 			if(msg)
-				message_admins("\blue [key_name_admin(usr)] unbanned [key_name_admin(M)] from [msg]", 1)
-				M << "\red<BIG><B>You have been un-jobbanned by [usr.client.ckey] from [msg].</B></BIG>"
+				message_admins("<span class='notice'>[key_name_admin(usr)] unbanned [key_name_admin(M)] from [msg]</span>", 1)
+				M << "<span class='warning'><BIG><B>You have been un-jobbanned by [usr.client.ckey] from [msg].</B></BIG></span>"
 				href_list["jobban2"] = 1 // lets it fall through and refresh
 			return 1
 		return 0 //we didn't do anything!
@@ -921,9 +954,9 @@
 		if (ismob(M))
 			if(!check_if_greater_rights_than(M.client))
 				return
-			M << "\red You have been kicked from the server"
+			M << "<span class='warning'>You have been kicked from the server</span>"
 			log_admin("[key_name(usr)] booted [key_name(M)].")
-			message_admins("\blue [key_name_admin(usr)] booted [key_name_admin(M)].", 1)
+			message_admins("<span class='notice'>[key_name_admin(usr)] booted [key_name_admin(M)].</span>", 1)
 			//M.client = null
 			del(M.client)
 /*
@@ -952,7 +985,7 @@
 		if(t)
 			if((alert("Do you want to unjobban [t]?","Unjobban confirmation", "Yes", "No") == "Yes") && t) //No more misclicks! Unless you do it twice.
 				log_admin("[key_name(usr)] removed [t]")
-				message_admins("\blue [key_name_admin(usr)] removed [t]", 1)
+				message_admins("<span class='notice'>[key_name_admin(usr)] removed [t]</span>", 1)
 				jobban_remove(t)
 				href_list["ban"] = 1 // lets it fall through and refresh
 				var/t_split = text2list(t, " - ")
@@ -966,7 +999,7 @@
 		var/mob/M = locate(href_list["newban"])
 		if(!ismob(M)) return
 
-		if(M.client && M.client.holder)	return	//admins cannot be banned. Even if they could, the ban doesn't affect them anyway
+		// now you can! if(M.client && M.client.holder)	return	//admins cannot be banned. Even if they could, the ban doesn't affect them anyway
 
 		switch(alert("Temporary Ban?",,"Yes","No", "Cancel"))
 			if("Yes")
@@ -979,17 +1012,17 @@
 					return
 				AddBan(M.ckey, M.computer_id, reason, usr.ckey, 1, mins)
 				ban_unban_log_save("[usr.client.ckey] has banned [M.ckey]. - Reason: [reason] - This will be removed in [mins] minutes.")
-				M << "\red<BIG><B>You have been banned by [usr.client.ckey].\nReason: [reason].</B></BIG>"
-				M << "\red This is a temporary ban, it will be removed in [mins] minutes."
+				M << "<span class='warning'><BIG><B>You have been banned by [usr.client.ckey].\nReason: [reason].</B></BIG></span>"
+				M << "<span class='warning'>This is a temporary ban, it will be removed in [mins] minutes.</span>"
 				feedback_inc("ban_tmp",1)
 				DB_ban_record(BANTYPE_TEMP, M, mins, reason)
 				feedback_inc("ban_tmp_mins",mins)
 				if(config.banappeals)
-					M << "\red To try to resolve this matter head to [config.banappeals]"
+					M << "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>"
 				else
-					M << "\red No ban appeals URL has been set."
+					M << "<span class='warning'>No ban appeals URL has been set.</span>"
 				log_admin("[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.")
-				message_admins("\blue[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.")
+				message_admins("<span class='warning'>[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.</span>")
 
 				del(M.client)
 				//del(M)	// See no reason why to delete mob. Important stuff can be lost. And ban can be lifted before round ends.
@@ -1003,15 +1036,20 @@
 						AddBan(M.ckey, M.computer_id, reason, usr.ckey, 0, 0, M.lastKnownIP)
 					if("No")
 						AddBan(M.ckey, M.computer_id, reason, usr.ckey, 0, 0)
-				M << "\red<BIG><B>You have been banned by [usr.client.ckey].\nReason: [reason].</B></BIG>"
-				M << "\red This is a permanent ban."
+				var/sticky = alert(usr,"Sticky Ban [M.ckey]? Use this only if you never intend to unban the player.","Sticky Icky","Yes", "No") == "Yes"
+				if(sticky)
+					world.SetConfig("keyban",M.ckey,"type=sticky&reason=[reason]&message=[reason]&admin=[ckey(usr.key)]")
+					message_admins("[key_name_admin(usr)] has sticky banned [key_name(M)].")
+					log_admin("[key_name(usr)] has sticky banned [key_name(M)].")
+				M << "<span class='warning'><BIG><B>You have been banned by [usr.client.ckey].\nReason: [reason].</B></BIG></span>"
+				M << "<span class='warning'>This is a permanent ban.</span>"
 				if(config.banappeals)
-					M << "\red To try to resolve this matter head to [config.banappeals]"
+					M << "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>"
 				else
-					M << "\red No ban appeals URL has been set."
+					M << "<span class='warning'>No ban appeals URL has been set.</span>"
 				ban_unban_log_save("[usr.client.ckey] has permabanned [M.ckey]. - Reason: [reason] - This is a permanent ban.")
 				log_admin("[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis is a permanent ban.")
-				message_admins("\blue[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis is a permanent ban.")
+				message_admins("<span class='warning'>[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis is a permanent ban.</span>")
 				feedback_inc("ban_perma",1)
 				DB_ban_record(BANTYPE_PERMA, M, -1, reason)
 
@@ -1080,8 +1118,8 @@
 			return alert(usr, "The game has already started.", null, null, null, null)
 		master_mode = href_list["c_mode2"]
 		log_admin("[key_name(usr)] set the mode as [master_mode].")
-		message_admins("\blue [key_name_admin(usr)] set the mode as [master_mode].", 1)
-		world << "\blue <b>The mode is now: [master_mode]</b>"
+		message_admins("<span class='notice'>[key_name_admin(usr)] set the mode as [master_mode].</span>", 1)
+		world << "<span class='notice'><b>The mode is now: [master_mode]</b></span>"
 		Game() // updates the main game menu
 		world.save_mode(master_mode)
 		.(href, list("c_mode"=1))
@@ -1095,7 +1133,7 @@
 			return alert(usr, "The game mode has to be secret!", null, null, null, null)
 		secret_force_mode = href_list["f_secret2"]
 		log_admin("[key_name(usr)] set the forced secret mode as [secret_force_mode].")
-		message_admins("\blue [key_name_admin(usr)] set the forced secret mode as [secret_force_mode].", 1)
+		message_admins("<span class='notice'>[key_name_admin(usr)] set the forced secret mode as [secret_force_mode].</span>", 1)
 		Game() // updates the main game menu
 		.(href, list("f_secret"=1))
 
@@ -1108,8 +1146,11 @@
 			return
 
 		log_admin("[key_name(usr)] attempting to monkeyize [key_name(H)]")
-		message_admins("\blue [key_name_admin(usr)] attempting to monkeyize [key_name_admin(H)]", 1)
-		H.monkeyize()
+		message_admins("<span class='notice'>[key_name_admin(usr)] attempting to monkeyize [key_name_admin(H)]</span>", 1)
+		var/mob/M = H.monkeyize()
+		if(M)
+			if(M.client == CLIENT) usr = M //We probably transformed ourselves
+			show_player_panel(M)
 
 	else if(href_list["corgione"])
 		if(!check_rights(R_SPAWN))	return
@@ -1120,8 +1161,11 @@
 			return
 
 		log_admin("[key_name(usr)] attempting to corgize [key_name(H)]")
-		message_admins("\blue [key_name_admin(usr)] attempting to corgize [key_name_admin(H)]", 1)
-		H.corgize()
+		message_admins("<span class='notice'>[key_name_admin(usr)] attempting to corgize [key_name_admin(H)]</span>", 1)
+		var/mob/M = H.corgize()
+		if(M)
+			if(M.client == CLIENT) usr = M //We probably transformed ourselves
+			show_player_panel(M)
 
 	else if(href_list["forcespeech"])
 		if(!check_rights(R_FUN))	return
@@ -1135,60 +1179,89 @@
 		M.say(speech)
 		speech = sanitize(speech) // Nah, we don't trust them
 		log_admin("[key_name(usr)] forced [key_name(M)] to say: [speech]")
-		message_admins("\blue [key_name_admin(usr)] forced [key_name_admin(M)] to say: [speech]")
+		message_admins("<span class='notice'>[key_name_admin(usr)] forced [key_name_admin(M)] to say: [speech]</span>")
 
 	else if(href_list["sendtoprison"])
-		if(!check_rights(R_ADMIN))	return
+		// Reworked to be useful for investigating shit.
+		if(!check_rights(R_ADMIN))
+			return
 
-		if(alert(usr, "Send to admin prison for the round?", "Message", "Yes", "No") != "Yes")
+		if(alert(usr, "Warp to prison?", "Message", "Yes", "No") != "Yes")
 			return
 
 		var/mob/M = locate(href_list["sendtoprison"])
+
 		if(!ismob(M))
 			usr << "This can only be used on instances of type /mob"
 			return
+
 		if(istype(M, /mob/living/silicon/ai))
 			usr << "This cannot be used on instances of type /mob/living/silicon/ai"
 			return
 
 		var/turf/prison_cell = pick(prisonwarp)
-		if(!prison_cell)	return
 
+		if(!prison_cell)
+			return
+
+		/*
 		var/obj/structure/closet/secure_closet/brig/locker = new /obj/structure/closet/secure_closet/brig(prison_cell)
 		locker.opened = 0
 		locker.locked = 1
 
 		//strip their stuff and stick it in the crate
 		for(var/obj/item/I in M)
-			M.u_equip(I)
+			M.u_equip(I,1)
 			if(I)
 				I.loc = locker
 				I.layer = initial(I.layer)
-				I.dropped(M)
+				//I.dropped(M)
+
 		M.update_icons()
+		*/
 
 		//so they black out before warping
 		M.Paralyse(5)
+		M.visible_message(
+			"<span class=\"sinister\">You hear the sound of cell doors slamming shut, and [M.name] suddenly vanishes!</span>",
+			"<span class=\"sinister\">You hear the sound of cell doors slamming shut!</span>")
+
 		sleep(5)
-		if(!M)	return
+
+		if(!M)
+			return
+
+		// TODO: play sound here.  Thinking of using Wolfenstein 3D's cell door closing sound.
 
 		M.loc = prison_cell
+
+		/*
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/prisoner = M
 			prisoner.equip_to_slot_or_del(new /obj/item/clothing/under/color/orange(prisoner), slot_w_uniform)
 			prisoner.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(prisoner), slot_shoes)
+		*/
 
-		M << "\red You have been sent to the prison station!"
+		M << "<span class='warning'>You have been sent to the prison station!</span>"
 		log_admin("[key_name(usr)] sent [key_name(M)] to the prison station.")
-		message_admins("\blue [key_name_admin(usr)] sent [key_name_admin(M)] to the prison station.", 1)
+		message_admins("<span class='notice'>[key_name_admin(usr)] sent [key_name_admin(M)] to the prison station.</span>", 1)
 
-	else if(href_list["tdome1"])
+	else if(href_list["tdome1"] || href_list["tdome2"])
 		if(!check_rights(R_FUN))	return
 
 		if(alert(usr, "Confirm?", "Message", "Yes", "No") != "Yes")
 			return
 
-		var/mob/M = locate(href_list["tdome1"])
+		var/mob/M = null
+		var/team = ""
+
+		if(href_list["tdome1"])
+			team = "Green"
+			M = locate(href_list["tdome1"])
+		else if (href_list["tdome2"])
+			team = "Red"
+			M = locate(href_list["tdome2"])
+
 		if(!ismob(M))
 			usr << "This can only be used on instances of type /mob"
 			return
@@ -1196,49 +1269,122 @@
 			usr << "This cannot be used on instances of type /mob/living/silicon/ai"
 			return
 
+		var/obj/item/packobelongings/pack = null
+
+		switch(team)
+			if("Green")
+				pack = new /obj/item/packobelongings/green(M.loc)
+				pack.x = map.tDomeX+2
+			if("Red")
+				pack = new /obj/item/packobelongings/red(M.loc)
+				pack.x = map.tDomeX-2
+
+		pack.z = map.tDomeZ //the players' belongings are stored there, in the Thunderdome Admin lodge.
+		pack.y = map.tDomeY
+
+		pack.name = "[M.real_name]'s belongings"
+
 		for(var/obj/item/I in M)
-			M.u_equip(I)
+			if(istype(I,/obj/item/clothing/glasses))
+				var/obj/item/clothing/glasses/G = I
+				if(G.prescription)
+					continue
+			M.u_equip(I,1)
 			if(I)
 				I.loc = M.loc
 				I.layer = initial(I.layer)
-				I.dropped(M)
+				//I.dropped(M)
+				I.loc = pack
 
-		M.Paralyse(5)
-		sleep(5)
-		M.loc = pick(tdome1)
-		spawn(50)
-			M << "\blue You have been sent to the Thunderdome."
-		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Team 1)")
-		message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Team 1)", 1)
+		var/obj/item/weapon/card/id/thunderdome/ident = null
 
-	else if(href_list["tdome2"])
-		if(!check_rights(R_FUN))	return
+		switch(team)
+			if("Green")
+				ident = new /obj/item/weapon/card/id/thunderdome/green(M)
+				ident.name = "[M.real_name]'s Thunderdome Green ID"
+			if("Red")
+				ident = new /obj/item/weapon/card/id/thunderdome/red(M)
+				ident.name = "[M.real_name]'s Thunderdome Red ID"
 
-		if(alert(usr, "Confirm?", "Message", "Yes", "No") != "Yes")
-			return
+		if(!iscarbon(M))
+			qdel(ident)
 
-		var/mob/M = locate(href_list["tdome2"])
-		if(!ismob(M))
-			usr << "This can only be used on instances of type /mob"
-			return
-		if(istype(M, /mob/living/silicon/ai))
-			usr << "This cannot be used on instances of type /mob/living/silicon/ai"
-			return
+		switch(team)
+			if("Green")
+				if(ishuman(M))
+					var/mob/living/carbon/human/H = M
+					H.equip_to_slot_or_del(new /obj/item/clothing/under/color/green(H), slot_w_uniform)
+					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(H), slot_shoes)
+					H.equip_to_slot_or_del(ident, slot_wear_id)
+					H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/green(H), slot_belt)
+					H.regenerate_icons()
+				else if(ismonkey(M))
+					var/mob/living/carbon/monkey/K = M
+					var/obj/item/clothing/monkeyclothes/jumpsuit_green/JS = new /obj/item/clothing/monkeyclothes/jumpsuit_green(K)
+					var/obj/item/clothing/monkeyclothes/olduniform = null
+					var/obj/item/clothing/monkeyclothes/oldhat = null
+					if(K.uniform)
+						olduniform = K.uniform
+						K.uniform = null
+						olduniform.loc = pack
+					K.uniform = JS
+					K.uniform.loc = K
+					if(K.hat)
+						oldhat = K.hat
+						K.hat = null
+						oldhat.loc = pack
+					K.equip_to_slot_or_del(ident, slot_r_hand)
+					K.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/green(K), slot_l_hand)
+					K.regenerate_icons()
 
-		for(var/obj/item/I in M)
-			M.u_equip(I)
-			if(I)
-				I.loc = M.loc
-				I.layer = initial(I.layer)
-				I.dropped(M)
+			if("Red")
+				if(ishuman(M))
+					var/mob/living/carbon/human/H = M
+					H.equip_to_slot_or_del(new /obj/item/clothing/under/color/red(H), slot_w_uniform)
+					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(H), slot_shoes)
+					H.equip_to_slot_or_del(ident, slot_wear_id)
+					H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/red(H), slot_belt)
+					H.regenerate_icons()
+				else if(ismonkey(M))
+					var/mob/living/carbon/monkey/K = M
+					var/obj/item/clothing/monkeyclothes/jumpsuit_red/JS = new /obj/item/clothing/monkeyclothes/jumpsuit_red(K)
+					var/obj/item/clothing/monkeyclothes/olduniform = null
+					var/obj/item/clothing/monkeyclothes/oldhat = null
+					if(K.uniform)
+						olduniform = K.uniform
+						K.uniform = null
+						olduniform.loc = pack
+					K.uniform = JS
+					K.uniform.loc = K
+					if(K.hat)
+						oldhat = K.hat
+						K.hat = null
+						oldhat.loc = pack
+					K.equip_to_slot_or_del(ident, slot_r_hand)
+					K.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/red(K), slot_l_hand)
+					K.regenerate_icons()
 
-		M.Paralyse(5)
-		sleep(5)
-		M.loc = pick(tdome2)
-		spawn(50)
-			M << "\blue You have been sent to the Thunderdome."
-		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Team 2)")
-		message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Team 2)", 1)
+		if(pack.contents.len == 0)
+			qdel(pack)
+
+		switch(team)
+			if("Green")
+				log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Team Green)")
+				message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Team Green)", 1)
+				M.loc = pick(tdome1)
+			if("Red")
+				log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Team Red)")
+				message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Team Red)", 1)
+				M.loc = pick(tdome2)
+
+		M << "<span class='danger'>You have been chosen to fight for the [team] Team. [pick(\
+		"The wheel of fate is turning!",\
+		"Heaven or Hell!",\
+		"Set Spell Card!",\
+		"Hologram Summer Again!",\
+		"Get ready for the next battle!",\
+		"Fight for your life!",\
+		)]</span>"
 
 	else if(href_list["tdomeadmin"])
 		if(!check_rights(R_FUN))	return
@@ -1258,7 +1404,7 @@
 		sleep(5)
 		M.loc = pick(tdomeadmin)
 		spawn(50)
-			M << "\blue You have been sent to the Thunderdome."
+			M << "<span class='notice'>You have been sent to the Thunderdome.</span>"
 		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Admin.)")
 		message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Admin.)", 1)
 
@@ -1277,11 +1423,11 @@
 			return
 
 		for(var/obj/item/I in M)
-			M.u_equip(I)
+			M.u_equip(I,1)
 			if(I)
 				I.loc = M.loc
 				I.layer = initial(I.layer)
-				I.dropped(M)
+				//I.dropped(M)
 
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/observer = M
@@ -1291,7 +1437,7 @@
 		sleep(5)
 		M.loc = pick(tdomeobserve)
 		spawn(50)
-			M << "\blue You have been sent to the Thunderdome."
+			M << "<span class='notice'>You have been sent to the Thunderdome.</span>"
 		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Observer.)")
 		message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Observer.)", 1)
 
@@ -1304,9 +1450,9 @@
 			return
 
 		if(config.allow_admin_rev)
-			L.revive()
-			message_admins("\red Admin [key_name_admin(usr)] healed / revived [key_name_admin(L)]!", 1)
-			log_admin("[key_name(usr)] healed / Rrvived [key_name(L)]")
+			L.revive(0)
+			message_admins("<span class='warning'>Admin [key_name_admin(usr)] healed / revived [key_name_admin(L)]!</span>", 1)
+			log_admin("[key_name(usr)] healed / revived [key_name(L)]")
 		else
 			usr << "Admin Rejuvinates have been disabled"
 
@@ -1318,9 +1464,12 @@
 			usr << "This can only be used on instances of type /mob/living/carbon/human"
 			return
 
-		message_admins("\red Admin [key_name_admin(usr)] AIized [key_name_admin(H)]!", 1)
+		message_admins("<span class='warning'>Admin [key_name_admin(usr)] AIized [key_name_admin(H)]!</span>", 1)
 		log_admin("[key_name(usr)] AIized [key_name(H)]")
-		H.AIize()
+		var/mob/M = H.AIize()
+		if(M)
+			if(M.client == CLIENT) usr = M //We probably transformed ourselves
+			show_player_panel(M)
 
 	else if(href_list["makealien"])
 		if(!check_rights(R_SPAWN))	return
@@ -1330,7 +1479,10 @@
 			usr << "This can only be used on instances of type /mob/living/carbon/human"
 			return
 
-		usr.client.cmd_admin_alienize(H)
+		var/mob/M = usr.client.cmd_admin_alienize(H)
+		if(M)
+			if(M.client == CLIENT) usr = M //We probably transformed ourselves
+			show_player_panel(M)
 
 	else if(href_list["makeslime"])
 		if(!check_rights(R_SPAWN))	return
@@ -1340,7 +1492,10 @@
 			usr << "This can only be used on instances of type /mob/living/carbon/human"
 			return
 
-		usr.client.cmd_admin_slimeize(H)
+		var/mob/M = usr.client.cmd_admin_slimeize(H)
+		if(M)
+			if(M.client == CLIENT) usr = M //We probably transformed ourselves
+			show_player_panel(M)
 
 	else if(href_list["makecluwne"])
 		if(!check_rights(R_SPAWN))	return
@@ -1350,7 +1505,10 @@
 			usr << "This can only be used on instances of type /mob/living/carbon/human"
 			return
 
-		usr.client.cmd_admin_cluwneize(H)
+		var/mob/M = usr.client.cmd_admin_cluwneize(H)
+		if(M)
+			if(M.client == CLIENT) usr = M //We probably transformed ourselves
+			show_player_panel(M)
 
 	else if(href_list["makerobot"])
 		if(!check_rights(R_SPAWN))	return
@@ -1360,7 +1518,10 @@
 			usr << "This can only be used on instances of type /mob/living/carbon/human"
 			return
 
-		usr.client.cmd_admin_robotize(H)
+		var/mob/M = usr.client.cmd_admin_robotize(H)
+		if(M)
+			if(M.client == CLIENT) usr = M //We probably transformed ourselves
+			show_player_panel(M)
 
 	else if(href_list["makemommi"])
 		if(!check_rights(R_SPAWN))	return
@@ -1370,7 +1531,10 @@
 			usr << "This can only be used on instances of type /mob/living/carbon/human"
 			return
 
-		usr.client.cmd_admin_mommify(H)
+		var/mob/M = usr.client.cmd_admin_mommify(H)
+		if(M)
+			if(M.client == CLIENT) usr = M //We probably transformed ourselves
+			show_player_panel(M)
 
 	else if(href_list["makeanimal"])
 		if(!check_rights(R_SPAWN))	return
@@ -1380,7 +1544,10 @@
 			usr << "This cannot be used on instances of type /mob/new_player"
 			return
 
-		usr.client.cmd_admin_animalize(M)
+		var/mob/new_mob = usr.client.cmd_admin_animalize(M)
+		if(new_mob && new_mob != M)
+			if(new_mob.client == CLIENT) usr = new_mob //We probably transformed ourselves
+			show_player_panel(new_mob)
 
 	else if(href_list["togmutate"])
 		if(!check_rights(R_SPAWN))	return
@@ -1445,10 +1612,51 @@
 		var/client/C = usr.client
 		if(!isobserver(usr))	C.admin_ghost()
 		sleep(2)
-		C.jumptomob(M)
+		if(C) C.jumptomob(M)
 
 	else if(href_list["check_antagonist"])
 		check_antagonists()
+
+	else if(href_list["cult_nextobj"])
+		if(alert(usr, "Validate the current Cult objective and unlock the next one?", "Cult Cheat Code", "Yes", "No") != "Yes")
+			return
+
+		var/datum/game_mode/cult/mode_ticker = ticker.mode
+		mode_ticker.bypass_phase()
+		message_admins("Admin [key_name_admin(usr)] has unlocked the Cult's next objective.")
+		log_admin("Admin [key_name_admin(usr)] has unlocked the Cult's next objective.")
+		check_antagonists()
+
+	else if(href_list["cult_mindspeak"])
+		var/input = stripped_input(usr, "Communicate to all the cultists with the voice of Nar-Sie", "Voice of Nar-Sie", "")
+		if(!input)
+			return
+
+		for(var/datum/mind/H in ticker.mode.cult)
+			if (H.current)
+				H.current << "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[input]</span></span>"
+
+		for(var/mob/dead/observer/O in player_list)
+			O << "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[input]</span></span>"
+
+		message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
+		log_narspeak("[key_name(usr)] Voice of Nar-Sie: [input]")
+
+	else if(href_list["cult_privatespeak"])
+		var/mob/M = locate(href_list["cult_privatespeak"])
+		if(!M)
+			return
+
+		var/input = stripped_input(usr, "Whisper to [M.real_name] with the voice of Nar-Sie", "Voice of Nar-Sie", "")
+		if(!input)
+			return
+
+		M << "<span class='game say'><span class='danger'>Nar-Sie</span> whispers to you, <span class='sinister'>[input]</span></span>"
+
+		for(var/mob/dead/observer/O in player_list)
+			O << "<span class='game say'><span class='danger'>Nar-Sie</span> whispers to [M.real_name], <span class='sinister'>[input]</span></span>"
+
+		message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
 
 	else if(href_list["adminplayerobservecoodjump"])
 		if(!check_rights(R_ADMIN))	return
@@ -1475,6 +1683,7 @@
 		var/special_role_description = ""
 		var/health_description = ""
 		var/gender_description = ""
+		var/species_description = "Not A Human"
 		var/turf/T = get_turf(M)
 
 		//Location
@@ -1508,8 +1717,11 @@
 			if(MALE,FEMALE)	gender_description = "[M.gender]"
 			else			gender_description = "<font color='red'><b>[M.gender]</b></font>"
 
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			species_description = "[H.species ? H.species.name : "<span class='danger'><b>No Species</b></span>"]"
 		src.owner << "<b>Info about [M.name]:</b> "
-		src.owner << "Mob type = [M.type]; Gender = [gender_description] Damage = [health_description]"
+		src.owner << "Mob type = [M.type]; Species = [species_description]; Gender = [gender_description]; Damage = [health_description];"
 		src.owner << "Name = <b>[M.name]</b>; Real_name = [M.real_name]; Mind_name = [M.mind?"[M.mind.name]":""]; Key = <b>[M.key]</b>;"
 		src.owner << "Location = [location_description];"
 		src.owner << "[special_role_description]"
@@ -1537,7 +1749,7 @@
 		log_admin("[key_name(H)] got their cookie, spawned by [key_name(src.owner)]")
 		message_admins("[key_name(H)] got their cookie, spawned by [key_name(src.owner)]")
 		feedback_inc("admin_cookies_spawned",1)
-		H << "\blue Your prayers have been answered!! You received the <b>best cookie</b>!"
+		H << "<span class='notice'>Your prayers have been answered!! You received the <b>best cookie</b>!</span>"
 
 	else if(href_list["BlueSpaceArtillery"])
 		if(!check_rights(R_ADMIN|R_FUN))	return
@@ -1616,9 +1828,12 @@
 		H << "You hear something crackle in your headset for a moment before a voice speaks.  \"Please stand by for a message from your benefactor.  Message as follows, agent. <b>\"[input]\"</b>  Message ends.\""
 
 	else if(href_list["CentcommFaxView"])
-		var/info = locate(href_list["CentcommFaxView"])
-
-		usr << browse("<HTML><HEAD><TITLE>Centcomm Fax Message</TITLE></HEAD><BODY>[info]</BODY></HTML>", "window=Centcomm Fax Message")
+		var/obj/item/weapon/paper/P = locate(href_list["CentcommFaxView"])
+		var/info_2 = ""
+		if(P.img)
+			usr << browse_rsc(P.img.img, "tmp_photo.png")
+			info_2 = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br>"
+		usr << browse("<HTML><HEAD><TITLE>Centcomm Fax Message</TITLE></HEAD><BODY>[info_2][P.info][P.stamps]</BODY></HTML>", "window=Centcomm Fax Message")
 
 	else if(href_list["CentcommFaxReply"])
 		var/mob/living/carbon/human/H = locate(href_list["CentcommFaxReply"])
@@ -1628,7 +1843,7 @@
 
 		var/customname = input(src.owner, "Pick a title for the report", "Title") as text|null
 
-		for(var/obj/machinery/faxmachine/F in machines)
+		for(var/obj/machinery/faxmachine/F in allfaxes)
 			if(! (F.stat & (BROKEN|NOPOWER) ) )
 
 				// animate! it's alive!
@@ -1720,7 +1935,7 @@
 	// /vg/
 	else if(href_list["set_base_laws"])
 		if(!check_rights(R_FUN))
-			usr << "\red You don't have +FUN. Go away."
+			usr << "<span class='warning'>You don't have +FUN. Go away.</span>"
 			return
 		var/lawtypes = typesof(/datum/ai_laws) - /datum/ai_laws
 		var/selected_law = input("Select the default lawset desired.","Lawset Selection",null) as null|anything in lawtypes
@@ -1733,9 +1948,10 @@
 			if("mommi")
 				mommi_base_law_type = selected_law
 				subject = "MoMMIs"
-		usr << "\blue New [subject] will spawn with the [selected_law] lawset."
+		usr << "<span class='notice'>New [subject] will spawn with the [selected_law] lawset.</span>"
 		log_admin("[key_name(src.owner)] set the default laws of [subject] to: [selected_law]")
 		message_admins("[key_name_admin(src.owner)] set the default laws of [subject] to: [selected_law]", 1)
+		lawchanges.Add("[key_name_admin(src.owner)] set the default laws of [subject] to: [selected_law]")
 
 	else if(href_list["create_object"])
 		if(!check_rights(R_SPAWN))	return
@@ -1783,10 +1999,6 @@
 				if(!check_rights(R_FUN,0))
 					removed_paths += dirty_path
 					continue
-			else if(ispath(path, /obj/item/weapon/melee/energy/blade))//Not an item one should be able to spawn./N
-				if(!check_rights(R_FUN,0))
-					removed_paths += dirty_path
-					continue
 			else if(ispath(path, /obj/effect/bhole))
 				if(!check_rights(R_FUN,0))
 					removed_paths += dirty_path
@@ -1800,16 +2012,16 @@
 			alert("Select fewer object types, (max 5)")
 			return
 		else if(length(removed_paths))
-			alert("Removed:\n" + dd_list2text(removed_paths, "\n"))
+			alert("Removed:\n" + list2text(removed_paths, "\n"))
 
 		var/list/offset = text2list(href_list["offset"],",")
-		var/number = dd_range(1, 100, text2num(href_list["object_count"]))
+		var/number = Clamp(text2num(href_list["object_count"]), 1, 100)
 		var/X = offset.len > 0 ? text2num(offset[1]) : 0
 		var/Y = offset.len > 1 ? text2num(offset[2]) : 0
 		var/Z = offset.len > 2 ? text2num(offset[3]) : 0
 		var/tmp_dir = href_list["object_dir"]
 		var/obj_dir = tmp_dir ? text2num(tmp_dir) : 2
-		if(!obj_dir || !(obj_dir in list(1,2,4,8,5,6,9,10)))
+		if(!obj_dir || !(obj_dir in alldirs))
 			obj_dir = 2
 		var/obj_name = sanitize(href_list["object_name"])
 		var/where = href_list["object_where"]
@@ -1868,16 +2080,16 @@
 									M.real_name = obj_name
 
 		if (number == 1)
-			log_admin("[key_name(usr)] created a [english_list(paths)]")
+			log_admin("[key_name(usr)] created a [english_list(paths)] at [formatJumpTo(get_turf(usr))]")
 			for(var/path in paths)
 				if(ispath(path, /mob))
-					message_admins("[key_name_admin(usr)] created a [english_list(paths)]", 1)
+					message_admins("[key_name_admin(usr)] created a [english_list(paths)] at [formatJumpTo(get_turf(usr))]", 1)
 					break
 		else
-			log_admin("[key_name(usr)] created [number]ea [english_list(paths)]")
+			log_admin("[key_name(usr)] created [number]ea [english_list(paths)] at [formatJumpTo(get_turf(usr))]")
 			for(var/path in paths)
 				if(ispath(path, /mob))
-					message_admins("[key_name_admin(usr)] created [number]ea [english_list(paths)]", 1)
+					message_admins("[key_name_admin(usr)] created [number]ea [english_list(paths)] at [formatJumpTo(get_turf(usr))]", 1)
 					break
 		return
 
@@ -1940,36 +2152,36 @@
 					usr << "Please wait until the game starts!  Not sure how it will work otherwise."
 					return
 				gravity_is_on = !gravity_is_on
-				for(var/area/A in world)
+				for(var/area/A in areas)
 					A.gravitychange(gravity_is_on,A)
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Grav")
 				if(gravity_is_on)
 					log_admin("[key_name(usr)] toggled gravity on.", 1)
-					message_admins("\blue [key_name_admin(usr)] toggled gravity on.", 1)
+					message_admins("<span class='notice'>[key_name_admin(usr)] toggled gravity on.</span>", 1)
 					command_alert("Gravity generators are again functioning within normal parameters. Sorry for any inconvenience.")
 				else
 					log_admin("[key_name(usr)] toggled gravity off.", 1)
-					message_admins("\blue [key_name_admin(usr)] toggled gravity off.", 1)
+					message_admins("<span class='notice'>[key_name_admin(usr)] toggled gravity off.</span>", 1)
 					command_alert("Feedback surge detected in mass-distributions systems. Artifical gravity has been disabled whilst the system reinitializes. Further failures may result in a gravitational collapse and formation of blackholes. Have a nice day.")
 			if("wave")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Meteor")
 				log_admin("[key_name(usr)] spawned a meteor wave", 1)
-				message_admins("\blue [key_name_admin(usr)] spawned a meteor wave.", 1)
+				message_admins("<span class='notice'>[key_name_admin(usr)] spawned a meteor wave.</span>", 1)
 				new /datum/event/meteor_wave
 			if("goblob")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Blob")
 				log_admin("[key_name(usr)] spawned a blob", 1)
-				message_admins("\blue [key_name_admin(usr)] spawned a blob.", 1)
+				message_admins("<span class='notice'>[key_name_admin(usr)] spawned a blob.</span>", 1)
 				new /datum/event/blob
 
 			if("aliens")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Aliens")
 				log_admin("[key_name(usr)] spawned an alien infestation", 1)
-				message_admins("\blue [key_name_admin(usr)] attempted an alien infestation", 1)
+				message_admins("<span class='notice'>[key_name_admin(usr)] attempted an alien infestation</span>", 1)
 				new /datum/event/alien_infestation
 
 
@@ -1977,32 +2189,32 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","P")
 				log_admin("[key_name(usr)] made all areas powered", 1)
-				message_admins("\blue [key_name_admin(usr)] made all areas powered", 1)
+				message_admins("<span class='notice'>[key_name_admin(usr)] made all areas powered</span>", 1)
 				power_restore()
 			if("unpower")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","UP")
 				log_admin("[key_name(usr)] made all areas unpowered", 1)
-				message_admins("\blue [key_name_admin(usr)] made all areas unpowered", 1)
+				message_admins("<span class='notice'>[key_name_admin(usr)] made all areas unpowered</span>", 1)
 				power_failure()
 			if("quickpower")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","QP")
 				log_admin("[key_name(usr)] made all SMESs powered", 1)
-				message_admins("\blue [key_name_admin(usr)] made all SMESs powered", 1)
+				message_admins("<span class='notice'>[key_name_admin(usr)] made all SMESs powered</span>", 1)
 				power_restore_quick()
 			if("activateprison")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AP")
-				world << "\blue <B>Transit signature detected.</B>"
-				world << "\blue <B>Incoming shuttle.</B>"
+				world << "<span class='notice'><B>Transit signature detected.</B></span>"
+				world << "<span class='notice'><B>Incoming shuttle.</B></span>"
 				/*
 				var/A = locate(/area/shuttle_prison)
 				for(var/atom/movable/AM as mob|obj in A)
 					AM.z = 1
 					AM.Move()
 				*/
-				message_admins("\blue [key_name_admin(usr)] sent the prison shuttle to the station.", 1)
+				message_admins("<span class='notice'>[key_name_admin(usr)] sent the prison shuttle to the station.</span>", 1)
 			if("deactivateprison")
 				/*
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2012,53 +2224,55 @@
 					AM.z = 2
 					AM.Move()
 				*/
-				message_admins("\blue [key_name_admin(usr)] sent the prison shuttle back.", 1)
+				message_admins("<span class='notice'>[key_name_admin(usr)] sent the prison shuttle back.</span>", 1)
 			if("toggleprisonstatus")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TPS")
-				for(var/obj/machinery/computer/prison_shuttle/PS in world)
+				for(var/obj/machinery/computer/prison_shuttle/PS in machines)
 					PS.allowedtocall = !(PS.allowedtocall)
-					message_admins("\blue [key_name_admin(usr)] toggled status of prison shuttle to [PS.allowedtocall].", 1)
-			if("prisonwarp")
-				if(!ticker)
+					message_admins("<span class='notice'>[key_name_admin(usr)] toggled status of prison shuttle to [PS.allowedtocall].</span>", 1)
+			if ("prisonwarp")
+				if (!ticker)
 					alert("The game hasn't started yet!", null, null, null, null, null)
 					return
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","PW")
-				message_admins("\blue [key_name_admin(usr)] teleported all players to the prison station.", 1)
-				for(var/mob/living/carbon/human/H in mob_list)
-					var/turf/loc = find_loc(H)
-					var/security = 0
-					if(loc.z > 1 || prisonwarped.Find(H))
-//don't warp them if they aren't ready or are already there
-						continue
-					H.Paralyse(5)
-					if(H.wear_id)
-						var/obj/item/weapon/card/id/id = H.get_idcard()
-						for(var/A in id.access)
-							if(A == access_security)
-								security++
-					if(!security)
-						//strip their stuff before they teleport into a cell :downs:
-						for(var/obj/item/weapon/W in H)
-							if(istype(W, /datum/organ/external))
-								continue
-								//don't strip organs
-							H.u_equip(W)
-							if (H.client)
-								H.client.screen -= W
-							if (W)
-								W.loc = H.loc
-								W.dropped(H)
-								W.layer = initial(W.layer)
-						//teleport person to cell
-						H.loc = pick(prisonwarp)
-						H.equip_to_slot_or_del(new /obj/item/clothing/under/color/orange(H), slot_w_uniform)
-						H.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(H), slot_shoes)
-					else
-						//teleport security person
-						H.loc = pick(prisonsecuritywarp)
-					prisonwarped += H
+
+				feedback_inc("admin_secrets_fun_used", 1)
+
+				feedback_add_details("admin_secrets_fun_used", "PW")
+
+				message_admins("<span class='notice'>[key_name_admin(usr)] teleported all players to the prison station.</span>", 1)
+
+				var/security
+
+				for (var/mob/living/carbon/human/H in mob_list)
+					if (H)
+						if (H in prisonwarped) // don't warp them if they aren't ready or are already there
+							continue
+
+						security = FALSE
+
+						H.Paralyse(5)
+
+						var/obj/item/weapon/card/id/id = H.get_id_card()
+
+						if(id)
+							if (access_security in id.access)
+								security = TRUE
+
+						if (!security)
+							// strip their stuff before they teleport into a cell :downs:
+							for (var/obj/item/I in H.get_all_slots())
+								H.drop_from_inventory(I)
+
+							H.loc = pick(prisonwarp) // teleport person to cell
+
+							H.equip_to_slot_or_del(new /obj/item/clothing/under/color/prisoner(H), slot_w_uniform)
+
+							H.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(H), slot_shoes)
+						else
+							H.loc = pick(prisonsecuritywarp) // teleport security person
+
+						prisonwarped += H
 			if("traitor_all")
 				if(!ticker)
 					alert("The game hasn't started yet!")
@@ -2090,33 +2304,30 @@
 					A.mind.objectives += new_objective
 					ticker.mode.greet_traitor(A.mind)
 					ticker.mode.finalize_traitor(A.mind)
-				message_admins("\blue [key_name_admin(usr)] used everyone is a traitor secret. Objective is [objective]", 1)
+				message_admins("<span class='notice'>[key_name_admin(usr)] used everyone is a traitor secret. Objective is [objective]</span>", 1)
 				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")
-			if("moveminingshuttle")
-				if(mining_shuttle_moving)
-					return
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","ShM")
-				move_mining_shuttle()
-				message_admins("\blue [key_name_admin(usr)] moved mining shuttle", 1)
-				log_admin("[key_name(usr)] moved the mining shuttle")
 			if("moveadminshuttle")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ShA")
 				move_admin_shuttle()
-				message_admins("\blue [key_name_admin(usr)] moved the centcom administration shuttle", 1)
+				message_admins("<span class='notice'>[key_name_admin(usr)] moved the centcom administration shuttle</span>", 1)
 				log_admin("[key_name(usr)] moved the centcom administration shuttle")
 			if("moveferry")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ShF")
-				move_ferry()
-				message_admins("\blue [key_name_admin(usr)] moved the centcom ferry", 1)
+				if(!transport_shuttle || !transport_shuttle.linked_area)
+					usr << "There is no transport shuttle!"
+					return
+
+				transport_shuttle.move(usr)
+
+				message_admins("<span class='notice'>[key_name_admin(usr)] moved the centcom ferry</span>", 1)
 				log_admin("[key_name(usr)] moved the centcom ferry")
 			if("movealienship")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ShX")
 				move_alien_ship()
-				message_admins("\blue [key_name_admin(usr)] moved the alien dinghy", 1)
+				message_admins("<span class='notice'>[key_name_admin(usr)] moved the alien dinghy</span>", 1)
 				log_admin("[key_name(usr)] moved the alien dinghy")
 			if("togglebombcap")
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2131,7 +2342,7 @@
 				var/range_dev = MAX_EXPLOSION_RANGE *0.25
 				var/range_high = MAX_EXPLOSION_RANGE *0.5
 				var/range_low = MAX_EXPLOSION_RANGE
-				message_admins("\red <b> [key_name_admin(usr)] changed the bomb cap to [range_dev], [range_high], [range_low]</b>", 1)
+				message_admins("<span class='danger'> [key_name_admin(usr)] changed the bomb cap to [range_dev], [range_high], [range_low]</span>", 1)
 				log_admin("[key_name_admin(usr)] changed the bomb cap to [MAX_EXPLOSION_RANGE]")
 
 			if("flicklights")
@@ -2151,27 +2362,27 @@
 								var/Message = rand(1,4)
 								switch(Message)
 									if(1)
-										M.show_message(text("\blue You shudder as if cold..."), 1)
+										M.show_message(text("<span class='notice'>You shudder as if cold...</span>"), 1)
 									if(2)
-										M.show_message(text("\blue You feel something gliding across your back..."), 1)
+										M.show_message(text("<span class='notice'>You feel something gliding across your back...</span>"), 1)
 									if(3)
-										M.show_message(text("\blue Your eyes twitch, you feel like something you can't see is here..."), 1)
+										M.show_message(text("<span class='notice'>Your eyes twitch, you feel like something you can't see is here...</span>"), 1)
 									if(4)
-										M.show_message(text("\blue You notice something moving out of the corner of your eye, but nothing is there..."), 1)
+										M.show_message(text("<span class='notice'>You notice something moving out of the corner of your eye, but nothing is there...</span>"), 1)
 								for(var/obj/W in orange(5,M))
 									if(prob(25) && !W.anchored)
 										step_rand(W)
 					sleep(rand(100,1000))
 				for(var/mob/M in player_list)
 					if(M.stat != 2)
-						M.show_message(text("\blue The chilling wind suddenly stops..."), 1)
+						M.show_message(text("<span class='notice'>The chilling wind suddenly stops...</span>"), 1)
 /*				if("shockwave")
 				ok = 1
-				world << "\red <B><big>ALERT: STATION STRESS CRITICAL</big></B>"
+				world << "<span class='danger'><big>ALERT: STATION STRESS CRITICAL</big></span>"
 				sleep(60)
-				world << "\red <B><big>ALERT: STATION STRESS CRITICAL. TOLERABLE LEVELS EXCEEDED!</big></B>"
+				world << "<span class='danger'><big>ALERT: STATION STRESS CRITICAL. TOLERABLE LEVELS EXCEEDED!</big></span>"
 				sleep(80)
-				world << "\red <B><big>ALERT: STATION STRUCTURAL STRESS CRITICAL. SAFETY MECHANISMS FAILED!</big></B>"
+				world << "<span class='danger'><big>ALERT: STATION STRUCTURAL STRESS CRITICAL. SAFETY MECHANISMS FAILED!</big></span>"
 				sleep(40)
 				for(var/mob/M in world)
 					shake_camera(M, 400, 1)
@@ -2259,12 +2470,12 @@
 				else
 					communications_blackout(1)
 				message_admins("[key_name_admin(usr)] triggered a communications blackout.", 1)
-			if("spaceninja")
+
+			if("pda_spam")
 				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","SN")
-				if(toggle_space_ninja)
-					if(space_ninja_arrival())//If the ninja is actually spawned. They may not be depending on a few factors.
-						message_admins("[key_name_admin(usr)] has sent in a space ninja", 1)
+				feedback_add_details("admin_secrets_fun_used","PDA")
+				new /datum/event/pda_spam
+
 			if("carp")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","C")
@@ -2300,7 +2511,7 @@
 			if("whiteout")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","WO")
-				for(var/obj/machinery/light/L in world)
+				for(var/obj/machinery/light/L in alllights)
 					L.fix()
 				message_admins("[key_name_admin(usr)] fixed all lights", 1)
 			if("aliens")
@@ -2336,7 +2547,7 @@
 
 				message_admins("[key_name_admin(usr)] made the floor LAVA! It'll last [length] seconds and it will deal [damage] damage to everyone.", 1)
 
-				for(var/turf/simulated/floor/F in world)
+				for(var/turf/simulated/floor/F in turfs)
 					if(F.z == 1)
 						F.name = "lava"
 						F.desc = "The floor is LAVA!"
@@ -2361,15 +2572,32 @@
 
 						sleep(10)
 
-					for(var/turf/simulated/floor/F in world) // Reset everything.
+					for(var/turf/simulated/floor/F in turfs) // Reset everything.
 						if(F.z == 1)
 							F.name = initial(F.name)
 							F.desc = initial(F.desc)
-							F.overlays.Cut()
+							F.overlays.len = 0
 							F.lava = 0
 							F.update_icon()
 					floorIsLava = 0
 				return
+			if("thebees")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","BEE")
+				var/answer = alert("What's this? A Space Station woefully underpopulated by bees?",,"Let's fix it!","On second thought, let's not.")
+				if(answer=="Let's fix it!")
+					message_admins("[key_name_admin(usr)] unleashed the bees onto the crew.", 1)
+					world << "<font size='10' color='red'><b>NOT THE BEES!</b></font>"
+					world << sound('sound/effects/bees.ogg')
+					for(var/mob/living/M in player_list)
+						var/mob/living/simple_animal/bee/BEE = new(get_turf(M))
+						BEE.strength = 16
+						BEE.toxic = 5
+						BEE.mut = 2
+						BEE.feral = 25
+						BEE.target = M
+						BEE.icon_state = "bees_swarm-feral"
+
 			if("virus")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","V")
@@ -2384,7 +2612,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RET")
 				for(var/mob/living/carbon/human/H in player_list)
-					H << "\red <B>You suddenly feel stupid.</B>"
+					H << "<span class='danger'>You suddenly feel stupid.</span>"
 					H.setBrainLoss(60)
 				message_admins("[key_name_admin(usr)] made everybody retarded")
 			if("fakeguns")
@@ -2397,6 +2625,20 @@
 					W.icon_state = "revolver"
 					W.item_state = "gun"
 				message_admins("[key_name_admin(usr)] made every item look like a gun")
+			if("experimentalguns")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","GUN")
+				for(var/mob/living/carbon/C in player_list)
+					var/list/turflist = list()
+					for(var/turf/T in orange(src,1))
+						turflist += T
+					if(!turflist.len)
+						turflist += get_turf(C)
+					var/turf/U = pick(turflist)
+					var/obj/structure/closet/crate/secure/weapon/experimental/E = new(U)
+					C << "<span class='danger'>A crate appears next to you. You think you can read \"[E.chosen_set]\" scribbled on it</span>"
+					U.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg')
+				message_admins("[key_name_admin(usr)] distributed experimental guns to the entire crew")
 			if("schoolgirl")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SG")
@@ -2409,7 +2651,7 @@
 			if("eagles")//SCRAW
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","EgL")
-				for(var/obj/machinery/door/airlock/W in world)
+				for(var/obj/machinery/door/airlock/W in all_doors)
 					if(W.z == 1 && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
 						W.req_access = list()
 				message_admins("[key_name_admin(usr)] activated Egalitarian Station mode")
@@ -2425,7 +2667,7 @@
 			if("ionstorm")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","I")
-				IonStorm()
+				generate_ion_law()
 				message_admins("[key_name_admin(usr)] triggered an ion storm")
 				var/show_log = alert(usr, "Show ion message?", "Message", "Yes", "No")
 				if(show_log == "Yes")
@@ -2441,13 +2683,233 @@
 				feedback_add_details("admin_secrets_fun_used","OO")
 				usr.client.only_one()
 //				message_admins("[key_name_admin(usr)] has triggered a battle to the death (only one)")
+			if("togglenarsie")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","NA")
+				var/choice = input("How do you wish for narsie to interact with her surroundings?") in list("CultStation13", "Nar-Singulo")
+				if(choice == "CultStation13")
+					message_admins("[key_name_admin(usr)] has set narsie's behaviour to \"CultStation13\".")
+					narsie_behaviour = "CultStation13"
+				if(choice == "Nar-Singulo")
+					message_admins("[key_name_admin(usr)] has set narsie's behaviour to \"Nar-Singulo\".")
+					narsie_behaviour = "Nar-Singulo"
+			if("hellonearth")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","NS")
+				var/choice = input("You sure you want to end the round and summon narsie at your location? Misuse of this could result in removal of flags or halarity.") in list("PRAISE SATAN", "Cancel")
+				if(choice == "PRAISE SATAN")
+					new /obj/machinery/singularity/narsie/large(get_turf(usr))
+					message_admins("[key_name_admin(usr)] has summoned narsie and brought about a new realm of suffering.")
+			if("supermattercascade")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","SC")
+				var/choice = input("You sure you want to destroy the universe and create a large explosion at your location? Misuse of this could result in removal of flags or halarity.") in list("NO TIME TO EXPLAIN", "Cancel")
+				if(choice == "NO TIME TO EXPLAIN")
+					explosion(get_turf(usr), 8, 16, 24, 32, 1)
+					new /turf/unsimulated/wall/supermatter(get_turf(usr))
+					SetUniversalState(/datum/universal_state/supermatter_cascade)
+					message_admins("[key_name_admin(usr)] has managed to destroy the universe with a supermatter cascade. Good job, [key_name_admin(usr)]")
+			if("spawnadminbus")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","AB")
+				var/obj/structure/bed/chair/vehicle/adminbus/A = new /obj/structure/bed/chair/vehicle/adminbus(get_turf(usr))
+				A.dir = EAST
+				A.update_lightsource()
+				A.busjuke.dir = EAST
+				message_admins("[key_name_admin(usr)] has spawned an Adminbus. Who gave him the keys?")
+			if("spawnselfdummy")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","TD")
+				message_admins("[key_name_admin(usr)] spawned himself as a Test Dummy.")
+				var/turf/T = get_turf(usr)
+				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
+				usr.client.cmd_assume_direct_control(D)
+				D.equip_to_slot_or_del(new /obj/item/clothing/under/color/black(D), slot_w_uniform)
+				D.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(D), slot_shoes)
+				D.equip_to_slot_or_del(new /obj/item/weapon/card/id/admin(D), slot_wear_id)
+				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
+				D.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(D), slot_back)
+				D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/engineer(D.back), slot_in_backpack)
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg')
+				D.name = "Admin"
+				D.real_name = "Admin"
+				var/newname = ""
+				newname = copytext(sanitize(input(D, "Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
+				if (!newname)
+					newname = "Admin"
+				D.name = newname
+				D.real_name = newname
+			//False flags and bait below. May cause mild hilarity or extreme pain. Now in one button
+			if("fakealerts")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","FAKEA")
+				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Return")
+				//Big fat lists of effects, not very modular but at least there's less buttons
+				if(choice == "Return") //Actually fuck this
+					return //Duh
+				if(choice == "Biohazard") //GUISE WE HAVE A BLOB
+					var/levelchoice = input("Set the level of the biohazard alert, or leave at 0 to have a random level (1 to 7 supported only)", "Space FEMA Readiness Program", 0) as num
+					if(!levelchoice || levelchoice > 7 || levelchoice < 0)
+						usr << "<span class='warning'>Invalid input range (0 to 7 only)</span>"
+						return
+					biohazard_alert(level = levelchoice)
+					message_admins("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
+					log_admin("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
+					return
+				if(choice == "Lifesigns") //MUH ALIUMS
+					command_alert("Unidentified lifesigns detected coming aboard [station_name()]. Secure any exterior access, including ducting and ventilation.", "Lifesign Alert")
+					world << sound('sound/AI/aliens.ogg')
+					message_admins("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
+					log_admin("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
+					return
+				if(choice == "Malfunction") //BLOW EVERYTHING
+					var/salertchoice = input("Do you wish to include the Hostile Runtimes warning to have an authentic Malfunction Takeover Alert ?", "Nanotrasen Alert Level Monitor") in list("Yes", "No")
+					if(salertchoice == "Yes")
+						command_alert("Hostile runtimes detected in all station systems, please deactivate your AI to prevent possible damage to its morality core.", "Anomaly Alert")
+					world << "<font size=4 color='red'>Attention! Delta security level reached!</font>" //Don't ACTUALLY set station alert to Delta to avoid fucking shit up for real
+					world << "<font color='red'>[config.alert_desc_delta]</font>"
+					world << sound('sound/AI/aimalf.ogg') //AI got valid
+					message_admins("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
+					log_admin("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
+					return
+				if(choice == "Ion")
+					command_alert("Ion storm detected near the station. Please check all AI-controlled equipment for errors.", "Anomaly Alert")
+					world << sound('sound/AI/ionstorm.ogg')
+					message_admins("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
+					log_admin("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
+					return
+				if(choice == "Meteor Wave")
+					command_alert("A meteor storm has been detected on collision course with the station. Seek shelter within the core of the station immediately.", "Meteor Alert")
+					world << sound('sound/AI/meteors.ogg')
+					message_admins("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
+					log_admin("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
+					return
+				if(choice == "Carp Migration")
+					command_alert("Unknown biological entities have been detected near [station_name()], please stand-by.", "Lifesign Alert")
+					message_admins("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
+					log_admin("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
+					return
+			if("fakebooms") //Micheal Bay is in the house !
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","FAKEE")
+				var/choice = input("How much high-budget explosions do you want ?", "Micheal Bay SFX Systems", 1) as num
+				if(choice < 1) //No negative or null explosion amounts here math genius
+					usr << "<span class='warning'>Invalid input range (null or negative)</span>"
+					return
+				message_admins("[key_name_admin(usr)] improvised himself as Micheal Bay and triggered [round(choice)] fake explosions.")
+				log_admin("[key_name_admin(usr)] improvised himself as Micheal Bay and triggered [round(choice)] fake explosions.")
+				for(var/i = 1 to choice)
+					world << sound('sound/effects/explosionfar.ogg')
+					sleep(rand(2, 10)) //Sleep 0.2 to 1 second
+			if("massbomber")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","BBM")
+				var/choice = alert("Dress every player like Bomberman and give them BBDs?","Bomberman Mode Activation","Confirm","Cancel")
+				if(choice=="Confirm")
+					bomberman_mode = 1
+					world << sound('sound/bomberman/start.ogg')
+					for(var/mob/living/carbon/human/M in player_list)
+						if(M.wear_suit)
+							var/obj/item/O = M.wear_suit
+							M.u_equip(O,1)
+							O.loc = M.loc
+							//O.dropped(M)
+						if(M.head)
+							var/obj/item/O = M.head
+							M.u_equip(O,1)
+							O.loc = M.loc
+							//O.dropped(M)
+						M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/bomberman(M), slot_head)
+						M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/bomberman(M), slot_wear_suit)
+						M.equip_to_slot_or_del(new /obj/item/weapon/bomberman/(M), slot_s_store)
+						M.update_icons()
+						M << "Wait...what?"
+						spawn(50)
+							M << "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>"
+							M << "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>"
+
+				message_admins("[key_name_admin(usr)] turned everyone into Bomberman!")
+				log_admin("[key_name_admin(usr)] turned everyone into Bomberman!")
+			if("bomberhurt")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","BBH")
+				var/choice = alert("Activate Cuban Pete mode? Note that newly spawned BBD will still have player damage deactivated.","Activating Bomberman Bombs Player Damage","Confirm","Cancel")
+				if(choice=="Confirm")
+					bomberman_hurt = 1
+					for(var/obj/item/weapon/bomberman/B in bombermangear)
+						if(!B.arena)
+							B.hurt_players = 1
+				message_admins("[key_name_admin(usr)] enabled the player damage of the Bomberman Bomb Dispensers currently in the world. Cuban Pete approves.")
+				log_admin("[key_name_admin(usr)] enabled the player damage of the Bomberman Bomb Dispensers currently in the world. Cuban Pete approves.")
+			if("bomberdestroy")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","BBD")
+				var/choice = alert("Activate Michael Bay mode? Note that newly spawned BBD will still have environnement damage deactivated.","Activating Bomberman Bombs Environnement Damage","Confirm","Cancel")
+				if(choice=="Confirm")
+					bomberman_destroy = 1
+					for(var/obj/item/weapon/bomberman/B in bombermangear)
+						if(!B.arena)
+							B.destroy_environnement = 1
+				message_admins("[key_name_admin(usr)] enabled the environnement damage of the Bomberman Bomb Dispensers currently in the world. Michael Bay approves.")
+				log_admin("[key_name_admin(usr)] enabled the environnement damage of the Bomberman Bomb Dispensers currently in the world. Michael Bay approves.")
+			if("bombernohurt")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","BBNH")
+				var/choice = alert("Disable Cuban Pete mode.","Disable Bomberman Bombs Player Damage","Confirm","Cancel")
+				if(choice=="Confirm")
+					bomberman_hurt = 0
+					for(var/obj/item/weapon/bomberman/B in bombermangear)
+						if(!B.arena)
+							B.hurt_players = 0
+				message_admins("[key_name_admin(usr)] disabled the player damage of the Bomberman Bomb Dispensers currently in the world.")
+				log_admin("[key_name_admin(usr)] disabled the player damage of the Bomberman Bomb Dispensers currently in the world.")
+			if("bombernodestroy")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","BBND")
+				var/choice = alert("Disable Michael Bay mode?","Disable Bomberman Bombs Environnement Damage","Confirm","Cancel")
+				if(choice=="Confirm")
+					bomberman_destroy = 0
+					for(var/obj/item/weapon/bomberman/B in bombermangear)
+						if(!B.arena)
+							B.destroy_environnement = 0
+				message_admins("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
+				log_admin("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
+			if("togglebombmethod")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","BM")
+				var/choice = input("Do you wish for explosions to take walls and obstacles into account?") in list("Yes, let's have realistic explosions", "No, let's have perfectly circular explosions")
+				if(choice == "Yes, let's have realistic explosions")
+					message_admins("[key_name_admin(usr)] has set explosions to take walls and obstacles into account.")
+					explosion_newmethod = 1
+				if(choice == "No, let's have perfectly circular explosions")
+					message_admins("[key_name_admin(usr)] has set explosions to completely pass through walls and obstacles.")
+					explosion_newmethod = 0
+			if("placeturret")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","TUR")
+				var/list/possible_guns = list()
+				for(var/path in typesof(/obj/item/weapon/gun/energy))
+					possible_guns += path
+				var/choice = input("What energy gun do you want inside the turret?") in possible_guns
+				if(!choice)
+					return
+				var/obj/item/weapon/gun/energy/gun = new choice()
+				var/obj/machinery/porta_turret/Turret = new(get_turf(usr))
+				Turret.installation = choice
+				Turret.gun_charge = gun.power_supply.charge
+				Turret.update_gun()
+				qdel(gun)
+				var/emag = input("Emag the turret?") in list("Yes", "No")
+				if(emag=="Yes")
+					Turret.emag(usr)
 		if(usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsfun"]]")
-			if (ok)
-				world << text("<B>A secret has been activated by []!</B>", usr.key)
+			if(ok)
+				world << text("<B>A secret has been activated by [usr.key]!</B>")
 
 	else if(href_list["secretsadmin"])
-		if(!check_rights(R_ADMIN))	return
+		if(!check_rights(R_ADMIN))
+			return
 
 		var/ok = 0
 		switch(href_list["secretsadmin"])
@@ -2547,12 +3009,12 @@
 					dat += "No-one has done anything this round!"
 				usr << browse(dat, "window=admin_log")
 			if("maint_access_brig")
-				for(var/obj/machinery/door/airlock/maintenance/M in world)
+				for(var/obj/machinery/door/airlock/maintenance/M in all_doors)
 					if (access_maint_tunnels in M.req_access)
 						M.req_access = list(access_brig)
 				message_admins("[key_name_admin(usr)] made all maint doors brig access-only.")
 			if("maint_access_engiebrig")
-				for(var/obj/machinery/door/airlock/maintenance/M in world)
+				for(var/obj/machinery/door/airlock/maintenance/M in all_doors)
 					if (access_maint_tunnels in M.req_access)
 						M.req_access = list()
 						M.req_one_access = list(access_brig,access_engine)
@@ -2563,6 +3025,10 @@
 				J.total_positions = -1
 				J.spawn_positions = -1
 				message_admins("[key_name_admin(usr)] has removed the cap on security officers.")
+			if("virus_custom")
+				if(virus2_make_custom(usr.client))
+					feedback_add_details("admin_secrets_fun_used", "V_C")
+					message_admins("[key_name_admin(usr)] has trigger a custom virus outbreak.", 1)
 
 	else if(href_list["ac_view_wanted"])            //Admin newscaster Topic() stuff be here
 		src.admincaster_screen = 18                 //The ac_ prefix before the hrefs stands for AdminCaster.
@@ -2571,7 +3037,7 @@
 	else if(href_list["ac_set_channel_name"])
 		src.admincaster_feed_channel.channel_name = strip_html_simple(input(usr, "Provide a Feed Channel Name", "Network Channel Handler", ""))
 		while (findtext(src.admincaster_feed_channel.channel_name," ") == 1)
-			src.admincaster_feed_channel.channel_name = copytext(src.admincaster_feed_channel.channel_name,2,lentext(src.admincaster_feed_channel.channel_name)+1)
+			src.admincaster_feed_channel.channel_name = copytext(src.admincaster_feed_channel.channel_name,2,length(src.admincaster_feed_channel.channel_name)+1)
 		src.access_news_network()
 
 	else if(href_list["ac_set_channel_lock"])
@@ -2610,7 +3076,7 @@
 	else if(href_list["ac_set_new_message"])
 		src.admincaster_feed_message.body = adminscrub(input(usr, "Write your Feed story", "Network Channel Handler", ""))
 		while (findtext(src.admincaster_feed_message.body," ") == 1)
-			src.admincaster_feed_message.body = copytext(src.admincaster_feed_message.body,2,lentext(src.admincaster_feed_message.body)+1)
+			src.admincaster_feed_message.body = copytext(src.admincaster_feed_message.body,2,length(src.admincaster_feed_message.body)+1)
 		src.access_news_network()
 
 	else if(href_list["ac_submit_new_message"])
@@ -2664,13 +3130,13 @@
 	else if(href_list["ac_set_wanted_name"])
 		src.admincaster_feed_message.author = adminscrub(input(usr, "Provide the name of the Wanted person", "Network Security Handler", ""))
 		while (findtext(src.admincaster_feed_message.author," ") == 1)
-			src.admincaster_feed_message.author = copytext(admincaster_feed_message.author,2,lentext(admincaster_feed_message.author)+1)
+			src.admincaster_feed_message.author = copytext(admincaster_feed_message.author,2,length(admincaster_feed_message.author)+1)
 		src.access_news_network()
 
 	else if(href_list["ac_set_wanted_desc"])
 		src.admincaster_feed_message.body = adminscrub(input(usr, "Provide the a description of the Wanted person and any other details you deem important", "Network Security Handler", ""))
 		while (findtext(src.admincaster_feed_message.body," ") == 1)
-			src.admincaster_feed_message.body = copytext(src.admincaster_feed_message.body,2,lentext(src.admincaster_feed_message.body)+1)
+			src.admincaster_feed_message.body = copytext(src.admincaster_feed_message.body,2,length(src.admincaster_feed_message.body)+1)
 		src.access_news_network()
 
 	else if(href_list["ac_submit_wanted"])
@@ -2789,6 +3255,24 @@
 			if(href_list["vsc"] == "default")
 				zas_settings.SetDefault(usr)
 
+	else if(href_list["toglang"])
+		if(check_rights(R_SPAWN))
+			var/mob/M = locate(href_list["toglang"])
+			if(!istype(M))
+				usr << "[M] is illegal type, must be /mob!"
+				return
+			var/lang2toggle = href_list["lang"]
+			var/datum/language/L = all_languages[lang2toggle]
+
+			if(L in M.languages)
+				if(!M.remove_language(lang2toggle))
+					usr << "Failed to remove language '[lang2toggle]' from \the [M]!"
+			else
+				if(!M.add_language(lang2toggle))
+					usr << "Failed to add language '[lang2toggle]' from \the [M]!"
+
+			show_player_panel(M)
+
 	// player info stuff
 
 	if(href_list["add_player_info"])
@@ -2819,3 +3303,504 @@
 			if("list")
 				PlayerNotesPage(text2num(href_list["index"]))
 		return
+
+//-------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------Shuttle stuff-----------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------
+
+	if(href_list["shuttle_select"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","SS")
+
+		var/datum/shuttle/S = select_shuttle_from_all(usr,"Please select a shuttle","Admin abuse")
+
+		if(istype(S))
+			selected_shuttle = S
+			usr << "[S] ([S.type]) selected!"
+
+		shuttle_magic() //Update the window!
+
+	if(href_list["shuttle_create_destination"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","DC")
+
+		var/area/A = get_area(get_turf(usr))
+
+		var/name = input(usr,"What would you like to name this docking port?","Admin abuse","[A ? "[A.name]" : "Space [rand(100,999)]"]") as text|null
+		if(!name) return
+
+		var/obj/structure/docking_port/destination/D = new( get_turf(usr) )
+		D.dir = usr.dir
+		D.areaname = name
+
+		A = get_area(D)
+		if(A)
+			var/datum/shuttle/S = A.get_shuttle()
+			if(S)
+				if(alert(usr,"Would you like the new docking port to be a part of [S.name] ([S.type])? Any shuttles docked to it will be moved together with [S.name].","Admin abuse","Yes","No") == "Yes")
+					if(get_area(D) == A) //If the shuttle moved, abort -- as that would lead to weird shittu
+						S.docking_ports_aboard |= D
+						usr << "[D] is now considered a part of [S.name] ([S.type])."
+
+		if(istype(selected_shuttle))
+			if(alert(usr,"Would you like to add [D.areaname] to the list of [selected_shuttle.name]'s destinations?","Admin abuse","Yes","No") == "Yes")
+				selected_shuttle.docking_ports |= D
+				usr << "Added [D] to the list of [selected_shuttle.name]'s destinations"
+
+		message_admins("<span class='notice'>[key_name_admin(usr)] has created a new destination docking port ([D.areaname]) in [get_area(D)] [formatJumpTo(get_turf(D))]</span>", 1)
+		log_admin("[key_name_admin(usr)] has created a new destination docking port ([D.areaname]) at [D.x];[D.y];[D.z]")
+
+	if(href_list["shuttle_modify_destination"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","MD")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S)) return
+
+		var/list/docking_ports_to_pick_from = all_docking_ports.Copy()
+		var/list/options = list()
+		for(var/obj/structure/docking_port/destination/D in (docking_ports_to_pick_from - S.docking_ports))
+			var/name = D.areaname
+			options += name
+			options[name] = D
+
+		var/obj/structure/docking_port/destination/choice = options[(input(usr,"Select a docking port to add to [S.name]","Admin abuse") in options)]
+		if(!istype(choice)) return
+
+		S.docking_ports |= choice
+		usr << "Added [choice.areaname] to [S.name]!"
+
+	if(href_list["shuttle_set_transit"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","AT")
+
+		var/list/L = list()
+		for(var/obj/structure/docking_port/destination/D in get_turf(usr) )
+			var/name = "[D.name] ([D.areaname])"
+			L += name
+			L[name]=D
+
+		if(!L.len)
+			usr << "Please stand on the docking port you wish to make a transit area."
+
+		var/obj/structure/docking_port/port_to_link = L[ (input(usr,"Select a new transit area for the shuttle","Admin abuse") as null|anything in (L + list("Cancel"))) ]
+		if(!istype(port_to_link)) return
+
+		var/datum/shuttle/shuttle_to_link = selected_shuttle
+		if(!istype(shuttle_to_link)) return
+
+		var/choice = input(usr,"Please confirm that you want to make [port_to_link] ([port_to_link.areaname]) a transit area for [shuttle_to_link.name] ([shuttle_to_link.type])?","Admin abuse") in list("Yes","No")
+
+		if(choice == "Yes")
+			shuttle_to_link.set_transit_dock(port_to_link)
+		else
+			return
+
+		message_admins("[key_name_admin(usr)] has set a destination docking port ([port_to_link.areaname]) at [port_to_link.x];[port_to_link.y];[port_to_link.z] to be [shuttle_to_link.name] ([shuttle_to_link.type])'s transit area [formatJumpTo(get_turf(port_to_link))]", 1)
+		log_admin("[key_name_admin(usr)] has set a destination docking port ([port_to_link.areaname]) at [port_to_link.x];[port_to_link.y];[port_to_link.z] to be [shuttle_to_link.name] ([shuttle_to_link.type])'s transit area")
+
+	if(href_list["shuttle_create_shuttleport"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","SC")
+
+		var/obj/structure/docking_port/shuttle/D = new(get_turf(usr.loc))
+		D.dir = usr.dir
+
+		var/area/A = get_area(D)
+		var/datum/shuttle/S = A.get_shuttle()
+		if(S && !S.linked_port)
+			if(alert(usr,"Would you like to make [S.name] ([S.type]) use this docking port?","Admin abuse","Yes","No") == "Yes")
+				if(!S || S.linked_port)
+					usr << "Either the shuttle was deleted, or somebody already linked a shuttle docking port to it. Sorry!"
+					return
+				if(!D) return
+
+				S.linked_port = D
+				usr << "The shuttle docking port will now be used by [S.name]!"
+
+		message_admins("<span class='notice'>[key_name_admin(usr)] has created a new shuttle docking port in [get_area(D)] [formatJumpTo(get_turf(D))]</span>", 1)
+		log_admin("[key_name_admin(usr)] has created a new shuttle docking port at [D.x];[D.y];[D.z]</span>")
+
+	if(href_list["shuttle_toggle_lockdown"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","LD")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S)) return
+
+		if(S.lockdown)
+			S.lockdown = 0
+			usr << "The lockdown from [S.name] has been lifted."
+			message_admins("<span class='notice'>[key_name_admin(usr)] has lifted [capitalize(S.name)]'s lockdown.</span>", 1)
+			log_admin("[key_name(usr)] has locked [capitalize(S.name)] down. [(length(S.lockdown)>=1) ? "Reason: [S.lockdown]" : ""]")
+		else
+			S.lockdown = 1
+			usr << "[S.name] has been locked down."
+			var/reason = input(usr,"Would you like to provide additional information, which will be shown on [capitalize(S.name)]'s control consoles?","Shuttle lockdown") in list("Yes","No")
+			if(reason == "Yes")
+				reason = input(usr,"Please type additional information about the lockdown of [capitalize(S.name)].","Shuttle lockdown")
+				if(length(reason)>=1)
+					S.lockdown = reason
+			message_admins("<span class='notice'>[key_name_admin(usr)] has locked [capitalize(S.name)] down. [(length(S.lockdown)>=1) ? "Reason: [S.lockdown]" : ""]</span>", 1)
+			log_admin("[key_name(usr)] has locked [capitalize(S.name)] down. [(length(S.lockdown)>=1) ? "Reason: [S.lockdown]" : ""]")
+
+	if(href_list["shuttle_move_to"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","MV")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S)) return
+
+		var/list/possible_ports = list()
+		for(var/obj/structure/docking_port/destination/D in S.docking_ports)
+			var/name = D.areaname
+			possible_ports += name
+			possible_ports[name] = D
+
+		var/choice = input(usr, "Select a docking port for [capitalize(S.name)] to travel to", "Shuttle movement") in (possible_ports + list("Cancel"))
+		var/obj/structure/docking_port/destination/target_port = possible_ports[choice]
+
+		if(!target_port)
+			return
+
+		S.travel_to(target_port,,usr)
+
+		message_admins("[key_name_admin(usr)] has moved [capitalize(S.name)] to [target_port.areaname] ([target_port.x];[target_port.y];[target_port.z])")
+		log_admin("[key_name(usr)] has moved [capitalize(S.name)] to [target_port.areaname] ([target_port.x];[target_port.y];[target_port.z])")
+
+	if(href_list["shuttle_edit"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","SE")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S)) return
+
+		var/list/options = list("Cancel","cooldown","pre-flight delay","transit delay","use transit","can link to computer","innacuracy","name","destroy areas","can rotate")
+		if(S.is_special()) options += "DEFINED LOCATIONS"
+		var/choice = input(usr,"What to edit in [capitalize(S.name)]?","Shuttle editing") in options
+
+		var/new_value
+		switch(choice)
+			if("cooldown")
+				new_value = input(usr,"Input new cooldown for [capitalize(S.name)] (in 1/10s of a second)","Shuttle editing",S.cooldown) as num
+				S.cooldown = new_value
+			if("pre-flight delay")
+				new_value = input(usr,"Input new pre-flight delay for [capitalize(S.name)] (in 1/10s of a second)","Shuttle editing",S.pre_flight_delay) as num
+				S.pre_flight_delay = new_value
+			if("transit delay")
+				new_value = input(usr,"Input new transit delay for [capitalize(S.name)] (in 1/10s of a second)","Shuttle editing",S.transit_delay) as num
+				S.transit_delay = new_value
+			if("use transit")
+				new_value = input(usr,"[NO_TRANSIT] -  no transit, [TRANSIT_ACROSS_Z_LEVELS] - only across z levels, [TRANSIT_ALWAYS] - always","Shuttle editing ([capitalize(S.name)])",S.use_transit) as num
+				if(new_value in list(NO_TRANSIT,TRANSIT_ACROSS_Z_LEVELS,TRANSIT_ALWAYS))
+					S.use_transit = new_value
+				else
+					usr << "Not valid!"
+					return
+			if("can link to computer")
+				new_value = input(usr,"[LINK_FREE] - can always link, [LINK_PASSWORD_ONLY] - can only link with password ([S.password]), [LINK_FORBIDDEN] - can't link at all","Shuttle editing ([capitalize(S.name)])",S.can_link_to_computer) as num
+				S.pre_flight_delay = new_value
+			if("direction")
+				new_value = input(usr,"[NORTH] - north, [SOUTH] - south, [WEST] - west, [EAST] - east","Shuttle editing ([capitalize(S.name)])",S.dir) as num
+				if(new_value in cardinal)
+					S.dir = new_value
+				else
+					usr << "Not valid!"
+					return
+			if("innacuracy")
+				new_value = input(usr,"Input new innacuracy value for [capitalize(S.name)] (when a shuttle moves, its final location is randomly offset by this value)","Shuttle editing",S.innacuracy) as num
+				S.innacuracy = new_value
+			if("name")
+				new_value = input(usr,"Input new name for [capitalize(S.name)]","Shuttle editing",S.innacuracy) as text
+				S.name = new_value
+			if("can rotate")
+				new_value = input(usr,"0 - rotation disabled, 1 - rotation enabled","Shuttle editing",S.can_rotate) as num
+				S.can_rotate = new_value
+			if("DEFINED LOCATIONS")
+				usr << "To prevent accidental mistakes, you can only set these locations to docking ports in the shuttle's memory (use the \"Add a destination docking port to a shuttle\" command)"
+
+				var/list/locations = list("--Cancel--")
+				switch(S.type)
+					if(/datum/shuttle/vox)
+						locations += list("Vox home (MOVING TO IT WILL END THE ROUND)" = "dock_home")
+					if(/datum/shuttle/escape)
+						locations += list("Escape shuttle home" = "dock_station","Escape shuttle centcom" = "dock_centcom")
+					if(/datum/shuttle/taxi)
+						locations += list("Taxi medbay silicon" = "dock_medical_silicon","Taxi engineering cargo" = "dock_engineering_cargo","Taxi security science" = "dock_security_science","Taxi abandoned station" = "dock_abandoned")
+					if(/datum/shuttle/supply)
+						locations += list("Centcom loading bay" = "dock_centcom", "Station cargo bay" = "dock_station")
+
+				var/choice2 = input(usr,"Select a location to modify","Shuttle editing") in locations
+				var/variable_to_edit = locations[choice2]
+
+				var/obj/structure/docking_port/destination/D = select_port_from_list(usr,"Select a new [choice2] location for [S.name] ([S.type])","Shuttle editing",S.docking_ports)
+				if(istype(D))
+					S.vars[variable_to_edit] = D
+					usr << "[S.name]'s [variable_to_edit] has been changed to [D.areaname]"
+					message_admins("<span class='notice'>[key_name_admin(usr)] has changed [capitalize(S.name)]'s [choice2] to [D.areaname]!</span>", 1)
+					log_admin("[key_name_admin(usr)] has changed [capitalize(S.name)]'s [choice2] to [D.areaname]!")
+				else
+					return
+
+
+		message_admins("<span class='notice'>[key_name_admin(usr)] has set [capitalize(S.name)]'s [choice] to [new_value]!</span>", 1)
+		log_admin("[key_name_admin(usr)] has set [capitalize(S.name)]'s [choice] to [new_value]!")
+
+		shuttle_magic() //Update the window!
+
+	if(href_list["shuttle_delete"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","DEL")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S)) return
+
+		var/killed_objs = 0
+
+		if( (input(usr,"Please type \"Yes\" to confirm that you want to delete [capitalize(S)]. This process can't be reverted!","Shuttle deletion","No") as text) != "Yes" )
+			return
+
+		if(S.is_special())
+			usr << "This shuttle can't be deleted. Use the lockdown function instead."
+			return
+
+		var/choice = (input(usr,"Would you like to delete all turfs and objects in the shuttle's current area? Mobs will not be affected.") in list("Yes","No","Cancel") )
+		if(choice == "Cancel")
+			return
+		else if(choice == "Yes")
+			killed_objs = 1
+
+		if(S.linked_area)
+			if(killed_objs == 1)
+				for(var/turf/T in S.linked_area)
+					if(istype(T, /turf/simulated))
+						qdel(T)
+				for(var/obj/O in S.linked_area)
+					if(istype(O, /obj/item) || istype(O, /obj/machinery) || istype(O, /obj/structure))
+						qdel(O)
+				usr << "All turfs and objects deleted from [S.linked_area]."
+
+		message_admins("<span class='notice'>[key_name_admin(usr)] has deleted [capitalize(S.name)] ([S.type]). Objects and turfs [(killed_objs) ? "deleted" : "not deleted"].</span>")
+		log_admin("[key_name(usr)]  has deleted [capitalize(S.name)]! Objects and turfs [(killed_objs) ? "deleted" : "not deleted"].")
+
+		qdel(S)
+		selected_shuttle = null
+
+		shuttle_magic() //Update the window!
+
+	if(href_list["shuttle_teleport_to"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","TP")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S)) return
+
+		if(!S.linked_area || !istype(S.linked_area, /area/))
+			usr << "The shuttle is in the middle of nowhere! (The 'linked_area' variable is either null or not an area, please report this)"
+			return
+
+		var/turf/T = locate(/turf/) in S.linked_area
+		usr.forceMove(T)
+		usr << "You have teleported to [capitalize(S.name)]"
+
+	if(href_list["shuttle_teleport_to_dock"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","TP2")
+
+		var/list/destinations = list()
+		for(var/obj/structure/docking_port/destination/D in all_docking_ports)
+			var/name = "[D.areaname][D.docked_with ? " (docked to [D.docked_with.areaname])" : ""]"
+			destinations += name
+			destinations[name]=D
+
+		var/choice = input(usr,"Select a docking port to teleport to","Finding a docking port") in destinations
+
+		var/obj/structure/docking_port/destination/target = destinations[choice]
+		if(!target) return
+
+		usr.forceMove(get_turf(target))
+		usr << "You have teleported to [choice]"
+
+	if(href_list["shuttle_get_console"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","GC")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S)) return
+
+		if(!S.control_consoles.len)
+
+			var/choice = input(usr,"There is no control console linked to [capitalize(S.name)]. Would you like to create one at your current location?","Shuttle control access") in list("Yes","No")
+			if(choice == "Yes")
+				var/turf/usr_loc = get_turf(usr)
+				var/obj/machinery/computer/shuttle_control/C = new(usr_loc)
+				if(C)
+					C.link_to(S)
+					usr << "A new shuttle control console has been created."
+					message_admins("[key_name_admin(usr)] has created a new shuttle control console connected to [capitalize(S.name)] in [get_area(usr_loc)].")
+					log_admin("[key_name(usr)] has created a new shuttle control console connected to [capitalize(S.name)] in [get_area(usr_loc)].")
+			else
+				return
+
+		else
+
+			var/obj/machinery/computer/shuttle_control/C = pick(S.control_consoles)
+			if(C)
+				usr.loc = C.loc
+
+	if(href_list["shuttle_shuttlify"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","SHH")
+
+		var/area/A = get_area(usr)
+		if(!A)
+			usr << "You must be standing on an area!"
+			return
+		if(A.type == /area && A.name == "Space")
+			usr << "You can't shuttlify space. (If this isn't space, rename this area to something else!)"
+			return
+
+		var/datum/shuttle/conflict = A.get_shuttle()
+		if(conflict)
+			var/choice = input(usr,"This area is already used by [conflict]. Type \"Yes\" to continue and bring on the unintended features","Shuttlify","NO") as text
+			if(choice != "Yes")
+				return
+
+		if( !(locate(/obj/structure/docking_port/shuttle) in A) )
+			usr << "Please create a shuttle docking port (/obj/structure/docking_port/shuttle) in this area!"
+			return
+
+		var/name = input(usr, "Please name the new shuttle", "Shuttlify", A.name) as text|null
+
+		if(!name)
+			usr << "Shuttlifying cancelled."
+			return
+
+		var/datum/shuttle/custom/S = new(starting_area = A)
+		S.initialize()
+		S.name = name
+
+		usr << "Shuttle created!"
+
+		selected_shuttle = S
+		shuttle_magic() //Update the window!
+
+		message_admins("<span class='notice'>[key_name_admin(usr)] has turned [A.name] into a shuttle named [S.name]. [formatJumpTo(get_turf(usr))]</span>")
+		log_admin("[key_name(usr)]  has turned [A.name] into a shuttle named [S.name].")
+
+	if(href_list["shuttle_forcemove"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","FM")
+
+		var/list/L = list("Cancel","YOUR CURRENT LOCATION")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S)) return
+
+		for(var/obj/structure/docking_port/destination/D in S.docking_ports)
+			var/name = "[D.name] [D.areaname]"
+			L+=name
+			L[name]=D
+
+		L += "---other destinations---"
+
+		for(var/obj/structure/docking_port/destination/D in all_docking_ports - S.docking_ports)
+			var/name = D.areaname
+			L+=name
+			L[name]=D
+
+		var/choice = input(usr, "Select a location to teleport [S.name] to!", "Shuttle teleporting") in L
+
+		if(choice == "YOUR CURRENT LOCATION")
+			var/area/A = get_area(usr)
+			var/turf/T = get_turf(usr)
+			if(!A) return
+			if(!T) return
+
+			var/obj/structure/docking_port/destination/temp = new(T)
+			temp.invisibility = 101
+			temp.areaname = A.name
+			temp.dir = usr.dir
+
+			S.move_to_dock(temp)
+
+			message_admins("[key_name_admin(usr)] has teleported [capitalize(S.name)] to himself ([A.name], [temp.x];[temp.y];[temp.z])!")
+			log_admin("[key_name(usr)] has teleported [capitalize(S.name)] to himself by ([A.name], [temp.x];[temp.y];[temp.z])")
+
+			qdel(temp)
+			return
+		else
+			var/obj/structure/docking_port/destination/D = L[choice]
+			if(!D) return
+
+			S.move_to_dock(D)
+
+			message_admins("<span class='notice'>[key_name_admin(usr)] has teleported [capitalize(S.name)] to [choice] ([D.x];[D.y];[D.z])</span>")
+			log_admin("[key_name(usr)] has teleported [capitalize(S.name)] to [choice] ([D.x];[D.y];[D.z])")
+
+			return
+
+	if(href_list["shuttle_reset"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","SR")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S)) return
+
+		if(alert(usr,"ARE YOU SURE YOU WANT TO RESET [S.name] ([S.type])?","HELP","Yes","No")=="No") return
+
+		S.name = initial(S.name)
+		S.cooldown = initial(S.cooldown)
+		S.innacuracy = initial(S.innacuracy)
+		S.transit_delay = initial(S.transit_delay)
+		S.pre_flight_delay = initial(S.pre_flight_delay)
+		S.use_transit = initial(S.use_transit)
+		S.dir = initial(S.dir)
+
+		S.initialize()
+
+		message_admins("[key_name_admin(usr)] has reset [capitalize(S.name)]'s variables")
+		log_admin("[key_name(usr)] has reset [capitalize(S.name)]'s variables")
+
+	if(href_list["shuttle_supercharge"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","SUP")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S)) return
+
+		S.supercharge()
+
+	if(href_list["shuttle_mass_lockdown"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","ML")
+
+		if( !(input(usr,"Please type \"Yes\" to confirm that you want to lockdown all shuttles.","IS IT LOOSE?","NO") == "Yes") )
+			return
+
+		for(var/datum/shuttle/S in shuttles)
+			S.lockdown = 1
+
+		usr << "All shuttles were locked down."
+
+		message_admins("<span class='notice'>[key_name_admin(usr)] has locked all shuttles down!</span>")
+		log_admin("[key_name(usr)] has locked all shuttles down!")
+
+	if(href_list["shuttle_show_overlay"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","SO")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S)) return
+
+		if(!S.linked_port)
+			usr << "The shuttle must have a shuttle docking port!"
+			return
+
+		if(usr.dir != S.dir)
+			usr << "WARNING: You're not facing [dir2text(S.dir)]! The result may be <i>slightly</i> innacurate."
+
+		S.show_outline(usr)
+
+
+	//------------------------------------------------------------------Shuttle stuff end---------------------------------

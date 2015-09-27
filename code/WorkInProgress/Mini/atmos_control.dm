@@ -1,3 +1,4 @@
+var/global/list/atmos_controllers = list()
 /obj/item/weapon/circuitboard/atmoscontrol
 	name = "\improper Central Atmospherics Computer Circuitboard"
 	build_path = /obj/machinery/computer/atmoscontrol
@@ -8,7 +9,8 @@
 	id = "atmoscontrol"
 	req_tech = list("programming" = 4)
 	build_type = IMPRINTER
-	materials = list("$glass" = 2000, "sacid" = 20)
+	materials = list(MAT_GLASS = 2000, "sacid" = 20)
+	category = "Console Boards"
 	build_path = /obj/item/weapon/circuitboard/atmoscontrol
 
 /obj/machinery/computer/atmoscontrol
@@ -23,6 +25,14 @@
 	var/overridden = 0 //not set yet, can't think of a good way to do it
 	req_one_access = list(access_ce)
 
+	light_color = LIGHT_COLOR_CYAN
+
+/obj/machinery/computer/atmoscontrol/New()
+	..()
+	atmos_controllers |= src
+/obj/machinery/computer/atmoscontrol/Destroy()
+	atmos_controllers -= src
+	..()
 
 /obj/machinery/computer/atmoscontrol/xeno
 	name = "\improper Xenobiology Atmospherics Computer"
@@ -58,7 +68,6 @@
 	return interact(user)
 
 /obj/machinery/computer/atmoscontrol/interact(mob/user)
-	user.set_machine(src)
 	if(allowed(user))
 		overridden = 1
 	else if(!emagged)
@@ -69,8 +78,8 @@
 
 /obj/machinery/computer/atmoscontrol/attackby(var/obj/item/I as obj, var/mob/user as mob)
 	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
-		user.visible_message("\red \The [user] swipes \a [I] through \the [src], causing the screen to flash!",\
-			"\red You swipe your [I] through \the [src], the screen flashing as you gain full control.",\
+		user.visible_message("<span class='warning'>\The [user] swipes \a [I] through \the [src], causing the screen to flash!</span>",\
+			"<span class='warning'>You swipe your [I] through \the [src], the screen flashing as you gain full control.</span>",\
 			"You hear the swipe of a card through a reader, and an electronic warble.")
 		emagged = 1
 		overridden = 1
@@ -88,14 +97,18 @@
 		data["alarm"] = "\ref[current]"
 
 	var/list/alarms=list()
-	for(var/obj/machinery/alarm/alarm in (machines)) // removing sortAtom because nano updates it just enough for the lag to happen
+	for(var/obj/machinery/alarm/alarm in sortNames(machines)) // removing sortAtom because nano updates it just enough for the lag to happen
 		if(!is_in_filter(alarm.areaMaster.type))
 			continue // NO ACCESS 4 U
-
+		var/turf/pos = get_turf(alarm)
 		var/list/alarm_data=list()
 		alarm_data["ID"]="\ref[alarm]"
 		alarm_data["danger"] = max(alarm.local_danger_level, alarm.areaMaster.atmosalm-1)
 		alarm_data["name"] = "[alarm]"
+		alarm_data["area"] = get_area(alarm)
+		alarm_data["x"] = pos.x
+		alarm_data["y"] = pos.y
+		alarm_data["z"] = pos.z
 		alarms+=list(alarm_data)
 	data["alarms"]=alarms
 
@@ -104,9 +117,17 @@
 
 	if (!ui)
 		// the ui does not exist, so we'll create a new one
-		ui = new(user, src, ui_key, "atmos_control.tmpl", name, 550, 410)
+		ui = new(user, src, ui_key, "atmos_control.tmpl", name, 900, 800)
+		// adding a template with the key "mapContent" enables the map ui functionality
+		ui.add_template("mapContent", "atmos_control_map_content.tmpl")
+		// adding a template with the key "mapHeader" replaces the map header content
+		ui.add_template("mapHeader", "atmos_control_map_header.tmpl")
 		// When the UI is first opened this is the data it will use
+		// we want to show the map by default
+		ui.set_show_map(1)
+
 		ui.set_initial_data(data)
+
 		ui.open()
 		// Auto update every Master Controller tick
 		if(current)
@@ -118,20 +139,24 @@
 
 
 /obj/machinery/computer/atmoscontrol/proc/is_in_filter(var/typepath)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/atmoscontrol/proc/is_in_filter() called tick#: [world.time]")
 	if(!filter) return 1 // YEP.  TOTALLY.
 	return typepath in filter
 
 //a bunch of this is copied from atmos alarms
 /obj/machinery/computer/atmoscontrol/Topic(href, href_list)
 	if(..())
-		return
+		return 0
+	if(href_list["close"])
+		if(usr.machine == src) usr.unset_machine()
+		return 1
 	if(href_list["reset"])
 		current = null
 
 	if(href_list["alarm"])
 		current = locate(href_list["alarm"])
-		updateUsrDialog()
-		return
+		//updateUsrDialog()
+		return 1
 
 	if(current)
 		if(href_list["command"])
@@ -155,11 +180,11 @@
 					else
 						var/newval = input("Enter new value") as num|null
 						if(isnull(newval))
-							return
+							return 0
 						val = newval
 					current.send_signal(device_id, list (href_list["command"] = val))
 					spawn(3)
-						src.updateUsrDialog()
+						return 1
 				//if("adjust_threshold") //was a good idea but required very wide window
 				if("set_threshold")
 					var/env = href_list["env"]
@@ -168,7 +193,7 @@
 					var/list/thresholds = list("lower bound", "low warning", "high warning", "upper bound")
 					var/newval = input("Enter [thresholds[threshold]] for [env]", "Alarm triggers", selected[threshold]) as num|null
 					if (isnull(newval) || ..() || (current.locked && issilicon(usr)))
-						return
+						return 0
 					if (newval<0)
 						selected[threshold] = -1.0
 					else if (env=="temperature" && newval>5000)
@@ -217,14 +242,14 @@
 							current.target_temperature = selected[3]
 
 					spawn(1)
-						updateUsrDialog()
-			return
+						return 1
+			return 0
 
 		if(href_list["screen"])
 			current.screen = text2num(href_list["screen"])
-			spawn(1)
-				src.updateUsrDialog()
-			return
+			//spawn(1)
+			//	updateUsrDialog()
+			return 1
 
 		if(href_list["atmos_unlock"])
 			switch(href_list["atmos_unlock"])
@@ -236,31 +261,31 @@
 		if(href_list["atmos_alarm"])
 			current.alarmActivated=1
 			current.areaMaster.updateDangerLevel()
-			spawn(1)
-				src.updateUsrDialog()
+			//spawn(1)
+				//src.updateUsrDialog()
 			current.update_icon()
-			return
+			return 1
 		if(href_list["atmos_reset"])
 			current.alarmActivated=0
 			current.areaMaster.updateDangerLevel()
-			spawn(1)
-				src.updateUsrDialog()
+			//spawn(1)
+				//src.updateUsrDialog()
 			current.update_icon()
-			return
+			return 1
 
 		if(href_list["mode"])
 			current.mode = text2num(href_list["mode"])
 			current.apply_mode()
-			spawn(5)
-				src.updateUsrDialog()
-			return
+			//spawn(5)
+				//src.updateUsrDialog()
+			return 1
 
 		if(href_list["preset"])
 			current.preset = text2num(href_list["preset"])
 			current.apply_preset()
-			spawn(5)
-				src.updateUsrDialog()
-			return
+			//spawn(5)
+				//src.updateUsrDialog()
+			return 1
 
 		if(href_list["temperature"])
 			var/list/selected = current.TLV["temperature"]
@@ -268,10 +293,10 @@
 			var/min_temperature = max(selected[2] - T0C, MIN_TEMPERATURE)
 			var/input_temperature = input("What temperature would you like the system to maintain? (Capped between [min_temperature]C and [max_temperature]C)", "Thermostat Controls") as num|null
 			if(input_temperature==null)
-				return
+				return 0
 			if(input_temperature > max_temperature || input_temperature < min_temperature)
 				usr << "Temperature must be between [min_temperature]C and [max_temperature]C"
 			else
 				current.target_temperature = input_temperature + T0C
-			return
-	updateUsrDialog()
+			return 1
+	return 1//updateUsrDialog()

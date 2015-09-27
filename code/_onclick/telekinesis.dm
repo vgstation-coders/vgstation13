@@ -11,6 +11,7 @@ var/const/tk_maxrange = 15
 	By default, emulate the user's unarmed attack
 */
 /atom/proc/attack_tk(mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_tk() called tick#: [world.time]")
 	if(user.stat) return
 	user.UnarmedAttack(src,0) // attack_hand, attack_paw, etc
 	return
@@ -23,6 +24,7 @@ var/const/tk_maxrange = 15
 	There are not a lot of defaults at this time, add more where appropriate.
 */
 /atom/proc/attack_self_tk(mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_self_tk() called tick#: [world.time]")
 	return
 
 /obj/attack_tk(mob/user)
@@ -76,7 +78,7 @@ var/const/tk_maxrange = 15
 
 
 	dropped(mob/user as mob)
-		if(focus && user && loc != user && loc != user.loc) // drop_item() gets called when you tk-attack a table/closet with an item
+		if(focus && user && loc != user && loc != user.loc) // drop_item(null, ) gets called when you tk-attack a table/closet with an item
 			if(focus.Adjacent(loc))
 				focus.loc = loc
 
@@ -95,7 +97,9 @@ var/const/tk_maxrange = 15
 		if(focus)
 			focus.attack_self_tk(user)
 
-	afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, proximity)//TODO: go over this
+	afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, proximity, params)//TODO: go over this
+		if(user)
+			user.delayNextAttack(8)
 		if(!target || !user)	return
 		if(last_throw+3 > world.time)	return
 		if(!host || host != user)
@@ -121,7 +125,7 @@ var/const/tk_maxrange = 15
 			if(8 to tk_maxrange)
 				user.next_move += 10
 			else
-				user << "\blue Your mind won't reach that far."
+				user << "<span class='notice'>Your mind won't reach that far.</span>"
 				return*/
 		if(d > tk_maxrange)
 			user << "<span class='warning'>Your mind won't reach that far.</span>"
@@ -138,9 +142,9 @@ var/const/tk_maxrange = 15
 
 		if(!istype(target, /turf) && istype(focus,/obj/item) && target.Adjacent(focus))
 			var/obj/item/I = focus
-			var/resolved = target.attackby(I, user, user:get_organ_target())
+			var/resolved = target.attackby(I, user, params)
 			if(!resolved && target && I)
-				I.afterattack(target,user,1) // for splashing with beakers
+				I.afterattack(target,user,1,params) // for splashing with beakers
 
 
 		else
@@ -154,6 +158,7 @@ var/const/tk_maxrange = 15
 
 
 	proc/focus_object(var/obj/target, var/mob/living/user)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/focus_object() called tick#: [world.time]")
 		if(!istype(target,/obj))	return//Cant throw non objects atm might let it do mobs later
 		if(target.anchored || !isturf(target.loc))
 			del src
@@ -165,6 +170,7 @@ var/const/tk_maxrange = 15
 
 
 	proc/apply_focus_overlay()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/apply_focus_overlay() called tick#: [world.time]")
 		if(!focus)	return
 		var/obj/effect/overlay/O = new /obj/effect/overlay(locate(focus.x,focus.y,focus.z))
 		O.name = "sparkles"
@@ -176,18 +182,19 @@ var/const/tk_maxrange = 15
 		O.icon_state = "nothing"
 		flick("empdisable",O)
 		spawn(5)
-			O.delete()
+			qdel(O)
 		return
 
 
 	update_icon()
-		overlays.Cut()
+		overlays.len = 0
 		if(focus && focus.icon && focus.icon_state)
 			overlays += icon(focus.icon,focus.icon_state)
 		return
 
 /*Not quite done likely needs to use something thats not get_step_to
 	proc/check_path()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/check_path() called tick#: [world.time]")
 		var/turf/ref = get_turf(src.loc)
 		var/turf/target = get_turf(focus.loc)
 		if(!ref || !target)	return 0
@@ -202,7 +209,7 @@ var/const/tk_maxrange = 15
 //equip_to_slot_or_del(obj/item/W, slot, del_on_fail = 1)
 /*
 		if(istype(user, /mob/living/carbon))
-			if(user:mutations & M_TK && get_dist(source, user) <= 7)
+			if((user:mutations & M_TK) && get_dist(source, user) <= 7)
 				if(user:get_active_hand())	return 0
 				var/X = source:x
 				var/Y = source:y

@@ -1,5 +1,6 @@
 //Returns 1 if mob can be infected, 0 otherwise. Checks his clothing.
 proc/get_infection_chance(var/mob/living/carbon/M, var/vector = "Airborne")
+	//writepanic("[__FILE__].[__LINE__] \\/proc/get_infection_chance() called tick#: [world.time]")
 	var/score = 0
 	if (!istype(M))
 		return 0
@@ -41,19 +42,21 @@ proc/get_infection_chance(var/mob/living/carbon/M, var/vector = "Airborne")
 
 //Checks if table-passing table can reach target (5 tile radius)
 proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/airborne_can_reach() called tick#: [world.time]")
 	var/obj/dummy = new(source)
-	dummy.flags = FPRINT | TABLEPASS
+	dummy.flags = FPRINT
 	dummy.pass_flags = PASSTABLE
 
 	for(var/i=0, i<radius, i++) if(!step_towards(dummy, target)) break
 
-	var/rval = (dummy.loc in range(1,target))
+	var/rval = (target.Adjacent(dummy.loc))
 	dummy.loc = null
 	dummy = null
 	return rval
 
 //Attemptes to infect mob M with virus. Set forced to 1 to ignore protective clothing.  Returns 1 if successful.
-/proc/infect_virus2(var/mob/living/carbon/M,var/datum/disease2/disease/disease,var/forced = 0)
+/proc/infect_virus2(var/mob/living/carbon/M,var/datum/disease2/disease/disease,var/forced = 0, var/notes="")
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/infect_virus2() called tick#: [world.time]")
 	if(!istype(disease))
 //		log_debug("Bad virus")
 		return 0
@@ -76,28 +79,33 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 		var/datum/disease2/disease/D = disease.getcopy()
 		D.minormutate()
 //		log_debug("Adding virus")
+		D.log += "<br />[timestamp()] Infected [key_name(M)] [notes]"
 		M.virus2["[D.uniqueID]"] = D
 		return 1
 	return 0
 
 //Infects mob M with random lesser disease, if he doesn't have one
 /proc/infect_mob_random_lesser(var/mob/living/carbon/M)
-	var/datum/disease2/disease/D = new /datum/disease2/disease
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/infect_mob_random_lesser() called tick#: [world.time]")
+	var/datum/disease2/disease/D = new /datum/disease2/disease("infect_mob_random_lesser")
 	D.makerandom()
 	D.infectionchance = 1
 	M.virus2["[D.uniqueID]"] = D
 
 //Infects mob M with random greated disease, if he doesn't have one
 /proc/infect_mob_random_greater(var/mob/living/carbon/M)
-	var/datum/disease2/disease/D = new /datum/disease2/disease
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/infect_mob_random_greater() called tick#: [world.time]")
+	var/datum/disease2/disease/D = new /datum/disease2/disease("infect_mob_random_greater")
 	D.makerandom(1)
 	M.virus2["[D.uniqueID]"] = D
 
 //Fancy prob() function.
 /proc/dprob(var/p)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/dprob() called tick#: [world.time]")
 	return(prob(sqrt(p)) && prob(sqrt(p)))
 
 /mob/living/carbon/proc/spread_disease_to(var/mob/living/carbon/victim, var/vector = "Airborne")
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/proc/spread_disease_to() called tick#: [world.time]")
 	if (src == victim)
 		return "retardation"
 
@@ -111,14 +119,14 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 			if (vector == "Airborne")
 				if(airborne_can_reach(get_turf(src), get_turf(victim)))
 //					log_debug("In range, infecting")
-					infect_virus2(victim,V)
+					infect_virus2(victim,V, notes="(Airborne, from [key_name(src)])")
 				else
 //					log_debug("Could not reach target")
 
 			if (vector == "Contact")
 				if (in_range(src, victim))
 //					log_debug("In range, infecting")
-					infect_virus2(victim,V)
+					infect_virus2(victim,V, notes="(Contact with [key_name(src)])")
 
 	//contact goes both ways
 	if (victim.virus2.len > 0 && vector == "Contact")
@@ -137,4 +145,4 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 			for (var/ID in victim.virus2)
 				var/datum/disease2/disease/V = victim.virus2[ID]
 				if(V && V.spreadtype != vector) continue
-				infect_virus2(src,V)
+				infect_virus2(src,V, notes="(Contact with [key_name(victim)])")

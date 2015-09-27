@@ -1,5 +1,7 @@
 /datum/hud/proc/human_hud(var/ui_style='icons/mob/screen1_White.dmi', var/ui_color = "#ffffff", var/ui_alpha = 255)
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/hud/proc/human_hud() called tick#: [world.time]")
+
 	src.adding = list()
 	src.other = list()
 	src.hotkeybuttons = list() //These can be disabled for hotkey usersx
@@ -7,7 +9,7 @@
 	var/obj/screen/using
 	var/obj/screen/inventory/inv_box
 
-	using = new /obj/screen()
+	using = getFromPool(/obj/screen)
 	using.name = "act_intent"
 	using.dir = SOUTHWEST
 	using.icon = ui_style
@@ -23,7 +25,7 @@
 	ico = new(ui_style, "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
 	ico.DrawBox(rgb(255,255,255,1),1,ico.Height()/2,ico.Width()/2,ico.Height())
-	using = new /obj/screen( src )
+	using = getFromPool(/obj/screen,src)
 	using.name = "help"
 	using.icon = ico
 	using.screen_loc = ui_acti
@@ -34,7 +36,7 @@
 	ico = new(ui_style, "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
 	ico.DrawBox(rgb(255,255,255,1),ico.Width()/2,ico.Height()/2,ico.Width(),ico.Height())
-	using = new /obj/screen( src )
+	using = getFromPool(/obj/screen,src)
 	using.name = "disarm"
 	using.icon = ico
 	using.screen_loc = ui_acti
@@ -45,7 +47,7 @@
 	ico = new(ui_style, "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
 	ico.DrawBox(rgb(255,255,255,1),ico.Width()/2,1,ico.Width(),ico.Height()/2)
-	using = new /obj/screen( src )
+	using = getFromPool(/obj/screen,src)
 	using.name = "grab"
 	using.icon = ico
 	using.screen_loc = ui_acti
@@ -56,7 +58,7 @@
 	ico = new(ui_style, "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
 	ico.DrawBox(rgb(255,255,255,1),1,1,ico.Width()/2,ico.Height()/2)
-	using = new /obj/screen( src )
+	using = getFromPool(/obj/screen,src)
 	using.name = "harm"
 	using.icon = ico
 	using.screen_loc = ui_acti
@@ -66,7 +68,7 @@
 
 //end intent small hud objects
 
-	using = new /obj/screen()
+	using = getFromPool(/obj/screen)
 	using.name = "mov_intent"
 	using.dir = SOUTHWEST
 	using.icon = ui_style
@@ -78,7 +80,7 @@
 	src.adding += using
 	move_intent = using
 
-	using = new /obj/screen()
+	using = getFromPool(/obj/screen)
 	using.name = "drop"
 	using.icon = ui_style
 	using.icon_state = "act_drop"
@@ -88,7 +90,7 @@
 	using.alpha = ui_alpha
 	src.hotkeybuttons += using
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "i_clothing"
 	inv_box.dir = SOUTH
 	inv_box.icon = ui_style
@@ -100,7 +102,7 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "o_clothing"
 	inv_box.dir = SOUTH
 	inv_box.icon = ui_style
@@ -112,7 +114,7 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "r_hand"
 	inv_box.dir = WEST
 	inv_box.icon = ui_style
@@ -128,7 +130,7 @@
 	src.r_hand_hud_object = inv_box
 	src.adding += inv_box
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "l_hand"
 	inv_box.dir = EAST
 	inv_box.icon = ui_style
@@ -143,7 +145,7 @@
 	src.l_hand_hud_object = inv_box
 	src.adding += inv_box
 
-	using = new /obj/screen/inventory()
+	using = getFromPool(/obj/screen/inventory)
 	using.name = "hand"
 	using.dir = SOUTH
 	using.icon = ui_style
@@ -154,7 +156,7 @@
 	using.alpha = ui_alpha
 	src.adding += using
 
-	using = new /obj/screen/inventory()
+	using = getFromPool(/obj/screen/inventory)
 	using.name = "hand"
 	using.dir = SOUTH
 	using.icon = ui_style
@@ -165,7 +167,7 @@
 	using.alpha = ui_alpha
 	src.adding += using
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "id"
 	inv_box.dir = NORTH
 	inv_box.icon = ui_style
@@ -177,7 +179,7 @@
 	inv_box.alpha = ui_alpha
 	src.adding += inv_box
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "mask"
 	inv_box.dir = NORTH
 	inv_box.icon = ui_style
@@ -189,7 +191,7 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "back"
 	inv_box.dir = NORTH
 	inv_box.icon = ui_style
@@ -201,7 +203,7 @@
 	inv_box.alpha = ui_alpha
 	src.adding += inv_box
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "storage1"
 	inv_box.icon = ui_style
 	inv_box.icon_state = "pocket"
@@ -212,7 +214,7 @@
 	inv_box.alpha = ui_alpha
 	src.adding += inv_box
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "storage2"
 	inv_box.icon = ui_style
 	inv_box.icon_state = "pocket"
@@ -223,7 +225,7 @@
 	inv_box.alpha = ui_alpha
 	src.adding += inv_box
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "suit storage"
 	inv_box.icon = ui_style
 	inv_box.dir = 8 //The sprite at dir=8 has the background whereas the others don't.
@@ -235,7 +237,7 @@
 	inv_box.alpha = ui_alpha
 	src.adding += inv_box
 
-	using = new /obj/screen()
+	using = getFromPool(/obj/screen)
 	using.name = "resist"
 	using.icon = ui_style
 	using.icon_state = "act_resist"
@@ -245,7 +247,7 @@
 	using.alpha = ui_alpha
 	src.hotkeybuttons += using
 
-	using = new /obj/screen()
+	using = getFromPool(/obj/screen)
 	using.name = "toggle"
 	using.icon = ui_style
 	using.icon_state = "other"
@@ -255,7 +257,7 @@
 	using.alpha = ui_alpha
 	src.adding += using
 
-	using = new /obj/screen()
+	using = getFromPool(/obj/screen)
 	using.name = "equip"
 	using.icon = ui_style
 	using.icon_state = "act_equip"
@@ -265,7 +267,7 @@
 	using.alpha = ui_alpha
 	src.adding += using
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "gloves"
 	inv_box.icon = ui_style
 	inv_box.icon_state = "gloves"
@@ -276,7 +278,7 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "eyes"
 	inv_box.icon = ui_style
 	inv_box.icon_state = "glasses"
@@ -287,7 +289,7 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "ears"
 	inv_box.icon = ui_style
 	inv_box.icon_state = "ears"
@@ -298,7 +300,7 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "head"
 	inv_box.icon = ui_style
 	inv_box.icon_state = "hair"
@@ -309,7 +311,7 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "shoes"
 	inv_box.icon = ui_style
 	inv_box.icon_state = "shoes"
@@ -320,7 +322,7 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
-	inv_box = new /obj/screen/inventory()
+	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "belt"
 	inv_box.icon = ui_style
 	inv_box.icon_state = "belt"
@@ -331,7 +333,7 @@
 	inv_box.alpha = ui_alpha
 	src.adding += inv_box
 
-	mymob.throw_icon = new /obj/screen()
+	mymob.throw_icon = getFromPool(/obj/screen)
 	mymob.throw_icon.icon = ui_style
 	mymob.throw_icon.icon_state = "act_throw_off"
 	mymob.throw_icon.name = "throw"
@@ -340,62 +342,62 @@
 	mymob.throw_icon.alpha = ui_alpha
 	src.hotkeybuttons += mymob.throw_icon
 
-	mymob.oxygen = new /obj/screen()
+	mymob.oxygen = getFromPool(/obj/screen)
 	mymob.oxygen.icon = ui_style
 	mymob.oxygen.icon_state = "oxy0"
 	mymob.oxygen.name = "oxygen"
 	mymob.oxygen.screen_loc = ui_oxygen
 
-	mymob.pressure = new /obj/screen()
+	mymob.pressure = getFromPool(/obj/screen)
 	mymob.pressure.icon = ui_style
 	mymob.pressure.icon_state = "pressure0"
 	mymob.pressure.name = "pressure"
 	mymob.pressure.screen_loc = ui_pressure
 
-	mymob.toxin = new /obj/screen()
+	mymob.toxin = getFromPool(/obj/screen)
 	mymob.toxin.icon = ui_style
 	mymob.toxin.icon_state = "tox0"
 	mymob.toxin.name = "toxin"
 	mymob.toxin.screen_loc = ui_toxin
 
-	mymob.internals = new /obj/screen()
+	mymob.internals = getFromPool(/obj/screen)
 	mymob.internals.icon = ui_style
 	mymob.internals.icon_state = "internal0"
 	mymob.internals.name = "internal"
 	mymob.internals.screen_loc = ui_internal
 
-	mymob.fire = new /obj/screen()
+	mymob.fire = getFromPool(/obj/screen)
 	mymob.fire.icon = ui_style
 	mymob.fire.icon_state = "fire0"
 	mymob.fire.name = "fire"
 	mymob.fire.screen_loc = ui_fire
 
-	mymob.bodytemp = new /obj/screen()
+	mymob.bodytemp = getFromPool(/obj/screen)
 	mymob.bodytemp.icon = ui_style
 	mymob.bodytemp.icon_state = "temp1"
 	mymob.bodytemp.name = "body temperature"
 	mymob.bodytemp.screen_loc = ui_temp
 
-	mymob.healths = new /obj/screen()
+	mymob.healths = getFromPool(/obj/screen)
 	mymob.healths.icon = ui_style
 	mymob.healths.icon_state = "health0"
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_health
 
-	mymob.nutrition_icon = new /obj/screen()
+	mymob.nutrition_icon = getFromPool(/obj/screen)
 	mymob.nutrition_icon.icon = ui_style
 	mymob.nutrition_icon.icon_state = "nutrition0"
 	mymob.nutrition_icon.name = "nutrition"
 	mymob.nutrition_icon.screen_loc = ui_nutrition
 
-	mymob.pullin = new /obj/screen()
+	mymob.pullin = getFromPool(/obj/screen)
 	mymob.pullin.icon = ui_style
 	mymob.pullin.icon_state = "pull0"
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_pull_resist
 	src.hotkeybuttons += mymob.pullin
 
-	mymob.blind = new /obj/screen()
+	mymob.blind = getFromPool(/obj/screen)
 	mymob.blind.icon = 'icons/mob/screen1_full.dmi'
 	mymob.blind.icon_state = "blackimageoverlay"
 	mymob.blind.name = " "
@@ -403,7 +405,7 @@
 	mymob.blind.mouse_opacity = 0
 	mymob.blind.layer = 0
 
-	mymob.damageoverlay = new /obj/screen()
+	mymob.damageoverlay = getFromPool(/obj/screen)
 	mymob.damageoverlay.icon = 'icons/mob/screen1_full.dmi'
 	mymob.damageoverlay.icon_state = "oxydamageoverlay0"
 	mymob.damageoverlay.name = "dmg"
@@ -411,44 +413,44 @@
 	mymob.damageoverlay.mouse_opacity = 0
 	mymob.damageoverlay.layer = 18.1 //The black screen overlay sets layer to 18 to display it, this one has to be just on top.
 
-	mymob.flash = new /obj/screen()
+	mymob.flash = getFromPool(/obj/screen)
 	mymob.flash.icon = ui_style
 	mymob.flash.icon_state = "blank"
 	mymob.flash.name = "flash"
 	mymob.flash.screen_loc = "1,1 to 15,15"
 	mymob.flash.layer = 17
 
-	mymob.pain = new /obj/screen( null )
+	mymob.pain = getFromPool(/obj/screen)
 
-	mymob.zone_sel = new /obj/screen/zone_sel( null )
+	mymob.zone_sel = getFromPool(/obj/screen/zone_sel)
 	mymob.zone_sel.icon = ui_style
 	mymob.zone_sel.color = ui_color
 	mymob.zone_sel.alpha = ui_alpha
-	mymob.zone_sel.overlays.Cut()
+	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
 
 	//Handle the gun settings buttons
-	mymob.gun_setting_icon = new /obj/screen/gun/mode(null)
+	mymob.gun_setting_icon = getFromPool(/obj/screen/gun/mode)
 	if (mymob.client)
 		if (mymob.client.gun_mode) // If in aim mode, correct the sprite
 			mymob.gun_setting_icon.dir = 2
 	for(var/obj/item/weapon/gun/G in mymob) // If targeting someone, display other buttons
 		if (G.target)
-			mymob.item_use_icon = new /obj/screen/gun/item(null)
+			mymob.item_use_icon = getFromPool(/obj/screen/gun/item)
 			if (mymob.client.target_can_click)
 				mymob.item_use_icon.dir = 1
 			src.adding += mymob.item_use_icon
-			mymob.gun_move_icon = new /obj/screen/gun/move(null)
+			mymob.gun_move_icon = getFromPool(/obj/screen/gun/move)
 			if (mymob.client.target_can_move)
 				mymob.gun_move_icon.dir = 1
-				mymob.gun_run_icon = new /obj/screen/gun/run(null)
+				mymob.gun_run_icon = getFromPool(/obj/screen/gun/run)
 				if (mymob.client.target_can_run)
 					mymob.gun_run_icon.dir = 1
 				src.adding += mymob.gun_run_icon
 			src.adding += mymob.gun_move_icon
 
 
-	mymob.client.screen = null
+	mymob.client.reset_screen()
 
 	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.nutrition_icon, mymob.pullin, mymob.blind, mymob.flash, mymob.damageoverlay, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep) //, mymob.mach )
 	mymob.client.screen += src.adding + src.hotkeybuttons
@@ -461,6 +463,7 @@
 	set category = "OOC"
 	set name = "Toggle hotkey buttons"
 	set desc = "This disables or enables the user interface buttons which can be used with hotkeys."
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/carbon/human/verb/toggle_hotkey_verbs()  called tick#: [world.time]")
 
 	if(hud_used.hotkey_ui_hidden)
 		client.screen += hud_used.hotkeybuttons
@@ -475,31 +478,33 @@
 	if(!hud_used) return
 	if(!client) return
 
-	if(!hud_used.hud_shown)	//Hud toggled to minimal
+	if(hud_used.hud_shown != 1)	//Hud toggled to minimal
 		return
 
 	client.screen -= hud_used.item_action_list
 
-	hud_used.item_action_list = list()
 	for(var/obj/item/I in src)
-		if(I.icon_action_button)
-			var/obj/screen/item_action/A = new(hud_used)
+		if(I.action_button_name)
+			if(hud_used.item_action_list.len < num)
+				var/obj/screen/item_action/N = getFromPool(/obj/screen/item_action,hud_used)
+				hud_used.item_action_list += N
 
-			//A.icon = 'icons/mob/screen1_action.dmi'
-			//A.icon_state = I.icon_action_button
+			var/obj/screen/item_action/A = hud_used.item_action_list[num]
+
 			A.icon = ui_style2icon(client.prefs.UI_style)
 			A.icon_state = "template"
+
+			A.overlays.len = 0
 			var/image/img = image(I.icon, A, I.icon_state)
 			img.pixel_x = 0
 			img.pixel_y = 0
 			A.overlays += img
 
-			if(I.action_button_name)
-				A.name = I.action_button_name
-			else
-				A.name = "Use [I.name]"
+			A.name = I.action_button_name
 			A.owner = I
-			hud_used.item_action_list += A
+
+			client.screen += hud_used.item_action_list[num]
+
 			switch(num)
 				if(1)
 					A.screen_loc = ui_action_slot1
@@ -513,4 +518,3 @@
 					A.screen_loc = ui_action_slot5
 					break //5 slots available, so no more can be added.
 			num++
-	src.client.screen += src.hud_used.item_action_list

@@ -11,6 +11,8 @@
 	var/receive_frequency = 1437
 	var/datum/radio_frequency/radio_connection
 
+	light_color = LIGHT_COLOR_CYAN
+
 
 /obj/machinery/computer/atmos_alert/initialize()
 	..()
@@ -35,6 +37,7 @@
 
 
 /obj/machinery/computer/atmos_alert/proc/set_frequency(new_frequency)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/atmos_alert/proc/set_frequency() called tick#: [world.time]")
 	radio_controller.remove_object(src, receive_frequency)
 	receive_frequency = new_frequency
 	radio_connection = radio_controller.add_object(src, receive_frequency, RADIO_ATMOSIA)
@@ -67,6 +70,7 @@
 
 
 /obj/machinery/computer/atmos_alert/proc/return_text()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/atmos_alert/proc/return_text() called tick#: [world.time]")
 	var/priority_text
 	var/minor_text
 

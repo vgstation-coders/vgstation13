@@ -10,9 +10,10 @@ Refactored AI modules by N3X15
 	name = "AI Module"
 	icon = 'icons/obj/module.dmi'
 	icon_state = "std_mod"
-	item_state = "electronic"
+	item_state = "circuitboard"
 	desc = "An AI Module for transmitting encrypted instructions to the AI."
-	flags = FPRINT | TABLEPASS| CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	force = 5.0
 	w_class = 2.0
 	throwforce = 5.0
@@ -21,10 +22,9 @@ Refactored AI modules by N3X15
 	origin_tech = "programming=3"
 
 	//Recycling
-	g_amt=2000 // Glass
-	var/gold_amt=0
-	var/diamond_amt=0
+	starting_materials = list(MAT_GLASS = 2000)
 	w_type=RECYK_ELECTRONIC
+	melt_temperature = MELTPOINT_SILICON
 	// Don't specify sulfuric, as that's renewable and is used up in the etching process anyway.
 
 	var/law // Cached law
@@ -33,19 +33,14 @@ Refactored AI modules by N3X15
 	var/modflags = 0
 
 /obj/item/weapon/aiModule/New()
+	. = ..()
 	name = "'[modname]' [modtype]"
 	updateLaw()
-
-/obj/item/weapon/aiModule/recycle(var/datum/materials/rec)
-	rec.addAmount("glass",  g_amt)
-	rec.addAmount("gold",   gold_amt)
-	rec.addAmount("diamond",diamond_amt)
-	return 1
 
 /obj/item/weapon/aiModule/attack_ai(mob/user as mob)
 	// Keep MoMMIs from picking them up.
 	if(isMoMMI(user))
-		user << "\red Your firmware prevents you from picking that up!"
+		user << "<span class='warning'>Your firmware prevents you from picking that up!</span>"
 	return
 
 // This prevents modules from being picked up.  Use it, if needed.
@@ -54,9 +49,11 @@ Refactored AI modules by N3X15
 
 // Make a copy of this module.
 /obj/item/weapon/aiModule/proc/copy()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/aiModule/proc/copy() called tick#: [world.time]")
 	return new src.type(loc)
 
 /obj/item/weapon/aiModule/proc/fmtSubject(var/atom/target)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/aiModule/proc/fmtSubject() called tick#: [world.time]")
 	if(ismob(target))
 		var/mob/M=target
 		return "[M.name]([M.key])"
@@ -67,10 +64,12 @@ Refactored AI modules by N3X15
 // 1 for successful validation.
 // Run prior to law upload, and when doing a dry run in the planning frame.
 /obj/item/weapon/aiModule/proc/validate(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/aiModule/proc/validate() called tick#: [world.time]")
 	return 1
 
 // Apply laws to ai_laws datum.
 /obj/item/weapon/aiModule/proc/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/aiModule/proc/upload() called tick#: [world.time]")
 	var/senderName="Unknown"
 	if(sender)
 		senderName=sender.name
@@ -79,7 +78,7 @@ Refactored AI modules by N3X15
 		var/mob/M=target
 		// This seems redundant.  Revisit. - N3X
 		if(src.modflags & HIDE_SENDER)
-			target << "\red <b>\[REDACTED\]</b> \black has uploaded a change to the laws you must follow, using \a [name]. From now on: "
+			target << "<span class='danger'>\[REDACTED\] </span>has uploaded a change to the laws you must follow, using \a [name]. From now on: "
 		else
 			target << "[senderName] has uploaded a change to the laws you must follow, using \a [name]. From now on: "
 		targetName="[fmtSubject(M)])"
@@ -92,6 +91,7 @@ Refactored AI modules by N3X15
 
 // Constructs the law and desc from variables.
 /obj/item/weapon/aiModule/proc/updateLaw()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/aiModule/proc/updateLaw() called tick#: [world.time]")
 	law = "BUG: [type] doesn't override updateLaw()!"
 	desc = "\A [name]: '[law]'"
 
@@ -99,12 +99,11 @@ Refactored AI modules by N3X15
 
 /obj/item/weapon/aiModule/reset
 	modname = "Reset"
-	desc = "A 'reset' AI module: 'Clears all laws except for the core three.'"
+	desc = "A 'reset' AI module: 'Clears all non-inherent (non-core) laws.'"
 	origin_tech = "programming=3;materials=4"
 
 	// Recycling
-	g_amt   =2000/CC_PER_SHEET_GLASS // Glass
-	gold_amt=100/CC_PER_SHEET_MISC
+	starting_materials = list(MAT_GLASS = 2000/CC_PER_SHEET_GLASS, MAT_GOLD = 100/CC_PER_SHEET_MISC)
 	// Don't specify sulfuric, as that's renewable and is used up in the etching process anyway.
 
 /obj/item/weapon/aiModule/reset/updateLaw()
@@ -129,8 +128,7 @@ Refactored AI modules by N3X15
 	origin_tech = "programming=3;materials=6"
 
 	// Recycling
-	g_amt=2000/CC_PER_SHEET_GLASS // Glass
-	diamond_amt=100/CC_PER_SHEET_MISC
+	starting_materials = list(MAT_GLASS = 2000/CC_PER_SHEET_GLASS, MAT_DIAMOND = 100/CC_PER_SHEET_MISC)
 	// Don't specify sulfuric, as that's renewable and is used up in the etching process anyway.
 
 /obj/item/weapon/aiModule/purge/updateLaw()
@@ -179,5 +177,5 @@ Refactored AI modules by N3X15
 
 /obj/item/weapon/aiModule/keeper/validate(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	..()
-	sender << "\red How the fuck did you get this?"
+	sender << "<span class='warning'>How the fuck did you get this?</span>"
 	return 0

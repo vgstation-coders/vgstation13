@@ -3,7 +3,7 @@
 /obj/machinery/particle_accelerator/control_box
 	name = "Particle Accelerator Control Computer"
 	desc = "This controls the density of the particles."
-	icon = 'icons/obj/machines/particle_accelerator.dmi'
+	icon = 'icons/obj/machines/particle_accelerator2.dmi'
 	icon_state = "control_box"
 	reference = "control_box"
 	anchored = 0
@@ -21,6 +21,8 @@
 	var/parts = null
 	var/datum/wires/particle_acc/control_box/wires = null
 
+	light_color = LIGHT_COLOR_BLUE
+
 /obj/machinery/particle_accelerator/control_box/New()
 	wires = new(src)
 	connected_parts = list()
@@ -29,6 +31,11 @@
 /obj/machinery/particle_accelerator/control_box/Destroy()
 	if(active)
 		toggle_power()
+
+	if(wires)
+		wires.Destroy()
+		wires = null
+
 	..()
 
 /obj/machinery/particle_accelerator/control_box/attack_hand(mob/user as mob)
@@ -59,6 +66,9 @@
 	if(active)
 		icon_state = "[reference]p1"
 	else
+		if(stat & NOPOWER)
+			icon_state = "[reference]w"
+			return
 		if(use_power)
 			if(assembled)
 				icon_state = "[reference]p"
@@ -107,11 +117,13 @@
 
 
 /obj/machinery/particle_accelerator/control_box/proc/strength_change()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/particle_accelerator/control_box/proc/strength_change() called tick#: [world.time]")
 	for(var/obj/structure/particle_accelerator/part in connected_parts)
 		part.strength = strength
 		part.update_icon()
 
 /obj/machinery/particle_accelerator/control_box/proc/add_strength(var/s)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/particle_accelerator/control_box/proc/add_strength() called tick#: [world.time]")
 	if(assembled)
 		strength++
 		if(strength > strength_upper_limit)
@@ -119,16 +131,17 @@
 		else
 			message_admins("PA Control Computer increased to [strength] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 			log_game("PA Control Computer increased to [strength] by [usr.ckey]([usr]) in ([x],[y],[z])")
-			investigate_log("increased to <font color='red'>[strength]</font> by [usr.key]","singulo")
+			investigation_log(I_SINGULO,"increased to <font color='red'>[strength]</font> by [usr.key]")
 		strength_change()
 
 /obj/machinery/particle_accelerator/control_box/proc/remove_strength(var/s)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/particle_accelerator/control_box/proc/remove_strength() called tick#: [world.time]")
 	if(assembled)
 		strength--
 		if(strength < 0)
 			strength = 0
 		else
-			investigate_log("decreased to <font color='green'>[strength]</font> by [usr.key]","singulo")
+			investigation_log(I_SINGULO,"decreased to <font color='green'>[strength]</font> by [usr.key]")
 		strength_change()
 
 /obj/machinery/particle_accelerator/control_box/power_change()
@@ -138,14 +151,20 @@
 		use_power = 0
 	else if(!stat && construction_state <= 3)
 		use_power = 1
+	src.update_icon()
+	for(var/obj/structure/particle_accelerator/part in connected_parts)
+		part.strength = null
+		part.powered = 0
+		part.update_icon()
 	return
+
 
 
 /obj/machinery/particle_accelerator/control_box/process()
 	if(src.active)
 		//a part is missing!
 		if( length(connected_parts) < 6 )
-			investigate_log("lost a connected part; It <font color='red'>powered down</font>.","singulo")
+			investigation_log(I_SINGULO,"lost a connected part; It <font color='red'>powered down</font>.")
 			src.toggle_power()
 			return
 		//emit some particles
@@ -156,6 +175,7 @@
 
 
 /obj/machinery/particle_accelerator/control_box/proc/part_scan()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/particle_accelerator/control_box/proc/part_scan() called tick#: [world.time]")
 	for(var/obj/structure/particle_accelerator/fuel_chamber/F in orange(1,src))
 		src.dir = F.dir
 	connected_parts = list()
@@ -193,6 +213,7 @@
 
 
 /obj/machinery/particle_accelerator/control_box/proc/check_part(var/turf/T, var/type)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/particle_accelerator/control_box/proc/check_part() called tick#: [world.time]")
 	if(!(T)||!(type))
 		return 0
 	var/obj/structure/particle_accelerator/PA = locate(/obj/structure/particle_accelerator) in T
@@ -205,8 +226,9 @@
 
 
 /obj/machinery/particle_accelerator/control_box/proc/toggle_power()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/particle_accelerator/control_box/proc/toggle_power() called tick#: [world.time]")
 	src.active = !src.active
-	investigate_log("turned [active?"<font color='red'>ON</font>":"<font color='green'>OFF</font>"] by [usr ? usr.key : "outside forces"]","singulo")
+	investigation_log(I_SINGULO,"turned [active?"<font color='red'>ON</font>":"<font color='green'>OFF</font>"] by [usr ? usr.key : "outside forces"]")
 	if (active)
 		message_admins("PA Control Computer turned ON by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 		log_game("PA Control Computer turned ON by [usr.ckey]([usr]) in ([x],[y],[z])")
@@ -227,10 +249,11 @@
 
 /obj/machinery/particle_accelerator/control_box/interact(mob/user)
 	if((get_dist(src, user) > 1) || (stat & (BROKEN|NOPOWER)))
-		if(!istype(user, /mob/living/silicon))
-			user.unset_machine()
-			user << browse(null, "window=pacontrol")
-			return
+		if(!istype(user, /mob/living/silicon) && !isAdminGhost(user))
+			if(!user.mutations || user.mutations.len || !(M_TK in user.mutations))
+				user.unset_machine()
+				user << browse(null, "window=pacontrol")
+				return
 	user.set_machine(src)
 
 	var/dat = ""

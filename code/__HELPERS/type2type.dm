@@ -1,7 +1,6 @@
 /*
  * Holds procs designed to change one type of value, into another.
  * Contains:
- *			hex2num & num2hex
  *			text2list & list2text
  *			file2list
  *			angle2dir
@@ -9,97 +8,95 @@
  *			worldtime2text
  */
 
-//Returns an integer given a hex input
-/proc/hex2num(hex)
-	if (!( istext(hex) ))
-		return
+// Concatenates a list of strings into a single string.  A seperator may optionally be provided.
+/proc/list2text(list/ls, sep)
+	if(ls.len <= 1) // Early-out code for empty or singleton lists.
+		return ls.len ? ls[1] : ""
 
-	var/num = 0
-	var/power = 0
-	var/i = null
-	i = length(hex)
-	while(i > 0)
-		var/char = copytext(hex, i, i + 1)
-		switch(char)
-			if("0")
-				//Apparently, switch works with empty statements, yay! If that doesn't work, blame me, though. -- Urist
-			if("9", "8", "7", "6", "5", "4", "3", "2", "1")
-				num += text2num(char) * 16 ** power
-			if("a", "A")
-				num += 16 ** power * 10
-			if("b", "B")
-				num += 16 ** power * 11
-			if("c", "C")
-				num += 16 ** power * 12
-			if("d", "D")
-				num += 16 ** power * 13
-			if("e", "E")
-				num += 16 ** power * 14
-			if("f", "F")
-				num += 16 ** power * 15
-			else
-				return
-		power++
-		i--
-	return num
+	var/l = ls.len // Made local for sanic speed.
+	var/i = 0 // Incremented every time a list index is accessed.
 
-//Returns the hex value of a number given a value assumed to be a base-ten value
-/proc/num2hex(num, placeholder)
+	if(sep != null)
+		// Macros expand to long argument lists like so: sep, ls[++i], sep, ls[++i], sep, ls[++i], etc...
+		#define S1    sep, ls[++i]
+		#define S4    S1,  S1,  S1,  S1
+		#define S16   S4,  S4,  S4,  S4
+		#define S64   S16, S16, S16, S16
 
-	if (placeholder == null)
-		placeholder = 2
-	if (!( isnum(num) ))
-		return
-	if (!( num ))
-		return "0"
-	var/hex = ""
-	var/i = 0
-	while(16 ** i < num)
-		i++
-	var/power = null
-	power = i - 1
-	while(power >= 0)
-		var/val = round(num / 16 ** power)
-		num -= val * 16 ** power
-		switch(val)
-			if(9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0, 0.0)
-				hex += text("[]", val)
-			if(10.0)
-				hex += "A"
-			if(11.0)
-				hex += "B"
-			if(12.0)
-				hex += "C"
-			if(13.0)
-				hex += "D"
-			if(14.0)
-				hex += "E"
-			if(15.0)
-				hex += "F"
-			else
-		power--
-	while(length(hex) < placeholder)
-		hex = text("0[]", hex)
-	return hex
+		. = "[ls[++i]]" // Make sure the initial element is converted to text.
 
+		// Having the small concatenations come before the large ones boosted speed by an average of at least 5%.
+		if(l-1 & 0x01) // 'i' will always be 1 here.
+			. = text("[][][]", ., S1) // Append 1 element if the remaining elements are not a multiple of 2.
+		if(l-i & 0x02)
+			. = text("[][][][][]", ., S1, S1) // Append 2 elements if the remaining elements are not a multiple of 4.
+		if(l-i & 0x04)
+			. = text("[][][][][][][][][]", ., S4) // And so on....
+		if(l-i & 0x08)
+			. = text("[][][][][][][][][][][][][][][][][]", ., S4, S4)
+		if(l-i & 0x10)
+			. = text("[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]", ., S16)
+		if(l-i & 0x20)
+			. = text("[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]", ., S16, S16)
+		if(l-i & 0x40)
+			. = text("[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]", ., S64)
+		while(l > i) // Chomp through the rest of the list, 128 elements at a time.
+			. = text("[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]", ., S64, S64)
 
-//Attaches each element of a list to a single string seperated by 'seperator'.
-/proc/dd_list2text(var/list/the_list, separator)
-	var/total = the_list.len
-	if(!total)
-		return
-	var/count = 2
-	var/newText = "[the_list[1]]"
-	while(count <= total)
-		if(separator)
-			newText += separator
-		newText += "[the_list[count]]"
-		count++
-	return newText
+		#undef S64
+		#undef S16
+		#undef S4
+		#undef S1
 
+	else
+		// Macros expand to long argument lists like so: ls[++i], ls[++i], ls[++i], etc...
+		#define S1    ls[++i]
+		#define S4    S1,  S1,  S1,  S1
+		#define S16   S4,  S4,  S4,  S4
+		#define S64   S16, S16, S16, S16
 
-//slower then dd_list2text, but correctly processes associative lists.
+		. = "[ls[++i]]" // Make sure the initial element is converted to text.
+
+		if(l-1 & 0x01) // 'i' will always be 1 here.
+			. += "[S1]" // Append 1 element if the remaining elements are not a multiple of 2.
+		if(l-i & 0x02)
+			. = text("[][][]", ., S1, S1) // Append 2 elements if the remaining elements are not a multiple of 4.
+		if(l-i & 0x04)
+			. = text("[][][][][]", ., S4) // And so on...
+		if(l-i & 0x08)
+			. = text("[][][][][][][][][]", ., S4, S4)
+		if(l-i & 0x10)
+			. = text("[][][][][][][][][][][][][][][][][]", ., S16)
+		if(l-i & 0x20)
+			. = text("[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]", ., S16, S16)
+		if(l-i & 0x40)
+			. = text("[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]", ., S64)
+		while(l > i) // Chomp through the rest of the list, 128 elements at a time.
+			. = text("[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]\
+	            [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]", ., S64, S64)
+
+		#undef S64
+		#undef S16
+		#undef S4
+		#undef S1
+
+//slower then list2text, but correctly processes associative lists.
 proc/tg_list2text(list/list, glue=",")
+	//writepanic("[__FILE__].[__LINE__] \\/proc/tg_list2text() called tick#: [world.time]")
 	if(!istype(list) || !list.len)
 		return
 	var/output
@@ -110,6 +107,7 @@ proc/tg_list2text(list/list, glue=",")
 // HTTP GET URL query builder thing.
 // list("a"="b","c"="d") -> ?a=b&c=d
 /proc/buildurlquery(list/list,sep="&")
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/buildurlquery() called tick#: [world.time]")
 	if(!istype(list) || !list.len)
 		return
 	var/output
@@ -122,74 +120,44 @@ proc/tg_list2text(list/list, glue=",")
 		i++
 	return output
 
-//Converts a text string into a list by splitting the string at each seperator found in text (discarding the seperator)
-//Returns an empty list if the text cannot be split, or the split text in a list.
-//Not giving a "" seperator will cause the text to be broken into a list of single letters.
-/proc/text2list(text, seperator="\n")
+//Converts a string into a list by splitting the string at each delimiter found. (discarding the seperator)
+/proc/text2list(text, delimiter="\n")
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/text2list() called tick#: [world.time]")
+	var/delim_len = length(delimiter)
+	if(delim_len < 1) return list(text)
 	. = list()
+	var/last_found = 1
+	var/found
+	do
+		found = findtext(text, delimiter, last_found, 0)
+		. += copytext(text, last_found, found)
+		last_found = found + delim_len
+	while(found)
 
-	var/text_len = length(text)					//length of the input text
-	var/seperator_len = length(seperator)		//length of the seperator text
-
-	if(text_len >= seperator_len)
-		var/i
-		var/last_i = 1
-
-		for(i=1,i<=(text_len+1-seperator_len),i++)
-			if( cmptext(copytext(text,i,i+seperator_len), seperator) )
-				if(i != last_i)
-					. += copytext(text,last_i,i)
-				last_i = i + seperator_len
-
-		if(last_i <= text_len)
-			. += copytext(text, last_i, 0)
-	else
-		. += text
-	return .
-
-//Converts a text string into a list by splitting the string at each seperator found in text (discarding the seperator)
-//Returns an empty list if the text cannot be split, or the split text in a list.
-//Not giving a "" seperator will cause the text to be broken into a list of single letters.
 //Case Sensitive!
-/proc/text2listEx(text, seperator="\n")
+/proc/text2listEx(text, delimiter="\n")
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/text2listEx() called tick#: [world.time]")
+	var/delim_len = length(delimiter)
+	if(delim_len < 1) return list(text)
 	. = list()
-
-	var/text_len = length(text)					//length of the input text
-	var/seperator_len = length(seperator)		//length of the seperator text
-
-	if(text_len >= seperator_len)
-		var/i
-		var/last_i = 1
-
-		for(i=1,i<=(text_len+1-seperator_len),i++)
-			if( cmptextEx(copytext(text,i,i+seperator_len), seperator) )
-				if(i != last_i)
-					. += copytext(text,last_i,i)
-				last_i = i + seperator_len
-
-		if(last_i <= text_len)
-			. += copytext(text, last_i, 0)
-	else
-		. += text
-	return .
+	var/last_found = 1
+	var/found
+	do
+		found = findtextEx(text, delimiter, last_found, 0)
+		. += copytext(text, last_found, found)
+		last_found = found + delim_len
+	while(found)
 
 //Splits the text of a file at seperator and returns them in a list.
 /proc/file2list(filename, seperator="\n")
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/file2list() called tick#: [world.time]")
 	return text2list(return_file_text(filename),seperator)
 
 
 //Turns a direction into text
 
-/proc/num2dir(direction)
-	switch(direction)
-		if(1.0) return NORTH
-		if(2.0) return SOUTH
-		if(4.0) return EAST
-		if(8.0) return WEST
-		else
-			world.log << "UNKNOWN DIRECTION: [direction]"
-
 /proc/dir2text(direction)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/dir2text() called tick#: [world.time]")
 	switch(direction)
 		if(1.0)
 			return "north"
@@ -212,6 +180,7 @@ proc/tg_list2text(list/list, glue=",")
 
 //Turns text into proper directions
 /proc/text2dir(direction)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/text2dir() called tick#: [world.time]")
 	switch(uppertext(direction))
 		if("NORTH")
 			return 1
@@ -234,6 +203,7 @@ proc/tg_list2text(list/list, glue=",")
 
 //Converts an angle (degrees) into an ss13 direction
 /proc/angle2dir(var/degree)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/angle2dir() called tick#: [world.time]")
 	degree = ((degree+22.5)%365)
 	if(degree < 45)		return NORTH
 	if(degree < 90)		return NORTHEAST
@@ -247,6 +217,7 @@ proc/tg_list2text(list/list, glue=",")
 //returns the north-zero clockwise angle in degrees, given a direction
 
 /proc/dir2angle(var/D)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/dir2angle() called tick#: [world.time]")
 	switch(D)
 		if(NORTH)		return 0
 		if(SOUTH)		return 180
@@ -260,10 +231,12 @@ proc/tg_list2text(list/list, glue=",")
 
 //Returns the angle in english
 /proc/angle2text(var/degree)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/angle2text() called tick#: [world.time]")
 	return dir2text(angle2dir(degree))
 
 //Converts a blend_mode constant to one acceptable to icon.Blend()
 /proc/blendMode2iconMode(blend_mode)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/blendMode2iconMode() called tick#: [world.time]")
 	switch(blend_mode)
 		if(BLEND_MULTIPLY) return ICON_MULTIPLY
 		if(BLEND_ADD)      return ICON_ADD
@@ -272,6 +245,7 @@ proc/tg_list2text(list/list, glue=",")
 
 //Converts a rights bitfield into a string
 /proc/rights2text(rights,seperator="")
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/rights2text() called tick#: [world.time]")
 	if(rights & R_BUILDMODE)	. += "[seperator]+BUILDMODE"
 	if(rights & R_ADMIN)		. += "[seperator]+ADMIN"
 	if(rights & R_BAN)			. += "[seperator]+BAN"
@@ -286,15 +260,18 @@ proc/tg_list2text(list/list, glue=",")
 	if(rights & R_SOUNDS)		. += "[seperator]+SOUND"
 	if(rights & R_SPAWN)		. += "[seperator]+SPAWN"
 	if(rights & R_MOD)			. += "[seperator]+MODERATOR"
+	if(rights & R_ADMINBUS)		. += "[seperator]+ADMINBUS"
 	return .
 
 /proc/ui_style2icon(ui_style)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/ui_style2icon() called tick#: [world.time]")
 	switch(ui_style)
 		if("old")		return 'icons/mob/screen1_old.dmi'
 		if("Orange")	return 'icons/mob/screen1_Orange.dmi'
 		else			return 'icons/mob/screen1_Midnight.dmi'
 
 /proc/num2septext(var/theNum, var/sigFig = 7,var/sep=",") // default sigFig (1,000,000)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/num2septext() called tick#: [world.time]")
 	var/finalNum = num2text(theNum, sigFig)
 
 	// Start from the end, or from the decimal point

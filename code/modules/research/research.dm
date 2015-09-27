@@ -44,19 +44,25 @@ research holder datum.
 **	Includes all the helper procs and basic tech processing.  **
 ***************************************************************/
 
-/datum/research								//Holder for all the existing, archived, and known tech. Individual to console.
+var/global/list/design_list = list()
+var/global/list/tech_list = list()
 
-									//Datum/tech go here.
-	var/list/possible_tech = list()			//List of all tech in the game that players have access to (barring special events).
-	var/list/known_tech = list()				//List of locally known tech.
-	var/list/possible_designs = list()		//List of all designs (at base reliability).
+var/global/list/hidden_tech = list(
+	/datum/tech,
+	/datum/tech/nanotrasen,
+	)
+
+/datum/research								//Holder for all the existing, archived, and known tech. Individual to console.
+	var/list/known_tech = list()			//List of locally known tech.
 	var/list/known_designs = list()			//List of available designs (at base reliability).
 
 /datum/research/New()		//Insert techs into possible_tech here. Known_tech automatically updated.
-	for(var/T in typesof(/datum/tech) - /datum/tech)
-		possible_tech += new T(src)
-	for(var/D in typesof(/datum/design) - /datum/design)
-		possible_designs += new D(src)
+	if(!tech_list.len)
+		for(var/T in typesof(/datum/tech) - hidden_tech)
+			tech_list += new T()
+	if(!design_list.len)
+		for(var/D in typesof(/datum/design) - /datum/design)
+			design_list += new D()
 	RefreshResearch()
 
 
@@ -64,6 +70,7 @@ research holder datum.
 //Checks to see if tech has all the required pre-reqs.
 //Input: datum/tech; Output: 0/1 (false/true)
 /datum/research/proc/TechHasReqs(var/datum/tech/T)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/research/proc/TechHasReqs() called tick#: [world.time]")
 	if(T.req_tech.len == 0)
 		return 1
 	var/matches = 0
@@ -80,6 +87,7 @@ research holder datum.
 //Checks to see if design has all the required pre-reqs.
 //Input: datum/design; Output: 0/1 (false/true)
 /datum/research/proc/DesignHasReqs(var/datum/design/D)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/research/proc/DesignHasReqs() called tick#: [world.time]")
 	if(D.req_tech.len == 0)
 		return 1
 	var/matches = 0
@@ -97,6 +105,7 @@ research holder datum.
 //Checks to see if design has all the required pre-reqs.
 //Input: datum/design; Output: 0/1 (false/true)
 /datum/research/proc/DesignHasReqs(var/datum/design/D)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/research/proc/DesignHasReqs() called tick#: [world.time]")
 	if(D.req_tech.len == 0)
 		return 1
 	var/matches = 0
@@ -113,15 +122,17 @@ research holder datum.
 //Adds a tech to known_tech list. Checks to make sure there aren't duplicates and updates existing tech's levels if needed.
 //Input: datum/tech; Output: Null
 /datum/research/proc/AddTech2Known(var/datum/tech/T)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/research/proc/AddTech2Known() called tick#: [world.time]")
 	for(var/datum/tech/known in known_tech)
 		if(T.id == known.id)
 			if(T.level > known.level)
 				known.level = T.level
-			return
+			return 1
 	known_tech += T
-	return
+	return 2
 
 /datum/research/proc/AddDesign2Known(var/datum/design/D)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/research/proc/AddDesign2Known() called tick#: [world.time]")
 	if(!(D in known_designs))
 		for(var/datum/design/known in known_designs)
 			if(D.id == known.id)
@@ -134,14 +145,15 @@ research holder datum.
 //Refreshes known_tech and known_designs list. Then updates the reliability vars of the designs in the known_designs list.
 //Input/Output: n/a
 /datum/research/proc/RefreshResearch()
-	for(var/datum/tech/PT in possible_tech)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/research/proc/RefreshResearch() called tick#: [world.time]")
+	for(var/datum/tech/PT in tech_list)
 		if(TechHasReqs(PT))
 			AddTech2Known(PT)
-	for(var/datum/design/PD in possible_designs)
+	for(var/datum/design/PD in design_list)
 		if(DesignHasReqs(PD))
 			AddDesign2Known(PD)
 	for(var/datum/tech/T in known_tech)
-		T = between(1,T.level,20)
+		T = Clamp(T.level, 1, 20)
 	for(var/datum/design/D in known_designs)
 		D.CalcReliability(known_tech)
 	return
@@ -149,12 +161,14 @@ research holder datum.
 //Refreshes the levels of a given tech.
 //Input: Tech's ID and Level; Output: null
 /datum/research/proc/UpdateTech(var/ID, var/level)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/research/proc/UpdateTech() called tick#: [world.time]")
 	for(var/datum/tech/KT in known_tech)
 		if(KT.id == ID)
 			if(KT.level <= level) KT.level = max((KT.level + 1), (level - 1))
 	return
 
 /datum/research/proc/UpdateDesign(var/path)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/research/proc/UpdateDesign() called tick#: [world.time]")
 	for(var/datum/design/KD in known_designs)
 		if(KD.build_path == path)
 			KD.reliability_mod += rand(1,2)
@@ -174,6 +188,7 @@ datum/tech	//Datum of individual technologies.
 	var/max_level  = 1					// Maximum level this can be at (for admin hax)
 	var/goal_level =-1					// Used for job objectives.  Set to max_level unless max_level is unobtainable.
 	var/list/req_tech = list()			//List of ids associated values of techs required to research this tech. "id" = #
+	var/new_category = null
 
 /datum/tech/New()
 	if(goal_level==-1)
@@ -244,8 +259,16 @@ datum/tech/syndicate
 	name = "Illegal Technologies Research"
 	desc = "The study of technologies that violate standard Nanotrasen regulations."
 	id = "syndicate"
-	goal_level=0 // Don't count towards maxed research, since it's illegal.
+	goal_level=0 // Doesn't count towards maxed research, since it's illegal.
 	max_level=8
+
+datum/tech/nanotrasen
+	name = "Nanotrasen Experimental Technologies"
+	desc = "The research of miscellaneous bleeding-edge technologies, sponsored by Nanotrasen."
+	id = "nanotrasen"
+	goal_level=0 // Doesn't count towards maxed research, since it's bonus.
+	max_level=8
+	new_category = "Nanotrasen"
 
 /*
 datum/tech/arcane
@@ -282,11 +305,22 @@ datum/tech/robotics
 	icon_state = "datadisk2"
 	item_state = "card-id"
 	w_class = 1.0
-	m_amt = 30
-	g_amt = 10
+	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
 	w_type = RECYK_ELECTRONIC
 	var/datum/tech/stored
 
 /obj/item/weapon/disk/tech_disk/New()
+	..()
 	src.pixel_x = rand(-5.0, 5)
 	src.pixel_y = rand(-5.0, 5)
+
+/obj/item/weapon/disk/tech_disk/nanotrasen
+	name = "Technology Disk (Nanotrasen 1)"
+
+/obj/item/weapon/disk/tech_disk/nanotrasen/New()
+	..()
+	stored = new/datum/tech/nanotrasen(src)
+
+/obj/item/weapon/paper/tech_nanotrasen
+	name = "paper - 'Nanotrasen Experimental Technologies'"
+	info = "<B>Thank you for participating in this Nanotrasen-sponsored initiative!</B><BR><BR>This technology disk will open you the doors of Nanotrasen's most bleeding-edge experimental devices, and we look forward to you testing them for us! Also, note that you will still need to perform some research before these designs become available for you to print, but here's a guide to the tech levels that they will require.<br><ol><li><b>Hookshot</b>: Materials=2, Engineering=5, Electromagnetic=2</li><li><b>Ricochet Rifle</b>: Materials=3, Power=3, Combat=3</li><li><b>Gravity Well Gun</b>: Materials=7, Bluespace=5, Electromagnetic=5</li></ol><br>We look forward to the results of your experiments. Depending on their success we might grant you access to even more bleeding-edge technologies in the future! Make Science proud!<br><br><i>Central Command R&D Lab</i>"

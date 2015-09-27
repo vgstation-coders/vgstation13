@@ -23,8 +23,9 @@
 		set name = "Toggle Labcoat Buttons"
 		set category = "Object"
 		set src in usr
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\verb/toggle()  called tick#: [world.time]")
 
-		if(!usr.canmove || usr.stat || usr.restrained())
+		if(!usr.canmove || usr.stat || usr.restrained() || (usr.status_flags & FAKEDEATH))
 			return 0
 
 		if(open)

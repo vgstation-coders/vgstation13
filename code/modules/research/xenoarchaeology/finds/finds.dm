@@ -23,41 +23,48 @@
 // Strange rocks
 
 //have all strange rocks be cleared away using welders for now
-/obj/item/weapon/ore/strangerock
-	name = "Strange rock"
+/obj/item/weapon/strangerock
+	name = "\improper Strange rock"
 	desc = "Seems to have some unusal strata evident throughout it."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "strange"
 	var/obj/item/weapon/inside
 	var/method = 0// 0 = fire, 1 = brush, 2 = pick
+	var/datum/geosample/geologic_data
 	origin_tech = "materials=5"
 
-/obj/item/weapon/ore/strangerock/New(loc, var/inside_item_type = 0)
-	..(loc)
+/obj/item/weapon/strangerock/New(loc, var/inside_item_type = 0)
+	..()
 
 	//method = rand(0,2)
 	if(inside_item_type)
-		inside = new/obj/item/weapon/archaeological_find(src, new_item_type = inside_item_type)
+		new/obj/item/weapon/archaeological_find(src, new_item_type = inside_item_type)
 		if(!inside)
 			inside = locate() in contents
 
-/*/obj/item/weapon/ore/strangerock/ex_act(var/severity)
+/obj/item/weapon/strangerock/Destroy()
+	..()
+	qdel(inside)
+	inside = null
+
+/*/obj/item/weapon/strangerock/ex_act(var/severity)
 	if(severity && prob(30))
 		src.visible_message("The [src] crumbles away, leaving some dust and gravel behind.")*/
 
-/obj/item/weapon/ore/strangerock/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/strangerock/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/weldingtool/))
 		var/obj/item/weapon/weldingtool/w = W
 		if(w.isOn())
 			if(w.get_fuel() >= 4 && !src.method)
 				if(inside)
 					inside.loc = get_turf(src)
+					inside = null
 					for(var/mob/M in viewers(world.view, user))
 						M.show_message("<span class='info'>[src] burns away revealing [inside].</span>",1)
 				else
 					for(var/mob/M in viewers(world.view, user))
 						M.show_message("<span class='info'>[src] burns away into nothing.</span>",1)
-				del(src)
+				qdel(src)
 				w.remove_fuel(4)
 			else
 				for(var/mob/M in viewers(world.view, user))
@@ -73,7 +80,7 @@
 	..()
 	if(prob(33))
 		src.visible_message("<span class='warning'>[src] crumbles away, leaving some dust and gravel behind.</span>")
-		del(src)
+		qdel(src)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Archaeological finds
@@ -85,6 +92,7 @@
 	var/find_type = 0
 
 /obj/item/weapon/archaeological_find/New(loc, var/new_item_type)
+	AddToProfiler()
 	if(new_item_type)
 		find_type = new_item_type
 	else
@@ -155,7 +163,7 @@
 				"You wonder what kind of music was made with it")]."
 		if(6)
 			item_type = "[pick("bladed knife","serrated blade","sharp cutting implement")]"
-			new_item = new /obj/item/weapon/kitchenknife(src.loc)
+			new_item = new /obj/item/weapon/kitchen/utensil/knife/large(src.loc)
 			additional_desc = "[pick("It doesn't look safe.",\
 			"It looks wickedly jagged",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along the edges")]."
@@ -222,8 +230,8 @@
 			var/list/possible_spawns = list()
 			possible_spawns += /obj/item/stack/sheet/metal
 			possible_spawns += /obj/item/stack/sheet/plasteel
-			possible_spawns += /obj/item/stack/sheet/glass
-			possible_spawns += /obj/item/stack/sheet/rglass
+			possible_spawns += /obj/item/stack/sheet/glass/glass
+			possible_spawns += /obj/item/stack/sheet/glass/rglass
 			possible_spawns += /obj/item/stack/sheet/mineral/plasma
 			possible_spawns += /obj/item/stack/sheet/mineral/mythril
 			possible_spawns += /obj/item/stack/sheet/mineral/gold
@@ -233,7 +241,9 @@
 			possible_spawns += /obj/item/stack/sheet/mineral/silver
 
 			var/new_type = pick(possible_spawns)
-			new_item = new new_type(src.loc)
+			if(new_type == /obj/item/stack/sheet/metal)
+				new_item = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+			else new_item = new new_type(get_turf(src))
 			new_item:amount = rand(5,45)
 		if(15)
 			if(prob(75))
@@ -268,7 +278,7 @@
 			apply_material_decorations = 0
 			apply_image_decorations = 0
 		if(18)
-			new_item = new /obj/item/device/radio/beacon(src.loc)
+			new_item = new /obj/item/beacon(src.loc)
 			talkative = 0
 			new_item.icon_state = "unknown[rand(1,4)]"
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
@@ -332,8 +342,10 @@
 			if(spawn_type)
 				var/obj/item/weapon/gun/energy/new_gun = new spawn_type(src.loc)
 				new_item = new_gun
+				new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 				new_item.icon_state = "egun[rand(1,6)]"
 				new_gun.desc = "This is an antique energy weapon, you're not sure if it will fire or not."
+				new_gun.charge_states = 0 //let's prevent it from losing that great icon if we charge it
 
 				//5% chance to explode when first fired
 				//10% chance to have an unchargeable cell
@@ -355,16 +367,18 @@
 			new_item.icon_state = "gun[rand(1,4)]"
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 
-			//33% chance to be able to reload the gun with human ammunition
-			if(prob(66))
-				new_gun.caliber = "999"
+			//let's get some ammunition in this gun : weighted to pick available ammo
+			new_gun.caliber = pick(50;list("357" = 1),
+								   10;list("75" = 1),
+								   30;list("38" = 1),
+								   10;list("12mm" = 1))
 
 			//33% chance to fill it with a random amount of bullets
 			new_gun.max_shells = rand(1,12)
 			if(prob(33))
 				var/num_bullets = rand(1,new_gun.max_shells)
 				if(num_bullets < new_gun.loaded.len)
-					new_gun.loaded.Cut()
+					new_gun.loaded.len = 0
 					for(var/i = 1, i <= num_bullets, i++)
 						var/A = text2path(new_gun.ammo_type)
 						new_gun.loaded += new A(new_gun)
@@ -532,16 +546,18 @@
 
 		if(talkative && istype(new_item,/obj/item/weapon))
 			new_item.listening_to_players = 1
+			new_item.heard_words = list()
 			if(prob(25))
 				new_item.speaking_to_players = 1
-				processing_objects.Add(src)
+				processing_objects.Add(new_item)
 		var/turf/T = get_turf(src)
 		if(istype(T, /turf/unsimulated/mineral))
 			T:last_find = new_item
-		del(src)
+		qdel(src)
 
 	else if(talkative)
 		listening_to_players = 1
 		if(prob(25))
+			if(!heard_words) heard_words = list()
 			speaking_to_players = 1
 			processing_objects.Add(src)
