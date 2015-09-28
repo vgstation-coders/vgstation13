@@ -832,7 +832,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey
 	name = "Ack Daniel's"
-	desc = "A soft silky goodness with hints of calcium. A memento to the cracked ack."
+	desc = "Made with the wildest rye from skeleton cemeteries. A memento to the cracked ack."
 	icon_state = "whiskeybottle"
 	vending_cat = "spirits"
 	isGlass = 1
