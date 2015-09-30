@@ -5,6 +5,7 @@
 #define WALLCOVERREMOVED 4
 #define WALLRODSUNSECURED 5
 #define WALLRODSCUT 6
+
 /turf/simulated/wall/r_wall
 	name = "reinforced wall"
 	desc = "A huge chunk of reinforced metal and anchored rods used to seperate rooms and keep all but the most equipped crewmen out."
@@ -409,24 +410,23 @@
 		severity = 1.0
 	switch(severity)
 		if(1.0)
-			if(prob(66)) //It's "bomb-proof"
-				dismantle_wall(0,1) //So it isn't completely destroyed, nice uh ?
-			else
-				dismantle_wall(1,1) //Fuck it up nicely
+			src.ChangeTurf(get_base_turf(src.z)) //Bomb-proof as it might be, nothing can stand a bomb this strong
 		if(2.0)
-			if(prob(75) && (d_state == WALLCOMPLETED))//No more infinite plasteel generation!
+			if(prob(75) && (d_state == WALLCOMPLETED)) //No more infinite plasteel generation!
 				src.d_state = WALLCOVERREMOVED
 				update_icon()
 				getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src)) //Lose the plasteel needed to get there
 			else
 				dismantle_wall(0,1)
 		if(3.0)
-			if(prob(15))
+			if(prob(15)) //Small probability to do serious damage
 				dismantle_wall(0,1)
-			else //If prob fails, break the outer safety grille to look like scrap damage
-				src.d_state = WALLCOVEREXPOSED
-				update_icon()
+			else
+				if(prob(25)) //Failing that, chance of breaking the outer safety grille
+					src.d_state = WALLCOVEREXPOSED
+					update_icon()
 	return
+
 #undef WALLCOMPLETED
 #undef WALLCOVEREXPOSED
 #undef WALLCOVERUNSECURED

@@ -287,8 +287,8 @@ var/bomb_set
 
 	var/off_station = 0
 	var/turf/bomb_location = get_turf(src)
-	if( bomb_location && (bomb_location.z == 1) )
-		if( (bomb_location.x < (128-NUKERANGE)) || (bomb_location.x > (128+NUKERANGE)) || (bomb_location.y < (128-NUKERANGE)) || (bomb_location.y > (128+NUKERANGE)) )
+	if(bomb_location && (bomb_location.z == 1))
+		if((bomb_location.x < (128-NUKERANGE)) || (bomb_location.x > (128+NUKERANGE)) || (bomb_location.y < (128-NUKERANGE)) || (bomb_location.y > (128+NUKERANGE)))
 			off_station = 1
 	else
 		off_station = 2
@@ -298,9 +298,11 @@ var/bomb_set
 			var/datum/game_mode/nuclear/GM = ticker.mode
 			var/obj/machinery/computer/shuttle_control/syndicate/syndie_location = locate(/obj/machinery/computer/shuttle_control/syndicate)
 			if(syndie_location)
-				GM.syndies_didnt_escape = (syndie_location.z > 1 ? 0 : 1)	//muskets will make me change this, but it will do for now
+				GM.syndies_didnt_escape = (syndie_location.z != map.zCentcomm) //Muskets will make me change this, but it will do for now
 			GM.nuke_off_station = off_station
-		ticker.station_explosion_cinematic(off_station,null)
+		ticker.station_explosion_cinematic(off_station, null)
+		explosion(get_turf(src), 10, 20, 40) //Yes, that's damaging
+		qdel(src) //Get that hothead out of here
 		if(ticker.mode)
 			ticker.mode.explosion_in_progress = 0
 			if(ticker.mode.name == "nuclear emergency")
@@ -309,7 +311,7 @@ var/bomb_set
 			else
 				world << "<B>The station was destoyed by the nuclear blast!</B>"
 
-			ticker.mode.station_was_nuked = (off_station<2)	//offstation==1 is a draw. the station becomes irradiated and needs to be evacuated.
+			ticker.mode.station_was_nuked = (off_station < 2)	//offstation==1 is a draw. the station becomes irradiated and needs to be evacuated.
 															//kinda shit but I couldn't  get permission to do what I wanted to do.
 
 			if(!ticker.mode.check_finished())//If the mode does not deal with the nuke going off so just reboot because everyone is stuck as is
@@ -322,7 +324,7 @@ var/bomb_set
 
 				CallHook("Reboot",list())
 
-				if (watchdog.waiting)
+				if(watchdog.waiting)
 					world << "<span class='notice'><B>Server will shut down for an automatic update in a few seconds.</B></span>"
 					watchdog.signal_ready()
 					return
@@ -331,6 +333,7 @@ var/bomb_set
 				world.Reboot()
 				return
 	return
+
 /**
  * NOTE: Don't change it to Destroy().
  */
