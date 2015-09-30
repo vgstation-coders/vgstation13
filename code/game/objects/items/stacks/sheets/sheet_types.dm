@@ -133,7 +133,6 @@ var/global/list/datum/stack_recipe/metal_recipes = list ( \
 	recipes = metal_recipes
 	return ..()
 
-
 /*
  * Plasteel
  */
@@ -155,22 +154,21 @@ var/global/list/datum/stack_recipe/plasteel_recipes = list ( \
 	desc = "This sheet is an alloy of iron and plasma."
 	icon_state = "sheet-plasteel"
 	item_state = "sheet-plasteel"
-	starting_materials = list(MAT_IRON = 3750) // Was 7500, which doesn't make any fucking sense
-	perunit = 2875 //average of plasma and metal
+	starting_materials = list(MAT_IRON = 2750, MAT_PLASMA = 1000)
 	throwforce = 15.0
 	flags = FPRINT
 	siemens_coefficient = 1
 	origin_tech = "materials=2"
 	w_type = RECYK_METAL
-	melt_temperature = MELTPOINT_STEEL+500
+	melt_temperature = MELTPOINT_STEEL + 500
 
 /obj/item/stack/sheet/plasteel/New(var/loc, var/amount=null)
 		recipes = plasteel_recipes
 		return ..()
 
 /obj/item/stack/sheet/plasteel/recycle(var/datum/materials/rec)
-	rec.addAmount(MAT_PLASMA, amount)
-	rec.addAmount(MAT_IRON, amount)
+	rec.addAmount(MAT_PLASMA, amount * (1000/CC_PER_SHEET_MISC))
+	rec.addAmount(MAT_IRON,   amount * (2750/CC_PER_SHEET_METAL))
 	return 1
 
 /*
@@ -196,7 +194,7 @@ var/global/list/datum/stack_recipe/wood_recipes = list ( \
 	singular_name = "wood plank"
 	icon_state = "sheet-wood"
 	origin_tech = "materials=1;biotech=1"
-	autoignition_temperature=AUTOIGNITION_WOOD
+	autoignition_temperature = AUTOIGNITION_WOOD
 	sheettype = "wood"
 
 /obj/item/stack/sheet/wood/cultify()

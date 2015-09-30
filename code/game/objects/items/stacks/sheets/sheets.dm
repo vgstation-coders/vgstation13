@@ -8,14 +8,14 @@
 	throw_speed = 3
 	throw_range = 3
 	attack_verb = list("bashed", "battered", "bludgeoned", "thrashed", "smashed")
-	perunit=3750
-	var/sheettype = null //this is used for girders in the creation of walls/false walls
+	perunit = CC_PER_SHEET_METAL //See setup.dm
+	var/sheettype = null //This is used for girders in the creation of walls/false walls
 
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/stack/sheet/New(var/newloc, var/amount = null)
-	pixel_x = rand(0,4)-4
-	pixel_y = rand(0,4)-4
+	pixel_x = rand(0, 4) - 4
+	pixel_y = rand(0, 4) - 4
 	..()
 
 
