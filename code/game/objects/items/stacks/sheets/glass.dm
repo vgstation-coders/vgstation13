@@ -20,7 +20,7 @@
 	var/sname = "glass"
 	var/shard_type = /obj/item/weapon/shard
 
-	siemens_coefficient = 0 //does not conduct
+	siemens_coefficient = 0 //Does not conduct
 
 /obj/item/stack/sheet/glass/attack_self(mob/user as mob)
 	construct_window(user)
@@ -236,7 +236,7 @@
 	singular_name = "reinforced glass sheet"
 	sname = "glass_ref"
 	icon_state = "sheet-rglass"
-	starting_materials = list(MAT_IRON = 1875, MAT_GLASS = 3750)
+	starting_materials = list(MAT_IRON = 1000, MAT_GLASS = 2750)
 	created_window = /obj/structure/window/reinforced
 	full_window = /obj/structure/window/full/reinforced
 	windoor = /obj/structure/windoor_assembly/
@@ -249,8 +249,8 @@
 	starting_materials = null
 
 /obj/item/stack/sheet/glass/rglass/recycle(var/datum/materials/rec)
-	rec.addAmount(MAT_GLASS, amount)
-	rec.addAmount(MAT_IRON,  0.5 * amount)
+	rec.addAmount(MAT_GLASS, 2750)
+	rec.addAmount(MAT_IRON,  1000)
 	return 1
 
 /*
@@ -263,20 +263,19 @@
 	singular_name = "glass sheet"
 	icon_state = "sheet-plasmaglass"
 	sname = "plasma"
-	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS)
+	starting_materials = list(MAT_GLASS = 2750, MAT_PLASMA = 1000)
 	origin_tech = "materials=3;plasmatech=2"
 	created_window = /obj/structure/window/plasma
 	full_window = /obj/structure/window/full/plasma
 	rglass = /obj/item/stack/sheet/glass/plasmarglass
-	perunit = 2875 //average of plasma and glass
 	melt_temperature = MELTPOINT_STEEL + 500
 	glass_quality = 1.15 //Can you imagine a world in which plasmaglass is worse than rglass
 	shealth = 20
 	shard_type = /obj/item/weapon/shard/plasma
 
 /obj/item/stack/sheet/glass/plasmaglass/recycle(var/datum/materials/rec)
-	rec.addAmount(MAT_PLASMA, amount)
-	rec.addAmount(MAT_GLASS, amount)
+	rec.addAmount(MAT_PLASMA, 1000)
+	rec.addAmount(MAT_GLASS,  2750)
 	return RECYK_GLASS
 
 /*
@@ -288,20 +287,19 @@
 	singular_name = "reinforced plasma glass sheet"
 	icon_state = "sheet-plasmarglass"
 	sname = "plasma_ref"
-	starting_materials = list(MAT_IRON = 1875, MAT_GLASS = CC_PER_SHEET_GLASS)
-	melt_temperature = MELTPOINT_STEEL+500 // I guess...?
+	starting_materials = list(MAT_IRON = 1000, MAT_GLASS = 1750, MAT_PLASMA = 1000)
+	melt_temperature = MELTPOINT_STEEL + 500 //I guess...?
 	origin_tech = "materials=4;plasmatech=2"
 	created_window = /obj/structure/window/reinforced/plasma
 	full_window = /obj/structure/window/full/reinforced/plasma
 	windoor = /obj/structure/windoor_assembly/plasma
-	perunit = 2875
 	reinforced = 1
 	glass_quality = 1.3
 	shealth = 30
 	shard_type = /obj/item/weapon/shard/plasma
 
 /obj/item/stack/sheet/glass/plasmarglass/recycle(var/datum/materials/rec)
-	rec.addAmount(MAT_PLASMA, amount)
-	rec.addAmount(MAT_GLASS, amount)
-	rec.addAmount(MAT_IRON,  0.5 * amount)
+	rec.addAmount(MAT_PLASMA, 1000)
+	rec.addAmount(MAT_GLASS,  1750)
+	rec.addAmount(MAT_IRON,   1000)
 	return 1

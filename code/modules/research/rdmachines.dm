@@ -173,18 +173,18 @@ var/global/list/rnd_machines = list()
 			if(M.sheettype==O.type)
 				found = matID
 		if(!found)
-			user << "<span class='warning'>\The [src.name] rejects \the [O.name].</span>"
+			user << "<span class='warning'>\The [src] rejects \the [O].</span>"
 			busy = 0
 			return 1
 		if(allowed_materials && allowed_materials.len)
 			if(!(found in allowed_materials))
-				user << "<span class='warning'>\The [src.name] rejects \the [O.name].</span>"
+				user << "<span class='warning'>\The [src] rejects \the [O].</span>"
 				busy = 0
 				return 1
 
 		var/obj/item/stack/sheet/S = O
 		if (TotalMaterials() + S.perunit > max_material_storage)
-			user << "<span class='warning'>\The [src.name]'s material bin is full. Please remove material before adding more.</span>"
+			user << "<span class='warning'>\The [src]'s material bin is full. Please remove material before adding more.</span>"
 			busy = 0
 			return 1
 
@@ -212,7 +212,7 @@ var/global/list/rnd_machines = list()
 		icon_state = "[base_state]"
 		use_power(max(1000, (3750*amount/10)))
 		stack.use(amount)
-		user << "<span class='notice'>You add [amount] sheets to the [src.name].</span>"
+		user << "<span class='notice'>You add [amount] sheet[amount > 1 ? "s":""] to \the [src].</span>"
 		icon_state = "[base_state]"
 
 		var/datum/material/material = materials.getMaterial(found)
