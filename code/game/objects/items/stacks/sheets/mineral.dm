@@ -18,7 +18,7 @@ Mineral Sheets
 /obj/item/stack/sheet/mineral
 	w_type = RECYK_METAL
 	var/recyck_mat
-	perunit = 2000 //See setup.dm, CC_PER_SHEET_MISC
+	perunit = CC_PER_SHEET_MISC //See setup.dm
 
 /obj/item/stack/sheet/mineral/recycle(var/datum/materials/rec)
 	if(!recyck_mat)

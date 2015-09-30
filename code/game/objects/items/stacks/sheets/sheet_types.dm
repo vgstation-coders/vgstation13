@@ -167,8 +167,8 @@ var/global/list/datum/stack_recipe/plasteel_recipes = list ( \
 		return ..()
 
 /obj/item/stack/sheet/plasteel/recycle(var/datum/materials/rec)
-	rec.addAmount(MAT_PLASMA, 1000)
-	rec.addAmount(MAT_IRON, 2750)
+	rec.addAmount(MAT_PLASMA, amount * (1000/CC_PER_SHEET_MISC))
+	rec.addAmount(MAT_IRON,   amount * (2750/CC_PER_SHEET_METAL))
 	return 1
 
 /*

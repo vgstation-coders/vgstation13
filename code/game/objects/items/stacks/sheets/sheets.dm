@@ -8,7 +8,7 @@
 	throw_speed = 3
 	throw_range = 3
 	attack_verb = list("bashed", "battered", "bludgeoned", "thrashed", "smashed")
-	perunit = 3750 //See setup.dm, CC_PER_SHEET_METAL and CC_PER_SHEET_GLASS
+	perunit = CC_PER_SHEET_METAL //See setup.dm
 	var/sheettype = null //This is used for girders in the creation of walls/false walls
 
 	mech_flags = MECH_SCAN_FAIL
