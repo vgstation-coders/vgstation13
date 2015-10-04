@@ -5,17 +5,18 @@
 	icon_state = "miner"
 	power_channel=ENVIRON
 
-	m_amt = 0 // fuk u
+	starting_materials = null
 	w_type = NOT_RECYCLABLE
 
 	var/datum/gas_mixture/air_contents
+	var/datum/gas_mixture/pumping = new //used in transfering air around
 
 	var/on=1
 
 	var/max_external_pressure=10000 // 10,000kPa ought to do it.
 	var/internal_pressure=4500 // Bottleneck
 
-	var/light_color = "#FFFFFF"
+	var/overlay_color = "#FFFFFF"
 
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
@@ -62,6 +63,7 @@
 
 // Add air here.  DO NOT CALL UPDATE_VALUES OR UPDATE_ICON.
 /obj/machinery/atmospherics/miner/proc/AddAir()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/miner/proc/AddAir() called tick#: [world.time]")
 	return
 
 /obj/machinery/atmospherics/miner/update_icon()
@@ -70,7 +72,7 @@
 		return
 	if(on)
 		var/new_icon_state="on"
-		var/new_color = light_color
+		var/new_color = overlay_color
 		if(stat & BROKEN)
 			new_icon_state="broken"
 			new_color="#FF0000"
@@ -97,8 +99,7 @@
 	var/datum/gas_mixture/environment = loc.return_air()
 	var/environment_pressure = environment.return_pressure()
 
-	var/datum/gas_mixture/pumped = new
-	pumped.copy_from(air_contents)
+	pumping.copy_from(air_contents)
 
 	var/pressure_delta = 10000
 
@@ -109,15 +110,15 @@
 	//pressure_delta = min(pressure_delta, (internal_pressure - environment_pressure))
 
 	if(pressure_delta > 0.1)
-		var/transfer_moles = pressure_delta*environment.volume/(pumped.temperature * R_IDEAL_GAS_EQUATION)
+		var/transfer_moles = pressure_delta*environment.volume/(pumping.temperature * R_IDEAL_GAS_EQUATION)
 
-		var/datum/gas_mixture/removed = pumped.remove(transfer_moles)
+		var/datum/gas_mixture/removed = pumping.remove(transfer_moles)
 
 		loc.assume_air(removed)
 
 /obj/machinery/atmospherics/miner/sleeping_agent
 	name = "\improper N2O Gas Miner"
-	light_color = "#FFCCCC"
+	overlay_color = "#FFCCCC"
 
 	AddAir()
 		var/datum/gas/sleeping_agent/trace_gas = new
@@ -126,28 +127,28 @@
 
 /obj/machinery/atmospherics/miner/nitrogen
 	name = "\improper N2 Gas Miner"
-	light_color = "#CCFFCC"
+	overlay_color = "#CCFFCC"
 
 	AddAir()
 		air_contents.nitrogen = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
 
 /obj/machinery/atmospherics/miner/oxygen
 	name = "\improper O2 Gas Miner"
-	light_color = "#007FFF"
+	overlay_color = "#007FFF"
 
 	AddAir()
 		air_contents.oxygen = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
 
 /obj/machinery/atmospherics/miner/toxins
 	name = "\improper Plasma Gas Miner"
-	light_color = "#FF0000"
+	overlay_color = "#FF0000"
 
 	AddAir()
 		air_contents.toxins = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
 
 /obj/machinery/atmospherics/miner/carbon_dioxide
 	name = "\improper CO2 Gas Miner"
-	light_color = "#CDCDCD"
+	overlay_color = "#CDCDCD"
 
 	AddAir()
 		air_contents.carbon_dioxide = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
@@ -156,7 +157,7 @@
 /obj/machinery/atmospherics/miner/air
 	name = "\improper Air Miner"
 	desc = "You fucking <em>cheater</em>."
-	light_color = "#70DBDB"
+	overlay_color = "#70DBDB"
 
 	on = 0
 

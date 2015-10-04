@@ -28,6 +28,7 @@
 
 // Tell nodes to fix their networks.
 /obj/machinery/atmospherics/unary/vent/burstpipe/proc/do_connect()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/unary/vent/burstpipe/proc/do_connect() called tick#: [world.time]")
 	//var/flip = turn(dir, 180)
 	initialize_directions = dir
 	var/turf/T = loc
@@ -43,11 +44,11 @@
 		return ..()
 	var/turf/T = get_turf(src)
 	playsound(T, 'sound/items/Ratchet.ogg', 50, 1)
-	user << "\blue You begin to remove \the [src]..."
-	if (do_after(user, 40))
+	user << "<span class='notice'>You begin to remove \the [src]...</span>"
+	if (do_after(user, src, 40))
 		user.visible_message( \
 			"[user] removes \the [src].", \
-			"\blue You have removed \the [src].", \
+			"<span class='notice'>You have removed \the [src].</span>", \
 			"You hear a ratchet.")
 		//new /obj/item/pipe(T, make_from=src)
 		del(src)

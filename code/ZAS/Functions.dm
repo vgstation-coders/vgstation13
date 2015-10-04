@@ -4,6 +4,8 @@
 //Floods outward from an initial turf to fill everywhere it's zone would reach.
 proc/FloodFill(turf/simulated/start)
 
+	//writepanic("[__FILE__].[__LINE__] \\/proc/FloodFill() called tick#: [world.time]")
+
 	if(!istype(start))
 		return list()
 
@@ -17,7 +19,7 @@ proc/FloodFill(turf/simulated/start)
 		var/turf/simulated/T = pick(open)
 
 		//sanity!
-		if(!istype(T))
+		if(!istype(T) || iscatwalk(T))
 			open -= T
 			continue
 
@@ -26,7 +28,7 @@ proc/FloodFill(turf/simulated/start)
 			var/turf/simulated/O = get_step(T,d)
 
 			//Ensure the turf is of proper type, that it is not in either list, and that air can reach it.
-			if(istype(O) && !(O in open) && !(O in closed) && O.ZCanPass(T))
+			if(istype(O) && !iscatwalk(O) && !(O in open) && !(O in closed) && O.ZCanPass(T))
 
 				//Handle connections from a tile with a door.
 				if(T.HasDoor())
@@ -43,7 +45,7 @@ proc/FloodFill(turf/simulated/start)
 						var/turf/simulated/W = get_step(O, WEST)
 						var/turf/simulated/N = get_step(O, NORTH)
 
-						if( !O.ZCanPass(N) && !O.ZCanPass(W) )
+						if(!O.ZCanPass(N) && !O.ZCanPass(W) )
 							//If it cannot connect either to the north or west, connect it!
 							open += O
 
@@ -76,6 +78,8 @@ proc/FloodFill(turf/simulated/start)
 
 //Procedure to merge two zones together.
 proc/ZMerge(zone/A,zone/B)
+
+	//writepanic("[__FILE__].[__LINE__] \\/proc/ZMerge() called tick#: [world.time]")
 
 	//Sanity~
 	if(!istype(A) || !istype(B))
@@ -140,12 +144,14 @@ proc/ZMerge(zone/A,zone/B)
 //Connects two zones by forming a connection object representing turfs A and B.
 proc/ZConnect(turf/simulated/A,turf/simulated/B)
 
+	//writepanic("[__FILE__].[__LINE__] \\/proc/ZConnect() called tick#: [world.time]")
+
 	//Make sure that if it's space, it gets added to unsimulated_tiles instead.
-	if(!istype(B))
+	if(!istype(B) || iscatwalk(B))
 		if(A.zone)
 			A.zone.AddTurf(B)
 		return
-	if(!istype(A))
+	if(!istype(A) || iscatwalk(A))
 		if(B.zone)
 			B.zone.AddTurf(A)
 		return

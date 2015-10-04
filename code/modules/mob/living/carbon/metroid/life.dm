@@ -10,6 +10,8 @@
 /mob/living/carbon/slime/Life()
 	set invisibility = 0
 	//set background = 1
+	if(timestopped) return 0 //under effects of time magick
+
 
 	if (src.monkeyizing)
 		return
@@ -49,6 +51,8 @@
 
 
 /mob/living/carbon/slime/proc/AIprocess()  // the master AI process
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/AIprocess() called tick#: [world.time]")
 
 	//world << "AI proc started."
 	if(AIproc || stat == DEAD || client) return
@@ -151,6 +155,7 @@
 	//world << "AI proc ended."
 
 /mob/living/carbon/slime/proc/handle_environment(datum/gas_mixture/environment)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/handle_environment() called tick#: [world.time]")
 	if(flags & INVULNERABLE)
 		return
 
@@ -215,6 +220,7 @@
 
 
 /mob/living/carbon/slime/proc/adjust_body_temperature(current, loc_temp, boost)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/adjust_body_temperature() called tick#: [world.time]")
 	var/temperature = current
 	var/difference = abs(current-loc_temp)	//get difference
 	var/increments// = difference/10			//find how many increments apart they are
@@ -233,6 +239,8 @@
 
 /mob/living/carbon/slime/proc/handle_chemicals_in_body()
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/handle_chemicals_in_body() called tick#: [world.time]")
+
 	if(reagents) reagents.metabolize(src)
 
 
@@ -242,6 +250,8 @@
 
 
 /mob/living/carbon/slime/proc/handle_regular_status_updates()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/handle_regular_status_updates() called tick#: [world.time]")
 
 	if(istype(src, /mob/living/carbon/slime/adult))
 		health = 200 - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
@@ -323,6 +333,8 @@
 
 /mob/living/carbon/slime/proc/handle_nutrition()
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/handle_nutrition() called tick#: [world.time]")
+
 	if(prob(20))
 		if(istype(src, /mob/living/carbon/slime/adult)) nutrition-=rand(4,6)
 		else nutrition-=rand(2,3)
@@ -373,6 +385,7 @@
 
 
 /mob/living/carbon/slime/proc/handle_targets()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/slime/proc/handle_targets() called tick#: [world.time]")
 	if(Tempstun)
 		if(!Victim) // not while they're eating!
 			canmove = 0
@@ -522,3 +535,6 @@
 		else
 			if(!AIproc)
 				spawn() AIprocess()
+
+/mob/living/carbon/slime/regular_hud_updates()
+	return

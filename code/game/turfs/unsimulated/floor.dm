@@ -3,25 +3,21 @@
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "Floor3"
 
+/turf/unsimulated/floor/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			new/obj/effect/decal/cleanable/soot(src)
+		if(2.0)
+			if(prob(65))
+				new/obj/effect/decal/cleanable/soot(src)
+		if(3.0)
+			if(prob(20))
+				new/obj/effect/decal/cleanable/soot(src)
+			return
+	return
+
 /turf/unsimulated/floor/attack_paw(user as mob)
 	return src.attack_hand(user)
-
-/turf/unsimulated/floor/attack_hand(var/mob/user as mob)
-	if ((!( user.canmove ) || user.restrained() || !( user.pulling )))
-		return
-	if (user.pulling.anchored)
-		return
-	if ((user.pulling.loc != user.loc && get_dist(user, user.pulling) > 1))
-		return
-	if (ismob(user.pulling))
-		var/mob/M = user.pulling
-		var/mob/t = M.pulling
-		M.stop_pulling()
-		step(user.pulling, get_dir(user.pulling.loc, src))
-		M.start_pulling(t)
-	else
-		step(user.pulling, get_dir(user.pulling.loc, src))
-	return
 
 /turf/unsimulated/floor/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
@@ -29,3 +25,10 @@
 		icon_state = "cult"
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1)
 	return
+
+/turf/unsimulated/floor/grass
+	icon_state = "grass1"
+
+/turf/unsimulated/floor/grass/New()
+	..()
+	icon_state = "grass[rand(1,4)]"

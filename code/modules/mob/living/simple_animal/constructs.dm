@@ -10,7 +10,7 @@
 	response_harm   = "punches"
 	icon_dead = "shade_dead"
 	speed = -1
-	a_intent = "hurt"
+	a_intent = I_HURT
 	stop_automated_movement = 1
 	status_flags = CANPUSH
 	attack_sound = 'sound/weapons/spiderlunge.ogg'
@@ -23,11 +23,33 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
+	show_stat_health = 0
 	faction = "cult"
 	supernatural = 1
+	flying = 1
 	var/nullblock = 0
 
+	mob_swap_flags = HUMAN|SIMPLE_ANIMAL|SLIME|MONKEY
+	mob_push_flags = ALLMOBS
+
 	var/list/construct_spells = list()
+
+/mob/living/simple_animal/construct/construct_chat_check(setting)
+	if(!mind) return
+
+	if(mind in ticker.mode.cult)
+		return 1
+
+/mob/living/simple_animal/construct/handle_inherent_channels(message, message_mode, var/datum/language/speaking)
+	if(..())
+		return 1
+	if(message_mode == MODE_HEADSET && construct_chat_check(0))
+		var/turf/T = get_turf(src)
+		log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Cult channel: [message]")
+		for(var/mob/M in mob_list)
+			if(M.construct_chat_check(2) /*receiving check*/ || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
+				M << "<span class='sinister'><b>[src.name]:</b> [message]</span>"
+		return 1
 
 /mob/living/simple_animal/construct/cultify()
 	return
@@ -36,8 +58,10 @@
 	..()
 	name = text("[initial(name)] ([rand(1, 1000)])")
 	real_name = name
+	add_language(LANGUAGE_CULT)
+	default_language = all_languages[LANGUAGE_CULT]
 	for(var/spell in construct_spells)
-		spell_list += new spell(src)
+		src.add_spell(new spell, "const_spell_ready")
 	updateicon()
 
 /mob/living/simple_animal/construct/Die()
@@ -45,14 +69,12 @@
 	new /obj/item/weapon/ectoplasm (src.loc)
 	for(var/mob/M in viewers(src, null))
 		if((M.client && !( M.blinded )))
-			M.show_message("\red [src] collapses in a shattered heap. ")
+			M.show_message("<span class='warning'>[src] collapses in a shattered heap. </span>")
 	ghostize()
 	del src
 	return
 
-/mob/living/simple_animal/construct/examine()
-	set src in oview()
-
+/mob/living/simple_animal/construct/examine(mob/user)
 	var/msg = "<span cass='info'>*---------*\nThis is \icon[src] \a <EM>[src]</EM>!\n"
 	if (src.health < src.maxHealth)
 		msg += "<span class='warning'>"
@@ -63,46 +85,13 @@
 		msg += "</span>"
 	msg += "*---------*</span>"
 
-	usr << msg
-	return
-
-/mob/living/simple_animal/construct/Bump(atom/movable/AM as mob|obj, yes)
-	if ((!( yes ) || now_pushing))
-		return
-	now_pushing = 1
-	if(ismob(AM))
-		var/mob/tmob = AM
-		if(istype(tmob, /mob/living/carbon/human) && (M_FAT in tmob.mutations))
-			if(prob(5))
-				src << "\red <B>You fail to push [tmob]'s fat ass out of the way.</B>"
-				now_pushing = 0
-				return
-		if(!(tmob.status_flags & CANPUSH))
-			now_pushing = 0
-			return
-		now_pushing = 1
-
-		tmob.LAssailant = src
-	now_pushing = 0
-	..()
-	if (!istype(AM, /atom/movable))
-		return
-	if (!( now_pushing ))
-		now_pushing = 1
-		if (!( AM.anchored ))
-			var/t = get_dir(src, AM)
-			if (istype(AM, /obj/structure/window/full))
-				for(var/obj/structure/window/win in get_step(AM,t))
-					now_pushing = 0
-					return
-			step(AM, t)
-		now_pushing = null
+	user << msg
 
 
 /mob/living/simple_animal/construct/attack_animal(mob/living/simple_animal/M as mob)
 	if(istype(M, /mob/living/simple_animal/construct/builder))
 		if(src.health >= src.maxHealth)
-			M << "\blue [src] has nothing to mend."
+			M << "<span class='notice'>[src] has nothing to mend.</span>"
 			return
 		health = min(maxHealth, health + 5) // Constraining health to maxHealth
 		M.visible_message("[M] mends some of \the <EM>[src]'s</EM> wounds.","You mend some of \the <em>[src]'s</em> wounds.")
@@ -114,13 +103,13 @@
 		else
 			if(M.attack_sound)
 				playsound(loc, M.attack_sound, 50, 1, 1)
-			for(var/mob/O in viewers(src, null))
-				O.show_message("<span class='attack'>\The <EM>[M]</EM> [M.attacktext] \the <EM>[src]</EM>!</span>", 1)
+			M.visible_message("<span class='attack'>\The <EM>[M]</EM> [M.attacktext] \the <EM>[src]</EM>!</span>")
 			add_logs(M, src, "attacked", admin=1)
 			var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 			adjustBruteLoss(damage)
 
 /mob/living/simple_animal/construct/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	user.delayNextAttack(8)
 	if(O.force)
 		var/damage = O.force
 		if (O.damtype == HALLOSS)
@@ -129,21 +118,12 @@
 			damage *= 2
 			purge = 3
 		adjustBruteLoss(damage)
-		for(var/mob/M in viewers(src, null))
-			if ((M.client && !( M.blinded )))
-				M.show_message("\red \b [src] has been attacked with [O] by [user]. ")
+		user.visible_message("<span class='danger'>[src] has been attacked with [O] by [user]. </span>")
 	else
-		usr << "\red This weapon is ineffective, it does no damage."
-		for(var/mob/M in viewers(src, null))
-			if ((M.client && !( M.blinded )))
-				M.show_message("\red [user] gently taps [src] with [O]. ")
+		usr << "<span class='warning'>This weapon is ineffective, it does no damage.</span>"
+		user.visible_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
 
 
-/mob/living/simple_animal/construct/airflow_stun()
-	return
-
-/mob/living/simple_animal/construct/airflow_hit(atom/A)
-	return
 
 /////////////////Juggernaut///////////////
 
@@ -167,9 +147,10 @@
 	environment_smash = 2
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	status_flags = 0
-	construct_spells = list(/obj/effect/proc_holder/spell/aoe_turf/conjure/lesserforcewall)
+	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
 
 /mob/living/simple_animal/construct/armoured/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	user.delayNextAttack(8)
 	if(O.force)
 		if(O.force >= 11)
 			var/damage = O.force
@@ -178,16 +159,16 @@
 			adjustBruteLoss(damage)
 			for(var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
-					M.show_message("\red \b [src] has been attacked with [O] by [user]. ")
+					M.show_message("<span class='danger'>[src] has been attacked with [O] by [user]. </span>")
 		else
 			for(var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
-					M.show_message("\red \b [O] bounces harmlessly off of [src]. ")
+					M.show_message("<span class='danger'>[O] bounces harmlessly off of [src]. </span>")
 	else
-		usr << "\red This weapon is ineffective, it does no damage."
+		usr << "<span class='warning'>This weapon is ineffective, it does no damage.</span>"
 		for(var/mob/M in viewers(src, null))
 			if ((M.client && !( M.blinded )))
-				M.show_message("\red [user] gently taps [src] with [O]. ")
+				M.show_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
 
 
 /mob/living/simple_animal/construct/armoured/bullet_act(var/obj/item/projectile/P)
@@ -238,7 +219,7 @@
 	environment_smash = 1
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/rapidslice.ogg'
-	construct_spells = list(/obj/effect/proc_holder/spell/targeted/ethereal_jaunt/shift)
+	construct_spells = list(/spell/targeted/ethereal_jaunt/shift)
 
 
 
@@ -261,13 +242,13 @@
 	melee_damage_upper = 5
 	attacktext = "rams"
 	speed = 0
-	environment_smash = 2
+	environment_smash = 1
 	attack_sound = 'sound/weapons/rapidslice.ogg'
-	construct_spells = list(/obj/effect/proc_holder/spell/aoe_turf/conjure/construct/lesser,
-							/obj/effect/proc_holder/spell/aoe_turf/conjure/wall,
-							/obj/effect/proc_holder/spell/aoe_turf/conjure/floor,
-							/obj/effect/proc_holder/spell/aoe_turf/conjure/soulstone,
-							/obj/effect/proc_holder/spell/aoe_turf/conjure/pylon,
+	construct_spells = list(/spell/aoe_turf/conjure/construct/lesser,
+							/spell/aoe_turf/conjure/wall,
+							/spell/aoe_turf/conjure/floor,
+							/spell/aoe_turf/conjure/soulstone,
+							/spell/aoe_turf/conjure/pylon,
 							///obj/effect/proc_holder/spell/targeted/projectile/magic_missile/lesser
 							)
 
@@ -295,8 +276,10 @@
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	var/energy = 0
 	var/max_energy = 1000
+	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
 
 /mob/living/simple_animal/construct/behemoth/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	user.delayNextAttack(8)
 	if(O.force)
 		if(O.force >= 11)
 			var/damage = O.force
@@ -305,16 +288,16 @@
 			adjustBruteLoss(damage)
 			for(var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
-					M.show_message("\red \b [src] has been attacked with [O] by [user]. ")
+					M.show_message("<span class='danger'>[src] has been attacked with [O] by [user]. </span>")
 		else
 			for(var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
-					M.show_message("\red \b [O] bounces harmlessly off of [src]. ")
+					M.show_message("<span class='danger'>[O] bounces harmlessly off of [src]. </span>")
 	else
-		usr << "\red This weapon is ineffective, it does no damage."
+		usr << "<span class='warning'>This weapon is ineffective, it does no damage.</span>"
 		for(var/mob/M in viewers(src, null))
 			if ((M.client && !( M.blinded )))
-				M.show_message("\red [user] gently taps [src] with [O]. ")
+				M.show_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
 
 
 ////////////////////////Harvester////////////////////////////////
@@ -337,8 +320,12 @@
 	environment_smash = 1
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/pierce.ogg'
-	var/doorcooldown = 10
-	var/runecooldown = 10
+
+	construct_spells = list(
+			/spell/targeted/harvest,
+			/spell/aoe_turf/knock/harvester,
+			/spell/rune_write
+		)
 
 /mob/living/simple_animal/construct/harvester/New()
 	..()
@@ -346,8 +333,9 @@
 
 ////////////////Glow//////////////////
 /mob/living/simple_animal/construct/proc/updateicon()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/construct/proc/updateicon() called tick#: [world.time]")
 	overlays = 0
-	var/overlay_layer = LIGHTING_LAYER+1
+	var/overlay_layer = LIGHTING_LAYER + 1
 	if(layer != MOB_LAYER)
 		overlay_layer=TURF_LAYER+0.2
 
@@ -358,13 +346,14 @@
 
 /*
 /client/proc/summon_cultist()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/summon_cultist() called tick#: [world.time]")
 	set category = "Behemoth"
 	set name = "Summon Cultist (300)"
 	set desc = "Teleport a cultist to your location"
 	if (istype(usr,/mob/living/simple_animal/constructbehemoth))
 
 		if(usr.energy<300)
-			usr << "\red You do not have enough power stored!"
+			usr << "<span class='warning'>You do not have enough power stored!</span>"
 			return
 
 		if(usr.stat)
@@ -381,11 +370,13 @@
 			if (cultist == usr) //just to be sure.
 				return
 			cultist.loc = usr.loc
-			usr.visible_message("\red [cultist] appears in a flash of red light as [usr] glows with power")*/
+			usr.visible_message("<span class='warning'>[cultist] appears in a flash of red light as [usr] glows with power</span>")*/
 
 ////////////////HUD//////////////////////
 
 /mob/living/simple_animal/construct/Life()
+	if(timestopped) return 0 //under effects of time magick
+
 	. = ..()
 	if(.)
 		if(fire)
@@ -399,32 +390,11 @@
 			if(purge > 0)							purged.icon_state = "purge1"
 			else									purged.icon_state = "purge0"
 
-		if(construct_spell1)
-			construct_spell1.overlays = 0
-			if(purge)
-				construct_spell1.overlays += "silence"
-
-		if(construct_spell2)
-			construct_spell2.overlays = 0
-			if(purge)
-				construct_spell2.overlays += "silence"
-
-		if(construct_spell3)
-			construct_spell3.overlays = 0
-			if(purge)
-				construct_spell3.overlays += "silence"
-
-		if(construct_spell4)
-			construct_spell4.overlays = 0
-			if(purge)
-				construct_spell4.overlays += "silence"
-
-		if(construct_spell5)
-			construct_spell5.overlays = 0
-			if(purge)
-				construct_spell5.overlays += "silence"
+		silence_spells(purge)
 
 /mob/living/simple_animal/construct/armoured/Life()
+	if(timestopped) return 0 //under effects of time magick
+
 	..()
 	if(healths)
 		switch(health)
@@ -437,19 +407,10 @@
 			if(1 to 41)				healths.icon_state = "juggernaut_health6"
 			else					healths.icon_state = "juggernaut_health7"
 
-		var/obj/effect/proc_holder/spell/S = null
-		for(var/datum/D in spell_list)
-			if(istype(D, /obj/effect/proc_holder/spell/aoe_turf/conjure/lesserforcewall))
-				S = D
-				break
-		if(S)
-			if(S.charge_counter < S.charge_max)
-				construct_spell1.icon_state = "spell_juggerwall-off"
-			else
-				construct_spell1.icon_state = "spell_juggerwall"
-
 
 /mob/living/simple_animal/construct/behemoth/Life()
+	if(timestopped) return 0 //under effects of time magick
+
 	..()
 	if(healths)
 		switch(health)
@@ -463,6 +424,8 @@
 			else					healths.icon_state = "juggernaut_health7"
 
 /mob/living/simple_animal/construct/builder/Life()
+	if(timestopped) return 0 //under effects of time magick
+
 	..()
 	if(healths)
 		switch(health)
@@ -475,72 +438,11 @@
 			if(1 to 9)				healths.icon_state = "artificer_health6"
 			else					healths.icon_state = "artificer_health7"
 
-	if(construct_spell1)
-		var/obj/effect/proc_holder/spell/S = null
-		for(var/datum/D in spell_list)
-			if(istype(D, /obj/effect/proc_holder/spell/aoe_turf/conjure/wall))
-				S = D
-				break
-		if(S)
-			if(S.charge_counter < S.charge_max)
-				construct_spell1.icon_state = "spell_wall-off"
-			else
-				construct_spell1.icon_state = "spell_wall"
-
-
-	if(construct_spell2)
-		var/obj/effect/proc_holder/spell/S = null
-		for(var/datum/D in spell_list)
-			if(istype(D, /obj/effect/proc_holder/spell/aoe_turf/conjure/soulstone))
-				S = D
-				break
-		if(S)
-			if(S.charge_counter < S.charge_max)
-				construct_spell2.icon_state = "spell_soulstone-off"
-			else
-				construct_spell2.icon_state = "spell_soulstone"
-
-
-	if(construct_spell3)
-		var/obj/effect/proc_holder/spell/S = null
-		for(var/datum/D in spell_list)
-			if(istype(D, /obj/effect/proc_holder/spell/aoe_turf/conjure/floor))
-				S = D
-				break
-		if(S)
-			if(S.charge_counter < S.charge_max)
-				construct_spell3.icon_state = "spell_floor-off"
-			else
-				construct_spell3.icon_state = "spell_floor"
-
-
-	if(construct_spell4)
-		var/obj/effect/proc_holder/spell/S = null
-		for(var/datum/D in spell_list)
-			if(istype(D, /obj/effect/proc_holder/spell/aoe_turf/conjure/construct/lesser))
-				S = D
-				break
-		if(S)
-			if(S.charge_counter < S.charge_max)
-				construct_spell4.icon_state = "spell_shell-off"
-			else
-				construct_spell4.icon_state = "spell_shell"
-
-
-	if(construct_spell5)
-		var/obj/effect/proc_holder/spell/S = null
-		for(var/datum/D in spell_list)
-			if(istype(D, /obj/effect/proc_holder/spell/aoe_turf/conjure/pylon))
-				S = D
-				break
-		if(S)
-			if(S.charge_counter < S.charge_max)
-				construct_spell5.icon_state = "spell_pylon-off"
-			else
-				construct_spell5.icon_state = "spell_pylon"
 
 
 /mob/living/simple_animal/construct/wraith/Life()
+	if(timestopped) return 0 //under effects of time magick
+
 	..()
 	if(healths)
 		switch(health)
@@ -553,20 +455,10 @@
 			if(1 to 11)				healths.icon_state = "wraith_health6"
 			else					healths.icon_state = "wraith_health7"
 
-	if(construct_spell1)
-		var/obj/effect/proc_holder/spell/S = null
-		for(var/datum/D in spell_list)
-			if(istype(D, /obj/effect/proc_holder/spell/targeted/ethereal_jaunt/shift))
-				S = D
-				break
-		if(S)
-			if(S.charge_counter < S.charge_max)
-				construct_spell1.icon_state = "spell_shift-off"
-			else
-				construct_spell1.icon_state = "spell_shift"
-
 
 /mob/living/simple_animal/construct/harvester/Life()
+	if(timestopped) return 0 //under effects of time magick
+
 	..()
 	if(healths)
 		switch(health)
@@ -578,20 +470,3 @@
 			if(25 to 49)			healths.icon_state = "harvester_health5"
 			if(1 to 24)				healths.icon_state = "harvester_health6"
 			else					healths.icon_state = "harvester_health7"
-
-	if(construct_spell1)
-		if(runecooldown < 10)
-			construct_spell1.icon_state = "spell_rune-off"
-		else
-			construct_spell1.icon_state = "spell_rune"
-
-	if(construct_spell2)
-		if(doorcooldown < 10)
-			construct_spell2.icon_state = "spell_breakdoor-off"
-		else
-			construct_spell2.icon_state = "spell_breakdoor"
-
-	if(runecooldown < 10)
-		runecooldown++
-	if(doorcooldown < 10)
-		doorcooldown++

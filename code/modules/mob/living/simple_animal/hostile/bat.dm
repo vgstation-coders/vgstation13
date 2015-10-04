@@ -8,13 +8,13 @@
 	icon_gib = "bat_dead"
 	speak_chance = 0
 	turns_per_move = 3
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	response_help = "pets the"
 	response_disarm = "gently pushes aside the"
 	response_harm = "hits the"
 	speed = 4
 	maxHealth = 20
 	health = 20
+	flying = 1
 
 	harm_intent_damage = 8
 	melee_damage_lower = 10
@@ -34,6 +34,7 @@
 	minbodytemp = 0
 
 	environment_smash = 1
+	size = SIZE_TINY
 
 	faction = "scarybat"
 	var/mob/living/owner
@@ -45,6 +46,11 @@
 
 /mob/living/simple_animal/hostile/scarybat/Process_Spacemove(var/check_drift = 0)
 	return ..()	//No drifting in space for space carp!	//original comments do not steal
+
+/mob/living/simple_animal/hostile/scarybat/IsInvalidTarget(atom/A)
+	..()
+	if(A == owner)
+		return 1
 
 /mob/living/simple_animal/hostile/scarybat/FindTarget()
 	. = ..()
@@ -75,29 +81,31 @@
 	return
 
 /mob/living/simple_animal/hostile/scarybat/cult/Life()
+	if(timestopped) return 0 //under effects of time magick
 	..()
 	if(emergency_shuttle.location == 1)
 		if(!enroute && !target)	//The shuttle docked, all monsters rush for the escape hallway
-			if(!shuttletarget || (get_dist(src, shuttletarget) >= 2))
-				shuttletarget = pick(get_area_turfs(locate(/area/hallway/secondary/exit)))
+			if(!shuttletarget && escape_list.len) //Make sure we didn't already assign it a target, and that there are targets to pick
+				shuttletarget = pick(escape_list) //Pick a shuttle target
 			enroute = 1
 			stop_automated_movement = 1
-			spawn()
+/*			spawn()
 				if(!src.stat)
-					horde()
+					horde()*/
 
 		if(get_dist(src, shuttletarget) <= 2)		//The monster reached the escape hallway
 			enroute = 0
 			stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/scarybat/cult/proc/horde()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/hostile/scarybat/cult/proc/horde() called tick#: [world.time]")
 	var/turf/T = get_step_to(src, shuttletarget)
 	for(var/atom/A in T)
 		if(istype(A,/obj/machinery/door/airlock))
 			var/obj/machinery/door/airlock/D = A
 			if(D.density && !D.locked && !D.welded)
 				D.open()
-		else if(istype(A,/obj/structure/mineral_door))
+		else if(istype(A,/obj/machinery/door/mineral))
 			var/obj/machinery/door/D = A
 			if(D.density)
 				D.open()
@@ -112,3 +120,50 @@
 		spawn(10)
 			if(!src.stat)
 				horde()
+
+
+
+/mob/living/simple_animal/hostile/scarybat/book
+	name = "flying book"
+	desc = "An enchanted book, flying through the air by flapping it's pages."
+	icon = 'icons/mob/animal.dmi'
+	icon_state = "bookbat"
+	icon_living = "bookbat"
+	icon_dead = "bookbat_dead"
+	icon_gib = "bookbat_dead"
+	speak_chance = 0
+	turns_per_move = 3
+	response_help = "pats the"
+	response_disarm = "gently pushes aside the"
+	response_harm = "hits the"
+	speed = 4
+	maxHealth = 15
+	health = 15
+	var/book_cover
+
+	harm_intent_damage = 8
+	melee_damage_lower = 5
+	melee_damage_upper = 10
+	attacktext = "clamps shut on"
+	attack_sound = 'sound/effects/pageturn3.ogg'
+
+mob/living/simple_animal/hostile/scarybat/book/New()
+	..()
+	if(!book_cover)
+		book_cover = pick( list("red","purple","blue","green") )
+	icon_state = "bookbat_[book_cover]"
+	icon_living = "bookbat_[book_cover]"
+	icon_dead = "bookbat_[book_cover]_dead"
+
+/mob/living/simple_animal/hostile/scarybat/book/woody
+	name = "Woody"
+	desc = "A close friend to many librarians."
+	icon_state = "bookbat_woody"
+	icon_living = "bookbat_woody"
+	icon_dead = "bookbat_woody_dead"
+	icon_gib = "bookbat_woody_dead"
+	book_cover = "woody"
+	environment_smash = 0
+	harm_intent_damage = 0
+	melee_damage_lower = 0
+	melee_damage_upper = 0

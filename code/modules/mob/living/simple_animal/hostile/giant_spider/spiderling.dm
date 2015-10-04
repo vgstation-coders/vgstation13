@@ -18,6 +18,8 @@
 	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent
 	var/travelling_in_vent = 0
 
+	butchering_drops = null
+
 	vision_range = 3
 	aggro_vision_range = 9
 	idle_vision_range = 3
@@ -29,7 +31,8 @@
 	melee_damage_lower = 0
 	melee_damage_upper = 0
 	attacktext = "barrels into"
-	a_intent = "help"
+	a_intent = I_HELP
+	size = SIZE_TINY
 	//throw_message = "sinks in slowly, before being pushed out of "
 	//status_flags = CANPUSH
 	search_objects = 0
@@ -66,6 +69,7 @@
 	stance = HOSTILE_STANCE_IDLE
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/Life()
+	if(timestopped) return 0 //under effects of time magick
 	if(travelling_in_vent)
 		if(istype(src.loc, /turf))
 			travelling_in_vent = 0
@@ -94,7 +98,7 @@
 							return
 
 						if(prob(50))
-							src.visible_message("\blue You hear something squeezing through the ventilation ducts.",2)
+							src.visible_message("<span class='notice'>You hear something squeezing through the ventilation ducts.</span>",2)
 						sleep(travel_time)
 
 						if(!exit_vent || exit_vent.welded)
@@ -130,7 +134,17 @@
 		ventcrawl(target)
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/proc/ventcrawl(var/obj/machinery/atmospherics/unary/vent_pump/v)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/hostile/giant_spider/spiderling/proc/ventcrawl() called tick#: [world.time]")
 	//ventcrawl!
 	if(!v.welded)
 		entry_vent = v
 		Goto(get_turf(v),move_to_delay)
+
+//Virologist's little friend!
+/mob/living/simple_animal/hostile/giant_spider/spiderling/salk
+	name = "Salk"
+	desc = "Named after someone who did their job much better than you do"
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "jonas"
+	icon_living = "jonas"
+	amount_grown = -INFINITY

@@ -14,7 +14,24 @@
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-
+		if(isvampire(H))
+			if(!(VAMP_MATURE in H.mind.vampire.powers))
+				H << "<span class='notice'>You don't see anything.</span>"
+				return
+		if(user.hallucinating())
+			switch(rand(1,100))
+				if(1 to 20)
+					H << "<span class='sinister'>You look like [pick("a monster","a goliath","a catbeast","a ghost","a chicken","the mailman","a demon")]! Your heart skips a beat.</span>"
+					H.Weaken(4)
+					return
+				if(21 to 40)
+					H << "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>"
+					H.emote("scream",,, 1)
+					H.dir = turn(H.dir, 180)
+					return
+				if(41 to 50)
+					H << "<span class='notice'>You don't see anything.</span>"
+					return
 		var/userloc = H.loc
 
 		//see code/modules/mob/new_player/preferences.dm at approx line 545 for comments!
@@ -46,7 +63,7 @@
 		else
 			species_hair = hair_styles_list
 
-		var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in hair_styles_list
+		var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
 		if(userloc != H.loc) return	//no tele-grooming
 		if(new_style)
 			H.h_style = new_style
@@ -55,6 +72,7 @@
 
 
 /obj/structure/mirror/proc/shatter()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/mirror/proc/shatter() called tick#: [world.time]")
 	if(shattered)	return
 	shattered = 1
 	icon_state = "mirror_broke"
@@ -72,10 +90,10 @@
 
 
 /obj/structure/mirror/attackby(obj/item/I as obj, mob/user as mob)
-	if ((shattered) && (istype(I, /obj/item/stack/sheet/glass)))
-		var/obj/item/stack/sheet/glass/stack = I
+	if ((shattered) && (istype(I, /obj/item/stack/sheet/glass/glass)))
+		var/obj/item/stack/sheet/glass/glass/stack = I
 		if ((stack.amount - 2) < 0)
-			user << "\red You need more glass to do that."
+			user << "<span class='warning'>You need more glass to do that.</span>"
 		else
 			stack.use(2)
 			shattered = 0

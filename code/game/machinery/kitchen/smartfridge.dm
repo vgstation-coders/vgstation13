@@ -11,7 +11,6 @@
 	idle_power_usage = 5
 	active_power_usage = 100
 	flags = NOREACT
-	var/global/max_n_of_items = 999 // Sorry but the BYOND infinite loop detector doesn't look things over 1000.
 	var/icon_on = "smartfridge"
 	var/icon_off = "smartfridge-off"
 	var/item_quants = list()
@@ -28,13 +27,13 @@
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL
 
-	l_color = "#7BF9FF"
+	light_color = LIGHT_COLOR_CYAN
 	power_change()
 		..()
 		if(!(stat & (BROKEN|NOPOWER)))
-			SetLuminosity(2)
+			set_light(2)
 		else
-			SetLuminosity(0)
+			set_light(0)
 
 
 /********************************************************************
@@ -59,6 +58,7 @@
 	RefreshParts()
 
 /obj/machinery/smartfridge/proc/accept_check(var/obj/item/O as obj, var/mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/smartfridge/proc/accept_check() called tick#: [world.time]")
 	for(var/ac_type in accepted_types)
 		if(istype(O, ac_type))
 			return 1
@@ -73,7 +73,7 @@
 
 	accepted_types = list(/obj/item/seeds)
 
-	l_color = "#000000"
+	light_color = null
 
 /obj/machinery/smartfridge/seeds/New()
 	. = ..()
@@ -214,25 +214,28 @@
 *   Item Adding
 ********************/
 
-/obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(stat & NOPOWER)
 		user << "<span class='notice'>\The [src] is unpowered and useless.</span>"
-		return
+		return 1
 
 	if(..())
 		return 1
 
 	if(accept_check(O))
-		if(contents.len >= max_n_of_items)
+		if(contents.len >= MAX_N_OF_ITEMS)
 			user << "<span class='notice'>\The [src] is full.</span>"
 			return 1
 		else
-			user.before_take_item(O)
-			O.loc = src
-			if(item_quants[O.name])
-				item_quants[O.name]++
+			if(!user.drop_item(O, src))
+				return 1
+
+			var/sanitized_name = sanitize(O.name, list("\"" = "", "'" = "", "+" = "plus", ";" = "", "^" = "", "&" = "", "<" = "", ">" = ""))
+			O.name = sanitized_name
+			if(item_quants[sanitized_name])
+				item_quants[sanitized_name]++
 			else
-				item_quants[O.name] = 1
+				item_quants[sanitized_name] = 1
 			user.visible_message("<span class='notice'>[user] has added \the [O] to \the [src].", \
 								 "<span class='notice'>You add \the [O] to \the [src].")
 
@@ -241,15 +244,17 @@
 		var/objects_loaded = 0
 		for(var/obj/G in bag.contents)
 			if(accept_check(G))
-				if(contents.len >= max_n_of_items)
+				if(contents.len >= MAX_N_OF_ITEMS)
 					user << "<span class='notice'>\The [src] is full.</span>"
 					return 1
 				else
 					bag.remove_from_storage(G,src)
-					if(item_quants[G.name])
-						item_quants[G.name]++
+					var/sanitized_name = sanitize(G.name, list("\"" = "", "'" = "", "+" = "plus", ";" = "", "^" = "", "&" = "", "<" = "", ">" = ""))
+					G.name = sanitized_name
+					if(item_quants[sanitized_name])
+						item_quants[sanitized_name]++
 					else
-						item_quants[G.name] = 1
+						item_quants[sanitized_name] = 1
 					objects_loaded++
 		if(objects_loaded)
 
@@ -258,17 +263,26 @@
 			if(bag.contents.len > 0)
 				user << "<span class='notice'>Some items are refused.</span>"
 
+	else if(istype(O, /obj/item/weapon/paper) && user.drop_item(O, src.loc))
+		var/list/params_list = params2list(params)
+		if(O.loc == src.loc && params_list.len)
+			var/clamp_x = 16
+			var/clamp_y = 16
+			O.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
+			O.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
+			user << "<span class='notice'>You hang \the [O.name] on the fridge.</span>"
 	else
 		user << "<span class='notice'>\The [src] smartly refuses [O].</span>"
 		return 1
-
+	item_quants = sortList(item_quants)
 	updateUsrDialog()
+	return 1
 
 /obj/machinery/smartfridge/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
 /obj/machinery/smartfridge/attack_ai(mob/user as mob)
-	return 0
+	return src.attack_hand(user)
 
 /obj/machinery/smartfridge/attack_hand(mob/user as mob)
 	user.set_machine(src)
@@ -292,7 +306,7 @@
 				var/N = item_quants[O]
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\kitchen\smartfridge.dm:140: dat += "<FONT color = 'blue'><B>[capitalize(O)]</B>:"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\kitchen\smartfridge.dm:140: dat += "<FONT color = 'blue'><B>[capitalize(O)]</B>:"
 				dat += {"<FONT color = 'blue'><B>[capitalize(O)]</B>:
 					[N] </font>
 					<a href='byond://?src=\ref[src];vend=[O];amount=1'>Vend</A> "}

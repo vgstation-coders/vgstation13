@@ -12,6 +12,7 @@
 	response_help  = "touches the"
 	response_disarm = "pushes the"
 	response_harm   = "hits the"
+	meat_type = null
 	var/response_snap = "snapped the neck of" //Past tense because it "happened before you could see it"
 	var/response_snap_target = "In the blink of an eye, something grabs you and snaps your neck!"
 	var/snap_sound = list('sound/scp/firstpersonsnap.ogg','sound/scp/firstpersonsnap2.ogg','sound/scp/firstpersonsnap3.ogg')
@@ -23,8 +24,9 @@
 	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent //Graciously stolen from spider code
 
 /mob/living/simple_animal/sculpture/proc/GrabMob(var/mob/living/target)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/sculpture/proc/GrabMob() called tick#: [world.time]")
 	if(target && target != src && ishuman(target) && !observed)
-		G = new /obj/item/weapon/grab(src, target)
+		G = getFromPool(/obj/item/weapon/grab,src,target)
 		target.Stun(1)
 		target.Paralyse(1)
 		G.loc = src
@@ -45,6 +47,7 @@
 		del(G)
 
 /mob/living/simple_animal/sculpture/Life()
+	if(timestopped) return 0 //under effects of time magick
 
 	//If we are hibernating, just don't do anything
 	if(hibernate)
@@ -144,7 +147,7 @@
 		spawn()
 			while(get_turf(src) != target_turf && num_turfs > 0)
 				for(var/obj/structure/window/W in next_turf)
-					W.destroy()
+					W.Destroy(brokenup = 1)
 					sleep(5)
 				for(var/obj/structure/table/O in next_turf)
 					O.ex_act(1)
@@ -182,8 +185,8 @@
 			else if(istype(thisturf, /turf/unsimulated/wall))
 				continue
 			turfs += thisturf
-		var/turf/target_turf = pick(turfs)
-
+		var/turf/target_turf = safepick(turfs)
+		if(!target_turf) return
 		//MUH 6 QUADRILLION WINDOWS
 		//rampage along a path to get to it, in the blink of an eye
 		var/turf/next_turf = get_step_towards(src, target_turf)
@@ -191,7 +194,7 @@
 		spawn()
 			while(get_turf(src) != target_turf && num_turfs > 0)
 				for(var/obj/structure/window/W in next_turf)
-					W.destroy()
+					W.Destroy(brokenup = 1)
 					sleep(5)
 				for(var/obj/structure/table/O in next_turf)
 					O.ex_act(1)
@@ -254,6 +257,7 @@
 /mob/living/simple_animal/sculpture/Bump(atom/movable/AM as mob, yes)
 	if(!G && !observed)
 		GrabMob(AM)
+	..()
 
 /mob/living/simple_animal/sculpture/Bumped(atom/movable/AM as mob, yes)
 	if(!G && !observed)

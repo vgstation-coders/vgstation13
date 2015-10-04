@@ -12,7 +12,6 @@
 		loc = pick(newplayer_start)
 	else
 		loc = locate(1,1,1)
-	lastarea = loc
 
 	sight |= SEE_TURFS
 	player_list |= src
@@ -27,7 +26,9 @@
 		loc = pick(watch_locations)
 */
 	new_player_panel()
-	spawn(-1)
+	if(ckey in deadmins)
+		verbs += /client/proc/readmin
+	spawn(0)
 		if(client)
 			//If the changelog has changed, show it to them
 			if(client.prefs.lastchangelog != changelog_hash)

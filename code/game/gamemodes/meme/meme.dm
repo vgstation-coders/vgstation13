@@ -108,6 +108,7 @@
 
 
 /datum/game_mode/proc/forge_meme_objectives(var/datum/mind/meme, var/datum/mind/first_host)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/forge_meme_objectives() called tick#: [world.time]")
 	// meme always needs to attune X hosts
 	var/datum/objective/meme_attune/attune_objective = new
 	attune_objective.owner = meme
@@ -126,8 +127,9 @@
 	return
 
 /datum/game_mode/proc/greet_meme(var/datum/mind/meme, var/you_are=1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/greet_meme() called tick#: [world.time]")
 	if (you_are)
-		meme.current << "<B>\red You are a meme!</B>"
+		meme.current << "<span class='danger'>You are a meme!</span>"
 
 	var/obj_count = 1
 	for(var/datum/objective/objective in meme.objectives)
@@ -150,6 +152,7 @@
 		return 1
 
 /datum/game_mode/proc/auto_declare_completion_meme()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/auto_declare_completion_meme() called tick#: [world.time]")
 	for(var/datum/mind/meme in memes)
 		var/memewin = 1
 		var/attuned = 0
@@ -161,10 +164,10 @@
 			var/count = 1
 			for(var/datum/objective/objective in meme.objectives)
 				if(objective.check_completion())
-					world << "<B>Objective #[count]</B>: [objective.explanation_text] \green <B>Success</B>"
+					world << "<B>Objective #[count]</B>: [objective.explanation_text] <span class='good'><B>Success</B></span>"
 					feedback_add_details("meme_objective","[objective.type]|SUCCESS")
 				else
-					world << "<B>Objective #[count]</B>: [objective.explanation_text] \red Failed"
+					world << "<B>Objective #[count]</B>: [objective.explanation_text] <span class='warning'>Failed</span>"
 					feedback_add_details("meme_objective","[objective.type]|FAIL")
 					memewin = 0
 				count++

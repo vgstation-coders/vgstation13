@@ -3,15 +3,23 @@
 	turf = /turf/space
 	view = "15x15"
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
-
+	//loop_checks = 0
 #define RECOMMENDED_VERSION 501
 
 
+var/savefile/panicfile
 /world/New()
 	// Honk honk, fuck you science
 	populate_seed_list()
-	WORLD_X_OFFSET=rand(-50,50)
-	WORLD_Y_OFFSET=rand(-50,50)
+	for(var/i=1, i<=map.zLevels.len, i++)
+		WORLD_X_OFFSET += rand(-50,50)
+		WORLD_Y_OFFSET += rand(-50,50)
+
+	// Initialize world events as early as possible.
+	on_login = new ()
+	on_ban   = new ()
+	on_unban = new ()
+
 
 	/*Runtimes, not sure if i need it still so commenting out for now
 	starticon = rotate_icon('icons/obj/lightning.dmi', "lightningstart")
@@ -22,8 +30,11 @@
 	// logs
 	var/date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
 
-	href_logfile = file("data/logs/[date_string] hrefs.htm")
+	investigations["hrefs"] = new /datum/log_controller("hrefs", filename="data/logs/[date_string] hrefs.htm", persist=TRUE)
+	investigations["atmos"] = new /datum/log_controller("atmos", filename="data/logs/[date_string] atmos.htm", persist=TRUE)
+
 	diary = file("data/logs/[date_string].log")
+	panicfile = new/savefile("data/logs/profiling/proclogs/[date_string].sav")
 	diaryofmeanpeople = file("data/logs/[date_string] Attack.log")
 	admin_diary = file("data/logs/[date_string] admin only.log")
 
@@ -32,14 +43,23 @@
 	diary << log_start
 	diaryofmeanpeople << log_start
 	admin_diary << log_start
+	var/ourround = time_stamp()
+	panicfile.cd = ourround
+
 
 	changelog_hash = md5('html/changelog.html')					//used for telling if the changelog has changed recently
-
+/*
+ * IF YOU HAVE BYOND VERSION BELOW 507.1248 OR ARE ABLE TO WALK THROUGH WINDOORS/BORDER WINDOWS COMMENT OUT
+ * #define BORDER_USE_TURF_EXIT
+ * FOR MORE INFORMATION SEE: http://www.byond.com/forum/?post=1666940
+ */
+#ifdef BORDER_USE_TURF_EXIT
+	if(byond_version < 507)
+		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 507.1248 or comment BORDER_USE_TURF_EXIT in global.dm")
+#elif
 	if(byond_version < RECOMMENDED_VERSION)
 		world.log << "Your server's byond version does not meet the recommended requirements for this code. Please update BYOND"
-
-
-
+#endif
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 
 	load_configuration()
@@ -58,21 +78,23 @@
 	LoadBans()
 	SetupHooks() // /vg/
 
-	copy_logs() // Just copy the logs.
+	library_catalog.initialize()
+
+	spawn() copy_logs() // Just copy the logs.
 	if(config && config.log_runtimes)
 		log = file("data/logs/runtime/[time2text(world.realtime,"YYYY-MM-DD")]-runtime.log")
 	if(config && config.server_name != null && config.server_suffix && world.port > 0)
 		// dumb and hardcoded but I don't care~
 		config.server_name += " #[(world.port % 1000) / 100]"
 
-	investigate_reset()
 	Get_Holiday()	//~Carn, needs to be here when the station is named so :P
 
 	src.update_status()
 
 	makepowernets()
+	paperwork_setup()
 
-	sun = new /datum/sun()
+	//sun = new /datum/sun()
 	radio_controller = new /datum/controller/radio()
 	data_core = new /obj/effect/datacore()
 	paiController = new /datum/paiController()
@@ -81,6 +103,8 @@
 		world.log << "Your server failed to establish a connection with the feedback database."
 	else
 		world.log << "Feedback database connection established."
+	migration_controller_mysql = new
+	migration_controller_sqlite = new ("players2.sqlite", "players2_empty.sqlite")
 
 	if(!setup_old_database_connection())
 		world.log << "Your server failed to establish a connection with the tgstation database."
@@ -105,21 +129,33 @@
 
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 
+	processScheduler = new
 	master_controller = new /datum/controller/game_controller()
+
 	spawn(1)
+		processScheduler.deferSetupFor(/datum/controller/process/ticker)
+		processScheduler.setup()
+
 		master_controller.setup()
 
 		setup_species()
+		setup_shuttles()
 
-	process_teleport_locs()			//Sets up the wizard teleport locations
-	process_ghost_teleport_locs()	//Sets up ghost teleport locations.
+	for(var/plugin_type in typesof(/plugin))
+		var/plugin/P = new plugin_type()
+		plugins[P.name] = P
+		P.on_world_loaded()
+
+	process_teleport_locs()				//Sets up the wizard teleport locations
+	process_ghost_teleport_locs()		//Sets up ghost teleport locations.
 	process_adminbus_teleport_locs()	//Sets up adminbus teleport locations.
+	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 
 	spawn(3000)		//so we aren't adding to the round-start lag
 		if(config.ToRban)
 			ToRban_autoupdate()
-		if(config.kick_inactive)
-			KickInactiveClients()
+		/*if(config.kick_inactive)
+			KickInactiveClients()*/
 
 #undef RECOMMENDED_VERSION
 
@@ -162,6 +198,12 @@
 		s["ai"] = config.allow_ai
 		s["host"] = host ? host : null
 		s["players"] = list()
+		s["map_name"] = map.nameLong
+		s["gamestate"] = 1
+		if(ticker)
+			s["gamestate"] = ticker.current_state
+		s["active_players"] = get_active_player_count()
+		s["revision"] = return_revision()
 		var/n = 0
 		var/admins = 0
 
@@ -178,6 +220,9 @@
 		s["admins"] = admins
 
 		return list2params(s)
+	else if (findtext(T,"notes:"))
+		var/notekey = copytext(T, 7)
+		return list2params(exportnotes(notekey))
 
 
 /world/Reboot(reason)
@@ -202,6 +247,10 @@
 				fdel(filename)
 				fcopy(vote.chosen_map, filename)
 			sleep(60)
+
+	processScheduler.stop()
+	paperwork_stop()
+
 	spawn(0)
 		world << sound(pick('sound/AI/newroundsexy.ogg','sound/misc/apcdestroyed.ogg','sound/misc/bangindonk.ogg','sound/misc/slugmissioncomplete.ogg')) // random end sounds!! - LastyBatsy
 
@@ -216,6 +265,7 @@
 
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
 /world/proc/KickInactiveClients()
+	//writepanic("[__FILE__].[__LINE__] (world)([usr ? usr.ckey : ""])  \\/world/proc/KickInactiveClients() called tick#: [world.time]")
 	spawn(-1)
 		//set background = 1
 		while(1)
@@ -226,10 +276,11 @@
 						log_access("AFK: [key_name(C)]")
 						C << "<span class='warning'>You have been inactive for more than 10 minutes and have been disconnected.</span>"
 						del(C)
-#undef INACTIVITY_KICK
+//#undef INACTIVITY_KICK
 
 
 /world/proc/load_mode()
+	//writepanic("[__FILE__].[__LINE__] (world)([usr ? usr.ckey : ""])  \\/world/proc/load_mode() called tick#: [world.time]")
 	var/list/Lines = file2list("data/mode.txt")
 	if(Lines.len)
 		if(Lines[1])
@@ -237,14 +288,17 @@
 			diary << "Saved mode is '[master_mode]'"
 
 /world/proc/save_mode(var/the_mode)
+	//writepanic("[__FILE__].[__LINE__] (world)([usr ? usr.ckey : ""])  \\/world/proc/save_mode() called tick#: [world.time]")
 	var/F = file("data/mode.txt")
 	fdel(F)
 	F << the_mode
 
 /world/proc/load_motd()
+	//writepanic("[__FILE__].[__LINE__] (world)([usr ? usr.ckey : ""])  \\/world/proc/load_motd() called tick#: [world.time]")
 	join_motd = file2text("config/motd.txt")
 
 /world/proc/load_configuration()
+	//writepanic("[__FILE__].[__LINE__] (world)([usr ? usr.ckey : ""])  \\/world/proc/load_configuration() called tick#: [world.time]")
 	config = new /datum/configuration()
 	config.load("config/config.txt")
 	config.load("config/game_options.txt","game_options")
@@ -254,6 +308,7 @@
 	abandon_allowed = config.respawn
 
 /world/proc/load_mods()
+	//writepanic("[__FILE__].[__LINE__] (world)([usr ? usr.ckey : ""])  \\/world/proc/load_mods() called tick#: [world.time]")
 	if(config.admin_legacy_system)
 		var/text = file2text("config/moderators.txt")
 		if (!text)
@@ -273,6 +328,7 @@
 				D.associate(directory[ckey])
 
 /world/proc/update_status()
+	//writepanic("[__FILE__].[__LINE__] (world)([usr ? usr.ckey : ""])  \\/world/proc/update_status() called tick#: [world.time]")
 	var/s = ""
 
 	if (config && config.server_name)
@@ -280,7 +336,7 @@
 
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\world.dm:235: s += "<b>[station_name()]</b>";
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\world.dm:235: s += "<b>[station_name()]</b>";
 	s += {"<b>[station_name()]</b>"
 		(
 		<a href=\"http://\">" //Change this to wherever you want the hub to link to
@@ -339,6 +395,8 @@ var/failed_old_db_connections = 0
 
 proc/setup_database_connection()
 
+	//writepanic("[__FILE__].[__LINE__] \\/proc/setup_database_connection() called tick#: [world.time]")
+
 	if(failed_db_connections > FAILED_DB_CONNECTION_CUTOFF)	//If it failed to establish a connection more than 5 times in a row, don't bother attempting to conenct anymore.
 		return 0
 
@@ -363,6 +421,7 @@ proc/setup_database_connection()
 
 //This proc ensures that the connection to the feedback database (global variable dbcon) is established
 proc/establish_db_connection()
+	//writepanic("[__FILE__].[__LINE__] \\/proc/establish_db_connection() called tick#: [world.time]")
 	if(failed_db_connections > FAILED_DB_CONNECTION_CUTOFF)
 		return 0
 
@@ -370,8 +429,8 @@ proc/establish_db_connection()
 	if(dbcon)
 		q = dbcon.NewQuery("show global variables like 'wait_timeout'")
 		q.Execute()
-	if(q.ErrorMsg())
-		dbcon.Disconnect()
+		if(q && q.ErrorMsg())
+			dbcon.Disconnect()
 	if(!dbcon || !dbcon.IsConnected())
 		return setup_database_connection()
 	else
@@ -382,6 +441,8 @@ proc/establish_db_connection()
 
 //These two procs are for the old database, while it's being phased out. See the tgstation.sql file in the SQL folder for more information.
 proc/setup_old_database_connection()
+
+	//writepanic("[__FILE__].[__LINE__] \\/proc/setup_old_database_connection() called tick#: [world.time]")
 
 	if(failed_old_db_connections > FAILED_DB_CONNECTION_CUTOFF)	//If it failed to establish a connection more than 5 times in a row, don't bother attempting to conenct anymore.
 		return 0
@@ -401,12 +462,13 @@ proc/setup_old_database_connection()
 		failed_old_db_connections = 0	//If this connection succeeded, reset the failed connections counter.
 	else
 		failed_old_db_connections++		//If it failed, increase the failed connections counter.
-		world.log << dbcon.ErrorMsg()
+		world.log << dbcon_old.ErrorMsg()
 
 	return .
 
 //This proc ensures that the connection to the feedback database (global variable dbcon) is established
 proc/establish_old_db_connection()
+	//writepanic("[__FILE__].[__LINE__] \\/proc/establish_old_db_connection() called tick#: [world.time]")
 	if(failed_old_db_connections > FAILED_DB_CONNECTION_CUTOFF)
 		return 0
 

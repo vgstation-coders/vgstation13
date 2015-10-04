@@ -8,7 +8,11 @@
 	active_power_usage = 300
 	var/obj/item/weapon/circuitboard/circuit = null //if circuit==null, computer can't disassembly
 	var/processing = 0
-	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK
+	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | SHUTTLEWRENCH
+
+	use_auto_lights = 1
+	light_power_on = 1
+	light_range_on = 3
 
 /obj/machinery/computer/cultify()
 	new /obj/structure/cult/tome(loc)
@@ -19,23 +23,19 @@
 	if(ticker)
 		initialize()
 
+/obj/machinery/computer/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover) && mover.checkpass(PASSMACHINE))
+		return 1
+	return ..()
+
 /obj/machinery/computer/initialize()
+	..()
 	power_change()
 
 /obj/machinery/computer/process()
 	if(stat & (NOPOWER|BROKEN))
 		return 0
 	return 1
-
-/obj/machinery/computer/meteorhit(var/obj/O as obj)
-	for(var/x in verbs)
-		verbs -= x
-	set_broken()
-	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
-	smoke.set_up(5, 0, src)
-	smoke.start()
-	return
-
 
 /obj/machinery/computer/emp_act(severity)
 	if(prob(20/severity)) set_broken()
@@ -68,7 +68,6 @@
 		set_broken()
 	..()
 
-
 /obj/machinery/computer/blob_act()
 	if (prob(75))
 		for(var/x in verbs)
@@ -81,38 +80,33 @@
 	icon_state = initial(icon_state)
 	// Broken
 	if(stat & BROKEN)
-		icon_state += "b"
+		icon_state = "[initial(icon_state)]b"
 
 	// Powered
 	else if(stat & NOPOWER)
-		icon_state = initial(icon_state)
-		icon_state += "0"
-
-
+		icon_state = "[initial(icon_state)]0"
 
 /obj/machinery/computer/power_change()
-	..()
+	. = ..()
 	update_icon()
-	if(!(stat & (BROKEN|NOPOWER)))
-		SetLuminosity(2)
-	else
-		SetLuminosity(0)
-
 
 /obj/machinery/computer/proc/set_broken()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/proc/set_broken() called tick#: [world.time]")
 	stat |= BROKEN
 	update_icon()
 
-/obj/machinery/computer/togglePanelOpen(var/obj/toggleitem, mob/user)
+/obj/machinery/computer/togglePanelOpen(var/obj/toggleitem, mob/user, var/obj/item/weapon/circuitboard/CC = null)
 	if(!circuit) //we can't disassemble with no circuit, so add some fucking circuits if you want disassembly
 		return
 	playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 	user.visible_message(	"[user] begins to unscrew \the [src]'s monitor.",
 							"You begin to unscrew the monitor...")
-	if(do_after(user, 20))
+	if (do_after(user, src, 20) && (circuit || CC))
 		var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-		var/obj/item/weapon/circuitboard/M = new circuit( A )
-		A.circuit = M
+		if(!CC) CC = new circuit( A )
+		else
+			CC.loc = A
+		A.circuit = CC
 		A.anchored = 1
 		for (var/obj/C in src)
 			C.loc = src.loc
@@ -125,8 +119,12 @@
 			user << "<span class='notice'>\icon[src] You disconnect the monitor.</span>"
 			A.state = 4
 			A.icon_state = "4"
+		circuit = null // Used by the busy check to avoid multiple 'You disconnect the monitor' messages
 		Destroy(src)
 		return 1
+	else
+		return 1 // Needed, otherwise the computer UI will pop open
+
 	return
 
 /obj/machinery/computer/attackby(I as obj, user as mob)

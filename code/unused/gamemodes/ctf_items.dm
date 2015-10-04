@@ -44,6 +44,7 @@
 	return
 
 /obj/item/weapon/ctf_flag/proc/check_if_equipped()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/ctf_flag/proc/check_if_equipped() called tick#: [world.time]")
 	var/equipped = 0
 	for(var/mob/M in living_mob_list)
 		if(M &&!M.stat)
@@ -89,7 +90,7 @@
 					sleep(300)
 					world.Reboot()
 		else
-			user << "\red You need to have your flag in the beginning position!"
+			user << "<span class='warning'>You need to have your flag in the beginning position!</span>"
 	else if(istype(C, /obj/item/weapon/ctf_flag/red))
 		world << "<B>[user.real_name] has tried to score with their own flag! Idiot!</B>"
 	src.operating = 0
@@ -131,7 +132,7 @@
 					sleep(300)
 					world.Reboot()
 		else
-			user << "\red You need to have your flag in the beginning position!"
+			user << "<span class='warning'>You need to have your flag in the beginning position!</span>"
 	else if(istype(C, /obj/item/weapon/ctf_flag/green))
 		world << "<B>[user.real_name] has tried to score with their own flag! Idiot!</B>"
 	src.operating = 0

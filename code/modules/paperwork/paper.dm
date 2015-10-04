@@ -5,7 +5,7 @@
 
 /obj/item/weapon/paper
 	name = "paper"
-	gender = PLURAL
+	gender = NEUTER
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "paper"
 	throwforce = 0
@@ -14,8 +14,6 @@
 	throw_speed = 1
 	layer = 3.9
 	pressure_resistance = 1
-	slot_flags = SLOT_HEAD
-	body_parts_covered = HEAD
 	attack_verb = list("slapped")
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
@@ -47,43 +45,39 @@
 	if(info)
 		icon_state += "_words"
 
-/obj/item/weapon/paper/examine()
-	set src in oview(1)
-
-//	..()	//We don't want them to see the dumb "this is a paper" thing every time.
-// I didn't like the idea that people can read tiny pieces of paper from across the room.
-// Now you need to be next to the paper in order to read it.
-	if(in_range(usr, src))
+/obj/item/weapon/paper/examine(mob/user)
+	if(in_range(user, src))
 		var/info_2 = ""
 		if(img)
-			usr << browse_rsc(img.img, "tmp_photo.png")
+			user << browse_rsc(img.img, "tmp_photo.png")
 			info_2 = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
-		if(!(istype(usr, /mob/living/carbon/human) || istype(usr, /mob/dead/observer) || istype(usr, /mob/living/silicon)))
-			usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_2][stars(info)][stamps]</BODY></HTML>", "window=[name]")
-			onclose(usr, "[name]")
+		if(!(istype(user, /mob/living/carbon/human) || istype(user, /mob/dead/observer) || istype(user, /mob/living/silicon)))
+			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_2][stars(info)][stamps]</BODY></HTML>", "window=[name]")
+			onclose(user, "[name]")
 		else
-			usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_2][info][stamps]</BODY></HTML>", "window=[name]")
-			onclose(usr, "[name]")
+			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_2][info][stamps]</BODY></HTML>", "window=[name]")
+			onclose(user, "[name]")
 	else
-		usr << "<span class='notice'>It is too far away.</span>"
-	return
+		..() //Only show a regular description if it is too far away to read.
+		user << "<span class='notice'>It is too far away to read.</span>"
 
 /obj/item/weapon/paper/verb/rename()
 	set name = "Rename paper"
 	set category = "Object"
 	set src in usr
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/item/weapon/paper/verb/rename()  called tick#: [world.time]")
 	if((M_CLUMSY in usr.mutations) && prob(50))
 		usr << "<span class='warning'>You cut yourself on [src].</span>"
 		return
 	var/n_name = copytext(sanitize(input(usr, "What would you like to label [src]?", "Paper Labelling", null)  as text), 1, MAX_NAME_LEN)
-	if((loc == usr && usr.stat == 0))
+	if((loc == usr && !usr.stat && !(usr.status_flags & FAKEDEATH)))
 		name = "paper[(n_name ? text("- '[n_name]'") : null)]"
 	add_fingerprint(usr)
 	return
 
 /obj/item/weapon/paper/attack_self(mob/living/user as mob)
-	examine()
+	user.examination(src)
 	if(rigged && (Holiday == "April Fool's Day"))
 		if(spam_flag == 0)
 			spam_flag = 1
@@ -98,19 +92,25 @@
 		dist = get_dist(src, user.current)
 	else //cyborg or AI not seeing through a camera
 		dist = get_dist(src, user)
-	if(dist < 2)
-		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info][stamps]</BODY></HTML>", "window=[name]")
+	if(dist < 2 || (istype(user) && (user.ai_flags & HIGHRESCAMS)))
+		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info][stamps]</BODY></HTML>", "window=[name]")
 		onclose(usr, "[name]")
 	else
-		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[stars(info)][stamps]</BODY></HTML>", "window=[name]")
+		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[stars(info)][stamps]</BODY></HTML>", "window=[name]")
 		onclose(usr, "[name]")
 	return
 
 /obj/item/weapon/paper/proc/addtofield(var/id, var/text, var/links = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/paper/proc/addtofield() called tick#: [world.time]")
 	var/locid = 0
 	var/laststart = 1
 	var/textindex = 1
+	var/softcount = 0
 	while(1) // I know this can cause infinite loops and fuck up the whole server, but the if(istart==0) should be safe as fuck
+		if(softcount>50)
+			break
+		if(softcount%25 == 0)
+			sleep(1)
 		var/istart = 0
 		if(links)
 			istart = findtext(info_links, "<span class=\"paper_field\">", laststart)
@@ -120,6 +120,7 @@
 		if(istart==0)
 			return // No field found with matching id
 
+		softcount++
 		laststart = istart+1
 		locid++
 		if(locid == id)
@@ -144,24 +145,31 @@
 		updateinfolinks()
 
 /obj/item/weapon/paper/proc/updateinfolinks()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/paper/proc/updateinfolinks() called tick#: [world.time]")
 	info_links = info
 	var/i = 0
 	for(i=1,i<=fields,i++)
+		if(i>=50)
+			break //abandon ship
+		if(i%25 == 0)
+			sleep(1)
 		addtofield(i, "<A href='?src=\ref[src];write=[i]'>write</A> ", 1)
 		addtofield(i, "<A href='?src=\ref[src];help=[i]'>help</A> ", 1)
 	info_links +="<A href='?src=\ref[src];write=end'>write</A> "
 	info_links +="<A href='?src=\ref[src];help=end'>help</A> "
 
 /obj/item/weapon/paper/proc/clearpaper()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/paper/proc/clearpaper() called tick#: [world.time]")
 	info = null
 	stamps = null
 	stamped = list()
-	overlays.Cut()
+	overlays.len = 0
 	updateinfolinks()
 	update_icon()
 
 
 /obj/item/weapon/paper/proc/parsepencode(var/mob/user,var/obj/item/i, var/t)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/paper/proc/parsepencode() called tick#: [world.time]")
 	if(istype(i,/obj/item/weapon/pen))
 		//t = parsepencode(t, i, usr, iscrayon) // Encode everything from pencode to html
 		var/obj/item/weapon/pen/P=i
@@ -175,6 +183,7 @@
 
 
 /obj/item/weapon/paper/proc/openhelp(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/paper/proc/openhelp() called tick#: [world.time]")
 	user << browse({"<HTML><HEAD><TITLE>Pen Help</TITLE></HEAD>
 	<BODY>
 		<b><center>Crayon&Pen commands</center></b><br>
@@ -184,16 +193,29 @@
 		\[b\] - \[/b\] : Makes the text <b>bold</b>.<br>
 		\[i\] - \[/i\] : Makes the text <i>italic</i>.<br>
 		\[u\] - \[/u\] : Makes the text <u>underlined</u>.<br>
-		\[large\] - \[/large\] : Increases the <font size = \"4\">size</font> of the text.<br>
+		\[large\] - \[/large\] : Increases the <span style=\"font-size:25px\">size</span> of the text.<br>
 		\[sign\] : Inserts a signature of your name in a foolproof way.<br>
 		\[field\] : Inserts an invisible field which lets you start type from there. Useful for forms.<br>
 		<br>
 		<b><center>Pen exclusive commands</center></b><br>
-		\[small\] - \[/small\] : Decreases the <font size = \"1\">size</font> of the text.<br>
+		\[small\] - \[/small\] : Decreases the <span style=\"font-size:15px\">size</span> of the text.<br>
+		\[tiny\] - \[/tiny\] : Sharply decreases the <span style=\"font-size:10px\">size</span> of the text.<br>
 		\[list\] - \[/list\] : A list.<br>
 		\[*\] : A dot used for lists.<br>
 		\[hr\] : Adds a horizontal rule.<br>
-		\[img\]http://url\[/img\] : add an image
+		\[img\]http://url\[/img\] : Add an image.<br>
+		<br>
+		<center>Fonts</center><br>
+		\[agency\] - \[/agency\] : <span style=\"font-family:Agency FB\">Agency FB</span><br>
+		\[algerian\] - \[/algerian\] : <span style=\"font-family:Algerian\">Algerian</span><br>
+		\[arial\] - \[/arial\] : <span style=\"font-family:Arial\">Arial</span><br>
+		\[arialb\] - \[/arialb\] : <span style=\"font-family:Arial Black\">Arial Black</span><br>
+		\[calibri\] - \[/calibri\] : <span style=\"font-family:Calibri\">Calibri</span><br>
+		\[courier\] - \[/courier\] : <span style=\"font-family:Courier\">Courier</span><br>
+		\[helvetica\] - \[/helvetica\] : <span style=\"font-family:Helvetica\">Helvetica</span><br>
+		\[impact\] - \[/impact\] : <span style=\"font-family:Impact\">Impact</span><br>
+		\[palatino\] - \[/palatino\] : <span style=\"font-family:Palatino Linotype\">Palatino Linotype</span><br>
+		\[tnr\] - \[/tnr\] : <span style=\"font-family:Times New Roman\">Times New Roman</span>
 	</BODY></HTML>"}, "window=paper_help")
 
 
@@ -219,34 +241,34 @@
 			usr << "<span class='warning'>Please ensure your pen is in your active hand and that you're holding the paper.</span>"
 			return
 
-		// if paper is not in usr, then it must be in a clipboard or folder, which must be in or near usr
-		if(src.loc != usr && !((istype(src.loc, /obj/item/weapon/clipboard) || istype(src.loc, /obj/item/weapon/folder)) && (src.loc.loc == usr || src.loc.Adjacent(usr)) ) )
+		if(!Adjacent(usr, 1)) //the 1 means that the paper can be in one other item and be written on
 			return
 
 		log += "<br />\[[time_stamp()]] [key_name(usr)] added: [t]"
 
 		t = replacetext(t, "\n", "<BR>")
 
-		t = parsepencode(usr,i,t)
+		spawn()
+			t = parsepencode(usr,i,t)
 
-		//Count the fields
-		var/laststart = 1
-		while(1)
-			var/j = findtext(t, "<span class=\"paper_field\">", laststart)
-			if(j==0)
-				break
-			laststart = j+1
-			fields++
+			//Count the fields
+			var/laststart = 1
+			while(1)
+				var/j = findtext(t, "<span class=\"paper_field\">", laststart)
+				if(j==0)
+					break
+				laststart = j+1
+				fields++
 
-		if(id!="end")
-			addtofield(text2num(id), t) // He wants to edit a field, let him.
-		else
-			info += t // Oh, he wants to edit to the end of the file, let him.
-			updateinfolinks()
+			if(id!="end")
+				addtofield(text2num(id), t) // He wants to edit a field, let him.
+			else
+				info += t // Oh, he wants to edit to the end of the file, let him.
+				updateinfolinks()
 
-		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_links][stamps]</BODY></HTML>", "window=[name]") // Update the window
+			usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_links][stamps]</BODY></HTML>", "window=[name]") // Update the window
 
-		update_icon()
+			update_icon()
 
 	if(href_list["help"])
 		openhelp(usr)
@@ -262,11 +284,15 @@
 		if ( istype(P, /obj/item/weapon/pen/robopen) && P:mode == 2 )
 			P:RenamePaper(user,src)
 		else
-			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_links][stamps]</BODY></HTML>", "window=[name]")
+			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_links][stamps]</BODY></HTML>", "window=[name]")
 		//openhelp(user)
 		return
+
 	else if(istype(P, /obj/item/weapon/stamp))
-		if((!in_range(src, usr) && loc != user && !( istype(loc, /obj/item/weapon/clipboard) ) && loc.loc != user && user.get_active_hand() != P))
+		//if((!in_range(src, user) && loc != user && !( istype(loc, /obj/item/weapon/clipboard) ) && loc.loc != user && user.get_active_hand() != P)) return //What the actual FUCK
+
+		if(istype(P, /obj/item/weapon/stamp/clown) && !clown)
+			user << "<span class='notice'>You are totally unable to use the stamp. HONK!</span>"
 			return
 
 		stamps += (stamps=="" ? "<HR>" : "<BR>") + "<i>This [src.name] has been stamped with the [P.name].</i>"
@@ -274,12 +300,6 @@
 		var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
 		stampoverlay.pixel_x = rand(-2, 2)
 		stampoverlay.pixel_y = rand(-3, 2)
-
-		if(istype(P, /obj/item/weapon/stamp/clown))
-			if(!clown)
-				user << "<span class='notice'>You are totally unable to use the stamp. HONK!</span>"
-				return
-
 		stampoverlay.icon_state = "paper_[P.icon_state]"
 
 		if(!stamped)
@@ -288,16 +308,96 @@
 		overlays += stampoverlay
 
 		user << "<span class='notice'>You stamp [src] with your rubber stamp.</span>"
+
 	else if(istype(P, /obj/item/weapon/photo))
 		if(img)
 			user << "<span class='notice'>This paper already has a photo attached.</span>"
 			return
 		img = P
-		user.drop_item(P)
-		P.loc = src
+		user.drop_item(P, src)
 		user << "<span class='notice'>You attach the photo to the piece of paper.</span>"
+	else if(P.is_hot())
+		src.ashify_item(user)
+		return //no fingerprints, paper is gone
 	add_fingerprint(user)
+	return ..()
+
+/obj/item/proc/ashify_item(mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/proc/ashify_item() called tick#: [world.time]")
+	var/prot = 0
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if (M_RESIST_HEAT in H.mutations)
+			prot = 1
+		else if(H.gloves)
+			var/obj/item/clothing/gloves/G = H.gloves
+			if(G.max_heat_protection_temperature)
+				prot = (G.max_heat_protection_temperature > src.autoignition_temperature)
+		if(!prot && (M_CLUMSY in H.mutations) && prob(50)) //only fail if human
+			H.apply_damage(10,BURN,(pick("l_hand", "r_hand")))
+			user.drop_hands()
+			user.visible_message( \
+				"<span class='notice'>[user] tries to burn the [src.name], but burns \his hand trying!</span>", \
+				"<span class='warning'>You try to burn the [src.name], but burn your hand trying!</span>")
+			return //you fail before even managing to burn it!
+	if(prot) //user is human and is protected from fire, let's make them a badass
+		user.visible_message( \
+			"<span class='warning'>[user] holds up the [src.name] and sets it on fire, holding it in \his hand as it burns down to ashes. Damn, \he's cold.</span>", \
+			"<span class='warning'>You hold up the [src.name] and set it on fire, holding it in your hand as it burns down to ashes. Damn, you're cold.</span>")
+	else
+		user.visible_message( \
+			"<span class='warning'>[user] holds up the [src.name] and sets it on fire, reducing it to a heap of ashes.</span>", \
+			"<span class='warning'>You hold up the [src.name] and set it on fire, reducing it to a heap of ashes.</span>")
+	new ashtype(get_turf(src)) //not using ashify() since it calls for src.loc rather than get_turf(src), and requires the object to be on fire also
+	qdel(src)
 	return
+
+var/global/list/paper_folding_results = list ( \
+	"paper plane" = /obj/item/weapon/p_folded/plane,
+	"paper hat" = /obj/item/weapon/p_folded/hat,
+	"ball of paper" = /obj/item/weapon/p_folded/ball,
+	"folded note" = /obj/item/weapon/p_folded/note_small,
+	"origami crane" = /obj/item/weapon/p_folded/crane,
+	"origami boat" = /obj/item/weapon/p_folded/boat,
+	"origami heart" = /obj/item/weapon/p_folded/folded_heart,
+	)
+
+/obj/item/weapon/paper/verb/fold()
+	set category = "Object"
+	set name = "Fold paper"
+	set src in usr
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/item/weapon/paper/verb/fold()  called tick#: [world.time]")
+
+	if (!canfold(usr)) return
+	. = paper_folding_results[(input("What do you want to make the paper into?", "Paper Folding") as null|anything in paper_folding_results)]
+	if (. == null) return
+	if (!canfold(usr)) return //second check in case some chucklefuck moves the paper or falls down while the menu is open
+
+	usr.drop_item(src)	//Drop the original paper to free our hand and call proper inventory handling code
+	var/obj/item/weapon/p_folded/P = new .(get_turf(usr)) 	//Let's make a new item
+	P.unfolded = src										//that unfolds into the original paper
+	src.loc = P												//and also contains it, for good measure.
+	usr.put_in_hands(P)
+	P.pixel_y = src.pixel_y
+	P.pixel_x = src.pixel_x
+	if (istype(src, /obj/item/weapon/paper/nano))
+		P.color = "#9A9A9A"
+		P.nano = 1
+	usr.visible_message("<span class='notice'>[usr] folds \the [src.name] into a [P.name].</span>", "<span class='notice'>You fold \the [src.name] into a [P.name].</span>")
+	P.add_fingerprint(usr)
+	return
+
+/obj/item/weapon/paper/proc/canfold(mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/paper/proc/canfold() called tick#: [world.time]")
+	if(!user)
+		return 0
+	if(user.stat || user.restrained())
+		user << "<span class='notice'>You can't do that while restrained.</span>"
+		return 0
+	if(user.l_hand != src && user.r_hand != src)
+		user << "<span class='notice'>You'll need [src] in your hands to do that.</span>"
+		return 0
+	return 1
 
 /*
  * Premade paper

@@ -1,8 +1,10 @@
 /hook/startup/proc/createDatacore()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/hook/startup/proc/createDatacore() called tick#: [world.time]")
 	data_core = new /obj/effect/datacore()
 	return 1
 
 /obj/effect/datacore/proc/manifest(var/nosleep = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/datacore/proc/manifest() called tick#: [world.time]")
 	spawn()
 		if(!nosleep)
 			sleep(40)
@@ -11,16 +13,13 @@
 		return
 
 /obj/effect/datacore/proc/manifest_modify(var/name, var/assignment)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/datacore/proc/manifest_modify() called tick#: [world.time]")
 	if(PDA_Manifest.len)
-		PDA_Manifest.Cut()
-	var/datum/data/record/foundrecord
+		PDA_Manifest.len = 0
+
 	var/real_title = assignment
 
-	for(var/datum/data/record/t in data_core.general)
-		if (t)
-			if(t.fields["name"] == name)
-				foundrecord = t
-				break
+	var/datum/data/record/foundrecord = find_record("name", name, data_core.general)
 
 	var/list/all_jobs = get_job_datums()
 
@@ -36,8 +35,9 @@
 		foundrecord.fields["real_rank"] = real_title
 
 /obj/effect/datacore/proc/manifest_inject(var/mob/living/carbon/human/H)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/datacore/proc/manifest_inject() called tick#: [world.time]")
 	if(PDA_Manifest.len)
-		PDA_Manifest.Cut()
+		PDA_Manifest.len = 0
 
 	if(H.mind && (H.mind.assigned_role != "MODE"))
 		var/assignment
@@ -125,6 +125,7 @@
 
 
 proc/get_id_photo(var/mob/living/carbon/human/H)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/get_id_photo() called tick#: [world.time]")
 	var/icon/preview_icon = null
 
 	var/g = "m"

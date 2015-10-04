@@ -16,8 +16,8 @@
 			if(istype(AC, /obj/item/ammo_casing/a357) && !perfect && prob(70 - (getAmmo() * 10)))	//minimum probability of 10, maximum of 60
 				M << "<span class='danger'>[src] blows up in your face.</span>"
 				M.take_organ_damage(0,20)
-				M.drop_item()
-				del(src)
+				M.drop_item(src)
+				qdel(src)
 				return 0
 		return 1
 
@@ -25,6 +25,7 @@
 		set name = "Name Gun"
 		set category = "Object"
 		set desc = "Click to rename your gun. If you're the detective."
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\verb/rename_gun()  called tick#: [world.time]")
 
 		var/mob/M = usr
 		if(!M.mind)	return 0
@@ -55,7 +56,7 @@
 					playsound(user, fire_sound, 50, 1)
 					user.visible_message("<span class='danger'>[src] goes off!</span>", "<span class='danger'>[src] goes off in your face!</span>")
 					return
-				if(do_after(user, 30))
+				if(do_after(user, src, 30))
 					if(getAmmo())
 						user << "<span class='notice'>You can't modify it!</span>"
 						return
@@ -71,7 +72,7 @@
 					playsound(user, fire_sound, 50, 1)
 					user.visible_message("<span class='danger'>[src] goes off!</span>", "<span class='danger'>[src] goes off in your face!</span>")
 					return
-				if(do_after(user, 30))
+				if(do_after(user, src, 30))
 					if(getAmmo())
 						user << "<span class='notice'>You can't modify it!</span>"
 						return
@@ -99,10 +100,13 @@
 	origin_tech = "combat=2;materials=2"
 
 /obj/item/weapon/gun/projectile/russian/New()
+	..()
 	Spin()
 	update_icon()
 
 /obj/item/weapon/gun/projectile/russian/proc/Spin()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/gun/projectile/russian/proc/Spin() called tick#: [world.time]")
 
 	for(var/obj/item/ammo_casing/AC in loaded)
 		del(AC)
@@ -153,7 +157,7 @@
 /obj/item/weapon/gun/projectile/russian/attack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj)
 
 	if(!getAmmo())
-		user.visible_message("\red *click*", "\red *click*")
+		user.visible_message("<span class='warning'>*click*</span>", "<span class='warning'>*click*</span>")
 		playsound(user, 'sound/weapons/empty.ogg', 100, 1)
 		return
 
@@ -164,7 +168,7 @@
 
 				var/obj/item/ammo_casing/AC = loaded[1]
 				if(!process_chambered())
-					user.visible_message("\red *click*", "\red *click*")
+					user.visible_message("<span class='warning'>*click*</span>", "<span class='warning'>*click*</span>")
 					playsound(user, 'sound/weapons/empty.ogg', 100, 1)
 					return
 				if(!in_chamber)

@@ -88,13 +88,14 @@
 		vox.dna.mutantrace = "vox"
 		vox.set_species("Vox")
 		vox.generate_name()
-		vox.languages = list() // Removing language from chargen.
+		//vox.languages = HUMAN // Removing language from chargen.
 		vox.flavor_text = ""
-		vox.add_language("Vox-pidgin")
+		vox.default_language = all_languages["Vox-pidgin"]
+		vox.species.default_language = "Vox-pidgin"
 		vox.h_style = "Short Vox Quills"
 		vox.f_style = "Shaved"
 		for(var/datum/organ/external/limb in vox.organs)
-			limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT)
+			limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT | ORGAN_PEG)
 		vox.equip_vox_raider()
 		vox.regenerate_icons()
 
@@ -105,6 +106,7 @@
 		send_intercept()
 
 /datum/game_mode/heist/proc/is_raider_crew_alive()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/heist/proc/is_raider_crew_alive() called tick#: [world.time]")
 	var/raider_crew_count = raiders.len
 
 	for(var/datum/mind/raider in raiders)
@@ -119,6 +121,7 @@
 	return TRUE
 
 /datum/game_mode/heist/proc/is_raider_crew_safe()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/heist/proc/is_raider_crew_safe() called tick#: [world.time]")
 	if(!is_raider_crew_alive())
 		return FALSE
 
@@ -131,6 +134,9 @@
 	return TRUE
 
 /datum/game_mode/heist/proc/forge_vox_objectives()
+
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/heist/proc/forge_vox_objectives() called tick#: [world.time]")
 
 
 	//Commented out for testing.
@@ -173,10 +179,11 @@
 		O.find_target()
 
 /datum/game_mode/heist/proc/greet_vox(const/datum/mind/raider)
-	raider.current << {"\blue <B>You are a Vox Raider, fresh from the Shoal!</b>
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/heist/proc/greet_vox() called tick#: [world.time]")
+	raider.current << {"<span class='notice'><B>You are a Vox Raider, fresh from the Shoal!</b>
 The Vox are a race of cunning, sharp-eyed nomadic raiders and traders endemic to Tau Ceti and much of the unexplored galaxy. You and the crew have come to the Exodus for plunder, trade or both.
 Vox are cowardly and will flee from larger groups, but corner one or find them en masse and they are vicious.
-Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to turn on your nitrogen internals!"}
+Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to turn on your nitrogen internals!</span>"}
 
 	var/obj_count = 0
 
@@ -230,7 +237,7 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 		else
 			win_msg += "<B>The Vox Raiders were repelled!</B>"
 
-	world << "\red <FONT size = 3><B>[win_type] [win_group] victory!</B></FONT><br>[win_msg]"
+	completion_text += "<br><span class='danger'><FONT size = 3>[win_type] [win_group] victory!</FONT><br>[win_msg]</span>"
 
 	feedback_set_details("round_end_result","heist - [win_type] [win_group]")
 
@@ -240,19 +247,25 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 		count++
 
 		if(objective.check_completion())
-			world << "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
+			completion_text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
 			feedback_add_details("traitor_objective","[objective.type]|SUCCESS")
 		else
-			world << "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='red'>Fail.</font>"
+			completion_text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='red'>Fail.</font>"
 			feedback_add_details("traitor_objective","[objective.type]|FAIL")
 
-	var/text = "<FONT size = 2><B>The vox raiders were:</B></FONT>"
+	var/icon/logo = icon('icons/mob/mob.dmi', "vox-logo")
+	end_icons += logo
+	var/tempstate = end_icons.len
+	var/text = {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The vox raiders were:</B></FONT> <img src="logo_[tempstate].png">"}
 	var/end_area = get_area_master(locate(/area/shuttle/vox/station))
 
 	for(var/datum/mind/vox in raiders)
-		text += "<br>[vox.key] was [vox.name] ("
 
 		if(vox.current)
+			var/icon/flat = getFlatIcon(vox.current, SOUTH, 1, 1)
+			end_icons += flat
+			tempstate = end_icons.len
+			text += {"<br><img src="logo_[tempstate].png"> <b>[vox.key]</b> was <b>[vox.name]</b> ("}
 			if(get_area_master(vox.current) != end_area) // areaMaster var can be used on this if move_contents_to proc refactored to use Move()
 				text += "left behind, "
 
@@ -260,20 +273,26 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 				text += "survived"
 			else
 				text += "died"
+				flat.Turn(90)
+				end_icons[tempstate] = flat
 
 			if(vox.current.real_name != vox.name)
 				text += " as [vox.current.real_name]"
 		else
+			var/icon/sprotch = icon('icons/effects/blood.dmi', "voxblood")
+			end_icons += sprotch
+			tempstate = end_icons.len
+			text += {"<br><img src="logo_[tempstate].png"> <b>[vox.key]</b> was <b>[vox.name]</b> ("}
 			text += "body destroyed"
 
 		text += ")"
 
-	world << text
+	completion_text += text
 	..()
 	return 1
 
 /datum/game_mode/heist/check_finished()
-	if(!is_raider_crew_alive() || vox_shuttle_location == "start")
+	if(!is_raider_crew_alive() || (vox_shuttle && vox_shuttle.returned_home))
 		return 1
 
 	return ..()

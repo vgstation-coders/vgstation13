@@ -21,15 +21,14 @@
 
 	req_access = list(access_security)
 
-/obj/machinery/detector/New(loc)
-	..(loc)
-	machine_flags |= WRENCHMOVE | FIXED2WORK
+	flags = FPRINT | PROXMOVE
+	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/detector/proc/assess_perp(mob/living/carbon/human/perp as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/detector/proc/assess_perp() called tick#: [world.time]")
 	var/threatcount = 0
-	if(!(istype(perp, /mob/living/carbon)))
-		return
-	if(src.emagged == 2) return 10
+	if(!(istype(perp, /mob/living/carbon)) || isalien(perp) || isbrain(perp))
+		return -1
 
 	if(!src.allowed(perp))
 
@@ -45,26 +44,23 @@
 			&& !istype(perp.r_hand, /obj/item/weapon/gun/energy/laser/practice))
 				threatcount += 4
 
-		if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee))
-			if(!istype(perp.belt, /obj/item/weapon/gun/energy/laser/bluetag) \
-			&& !istype(perp.belt, /obj/item/weapon/gun/energy/laser/redtag) \
-			&& !istype(perp.belt, /obj/item/weapon/gun/energy/laser/practice))
-				threatcount += 2
-
 		if(istype(perp.back, /obj/item/weapon/gun) || istype(perp.back, /obj/item/weapon/melee))
 			if(!istype(perp.back, /obj/item/weapon/gun/energy/laser/bluetag) \
 			&& !istype(perp.back, /obj/item/weapon/gun/energy/laser/redtag) \
 			&& !istype(perp.back, /obj/item/weapon/gun/energy/laser/practice))
 				threatcount += 2
 
-
-
-		if(istype(perp.s_store, /obj/item/weapon/gun) || istype(perp.s_store, /obj/item/weapon/melee))
-			if(!istype(perp.s_store, /obj/item/weapon/gun/energy/laser/bluetag) \
-			&& !istype(perp.s_store, /obj/item/weapon/gun/energy/laser/redtag) \
-			&& !istype(perp.s_store, /obj/item/weapon/gun/energy/laser/practice))
-				threatcount += 2
-
+		if(ishuman(perp))
+			if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee))
+				if(!istype(perp.belt, /obj/item/weapon/gun/energy/laser/bluetag) \
+				&& !istype(perp.belt, /obj/item/weapon/gun/energy/laser/redtag) \
+				&& !istype(perp.belt, /obj/item/weapon/gun/energy/laser/practice))
+					threatcount += 2
+			if(istype(perp.s_store, /obj/item/weapon/gun) || istype(perp.s_store, /obj/item/weapon/melee))
+				if(!istype(perp.s_store, /obj/item/weapon/gun/energy/laser/bluetag) \
+				&& !istype(perp.s_store, /obj/item/weapon/gun/energy/laser/redtag) \
+				&& !istype(perp.s_store, /obj/item/weapon/gun/energy/laser/practice))
+					threatcount += 2
 
 		if(scanmode)
 			//
@@ -95,10 +91,6 @@
 						&& !istype(things, /obj/item/weapon/gun/energy/laser/practice))
 							threatcount += 2
 
-
-
-
-
 		if(idmode)
 			//
 			if(!perp.wear_id)
@@ -109,23 +101,16 @@
 			if(!perp.wear_id)
 				threatcount += 2
 
-
-		if(istype(perp.wear_suit, /obj/item/clothing/suit/wizrobe))
-			threatcount += 2
+		if(ishuman(perp))
+			if(istype(perp.wear_suit, /obj/item/clothing/suit/wizrobe))
+				threatcount += 2
 
 		if(perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
 			threatcount += 2
 
-
-
-
-
 		//Agent cards lower threatlevel.
 		//if(perp.wear_id && istype(perp:wear_id.GetID(), /obj/item/weapon/card/id/syndicate)) ///////////////nah, i dont think so
 		//	threatcount -= 2
-
-
-
 
 	var/passperpname = ""
 	for (var/datum/data/record/E in data_core.general)
@@ -146,7 +131,8 @@
 					break
 
 	var/list/retlist = list(threatcount, passperpname)
-
+	if(emagged)
+		retlist[1] = 10
 	return retlist
 
 
@@ -171,52 +157,30 @@
 		add_fingerprint(user)
 		src.disable = !src.disable
 		if (src.disable)
-			user.visible_message("\red [user] has disconnected the detector array!", "\red You disconnect the detector array!")
+			user.visible_message("<span class='warning'>[user] has disconnected the detector array!</span>", "<span class='warning'>You disconnect the detector array!</span>")
 		if (!src.disable)
-			user.visible_message("\red [user] has connected the detector array!", "\red You connect the detector array!")
+			user.visible_message("<span class='warning'>[user] has connected the detector array!</span>", "<span class='warning'>You connect the detector array!</span>")
 	*/
 
 /obj/machinery/detector/Topic(href, href_list)
-	if(..()) return
+	if(..()) return 1
 
 	if(usr) usr.set_machine(src)
 
-	if (href_list["idmode"])
-
-		if(idmode)
-			idmode = 0
-			//
-
+	switch(href_list["action"])
+		if("idmode")
+			idmode = !idmode
+		if("scanmode")
+			scanmode = !scanmode
+		if("senmode")
+			senset = !senset
 		else
-			idmode = 1
-
-
-
-	if (href_list["scanmode"])
-
-		if(scanmode)
-			scanmode = 0
-			//
-
-		else
-			scanmode = 1
-
-
-	if (href_list["senmode"])
-
-		if(senset)
-			senset = 0
-			//
-
-		else
-			senset = 1
+			return
 
 	src.updateUsrDialog()
-	return
+	return 1
 
 
-
-.
 
 /obj/machinery/detector/attack_hand(mob/user as mob)
 
@@ -228,28 +192,17 @@
 		if(!src.anchored)
 			return
 
-		var/dat = "<h4>"
+		var/dat = {"
+		<TITLE>Mr. V.A.L.I.D. Portable Threat Detector</TITLE><h3>Menu:</h3><h4>
 
-		if(idmode == 0)
-			dat += "Citizens must carry ID: <A href='?src=\ref[src];idmode=1'>Turn On</A><BR><BR>"
-		else
-			dat += "Citizens must carry ID: <A href='?src=\ref[src];idmode=1'>Turn Off</A><BR><BR>"
+		Citizens must carry ID: <A href='?src=\ref[src];action=idmode'>Turn [idmode ? "Off" : "On"]</A>
 
+		Intrusive Scan: <A href='?src=\ref[src];action=scanmode'>Turn [scanmode ? "Off" : "On"]</A>
 
-		if(scanmode == 0)
-			dat += "Intrusive Scan: <A href='?src=\ref[src];scanmode=1'>Turn On</A><BR><BR>"
-		else
-			dat += "Intrusive Scan: <A href='?src=\ref[src];scanmode=1'>Turn Off</A><BR><BR>"
+		DeMil Alerts: <A href='?src=\ref[src];action=senmode'>Turn [senset ? "Off" : "On"]</A></h4>
+		"}
 
-
-
-		if(senset == 0)
-			dat += "DeMil Alerts: <A href='?src=\ref[src];senmode=1'>Turn On</A><BR><BR>"
-		else
-			dat += "DeMil Alerts: <A href='?src=\ref[src];senmode=1'>Turn Off</A><BR><BR>"
-
-
-		user << browse("<TITLE>Mr. V.A.L.I.D. Portable Threat Detector</TITLE><h3>Menu:</h3><BR><BR>[dat]</h4></ul>", "window=detector;size=575x300")
+		user << browse(dat, "window=detector;size=575x300")
 		onclose(user, "detector")
 		return
 
@@ -259,6 +212,7 @@
 
 
 /obj/machinery/detector/proc/flash()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/detector/proc/flash() called tick#: [world.time]")
 	if (!(powered()))
 		return
 
@@ -273,6 +227,8 @@
 		if (get_dist(src, O) > src.range)
 			continue
 		var/list/ourretlist = src.assess_perp(O)
+		if(!istype(ourretlist) || !ourretlist.len)
+			return
 		var/dudesthreat = ourretlist[1]
 		var/dudesname = ourretlist[2]
 

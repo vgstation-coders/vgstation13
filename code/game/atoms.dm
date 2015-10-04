@@ -1,3 +1,6 @@
+var/global/list/del_profiling = list()
+var/global/list/gdel_profiling = list()
+var/global/list/ghdel_profiling = list()
 /atom
 	layer = 2
 
@@ -16,9 +19,15 @@
 	var/pass_flags = 0
 	var/throwpass = 0
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
+	var/pressure_resistance = ONE_ATMOSPHERE
+	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
 
 	///Chemistry.
 	var/datum/reagents/reagents = null
+
+	//Material datums - the fun way of doing things in a laggy manner
+	var/datum/materials/materials = null
+	var/list/starting_materials //starting set of mats - used in New(), you can set this to an empty list to have the datum be generated but not filled
 
 	//var/chem_is_open_container = 0
 	// replaced by OPENCONTAINER flags and atom/proc/is_open_container()
@@ -27,25 +36,69 @@
 	//Detective Work, used for the duplicate data points kept in the scanners
 	var/list/original_atom
 
-	var/list/beams=list()
+	var/list/beams
 
 	// EVENTS
-	var/event/on_destroyed = new() // On Destroy()
+	/////////////////////////////
+	// On Destroy()
+	var/event/on_destroyed
+
+	// When this object moves. (args: loc)
+	var/event/on_moved
+
+	var/labeled //Stupid and ugly way to do it, but the alternative would probably require rewriting everywhere a name is read.
+	var/min_harm_label = 0 //Minimum langth of harm-label to be effective. 0 means it cannot be harm-labeled. If any label should work, set this to 1 or 2.
+	var/harm_labeled = 0 //Length of current harm-label. 0 if it doesn't have one.
+	var/list/harm_label_examine //Messages that appears when examining the item if it is harm-labeled. Message in position 1 is if it is harm-labeled but the label is too short to work, while message in position 2 is if the harm-label works.
+	//var/harm_label_icon_state //Makes sense to have this, but I can't sprite. May be added later.
+	var/list/last_beamchecks // timings for beam checks.
+	var/ignoreinvert = 0
+	var/forceinvertredraw = 0
+	var/tempoverlay
+	var/timestopped
+
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/beam_connect() called tick#: [world.time]")
+	if(!last_beamchecks) last_beamchecks = list()
+	if(!beams) beams = list()
 	if(!(B in beams))
 		beams.Add(B)
 	return 1
 
 /atom/proc/beam_disconnect(var/obj/effect/beam/B)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/beam_disconnect() called tick#: [world.time]")
 	beams.Remove(B)
 
-/atom/proc/throw_impact(atom/hit_atom, var/speed)
+/atom/proc/apply_beam_damage(var/obj/effect/beam/B)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/apply_beam_damage() called tick#: [world.time]")
+	return 1
+
+/atom/proc/handle_beams()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/handle_beams() called tick#: [world.time]")
+	return 1
+
+/atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
+	switch(xy)
+		if(1)
+			src.pixel_x = rand(-intensity, intensity)
+		if(2)
+			src.pixel_y = rand(-intensity, intensity)
+		if(3)
+			src.pixel_x = rand(-intensity, intensity)
+			src.pixel_y = rand(-intensity, intensity)
+
+	spawn(2)
+	src.pixel_x = 0
+	src.pixel_y = 0
+
+/atom/proc/throw_impact(atom/hit_atom, var/speed, user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/throw_impact() called tick#: [world.time]")
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
-		M.hitby(src)
+		M.hitby(src,speed,src.dir)
 
-		log_attack("<font color='red'>[hit_atom] ([M.ckey]) was hit by [src] thrown by ([src.fingerprintslast])</font>")
+		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by ([src.fingerprintslast])</font>")
 
 	else if(isobj(hit_atom))
 		var/obj/O = hit_atom
@@ -60,9 +113,10 @@
 				step(src, turn(src.dir, 180))
 			if(istype(src,/mob/living))
 				var/mob/living/M = src
-				M.take_organ_damage(20)
+				M.take_organ_damage(10)
 
 /atom/proc/AddToProfiler()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/AddToProfiler() called tick#: [world.time]")
 	// Memory usage profiling - N3X.
 	if (type in type_instances)
 		type_instances[type] = type_instances[type] + 1
@@ -70,6 +124,7 @@
 		type_instances[type] = 1
 
 /atom/proc/DeleteFromProfiler()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/DeleteFromProfiler() called tick#: [world.time]")
 	// Memory usage profiling - N3X.
 	if (type in type_instances)
 		type_instances[type] = type_instances[type] - 1
@@ -77,84 +132,116 @@
 		type_instances[type] = 0
 		WARNING("Type [type] does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler().")
 
-/atom/Destroy()
-	// Only call when we're actually deleted.
+/atom/Del()
 	DeleteFromProfiler()
+	..()
 
+/atom/Destroy()
 	if(reagents)
-		reagents.Destroy()
+		qdel(reagents)
 		reagents = null
+
+	if(materials)
+		returnToPool(materials)
 
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
-
 	INVOKE_EVENT(on_destroyed, list()) // No args.
+	if(on_moved) on_moved.holder = null
+	if(on_destroyed) on_destroyed.holder = null
+	if(istype(beams, /list) && beams.len) beams.len = 0
+	/*if(istype(beams) && beams.len)
+		for(var/obj/effect/beam/B in beams)
+			if(B && B.target == src)
+				B.target = null
+			if(B.master && B.master.target == src)
+				B.master.target = null
+		beams.len = 0
+	*/
 
 /atom/New()
+	on_destroyed = new("owner"=src)
+	on_moved = new("owner"=src)
 	. = ..()
+	if(starting_materials)
+		materials = getFromPool(/datum/materials, src)
+		for(var/matID in starting_materials)
+			materials.addAmount(matID, starting_materials[matID])
 	AddToProfiler()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/assume_air() called tick#: [world.time]")
 	return null
 
 /atom/proc/remove_air(amount)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/remove_air() called tick#: [world.time]")
 	return null
 
 /atom/proc/return_air()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/return_air() called tick#: [world.time]")
 	if(loc)
 		return loc.return_air()
 	else
 		return null
 
 /atom/proc/check_eye(user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/check_eye() called tick#: [world.time]")
 	if (istype(user, /mob/living/silicon/ai)) // WHYYYY
 		return 1
 	return
 
 /atom/proc/on_reagent_change()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/on_reagent_change() called tick#: [world.time]")
 	return
 
 /atom/proc/Bumped(AM as mob|obj)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/Bumped() called tick#: [world.time]")
 	return
 
 // Convenience proc to see if a container is open for chemistry handling
 // returns true if open
 // false if closed
 /atom/proc/is_open_container()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/is_open_container() called tick#: [world.time]")
 	return flags & OPENCONTAINER
 
 /*//Convenience proc to see whether a container can be accessed in a certain way.
 
 	proc/can_subract_container()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/can_subract_container() called tick#: [world.time]")
 		return flags & EXTRACT_CONTAINER
 
 	proc/can_add_container()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/can_add_container() called tick#: [world.time]")
 		return flags & INSERT_CONTAINER
 */
 
-
-/atom/proc/meteorhit(obj/meteor as obj)
-	return
-
 /atom/proc/allow_drop()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/allow_drop() called tick#: [world.time]")
 	return 1
 
 /atom/proc/CheckExit()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/CheckExit() called tick#: [world.time]")
 	return 1
 
-/atom/proc/HasProximity(atom/movable/AM as mob|obj)
+/atom/proc/HasProximity(atom/movable/AM as mob|obj) //IF you want to use this, the atom must have the PROXMOVE flag, and the moving atom must also have the PROXMOVE flag currently to help with lag
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/HasProximity() called tick#: [world.time]")
 	return
 
 /atom/proc/emp_act(var/severity)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/emp_act() called tick#: [world.time]")
 	return
 
 /atom/proc/singuloCanEat()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/singuloCanEat() called tick#: [world.time]")
 	return 1
 
 /atom/proc/bullet_act(var/obj/item/projectile/Proj)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/bullet_act() called tick#: [world.time]")
 	return 0
 
 /atom/proc/in_contents_of(container)//can take class or object instance as argument
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/in_contents_of() called tick#: [world.time]")
 	if(ispath(container))
 		if(istype(src.loc, container))
 			return 1
@@ -162,8 +249,12 @@
 		return 1
 	return
 
+/atom/proc/projectile_check()
+	return
+
 /*
  *	atom/proc/search_contents_for(path,list/filter_path=null)
+ //writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \ *	atom/proc/search_contents_for() called tick#: [world.time]")
  * Recursevly searches all atom contens (including contents contents and so on).
  *
  * ARGS: path - search atom contents for atoms of this type
@@ -173,6 +264,7 @@
  */
 
 /atom/proc/search_contents_for(path,list/filter_path=null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/search_contents_for() called tick#: [world.time]")
 	var/list/found = list()
 	for(var/atom/A in src)
 		if(istype(A, path))
@@ -187,7 +279,21 @@
 			found += A.search_contents_for(path,filter_path)
 	return found
 
-
+/*
+ *	atom/proc/contains_atom_from_list(var/list/L)
+ *	Basically same as above but it takes a list of paths (like list(/mob/living/,/obj/machinery/something,...))
+ * RETURNS: a found atom
+ */
+/atom/proc/contains_atom_from_list(var/list/L)
+	for(var/atom/A in src)
+		for(var/T in L)
+			if(istype(A,T))
+				return A
+		if(A.contents.len)
+			var/atom/R = A.contains_atom_from_list(L)
+			if(R)
+				return R
+	return 0
 
 
 /*
@@ -200,6 +306,7 @@ The math involved assumes that the icon is vertical to begin with so unless you 
 its easier to just keep the beam vertical.
 */
 /atom/proc/Beam(atom/BeamTarget,icon_state="b_beam",icon='icons/effects/beam.dmi',time=50, maxdistance=10)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/Beam() called tick#: [world.time]")
 	//BeamTarget represents the target for the beam, basically just means the other end.
 	//Time is the duration to draw the beam
 	//Icon is obviously which icon to use for the beam, default is beam.dmi
@@ -218,7 +325,7 @@ its easier to just keep the beam vertical.
 
 		for(var/obj/effect/overlay/beam/O in orange(10,src))	//This section erases the previously drawn beam because I found it was easier to
 			if(O.BeamSource==src)				//just draw another instance of the beam instead of trying to manipulate all the
-				del O							//pieces to a new orientation.
+				returnToPool(O)					//pieces to a new orientation.
 		var/Angle=round(Get_Angle(src,BeamTarget))
 		var/icon/I=new(icon,icon_state)
 		I.Turn(Angle)
@@ -227,7 +334,7 @@ its easier to just keep the beam vertical.
 		var/N=0
 		var/length=round(sqrt((DX)**2+(DY)**2))
 		for(N,N<length,N+=32)
-			var/obj/effect/overlay/beam/X=new(loc)
+			var/obj/effect/overlay/beam/X=getFromPool(/obj/effect/overlay/beam,loc)
 			X.BeamSource=src
 			if(N+32>length)
 				var/icon/II=new(icon,icon_state)
@@ -259,7 +366,7 @@ its easier to just keep the beam vertical.
 			X.pixel_y=Pixel_y
 			var/turf/TT = get_turf(X.loc)
 			if(TT.density)
-				del(X)
+				qdel(X)
 				break
 			for(var/obj/O in TT)
 				if(!O.CanPass(light))
@@ -269,36 +376,69 @@ its easier to just keep the beam vertical.
 					broken = 1
 					break
 			if(broken)
-				del(X)
+				qdel(X)
 				break
 		sleep(3)	//Changing this to a lower value will cause the beam to follow more smoothly with movement, but it will also be more laggy.
 					//I've found that 3 ticks provided a nice balance for my use.
-	for(var/obj/effect/overlay/beam/O in orange(10,src)) if(O.BeamSource==src) del O
+	for(var/obj/effect/overlay/beam/O in orange(10,src)) if(O.BeamSource==src) returnToPool(O)
 
-
+//Woo hoo. Overtime
 //All atoms
-/atom/verb/examine()
-	set name = "Examine"
-	set category = "IC"
-	set src in oview(12)	//make it work from farther away
+/atom/proc/examine(mob/user, var/size = "")
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/examine() called tick#: [world.time]")
+	//This reformat names to get a/an properly working on item descriptions when they are bloody
+	var/f_name = "\a [src]."
+	if(src.blood_DNA && src.blood_DNA.len)
+		if(gender == PLURAL)
+			f_name = "some "
+		else
+			f_name = "a "
+		f_name += "<span class='danger'>blood-stained</span> [name]!"
 
-	if (!( usr ))
-		return
+	user << "\icon[src] That's [f_name]" + size
+	if(desc)
+		user << desc
 
-	usr.face_atom(src)
-	usr << "That's \a [src]." //changed to "That's" from "This is" because "This is some metal sheets" sounds dumb compared to "That's some metal sheets" ~Carn
-	usr << desc
+	if(reagents && is_open_container() && !ismob(src)) //is_open_container() isn't really the right proc for this, but w/e
+		if(get_dist(user,src) > 3)
+			user << "<span class='info'>You can't make out the contents.</span>"
+		else
+			user << "It contains:"
+			if(!user.hallucinating())
+				if(reagents.reagent_list.len)
+					for(var/datum/reagent/R in reagents.reagent_list)
+						user << "<span class='info'>[R.volume] units of [R.name]</span>"
+				else
+					user << "<span class='info'>Nothing.</span>"
 
+			else //Show stupid things to hallucinating mobs
+				var/list/fake_reagents = list("Water", "Orange juice", "Banana juice", "Tungsten", "Chloral Hydrate", "Helium",\
+					"Sea water", "Energy drink", "Gushin' Granny", "Salt", "Sugar", "something yellow", "something red", "something blue",\
+					"something suspicious", "something smelly", "something sweet", "Soda", "something that reminds you of home",\
+					"Chef's Special")
+				for(var/i, i < rand(1,10), i++)
+					var/fake_amount = rand(1,30)
+					var/fake_reagent = pick(fake_reagents)
+					fake_reagents -= fake_reagent
+
+					user << "<span class='info'>[fake_amount] units of [fake_reagent]</span>"
 	if(on_fire)
-		usr << "\red OH SHIT! IT'S ON FIRE!"
-	// *****RM
-	//usr << "[name]: Dn:[density] dir:[dir] cont:[contents] icon:[icon] is:[icon_state] loc:[loc]"
+		user.simple_message("<span class='danger'>OH SHIT! IT'S ON FIRE!</span>",\
+			"<span class='info'>It's on fire, man.</span>")
+
+	if(min_harm_label && harm_labeled)
+		if(harm_labeled < min_harm_label)
+			user << harm_label_examine[1]
+		else
+			user << harm_label_examine[2]
 	return
 
 // /atom/proc/MouseDrop_T()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\// /atom/proc/MouseDrop_T() called tick#: [world.time]")
 // 	return
 
 /atom/proc/relaymove()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/relaymove() called tick#: [world.time]")
 	return
 
 // Severity is actually "distance".
@@ -308,29 +448,41 @@ its easier to just keep the beam vertical.
 //
 // child is set to the child object that exploded, if available.
 /atom/proc/ex_act(var/severity, var/child=null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/ex_act() called tick#: [world.time]")
 	return
 
+/atom/proc/mech_drill_act(var/severity, var/child=null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/mech_drill_act() called tick#: [world.time]")
+	return ex_act(severity, child)
+
 /atom/proc/blob_act()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/blob_act() called tick#: [world.time]")
 	return
 
 /*
 /atom/proc/attack_hand(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_hand() called tick#: [world.time]")
 	return
 
 /atom/proc/attack_paw(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_paw() called tick#: [world.time]")
 	return
 
 /atom/proc/attack_ai(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_ai() called tick#: [world.time]")
 	return
 
 /atom/proc/attack_robot(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_robot() called tick#: [world.time]")
 	attack_ai(user)
 	return
 
 /atom/proc/attack_animal(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_animal() called tick#: [world.time]")
 	return
 
 /atom/proc/attack_ghost(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_ghost() called tick#: [world.time]")
 	var/ghost_flags = 0
 	if(ghost_read)
 		ghost_flags |= PERMIT_ALL
@@ -341,6 +493,7 @@ its easier to just keep the beam vertical.
 	return
 
 /atom/proc/attack_admin(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_admin() called tick#: [world.time]")
 	if(!user || !user.client || !user.client.holder)
 		return
 	attack_hand(user)
@@ -348,49 +501,94 @@ its easier to just keep the beam vertical.
 //for aliens, it works the same as monkeys except for alien-> mob interactions which will be defined in the
 //appropiate mob files
 /atom/proc/attack_alien(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_alien() called tick#: [world.time]")
 	src.attack_paw(user)
 	return
 
 /atom/proc/attack_larva(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_larva() called tick#: [world.time]")
 	return
 
 // for slimes
 /atom/proc/attack_slime(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_slime() called tick#: [world.time]")
 	return
 
 /atom/proc/hand_h(mob/user as mob)			//human (hand) - restrained
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/hand_h() called tick#: [world.time]")
 	return
 
 /atom/proc/hand_p(mob/user as mob)			//monkey (paw) - restrained
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/hand_p() called tick#: [world.time]")
 	return
 
 /atom/proc/hand_a(mob/user as mob)			//AI - restrained
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/hand_a() called tick#: [world.time]")
 	return
 
 /atom/proc/hand_r(mob/user as mob)			//Cyborg (robot) - restrained
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/hand_r() called tick#: [world.time]")
 	src.hand_a(user)
 	return
 
 /atom/proc/hand_al(mob/user as mob)			//alien - restrained
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/hand_al() called tick#: [world.time]")
 	src.hand_p(user)
 	return
 
 /atom/proc/hand_m(mob/user as mob)			//slime - restrained
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/hand_m() called tick#: [world.time]")
 	return
 */
 
+/atom/proc/singularity_act()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/singularity_act() called tick#: [world.time]")
+	return
+
+//Called when a shuttle collides with an atom
+/atom/proc/shuttle_act(var/datum/shuttle/S)
+	return
+
+//Called when a shuttle rotates
+/atom/proc/shuttle_rotate(var/angle)
+	src.dir = turn(src.dir, -angle)
+
+	if(canSmoothWith) //Smooth the smoothable
+		relativewall()
+		relativewall_neighbours()
+
+	if(pixel_x || pixel_y)
+		var/cosine	= cos(angle)
+		var/sine	= sin(angle)
+		var/newX = (cosine	* pixel_x) + (sine	* pixel_y)
+		var/newY = -(sine	* pixel_x) + (cosine* pixel_y)
+
+		pixel_x = newX
+		pixel_y = newY
+
+/atom/proc/singularity_pull()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/singularity_pull() called tick#: [world.time]")
+	return
+
+/atom/proc/emag_act()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/emag_act() called tick#: [world.time]")
+	return
+
 /atom/proc/hitby(atom/movable/AM as mob|obj)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/hitby() called tick#: [world.time]")
 	return
 
 /*
 /atom/proc/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attackby() called tick#: [world.time]")
 	if (!(istype(W, /obj/item/weapon/grab) ) && !(istype(W, /obj/item/weapon/plastique)) && !(istype(W, /obj/item/weapon/reagent_containers/spray)) && !(istype(W, /obj/item/weapon/packageWrap)) && !istype(W, /obj/item/device/detective_scanner))
 		for(var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
-				O << "\red <B>[src] has been hit by [user] with [W]</B>"
+				O << "<span class='danger'>[src] has been hit by [user] with [W]</span>"
 	return
 */
 /atom/proc/add_hiddenprint(mob/living/M as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/add_hiddenprint() called tick#: [world.time]")
 	if(isnull(M)) return
 	if(isnull(M.key)) return
 	if (!( src.flags ) & FPRINT)
@@ -416,6 +614,7 @@ its easier to just keep the beam vertical.
 	return
 
 /atom/proc/add_fingerprint(mob/living/M as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/add_fingerprint() called tick#: [world.time]")
 	if(isnull(M)) return
 	if(isAI(M)) return
 	if(isnull(M.key)) return
@@ -486,6 +685,7 @@ its easier to just keep the beam vertical.
 
 
 /atom/proc/transfer_fingerprints_to(var/atom/A)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/transfer_fingerprints_to() called tick#: [world.time]")
 	if(!istype(A.fingerprints,/list))
 		A.fingerprints = list()
 	if(!istype(A.fingerprintshidden,/list))
@@ -502,6 +702,7 @@ its easier to just keep the beam vertical.
 
 //returns 1 if made bloody, returns 0 otherwise
 /atom/proc/add_blood(mob/living/carbon/human/M as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/add_blood() called tick#: [world.time]")
 	.=1
 	if(!M)//if the blood is of non-human source
 		if(!blood_DNA || !istype(blood_DNA, /list))
@@ -533,6 +734,7 @@ its easier to just keep the beam vertical.
 	return
 
 /atom/proc/add_vomit_floor(mob/living/carbon/M as mob, var/toxvomit = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/add_vomit_floor() called tick#: [world.time]")
 	if( istype(src, /turf/simulated) )
 		var/obj/effect/decal/cleanable/vomit/this = new /obj/effect/decal/cleanable/vomit(src)
 
@@ -542,13 +744,16 @@ its easier to just keep the beam vertical.
 
 
 /atom/proc/clean_blood()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/clean_blood() called tick#: [world.time]")
 	src.germ_level = 0
 	if(istype(blood_DNA, /list))
-		del(blood_DNA)
+		//del(blood_DNA)
+		blood_DNA.len = 0
 		return 1
 
 
 /atom/proc/get_global_map_pos()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/get_global_map_pos() called tick#: [world.time]")
 	if(!islist(global_map) || isemptylist(global_map)) return
 	var/cur_x = null
 	var/cur_y = null
@@ -565,4 +770,40 @@ its easier to just keep the beam vertical.
 		return 0
 
 /atom/proc/checkpass(passflag)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/checkpass() called tick#: [world.time]")
 	return pass_flags&passflag
+
+/datum/proc/setGender(gend = FEMALE)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/proc/setGender() called tick#: [world.time]")
+	if(!("gender" in vars))
+		CRASH("Oh shit you stupid nigger the [src] doesn't have a gender variable.")
+	if(ishuman(src))
+		ASSERT(gend != PLURAL && gend != NEUTER)
+	src:gender = gend
+
+/atom/setGender(gend = FEMALE)
+	gender = gend
+
+/mob/living/carbon/human/setGender(gend = FEMALE)
+	if(gend == PLURAL || gend == NEUTER || (gend != FEMALE && gend != MALE))
+		CRASH("SOMEBODY SET A BAD GENDER ON [src] [gend]")
+	var/old_gender = src.gender
+	src.gender = gend
+	testing("Set [src]'s gender to [gend], old gender [old_gender] previous gender [prev_gender]")
+
+/atom/proc/mop_act(obj/item/weapon/mop/M, mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/mop_act() called tick#: [world.time]")
+	return 0
+
+/atom/proc/change_area(var/area/oldarea, var/area/newarea)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/change_area() called tick#: [world.time]")
+	if(istype(oldarea))
+		oldarea = "[oldarea.name]"
+	if(istype(newarea))
+		newarea = "[newarea.name]"
+
+//Called in /spell/aoe_turf/boo/cast() (code/modules/mob/dead/observer/spells.dm)
+/atom/proc/spook()
+	if(blessed)
+		return 0
+	return 1

@@ -10,6 +10,9 @@
 	unacidable = 1
 	use_power = 0
 	luminosity = 4
+
+	flags = FPRINT | PROXMOVE
+
 	var/obj/machinery/field_generator/FG1 = null
 	var/obj/machinery/field_generator/FG2 = null
 	var/hasShocked = 0 //Used to add a delay between shocks. In some cases this used to crash servers by spawning hundreds of sparks every second.
@@ -34,9 +37,6 @@
 
 
 /obj/machinery/containment_field/ex_act(severity)
-	return 0
-
-/obj/machinery/containment_field/meteorhit()
 	return 0
 
 /obj/machinery/containment_field/HasProximity(atom/movable/AM as mob|obj)
@@ -71,6 +71,7 @@
 		hasShocked = 0
 
 /obj/machinery/containment_field/proc/set_master(var/master1,var/master2)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/containment_field/proc/set_master() called tick#: [world.time]")
 	if(!master1 || !master2)
 		return 0
 	FG1 = master1

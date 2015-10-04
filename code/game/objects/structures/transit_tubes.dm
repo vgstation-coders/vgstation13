@@ -90,11 +90,28 @@ obj/structure/ex_act(severity)
 		init_dirs()
 
 /obj/structure/transit_tube/Bumped(mob/AM as mob|obj)
-	var/obj/structure/transit_tube/T = locate() in AM.loc
-	if(T)
+	var/obj/structure/transit_tube/tube = locate() in AM.loc
+	if(tube)
 		AM << "<span class='warning'>The tube's support pylons block your way.</span>"
 		return ..()
 	else
+		var/turf/T = get_turf(src)
+		var/list/large_dense = list()
+		for(var/atom/movable/border_obstacle in T)
+			if(border_obstacle.flags&ON_BORDER)
+				if(!border_obstacle.CanPass(AM, AM.loc) && AM != border_obstacle)
+					return ..()
+			else if(border_obstacle != src)
+				large_dense += border_obstacle
+
+		//Then, check the turf itself
+		if (!T.CanPass(AM, T))
+			return ..()
+
+		//Finally, check objects/mobs to block entry that are not on the border
+		for(var/atom/movable/obstacle in large_dense)
+			if(!obstacle.CanPass(AM, AM.loc) && AM != obstacle)
+				return ..()
 		AM.loc = src.loc
 		AM << "<span class='info'>You slip under the tube.</span>"
 
@@ -126,6 +143,7 @@ obj/structure/ex_act(severity)
 
 
 /obj/structure/transit_tube/station/proc/open_animation()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/station/proc/open_animation() called tick#: [world.time]")
 	if(icon_state == "closed")
 		icon_state = "opening"
 		spawn(OPEN_DURATION)
@@ -135,6 +153,7 @@ obj/structure/ex_act(severity)
 
 
 /obj/structure/transit_tube/station/proc/close_animation()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/station/proc/close_animation() called tick#: [world.time]")
 	if(icon_state == "open")
 		icon_state = "closing"
 		spawn(CLOSE_DURATION)
@@ -144,6 +163,7 @@ obj/structure/ex_act(severity)
 
 
 /obj/structure/transit_tube/station/proc/launch_pod()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/station/proc/launch_pod() called tick#: [world.time]")
 	for(var/obj/structure/transit_tube_pod/pod in loc)
 		if(!pod.moving && pod.dir in directions())
 			spawn(5)
@@ -172,6 +192,7 @@ obj/structure/ex_act(severity)
 
 // Called to check if a pod should stop upon entering this tube.
 /obj/structure/transit_tube/proc/should_stop_pod(pod, from_dir)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/should_stop_pod() called tick#: [world.time]")
 	return 0
 
 
@@ -183,6 +204,7 @@ obj/structure/ex_act(severity)
 
 // Called when a pod stops in this tube section.
 /obj/structure/transit_tube/proc/pod_stopped(pod, from_dir)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/pod_stopped() called tick#: [world.time]")
 	return
 
 
@@ -213,11 +235,13 @@ obj/structure/ex_act(severity)
 //  Tubes that have some sort of logic or changing direction might
 //  override it with additional logic.
 /obj/structure/transit_tube/proc/directions()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/directions() called tick#: [world.time]")
 	return tube_dirs
 
 
 
 /obj/structure/transit_tube/proc/has_entrance(from_dir)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/has_entrance() called tick#: [world.time]")
 	from_dir = turn(from_dir, 180)
 
 	for(var/direction in directions())
@@ -229,6 +253,7 @@ obj/structure/ex_act(severity)
 
 
 /obj/structure/transit_tube/proc/has_exit(in_dir)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/has_exit() called tick#: [world.time]")
 	for(var/direction in directions())
 		if(direction == in_dir)
 			return 1
@@ -240,6 +265,7 @@ obj/structure/ex_act(severity)
 // Searches for an exit direction within 45 degrees of the
 //  specified dir. Returns that direction, or 0 if none match.
 /obj/structure/transit_tube/proc/get_exit(in_dir)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/get_exit() called tick#: [world.time]")
 	var/near_dir = 0
 	var/in_dir_cw = turn(in_dir, -45)
 	var/in_dir_ccw = turn(in_dir, 45)
@@ -264,14 +290,17 @@ obj/structure/ex_act(severity)
 //  for later tube types to interact in more interesting ways
 //  such as being very fast in one direction, but slow in others
 /obj/structure/transit_tube/proc/exit_delay(pod, to_dir)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/exit_delay() called tick#: [world.time]")
 	return exit_delay
 
 /obj/structure/transit_tube/proc/enter_delay(pod, to_dir)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/enter_delay() called tick#: [world.time]")
 	return enter_delay
 
 
 
 /obj/structure/transit_tube_pod/proc/follow_tube()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube_pod/proc/follow_tube() called tick#: [world.time]")
 	if(moving)
 		return
 
@@ -369,6 +398,7 @@ obj/structure/ex_act(severity)
 //  giving it a chance to mix its internal air supply with the turf it is
 //  currently on.
 /obj/structure/transit_tube_pod/proc/mix_air()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube_pod/proc/mix_air() called tick#: [world.time]")
 	var/datum/gas_mixture/environment = loc.return_air()
 	var/env_pressure = environment.return_pressure()
 	var/int_pressure = air_contents.return_pressure()
@@ -440,6 +470,7 @@ obj/structure/ex_act(severity)
 //  variations. Additionally, as a separate proc, sub-types
 //  can handle it more intelligently.
 /obj/structure/transit_tube/proc/init_dirs()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/init_dirs() called tick#: [world.time]")
 	if(icon_state == "auto")
 		// Additional delay, for map loading.
 		spawn(1)
@@ -465,6 +496,7 @@ obj/structure/ex_act(severity)
 // Pick two directions, preferring tubes that already connect
 //  to loc, or other auto tubes if there aren't enough connections.
 /obj/structure/transit_tube/proc/init_dirs_automatic()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/init_dirs_automatic() called tick#: [world.time]")
 	var/list/connected = list()
 	var/list/connected_auto = list()
 
@@ -495,6 +527,7 @@ obj/structure/ex_act(severity)
 //  135 degree angle, and return a list containing the pair.
 //  If none exist, return list(connected[1], turn(connected[1], 180)
 /obj/structure/transit_tube/proc/select_automatic_dirs(connected)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/select_automatic_dirs() called tick#: [world.time]")
 	if(length(connected) < 1)
 		return list()
 
@@ -511,6 +544,7 @@ obj/structure/ex_act(severity)
 
 
 /obj/structure/transit_tube/proc/select_automatic_icon_state(directions)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/select_automatic_icon_state() called tick#: [world.time]")
 	if(length(directions) == 2)
 		icon_state = "[dir2text_short(directions[1])]-[dir2text_short(directions[2])]"
 
@@ -518,6 +552,7 @@ obj/structure/ex_act(severity)
 
 // Look for diagonal directions, generate the decorative corners in each.
 /obj/structure/transit_tube/proc/generate_automatic_corners(directions)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/generate_automatic_corners() called tick#: [world.time]")
 	for(var/direction in directions)
 		if(direction == 5 || direction == 6 || direction == 9 || direction == 10)
 			if(direction & NORTH)
@@ -536,6 +571,7 @@ obj/structure/ex_act(severity)
 
 // Generate a corner, if one doesn't exist for the direction on the turf.
 /obj/structure/transit_tube/proc/create_automatic_decorative_corner(location, direction)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/create_automatic_decorative_corner() called tick#: [world.time]")
 	var/state = "D-[dir2text_short(direction)]"
 
 	for(var/obj/structure/transit_tube/tube in location)
@@ -556,6 +592,7 @@ obj/structure/ex_act(severity)
 //  but it is probably safer to assume the existence of, and
 //  rely on, a sufficiently smart compiler/optimizer.
 /obj/structure/transit_tube/proc/parse_dirs(text)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/parse_dirs() called tick#: [world.time]")
 	var/global/list/direction_table = list()
 
 	if(text in direction_table)
@@ -586,6 +623,7 @@ obj/structure/ex_act(severity)
 // A copy of text2dir, extended to accept one and two letter
 //  directions, and to clearly return 0 otherwise.
 /obj/structure/transit_tube/proc/text2dir_extended(direction)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/text2dir_extended() called tick#: [world.time]")
 	switch(uppertext(direction))
 		if("NORTH", "N")
 			return 1
@@ -611,6 +649,7 @@ obj/structure/ex_act(severity)
 // A copy of dir2text, which returns the short one or two letter
 //  directions used in tube icon states.
 /obj/structure/transit_tube/proc/dir2text_short(direction)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/transit_tube/proc/dir2text_short() called tick#: [world.time]")
 	switch(direction)
 		if(1)
 			return "N"

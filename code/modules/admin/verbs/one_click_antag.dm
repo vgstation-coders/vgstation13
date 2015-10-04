@@ -2,13 +2,15 @@ client/proc/one_click_antag()
 	set name = "Create Antagonist"
 	set desc = "Auto-create an antagonist of your choice"
 	set category = "Admin"
-
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/one_click_antag() called tick#: [world.time]")
 	if(holder)
 		holder.one_click_antag()
 	return
 
 
 /datum/admins/proc/one_click_antag()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/one_click_antag() called tick#: [world.time]")
 
 	var/dat = {"<B>One-click Antagonist</B><br>
 		<a href='?src=\ref[src];makeAntag=1'>Make Traitors</a><br>
@@ -19,7 +21,6 @@ client/proc/one_click_antag()
 		<a href='?src=\ref[src];makeAntag=6'>Make Wizard (Requires Ghosts)</a><br>
 		<a href='?src=\ref[src];makeAntag=11'>Make Vox Raiders (Requires Ghosts)</a><br>
 		<a href='?src=\ref[src];makeAntag=7'>Make Nuke Team (Requires Ghosts)</a><br>
-		<a href='?src=\ref[src];makeAntag=8'>Make Space Ninja (Requires Ghosts)</a><br>
 		<a href='?src=\ref[src];makeAntag=9'>Make Aliens (Requires Ghosts)</a><br>
 		<a href='?src=\ref[src];makeAntag=10'>Make Deathsquad (Syndicate) (Requires Ghosts)</a><br>
 		"}
@@ -29,6 +30,8 @@ client/proc/one_click_antag()
 
 
 /datum/admins/proc/makeMalfAImode()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/makeMalfAImode() called tick#: [world.time]")
 
 	var/list/mob/living/silicon/AIs = list()
 	var/mob/living/silicon/malfAI = null
@@ -50,13 +53,13 @@ client/proc/one_click_antag()
 
 
 /datum/admins/proc/makeTraitors()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/makeTraitors() called tick#: [world.time]")
 	var/datum/game_mode/traitor/temp = new
 
 	if(config.protect_roles_from_antagonist)
 		temp.restricted_jobs += temp.protected_jobs
 
 	var/list/mob/living/carbon/human/candidates = list()
-	var/mob/living/carbon/human/H = null
 
 	for(var/mob/living/carbon/human/applicant in player_list)
 		if(applicant.client.desires_role(ROLE_TRAITOR))
@@ -67,21 +70,29 @@ client/proc/one_click_antag()
 							if(!(applicant.job in temp.restricted_jobs))
 								candidates += applicant
 
-	if(candidates.len)
-		var/numTratiors = min(candidates.len, 3)
+	if (candidates.len)
+		candidates = shuffle(candidates)
 
-		for(var/i = 0, i<numTratiors, i++)
-			H = pick(candidates)
-			H.mind.make_Tratior()
-			candidates.Remove(H)
+		var/mob/living/carbon/human/candidate
+
+		for (var/i = 1 to min(candidates.len, 3))
+			candidate = pick_n_take(candidates)
+
+			if (candidate)
+				var/datum/mind/candidate_mind = candidate.mind
+
+				if (candidate_mind)
+					if (candidate_mind.make_traitor())
+						log_admin("[key_name(owner)] has traitor'ed [key_name(candidate)] via create antagonist verb.")
 
 		return 1
-
 
 	return 0
 
 
 /datum/admins/proc/makeChanglings()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/makeChanglings() called tick#: [world.time]")
 
 	var/datum/game_mode/changeling/temp = new
 	if(config.protect_roles_from_antagonist)
@@ -113,6 +124,8 @@ client/proc/one_click_antag()
 
 /datum/admins/proc/makeRevs()
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/makeRevs() called tick#: [world.time]")
+
 	var/datum/game_mode/revolution/temp = new
 	if(config.protect_roles_from_antagonist)
 		temp.restricted_jobs += temp.protected_jobs
@@ -121,6 +134,7 @@ client/proc/one_click_antag()
 	var/mob/living/carbon/human/H = null
 
 	for(var/mob/living/carbon/human/applicant in player_list)
+		if(!applicant.client) continue
 		if(applicant.client.desires_role(ROLE_REV))
 			if(applicant.stat == CONSCIOUS)
 				if(applicant.mind)
@@ -141,6 +155,7 @@ client/proc/one_click_antag()
 	return 0
 
 /datum/admins/proc/makeWizard()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/makeWizard() called tick#: [world.time]")
 	var/list/mob/dead/observer/candidates = list()
 	var/mob/dead/observer/theghost = null
 
@@ -165,6 +180,8 @@ client/proc/one_click_antag()
 
 
 /datum/admins/proc/makeCult()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/makeCult() called tick#: [world.time]")
 
 	var/datum/game_mode/cult/temp = new
 	if(config.protect_roles_from_antagonist)
@@ -197,6 +214,8 @@ client/proc/one_click_antag()
 
 
 /datum/admins/proc/makeNukeTeam()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/makeNukeTeam() called tick#: [world.time]")
 
 	var/list/mob/dead/observer/candidates = list()
 	var/mob/dead/observer/theghost = null
@@ -265,7 +284,8 @@ client/proc/one_click_antag()
 				if(synd_mind.current.client)
 					for(var/image/I in synd_mind.current.client.images)
 						if(I.icon_state == "synd")
-							del(I)
+							//del(I)
+							synd_mind.current.client.images -= I
 
 		for(var/datum/mind/synd_mind in ticker.mode.syndicates)
 			if(synd_mind.current)
@@ -275,7 +295,7 @@ client/proc/one_click_antag()
 							var/I = image('icons/mob/mob.dmi', loc = synd_mind_1.current, icon_state = "synd")
 							synd_mind.current.client.images += I
 
-		for (var/obj/machinery/nuclearbomb/bomb in world)
+		for (var/obj/machinery/nuclearbomb/bomb in machines)
 			bomb.r_code = nuke_code						// All the nukes are set to this code.
 	return 1
 
@@ -284,14 +304,11 @@ client/proc/one_click_antag()
 
 
 /datum/admins/proc/makeAliens()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/makeAliens() called tick#: [world.time]")
 	alien_infestation(3)
 	return 1
-
-/datum/admins/proc/makeSpaceNinja()
-	space_ninja_arrival()
-	return 1
-
 /datum/admins/proc/makeDeathsquad()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/makeDeathsquad() called tick#: [world.time]")
 	var/list/mob/dead/observer/candidates = list()
 	var/mob/dead/observer/theghost = null
 	var/input = "Purify the station."
@@ -336,7 +353,7 @@ client/proc/one_click_antag()
 				//So they don't forget their code or mission.
 
 
-				new_syndicate_commando << "\blue You are an Elite Syndicate. [!syndicate_leader_selected?"commando":"<B>LEADER</B>"] in the service of the Syndicate. \nYour current mission is: \red<B> [input]</B>"
+				new_syndicate_commando << "<span class='notice'>You are an Elite Syndicate. [!syndicate_leader_selected?"commando":"<B>LEADER</B>"] in the service of the Syndicate. \nYour current mission is: <span class='danger'> [input]</span></span>"
 
 				numagents--
 		if(numagents >= 6)
@@ -350,6 +367,7 @@ client/proc/one_click_antag()
 
 
 /proc/makeBody(var/mob/dead/observer/G_found) // Uses stripped down and bastardized code from respawn character
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/makeBody() called tick#: [world.time]")
 	if(!G_found || !G_found.key)	return
 
 	//First we spawn a dude.
@@ -368,6 +386,7 @@ client/proc/one_click_antag()
 	return new_character
 
 /datum/admins/proc/create_syndicate_death_commando(obj/spawn_location, syndicate_leader_selected = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/create_syndicate_death_commando() called tick#: [world.time]")
 	var/mob/living/carbon/human/new_syndicate_commando = new(spawn_location.loc)
 	var/syndicate_commando_leader_rank = pick("Lieutenant", "Captain", "Major")
 	var/syndicate_commando_rank = pick("Corporal", "Sergeant", "Staff Sergeant", "Sergeant 1st Class", "Master Sergeant", "Sergeant Major")
@@ -397,6 +416,8 @@ client/proc/one_click_antag()
 
 /datum/admins/proc/makeVoxRaiders()
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/makeVoxRaiders() called tick#: [world.time]")
+
 	var/list/mob/dead/observer/candidates = list()
 	var/mob/dead/observer/theghost = null
 	var/input = "Disregard shinies, acquire hardware."
@@ -415,7 +436,7 @@ client/proc/one_click_antag()
 		var/max_raiders = 1
 		var/raiders = max_raiders
 		//Spawns vox raiders and equips them.
-		for (var/obj/effect/landmark/L in world)
+		for (var/obj/effect/landmark/L in landmarks_list)
 			if(L.name == "voxstart")
 				if(raiders<=0)
 					break
@@ -431,8 +452,8 @@ client/proc/one_click_antag()
 					break
 
 				new_vox.key = theghost.key
-				new_vox << "\blue You are a Vox Primalis, fresh out of the Shoal. Your ship has arrived at the Tau Ceti system hosting the NSV Exodus... or was it the Luna? NSS? Utopia? Nobody is really sure, but everyong is raring to start pillaging! Your current goal is: \red<B> [input]</B>"
-				new_vox << "\red Don't forget to turn on your nitrogen internals!"
+				new_vox << "<span class='notice'>You are a Vox Primalis, fresh out of the Shoal. Your ship has arrived at the Tau Ceti system hosting the NSV Exodus... or was it the Luna? NSS? Utopia? Nobody is really sure, but everyong is raring to start pillaging! Your current goal is: <span class='danger'> [input]</span></span>"
+				new_vox << "<span class='warning'>Don't forget to turn on your nitrogen internals!</span>"
 
 				raiders--
 			if(raiders > max_raiders)
@@ -443,9 +464,11 @@ client/proc/one_click_antag()
 
 /datum/admins/proc/create_vox_raider(obj/spawn_location, leader_chosen = 0)
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/create_vox_raider() called tick#: [world.time]")
+
 	var/mob/living/carbon/human/new_vox = new(spawn_location.loc)
 
-	new_vox.gender = pick(MALE, FEMALE)
+	new_vox.setGender(pick(MALE, FEMALE))
 	new_vox.h_style = "Short Vox Quills"
 	new_vox.regenerate_icons()
 
@@ -455,7 +478,7 @@ client/proc/one_click_antag()
 	new_vox.dna.mutantrace = "vox"
 	new_vox.set_species("Vox") // Actually makes the vox! How about that.
 	new_vox.generate_name()
-	new_vox.add_language("Vox-pidgin")
+	//new_vox.add_language("Vox-pidgin")
 	new_vox.mind_initialize()
 	new_vox.mind.assigned_role = "MODE"
 	new_vox.mind.special_role = "Vox Raider"

@@ -28,3 +28,17 @@ info.json
 /bot/config.yml
 /bot/data
 /analysis
+/code-fixed
+
+# Player preferences
+players2.sqlite
+
+# New CMC Minimap images.
+/data/minimaps/*
+
+# Backup maps created by maptools
+*.dmm.backup
+
+# Changelog dry runs
+/html/changelog.dry.html
+/html/changelogs/.dry_changelog.yml

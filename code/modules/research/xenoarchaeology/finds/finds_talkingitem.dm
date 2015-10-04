@@ -18,6 +18,7 @@
 		SaySomething()
 
 /obj/item/weapon/proc/catchMessage(var/msg, var/mob/source)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/proc/catchMessage() called tick#: [world.time]")
 	if(speaking_to_players)
 		var/list/seperate = list()
 		if(findtext(msg,"(("))
@@ -47,9 +48,10 @@
 			spawn(2) SaySomething(pick(seperate))
 	if(prob(30))
 		for(var/mob/O in viewers(src))
-			O.show_message("\blue [src] hums for bit then stops...", 1)
+			O.show_message("<span class='notice'>[src] hums for bit then stops...</span>", 1)
 
 /*/obj/item/weapon/talkingcrystal/proc/debug()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\//obj/item/weapon/talkingcrystal/proc/debug() called tick#: [world.time]")
 	//set src in view()
 	for(var/v in heard_words)
 		world << "[uppertext(v)]"
@@ -58,6 +60,8 @@
 			world << "[X]"*/
 
 /obj/item/weapon/proc/SaySomething(var/word = null)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/proc/SaySomething() called tick#: [world.time]")
 
 	var/msg
 	var/limit = rand(max(5,heard_words.len/2))+3
@@ -105,5 +109,5 @@
 			listening|=M
 
 	for(var/mob/M in listening)
-		M << "<b>[src]</b> reverberates, \blue\"[msg]\""
+		M << "<b>[src]</b> reverberates, <span class='warning'>\"[msg]\"</span>"
 	lastsaid = world.timeofday + rand(300,800)

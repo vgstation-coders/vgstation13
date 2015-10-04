@@ -6,6 +6,7 @@
 /datum/map/active
 	nameShort = "deff"
 	nameLong = "Defficiency"
+	map_dir = "defficiency"
 	tDomeX = 127
 	tDomeY = 67
 	tDomeZ = 2
@@ -25,5 +26,8 @@
 		)
 
 ////////////////////////////////////////////////////////////////
+#include "defficiency/pipes.dm" // Atmos layered pipes.
+
+#include "defficiency/areas.dm" // Areas
 
 #include "defficiency.dmm"

@@ -9,6 +9,8 @@
 
 /obj/item/clothing/suit/storage/proc/return_inv()
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/suit/storage/proc/return_inv() called tick#: [world.time]")
+
 	var/list/L = list(  )
 
 	L += src.contents
@@ -22,6 +24,7 @@
 	return L
 
 /obj/item/clothing/suit/storage/proc/show_to(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/suit/storage/proc/show_to() called tick#: [world.time]")
 	user.client.screen -= src.boxes
 	user.client.screen -= src.closer
 	user.client.screen -= src.contents
@@ -33,6 +36,8 @@
 
 /obj/item/clothing/suit/storage/proc/hide_from(mob/user as mob)
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/suit/storage/proc/hide_from() called tick#: [world.time]")
+
 	if(!user.client)
 		return
 	user.client.screen -= src.boxes
@@ -42,6 +47,8 @@
 
 /obj/item/clothing/suit/storage/proc/close(mob/user as mob)
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/suit/storage/proc/close() called tick#: [world.time]")
+
 	src.hide_from(user)
 	user.s_active = null
 	return
@@ -49,6 +56,7 @@
 //This proc draws out the inventory and places the items on it. tx and ty are the upper left tile and mx, my are the bottm right.
 //The numbers are calculated from the bottom-left The bottom-left slot being 1,1.
 /obj/item/clothing/suit/storage/proc/orient_objs(tx, ty, mx, my)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/suit/storage/proc/orient_objs() called tick#: [world.time]")
 	var/cx = tx
 	var/cy = ty
 	src.boxes.screen_loc = text("[tx]:,[ty] to [mx],[my]")
@@ -64,6 +72,7 @@
 
 //This proc draws out the inventory and places the items on it. It uses the standard position.
 /obj/item/clothing/suit/storage/proc/standard_orient_objs(var/rows,var/cols)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/suit/storage/proc/standard_orient_objs() called tick#: [world.time]")
 	var/cx = 4
 	var/cy = 2+rows
 	src.boxes.screen_loc = text("4:16,2:16 to [4+cols]:16,[2+rows]:16")
@@ -79,6 +88,7 @@
 
 //This proc determins the size of the inventory to be displayed. Please touch it only if you know what you're doing.
 /obj/item/clothing/suit/storage/proc/orient2hud(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/suit/storage/proc/orient2hud() called tick#: [world.time]")
 	//var/mob/living/carbon/human/H = user
 	var/row_num = 0
 	var/col_count = min(7,storage_slots) -1
@@ -142,19 +152,15 @@
 			user << "<span class='warning'>The [src] cannot hold \the [W] as it's a storage item of the same size.</span>"
 			return //To prevent the stacking of the same sized items.
 
-	user.u_equip(W)
+	user.u_equip(W,1)
 	playsound(get_turf(src), "rustle", 50, 1, -5)
 	W.loc = src
 	if ((user.client && user.s_active != src))
 		user.client.screen -= W
 	src.orient2hud(user)
-	W.dropped(user)
+	//W.dropped(user)
 	add_fingerprint(user)
 	show_to(user)
-
-
-/obj/item/weapon/storage/dropped(mob/user as mob)
-	return
 
 /obj/item/clothing/suit/storage/MouseDrop(atom/over_object)
 	if(ishuman(usr))
@@ -164,13 +170,13 @@
 		playsound(get_turf(src), "rustle", 50, 1, -5)
 		if ((!( M.restrained() ) && !( M.stat ) && M.wear_suit == src))
 			if (over_object.name == "r_hand")
-				M.u_equip(src)
+				M.u_equip(src,0)
 				M.put_in_r_hand(src)
 			//	if (!( M.r_hand ))
 			//		M.u_equip(src)
 			//		M.r_hand = src
 			else if (over_object.name == "l_hand")
-				M.u_equip(src)
+				M.u_equip(src,0)
 				M.put_in_l_hand(src)
 				//	if (!( M.l_hand ))
 				//		M.u_equip(src)
@@ -204,13 +210,13 @@
 
 /obj/item/clothing/suit/storage/New()
 	. = ..()
-	boxes = new /obj/screen/storage(  )
+	boxes = getFromPool(/obj/screen/storage)
 	boxes.name = "storage"
 	boxes.master = src
 	boxes.icon_state = "block"
 	boxes.screen_loc = "7,7 to 10,8"
 	boxes.layer = 19
-	closer = new /obj/screen/close(  )
+	closer = getFromPool(/obj/screen/close)
 	closer.master = src
 	closer.icon_state = "x"
 	closer.layer = 20
@@ -221,9 +227,10 @@
 		for(var/obj/O in contents)
 			O.emp_act(severity)
 	..()
-
+/*
 /obj/item/clothing/suit/hear_talk(mob/M, var/msg)
 	for (var/atom/A in src)
 		if(istype(A,/obj/))
 			var/obj/O = A
 			O.hear_talk(M, msg)
+*/

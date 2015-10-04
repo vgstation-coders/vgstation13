@@ -10,7 +10,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	restricted_jobs = list("AI", "Cyborg", "Mobile MMI")
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain")
 	required_players = 1
-	required_players_secret = 10
+	required_players_secret = 20
 	required_enemies = 1
 	recommended_enemies = 4
 
@@ -90,6 +90,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 
 /datum/game_mode/proc/forge_changeling_objectives(var/datum/mind/changeling)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/forge_changeling_objectives() called tick#: [world.time]")
 	//OBJECTIVES - Always absorb 5 genomes, plus random traitor objectives.
 	//If they have two objectives as well as absorb, they must survive rather than escape
 	//No escape alone because changelings aren't suited for it and it'd probably just lead to rampant robusting
@@ -125,9 +126,10 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	return
 
 /datum/game_mode/proc/greet_changeling(var/datum/mind/changeling, var/you_are=1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/greet_changeling() called tick#: [world.time]")
 	if (you_are)
-		changeling.current << "<B>\red You are a changeling!</B>"
-	changeling.current << "<b>\red Use say \":g message\" to communicate with your fellow changelings. Remember: you get all of their absorbed DNA if you absorb them.</b>"
+		changeling.current << "<span class='danger'>You are a changeling!</span>"
+	changeling.current << "<span class='danger'>Use say \":g message\" to communicate with your fellow changelings. Remember: you get all of their absorbed DNA if you absorb them.</span>"
 	changeling.current << "<B>You must complete the following tasks:</B>"
 
 	if (changeling.current.mind)
@@ -164,24 +166,42 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	return 0*/
 
 /datum/game_mode/proc/grant_changeling_powers(mob/living/carbon/changeling_mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/grant_changeling_powers() called tick#: [world.time]")
 	if(!istype(changeling_mob))	return
 	changeling_mob.make_changeling()
 
 /datum/game_mode/proc/auto_declare_completion_changeling()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/auto_declare_completion_changeling() called tick#: [world.time]")
+	var/text = ""
 	if(changelings.len)
-		var/text = "<FONT size = 2><B>The changelings were:</B></FONT>"
+		var/icon/logoa = icon('icons/mob/mob.dmi', "change-logoa")
+		var/icon/logob = icon('icons/mob/mob.dmi', "change-logob")
+		end_icons += logoa
+		var/tempstatea = end_icons.len
+		end_icons += logob
+		var/tempstateb = end_icons.len
+		text += {"<BR><img src="logo_[tempstatea].png"> <FONT size = 2><B>The changelings were:</B></FONT> <img src="logo_[tempstateb].png">"}
 		for(var/datum/mind/changeling in changelings)
 			var/changelingwin = 1
 
-			text += "<br>[changeling.key] was [changeling.name] ("
 			if(changeling.current)
+				var/icon/flat = getFlatIcon(changeling.current, SOUTH, 1, 1)
+				end_icons += flat
+				var/tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[changeling.key]</b> was <b>[changeling.name]</b> ("}
 				if(changeling.current.stat == DEAD)
 					text += "died"
+					flat.Turn(90)
+					end_icons[tempstate] = flat
 				else
 					text += "survived"
 				if(changeling.current.real_name != changeling.name)
 					text += " as [changeling.current.real_name]"
 			else
+				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
+				end_icons += sprotch
+				var/tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[changeling.key]</b> was <b>[changeling.name]</b> ("}
 				text += "body destroyed"
 				changelingwin = 0
 			text += ")"
@@ -189,7 +209,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 			//Removed sanity if(changeling) because we -want- a runtime to inform us that the changelings list is incorrect and needs to be fixed.
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\changeling\changeling.dm:182: text += "<br><b>Changeling ID:</b> [changeling.changeling.changelingID]."
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\changeling\changeling.dm:182: text += "<br><b>Changeling ID:</b> [changeling.changeling.changelingID]."
 			text += {"<br><b>Changeling ID:</b> [changeling.changeling.changelingID].
 <b>Genomes Absorbed:</b> [changeling.changeling.absorbedcount]"}
 			// END AUTOFIX
@@ -212,13 +232,20 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 				text += "<br><font color='red'><B>The changeling has failed.</B></font>"
 				feedback_add_details("changeling_success","FAIL")
 
-		world << text
-
-
-	return 1
+			if(changeling.total_TC)
+				if(changeling.spent_TC)
+					text += "<br><span class='sinister'>TC Remaining: [changeling.total_TC - changeling.spent_TC]/[changeling.total_TC] - The tools used by the Changeling were: "
+					for(var/entry in changeling.uplink_items_bought)
+						text += "<br>[entry]"
+				else
+					text += "<br><span class='sinister'>The Changeling was a smooth operator this round (did not purchase any uplink items)</span>"
+		text += "<BR><HR>"
+	return text
 
 /datum/changeling //stores changeling powers, changeling recharge thingie, changeling absorbed DNA and changeling ID (for changeling hivemind)
 	var/list/absorbed_dna = list()
+	var/list/absorbed_species = list()
+	var/list/absorbed_languages = list()
 	var/absorbedcount = 0
 	var/chem_charges = 20
 	var/chem_recharge_rate = 0.5
@@ -244,11 +271,12 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 		changelingID = "[honorific] [rand(1,999)]"
 
 /datum/changeling/proc/regenerate()
-	chem_charges = min(max(0, chem_charges+chem_recharge_rate), chem_storage)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/changeling/proc/regenerate() called tick#: [world.time]")
+	chem_charges = Clamp(chem_charges + chem_recharge_rate, 0, chem_storage)
 	geneticdamage = max(0, geneticdamage-1)
 
-
 /datum/changeling/proc/GetDNA(var/dna_owner)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/changeling/proc/GetDNA() called tick#: [world.time]")
 	var/datum/dna/chosen_dna
 	for(var/datum/dna/DNA in absorbed_dna)
 		if(dna_owner == DNA.real_name)

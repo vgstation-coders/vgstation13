@@ -1,7 +1,8 @@
 /proc/wormhole_event()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/wormhole_event() called tick#: [world.time]")
 	spawn()
 		var/list/pick_turfs = list()
-		for(var/turf/simulated/floor/T in world)
+		for(var/turf/simulated/floor/T in turfs)
 			if(T.z == 1)
 				pick_turfs += T
 
@@ -9,7 +10,7 @@
 			//All ready. Announce that bad juju is afoot.
 			command_alert("Space-time anomalies detected on the station. There is no additional data.", "Anomaly Alert")
 			for(var/mob/M in player_list)
-				if(!istype(M,/mob/new_player))
+				if(!istype(M,/mob/new_player) && M.client)
 					M << sound('sound/AI/spanomalies.ogg')
 
 			//prob(20) can be approximated to 1 wormhole every 5 turfs!
@@ -54,12 +55,12 @@
 
 //maybe this proc can even be used as an admin tool for teleporting players without ruining immulsions?
 /proc/create_wormhole(var/turf/enter as turf, var/turf/exit as turf)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/create_wormhole() called tick#: [world.time]")
 	var/obj/effect/portal/P = new /obj/effect/portal( enter )
 	P.target = exit
-	P.creator = null
 	P.icon = 'icons/obj/objects.dmi'
 	P.failchance = 0
 	P.icon_state = "anom"
 	P.name = "wormhole"
-	spawn(rand(300,600))
-		del(P)
+	spawn(rand(300,600)) //This isn't useful, the new in hand tele will likely override it
+		qdel(P)

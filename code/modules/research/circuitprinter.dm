@@ -17,27 +17,23 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	build_time = IMPRINTER_BUILD_TIME
 	build_number = 1
 
-	research_flags = HASOUTPUT | TAKESMATIN | CONSOLECONTROL
+	research_flags = HASOUTPUT | TAKESMATIN | CONSOLECONTROL | LOCKBOXES
 
-	allowed_materials=list(
-		/obj/item/stack/sheet/glass,
-		/obj/item/stack/sheet/mineral/gold,
-		/obj/item/stack/sheet/mineral/diamond,
-		/obj/item/stack/sheet/mineral/uranium,
-		/obj/item/stack/sheet/mineral/plasma,
-		/obj/item/stack/sheet/mineral/pharosium,
-		/obj/item/stack/sheet/mineral/char,
-		/obj/item/stack/sheet/mineral/claretine,
-		/obj/item/stack/sheet/mineral/bohrum,
-		/obj/item/stack/sheet/mineral/syreline,
-		/obj/item/stack/sheet/mineral/erebite,
-		/obj/item/stack/sheet/mineral/cytine,
-		/obj/item/stack/sheet/mineral/telecrystal,
-		/obj/item/stack/sheet/mineral/mauxite,
-		/obj/item/stack/sheet/mineral/cobryl,
-		/obj/item/stack/sheet/mineral/cerenkite,
-		/obj/item/stack/sheet/mineral/molitz,
-		/obj/item/stack/sheet/mineral/uqill
+	part_sets = list(
+		"Machine Boards" = list(),
+		"Console Boards" = list(),
+		"Mecha Boards" = list(),
+		"Module Boards" = list(),
+		"Engineering Boards" = list(),
+		"Misc" = list()
+	)
+
+	allowed_materials = list(
+						MAT_GLASS,
+						MAT_GOLD,
+						MAT_DIAMOND,
+						MAT_URANIUM,
+						MAT_PLASMA
 	)
 
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/New()
@@ -52,9 +48,16 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	)
 
 	// Don't log reagent transfers.  They're just spammy.
-	reagents_to_log=0
+	log_reagents=0
 
 	RefreshParts()
+
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/Destroy()
+	if(linked_console && linked_console.linked_imprinter == src)
+		linked_console.linked_imprinter = null	//Clearing of the rest is handled in the parent.
+
+	. = ..()
+
 
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/RefreshParts()
 	var/T = 0

@@ -19,17 +19,19 @@ var/list
 
 /mob/var/datum/hSB/sandbox = null
 /mob/proc/CanBuild()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/CanBuild() called tick#: [world.time]")
 	if(ticker.mode.name == "sandbox")
 		sandbox = new/datum/hSB
 		sandbox.owner = src.ckey
 		if(src.client.holder)
 			sandbox.admin = 1
-		verbs += new /mob/proc/sandbox_panel
-		verbs += new /mob/proc/sandbox_spawn_atom
+		verbs += /mob/proc/sandbox_panel
+		verbs += /mob/proc/sandbox_spawn_atom
 
 /mob/proc/sandbox_panel()
 	set name = "Sandbox Panel"
 	set category = "Sandbox"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/sandbox_panel() called tick#: [world.time]")
 
 	if(sandbox)
 		sandbox.update()
@@ -49,6 +51,7 @@ var/global/list/banned_sandbox_types=list(
 	)
 
 proc/is_banned_type(typepath)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/is_banned_type() called tick#: [world.time]")
 	for(var/btype in banned_sandbox_types)
 		if(findtext("[typepath]", "[btype]")!=0)
 			return 1
@@ -58,6 +61,7 @@ proc/is_banned_type(typepath)
 	set category = "Sandbox"
 	set desc = "Spawn any item or machine"
 	set name = "Sandbox Spawn"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/sandbox_spawn_atom() called tick#: [world.time]")
 
 	var/list/types = typesof(/obj/item) + typesof(/obj/machinery)
 	for(var/type in types)
@@ -82,7 +86,7 @@ proc/is_banned_type(typepath)
 		if(!chosen)
 			return
 	if(is_banned_type(chosen))
-		src << "\red Denied."
+		src << "<span class='warning'>Denied.</span>"
 		return
 	new chosen(usr.loc)
 
@@ -99,7 +103,7 @@ datum/hSB
 			if(admin)
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\sandbox\h_sandbox.dm:39: hsbpanel += "<b>Administration Tools:</b><br>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\sandbox\h_sandbox.dm:39: hsbpanel += "<b>Administration Tools:</b><br>"
 				hsbpanel += {"<b>Administration Tools:</b><br>
 					- <a href=\"?\ref[src];hsb=hsbtobj\">Toggle Object Spawning</a><br><br>"}
 			// END AUTOFIX
@@ -156,11 +160,11 @@ datum/hSB
 					P.back.layer = 20
 					P.internal = P.back
 				if("hsbmetal")
-					var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/metal
+					var/obj/item/stack/sheet/hsb = getFromPool(/obj/item/stack/sheet/metal,get_turf(usr))
 					hsb.amount = 50
 					hsb.loc = usr.loc
 				if("hsbglass")
-					var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/glass
+					var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/glass/glass
 					hsb.amount = 50
 					hsb.loc = usr.loc
 				if("hsbplasma")
@@ -184,7 +188,7 @@ datum/hSB
 				if("hsbtoolbox")
 					var/obj/item/weapon/storage/hsb = new/obj/item/weapon/storage/toolbox/mechanical
 					for(var/obj/item/device/radio/T in hsb)
-						del(T)
+						qdel(T)
 					new/obj/item/weapon/crowbar (hsb)
 					hsb.loc = usr.loc
 				if("hsbmedkit")

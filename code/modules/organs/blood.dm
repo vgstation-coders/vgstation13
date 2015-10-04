@@ -12,6 +12,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 //Initializes blood vessels
 /mob/living/carbon/human/proc/make_blood()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/make_blood() called tick#: [world.time]")
 	if(vessel)
 		return
 
@@ -27,6 +28,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 //Resets blood data
 /mob/living/carbon/human/proc/fixblood()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/fixblood() called tick#: [world.time]")
 	for(var/datum/reagent/blood/B in vessel.reagent_list)
 		if(B.id == "blood")
 			B.data = list(	"donor"=src,"viruses"=null,"blood_DNA"=dna.unique_enzymes,"blood_colour"= species.blood_color,"blood_type"=dna.b_type,	\
@@ -35,6 +37,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 // Takes care blood loss and regeneration
 /mob/living/carbon/human/proc/handle_blood()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/handle_blood() called tick#: [world.time]")
 
 	if(species && species.flags & NO_BLOOD)
 		return
@@ -80,22 +84,22 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 			if(BLOOD_VOLUME_SAFE to 10000)
 				if(pale)
 					pale = 0
-					update_body()
+					//update_body()
 			if(BLOOD_VOLUME_OKAY to BLOOD_VOLUME_SAFE)
 				if(!pale)
 					pale = 1
-					update_body()
+					//update_body()
 					var/word = pick("dizzy","woosey","faint")
-					src << "\red You feel [word]"
+					src << "<span class='warning'>You feel [word]</span>"
 				if(prob(1))
 					var/word = pick("dizzy","woosey","faint")
-					src << "\red You feel [word]"
+					src << "<span class='warning'>You feel [word]</span>"
 				if(oxyloss < 20)
 					oxyloss += 2
 			if(BLOOD_VOLUME_BAD to BLOOD_VOLUME_OKAY)
 				if(!pale)
 					pale = 1
-					update_body()
+					//update_body()
 				eye_blurry += 6
 				if(oxyloss < 50)
 					oxyloss += 5
@@ -103,25 +107,25 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				if(prob(15))
 					Paralyse(rand(1,3))
 					var/word = pick("dizzy","woosey","faint")
-					src << "\red You feel extremely [word]"
+					src << "<span class='warning'>You feel extremely [word]</span>"
 			if(BLOOD_VOLUME_SURVIVE to BLOOD_VOLUME_BAD)
 				if(!pale)
 					pale = 1
-					update_body()
+					//update_body()
 				oxyloss += 5
 				toxloss += 1
 				if(prob(15))
 					var/word = pick("dizzy","woosey","faint")
-					src << "\red You feel extremely [word]"
+					src << "<span class='warning'>You feel extremely [word]</span>"
 			if(0 to BLOOD_VOLUME_SURVIVE)
 				// Kill then pretty fast, but don't overdo it
 				// I SAID DON'T OVERDO IT
 				if(!pale) //Somehow
 					pale = 1
-					update_body()
+					//update_body()
 				oxyloss += 8
 				toxloss += 2
-				cloneloss += 1
+				//cloneloss += 1
 				Paralyse(5) //Keep them on the ground, that'll teach them
 
 		// Without enough blood you slowly go hungry.
@@ -151,6 +155,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 //Makes a blood drop, leaking amt units of blood from the mob
 /mob/living/carbon/human/proc/drip(var/amt as num)
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/drip() called tick#: [world.time]")
+
 	if(species && species.flags & NO_BLOOD) //TODO: Make drips come from the reagents instead.
 		return
 
@@ -166,8 +172,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 //Gets blood from mob to the container, preserving all data in it.
 /mob/living/carbon/proc/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
-
-	var/datum/reagent/B = get_blood(container.reagents)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/proc/take_blood() called tick#: [world.time]")
+	var/datum/reagent/B = (container ? get_blood(container.reagents) : null)
 	if(!B) B = new /datum/reagent/blood
 	B.holder = container
 	B.volume += amount
@@ -213,6 +219,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 //Transfers blood from container ot vessels
 /mob/living/carbon/proc/inject_blood(obj/item/weapon/reagent_containers/container, var/amount)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/proc/inject_blood() called tick#: [world.time]")
 	var/datum/reagent/blood/injected = get_blood(container.reagents)
 	if (!injected)
 		return
@@ -251,6 +258,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 //Gets human's own blood.
 /mob/living/carbon/proc/get_blood(datum/reagents/container)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/proc/get_blood() called tick#: [world.time]")
 	var/datum/reagent/blood/res = locate() in container.reagent_list //Grab some blood
 	if(res) // Make sure there's some blood at all
 		if(res.data["donor"] != src) //If it's not theirs, then we look for theirs
@@ -260,6 +268,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	return res
 
 proc/blood_incompatible(donor,receiver)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/blood_incompatible() called tick#: [world.time]")
 	if(!donor || !receiver) return 0
 	var
 		donor_antigen = copytext(donor,1,lentext(donor))
@@ -278,15 +287,27 @@ proc/blood_incompatible(donor,receiver)
 	return 0
 
 proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
-
+	//writepanic("[__FILE__].[__LINE__] \\/proc/blood_splatter() called tick#: [world.time]")
 	var/obj/effect/decal/cleanable/blood/B
 	var/decal_type = /obj/effect/decal/cleanable/blood/splatter
 	var/turf/T = get_turf(target)
+	var/list/drip_icons = list("1","2","3","4","5")
 
 	if(istype(source,/mob/living/carbon/human))
 		var/mob/living/carbon/human/M = source
-		source = M.get_blood(M.vessel)
-	else if(istype(source,/mob/living/carbon/monkey))
+		var/datum/reagent/blood/is_there_blood = M.get_blood(M.vessel)
+		if(!is_there_blood && M.dna && M.species)
+			is_there_blood = new /datum/reagent/blood()
+			is_there_blood.data["blood_DNA"] = M.dna.unique_enzymes
+			is_there_blood.data["blood_type"] = M.dna.b_type
+			is_there_blood.data["blood_colour"] = M.species.blood_color
+			if (!is_there_blood.data["virus2"])
+				is_there_blood.data["virus2"] = list()
+			is_there_blood.data["virus2"] |= virus_copylist(M.virus2)
+
+		source = is_there_blood
+
+	if(istype(source,/mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/donor = source
 		if(donor.dna)
 			source = new()
@@ -298,24 +319,26 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 
 		// Only a certain number of drips can be on a given turf.
 		var/list/drips = list()
-		var/list/drip_icons = list("1","2","3","4","5")
 
 		for(var/obj/effect/decal/cleanable/blood/drip/drop in T)
 			drips += drop
-			drip_icons.Remove(drop.icon_state)
+			drip_icons -= drop.icon_state
 
 		// If we have too many drips, remove them and spawn a proper blood splatter.
 		if(drips.len >= 5)
 			//TODO: copy all virus data from drips to new splatter?
 			for(var/obj/effect/decal/cleanable/blood/drip/drop in drips)
-				del drop
+				returnToPool(drop)
 		else
 			decal_type = /obj/effect/decal/cleanable/blood/drip
 
 	// Find a blood decal or create a new one.
 	B = locate(decal_type) in T
-	if(!B)
-		B = new decal_type(T)
+	if(!B || (decal_type == /obj/effect/decal/cleanable/blood/drip))
+		B = getFromPool(decal_type,T)
+		B.New(T)
+		if(decal_type == /obj/effect/decal/cleanable/blood/drip)
+			B.icon_state = pick(drip_icons)
 
 	// If there's no data to copy, call it quits here.
 	if(!source)

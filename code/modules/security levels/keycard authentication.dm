@@ -1,3 +1,5 @@
+var/global/list/obj/machinery/keycard_auth/authenticators = list()
+
 /obj/machinery/keycard_auth
 	name = "Keycard Authentication Device"
 	desc = "This device is used to trigger station functions, which require more than one ID card to authenticate."
@@ -19,6 +21,10 @@
 	idle_power_usage = 2
 	active_power_usage = 6
 	power_channel = ENVIRON
+
+/obj/machinery/keycard_auth/New()
+	..()
+	authenticators += src
 
 /obj/machinery/keycard_auth/attack_ai(mob/user as mob)
 	user << "The station AI is not to interact with these devices."
@@ -51,6 +57,10 @@
 	else
 		stat |= NOPOWER
 
+/obj/machinery/keycard_auth/Destroy()
+	..()
+	authenticators -= src
+
 /obj/machinery/keycard_auth/attack_hand(mob/user as mob)
 	if(user.stat || stat & (NOPOWER|BROKEN))
 		user << "This device is not powered."
@@ -65,21 +75,21 @@
 
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\security levels\keycard authentication.dm:66: dat += "This device is used to trigger some high security events. It requires the simultaneous swipe of two high-level ID cards."
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\security levels\keycard authentication.dm:66: dat += "This device is used to trigger some high security events. It requires the simultaneous swipe of two high-level ID cards."
 	dat += {"This device is used to trigger some high security events. It requires the simultaneous swipe of two high-level ID cards.
 		<br><hr><br>"}
 	// END AUTOFIX
 	if(screen == 1)
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\security levels\keycard authentication.dm:70: dat += "Select an event to trigger:<ul>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\security levels\keycard authentication.dm:70: dat += "Select an event to trigger:<ul>"
 		dat += {"Select an event to trigger:<ul>
 			<li><A href='?src=\ref[src];triggerevent=Red alert'>Red alert</A></li>"}
 		// END AUTOFIX
 		//dat += "<li><A href='?src=\ref[src];triggerevent=Emergency Response Team'>Emergency Response Team</A></li>" Not yet
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\security levels\keycard authentication.dm:73: dat += "<li><A href='?src=\ref[src];triggerevent=Grant Emergency Maintenance Access'>Grant Emergency Maintenance Access</A></li>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\security levels\keycard authentication.dm:73: dat += "<li><A href='?src=\ref[src];triggerevent=Grant Emergency Maintenance Access'>Grant Emergency Maintenance Access</A></li>"
 		dat += {"<li><A href='?src=\ref[src];triggerevent=Grant Emergency Maintenance Access'>Grant Emergency Maintenance Access</A></li>
 			<li><A href='?src=\ref[src];triggerevent=Revoke Emergency Maintenance Access'>Revoke Emergency Maintenance Access</A></li>
 			</ul>"}
@@ -88,7 +98,7 @@
 	if(screen == 2)
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\security levels\keycard authentication.dm:78: dat += "Please swipe your card to authorize the following event: <b>[event]</b>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\security levels\keycard authentication.dm:78: dat += "Please swipe your card to authorize the following event: <b>[event]</b>"
 		dat += {"Please swipe your card to authorize the following event: <b>[event]</b>
 			<p><A href='?src=\ref[src];reset=1'>Back</A>"}
 		// END AUTOFIX
@@ -97,7 +107,7 @@
 
 
 /obj/machinery/keycard_auth/Topic(href, href_list)
-	..()
+	if(..()) return 1
 	if(busy)
 		usr << "This device is busy."
 		return
@@ -115,6 +125,7 @@
 	return
 
 /obj/machinery/keycard_auth/proc/reset()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/keycard_auth/proc/reset() called tick#: [world.time]")
 	active = 0
 	event = ""
 	screen = 1
@@ -125,8 +136,9 @@
 	event_confirmed_by = null
 
 /obj/machinery/keycard_auth/proc/broadcast_request()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/keycard_auth/proc/broadcast_request() called tick#: [world.time]")
 	icon_state = "auth_on"
-	for(var/obj/machinery/keycard_auth/KA in world)
+	for(var/obj/machinery/keycard_auth/KA in authenticators)
 		if(KA == src) continue
 		KA.reset()
 		spawn()
@@ -141,6 +153,7 @@
 	reset()
 
 /obj/machinery/keycard_auth/proc/receive_request(var/obj/machinery/keycard_auth/source)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/keycard_auth/proc/receive_request() called tick#: [world.time]")
 	if(stat & (BROKEN|NOPOWER))
 		return
 	event_source = source
@@ -156,6 +169,7 @@
 	busy = 0
 
 /obj/machinery/keycard_auth/proc/trigger_event()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/keycard_auth/proc/trigger_event() called tick#: [world.time]")
 	switch(event)
 		if("Red alert")
 			set_security_level(SEC_LEVEL_RED)
@@ -173,11 +187,13 @@
 var/global/maint_all_access = 0
 
 /proc/make_maint_all_access()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/make_maint_all_access() called tick#: [world.time]")
 	maint_all_access = 1
 	world << "<font size=4 color='red'>Attention!</font>"
 	world << "<font color='red'>The maintenance access requirement has been revoked on all airlocks.</font>"
 
 /proc/revoke_maint_all_access()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/revoke_maint_all_access() called tick#: [world.time]")
 	maint_all_access = 0
 	world << "<font size=4 color='red'>Attention!</font>"
 	world << "<font color='red'>The maintenance access requirement has been readded on all maintenance airlocks.</font>"

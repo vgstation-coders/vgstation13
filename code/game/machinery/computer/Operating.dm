@@ -9,7 +9,7 @@
 	var/mob/living/carbon/human/victim = null
 	var/obj/machinery/optable/optable = null
 
-	l_color = "#0000FF"
+	light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/operating/New()
 	..()
@@ -19,9 +19,11 @@
 	return
 
 /obj/machinery/computer/operating/proc/updatemodules()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/operating/proc/updatemodules() called tick#: [world.time]")
 	src.optable = findoptable()
 
 /obj/machinery/computer/operating/proc/findoptable()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/operating/proc/findoptable() called tick#: [world.time]")
 	var/obj/machinery/optable/optablef = null
 
 	// Loop through every direction
@@ -55,7 +57,7 @@
 	updatemodules()
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\computer\Operating.dm:41: var/dat = "<HEAD><TITLE>Operating Computer</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\computer\Operating.dm:41: var/dat = "<HEAD><TITLE>Operating Computer</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n"
 	var/dat = {"<HEAD><TITLE>Operating Computer</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>"}
 	// END AUTOFIX
 	if(!isnull(src.optable) && (src.optable.check_victim()))
@@ -87,15 +89,25 @@
 	user.set_machine(src)
 	onclose(user, "op")
 
-
 /obj/machinery/computer/operating/Topic(href, href_list)
 	if(..())
-		return
-	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+		return 1
+	else
 		usr.set_machine(src)
 	return
-
 
 /obj/machinery/computer/operating/process()
 	if(..())
 		src.updateDialog()
+	update_icon()
+
+/obj/machinery/computer/operating/update_icon()
+	..()
+	if(!(stat & (BROKEN | NOPOWER)))
+		updatemodules()
+		if(!isnull(src.optable) && (src.optable.check_victim()))
+			src.victim = src.optable.victim
+			if(victim.stat == DEAD)
+				icon_state = "operating-dead"
+			else
+				icon_state = "operating-living"

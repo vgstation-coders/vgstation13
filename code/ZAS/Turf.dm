@@ -6,6 +6,7 @@
 /turf/var/datum/gas_mixture/air
 
 /turf/simulated/proc/set_graphic(const/newGraphics)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/simulated/proc/set_graphic() called tick#: [world.time]")
 	if (!isnum(newGraphics))
 		return
 
@@ -33,6 +34,7 @@
 		gasGraphics = overlayGraphics.Copy()
 
 /turf/proc/update_air_properties()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/proc/update_air_properties() called tick#: [world.time]")
 	var/block = c_airblock(src)
 	if(block & AIR_BLOCKED)
 		//dbg(blocked)
@@ -124,7 +126,7 @@
 			//This happens when windows move or are constructed. We need to rebuild.
 			if((previously_open & d) && istype(unsim, /turf/simulated))
 				var/turf/simulated/sim = unsim
-				if(sim.zone == zone)
+				if(istype(zone) && sim.zone == zone)
 					zone.rebuild()
 					return
 
@@ -197,6 +199,7 @@
 		air_master.connect(src, T)
 
 /turf/proc/post_update_air_properties()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/proc/post_update_air_properties() called tick#: [world.time]")
 	if(connections) connections.update_all()
 
 /turf/assume_air(datum/gas_mixture/giver) //use this for machines to adjust air
@@ -255,6 +258,7 @@
 		return air
 
 /turf/proc/make_air()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/proc/make_air() called tick#: [world.time]")
 	air = new/datum/gas_mixture
 	air.temperature = temperature
 	air.adjust(oxygen, carbon_dioxide, nitrogen, toxins)
@@ -262,6 +266,11 @@
 	air.volume = CELL_VOLUME
 
 /turf/simulated/proc/c_copy_air()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/simulated/proc/c_copy_air() called tick#: [world.time]")
 	if(!air) air = new/datum/gas_mixture
 	air.copy_from(zone.air)
 	air.group_multiplier = 1
+
+
+/turf/attack_hand(mob/user as mob)
+	user.Move_Pulled(src)

@@ -7,9 +7,9 @@
 */
 
 /mob/living/silicon/robot/ClickOn(var/atom/A, var/params)
-	if(world.time <= next_click)
+	if(click_delayer.blocked())
 		return
-	next_click = world.time + 1
+	click_delayer.setDelay(1)
 
 	if(client.buildmode) // comes after object.Click to allow buildmode gui objects to be clicked
 		build_click(src, client.buildmode, params, A)
@@ -32,9 +32,11 @@
 		CtrlClickOn(A)
 		return
 
-	if(next_move >= world.time)
+	if(attack_delayer.blocked())
 		return
-
+	if(isVentCrawling())
+		src << "<span class='danger'>Not while we're vent crawling!</span>"
+		return
 	face_atom(A) // change direction to face what you clicked on
 
 	/*
@@ -52,8 +54,8 @@
 		A.attack_robot(src)
 		return
 
-	// buckled cannot prevent machine interlinking but stops arm movement
-	if( buckled )
+	// locked_to cannot prevent machine interlinking but stops arm movement
+	if(locked_to)
 		return
 
 	if(W == A)
@@ -61,20 +63,25 @@
 		if(W.flags&USEDELAY)
 			next_move += 5
 		*/
-		W.attack_self(src)
+		W.attack_self(src, params)
 		return
 
 	// cyborgs are prohibited from using storage items so we can I think safely remove (A.loc in contents)
 	if(A == loc || (A in loc) || (A in contents))
 		// No adjacency checks
-		next_move = world.time + 8
 		/*if(W.flags&USEDELAY)
 			next_move += 5
 		*/
 
-		var/resolved = A.attackby(W,src)
-		if(!resolved && A && W)
-			W.afterattack(A,src,1,params)
+		var/resolved = W.preattack(A, src, 1, params)
+		if(!resolved)
+			resolved = A.attackby(W,src,params)
+			if(ismob(A) || istype(A, /obj/mecha) || istype(W, /obj/item/weapon/grab))
+				delayNextAttack(10)
+			if(!resolved && A && W)
+				W.afterattack(A,src,1,params) // 1 indicates adjacency
+			else
+				delayNextAttack(10)
 		return
 
 
@@ -86,10 +93,15 @@
 			if(W.flags&USEDELAY)
 				next_move += 5
 			*/
-
-			var/resolved = A.attackby(W, src)
-			if(!resolved && A && W)
-				W.afterattack(A, src, 1, params)
+			var/resolved = W.preattack(A, src, 1, params)
+			if(!resolved)
+				resolved = A.attackby(W,src,params)
+				if(ismob(A) || istype(A, /obj/mecha))
+					delayNextAttack(10)
+				if(!resolved && A && W)
+					W.afterattack(A,src,1,params) // 1 indicates adjacency
+				else
+					delayNextAttack(10)
 			return
 		else
 			//next_move = world.time + 10
@@ -110,6 +122,9 @@
 		A.AIAltClick(src)
 		return
 	*/
+	. = ..()
+	if(.)
+		return
 	if(isturf(A))
 		A.AltClick(src)
 		return
@@ -139,17 +154,22 @@
 	change attack_robot() above to the proper function
 */
 /mob/living/silicon/robot/UnarmedAttack(atom/A)
+	if(ismob(A))
+		delayNextAttack(10)
 	A.attack_robot(src)
+	return
 /mob/living/silicon/robot/RangedAttack(atom/A)
 	A.attack_robot(src)
 
 /atom/proc/attack_robot(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/attack_robot() called tick#: [world.time]")
 	attack_ai(user)
 	return
 
 
 // /vg/: Alt-click.
 /atom/proc/RobotAltClick()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/RobotAltClick() called tick#: [world.time]")
 	return
 
 // /vg/: Alt-click to open shit

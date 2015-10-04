@@ -4,8 +4,10 @@
 
 	icon = 'icons/obj/machines/broadcast.dmi'
 	icon_state = "broadcaster"
-	l_color="#4285F4"
-	use_power = 1
+	light_color = LIGHT_COLOR_BLUE
+	use_power = 0 // We use power_connection for this.
+	density = 1
+	anchored = 1 // May need map updates idfk
 	idle_power_usage = 50
 	active_power_usage = 1000
 
@@ -15,11 +17,39 @@
 	var/heating_power=40000
 	var/list/autolink = null
 
+	var/datum/wires/transmitter/wires = null
+	var/datum/power_connection/consumer/cable/power_connection = null
+
 	var/const/RADS_PER_TICK=150
 	var/const/MAX_TEMP=70 // Celsius
+	machine_flags = MULTITOOL_MENU | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK
+
+/obj/machinery/media/transmitter/broadcast/New()
+	..()
+	wires = new(src)
+	power_connection=new(src,LIGHT)
+	power_connection.idle_usage=idle_power_usage
+	power_connection.active_usage=active_power_usage
+
+/obj/machinery/media/transmitter/broadcast/Destroy()
+	if(wires)
+		qdel(wires)
+		wires = null
+	if(power_connection)
+		qdel(power_connection)
+		power_connection = null
+	..()
+
+/obj/machinery/media/transmitter/broadcast/proc/cable_power_change(var/list/args)
+	if(power_connection.powered())
+		stat &= ~NOPOWER
+	else
+		stat |= NOPOWER
+
+	update_icon()
 
 /obj/machinery/media/transmitter/broadcast/initialize()
-	testing("[type]/initialize() called!")
+	//testing("[type]/initialize() called!")
 	if(autolink && autolink.len)
 		for(var/obj/machinery/media/source in orange(20, src))
 			if(source.id_tag in autolink)
@@ -28,9 +58,23 @@
 		hook_media_sources()
 	if(on)
 		update_on()
+	power_connection.power_changed.Add(src,"cable_power_change")
+	power_connection.connect()
 	update_icon()
 
+/obj/machinery/media/transmitter/broadcast/wrenchAnchor(mob/user)
+	if(..())
+		if(anchored) // We are now anchored
+			power_connection.connect() // Connect to the powernet
+		else // We are now NOT anchored
+			power_connection.disconnect() // Ditch powernet.
+			on=0
+			update_on()
+		return 1
+	return
+
 /obj/machinery/media/transmitter/broadcast/proc/hook_media_sources()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/transmitter/broadcast/proc/hook_media_sources() called tick#: [world.time]")
 	if(!sources.len)
 		return
 
@@ -40,6 +84,7 @@
 		source.update_music() // Request music update
 
 /obj/machinery/media/transmitter/broadcast/proc/unhook_media_sources()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/transmitter/broadcast/proc/unhook_media_sources() called tick#: [world.time]")
 	if(!sources.len)
 		return
 
@@ -49,16 +94,34 @@
 	broadcast() // Bzzt
 
 /obj/machinery/media/transmitter/broadcast/attackby(var/obj/item/W, mob/user)
-	if(istype(W, /obj/item/device/multitool))
-		update_multitool_menu(user)
-		return 1
+	. = ..()
+	if(.)
+		return .
+	if(panel_open && (istype(W, /obj/item/device/multitool)||istype(W, /obj/item/weapon/wirecutters)))
+		attack_hand(user)
+	if(issolder(W))
+		if(integrity>=100)
+			user << "<span class='warning'>[src] doesn't need to be repaired!</span>"
+			return
+		var/obj/item/weapon/solder/S = W
+		if(!S.remove_fuel(4,user))
+			return
+		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+		if(do_after(user, src,40))
+			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+			integrity = 100
+			user << "<span class='notice'>You repair the blown fuses on [src].</span>"
 
 /obj/machinery/media/transmitter/broadcast/attack_ai(var/mob/user as mob)
 	src.add_hiddenprint(user)
 	attack_hand(user)
 
 /obj/machinery/media/transmitter/broadcast/attack_hand(var/mob/user as mob)
-	update_multitool_menu(user)
+	if(panel_open)
+		wires.Interact(user)
+	. = ..()
+	if(.)
+		return .
 
 /obj/machinery/media/transmitter/broadcast/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	// You need a multitool to use this, or be silicon
@@ -88,37 +151,29 @@
 	return screen
 
 
-
-/obj/machinery/light_switch/power_change()
-	if(powered(LIGHT))
-		stat &= ~NOPOWER
-	else
-		stat |= NOPOWER
-
-	updateicon()
-
-/obj/machinery/light_switch/emp_act(severity)
+/obj/machinery/media/transmitter/broadcast/emp_act(severity)
 	if(stat & (BROKEN|NOPOWER))
 		..(severity)
 		return
-	power_change()
+	cable_power_change()
 	..(severity)
 
 /obj/machinery/media/transmitter/broadcast/update_icon()
 	overlays = 0
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
 		return
 	if(on)
 		overlays+="broadcaster on"
-		SetLuminosity(3) // OH FUUUUCK
+		set_light(3) // OH FUUUUCK
 		use_power = 2
 	else
-		SetLuminosity(1) // Only the tile we're on.
+		set_light(1) // Only the tile we're on.
 		use_power = 1
 	if(sources.len)
 		overlays+="broadcaster linked"
 
 /obj/machinery/media/transmitter/broadcast/proc/update_on()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/transmitter/broadcast/proc/update_on() called tick#: [world.time]")
 	if(on)
 		visible_message("\The [src] hums as it begins pumping energy into the air!")
 		connect_frequency()
@@ -134,6 +189,11 @@
 		return
 
 	if("power" in href_list)
+		if(!power_connection.powernet)
+			power_connection.connect()
+		if(!power_connection.powered())
+			usr << "<span class='warning'>This machine needs to be hooked up to a powered cable.</span>"
+			return
 		on = !on
 		update_on()
 		return
@@ -151,13 +211,16 @@
 				media_frequency = newfreq
 				connect_frequency()
 			else
-				usr << "\red Invalid FM frequency. (90.0, 200.0)"
+				usr << "<span class='warning'>Invalid FM frequency. (90.0, 200.0)</span>"
+
+/obj/machinery/media/transmitter/broadcast/proc/count_rad_wires()
+	return !wires.IsIndexCut(TRANS_RAD_ONE) + !wires.IsIndexCut(TRANS_RAD_TWO)
 
 /obj/machinery/media/transmitter/broadcast/process()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
 		return
-	if(on)
-		if(integrity<=0)
+	if(on && anchored)
+		if(integrity<=0 || count_rad_wires()==0) //Shut down if too damaged OR if no rad wires
 			on=0
 			update_on()
 
@@ -165,7 +228,7 @@
 		for(var/mob/living/carbon/M in view(src,3))
 			var/rads = RADS_PER_TICK * sqrt( 1 / (get_dist(M, src) + 1) )
 			if(istype(M,/mob/living/carbon/human))
-				M.apply_effect((rads*3),IRRADIATE)
+				M.apply_effect((rads*count_rad_wires()),IRRADIATE)
 			else
 				M.radiation += rads
 
@@ -201,7 +264,7 @@
 		var/datum/gas_mixture/environment = loc.return_air()
 		switch(environment.temperature)
 			if(T0C to (T20C + 20))
-				integrity = between(0, integrity, 100)
+				integrity = Clamp(integrity, 0, 100)
 			if((T20C + 20) to INFINITY)
 				integrity = max(0, integrity - 1)
 

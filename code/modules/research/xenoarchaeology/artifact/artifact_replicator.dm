@@ -34,11 +34,11 @@
 	/obj/item/device/paicard,\
 	/obj/item/device/radio,\
 	/obj/item/device/radio/headset,\
-	/obj/item/device/radio/beacon,\
+	/obj/item/beacon,\
 	/obj/item/weapon/autopsy_scanner,\
 	/obj/item/weapon/bikehorn,\
 	/obj/item/weapon/bonesetter,\
-	/obj/item/weapon/butch,\
+	/obj/item/weapon/kitchen/utensil/knife/large/butch,\
 	/obj/item/weapon/caution,\
 	/obj/item/weapon/caution/cone,\
 	/obj/item/weapon/crowbar,\
@@ -48,13 +48,13 @@
 	/obj/item/weapon/hatchet,\
 	/obj/item/weapon/handcuffs,\
 	/obj/item/weapon/hemostat,\
-	/obj/item/weapon/kitchenknife,\
+	/obj/item/weapon/kitchen/utensil/knife/large,\
 	/obj/item/weapon/lighter,\
 	/obj/item/weapon/lighter,\
 	/obj/item/weapon/light/bulb,\
 	/obj/item/weapon/light/tube,\
 	/obj/item/weapon/pickaxe,\
-	/obj/item/weapon/shovel,\
+	/obj/item/weapon/pickaxe/shovel,\
 	/obj/item/weapon/table_parts,\
 	/obj/item/weapon/weldingtool,\
 	/obj/item/weapon/wirecutters,\
@@ -77,7 +77,7 @@
 	if(spawning_types.len && powered())
 		spawn_progress++
 		if(spawn_progress > max_spawn_ticks)
-			src.visible_message("\blue \icon[src] [src] pings!")
+			src.visible_message("<span class='notice'>\icon[src] [src] pings!</span>")
 			var/spawn_type = spawning_types[1]
 			new spawn_type(src.loc)
 
@@ -90,7 +90,7 @@
 				icon_state = "borgcharger0(old)"
 
 		else if(prob(5))
-			src.visible_message("\blue \icon[src] [src] [pick("clicks","whizzes","whirrs","whooshes","clanks","clongs","clonks","bangs")].")
+			src.visible_message("<span class='notice'>\icon[src] [src] [pick("clicks","whizzes","whirrs","whooshes","clanks","clongs","clonks","bangs")].</span>")
 
 /obj/machinery/replicator/attack_hand(mob/user as mob)
 	interact(user)
@@ -109,9 +109,9 @@
 		var/index = text2num(href_list["activate"])
 		if(index > 0 && index <= construction.len)
 			if(spawning_types.len)
-				src.visible_message("\blue \icon[src] a [pick("light","dial","display","meter","pad")] on [src]'s front [pick("blinks","flashes")] [pick("red","yellow","blue","orange","purple","green","white")].")
+				src.visible_message("<span class='notice'>\icon[src] a [pick("light","dial","display","meter","pad")] on [src]'s front [pick("blinks","flashes")] [pick("red","yellow","blue","orange","purple","green","white")].</span>")
 			else
-				src.visible_message("\blue \icon[src] [src]'s front compartment slides shut.")
+				src.visible_message("<span class='notice'>\icon[src] [src]'s front compartment slides shut.</span>")
 
 			spawning_types.Add(construction[construction[index]])
 			spawn_progress = 0

@@ -1,4 +1,4 @@
-var/global/list/moneytypes=list(
+var/global/list/moneytypes = list(
 	/obj/item/weapon/spacecash/c1000 = 1000,
 	/obj/item/weapon/spacecash/c100  = 100,
 	/obj/item/weapon/spacecash/c10   = 10,
@@ -23,8 +23,8 @@ var/global/list/moneytypes=list(
 	w_class = 1.0
 	var/access = list()
 	access = access_crate_cash
-	var/worth = 1 // Per chip
-	var/amount = 1 // number of chips
+	var/worth = 1 //Per chip
+	var/amount = 1 //Number of chips
 	var/stack_color = "#4E054F"
 	autoignition_temperature=AUTOIGNITION_PAPER
 
@@ -34,20 +34,23 @@ var/global/list/moneytypes=list(
 	amount = new_amount
 	update_icon()
 
-/obj/item/weapon/spacecash/examine()
-	if(amount>1)
-		usr << "\icon[src] This is a stack of [amount] [src]s."
+/obj/item/weapon/spacecash/examine(mob/user)
+	if(amount > 1)
+		setGender(PLURAL)
+		..()
+		user << "It's a stack holding [amount] chips."
+		user << "<span class='info'>It's worth [worth*amount] credits.</span>"
 	else
-		usr << "\icon[src] This is \a [src]s."
-	usr << "It's worth [worth*amount] credits."
+		setGender(NEUTER)
+		..()
 
 /obj/item/weapon/spacecash/update_icon()
 	icon_state = "cash[worth]"
-	// Up to 100 items per stack.
+	//Up to 100 items per stack.
 	overlays = 0
 	var/stacksize=round(amount/25)
-	pixel_x=rand(-7,7)
-	pixel_y=rand(-14,14)
+	pixel_x = rand(-7, 7)
+	pixel_y = rand(-14, 14)
 	if(stacksize)
 		// 0 = single
 		// 1 = 1/4 stack
@@ -59,6 +62,7 @@ var/global/list/moneytypes=list(
 		overlays += stack
 
 /obj/item/weapon/spacecash/proc/collect_from(var/obj/item/weapon/spacecash/cash)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/spacecash/proc/collect_from() called tick#: [world.time]")
 	if(cash.worth == src.worth)
 		var/taking = min(100-src.amount,cash.amount)
 		cash.amount -= taking
@@ -69,10 +73,7 @@ var/global/list/moneytypes=list(
 	return 0
 
 /obj/item/weapon/spacecash/afterattack(atom/A as mob|obj, mob/user as mob)
-	if (istype(A, /turf) \
-	 || istype(A, /obj/structure/table) \
-	 || istype(A, /obj/structure/rack) \
-	 )
+	if(istype(A, /turf) || istype(A, /obj/structure/table) || istype(A, /obj/structure/rack))
 		var/turf/T = get_turf(A)
 		var/collected = 0
 		for(var/obj/item/weapon/spacecash/cash in T)
@@ -80,13 +81,13 @@ var/global/list/moneytypes=list(
 				collected += collect_from(cash)
 		if(collected)
 			update_icon()
-			user << "\blue You add [collected] chips to your stack of cash."
+			user << "<span class='notice'>You add [collected] credit [amount > 1 ? "chips":"chip"] to your stack of cash.</span>"
 	else if(istype(A,/obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/cash = A
 		var/collected = src.collect_from(cash)
 		if(collected)
 			update_icon()
-			user << "\blue You add [collected] chips to your stack of cash."
+			user << "<span class='notice'>You add [collected] credit [amount > 1 ? "chips":"chip"] to your stack of cash.</span>"
 
 /obj/item/weapon/spacecash/c10
 	icon_state = "cash10"
@@ -103,7 +104,14 @@ var/global/list/moneytypes=list(
 	worth = 1000
 	stack_color = "#333333"
 
+/obj/structure/closet/cash_closet/New()
+	var/list/types = typesof(/obj/item/weapon/spacecash)
+	for(var/i = 1 to rand(3,10))
+		var/typepath = pick(types)
+		new typepath(src)
+
 /proc/dispense_cash(var/amount, var/loc)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/dispense_cash() called tick#: [world.time]")
 	for(var/cashtype in moneytypes)
 		var/slice = moneytypes[cashtype]
 		var/dispense_count = Floor(amount/slice)
@@ -115,6 +123,7 @@ var/global/list/moneytypes=list(
 				dispense_count -= dispense_this_time
 
 /proc/count_cash(var/list/cash)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/count_cash() called tick#: [world.time]")
 	. = 0
 	for(var/obj/item/weapon/spacecash/C in cash)
 		. += C.amount * C.worth

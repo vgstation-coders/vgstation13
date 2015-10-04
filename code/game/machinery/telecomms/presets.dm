@@ -60,7 +60,7 @@
 	id = "Receiver B"
 	network = "tcommsat"
 	autolinkers = list("receiverB") // link to relay
-	freq_listening = list(1353, 1357, 1359) //command, engineering, security
+	freq_listening = list(1345, 1353, 1357, 1359) //ert, command, engineering, security
 
 	//Common and other radio frequencies for people to freely use
 	New()
@@ -68,6 +68,9 @@
 			freq_listening |= i
 		..()
 
+/obj/machinery/telecomms/receiver/preset_complete
+	name = "Receiver"
+	freq_listening = list()
 
 //Buses
 
@@ -92,13 +95,19 @@
 /obj/machinery/telecomms/bus/preset_four
 	id = "Bus 4"
 	network = "tcommsat"
-	freq_listening = list(1357)
+	freq_listening = list(1345, 1357)
 	autolinkers = list("processor4", "engineering", "common")
 
 /obj/machinery/telecomms/bus/preset_four/New()
 	for(var/i = 1441, i < 1489, i += 2)
 		freq_listening |= i
 	..()
+
+/obj/machinery/telecomms/bus/preset_complete
+	id = "Bus Complete"
+	network = "tcommsat"
+	freq_listening = list()
+	autolinkers = list("processor1", "common")
 
 //Processors
 
@@ -121,6 +130,10 @@
 	id = "Processor 4"
 	network = "tcommsat"
 	autolinkers = list("processor4")
+
+
+/obj/machinery/telecomms/processor/preset_complete
+	name = "Processor"
 
 //Servers
 
@@ -147,7 +160,7 @@
 	freq_listening = list(1347)
 	autolinkers = list("supply")
 
-//Using old mining channel frequency for a service channel for the bartender, botanist and chef. 
+//Using old mining channel frequency for a service channel for the bartender, botanist and chef.
 //Also cleaned up all the references to the mining channel I could find, it most likely will never be used again anyway. - Duny
 /obj/machinery/telecomms/server/presets/service
 	id = "Service Server"
@@ -156,7 +169,7 @@
 
 /obj/machinery/telecomms/server/presets/common
 	id = "Common Server"
-	freq_listening = list()
+	freq_listening = list(1345)
 	autolinkers = list("common")
 
 	//Common and other radio frequencies for people to freely use
@@ -165,6 +178,10 @@
 	for(var/i = 1441, i < 1489, i += 2)
 		freq_listening |= i
 	..()
+
+/obj/machinery/telecomms/server/presets/complete
+	id = "Master Server"
+	freq_listening = list()
 
 /obj/machinery/telecomms/server/presets/command
 	id = "Command Server"
@@ -197,3 +214,7 @@
 	id = "Broadcaster B"
 	network = "tcommsat"
 	autolinkers = list("broadcasterB")
+
+/obj/machinery/telecomms/broadcaster/preset_complete
+	name = "Broadcaster"
+	network = "tcommsat"

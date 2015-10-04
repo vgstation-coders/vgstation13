@@ -3,6 +3,7 @@
 #define COMM_SCREEN_STAT		2
 #define COMM_SCREEN_MESSAGES	3
 #define COMM_SCREEN_SECLEVEL	4
+#define COMM_SCREEN_ERT			5
 
 var/shuttle_call/shuttle_calls[0]
 
@@ -56,14 +57,18 @@ var/shuttle_call/shuttle_calls[0]
 	var/stat_msg2
 	var/display_type="blank"
 
-	l_color = "#0000FF"
+	light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/communications/Topic(href, href_list)
 	if(..(href, href_list))
 		return
 
+	if(href_list["close"])
+		if(usr.machine == src) usr.unset_machine()
+		return 1
+
 	if (!(src.z in list(STATION_Z,CENTCOMM_Z)))
-		usr << "\red <b>Unable to establish a connection</b>: \black You're too far away from the station!"
+		usr << "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!"
 		return
 
 	usr.set_machine(src)
@@ -80,6 +85,8 @@ var/shuttle_call/shuttle_calls[0]
 			if (istype(I, /obj/item/device/pda))
 				var/obj/item/device/pda/pda = I
 				I = pda.id
+			if (istype(I,/obj/item/weapon/card/emag))
+				emag(usr)
 			if (I && istype(I))
 				if(src.check_access(I))
 					authenticated = 1
@@ -88,7 +95,6 @@ var/shuttle_call/shuttle_calls[0]
 		if("logout")
 			authenticated = 0
 			setMenuState(usr,COMM_SCREEN_MAIN)
-
 		// ALART LAVUL
 		if("changeseclevel")
 			setMenuState(usr,COMM_SCREEN_SECLEVEL)
@@ -133,11 +139,63 @@ var/shuttle_call/shuttle_calls[0]
 				if(!input || !(usr in view(1,src)))
 					return
 				captain_announce(input)//This should really tell who is, IE HoP, CE, HoS, RD, Captain
-				log_say("[key_name(usr)] has made a captain announcement: [input]")
+				var/turf/T = get_turf(usr)
+				log_say("[key_name(usr)] (@[T.x],[T.y],[T.z]) has made a captain announcement: [input]")
 				message_admins("[key_name_admin(usr)] has made a captain announcement.", 1)
 				message_cooldown = 1
 				spawn(600)//One minute cooldown
 					message_cooldown = 0
+
+		if("emergency_screen")
+			var/mob/M = usr
+			var/obj/item/weapon/card/id/I = M.get_active_hand()
+			if (istype(I, /obj/item/device/pda))
+				var/obj/item/device/pda/pda = I
+				I = pda.id
+			if (I && istype(I))
+				if(access_captain in I.access)
+					authenticated = 2
+			if(authenticated != 2)
+				usr << "<span class='warning'>You do not have clearance to use this function.</span>"
+				return
+			setMenuState(usr,COMM_SCREEN_ERT)
+			return
+		if("request_emergency_team")
+			if(menu_state != COMM_SCREEN_ERT) return //Not on the right screen.
+			if ((!(ticker) || emergency_shuttle.location))
+				usr << "<span class='warning'>Warning: The evac shuttle has already arrived.</span>"
+				return
+
+			if(!universe.OnShuttleCall(usr))
+				usr << "<span class='notice'>\The [src.name] cannot establish a bluespace connection.</span>"
+				return
+
+			if(sent_strike_team)
+				usr << "<span class='warning'>PKI AUTH ERROR: SERVER REPORTS BLACKLISTED COMMUNICATION KEY PLEASE CONTACT SERVICE TECHNICIAN</span>"
+				return
+
+			if(world.time < 6000)
+				usr << "<span class='notice'>The emergency response team is away on another mission, Please wait another [round((6000-world.time)/600)] minute\s before trying again.</span>"
+				return
+			if(emergency_shuttle.online)
+				usr << "The emergency shuttle is already on its way."
+				return
+			if(!(get_security_level() in list("red", "delta")))
+				usr << "<span class='notice'>The station must be in an emergency to request a Response Team.</span>"
+				return
+			if(authenticated != 2 || issilicon(usr))
+				usr << "<span class='warning'>\The [src.name]'s screen flashes, \"Access Denied\".</span>"
+				return
+			if(send_emergency_team)
+				usr << "<span class='notice'>Central Command has already dispatched a Response Team to [station_name()]</span>"
+				return
+
+			var/response = alert(usr,"Are you sure you want to request a response team?", "ERT Request", "Yes", "No")
+			if(response != "Yes")
+				return
+			trigger_armed_response_team(1)
+			setMenuState(usr,COMM_SCREEN_MAIN)
+			return
 
 		if("callshuttle")
 			if(src.authenticated)
@@ -206,16 +264,17 @@ var/shuttle_call/shuttle_calls[0]
 		if("MessageCentcomm")
 			if(src.authenticated==2)
 				if(centcomm_message_cooldown)
-					usr << "\red Arrays recycling.  Please stand by."
+					usr << "<span class='warning'>Arrays recycling.  Please stand by for a few seconds.</span>"
 					return
 				var/input = stripped_input(usr, "Please choose a message to transmit to Centcomm via quantum entanglement.  Please be aware that this process is very expensive, and abuse will lead to... termination.  Transmission does not guarantee a response. There is a 30 second delay before you may send another message, be clear, full and concise.", "To abort, send an empty message.", "")
 				if(!input || !(usr in view(1,src)))
 					return
 				Centcomm_announce(input, usr)
-				usr << "\blue Message transmitted."
-				log_say("[key_name(usr)] has made an IA Centcomm announcement: [input]")
+				usr << "<span class='notice'>Message transmitted.</span>"
+				var/turf/T = get_turf(usr)
+				log_say("[key_name(usr)] (@[T.x],[T.y],[T.z]) has sent a bluespace message to Centcomm: [input]")
 				centcomm_message_cooldown = 1
-				spawn(300)//10 minute cooldown
+				spawn(300)//30 seconds cooldown
 					centcomm_message_cooldown = 0
 			setMenuState(usr,COMM_SCREEN_MAIN)
 
@@ -224,16 +283,17 @@ var/shuttle_call/shuttle_calls[0]
 		if("MessageSyndicate")
 			if((src.authenticated==2) && (src.emagged))
 				if(centcomm_message_cooldown)
-					usr << "\red Arrays recycling.  Please stand by."
+					usr << "<span class='warning'>Arrays recycling.  Please stand by for a few seconds.</span>"
 					return
 				var/input = stripped_input(usr, "Please choose a message to transmit to \[ABNORMAL ROUTING CORDINATES\] via quantum entanglement.  Please be aware that this process is very expensive, and abuse will lead to... termination. Transmission does not guarantee a response. There is a 30 second delay before you may send another message, be clear, full and concise.", "To abort, send an empty message.", "")
 				if(!input || !(usr in view(1,src)))
 					return
 				Syndicate_announce(input, usr)
-				usr << "\blue Message transmitted."
-				log_say("[key_name(usr)] has made a Syndicate announcement: [input]")
+				usr << "<span class='notice'>Message transmitted.</span>"
+				var/turf/T = get_turf(usr)
+				log_say("[key_name(usr)] (@[T.x],[T.y],[T.z]) has sent a bluespace message to the syndicate: [input]")
 				centcomm_message_cooldown = 1
-				spawn(300)//10 minute cooldown
+				spawn(300)//30 seconds cooldown
 					centcomm_message_cooldown = 0
 			setMenuState(usr,COMM_SCREEN_MAIN)
 
@@ -241,12 +301,9 @@ var/shuttle_call/shuttle_calls[0]
 			usr << "Backup routing data restored!"
 			src.emagged = 0
 			setMenuState(usr,COMM_SCREEN_MAIN)
+			update_icon()
 
 	return 1
-
-/obj/machinery/computer/communcations/emag(mob/user as mob)
-	src.emagged = 1
-	user << "You scramble the communication routing circuits!"
 
 /obj/machinery/computer/communications/attack_ai(var/mob/user as mob)
 	src.add_hiddenprint(user)
@@ -261,7 +318,7 @@ var/shuttle_call/shuttle_calls[0]
 		return
 
 	if (!(src.z in list(STATION_Z, CENTCOMM_Z)))
-		user << "\red <b>Unable to establish a connection</b>: \black You're too far away from the station!"
+		user << "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!"
 		return
 
 	ui_interact(user)
@@ -303,6 +360,7 @@ var/shuttle_call/shuttle_calls[0]
 		list("id"=SEC_LEVEL_BLUE,  "name"="Blue"),
 		//SEC_LEVEL_RED = list("name"="Red"),
 	)
+	data["ert_sent"] = send_emergency_team
 
 	var/msg_data[0]
 	for(var/i=1;i<=src.messagetext.len;i++)
@@ -328,7 +386,7 @@ var/shuttle_call/shuttle_calls[0]
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
-        // for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
+        // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
 		ui = new(user, src, ui_key, "comm_console.tmpl", "Communications Console", 400, 500)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
@@ -337,35 +395,64 @@ var/shuttle_call/shuttle_calls[0]
 		// auto update every Master Controller tick
 		ui.set_auto_update(1)
 
+/obj/machinery/computer/communications/emag(mob/user as mob)
+	if(!emagged)
+		emagged = 1
+		user << "Syndicate routing data uploaded!"
+		new/obj/effect/effect/sparks(get_turf(src))
+		playsound(loc,"sparks",50,1)
+		authenticated = 2
+		setMenuState(usr,COMM_SCREEN_MAIN)
+		update_icon()
+		return 1
+	return
+
+
+/obj/machinery/computer/communications/update_icon()
+	..()
+	var/initial_icon = initial(icon_state)
+	icon_state = "[emagged ? "[initial_icon]-emag" : "[initial_icon]"]"
+	if(stat & BROKEN)
+		icon_state = "[initial_icon]b"
+	else if(stat & NOPOWER)
+		icon_state = "[initial_icon]0"
+
+
 /obj/machinery/computer/communications/proc/setCurrentMessage(var/mob/user,var/value)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/communications/proc/setCurrentMessage() called tick#: [world.time]")
 	if(issilicon(user))
 		aicurrmsg=value
 	else
 		currmsg=value
 
 /obj/machinery/computer/communications/proc/getCurrentMessage(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/communications/proc/getCurrentMessage() called tick#: [world.time]")
 	if(issilicon(user))
 		return aicurrmsg
 	else
 		return currmsg
 
 /obj/machinery/computer/communications/proc/setMenuState(var/mob/user,var/value)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/communications/proc/setMenuState() called tick#: [world.time]")
 	if(issilicon(user))
 		ai_menu_state=value
 	else
 		menu_state=value
 
 /obj/machinery/computer/communications/proc/getMenuState(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/communications/proc/getMenuState() called tick#: [world.time]")
 	if(issilicon(user))
 		return ai_menu_state
 	else
 		return menu_state
 
 /proc/enable_prison_shuttle(var/mob/user)
-	for(var/obj/machinery/computer/prison_shuttle/PS in world)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/enable_prison_shuttle() called tick#: [world.time]")
+	for(var/obj/machinery/computer/prison_shuttle/PS in machines)
 		PS.allowedtocall = !(PS.allowedtocall)
 
 /proc/call_shuttle_proc(var/mob/user, var/justification)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/call_shuttle_proc() called tick#: [world.time]")
 	if ((!(ticker) || emergency_shuttle.location))
 		return
 
@@ -377,7 +464,7 @@ var/shuttle_call/shuttle_calls[0]
 		return
 
 	if(world.time < 6000) // Ten minute grace period to let the game get going without lolmetagaming. -- TLE
-		user << "The emergency shuttle is refueling. Please wait another [round((6000-world.time)/600)] minutes before trying again."
+		user << "The emergency shuttle is refueling. Please wait another [round((6000-world.time)/600)] minute\s before trying again."
 		return
 
 	if(emergency_shuttle.direction == -1)
@@ -403,6 +490,7 @@ var/shuttle_call/shuttle_calls[0]
 	return
 
 /proc/init_shift_change(var/mob/user, var/force = 0)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/init_shift_change() called tick#: [world.time]")
 	if ((!( ticker ) || emergency_shuttle.location))
 		return
 
@@ -448,6 +536,7 @@ var/shuttle_call/shuttle_calls[0]
 	return
 
 /proc/recall_shuttle(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/recall_shuttle() called tick#: [world.time]")
 	if ((!( ticker ) || emergency_shuttle.location || emergency_shuttle.direction == 0 || emergency_shuttle.timeleft() < 300))
 		return
 	if( ticker.mode.name == "blob" || ticker.mode.name == "meteor")
@@ -461,11 +550,13 @@ var/shuttle_call/shuttle_calls[0]
 
 /obj/machinery/computer/communications/proc/post_status(var/command, var/data1, var/data2)
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/communications/proc/post_status() called tick#: [world.time]")
+
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(1435)
 
 	if(!frequency) return
 
-	var/datum/signal/status_signal = new
+	var/datum/signal/status_signal = getFromPool(/datum/signal)
 	status_signal.source = src
 	status_signal.transmission_method = 1
 	status_signal.data["command"] = command
@@ -484,7 +575,7 @@ var/shuttle_call/shuttle_calls[0]
 
 /obj/machinery/computer/communications/Destroy()
 
-	for(var/obj/machinery/computer/communications/commconsole in world)
+	for(var/obj/machinery/computer/communications/commconsole in machines)
 		if(istype(commconsole.loc,/turf) && commconsole != src)
 			return ..()
 
@@ -509,7 +600,7 @@ var/shuttle_call/shuttle_calls[0]
 
 /obj/item/weapon/circuitboard/communications/Destroy()
 
-	for(var/obj/machinery/computer/communications/commconsole in world)
+	for(var/obj/machinery/computer/communications/commconsole in machines)
 		if(istype(commconsole.loc,/turf))
 			return ..()
 

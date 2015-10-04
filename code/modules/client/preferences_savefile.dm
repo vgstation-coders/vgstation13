@@ -10,8 +10,11 @@
 //if a file can't be updated, return 0 to delete it and start again
 //if a file was updated, return 1
 
+/// IF YOU NEED A FIELD ADDED TO THE DATABASE, CREATE A MIGRATION SO SHIT GETS UPDATED.
+/// SEE code/modules/migrations/SS13_Prefs/
 
 /datum/preferences/proc/savefile_update()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/savefile_update() called tick#: [world.time]")
 	// Preseed roles.
 	for(var/role_id in special_roles)
 		roles[role_id]=0
@@ -34,12 +37,24 @@
 
 
 /datum/preferences/proc/load_path(ckey,filename="preferences.sav")
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/load_path() called tick#: [world.time]")
 	if(!ckey)	return
 	path = "data/player_saves/[copytext(ckey,1,2)]/[ckey]/[filename]"
 	savefile_version = SAVEFILE_VERSION_MAX
 
 
+/datum/preferences/proc/SetChangelog(ckey,hash)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/SetChangelog() called tick#: [world.time]")
+	lastchangelog=hash
+	var/database/query/q = new
+	q.Add("UPDATE client SET lastchangelog=? WHERE ckey=?",lastchangelog,ckey)
+	if(!q.Execute(db))
+		message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
+		warning("Error #:[q.Error()] - [q.ErrorMsg()]")
+		return 0
+
 /datum/preferences/proc/load_preferences_sqlite(var/ckey)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/load_preferences_sqlite() called tick#: [world.time]")
 	var/list/preference_list_client = new
 	var/database/query/check = new
 	var/database/query/q = new
@@ -72,8 +87,11 @@
 	warns			=	text2num(preference_list_client["warns"])
 	warnbans		=	text2num(preference_list_client["warnsbans"])
 	volume			=	text2num(preference_list_client["volume"])
+	usewmp			=	text2num(preference_list_client["usewmp"])
 	special_popup	=	text2num(preference_list_client["special"])
 	randomslot		=	text2num(preference_list_client["randomslot"])
+	usenanoui		=	text2num(preference_list_client["usenanoui"])
+	progress_bars	=	text2num(preference_list_client["progress_bars"])
 
 	ooccolor		= 	sanitize_hexcolor(ooccolor, initial(ooccolor))
 	lastchangelog	= 	sanitize_text(lastchangelog, initial(lastchangelog))
@@ -85,12 +103,15 @@
 	UI_style_alpha	= 	sanitize_integer(UI_style_alpha, 0, 255, initial(UI_style_alpha))
 	randomslot		= 	sanitize_integer(randomslot, 0, 1, initial(randomslot))
 	volume			= 	sanitize_integer(volume, 0, 100, initial(volume))
+	usewmp			= 	sanitize_integer(usewmp, 0, 1, initial(usewmp))
 	special_popup	= 	sanitize_integer(special_popup, 0, 1, initial(special_popup))
-
+	usenanoui		= 	sanitize_integer(usenanoui, 0, 1, initial(usenanoui))
+	progress_bars	= 	sanitize_integer(progress_bars, 0, 1, initial(progress_bars))
 	return 1
 
 
 /datum/preferences/proc/load_preferences()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/load_preferences() called tick#: [world.time]")
 	if(!path)				return 0
 	if(!fexists(path))		return 0
 	var/savefile/S = new /savefile(path)
@@ -136,6 +157,7 @@
 
 
 /datum/preferences/proc/save_preferences_sqlite(var/user, var/ckey)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/save_preferences_sqlite() called tick#: [world.time]")
 	if(!(world.timeofday >= (lastPolled + POLLED_LIMIT)))
 		user << "You need to wait [round((((lastPolled + POLLED_LIMIT) - world.timeofday) / 10))] seconds before you can save again."
 		return
@@ -145,15 +167,15 @@
 	check.Add("SELECT ckey FROM client WHERE ckey = ?", ckey)
 	if(check.Execute(db))
 		if(!check.NextRow())
-			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, special) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",\
-			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, special_popup)
+			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, progress_bars) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
+			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, progress_bars)
 			if(!q.Execute(db))
 				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 				warning("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 		else
-			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,special=? WHERE ckey = ?",\
-			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, special_popup, ckey)
+			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,progress_bars=? WHERE ckey = ?",\
+			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, progress_bars, ckey)
 			if(!q.Execute(db))
 				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 				warning("Error #:[q.Error()] - [q.ErrorMsg()]")
@@ -167,6 +189,7 @@
 	return 1
 
 /datum/preferences/proc/save_preferences()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/save_preferences() called tick#: [world.time]")
 	if(!path)				return 0
 	var/savefile/S = new /savefile(path)
 	if(!S)					return 0
@@ -191,6 +214,7 @@
 
 //saving volume changes
 /datum/preferences/proc/save_volume()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/save_volume() called tick#: [world.time]")
 	if(!path)				return 0
 	var/savefile/S = new /savefile(path)
 	if(!S)					return 0
@@ -200,6 +224,7 @@
 	return 1
 
 /datum/preferences/proc/load_save_sqlite(var/ckey, var/user, var/slot)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/load_save_sqlite() called tick#: [world.time]")
 	var/list/preference_list = new
 	var/database/query/q     = new
 	var/database/query/check = new
@@ -228,6 +253,9 @@ SELECT
     limbs.r_hand,
     limbs.heart,
     limbs.eyes,
+    limbs.lungs,
+    limbs.liver,
+    limbs.kidneys,
     players.player_ckey,
     players.player_slot,
     players.ooc_notes,
@@ -365,6 +393,9 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	organ_data["r_hand"]= preference_list["r_hand"]
 	organ_data["heart"] = preference_list["heart"]
 	organ_data["eyes"] 	= preference_list["eyes"]
+	organ_data["lungs"] = preference_list["lungs"]
+	organ_data["kidneys"]=preference_list["kidneys"]
+	organ_data["liver"] = preference_list["liver"]
 
 	alternate_option	= text2num(preference_list["alternate_option"])
 	job_civilian_high	= text2num(preference_list["job_civilian_high"])
@@ -444,6 +475,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 
 
 /datum/preferences/proc/load_save(dir)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/load_save() called tick#: [world.time]")
 	var/savefile/S = new /savefile(path)
 	if(!S) return 0
 	S.cd = dir
@@ -548,6 +580,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 
 
 /datum/preferences/proc/random_character_sqlite(var/user, var/ckey)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/random_character_sqlite() called tick#: [world.time]")
 	var/database/query/q = new
 	var/list/slot_list = new
 	q.Add("SELECT player_slot FROM players WHERE player_ckey=?", ckey)
@@ -563,6 +596,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	return 1
 
 /datum/preferences/proc/random_character()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/random_character() called tick#: [world.time]")
 	if(!path)				return 0
 	if(!fexists(path))		return 0
 	var/savefile/S = new /savefile(path)
@@ -583,6 +617,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	return 1
 
 /datum/preferences/proc/load_character(slot)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/load_character() called tick#: [world.time]")
 	if(!path)				return 0
 	if(!fexists(path))		return 0
 	var/savefile/S = new /savefile(path)
@@ -598,6 +633,8 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	return 1
 
 /datum/preferences/proc/save_character_sqlite(var/ckey, var/user, var/slot)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/save_character_sqlite() called tick#: [world.time]")
 
 	if(slot > MAX_SAVE_SLOTS)
 		user << "You are limited to 8 character slots."
@@ -731,6 +768,8 @@ AND players.player_slot = ? ;"}, ckey, slot)
 
 
 /datum/preferences/proc/save_character()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/preferences/proc/save_character() called tick#: [world.time]")
 
 	if(!path)				return 0
 	var/savefile/S = new /savefile(path)

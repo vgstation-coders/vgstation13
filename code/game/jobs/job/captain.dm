@@ -25,7 +25,9 @@
 			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		var/obj/item/clothing/under/U = new /obj/item/clothing/under/rank/captain(H)
-		U.hastie = new /obj/item/clothing/tie/medal/gold/captain(U)
+		var/obj/item/clothing/accessory/medal/gold/captain/medal = new
+		U.accessories += medal
+		medal.on_attached(null, U)
 		H.equip_or_collect(U, slot_w_uniform)
 		//H.equip_or_collect(new /obj/item/device/pda/captain(H), slot_belt)
 		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
@@ -33,8 +35,10 @@
 		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
 		if(H.backbag == 1)
 			H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H), slot_r_hand)
+			H.equip_or_collect(new /obj/item/weapon/gun/energy/gun(H), slot_l_hand)
 		else
 			H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H.back), slot_in_backpack)
+			H.equip_or_collect(new /obj/item/weapon/gun/energy/gun(H), slot_in_backpack)
 		var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 		L.imp_in = H
 		L.implanted = 1
@@ -91,4 +95,10 @@
 			H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H), slot_r_hand)
 		else
 			H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H.back), slot_in_backpack)
+		var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
+		L.imp_in = H
+		L.implanted = 1
+		var/datum/organ/external/affected = H.get_organ("head")
+		affected.implants += L
+		L.part = affected
 		return 1

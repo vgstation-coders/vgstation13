@@ -34,12 +34,14 @@
 	return attack_hand(user)
 
 /obj/item/weapon/dnainjector/proc/GetRealBlock(var/selblock)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/dnainjector/proc/GetRealBlock() called tick#: [world.time]")
 	if(selblock==0)
 		return block
 	else
 		return selblock
 
 /obj/item/weapon/dnainjector/proc/GetState(var/selblock=0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/dnainjector/proc/GetState() called tick#: [world.time]")
 	var/real_block=GetRealBlock(selblock)
 	if(buf.types&DNA2_BUF_SE)
 		return buf.dna.GetSEState(real_block)
@@ -47,6 +49,7 @@
 		return buf.dna.GetUIState(real_block)
 
 /obj/item/weapon/dnainjector/proc/SetState(var/on, var/selblock=0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/dnainjector/proc/SetState() called tick#: [world.time]")
 	var/real_block=GetRealBlock(selblock)
 	if(buf.types&DNA2_BUF_SE)
 		return buf.dna.SetSEState(real_block,on)
@@ -54,6 +57,7 @@
 		return buf.dna.SetUIState(real_block,on)
 
 /obj/item/weapon/dnainjector/proc/GetValue(var/selblock=0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/dnainjector/proc/GetValue() called tick#: [world.time]")
 	var/real_block=GetRealBlock(selblock)
 	if(buf.types&DNA2_BUF_SE)
 		return buf.dna.GetSEValue(real_block)
@@ -61,6 +65,7 @@
 		return buf.dna.GetUIValue(real_block)
 
 /obj/item/weapon/dnainjector/proc/SetValue(var/val,var/selblock=0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/dnainjector/proc/SetValue() called tick#: [world.time]")
 	var/real_block=GetRealBlock(selblock)
 	if(buf.types&DNA2_BUF_SE)
 		return buf.dna.SetSEValue(real_block,val)
@@ -68,6 +73,7 @@
 		return buf.dna.SetUIValue(real_block,val)
 
 /obj/item/weapon/dnainjector/proc/inject(mob/M as mob, mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/dnainjector/proc/inject() called tick#: [world.time]")
 	if(istype(M,/mob/living/carbon/human/manifested))
 		M << "<span class='warning'> Apparently it didn't work.</span>"
 		if(M != user)
@@ -97,8 +103,8 @@
 					M.dna.SetSEValue(block,src.GetValue())
 				domutcheck(M, null)
 				uses--
-				if(prob(5))
-					trigger_side_effect(M)
+				//if(prob(5))
+					//trigger_side_effect(M)
 
 	spawn(0)//this prevents the collapse of space-time continuum
 		if (user)
@@ -109,8 +115,8 @@
 /obj/item/weapon/dnainjector/attack(mob/M as mob, mob/user as mob)
 	if (!istype(M, /mob))
 		return
-	if (!(istype(usr, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
-		user << "\red You don't have the dexterity to do this!"
+	if (!user.dexterity_check())
+		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
 		return
 
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been injected with [name] by [user.name] ([user.ckey])</font>")
@@ -138,19 +144,19 @@
 				M.requests += O
 				if (buf.types & DNA2_BUF_SE)
 					if(block)// Isolated injector
-						testing("Isolated block [block] injector with contents: [GetValue()]")
+						//testing("Isolated block [block] injector with contents: [GetValue()]")
 						if (GetState() && block == MONKEYBLOCK && istype(M, /mob/living/carbon/human)  )
-							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] \red(MONKEY)")
+							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] <span class='warning'>(MONKEY)</span>")
 							log_attack("[key_name(user)] injected [key_name(M)] with the Isolated [name] (MONKEY)")
-							log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] \red(MONKEY)")
+							log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] <span class='warning'>(MONKEY)</span>")
 						else
 							log_attack("[key_name(user)] injected [key_name(M)] with the Isolated [name]")
 					else
-						testing("DNA injector with contents: [english_list(buf.dna.SE)]")
+						//testing("DNA injector with contents: [english_list(buf.dna.SE)]")
 						if (GetState(MONKEYBLOCK) && istype(M, /mob/living/carbon/human) )
-							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the [name] \red(MONKEY)")
+							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the [name] <span class='warning'>(MONKEY)</span>")
 							log_attack("[key_name(user)] injected [key_name(M)] with the [name] (MONKEY)")
-							log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the [name] \red(MONKEY)")
+							log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the [name] <span class='warning'>(MONKEY)</span>")
 						else
 	//						message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the [name]")
 							log_attack("[key_name(user)] injected [key_name(M)] with the [name]")
@@ -165,25 +171,25 @@
 			if(!inuse)
 
 				for(var/mob/O in viewers(M, null))
-					O.show_message(text("\red [] has been injected with [] by [].", M, src, user), 1)
+					O.show_message(text("<span class='warning'>[] has been injected with [] by [].</span>", M, src, user), 1)
 					//Foreach goto(192)
 				if (!(istype(M, /mob/living/carbon/human) || istype(M, /mob/living/carbon/monkey)))
-					user << "\red Apparently it didn't work."
+					user << "<span class='warning'>Apparently it didn't work.</span>"
 					return
 
 				if (buf.types & DNA2_BUF_SE)
 					if(block)// Isolated injector
-						testing("Isolated block [block] injector with contents: [GetValue()]")
+						//testing("Isolated block [block] injector with contents: [GetValue()]")
 						if (GetState() && block == MONKEYBLOCK && istype(M, /mob/living/carbon/human)  )
-							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] \red(MONKEY)")
+							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] <span class='warning'>(MONKEY)</span>")
 							log_attack("[key_name(user)] injected [key_name(M)] with the Isolated [name] (MONKEY)")
-							log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] \red(MONKEY)")
+							log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] <span class='warning'>(MONKEY)</span>")
 						else
 							log_attack("[key_name(user)] injected [key_name(M)] with the Isolated [name]")
 					else
-						testing("DNA injector with contents: [english_list(buf.dna.SE)]")
+						//testing("DNA injector with contents: [english_list(buf.dna.SE)]")
 						if (GetState(MONKEYBLOCK) && istype(M, /mob/living/carbon/human))
-							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the [name] \red(MONKEY)")
+							message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the [name] <span class='warning'>(MONKEY)</span>")
 							log_game("[key_name(user)] injected [key_name(M)] with the [name] (MONKEY)")
 						else
 	//						message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the [name]")
@@ -202,9 +208,9 @@
 				*/
 				if(user)//If the user still exists. Their mob may not.
 					if(M)//Runtime fix: If the mob doesn't exist, mob.name doesnt work. - Nodrak
-						user.show_message(text("\red You inject [M.name]"))
+						user.show_message(text("<span class='warning'>You inject [M.name]</span>"))
 					else
-						user.show_message(text("\red You finish the injection."))
+						user.show_message(text("<span class='warning'>You finish the injection.</span>"))
 	return
 
 
@@ -510,7 +516,7 @@
 		block = PSYRESISTBLOCK
 		..()
 
-/obj/item/weapon/dnainjector/darkcloak
+/*/obj/item/weapon/dnainjector/darkcloak
 	name = "DNA-Injector (Dark Cloak)"
 	desc = "BLEH BLEH, I AM HERE TO SUCK YOUR BLOOD!"
 	datatype = DNA2_BUF_SE
@@ -529,7 +535,7 @@
 	New()
 		block = SHADOWBLOCK
 		..()
-
+*/
 /obj/item/weapon/dnainjector/chameleon
 	name = "DNA-Injector (Chameleon)"
 	desc = "You cant see me."
@@ -1195,4 +1201,42 @@
 	//block = 14
 	New()
 		block = SANSBLOCK
+		..()
+
+/obj/item/weapon/dnainjector/farsightmut
+	name = "DNA-Injector (Farsight)"
+	desc = "This will allow you to focus your eyes better."
+	datatype = DNA2_BUF_SE
+	value = 0xFFF
+	//block = 2
+	New()
+		block = FARSIGHTBLOCK
+		..()
+
+/obj/item/weapon/dnainjector/antifarsight
+	name = "DNA-Injector (Anti-Farsight)"
+	desc = "No fun allowed"
+	datatype = DNA2_BUF_SE
+	value = 0x001
+	//block = 2
+	New()
+		block = FARSIGHTBLOCK
+		..()
+
+/obj/item/weapon/dnainjector/remotesay
+	name = "DNA-Injector (Remote Say)"
+	desc = "Share it with the world."
+	datatype = DNA2_BUF_SE
+	value = 0xFFF
+	New()
+		block = REMOTETALKBLOCK
+		..()
+
+/obj/item/weapon/dnainjector/antiremotesay
+	name = "DNA-Injector (Remote Say)"
+	desc = "Keep it to yourself."
+	datatype = DNA2_BUF_SE
+	value = 0x001
+	New()
+		block = REMOTETALKBLOCK
 		..()

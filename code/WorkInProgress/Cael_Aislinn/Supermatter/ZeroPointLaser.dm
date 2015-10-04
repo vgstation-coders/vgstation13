@@ -31,6 +31,7 @@
 	set name = "Rotate"
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/zero_point_emitter/verb/rotate()  called tick#: [world.time]")
 
 	if (src.anchored || usr:stat)
 		usr << "It is fastened to the floor!"
@@ -64,9 +65,9 @@
 				src.use_power = 2
 			update_icon()
 		else
-			user << "\red The controls are locked!"
+			user << "<span class='warning'>The controls are locked!</span>"
 	else
-		user << "\red The [src] needs to be firmly secured to the floor first."
+		user << "<span class='warning'>The [src] needs to be firmly secured to the floor first.</span>"
 		return 1
 
 
@@ -119,7 +120,7 @@
 	if(!emagged)
 		locked = 0
 		emagged = 1
-		user.visible_message("[user.name] emags the [src.name].","\red You short out the lock.")
+		user.visible_message("[user.name] emags the [src.name].","<span class='warning'>You short out the lock.</span>")
 		return 1
 	return -1
 
@@ -129,7 +130,7 @@
 
 	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
 		if(emagged)
-			user << "\red The lock seems to be broken"
+			user << "<span class='warning'>The lock seems to be broken</span>"
 			return
 		if(src.allowed(user))
 			if(active)
@@ -137,9 +138,9 @@
 				user << "The controls are now [src.locked ? "locked." : "unlocked."]"
 			else
 				src.locked = 0 //just in case it somehow gets locked
-				user << "\red The controls can only be locked when the [src] is online"
+				user << "<span class='warning'>The controls can only be locked when the [src] is online</span>"
 		else
-			user << "\red Access denied."
+			user << "<span class='warning'>Access denied.</span>"
 		return
 	return
 
@@ -150,7 +151,7 @@
 	return
 
 /obj/machinery/zero_point_emitter/Topic(href, href_list)
-	..()
+	if(..()) return 1
 	if( href_list["input"] )
 		var/i = text2num(href_list["input"])
 		var/d = i
@@ -159,13 +160,13 @@
 		new_power = min(new_power,0.01)		//highest possible value
 		energy = new_power
 		//
-		for(var/obj/machinery/computer/lasercon/comp in world)
+		for(var/obj/machinery/computer/lasercon/comp in machines)
 			if(comp.id == src.id)
 				comp.updateDialog()
 	else if( href_list["online"] )
 		active = !active
 		//
-		for(var/obj/machinery/computer/lasercon/comp in world)
+		for(var/obj/machinery/computer/lasercon/comp in machines)
 			if(comp.id == src.id)
 				comp.updateDialog()
 	else if( href_list["freq"] )
@@ -175,6 +176,6 @@
 		new_freq = min(new_freq,20000)	//highest possible value
 		frequency = new_freq
 		//
-		for(var/obj/machinery/computer/lasercon/comp in world)
+		for(var/obj/machinery/computer/lasercon/comp in machines)
 			if(comp.id == src.id)
 				comp.updateDialog()

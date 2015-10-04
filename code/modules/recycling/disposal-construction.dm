@@ -10,7 +10,7 @@
 	anchored = 0
 	density = 0
 	pressure_resistance = 5*ONE_ATMOSPHERE
-	m_amt = 1850
+	starting_materials = list(MAT_IRON = 1850)
 	w_type = RECYK_METAL
 	level = 2
 	var/ptype = 0
@@ -21,6 +21,7 @@
 
 	// update iconstate and dpdir due to dir and type
 	proc/update()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/update() called tick#: [world.time]")
 		var/flip = turn(dir, 180)
 		var/left = turn(dir, 90)
 		var/right = turn(dir, -90)
@@ -59,14 +60,13 @@
 				base_state = "intake"
 				dpdir = dir
 
-			if(9)
+			if(9, 11)
 				base_state = "pipe-j1s"
 				dpdir = dir | right | flip
 
-			if(10)
+			if(10, 12)
 				base_state = "pipe-j2s"
 				dpdir = dir | left | flip
-
 
 		if(ptype<6 || ptype>8)
 			icon_state = "con[base_state]"
@@ -79,6 +79,7 @@
 	// hide called by levelupdate if turf intact status changes
 	// change visibility status and force update of icon
 	hide(var/intact)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\verb/hide()  called tick#: [world.time]")
 		invisibility = (intact && level==1) ? 101: 0	// hide if floor is intact
 		update()
 
@@ -88,8 +89,9 @@
 		set name = "Rotate Pipe"
 		set category = "Object"
 		set src in view(1)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\verb/rotate()  called tick#: [world.time]")
 
-		if(usr.stat)
+		if(usr.stat || (usr.status_flags & FAKEDEATH))
 			return
 
 		if(anchored)
@@ -103,7 +105,8 @@
 		set name = "Flip Pipe"
 		set category = "Object"
 		set src in view(1)
-		if(usr.stat)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\verb/flip()  called tick#: [world.time]")
+		if(usr.stat || (usr.status_flags & FAKEDEATH))
 			return
 
 		if(anchored)
@@ -120,11 +123,16 @@
 				ptype = 10
 			if(10)
 				ptype = 9
+			if(11)
+				ptype = 12
+			if(12)
+				ptype = 11
 
 		update()
 
 	// returns the type path of disposalpipe corresponding to this item dtype
 	proc/dpipetype()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/dpipetype() called tick#: [world.time]")
 		switch(ptype)
 			if(0,1)
 				return /obj/structure/disposalpipe/segment
@@ -140,6 +148,8 @@
 				return /obj/machinery/disposal/deliveryChute
 			if(9,10)
 				return /obj/structure/disposalpipe/sortjunction
+			if(11, 12)
+				return /obj/structure/disposalpipe/wrapsortjunction
 		return
 
 
@@ -161,6 +171,9 @@
 				nicetype = "delivery chute"
 			if(9, 10)
 				nicetype = "sorting pipe"
+				ispipe = 1
+			if(11, 12)
+				nicetype = "wrap sorting pipe"
 				ispipe = 1
 			else
 				nicetype = "pipe"
@@ -218,7 +231,7 @@
 				if(W.remove_fuel(0,user))
 					playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
 					user << "Welding the [nicetype] in place."
-					if(do_after(user, 20))
+					if(do_after(user, src, 20))
 						if(!src || !W.isOn()) return
 						user << "The [nicetype] has been welded in place!"
 						update() // TODO: Make this neat
@@ -233,9 +246,13 @@
 							P.updateicon()
 
 							//Needs some special treatment ;)
-							if(ptype==9 || ptype==10)
-								var/obj/structure/disposalpipe/sortjunction/SortP = P
-								SortP.updatedir()
+							switch(ptype)
+								if(9, 10)
+									var/obj/structure/disposalpipe/sortjunction/SortP = P
+									SortP.updatedir()
+								if(11, 12)
+									var/obj/structure/disposalpipe/wrapsortjunction/sort_P = P
+									sort_P.update_dir()
 
 						else if(ptype==6) // Disposal bin
 							var/obj/machinery/disposal/P = new /obj/machinery/disposal(src.loc)

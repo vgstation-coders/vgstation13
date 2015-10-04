@@ -1,6 +1,7 @@
 /datum/configuration
 	var/server_name = null				// server name (for world name / status)
 	var/server_suffix = 0				// generate numeric suffix based on server port
+	var/world_style_config = world_style
 
 	var/nudge_script_path = "nudge.py"  // where the nudge.py script is located
 
@@ -41,7 +42,6 @@
 	var/allow_Metadata = 0				// Metadata is supported.
 	var/popup_admin_pm = 0				//adminPMs to non-admins show in a pop-up 'reply' window when set to 1.
 	var/Ticklag = 0.9
-	var/Tickcomp = 0
 	var/socket_talk	= 0					// use socket_talk to communicate with other processes
 	var/list/resource_urls = null
 	var/antag_hud_allowed = 0			// Ghosts can turn on Antagovision to see a HUD of who is the bad guys this round.
@@ -70,6 +70,8 @@
 	var/cult_ghostwriter = 1               //Allows ghosts to write in blood in cult rounds...
 	var/cult_ghostwriter_req_cultists = 10 //...so long as this many cultists are active.
 
+	var/borer_takeover_immediately = 0
+
 	var/disable_player_mice = 0
 	var/uneducated_mice = 0 //Set to 1 to prevent newly-spawned mice from understanding human speech
 
@@ -77,10 +79,14 @@
 	var/limitalienplayers = 0
 	var/alien_to_human_ratio = 0.5
 
+	//used to determine if cyborgs/AI can speak
+	var/silent_ai = 0
+	var/silent_borg = 0
+
 	var/server
 	var/banappeals
 	var/wikiurl = "http://baystation12.net/wiki/index.php?title=Main_Page"
-	var/vgws_base_url = "http://vg13.undo.it" // No hanging slashes.
+	var/vgws_base_url = "http://ss13.pomf.se" // No hanging slashes.
 	var/forumurl = "http://baystation12.net/forums/"
 
 	var/media_base_url = "" // http://ss13.nexisonline.net/media
@@ -138,6 +144,7 @@
 	var/ghost_interaction = 0
 
 	var/comms_password = ""
+	var/paperwork_library = 0 //use the library DLL.
 
 	var/use_irc_bot = 0
 	var/irc_bot_host = "localhost"
@@ -154,6 +161,11 @@
 	var/emag_recharge_ticks = 0
 
 	var/map_voting = 0
+	var/renders_url = ""
+
+	var/default_ooc_color = "#002eb8"
+
+	var/mommi_static = 0 //Scrambling mobs for mommis or not
 
 /datum/configuration/New()
 	. = ..()
@@ -178,6 +190,7 @@
 	votable_modes += "secret"
 
 /datum/configuration/proc/load(filename, type = "config") //the type can also be game_options, in which case it uses a different switch. not making it separate to not copypaste code - Urist
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/configuration/proc/load() called tick#: [world.time]")
 	var/list/Lines = file2list(filename)
 
 	for(var/t in Lines)
@@ -431,9 +444,6 @@
 				if("socket_talk")
 					socket_talk = text2num(value)
 
-				if("tickcomp")
-					Tickcomp = 1
-
 				if("humans_need_surnames")
 					humans_need_surnames = 1
 
@@ -470,6 +480,9 @@
 
 				if("comms_password")
 					config.comms_password = value
+
+				if("paperwork_library")
+					config.paperwork_library = 1
 
 				if("irc_bot_host")
 					config.irc_bot_host = value
@@ -508,6 +521,10 @@
 					vgws_base_url = value
 				if("map_voting")
 					map_voting = 1
+				if("renders_url")
+					renders_url = value
+				if("mommi_static")
+					mommi_static = 1
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 
@@ -565,10 +582,17 @@
 					config.emag_recharge_rate = value
 				if("emag_recharge_ticks")
 					config.emag_recharge_ticks = value
+				if("silent_ai")
+					config.silent_ai = 1
+				if("silent_borg")
+					config.silent_borg = 1
+				if("borer_takeover_immediately")
+					config.borer_takeover_immediately = 1
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 
 /datum/configuration/proc/loadsql(filename)  // -- TLE
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/configuration/proc/loadsql() called tick#: [world.time]")
 	var/list/Lines = file2list(filename)
 	for(var/t in Lines)
 		if(!t)	continue
@@ -615,6 +639,7 @@
 				diary << "Unknown setting in configuration: '[name]'"
 
 /datum/configuration/proc/loadforumsql(filename)  // -- TLE
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/configuration/proc/loadforumsql() called tick#: [world.time]")
 	var/list/Lines = file2list(filename)
 	for(var/t in Lines)
 		if(!t)	continue
@@ -657,6 +682,7 @@
 				diary << "Unknown setting in configuration: '[name]'"
 
 /datum/configuration/proc/pick_mode(mode_name)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/configuration/proc/pick_mode() called tick#: [world.time]")
 	// I wish I didn't have to instance the game modes in order to look up
 	// their information, but it is the only way (at least that I know of).
 	for (var/T in (typesof(/datum/game_mode) - /datum/game_mode))
@@ -667,6 +693,7 @@
 	return new /datum/game_mode/extended()
 
 /datum/configuration/proc/get_runnable_modes()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/configuration/proc/get_runnable_modes() called tick#: [world.time]")
 	var/list/datum/game_mode/runnable_modes = new
 	for (var/T in (typesof(/datum/game_mode) - /datum/game_mode))
 		var/datum/game_mode/M = new T()

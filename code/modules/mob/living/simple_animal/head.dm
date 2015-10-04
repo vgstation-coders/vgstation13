@@ -34,6 +34,7 @@
 	stop_automated_movement = 1
 
 /mob/living/simple_animal/head/Life()
+	if(timestopped) return 0 //under effects of time magick
 	if(stat == DEAD)
 		if(health > 0)
 			icon_state = icon_living
@@ -48,6 +49,7 @@
 		if(A.ckey)
 			say_something(A)
 /mob/living/simple_animal/head/proc/say_something(mob/A)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/head/proc/say_something() called tick#: [world.time]")
 	if(prob(85))
 		return
 	if(prob(30))

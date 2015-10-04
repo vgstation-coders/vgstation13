@@ -18,11 +18,11 @@
 	air_contents.volume=volume
 
 /obj/machinery/atmospherics/unary/vent/process()
-	..()
+	. = ..()
 
 	CHECK_DISABLED(vents)
 	if (!node)
-		return // Turning off the vent is a PITA. - N3X
+		return// Turning off the vent is a PITA. - N3X
 
 	// New GC does this sometimes
 	if(!loc) return
@@ -33,14 +33,20 @@
 
 	loc.assume_air(removed)
 
+	return 1
+
 
 /obj/machinery/atmospherics/unary/vent/update_icon()
 	if(node)
 		icon_state = "intact"
-		//dir = get_dir(src, node)
-
 	else
 		icon_state = "exposed"
+	..()
+	if (istype(loc, /turf/simulated/floor) && node)
+		var/turf/simulated/floor/floor = loc
+		if(floor.floor_tile && node.alpha == 128)
+			underlays.Cut()
+
 
 
 /obj/machinery/atmospherics/unary/vent/initialize()
@@ -54,11 +60,7 @@
 
 
 /obj/machinery/atmospherics/unary/vent/hide(var/i)
-	if(node)
-		icon_state = "[i == 1 && istype(loc, /turf/simulated) ? "h" : "" ]intact"
-		dir = get_dir(src, node)
-	else
-		icon_state = "exposed"
+	update_icon()
 
 /obj/machinery/atmospherics/unary/vent/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	if(pipe)
@@ -76,23 +78,3 @@
 		node.initialize()
 		node.build_network()
 	return 1
-
-/obj/machinery/atmospherics/unary/vent/attackby(var/obj/item/weapon/W, var/mob/user)
-	if (!istype(W, /obj/item/weapon/wrench))
-		return ..()
-	var/turf/T = get_turf(src)
-	var/datum/gas_mixture/int_air = return_air()
-	var/datum/gas_mixture/env_air = T.return_air()
-	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
-		user << "\red You cannot remove this [src], it too exerted due to internal pressure."
-		add_fingerprint(user)
-		return 1
-	playsound(T, 'sound/items/Ratchet.ogg', 50, 1)
-	user << "\blue You begin to unfasten \the [src]..."
-	if (do_after(user, 40))
-		user.visible_message( \
-			"[user] unfastens \the [src].", \
-			"\blue You have unfastened \the [src].", \
-			"You hear ratchet.")
-		new /obj/item/pipe(T, make_from=src)
-		del(src)

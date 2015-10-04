@@ -6,7 +6,7 @@
 	icon_state = "control"
 	var/icon_mod = "on" // on, critical, or fuck
 	var/old_icon_mod = "on"
-	anchored = 1
+	anchored = 0
 	density = 1
 	use_power = 1
 	idle_power_usage = 100
@@ -41,7 +41,13 @@
 
 /obj/machinery/power/am_control_unit/Destroy()//Perhaps damage and run stability checks rather than just del on the others
 	for(var/obj/machinery/am_shielding/AMS in linked_shielding)
-		del(AMS)
+		AMS.control_unit = null
+		qdel(AMS)
+	for(var/obj/machinery/am_shielding/AMS in linked_cores)
+		AMS.control_unit = null
+		qdel(AMS)
+	qdel(fueljar)
+	fueljar = null
 	..()
 
 
@@ -51,7 +57,7 @@
 		exploded=1
 		explosion(get_turf(src),8,10,12,15)
 		if(src)
-			del(src)
+			qdel(src)
 
 	if(update_shield_icons && !shield_icon_delay)
 		check_shield_icons()
@@ -78,6 +84,7 @@
 
 
 /obj/machinery/power/am_control_unit/proc/produce_power()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/am_control_unit/proc/produce_power() called tick#: [world.time]")
 	playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
 	var/core_power = reported_core_efficiency//Effectively how much fuel we can safely deal with
 	if(core_power <= 0) return 0//Something is wrong
@@ -115,9 +122,7 @@
 	if(prob(100-stability))//Might infect the rest of the machine
 		for(var/obj/machinery/am_shielding/AMS in linked_shielding)
 			AMS.blob_act()
-		spawn(0)
-			//Likely explode
-			del(src)
+		qdel(src)
 		return
 	check_stability()
 	return
@@ -173,17 +178,17 @@
 			src.anchored = 0
 			disconnect_from_network()
 		else
-			user << "\red Once bolted and linked to a shielding unit it the [src.name] is unable to be moved!"
+			user << "<span class='warning'>Once bolted and linked to a shielding unit it the [src.name] is unable to be moved!</span>"
 		return
 
 	if(istype(W, /obj/item/weapon/am_containment))
 		if(fueljar)
-			user << "\red There is already a [fueljar] inside!"
+			user << "<span class='warning'>There is already a [fueljar] inside!</span>"
 			return
 		fueljar = W
 		if(user.client)
 			user.client.screen -= W
-		user.u_equip(W)
+		user.u_equip(W,1)
 		W.loc = src
 		user.update_icons()
 		message_admins("AME loaded with fuel by [user.name] at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
@@ -206,6 +211,7 @@
 
 
 /obj/machinery/power/am_control_unit/proc/add_shielding(var/obj/machinery/am_shielding/AMS, var/AMS_linking = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/am_control_unit/proc/add_shielding() called tick#: [world.time]")
 	if(!istype(AMS)) return 0
 	if(!anchored) return 0
 	if(!AMS_linking && !AMS.link_control(src)) return 0
@@ -215,6 +221,7 @@
 
 
 /obj/machinery/power/am_control_unit/proc/remove_shielding(var/obj/machinery/am_shielding/AMS)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/am_control_unit/proc/remove_shielding() called tick#: [world.time]")
 	if(!istype(AMS)) return 0
 	linked_shielding.Remove(AMS)
 	update_shield_icons = 2
@@ -223,12 +230,14 @@
 
 
 /obj/machinery/power/am_control_unit/proc/check_stability()//TODO: make it break when low also might want to add a way to fix it like a part or such that can be replaced
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/am_control_unit/proc/check_stability() called tick#: [world.time]")
 	if(stability <= 0)
-		del(src)
+		qdel(src)
 	return
 
 
 /obj/machinery/power/am_control_unit/proc/toggle_power()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/am_control_unit/proc/toggle_power() called tick#: [world.time]")
 	active = !active
 	if(active)
 		use_power = 2
@@ -243,6 +252,7 @@
 
 
 /obj/machinery/power/am_control_unit/proc/check_shield_icons()//Forces icon_update for all shields
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/am_control_unit/proc/check_shield_icons() called tick#: [world.time]")
 	if(shield_icon_delay) return
 	shield_icon_delay = 1
 	if(update_shield_icons == 2)//2 means to clear everything and rebuild
@@ -256,12 +266,12 @@
 	else
 		for(var/obj/machinery/am_shielding/AMS in linked_shielding)
 			AMS.update_icon()
-	spawn(20)
-		shield_icon_delay = 0
-	return
+	sleep(20)
+	shield_icon_delay = 0
 
 
 /obj/machinery/power/am_control_unit/proc/check_core_stability()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/am_control_unit/proc/check_core_stability() called tick#: [world.time]")
 	//if(stored_core_stability_delay || linked_cores.len <= 0)	return
 	if(linked_cores.len <=0) return
 	//stored_core_stability_delay = 1
@@ -335,9 +345,12 @@
 
 
 /obj/machinery/power/am_control_unit/Topic(href, href_list)
-	..()
+	if(..()) return 1
+	if(href_list["close"])
+		if(usr.machine == src) usr.unset_machine()
+		return 1
 	//Ignore input if we are broken or guy is not touching us, AI can control from a ways away
-	if(stat & (BROKEN|NOPOWER) || (get_dist(src, usr) > 1 && !istype(usr, /mob/living/silicon/ai)))
+	if(stat & (BROKEN|NOPOWER))
 		usr.unset_machine()
 		usr << browse(null, "window=AMcontrol")
 		return

@@ -10,6 +10,7 @@
 /obj/machinery/computer/telecomms/monitor
 	name = "Telecommunications Monitor"
 	icon_state = "comm_monitor"
+	circuit = "/obj/item/weapon/circuitboard/comm_monitor"
 
 	var/screen = 0				// the screen number:
 	var/list/machinelist = list()	// the machines located by the computer
@@ -19,7 +20,7 @@
 
 	var/temp = ""				// temporary feedback messages
 
-	l_color = "#50AB00"
+	light_color = LIGHT_COLOR_GREEN
 
 /obj/machinery/computer/telecomms/monitor/attack_hand(mob/user as mob)
 	if(stat & (BROKEN|NOPOWER))
@@ -35,7 +36,7 @@
 		if(0)
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\telecomms\telemonitor.dm:34: dat += "<br>[temp]<br><br>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\telecomms\telemonitor.dm:34: dat += "<br>[temp]<br><br>"
 			dat += {"<br>[temp]<br><br>
 				<br>Current Network: <a href='?src=\ref[src];network=1'>[network]</a><br>"}
 			// END AUTOFIX
@@ -45,7 +46,7 @@
 					dat += "<li><a href='?src=\ref[src];viewmachine=[T.id]'>\ref[T] [T.name]</a> ([T.id])</li>"
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\telecomms\telemonitor.dm:40: dat += "</ul>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\telecomms\telemonitor.dm:40: dat += "</ul>"
 				dat += {"</ul>
 					<br><a href='?src=\ref[src];operation=release'>\[Flush Buffer\]</a>"}
 				// END AUTOFIX
@@ -58,7 +59,7 @@
 		if(1)
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\telecomms\telemonitor.dm:49: dat += "<br>[temp]<br>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\telecomms\telemonitor.dm:49: dat += "<br>[temp]<br>"
 			dat += {"<br>[temp]<br>
 				<center><a href='?src=\ref[src];operation=mainmenu'>\[Main Menu\]</a></center>
 				<br>Current Network: [network]<br>
@@ -138,13 +139,14 @@
 	return
 
 /obj/machinery/computer/telecomms/monitor/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
+	if(..())
+		return 1
 	src.updateUsrDialog()
-	return ..()
 
 /obj/machinery/computer/telecomms/monitor/emag(mob/user)
 	if(!emagged)
 		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
-		user << "\blue You you disable the security protocols"
+		user << "<span class='notice'>You you disable the security protocols</span>"
 		return 1
 	return

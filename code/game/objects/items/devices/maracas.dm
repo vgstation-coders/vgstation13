@@ -5,7 +5,8 @@
 	icon_state = "maracas"
 	item_state = "maracas"
 	w_class = 1.0
-	flags = FPRINT | TABLEPASS | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 
 	var/emagged = 0//our maracas are different - Deity Link
@@ -40,4 +41,5 @@
 	chickchicky()
 
 /obj/item/device/maracas/proc/chickchicky()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/maracas/proc/chickchicky() called tick#: [world.time]")
 	playsound(get_turf(src), 'sound/misc/maracas.ogg', 50, 1)

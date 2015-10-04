@@ -1,6 +1,7 @@
 var/list/name_to_mineral
 
 proc/SetupMinerals()
+	//writepanic("[__FILE__].[__LINE__] \\/proc/SetupMinerals() called tick#: [world.time]")
 	name_to_mineral = list()
 	for(var/type in typesof(/mineral) - /mineral)
 		var/mineral/new_mineral = new type
@@ -29,6 +30,7 @@ mineral
 			display_name = name
 
 	proc/UpdateTurf(var/turf/unsimulated/mineral/T)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/UpdateTurf() called tick#: [world.time]")
 		T.UpdateMineral()
 
 mineral/uranium
@@ -164,7 +166,7 @@ mineral/gibtonite
 	name = "Gibtonite"
 	result_amount = 1
 	spread = 1
-	ore = /obj/item/weapon/twohanded/required/gibtonite
+	ore = /obj/item/weapon/gibtonite
 	UpdateTurf(var/turf/T)
 		if(!istype(T,/turf/unsimulated/mineral/gibtonite))
 			T.ChangeTurf(/turf/unsimulated/mineral/gibtonite)

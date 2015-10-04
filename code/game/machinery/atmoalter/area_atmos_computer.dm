@@ -9,13 +9,8 @@
 
 	var/range = 25
 
-	l_color = "#7BF9FF"
-	power_change()
-		..()
-		if(!(stat & (BROKEN|NOPOWER)))
-			SetLuminosity(2)
-		else
-			SetLuminosity(0)
+	light_color = LIGHT_COLOR_CYAN
+	light_range_on = 2
 
 	//Simple variable to prevent me from doing attack_hand in both this and the child computer
 	var/zone = "This computer is working on a wireless range, the range is currently limited to 25 meters."
@@ -118,12 +113,14 @@
 			scrubber.update_icon()
 
 	proc/validscrubber( var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber as obj )
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/validscrubber() called tick#: [world.time]")
 		if(!isobj(scrubber) || get_dist(scrubber.loc, src.loc) > src.range || scrubber.loc.z != src.loc.z)
 			return 0
 
 		return 1
 
 	proc/scanscrubbers()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/scanscrubbers() called tick#: [world.time]")
 		connectedscrubbers = new()
 
 		var/found = 0
@@ -151,14 +148,10 @@
 		var/turf/T_src = get_turf(src)
 		if(!T_src.loc) return 0
 		var/area/A_src = T_src.loc
-		if (A_src.master)
-			A_src = A_src.master
 
 		var/turf/T_scrub = get_turf(scrubber)
 		if(!T_scrub.loc) return 0
 		var/area/A_scrub = T_scrub.loc
-		if (A_scrub.master)
-			A_scrub = A_scrub.master
 
 		if(A_scrub != A_src)
 			return 0
@@ -173,11 +166,11 @@
 		var/turf/T = get_turf(src)
 		if(!T.loc) return
 		var/area/A = get_area_master(T)
-		for(var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in world )
+		for(var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in machines)
 			var/turf/T2 = get_turf(scrubber)
 			if(T2 && T2.loc)
 				var/area/A2 = T2.loc
-				if(istype(A2) && A2.master && A2.master == A )
+				if(istype(A2) && A2 == A )
 					connectedscrubbers += scrubber
 					found = 1
 

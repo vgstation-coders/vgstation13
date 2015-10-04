@@ -1,3 +1,5 @@
+#define NO_GAS 0.01
+#define SOME_GAS 1
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging
 	icon = 'icons/obj/pipes/heat.dmi'
@@ -14,8 +16,19 @@
 
 	burst_type = /obj/machinery/atmospherics/unary/vent/burstpipe/heat_exchanging
 
+	can_be_coloured = 0
+
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/getNodeType(var/node_id)
 	return PIPE_TYPE_HE
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/update_icon(var/adjacent_procd)
+	var/node_list = list(node1,node2)
+	if(!node1 && !node2)
+		qdel(src)
+	if(!adjacent_procd)
+		for(var/obj/machinery/atmospherics/node in node_list)
+			if(node.update_icon_ready && !(istype(node,/obj/machinery/atmospherics/pipe/simple)))
+				node.update_icon(1)
 
 	// BubbleWrap
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/New()
@@ -52,7 +65,7 @@
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/process()
 	if(!parent)
-		return ..()
+		. = ..()
 
 	// Get gas from pipenet
 	var/datum/gas_mixture/internal = return_air()
@@ -61,26 +74,30 @@
 
 	//Get processable air sample and thermal info from environment
 	var/datum/gas_mixture/environment = loc.return_air()
-	var/transfer_moles = 0.25 * environment.total_moles()
+	var/environment_moles = environment.total_moles()
+	var/transfer_moles = 0.25 * environment_moles
 	var/datum/gas_mixture/external_removed = environment.remove(transfer_moles)
 
 	// No environmental gas?  We radiate it, then.
-	if (!external_removed)
+	if(!external_removed)
 		if(internal_removed)
 			internal.merge(internal_removed)
 		return radiate()
 
-	// Not enough gas in the air around us to care about.  Radiate.
-	if (external_removed.total_moles() < 10)
+	// Not enough gas in the air around us to care about.  Radiate. Less gas than airless tiles start with.
+	if(environment_moles < NO_GAS)
 		if(internal_removed)
 			internal.merge(internal_removed)
 		environment.merge(external_removed)
 		return radiate()
+	// A tiny bit of air so this isn't really space, but its not worth activating exchange procs
+	else if(environment_moles < SOME_GAS)
+		return 0
 
 	// No internal gas.  Screw this, we're out.
-	if (!internal_removed)
+	if(!internal_removed)
 		environment.merge(external_removed)
-		return 1
+		return
 
 	//Get same info from connected gas
 	var/combined_heat_capacity = internal_removed.heat_capacity() + external_removed.heat_capacity()
@@ -96,15 +113,19 @@
 	internal_removed.temperature = final_temperature
 	internal.merge(internal_removed)
 
-	parent.network.update = 1
+
+	if(parent && parent.network)
+		parent.network.update = 1
+	return 1
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/proc/radiate()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/pipe/simple/heat_exchanging/proc/radiate() called tick#: [world.time]")
 	var/datum/gas_mixture/internal = return_air()
 	var/internal_transfer_moles = 0.25 * internal.total_moles()
 	var/datum/gas_mixture/internal_removed = internal.remove(internal_transfer_moles)
 
 	if (!internal_removed)
-		return 1
+		return
 
 	var/combined_heat_capacity = internal_removed.heat_capacity() + RADIATION_CAPACITY
 	var/combined_energy = internal_removed.temperature * internal_removed.heat_capacity() + (RADIATION_CAPACITY * ENERGY_MULT)

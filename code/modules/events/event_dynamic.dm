@@ -2,7 +2,8 @@ var/list/event_last_fired = list()
 
 //Always triggers an event when called, dynamically chooses events based on job population
 /proc/spawn_dynamic_event()
-	if(!config.allow_random_events)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/spawn_dynamic_event() called tick#: [world.time]")
+	if(!config.allow_random_events || map && map.dorf)
 		return
 
 	var/minutes_passed = world.time/600
@@ -10,6 +11,10 @@ var/list/event_last_fired = list()
 
 	if(minutes_passed < roundstart_delay) //Self-explanatory
 		message_admins("Too early to trigger random event, aborting.")
+		return
+
+	if(universe.name != "Normal")
+		message_admins("Universe isn't normal, aborting random event spawn.")
 		return
 
 	var/list/active_with_role = number_active_with_role()
@@ -43,7 +48,7 @@ var/list/event_last_fired = list()
 
 	if(active_with_role["AI"] > 0 || active_with_role["Cyborg"] > 0)
 		possibleEvents[/datum/event/ionstorm] = 30
-	//possibleEvents[/datum/event/grid_check] = 20 //May cause lag
+	possibleEvents[/datum/event/grid_check] = 20 //May cause lag
 	possibleEvents[/datum/event/electrical_storm] = 10
 	possibleEvents[/datum/event/wallrot] = 30
 
@@ -67,9 +72,6 @@ var/list/event_last_fired = list()
 			possibleEvents[/datum/event/spider_infestation] = 15
 		if(aliens_allowed && !sent_aliens_to_station)
 			possibleEvents[/datum/event/alien_infestation] = 10
-		if(!sent_ninja_to_station && toggle_space_ninja)
-			possibleEvents[/datum/event/space_ninja] = 0 //Fix the ninja code first
-
 	for(var/event_type in event_last_fired) if(possibleEvents[event_type])
 		var/time_passed = world.time - event_last_fired[event_type]
 		var/full_recharge_after = 60 * 60 * 10 // Was 3 hours, changed to 1 hour since rounds rarely last that long anyways
@@ -97,6 +99,8 @@ var/list/event_last_fired = list()
 	//and start working via the constructor.
 	new picked_event
 
+	score["eventsendured"]++
+
 	message_admins("[picked_event] firing. Time to have fun.")
 
 	return 1
@@ -105,6 +109,7 @@ var/list/event_last_fired = list()
 // with a specific role.
 // Note that this isn't sorted by department, because e.g. having a roboticist shouldn't make meteors spawn.
 /proc/number_active_with_role(role)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/number_active_with_role() called tick#: [world.time]")
 	var/list/active_with_role = list()
 	active_with_role["Engineer"] = 0
 	active_with_role["Medical"] = 0
@@ -121,12 +126,12 @@ var/list/event_last_fired = list()
 
 		if(istype(M, /mob/living/silicon/robot) && M:module && M:module.name == "engineering robot module")
 			active_with_role["Engineer"]++
-		if(M.mind.assigned_role in list("Chief Engineer", "Station Engineer"))
+		if(M.mind.assigned_role in engineering_positions)
 			active_with_role["Engineer"]++
 
 		if(istype(M, /mob/living/silicon/robot) && M:module && M:module.name == "medical robot module")
 			active_with_role["Medical"]++
-		if(M.mind.assigned_role in list("Chief Medical Officer", "Medical Doctor"))
+		if(M.mind.assigned_role in medical_positions)
 			active_with_role["Medical"]++
 
 		if(istype(M, /mob/living/silicon/robot) && M:module && M:module.name == "security robot module")
@@ -134,7 +139,7 @@ var/list/event_last_fired = list()
 		if(M.mind.assigned_role in security_positions)
 			active_with_role["Security"]++
 
-		if(M.mind.assigned_role in list("Research Director", "Scientist"))
+		if(M.mind.assigned_role in science_positions)
 			active_with_role["Scientist"]++
 
 		if(M.mind.assigned_role == "AI")

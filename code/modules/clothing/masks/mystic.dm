@@ -3,7 +3,7 @@
 	desc = "<span class=warning>\"I'm happy! I'M HAPPY! SEE! I SAID I'M HAPPY PLEASE DON'T\"<span>"
 	icon_state = "happiest"
 	item_state = "happiest"
-	flags = FPRINT|TABLEPASS|MASKINTERNALS
+	flags = FPRINT|MASKINTERNALS
 	flags_inv = HIDEFACE
 	w_class = 2
 	siemens_coefficient = 3.0
@@ -28,7 +28,7 @@
 
 /obj/item/clothing/mask/happy/pickup(mob/user as mob)
 	flick("happiest_flash", src)
-	user << "<span class=warning>\b The mask's eyesockets briefly flash with a foreboding red glare.</span>"
+	user << "<span class=warning><B>The mask's eyesockets briefly flash with a foreboding red glare.</span></B>"
 
 /obj/item/clothing/mask/happy/OnMobLife(var/mob/living/carbon/human/wearer)
 	var/mob/living/carbon/human/W = wearer
@@ -53,6 +53,7 @@
 	canremove = 1
 
 /obj/item/clothing/mask/happy/proc/RaiseShade(var/mob/living/carbon/human/H)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/mask/happy/proc/RaiseShade() called tick#: [world.time]")
 	for(var/mob/living/carbon/human/M in view(4, H))
 		if(!M) return
 		if(M.stat != 2) continue

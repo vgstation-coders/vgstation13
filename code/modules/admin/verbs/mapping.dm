@@ -40,12 +40,14 @@ var/intercom_range_display_status = 0
 /client/proc/do_not_use_these()
 	set category = "Mapping"
 	set name = "-None of these are for ingame use!!"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/do_not_use_these() called tick#: [world.time]")
 
 	..()
 
 /client/proc/camera_view()
 	set category = "Mapping"
 	set name = "Camera Range Display"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/camera_view() called tick#: [world.time]")
 
 	if(camera_range_display_status)
 		camera_range_display_status = 0
@@ -67,6 +69,7 @@ var/intercom_range_display_status = 0
 /client/proc/sec_camera_report()
 	set category = "Mapping"
 	set name = "Camera Report"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/sec_camera_report() called tick#: [world.time]")
 
 	if(!master_controller)
 		alert(usr,"Master_controller not found.","Sec Camera Report")
@@ -107,26 +110,27 @@ var/intercom_range_display_status = 0
 /client/proc/intercom_view()
 	set category = "Mapping"
 	set name = "Intercom Range Display"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/intercom_view() called tick#: [world.time]")
 
-	if(intercom_range_display_status)
-		intercom_range_display_status = 0
+	if (intercom_range_display_status)
+		intercom_range_display_status = FALSE
 	else
-		intercom_range_display_status = 1
+		intercom_range_display_status = TRUE
 
-	for(var/obj/effect/debugging/marker/M in world)
-		del(M)
+	for (var/obj/effect/debugging/marker/M in world)
+		qdel(M)
 
-	if(intercom_range_display_status)
-		for(var/obj/item/device/radio/intercom/I in world)
-			for(var/turf/T in orange(7,I))
-				var/obj/effect/debugging/marker/F = new/obj/effect/debugging/marker(T)
-				if (!(F in view(7,I.loc)))
-					del(F)
+	if (intercom_range_display_status)
+		for (var/obj/item/device/radio/intercom/I in world)
+			for (var/turf/T in view(I.canhear_range, I))
+				new /obj/effect/debugging/marker(T)
+
 	feedback_add_details("admin_verb","mIRD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/enable_debug_verbs()
 	set category = "Debug"
 	set name = "Debug verbs"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/proc/enable_debug_verbs()  called tick#: [world.time]")
 
 	if(!check_rights(R_DEBUG)) return
 
@@ -173,6 +177,8 @@ var/intercom_range_display_status = 0
 /client/proc/count_objects_on_z_level()
 	set category = "Mapping"
 	set name = "Count Objects On Level"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/count_objects_on_z_level() called tick#: [world.time]")
+
 	var/level = input("Which z-level?","Level?") as text
 	if(!level) return
 	var/num_level = text2num(level)
@@ -214,8 +220,10 @@ var/intercom_range_display_status = 0
 	feedback_add_details("admin_verb","mOBJZ") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/count_objects_all()
+	set background = 1
 	set category = "Mapping"
 	set name = "Count Objects All"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/count_objects_all() called tick#: [world.time]")
 
 	var/type_text = input("Which type path?","") as text
 	if(!type_text) return
@@ -237,13 +245,14 @@ var/intercom_range_display_status = 0
 				line += " no.[i+10+j]@\[[temp_atom.x], [temp_atom.y], [temp_atom.z]\]; "
 		world << line*/
 
-	world << "There are [count] objects of type [type_path] in the game world"
+	usr << "There are [count] objects of type [type_path] in the game world"
 	feedback_add_details("admin_verb","mOBJ") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/check_sim_unsim()
 	set category = "Mapping"
 	set name = "Check Sim/Unsim Bounds"
 	set background = 1
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/check_sim_unsim() called tick#: [world.time]")
 
 	// this/can/be/next/to = list(these)
 	var/list/acceptable_types=list(
@@ -291,7 +300,7 @@ var/intercom_range_display_status = 0
 		/obj/machinery/door
 	)
 
-	for(var/turf/T in world)
+	for(var/turf/T in turfs)
 		for(var/basetype in acceptable_types)
 			var/list/badtiles[0]
 			if(istype(T,basetype))
@@ -319,6 +328,7 @@ var/global/prevent_airgroup_regroup = 0
 
 /*
 /client/proc/break_all_air_groups()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/break_all_air_groups() called tick#: [world.time]")
 	set category = "Mapping"
 	set name = "Break All Airgroups"
 
@@ -328,10 +338,11 @@ var/global/prevent_airgroup_regroup = 0
 	message_admins("[src.ckey] used 'Break All Airgroups'")*/
 
 /client/proc/regroup_all_air_groups()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/regroup_all_air_groups() called tick#: [world.time]")
 	set category = "Mapping"
 	set name = "Regroup All Airgroups Attempt"
 
-	usr << "\red Proc disabled."
+	usr << "<span class='warning'>Proc disabled.</span>"
 
 	/*prevent_airgroup_regroup = 0
 	for(var/datum/air_group/AG in air_master.air_groups)
@@ -339,10 +350,11 @@ var/global/prevent_airgroup_regroup = 0
 	message_admins("[src.ckey] used 'Regroup All Airgroups Attempt'")*/
 
 /client/proc/kill_pipe_processing()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/kill_pipe_processing() called tick#: [world.time]")
 	set category = "Mapping"
 	set name = "Kill pipe processing"
 
-	usr << "\red Proc disabled."
+	usr << "<span class='warning'>Proc disabled.</span>"
 
 	/*pipe_processing_killed = !pipe_processing_killed
 	if(pipe_processing_killed)
@@ -351,10 +363,11 @@ var/global/prevent_airgroup_regroup = 0
 		message_admins("[src.ckey] used 'kill pipe processing', restoring all pipe processing.")*/
 
 /client/proc/kill_air_processing()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/kill_air_processing() called tick#: [world.time]")
 	set category = "Mapping"
 	set name = "Kill air processing"
 
-	usr << "\red Proc disabled."
+	usr << "<span class='warning'>Proc disabled.</span>"
 
 	/*air_processing_killed = !air_processing_killed
 	if(air_processing_killed)
@@ -366,10 +379,11 @@ var/global/prevent_airgroup_regroup = 0
 var/global/say_disabled = 0
 /*
 /client/proc/disable_communication()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/disable_communication() called tick#: [world.time]")
 	set category = "Mapping"
 	set name = "Disable all communication verbs"
 
-	usr << "\red Proc disabled."
+	usr << "<span class='warning'>Proc disabled.</span>"
 
 	/*say_disabled = !say_disabled
 	if(say_disabled)
@@ -383,10 +397,11 @@ var/global/movement_disabled = 0
 var/global/movement_disabled_exception //This is the client that calls the proc, so he can continue to run around to gauge any change to lag.
 /*
 /client/proc/disable_movement()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/disable_movement() called tick#: [world.time]")
 	set category = "Mapping"
 	set name = "Disable all movement"
 
-	usr << "\red Proc disabled."
+	usr << "<span class='warning'>Proc disabled.</span>"
 
 	/*movement_disabled = !movement_disabled
 	if(movement_disabled)

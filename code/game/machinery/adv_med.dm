@@ -9,30 +9,92 @@
 	anchored = 1
 	idle_power_usage = 125
 	active_power_usage = 250
-	machine_flags = 0
-
+	var/orient = "LEFT"
+	var/scanning = 1
+	var/obj/machinery/body_scanconsole/connected = null //This will save us a lot of locates
+	machine_flags = SCREWTOGGLE | CROWDESTROY
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/fullbodyscanner,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module
+	)
 	var/mob/living/carbon/occupant
 	var/locked
 
-	l_color = "#00FF00"
+	light_color = LIGHT_COLOR_GREEN
+	light_range_on = 3
+	light_power_on = 2
+
+/obj/machinery/bodyscanner/New()
+	..()
+	RefreshParts()
+	spawn( 5 )
+		var/turf/t
+		world.log << "DEBUG: Beginning body scanner console checking/auto-generation for scanner [src] at [src.loc.x],[src.loc.y],[src.loc.z]..."
+		if(orient == "RIGHT")
+			update_icon()
+			t = get_step(get_turf(src), WEST)
+			// generate_console(get_step(get_turf(src), WEST))
+		else
+			t = get_step(get_turf(src), EAST)
+			// generate_console(get_step(get_turf(src), EAST))
+		ASSERT(t)
+		var/obj/machinery/body_scanconsole/c = locate() in t.contents
+		if(c)
+			connected = c
+			c.connected = src
+		else
+			world.log << "DEBUG: generating console at [t.loc.x],[t.loc.y],[t.loc.z] for scanner at [src.loc.x],[src.loc.y],[src.loc.z]"
+			generate_console(t)
+		return
+	return
+
+/obj/machinery/bodyscanner/proc/generate_console(turf/T as turf)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bodyscanner/proc/generate_console() called tick#: [world.time]")
+	if(connected)
+		connected.orient = src.orient
+		connected.update_icon()
+		return 1
+	if(!T.density)
+		connected = new /obj/machinery/body_scanconsole(T)
+		connected.orient = src.orient
+		connected.update_icon()
+		return 1
+	else
+		return 0
+
+/obj/machinery/bodyscanner/Destroy()
+	..()
+	if(connected)
+		connected.connected = null
+		qdel(connected)
+		connected = null
+
+/obj/machinery/bodyscanner/update_icon()
+	icon_state = "body_scanner_[occupant ? "1" : "0"][orient == "LEFT" ? null : "-r"]"
+
+/obj/machinery/bodyscanner/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		T += SP.rating
+	scanning = round(T/3) //9 = Reagent details, Blood Type; 6 = Blood Type; 3 = basic
 
 /obj/machinery/bodyscanner/power_change()
 	..()
 	if(!(stat & (BROKEN|NOPOWER)) && src.occupant)
-		SetLuminosity(2)
+		set_light(light_range_on, light_power_on)
 	else
-		SetLuminosity(0)
+		set_light(0)
 
 /obj/machinery/bodyscanner/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if(!istype(O) || isturf(O)) // Its not a movable atom.
+	if(!ismob(O)) //humans only
 		return
-	if(O.loc == user) //no you can't pull things out of your ass
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
 		return
 	if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.resting) //are you cuffed, dying, lying, stunned or other
 		return
-	if(O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
-		return
-	if(!ismob(O)) //humans only
+	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
 		return
 	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
 		return
@@ -40,17 +102,16 @@
 		return
 	if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
 		return
-	if(!istype(user.loc, /turf) || !istype(O.loc, /turf)) // are you in a container/closet/pod/etc?
-		return
 	if(occupant)
 		user << "<span class='notice'>\The [src] is already occupied!</span>"
 		return
 	if(isrobot(user))
-		if(!istype(user:module, /obj/item/weapon/robot_module/medical))
+		var/mob/living/silicon/robot/robit = usr
+		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
 			user << "<span class='warning'>You do not have the means to do this!</span>"
 			return
 	var/mob/living/L = O
-	if(!istype(L) || L.buckled)
+	if(!istype(L) || L.locked_to)
 		return
 	if(L.abiotic())
 		user << "<span class='notice'>Subject cannot have abiotic items on.</span>"
@@ -64,32 +125,61 @@
 	else
 		visible_message("[user] places [L] into \the [src].")
 
-	if(L.client)
-		L.client.perspective = EYE_PERSPECTIVE
-		L.client.eye = src
 	L.loc = src
+	L.reset_view()
 	src.occupant = L
-	src.icon_state = "body_scanner_1"
+	update_icon()
 	for(var/obj/OO in src)
 		OO.loc = src.loc
 		//Foreach goto(154)
 	src.add_fingerprint(user)
+	if(!(stat & (BROKEN|NOPOWER)))
+		set_light(light_range_on, light_power_on)
 	return
+
+/obj/machinery/bodyscanner/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+	if(!ishuman(usr) && !isrobot(usr))
+		return
+	if(!occupant)
+		usr << "<span class='warning'>The scanner is unoccupied!</span>"
+		return
+	if(isrobot(usr))
+		var/mob/living/silicon/robot/robit = usr
+		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+			usr << "<span class='warning'>You do not have the means to do this!</span>"
+			return
+	if(!istype(over_location) || over_location.density)
+		return
+	if(!Adjacent(over_location))
+		return
+	if(!(occupant == usr) && (!Adjacent(usr) || !usr.Adjacent(over_location)))
+		return
+	for(var/atom/movable/A in over_location.contents)
+		if(A.density)
+			if((A == src) || istype(A, /mob))
+				continue
+			return
+	if(occupant == usr)
+		visible_message("[usr] climbs out of \the [src].", 3)
+	else
+		visible_message("[usr] removes [occupant.name] from \the [src].", 3)
+	go_out(over_location)
 
 /obj/machinery/bodyscanner/relaymove(mob/user as mob)
 	if(user.stat)
 		return
-	src.go_out()
+	go_out()
 	return
 
 /obj/machinery/bodyscanner/verb/eject()
 	set src in oview(1)
 	set category = "Object"
 	set name = "Eject Body Scanner"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/bodyscanner/verb/eject()  called tick#: [world.time]")
 
-	if(usr.stat != 0)
+	if(usr.stat != 0 || (usr.status_flags & FAKEDEATH))
 		return
-	src.go_out()
+	go_out()
 	add_fingerprint(usr)
 	return
 
@@ -97,8 +187,9 @@
 	set src in oview(1)
 	set category = "Object"
 	set name = "Enter Body Scanner"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/bodyscanner/verb/move_inside()  called tick#: [world.time]")
 
-	if(usr.stat != 0)
+	if(usr.stat != 0 || (usr.status_flags & FAKEDEATH))
 		return
 	if(src.occupant)
 		usr << "<span class='notice'>\The [src] is already occupied!</span>"
@@ -106,52 +197,85 @@
 	if(usr.abiotic())
 		usr << "<span class='notice'>Subject cannot have abiotic items on.</span>"
 		return
+	if(usr.locked_to)
+		return
 	usr.pulling = null
-	usr.client.perspective = EYE_PERSPECTIVE
-	usr.client.eye = src
 	usr.loc = src
+	usr.reset_view()
 	src.occupant = usr
-	src.icon_state = "body_scanner_1"
+	update_icon()
 	for(var/obj/O in src)
-		del(O)
+		qdel(O)
 	src.add_fingerprint(usr)
+	if(!(stat & (BROKEN|NOPOWER)))
+		set_light(light_range_on, light_power_on)
 	return
 
-/obj/machinery/bodyscanner/proc/go_out()
-	if((!( src.occupant ) || src.locked))
+/obj/machinery/bodyscanner/proc/go_out(var/exit = loc)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bodyscanner/proc/go_out() called tick#: [world.time]")
+	if((!(src.occupant) || locked))
 		return
 	for(var/obj/O in src)
 		O.loc = src.loc
 
-	if(src.occupant.client)
-		src.occupant.client.eye = src.occupant.client.mob
-		src.occupant.client.perspective = MOB_PERSPECTIVE
-	src.occupant.loc = src.loc
+	src.occupant.forceMove(exit)
+	src.occupant.reset_view()
 	src.occupant = null
-	src.icon_state = "body_scanner_0"
+	update_icon()
+	set_light(0)
 	return
 
-/obj/machinery/bodyscanner/attackby(obj/item/weapon/grab/G as obj, user as mob)
-	..()
+/obj/machinery/bodyscanner/crowbarDestroy(mob/user)
+	if (occupant)
+		user << "<span class='warning'>You cannot disassemble this [src], it's occupado.</span>"
+		return
+	return..()
+
+/obj/machinery/bodyscanner/attackby(obj/item/weapon/W as obj, user as mob)
+	if(iswrench(W) && !occupant)
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		if(orient == "RIGHT")
+			orient = "LEFT"
+			if(generate_console(get_step(get_turf(src), EAST)))
+				update_icon()
+			else
+				orient = "RIGHT"
+				user << "<span class='warning'>There is no space!</span>"
+				generate_console(get_step(get_turf(src), WEST))
+		else
+			orient = "RIGHT"
+			if(generate_console(get_step(get_turf(src), WEST)))
+				update_icon()
+			else
+				orient = "LEFT"
+				visible_message("<span class='warning'>There is no space!</span>","<span class='warning'>[user] wants to be hardcore, but his CMO won't let him.</span>")
+				generate_console(get_step(get_turf(src), EAST))
+		return
+	if(!istype(W, /obj/item/weapon/grab))
+		return ..()
+	var/obj/item/weapon/grab/G = W
 	if((!( istype(G, /obj/item/weapon/grab) ) || !( ismob(G.affecting) )))
 		return
 	if(src.occupant)
 		user << "<span class='notice'>\The [src] is already occupied!</span>"
 		return
+
+	G.affecting.unlock_from()
+
 	if(G.affecting.abiotic())
 		user << "<span class='notice'>Subject cannot have abiotic items on.</span>"
 		return
 	var/mob/M = G.affecting
-	if(M.client)
-		M.client.perspective = EYE_PERSPECTIVE
-		M.client.eye = src
 	M.loc = src
+	M.reset_view()
 	src.occupant = M
-	src.icon_state = "body_scanner_1"
+	update_icon()
 	for(var/obj/O in src)
-		O.loc = src.loc
+		O.forceMove(loc)
 	src.add_fingerprint(user)
-	del(G)
+	qdel(G)
+	if(!(stat & (BROKEN|NOPOWER)))
+		set_light(light_range_on, light_power_on)
 	return
 
 /obj/machinery/bodyscanner/ex_act(severity)
@@ -183,7 +307,33 @@
 	if(prob(50))
 		for(var/atom/movable/A as mob|obj in src)
 			A.loc = src.loc
-		del(src)
+		qdel(src)
+
+
+/obj/machinery/body_scanconsole
+	var/obj/machinery/bodyscanner/connected
+	var/known_implants = list(/obj/item/weapon/implant/chem, /obj/item/weapon/implant/death_alarm, /obj/item/weapon/implant/loyalty, /obj/item/weapon/implant/tracking)
+	var/delete
+	var/temphtml
+	name = "body scanner console"
+	icon = 'icons/obj/Cryogenic2.dmi'
+	icon_state = "body_scannerconsole"
+	density = 1
+	anchored = 1
+	var/orient = "LEFT"
+
+/obj/machinery/body_scanconsole/New()
+	..()
+	spawn(5)
+		if(orient == "RIGHT")
+			icon_state = "body_scannerconsole-r"
+			src.connected = locate(/obj/machinery/bodyscanner, get_step(src, EAST))
+		else
+			src.connected = locate(/obj/machinery/bodyscanner, get_step(src, WEST))
+	return
+
+/obj/machinery/body_scanconsole/update_icon()
+	icon_state = "body_scannerconsole[stat & NOPOWER ? "-p" : null][orient == "LEFT" ? null : "-r"]"
 
 /obj/machinery/body_scanconsole/ex_act(severity)
 	switch(severity)
@@ -199,37 +349,15 @@
 
 /obj/machinery/body_scanconsole/blob_act()
 	if(prob(50))
-		del(src)
+		qdel(src)
 
 /obj/machinery/body_scanconsole/power_change()
-	if(stat & BROKEN)
-		icon_state = "body_scannerconsole-p"
-	else if(powered())
-		icon_state = initial(icon_state)
+	if(powered())
 		stat &= ~NOPOWER
 	else
 		spawn(rand(0, 15))
-			src.icon_state = "body_scannerconsole-p"
 			stat |= NOPOWER
-
-/obj/machinery/body_scanconsole
-	var/obj/machinery/bodyscanner/connected
-	var/known_implants = list(/obj/item/weapon/implant/chem, /obj/item/weapon/implant/death_alarm, /obj/item/weapon/implant/loyalty, /obj/item/weapon/implant/tracking)
-	var/delete
-	var/temphtml
-	name = "body scanner console"
-	icon = 'icons/obj/Cryogenic2.dmi'
-	icon_state = "body_scannerconsole"
-	density = 1
-	anchored = 1
-
-
-/obj/machinery/body_scanconsole/New()
-	..()
-	spawn(5)
-		src.connected = locate(/obj/machinery/bodyscanner, get_step(src, WEST))
-		return
-	return
+	update_icon()
 
 /obj/machinery/body_scanconsole/process()
 	if (stat & (BROKEN | NOPOWER | MAINT | EMPED))
@@ -270,7 +398,7 @@
 			dat = format_occupant_data(src.connected.get_occupant_data())
 			dat += "<HR><A href='?src=\ref[src];print=1'>Print</A><BR>"
 		else
-			dat = "<font color='red'> Error: No Body Scanner connected.</font>"
+			dat = "<font color='red'>Error: No Body Scanner connected.</font>"
 
 	dat += text("<BR><A href='?src=\ref[];mach_close=scanconsole'>Close</A>", user)
 	user << browse(dat, "window=scanconsole;size=430x600")
@@ -298,6 +426,7 @@
 
 
 /obj/machinery/bodyscanner/proc/get_occupant_data()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bodyscanner/proc/get_occupant_data() called tick#: [world.time]")
 	if (!occupant || !istype(occupant, /mob/living/carbon/human))
 		return
 	var/mob/living/carbon/human/H = occupant
@@ -322,6 +451,8 @@
 		"bicaridine_amount" = H.reagents.get_reagent_amount("bicaridine"),
 		"dermaline_amount" = H.reagents.get_reagent_amount("dermaline"),
 		"blood_amount" = H.vessel.get_reagent_amount("blood"),
+		"all_chems" = H.reagents.reagent_list,
+		"btype" = H.dna.b_type,
 		"disabilities" = H.sdisabilities,
 		"tg_diseases_list" = H.viruses,
 		"lung_ruptured" = H.is_lung_ruptured(),
@@ -332,6 +463,7 @@
 
 
 /obj/machinery/body_scanconsole/proc/format_occupant_data(var/list/occ)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/body_scanconsole/proc/format_occupant_data() called tick#: [world.time]")
 	var/dat = "<font color='blue'><b>Scan performed at [occ["stationtime"]]</b></font><br>"
 	dat += "<font color='blue'><b>Occupant Statistics:</b></font><br>"
 	var/aux
@@ -360,6 +492,8 @@
 		dat += "Large growth detected in frontal lobe, possibly cancerous. Surgical removal is recommended.<br>"
 
 	dat += text("[]\tBlood Level %: [] ([] units)</FONT><BR>", (occ["blood_amount"] > 448 ?"<font color='blue'>" : "<font color='red'>"), occ["blood_amount"]*100 / 560, occ["blood_amount"])
+	if(connected.scanning>=2)
+		dat += text("<font color='blue'>\tBlood Type: []</FONT><BR>", occ["btype"])
 
 	dat += text("Inaprovaline: [] units<BR>", occ["inaprovaline_amount"])
 	dat += text("Soporific: [] units<BR>", occ["stoxin_amount"])
@@ -367,9 +501,14 @@
 	dat += text("[]\tBicaridine: [] units<BR>", (occ["bicaridine_amount"] < 30 ? "<font color='black'>" : "<font color='red'>"), occ["bicaridine_amount"])
 	dat += text("[]\tDexalin: [] units<BR>", (occ["dexalin_amount"] < 30 ? "<font color='black'>" : "<font color='red'>"), occ["dexalin_amount"])
 
+	if(connected.scanning>2)
+		for(var/datum/reagent/R in occ["all_chems"])
+			if(R.id == "blood" || R.id == "inaprovaline" || R.id == "stoxin" || R.id == "dermaline" || R.id == "bicaridine" || R.id == "dexalin") continue //no repeats
+			else
+				dat += text("<font color='black'>Detected</font> <font color='blue'>[R.volume]</font> <font color='black'>units of</font> <font color='blue'>[R.name]</font><BR>")
 	for(var/datum/disease/D in occ["tg_diseases_list"])
 		if(!D.hidden[SCANNER])
-			dat += text("<font color='red'><B>Warning: [D.form] Detected</B>\nName: [D.name].\nType: [D.spread].\nStage: [D.stage]/[D.max_stages].\nPossible Cure: [D.cure]</FONT><BR>")
+			dat += text("<BR><font color='red'><B>Warning: [D.form] Detected</B>\nName: [D.name].\nType: [D.spread].\nStage: [D.stage]/[D.max_stages].\nPossible Cure: [D.cure]</FONT><BR>")
 
 	dat += "<HR><table border='1'>"
 	dat += "<tr>"
@@ -392,9 +531,10 @@
 
 		dat += "<tr>"
 
-		for(var/datum/wound/W in e.wounds) if(W.internal)
-			internal_bleeding = "<br>Internal bleeding"
-			break
+		for(var/datum/wound/W in e.wounds)
+			if(W.internal)
+				internal_bleeding = "<br>Internal bleeding"
+				break
 		if(istype(e, /datum/organ/external/chest) && occ["lung_ruptured"])
 			lung_ruptured = "Lung ruptured:"
 		if(e.status & ORGAN_SPLINTED)
@@ -474,3 +614,13 @@
 	if(occ["sdisabilities"] & NEARSIGHTED)
 		dat += text("<font color='red'>Retinal misalignment detected.</font><BR>")
 	return dat
+
+/obj/machinery/body_scanconsole/Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq)
+	if(!src.connected || src.connected.scanning<3)
+		return
+	if(speaker in range(src,3) && findtext(raw_message, "scanner, print"))
+		if(!src.connected.occupant||!istype(src.connected.occupant,/mob/living/carbon/human))
+			return
+		var/obj/item/weapon/paper/R = new(src.loc)
+		R.name = "paper - 'body scan report'"
+		R.info = format_occupant_data(src.connected.get_occupant_data())

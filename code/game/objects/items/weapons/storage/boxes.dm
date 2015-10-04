@@ -63,8 +63,8 @@
 		..()
 		contents = list()
 		sleep(1)
-		new /obj/item/clothing/mask/breath( src )
-		new /obj/item/weapon/tank/emergency_oxygen( src )
+		new /obj/item/clothing/mask/breath(src)
+		new /obj/item/weapon/tank/emergency_oxygen(src)
 		return
 
 /obj/item/weapon/storage/box/survival/vox
@@ -72,8 +72,8 @@
 		..()
 		contents = list()
 		sleep(1)
-		new /obj/item/clothing/mask/breath/vox( src )
-		new /obj/item/weapon/tank/emergency_nitrogen( src )
+		new /obj/item/clothing/mask/breath/vox(src)
+		new /obj/item/weapon/tank/emergency_nitrogen(src)
 		return
 
 /obj/item/weapon/storage/box/engineer/
@@ -81,8 +81,8 @@
 		..()
 		contents = list()
 		sleep(1)
-		new /obj/item/clothing/mask/breath( src )
-		new /obj/item/weapon/tank/emergency_oxygen/engi( src )
+		new /obj/item/clothing/mask/breath(src)
+		new /obj/item/weapon/tank/emergency_oxygen/engi(src)
 		return
 
 
@@ -93,13 +93,8 @@
 
 	New()
 		..()
-		new /obj/item/clothing/gloves/latex(src)
-		new /obj/item/clothing/gloves/latex(src)
-		new /obj/item/clothing/gloves/latex(src)
-		new /obj/item/clothing/gloves/latex(src)
-		new /obj/item/clothing/gloves/latex(src)
-		new /obj/item/clothing/gloves/latex(src)
-		new /obj/item/clothing/gloves/latex(src)
+		for(var/i=0,i<7,i++)
+			new /obj/item/clothing/gloves/latex(src)
 
 /obj/item/weapon/storage/box/masks
 	name = "sterile masks"
@@ -108,13 +103,8 @@
 
 	New()
 		..()
-		new /obj/item/clothing/mask/surgical(src)
-		new /obj/item/clothing/mask/surgical(src)
-		new /obj/item/clothing/mask/surgical(src)
-		new /obj/item/clothing/mask/surgical(src)
-		new /obj/item/clothing/mask/surgical(src)
-		new /obj/item/clothing/mask/surgical(src)
-		new /obj/item/clothing/mask/surgical(src)
+		for(var/i=0,i<7,i++)
+			new /obj/item/clothing/mask/surgical(src)
 
 
 /obj/item/weapon/storage/box/syringes
@@ -124,13 +114,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/reagent_containers/syringe( src )
-		new /obj/item/weapon/reagent_containers/syringe( src )
-		new /obj/item/weapon/reagent_containers/syringe( src )
-		new /obj/item/weapon/reagent_containers/syringe( src )
-		new /obj/item/weapon/reagent_containers/syringe( src )
-		new /obj/item/weapon/reagent_containers/syringe( src )
-		new /obj/item/weapon/reagent_containers/syringe( src )
+		for(var/i=0,i<7,i++)
+			new /obj/item/weapon/reagent_containers/syringe(src)
 
 /obj/item/weapon/storage/box/beakers
 	name = "beaker box"
@@ -138,13 +123,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/reagent_containers/glass/beaker( src )
-		new /obj/item/weapon/reagent_containers/glass/beaker( src )
-		new /obj/item/weapon/reagent_containers/glass/beaker( src )
-		new /obj/item/weapon/reagent_containers/glass/beaker( src )
-		new /obj/item/weapon/reagent_containers/glass/beaker( src )
-		new /obj/item/weapon/reagent_containers/glass/beaker( src )
-		new /obj/item/weapon/reagent_containers/glass/beaker( src )
+		for(var/i=0,i<7,i++)
+			new /obj/item/weapon/reagent_containers/glass/beaker(src)
 
 /obj/item/weapon/storage/box/injectors
 	name = "\improper DNA injectors"
@@ -152,12 +132,10 @@
 
 	New()
 		..()
-		new /obj/item/weapon/dnainjector/h2m(src)
-		new /obj/item/weapon/dnainjector/h2m(src)
-		new /obj/item/weapon/dnainjector/h2m(src)
-		new /obj/item/weapon/dnainjector/m2h(src)
-		new /obj/item/weapon/dnainjector/m2h(src)
-		new /obj/item/weapon/dnainjector/m2h(src)
+		for(var/i=0,i<3,i++)
+			new /obj/item/weapon/dnainjector/h2m(src)
+		for(var/i=0,i<3,i++)
+			new /obj/item/weapon/dnainjector/m2h(src)
 
 
 /obj/item/weapon/storage/box/blanks
@@ -166,13 +144,8 @@
 
 	New()
 		..()
-		new /obj/item/ammo_casing/shotgun/blank(src)
-		new /obj/item/ammo_casing/shotgun/blank(src)
-		new /obj/item/ammo_casing/shotgun/blank(src)
-		new /obj/item/ammo_casing/shotgun/blank(src)
-		new /obj/item/ammo_casing/shotgun/blank(src)
-		new /obj/item/ammo_casing/shotgun/blank(src)
-		new /obj/item/ammo_casing/shotgun/blank(src)
+		for(var/i=0,i<7,i++)
+			new /obj/item/ammo_casing/shotgun/blank(src)
 
 
 
@@ -183,13 +156,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/grenade/flashbang(src)
-		new /obj/item/weapon/grenade/flashbang(src)
-		new /obj/item/weapon/grenade/flashbang(src)
-		new /obj/item/weapon/grenade/flashbang(src)
-		new /obj/item/weapon/grenade/flashbang(src)
-		new /obj/item/weapon/grenade/flashbang(src)
-		new /obj/item/weapon/grenade/flashbang(src)
+		for(var/i=0,i<7,i++)
+			new /obj/item/weapon/grenade/flashbang(src)
 
 /obj/item/weapon/storage/box/smokebombs
 	name = "box of smokebombs"
@@ -197,13 +165,17 @@
 
 	New()
 		..()
-		new /obj/item/weapon/grenade/smokebomb(src)
-		new /obj/item/weapon/grenade/smokebomb(src)
-		new /obj/item/weapon/grenade/smokebomb(src)
-		new /obj/item/weapon/grenade/smokebomb(src)
-		new /obj/item/weapon/grenade/smokebomb(src)
-		new /obj/item/weapon/grenade/smokebomb(src)
-		new /obj/item/weapon/grenade/smokebomb(src)
+		for(var/i=0,i<7,i++)
+			new /obj/item/weapon/grenade/smokebomb(src)
+
+/obj/item/weapon/storage/box/stickybombs
+	name = "box of stickybombs"
+	icon_state = "stickybomb"
+
+	New()
+		..()
+		for(var/i=0,i<24,i++)
+			new /obj/item/stickybomb(src)
 
 /obj/item/weapon/storage/box/emps
 	name = "emp grenades"
@@ -212,11 +184,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/grenade/empgrenade(src)
-		new /obj/item/weapon/grenade/empgrenade(src)
-		new /obj/item/weapon/grenade/empgrenade(src)
-		new /obj/item/weapon/grenade/empgrenade(src)
-		new /obj/item/weapon/grenade/empgrenade(src)
+		for(var/i=0,i<5,i++)
+			new /obj/item/weapon/grenade/empgrenade(src)
 
 
 /obj/item/weapon/storage/box/trackimp
@@ -226,10 +195,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/implantcase/tracking(src)
-		new /obj/item/weapon/implantcase/tracking(src)
-		new /obj/item/weapon/implantcase/tracking(src)
-		new /obj/item/weapon/implantcase/tracking(src)
+		for(var/i=0,i<4,i++)
+			new /obj/item/weapon/implantcase/tracking(src)
 		new /obj/item/weapon/implanter(src)
 		new /obj/item/weapon/implantpad(src)
 		new /obj/item/weapon/locator(src)
@@ -241,11 +208,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/implantcase/chem(src)
-		new /obj/item/weapon/implantcase/chem(src)
-		new /obj/item/weapon/implantcase/chem(src)
-		new /obj/item/weapon/implantcase/chem(src)
-		new /obj/item/weapon/implantcase/chem(src)
+		for(var/i=0,i<5,i++)
+			new /obj/item/weapon/implantcase/chem(src)
 		new /obj/item/weapon/implanter(src)
 		new /obj/item/weapon/implantpad(src)
 
@@ -256,13 +220,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/legcuffs/bolas(src)
-		new /obj/item/weapon/legcuffs/bolas(src)
-		new /obj/item/weapon/legcuffs/bolas(src)
-		new /obj/item/weapon/legcuffs/bolas(src)
-		new /obj/item/weapon/legcuffs/bolas(src)
-		new /obj/item/weapon/legcuffs/bolas(src)
-		new /obj/item/weapon/legcuffs/bolas(src)
+		for(var/i=0,i<7,i++)
+			new /obj/item/weapon/legcuffs/bolas(src)
 
 
 /obj/item/weapon/storage/box/rxglasses
@@ -272,13 +231,8 @@
 
 	New()
 		..()
-		new /obj/item/clothing/glasses/regular(src)
-		new /obj/item/clothing/glasses/regular(src)
-		new /obj/item/clothing/glasses/regular(src)
-		new /obj/item/clothing/glasses/regular(src)
-		new /obj/item/clothing/glasses/regular(src)
-		new /obj/item/clothing/glasses/regular(src)
-		new /obj/item/clothing/glasses/regular(src)
+		for(var/i=0,i<7,i++)
+			new /obj/item/clothing/glasses/regular(src)
 
 /obj/item/weapon/storage/box/drinkingglasses
 	name = "box of drinking glasses"
@@ -286,12 +240,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(src)
-		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(src)
-		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(src)
-		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(src)
-		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(src)
-		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(src)
+		for(var/i=0,i<6,i++)
+			new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(src)
 
 /obj/item/weapon/storage/box/cdeathalarm_kit
 	name = "Death Alarm Kit"
@@ -302,12 +252,8 @@
 	New()
 		..()
 		new /obj/item/weapon/implanter(src)
-		new /obj/item/weapon/implantcase/death_alarm(src)
-		new /obj/item/weapon/implantcase/death_alarm(src)
-		new /obj/item/weapon/implantcase/death_alarm(src)
-		new /obj/item/weapon/implantcase/death_alarm(src)
-		new /obj/item/weapon/implantcase/death_alarm(src)
-		new /obj/item/weapon/implantcase/death_alarm(src)
+		for(var/i=0,i<6,i++)
+			new /obj/item/weapon/implantcase/death_alarm(src)
 
 /obj/item/weapon/storage/box/condimentbottles
 	name = "box of condiment bottles"
@@ -315,12 +261,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/reagent_containers/food/condiment(src)
-		new /obj/item/weapon/reagent_containers/food/condiment(src)
-		new /obj/item/weapon/reagent_containers/food/condiment(src)
-		new /obj/item/weapon/reagent_containers/food/condiment(src)
-		new /obj/item/weapon/reagent_containers/food/condiment(src)
-		new /obj/item/weapon/reagent_containers/food/condiment(src)
+		for(var/i=0,i<6,i++)
+			new /obj/item/weapon/reagent_containers/food/condiment(src)
 
 
 
@@ -329,13 +271,8 @@
 	desc = "It has pictures of paper cups on the front."
 	New()
 		..()
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
+		for(var/i=0,i<7,i++)
+			new /obj/item/weapon/reagent_containers/food/drinks/sillycup(src)
 
 
 /obj/item/weapon/storage/box/donkpockets
@@ -345,12 +282,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/reagent_containers/food/snacks/donkpocket(src)
-		new /obj/item/weapon/reagent_containers/food/snacks/donkpocket(src)
-		new /obj/item/weapon/reagent_containers/food/snacks/donkpocket(src)
-		new /obj/item/weapon/reagent_containers/food/snacks/donkpocket(src)
-		new /obj/item/weapon/reagent_containers/food/snacks/donkpocket(src)
-		new /obj/item/weapon/reagent_containers/food/snacks/donkpocket(src)
+		for(var/i=0,i<6,i++)
+			new /obj/item/weapon/reagent_containers/food/snacks/donkpocket(src)
 
 /obj/item/weapon/storage/box/monkeycubes
 	name = "monkey cube box"
@@ -396,13 +329,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/card/id(src)
-		new /obj/item/weapon/card/id(src)
-		new /obj/item/weapon/card/id(src)
-		new /obj/item/weapon/card/id(src)
-		new /obj/item/weapon/card/id(src)
-		new /obj/item/weapon/card/id(src)
-		new /obj/item/weapon/card/id(src)
+		for(var/i=0,i<7,i++)
+			new /obj/item/weapon/card/id(src)
 
 /obj/item/weapon/storage/box/seccarts
 	name = "Spare R.O.B.U.S.T. Cartridges"
@@ -411,13 +339,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/cartridge/security(src)
-		new /obj/item/weapon/cartridge/security(src)
-		new /obj/item/weapon/cartridge/security(src)
-		new /obj/item/weapon/cartridge/security(src)
-		new /obj/item/weapon/cartridge/security(src)
-		new /obj/item/weapon/cartridge/security(src)
-		new /obj/item/weapon/cartridge/security(src)
+		for(var/i=0,i<7,i++)
+			new /obj/item/weapon/cartridge/security(src)
 
 
 /obj/item/weapon/storage/box/handcuffs
@@ -427,13 +350,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/handcuffs(src)
-		new /obj/item/weapon/handcuffs(src)
-		new /obj/item/weapon/handcuffs(src)
-		new /obj/item/weapon/handcuffs(src)
-		new /obj/item/weapon/handcuffs(src)
-		new /obj/item/weapon/handcuffs(src)
-		new /obj/item/weapon/handcuffs(src)
+		for(var/i=0,i<7,i++)
+			new /obj/item/weapon/handcuffs(src)
 
 /obj/item/weapon/storage/box/mousetraps
 	name = "box of Pest-B-Gon Mousetraps"
@@ -442,12 +360,8 @@
 
 	New()
 		..()
-		new /obj/item/device/assembly/mousetrap( src )
-		new /obj/item/device/assembly/mousetrap( src )
-		new /obj/item/device/assembly/mousetrap( src )
-		new /obj/item/device/assembly/mousetrap( src )
-		new /obj/item/device/assembly/mousetrap( src )
-		new /obj/item/device/assembly/mousetrap( src )
+		for(var/i=0,i<6,i++)
+			new /obj/item/device/assembly/mousetrap(src)
 
 /obj/item/weapon/storage/box/pillbottles
 	name = "box of pill bottles"
@@ -455,13 +369,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/storage/pill_bottle( src )
-		new /obj/item/weapon/storage/pill_bottle( src )
-		new /obj/item/weapon/storage/pill_bottle( src )
-		new /obj/item/weapon/storage/pill_bottle( src )
-		new /obj/item/weapon/storage/pill_bottle( src )
-		new /obj/item/weapon/storage/pill_bottle( src )
-		new /obj/item/weapon/storage/pill_bottle( src )
+		for(var/i=0,i<7,i++)
+			new /obj/item/weapon/storage/pill_bottle(src)
 
 /obj/item/weapon/storage/box/lethalshells
 	name = "lethal shells"
@@ -469,21 +378,8 @@
 
 	New()
 		..()
-		new /obj/item/ammo_casing/shotgun(src)
-		new /obj/item/ammo_casing/shotgun(src)
-		new /obj/item/ammo_casing/shotgun(src)
-		new /obj/item/ammo_casing/shotgun(src)
-		new /obj/item/ammo_casing/shotgun(src)
-		new /obj/item/ammo_casing/shotgun(src)
-		new /obj/item/ammo_casing/shotgun(src)
-		new /obj/item/ammo_casing/shotgun(src)
-		new /obj/item/ammo_casing/shotgun(src)
-		new /obj/item/ammo_casing/shotgun(src)
-		new /obj/item/ammo_casing/shotgun(src)
-		new /obj/item/ammo_casing/shotgun(src)
-		new /obj/item/ammo_casing/shotgun(src)
-		new /obj/item/ammo_casing/shotgun(src)
-		new /obj/item/ammo_casing/shotgun(src)
+		for(var/i=0,i<15,i++)
+			new /obj/item/ammo_casing/shotgun(src)
 
 /obj/item/weapon/storage/box/beanbagshells
 	name = "bean bag shells"
@@ -491,21 +387,8 @@
 
 	New()
 		..()
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		for(var/i=0,i<15,i++)
+			new /obj/item/ammo_casing/shotgun/beanbag(src)
 
 /obj/item/weapon/storage/box/stunshells
 	name = "stun shells"
@@ -513,21 +396,8 @@
 
 	New()
 		..()
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
+		for(var/i=0,i<15,i++)
+			new /obj/item/ammo_casing/shotgun/stunshell(src)
 
 /obj/item/weapon/storage/box/dartshells
 	name = "shotgun darts"
@@ -535,21 +405,18 @@
 
 	New()
 		..()
-		new /obj/item/ammo_casing/shotgun/dart(src)
-		new /obj/item/ammo_casing/shotgun/dart(src)
-		new /obj/item/ammo_casing/shotgun/dart(src)
-		new /obj/item/ammo_casing/shotgun/dart(src)
-		new /obj/item/ammo_casing/shotgun/dart(src)
-		new /obj/item/ammo_casing/shotgun/dart(src)
-		new /obj/item/ammo_casing/shotgun/dart(src)
-		new /obj/item/ammo_casing/shotgun/dart(src)
-		new /obj/item/ammo_casing/shotgun/dart(src)
-		new /obj/item/ammo_casing/shotgun/dart(src)
-		new /obj/item/ammo_casing/shotgun/dart(src)
-		new /obj/item/ammo_casing/shotgun/dart(src)
-		new /obj/item/ammo_casing/shotgun/dart(src)
-		new /obj/item/ammo_casing/shotgun/dart(src)
-		new /obj/item/ammo_casing/shotgun/dart(src)
+		for(var/i=0,i<15,i++)
+			new /obj/item/ammo_casing/shotgun/dart(src)
+
+/obj/item/weapon/storage/box/labels
+	name = "label roll box"
+	desc = "A box of refill rolls for a hand labeler."
+	icon_state = "labels"
+
+	New()
+		..()
+		for(var/i=1; i <= storage_slots; i++)
+			new /obj/item/device/label_roll(src)
 
 /obj/item/weapon/storage/box/snappops
 	name = "snap pop box"
@@ -563,30 +430,6 @@
 		for(var/i=1; i <= storage_slots; i++)
 			new /obj/item/toy/snappop(src)
 
-/obj/item/weapon/storage/box/matches
-	name = "matchbox"
-	desc = "A small box of Almost But Not Quite Plasma Premium Matches."
-	icon = 'icons/obj/cigarettes.dmi'
-	icon_state = "matchbox"
-	item_state = "zippo"
-	storage_slots = 10
-	w_class = 1
-	flags = TABLEPASS
-	slot_flags = SLOT_BELT
-
-	New()
-		..()
-		for(var/i=1; i <= storage_slots; i++)
-			new /obj/item/weapon/match(src)
-
-	attackby(obj/item/weapon/match/W as obj, mob/user as mob)
-		if(istype(W, /obj/item/weapon/match) && W.lit == 0)
-			W.lit = 1
-			W.icon_state = "match_lit"
-			processing_objects.Add(W)
-		W.update_icon()
-		return
-
 /obj/item/weapon/storage/box/autoinjectors
 	name = "box of injectors"
 	desc = "Contains autoinjectors."
@@ -595,6 +438,16 @@
 		..()
 		for (var/i; i < storage_slots; i++)
 			new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+
+/obj/item/weapon/storage/box/mugs
+	name = "box of mugs"
+	desc = "It's a box of mugs."
+	icon_state = "box"
+
+	New()
+		..()
+		for(var/i=0,i<6,i++)
+			new /obj/item/weapon/reagent_containers/food/drinks/mug(src)
 
 // TODO Change this to a box/large. - N3X
 /obj/item/weapon/storage/box/lights
@@ -633,3 +486,19 @@
 		new /obj/item/weapon/light/tube(src)
 	for(var/i = 0; i < 7; i++)
 		new /obj/item/weapon/light/bulb(src)
+
+/obj/item/weapon/storage/box/lights/tubes/New()
+	..()
+	for(var/i = 0; i < 21; i++)
+		new /obj/item/weapon/light/tube(src)
+
+/obj/item/weapon/storage/box/lights/he
+	name = "high efficiency lights"
+	icon_state = "lightmixed"
+
+/obj/item/weapon/storage/box/lights/he/New()
+	..()
+	for(var/i = 0; i < 14; i++)
+		new /obj/item/weapon/light/tube/he(src)
+	for(var/i = 0; i < 7; i++)
+		new /obj/item/weapon/light/bulb/he(src)

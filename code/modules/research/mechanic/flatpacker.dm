@@ -1,7 +1,4 @@
-#define FLA_FAB_WIDTH 1000
-#define FLA_FAB_HEIGHT 600
-
-#define FLA_FAB_BASETIME 100
+#define FLA_FAB_BASETIME 0.5
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker
 	name = "Flatpack Fabricator"
@@ -11,7 +8,9 @@
 
 	nano_file = "flatpacker.tmpl"
 
-	design_types = list("machine" = 1, "item" = 0)
+	build_time = FLA_FAB_BASETIME
+
+	design_types = list("machine")
 
 	var/build_parts =  list(
 		/obj/item/weapon/stock_parts/micro_laser = 1,
@@ -43,22 +42,14 @@
 
 	RefreshParts()
 
-obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker/build_part(var/datum/design/mechanic_design/part)
+/obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker/build_part(var/datum/design/mechanic_design/part)
 	if(!part)
 		return
 
-	for(var/M in part.materials)
-		if(!check_mat(part, M))
-			src.visible_message("<font color='blue'>The [src.name] beeps, \"Not enough materials to complete item.\"</font>")
-			stopped=1
-			return 0
-		if(copytext(M,1,2) == "$")
-			var/matID=copytext(M,2)
-			var/datum/material/material=materials[matID]
-			material.stored = max(0, (material.stored-part.materials[M]))
-			materials[matID]=material
-		else
-			reagents.remove_reagent(M, part.materials[M])
+	if(!remove_materials(part))
+		stopped = 1
+		src.visible_message("<font color='blue'>The [src.name] beeps, \"Not enough materials to complete item.\"</font>")
+		return
 
 	src.being_built = new part.build_path(src)
 
@@ -75,21 +66,18 @@ obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker/build_part(var/datum/desi
 		being_built.loc = FP
 		FP.name += " ([being_built.name])"
 		FP.machine = being_built
+		FP.update_icon()
+		var/turf/output = get_output()
 		FP.loc = get_turf(output)
 		src.visible_message("\icon [src] \The [src] beeps: \"Succesfully completed \the [being_built.name].\"")
 		src.being_built = null
 
-		//blueprint stuff
-		if(uses_list[part] > 0)
-			uses_list[part]--
-			if(uses_list[part] == 0)
-				uses_list -= part
-				remove_part_from_set(part.category, part)
 	src.updateUsrDialog()
 	src.busy = 0
 	return 1
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	..()
+	if(..())
+		return 1
 	if (O.is_open_container())
 		return 1

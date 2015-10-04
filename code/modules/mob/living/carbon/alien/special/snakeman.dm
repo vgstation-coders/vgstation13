@@ -7,6 +7,7 @@
 		return 4
 
 /mob/living/carbon/alien/humanoid/special/snakeman/verb/lay_egg(mob/living/carbon/human/M as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/carbon/alien/humanoid/special/snakeman/verb/lay_egg()  called tick#: [world.time]")
 	set name = "Impregnate"
 	set desc = "Lays an egg on a corpse, allowing the egg to feed."
 	set category = "Snakeman"
@@ -26,7 +27,7 @@
 	visible_message("[src] extends a probiscis and stabs it into [M]")
 
 	if (!do_mob(usr, M, 50))
-		usr << "\red The injection of the egg has been interrupted!"
+		usr << "<span class='warning'>The injection of the egg has been interrupted!</span>"
 		return
 
 	if(M.client)

@@ -12,9 +12,10 @@ var/global/vox_shuttle_location
 	var/moving = FALSE
 	var/lastMove = 0
 
-	l_color = "#B40000"
+	light_color = LIGHT_COLOR_RED
 
 /obj/machinery/computer/vox_station/proc/vox_move_to(var/destination)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/vox_station/proc/vox_move_to() called tick#: [world.time]")
 	if(moving)
 		return
 
@@ -53,7 +54,7 @@ var/global/vox_shuttle_location
 	return attack_hand(user)
 
 /obj/machinery/computer/vox_station/attack_hand(mob/user as mob)
-	if(!allowed(user))
+	if(!allowed(user) || issilicon(user))
 		user << "<span class=\"warning\">Access denied</span>"
 		return
 
@@ -74,14 +75,15 @@ var/global/vox_shuttle_location
 	user << browse(dat, "window=computer;size=575x450")
 	onclose(user, "computer")
 
+/obj/machinery/computer/vox_station/power_change()
+	return
+
 /obj/machinery/computer/vox_station/Topic(href, href_list)
-	if(!isliving(usr))
-		return
+	if(..()) return 1
 
-	var/mob/living/user = locate("\ref[usr]")
+	var/mob/user = usr
 
-	if(in_range(src, user) || issilicon(user))
-		user.set_machine(src)
+	user.set_machine(src)
 
 	vox_shuttle_location = "station"
 

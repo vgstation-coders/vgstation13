@@ -1,5 +1,6 @@
 
 /datum/admins/proc/player_panel_new()//The new one
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/player_panel_new() called tick#: [world.time]")
 	if (!usr.client.holder)
 		return
 	var/dat = "<html><head><title>Admin Player Panel</title></head>"
@@ -324,11 +325,12 @@
 
 //The old one
 /datum/admins/proc/player_panel_old()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/player_panel_old() called tick#: [world.time]")
 	if (!usr.client.holder)
 		return
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:327: var/dat = "<html><head><title>Player Menu</title></head>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:327: var/dat = "<html><head><title>Player Menu</title></head>"
 	var/dat = {"<html><head><title>Player Menu</title></head>
 <body><table border=1 cellspacing=5><B><tr><th>Name</th><th>Real Name</th><th>Assigned Job</th><th>Key</th><th>Options</th><th>PM</th><th>Traitor?</th></tr></B>"}
 	// END AUTOFIX
@@ -389,11 +391,12 @@
 
 
 /datum/admins/proc/check_antagonists()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/check_antagonists() called tick#: [world.time]")
 	if (ticker && ticker.current_state >= GAME_STATE_PLAYING)
 		var/dat = "<html><head><title>Round Status</title></head><body><h1><B>Round Status</B></h1>"
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:386: dat += "Current Game Mode: <B>[ticker.mode.name]</B><BR>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:386: dat += "Current Game Mode: <B>[ticker.mode.name]</B><BR>"
 		dat += {"Current Game Mode: <B>[ticker.mode.name]</B><BR>
 			Round Duration: <B>[round(world.time / 36000)]:[add_zero(world.time / 600 % 60, 2)]:[world.time / 100 % 6][world.time / 100 % 10]</B><BR>
 			<B>Emergency shuttle</B><BR>"}
@@ -406,7 +409,7 @@
 				if(0)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:395: dat += "ETA: <a href='?src=\ref[src];edit_shuttle_time=1'>[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]</a><BR>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:395: dat += "ETA: <a href='?src=\ref[src];edit_shuttle_time=1'>[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]</a><BR>"
 					dat += {"ETA: <a href='?src=\ref[src];edit_shuttle_time=1'>[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]</a><BR>
 						<a href='?src=\ref[src];call_shuttle=2'>Send Back</a><br>"}
 					// END AUTOFIX
@@ -420,7 +423,7 @@
 				if(M)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:405: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:405: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
 					// END AUTOFIX
@@ -450,7 +453,7 @@
 				else
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:431: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a> <b>(Leader)</b>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:431: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a> <b>(Leader)</b>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a> <b>(Leader)</b>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
 					// END AUTOFIX
@@ -459,7 +462,7 @@
 				if(M)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:436: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:436: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
 					// END AUTOFIX
@@ -469,11 +472,11 @@
 				if(M)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:442: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:442: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
 					// END AUTOFIX
-					var/turf/mob_loc = get_turf_loc(M)
+					var/turf/mob_loc = get_turf(M)
 					dat += "<td>[mob_loc.loc]</td></tr>"
 				else
 					dat += "<tr><td><i>Head not found!</i></td></tr>"
@@ -486,7 +489,7 @@
 				if(M)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:455: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:455: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
 						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
@@ -502,7 +505,7 @@
 				if(M)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:467: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:467: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
 						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
@@ -519,7 +522,7 @@
 				if(M)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:479: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:479: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
 						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
@@ -535,7 +538,7 @@
 				if(M)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:490: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:490: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
 						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
@@ -552,11 +555,53 @@
 				if(M)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:503: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:503: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
+						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
+						<td><A href='?src=\ref[src];cult_privatespeak=\ref[M]'>Nar-Speak</A></td></tr>"}
 					// END AUTOFIX
 			dat += "</table>"
+
+			var/living_crew = 0
+			var/living_cultists = 0
+			for(var/mob/living/L in player_list)
+				if(L.stat != DEAD)
+					if(L.mind in ticker.mode.cult)
+						living_cultists++
+					else
+						if(istype(L, /mob/living/carbon))
+							living_crew++
+
+			dat += "<br>[living_cultists] living cultists. (use <a href='?src=\ref[src];cult_mindspeak=\ref[src]'>Voice of Nar-Sie</a>)"
+			dat += "<br>[living_crew] living non-cultists."
+			dat += "<br>"
+
+			if(istype(ticker.mode, /datum/game_mode/cult))
+				dat += "<br><B>Cult Objectives:</B>"
+				var/datum/game_mode/cult/mode_ticker = ticker.mode
+
+				for(var/obj_count=1, obj_count <= mode_ticker.objectives.len, obj_count++)
+					var/explanation
+					switch(mode_ticker.objectives[obj_count])
+						if("convert")
+							explanation = "Reach a total of [mode_ticker.convert_target] cultists.[(obj_count < mode_ticker.objectives.len) ? "<font color='green'><B>Success!</B></font>" : "(currently [mode_ticker.cult.len] cultists)"]"
+						if("bloodspill")
+							explanation = "Cover [mode_ticker.spilltarget] tiles in blood.[(obj_count < mode_ticker.objectives.len) ? "<font color='green'><B>Success!</B></font>" : "(currently [mode_ticker.bloody_floors.len] bloody floors)"]"
+						if("sacrifice")
+							explanation = "Sacrifice [mode_ticker.sacrifice_target.name], the [mode_ticker.sacrifice_target.assigned_role].[(obj_count < mode_ticker.objectives.len) ? "<font color='green'><B>Success!</B></font>" : ""]"
+						if("eldergod")
+							explanation = "Summon Nar-Sie.[(obj_count < mode_ticker.objectives.len) ? "<font color='green'><B>Success!</B></font>" : ""]"
+						if("harvest")
+							explanation = "Bring [mode_ticker.harvest_target] humans directly to Nar-Sie.[mode_ticker.bonus ? "<font color='green'><B>Success!</B></font>" : "(currently [mode_ticker.harvested] sacrifices)"]"
+						if("hijack")
+							explanation = "Don't let any non-cultist escape on the Shuttle alive.[mode_ticker.bonus ? "<font color='green'><B>Success!</B></font>" : ""]"
+						if("massacre")
+							explanation = "Massacre the crew until there are less than [mode_ticker.massacre_target] people left on the station.[mode_ticker.bonus ? "<font color='green'><B>Success!</B></font>" : ""]"
+
+					dat += "<br><B>Objective #[obj_count]</B>: [explanation]"
+
+				if(!mode_ticker.narsie_condition_cleared)
+					dat += "<br><a href='?src=\ref[src];cult_nextobj=\ref[src]'>complete objective (debug)</a>"
 
 		/*if(istype(ticker.mode, /datum/game_mode/anti_revolution) && ticker.mode:heads.len)	//comment out anti-revolution
 			dat += "<br><table cellspacing=5><tr><td><B>Corrupt Heads</B></td><td></td></tr>"
@@ -565,7 +610,7 @@
 				if(M)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:512: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:512: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
 					// END AUTOFIX
@@ -579,13 +624,29 @@
 				if(M)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:521: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:521: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
 						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
 					// END AUTOFIX
 				else
 					dat += "<tr><td><i>Vampire not found!</i></td></tr>"
+
+		if(ticker.mode.enthralled.len > 0)
+			dat += "<br><table cellspacing=5><tr><td><B>Thralls</B></td><td></td><td></td></tr>"
+			for(var/datum/mind/Mind in ticker.mode.enthralled)
+				var/mob/M = Mind.current
+				if(M)
+
+					// AUTOFIXED BY fix_string_idiocy.py
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:521: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
+						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
+					// END AUTOFIX
+				else
+					dat += "<tr><td><i>Enthralled not found!</i></td></tr>"
+
 		if(ticker.mode.traitors.len > 0)
 			dat += "<br><table cellspacing=5><tr><td><B>Traitors</B></td><td></td><td></td></tr>"
 			for(var/datum/mind/traitor in ticker.mode.traitors)
@@ -593,7 +654,7 @@
 				if(M)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:521: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:521: dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
 						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
@@ -606,7 +667,7 @@
 			var/datum/game_mode/blob/mode = ticker.mode
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:530: dat += "<br><table cellspacing=5><tr><td><B>Blob</B></td><td></td><td></td></tr>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:530: dat += "<br><table cellspacing=5><tr><td><B>Blob</B></td><td></td><td></td></tr>"
 			dat += {"<br><table cellspacing=5><tr><td><B>Blob</B></td><td></td><td></td></tr>
 				<tr><td><i>Progress: [blobs.len]/[mode.blobwincount]</i></td></tr>"}
 			// END AUTOFIX
@@ -615,26 +676,52 @@
 				if(M)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:536: dat += "<tr><td><a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:536: dat += "<tr><td><a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += {"<tr><td><a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?priv_msg=\ref[M]'>PM</A></td>"}
 					// END AUTOFIX
 				else
 					dat += "<tr><td><i>Blob not found!</i></td></tr>"
 			dat += "</table>"
-		else if(locate(/mob/camera/blob) in world)
+		else if(locate(/mob/camera/blob) in mob_list)
 			dat += "<br><table cellspacing=5><tr><td><B>Blob</B></td><td></td><td></td></tr>"
-			for(var/mob/M in world)
+			for(var/mob/M in mob_list)
 				if(istype(M, /mob/camera/blob))
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\player_panel.dm:545: dat += "<tr><td><a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\\\player_panel.dm:545: dat += "<tr><td><a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += {"<tr><td><a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?priv_msg=\ref[M]'>PM</A></td>"}
 					// END AUTOFIX
 			dat += "</table>"
 
+		if(ticker.mode.ert.len > 0)
+			dat += "<br><table cellspacing=5><tr><td><B>ERT</B></td><td></td><td></td></tr>"
+			for(var/datum/mind/ert in ticker.mode.ert)
+				var/mob/M = ert.current
+				if(M)
+
+					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
+
+				else
+					dat += "<tr><td><i>Emergency Responder not found!</i></td></tr>"
+			dat += "</table>"
+
+		if(ticker.mode.deathsquad.len > 0)
+			dat += "<br><table cellspacing=5><tr><td><B>Deathsquad</B></td><td></td><td></td></tr>"
+			for(var/datum/mind/deathsquad in ticker.mode.deathsquad)
+				var/mob/M = deathsquad.current
+				if(M)
+
+					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
+
+				else
+					dat += "<tr><td><i>Death Commando not found!</i></td></tr>"
+			dat += "</table>"
+
 		dat += "</body></html>"
-		usr << browse(dat, "window=roundstatus;size=400x500")
+		usr << browse(dat, "window=roundstatus;size=440x500")
 	else
 		alert("The game hasn't started yet!")

@@ -18,12 +18,8 @@
 /obj/effect/energy_field/bullet_act(var/obj/item/projectile/Proj)
 	Stress(Proj.damage / 10)
 
-/obj/effect/energy_field/meteorhit(obj/effect/meteor/M as obj)
-	if(M)
-		walk(M,0)
-		Stress(2)
-
 /obj/effect/energy_field/proc/Stress(var/severity)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/energy_field/proc/Stress() called tick#: [world.time]")
 	strength -= severity
 
 	//if we take too much damage, drop out - the generator will bring us back up if we have enough power
@@ -35,6 +31,7 @@
 		density = 1
 
 /obj/effect/energy_field/proc/Strengthen(var/severity)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/energy_field/proc/Strengthen() called tick#: [world.time]")
 	strength += severity
 
 	//if we take too much damage, drop out - the generator will bring us back up if we have enough power

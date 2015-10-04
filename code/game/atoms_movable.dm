@@ -1,7 +1,6 @@
 /atom/movable
 	// Recycling shit
-	var/m_amt = 0	         // metal (CC)
-	var/g_amt = 0	         // glass (CC)
+
 	var/w_type = NOT_RECYCLABLE  // Waste category for sorters. See setup.dm
 
 	layer = 3
@@ -19,56 +18,242 @@
 	var/area/areaMaster
 
 	// Garbage collection (controller).
-	var/gcDestroyed
-	var/timeDestroyed
+	//var/gcDestroyed
+	//var/timeDestroyed
 
-	// EVENTS
-	/////////////////////////////
+	var/sound_override = 0 //Do we make a sound when bumping into something?
+	var/hard_deleted = 0
 
-	// When this object moves. (args: loc)
-	var/event/on_moved=new /event()
+	var/obj/effect/overlay/chain/tether = null
+	var/tether_pull = 0
+
+	//glide_size = 8
+
+	//Atom locking stuff.
+	var/list/locked_atoms
+	var/atom/movable/locked_to
+	var/locked_should_lie = 0	//Whether locked mobs should lie down, used by beds.
+	var/dense_when_locking = 1
+
+	// Can we send relaymove() if gravity is disabled or we are in space? (Should be handled by relaymove, but shitcode abounds)
+	var/internal_gravity = 0
 
 /atom/movable/New()
 	. = ..()
 	areaMaster = get_area_master(src)
+	if(flags & HEAR && !ismob(src))
+		getFromPool(/mob/virtualhearer, src)
+	var/icon/I = icon(icon, icon_state, dir)
+	if(I)
+		I.MapColors(-1,0,0, 0,-1,0, 0,0,-1, 1,1,1)
+		src.tempoverlay = I
+
+	locked_atoms = list()
 
 /atom/movable/Destroy()
-	gcDestroyed = "bye world!"
+	if(flags & HEAR && !ismob(src))
+		for(var/mob/virtualhearer/VH in virtualhearers)
+			if(VH.attached == src)
+				returnToPool(VH)
+	gcDestroyed = "Bye, world!"
 	tag = null
 	loc = null
+
+	for(var/atom/movable/AM in locked_atoms)
+		unlock_atom(AM)
+
+	if(locked_to)
+		locked_to.unlock_atom(src)
+
 	..()
 
+/proc/delete_profile(var/type, code = 0)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/delete_profile() called tick#: [world.time]")
+	if(!ticker || ticker.current_state < 3) return
+	if(code == 0)
+		if (!("[type]" in del_profiling))
+			del_profiling["[type]"] = 0
+
+		del_profiling["[type]"] += 1
+	else if(code == 1)
+		if (!("[type]" in ghdel_profiling))
+			ghdel_profiling["[type]"] = 0
+
+		ghdel_profiling["[type]"] += 1
+	else
+		if (!("[type]" in gdel_profiling))
+			gdel_profiling["[type]"] = 0
+
+		gdel_profiling["[type]"] += 1
+		soft_dels += 1
+
 /atom/movable/Del()
-	// Pass to Destroy().
-	if(!gcDestroyed)
+	if (gcDestroyed)
+
+		if (hard_deleted)
+			delete_profile("[type]", 1)
+		else
+			garbageCollector.dequeue("\ref[src]") // hard deletions have already been handled by the GC queue.
+			delete_profile("[type]", 2)
+	else // direct del calls or nulled explicitly.
+		delete_profile("[type]", 0)
 		Destroy()
 
 	..()
 
-// Used in shuttle movement and AI eye stuff.
-// Primarily used to notify objects being moved by a shuttle/bluespace fuckup.
-/atom/movable/proc/setLoc(var/T, var/teleported=0)
-	loc = T
+/atom/movable/Move(newLoc,Dir=0,step_x=0,step_y=0)
+	if(!loc || !newLoc)
+		return 0
+	//set up glide sizes before the move
+	//ensure this is a step, not a jump
 
-	// Update on_moved listeners.
-	INVOKE_EVENT(on_moved,list("loc"=loc))
+	//. = ..(NewLoc,Dir,step_x,step_y)
+	if(timestopped)
+		if(!pulledby || pulledby.timestopped) //being moved by our wizard maybe?
+			return 0
+	var/move_delay = max(5 * world.tick_lag, 1)
+	if(ismob(src))
+		var/mob/M = src
+		if(M.client)
+			move_delay = (3+(M.client.move_delayer.next_allowed - world.time))*world.tick_lag
 
-/atom/movable/Move(NewLoc,Dir=0,step_x=0,step_y=0)
-	var/atom/A = src.loc
-	. = ..()
+	var/can_pull_tether = 0
+	if(tether)
+		if(tether.attempt_to_follow(src,newLoc))
+			can_pull_tether = 1
+		else
+			return 0
+	glide_size = Ceiling(32 / move_delay * world.tick_lag) - 1 //We always split up movements into cardinals for issues with diagonal movements.
+	var/atom/oldloc = loc
+	if((bound_height != 32 || bound_width != 32) && (loc == newLoc))
+		. = ..()
 
+		update_dir()
+		return
+
+	if(loc != newLoc)
+		if (!(Dir & (Dir - 1))) //Cardinal move
+			. = ..()
+		else //Diagonal move, split it into cardinal moves
+			if (Dir & 1)
+				if (Dir & 4)
+					if (step(src, NORTH))
+						. = step(src, EAST)
+					else if (step(src, EAST))
+						. = step(src, NORTH)
+				else if (Dir & 8)
+					if (step(src, NORTH))
+						. = step(src, WEST)
+					else if (step(src, WEST))
+						. = step(src, NORTH)
+			else if (Dir & 2)
+				if (Dir & 4)
+					if (step(src, SOUTH))
+						. = step(src, EAST)
+					else if (step(src, EAST))
+						. = step(src, SOUTH)
+				else if (Dir & 8)
+					if (step(src, SOUTH))
+						. = step(src, WEST)
+					else if (step(src, WEST))
+						. = step(src, SOUTH)
+
+	if(. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
+		spawn(0)
+			for(var/atom/movable/AM in locked_atoms)
+				AM.forceMove(loc)
+
+	update_dir()
+
+	if(!loc || (loc == oldloc && oldloc != newLoc))
+		last_move = 0
+		return
+
+	if(tether && can_pull_tether && !tether_pull)
+		tether.follow(src,oldloc)
+		var/datum/chain/tether_datum = tether.chain_datum
+		if(!tether_datum.Check_Integrity())
+			tether_datum.snap = 1
+			tether_datum.Delete_Chain()
+
+	last_move = Dir
 	src.move_speed = world.timeofday - src.l_move_time
 	src.l_move_time = world.timeofday
-	src.m_flag = 1
-	if ((A != src.loc && A && A.z == src.z))
-		src.last_move = get_dir(A, src.loc)
-
 	// Update on_moved listeners.
-	INVOKE_EVENT(on_moved,list("loc"=NewLoc))
-
+	INVOKE_EVENT(on_moved,list("loc"=newLoc))
 	return .
 
+//The reason behind change_dir()
+/atom/movable/proc/update_dir()
+	for(var/atom/movable/AM in locked_atoms)
+		if(dir != AM.dir)
+			AM.change_dir(dir, src)
+
+//Like forceMove(), but for dirs!
+/atom/movable/proc/change_dir(new_dir, var/changer)
+	if(locked_to && changer != locked_to)
+		return
+
+	if(new_dir != dir)
+		dir = new_dir
+		update_dir()
+
+//Atom locking, lock an atom to another atom, and the locked atom will move when the other atom moves.
+//Essentially buckling mobs to chairs. For all atoms.
+//Please don't lock atoms to other atoms if the atoms locked to expect for example a different type, it's basically bound to runtime/glitch.
+/atom/movable/proc/lock_atom(var/atom/movable/AM)
+	if(AM in locked_atoms || AM.locked_to || !istype(AM))
+		return
+
+	AM.locked_to = src
+	locked_atoms += AM
+
+	AM.forceMove(loc)
+	AM.change_dir(dir, src)
+
+	if(ismob(AM))
+		var/mob/M = AM
+		M.update_canmove()
+
+	AM.anchored = 1
+
+	if(dense_when_locking)
+		density = 1
+
+	return 1
+
+/atom/movable/proc/unlock_atom(var/atom/movable/AM)
+	if(!(AM in locked_atoms))
+		return
+
+	locked_atoms -= AM
+	AM.locked_to = null
+
+	if(ismob(AM))
+		var/mob/M = AM
+		M.update_canmove()
+
+	AM.anchored = initial(AM.anchored)
+
+	if(dense_when_locking)
+		density = initial(density)
+
+	return 1
+
+/atom/movable/proc/unlock_from()
+	if(!locked_to)
+		return 0
+
+	locked_to.unlock_atom(src)
+
 /atom/movable/proc/recycle(var/datum/materials/rec)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/movable/proc/recycle() called tick#: [world.time]")
+	if(materials)
+		for(var/matid in materials.storage)
+			var/datum/material/material = materials.getMaterial(matid)
+			rec.addAmount(matid, materials.storage[matid] / material.cc_per_sheet) //the recycler's material is read as 1 = 1 sheet
+			materials.storage[matid] = 0
+		return 1
 	return 0
 
 // Previously known as HasEntered()
@@ -89,43 +274,74 @@
 	return
 
 /atom/movable/proc/forceMove(atom/destination)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/movable/proc/forceMove() called tick#: [world.time]")
 	if(destination)
 		if(loc)
 			loc.Exited(src)
 
 		loc = destination
 		loc.Entered(src)
+		if(isturf(destination))
+			var/area/A = get_area_master(destination)
+			A.Entered(src)
 
 		for(var/atom/movable/AM in loc)
 			AM.Crossed(src)
+
+		for(var/atom/movable/AM in locked_atoms)
+			AM.forceMove(loc)
 
 		// Update on_moved listeners.
 		INVOKE_EVENT(on_moved,list("loc"=loc))
 		return 1
 	return 0
 
-/atom/movable/proc/hit_check(var/speed)
+/atom/movable/proc/forceEnter(atom/destination)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/movable/proc/forceEnter() called tick#: [world.time]")
+	if(destination)
+		if(loc)
+			loc.Exited(src)
+		loc = destination
+		loc.Entered(src)
+		if(isturf(destination))
+			var/area/A = get_area_master(destination)
+			A.Entered(src)
+
+		for(var/atom/movable/AM in locked_atoms)
+			AM.forceMove(loc)
+
+		return 1
+	return 0
+
+/atom/movable/proc/hit_check(var/speed, mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/movable/proc/hit_check() called tick#: [world.time]")
 	if(src.throwing)
 		for(var/atom/A in get_turf(src))
 			if(A == src) continue
 			if(istype(A,/mob/living))
 				if(A:lying) continue
-				src.throw_impact(A,speed)
+				src.throw_impact(A, speed, user)
 				if(src.throwing == 1)
 					src.throwing = 0
 			if(isobj(A))
 				if(A.density && !A.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
-					src.throw_impact(A,speed)
+					src.throw_impact(A, speed, user)
 					src.throwing = 0
 
-/atom/movable/proc/throw_at(atom/target, range, speed)
+/atom/movable/proc/throw_at(atom/target, range, speed, override = 1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/movable/proc/throw_at() called tick#: [world.time]")
 	if(!target || !src)	return 0
+	if(override)
+		sound_override = 1
 	//use a modified version of Bresenham's algorithm to get from the atom's current position to that of the target
 
 	throwing = 1
-	throw_speed = speed
+	if(!speed)
+		speed = throw_speed
 
+	var/mob/user
 	if(usr)
+		user = usr
 		if(M_HULK in usr.mutations)
 			src.throwing = 2 // really strong throw!
 
@@ -150,19 +366,27 @@
 		var/error = dist_x/2 - dist_y
 
 
-
+		var/tS = 0
 		while(src && target &&((((src.x < target.x && dx == EAST) || (src.x > target.x && dx == WEST)) && dist_travelled < range) || (a && a.has_gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
 			// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
+			if(tS && dist_travelled)
+				timestopped = loc.timestopped
+				tS = 0
+			if(timestopped && !dist_travelled)
+				timestopped = 0
+				tS = 1
+			while((loc.timestopped || timestopped) && dist_travelled)
+				sleep(3)
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					break
 				src.Move(step)
-				hit_check(throw_speed)
+				hit_check(speed, user)
 				error += dist_x
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= throw_speed)
+				if(dist_since_sleep >= speed)
 					dist_since_sleep = 0
 					sleep(1)
 			else
@@ -170,11 +394,11 @@
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					break
 				src.Move(step)
-				hit_check(throw_speed)
+				hit_check(speed, user)
 				error -= dist_y
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= throw_speed)
+				if(dist_since_sleep >= speed)
 					dist_since_sleep = 0
 					sleep(1)
 			a = get_area(src.loc)
@@ -182,16 +406,19 @@
 		var/error = dist_y/2 - dist_x
 		while(src && target &&((((src.y < target.y && dy == NORTH) || (src.y > target.y && dy == SOUTH)) && dist_travelled < range) || (a && a.has_gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
 			// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
+			if(timestopped)
+				sleep(1)
+				continue
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					break
 				src.Move(step)
-				hit_check(throw_speed)
+				hit_check(speed, user)
 				error += dist_y
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= throw_speed)
+				if(dist_since_sleep >= speed)
 					dist_since_sleep = 0
 					sleep(1)
 			else
@@ -199,11 +426,11 @@
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					break
 				src.Move(step)
-				hit_check(throw_speed)
+				hit_check(speed, user)
 				error -= dist_x
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= throw_speed)
+				if(dist_since_sleep >= speed)
 					dist_since_sleep = 0
 					sleep(1)
 
@@ -211,8 +438,12 @@
 
 	//done throwing, either because it hit something or it finished moving
 	src.throwing = 0
-	if(isobj(src)) src.throw_impact(get_turf(src),throw_speed)
+	if(isobj(src))
+		src.throw_impact(get_turf(src), speed, user)
 
+/atom/movable/change_area(oldarea, newarea)
+	areaMaster = newarea
+	..()
 
 //Overlays
 /atom/movable/overlay
@@ -221,11 +452,11 @@
 
 /atom/movable/overlay/New()
 	. = ..()
-	verbs.Cut()
+	verbs.len = 0
 
-/atom/movable/overlay/attackby(a, b)
+/atom/movable/overlay/attackby(a, b, c)
 	if (src.master)
-		return src.master.attackby(a, b)
+		return src.master.attackby(a, b, c)
 	return
 
 /atom/movable/overlay/attack_paw(a, b, c)
@@ -238,8 +469,41 @@
 		return src.master.attack_hand(a, b, c)
 	return
 
+/atom/movable/proc/attempt_to_follow(var/atom/movable/A,var/turf/T)
+	if(anchored)
+		return 0
+	if(get_dist(T,loc) <= 1)
+		return 1
+	else
+		var/turf/U = A.loc
+		return U.Enter(src,loc)
+
 /////////////////////////////
 // SINGULOTH PULL REFACTOR
 /////////////////////////////
 /atom/movable/proc/canSingulothPull(var/obj/machinery/singularity/singulo)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/movable/proc/canSingulothPull() called tick#: [world.time]")
+	return singuloCanEat()
+
+/atom/movable/proc/say_understands(var/mob/other)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/movable/proc/say_understands() called tick#: [world.time]")
+	return 1
+
+////////////
+/// HEAR ///
+////////////
+/atom/movable/proc/addHear()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/movable/proc/addHear() called tick#: [world.time]")
+	flags |= HEAR
+	getFromPool(/mob/virtualhearer, src)
+
+/atom/movable/proc/removeHear()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/movable/proc/removeHear() called tick#: [world.time]")
+	flags &= ~HEAR
+	for(var/mob/virtualhearer/VH in virtualhearers)
+		if(VH.attached == src)
+			returnToPool(VH)
+
+//Can it be moved by a shuttle?
+/atom/movable/proc/can_shuttle_move(var/datum/shuttle/S)
 	return 1

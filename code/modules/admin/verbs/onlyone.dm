@@ -1,4 +1,5 @@
 /client/proc/only_one()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/only_one() called tick#: [world.time]")
 	if(!ticker)
 		alert("The game hasn't started yet!")
 		return
@@ -48,5 +49,5 @@
 		W.registered_name = H.real_name
 		H.equip_to_slot_or_del(W, slot_wear_id)
 
-	message_admins("\blue [key_name_admin(usr)] used THERE CAN BE ONLY ONE!", 1)
+	message_admins("<span class='notice'>[key_name_admin(usr)] used THERE CAN BE ONLY ONE!</span>", 1)
 	log_admin("[key_name(usr)] used there can be only one.")

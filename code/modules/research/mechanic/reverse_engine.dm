@@ -87,6 +87,7 @@
 //Loads a design from a list onto the machine to be researched
 //Pretty simple, just checks if the design is already present and then adds it and removes it from the parent list
 /obj/machinery/r_n_d/reverse_engine/proc/AddDesign(var/datum/design/mechanic_design/design, var/list/design_list, var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/r_n_d/reverse_engine/proc/AddDesign() called tick#: [world.time]")
 	if(!istype(design))
 		design_list -= design //lets just brush that under the rug
 		return
@@ -114,15 +115,14 @@
 //given a design, it checks to see the difference between the tech levels of the design and of the rd console it is linked to.
 //returns the number of levels difference between the design and the console, if any at all ( no negatives )
 /obj/machinery/r_n_d/reverse_engine/proc/Tech_Difference(var/datum/design/mechanic_design/design)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/r_n_d/reverse_engine/proc/Tech_Difference() called tick#: [world.time]")
 	var/list/techlist = design.req_tech
 	var/techdifference = 0
 	if(techlist.len && linked_console)
 		//message_admins("We have a techlist and a linked_console")
-		var/obj/machinery/computer/rdconsole/console = src.linked_console
-		var/list/possible_tech = console.files.possible_tech
 		for(var/checktech in techlist)
 			//message_admins("Looking at [checktech] with value of [techlist[checktech]]")
-			for(var/datum/tech/pointed_tech in possible_tech) //if we find that technology
+			for(var/datum/tech/pointed_tech in tech_list) //if we find that technology
 				if(pointed_tech.id == checktech)
 					if(techlist[checktech] > pointed_tech.level) //if the machine board's research level is higher than the one on the console
 						//message_admins("Found a difference of [techlist[checktech] - pointed_tech.level]")
@@ -137,6 +137,9 @@
 	return techdifference
 
 /obj/machinery/r_n_d/reverse_engine/proc/researchQueue()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/r_n_d/reverse_engine/proc/researchQueue() called tick#: [world.time]")
+	if(!research_queue.len)
+		return
 	while(research_queue[1])
 		if(stat&(NOPOWER|BROKEN))
 			return 0
@@ -151,6 +154,7 @@
 		src.visible_message("<span class='notice'>\icon [src] \The [src] beeps: 'Successfully researched all designs.'</span>")
 
 /obj/machinery/r_n_d/reverse_engine/proc/researchDesign(var/datum/design/mechanic_design/design)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/r_n_d/reverse_engine/proc/researchDesign() called tick#: [world.time]")
 	//message_admins("This researchDesign got called with the [design.design_name].")
 	if(busy)
 		return
@@ -175,6 +179,7 @@
 
 //finds a printer connected to the console, and use it to print our design
 /obj/machinery/r_n_d/reverse_engine/proc/PrintDesign(var/datum/design/mechanic_design/design, var/use_nano = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/r_n_d/reverse_engine/proc/PrintDesign() called tick#: [world.time]")
 	if(linked_console)
 		//message_admins("Looking for machines...")
 		for(var/obj/machinery/r_n_d/M in linked_console.linked_machines)
@@ -190,7 +195,7 @@
 /obj/machinery/r_n_d/reverse_engine/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(src.stat & (BROKEN|NOPOWER))
 		return
-	if((user.stat && !isobserver(user)) || user.restrained() || !allowed(user))
+	if((user.stat && !isobserver(user)) || user.restrained() || !allowed(user) || !Adjacent(user))
 		return
 
 	var/data[0]
@@ -199,11 +204,13 @@
 
 	for(var/i=1;i<=research_queue.len;i++)
 		var/datum/design/mechanic_design/research_item = research_queue[i]
-		todo_queue.Add(list(list("name" = research_item.name, "command1" = list("research" = i), "command2" = list("remove_tosearch" = i))))
+		if(istype(research_item, /datum/design/mechanic_design))
+			todo_queue.Add(list(list("name" = research_item.name, "command1" = list("research" = i), "command2" = list("remove_tosearch" = i))))
 
 	for(var/i=1;i<=ready_queue.len;i++)
 		var/datum/design/mechanic_design/ready_item = ready_queue[i]
-		done_queue.Add(list(list("name" = ready_item.name, "command1" = list("print_design" = i), "command2" = list("nanoprint_design" = i), "command3" = list("remove_researched" = i))))
+		if(istype(ready_item,/datum/design/mechanic_design))
+			done_queue.Add(list(list("name" = ready_item.name, "command1" = list("print_design" = i), "command2" = list("nanoprint_design" = i), "command3" = list("remove_researched" = i))))
 
 	data["research_queue"] = todo_queue
 	data["ready_queue"] = done_queue
@@ -218,7 +225,9 @@
 
 	if(..())
 		return
-
+	if(href_list["close"])
+		if(usr.machine == src) usr.unset_machine()
+		return 1
 	if(href_list["remove_tosearch"])
 		var/datum/design/mechanic_design/design = research_queue[text2num(href_list["remove_tosearch"])]
 		if(design)

@@ -1,6 +1,7 @@
 client/proc/ZoneTick()
 	set category = "Debug"
 	set name = "Process Atmos"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/ZoneTick() called tick#: [world.time]")
 
 	var/result = air_master.Tick()
 	if(result)
@@ -12,6 +13,7 @@ client/proc/ZoneTick()
 
 client/proc/Zone_Info(turf/T as null|turf)
 	set category = "Debug"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/Zone_Info() called tick#: [world.time]")
 	if(T)
 		if(istype(T,/turf/simulated) && T:zone)
 			T:zone:dbg_data(src)
@@ -30,6 +32,8 @@ client/var/list/zone_debug_images
 
 client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 	set category = "Debug"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/Test_ZAS_Connection() called tick#: [world.time]")
+
 	if(!istype(T))
 		return
 
@@ -85,6 +89,7 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 
 
 /*zone/proc/DebugDisplay(client/client)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/zone/proc/DebugDisplay() called tick#: [world.time]")
 	if(!istype(client))
 		return
 
@@ -99,7 +104,7 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 		for(var/turf/T in contents)
 			current_zone_images += image('icons/misc/debug_group.dmi', T, null, TURF_LAYER)
 
-		for(var/turf/space/S in unsimulated_tiles)
+		for(var/turf/S in unsimulated_tiles)
 			current_zone_images += image('icons/misc/debug_space.dmi', S, null, TURF_LAYER)
 
 		client << "<u>Zone Air Contents</u>"
@@ -111,7 +116,7 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 		client << "Heat Energy: [air.temperature * air.heat_capacity()] J"
 		client << "Pressure: [air.return_pressure()] KPa"
 		client << ""
-		client << "Space Tiles: [length(unsimulated_tiles)]"
+		client << "Unsimulated Zone(space/catwalk) Tiles: [length(unsimulated_tiles)]"
 		client << "Movable Objects: [length(movables())]"
 		client << "<u>Connections: [length(connections)]</u>"
 
@@ -147,10 +152,11 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 		for(var/zone/Z in air_master.zones)
 			if(Z.air == air && Z != src)
 				var/turf/zloc = pick(Z.contents)
-				client << "\red Illegal air datum shared by: [zloc.loc.name]"*/
+				client << "<span class='warning'>Illegal air datum shared by: [zloc.loc.name]</span>"*/
 
 
 /*client/proc/TestZASRebuild()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/TestZASRebuild() called tick#: [world.time]")
 	set category = "Debug"
 //	var/turf/turf = get_turf(mob)
 	var/zone/current_zone = mob.loc:zone
@@ -232,6 +238,7 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 
 /* VG - We rolled our own.
 client/proc/ZASSettings()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/ZASSettings() called tick#: [world.time]")
 	set category = "Debug"
 
 	vsc.SetDefault(mob)

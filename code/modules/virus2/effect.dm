@@ -12,12 +12,14 @@
 	virus=D
 
 /datum/disease2/effectholder/proc/runeffect(var/mob/living/carbon/human/mob,var/stage)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/effectholder/proc/runeffect() called tick#: [world.time]")
 	if(happensonce > -1 && effect.stage <= stage && prob(chance))
 		effect.activate(mob)
 		if(happensonce == 1)
 			happensonce = -1
 
 /datum/disease2/effectholder/proc/getrandomeffect(var/badness = 1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/effectholder/proc/getrandomeffect() called tick#: [world.time]")
 	if(effect)
 		virus.log += "<br />[timestamp()] Effect [effect.name] [chance]% is now "
 	else
@@ -34,6 +36,7 @@
 	virus.log += "[effect.name] [chance]%:"
 
 /datum/disease2/effectholder/proc/minormutate()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/effectholder/proc/minormutate() called tick#: [world.time]")
 	switch(pick(1,2,3,4,5))
 		if(1)
 			chance = rand(0,effect.chance_maxm)
@@ -41,6 +44,7 @@
 			multiplier = rand(1,effect.maxm)
 
 /datum/disease2/effectholder/proc/majormutate()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/effectholder/proc/majormutate() called tick#: [world.time]")
 	getrandomeffect(2)
 
 ////////////////////////////////////////////////////////////////
@@ -54,14 +58,16 @@
 	var/maxm = 1
 	var/badness = 1
 	proc/activate(var/mob/living/carbon/mob,var/multiplier)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/activate() called tick#: [world.time]")
 	proc/deactivate(var/mob/living/carbon/mob)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/deactivate() called tick#: [world.time]")
 
 ////////////////////////SPECIAL/////////////////////////////////
 /*/datum/disease2/effect/alien
 	name = "Unidentified Foreign Body"
 	stage = 4
 	activate(var/mob/living/carbon/mob,var/multiplier)
-		mob << "\red You feel something tearing its way out of your stomach..."
+		mob << "<span class='warning'>You feel something tearing its way out of your stomach...</span>"
 		mob.adjustToxLoss(10)
 		mob.updatehealth()
 		if(prob(40))
@@ -123,6 +129,17 @@
 			if(h.set_species("Tajaran"))
 				h.regenerate_icons()
 
+/datum/disease2/effect/voxpox
+	name = "Vox Pox"
+	stage = 4
+	badness = 2
+/datum/disease2/effect/voxpox/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(istype(mob,/mob/living/carbon/human))
+		var/mob/living/carbon/human/h = mob
+		if(h.species.name != "Vox")
+			if(h.set_species("Vox"))
+				h.regenerate_icons()
+
 /datum/disease2/effect/suicide
 	name = "Suicidal Syndrome"
 	stage = 4
@@ -130,7 +147,7 @@
 /datum/disease2/effect/suicide/activate(var/mob/living/carbon/mob,var/multiplier)
 	mob.suiciding = 1
 	//instead of killing them instantly, just put them at -175 health and let 'em gasp for a while
-	viewers(mob) << "\red <b>[mob.name] is holding \his breath. It looks like \he's trying to commit suicide.</b>"
+	viewers(mob) << "<span class='danger'>[mob.name] is holding \his breath. It looks like \he's trying to commit suicide.</span>"
 	mob.adjustOxyLoss(175 - mob.getToxLoss() - mob.getFireLoss() - mob.getBruteLoss() - mob.getOxyLoss())
 	mob.updatehealth()
 	spawn(200) //in case they get revived by cryo chamber or something stupid like that, let them suicide again in 20 seconds
@@ -224,6 +241,7 @@
 	stage = 4
 /datum/disease2/effect/scc/activate(var/mob/living/carbon/mob,var/multiplier)
 	//
+	if(!ishuman(mob)) return 0
 	var/mob/living/carbon/human/H = mob
 	mob.reagents.add_reagent("pacid", 10)
 	mob << "<span class = 'warning'> Your body burns as your cells break down.</span>"
@@ -275,11 +293,13 @@
 					meatslab.loc = mob.loc
 					meatslab.throw_at(Tx,i,3)
 					if (!Tx.density)
-						new /obj/effect/decal/cleanable/blood/gibs(Tx,i)
+
+						var/obj/effect/decal/cleanable/blood/gibs/D = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
+						D.New(Tx,i)
 
 
 		if(2)
-			//mob << "\red i dont think i need this here"
+			//mob << "<span class='warning'>i dont think i need this here</span>"
 
 			for (var/datum/organ/external/E in H.organs)
 				if(pick(1,0))
@@ -318,6 +338,14 @@
 
 
 
+/datum/disease2/effect/delightful
+	name = "Delightful Effect"
+	stage = 4
+/datum/disease2/effect/delightful/activate(var/mob/living/carbon/mob,var/multiplier)
+	mob << "<span class = 'notice'> You feel delightful!</span>"
+	if (mob.reagents.get_reagent_amount("doctorsdelight") < 1)
+		mob.reagents.add_reagent("doctorsdelight", 1)
+
 
 
 /datum/disease2/effect/spawn
@@ -337,12 +365,8 @@
 	name = "Biolobulin Effect"
 	stage = 4
 /datum/disease2/effect/orbweapon/activate(var/mob/living/carbon/mob,var/multiplier)
-	//
-
-	var/obj/item/toy/snappop/virus = new /obj/item/toy/snappop/virus
-	mob.equip_to_slot(virus, slot_l_hand)
-
-
+	var/obj/item/toy/snappop/virus/virus = new /obj/item/toy/snappop/virus
+	mob.equip_to_slot_or_drop(virus, slot_l_hand)
 
 /obj/item/clothing/mask/gas/virusclown_hat
 
@@ -371,7 +395,7 @@
 	if(prob(10))
 		GM.toxins += 100
 		//GM.temperature = 1500+T0C //should be enough to start a fire
-		mob << "\red You exhale a large plume of toxic gas!"
+		mob << "<span class='warning'>You exhale a large plume of toxic gas!</span>"
 	else
 		GM.toxins += 10
 		GM.temperature = istype(T) ? T.air.temperature : T20C
@@ -441,6 +465,17 @@
 /datum/disease2/effect/giggle/activate(var/mob/living/carbon/mob,var/multiplier)
 	mob.say("*giggle")
 
+/datum/disease2/effect/chickenpox
+	name = "Chicken Pox"
+	stage = 3
+/datum/disease2/effect/chickenpox/activate(var/mob/living/carbon/mob,var/multiplier)
+	if (prob(30))
+		mob.say(pick("BAWWWK!", "BAAAWWK!", "CLUCK!", "CLUUUCK!", "BAAAAWWWK!"))
+	if (prob(15))
+		mob.emote("me",1,"vomits up a chicken egg!")
+		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
+		new /obj/item/weapon/reagent_containers/food/snacks/egg(get_turf(mob))
+
 /datum/disease2/effect/confusion
 	name = "Topographical Cretinism"
 	stage = 3
@@ -502,7 +537,7 @@
 	var/mob/living/carbon/human/H = mob
 	var/obj/item/clothing/glasses/virussunglasses = new /obj/item/clothing/glasses/virussunglasses
 	if(H.glasses && !istype(H.glasses, /obj/item/clothing/glasses/virussunglasses))
-		mob.u_equip(H.glasses)
+		mob.u_equip(H.glasses,1)
 		mob.equip_to_slot(virussunglasses, slot_glasses)
 	if(!slot_glasses)
 		mob.equip_to_slot(virussunglasses, slot_glasses)
@@ -528,7 +563,7 @@
 	if(ishuman(mob))
 		if(mob:glasses && istype(mob:glasses, /obj/item/clothing/glasses/virussunglasses))
 			mob:glasses.canremove = 1
-			mob.u_equip(mob:glasses)
+			mob.u_equip(mob:glasses,1)
 
 /obj/item/clothing/glasses/virussunglasses
 
@@ -555,7 +590,7 @@
 	//
 	var/obj/item/clothing/mask/gas/virusclown_hat = new /obj/item/clothing/mask/gas/virusclown_hat
 	if(mob.wear_mask && !istype(mob.wear_mask, /obj/item/clothing/mask/gas/virusclown_hat))
-		mob.u_equip(mob.wear_mask)
+		mob.u_equip(mob.wear_mask,1)
 		mob.equip_to_slot(virusclown_hat, slot_wear_mask)
 	if(!mob.wear_mask)
 		mob.equip_to_slot(virusclown_hat, slot_wear_mask)
@@ -573,6 +608,7 @@
 /obj/item/clothing/mask/gas/virusclown_hat/equipped(var/mob/user, var/slot)
 	if (slot == slot_wear_mask)
 		canremove = 0		//curses!
+		can_flip = 0   //no pushing the mask up off your face
 	..()
 
 
@@ -592,7 +628,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 
 	var/obj/item/clothing/mask/horsehead/magic/magichead = new /obj/item/clothing/mask/horsehead/magic
 	if(mob.wear_mask && !istype(mob.wear_mask, /obj/item/clothing/mask/horsehead/magic))
-		mob.u_equip(mob.wear_mask)
+		mob.u_equip(mob.wear_mask,1)
 		mob.equip_to_slot(magichead, slot_wear_mask)
 	if(!mob.wear_mask)
 		mob.equip_to_slot(magichead, slot_wear_mask)
@@ -618,7 +654,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 
 /datum/disease2/effect/spaceadapt
 	name = "Space Adaptation Effect"
-	stage = 3
+	stage = 5
 /datum/disease2/effect/spaceadapt/activate(var/mob/living/carbon/mob,var/multiplier)
 	var/mob/living/carbon/human/H = mob
 	if (mob.reagents.get_reagent_amount("dexalinp") < 10)
@@ -631,9 +667,10 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 		mob.reagents.add_reagent("dermaline", 4)
 	mob.emote("me",1,"exhales slowly.")
 
-	var/datum/organ/external/chest/chest = H.get_organ("chest")
-	for(var/datum/organ/internal/I in chest.internal_organs)
-		I.damage = 0
+	if(ishuman(H))
+		var/datum/organ/external/chest/chest = H.get_organ("chest")
+		for(var/datum/organ/internal/I in chest.internal_organs)
+			I.damage = 0
 
 
 ////////////////////////STAGE 2/////////////////////////////////
@@ -747,7 +784,8 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	if (prob(30))
 		var/obj/effect/decal/cleanable/blood/D= locate(/obj/effect/decal/cleanable/blood) in get_turf(mob)
 		if(D==null)
-			D = new(get_turf(mob))
+			D = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(mob))
+			D.New(D.loc)
 
 		D.virus2 |= virus_copylist(mob.virus2)
 
@@ -765,8 +803,9 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	if (prob(30))
 		mob.say("*cough")
 		var/obj/effect/decal/cleanable/blood/viralsputum/D= locate(/obj/effect/decal/cleanable/blood/viralsputum) in get_turf(mob)
-		if(D==null)
-			D = new(get_turf(mob))
+		if(!D)
+			D = getFromPool(/obj/effect/decal/cleanable/blood/viralsputum, get_turf(mob))
+			D.New(D.loc)
 
 		D.virus2 |= virus_copylist(mob.virus2)
 
@@ -777,7 +816,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	name = "Lantern Syndrome"
 	stage = 2
 /datum/disease2/effect/lantern/activate(var/mob/living/carbon/mob,var/multiplier)
-	mob.SetLuminosity(4)
+	mob.set_light(4)
 	mob << "<span class = 'notice'>You are glowing!</span>"
 
 

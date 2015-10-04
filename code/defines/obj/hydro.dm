@@ -33,21 +33,21 @@
 	var/growthstages = 0
 	var/plant_type = 0 // 0 = 'normal plant'; 1 = weed; 2 = shroom
 
-/obj/item/seeds/examine()
+/obj/item/seeds/examine(mob/user)
 	..()
-	usr << "Plant Yield: \blue [(yield != -1) ? yield : "\red ERROR"]"
-	usr << "Plant Potency: \blue [(potency != -1) ? potency : "\red ERROR"]"
+	user << "Plant Yield: <span class='info'>[(yield != -1) ? yield : "<span class='attack'>ERROR</span>"]</span>"
+	user << "Plant Potency: <span class='info'>[(potency != -1) ? potency : "<span class='attack'>ERROR</span>"]</span>"
 
 /obj/item/seeds/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (istype(O, /obj/item/device/analyzer/plant_analyzer))
 		user << "*** <B>[plantname]</B> ***"
-		user << "-Plant Endurance: \blue [endurance]"
-		user << "-Plant Lifespan: \blue [lifespan]"
+		user << "-Plant Endurance: <span class='info'>[endurance]</span>"
+		user << "-Plant Lifespan: <span class='info'>[lifespan]</span>"
 		if(yield != -1)
-			user << "-Plant Yield: \blue [yield]"
-		user << "-Plant Production: \blue [production]"
+			user << "-Plant Yield: <span class='info'>[yield]</span>"
+		user << "-Plant Production: <span class='info'>[production]</span>"
 		if(potency != -1)
-			user << "-Plant Potency: \blue [potency]"
+			user << "-Plant Potency: <span class='info'>[potency]</span>"
 		return
 	..() // Fallthrough to item/attackby() so that bags can pick seeds up
 
@@ -1219,7 +1219,7 @@
 		return
 	user << "<span class='notice'>You plant the kudzu. You monster.</span>"
 	new /obj/effect/plantsegment_controller(user.loc)
-	del(src)
+	qdel(src)
 
 
 
@@ -1290,6 +1290,7 @@
 	create_reagents(50)
 
 /obj/item/weapon/grown/proc/changePotency(newValue) //-QualityVan
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/grown/proc/changePotency() called tick#: [world.time]")
 	potency = newValue
 
 /obj/item/weapon/grown/log
@@ -1308,6 +1309,8 @@
 	seed = "/obj/item/seeds/towermycelium"
 	attack_verb = list("bashed", "battered", "bludgeoned", "whacked")
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\attack_verb = list()  called tick#: [world.time]")
+
 	attackby(obj/item/weapon/W as obj, mob/user as mob)
 		if(istype(W, /obj/item/weapon/circular_saw) || istype(W, /obj/item/weapon/hatchet) || (istype(W, /obj/item/weapon/twohanded/fireaxe) && W:wielded) || istype(W, /obj/item/weapon/melee/energy))
 			user.show_message("<span class='notice'>You make planks out of the [src]!</span>", 1)
@@ -1320,7 +1323,7 @@
 						continue
 					G.attackby(NG, user)
 					usr << "You add the newly-formed wood to the stack. It now contains [NG.amount] planks."
-			del(src)
+			qdel(src)
 			return
 
 /obj/item/weapon/grown/sunflower // FLOWER POWER!
@@ -1413,7 +1416,7 @@
 		force = round((5 + potency / 5), 1)
 
 /obj/item/weapon/grown/deathnettle // -- Skie
-	desc = "The \red glowing \black nettle incites \red<B>rage</B>\black in you just from looking at it!"
+	desc = "The <span class='attack'>glowing</span> nettle incites <span class='danger'>rage</span> in you just from looking at it!"
 	icon = 'icons/obj/weapons.dmi'
 	name = "deathnettle"
 	icon_state = "deathnettle"
@@ -1429,8 +1432,10 @@
 	origin_tech = "combat=3"
 	attack_verb = list("stung")
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\attack_verb = list()  called tick#: [world.time]")
+
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>"
 		return (BRUTELOSS|TOXLOSS)
 
 /obj/item/weapon/grown/deathnettle/New()
@@ -1496,7 +1501,7 @@
 	var/WeedKillStr = 2
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is huffing the [src.name]! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class='danger'>[user] is huffing the [src.name]! It looks like \he's trying to commit suicide.</span>"
 		return (TOXLOSS)
 
 /obj/item/weapon/pestspray // -- Skie
@@ -1515,7 +1520,7 @@
 	var/PestKillStr = 2
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is huffing the [src.name]! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class='danger'>[user] is huffing the [src.name]! It looks like \he's trying to commit suicide.</span>"
 		return (TOXLOSS)
 
 /obj/item/weapon/minihoe // -- Numbers

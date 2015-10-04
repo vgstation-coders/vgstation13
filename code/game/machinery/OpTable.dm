@@ -10,6 +10,8 @@
 	active_power_usage = 5
 	var/mob/living/carbon/human/victim = null
 	var/strapped = 0.0
+	throwpass = 1 //so Adjacent passes.
+	var/rating = 1 //Use this for upgrades some day
 
 	var/obj/machinery/computer/operating/computer = null
 
@@ -46,8 +48,8 @@
 
 /obj/machinery/optable/attack_paw(mob/user as mob)
 	if ((M_HULK in usr.mutations))
-		usr << text("\blue You destroy the operating table.")
-		visible_message("\red [usr] destroys the operating table!")
+		usr << text("<span class='notice'>You destroy the operating table.</span>")
+		visible_message("<span class='warning'>[usr] destroys the operating table!</span>")
 		src.density = 0
 		del(src)
 	if (!( locate(/obj/machinery/optable, user.loc) ))
@@ -59,8 +61,8 @@
 
 /obj/machinery/optable/attack_hand(mob/user as mob)
 	if (M_HULK in usr.mutations)
-		usr << text("\blue You destroy the table.")
-		visible_message("\red [usr] destroys the operating table!")
+		usr << text("<span class='notice'>You destroy the table.</span>")
+		visible_message("<span class='warning'>[usr] destroys the operating table!</span>")
 		src.density = 0
 		del(src)
 	return
@@ -74,22 +76,22 @@
 		return 0
 
 
-/obj/machinery/optable/MouseDrop_T(obj/O as obj, mob/user as mob)
+/obj/machinery/optable/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
 
 	if ((( istype(O, /obj/item/weapon) ) || user.get_active_hand() == O))
 
-		user.drop_item()
+		user.drop_item(O)
 		if (O.loc != src.loc)
 			step(O, get_dir(O, src))
 		return
 	else
-		if(O.loc == user) //no you can't pull things out of your ass
+		if(!ismob(O)) //humans only
+			return
+		if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
 			return
 		if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.resting) //are you cuffed, dying, lying, stunned or other
 			return
-		if(O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
-			return
-		if(!ismob(O)) //humans only
+		if(O.anchored || !Adjacent(user) || !user.Adjacent(src)) // is the mob anchored, too far away from you, or are you too far away from the source
 			return
 		if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
 			return
@@ -97,21 +99,15 @@
 			return
 		if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
 			return
-		if(isrobot(user))
-			if(!istype(user:module, /obj/item/weapon/robot_module/medical))
-				user << "<span class='warning'>You do not have the means to do this!</span>"
-				return
-		if(!istype(user.loc, /turf) || !istype(O.loc, /turf)) // are you in a container/closet/pod/etc?
-			return
 		var/mob/living/L = O
-		if(!istype(L) || L.buckled || L == user)
+		if(!istype(L) || L.locked_to || L == user)
 			return
 		if (L.client)
 			L.client.perspective = EYE_PERSPECTIVE
 			L.client.eye = src
 		L.resting = 1
 		L.loc = src.loc
-		visible_message("\red [L] has been laid on the operating table by [user].", 3)
+		visible_message("<span class='warning'>[L] has been laid on the operating table by [user].</span>", 3)
 		for(var/obj/OO in src)
 			OO.loc = src.loc
 		src.add_fingerprint(user)
@@ -119,9 +115,10 @@
 		src.victim = L
 		return
 /obj/machinery/optable/proc/check_victim()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/optable/proc/check_victim() called tick#: [world.time]")
 	if(locate(/mob/living/carbon/human, src.loc))
 		var/mob/M = locate(/mob/living/carbon/human, src.loc)
-		if(M.resting)
+		if(M.lying)
 			src.victim = M
 			icon_state = "table2-active"
 			return 1
@@ -133,10 +130,12 @@
 	check_victim()
 
 /obj/machinery/optable/proc/take_victim(mob/living/carbon/C, mob/living/carbon/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/optable/proc/take_victim() called tick#: [world.time]")
+	C.unlock_from()
 	if (C == user)
 		user.visible_message("[user] climbs on the operating table.","You climb on the operating table.")
 	else
-		visible_message("\red [C] has been laid on the operating table by [user].", 3)
+		visible_message("<span class='warning'>[C] has been laid on the operating table by [user].</span>", 3)
 	if (C.client)
 		C.client.perspective = EYE_PERSPECTIVE
 		C.client.eye = src
@@ -156,24 +155,35 @@
 	set name = "Climb On Table"
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/optable/verb/climb_on()  called tick#: [world.time]")
 
-	if(usr.stat || !ishuman(usr) || usr.buckled || usr.restrained())
+	if(usr.stat || !ishuman(usr) || usr.locked_to || usr.restrained() || (usr.status_flags & FAKEDEATH))
 		return
 
 	if(src.victim)
-		usr << "\blue <B>The table is already occupied!</B>"
+		usr << "<span class='notice'><B>The table is already occupied!</B></span>"
 		return
 
 	take_victim(usr,usr)
 
 /obj/machinery/optable/attackby(obj/item/weapon/W as obj, mob/living/carbon/user as mob)
+	if(iswrench(W))
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		switch(rating)
+			if(1)
+				new /obj/item/weapon/stock_parts/scanning_module(src.loc)
+			if(2)
+				new /obj/item/weapon/stock_parts/scanning_module/adv(src.loc)
+			if(3)
+				new /obj/item/weapon/stock_parts/scanning_module/phasic(src.loc)
+		new /obj/structure/table/reinforced(src.loc)
+		qdel(src)
+		return
 	if (istype(W, /obj/item/weapon/grab))
 		if(iscarbon(W:affecting))
 			take_victim(W:affecting,usr)
-			del(W)
+			returnToPool(W)
 			return
 	if(isrobot(user)) return
-	user.drop_item()
-	if(W && W.loc)
-		W.loc = src.loc
+	user.drop_item(W, src.loc)
 	return

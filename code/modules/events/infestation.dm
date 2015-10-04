@@ -5,14 +5,14 @@
 #define LOC_LIBRARY 4
 #define LOC_HYDRO 5
 #define LOC_VAULT 6
-#define LOC_CONSTR 7
-#define LOC_TECH 8
+#define LOC_TECH 7
 
 #define VERM_MICE    0
 #define VERM_LIZARDS 1
 #define VERM_SPIDERS 2
 #define VERM_SLIMES  3
 #define VERM_BATS    4
+#define VERM_BORERS  5
 
 /datum/event/infestation
 	announceWhen = 15
@@ -24,9 +24,12 @@
 
 /datum/event/infestation/start()
 
-	location = rand(0,8)
+	location = rand(0,7)
 	var/list/turf/simulated/floor/turfs = list()
 	var/spawn_area_type
+
+	// TODO:  These locations should be specified by the map datum or by the area.
+	//  something like area.is_quiet=1 or map.quiet_areas=list()
 	switch(location)
 		if(LOC_KITCHEN)
 			spawn_area_type = /area/crew_quarters/kitchen
@@ -49,9 +52,6 @@
 		if(LOC_VAULT)
 			spawn_area_type = /area/storage/nuke_storage
 			locstring = "the vault"
-		if(LOC_CONSTR)
-			spawn_area_type = /area/construction
-			locstring = "the construction area"
 		if(LOC_TECH)
 			spawn_area_type = /area/storage/tech
 			locstring = "technical storage"
@@ -61,11 +61,10 @@
 		//world << "	checking [areapath]"
 		var/area/A = locate(areapath)
 		//world << "	A: [A], contents.len: [A.contents.len]"
-		for(var/area/B in A.related)
 			//world << "	B: [B], contents.len: [B.contents.len]"
-			for(var/turf/simulated/floor/F in B.contents)
-				if(!F.contents.len)
-					turfs += F
+		for(var/turf/simulated/floor/F in A)
+			if(!F.contents.len)
+				turfs += F
 
 	var/list/spawn_types = list()
 	var/max_number
@@ -88,6 +87,10 @@
 		if(VERM_BATS)
 			spawn_types = /mob/living/simple_animal/hostile/scarybat
 			vermstring = "bats"
+		if(VERM_BORERS)
+			spawn_types = /mob/living/simple_animal/borer
+			vermstring = "borers"
+			max_number = 5
 
 	spawn(0)
 		var/num = rand(2,max_number)

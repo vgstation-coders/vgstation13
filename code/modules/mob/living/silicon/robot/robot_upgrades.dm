@@ -13,6 +13,7 @@
 	var/installed = 0
 
 /obj/item/borg/upgrade/proc/action()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/borg/upgrade/proc/action() called tick#: [world.time]")
 	return
 
 
@@ -65,7 +66,7 @@
 
 /obj/item/borg/upgrade/restart/action(var/mob/living/silicon/robot/R)
 	if(!R.key)
-		for(var/mob/dead/observer/ghost in world)
+		for(var/mob/dead/observer/ghost mob_list)
 			if(ghost.corpse == R && ghost.client)
 				ghost.client.mob = ghost.corpse
 
@@ -138,7 +139,7 @@
 		usr << "There's no mounting point for the module!"
 		return 0
 	else
-		R.module.modules += new/obj/item/weapon/tank/jetpack/carbondioxide
+		R.module.modules += new/obj/item/weapon/tank/jetpack/carbondioxide(R.module)
 		for(var/obj/item/weapon/tank/jetpack/carbondioxide in R.module.modules)
 			R.internals = src
 		R.icon_state="Miner+j"

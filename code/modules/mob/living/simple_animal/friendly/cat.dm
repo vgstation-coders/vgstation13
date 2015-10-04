@@ -1,11 +1,13 @@
 //Cat
 /mob/living/simple_animal/cat
 	name = "cat"
+
 	desc = "Kitty!!"
 	icon_state = "cat2"
 	icon_living = "cat2"
 	icon_dead = "cat2_dead"
 	gender = MALE
+	size = SIZE_SMALL
 	speak = list("Meow!", "Esp!", "Purr!", "HSSSSS")
 	speak_emote = list("purrs", "meows")
 	emote_hear = list("meows", "mews")
@@ -13,9 +15,11 @@
 	speak_chance = 1
 	turns_per_move = 5
 	see_in_dark = 6
-	species = /mob/living/simple_animal/cat
+
+	can_breed = 1
+	species_type = /mob/living/simple_animal/cat
 	childtype = /mob/living/simple_animal/cat/kitten
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
+
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm   = "kicks"
@@ -35,27 +39,27 @@
 	gender = FEMALE
 
 /mob/living/simple_animal/cat/Life()
+	if(timestopped) return 0 //under effects of time magick
+
 	//MICE!
 	if((src.loc) && isturf(src.loc))
-		if(!stat && !resting && !buckled)
+		if(!stat && !resting && !locked_to)
 			for(var/mob/living/simple_animal/mouse/M in view(1,src))
 				if(!M.stat)
 					M.splat()
-					emote(pick("\red splats the [M]!","\red toys with the [M]","worries the [M]"))
+					emote(pick("<span class='warning'>splats the [M]!</span>","<span class='warning'>toys with the [M]</span>","worries the [M]"))
 					movement_target = null
 					stop_automated_movement = 0
 					break
 
 	..()
 
-	make_babies()
-
 	for(var/mob/living/simple_animal/mouse/snack in oview(src, 3))
 		if(prob(15))
 			emote(pick("hisses and spits!","mrowls fiercely!","eyes [snack] hungrily."))
 		break
 
-	if(!stat && !resting && !buckled)
+	if(!stat && !resting && !locked_to)
 		turns_since_scan++
 		if(turns_since_scan > 5)
 			walk_to(src,0)
@@ -77,10 +81,40 @@
 /mob/living/simple_animal/cat/Proc
 	name = "Proc"
 
+/mob/living/simple_animal/cat/salem
+	name = "Salem"
+	desc = "Meow."
+	icon_state = "salem"
+	icon_living= "salem"
+	icon_dead= "salem_dead"
+	gender = FEMALE
+
 /mob/living/simple_animal/cat/kitten
 	name = "kitten"
+
 	desc = "D'aaawwww"
 	icon_state = "kitten"
 	icon_living = "kitten"
 	icon_dead = "kitten_dead"
 	gender = NEUTER
+	size = SIZE_TINY
+
+/mob/living/simple_animal/cat/snek
+	name = "snake"
+
+	desc = "sssSSSSsss"
+	icon_state = "snek"
+	icon_living = "snek"
+	icon_dead = "snek_dead"
+	gender = NEUTER
+	speak = list("SssssSSSS.", "Slirp.","HSSSSS")
+	speak_emote = list("hisses")
+	emote_hear = list("hisses")
+	emote_see = list("slithers")
+
+	species_type = /mob/living/simple_animal/cat/snek
+	butchering_drops = null
+	childtype = null
+
+/mob/living/simple_animal/cat/snek/corpus
+	name = "Corpus"

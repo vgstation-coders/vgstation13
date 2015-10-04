@@ -18,6 +18,7 @@ datum
 
 		// /vg/: Send admin alerts with standardized code.
 		proc/send_admin_alert(var/datum/reagents/holder, var/reaction_name=src.name)
+			//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/send_admin_alert() called tick#: [world.time]")
 			var/message_prefix = "\A [reaction_name] reaction has occured"
 			var/message="[message_prefix]"
 			var/atom/A = holder.my_atom
@@ -38,6 +39,7 @@ datum
 			message_admins(message, 0, 1)
 
 		proc/on_reaction(var/datum/reagents/holder, var/created_volume)
+			//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/on_reaction() called tick#: [world.time]")
 			return
 
 		//I recommend you set the result amount to the total volume of all components.
@@ -170,12 +172,28 @@ datum
 		//	required_reagents = list("hydrogen" = 1, "carbon" = 1, "nitrogen" = 1)
 		//	result_amount = 1
 
-		water //I can't believe we never had this.
+/* You attempt to make water by mixing the ingredients for Hydroperoxyl, but you get a big, whopping sum of nothing!
+		water //Keeping this commented out for posterity.
 			name = "Water"
 			id = "water"
-			result = null
-			required_reagents = list("oxygen" = 2, "hydrogen" = 1)
+			result = null //I can't believe it's not water!
+			required_reagents = list("oxygen" = 2, "hydrogen" = 1) //And there goes the atmosphere, thanks greenhouse gases!
 			result_amount = 1
+*/
+
+		water
+			name = "Water"
+			id = "water"
+			result = "water"
+			required_reagents = list("hydrogen" = 2, "oxygen" = 1)
+			result_amount = 1
+
+		sacid
+			name = "Sulphuric Acid"
+			id = "sacid"
+			result = "sacid"
+			required_reagents = list("sulfur" = 2, "oxygen" = 3, "water" = 2)
+			result_amount = 2
 
 		thermite
 			name = "Thermite"
@@ -251,8 +269,8 @@ datum
 			name = "Virus Food"
 			id = "virusfood"
 			result = "virusfood"
-			required_reagents = list("water" = 1, "milk" = 1)
-			result_amount = 5
+			required_reagents = list("water" = 5, "milk" = 5)
+			result_amount = 15
 
 		leporazine
 			name = "Leporazine"
@@ -427,7 +445,7 @@ datum
 
 				var/eye_safety = 0
 
-				for(var/mob/living/carbon/M in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/living/carbon/M in viewers(get_turf(holder.my_atom), null))
 					if(iscarbon(M))
 						eye_safety = M.eyecheck()
 
@@ -545,6 +563,13 @@ datum
 			required_reagents = list("sodiumchloride" = 1, "ethanol" = 1, "radium" = 1)
 			result_amount = 3
 
+		carp_pheromones
+			name = "Carp pheromones"
+			id = "carppheromones"
+			result = "carppheromones"
+			required_reagents = list("carpotoxin" = 1, "leporazine" = 1, "carbon" = 1)
+			result_amount = 3
+
 		plasmasolidification
 			name = "Solid Plasma"
 			id = "solidplasma"
@@ -566,12 +591,6 @@ datum
 				new /obj/item/stack/sheet/mineral/plastic(get_turf(holder.my_atom),10)
 				return
 
-		virus_food
-			name = "Virus Food"
-			id = "virusfood"
-			result = "virusfood"
-			required_reagents = list("water" = 5, "milk" = 5, "oxygen" = 5)
-			result_amount = 15
 /*
 		mix_virus
 			name = "Mix Virus"
@@ -618,6 +637,16 @@ datum
 			required_reagents = list("capsaicin" = 2)
 			required_catalysts = list("plasma" = 5)
 			result_amount = 1
+
+		methylin
+			name = "Methylin"
+			id = "methylin"
+			result = "methylin"
+			required_reagents = list("hydrogen" = 1, "chlorine" = 1, "ethanol" = 1)
+			required_catalysts = list("fluorine" = 5)
+			result_amount = 1
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 // foam and foam precursor
@@ -642,12 +671,12 @@ datum
 
 				var/location = get_turf(holder.my_atom)
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution violently bubbles!"
+					M << "<span class='warning'>The solution violently bubbles!</span>"
 
 				location = get_turf(holder.my_atom)
 
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution spews out foam!"
+					M << "<span class='warning'>The solution spews out foam!</span>"
 
 				//world << "Holder volume is [holder.total_volume]"
 				//for(var/datum/reagent/R in holder.reagent_list)
@@ -672,7 +701,7 @@ datum
 				var/location = get_turf(holder.my_atom)
 
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution spews out a metalic foam!"
+					M << "<span class='warning'>The solution spews out a metalic foam!</span>"
 
 				var/datum/effect/effect/system/foam_spread/s = new()
 				s.set_up(created_volume, location, holder, 1)
@@ -692,7 +721,7 @@ datum
 				var/location = get_turf(holder.my_atom)
 
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution spews out a metalic foam!"
+					M << "<span class='warning'>The solution spews out a metalic foam!</span>"
 
 				var/datum/effect/effect/system/foam_spread/s = new()
 				s.set_up(created_volume, location, holder, 2)
@@ -854,9 +883,10 @@ datum
 			on_reaction(var/datum/reagents/holder, var/created_volume)
 
 				// Calculate new position (searches through beacons in world)
-				var/obj/item/device/radio/beacon/chosen
+				var
+				/chosen
 				var/list/possible = list()
-				for(var/obj/item/device/radio/beacon/W in world)
+				for(var/obj/item/beacon/W in beacons)
 					possible += W
 
 				if(possible.len > 0)
@@ -879,7 +909,7 @@ datum
 					var/y_distance = TO.y - FROM.y
 					var/x_distance = TO.x - FROM.x
 					for (var/atom/movable/A in range(2, FROM )) // iterate thru list of mobs in the area
-						if(istype(A, /obj/item/device/radio/beacon)) continue // don't teleport beacons because that's just insanely stupid
+						if(istype(A, /obj/item/beacon)) continue // don't teleport beacons because that's just insanely stupid
 						if( A.anchored && !istype(A, /mob/dead/observer) ) continue // don't teleport anchored things (computers, tables, windows, grilles, etc) because this causes problems!
 						// do teleport ghosts however because hell why not
 
@@ -1004,12 +1034,12 @@ datum
 
 				var/location = get_turf(holder.my_atom)
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution violently bubbles!"
+					M << "<span class='warning'>The solution violently bubbles!</span>"
 
 				location = get_turf(holder.my_atom)
 
 				for(var/mob/M in viewers(5, location))
-					M << "\red The solution spews out foam!"
+					M << "<span class='warning'>The solution spews out foam!</span>"
 
 				//world << "Holder volume is [holder.total_volume]"
 				//for(var/datum/reagent/R in holder.reagent_list)
@@ -1044,7 +1074,7 @@ datum
 				else
 					holder.my_atom.visible_message("<span class='rose'>Infused with plasma, the core begins to quiver and grow, and soon a new baby slime emerges from it!</span>")
 				var/mob/living/carbon/slime/S = new /mob/living/carbon/slime
-				S.loc = get_turf_loc(holder.my_atom)
+				S.loc = get_turf(holder.my_atom)
 
 		slimemonkey
 			name = "Slime Monkey"
@@ -1057,7 +1087,7 @@ datum
 			on_reaction(var/datum/reagents/holder)
 				for(var/i = 1, i <= 3, i++)
 					var /obj/item/weapon/reagent_containers/food/snacks/monkeycube/M = new /obj/item/weapon/reagent_containers/food/snacks/monkeycube
-					M.loc = get_turf_loc(holder.my_atom)
+					M.loc = get_turf(holder.my_atom)
 
 //Green
 		slimemutate
@@ -1079,12 +1109,11 @@ datum
 			required_container = /obj/item/slime_extract/metal
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
-				var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal
+				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(holder.my_atom))
 				M.amount = 15
-				M.loc = get_turf_loc(holder.my_atom)
 				var/obj/item/stack/sheet/plasteel/P = new /obj/item/stack/sheet/plasteel
 				P.amount = 5
-				P.loc = get_turf_loc(holder.my_atom)
+				P.loc = get_turf(holder.my_atom)
 
 //Gold
 		slimecrit
@@ -1138,9 +1167,9 @@ datum
 				var/list/critters = typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
 
 
-				playsound(get_turf_loc(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 					if (istype(O, /mob/living/carbon/human/))
 						var /mob/living/carbon/human/H = O
 						if((H.eyecheck() <= 0)&&(!istype(H.glasses, /obj/item/clothing/glasses/science)))
@@ -1155,7 +1184,7 @@ datum
 					var/chosen = pick(critters)
 					var/mob/living/simple_animal/hostile/C = new chosen
 					C.faction = "slimesummon"
-					C.loc = get_turf_loc(holder.my_atom)
+					C.loc = get_turf(holder.my_atom)
 					if(prob(50))
 						for(var/j = 1, j <= rand(1, 3), j++)
 							step(C, pick(NORTH,SOUTH,EAST,WEST))
@@ -1212,7 +1241,7 @@ datum
 
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 					if (istype(O, /mob/living/carbon/human/))
 						var /mob/living/carbon/human/H = O
 						if((H.eyecheck() <= 0)&&(!istype(H.glasses, /obj/item/clothing/glasses/science)))
@@ -1250,7 +1279,7 @@ datum
 
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 					if (istype(O, /mob/living/carbon/human/))
 						var /mob/living/carbon/human/H = O
 						if((H.eyecheck() <= 0)&&(!istype(H.glasses, /obj/item/clothing/glasses/science)))
@@ -1303,7 +1332,7 @@ datum
 
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 					if (istype(O, /mob/living/carbon/human/))
 						var /mob/living/carbon/human/H = O
 						if((H.eyecheck() <= 0)&&(!istype(H.glasses, /obj/item/clothing/glasses/science)))
@@ -1369,7 +1398,7 @@ datum
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 				for(var/mob/living/M in range (get_turf(holder.my_atom), 7))
 					M.bodytemperature -= 240
-					M << "\blue You feel a chill!"
+					M << "<span class='notice'>You feel a chill!</span>"
 
 //Orange
 		slimecasp
@@ -1629,9 +1658,9 @@ datum
 				else
 					send_admin_alert(holder, reaction_name="bluespace slime + plasma (Mass Teleport) in a grenade")
 				// Calculate new position (searches through beacons in world)
-				var/obj/item/device/radio/beacon/chosen
+				var/obj/item/beacon/chosen
 				var/list/possible = list()
-				for(var/obj/item/device/radio/beacon/W in world)
+				for(var/obj/item/beacon/W in beacons)
 					possible += W
 
 				if(possible.len > 0)
@@ -1654,7 +1683,7 @@ datum
 					var/y_distance = TO.y - FROM.y
 					var/x_distance = TO.x - FROM.x
 					for (var/atom/movable/A in range(4, FROM )) // iterate thru list of mobs in the area
-						if(istype(A, /obj/item/device/radio/beacon)) continue // don't teleport beacons because that's just insanely stupid
+						if(istype(A, /obj/item/beacon)) continue // don't teleport beacons because that's just insanely stupid
 						if(A.anchored) continue
 						if(istype(A, /obj/structure/cable )) continue
 
@@ -1705,7 +1734,7 @@ datum
 				var/obj/item/weapon/slimesteroid2/P = new /obj/item/weapon/slimesteroid2
 				P.loc = get_turf(holder.my_atom)
 
-//Sepia
+//sepia
 		slimecamera
 			name = "Slime Camera"
 			id = "m_camera"
@@ -1877,7 +1906,7 @@ datum
 			name = "Patron"
 			id = "patron"
 			result = "patron"
-			required_reagents = list("tequilla" = 10, "silver" = 1)
+			required_reagents = list("tequila" = 10, "silver" = 1)
 			result_amount = 10
 
 		bilk
@@ -2022,14 +2051,14 @@ datum
 			name = "Brave Bull"
 			id = "bravebull"
 			result = "bravebull"
-			required_reagents = list("tequilla" = 2, "kahlua" = 1)
+			required_reagents = list("tequila" = 2, "kahlua" = 1)
 			result_amount = 3
 
-		tequilla_sunrise
-			name = "Tequilla Sunrise"
-			id = "tequillasunrise"
-			result = "tequillasunrise"
-			required_reagents = list("tequilla" = 2, "orangejuice" = 1)
+		tequila_sunrise
+			name = "Tequila Sunrise"
+			id = "tequilasunrise"
+			result = "tequilasunrise"
+			required_reagents = list("tequila" = 2, "orangejuice" = 1)
 			result_amount = 3
 
 		toxins_special
@@ -2099,14 +2128,14 @@ datum
 			name = "Margarita"
 			id = "margarita"
 			result = "margarita"
-			required_reagents = list("tequilla" = 2, "limejuice" = 1)
+			required_reagents = list("tequila" = 2, "limejuice" = 1)
 			result_amount = 3
 
 		longislandicedtea
 			name = "Long Island Iced Tea"
 			id = "longislandicedtea"
 			result = "longislandicedtea"
-			required_reagents = list("vodka" = 1, "gin" = 1, "tequilla" = 1, "cubalibre" = 1)
+			required_reagents = list("vodka" = 1, "gin" = 1, "tequila" = 1, "cubalibre" = 1)
 			result_amount = 4
 
 		threemileisland
@@ -2257,14 +2286,14 @@ datum
 			name = "Soy Latte"
 			id = "soy_latte"
 			result = "soy_latte"
-			required_reagents = list("coffee" = 1, "soymilk" = 1)
+			required_reagents = list("espresso" = 1, "soymilk" = 1)
 			result_amount = 2
 
 		cafe_latte
-			name = "Cafe Latte"
+			name = "Latte"
 			id = "cafe_latte"
 			result = "cafe_latte"
-			required_reagents = list("coffee" = 1, "milk" = 1)
+			required_reagents = list("espresso" = 1, "milk" = 1)
 			result_amount = 2
 
 		acidspit
@@ -2406,3 +2435,126 @@ datum
 			result = "rewriter"
 			required_reagents = list("spacemountainwind" = 1, "coffee" = 1)
 			result_amount = 2
+
+		vinegar
+			name = "Vinegar"
+			id = "vinegar"
+			result = "vinegar"
+			required_reagents = list("wine" = 5)
+			required_catalysts = list("enzyme" = 5)
+			result_amount = 5
+
+			//cafe stuff!
+
+
+		acidtea
+			name = "Earl's Grey Tea"
+			id = "acidtea"
+			result = "acidtea"
+			required_reagents = list("sacid" = 1, "tea" = 1)
+			result_amount = 2
+
+		chifir
+			name = "Chifir"
+			id = "chifir"
+			result = "chifir"
+			required_reagents = list("tea" = 5, "redtea" = 5, "greentea" = 5)
+			result_amount = 15
+
+		yinyang
+			name = "Zen Tea"
+			id = "yinyang"
+			result = "yinyang"
+			required_reagents = list("tea" = 5, "nothing" = 5)
+			result_amount = 10
+
+		singularitea
+			name = "Singularitea"
+			id = "singularitea"
+			result = "singularitea"
+			required_reagents = list("radium" = 1, "tea" = 5, "redtea" = 5)
+			result_amount = 10
+
+		gyro
+			name = "Gyro"
+			id = "gyro"
+			result = "gyro"
+			required_reagents = list("greentea" = 5, "whiskey" = 5, "iron" = 1)
+			result_amount = 10
+
+		plasmatea
+			name = "Plasma Pekoe"
+			id = "plasmatea"
+			result = "plasmatea"
+			required_reagents = list("tea" = 5, "plasma" = 5)
+			result_amount = 10
+
+		espresso
+			name = "Espresso"
+			id = "espresso"
+			result = "espresso"
+			required_reagents = list("coffee" = 1, "water" = 1)
+			result_amount = 2
+
+
+		cappuccino
+			name = "Cappuccino"
+			id = "cappuccino"
+			result = "cappuccino"
+			required_reagents = list("espresso" = 1, "cream" = 1)
+			result_amount = 2
+
+		tonio
+			name = "Tonio"
+			id = "tonio"
+			result = "tonio"
+			required_reagents = list("coffee" = 5, "limejuice" = 1, "tomatojuice" = 1, "lemonjuice" = 1, "watermelonjuice" = 1, "honey" = 1)
+			result_amount = 10
+
+		doppio
+			name = "Doppio"
+			id = "doppio"
+			result = "doppio"
+			required_reagents = list("coffee" = 5, "redtea" = 5, "greentea" = 5)
+			result_amount = 10
+
+		passione
+			name = "Passione"
+			id = "passione"
+			result = "passione"
+			required_reagents = list("cappuccino" = 5, "gold" = 1, "honey" =5)
+			result_amount = 10
+
+		seccoffee
+			name = "Wake up call"
+			id = "seccoffee"
+			result = "seccoffee"
+			required_reagents = list("coffee" = 5, "sprinkles" = 1, "beepskysmash" = 5)
+			result_amount = 10
+
+		medcoffee
+			name = "Lifeline"
+			id = "medcoffee"
+			result = "medcoffee"
+			required_reagents = list("coffee" = 5, "doctorsdelight" = 5, "blood" = 1)
+			result_amount = 10
+
+		detcoffee
+			name = "Joe"
+			id = "detcoffee"
+			result = "detcoffee"
+			required_reagents = list("coffee" = 5, "whiskey" = 5)
+			result_amount = 5
+
+		etank
+			name = "Recharger"
+			id = "tank"
+			result = "etank"
+			required_reagents = list("coffee" = 1, "iron" = 1, "lithium" = 1, "fuel" = 1, "aluminum" = 1)
+			result_amount = 5
+
+		greytea
+			name = "Tide"
+			id = "greytea"
+			result = "greytea"
+			required_reagents = list("water" = 5, "fuel" = 5)

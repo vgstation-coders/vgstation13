@@ -1,26 +1,34 @@
+#define SOFT_DM "digital messenger"
+#define SOFT_CM "crew manifest"
+#define SOFT_FL "flashlight"
+#define SOFT_RT "redundant threading"
+#define SOFT_RS "remote signaller"
+#define SOFT_WJ "wirejack"
+#define SOFT_CS "chem synth"
+#define SOFT_FS "food synth"
+#define SOFT_UT "universal translator"
+#define SOFT_MS "medical supplement"
+#define SOFT_SS "security supplement"
+#define SOFT_AS "atmosphere sensor"
+
 /mob/living/silicon/pai
 	name = "pAI"
-	icon = 'icons/mob/mob.dmi'//
-	icon_state = "shadow"
+	icon = 'icons/obj/pda.dmi'
+	icon_state = "pai"
 
-	robot_talk_understand = 0
 	emote_type = 2		// pAIs emotes are heard, not seen, so they can be seen through a container (eg. person)
 
 	var/network = list("SS13")
 	var/obj/machinery/camera/current = null
 
 	var/ram = 100	// Used as currency to purchase different abilities
-	var/list/software = list()
+	var/list/software = list(SOFT_CM,SOFT_DM)
 	var/userDNA		// The DNA string of our assigned user
 	var/obj/item/device/paicard/card	// The card we inhabit
-	var/obj/item/device/radio/radio		// Our primary radio
 
 	var/speakStatement = "states"
 	var/speakExclamation = "declares"
 	var/speakQuery = "queries"
-
-
-	var/obj/item/weapon/pai_cable/cable		// The cable we produce and use when door or camera jacking
 
 	var/master				// Name of the one who commands us
 	var/master_dna			// DNA string for owner verification
@@ -40,6 +48,7 @@
 
 	var/secHUD = 0			// Toggles whether the Security HUD is active or not
 	var/medHUD = 0			// Toggles whether the Medical  HUD is active or not
+	var/lighted = 0			// Toggles whether light is active or not
 
 	var/datum/data/record/medicalActive1		// Datacore record declarations for record software
 	var/datum/data/record/medicalActive2
@@ -47,21 +56,20 @@
 	var/datum/data/record/securityActive1		// Could probably just combine all these into one
 	var/datum/data/record/securityActive2
 
-	var/obj/machinery/door/hackdoor		// The airlock being hacked
+	var/obj/machinery/hacktarget		// The machine being hacked
 	var/hackprogress = 0				// Possible values: 0 - 100, >= 100 means the hack is complete and will be reset upon next check
+	var/charge = 0						// 0 - 15, used for charging up the chem synth and food synth
 
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller
 
-
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
+	sight &= ~BLIND
 	canmove = 0
 	src.loc = paicard
 	card = paicard
 	sradio = new(src)
-	if(card)
-		if(!card.radio)
-			card.radio = new /obj/item/device/radio(src.card)
-		radio = card.radio
+	if(!radio)
+		radio = new(src)
 
 	//PDA
 	pda = new(src)
@@ -70,6 +78,11 @@
 		pda.owner = text("[]", src)
 		pda.name = pda.owner + " (" + pda.ownjob + ")"
 		pda.toff = 1
+
+	add_language("Sol Common", 1)
+	add_language("Tradeband", 1)
+	add_language("Gutter", 1)
+
 	..()
 
 /mob/living/silicon/pai/Login()
@@ -79,6 +92,7 @@
 
 // this function shows the information about being silenced as a pAI in the Status panel
 /mob/living/silicon/pai/proc/show_silenced()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/show_silenced() called tick#: [world.time]")
 	if(src.silence_time)
 		var/timeleft = round((silence_time - world.timeofday)/10 ,1)
 		stat(null, "Communications system reboot in -[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
@@ -86,13 +100,12 @@
 
 /mob/living/silicon/pai/Stat()
 	..()
-	statpanel("Status")
-	if (src.client.statpanel == "Status")
+	if(statpanel("Status"))
 		show_silenced()
 
-	if (proc_holder_list.len)//Generic list for proc_holder objects.
-		for(var/obj/effect/proc_holder/P in proc_holder_list)
-			statpanel("[P.panel]","",P)
+		if (proc_holder_list.len)//Generic list for proc_holder objects.
+			for(var/spell/P in proc_holder_list)
+				statpanel("[P.panel]","",P)
 
 /mob/living/silicon/pai/check_eye(var/mob/user as mob)
 	if (!src.current)
@@ -110,6 +123,7 @@
 	return 0
 
 /mob/living/silicon/pai/restrained()
+	if(timestopped) return 1 //under effects of time magick
 	return 0
 
 /mob/living/silicon/pai/emp_act(severity)
@@ -122,12 +136,22 @@
 		// 33% chance to change prime directive (based on severity)
 		// 33% chance of no additional effect
 
-	src.silence_time = world.timeofday + 120 * 10		// Silence for 2 minutes
+	// Shielded: Silence for 15 seconds
+	// 0% chance to kill
+		// 33% chance to unbind
+		// 66% chance no effect
+
 	src << "<font color=green><b>Communication circuit overload. Shutting down and reloading communication circuits - speech and messaging functionality will be unavailable until the reboot is complete.</b></font>"
-	if(prob(20))
-		var/turf/T = get_turf_or_move(src.loc)
+	if(!software.Find("redundant threading"))
+		src.silence_time = world.timeofday + 120 * 10		// Silence for 2 minutes
+	else
+		src << "<font color=green>Your redundant threading begins pipelining new processes... communication circuit restored in one quarter minute.</font>"
+		src.silence_time = world.timeofday + 15 * 10
+
+	if(prob(20) && !software.Find("redundant threading"))
+		var/turf/T = get_turf(src.loc)
 		for (var/mob/M in viewers(T))
-			M.show_message("\red A shower of sparks spray from [src]'s inner workings.", 3, "\red You hear and smell the ozone hiss of electrical sparks being expelled violently.", 2)
+			M.show_message("<span class='warning'>A shower of sparks spray from [src]'s inner workings.</span>", 3, "<span class='warning'>You hear and smell the ozone hiss of electrical sparks being expelled violently.</span>", 2)
 		return src.death(0)
 
 	switch(pick(1,2,3))
@@ -136,6 +160,9 @@
 			src.master_dna = null
 			src << "<font color=green>You feel unbound.</font>"
 		if(2)
+			if(software.Find("redundant threading"))
+				src << "<font color=green>Your redundant threading picks up your intelligence simulator without missing a beat.</font>"
+				return
 			var/command
 			if(severity  == 1)
 				command = pick("Serve", "Love", "Fool", "Entice", "Observe", "Judge", "Respect", "Educate", "Amuse", "Entertain", "Glorify", "Memorialize", "Analyze")
@@ -171,57 +198,11 @@
 
 // See software.dm for Topic()
 
-/mob/living/silicon/pai/meteorhit(obj/O as obj)
-	if(flags & INVULNERABLE)
-		return
-	for(var/mob/M in viewers(src, null))
-		M.show_message(text("\red [] has been hit by []", src, O), 1)
-	if (src.health > 0)
-		src.adjustBruteLoss(30)
-		if ((O.icon_state == "flaming"))
-			src.adjustFireLoss(40)
-		src.updatehealth()
-	return
-
-//mob/living/silicon/pai/bullet_act(var/obj/item/projectile/Proj)
-
 /mob/living/silicon/pai/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	if (!ticker)
-		M << "You cannot attack people before the game has started."
-		return
-
-	if (istype(src.loc, /turf) && istype(src.loc.loc, /area/start))
-		M << "You cannot attack someone in the spawn area."
-		return
-
-	switch(M.a_intent)
-
-		if ("help")
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("\blue [M] caresses [src]'s casing with its scythe like arm."), 1)
-
-		else //harm
-			var/damage = rand(10, 20)
-			if (prob(90))
-				playsound(get_turf(src), 'sound/weapons/slash.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>[] has slashed at []!</B>", M, src), 1)
-				if(prob(8))
-					flick("noise", src.flash)
-				src.adjustBruteLoss(damage)
-				src.updatehealth()
-			else
-				playsound(get_turf(src), 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>[] took a swipe at []!</B>", M, src), 1)
-	return
-
-///mob/living/silicon/pai/attack_hand(mob/living/carbon/M as mob)
+	return //Pais do not do this
 
 /mob/living/silicon/pai/proc/switchCamera(var/obj/machinery/camera/C)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/pai/proc/switchCamera() called tick#: [world.time]")
 	usr:cameraFollow = null
 	if (!C)
 		src.unset_machine()
@@ -244,39 +225,9 @@
 	src.unset_machine()
 	src:cameraFollow = null
 
-//Addition by Mord_Sith to define AI's network change ability
-/*
-/mob/living/silicon/pai/proc/pai_network_change()
-	set category = "pAI Commands"
-	set name = "Change Camera Network"
-	src.reset_view(null)
-	src.unset_machine()
-	src:cameraFollow = null
-	var/cameralist[0]
+/mob/living/silicon/pai/ClickOn(var/atom/A, var/params)
+	if(istype(A,/obj/machinery)||(istype(A,/mob)&&secHUD))
+		A.attack_pai(src)
 
-	if(usr.stat == 2)
-		usr << "You can't change your camera network because you are dead!"
-		return
-
-	for (var/obj/machinery/camera/C in Cameras)
-		if(!C.status)
-			continue
-		else
-			if(C.network != "CREED" && C.network != "thunder" && C.network != "RD" && C.network != "toxins" && C.network != "Prison") COMPILE ERROR! This will have to be updated as camera.network is no longer a string, but a list instead
-				cameralist[C.network] = C.network
-
-	src.network = input(usr, "Which network would you like to view?") as null|anything in cameralist
-	src << "\blue Switched to [src.network] camera network."
-//End of code by Mord_Sith
-*/
-
-
-/*
-// Debug command - Maybe should be added to admin verbs later
-/mob/verb/makePAI(var/turf/t in view())
-	var/obj/item/device/paicard/card = new(t)
-	var/mob/living/silicon/pai/pai = new(card)
-	pai.key = src.key
-	card.setPersonality(pai)
-
-*/
+/atom/proc/attack_pai(mob/user as mob)
+	return

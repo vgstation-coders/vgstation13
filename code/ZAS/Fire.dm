@@ -3,7 +3,7 @@
 Making Bombs with ZAS:
 Make burny fire with lots of burning
 Draw off 5000K gas from burny fire
-Separate gas into oxygen and plasma components
+separate gas into oxygen and plasma components
 Obtain plasma and oxygen tanks filled up about 50-75% with normal-temp gas
 Fill rest with super hot gas from separated canisters, they should be about 125C now.
 Attach to transfer valve and open. BOOM.
@@ -24,56 +24,50 @@ Attach to transfer valve and open. BOOM.
 	var/volatility = BASE_ZAS_FUEL_REQ //the lower this is, the easier it burns with low fuel in it. Starts at the define value
 
 /atom/proc/getFireFuel()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/getFireFuel() called tick#: [world.time]")
 	return fire_fuel
 
 /atom/proc/burnFireFuel(var/used_fuel_ratio,var/used_reactants_ratio)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/burnFireFuel() called tick#: [world.time]")
 	fire_fuel -= (fire_fuel * used_fuel_ratio * used_reactants_ratio) //* 5
 	if(fire_fuel<=0.1)
 		//testing("[src] ashifying (BFF)!")
 		ashify()
 
 /atom/proc/ashify()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/ashify() called tick#: [world.time]")
 	if(!on_fire)
 		return
 	new ashtype(src.loc)
 	qdel(src)
 
 /atom/proc/extinguish()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/extinguish() called tick#: [world.time]")
 	on_fire=0
 	if(fire_overlay)
 		overlays -= fire_overlay
 
 /atom/proc/ignite(var/temperature)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/ignite() called tick#: [world.time]")
 	on_fire=1
 	//visible_message("\The [src] bursts into flame!")
 	if(fire_dmi && fire_sprite)
 		fire_overlay = image(fire_dmi,fire_sprite)
 		overlays += fire_overlay
-	var/turf/T = get_turf(src)
-	if(! (locate(/obj/fire) in T))
-		new /obj/fire(T)
 
 /atom/proc/melt()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/melt() called tick#: [world.time]")
 	return //lolidk
 
 /atom/proc/solidify()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/solidify() called tick#: [world.time]")
 	return //lolidk
 
 /atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/fire_act() called tick#: [world.time]")
 	if(autoignition_temperature && !on_fire && exposed_temperature > autoignition_temperature)
 		ignite(exposed_temperature)
 		return 1
-
-	if(melt_temperature)
-		if(melt_temperature <= exposed_temperature && !molten && prob(5))
-			molten=1
-			melt()
-			return 1
-		if(melt_temperature > exposed_temperature && molten && prob(5))
-			molten=0
-			solidify()
-			return 1
-
 	return 0
 
 /turf
@@ -95,6 +89,7 @@ Attach to transfer valve and open. BOOM.
 	return 0
 
 /turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume, var/soh = 0, var/surfaces=0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/proc/hotspot_expose() called tick#: [world.time]")
 
 /turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh, surfaces)
 	var/obj/effect/effect/foam/fire/W = locate() in contents
@@ -119,6 +114,7 @@ Attach to transfer valve and open. BOOM.
 
 // ignite_temp: 0 = Don't check, just get fuel.
 /turf/simulated/proc/getAmtFuel(var/ignite_temp=0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/simulated/proc/getAmtFuel() called tick#: [world.time]")
 	var/fuel_found=0
 	if(!ignite_temp || src.autoignition_temperature<ignite_temp)
 		fuel_found += src.getFireFuel()
@@ -134,15 +130,16 @@ Attach to transfer valve and open. BOOM.
 	anchored = 1
 	mouse_opacity = 0
 
-	//luminosity = 3
+	blend_mode = BLEND_ADD
 
 	icon = 'icons/effects/fire.dmi'
 	icon_state = "1"
 	layer = TURF_LAYER
 
-	l_color = "#ED9200"
+	light_color = LIGHT_COLOR_FIRE
 
 /obj/fire/proc/Extinguish()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/fire/proc/Extinguish() called tick#: [world.time]")
 	var/turf/simulated/S=loc
 
 	if(istype(S))
@@ -155,6 +152,7 @@ Attach to transfer valve and open. BOOM.
 
 
 /obj/fire/process()
+	if(timestopped) return 0
 	. = 1
 
 	// Get location and check if it is in a proper ZAS zone.
@@ -194,13 +192,13 @@ Attach to transfer valve and open. BOOM.
 
 	if(firelevel > 6)
 		icon_state = "3"
-		SetLuminosity(7)
+		set_light(7, 3)
 	else if(firelevel > 2.5)
 		icon_state = "2"
-		SetLuminosity(5)
+		set_light(5, 2)
 	else
 		icon_state = "1"
-		SetLuminosity(3)
+		set_light(3, 1)
 
 	//im not sure how to implement a version that works for every creature so for now monkeys are firesafe
 	for(var/mob/living/carbon/human/M in loc)
@@ -208,6 +206,7 @@ Attach to transfer valve and open. BOOM.
 
 	for(var/atom/A in loc)
 		A.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
+
 
 	// Burn the turf, too.
 	S.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
@@ -255,22 +254,24 @@ Attach to transfer valve and open. BOOM.
 /obj/fire/New()
 	. = ..()
 	dir = pick(cardinal)
-	SetLuminosity(3)
+	set_light(3)
 	air_master.active_hotspots.Add(src)
 
 /obj/fire/Destroy()
 	air_master.active_hotspots.Remove(src)
 
-	SetLuminosity(0)
+	set_light(0)
 	..()
 
 turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.
 turf/proc/apply_fire_protection()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \turf/proc/apply_fire_protection() called tick#: [world.time]")
 turf/simulated/apply_fire_protection()
 	fire_protection = world.time
 
 
 datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\datum/gas_mixture/proc/zburn() called tick#: [world.time]")
 	// NOTE: zburn is also called from canisters and in tanks/pipes (via react()).  Do NOT assume T is always a turf.
 	//  In the aforementioned cases, it's null. - N3X.
 	var/value = 0
@@ -342,6 +343,7 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	return value
 
 /datum/gas_mixture/proc/check_recombustability(var/turf/T)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/gas_mixture/proc/check_recombustability() called tick#: [world.time]")
 	//this is a copy proc to continue a fire after its been started.
 
 	var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
@@ -379,6 +381,7 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	return still_burning
 
 datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\datum/gas_mixture/proc/check_combustability() called tick#: [world.time]")
 	//this check comes up very often and is thus centralized here to ease adding stuff
 	// zburn is used in tank fires, as well. This check, among others, broke tankbombs. - N3X
 	/*
@@ -404,6 +407,7 @@ datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
 	return 0
 
 datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\datum/gas_mixture/proc/calculate_firelevel() called tick#: [world.time]")
 	//Calculates the firelevel based on one equation instead of having to do this multiple times in different areas.
 
 	var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
@@ -439,6 +443,7 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 
 
 /mob/living/proc/FireBurn(var/firelevel, var/last_temperature, var/pressure)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/proc/FireBurn() called tick#: [world.time]")
 	var/mx = 5 * firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier) * min(pressure / ONE_ATMOSPHERE, 1)
 	apply_damage(2.5*mx, BURN)
 

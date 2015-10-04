@@ -3,7 +3,7 @@
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
 	density = 1
-
+	default_colour = "#0000b7"
 	anchored = 1.0
 
 	current_heat_capacity = 1000
@@ -44,8 +44,7 @@
 			icon_state = "freezer"
 	else
 		icon_state = "freezer_0"
-	return
-
+	..()
 /obj/machinery/atmospherics/unary/cold_sink/freezer/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)
@@ -71,8 +70,7 @@
 	if(src.on)
 		user << "You have to turn off the [src] first!"
 		return
-	if(..())
-		return 1
+	..()
 	if(!anchored)
 		verbs += rotate_verbs
 		if(node)
@@ -114,7 +112,8 @@
 	onclose(user, "freezer")
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/Topic(href, href_list)
-	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
+	if(..()) return 1
+	else
 		usr.set_machine(src)
 		if (href_list["start"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"turned [on?"off":"on"]"))
@@ -142,6 +141,7 @@
 	set name = "Rotate Clockwise"
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate()  called tick#: [world.time]")
 
 	if (src.anchored || usr:stat)
 		usr << "It is fastened to the floor!"
@@ -153,6 +153,7 @@
 	set name = "Rotate Counter Clockwise"
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate_ccw()  called tick#: [world.time]")
 
 	if (src.anchored || usr:stat)
 		usr << "It is fastened to the floor!"
@@ -166,9 +167,8 @@
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
 	density = 1
-
 	anchored = 1.0
-
+	default_colour = "#b70000"
 	current_heat_capacity = 1000
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
@@ -207,6 +207,7 @@
 			icon_state = "heater"
 	else
 		icon_state = "heater_0"
+	..()
 	return
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_ai(mob/user as mob)
@@ -234,8 +235,7 @@
 	if(src.on)
 		user << "You have to turn off the [src] first!"
 		return
-	if(..())
-		return 1
+	..()
 	if(!anchored)
 		verbs += rotate_verbs
 		if(node)
@@ -274,7 +274,8 @@
 	onclose(user, "heater")
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/Topic(href, href_list)
-	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
+	if(..()) return 1
+	else
 		usr.set_machine(src)
 		if (href_list["start"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"turned [on?"off":"on"]"))
@@ -303,6 +304,7 @@
 	set name = "Rotate Clockwise"
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate()  called tick#: [world.time]")
 
 	if (src.anchored || usr:stat)
 		usr << "It is fastened to the floor!"
@@ -314,6 +316,7 @@
 	set name = "Rotate Counter Clockwise"
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate_ccw()  called tick#: [world.time]")
 
 	if (src.anchored || usr:stat)
 		usr << "It is fastened to the floor!"

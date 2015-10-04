@@ -5,7 +5,14 @@
 /mob/living/silicon/robot/mommi/get_active_hand()
 	return module_active
 
+/mob/living/silicon/robot/mommi/get_all_slots()
+	return list(tool_state, sight_state, head_state)
+
+/mob/living/silicon/robot/mommi/get_equipped_items()
+	return list(sight_state, head_state)
+
 /mob/living/silicon/robot/mommi/proc/is_in_modules(obj/item/W, var/permit_sheets=0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/robot/mommi/proc/is_in_modules() called tick#: [world.time]")
 	if(istype(W, src.module.emag.type))
 		return src.module.emag
 	// Exact matching for stacks (so we can load machines)
@@ -14,25 +21,31 @@
 			if(S.type==W.type)
 				return permit_sheets ? 0 : S
 	else
-		return locate(W) in src.module.modules
+		return (W in src.module.modules)
+
+#define MOMMI_LOW_POWER 100
 
 /mob/living/silicon/robot/mommi/put_in_hands(var/obj/item/W)
 	// Fixing NPEs caused by PDAs giving me NULLs to hold :V - N3X
 	// And before you ask, this is how /mob handles NULLs, too.
 	if(!W)
 		return 0
+	if(cell && cell.charge <= MOMMI_LOW_POWER)
+		drop_item(W)
+		return 0
 	// Make sure we're not picking up something that's in our factory-supplied toolbox.
 	//if(is_type_in_list(W,src.module.modules))
-	if(is_in_modules(W))
-		src << "\red Picking up something that's built-in to you seems a bit silly."
+	//if(is_in_modules(W))
+		//src << "<span class='warning'>Picking up something that's built-in to you seems a bit silly.</span>"
+		//return 0
+	if(W.type == /obj/item/device/material_synth)
+		drop_item(W)
 		return 0
 	if(tool_state)
 		//var/obj/item/found = locate(tool_state) in src.module.modules
 		var/obj/item/TS = tool_state
 		if(!is_in_modules(tool_state))
-			drop_item()
-			if(TS && TS.loc)
-				TS.loc = src.loc
+			drop_item(TS)
 		else
 			TS.loc = src.module
 		contents -= tool_state
@@ -40,7 +53,7 @@
 			client.screen -= tool_state
 	tool_state = W
 	W.layer = 20
-	contents += W
+	W.forceMove(src)
 
 	// Make crap we pick up active so there's less clicking and carpal. - N3X
 	module_active=tool_state
@@ -52,7 +65,7 @@
 
 //Attemps to remove an object on a mob.  Will not move it to another area or such, just removes from the mob.
 /mob/living/silicon/robot/mommi/remove_from_mob(var/obj/O)
-	src.u_equip(O)
+	src.u_equip(O,0)
 	if (src.client)
 		src.client.screen -= O
 	O.layer = initial(O.layer)
@@ -70,6 +83,7 @@
 		unequip_sight()
 	else if (W == head_state)
 		unequip_head()
+
 
 // Override the default /mob version since we only have one hand slot.
 /mob/living/silicon/robot/mommi/put_in_active_hand(var/obj/item/W)
@@ -92,25 +106,25 @@
 		return drop_item()
 	return 0
 
-/mob/living/silicon/robot/mommi/drop_item(var/atom/Target)
+/mob/living/silicon/robot/mommi/drop_item(var/obj/item/to_drop, var/atom/Target)
 	if(tool_state)
 		//var/obj/item/found = locate(tool_state) in src.module.modules
 		if(is_in_modules(tool_state))
-			src << "\red This item cannot be dropped."
-			return 0
+			if((tool_state in contents) && (tool_state in src.module.modules))
+				src << "<span class='warning'>This item cannot be dropped.</span>"
+				return 0
 		if(client)
 			client.screen -= tool_state
 		contents -= tool_state
 		var/obj/item/TS = tool_state
-		var/turf/T = null
-		if(Target)
-			T=get_turf(Target)
-		else
-			T=get_turf(src)
-		TS.layer=initial(TS.layer)
-		TS.loc = T.loc
+		if(!Target)
+			Target = get_turf(src)
 
-		if(istype(T))
+		TS.layer=initial(TS.layer)
+		TS.loc = Target
+
+		if(istype(Target, /turf))
+			var/turf/T = Target
 			T.Entered(tool_state)
 		TS.dropped(src)
 		tool_state = null
@@ -127,6 +141,9 @@
 	var/obj/item/TS
 	if(isnull(module_active))
 		return
+	if((module_active in src.contents) && !(module_active in src.module.modules) && (module_active != src.module.emag))
+		TS = tool_state
+		drop_item(TS)
 	if(sight_state == module_active)
 		TS = sight_state
 		if(istype(sight_state,/obj/item/borg/sight))
@@ -142,8 +159,6 @@
 		TS = tool_state
 		if(!is_in_modules(TS))
 			drop_item()
-			if(TS && TS.loc)
-				TS.loc = get_turf(src)
 		if(istype(tool_state,/obj/item/borg/sight))
 			sight_mode &= ~tool_state:sight_mode
 		if (client)
@@ -153,7 +168,8 @@
 		tool_state = null
 		inv_tool.icon_state = "inv1"
 	if(is_in_modules(TS))
-		TS.loc = src.module
+		TS.forceMove(src.module)
+	hud_used.update_robot_modules_display()
 
 /mob/living/silicon/robot/mommi/uneq_all()
 	module_active = null
@@ -163,6 +179,7 @@
 	unequip_head()
 
 /mob/living/silicon/robot/mommi/proc/unequip_sight()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/robot/mommi/proc/unequip_sight() called tick#: [world.time]")
 	if(sight_state)
 		if(istype(sight_state,/obj/item/borg/sight))
 			sight_mode &= ~sight_state:sight_mode
@@ -174,6 +191,7 @@
 
 // Unequips an object from the MoMMI's head
 /mob/living/silicon/robot/mommi/proc/unequip_head()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/robot/mommi/proc/unequip_head() called tick#: [world.time]")
 	// If there is a hat on the MoMMI's head
 	if(head_state)
 		// Select the MoMMI's claw
@@ -198,12 +216,11 @@
 		update_inv_head()
 
 /mob/living/silicon/robot/mommi/proc/unequip_tool()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/robot/mommi/proc/unequip_tool() called tick#: [world.time]")
 	if(tool_state)
 		var/obj/item/TS=tool_state
 		if(!is_in_modules(TS))
 			drop_item()
-			if(TS && TS.loc)
-				TS.loc = get_turf(src)
 		if(istype(tool_state,/obj/item/borg/sight))
 			sight_mode &= ~tool_state:sight_mode
 		if (client)
@@ -212,7 +229,8 @@
 		tool_state = null
 		inv_tool.icon_state = "inv1"
 		if(is_in_modules(TS))
-			TS.loc = src.module
+			TS.forceMove(src.module)
+		hud_used.update_robot_modules_display()
 
 
 /mob/living/silicon/robot/mommi/activated(obj/item/O)
@@ -325,7 +343,7 @@
 	if(W == tool_state)
 		// Don't allow the MoMMI to equip tools to their head. I mean, they cant anyways, but stop them here
 		if(is_in_modules(tool_state))
-			src << "\red You cannot equip a module to your head."
+			src << "<span class='warning'>You cannot equip a module to your head.</span>"
 			return 0
 		// Remove the item in the MoMMI's claw from their HuD
 		if (client)
@@ -357,7 +375,7 @@
 			if (client)
 				client.screen += head_state
 		else
-			src << "\red You are trying to equip this item to an unsupported inventory slot. How the heck did you manage that? Stop it..."
+			src << "<span class='warning'>You are trying to equip this item to an unsupported inventory slot. How the heck did you manage that? Stop it...</span>"
 			return 0
 	// Set the item layer and update the MoMMI's icons
 	W.layer = 20
@@ -376,6 +394,7 @@
 /mob/living/silicon/robot/mommi/verb/quick_equip()
 	set name = "quick-equip"
 	set hidden = 1
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/silicon/robot/mommi/verb/quick_equip()  called tick#: [world.time]")
 
 	// Only allow equipping if the tool slot is activated
 	if(!module_selected(INV_SLOT_TOOL))

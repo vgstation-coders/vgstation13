@@ -1,9 +1,10 @@
 obj/structure
 	icon = 'icons/obj/structures.dmi'
+	penetration_dampening = 5
 
 obj/structure/blob_act()
 	if(prob(50))
-		del(src)
+		qdel(src)
 
 obj/structure/ex_act(severity)
 	switch(severity)
@@ -17,11 +18,5 @@ obj/structure/ex_act(severity)
 		if(3.0)
 			return
 
-obj/structure/meteorhit(obj/O as obj)
-	del(src)
-
-/obj/structure/Destroy()
-	if(hascall(src, "unbuckle"))
-		src:unbuckle()
-
-	..()
+/obj/structure/projectile_check()
+	return PROJREACT_OBJS

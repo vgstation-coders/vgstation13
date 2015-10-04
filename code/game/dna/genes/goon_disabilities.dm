@@ -20,6 +20,13 @@
 	OnSay(var/mob/M, var/message)
 		return ""
 
+	activate(var/mob/M, var/connected, var/flags)
+		..()
+		M.sdisabilities |= MUTE
+
+	deactivate(var/mob/M, var/connected, var/flags)
+		if(..())
+			M.sdisabilities &= ~MUTE
 ////////////////////////////////////////
 // Harmful to others as well as self
 ////////////////////////////////////////
@@ -39,7 +46,7 @@
 		owner.radiation = max(owner.radiation, 20)
 		for(var/mob/living/L in range(1, owner))
 			if(L == owner) continue
-			L << "\red You are enveloped by a soft green glow emanating from [owner]."
+			L << "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>"
 			L.radiation += 5
 		return
 
@@ -58,6 +65,14 @@
 	deactivation_message = "You feel fit!"
 
 	mutation = M_OBESITY
+
+	can_activate(var/mob/M, var/flags)
+		if(!ishuman(M)) return 0
+
+		var/mob/living/carbon/human/H = M
+		if(H.species && !(H.species.flags & CAN_BE_FAT)) return 0
+
+		return 1
 
 	New()
 		..()
@@ -279,19 +294,6 @@
 // USELESS SHIT //
 //////////////////
 
-// WAS: /datum/bioEffect/strong
-/datum/dna/gene/disability/strong
-	// pretty sure this doesn't do jack shit, putting it here until it does
-	name = "Strong"
-	desc = "Enhances the subject's ability to build and retain heavy muscles."
-	activation_message = "You feel buff!"
-	deactivation_message = "You feel wimpy and weak."
-
-	mutation = M_STRONG
-
-	New()
-		..()
-		block=STRONGBLOCK
 
 // WAS: /datum/bioEffect/horns
 /datum/dna/gene/disability/horns
@@ -331,9 +333,9 @@
 				if (C == owner)
 					continue
 				if (src.variant == 2)
-					C << "\red [src.personalized_stink]"
+					C << "<span class='warning'>[src.personalized_stink]</span>"
 				else
-					C << "\red [stinkString()]"
+					C << "<span class='warning'>[stinkString()]</span>"
 */
 
 
@@ -346,78 +348,101 @@
 	activation_messages = list("You suddenly feel rather hot.")
 	deactivation_messages = list("You no longer feel uncomfortably hot.")
 
-	spelltype=/obj/effect/proc_holder/spell/targeted/immolate
+	spelltype = /spell/targeted/immolate
 
 	New()
 		..()
 		block = IMMOLATEBLOCK
 
-/obj/effect/proc_holder/spell/targeted/immolate
+/spell/targeted/immolate
 	name = "Incendiary Mitochondria"
 	desc = "The subject becomes able to convert excess cellular energy into thermal energy."
 	panel = "Mutant Powers"
 
-	charge_type = "recharge"
+	charge_type = Sp_RECHARGE
 	charge_max = 600
 
-	clothes_req = 0
-	stat_allowed = 0
-	invocation_type = "none"
+	spell_flags = INCLUDEUSER
+	invocation_type = SpI_NONE
 	range = -1
+	max_targets = 1
 	selection_type = "range"
-	var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
-	include_user = 1
+	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
+	cast_sound = 'sound/effects/bamf.ogg'
 
-/obj/effect/proc_holder/spell/targeted/immolate/cast(list/targets)
-	var/mob/living/L = usr
+	hud_state = "gen_immolate"
+	override_base = "genetic"
 
-	L.adjust_fire_stacks(0.5) // Same as walking into fire. Was 100 (goon fire)
-	L.visible_message("\red <b>[L.name]</b> suddenly bursts into flames!")
-	L.on_fire = 1
-	L.update_icon = 1
-	playsound(L.loc, 'sound/effects/bamf.ogg', 50, 0)
+/spell/targeted/immolate/cast(list/targets)
+	..()
+	for(var/mob/living/target in targets)
+		target.adjust_fire_stacks(0.5) // Same as walking into fire. Was 100 (goon fire)
+		target.visible_message("<span class='danger'><b>[target.name]</b> suddenly bursts into flames!</span>")
+		target.on_fire = 1
+		target.update_icon = 1
 
 ////////////////////////////////////////////////////////////////////////
 
 // WAS: /datum/bioEffect/melt
-/datum/dna/gene/basic/grant_verb/melt
+/datum/dna/gene/basic/grant_spell/melt
 	name = "Self Biomass Manipulation"
 	desc = "The subject becomes able to transform the matter of their cells into a liquid state."
 	flags = GENE_UNNATURAL
 	activation_messages = list("You feel strange and jiggly.")
 	deactivation_messages = list("You feel more solid.")
 
-	verbtype=/proc/bioproc_melt
+	spelltype = /spell/targeted/melt
 
 	New()
 		..()
 		block = MELTBLOCK
 
-/proc/bioproc_melt()
-	set name = "Dissolve"
-	set desc = "Transform yourself into a liquified state."
-	set category = "Mutant Abilities"
+/spell/targeted/melt
+	name = "Dissolve"
+	desc = "Transform yourself into a liquified state."
+	panel = "Mutant Powers"
 
-	if (istype(usr,/mob/living/carbon/human/))
-		var/mob/living/carbon/human/H = usr
+	charge_type = Sp_CHARGES
+	charge_max = 1
 
-		H.visible_message("\red <b>[H.name]'s flesh melts right off! Holy shit!</b>")
-		//if (H.gender == "female")
-		//	playsound(H.loc, 'female_fallscream.ogg', 50, 0)
-		//else
-		//	playsound(H.loc, 'male_fallscream.ogg', 50, 0)
-		//playsound(H.loc, 'bubbles.ogg', 50, 0)
-		//playsound(H.loc, 'loudcrunch2.ogg', 50, 0)
-		var/mob/living/carbon/human/skellington/nH = new /mob/living/carbon/human/skellington(H.loc, delay_ready_dna=1)
-		if(nH.has_brain())
-			var/datum/organ/internal/brain/skellBrain = nH.internal_organs_by_name["brain"]
-			del(skellBrain)
-		nH.real_name = H.real_name
-		nH.name = "[H.name]'s skeleton"
-		//H.decomp_stage = 4
-		H.gib(1)
-	else
-		usr.visible_message("\red <b>[usr.name] melts into a pile of bloody viscera!</b>")
-		usr.gib(1)
+	spell_flags = INCLUDEUSER | STATALLOWED
+	invocation_type = SpI_NONE
+	range = -1
+	max_targets = 1
+	selection_type = "range"
 
-	return
+	override_base = "genetic"
+	hud_state = "gen_dissolve"
+
+/spell/targeted/melt/cast(var/list/targets, mob/user)
+	for(var/mob/M in targets)
+		if (istype(M,/mob/living/carbon/human/))
+			var/mob/living/carbon/human/H = M
+			if(H.species && H.species.name == "Skellington")
+				H << "<span class='warning'>You have no flesh left to melt!</span>"
+				return 0
+
+			H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
+			//if (H.gender == "female")
+			//	playsound(H.loc, 'female_fallscream.ogg', 50, 0)
+			//else
+			//	playsound(H.loc, 'male_fallscream.ogg', 50, 0)
+			//playsound(H.loc, 'bubbles.ogg', 50, 0)
+			//playsound(H.loc, 'loudcrunch2.ogg', 50, 0)
+			var/mob/living/carbon/human/skellington/nH = new /mob/living/carbon/human/skellington(H.loc, delay_ready_dna=1)
+			nH.lying = H.lying
+			//if(nH.has_brain())
+				//var/datum/organ/internal/brain/skellBrain = nH.internal_organs_by_name["brain"]
+				///del(skellBrain)
+			nH.real_name = H.real_name
+			nH.ckey = H.ckey
+			nH.name = "[H.name]'s skeleton"
+
+			if(H.mind)
+				H.mind.transfer_to(nH) //Transfer mind to the new body - to regain vampire/changeling/antag status!
+			//H.decomp_stage = 4
+			H.gib(1)
+		else
+			M.visible_message("<span class='danger'>[usr.name] melts into a pile of bloody viscera!</span>")
+			M.gib(1)
+

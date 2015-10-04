@@ -24,6 +24,7 @@
 			stat |= NOPOWER
 
 /obj/machinery/ai_slipper/proc/setState(var/enabled, var/uses)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/ai_slipper/proc/setState() called tick#: [world.time]")
 	src.disabled = disabled
 	src.uses = uses
 	src.power_change()
@@ -56,14 +57,7 @@
 		return
 
 	user.set_machine(src)
-	var/loc = src.loc
-	if(istype(loc, /turf))
-		loc = loc:loc
-	if(!istype(loc, /area))
-		user << text("Critical error - cannot connect to area master")
-		return
-	var/area/area = loc
-	var/t = "<TT><B>Foam Dispenser</B> ([area.name])<HR>"
+	var/t = "<TT><B>Foam Dispenser</B> ([areaMaster.name])<HR>"
 
 	if(src.locked && (!istype(user, /mob/living/silicon)))
 		t += "<I>(Swipe ID card to unlock control panel.)</I><BR>"
@@ -76,7 +70,7 @@
 	return
 
 /obj/machinery/ai_slipper/Topic(href, href_list)
-	..()
+	if(..()) return 1
 	if(src.locked)
 		if(!istype(usr, /mob/living/silicon))
 			usr << "<span class='warning'>Control panel is locked!</span>"
@@ -99,6 +93,7 @@
 	return
 
 /obj/machinery/ai_slipper/proc/slip_process()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/ai_slipper/proc/slip_process() called tick#: [world.time]")
 	while(cooldown_time - world.timeofday > 0)
 		var/ticksleft = cooldown_time - world.timeofday
 

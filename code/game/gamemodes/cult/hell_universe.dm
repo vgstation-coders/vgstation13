@@ -33,12 +33,15 @@ In short:
 
 
 /datum/universal_state/hell/OnTurfChange(var/turf/T)
-	var/turf/space/spess = T
-	if(istype(spess))
-		spess.overlays += "hell01"
+	if(T.name == "space")
+		T.overlays += "hell01"
+		T.underlays -= "hell01"
+	else
+		T.overlays -= "hell01"
 
 // Apply changes when entering state
 /datum/universal_state/hell/OnEnter()
+	set background = 1
 	/*
 	if(emergency_shuttle.direction==2)
 		captain_announce("The emergency shuttle has returned due to bluespace distortion.")
@@ -46,8 +49,29 @@ In short:
 	emergency_shuttle.force_shutdown()
 	*/
 
-	for(var/area/ca in world)
-		var/area/A=get_area_master(ca)
+	escape_list = get_area_turfs(locate(/area/hallway/secondary/exit))
+	tcheck(80,1)
+	suspend_alert = 1
+
+	//separated into separate procs for profiling
+	AreaSet()
+	tcheck(80,1)
+	MiscSet()
+	tcheck(80,1)
+	APCSet()
+	tcheck(80,1)
+	KillMobs()
+	tcheck(80,1)
+	OverlayAndAmbientSet()
+	tcheck(80,1)
+	runedec += 9000	//basically removing the rune cap
+
+	ticker.StartThematic("endgame")
+
+
+/datum/universal_state/hell/proc/AreaSet()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/universal_state/hell/proc/AreaSet() called tick#: [world.time]")
+	for(var/area/A in areas)
 		if(!istype(A,/area) || A.name=="Space")
 			continue
 
@@ -77,30 +101,46 @@ In short:
 */
 
 		A.updateicon()
+		tcheck(80,1)
 
-	for(var/turf/space/spess in world)
-		spess.overlays += "hell01"
+/datum/universal_state/hell/OverlayAndAmbientSet()
+	for(var/turf/T in turfs)
+		if(istype(T, /turf/space))
+			T.overlays += "hell01"
+		else
+			T.underlays += "hell01"
+		tcheck(85,1)
 
-	for(var/turf/T in world)
-		if(!T.holy && istype(T,/turf/simulated/floor) && prob(1))
+	for(var/atom/movable/lighting_overlay/L in all_lighting_overlays)
+		L.update_lumcount(0.5, 0, 0)
+		tcheck(80,1)
+
+/datum/universal_state/hell/proc/MiscSet()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/universal_state/hell/proc/MiscSet() called tick#: [world.time]")
+	for(var/turf/simulated/floor/T in turfs)
+		if(!T.holy && prob(1))
 			new /obj/effect/gateway/active/cult(T)
+		tcheck(80,1)
 
-	for (var/obj/machinery/firealarm/alm in world)
+	for (var/obj/machinery/firealarm/alm in machines)
 		if (!(alm.stat & BROKEN))
 			alm.ex_act(2)
+		tcheck(80,1)
 
-	for (var/obj/machinery/power/apc/APC in world)
+/datum/universal_state/hell/proc/APCSet()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/universal_state/hell/proc/APCSet() called tick#: [world.time]")
+	for (var/obj/machinery/power/apc/APC in power_machines)
 		if (!(APC.stat & BROKEN) && !istype(APC.areaMaster,/area/turret_protected/ai))
+			APC.chargemode = 0
 			if(APC.cell)
 				APC.cell.charge = 0
 			APC.emagged = 1
 			APC.queue_icon_update()
-			APC.update()
+		tcheck(85,1)
 
-	for(var/mob/living/simple_animal/M in world)
+/datum/universal_state/hell/proc/KillMobs()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/universal_state/hell/proc/KillMobs() called tick#: [world.time]")
+	for(var/mob/living/simple_animal/M in mob_list)
 		if(M && !M.client)
 			M.stat = DEAD
-
-	runedec += 9000	//basically removing the rune cap
-
-	ticker.StartThematic("endgame")
+		tcheck(80,1)

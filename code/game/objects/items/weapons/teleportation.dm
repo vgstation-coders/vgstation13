@@ -16,12 +16,13 @@
 	var/frequency = 1451
 	var/broadcasting = null
 	var/listening = 1.0
-	flags = FPRINT | TABLEPASS| CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	w_class = 2.0
 	item_state = "electronic"
 	throw_speed = 4
 	throw_range = 20
-	m_amt = 400
+	starting_materials = list(MAT_IRON = 400)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = "magnets=1"
 
@@ -61,7 +62,7 @@ Frequency:
 			if (sr)
 				src.temp += "<B>Located Beacons:</B><BR>"
 
-				for(var/obj/item/device/radio/beacon/W in world)
+				for(var/obj/item/beacon/W in beacons)
 					if (W.frequency == src.frequency)
 						var/turf/tr = get_turf(W)
 						if (tr.z == sr.z && tr)
@@ -101,7 +102,7 @@ Frequency:
 									direct = "weak"
 							src.temp += "[W.id]-[dir2text(get_dir(sr, tr))]-[direct]<BR>"
 
-				src.temp += "<B>You are at \[[sr.x-WORLD_X_OFFSET],[sr.y-WORLD_Y_OFFSET],[sr.z]\]</B> in orbital coordinates.<BR><BR><A href='byond://?src=\ref[src];refresh=1'>Refresh</A><BR>"
+				src.temp += "<B>You are at \[[sr.x-WORLD_X_OFFSET[sr.z]],[sr.y-WORLD_Y_OFFSET[sr.z]],[sr.z]\]</B> in orbital coordinates.<BR><BR><A href='byond://?src=\ref[src];refresh=1'>Refresh</A><BR>"
 			else
 				src.temp += "<B><FONT color='red'>Processing Error:</FONT></B> Unable to locate orbital position.<BR>"
 		else
@@ -133,9 +134,10 @@ Frequency:
 	w_class = 2.0
 	throw_speed = 3
 	throw_range = 5
-	m_amt = 10000
+	starting_materials = list(MAT_IRON = 10000, MAT_GOLD = 500, MAT_PHAZON = 50)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = "magnets=1;bluespace=3"
+	var/list/portals = list()
 
 /obj/item/weapon/hand_tele/attack_self(mob/user as mob)
 	var/turf/current_location = get_turf(user)//What turf is the user on?
@@ -143,27 +145,36 @@ Frequency:
 		user << "<span class='notice'>\The [src] is malfunctioning.</span>"
 		return
 	var/list/L = list(  )
-	for(var/obj/machinery/teleport/hub/R in world)
-		var/obj/machinery/computer/teleporter/com = locate(/obj/machinery/computer/teleporter, locate(R.x - 2, R.y, R.z))
-		if (istype(com, /obj/machinery/computer/teleporter) && com.locked && !com.one_time_use)
-			if(R.engaged)
-				L["[com.id] (Active)"] = com.locked
-			else
-				L["[com.id] (Inactive)"] = com.locked
-	var/list/turfs = list(	)
-	for(var/turf/T in orange(10))
-		if(T.x>world.maxx-8 || T.x<8)	continue	//putting them at the edge is dumb
-		if(T.y>world.maxy-8 || T.y<8)	continue
+	for(var/obj/machinery/computer/teleporter/R in machines)
+		for(var/obj/machinery/teleport/hub/com in locate(R.x + 2, R.y, R.z))
+			if(R.locked && !R.one_time_use)
+				if(com.engaged)
+					L["[R.id] (Active)"] = R.locked
+				else
+					L["[R.id] (Inactive)"] = R.locked
+
+	var/list/turfs = new/list()
+
+	for (var/turf/T in trange(10, user))
+		// putting them at the edge is dumb
+		if (T.x > world.maxx - 8 || T.x < 8)
+			continue
+
+		if (T.y > world.maxy - 8 || T.y < 8)
+			continue
+
 		turfs += T
-	if(turfs.len)
+
+	if (turfs.len)
 		L["None (Dangerous)"] = pick(turfs)
+
+	turfs = null
+
 	var/t1 = input(user, "Please select a teleporter to lock in on.", "Hand Teleporter") in L
+
 	if ((user.get_active_hand() != src || user.stat || user.restrained()))
 		return
-	var/count = 0	//num of portals from this teleport in world
-	for(var/obj/effect/portal/PO in world)
-		if(PO.creator == src)	count++
-	if(count >= 3)
+	if(portals.len >= 3)
 		user.show_message("<span class='notice'>\The [src] is recharging!</span>")
 		return
 	var/T = L[t1]
@@ -172,7 +183,7 @@ Frequency:
 	var/obj/effect/portal/P = new /obj/effect/portal( get_turf(src) )
 	P.target = T
 	P.creator = src
+	portals += P
 	src.add_fingerprint(user)
-	return
 
 

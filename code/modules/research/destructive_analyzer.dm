@@ -27,18 +27,21 @@ Note: Must be placed within 3 tiles of the R&D Console
 
 	RefreshParts()
 
+/obj/machinery/r_n_d/destructive_analyzer/Destroy()
+	if(linked_console && linked_console.linked_destroy == src)
+		linked_console.linked_destroy = null
+
+	. = ..()
+
 /obj/machinery/r_n_d/destructive_analyzer/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/S in src)
+	for(var/obj/item/weapon/stock_parts/S in component_parts)
 		T += S.rating * 0.1
-	T = between (0, T, 1)
+	T = Clamp(T, 0, 1)
 	decon_mod = T
 
-/obj/machinery/r_n_d/destructive_analyzer/meteorhit()
-	del(src)
-	return
-
 /obj/machinery/r_n_d/destructive_analyzer/proc/ConvertReqString2List(var/list/source_list)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/r_n_d/destructive_analyzer/proc/ConvertReqString2List() called tick#: [world.time]")
 	var/list/temp_list = params2list(source_list)
 	for(var/O in temp_list)
 		temp_list[O] = text2num(temp_list[O])
@@ -53,41 +56,52 @@ Note: Must be placed within 3 tiles of the R&D Console
 /obj/machinery/r_n_d/destructive_analyzer/crowbarDestroy(mob/user)
 	if(..() == 1)
 		if(loaded_item)
-			loaded_item.loc = src.loc
+			loaded_item.forceMove(loc)
 		return 1
 	return -1
 
 /obj/machinery/r_n_d/destructive_analyzer/attackby(var/obj/O as obj, var/mob/user as mob)
 	if(..())
 		return 1
-	if (istype(O, /obj/item) && !loaded_item)
+	if (istype(O, /obj/item) && !loaded_item && !panel_open)
 		if(isrobot(user)) //Don't put your module items in there!
 			if(isMoMMI(user))
 				var/mob/living/silicon/robot/mommi/mommi = user
 				if(mommi.is_in_modules(O,permit_sheets=1))
-					user << "\red You cannot insert something that is part of you."
+					user << "<span class='warning'>You cannot insert something that is part of you.</span>"
 					return
 			else
 				return
 		if(!O.origin_tech)
-			user << "\red This doesn't seem to have a tech origin!"
+			user << "<span class='warning'>This doesn't seem to have a tech origin!</span>"
 			return
 		var/list/temp_tech = ConvertReqString2List(O.origin_tech)
 		if (temp_tech.len == 0)
-			user << "\red You cannot deconstruct this item!"
+			user << "<span class='warning'>You cannot deconstruct this item!</span>"
 			return
 		/*if(O.reliability < 90 && O.crit_fail == 0)
-			usr << "\red Item is neither reliable enough or broken enough to learn from."
+			usr << "<span class='warning'>Item is neither reliable enough or broken enough to learn from.</span>"
 			return*/
 		busy = 1
 		loaded_item = O
-		user.drop_item()
-		O.loc = src
-		user << "\blue You add the [O.name] to the machine!"
+		user.drop_item(O, src)
+		user << "<span class='notice'>You add the [O.name] to the machine!</span>"
 		flick("d_analyzer_la", src)
 		spawn(10)
 			icon_state = "d_analyzer_l"
 			busy = 0
+	return
+
+/obj/machinery/r_n_d/destructive_analyzer/attack_hand(mob/user as mob)
+	if (..(user))
+		return
+	if (loaded_item && !panel_open && !busy)
+		user << "<span class='notice'>You remove the [loaded_item.name] from the [src].</span>"
+		loaded_item.loc = src.loc
+		loaded_item = null
+		icon_state = "d_analyzer"
+
+/obj/machinery/r_n_d/destructive_analyzer/attack_ghost(mob/user)
 	return
 
 //For testing purposes only.

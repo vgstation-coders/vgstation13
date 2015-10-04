@@ -15,7 +15,7 @@
 
 /obj/machinery/door/poddoor/shutters/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	add_fingerprint(user)
-	if(!(istype(C, /obj/item/weapon/crowbar) || (istype(C, /obj/item/weapon/twohanded/fireaxe) && C:wielded == 1) ))
+	if(!(istype(C, /obj/item/weapon/crowbar) || (istype(C, /obj/item/weapon/fireaxe) && C.wielded == 1) ))
 		return
 	if(density && (stat & NOPOWER) && !operating)
 		operating = 1
@@ -24,13 +24,14 @@
 			icon_state = "shutter0"
 			sleep(15)
 			density = 0
-			SetOpacity(0)
+			set_opacity(0)
 			operating = 0
 			return
 	return
 
 /obj/machinery/door/poddoor/shutters/open()
 	if(operating == 1) //doors can still open when emag-disabled
+	//if(welded) //These are not airlocks
 		return
 	if(!ticker)
 		return 0
@@ -40,7 +41,7 @@
 	icon_state = "shutter0"
 	sleep(10)
 	density = 0
-	SetOpacity(0)
+	set_opacity(0)
 	update_nearby_tiles()
 
 	if(operating == 1) //emag again
@@ -52,13 +53,14 @@
 
 /obj/machinery/door/poddoor/shutters/close()
 	if(operating)
+	//if(welded) //these are not airlocks.
 		return
 	operating = 1
 	flick("shutterc1", src)
 	icon_state = "shutter1"
 	density = 1
 	if(visible)
-		SetOpacity(1)
+		set_opacity(1)
 	update_nearby_tiles()
 
 	sleep(10)

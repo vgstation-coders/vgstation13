@@ -13,20 +13,32 @@ it creates. All the menus and other manipulation commands are in the R&D console
 	desc = "A fabricator capable of producing prototypes from research schematics."
 	flags = OPENCONTAINER
 
-	max_material_storage = 100000 //All this could probably be done better with a list but meh.
 	build_time = PROTOLATHE_BUILD_TIME
 	build_number = 2
 
-	l_color = "#7BF9FF"
+	light_color = LIGHT_COLOR_CYAN
 
 	research_flags = CONSOLECONTROL | HASOUTPUT | TAKESMATIN | HASMAT_OVER | LOCKBOXES
+
+	part_sets = list(
+		"Stock Parts" = list(),
+		"Bluespace" = list(),
+		"Data" = list(),
+		"Engineering" = list(),
+		"Medical" = list(),
+		"Mining" = list(),
+		"Robotics" = list(),
+		"Weapons" = list(),
+		"Armor" = list(),
+		"Misc" = list(),
+		)
 
 /obj/machinery/r_n_d/fabricator/protolathe/power_change()
 	..()
 	if(!(stat & (BROKEN|NOPOWER)))
-		SetLuminosity(2)
+		set_light(2)
 	else
-		SetLuminosity(0)
+		set_light(0)
 
 /obj/machinery/r_n_d/fabricator/protolathe/New()
 	. = ..()
@@ -43,6 +55,11 @@ it creates. All the menus and other manipulation commands are in the R&D console
 
 	RefreshParts()
 
+/obj/machinery/r_n_d/fabricator/protolathe/Destroy()
+	if(linked_console && linked_console.linked_lathe == src)
+		linked_console.linked_lathe = null
+
+	. = ..()
 
 /obj/machinery/r_n_d/fabricator/protolathe/RefreshParts()
 	var/T = 0
@@ -50,10 +67,11 @@ it creates. All the menus and other manipulation commands are in the R&D console
 		T += G.reagents.maximum_volume
 
 	create_reagents(T) // Holder for the reagents used as materials.
-	T = 0
-	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
-		T += M.rating
-	max_material_storage = T * 75000
+
+	. = ..()
+
+/obj/machinery/r_n_d/fabricator/protolathe/setup_part_sets()
+	return
 
 /obj/machinery/r_n_d/fabricator/protolathe/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	..()

@@ -14,14 +14,33 @@
 	var/list/transplant_data // Blood DNA and colour of donor
 	var/rejecting            // Is this organ already being rejected?
 	var/obj/item/organ/organ_holder
+	var/datum/dna/owner_dna
+
+
+/datum/organ/internal/Copy()
+	var/datum/organ/internal/I = ..()
+	I.damage = damage
+	I.min_bruised_damage = min_bruised_damage
+	I.min_broken_damage = min_broken_damage
+	I.parent_organ = parent_organ
+	I.robotic = robotic
+	I.removed_type = removed_type
+	I.transplant_data = transplant_data
+	I.rejecting = rejecting
+	I.organ_holder = null
+	I.owner_dna = owner_dna
+	return I
 
 /datum/organ/internal/proc/rejuvenate()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/internal/proc/rejuvenate() called tick#: [world.time]")
 	damage=0
 
 /datum/organ/internal/proc/is_bruised()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/internal/proc/is_bruised() called tick#: [world.time]")
 	return damage >= min_bruised_damage
 
 /datum/organ/internal/proc/is_broken()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/internal/proc/is_broken() called tick#: [world.time]")
 	return damage >= min_broken_damage
 
 /datum/organ/internal/New(mob/living/carbon/human/H)
@@ -89,6 +108,8 @@
 							owner.reagents.add_reagent("toxin", rand(3,5))
 
 /datum/organ/internal/proc/take_damage(amount, var/silent=0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/internal/proc/take_damage() called tick#: [world.time]")
+	if(!owner) return
 	if(src.robotic == 2)
 		src.damage += (amount * 0.8)
 	else
@@ -100,6 +121,7 @@
 
 
 /datum/organ/internal/proc/emp_act(severity)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/internal/proc/emp_act() called tick#: [world.time]")
 	switch(robotic)
 		if(0)
 			return
@@ -127,9 +149,11 @@
 					return
 
 /datum/organ/internal/proc/mechanize() //Being used to make robutt hearts, etc
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/internal/proc/mechanize() called tick#: [world.time]")
 	robotic = 2
 
 /datum/organ/internal/proc/mechassist() //Used to add things like pacemakers, etc
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/internal/proc/mechassist() called tick#: [world.time]")
 	robotic = 1
 	min_bruised_damage = 15
 	min_broken_damage = 35
@@ -168,11 +192,16 @@
 	var/process_accuracy = 10
 	removed_type = /obj/item/organ/liver
 
+	Copy()
+		var/datum/organ/internal/liver/I = ..()
+		I.process_accuracy = process_accuracy
+		return I
+
 	process()
 		..()
 		if (germ_level > INFECTION_LEVEL_ONE)
 			if(prob(1))
-				owner << "\red Your skin itches."
+				owner << "<span class='warning'>Your skin itches.</span>"
 		if (germ_level > INFECTION_LEVEL_TWO)
 			if(prob(1))
 				spawn owner.vomit()
@@ -236,6 +265,8 @@
 	removed_type = /obj/item/organ/appendix
 
 /datum/organ/internal/proc/remove(var/mob/user)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/internal/proc/remove() called tick#: [world.time]")
 
 	if(!removed_type) return 0
 

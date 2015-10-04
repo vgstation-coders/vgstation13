@@ -16,8 +16,10 @@
 	var/implant=null
 	var/ckey=null
 	var/mind=null
+	var/list/languages = list()
 
 /datum/dna2/record/proc/GetData()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/dna2/record/proc/GetData() called tick#: [world.time]")
 	var/list/ser=list("data" = null, "owner" = null, "label" = null, "type" = null, "ue" = 0)
 	if(dna)
 		ser["ue"] = (types & DNA2_BUF_UE) == DNA2_BUF_UE
@@ -47,15 +49,12 @@
 	var/locked = 0
 	var/mob/living/carbon/occupant = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
-	var/opened = 0
+	machine_flags = SCREWTOGGLE | CROWDESTROY
 
-	l_color = "#7BF9FF"
-	power_change()
-		..()
-		if(!(stat & (BROKEN|NOPOWER)) && src.occupant)
-			SetLuminosity(2)
-		else
-			SetLuminosity(0)
+	light_color = LIGHT_COLOR_CYAN
+	use_auto_lights = 1
+	light_range_on = 3
+	light_power_on = 2
 
 /obj/machinery/dna_scannernew/New()
 	. = ..()
@@ -79,12 +78,14 @@
 	src.go_out()
 	return
 
+
 /obj/machinery/dna_scannernew/verb/eject()
 	set src in oview(1)
 	set category = "Object"
 	set name = "Eject DNA Scanner"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/dna_scannernew/verb/eject()  called tick#: [world.time]")
 
-	if (usr.stat != 0 || istype(usr, /mob/living/simple_animal))
+	if (usr.stat != 0 || istype(usr, /mob/living/simple_animal) || (usr.status_flags & FAKEDEATH))
 		return
 
 	eject_occupant()
@@ -92,12 +93,13 @@
 	add_fingerprint(usr)
 	return
 
-/obj/machinery/dna_scannernew/proc/eject_occupant()
-	src.go_out()
+/obj/machinery/dna_scannernew/proc/eject_occupant(var/exit = loc)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/dna_scannernew/proc/eject_occupant() called tick#: [world.time]")
+	src.go_out(exit)
 	for(var/obj/O in src)
 		if(!istype(O,/obj/item/weapon/circuitboard/clonescanner) && \
 		   !istype(O,/obj/item/weapon/stock_parts) && \
-		   !istype(O,/obj/item/weapon/cable_coil) && \
+		   !istype(O,/obj/item/stack/cable_coil) && \
 		   O != beaker)
 			O.loc = get_turf(src)//Ejects items that manage to get in there (exluding the components and beaker)
 	if(!occupant)
@@ -108,10 +110,9 @@
 	set src in oview(1)
 	set category = "Object"
 	set name = "Enter DNA Scanner"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/dna_scannernew/verb/move_inside()  called tick#: [world.time]")
 
-	if (usr.stat != 0)
-		return
-	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
+	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting || (usr.status_flags & FAKEDEATH)) //are you cuffed, dying, lying, stunned or other
 		return
 	if (!ishuman(usr) && !ismonkey(usr)) //Make sure they're a mob that has dna
 		usr << "<span class='notice'> Try as you might, you can not climb up into the scanner.</span>"
@@ -126,142 +127,155 @@
 		usr << "<span class='notice'> <B>Subject cannot have abiotic items on.</B></span>"
 		return
 	usr.stop_pulling()
-	usr.client.perspective = EYE_PERSPECTIVE
-	usr.client.eye = src
 	usr.loc = src
+	usr.reset_view()
 	src.occupant = usr
 	src.icon_state = "scanner_1"
 	src.add_fingerprint(usr)
 	return
 
 /obj/machinery/dna_scannernew/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if(!istype(O) || isturf(O)) // Cant drag the floor man
+	if(!ismob(O)) //mobs only
 		return
-	if(O.loc == user) //no you can't pull things out of your ass
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
 		return
 	if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.resting) //are you cuffed, dying, lying, stunned or other
 		return
-	if(O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
-		return
-	if(!ismob(O)) //humans only
+	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
 		return
 	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
 		return
-	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
+	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the scanner
 		return
 	if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
 		return
-	if(!istype(user.loc, /turf) || !istype(O.loc, /turf)) // are you in a container/closet/pod/etc?
-		return
 	if(occupant)
-		user << "\blue <B>The DNA Scanner is already occupied!</B>"
+		user << "<span class='notice'>\The [src] is already occupied!</span>"
 		return
-	if (istype(O, /mob/living/carbon/human/manifested))
+	if(istype(O, /mob/living/carbon/human/manifested))
 		usr << "<span class='notice'> For some reason, the scanner is unable to read that person's genes.</span>"//to prevent a loophole that allows cultist to turn manifested ghosts into normal humans
 		return
 	if(isrobot(user))
-		if(!istype(user:module, /obj/item/weapon/robot_module/medical))
+		var/mob/living/silicon/robot/robit = usr
+		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
 			user << "<span class='warning'>You do not have the means to do this!</span>"
 			return
 	var/mob/living/L = O
-	if(!istype(L) || L.buckled)
+	if(!istype(L) || L.locked_to)
 		return
 	if(L.abiotic())
-		user << "\red <B>Subject cannot have abiotic items on.</B>"
+		user << "<span class='danger'>Subject cannot have abiotic items on.</span>"
 		return
 	for(var/mob/living/carbon/slime/M in range(1,L))
 		if(M.Victim == L)
 			usr << "[L.name] will not fit into the DNA Scanner because they have a slime latched onto their head."
 			return
 	if(L == user)
-		return
-	visible_message("[user] puts [L.name] into the DNA Scanner.", 3)
+		visible_message("[user] climbs into \the [src].")
+	else
+		visible_message("[user] places [L] into \the [src].")
+	if(user.pulling == L)
+		user.stop_pulling()
 	put_in(L)
 	if(user.pulling == L)
 		user.pulling = null
 
-/obj/machinery/dna_scannernew/attackby(var/obj/item/weapon/item as obj, var/mob/user as mob)
-	if (istype(item, /obj/item/weapon/screwdriver))
-		if (!opened)
-			src.opened = 1
-			user << "You open the maintenance hatch of [src]."
-			//src.icon_state = "autolathe_t"
-		else
-			src.opened = 0
-			user << "You close the maintenance hatch of [src]."
-			//src.icon_state = "autolathe"
-		return 1
-	else if(istype(item, /obj/item/weapon/crowbar))
-		if (occupant)
-			user << "\red You cannot disassemble this [src], it's occupado."
+/obj/machinery/dna_scannernew/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+	if(!ishuman(usr) && !isrobot(usr))
+		return
+	if(!occupant)
+		usr << "<span class='warning'>The sleeper is unoccupied!</span>"
+		return
+	if(isrobot(usr))
+		var/mob/living/silicon/robot/robit = usr
+		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+			usr << "<span class='warning'>You do not have the means to do this!</span>"
 			return
-		if (opened)
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-			return 1
-	else if(istype(item, /obj/item/weapon/reagent_containers/glass))
+	if(!istype(over_location) || over_location.density)
+		return
+	if(!Adjacent(over_location))
+		return
+	if(!(occupant == usr) && (!Adjacent(usr) || !usr.Adjacent(over_location)))
+		return
+	for(var/atom/movable/A in over_location.contents)
+		if(A.density)
+			if((A == src) || istype(A, /mob))
+				continue
+			return
+	if(occupant == usr)
+		visible_message("[usr] climbs out of \the [src].", 3)
+	else
+		visible_message("[usr] removes [occupant.name] from \the [src].", 3)
+	eject_occupant(over_location)
+
+/obj/machinery/dna_scannernew/attackby(var/obj/item/weapon/item as obj, var/mob/user as mob)
+	if(istype(item, /obj/item/weapon/reagent_containers/glass))
 		if(beaker)
-			user << "\red A beaker is already loaded into the machine."
+			user << "<span class='warning'>A beaker is already loaded into the machine.</span>"
 			return
 
 		beaker = item
-		user.drop_item()
-		item.loc = src
+		user.drop_item(beaker, src)
 		user.visible_message("[user] adds \a [item] to \the [src]!", "You add \a [item] to \the [src]!")
 		return
-	if(istype(item, /obj/item/weapon/grab)) //sanity checks, you chucklefucks
+	else if(istype(item, /obj/item/weapon/grab)) //sanity checks, you chucklefucks
 		var/obj/item/weapon/grab/G = item
 		if (!ismob(G.affecting))
 			return
 		if (src.occupant)
-			user << "\blue <B>The scanner is already occupied!</B>"
+			user << "<span class='notice'><B>The scanner is already occupied!</B></span>"
 			return
 		if (G.affecting.abiotic())
-			user << "\blue <B>Subject cannot have abiotic items on.</B>"
+			user << "<span class='notice'><B>Subject cannot have abiotic items on.</B></span>"
+			return
+		if(G.affecting.locked_to)
 			return
 		put_in(G.affecting)
 		src.add_fingerprint(user)
-		del(G)
+		qdel(G)
 		return 1
-	return
+	return ..()
 
 /obj/machinery/dna_scannernew/proc/put_in(var/mob/M)
-	if(M.client)
-		M.client.perspective = EYE_PERSPECTIVE
-		M.client.eye = src
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/dna_scannernew/proc/put_in() called tick#: [world.time]")
 	M.loc = src
+	M.reset_view()
 	src.occupant = M
 	src.icon_state = "scanner_1"
 
 	// search for ghosts, if the corpse is empty and the scanner is connected to a cloner
-	for(dir in list(NORTH, EAST, SOUTH, WEST))
-		if(locate(/obj/machinery/computer/cloning, get_step(src, dir)))
+	for(dir in cardinal)
+		var/obj/machinery/computer/cloning/C = locate(/obj/machinery/computer/cloning) in get_step(src, dir)
+		if(C)
+			C.update_icon()
 			if(!M.client && M.mind)
 				for(var/mob/dead/observer/ghost in player_list)
 					if(ghost.mind == M.mind)
-						ghost << 'sound/effects/adminhelp.ogg'
-						ghost << "<b><font color = #330033><font size = 3>Your corpse has been placed into a cloning scanner. Return to your body if you want to be resurrected/cloned!</b> (Verbs -> Ghost -> Re-enter corpse)</font color>"
+						if(ghost.client)
+							ghost << 'sound/effects/adminhelp.ogg'
+							ghost << "<span class='interface'><b><font size = 3>Your corpse has been placed into a cloning scanner. Return to your body if you want to be resurrected/cloned!</b> \
+								(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</font></span>"
+						else
+							ghost.canclone = M
 						break
 			break
 	return
 
-/obj/machinery/dna_scannernew/proc/go_out()
-	if ((!( src.occupant ) || src.locked))
-		return
-	if (src.occupant.client)
-		src.occupant.client.eye = src.occupant.client.mob
-		src.occupant.client.perspective = MOB_PERSPECTIVE
-	src.occupant.loc = src.loc
-	src.occupant = null
-	src.icon_state = "scanner_0"
-	return
+/obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/dna_scannernew/proc/go_out() called tick#: [world.time]")
+	if ((!(occupant) || locked))
+		return 0
+	occupant.forceMove(exit)
+	occupant.reset_view()
+	occupant = null
+	icon_state = "scanner_0"
+
+	for(dir in cardinal)
+		var/obj/machinery/computer/cloning/C = locate(/obj/machinery/computer/cloning) in get_step(src, dir)
+		if(C)
+			C.update_icon()
+
+	return 1
 
 /obj/machinery/dna_scannernew/ex_act(severity)
 	switch(severity)
@@ -305,7 +319,7 @@
 	name = "DNA Modifier Access Console"
 	desc = "Scand DNA."
 	icon = 'icons/obj/computer.dmi'
-	icon_state = "scanner"
+	icon_state = "dna"
 	density = 1
 
 	anchored = 1
@@ -334,14 +348,13 @@
 	// Fix for #274 (Mash create block injector without answering dialog to make unlimited injectors) - N3X.
 	var/waiting_for_user_input = 0
 
-	l_color = "#0000FF"
+	light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/scan_consolenew/attackby(obj/O as obj, mob/user as mob)
 	..()
 	if (istype(O, /obj/item/weapon/disk/data)) //INSERT SOME diskS
 		if (!src.disk)
-			user.drop_item()
-			O.loc = src
+			user.drop_item(O, src)
 			src.disk = O
 			user << "You insert [O]."
 			nanomanager.update_uis(src) // update all UIs attached to src()
@@ -365,18 +378,7 @@
 /obj/machinery/computer/scan_consolenew/blob_act()
 
 	if(prob(75))
-		del(src)
-
-/obj/machinery/computer/scan_consolenew/power_change()
-	if(stat & BROKEN)
-		icon_state = "broken"
-	else if(powered())
-		icon_state = initial(icon_state)
-		stat &= ~NOPOWER
-	else
-		spawn(rand(0, 15))
-			src.icon_state = "c_unpowered"
-			stat |= NOPOWER
+		qdel(src)
 
 /obj/machinery/computer/scan_consolenew/New()
 	..()
@@ -390,18 +392,21 @@
 	return
 
 /obj/machinery/computer/scan_consolenew/proc/findScanner()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/scan_consolenew/proc/findScanner() called tick#: [world.time]")
 	for(dir in list(NORTH,EAST,SOUTH,WEST))
 		var/foundmachine = locate(/obj/machinery/dna_scannernew, get_step(src, dir))
 		if(foundmachine)
 			return foundmachine
 
 /obj/machinery/computer/scan_consolenew/proc/all_dna_blocks(var/list/buffer)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/scan_consolenew/proc/all_dna_blocks() called tick#: [world.time]")
 	var/list/arr = list()
 	for(var/i = 1, i <= buffer.len, i++)
 		arr += "[i]:[EncodeDNABlock(buffer[i])]"
 	return arr
 
 /obj/machinery/computer/scan_consolenew/proc/setInjectorBlock(var/obj/item/weapon/dnainjector/I, var/blk, var/datum/dna2/record/buffer)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/scan_consolenew/proc/setInjectorBlock() called tick#: [world.time]")
 	var/pos = findtext(blk,":")
 	if(!pos) return 0
 	var/id = text2num(copytext(blk,1,pos))
@@ -539,7 +544,7 @@
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
-        // for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
+        // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
 		ui = new(user, src, ui_key, "dna_modifier.tmpl", "DNA Modifier Console", 660, 700)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
@@ -551,6 +556,9 @@
 /obj/machinery/computer/scan_consolenew/Topic(href, href_list)
 	if(..())
 		return 0 // don't update uis
+	if(href_list["close"])
+		if(usr.machine == src)
+			usr.unset_machine()
 	if(!istype(usr.loc, /turf))
 		return 0 // don't update uis
 	if(!src || !src.connected)
@@ -848,7 +856,7 @@
 
 		if (bufferOption == "changeLabel")
 			var/datum/dna2/record/buf = src.buffers[bufferId]
-			var/text = sanitize(input(usr, "New Label:", "Edit Label", buf.name) as text|null)
+			var/text = copytext(sanitize(input(usr, "New Label:", "Edit Label", buf.name) as text|null),1,MAX_NAME_LEN)
 			buf.name = text
 			src.buffers[bufferId] = buf
 			return 1

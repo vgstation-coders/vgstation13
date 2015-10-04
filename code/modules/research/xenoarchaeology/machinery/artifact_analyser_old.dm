@@ -99,6 +99,7 @@
 			break
 
 /obj/machinery/artifact_analyser/proc/AA_FailedAnalysis(var/failtype)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/artifact_analyser/proc/AA_FailedAnalysis() called tick#: [world.time]")
 	switch(failtype)
 		if(1)
 			src.aorigin = "Failed to Identify"
@@ -114,6 +115,7 @@
 			if (prob(20)) src.aeffect2 = pick(src.allranges)
 
 /obj/machinery/artifact_analyser/proc/AA_Analyse()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/artifact_analyser/proc/AA_Analyse() called tick#: [world.time]")
 	if(!cur_artifact)
 		return
 	src.accuO = 5 + rand(0,10) + origin_bonuses[cur_artifact.origin] + cur_artifact.activated * 50
@@ -212,7 +214,7 @@
 	cur_artifact.my_effect.artifact_id = cur_artifact.display_id
 
 /obj/machinery/artifact_analyser/Topic(href, href_list)
-
+	if(..()) return 1
 	if(href_list["analyse"])
 		if(owned_pad)
 			var/turf/pad_turf = get_turf(owned_pad)
@@ -257,7 +259,7 @@
 
 	if(href_list["upload"] && cur_id != "")
 		//add new datum to every DB in the world
-		for(var/obj/machinery/computer/artifact_database/DB in world)
+		for(var/obj/machinery/computer/artifact_database/DB in machines)
 			var/update = 0
 			for(var/datum/catalogued_artifact/CA in DB.catalogued_artifacts)
 				if(CA.display_id == cur_id)
@@ -289,7 +291,7 @@
 		P.name = "Artifact Analysis Report #[scan_num]"
 		P.info = r
 		for(var/mob/O in hearers(src, null))
-			O.show_message("\icon[src] \blue The [src.name] prints a sheet of paper", 3)
+			O.show_message("\icon[src] <span class='notice'>The [src.name] prints a sheet of paper</span>", 3)
 		use_power(10)
 
 	if(href_list["close"])

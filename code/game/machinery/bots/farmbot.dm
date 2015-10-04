@@ -92,6 +92,7 @@
 
 
 /obj/machinery/bot/farmbot/proc/get_total_ferts()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/farmbot/proc/get_total_ferts() called tick#: [world.time]")
 	var total_fert = 0
 	for (var/obj/item/weapon/reagent_containers/glass/fertilizer/fert in contents)
 		total_fert++
@@ -168,14 +169,13 @@
 			user << "Controls are now [src.locked ? "locked." : "unlocked."]"
 			src.updateUsrDialog()
 		else
-			user << "\red Access denied."
+			user << "<span class='warning'>Access denied.</span>"
 
 	else if (istype(W, /obj/item/weapon/reagent_containers/glass/fertilizer))
 		if ( get_total_ferts() >= Max_Fertilizers )
 			user << "The fertilizer storage is full!"
 			return
-		user.drop_item()
-		W.loc = src
+		user.drop_item(W, src)
 		user << "You insert [W]."
 		flick("farmbot_hatch",src)
 		src.updateUsrDialog()
@@ -186,10 +186,10 @@
 
 /obj/machinery/bot/farmbot/Emag(mob/user as mob)
 	..()
-	if(user) user << "\red You short out [src]'s plant identifier circuits."
+	if(user) user << "<span class='warning'>You short out [src]'s plant identifier circuits.</span>"
 	spawn(0)
 		for(var/mob/O in hearers(src, null))
-			O.show_message("\red <B>[src] buzzes oddly!</B>", 1)
+			O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 	flick("farmbot_broke", src)
 	src.emagged = 1
 	src.on = 1
@@ -201,7 +201,7 @@
 
 /obj/machinery/bot/farmbot/explode()
 	src.on = 0
-	visible_message("\red <B>[src] blows apart!</B>", 1)
+	visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
 	new /obj/item/weapon/minihoe(Tsec)
@@ -258,6 +258,7 @@
 	return
 
 /obj/machinery/bot/farmbot/proc/use_farmbot_item()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/farmbot/proc/use_farmbot_item() called tick#: [world.time]")
 	if ( !target )
 		mode = 0
 		return 0
@@ -297,6 +298,7 @@
 
 
 /obj/machinery/bot/farmbot/proc/find_target()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/farmbot/proc/find_target() called tick#: [world.time]")
 	if ( emagged ) //Find a human and help them!
 		for ( var/mob/living/carbon/human/human in view(7,src) )
 			if (human.stat == 2)
@@ -326,6 +328,7 @@
 		return 0
 
 /obj/machinery/bot/farmbot/proc/GetNeededMode(obj/machinery/portable_atmospherics/hydroponics/tray)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/farmbot/proc/GetNeededMode() called tick#: [world.time]")
 	if ( !tray.seed || tray.dead )
 		return 0
 
@@ -341,12 +344,15 @@
 	return 0
 
 /obj/machinery/bot/farmbot/proc/move_to_target()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/farmbot/proc/move_to_target() called tick#: [world.time]")
 	//Mostly copied from medibot code.
 
 	if(src.frustration > 8)
 		target = null
 		mode = 0
 		frustration = 0
+		src.path = new()
+	if(!src.path)
 		src.path = new()
 	if(src.target && (src.path.len) && (get_dist(src.target,src.path[src.path.len]) > 2))
 		src.path = new()
@@ -355,7 +361,7 @@
 			var/turf/dest = get_step_towards(target,src)  //Can't pathfind to a tray, as it is dense, so pathfind to the spot next to the tray
 
 			src.path = AStar(src.loc, dest, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 30,id=botcard)
-			if(src.path.len == 0)
+			if(path && src.path.len == 0)
 				for ( var/turf/spot in orange(1,target) ) //The closest one is unpathable, try  the other spots
 					if ( spot == dest ) //We already tried this spot
 						continue
@@ -384,6 +390,7 @@
 
 
 /obj/machinery/bot/farmbot/proc/fertilize(var/obj/item/weapon/reagent_containers/glass/fertilizer/fert)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/farmbot/proc/fertilize() called tick#: [world.time]")
 	if ( !fert )
 		target = null
 		mode = 0
@@ -393,7 +400,7 @@
 		spawn(0)
 			fert.loc = src.loc
 			fert.throw_at(target, 16, 3)
-		src.visible_message("\red <b>[src] launches [fert.name] at [target.name]!</b>")
+		src.visible_message("<span class='danger'>[src] launches [fert.name] at [target.name]!</span>")
 		flick("farmbot_broke", src)
 		spawn (FARMBOT_EMAG_DELAY)
 			mode = 0
@@ -403,7 +410,7 @@
 	else // feed them plants~
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
 		tray.nutrilevel = 10
-		fert.reagents.trans_to(tray.reagents, fert.reagents.total_volume)
+		fert.reagents.trans_to(tray, fert.reagents.total_volume)
 		del fert
 		//tray.updateicon()
 		icon_state = "farmbot_fertile"
@@ -417,6 +424,7 @@
 		return 1
 
 /obj/machinery/bot/farmbot/proc/weed()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/farmbot/proc/weed() called tick#: [world.time]")
 	icon_state = "farmbot_hoe"
 	spawn(FARMBOT_ANIMATION_TIME)
 		icon_state = "farmbot[src.on]"
@@ -427,13 +435,14 @@
 			mode = 0
 
 		if ( prob(30) ) // better luck next time little guy
-			src.visible_message("\red <b>[src] swings wildly at [target] with a minihoe, missing completely!</b>")
+			src.visible_message("<span class='danger'>[src] swings wildly at [target] with a minihoe, missing completely!</span>")
 
 		else // yayyy take that weeds~
 			var/attackVerb = pick("slashed", "sliced", "cut", "clawed")
+			//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\var/attackVerb = pick()  called tick#: [world.time]")
 			var /mob/living/carbon/human/human = target
 
-			src.visible_message("\red <B>[src] [attackVerb] [human]!</B>")
+			src.visible_message("<span class='danger'>[src] [attackVerb] [human]!</span>")
 			var/damage = 15
 			var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
 			var/datum/organ/external/affecting = human.get_organ(ran_zone(dam_zone))
@@ -450,6 +459,7 @@
 		//tray.updateicon()
 
 /obj/machinery/bot/farmbot/proc/water()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/farmbot/proc/water() called tick#: [world.time]")
 	if ( !tank || tank.reagents.total_volume < 1 )
 		mode = 0
 		target = null
@@ -461,7 +471,7 @@
 
 	if ( emagged ) // warning, humans are thirsty!
 		var splashAmount = min(70,tank.reagents.total_volume)
-		src.visible_message("\red [src] splashes [target] with a bucket of water!")
+		src.visible_message("<span class='warning'>[src] splashes [target] with a bucket of water!</span>")
 		playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 		if ( prob(50) )
 			tank.reagents.reaction(target, TOUCH) //splash the human!
@@ -494,6 +504,7 @@
 			mode = 0
 
 /obj/machinery/bot/farmbot/proc/refill()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/farmbot/proc/refill() called tick#: [world.time]")
 	if ( !tank || !tank.reagents.total_volume > 600 || !istype(target,/obj/structure/sink) )
 		mode = 0
 		target = null
@@ -501,9 +512,9 @@
 
 	mode = FARMBOT_MODE_WAITING
 	playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
-	src.visible_message("\blue [src] starts filling it's tank from [target].")
+	src.visible_message("<span class='notice'>[src] starts filling it's tank from [target].</span>")
 	spawn(300)
-		src.visible_message("\blue [src] finishes filling it's tank.")
+		src.visible_message("<span class='notice'>[src] finishes filling it's tank.</span>")
 		src.mode = 0
 		tank.reagents.add_reagent("water", tank.reagents.maximum_volume - tank.reagents.total_volume )
 		playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)

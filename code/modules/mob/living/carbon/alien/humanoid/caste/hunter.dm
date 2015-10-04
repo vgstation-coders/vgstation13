@@ -19,6 +19,8 @@
 		name = text("alien hunter ([rand(1, 1000)])")
 	real_name = name
 	..()
+	add_language(LANGUAGE_XENO)
+	default_language = all_languages[LANGUAGE_XENO]
 
 /mob/living/carbon/alien/humanoid/hunter
 	handle_regular_hud_updates()
@@ -55,6 +57,7 @@
 //This ought to be fixed, maybe not now though
 /*
 /mob/living/carbon/alien/humanoid/hunter/verb/invis()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/carbon/alien/humanoid/hunter/verb/invis()  called tick#: [world.time]")
 	set name = "Invisibility (50)"
 	set desc = "Makes you invisible for 15 seconds"
 	set category = "Alien"
@@ -66,7 +69,7 @@
 			adjustToxLoss(-50)
 			alien_invis = 1.0
 			update_icons()
-			src << "\green You are now invisible."
+			src << "<span class='good'>You are now invisible.</span>"
 			visible_message("<span class='danger'>\The [src] fades into the surroundings!</span>", "<span class='alien'>You are now invisible</span>")
 			spawn(250)
 				if(!isnull(src)) //Don't want the game to runtime error when the mob no-longer exists.

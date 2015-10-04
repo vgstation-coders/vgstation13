@@ -3,9 +3,6 @@
 	~Sayu
 */
 
-// 1 decisecond click delay (above and beyond mob/next_move)
-/mob/var/next_click	= 0
-
 /*
 	Before anything else, defer these calls to a per-mobtype handler.  This allows us to
 	remove istype() spaghetti code, but requires the addition of other handler procs to simplify it.
@@ -28,15 +25,22 @@
 	check whether you're adjacent to the target, then pass off the click to whoever
 	is recieving it.
 	The most common are:
-	* mob/UnarmedAttack(atom,adjacent) - used here only when adjacent, with no item in hand; in the case of humans, checks gloves
-	* atom/attackby(item,user) - used only when adjacent
+	* mob/UnarmedAttack(atom,adjacent,params) - used here only when adjacent, with no item in hand; in the case of humans, checks gloves
+	* atom/attackby(item,user,params) - used only when adjacent
 	* item/afterattack(atom,user,adjacent,params) - used both ranged and adjacent
 	* mob/RangedAttack(atom,params) - used only ranged, only used for tk and laser eyes but could be changed
 */
+
+#define MAX_ITEM_DEPTH	3 //how far we can recurse before we can't get an item
+
 /mob/proc/ClickOn( var/atom/A, var/params )
-	if(world.time <= next_click)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/ClickOn() called tick#: [world.time]")
+	if(!click_delayer) click_delayer = new
+	if(timestopped) return 0 //under effects of time magick
+
+	if(click_delayer.blocked())
 		return
-	next_click = world.time + 1
+	click_delayer.setDelay(1)
 
 	if(client.buildmode)
 		build_click(src, client.buildmode, params, A)
@@ -61,9 +65,9 @@
 
 	face_atom(A) // change direction to face what you clicked on
 
-	if(next_move > world.time) // in the year 2000...
+	if(attack_delayer.blocked()) // This was next_move.  next_attack makes more sense.
 		return
-	//world << "next_move is [next_move] and world.time is [world.time]"
+	//world << "next_attack is [next_attack] and world.time is [world.time]"
 	if(istype(loc,/obj/mecha))
 		if(!locate(/turf) in list(A,A.loc)) // Prevents inventory from being drilled
 			return
@@ -84,7 +88,7 @@
 		/*next_move = world.time + 6
 		if(W.flags&USEDELAY)
 			next_move += 5*/
-		W.attack_self(src)
+		W.attack_self(src, params)
 		if(hand)
 			update_inv_l_hand(0)
 		else
@@ -92,76 +96,44 @@
 
 		return
 
-	// operate two levels deep here (item in backpack in src; NOT item in box in backpack in src)
-	if(A == loc || (A in loc) || (A in contents) || (A.loc in contents))
-
-		/*/ faster access to objects already on you
-		if(A in contents)
-			next_move = world.time + 6 // on your person
-		else
-			next_move = world.time + 8 // in a box/bag or in your square
-		*/
-		// No adjacency needed
-		if(W)
-			/*
-			if(W.flags&USEDELAY)
-				next_move += 5
-			*/
-
-			var/resolved = A.attackby(W,src)
-			if(ismob(A) || istype(A, /obj/mecha) || istype(W, /obj/item/weapon/grab))
-				changeNext_move(10)
-			if(!resolved && A && W)
-				W.afterattack(A,src,1,params) // 1 indicates adjacency
-			else
-				changeNext_move(10)
-		else
-			if(ismob(A) || istype(W, /obj/item/weapon/grab))
-				changeNext_move(10)
-			UnarmedAttack(A)
-		return
-
 	if(!isturf(loc)) // This is going to stop you from telekinesing from inside a closet, but I don't shed many tears for that
 		return
 
 	// Allows you to click on a box's contents, if that box is on the ground, but no deeper than that
-	if(isturf(A) || isturf(A.loc) || (A.loc && isturf(A.loc.loc)))
-		//next_move = world.time + 10
-		if(A.Adjacent(src)) // see adjacent.dm
-			if(W)
-				/*if(W.flags&USEDELAY)
-					next_move += 5
-				*/
-				// Return 1 in attackby() to prevent afterattack() effects (when safely moving items for example)
+	if(A.Adjacent(src, MAX_ITEM_DEPTH)) // see adjacent.dm
+		if(W)
+
+			var/resolved = W.preattack(A, src, 1, params)
+			if(!resolved)
+				resolved = A.attackby(W,src, params)
 				if(ismob(A) || istype(A, /obj/mecha) || istype(W, /obj/item/weapon/grab))
-					changeNext_move(10)
-				var/resolved = A.attackby(W,src)
+					delayNextAttack(10)
 				if(!resolved && A && W)
-					W.afterattack(A,src,1,params) // 1: clicking something Adjacent
+					W.afterattack(A,src,1,params) // 1 indicates adjacency
 				else
-					changeNext_move(10)
-			else
-				if(ismob(A) || istype(W, /obj/item/weapon/grab))
-					changeNext_move(10)
-				UnarmedAttack(A, 1)
-			return
-		else // non-adjacent click
-			if(W)
-				if(ismob(A))
-					changeNext_move(10)
+					delayNextAttack(10)
+		else
+			if(ismob(A) || istype(W, /obj/item/weapon/grab))
+				delayNextAttack(10)
+			INVOKE_EVENT(on_uattack,list("atom"=A))
+			UnarmedAttack(A, 1, params)
+		return
+	else // non-adjacent click
+		if(W)
+			if(ismob(A))
+				delayNextAttack(10)
+			if(!W.preattack(A, src, 0,  params))
 				W.afterattack(A,src,0,params) // 0: not Adjacent
-			else
-				if(ismob(A))
-					changeNext_move(10)
-				RangedAttack(A, params)
-
+		else
+			if(ismob(A))
+				delayNextAttack(10)
+			RangedAttack(A, params)
+			INVOKE_EVENT(on_uattack,list("atom"=A))
 	return
-
-/mob/proc/changeNext_move(num)
-	next_move = world.time + num
 
 // Default behavior: ignore double clicks, consider them normal clicks instead
 /mob/proc/DblClickOn(var/atom/A, var/params)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/DblClickOn() called tick#: [world.time]")
 	//ClickOn(A,params)
 	return
 
@@ -176,9 +148,10 @@
 	proximity_flag is not currently passed to attack_hand, and is instead used
 	in human click code to allow glove touches only at melee range.
 */
-/mob/proc/UnarmedAttack(var/atom/A, var/proximity_flag)
+/mob/proc/UnarmedAttack(var/atom/A, var/proximity_flag, var/params)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/UnarmedAttack() called tick#: [world.time]")
 	if(ismob(A))
-		changeNext_move(10)
+		delayNextAttack(10)
 	return
 
 /*
@@ -190,8 +163,9 @@
 	animals lunging, etc.
 */
 /mob/proc/RangedAttack(var/atom/A, var/params)
-	if(!mutations.len) return
-	if((M_LASER in mutations) && a_intent == "hurt")
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/RangedAttack() called tick#: [world.time]")
+	if(!mutations || !mutations.len) return
+	if((M_LASER in mutations) && a_intent == I_HURT)
 		LaserEyes(A) // moved into a proc below
 	else if(M_TK in mutations)
 		/*switch(get_dist(src,A))
@@ -214,6 +188,7 @@
 	Not currently used by anything but could easily be.
 */
 /mob/proc/RestrainedClickOn(var/atom/A)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/RestrainedClickOn() called tick#: [world.time]")
 	return
 
 /*
@@ -221,6 +196,7 @@
 	Only used for swapping hands
 */
 /mob/proc/MiddleClickOn(var/atom/A)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/MiddleClickOn() called tick#: [world.time]")
 	return
 /mob/living/carbon/MiddleClickOn(var/atom/A)
 	swap_hand()
@@ -228,6 +204,7 @@
 // In case of use break glass
 /*
 /atom/proc/MiddleClick(var/mob/M as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/MiddleClick() called tick#: [world.time]")
 	return
 */
 
@@ -237,11 +214,13 @@
 	This is overridden in ai.dm
 */
 /mob/proc/ShiftClickOn(var/atom/A)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/ShiftClickOn() called tick#: [world.time]")
 	A.ShiftClick(src)
 	return
 /atom/proc/ShiftClick(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/ShiftClick() called tick#: [world.time]")
 	if(user.client && user.client.eye == user)
-		examine()
+		user.examination(src)
 	return
 
 /*
@@ -249,25 +228,31 @@
 	For most objects, pull
 */
 /mob/proc/CtrlClickOn(var/atom/A)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/CtrlClickOn() called tick#: [world.time]")
 	A.CtrlClick(src)
 	return
 /atom/proc/CtrlClick(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/CtrlClick() called tick#: [world.time]")
+	user.stop_pulling()
 	return
 
 /atom/movable/CtrlClick(var/mob/user)
 	if(Adjacent(user))
 		user.start_pulling(src)
 
+
 /*
 	Alt click
 	Unused except for AI
 */
 /mob/proc/AltClickOn(var/atom/A)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/AltClickOn() called tick#: [world.time]")
 	A.AltClick(src)
 	return
 
 /atom/proc/AltClick(var/mob/user)
-	if(ishuman(src) && user.Adjacent(src))
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/AltClick() called tick#: [world.time]")
+	if(!(isrobot(user)) && ishuman(src) && user.Adjacent(src))
 		src:give_item(user)
 		return
 	var/turf/T = get_turf(src)
@@ -286,11 +271,12 @@
 	face_atom: turns the mob towards what you clicked on
 */
 /mob/proc/LaserEyes(atom/A)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/LaserEyes() called tick#: [world.time]")
 	return
 
 /mob/living/LaserEyes(atom/A)
 	//next_move = world.time + 6
-	changeNext_move(4)
+	delayNextAttack(4)
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(A)
 
@@ -314,72 +300,12 @@
 		nutrition = max(nutrition - rand(1,5),0)
 		handle_regular_hud_updates()
 	else
-		src << "\red You're out of energy!  You need food!"
-
-/mob/proc/PowerGlove(atom/A)
-	return
-
-/mob/living/carbon/human/PowerGlove(atom/A)
-	var/obj/item/clothing/gloves/yellow/power/G = src:gloves
-	var/time = 100
-	var/turf/T = get_turf(src)
-	var/turf/U = get_turf(A)
-	var/obj/structure/cable/cable = locate() in T
-	if(!cable || !istype(cable))
-		return
-	if(world.time < G.next_shock)
-		src << "<span class='warning'>[G] aren't ready to shock again!</span>"
-		return
-	src.visible_message("<span class='warning'>[name] fires an arc of electricity!</span>", \
-	"<span class='warning'>You fire an arc of electricity!</span>", \
-	"You hear the loud crackle of electricity!")
-	var/datum/powernet/PN = cable.get_powernet()
-	var/obj/item/projectile/beam/lightning/L = getFromPool(/obj/item/projectile/beam/lightning, loc)
-	if(PN)
-		L.damage = PN.get_electrocute_damage()
-		if(L.damage >= 200)
-			apply_damage(15, BURN, (hand ? "l_hand" : "r_hand"))
-			//usr:Stun(15)
-			//usr:Weaken(15)
-			//if(usr:status_flags & CANSTUN) // stun is usually associated with stutter
-			//	usr:stuttering += 20
-			time = 200
-			src << "<span class='warning'>[G] overloads from the massive current, shocking you in the process!"
-		else if(L.damage >= 100)
-			apply_damage(5, BURN, (hand ? "l_hand" : "r_hand"))
-			//usr:Stun(10)
-			//usr:Weaken(10)
-			//if(usr:status_flags & CANSTUN) // stun is usually associated with stutter
-			//	usr:stuttering += 10
-			time = 150
-			src << "<span class='warning'>[G] overloads from the massive current, shocking you in the process!"
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, src)
-		s.start()
-	if(L.damage <= 0)
-		returnToPool(L)
-		//del(L)
-	if(L)
-		playsound(get_turf(src), 'sound/effects/eleczap.ogg', 75, 1)
-		L.tang = L.adjustAngle(get_angle(U,T))
-		L.icon = midicon
-		L.icon_state = "[L.tang]"
-		L.firer = usr
-		L.def_zone = get_organ_target()
-		L.original = src
-		L.current = U
-		L.starting = U
-		L.yo = U.y - T.y
-		L.xo = U.x - T.x
-		spawn( 1 )
-			L.process()
-
-	next_move = world.time + 12
-	G.next_shock = world.time + time
+		src << "<span class='warning'>You're out of energy!  You need food!</span>"
 
 // Simple helper to face what you clicked on, in case it should be needed in more than one place
 /mob/proc/face_atom(var/atom/A)
-	if(stat != CONSCIOUS || buckled || !A || !x || !y || !A.x || !A.y )
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/face_atom() called tick#: [world.time]")
+	if(stat != CONSCIOUS || locked_to || !A || !x || !y || !A.x || !A.y )
 		return
 
 	var/dx = A.x - x
@@ -387,23 +313,23 @@
 
 	if(!dx && !dy) // Wall items are graphically shifted but on the floor
 		if(A.pixel_y > 16)
-			dir = NORTH
+			change_dir(NORTH)
 		else if(A.pixel_y < -16)
-			dir = SOUTH
+			change_dir(SOUTH)
 		else if(A.pixel_x > 16)
-			dir = EAST
+			change_dir(EAST)
 		else if(A.pixel_x < -16)
-			dir = WEST
+			change_dir(WEST)
 
 		return
 
 	if(abs(dx) < abs(dy))
 		if(dy > 0)
-			dir = NORTH
+			change_dir(NORTH)
 		else
-			dir = SOUTH
+			change_dir(SOUTH)
 	else
 		if(dx > 0)
-			dir = EAST
+			change_dir(EAST)
 		else
-			dir = WEST
+			change_dir(WEST)

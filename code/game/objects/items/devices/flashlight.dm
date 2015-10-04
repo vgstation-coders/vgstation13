@@ -5,10 +5,10 @@
 	icon_state = "flashlight"
 	item_state = "flashlight"
 	w_class = 2
-	flags = FPRINT | TABLEPASS | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
-	m_amt = 50
-	g_amt = 20
+	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL // Assuming big beefy fucking maglite.
 	action_button_name = "Toggle Light"
@@ -19,24 +19,19 @@
 	..()
 	if(on)
 		icon_state = "[initial(icon_state)]-on"
-		SetLuminosity(brightness_on)
+		set_light(brightness_on)
 	else
 		icon_state = initial(icon_state)
-		SetLuminosity(0)
+		set_light(0)
 
 /obj/item/device/flashlight/proc/update_brightness(var/mob/user = null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/flashlight/proc/update_brightness() called tick#: [world.time]")
 	if(on)
 		icon_state = "[initial(icon_state)]-on"
-		if(user && loc == user)
-			user.SetLuminosity(user.luminosity + brightness_on)
-		else if(isturf(loc))
-			SetLuminosity(brightness_on)
+		set_light(brightness_on)
 	else
 		icon_state = initial(icon_state)
-		if(user && loc == user)
-			user.SetLuminosity(user.luminosity - brightness_on)
-		else if(isturf(loc))
-			SetLuminosity(0)
+		set_light(0)
 
 /obj/item/device/flashlight/attack_self(mob/user)
 	if(!isturf(user.loc))
@@ -54,14 +49,16 @@
 		if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))	//too dumb to use flashlight properly
 			return ..()	//just hit them in the head
 
-		if(!(istype(user, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")	//don't have dexterity
+		if (!user.dexterity_check())
 			user << "<span class='notice'>You don't have the dexterity to do this!</span>"
 			return
 
 		var/mob/living/carbon/human/H = M	//mob has protective eyewear
-		if(istype(M, /mob/living/carbon/human) && ((H.head && H.head.flags & HEADCOVERSEYES) || (H.wear_mask && H.wear_mask.flags & MASKCOVERSEYES) || (H.glasses && H.glasses.flags & GLASSESCOVERSEYES)))
-			user << "<span class='notice'>You're going to need to remove that [(H.head && H.head.flags & HEADCOVERSEYES) ? "helmet" : (H.wear_mask && H.wear_mask.flags & MASKCOVERSEYES) ? "mask": "glasses"] first.</span>"
-			return
+		if(istype(M, /mob/living/carbon/human))
+			var/obj/item/eye_protection = H.get_body_part_coverage(EYES)
+			if(eye_protection)
+				user << "<span class='notice'>You're going to need to remove their [eye_protection] first.</span>"
+				return
 
 		if(M == user)	//they're using it on themselves
 			if(!M.blinded)
@@ -89,25 +86,13 @@
 	else
 		return ..()
 
-
-/obj/item/device/flashlight/pickup(mob/user)
-	if(on)
-		user.SetLuminosity(user.luminosity + brightness_on)
-		SetLuminosity(0)
-
-
-/obj/item/device/flashlight/dropped(mob/user)
-	if(on)
-		user.SetLuminosity(user.luminosity - brightness_on)
-		SetLuminosity(brightness_on)
-
-
 /obj/item/device/flashlight/pen
 	name = "penlight"
 	desc = "A pen-sized light, used by medical staff."
 	icon_state = "penlight"
 	item_state = ""
-	flags = FPRINT | TABLEPASS | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	brightness_on = 2
 
 
@@ -119,9 +104,9 @@
 	item_state = "lamp"
 	brightness_on = 5
 	w_class = 4
-	flags = FPRINT | TABLEPASS | CONDUCT
-	m_amt = 0
-	g_amt = 0
+	flags = FPRINT
+	siemens_coefficient = 1
+	starting_materials = null
 	on = 1
 
 /obj/item/device/flashlight/lamp/cultify()
@@ -141,6 +126,7 @@
 	set category = "Object"
 	set src in oview(1)
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/item/device/flashlight/lamp/verb/toggle_light()  called tick#: [world.time]")
 	if(!usr.stat)
 		attack_self(usr)
 
@@ -150,7 +136,8 @@
 	name = "flare"
 	desc = "A red Nanotrasen issued flare. There are instructions on the side, it reads 'pull cord, make light'."
 	w_class = 2.0
-	brightness_on = 7 // Pretty bright.
+	brightness_on = 4 // Pretty bright.
+	light_power = 2.5
 	icon_state = "flare"
 	item_state = "flare"
 	action_button_name = null //just pull it manually, neckbeard.
@@ -159,7 +146,7 @@
 	var/produce_heat = 1500
 	var/H_color = ""
 
-	l_color = "#AA0033"
+	light_color = LIGHT_COLOR_FLARE
 
 /obj/item/device/flashlight/flare/New()
 	fuel = rand(300, 500) // Sorry for changing this so much but I keep under-estimating how long X number of ticks last in seconds.
@@ -177,6 +164,7 @@
 		processing_objects -= src
 
 /obj/item/device/flashlight/flare/proc/turn_off()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/flashlight/flare/proc/turn_off() called tick#: [world.time]")
 	on = 0
 	src.force = initial(src.force)
 	src.damtype = initial(src.damtype)
@@ -199,6 +187,7 @@
 	Light(user)
 
 /obj/item/device/flashlight/flare/proc/Light(var/mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/flashlight/flare/proc/Light() called tick#: [world.time]")
 	if(user)
 		if(!isturf(user.loc))
 			user << "You cannot turn the light on while in this [user.loc]." //To prevent some lighting anomalities.
@@ -208,21 +197,14 @@
 	src.damtype = "fire"
 	processing_objects += src
 	if(user)
-		user.l_color = l_color
 		update_brightness(user)
 	else
 		update_brightness()
 
-/obj/item/device/flashlight/flare/pickup(mob/user)
-	..()
-	if(on)
-		user.l_color = l_color
-
-
-/obj/item/device/flashlight/flare/dropped(mob/user)
-	..()
-	user.l_color = initial(user.l_color)
-
+/obj/item/device/flashlight/flare/ever_bright/New()
+	. = ..()
+	fuel = INFINITY
+	Light()
 
 // SLIME LAMP
 /obj/item/device/flashlight/lamp/slime
@@ -230,7 +212,7 @@
 	desc = "A lamp powered by a slime core. You can adjust its brightness by touching it."
 	icon_state = "slimelamp"
 	item_state = ""
-	l_color = "#333300"
+	light_color = LIGHT_COLOR_SLIME_LAMP
 	on = 0
 	luminosity = 2
 	var/brightness_max = 6
@@ -240,24 +222,19 @@
 	..()
 	if(on)
 		icon_state = "[initial(icon_state)]-on"
-		SetLuminosity(brightness_max)
+		set_light(brightness_max)
 	else
 		icon_state = initial(icon_state)
-		SetLuminosity(brightness_min)
+		set_light(brightness_min)
 
 /obj/item/device/flashlight/lamp/slime/proc/slime_brightness(var/mob/user = null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/flashlight/lamp/slime/proc/slime_brightness() called tick#: [world.time]")
 	if(on)
 		icon_state = "[initial(icon_state)]-on"
-		if(user && loc == user)
-			user.SetLuminosity(user.luminosity + brightness_max - brightness_min)
-		else if(isturf(loc))
-			SetLuminosity(brightness_max)
+		set_light(brightness_max)
 	else
 		icon_state = initial(icon_state)
-		if(user && loc == user)
-			user.SetLuminosity(user.luminosity - brightness_max + brightness_min)
-		else if(isturf(loc))
-			SetLuminosity(brightness_min)
+		set_light(brightness_min)
 
 /obj/item/device/flashlight/lamp/slime/attack_self(mob/user)
 	if(!isturf(user.loc))
@@ -266,22 +243,3 @@
 	on = !on
 	slime_brightness(user)
 	return 1
-
-/obj/item/device/flashlight/lamp/slime/pickup(mob/user)
-	user.l_color = l_color
-	if(on)
-		user.SetLuminosity(user.luminosity + brightness_max)
-		SetLuminosity(0)
-	else
-		user.SetLuminosity(user.luminosity + brightness_min)
-		SetLuminosity(0)
-
-
-/obj/item/device/flashlight/lamp/slime/dropped(mob/user)
-	user.l_color = initial(user.l_color)
-	if(on)
-		user.SetLuminosity(user.luminosity - brightness_max)
-		SetLuminosity(brightness_max)
-	else
-		user.SetLuminosity(user.luminosity - brightness_min)
-		SetLuminosity(brightness_min)

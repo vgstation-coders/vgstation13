@@ -4,18 +4,8 @@
  * A large number of misc global procs.
  */
 
-//Returns the middle-most value
-/proc/dd_range(var/low, var/high, var/num)
-	return max(low,min(high,num))
-
-//Returns whether or not A is the middle most value
-/proc/InRange(var/A, var/lower, var/upper)
-	if(A < lower) return 0
-	if(A > upper) return 0
-	return 1
-
-
 /proc/Get_Angle(atom/movable/start,atom/movable/end)//For beams.
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/Get_Angle() called tick#: [world.time]")
 	if(!start || !end) return 0
 	var/dy
 	var/dx
@@ -31,6 +21,7 @@
 
 //Returns location. Returns null if no location was found.
 /proc/get_teleport_loc(turf/location,mob/target,distance = 1, density = 0, errorx = 0, errory = 0, eoffsetx = 0, eoffsety = 0)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_teleport_loc() called tick#: [world.time]")
 /*
 Location where the teleport begins, target that will teleport, distance to go, density checking 0/1(yes/no).
 Random error in tile placement x, error in tile placement y, and block offset.
@@ -122,49 +113,12 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 	return destination
 
-
-
-/proc/LinkBlocked(turf/A, turf/B)
-	if(A == null || B == null) return 1
-	var/adir = get_dir(A,B)
-	var/rdir = get_dir(B,A)
-	if((adir & (NORTH|SOUTH)) && (adir & (EAST|WEST)))	//	diagonal
-		var/iStep = get_step(A,adir&(NORTH|SOUTH))
-		if(!LinkBlocked(A,iStep) && !LinkBlocked(iStep,B)) return 0
-
-		var/pStep = get_step(A,adir&(EAST|WEST))
-		if(!LinkBlocked(A,pStep) && !LinkBlocked(pStep,B)) return 0
-		return 1
-
-	if(DirBlocked(A,adir)) return 1
-	if(DirBlocked(B,rdir)) return 1
-	return 0
-
-
-/proc/DirBlocked(turf/loc,var/dir)
-	for(var/obj/structure/window/D in loc)
-		if(!D.density)			continue
-		if(D.is_fulltile())	return 1
-		if(D.dir == dir)		return 1
-
-	for(var/obj/machinery/door/D in loc)
-		if(!D.density)			continue
-		if(istype(D, /obj/machinery/door/window))
-			if((dir & SOUTH) && (D.dir & (EAST|WEST)))		return 1
-			if((dir & EAST ) && (D.dir & (NORTH|SOUTH)))	return 1
-		else return 1	// it's a real, air blocking door
-	return 0
-
-/proc/TurfBlockedNonWindow(turf/loc)
-	for(var/obj/O in loc)
-		if(O.density && !istype(O, /obj/structure/window))
-			return 1
-	return 0
-
 /proc/sign(x)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/sign() called tick#: [world.time]")
 	return x!=0?x/abs(x):0
 
 /proc/getline(atom/M,atom/N)//Ultra-Fast Bresenham Line-Drawing Algorithm
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/getline() called tick#: [world.time]")
 	var/px=M.x		//starting x
 	var/py=M.y
 	var/line[] = list(locate(px,py,M.z))
@@ -197,6 +151,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 //Returns whether or not a player is a guest using their ckey as an input
 /proc/IsGuestKey(key)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/IsGuestKey() called tick#: [world.time]")
 	if (findtext(key, "Guest-", 1, 7) != 1) //was findtextEx
 		return 0
 
@@ -210,76 +165,100 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 //Ensure the frequency is within bounds of what it should be sending/recieving at
 /proc/sanitize_frequency(var/f)
-	f = round(f)
-	f = max(1201, f) // 120.1
-	f = min(1599, f) // 159.9
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/sanitize_frequency() called tick#: [world.time]")
+	f = Clamp(round(f), 1201, 1599) // 120.1, 159.9
+
 	if ((f % 2) == 0) //Ensure the last digit is an odd number
 		f += 1
+
 	return f
 
 //Turns 1479 into 147.9
 /proc/format_frequency(var/f)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/format_frequency() called tick#: [world.time]")
+	f = text2num(f)
 	return "[round(f / 10)].[f % 10]"
 
 
 
-//This will update a mob's name, real_name, mind.name, data_core records, pda and id
-//Calling this proc without an oldname will only update the mob and skip updating the pda, id and records ~Carn
-/mob/proc/fully_replace_character_name(var/oldname,var/newname)
-	if(!newname)	return 0
+/**
+ * This will update a mob's name, real_name, mind.name, data_core records, pda and id.
+ * Calling this proc without an oldname will only update the mob and skip updating the pda, id and records. ~Carn
+ */
+/mob/proc/fully_replace_character_name(oldname, newname)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/mob/proc/fully_replace_character_name() called tick#: [world.time]")
+	if (!newname)
+		return 0
+
 	real_name = newname
+
 	name = newname
-	if(mind)
+
+	if (mind)
 		mind.name = newname
-	if(dna)
+
+	if (dna)
 		dna.real_name = real_name
 
-	if(oldname)
-		//update the datacore records! This is goig to be a bit costly.
-		for(var/list/L in list(data_core.general,data_core.medical,data_core.security,data_core.locked))
-			for(var/datum/data/record/R in L)
-				if(R.fields["name"] == oldname)
+	if (oldname)
+		/*
+		 * Update the datacore records!
+		 * This is going to be a bit costly.
+		 */
+		for (var/list/L in list(data_core.general, data_core.medical, data_core.security,data_core.locked))
+			if (L)
+				var/datum/data/record/R = find_record("name", oldname, L)
+
+				if (R)
 					R.fields["name"] = newname
-					break
 
-		//update our pda and id if we have them on our person
-		var/list/searching = GetAllContents(searchDepth = 3)
-		var/search_id = 1
-		var/search_pda = 1
+		// update our pda and id if we have them on our person
+		var/search_id = TRUE
 
-		for(var/A in searching)
-			if( search_id && istype(A,/obj/item/weapon/card/id) )
-				var/obj/item/weapon/card/id/ID = A
-				if(ID.registered_name == oldname)
+		var/search_pda = TRUE
+
+		for (var/object in get_contents_in_object(src))
+			if (search_id && istype(object, /obj/item/weapon/card/id))
+				var/obj/item/weapon/card/id/ID = object
+
+				if (ID.registered_name == oldname)
 					ID.registered_name = newname
 					ID.name = "[newname]'s ID Card ([ID.assignment])"
-					if(!search_pda)	break
-					search_id = 0
 
-			else if( search_pda && istype(A,/obj/item/device/pda) )
-				var/obj/item/device/pda/PDA = A
-				if(PDA.owner == oldname)
+					if (!search_pda)
+						break
+
+					search_id = FALSE
+			else if (search_pda && istype(object, /obj/item/device/pda))
+				var/obj/item/device/pda/PDA = object
+
+				if (PDA.owner == oldname)
 					PDA.owner = newname
 					PDA.name = "PDA-[newname] ([PDA.ownjob])"
-					if(!search_id)	break
-					search_pda = 0
 
-		//Fixes renames not being reflected in objective text
-		var/list/O = (typesof(/datum/objective)  - /datum/objective)
+					if (!search_id)
+						break
+
+					search_pda = FALSE
+
+		// fixes renames not being reflected in objective text
 		var/length
-		var/pos
-		for(var/datum/objective/objective in O)
-			if(objective.target != mind) continue
-			length = length(oldname)
-			pos = findtextEx(objective.explanation_text, oldname)
-			objective.explanation_text = copytext(objective.explanation_text, 1, pos)+newname+copytext(objective.explanation_text, pos+length)
+		var/position
+
+		for (var/datum/mind/mind in ticker.minds)
+			if (mind)
+				for (var/datum/objective/objective in mind.objectives)
+					if (objective && objective.target == mind)
+						length = length(oldname)
+						position = findtextEx(objective.explanation_text, oldname)
+						objective.explanation_text = copytext(objective.explanation_text, 1, position) + newname + copytext(objective.explanation_text, position + length)
+
 	return 1
-
-
 
 //Generalised helper proc for letting mobs rename themselves. Used to be clname() and ainame()
 //Last modified by Carn
 /mob/proc/rename_self(var/role, var/allow_numbers=0)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/mob/proc/rename_self() called tick#: [world.time]")
 	spawn(0)
 		var/oldname = real_name
 
@@ -327,10 +306,12 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 //Picks a string of symbols to display as the law number for hacked or ion laws
 /proc/ionnum()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/ionnum() called tick#: [world.time]")
 	return "[pick("!","@","#","$","%","^","&","*")][pick("!","@","#","$","%","^","&","*")][pick("!","@","#","$","%","^","&","*")][pick("!","@","#","$","%","^","&","*")]"
 
 //When an AI is activated, it can choose from a list of non-slaved borgs to have as a slave.
 /proc/freeborg()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/freeborg() called tick#: [world.time]")
 	var/select = null
 	var/list/borgs = list()
 
@@ -347,6 +328,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 //When a borg is activated, it can choose which AI it wants to be slaved to
 /proc/active_ais()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/active_ais() called tick#: [world.time]")
 	. = list()
 	for(var/mob/living/silicon/ai/A in living_mob_list)
 		if(A.stat == DEAD)
@@ -358,6 +340,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 //Find an active ai with the least borgs. VERBOSE PROCNAME HUH!
 /proc/select_active_ai_with_fewest_borgs()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/select_active_ai_with_fewest_borgs() called tick#: [world.time]")
 	var/mob/living/silicon/ai/selected
 	var/list/active = active_ais()
 	for(var/mob/living/silicon/ai/A in active)
@@ -367,6 +350,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return selected
 
 /proc/select_active_ai(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/select_active_ai() called tick#: [world.time]")
 	var/list/ais = active_ais()
 	if(ais.len)
 		if(user)	. = input(usr,"AI signals detected:", "AI selection") in ais
@@ -374,6 +358,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return .
 
 /proc/get_sorted_mobs()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_sorted_mobs() called tick#: [world.time]")
 	var/list/old_list = getmobs()
 	var/list/AI_list = list()
 	var/list/Dead_list = list()
@@ -404,6 +389,8 @@ Turf and target are seperate in case you want to teleport some distance from a t
 //Returns a list of all mobs with their name
 /proc/getmobs()
 
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/getmobs() called tick#: [world.time]")
+
 	var/list/mobs = sortmobs()
 	var/list/names = list()
 	var/list/creatures = list()
@@ -429,8 +416,9 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 //Orders mobs by type then by name
 /proc/sortmobs()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/sortmobs() called tick#: [world.time]")
 	var/list/moblist = list()
-	var/list/sortmob = sortAtom(mob_list)
+	var/list/sortmob = sortNames(mob_list)
 	for(var/mob/living/silicon/ai/M in sortmob)
 		moblist.Add(M)
 	for(var/mob/camera/M in sortmob)
@@ -463,23 +451,18 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 //E = MC^2
 /proc/convert2energy(var/M)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/convert2energy() called tick#: [world.time]")
 	var/E = M*(SPEED_OF_LIGHT_SQ)
 	return E
 
 //M = E/C^2
 /proc/convert2mass(var/E)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/convert2mass() called tick#: [world.time]")
 	var/M = E/(SPEED_OF_LIGHT_SQ)
 	return M
 
-//Forces a variable to be posative
-/proc/modulus(var/M)
-	if(M >= 0)
-		return M
-	if(M < 0)
-		return -M
-
-
 /proc/key_name(var/whom, var/include_link = null, var/include_name = 1)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/key_name() called tick#: [world.time]")
 	var/mob/M
 	var/client/C
 	var/key
@@ -525,11 +508,13 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return .
 
 /proc/key_name_admin(var/whom, var/include_name = 1)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/key_name_admin() called tick#: [world.time]")
 	return key_name(whom, 1, include_name)
 
 // Returns the atom sitting on the turf.
 // For example, using this on a disk, which is in a bag, on a mob, will return the mob because it's on the turf.
 /proc/get_atom_on_turf(var/atom/movable/M)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_atom_on_turf() called tick#: [world.time]")
 	var/atom/loc = M
 	while(loc && loc.loc && !istype(loc.loc, /turf/))
 		loc = loc.loc
@@ -551,6 +536,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 // Otherwise, the user mob's machine var will be reset directly.
 //
 /proc/onclose(mob/user, windowid, var/atom/ref=null)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/onclose() called tick#: [world.time]")
 	if(!user.client) return
 	var/param = "null"
 	if(ref)
@@ -570,6 +556,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	set hidden = 1						// hide this verb from the user's panel
 	set name = ".windowclose"			// no autocomplete on cmd line
 
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""]) \\/client/verb/windowclose()  called tick#: [world.time]")
 	//world << "windowclose: [atomref]"
 	if(atomref!="null")				// if passed a real atomref
 		var/hsrc = locate(atomref)	// find the reffed atom
@@ -587,17 +574,11 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		src.mob.unset_machine()
 	return
 
-//Will return the location of the turf an atom is ultimatly sitting on
-/proc/get_turf_loc(var/atom/movable/M) //gets the location of the turf that the atom is on, or what the atom is in is on, etc
-	//in case they're in a closet or sleeper or something
-	var/atom/loc = M.loc
-	while(!istype(loc, /turf/))
-		loc = loc.loc
-	return loc
-
 // returns the turf located at the map edge in the specified direction relative to A
 // used for mass driver
 /proc/get_edge_target_turf(var/atom/A, var/direction)
+
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_edge_target_turf() called tick#: [world.time]")
 
 	var/turf/target = locate(A.x, A.y, A.z)
 	if(!A || !target)
@@ -623,6 +604,8 @@ Turf and target are seperate in case you want to teleport some distance from a t
 // used for disposal system
 /proc/get_ranged_target_turf(var/atom/A, var/direction, var/range)
 
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_ranged_target_turf() called tick#: [world.time]")
+
 	var/x = A.x
 	var/y = A.y
 	if(direction & NORTH)
@@ -639,21 +622,16 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 // returns turf relative to A offset in dx and dy tiles
 // bound to map limits
-/proc/get_offset_target_turf(var/atom/A, var/dx, var/dy)
-	var/x = min(world.maxx, max(1, A.x + dx))
-	var/y = min(world.maxy, max(1, A.y + dy))
-	return locate(x,y,A.z)
+/proc/get_offset_target_turf(atom/A, dx, dy)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_offset_target_turf() called tick#: [world.time]")
+	var/x = Clamp(A.x + dx, 1, world.maxx)
+	var/y = Clamp(A.y + dy, 1, world.maxy)
 
-//Makes sure MIDDLE is between LOW and HIGH. If not, it adjusts it. Returns the adjusted value.
-/proc/between(var/low, var/middle, var/high)
-	return max(min(middle, high), low)
-
-proc/arctan(x)
-	var/y=arcsin(x/sqrt(1+x*x))
-	return y
+	return locate(x, y, A.z)
 
 //returns random gauss number
 proc/GaussRand(var/sigma)
+  //writepanic("[__FILE__].[__LINE__] \\/proc/GaussRand() called tick#: [world.time]")
   var/x,y,rsq
   do
     x=2*rand()-1
@@ -664,38 +642,12 @@ proc/GaussRand(var/sigma)
 
 //returns random gauss number, rounded to 'roundto'
 proc/GaussRandRound(var/sigma,var/roundto)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/GaussRandRound() called tick#: [world.time]")
 	return round(GaussRand(sigma),roundto)
-
-proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,flick_anim as text,sleeptime = 0,direction as num)
-//This proc throws up either an icon or an animation for a specified amount of time.
-//The variables should be apparent enough.
-	var/atom/movable/overlay/animation = new(location)
-	if(direction)
-		animation.dir = direction
-	animation.icon = a_icon
-	animation.layer = target:layer+1
-	if(a_icon_state)
-		animation.icon_state = a_icon_state
-	else
-		animation.icon_state = "blank"
-		animation.master = target
-		flick(flick_anim, animation)
-	sleep(max(sleeptime, 15))
-	animation.loc = null
-
-//Will return the contents of an atom recursivly to a depth of 'searchDepth'
-/atom/proc/GetAllContents(searchDepth = 5)
-	var/list/toReturn = list()
-
-	for(var/atom/part in contents)
-		toReturn += part
-		if(part.contents.len && searchDepth)
-			toReturn += part.GetAllContents(searchDepth - 1)
-
-	return toReturn
 
 //Step-towards method of determining whether one atom can see another. Similar to viewers()
 /proc/can_see(var/atom/source, var/atom/target, var/length=5) // I couldnt be arsed to do actual raycasting :I This is horribly inaccurate.
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/can_see() called tick#: [world.time]")
 	var/turf/current = get_turf(source)
 	var/turf/target_turf = get_turf(target)
 	var/steps = 0
@@ -711,6 +663,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 	return 1
 
 /proc/is_blocked_turf(var/turf/T)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/is_blocked_turf() called tick#: [world.time]")
 	var/cant_pass = 0
 	if(T.density) cant_pass = 1
 	for(var/atom/A in T)
@@ -719,6 +672,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 	return cant_pass
 
 /proc/get_step_towards2(var/atom/ref , var/atom/trg)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_step_towards2() called tick#: [world.time]")
 	var/base_dir = get_dir(ref, get_step_towards(ref,trg))
 	var/turf/temp = get_step_towards(ref,trg)
 
@@ -746,19 +700,48 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 
 	else return get_step(ref, base_dir)
 
-/proc/do_mob(var/mob/user , var/mob/target, var/time = 30) //This is quite an ugly solution but i refuse to use the old request system.
+/proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10) //This is quite an ugly solution but i refuse to use the old request system.
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/do_mob() called tick#: [world.time]")
 	if(!user || !target) return 0
 	var/user_loc = user.loc
 	var/target_loc = target.loc
 	var/holding = user.get_active_hand()
-	sleep(time)
-	if(!user || !target) return 0
-	if ( user.loc == user_loc && target.loc == target_loc && user.get_active_hand() == holding && !( user.stat ) && ( !user.stunned && !user.weakened && !user.paralysis && !user.lying ) )
-		return 1
-	else
-		return 0
+	var/delayfraction = round(delay/numticks)
+	var/image/progbar
+	if(user && user.client && user.client.prefs.progress_bars)
+		if(!progbar)
+			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+			progbar.pixel_y = 32
+		//if(!barbar)
+			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "none")
+			//barbar.pixel_y = 36
+	//var/oldstate
+	for (var/i = 1 to numticks)
+		if(user && user.client && user.client.prefs.progress_bars && progbar)
+			//oldstate = progbar.icon_state
+			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
+			user.client.images |= progbar
+		sleep(delayfraction)
+		if(!user || !target)
+			if(progbar)
+				progbar.icon_state = "prog_bar_stopped"
+				spawn(2)
+					if(user && user.client) user.client.images -= progbar
+					if(progbar) progbar.loc = null
+			return 0
+		if ( user.loc != user_loc || target.loc != target_loc || user.get_active_hand() != holding || ( user.stat ) || ( user.stunned || user.weakened || user.paralysis || user.lying ) )
+			if(progbar)
+				progbar.icon_state = "prog_bar_stopped"
+				spawn(2)
+					if(user && user.client) user.client.images -= progbar
+					if(progbar) progbar.loc = null
+			return 0
+	if(user && user.client) user.client.images -= progbar
+	if(progbar) progbar.loc = null
+	return 1
 
-/proc/do_after(var/mob/user as mob, delay as num, var/numticks = 5, var/needhand = 1)
+/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/do_after() called tick#: [world.time]")
 	if(!user || isnull(user))
 		return 0
 	if(numticks == 0)
@@ -767,52 +750,84 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 	var/delayfraction = round(delay/numticks)
 	var/Location = user.loc
 	var/holding = user.get_active_hand()
-
-	for(var/i = 0, i<numticks, i++)
+	var/image/progbar
+	//var/image/barbar
+	if(user && user.client && user.client.prefs.progress_bars && target)
+		if(!progbar)
+			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+			progbar.pixel_y = 32
+		//if(!barbar)
+			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "none")
+			//barbar.pixel_y = 36
+	//var/oldstate
+	for (var/i = 1 to numticks)
+		if(user && user.client && user.client.prefs.progress_bars && target)
+			if(!progbar)
+				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+			//oldstate = progbar.icon_state
+			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
+			user.client.images |= progbar
 		sleep(delayfraction)
-
-
+		//if(user.client && progbar.icon_state != oldstate)
+			//user.client.images.Remove(progbar)
 		if(!user || user.stat || user.weakened || user.stunned || !(user.loc == Location))
+			if(progbar)
+				progbar.icon_state = "prog_bar_stopped"
+				spawn(2)
+					if(user && user.client) user.client.images -= progbar
+					if(progbar) progbar.loc = null
 			return 0
 		if(needhand && !(user.get_active_hand() == holding))	//Sometimes you don't want the user to have to keep their active hand
+			if(progbar)
+				progbar.icon_state = "prog_bar_stopped"
+				spawn(2)
+					if(user && user.client) user.client.images -= progbar
+					if(progbar) progbar.loc = null
 			return 0
-
+	if(user && user.client) user.client.images -= progbar
+	if(progbar) progbar.loc = null
 	return 1
 
 //Takes: Anything that could possibly have variables and a varname to check.
 //Returns: 1 if found, 0 if not.
 /proc/hasvar(var/datum/A, var/varname)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/hasvar() called tick#: [world.time]")
 	if(A.vars.Find(lowertext(varname))) return 1
 	else return 0
 
-//Returns: all the areas in the world
-/proc/return_areas()
-	var/list/area/areas = list()
-	for(var/area/A in world)
-		areas += A
-	return areas
+//Returns sortedAreas list if populated
+//else populates the list first before returning it
+/proc/SortAreas()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/SortAreas() called tick#: [world.time]")
+	for(var/area/A in areas)
+		sortedAreas.Add(A)
 
-//Returns: all the areas in the world, sorted.
-/proc/return_sorted_areas()
-	return sortNames(return_areas())
+	sortTim(sortedAreas, /proc/cmp_name_asc)
+
+/area/proc/addSorted()
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/area/proc/addSorted() called tick#: [world.time]")
+	sortedAreas.Add(src)
+	sortTim(sortedAreas, /proc/cmp_name_asc)
 
 //Takes: Area type as text string or as typepath OR an instance of the area.
 //Returns: A list of all areas of that type in the world.
 /proc/get_areas(var/areatype)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_areas() called tick#: [world.time]")
 	if(!areatype) return null
 	if(istext(areatype)) areatype = text2path(areatype)
 	if(isarea(areatype))
 		var/area/areatemp = areatype
 		areatype = areatemp.type
 
-	var/list/areas = new/list()
-	for(var/area/N in world)
-		if(istype(N, areatype)) areas += N
-	return areas
+	var/list/theareas = new/list()
+	for(var/area/N in areas)
+		if(istype(N, areatype)) theareas += N
+	return theareas
 
 //Takes: Area type as text string or as typepath OR an instance of the area.
 //Returns: A list of all turfs in areas of that type of that type in the world.
 /proc/get_area_turfs(var/areatype)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_area_turfs() called tick#: [world.time]")
 	if(!areatype) return null
 	if(istext(areatype)) areatype = text2path(areatype)
 	if(isarea(areatype))
@@ -820,7 +835,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 		areatype = areatemp.type
 
 	var/list/turfs = new/list()
-	for(var/area/N in world)
+	for(var/area/N in areas)
 		if(istype(N, areatype))
 			for(var/turf/T in N) turfs += T
 	return turfs
@@ -828,6 +843,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 //Takes: Area type as text string or as typepath OR an instance of the area.
 //Returns: A list of all atoms	(objs, turfs, mobs) in areas of that type of that type in the world.
 /proc/get_area_all_atoms(var/areatype)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_area_all_atoms() called tick#: [world.time]")
 	if(!areatype) return null
 	if(istext(areatype)) areatype = text2path(areatype)
 	if(isarea(areatype))
@@ -835,7 +851,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 		areatype = areatemp.type
 
 	var/list/atoms = new/list()
-	for(var/area/N in world)
+	for(var/area/N in areas)
 		if(istype(N, areatype))
 			for(var/atom/A in N)
 				atoms += A
@@ -846,163 +862,27 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 	var/y_pos = null
 	var/z_pos = null
 
-/area/proc/move_contents_to(var/area/A, var/turftoleave=null, var/direction = null)
-	//Takes: Area. Optional: turf type to leave behind.
-	//Returns: Nothing.
-	//Notes: Attempts to move the contents of one area to another area.
-	//       Movement based on lower left corner. Tiles that do not fit
-	//		 into the new area will not be moved.
+/datum/coords/New(var/x as num, var/y as num, var/z as num)
+	.=..()
+	x_pos = x
+	y_pos = y
+	z_pos = z
 
-	if(!A || !src) return 0
+/datum/coords/proc/equal_to(var/datum/coords/C)
+	if(src.x_pos==C.x_pos && src.y_pos==C.y_pos && src.z_pos==C.z_pos)
+		return 1
+	return 0
 
-	var/list/turfs_src = get_area_turfs(src.type)
-	var/list/turfs_trg = get_area_turfs(A.type)
+/datum/coords/proc/subtract(var/datum/coords/C)
+	var/datum/coords/CR = new(x_pos-C.x_pos,y_pos-C.y_pos,z_pos-C.z_pos)
+	return CR
 
-	var/src_min_x = 0
-	var/src_min_y = 0
-	for (var/turf/T in turfs_src)
-		if(T.x < src_min_x || !src_min_x) src_min_x	= T.x
-		if(T.y < src_min_y || !src_min_y) src_min_y	= T.y
-
-	var/trg_min_x = 0
-	var/trg_min_y = 0
-	for (var/turf/T in turfs_trg)
-		if(T.x < trg_min_x || !trg_min_x) trg_min_x	= T.x
-		if(T.y < trg_min_y || !trg_min_y) trg_min_y	= T.y
-
-	var/list/refined_src = new/list()
-	for(var/turf/T in turfs_src)
-		refined_src += T
-		refined_src[T] = new/datum/coords
-		var/datum/coords/C = refined_src[T]
-		C.x_pos = (T.x - src_min_x)
-		C.y_pos = (T.y - src_min_y)
-
-	var/list/refined_trg = new/list()
-	for(var/turf/T in turfs_trg)
-		refined_trg += T
-		refined_trg[T] = new/datum/coords
-		var/datum/coords/C = refined_trg[T]
-		C.x_pos = (T.x - trg_min_x)
-		C.y_pos = (T.y - trg_min_y)
-
-	var/list/fromupdate = new/list()
-	var/list/toupdate = new/list()
-
-	moving:
-		for (var/turf/T in refined_src)
-			var/datum/coords/C_src = refined_src[T]
-			for (var/turf/B in refined_trg)
-				var/datum/coords/C_trg = refined_trg[B]
-				if(C_src.x_pos == C_trg.x_pos && C_src.y_pos == C_trg.y_pos)
-
-					var/old_dir1 = T.dir
-					var/old_icon_state1 = T.icon_state
-					var/old_icon1 = T.icon
-
-					var/turf/X = B.ChangeTurf(T.type)
-					X.dir = old_dir1
-					X.icon_state = old_icon_state1
-					X.icon = old_icon1 //Shuttle floors are in shuttle.dmi while the defaults are floors.dmi
-
-					var/turf/simulated/ST = T
-
-					if(istype(ST) && ST.zone)
-						var/turf/simulated/SX = X
-
-						if(!SX.air)
-							SX.make_air()
-
-						SX.air.copy_from(ST.zone.air)
-						ST.zone.remove(ST)
-
-					/* Quick visual fix for some weird shuttle corner artefacts when on transit space tiles */
-					if(direction && findtext(X.icon_state, "swall_s"))
-
-						// Spawn a new shuttle corner object
-						var/obj/corner = new()
-						corner.loc = X
-						corner.density = 1
-						corner.anchored = 1
-						corner.icon = X.icon
-						corner.icon_state = replacetext(X.icon_state, "_s", "_f")
-						corner.tag = "delete me"
-						corner.name = "wall"
-
-						// Find a new turf to take on the property of
-						var/turf/nextturf = get_step(corner, direction)
-						if(!nextturf || !istype(nextturf, /turf/space))
-							nextturf = get_step(corner, turn(direction, 180))
-
-
-						// Take on the icon of a neighboring scrolling space icon
-						X.icon = nextturf.icon
-						X.icon_state = nextturf.icon_state
-
-
-					for(var/obj/O in T)
-
-						// Reset the shuttle corners
-						if(O.tag == "delete me")
-							X.icon = 'icons/turf/shuttle.dmi'
-							X.icon_state = replacetext(O.icon_state, "_f", "_s") // revert the turf to the old icon_state
-							X.name = "wall"
-							del(O) // prevents multiple shuttle corners from stacking
-							continue
-						if(!istype(O,/obj)) continue
-						O.loc.Exited(O)
-						O.setLoc(X,teleported=1)
-						O.loc.Entered(O)
-					for(var/mob/M in T)
-						if(!M.move_on_shuttle)
-							continue
-						M.loc.Exited(M)
-						M.loc = X
-						M.loc.Entered(M)
-
-//					var/area/AR = X.loc
-
-//					if(AR.lighting_use_dynamic)							//TODO: rewrite this code so it's not messed by lighting ~Carn
-//						X.opacity = !X.opacity
-//						X.SetOpacity(!X.opacity)
-
-					toupdate += X
-
-					if(turftoleave)
-						fromupdate += T.ChangeTurf(turftoleave)
-					else
-						T.ChangeTurf(/turf/space)
-
-					refined_src -= T
-					refined_trg -= B
-					continue moving
-
-	var/list/doors = new/list()
-
-	if(toupdate.len)
-		for(var/turf/simulated/T1 in toupdate)
-			for(var/obj/machinery/door/D2 in T1)
-				doors += D2
-			/*if(T1.parent)
-				air_master.groups_to_rebuild += T1.parent
-			else
-				air_master.mark_for_update(T1)*/
-
-	if(fromupdate.len)
-		for(var/turf/simulated/T2 in fromupdate)
-			for(var/obj/machinery/door/D2 in T2)
-				doors += D2
-			/*if(T2.parent)
-				air_master.groups_to_rebuild += T2.parent
-			else
-				air_master.mark_for_update(T2)*/
-
-	for(var/obj/O in doors)
-		O:update_nearby_tiles()
-
-
+/datum/coords/proc/add(var/datum/coords/C)
+	var/datum/coords/CR = new(x_pos+C.x_pos,y_pos+C.y_pos,z_pos+C.z_pos)
+	return CR
 
 proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/DuplicateObject() called tick#: [world.time]")
 	if(!original)
 		return null
 
@@ -1016,12 +896,13 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 	if(perfectcopy)
 		if((O) && (original))
 			for(var/V in original.vars)
-				if(!(V in list("type","loc","locs","vars", "parent", "parent_type","verbs","ckey","key")))
+				if(!(V in list("type","loc","locs","vars", "parent", "parent_type","verbs","ckey","key","group")))
 					O.vars[V] = original.vars[V]
 	return O
 
 
 /area/proc/copy_contents_to(var/area/A , var/platingRequired = 0 )
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/area/proc/copy_contents_to() called tick#: [world.time]")
 	//Takes: Area. Optional: If it should copy to areas that don't have plating
 	//Returns: Nothing.
 	//Notes: Attempts to move the contents of one area to another area.
@@ -1108,7 +989,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 					for(var/mob/M in T)
 
-						if(!M.move_on_shuttle)
+						if(!M.can_shuttle_move())
 							continue
 						mobs += M
 
@@ -1164,15 +1045,18 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 
 proc/get_cardinal_dir(atom/A, atom/B)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/get_cardinal_dir() called tick#: [world.time]")
 	var/dx = abs(B.x - A.x)
 	var/dy = abs(B.y - A.y)
 	return get_dir(A, B) & (rand() * (dx+dy) < dy ? 3 : 12)
 
 //chances are 1:value. anyprob(1) will always return true
 proc/anyprob(value)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/anyprob() called tick#: [world.time]")
 	return (rand(1,value)==value)
 
 proc/view_or_range(distance = world.view , center = usr , type)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/view_or_range() called tick#: [world.time]")
 	switch(type)
 		if("view")
 			. = view(distance,center)
@@ -1181,6 +1065,7 @@ proc/view_or_range(distance = world.view , center = usr , type)
 	return
 
 proc/oview_or_orange(distance = world.view , center = usr , type)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/oview_or_orange() called tick#: [world.time]")
 	switch(type)
 		if("view")
 			. = oview(distance,center)
@@ -1189,6 +1074,7 @@ proc/oview_or_orange(distance = world.view , center = usr , type)
 	return
 
 proc/get_mob_with_client_list()
+	//writepanic("[__FILE__].[__LINE__] \\/proc/get_mob_with_client_list() called tick#: [world.time]")
 	var/list/mobs = list()
 	for(var/mob/M in mob_list)
 		if (M.client)
@@ -1197,50 +1083,46 @@ proc/get_mob_with_client_list()
 
 
 /proc/parse_zone(zone)
-	if(zone == "r_hand") return "right hand"
-	else if (zone == "l_hand") return "left hand"
-	else if (zone == "l_arm") return "left arm"
-	else if (zone == "r_arm") return "right arm"
-	else if (zone == "l_leg") return "left leg"
-	else if (zone == "r_leg") return "right leg"
-	else if (zone == "l_foot") return "left foot"
-	else if (zone == "r_foot") return "right foot"
-	else if (zone == "l_hand") return "left hand"
-	else if (zone == "r_hand") return "right hand"
-	else if (zone == "l_foot") return "left foot"
-	else if (zone == "r_foot") return "right foot"
-	else return zone
-
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/parse_zone() called tick#: [world.time]")
+	switch(zone)
+		if ("r_hand")
+			return "right hand"
+		if ("l_hand")
+			return "left hand"
+		if ("l_arm")
+			return "left arm"
+		if ("r_arm")
+			return "right arm"
+		if ("l_leg")
+			return "left leg"
+		if ("r_leg")
+			return "right leg"
+		if ("l_foot")
+			return "left foot"
+		if ("r_foot")
+			return "right foot"
+		else
+			return zone
 
 /proc/get_turf(const/atom/O)
-	if (isnull(O) || isarea(O))
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_turf() called tick#: [world.time]")
+	if (isnull(O) || isarea(O) || !istype(O))
 		return
-
-	var/atom/A = O
-
-	for (var/i = 0, ++i <= 16)
-		if (isturf(A))
-			return A
-
-		if (istype(A))
-			A = A.loc
-		else
-			return
+	var/atom/A
+	for(A=O, A && !isturf(A), A=A.loc);  // semicolon is for the empty statement
+	return A
 
 /proc/get(atom/loc, type)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get() called tick#: [world.time]")
 	while(loc)
 		if(istype(loc, type))
 			return loc
 		loc = loc.loc
 	return null
 
-/proc/get_turf_or_move(turf/location)
-	return get_turf(location)
-
-
 //Quick type checks for some tools
 var/global/list/common_tools = list(
-/obj/item/weapon/cable_coil,
+/obj/item/stack/cable_coil,
 /obj/item/weapon/wrench,
 /obj/item/weapon/weldingtool,
 /obj/item/weapon/screwdriver,
@@ -1248,114 +1130,8 @@ var/global/list/common_tools = list(
 /obj/item/device/multitool,
 /obj/item/weapon/crowbar)
 
-/proc/istool(O)
-	if(O && is_type_in_list(O, common_tools))
-		return 1
-	return 0
-
-/proc/iswrench(O)
-	if(istype(O, /obj/item/weapon/wrench))
-		return 1
-	return 0
-
-/proc/iswelder(O)
-	if(istype(O, /obj/item/weapon/weldingtool))
-		return 1
-	return 0
-
-/proc/iscoil(O)
-	if(istype(O, /obj/item/weapon/cable_coil))
-		return 1
-	return 0
-
-/proc/iswirecutter(O)
-	if(istype(O, /obj/item/weapon/wirecutters))
-		return 1
-	return 0
-
-/proc/isscrewdriver(O)
-	if(istype(O, /obj/item/weapon/screwdriver))
-		return 1
-	return 0
-
-/proc/ismultitool(O)
-	if(istype(O, /obj/item/device/multitool))
-		return 1
-	return 0
-
-/proc/iscrowbar(O)
-	if(istype(O, /obj/item/weapon/crowbar))
-		return 1
-	return 0
-
-/proc/iswire(O)
-	if(istype(O, /obj/item/weapon/cable_coil))
-		return 1
-	return 0
-
-proc/is_hot(obj/item/W as obj)
-	switch(W.type)
-		if(/obj/item/weapon/weldingtool)
-			var/obj/item/weapon/weldingtool/WT = W
-			if(WT.isOn())
-				return 3800
-			else
-				return 0
-		if(/obj/item/weapon/lighter)
-			if(W:lit)
-				return 1500
-			else
-				return 0
-		if(/obj/item/weapon/match)
-			if(W:lit)
-				return 1000
-			else
-				return 0
-		if(/obj/item/clothing/mask/cigarette)
-			if(W:lit)
-				return 1000
-			else
-				return 0
-		if(/obj/item/weapon/pickaxe/plasmacutter)
-			return 3800
-		if(/obj/item/weapon/melee/energy)
-			return 3500
-		else
-			return 0
-
-	return 0
-
-//Is this even used for anything besides balloons? Yes I took out the W:lit stuff because : really shouldnt be used.
-/proc/is_sharp(obj/item/W as obj)		// For the record, WHAT THE HELL IS THIS METHOD OF DOING IT?
-	if(!W)
-		return 0
-
-	if(W.sharp) return 1
-	return ( \
-		W.sharp													  || \
-		istype(W, /obj/item/weapon/screwdriver)                   || \
-		istype(W, /obj/item/weapon/pen)                           || \
-		istype(W, /obj/item/weapon/weldingtool)					  || \
-		istype(W, /obj/item/weapon/lighter/zippo)				  || \
-		istype(W, /obj/item/weapon/match)            		      || \
-		istype(W, /obj/item/clothing/mask/cigarette) 		      || \
-		istype(W, /obj/item/weapon/wirecutters)                   || \
-		istype(W, /obj/item/weapon/circular_saw)                  || \
-		istype(W, /obj/item/weapon/melee/energy/sword)            || \
-		istype(W, /obj/item/weapon/melee/energy/blade)            || \
-		istype(W, /obj/item/weapon/shovel)                        || \
-		istype(W, /obj/item/weapon/kitchenknife)                  || \
-		istype(W, /obj/item/weapon/butch)						  || \
-		istype(W, /obj/item/weapon/scalpel)                       || \
-		istype(W, /obj/item/weapon/kitchen/utensil/knife)         || \
-		istype(W, /obj/item/weapon/shard)                         || \
-		istype(W, /obj/item/weapon/broken_bottle)				  || \
-		istype(W, /obj/item/weapon/reagent_containers/syringe)    || \
-		istype(W, /obj/item/weapon/kitchen/utensil/fork) && W.icon_state != "forkloaded" || \
-		istype(W, /obj/item/weapon/twohanded/fireaxe) \
-	)
-
 /proc/is_surgery_tool(obj/item/W as obj)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/is_surgery_tool() called tick#: [world.time]")
 	return (	\
 	istype(W, /obj/item/weapon/scalpel)			||	\
 	istype(W, /obj/item/weapon/hemostat)		||	\
@@ -1367,13 +1143,14 @@ proc/is_hot(obj/item/W as obj)
 
 //check if mob is lying down on something we can operate him on.
 /proc/can_operate(mob/living/carbon/M)
-	return (locate(/obj/machinery/optable, M.loc) && M.resting) || \
-	(locate(/obj/structure/stool/bed/roller, M.loc) && 	\
-	(M.buckled || M.lying || M.weakened || M.stunned || M.paralysis || M.sleeping || M.stat)) && prob(75) || 	\
-	(locate(/obj/structure/table/, M.loc) && 	\
-	(M.lying || M.weakened || M.stunned || M.paralysis || M.sleeping || M.stat) && prob(66))
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/can_operate() called tick#: [world.time]")
+	return (ishuman(M) && M.lying && \
+	locate(/obj/machinery/optable, M.loc) || \
+	(locate(/obj/structure/bed/roller, M.loc) && prob(75)) || \
+	(locate(/obj/structure/table/, M.loc) && prob(66)))
 
 /proc/reverse_direction(var/dir)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/reverse_direction() called tick#: [world.time]")
 	switch(dir)
 		if(NORTH)
 			return SOUTH
@@ -1402,9 +1179,10 @@ var/list/WALLITEMS = list(
 	"/obj/machinery/newscaster", "/obj/machinery/firealarm", "/obj/structure/noticeboard", "/obj/machinery/door_control",
 	"/obj/machinery/computer/security/telescreen", "/obj/machinery/embedded_controller/radio/simple_vent_controller",
 	"/obj/item/weapon/storage/secure/safe", "/obj/machinery/door_timer", "/obj/machinery/flasher", "/obj/machinery/keycard_auth",
-	"/obj/structure/mirror", "/obj/structure/closet/fireaxecabinet", "/obj/machinery/computer/security/telescreen/entertainment"
+	"/obj/structure/mirror", "/obj/structure/closet/fireaxecabinet", "obj/structure/sign"
 	)
 /proc/gotwallitem(loc, dir)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/gotwallitem() called tick#: [world.time]")
 	for(var/obj/O in loc)
 		for(var/item in WALLITEMS)
 			if(istype(O, text2path(item)))
@@ -1432,19 +1210,17 @@ var/list/WALLITEMS = list(
 	for(var/obj/O in get_step(loc, dir))
 		for(var/item in WALLITEMS)
 			if(istype(O, text2path(item)))
-				if(O.pixel_x == 0 && O.pixel_y == 0)
+				if(abs(O.pixel_x) <= 10 && abs(O.pixel_y) <=10)
 					return 1
 	return 0
 
 
 proc/get_angle(atom/a, atom/b)
-    return atan2(b.y - a.y, b.x - a.x)
-
-proc/atan2(x, y)
-	if(!x && !y) return 0
-	return y >= 0 ? arccos(x / sqrt(x * x + y * y)) : -arccos(x / sqrt(x * x + y * y))
+    //writepanic("[__FILE__].[__LINE__] \\/proc/get_angle() called tick#: [world.time]")
+    return Atan2(b.y - a.y, b.x - a.x)
 
 proc/rotate_icon(file, state, step = 1, aa = FALSE)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/rotate_icon() called tick#: [world.time]")
 	var icon/base = icon(file, state)
 
 	var w, h, w2, h2
@@ -1469,12 +1245,127 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 
 	return result
 
-/proc/iscatwalk(atom/A)
-	if(istype(A, /turf/simulated/floor/plating/airless/catwalk))
-		return 1
-	return 0
-
 /proc/has_edge(obj/O as obj)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/has_edge() called tick#: [world.time]")
 	if (!O) return 0
 	if(O.edge) return 1
 	return 0
+
+proc/find_holder_of_type(var/atom/reference,var/typepath) //Returns the first object holder of the type you specified
+	//writepanic("[__FILE__].[__LINE__] \\/proc/find_holder_of_type() called tick#: [world.time]")
+	var/atom/location = reference.loc //ie /mob to find the first mob holding it
+	while(!istype(location,/turf) && !istype(location,null))
+		if(istype(location,typepath))
+			return location
+		location = location.loc
+	return 0
+
+/proc/get_distant_turf(var/turf/T,var/direction,var/distance)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_distant_turf() called tick#: [world.time]")
+	if(!T || !direction || !distance)	return
+
+	var/dest_x = T.x
+	var/dest_y = T.y
+	var/dest_z = T.z
+
+	if(direction & NORTH)
+		dest_y = min(world.maxy, dest_y+distance)
+	if(direction & SOUTH)
+		dest_y = max(0, dest_y-distance)
+	if(direction & EAST)
+		dest_x = min(world.maxy, dest_x+distance)
+	if(direction & WEST)
+		dest_x = max(0, dest_x-distance)
+
+	return locate(dest_x,dest_y,dest_z)
+
+/var/mob/dview/dview_mob = new
+
+//Version of view() which ignores darkness, because BYOND doesn't have it (I actually suggested it but it was tagged redundant, BUT HEARERS IS A T- /rant).
+/proc/dview(var/range = world.view, var/center, var/invis_flags = 0)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/dview() called tick#: [world.time]")
+	if(!center)
+		return
+
+	dview_mob.loc = center
+
+	dview_mob.see_invisible = invis_flags
+
+	. = view(range, dview_mob)
+	dview_mob.loc = null
+
+/mob/dview
+	invisibility = 101
+	density = 0
+	see_in_dark = 1e6
+	anchored = 1
+
+//Gets the Z level datum for this atom's Z level
+/proc/get_z_level(var/atom/A)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/get_z_level() called tick#: [world.time]")
+	var/z
+	if(istype(A, /atom/movable))
+		var/turf/T = get_turf(A)
+		if(!T)
+			return null
+		z = T.z
+	else
+		z = A.z
+
+	. = map.zLevels[z]
+
+/proc/get_dir_cardinal(var/atom/T1,var/atom/T2)
+	if(!T1 || !T2)
+		return null
+
+	var/direc = get_dir(T1,T2)
+
+	if(direc in cardinal)
+		return direc
+
+	switch(direc)
+		if(NORTHEAST)
+			if((T2.x - T1.x) > (T2.y - T1.y))
+				return EAST
+			else
+				return NORTH
+		if(SOUTHEAST)
+			if((T2.x - T1.x) > ((T2.y - T1.y)*-1))
+				return EAST
+			else
+				return SOUTH
+		if(NORTHWEST)
+			if(((T2.x - T1.x)*-1) > (T2.y - T1.y))
+				return WEST
+			else
+				return NORTH
+		if(SOUTHWEST)
+			if((T2.x - T1.x) > (T2.y - T1.y))
+				return WEST
+			else
+				return SOUTH
+		else
+			return null
+
+/proc/adjustAngle(angle)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/adjustAngle() called tick#: [world.time]")
+	angle = round(angle) + 45
+	if(angle > 180)
+		angle -= 180
+	else
+		angle += 180
+	if(!angle)
+		angle = 1
+	/*if(angle < 0)
+		//angle = (round(abs(get_angle(A, user))) + 45) - 90
+		angle = round(angle) + 45 + 180
+	else
+		angle = round(angle) + 45*/
+	return angle
+
+/proc/print_runtime(exception/e)
+	world.log << "[time_stamp()] Runtime detected\n[e] at [e.file]:[e.line]\n [e.desc]"
+
+/world/Error(exception/e)
+	print_runtime(e)
+	..()

@@ -5,11 +5,13 @@
 	return
 
 /obj/machinery/atmoalter/siphs/proc/releaseall()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmoalter/siphs/proc/releaseall() called tick#: [world.time]")
 	src.t_status = 1
 	src.t_per = max_valve
 	return
 
 /obj/machinery/atmoalter/siphs/proc/reset(valve, auto)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmoalter/siphs/proc/reset() called tick#: [world.time]")
 	if(c_status!=0)
 		return
 
@@ -28,6 +30,7 @@
 	return
 
 /obj/machinery/atmoalter/siphs/proc/release(amount, flag)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmoalter/siphs/proc/release() called tick#: [world.time]")
 	/*
 	var/T = src.loc
 	if (!( istype(T, /turf) ))
@@ -43,6 +46,7 @@
 	*/ //TODO: FIX
 
 /obj/machinery/atmoalter/siphs/proc/siphon(amount, flag)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmoalter/siphs/proc/siphon() called tick#: [world.time]")
 	/*
 	var/T = src.loc
 	if (!( istype(T, /turf) ))
@@ -58,6 +62,8 @@
 	*/ //TODO: FIX
 
 /obj/machinery/atmoalter/siphs/proc/setstate()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmoalter/siphs/proc/setstate() called tick#: [world.time]")
 
 	if(stat & NOPOWER)
 		icon_state = "siphon:0"
@@ -275,6 +281,7 @@
 //true if the siphon is portable (therfore no power needed)
 
 /obj/machinery/proc/portable()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/proc/portable() called tick#: [world.time]")
 	return istype(src, /obj/machinery/atmoalter/siphs/fullairsiphon/port) || istype(src, /obj/machinery/atmoalter/siphs/scrubbers/port)
 
 /obj/machinery/atmoalter/siphs/power_change()
@@ -416,7 +423,7 @@
 	return
 
 /obj/machinery/atmoalter/siphs/Topic(href, href_list)
-	..()
+	if(..()) return 1
 
 	if (usr.stat || usr.restrained())
 		return
@@ -491,26 +498,26 @@
 			if (src.c_status)
 				src.anchored = 0
 				src.c_status = 0
-				user.show_message("\blue You have disconnected the siphon.")
+				user.show_message("<span class='notice'>You have disconnected the siphon.</span>")
 				if(con)
 					con.connected = null
 			else
 				if (con && !con.connected)
 					src.anchored = 1
 					src.c_status = 3
-					user.show_message("\blue You have connected the siphon.")
+					user.show_message("<span class='notice'>You have connected the siphon.</span>")
 					con.connected = src
 				else
-					user.show_message("\blue There is nothing here to connect to the siphon.")
+					user.show_message("<span class='notice'>There is nothing here to connect to the siphon.</span>")
 
 
 		else
 			if (istype(W, /obj/item/weapon/wrench))
 				src.alterable = !( src.alterable )
 				if (src.alterable)
-					user << "\blue You unlock the interface!"
+					user << "<span class='notice'>You unlock the interface!</span>"
 				else
-					user << "\blue You lock the interface!"
+					user << "<span class='notice'>You lock the interface!</span>"
 	return
 
 

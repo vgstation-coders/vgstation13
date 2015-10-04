@@ -17,6 +17,8 @@
 	attack_sound = 'sound/weapons/welderattack.ogg'
 	faction = "slimesummon"
 	speed = 4
+	can_butcher = 0
+
 	var/colour = "grey"
 
 /mob/living/simple_animal/hostile/slime/New()
@@ -52,11 +54,13 @@
 	del(src)
 
 /mob/living/simple_animal/hostile/slime/Life()
+	if(timestopped) return 0 //under effects of time magick
 	..()
 	if(bodytemperature < 273.15)
 		calm()
 
 /mob/living/simple_animal/hostile/slime/proc/calm()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/hostile/slime/proc/calm() called tick#: [world.time]")
 	switch(colour)
 		if("grey")
 			new /mob/living/carbon/slime(loc)

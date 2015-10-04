@@ -41,7 +41,7 @@ Feel free to do whatever with this if you think it lacks.
 	return
 
 /obj/machinery/pdapainter/update_icon()
-	overlays.Cut()
+	overlays.len = 0
 
 	if(stat & BROKEN)
 		icon_state = "[initial(icon_state)]-broken"
@@ -91,17 +91,15 @@ Feel free to do whatever with this if you think it lacks.
 		else
 			var/obj/item/device/pda/P = O
 			if(istype(P))
-				user.drop_item(P)
+				user.drop_item(P, src)
 				storedpda = P
-				P.loc = src
 				//P.add_fingerprint(usr)
 				update_icon()
 
 /obj/machinery/pdapainter/attack_hand(mob/user as mob)
 	..()
 
-
-	if(!istype(usr, /mob/living))
+	if(!ishuman(user))
 		return
 
 	src.add_fingerprint(user)
@@ -133,9 +131,9 @@ Feel free to do whatever with this if you think it lacks.
 	set name = "Eject PDA"
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/pdapainter/verb/ejectpda()  called tick#: [world.time]")
 
-
-	if(!istype(usr, /mob/living))
+	if(!ishuman(usr))
 		return
 
 	if(storedpda)
@@ -149,10 +147,10 @@ Feel free to do whatever with this if you think it lacks.
 	set name = "Print PDA"
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/pdapainter/verb/printpda()  called tick#: [world.time]")
 
-	if(!istype(usr, /mob/living))
+	if(!ishuman(usr))
 		return
-
 	if(storedpda)
 		usr << "You can't print a PDA while \the [storedpda] is loaded into \the [src]."
 		return

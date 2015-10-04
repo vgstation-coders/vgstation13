@@ -7,21 +7,26 @@
 	w_class = 1.0
 	throw_speed = 4
 	throw_range = 10
-	flags = FPRINT | TABLEPASS| CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	origin_tech = "magnets=2;combat=1"
+	min_harm_label = 15 //Multiple layers?
+	harm_label_examine = list("<span class='info'>A label is on the bulb, but doesn't cover it.</span>", "<span class='warning'>A label covers the bulb!</span>")
 
 	var/times_used = 0 //Number of times it's been used.
 	var/broken = 0     //Is the flash burnt out?
 	var/last_used = 0 //last world.time it was used.
 
 /obj/item/device/flash/proc/clown_check(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/flash/proc/clown_check() called tick#: [world.time]")
 	if(user && (M_CLUMSY in user.mutations) && prob(50))
-		user << "\red \The [src] slips out of your hand."
+		user << "<span class='warning'>\The [src] slips out of your hand.</span>"
 		user.drop_item()
 		return 0
 	return 1
 
 /obj/item/device/flash/proc/flash_recharge()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/flash/proc/flash_recharge() called tick#: [world.time]")
 	//capacitor recharges over time
 	for(var/i=0, i<3, i++)
 		if(last_used+600 > world.time)
@@ -72,7 +77,7 @@
 
 	playsound(get_turf(user), 'sound/weapons/flash.ogg', 100, 1)
 
-	var/flashfail = FALSE
+	var/flashfail = (harm_labeled >= min_harm_label) //Flashfail is always true if the device has been successfully harm-labeled.
 
 	if(iscarbon(M))
 		var/mob/living/carbon/Subject = M
@@ -82,7 +87,7 @@
 			Subject.Weaken(10)
 			flick("e_flash", Subject.flash)
 
-			if(ishuman(user) && user.mind && user.mind in ticker.mode.head_revolutionaries) // alien revhead when?
+			if(user.mind && isrevhead(user)) // alien revhead when?
 				if(ishuman(Subject))
 					if(Subject.stat != DEAD)
 						Subject.mind_initialize() // give them a mind datum if they don't have one
@@ -150,6 +155,7 @@
 			user.show_message("<span class='warning'>*click* *click*</span>", 2)
 			return
 	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
+	if(harm_labeled >= min_harm_label)	return //Act as if the flash was activated except the useful part.
 	flick("flash2", src)
 	if(user && isrobot(user))
 		spawn(0)
@@ -193,7 +199,7 @@
 				icon_state = "flashburnt"
 				return
 			times_used++
-			if(istype(loc, /mob/living/carbon))
+			if(istype(loc, /mob/living/carbon) && harm_labeled < min_harm_label)
 				var/mob/living/carbon/M = loc
 				var/safety = M.eyecheck()
 				if(safety <= 0)
@@ -213,12 +219,12 @@
 	..()
 	if(!broken)
 		broken = 1
-		user << "\red The bulb has burnt out!"
+		user << "<span class='warning'>The bulb has burnt out!</span>"
 		icon_state = "flashburnt"
 
 /obj/item/device/flash/synthetic/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
 	..()
 	if(!broken)
 		broken = 1
-		user << "\red The bulb has burnt out!"
+		user << "<span class='warning'>The bulb has burnt out!</span>"
 		icon_state = "flashburnt"

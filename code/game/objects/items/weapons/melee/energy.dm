@@ -1,10 +1,22 @@
 /obj/item/weapon/melee/energy
 	var/active = 0
+	sharpness = 1.5 //very very sharp
+	heat_production = 3500
 
-	suicide_act(mob/user)
-		viewers(user) << pick("\red <b>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</b>", \
-							"\red <b>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</b>")
-		return (BRUTELOSS|FIRELOSS)
+/obj/item/weapon/melee/energy/suicide_act(mob/user)
+	viewers(user) << pick("<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>", \
+						"<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return (BRUTELOSS|FIRELOSS)
+
+/obj/item/weapon/melee/energy/is_hot()
+	if(active)
+		return heat_production
+	return 0
+
+/obj/item/weapon/melee/energy/is_sharp()
+	if(active)
+		return sharpness
+	return 0
 
 /obj/item/weapon/melee/energy/axe
 	name = "energy axe"
@@ -15,12 +27,14 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = 3.0
-	flags = FPRINT | CONDUCT | NOSHIELD | TABLEPASS
+	flags = FPRINT
+	siemens_coefficient = 1
 	origin_tech = "combat=3"
 	attack_verb = list("attacked", "chopped", "cleaved", "torn", "cut")
 
+
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] swings the [src.name] towards /his head! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class='danger'>[user] swings the [src.name] towards /his head! It looks like \he's trying to commit suicide.</span>"
 		return (BRUTELOSS|FIRELOSS)
 
 /obj/item/weapon/melee/energy/sword
@@ -35,7 +49,7 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = 2.0
-	flags = FPRINT | TABLEPASS | NOSHIELD
+	flags = FPRINT
 	origin_tech = "magnets=3;syndicate=4"
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
@@ -62,6 +76,7 @@
 	return
 
 /obj/item/weapon/melee/energy/sword/proc/toggleActive(mob/user, var/togglestate = "") //you can use togglestate to manually set the sword on or off
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/melee/energy/sword/proc/toggleActive() called tick#: [world.time]")
 	switch(togglestate)
 		if("on")
 			active = 1
@@ -72,12 +87,14 @@
 	if (active)
 		force = 30
 		w_class = 4
+		hitsound = "sound/weapons/blade1.ogg"
 		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
 		user << "<span class='notice'> [src] is now active.</span>"
 	else
 		force = 3
 		w_class = 2
 		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
+		hitsound = "sound/weapons/empty.ogg"
 		user << "<span class='notice'> [src] can now be concealed.</span>"
 	update_icon()
 
@@ -96,7 +113,7 @@
 				user.adjustBrainLoss(10)
 		else
 			user << "<span class='notice'>You attach the ends of the two energy swords, making a single double-bladed weapon! You're cool.</span>"
-			new /obj/item/weapon/twohanded/dualsaber(user.loc)
+			new /obj/item/weapon/dualsaber(user.loc)
 			del(W)
 			del(src)
 
@@ -110,16 +127,3 @@
 	..()
 	_color = null
 	update_icon()
-
-/obj/item/weapon/melee/energy/blade
-	name = "energy blade"
-	desc = "A concentrated beam of energy in the shape of a blade. Very stylish... and lethal."
-	icon_state = "blade"
-	force = 70.0//Normal attacks deal very high damage.
-	throwforce = 1//Throwing or dropping the item deletes it.
-	throw_speed = 1
-	throw_range = 1
-	w_class = 4.0//So you can't hide it in your pocket or some such.
-	flags = FPRINT | TABLEPASS | NOSHIELD
-	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
-	var/datum/effect/effect/system/spark_spread/spark_system

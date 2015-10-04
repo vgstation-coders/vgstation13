@@ -18,21 +18,21 @@
 	name = "Uranium ore"
 	icon_state = "Uranium ore"
 	origin_tech = "materials=5"
-	material="uranium"
+	material=MAT_URANIUM
 	melt_temperature = 1070+T0C
 
 /obj/item/weapon/ore/iron
 	name = "Iron ore"
 	icon_state = "Iron ore"
 	origin_tech = "materials=1"
-	material="iron"
+	material=MAT_IRON
 	melt_temperature = MELTPOINT_STEEL
 
 /obj/item/weapon/ore/glass
 	name = "Sand"
 	icon_state = "Glass ore"
 	origin_tech = "materials=1"
-	material="glass"
+	material=MAT_GLASS
 	melt_temperature = MELTPOINT_GLASS
 
 	attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
@@ -47,34 +47,34 @@
 	name = "Plasma ore"
 	icon_state = "Plasma ore"
 	origin_tech = "materials=2"
-	material="plasma"
+	material=MAT_PLASMA
 	melt_temperature = MELTPOINT_STEEL+500
 
 /obj/item/weapon/ore/silver
 	name = "Silver ore"
 	icon_state = "Silver ore"
 	origin_tech = "materials=3"
-	material="silver"
+	material=MAT_SILVER
 	melt_temperature = 961+T0C
 
 /obj/item/weapon/ore/gold
 	name = "Gold ore"
 	icon_state = "Gold ore"
 	origin_tech = "materials=4"
-	material="gold"
+	material=MAT_GOLD
 	melt_temperature = 1064+T0C
 
 /obj/item/weapon/ore/diamond
 	name = "Diamond ore"
 	icon_state = "Diamond ore"
 	origin_tech = "materials=6"
-	material="diamond"
+	material=MAT_DIAMOND
 
 /obj/item/weapon/ore/clown
 	name = "Bananium ore"
 	icon_state = "Clown ore"
 	origin_tech = "materials=4"
-	material="clown"
+	material=MAT_CLOWN
 	melt_temperature = MELTPOINT_GLASS
 
 /obj/item/weapon/ore/phazon
@@ -82,7 +82,7 @@
 	desc = "What the fuck?"
 	icon_state = "Phazon ore"
 	origin_tech = "materials=7"
-	material="phazon"
+	material=MAT_PHAZON
 	melt_temperature = MELTPOINT_GLASS
 
 /obj/item/weapon/ore/slag
@@ -193,7 +193,7 @@
 /obj/item/weapon/ore/cytine/attack_hand(mob/user as mob)
 	var/obj/item/weapon/glowstick/G = new /obj/item/weapon/glowstick(user.loc)
 	G.color = color
-	G.l_color = color
+	G.light_color = color
 	del(src)
 
 /obj/item/weapon/ore/uqill
@@ -206,7 +206,7 @@
 	desc = "A large unprocessed telecrystal, a gemstone with space-warping properties."
 	icon_state = "telecrystal"
 	material="telecrystal"
-/obj/item/weapon/twohanded/required/gibtonite
+/obj/item/weapon/gibtonite
 	name = "Gibtonite ore"
 	desc = "Extremely explosive if struck with mining equipment, Gibtonite is often used by miners to speed up their work by using it as a mining charge. This material is illegal to possess by unauthorized personnel under space law."
 	icon = 'icons/obj/mining.dmi'
@@ -215,11 +215,12 @@
 	w_class = 4
 	throw_range = 0
 	anchored = 1 //Forces people to carry it by hand, no pulling!
+	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND
 	var/primed = 0
 	var/det_time = 100
 	var/quality = 1 //How pure this gibtonite is, determines the explosion produced by it and is derived from the det_time of the rock wall it was taken from, higher shipping_value = better
 
-/obj/item/weapon/twohanded/required/gibtonite/attackby(obj/item/I, mob/user)
+/obj/item/weapon/gibtonite/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/weapon/pickaxe) || istype(I, /obj/item/weapon/resonator))
 		GibtoniteReaction(user)
 		return
@@ -231,15 +232,16 @@
 		return
 	..()
 
-/obj/item/weapon/twohanded/required/gibtonite/bullet_act(var/obj/item/projectile/P)
+/obj/item/weapon/gibtonite/bullet_act(var/obj/item/projectile/P)
 	if(istype(P, /obj/item/projectile/bullet))
 		GibtoniteReaction(P.firer)
 	..()
 
-/obj/item/weapon/twohanded/required/gibtonite/ex_act()
+/obj/item/weapon/gibtonite/ex_act()
 	GibtoniteReaction(triggered_by_explosive = 1)
 
-/obj/item/weapon/twohanded/required/gibtonite/proc/GibtoniteReaction(mob/user, triggered_by_explosive = 0)
+/obj/item/weapon/gibtonite/proc/GibtoniteReaction(mob/user, triggered_by_explosive = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/gibtonite/proc/GibtoniteReaction() called tick#: [world.time]")
 	if(!primed)
 		playsound(src,'sound/effects/hit_on_shattered_glass.ogg',50,1)
 		primed = 1
@@ -291,12 +293,13 @@
 	icon = 'icons/obj/items.dmi'
 	name = "Coin"
 	icon_state = "coin"
-	flags = FPRINT | TABLEPASS| CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	force = 0.0
 	throwforce = 0.0
 	w_class = 1.0
 	var/string_attached
-	var/material="iron" // Ore ID, used with coinbags.
+	var/material=MAT_IRON // Ore ID, used with coinbags.
 	var/credits = 0 // How many credits is this coin worth?
 
 /obj/item/weapon/coin/New()
@@ -311,55 +314,55 @@
 	return w_type
 
 /obj/item/weapon/coin/gold
-	material="gold"
+	material=MAT_GOLD
 	name = "Gold coin"
 	icon_state = "coin_gold"
 	credits = 5
 	melt_temperature=1064+T0C
 
 /obj/item/weapon/coin/silver
-	material="silver"
+	material=MAT_SILVER
 	name = "Silver coin"
 	icon_state = "coin_silver"
 	credits = 1
 	melt_temperature=961+T0C
 
 /obj/item/weapon/coin/diamond
-	material="diamond"
+	material=MAT_DIAMOND
 	name = "Diamond coin"
 	icon_state = "coin_diamond"
 	credits = 25
 
 /obj/item/weapon/coin/iron
-	material="iron"
+	material=MAT_IRON
 	name = "Iron coin"
 	icon_state = "coin_iron"
 	credits = 0.01
 	melt_temperature=MELTPOINT_STEEL
 
 /obj/item/weapon/coin/plasma
-	material="plasma"
+	material=MAT_PLASMA
 	name = "Solid plasma coin"
 	icon_state = "coin_plasma"
 	credits = 0.1
 	melt_temperature=MELTPOINT_STEEL+500
 
 /obj/item/weapon/coin/uranium
-	material="uranium"
+	material=MAT_URANIUM
 	name = "Uranium coin"
 	icon_state = "coin_uranium"
 	credits = 25
 	melt_temperature=1070+T0C
 
 /obj/item/weapon/coin/clown
-	material="clown"
+	material=MAT_CLOWN
 	name = "Bananaium coin"
 	icon_state = "coin_clown"
 	credits = 1000
 	melt_temperature=MELTPOINT_GLASS
 
 /obj/item/weapon/coin/phazon
-	material="phazon"
+	material=MAT_PHAZON
 	name = "Phazon coin"
 	icon_state = "coin_phazon"
 	credits = 2000
@@ -376,30 +379,30 @@
 	icon_state = "coin_mythril"
 
 /obj/item/weapon/coin/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/cable_coil) )
-		var/obj/item/weapon/cable_coil/CC = W
+	if(istype(W,/obj/item/stack/cable_coil) )
+		var/obj/item/stack/cable_coil/CC = W
 		if(string_attached)
-			user << "\blue There already is a string attached to this coin."
+			user << "<span class='notice'>There already is a string attached to this coin.</span>"
 			return
 
 		if(CC.amount <= 0)
-			user << "\blue This cable coil appears to be empty."
+			user << "<span class='notice'>This cable coil appears to be empty.</span>"
 			del(CC)
 			return
 
 		overlays += image('icons/obj/items.dmi',"coin_string_overlay")
 		string_attached = 1
-		user << "\blue You attach a string to the coin."
+		user << "<span class='notice'>You attach a string to the coin.</span>"
 		CC.use(1)
 	else if(istype(W,/obj/item/weapon/wirecutters) )
 		if(!string_attached)
 			..()
 			return
 
-		var/obj/item/weapon/cable_coil/CC = new/obj/item/weapon/cable_coil(user.loc)
+		var/obj/item/stack/cable_coil/CC = new(user.loc)
 		CC.amount = 1
-		CC.updateicon()
+		CC.update_icon()
 		overlays = list()
 		string_attached = null
-		user << "\blue You detach the string from the coin."
+		user << "<span class='notice'>You detach the string from the coin.</span>"
 	else ..()

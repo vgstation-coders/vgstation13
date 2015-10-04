@@ -33,14 +33,15 @@
 	flags_inv = HIDEJUMPSUIT
 	species_fit = list("Vox")
 
-/obj/item/clothing/suit/captunic/capjacket
+/obj/item/clothing/suit/storage/capjacket
 	name = "captain's uniform jacket"
 	desc = "A less formal jacket for everyday captain use."
 	icon_state = "capjacket"
 	item_state = "bio_suit"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
-	flags_inv = HIDEJUMPSUIT
 	species_fit = list("Vox")
+	max_combined_w_class = 6
+	storage_slots = 3
 
 //Chaplain
 /obj/item/clothing/suit/chaplain_hoodie
@@ -70,7 +71,7 @@
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.50
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
-	allowed = list (/obj/item/weapon/kitchenknife,/obj/item/weapon/butch)
+	allowed = list (/obj/item/weapon/kitchen/utensil/knife/large,/obj/item/weapon/kitchen/utensil/knife/large/butch)
 	species_fit = list("Vox")
 
 //Chef
@@ -123,7 +124,7 @@
 	blood_overlay_type = "armor"
 	allowed = list (/obj/item/device/analyzer, /obj/item/device/flashlight, /obj/item/device/multitool, /obj/item/device/radio, /obj/item/device/t_scanner, \
 	/obj/item/weapon/crowbar, /obj/item/weapon/screwdriver, /obj/item/weapon/weldingtool, /obj/item/weapon/wirecutters, /obj/item/weapon/wrench, \
-	/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
+	/obj/item/weapon/tank/emergency_oxygen,  /obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/device_analyser)
 	species_fit = list("Vox")
 
 //Lawyer
@@ -156,8 +157,9 @@
 		set name = "Toggle Coat Buttons"
 		set category = "Object"
 		set src in usr
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\verb/toggle()  called tick#: [world.time]")
 
-		if(!usr.canmove || usr.stat || usr.restrained())
+		if(!usr.canmove || usr.stat || usr.restrained() || (usr.status_flags & FAKEDEATH))
 			return 0
 
 		switch(icon_state)
@@ -186,8 +188,9 @@
 		set name = "Toggle Jacket Buttons"
 		set category = "Object"
 		set src in usr
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\verb/toggle()  called tick#: [world.time]")
 
-		if(!usr.canmove || usr.stat || usr.restrained())
+		if(!usr.canmove || usr.stat || usr.restrained() || (usr.status_flags & FAKEDEATH))
 			return 0
 
 		switch(icon_state)

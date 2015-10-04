@@ -31,7 +31,7 @@
 	name = "amish suit"
 	icon_state = "sl_suit"
 	_color = "sl_suit"
-	flags = FPRINT | TABLEPASS | ONESIZEFITSALL
+	flags = FPRINT  | ONESIZEFITSALL
 
 /obj/item/clothing/under/waiter
 	name = "waiter's outfit"
@@ -39,7 +39,7 @@
 	icon_state = "waiter"
 	item_state = "waiter"
 	_color = "waiter"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 
 /obj/item/clothing/under/rank/mailman
 	name = "mailman's jumpsuit"
@@ -85,10 +85,10 @@
 	w_class = 4//bulky item
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.02
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
 	cold_protection = UPPER_TORSO | LOWER_TORSO | LEGS | ARMS //Needs gloves and shoes with cold protection to be fully protected.
-	min_cold_protection_temperature = SPACE_SUIT_MIN_COLD_PROTECITON_TEMPERATURE
+	min_cold_protection_temperature = SPACE_SUIT_MIN_COLD_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/under/acj
 	name = "administrative cybernetic jumpsuit"
@@ -98,11 +98,11 @@
 	desc = "it's a cybernetically enhanced jumpsuit used for administrative duties."
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
 	armor = list(melee = 100, bullet = 100, laser = 100,energy = 100, bomb = 100, bio = 100, rad = 100)
 	cold_protection = UPPER_TORSO | LOWER_TORSO | LEGS | FEET | ARMS | HANDS
-	min_cold_protection_temperature = SPACE_SUIT_MIN_COLD_PROTECITON_TEMPERATURE
+	min_cold_protection_temperature = SPACE_SUIT_MIN_COLD_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0
 
 /obj/item/clothing/under/owl
@@ -110,7 +110,7 @@
 	desc = "A jumpsuit with owl wings. Photorealistic owl feathers! Twooooo!"
 	icon_state = "owl"
 	_color = "owl"
-	flags = FPRINT | TABLEPASS | ONESIZEFITSALL
+	flags = FPRINT  | ONESIZEFITSALL
 
 /obj/item/clothing/under/johnny
 	name = "johnny~~ jumpsuit"
@@ -424,3 +424,152 @@
 	icon_state = "russobluecamo"
 	item_state = "russobluecamo"
 	_color = "russobluecamo"
+
+/obj/item/clothing/under/jester
+	name = "jester duit"
+	desc = "Only a fool would wear such a suit."
+	icon_state = "jester"
+	item_state = "jester"
+	_color = "jester"
+
+/obj/item/clothing/under/stilsuit
+	name = "dtilsuit"
+	desc = "Designed to preserve bodymoisture."
+	icon_state = "stilsuit"
+	item_state = "stilsuit"
+	_color = "stilsuit"
+
+/obj/item/clothing/under/aviatoruniform
+	name = "aviator uniform"
+	desc = "Now you can look absolutely dashing!"
+	icon_state = "aviator_uniform"
+	item_state = "aviator_uniform"
+	_color = "aviator_uniform"
+	species_restricted = list("exclude","Vox")
+
+/obj/item/clothing/under/libertyshirt
+	name = "liberty dhirt"
+	desc = "For any freedom loving patriot out there"
+	icon_state = "libertyshirt"
+	item_state = "libertyshirt"
+	_color = "libertyshirt"
+
+/obj/item/clothing/under/bikersuit
+	name = "biker's outfit"
+	icon_state = "biker"
+	item_state = "biker"
+	_color = "biker"
+
+/obj/item/clothing/under/jacketsuit
+	name = "richard's outfit"
+	desc = "Do you know what time it is?"
+	icon_state = "jacket"
+	item_state = "jacket"
+	_color = "jacket"
+
+/obj/item/clothing/under/mega
+	name = "\improper DRN-001 suit"
+	desc = "The original. Simple, yet very adaptable."
+	icon_state = "mega"
+	item_state = "mega"
+	_color = "mega"
+
+/obj/item/clothing/under/proto
+	name = "The Prototype Suit"
+	desc = "Even robots know scarves are the perfect accessory for a brooding rival."
+	icon_state = "proto"
+	item_state = "proto"
+	_color = "proto"
+
+/obj/item/clothing/under/megax
+	name = "\improper Maverick Hunter regalia"
+	desc = "The best outfit for taking out rogue borgs."
+	icon_state = "megax"
+	item_state = "megax"
+	_color = "megax"
+
+/obj/item/clothing/under/joe
+	name = "The Sniper Suit"
+	desc = "Mass produced combat robots with a rather unfitting name."
+	icon_state = "joe"
+	item_state = "joe"
+	_color = "joe"
+
+/obj/item/clothing/under/roll
+	name = "\improper DRN-002 Dress"
+	desc = "A simple red dress, the good doctor's second robot wasn't quite as exciting as the first."
+	icon_state = "roll"
+	item_state = "roll"
+	_color = "roll"
+
+/obj/item/clothing/under/maid
+	name = "maid outfit"
+	desc = "Perfect for lusty aliens and desperate weeaboos."
+	icon_state = "maid"
+	item_state = "maid"
+	_color = "maid"
+
+/obj/item/clothing/under/darkholme
+	name = "\improper The Darkholme"
+	desc = "Fuck you."
+	icon_state = "darkholme"
+	item_state = "darkholme"
+	_color = "darkholme"
+
+/obj/item/clothing/under/gokugidown
+	name = "turtle hermit undershirt"
+	desc = "Something seems oddly familiar about this outfit..."
+	icon_state = "gokugidown"
+	item_state = "gokugidown"
+	_color = "gokugidown"
+
+/obj/item/clothing/under/gokugi
+	name = "turtle hermit outfit"
+	desc = "An outfit from one trained by the great Turtle Hermit"
+	icon_state = "gokugi"
+	item_state = "gokugi"
+	_color = "gokugi"
+
+/obj/item/clothing/under/doomguy
+	name = "\improper Doomguy's pants"
+	desc = ""
+	icon_state = "doom"
+	item_state = "doom"
+	_color = "doom"
+
+/obj/item/clothing/under/vault13
+	name = "vault 13 Jumpsuit"
+	desc = "Oddly similar to the station's usual jumpsuits, but with a rustic charm to it. Has a large thirteen emblazened on the back"
+	icon_state = "v13-jumpsuit"
+	item_state = "v13-jumpsuit"
+	_color = "v13-jumpsuit"
+
+/obj/item/clothing/under/vault
+	name = "vault jumpsuit"
+	desc = "Oddly similar to the station's usual jumpsuits, but with a rustic charm to it."
+	icon_state = "v-jumpsuit"
+	item_state = "v-jumpsuit"
+	_color = "v-jumpsuit"
+
+/obj/item/clothing/under/contortionist
+	name = "contortionist's jumpsuit"
+	desc = "A light jumpsuit useful for squeezing through narrow vents."
+	icon_state = "darkholme"
+	item_state = "darkholme"
+	_color = "darkholme"
+
+/obj/item/clothing/under/contortionist/proc/check_clothing(mob/user as mob)
+	//Allowed to wear: glasses, shoes, gloves, pockets, mask, and jumpsuit (obviously)
+	var/list/slot_must_be_empty = list(slot_back,slot_handcuffed,slot_legcuffed,slot_l_hand,slot_r_hand,slot_belt,slot_head,slot_wear_suit)
+	for(var/slot_id in slot_must_be_empty)
+		if(user.get_item_by_slot(slot_id))
+			user << "<span class='warning'>You can't fit inside while wearing that \the [user.get_item_by_slot(slot_id)].</span>"
+			return 0
+	return 1
+
+/obj/item/clothing/under/clownpiece
+	name = "Clownpiece's Pierrot suit"
+	desc = "A female-sized set of leggings and shirt with a pattern similar to the American flag, featuring a frilled collar."
+	icon_state = "clownpiece"
+	item_state = "clownpiece"
+	_color = "clownpiece"

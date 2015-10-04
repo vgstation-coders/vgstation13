@@ -12,7 +12,11 @@
 	var/list/upgrade_holder = list()
 	var/upgrading = 0 // are we upgrading a nigga?
 	var/upgrade_finished = -1 // time the upgrade should finish
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
+	var/manipulator_coeff = 1 // better manipulator swaps parts faster
+	var/transfer_rate_coeff = 1 // transfer rate bonuses
+	var/capacitor_stored = 0 //power stored in capacitors, to be instantly transferred to robots when they enter the charger
+	var/capacitor_max = 0 //combined max power the capacitors can hold
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
 
 /obj/machinery/recharge_station/New()
 	. = ..()
@@ -20,13 +24,25 @@
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/recharge_station,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/capacitor,
 		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin,
 		/obj/item/weapon/stock_parts/matter_bin
 	)
 
 	RefreshParts()
+
+/obj/machinery/recharge_station/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+		T += M.rating-1
+	manipulator_coeff = initial(manipulator_coeff)+(T)
+	T = 0
+	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+		T += C.rating-1
+	transfer_rate_coeff = initial(transfer_rate_coeff)+(T * 0.2)
+	capacitor_max = initial(capacitor_max)+(T * 750)
+	active_power_usage = 1000 * transfer_rate_coeff
 
 /obj/machinery/recharge_station/Destroy()
 	src.go_out()
@@ -57,9 +73,12 @@
 
 	if(src.occupant)
 		process_occupant()
+	else
+		process_capacitors()
 	return 1
 
 /obj/machinery/recharge_station/proc/process_upgrade()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/recharge_station/proc/process_upgrade() called tick#: [world.time]")
 	if(!upgrading)
 		return
 	if(!occupant || !isrobot(occupant)) // Something happened so stop the upgrade.
@@ -84,14 +103,10 @@
 			occupant << "<span class='notice'>Upgrade completed.</span>"
 			playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 0)
 
-/obj/machinery/recharge_station/attackby(var/obj/item/W, var/mob/user)
+/obj/machinery/recharge_station/attackby(var/obj/item/W, var/mob/living/user)
 	if(is_type_in_list(W, acceptable_upgradeables))
 		if(!(locate(W.type) in upgrade_holder))
-			if(!isMoMMI(user))
-				user:drop_item_v(W)
-			else
-				user:drop_item()
-			W.loc = src
+			user.drop_item(W, src)
 			upgrade_holder.Add(W)
 			user << "<span class='notice'>You add \the [W] to \the [src].</span>"
 			return
@@ -103,44 +118,35 @@
 		return
 	return
 
+/obj/machinery/recharge_station/attack_ghost(var/mob/user) //why would they
+	return 0
+
 /obj/machinery/recharge_station/attack_ai(var/mob/user)
 	attack_hand(user)
 
 /obj/machinery/recharge_station/attack_hand(var/mob/user)
-	if(!Adjacent(user))
-		if(user == occupant)
-			if(upgrading)
-				user << "<span class='notice'>You interrupt the upgrade process.</span>"
-				upgrading = 0
-				upgrade_finished = -1
-				return 0
-			else if(upgrade_holder.len)
-				upgrading = input(user, "Choose an item to swap out.","Upgradeables") as null|anything in upgrade_holder
-				if(!upgrading)
-					upgrading = 0
-					return
-				if(alert(user, "You have chosen [upgrading], is this correct?", , "Yes", "No") == "Yes")
-					upgrade_finished = world.timeofday + 600
-					user << "The upgrade should complete in approximately 60 seconds, you will be unable to exit \the [src] during this unless you cancel the process."
-					return
-		return
-	else
-		if(user == occupant)
-			if(upgrading)
-				user << "<span class='notice'>You interrupt the upgrade process.</span>"
-				upgrading = 0
-				upgrade_finished = -1
-				return 0
-			else if(upgrade_holder.len)
-				upgrading = input(user, "Choose an item to swap out.","Upgradeables") as null|anything in upgrade_holder
-				if(!upgrading)
-					upgrading = 0
-					return
-				if(alert(user, "You have chosen [upgrading], is this correct?", , "Yes", "No") == "Yes")
-					upgrade_finished = world.timeofday + 600
-					user << "The upgrade should complete in approximately 60 seconds, you will be unable to exit \the [src] during this unless you cancel the process."
-					return
+	if(user == occupant)
+		if(upgrading)
+			user << "<span class='notice'>You interrupt the upgrade process.</span>"
+			upgrading = 0
+			upgrade_finished = -1
+			return 0
 		else if(upgrade_holder.len)
+			upgrading = input(user, "Choose an item to swap out.","Upgradeables") as null|anything in upgrade_holder
+			if(!upgrading)
+				upgrading = 0
+				return
+			if(alert(user, "You have chosen [upgrading], is this correct?", , "Yes", "No") == "Yes")
+				upgrade_finished = world.timeofday + (600/manipulator_coeff)
+				user << "The upgrade should complete in approximately [60/manipulator_coeff] seconds, you will be unable to exit \the [src] during this unless you cancel the process."
+				spawn() do_after(user,src,600/manipulator_coeff,needhand = FALSE)
+				return
+			else
+				upgrading = 0
+				user << "You decide not to apply the upgrade"
+				return
+	else if(Adjacent(user))
+		if(upgrade_holder.len)
 			var/obj/removed = input(user, "Choose an item to remove.",upgrade_holder[1]) as null|anything in upgrade_holder
 			if(!removed)
 				return
@@ -171,6 +177,7 @@
 
 
 /obj/machinery/recharge_station/proc/build_icon()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/recharge_station/proc/build_icon() called tick#: [world.time]")
 	if(stat & (NOPOWER|BROKEN) || !anchored)
 		icon_state = "borgcharger"
 	else
@@ -180,9 +187,13 @@
 			icon_state = "borgcharger0"
 
 /obj/machinery/recharge_station/proc/process_occupant()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/recharge_station/proc/process_occupant() called tick#: [world.time]")
 	if(src.occupant)
 		if (istype(occupant, /mob/living/silicon/robot))
 			var/mob/living/silicon/robot/R = occupant
+			if((R.stat == DEAD) || (!R.client))//no more borgs suiciding in recharge stations to ruin them.
+				go_out()
+				return
 			restock_modules()
 			if(!R.cell)
 				return
@@ -190,10 +201,29 @@
 				R.cell.charge = R.cell.maxcharge
 				return
 			else
-				R.cell.charge = min(R.cell.charge + 200  + (isMoMMI(occupant) ? 100 : 0), R.cell.maxcharge)
+				if (capacitor_stored)
+					var/juicetofill = R.cell.maxcharge-R.cell.charge
+					if(capacitor_stored > juicetofill)
+						capacitor_stored -= juicetofill
+						R.cell.charge = R.cell.maxcharge
+					else
+						R.cell.charge = R.cell.charge + capacitor_stored
+						capacitor_stored = 0
+				R.cell.charge = min(R.cell.charge + 200 * transfer_rate_coeff + (isMoMMI(occupant) ? 100 * transfer_rate_coeff : 0), R.cell.maxcharge)
 				return
 
+/obj/machinery/recharge_station/proc/process_capacitors()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/recharge_station/proc/process_capacitors() called tick#: [world.time]")
+	if (capacitor_stored >= capacitor_max)
+		if (idle_power_usage != initial(idle_power_usage)) //probably better to not re-assign the variable each process()?
+			idle_power_usage = initial(idle_power_usage)
+		return 0
+	idle_power_usage = initial(idle_power_usage) + (100 * transfer_rate_coeff)
+	capacitor_stored = min(capacitor_stored + (20 * transfer_rate_coeff), capacitor_max)
+	return 1
+
 /obj/machinery/recharge_station/proc/go_out()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/recharge_station/proc/go_out() called tick#: [world.time]")
 	if(!( src.occupant ))
 		return
 	if(upgrading)
@@ -208,60 +238,68 @@
 	src.occupant = null
 	build_icon()
 	src.use_power = 1
+	// Removes dropped items/magically appearing mobs from the charger too
+	for (var/atom/movable/x in src.contents)
+		if(!(x in upgrade_holder | component_parts))
+			x.forceMove(src.loc)
 	return
 
 /obj/machinery/recharge_station/proc/restock_modules()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/recharge_station/proc/restock_modules() called tick#: [world.time]")
 	if(src.occupant)
 		if(istype(occupant, /mob/living/silicon/robot))
 			var/mob/living/silicon/robot/R = occupant
 			if(R.module && R.module.modules)
 				var/list/um = R.contents|R.module.modules
-				// ^ makes sinle list of active (R.contents) and inactive modules (R.module.modules)
+				// ^ makes single list of active (R.contents) and inactive modules (R.module.modules)
 				for(var/obj/O in um)
-					// Engineering
-					if(istype(O,/obj/item/stack/sheet/metal)\
-					|| istype(O,/obj/item/stack/sheet/rglass)\
-					|| istype(O,/obj/item/stack/sheet/glass)\
-					|| istype(O,/obj/item/weapon/cable_coil)\
-					|| istype(O,/obj/item/stack/tile/plasteel))
-						if(O:amount < 50)
-							O:amount += 2
-						if(O:amount > 50)
-							O:amount = 50
+					// Stacks
+					if(istype(O,/obj/item/stack))
+						var/obj/item/stack/S=O
+						if(!istype(S,/obj/item/stack/cable_coil) && !istype(S,/obj/item/stack/medical))
+							continue //Only recharge cable coils and medical stacks
+
+						if(S.amount < S.max_amount)
+							S.amount += 2
+						if(S.amount > S.max_amount)
+							S.amount = S.max_amount
 					// Security
 					if(istype(O,/obj/item/device/flash))
-						if(O:broken)
-							O:broken = 0
-							O:times_used = 0
-							O:icon_state = "flash"
+						var/obj/item/device/flash/F=O
+						if(F.broken)
+							F.broken = 0
+							F.times_used = 0
+							F.icon_state = "flash"
 					if(istype(O,/obj/item/weapon/gun/energy/taser/cyborg))
-						if(O:power_supply.charge < O:power_supply.maxcharge)
-							O:power_supply.give(O:charge_cost)
-							O:update_icon()
+						var/obj/item/weapon/gun/energy/taser/cyborg/C=O
+						if(C.power_supply.charge < C.power_supply.maxcharge)
+							C.power_supply.give(C.charge_cost)
+							C.update_icon()
 						else
-							O:charge_tick = 0
+							C.charge_tick = 0
 					if(istype(O,/obj/item/weapon/melee/baton))
 						var/obj/item/weapon/melee/baton/B = O
 						if(B.bcell)
 							B.bcell.charge = B.bcell.maxcharge
 					//Combat
 					if(istype(O,/obj/item/weapon/gun/energy/laser/cyborg))
-						if(O:power_supply.charge < O:power_supply.maxcharge)
-							O:power_supply.give(O:charge_cost)
-							O:update_icon()
+						var/obj/item/weapon/gun/energy/laser/cyborg/C=O
+						if(C.power_supply.charge < C.power_supply.maxcharge)
+							C.power_supply.give(C.charge_cost)
+							C.update_icon()
 						else
-							O:charge_tick = 0
+							C.charge_tick = 0
 					if(istype(O,/obj/item/weapon/gun/energy/lasercannon/cyborg))
-						if(O:power_supply.charge < O:power_supply.maxcharge)
-							O:power_supply.give(O:charge_cost)
-							O:update_icon()
-						else
-							O:charge_tick = 0
+						var/obj/item/weapon/gun/energy/lasercannon/cyborg/C=O
+						if(C.power_supply.charge < C.power_supply.maxcharge)
+							C.power_supply.give(C.charge_cost)
+							C.update_icon()
 					//Mining
 					if(istype(O,/obj/item/weapon/gun/energy/kinetic_accelerator/cyborg))
-						if(O:power_supply.charge < O:power_supply.maxcharge)
-							O:power_supply.give(O:charge_cost)
-							O:update_icon()
+						var/obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/C=O
+						if(C.power_supply.charge < C.power_supply.maxcharge)
+							C.power_supply.give(C.charge_cost)
+							C.update_icon()
 						else
 							O:charge_tick = 0
 					//Service
@@ -273,11 +311,6 @@
 						var/obj/item/weapon/reagent_containers/glass/bottle/robot/B = O
 						if(B.reagent && (B.reagents.get_reagent_amount(B.reagent) < B.volume))
 							B.reagents.add_reagent(B.reagent, 2)
-					if(istype(O,/obj/item/stack/medical/bruise_pack) || istype(O,/obj/item/stack/medical/ointment) || istype(O,/obj/item/stack/medical/advanced/bruise_pack) || istype(O,/obj/item/stack/medical/advanced/ointment) || istype(O,/obj/item/stack/medical/splint))
-						if(O:amount < O:max_amount)
-							O:amount += 2
-						if(O:amount > O:max_amount)
-							O:amount = O:max_amount
 					if(istype(O,/obj/item/weapon/melee/defibrillator))
 						var/obj/item/weapon/melee/defibrillator/D = O
 						D.charges = initial(D.charges)
@@ -304,6 +337,7 @@
 /obj/machinery/recharge_station/verb/move_eject()
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/recharge_station/verb/move_eject()  called tick#: [world.time]")
 	if (usr.stat != 0)
 		return
 	src.go_out()
@@ -313,41 +347,40 @@
 /obj/machinery/recharge_station/verb/move_inside()
 	set category = "Object"
 	set src in oview(1)
-	// Broken or unanchored?  Fuck off.
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/recharge_station/verb/move_inside()  called tick#: [world.time]")
+
+	mob_enter(usr)
+	return
+
+/obj/machinery/recharge_station/proc/mob_enter(mob/living/silicon/robot/R)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/recharge_station/proc/mob_enter() called tick#: [world.time]")
 	if(stat & (NOPOWER|BROKEN) || !anchored)
 		return
-	if (usr.stat == 2)
+	if (R.stat == 2)
 		//Whoever had it so that a borg with a dead cell can't enter this thing should be shot. --NEO
 		return
-	if (!(istype(usr, /mob/living/silicon/)))
-		usr << "\blue <B>Only non-organics may enter the recharger!</B>"
+	if (!(istype(R, /mob/living/silicon/)))
+		R << "<span class='notice'><B>Only non-organics may enter the recharger!</B></span>"
 		return
 	if (src.occupant)
-		usr << "\blue <B>The cell is already occupied!</B>"
+		R << "<span class='notice'><B>The cell is already occupied!</B></span>"
 		return
-	/*if (!usr:cell)
-		usr<<"\blue Without a powercell, you can't be recharged."
-		//Make sure they actually HAVE a cell, now that they can get in while powerless. --NEO
-		return*/
-	usr.stop_pulling()
-	if(usr && usr.client)
-		usr.client.perspective = EYE_PERSPECTIVE
-		usr.client.eye = src
-	usr.loc = src
-	src.occupant = usr
-	/*for(var/obj/O in src)
-		O.loc = src.loc*/
-	src.add_fingerprint(usr)
+	R.stop_pulling()
+	if(R && R.client)
+		R.client.perspective = EYE_PERSPECTIVE
+		R.client.eye = src
+	R.loc = src
+	src.occupant = R
+	src.add_fingerprint(R)
 	build_icon()
 	src.use_power = 2
 	for(var/obj/O in upgrade_holder)
 		if(istype(O, /obj/item/weapon/cell))
-			if(!usr:cell)
+			if(!R.cell)
 				usr << "<big><span class='notice'>Power Cell replacement available.</span></big>"
 			else
-				if(O:maxcharge > usr:cell:maxcharge)
+				if(O:maxcharge > R.cell.maxcharge)
 					usr << "<span class='notice'>Power Cell upgrade available.</span></big>"
-	return
 
 /obj/machinery/recharge_station/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(occupant)
@@ -363,3 +396,9 @@
 
 
 
+/obj/machinery/recharge_station/Bumped(atom/AM as mob|obj)
+	if(!issilicon(AM) || isAI(AM))
+		return
+	var/mob/living/silicon/robot/R = AM
+	mob_enter(R)
+	return

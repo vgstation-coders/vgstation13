@@ -15,8 +15,10 @@ var/const/MAX_ACTIVE_TIME = 400
 	icon_state = "facehugger"
 	item_state = "facehugger"
 	w_class = 1 //note: can be picked up by aliens unlike most other items of w_class below 4
-	flags = FPRINT | TABLEPASS | MASKCOVERSMOUTH | MASKCOVERSEYES | MASKINTERNALS
+	flags = FPRINT  | MASKINTERNALS | PROXMOVE
+	body_parts_covered = HEAD|MOUTH|EYES
 	throw_range = 5
+	var/real = 1 //Facehuggers are real, toys are not.
 
 	var/stat = CONSCIOUS //UNCONSCIOUS is the idle state in this case
 
@@ -25,6 +27,9 @@ var/const/MAX_ACTIVE_TIME = 400
 	var/strength = 5
 
 	var/attached = 0
+
+/obj/item/clothing/mask/facehugger/can_contaminate()
+	return 0
 
 /obj/item/clothing/mask/facehugger/attack_paw(user as mob) //can be picked up by aliens
 	if(isalien(user))
@@ -53,16 +58,17 @@ var/const/MAX_ACTIVE_TIME = 400
 	else
 		del(src)
 
-/obj/item/clothing/mask/facehugger/examine()
+/obj/item/clothing/mask/facehugger/examine(mob/user)
 	..()
+	if(!real) //Toy facehuggers are a child, avoid confusing examine text.
+		return
 	switch(stat)
 		if(DEAD,UNCONSCIOUS)
-			usr << "<span class='danger'>\The [src] is not moving.</span>"
+			user << "<span class='deadsay'>\The [src] is not moving.</span>"
 		if(CONSCIOUS)
-			usr << "<span class='danger'>\The [src] seems active.</span>"
+			user << "<span class='danger'>\The [src] seems active.</span>"
 	if (sterile)
-		usr << "<span class='danger'>It looks like \the [src]'s proboscis has been removed.</span>"
-	return
+		user << "<span class='danger'>It looks like \the [src]'s proboscis has been removed.</span>"
 
 /obj/item/clothing/mask/facehugger/attackby()
 	Die()
@@ -109,6 +115,7 @@ var/const/MAX_ACTIVE_TIME = 400
 		Attach(hit_atom)
 
 /obj/item/clothing/mask/facehugger/proc/Attach(M as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/mask/facehugger/proc/Attach() called tick#: [world.time]")
 	if( (!iscorgi(M) && !iscarbon(M)) || isalien(M))
 		return 0
 	if(attached)
@@ -131,8 +138,9 @@ var/const/MAX_ACTIVE_TIME = 400
 
 	if(ishuman(L))
 		var/mob/living/carbon/human/H = L
-		if(H.head && H.head.flags & HEADCOVERSMOUTH)
-			H.visible_message("<span class='danger'>\The [src] smashes against [H]'s [H.head] !</span>")
+		var/obj/item/mouth_protection = H.get_body_part_coverage(MOUTH)
+		if(mouth_protection && mouth_protection != H.wear_mask) //can't be protected with your own mask, has to be a hat
+			H.visible_message("<span class='danger'>\The [src] smashes against [H]'s [mouth_protection] !</span>")
 			Die()
 			return 0
 
@@ -167,6 +175,7 @@ var/const/MAX_ACTIVE_TIME = 400
 	return 0
 
 /obj/item/clothing/mask/facehugger/proc/Impregnate(mob/living/target as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/mask/facehugger/proc/Impregnate() called tick#: [world.time]")
 	if(!target || target.wear_mask != src || target.stat == DEAD) //was taken off or something
 		return
 
@@ -188,6 +197,7 @@ var/const/MAX_ACTIVE_TIME = 400
 	return
 
 /obj/item/clothing/mask/facehugger/proc/GoActive()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/mask/facehugger/proc/GoActive() called tick#: [world.time]")
 	if(stat == DEAD || stat == CONSCIOUS)
 		return
 
@@ -196,6 +206,7 @@ var/const/MAX_ACTIVE_TIME = 400
 	return
 
 /obj/item/clothing/mask/facehugger/proc/GoIdle()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/mask/facehugger/proc/GoIdle() called tick#: [world.time]")
 	if(stat == DEAD || stat == UNCONSCIOUS)
 		return
 
@@ -209,6 +220,7 @@ var/const/MAX_ACTIVE_TIME = 400
 	return
 
 /obj/item/clothing/mask/facehugger/proc/Die()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/mask/facehugger/proc/Die() called tick#: [world.time]")
 	if(stat == DEAD)
 		return
 
@@ -223,6 +235,8 @@ var/const/MAX_ACTIVE_TIME = 400
 
 /proc/CanHug(var/mob/M)
 
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/CanHug() called tick#: [world.time]")
+
 	if(iscorgi(M))
 		return 1
 
@@ -232,6 +246,6 @@ var/const/MAX_ACTIVE_TIME = 400
 	var/mob/living/carbon/C = M
 	if(ishuman(C))
 		var/mob/living/carbon/human/H = C
-		if(H.head && H.head.flags & HEADCOVERSMOUTH)
+		if(H.check_body_part_coverage(MOUTH) || (locate(/obj/item/alien_embryo) in H))
 			return 0
 	return 1

@@ -39,14 +39,8 @@
 		Break()
 		qdel(src)
 
-
-/obj/structure/lamarr/meteorhit(obj/O as obj)
-		getFromPool(/obj/item/weapon/shard, loc)
-		Break()
-		qdel(src)
-
-
 /obj/structure/lamarr/proc/healthcheck()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/lamarr/proc/healthcheck() called tick#: [world.time]")
 	if (src.health <= 0)
 		if (!( src.destroyed ))
 			src.density = 0
@@ -79,15 +73,16 @@
 	if (src.destroyed)
 		return
 	else
-		usr << text("\blue You kick the lab cage.")
+		usr << text("<span class='notice'>You kick the lab cage.</span>")
 		for(var/mob/O in oviewers())
 			if ((O.client && !( O.blinded )))
-				O << text("\red [] kicks the lab cage.", usr)
+				O << text("<span class='warning'>[] kicks the lab cage.</span>", usr)
 		src.health -= 2
 		healthcheck()
 		return
 
 /obj/structure/lamarr/proc/Break()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/lamarr/proc/Break() called tick#: [world.time]")
 	if(occupied)
 		new /obj/item/clothing/mask/facehugger/lamarr(src.loc)
 		occupied = 0
@@ -98,7 +93,7 @@
 	name = "Lamarr"
 	desc = "The worst she might do is attempt to... couple with your head."//hope we don't get sued over a harmless reference, rite?
 	sterile = 1
-	gender = FEMALE
+	setGender(FEMALE)
 
 /obj/item/clothing/mask/facehugger/lamarr/New()//to prevent deleting it if aliums are disabled
 	return

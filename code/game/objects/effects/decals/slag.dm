@@ -6,13 +6,14 @@
 	icon_state = "slagcold"
 	anchored = 1
 	melt_temperature=0
-	l_color="#FFA500"
+	light_color = LIGHT_COLOR_ORANGE
 
-	var/datum/materials/mats=new
+	starting_materials = list()
 
 /obj/effect/decal/slag/proc/slaggify(var/obj/O)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/decal/slag/proc/slaggify() called tick#: [world.time]")
 	// This is basically a crude recycler doohicky
-	if (O.recycle(mats))
+	if (O.recycle(materials))
 		if(melt_temperature==0)
 			// Set up our solidification temperature.
 			melt_temperature=O.melt_temperature
@@ -24,10 +25,10 @@
 			molten=1
 			icon_state="slaghot"
 			processing_objects.Add(src)
-			SetLuminosity(2)
+			set_light(2)
 
 /obj/effect/decal/slag/Destroy()
-	SetLuminosity(0)
+	set_light(0)
 	processing_objects.Remove(src)
 	..()
 
@@ -44,29 +45,29 @@
 
 
 
-/obj/effect/decal/slag/examine()
+/obj/effect/decal/slag/examine(mob/user)
 	..()
 	if(molten)
-		usr << "<span class=\"warning\">Jesus, it's hot!</span>"
+		user << "<span class=\"warning\">Jesus, it's hot!</span>"
 
 	var/list/bits=list()
-	for(var/mat_id in mats.storage)
-		var/datum/material/mat=mats.getMaterial(mat_id)
-		if(mat.stored > 0)
+	for(var/mat_id in materials.storage)
+		var/datum/material/mat=materials.getMaterial(mat_id)
+		if(materials.storage[mat_id] > 0)
 			bits.Add(mat.processed_name)
 
 	if(bits.len>0)
-		usr << "<span class=\"info\">It appears to contain bits of [english_list(bits)].</span>"
+		user << "<span class=\"info\">It appears to contain bits of [english_list(bits)].</span>"
 	else
-		usr << "<span class=\"warning\">It appears to be completely worthless.</span>"
+		user << "<span class=\"warning\">It appears to be completely worthless.</span>"
 
 /obj/effect/decal/slag/solidify()
 	icon_state="slagcold"
-	SetLuminosity(0)
+	set_light(0)
 
 /obj/effect/decal/slag/melt()
 	icon_state="slaghot"
-	SetLuminosity(2)
+	set_light(2)
 
 /obj/effect/decal/slag/Crossed(M as mob)
 	..()
@@ -94,9 +95,10 @@
 			"<span class=\"danger\">You break apart \the [src] with your [W.name]!", \
 			"You hear the sound of rock crumbling.")
 		var/obj/item/weapon/ore/slag/slag = new /obj/item/weapon/ore/slag(loc)
-		slag.mats = src.mats
+		slag.materials = src.materials
+		slag.materials.holder = slag
 		qdel(src)
 	else
-		user.visible_message("<span class=\"warning\">[user.name] hits \the [src] with his [W.name].</span>", \
-			"<span class=\"warning\">You fail to damage \the [src] with your [W.name]!</span>", \
+		user.visible_message("<span class=\"attack\">[user.name] hits \the [src] with his [W.name].</span>", \
+			"<span class=\"attack\">You fail to damage \the [src] with your [W.name]!</span>", \
 			"You hear someone hitting something.")

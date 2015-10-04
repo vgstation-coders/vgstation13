@@ -30,26 +30,17 @@ Thus, the two variables affect pump operation are set in New():
 	on = 1
 	icon_state = "intact_on"
 
-/obj/machinery/atmospherics/binary/volume_pump/update_icon()
+/obj/machinery/atmospherics/binary/volume_pump/update_icon(var/adjacent_procd)
 	if(stat & NOPOWER)
 		icon_state = "intact_off"
 	else if(node1 && node2)
 		icon_state = "intact_[on?("on"):("off")]"
-	else
-		if(node1)
-			icon_state = "exposed_1_off"
-		else if(node2)
-			icon_state = "exposed_2_off"
-		else
-			icon_state = "exposed_3_off"
-	return
+	..()
 
 /obj/machinery/atmospherics/binary/volume_pump/process()
-//		..()
-	if(stat & (NOPOWER|BROKEN))
+	. = ..()
+	if((stat & (NOPOWER|BROKEN)) || !on || transfer_rate < 1)
 		return
-	if(!on || transfer_rate < 1)
-		return 0
 
 // Pump mechanism just won't do anything if the pressure is too high/too low
 
@@ -57,7 +48,7 @@ Thus, the two variables affect pump operation are set in New():
 	var/output_starting_pressure = air2.return_pressure()
 
 	if((input_starting_pressure < 0.01) || (output_starting_pressure > 9000))
-		return 1
+		return
 
 	var/transfer_ratio = max(1, transfer_rate/air1.volume)
 
@@ -74,16 +65,18 @@ Thus, the two variables affect pump operation are set in New():
 	return 1
 
 /obj/machinery/atmospherics/binary/volume_pump/proc/set_frequency(new_frequency)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/binary/volume_pump/proc/set_frequency() called tick#: [world.time]")
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
 		radio_connection = radio_controller.add_object(src, frequency)
 
 /obj/machinery/atmospherics/binary/volume_pump/proc/broadcast_status()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/binary/volume_pump/proc/broadcast_status() called tick#: [world.time]")
 	if(!radio_connection)
 		return 0
 
-	var/datum/signal/signal = new
+	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 
@@ -117,7 +110,7 @@ Thus, the two variables affect pump operation are set in New():
 /obj/machinery/atmospherics/binary/volume_pump/receive_signal(datum/signal/signal)
 	if(!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command"))
 		return 0
-
+	var/old_on=on
 	if("power" in signal.data)
 		on = text2num(signal.data["power"])
 
@@ -125,11 +118,7 @@ Thus, the two variables affect pump operation are set in New():
 		on = !on
 
 	if("set_transfer_rate" in signal.data)
-		transfer_rate = between(
-			0,
-			text2num(signal.data["set_transfer_rate"]),
-			air1.volume
-		)
+		transfer_rate = Clamp(text2num(signal.data["set_transfer_rate"]), 0, air1.volume)
 
 	if("status" in signal.data)
 		spawn(2)
@@ -139,7 +128,8 @@ Thus, the two variables affect pump operation are set in New():
 	spawn(2)
 		broadcast_status()
 	update_icon()
-	activity_log += text("\[[time_stamp()]\] Remote signal toggled us [on ? "on" : "off"]")
+	if(old_on!=on)
+		investigation_log(I_ATMOS,"was powered [on ? "on" : "off"] by a remote signal")
 
 
 /obj/machinery/atmospherics/binary/volume_pump/attack_hand(user as mob)
@@ -147,7 +137,7 @@ Thus, the two variables affect pump operation are set in New():
 		return
 	src.add_fingerprint(usr)
 	if(!src.allowed(user))
-		user << "\red Access denied."
+		user << "<span class='warning'>Access denied.</span>"
 		return
 	usr.set_machine(src)
 	interact(user)
@@ -157,10 +147,11 @@ Thus, the two variables affect pump operation are set in New():
 	if(..()) return
 	if(href_list["power"])
 		on = !on
-		activity_log += text("\[[time_stamp()]\] Real name: [], Key: [] - turned [] \the [].",usr.real_name, usr.key,(on ? "on" : "off"),src)
+		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(usr)]")
 	if(href_list["set_transfer_rate"])
 		var/new_transfer_rate = input(usr,"Enter new output volume (0-200l/s)","Flow control",src.transfer_rate) as num
 		src.transfer_rate = max(0, min(200, new_transfer_rate))
+		investigation_log(I_ATMOS,"was set to [transfer_rate] L/s by [key_name(usr)]")
 	usr.set_machine(src)
 	src.update_icon()
 	src.updateUsrDialog()
@@ -169,32 +160,3 @@ Thus, the two variables affect pump operation are set in New():
 /obj/machinery/atmospherics/binary/volume_pump/power_change()
 	..()
 	update_icon()
-
-
-
-/obj/machinery/atmospherics/binary/volume_pump/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if (!istype(W, /obj/item/weapon/wrench))
-		return ..()
-	if (!(stat & NOPOWER) && on)
-		user << "\red You cannot unwrench this [src], turn it off first."
-		return 1
-	var/turf/T = src.loc
-	if (level==1 && isturf(T) && T.intact)
-		user << "\red You must remove the plating first."
-		return 1
-	var/datum/gas_mixture/int_air = return_air()
-	var/datum/gas_mixture/env_air = loc.return_air()
-	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
-		user << "\red You cannot unwrench this [src], it too exerted due to internal pressure."
-		add_fingerprint(user)
-		return 1
-	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-	user << "\blue You begin to unfasten \the [src]..."
-	if (do_after(user, 40))
-		user.visible_message( \
-			"[user] unfastens \the [src].", \
-			"\blue You have unfastened \the [src].", \
-			"You hear ratchet.")
-		new /obj/item/pipe(loc, make_from=src)
-		del(src)
-

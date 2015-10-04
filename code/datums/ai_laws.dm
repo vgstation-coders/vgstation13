@@ -9,6 +9,7 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 //Add, comment out, or adjust weights to modify law selection
 //So long as the weights come to a sum of 100 total, they will be equal parts of 100%
 /proc/getLawset(var/mob/M)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/getLawset() called tick#: [world.time]")
 	if(!base_law_type) base_law_type = pick(
 		40;/datum/ai_laws/asimov,
 		20;/datum/ai_laws/corporate,
@@ -26,8 +27,9 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 /datum/ai_laws
 	var/name = "Unknown Laws"
 	var/randomly_selectable = 0
+	// Zeroth laws
 	var/zeroth = null
-	var/zeroth_borg = null
+	var/zeroth_borg = null // wotm8
 	var/list/inherent = list()
 	var/list/supplied = list()
 	var/list/ion = list()
@@ -38,35 +40,44 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 /* General ai_law functions */
 
 /datum/ai_laws/proc/set_zeroth_law(var/law, var/law_borg = null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/set_zeroth_law() called tick#: [world.time]")
 	src.zeroth = law
 	if(law_borg) //Making it possible for slaved borgs to see a different law 0 than their AI. --NEO
 		src.zeroth_borg = law_borg
 
 /datum/ai_laws/proc/add_inherent_law(var/law)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/add_inherent_law() called tick#: [world.time]")
 	if (!(law in src.inherent))
 		src.inherent += law
 
 /datum/ai_laws/proc/add_ion_law(var/law)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/add_ion_law() called tick#: [world.time]")
 	src.ion += law
 
 /datum/ai_laws/proc/clear_inherent_laws()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/clear_inherent_laws() called tick#: [world.time]")
 	del(src.inherent)
 	src.inherent = list()
 	inherent_cleared = 1
 
 /datum/ai_laws/proc/add_supplied_law(var/number, var/law)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/add_supplied_law() called tick#: [world.time]")
 	while (src.supplied.len < number + 1)
 		src.supplied += ""
 
 	src.supplied[number + 1] = law
 
 /datum/ai_laws/proc/clear_supplied_laws()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/clear_supplied_laws() called tick#: [world.time]")
 	src.supplied = list()
 
 /datum/ai_laws/proc/clear_ion_laws()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/clear_ion_laws() called tick#: [world.time]")
 	src.ion = list()
 
 /datum/ai_laws/proc/show_laws(var/who)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/show_laws() called tick#: [world.time]")
 
 	if (src.zeroth)
 		who << "0. [src.zeroth]"
@@ -90,36 +101,92 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 			who << "[number]. [law]"
 			number++
 
+/datum/ai_laws/proc/write_laws()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/write_laws() called tick#: [world.time]")
+	var/text = ""
+	if (src.zeroth)
+		text += "0. [src.zeroth]"
+
+	for (var/index = 1, index <= src.ion.len, index++)
+		var/law = src.ion[index]
+		var/num = ionnum()
+		text += "<br>[num]. [law]"
+
+	var/number = 1
+	for (var/index = 1, index <= src.inherent.len, index++)
+		var/law = src.inherent[index]
+
+		if (length(law) > 0)
+			text += "<br>[number]. [law]"
+			number++
+
+	for (var/index = 1, index <= src.supplied.len, index++)
+		var/law = src.supplied[index]
+		if (length(law) > 0)
+			text += "<br>[number]. [law]"
+			number++
+	return text
+
 /datum/ai_laws/proc/adminLink(var/mob/living/silicon/S,var/law_type,var/index,var/label)
-	return "<a href=\"?src=\ref[src];set_law=[law_type];index=[index];mob=\ref[S]\">[label]</a>"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/adminLink() called tick#: [world.time]")
+	return "<a href=\"?src=\ref[src];set_law=[law_type];index=[index];mob=\ref[S]\">[label]</a> (<a href=\"?src=\ref[src];rm_law=[law_type];index=[index];mob=\ref[S]\" style=\"color:red\">Remove</a>)"
 
 /datum/ai_laws/Topic(href,href_list)
-	if("set_law" in href_list)
-		if(usr.client && usr.client.holder)
-			var/lawtype=text2num(href_list["set_law"])
-			var/index=text2num(href_list["index"])
-			var/mob/living/silicon/S=locate(href_list["mob"])
-			var/oldlaw = get_law(lawtype,index)
-			var/newlaw = copytext(sanitize(input(usr, "Please enter a new law.", "Freeform Law Entry", oldlaw)),1,MAX_MESSAGE_LEN)
-			if(newlaw == "")
-				if(alert(src,"Are you sure you wish to delete this law?","Yes","No") == "No")
-					return
-			set_law(lawtype,index,newlaw)
+	if(!usr.client || !usr.client.holder)
+		return
+	if("rm_law" in href_list)
+		var/lawtype = text2num(href_list["rm_law"])
+		var/index=text2num(href_list["index"])
+		var/mob/living/silicon/S=locate(href_list["mob"])
 
-			var/lawtype_str="law #[index]"
-			switch(lawtype)
-				if(LAW_ZERO)
-					lawtype_str = "law zero"
-				if(LAW_IONIC)
-					lawtype_str = "ionic law #[index]"
-				if(LAW_INHERENT)
-					lawtype_str = "core law #[index]"
-			log_admin("[key_name(usr)] has changed [lawtype_str] on [key_name(S)]: \"[newlaw]\"")
-			message_admins("[usr.key] changed [lawtype_str] on [key_name(S)]: \"[newlaw]\"")
-			return 1
+
+		var/oldlaw = get_law(lawtype,index)
+
+		rm_law(lawtype,index)
+
+		var/lawtype_str="law #[index]"
+		switch(lawtype)
+			if(LAW_ZERO)
+				lawtype_str = "law zero"
+			if(LAW_IONIC)
+				lawtype_str = "ionic law #[index]"
+			if(LAW_INHERENT)
+				lawtype_str = "core law #[index]"
+		log_admin("[key_name(usr)] has removed [lawtype_str] on [key_name(S)]: \"[oldlaw]\"")
+		message_admins("[usr.key] removed [lawtype_str] on [key_name(S)]: \"[oldlaw]\"")
+		lawchanges.Add("[key_name(usr)] has removed [lawtype_str] on [key_name(S)]: \"[oldlaw]\"")
+		usr.client.holder.show_player_panel(S)
+
+		return 1
+
+	if("set_law" in href_list)
+		var/lawtype=text2num(href_list["set_law"])
+		var/index=text2num(href_list["index"])
+		var/mob/living/silicon/S=locate(href_list["mob"])
+		var/oldlaw = get_law(lawtype,index)
+		var/newlaw = copytext(sanitize(input(usr, "Please enter a new law.", "Freeform Law Entry", oldlaw)),1,MAX_MESSAGE_LEN)
+		if(newlaw == "" || newlaw==null)
+			return
+		set_law(lawtype,index,newlaw)
+
+		var/lawtype_str="law #[index]"
+		switch(lawtype)
+			if(LAW_ZERO)
+				lawtype_str = "law zero"
+			if(LAW_IONIC)
+				lawtype_str = "ionic law #[index]"
+			if(LAW_INHERENT)
+				lawtype_str = "core law #[index]"
+		log_admin("[key_name(usr)] has changed [lawtype_str] on [key_name(S)]: \"[newlaw]\"")
+		message_admins("[usr.key] changed [lawtype_str] on [key_name(S)]: \"[newlaw]\"")
+
+		usr.client.holder.show_player_panel(S)
+
+		return 1
 	return 0
 
 /datum/ai_laws/proc/display_admin_tools(var/mob/living/silicon/context)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/display_admin_tools() called tick#: [world.time]")
 	var/dat=""
 	if (src.zeroth)
 		dat += "<br />0. [adminLink(context,LAW_ZERO,1,zeroth)]"
@@ -146,6 +213,7 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 
 // /vg/: Used in the simplified law system. Takes LAW_ constants.
 /datum/ai_laws/proc/add_law(var/number,var/law)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/add_law() called tick#: [world.time]")
 	switch(number)
 		if(LAW_IONIC)
 			add_ion_law(law)
@@ -158,6 +226,7 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 
 // /vg/: Used in the simplified law system. Takes LAW_ constants.
 /datum/ai_laws/proc/get_law(var/law_type,var/idx)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/get_law() called tick#: [world.time]")
 	switch(law_type)
 		if(LAW_IONIC)
 			return ion[idx]
@@ -170,6 +239,7 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 
 // /vg/: Used in the simplified law system. Takes LAW_ constants.
 /datum/ai_laws/proc/set_law(var/law_type,var/idx,var/law)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/set_law() called tick#: [world.time]")
 	switch(law_type)
 		if(LAW_IONIC)
 			ion[idx]=law
@@ -180,13 +250,25 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 		else
 			supplied[idx]=law
 
-
+// /vg/: Used in the simplified law system. Takes LAW_ constants.
+/datum/ai_laws/proc/rm_law(var/law_type,var/idx)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/rm_law() called tick#: [world.time]")
+	switch(law_type)
+		if(LAW_IONIC)
+			ion.Cut(idx,idx+1)
+		if(LAW_ZERO)
+			zeroth=null
+		if(LAW_INHERENT)
+			inherent.Cut(idx,idx+1)
+		else
+			supplied.Cut(idx,idx+1)
 
 // Now a modifier
 /datum/ai_laws/proc/malfunction()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/ai_laws/proc/malfunction() called tick#: [world.time]")
 	..()
 	name = "*ERROR*"
-	set_zeroth_law("\red ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010")
+	set_zeroth_law("<span class='warning'>ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010</span>")
 
 /datum/ai_laws/asimov
 	name = "Three Laws of Robotics"

@@ -7,10 +7,11 @@
 	var/making_mage = 0
 	var/mages_made = 1
 	var/time_checked = 0
+	rage = 1
 
 /datum/game_mode/wizard/announce()
 	world << "<B>The current game mode is - Ragin' Mages!</B>"
-	world << "<B>The \red Space Wizard Federation\black is pissed, help defeat all the space wizards!</B>"
+	world << "<B>The <span class='danger'>Space Wizard Federation is pissed, help defeat all the space wizards!</span>"
 
 /datum/game_mode/wizard/raginmages/post_setup()
 	var/playercount = 0
@@ -23,7 +24,7 @@
 
 /datum/game_mode/wizard/raginmages/greet_wizard(var/datum/mind/wizard, var/you_are=1)
 	if (you_are)
-		wizard.current << "<B>\red You are the Space Wizard!</B>"
+		wizard.current << "<span class='danger'>You are the Space Wizard!</span>"
 	wizard.current << "<B>The Space Wizards Federation has given you the following tasks:</B>"
 
 	var/obj_count = 1
@@ -40,18 +41,18 @@
 			continue
 		if(istype(wizard.current,/mob/living/carbon/brain))
 			continue
-		if(wizard.current.stat==2)
+		if(wizard.current.stat == DEAD)
 			continue
-		if(wizard.current.stat==1)
+		if(wizard.current.stat == UNCONSCIOUS)
 			if(wizard.current.health < 0)
-				wizard.current << "\red <font size='4'>The Space Wizard Federation is upset with your performance and have terminated your employment.</font>"
-				wizard.current.stat = 2
-			continue
+				wizard.current << "<span class='warning'><font size='4'>The Space Wizard Federation is upset with your performance and have terminated your employment.</font></span>"
+				wizard.current.stat = DEAD
+				continue
 		wizards_alive++
 
 	if (wizards_alive)
 		if(!time_checked) time_checked = world.time
-		if(world.time > time_checked + 3000 && (mages_made < max_mages))
+		if(world.time > time_checked + 12000 && (mages_made < max_mages))
 			time_checked = world.time
 			make_more_mages()
 	else
@@ -60,9 +61,11 @@
 			return 1
 		else
 			make_more_mages()
-	return ..()
+	return ..() // Check for shuttle and nuke.
 
 /datum/game_mode/wizard/raginmages/proc/make_more_mages()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/wizard/raginmages/proc/make_more_mages() called tick#: [world.time]")
 
 	if(making_mage || emergency_shuttle.departed)
 		return 0
@@ -76,6 +79,9 @@
 		message_admins("SWF is still pissed, sending another wizard - [max_mages - mages_made] left.")
 		for(var/mob/dead/observer/G in get_active_candidates(ROLE_WIZARD, poll="Do you wish to be considered for the position of Space Wizard Foundation 'diplomat'?"))
 			if(G.client && !G.client.holder && !jobban_isbanned(G, "wizard") && !jobban_isbanned(G, "Syndicate"))
+				if(G.mind && G.mind.isScrying)
+					if(G.mind.current.stat < DEAD || !iscarbon(G.mind.current) || isbrain(G.mind.current))
+						continue
 				candidates += G
 		if(!candidates.len)
 			message_admins("No candidates found, sleeping until another mage check...")
@@ -93,11 +99,12 @@
 		if(theghost)
 			var/mob/living/carbon/human/new_character= makeBody(theghost)
 			new_character.mind.make_Wizard()
+			new_character.dna.ResetSE() //Manually cleaning this antag as he isn't caught by the gameticker
 			making_mage = 0
 			return 1
 
 /datum/game_mode/wizard/raginmages/declare_completion()
 	if(finished)
 		feedback_set_details("round_end_result","loss - wizard killed")
-		world << "\red <FONT size = 3><B> The crew has managed to hold off the wizard attack! The Space Wizards Federation has been taught a lesson they will not soon forget!</B></FONT>"
+		world << "<span class='danger'><FONT size = 3> The crew has managed to hold off the wizard attack! The Space Wizards Federation has been taught a lesson they will not soon forget!</FONT></span>"
 	..(1)

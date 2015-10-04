@@ -25,7 +25,7 @@
 	var/dat = "<B>Bluespace Artillery Control:</B><BR>"
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\awaymissions\bluespaceartillery.dm:26: dat += "Locked on<BR>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\awaymissions<span class='warning'>spaceartillery.dm:26: dat += </span>"Locked on<BR>"
 	dat += {"Locked on<BR>
 		<B>Charge progress: [reload]/180:</B><BR>
 		<A href='byond://?src=\ref[src];fire=1'>Open Fire</A><BR>
@@ -36,10 +36,8 @@
 	return
 
 /obj/machinery/artillerycontrol/Topic(href, href_list)
-	..()
-	if (usr.stat || usr.restrained())
-		return
-	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+	if(..()) return 1
+	else
 		var/A
 		A = input("Area to jump bombard", "Open Fire", A) in teleportlocs
 		var/area/thearea = teleportlocs[A]
@@ -56,6 +54,7 @@
 			reload = 0
 
 /*mob/proc/openfire()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/openfire() called tick#: [world.time]")
 	var/A
 	A = input("Area to jump bombard", "Open Fire", A) in teleportlocs
 	var/area/thearea = teleportlocs[A]

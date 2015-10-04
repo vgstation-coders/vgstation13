@@ -18,7 +18,6 @@
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 500
-	directwired = 0
 	var/remote_access_enabled = 1
 	var/cached_power_avail = 0
 	var/emergency_insert_ready = 0
@@ -54,7 +53,7 @@
 	if(!emagged)
 		locked = 0
 		emagged = 1
-		user.visible_message("[user.name] emags the [src.name].","\red You short out the lock.")
+		user.visible_message("[user.name] emags the [src.name].","<span class='warning'>You short out the lock.</span>")
 		return 1
 	return -1
 /obj/machinery/power/rust_fuel_injector/attackby(obj/item/W, mob/user)
@@ -63,20 +62,19 @@
 
 	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
 		if(emagged)
-			user << "\red The lock seems to be broken"
+			user << "<span class='warning'>The lock seems to be broken</span>"
 			return
 		if(src.allowed(user))
 			src.locked = !src.locked
 			user << "The controls are now [src.locked ? "locked." : "unlocked."]"
 		else
-			user << "\red Access denied."
+			user << "<span class='warning'>Access denied.</span>"
 		return
 
 	if(istype(W, /obj/item/weapon/fuel_assembly) && !cur_assembly)
 		if(emergency_insert_ready)
 			cur_assembly = W
-			user.drop_item()
-			W.loc = src
+			user.drop_item(W, src)
 			emergency_insert_ready = 0
 			return
 
@@ -107,7 +105,7 @@
 	else
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_injector.dm:149: dat += "<B>Reactor Core Fuel Injector</B><hr>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_injector.dm:149: dat += "<B>Reactor Core Fuel Injector</B><hr>"
 		dat += {"<B>Reactor Core Fuel Injector</B><hr>
 			<b>Device ID tag:</b> [id_tag] <a href='?src=\ref[src];modify_tag=1'>\[Modify\]</a><br>
 			<b>Status:</b> [injecting ? "<font color=green>Active</font> <a href='?src=\ref[src];toggle_injecting=1'>\[Disable\]</a>" : "<font color=blue>Standby</font> <a href='?src=\ref[src];toggle_injecting=1'>\[Enable\]</a>"]<br>
@@ -126,7 +124,7 @@
 			font_colour = "orange"
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_injector.dm:164: dat += "<b>Power status:</b> <font color=[font_colour]>[active_power_usage]/[cached_power_avail] W</font><br>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_injector.dm:164: dat += "<b>Power status:</b> <font color=[font_colour]>[active_power_usage]/[cached_power_avail] W</font><br>"
 		dat += {"<b>Power status:</b> <font color=[font_colour]>[active_power_usage]/[cached_power_avail] W</font><br>
 			<a href='?src=\ref[src];toggle_remote=1'>\[[remote_access_enabled ? "Disable remote access" : "Enable remote access"]\]</a><br>
 			<hr>
@@ -138,7 +136,7 @@
 	user.set_machine(src)
 
 /obj/machinery/power/rust_fuel_injector/Topic(href, href_list)
-	..()
+	if(..()) return 1
 
 	if( href_list["modify_tag"] )
 		id_tag = input("Enter new ID tag", "Modifying ID tag") as text|null
@@ -166,7 +164,7 @@
 	if( href_list["fuel_usage"] )
 		var/new_usage = text2num(input("Enter new fuel usage (0.01% - 100%)", "Modifying fuel usage", fuel_usage * 100))
 		if(!new_usage)
-			usr << "\red That's not a valid number."
+			usr << "<span class='warning'>That's not a valid number.</span>"
 			return
 		new_usage = max(new_usage, 0.01)
 		new_usage = min(new_usage, 100)
@@ -185,18 +183,21 @@
 	updateDialog()
 
 /obj/machinery/power/rust_fuel_injector/proc/BeginInjecting()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/rust_fuel_injector/proc/BeginInjecting() called tick#: [world.time]")
 	if(!injecting && cur_assembly)
 		icon_state = "injector1"
 		injecting = 1
 		use_power = 1
 
 /obj/machinery/power/rust_fuel_injector/proc/StopInjecting()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/rust_fuel_injector/proc/StopInjecting() called tick#: [world.time]")
 	if(injecting)
 		injecting = 0
 		icon_state = "injector0"
 		use_power = 0
 
 /obj/machinery/power/rust_fuel_injector/proc/Inject()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/rust_fuel_injector/proc/Inject() called tick#: [world.time]")
 	if(!injecting)
 		return
 	if(cur_assembly)
@@ -217,7 +218,8 @@
 				A.particle_type = reagent
 				A.additional_particles = numparticles - 1
 				//A.target = target_field
-				//
+				A.startMove(1)
+
 				cur_assembly.rod_quantities[reagent] -= amount
 				amount_left += cur_assembly.rod_quantities[reagent]
 		cur_assembly.percent_depleted = amount_left / 300
@@ -226,6 +228,7 @@
 		StopInjecting()
 
 /obj/machinery/power/rust_fuel_injector/proc/attempt_fuel_swap()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/rust_fuel_injector/proc/attempt_fuel_swap() called tick#: [world.time]")
 	var/rev_dir = reverse_direction(dir)
 	var/turf/mid = get_step(src, rev_dir)
 	var/success = 0
@@ -247,27 +250,29 @@
 
 		break
 	if(success)
-		src.visible_message("\blue \icon[src] a green light flashes on [src].")
+		src.visible_message("<span class='notice'>\icon[src] a green light flashes on [src].</span>")
 		updateDialog()
 	else
-		src.visible_message("\red \icon[src] a red light flashes on [src].")
+		src.visible_message("<span class='warning'>\icon[src] a red light flashes on [src].</span>")
 
 /obj/machinery/power/rust_fuel_injector/verb/rotate_clock()
 	set category = "Object"
 	set name = "Rotate Generator (Clockwise)"
 	set src in view(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/power/rust_fuel_injector/verb/rotate_clock()  called tick#: [world.time]")
 
-	if (usr.stat || usr.restrained()  || anchored)
-		return
-
-	src.dir = turn(src.dir, 90)
-
-/obj/machinery/power/rust_fuel_injector/verb/rotate_anticlock()
-	set category = "Object"
-	set name = "Rotate Generator (Counterclockwise)"
-	set src in view(1)
-
-	if (usr.stat || usr.restrained()  || anchored)
+	if (usr.stat || usr.restrained()  || anchored || (usr.status_flags & FAKEDEATH))
 		return
 
 	src.dir = turn(src.dir, -90)
+
+/obj/machinery/power/rust_fuel_injector/verb/rotate_anticlock()
+	set category = "Object"
+	set name = "Rotate Generator (Counter-clockwise)"
+	set src in view(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/power/rust_fuel_injector/verb/rotate_anticlock()  called tick#: [world.time]")
+
+	if (usr.stat || usr.restrained()  || anchored || (usr.status_flags & FAKEDEATH))
+		return
+
+	src.dir = turn(src.dir, 90)

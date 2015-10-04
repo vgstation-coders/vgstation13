@@ -14,6 +14,36 @@
   *
   * @return /nanomanager new nanomanager object
   */
+
+  //Uncomment to enable nano file debugging
+  // #define NANO_DEBUG 1
+
+
+/datum/nanomanager/proc/rebuild_asset_dirs()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/nanomanager/proc/rebuild_asset_dirs() called tick#: [world.time]")
+	asset_files.len = 0
+	var/list/nano_asset_dirs = list(\
+		"nano/css/",\
+		"nano/images/",\
+		"nano/js/",\
+		"nano/templates/"\
+	)
+	var/list/filenames = null
+	for (var/path in nano_asset_dirs)
+		#ifdef NANO_DEBUG
+		world.log << "loading [path]"
+		#endif
+		filenames = flist(path)
+		for(var/filename in filenames)
+			if(copytext(filename, length(filename)) != "/") // filenames which end in "/" are actually directories, which we want to ignore
+				if(fexists(path + filename))
+					#ifdef NANO_DEBUG
+					world.log << "Found [path+filename]!"
+					#endif
+					asset_files.Add(fcopy_rsc(path + filename)) // add this file to asset_files for sending to clients when they connect
+	return
+
+
 /datum/nanomanager/New()
 	var/list/nano_asset_dirs = list(\
 		"nano/css/",\
@@ -24,10 +54,16 @@
 
 	var/list/filenames = null
 	for (var/path in nano_asset_dirs)
+		#ifdef NANO_DEBUG
+		world.log << "loading [path]"
+		#endif
 		filenames = flist(path)
 		for(var/filename in filenames)
 			if(copytext(filename, length(filename)) != "/") // filenames which end in "/" are actually directories, which we want to ignore
 				if(fexists(path + filename))
+					#ifdef NANO_DEBUG
+					world.log << "Found [path+filename]!"
+					#endif
 					asset_files.Add(fcopy_rsc(path + filename)) // add this file to asset_files for sending to clients when they connect
 
 	return
@@ -45,6 +81,7 @@
   * @return /nanoui Returns the found ui, for null if none exists
   */
 /datum/nanomanager/proc/try_update_ui(var/mob/user, src_object, ui_key, var/datum/nanoui/ui, data, var/force_open = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/nanomanager/proc/try_update_ui() called tick#: [world.time]")
 	if (isnull(ui)) // no ui has been passed, so we'll search for one
 	{
 		ui = get_open_ui(user, src_object, ui_key)
@@ -69,6 +106,7 @@
   * @return /nanoui Returns the found ui, or null if none exists
   */
 /datum/nanomanager/proc/get_open_ui(var/mob/user, src_object, ui_key)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/nanomanager/proc/get_open_ui() called tick#: [world.time]")
 	var/src_object_key = "\ref[src_object]"
 	if (isnull(open_uis[src_object_key]) || !istype(open_uis[src_object_key], /list))
 		//testing("nanomanager/get_open_ui mob [user.name] [src_object:name] [ui_key] - there are no uis open")
@@ -92,6 +130,7 @@
   * @return int The number of uis updated
   */
 /datum/nanomanager/proc/update_uis(src_object)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/nanomanager/proc/update_uis() called tick#: [world.time]")
 	var/src_object_key = "\ref[src_object]"
 	if (isnull(open_uis[src_object_key]) || !istype(open_uis[src_object_key], /list))
 		return 0
@@ -114,6 +153,7 @@
   * @return int The number of uis updated
   */
 /datum/nanomanager/proc/update_user_uis(var/mob/user, src_object = null, ui_key = null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/nanomanager/proc/update_user_uis() called tick#: [world.time]")
 	if (isnull(user.open_uis) || !istype(user.open_uis, /list) || open_uis.len == 0)
 		return 0 // has no open uis
 
@@ -135,6 +175,7 @@
   * @return int The number of uis closed
   */
 /datum/nanomanager/proc/close_user_uis(var/mob/user, src_object = null, ui_key = null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/nanomanager/proc/close_user_uis() called tick#: [world.time]")
 	if (isnull(user.open_uis) || !istype(user.open_uis, /list) || open_uis.len == 0)
 		//testing("nanomanager/close_user_uis mob [user.name] has no open uis")
 		return 0 // has no open uis
@@ -158,6 +199,7 @@
   * @return nothing
   */
 /datum/nanomanager/proc/ui_opened(var/datum/nanoui/ui)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/nanomanager/proc/ui_opened() called tick#: [world.time]")
 	var/src_object_key = "\ref[ui.src_object]"
 	if (isnull(open_uis[src_object_key]) || !istype(open_uis[src_object_key], /list))
 		open_uis[src_object_key] = list(ui.ui_key = list())
@@ -179,6 +221,7 @@
   * @return int 0 if no ui was removed, 1 if removed successfully
   */
 /datum/nanomanager/proc/ui_closed(var/datum/nanoui/ui)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/nanomanager/proc/ui_closed() called tick#: [world.time]")
 	var/src_object_key = "\ref[ui.src_object]"
 	if (isnull(open_uis[src_object_key]) || !istype(open_uis[src_object_key], /list))
 		return 0 // wasn't open
@@ -186,7 +229,8 @@
 		return 0 // wasn't open
 
 	processing_uis.Remove(ui)
-	ui.user.open_uis.Remove(ui)
+	if(ui.user)
+		ui.user.open_uis.Remove(ui)
 	var/list/uis = open_uis[src_object_key][ui.ui_key]
 	uis.Remove(ui)
 
@@ -205,6 +249,7 @@
 
 //
 /datum/nanomanager/proc/user_logout(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/nanomanager/proc/user_logout() called tick#: [world.time]")
 	//testing("nanomanager/user_logout user [user.name]")
 	return close_user_uis(user)
 
@@ -218,6 +263,7 @@
   * @return nothing
   */
 /datum/nanomanager/proc/user_transferred(var/mob/oldMob, var/mob/newMob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/nanomanager/proc/user_transferred() called tick#: [world.time]")
 	if(!istype(oldMob))
 		return 0 // no mob, no uis
 	//testing("nanomanager/user_transferred from mob [oldMob.name] to mob [newMob.name]")
@@ -232,7 +278,7 @@
 		ui.user = newMob
 		newMob.open_uis.Add(ui)
 
-	oldMob.open_uis.Cut()
+	oldMob.open_uis.len = 0
 
 	return 1 // success
 
@@ -246,6 +292,8 @@
   */
 
 /datum/nanomanager/proc/send_resources(client)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/nanomanager/proc/send_resources() called tick#: [world.time]")
 	for(var/file in asset_files)
+		world.log << file
 		client << browse_rsc(file)	// send the file to the client
 

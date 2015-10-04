@@ -7,6 +7,7 @@ var/list/potential_theft_objectives=list(
 	"salvage" = typesof(/datum/theft_objective/number/salvage) - /datum/theft_objective/number/salvage
 )
 
+
 datum/objective
 	var/datum/mind/owner = null			//Who owns the objective.
 	var/explanation_text = "Nothing"	//What that person is supposed to do.
@@ -14,26 +15,30 @@ datum/objective
 	var/target_amount = 0				//If they are focused on a particular number. Steal objectives have their own counter.
 	var/completed = 0					//currently only used for custom objectives.
 	var/blocked = 0                     // Universe fucked, you lost.
+	var/list/bad_targets = list("AI","Cyborg","Mobile MMI")//For roundstart cases where they are still human at the time of objective assignment
 
 	New(var/text)
 		if(text)
 			explanation_text = text
 
 	proc/check_completion()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/check_completion() called tick#: [world.time]")
 		return completed
 
 	proc/find_target()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/find_target() called tick#: [world.time]")
 		var/list/possible_targets = list()
 		for(var/datum/mind/possible_target in ticker.minds)
-			if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.stat != 2))
+			if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.z != map.zCentcomm) && (possible_target.current.stat != DEAD) && !(possible_target.assigned_role in bad_targets))
 				possible_targets += possible_target
 		if(possible_targets.len > 0)
 			target = pick(possible_targets)
 
 
-	proc/find_target_by_role(role, role_type=0)//Option sets either to check assigned role or special role. Default to assigned.
+	proc/find_target_by_role(role, role_type = 0)//Option sets either to check assigned role or special role. Default to assigned.
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/find_target_by_role() called tick#: [world.time]")
 		for(var/datum/mind/possible_target in ticker.minds)
-			if((possible_target != owner) && ishuman(possible_target.current) && ((role_type ? possible_target.special_role : possible_target.assigned_role) == role) )
+			if((possible_target != owner) && ishuman(possible_target.current) && (possible_target.current.z != map.zCentcomm) && ((role_type ? possible_target.special_role : possible_target.assigned_role) == role) && !(possible_target.assigned_role in bad_targets))
 				target = possible_target
 				break
 
@@ -371,7 +376,11 @@ datum/objective/escape
 			return 0
 
 		if(istype(location, /turf/simulated/shuttle/floor4)) // Fails tratiors if they are in the shuttle brig -- Polymorph
-			if(istype(owner.current, /mob/living/carbon))
+			if(istype(owner.current, /mob/living/carbon/human))
+				var/mob/living/carbon/human/H = owner.current
+				if(!H.restrained()) // Technically, traitors will fail the objective if they are time stopped by a wizard
+					return 1
+			else if(istype(owner.current, /mob/living/carbon)) // I don't think non-humanoid carbons can get the escape objective, but I'm leaving it to be safe
 				var/mob/living/carbon/C = owner.current
 				if (!C.handcuffed)
 					return 1
@@ -543,9 +552,11 @@ datum/objective/nuclear
 		explanation_text = "Free Objective."
 
 	proc/format_explanation()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/format_explanation() called tick#: [world.time]")
 		return "Steal [steal_target.name]."
 
 	proc/select_target()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/select_target() called tick#: [world.time]")
 		var/list/possible_items_all = potential_theft_objectives[target_category]+"custom"
 		var/new_target = input("Select target:", "Objective target", null) as null|anything in possible_items_all
 		if (!new_target) return
@@ -555,7 +566,7 @@ datum/objective/nuclear
 			if (!O.typepath) return
 			var/tmp_obj = new O.typepath
 			var/custom_name = tmp_obj:name
-			del(tmp_obj)
+			qdel(tmp_obj)
 			O.name = copytext(sanitize(input("Enter target name:", "Objective target", custom_name) as text|null),1,MAX_NAME_LEN)
 			if (!O.name) return
 			steal_target = O
@@ -570,35 +581,9 @@ datum/objective/nuclear
 		if(!steal_target) return 1 // Free Objective
 		return steal_target.check_completion(owner)
 
-datum/objective/download
-	proc/gen_amount_goal()
-		target_amount = rand(10,20)
-		explanation_text = "Download [target_amount] research levels."
-		return target_amount
-
-
-	check_completion()
-		if(blocked) return 0
-		if(!ishuman(owner.current))
-			return 0
-		if(!owner.current || owner.current.stat == 2)
-			return 0
-		if(!(istype(owner.current:wear_suit, /obj/item/clothing/suit/space/space_ninja)&&owner.current:wear_suit:s_initialized))
-			return 0
-		var/current_amount
-		var/obj/item/clothing/suit/space/space_ninja/S = owner.current:wear_suit
-		if(!S.stored_research.len)
-			return 0
-		else
-			for(var/datum/tech/current_data in S.stored_research)
-				if(current_data.level>1)	current_amount+=(current_data.level-1)
-		if(current_amount<target_amount)	return 0
-		return 1
-
-
-
 datum/objective/capture
 	proc/gen_amount_goal()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/gen_amount_goal() called tick#: [world.time]")
 		target_amount = rand(5,10)
 		explanation_text = "Accumulate [target_amount] capture points."
 		return target_amount
@@ -637,6 +622,7 @@ datum/objective/capture
 
 datum/objective/blood
 	proc/gen_amount_goal(low = 150, high = 400)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/gen_amount_goal() called tick#: [world.time]")
 		target_amount = rand(low,high)
 		target_amount = round(round(target_amount/5)*5)
 		explanation_text = "Accumulate atleast [target_amount] units of blood in total."
@@ -650,6 +636,7 @@ datum/objective/blood
 			return 0
 datum/objective/absorb
 	proc/gen_amount_goal(var/lowbound = 4, var/highbound = 6)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/gen_amount_goal() called tick#: [world.time]")
 		target_amount = rand (lowbound,highbound)
 		if (ticker)
 			var/n_p = 1 //autowin
@@ -711,7 +698,10 @@ datum/objective/absorb
 		sacrifice //stolen from traitor target objective
 
 			proc/find_target() //I don't know how to make it work with the rune otherwise, so I'll do it via a global var, sacrifice_target, defined in rune15.dm
+				//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \			proc/find_target() called tick#: [world.time]")
 				var/list/possible_targets = call(/datum/game_mode/cult/proc/get_unconvertables)()
+
+				//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\dar/list/possible_targets = call(/datum/game_mode/cult/proc/get_unconvertables)() called tick#: [world.time]")
 
 				if(possible_targets.len > 0)
 					sacrifice_target = pick(possible_targets)

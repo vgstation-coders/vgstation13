@@ -42,10 +42,12 @@
 #define ui_inv1 "6:16,1:5"			//borgs
 #define ui_inv2 "7:16,1:5"			//borgs
 #define ui_inv3 "8:16,1:5"			//borgs
-#define ui_borg_store "9:16,1:5"	//borgs
+#define ui_borg_module "CENTER+1:16,SOUTH:5" //borgs
+#define ui_borg_store "CENTER+2:16,SOUTH:5"	//borgs
 
 #define ui_monkey_uniform "3:14,1:5"//monkey
 #define ui_monkey_hat "4:14,1:5"	//monkey
+#define ui_monkey_glasses "2:14,1:5"	//monkey
 #define ui_monkey_mask "5:14,1:5"	//monkey
 #define ui_monkey_back "6:14,1:5"	//monkey
 
@@ -59,7 +61,7 @@
 #define ui_acti_alt "14:28,1:5" //alternative intent switcher for when the interface is hidden (F12)
 
 #define ui_borg_pull "12:24,2:7"
-#define ui_borg_module "13:26,2:7"
+//#define ui_borg_module "13:26,2:7"
 #define ui_borg_panel "14:28,2:7"
 
 //Gun buttons
@@ -92,11 +94,8 @@
 #define ui_construct_fire "14:16,8:13" //above health, slightly to the left
 #define ui_construct_pull "14:28,2:10" //above the zone_sel icon
 
-#define ui_construct_spell1 "7:16,1:5"
-#define ui_construct_spell2 "6:16,1:5"
-#define ui_construct_spell3 "8:16,1:5"
-#define ui_construct_spell4 "5:16,1:5"
-#define ui_construct_spell5 "9:16,1:5"
+#define ui_spell_master "14:16,14:16"
+#define ui_genetic_master "14:16,12:16"
 
 //Pop-up inventory
 #define ui_shoes "2:8,1:5"

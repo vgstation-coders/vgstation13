@@ -3,14 +3,13 @@
 	name = "Food Processor"
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "processor"
-	layer = 2.9
 	density = 1
 	anchored = 1
 	var/broken = 0
 	var/processing = 0
 	var/opened = 0.0
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
 	use_power = 1
 	idle_power_usage = 20
@@ -41,6 +40,7 @@
 	var/output
 	var/time = 40
 	proc/process(loc, what)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/process() called tick#: [world.time]")
 		if (src.output && loc)
 			new src.output(loc)
 		if (what)
@@ -83,7 +83,7 @@
 				var/C = S.cores
 				if(S.stat != DEAD)
 					S.loc = loc
-					S.visible_message("\blue [C] crawls free of the processor!")
+					S.visible_message("<span class='notice'>[C] crawls free of the processor!</span>")
 					return
 				for(var/i = 1, i <= C, i++)
 					new S.coretype(loc)
@@ -125,6 +125,7 @@
 			output = null
 
 /obj/machinery/processor/proc/select_recipe(var/X)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/processor/proc/select_recipe() called tick#: [world.time]")
 	for (var/Type in typesof(/datum/food_processor_process) - /datum/food_processor_process - /datum/food_processor_process/mob)
 		var/datum/food_processor_process/P = new Type()
 		if (!istype(X, P.input))
@@ -148,7 +149,7 @@
 	if(src.contents.len > 0) //TODO: several items at once? several different items?
 		user << "<span class='warning'>Something is already in [src]</span>."
 		return 1
-	var/what = O
+	var/atom/movable/what = O
 	if (istype(O, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = O
 		what = G.affecting
@@ -159,8 +160,12 @@
 		return 1
 	user.visible_message("<span class='notice'>[user] puts [what] into [src].</span>", \
 		"You put [what] into the [src].")
-	user.drop_item()
-	what:loc = src
+	if(what == user.get_active_hand())
+		user.drop_item(what, src)
+	else
+		if(O.loc == user)
+			user.drop_item(O)
+		what.loc = src
 	return
 
 /obj/machinery/processor/attack_hand(var/mob/user as mob)

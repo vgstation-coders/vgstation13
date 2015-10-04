@@ -11,13 +11,18 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	icon = 'icons/effects/effects.dmi'
 	mouse_opacity = 0
 	unacidable = 1 // so effect are not targeted by alien acid.
-	flags = TABLEPASS
+	flags = 0
 	w_type=NOT_RECYCLABLE
+	pass_flags = PASSTABLE|PASSGRILLE|PASSMACHINE
 
 /obj/effect/effect/water
 	name = "water"
 	icon_state = "extinguish"
 	var/life = 15.0
+
+/obj/effect/effect/water/spray
+	name = "spray"
+	icon_state = "extinguish_gray"
 
 /obj/effect/effect/water/New()
 	. = ..()
@@ -71,6 +76,9 @@ would spawn and follow the beaker, even if it is carried or thrown.
 		holder = atom
 
 	proc/start()
+
+/obj/effect/canSingulothPull(var/obj/machinery/singularity/singulo)
+	return 0
 
 /////////////////////////////////////////////
 // GENERIC STEAM SPREAD SYSTEM
@@ -138,6 +146,9 @@ steam.start() -- spawns the effect
 
 /obj/effect/effect/sparks/New(var/travel_dir)
 	..()
+	var/turf/T = loc
+	if(istype(T))
+		T.hotspot_expose(1000, 100, surfaces = 1)
 
 /obj/effect/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
 	inertia_dir=travel_dir
@@ -145,14 +156,14 @@ steam.start() -- spawns the effect
 	processing_objects.Add(src)
 	var/turf/T = loc
 	if (istype(T, /turf))
-		T.hotspot_expose(1000, 100)
+		T.hotspot_expose(1000, 100, surfaces = 1)
 
 /obj/effect/effect/sparks/Destroy()
 	processing_objects.Remove(src)
 	var/turf/T = src.loc
 
 	if (istype(T, /turf))
-		T.hotspot_expose(1000, 100)
+		T.hotspot_expose(1000, 100, surfaces = 1)
 
 	..()
 
@@ -160,7 +171,7 @@ steam.start() -- spawns the effect
 	..()
 	var/turf/T = src.loc
 	if (istype(T, /turf))
-		T.hotspot_expose(1000,100)
+		T.hotspot_expose(1000,100, surfaces = 1)
 	return
 
 /obj/effect/effect/sparks/process()
@@ -234,6 +245,12 @@ steam.start() -- spawns the effect
 	if (M.internal != null && M.wear_mask && (M.wear_mask.flags & MASKINTERNALS))
 		return 0
 	return 1
+
+/obj/effect/effect/smoke/Destroy()
+	if(reagents)
+		reagents.my_atom = null
+		reagents = null
+	..()
 
 /////////////////////////////////////////////
 // Bad smoke
@@ -375,6 +392,11 @@ steam.start() -- spawns the effect
 /obj/effect/effect/smoke/chem
 	icon = 'icons/effects/chemsmoke.dmi'
 
+/obj/effect/effect/smoke/Destroy()
+	if(reagents)
+		qdel(reagents)
+		reagents = null
+	..()
 /obj/effect/effect/smoke/chem/New()
 	. = ..()
 	create_reagents(500)
@@ -474,7 +496,9 @@ steam.start() -- spawns the effect
 					sleep(10)
 					step(smoke,direction)
 				spawn(150+rand(10,30))
-					if(smoke) qdel(smoke)
+					if(smoke)
+						qdel(smoke)
+						smoke = null
 					src.total_smoke--
 
 // Goon compat.
@@ -512,15 +536,34 @@ steam.start() -- spawns the effect
 /// and don't call start() in a loop that will be repeated otherwise it'll get spammed!
 /////////////////////////////////////////////
 
-/obj/effect/effect/ion_trails
-	name = "ion trails"
-	icon_state = "ion_trails"
+/obj/effect/effect/trails
+	name = ""
+	icon_state = ""
 	anchored = 1
 
-/datum/effect/effect/system/ion_trail_follow
+	var/base_name="ion"
+
+/obj/effect/effect/trails/New()
+	..()
+	name = "[base_name] trails"
+	icon_state = "[base_name]_trails"
+
+/obj/effect/effect/trails/proc/Play()
+	flick("[base_name]_fade", src)
+	icon_state = "blank"
+	spawn( 20 )
+		if(src)
+			returnToPool(src)
+
+/obj/effect/effect/trails/ion
+	base_name = "ion"
+
+/datum/effect/effect/system/trail
 	var/turf/oldposition
 	var/processing = 1
 	var/on = 1
+
+	var/trail_type=/obj/effect/effect/trails/ion
 
 	set_up(atom/atom)
 		attach(atom)
@@ -536,31 +579,24 @@ steam.start() -- spawns the effect
 				var/turf/T = get_turf(src.holder)
 				if(T != src.oldposition)
 					if(istype(T, /turf/space))
-						var/obj/effect/effect/ion_trails/I = new /obj/effect/effect/ion_trails(src.oldposition)
+						var/obj/effect/effect/trails/I = getFromPool(trail_type,src.oldposition)
 						src.oldposition = T
 						I.dir = src.holder.dir
-						flick("ion_fade", I)
-						I.icon_state = "blank"
-						spawn( 20 )
-							if(I) qdel(I)
-					spawn(2)
-						if(src.on)
-							src.processing = 1
-							src.start()
-				else
-					spawn(2)
-						if(src.on)
-							src.processing = 1
-							src.start()
+						I.Play()
+				spawn(2)
+					if(src.on)
+						src.processing = 1
+						src.start()
 
 	proc/stop()
 		src.processing = 0
 		src.on = 0
 
-/datum/effect/effect/system/ion_trail_follow/space_trail
+/datum/effect/effect/system/trail/space_trail
 	var/turf/oldloc // secondary ion trail loc
 	var/turf/currloc
-/datum/effect/effect/system/ion_trail_follow/space_trail/start()
+
+/datum/effect/effect/system/trail/space_trail/start()
 	if(!src.on)
 		src.on = 1
 		src.processing = 1
@@ -591,8 +627,8 @@ steam.start() -- spawns the effect
 						src.oldloc = get_step(oldposition,NORTH)
 						//src.oldloc = get_step(oldloc,EAST)
 				if(istype(T, /turf/space))
-					var/obj/effect/effect/ion_trails/I = new /obj/effect/effect/ion_trails(src.oldposition)
-					var/obj/effect/effect/ion_trails/II = new /obj/effect/effect/ion_trails(src.oldloc)
+					var/obj/effect/effect/trails/ion/I = getFromPool(/obj/effect/effect/trails/ion,src.oldposition)
+					var/obj/effect/effect/trails/ion/II = getFromPool(/obj/effect/effect/trails/ion,src.oldloc)
 					//src.oldposition = T
 					I.dir = src.holder.dir
 					II.dir = src.holder.dir
@@ -601,17 +637,13 @@ steam.start() -- spawns the effect
 					I.icon_state = "blank"
 					II.icon_state = "blank"
 					spawn( 20 )
-						if(I) qdel(I)
-						if(II) qdel(II)
-				spawn(2)
-					if(src.on)
-						src.processing = 1
-						src.start()
-			else
-				spawn(2)
-					if(src.on)
-						src.processing = 1
-						src.start()
+						if(I) returnToPool(I)
+						if(II) returnToPool(II)
+
+			spawn(2)
+				if(src.on)
+					src.processing = 1
+					src.start()
 			currloc = T
 
 
@@ -722,6 +754,7 @@ steam.start() -- spawns the effect
 		flick("[icon_state]-disolve", src)
 		sleep(5)
 		qdel(src)
+	AddToProfiler()
 
 /obj/effect/effect/foam/fire/process()
 	if(--amount < 0)
@@ -785,11 +818,11 @@ steam.start() -- spawns the effect
 
 	if (istype(AM, /mob/living/carbon))
 		var/mob/M =	AM
-		if (istype(M, /mob/living/carbon/human) && (istype(M:shoes, /obj/item/clothing/shoes) && M:shoes.flags&NOSLIP))
+		if (istype(M, /mob/living/carbon/human) && M.CheckSlip() < 1)
 			return
 
 		M.stop_pulling()
-		M << "\blue You slipped on the foam!"
+		M << "<span class='notice'>You slipped on the foam!</span>"
 		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
 		M.Stun(5)
 		M.Weaken(2)
@@ -855,76 +888,80 @@ steam.start() -- spawns the effect
 	desc = "A lightweight foamed metal wall."
 	var/metal = 1		// 1=aluminum, 2=iron
 
-	proc/updateicon()
-		if(metal == 1)
-			icon_state = "metalfoam"
-		else
-			icon_state = "ironfoam"
+/obj/structure/foamedmetal/proc/updateicon()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/updateicon() called tick#: [world.time]")
+
+	if(metal == 1)
+		icon_state = "metalfoam"
+	else
+		icon_state = "ironfoam"
 
 
-	ex_act(severity)
+/obj/structure/foamedmetal/ex_act(severity)
+	qdel(src)
+
+/obj/structure/foamedmetal/blob_act()
+	qdel(src)
+
+/obj/structure/foamedmetal/bullet_act()
+	if(metal==1 || prob(50))
 		qdel(src)
 
-	blob_act()
-		del(src)
+/obj/structure/foamedmetal/attack_paw(var/mob/user)
+	attack_hand(user)
+	return
 
-	bullet_act()
-		if(metal==1 || prob(50))
-			del(src)
+/obj/structure/foamedmetal/attack_hand(var/mob/user)
+	user.delayNextAttack(10)
+	if ((M_HULK in user.mutations) || (prob(75 - metal*25)))
+		user << "<span class='notice'>You smash through the metal foam wall.</span>"
+		for(var/mob/O in oviewers(user))
+			if ((O.client && !( O.blinded )))
+				O << "<span class='warning'>[user] smashes through the foamed metal.</span>"
+		qdel(src)
+	else
+		user << "<span class='notice'>You hit the metal foam but bounce off it.</span>"
+	return
 
-	attack_paw(var/mob/user)
-		attack_hand(user)
+
+/obj/structure/foamedmetal/attackby(var/obj/item/I, var/mob/user)
+	user.delayNextAttack(10)
+	if (istype(I, /obj/item/weapon/grab))
+		var/obj/item/weapon/grab/G = I
+		G.affecting.loc = src.loc
+		for(var/mob/O in viewers(src))
+			if (O.client)
+				O << "<span class='warning'>[G.assailant] smashes [G.affecting] through the foamed metal wall.</span>"
+		returnToPool(I)
+		qdel(src)
 		return
 
-	attack_hand(var/mob/user)
-		user.changeNext_move(10)
-		if ((M_HULK in user.mutations) || (prob(75 - metal*25)))
-			user << "\blue You smash through the metal foam wall."
-			for(var/mob/O in oviewers(user))
-				if ((O.client && !( O.blinded )))
-					O << "\red [user] smashes through the foamed metal."
-			del(src)
-		else
-			user << "\blue You hit the metal foam but bounce off it."
-		return
+	if(prob(I.force*20 - metal*25))
+		user << "<span class='notice'>You smash through the foamed metal with \the [I].</span>"
+		for(var/mob/O in oviewers(user))
+			if ((O.client && !( O.blinded )))
+				O << "<span class='warning'>[user] smashes through the foamed metal.</span>"
+		qdel(src)
+	else
+		user << "<span class='notice'>You hit the metal foam to no effect.</span>"
+
+/obj/structure/foamedmetal/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(air_group) return 0
+	return !density
 
 
-	attackby(var/obj/item/I, var/mob/user)
-		user.changeNext_move(10)
-		if (istype(I, /obj/item/weapon/grab))
-			var/obj/item/weapon/grab/G = I
-			G.affecting.loc = src.loc
-			for(var/mob/O in viewers(src))
-				if (O.client)
-					O << "\red [G.assailant] smashes [G.affecting] through the foamed metal wall."
-			del(I)
-			del(src)
-			return
+/obj/structure/foamedmetal/proc/update_nearby_tiles()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/update_nearby_tiles() called tick#: [world.time]")
 
-		if(prob(I.force*20 - metal*25))
-			user << "\blue You smash through the foamed metal with \the [I]."
-			for(var/mob/O in oviewers(user))
-				if ((O.client && !( O.blinded )))
-					O << "\red [user] smashes through the foamed metal."
-			del(src)
-		else
-			user << "\blue You hit the metal foam to no effect."
+	if (isnull(air_master))
+		return 0
 
-	CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-		if(air_group) return 0
-		return !density
+	var/T = loc
 
+	if (isturf(T))
+		air_master.mark_for_update(T)
 
-	proc/update_nearby_tiles()
-		if (isnull(air_master))
-			return 0
-
-		var/T = loc
-
-		if (isturf(T))
-			air_master.mark_for_update(T)
-
-		return 1
+	return 1
 
 /obj/structure/foamedmetal/New()
 	. = ..()
@@ -958,10 +995,10 @@ steam.start() -- spawns the effect
 			s.start()
 
 			for(var/mob/M in viewers(5, location))
-				M << "\red The solution violently explodes."
+				M << "<span class='warning'>The solution violently explodes.</span>"
 			for(var/mob/M in viewers(1, location))
 				if (prob (50 * amount))
-					M << "\red The explosion knocks you down."
+					M << "<span class='warning'>The explosion knocks you down.</span>"
 					M.Weaken(rand(1,5))
 			return
 		else
@@ -991,7 +1028,7 @@ steam.start() -- spawns the effect
 			*/
 
 			for(var/mob/M in viewers(8, location))
-				M << "\red The solution violently explodes."
+				M << "<span class='warning'>The solution violently explodes.</span>"
 
 			explosion(location, devastation, heavy, light, flash)
 

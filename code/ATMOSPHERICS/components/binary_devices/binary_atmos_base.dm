@@ -11,7 +11,11 @@
 
 	var/datum/pipe_network/network1
 	var/datum/pipe_network/network2
-	var/list/activity_log = list()
+
+	var/activity_log = ""
+
+/obj/machinery/atmospherics/binary/investigation_log(var/subject, var/message)
+	activity_log += ..()
 
 /obj/machinery/atmospherics/binary/New()
 	..()
@@ -26,9 +30,13 @@
 			initialize_directions = EAST|WEST
 	air1 = new
 	air2 = new
-
+	update_icon()
 	air1.volume = 200
 	air2.volume = 200
+
+/obj/machinery/atmospherics/binary/update_icon(var/adjacent_procd)
+	var/node_list = list(node1,node2)
+	..(adjacent_procd,node_list)
 
 /obj/machinery/atmospherics/binary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	dir = pipe.dir
@@ -65,10 +73,12 @@
 /obj/machinery/atmospherics/binary/Destroy()
 	if(node1)
 		node1.disconnect(src)
-		del(network1)
+		if(network1)
+			returnToPool(network1)
 	if(node2)
 		node2.disconnect(src)
-		del(network2)
+		if(network2)
+			returnToPool(network2)
 
 	node1 = null
 	node2 = null
@@ -85,12 +95,12 @@
 
 /obj/machinery/atmospherics/binary/build_network()
 	if(!network1 && node1)
-		network1 = new /datum/pipe_network()
+		network1 = getFromPool(/datum/pipe_network)
 		network1.normal_members += src
 		network1.build_network(node1, src)
 
 	if(!network2 && node2)
-		network2 = new /datum/pipe_network()
+		network2 = getFromPool(/datum/pipe_network)
 		network2.normal_members += src
 		network2.build_network(node2, src)
 
@@ -126,11 +136,19 @@
 
 /obj/machinery/atmospherics/binary/disconnect(obj/machinery/atmospherics/reference)
 	if(reference==node1)
-		del(network1)
+		if(network1)
+			returnToPool(network1)
 		node1 = null
 
 	else if(reference==node2)
-		del(network2)
+		if(network2)
+			returnToPool(network2)
 		node2 = null
 
 	return null
+
+/obj/machinery/atmospherics/binary/unassign_network(datum/pipe_network/reference)
+	if(network1 == reference)
+		network1 = null
+	if(network2 == reference)
+		network2 = null

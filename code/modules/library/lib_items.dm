@@ -34,33 +34,29 @@
 
 /obj/structure/bookcase/attackby(obj/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/book))
-		user.drop_item()
-		O.loc = src
+		user.drop_item(O, src)
 		update_icon()
 	else if(istype(O, /obj/item/weapon/tome))
-		user.drop_item()
-		O.loc = src
+		user.drop_item(O, src)
 		update_icon()
 	else if(istype(O, /obj/item/weapon/spellbook))
-		user.drop_item()
-		O.loc = src
+		user.drop_item(O, src)
 		update_icon()
 	else if(istype(O, /obj/item/weapon/storage/bible))
-		user.drop_item()
-		O.loc = src
+		user.drop_item(O, src)
 		update_icon()
-	else if(istype(O, /obj/item/weapon/wrench))
-		user << "<span class='notice'> Now disassembling bookcase</span>"
+	else if(istype(O, /obj/item/weapon/screwdriver))
+		user << "<span class='notice'>Now disassembling [src]</span>"
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		if(do_after(user,50))
-			new /obj/item/stack/sheet/wood(get_turf(src))
-			new /obj/item/stack/sheet/wood(get_turf(src))
-			new /obj/item/stack/sheet/wood(get_turf(src))
-			new /obj/item/stack/sheet/wood(get_turf(src))
-			new /obj/item/stack/sheet/wood(get_turf(src))
+		if(do_after(user, src,50))
+			getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 5)
 			density = 0
 			qdel(src)
 		return
+	else if(istype(O, /obj/item/weapon/wrench))
+		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+		user << (anchored ? "<span class='notice'>You unfasten the [src] from the floor.</span>" : "<span class='notice'>You secure the [src] to the floor.</span>")
+		anchored = !anchored
 	else if(istype(O, /obj/item/weapon/pen))
 		var/newname = stripped_input(usr, "What would you like to title this bookshelf?")
 		if(!newname)
@@ -76,15 +72,13 @@
 			else
 		if (src.health <= 0)
 			visible_message("<span class=warning>The bookcase is smashed apart!</span>")
-			new /obj/item/stack/sheet/wood(get_turf(src))
-			new /obj/item/stack/sheet/wood(get_turf(src))
-			new /obj/item/stack/sheet/wood(get_turf(src))
+			getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 3)
 			qdel(src)
 		..()
 
 /obj/structure/bookcase/attack_hand(var/mob/user as mob)
 	if(contents.len)
-		var/obj/item/weapon/book/choice = input("Which book would you like to remove from the shelf?") in contents as obj|null
+		var/obj/item/weapon/book/choice = input("Which book would you like to remove from the shelf?") as null|obj in contents
 		if(choice)
 			if(!usr.canmove || usr.stat || usr.restrained() || !in_range(loc, usr))
 				return
@@ -165,7 +159,7 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = 3		 //upped to three because books are, y'know, pretty big. (and you could hide them inside eachother recursively forever)
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	attack_verb = list("bashed", "whacked", "educated")
 
 	autoignition_temperature = AUTOIGNITION_PAPER
@@ -177,7 +171,20 @@
 	var/unique = 0   // 0 - Normal book, 1 - Should not be treated as normal book, unable to be copied, unable to be modified
 	var/title		 // The real name of the book.
 	var/carved = 0	 // Has the book been hollowed out for use as a secret storage item?
-	var/obj/item/store	//What's in the book?
+	var/wiki_page       // Title of the book's wiki page.
+	var/forbidden = 0     // Prevent ordering of this book. (0=no, 1=yes, 2=emag only)
+	var/obj/item/store	// What's in the book?
+
+/obj/item/weapon/book/New()
+	..()
+	if(wiki_page)
+		dat = {"
+		<html>
+			<body>
+				<iframe width='100%' height='100%' src="http://ss13.pomf.se/wiki/index.php?title=[wiki_page]&printable=yes"></iframe>
+			</body>
+		</html>
+		"}
 
 /obj/item/weapon/book/cultify()
 	new /obj/item/weapon/tome(loc)
@@ -204,8 +211,7 @@
 	if(carved)
 		if(!store)
 			if(W.w_class < 3)
-				user.drop_item()
-				W.loc = src
+				user.drop_item(W, src)
 				store = W
 				user << "<span class='notice'>You put [W] in [title].</span>"
 				return
@@ -274,10 +280,10 @@
 							return
 					scanner.computer.inventory.Add(src)
 					user << "[W]'s screen flashes: 'Book stored in buffer. Title added to general inventory.'"
-	else if(istype(W, /obj/item/weapon/kitchenknife) || istype(W, /obj/item/weapon/wirecutters))
+	else if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large) || istype(W, /obj/item/weapon/wirecutters))
 		if(carved)	return
 		user << "<span class='notice'>You begin to carve out [title].</span>"
-		if(do_after(user, 30))
+		if(do_after(user, src, 30))
 			user << "<span class='notice'>You carve out the pages from [title]! You didn't want to read it anyway.</span>"
 			carved = 1
 			return
@@ -295,8 +301,8 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = 1.0
-	flags = FPRINT | TABLEPASS
-	var/obj/machinery/librarycomp/computer // Associated computer - Modes 1 to 3 use this
+	flags = FPRINT
+	var/obj/machinery/computer/library/checkout/computer // Associated computer - Modes 1 to 3 use this
 	var/obj/item/weapon/book/book	 //  Currently scanned book
 	var/mode = 0 					// 0 - Scan only, 1 - Scan and Set Buffer, 2 - Scan and Attempt to Check In, 3 - Scan and Attempt to Add to Inventory
 

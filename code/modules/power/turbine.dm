@@ -22,7 +22,6 @@
 	anchored = 1
 	density = 1
 	var/obj/machinery/compressor/compressor
-	directwired = 1
 	var/turf/simulated/outturf
 	var/lastgen
 
@@ -38,7 +37,7 @@
 	var/id_tag = 0
 	var/door_status = 0
 
-	l_color = "#0000FF"
+	light_color = LIGHT_COLOR_BLUE
 
 // the inlet stage of the gas turbine electricity generator
 
@@ -60,7 +59,7 @@
 /obj/machinery/compressor/process()
 	if(!starter)
 		return
-	overlays.Cut()
+	overlays.len = 0
 	if(stat & BROKEN)
 		return
 	if(!turbine)
@@ -115,7 +114,7 @@
 /obj/machinery/power/turbine/process()
 	if(!compressor.starter)
 		return
-	overlays.Cut()
+	overlays.len = 0
 	if(stat & BROKEN)
 		return
 	if(!compressor)
@@ -157,7 +156,7 @@
 
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\power\turbine.dm:156: t += "Generated power : [round(lastgen)] W<BR><BR>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\\power\turbine.dm:156: t += "Generated power : [round(lastgen)] W<BR><BR>"
 	t += {"Generated power : [round(lastgen)] W<BR><BR>
 		Turbine: [round(compressor.rpm)] RPM<BR>
 		Starter: [ compressor.starter ? "<A href='?src=\ref[src];str=1'>Off</A> <B>On</B>" : "<B>Off</B> <A href='?src=\ref[src];str=1'>On</A>"]
@@ -170,15 +169,15 @@
 	return
 
 /obj/machinery/power/turbine/Topic(href, href_list)
+	if(!isAI(usr) && usr.z != z) return 1
 	..()
 	if(stat & BROKEN)
 		return
 	if (usr.stat || usr.restrained() )
 		return
-	if (!(istype(usr, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
-		if(!istype(usr, /mob/living/silicon/ai))
-			usr << "\red You don't have the dexterity to do this!"
-			return
+	if (!usr.dexterity_check())
+		usr << "<span class='warning'>You don't have the dexterity to do this!</span>"
+		return
 
 	if (( usr.machine==src && ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
 
@@ -218,16 +217,16 @@
 			if(id_tag == C.comp_id)
 				compressor = C
 		doors = new /list()
-		for(var/obj/machinery/door/poddoor/P in machines)
+		for(var/obj/machinery/door/poddoor/P in poddoors)
 			if(P.id_tag == id_tag)
 				doors += P
 
 /obj/machinery/computer/turbine_computer/attackby(I as obj, user as mob)
 	if(istype(I, /obj/item/weapon/screwdriver))
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-		if(do_after(user, 20))
+		if(do_after(user, src, 20))
 			if (src.stat & BROKEN)
-				user << "\blue The broken glass falls out."
+				user << "<span class='notice'>The broken glass falls out.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				getFromPool(/obj/item/weapon/shard, loc)
 				var/obj/item/weapon/circuitboard/turbine_control/M = new /obj/item/weapon/circuitboard/turbine_control( A )
@@ -240,7 +239,7 @@
 				A.anchored = 1
 				del(src)
 			else
-				user << "\blue You disconnect the monitor."
+				user << "<span class='notice'>You disconnect the monitor.</span>"
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				var/obj/item/weapon/circuitboard/turbine_control/M = new /obj/item/weapon/circuitboard/turbine_control( A )
 				for (var/obj/C in src)
@@ -271,7 +270,7 @@
 		\n<BR>
 		\n"}
 	else
-		dat += "\red<B>No compatible attached compressor found."
+		dat += "<span class='warning'><B>No compatible attached compressor found.</span>"
 
 	user << browse(dat, "window=computer;size=400x500")
 	onclose(user, "computer")

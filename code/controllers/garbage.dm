@@ -1,18 +1,19 @@
 #define GC_COLLECTIONS_PER_TICK 300 // Was 100.
-#define GC_COLLECTION_TIMEOUT (10 SECONDS)
-#define GC_FORCE_DEL_PER_TICK 20
+#define GC_COLLECTION_TIMEOUT (30 SECONDS)
+#define GC_FORCE_DEL_PER_TICK 60
 //#define GC_DEBUG
 
 var/list/gc_hard_del_types = new
 var/datum/garbage_collector/garbageCollector
-
+var/soft_dels = 0
 /client/verb/gc_dump_hdl()
 	set name = "(GC) Hard Del List"
 	set desc = "List types that are hard del()'d by the GC."
 	set category = "Debug"
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/verb/gc_dump_hdl()  called tick#: [world.time]")
 	for(var/A in gc_hard_del_types)
-		usr << A
+		usr << "[A] = [gc_hard_del_types[A]]"
 
 /datum/garbage_collector
 	var/list/queue = new
@@ -22,26 +23,25 @@ var/datum/garbage_collector/garbageCollector
 	var/dels_count = 0
 	var/hard_dels = 0
 
-/datum/garbage_collector/proc/addTrash(const/atom/movable/AM)
-	if(!istype(AM))
+/datum/garbage_collector/proc/addTrash(const/datum/D)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/garbage_collector/proc/addTrash() called tick#: [world.time]")
+	if(istype(D, /atom) && !istype(D, /atom/movable))
 		return
 
 	if(del_everything)
-		del(AM)
+		del(D)
 		hard_dels++
 		dels_count++
 		return
 
-	var/timeofday = world.timeofday
-	AM.timeDestroyed = timeofday
-	queue -= "\ref[AM]"
-	queue["\ref[AM]"] = timeofday
+	queue["\ref[D]"] = world.timeofday
 
 /datum/garbage_collector/proc/process()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/garbage_collector/proc/process() called tick#: [world.time]")
 	var/remainingCollectionPerTick = GC_COLLECTIONS_PER_TICK
 	var/remainingForceDelPerTick = GC_FORCE_DEL_PER_TICK
 	var/collectionTimeScope = world.timeofday - GC_COLLECTION_TIMEOUT
-
+	if(narsie_cometh) return //don't even fucking bother, its over.
 	while(queue.len && --remainingCollectionPerTick >= 0)
 		var/refID = queue[1]
 		var/destroyedAtTime = queue[refID]
@@ -49,26 +49,31 @@ var/datum/garbage_collector/garbageCollector
 		if(destroyedAtTime > collectionTimeScope)
 			break
 
-		var/atom/movable/AM = locate(refID)
-
-		// Something's still referring to the qdel'd object. Kill it.
-		if(AM && AM.timeDestroyed == destroyedAtTime)
+		var/datum/D = locate(refID)
+		if(D) // Something's still referring to the qdel'd object. del it.
+			if(isnull(D.gcDestroyed))
+				queue -= refID
+				continue
 			if(remainingForceDelPerTick <= 0)
 				break
 
 			#ifdef GC_DEBUG
-			WARNING("gc process force delete [AM.type]")
+			WARNING("gc process force delete [D.type]")
 			#endif
 
-			gc_hard_del_types |= "[AM.type]"
+			if(istype(D, /atom/movable))
+				var/atom/movable/AM = D
+				AM.hard_deleted = 1
 
-			del(AM)
+			del D
 
 			hard_dels++
 			remainingForceDelPerTick--
-
-		queue.Cut(1, 2)
-		dels_count++
+			if(world.cpu > 80)
+				#ifdef GG_DEBUG
+				WARNING("GC process sleeping due to high CPU usage!")
+				#endif
+				sleep(calculateticks(2))
 
 #ifdef GC_DEBUG
 #undef GC_DEBUG
@@ -78,30 +83,44 @@ var/datum/garbage_collector/garbageCollector
 #undef GC_COLLECTION_TIMEOUT
 #undef GC_COLLECTIONS_PER_TICK
 
+/datum/garbage_collector/proc/dequeue(id)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/garbage_collector/proc/dequeue() called tick#: [world.time]")
+	if (queue)
+		queue -= id
+
+	dels_count++
+
 /*
- * NEVER USE THIS FOR ANYTHING OTHER THAN /atom/movable
- * OTHER TYPES CANNOT BE QDEL'D BECAUSE THEIR LOC IS LOCKED OR THEY DON'T HAVE ONE.
+ * NEVER USE THIS FOR /atom OTHER THAN /atom/movable
+ * BASE ATOMS CANNOT BE QDEL'D BECAUSE THEIR LOC IS LOCKED.
  */
-/proc/qdel(const/atom/movable/AM)
-	if(isnull(AM))
+/proc/qdel(const/datum/D, ignore_pooling = 0, ignore_destroy = 0)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/qdel() called tick#: [world.time]")
+	if(isnull(D))
 		return
 
 	if(isnull(garbageCollector))
-		del(AM)
+		del(D)
 		return
 
-	if(!istype(AM))
-		WARNING("qdel() passed object of type [AM.type]. qdel() can only handle /atom/movable types.")
-		del(AM)
+	if(istype(D, /atom) && !istype(D, /atom/movable))
+		WARNING("qdel() passed object of type [D.type]. qdel() cannot handle unmovable atoms.")
+		del(D)
 		garbageCollector.hard_dels++
 		garbageCollector.dels_count++
 		return
 
-	if(isnull(AM.gcDestroyed))
-		// Let our friend know they're about to get fucked up.
-		AM.Destroy()
+	//We are object pooling this.
+	if(("[D.type]" in masterdatumPool) && !ignore_pooling)
+		returnToPool(D)
+		return
 
-		garbageCollector.addTrash(AM)
+	if(isnull(D.gcDestroyed))
+		// Let our friend know they're about to get fucked up.
+		if(!ignore_destroy)
+			D.Destroy()
+
+		garbageCollector.addTrash(D)
 
 /datum/controller
 	var/processing = 0
@@ -109,20 +128,71 @@ var/datum/garbage_collector/garbageCollector
 	var/processing_interval = 0
 
 /datum/controller/proc/recover() // If we are replacing an existing controller (due to a crash) we attempt to preserve as much as we can.
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/controller/proc/recover() called tick#: [world.time]")
 
 /*
  * Like Del(), but for qdel.
  * Called BEFORE qdel moves shit.
  */
 /datum/proc/Destroy()
-	del(src)
+	qdel(src, 1, 1)
 
 /client/proc/qdel_toggle()
 	set name = "Toggle qdel Behavior"
 	set desc = "Toggle qdel usage between normal and force del()."
 	set category = "Debug"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/qdel_toggle() called tick#: [world.time]")
 
 	garbageCollector.del_everything = !garbageCollector.del_everything
 	world << "<b>GC: qdel turned [garbageCollector.del_everything ? "off" : "on"].</b>"
 	log_admin("[key_name(usr)] turned qdel [garbageCollector.del_everything ? "off" : "on"].")
-	message_admins("\blue [key_name(usr)] turned qdel [garbageCollector.del_everything ? "off" : "on"].", 1)
+	message_admins("<span class='notice'>[key_name(usr)] turned qdel [garbageCollector.del_everything ? "off" : "on"].</span>", 1)
+
+/*/client/var/running_find_references
+
+/atom/verb/find_references()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/atom/verb/find_references()  called tick#: [world.time]")
+	set category = "Debug"
+	set name = "Find References"
+	set background = 1
+	set src in world
+
+	if(!usr || !usr.client)
+		return
+
+	if(usr.client.running_find_references)
+		testing("CANCELLED search for references to a [usr.client.running_find_references].")
+		usr.client.running_find_references = null
+		return
+
+	if(alert("Running this will create a lot of lag until it finishes.  You can cancel it by running it again.  Would you like to begin the search?", "Find References", "Yes", "No") == "No")
+		return
+	qdel(src)
+	// Remove this object from the list of things to be auto-deleted.
+	if(garbageCollector)
+		garbageCollector.queue -= "\ref[src]"
+
+	usr.client.running_find_references = type
+	testing("Beginning search for references to a [type].")
+	var/list/things = list()
+	for(var/client/thing)
+		things += thing
+	for(var/datum/thing)
+		things += thing
+	for(var/atom/thing)
+		things += thing
+	for(var/event/thing)
+		things += thing
+	testing("Collected list of things in search for references to a [type]. ([things.len] Thing\s)")
+	for(var/datum/thing in things)
+		if(!usr.client.running_find_references) return
+		for(var/varname in thing.vars)
+			var/variable = thing.vars[varname]
+			if(variable == src)
+				testing("Found [src.type] \ref[src] in [thing.type]'s [varname] var.")
+			else if(islist(variable))
+				if(src in variable)
+					testing("Found [src.type] \ref[src] in [thing.type]'s [varname] list var.")
+	testing("Completed search for references to a [type].")
+	usr.client.running_find_references = null
+*/

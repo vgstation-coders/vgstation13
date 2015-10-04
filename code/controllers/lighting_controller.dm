@@ -1,4 +1,4 @@
-var/global/datum/controller/lighting/lighting_controller = new ()
+var/global/datum/controller/lighting/lighting_controller = new
 
 datum/controller/lighting
 	processing_interval = 5 // Setting this too low will probably kill the server. Don't be silly with it!
@@ -33,6 +33,7 @@ datum/controller/lighting
 //than deleting them). Processing interval should be roughly half a second for best results.
 //By using queues we are ensuring we don't perform more updates than are necessary
 datum/controller/lighting/proc/process()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\datum/controller/lighting/proc/process() called tick#: [world.time]")
 	processing = 1
 	spawn(0)
 		set background = BACKGROUND_ENABLED
@@ -46,7 +47,8 @@ datum/controller/lighting/proc/process()
 					var/datum/light_source/L = lights[i]
 					if(L && !L.check())
 						continue
-					lights.Cut(i,i+1)
+					if(lights.Remove(null))
+						lights.Cut(i,i+1)
 					i--
 
 				sleep(-1)
@@ -56,7 +58,7 @@ datum/controller/lighting/proc/process()
 					var/turf/T = changed_turfs[i]
 					if(T && T.lighting_changed)
 						T.shift_to_subarea()
-				changed_turfs.Cut()		// reset the changed list
+				changed_turfs.len = 0		// reset the changed list
 
 				process_cost = (world.timeofday - started)
 
@@ -67,13 +69,14 @@ datum/controller/lighting/proc/process()
 //Note: if we get additional z-levels at runtime (e.g. if the gateway thin ever gets finished) we can initialize specific
 //z-levels with the z_level argument
 datum/controller/lighting/proc/Initialize(var/z_level)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\datum/controller/lighting/proc/Initialize() called tick#: [world.time]")
 	processing = 0
 	spawn(-1)
 		set background = BACKGROUND_ENABLED
 		for(var/i=1, i<=lights.len, i++)
 			var/datum/light_source/L = lights[i]
 			if(L.check())
-				lights.Cut(i,i+1)
+				lights.Remove(L)
 				i--
 
 		var/z_start = 1
@@ -90,7 +93,7 @@ datum/controller/lighting/proc/Initialize(var/z_level)
 					var/turf/T = locate(i,j,k)
 					if(T)	T.shift_to_subarea()
 
-		changed_turfs.Cut()		// reset the changed list
+		changed_turfs.len = 0		// reset the changed list
 
 
 //Used to strip valid information from an existing controller and transfer it to a replacement

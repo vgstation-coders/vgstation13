@@ -4,7 +4,9 @@
 
 //RELEASE PASSENGERS
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/release_passengers(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/release_passengers(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/release_passengers() called tick#: [world.time]")
 
 	unloading = 1
 	flick("icon_free-push",bususer.gui_icons.adminbus_free)
@@ -16,7 +18,7 @@
 			freed(L)
 		else if(isbot(A))
 			var/obj/machinery/bot/B = A
-			B.loc = get_step(src,turn(src.dir,-90))
+			B.forceMove(get_step(src,turn(src.dir,-90)))
 			B.turn_on()
 			B.flags &= ~INVULNERABLE
 			B.anchored = 0
@@ -28,9 +30,9 @@
 
 	return
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/freed(var/mob/living/L)
-	L.loc = get_step(src,turn(src.dir,-90))
-	L.buckled = null
+/obj/structure/bed/chair/vehicle/adminbus/proc/freed(var/mob/living/L)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/freed() called tick#: [world.time]")
+	L.forceMove(get_step(src, turn(src.dir, -90)))
 	L.anchored = 0
 	L.flags &= ~INVULNERABLE
 	L.captured = 0
@@ -42,7 +44,8 @@
 	update_rearview()
 
 //MOB SPAWNING
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/spawn_mob(mob/bususer,var/mob_type,var/count)
+/obj/structure/bed/chair/vehicle/adminbus/proc/spawn_mob(mob/bususer,var/mob_type,var/count)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/spawn_mob() called tick#: [world.time]")
 	switch(mob_type)
 		if(1)
 			flick("icon_spclown-push",bususer.gui_icons.adminbus_spclowns)
@@ -105,7 +108,9 @@
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-16,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#525288")
 		sleep(5)
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/remove_mobs(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/remove_mobs(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/remove_mobs() called tick#: [world.time]")
 
 	flick("icon_delmobs-push",bususer.gui_icons.adminbus_delmobs)
 
@@ -121,7 +126,8 @@
 
 //SINGULARITY/NARSIE HOOK&CHAIN
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/capture_singulo(var/obj/machinery/singularity/S)
+/obj/structure/bed/chair/vehicle/adminbus/proc/capture_singulo(var/obj/machinery/singularity/S)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/capture_singulo() called tick#: [world.time]")
 	for(var/atom/A in hookshot)																//first we remove the hookshot and its chain
 		qdel(A)
 	hookshot.len = 0
@@ -147,7 +153,9 @@
 	chain += A																				//once the anchor has reached the singulo, it parents itself to the last element in the chain
 	A.target = singulo																		//and stays on top of the singulo.
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/throw_hookshot(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/throw_hookshot(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/throw_hookshot() called tick#: [world.time]")
 
 	if(!hook && !singulo)
 		return
@@ -156,18 +164,18 @@
 		bususer.gui_icons.adminbus_hook.icon_state = "icon_hook-push"
 		var/obj/structure/singulo_chain/anchor/A = locate(/obj/structure/singulo_chain/anchor) in chain
 		if(A)
-			del(A)//so we don't drag the singulo back to us along with the rest of the chain.
+			qdel(A)//so we don't drag the singulo back to us along with the rest of the chain.
 		singulo.on_release()
 		singulo = null
 		while(chain_base)
 			var/obj/structure/singulo_chain/C = chain_base
 			C.move_child(get_turf(src))
 			chain_base = C.child
-			del(C)
+			qdel(C)
 			sleep(2)
 
 		for(var/obj/structure/singulo_chain/N in chain)//Just in case some bits of the chain were detached from the bus for whatever reason
-			del(N)
+			qdel(N)
 		chain.len = 0
 
 		if(!singulo)
@@ -192,17 +200,22 @@
 
 /////////////////
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/mass_rejuvinate(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/mass_rejuvinate(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/mass_rejuvinate() called tick#: [world.time]")
 
 	flick("icon_massrejuv-push",bususer.gui_icons.adminbus_massrejuv)
 
 	for(var/mob/living/M in orange(src,3))
-		M.revive()
+		M.revive(1)
+		M.suiciding = 0
 		M << "<span class='notice'>THE ADMINBUS IS LOVE. THE ADMINBUS IS LIFE.</span>"
 		sleep(2)
 	update_rearview()
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/toggle_lights(mob/bususer,var/lightpower=0)
+/obj/structure/bed/chair/vehicle/adminbus/proc/toggle_lights(mob/bususer,var/lightpower=0)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/toggle_lights() called tick#: [world.time]")
 
 	if(lightpower == roadlights)
 		return
@@ -212,30 +225,32 @@
 			bususer.gui_icons.adminbus_roadlights_0.icon_state = "icon_lights_0-on"
 			bususer.gui_icons.adminbus_roadlights_1.icon_state = "icon_lights_1-off"
 			bususer.gui_icons.adminbus_roadlights_2.icon_state = "icon_lights_2-off"
-			lightsource.SetLuminosity(0)
+			lightsource.set_light(0)
 			if(roadlights == 1 || roadlights == 2)
-				overlays -= image(icon,"roadlights",LIGHTING_LAYER+1)
+				overlays -= image(icon,"roadlights", LIGHTING_LAYER + 1)
 			roadlights = 0
 		if(1)
 			bususer.gui_icons.adminbus_roadlights_0.icon_state = "icon_lights_0-off"
 			bususer.gui_icons.adminbus_roadlights_1.icon_state = "icon_lights_1-on"
 			bususer.gui_icons.adminbus_roadlights_2.icon_state = "icon_lights_2-off"
-			lightsource.SetLuminosity(2)
+			lightsource.set_light(2)
 			if(roadlights == 0)
-				overlays += image(icon,"roadlights",LIGHTING_LAYER+1)
+				overlays += image(icon,"roadlights", LIGHTING_LAYER + 1)
 			roadlights = 1
 		if(2)
 			bususer.gui_icons.adminbus_roadlights_0.icon_state = "icon_lights_0-off"
 			bususer.gui_icons.adminbus_roadlights_1.icon_state = "icon_lights_1-off"
 			bususer.gui_icons.adminbus_roadlights_2.icon_state = "icon_lights_2-on"
-			lightsource.SetLuminosity(3)
+			lightsource.set_light(3)
 			if(roadlights == 0)
-				overlays += image(icon,"roadlights",LIGHTING_LAYER+1)
+				overlays += image(icon,"roadlights", LIGHTING_LAYER + 1)
 			roadlights = 2
 
 	update_lightsource()
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/toggle_bumpers(mob/bususer,var/bumperpower=1)
+/obj/structure/bed/chair/vehicle/adminbus/proc/toggle_bumpers(mob/bususer,var/bumperpower=1)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/toggle_bumpers() called tick#: [world.time]")
 
 	if(bumperpower == bumpers)
 		return
@@ -258,7 +273,9 @@
 			bumpers = 3
 
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/toggle_door(mob/bususer,var/doorstate=0)
+/obj/structure/bed/chair/vehicle/adminbus/proc/toggle_door(mob/bususer,var/doorstate=0)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/toggle_door() called tick#: [world.time]")
 
 	if(doorstate == door_mode)
 		return
@@ -275,7 +292,8 @@
 			door_mode = 1
 			overlays += image(icon,"opendoor")
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/loadsa_goodies(mob/bususer,var/goodie_type)
+/obj/structure/bed/chair/vehicle/adminbus/proc/loadsa_goodies(mob/bususer,var/goodie_type)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/loadsa_goodies() called tick#: [world.time]")
 	switch(goodie_type)
 		if(1)
 			flick("icon_loadsids-push",bususer.gui_icons.adminbus_loadsids)
@@ -316,34 +334,38 @@
 				var/obj/item/C = new fuckingmoney(src.loc)
 				C.throw_at(pick(throwzone),rand(2,5),0)
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/give_bombs(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/give_bombs(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/give_bombs() called tick#: [world.time]")
 
 	flick("icon_givebombs-push",bususer.gui_icons.adminbus_givebombs)
 
 	var/distributed = 0
 
-	if(buckled_mob && iscarbon(buckled_mob))
-		if(!(buckled_mob.r_hand))
-			var/obj/item/device/fuse_bomb/admin/B = new /obj/item/device/fuse_bomb/admin(buckled_mob)
-			spawnedbombs += B
-			buckled_mob.equip_to_slot_or_del(B, slot_r_hand)
-			buckled_mob << "<span class='warning'>Lit and throw!</span>"
-			buckled_mob.update_inv_r_hand()
-		else if(!(buckled_mob.l_hand))
-			var/obj/item/device/fuse_bomb/admin/B = new /obj/item/device/fuse_bomb/admin(buckled_mob)
-			spawnedbombs += B
-			buckled_mob.equip_to_slot_or_del(B, slot_l_hand)
-			buckled_mob << "<span class='warning'>Lit and throw!</span>"
-			buckled_mob.update_inv_l_hand()
+	if(locked_atoms.len)
+		var/mob/living/M = locked_atoms[1]
+		if(iscarbon(M))
+			if(!M.r_hand)
+				var/obj/item/device/fuse_bomb/admin/B = new /obj/item/device/fuse_bomb/admin(M)
+				spawnedbombs += B
+				M.equip_to_slot_or_del(B, slot_r_hand)
+				M << "<span class='warning'>Lit and throw!</span>"
+				M.update_inv_r_hand()
+			else if(!M.l_hand)
+				var/obj/item/device/fuse_bomb/admin/B = new /obj/item/device/fuse_bomb/admin(M)
+				spawnedbombs += B
+				M.equip_to_slot_or_del(B, slot_l_hand)
+				M << "<span class='warning'>Lit and throw!</span>"
+				M.update_inv_l_hand()
 	for(var/mob/living/carbon/C in passengers)
-		if(!(C.r_hand))
+		if(!C.r_hand)
 			var/obj/item/device/fuse_bomb/admin/B = new /obj/item/device/fuse_bomb/admin(C)
 			spawnedbombs += B
 			C.equip_to_slot_or_del(B, slot_r_hand)
 			C << "<span class='warning'>Our benefactors have provided you with a bomb. Lit and throw!</span>"
 			distributed++
 			C.update_inv_r_hand()
-		else if(!(C.l_hand))
+		else if(!C.l_hand)
 			var/obj/item/device/fuse_bomb/admin/B = new /obj/item/device/fuse_bomb/admin(C)
 			spawnedbombs += B
 			C.equip_to_slot_or_del(B, slot_l_hand)
@@ -354,7 +376,9 @@
 	update_rearview()
 	bususer << "[distributed] bombs distributed to passengers.</span>"
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/delete_bombs(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/delete_bombs(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/delete_bombs() called tick#: [world.time]")
 
 	flick("icon_delgiven-push",bususer.gui_icons.adminbus_delbombs)
 
@@ -380,25 +404,29 @@
 	bususer << "Deleted all [distributed] bombs.</span>"
 
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/give_lasers(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/give_lasers(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/give_lasers() called tick#: [world.time]")
 
 	flick("icon_givelasers-push",bususer.gui_icons.adminbus_givelasers)
 
 	var/distributed = 0
 
-	if(buckled_mob && iscarbon(buckled_mob))
-		if(!(buckled_mob.r_hand))
-			var/obj/item/weapon/gun/energy/laser/admin/L = new /obj/item/weapon/gun/energy/laser/admin(buckled_mob)
-			spawnedlasers += L
-			buckled_mob.equip_to_slot_or_del(L, slot_r_hand)
-			buckled_mob << "<span class='warning'>Spray and /pray!</span>"
-			buckled_mob.update_inv_r_hand()
-		else if(!(buckled_mob.l_hand))
-			var/obj/item/weapon/gun/energy/laser/admin/L = new /obj/item/weapon/gun/energy/laser/admin(buckled_mob)
-			spawnedlasers += L
-			buckled_mob.equip_to_slot_or_del(L, slot_l_hand)
-			buckled_mob << "<span class='warning'>Spray and /pray!</span>"
-			buckled_mob.update_inv_l_hand()
+	if(locked_atoms.len)
+		var/mob/living/M = locked_atoms[1]
+		if(iscarbon(M))
+			if(!M.r_hand)
+				var/obj/item/weapon/gun/energy/laser/admin/L = new /obj/item/weapon/gun/energy/laser/admin(M)
+				spawnedlasers += L
+				M.equip_to_slot_or_del(L, slot_r_hand)
+				M << "<span class='warning'>Spray and /pray!</span>"
+				M.update_inv_r_hand()
+			else if(!M.l_hand)
+				var/obj/item/weapon/gun/energy/laser/admin/L = new /obj/item/weapon/gun/energy/laser/admin(M)
+				spawnedlasers += L
+				M.equip_to_slot_or_del(L, slot_l_hand)
+				M << "<span class='warning'>Spray and /pray!</span>"
+				M.update_inv_l_hand()
 
 	for(var/mob/living/carbon/C in passengers)
 		if(!(C.r_hand))
@@ -419,7 +447,9 @@
 	update_rearview()
 	bususer << "[distributed] infinite laser guns distributed to passengers.</span>"
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/delete_lasers(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/delete_lasers(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/delete_lasers() called tick#: [world.time]")
 
 	flick("icon_delgiven-push",bususer.gui_icons.adminbus_dellasers)
 
@@ -444,7 +474,9 @@
 	update_rearview()
 	bususer << "Deleted all [distributed] laser guns.</span>"
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Mass_Repair(mob/bususer,var/turf/centerloc=null,var/repair_range=3)//the proc can be called by others, doing (null, <center of the area you want to repair>, <radius of the area you want to repair>)
+/obj/structure/bed/chair/vehicle/adminbus/proc/Mass_Repair(mob/bususer,var/turf/centerloc=null,var/repair_range=3)//the proc can be called by others, doing (null, <center of the area you want to repair>, <radius of the area you want to repair>)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Mass_Repair() called tick#: [world.time]")
 
 	if(bususer)
 		flick("icon_massrepair-push",bususer.gui_icons.adminbus_massrepair)
@@ -497,10 +529,12 @@
 		if(istype(S,/obj/item/weapon/shard/plasma))
 			new/obj/item/stack/sheet/glass/plasmaglass(S.loc)
 		else
-			new/obj/item/stack/sheet/glass(S.loc)
+			new/obj/item/stack/sheet/glass/glass(S.loc)
 		qdel(S)
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Teleportation(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/Teleportation(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Teleportation() called tick#: [world.time]")
 
 	if(warp.icon_state == "warp_activated")
 		return
@@ -531,12 +565,13 @@
 	var/turf/T2 = pick(L)
 	bususer.gui_icons.adminbus_tele.icon_state = "icon_teleport"
 	warp.icon_state = ""
-	src.loc = T2
-	src.Move()
+	forceMove(T2)
 	T1.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-32,MOB_LAYER+1,'sound/effects/busteleport.ogg')
 	T2.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-32,MOB_LAYER+1,'sound/effects/busteleport.ogg')
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Obs(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Obs(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Obs() called tick#: [world.time]")
 
 	if(passengers.len == 0)
 		flick("icon_tdobs-flick",bususer.gui_icons.adminbus_tdobs)
@@ -572,17 +607,17 @@
 
 */
 
-			M.loc = pick(tdomeobserve)
+			M.forceMove(pick(tdomeobserve))
 			M << "<span class='notice'>You have been sent to the Thunderdome. Thank you for riding with us and enjoy your games.</span>"
 
 		else if(isbot(A))
 			var/obj/machinery/bot/B = A
-			B.loc = get_step(src,turn(src.dir,-90))
+			B.forceMove(get_step(src,turn(src.dir,-90)))
 			B.turn_on()
 			B.flags &= ~INVULNERABLE
 			B.anchored = 0
 			passengers -= B
-			B.loc = pick(tdomeobserve)
+			B.forceMove(pick(tdomeobserve))
 
 		var/turf/TD = get_turf(A)
 		if(TD)
@@ -590,7 +625,9 @@
 
 		sleep(1)
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Arena(mob/bususer)//this one sends an equal number of fighter to each side.
+/obj/structure/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Arena(mob/bususer)//this one sends an equal number of fighter to each side.
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Arena() called tick#: [world.time]")
 
 	if(passengers.len == 0)
 		flick("icon_tdarena-flick",bususer.gui_icons.adminbus_tdarena)
@@ -620,7 +657,9 @@
 
 	bususer << "The passengers' belongings were stored inside the Thunderdome's admin lodge."
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Arena_Green(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Arena_Green(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Arena_Green() called tick#: [world.time]")
 
 	if(passengers.len == 0)
 		flick("icon_tdgreen-flick",bususer.gui_icons.adminbus_tdgreen)
@@ -643,7 +682,9 @@
 
 	bususer << "The passengers' belongings were stored inside the Thunderdome's admin lodge."
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Arena_Red(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Arena_Red(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Arena_Red() called tick#: [world.time]")
 
 	if(passengers.len == 0)
 		flick("icon_tdred-flick",bususer.gui_icons.adminbus_tdred)
@@ -666,7 +707,8 @@
 
 	bususer << "The passengers' belongings were stored inside the Thunderdome's admin lodge."
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/join_team(var/atom/A, var/team)
+/obj/structure/bed/chair/vehicle/adminbus/proc/join_team(var/atom/A, var/team)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/join_team() called tick#: [world.time]")
 	if(isliving(A))
 		var/mob/living/M = A
 		freed(M)
@@ -786,7 +828,7 @@
 
 	else if(isbot(A))
 		var/obj/machinery/bot/B = A
-		B.loc = get_step(src,turn(src.dir,-90))
+		B.forceMove(get_step(src,turn(src.dir,-90)))
 		B.turn_on()
 		B.flags &= ~INVULNERABLE
 		B.anchored = 0
@@ -830,7 +872,9 @@
 	icon_state = "belongings-red"
 	desc = "Items belonging to one of the Thunderdome contestants."
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Send_Home(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/Send_Home(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Send_Home() called tick#: [world.time]")
 
 	if(passengers.len == 0)
 		flick("icon_home-flick",bususer.gui_icons.adminbus_home)
@@ -855,7 +899,9 @@
 		if(T2)
 			T2.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg')
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Make_Antag(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/Make_Antag(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Make_Antag() called tick#: [world.time]")
 
 	if(passengers.len == 0)
 		flick("icon_antag-flick",bususer.gui_icons.adminbus_antag)
@@ -890,12 +936,14 @@
 
 	bususer.gui_icons.adminbus_antag.icon_state = "icon_antag"
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/antagify_passengers(var/delay)
+/obj/structure/bed/chair/vehicle/adminbus/proc/antagify_passengers(var/delay)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/antagify_passengers() called tick#: [world.time]")
 	for(var/mob/M in passengers)
 		spawn()
 			Delay_Antag(M, delay)
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Delay_Antag(var/mob/M,var/delay=100)
+/obj/structure/bed/chair/vehicle/adminbus/proc/Delay_Antag(var/mob/M,var/delay=100)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Delay_Antag() called tick#: [world.time]")
 	if(!M.mind)	return
 	if(!ishuman(M) && !ismonkey(M))	return
 
@@ -913,13 +961,17 @@
 
 	antag_madness_adminbus(M)
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Mounted_Jukebox(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/Mounted_Jukebox(mob/bususer)
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Mounted_Jukebox() called tick#: [world.time]")
 
 	flick("icon_jukebox-push",bususer.gui_icons.adminbus_juke)
 
 	busjuke.attack_hand(bususer)
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Adminbus_Deletion(mob/bususer)//make sure to always use this proc when deleting an adminbus
+/obj/structure/bed/chair/vehicle/adminbus/proc/Adminbus_Deletion(mob/bususer)//make sure to always use this proc when deleting an adminbus
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/Adminbus_Deletion() called tick#: [world.time]")
 
 	if(bususer)
 		bususer.gui_icons.adminbus_delete.icon_state = "icon_delete-push"
@@ -969,7 +1021,8 @@
 	var/turf/T = get_turf(src)
 	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-32,MOB_LAYER+1,'sound/effects/busteleport.ogg')
 
-	if(buckled_mob)
-		buckled_mob.hud_used.remove_adminbus_hud()
+	if(locked_atoms.len)
+		var/mob/living/M = locked_atoms[1]
+		M.hud_used.remove_adminbus_hud()
 
 	del(src)//RIP ADMINBUS

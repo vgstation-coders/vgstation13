@@ -1,4 +1,5 @@
 /mob/living/carbon/human/proc/monkeyize()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/monkeyize() called tick#: [world.time]")
 	if (monkeyizing)
 		return
 	for(var/obj/item/W in src)
@@ -14,14 +15,9 @@
 	invisibility = 101
 
 	for(var/t in organs)
-		del(t)
-	var/atom/movable/overlay/animation = new /atom/movable/overlay( loc )
-	animation.icon_state = "blank"
-	animation.icon = 'icons/mob/mob.dmi'
-	animation.master = src
-	flick("h2monkey", animation)
-	sleep(48)
-	//animation = null
+		qdel(t)
+	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "h2monkey", sleeptime = 15)
+	sleep(33)
 
 	if(!species.primitive) //If the creature in question has no primitive set, this is going to be messy.
 		gib()
@@ -29,7 +25,7 @@
 
 	var/mob/living/carbon/monkey/O = null
 
-	O = new species.primitive(loc)
+	O = new species.primitive(get_turf(src))
 
 	O.dna = dna.Clone()
 	O.dna.SetSEState(MONKEYBLOCK,1)
@@ -47,13 +43,12 @@
 
 	O << "<B>You are now [O]. </B>"
 
-	spawn(0)//To prevent the proc from returning null.
-		del(src)
-	del(animation)
+	qdel(src)
 
 	return O
 
 /mob/living/carbon/human/proc/Cluwneize()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/Cluwneize() called tick#: [world.time]")
 	if (monkeyizing)
 		return
 	for(var/obj/item/W in src)
@@ -64,25 +59,24 @@
 	icon = null
 	invisibility = 101
 	for(var/t in organs)	//this really should not be necessary
-		del(t)
+		qdel(t)
 
-	var/mob/living/simple_animal/hostile/retaliate/cluwne/new_mob = new (src.loc)
-	new_mob.universal_speak = 1
-	new_mob.gender=src.gender
+	var/mob/living/simple_animal/hostile/retaliate/cluwne/new_mob = new (get_turf(src))
+	new_mob.setGender(gender)
 	new_mob.name = pick(clown_names)
 	new_mob.real_name = new_mob.name
 	new_mob.mutations += M_CLUMSY
 	new_mob.mutations += M_FAT
 	new_mob.setBrainLoss(100)
-	new_mob.a_intent = "hurt"
+	new_mob.a_intent = I_HURT
 	new_mob.key = key
 
 	new_mob << "<span class='sinister'>Instantly, what was your clothes fall off, and are replaced with a mockery of all that is clowning; Disgusting-looking garb that the foulest of creatures would be afraid of wearing. Your very face begins to shape, mold, into something truely disgusting. A mask made of flesh. Your body is feeling the worst pain it has ever felt. As you think it cannot get any worse, one of your arms turns into a horrific meld of flesh and plastic, making a limb made entirely of bike horns.</span>"
 	new_mob << "<span class='sinister'>Your very soul is being torn apart. What was organs, blood, flesh, is now darkness. And inside the infernal void that was once a living being, something sinister takes root. As what you were goes away, you try to let out a frantic plea of 'Help me! Please god help me!' but your god has abandoned you, and all that leaves your horrible mouth is a strangled 'HONK!'.</span>"
 	new_mob.say("HONK!")
 	spawn(0)//To prevent the proc from returning null.
-		del(src)
-	return
+		qdel(src)
+	return new_mob
 
 /mob/new_player/AIize()
 	spawning = 1
@@ -92,7 +86,7 @@
 	if (monkeyizing)
 		return
 	for(var/t in organs)
-		del(t)
+		qdel(t)
 
 	return ..()
 
@@ -108,9 +102,10 @@
 	return ..()
 
 /mob/proc/AIize()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/AIize() called tick#: [world.time]")
 	if(client)
 		src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1) // stop the jams for AIs
-	var/mob/living/silicon/ai/O = new (loc, base_law_type,,1)//No MMI but safety is in effect.
+	var/mob/living/silicon/ai/O = new (get_turf(src), base_law_type,,1)//No MMI but safety is in effect.
 	O.invisibility = 0
 	O.aiRestorePowerRoutine = 0
 
@@ -164,16 +159,17 @@
 
 	O.rename_self("ai",1)
 	. = O
-	del(src)
+	qdel(src)
 
 
 //human -> robot
 /mob/living/carbon/human/proc/Robotize(var/delete_items = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/Robotize() called tick#: [world.time]")
 	if (monkeyizing)
 		return
 	for(var/obj/item/W in src)
 		if(delete_items)
-			del(W)
+			qdel(W)
 		else
 			drop_from_inventory(W)
 	regenerate_icons()
@@ -182,16 +178,16 @@
 	icon = null
 	invisibility = 101
 	for(var/t in organs)
-		del(t)
+		qdel(t)
 
-	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot( loc )
-
+	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(src))
+	. = O
 	// cyborgs produced by Robotize get an automatic power cell
 	O.cell = new(O)
 	O.cell.maxcharge = 7500
 	O.cell.charge = 7500
 
-	O.gender = gender
+	O.setGender(gender)
 	O.invisibility = 0
 
 	if(mind)		//TODO
@@ -209,14 +205,15 @@
 	O.mmi = new /obj/item/device/mmi(O)
 	O.mmi.transfer_identity(src)//Does not transfer key/client.
 
-	O.Namepick()
+	spawn() O.Namepick()
 
 	spawn(0)//To prevent the proc from returning null.
-		del(src)
-	return O
+		qdel(src)
+
 
 //human -> mommi
 /mob/living/carbon/human/proc/MoMMIfy(round_start = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/MoMMIfy() called tick#: [world.time]")
 	if (monkeyizing)
 		return
 	for(var/obj/item/W in src)
@@ -227,17 +224,17 @@
 	icon = null
 	invisibility = 101
 	for(var/t in organs)
-		del(t)
+		qdel(t)
 
-	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi( loc )
-
+	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi(get_turf(src))
+	. = O
 	// MoMMIs produced by Robotize get an automatic power cell
 	O.cell = new(O)
 	O.cell.maxcharge = (round_start ? 10000 : 15000)
 	O.cell.charge = (round_start ? 10000 : 15000)
 
 
-	O.gender = gender
+	O.setGender(gender)
 	O.invisibility = 0
 
 
@@ -256,15 +253,15 @@
 	O.mmi = new /obj/item/device/mmi(O)
 	O.mmi.transfer_identity(src)//Does not transfer key/client.
 
-	O.Namepick()
+	spawn() O.Namepick()
 
 
 	spawn(0)//To prevent the proc from returning null.
-		del(src)
-	return O
+		qdel(src)
 
 //human -> alien
 /mob/living/carbon/human/proc/Alienize()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/Alienize() called tick#: [world.time]")
 	if (monkeyizing)
 		return
 	for(var/obj/item/W in src)
@@ -275,27 +272,28 @@
 	icon = null
 	invisibility = 101
 	for(var/t in organs)
-		del(t)
+		qdel(t)
 
 	var/alien_caste = pick("Hunter","Sentinel","Drone")
 	var/mob/living/carbon/alien/humanoid/new_xeno
 	switch(alien_caste)
 		if("Hunter")
-			new_xeno = new /mob/living/carbon/alien/humanoid/hunter(loc)
+			new_xeno = new /mob/living/carbon/alien/humanoid/hunter(get_turf(src))
 		if("Sentinel")
-			new_xeno = new /mob/living/carbon/alien/humanoid/sentinel(loc)
+			new_xeno = new /mob/living/carbon/alien/humanoid/sentinel(get_turf(src))
 		if("Drone")
-			new_xeno = new /mob/living/carbon/alien/humanoid/drone(loc)
+			new_xeno = new /mob/living/carbon/alien/humanoid/drone(get_turf(src))
 
-	new_xeno.a_intent = "hurt"
+	new_xeno.a_intent = I_HURT
 	new_xeno.key = key
 
 	new_xeno << "<B>You are now an alien.</B>"
 	spawn(0)//To prevent the proc from returning null.
-		del(src)
-	return
+		qdel(src)
+	return new_xeno
 
 /mob/living/carbon/human/proc/slimeize(adult as num, reproduce as num)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/slimeize() called tick#: [world.time]")
 	if (monkeyizing)
 		return
 	for(var/obj/item/W in src)
@@ -306,32 +304,33 @@
 	icon = null
 	invisibility = 101
 	for(var/t in organs)
-		del(t)
+		qdel(t)
 
 	var/mob/living/carbon/slime/new_slime
 	if(reproduce)
 		var/number = pick(14;2,3,4)	//reproduce (has a small chance of producing 3 or 4 offspring)
 		var/list/babies = list()
 		for(var/i=1,i<=number,i++)
-			var/mob/living/carbon/slime/M = new/mob/living/carbon/slime(loc)
+			var/mob/living/carbon/slime/M = new/mob/living/carbon/slime(get_turf(src))
 			M.nutrition = round(nutrition/number)
 			step_away(M,src)
 			babies += M
 		new_slime = pick(babies)
 	else
 		if(adult)
-			new_slime = new /mob/living/carbon/slime/adult(loc)
+			new_slime = new /mob/living/carbon/slime/adult(get_turf(src))
 		else
-			new_slime = new /mob/living/carbon/slime(loc)
-	new_slime.a_intent = "hurt"
+			new_slime = new /mob/living/carbon/slime(get_turf(src))
+	new_slime.a_intent = I_HURT
 	new_slime.key = key
 
 	new_slime << "<B>You are now a slime. Skreee!</B>"
 	spawn(0)//To prevent the proc from returning null.
-		del(src)
-	return
+		qdel(src)
+	return new_slime
 
 /mob/living/carbon/human/proc/corgize()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/corgize() called tick#: [world.time]")
 	if (monkeyizing)
 		return
 	for(var/obj/item/W in src)
@@ -342,16 +341,16 @@
 	icon = null
 	invisibility = 101
 	for(var/t in organs)	//this really should not be necessary
-		del(t)
+		qdel(t)
 
-	var/mob/living/simple_animal/corgi/new_corgi = new /mob/living/simple_animal/corgi (loc)
-	new_corgi.a_intent = "hurt"
+	var/mob/living/simple_animal/corgi/new_corgi = new /mob/living/simple_animal/corgi (get_turf(src))
+	new_corgi.a_intent = I_HURT
 	new_corgi.key = key
 
 	new_corgi << "<B>You are now a Corgi. Yap Yap!</B>"
 	spawn(0)//To prevent the proc from returning null.
-		del(src)
-	return
+		qdel(src)
+	return new_corgi
 
 /mob/living/carbon/human/Animalize()
 
@@ -359,7 +358,7 @@
 	var/mobpath = input("Which type of mob should [src] turn into?", "Choose a type") in mobtypes
 
 	if(!safe_animal(mobpath))
-		usr << "\red Sorry but this mob type is currently unavailable."
+		usr << "<span class='warning'>Sorry but this mob type is currently unavailable.</span>"
 		return
 
 	if(monkeyizing)
@@ -374,35 +373,39 @@
 	invisibility = 101
 
 	for(var/t in organs)
-		del(t)
+		qdel(t)
 
-	var/mob/new_mob = new mobpath(src.loc)
+	var/mob/new_mob = new mobpath(get_turf(src))
 
 	new_mob.key = key
-	new_mob.a_intent = "hurt"
+	new_mob.a_intent = I_HURT
 
 
 	new_mob << "You suddenly feel more... animalistic."
 	spawn()
-		del(src)
-	return
+		qdel(src)
+	return new_mob
 
 /mob/proc/Animalize()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/Animalize() called tick#: [world.time]")
 
 	var/list/mobtypes = typesof(/mob/living/simple_animal)
 	var/mobpath = input("Which type of mob should [src] turn into?", "Choose a type") in mobtypes
 
 	if(!safe_animal(mobpath))
-		usr << "\red Sorry but this mob type is currently unavailable."
+		usr << "<span class='warning'>Sorry but this mob type is currently unavailable.</span>"
 		return
 
-	var/mob/new_mob = new mobpath(src.loc)
+	var/mob/new_mob = new mobpath(get_turf(src))
 
 	new_mob.key = key
-	new_mob.a_intent = "hurt"
+	new_mob.a_intent = I_HURT
 	new_mob << "You feel more... animalistic"
 
-	del(src)
+	spawn()
+		qdel(src)
+	return new_mob
 
 /* Certain mob types have problems and should not be allowed to be controlled by players.
  *
@@ -410,6 +413,7 @@
  * This also gives a place to explain -why- players shouldnt be turn into certain mobs and hopefully someone can fix them.
  */
 /mob/proc/safe_animal(var/MP)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/safe_animal() called tick#: [world.time]")
 
 //Bad mobs! - Remember to add a comment explaining what's wrong with the mob
 	if(!MP)

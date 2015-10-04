@@ -1,5 +1,6 @@
 //like orange but only checks north/south/east/west for one step
 proc/cardinalrange(var/center)
+	//writepanic("[__FILE__].[__LINE__] \\/proc/cardinalrange() called tick#: [world.time]")
 	var/list/things = list()
 	for(var/direction in cardinal)
 		var/turf/T = get_step(center, direction)
@@ -31,20 +32,21 @@ proc/cardinalrange(var/center)
 
 /obj/machinery/am_shielding/New(loc)
 	..(loc)
+	machines -= src
+	power_machines += src
 	spawn(10)
 		controllerscan()
-	return
 
 
 /obj/machinery/am_shielding/proc/controllerscan(var/priorscan = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/am_shielding/proc/controllerscan() called tick#: [world.time]")
 	//Make sure we are the only one here
 	if(!istype(src.loc, /turf))
-		del(src)
+		qdel(src)
 		return
 	for(var/obj/machinery/am_shielding/AMS in loc.contents)
 		if(AMS == src) continue
-		spawn(0)
-			del(src)
+		qdel(src)
 		return
 
 	//Search for shielding first
@@ -53,25 +55,21 @@ proc/cardinalrange(var/center)
 			break
 
 	if(!control_unit)//No other guys nearby, look for a control unit
-		for(var/direction in cardinal)
 		for(var/obj/machinery/power/am_control_unit/AMC in cardinalrange(src))
 			if(AMC.add_shielding(src))
 				break
-
-	if(!control_unit)
 		if(!priorscan)
-			spawn(20)
-				controllerscan(1)//Last chance
+			sleep(20)
+			controllerscan(1)//Last chance
 			return
-		spawn(0)
-			del(src)
-	return
+		qdel(src)
 
 
 /obj/machinery/am_shielding/Destroy()
 	if(control_unit)	control_unit.remove_shielding(src)
 	if(processing)	shutdown_core()
-	visible_message("\red The [src.name] melts!")
+	visible_message("<span class='warning'>The [src.name] melts!</span>")
+	power_machines -= src
 	//Might want to have it leave a mess on the floor but no sprites for now
 	..()
 	return
@@ -100,8 +98,7 @@ proc/cardinalrange(var/center)
 			new /obj/effect/blob/node(src.loc,150)
 		else
 			new /obj/effect/blob(src.loc,60)
-		spawn(0)
-			del(src)
+		qdel(src)
 		return
 	check_stability()
 	return
@@ -126,7 +123,7 @@ proc/cardinalrange(var/center)
 
 
 /obj/machinery/am_shielding/update_icon()
-	overlays.Cut()
+	overlays.len = 0
 	coredirs = 0
 	dirs = 0
 	for(var/direction in alldirs)
@@ -169,6 +166,7 @@ proc/cardinalrange(var/center)
 
 //Call this to link a detected shilding unit to the controller
 /obj/machinery/am_shielding/proc/link_control(var/obj/machinery/power/am_control_unit/AMC)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/am_shielding/proc/link_control() called tick#: [world.time]")
 	if(!istype(AMC))	return 0
 	if(control_unit && control_unit != AMC) return 0//Already have one
 	control_unit = AMC
@@ -178,6 +176,7 @@ proc/cardinalrange(var/center)
 
 //Scans cards for shields or the control unit and if all there it
 /obj/machinery/am_shielding/proc/core_check()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/am_shielding/proc/core_check() called tick#: [world.time]")
 	for(var/direction in alldirs)
 		var/found_am_device=0
 		for(var/obj/machinery/machine in get_step(loc, direction))
@@ -192,38 +191,36 @@ proc/cardinalrange(var/center)
 
 
 /obj/machinery/am_shielding/proc/setup_core()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/am_shielding/proc/setup_core() called tick#: [world.time]")
 	processing = 1
-	machines.Add(src)
+	power_machines.Add(src)
 	if(!control_unit)	return
 	control_unit.linked_cores.Add(src)
 	control_unit.reported_core_efficiency += efficiency
-	return
 
 
 /obj/machinery/am_shielding/proc/shutdown_core()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/am_shielding/proc/shutdown_core() called tick#: [world.time]")
 	processing = 0
 	if(!control_unit)	return
 	control_unit.linked_cores.Remove(src)
 	control_unit.reported_core_efficiency -= efficiency
-	return
 
 
 /obj/machinery/am_shielding/proc/check_stability(var/injecting_fuel = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/am_shielding/proc/check_stability() called tick#: [world.time]")
 	if(stability > 0) return
 	if(injecting_fuel && control_unit)
 		control_unit.exploding = 1
-	if(src)
-		del(src)
-	return
-
+	qdel(src)
 
 /obj/machinery/am_shielding/proc/recalc_efficiency(var/new_efficiency)//tbh still not 100% sure how I want to deal with efficiency so this is likely temp
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/am_shielding/proc/recalc_efficiency() called tick#: [world.time]")
 	if(!control_unit || !processing) return
 	if(stability < 50)
 		new_efficiency /= 2
 	control_unit.reported_core_efficiency += (new_efficiency - efficiency)
 	efficiency = new_efficiency
-	return
 
 
 
@@ -234,17 +231,17 @@ proc/cardinalrange(var/center)
 	icon_state = "box"
 	item_state = "electronic"
 	w_class = 4.0
-	flags = FPRINT | TABLEPASS | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	throwforce = 5
 	throw_speed = 1
 	throw_range = 2
-	m_amt = CC_PER_SHEET_METAL*2
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL*2)
 	w_type = RECYK_METAL
 
 /obj/item/device/am_shielding_container/attackby(var/obj/item/I, var/mob/user)
-	if(istype(I, /obj/item/device/multitool) && istype(src.loc,/turf))
+	if(ismultitool(I) && isturf(loc))
 		new/obj/machinery/am_shielding(src.loc)
-		del(src)
+		qdel(src)
 		return
 	..()
-	return

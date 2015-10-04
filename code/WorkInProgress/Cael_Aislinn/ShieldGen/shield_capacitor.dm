@@ -73,7 +73,7 @@
 			user << "Controls are now [src.locked ? "locked." : "unlocked."]"
 			updateDialog()
 		else
-			user << "\red Access denied."
+			user << "<span class='warning'>Access denied.</span>"
 
 /obj/machinery/shield_capacitor/attack_paw(user as mob)
 	return src.attack_hand(user)
@@ -98,7 +98,7 @@
 		t += "<i>Swipe your ID card to begin.</i>"
 	else
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\WorkInProgress\Cael_Aislinn\ShieldGen\shield_capacitor.dm:94: t += "This capacitor is: [active ? "<font color=green>Online</font>" : "<font color=red>Offline</font>" ] <a href='?src=\ref[src];toggle=1'>[active ? "\[Deactivate\]" : "\[Activate\]"]</a><br>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\ShieldGen\shield_capacitor.dm:94: t += "This capacitor is: [active ? "<font color=green>Online</font>" : "<font color=red>Offline</font>" ] <a href='?src=\ref[src];toggle=1'>[active ? "\[Deactivate\]" : "\[Activate\]"]</a><br>"
 		t += {"This capacitor is: [active ? "<font color=green>Online</font>" : "<font color=red>Offline</font>" ] <a href='?src=\ref[src];toggle=1'>[active ? "\[Deactivate\]" : "\[Activate\]"]</a><br>
 			[time_since_fail > 2 ? "<font color=green>Charging stable.</font>" : "<font color=red>Warning, low charge!</font>"]<br>
 			Charge: [stored_charge] Watts ([100 * stored_charge/max_charge]%)<br>
@@ -111,7 +111,7 @@
 		<a href='?src=\ref[src];charge_rate=[max_charge_rate]'>\[max\]</a><br>"}
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\WorkInProgress\Cael_Aislinn\ShieldGen\shield_capacitor.dm:104: t += "<hr>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\ShieldGen\shield_capacitor.dm:104: t += "<hr>"
 	t += {"<hr>
 		<A href='?src=\ref[src]'>Refresh</A>
 		<A href='?src=\ref[src];close=1'>Close</A><BR>"}
@@ -136,6 +136,7 @@
 		time_since_fail = 0
 
 /obj/machinery/shield_capacitor/Topic(href, href_list[])
+	if(!isAI(usr) && usr.z != z) return 1
 	..()
 	if( href_list["close"] )
 		usr << browse(null, "window=shield_capacitor")
@@ -175,6 +176,7 @@
 	set name = "Rotate capacitor clockwise"
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/shield_capacitor/verb/rotate()  called tick#: [world.time]")
 
 	if (src.anchored)
 		usr << "It is fastened to the floor!"

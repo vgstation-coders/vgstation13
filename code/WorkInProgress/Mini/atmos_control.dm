@@ -1,3 +1,4 @@
+var/global/list/atmos_controllers = list()
 /obj/item/weapon/circuitboard/atmoscontrol
 	name = "\improper Central Atmospherics Computer Circuitboard"
 	build_path = /obj/machinery/computer/atmoscontrol
@@ -8,7 +9,8 @@
 	id = "atmoscontrol"
 	req_tech = list("programming" = 4)
 	build_type = IMPRINTER
-	materials = list("$glass" = 2000, "sacid" = 20)
+	materials = list(MAT_GLASS = 2000, "sacid" = 20)
+	category = "Console Boards"
 	build_path = /obj/item/weapon/circuitboard/atmoscontrol
 
 /obj/machinery/computer/atmoscontrol
@@ -23,7 +25,14 @@
 	var/overridden = 0 //not set yet, can't think of a good way to do it
 	req_one_access = list(access_ce)
 
-	l_color = "#7BF9FF"
+	light_color = LIGHT_COLOR_CYAN
+
+/obj/machinery/computer/atmoscontrol/New()
+	..()
+	atmos_controllers |= src
+/obj/machinery/computer/atmoscontrol/Destroy()
+	atmos_controllers -= src
+	..()
 
 /obj/machinery/computer/atmoscontrol/xeno
 	name = "\improper Xenobiology Atmospherics Computer"
@@ -69,8 +78,8 @@
 
 /obj/machinery/computer/atmoscontrol/attackby(var/obj/item/I as obj, var/mob/user as mob)
 	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
-		user.visible_message("\red \The [user] swipes \a [I] through \the [src], causing the screen to flash!",\
-			"\red You swipe your [I] through \the [src], the screen flashing as you gain full control.",\
+		user.visible_message("<span class='warning'>\The [user] swipes \a [I] through \the [src], causing the screen to flash!</span>",\
+			"<span class='warning'>You swipe your [I] through \the [src], the screen flashing as you gain full control.</span>",\
 			"You hear the swipe of a card through a reader, and an electronic warble.")
 		emagged = 1
 		overridden = 1
@@ -130,6 +139,7 @@
 
 
 /obj/machinery/computer/atmoscontrol/proc/is_in_filter(var/typepath)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/atmoscontrol/proc/is_in_filter() called tick#: [world.time]")
 	if(!filter) return 1 // YEP.  TOTALLY.
 	return typepath in filter
 
@@ -137,6 +147,9 @@
 /obj/machinery/computer/atmoscontrol/Topic(href, href_list)
 	if(..())
 		return 0
+	if(href_list["close"])
+		if(usr.machine == src) usr.unset_machine()
+		return 1
 	if(href_list["reset"])
 		current = null
 

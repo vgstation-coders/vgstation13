@@ -22,44 +22,15 @@
 		name = "alien larva ([rand(1, 1000)])"
 	real_name = name
 	regenerate_icons()
+	add_language(LANGUAGE_XENO)
+	default_language = all_languages[LANGUAGE_XENO]
 	..()
-
-//This is fine, works the same as a human
-/mob/living/carbon/alien/larva/Bump(atom/movable/AM as mob|obj, yes)
-
-	spawn(0)
-		if((!(yes) || now_pushing))
-			return
-		now_pushing = 1
-		if(ismob(AM))
-			var/mob/tmob = AM
-			if(istype(tmob, /mob/living/carbon/human) && (M_FAT in tmob.mutations))
-				if(prob(70))
-					src << "<span class='danger'>You fail to push [tmob]'s fat ass out of the way.</span>"
-					now_pushing = 0
-					return
-				if(!(tmob.status_flags & CANPUSH))
-					now_pushing = 0
-					return
-			tmob.LAssailant = src
-
-		now_pushing = 0
-		..()
-		if (!(istype(AM, /atom/movable)))
-			return
-		if (!(now_pushing))
-			now_pushing = 1
-			if (!(AM.anchored))
-				var/t = get_dir(src, AM)
-				step(AM, t)
-			now_pushing = null
-		return
-	return
 
 //This needs to be fixed
 /mob/living/carbon/alien/larva/Stat()
 	..()
-	stat(null, "Progress: [amount_grown]/[max_grown]")
+	if(statpanel("Status"))
+		stat(null, "Progress: [amount_grown]/[max_grown]")
 
 /mob/living/carbon/alien/larva/adjustToxLoss(amount)
 	if(stat != DEAD)
@@ -123,16 +94,6 @@
 /mob/living/carbon/alien/larva/attack_ui(slot_id)
 	return
 
-/mob/living/carbon/alien/larva/meteorhit(O as obj)
-	if(flags & INVULNERABLE)
-		return
-	visible_message("<span class='warning'>\The [src] has been hit by [O]")
-	if(health > 0)
-		adjustBruteLoss((istype(O, /obj/effect/meteor/small) ? 10 : 25)) //You fucking what
-		adjustFireLoss(30)
-		updatehealth()
-	return
-
 /mob/living/carbon/alien/larva/attack_animal(mob/living/simple_animal/M as mob)
 	if(M.melee_damage_upper == 0)
 		M.emote("[M.friendly] [src]")
@@ -164,7 +125,7 @@
 
 	switch(M.a_intent)
 
-		if("help")
+		if(I_HELP)
 			help_shake_act(M)
 		else
 			if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
@@ -216,7 +177,7 @@
 	if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = M.gloves
 		if(G.cell)
-			if(M.a_intent == "hurt")//Stungloves. Any contact will stun the alien.
+			if(M.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
 				if(G.cell.charge >= 2500)
 					G.cell.use(2500)
 
@@ -233,7 +194,7 @@
 
 	switch(M.a_intent)
 
-		if("help")
+		if(I_HELP)
 			if(health > 0)
 				help_shake_act(M)
 			else
@@ -252,10 +213,10 @@
 						O.process()
 						return
 
-		if("grab")
+		if(I_GRAB)
 			if(M == src)
 				return
-			var/obj/item/weapon/grab/G = new /obj/item/weapon/grab( M, src )
+			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
 
 			M.put_in_active_hand(G)
 			grabbed_by += G
@@ -302,7 +263,7 @@
 
 	switch(M.a_intent)
 
-		if("help")
+		if(I_HELP)
 			sleeping = max(0,sleeping-5)
 			resting = 0
 			AdjustParalysis(-3)
@@ -316,7 +277,7 @@
 				var/damage = rand(1, 3)
 				for(var/mob/O in viewers(src, null))
 					if((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>[M.name] has bit []!</B>", src), 1)
+						O.show_message(text("<span class='danger'>[M.name] has bit []!</span>", src), 1)
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
@@ -324,6 +285,8 @@
 	return
 
 /mob/living/carbon/alien/larva/restrained()
+	if(timestopped) return 1 //under effects of time magick
+
 	return 0
 
 /mob/living/carbon/alien/larva/var/co2overloadtime = null
@@ -344,3 +307,8 @@
 	user << browse(dat, text("window=mob[name];size=340x480"))
 	onclose(user, "mob[name]")
 	return
+
+/mob/living/carbon/alien/larva/say_understands(var/mob/other,var/datum/language/speaking = null)
+	if(speaking && speaking.name == LANGUAGE_SOL_COMMON)
+		return 1
+	return ..()

@@ -16,6 +16,7 @@
 	battery_effect = new()
 
 /obj/item/weapon/anobattery/proc/UpdateSprite()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/anobattery/proc/UpdateSprite() called tick#: [world.time]")
 	var/p = (stored_charge/capacity)*100
 	p = min(p, 100)
 	icon_state = "anobattery[round(p,25)]"
@@ -39,9 +40,8 @@
 /obj/item/weapon/anodevice/attackby(var/obj/I as obj, var/mob/user as mob)
 	if(istype(I, /obj/item/weapon/anobattery))
 		if(!inserted_battery)
-			user << "\blue You insert the battery."
-			user.drop_item()
-			I.loc = src
+			user << "<span class='notice'>You insert the battery.</span>"
+			user.drop_item(I, src)
 			inserted_battery = I
 			UpdateSprite()
 	else
@@ -99,7 +99,7 @@
 		cooldown -= 1
 		if(cooldown <= 0)
 			cooldown = 0
-			src.visible_message("\blue \icon[src] [src] chimes.", "\blue \icon[src] You hear something chime.")
+			src.visible_message("<span class='notice'>\icon[src] [src] chimes.</span>", "<span class='notice'>\icon[src] You hear something chime.</span>")
 	else if(activated)
 		if(inserted_battery && inserted_battery.battery_effect)
 			//make sure the effect is active
@@ -132,10 +132,11 @@
 			shutdown()
 
 /obj/item/weapon/anodevice/proc/shutdown_emission()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/anodevice/proc/shutdown_emission() called tick#: [world.time]")
 	if(activated)
 		activated = 0
 		timing = 0
-		src.visible_message("\blue \icon[src] [src] buzzes.", "\icon[src]\blue You hear something buzz.")
+		src.visible_message("<span class='notice'>\icon[src] [src] buzzes.</span>", "\icon[src]<span class='notice'>You hear something buzz.</span>")
 
 		cooldown = archived_time / 2
 
@@ -195,6 +196,7 @@
 	updateDialog()
 
 /obj/item/weapon/anodevice/proc/UpdateSprite()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/anodevice/proc/UpdateSprite() called tick#: [world.time]")
 	if(!inserted_battery)
 		icon_state = "anodev"
 		return

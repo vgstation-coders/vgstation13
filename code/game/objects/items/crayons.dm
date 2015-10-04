@@ -67,24 +67,71 @@
 
 /obj/item/toy/crayon/afterattack(atom/target, mob/user as mob, proximity)
 	if(!proximity) return
+
+	var/user_loc = user.loc
+
 	if(istype(target,/turf/simulated/floor))
 		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") in list("graffiti","rune","letter")
+		var/preference
 		switch(drawtype)
 			if("letter")
 				drawtype = input("Choose the letter.", "Crayon scribbles") in list("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")
 				user << "You start drawing a letter on the [target.name]."
 			if("graffiti")
+				var/list/graffitis = list(
+					"Random"="graffiti",
+					"Cancel"="cancel",
+					"Left arrow"="left",
+					"Right arrow"="right",
+					"Up arrow"="up",
+					"Down arrow"="down",
+					"Heart"="heart",
+					"Lambda"="lambda",
+					"50 blessings"="50bless",
+					"Engineer"="engie",
+					"Guy"="guy",
+					"The end is nigh"="end",
+					"Amy + Jon"="amyjon",
+					"Matt was here"="matt",
+					"Revolution"="revolution",
+					"Face"="face",
+					"Dwarf"="dwarf",
+					"Uboa"="uboa",
+					"Rogue cyborgs"="borgsrogue",
+					"Shitcurity"="shitcurity",
+					"Catbeast here"="catbeast",
+					"Vox are pox"="voxpox",
+					"Hieroglyphs"="hieroglyphs[rand(1,3)]",
+					"Securites eunt domus"="security",
+					"Nanotrasen logo"="nanotrasen",
+					"Syndicate logo"="syndicate[rand(1,2)]",
+					"Don't believe these lies"="lie",
+					"Chaos Undivided"="chaos"
+				)
+				if(istype(user,/mob/living/carbon/human))
+					var/mob/living/carbon/human/M=user
+					if(M.getBrainLoss() >= 60)
+						graffitis = list(
+							"Cancel"="cancel",
+							"Dick"="dick[rand(1,3)]",
+							"Valids"="valid"
+							)
+				preference = input("Choose the graffiti.", "Crayon scribbles") in graffitis
+				drawtype=graffitis[preference]
+				if(drawtype=="cancel") return
 				user << "You start drawing graffiti on the [target.name]."
 			if("rune")
 				user << "You start drawing a rune on the [target.name]."
-		if(instant || do_after(user, 50))
+
+		if(user_loc != user.loc) return//check to see if user has moved
+		if(instant || do_after(user,target, 50))
 			new /obj/effect/decal/cleanable/crayon(target,colour,shadeColour,drawtype)
 			user << "You finish drawing."
 			target.add_fingerprint(user)		// Adds their fingerprints to the floor the crayon is drawn on.
 			if(uses)
 				uses--
 				if(!uses)
-					user << "\red You used up your crayon!"
+					user << "<span class='warning'>You used up your crayon!</span>"
 					del(src)
 	return
 
@@ -95,7 +142,7 @@
 		if(uses)
 			uses -= 5
 			if(uses <= 0)
-				user << "\red You ate your crayon!"
+				user << "<span class='warning'>You ate your crayon!</span>"
 				del(src)
 	else
 		..()

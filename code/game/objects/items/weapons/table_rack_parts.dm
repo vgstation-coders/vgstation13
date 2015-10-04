@@ -14,22 +14,24 @@
 /obj/item/weapon/table_parts/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	if (istype(W, /obj/item/weapon/wrench))
-		new /obj/item/stack/sheet/metal( user.loc )
+		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		M.amount = 1
 		//SN src = null
-		del(src)
+		qdel(src)
 	if (istype(W, /obj/item/stack/rods))
-		if (W:amount >= 4)
+		var/obj/item/stack/rods/rods = W
+		if (rods.amount >= 4)
 			new /obj/item/weapon/table_parts/reinforced( user.loc )
-			user << "\blue You reinforce the [name]."
-			W:use(4)
-			del(src)
-		else if (W:amount < 4)
-			user << "\red You need at least four rods to do this."
+			user << "<span class='notice'>You reinforce the [name].</span>"
+			rods.use(4)
+			qdel(src)
+		else if (rods.amount < 4)
+			user << "<span class='warning'>You need at least four rods to do this.</span>"
 
 /obj/item/weapon/table_parts/attack_self(mob/user as mob)
 	new /obj/structure/table( user.loc )
-	user.drop_item()
-	del(src)
+	user.drop_item(src)
+	qdel(src)
 	return
 
 
@@ -38,13 +40,14 @@
  */
 /obj/item/weapon/table_parts/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/wrench))
-		new /obj/item/stack/sheet/metal( user.loc )
+		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		M.amount = 1
 		new /obj/item/stack/rods( user.loc )
 		del(src)
 
 /obj/item/weapon/table_parts/reinforced/attack_self(mob/user as mob)
 	new /obj/structure/table/reinforced( user.loc )
-	user.drop_item()
+	user.drop_item(src)
 	del(src)
 	return
 
@@ -62,13 +65,13 @@
 			Grass.amount -= 1
 		else
 			del(Grass)
-		new /obj/item/weapon/table_parts/wood/poker( src.loc )
-		visible_message("<span class='notice'>[user] adds grass to the wooden table parts</span>")
+		new /obj/item/weapon/table_parts/wood/poker( get_turf(src) )
+		visible_message("<span class='notice'>[user] adds grass to the wooden table parts.</span>")
 		del(src)
 
 /obj/item/weapon/table_parts/wood/attack_self(mob/user as mob)
 	new /obj/structure/table/woodentable( user.loc )
-	user.drop_item()
+	user.drop_item(src)
 	del(src)
 	return
 
@@ -85,7 +88,7 @@
 
 /obj/item/weapon/table_parts/wood/poker/attack_self(mob/user as mob)
 	new /obj/structure/table/woodentable/poker( user.loc )
-	user.drop_item()
+	user.drop_item(src)
 	del(src)
 	return
 
@@ -96,14 +99,15 @@
 /obj/item/weapon/rack_parts/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	if (istype(W, /obj/item/weapon/wrench))
-		new /obj/item/stack/sheet/metal( user.loc )
-		del(src)
+		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		M.amount = 1
+		qdel(src)
 		return
 	return
 
 /obj/item/weapon/rack_parts/attack_self(mob/user as mob)
 	var/obj/structure/rack/R = new /obj/structure/rack( user.loc )
 	R.add_fingerprint(user)
-	user.drop_item()
+	user.drop_item(src)
 	del(src)
 	return

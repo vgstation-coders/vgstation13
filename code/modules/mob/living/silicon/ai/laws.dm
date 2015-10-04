@@ -2,6 +2,7 @@
 /mob/living/silicon/ai/proc/show_laws_verb()
 	set category = "AI Commands"
 	set name = "Show Laws"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/silicon/ai/proc/show_laws_verb()  called tick#: [world.time]")
 	src.show_laws()
 
 /mob/living/silicon/ai/show_laws(var/everyone = 0)
@@ -17,48 +18,61 @@
 	src.laws.show_laws(who)
 
 /mob/living/silicon/ai/proc/laws_sanity_check()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/laws_sanity_check() called tick#: [world.time]")
 	if (!src.laws)
 		src.laws = new base_law_type
 
 /mob/living/silicon/ai/proc/set_zeroth_law(var/law, var/law_borg)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/set_zeroth_law() called tick#: [world.time]")
 	src.laws_sanity_check()
 	src.laws.set_zeroth_law(law, law_borg)
 
 /mob/living/silicon/ai/proc/add_inherent_law(var/law)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/add_inherent_law() called tick#: [world.time]")
 	src.laws_sanity_check()
 	src.laws.add_inherent_law(law)
 
 /mob/living/silicon/ai/proc/clear_inherent_laws()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/clear_inherent_laws() called tick#: [world.time]")
 	src.laws_sanity_check()
 	src.laws.clear_inherent_laws()
 
 /mob/living/silicon/ai/proc/add_ion_law(var/law)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/add_ion_law() called tick#: [world.time]")
 	src.laws_sanity_check()
 	src.laws.add_ion_law(law)
+	notify_slaved()
+
+/mob/living/silicon/ai/proc/notify_slaved(var/force_sync=0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/notify_slaved() called tick#: [world.time]")
 	for(var/mob/living/silicon/robot/R in mob_list)
+		if(force_sync)
+			R.lawsync()
 		if(R.lawupdate && (R.connected_ai == src))
-			R << "\red " + law + "\red...LAWS UPDATED"
+			R << "<span class='danger'>...LAWS UPDATED</span>"
 
 /mob/living/silicon/ai/proc/clear_ion_laws()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/clear_ion_laws() called tick#: [world.time]")
 	src.laws_sanity_check()
 	src.laws.clear_ion_laws()
 
 /mob/living/silicon/ai/proc/add_supplied_law(var/number, var/law)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/add_supplied_law() called tick#: [world.time]")
 	src.laws_sanity_check()
 	src.laws.add_supplied_law(number, law)
 
 /mob/living/silicon/ai/proc/clear_supplied_laws()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/clear_supplied_laws() called tick#: [world.time]")
 	src.laws_sanity_check()
 	src.laws.clear_supplied_laws()
 
 /mob/living/silicon/ai/proc/statelaws() // -- TLE
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/ai/proc/statelaws() called tick#: [world.time]")
 	src.say("Current Active Laws:")
 	//src.laws_sanity_check()
 	//src.laws.show_laws(world)
 	var/number = 1
 	sleep(10)
-
-
 
 	if (src.laws.zeroth)
 		if (src.lawcheck[1] == "Yes") //This line and the similar lines below make sure you don't state a law unless you want to. --NeoFite
@@ -82,7 +96,6 @@
 				sleep(10)
 			number++
 
-
 	for (var/index = 1, index <= src.laws.supplied.len, index++)
 		var/law = src.laws.supplied[index]
 
@@ -94,10 +107,12 @@
 				number++
 
 /mob/living/silicon/ai/verb/checklaws() //Gives you a link-driven interface for deciding what laws the statelaws() proc will share with the crew. --NeoFite
+	set name = "State Laws"
+	set category = "AI Commands"
+	set desc = "State your law(s) to the crew"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/silicon/ai/verb/checklaws()  called tick#: [world.time]")
 
 	var/list = "<b>Which laws do you want to include when stating them for the crew?</b><br><br>"
-
-
 
 	if (src.laws.zeroth)
 		if (!src.lawcheck[1])
@@ -106,10 +121,7 @@
 
 	for (var/index = 1, index <= src.laws.ion.len, index++)
 		var/law = src.laws.ion[index]
-
 		if (length(law) > 0)
-
-
 			if (!src.ioncheck[index])
 				src.ioncheck[index] = "Yes"
 			list += {"<A href='byond://?src=\ref[src];lawi=[index]'>[src.ioncheck[index]] [ionnum()]:</A> [law]<BR>"}

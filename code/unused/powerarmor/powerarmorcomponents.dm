@@ -5,6 +5,7 @@
 	var/slowdown = 0 //how much the component slows down the wearer
 
 	proc/toggle()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/toggle() called tick#: [world.time]")
 		return
 		//The child objects will use this proc
 
@@ -18,6 +19,7 @@
 		return
 
 	proc/checkpower()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/checkpower() called tick#: [world.time]")
 		return 1
 
 	plasma
@@ -69,15 +71,15 @@
 				if (prob(src.reliability))
 					for (var/mob/M in range(0,src.parent)) //Only a minor failure, enjoy your radiation.
 						if (src.parent in M.contents)
-							M << "\red Your armor feels pleasantly warm for a moment."
+							M << "<span class='warning'>Your armor feels pleasantly warm for a moment.</span>"
 						else
-							M << "\red You feel a warm sensation."
+							M << "<span class='warning'>You feel a warm sensation.</span>"
 						M.radiation += rand(1,40)
 				else
 					for (var/mob/M in range(rand(1,4),src.parent)) //Big failure, TIME FOR RADIATION BITCHES
 						if (src.parent in M.contents)
-							M << "\red Your armor's reactor overloads!"
-						M << "\red You feel a wave of heat wash over you."
+							M << "<span class='warning'>Your armor's reactor overloads!</span>"
+						M << "<span class='warning'>You feel a wave of heat wash over you.</span>"
 						M.radiation += 100
 					crit_fail = 1 //broken~
 					parent.powerdown(1)
@@ -97,9 +99,9 @@
 		switch(parent.active)
 			if(1)
 				if(!sudden)
-					usr << "\blue Reactive armor systems disengaged."
+					usr << "<span class='notice'>Reactive armor systems disengaged.</span>"
 			if(0)
-				usr << "\blue Reactive armor systems engaged."
+				usr << "<span class='notice'>Reactive armor systems engaged.</span>"
 		var/list/switchover = list()
 		for (var/armorvar in parent.armor)
 			switchover[armorvar] = togglearmor[armorvar]
@@ -129,10 +131,10 @@
 		switch(parent.active)
 			if(1)
 				if(!sudden)
-					usr << "\blue Movement assist servos disengaged."
+					usr << "<span class='notice'>Movement assist servos disengaged.</span>"
 				parent.slowdown += toggleslowdown
 			if(0)
-				usr << "\blue Movement assist servos engaged."
+				usr << "<span class='notice'>Movement assist servos engaged.</span>"
 				parent.slowdown -= toggleslowdown
 
 /obj/item/powerarmor/atmoseal
@@ -145,7 +147,7 @@
 		switch(parent.active)
 			if(1)
 				if(!sudden)
-					usr << "\blue Atmospheric seals disengaged."
+					usr << "<span class='notice'>Atmospheric seals disengaged.</span>"
 				parent.gas_transfer_coefficient = 1
 				parent.permeability_coefficient = 1
 				parent.heat_transfer_coefficient = 1
@@ -166,7 +168,7 @@
 				sealed = 0
 
 			if(0)
-				usr << "\blue Atmospheric seals engaged."
+				usr << "<span class='notice'>Atmospheric seals engaged.</span>"
 				parent.gas_transfer_coefficient = 0.01
 				parent.permeability_coefficient = 0.02
 				parent.heat_transfer_coefficient = 0.02
@@ -196,16 +198,17 @@
 		desc = "Keeps the bad stuff out, but lets you remove your helmet without having to turn the whole suit off."
 
 		proc/helmtoggle(sudden = 0, manual = 0)
+			//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \		proc/helmtoggle() called tick#: [world.time]")
 			var/mob/living/carbon/human/user = usr
 			var/obj/item/clothing/head/powered/helm
 			if(user.head && istype(user.head,/obj/item/clothing/head/powered))
 				helm = user.head
 
 				if(!sealed)
-					user << "\red Unable to initialize helmet seal, armor seals not active."
+					user << "<span class='warning'>Unable to initialize helmet seal, armor seals not active.</span>"
 					return
 				if(!helm.parent)
-					user << "\blue Helmet locked."
+					user << "<span class='notice'>Helmet locked.</span>"
 					helm.canremove = 0
 					parent.helm = helm
 					helm.parent = parent
@@ -214,14 +217,14 @@
 					parent.helm.permeability_coefficient = 0.02
 					parent.helm.heat_transfer_coefficient = 0.02
 					parent.helm.flags |= HEADSPACE
-					user << "\blue Helmet atmospheric seals engaged."
+					user << "<span class='notice'>Helmet atmospheric seals engaged.</span>"
 					if(manual)
 						for (var/armorvar in helm.armor)
 							helm.armor[armorvar] = parent.armor[armorvar]
 					return
 				else
 					if(manual)
-						user << "\blue Helmet atmospheric seals disengaged."
+						user << "<span class='notice'>Helmet atmospheric seals disengaged.</span>"
 					parent.helm.gas_transfer_coefficient = 1
 					parent.helm.permeability_coefficient = 1
 					parent.helm.heat_transfer_coefficient = 1
@@ -232,7 +235,7 @@
 					if(!sudden)
 						if(manual)
 							sleep(20)
-							user << "\blue Helmet unlocked."
+							user << "<span class='notice'>Helmet unlocked.</span>"
 						helm.canremove = 1
 						parent.helm = null
 						helm.parent = null

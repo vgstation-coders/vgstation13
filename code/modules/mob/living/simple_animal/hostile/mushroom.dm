@@ -29,14 +29,15 @@
 	var/image/cap_living = null //Where we store our cap icons so we dont generate them constantly to update our icon
 	var/image/cap_dead = null
 
-/mob/living/simple_animal/hostile/mushroom/examine()
+/mob/living/simple_animal/hostile/mushroom/examine(mob/user)
 	..()
 	if(health >= maxHealth)
-		usr << "<span class='info'>It looks healthy.</span>"
+		user << "<span class='info'>It looks healthy.</span>"
 	else
-		usr << "<span class='info'>It looks like it's been roughed up.</span>"
+		user << "<span class='info'>It looks like it's been roughed up.</span>"
 
 /mob/living/simple_animal/hostile/mushroom/Life()
+	if(timestopped) return 0 //under effects of time magick
 	..()
 	if(!stat)//Mushrooms slowly regenerate if conscious, for people who want to save them from being eaten
 		health = min(health+2, maxHealth)
@@ -90,13 +91,15 @@
 	UpdateMushroomCap()
 
 /mob/living/simple_animal/hostile/mushroom/proc/UpdateMushroomCap()
-	overlays.Cut()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/hostile/mushroom/proc/UpdateMushroomCap() called tick#: [world.time]")
+	overlays.len = 0
 	if(health == 0)
 		overlays += cap_dead
 	else
 		overlays += cap_living
 
 /mob/living/simple_animal/hostile/mushroom/proc/Recover()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/hostile/mushroom/proc/Recover() called tick#: [world.time]")
 	visible_message("<span class='notice'>[src] slowly begins to recover.</span>")
 	health = 5
 	faint_ticker = 0
@@ -107,6 +110,7 @@
 		recovery_cooldown = 0
 
 /mob/living/simple_animal/hostile/mushroom/proc/LevelUp(var/level_gain)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/hostile/mushroom/proc/LevelUp() called tick#: [world.time]")
 	if(powerlevel <= 9)
 		powerlevel += level_gain
 		if(prob(25))
@@ -117,6 +121,7 @@
 	health = maxHealth //They'll always heal, even if they don't gain a level, in case you want to keep this shroom around instead of harvesting it
 
 /mob/living/simple_animal/hostile/mushroom/proc/Bruise()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/hostile/mushroom/proc/Bruise() called tick#: [world.time]")
 	if(!bruised && !stat)
 		src.visible_message("<span class='notice'>The [src.name] was bruised!</span>")
 		bruised = 1
@@ -135,7 +140,7 @@
 
 /mob/living/simple_animal/hostile/mushroom/attack_hand(mob/living/carbon/human/M as mob)
 	..()
-	if(M.a_intent == "hurt")
+	if(M.a_intent == I_HURT)
 		Bruise()
 
 /mob/living/simple_animal/hostile/mushroom/hitby(atom/movable/AM)
@@ -148,12 +153,3 @@
 /mob/living/simple_animal/hostile/mushroom/bullet_act()
 	..()
 	Bruise()
-
-/mob/living/simple_animal/hostile/mushroom/harvest()
-	var/counter
-	for(counter=0, counter<=powerlevel, counter++)
-		var/obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/S = new /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice(src.loc)
-		S.reagents.add_reagent("psilocybin", powerlevel)
-		S.reagents.add_reagent("doctorsdelight", powerlevel)
-		S.reagents.add_reagent("synaptizine", powerlevel)
-	del(src)

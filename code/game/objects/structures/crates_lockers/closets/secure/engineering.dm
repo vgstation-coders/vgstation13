@@ -25,11 +25,13 @@
 		new /obj/item/weapon/cartridge/ce(src)
 		new /obj/item/device/radio/headset/heads/ce(src)
 		new /obj/item/weapon/storage/toolbox/mechanical(src)
+		new /obj/item/device/device_analyser/advanced(src)
 		new /obj/item/clothing/suit/storage/hazardvest(src)
 		new /obj/item/clothing/mask/gas(src)
 		new /obj/item/device/multitool(src)
 		new /obj/item/device/flash(src)
 		new /obj/item/device/gps/engineering(src)
+		new /obj/item/weapon/storage/belt/utility/chief(src)
 		return
 
 
@@ -48,14 +50,15 @@
 	New()
 		..()
 		sleep(2)
+		new /obj/item/weapon/storage/toolbox/electrical(src)
+		new /obj/item/weapon/storage/toolbox/electrical(src)
+		new /obj/item/weapon/storage/toolbox/electrical(src)
+		new /obj/item/weapon/rcl(src)
+		new /obj/item/weapon/circuitboard/power_control(src)
+		new /obj/item/weapon/circuitboard/power_control(src)
+		new /obj/item/weapon/circuitboard/power_control(src)
 		new /obj/item/clothing/gloves/yellow(src)
 		new /obj/item/clothing/gloves/yellow(src)
-		new /obj/item/weapon/storage/toolbox/electrical(src)
-		new /obj/item/weapon/storage/toolbox/electrical(src)
-		new /obj/item/weapon/storage/toolbox/electrical(src)
-		new /obj/item/weapon/module/power_control(src)
-		new /obj/item/weapon/module/power_control(src)
-		new /obj/item/weapon/module/power_control(src)
 		new /obj/item/device/multitool(src)
 		new /obj/item/device/multitool(src)
 		new /obj/item/device/multitool(src)
@@ -144,10 +147,11 @@
 		new /obj/item/clothing/suit/storage/hazardvest(src)
 		new /obj/item/clothing/mask/gas(src)
 		new /obj/item/taperoll/atmos(src)
+		new /obj/item/pipe_planner(src)
 		new /obj/item/weapon/wrench/socket(src)
 		new /obj/item/weapon/gun/projectile/flare(src) //yay for emergency lighting
 		new /obj/item/ammo_storage/box/flare(src)
-		new /obj/item/weapon/pipe_dispenser(src)
+		new /obj/item/device/rcd/rpd(src)
 		new /obj/item/device/analyzer(src)
 		return
 
@@ -171,6 +175,7 @@
 		new /obj/item/clothing/under/rank/mechanic(src)
 		new /obj/item/clothing/shoes/white(src)
 		new /obj/item/weapon/storage/toolbox/mechanical(src)
+		//new /obj/item/device/component_exchanger(src)
 		new /obj/item/device/radio/headset/headset_engsci(src)
 		new /obj/item/clothing/suit/storage/hazardvest(src)
 		new /obj/item/device/device_analyser(src)
@@ -199,3 +204,15 @@
 		..()
 		sleep(2)
 		new /obj/machinery/power/supermatter/shard(src)
+
+/obj/structure/closet/crate/secure/large/reinforced/shard/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+	if(istype(mover,/obj/machinery/power/supermatter))
+		return 1
+	else
+		return ..()
+
+/obj/structure/closet/crate/secure/large/reinforced/shard/can_close()
+	for(var/obj/machinery/power/supermatter/S in loc)
+		if(S.damage) //This is what I like to call predicting the metagame
+			return 0
+	return ..()

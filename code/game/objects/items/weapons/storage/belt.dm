@@ -4,12 +4,13 @@
 	icon = 'icons/obj/clothing/belts.dmi'
 	icon_state = "utilitybelt"
 	item_state = "utility"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	slot_flags = SLOT_BELT
 	attack_verb = list("whipped", "lashed", "disciplined")
 
 
 /obj/item/weapon/storage/belt/proc/can_use()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/storage/belt/proc/can_use() called tick#: [world.time]")
 	if(!ismob(loc)) return 0
 	var/mob/M = loc
 	if(src in M.get_equipped_items())
@@ -17,42 +18,35 @@
 	else
 		return 0
 
-
-/obj/item/weapon/storage/belt/MouseDrop(obj/over_object as obj, src_location, over_location)
-	var/mob/M = usr
-	if(!istype(over_object, /obj/screen))
-		return ..()
-	playsound(get_turf(src), "rustle", 50, 1, -5)
-	if (!M.restrained() && !M.stat && can_use())
-		switch(over_object.name)
-			if("r_hand")
-				M.u_equip(src)
-				M.put_in_r_hand(src)
-			if("l_hand")
-				M.u_equip(src)
-				M.put_in_l_hand(src)
-		src.add_fingerprint(usr)
-		return
-
-
-
 /obj/item/weapon/storage/belt/utility
 	name = "tool-belt" //Carn: utility belt is nicer, but it bamboozles the text parsing.
-	desc = "Can hold various tools."
+	desc = "It has a tag that rates it for compatibility with standard tools, device analyzers, flashlights, cables, engineering tape, small fire extinguishers, compressed matter cartridges, light replacers, and fuel cans."
 	icon_state = "utilitybelt"
 	item_state = "utility"
+	w_class = 4
+	max_w_class = 2
+	storage_slots = 14
+	max_combined_w_class = 200 //This actually doesn't matter as long as it is arbitrarily high, bar will be set by storage slots
 	can_hold = list(
 		"/obj/item/weapon/crowbar",
 		"/obj/item/weapon/screwdriver",
 		"/obj/item/weapon/weldingtool",
+		"/obj/item/weapon/solder",
 		"/obj/item/weapon/wirecutters",
 		"/obj/item/weapon/wrench",
 		"/obj/item/device/multitool",
 		"/obj/item/device/flashlight",
-		"/obj/item/weapon/cable_coil",
+		"/obj/item/stack/cable_coil",
 		"/obj/item/device/t_scanner",
 		"/obj/item/device/analyzer",
-		"/obj/item/taperoll/engineering")
+		"/obj/item/taperoll/engineering",
+		"/obj/item/taperoll/atmos",
+		"/obj/item/weapon/extinguisher",
+		"/obj/item/weapon/rcd_ammo",
+		"/obj/item/weapon/reagent_containers/glass/fuelcan",
+		"/obj/item/device/lightreplacer",
+		"/obj/item/device/device_analyser"
+		)
 
 /obj/item/weapon/storage/belt/utility/complete/New()
 	..()
@@ -62,7 +56,7 @@
 	new /obj/item/weapon/crowbar(src)
 	new /obj/item/weapon/wirecutters(src)
 	new /obj/item/device/multitool(src)
-	new /obj/item/weapon/cable_coil(src,30,pick("red","yellow","orange"))
+	new /obj/item/stack/cable_coil(src,30,pick("red","yellow","orange"))
 
 /obj/item/weapon/storage/belt/utility/full/New()
 	..()
@@ -71,7 +65,7 @@
 	new /obj/item/weapon/weldingtool(src)
 	new /obj/item/weapon/crowbar(src)
 	new /obj/item/weapon/wirecutters(src)
-	new /obj/item/weapon/cable_coil(src,30,pick("red","yellow","orange"))
+	new /obj/item/stack/cable_coil(src,30,pick("red","yellow","orange"))
 
 
 /obj/item/weapon/storage/belt/utility/atmostech/New()
@@ -83,7 +77,43 @@
 	new /obj/item/weapon/wirecutters(src)
 	new /obj/item/device/t_scanner(src)
 
+/obj/item/weapon/storage/belt/utility/chief
+	name = "advanced tool-belt"
+	desc = "The ancestral belt of Many-APCs-Charging, the original chief engineer from Space Native America. It's made out of the skins of the ancient enemy of engineers, giant spiders."
+	icon_state = "utilitychief"
+	item_state = "utilitychief"
+	w_class = 4
+	max_w_class = 3
+	storage_slots = 14
+	can_hold = list(
+		"/obj/item/weapon/crowbar",
+		"/obj/item/weapon/screwdriver",
+		"/obj/item/weapon/weldingtool",
+		"/obj/item/weapon/solder",
+		"/obj/item/weapon/wirecutters",
+		"/obj/item/weapon/wrench",
+		"/obj/item/device/multitool",
+		"/obj/item/device/flashlight",
+		"/obj/item/stack/cable_coil",
+		"/obj/item/device/t_scanner",
+		"/obj/item/device/analyzer",
+		"/obj/item/taperoll/engineering",
+		"/obj/item/taperoll/atmos",
+		"/obj/item/weapon/extinguisher",
+		"/obj/item/device/rcd/matter/engineering",
+		"/obj/item/device/rcd/rpd",
+		"/obj/item/device/rcd/tile_painter",
+		"/obj/item/weapon/storage/component_exchanger",
+		"/obj/item/weapon/rcd_ammo",
+		"/obj/item/weapon/reagent_containers/glass/fuelcan",
+		"/obj/item/blueprints",
+		"/obj/item/device/lightreplacer",
+		"/obj/item/device/device_analyser",
+		"/obj/item/weapon/rcl"
+		)
 
+/obj/item/weapon/storage/belt/utility/chief/New()
+	..()
 
 /obj/item/weapon/storage/belt/medical
 	name = "medical belt"
@@ -106,7 +136,9 @@
 		"/obj/item/device/flashlight/pen",
 		"/obj/item/clothing/mask/surgical",
 		"/obj/item/clothing/gloves/latex",
-        "/obj/item/weapon/reagent_containers/hypospray/autoinjector"
+        "/obj/item/weapon/reagent_containers/hypospray/autoinjector",
+		"/obj/item/device/mass_spectrometer",
+		"/obj/item/device/gps/paramedic"
 	)
 
 
@@ -119,7 +151,7 @@
 	max_w_class = 3
 	max_combined_w_class = 21
 	can_hold = list(
-		"/obj/item/weapon/grenade/flashbang",
+		"/obj/item/weapon/grenade",
 		"/obj/item/weapon/reagent_containers/spray/pepper",
 		"/obj/item/weapon/handcuffs",
 		"/obj/item/device/flash",
@@ -140,7 +172,9 @@
 		"/obj/item/taperoll/police",
 		"/obj/item/weapon/gun/energy/taser",
 		"/obj/item/weapon/legcuffs/bolas",
-		"/obj/item/device/hailer"
+		"/obj/item/device/hailer",
+		"obj/item/weapon/melee/telebaton",
+		"/obj/item/device/gps/secure"
 		)
 /obj/item/weapon/storage/belt/security/batmanbelt
 	name = "batbelt"
@@ -201,11 +235,11 @@
 	max_combined_w_class = 28
 	can_hold = list(
 		"/obj/item/weapon/storage/bag/ore",
-		"/obj/item/weapon/shovel",
+		"/obj/item/weapon/pickaxe/shovel",
 		"/obj/item/weapon/storage/box/samplebags",
 		"/obj/item/device/core_sampler",
 		"/obj/item/device/beacon_locator",
-		"/obj/item/device/radio/beacon",
+		"/obj/item/beacon",
 		"/obj/item/device/gps",
 		"/obj/item/device/measuring_tape",
 		"/obj/item/device/flashlight",
@@ -290,3 +324,9 @@
 
 /obj/item/weapon/storage/belt/thunderdome/red
 	icon_state = "td_belt-red"
+
+/obj/item/weapon/storage/belt/security/doomguy
+	name = "Doomguy's belt"
+	desc = ""
+	icon_state = "doom"
+	item_state = "doom"

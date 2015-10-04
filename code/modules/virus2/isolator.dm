@@ -19,8 +19,7 @@
 		return
 
 	src.beaker =  B
-	user.drop_item()
-	B.loc = src
+	user.drop_item(B, src)
 	if(istype(B,/obj/item/weapon/reagent_containers/syringe))
 		user << "You add the syringe to the machine!"
 		src.updateUsrDialog()
@@ -41,7 +40,7 @@
 				break
 		// /vg/: Try to fix isolators
 		if(!Blood)
-			usr << "\red ERROR: Unable to locate blood within the beaker.  Bug?"
+			usr << "<span class='warning'>ERROR: Unable to locate blood within the beaker.  Bug?</span>"
 			testing("Unable to locate blood in [beaker]!")
 			return
 		var/list/virus = virus_copylist(Blood.data["virus2"])
@@ -72,7 +71,7 @@
 	if(!beaker)
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\virus2\isolator.dm:68: dat = "Please insert sample into the isolator.<BR>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\virus2\isolator.dm:68: dat = "Please insert sample into the isolator.<BR>"
 		dat = {"Please insert sample into the isolator.<BR>
 <A href='?src=\ref[src];close=1'>Close</A>"}
 		// END AUTOFIX

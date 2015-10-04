@@ -24,14 +24,14 @@
 	attackby(obj/item/clothing/under/U as obj, mob/user as mob)
 		..()
 		if(istype(U, /obj/item/clothing/under/chameleon))
-			user << "\red Nothing happens."
+			user << "<span class='warning'>Nothing happens.</span>"
 			return
 		if(istype(U, /obj/item/clothing/under))
 			if(src.clothing_choices.Find(U))
-				user << "\red Pattern is already recognised by the suit."
+				user << "<span class='warning'>Pattern is already recognised by the suit.</span>"
 				return
 			src.clothing_choices += U
-			user << "\red Pattern absorbed by the suit."
+			user << "<span class='warning'>Pattern absorbed by the suit.</span>"
 
 
 	emp_act(severity)
@@ -51,9 +51,10 @@
 		set name = "Change Color"
 		set category = "Object"
 		set src in usr
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\verb/change()  called tick#: [world.time]")
 
 		if(icon_state == "psyche")
-			usr << "\red Your suit is malfunctioning"
+			usr << "<span class='warning'>Your suit is malfunctioning</span>"
 			return
 
 		var/obj/item/clothing/under/A

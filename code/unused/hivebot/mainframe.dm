@@ -2,6 +2,7 @@
 	Namepick()
 
 /mob/living/silicon/hive_mainframe/Life()
+	if(timestopped) return 0 //under effects of time magick
 	if (src.stat == 2)
 		return
 	else
@@ -21,16 +22,12 @@
 
 /mob/living/silicon/hive_mainframe/Stat()
 	..()
-	statpanel("Status")
-	if (src.client.statpanel == "Status")
+
+	if(statpanel("Status"))
 		if(emergency_shuttle.online && emergency_shuttle.location < 2)
 			var/timeleft = emergency_shuttle.timeleft()
 			if (timeleft)
 				stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
-/*
-		if(ticker.mode.name == "AI malfunction")
-			stat(null, "Points left until the AI takes over: [AI_points]/[AI_points_win]")
-*/
 
 /mob/living/silicon/hive_mainframe/updatehealth()
 	if (src.nodamage == 0)
@@ -61,20 +58,6 @@
 				src.verbs += /client/proc/ghost
 	return ..(gibbed)
 
-
-/mob/living/silicon/hive_mainframe/say_understands(var/other)
-	if (istype(other, /mob/living/carbon/human))
-		return 1
-	if (istype(other, /mob/living/silicon/robot))
-		return 1
-	if (istype(other, /mob/living/silicon/hivebot))
-		return 1
-	if (istype(other, /mob/living/silicon/ai))
-		return 1
-	if (istype(other, /mob/living/carbon/human/tajaran))
-		return 1
-	return ..()
-
 /mob/living/silicon/hive_mainframe/say_quote(var/text)
 	var/ending = copytext(text, length(text))
 
@@ -87,6 +70,7 @@
 
 
 /mob/living/silicon/hive_mainframe/proc/return_to(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/hive_mainframe/proc/return_to() called tick#: [world.time]")
 	if(user.mind)
 		user.mind.transfer_to(src)
 		spawn(20)
@@ -98,13 +82,16 @@
 		return
 
 /mob/living/silicon/hive_mainframe/verb/cmd_deploy_to()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/silicon/hive_mainframe/verb/cmd_deploy_to()  called tick#: [world.time]")
 	set category = "Mainframe Commands"
 	set name = "Deploy to shell."
 	deploy_to()
 
 /mob/living/silicon/hive_mainframe/verb/deploy_to()
 
-	if(usr.stat == 2)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/silicon/hive_mainframe/verb/deploy_to()  called tick#: [world.time]")
+
+	if(usr.stat == 2 || (usr.status_flags & FAKEDEATH))
 		usr << "You can't deploy because you are dead!"
 		return
 
@@ -132,8 +119,10 @@
 
 
 /client/proc/MainframeMove(n,direct,var/mob/living/silicon/hive_mainframe/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/MainframeMove() called tick#: [world.time]")
 	return
 /obj/hud/proc/hive_mainframe_hud()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/hud/proc/hive_mainframe_hud() called tick#: [world.time]")
 	return
 
 
@@ -166,6 +155,7 @@
 
 
 /mob/living/silicon/hive_mainframe/proc/Namepick()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/hive_mainframe/proc/Namepick() called tick#: [world.time]")
 	var/randomname = pick(ai_names)
 	var/newname = input(src,"You are the a Mainframe Unit. Would you like to change your name to something else?", "Name change",randomname)
 

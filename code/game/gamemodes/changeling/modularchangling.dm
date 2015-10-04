@@ -26,6 +26,12 @@ var/list/datum/power/changeling/powerinstances = list()
 	genomecost = 0
 	verbpath = /mob/proc/changeling_transform
 
+/datum/power/changeling/change_species
+	name = "Change Species"
+	desc = "We take on the apperance of a species that we have absorbed."
+	genomecost = 0
+	verbpath = /mob/proc/changeling_change_species
+
 /datum/power/changeling/fakedeath
 	name = "Regenerative Stasis"
 	desc = "We become weakened to a death-like state, where we will rise again from death."
@@ -190,6 +196,7 @@ var/list/datum/power/changeling/powerinstances = list()
 /datum/changeling/proc/EvolutionMenu()//The new one
 	set category = "Changeling"
 	set desc = "Level up!"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/changeling/proc/EvolutionMenu() called tick#: [world.time]")
 
 	if(!usr || !usr.mind || !usr.mind.changeling)	return
 	src = usr.mind.changeling
@@ -465,7 +472,10 @@ var/list/datum/power/changeling/powerinstances = list()
 
 
 
+
+
 /datum/changeling/proc/purchasePower(var/datum/mind/M, var/Pname, var/remake_verbs = 1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\datum/changeling/proc/purchasePower() called tick#: [world.time]")
 	if(!M || !M.changeling)
 		return
 

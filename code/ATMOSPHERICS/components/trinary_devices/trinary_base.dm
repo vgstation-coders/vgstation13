@@ -15,30 +15,40 @@ obj/machinery/atmospherics/trinary
 	var/datum/pipe_network/network2
 	var/datum/pipe_network/network3
 
+	var/activity_log = ""
+
+/obj/machinery/atmospherics/trinary/update_icon(var/adjacent_procd)
+	var/node_list = list(node1,node2,node3)
+	..(adjacent_procd,node_list)
+
 obj/machinery/atmospherics/trinary/New()
 	..()
-	switch(dir)
-		if(NORTH)
-			initialize_directions = EAST|NORTH|SOUTH
-		if(SOUTH)
-			initialize_directions = SOUTH|WEST|NORTH
-		if(EAST)
-			initialize_directions = EAST|WEST|SOUTH
-		if(WEST)
-			initialize_directions = WEST|NORTH|EAST
+	initialize_directions()
 	air1 = new
 	air2 = new
 	air3 = new
+	air1.volume = starting_volume
+	air2.volume = starting_volume
+	air3.volume = starting_volume
 
-	air1.volume = 200
-	air2.volume = 200
-	air3.volume = 200
+/obj/machinery/atmospherics/trinary/proc/initialize_directions()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/trinary/proc/initialize_directions() called tick#: [world.time]")
+	switch(dir)
+		if(NORTH)
+			initialize_directions = SOUTH|NORTH|EAST
+		if(SOUTH)
+			initialize_directions = NORTH|SOUTH|WEST
+		if(EAST)
+			initialize_directions = WEST|EAST|SOUTH
+		if(WEST)
+			initialize_directions = EAST|WEST|NORTH
 
 obj/machinery/atmospherics/trinary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	if(!(pipe.dir in list(NORTH, SOUTH, EAST, WEST)) && src.mirror) //because the dir isn't in the right set, we want to make the mirror kind
 		var/obj/machinery/atmospherics/trinary/mirrored_pipe = new mirror(src.loc)
 		pipe.dir = turn(pipe.dir, -45)
 		qdel(src)
+		mirrored_pipe.setPipingLayer(pipe.piping_layer)
 		return mirrored_pipe.buildFrom(usr, pipe)
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
@@ -80,13 +90,16 @@ obj/machinery/atmospherics/trinary/network_expand(datum/pipe_network/new_network
 obj/machinery/atmospherics/trinary/Destroy()
 	if(node1)
 		node1.disconnect(src)
-		del(network1)
+		if(network1)
+			returnToPool(network1)
 	if(node2)
 		node2.disconnect(src)
-		del(network2)
+		if(network2)
+			returnToPool(network2)
 	if(node3)
 		node3.disconnect(src)
-		del(network3)
+		if(network3)
+			returnToPool(network3)
 
 	node1 = null
 	node2 = null
@@ -97,25 +110,36 @@ obj/machinery/atmospherics/trinary/Destroy()
 obj/machinery/atmospherics/trinary/initialize()
 	if(node1 && node2 && node3) return
 
-	node1 = findConnecting(turn(dir, -180))
-	node2 = findConnecting(turn(dir, -90))
-	node3 = findConnecting(dir)
+	//mirrored pipes face the same way and have their nodes in the same place
+	//The 1 and 3 nodes are reversed, however.
+	//   1           3
+	// 2-- becomes 2-- facing south, for example
+	//   3           1
+	if(!(pipe_flags & IS_MIRROR))
+		node1 = findConnecting(turn(dir, -180))
+		node2 = findConnecting(turn(dir, -90))
+		node3 = findConnecting(dir)
+	else
+		node1 = findConnecting(dir)
+		node2 = findConnecting(turn(dir, -90))
+		node3 = findConnecting(turn(dir, -180))
+
 
 	update_icon()
 
 obj/machinery/atmospherics/trinary/build_network()
 	if(!network1 && node1)
-		network1 = new /datum/pipe_network()
+		network1 = getFromPool(/datum/pipe_network)
 		network1.normal_members += src
 		network1.build_network(node1, src)
 
 	if(!network2 && node2)
-		network2 = new /datum/pipe_network()
+		network2 = getFromPool(/datum/pipe_network)
 		network2.normal_members += src
 		network2.build_network(node2, src)
 
 	if(!network3 && node3)
-		network3 = new /datum/pipe_network()
+		network3 = getFromPool(/datum/pipe_network)
 		network3.normal_members += src
 		network3.build_network(node3, src)
 
@@ -158,15 +182,26 @@ obj/machinery/atmospherics/trinary/return_network_air(datum/pipe_network/referen
 
 obj/machinery/atmospherics/trinary/disconnect(obj/machinery/atmospherics/reference)
 	if(reference==node1)
-		del(network1)
+		if(network1)
+			returnToPool(network1)
 		node1 = null
 
 	else if(reference==node2)
-		del(network2)
+		if(network2)
+			returnToPool(network2)
 		node2 = null
 
 	else if(reference==node3)
-		del(network3)
+		if(network3)
+			returnToPool(network3)
 		node3 = null
 
 	return null
+
+/obj/machinery/atmospherics/trinary/unassign_network(datum/pipe_network/reference)
+	if(network1 == reference)
+		network1 = null
+	if(network2 == reference)
+		network2 = null
+	if(network3 == reference)
+		network3 = null

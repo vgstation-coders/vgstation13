@@ -2,26 +2,29 @@
 
 var/cultwords = list()
 var/global/runedec = 0
-var/engwords = list("travel", "blood", "join", "hell", "destroy", "technology", "self", "see", "other", "hide")
+var/global/list/engwords = list("travel", "blood", "join", "hell", "destroy", "technology", "self", "see", "other", "hide")
+var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","mgar","balaq", "karazet", "geeri")
 var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE WORLD WHEN AN AI LOGS IN
 
 /client/proc/check_words() // -- Urist
 	set category = "Special Verbs"
 	set name = "Check Rune Words"
 	set desc = "Check the rune-word meaning"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/check_words() called tick#: [world.time]")
 	if(!cultwords["travel"])
 		runerandom()
 	for (var/word in engwords)
 		usr << "[cultwords[word]] is [word]"
 
 /proc/runerandom() //randomizes word meaning
-	var/list/runewords=list("ire","ego","nahlizet","certum","veri","jatkaa","mgar","balaq", "karazet", "geeri") ///"orkan" and "allaq" removed.
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/runerandom() called tick#: [world.time]")
+	var/list/runewords= rnwords///"orkan" and "allaq" removed.
 	for (var/word in engwords)
 		cultwords[word] = pick(runewords)
 		runewords-=cultwords[word]
 
 /obj/effect/rune
-	desc = ""
+	desc = "A strange collection of symbols drawn in blood."
 	anchored = 1
 	icon = 'icons/obj/rune.dmi'
 	icon_state = "1"
@@ -35,6 +38,15 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	var/word1
 	var/word2
 	var/word3
+	var/image/blood_image
+
+	var/atom/movable/overlay/c_animation = null
+	var/nullblock = 0
+	var/mob/living/ajourn
+
+	var/summoning = 0
+	var/list/summonturfs = list()
+
 // Places these combos are mentioned: this file - twice in the rune code, once in imbued tome, once in tome's HTML runes.dm - in the imbue rune code. If you change a combination - dont forget to change it everywhere.
 
 // travel self [word] - Teleport to random [rune with word destination matching]
@@ -66,36 +78,30 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 // join hide technology - stun rune. Rune color: bright pink.
 /obj/effect/rune/New()
 	..()
-	var/image/blood = image(loc = src)
-	blood.override = 1
+	blood_image = image(loc = src)
+	blood_image.override = 1
 	for(var/mob/living/silicon/ai/AI in player_list)
-		AI.client.images += blood
+		if(AI.client)
+			AI.client.images += blood_image
 	rune_list.Add(src)
 
 /obj/effect/rune/Destroy()
+	if(istype(ajourn))
+		ajourn.ajourn = null
+	ajourn = null
+	for(var/mob/living/silicon/ai/AI in player_list)
+		if(AI.client)
+			AI.client.images -= blood_image
+	qdel(blood_image)
+	blood_image = null
 	rune_list.Remove(src)
 	..()
 
-/obj/effect/rune/examine()
-	set src in view(2)
-
-	if(!iscultist(usr))
-		usr << "A strange collection of symbols drawn in blood."
-		return
-		/* Explosions... really?
-		if(desc && !usr.stat)
-			usr << "It reads: <i>[desc]</i>."
-			sleep(30)
-			explosion(src.loc, 0, 2, 5, 5)
-			if(src)
-				del(src)
-		*/
-	if(!desc)
-		usr << "A spell circle drawn in blood. It reads: <i>[word1] [word2] [word3]</i>."
-	else
-		usr << "Explosive Runes inscription in blood. It reads: <i>[desc]</i>."
-
-	return
+/obj/effect/rune/examine(mob/user)
+	..()
+	if(iscultist(user) || isobserver(user))
+		var/rune_name = get_uristrune_name(word1,word2,word3)
+		user << "A spell circle drawn in blood. It reads: <i>[word1] [word2] [word3]</i>.[rune_name ? " From [pick("your intuition, you are pretty sure that","deep memories, you determine that","the rune's energies, you deduct that","Nar-Sie's murmurs, you know that")] this is \a <b>[rune_name]</b> rune." : ""]"
 
 
 /obj/effect/rune/attackby(I as obj, user as mob)
@@ -181,6 +187,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 
 
 /obj/effect/rune/proc/fizzle()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/rune/proc/fizzle() called tick#: [world.time]")
 	if(istype(src,/obj/effect/rune))
 		usr.say(pick("B'ADMINES SP'WNIN SH'T","IC'IN O'OC","RO'SHA'M I'SA GRI'FF'N ME'AI","TOX'IN'S O'NM FI'RAH","IA BL'AME TOX'IN'S","FIR'A NON'AN RE'SONA","A'OI I'RS ROUA'GE","LE'OAN JU'STA SP'A'C Z'EE SH'EF","IA PT'WOBEA'RD, IA A'DMI'NEH'LP"))
 	else
@@ -190,15 +197,18 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	return
 
 /obj/effect/rune/proc/check_icon()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/rune/proc/check_icon() called tick#: [world.time]")
 	icon = get_uristrune_cult(word1, word2, word3)
 
 /obj/item/weapon/tome
 	name = "arcane tome"
+	desc = "An old, dusty tome with frayed edges and a sinister looking cover."
+	icon = 'icons/obj/cult.dmi'
 	icon_state ="tome"
 	throw_speed = 1
 	throw_range = 5
 	w_class = 2.0
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	var/notedat = ""
 	var/tomedat = ""
 	var/list/words = list("ire" = "ire", "ego" = "ego", "nahlizet" = "nahlizet", "certum" = "certum", "veri" = "veri", "jatkaa" = "jatkaa", "balaq" = "balaq", "mgar" = "mgar", "karazet" = "karazet", "geeri" = "geeri")
@@ -226,25 +236,25 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				<b>Summon new tome: </b>See Blood Hell<br>
 				<b>Convert a person: </b>Join Blood Self<br>
 				<b>Summon Nar-Sie: </b>Hell Join Self<br>
-				<b>Disable technology: </b>Destroy See Technology<br>
+				<b>EMP: </b>Destroy See Technology<br>
 				<b>Drain blood: </b>Travel Blood Self<br>
 				<b>Raise dead: </b>Blood Join Hell<br>
 				<b>Hide runes: </b>Hide See Blood<br>
-				<b>Reveal hidden runes: </b>Blood See Hide<br>
-				<b>Leave your body: </b>Hell travel self<br>
-				<b>Ghost Manifest: </b>Blood See Travel<br>
+				<b>Reveal runes: </b>Blood See Hide<br>
+				<b>Astral Journey: </b>Hell travel self<br>
+				<b>Manifest a ghost : </b>Blood See Travel<br>
 				<b>Imbue a talisman: </b>Hell Technology Join<br>
 				<b>Sacrifice: </b>Hell Blood Join<br>
-				<b>Create a wall: </b>Destroy Travel Self<br>
+				<b>Wall: </b>Destroy Travel Self<br>
 				<b>Summon cultist: </b>Join Other Self<br>
 				<b>Free a cultist: </b>Travel technology other<br>
 				<b>Deafen: </b>Hide Other See<br>
 				<b>Blind: </b>Destroy See Other<br>
-				<b>Blood Boil: </b>Destroy See Blood<br>
 				<b>Communicate: </b>Self Other Technology<br>
 				<b>Stun: </b>Join Hide Technology<br>
-				<b>Summon Cultist Armor: </b>Hell Destroy Other<br>
+				<b>Cult Armor: </b>Hell Destroy Other<br>
 				<b>See Invisible: </b>See Hell Join<br>
+				<b>Blood Boil: </b>Destroy See Blood<br>
 				</p>
 				<h2>Rune Descriptions</h2>
 				<h3>Teleport self</h3>
@@ -256,8 +266,8 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				<h3>Convert a person</h3>
 				This rune opens target's mind to the realm of Nar-Sie, which usually results in this person joining the cult. However, some people (mostly the ones who posess high authority) have strong enough will to stay true to their old ideals. <br>
 				<h3>Summon Nar-Sie</h3>
-				The ultimate rune. It summons the Avatar of Nar-Sie himself, tearing a huge hole in reality and consuming everything around it. Summoning it is the final goal of any cult.<br>
-				<h3>Disable Technology</h3>
+				The ultimate rune. It summons the Avatar of Nar-Sie himself, tearing a huge hole in reality and consuming everything around it. Summoning it is the final goal of any cult. Just make sure that you have completed any other objectives and that you are on the Station when you try summon Him.<br>
+				<h3>EMP</h3>
 				Invoking this rune creates a strong electromagnetic pulse in a small radius, making it basically analogic to an EMP grenade. You can imbue this rune into a talisman, making it a decent defensive item.<br>
 				<h3>Drain Blood</h3>
 				This rune instantly heals you of some brute damage at the expense of a person placed on top of the rune. Whenever you invoke a drain rune, ALL drain runes on the station are activated, draining blood from anyone located on top of those runes. This includes yourself, though the blood you drain from yourself just comes back to you. This might help you identify this rune when studying words. One drain gives up to 25HP per each victim, but you can repeat it if you need more. Draining only works on living people, so you might need to recharge your "Battery" once its empty. Drinking too much blood at once might cause blood hunger.<br>
@@ -267,14 +277,14 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				This rune makes all nearby runes completely invisible. They are still there and will work if activated somehow, but you cannot invoke them directly if you do not see them.<br>
 				<h3>Reveal runes</h3>
 				This rune is made to reverse the process of hiding a rune. It reveals all hidden runes in a rather large area around it.
-				<h3>Leave your body</h3>
+				<h3>Astral Journey</h3>
 				This rune gently rips your soul out of your body, leaving it intact. You can observe the surroundings as a ghost as well as communicate with other ghosts. Your body takes damage while you are there, so ensure your journey is not too long, or you might never come back.<br>
 				<h3>Manifest a ghost</h3>
 				Unlike the Raise Dead rune, this rune does not require any special preparations or vessels. Instead of using full lifeforce of a sacrifice, it will drain YOUR lifeforce. Stand on the rune and invoke it. If theres a ghost standing over the rune, it will materialise, and will live as long as you dont move off the rune or die. You can put a paper with a name on the rune to make the new body look like that person.<br>
 				<h3>Imbue a talisman</h3>
 				This rune allows you to imbue the magic of some runes into paper talismans. Create an imbue rune, then an appropriate rune beside it. Put an empty piece of paper on the imbue rune and invoke it. You will now have a one-use talisman with the power of the target rune. Using a talisman drains some health, so be careful with it. You can imbue a talisman with power of the following runes: summon tome, reveal, conceal, teleport, tisable technology, communicate, deafen, blind and stun.<br>
 				<h3>Sacrifice</h3>
-				Sacrifice rune allows you to sacrifice a living thing or a body to the Geometer of Blood. Monkeys and dead humans are the most basic sacrifices, they might or might not be enough to gain His favor. A living human is what a real sacrifice should be, however, you will need 3 people chanting the invocation to sacrifice a living person.
+				Sacrifice rune allows you to sacrifice a living thing or a body to the Geometer of Blood. Monkeys and dead humans are the most basic sacrifices, they might or might not be enough to gain His favor. A living human is what a real sacrifice should be, however, you will need 3 people chanting the invocation to sacrifice a living person.<br>Silicons can also be disposed of using this rune.<br>
 				<h3>Create a wall</h3>
 				Invoking this rune solidifies the air above it, creating an an invisible wall. To remove the wall, simply invoke the rune again.
 				<h3>Summon cultist</h3>
@@ -285,16 +295,16 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				This rune temporarily deafens all non-cultists around you.<br>
 				<h3>Blind</h3>
 				This rune temporarily blinds all non-cultists around you. Very robust. Use together with the deafen rune to leave your enemies completely helpless.<br>
-				<h3>Blood boil</h3>
-				This rune boils the blood all non-cultists in visible range. The damage is enough to instantly critically hurt any person. You need 3 cultists invoking the rune for it to work. This rune is unreliable and may cause unpredicted effect when invoked. It also drains significant amount of your health when succesfully invoked.<br>
 				<h3>Communicate</h3>
 				Invoking this rune allows you to relay a message to all cultists on the station and nearby space objects.
 				<h3>Stun</h3>
-				Unlike other runes, this ons is supposed to be used in talisman form. When invoked directly, it simply releases some dark energy, briefly stunning everyone around. When imbued into a talisman, you can force all of its energy into one person, stunning him so hard he cant even speak. However, effect wears off rather fast.<br>
-				<h3>Equip Armor</h3>
-				When this rune is invoked, either from a rune or a talisman, it will equip the user with the armor of the followers of Nar-Sie. To use this rune to its fullest extent, make sure you are not wearing any form of headgear, armor, gloves or shoes, and make sure you are not holding anything in your hands.<br>
+				Unlike other runes, this ons is supposed to be used in talisman form. When invoked directly, it simply releases some dark energy, briefly stunning everyone around. When imbued into a talisman, you can force all of its energy into one person, stunning him so hard he cant even speak. However, effect wears off rather fast.<br><br>Works on robots!<br>
+				<h3>Cult Armor</h3>
+				When this rune is invoked, either from a rune or a talisman, it will equip the user with the armor of the followers of Nar-Sie. To use this rune to its fullest extent, make sure you are not wearing any form of headgear, armor, gloves or shoes, and make sure you are not holding anything in your hands.<br>Small-sized individuals will be provided with a fitting armor.<br><br>You may also use this rune to change a construct's type. Simply ask the construct to stand on the rune then touch it.<br>
 				<h3>See Invisible</h3>
 				When invoked when standing on it, this rune allows the user to see the the world beyond as long as he does not move.<br>
+				<h3>Blood boil</h3>
+				This rune boils the blood all non-cultists in visible range. The damage is enough to instantly critically hurt any person. You need 3 cultists invoking the rune for it to work. This rune is unreliable and may cause unpredicted effect when invoked. It also drains significant amount of your health when succesfully invoked.<br>
 				</body>
 				</html>
 				"}
@@ -303,7 +313,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 /obj/item/weapon/tome/Topic(href,href_list[])
 	if (src.loc == usr)
 		var/number = text2num(href_list["number"])
-		if (usr.stat|| usr.restrained())
+		if (usr.stat || usr.restrained())
 			return
 		switch(href_list["action"])
 			if("clear")
@@ -334,6 +344,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 
 /*
 /obj/item/weapon/tome/proc/edit_notes()     FUCK IT. Cant get it to work properly. - K0000
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/tome/proc/edit_notes() called tick#: [world.time]")
 	world << "its been called! [usr]"
 	notedat = {"
 	<br><b>Word translation notes</b> <br>
@@ -418,6 +429,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
 				"}
 //						call(/obj/item/weapon/tome/proc/edit_notes)()
+					//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\//						call(/obj/item/weapon/tome/proc/edit_notes)() called tick#: [world.time]")
 					user << browse("[notedat]", "window=notes")
 					return
 		if(usr.get_active_hand() != src)
@@ -430,33 +442,37 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		for (var/w in words)
 			english+=words[w]
 		if(usr)
-			w1 = input("Write your first rune:", "Rune Scribing") in english
-			for (var/w in words)
-				if (words[w] == w1)
-					w1 = w
+			w1 = input("Write your first rune: \[ __ \] \[ ... \] \[ ... \]", "Rune Scribing") as null|anything in english
+			if(!w1)
+				return
 		if(usr)
-			w2 = input("Write your second rune:", "Rune Scribing") in english
-			for (var/w in words)
-				if (words[w] == w2)
-					w2 = w
+			w2 = input("Write your second rune: \[ [w1] \] \[ __ \] \[ ... \]", "Rune Scribing") as null|anything in english
+			if(!w2)
+				return
 		if(usr)
-			w3 = input("Write your third rune:", "Rune Scribing") in english
-			for (var/w in words)
-				if (words[w] == w3)
-					w3 = w
+			w3 = input("Write your third rune: \[ [w1] \] \[ [w2] \] \[ __ \]", "Rune Scribing") as null|anything in english
+			if(!w3)
+				return
+
+		for (var/w in words)
+			if (words[w] == w1)
+				w1 = w
+			if (words[w] == w2)
+				w2 = w
+			if (words[w] == w3)
+				w3 = w
 
 		if(usr.get_active_hand() != src)
 			return
-
 		for (var/mob/V in viewers(src))
 			V.show_message("<span class='warning'>[user] slices open a finger and begins to chant and paint symbols on the floor.</span>", 3, "<span class='warning'>You hear chanting.</span>", 2)
 		user << "<span class='warning'>You slice open one of your fingers and begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>"
 		user.take_overall_damage((rand(9)+1)/10) // 0.1 to 1.0 damage
-		if(do_after(user, 50))
+		if(do_after(user, user.loc, 50))
 			if(usr.get_active_hand() != src)
 				return
 			var/mob/living/carbon/human/H = user
-			var/obj/effect/rune/R = new /obj/effect/rune(user.loc)
+			var/obj/effect/rune/R = new /obj/effect/rune(get_turf(user))
 			user << "<span class='warning'>You finish drawing the arcane markings of the Geometer.</span>"
 			R.word1 = w1
 			R.word2 = w2
@@ -470,7 +486,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		return
 
 /obj/item/weapon/tome/attackby(obj/item/weapon/tome/T as obj, mob/living/user as mob)
-	if(istype(T, /obj/item/weapon/tome)) // sanity check to prevent a runtime error
+	if(istype(T, /obj/item/weapon/tome) && iscultist(user)) // sanity check to prevent a runtime error
 		switch(alert("Copy the runes from your tome?",,"Copy", "Cancel"))
 			if("cancel")
 				return
@@ -482,14 +498,13 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		for(var/w in words)
 			words[w] = T.words[w]
 		user << "You copy the translation notes from your tome."
+		flick("tome-copied",src)
 
 
-/obj/item/weapon/tome/examine()
-	set src in usr
-	if(!iscultist(usr))
-		usr << "An old, dusty tome with frayed edges and a sinister looking cover."
-	else
-		usr << "The scriptures of Nar-Sie, The One Who Sees, The Geometer of Blood. Contains the details of every ritual his followers could think of. Most of these are useless, though."
+/obj/item/weapon/tome/examine(mob/user)
+	..()
+	if(iscultist(user))
+		user << "The scriptures of Nar-Sie, The One Who Sees, The Geometer of Blood. Contains the details of every ritual his followers could think of. Most of these are useless, though."
 
 /obj/item/weapon/tome/cultify()
 	return

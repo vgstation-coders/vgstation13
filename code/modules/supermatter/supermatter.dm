@@ -14,7 +14,7 @@
 
 /obj/machinery/power/supermatter
 	name = "Supermatter Crystal"
-	desc = "A strangely translucent and iridescent crystal. \red You get headaches just from looking at it."
+	desc = "A strangely translucent and iridescent crystal. <span class='warning'>You get headaches just from looking at it.</span>"
 	icon = 'icons/obj/engine.dmi'
 	icon_state = "darkmatter"
 	density = 1
@@ -22,7 +22,7 @@
 
 	var/max_luminosity = 8 // Now varies based on power.
 
-	l_color = "#ffcc00"
+	light_color = LIGHT_COLOR_YELLOW
 
 	// What it's referred to in the alerts
 	var/short_name = "Crystal"
@@ -34,6 +34,7 @@
 	var/damage = 0
 	var/damage_archived = 0
 	var/warning_point = 100
+	var/audio_warning_point=500
 	var/emergency_point = 700
 	var/explosion_point = 1000
 
@@ -43,7 +44,9 @@
 
 	var/lastwarning = 0                        // Time in 1/10th of seconds since the last sent warning
 	var/lastaudiowarning = 0
+
 	var/power = 0
+	var/max_power = 2000 // Used for lighting scaling.
 
 	var/oxygen = 0				  // Moving this up here for easier debugging.
 
@@ -61,20 +64,28 @@
 	var/frequency = 0
 	var/id_tag
 
+	//Add types to this list so it doesn't make a message or get desroyed by the Supermatter on touch.
+	var/list/message_exclusions = list(/obj/effect/effect/sparks)
+	machine_flags = MULTITOOL_MENU
+
 /obj/machinery/power/supermatter/shard //Small subtype, less efficient and more sensitive, but less boom.
 	name = "Supermatter Shard"
 	short_name = "Shard"
-	desc = "A strangely translucent and iridescent crystal that looks like it used to be part of a larger structure. \red You get headaches just from looking at it."
+	desc = "A strangely translucent and iridescent crystal that looks like it used to be part of a larger structure. <span class='warning'>You get headaches just from looking at it.</span>"
 	icon_state = "darkmatter_shard"
 	base_icon_state = "darkmatter_shard"
 
 	warning_point = 50
+	audio_warning_point=400
 	emergency_point = 500
 	explosion_point = 900
 
 	gasefficency = 0.125
 
 	explosion_power = 8 // WAS 3 - N3X
+
+	max_luminosity = 5
+	max_power=3000
 
 
 /obj/machinery/power/supermatter/New()
@@ -83,19 +94,48 @@
 
 
 /obj/machinery/power/supermatter/Destroy()
-	del(radio)
+	qdel(radio)
+	radio = null
 	. = ..()
 
 /obj/machinery/power/supermatter/proc/explode()
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/supermatter/proc/explode() called tick#: [world.time]")
 		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
 		new /turf/unsimulated/wall/supermatter(get_turf(src))
 		SetUniversalState(/datum/universal_state/supermatter_cascade)
-		del(src)
+		qdel(src)
 
 /obj/machinery/power/supermatter/shard/explode()
 		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
-		del src
+		qdel(src)
 		return
+
+/obj/machinery/power/supermatter/ex_act(severity)
+	switch(severity)
+		if(3.0)
+			return //Should be improved
+		else
+			return explode()
+
+/obj/machinery/power/supermatter/shard/singularity_act()
+	var/prints = ""
+	if(src.fingerprintshidden)
+		prints = ", all touchers : [list2params(src.fingerprintshidden)]"
+	log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
+	message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
+	qdel(src)
+	return 15000
+
+/obj/machinery/power/supermatter/singularity_act()
+	var/prints = ""
+	if(src.fingerprintshidden)
+		prints = ", all touchers : " + src.fingerprintshidden
+	SetUniversalState(/datum/universal_state/supermatter_cascade)
+	//S.expand(STAGE_SUPER, 1)
+	log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
+	message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
+	qdel(src)
+	return 20000
 
 /obj/machinery/power/supermatter/process()
 
@@ -136,10 +176,12 @@
 					offset=0
 					audio_sounds += list('sound/AI/supermatter_delam.ogg')
 					//audio_offset = 100
-				play_alert=1
+				play_alert = (damage > audio_warning_point)
 			else
 				warning = "[short_name] hyperstructure returning to safe operating levels. Instability: [stability]%"
-			radio.autosay(warning, "Supermatter [short_name] Monitor")
+			//radio.say(warning, "Supermatter [short_name] Monitor")
+			Broadcast_Message(radio, all_languages[LANGUAGE_SOL_COMMON], null, radio, warning, "Supermatter [short_name] Monitor", "Automated Announcement", "Supermatter [short_name] Monitor", 0, 0, list(0,1), 1459)
+
 			lastwarning = world.timeofday - offset
 
 		if(play_alert && (world.timeofday - lastaudiowarning) / 10 >= AUDIO_WARNING_DELAY)
@@ -164,7 +206,7 @@
 
 		if(!radio_connection) return
 
-		var/datum/signal/signal = new
+		var/datum/signal/signal = getFromPool(/datum/signal)
 		signal.source = src
 		signal.transmission_method = 1
 		signal.data = list(
@@ -239,10 +281,15 @@
 			l.hallucination = max(0, min(200, l.hallucination + power * config_hallucination_power * sqrt( 1 / max(1,get_dist(l, src)) ) ) )
 
 	for(var/mob/living/l in range(src, round((power / 100) ** 0.25)))
-		var/rads = (power / 10) * sqrt( 1 / get_dist(l, src) )
+		var/rads = (power / 10) * sqrt(1/(max(get_dist(l, src), 1)))
 		l.apply_effect(rads, IRRADIATE)
 
 	power -= (power/500)**3
+
+	var/light_value = Clamp(round(Clamp(power / max_power, 0, 1) * max_luminosity), 0, max_luminosity)
+
+	// Lighting based on power output.
+	set_light(light_value, light_value / 2)
 
 	return 1
 
@@ -283,7 +330,6 @@
 	attack_ai(user)
 
 /obj/machinery/power/supermatter/attack_ai(mob/user as mob)
-	src.examine()
 	var/stability = num2text(round((damage / explosion_point) * 100))
 	user << "<span class = \"info\">Matrix Instability: [stability]%</span>"
 	user << "<span class = \"info\">Damage: [format_num(damage)]</span>" // idfk what units we're using.
@@ -299,15 +345,16 @@
 	Consume(user)
 
 /obj/machinery/power/supermatter/proc/transfer_energy()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/supermatter/proc/transfer_energy() called tick#: [world.time]")
 	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
 		if(get_dist(R, src) <= 15) // Better than using orange() every process
 			R.receive_pulse(power)
 	return
 
 /obj/machinery/power/supermatter/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
-	if(istype(W, /obj/item/device/multitool))
-		update_multitool_menu(user)
-		return 1
+	. = ..()
+	if(.)
+		return .
 
 	user.visible_message("<span class=\"warning\">\The [user] touches \a [W] to \the [src] as a silence fills the room...</span>",\
 		"<span class=\"danger\">You touch \the [W] to \the [src] when everything suddenly goes silent.\"</span>\n<span class=\"notice\">\The [W] flashes into dust as you flinch away from \the [src].</span>",\
@@ -326,9 +373,11 @@
 		AM.visible_message("<span class=\"warning\">\The [AM] slams into \the [src] inducing a resonance... \his body starts to glow and catch flame before flashing into ash.</span>",\
 		"<span class=\"danger\">You slam into \the [src] as your ears are filled with unearthly ringing. Your last thought is \"Oh, fuck.\"</span>",\
 		"<span class=\"warning\">You hear an unearthly noise as a wave of heat washes over you.</span>")
-	else
+	else if(!is_type_in_list(AM, message_exclusions))
 		AM.visible_message("<span class=\"warning\">\The [AM] smacks into \the [src] and rapidly flashes to ash.</span>",\
 		"<span class=\"warning\">You hear a loud crack as you are washed with a wave of heat.</span>")
+	else
+		return ..()
 
 	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
 
@@ -336,11 +385,14 @@
 
 
 /obj/machinery/power/supermatter/proc/Consume(var/mob/living/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/power/supermatter/proc/Consume() called tick#: [world.time]")
 	if(istype(user))
 		user.dust()
+		if(istype(user,/mob/living/simple_animal/mouse)) //>implying mice are going to follow the rules
+			return
 		power += 200
 	else
-		del user
+		qdel(user)
 
 	power += 200
 

@@ -20,13 +20,15 @@
 	// Life vars/
 	var/energy = 0
 	var/obj/effect/plant_controller/master = null
-	var/mob/living/buckled_mob
 	var/datum/seed/seed
 
 /obj/effect/plantsegment/New()
 	return
 
 /obj/effect/plantsegment/Destroy()
+	if(reagents)
+		reagents.my_atom = null
+		reagents = null
 	if(master)
 		master.vines -= src
 		master.growth_queue -= src
@@ -34,26 +36,27 @@
 
 /obj/effect/plantsegment/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (!W || !user || !W.type) return
-	switch(W.type)
-		if(/obj/item/weapon/circular_saw) del src
-		if(/obj/item/weapon/kitchen/utensil/knife) del src
-		if(/obj/item/weapon/scalpel) del src
-		if(/obj/item/weapon/twohanded/fireaxe) del src
-		if(/obj/item/weapon/hatchet) del src
-		if(/obj/item/weapon/melee/energy) del src
+	switch(W.type) //This is absolutely terrible AND copypasted from biomass (or other way around)
+		if(/obj/item/weapon/circular_saw) qdel(src)
+		if(/obj/item/weapon/kitchen/utensil/knife) qdel(src)
+		if(/obj/item/weapon/fireaxe) qdel(src)
+		if(/obj/item/weapon/hatchet) qdel(src)
+		if(/obj/item/weapon/melee/energy) qdel(src)
+		if(/obj/item/weapon/pickaxe/plasmacutter) qdel(src)
 
 		// Less effective weapons
 		if(/obj/item/weapon/wirecutters)
-			if(prob(25)) del src
+			if(prob(25)) qdel(src)
 		if(/obj/item/weapon/shard)
-			if(prob(25)) del src
+			if(prob(25)) qdel(src)
 
 		// Weapons with subtypes
 		else
-			if(istype(W, /obj/item/weapon/melee/energy/sword)) del src
+			if(istype(W, /obj/item/weapon/melee/energy/sword)) qdel(src)
+			else if(istype(W, /obj/item/weapon/scalpel)) qdel(src)
 			else if(istype(W, /obj/item/weapon/weldingtool))
 				var/obj/item/weapon/weldingtool/WT = W
-				if(WT.remove_fuel(0, user)) del src
+				if(WT.remove_fuel(0, user)) qdel(src)
 			else
 				manual_unbuckle(user)
 				return
@@ -63,7 +66,7 @@
 
 /obj/effect/plantsegment/attack_hand(mob/user as mob)
 
-	if(user.a_intent == "help" && seed && harvest)
+	if(user.a_intent == I_HELP && seed && harvest)
 		seed.harvest(user,1)
 		harvest = 0
 		lastproduce = age
@@ -76,39 +79,32 @@
 /obj/effect/plantsegment/attack_paw(mob/user as mob)
 	manual_unbuckle(user)
 
-/obj/effect/plantsegment/proc/unbuckle()
-	if(buckled_mob)
-		if(buckled_mob.buckled == src)	//this is probably unneccesary, but it doesn't hurt
-			buckled_mob.buckled = null
-			buckled_mob.anchored = initial(buckled_mob.anchored)
-			buckled_mob.update_canmove()
-		buckled_mob = null
-	return
-
 /obj/effect/plantsegment/proc/manual_unbuckle(mob/user as mob)
-	if(buckled_mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/plantsegment/proc/manual_unbuckle() called tick#: [world.time]")
+	if(locked_atoms && locked_atoms.len)
 		if(prob(seed ? min(max(0,100 - seed.potency),100) : 50))
-			if(buckled_mob.buckled == src)
-				if(buckled_mob != user)
-					buckled_mob.visible_message(\
-						"<span class='notice'>[user.name] frees [buckled_mob.name] from [src].</span>",\
-						"<span class='notice'>[user.name] frees you from [src].</span>",\
-						"<span class='warning'>You hear shredding and ripping.</span>")
-				else
-					buckled_mob.visible_message(\
-						"<span class='notice'>[buckled_mob.name] struggles free of [src].</span>",\
-						"<span class='notice'>You untangle [src] from around yourself.</span>",\
-						"<span class='warning'>You hear shredding and ripping.</span>")
-			unbuckle()
+			var/mob/M = locked_atoms[1]
+			if(M != user)
+				M.visible_message(\
+					"<span class='notice'>[user.name] frees [M.name] from \the [src].</span>",\
+					"<span class='notice'>[user.name] frees you from [src].</span>",\
+					"<span class='warning'>You hear shredding and ripping.</span>")
+			else
+				M.visible_message(\
+					"<span class='notice'>[M.name] struggles free of [src].</span>",\
+					"<span class='notice'>You untangle [src] from around yourself.</span>",\
+					"<span class='warning'>You hear shredding and ripping.</span>")
+			unlock_atom(M)
 		else
 			var/text = pick("rips","tears","pulls")
 			user.visible_message(\
-				"<span class='notice'>[user.name] [text] at [src].</span>",\
-				"<span class='notice'>You [text] at [src].</span>",\
+				"<span class='notice'>[user.name] [text] at \the [src].</span>",\
+				"<span class='notice'>You [text] at \the [src].</span>",\
 				"<span class='warning'>You hear shredding and ripping.</span>")
-	return
 
 /obj/effect/plantsegment/proc/grow()
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/plantsegment/proc/grow() called tick#: [world.time]")
 
 	if(!energy)
 		src.icon_state = pick("Med1", "Med2", "Med3")
@@ -127,71 +123,73 @@
 
 /obj/effect/plantsegment/proc/entangle_mob()
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/plantsegment/proc/entangle_mob() called tick#: [world.time]")
+
 	if(limited_growth)
 		return
 
 	if(prob(seed ? seed.potency : 25))
 
-		if(!buckled_mob)
+		if(!locked_atoms.len)
 			var/mob/living/carbon/V = locate() in src.loc
-			if(V && (V.stat != DEAD) && (V.buckled != src)) // If mob exists and is not dead or captured.
-				V.buckled = src
-				V.loc = src.loc
-				V.update_canmove()
-				src.buckled_mob = V
+			if(V && V.stat != DEAD) // If mob exists and is not dead or captured.
+				lock_atom(V)
 				V << "<span class='danger'>The vines [pick("wind", "tangle", "tighten")] around you!</span>"
 
 		// FEED ME, SEYMOUR.
-		if(buckled_mob && seed && (buckled_mob.stat != DEAD)) //Don't bother with a dead mob.
+		if(seed && locked_atoms.len)
+			var/mob/V = locked_atoms[1]
+			if(V.stat != DEAD) //Don't bother with a dead mob.
 
-			var/mob/living/M = buckled_mob
-			if(!istype(M)) return
-			var/mob/living/carbon/human/H = buckled_mob
+				var/mob/living/M = V
+				if(!istype(M)) return
+				var/mob/living/carbon/human/H = V
 
-			// Drink some blood/cause some brute.
-			if(seed.carnivorous == 2)
-				buckled_mob << "<span class='danger'>\The [src] pierces your flesh greedily!</span>"
+				// Drink some blood/cause some brute.
+				if(seed.carnivorous == 2)
+					V << "<span class='danger'>\The [src] pierces your flesh greedily!</span>"
 
-				var/damage = rand(round(seed.potency/2),seed.potency)
-				if(!istype(H))
-					H.adjustBruteLoss(damage)
-					return
+					var/damage = rand(round(seed.potency/2),seed.potency)
+					if(!istype(H))
+						H.adjustBruteLoss(damage)
+						return
 
-				var/datum/organ/external/affecting = H.get_organ(pick("l_foot","r_foot","l_leg","r_leg","l_hand","r_hand","l_arm", "r_arm","head","chest","groin"))
+					var/datum/organ/external/affecting = H.get_organ(pick("l_foot","r_foot","l_leg","r_leg","l_hand","r_hand","l_arm", "r_arm","head","chest","groin"))
 
-				if(affecting)
-					affecting.take_damage(damage, 0)
-					if(affecting.parent)
-						affecting.parent.add_autopsy_data("[plant_damage_noun]", damage)
-				else
-					H.adjustBruteLoss(damage)
+					if(affecting)
+						affecting.take_damage(damage, 0)
+						if(affecting.parent)
+							affecting.parent.add_autopsy_data("[plant_damage_noun]", damage)
+					else
+						H.adjustBruteLoss(damage)
 
-				H.UpdateDamageIcon()
-				H.updatehealth()
+					H.UpdateDamageIcon()
+					H.updatehealth()
 
-			// Inject some chems.
-			if(seed.chems && seed.chems.len && istype(H))
-				H << "<span class='danger'>You feel something seeping into your skin!</span>"
-				for(var/rid in seed.chems)
-					var/injecting = min(5,max(1,seed.potency/5))
-					H.reagents.add_reagent(rid,injecting)
+				// Inject some chems.
+				if(seed.chems && seed.chems.len && istype(H))
+					H << "<span class='danger'>You feel something seeping into your skin!</span>"
+					for(var/rid in seed.chems)
+						var/injecting = min(5,max(1,seed.potency/5))
+						H.reagents.add_reagent(rid,injecting)
 
 /obj/effect/plantsegment/proc/update()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/plantsegment/proc/update() called tick#: [world.time]")
 	if(!seed) return
 
 	// Update bioluminescence.
 	if(seed.biolum)
-		SetLuminosity(1+round(seed.potency/10))
+		set_light(1+round(seed.potency/10))
 		if(seed.biolum_colour)
-			l_color = seed.biolum_colour
+			light_color = seed.biolum_colour
 		else
-			l_color = null
+			light_color = null
 		return
 	else
-		SetLuminosity(0)
+		set_light(0)
 
 	// Update flower/product overlay.
-	overlays.Cut()
+	overlays.len = 0
 	if(age >= seed.maturation)
 		if(prob(20) && seed.products && seed.products.len && !harvest && ((age-lastproduce) > seed.production))
 			harvest = 1
@@ -210,18 +208,28 @@
 			overlays += flower_overlay
 
 /obj/effect/plantsegment/proc/spread()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/plantsegment/proc/spread() called tick#: [world.time]")
 	var/direction = pick(cardinal)
 	var/step = get_step(src,direction)
 	if(istype(step,/turf/simulated/floor))
 		var/turf/simulated/floor/F = step
 		if(!locate(/obj/effect/plantsegment,F))
-			if(locate(/obj/structure/window,F))
+			if(locate(/obj/structure/window,F))//PREVENTS VINES FROM PASSING INTO WINDOWS
 				for(var/obj/structure/window/twindow in F)
 					if(get_dir(step, loc) == twindow.dir)
 						return
-			if(locate(/obj/structure/window,loc))
+			if(locate(/obj/structure/window,loc))//PREVENTS VINES FROM PASSING OUT OF WINDOWS
 				for(var/obj/structure/window/lwindow in loc)
 					if(get_dir(loc, step) == lwindow.dir)
+						return
+
+			if(locate(/obj/machinery/door/window,F))//PREVENTS VINES FROM PASSING OUT OF CLOSED WINDOORS
+				for(var/obj/machinery/door/window/twindoor in F)
+					if(get_dir(step, loc) == twindoor.dir && twindoor.density == 1)
+						return
+			if(locate(/obj/machinery/door/window,loc))//PREVENTS VINES FROM PASSING OUT OF CLOSED WINDOORS
+				for(var/obj/machinery/door/window/lwindoor in loc)
+					if(get_dir(loc, step) == lwindoor.dir && lwindoor.density == 1)
 						return
 			if(F.Enter(src))
 				if(master)
@@ -245,14 +253,19 @@
 
 // Hotspots kill vines.
 /obj/effect/plantsegment/fire_act(null, temp, volume)
-	del src
+	qdel(src)
 
 /obj/effect/plantsegment/proc/die()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/plantsegment/proc/die() called tick#: [world.time]")
 	if(seed && harvest)
 		if(rand(5))seed.harvest(src,1)
 		qdel(src)
 
 /obj/effect/plantsegment/proc/life()
+	if(timestopped) return 0 //under effects of time magick
+
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/plantsegment/proc/life() called tick#: [world.time]")
 
 	if(!seed)
 		return
@@ -276,16 +289,11 @@
 		die()
 		return
 
-	var/area/A = T.loc
-	if(A)
-		var/light_available
-		if(A.lighting_use_dynamic)
-			light_available = max(0,min(10,T.lighting_lumcount)-5)
-		else
-			light_available =  5
-		if(abs(light_available - seed.ideal_light) > seed.light_tolerance)
-			die()
-			return
+	var/light_available = T.get_lumcount(0.5) * 10
+
+	if(abs(light_available - seed.ideal_light) > seed.light_tolerance)
+		die()
+		return
 
 /obj/effect/plant_controller
 
@@ -313,6 +321,7 @@
 
 	spawn(0)
 		spawn_piece(src.loc)
+		loc = null
 
 	processing_objects.Add(src)
 
@@ -321,6 +330,7 @@
 	..()
 
 /obj/effect/plant_controller/proc/spawn_piece(var/turf/location)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/plant_controller/proc/spawn_piece() called tick#: [world.time]")
 	var/obj/effect/plantsegment/SV = new(location)
 	SV.limited_growth = src.limited_growth
 	growth_queue += SV
@@ -334,7 +344,7 @@
 /obj/effect/plant_controller/process()
 
 	// Space vines exterminated. Remove the controller
-	if(!vines)
+	if(!vines.len)
 		qdel(src)
 		return
 
@@ -372,6 +382,8 @@
 		growth_queue -= SV
 
 		SV.life()
+
+		if(!SV) continue
 
 		if(SV.energy < 2) //If tile isn't fully grown
 			var/chance

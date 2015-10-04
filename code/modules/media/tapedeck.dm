@@ -45,6 +45,7 @@
 	var/last_ad_cyc    = 0 // Last world.time of an ad cycle
 	var/list/ad_queue  = 0 // Ads queued to play
 
+	machine_flags = MULTITOOL_MENU
 	var/state_base = "tapedeck"
 
 /obj/machinery/media/tapedeck/attack_ai(var/mob/user)
@@ -76,14 +77,15 @@
 			overlays += "[state_base]-running"
 
 /obj/machinery/media/tapedeck/proc/check_reload()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/tapedeck/proc/check_reload() called tick#: [world.time]")
 	return world.time > last_reload + JUKEBOX_RELOAD_COOLDOWN
 
 /obj/machinery/media/tapedeck/attack_hand(var/mob/user)
 	if(stat & NOPOWER)
-		usr << "\red You don't see anything to mess with."
+		usr << "<span class='warning'>You don't see anything to mess with.</span>"
 		return
 	if(stat & BROKEN && playlist!=null)
-		user.visible_message("\red <b>[user.name] smacks the side of \the [src.name].</b>","\red You hammer the side of \the [src.name].")
+		user.visible_message("<span class='danger'>[user.name] smacks the side of \the [src.name].</span>","<span class='warning'>You hammer the side of \the [src.name].</span>")
 		stat &= ~BROKEN
 		playlist=null
 		playing=emagged
@@ -106,6 +108,7 @@
 	popup.open()
 
 /obj/machinery/media/jukebox/proc/ScreenMain(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/jukebox/proc/ScreenMain() called tick#: [world.time]")
 	var/t = "<h1>[src] Interface</h1>"
 	t += "<b>Power:</b> <a href='?src=\ref[src];power=1'>[playing?"On":"Off"]</a><br />"
 	t += "<b>Play Mode:</b> <a href='?src=\ref[src];mode=1'>[loopModeNames[loop_mode]]</a><br />"
@@ -162,6 +165,7 @@
 	return t
 
 /obj/machinery/media/jukebox/proc/ScreenSettings(var/mob/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/jukebox/proc/ScreenSettings() called tick#: [world.time]")
 	var/dat={"<h1>Settings</h1>
 		<form action="?src=\ref[src]" method="get">
 		<input type="hidden" name="src" value="\ref[src]" />
@@ -188,9 +192,9 @@
 
 
 /obj/machinery/media/jukebox/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/device/multitool))
-		update_multitool_menu(user)
-		return 1
+	. = ..()
+	if(.)
+		return .
 	if(istype(W, /obj/item/weapon/card/emag))
 		current_song = 0
 		if(!emagged)
@@ -200,26 +204,27 @@
 			loop_mode = JUKEMODE_SHUFFLE
 			emagged = 1
 			playing = 1
-			user.visible_message("\red [user.name] slides something into the [src.name]'s card-reader.","\red You short out the [src.name].")
+			user.visible_message("<span class='warning'>[user.name] slides something into the [src.name]'s card-reader.</span>","<span class='warning'>You short out the [src.name].</span>")
 			update_icon()
 			update_music()
+			return 1
 	else if(istype(W,/obj/item/weapon/wrench))
 		var/un = !anchored ? "" : "un"
-		user.visible_message("\blue [user.name] begins [un]locking \the [src.name]'s casters.","\blue You begin [un]locking \the [src.name]'s casters.")
-		if(do_after(user,30))
+		user.visible_message("<span class='notice'>[user.name] begins [un]locking \the [src.name]'s casters.</span>","<span class='notice'>You begin [un]locking \the [src.name]'s casters.</span>")
+		if(do_after(user, src,30))
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			anchored = !anchored
-			user.visible_message("\blue [user.name] [un]locks \the [src.name]'s casters.","\red You [un]lock \the [src.name]'s casters.")
+			user.visible_message("<span class='notice'>[user.name] [un]locks \the [src.name]'s casters.</span>","<span class='warning'>You [un]lock \the [src.name]'s casters.</span>")
 			playing = emagged
 			update_music()
 			update_icon()
 
 /obj/machinery/media/jukebox/Topic(href, href_list)
 	if(isobserver(usr) && !isAdminGhost(usr))
-		usr << "\red You can't push buttons when your fingers go right through them, dummy."
+		usr << "<span class='warning'>You can't push buttons when your fingers go right through them, dummy.</span>"
 		return
 
-	..()
+	if(..()) return 1
 
 	if (href_list["power"])
 		playing=!playing
@@ -234,7 +239,7 @@
 			if("Save Settings")
 				var/datum/money_account/new_linked_account = get_money_account(text2num(href_list["payableto"]),z)
 				if(!new_linked_account)
-					usr << "\red Unable to link new account. Aborting."
+					usr << "<span class='warning'>Unable to link new account. Aborting.</span>"
 					return
 
 				change_cost = max(0,text2num(href_list["set_change_cost"]))
@@ -250,7 +255,7 @@
 
 	if (href_list["playlist"])
 		if(!check_reload())
-			usr << "\red You must wait 60 seconds between playlist reloads."
+			usr << "<span class='warning'>You must wait 60 seconds between playlist reloads.</span>"
 			return
 		playlist_id=href_list["playlist"]
 		last_reload=world.time
@@ -344,6 +349,7 @@
 	..()
 
 /obj/machinery/media/jukebox/proc/stop_playing()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/media/jukebox/proc/stop_playing() called tick#: [world.time]")
 	//current_song=0
 	playing=0
 	update_music()
@@ -402,7 +408,7 @@
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)
 	// NO FUN ALLOWED.  Emag list is included, anyway.
 	if(istype(W, /obj/item/weapon/card/emag))
-		user << "\red Your [W] refuses to touch \the [src]!"
+		user << "<span class='warning'>Your [W] refuses to touch \the [src]!</span>"
 		return
 	..()
 

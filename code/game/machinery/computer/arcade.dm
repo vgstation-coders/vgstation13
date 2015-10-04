@@ -16,9 +16,10 @@
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	emag_cost = 0 // because fun
 
-	l_color = "#00FF00"
+	light_color = LIGHT_COLOR_GREEN
 
 	var/list/prizes = list(	/obj/item/weapon/storage/box/snappops			= 2,
+							/obj/item/toy/cards								= 2,
 							/obj/item/toy/blink								= 2,
 							/obj/item/clothing/under/syndicate/tacticool	= 2,
 							/obj/item/toy/sword								= 2,
@@ -27,7 +28,7 @@
 							/obj/item/clothing/suit/syndicatefake			= 2,
 							/obj/item/weapon/storage/fancy/crayons			= 2,
 							/obj/item/toy/spinningtoy						= 2,
-							/obj/item/toy/minimeteor					= 2,
+							/obj/item/toy/minimeteor						= 2,
 							/obj/item/device/whisperphone					= 2,
 							/obj/item/toy/prize/ripley						= 1,
 							/obj/item/toy/prize/fireripley					= 1,
@@ -60,6 +61,38 @@
 	src.name = (name_action + name_part1 + name_part2)
 
 
+/obj/machinery/computer/arcade/proc/import_game_data(var/obj/item/weapon/circuitboard/arcade/A)
+	if(!A || !A.game_data || !A.game_data.len)
+		return
+	name = A.game_data["name"]
+	emagged = A.game_data["emagged"]
+	enemy_name = A.game_data["enemy_name"]
+	temp = A.game_data["temp"]
+	player_hp = A.game_data["player_hp"]
+	player_mp = A.game_data["player_mp"]
+	enemy_hp = A.game_data["enemy_hp"]
+	enemy_mp =A.game_data["enemy_mp"]
+	gameover = A.game_data["gameover"]
+	blocked = A.game_data["blocked"]
+
+/obj/machinery/computer/arcade/proc/export_game_data(var/obj/item/weapon/circuitboard/arcade/A)
+	if(!A) return
+	if(!A.game_data)
+		A.game_data = list()
+	A.game_data.len = 0
+	A.game_data["name"] = name
+	A.game_data["emagged"] = emagged
+	A.game_data["enemy_name"] = enemy_name 
+	A.game_data["temp"] = temp
+	A.game_data["player_hp"] = player_hp
+	A.game_data["player_mp"] = player_mp
+	A.game_data["enemy_hp"] = enemy_hp
+	A.game_data["enemy_mp"] = enemy_mp
+	A.game_data["gameover"] = gameover
+	A.game_data["blocked"] = blocked
+
+
+
 /obj/machinery/computer/arcade/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)
@@ -74,7 +107,7 @@
 	var/dat = "<a href='byond://?src=\ref[src];close=1'>Close</a>"
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\computer\arcade.dm:67: dat += "<center><h4>[src.enemy_name]</h4></center>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\computer\arcade.dm:67: dat += "<center><h4>[src.enemy_name]</h4></center>"
 	dat += {"<center><h4>[src.enemy_name]</h4></center>
 		<br><center><h3>[src.temp]</h3></center>
 		<br><center>Health: [src.player_hp] | Magic: [src.player_mp] | Enemy Health: [src.enemy_hp]</center>"}
@@ -84,7 +117,7 @@
 	else
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\computer\arcade.dm:75: dat += "<center><b><a href='byond://?src=\ref[src];attack=1'>Attack</a> | "
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\computer\arcade.dm:75: dat += "<center><b><a href='byond://?src=\ref[src];attack=1'>Attack</a> | "
 		dat += {"<center><b><a href='byond://?src=\ref[src];attack=1'>Attack</a> |
 			<a href='byond://?src=\ref[src];heal=1'>Heal</a> |
 			<a href='byond://?src=\ref[src];charge=1'>Recharge Power</a>"}
@@ -162,6 +195,7 @@
 	return
 
 /obj/machinery/computer/arcade/proc/arcade_action()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/arcade/proc/arcade_action() called tick#: [world.time]")
 	if ((src.enemy_mp <= 0) || (src.enemy_hp <= 0))
 		if(!gameover)
 			src.gameover = 1
@@ -268,3 +302,10 @@
 		new empprize(src.loc)
 
 	..(severity)
+
+/obj/machinery/computer/arcade/togglePanelOpen(var/obj/toggleitem, mob/user)
+	var/obj/item/weapon/circuitboard/arcade/A
+	if(circuit)
+		A = new
+		export_game_data(A)
+	..(toggleitem, user, A)

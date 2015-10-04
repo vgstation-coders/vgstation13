@@ -2,6 +2,7 @@
 	set category = "Special Verbs"
 	set name = "Asay" //Gave this shit a shorter name so you only have to time out "asay" rather than "admin say" to use it --NeoFite
 	set hidden = 1
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_admin_say() called tick#: [world.time]")
 	if(!check_rights(R_ADMIN))	return
 
 	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
@@ -21,6 +22,7 @@
 	set category = "Special Verbs"
 	set name = "mWindow"
 	set hidden = 1
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_mod_window() called tick#: [world.time]")
 
 	if(!check_rights(R_ADMIN|R_MOD)) return
 	winset(src, "window1", "is-visible=true")
@@ -29,6 +31,7 @@
 	set category = "Special Verbs"
 	set name = "Msay"
 	set hidden = 1
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/cmd_mod_say() called tick#: [world.time]")
 
 	if(!check_rights(R_ADMIN|R_MOD))	return
 
@@ -43,6 +46,6 @@
 	for(var/client/C in admins)
 		if((R_ADMIN|R_MOD) & C.holder.rights)
 			if(C.prefs.special_popup)
-				C << output("<span class='[color]'>[key_name(src,1)] (<A HREF='?src=\ref[C.holder];adminplayerobservejump=\ref[mob]'>JMP</A>): <span class='message'>[msg]</span></span>", "window1.msay_output")
+				C << output("\[[time_stamp()]] <span style='color:[color];'><b>[key_name(src,1)]</b> (<A HREF='?src=\ref[C.holder];adminplayerobservejump=\ref[mob]'>JMP</A>): <span class='modooc'>[msg]</span></span>", "window1.msay_output")
 			else
-				C << "<span class='prefix'>MOD: </span><span class='[color]'><EM>[key_name(src,1)]</EM> (<A HREF='?src=\ref[C.holder];adminplayerobservejump=\ref[mob]'>JMP</A>): <span class='message'>[msg]</span></span>"
+				C << "<span class='prefix'>MOD: </span><span class='[color]'><EM>[key_name(src,1)]</EM> (<A HREF='?src=\ref[C.holder];adminplayerobservejump=\ref[mob]'>JMP</A>): <span class='modooc'>[msg]</span></span>"

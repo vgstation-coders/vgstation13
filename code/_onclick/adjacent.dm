@@ -11,6 +11,7 @@
 	to check that the mob is not inside of something
 */
 /atom/proc/Adjacent(var/atom/neighbor) // basic inheritance, unused
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/Adjacent() called tick#: [world.time]")
 	return 0
 
 // Not a sane use of the function and (for now) indicative of an error elsewhere
@@ -27,32 +28,38 @@
 */
 /turf/Adjacent(var/atom/neighbor, var/atom/target = null)
 	var/turf/T0 = get_turf(neighbor)
-	if(T0 == src)
+
+	if(T0 == src) //same turf
 		return 1
-	if(get_dist(src,T0) > 1)
+
+	if(get_dist(src,T0) > 1) //too far
 		return 0
 
+	// Non diagonal case
 	if(T0.x == x || T0.y == y)
+		// Window snowflake code
+		if(neighbor.flags & ON_BORDER && neighbor.dir == get_dir(T0, src)) return 1
 		// Check for border blockages
 		return T0.ClickCross(get_dir(T0,src), border_only = 1) && src.ClickCross(get_dir(src,T0), border_only = 1, target_atom = target)
 
-	// Not orthagonal
-	var/in_dir = get_dir(neighbor,src) // eg. northwest (1+8)
-	var/d1 = in_dir&(in_dir-1)		// eg west		(1+8)&(8) = 8
-	var/d2 = in_dir - d1			// eg north		(1+8) - 8 = 1
+	// Diagonal case
+	var/in_dir = get_dir(T0,src) // eg. northwest (1+8) = 9 (00001001)
+	var/d1 = in_dir&3		     // eg. north	  (1+8)&3 (0000 0011) = 1 (0000 0001)
+	var/d2 = in_dir&12			 // eg. west	  (1+8)&12 (0000 1100) = 8 (0000 1000)
 
 	for(var/d in list(d1,d2))
-		if(!T0.ClickCross(d, border_only = 1))
+		if(!T0.ClickCross(d, border_only = 1) && !(neighbor.flags & ON_BORDER && neighbor.dir == d))
 			continue // could not leave T0 in that direction
 
 		var/turf/T1 = get_step(T0,d)
-		if(!T1 || T1.density || !T1.ClickCross(get_dir(T1,T0) | get_dir(T1,src), border_only = 0))
+		if(!T1 || T1.density || !T1.ClickCross(get_dir(T1,T0) | get_dir(T1,src), border_only = 0)) //let's check both directions at once
 			continue // couldn't enter or couldn't leave T1
 
 		if(!src.ClickCross(get_dir(src,T1), border_only = 1, target_atom = target))
 			continue // could not enter src
 
 		return 1 // we don't care about our own density
+
 	return 0
 
 /*
@@ -66,9 +73,8 @@
 /atom/movable/Adjacent(var/atom/neighbor)
 	if(neighbor == loc) return 1
 	if(!isturf(loc)) return 0
-	for(var/turf/T in locs)
-		if(isnull(T)) continue
-		if(T.Adjacent(neighbor,src)) return 1
+	var/turf/T = get_turf(src)
+	if(T.Adjacent(neighbor,src)) return 1
 	return 0
 
 // This is necessary for storage items not on your person.
@@ -88,14 +94,16 @@
 	so they can be interacted with without opening the door.
 */
 /obj/machinery/door/Adjacent(var/atom/neighbor)
-	var/obj/machinery/door/firedoor/border_only/BOD = locate() in loc
-	if(BOD)
-		BOD.throwpass = 1 // allow click to pass
-		. = ..()
-		BOD.throwpass = 0
-		return .
-	return ..()
+	var/list/disable_throwpass = list()
 
+	for(var/obj/machinery/door/D in (loc.contents - src))
+		if(D.flags & ON_BORDER)
+			D.throwpass = 1
+			disable_throwpass += D
+	.=..()
+	for(var/obj/machinery/door/D in disable_throwpass)
+		D.throwpass = 0
+	return
 
 /*
 	This checks if you there is uninterrupted airspace between that turf and this one.
@@ -103,6 +111,7 @@
 	The border_only flag allows you to not objects (for source and destination squares)
 */
 /turf/proc/ClickCross(var/target_dir, var/border_only, var/atom/target_atom = null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/turf/proc/ClickCross() called tick#: [world.time]")
 	for(var/obj/O in src)
 		if( !O.density || O == target_atom || O.throwpass) continue // throwpass is used for anything you can click through
 

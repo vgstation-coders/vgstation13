@@ -1,7 +1,7 @@
 /obj/machinery/computer/diseasesplicer
 	name = "Disease Splicer"
 	icon = 'icons/obj/computer.dmi'
-	icon_state = "crew"
+	icon_state = "virus"
 	circuit = "/obj/item/weapon/circuitboard/splicer"
 
 	var/datum/disease2/effectholder/memorybank = null
@@ -12,7 +12,7 @@
 	var/splicing = 0
 	var/scanning = 0
 
-	l_color = "#0000FF"
+	light_color = LIGHT_COLOR_GREEN
 
 /obj/machinery/computer/diseasesplicer/attackby(var/obj/I as obj, var/mob/user as mob)
 	if(!(istype(I,/obj/item/weapon/virusdish) || istype(I,/obj/item/weapon/diseasedisk)))
@@ -23,8 +23,7 @@
 		if(!dish)
 
 			dish = I
-			c.drop_item()
-			I.loc = src
+			c.drop_item(I, src)
 	if(istype(I,/obj/item/weapon/diseasedisk))
 		user << "You upload the contents of the disk into the buffer"
 		memorybank = I:effect
@@ -98,11 +97,11 @@
 	if(scanning)
 		scanning -= 1
 		if(!scanning)
-			state("The [src.name] beeps", "blue")
+			alert_noise("beep")
 	if(splicing)
 		splicing -= 1
 		if(!splicing)
-			state("The [src.name] pings", "blue")
+			alert_noise("ping")
 	if(burning)
 		burning -= 1
 		if(!burning)
@@ -112,7 +111,7 @@
 			else
 				d.name = "Unknown GNA disk (Stage: [5-memorybank.effect.stage])"
 			d.effect = memorybank
-			state("The [src.name] zings", "blue")
+			alert_noise("ping")
 
 	src.updateUsrDialog()
 	return

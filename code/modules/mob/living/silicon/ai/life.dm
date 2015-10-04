@@ -1,4 +1,6 @@
 /mob/living/silicon/ai/Life()
+	if(timestopped) return 0 //under effects of time magick
+
 	if (src.stat == 2)
 		return
 	else //I'm not removing that shitton of tabs, unneeded as they are. -- Urist
@@ -14,7 +16,7 @@
 
 		if (src.malfhack)
 			if (src.malfhack.aidisabled)
-				src << "\red ERROR: APC access disabled, hack attempt canceled."
+				src << "<span class='warning'>ERROR: APC access disabled, hack attempt canceled.</span>"
 				src.malfhacking = 0
 				src.malfhack = null
 
@@ -23,9 +25,13 @@
 			death()
 			return
 
-		if (src.machine)
-			if (!( src.machine.check_eye(src) ))
-				src.reset_view(null)
+		if(client)
+			if (src.machine)
+				if (!( src.machine.check_eye(src) ))
+					src.reset_view(null)
+			else
+				if(!isTeleViewing(client.eye))
+					reset_view(null)
 
 		// Handle power damage (oxy)
 		if(src:aiRestorePowerRoutine != 0)
@@ -45,18 +51,19 @@
 			loc = T.loc
 			if (istype(loc, /area))
 				//stage = 4
-				if (!loc.master.power_equip && !istype(src.loc,/obj/item))
+				if (!loc.power_equip && !istype(src.loc,/obj/item))
 					//stage = 5
 					blind = 1
 
 		if (!blind)	//lol? if(!blind)	#if(src.blind.layer)    <--something here is clearly wrong :P
 					//I'll get back to this when I find out  how this is -supposed- to work ~Carn //removed this shit since it was confusing as all hell --39kk9t
 			//stage = 4.5
-			src.sight |= SEE_TURFS
-			src.sight |= SEE_MOBS
-			src.sight |= SEE_OBJS
-			src.see_in_dark = 8
-			src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+			if(client && client.eye == eyeobj) // We are viewing the world through our "eye" mob.
+				src.sight |= SEE_TURFS
+				src.sight |= SEE_MOBS
+				src.sight |= SEE_OBJS
+				src.see_in_dark = 8
+				src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
 			var/area/home = get_area(src)
 			if(!home)	return//something to do with malf fucking things up I guess. <-- aisat is gone. is this still necessary? ~Carn
@@ -85,7 +92,7 @@
 			src.see_in_dark = 0
 			src.see_invisible = SEE_INVISIBLE_LIVING
 
-			if (((!loc.master.power_equip) || istype(T, /turf/space)) && !istype(src.loc,/obj/item))
+			if (((!loc.power_equip) || istype(T, /turf/space)) && !istype(src.loc,/obj/item))
 				if (src:aiRestorePowerRoutine==0)
 					src:aiRestorePowerRoutine = 1
 
@@ -99,7 +106,7 @@
 					spawn(20)
 						src << "Backup battery online. Scanners, camera, and radio interface offline. Beginning fault-detection."
 						sleep(50)
-						if (loc.master.power_equip)
+						if (loc.power_equip)
 							if (!istype(T, /turf/space))
 								src << "Alert cancelled. Power has been restored without our assistance."
 								src:aiRestorePowerRoutine = 0
@@ -126,18 +133,17 @@
 						var/PRP //like ERP with the code, at least this stuff is no more 4x sametext
 						for (PRP=1, PRP<=4, PRP++)
 							var/area/AIarea = get_area(src)
-							for(var/area/A in AIarea.master.related)
-								for (var/obj/machinery/power/apc/APC in A)
-									if (!(APC.stat & BROKEN))
-										theAPC = APC
-										break
+							for (var/obj/machinery/power/apc/APC in AIarea)
+								if (!(APC.stat & BROKEN))
+									theAPC = APC
+									break
 							if (!theAPC)
 								switch(PRP)
 									if (1) src << "Unable to locate APC!"
 									else src << "Lost connection with the APC!"
 								src:aiRestorePowerRoutine = 2
 								return
-							if (loc.master.power_equip)
+							if (loc.power_equip)
 								if (!istype(T, /turf/space))
 									src << "Alert cancelled. Power has been restored without our assistance."
 									src:aiRestorePowerRoutine = 0
@@ -165,7 +171,7 @@
 		health = maxHealth
 		stat = CONSCIOUS
 	else
-		if(fire_res_on_core)
+		if(ai_flags & COREFIRERESIST)
 			health = maxHealth - getOxyLoss() - getToxLoss() - getBruteLoss()
 		else
 			health = maxHealth - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()

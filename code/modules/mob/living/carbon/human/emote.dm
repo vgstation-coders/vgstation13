@@ -1,6 +1,6 @@
 /mob/living/carbon/human/emote(var/act,var/m_type=1,var/message = null, var/auto)
 	var/param = null
-
+	if(timestopped) return //under effects of time magick
 	if (findtext(act, "-", 1, null))
 		var/t1 = findtext(act, "-", 1, null)
 		param = copytext(act, t1 + 1, length(act) + 1)
@@ -21,10 +21,11 @@
 
 	if(act == "oath" && src.miming)
 		src.miming = 0
-		for(var/obj/effect/proc_holder/spell/aoe_turf/conjure/mime_wall/s in src.spell_list)
-			del(s)
+		for(var/spell/aoe_turf/conjure/forcewall/mime/spell in src.spell_list)
+			src.remove_spell(spell)
+			qdel(spell)
 		message_admins("[src.name] ([src.ckey]) has broken their oath of silence. (<A HREF='?_src_=holder;adminplayerobservejump=\ref[src]'>JMP</a>)")
-		src << "\red An unsettling feeling surrounds you..."
+		src << "<span class = 'notice'>An unsettling feeling surrounds you...</span>"
 		return
 
 	switch(act)
@@ -42,7 +43,7 @@
 			m_type = VISIBLE
 
 		if ("bow")
-			if (!src.buckled)
+			if (!src.locked_to)
 				var/M = null
 				if (param)
 					for (var/mob/A in view(null, null))
@@ -79,7 +80,7 @@
 				return
 			if (src.client)
 				if (client.prefs.muted & MUTE_IC)
-					src << "\red You cannot send IC messages (muted)."
+					src << "<span class = 'warning'>You cannot send IC messages (muted).</span>"
 					return
 				if (src.client.handle_spam_prevention(message,MUTE_IC))
 					return
@@ -90,7 +91,7 @@
 			return custom_emote(m_type, message)
 
 		if ("salute")
-			if (!src.buckled)
+			if (!src.locked_to)
 				var/M = null
 				if (param)
 					for (var/mob/A in view(null, null))
@@ -126,17 +127,31 @@
 					m_type = VISIBLE
 		if ("flap")
 			if (!src.restrained())
-				message = "<B>[src]</B> flaps his wings."
+				message = "<B>[src]</B> flaps \his wings."
 				m_type = HEARABLE
 				if(miming)
 					m_type = VISIBLE
+				if(src.wear_suit && istype(src.wear_suit,/obj/item/clothing/suit/clownpiece))
+					var/obj/item/clothing/suit/clownpiece/wings = src.wear_suit
+					wings.icon_state = "clownpiece-fly"
+					update_inv_wear_suit(1)
+					spawn(5)
+						wings.icon_state = initial(wings.icon_state)
+						update_inv_wear_suit(1)
 
 		if ("aflap")
 			if (!src.restrained())
-				message = "<B>[src]</B> flaps his wings ANGRILY!"
+				message = "<B>[src]</B> flaps \his wings ANGRILY!"
 				m_type = HEARABLE
 				if(miming)
 					m_type = VISIBLE
+				if(src.wear_suit && istype(src.wear_suit,/obj/item/clothing/suit/clownpiece))
+					var/obj/item/clothing/suit/clownpiece/wings = src.wear_suit
+					wings.icon_state = "clownpiece-fly"
+					update_inv_wear_suit(1)
+					spawn(5)
+						wings.icon_state = initial(wings.icon_state)
+						update_inv_wear_suit(1)
 
 		if ("drool")
 			message = "<B>[src]</B> drools."
@@ -477,6 +492,10 @@
 			message = "<B>[src]</B> winks."
 			m_type = VISIBLE
 
+		if ("spin")
+			message = "<B>[src]</B> spins out of control!"
+			m_type = VISIBLE
+
 		if ("yawn")
 			if (!muzzled)
 				message = "<B>[src]</B> yawns."
@@ -568,19 +587,43 @@
 		if("fart")
 			if(src.op_stage.butt != 4)
 				if(world.time-lastFart >= 400)
-					var/list/farts = list("farts.","passes wind.","toots.","farts [pick("lightly", "tenderly", "softly", "with care")].","farts with the force of one thousand suns.")
-					if(miming)
-						farts = list("silently farts.", "acts out a fart.", "lets out a silent but deadly fart.")
-					var/fart = pick(farts)
+					for(var/mob/living/M in view(0))
+						if(M != src && M.loc == src.loc)
+							if(!miming)
+								visible_message("<span class = 'warning'><b>[src]</b> farts in <b>[M]</b>'s face!</span>")
+							else
+								visible_message("<span class = 'warning'><b>[src]</b> silently farts in <b>[M]</b>'s face!</span>")
+						else
+							continue
+					/*
+
+					GAY BROKEN SHIT
 
 					for(var/mob/M in view(1))
 						if(M != src)
 							if(!miming)
-								visible_message("\red <b>[src]</b> farts in <b>[M]</b>'s face!")
+								visible_message("<span class='danger'><b>[src]</b> farts in [M]'s face!</span>")
 							else
-								visible_message("\red <b>[src]</b> silently farts in <b>[M]</b>'s face!")
+								visible_message("<span class='danger'><b>[src]</b> silently farts in [M]'s face!</span>")
 						else
 							continue
+
+					GAY BROKEN SHIT
+
+					*/
+
+					var/list/farts = list(
+						"farts",
+						"passes wind",
+						"toots",
+						"farts [pick("lightly", "tenderly", "softly", "with care")]",
+						)
+
+					if(miming)
+						farts = list("silently farts.", "acts out a fart.", "lets out a silent fart.")
+
+					var/fart = pick(farts)
+
 					if(!miming)
 						message = "<b>[src]</b> [fart]."
 						if(mind && mind.assigned_role == "Clown")
@@ -610,11 +653,11 @@
 						playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, 1)
 						if(wearing_suit)
 							if(!wearing_mask)
-								src << "\red You gas yourself!"
+								src << "<span class = 'warning'>You gas yourself!</span>"
 								reagents.add_reagent("space_drugs", rand(10,50))
 						else
 							// Was /turf/, now /mob/
-							for(var/mob/M in view(location,aoe_range))
+							for(var/mob/living/M in view(location,aoe_range))
 								if (M.internal != null && M.wear_mask && (M.wear_mask.flags & MASKINTERNALS))
 									continue
 								if(!airborne_can_reach(location,get_turf(M),aoe_range))
@@ -626,7 +669,8 @@
 								// <[REDACTED]> gets between 1 and 10 units of jenkem added to them...we obviously don't have Jenkem, but Space Drugs do literally the same exact thing as Jenkem
 								// <[REDACTED]> the user, of course, isn't impacted because it's not an actual smoke cloud
 								// So, let's give 'em space drugs.
-								M.reagents.add_reagent("space_drugs",rand(1,50))
+								if(M.reagents)
+									M.reagents.add_reagent("space_drugs",rand(1,50))
 							/*
 							var/datum/effect/effect/system/smoke_spread/chem/fart/S = new /datum/effect/effect/system/smoke_spread/chem/fart
 							S.attach(location)
@@ -639,23 +683,51 @@
 					if(M_SUPER_FART in mutations)
 						message=""
 						playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
-						visible_message("\red <b>[name]</b> hunches down and grits their teeth!")
-						if(do_after(usr,30))
-							visible_message("\red <b>[name]</b> unleashes a [pick("tremendous","gigantic","colossal")] fart!","You hear a [pick("tremendous","gigantic","colossal")] fart.")
-							//playsound(L.loc, 'superfart.ogg', 50, 0)
+						visible_message("<span class = 'warning'><b>[name]</b> hunches down and grits their teeth!</span>")
+						if(do_after(usr,usr,30))
+							visible_message("<span class = 'warning'><b>[name]</b> unleashes a [pick("tremendous","gigantic","colossal")] fart!</span>","<span class = 'warning'>You hear a [pick("tremendous","gigantic","colossal")] fart.</span>")
+							playsound(location, 'sound/effects/superfart.ogg', 50, 0)
 							if(!wearing_suit)
 								for(var/mob/living/V in view(src,aoe_range))
+									if(!airborne_can_reach(location,get_turf(V),aoe_range)) continue
 									shake_camera(V,10,5)
 									if (V == src)
 										continue
-									V << "\red You are sent flying!"
+									V << "<span class = 'danger'>You're sent flying!</span>"
 									V.Weaken(5) // why the hell was this set to 12 christ
 									step_away(V,location,15)
 									step_away(V,location,15)
 									step_away(V,location,15)
 						else
-							usr << "\red You were interrupted and couldn't fart! Rude!"
+							usr << "<span class = 'notice'>You were interrupted and couldn't fart! Rude!</span>"
+
 					lastFart=world.time
+
+					var/obj/item/weapon/storage/bible/B = locate(/obj/item/weapon/storage/bible) in src.loc
+					if(B)
+						if(iscult(src))
+							src << "<span class='sinister'>Nar-Sie shields you from [B.deity_name]'s wrath!</span>"
+						else
+							if(istype(src.head, /obj/item/clothing/head/fedora))
+								src << "<span class='notice'>You feel incredibly enlightened after farting on [B]!</span>"
+								var/obj/item/clothing/head/fedora/F = src.head
+								F.tip_fedora()
+							else
+								src << "<span class='danger'>You feel incredibly guilty for farting on [B]!</span>"
+							if(prob(80)) //20% chance to escape God's justice
+								spawn(rand(10,30))
+									if(src && B)
+										src.show_message("<span class='game say'><span class='name'>[B.deity_name]</span> says, \"Thou hast angered me, mortal!\"",2)
+
+										sleep(10)
+
+										if(src && B)
+											src << "<span class='danger'>You were disintegrated by [B.deity_name]'s bolt of lightning.</span>"
+											src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Farted on a bible and suffered [B.deity_name]'s wrath.</font>")
+
+											explosion(get_turf(src),-1,-1,1,5) //Tiny explosion with flash
+
+											src.dust()
 				else
 					message = "<b>[src]</b> strains, and nothing happens."
 					m_type = VISIBLE
@@ -666,14 +738,14 @@
 			src << "blink, blink_r, blush, bow-(none)/mob, burp, choke, chuckle, clap, collapse, cough,\ncry, custom, deathgasp, drool, eyebrow, frown, gasp, giggle, groan, grumble, handshake, hug-(none)/mob, glare-(none)/mob,\ngrin, laugh, look-(none)/mob, moan, mumble, nod, pale, point-atom, raise, salute, shake, shiver, shrug,\nsigh, signal-#1-10, smile, sneeze, sniff, snore, stare-(none)/mob, tremble, twitch, twitch_s, whimper,\nwink, yawn"
 
 		else
-			src << "\blue Unusable emote '[act]'. Say *help for a list."
+			src << "<span class = 'notice'>Unusable emote '[act]'. Say *help for a list.</span>"
 
 
 
 
 
 	if (message)
-		log_emote("[name]/[key] : [message]")
+		log_emote("[name]/[key] (@[x],[y],[z]): [message]")
 
  //Hearing gasp and such every five seconds is not good emotes were not global for a reason.
  // Maybe some people are okay with that.
@@ -681,9 +753,11 @@
 		for(var/mob/M in dead_mob_list)
 			if(!M.client || istype(M, /mob/new_player))
 				continue //skip monkeys, leavers and new players
-			if(M.stat == DEAD && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(src,null)))
+			if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(src,null)))
 				M.show_message(message)
 
+		// Borers, other internal things.
+		INVOKE_EVENT(on_emote, list("mob"=src,"message"=message,"m_type"=m_type))
 
 		if (m_type & 1)
 			for (var/mob/O in viewers(src, null))
@@ -696,6 +770,7 @@
 	set name = "Set Pose"
 	set desc = "Sets a description which will be shown when someone examines you."
 	set category = "IC"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/carbon/human/verb/pose()  called tick#: [world.time]")
 
 	pose =  copytext(sanitize(input(usr, "This is [src]. \He is...", "Pose", null)  as text), 1, MAX_MESSAGE_LEN)
 
@@ -703,5 +778,11 @@
 	set name = "Set Flavour Text"
 	set desc = "Sets an extended description of your character's features."
 	set category = "IC"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/carbon/human/verb/set_flavor()  called tick#: [world.time]")
 
-	flavor_text =  copytext(sanitize(input(usr, "Please enter your new flavour text.", "Flavour text", null)  as text), 1)
+	if(appearance_isbanned(usr))
+		src << "<span class = 'notice'>You are appearance banned!</span>"
+		flavor_text = null
+		return
+	else
+		flavor_text =  copytext(sanitize(input(usr, "Please enter your new flavour text.", "Flavour text", null)  as text), 1)

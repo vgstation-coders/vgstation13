@@ -82,7 +82,7 @@
 			user << "Controls are now [src.locked ? "locked." : "unlocked."]"
 			updateDialog()
 		else
-			user << "\red Access denied."
+			user << "<span class='warning'>Access denied.</span>"
 
 /obj/machinery/shield_gen/attack_paw(user as mob)
 	return src.attack_hand(user)
@@ -99,7 +99,7 @@
 /obj/machinery/shield_gen/attack_ghost(mob/user)
 	if(isAdminGhost(user)) src.attack_hand(user)
 	return
-	
+
 /obj/machinery/shield_gen/interact(mob/user)
 	if ( (get_dist(src, user) > 1 ) || (stat & (BROKEN|NOPOWER)) )
 		if (!istype(user, /mob/living/silicon))
@@ -112,7 +112,7 @@
 	else
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\WorkInProgress\Cael_Aislinn\ShieldGen\shield_gen.dm:102: t += "[owned_capacitor ? "<font color=green>Charge capacitor connected.</font>" : "<font color=red>Unable to locate charge capacitor!</font>"]<br>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\ShieldGen\shield_gen.dm:102: t += "[owned_capacitor ? "<font color=green>Charge capacitor connected.</font>" : "<font color=red>Unable to locate charge capacitor!</font>"]<br>"
 		t += {"[owned_capacitor ? "<font color=green>Charge capacitor connected.</font>" : "<font color=red>Unable to locate charge capacitor!</font>"]<br>
 			This generator is: [active ? "<font color=green>Online</font>" : "<font color=red>Offline</font>" ] <a href='?src=\ref[src];toggle=1'>[active ? "\[Deactivate\]" : "\[Activate\]"]</a><br>
 			[time_since_fail > 2 ? "<font color=green>Field is stable.</font>" : "<font color=red>Warning, field is unstable!</font>"]<br>
@@ -141,7 +141,7 @@
 		// END NOT-AUTOFIX
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\WorkInProgress\Cael_Aislinn\ShieldGen\shield_gen.dm:127: t += "<hr>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\ShieldGen\shield_gen.dm:127: t += "<hr>"
 	t += {"<hr>
 		<A href='?src=\ref[src]'>Refresh</A>
 		<A href='?src=\ref[src];close=1'>Close</A><BR>"}
@@ -188,7 +188,8 @@
 		average_field_strength = 0
 
 /obj/machinery/shield_gen/Topic(href, href_list[])
-	..()
+	if(!isAI(usr) && usr.z != z) return 1
+	if(..()) return 1
 	if( href_list["close"] )
 		usr << browse(null, "window=shield_generator")
 		usr.unset_machine()
@@ -241,6 +242,7 @@
 
 /*
 /obj/machinery/shield_gen/proc/check_powered()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/shield_gen/proc/check_powered() called tick#: [world.time]")
 	check_powered = 1
 	if(!anchored)
 		powered = 0
@@ -272,6 +274,7 @@
 			*/
 
 /obj/machinery/shield_gen/proc/toggle()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/shield_gen/proc/toggle() called tick#: [world.time]")
 	active = !active
 	power_change()
 	if(active)
@@ -296,6 +299,7 @@
 
 //grab the border tiles in a circle around this machine
 /obj/machinery/shield_gen/proc/get_shielded_turfs()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/shield_gen/proc/get_shielded_turfs() called tick#: [world.time]")
 	var/list/out = list()
 	for(var/turf/T in range(field_radius, src))
 		if(get_dist(src,T) == field_radius)

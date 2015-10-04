@@ -7,10 +7,9 @@
 	var/id = null
 	var/one_time_use = 0 //Used for one-time-use teleport cards (such as clown planet coordinates.)
 						 //Setting this to 1 will set src.locked to null after a player enters the portal and will not allow hand-teles to open portals to that location.
-	ghost_read=0 // #430
 	ghost_write=0
 
-	l_color = "#0000FF"
+	light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/teleporter/New()
 	. = ..()
@@ -39,14 +38,14 @@
 		if(istype(L, /obj/effect/landmark/) && istype(L.loc, /turf))
 			usr << "You insert the coordinates into the machine."
 			usr << "A message flashes across the screen reminding the traveller that the nuclear authentication disk is to remain on the station at all times."
-			user.drop_item()
-			del(I)
+			user.drop_item(I)
+			qdel(I)
 
 			/* FUCK YOU
 			if(C.data == "Clown Land")
 				//whoops
 				for(var/mob/O in hearers(src, null))
-					O.show_message("\red Incoming bluespace portal detected, unable to lock in.", 2)
+					O.show_message("<span class='warning'>Incoming bluespace portal detected, unable to lock in.</span>", 2)
 
 				for(var/obj/machinery/teleport/hub/H in range(1))
 					var/amount = rand(2,5)
@@ -55,13 +54,18 @@
 				//
 			else
 			*/
-			for(var/mob/O in hearers(src, null))
-				O.show_message("\blue Locked In", 2)
+			say("Locked in")
 			src.locked = L
 			one_time_use = 1
 
 			src.add_fingerprint(usr)
 	return
+
+/obj/machinery/computer/teleporter/examine(var/mob/user)
+	..()
+	if(locked)
+		var/area/locked_area = get_area(locked)
+		user << "The destination is set to \"[locked_area.name]\""
 
 /obj/machinery/computer/teleporter/attack_paw(var/mob/user)
 	src.attack_hand(user)
@@ -70,17 +74,80 @@
 	src.attack_hand(user)
 
 /obj/machinery/computer/teleporter/attack_hand(var/mob/user)
-	if(stat & (NOPOWER|BROKEN))
+	. = ..()
+	if(.)
+		user.unset_machine()
 		return
 
+	interact(user)
+
+/obj/machinery/computer/teleporter/interact(var/mob/user)
+	var/area/locked_area
+	if(locked)
+		locked_area = get_area(locked)
+		if(!locked_area)
+			locked = null
+
+		if(locked) //If there's still a locked thing (incase it got cleared above)
+			locked_area = get_area(locked)
+			if(!locked_area)
+				locked = null
+			. = {"
+			<b>Destination:</b> [sanitize(locked_area.name)]<br>
+			<a href='?src=\ref[src];clear=1'>Clear destination</a><br>
+			"}
+	else
+		. = {"
+		<b>Destination unset!</b><br>
+		"}
+
+	. += {"
+		<br><b>Available destinations:<b><br>
+		<lu>
+	"}
+
+	var/list/dests = get_avail_dests()
+
+	for(var/name in dests)
+		. += {"
+			<li><a href='?src=\ref[src];dest=[dests.Find(name)]'[dests[name] == locked ? " class='linkOn'" : ""]>[sanitize(name)]</a></li>
+		"}
+
+	. += "</lu>"
+
+	var/datum/browser/popup = new(user, "teleporter_console", name, 250, 500, src)
+	popup.set_content(.)
+	popup.open()
+	user.set_machine(src)
+
+/obj/machinery/computer/teleporter/Topic(var/href, var/list/href_list)
+	. = ..()
+	if(.)
+		return
+
+	if(href_list["clear"])
+		locked = null
+		updateUsrDialog()
+		return 1
+
+	if(href_list["dest"])
+		var/list/dests = get_avail_dests()
+		var/idx = Clamp(text2num(href_list["dest"]), 1, dests.len)
+		locked = dests[dests[idx]]
+		say("Locked in")
+		updateUsrDialog()
+		return 1
+
+/obj/machinery/computer/teleporter/proc/get_avail_dests()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/teleporter/proc/get_avail_dests() called tick#: [world.time]")
 	var/list/L = list()
 	var/list/areaindex = list()
 
-	for(var/obj/item/device/radio/beacon/R in world)
+	for(var/obj/item/beacon/R in beacons)
 		var/turf/T = get_turf(R)
 		if (!T)
 			continue
-		if(T.z == 2 || T.z > 7)
+		if(T.z == CENTCOMM_Z || T.z > map.zLevels.len)
 			continue
 		var/tmpname = T.loc.name
 		if(areaindex[tmpname])
@@ -89,7 +156,7 @@
 			areaindex[tmpname] = 1
 		L[tmpname] = R
 
-	for (var/obj/item/weapon/implant/tracking/I in world)
+	for (var/obj/item/weapon/implant/tracking/I in tracking_implants)
 		if (!I.implanted || !ismob(I.loc))
 			continue
 		else
@@ -107,32 +174,20 @@
 				areaindex[tmpname] = 1
 			L[tmpname] = I
 
-	var/desc = input("Please select a location to lock in.", "Locking Computer") in L
-	src.locked = L[desc]
-	for(var/mob/O in hearers(src, null))
-		O.show_message("\blue Locked In", 2)
-	src.add_fingerprint(usr)
-	return
+	. = L
 
 /obj/machinery/computer/teleporter/verb/set_id(t as text)
 	set category = "Object"
 	set name = "Set teleporter ID"
 	set src in oview(1)
 	set desc = "ID Tag:"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/computer/teleporter/verb/set_id()  called tick#: [world.time]")
 
 	if(stat & (NOPOWER|BROKEN) || !istype(usr,/mob/living))
 		return
 	if (t)
 		src.id = t
 	return
-
-/proc/find_loc(obj/R as obj)
-	if (!R)	return null
-	var/turf/T = R.loc
-	while(!istype(T, /turf))
-		T = T.loc
-		if(!T || istype(T, /area))	return null
-	return T
 
 /obj/machinery/teleport
 	name = "teleport"
@@ -196,13 +251,14 @@
 	return
 
 /obj/machinery/teleport/hub/proc/teleport(atom/movable/M as mob|obj)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/teleport/hub/proc/teleport() called tick#: [world.time]")
 	var/atom/l = src.loc
 	var/obj/machinery/computer/teleporter/com = locate(/obj/machinery/computer/teleporter, locate(l.x - 2, l.y, l.z))
 	if (!com)
 		return
 	if (!com.locked)
 		for(var/mob/O in hearers(src, null))
-			O.show_message("\red Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.")
+			O.show_message("<span class='warning'>Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.</span>")
 		return
 	if (istype(M, /atom/movable))
 		if(prob(5) && !accurate) //oh dear a problem, put em in deep space
@@ -218,24 +274,30 @@
 		s.set_up(5, 1, src)
 		s.start()
 		for(var/mob/B in hearers(src, null))
-			B.show_message("\blue Test fire completed.")
+			B.show_message("<span class='notice'>Test fire completed.</span>")
 	return
 /*
 /proc/do_teleport(atom/movable/M as mob|obj, atom/destination, precision)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/proc/do_teleport() called tick#: [world.time]")
 	if(istype(M, /obj/effect))
 		del(M)
 		return
 	if (istype(M, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite
 		for(var/mob/O in viewers(M, null))
-			O.show_message(text("\red <B>The [] bounces off of the portal!</B>", M.name), 1)
+			O.show_message(text("<span class='danger'>The [] bounces off of the portal!</span>", M.name), 1)
 		return
 	if (istype(M, /mob/living))
 		var/mob/living/MM = M
+		if(MM.locked_to_z != 0 && destination.z != MM.locked_to_z)
+			MM.visible_message("<span class='danger'>[MM] bounces off the portal!</span>","<span class='warning'>You're unable to go to that destination!</span>")
+			return
+
 		if(MM.check_contents_for(/obj/item/weapon/disk/nuclear))
-			MM << "\red Something you are carrying seems to be unable to pass through the portal. Better drop it if you want to go through."
+			MM << "<span class='warning'>Something you are carrying seems to be unable to pass through the portal. Better drop it if you want to go through.</span>"
 			return
 	var/disky = 0
 	for (var/atom/O in M.contents) //I'm pretty sure this accounts for the maximum amount of container in container stacking. --NeoFite
+		world << "Checking [O]([O.type]) for teleport"
 		if (istype(O, /obj/item/weapon/storage) || istype(O, /obj/item/weapon/gift))
 			for (var/obj/OO in O.contents)
 				if (istype(OO, /obj/item/weapon/storage) || istype(OO, /obj/item/weapon/gift))
@@ -248,22 +310,30 @@
 			disky = 1
 		if (istype(O, /mob/living))
 			var/mob/living/MM = O
+			if(MM.locked_to_z != 0 && destination.z != MM.locked_to_z)
+				M.visible_message("<span class='danger'>[M] bounces off the portal!</span>")
+				return
 			if(MM.check_contents_for(/obj/item/weapon/disk/nuclear))
 				disky = 1
 	if (disky)
 		for(var/mob/P in viewers(M, null))
-			P.show_message(text("\red <B>The [] bounces off of the portal!</B>", M.name), 1)
+			P.show_message(text("<span class='danger'>The [] bounces off of the portal!</span>", M.name), 1)
 		return
 
 //Bags of Holding cause bluespace teleportation to go funky. --NeoFite
 	if (istype(M, /mob/living))
 		var/mob/living/MM = M
+		if(MM.locked_to_z != 0 && destination.z != MM.locked_to_z)
+			MM.visible_message("<span class='danger'>[MM] bounces off the portal!</span>","<span class='warning'>You're unable to go to that destination!</span>")
+			return
+
 		if(MM.check_contents_for(/obj/item/weapon/storage/backpack/holding))
-			MM << "\red The Bluespace interface on your Bag of Holding interferes with the teleport!"
+			MM << "<span class='warning'>The Bluespace interface on your Bag of Holding interferes with the teleport!</span>"
 			precision = rand(1,100)
 	if (istype(M, /obj/item/weapon/storage/backpack/holding))
 		precision = rand(1,100)
 	for (var/atom/O in M.contents) //I'm pretty sure this accounts for the maximum amount of container in container stacking. --NeoFite
+		world << "Checking [O]([O.type]) for teleport"
 		if (istype(O, /obj/item/weapon/storage) || istype(O, /obj/item/weapon/gift))
 			for (var/obj/OO in O.contents)
 				if (istype(OO, /obj/item/weapon/storage) || istype(OO, /obj/item/weapon/gift))
@@ -276,6 +346,9 @@
 			precision = rand(1,100)
 		if (istype(O, /mob/living))
 			var/mob/living/MM = O
+			if(MM.locked_to_z != 0 && destination.z != MM.locked_to_z)
+				M.visible_message("<span class='danger'>[M] bounces off the portal!</span>")
+				return
 			if(MM.check_contents_for(/obj/item/weapon/storage/backpack/holding))
 				precision = rand(1,100)
 
@@ -298,7 +371,8 @@
 	if(tmploc==null)
 		return
 
-	M.loc = tmploc
+	//M.loc = tmploc
+	M.forceMove(tmploc)
 	sleep(2)
 
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
@@ -362,6 +436,7 @@ obj/machinery/teleport/station/New()
 		src.engage()
 
 /obj/machinery/teleport/station/proc/engage()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/teleport/station/proc/engage() called tick#: [world.time]")
 	if(stat & (BROKEN|NOPOWER))
 		return
 
@@ -373,12 +448,13 @@ obj/machinery/teleport/station/New()
 		H.icon_state = "tele1"
 		use_power(5000)
 		for(var/mob/O in hearers(src, null))
-			O.show_message("\blue Teleporter engaged!", 2)
+			O.show_message("<span class='notice'>Teleporter engaged!</span>", 2)
 	src.add_fingerprint(usr)
 	src.engaged = 1
 	return
 
 /obj/machinery/teleport/station/proc/disengage()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/teleport/station/proc/disengage() called tick#: [world.time]")
 	if(stat & (BROKEN|NOPOWER))
 		return
 
@@ -389,7 +465,7 @@ obj/machinery/teleport/station/New()
 		H.engaged = 0
 		H.icon_state = "tele0"
 		for(var/mob/O in hearers(src, null))
-			O.show_message("\blue Teleporter disengaged!", 2)
+			O.show_message("<span class='notice'>Teleporter disengaged!</span>", 2)
 	src.add_fingerprint(usr)
 	src.engaged = 0
 	return
@@ -398,6 +474,7 @@ obj/machinery/teleport/station/New()
 	set name = "Test Fire Teleporter"
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/teleport/station/verb/testfire()  called tick#: [world.time]")
 
 	if(stat & (BROKEN|NOPOWER) || !istype(usr,/mob/living))
 		return
@@ -407,7 +484,7 @@ obj/machinery/teleport/station/New()
 	if (com && !active)
 		active = 1
 		for(var/mob/O in hearers(src, null))
-			O.show_message("\blue Test firing!", 2)
+			O.show_message("<span class='notice'>Test firing!</span>", 2)
 		com.teleport()
 		use_power(5000)
 
@@ -437,4 +514,5 @@ obj/machinery/teleport/station/New()
 	return
 
 /atom/proc/laserhit(L as obj)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/laserhit() called tick#: [world.time]")
 	return 1

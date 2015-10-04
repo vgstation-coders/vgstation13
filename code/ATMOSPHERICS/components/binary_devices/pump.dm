@@ -18,7 +18,6 @@ Thus, the two variables affect pump operation are set in New():
 
 	name = "Gas pump"
 	desc = "A pump"
-
 	var/on = 0
 	var/target_pressure = ONE_ATMOSPHERE
 
@@ -30,7 +29,7 @@ Thus, the two variables affect pump operation are set in New():
 	name = "High capacity gas pump"
 	desc = "A high capacity pump"
 
-	target_pressure = 15000000
+	target_pressure = 15000000 // Holy fuck man
 
 /obj/machinery/atmospherics/binary/pump/on
 	on = 1
@@ -41,27 +40,18 @@ Thus, the two variables affect pump operation are set in New():
 		icon_state = "intact_off"
 	else if(node1 && node2)
 		icon_state = "intact_[on?("on"):("off")]"
-	else
-		if(node1)
-			icon_state = "exposed_1_off"
-		else if(node2)
-			icon_state = "exposed_2_off"
-		else
-			icon_state = "exposed_3_off"
-	return
+	..()
 
 /obj/machinery/atmospherics/binary/pump/process()
-//		..()
-	if(stat & (NOPOWER|BROKEN))
+	. = ..()
+	if((stat & (NOPOWER|BROKEN)) || !on)
 		return
-	if(!on)
-		return 0
 
 	var/output_starting_pressure = air2.return_pressure()
 
 	if( (target_pressure - output_starting_pressure) < 0.01)
 		//No need to pump gas if target is already reached!
-		return 1
+		return
 
 	//Calculate necessary moles to transfer using PV=nRT
 	if((air1.total_moles() > 0) && (air1.temperature>0))
@@ -84,16 +74,18 @@ Thus, the two variables affect pump operation are set in New():
 
 
 /obj/machinery/atmospherics/binary/pump/proc/set_frequency(new_frequency)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/binary/pump/proc/set_frequency() called tick#: [world.time]")
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
 		radio_connection = radio_controller.add_object(src, frequency, filter = RADIO_ATMOSIA)
 
 /obj/machinery/atmospherics/binary/pump/proc/broadcast_status()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/atmospherics/binary/pump/proc/broadcast_status() called tick#: [world.time]")
 	if(!radio_connection)
 		return 0
 
-	var/datum/signal/signal = new
+	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 
@@ -134,11 +126,7 @@ Thus, the two variables affect pump operation are set in New():
 		on = !on
 
 	if("set_output_pressure" in signal.data)
-		target_pressure = between(
-			0,
-			text2num(signal.data["set_output_pressure"]),
-			ONE_ATMOSPHERE*50
-		)
+		target_pressure = Clamp(text2num(signal.data["set_output_pressure"]), 0, ONE_ATMOSPHERE * 50)
 
 	if("status" in signal.data)
 		spawn(2)
@@ -148,7 +136,7 @@ Thus, the two variables affect pump operation are set in New():
 	spawn(2)
 		broadcast_status()
 	update_icon()
-	activity_log += text("\[[time_stamp()]\] Remote signal toggled us [on ? "on" : "off"]")
+	investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by signal.")
 	return
 
 
@@ -157,7 +145,7 @@ Thus, the two variables affect pump operation are set in New():
 		return
 	src.add_fingerprint(usr)
 	if(!src.allowed(user))
-		user << "\red Access denied."
+		user << "<span class='warning'>Access denied.</span>"
 		return
 	usr.set_machine(src)
 	interact(user)
@@ -167,10 +155,11 @@ Thus, the two variables affect pump operation are set in New():
 	if(..()) return
 	if(href_list["power"])
 		on = !on
-		activity_log += text("\[[time_stamp()]\] Real name: [], Key: [] - turned [] \the [].",usr.real_name, usr.key,(on ? "on" : "off"),src)
+		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(usr)].")
 	if(href_list["set_press"])
 		var/new_pressure = input(usr,"Enter new output pressure (0-4500kPa)","Pressure control",src.target_pressure) as num
 		src.target_pressure = max(0, min(4500, new_pressure))
+		investigation_log(I_ATMOS,"was set to [target_pressure] kPa by [key_name(usr)].")
 	usr.set_machine(src)
 	src.update_icon()
 	src.updateUsrDialog()
@@ -184,24 +173,6 @@ Thus, the two variables affect pump operation are set in New():
 	if (!istype(W, /obj/item/weapon/wrench))
 		return ..()
 	if (!(stat & NOPOWER) && on)
-		user << "\red You cannot unwrench this [src], turn it off first."
+		user << "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>"
 		return 1
-	var/turf/T = src.loc
-	if (level==1 && isturf(T) && T.intact)
-		user << "\red You must remove the plating first."
-		return 1
-	var/datum/gas_mixture/int_air = return_air()
-	var/datum/gas_mixture/env_air = loc.return_air()
-	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
-		user << "\red You cannot unwrench this [src], it too exerted due to internal pressure."
-		add_fingerprint(user)
-		return 1
-	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-	user << "\blue You begin to unfasten \the [src]..."
-	if (do_after(user, 40))
-		user.visible_message( \
-			"[user] unfastens \the [src].", \
-			"\blue You have unfastened \the [src].", \
-			"You hear ratchet.")
-		new /obj/item/pipe(loc, make_from=src)
-		del(src)
+	return ..()

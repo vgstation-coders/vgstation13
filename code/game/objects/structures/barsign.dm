@@ -44,13 +44,13 @@
 
 /obj/structure/sign/double/barsign/attack_hand(mob/user as mob)
 	if (!src.allowed(user))
-		user << "\red Access denied."
+		user << "<span class='warning'>Access denied.</span>"
 		return
 
 	if (!(get_dir(src, usr) in list(SOUTHWEST, SOUTH, SOUTHEAST)))
 		return
 
-	barsigns.Cut()
+	barsigns.len = 0
 	for(var/bartype in typesof(/datum/barsign))
 		var/datum/barsign/signinfo = new bartype
 		barsigns[signinfo.name] = signinfo
@@ -58,6 +58,7 @@
 	pick_sign()
 
 /obj/structure/sign/double/barsign/proc/pick_sign()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/sign/double/barsign/proc/pick_sign() called tick#: [world.time]")
 	var/picked_name = input("Available Signage", "Bar Sign", "Cancel") as null|anything in barsigns
 	if(!picked_name)
 		return

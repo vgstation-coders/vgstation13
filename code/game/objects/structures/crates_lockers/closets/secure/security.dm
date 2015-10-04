@@ -16,7 +16,7 @@
 		else
 			new /obj/item/weapon/storage/backpack/satchel_cap(src)
 		new /obj/item/clothing/suit/captunic(src)
-		new /obj/item/clothing/suit/captunic/capjacket(src)
+		new /obj/item/clothing/suit/storage/capjacket(src)
 		new /obj/item/clothing/head/helmet/cap(src)
 		new /obj/item/clothing/under/rank/captain(src)
 		new /obj/item/clothing/suit/armor/vest(src)
@@ -108,6 +108,7 @@
 		new /obj/item/clothing/suit/armor/hos/jensen(src)
 		new /obj/item/clothing/head/helmet/HoS/dermal(src)
 		new /obj/item/weapon/cartridge/hos(src)
+		new /obj/item/device/detective_scanner(src)
 		new /obj/item/device/radio/headset/heads/hos(src)
 		new /obj/item/clothing/glasses/sunglasses/sechud(src)
 		new /obj/item/weapon/shield/riot(src)
@@ -117,7 +118,7 @@
 		new /obj/item/device/flash(src)
 		new /obj/item/weapon/melee/baton/loaded(src)
 		new /obj/item/weapon/gun/energy/gun(src)
-		new /obj/item/clothing/tie/holster/waist(src)
+		new /obj/item/clothing/accessory/holster/waist(src)
 		new /obj/item/weapon/melee/telebaton(src)
 		return
 
@@ -154,6 +155,7 @@
 		new /obj/item/weapon/melee/baton/loaded(src)
 		new /obj/item/weapon/gun/energy/taser(src)
 		new /obj/item/weapon/storage/box/bolas(src)
+		new /obj/item/weapon/batteringram(src)
 		return
 
 
@@ -189,6 +191,7 @@
 		new /obj/item/taperoll/police(src)
 		new /obj/item/device/hailer(src) //wonder if vg would spam this
 		new /obj/item/clothing/gloves/black(src)
+		new /obj/item/device/gps/secure(src)
 		return
 
 
@@ -196,7 +199,7 @@
 
 	New()
 		..()
-		new /obj/item/clothing/tie/armband/cargo(src)
+		new /obj/item/clothing/accessory/armband/cargo(src)
 		new /obj/item/device/encryptionkey/headset_cargo(src)
 		return
 
@@ -204,7 +207,7 @@
 
 	New()
 		..()
-		new /obj/item/clothing/tie/armband/engine(src)
+		new /obj/item/clothing/accessory/armband/engine(src)
 		new /obj/item/device/encryptionkey/headset_eng(src)
 		return
 
@@ -212,7 +215,7 @@
 
 	New()
 		..()
-		new /obj/item/clothing/tie/armband/science(src)
+		new /obj/item/clothing/accessory/armband/science(src)
 		new /obj/item/device/encryptionkey/headset_sci(src)
 		return
 
@@ -220,7 +223,7 @@
 
 	New()
 		..()
-		new /obj/item/clothing/tie/armband/medgreen(src)
+		new /obj/item/clothing/accessory/armband/medgreen(src)
 		new /obj/item/device/encryptionkey/headset_med(src)
 		return
 
@@ -253,7 +256,7 @@
 		new /obj/item/ammo_storage/box/c38(src)
 		new /obj/item/ammo_storage/box/c38(src)
 		new /obj/item/weapon/gun/projectile/detective(src)
-		new /obj/item/clothing/tie/holster/armpit(src)
+		new /obj/item/clothing/accessory/holster/armpit(src)
 		return
 
 /obj/structure/closet/secure_closet/detective/update_icon()
@@ -276,8 +279,8 @@
 	New()
 		..()
 		sleep(2)
-		new /obj/item/weapon/reagent_containers/ld50_syringe/chloral(src)
-		new /obj/item/weapon/reagent_containers/ld50_syringe/chloral(src)
+		new /obj/item/weapon/reagent_containers/syringe/giant/chloral(src)
+		new /obj/item/weapon/reagent_containers/syringe/giant/chloral(src)
 		return
 
 
@@ -289,7 +292,8 @@
 	var/id_tag = null
 
 	New()
-		new /obj/item/clothing/under/color/orange( src )
+		..()
+		new /obj/item/clothing/under/color/prisoner( src )
 		new /obj/item/clothing/shoes/orange( src )
 		return
 

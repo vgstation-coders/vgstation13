@@ -36,6 +36,7 @@ var/const/HOLOPAD_MODE = 0
 	var/mob/living/silicon/ai/master//Which AI, if any, is controlling the object? Only one AI may control a hologram at any time.
 	var/last_request = 0 //to prevent request spam. ~Carn
 	var/holo_range = 5 // Change to change how far the AI can move away from the holopad before deactivating.
+	flags = HEAR
 
 /obj/machinery/hologram/holopad/attack_hand(var/mob/living/carbon/human/user) //Carn: Hologram requests.
 	if(!istype(user))
@@ -58,7 +59,7 @@ var/const/HOLOPAD_MODE = 0
 	I don't need to check for client since they're clicking on an object.
 	This may change in the future but for now will suffice.*/
 	if(user.eyeobj.loc != src.loc)//Set client eye on the object if it's not already.
-		user.eyeobj.setLoc(get_turf(src))
+		user.eyeobj.forceMove(get_turf(src))
 	else if(!hologram)//If there is no hologram, possibly make one.
 		activate_holo(user)
 	else if(master==user)//If there is a hologram, remove it. But only if the user is the master. Otherwise do nothing.
@@ -66,37 +67,39 @@ var/const/HOLOPAD_MODE = 0
 	return
 
 /obj/machinery/hologram/holopad/proc/activate_holo(mob/living/silicon/ai/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/hologram/holopad/proc/activate_holo() called tick#: [world.time]")
 	if(!(stat & NOPOWER) && user.eyeobj.loc == src.loc)//If the projector has power and client eye is on it.
 		if(!hologram)//If there is not already a hologram.
 			create_holo(user)//Create one.
 			src.visible_message("A holographic image of [user] flicks to life right before your eyes!")
 		else
-			user << "\red ERROR: \black Image feed in progress."
+			user << "<span class='warning'>ERROR: </span>Image feed in progress."
 	else
-		user << "\red ERROR: \black Unable to project hologram."
+		user << "<span class='warning'>ERROR: </span>Unable to project hologram."
 	return
 
 /*This is the proc for special two-way communication between AI and holopad/people talking near holopad.
 For the other part of the code, check silicon say.dm. Particularly robot talk.*/
-/obj/machinery/hologram/holopad/hear_talk(mob/living/M, text)
-	if(M&&hologram&&master)//Master is mostly a safety in case lag hits or something.
-		if(!master.say_understands(M))//The AI will be able to understand most mobs talking through the holopad.
-			text = stars(text)
-		var/name_used = M.GetVoice()
-		//This communication is imperfect because the holopad "filters" voices and is only designed to connect to the master only.
-		var/rendered = "<i><span class='game say'>Holopad received, <span class='name'>[name_used]</span> <span class='message'>[M.say_quote(text)]</span></span></i>"
+/obj/machinery/hologram/holopad/Hear(message, atom/movable/speaker, var/datum/language/speaking, raw_message, radio_freq)
+	if(speaker && hologram && master && !radio_freq && speaker != master)//Master is mostly a safety in case lag hits or something. Radio_freq so AIs dont hear holopad stuff through radios.
+		if(!master.say_understands(speaker, speaking)) //previously if(!master.languages & speaker.languages)//The AI will be able to understand most mobs talking through the holopad.
+			raw_message = master.lang_treat(speaker, speaking, raw_message)
+		var/name_used = speaker.GetVoice()
+		var/rendered = "<i><span class='game say'>Holopad received, <span class='name'>[name_used]</span> <span class='message'>[speaker.say_quote(raw_message)]</span></span></i>"
 		master.show_message(rendered, 2)
 	return
 
+
 /obj/machinery/hologram/holopad/proc/create_holo(mob/living/silicon/ai/A, turf/T = loc)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/hologram/holopad/proc/create_holo() called tick#: [world.time]")
 	hologram = new(T)//Spawn a blank effect at the location.
 	hologram.icon = A.holo_icon
 	hologram.mouse_opacity = 0//So you can't click on it.
 	hologram.layer = FLY_LAYER//Above all the other objects/mobs. Or the vast majority of them.
 	hologram.anchored = 1//So space wind cannot drag it.
 	hologram.name = "[A.name] (Hologram)"//If someone decides to right click.
-	hologram.SetLuminosity(2)	//hologram lighting
-	SetLuminosity(2)			//pad lighting
+	hologram.set_light(2)	//hologram lighting
+	set_light(2)			//pad lighting
 	icon_state = "holopad1"
 	A.current = src
 	master = A//AI is the master.
@@ -104,12 +107,13 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	return 1
 
 /obj/machinery/hologram/holopad/proc/clear_holo()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/hologram/holopad/proc/clear_holo() called tick#: [world.time]")
 //	hologram.SetLuminosity(0)//Clear lighting.	//handled by the lighting controller when its ower is deleted
 	del(hologram)//Get rid of hologram.
 	if(master.current == src)
 		master.current = null
 	master = null//Null the master, since no-one is using it now.
-	SetLuminosity(0)			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
+	set_light(0)			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
 	icon_state = "holopad0"
 	use_power = 1//Passive power usage.
 	return 1
@@ -126,13 +130,14 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 					var/area/holo_area = get_area(src)
 					var/area/eye_area = get_area(master.eyeobj)
 
-					if(eye_area in holo_area.master.related)
+					if(eye_area == holo_area)
 						return 1
 
 		clear_holo()//If not, we want to get rid of the hologram.
 	return 1
 
 /obj/machinery/hologram/holopad/proc/move_hologram()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/hologram/holopad/proc/move_hologram() called tick#: [world.time]")
 	if(hologram)
 		step_to(hologram, master.eyeobj) // So it turns.
 		hologram.loc = get_turf(master.eyeobj)
@@ -173,10 +178,6 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	del(src)
 	return
 
-/obj/machinery/hologram/meteorhit()
-	del(src)
-	return
-
 /obj/machinery/hologram/Destroy()
 	if(hologram)
 		src:clear_holo()
@@ -186,6 +187,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 Holographic project of everything else.
 
 /mob/verb/hologram_test()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/verb/hologram_test()  called tick#: [world.time]")
 	set name = "Hologram Debug New"
 	set category = "CURRENT DEBUG"
 

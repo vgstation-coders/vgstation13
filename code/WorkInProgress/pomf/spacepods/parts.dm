@@ -5,19 +5,22 @@
 /obj/item/pod_parts/core
 	name="Space Pod Core"
 	icon_state = "core"
-	flags = FPRINT | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	origin_tech = "materials=4;plasma=3;bluespace=2;engineering=3"
 
 /obj/item/pod_parts/pod_frame
 	name = "Space Pod Frame"
 	icon_state = ""
-	flags = CONDUCT
+	flags = 0
+	siemens_coefficient = 1
 	density = 0
 	anchored = 0
 	var/link_to = null
 	var/link_angle = 0
 
 /obj/item/pod_parts/pod_frame/proc/find_square()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/pod_parts/pod_frame/proc/find_square() called tick#: [world.time]")
 	/*
 	each part, in essence, stores the relative position of another part
 	you can find where this part should be by looking at the current direction of the current part and applying the link_angle
@@ -30,7 +33,7 @@
 	var/turf/T
 	var/obj/item/pod_parts/pod_frame/linked
 	var/obj/item/pod_parts/pod_frame/pointer
-	var/connectedparts =  list()
+	var/list/connectedparts =  list()
 	neededparts -= src
 	//log_admin("Starting with [src]")
 	linked = src
@@ -46,6 +49,8 @@
 			pointer = null
 	//log_admin("Parts left: [neededparts.len]") //len not working
 	for(var/i = 1; i <=4; i++)
+		if(i > connectedparts.len)
+			return 0
 		var/obj/item/pod_parts/pod_frame/F = connectedparts[i]
 		if(F.type in neededparts) //if one of the items can be founded in neededparts
 			neededparts -= F.type
@@ -81,6 +86,7 @@
 	set name = "Rotate Frame"
 	set category = "Object"
 	set src in oview(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/item/pod_parts/pod_frame/verb/rotate()  called tick#: [world.time]")
 	if(anchored)
 		usr << "\The [src] is securely bolted!"
 		return 0

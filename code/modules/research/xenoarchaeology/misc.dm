@@ -3,6 +3,7 @@
 #define ARTIFACT_SPAWN_CHANCE 20
 
 proc/SetupXenoarch()
+	//writepanic("[__FILE__].[__LINE__] \\/proc/SetupXenoarch() called tick#: [world.time]")
 	for(var/turf/unsimulated/mineral/M in block(locate(1,1,1), locate(world.maxx, world.maxy, world.maxz)))
 		if(!prob(XENOARCH_SPAWN_CHANCE))
 			continue
@@ -156,7 +157,7 @@ proc/SetupXenoarch()
 		new /obj/item/device/core_sampler(src)
 		new /obj/item/device/gps(src)
 		new /obj/item/device/beacon_locator(src)
-		new /obj/item/device/radio/beacon(src)
+		new /obj/item/beacon(src)
 		new /obj/item/clothing/glasses/meson(src)
 		new /obj/item/weapon/pickaxe(src)
 		new /obj/item/device/measuring_tape(src)

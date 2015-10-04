@@ -27,12 +27,14 @@
 	faction = "cult"
 	status_flags = CANPUSH
 	supernatural = 1
+	flying = 1
 
 
 /mob/living/simple_animal/shade/cultify()
 	return
 
 /mob/living/simple_animal/shade/Life()
+	if(timestopped) return 0 //under effects of time magick
 	..()
 	if(stat == 2)
 		new /obj/item/weapon/ectoplasm (src.loc)
@@ -45,6 +47,7 @@
 
 
 /mob/living/simple_animal/shade/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
+	user.delayNextAttack(8)
 	if(istype(O, /obj/item/device/soulstone))
 		O.transfer_soul("SHADE", src, user)
 	else
@@ -58,7 +61,7 @@
 			health -= damage
 			for(var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='warning'> \b [src] has been attacked with [O] by [user].</span>")
+					M.show_message("<span class='warning'> <B>[src] has been attacked with [O] by [user].</span></B>")
 		else
 			usr << "<span class='warning'> This weapon is ineffective, it does no damage.</span>"
 			for(var/mob/M in viewers(src, null))
@@ -66,9 +69,15 @@
 					M.show_message("<span class='warning'> [user] gently taps [src] with [O].</span>")
 	return
 
+/mob/living/simple_animal/shade/shuttle_act()
+	if(!(src.flags & INVULNERABLE))
+		health -= rand(5,45) //These guys are like ghosts, a collision with a shuttle wouldn't destroy one outright
+	return
+
 ////////////////HUD//////////////////////
 
 /mob/living/simple_animal/shade/Life()
+	if(timestopped) return 0 //under effects of time magick
 	. = ..()
 
 	if(pullin)

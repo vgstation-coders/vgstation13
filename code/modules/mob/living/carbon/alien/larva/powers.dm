@@ -3,6 +3,7 @@
 	set name = "Hide"
 	set desc = "Allows you to hide beneath tables or items laid on the ground. Toggle."
 	set category = "Alien"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/carbon/alien/larva/verb/hide()  called tick#: [world.time]")
 
 	if(stat != CONSCIOUS)
 		return
@@ -18,13 +19,14 @@
 	set name = "Evolve"
 	set desc = "Evolve into a fully grown Alien."
 	set category = "Alien"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/mob/living/carbon/alien/larva/verb/evolve()  called tick#: [world.time]")
 
 	if(stat != CONSCIOUS)
 		return
 
 	//Seems about right
 	//if(handcuffed || legcuffed)
-		//src << "\red You cannot evolve when you are cuffed."
+		//src << "<span class='warning'>You cannot evolve when you are cuffed.</span>"
 
 	if(amount_grown >= max_grown)	//TODO ~Carn
 		//green is impossible to read, so i made these blue and changed the formatting slightly
@@ -43,6 +45,8 @@
 				new_xeno = new /mob/living/carbon/alien/humanoid/sentinel(loc)
 			if("Drone")
 				new_xeno = new /mob/living/carbon/alien/humanoid/drone(loc)
+		for(var/datum/language/L in languages)
+			new_xeno.add_language(L.name)
 		if(mind)	mind.transfer_to(new_xeno)
 		del(src)
 		playsound(get_turf(src), 'sound/effects/evolve.ogg', 40, 1)

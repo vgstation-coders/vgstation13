@@ -10,7 +10,7 @@
 	var/moving = 0
 	var/lastMove = 0
 
-	l_color = "#B40000"
+	light_color = LIGHT_COLOR_RED
 
 /obj/machinery/computer/syndicate_station/New()
 	curr_location= locate(/area/syndicate_station/start)
@@ -20,6 +20,7 @@
 	icon_state = "syndishuttle"
 
 /obj/machinery/computer/syndicate_station/proc/syndicate_move_to(area/destination as area)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/syndicate_station/proc/syndicate_move_to() called tick#: [world.time]")
 	if(moving)	return
 	if(lastMove + SYNDICATE_SHUTTLE_COOLDOWN > world.time)	return
 	var/area/dest_location = locate(destination)
@@ -53,7 +54,7 @@
 
 /obj/machinery/computer/syndicate_station/attack_hand(mob/user as mob)
 	if(!allowed(user))
-		user << "\red Access Denied"
+		user << "<span class='warning'>Access Denied</span>"
 		return
 
 	user.set_machine(src)
@@ -75,13 +76,14 @@
 	onclose(user, "computer")
 	return
 
+/obj/machinery/computer/syndicate_station/power_change()
+	return
 
 /obj/machinery/computer/syndicate_station/Topic(href, href_list)
-	if(!isliving(usr))	return
-	var/mob/living/user = usr
+	if(..()) return 1
+	var/mob/user = usr
 
-	if(in_range(src, user) || istype(user, /mob/living/silicon))
-		user.set_machine(src)
+	user.set_machine(src)
 
 	if(href_list["syndicate"])
 		syndicate_move_to(/area/syndicate_station/start)

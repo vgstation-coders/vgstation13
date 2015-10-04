@@ -3,33 +3,19 @@
 	desc = "It can be used to download Apps on your PDA."
 	icon_state = "pdaterm"
 	circuit = "/obj/item/weapon/circuitboard/pda_terminal"
-	l_color = "#993300"
+	light_color = LIGHT_COLOR_ORANGE
 
 	var/obj/item/device/pda/pda_device = null
 
-	var/obj/machinery/account_database/linked_db
-	var/datum/money_account/linked_account
+	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | PURCHASER
 
 /obj/machinery/computer/pda_terminal/New()
 	..()
-	reconnect_database()
-	linked_account = vendor_account
-
-	spawn(40)//should fix a rare occurence where a terminal placed at round start wouldn't be linked to its account and/or database.
-		if(!linked_db)
-			reconnect_database()
-		if(!linked_account)
-			linked_account = vendor_account
-
-/obj/machinery/computer/pda_terminal/proc/reconnect_database()
-	for(var/obj/machinery/account_database/DB in account_DBs)
-		//Checks for a database on its Z-level, else it checks for a database at the main Station.
-		if((DB.z == src.z) || (DB.z == STATION_Z))
-			if((DB.stat == 0))//If the database if damaged or not powered, people won't be able to use the vending machines anymore.
-				linked_db = DB
-				break
+	if(ticker)
+		initialize()
 
 /obj/machinery/computer/pda_terminal/proc/format_apps(var/obj/item/device/pda/pda_hardware)//makes a list of all the apps that aren't yet installed on the PDA
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/pda_terminal/proc/format_apps() called tick#: [world.time]")
 	if(!istype(pda_hardware))
 		return list()
 
@@ -52,12 +38,15 @@
 	return formatted
 
 /obj/machinery/computer/pda_terminal/proc/get_app_name(var/datum/pda_app/app)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/pda_terminal/proc/get_app_name() called tick#: [world.time]")
 	return "[app.name]"
 
 /obj/machinery/computer/pda_terminal/proc/get_display_name(var/datum/pda_app/app)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/pda_terminal/proc/get_display_name() called tick#: [world.time]")
 	return "[app.name] ([!(app.price) ? "free" : "[app.price]$"])"
 
 /obj/machinery/computer/pda_terminal/proc/get_display_desc(var/datum/pda_app/app)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/pda_terminal/proc/get_display_desc() called tick#: [world.time]")
 	return "[app.desc]"
 
 /obj/machinery/computer/pda_terminal/attackby(obj/item/device/pda/user_pda, mob/user)
@@ -65,8 +54,7 @@
 		return ..()
 
 	if(!pda_device)
-		user.drop_item()
-		user_pda.loc = src
+		user.drop_item(user_pda, src)
 		pda_device = user_pda
 		update_icon()
 
@@ -114,7 +102,9 @@
 /obj/machinery/computer/pda_terminal/Topic(href, href_list)
 	if(..())
 		return 1
-
+	if(href_list["close"])
+		if(usr.machine == src) usr.unset_machine()
+		return 1
 	switch(href_list["choice"])
 		if ("pda_device")
 			if (pda_device)
@@ -129,8 +119,7 @@
 			else
 				var/obj/item/I = usr.get_active_hand()
 				if (istype(I, /obj/item/device/pda))
-					usr.drop_item()
-					I.loc = src
+					usr.drop_item(I, src)
 					pda_device = I
 			update_icon()
 
@@ -151,25 +140,8 @@
 					flick("pdaterm-problem", src)
 					return
 
-				if(istype(usr, /mob/living/carbon/human))
-					var/mob/living/carbon/human/H=usr
-					var/obj/item/weapon/card/card = null
-					var/obj/item/device/pda/pda = null
-
-					if(pda_device.id)//we look for an ID in the inserted PDA first
-						card = pda_device.id
-					else if(istype(H.wear_id,/obj/item/weapon/card))
-						card=H.wear_id
-					else if(istype(H.get_active_hand(),/obj/item/weapon/card))
-						card=H.get_active_hand()
-					else if(istype(H.wear_id,/obj/item/device/pda))
-						pda=H.wear_id
-						if(pda.id)
-							card=pda.id
-					else if(istype(H.get_active_hand(),/obj/item/device/pda))
-						pda=H.get_active_hand()
-						if(pda.id)
-							card=pda.id
+				if(istype(usr, /mob/living))
+					var/obj/item/weapon/card/card = usr.get_id_card()
 					if(card)
 						if (connect_account(usr,card,appdatum))
 							appdatum.onInstall(pda_device)
@@ -182,25 +154,9 @@
 						flick("pdaterm-problem", src)
 
 		if ("new_pda")
-			if(istype(usr, /mob/living/carbon/human))
-				var/mob/living/carbon/human/H=usr
-				var/obj/item/weapon/card/card = null
-				var/obj/item/device/pda/pda = null
+			if(istype(usr, /mob/living))
+				var/obj/item/weapon/card/card = usr.get_id_card()
 
-				if(pda_device && pda_device.id)//we look for an ID in the inserted PDA first
-					card = pda_device.id
-				else if(istype(H.wear_id,/obj/item/weapon/card))
-					card=H.wear_id
-				else if(istype(H.get_active_hand(),/obj/item/weapon/card))
-					card=H.get_active_hand()
-				else if(istype(H.wear_id,/obj/item/device/pda))
-					pda=H.wear_id
-					if(pda.id)
-						card=pda.id
-				else if(istype(H.get_active_hand(),/obj/item/device/pda))
-					pda=H.get_active_hand()
-					if(pda.id)
-						card=pda.id
 				if(card)
 					if (connect_account(usr,card,0))
 						usr << "\icon[src]<span class='notice'>Enjoy your new PDA!</span>"
@@ -216,7 +172,7 @@
 					flick("pdaterm-problem", src)
 	return 1
 
-/obj/machinery/computer/pda_terminal/proc/connect_account(var/mob/user,var/obj/item/weapon/card/W,var/appdatum)
+/obj/machinery/computer/pda_terminal/connect_account(var/mob/user,var/obj/item/weapon/card/W,var/appdatum)
 	if(istype(W))
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(!linked_db)
@@ -230,7 +186,7 @@
 			user << "\icon[src]<span class='warning'>Unable to connect to accounts database.</span>"
 	return	0
 
-/obj/machinery/computer/pda_terminal/proc/scan_card(var/mob/user,var/obj/item/weapon/card/id/C,var/datum/pda_app/appdatum)
+/obj/machinery/computer/pda_terminal/scan_card(var/mob/user,var/obj/item/weapon/card/id/C,var/datum/pda_app/appdatum)
 	if(istype(C))
 		user << "<span class='info'>\the [src] detects and scans the following ID: [C].</span>"
 		if(linked_account)

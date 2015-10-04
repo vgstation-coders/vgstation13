@@ -25,6 +25,8 @@
 
 	proc/GC()
 
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/GC() called tick#: [world.time]")
+
 		Holder = null
 		if(interpreter)
 			interpreter.GC()
@@ -33,6 +35,7 @@
 	/* -- Compile a raw block of text -- */
 
 	proc/Compile(code as message)
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/Compile() called tick#: [world.time]")
 		var/n_scriptOptions/nS_Options/options = new()
 		var/n_Scanner/nS_Scanner/scanner       = new(code, options)
 		var/list/tokens                        = scanner.Scan()
@@ -56,6 +59,8 @@
 	/* -- Execute the compiled code -- */
 
 	proc/Run(var/datum/signal/signal)
+
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/Run() called tick#: [world.time]")
 
 		if(!ready)
 			return
@@ -237,6 +242,8 @@ datum/signal
 
 	proc/mem(var/address, var/value)
 
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/mem() called tick#: [world.time]")
+
 		if(istext(address))
 			var/obj/machinery/telecomms/server/S = data["server"]
 
@@ -248,6 +255,8 @@ datum/signal
 
 
 	proc/signaler(var/freq = 1459, var/code = 30)
+
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/signaler() called tick#: [world.time]")
 
 		if(isnum(freq) && isnum(code))
 
@@ -267,7 +276,7 @@ datum/signal
 			code = round(code)
 			code = Clamp(code, 0, 100)
 
-			var/datum/signal/signal = new
+			var/datum/signal/signal = getFromPool(/datum/signal)
 			signal.source = S
 			signal.encryption = code
 			signal.data["message"] = "ACTIVATE"
@@ -280,7 +289,9 @@ datum/signal
 
 	proc/tcombroadcast(var/message, var/freq, var/source, var/job)
 
-		var/datum/signal/newsign = new
+		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/tcombroadcast() called tick#: [world.time]")
+
+		var/datum/signal/newsign = getFromPool(/datum/signal)
 		var/obj/machinery/telecomms/server/S = data["server"]
 		var/obj/item/device/radio/hradio = S.server_radio
 
@@ -299,9 +310,18 @@ datum/signal
 			freq *= 10 // shift the decimal one place
 
 		if(!job)
-			job = "?"
+			job = "Unknown"
 
-		newsign.data["mob"] = null
+		//SAY REWRITE RELATED CODE.
+		//This code is a little hacky, but it *should* work. Even though it'll result in a virtual speaker referencing another virtual speaker. vOv
+		var/atom/movable/virtualspeaker/virt = getFromPool(/atom/movable/virtualspeaker, null)
+		virt.name = source
+		virt.job = job
+		virt.faketrack = 1
+		//END SAY REWRITE RELATED CODE.
+
+
+		newsign.data["mob"] = virt
 		newsign.data["mobtype"] = /mob/living/carbon/human
 		newsign.data["name"] = source
 		newsign.data["realname"] = newsign.data["name"]
@@ -321,7 +341,7 @@ datum/signal
 		newsign.data["vmessage"] = message
 		newsign.data["vname"] = source
 		newsign.data["vmask"] = 0
-		newsign.data["level"] = list()
+		newsign.data["level"] = data["level"]
 
 		newsign.sanitize_data()
 
@@ -329,3 +349,5 @@ datum/signal
 		if(!pass)
 			S.relay_information(newsign, "/obj/machinery/telecomms/broadcaster") // send this simple message to broadcasters
 
+		spawn(50)
+			returnToPool(virt)

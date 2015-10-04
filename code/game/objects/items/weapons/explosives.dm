@@ -7,7 +7,7 @@
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "plastic-explosive0"
 	item_state = "plasticx"
-	flags = FPRINT | TABLEPASS | USEDELAY
+	flags = FPRINT
 	w_class = 2.0
 	origin_tech = "syndicate=2"
 	var/datum/wires/explosive/plastic/wires = null
@@ -21,14 +21,14 @@
 
 /obj/item/weapon/plastique/Destroy()
 	if(wires)
-		wires.Destroy()
+		qdel(wires)
 		wires = null
 
 	..()
 
 /obj/item/weapon/plastique/suicide_act(var/mob/user)
 	. = (BRUTELOSS)
-	viewers(user) << "\red <b>[user] activates the C4 and holds it above his head! It looks like \he's going out with a bang!</b>"
+	viewers(user) << "<span class='danger'>[user] activates the C4 and holds it above his head! It looks like \he's going out with a bang!</span>"
 	var/message_say = "FOR NO RAISIN!"
 	if(user.mind)
 		if(user.mind.special_role)
@@ -71,16 +71,16 @@
 		user.attack_log += "\[[time_stamp()]\] <font color='red'> [user.real_name] tried planting [name] on [target:real_name] ([target:ckey])</font>"
 		msg_admin_attack("[user.real_name] ([user.ckey]) tried planting [name] on [target:real_name] ([target:ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
-		user.visible_message("\red [user.name] is trying to plant some kind of explosive on [target.name]!")
+		user.visible_message("<span class='warning'>[user.name] is trying to plant some kind of explosive on [target.name]!</span>")
 
-	if(do_after(user, 50) && in_range(user, target))
-		user.drop_item()
+	if(do_after(user, target, 50) && in_range(user, target))
+		user.drop_item(src)
 		src.target = target
 		loc = null
 		if (ismob(target))
 			var/mob/M=target
 			target:attack_log += "\[[time_stamp()]\]<font color='orange'> Had the [name] planted on them by [user.real_name] ([user.ckey])</font>"
-			user.visible_message("\red [user.name] finished planting an explosive on [target.name]!")
+			user.visible_message("<span class='warning'>[user.name] finished planting an explosive on [target.name]!</span>")
 			playsound(get_turf(src), 'sound/weapons/c4armed.ogg', 60, 1)
 			if(!iscarbon(user))
 				M.LAssailant = null
@@ -93,6 +93,8 @@
 
 /obj/item/weapon/plastique/proc/explode(var/location)
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/plastique/proc/explode() called tick#: [world.time]")
+
 	if(!target)
 		target = get_atom_on_turf(src)
 	if(!target)
@@ -101,8 +103,8 @@
 		explosion(location, -1, -1, 2, 3)
 
 	if(target)
+		target.overlays -= image('icons/obj/assemblies.dmi', "plastic-explosive2")
 		if(!(target.singuloCanEat()))//mostly adminbus objects. It'd make sense though that C4 can't destroy what even a singulo can't eat.
-			target.overlays -= image('icons/obj/assemblies.dmi', "plastic-explosive2")
 			del(src)
 			return
 		if (istype(target, /turf/simulated/wall))

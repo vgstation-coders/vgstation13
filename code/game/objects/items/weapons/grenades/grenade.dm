@@ -7,19 +7,21 @@
 	item_state = "flashbang"
 	throw_speed = 4
 	throw_range = 20
-	flags = FPRINT | TABLEPASS | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	var/active = 0
 	var/det_time = 50
 
 /obj/item/weapon/grenade/proc/clown_check(var/mob/living/user)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/grenade/proc/clown_check() called tick#: [world.time]")
 	if((M_CLUMSY in user.mutations) && prob(50))
 		user << "<span class='warning'>Huh? How does this thing work?</span>"
 
 		activate(user)
 		add_fingerprint(user)
 		spawn(5)
-			prime()
+			prime(user)
 		return 0
 	return 1
 
@@ -36,25 +38,24 @@
 			prime()
 			return
 		user.dir = get_dir(user, target)
-		user.drop_item()
+		user.drop_item(null, )
 		var/t = (isturf(target) ? target : target.loc)
 		walk_towards(src, t, 3)
 	return*/
 
 
-/obj/item/weapon/grenade/examine()
-	set src in usr
-	usr << desc
+/obj/item/weapon/grenade/examine(mob/user)
+	..()
 	if(det_time > 1)
-		usr << "The timer is set to [det_time/10] seconds."
+		user << "<span class='info'>The timer is set to [det_time/10] seconds.</span>"
 		return
-	usr << "\The [src] is set for instant detonation."
+	user << "<span class='warning'>\The [src] is set for instant detonation.</span>"
 
 
 /obj/item/weapon/grenade/attack_self(mob/user as mob)
 	if(!active)
 		if(clown_check(user))
-			user << "<span class='warning'>You prime \the [name]! [det_time/10] seconds!</span>"
+			user << "<span class='attack'>You prime \the [name]! [det_time/10] seconds!</span>"
 
 			activate(user)
 			add_fingerprint(user)
@@ -65,6 +66,7 @@
 
 
 /obj/item/weapon/grenade/proc/activate(mob/user as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/grenade/proc/activate() called tick#: [world.time]")
 	if(active)
 		return
 
@@ -78,17 +80,19 @@
 	playsound(loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 
 	spawn(det_time)
-		prime()
+		prime(user)
 		return
 
 
 /obj/item/weapon/grenade/proc/prime()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/grenade/proc/prime() called tick#: [world.time]")
 //	playsound(loc, 'sound/items/Welder2.ogg', 25, 1)
 	var/turf/T = get_turf(src)
 	if(T)
 		T.hotspot_expose(700,125,surfaces=istype(loc,/turf))
 
 /obj/item/weapon/grenade/proc/update_mob()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/grenade/proc/update_mob() called tick#: [world.time]")
 	if(ismob(loc))
 		var/mob/M = loc
 		M.drop_from_inventory(src)

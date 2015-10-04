@@ -1,8 +1,14 @@
+var/const/ANIMAL_CHILD_CAP = 50
+var/global/list/animal_count = list() //Stores types, and amount of animals of that type associated with the type (example: /mob/living/simple_animal/dog = 10)
+//Animals can't breed if amount of children exceeds 50
+
 /mob/living/simple_animal
 	name = "animal"
 	icon = 'icons/mob/animal.dmi'
 	health = 20
 	maxHealth = 20
+
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal
 
 	var/icon_living = ""
 	var/icon_dead = ""
@@ -16,9 +22,7 @@
 
 	var/turns_per_move = 1
 	var/turns_since_move = 0
-	universal_speak = 1
-	var/meat_amount = 0
-	var/meat_type
+
 	var/stop_automated_movement = 0 //Use this to temporarely stop random movement or to if you write special movement code for animals.
 	var/wander = 1	// Does the mob wander around when idle?
 	var/stop_automated_movement_when_pulled = 1 //When set to 1 this stops the animal from moving when someone is pulling it.
@@ -38,6 +42,8 @@
 	var/oxygen_alert = 0
 	var/toxins_alert = 0
 
+	var/show_stat_health = 1	//does the percentage health show in the stat panel for the mob
+
 	//Atmos effect - Yes, you can make creatures that require plasma or co2 to survive. N2O is a trace gas and handled separately, hence why it isn't here. It'd be hard to add it. Hard and me don't mix (Yes, yes make all the dick jokes you want with that.) - Errorage
 	var/min_oxy = 5
 	var/max_oxy = 0					//Leaving something at 0 means it's off - has no maximum
@@ -49,6 +55,10 @@
 	var/max_n2 = 0
 	var/unsuitable_atoms_damage = 2	//This damage is taken when atmos doesn't fit all the requirements above
 
+
+	mob_bump_flag = SIMPLE_ANIMAL
+	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
+	mob_push_flags = MONKEY|SLIME|SIMPLE_ANIMAL
 
 	//LETTING SIMPLE ANIMALS ATTACK? WHAT COULD GO WRONG. Defaults to zero so Ian can still be cuddly
 	var/melee_damage_lower = 0
@@ -62,35 +72,70 @@
 
 	//Hot simple_animal baby making vars
 	var/childtype = null
+	var/child_amount = 1
 	var/scan_ready = 1
-	var/species //Sorry, no spider+corgi buttbabies.
+	var/can_breed = 0
 
 	//Null rod stuff
 	var/supernatural = 0
 	var/purge = 0
 
+	universal_speak = 1
+	universal_understand = 1
+
+	var/life_tick = 0
+
+/mob/living/simple_animal/apply_beam_damage(var/obj/effect/beam/B)
+	var/lastcheck=last_beamchecks["\ref[B]"]
+
+	var/damage = ((world.time - lastcheck)/10)  * (B.get_damage()/2)
+
+	// Actually apply damage
+	health -= damage
+
+	// Update check time.
+	last_beamchecks["\ref[B]"]=world.time
+
+/mob/living/simple_animal/rejuvenate(animation = 0)
+	var/turf/T = get_turf(src)
+	if(animation) T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg')
+	src.health = src.maxHealth
+	return 1
 /mob/living/simple_animal/New()
 	..()
 	verbs -= /mob/verb/observe
 	if(!real_name)
 		real_name = name
 
+	animal_count[src.type]++
+
 /mob/living/simple_animal/Login()
 	if(src && src.client)
-		src.client.screen = null
+		src.client.reset_screen()
 	..()
 
 /mob/living/simple_animal/updatehealth()
 	return
 
+/mob/living/simple_animal/airflow_stun()
+	return
+
+/mob/living/simple_animal/airflow_hit(atom/A)
+	return
+
+// For changing wander behavior
+/mob/living/simple_animal/proc/wander_move(var/turf/dest)
+	Move(dest)
+
 /mob/living/simple_animal/Life()
+	if(timestopped) return 0 //under effects of time magick
+	..()
 
 	//Health
 	if(stat == DEAD)
 		if(health > 0)
 			icon_state = icon_living
-			dead_mob_list -= src
-			living_mob_list += src
+			src.resurrect()
 			stat = CONSCIOUS
 			density = 1
 			update_canmove()
@@ -99,9 +144,11 @@
 
 	if(health < 1 && stat != DEAD)
 		Die()
+		return 0
 
-	if(health > maxHealth)
-		health = maxHealth
+	life_tick++
+
+	health = min(health, maxHealth)
 
 	if(stunned)
 		AdjustStunned(-1)
@@ -115,11 +162,12 @@
 
 	//Movement
 	if((!client||deny_client_move) && !stop_automated_movement && wander && !anchored && (ckey == null) && !(flags & INVULNERABLE))
-		if(isturf(src.loc) && !resting && !buckled && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
+		if(isturf(src.loc) && !resting && !locked_to && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Soma animals don't move when pulled
-					Move(get_step(src,pick(cardinal)))
+					var/destination = get_step(src, pick(cardinal))
+					wander_move(destination)
 					turns_since_move = 0
 
 	//Speaking
@@ -223,28 +271,20 @@
 
 	if(!atmos_suitable)
 		adjustBruteLoss(unsuitable_atoms_damage)
+
+	if(can_breed)
+		make_babies()
+
 	return 1
 
-/mob/living/simple_animal/Bumped(AM as mob|obj)
-	if(!AM) return
-
-	if(resting || buckled)
-		return
-
-	if(isturf(src.loc))
-		if(ismob(AM))
-			var/newamloc = src.loc
-			src.loc = AM:loc
-			AM:loc = newamloc
-		else
-			..()
-
-/mob/living/simple_animal/gib(var/animation = 0)
+/mob/living/simple_animal/gib(var/animation = 0, var/meat = 1)
 	if(icon_gib)
 		flick(icon_gib, src)
-	if(meat_amount && meat_type)
-		for(var/i = 0; i < meat_amount; i++)
-			new meat_type(src.loc)
+
+	if(meat && meat_type)
+		for(var/i = 0; i < (src.size - meat_taken); i++)
+			drop_meat(get_turf(src))
+
 	..()
 
 
@@ -260,11 +300,13 @@
 	return "says, \"[text]\"";
 
 /mob/living/simple_animal/emote(var/act, var/type, var/desc)
+	if(timestopped) return //under effects of time magick
 	if(stat)
 		return
-	if(act)
-		if(act == "scream")	act = "whimper" //ugly hack to stop animals screaming when crushed :P
-		..(act, type, desc)
+	if(act == "scream")
+		desc = "makes a loud and pained whimper"  //ugly hack to stop animals screaming when crushed :P
+		act = "me"
+	..(act, type, desc)
 
 /mob/living/simple_animal/attack_animal(mob/living/simple_animal/M as mob)
 	if(M.melee_damage_upper == 0)
@@ -275,7 +317,7 @@
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
-			O.show_message("\red <B>\The [M]</B> [M.attacktext] [src]!", 1)
+			O.show_message("<span class='warning'><B>\The [M]</B> [M.attacktext] [src]!</span>", 1)
 		add_logs(M, src, "attacked", admin=0)
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		adjustBruteLoss(damage)
@@ -285,7 +327,7 @@
 	// FUCK mice. - N3X
 	if(ismouse(src) && (Proj.stun+Proj.weaken+Proj.paralyze+Proj.agony)>5)
 		var/mob/living/simple_animal/mouse/M=src
-		M << "\red What would probably not kill a human completely overwhelms your tiny body."
+		M << "<span class='warning'>What would probably not kill a human completely overwhelms your tiny body.</span>"
 		M.splat()
 		return 0
 	adjustBruteLoss(Proj.damage)
@@ -297,19 +339,19 @@
 
 	switch(M.a_intent)
 
-		if("help")
+		if(I_HELP)
 			if (health > 0)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
-						O.show_message("\blue [M] [response_help] [src].")
+						O.show_message("<span class='notice'>[M] [response_help] [src].</span>")
 
-		if("grab")
+		if(I_GRAB)
 			if (M == src || anchored)
 				return
 			if (!(status_flags & CANPUSH))
 				return
 
-			var/obj/item/weapon/grab/G = new /obj/item/weapon/grab(M, src )
+			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
 
 			M.put_in_active_hand(G)
 
@@ -320,13 +362,13 @@
 
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
-					O.show_message(text("\red [] has grabbed [] passively!", M, src), 1)
+					O.show_message(text("<span class='warning'>[] has grabbed [] passively!</span>", M, src), 1)
 
-		if("hurt", "disarm")
+		if(I_HURT, I_DISARM)
 			adjustBruteLoss(harm_intent_damage)
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
-					O.show_message("\red [M] [response_harm] [src]!")
+					O.show_message("<span class='warning'>[M] [response_harm] [src]!</span>")
 
 	return
 
@@ -334,18 +376,18 @@
 
 	switch(M.a_intent)
 
-		if ("help")
+		if (I_HELP)
 
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
-					O.show_message(text("\blue [M] caresses [src] with its scythe like arm."), 1)
-		if ("grab")
+					O.show_message(text("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>"), 1)
+		if (I_GRAB)
 			if(M == src || anchored)
 				return
 			if(!(status_flags & CANPUSH))
 				return
 
-			var/obj/item/weapon/grab/G = new /obj/item/weapon/grab(M, src )
+			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
 
 			M.put_in_active_hand(G)
 
@@ -357,11 +399,11 @@
 			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
-					O.show_message(text("\red [] has grabbed [] passively!", M, src), 1)
+					O.show_message(text("<span class='warning'>[] has grabbed [] passively!</span>", M, src), 1)
 
-		if("hurt", "disarm")
+		if(I_HURT, I_DISARM)
 			var/damage = rand(15, 30)
-			visible_message("\red <B>[M] has slashed at [src]!</B>")
+			visible_message("<span class='danger'>[M] has slashed at [src]!</span>")
 			adjustBruteLoss(damage)
 
 	return
@@ -369,14 +411,14 @@
 /mob/living/simple_animal/attack_larva(mob/living/carbon/alien/larva/L as mob)
 
 	switch(L.a_intent)
-		if("help")
-			visible_message("\blue [L] rubs it's head against [src]")
+		if(I_HELP)
+			visible_message("<span class='notice'>[L] rubs it's head against [src]</span>")
 
 
 		else
 
 			var/damage = rand(5, 10)
-			visible_message("\red <B>[L] bites [src]!</B>")
+			visible_message("<span class='danger'>[L] bites [src]!</span>")
 
 			if(stat != DEAD)
 				adjustBruteLoss(damage)
@@ -390,7 +432,7 @@
 
 	if(M.Victim) return // can't attack while eating!
 
-	visible_message("\red <B>[M.name] glomps [src]!</B>")
+	visible_message("<span class='danger'>[M.name] glomps [src]!</span>")
 
 	var/damage = rand(1, 3)
 
@@ -407,25 +449,20 @@
 
 /mob/living/simple_animal/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
 	if(istype(O, /obj/item/stack/medical))
-		user.changeNext_move(4)
+		user.delayNextAttack(4)
 		if(stat != DEAD)
 			var/obj/item/stack/medical/MED = O
 			if(health < maxHealth)
-				if(MED.amount >= 1)
+				if(MED.use(1))
 					adjustBruteLoss(-MED.heal_brute)
-					MED.amount -= 1
-					if(MED.amount <= 0)
-						del(MED)
-					for(var/mob/M in viewers(src, null))
-						if ((M.client && !( M.blinded )))
-							M.show_message("\blue [user] applies the [MED] on [src]")
+					src.visible_message("<span class='notice'>[user] applies \the [MED] on [src].</span>")
 		else
-			user << "\blue this [src] is dead, medical items won't bring it back to life."
-	if(meat_type && (stat == DEAD))	//if the animal has a meat, and if it is dead.
-		if(istype(O, /obj/item/weapon/kitchenknife) || istype(O, /obj/item/weapon/butch))
-			harvest()
+			user << "<span class='notice'>this [src] is dead, medical items won't bring it back to life.</span>"
+	else if((meat_type || butchering_drops) && (stat == DEAD))	//if the animal has a meat, and if it is dead.
+		if(O.is_sharp())
+			butcher()
 	else
-		user.changeNext_move(8)
+		user.delayNextAttack(8)
 		if(O.force)
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
@@ -436,12 +473,12 @@
 			adjustBruteLoss(damage)
 			for(var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
-					M.show_message("\red \b [src] has been attacked with the [O] by [user]. ")
+					M.show_message("<span class='danger'>[src] has been attacked with the [O] by [user]. </span>")
 		else
-			usr << "\red This weapon is ineffective, it does no damage."
+			usr << "<span class='warning'>This weapon is ineffective, it does no damage.</span>"
 			for(var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
-					M.show_message("\red [user] gently taps [src] with the [O]. ")
+					M.show_message("<span class='warning'>[user] gently taps [src] with the [O]. </span>")
 
 /mob/living/simple_animal/movement_delay()
 	var/tally = 0 //Incase I need to add stuff other than "speed" later
@@ -453,21 +490,39 @@
 			tally = 1
 		tally *= purge
 
+	if(istype(loc,/turf/simulated/floor))
+		var/turf/simulated/floor/T = loc
+
+		if(T.material=="phazon")
+			return -1 // Phazon floors make us go fast
+
 	return tally+config.animal_delay
 
 /mob/living/simple_animal/Stat()
 	..()
 
-	statpanel("Status")
-	stat(null, "Health: [round((health / maxHealth) * 100)]%")
+	if(statpanel("Status") && show_stat_health)
+		stat(null, "Health: [round((health / maxHealth) * 100)]%")
 
 /mob/living/simple_animal/proc/Die()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/proc/Die() called tick#: [world.time]")
 	health = 0 // so /mob/living/simple_animal/Life() doesn't magically revive them
 	living_mob_list -= src
 	dead_mob_list += src
 	icon_state = icon_dead
 	stat = DEAD
 	density = 0
+
+	animal_count[src.type]--
+	if(!src.butchering_drops && animal_butchering_products[src.species_type]) //If we already created a list of butchering drops, don't create another one
+		var/list/L = animal_butchering_products[src.species_type]
+		src.butchering_drops = list()
+
+		for(var/butchering_type in L)
+			src.butchering_drops += new butchering_type
+
+	verbs += /mob/living/proc/butcher
+
 	return
 
 /mob/living/simple_animal/death(gibbed)
@@ -503,9 +558,11 @@
 		Die()
 
 /mob/living/simple_animal/proc/SA_attackable(target)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/proc/SA_attackable() called tick#: [world.time]")
 	return CanAttack(target)
 
 /mob/living/simple_animal/proc/CanAttack(var/atom/target)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/proc/CanAttack() called tick#: [world.time]")
 	if(see_invisible < target.invisibility)
 		return 0
 	if (isliving(target))
@@ -541,10 +598,13 @@
 
 /mob/living/simple_animal/revive()
 	health = maxHealth
+	butchering_drops = null
+	meat_taken = 0
 	..()
 
 /mob/living/simple_animal/proc/make_babies() // <3 <3 <3
-	if(gender != FEMALE || stat || !scan_ready || !childtype || !species)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/proc/make_babies() called tick#: [world.time]")
+	if(gender != FEMALE || stat || !scan_ready || !childtype || !species_type)
 		return
 	scan_ready = 0
 	spawn(400)
@@ -557,22 +617,29 @@
 			continue
 		else if(istype(M, childtype)) //Check for children FIRST.
 			children++
-		else if(istype(M, species))
+		else if(istype(M, species_type))
 			if(M.client)
 				continue
 			else if(!istype(M, childtype) && M.gender == MALE) //Better safe than sorry ;_;
 				partner = M
-		else if(istype(M, /mob/))
-			alone = 0
-			continue
+		else if(istype(M, /mob/living))
+			if(!istype(M, /mob/dead/observer) || M.stat != DEAD) //Make babies with ghosts or dead people nearby!
+				alone = 0
+				continue
 	if(alone && partner && children < 3)
-		new childtype(loc)
+		give_birth()
 
-// Harvest an animal's delicious byproducts
-/mob/living/simple_animal/proc/harvest()
-	new meat_type (get_turf(src))
-	if(prob(95))
-		del(src)
-		return
-	gib()
-	return
+/mob/living/simple_animal/proc/give_birth()
+	for(var/i=1; i<=child_amount; i++)
+		if(animal_count[childtype] > ANIMAL_CHILD_CAP)
+			break
+
+		var/mob/living/simple_animal/child = new childtype(loc)
+		if(istype(child))
+			child.faction = src.faction
+
+/mob/living/simple_animal/say_understands(var/mob/other,var/datum/language/speaking = null)
+	if(other) other = other.GetSource()
+	if(issilicon(other))
+		return 1
+	return ..()

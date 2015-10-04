@@ -7,6 +7,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 	set desc = "Turns the target player into a random fully geared antag."
 	set category = "Fun"
 
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\client/proc/antag_madness() called tick#: [world.time]")
+
 	if(!holder)
 		return
 
@@ -70,7 +72,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 	feedback_add_details("admin_verb","AM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/obj/structure/stool/bed/chair/vehicle/adminbus/proc/antag_madness_adminbus(var/mob/M)
+/obj/structure/bed/chair/vehicle/adminbus/proc/antag_madness_adminbus(var/mob/M)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/stool/bed/chair/vehicle/adminbus/proc/antag_madness_adminbus() called tick#: [world.time]")
 	if(!M.mind)
 		return
 
@@ -110,13 +113,14 @@ client/proc/antag_madness(var/mob/M in mob_list)
 	M << "<span class='danger'>You get the feeling that you're not the only one who remembered his true origin. Will they be your allies or your foes? That is for you to decide.</span>"
 
 /proc/create_madness(var/mob/living/carbon/human/M, var/choice)
+	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/create_madness() called tick#: [world.time]")
 	if (M.mind.assigned_role == "Clown")
 		M << "The adminbus has allowed you to overcome your clownish nature, allowing you to wield weapons without harming yourself."
 		M.mutations.Remove(M_CLUMSY)
 
 	switch(choice)
 		if("traitor")
-			if(M.mind in ticker.mode.traitors)	return 0
+			if(istraitor(M))	return 0
 			ticker.mode.traitors += M.mind
 			M.mind.special_role = "traitor"
 			ticker.mode.forge_traitor_objectives(M.mind)
@@ -126,11 +130,11 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			pack.name = "[M.real_name]'s belongings"
 
 			for(var/obj/item/I in M)
-				M.u_equip(I)
+				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
 					I.layer = initial(I.layer)
-					I.dropped(M)
+					//I.dropped(M)
 					I.loc = pack
 
 			M.equip_to_slot_or_del(new/obj/item/device/radio/headset, slot_ears)
@@ -157,7 +161,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("changeling")
-			if(M.mind in ticker.mode.changelings)	return 0
+			if(ischangeling(M))	return 0
 			ticker.mode.changelings += M.mind
 			ticker.mode.grant_changeling_powers(M)
 			M.mind.special_role = "Changeling"
@@ -170,25 +174,25 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("vampire")
-			if(M.mind in ticker.mode.vampires)	return 0
+			if(isvampire(M))	return 0
 			ticker.mode.vampires += M.mind
 			ticker.mode.grant_vampire_powers(M)
 			M.mind.special_role = "Vampire"
 			ticker.mode.forge_vampire_objectives(M.mind)
 			ticker.mode.greet_vampire(M.mind)
-			M.mind.vampire.bloodtotal = 500
-			M.mind.vampire.bloodusable = 500
+			M.mind.vampire.bloodtotal = 666
+			M.mind.vampire.bloodusable = 666
 			M.check_vampire_upgrade(M.mind)
 
 			var/obj/item/packobelongings/pack = new /obj/item/packobelongings(M)
 			pack.name = "[M.real_name]'s belongings"
 
 			for(var/obj/item/I in M)
-				M.u_equip(I)
+				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
 					I.layer = initial(I.layer)
-					I.dropped(M)
+					//I.dropped(M)
 					I.loc = pack
 
 			M.equip_to_slot_or_del(new/obj/item/device/radio/headset, slot_ears)
@@ -197,7 +201,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			M.equip_to_slot_or_del(new/obj/item/clothing/shoes/jackboots, slot_shoes)
 			M.equip_to_slot_or_del(new/obj/item/clothing/gloves/batmangloves, slot_gloves)
 			M.equip_to_slot_or_del(new/obj/item/clothing/mask/gas/death_commando, slot_wear_mask)
-			M.equip_to_slot_or_del(new/obj/item/clothing/suit/hgpirate, slot_wear_suit)
+			M.equip_to_slot_or_del(new/obj/item/clothing/suit/storage/draculacoat, slot_wear_suit)
 			M.equip_to_slot_or_del(new/obj/item/clothing/head/chaplain_hood, slot_head)
 			M.equip_to_slot_or_del(new/obj/item/weapon/tank/emergency_oxygen/double, slot_s_store)
 
@@ -205,18 +209,20 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			M << "Your previous belongings have been stored in your backpack."
 			M.regenerate_icons()
 
-			M << "<span class='danger'>You have been gifted a total of 500 usable units of blood!</span>"
+			M << "<span class='danger'>You have been gifted a total of 666 usable units of blood!</span>"
 			return 1
 
 
 
 		if("cult")
-			if(M.mind in ticker.mode.cult)	return 0
+			if(iscult(M))	return 0
 			ticker.mode.cult += M.mind
 			ticker.mode.update_cult_icons_added(M.mind)
 			M.mind.special_role = "Cultist"
 			M << "<span class='sinister'>You remember the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>"
 			M << "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>"
+			M << "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>"
+			M.add_language("Cult")
 			var/datum/game_mode/cult/cult = ticker.mode
 			if (istype(cult))
 				cult.memoize_cult_objectives(M.mind)
@@ -240,11 +246,11 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			pack.name = "[M.real_name]'s belongings"
 
 			for(var/obj/item/I in M)
-				M.u_equip(I)
+				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
 					I.layer = initial(I.layer)
-					I.dropped(M)
+					//I.dropped(M)
 					I.loc = pack
 
 			var/obj/item/weapon/tome/T = new/obj/item/weapon/tome(M)
@@ -300,15 +306,15 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 			M << "<span class='danger'>You suddenly realize that you clearly remember every single rune word! Check your notes.</span>"
 
-			M << "A tome, a message from your new master, appears in your backpack."
+			M << "<span class='sinister'>A tome, a message from your new master, appears in your backpack.</span>"
 
-			M << "You have a talisman in your backpack, one that will help you start the cult on this station. Use it well and remember - there are others...or maybe not..."//duh
+			M << "<span class='sinister'>You have a talisman in your backpack, one that will help you start the cult on this station. Use it well and remember - there are others...or maybe not...</span>"//duh
 			return 1
 
 
 
 		if("rev")
-			if(M.mind in ticker.mode.head_revolutionaries)	return 0
+			if(isrevhead(M))	return 0
 			ticker.mode.head_revolutionaries += M.mind
 			ticker.mode.update_rev_icons_added(M.mind)
 			M.mind.special_role = "Head Revolutionary"
@@ -319,11 +325,11 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			pack.name = "[M.real_name]'s belongings"
 
 			for(var/obj/item/I in M)
-				M.u_equip(I)
+				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
 					I.layer = initial(I.layer)
-					I.dropped(M)
+					//I.dropped(M)
 					I.loc = pack
 
 			M.equip_to_slot_or_del(new/obj/item/device/radio/headset/syndicate, slot_ears)
@@ -337,7 +343,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			M.equip_to_slot_or_del(new/obj/item/clothing/gloves/grey, slot_gloves)
 			M.equip_to_slot_or_del(new/obj/item/weapon/katana, slot_belt)
 			M.equip_to_slot_or_del(new/obj/item/device/flash, slot_l_store)
-			M.equip_to_slot_or_del(new/obj/item/weapon/storage/box/matches, slot_r_store)
+			M.equip_to_slot_or_del(new/obj/item/weapon/storage/fancy/matchbox/strike_anywhere, slot_r_store)
 			M.regenerate_icons()
 			M.equip_to_slot_or_del(new/obj/item/weapon/gun/energy/laser/LaserAK, slot_in_backpack)
 			M.equip_to_slot_or_del(new/obj/item/weapon/gun/energy/laser/LaserAK, slot_in_backpack)
@@ -352,7 +358,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("nuke")
-			if(M.mind in ticker.mode.syndicates)	return 0
+			if(isnukeop(M))	return 0
 			ticker.mode.syndicates += M.mind
 			ticker.mode.update_synd_icons_added(M.mind)
 			M.real_name = "[syndicate_name()] Operative"
@@ -366,11 +372,11 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			pack.name = "[M.real_name]'s belongings"
 
 			for(var/obj/item/I in M)
-				M.u_equip(I)
+				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
 					I.layer = initial(I.layer)
-					I.dropped(M)
+					//I.dropped(M)
 					I.loc = pack
 
 			ticker.mode.equip_syndicate(M)
@@ -397,7 +403,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("deathsquad")
-			if(M.mind in ticker.mode.deathsquads)	return 0
+			if(isdeathsquad(M))	return 0
+			ticker.mode.deathsquad += M.mind
 			M.mind.assigned_role = "MODE"
 			M.mind.special_role = "Death Commando"
 			ticker.mode.deathsquads += M.mind
@@ -422,11 +429,11 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			pack.name = "[M.real_name]'s belongings"
 
 			for(var/obj/item/I in M)
-				M.u_equip(I)
+				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
 					I.layer = initial(I.layer)
-					I.dropped(M)
+					//I.dropped(M)
 					I.loc = pack
 
 			M.equip_to_slot_or_del(new/obj/item/device/radio/headset/syndicate, slot_ears)
@@ -435,7 +442,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			M.equip_to_slot_or_del(new/obj/item/clothing/mask/gas/swat, slot_wear_mask)
 			M.equip_to_slot_or_del(new/obj/item/weapon/storage/backpack/security, slot_back)
 			M.equip_to_slot_or_del(new/obj/item/weapon/card/id/centcom, slot_wear_id)
-			M.equip_to_slot_or_del(new/obj/item/clothing/head/helmet/space/deathsquad, slot_head)
+			M.equip_to_slot_or_del(new/obj/item/clothing/head/helmet/space/rig/deathsquad, slot_head)
 			M.equip_to_slot_or_del(new/obj/item/clothing/suit/armor/swat, slot_wear_suit)
 			M.equip_to_slot_or_del(new/obj/item/clothing/gloves/swat, slot_gloves)
 			M.equip_to_slot_or_del(new/obj/item/weapon/gun/energy/pulse_rifle/M1911, slot_belt)
@@ -458,7 +465,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("wizard")
-			if(M.mind in ticker.mode.wizards)	return 0
+			if(iswizard(M))	return 0
 			ticker.mode.wizards += M.mind
 			M.mind.special_role = "Wizard"
 			M.mind.assigned_role = "MODE"
@@ -470,17 +477,18 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			pack.name = "[M.real_name]'s belongings"
 
 			for(var/obj/item/I in M)
-				M.u_equip(I)
+				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
 					I.layer = initial(I.layer)
-					I.dropped(M)
+					//I.dropped(M)
 					I.loc = pack
 
 			if(M.gender == "male")
 				M.equip_to_slot_or_del(new/obj/item/clothing/shoes/sandal, slot_shoes)
 				M.equip_to_slot_or_del(new/obj/item/clothing/head/wizard, slot_head)
 				M.equip_to_slot_or_del(new/obj/item/clothing/suit/wizrobe, slot_wear_suit)
+				M.equip_to_slot_or_del(new/obj/item/weapon/staff, slot_l_hand)
 
 				M.r_eyes = 102
 				M.g_eyes = 51
@@ -501,6 +509,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.equip_to_slot_or_del(new/obj/item/clothing/shoes/sandal/marisa, slot_shoes)
 				M.equip_to_slot_or_del(new/obj/item/clothing/head/wizard/marisa, slot_head)
 				M.equip_to_slot_or_del(new/obj/item/clothing/suit/wizrobe/marisa, slot_wear_suit)
+				M.equip_to_slot_or_del(new/obj/item/weapon/staff/broom, slot_l_hand)
 
 				M.r_eyes = 153
 				M.g_eyes = 102
@@ -523,7 +532,6 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			M.equip_to_slot_or_del(new/obj/item/device/radio/headset, slot_ears)
 			M.equip_to_slot_or_del(new/obj/item/clothing/under/lightpurple, slot_w_uniform)
 			M.equip_to_slot_or_del(new/obj/item/weapon/storage/backpack/satchel, slot_back)
-			M.equip_to_slot_or_del(new/obj/item/weapon/staff, slot_l_hand)
 			var/obj/item/weapon/spellbook/S = new/obj/item/weapon/spellbook(M)
 			S.uses = 30
 			S.op = 0
@@ -548,7 +556,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 		if("monkey")
 			if(M.monkeyizing)	return 0
-			if(M.mind in ticker.mode.infected_monkeys)	return 0
+			if(isbadmonkey(M))	return 0
 			ticker.mode.infected_monkeys += M.mind
 			var/mob/living/carbon/human/H = M
 			var/mob/living/carbon/monkey/K = M

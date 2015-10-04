@@ -16,9 +16,7 @@
 		user << "<span class='warning'>\The [src] cannot be applied to [M]!</span>"
 		return 1
 
-	if(!(istype(user, /mob/living/carbon/human) || \
-			istype(user, /mob/living/silicon) || \
-			istype(user, /mob/living/carbon/monkey) && ticker && ticker.mode.name == "monkey"))
+	if (!user.dexterity_check())
 		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
 		return 1
 
@@ -252,7 +250,7 @@
 			user.visible_message("<span class='warning'>[user] starts to apply \the [src] to their [limb].</span>", \
 								"<span class='warning'>You start to apply \the [src] to your [limb].</span>", \
 								"<span class='warning'>You hear something being wrapped.</span>")
-		if(do_after(user, 50))
+		if(do_mob(user, M, 50))
 			if (M != user)
 				user.visible_message("<span class='warning'>[user] finishes applying \the [src] to [M]'s [limb].</span>", \
 									"<span class='warning'>You finish applying \the [src] to [M]'s [limb].</span>", \

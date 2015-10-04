@@ -49,10 +49,13 @@
 		return
 
 	if(in_range(src, usr) && ishuman(over_object) && get_dist(over_object, src) <= 1)
+		var/mob/living/carbon/human/H = over_object
+		if(H.species && (H.species.chem_flags & NO_INJECT))
+			H.visible_message("<span class='warning'>[usr] struggles to place the IV into [H] but fails.</span>","<span class='notice'>[usr] tries to place the IV into your arm but is unable to.</span>")
+			return
 		visible_message("[usr] attaches \the [src] to \the [over_object].")
 		src.attached = over_object
 		src.update_icon()
-
 
 /obj/machinery/iv_drip/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(isobserver(user)) return
@@ -60,19 +63,19 @@
 		return
 	if(istype(W, /obj/item/weapon/wrench))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		new /obj/item/stack/sheet/metal(src.loc,2)
+		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,get_turf(src))
+		M.amount = 2
 		if(src.beaker)
 			src.beaker.loc = get_turf(src)
 			src.beaker = null
-		user << "\blue You dismantle \the [name]."
-		del(src)
+		user << "<span class='notice'>You dismantle \the [name].</span>"
+		qdel(src)
 	if (istype(W, /obj/item/weapon/reagent_containers))
 		if(!isnull(src.beaker))
 			user << "There is already a reagent container loaded!"
 			return
 
-		user.drop_item()
-		W.loc = src
+		user.drop_item(W, src)
 		src.beaker = W
 		user << "You attach \the [W] to \the [src]."
 		src.update_icon()
@@ -134,9 +137,13 @@
 				update_icon()
 
 /obj/machinery/iv_drip/attack_hand(mob/user as mob)
-	if(isobserver(usr)) return
-	if(user.stat) return
-	if(src.beaker)
+	if(isobserver(usr) || user.stat)
+		return
+	if(attached)
+		visible_message("[src.attached] is detached from \the [src].")
+		src.attached = null
+		src.update_icon()
+	else if(src.beaker)
 		src.beaker.loc = get_turf(src)
 		src.beaker = null
 		update_icon()
@@ -146,31 +153,28 @@
 
 /obj/machinery/iv_drip/verb/toggle_mode()
 	set name = "Toggle Mode"
+	set category = "Object"
 	set src in view(1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/iv_drip/verb/toggle_mode()  called tick#: [world.time]")
 
 	if(!istype(usr, /mob/living))
-		usr << "\red You can't do that."
+		usr << "<span class='warning'>You can't do that.</span>"
 		return
 
-	if(usr.stat)
+	if(usr.stat || (usr.status_flags & FAKEDEATH))
 		return
 
 	mode = !mode
 	usr << "The [src] is now [mode ? "injecting" : "taking blood"]."
 
-/obj/machinery/iv_drip/examine()
-	set src in view()
+/obj/machinery/iv_drip/examine(mob/user)
 	..()
-	if (!(usr in view(2)) && usr!=src.loc) return
-
-	usr << "The [src] is [mode ? "injecting" : "taking blood"]."
-
+	user << "The [src] is [mode ? "injecting" : "taking blood"]."
 	if(beaker)
 		if(beaker.reagents && beaker.reagents.reagent_list.len)
-			usr << "\blue Attached is \a [beaker] with [beaker.reagents.total_volume] units of liquid."
+			user << "<span class='info'>Attached is \a [beaker] with [beaker.reagents.total_volume] units of liquid.</span>"
 		else
-			usr << "\blue Attached is an empty [beaker]."
+			user << "<span class='info'>Attached is \an empty [beaker].</span>"
 	else
-		usr << "\blue No chemicals are attached."
-
-	usr << "\blue [attached ? attached : "No one"] is attached."
+		user << "<span class='info'>No chemicals are attached.</span>"
+	user << "<span class='info'>It is attached to [attached ? attached : "no one"].</span>"

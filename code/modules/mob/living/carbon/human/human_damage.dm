@@ -66,6 +66,7 @@
 	hud_updateflag |= 1 << HEALTH_HUD
 
 /mob/living/carbon/human/proc/adjustBruteLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/adjustBruteLossByPart() called tick#: [world.time]")
 	if(species && species.brute_mod)
 		amount = amount*species.brute_mod
 
@@ -73,7 +74,7 @@
 		var/datum/organ/external/O = get_organ(organ_name)
 
 		if(amount > 0)
-			O.take_damage(amount, 0, sharp=is_sharp(damage_source), edge=has_edge(damage_source), used_weapon=damage_source)
+			O.take_damage(amount, 0, sharp=damage_source.is_sharp(), edge=has_edge(damage_source), used_weapon=damage_source)
 		else
 			//if you don't want to heal robot organs, they you will have to check that yourself before using this proc.
 			O.heal_damage(-amount, 0, internal=0, robo_repair=(O.status & ORGAN_ROBOT))
@@ -81,6 +82,7 @@
 	hud_updateflag |= 1 << HEALTH_HUD
 
 /mob/living/carbon/human/proc/adjustFireLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/adjustFireLossByPart() called tick#: [world.time]")
 	if(species && species.burn_mod)
 		amount = amount*species.burn_mod
 
@@ -88,7 +90,7 @@
 		var/datum/organ/external/O = get_organ(organ_name)
 
 		if(amount > 0)
-			O.take_damage(0, amount, sharp=is_sharp(damage_source), edge=has_edge(damage_source), used_weapon=damage_source)
+			O.take_damage(0, amount, sharp=damage_source.is_sharp(), edge=has_edge(damage_source), used_weapon=damage_source)
 		else
 			//if you don't want to heal robot organs, they you will have to check that yourself before using this proc.
 			O.heal_damage(0, -amount, internal=0, robo_repair=(O.status & ORGAN_ROBOT))
@@ -145,6 +147,7 @@
 
 //Returns a list of damaged organs
 /mob/living/carbon/human/proc/get_damaged_organs(var/brute, var/burn)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/get_damaged_organs() called tick#: [world.time]")
 	var/list/datum/organ/external/parts = list()
 	for(var/datum/organ/external/O in organs)
 		if((brute && O.brute_dam) || (burn && O.burn_dam))
@@ -153,6 +156,7 @@
 
 //Returns a list of damageable organs
 /mob/living/carbon/human/proc/get_damageable_organs()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/get_damageable_organs() called tick#: [world.time]")
 	var/list/datum/organ/external/parts = list()
 	for(var/datum/organ/external/O in organs)
 		if(O.brute_dam + O.burn_dam < O.max_damage)
@@ -238,6 +242,7 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 This function restores the subjects blood to max.
 */
 /mob/living/carbon/human/proc/restore_blood()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/restore_blood() called tick#: [world.time]")
 	if(!species.flags & NO_BLOOD)
 		var/blood_volume = vessel.get_reagent_amount("blood")
 		vessel.add_reagent("blood",560.0-blood_volume)
@@ -251,6 +256,7 @@ This function restores all organs.
 		current_organ.rejuvenate()
 
 /mob/living/carbon/human/proc/HealDamage(zone, brute, burn)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/HealDamage() called tick#: [world.time]")
 	var/datum/organ/external/E = get_organ(zone)
 	if(istype(E, /datum/organ/external))
 		if (E.heal_damage(brute, burn))
@@ -262,6 +268,7 @@ This function restores all organs.
 
 
 /mob/living/carbon/human/proc/get_organ(var/zone)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/get_organ() called tick#: [world.time]")
 	if(!zone)	zone = "chest"
 	if (zone in list( "eyes", "mouth" ))
 		zone = "head"
@@ -293,13 +300,13 @@ This function restores all organs.
 			if(species && species.brute_mod)
 				damage = damage*species.brute_mod
 			if(organ.take_damage(damage, 0, sharp, edge, used_weapon))
-				UpdateDamageIcon()
+				UpdateDamageIcon(1)
 		if(BURN)
 			damageoverlaytemp = 20
 			if(species && species.burn_mod)
 				damage = damage*species.burn_mod
 			if(organ.take_damage(0, damage, sharp, edge, used_weapon))
-				UpdateDamageIcon()
+				UpdateDamageIcon(1)
 
 	// Will set our damageoverlay icon to the next level, which will then be set back to the normal level the next mob.Life().
 	updatehealth()
@@ -311,13 +318,13 @@ This function restores all organs.
 	if(istype(used_weapon,/obj/item/weapon))
 		var/obj/item/weapon/W = used_weapon  //Sharp objects will always embed if they do enough damage.
 		if( (damage > (10*W.w_class)) && ( (sharp && !ismob(W.loc)) || prob(damage/W.w_class) ) )
-			if(!istype(W, /obj/item/weapon/butch/meatcleaver))
+			if(!istype(W, /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver))
 				organ.implants += W
 				visible_message("<span class='danger'>\The [W] sticks in the wound!</span>")
 				W.add_blood(src)
 				if(ismob(W.loc))
 					var/mob/living/H = W.loc
-					H.drop_item()
+					H.drop_item(W, src)
 				W.loc = src
 */
 	if(istype(used_weapon,/obj/item/projectile/bullet)) //We don't want to use the actual projectile item, so we spawn some shrapnel.

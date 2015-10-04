@@ -20,7 +20,8 @@
 	display_contents_with_number = 0 // UNStABLE AS FuCK, turn on when it stops crashing clients
 	use_to_pickup = 1
 	slot_flags = SLOT_BELT
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
+
 
 // -----------------------------
 //          Trash bag
@@ -65,16 +66,33 @@
 	can_hold = list() // any
 	cant_hold = list("/obj/item/weapon/disk/nuclear")
 
-	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] puts the [src.name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</b>"
-		return(OXYLOSS)
+	slot_flags = SLOT_BELT | SLOT_HEAD
+	flags = FPRINT | BLOCK_BREATHING | BLOCK_GAS_SMOKE_EFFECT
+	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR
+
+/obj/item/weapon/storage/bag/plasticbag/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	//Forbid wearing bags with something inside!
+	.=..()
+	if(contents.len && (slot == slot_head))
+		return 0
+
+/obj/item/weapon/storage/bag/plasticbag/can_be_inserted()
+	if(ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		if(H.head == src) //If worn
+			return 0
+	return ..()
+
+/obj/item/weapon/storage/bag/plasticbag/suicide_act(mob/user)
+	user.visible_message("<span class='danger'>[user] puts the [src.name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</span>")
+	return(OXYLOSS)
 
 // -----------------------------
 //        Mining Satchel
 // -----------------------------
 
 /obj/item/weapon/storage/bag/ore
-	name = "Mining Satchel"
+	name = "\improper Mining Satchel" //need the improper for the
 	desc = "This little bugger can be used to store and transport ores."
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "satchel"
@@ -98,7 +116,35 @@
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	max_w_class = 3
 	w_class = 1
-	can_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg",)
+	can_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg")
+
+// -----------------------------
+//          Food bag
+// -----------------------------
+
+/obj/item/weapon/storage/bag/food
+	icon = 'icons/obj/kitchen.dmi'
+	icon_state = "foodbag0"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
+	name = "Food Delivery Bag"
+	storage_slots = 14; //the number of food items it can carry.
+	max_combined_w_class = 28 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
+	max_w_class = 3
+	w_class = 3
+	can_hold = list("/obj/item/weapon/reagent_containers/food/snacks")
+
+/obj/item/weapon/storage/bag/food/update_icon()
+	if(contents.len < 1)
+		icon_state = "foodbag0"
+	else icon_state = "foodbag1"
+
+// -----------------------------
+//          Borg Food bag
+// -----------------------------
+
+/obj/item/weapon/storage/bag/food/borg
+	name = "Food Transport Bag"
+	desc = "Useful for manipulating food items in the kitchen."
 
 // -----------------------------
 //          Pill Collector
@@ -114,7 +160,6 @@
 	max_w_class = 3
 	w_class = 1
 	can_hold = list("/obj/item/weapon/reagent_containers/glass/bottle","/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/reagent_containers/syringe")
-
 
 // -----------------------------
 //        Sheet Snatcher
@@ -147,7 +192,7 @@
 			current += S.amount
 		if(capacity == current)//If it's full, you're done
 			if(!stop_messages)
-				usr << "\red The snatcher is full."
+				usr << "<span class='warning'>The snatcher is full.</span>"
 			return 0
 		return 1
 
@@ -175,11 +220,11 @@
 				break
 
 		if(!inserted || !S.amount)
-			usr.u_equip(S)
+			usr.u_equip(S,1)
 			usr.update_icons()	//update our overlays
 			if (usr.client && usr.s_active != src)
 				usr.client.screen -= S
-			S.dropped(usr)
+			//S.dropped(usr)
 			if(!S.amount)
 				del S
 			else
@@ -272,4 +317,15 @@
 	max_combined_w_class = 200
 	max_w_class = 3
 	w_class = 1
-	can_hold = list("/obj/item/weapon/stock_parts")
+	can_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell")
+
+/obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)
+	var/lowest_rating = INFINITY //Get the lowest rating, so only mass drop the lowest parts.
+	for(var/obj/item/B in contents)
+		if(B.get_rating() < lowest_rating)
+			lowest_rating = B.get_rating()
+
+	for(var/obj/item/B in contents) //Now that we have the lowest rating we can dump only parts at the lowest rating.
+		if(B.get_rating() > lowest_rating)
+			continue
+		remove_from_storage(B, A)

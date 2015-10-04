@@ -14,7 +14,14 @@
 /obj/item/projectile/missile/process(var/turf/newtarget)
 	target = newtarget
 	dir = get_dir(src.loc, target)
-	walk_towards(src, target, MISSILE_SPEED)
+	//walk_towards(src, target, MISSILE_SPEED)
+	spawn()
+		while(loc)
+			if(timestopped)
+				sleep(world.tick_lag)
+				continue
+			step_towards(src,target)
+			sleep(MISSILE_SPEED)
 
 /obj/item/projectile/missile/Bump(atom/A)
 	spawn(0)
@@ -24,6 +31,7 @@
 	return
 
 /obj/item/projectile/missile/proc/explode()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/projectile/missile/proc/explode() called tick#: [world.time]")
 	explosion(src.loc, 1, 1, 2, 7, 0)
 	playsound(src.loc, "explosion", 50, 1)
 	del(src)
@@ -74,6 +82,7 @@
 	return
 
 /obj/machinery/meteor_battery/proc/isPopping()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/meteor_battery/proc/isPopping() called tick#: [world.time]")
 	return (popping!=0)
 
 /obj/machinery/meteor_battery/power_change()
@@ -92,10 +101,12 @@
 				stat |= NOPOWER
 
 /obj/machinery/meteor_battery/proc/setState(var/enabled)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/meteor_battery/proc/setState() called tick#: [world.time]")
 	src.enabled = enabled
 	src.power_change()
 
 /obj/machinery/meteor_battery/proc/get_new_target()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/meteor_battery/proc/get_new_target() called tick#: [world.time]")
 	var/list/new_targets = new
 	var/new_target
 	for(var/obj/effect/meteor/M in view(protect_range, get_turf(src)))
@@ -139,7 +150,7 @@
 				spawn(rand(4,120) * 10)
 					M.explode()
 				for(var/mob/P in view(7))
-					P.visible_message("\red The missile skids to a halt, vibrating and sparking ominously!")
+					P.visible_message("<span class='warning'>The missile skids to a halt, vibrating and sparking ominously!</span>")
 
 	if(!cur_target)
 		cur_target = get_new_target() //get new target
@@ -163,6 +174,7 @@
 	return
 
 /obj/machinery/meteor_battery/proc/target()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/meteor_battery/proc/target() called tick#: [world.time]")
 	while(src && enabled && !stat)
 		src.dir = get_dir(src, cur_target)
 		shootAt(cur_target)
@@ -170,6 +182,7 @@
 	return
 
 /obj/machinery/meteor_battery/proc/shootAt(var/atom/movable/target)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/meteor_battery/proc/shootAt() called tick#: [world.time]")
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(target)
 	if (!T || !U)
@@ -184,9 +197,11 @@
 
 
 /obj/machinery/meteor_battery/proc/isDown()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/meteor_battery/proc/isDown() called tick#: [world.time]")
 	return (invisibility!=0)
 
 /obj/machinery/meteor_battery/proc/popUp()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/meteor_battery/proc/popUp() called tick#: [world.time]")
 	if ((!isPopping()) || src.popping==-1)
 		invisibility = 0
 		popping = 1
@@ -197,6 +212,7 @@
 			if (popping==1) popping = 0
 
 /obj/machinery/meteor_battery/proc/popDown()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/meteor_battery/proc/popDown() called tick#: [world.time]")
 	if ((!isPopping()) || src.popping==1)
 		popping = -1
 		if (src.cover!=null)
@@ -236,6 +252,7 @@
 		src.die()
 
 /obj/machinery/meteor_battery/proc/die()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/meteor_battery/proc/die() called tick#: [world.time]")
 	src.health = 0
 	src.density = 0
 	src.stat |= BROKEN
@@ -252,10 +269,10 @@
 		playsound(src.loc, 'sound/weapons/slash.ogg', 25, 1, -1)
 		for(var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
-				O.show_message(text("\red <B>[] has slashed at []!</B>", M, src), 1)
+				O.show_message(text("<span class='danger'>[] has slashed at []!</span>", M, src), 1)
 		src.health -= 15
 		if (src.health <= 0)
 			src.die()
 	else
-		M << "\green That object is useless to you."
+		M << "<span class='good'>That object is useless to you.</span>"
 	return

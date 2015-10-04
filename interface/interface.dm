@@ -1,26 +1,53 @@
 //Please use mob or src (not usr) in these procs. This way they can be called in the same fashion as procs.
+/client/verb/MapRender()
+	set name = "MapRender"
+	set desc = "Shows a high scale rendering of the current map in your browser."
+	set hidden = 1
+
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/verb/MapRender()  called tick#: [world.time]")
+	if(!config.renders_url || config.renders_url == "")
+		src << "<span class='danger'>The Map Renders url has not been set in the server configuration.</span>"
+		return
+	if(alert("This will open the map render(s) in your browser. Are you sure?",,"Yes","No")=="No")
+		return
+	if(map)
+		switch(map.nameShort)
+			if("meta")
+				src << link("[config.renders_url]/metaclub/")
+			if("deff")
+				src << link("[config.renders_url]/defficiency/")
+			if("box")
+				src << link("[config.renders_url]/tgstation/")
+			if("taxi")
+				src << link("[config.renders_url]/taxistation/")
+			else
+				src << "<span class='warning'>No map render for [map.nameLong], bug Pomf about it!</span>"
+	return
+
 /client/verb/wiki()
 	set name = "wiki"
 	set desc = "Visit the wiki."
 	set hidden = 1
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/verb/wiki()  called tick#: [world.time]")
 	if( config.wikiurl )
 		if(alert("This will open the wiki in your browser. Are you sure?",,"Yes","No")=="No")
 			return
 		src << link(config.wikiurl)
 	else
-		src << "\red The wiki URL is not set in the server configuration."
+		src << "<span class='danger'>The wiki URL is not set in the server configuration.</span>"
 	return
 
 /client/verb/forum()
 	set name = "forum"
 	set desc = "Visit the forum."
 	set hidden = 1
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/verb/forum()  called tick#: [world.time]")
 	if( config.forumurl )
 		if(alert("This will open the forum in your browser. Are you sure?",,"Yes","No")=="No")
 			return
 		src << link(config.forumurl)
 	else
-		src << "\red The forum URL is not set in the server configuration."
+		src << "<span class='danger'>The forum URL is not set in the server configuration.</span>"
 	return
 
 #define RULES_FILE "config/rules.html"
@@ -28,12 +55,14 @@
 	set name = "Rules"
 	set desc = "Show Server Rules."
 	set hidden = 1
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/verb/rules()  called tick#: [world.time]")
 	src << browse(file(RULES_FILE), "window=rules;size=480x320")
 #undef RULES_FILE
 
 /client/verb/hotkeys_help()
 	set name = "hotkeys-help"
 	set category = "OOC"
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/verb/hotkeys_help()  called tick#: [world.time]")
 
 	var/hotkey_mode = {"<font color='purple'>
 Hotkey-Mode: (hotkey-mode must be on)
@@ -45,7 +74,9 @@ Hotkey-Mode: (hotkey-mode must be on)
 \tq = drop
 \te = equip
 \tr = throw
+\tm = me
 \tt = say
+\to = OOC
 \tx = swap-hand
 \tz = activate held object (or y)
 \tf = cycle-intents-left
@@ -93,3 +124,19 @@ Admin:
 	src << other
 	if(holder)
 		src << admin
+
+// Needed to circumvent a bug where .winset does not work when used on the window.on-size event in skins.
+// Used by /datum/html_interface/nanotrasen (code/modules/html_interface/nanotrasen/nanotrasen.dm)
+/client/verb/_swinset(var/x as text)
+	set name = ".swinset"
+	set hidden = 1
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/verb/_swinset()  called tick#: [world.time]")
+	winset(src, null, x)
+
+/client/verb/roundendinfo()
+	set name = "RoundEndInformation"
+	set desc = "Open the Round End Information window."
+	set hidden = 1
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/client/verb/roundendinfo()  called tick#: [world.time]")
+
+	src << browse(round_end_info, "window=roundstats;size=1000x600")

@@ -34,7 +34,8 @@
 	var/projectile = null	//holder for bullettype
 	var/eprojectile = null//holder for the shot when emagged
 	var/reqpower = 0 //holder for power needed
-	var/sound = null//So the taser can have sound
+	var/fire_sound = 'sound/weapons/Laser.ogg'
+	var/efire_sound = 'sound/weapons/Laser.ogg'
 	var/iconholder = null//holder for the icon_state
 	var/egun = null//holder to handle certain guns switching bullettypes
 
@@ -59,129 +60,187 @@
 
 	machine_flags = EMAGGABLE
 
-	New()
-		..()
-		icon_state = "[lasercolor]grey_target_prism"
-		// Sets up a spark system
-		spark_system = new /datum/effect/effect/system/spark_spread
-		spark_system.set_up(5, 0, src)
-		spark_system.attach(src)
-		sleep(10)
-		if(!installation)// if for some reason the turret has no gun (ie, admin spawned) it resorts to basic taser shots
-			projectile = /obj/item/projectile/energy/electrode//holder for the projectile, here it is being set
-			eprojectile = /obj/item/projectile/beam//holder for the projectile when emagged, if it is different
-			reqpower = 200
-			sound = 1
+/obj/machinery/porta_turret/New()
+	..()
+	icon_state = "[lasercolor]grey_target_prism"
+	// Sets up a spark system
+	spark_system = new /datum/effect/effect/system/spark_spread
+	spark_system.set_up(5, 0, src)
+	spark_system.attach(src)
+	spawn(10)
+		update_gun()
+
+/obj/machinery/porta_turret/proc/update_gun()
+	if(!installation)// if for some reason the turret has no gun (ie, admin spawned) it resorts to basic taser shots
+		projectile = /obj/item/projectile/energy/electrode//holder for the projectile, here it is being set
+		eprojectile = /obj/item/projectile/beam//holder for the projectile when emagged, if it is different
+		reqpower = 200
+		iconholder = 1
+	else
+		var/obj/item/weapon/gun/energy/E=new installation
+				// All energy-based weapons are applicable
+		switch(E.type)
+			if(/obj/item/weapon/gun/energy/laser/bluetag)
+				projectile = /obj/item/projectile/beam/lastertag/blue
+				eprojectile = /obj/item/projectile/beam/lastertag/omni//This bolt will stun ERRYONE with a vest
+				iconholder = null
+				reqpower = 100
+				lasercolor = "b"
+				req_access = list(access_maint_tunnels)
+				check_records = 0
+				criminals = 0
+				auth_weapons = 1
+				stun_all = 0
+				check_anomalies = 0
+				shot_delay = 30
+
+			if(/obj/item/weapon/gun/energy/laser/redtag)
+				projectile = /obj/item/projectile/beam/lastertag/red
+				eprojectile = /obj/item/projectile/beam/lastertag/omni
+				iconholder = null
+				reqpower = 100
+				lasercolor = "r"
+				req_access = list(access_maint_tunnels)
+				check_records = 0
+				criminals = 0
+				auth_weapons = 1
+				stun_all = 0
+				check_anomalies = 0
+				shot_delay = 30
+
+			if(/obj/item/weapon/gun/energy/laser/practice)
+				projectile = /obj/item/projectile/beam/practice
+				eprojectile = /obj/item/projectile/beam
+				iconholder = null
+				reqpower = 100
+
+			if(/obj/item/weapon/gun/energy/pulse_rifle)
+				projectile = /obj/item/projectile/beam/pulse
+				eprojectile = projectile
+				iconholder = null
+				reqpower = 700
+				fire_sound = 'sound/weapons/pulse.ogg'
+				efire_sound = fire_sound
+
+			if(/obj/item/weapon/gun/energy/staff)
+				projectile = /obj/item/projectile/change
+				eprojectile = projectile
+				iconholder = 1
+				reqpower = 700
+				fire_sound = 'sound/weapons/radgun.ogg'
+				efire_sound = fire_sound
+
+			if(/obj/item/weapon/gun/energy/ionrifle)
+				projectile = /obj/item/projectile/ion
+				eprojectile = projectile
+				iconholder = 1
+				reqpower = 700
+				fire_sound = 'sound/weapons/ion.ogg'
+				efire_sound = fire_sound
+
+			if(/obj/item/weapon/gun/energy/taser)
+				projectile = /obj/item/projectile/energy/electrode
+				eprojectile = projectile
+				iconholder = 1
+				reqpower = 200
+				fire_sound = 'sound/weapons/Taser.ogg'
+				efire_sound = fire_sound
+
+			if(/obj/item/weapon/gun/energy/stunrevolver)
+				projectile = /obj/item/projectile/energy/electrode
+				eprojectile = projectile
+				iconholder = 1
+				reqpower = 200
+				fire_sound = 'sound/weapons/Gunshot.ogg'
+				efire_sound = fire_sound
+
+			if(/obj/item/weapon/gun/energy/lasercannon)
+				projectile = /obj/item/projectile/beam/heavylaser
+				eprojectile = projectile
+				iconholder = null
+				reqpower = 600
+				fire_sound = 'sound/weapons/lasercannonfire.ogg'
+				efire_sound = fire_sound
+
+			if(/obj/item/weapon/gun/energy/decloner)
+				projectile = /obj/item/projectile/energy/declone
+				eprojectile = projectile
+				iconholder = null
+				reqpower = 600
+				fire_sound = 'sound/weapons/pulse3.ogg'
+				efire_sound = fire_sound
+
+			if(/obj/item/weapon/gun/energy/crossbow/largecrossbow)
+				projectile = /obj/item/projectile/energy/bolt/large
+				eprojectile = projectile
+				iconholder = null
+				reqpower = 125
+				fire_sound = 'sound/weapons/ebow.ogg'
+				efire_sound = fire_sound
+
+			if(/obj/item/weapon/gun/energy/crossbow)
+				projectile = /obj/item/projectile/energy/bolt
+				eprojectile = projectile
+				iconholder = null
+				reqpower = 50
+				fire_sound = 'sound/weapons/ebow.ogg'
+				efire_sound = fire_sound
+
+			if(/obj/item/weapon/gun/energy/laser)
+				projectile = /obj/item/projectile/beam
+				eprojectile = projectile
+				iconholder = null
+				reqpower = 500
+
+			if(/obj/item/weapon/gun/energy/ricochet)
+				projectile = /obj/item/projectile/ricochet
+				eprojectile = projectile
+				iconholder = null
+				reqpower = 500
+
+			if(/obj/item/weapon/gun/energy/bison)
+				projectile = /obj/item/projectile/beam/bison
+				eprojectile = projectile
+				iconholder = null
+				reqpower = 250
+				fire_sound = 'sound/weapons/bison_fire.ogg'
+				efire_sound = fire_sound
+
+			if(/obj/item/weapon/gun/energy/polarstar/spur)
+				projectile = /obj/item/projectile/spur
+				eprojectile = projectile
+				iconholder = null
+				reqpower = 700
+				fire_sound = 'sound/weapons/spur_high.ogg'
+				efire_sound = fire_sound
+
+			if(/obj/item/weapon/gun/energy/polarstar)
+				projectile = /obj/item/projectile/spur/polarstar
+				eprojectile = projectile
+				iconholder = null
+				reqpower = 400
+				fire_sound = 'sound/weapons/spur_high.ogg'
+				efire_sound = fire_sound
+
+			else // Energy gun shots
+				projectile = /obj/item/projectile/energy/electrode// if it hasn't been emagged, it uses normal taser shots
+				eprojectile = /obj/item/projectile/beam//If it has, going to kill mode
+				iconholder = 1
+				egun = 1
+				reqpower = 200
+				fire_sound = 'sound/weapons/Taser.ogg'
+		if(!eprojectile || !projectile)
+			projectile = /obj/item/projectile/energy/electrode// if it hasn't been emagged, it uses normal taser shots
+			eprojectile = /obj/item/projectile/beam//If it has, going to kill mode
 			iconholder = 1
-		else
-			var/obj/item/weapon/gun/energy/E=new installation
-					// All energy-based weapons are applicable
-			switch(E.type)
-				if(/obj/item/weapon/gun/energy/laser/bluetag)
-					projectile = /obj/item/projectile/beam/lastertag/blue
-					eprojectile = /obj/item/projectile/beam/lastertag/omni//This bolt will stun ERRYONE with a vest
-					iconholder = null
-					reqpower = 100
-					lasercolor = "b"
-					req_access = list(access_maint_tunnels)
-					check_records = 0
-					criminals = 0
-					auth_weapons = 1
-					stun_all = 0
-					check_anomalies = 0
-					shot_delay = 30
+			egun = 1
+			reqpower = 200
+			fire_sound = 'sound/weapons/Taser.ogg'
 
-				if(/obj/item/weapon/gun/energy/laser/redtag)
-					projectile = /obj/item/projectile/beam/lastertag/red
-					eprojectile = /obj/item/projectile/beam/lastertag/omni
-					iconholder = null
-					reqpower = 100
-					lasercolor = "r"
-					req_access = list(access_maint_tunnels)
-					check_records = 0
-					criminals = 0
-					auth_weapons = 1
-					stun_all = 0
-					check_anomalies = 0
-					shot_delay = 30
-
-				if(/obj/item/weapon/gun/energy/laser/practice)
-					projectile = /obj/item/projectile/beam/practice
-					eprojectile = /obj/item/projectile/beam
-					iconholder = null
-					reqpower = 100
-
-				if(/obj/item/weapon/gun/energy/pulse_rifle)
-					projectile = /obj/item/projectile/beam/pulse
-					eprojectile = projectile
-					iconholder = null
-					reqpower = 700
-
-				if(/obj/item/weapon/gun/energy/staff)
-					projectile = /obj/item/projectile/change
-					eprojectile = projectile
-					iconholder = 1
-					reqpower = 700
-
-				if(/obj/item/weapon/gun/energy/ionrifle)
-					projectile = /obj/item/projectile/ion
-					eprojectile = projectile
-					iconholder = 1
-					reqpower = 700
-
-				if(/obj/item/weapon/gun/energy/taser)
-					projectile = /obj/item/projectile/energy/electrode
-					eprojectile = projectile
-					iconholder = 1
-					reqpower = 200
-
-				if(/obj/item/weapon/gun/energy/stunrevolver)
-					projectile = /obj/item/projectile/energy/electrode
-					eprojectile = projectile
-					iconholder = 1
-					reqpower = 200
-
-				if(/obj/item/weapon/gun/energy/lasercannon)
-					projectile = /obj/item/projectile/beam/heavylaser
-					eprojectile = projectile
-					iconholder = null
-					reqpower = 600
-
-				if(/obj/item/weapon/gun/energy/decloner)
-					projectile = /obj/item/projectile/energy/declone
-					eprojectile = projectile
-					iconholder = null
-					reqpower = 600
-
-				if(/obj/item/weapon/gun/energy/crossbow/largecrossbow)
-					projectile = /obj/item/projectile/energy/bolt/large
-					eprojectile = projectile
-					iconholder = null
-					reqpower = 125
-
-				if(/obj/item/weapon/gun/energy/crossbow)
-					projectile = /obj/item/projectile/energy/bolt
-					eprojectile = projectile
-					iconholder = null
-					reqpower = 50
-
-				if(/obj/item/weapon/gun/energy/laser)
-					projectile = /obj/item/projectile/beam
-					eprojectile = projectile
-					iconholder = null
-					reqpower = 500
-
-				else // Energy gun shots
-					projectile = /obj/item/projectile/energy/electrode// if it hasn't been emagged, it uses normal taser shots
-					eprojectile = /obj/item/projectile/beam//If it has, going to kill mode
-					iconholder = 1
-					egun = 1
-					reqpower = 200
-
-	Destroy()
-		// deletes its own cover with it
-		del(cover)
-		..()
+/obj/machinery/porta_turret/Destroy()
+	// deletes its own cover with it
+	qdel(cover)
+	..()
 
 
 /obj/machinery/porta_turret/attack_ai(mob/user as mob)
@@ -243,7 +302,7 @@ Status: []<BR>"},
 		if(anchored) // you can't turn a turret on/off if it's not anchored/secured
 			on = !on // toggle on/off
 		else
-			usr << "\red It has to be secured first!"
+			usr << "<span class='warning'>It has to be secured first!</span>"
 
 		updateUsrDialog()
 		return
@@ -288,10 +347,10 @@ Status: []<BR>"},
 
 /obj/machinery/porta_turret/emag(mob/user)
 	if(!emagged)
-		user << "\red You short out [src]'s threat assessment circuits."
+		user << "<span class='warning'>You short out [src]'s threat assessment circuits.</span>"
 		spawn(0)
 			for(var/mob/O in hearers(src, null))
-				O.show_message("\red [src] hums oddly...", 1)
+				O.show_message("<span class='warning'>[src] hums oddly...</span>", 1)
 		emagged = 1
 		src.on = 0 // turns off the turret temporarily
 		sleep(60) // 6 seconds for the traitor to gtfo of the area before the turret decides to ruin his shit
@@ -311,11 +370,13 @@ Status: []<BR>"},
 					Gun.power_supply.charge=gun_charge
 					Gun.update_icon()
 					lasercolor = null
-				if(prob(50)) new /obj/item/stack/sheet/metal( loc, rand(1,4))
+				if(prob(50))
+					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,loc)
+					M.amount = rand(1,4)
 				if(prob(50)) new /obj/item/device/assembly/prox_sensor(locate(x,y,z))
 			else
 				user << "You remove the turret but did not manage to salvage anything."
-			del(src)
+			qdel(src)
 		return
 
 	..()
@@ -336,7 +397,7 @@ Status: []<BR>"},
 			user << "You unsecure the exterior bolts on the turret."
 			icon_state = "turretCover"
 			invisibility = 0
-			del(cover) // deletes the cover, and the turret instance itself becomes its own cover.
+			qdel(cover) // deletes the cover, and the turret instance itself becomes its own cover.
 
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		// Behavior lock/unlock mangement
@@ -344,10 +405,10 @@ Status: []<BR>"},
 			locked = !src.locked
 			user << "Controls are now [locked ? "locked." : "unlocked."]"
 		else
-			user << "\red Access denied."
+			user << "<span class='warning'>Access denied.</span>"
 
 	else
-		user.changeNext_move(10)
+		user.delayNextAttack(10)
 		// if the turret was attacked with the intention of harming it:
 		src.health -= W.force * 0.5
 		if (src.health <= 0)
@@ -411,6 +472,7 @@ Status: []<BR>"},
 		src.die()
 
 /obj/machinery/porta_turret/proc/die() // called when the turret dies, ie, health <= 0
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/porta_turret/proc/die() called tick#: [world.time]")
 	src.health = 0
 	src.density = 0
 	src.stat |= BROKEN // enables the BROKEN bit
@@ -429,7 +491,7 @@ Status: []<BR>"},
 
 	if(src.cover==null && anchored) // if it has no cover and is anchored
 		if (stat & BROKEN) // if the turret is borked
-			del(cover) // delete its cover, assuming it has one. Workaround for a pesky little bug
+			qdel(cover) // delete its cover, assuming it has one. Workaround for a pesky little bug
 		else
 
 			src.cover = new /obj/machinery/porta_turret_cover(src.loc) // if the turret has no cover and is anchored, give it a cover
@@ -552,6 +614,7 @@ Status: []<BR>"},
 
 
 /obj/machinery/porta_turret/proc/assess_perp(mob/living/carbon/human/perp as mob)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/porta_turret/proc/assess_perp() called tick#: [world.time]")
 	var/threatcount = 0 // the integer returned
 
 	if(src.emagged) return 10 // if emagged, always return 10.
@@ -618,6 +681,7 @@ Status: []<BR>"},
 
 
 /obj/machinery/porta_turret/proc/shootAt(var/atom/movable/target) // shoots at a target
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/porta_turret/proc/shootAt() called tick#: [world.time]")
 	if(disabled)
 		return
 
@@ -648,12 +712,13 @@ Status: []<BR>"},
 		icon_state = "[lasercolor]target_prism"
 	else
 		icon_state = "[lasercolor]orange_target_prism"
-	if(sound)
-		playsound(get_turf(src), 'sound/weapons/Taser.ogg', 75, 1)
+
 	var/obj/item/projectile/A
 	if(emagged)
+		playsound(get_turf(src), efire_sound, 75, 1)
 		A = new eprojectile( loc )
 	else
+		playsound(get_turf(src), fire_sound, 75, 1)
 		A = new projectile( loc )
 	A.original = target.loc
 	if(!emagged)
@@ -661,10 +726,13 @@ Status: []<BR>"},
 	else
 		use_power((reqpower*2))
 		// Shooting Code:
+	A.starting = T
+	A.shot_from = src
 	A.current = T
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
 	spawn( 1 )
+		A.OnFired()
 		A.process()
 	return
 
@@ -697,7 +765,7 @@ Status: []<BR>"},
 		if(0) // first step
 			if(istype(W, /obj/item/weapon/wrench) && !anchored)
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-				user << "\blue You secure the external bolts."
+				user << "<span class='notice'>You secure the external bolts.</span>"
 				anchored = 1
 				build_step = 1
 				return
@@ -705,19 +773,21 @@ Status: []<BR>"},
 			else if(istype(W, /obj/item/weapon/crowbar) && !anchored)
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
 				user << "You dismantle the turret construction."
-				new /obj/item/stack/sheet/metal( loc, 5)
-				del(src)
+				//new /obj/item/stack/sheet/metal( loc, 5)
+				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, loc)
+				M.amount = 5
+				qdel(src)
 				return
 
 		if(1)
 			if(istype(W, /obj/item/stack/sheet/metal))
 				if(W:amount>=2) // requires 2 metal sheets
-					user << "\blue You add some metal armor to the interior frame."
+					user << "<span class='notice'>You add some metal armor to the interior frame.</span>"
 					build_step = 2
 					W:amount -= 2
 					icon_state = "turret_frame2"
 					if(W:amount <= 0)
-						del(W)
+						returnToPool(W)
 					return
 
 			else if(istype(W, /obj/item/weapon/wrench))
@@ -731,7 +801,7 @@ Status: []<BR>"},
 		if(2)
 			if(istype(W, /obj/item/weapon/wrench))
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-				user << "\blue You bolt the metal armor into place."
+				user << "<span class='notice'>You bolt the metal armor into place.</span>"
 				build_step = 3
 				return
 
@@ -739,27 +809,29 @@ Status: []<BR>"},
 				var/obj/item/weapon/weldingtool/WT = W
 				if(!WT.isOn()) return
 				if (WT.get_fuel() < 5) // uses up 5 fuel.
-					user << "\red You need more fuel to complete this task."
+					user << "<span class='warning'>You need more fuel to complete this task.</span>"
 					return
 
 				playsound(get_turf(src), pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
-				if(do_after(user, 20))
+				if(do_after(user, src, 20))
 					if(!src || !WT.remove_fuel(5, user)) return
 					build_step = 1
 					user << "You remove the turret's interior metal armor."
-					new /obj/item/stack/sheet/metal( loc, 2)
+					//new /obj/item/stack/sheet/metal( loc, 2)
+					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,loc)
+					M.amount = 2
 					return
 
 
 		if(3)
 			if(istype(W, /obj/item/weapon/gun/energy)) // the gun installation part
-
+				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 100, 1)
 				var/obj/item/weapon/gun/energy/E = W // typecasts the item to an energy gun
 				installation = W.type // installation becomes W.type
 				gun_charge = E.power_supply.charge // the gun's charge is stored in src.gun_charge
-				user << "\blue You add \the [W] to the turret."
+				user << "<span class='notice'>You add \the [W] to the turret.</span>"
 				build_step = 4
-				del(W) // delete the gun :(
+				qdel(W) // delete the gun :(
 				return
 
 			else if(istype(W, /obj/item/weapon/wrench))
@@ -770,9 +842,10 @@ Status: []<BR>"},
 
 		if(4)
 			if(isprox(W))
+				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 100, 1)
 				build_step = 5
-				user << "\blue You add the prox sensor to the turret."
-				del(W)
+				user << "<span class='notice'>You add the prox sensor to the turret.</span>"
+				qdel(W)
 				return
 
 			// attack_hand() removes the gun
@@ -781,7 +854,7 @@ Status: []<BR>"},
 			if(istype(W, /obj/item/weapon/screwdriver))
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
 				build_step = 6
-				user << "\blue You close the internal access hatch."
+				user << "<span class='notice'>You close the internal access hatch.</span>"
 				return
 
 			// attack_hand() removes the prox sensor
@@ -789,11 +862,11 @@ Status: []<BR>"},
 		if(6)
 			if(istype(W, /obj/item/stack/sheet/metal))
 				if(W:amount>=2)
-					user << "\blue You add some metal armor to the exterior frame."
+					user << "<span class='notice'>You add some metal armor to the exterior frame.</span>"
 					build_step = 7
 					W:amount -= 2
 					if(W:amount <= 0)
-						del(W)
+						qdel(W)
 					return
 
 			else if(istype(W, /obj/item/weapon/screwdriver))
@@ -807,30 +880,28 @@ Status: []<BR>"},
 				var/obj/item/weapon/weldingtool/WT = W
 				if(!WT.isOn()) return
 				if (WT.get_fuel() < 5)
-					user << "\red You need more fuel to complete this task."
+					user << "<span class='warning'>You need more fuel to complete this task.</span>"
 
 				playsound(get_turf(src), pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
-				if(do_after(user, 30))
+				if(do_after(user, src, 30))
 					if(!src || !WT.remove_fuel(5, user)) return
 					build_step = 8
-					user << "\blue You weld the turret's armor down."
+					user << "<span class='notice'>You weld the turret's armor down.</span>"
 
 					// The final step: create a full turret
 					var/obj/machinery/porta_turret/Turret = new/obj/machinery/porta_turret(locate(x,y,z))
 					Turret.name = finish_name
 					Turret.installation = src.installation
 					Turret.gun_charge = src.gun_charge
-
-//					Turret.cover=new/obj/machinery/porta_turret_cover(src.loc)
-//					Turret.cover.Parent_Turret=Turret
-//					Turret.cover.name = finish_name
-					Turret.New()
-					del(src)
+					Turret.update_gun()
+					qdel(src)
 
 			else if(istype(W, /obj/item/weapon/crowbar))
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
 				user << "You pry off the turret's exterior armor."
-				new /obj/item/stack/sheet/metal( loc, 2)
+				//new /obj/item/stack/sheet/metal( loc, 2)
+				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,loc)
+				M.amount = 2
 				build_step = 6
 				return
 
@@ -986,7 +1057,7 @@ Status: []<BR>"},
 			else
 				Parent_Turret.on=1
 		else
-			usr << "\red It has to be secured first!"
+			usr << "<span class='warning'>It has to be secured first!</span>"
 
 		updateUsrDialog()
 		return
@@ -1010,10 +1081,10 @@ Status: []<BR>"},
 /obj/machinery/porta_turret_cover/attackby(obj/item/W as obj, mob/user as mob)
 
 	if ((istype(W, /obj/item/weapon/card/emag)) && (!Parent_Turret.emagged))
-		user << "\red You short out [Parent_Turret]'s threat assessment circuits."
+		user << "<span class='warning'>You short out [Parent_Turret]'s threat assessment circuits.</span>"
 		spawn(0)
 			for(var/mob/O in hearers(Parent_Turret, null))
-				O.show_message("\red [Parent_Turret] hums oddly...", 1)
+				O.show_message("<span class='warning'>[Parent_Turret] hums oddly...</span>", 1)
 		Parent_Turret.emagged = 1
 		Parent_Turret.on = 0
 		sleep(40)
@@ -1032,7 +1103,7 @@ Status: []<BR>"},
 			user << "You unsecure the exterior bolts on the turret."
 			Parent_Turret.icon_state = "turretCover"
 			Parent_Turret.invisibility = 0
-			del(src)
+			qdel(src)
 
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if (Parent_Turret.allowed(user))
@@ -1040,7 +1111,7 @@ Status: []<BR>"},
 			user << "Controls are now [Parent_Turret.locked ? "locked." : "unlocked."]"
 			updateUsrDialog()
 		else
-			user << "\red Access denied."
+			user << "<span class='warning'>Access denied.</span>"
 
 	else
 		Parent_Turret.health -= W.force * 0.5

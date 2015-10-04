@@ -17,7 +17,7 @@
 	W.loc = src
 	if (user.client)
 		user.client.screen -= W
-	user.u_equip(W)
+	user.u_equip(W,1)
 	var/const/bottom_right_x = 115.0
 	var/const/bottom_right_y = 150.0
 	var/const/top_left_x = 15.0
@@ -61,7 +61,7 @@
 /obj/item/weapon/firbang/afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
 	if (user.get_active_hand() == src)
 		if ((M_CLUMSY in usr.mutations) && prob(50))
-			user << "\red Huh? How does this thing work?!"
+			user << "<span class='warning'>Huh? How does this thing work?!</span>"
 			src.state = 1
 			src.icon_state = "flashbang1"
 			playsound(src.loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
@@ -69,7 +69,7 @@
 				prime()
 				return
 		else if (!( src.state ))
-			user << "\red You prime the [src]! [det_time/10] seconds!"
+			user << "<span class='warning'>You prime the [src]! [det_time/10] seconds!</span>"
 			src.state = 1
 			src.icon_state = "flashbang1"
 			playsound(src.loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
@@ -92,6 +92,7 @@
 	return
 
 /obj/item/weapon/firbang/proc/prime()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/firbang/proc/prime() called tick#: [world.time]")
 	playsound(src.loc, 'sound/effects/bang.ogg', 25, 1)
 	var/turf/T = get_turf(src)
 	if(T)
@@ -109,12 +110,12 @@
 /obj/item/weapon/firbang/attack_self(mob/user as mob)
 	if (!src.state)
 		if (M_CLUMSY in user.mutations)
-			user << "\red Huh? How does this thing work?!"
+			user << "<span class='warning'>Huh? How does this thing work?!</span>"
 			spawn( 5 )
 				prime()
 				return
 		else
-			user << "\red You prime the [src]! [det_time/10] seconds!"
+			user << "<span class='warning'>You prime the [src]! [det_time/10] seconds!</span>"
 			src.state = 1
 			src.icon_state = "flashbang1"
 			add_fingerprint(user)

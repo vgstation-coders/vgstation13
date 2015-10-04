@@ -1,6 +1,7 @@
 #define DRYING_TIME 5 * 60*10			//for 1 unit of depth in puddle (amount var)
 
 var/global/list/image/splatter_cache=list()
+var/global/list/blood_list = list()
 
 /obj/effect/decal/cleanable/blood
 	name = "blood"
@@ -12,89 +13,26 @@ var/global/list/image/splatter_cache=list()
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "mfloor1"
 	random_icon_states = list("mfloor1", "mfloor2", "mfloor3", "mfloor4", "mfloor5", "mfloor6", "mfloor7")
+
 	var/base_icon = 'icons/effects/blood.dmi'
-	var/list/viruses = list()
-	blood_DNA = list()
-	var/basecolor="#A10808" // Color when wet.
-	var/list/datum/disease2/disease/virus2 = list()
-	var/amount = 5
+
+	basecolor="#A10808" // Color when wet.
+	amount = 5
+	counts_as_blood = 1
+	transfers_dna = 1
+	absorbs_types=list(/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/cleanable/blood/writing)
 
 /obj/effect/decal/cleanable/blood/cultify()
 	return
-
-/obj/effect/decal/cleanable/blood/Destroy()
-	for(var/datum/disease/D in viruses)
-		D.cure(0)
-		D.holder = null
-	..()
-
-/obj/effect/decal/cleanable/blood/New()
-	..()
-	update_icon()
-	if(istype(src, /obj/effect/decal/cleanable/blood/gibs))
-		return
-	if(istype(src, /obj/effect/decal/cleanable/blood/tracks))
-		return // We handle our own drying.
-	if(src.type == /obj/effect/decal/cleanable/blood)
-		if(src.loc && isturf(src.loc))
-			for(var/obj/effect/decal/cleanable/blood/B in src.loc)
-				if(B != src)
-					if (B.blood_DNA)
-						blood_DNA |= B.blood_DNA.Copy()
-					del(B)
 
 /obj/effect/decal/cleanable/blood/update_icon()
 	if(basecolor == "rainbow") basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
 	color = basecolor
 
-/obj/effect/decal/cleanable/blood/Crossed(mob/living/carbon/human/perp)
-	if (!istype(perp))
-		return
-	if(amount < 1)
-		return
+	var/icon/blood = icon(base_icon,icon_state,dir)
+	blood.Blend(basecolor,ICON_MULTIPLY)
 
-	if(perp.shoes)
-		perp.shoes:track_blood = max(amount,perp.shoes:track_blood)                //Adding blood to shoes
-		if(!perp.shoes.blood_overlay)
-			perp.shoes.generate_blood_overlay()
-		if(!perp.shoes.blood_DNA)
-			perp.shoes.blood_DNA = list()
-			perp.shoes.blood_overlay.color = basecolor
-			perp.shoes.overlays += perp.shoes.blood_overlay
-			perp.update_inv_shoes(1)
-		perp.shoes.blood_DNA |= blood_DNA.Copy()
-		perp.shoes.blood_color=basecolor
-	else
-		perp.track_blood = max(amount,perp.track_blood)                                //Or feet
-		if(!perp.feet_blood_DNA)
-			perp.feet_blood_DNA = list()
-		perp.feet_blood_DNA |= blood_DNA.Copy()
-		perp.feet_blood_color=basecolor
-
-	amount--
-
-/obj/effect/decal/cleanable/blood/proc/dry()
-	name = "dried [src.name]"
-	desc = "It's dry and crusty. Someone is not doing their job."
-	color = adjust_brightness(color, -50)
-	amount = 0
-
-/obj/effect/decal/cleanable/blood/attack_hand(mob/living/carbon/human/user)
-	..()
-	if (amount && istype(user))
-		add_fingerprint(user)
-		if (user.gloves)
-			return
-		var/taken = rand(1,amount)
-		amount -= taken
-		user << "<span class='notice'>You get some of \the [src] on your hands.</span>"
-		if (!user.blood_DNA)
-			user.blood_DNA = list()
-		user.blood_DNA |= blood_DNA.Copy()
-		user.bloody_hands += taken
-		user.hand_blood_color = basecolor
-		user.update_inv_gloves(1)
-		user.verbs += /mob/living/carbon/human/proc/bloody_doodle
+	icon = blood
 
 /obj/effect/decal/cleanable/blood/splatter
 	random_icon_states = list("mgibbl1", "mgibbl2", "mgibbl3", "mgibbl4", "mgibbl5")
@@ -108,6 +46,8 @@ var/global/list/image/splatter_cache=list()
 	icon_state = "1"
 	random_icon_states = list("1","2","3","4","5")
 	amount = 0
+
+	base_icon = 'icons/effects/drip.dmi'
 
 /obj/effect/decal/cleanable/blood/writing
 	icon_state = "tracks"
@@ -126,9 +66,9 @@ var/global/list/image/splatter_cache=list()
 	else
 		icon_state = "writing1"
 
-/obj/effect/decal/cleanable/blood/writing/examine()
+/obj/effect/decal/cleanable/blood/writing/examine(mob/user)
 	..()
-	usr << "It reads: <font color='[basecolor]'>\"[message]\"<font>"
+	user << "It reads: <font color='[basecolor]'>\"[message]\"<font>"
 
 /obj/effect/decal/cleanable/blood/gibs
 	name = "gibs"
@@ -154,7 +94,7 @@ var/global/list/image/splatter_cache=list()
 	blood.Blend(basecolor,ICON_MULTIPLY)
 
 	icon = blood
-	overlays.Cut()
+	overlays.len = 0
 	overlays += giblets
 
 /obj/effect/decal/cleanable/blood/gibs/up
@@ -172,7 +112,9 @@ var/global/list/image/splatter_cache=list()
 /obj/effect/decal/cleanable/blood/gibs/core
 	random_icon_states = list("gibmid1", "gibmid2", "gibmid3")
 
-
+/obj/effect/decal/cleanable/blood/gibs/core/New()
+	..()
+	playsound(src, get_sfx("gib"),50,1)
 
 
 
@@ -185,22 +127,24 @@ var/global/list/image/splatter_cache=list()
 	icon_state = "floor1"
 	random_icon_states = list("floor1", "floor2", "floor3", "floor4", "floor5", "floor6", "floor7")
 
-	Del()
-		for(var/datum/disease/D in viruses)
-			D.cure(0)
-		..()
+/obj/effect/decal/cleanable/blood/viralsputum/Destroy()
+	for(var/datum/disease/D in viruses)
+		D.cure(0)
+	..()
 
 
 
 
 
 /obj/effect/decal/cleanable/blood/gibs/proc/streak(var/list/directions)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/decal/cleanable/blood/gibs/proc/streak() called tick#: [world.time]")
 	spawn (0)
 		var/direction = pick(directions)
 		for (var/i = 0, i < pick(1, 200; 2, 150; 3, 50; 4), i++)
 			sleep(3)
 			if (i > 0)
-				var/obj/effect/decal/cleanable/blood/b = new /obj/effect/decal/cleanable/blood/splatter(src.loc)
+				var/obj/effect/decal/cleanable/blood/b = getFromPool(/obj/effect/decal/cleanable/blood/splatter, src.loc)
+				b.New(src.loc)
 				b.basecolor = src.basecolor
 				b.update_icon()
 				for(var/datum/disease/D in src.viruses)
@@ -215,7 +159,7 @@ var/global/list/image/splatter_cache=list()
 /obj/effect/decal/cleanable/mucus
 	name = "mucus"
 	desc = "Disgusting mucus."
-	gender = PLURAL
+	setGender(PLURAL)
 	density = 0
 	anchored = 1
 	layer = 2
@@ -223,5 +167,4 @@ var/global/list/image/splatter_cache=list()
 	icon_state = "mucus"
 	random_icon_states = list("mucus")
 
-	var/list/datum/disease2/disease/virus2 = list()
-	var/dry=0 // Keeps the lag down
+	var/dry=0

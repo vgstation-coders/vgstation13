@@ -1,14 +1,14 @@
 /mob/living/carbon/human/attack_paw(mob/M as mob)
 	..()
-	//M.changeNext_move(10)
-	if (M.a_intent == "help")
+	//M.delayNextAttack(10)
+	if (M.a_intent == I_HELP)
 		help_shake_act(M)
 	else
 		if (istype(wear_mask, /obj/item/clothing/mask/muzzle))
 			return
 
 		for(var/mob/O in viewers(src, null))
-			O.show_message(text("\red <B>[M.name] has bit []!</B>", src), 1)
+			O.show_message(text("<span class='danger'>[M.name] has bit []!</span>", src), 1)
 
 		var/damage = rand(1, 3)
 		var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
