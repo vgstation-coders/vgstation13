@@ -1314,3 +1314,10 @@ var/proccalls = 1
 
 #define log_adminwarn(text) diary << html_decode("\[[time_stamp()]]ADMINWARN: [text]")
 #define log_pda(text) diary << html_decode("\[[time_stamp()]]PDA: [text]")
+
+
+// States for the game ticker.
+#define GAME_STATE_PREGAME		1
+#define GAME_STATE_SETTING_UP	2
+#define GAME_STATE_PLAYING		3
+#define GAME_STATE_FINISHED		4

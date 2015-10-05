@@ -9,7 +9,7 @@
 
 /proc/canGhostRead(var/mob/A, var/obj/target, var/flags=PERMIT_ALL)
 	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/canGhostRead() called tick#: [world.time]")
-	if(isAdminGhost(A))
+	if(isAdminGhost(A) || ticker.current_state == GAME_STATE_FINISHED)
 		return 1
 	if(flags & PERMIT_ALL)
 		return 1
@@ -18,9 +18,9 @@
 /proc/canGhostWrite(var/mob/A, var/obj/target, var/desc="fucked with", var/flags=0)
 	//writepanic("[__FILE__].[__LINE__] (no type)([usr ? usr.ckey : ""])  \\/proc/canGhostWrite() called tick#: [world.time]")
 	if(flags & PERMIT_ALL)
-		if(!target.blessed)
+		if(!target.blessed && ticker.current_state != GAME_STATE_FINISHED)
 			return 1
-	if(isAdminGhost(A))
+	if(isAdminGhost(A) || ticker.current_state == GAME_STATE_FINISHED)
 		if(desc!="")
 			add_ghostlogs(A, target, desc, 1)
 		return 1

@@ -39,7 +39,7 @@
 
 #define iscluwne(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne)
 
-#define isAI(A) istype(A, /mob/living/silicon/ai)
+#define isAI(A) (istype(A, /mob/living/silicon/ai) || (isobserver(A) && ticker.current_state == GAME_STATE_FINISHED)) 
 
 #define isAIEye(A) istype(A, /mob/camera/aiEye)
 
