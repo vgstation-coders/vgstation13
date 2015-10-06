@@ -198,6 +198,8 @@
 	var/obj/item/stack/stack
 	var/moved = 0
 	for(var/atom/movable/A in in_T.contents)
+		if(!istype(A,  /obj/item) && !istype(A, /mob/living))
+			continue //No observing mobs, cameras, structures, particles or effects. Thank you
 		if(A.anchored)
 			continue
 
