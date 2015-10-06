@@ -313,13 +313,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	return
 
 // Check for last poltergeist activity.
-/mob/dead/observer/proc/can_poltergeist(var/start_cooldown=1)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/dead/observer/proc/can_poltergeist() called tick#: [world.time]")
+/mob/dead/observer/proc/can_poltergeist(var/start_cooldown = 1)
 	if(world.time >= next_poltergeist)
 		if(start_cooldown)
 			start_poltergeist_cooldown()
 		return 1
-	return 0
+	return ticker.current_state == GAME_STATE_FINISHED
 
 /mob/dead/observer/proc/start_poltergeist_cooldown()
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/dead/observer/proc/start_poltergeist_cooldown() called tick#: [world.time]")

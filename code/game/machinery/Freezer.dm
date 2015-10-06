@@ -112,22 +112,21 @@
 	onclose(user, "freezer")
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/Topic(href, href_list)
-	if(..()) return 1
-	else
-		usr.set_machine(src)
-		if (href_list["start"])
-			if(isobserver(usr) && !canGhostWrite(usr,src,"turned [on?"off":"on"]"))
-				return
-			src.on = !src.on
-			update_icon()
-		if(href_list["temp"])
-			if(isobserver(usr) && !canGhostWrite(usr,src,"set temperature of"))
-				return
-			var/amount = text2num(href_list["temp"])
-			if(amount > 0)
-				src.current_temperature = min(T20C, src.current_temperature+amount)
-			else
-				src.current_temperature = max((T0C - 200), src.current_temperature+amount)
+	if(..())
+		return 1
+
+	usr.set_machine(src)
+	if (href_list["start"])
+		src.on = !src.on
+		update_icon()
+
+	if(href_list["temp"])
+		var/amount = text2num(href_list["temp"])
+		if(amount > 0)
+			src.current_temperature = min(T20C, src.current_temperature+amount)
+		else
+			src.current_temperature = max((T0C - 200), src.current_temperature+amount)
+
 	src.updateUsrDialog()
 	src.add_fingerprint(usr)
 	return
