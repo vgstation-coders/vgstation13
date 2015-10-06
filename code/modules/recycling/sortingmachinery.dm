@@ -502,8 +502,10 @@ var/list/DEFAULT_TAGGER_LOCATIONS = list(
 	var/items_moved = 0
 
 	for(var/atom/movable/A in affecting)
+		if(!istype(A,  /obj/item) && !istype(A, /mob/living))
+			continue //No observing mobs, cameras, structures, particles or effects. Thank you
 		if(A.anchored)
-			continue
+			continue //Nothing anchored
 
 		if(sort(A))
 			A.forceMove(filter_T)
