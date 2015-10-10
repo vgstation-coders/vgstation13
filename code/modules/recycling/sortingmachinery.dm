@@ -33,6 +33,8 @@ var/list/DEFAULT_TAGGER_LOCATIONS = list(
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "deliverycloset"
 	var/obj/wrapped = null
+	var/stamped
+	var/stamped_by
 	density = 1
 	var/sortTag
 	flags = FPRINT
@@ -81,6 +83,8 @@ var/list/DEFAULT_TAGGER_LOCATIONS = list(
 	icon_state = "deliverycrateSmall"
 	var/obj/item/wrapped = null
 	var/sortTag
+	var/stamped
+	var/stamped_by
 	flags = FPRINT
 
 /obj/item/smallDelivery/attack_self(mob/user as mob)

@@ -249,10 +249,15 @@ var/list/mechtoys = list(
 	var/area/shuttle = cargo_shuttle.linked_area
 	if(!shuttle)	return
 
+	var/notify_admins = 0
+	var/notify_details = "DETAILS: "
+
 	var/datum/money_account/cargo_acct = department_accounts["Cargo"]
 
 	for(var/atom/movable/MA in shuttle)
 		if(MA.anchored)	continue
+
+		var/delete_this = 1 //If 1, delete this item after processing it!
 
 		if(istype(MA, /obj/item/stack/sheet/mineral/plasma))
 			var/obj/item/stack/sheet/mineral/plasma/P = MA
@@ -272,17 +277,56 @@ var/list/mechtoys = list(
 					var/datum/material/mat = materials_list.getMaterial(P.sheettype)
 					cargo_acct.money += (mat.value * 2) * P.amount // Central Command pays double for plasma they receive that hasn't been redeemed already.
 					continue
-				if(find_slip && istype(A,/obj/item/weapon/paper/manifest))
+
+				else if(find_slip && istype(A,/obj/item/weapon/paper/manifest))
 					var/obj/item/weapon/paper/slip = A
 					if(slip.stamped && slip.stamped.len) //yes, the clown stamp will work. clown is the highest authority on the station, it makes sense
 						cargo_acct.money += credits_per_slip
 						find_slip = 0
 					continue
 
-				SellObjToOrders(A,0)
+				else
 
-				// Delete it. (Fixes github #473)
-				if(A) qdel(A)
+					var/obj/item/smallDelivery/D = A
+					if(istype(D) && D.stamped) //This handles sending packages to centcomm
+						if(centcom_mail.len)
+							var/new_loc = pick(centcom_mail)
+							if(new_loc)
+								D.forceMove(new_loc)
+
+								notify_admins = 1
+								notify_details += "package stamped by [D.stamped_by ? D.stamped_by : "unknown"], "
+
+					else
+
+						SellObjToOrders(A,0)
+						// Delete it. (Fixes github #473)
+						if(A) qdel(A)
+
+		else if(istype(MA, /obj/structure/bigDelivery)) //This handles sending packages to centcomm
+			var/obj/structure/bigDelivery/D = MA
+
+			if(D.stamped)
+				if(centcom_mail.len)
+					var/new_loc = pick(centcom_mail)
+					if(new_loc)
+						D.forceMove(new_loc)
+
+						notify_admins = 1
+						notify_details += "package stamped by [D.stamped_by ? D.stamped_by : "unknown"], "
+				delete_this = 0
+		else if(istype(MA, /obj/item/smallDelivery)) //This handles sending packages to centcomm
+			var/obj/item/smallDelivery/D = MA
+
+			if(D.stamped)
+				if(centcom_mail.len)
+					var/new_loc = pick(centcom_mail)
+					if(new_loc)
+						D.forceMove(new_loc)
+
+						notify_admins = 1
+						notify_details += "package stamped by [D.stamped_by ? D.stamped_by : "unknown"], "
+				delete_this = 0
 		else
 			SellObjToOrders(MA,1)
 
@@ -292,7 +336,16 @@ var/list/mechtoys = list(
 				O.Pay()
 				centcomm_orders -= O
 		//world << "deleting [MA]/[MA.type] it was [!MA.anchored ? "not ": ""] anchored"
-		qdel(MA)
+		if(delete_this) qdel(MA)
+
+	if(notify_admins)
+
+		var/turf/post_office = pick(centcom_mail)
+		if(!post_office) return
+
+		admins << "<span class='notice'><b><span style='color:orange'>CENTCOMM MAIL!</span></b></span> The parcel(s) are stored in [formatJumpTo(post_office)]."
+		admins << notify_details
+		admins << 'sound/effects/fax.ogg'
 
 	//Buyin
 /datum/controller/supply_shuttle/proc/buy()

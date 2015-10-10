@@ -312,6 +312,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "EFTPOS crate"
 	group = "Supplies"
 
+/datum/supply_packs/postage_stap
+	name = "1 Postage Stamp"
+	contains = list(/obj/item/postage_stamp)
+	cost = 500
+	containertype = /obj/structure/closet/crate
+	containername = "Postage Stamp crate"
+	group = "Supplies"
+
 //////CLOTHING//////
 
 /datum/supply_packs/costume
