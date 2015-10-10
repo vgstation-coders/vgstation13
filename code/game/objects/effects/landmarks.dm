@@ -14,7 +14,7 @@
 	switch(name)			//some of these are probably obsolete
 		if("shuttle")
 			shuttle_z = z
-			del(src)
+			return qdel(src)
 
 		if("airtunnel_stop")
 			airtunnel_stop = x
@@ -27,26 +27,26 @@
 
 		if("monkey")
 			monkeystart += loc
-			del(src)
+			return qdel(src)
 		if("start")
 			newplayer_start += loc
-			del(src)
+			return qdel(src)
 
 		if("wizard")
 			wizardstart += loc
-			del(src)
+			return qdel(src)
 
 		if("JoinLate")
 			latejoin += loc
-			del(src)
+			return qdel(src)
 		if("AssetJoinLate")
 			assistant_latejoin += loc
-			del(src)
+			return qdel(src)
 
 		//prisoners
 		if("prisonwarp")
 			prisonwarp += loc
-			del(src)
+			return qdel(src)
 	//	if("mazewarp")
 	//		mazewarp += loc
 		if("Holding Facility")
@@ -62,22 +62,25 @@
 		//not prisoners
 		if("prisonsecuritywarp")
 			prisonsecuritywarp += loc
-			del(src)
+			return qdel(src)
 
 		if("blobstart")
 			blobstart += loc
-			del(src)
+			return qdel(src)
 
 		if("xeno_spawn")
 			xeno_spawn += loc
-			del(src)
+			return qdel(src)
 
 		if("endgame_exit")
 			endgame_safespawns += loc
-			del(src)
+			return qdel(src)
 		if("bluespacerift")
 			endgame_exits += loc
-			del(src)
+			return qdel(src)
+		if("centcom_mail")
+			centcom_mail += loc
+			return qdel(src)
 
 	landmarks_list += src
 	return 1
@@ -85,6 +88,9 @@
 /obj/effect/landmark/Destroy()
 	landmarks_list -= src
 	..()
+
+/obj/effect/landmark/centcom_mail
+	name = "centcom_mail"
 
 /obj/effect/landmark/start
 	name = "start"
