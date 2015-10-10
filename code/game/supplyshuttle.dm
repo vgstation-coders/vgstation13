@@ -290,12 +290,12 @@ var/list/mechtoys = list(
 					var/obj/item/smallDelivery/D = A
 					if(istype(D) && D.stamped) //This handles sending packages to centcomm
 						if(centcom_mail.len)
-						var/new_loc = pick(centcom_mail)
-						if(new_loc)
-							D.forceMove(new_loc)
+							var/new_loc = pick(centcom_mail)
+							if(new_loc)
+								D.forceMove(new_loc)
 
-							notify_admins = 1
-							notify_details += "package stamped by [D.stamped_by ? D.stamped_by : "unknown"], "
+								notify_admins = 1
+								notify_details += "package stamped by [D.stamped_by ? D.stamped_by : "unknown"], "
 
 					else
 
