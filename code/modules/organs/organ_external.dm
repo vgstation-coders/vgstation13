@@ -773,11 +773,13 @@ Note that amputating the affected organ does in fact remove the infection from t
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/mutate() called tick#: [world.time]")
 	src.status |= ORGAN_MUTATED
 	owner.update_body()
+	return
 
 /datum/organ/external/proc/unmutate()
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/unmutate() called tick#: [world.time]")
 	src.status &= ~ORGAN_MUTATED
 	owner.update_body()
+	return
 
 /datum/organ/external/proc/get_damage()	//returns total damage
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/organ/external/proc/get_damage() called tick#: [world.time]")
