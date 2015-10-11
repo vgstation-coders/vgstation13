@@ -74,7 +74,7 @@ move an amendment</a> to the drawing.</p>
 "}
 		if (AREA_BLUEPRINTS)
 			text += {"
-<p>According to the blueprints, you are now <b>\"[A.name]\"</b> This place seems to be relatively new on the blueprints.</p>"}
+<p>According to the blueprints, you are now in <b>\"[A.name]\"</b> This place seems to be relatively new on the blueprints.</p>"}
 			text += "<p>You may <a href='?src=\ref[src];action=edit_area'>move an amendment</a> to the drawing.</p>"//, or <a href='?src=\ref[src];action=delete_area'>erase</a> this place from the blueprints."
 
 		else
@@ -147,6 +147,9 @@ move an amendment</a> to the drawing.</p>
 			allthings.change_area(oldarea,newarea)
 	newarea.addSorted()
 
+	ghostteleportlocs += newarea.name
+	ghostteleportlocs[newarea.name] = newarea
+
 	sleep(5)
 	interact()
 
@@ -186,6 +189,10 @@ move an amendment</a> to the drawing.</p>
 		for(var/atom/movable/AM in T.contents)
 			AM.change_area(areadeleted,space)
 	usr << "You've erased the \"[areadeleted]\" from the blueprints."
+
+	var/log_str = "<span class='notice'>[key_name(usr,1)] has deleted [areadeleted] (a custom blueprint area) using [src].</span>"
+	message_admins(log_str)
+	log_game(log_str)
 
 /obj/item/blueprints/proc/check_tile_is_border(var/turf/T2,var/dir)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/blueprints/proc/check_tile_is_border() called tick#: [world.time]")

@@ -36,6 +36,11 @@
 			text += {"
 <p>This place isn't noted on the blueprint.</p>
 "}
+		if (AREA_BLUEPRINTS)
+			text += {"
+<p>According to the blueprints, you are now in <b>\"[A.name]\"</b> This place seems to be relatively new on the blueprints.</p>"}
+			text += "<p>You may <a href='?src=\ref[src];action=edit_area'>move an amendment</a> to the drawing.</p>"//, or <a href='?src=\ref[src];action=delete_area'>erase</a> this place from the blueprints."
+
 		else
 			return
 	text += "</BODY></HTML>"
