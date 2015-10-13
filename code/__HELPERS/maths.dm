@@ -188,3 +188,23 @@ proc/arctan(x)
 //Thanks to wwjnc for this.
 /proc/test_bitflag(var/bitflag)
 	return bitflag != 0 && !(bitflag & (bitflag - 1))
+
+/*
+ * This probably isn't a linear_extrapolation and I don't know what I'm talking about but I needed to name the function something.
+ * Usage: Compares the input to a "soft cap" and a "hard cap". Returns a decimal between 0 and 1.
+ * Example: With a soft cap of 100 and a hard cap of 150, an input of 125 will return 0.5.
+ */
+/proc/linear_extrapolation(input, a, b, min = 0, max = 1)
+	if(a==b) return 1
+	return Clamp((b - input)/(b - a), min, max)
+
+/*
+ * Diminishing returns formula using a triangular number sequence.
+ * Taken from http://lostsouls.org/grimoire_diminishing_returns
+ */
+/proc/triangular_seq(input, scale)
+	if(input < 0)
+		return -triangular_seq(-input, scale)
+	var/mult = input/scale
+	var/trinum = (sqrt(8 * mult + 1) - 1 ) / 2
+	return trinum * scale

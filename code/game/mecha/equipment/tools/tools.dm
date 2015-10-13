@@ -226,6 +226,70 @@
 	//ORIENTED
 	//PROGRAMMING
 
+/obj/item/mecha_parts/mecha_equipment/tool/scythe
+	name = "Heavy Duty Pneumatic Scythe"
+	desc = "An extremely heavy-duty pneumatic scythe. The \"giant robot\" approach to weed control. (Can be attached to: Engineering Exosuits)"
+	icon_state = "mecha_lazyscythecopypaste"
+	equip_cooldown = 20
+	energy_drain = 15
+	var/dam_force = 20
+
+/obj/item/mecha_parts/mecha_equipment/tool/scythe/can_attach(obj/mecha/working/ripley/M as obj)
+	if(..())
+		if(istype(M))
+			return 1
+	return 0
+
+/obj/item/mecha_parts/mecha_equipment/tool/scythe/action(atom/target)
+	if(!action_checks(target)) return
+
+	if(istype(target, /obj/machinery/portable_atmospherics/hydroponics))
+		set_ready_state(0)
+		if(do_after_cooldown(target, 1/2))
+			chassis.visible_message("<font color='red'><b>[chassis] smashes apart \the [target]!</b></font>", "You hear a pneumatic screeching and something being smashed apart.")
+			occupant_message("<font color='red'><b>You smash apart \the [target]!</b></font>")
+			log_message("Destroyed [target].")
+			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
+			tray.smashDestroy(50) //Just to really drive it home
+			playsound(target, 'sound/mecha/mechsmash.ogg', 50, 1)
+	else if(istype(target, /obj/effect/plantsegment) || istype(target, /obj/effect/alien/weeds) || istype(target, /obj/effect/biomass)|| istype(target, /turf/simulated/floor))
+		set_ready_state(0)
+		var/olddir = chassis.dir
+		var/eradicated = 0
+		spawn for(var/i=1, i<=4, i++)
+			chassis.mechturn(turn(olddir, 90*i))
+			for(var/obj/effect/E in range(chassis,i == 4 ? 2 : 1))
+				if(get_dir(chassis,E)&chassis.dir || E.loc == get_turf(chassis)) //This kills vines through windows, but ehhhh
+					if(istype(E, /obj/effect/plantsegment))
+						var/obj/effect/plantsegment/K = E
+						K.die_off()
+						eradicated++
+					else if(istype(E, /obj/effect/alien/weeds) || istype(E, /obj/effect/biomass))
+						E.Destroy()
+						eradicated++
+			sleep(3)
+		if(eradicated)
+			occupant_message("<font color='blue'>[eradicated] weeds successfully eradicated.</font>")
+			log_message("Culled [eradicated] weeds.")
+		set_ready_state(1)
+	else if(istype(target,/mob/living))
+		var/mob/living/M = target
+		if(M.stat>1) return //Why?
+		if(chassis.occupant.a_intent == I_HURT)
+			set_ready_state(0)
+			M.apply_damage(dam_force, BRUTE)
+			occupant_message("<span class='danger'>You slash [target] with [src.name].</span>")
+			chassis.visible_message("<span class='danger'>[chassis] slashes at [target] with [src.name]!</span>")
+			M.attack_log +="\[[time_stamp()]\]<font color='orange'> Mech Scythed by [chassis.occupant.name] ([chassis.occupant.ckey]) with [src.name]</font>"
+			chassis.occupant.attack_log += "\[[time_stamp()]\]<font color='red'> Slashed [M.name] ([M.ckey]) with [src.name]</font>"
+			log_attack("<font color='red'>[chassis.occupant.name] ([chassis.occupant.ckey]) mech scythed [M.name] ([M.ckey]) with [src.name]</font>" )
+			log_message("Slashed at [target] with [src.name].")
+			do_after_cooldown()
+	else
+		return 0
+	chassis.use_power(energy_drain)
+	return 1
+
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher
 	name = "Exosuit-Mounted Foam Extinguisher"
 	desc = "A fire extinguisher module for an exosuit. (Can be attached to: Firefighting exosuits)"

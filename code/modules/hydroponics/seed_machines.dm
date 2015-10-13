@@ -195,10 +195,10 @@
 		if(!seed) return
 		seed.loc = get_turf(src)
 
-		if(seed.seed.name == "new line" || isnull(seed_types[seed.seed.name]))
-			seed.seed.uid = seed_types.len + 1
+		if(seed.seed.name == "new line" || isnull(plant_controller.seeds[seed.seed.name]))
+			seed.seed.uid = plant_controller.seeds.len + 1
 			seed.seed.name = "[seed.seed.uid]"
-			seed_types[seed.seed.name] = seed.seed
+			plant_controller.seeds[seed.seed.name] = seed.seed
 
 		seed.update_seed()
 		visible_message("\icon[src] [src] beeps and spits out [seed].")
@@ -338,7 +338,7 @@
 		last_action = world.time
 		active = 1
 
-		if(!isnull(seed_types[seed.seed.name]))
+		if(!isnull(plant_controller.seeds[seed.seed.name]))
 			seed.seed = seed.seed.diverge(1)
 			seed.seed_type = seed.seed.name
 			seed.update_seed()

@@ -186,7 +186,7 @@
  * Deathnettle
  */
 
-/obj/item/weapon/grown/deathnettle/pickup(mob/living/carbon/human/user as mob)
+/obj/item/weapon/grown/deathnettle/pickup(mob/living/carbon/human/user as mob) //todo this
 	if(!user.gloves)
 		if(istype(user, /mob/living/carbon/human))
 			var/organ = ((user.hand ? "l_":"r_") + "arm")

@@ -89,6 +89,14 @@ emp_act
 			return C
 	return null
 
+/mob/living/carbon/human/proc/get_exposed_body_parts() //because get_body_part_coverage(FULL_BODY) checks if any body part is covered, rather than if all of them are
+	var/body_coverage = FULL_BODY | FULL_HEAD
+	for(var/obj/item/clothing/C in get_clothing_items())
+		if(!C) continue
+		body_coverage &= ~(C.body_parts_covered)
+	return body_coverage
+
+
 /mob/living/carbon/human/proc/check_shields(var/damage = 0, var/attack_text = "the attack")
 	if(l_hand && istype(l_hand, /obj/item/weapon))//Current base is the prob(50-d/3)
 		var/obj/item/weapon/I = l_hand

@@ -20,11 +20,11 @@
 	spawn(1)
 		// Fill the object up with the appropriate reagents.
 		if(!isnull(plantname))
-			var/datum/seed/S = seed_types[plantname]
+			var/datum/seed/S = plant_controller.seeds[plantname]
 			if(!S || !S.chems)
 				return
 
-			potency = S.potency
+			potency = round(S.potency)
 
 			for(var/rid in S.chems)
 				var/list/reagent_data = S.chems[rid]
@@ -132,7 +132,7 @@
 	spawn(5)
 		force = round((5+potency/5), 1)
 
-/obj/item/weapon/grown/nettle/pickup(mob/living/carbon/human/user as mob)
+/obj/item/weapon/grown/nettle/pickup(mob/living/carbon/human/user as mob) //is this seriously declared twice?
 	if(istype(user))
 		if(!user.gloves)
 			to_chat(user, "<span class='warning'>The nettle burns your bare hand!</span>")

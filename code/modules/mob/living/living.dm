@@ -732,7 +732,7 @@ Thanks.
 			var/datum/chain/tether_datum = L.tether.chain_datum
 			if(tether_datum.extremity_B == src)
 				L.visible_message("<span class='danger'>\the [L] quickly grabs and removes \the [L.tether] tethered to his body!</span>",
-							  "<span class='warning'>You quickly grabs and remove \the [L.tether] tethered to your body.</span>")
+							  "<span class='warning'>You quickly grab and remove \the [L.tether] tethered to your body.</span>")
 				L.tether = null
 				tether_datum.extremity_B = null
 				tether_datum.rewind_chain()
@@ -804,30 +804,35 @@ Thanks.
 			L.visible_message("<span class='danger'>[L] resists!</span>")
 
 
-	//unbuckling yourself
-	if(L.locked_to && L.special_delayer.blocked() && istype(L.locked_to, /obj/structure/bed))
-		var/obj/structure/bed/B = L.locked_to
-		if(iscarbon(L))
-			var/mob/living/carbon/C = L
-			if(C.handcuffed)
-				C.delayNextAttack(100)
-				C.delayNextSpecial(100)
-				C.visible_message("<span class='warning'>[C] attempts to unbuckle themself!</span>",
-								  "<span class='warning'>You attempt to unbuckle yourself (this will take around two minutes, and you need to stay still).</span>",
-								  self_drugged_message="<span class='warning'>You attempt to regain control of your legs (this will take a while).</span>")
-				spawn(0)
-					if(do_after(usr, usr, 1200))
-						if(!C.locked_to)
-							return
-						C.visible_message("<span class='danger'>[C] manages to unbuckle themself!</span>",\
-							"<span class='notice'>You successfully unbuckle yourself.</span>",\
-							self_drugged_message="<span class='notice'>You successfully regain control of your legs and stand up.</span>")
-						B.manual_unbuckle(C)
-					else
-						C.simple_message("<span class='warning'>Your unbuckling attempt was interrupted.</span>", \
-							"<span class='warning'>Your attempt to regain control of your legs was interrupted. Damn it!</span>")
-		else
-			B.manual_unbuckle(L)
+	if(L.locked_to && L.special_delayer.blocked())
+		//unbuckling yourself
+		if(istype(L.locked_to, /obj/structure/bed))
+			var/obj/structure/bed/B = L.locked_to
+			if(iscarbon(L))
+				var/mob/living/carbon/C = L
+				if(C.handcuffed)
+					C.delayNextAttack(100)
+					C.delayNextSpecial(100)
+					C.visible_message("<span class='warning'>[C] attempts to unbuckle themself!</span>",
+									  "<span class='warning'>You attempt to unbuckle yourself (this will take around two minutes, and you need to stay still).</span>",
+									  self_drugged_message="<span class='warning'>You attempt to regain control of your legs (this will take a while).</span>")
+					spawn(0)
+						if(do_after(usr, usr, 1200))
+							if(!C.locked_to)
+								return
+							C.visible_message("<span class='danger'>[C] manages to unbuckle themself!</span>",\
+								"<span class='notice'>You successfully unbuckle yourself.</span>",\
+								self_drugged_message="<span class='notice'>You successfully regain control of your legs and stand up.</span>")
+							B.manual_unbuckle(C)
+						else
+							C.simple_message("<span class='warning'>Your unbuckling attempt was interrupted.</span>", \
+								"<span class='warning'>Your attempt to regain control of your legs was interrupted. Damn it!</span>")
+			else
+				B.manual_unbuckle(L)
+		//release from kudzu
+		else if(istype(L.locked_to, /obj/effect/plantsegment))
+			var/obj/effect/plantsegment/K = L.locked_to
+			K.manual_unbuckle(L)
 
 	//Breaking out of a locker?
 	if(src.loc && (istype(src.loc, /obj/structure/closet)))
@@ -977,7 +982,7 @@ Thanks.
 						if(!CM.legcuffed || CM.locked_to)
 							return // time leniency for lag which also might make this whole thing pointless but the server
 						CM.visible_message("<span class='danger'>[CM] manages to remove [HC]!</span>",
-										   "<span class='notice'>You successful remove [HC].</span>")
+										   "<span class='notice'>You successfuly remove [HC].</span>")
 						CM.legcuffed.loc = usr.loc
 						CM.legcuffed = null
 						CM.update_inv_legcuffed()
