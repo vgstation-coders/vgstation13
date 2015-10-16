@@ -2,6 +2,7 @@
 	name = "mosin nagant"
 	desc = "JOY OF HAVING MOSIN NAGANT RIFLE IS JOY THAT MONEY CANNOT AFFORD. "
 	fire_sound = 'sound/weapons/nagant.ogg'
+	fire_sound_far = 'sound/weapons/nagant_far.ogg'
 	icon_state = "nagant"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
@@ -18,8 +19,6 @@
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
 
-
-	gun_flags = 0
 
 /obj/item/weapon/gun/projectile/nagant/isHandgun()
 		return 0

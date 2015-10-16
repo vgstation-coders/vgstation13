@@ -94,7 +94,7 @@
 		force = 3
 		w_class = 2
 		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
-		hitsound = "sound/weapons/empty.ogg"
+		hitsound = "sound/weapons/telebaton.ogg"
 		user << "<span class='notice'> [src] can now be concealed.</span>"
 	update_icon()
 

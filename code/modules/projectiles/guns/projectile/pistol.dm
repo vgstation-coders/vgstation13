@@ -27,7 +27,7 @@
 	mag_type = "/obj/item/ammo_storage/magazine/a50"
 	load_method = 2
 
-	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+	gun_flags = AUTOMAGDROP
 
 /obj/item/weapon/gun/projectile/deagle/gold
 	desc = "A gold plated gun folded over a million times by superior martian gunsmiths. Uses .50 AE ammo."
@@ -56,7 +56,7 @@
 	mag_type = "/obj/item/ammo_storage/magazine/a75"
 	load_method = 2
 
-	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+	gun_flags = AUTOMAGDROP
 
 	update_icon()
 		..()
@@ -79,7 +79,7 @@
 	mag_type = "/obj/item/ammo_storage/magazine/mc9mm"
 	load_method = 2
 
-	gun_flags = AUTOMAGDROP | EMPTYCASINGS | SILENCECOMP
+	gun_flags = AUTOMAGDROP | SILENCECOMP
 
 /obj/item/weapon/gun/projectile/pistol/update_icon()
 	..()

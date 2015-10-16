@@ -60,7 +60,7 @@
 				if("smg")
 					new /obj/item/weapon/gun/projectile/automatic(get_turf(H))
 				if("uzi")
-					new /obj/item/weapon/gun/projectile/automatic/mini_uzi(get_turf(H))
+					new /obj/item/weapon/gun/projectile/automatic/micro_uzi(get_turf(H))
 				if("crossbow")
 					new /obj/item/weapon/gun/energy/crossbow(get_turf(H))
 				if("saw")

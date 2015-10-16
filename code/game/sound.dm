@@ -16,8 +16,6 @@ var/list/male_scream_sound = list('sound/misc/malescream1.ogg', 'sound/misc/male
 var/list/female_scream_sound = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
 var/list/lightning_sound = list('sound/effects/lightning/chainlightning1.ogg', 'sound/effects/lightning/chainlightning2.ogg', 'sound/effects/lightning/chainlightning3.ogg', 'sound/effects/lightning/chainlightning4.ogg', 'sound/effects/lightning/chainlightning5.ogg', 'sound/effects/lightning/chainlightning6.ogg', 'sound/effects/lightning/chainlightning7.ogg')
 
-//var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
-
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
 //space sounds have no gas modification, for example. Though >space sounds
 /proc/playsound(var/atom/source, soundin, vol as num, vary, extrarange as num, falloff, var/gas_modified = 1)

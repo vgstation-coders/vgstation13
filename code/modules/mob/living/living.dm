@@ -703,12 +703,12 @@ Thanks.
 		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
 			var/mob/living/M = G.loc
 			if(!(M in view(src)))
-				NotTargeted(G)
-		for(var/obj/item/weapon/gun/G in src) //Handle the gunner loosing sight of their target/s
+				untarget(M, G)
+		for(var/obj/item/weapon/gun/G in src) //Handle the gunner losing sight of their target/s
 			if(G.target)
 				for(var/mob/living/M in G.target)
 					if(M && !(M in view(src)))
-						M.NotTargeted(G)
+						M.untarget(M, G)
 	// Update on_moved listeners.
 	INVOKE_EVENT(on_moved,list("loc"=loc))
 

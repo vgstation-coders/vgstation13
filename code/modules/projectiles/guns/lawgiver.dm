@@ -20,6 +20,7 @@
 	var/obj/item/ammo_casing/chambered = null
 	var/firing_mode = STUN
 	fire_delay = 0
+	fire_sound_dist = 0 //We do not want far sounds for this
 	var/projectile_type = "/obj/item/projectile/energy/electrode"
 	fire_sound = 'sound/weapons/Taser.ogg'
 	var/magazine = null
@@ -118,7 +119,7 @@
 	explosion(user, -1, 0, 2)
 	qdel(src)
 
-/obj/item/weapon/gun/lawgiver/proc/LoadMag(var/obj/item/ammo_storage/magazine/AM, var/mob/user)
+/obj/item/weapon/gun/lawgiver/proc/load_mag(var/obj/item/ammo_storage/magazine/AM, var/mob/user)
 	if(istype(AM, /obj/item/ammo_storage/magazine/lawgiver) && !magazine)
 		if(user)
 			user.drop_item(AM, src)
@@ -129,7 +130,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/lawgiver/proc/RemoveMag(var/mob/user)
+/obj/item/weapon/gun/lawgiver/proc/remove_mag(var/mob/user)
 	if(magazine)
 		var/obj/item/ammo_storage/magazine/lawgiver/L = magazine
 		L.loc = get_turf(src.loc)
@@ -152,6 +153,7 @@
 			if((findtext(message, "stun")) || (findtext(message, "taser")))
 				firing_mode = STUN
 				fire_sound = 'sound/weapons/Taser.ogg'
+				fire_sound_dist = 0 //No far sounds
 				projectile_type = "/obj/item/projectile/energy/electrode"
 				fire_delay = 0
 				sleep(3)
@@ -160,12 +162,15 @@
 				firing_mode = LASER
 				fire_sound = 'sound/weapons/lasercannonfire.ogg'
 				projectile_type = "/obj/item/projectile/beam/heavylaser"
+				fire_sound_dist = 0 //No far sounds
 				fire_delay = 5
 				sleep(3)
 				say("LASER")
 			else if((findtext(message, "rapid")) || (findtext(message, "automatic")))
 				firing_mode = RAPID
-				fire_sound = 'sound/weapons/Gunshot_c20.ogg'
+				fire_sound = 'sound/weapons/c20r.ogg'
+				fire_sound_far = 'sound/weapons/c20r_far.ogg'
+				fire_sound_dist = 7 //Far sounds
 				projectile_type = "/obj/item/projectile/bullet/midbullet/lawgiver"
 				fire_delay = 0
 				rapid_message = 0
@@ -176,6 +181,7 @@
 				firing_mode = FLARE
 				fire_sound = 'sound/weapons/shotgun.ogg'
 				projectile_type = "/obj/item/projectile/flare"
+				fire_sound_dist = 0 //No far sounds
 				fire_delay = 5
 				recoil = 1
 				sleep(3)
@@ -184,6 +190,7 @@
 				firing_mode = HI_EX
 				fire_sound = 'sound/weapons/elecfire.ogg'
 				projectile_type = "/obj/item/projectile/bullet/gyro"
+				fire_sound_dist = 0 //No far sounds
 				fire_delay = 4
 				recoil = 1
 				sleep(3)
@@ -206,7 +213,7 @@
 			self_destruct(user)
 			return
 	else
-		click_empty(user)
+		playsound(get_turf(src), 'sound/weapons/empty.ogg', 100, 1)
 		say("PLEASE REGISTER A DNA SAMPLE")
 		return
 
@@ -223,7 +230,9 @@
 		in_chamber = null
 		if(!chamber_round())
 			rapidFirestop = 1
-			return click_empty(user)
+			playsound(get_turf(src), 'sound/weapons/empty.ogg', 100, 1)
+			visible_message("<span class='warning'>*click*</span>")
+			return
 		rapidFirechamber = 1
 
 	else if(firing_mode == RAPID && rapidFirechamber)
@@ -232,7 +241,9 @@
 	else if(firing_mode != RAPID)
 		in_chamber = null
 		if(!chamber_round())
-			return click_empty(user)
+			playsound(get_turf(src), 'sound/weapons/empty.ogg', 100, 1)
+			visible_message("<span class='warning'>*click*</span>")
+			return
 
 	if(clumsy_check)
 		if(istype(user, /mob/living))
@@ -382,7 +393,7 @@
 				return
 		else
 			user.visible_message("<span class = 'warning'>[user] pulls the trigger.</span>")
-			click_empty(user)
+			playsound(get_turf(src), 'sound/weapons/empty.ogg', 100, 1)
 			say("PLEASE REGISTER A DNA SAMPLE")
 			return
 		if (chamber_round())
@@ -400,7 +411,8 @@
 			mouthshoot = 0
 			return
 		else
-			click_empty(user)
+			playsound(get_turf(src), 'sound/weapons/empty.ogg', 100, 1)
+			visible_message("<span class='warning'>*click*</span>")
 			mouthshoot = 0
 			return
 
@@ -520,7 +532,7 @@
 	if(istype(A, /obj/item/ammo_storage/magazine/lawgiver))
 		var/obj/item/ammo_storage/magazine/lawgiver/AM = A
 		if(!magazine)
-			LoadMag(AM, user)
+			load_mag(AM, user)
 		else
 			user << "<span class='rose'>There is already a magazine loaded in \the [src]!</span>"
 	else if (istype(A, /obj/item/ammo_storage/magazine))
@@ -530,7 +542,7 @@
 	if (target)
 		return ..()
 	if (magazine)
-		RemoveMag(user)
+		remove_mag(user)
 	else
 		user << "<span class='warning'>There's no magazine loaded in \the [src]!</span>"
 

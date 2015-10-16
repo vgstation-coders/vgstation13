@@ -10,6 +10,7 @@
 	starting_materials = list(MAT_IRON = 1000)
 	w_type = RECYK_METAL
 	w_class = 1.0
+	//eject_casing = 0 //Flares don't leave casings
 	var/obj/item/device/flashlight/flare/stored_flare = null
 
 /obj/item/ammo_casing/shotgun/flare/New()

@@ -149,7 +149,7 @@
 		"Air horn" = 'sound/items/AirHorn.ogg',
 		"Chewing" = 'sound/items/eatfood.ogg',
 		"Polaroid" = "polaroid",
-		"Gunshot" = 'sound/weapons/Gunshot.ogg',
+		"Gunshot" = 'sound/weapons/gunshot.ogg',
 		"Ion gun" = 'sound/weapons/ion.ogg',
 		"Laser gun" = 'sound/weapons/Laser.ogg',
 		"Punch" = "punch",

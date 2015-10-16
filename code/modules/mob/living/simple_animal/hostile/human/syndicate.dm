@@ -79,8 +79,8 @@
 	minimum_distance = 5
 	icon_state = "syndicateranged"
 	icon_living = "syndicateranged"
-	casingtype = /obj/item/ammo_casing/a12mm
-	projectilesound = 'sound/weapons/Gunshot_smg.ogg'
+	casingtype = /obj/item/ammo_casing/a556x45
+	projectilesound = 'sound/weapons/c20r.ogg'
 	projectiletype = /obj/item/projectile/bullet/midbullet2
 
 	items_to_drop = list(/obj/item/weapon/gun/projectile/automatic/c20r)

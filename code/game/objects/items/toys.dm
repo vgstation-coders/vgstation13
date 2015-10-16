@@ -169,10 +169,10 @@
 		return
 	src.add_fingerprint(user)
 	if (src.bullets < 1)
-		user.show_message("<span class = 'danger'>*click* *click*</span>", 2)
 		playsound(user, 'sound/weapons/empty.ogg', 100, 1)
+		visible_message("<span class='warning'>*click*</span>")
 		return
-	playsound(user, 'sound/weapons/Gunshot.ogg', 100, 1)
+	playsound(user, 'sound/weapons/gunshot.ogg', 100, 1)
 	src.bullets--
 	for(var/mob/O in viewers(user, null))
 		O.show_message(text("<span class = 'danger'><B>[] fires a cap gun at []!</B></span>", user, target), 1, "<span class = 'danger'>You hear a gunshot</span>", 2)

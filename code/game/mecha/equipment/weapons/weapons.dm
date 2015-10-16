@@ -236,7 +236,7 @@
 	icon_state = "mecha_uac2"
 	equip_cooldown = 10
 	projectile = /obj/item/projectile/bullet/weakbullet
-	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
+	fire_sound = 'sound/weapons/smg.ogg'
 	projectiles = 300
 	projectile_energy_cost = 20
 	var/projectiles_per_shot = 3

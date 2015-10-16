@@ -4,6 +4,8 @@
 /obj/item/ammo_storage/magazine
 	desc = "A magazine capable of holding bullets. Can be loaded into certain weapons."
 	exact = 1 //we only load the thing we want to load
+	var/magazine_insert_sound = 'sound/weapons/general_mag_in.ogg'
+	var/magazine_remove_sound = 'sound/weapons/general_mag_out.ogg'
 
 /obj/item/ammo_storage/magazine/mc9mm
 	name = "magazine (9mm)"
@@ -39,6 +41,15 @@
 	sprite_modulo = 3
 	multiple_sprites = 1
 
+/obj/item/ammo_storage/magazine/a556x45
+	name = "magazine (5.56x45)"
+	icon_state = "5.56x45"
+	origin_tech = "combat=3"
+	ammo_type = "/obj/item/ammo_casing/a556x45"
+	max_ammo = 30
+	sprite_modulo = 3
+	multiple_sprites = 1
+
 /obj/item/ammo_storage/magazine/a50
 	name = "magazine (.50)"
 	icon_state = "50ae"
@@ -67,9 +78,9 @@
 	icon_state = "a762"
 	origin_tech = "combat=2"
 	ammo_type = "/obj/item/ammo_casing/a762"
-	max_ammo = 50
+	max_ammo = 120
 	multiple_sprites = 1
-	sprite_modulo = 10
+	sprite_modulo = 20
 
 /obj/item/ammo_storage/magazine/a762/empty
 	starting_ammo = 0
@@ -83,12 +94,21 @@
 	multiple_sprites = 1
 	sprite_modulo = 1
 
-/obj/item/ammo_storage/magazine/uzi45 //Uzi mag
+/obj/item/ammo_storage/magazine/uzi45
 	name = "magazine (.45)"
 	icon_state = "uzi45"
 	origin_tech = "combat=2"
 	ammo_type = "/obj/item/ammo_casing/c45"
 	max_ammo = 16
+	multiple_sprites = 1
+	sprite_modulo = 2
+
+/obj/item/ammo_storage/magazine/uzimicro45
+	name = "magazine (.45)"
+	icon_state = "uzi45"
+	origin_tech = "combat=2"
+	ammo_type = "/obj/item/ammo_casing/c45"
+	max_ammo = 12
 	multiple_sprites = 1
 	sprite_modulo = 2
 
