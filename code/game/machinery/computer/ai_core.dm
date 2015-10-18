@@ -42,10 +42,10 @@
 					state = 0
 			if(istype(P, /obj/item/weapon/circuitboard/aicore) && !circuit)
 				playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
-				user << "<span class='notice'>You place the circuit board inside the frame.</span>"
-				icon_state = "1"
-				circuit = P
-				user.drop_item(P, src)
+				if(user.drop_item(P, src))
+					user << "<span class='notice'>You place the circuit board inside the frame.</span>"
+					icon_state = "1"
+					circuit = P
 			if(istype(P, /obj/item/weapon/screwdriver) && circuit)
 				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 				user << "<span class='notice'>You screw the circuit board into place.</span>"
@@ -133,11 +133,14 @@
 					user << "<span class='warning'>This [P] does not seem to fit.</span>"
 					return
 
+				if(!user.drop_item(P, src))
+					user << "<span class='warning'>You can't let go of \the [P]!</span>"
+					return
+
 				if(P:brainmob.mind)
 					ticker.mode.remove_cultist(P:brainmob.mind, 1)
 					ticker.mode.remove_revolutionary(P:brainmob.mind, 1)
 
-				user.drop_item(P, src)
 				brain = P
 				usr << "Added [P]."
 				icon_state = "3b"

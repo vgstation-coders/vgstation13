@@ -80,10 +80,13 @@
 				if(istype(P, /obj/item/weapon/circuitboard))
 					var/obj/item/weapon/circuitboard/B = P
 					if(B.board_type == "machine")
+						if(!user.drop_item(B, src))
+							user << "<span class='warning'>You can't let go of \the [B]!</span>"
+							return
+
 						playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 						user << "<span class='notice'>You add the circuit board to the frame.</span>"
 						circuit = P
-						user.drop_item(B, src)
 						set_build_state(3)
 						components = list()
 						req_components = circuit.req_components.Copy()
@@ -201,11 +204,11 @@
 											else
 												user << "<span class='warning'>You do not have enough [P]!</span>"
 
-										user.drop_item(P, src)
-										components += P
-										req_components[I]--
-										update_desc()
-										break
+										if(user.drop_item(P, src))
+											components += P
+											req_components[I]--
+											update_desc()
+											break
 								user << desc
 
 								if(P && P.loc != src && !istype(P, /obj/item/stack/cable_coil))

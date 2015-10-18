@@ -32,7 +32,7 @@
 	w_class = W
 
 /obj/item/weapon/gift/attack_self(mob/user as mob)
-	user.drop_item(src)
+	user.drop_item(src, force_drop = 1)
 	if(gift)
 		user.put_in_active_hand(gift)
 		gift.add_fingerprint(user)

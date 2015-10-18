@@ -27,10 +27,12 @@
 
 	if((istype(I, /obj/item/weapon/grenade)))
 		if(grenades.len < max_grenades)
-			user.drop_item(I, src)
-			grenades += I
-			user << "<span class='notice'>You load the [I.name] into the [src.name].</span>"
-			user << "<span class='notice'>[grenades.len] / [max_grenades] grenades loaded.</span>"
+			if(user.drop_item(I, src))
+				grenades += I
+				user << "<span class='notice'>You load the [I.name] into the [src.name].</span>"
+				user << "<span class='notice'>[grenades.len] / [max_grenades] grenades loaded.</span>"
+			else
+				user << "<span class='warning'>You can't let go of \the [I]!</span>"
 		else
 			user << "<span class='warning'>The [src.name] cannot hold more grenades.</span>"
 

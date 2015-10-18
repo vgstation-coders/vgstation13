@@ -71,21 +71,21 @@
 		if(health > 0)
 			user << "<span class='warning'>There is already a queen in there.</span>"
 		else
-			health = 10
-			nutrilevel = min(10,nutrilevel+10)
-			user.drop_item(O)
-			qdel(O)
-			user << "<span class='notice'>You carefully insert the queen into [src], she gets busy making a hive.</span>"
-			bees_in_hive = 0
+			if(user.drop_item(O))
+				health = 10
+				nutrilevel = min(10,nutrilevel+10)
+				qdel(O)
+				user << "<span class='notice'>You carefully insert the queen into [src], she gets busy making a hive.</span>"
+				bees_in_hive = 0
 	else if(istype(O, /obj/item/beezeez))
-		beezeez += 100
-		nutrilevel += 10
-		user.drop_item(O)
-		if(health > 0)
-			user << "<span class='notice'>You insert [O] into [src]. A relaxed humming appears to pick up.</span>"
-		else
-			user << "<span class='notice'>You insert [O] into [src]. Now it just needs some bees.</span>"
-		qdel(O)
+		if(user.drop_item(O))
+			beezeez += 100
+			nutrilevel += 10
+			if(health > 0)
+				user << "<span class='notice'>You insert [O] into [src]. A relaxed humming appears to pick up.</span>"
+			else
+				user << "<span class='notice'>You insert [O] into [src]. Now it just needs some bees.</span>"
+			qdel(O)
 	else if(istype(O, /obj/item/weapon/hatchet))
 		if(health > 0)
 			user.visible_message("<span class='danger'>\the [user] begins harvesting the honeycombs, the bees don't like that.</span>","<span class='danger'>You begin harvesting the honeycombs, the bees don't like that.</span>")

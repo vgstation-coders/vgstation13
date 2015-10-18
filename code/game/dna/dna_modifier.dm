@@ -231,11 +231,10 @@
 		if(beaker)
 			user << "<span class='warning'>A beaker is already loaded into the machine.</span>"
 			return
-
-		beaker = item
-		user.drop_item(beaker, src)
-		user.visible_message("[user] adds \a [item] to \the [src]!", "You add \a [item] to \the [src]!")
-		return
+		if(user.drop_item(beaker, src))
+			beaker = item
+			user.visible_message("[user] adds \a [item] to \the [src]!", "You add \a [item] to \the [src]!")
+			return
 	else if(istype(item, /obj/item/weapon/grab)) //sanity checks, you chucklefucks
 		var/obj/item/weapon/grab/G = item
 		if (!ismob(G.affecting))
@@ -372,10 +371,10 @@
 	..()
 	if (istype(O, /obj/item/weapon/disk/data)) //INSERT SOME diskS
 		if (!src.disk)
-			user.drop_item(O, src)
-			src.disk = O
-			user << "You insert [O]."
-			nanomanager.update_uis(src) // update all UIs attached to src()
+			if(user.drop_item(O, src))
+				src.disk = O
+				user << "You insert [O]."
+				nanomanager.update_uis(src) // update all UIs attached to src()
 	return
 
 /obj/machinery/computer/scan_consolenew/ex_act(severity)

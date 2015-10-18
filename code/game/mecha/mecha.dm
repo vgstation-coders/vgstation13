@@ -764,10 +764,10 @@
 		var/obj/item/mecha_parts/mecha_equipment/E = W
 		spawn()
 			if(E.can_attach(src))
-				user.drop_item(W)
-				E.attach(src)
-				user.visible_message("[user] attaches [W] to [src]", "You attach [W] to [src]")
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				if(user.drop_item(W))
+					E.attach(src)
+					user.visible_message("[user] attaches [W] to [src]", "You attach [W] to [src]")
+					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 			else
 				user << "You were unable to attach [W] to [src]"
 		return
@@ -837,30 +837,30 @@
 	else if(istype(W, /obj/item/weapon/cell))
 		if(state==STATE_BOLTSOPENED)
 			if(!src.cell)
-				user << "You install the powercell."
-				user.drop_item(W, src)
-				src.cell = W
-				src.log_message("Powercell installed.")
+				if(user.drop_item(W, src))
+					user << "You install the powercell."
+					src.cell = W
+					src.log_message("Powercell installed.")
 			else
 				user << "There's already a powercell installed."
 		return
 	else if(istype(W, /obj/item/mecha_parts/mecha_tracking))
 		if(state==STATE_BOLTSOPENED)
 			if(!src.tracking)
-				user << "You install the tracking beacon and safeties."
-				user.drop_item(W, src)
-				src.tracking = W
-				src.log_message("Exosuit tracking beacon installed.")
+				if(user.drop_item(W, src))
+					user << "You install the tracking beacon and safeties."
+					src.tracking = W
+					src.log_message("Exosuit tracking beacon installed.")
 			else
 				user << "There's already a tracking beacon installed."
 		return
 	else if(istype(W, /obj/item/device/radio/electropack))
 		if(state==STATE_BOLTSOPENED)
 			if(!src.electropack)
-				user << "You rig the electropack to the cockpit."
-				user.drop_item(W, src)
-				src.electropack = W
-				src.log_message("Emergency ejection routines installed.") //not exactly a legitimate upgrade!
+				if(user.drop_item(W, src))
+					user << "You rig the electropack to the cockpit."
+					src.electropack = W
+					src.log_message("Emergency ejection routines installed.") //not exactly a legitimate upgrade!
 			else
 				user << "There's already an electropack installed."
 		return

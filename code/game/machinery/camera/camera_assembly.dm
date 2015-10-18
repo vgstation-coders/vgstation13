@@ -128,10 +128,10 @@
 		if(is_type_in_list(W, upgrades))
 			user << "The assembly already has \a [W] inside!"
 			return
-		user << "You attach the [W] into the assembly inner circuits."
-		upgrades += W
-		user.drop_item(W, src)
-		return
+		if(user.drop_item(W, src))
+			user << "You attach the [W] into the assembly inner circuits."
+			upgrades += W
+			return
 
 	// Taking out upgrades
 	else if(iscrowbar(W) && upgrades.len)

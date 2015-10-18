@@ -201,12 +201,12 @@ var/list/camera_names=list()
 		if (!wires.CanDeconstruct())
 			user << "You can't reach into the camera's circuitry with the wires on the way."
 			return
-		user << "You attach the [W] into the camera's inner circuits."
-		assembly.upgrades += W
-		user.drop_item(W, src)
-		update_icon()
-		update_hear()
-		return
+		if(user.drop_item(W,src))
+			user << "You attach the [W] into the camera's inner circuits."
+			assembly.upgrades += W
+			update_icon()
+			update_hear()
+			return
 
 	// Taking out upgrades
 	else if(iscrowbar(W))

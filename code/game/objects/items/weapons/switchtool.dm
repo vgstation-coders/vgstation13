@@ -100,10 +100,10 @@
 				user << "\The [src] already has a [get_module_name(module)]."
 				return
 			else
-				stored_modules[module] = used_item
-				user.drop_item(used_item, src)
-				user << "You successfully load \the [used_item] into \the [src]'s [get_module_name(module)] slot."
-				return 1
+				if(user.drop_item(used_item, src))
+					stored_modules[module] = used_item
+					user << "You successfully load \the [used_item] into \the [src]'s [get_module_name(module)] slot."
+					return 1
 
 /obj/item/weapon/switchtool/proc/remove_module(mob/user)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/switchtool/proc/remove_module() called tick#: [world.time]")

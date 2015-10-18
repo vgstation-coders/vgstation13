@@ -172,8 +172,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 					I.overlays -= scanning
 					I.icon_state = "evidenceobj"
 				else
-					scanning = I
-					M.drop_item(I, src)
+					if(M.drop_item(I, src)) scanning = I
 			else
 				usr << "Invalid Object Rejected."
 		if("card")  //Processing a fingerprint card.
@@ -191,8 +190,8 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 						card.loc = src.loc
 					card = null
 					return
-				M.drop_item(I, src)
-				process_card()
+				if(M.drop_item(I, src))
+					process_card()
 			else
 				usr << "<span class='warning'>Invalid Object Rejected.</span>"
 		if("database") //Viewing all records in each database
