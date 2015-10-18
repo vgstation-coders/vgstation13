@@ -296,6 +296,10 @@ var/global/list/obj/machinery/light/alllights = list()
 			src.add_fingerprint(user)
 			var/obj/item/weapon/light/L = W
 			if(L.fitting == fitting)
+				if(!user.drop_item(L))
+					user << "<span class='warning'>You can't let go of \the [L]!</span>"
+					return
+
 				status = L.status
 				user << "You insert \the [L.name]."
 				switchcount = L.switchcount
@@ -309,7 +313,6 @@ var/global/list/obj/machinery/light/alllights = list()
 				on = has_power()
 				update()
 
-				user.drop_item(L)	//drop the item to update overlays and such
 				qdel(L)
 
 				if(on && rigged)

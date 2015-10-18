@@ -322,11 +322,11 @@
 						code = 0
 					else
 						code = S.code
-					user.drop_item(W)
-					del(W)
-					has_signaler = 1
-					update_icon()
-					return
+					if(user.drop_item(W))
+						del(W)
+						has_signaler = 1
+						update_icon()
+						return
 
 /obj/item/device/deskbell_assembly/attack_self(mob/living/carbon/user)
 	if(has_signaler)

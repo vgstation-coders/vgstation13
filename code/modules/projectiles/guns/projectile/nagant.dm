@@ -101,9 +101,9 @@
 			flame_turf(turflist)
 
 		if(prob(15))
-			user << "<span class='danger'>[src] flies out of your hands.</span>"
-			user.take_organ_damage(0,10)
-			user.drop_item(src)
+			if(user.drop_item(src))
+				user << "<span class='danger'>[src] flies out of your hands.</span>"
+				user.take_organ_damage(0,10)
 	Fire(A,user,params, "struggle" = struggle)
 	return 1
 

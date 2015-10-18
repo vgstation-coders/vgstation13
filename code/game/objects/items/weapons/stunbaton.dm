@@ -63,10 +63,10 @@
 /obj/item/weapon/melee/baton/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/cell))
 		if(!bcell)
-			user.drop_item(W, src)
-			bcell = W
-			user << "<span class='notice'>You install a cell in [src].</span>"
-			update_icon()
+			if(user.drop_item(W, src))
+				bcell = W
+				user << "<span class='notice'>You install a cell in [src].</span>"
+				update_icon()
 		else
 			user << "<span class='notice'>[src] already has a cell.</span>"
 

@@ -74,22 +74,24 @@
 		user.visible_message("<span class='warning'>[user.name] is trying to plant some kind of explosive on [target.name]!</span>")
 
 	if(do_after(user, target, 50) && in_range(user, target))
-		user.drop_item(src)
-		src.target = target
-		loc = null
-		if (ismob(target))
-			var/mob/M=target
-			target:attack_log += "\[[time_stamp()]\]<font color='orange'> Had the [name] planted on them by [user.real_name] ([user.ckey])</font>"
-			user.visible_message("<span class='warning'>[user.name] finished planting an explosive on [target.name]!</span>")
-			playsound(get_turf(src), 'sound/weapons/c4armed.ogg', 60, 1)
-			if(!iscarbon(user))
-				M.LAssailant = null
-			else
-				M.LAssailant = user
-		target.overlays += image('icons/obj/assemblies.dmi', "plastic-explosive2")
-		user << "Bomb has been planted. Timer counting down from [timer]."
-		spawn(timer*10)
-			explode(get_turf(target))
+		if(user.drop_item(src))
+			src.target = target
+			loc = null
+			if (ismob(target))
+				var/mob/M=target
+				target:attack_log += "\[[time_stamp()]\]<font color='orange'> Had the [name] planted on them by [user.real_name] ([user.ckey])</font>"
+				user.visible_message("<span class='warning'>[user.name] finished planting an explosive on [target.name]!</span>")
+				playsound(get_turf(src), 'sound/weapons/c4armed.ogg', 60, 1)
+				if(!iscarbon(user))
+					M.LAssailant = null
+				else
+					M.LAssailant = user
+			target.overlays += image('icons/obj/assemblies.dmi', "plastic-explosive2")
+			user << "Bomb has been planted. Timer counting down from [timer]."
+			spawn(timer*10)
+				explode(get_turf(target))
+		else
+			user << "<span class='warning'>You can't let go of \the [src]!</span>"
 
 /obj/item/weapon/plastique/proc/explode(var/location)
 

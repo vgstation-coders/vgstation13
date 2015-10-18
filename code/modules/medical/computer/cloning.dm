@@ -90,11 +90,11 @@
 		return .
 	if (istype(W, /obj/item/weapon/disk/data)) //INSERT SOME DISKETTES
 		if (!src.diskette)
-			user.drop_item(W, src)
-			src.diskette = W
-			user << "You insert [W]."
-			src.updateUsrDialog()
-			return 1
+			if(user.drop_item(W, src))
+				src.diskette = W
+				user << "You insert [W]."
+				src.updateUsrDialog()
+				return 1
 	return
 
 /obj/machinery/computer/cloning/attack_paw(mob/user as mob)

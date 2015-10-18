@@ -12,7 +12,7 @@
 	var/splicing = 0
 	var/scanning = 0
 	var/spliced = 0
-	
+
 	light_color = LIGHT_COLOR_GREEN
 
 /obj/machinery/computer/diseasesplicer/attackby(var/obj/I as obj, var/mob/user as mob)
@@ -22,9 +22,8 @@
 	if(istype(I,/obj/item/weapon/virusdish))
 		var/mob/living/carbon/c = user
 		if(!dish)
-
-			dish = I
-			c.drop_item(I, src)
+			if(c.drop_item(I, src))
+				dish = I
 	if(istype(I,/obj/item/weapon/diseasedisk))
 		user << "You upload the contents of the disk into the buffer"
 		memorybank = I:effect

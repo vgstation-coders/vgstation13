@@ -92,9 +92,9 @@
 	if((src.contents.len >= src.ingMax) || (src.contents.len >= ingredientLimit))
 		user << "<span class='warning'>That's already looking pretty stuffed.</span>"
 	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
+		if(!user.drop_item(I, src)) return
 		var/obj/item/weapon/reagent_containers/food/snacks/S = I
 		S.reagents.trans_to(src,S.reagents.total_volume)
-		user.drop_item(I, src)
 		src.ingredients += S
 
 		if(src.addTop) src.overlays -= src.topping //thank you Comic
@@ -354,15 +354,15 @@
 	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
 		if(src.ingredients.len < src.ingMax)
 			var/obj/item/weapon/reagent_containers/food/snacks/S = I
-			user.drop_item(I, src)
-			user << "<span class='notice'>You add the [S.name] to the [src.name].</span>"
-			S.reagents.trans_to(src,S.reagents.total_volume)
-			src.ingredients += S
-			src.updateName()
-			src.overlays -= src.filling //we can't directly modify the overlay, so we have to remove it and then add it again
-			var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
-			src.filling.color = BlendRGB(src.filling.color, newcolor, 1/src.ingredients.len)
-			src.overlays += src.filling
+			if(user.drop_item(I, src))
+				user << "<span class='notice'>You add the [S.name] to the [src.name].</span>"
+				S.reagents.trans_to(src,S.reagents.total_volume)
+				src.ingredients += S
+				src.updateName()
+				src.overlays -= src.filling //we can't directly modify the overlay, so we have to remove it and then add it again
+				var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
+				src.filling.color = BlendRGB(src.filling.color, newcolor, 1/src.ingredients.len)
+				src.overlays += src.filling
 		else user << "<span class='warning'>That won't fit.</span>"
 	else . = ..()
 	return

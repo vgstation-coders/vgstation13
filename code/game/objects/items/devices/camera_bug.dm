@@ -30,11 +30,12 @@
 		if(I.w_class < 3)
 			user << "<span class='warning'>\The [I] is too small for \the [src]</span>"
 			return 0
-	user << "<span class='notice'>You stealthily place \the [src] onto \the [A]</span>"
-	user.drop_item(src, A)
-	active = 1
-	camera_bugs += src
-	return 1
+
+	if(user.drop_item(src, A))
+		user << "<span class='notice'>You stealthily place \the [src] onto \the [A]</span>"
+		active = 1
+		camera_bugs += src
+		return 1
 
 /obj/item/device/camera_bug/emp_act(severity)
 	switch(severity)

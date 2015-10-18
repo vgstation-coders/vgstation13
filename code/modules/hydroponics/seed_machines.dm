@@ -93,7 +93,7 @@
 		if(S.seed && S.seed.immutable > 0)
 			user << "That seed is not compatible with our genetics technology."
 		else
-			user.drop_item(S, src)
+			user.drop_item(S, src, force_drop = 1)
 			seed = W
 			user << "You load [W] into [src]."
 		return
@@ -114,7 +114,9 @@
 					user << "That disk does not have any gene data loaded."
 					return
 
-			user.drop_item(W, src)
+			if(!user.drop_item(W, src))
+				return
+
 			loaded_disk = W
 			user << "You load [W] into [src]."
 

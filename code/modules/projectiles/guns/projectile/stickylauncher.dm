@@ -66,9 +66,9 @@
 			if(loaded.len >= 6)
 				user << "<span class='warning'>You cannot fit any more stickybombs in there!</span>"
 			else
-				user.drop_item(A, src)
-				user << "<span class='notice'>You load \the [A] into \the [src].</span>"
-				loaded += A
+				if(user.drop_item(A, src))
+					user << "<span class='notice'>You load \the [A] into \the [src].</span>"
+					loaded += A
 	else
 		..()
 

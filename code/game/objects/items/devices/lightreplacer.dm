@@ -85,8 +85,8 @@
 				return
 			G.amount = remaining
 			if(!G.amount)
-				user.drop_item(G)
-				del(G)
+				user.drop_item(G, force_drop = 1)
+				qdel(G)
 			AddUses(increment)
 			user << "You insert a piece of glass into the [src.name]. You have [uses] lights remaining."
 			return
@@ -95,10 +95,9 @@
 		var/obj/item/weapon/light/L = W
 		if(L.status == 0) // LIGHT OKAY
 			if(uses < max_uses)
-				AddUses(1)
-				user << "You insert the [L.name] into the [src.name]. You have [uses] lights remaining."
-				user.drop_item(L)
-				del(L)
+				if(user.drop_item(L))
+					AddUses(1)
+					user << "You insert the [L.name] into the [src.name]. You have [uses] lights remaining."
 				return
 		else
 			user << "You need a working light."

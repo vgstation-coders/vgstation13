@@ -189,8 +189,13 @@
 	if(W.w_class <= 2 && W.is_sharp() < 0.8) //Make sure the item is valid to attempt slipping shit into it
 		if(!iscarbon(user))
 			return 0
-		user << "<span class='notice'>You slip [W] inside [src].</span>"
-		user.drop_item(W, src)
+
+		if(user.drop_item(W, src))
+			user << "<span class='notice'>You slip [W] inside [src].</span>"
+		else
+			user << "<span class='warning'>You can't let go of \the [W]!</span>"
+			return
+
 		add_fingerprint(user)
 		contents += W
 		return 1 //No afterattack here
@@ -2818,15 +2823,17 @@
 				boxestoadd += i
 
 			if( (boxes.len+1) + boxestoadd.len <= 5 )
-				user.drop_item(I, src)
+				if(user.drop_item(I, src))
 
-				box.boxes = list() // Clear the box boxes so we don't have boxes inside boxes. - Xzibit
-				src.boxes.Add( boxestoadd )
+					box.boxes = list() // Clear the box boxes so we don't have boxes inside boxes. - Xzibit
+					src.boxes.Add( boxestoadd )
 
-				box.update_icon()
-				update_icon()
+					box.update_icon()
+					update_icon()
 
-				user << "<span class='notice'>You put the [box] ontop of the [src]!</span>"
+					user << "<span class='notice'>You put the [box] ontop of the [src]!</span>"
+				else
+					user << "<span class='warning'>You can't let go of \the [box]!</span>"
 			else
 				user << "<span class='warning'>The stack is too high!</span>"
 		else
@@ -2837,10 +2844,10 @@
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/)) // Long ass fucking object name
 		if(src.pizza) user << "<span class='warning'>[src] already has a pizza in it.</span>"
 		else if(src.open)
-			user.drop_item(I, src)
-			src.pizza = I
-			src.update_icon()
-			user << "<span class='notice'>You put [I] in [src].</span>"
+			if(user.drop_item(I, src))
+				src.pizza = I
+				src.update_icon()
+				user << "<span class='notice'>You put [I] in [src].</span>"
 		else user << "<span class='warning'>Open [src] first.</span>"
 		return
 
@@ -3805,10 +3812,10 @@
 
 	spawn(0)
 		if(((M_CLUMSY in H.mutations)) || prob(25))
-			user.visible_message("<span class='warning'>[src] escapes from [H]'s hands!</span>","<span class='warning'>[src] escapes from your grasp!</span>")
-			H.drop_item()
+			if(H.drop_item())
+				user.visible_message("<span class='warning'>[src] escapes from [H]'s hands!</span>","<span class='warning'>[src] escapes from your grasp!</span>")
 
-			jump()
+				jump()
 	return 1
 
 /obj/item/weapon/reagent_containers/food/snacks/potentham

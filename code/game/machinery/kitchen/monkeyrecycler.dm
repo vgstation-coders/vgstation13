@@ -50,13 +50,13 @@
 			if(target.wear_mask || target.l_hand || target.r_hand || target.back || target.uniform || target.hat)
 				user << "<span class='warning'>The monkey may not have abiotic items on.</span>"
 			else
-				user.drop_item(G)
-				del(target)
-				user << "<span class='notice'>You stuff the monkey in the machine."
-				playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
-				use_power(500)
-				src.grinded++
-				user << "<span class='notice'>The machine now has [grinded] monkeys worth of material stored.</span>"
+				if(user.drop_item(G, force_drop = 1))
+					del(target)
+					user << "<span class='notice'>You stuff the monkey in the machine."
+					playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
+					use_power(500)
+					src.grinded++
+					user << "<span class='notice'>The machine now has [grinded] monkeys worth of material stored.</span>"
 		else
 			user << "<span class='warning'>The machine only accepts monkeys!</span>"
 	else if(istype(O, /mob/living/carbon/monkey))

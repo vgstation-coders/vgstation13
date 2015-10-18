@@ -143,7 +143,7 @@
 	return 0
 
 //Drops the item in our hand - you can specify an item and a location to drop to
-/mob/proc/drop_item(var/obj/item/to_drop, var/atom/Target)
+/mob/proc/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/drop_item() called tick#: [world.time]")
 
 	if(!candrop) //can't drop items while etheral
@@ -154,6 +154,9 @@
 
 	if(!istype(to_drop)) //still nothing to drop?
 		return 0 //bail
+
+	if(to_drop.glued && !force_drop)
+		return 0
 
 	if(!Target)
 		Target = src.loc
@@ -173,6 +176,7 @@
 
 /mob/proc/drop_hands(var/atom/Target) //drops both items
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/drop_hands() called tick#: [world.time]")
+
 	drop_item(get_active_hand(), Target)
 	drop_item(get_inactive_hand(), Target)
 

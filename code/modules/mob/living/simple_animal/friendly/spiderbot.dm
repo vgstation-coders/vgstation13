@@ -64,10 +64,11 @@
 		if(jobban_isbanned(B.brainmob, "Cyborg"))
 			user << "<span class='warning'>[O] does not seem to fit.</span>"
 			return
+		if(!user.drop_item(O, src))
+			user << "<span class='warning'>You can't let go of \the [O].</span>"
 
 		user << "<span class='notice'>You install [O] in [src]!</span>"
 
-		user.drop_item(O, src)
 		src.mmi = O
 		src.transfer_personality(O)
 		src.update_icon()

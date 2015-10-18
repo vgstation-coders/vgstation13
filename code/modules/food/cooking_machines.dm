@@ -178,11 +178,12 @@ var/global/ingredientLimit = 10
 		if(src.foodChoices) . = src.foodChoices[(input("Select production.") in src.foodChoices)]
 		if (!Adjacent(user) || user.stat || user.get_active_hand() != I)
 			return 0
-		user.drop_item(I, src)
-		src.ingredient = I
-		spawn() src.cook(.)
-		user << "<span class='notice'>You add \the [I.name] to \the [src.name].</span>"
-		return 1
+
+		if(user.drop_item(I, src))
+			src.ingredient = I
+			spawn() src.cook(.)
+			user << "<span class='notice'>You add \the [I.name] to \the [src.name].</span>"
+			return 1
 	else user << "<span class='warning'>You can't put that in \the [src.name]. \n[.]</span>"
 	return 0
 

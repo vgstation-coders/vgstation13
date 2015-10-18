@@ -124,9 +124,9 @@
 		if(battery)
 			user << "<span class='notice'>The pod already has a battery.</span>"
 			return
-		user.drop_item(W, src)
-		battery = W
-		return
+		if(user.drop_item(W, src))
+			battery = W
+			return
 	if(istype(W, /obj/item/device/spacepod_equipment))
 		if(!hatch_open)
 			return ..()
@@ -138,12 +138,12 @@
 				user << "<span class='notice'>The pod already has a weapon system, remove it first.</span>"
 				return
 			else
-				user << "<span class='notice'>You insert \the [W] into the equipment system.</span>"
-				user.drop_item(W, equipment_system)
-				equipment_system.weapon_system = W
-				equipment_system.weapon_system.my_atom = src
-				new/obj/item/device/spacepod_equipment/weaponry/proc/fire_weapon_system(src, equipment_system.weapon_system.verb_name, equipment_system.weapon_system.verb_desc) //Yes, it has to be referenced like that. W.verb_name/desc doesn't compile.
-				return
+				if(user.drop_item(W, equipment_system))
+					user << "<span class='notice'>You insert \the [W] into the equipment system.</span>"
+					equipment_system.weapon_system = W
+					equipment_system.weapon_system.my_atom = src
+					new/obj/item/device/spacepod_equipment/weaponry/proc/fire_weapon_system(src, equipment_system.weapon_system.verb_name, equipment_system.weapon_system.verb_desc) //Yes, it has to be referenced like that. W.verb_name/desc doesn't compile.
+					return
 
 
 /obj/spacepod/attack_hand(mob/user as mob)
