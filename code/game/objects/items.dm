@@ -142,6 +142,8 @@
 	else
 		pronoun = "It is"
 	..(user, " [pronoun] a [size] item.")
+	if((loc == user) && glued)
+		user << "<span class='danger'>It is covered in superglue!</span>"
 
 
 /obj/item/attack_ai(mob/user as mob)
@@ -290,6 +292,10 @@
 			M.show_message("\The [src] is too cumbersome to carry in anything other than your hands.")
 		else
 			M.show_message("You have to unwield \the [wielded.wielding] first.")
+		return 0
+
+	if(glued)
+		M << "<span class='danger'>It's glued to your hands!</span>"
 		return 0
 
 	if(ishuman(M))

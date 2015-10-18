@@ -177,4 +177,5 @@
 	user << "<span class='info'>You gently apply the whole bottle of [src] to \the [target].</span>"
 	update_icon()
 	spent = 1
-	target.glued = 1
+	target.glued = 1 //Can't drop
+	target.canremove = 0 //Can't unequip
