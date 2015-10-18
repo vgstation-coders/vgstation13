@@ -144,6 +144,8 @@
 	hitsound = 'sound/items/quack.ogg'
 	honk_delay = 10
 
+#define GLUE_WEAROFF_TIME 9000 //15 minutes, or 900 seconds
+
 /obj/item/weapon/glue
 	name = "superglue"
 	desc = "A small plastic bottle full of high quality superglue."
@@ -156,7 +158,7 @@
 /obj/item/weapon/glue/examine(mob/user)
 	..()
 	if(Adjacent(user))
-		user.show_message("<span class='info'>The label reads: </span><span class='notice'>Instructions: 1) Gently apply glue to an object 2) Apply object to human flesh.</span>", MESSAGE_SEE)
+		user.show_message("<span class='info'>The label reads: </span><span class='notice'>Instructions: 1) Gently apply glue to an object 2) Apply object to human flesh. Lasts for 15 minutes.</span>", MESSAGE_SEE)
 
 /obj/item/weapon/glue/update_icon()
 	..()
@@ -179,3 +181,29 @@
 	spent = 1
 	target.glued = 1 //Can't drop
 	target.canremove = 0 //Can't unequip
+
+/obj/item/weapon/glue/proc/apply_glue(obj/item/target)
+	target.glued = 1
+	target.canremove = 0
+
+	spawn(GLUE_WEAROFF_TIME)
+		target.glued = initial(target.glued)
+		target.canremove = initial(target.canremove)
+
+/obj/item/weapon/glue/permanent
+	name = "superduperglue"
+	desc = "A small plastic bottle full of the best superglue in the universe."
+
+/obj/item/weapon/glue/permanent/apply_glue(obj/item/target)
+	target.glued = 1
+	target.canremove = 0
+
+	//DOn't remove afterwards
+
+/obj/item/weapon/glue/infinite
+	name = "superglue"
+	desc = "A small bluespace bottle full of high quality superglue."
+
+/obj/item/weapon/glue/infinite/afterattack()
+	spent = 0
+	..()

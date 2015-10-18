@@ -360,6 +360,11 @@
 
 	//actually throw it!
 	if (item)
+		var/obj/item/I = item
+		if(I.glued)
+			user << "<span class='warning'>It's stuck to your hand!</span>"
+			return
+
 		item.forceMove(get_turf(src))
 		src.visible_message("<span class='warning'>[src] has thrown [item].</span>", \
 			drugged_message = "<span class='warning'>[item] escapes from [src]'s grasp and flies away!</span>")
