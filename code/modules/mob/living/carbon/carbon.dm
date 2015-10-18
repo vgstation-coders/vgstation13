@@ -362,7 +362,7 @@
 	if (item)
 		var/obj/item/I = item
 		if(I.glued)
-			user << "<span class='warning'>It's stuck to your hand!</span>"
+			usr << "<span class='warning'>It's stuck to your hand!</span>"
 			return
 
 		item.forceMove(get_turf(src))
