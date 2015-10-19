@@ -361,7 +361,7 @@
 	//actually throw it!
 	if (item)
 		var/obj/item/I = item
-		if(I.glued)
+		if(I.cant_drop)
 			usr << "<span class='warning'>It's stuck to your hand!</span>"
 			return
 

@@ -179,15 +179,15 @@
 	user << "<span class='info'>You gently apply the whole bottle of [src] to \the [target].</span>"
 	update_icon()
 	spent = 1
-	target.glued = 1 //Can't drop
+	target.cant_drop = 1 //Can't drop
 	target.canremove = 0 //Can't unequip
 
 /obj/item/weapon/glue/proc/apply_glue(obj/item/target)
-	target.glued = 1
+	target.cant_drop = 1
 	target.canremove = 0
 
 	spawn(GLUE_WEAROFF_TIME)
-		target.glued = initial(target.glued)
+		target.cant_drop = initial(target.cant_drop)
 		target.canremove = initial(target.canremove)
 
 /obj/item/weapon/glue/permanent
@@ -195,7 +195,7 @@
 	desc = "A small plastic bottle full of the best superglue in the universe."
 
 /obj/item/weapon/glue/permanent/apply_glue(obj/item/target)
-	target.glued = 1
+	target.cant_drop = 1
 	target.canremove = 0
 
 	//DOn't remove afterwards

@@ -1336,7 +1336,3 @@ var/proccalls = 1
 #define MODE_CHANGELING "changeling"
 #define MODE_CULTCHAT "cultchat"
 #define MODE_ANCIENT "ancientchat"
-
-//For the canremove variable on items:
-#define CANT_REMOVE_NORMAL	1 //Can't remove when equipped, can hold and drop just fine!
-#define CANT_REMOVE_GLUE	2 //Can't remove, can't drop! Glued to your hands, basically

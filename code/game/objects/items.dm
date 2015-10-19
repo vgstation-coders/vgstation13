@@ -36,7 +36,7 @@
 	var/slowdown = 0 // How much clothing is slowing you down. Negative values speeds you up
 
 	var/canremove = 1 //Mostly for Ninja code at this point but basically will not allow the item to be removed if set to 0. /N
-	var/glued = 0 //If 1, can't drop it from hands!
+	var/cant_drop = 0 //If 1, can't drop it from hands!
 
 	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	var/list/allowed = null //suit storage stuff.
@@ -142,8 +142,8 @@
 	else
 		pronoun = "It is"
 	..(user, " [pronoun] a [size] item.")
-	if((loc == user) && glued)
-		user << "<span class='danger'>It is covered in superglue!</span>"
+	if((loc == user) && cant_drop)
+		user << "<span class='danger'>It is stuck to your hands!!</span>"
 
 
 /obj/item/attack_ai(mob/user as mob)
@@ -294,8 +294,8 @@
 			M.show_message("You have to unwield \the [wielded.wielding] first.")
 		return 0
 
-	if(glued)
-		M << "<span class='danger'>It's glued to your hands!</span>"
+	if(cant_drop)
+		M << "<span class='danger'>It's stuck to your hands!</span>"
 		return 0
 
 	if(ishuman(M))
