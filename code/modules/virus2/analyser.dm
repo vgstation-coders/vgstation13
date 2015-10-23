@@ -42,11 +42,11 @@
 	if(istype(I,/obj/item/weapon/virusdish))
 		var/mob/living/carbon/c = user
 		if(!dish)
-			dish = I
-			c.drop_item(I, src)
-			for(var/mob/M in viewers(src))
-				if(M == user)	continue
-				M.show_message("<span class='notice'>[user.name] inserts the [dish.name] in the [src.name]</span>", 3)
+			if(c.drop_item(I,src))
+				dish = I
+				for(var/mob/M in viewers(src))
+					if(M == user)	continue
+					M.show_message("<span class='notice'>[user.name] inserts the [dish.name] in the [src.name]</span>", 3)
 		else
 			user << "There is already a dish inserted"
 	return

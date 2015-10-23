@@ -43,8 +43,8 @@
 		if (!isnull(keyslot))
 			user << "<SPAN CLASS='notice'>The radio can't hold another key!</SPAN>"
 		else
-			user.drop_item(W, src)
-			insert_key(W)
+			if(user.drop_item(W, src))
+				insert_key(W)
 
 	return
 

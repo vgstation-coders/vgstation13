@@ -961,17 +961,17 @@ Auto Patrol: []"},
 	switch(build_step)
 		if(0,1)
 			if( istype(W, /obj/item/robot_parts/l_leg) || istype(W, /obj/item/robot_parts/r_leg) )
-				user.drop_item(W)
-				qdel(W)
-				build_step++
-				user << "<span class='notice'>You add the robot leg to [src].</span>"
-				name = "legs/frame assembly"
-				if(build_step == 1)
-					item_state = "ed209_leg"
-					icon_state = "ed209_leg"
-				else
-					item_state = "ed209_legs"
-					icon_state = "ed209_legs"
+				if(user.drop_item(W))
+					qdel(W)
+					build_step++
+					user << "<span class='notice'>You add the robot leg to [src].</span>"
+					name = "legs/frame assembly"
+					if(build_step == 1)
+						item_state = "ed209_leg"
+						icon_state = "ed209_leg"
+					else
+						item_state = "ed209_legs"
+						icon_state = "ed209_legs"
 
 		if(2)
 			if( istype(W, /obj/item/clothing/suit/redtag) )
@@ -979,13 +979,13 @@ Auto Patrol: []"},
 			else if( istype(W, /obj/item/clothing/suit/bluetag) )
 				lasercolor = "b"
 			if( lasercolor || istype(W, /obj/item/clothing/suit/armor/vest) )
-				user.drop_item(W)
-				qdel(W)
-				build_step++
-				user << "<span class='notice'>You add the armor to [src].</span>"
-				name = "vest/legs/frame assembly"
-				item_state = "[lasercolor]ed209_shell"
-				icon_state = "[lasercolor]ed209_shell"
+				if(user.drop_item(W))
+					qdel(W)
+					build_step++
+					user << "<span class='notice'>You add the armor to [src].</span>"
+					name = "vest/legs/frame assembly"
+					item_state = "[lasercolor]ed209_shell"
+					icon_state = "[lasercolor]ed209_shell"
 
 		if(3)
 			if( istype(W, /obj/item/weapon/weldingtool) )
@@ -996,23 +996,23 @@ Auto Patrol: []"},
 					user << "<span class='notice'>You welded the vest to [src].</span>"
 		if(4)
 			if( istype(W, /obj/item/clothing/head/helmet) )
-				user.drop_item(W)
-				qdel(W)
-				build_step++
-				user << "<span class='notice'>You add the helmet to [src].</span>"
-				name = "covered and shielded frame assembly"
-				item_state = "[lasercolor]ed209_hat"
-				icon_state = "[lasercolor]ed209_hat"
+				if(user.drop_item(W))
+					qdel(W)
+					build_step++
+					user << "<span class='notice'>You add the helmet to [src].</span>"
+					name = "covered and shielded frame assembly"
+					item_state = "[lasercolor]ed209_hat"
+					icon_state = "[lasercolor]ed209_hat"
 
 		if(5)
 			if( isprox(W) )
-				user.drop_item(W)
-				qdel(W)
-				build_step++
-				user << "<span class='notice'>You add the prox sensor to [src].</span>"
-				name = "covered, shielded and sensored frame assembly"
-				item_state = "[lasercolor]ed209_prox"
-				icon_state = "[lasercolor]ed209_prox"
+				if(user.drop_item(W))
+					qdel(W)
+					build_step++
+					user << "<span class='notice'>You add the prox sensor to [src].</span>"
+					name = "covered, shielded and sensored frame assembly"
+					item_state = "[lasercolor]ed209_prox"
+					icon_state = "[lasercolor]ed209_prox"
 
 		if(6)
 			if( istype(W, /obj/item/stack/cable_coil) )
@@ -1027,6 +1027,9 @@ Auto Patrol: []"},
 					name = "wired ED-209 assembly"
 
 		if(7)
+			if(!user.drop_item(W))
+				return
+
 			switch(lasercolor)
 				if("b")
 					if( !istype(W, /obj/item/weapon/gun/energy/laser/bluetag) )
@@ -1046,7 +1049,6 @@ Auto Patrol: []"},
 			user << "<span class='notice'>You add [W] to [src].</span>"
 			src.item_state = "[lasercolor]ed209_taser"
 			src.icon_state = "[lasercolor]ed209_taser"
-			user.drop_item(W)
 			qdel(W)
 
 		if(8)
@@ -1062,11 +1064,13 @@ Auto Patrol: []"},
 
 		if(9)
 			if( istype(W, /obj/item/weapon/cell) )
+				if(!user.drop_item(W))
+					return
+
 				build_step++
 				user << "<span class='notice'>You complete the ED-209.</span>"
 				var/turf/T = get_turf(src)
 				new /obj/machinery/bot/ed209(T,created_name,lasercolor)
-				user.drop_item(W)
 				qdel(W)
 				user.drop_from_inventory(src)
 				qdel(src)

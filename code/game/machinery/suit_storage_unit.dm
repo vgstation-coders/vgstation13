@@ -606,8 +606,11 @@
 		if(src.SUIT)
 			user << "<font color='blue'>The unit already contains a suit.</font>"
 			return
+		if(!user.drop_item(S, src))
+			user << "<span class='warning'>You can't let go of \the [S]!</span>"
+			return
+
 		user << "You load the [S.name] into the storage compartment."
-		user.drop_item(S, src)
 		src.SUIT = S
 		src.update_icon()
 		src.updateUsrDialog()
@@ -619,8 +622,11 @@
 		if(src.HELMET)
 			user << "<font color='blue'>The unit already contains a helmet.</font>"
 			return
+		if(!user.drop_item(H,src))
+			user << "<span class='warning'>You can't let go of \the [H]!</span>"
+			return
+
 		user << "You load the [H.name] into the storage compartment."
-		user.drop_item(H, src)
 		src.HELMET = H
 		src.update_icon()
 		src.updateUsrDialog()
@@ -632,8 +638,11 @@
 		if(src.MASK)
 			user << "<font color='blue'>The unit already contains a mask.</font>"
 			return
+		if(!user.drop_item(M,src))
+			user << "<span class='warning'>You can't let go of \the [M]!</span>"
+			return
+
 		user << "You load the [M.name] into the storage compartment."
-		user.drop_item(M, src)
 		src.MASK = M
 		src.update_icon()
 		src.updateUsrDialog()
@@ -645,8 +654,11 @@
 		if(src.BOOTS)
 			user << "<font color='blue'>The unit already contains shoes.</font>"
 			return
+		if(!user.drop_item(M,src))
+			user << "<span class='warning'>You can't let go of \the [M]!</span>"
+			return
+
 		user << "You load \the [M.name] into the storage compartment."
-		user.drop_item(M, src)
 		src.BOOTS = M
 		src.update_icon()
 		src.updateUsrDialog()

@@ -12,14 +12,14 @@
 
 /obj/machinery/gashapon/attackby(var/obj/O as obj, var/mob/user as mob)
 	if (istype(O, /obj/item/weapon/coin/))
-		user.drop_item(O, src)
-		user.visible_message("[user] puts a coin into [src] and turns the knob.", "You put a coin into [src] and turn the knob.")
-		src.visible_message("[src] clicks softly.")
-		sleep(rand(10,15))
-		src.visible_message("[src] dispenses a capsule!")
-		var/obj/item/weapon/capsule/b = new(src.loc)
-		b.icon_state = "capsule[rand(1,12)]"
-		del(O)
+		if(user.drop_item(O, src))
+			user.visible_message("[user] puts a coin into [src] and turns the knob.", "You put a coin into [src] and turn the knob.")
+			src.visible_message("[src] clicks softly.")
+			sleep(rand(10,15))
+			src.visible_message("[src] dispenses a capsule!")
+			var/obj/item/weapon/capsule/b = new(src.loc)
+			b.icon_state = "capsule[rand(1,12)]"
+			qdel(O)
 	else
 		return ..()
 

@@ -234,8 +234,8 @@
 	else if(istype(W,/obj/item/toy/crayon) ||istype(W,/obj/item/weapon/stamp))
 		if( wash_state in list(	1, 3, 6 ) )
 			if(!crayon)
-				user.drop_item(W, src)
-				crayon = W
+				if(user.drop_item(W, src))
+					crayon = W
 	else if(istype(W,/obj/item/weapon/grab))
 		if( (wash_state == 1) && hacked)
 			var/obj/item/weapon/grab/G = W
@@ -293,8 +293,8 @@
 
 		if(contents.len < 5)
 			if ( wash_state in list(1, 3) )
-				user.drop_item(W, src)
-				wash_state = 3
+				if(user.drop_item(W, src))
+					wash_state = 3
 			else
 				user << "<span class='notice'>You can't put the item in right now.</span>"
 		else

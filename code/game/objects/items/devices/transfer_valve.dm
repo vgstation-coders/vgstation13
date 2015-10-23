@@ -35,13 +35,13 @@
 			return
 
 		if(!tank_one)
-			tank_one = item
-			user.drop_item(item, src)
-			user << "<span class='notice'>You attach the tank to the transfer valve.</span>"
+			if(user.drop_item(item, src))
+				user << "<span class='notice'>You attach the tank to the transfer valve.</span>"
+				tank_one = item
 		else if(!tank_two)
-			tank_two = item
-			user.drop_item(item, src)
-			user << "<span class='notice'>You attach the tank to the transfer valve.</span>"
+			if(user.drop_item(item, src))
+				user << "<span class='notice'>You attach the tank to the transfer valve.</span>"
+				tank_two = item
 
 		update_icon()
 	//TODO: Have this take an assemblyholder

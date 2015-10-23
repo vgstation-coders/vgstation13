@@ -398,25 +398,25 @@
 			update_icon()
 	else if	(istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
 		if(cell)
-			user << "You swap the power cell within with the new cell in your hand."
-			var/obj/item/weapon/oldpowercell = cell
-			user.drop_item(W, src)
-			cell = W
-			chargecount = 0
-			update_icon()
-			user.put_in_hands(oldpowercell)
-			return
+			if(user.drop_item(W, src))
+				user << "You swap the power cell within with the new cell in your hand."
+				var/obj/item/weapon/oldpowercell = cell
+				cell = W
+				chargecount = 0
+				update_icon()
+				user.put_in_hands(oldpowercell)
+				return
 		else
 			if (stat & MAINT)
 				user << "<span class='warning'>There is no connector for your power cell.</span>"
 				return
-			user.drop_item(W, src)
-			cell = W
-			user.visible_message(\
-				"<span class='warning'>[user.name] has inserted the power cell to [src.name]!</span>",\
-				"You insert the power cell.")
-			chargecount = 0
-			update_icon()
+			if(user.drop_item(W, src))
+				cell = W
+				user.visible_message(\
+					"<span class='warning'>[user.name] has inserted the power cell to [src.name]!</span>",\
+					"You insert the power cell.")
+				chargecount = 0
+				update_icon()
 	else if	(istype(W, /obj/item/weapon/screwdriver))	// haxing
 		if(opened)
 			if (cell)

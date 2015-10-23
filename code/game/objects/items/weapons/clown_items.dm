@@ -143,3 +143,61 @@
 	attack_verb = list("quacked")
 	hitsound = 'sound/items/quack.ogg'
 	honk_delay = 10
+
+#define GLUE_WEAROFF_TIME -1 //originally 9000 -> 15 minutes, or 900 seconds
+
+/obj/item/weapon/glue
+	name = "superglue"
+	desc = "A small plastic bottle full of high quality superglue."
+
+	icon = 'icons/obj/items.dmi'
+	icon_state = "glue0"
+
+	var/spent = 0
+
+/obj/item/weapon/glue/examine(mob/user)
+	..()
+	if(Adjacent(user))
+		user.show_message("<span class='info'>The label reads: </span><span class='notice'>Instructions: 1) Gently apply glue to an object 2) Apply object to human flesh.</span>", MESSAGE_SEE)
+
+/obj/item/weapon/glue/update_icon()
+	..()
+	icon_state = "glue[spent]"
+
+/obj/item/weapon/glue/afterattack(obj/item/target, mob/user, flag)
+	if(!flag)
+		return
+
+	if(spent)
+		user << "<span class='warning'>There's no glue left in the bottle!</span>"
+		return
+
+	if(!istype(target)) //Can only apply to items!
+		user << "<span class='warning'>That would be such a waste of glue.</span>"
+		return
+
+	user << "<span class='info'>You gently use the whole bottle of [src] on \the [target].</span>"
+	spent = 1
+	update_icon()
+	target.cant_drop = 1 //Can't drop
+	target.canremove = 0 //Can't unequip
+
+/obj/item/weapon/glue/proc/apply_glue(obj/item/target)
+	target.cant_drop = 1
+	target.canremove = 0
+
+	if(GLUE_WEAROFF_TIME > 0)
+		spawn(GLUE_WEAROFF_TIME)
+			if(!target) return
+			target.cant_drop = initial(target.cant_drop)
+			target.canremove = initial(target.canremove)
+
+/obj/item/weapon/glue/infinite
+	name = "superglue"
+	desc = "A small bluespace bottle full of high quality superglue."
+
+/obj/item/weapon/glue/infinite/afterattack()
+	spent = 0
+	..()
+
+#undef GLUE_WEAROFF_TIME

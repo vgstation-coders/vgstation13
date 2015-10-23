@@ -121,8 +121,11 @@
 /obj/item/weapon/gun/lawgiver/proc/LoadMag(var/obj/item/ammo_storage/magazine/AM, var/mob/user)
 	if(istype(AM, /obj/item/ammo_storage/magazine/lawgiver) && !magazine)
 		if(user)
-			user.drop_item(AM, src)
-			user << "<span class='notice'>You load the magazine into \the [src].</span>"
+			if(user.drop_item(AM, src))
+				user << "<span class='notice'>You load the magazine into \the [src].</span>"
+			else
+				user << "<span class='warning'>You can't let go of \the [AM]!</span>"
+				return 0
 		magazine = AM
 		AM.update_icon()
 		update_icon()
@@ -240,7 +243,7 @@
 			if ((M_CLUMSY in M.mutations) && prob(50))
 				M << "<span class='danger'>[src] blows up in your face.</span>"
 				M.take_organ_damage(0,20)
-				M.drop_item(src)
+				M.drop_item(src, force_drop = 1)
 				qdel(src)
 				return
 

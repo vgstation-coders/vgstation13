@@ -43,16 +43,16 @@
 /obj/structure/bed/chair/vehicle/janicart/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/mecha_parts/janicart_upgrade) && !upgraded && !destroyed)
-		user.drop_item(W)
-		qdel(W)
-		user << "<span class='notice'>You upgrade the Pussy Wagon.</span>"
-		upgraded = 1
-		name = "upgraded janicart"
-		icon_state = "pussywagon_upgraded"
+		if(user.drop_item(W))
+			qdel(W)
+			user << "<span class='notice'>You upgrade the Pussy Wagon.</span>"
+			upgraded = 1
+			name = "upgraded janicart"
+			icon_state = "pussywagon_upgraded"
 	else if(istype(W, /obj/item/weapon/storage/bag/trash))
-		user << "<span class='notice'>You hook the trashbag onto the pimpin' ride.</span>"
-		user.drop_item(W, src)
-		mybag = W
+		if(user.drop_item(W, src))
+			user << "<span class='notice'>You hook the trashbag onto the pimpin' ride.</span>"
+			mybag = W
 
 /obj/structure/bed/chair/vehicle/janicart/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(istype(M))

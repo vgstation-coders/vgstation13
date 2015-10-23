@@ -163,8 +163,10 @@
 		if(pictures_left)
 			user << "<span class='notice'>[src] still has some film in it!</span>"
 			return
+		if(!user.drop_item(I))
+			user << "<span class='warning'>You can't let go of \the [I]!</span>"
+			return
 		user << "<span class='notice'>You insert [I] into [src].</span>"
-		user.drop_item(I)
 		qdel(I)
 		pictures_left = pictures_max
 		icon_state = icon_on

@@ -89,9 +89,9 @@ Remotes have procs for when attack_self() is called to handle which button is pr
 
 		if(istype(used_item, /obj/item/device/remote_button))
 			if(add_button(used_item, return_clicked_id_by_params(params) )) //attempt to plug the button on
-				user.drop_item(used_item, holder)
-				user << "You click \the [used_item] into \the [holder]."
-				return 1
+				if(user.drop_item(used_item, holder))
+					user << "You click \the [used_item] into \the [holder]."
+					return 1
 
 	var/button_id = return_clicked_id_by_params(params)
 	return press_button(button_id, user)

@@ -365,18 +365,18 @@ var/global/num_vending_terminals = 1
 		return
 	else if(istype(W, /obj/item/weapon/coin) && premium.len > 0)
 		if (isnull(coin))
-			user.drop_item(W, src)
-			coin = W
-			user << "<span class='notice'>You insert a coin into [src].</span>"
+			if(user.drop_item(W, src))
+				coin = W
+				user << "<span class='notice'>You insert a coin into [src].</span>"
 		else
 			user << "<SPAN CLASS='notice'>There's already a coin in [src].</SPAN>"
 
 		return
 	else if(istype(W, /obj/item/voucher))
 		if(can_accept_voucher(W, user))
-			user.drop_item(W, src)
-			user << "<span class='notice'>You insert [W] into [src].</span>"
-			return voucher_act(W, user)
+			if(user.drop_item(W, src))
+				user << "<span class='notice'>You insert [W] into [src].</span>"
+				return voucher_act(W, user)
 		else
 			user << "<span class='notice'>\The [src] refuses to take [W].</span>"
 			return 1
@@ -395,8 +395,8 @@ var/global/num_vending_terminals = 1
 				user << "<span class='notice'>Some items are refused.</span>"
 	else
 		if(is_type_in_list(W, allowed_inputs))
-			user.drop_item(W, src)
-			add_item(W)
+			if(user.drop_item(W, src))
+				add_item(W)
 	/*else if(istype(W, /obj/item/weapon/card) && currently_vending)
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(!linked_db)
@@ -1321,12 +1321,12 @@ var/global/num_vending_terminals = 1
 					return
 				usr << "You begin to insert \the [C] into \the [src]."
 				if(do_after(user, src, 10))
-					usr << "<span class='notice'>You secure \the [C]!</span>"
-					user.drop_item(C, src)
-					_circuitboard=C
-					playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
-					build++
-					update_icon()
+					if(user.drop_item(C,src))
+						usr << "<span class='notice'>You secure \the [C]!</span>"
+						_circuitboard=C
+						playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+						build++
+						update_icon()
 				return 1
 		if(1) // Circuitboard installed
 			if(istype(W, /obj/item/weapon/crowbar))
