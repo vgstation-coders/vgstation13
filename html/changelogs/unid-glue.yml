@@ -32,4 +32,5 @@ delete-after: True
 # SCREW THIS UP AND IT WON'T WORK.
 # Also, this gets changed to [] after reading.  Just remove the brackets when you add new shit.
 changes: 
-  - experiment: Added a cant_drop variable to items. When set to 1, the item can't be dropped or removed once picked up.
+  - rscadd: Added superglue. It can be applied to any item to make it unable to be dropped
+  - rscadd: Clown traitors may purchase a bottle of superglue (one time use) for 3 telecrystals.

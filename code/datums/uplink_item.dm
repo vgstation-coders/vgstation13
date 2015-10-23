@@ -136,6 +136,14 @@ var/list/uplink_items = list()
 	cost = 4
 	job = list("Clown")
 
+//Clown and mime
+/datum/uplink_item/jobspecific/superglue
+	name = "Bottle of Superglue"
+	desc = "This extremely potent and illegal superglue can permanently bind any item to human flesh. Apply it to something, and whoever touches it with their hands (bare or not) will be stuck to it, forever. The bottle holds just enough glue for 1 use."
+	item = /obj/item/weapon/glue
+	cost = 4
+	job = list("Clown", "Mime")
+
 //Detective
 /datum/uplink_item/jobspecific/evidenceforger
 	name = "Evidence Forger"
