@@ -396,9 +396,12 @@ var/global/list/item_mimic_disguises = list(
 
 	var/icon/mouth_overlay = icon('icons/mob/mob.dmi', icon_state = "mimic_mouth")
 
-/mob/living/simple_animal/hostile/mimic/crate/item/New()
-	environment_disguise()
+/mob/living/simple_animal/hostile/mimic/crate/item/New(loc, var/disguise)
 	..()
+
+	if(disguise)
+		copied_object = disguise
+		apply_disguise()
 
 /mob/living/simple_animal/hostile/mimic/crate/item/initialize()
 	return //Don't take any items!
@@ -455,17 +458,10 @@ var/global/list/item_mimic_disguises = list(
 
 	//Disguise as something else for bonus stealth points
 	environment_disguise()
-	if(copied_object)
-		appearance = initial(copied_object.appearance)
+	apply_disguise()
 
-		if(ispath(copied_object, /obj/item))
-			var/obj/item/I = copied_object
-			size = initial(I.w_class)
-		else
-			size = SIZE_NORMAL
-
-/mob/living/simple_animal/hostile/mimic/crate/item/environment_disguise(list/L = item_mimic_disguises)
-	..(item_mimic_disguises)
+/mob/living/simple_animal/hostile/mimic/crate/item/apply_disguise()
+	..()
 
 	if(ispath(copied_object, /obj/item))
 		var/obj/item/I = copied_object
