@@ -130,6 +130,100 @@
 	if(!usr.stat)
 		attack_self(usr)
 
+//Oil lamps
+
+/obj/item/device/flashlight/lamp/oil
+	name = "oil lamp"
+	desc = "A simple lamp which produces light using an oil-based fuel source."
+	icon_state = "oillamp"
+	item_state = "oillamp"
+
+/obj/item/device/flashlight/lamp/verb/rub()
+	set name = "Rub lamp"
+	set category = "Object"
+
+	usr.visible_message("<span class='info'>[usr] rubs \the [src].</span>", "<span class='info'>You rub \the [src].</span>")
+
+//MAGIC OIL LAMPS
+// - Rubbing them summons a genie (a ghost is required)
+
+/obj/item/device/flashlight/lamp/oil/magic
+	var/mob/living/simple_animal/hostile/retaliate/genie/our_genie
+	var/collecting_ghosts = 0
+	var/list/ghost_volunteers = list()
+
+/obj/item/device/flashlight/lamp/oil/magic/rub()
+	..()
+
+	if(our_genie)
+		return
+
+	if(!collecting_ghosts)
+		usr << "<span class='sinister'>\The [src] glows in your hands and starts shaking.</span>"
+		start_collecting_ghosts(usr)
+
+/obj/item/device/flashlight/lamp/oil/magic/automatic/New()
+	..()
+	spawn(10)
+	start_collecting_ghosts(usr)
+
+/obj/item/device/flashlight/lamp/oil/magic/proc/start_collecting_ghosts(mob/user)
+	search_for_candidates()
+
+	spawn(200)
+		if(!ghost_volunteers.len)
+			user << "<span class='info'>Nothing happens.</span>"
+			return
+		else
+			var/mob/dead/observer/O = pick(ghost_volunteers)
+			if(istype(O) && O.client && O.key)
+				spawn_genie(O, user)
+			else
+				user << "<span class='info'>Nothing happens.</span>"
+		collecting_ghosts = 0
+
+/obj/item/device/flashlight/lamp/oil/magic/proc/search_for_candidates()
+	ghost_volunteers = list()
+	collecting_ghosts = 1
+
+	for(var/mob/dead/observer/O in dead_mob_list)
+		if(O.client)
+			if(O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
+				continue
+
+			O << "<span class=\"recruit\">Somebody has found a magic lamp! (<a href='?src=\ref[src];signup=\ref[O]'>Become a genie</a>)</span>"
+
+/obj/item/device/flashlight/lamp/oil/magic/Topic(href, href_list)
+	if(href_list["signup"])
+		var/mob/dead/observer/O = locate(href_list["signup"])
+		if(!O) return
+
+		ghost_volunteers |= O
+
+		O << "<span class='info'>You have been added to the list of possible genies.</span>"
+
+/obj/item/device/flashlight/lamp/oil/magic/proc/spawn_genie(mob/dead/observer/new_soul, mob/user)
+	our_genie = new(get_turf(src))
+	our_genie.visible_message("<span class='notice'>\A [our_genie] emerges out of \the [src]!</span>")
+
+	our_genie.ckey = new_soul.ckey
+	our_genie << "<b>You are a genie.</b>"
+	our_genie << "<b>After eons of being imprisoned in an old oil lamp, you were finally freed by a mortal being named [user.real_name].</b>"
+	our_genie << "<b>Before you may roam the world freely, you must show gratitude to [user.real_name] by either serving them or by fulfilling their wishes.</b>"
+	our_genie << "<b>You possess the abilities to levitate, assume ethereal form, create clouds of smoke at will and conjure items. As an arcane being, you are not affected by air or temperature, and you can't use any items.</b>"
+	our_genie << "<b>You may only use your \"Conjure Item\" power three times before losing it.</b>"
+	our_genie.mind.assigned_role = "Genie"
+
+	var/default_name = "[pick("Mohammad","Alladin","Al'Hashid","Tyrone","Abdul","Abdullah","Abbas","Gabir","Hameed","Hamid","Hussam","Salam","Halam","Solmyr ibn Wali Barad")] the genie"
+	var/newname = reject_bad_name(copytext(sanitize(input(our_genie,"You may pick a name for yourself.","Genie", default_name) as text),1,MAX_NAME_LEN))
+
+	if (newname != "")
+		our_genie.name = newname
+	else
+		our_genie.name = default_name
+
+	our_genie = 1 //Set our_genie to 1 to prevent any more genies from spawning from this lamp (without this, when the genie died, the variable would reset to null and a new genie would be able to be created)
+
 // FLARES
 
 /obj/item/device/flashlight/flare
