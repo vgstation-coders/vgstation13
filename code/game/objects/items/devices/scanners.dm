@@ -233,8 +233,8 @@ Subject's pulse: ??? BPM"}
 					message += text("<br><span class='danger'>Internal bleeding detected. Advanced scan required for location.</span>")
 					break
 		if(H.vessel)
-			var/blood_volume = round(H.vessel.get_reagent_amount("blood"), 1)
-			var/blood_percent =  round(blood_volume / 560, 1)
+			var/blood_volume = round(H.vessel.get_reagent_amount("blood"))
+			var/blood_percent =  round(blood_volume / 560)
 			blood_percent *= 100
 			if(blood_volume <= BLOOD_VOLUME_SAFE)
 				message += "<br><span class='notice'>Notice: Blood Level Fine: [blood_percent]% [blood_volume]cl</span>" //Still about fine
