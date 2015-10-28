@@ -254,6 +254,8 @@
 			module_sprites["Marina-SD"] = "marinaSD"
 			module_sprites["Sleek"] = "sleekstandard"
 			module_sprites["#11"] = "servbot"
+			module_sprites["Kodiak"] = "kodiak-standard"
+			module_sprites["Spider"] = "spider-standard"
 			speed = 0
 
 		if("Service")
@@ -268,6 +270,7 @@
 			module_sprites["Marina-SV"] = "marinaSV"
 			module_sprites["Sleek"] = "sleekservice"
 			module_sprites["#27"] = "servbot-service"
+			module_sprites["Teddie"] = "kodiak-service"
 			speed = 0
 
 		if("Miner")
@@ -309,6 +312,7 @@
 			module_sprites["Securitron"] = "securitron"
 			module_sprites["Marina-SC"] = "marinaSC"
 			module_sprites["#9"] = "servbot-sec"
+			module_sprites["Grizzly"] = "kodiak-sec"
 			src << "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>"
 			speed = 0
 
@@ -873,7 +877,16 @@
 		if(wiresexposed)
 			user << "Close the panel first."
 		else if(cell)
-			user << "There is a power cell already installed."
+			user << "You swap the power cell within with the new cell in your hand."
+			var/obj/item/weapon/oldpowercell = cell
+			C.wrapped = null
+			C.installed = 0
+			cell = W
+			user.drop_item(W, src)
+			user.put_in_hands(oldpowercell)
+			C.installed = 1
+			C.wrapped = W
+			C.install()
 		else
 			user.drop_item(W, src)
 			cell = W
@@ -1111,7 +1124,11 @@
 			cell.updateicon()
 			cell.add_fingerprint(user)
 			user.put_in_active_hand(cell)
-			user << "You remove \the [cell]."
+			user.visible_message("<span class='warning'>[user] removes [src]'s [cell.name].</span>", \
+			"<span class='notice'>You remove [src]'s [cell.name].</span>")
+			src.attack_log += "\[[time_stamp()]\] <font color='orange'>Has had their [cell.name] removed by [user.name] ([user.ckey])</font>"
+			user.attack_log += "\[[time_stamp()]\] <font color='red'>Removed the [cell.name] of [src.name] ([src.ckey])</font>"
+			log_attack("<font color='red'>[user.name] ([user.ckey]) removed [src]'s [cell.name] ([src.ckey])</font>")
 			cell = null
 			cell_component.wrapped = null
 			cell_component.installed = 0
@@ -1221,6 +1238,7 @@
 	<BODY>
 	<B>Activated Modules</B>
 	<BR>
+	Sight Mode: <A HREF=?src=\ref[src];vision=0>[sensor_mode ? "[vision_types_list[sensor_mode]]" : "No sight module enabled"]</A><BR>
 	Module 1: [module_state_1 ? "<A HREF=?src=\ref[src];mod=\ref[module_state_1]>[module_state_1]<A>" : "No Module"]<BR>
 	Module 2: [module_state_2 ? "<A HREF=?src=\ref[src];mod=\ref[module_state_2]>[module_state_2]<A>" : "No Module"]<BR>
 	Module 3: [module_state_3 ? "<A HREF=?src=\ref[src];mod=\ref[module_state_3]>[module_state_3]<A>" : "No Module"]<BR>
@@ -1308,6 +1326,9 @@
 		checklaws()
 	if (href_list["laws"]) // With how my law selection code works, I changed statelaws from a verb to a proc, and call it through my law selection panel. --NeoFite
 		statelaws()
+	if(href_list["vision"])
+		sensor_mode()
+		installed_modules()
 	return
 
 /mob/living/silicon/robot/verb/sensor_mode()
@@ -1346,6 +1367,17 @@
 				sensor_mode = 0
 				src << "<span class='notice'>Sensor augmentations disabled.</span>"
 		handle_sensor_modes()
+		update_sight_hud()
+
+/mob/living/silicon/robot/proc/unequip_sight()
+	sensor_mode = 0
+	update_sight_hud()
+
+/mob/living/silicon/robot/proc/update_sight_hud()
+	if(sensor_mode == 0)
+		sensor.icon_state = "sight"
+	else
+		sensor.icon_state = "sight+a"
 
 /mob/living/silicon/robot/proc/radio_menu()
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/silicon/robot/proc/radio_menu() called tick#: [world.time]")
