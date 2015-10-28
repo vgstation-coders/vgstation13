@@ -254,6 +254,8 @@
 			module_sprites["Marina-SD"] = "marinaSD"
 			module_sprites["Sleek"] = "sleekstandard"
 			module_sprites["#11"] = "servbot"
+			module_sprites["Kodiak"] = "kodiak-standard"
+			module_sprites["Spider"] = "spider-standard"
 			speed = 0
 
 		if("Service")
@@ -268,6 +270,7 @@
 			module_sprites["Marina-SV"] = "marinaSV"
 			module_sprites["Sleek"] = "sleekservice"
 			module_sprites["#27"] = "servbot-service"
+			module_sprites["Teddie"] = "kodiak-service"
 			speed = 0
 
 		if("Miner")
@@ -309,6 +312,7 @@
 			module_sprites["Securitron"] = "securitron"
 			module_sprites["Marina-SC"] = "marinaSC"
 			module_sprites["#9"] = "servbot-sec"
+			module_sprites["Grizzly"] = "kodiak-sec"
 			src << "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>"
 			speed = 0
 
