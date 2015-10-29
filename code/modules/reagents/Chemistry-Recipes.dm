@@ -99,15 +99,13 @@ datum
 				empulse(location, round(created_volume / 24), round(created_volume / 14), 1)
 				holder.clear_reagents()
 				return
-/*
+
 		silicate
 			name = "Silicate"
 			id = "silicate"
 			result = "silicate"
 			required_reagents = list("aluminum" = 1, "silicon" = 1, "oxygen" = 1)
 			result_amount = 3
-*/
-
 
 		phalanximine
 			name = "Phalanximine"
@@ -646,6 +644,17 @@ datum
 			required_catalysts = list("fluorine" = 5)
 			result_amount = 1
 
+		explosion_bicarodyne
+			name = "Explosion"
+			id = "explosion_bicarodyne"
+			result = null
+			required_reagents = list("bicarodyne" = 1, "paracetamol" = 1)
+			result_amount = 1
+			on_reaction(var/datum/reagents/holder, var/created_volume)
+				explosion(get_turf(holder.my_atom),1,2,4)
+				holder.clear_reagents()
+				return
+
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -1134,15 +1143,16 @@ datum
 					send_admin_alert(holder, reaction_name="gold slime + plasma in a grenade!!")//expect to this this one spammed in the times to come
 
 				var/blocked = list(/mob/living/simple_animal/hostile,
-					/mob/living/simple_animal/hostile/pirate,
-					/mob/living/simple_animal/hostile/pirate/ranged,
-					/mob/living/simple_animal/hostile/russian,
-					/mob/living/simple_animal/hostile/russian/ranged,
-					/mob/living/simple_animal/hostile/syndicate,
-					/mob/living/simple_animal/hostile/syndicate/melee,
-					/mob/living/simple_animal/hostile/syndicate/melee/space,
-					/mob/living/simple_animal/hostile/syndicate/ranged,
-					/mob/living/simple_animal/hostile/syndicate/ranged/space,
+					/mob/living/simple_animal/hostile/humanoid/,
+					/mob/living/simple_animal/hostile/humanoid/pirate,
+					/mob/living/simple_animal/hostile/humanoid/pirate/ranged,
+					/mob/living/simple_animal/hostile/humanoid/russian,
+					/mob/living/simple_animal/hostile/humanoid/russian/ranged,
+					/mob/living/simple_animal/hostile/humanoid/syndicate,
+					/mob/living/simple_animal/hostile/humanoid/syndicate/melee,
+					/mob/living/simple_animal/hostile/humanoid/syndicate/melee/space,
+					/mob/living/simple_animal/hostile/humanoid/syndicate/ranged,
+					/mob/living/simple_animal/hostile/humanoid/syndicate/ranged/space,
 					/mob/living/simple_animal/hostile/alien/queen/large,
 					/mob/living/simple_animal/hostile/faithless,
 					/mob/living/simple_animal/hostile/faithless/cult,
@@ -1163,6 +1173,11 @@ datum
 					/mob/living/simple_animal/hostile/slime,
 					/mob/living/simple_animal/hostile/slime/adult,
 					/mob/living/simple_animal/hostile/mining_drone,
+					/mob/living/simple_animal/hostile/mimic,
+					/mob/living/simple_animal/hostile/mimic/copy,
+					/mob/living/simple_animal/hostile/mimic/crate,
+					/mob/living/simple_animal/hostile/mimic/crate/chest,
+					/mob/living/simple_animal/hostile/mimic/crate/item,
 					)//exclusion list for things you don't want the reaction to create.
 				var/list/critters = typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
 
@@ -1207,15 +1222,16 @@ datum
 					send_admin_alert(holder, reaction_name="gold slime + blood in a grenade")
 
 				var/blocked = list(/mob/living/simple_animal/hostile,
-					/mob/living/simple_animal/hostile/pirate,
-					/mob/living/simple_animal/hostile/pirate/ranged,
-					/mob/living/simple_animal/hostile/russian,
-					/mob/living/simple_animal/hostile/russian/ranged,
-					/mob/living/simple_animal/hostile/syndicate,
-					/mob/living/simple_animal/hostile/syndicate/melee,
-					/mob/living/simple_animal/hostile/syndicate/melee/space,
-					/mob/living/simple_animal/hostile/syndicate/ranged,
-					/mob/living/simple_animal/hostile/syndicate/ranged/space,
+					/mob/living/simple_animal/hostile/humanoid,
+					/mob/living/simple_animal/hostile/humanoid/pirate,
+					/mob/living/simple_animal/hostile/humanoid/pirate/ranged,
+					/mob/living/simple_animal/hostile/humanoid/russian,
+					/mob/living/simple_animal/hostile/humanoid/russian/ranged,
+					/mob/living/simple_animal/hostile/humanoid/syndicate,
+					/mob/living/simple_animal/hostile/humanoid/syndicate/melee,
+					/mob/living/simple_animal/hostile/humanoid/syndicate/melee/space,
+					/mob/living/simple_animal/hostile/humanoid/syndicate/ranged,
+					/mob/living/simple_animal/hostile/humanoid/syndicate/ranged/space,
 					/mob/living/simple_animal/hostile/alien/queen/large,
 					/mob/living/simple_animal/hostile/retaliate,
 					/mob/living/simple_animal/hostile/retaliate/clown,

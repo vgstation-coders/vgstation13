@@ -30,6 +30,13 @@
 		if(BANTYPE_APPEARANCE)
 			bantype_str = "APPEARANCE_PERMABAN"
 			bantype_pass = 1
+		if(BANTYPE_OOC_PERMA)
+			bantype_str = "OOC_PERMABAN"
+			duration = -1
+			bantype_pass = 1
+		if(BANTYPE_OOC_TEMP)
+			bantype_str = "OOC_TEMPBAN"
+			bantype_pass = 1
 	if( !bantype_pass ) return
 	if( !istext(reason) ) return
 	if( !isnum(duration) ) return
@@ -322,6 +329,8 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 		<option value='[BANTYPE_JOB_PERMA]'>JOB PERMABAN</option>
 		<option value='[BANTYPE_JOB_TEMP]'>JOB TEMPBAN</option>
 		<option value='[BANTYPE_APPEARANCE]'>APPEARANCE BAN</option>
+		<option value='[BANTYPE_OOC_PERMA]'>OOC_PERMABAN</option>
+		<option value='[BANTYPE_OOC_TEMP]'>OOC_TEMPBAN</option>
 		</select></td>
 		<td><b>Ckey:</b> <input type='text' name='dbbanaddckey'></td></tr>
 		<tr><td><b>Duration:</b> <input type='text' name='dbbaddduration'></td>
@@ -416,6 +425,10 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 					typedesc = "<b>TEMP JOBBAN</b><br><font size='2'>([job])<br>([duration] minutes<br>Expires [expiration]"
 				if("APPEARANCE_PERMABAN")
 					typedesc = "<b>APPEARANCE/NAME BAN</b>"
+				if("OOC_PERMABAN")
+					typedesc = "<b>PERMA OOCBAN</b>"
+				if("OOC_TEMPBAN")
+					typedesc = "<b>TEMP OOCBAN</b>"
 
 
 			// AUTOFIXED BY fix_string_idiocy.py

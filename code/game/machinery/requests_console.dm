@@ -6,7 +6,7 @@ var/req_console_information = list()
 var/list/obj/machinery/requests_console/allConsoles = list()
 
 /obj/machinery/requests_console
-	name = "Requests Console"
+	name = "requests console"
 	desc = "A console intended to send requests to diferent departments on the station."
 	anchored = 1
 	icon = 'icons/obj/terminals.dmi'
@@ -388,9 +388,9 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 /obj/machinery/say_quote(var/text)
 	var/ending = copytext(text, length(text) - 2)
 	if(ending == "!!!")
-		return "blares, \"[text]\""
+		return "blares, [text]"
 
-	return "beeps, \"[text]\""
+	return "beeps, [text]"
 
 					//deconstruction and hacking
 /obj/machinery/requests_console/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
@@ -447,3 +447,8 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			msgStamped = text("<font color='blue'><b>Stamped with the [T.name]</b></font>")
 			updateUsrDialog()
 	return
+
+/obj/machinery/requests_console/mechanic
+	name = "\improper Mechanics requests console"
+	department = "Mechanics"
+	departmentType = 4

@@ -157,6 +157,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Diamond"
 	id=MAT_DIAMOND
 	value=40
+	cc_per_sheet = 1750
 	oretype=/obj/item/weapon/ore/diamond
 	sheettype=/obj/item/stack/sheet/mineral/diamond
 	cointype=/obj/item/weapon/coin/diamond
@@ -205,6 +206,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Phazon"
 	id=MAT_PHAZON
 	value=200
+	cc_per_sheet = 1500
 	oretype=/obj/item/weapon/ore/phazon
 	sheettype=/obj/item/stack/sheet/mineral/phazon
 	cointype=/obj/item/weapon/coin/phazon
@@ -216,6 +218,15 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=null
 	sheettype=/obj/item/stack/sheet/mineral/plastic
 	cointype=null
+
+/datum/material/cardboard
+	name="Cardboard"
+	id=MAT_CARDBOARD
+	value=1
+	oretype=null
+	sheettype=/obj/item/stack/sheet/cardboard
+	cointype=null
+	cc_per_sheet = CC_PER_SHEET_METAL
 
 /* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium

@@ -1,4 +1,4 @@
-var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump, /obj/machinery/atmospherics/unary/vent_scrubber)
+var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump, /obj/machinery/atmospherics/unary/vent_scrubber, /obj/machinery/atmospherics/unary/vent)
 
 /mob/living/proc/can_ventcrawl()
 	return 0
@@ -29,6 +29,33 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 		return C.check_clothing(src)
 	return 1
 
+/obj/item/clothing/under/contortionist/verb/crawl_through_vent()
+	set name = "Crawl Through Vent"
+	set category = "Object"
+	set src in usr
+
+	var/mob/living/carbon/human/user = usr
+	if(istype(user) && user.w_uniform == src && check_clothing(user))
+		var/pipe = user.start_ventcrawl()
+		if(pipe)
+			user.handle_ventcrawl(pipe)
+
+/mob/proc/start_ventcrawl()
+	var/atom/pipe
+	var/list/pipes = list()
+	for(var/obj/machinery/atmospherics/unary/U in range(1))
+		if(is_type_in_list(U,ventcrawl_machinery) && Adjacent(U))
+			pipes |= U
+	if(!pipes || !pipes.len)
+		src << "There are no pipes that you can ventcrawl into within range!"
+		return
+	if(pipes.len == 1)
+		pipe = pipes[1]
+	else
+		pipe = input("Crawl Through Vent", "Pick a pipe") as null|anything in pipes
+	if(canmove && pipe)
+		return pipe
+
 /mob/living/carbon/slime/can_ventcrawl()
 	return 1
 
@@ -53,11 +80,15 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 /mob/living/carbon/alien/can_ventcrawl()
 	return 1
 
+/mob/living/carbon/alien/ventcrawl_carry()
+	return 1
+
 /mob/living/carbon/alien/humanoid/queen/can_ventcrawl()
 	return 0
 
+
 /mob/living/var/ventcrawl_layer = PIPING_LAYER_DEFAULT
-	
+
 /mob/living/proc/handle_ventcrawl(var/atom/clicked_on)
 	diary << "[src] is ventcrawling."
 	if(!stat)
@@ -142,6 +173,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 /mob/living/proc/add_ventcrawl(obj/machinery/atmospherics/starting_machine)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/proc/add_ventcrawl() called tick#: [world.time]")
 	is_ventcrawling = 1
+	candrop = 0
 	var/datum/pipe_network/network = starting_machine.return_network(starting_machine)
 	if(!network)
 		return
@@ -155,6 +187,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 /mob/living/proc/remove_ventcrawl()
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/proc/remove_ventcrawl() called tick#: [world.time]")
 	is_ventcrawling = 0
+	candrop = 1
 	if(client)
 		for(var/image/current_image in pipes_shown)
 			client.images -= current_image

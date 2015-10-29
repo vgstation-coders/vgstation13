@@ -99,7 +99,7 @@
 	id = "rped"
 	req_tech = list("engineering" = 4, "materials" = 4, "programming" = 2)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_GOLD = 200, MAT_SILVER = 200)
+	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_PLASTIC = 20000)
 	build_path = /obj/item/weapon/storage/bag/gadgets/part_replacer
 	category = "Engineering"
 
@@ -112,3 +112,13 @@
 	materials = list (MAT_IRON = 3000, MAT_GLASS = 1500, MAT_DIAMOND = 1000, MAT_URANIUM = 3000)
 	category = "Engineering"
 	build_path = /obj/item/device/material_synth
+
+/datum/design/adv_silicate_sprayer
+	name = "Advanced Silicate Sprayer"
+	desc = "An advanced tool to repair and reinforce windows."
+	id = "adv_silicate_sprayer"
+	req_tech = list("engineering" = 3, "materials" = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 700, MAT_GLASS = 50, MAT_SILVER = 50)
+	build_path = /obj/item/device/silicate_sprayer/advanced/empty
+	category = "Engineering"

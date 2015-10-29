@@ -143,7 +143,7 @@
 			if("rice")
 				name = "rice sack"
 				desc = "A taste of Asia in the kitchen."
-				icon_state = "enzyme"
+				icon_state = "rice"
 				item_state = null
 			if("soysauce")
 				name = "soy sauce"
@@ -189,6 +189,11 @@
 				name = "honey pot"
 				desc = "Sweet and healthy!"
 				icon_state = "honey"
+				item_state = null
+			if("cinnamon")
+				name = "cinnamon shaker"
+				desc = "A spice, obtained from the bark of cinnamomum trees."
+				icon_state = "cinnamon"
 				item_state = null
 			else
 				name = "misc condiment bottle"

@@ -80,16 +80,34 @@
 				if(synd_mind.current.client)
 					for(var/datum/mind/synd_mind_1 in syndicates)
 						if(synd_mind_1.current)
-							var/I = image('icons/mob/mob.dmi', loc = synd_mind_1.current, icon_state = "synd")
+							var/imageloc = synd_mind_1.current
+							if(istype(synd_mind_1.current.loc,/obj/mecha))
+								imageloc = synd_mind_1.current.loc
+							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd", layer = 13)
 							synd_mind.current.client.images += I
 
 /datum/game_mode/proc/update_synd_icons_added(datum/mind/synd_mind)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/update_synd_icons_added() called tick#: [world.time]")
+	if(!synd_mind)
+		return 0
 	spawn(0)
-		if(synd_mind.current)
-			if(synd_mind.current.client)
-				var/I = image('icons/mob/mob.dmi', loc = synd_mind.current, icon_state = "synd")
-				synd_mind.current.client.images += I
+		for(var/datum/mind/synd in syndicates)
+			if(synd.current)
+				if(synd.current.client)
+					var/imageloc = synd_mind.current
+					if(istype(synd_mind.current.loc,/obj/mecha))
+						imageloc = synd_mind.current.loc
+					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd", layer = 13)
+					synd.current.client.images += I
+			if(synd_mind.current)
+				if(synd_mind.current.client)
+					var/imageloc = synd_mind.current
+					if(istype(synd_mind.current.loc,/obj/mecha))
+						imageloc = synd_mind.current.loc
+					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd", layer = 13)
+					synd_mind.current.client.images += I
+
+		update_all_synd_icons()
 
 /datum/game_mode/proc/update_synd_icons_removed(datum/mind/synd_mind)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/game_mode/proc/update_synd_icons_removed() called tick#: [world.time]")
@@ -98,7 +116,7 @@
 			if(synd.current)
 				if(synd.current.client)
 					for(var/image/I in synd.current.client.images)
-						if(I.icon_state == "synd" && I.loc == synd_mind.current)
+						if(I.icon_state == "synd" && ((I.loc == synd_mind.current) || (I.loc == synd_mind.current.loc)))
 							//del(I)
 							synd.current.client.images -= I
 
@@ -108,6 +126,7 @@
 					if(I.icon_state == "synd")
 						//del(I)
 						synd_mind.current.client.images -= I
+		update_all_synd_icons()
 
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -221,6 +240,18 @@
 	var/radio_freq = SYND_FREQ
 	var/tank_slot = slot_r_hand
 
+	if(synd_mob.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
+		synd_mob << "<span class='notice'>Your intensive physical training to become a Nuclear Operative has paid off and made you fit again!</span>"
+		synd_mob.overeatduration = 0 //Fat-B-Gone
+		if(synd_mob.nutrition > 400) //We are also overeating nutriment-wise
+			synd_mob.nutrition = 400 //Fix that
+		//synd_mob.handle_chemicals_in_body() //Update now, don't wait for the next life.dm call
+		synd_mob.mutations.Remove(M_FAT)
+		synd_mob.update_mutantrace(0)
+		synd_mob.update_mutations(0)
+		synd_mob.update_inv_w_uniform(0)
+		synd_mob.update_inv_wear_suit()
+
 	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/syndicate(synd_mob)
 	R.set_frequency(radio_freq)
 	synd_mob.equip_to_slot_or_del(R, slot_ears)
@@ -259,7 +290,7 @@
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/reagent_containers/pill/creatine(synd_mob), slot_in_backpack) // HOOOOOO HOOHOHOHOHOHO - N3X
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/automatic/c20r(synd_mob), slot_belt)
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box/engineer(synd_mob.back), slot_in_backpack)
-	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/dexplosive(synd_mob)
+	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive(synd_mob)
 	E.imp_in = synd_mob
 	E.implanted = 1
 	synd_mob.update_icons()

@@ -95,6 +95,14 @@
 
 #define islightingoverlay(A) (istype(A, /atom/movable/lighting_overlay))
 
+#define ischair(A) (istype(A, /obj/structure/bed/chair))
+
+#define isvehicle(A) (istype(A, /obj/structure/bed/chair/vehicle))
+
+#define issilicatesprayer(A) (istype(A, /obj/item/device/silicate_sprayer))
+
+#define iswindow(A) (istype(A, /obj/structure/window))
+
 //Macros for antags
 
 #define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind.vampire)
@@ -120,6 +128,10 @@
 #define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || H.mind in ticker.mode.infected_monkeys)
 
 #define isdeathsquad(H) (H.mind in ticker.mode.deathsquads)
+
+//Macro for AREAS!
+
+#define isspace(A) (A.type == /area)
 
 //1 line helper procs compressed into defines.
 #define Clamp(x, y, z) 	(x <= y ? y : (x >= z ? z : x))

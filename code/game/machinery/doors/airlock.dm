@@ -61,7 +61,7 @@
 
 /obj/machinery/door/airlock/Destroy()
 	if(wires)
-		wires.Destroy()
+		qdel(wires)
 		wires = null
 
 	..()
@@ -95,6 +95,7 @@
 	name = "External Airlock"
 	icon = 'icons/obj/doors/Doorext.dmi'
 	assembly_type = /obj/structure/door_assembly/door_assembly_ext
+	normalspeed = 0 //So they close fast, not letting the air to depressurize in a fucking second
 
 /obj/machinery/door/airlock/external/cultify()
 	new /obj/machinery/door/mineral/wood(loc)
@@ -1267,6 +1268,7 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/wirejack(var/mob/living/silicon/pai/P)
 	if(..())
-		attack_ai(P)
+		//attack_ai(P)
+		open(1)
 		return 1
 	return 0

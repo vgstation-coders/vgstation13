@@ -228,6 +228,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "fuel tank crate"
 	group = "Supplies"
 
+/datum/supply_packs/silicatetank
+	name = "Silicate tank crate"
+	contains = list(/obj/structure/reagent_dispensers/silicate)
+	cost = 8
+	containertype = /obj/structure/largecrate
+	containername = "silicate tank crate"
+	group = "Supplies"
+
 /datum/supply_packs/mining
 	name = "Mining Equipment"
 	contains = list(/obj/item/weapon/pickaxe/drill,
@@ -1277,6 +1285,25 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 20
 	containertype = /obj/structure/closet/crate/hydroponics
 	containername = "Beekeeping crate"
+	access = access_hydroponics
+	group = "Hydroponics"
+
+/datum/supply_packs/ranching
+	name = "Ranching Crate"
+	contains = list(
+			/obj/item/weapon/circuitboard/egg_incubator,
+			/obj/item/weapon/stock_parts/capacitor,
+			/obj/item/weapon/stock_parts/capacitor,
+			/obj/item/weapon/stock_parts/matter_bin,
+			/obj/item/weapon/reagent_containers/food/snacks/egg,
+			/obj/item/weapon/reagent_containers/food/snacks/egg,
+			/obj/item/weapon/reagent_containers/food/snacks/egg,
+			/obj/item/weapon/kitchen/utensil/knife/large,
+			/obj/item/clothing/head/cowboy
+		)
+	cost = 15
+	containertype = /obj/structure/closet/crate/hydroponics
+	containername = "Ranching crate"
 	access = access_hydroponics
 	group = "Hydroponics"
 

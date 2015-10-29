@@ -20,7 +20,7 @@
 	var/ini_dir = null //This really shouldn't exist, but it does and I don't want to risk deleting it because it's likely mapping-related
 	var/d_state = WINDOWLOOSEFRAME //Normal windows have one step (unanchor), reinforced windows have three
 	var/shardtype = /obj/item/weapon/shard
-	var/sheettype = /obj/item/stack/sheet/glass //Used for deconstruction
+	var/sheettype = /obj/item/stack/sheet/glass/glass //Used for deconstruction
 	var/sheetamount = 1 //Number of sheets needed to build this window (determines how much shit is spawned via Destroy())
 	var/reinforced = 0 //Used for deconstruction steps
 	penetration_dampening = 1
@@ -89,12 +89,11 @@
 			damage_overlay.icon = icon('icons/obj/structures.dmi')
 			damage_overlay.dir = src.dir
 
+		overlays.Cut()
+
 		if(health < initial(health))
 			var/damage_fraction = Clamp(round((initial(health) - health) / initial(health) * 5) + 1, 1, 5) //gives a number, 1-5, based on damagedness
 			damage_overlay.icon_state = "[cracked_base][damage_fraction]"
-			overlays += damage_overlay
-		else
-			damage_overlay.icon_state = ""
 			overlays += damage_overlay
 
 /obj/structure/window/bullet_act(var/obj/item/projectile/Proj)
@@ -201,7 +200,7 @@
 	user.delayNextAttack(10)
 	health -= damage
 	user.visible_message("<span class='danger'>\The [user] smashes into \the [src]!</span>", \
-	"<span class='warning'>You smash into \the [src]!</span>")
+	"<span class='danger'>You smash into \the [src]!</span>")
 	healthcheck(user)
 
 /obj/structure/window/attack_alien(mob/user as mob)
@@ -289,7 +288,7 @@
 
 				if(istype(W, /obj/item/weapon/crowbar))
 					playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
-					user.visible_message("<span class='warning'>[user] pries \the [src] into its frame.</span>", \
+					user.visible_message("<span class='notice'>[user] pries \the [src] into its frame.</span>", \
 					"<span class='notice'>You pry \the [src] into its frame.</span>")
 					d_state = WINDOWUNSECUREFRAME
 					return
@@ -314,7 +313,7 @@
 
 				if(istype(W, /obj/item/weapon/screwdriver))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
-					user.visible_message("<span class='warning'>[user] fastens \the [src]'s frame to the floor.</span>", \
+					user.visible_message("<span class='notice'>[user] fastens \the [src]'s frame to the floor.</span>", \
 					"<span class='notice'>You fasten \the [src]'s frame to the floor.</span>")
 					d_state = WINDOWLOOSEFRAME
 					anchored = 1
@@ -337,7 +336,7 @@
 							qdel(src)
 							return
 					else
-						user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
+						user << "<span class='warning'>You need more welding fuel to complete this task.</span>"
 						return
 
 	else if(!reinforced) //Normal window steps
@@ -367,7 +366,7 @@
 					Destroy()
 					return
 			else
-				user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
+				user << "<span class='warning'>You need more welding fuel to complete this task.</span>"
 				return
 
 	if(W.damtype == BRUTE || W.damtype == BURN)
@@ -401,7 +400,7 @@
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/structure/window/verb/rotate()  called tick#: [world.time]")
 
 	if(anchored)
-		usr << "<span class='warning'>Is fastened to the floor, therefore you can't rotate it!</span>"
+		usr << "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>"
 		return 0
 
 	update_nearby_tiles() //Compel updates before
@@ -417,7 +416,7 @@
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/structure/window/verb/revrotate()  called tick#: [world.time]")
 
 	if(anchored)
-		usr << "<span class='warning'>Is fastened to the floor, therefore you can't rotate it!</span>"
+		usr << "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>"
 		return 0
 
 	update_nearby_tiles() //Compel updates before

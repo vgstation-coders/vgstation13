@@ -180,7 +180,12 @@
 			else
 				warning = "[short_name] hyperstructure returning to safe operating levels. Instability: [stability]%"
 			//radio.say(warning, "Supermatter [short_name] Monitor")
-			Broadcast_Message(radio, all_languages[LANGUAGE_SOL_COMMON], null, radio, warning, "Supermatter [short_name] Monitor", "Automated Announcement", "Supermatter [short_name] Monitor", 0, 0, list(0,1), 1459)
+			var/datum/speech/speech = radio.create_speech(warning, frequency=1459, transmitter=radio)
+			speech.name = "Supermatter [short_name] Monitor"
+			speech.job = "Automated Announcement"
+			speech.as_name = "Supermatter [short_name] Monitor"
+			Broadcast_Message(speech, level = list(0,1))
+			returnToPool(speech)
 
 			lastwarning = world.timeofday - offset
 
@@ -206,7 +211,7 @@
 
 		if(!radio_connection) return
 
-		var/datum/signal/signal = getFromDPool(/datum/signal)
+		var/datum/signal/signal = getFromPool(/datum/signal)
 		signal.source = src
 		signal.transmission_method = 1
 		signal.data = list(

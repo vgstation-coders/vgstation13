@@ -18,6 +18,7 @@
 	var/list/data = null
 	var/volume = 0
 	var/nutriment_factor = 0
+	var/sport = 1 //High sport helps you show off on a treadmill; multiplicative
 	var/custom_metabolism = REAGENTS_METABOLISM
 	var/overdose = 0
 	var/overdose_dam = 1
@@ -694,7 +695,7 @@
 /datum/reagent/holywater/reaction_obj(var/obj/O, var/volume)
 	src = null //WHAT
 	if(volume >= 1)
-		O.blessed = 1
+		O.bless()
 /datum/reagent/holywater/on_mob_life(var/mob/living/M as mob,var/alien)
 	if(!holder)
 		return
@@ -782,44 +783,16 @@
 	if(!holder) return
 	if(ishuman(M))
 		if(prob(7)) M.emote(pick("twitch","drool","moan","gasp"))
+		M.druggy = max(M.druggy, 50)
 		holder.remove_reagent(src.id, 0.25 * REAGENTS_METABOLISM)
 	return
 
-/*		silicate
-			name = "Silicate"
-			id = "silicate"
-			description = "A compound that can be used to reinforce glass."
-			reagent_state = LIQUID
-			color = "#C7FFFF" // rgb: 199, 255, 255
-
-			reaction_obj(var/obj/O, var/volume)
-				src = null
-				if(istype(O,/obj/structure/window))
-					if(O:silicate <= 200)
-
-						O:silicate += volume
-						O:health += volume * 3
-
-						if(!O:silicateIcon)
-							var/icon/I = icon(O.icon,O.icon_state,O.dir)
-
-							var/r = (volume / 100) + 1
-							var/g = (volume / 70) + 1
-							var/b = (volume / 50) + 1
-							I.SetIntensity(r,g,b)
-							O.icon = I
-							O:silicateIcon = I
-						else
-							var/icon/I = O:silicateIcon
-
-							var/r = (volume / 100) + 1
-							var/g = (volume / 70) + 1
-							var/b = (volume / 50) + 1
-							I.SetIntensity(r,g,b)
-							O.icon = I
-							O:silicateIcon = I
-
-				return*/
+/datum/reagent/silicate
+	name = "Silicate"
+	id = "silicate"
+	description = "A compound that can be used to repair and reinforce glass."
+	reagent_state = LIQUID
+	color = "#C7FFFF" // rgb: 199, 255, 255
 
 /datum/reagent/oxygen
 	name = "Oxygen"
@@ -1003,6 +976,7 @@
 	description = "The organic compound commonly known as table sugar and sometimes called saccharose. This white, odorless, crystalline powder has a pleasing, sweet taste."
 	reagent_state = SOLID
 	color = "#FFFFFF" // rgb: 255, 255, 255
+	sport = 1.2
 
 /datum/reagent/sugar/on_mob_life(var/mob/living/M as mob)
 	M.nutrition += 1*REM
@@ -1307,7 +1281,7 @@
 /datum/reagent/thermite/reaction_turf(var/turf/T, var/volume)
 	src = null
 	if(volume >= 5)
-		if(istype(T, /turf/simulated/wall))
+		if(istype(T, /turf/simulated/wall) && T:can_thermite)
 			T:thermite = 1
 			T.overlays.len = 0
 			T.overlays = image('icons/effects/effects.dmi',icon_state = "thermite")
@@ -2292,6 +2266,14 @@
 	..()
 	return
 
+/datum/reagent/bicarodyne
+	name = "Bicarodyne"
+	id = "bicarodyne"
+	description = "Not to be confused with Bicaridine, Bicarodyne is a volatile chemical that reacts violently in the presence of most human endorphins."
+	reagent_state = LIQUID
+	color = "#C8A5DC" // rgb: 200, 165, 220
+	overdose = REAGENTS_OVERDOSE * 2 //No need for anyone to get suspicious.
+	custom_metabolism = 0.01
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2812,6 +2794,14 @@
 	description = "A powder ground from peppercorns. *AAAACHOOO*"
 	reagent_state = SOLID
 	// no color (ie, black)
+
+/datum/reagent/cinnamon
+	name = "Cinnamon Powder"
+	id = "cinnamon"
+	description = "A spice, obtained from the bark of cinnamomum trees."
+	reagent_state = SOLID
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	color = "#D2691E" // rgb: 210, 105, 30
 
 /datum/reagent/coco
 	name = "Coco Powder"
@@ -4859,14 +4849,13 @@ var/global/list/tonio_doesnt_remove=list(
 	id = "etank"
 	description = "Regardless of how energized this coffee makes you feel, jumping against doors will still never be a viable way to open them."
 
-
 /datum/reagent/drink/cold/quantum
 	name = "Nuka Cola Quantum"
 	id = "quantum"
 	description = "Take the leap... enjoy a Quantum!"
 	color = "#100800" // rgb: 16, 8, 0
 	adj_sleepy = -2
-
+	sport = 5
 
 /datum/reagent/drink/cold/quantum/on_mob_life(var/mob/living/M as mob)
 
@@ -4875,3 +4864,11 @@ var/global/list/tonio_doesnt_remove=list(
 	M.apply_effect(2,IRRADIATE,0)
 	..()
 	return
+
+/datum/reagent/drink/sportdrink
+	name = "Sport Drink"
+	id = "sportdrink"
+	description = "You like sports, and you don't care who knows."
+	sport = 5
+	color = "#CCFF66" //rgb: 204, 255, 51
+	custom_metabolism =  0.01

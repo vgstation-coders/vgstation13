@@ -52,7 +52,7 @@
 
 /obj/machinery/computer/general_air_control/atmos_automation/proc/send_signal(var/list/data, filter = RADIO_ATMOSIA)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/general_air_control/atmos_automation/proc/send_signal() called tick#: [world.time]")
-	var/datum/signal/signal = getFromDPool(/datum/signal)
+	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 	signal.data=data
@@ -199,7 +199,7 @@
 
 	if(href_list["read"])
 		var/code = input("Input exported AAC code.","Automations","") as message|null
-		if(!code || !Adjacent(usr)) return 0
+		if(!code || (!issilicon(usr) && !Adjacent(usr))) return 0
 		try // To prevent invalid JSON causing runtimes.
 			ReadCode(code)
 		catch

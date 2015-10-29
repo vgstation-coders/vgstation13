@@ -42,6 +42,8 @@
 		new /obj/item/weapon/solder(),\
 		new /obj/item/device/analyzer(), \
 		new /obj/item/device/t_scanner(), \
+		new /obj/item/weapon/pickaxe/shovel/spade(), \
+		new /obj/item/device/silicate_sprayer/empty(), \
 		),
 		"Containers"=list(
 		new /obj/item/weapon/reagent_containers/glass/beaker(), \

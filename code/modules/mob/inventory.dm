@@ -142,9 +142,19 @@
 		return 1
 	return 0
 
+// Drops all and only equipped items, including items in hand
+/mob/proc/drop_all()
+	for (var/obj/item/I in get_all_slots())
+		drop_from_inventory(I)
+
+
 //Drops the item in our hand - you can specify an item and a location to drop to
 /mob/proc/drop_item(var/obj/item/to_drop, var/atom/Target)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/drop_item() called tick#: [world.time]")
+
+	if(!candrop) //can't drop items while etheral
+		return 0
+
 	if(!to_drop) //if we're not told to drop something specific
 		to_drop = get_active_hand() //drop what we're currently holding
 

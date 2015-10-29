@@ -163,6 +163,7 @@
 	return counter
 
 /obj/machinery/r_n_d/fabricator/process()
+	..()
 	if(busy || stopped || being_built)
 		return
 	if(queue.len==0)
@@ -222,6 +223,8 @@
 		if(copytext(M,1,2) == "$")
 			var/datum/material/material=materials.getMaterial(M)
 			output += "[output ? " | " : null][get_resource_cost_w_coeff(part,M)] [material.processed_name]"
+		else
+			output += "[output ? " | " : null][get_resource_cost_w_coeff(part,M)] [chemical_reagents_list[M]]"
 	return output
 
 /obj/machinery/r_n_d/fabricator/proc/remove_materials(var/datum/design/part)
@@ -234,25 +237,20 @@
 		if(copytext(M,1,2) == "$" && !(research_flags & IGNORE_MATS))
 			materials.removeAmount(M, get_resource_cost_w_coeff(part, M))
 		else if(!(research_flags & IGNORE_CHEMS))
-			reagents.remove_reagent(M, part.materials[M])
+			reagents.remove_reagent(M, get_resource_cost_w_coeff(part, M))
 	return 1
 
-/obj/machinery/r_n_d/fabricator/proc/check_mat(var/datum/design/being_built, var/M, var/num_requested=1)
+/obj/machinery/r_n_d/fabricator/proc/check_mat(var/datum/design/being_built, var/M)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/r_n_d/fabricator/proc/check_mat() called tick#: [world.time]")
 	if(copytext(M,1,2) == "$")
 		if(src.research_flags & IGNORE_MATS)
-			return num_requested
-		for(var/n=num_requested,n>=1,n--)
-			if ((materials.storage[M]-(get_resource_cost_w_coeff(being_built, M)*n)) >= 0)
-				return n
+			return 1
+		return round(materials.storage[M] / get_resource_cost_w_coeff(being_built, M), 1)
 	else
 		if(src.research_flags & IGNORE_CHEMS)
-			return num_requested
-		for(var/n=num_requested,n>=1,n--)
-			if (reagents.has_reagent(M, get_resource_cost_w_coeff(being_built, M)))
-				return n
+			return 1
+		return round(reagents.get_reagent_amount(M) / get_resource_cost_w_coeff(being_built, M), 1)
 	return 0
-
 
 /obj/machinery/r_n_d/fabricator/proc/build_part(var/datum/design/part)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/r_n_d/fabricator/proc/build_part() called tick#: [world.time]")
@@ -284,7 +282,7 @@
 	src.overlays -= "[base_state]_ani"
 	if(being_built)
 		if(!being_built.materials)
-			being_built.materials = getFromDPool(/datum/materials, being_built)
+			being_built.materials = getFromPool(/datum/materials, being_built)
 		for(var/matID in part.materials)
 			if(copytext(matID, 1, 2) != "$") //it's not a material, let's ignore it
 				continue

@@ -35,6 +35,9 @@
 	var/locked_should_lie = 0	//Whether locked mobs should lie down, used by beds.
 	var/dense_when_locking = 1
 
+	// Can we send relaymove() if gravity is disabled or we are in space? (Should be handled by relaymove, but shitcode abounds)
+	var/internal_gravity = 0
+
 /atom/movable/New()
 	. = ..()
 	areaMaster = get_area_master(src)
@@ -270,7 +273,7 @@
 	..()
 	return
 
-/atom/movable/proc/forceMove(atom/destination)
+/atom/movable/proc/forceMove(atom/destination,var/no_tp=0)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/movable/proc/forceMove() called tick#: [world.time]")
 	if(destination)
 		if(loc)
@@ -283,7 +286,8 @@
 			A.Entered(src)
 
 		for(var/atom/movable/AM in loc)
-			AM.Crossed(src)
+			AM.Crossed(src,no_tp)
+
 
 		for(var/atom/movable/AM in locked_atoms)
 			AM.forceMove(loc)

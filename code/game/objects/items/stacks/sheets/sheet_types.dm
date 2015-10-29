@@ -188,6 +188,7 @@ var/global/list/datum/stack_recipe/wood_recipes = list ( \
 	new/datum/stack_recipe("apiary", /obj/item/apiary, 10, time = 25, one_per_turf = 0, on_floor = 0), \
 	new/datum/stack_recipe("bowl", /obj/item/trash/bowl, 1), \
 	new/datum/stack_recipe("notice board", /obj/structure/noticeboard, 2, time = 15, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("blank canvas", /obj/item/mounted/frame/painting/blank, 2, time = 15), \
 	)
 
 /obj/item/stack/sheet/wood
@@ -198,6 +199,7 @@ var/global/list/datum/stack_recipe/wood_recipes = list ( \
 	origin_tech = "materials=1;biotech=1"
 	autoignition_temperature=AUTOIGNITION_WOOD
 	sheettype = "wood"
+	w_type = RECYK_WOOD
 
 /obj/item/stack/sheet/wood/cultify()
 	return
@@ -244,10 +246,16 @@ var/global/list/datum/stack_recipe/cardboard_recipes = list ( \
 	icon_state = "sheet-card"
 	flags = FPRINT
 	origin_tech = "materials=1"
+	starting_materials = list(MAT_CARDBOARD = 3750)
+	w_type=RECYK_MISC
 
 /obj/item/stack/sheet/cardboard/New(var/loc, var/amount=null)
 		recipes = cardboard_recipes
 		return ..()
+
+/obj/item/stack/sheet/cardboard/recycle(var/datum/materials/rec)
+	rec.addAmount(MAT_CARDBOARD, amount)
+	return 1
 
 /*
  * /vg/ charcoal

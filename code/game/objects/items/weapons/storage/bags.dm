@@ -116,7 +116,7 @@
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	max_w_class = 3
 	w_class = 1
-	can_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg")
+	can_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb")
 
 // -----------------------------
 //          Food bag
@@ -137,6 +137,20 @@
 	if(contents.len < 1)
 		icon_state = "foodbag0"
 	else icon_state = "foodbag1"
+
+/obj/item/weapon/storage/bag/food/menu1/New()
+	..()
+	new/obj/item/weapon/reagent_containers/food/snacks/monkeyburger(src)//6 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/fries(src)//4 nutriments
+	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola(src)//-3 drowsy
+	update_icon()
+
+/obj/item/weapon/storage/bag/food/menu2/New()
+	..()
+	new/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger(src)//14 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/cheesyfries(src)//6 nutriments
+	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind(src)//-7 drowsy, -1 sleepy
+	update_icon()
 
 // -----------------------------
 //          Borg Food bag

@@ -74,7 +74,6 @@
 /datum/mind/New(var/key)
 	src.key = key
 
-
 /datum/mind/proc/transfer_to(mob/living/new_character)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/mind/proc/transfer_to() called tick#: [world.time]")
 	if(!istype(new_character))
@@ -152,7 +151,6 @@
 	var/text = ""
 
 	if (istype(current, /mob/living/carbon/human) || istype(current, /mob/living/carbon/monkey) || istype(current, /mob/living/simple_animal/construct))
-		/mob/living/simple_animal/borer
 		/** HAS BORER **/
 		text = "Has Borer"
 		text = "<i><b>[text]</b></i>: "
@@ -979,10 +977,7 @@
 					R.emagged = 0
 					if (R.activated(R.module.emag))
 						R.module_active = null
-					if(R.sight_state == R.module.emag)
-						R.sight_state = null
-						R.contents -= R.module.emag
-					else if(R.tool_state == R.module.emag)
+					if(R.tool_state == R.module.emag)
 						R.tool_state = null
 						R.contents -= R.module.emag
 					log_admin("[key_name_admin(usr)] has unemag'ed [R].")
@@ -1012,10 +1007,7 @@
 							var/mob/living/silicon/robot/mommi/M=R
 							if (M.activated(M.module.emag))
 								M.module_active = null
-							if(M.sight_state == M.module.emag)
-								M.sight_state = null
-								M.contents -= M.module.emag
-							else if(M.tool_state == M.module.emag)
+							if(M.tool_state == M.module.emag)
 								M.tool_state = null
 								M.contents -= M.module.emag
 						if (R.module)
@@ -1455,3 +1447,11 @@ proc/clear_memory(var/silent = 1)
 	..()
 	mind.assigned_role = "Armalis"
 	mind.special_role = "Vox Raider"
+
+
+/proc/mind_can_reenter(var/datum/mind/mind)
+	if(mind)
+		for(var/mob/dead/observer/G in player_list)
+			if(G.can_reenter_corpse && G.mind == mind)
+				return TRUE
+	return FALSE

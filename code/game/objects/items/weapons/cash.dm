@@ -34,6 +34,53 @@ var/global/list/moneytypes = list(
 	amount = new_amount
 	update_icon()
 
+/obj/item/weapon/spacecash/attack_hand(mob/user as mob)
+	if (user.get_inactive_hand() == src)
+		var/obj/item/weapon/spacecash/C = new src.type(user, new_amount=1)
+		C.copy_evidences(src)
+		user.put_in_hands(C)
+		src.add_fingerprint(user)
+		C.add_fingerprint(user)
+		amount--
+		if(amount<=0)
+			qdel(src)
+		else
+			update_icon()
+	else
+		return ..()
+
+/obj/item/weapon/spacecash/proc/copy_evidences(obj/item/stack/from as obj)
+	src.blood_DNA = from.blood_DNA
+	src.fingerprints  = from.fingerprints
+	src.fingerprintshidden  = from.fingerprintshidden
+	src.fingerprintslast  = from.fingerprintslast
+
+/obj/item/weapon/spacecash/proc/can_stack_with(obj/item/other_stack)
+	return src.type == other_stack.type
+
+/obj/item/weapon/spacecash/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if (!proximity_flag)
+		return 0
+
+	if (can_stack_with(target))
+		var/obj/item/weapon/spacecash/S = target
+		if (amount >= 10)
+			user << "\The [src] cannot hold anymore chips."
+			return 1
+		var/to_transfer = 1
+		if (user.get_inactive_hand()!=S)
+			to_transfer = min(S.amount, 10-amount)
+		amount+=to_transfer
+		user << "You add [to_transfer] chip\s to the stack. It now contains [amount] chips, worth [amount*worth] credits."
+		S.amount-=to_transfer
+		if(S.amount<=0)
+			qdel(S)
+		else
+			S.update_icon()
+		update_icon()
+		return 1
+	return ..()
+
 /obj/item/weapon/spacecash/examine(mob/user)
 	if(amount > 1)
 		setGender(PLURAL)
@@ -48,7 +95,7 @@ var/global/list/moneytypes = list(
 	icon_state = "cash[worth]"
 	//Up to 100 items per stack.
 	overlays = 0
-	var/stacksize=round(amount/25)
+	var/stacksize=round(amount/2.5)
 	pixel_x = rand(-7, 7)
 	pixel_y = rand(-14, 14)
 	if(stacksize)
@@ -64,7 +111,7 @@ var/global/list/moneytypes = list(
 /obj/item/weapon/spacecash/proc/collect_from(var/obj/item/weapon/spacecash/cash)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/spacecash/proc/collect_from() called tick#: [world.time]")
 	if(cash.worth == src.worth)
-		var/taking = min(100-src.amount,cash.amount)
+		var/taking = min(10-src.amount,cash.amount)
 		cash.amount -= taking
 		src.amount += taking
 		if(cash.amount <= 0)
@@ -73,21 +120,12 @@ var/global/list/moneytypes = list(
 	return 0
 
 /obj/item/weapon/spacecash/afterattack(atom/A as mob|obj, mob/user as mob)
-	if(istype(A, /turf) || istype(A, /obj/structure/table) || istype(A, /obj/structure/rack))
-		var/turf/T = get_turf(A)
-		var/collected = 0
-		for(var/obj/item/weapon/spacecash/cash in T)
-			if(cash.worth == src.worth)
-				collected += collect_from(cash)
-		if(collected)
-			update_icon()
-			user << "<span class='notice'>You add [collected] credit [amount > 1 ? "chips":"chip"] to your stack of cash.</span>"
-	else if(istype(A,/obj/item/weapon/spacecash))
+	if(istype(A, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/cash = A
 		var/collected = src.collect_from(cash)
 		if(collected)
 			update_icon()
-			user << "<span class='notice'>You add [collected] credit [amount > 1 ? "chips":"chip"] to your stack of cash.</span>"
+			user << "<span class='notice'>You add [collected] [src.name][amount > 1 ? "s":""] to your stack of cash.</span>"
 
 /obj/item/weapon/spacecash/c10
 	icon_state = "cash10"
@@ -117,7 +155,7 @@ var/global/list/moneytypes = list(
 		var/dispense_count = Floor(amount/slice)
 		amount = amount % slice
 		while(dispense_count>0)
-			var/dispense_this_time = min(dispense_count,100)
+			var/dispense_this_time = min(dispense_count,10)
 			if(dispense_this_time > 0)
 				new cashtype(loc,dispense_this_time)
 				dispense_count -= dispense_this_time

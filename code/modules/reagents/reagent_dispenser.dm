@@ -28,6 +28,10 @@
 	else
 		user << "<span class='info'>Nothing.</span>"
 
+/obj/structure/reagent_dispensers/cultify()
+	new /obj/structure/reagent_dispensers/bloodkeg(get_turf(src))
+	..()
+
 /obj/structure/reagent_dispensers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
 	set category = "Object"
@@ -257,9 +261,23 @@
 	. = ..()
 	reagents.add_reagent("beer", 1000)
 
+/obj/structure/reagent_dispensers/bloodkeg
+	name = "old keg"
+	desc = "A very old-looking keg. Some red liquid periodically drips from it."
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "bloodkeg"
+	amount_per_transfer_from_this = 10
+
+/obj/structure/reagent_dispensers/bloodkeg/New()
+	. = ..()
+	reagents.add_reagent("blood", 1000)
+
+/obj/structure/reagent_dispensers/bloodkeg/cultify()
+	return
+
 /obj/structure/reagent_dispensers/beerkeg/blob_act()
 	explosion(src.loc,0,3,5,7,10)
-	del(src)
+	qdel(src)
 
 /obj/structure/reagent_dispensers/virusfood
 	name = "Virus Food Dispenser"
@@ -283,3 +301,31 @@
 /obj/structure/reagent_dispensers/corn_oil_tank/New()
 	. = ..()
 	reagents.add_reagent("cornoil", 1000)
+
+/obj/structure/reagent_dispensers/silicate
+	name = "\improper Silicate Tank"
+	desc = "A tank filled with silicate."
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "silicate tank"
+	amount_per_transfer_from_this = 50
+
+/obj/structure/reagent_dispensers/silicate/New()
+	. = ..()
+	reagents.add_reagent("silicate", 1000)
+
+/obj/structure/reagent_dispensers/silicate/attackby(var/obj/item/W, var/mob/user)
+	. = ..()
+	if(.)
+		return
+
+	if(issilicatesprayer(W))
+		var/obj/item/device/silicate_sprayer/S = W
+		if(S.get_amount() >= S.max_silicate) // Already filled.
+			user << "<span class='notice'>\The [S] is already full!</span>"
+			return
+
+		reagents.trans_to(S, S.max_silicate)
+		S.update_icon()
+		user << "<span class='notice'>Sprayer refilled.</span>"
+		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+		return 1
