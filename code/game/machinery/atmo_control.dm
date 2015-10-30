@@ -23,6 +23,46 @@
 
 	var/datum/radio_frequency/radio_connection
 
+/obj/machinery/air_sensor/atmospherics
+	frequency	= FREQ_ATMOSPHERICS
+
+/obj/machinery/air_sensor/atmospherics/oxygen
+	id_tag = ID_ATMOS_OXYGEN_SENSOR
+	output = MEASURE_PRESSURE | MEASURE_TEMPERATURE | MEASURE_OXYGEN
+
+/obj/machinery/air_sensor/atmospherics/nitrogen
+	id_tag = ID_ATMOS_NITROGEN_SENSOR
+	output = MEASURE_PRESSURE | MEASURE_TEMPERATURE | MEASURE_NITROGEN
+
+/obj/machinery/air_sensor/atmospherics/air
+	id_tag = ID_ATMOS_AIR_SENSOR
+	output = MEASURE_ALL
+
+/obj/machinery/air_sensor/atmospherics/co2
+	id_tag = ID_ATMOS_CO2_SENSOR
+	output = MEASURE_PRESSURE | MEASURE_TEMPERATURE | MEASURE_CO2
+
+/obj/machinery/air_sensor/atmospherics/n2o
+	id_tag = ID_ATMOS_NITROUS_SENSOR
+
+/obj/machinery/air_sensor/atmospherics/plasma
+	id_tag = ID_ATMOS_PLASMA_SENSOR
+	output = MEASURE_PRESSURE | MEASURE_TEMPERATURE | MEASURE_PLASMA
+
+/obj/machinery/air_sensor/atmospherics/mix
+	id_tag = ID_ATMOS_MIX_SENSOR
+	output = MEASURE_ALL
+
+/obj/machinery/air_sensor/supermatter
+	id_tag = ID_SME_SENSOR
+	frequency = FREQ_ENGINE_COMP
+	output = MEASURE_ALL
+
+/obj/machinery/air_sensor/telecomms
+	id_tag = ID_TCOMMS_SENSOR
+	frequency = FREQ_ATMOSPHERICS
+	output = MEASURE_ALL
+
 /obj/machinery/air_sensor/update_icon()
 	icon_state = "gsensor[on]"
 
@@ -113,7 +153,7 @@
 	icon_state = "tank"
 	circuit = "/obj/item/weapon/circuitboard/air_management"
 
-	name = "Computer"
+	name = "\improper Computer"
 
 	var/frequency = 1439
 	var/show_sensors=1
@@ -123,6 +163,30 @@
 	var/datum/radio_frequency/radio_connection
 
 	light_color = LIGHT_COLOR_CYAN
+
+// Monitor for ALL atmos tanks.
+/obj/machinery/computer/general_air_control/atmospherics/all_tanks
+	name = "\improper Tank monitor"
+	sensors = list \
+	(
+		ID_ATMOS_OXYGEN_SENSOR		= "Oxygen tank",
+		ID_ATMOS_NITROGEN_SENSOR	= "Nitrogen tank",
+		ID_ATMOS_NITROUS_SENSOR		= "Nitrous oxide tank",
+		ID_ATMOS_CO2_SENSOR			= "Carbon dioxide tank",
+		ID_ATMOS_PLASMA_SENSOR		= "Plasma tank",
+		ID_ATMOS_AIR_SENSOR			= "Air mix tank",
+		ID_ATMOS_MIX_SENSOR			= "Mixing tank"
+	)
+
+// Subtype for small station.
+/obj/machinery/computer/general_air_control/atmospherics/all_tanks/small
+	sensors = list \
+	(
+		ID_ATMOS_OXYGEN_SENSOR		= "Oxygen tank",
+		ID_ATMOS_NITROGEN_SENSOR	= "Nitrogen tank",
+		ID_ATMOS_PLASMA_SENSOR		= "Plasma tank",
+		ID_ATMOS_NITROUS_SENSOR		= "Nitrous oxide tank"
+	)
 
 /obj/machinery/computer/general_air_control/attack_hand(mob/user)
 	if(..(user))
@@ -348,6 +412,76 @@ font-weight:bold;
 
 		var/pressure_setting = ONE_ATMOSPHERE * 45
 
+/obj/machinery/computer/general_air_control/large_tank_control/atmospherics
+	frequency = FREQ_ATMOSPHERICS
+
+/obj/machinery/computer/general_air_control/large_tank_control/atmospherics/oxygen
+	name		= "\improper Oxygen Supply Control"
+	sensors 	= list(ID_ATMOS_OXYGEN_SENSOR = "Tank")
+	input_tag 	= ID_ATMOS_OXYGEN_IN
+	output_tag 	= ID_ATMOS_OXYGEN_OUT 
+
+/obj/machinery/computer/general_air_control/large_tank_control/atmospherics/oxygen/small
+	input_tag	= null
+
+/obj/machinery/computer/general_air_control/large_tank_control/atmospherics/nitrogen
+	name		= "\improper Nitrogen Supply Control"
+	sensors 	= list(ID_ATMOS_NITROGEN_SENSOR = "Tank")
+	input_tag 	= ID_ATMOS_NITROGEN_IN
+	output_tag 	= ID_ATMOS_NITROGEN_OUT
+
+/obj/machinery/computer/general_air_control/large_tank_control/atmospherics/nitrogen/small
+	input_tag	= null
+
+/obj/machinery/computer/general_air_control/large_tank_control/atmospherics/co2
+	name		= "\improper Carbon Dioxide Supply Control"
+	sensors 	= list(ID_ATMOS_CO2_SENSOR = "Tank")
+	input_tag 	= ID_ATMOS_CO2_IN
+	output_tag 	= ID_ATMOS_CO2_OUT 
+
+/obj/machinery/computer/general_air_control/large_tank_control/atmospherics/co2/small
+	input_tag	= null
+
+/obj/machinery/computer/general_air_control/large_tank_control/atmospherics/nitrous
+	name		= "\improper Nitrous Oxide Supply Control"
+	sensors 	= list(ID_ATMOS_NITROUS_SENSOR = "Tank")
+	input_tag 	= ID_ATMOS_NITROUS_IN
+	output_tag 	= ID_ATMOS_NITROUS_OUT
+
+/obj/machinery/computer/general_air_control/large_tank_control/atmospherics/nitrous/small
+	input_tag	= null
+
+/obj/machinery/computer/general_air_control/large_tank_control/atmospherics/plasma
+	name		= "\improper Plasma Supply Control"
+	sensors 	= list(ID_ATMOS_PLASMA_SENSOR = "Tank")
+	input_tag 	= ID_ATMOS_PLASMA_IN
+	output_tag 	= ID_ATMOS_PLASMA_OUT
+
+/obj/machinery/computer/general_air_control/large_tank_control/atmospherics/plasma/small
+	input_tag	= null
+
+/obj/machinery/computer/general_air_control/large_tank_control/atmospherics/mix
+	name		= "\improper Mix Tank Control"
+	sensors 	= list(ID_ATMOS_MIX_SENSOR = "Tank")
+	input_tag 	= ID_ATMOS_MIX_IN
+	output_tag 	= ID_ATMOS_MIX_OUT
+
+/obj/machinery/computer/general_air_control/large_tank_control/atmospherics/air
+	name		= "\improper Mixed Air Supply Control"
+	sensors 	= list(ID_ATMOS_AIR_SENSOR = "Tank")
+	input_tag 	= ID_ATMOS_AIR_IN
+	output_tag 	= ID_ATMOS_AIR_OUT 
+
+/obj/machinery/computer/general_air_control/large_tank_control/supermatter
+	name		= "\improper Supermatter Coolant Control"
+	sensors		= list(ID_SME_SENSOR = "Supermatter reactor core")
+	input_tag	= ID_SME_IN
+
+/obj/machinery/computer/general_air_control/large_tank_control/tcomms
+	name		= "\improper Telecommunications Coolant Control"
+	sensors		= list(ID_TCOMMS_SENSOR = "Telecommunications server room")
+	input_tag	= ID_TCOMMS_COOLANT_IN
+	output_tag	= ID_TCOMMS_COOLANT_OUT // The define is null, however if anybody changes the define in the future it'll instantly update.
 
 /obj/machinery/computer/general_air_control/large_tank_control/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	var/dat= {"

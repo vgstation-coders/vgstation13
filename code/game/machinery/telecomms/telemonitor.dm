@@ -22,6 +22,9 @@
 
 	light_color = LIGHT_COLOR_GREEN
 
+/obj/machinery/computer/telecomms/monitor/preset
+	network = "tcommsat"
+
 /obj/machinery/computer/telecomms/monitor/attack_hand(mob/user as mob)
 	if(stat & (BROKEN|NOPOWER))
 		return

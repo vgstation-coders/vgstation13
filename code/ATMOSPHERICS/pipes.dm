@@ -376,14 +376,38 @@
 
 /obj/machinery/atmospherics/pipe/simple/scrubbers/visible
 	level = 2
+
+/obj/machinery/atmospherics/pipe/simple/scrubbers/visible/layered
+	piping_layer	= PIPING_LAYER_SCRUBBING	
+	pixel_x			= PIPING_PIXELX_SCRUBBERS
+	pixel_y			= PIPING_PIXELY_SCRUBBERS
+
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden
 	level = 1
 	alpha=128
+
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered
+	piping_layer	= PIPING_LAYER_SCRUBBING	
+	pixel_x			= PIPING_PIXELX_SCRUBBERS
+	pixel_y			= PIPING_PIXELY_SCRUBBERS
+
 /obj/machinery/atmospherics/pipe/simple/supply/visible
 	level = 2
+
+/obj/machinery/atmospherics/pipe/simple/supply/visible/layered
+	piping_layer	= PIPING_LAYER_SUPPLY	
+	pixel_x			= PIPING_PIXELX_SUPPLY
+	pixel_y			= PIPING_PIXELY_SUPPLY
+
 /obj/machinery/atmospherics/pipe/simple/supply/hidden
 	level = 1
 	alpha=128
+
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered
+	piping_layer	= PIPING_LAYER_SUPPLY	
+	pixel_x			= PIPING_PIXELX_SUPPLY
+	pixel_y			= PIPING_PIXELY_SUPPLY
+
 /obj/machinery/atmospherics/pipe/simple/supplymain/visible
 	level = 2
 /obj/machinery/atmospherics/pipe/simple/supplymain/hidden
@@ -612,14 +636,38 @@
 	can_be_coloured = 1
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/visible
 	level = 2
+
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/visible/layered
+	piping_layer	= PIPING_LAYER_SCRUBBING	
+	pixel_x			= PIPING_PIXELX_SCRUBBERS
+	pixel_y			= PIPING_PIXELY_SCRUBBERS
+
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden
 	level = 1
 	alpha=128
+
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered
+	piping_layer	= PIPING_LAYER_SCRUBBING	
+	pixel_x			= PIPING_PIXELX_SCRUBBERS
+	pixel_y			= PIPING_PIXELY_SCRUBBERS
+
 /obj/machinery/atmospherics/pipe/manifold/supply/visible
 	level = 2
+
+/obj/machinery/atmospherics/pipe/manifold/supply/visible/layered
+	piping_layer	= PIPING_LAYER_SUPPLY	
+	pixel_x			= PIPING_PIXELX_SUPPLY
+	pixel_y			= PIPING_PIXELY_SUPPLY
+
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden
 	level = 1
 	alpha=128
+
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered
+	piping_layer	= PIPING_LAYER_SUPPLY	
+	pixel_x			= PIPING_PIXELX_SUPPLY
+	pixel_y			= PIPING_PIXELY_SUPPLY
+
 /obj/machinery/atmospherics/pipe/manifold/supplymain/visible
 	level = 2
 /obj/machinery/atmospherics/pipe/manifold/supplymain/hidden
@@ -832,14 +880,38 @@
 
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/visible
 	level = 2
+
+/obj/machinery/atmospherics/pipe/manifold4w/scrubbers/visible/layered
+	piping_layer	= PIPING_LAYER_SCRUBBING	
+	pixel_x			= PIPING_PIXELX_SCRUBBERS
+	pixel_y			= PIPING_PIXELY_SCRUBBERS
+
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden
 	level = 1
 	alpha=128
+
+/obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden/layered
+	piping_layer	= PIPING_LAYER_SCRUBBING	
+	pixel_x			= PIPING_PIXELX_SCRUBBERS
+	pixel_y			= PIPING_PIXELY_SCRUBBERS
+
 /obj/machinery/atmospherics/pipe/manifold4w/supply/visible
 	level = 2
+
+/obj/machinery/atmospherics/pipe/manifold4w/supply/visible/layered
+	piping_layer	= PIPING_LAYER_SUPPLY	
+	pixel_x			= PIPING_PIXELX_SUPPLY
+	pixel_y			= PIPING_PIXELY_SUPPLY
+
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden
 	level = 1
 	alpha=128
+
+/obj/machinery/atmospherics/pipe/manifold4w/supply/hidden/layered
+	piping_layer	= PIPING_LAYER_SUPPLY	
+	pixel_x			= PIPING_PIXELX_SUPPLY
+	pixel_y			= PIPING_PIXELY_SUPPLY
+
 /obj/machinery/atmospherics/pipe/manifold4w/supplymain/visible
 	level = 2
 /obj/machinery/atmospherics/pipe/manifold4w/supplymain/hidden
@@ -1263,3 +1335,29 @@
 		return 1
 	else
 		return ..()
+
+/obj/machinery/atmospherics/pipe/layer_adapter/supply
+	piping_layer	= PIPING_LAYER_SUPPLY
+	icon_state		= "adapter_2"
+	name			= "\improper Air supply pipe"
+	color			= PIPE_COLOR_BLUE
+
+/obj/machinery/atmospherics/pipe/layer_adapter/supply/visible
+	level			= 2
+
+/obj/machinery/atmospherics/pipe/layer_adapter/supply/hidden
+	level			= 1
+	alpha			= 128
+
+/obj/machinery/atmospherics/pipe/layer_adapter/scrubbers
+	piping_layer	= PIPING_LAYER_SCRUBBING
+	icon_state		= "adapter_4"
+	name			= "scrubbers pipe"
+	color			= PIPE_COLOR_RED
+
+/obj/machinery/atmospherics/pipe/layer_adapter/scrubbers/visible
+	level			= 2
+
+/obj/machinery/atmospherics/pipe/layer_adapter/scrubbers/hidden
+	level			= 1
+	alpha			= 128

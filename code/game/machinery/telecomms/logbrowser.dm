@@ -21,6 +21,8 @@
 
 	req_access = list(access_tcomsat)
 
+/obj/machinery/computer/telecomms/server/preset
+	network = "tcommsat"
 
 /obj/machinery/computer/telecomms/server/attack_hand(mob/user as mob)
 	if(stat & (BROKEN|NOPOWER))

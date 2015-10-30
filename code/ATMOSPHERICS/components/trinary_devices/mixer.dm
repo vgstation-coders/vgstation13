@@ -1,4 +1,4 @@
-obj/machinery/atmospherics/trinary/mixer
+/obj/machinery/atmospherics/trinary/mixer
 	icon = 'icons/obj/atmospherics/mixer.dmi'
 	icon_state = "intact_off"
 
@@ -14,7 +14,11 @@ obj/machinery/atmospherics/trinary/mixer
 
 	//node 3 is the outlet, nodes 1 & 2 are intakes
 
-obj/machinery/atmospherics/trinary/mixer/update_icon()
+/obj/machinery/atmospherics/trinary/mixer/on
+	on = 1
+	icon_state = "intact_on"
+
+/obj/machinery/atmospherics/trinary/mixer/update_icon()
 	if(stat & NOPOWER)
 		icon_state = "intact_off"
 	else if(node2 && node3 && node1)
@@ -24,18 +28,18 @@ obj/machinery/atmospherics/trinary/mixer/update_icon()
 		on = 0
 	..()
 
-obj/machinery/atmospherics/trinary/mixer/power_change()
+/obj/machinery/atmospherics/trinary/mixer/power_change()
 	var/old_stat = stat
 	..()
 	if(old_stat != stat)
 		update_icon()
 
-obj/machinery/atmospherics/trinary/mixer/New()
+/obj/machinery/atmospherics/trinary/mixer/New()
 	..()
 	air3.volume = 300
 
 
-obj/machinery/atmospherics/trinary/mixer/process()
+/obj/machinery/atmospherics/trinary/mixer/process()
 	. = ..()
 	if(!on)
 		return
@@ -89,7 +93,7 @@ obj/machinery/atmospherics/trinary/mixer/process()
 
 	return 1
 
-obj/machinery/atmospherics/trinary/mixer/attack_hand(user as mob)
+/obj/machinery/atmospherics/trinary/mixer/attack_hand(user as mob)
 	if(..())
 		return
 	src.add_fingerprint(usr)
@@ -120,7 +124,7 @@ obj/machinery/atmospherics/trinary/mixer/attack_hand(user as mob)
 	onclose(user, "atmo_mixer")
 	return
 
-obj/machinery/atmospherics/trinary/mixer/Topic(href,href_list)
+/obj/machinery/atmospherics/trinary/mixer/Topic(href,href_list)
 	if(..()) return
 	if(href_list["power"])
 		on = !on
@@ -153,3 +157,8 @@ obj/machinery/atmospherics/trinary/mixer/Topic(href,href_list)
 		icon_state = "intactm_off"
 		on = 0
 	return
+
+// THIS ONE IS FOR SMALLSTATION.
+/obj/machinery/atmospherics/trinary/mixer/on/air
+	node1_concentration = 0.8
+	node2_concentration = 0.2

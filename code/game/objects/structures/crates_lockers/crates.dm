@@ -619,3 +619,12 @@
 
 /obj/structure/closet/crate/secure/weapon/experimental/gravitywell
 	chosen_set = "gravitywell"
+
+/obj/structure/closet/crate/ame_shielding
+	name = "\improper AME shield crate"
+
+/obj/structure/closet/crate/ame_shielding/New()
+	. = ..()
+
+	for(var/i = 1 to 12)
+		new/obj/item/device/am_shielding_container(src)

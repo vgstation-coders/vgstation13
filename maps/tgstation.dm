@@ -26,5 +26,4 @@
 		)
 
 ////////////////////////////////////////////////////////////////
-#include "defficiency/pipes.dm" // Atmos layered pipes.
 #include "tgstation.dmm"

@@ -29,6 +29,10 @@
 	//Now uses a constant beam.
 	var/obj/effect/beam/emitter/beam = null
 
+/obj/machinery/power/emitter/anchored
+	anchored	= 1
+	state		= 2
+	
 	//Radio remote control
 /obj/machinery/power/emitter/proc/set_frequency(new_frequency)
 

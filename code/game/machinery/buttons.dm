@@ -13,6 +13,9 @@
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
 
+/obj/machinery/driver_button/recycling
+	id_tag = ID_DRIVER_RECYCLING
+
 /obj/machinery/driver_button/New(turf/loc, var/w_dir=null)
 	..()
 	switch(w_dir)

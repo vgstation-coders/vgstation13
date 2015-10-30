@@ -1,4 +1,3 @@
-
 /obj/machinery/processor
 	name = "Food Processor"
 	icon = 'icons/obj/kitchen.dmi'
@@ -14,6 +13,10 @@
 	use_power = 1
 	idle_power_usage = 20
 	active_power_usage = 500
+
+/obj/machinery/processor/slime
+	name = "\improper Slime Extractor"
+	desc = "A machine used to seperate a slime's extract from its body."
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **

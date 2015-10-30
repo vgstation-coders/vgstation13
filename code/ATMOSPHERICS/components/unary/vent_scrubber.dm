@@ -1,27 +1,27 @@
 /obj/machinery/atmospherics/unary/vent_scrubber
 	icon = 'icons/obj/atmospherics/vent_scrubber.dmi'
 	icon_state = "hoff"
-	name = "Air Scrubber"
-	desc = "Has a valve and pump attached to it"
+	name = "\improper Air Scrubber"
+	desc = "Has a valve and pump attached to it."
 	use_power = 1
 
 	level				= 1
 
 	var/id_tag			= null
-	var/frequency		= 1439
+	var/frequency		= FREQ_STATION_ATMOS
 	var/datum/radio_frequency/radio_connection
 
-	var/on				= 0
-	var/scrubbing		= 1 //0 = siphoning, 1 = scrubbing
-	var/scrub_CO2		= 1
-	var/scrub_Toxins	= 1
-	var/scrub_N2O		= 0
-	var/scrub_O2		= 0
-	var/scrub_N2		= 0
+	var/on				= FALSE
+	var/scrubbing		= TRUE //0 = siphoning, 1 = scrubbing
+	var/scrub_CO2		= TRUE
+	var/scrub_Toxins	= TRUE
+	var/scrub_N2O		= FALSE
+	var/scrub_O2		= FALSE
+	var/scrub_N2		= FALSE
 
 	var/volume_rate		= 1000 // 120
-	var/panic			= 0 //is this scrubber panicked?
-	var/welded			= 0
+	var/panic			= FALSE //is this scrubber panicked?
+	var/welded			= FALSE
 
 	var/area_uid
 	var/radio_filter_out
@@ -30,7 +30,7 @@
 	machine_flags		= MULTITOOL_MENU
 
 /obj/machinery/atmospherics/unary/vent_scrubber/on
-	on					= 1
+	on					= TRUE
 	icon_state			= "on"
 
 /obj/machinery/atmospherics/unary/vent_scrubber/on/burn_chamber
@@ -39,7 +39,30 @@
 	frequency			= 1449
 	id_tag				= "inc_out"
 
-	scrub_Toxins		= 0
+	scrub_Toxins		= FALSE
+
+/obj/machinery/atmospherics/unary/vent_scrubber/supermatter
+	id_tag				= ID_SME_OUT
+	frequency			= FREQ_ENGINE_COMP
+	panic				= TRUE // PANIC!!!
+
+/obj/machinery/atmospherics/unary/vent_scrubber/layered
+	piping_layer	= PIPING_LAYER_SCRUBBING	
+	pixel_x			= PIPING_PIXELX_SCRUBBERS
+	pixel_y			= PIPING_PIXELY_SCRUBBERS
+
+/obj/machinery/atmospherics/unary/vent_scrubber/on/layered
+	piping_layer	= PIPING_LAYER_SCRUBBING	
+	pixel_x			= PIPING_PIXELX_SCRUBBERS
+	pixel_y			= PIPING_PIXELY_SCRUBBERS
+
+/obj/machinery/atmospherics/unary/vent_scrubber/on/layered/vox
+	icon_state = "hon1"
+	scrub_O2 = TRUE
+
+/obj/machinery/atmospherics/unary/vent_scrubber/on/vox
+	icon_state = "hon1"
+	scrub_O2 = TRUE
 
 /obj/machinery/atmospherics/unary/vent_scrubber/New()
 	..()

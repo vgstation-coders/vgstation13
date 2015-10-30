@@ -22,6 +22,9 @@
 
 	req_access = list(access_tcomsat)
 
+/obj/machinery/computer/telecomms/traffic/preset
+	network = "tcommsat"
+
 /obj/machinery/computer/telecomms/traffic/proc/stop_editing()
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/computer/telecomms/traffic/proc/stop_editing() called tick#: [world.time]")
 	if(editingcode)

@@ -949,6 +949,9 @@
 /obj/structure/disposalpipe/segment
 	icon_state = "pipe-s"
 
+/obj/structure/disposalpipe/segment/bent
+	icon_state = "pipe-c"
+
 /obj/structure/disposalpipe/segment/New()
 	..()
 	if(icon_state == "pipe-s")

@@ -125,6 +125,10 @@
 
 	machine_flags = MULTITOOL_MENU
 
+/obj/machinery/atmospherics/binary/valve/digital/open
+	open = TRUE
+	icon_state = "hvalve1"
+
 /obj/machinery/atmospherics/binary/valve/digital/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)

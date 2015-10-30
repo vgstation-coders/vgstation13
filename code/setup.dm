@@ -22,6 +22,8 @@ var/global/disable_vents     = 0
 #define CHECK_DISABLED(TYPE) /* DO NOTHINK */
 #endif
 
+// Pipe layer stuff.
+
 #define PIPING_LAYER_DEFAULT	3 //starting value - this is the "central" pipe
 #define PIPING_LAYER_INCREMENT	1 //how much the smallest step in piping_layer is
 
@@ -31,6 +33,18 @@ var/global/disable_vents     = 0
 #define PIPING_LAYER_P_X		5 //each positive increment of piping_layer changes the pixel_x by this amount
 #define PIPING_LAYER_P_Y		-5 //same, but negative because they form a diagonal
 #define PIPING_LAYER_LCHANGE	0.05 //how much the layer var changes per increment
+
+#define PIPING_LAYER_SCRUBBING	4
+#define PIPING_LAYER_SUPPLY		2
+
+#define PIPING_LAYER_PIXEL_X(LAYER) (LAYER - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X
+#define PIPING_LAYER_PIXEL_Y(LAYER) (LAYER - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_Y
+
+#define PIPING_PIXELX_SUPPLY	PIPING_LAYER_PIXEL_X(PIPING_LAYER_SUPPLY)
+#define PIPING_PIXELY_SUPPLY	PIPING_LAYER_PIXEL_Y(PIPING_LAYER_SUPPLY)
+
+#define PIPING_PIXELX_SCRUBBERS	PIPING_LAYER_PIXEL_X(PIPING_LAYER_SCRUBBING)
+#define PIPING_PIXELY_SCRUBBERS	PIPING_LAYER_PIXEL_Y(PIPING_LAYER_SCRUBBING)
 
 #define PI 3.1415
 
@@ -1214,26 +1228,34 @@ var/proccalls = 1
 
 //Some defines to generalise colours used in lighting.
 //Important note on colors. Colors can end up significantly different from the basic html picture, especially when saturated
-#define LIGHT_COLOR_RED "#FA8282" //Warm but extremely diluted red. rgb(250, 130, 130)
-#define LIGHT_COLOR_GREEN "#64C864" //Bright but quickly dissipating neon green. rgb(100, 200, 100)
-#define LIGHT_COLOR_BLUE "#6496FA" //Cold, diluted blue. rgb(100, 150, 250)
+#define LIGHT_COLOR_RED			"#FA8282" //Warm but extremely diluted red. rgb(250, 130, 130)
+#define LIGHT_COLOR_GREEN		"#64C864" //Bright but quickly dissipating neon green. rgb(100, 200, 100)
+#define LIGHT_COLOR_BLUE		"#6496FA" //Cold, diluted blue. rgb(100, 150, 250)
 
-#define LIGHT_COLOR_CYAN "#7DE1E1" //Diluted cyan. rgb(125, 225, 225)
-#define LIGHT_COLOR_PINK "#E17DE1" //Diluted, mid-warmth pink. rgb(225, 125, 225)
-#define LIGHT_COLOR_YELLOW "#E1E17D" //Dimmed yellow, leaning kaki. rgb(225, 225, 125)
-#define LIGHT_COLOR_BROWN "#966432" //Clear brown, mostly dim. rgb(150, 100, 50)
-#define LIGHT_COLOR_ORANGE "#FA9632" //Mostly pure orange. rgb(250, 150, 50)
+#define LIGHT_COLOR_CYAN		"#7DE1E1" //Diluted cyan. rgb(125, 225, 225)
+#define LIGHT_COLOR_PINK		"#E17DE1" //Diluted, mid-warmth pink. rgb(225, 125, 225)
+#define LIGHT_COLOR_YELLOW		"#E1E17D" //Dimmed yellow, leaning kaki. rgb(225, 225, 125)
+#define LIGHT_COLOR_BROWN		"#966432" //Clear brown, mostly dim. rgb(150, 100, 50)
+#define LIGHT_COLOR_ORANGE		"#FA9632" //Mostly pure orange. rgb(250, 150, 50)
 
 //These ones aren't a direct colour like the ones above, because nothing would fit
-#define LIGHT_COLOR_FIRE "#FAA019" //Warm orange color, leaning strongly towards yellow. rgb(250, 160, 25)
-#define LIGHT_COLOR_FLARE "#FA644B" //Bright, non-saturated red. Leaning slightly towards pink for visibility. rgb(250, 100, 75)
-#define LIGHT_COLOR_SLIME_LAMP "#AFC84B" //Weird color, between yellow and green, very slimy. rgb(175, 200, 75)
-#define LIGHT_COLOR_TUNGSTEN "#FAE1AF" //Extremely diluted yellow, close to skin color (for some reason). rgb(250, 225, 175)
-#define LIGHT_COLOR_HALOGEN "#F0FAFA" //Barely visible cyan-ish hue, as the doctor prescribed. rgb(240, 250, 250)
+#define LIGHT_COLOR_FIRE		"#FAA019" //Warm orange color, leaning strongly towards yellow. rgb(250, 160, 25)
+#define LIGHT_COLOR_FLARE		"#FA644B" //Bright, non-saturated red. Leaning slightly towards pink for visibility. rgb(250, 100, 75)
+#define LIGHT_COLOR_SLIME_LAMP	"#AFC84B" //Weird color, between yellow and green, very slimy. rgb(175, 200, 75)
+#define LIGHT_COLOR_TUNGSTEN	"#FAE1AF" //Extremely diluted yellow, close to skin color (for some reason). rgb(250, 225, 175)
+#define LIGHT_COLOR_HALOGEN		"#F0FAFA" //Barely visible cyan-ish hue, as the doctor prescribed. rgb(240, 250, 250)
 
-//Default frequencies of signal based RC stuff, because comic and his magic numbers.
-#define FREQ_DISPOSAL 1367
-
+// Default frequencies of signal based RC stuff.
+#define FREQ_PRISON_SHUTTLE	1311
+#define FREQ_DISPOSAL		1367
+#define FREQ_STATUS_DISPLAY	1435
+#define FREQ_ATMOS_ALERT	1437
+#define FREQ_STATION_ATMOS	1439
+#define FREQ_ATMOSPHERICS	1441
+#define FREQ_ENGINE_COMP	1443
+#define FREQ_BOT_NAV		1445
+#define FREQ_BOT			1447
+#define FREQ_AIRLOCK		1449
 
 //Ore processing types for the ore processor
 #define ORE_PROCESSING_GENERAL 1
@@ -1278,30 +1300,110 @@ var/proccalls = 1
  *
  *
  */
-#define WARNING(MSG) world.log << "##WARNING: [MSG] in [__FILE__] at line [__LINE__] src: [src] usr: [usr]."
-#define warning(msg) world.log << "## WARNING: [msg]"
-#define testing(msg) world.log << "## TESTING: [msg]"
-#define log_game(text) diary << html_decode("\[[time_stamp()]]GAME: [text]")
+#define WARNING(MSG)		world.log << "##WARNING: [MSG] in [__FILE__] at line [__LINE__] src: [src] usr: [usr]."
+#define warning(msg)		world.log << "## WARNING: [msg]"
+#define testing(msg)		world.log << "## TESTING: [msg]"
+#define log_game(text)		diary << html_decode("\[[time_stamp()]]GAME: [text]")
 
-#define log_vote(text) diary << html_decode("\[[time_stamp()]]VOTE: [text]")
+#define log_vote(text)		diary << html_decode("\[[time_stamp()]]VOTE: [text]")
 
-#define log_access(text) diary << html_decode("\[[time_stamp()]]ACCESS: [text]")
+#define log_access(text)	diary << html_decode("\[[time_stamp()]]ACCESS: [text]")
 
-#define log_say(text) diary << html_decode("\[[time_stamp()]]SAY: [text]")
+#define log_say(text)		diary << html_decode("\[[time_stamp()]]SAY: [text]")
 
-#define log_ooc(text) diary << html_decode("\[[time_stamp()]]OOC: [text]")
+#define log_ooc(text)		diary << html_decode("\[[time_stamp()]]OOC: [text]")
 
-#define log_whisper(text) diary << html_decode("\[[time_stamp()]]WHISPER: [text]")
+#define log_whisper(text)	diary << html_decode("\[[time_stamp()]]WHISPER: [text]")
 
-#define log_cultspeak(text) diary << html_decode("\[[time_stamp()]]CULT: [text]")
+#define log_cultspeak(text)	diary << html_decode("\[[time_stamp()]]CULT: [text]")
 
-#define log_narspeak(text) diary << html_decode("\[[time_stamp()]]NARSIE: [text]")
+#define log_narspeak(text)	diary << html_decode("\[[time_stamp()]]NARSIE: [text]")
 
-#define log_emote(text) diary << html_decode("\[[time_stamp()]]EMOTE: [text]")
+#define log_emote(text)		diary << html_decode("\[[time_stamp()]]EMOTE: [text]")
 
-#define log_attack(text) diaryofmeanpeople << html_decode("\[[time_stamp()]]ATTACK: [text]")
+#define log_attack(text)	diaryofmeanpeople << html_decode("\[[time_stamp()]]ATTACK: [text]")
 
-#define log_adminsay(text) diary << html_decode("\[[time_stamp()]]ADMINSAY: [text]")
+#define log_adminsay(text)	diary << html_decode("\[[time_stamp()]]ADMINSAY: [text]")
 
-#define log_adminwarn(text) diary << html_decode("\[[time_stamp()]]ADMINWARN: [text]")
-#define log_pda(text) diary << html_decode("\[[time_stamp()]]PDA: [text]")
+#define log_adminwarn(text)	diary << html_decode("\[[time_stamp()]]ADMINWARN: [text]")
+#define log_pda(text)		diary << html_decode("\[[time_stamp()]]PDA: [text]")
+
+// ID tags.
+
+// Used in atmospherics.
+#define ID_ATMOS_OXYGEN_IN			"oxygen_in"
+#define ID_ATMOS_OXYGEN_OUT			"oxygen_out"
+#define ID_ATMOS_OXYGEN_SENSOR		"oxygen_sensor"
+
+#define ID_ATMOS_NITROGEN_IN		"nitrogen_in"
+#define ID_ATMOS_NITROGEN_OUT		"nitrogen_out"
+#define ID_ATMOS_NITROGEN_SENSOR	"nitrogen_sensor"
+
+#define ID_ATMOS_NITROUS_IN			"n2o_in"
+#define ID_ATMOS_NITROUS_OUT		"n2o_out"
+#define ID_ATMOS_NITROUS_SENSOR		"n2o_sensor"
+
+#define ID_ATMOS_CO2_IN				"co2_in"
+#define ID_ATMOS_CO2_OUT			"co2_out"
+#define ID_ATMOS_CO2_SENSOR			"co2_sensor"
+
+#define ID_ATMOS_PLASMA_IN			"plasma_in"
+#define ID_ATMOS_PLASMA_OUT			"plasma_out"
+#define ID_ATMOS_PLASMA_SENSOR		"plasma_sensor"
+
+#define ID_ATMOS_AIR_IN				"air_in"
+#define ID_ATMOS_AIR_OUT			"air_out"
+#define ID_ATMOS_AIR_SENSOR			"air_sensor"
+
+#define ID_ATMOS_MIX_IN				"mix_in"
+#define ID_ATMOS_MIX_OUT			"mix_out"
+#define ID_ATMOS_MIX_SENSOR			"mix_sensor"
+
+// SME.
+#define ID_SME_IN					"supermatter_in"
+#define ID_SME_OUT					"supermatter_out"
+#define ID_SME_SENSOR				"supermatter_sensor"
+
+// Telecommunications.
+#define ID_TCOMMS_COOLANT_IN		"telecomms_in"
+#define ID_TCOMMS_COOLANT_OUT		null
+#define ID_TCOMMS_SENSOR			"telecomms_sensor"
+
+// ID tags for conveyors.
+
+#define ID_CONVEYOR_MINING_PROCESSING 	"mining_processing"
+#define ID_CONVEYOR_RECYCLING 			"recycling_conveyor"
+#define ID_CONVEYOR_TOXINS				"toxins_conveyor"
+
+// ID tags for ore processors / stacking machines.
+
+// Mining.
+#define ID_MINING_ORE_PROCESSING	"mining_ore_processing"
+#define ID_MINING_STACKING			"mining_stacking"
+
+// Recycling.
+#define ID_RECYCLING_SMELTING		"recycling_smelting"
+#define ID_RECYCLING_STACKING		"recycling_stacking"
+
+
+// Mass Drivers.
+
+#define ID_DRIVER_RECYCLING			"recycling"
+
+// Pressure checks as used by unary and binary vent pumps.
+#define CHECKS_OFF			0 // Don't give a shit.
+#define CHECKS_EXTERNAL		1 // Do not pass the external bound.
+#define CHECKS_INTERNAL_IN	2 // Do not pass the internal bound (internal in for binary).
+#define CHECKS_INTERNAL_OUT	4 // Do not pass internal out bound (binary only).
+
+// Bitflags used by gas sensors.
+#define MEASURE_PRESSURE	1
+#define MEASURE_TEMPERATURE	2
+#define MEASURE_OXYGEN		4
+#define MEASURE_PLASMA		8
+#define MEASURE_NITROGEN	16
+#define MEASURE_CO2			32
+#define MEASURE_ALL			63
+
+// Item flags.
+#define ITEM_RAND_PX_OFFSET	1 // Gives it a random pixel offset.

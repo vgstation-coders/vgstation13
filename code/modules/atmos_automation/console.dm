@@ -6,13 +6,21 @@
 	show_sensors = 0
 	var/on = 0
 
-	name = "Atmospherics Automations Console"
+	name = "\improper Atmospherics Automations Console"
 
 	var/list/datum/automation/automations=list()
 
 	//Registers, see them as variables for the AAC.
 	var/register_amount = 10//Determines the maximal registers you can have.
 	var/list/registers = list()//Stores the register values, registers can't be named so this is enough.
+
+// Simple subtype with the engine component frequency.
+/obj/machinery/computer/general_air_control/atmos_automation/engine
+	frequency = FREQ_ENGINE_COMP
+
+// Simple subtype with the atmospherics frequency.
+/obj/machinery/computer/general_air_control/atmos_automation/atmospherics
+	frequency = FREQ_ATMOSPHERICS
 
 /obj/machinery/computer/general_air_control/atmos_automation/New()
 	..()

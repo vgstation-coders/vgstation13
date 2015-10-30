@@ -2,8 +2,8 @@
 	icon = 'icons/obj/atmospherics/vent_pump.dmi'
 	icon_state = "hoff"
 
-	name = "Air Vent"
-	desc = "Has a valve and pump attached to it"
+	name = "\improper Air Vent"
+	desc = "Has a valve and pump attached to it."
 	use_power = 1
 
 	level = 1
@@ -16,7 +16,7 @@
 	var/external_pressure_bound = ONE_ATMOSPHERE
 	var/internal_pressure_bound = 0
 
-	var/pressure_checks = 1
+	var/pressure_checks = CHECKS_EXTERNAL
 	//1: Do not pass external_pressure_bound
 	//2: Do not pass internal_pressure_bound
 	//3: Do not pass either
@@ -24,7 +24,7 @@
 	var/welded = 0 // Added for aliens -- TLE
 	var/canSpawnMice = 1 // Set to 0 to prevent spawning of mice.
 
-	var/frequency = 1439
+	var/frequency = FREQ_STATION_ATMOS
 	var/datum/radio_frequency/radio_connection
 
 	var/radio_filter_out
@@ -38,6 +38,16 @@
 	on = 1
 	icon_state = "hout"
 
+/obj/machinery/atmospherics/unary/vent_pump/on/layered
+	piping_layer	= PIPING_LAYER_SUPPLY	
+	pixel_x			= PIPING_PIXELX_SUPPLY
+	pixel_y			= PIPING_PIXELY_SUPPLY
+
+/obj/machinery/atmospherics/unary/vent_pump/layered
+	piping_layer	= PIPING_LAYER_SUPPLY	
+	pixel_x			= PIPING_PIXELX_SUPPLY
+	pixel_y			= PIPING_PIXELY_SUPPLY
+
 /obj/machinery/atmospherics/unary/vent_pump/siphon
 	pump_direction = 0
 	icon_state = "hoff"
@@ -45,6 +55,43 @@
 /obj/machinery/atmospherics/unary/vent_pump/siphon/on
 	on = 1
 	icon_state = "hin"
+
+// Used in the large supply tanks at atmos.
+/obj/machinery/atmospherics/unary/vent_pump/siphon/on/atmospherics
+	frequency	= FREQ_ATMOSPHERICS
+	internal_pressure_bound = 4000
+	pressure_checks = CHECKS_INTERNAL_IN
+
+/obj/machinery/atmospherics/unary/vent_pump/siphon/on/atmospherics/oxygen
+	id_tag		= ID_ATMOS_OXYGEN_OUT
+
+/obj/machinery/atmospherics/unary/vent_pump/siphon/on/atmospherics/nitrogen
+	id_tag		= ID_ATMOS_NITROGEN_OUT
+
+/obj/machinery/atmospherics/unary/vent_pump/siphon/on/atmospherics/nitrous
+	id_tag		= ID_ATMOS_NITROUS_OUT
+
+/obj/machinery/atmospherics/unary/vent_pump/siphon/on/atmospherics/co2
+	id_tag		= ID_ATMOS_CO2_OUT
+
+/obj/machinery/atmospherics/unary/vent_pump/siphon/on/atmospherics/plasma
+	id_tag		= ID_ATMOS_PLASMA_OUT
+
+/obj/machinery/atmospherics/unary/vent_pump/siphon/on/atmospherics/air
+	id_tag		= ID_ATMOS_AIR_OUT
+	internal_pressure_bound = 2000
+
+/obj/machinery/atmospherics/unary/vent_pump/siphon/on/atmospherics/mix
+	id_tag		= ID_ATMOS_MIX_OUT
+
+/obj/machinery/atmospherics/unary/vent_pump/on/supermatter
+	frequency	= FREQ_ENGINE_COMP
+	id_tag		= ID_SME_IN
+	pressure_checks = CHECKS_OFF
+
+/obj/machinery/atmospherics/unary/vent_pump/on/telecomms
+	frequency	= FREQ_ATMOSPHERICS
+	id_tag		= ID_TCOMMS_COOLANT_IN
 
 /obj/machinery/atmospherics/unary/vent_pump/New()
 	..()
@@ -57,7 +104,7 @@
 		src.broadcast_status()
 
 /obj/machinery/atmospherics/unary/vent_pump/high_volume
-	name = "Large Air Vent"
+	name = "\improper Large Air Vent"
 	power_channel = EQUIP
 
 /obj/machinery/atmospherics/unary/vent_pump/high_volume/New()

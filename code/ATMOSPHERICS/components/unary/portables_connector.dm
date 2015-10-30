@@ -11,6 +11,35 @@
 	use_power = 0
 	level = 0
 
+/obj/machinery/atmospherics/unary/portables_connector/layered/scrubbing
+	piping_layer = PIPING_LAYER_SCRUBBING
+	pixel_x = PIPING_PIXELX_SCRUBBERS
+	pixel_y = PIPING_PIXELY_SCRUBBERS
+
+/obj/machinery/atmospherics/unary/portables_connector/layered/supply
+	piping_layer = PIPING_LAYER_SUPPLY
+	pixel_x = PIPING_PIXELX_SUPPLY
+	pixel_y = PIPING_PIXELY_SUPPLY
+
+/obj/machinery/atmospherics/unary/portables_connector/layered/one
+	piping_layer = 1
+	pixel_x = PIPING_LAYER_PIXEL_X(1)
+	pixel_y = PIPING_LAYER_PIXEL_Y(1)
+
+/obj/machinery/atmospherics/unary/portables_connector/layered/two
+	piping_layer = 2
+	pixel_x = PIPING_LAYER_PIXEL_X(2)
+	pixel_y = PIPING_LAYER_PIXEL_Y(2)
+
+/obj/machinery/atmospherics/unary/portables_connector/layered/four
+	piping_layer = 4
+	pixel_x = PIPING_LAYER_PIXEL_X(4)
+	pixel_y = PIPING_LAYER_PIXEL_Y(4)
+
+/obj/machinery/atmospherics/unary/portables_connector/layered/five
+	piping_layer = 5
+	pixel_x = PIPING_LAYER_PIXEL_X(5)
+	pixel_y = PIPING_LAYER_PIXEL_Y(5)
 
 /obj/machinery/atmospherics/unary/portables_connector/New()
 	initialize_directions = dir

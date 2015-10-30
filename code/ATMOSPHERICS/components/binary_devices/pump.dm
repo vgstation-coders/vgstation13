@@ -29,11 +29,16 @@ Thus, the two variables affect pump operation are set in New():
 	name = "High capacity gas pump"
 	desc = "A high capacity pump"
 
-	target_pressure = 15000000 // Holy fuck man
+	target_pressure = 15e+6 // Holy fuck man
 
 /obj/machinery/atmospherics/binary/pump/on
 	on = 1
 	icon_state = "intact_on"
+
+/obj/machinery/atmospherics/binary/pump/on/layered/layer_1
+	piping_layer = 1
+	pixel_x = PIPING_LAYER_PIXEL_X(1)
+	pixel_y = PIPING_LAYER_PIXEL_Y(1)
 
 /obj/machinery/atmospherics/binary/pump/update_icon()
 	if(stat & NOPOWER)

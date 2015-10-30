@@ -49,6 +49,16 @@
 
 	var/vending_cat = null// subcategory for vending machines.
 
+	var/item_flags				= 0 // Flags for item specific stuff!
+	var/max_rand_pixel_offset	= 5 // Sets the maximum for the randomness of ITEM_RAND_PX_OFFSET.
+
+/obj/item/New()
+	. = ..()  
+
+	if(item_flags & ITEM_RAND_PX_OFFSET) // Set a random pixel offset between -max_rand_pixel_offset and max_rand_pixel_offset.
+		pixel_y = rand(-max_rand_pixel_offset, max_rand_pixel_offset)
+		pixel_x = rand(-max_rand_pixel_offset, max_rand_pixel_offset)
+
 /obj/item/Destroy()
 	if(istype(src.loc, /mob))
 		var/mob/H = src.loc

@@ -1,4 +1,4 @@
-var/list/mass_drivers = list()
+/var/global/list/mass_drivers = list()
 /obj/machinery/mass_driver
 	name = "mass driver"
 	desc = "Shoots things into space."
@@ -14,6 +14,9 @@ var/list/mass_drivers = list()
 	var/code = 1.0
 	var/id_tag = "default"
 	var/drive_range = 50 //this is mostly irrelevant since current mass drivers throw into space, but you could make a lower-range mass driver for interstation transport or something I guess.
+
+/obj/machinery/mass_driver/recycling
+	id_tag = ID_DRIVER_RECYCLING
 
 /obj/machinery/mass_driver/New()
 	..()

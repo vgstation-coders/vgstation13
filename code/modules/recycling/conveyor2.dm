@@ -21,12 +21,31 @@
 	var/list/affecting	// the list of all items that will be moved this ptick
 	var/id_tag = ""			// the control ID	- must match controller ID
 
-	var/frequency = 1367
+	var/frequency = FREQ_DISPOSAL
 	var/datum/radio_frequency/radio_connection
 
 	var/max_moved = 25
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
+
+/obj/machinery/conveyor/mining_processing
+	id_tag = ID_CONVEYOR_MINING_PROCESSING
+
+/obj/machinery/conveyor/mining_processing/reverse
+	in_reverse = TRUE
+
+/obj/machinery/conveyor/recycling
+	id_tag = ID_CONVEYOR_RECYCLING
+
+/obj/machinery/conveyor/recycling/reverse
+	in_reverse = TRUE
+
+/obj/machinery/conveyor/toxins
+	id_tag = ID_CONVEYOR_TOXINS
+
+/obj/machinery/conveyor/toxins/reverse
+	in_reverse = TRUE
+
 
 /obj/machinery/conveyor/centcom_auto
 	id_tag = "round_end_belt"
@@ -102,8 +121,7 @@
 
 	updateConfig(!building)
 
-/obj/machinery/conveyor/proc/updateConfig(var/startup=0)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/conveyor/proc/updateConfig() called tick#: [world.time]")
+/obj/machinery/conveyor/proc/updateConfig(var/startup = FALSE)
 	switch(dir)
 		if(NORTH)
 			forwards = NORTH
@@ -301,7 +319,7 @@
 
 	var/id_tag = "" 			// must match conveyor IDs to control them
 
-	var/frequency = 1367
+	var/frequency = FREQ_DISPOSAL
 	var/datum/radio_frequency/radio_connection
 	machine_flags = MULTITOOL_MENU
 
@@ -412,6 +430,15 @@
 /obj/machinery/conveyor_switch/oneway
 	var/convdir = 1 //Set to 1 or -1 depending on which way you want the conveyor to go. (In other words keep at 1 and set the proper dir on the belts.)
 	desc = "A conveyor control switch. It appears to only go in one direction."
+
+/obj/machinery/conveyor_switch/oneway/mining_processing
+	id_tag = ID_CONVEYOR_MINING_PROCESSING
+
+/obj/machinery/conveyor_switch/oneway/toxins
+	id_tag = ID_CONVEYOR_TOXINS
+
+/obj/machinery/conveyor_switch/oneway/recycling
+	id_tag = ID_CONVEYOR_RECYCLING
 
 // attack with hand, switch position
 /obj/machinery/conveyor_switch/oneway/attack_hand(mob/user)

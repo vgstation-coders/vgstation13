@@ -8,7 +8,7 @@
 #define DIR_ALL 	3	//All the directions.
 
 #define PAINT_ASK_DESC	=	1
-s
+
 /datum/rcd_schematic/tile
 	name				= "Decals"
 	category			= "Painting"

@@ -19,6 +19,13 @@
 
 	var/obj/item/weapon/card/id/id //Ref to the inserted ID card (for claiming points via the smelter).
 
+/obj/machinery/computer/smelting/mining
+	smelter_tag = ID_MINING_ORE_PROCESSING
+
+/obj/machinery/computer/smelting/recycling
+	name = "\improper Recycling Furnace Console"
+	smelter_tag = ID_RECYCLING_SMELTING
+
 /obj/machinery/computer/smelting/New()
 	. = ..()
 
@@ -297,6 +304,9 @@
 
 	var/credits = 0 //Amount of money, set to -1 to disable the $ amount showing in the menu (recycling, for example)
 
+/obj/machinery/mineral/processing_unit/mining
+	id_tag = ID_MINING_ORE_PROCESSING
+
 /obj/machinery/mineral/processing_unit/Destroy()
 	. = ..()
 
@@ -541,6 +551,9 @@
 	name = "recycling furnace"
 
 	credits = -1
+
+/obj/machinery/mineral/processing_unit/recycle/preset
+	id_tag = ID_RECYCLING_SMELTING
 
 /obj/machinery/mineral/processing_unit/recycle/grab_ores()
 	var/turf/in_T = get_step(src, in_dir)

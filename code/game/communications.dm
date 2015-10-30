@@ -111,10 +111,9 @@ On the map:
 1367 for recycling/mining processing machinery and conveyors
 1435 for status displays
 1437 for atmospherics/fire alerts
-1439 for engine components
 1439 for air pumps, air scrubbers, atmo control
-1441 for atmospherics - supply tanks
-1443 for atmospherics - distribution loop/mixed air tank
+1441 for atmospherics.
+1443 for engine components.
 1445 for bot nav beacons
 1447 for mulebot, secbot and ed209 control
 1449 for airlock controls, electropack, magnets

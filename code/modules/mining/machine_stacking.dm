@@ -13,6 +13,12 @@
 
 	var/list/stacker_data
 
+/obj/machinery/computer/stacking_unit/mining
+	stacker_tag = ID_MINING_STACKING
+
+/obj/machinery/computer/stacking_unit/recycling
+	stacker_tag = ID_RECYCLING_STACKING
+
 /obj/machinery/computer/stacking_unit/New()
 	. = ..()
 	if(ticker)
@@ -147,6 +153,12 @@
 	var/id_tag//The ID of the stacker this console should control
 	var/frequency = FREQ_DISPOSAL
 	var/datum/radio_frequency/radio_connection
+
+/obj/machinery/mineral/stacking_machine/mining
+	id_tag = ID_MINING_STACKING
+
+/obj/machinery/mineral/stacking_machine/recycling
+	id_tag = ID_RECYCLING_STACKING
 
 /obj/machinery/mineral/stacking_machine/RefreshParts()
 	var/T = 0

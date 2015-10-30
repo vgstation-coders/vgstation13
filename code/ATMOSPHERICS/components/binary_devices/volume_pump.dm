@@ -26,6 +26,16 @@ Thus, the two variables affect pump operation are set in New():
 	var/id_tag = null
 	var/datum/radio_frequency/radio_connection
 
+/obj/machinery/atmospherics/binary/volume_pump/layered/scrubbing
+	piping_layer	= PIPING_LAYER_SCRUBBING
+	pixel_x			= PIPING_PIXELX_SCRUBBERS
+	pixel_y			= PIPING_PIXELY_SCRUBBERS
+
+/obj/machinery/atmospherics/binary/volume_pump/layered/supply
+	piping_layer	= PIPING_LAYER_SUPPLY
+	pixel_x			= PIPING_PIXELX_SUPPLY
+	pixel_y			= PIPING_PIXELY_SUPPLY
+
 /obj/machinery/atmospherics/binary/volume_pump/on
 	on = 1
 	icon_state = "intact_on"

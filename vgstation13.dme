@@ -561,6 +561,7 @@
 #include "code\game\objects\effects\spawners\bombspawner.dm"
 #include "code\game\objects\effects\spawners\gibspawner.dm"
 #include "code\game\objects\effects\spawners\vaultspawner.dm"
+#include "code\game\objects\effects\spawners\window.dm"
 #include "code\game\objects\items\beacon.dm"
 #include "code\game\objects\items\blueprints.dm"
 #include "code\game\objects\items\bodybag.dm"
@@ -1849,10 +1850,8 @@
 #include "maps\_map.dm"
 #include "maps\tgstation.dm"
 #include "maps\defficiency\areas.dm"
-#include "maps\defficiency\pipes.dm"
 #include "maps\RandomZLevels\Academy.dm"
 #include "maps\RandomZLevels\challenge.dm"
 #include "maps\RandomZLevels\stationCollision.dm"
 #include "maps\RandomZLevels\wildwest.dm"
-#include "maps\tgstation\pipes.dm"
 // END_INCLUDE

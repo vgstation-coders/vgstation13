@@ -409,3 +409,527 @@
 	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON
 	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD // So it totals to the same pressure
 	//icon = 'icons/turf/shuttle-debug.dmi'
+
+// HERE BEGIN THE SUBTYPES FOR MAPPING, THINGS LIKE DIFFERENT FLOOR SPRITES.
+
+// REINFORCED FLOORING
+
+/turf/simulated/floor/engine/mapping/delivery
+	icon_state = "enginedelivery"
+
+/turf/simulated/floor/engine/mapping/bot
+	icon_state = "enginebot"
+
+/turf/simulated/floor/engine/mapping/loading_area
+	icon_state = "engineloadingarea"
+
+/turf/simulated/floor/engine/mapping/warning
+	icon_state = "enginewarn"
+
+/turf/simulated/floor/engine/mapping/warning/corner
+	icon_state = "enginewarncorner"
+
+// PLATING
+
+/turf/simulated/floor/plating/mapping/warning
+	icon_state = "warnplate"
+
+/turf/simulated/floor/plating/mapping/warning/corner
+	icon_state = "warnplatecorner"
+
+// BLACK
+
+/turf/simulated/floor/mapping/black
+	icon_state = "black"
+
+/turf/simulated/floor/mapping/black/corner
+	icon_state = "blackcorner"
+
+// NEUTRAL
+
+/turf/simulated/floor/mapping/neutral
+	icon_state = "neutral"
+
+/turf/simulated/floor/mapping/neutral/corner
+	icon_state = "neutralcorner"
+
+/turf/simulated/floor/mapping/neutral/full
+	icon_state = "neutralfull"
+
+// WHITE
+
+/turf/simulated/floor/mapping/white
+	icon_state = "white"
+
+/turf/simulated/floor/mapping/white/hall
+	icon_state = "whitehall"
+
+/turf/simulated/floor/mapping/white/corner
+	icon_state = "whitecorner"
+
+/turf/simulated/floor/mapping/white/delivery
+	icon_state = "whitedelivery"
+
+/turf/simulated/floor/mapping/white/bot
+	icon_state = "whitebot"
+
+/turf/simulated/floor/mapping/white/warning
+	icon_state = "warnwhite"
+
+/turf/simulated/floor/mapping/white/warning/corner
+	icon_state = "warnwhitecorner"
+
+// RED
+
+/turf/simulated/floor/mapping/red
+	icon_state = "red"
+
+/turf/simulated/floor/mapping/red/full
+	icon_state = "redfull"
+
+/turf/simulated/floor/mapping/red/corner
+	icon_state = "redcorner"
+
+// GREEN
+
+/turf/simulated/floor/mapping/green
+	icon_state = "green"
+
+/turf/simulated/floor/mapping/green/full
+	icon_state = "greenfull"
+
+/turf/simulated/floor/mapping/green/corner
+	icon_state = "greencorner"
+
+// BLUE
+
+/turf/simulated/floor/mapping/blue
+	icon_state = "blue"
+
+/turf/simulated/floor/mapping/blue/full
+	icon_state = "bluefull"
+
+/turf/simulated/floor/mapping/blue/corner
+	icon_state = "bluecorner"
+
+// YELLOW
+
+/turf/simulated/floor/mapping/yellow
+	icon_state = "yellow"
+
+/turf/simulated/floor/mapping/yellow/full
+	icon_state = "vfull"
+
+/turf/simulated/floor/mapping/yellow/corner
+	icon_state = "yellowcorner"
+
+// PURPLE
+
+/turf/simulated/floor/mapping/purple
+	icon_state = "purple"
+
+/turf/simulated/floor/mapping/purple/full
+	icon_state = "purplefull"
+
+/turf/simulated/floor/mapping/purple/corner
+	icon_state = "purplecorner"
+
+// ORANGE
+
+/turf/simulated/floor/mapping/orange
+	icon_state = "orange"
+
+/turf/simulated/floor/mapping/red/full
+	icon_state = "orangefull"
+
+/turf/simulated/floor/mapping/red/corner
+	icon_state = "orangecorner"
+
+// BROWN
+
+/turf/simulated/floor/mapping/brown
+	icon_state = "brown"
+
+/turf/simulated/floor/mapping/brown/full
+	icon_state = "brownfull"
+
+/turf/simulated/floor/mapping/brown/corner
+	icon_state = "browncorner"
+
+// RED AND YELLOW
+
+/turf/simulated/floor/mapping/red_yellow
+	icon_state = "redyellow"
+
+/turf/simulated/floor/mapping/red_yellow/full
+	icon_state = "redyellowfull"
+
+// RED AND BLUE
+
+/turf/simulated/floor/mapping/red_blue
+	icon_state = "redblue"
+
+/turf/simulated/floor/mapping/red_blue/full
+	icon_state = "redbluefull"
+
+// RED AND GREEN
+
+/turf/simulated/floor/mapping/red_green
+	icon_state = "redgreen"
+
+/turf/simulated/floor/mapping/red_green/full
+	icon_state = "redgreenfull"
+
+// GREEN AND YELLOW
+
+/turf/simulated/floor/mapping/green_yellow
+	icon_state = "greenyellow"
+
+/turf/simulated/floor/mapping/green_yellow/full
+	icon_state = "greenyellowfull"
+
+// GREEN AND BLUE
+
+/turf/simulated/floor/mapping/green_blue
+	icon_state = "greenblue"
+
+/turf/simulated/floor/mapping/green_blue/full
+	icon_state = "greenbluefull"
+
+// BLUE AND YELLOW
+
+/turf/simulated/floor/mapping/green_blue
+	icon_state = "blueyellow"
+
+/turf/simulated/floor/mapping/green_blue/full
+	icon_state = "blueyellowfull"
+
+// WHITE RED
+
+/turf/simulated/floor/mapping/white_red
+	icon_state = "whitered"
+
+/turf/simulated/floor/mapping/white_red/full
+	icon_state = "whiteredfull"
+
+/turf/simulated/floor/mapping/white_red/corner
+	icon_state = "whiteredcorner"
+
+// WHITE GREEN
+
+/turf/simulated/floor/mapping/white_green
+	icon_state = "whitegreen"
+
+/turf/simulated/floor/mapping/white_green/full
+	icon_state = "whitegreenfull"
+
+/turf/simulated/floor/mapping/white_green/corner
+	icon_state = "whitegreencorner"
+
+// WHITE BLUE
+
+/turf/simulated/floor/mapping/white_blue
+	icon_state = "whiteblue"
+
+/turf/simulated/floor/mapping/white_blue/full
+	icon_state = "whitebluefull"
+
+/turf/simulated/floor/mapping/white_blue/corner
+	icon_state = "whitebluecorner"
+
+// WHITE YELLOW
+
+/turf/simulated/floor/mapping/white_yellow
+	icon_state = "whiteyellow"
+
+/turf/simulated/floor/mapping/white_yellow/full
+	icon_state = "whiteyellowfull"
+
+/turf/simulated/floor/mapping/white_yellow/corner
+	icon_state = "whiteyellowcorner"
+
+// WHITE PURPLE
+
+/turf/simulated/floor/mapping/white_purple
+	icon_state = "whitepurple"
+
+/turf/simulated/floor/mapping/white_purple/full
+	icon_state = "whitepurplefull"
+
+/turf/simulated/floor/mapping/white_purple/corner
+	icon_state = "whitepurplecorner"
+
+// ARRIVAL
+
+/turf/simulated/floor/mapping/arrival
+	icon_state = "arrival"
+
+// ESCAPE
+
+/turf/simulated/floor/mapping/escape
+	icon_state = "escape"
+
+// DARK
+
+/turf/simulated/floor/mapping/dark
+	icon_state = "dark floor stripe"
+
+/turf/simulated/floor/mapping/dark/full
+	icon_state = "dark"
+
+/turf/simulated/floor/mapping/dark/corner
+	icon_state = "dark floor corner"
+
+// DARK RED
+
+/turf/simulated/floor/mapping/dark_red
+	icon_state = "dark red stripe"
+
+/turf/simulated/floor/mapping/dark_red/full
+	icon_state = "dark red full"
+
+/turf/simulated/floor/mapping/dark_red/corner
+	icon_state = "dark red corner"
+
+// DARK GREEN
+
+/turf/simulated/floor/mapping/dark_green
+	icon_state = "dark green stripe"
+
+/turf/simulated/floor/mapping/dark_green/full
+	icon_state = "dark green full"
+
+/turf/simulated/floor/mapping/dark_green/corner
+	icon_state = "dark green corner"
+
+// DARK BLUE
+
+/turf/simulated/floor/mapping/dark_blue
+	icon_state = "dark blue stripe"
+
+/turf/simulated/floor/mapping/dark_blue/full
+	icon_state = "dark blue full"
+
+/turf/simulated/floor/mapping/dark_blue/corner
+	icon_state = "dark blue corner"
+
+// DARK PURPLE
+
+/turf/simulated/floor/mapping/dark_purple
+	icon_state = "dark purple stripe"
+
+/turf/simulated/floor/mapping/dark_purple/full
+	icon_state = "dark purple full"
+
+/turf/simulated/floor/mapping/dark_purple/corner
+	icon_state = "dark purple corner"
+
+// DARK YELLOW
+
+/turf/simulated/floor/mapping/dark_yellow
+	icon_state = "dark yellow stripe"
+
+/turf/simulated/floor/mapping/dark_yellow/full
+	icon_state = "dark yellow full"
+
+/turf/simulated/floor/mapping/dark_yellow/corner
+	icon_state = "dark yellow corner"
+
+// DARK YELLOW
+
+/turf/simulated/floor/mapping/dark_orange
+	icon_state = "dark orange stripe"
+
+/turf/simulated/floor/mapping/dark_orange/full
+	icon_state = "dark orange full"
+
+/turf/simulated/floor/mapping/dark_orange/corner
+	icon_state = "dark orange corner"
+
+// DARK VAULT
+
+/turf/simulated/floor/mapping/dark_vault
+	icon_state = "dark vault stripe"
+
+/turf/simulated/floor/mapping/dark_vault/full
+	icon_state = "dark vault full"
+
+/turf/simulated/floor/mapping/dark_vault/corner
+	icon_state = "dark vault corner"
+
+/turf/simulated/floor/mapping/dark_vault/markings
+	icon_state = "dark-markings"
+
+// MARKINGS
+
+/turf/simulated/floor/mapping/markings/delivery
+	icon_state = "delivery"
+
+/turf/simulated/floor/mapping/markings/bot
+	icon_state = "bot"
+
+/turf/simulated/floor/mapping/markings/plaque
+	icon_state = "plaque"
+
+/turf/simulated/floor/mapping/markings/loading_area
+	icon_state = "loadingarea"
+
+// WARNING
+
+/turf/simulated/floor/mapping/warning
+	icon_state = "warning"
+
+/turf/simulated/floor/mapping/warning/corner
+	icon_state = "warningcorner"
+
+// CHAPEL
+
+/turf/simulated/floor/mapping/chapel
+	icon_state = "chapel"
+
+// SS13 LOGO
+
+/turf/simulated/floor/mapping/logo
+	icon_state = "L1"
+
+/turf/simulated/floor/mapping/logo/L1
+	icon_state = "L1"
+
+/turf/simulated/floor/mapping/logo/L2
+	icon_state = "L2"
+
+/turf/simulated/floor/mapping/logo/L3
+	icon_state = "L3"
+
+/turf/simulated/floor/mapping/logo/L4
+	icon_state = "L4"
+
+/turf/simulated/floor/mapping/logo/L5
+	icon_state = "L5"
+
+/turf/simulated/floor/mapping/logo/L6
+	icon_state = "L6"
+
+/turf/simulated/floor/mapping/logo/L7
+	icon_state = "L7"
+
+/turf/simulated/floor/mapping/logo/L8
+	icon_state = "L8"
+
+/turf/simulated/floor/mapping/logo/L9
+	icon_state = "L9"
+
+/turf/simulated/floor/mapping/logo/L10
+	icon_state = "L10"
+
+/turf/simulated/floor/mapping/logo/L11
+	icon_state = "L11"
+
+/turf/simulated/floor/mapping/logo/L12
+	icon_state = "L12"
+
+/turf/simulated/floor/mapping/logo/L13
+	icon_state = "L13"
+
+/turf/simulated/floor/mapping/logo/L14
+	icon_state = "L14"
+
+/turf/simulated/floor/mapping/logo/L15
+	icon_state = "L15"
+
+/turf/simulated/floor/mapping/logo/L16
+	icon_state = "L16"
+
+/turf/simulated/floor/mapping/logo/derelict/L1
+	icon_state = "derelict1"
+
+/turf/simulated/floor/mapping/logo/derelict/L2
+	icon_state = "derelict2"
+
+/turf/simulated/floor/mapping/logo/derelict/L3
+	icon_state = "derelict3"
+
+/turf/simulated/floor/mapping/logo/derelict/L4
+	icon_state = "derelict4"
+
+/turf/simulated/floor/mapping/logo/derelict/L5
+	icon_state = "derelict5"
+
+/turf/simulated/floor/mapping/logo/derelict/L6
+	icon_state = "derelict6"
+
+/turf/simulated/floor/mapping/logo/derelict/L7
+	icon_state = "derelict7"
+
+/turf/simulated/floor/mapping/logo/derelict/L8
+	icon_state = "derelict8"
+
+/turf/simulated/floor/mapping/logo/derelict/L9
+	icon_state = "derelict9"
+
+/turf/simulated/floor/mapping/logo/derelict/L10
+	icon_state = "derelict10"
+
+/turf/simulated/floor/mapping/logo/derelict/L11
+	icon_state = "derelict11"
+
+/turf/simulated/floor/mapping/logo/derelict/L12
+	icon_state = "derelict12"
+
+/turf/simulated/floor/mapping/logo/derelict/L13
+	icon_state = "derelict13"
+
+/turf/simulated/floor/mapping/logo/derelict/L14
+	icon_state = "derelict14"
+
+/turf/simulated/floor/mapping/logo/derelict/L15
+	icon_state = "derelict15"
+
+/turf/simulated/floor/mapping/logo/derelict/L16
+	icon_state = "derelict16"
+
+// OTHER
+
+/turf/simulated/floor/mapping/bar
+	icon_state = "bar"
+
+/turf/simulated/floor/mapping/cafeteria
+	icon_state = "cafeteria"
+
+/turf/simulated/floor/mapping/checker
+	icon_state = "checker"
+
+/turf/simulated/floor/mapping/barber
+	icon_state = "barber"
+
+/turf/simulated/floor/mapping/grimy
+	icon_state = "grimy"
+
+/turf/simulated/floor/mapping/hydro
+	icon_state = "hydrofloor"
+
+/turf/simulated/floor/mapping/showroom
+	icon_state = "showroomfloor"
+
+/turf/simulated/floor/mapping/freezer
+	icon_state = "freezerfloor"
+
+/turf/simulated/floor/mapping/bcircuit
+	icon_state = "bcircuit"
+
+/turf/simulated/floor/mapping/gcircuit
+	icon_state = "gcircuit"
+
+/turf/simulated/floor/mapping/solarpanel
+	icon_state = "solarpanel"
+
+/turf/simulated/floor/mapping/solarpanel/airless
+	icon_state = "solarpanel"
+	name = "airless floor"
+	
+	oxygen = 0.01
+	nitrogen = 0.01
+
+/turf/simulated/floor/mapping/solarpanel/airless/New()
+	..()
+	name = "floor"
