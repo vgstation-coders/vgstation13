@@ -1,4 +1,6 @@
 /mob/living/carbon/slime/examine(mob/user)
+	user.last_examine = src
+
 	var/msg = "<span class='info'>*---------*\nThis is \icon[src] \a <EM>[src]</EM>!\n"
 	if (src.stat == DEAD)
 		msg += "<span class='deadsay'>It is limp and unresponsive.</span>\n"

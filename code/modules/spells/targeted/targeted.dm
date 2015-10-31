@@ -71,9 +71,12 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 
 			if(possible_targets.len)
 				if(spell_flags & SELECTABLE) //if we are allowed to choose. see setup.dm for details
-					var/mob/temp_target = input(user, "Choose the target for the spell.", "Targeting") as null|mob in possible_targets
-					if(temp_target)
-						targets += temp_target
+					if(possible_targets.Find(user.last_examine)) //If the last guy whom user examined is a possible target, use him
+						targets += user.last_examine
+					else
+						var/mob/temp_target = input(user, "Choose the target for the spell.", "Targeting") as null|mob in possible_targets
+						if(temp_target)
+							targets += temp_target
 				else
 					targets += pick(possible_targets)
 			//Adds a safety check post-input to make sure those targets are actually in range.

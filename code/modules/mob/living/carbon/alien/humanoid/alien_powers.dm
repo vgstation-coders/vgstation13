@@ -118,11 +118,20 @@ Doesn't work on other aliens/AI.*/
 	return
 
 
-/mob/living/carbon/alien/humanoid/proc/neurotoxin(mob/target as mob in oview())
+/mob/living/carbon/alien/humanoid/proc/neurotoxin()//mob/target as mob in oview())
 	set name = "Spit Neurotoxin (50)"
 	set desc = "Spits neurotoxin at someone, paralyzing them for a short time if they are not wearing protective gear."
 	set category = "Alien"
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/alien/humanoid/proc/neurotoxin() called tick#: [world.time]")
+
+	var/mob/target
+	if(isliving(usr.last_examine)) //If last atom usr has examined is a living mob. No need to check if that mob is in our view, as that is done below
+		target = usr.last_examine //Spit neurotoxin at it!
+
+	if(!target) //If we failed to get a target in the previous three lines, choose a target the old-school way
+		target = input(usr, "Select a mob to spit neurotoxin at.", "Alien Powers") as null|mob in oview()
+
+	if(!target || !target in oview()) return //If we still failed to get a target OR the target is not in our view
 
 	if(powerc(50))
 		if(isalien(target))
