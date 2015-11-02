@@ -139,3 +139,12 @@
 	materials = list (MAT_IRON = 1000, MAT_GLASS = 1000)
 	category = "Medical"
 	build_path = /obj/item/device/antibody_scanner
+
+/datum/design/pill_collector
+	name = "Pill Collector"
+	id = "pcollector"
+	req_tech = list("materials" = 2, "biotech" = 2)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 4000, MAT_GLASS = 1000)
+	category = "Medical"
+	build_path = /obj/item/weapon/storage/bag/chem
