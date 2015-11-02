@@ -167,12 +167,13 @@
 /obj/item/weapon/storage/bag/chem
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "pcollector"
-	name = "Pill Collector"
+	name = "pill collector"
 	item_state = "pcollector"
 	storage_slots = 50; //the number of plant pieces it can carry.
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	max_w_class = 3
 	w_class = 1
+	origin_tech = "biotech=2;materials=2"
 	can_hold = list("/obj/item/weapon/reagent_containers/glass/bottle","/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/reagent_containers/syringe")
 
 // -----------------------------
