@@ -2,7 +2,7 @@ var/global/list/object_profiling = list()
 var/global/list/processing_objects = list()
 
 /datum/controller/process/obj
-	schedule_interval = 20 // every 2 seconds
+	schedule_interval = 2 SECONDS
 
 /datum/controller/process/obj/setup()
 	name = "obj"

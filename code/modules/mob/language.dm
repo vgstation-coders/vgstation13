@@ -244,6 +244,9 @@
 		"gal'h'rfikk", "harfrandid", "mud'gib", "fuu", "ma'jin", "dedo", "ol'btoh", "n'ath", "reth", "sh'yro", "eth", \
 		"d'rekkathnor", "khari'd", "gual'te", "nikka", "nikt'o", "barada", "kla'atu", "barhah", "hra" ,"zar'garis")
 
+/datum/language/clockcultcommon/say_misunderstood(mob/M, message)
+	//make a rot13 proc and then jumble shit around
+	return speech_verb
 
 // Language handling.
 /mob/proc/add_language(var/language)

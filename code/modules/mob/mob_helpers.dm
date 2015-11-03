@@ -1,5 +1,6 @@
 /proc/RemoveAllFactionIcons(var/datum/mind/M)
-	ticker.mode.update_cult_icons_removed(M)
+	ticker.mode.update_antag_icons_removed(M, ticker.mode.cult, "cult")
+	ticker.mode.update_antag_icons_removed(M, ticker.mode.clockcult, "clockcult")
 	ticker.mode.update_rev_icons_removed(M)
 	ticker.mode.update_wizard_icons_removed(M)
 

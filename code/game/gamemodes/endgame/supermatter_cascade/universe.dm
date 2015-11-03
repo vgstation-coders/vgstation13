@@ -220,7 +220,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 		if(M in ticker.mode.cult)
 			ticker.mode.cult -= M
-			ticker.mode.update_cult_icons_removed(M)
+			ticker.mode.update_antag_icons_removed(M, ticker.mode.cult, "cult")
 			M.special_role = null
 			var/datum/game_mode/cult/cult = ticker.mode
 			if (istype(cult))
@@ -235,7 +235,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 			M.special_role = null
 			M.current.spellremove(M.current, config.feature_object_spell_system? "object":"verb")
 			M.current << "<span class='danger'><FONT size = 3>Your powers ebb and you feel weak. You are no longer a wizard.</FONT></span>"
-			ticker.mode.update_wizard_icons_removed(M)
+			ticker.mode.update_antag_icons_removed(M, ticker.mode.wizards, "wizard")
 
 		if(M in ticker.mode.changelings)
 			ticker.mode.changelings -= M
@@ -256,7 +256,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 		if(M in ticker.mode.syndicates)
 			ticker.mode.syndicates -= M
-			ticker.mode.update_synd_icons_removed(M)
+			ticker.mode.update_antag_icons_removed(M, ticker.mode.syndicates, "synd")
 			M.special_role = null
 			//for (var/datum/objective/nuclear/O in objectives)
 			//	objectives-=O

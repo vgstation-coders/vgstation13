@@ -541,3 +541,84 @@ proc/get_nt_opposed()
 							var/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "minion")
 							t_mind.current.client.images += I
 							//world << "Adding minion overlay to [t_mind.current]"
+
+
+/*
+Antag icon generic procs
+By RemieRichards
+These are generic versions of:
+ - update_X_icons_added()
+ - update_X_icons_removed()
+ - update_all_X_icons()
+
+Only works for single icon states at the moment, but it atleast cleans up a bit.
+Modes that use these generics:
+- Cult
+- Clockcult
+- Wizard
+- Nuclear
+
+*/
+
+
+/datum/game_mode/proc/update_all_antag_icons(var/list/antag_list, var/antag_icon)
+	if(!antag_list || !antag_icon)
+		return
+	spawn(0)
+		for(var/datum/mind/antag in antag_list)
+			if(antag.current)
+				if(antag.current.client)
+					for(var/image/I in antag.current.client.images)
+						if(I.icon_state == antag_icon)
+							antag.current.client.images -= I
+		for(var/datum/mind/antag in antag_list)
+			if(antag.current)
+				if(antag.current.client)
+					for(var/datum/mind/antag_1 in antag_list)
+						if(antag_1.current)
+							var/imageloc = antag_1.current
+							if(ismecha(antag_1.current.loc))
+								imageloc = antag_1.current.loc
+							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = antag_icon, layer = 13)
+							antag.current.client.images += I
+
+
+/datum/game_mode/proc/update_antag_icons_added(datum/mind/antag_mind, var/list/antag_list, var/antag_icon)
+	if(!antag_mind || !antag_list || !antag_icon)
+		return 0
+	spawn(0)
+		for(var/datum/mind/antag in antag_list)
+			if(antag.current)
+				if(antag.current.client)
+					var/imageloc = antag.current
+					if(ismecha(antag.current.loc))
+						imageloc = antag.current.loc
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = antag_icon, layer = 13)
+					antag.current.client.images += I
+			if(antag_mind.current)
+				if(antag_mind.current.client)
+					var/imageloc = antag_mind.current
+					if(ismecha(antag_mind.current.loc))
+						imageloc = antag_mind.current.loc
+					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = antag_icon, layer = 13)
+					antag_mind.current.client.images += J
+
+
+/datum/game_mode/proc/update_antag_icons_removed(datum/mind/antag_mind, var/list/antag_list, var/antag_icon)
+	if(!antag_mind || !antag_list || !antag_icon)
+		return
+	spawn(0)
+		for(var/datum/mind/antag in antag_list)
+			if(antag.current)
+				if(antag.current.client)
+					for(var/image/I in antag.current.client.images)
+						if(I.icon_state == antag_icon && ((I.loc == antag_mind.current) || (I.loc == antag_mind.current.loc)))
+							antag.current.client.images -= I
+		if(antag_mind.current)
+			if(antag_mind.current.client)
+				for(var/image/I in antag_mind.current.client.images)
+					if(I.icon_state == antag_icon)
+						antag_mind.current.client.images -= I
+
+
+
