@@ -244,12 +244,12 @@
 	if((H.mind in ticker.mode:revolutionaries) || (H.mind in ticker.mode:head_revolutionaries))
 		ticker.mode.update_all_rev_icons() //So the icon actually appears
 	if(H.mind in ticker.mode.syndicates)
-		ticker.mode.update_all_synd_icons()
+		ticker.mode.update_all_antag_icons(ticker.mode.syndicates, "synd")
 	if (H.mind in ticker.mode.cult)
 		ticker.mode.add_cultist(src.occupant.mind)
-		ticker.mode.update_all_cult_icons() //So the icon actually appears
+		ticker.mode.update_all_antag_icons(ticker.mode.cult, "cult") //So the icon actually appears
 	if(H.mind in ticker.mode.wizards)
-		ticker.mode.update_all_wizard_icons()
+		ticker.mode.update_all_antag_icons(ticker.mode.wizards, "wizard")
 	if(("\ref[H.mind]" in ticker.mode.necromancer) || (H.mind in ticker.mode.risen))
 		ticker.mode.update_all_necro_icons()
 	if(("\ref[H.mind]" in ticker.mode.implanter) || (H.mind in ticker.mode.implanted))

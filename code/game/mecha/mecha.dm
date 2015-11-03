@@ -1147,11 +1147,13 @@
 			if((H.mind in ticker.mode:revolutionaries) || (H.mind in ticker.mode:head_revolutionaries))
 				ticker.mode.update_all_rev_icons()
 			if(H.mind in ticker.mode.syndicates)
-				ticker.mode.update_all_synd_icons()
-			if (H.mind in ticker.mode.cult)
-				ticker.mode.update_all_cult_icons()
+				ticker.mode.update_all_antag_icons(ticker.mode.syndicates, "synd")
+			if(H.mind in ticker.mode.cult)
+				ticker.mode.update_all_antag_icons(ticker.mode.cult, "cult")
 			if(H.mind in ticker.mode.wizards)
-				ticker.mode.update_all_wizard_icons()
+				ticker.mode.update_all_antag_icons(ticker.mode.wizards, "wizard")
+			if(isclockcult(H))
+				ticker.mode.update_all_antag_icons(ticker.mode.clockcult, "clockcult")
 		// -- End mode specific stuff
 
 		return 1
@@ -1331,11 +1333,13 @@
 			if((src.occupant.mind in ticker.mode:revolutionaries) || (src.occupant.mind in ticker.mode:head_revolutionaries))
 				ticker.mode.update_all_rev_icons()
 			if(src.occupant.mind in ticker.mode.syndicates)
-				ticker.mode.update_all_synd_icons()
-			if (src.occupant.mind in ticker.mode.cult)
-				ticker.mode.update_all_cult_icons()
+				ticker.mode.update_all_antag_icons(ticker.mode.syndicates, "synd")
+			if(src.occupant.mind in ticker.mode.cult)
+				ticker.mode.update_all_antag_icons(ticker.mode.cult, "cult")
 			if(src.occupant.mind in ticker.mode.wizards)
-				ticker.mode.update_all_wizard_icons()
+				ticker.mode.update_all_antag_icons(ticker.mode.wizards, "wizard")
+			if(isclockcult(src.occupant))
+				ticker.mode.update_all_antag_icons(ticker.mode.clockcult, "clockcult")
 		// -- End mode specific stuff
 
 		src.occupant = null

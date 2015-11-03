@@ -1576,41 +1576,48 @@ var/list/slot_equipment_priority = list( \
 
 
 /mob/proc/Stun(amount)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/Stun() called tick#: [world.time]")
 	if(status_flags & CANSTUN)
-		stunned = max(max(stunned,amount),0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
-	return
+		stunned = max(stunned, amount, 0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
+		INVOKE_EVENT(on_stun, list("amount" = amount))
+		update_canmove()	//updates lying, canmove and icons
 
 /mob/proc/SetStunned(amount) //if you REALLY need to set stun to a set amount without the whole "can't go below current stunned"
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/SetStunned() called tick#: [world.time]")
 	if(status_flags & CANSTUN)
 		stunned = max(amount,0)
+		INVOKE_EVENT(on_stun, list("amount" = amount))
+		update_canmove()	//updates lying, canmove and icons
 	return
 
 /mob/proc/AdjustStunned(amount)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/AdjustStunned() called tick#: [world.time]")
 	if(status_flags & CANSTUN)
 		stunned = max(stunned + amount,0)
+		INVOKE_EVENT(on_stun, list("amount" = amount))
+		update_canmove()	//updates lying, canmove and icons
 	return
 
 /mob/proc/Weaken(amount)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/Weaken() called tick#: [world.time]")
 	if(status_flags & CANWEAKEN)
-		weakened = max(max(weakened,amount),0)
+		weakened = max(weakened, amount, 0)
+		INVOKE_EVENT(on_weaken, list("amount" = amount))
 		update_canmove()	//updates lying, canmove and icons
 	return
 
 /mob/proc/SetWeakened(amount)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/SetWeakened() called tick#: [world.time]")
 	if(status_flags & CANWEAKEN)
-		weakened = max(amount,0)
+		weakened = max(amount, 0)
+		INVOKE_EVENT(on_weaken, list("amount" = amount))
 		update_canmove()	//updates lying, canmove and icons
 	return
 
 /mob/proc/AdjustWeakened(amount)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/AdjustWeakened() called tick#: [world.time]")
 	if(status_flags & CANWEAKEN)
-		weakened = max(weakened + amount,0)
+		weakened = max(weakened + amount, 0)
+		INVOKE_EVENT(on_weaken, list("amount" = amount))
 		update_canmove()	//updates lying, canmove and icons
 	return
 

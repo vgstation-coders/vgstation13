@@ -86,7 +86,6 @@ Please contact me on #coderbus IRC. ~Carn x
 	var/icon/deform_icon
 	var/update_overlays = 0
 
-
 /mob/living/carbon/human/proc/QueueUpdateDamageIcon(var/forced = 0)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/carbon/human/proc/QueueUpdateDamageIcon() called tick#: [world.time]")
 	if(forced)
@@ -99,6 +98,7 @@ Please contact me on #coderbus IRC. ~Carn x
 //this proc is messy as I was forced to include some old laggy cloaking code to it so that I don't break cloakers
 //I'll work on removing that stuff by rewriting some of the cloaking stuff at a later date.
 /mob/living/carbon/human/update_icons()
+	..() // To trigger events
 	update_hud()		//TODO: remove the need for this
 	update_overlays_standing()
 	update_transform()

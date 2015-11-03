@@ -69,7 +69,7 @@ var/list/all_doors = list()
 
 		// can bump open one airlock per second
 		// this is to prevent shock spam
-		if(world.time - M.last_bumped <= 10)
+		if(world.time - M.last_bumped <= DOOR_BUMP_DELAY)
 			return
 
 		M.last_bumped = world.time

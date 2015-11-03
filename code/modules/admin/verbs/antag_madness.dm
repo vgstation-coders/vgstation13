@@ -217,7 +217,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 		if("cult")
 			if(iscult(M))	return 0
 			ticker.mode.cult += M.mind
-			ticker.mode.update_cult_icons_added(M.mind)
+			ticker.mode.update_antag_icons_added(M.mind, ticker.mode.cult, "cult")
 			M.mind.special_role = "Cultist"
 			M << "<span class='sinister'>You remember the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>"
 			M << "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>"
@@ -360,7 +360,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 		if("nuke")
 			if(isnukeop(M))	return 0
 			ticker.mode.syndicates += M.mind
-			ticker.mode.update_synd_icons_added(M.mind)
+			ticker.mode.update_antag_icons_added(M.mind, ticker.mode.syndicates, "synd")
 			M.real_name = "[syndicate_name()] Operative"
 			M.mind.special_role = "Syndicate"
 			M.mind.assigned_role = "MODE"
@@ -471,7 +471,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			ticker.mode.wizards += M.mind
 			M.mind.special_role = "Wizard"
 			M.mind.assigned_role = "MODE"
-			ticker.mode.update_wizard_icons_added(M.mind)
+			ticker.mode.update_antag_icons_added(M.mind, ticker.mode.wizards, "wizard")
 			ticker.mode.forge_wizard_objectives(M.mind)
 			ticker.mode.greet_wizard(M.mind)
 
@@ -548,7 +548,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 			M.regenerate_icons()
 
-			ticker.mode.update_all_wizard_icons()
+			ticker.mode.update_all_antag_icons(ticker.mode.wizards, "wizard")
 
 			M.equip_to_slot_or_del(pack, slot_in_backpack)
 			M << "Your previous belongings have been stored in your backpack."

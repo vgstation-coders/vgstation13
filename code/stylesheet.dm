@@ -65,6 +65,7 @@ h1.alert, h2.alert		{color: #000000;}
 .rough					{font-family: 'Trebuchet MS', cursive, sans-serif;}
 .say_quote				{font-family: Georgia, Verdana, sans-serif;}
 .cult					{color: #800080; font-weight: bold; font-style: italic;}
+.clockwork				{color: #7f6000; font-weight: bold; font-style: italic;}
 .interface				{color: #330033;}
 .big					{font-size: 150%;}
 .bold					{font-weight: bold;}
