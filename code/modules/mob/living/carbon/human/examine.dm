@@ -2,6 +2,8 @@
 #define JITTER_HIGH 300
 
 /mob/living/carbon/human/examine(mob/user)
+	user.last_examine = src
+
 	var/list/obscured = check_obscured_slots()
 	var/skipgloves = 0
 	//var/skipsuitstorage = 0

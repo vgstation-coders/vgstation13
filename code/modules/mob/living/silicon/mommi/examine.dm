@@ -1,4 +1,5 @@
 /mob/living/silicon/robot/mommi/examine(mob/user)
+	user.last_examine = src
 
 	var/msg = "<span class='info'>*---------*\nThis is \icon[src] \a <EM>[src]</EM>!\n"
 

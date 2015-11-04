@@ -387,6 +387,8 @@ its easier to just keep the beam vertical.
 /atom/proc/examine(mob/user, var/size = "")
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/atom/proc/examine() called tick#: [world.time]")
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
+	user.last_examine = src
+
 	var/f_name = "\a [src]."
 	if(src.blood_DNA && src.blood_DNA.len)
 		if(gender == PLURAL)

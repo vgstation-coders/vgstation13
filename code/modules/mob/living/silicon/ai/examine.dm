@@ -1,4 +1,5 @@
 /mob/living/silicon/ai/examine(mob/user)
+	user.last_examine = src
 
 	var/msg = "<span class='info'>*---------*\nThis is \icon[src] <EM>[src]</EM>!\n"
 	if (src.stat == DEAD)
