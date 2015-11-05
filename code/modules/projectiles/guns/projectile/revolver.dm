@@ -157,8 +157,8 @@
 /obj/item/weapon/gun/projectile/russian/attack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj)
 
 	if(!getAmmo())
-		user.visible_message("<span class='warning'>*click*</span>", "<span class='warning'>*click*</span>")
 		playsound(user, 'sound/weapons/empty.ogg', 100, 1)
+		visible_message("<span class='warning'>*click*</span>")
 		return
 
 	if(isliving(target) && isliving(user))
@@ -168,8 +168,8 @@
 
 				var/obj/item/ammo_casing/AC = loaded[1]
 				if(!process_chambered())
-					user.visible_message("<span class='warning'>*click*</span>", "<span class='warning'>*click*</span>")
 					playsound(user, 'sound/weapons/empty.ogg', 100, 1)
+					visible_message("<span class='warning'>*click*</span>")
 					return
 				if(!in_chamber)
 					return

@@ -1,3 +1,9 @@
+/obj/item/ammo_casing/a556x45
+	desc = "A 5.56x45 bullet casing."
+	caliber = "556x45"
+	projectile_type = "/obj/item/projectile/bullet"
+	w_type = RECYK_METAL
+
 /obj/item/ammo_casing/a357
 	desc = "A .357 bullet casing."
 	caliber = "357"
@@ -74,6 +80,7 @@
 	projectile_type = "/obj/item/projectile/bullet"
 	starting_materials = list(MAT_IRON = 12500)
 	w_type = RECYK_METAL
+	casing_insert_sound = 'sound/weapons/shotgun_casing.ogg'
 
 	update_icon()
 		desc = "[initial(desc)][BB ? "" : " This one is spent"]"
@@ -136,9 +143,6 @@
 
 /obj/item/ammo_casing/energy/kinetic
 	projectile_type = /obj/item/projectile/bullet
-	//select_name = "kinetic"
-	//e_cost = 500
-	//fire_sound = 'sound/weapons/Gunshot4.ogg'
 	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/a762x55

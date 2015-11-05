@@ -245,11 +245,6 @@
 
 /obj/item/projectile/bullet/hecate/OnFired()
 	..()
-	for (var/mob/M in player_list)
-		if(M && M.client)
-			var/turf/M_turf = get_turf(M)
-			if(M_turf && (M_turf.z == starting.z))
-				M.playsound_local(starting, 'sound/weapons/hecate_fire_far.ogg', 25, 1)
 	for (var/mob/living/carbon/human/H in range(src,1))
 		if(!H.earprot())
 			H.Weaken(2)

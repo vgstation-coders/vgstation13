@@ -11,6 +11,7 @@
 	flags = FPRINT
 	w_class = 3.0
 	fire_delay = 0
+	fire_sound_dist = 0 //We do not want far sounds for this
 	fire_sound = 'sound/weapons/hookshot_fire.ogg'
 	var/maxlength = 14
 	var/obj/item/projectile/hookshot/hook = null

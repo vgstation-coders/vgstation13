@@ -12,6 +12,7 @@
 	w_class = 5.0//we be fuckin huge maaan
 	fire_delay = 0
 	fire_sound = 'sound/weapons/gatling_fire.ogg'
+	fire_sound_far = 'sound/weapons/gatling_fire_far.ogg'
 	var/max_shells = 200
 	var/current_shells = 200
 

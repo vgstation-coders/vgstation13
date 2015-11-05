@@ -11,6 +11,7 @@
 	flags = FPRINT
 	w_class = 3.0
 	fire_delay = 0
+	fire_sound_dist = 0 //We do not want far sounds for this
 	fire_sound = 'sound/weapons/portalgun_blue.ogg'
 	var/setting = 0	//0 = Blue, 1 = Red.
 	var/obj/effect/portal/blue_portal = null

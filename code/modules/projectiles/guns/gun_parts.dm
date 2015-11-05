@@ -6,7 +6,6 @@
  - Silencer
 */
 
-
 /obj/item/gun_part/silencer
 	name = "silencer"
 	desc = "a silencer"

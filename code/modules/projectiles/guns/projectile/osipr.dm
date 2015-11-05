@@ -15,6 +15,7 @@
 	fire_delay = 0
 	w_class = 3.0
 	fire_sound = 'sound/weapons/osipr_fire.ogg'
+	fire_sound_far = 'sound/weapons/osipr_fire_far.ogg'
 	var/obj/item/energy_magazine/osipr/magazine = null
 	var/energy_balls = 2
 	var/mode = OSIPR_PRIMARY_FIRE

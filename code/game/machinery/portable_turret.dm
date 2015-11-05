@@ -151,7 +151,7 @@
 				eprojectile = projectile
 				iconholder = 1
 				reqpower = 200
-				fire_sound = 'sound/weapons/Gunshot.ogg'
+				fire_sound = 'sound/weapons/gunshot.ogg'
 				efire_sound = fire_sound
 
 			if(/obj/item/weapon/gun/energy/lasercannon)

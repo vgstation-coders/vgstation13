@@ -11,6 +11,7 @@
 	fire_delay = 30
 	w_class = 4.0
 	fire_sound = 'sound/weapons/hecate_fire.ogg'
+	fire_sound_far = 'sound/weapons/hecate_fire_far.ogg'
 	caliber = list(".50BMG" = 1)
 	ammo_type = "/obj/item/ammo_casing/BMG50"
 	max_shells = 1

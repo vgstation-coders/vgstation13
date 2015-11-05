@@ -2,6 +2,7 @@
 	name = "rocket launcher"
 	desc = "Ranged explosions, science marches on."
 	fire_sound = 'sound/weapons/rocket.ogg'
+	fire_sound_far = 'sound/weapons/rocket_far.ogg'
 	icon_state = "rpg"
 	item_state = "rpg"
 	max_shells = 1
@@ -20,7 +21,6 @@
 	origin_tech = "combat=4;materials=2;syndicate=2"
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg"
 	attack_verb = list("struck", "hit", "bashed")
-	gun_flags = 0
 
 /obj/item/weapon/gun/projectile/rocketlauncher/isHandgun()
 	return 0
@@ -68,7 +68,6 @@
 	fire_delay = 2
 	caliber = list("nikita" = 1)
 	origin_tech = null
-	fire_sound = 'sound/weapons/rocket.ogg'
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg/nikita"
 	var/obj/item/projectile/nikita/fired = null
 	var/emagged = 0

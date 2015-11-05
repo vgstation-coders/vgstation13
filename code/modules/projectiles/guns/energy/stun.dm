@@ -51,7 +51,7 @@
 	icon_state = "stunrevolver"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	fire_sound = 'sound/weapons/Gunshot.ogg'
+	fire_sound = 'sound/weapons/gunshot.ogg'
 	origin_tech = "combat=3;materials=3;powerstorage=2"
 	charge_cost = 125
 	projectile_type = "/obj/item/projectile/energy/electrode"

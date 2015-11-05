@@ -2,6 +2,7 @@
 	name = "shotgun"
 	desc = "Useful for sweeping alleys."
 	fire_sound = 'sound/weapons/shotgun.ogg'
+	fire_sound_far = 'sound/weapons/shotgun_far.ogg'
 	icon_state = "shotgun"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
@@ -17,9 +18,6 @@
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
-
-
-	gun_flags = 0
 
 /obj/item/weapon/gun/projectile/shotgun/pump/isHandgun()
 		return 0

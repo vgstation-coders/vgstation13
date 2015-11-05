@@ -680,7 +680,7 @@
 				continue
 			if (targloc == curloc)
 				continue
-			playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
+			playsound(src, 'sound/weapons/gunshot.ogg', 50, 1)
 			var/obj/item/projectile/A = new /obj/item/projectile(curloc)
 			src.projectiles--
 			A.original = target

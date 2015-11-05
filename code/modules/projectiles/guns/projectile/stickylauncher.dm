@@ -14,6 +14,7 @@
 	w_class = 3.0
 	fire_delay = 2
 	fire_sound = 'sound/weapons/grenadelauncher.ogg'
+	fire_sound_dist = 0 //No far sounds
 	var/list/loaded = list()
 	var/list/fired = list()
 
