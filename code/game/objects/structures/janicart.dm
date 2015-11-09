@@ -50,6 +50,9 @@
 		name = "upgraded janicart"
 		icon_state = "pussywagon_upgraded"
 	else if(istype(W, /obj/item/weapon/storage/bag/trash))
+		if(mybag)
+			user << "<span class='warning'There is already a trashbag on the pimpin' ride!</span>
+			return
 		user << "<span class='notice'>You hook the trashbag onto the pimpin' ride.</span>"
 		user.drop_item(W, src)
 		mybag = W
