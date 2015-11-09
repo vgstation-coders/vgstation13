@@ -1,0 +1,4 @@
+author: Deity Link
+delete-after: true
+changes:
+  - bugfix: Fixed infinite blood tracks.
