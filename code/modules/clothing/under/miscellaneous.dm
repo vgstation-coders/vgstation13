@@ -572,4 +572,11 @@
 	desc = "A female-sized set of leggings and shirt with a pattern similar to the American flag, featuring a frilled collar."
 	icon_state = "clownpiece"
 	item_state = "clownpiece"
-	_color = "clownpiece"
+	_color = "clownpiece"	
+
+/obj/item/clothing/under/cia
+	name = "CIA's outfit"
+	desc = "Just looking at this makes you feel in charge."
+	icon_state = "cia"
+	item_state = "cia"
+	_color = "cia"
