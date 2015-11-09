@@ -51,9 +51,9 @@
 		icon_state = "pussywagon_upgraded"
 	else if(istype(W, /obj/item/weapon/storage/bag/trash))
 		if(mybag)
-			user << "<span class='warning'>There is already a trashbag on the pimpin' ride!</span>"
+			user << "<span class='warning'>There is already a trashbag on the [nick]!</span>"
 			return
-		user << "<span class='notice'>You hook the trashbag onto the pimpin' ride.</span>"
+		user << "<span class='notice'>You hook the trashbag onto the [nick].</span>"
 		user.drop_item(W, src)
 		mybag = W
 
@@ -61,10 +61,10 @@
 	if(istype(M))
 		if(reagents.total_volume >= 2)
 			reagents.trans_to(M, 3)
-			user << "<span class='notice'>You wet the mop in the pimpin' ride.</span>"
+			user << "<span class='notice'>You wet the mop in the [nick].</span>"
 			playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 		if(reagents.total_volume < 1)
-			user << "<span class='notice'>This pimpin' ride is out of water!</span>"
+			user << "<span class='notice'>This [nick] is out of water!</span>"
 	return 1
 
 /obj/structure/bed/chair/vehicle/janicart/attack_hand(mob/user)
