@@ -105,6 +105,8 @@
 
 #define iswindow(A) (istype(A, /obj/structure/window))
 
+#define ismecha(A) (istype(A, /obj/mecha))
+
 //Macros for antags
 
 #define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind.vampire)
@@ -130,6 +132,8 @@
 #define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || H.mind in ticker.mode.infected_monkeys)
 
 #define isdeathsquad(H) (H.mind in ticker.mode.deathsquads)
+
+#define isclockcult(H) (H.mind in ticker.mode.clockcult)
 
 //Macro for AREAS!
 

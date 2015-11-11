@@ -56,6 +56,8 @@
 
 	flags		= RCD_GET_TURF
 
+	var/floor_type = /turf/simulated/floor/plating/airless
+
 /datum/rcd_schematic/con_floors/attack(var/atom/A, var/mob/user)
 	if(!(istype(A, /turf/space) && !istype(A, /turf/space/transit)))
 		return "it can only create floors on space!"
@@ -74,6 +76,8 @@
 	category	= "Construction"
 	energy_cost	= 3
 
+	var/wall_type	= /turf/simulated/wall
+
 /datum/rcd_schematic/con_walls/attack(var/atom/A, var/mob/user)
 	if(!istype(A, /turf/simulated/floor))
 		return 1
@@ -86,7 +90,7 @@
 			return 1
 
 		playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
-		T.ChangeTurf(/turf/simulated/wall)
+		T.ChangeTurf(wall_type)
 		return 0
 
 	return 1

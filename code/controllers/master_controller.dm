@@ -221,6 +221,10 @@ datum/controller/game_controller/proc/cachedamageicons()
 	generateMiniMaps()
 	log_startup_progress("  Finished minimaps in [stop_watch(watch)]s.")
 
+	for(var/type in typesof(/datum/initializer) - /datum/initializer)
+		var/datum/initializer/I = new type()
+		I.initialize()
+	
 	log_startup_progress("Finished initializations in [stop_watch(overwatch)]s.")
 
 

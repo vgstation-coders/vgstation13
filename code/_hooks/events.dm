@@ -15,10 +15,14 @@
 	var/list/handlers=list() // List of [\ref, Function]
 	var/atom/holder
 
-/event/New(loc, owner)
-	..()
+/event/New(owner)
+	. = ..()
 	holder = owner
 
+/event/Destroy()
+	. = ..()
+	holder = null
+	
 /event/proc/Add(var/objectRef,var/procName)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/event/proc/Add() called tick#: [world.time]")
 	var/key="\ref[objectRef]:[procName]"

@@ -263,6 +263,30 @@
 
 		return damage
 
+	else if(istype(source, /obj/effect/sigil/transmission))
+		var/damage = shock_damage * siemens_coeff * 0.75 // take reduced damage
+
+		if(damage <= 0)
+			damage = 0
+
+		if(take_overall_damage(0, damage, "[source]") == 0) // godmode
+			return 0
+
+		visible_message( \
+			"<span class='warning'>[src] was shocked by the [source]!</span>", \
+			"<span class='danger'>Electrical shock sustained, system damaged!</span>", \
+			"<span class='warning'>You hear a heavy electrical crack.</span>" \
+		)
+
+		if(prob(35))
+			Stun(2)
+
+		var/datum/effect/effect/system/spark_spread/SparkSpread = new
+		SparkSpread.set_up(5, 1, loc)
+		SparkSpread.start()
+
+		return damage
+
 	return 0
 
 /mob/living/silicon/assess_threat() //Secbots will not target silicons!
