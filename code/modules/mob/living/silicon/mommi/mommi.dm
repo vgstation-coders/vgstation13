@@ -98,7 +98,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 
 /mob/living/silicon/robot/mommi/choose_icon()
-	var/icontype = input("Select an icon!", "Mobile MMI", null) in list("Basic", "Hover", "Keeper", "RepairBot", "Replicator", "Prime", "Scout")
+	var/icontype = input("Select an icon!", "Mobile MMI", null) as null|anything in list("Basic", "Hover", "Keeper", "RepairBot", "Replicator", "Prime", "Scout")
+	if(!icontype)
+		return
 	switch(icontype)
 		if("Replicator") subtype = "replicator"
 		if("Keeper")	 subtype = "keeper"
@@ -121,9 +123,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		return
 	var/list/modules = list("MoMMI")
 	if(modules.len)
-		modtype = input("Please, select a module!", "Robot", null, null) in modules
+		modtype = input("Please, select a module!", "Robot", null, null) as null|anything in modules
 	else
 		modtype=modules[0]
+
+	if(!modtype)
+		return
 
 	var/module_sprites[0] //Used to store the associations between sprite names and sprite index.
 

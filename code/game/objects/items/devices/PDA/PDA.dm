@@ -343,10 +343,22 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	default_cartridge = /obj/item/weapon/cartridge/quartermaster
 	icon_state = "pda-cargo"
 
+/obj/item/device/pda/cargo/New()
+	..()
+	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
+	app.onInstall(src)
+	app.frequency = deskbell_freq_cargo
+
 /obj/item/device/pda/quartermaster
 	name = "Quartermaster PDA"
 	default_cartridge = /obj/item/weapon/cartridge/quartermaster
 	icon_state = "pda-q"
+
+/obj/item/device/pda/quartermaster/New()
+	..()
+	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
+	app.onInstall(src)
+	app.frequency = deskbell_freq_cargo
 
 /obj/item/device/pda/shaftminer
 	name = "Mining PDA"
@@ -2250,8 +2262,18 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					user.show_message("<span class='notice'>No radiation detected.</span>")
 
 /obj/item/device/pda/afterattack(atom/A as mob|obj|turf|area, mob/user as mob)
-	switch(scanmode)
+	if(scanmode == 5)
+		if(atmos_analys)
+			if(A.Adjacent(user))
+				if(!A.attackby(atmos_analys, user))
+					atmos_analys.afterattack(A, user, 1)
 
+	if (!scanmode && istype(A, /obj/item/weapon/paper) && owner)
+		note = A:info
+		user << "<span class='notice'>Paper scanned.</span>" //concept of scanning paper copyright brainoblivion 2009
+
+/obj/item/device/pda/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
+	switch(scanmode)
 		if(3)
 			if(!isnull(A.reagents))
 				if(A.reagents.reagent_list.len > 0)
@@ -2263,22 +2285,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					user << "<span class='notice'>No active chemical agents found in [A].</span>"
 			else
 				user << "<span class='notice'>No significant chemical agents found in [A].</span>"
+			. = 1
 
-		if(5)
-			if(atmos_analys)
+		if (6)
+			if(dev_analys) //let's use this instead. Much neater
 				if(A.Adjacent(user))
-					if(!A.attackby(atmos_analys, user))
-						atmos_analys.afterattack(A, user, 1)
-
-	if (!scanmode && istype(A, /obj/item/weapon/paper) && owner)
-		note = A:info
-		user << "<span class='notice'>Paper scanned.</span>" //concept of scanning paper copyright brainoblivion 2009
-
-/obj/item/device/pda/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
-	if (scanmode == 6)
-		if(dev_analys) //let's use this instead. Much neater
-			if(A.Adjacent(user))
-				return dev_analys.preattack(A, user, 1)
+					return dev_analys.preattack(A, user, 1)
 
 /obj/item/device/pda/proc/explode() //This needs tuning.
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/device/pda/proc/explode() called tick#: [world.time]")

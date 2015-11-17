@@ -502,13 +502,17 @@ Thanks.
 	if(animation) T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg')
 
 	// shut down various types of badness
-	setToxLoss(0)
-	setOxyLoss(0)
-	setCloneLoss(0)
-	setBrainLoss(0)
-	SetParalysis(0)
-	SetStunned(0)
-	SetWeakened(0)
+	toxloss = 0
+	oxyloss = 0
+	cloneloss = 0
+	bruteloss = 0
+	fireloss = 0
+	brainloss = 0
+	halloss = 0
+	paralysis = 0
+	stunned = 0
+	weakened = 0
+	jitteriness = 0
 	germ_level = 0
 	next_pain_time = 0
 	traumatic_shock = 0
@@ -1279,6 +1283,9 @@ default behaviour is:
 	else
 		speed_mod = 0.5
 
+	if(!speed_mod)
+		return
+
 	if(src.butchering_drops && src.butchering_drops.len)
 		var/list/actions = list()
 		actions += "Butcher"
@@ -1301,7 +1308,7 @@ default behaviour is:
 			user.visible_message("<span class='notice'>[user] starts [our_product.verb_gerund] \the [src][tool ? "with \the [tool]" : ""].</span>",\
 				"<span class='info'>You start [our_product.verb_gerund] \the [src].</span>")
 			src.being_butchered = 1
-			if(!do_after(user,src,butchering_time * speed_mod))
+			if(!do_after(user,src,butchering_time / speed_mod))
 				user << "<span class='warning'>Your attempt to [our_product.verb_name] \the [src] has been interrupted.</span>"
 				src.being_butchered = 0
 			else

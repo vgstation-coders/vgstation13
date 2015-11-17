@@ -102,6 +102,11 @@ obj/item/device/mmi/Destroy()
 	if(try_handling_mommi_construction(O,user))
 		return
 	if(istype(O,/obj/item/organ/brain) && !brainmob) //Time to stick a brain in it --NEO
+		// MaMIs inherit from brain, but they shouldn't be insertable into a MMI
+		if (istype(O, /obj/item/organ/brain/mami))
+			user << "<span class='warning'>You are only able to fit organic brains on a MMI. [src] won't work.</span>"
+			return
+
 		var/obj/item/organ/brain/BO = O
 		if(!BO.brainmob)
 			user << "<span class='warning'>You aren't sure where this brain came from, but you're pretty sure it's a useless brain.</span>"
@@ -140,6 +145,10 @@ obj/item/device/mmi/Destroy()
 		else
 			user << "<span class='warning'>Access denied.</span>"
 		return
+
+	if(istype(O, /obj/item/weapon/implanter))
+		return//toplel
+
 	if(brainmob)
 		O.attack(brainmob, user)//Oh noooeeeee
 		return

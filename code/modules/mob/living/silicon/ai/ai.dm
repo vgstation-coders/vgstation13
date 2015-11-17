@@ -162,7 +162,8 @@ var/list/ai_list = list()
 	switch(choice)
 		if("Cancel")
 			return
-		if("Delete")
+		if ("Delete")
+			aicamera.aipictures.Remove(selection)
 			qdel(selection)
 		if("Rename")
 			var/new_name = sanitize(input(usr, "Write a new name for [selection.fields["name"]]:","Photo Modification"))
@@ -199,7 +200,7 @@ var/list/ai_list = list()
 	var/icontype = ""
 	/* Nuked your hidden shit.*/
 	if (custom_sprite == 1) icontype = ("Custom")//automagically selects custom sprite if one is available
-	else icontype = input("Select an icon!", "AI", null, null) in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man", "Hourglass", "Patriot", "Pirate", "Royal")
+	else icontype = input("Select an icon!", "AI", null, null) as null|anything in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man", "Hourglass", "Patriot", "Pirate", "Royal")
 	switch(icontype)
 		if("Custom") icon_state = "[src.ckey]-ai"
 		if("Clown") icon_state = "ai-clown2"
@@ -653,7 +654,7 @@ var/list/ai_list = list()
 			if(network in C.network)
 				U.eyeobj.forceMove(get_turf(C))
 				break
-	src << "<span class='notice'>Switched to [network] camera network.</span>"
+		src << "<span class='notice'>Switched to [network] camera network.</span>"
 //End of code by Mord_Sith
 
 

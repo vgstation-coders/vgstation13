@@ -14,6 +14,7 @@
 var/global/deepFriedEverything = 0
 var/global/deepFriedNutriment = 0
 var/global/foodNesting = 0
+var/global/recursiveFood = 0
 var/global/ingredientLimit = 10
 
 /client/proc/configFood()
@@ -24,9 +25,12 @@ var/global/ingredientLimit = 10
 	. = (alert("Deep Fried Everything?",,"Yes","No")=="Yes")
 	if(.)	deepFriedEverything = 1
 	else	deepFriedEverything = 0
-	. = (alert("Cereal Cereal Cereal?",,"Yes","No")=="Yes")
+	. = (alert("Food Nesting?",,"Yes","No")=="Yes")
 	if(.)	foodNesting = 1
 	else	foodNesting = 0
+	. = (alert("Enable recursive food? (WARNING: May cause server instability!)",,"Yes","No")=="Yes")
+	if(.)	recursiveFood = 1
+	else	recursiveFood = 0
 	. = (input("Deep Fried Nutriment? (1 to 50)"))
 	. = text2num(.)
 	if(isnum(.) && (. in 1 to 50)) deepFriedNutriment = . //This is absolutely terrible
@@ -54,6 +58,7 @@ var/global/ingredientLimit = 10
 	icon = 'icons/obj/cooking_machines.dmi'
 	icon_state = "oven_off"
 	var/icon_state_on = "oven_on"
+	var/recursive_ingredients = 0 //allow /food/snacks/customizable as a valid ingredient
 	layer = 2.9
 	density = 1
 	anchored = 1
@@ -160,6 +165,7 @@ var/global/ingredientLimit = 10
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/cooking/proc/validateIngredient() called tick#: [world.time]")
 	if(istype(I,/obj/item/weapon/grab) || istype(I,/obj/item/tk_grab)) . = "It won't fit."
 	else if(istype(I,/obj/item/weapon/disk/nuclear)) . = "It's the fucking nuke disk!"
+	else if(!recursive_ingredients && !recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable)) . = "It would be a straining topological exercise."
 	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/holder) || deepFriedEverything) . = "valid"
 	else if(istype(I,/obj/item/weapon/reagent_containers)) . = "transto"
 	else if(istype(I,/obj/item/organ))
@@ -349,6 +355,7 @@ var/global/ingredientLimit = 10
 	icon_state_on = "fryer_on"
 	foodChoices = null
 	cookTime = 200
+	recursive_ingredients = 1
 
 	cks_max_volume = 400
 	cooks_in_reagents = 1
@@ -428,6 +435,7 @@ var/global/ingredientLimit = 10
 	icon_state_on = "grill_on"
 	foodChoices = null
 	cookTime = 210
+	recursive_ingredients = 1
 
 	cooks_in_reagents = 1
 

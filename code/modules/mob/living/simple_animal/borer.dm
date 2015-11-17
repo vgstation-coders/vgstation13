@@ -80,6 +80,11 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 		if(U.id!="")
 			borer_avail_unlocks.Add(U)
 
+/mob/living/simple_animal/borer/Login()
+	..()
+	if(mind)
+		RemoveAllFactionIcons(mind)
+
 /mob/living/simple_animal/borer/Life()
 	if(timestopped) return 0 //under effects of time magick
 
@@ -503,7 +508,7 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 		detach()
 
 // Try to reset everything, also while handling invalid host/host_brain states.
-mob/living/simple_animal/borer/proc/detach()
+/mob/living/simple_animal/borer/proc/detach()
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\mob/living/simple_animal/borer/proc/detach() called tick#: [world.time]")
 	if(host)
 		if(istype(host,/mob/living/carbon/human))
@@ -527,8 +532,10 @@ mob/living/simple_animal/borer/proc/detach()
 		// Remove any unlocks that affect the host.
 		for(var/uid in research.unlocked.Copy())
 			var/datum/unlockable/borer/U = research.get(uid)
-			if(U && U.remove_on_detach)
-				U.remove_action()
+			if(U)
+				if(U.remove_on_detach)
+					U.relock()
+				U.on_detached()
 
 		host.on_emote.Remove(eh_emote)
 
@@ -636,6 +643,12 @@ mob/living/simple_animal/borer/proc/detach()
 	host_brain.real_name = M.real_name
 
 	eh_emote = host.on_emote.Add(src,"host_emote")
+
+	// Tell our upgrades that we've attached.
+	for(var/uid in research.unlocked.Copy())
+		var/datum/unlockable/borer/U = research.get(uid)
+		if(U)
+			U.on_attached()
 
 	// /vg/ - Our users are shit, so we start with control over host.
 	if(config.borer_takeover_immediately)
@@ -802,7 +815,7 @@ mob/living/simple_animal/borer/proc/detach()
 
 	src << "<span class='info'>You listen to the song of your host's nervous system, hunting for dischordant notes...</span>"
 	spawn(5 SECONDS)
-		healthanalyze(host, src, verbosity=1, silent=1, skip_checks=1) // I am not rewriting this shit with more immersive strings.  Deal with it. - N3X
+		healthanalyze(host, src, mode=1, silent=1, skip_checks=1) // I am not rewriting this shit with more immersive strings.  Deal with it. - N3X
 
 /mob/living/simple_animal/borer/proc/taste_blood()
 	set name = "Taste Blood"

@@ -43,7 +43,7 @@ REAGENT SCANNER
 		processing_objects.Remove(src)
 		return null
 
-	for(var/turf/T in range(ray_range, get_turf(src)))
+	for(var/turf/T in trange(ray_range, get_turf(src)))
 
 		if(!T.intact)
 			continue
@@ -122,7 +122,7 @@ proc/healthanalyze(mob/living/M as mob, mob/living/user as mob, var/mode = 0, va
 		if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
 			user.visible_message("<span class='warning'>[user] analyzes the floor's vitals!</span>", \
 			"<span class='warning'>You analyze the floor's vitals!</span>")
-			playsound(get_turf(src), 'sound/items/healthanalyzer.ogg', 50, 1)
+			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 			user << {"<span class='notice'>Analyzing Results for the floor:<br>Overall Status: Healthy</span>
 Key: <font color='blue'>Suffocation</font>/<font color='green'>Toxin</font>/<font color='#FFA500'>Burns</font>/<font color='red'>Brute</font>
 Damage Specifics: <font color='blue'>0</font> - <font color='green'>0</font> - <font color='#FFA500'>0</font> - <font color='red'>0</font>
@@ -136,7 +136,7 @@ Subject's pulse: ??? BPM"}
 	if(!silent)
 		user.visible_message("<span class='notice'>[user] analyzes [M]'s vitals.</span>", \
 		"<span class='notice'>You analyze [M]'s vitals.</span>")
-		playsound(get_turf(src), 'sound/items/healthanalyzer.ogg', 50, 1)
+		playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 	var/fake_oxy = max(rand(1, 40), M.getOxyLoss(), (300 - (M.getToxLoss() + M.getFireLoss() + M.getBruteLoss())))
 	var/OX = M.getOxyLoss() > 50   ? "<b>[M.getOxyLoss()]</b>"   : M.getOxyLoss()
 	var/TX = M.getToxLoss() > 50   ? "<b>[M.getToxLoss()]</b>"   : M.getToxLoss()
@@ -239,13 +239,13 @@ Subject's pulse: ??? BPM"}
 				if(BLOOD_VOLUME_SAFE to 1000000000)
 					message += "<br><span class='notice'>Blood Level Normal: [blood_percent]% ([blood_volume]cl)</span>"
 				if(BLOOD_VOLUME_OKAY to BLOOD_VOLUME_SAFE)
-					message += "<br><span class='notice'>Notice: Blood Level Fine: [blood_percent]% [blood_volume]cl</span>" //Still about fine
+					message += "<br><span class='warning'>Warning: Blood Level Low: [blood_percent]% [blood_volume]cl</span>" //Still about fine
 				if(BLOOD_VOLUME_BAD to BLOOD_VOLUME_OKAY)
-					message += "<br><span class='warning'>Warning: Blood Level Low: [blood_percent]% [blood_volume]cl</span>"
+					message += "<br><span class='danger'>Danger: Blood Level Serious: [blood_percent]% [blood_volume]cl</span>"
 				if(BLOOD_VOLUME_SURVIVE to BLOOD_VOLUME_BAD)
-					message += "<br><span class='warning'><b>Danger: Blood Level Serious: [blood_percent]% [blood_volume]cl</span>"
+					message += "<br><span class='danger'>Danger: Blood Level Critical: [blood_percent]% [blood_volume]cl</span>"
 				if(-1000000000 to BLOOD_VOLUME_SURVIVE)
-					message += "<br><span class='warning'><b>Danger: Blood Level Critical: [blood_percent]% [blood_volume]cl</span>"
+					message += "<br><span class='danger'>Danger: Blood Level Fatal: [blood_percent]% [blood_volume]cl</span>"
 		message += "<br><span class='notice'>Subject's pulse: <font color='[H.pulse == PULSE_THREADY || H.pulse == PULSE_NONE ? "red" : "blue"]'>[H.get_pulse(GETPULSE_TOOL)] BPM</font></span>"
 	user << message //Here goes
 	return message //To read last scan

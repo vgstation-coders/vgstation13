@@ -46,7 +46,7 @@
 	if(!stat)
 		if(size > SIZE_TINY && istype(loc, /obj/item/weapon/holder)) //If somebody picked us up and we're big enough to fight!
 			var/mob/living/L = loc.loc
-			if(!istype(L) || (L.faction != src.faction) || IsInvalidTarget(L)) //If we're not being held by a mob, OR we're being held by a mob who isn't from our faction OR we're being held by a mob whom we don't consider a valid target!
+			if(!istype(L) || (L.faction != src.faction) || !CanAttack(L)) //If we're not being held by a mob, OR we're being held by a mob who isn't from our faction OR we're being held by a mob whom we don't consider a valid target!
 				returnToPool(loc)
 			else
 				return 0
@@ -76,21 +76,18 @@
 
 /mob/living/simple_animal/hostile/proc/ListTargets()//Step 1, find out what we can see
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/hostile/proc/ListTargets() called tick#: [world.time]")
-	var/list/L = list()
-	if(!search_objects)
-		var/list/Mobs = hearers(vision_range, src) - src //Remove self, so we don't suicide
-		L += Mobs
-		for(var/obj/mecha/M in mechas_list)
-			if(get_dist(M, src) <= vision_range && can_see(src, M, vision_range))
-				L += M
-	else
-		var/list/Objects = oview(vision_range, src)
-		L += Objects
-	return L
+	var/list/L = new()
 
-/mob/living/simple_animal/hostile/proc/IsInvalidTarget(atom/A)
-	if(isMoMMI(A))
-		return 1
+	if (!search_objects)
+		L.Add(ohearers(vision_range, src))
+
+		for (var/obj/mecha/M in mechas_list)
+			if (get_dist(M, src) <= vision_range && can_see(src, M, vision_range))
+				L.Add(M)
+	else
+		L.Add(oview(vision_range, src))
+
+	return L
 
 /mob/living/simple_animal/hostile/proc/FindTarget()//Step 2, filter down possible targets to things we actually care about
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/hostile/proc/FindTarget() called tick#: [world.time]")
@@ -103,8 +100,6 @@
 			Targets = FoundTarget
 			break
 		if(CanAttack(A))//Can we attack it?
-			if(IsInvalidTarget(A)) continue
-
 			Targets += A
 			continue
 	Target = PickTarget(Targets)
@@ -132,27 +127,34 @@
 		return 0
 	if(isliving(the_target) && search_objects < 2)
 		var/mob/living/L = the_target
+		//WE ONLY ATTACK LIVING MOBS UNLESS SPECIFIED OTHERWISE
 		if(L.stat > stat_attack || (L.stat != stat_attack && stat_exclusive == 1))
 			return 0
+		//WE DON'T ATTACK INVULNERABLE MOBS (such as etheral jaunting mobs, or passengers of the adminbus)
 		if(L.flags & INVULNERABLE)
 			return 0
+		//WE DON'T ATTACK MOMMI
+		if(isMoMMI(L))
+			return 0
+		//WE DON'T OUR OWN FACTION UNLESS SPECIFIED OTHERWISE
 		if((L.faction == src.faction && !attack_same) || (L.faction != src.faction && attack_same == 2) || (L.faction != attack_faction && attack_faction))
 			return 0
+		//IF OUR FACTION IS A REFERENCE TO A SPECIFIC MOB THEN WE DON'T ATTACK HIM (examples include viscerator grenades, staff of animation mimics, asteroid monsters)
 		if((faction == "\ref[L]") && !attack_same)
 			return 0
-		if(isnukeop(L) && (faction == "syndicate"))
-			return 0
-		if(iscultist(L) && (faction == "cult"))
-			return 0
-		if(isslime(L) && (faction == "slimesummon"))
-			return 0
+		//IF WE ARE GOLD SLIME+PLASMA MONSTERS THEN WE DON'T ATTACK SLIMES/SLIME PEOPLE/ADAMANTINE GOLEMS
+		if(faction == "slimesummon")
+			if(isslime(L))
+				return 0
+			if(ishuman(L))
+				var/mob/living/carbon/human/H = L
+				if(H.dna)
+					if((H.dna.mutantrace == "slime") || (H.dna.mutantrace == "adamantine"))
+						return 0
+		//IF WE ARE MOBS SPAWNED BY THE ADMINBUS THEN WE DON'T ATTACK TEST DUMMIES OR IAN (wait what? man that's snowflaky as fuck)
 		if((istype(L,/mob/living/simple_animal/corgi/Ian) || istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
 			return 0
-		if(ishuman(L))
-			var/mob/living/carbon/human/H = L
-			if(H.dna)
-				if((H.dna.mutantrace == "slime") && (faction == "slimesummon"))
-					return 0
+		//WE DON'T ATTACK OUR FRIENDS (used by lazarus injectors, and rabid slimes)
 		if(L in friends)
 			return 0
 		return 1
@@ -188,15 +190,17 @@
 				OpenFire(target)
 		if(isturf(loc) && target.Adjacent(src))	//If they're next to us, attack
 			AttackingTarget()
-		if(retreat_distance != null && target_distance <= retreat_distance) //If we have a retreat distance, check if we need to run from our target
-			walk_away(src,target,retreat_distance,move_to_delay)
-		else
-			Goto(target,move_to_delay,minimum_distance)//Otherwise, get to our minimum distance so we chase them
+		if(canmove)
+			if(retreat_distance != null && target_distance <= retreat_distance) //If we have a retreat distance, check if we need to run from our target
+				walk_away(src,target,retreat_distance,move_to_delay)
+			else
+				Goto(target,move_to_delay,minimum_distance)//Otherwise, get to our minimum distance so we chase them
 		return
 	if(target.loc != null && get_dist(src, target.loc) <= vision_range)//We can't see our target, but he's in our vision range still
 		if(FindHidden(target) && environment_smash)//Check if he tried to hide in something to lose us
 			var/atom/A = target.loc
-			Goto(A,move_to_delay,minimum_distance)
+			if(canmove)
+				Goto(A,move_to_delay,minimum_distance)
 			if(A.Adjacent(src))
 				A.attack_animal(src)
 			return
