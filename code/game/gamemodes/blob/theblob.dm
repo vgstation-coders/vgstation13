@@ -12,6 +12,7 @@
 	var/health_timestamp = 0
 	var/brute_resist = 4
 	var/fire_resist = 1
+	var/stun_time = 0
 
 	// A note to the beam processing shit.
 	var/custom_process=0
@@ -91,7 +92,10 @@
 		update_icon()
 
 /obj/effect/blob/proc/Life()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/blob/proc/Life() called tick#: [world.time]")
+	if(stun_time)
+		stun_time--
+	if(brute_resist<4 && prob(20))
+		brute_resist++
 	return
 
 
@@ -135,6 +139,7 @@
 		return
 	if(istype(T, /turf/space) && prob(75))
 		return
+	if(stun_time) return 0
 	if(!T)
 		var/list/dirs = cardinal
 		for(var/i = 1 to 4)
@@ -180,7 +185,7 @@
 /obj/effect/blob/attackby(var/obj/item/weapon/W, var/mob/user)
 	user.delayNextAttack(10)
 	playsound(get_turf(src), 'sound/effects/attackblob.ogg', 50, 1)
-	src.visible_message("<span class='warning'><B>The [src.name] has been attacked with \the [W][(user ? " by [user]." : ".")]</span>")
+	src.visible_message("<span class='danger'>[(user ? "[user]" : "The world")] attacks [src.name] with \the [W].</span>")
 	var/damage = 0
 	switch(W.damtype)
 		if("fire")
@@ -193,6 +198,49 @@
 	health -= damage
 	update_icon()
 	return
+
+/obj/effect/blob/attack_hand(mob/living/carbon/human/H as mob)
+	if(!H.is_hand_valid_for_attack()) return
+	switch(H.a_intent)
+		if(I_HELP)
+			visible_message("<span class='info'>[H] gives [src] the 'hover hand'.</span>")
+			return
+		if(I_DISARM)
+			visible_message("<span class='danger'>[H] disrupts [src]!</span>")
+			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			stun_time += 5
+		if(I_GRAB)
+			if(brute_resist>1)
+				brute_resist -= 2
+				brute_resist = max(1,brute_resist)
+			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			visible_message("<span class='danger'>[H] stretches out [src]!</span>")
+		if(I_HURT)
+			log_attack("[H.name] ([H.ckey]) [H.species.attack_verb]ed [src.name].")
+			visible_message("<span class='danger'>[H] [H.species.attack_verb]s [src]!</span>")
+			var/damage = rand(0, H.species.max_hurt_damage)
+			if(!damage)
+				if(H.species.attack_verb == "punch")
+					playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+				else
+					playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
+
+				visible_message("<span class='danger'>[H] attempted to [H.species.attack_verb] [src]!</span>")
+				return 0
+			if(M_HULK in H.mutations)			damage += 5
+
+
+			if(H.species.attack_verb == "punch")
+				playsound(loc, "punch", 25, 1, -1)
+			else
+				playsound(loc, 'sound/weapons/slice.ogg', 25, 1, -1)
+			visible_message("<span class='danger'>[H] has [H.species.attack_verb]ed [src]!</span>")
+			damage = (damage / max(src.brute_resist,1))
+			health -= damage
+			update_icon()
+	H << "<span class='warning'>It burns!</span>"
+	H.adjustBruteLoss(rand(0,5))
+	return 1
 
 /obj/effect/blob/proc/change_to(var/type, var/mob/camera/blob/M = null)
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/effect/blob/proc/change_to() called tick#: [world.time]")

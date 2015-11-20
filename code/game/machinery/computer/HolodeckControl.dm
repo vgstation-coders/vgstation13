@@ -423,6 +423,25 @@
 	icon_state = "boxing"
 	item_state = "boxing"
 
+/obj/item/clothing/gloves/boxing/hologlove/Touch(var/atom/A, var/mob/living/carbon/human/attacker, var/proximity) //Always return one, we don't want to attack with hand
+	if(!ishuman(A)) return 0
+	var/mob/living/carbon/human/H = A
+	var/damage = rand(0, 9)
+	if(!damage)
+		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+		visible_message("<span class='danger'>[attacker] has attempted to punch [H]!</span>")
+		return 1
+	var/datum/organ/external/affecting = H.get_organ(ran_zone(attacker.zone_sel.selecting))
+	var/armor_block = H.run_armor_check(affecting, "melee")
+	if(M_HULK in attacker.mutations) damage += 5
+	playsound(loc, "punch", 25, 1, -1)
+	visible_message("<span class='danger'>[attacker] punches [H]!</span>")
+	H.apply_damage(damage, HALLOSS, affecting, armor_block)
+	if(damage >= 9)
+		visible_message("<span class='danger'>[attacker] staggers [H]!</span>")
+		H.apply_effect(4, WEAKEN, armor_block)
+	return 1
+
 /obj/structure/holowindow
 	name = "reinforced window"
 	icon = 'icons/obj/structures.dmi'

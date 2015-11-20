@@ -135,9 +135,37 @@ BLIND     // can't see anything
 	..()
 
 // Called just before an attack_hand(), in mob/UnarmedAttack()
-/obj/item/clothing/gloves/proc/Touch(var/atom/A, var/proximity)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/gloves/proc/Touch() called tick#: [world.time]")
-	return 0 // return 1 to cancel attack_hand()
+/obj/item/clothing/gloves/proc/Touch(var/atom/A, var/mob/living/carbon/human/attacker, var/proximity)
+	if(!proximity || !cell || attacker.a_intent != I_HURT || (!ishuman(A)&&!istype(/obj/effect/blob,A)))
+		return 0 // return 1 to cancel attack_hand()
+	else
+		if(ishuman(A))
+			var/mob/living/carbon/human/H = A
+			if(cell.charge >= 2500)
+				cell.use(2500)
+				visible_message("<span class='danger'>[attacker] touches [H] with the stun gloves!</span>")
+				attacker.attack_log += text("\[[time_stamp()]\] <font color='red'>Stungloved [H] ([H.ckey])</font>")
+				H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stungloved by [attacker.name] ([attacker.ckey])</font>")
+				log_attack("<font color='red'>[attacker.name] ([attacker.ckey]) stungloved [H] ([H.ckey])</font>")
+
+				var/armorblock = H.run_armor_check(attacker.zone_sel.selecting, "energy")
+				H.apply_effects(5,5,0,0,5,0,0,armorblock)
+			else
+				attacker << "<span class='warning'>Not enough charge! </span>"
+				visible_message("<span class='danger'>[attacker] touches [H] with the stun gloves!</span>")
+			return 1
+		else //isblob
+			var/obj/effect/blob/B = A
+			if(cell.charge >= 2500)
+				cell.use(2500)
+				visible_message("<span class='danger'>[attacker] touches [B] with stun gloves!</span>")
+				log_attack("<font color='red'>[attacker.name] ([attacker.ckey]) stungloved [B.name].</font>")
+				B.health -= (15 / max(B.fire_resist,1)) //It burns!
+				B.update_icon()
+			else
+				attacker << "<span class='warning'>Not enough charge!</span>"
+				visible_message("<span class='danger'>[attacker] touches [B] with stun gloves!</span>")
+			return 1
 
 //Head
 /obj/item/clothing/head

@@ -106,18 +106,14 @@
 		if(D.spread_by_touch())
 			contract_disease(D, 0, 1, CONTACT_HANDS)
 
-/mob/living/carbon/attack_hand(mob/M as mob)
+/mob/living/carbon/attack_hand(mob/living/carbon/M as mob)
 	if(!istype(M, /mob/living/carbon)) return
-	if (hasorgans(M))
-		var/datum/organ/external/temp = M:organs_by_name["r_hand"]
-		if (M.hand)
-			temp = M:organs_by_name["l_hand"]
-		if(temp && !temp.is_usable())
-			M << "<span class='warning'>You can't use your [temp.display_name]</span>"
-			return
+	if (!M.is_hand_valid_for_attack()) return
 	share_contact_diseases(M)
 	return
 
+/mob/living/carbon/proc/is_hand_valid_for_attack()
+	return 0 //Only humans pass this check. Aliens have claws, cyborgs have modules, etc.
 
 /mob/living/carbon/attack_paw(mob/M as mob)
 	if(!istype(M, /mob/living/carbon)) return
