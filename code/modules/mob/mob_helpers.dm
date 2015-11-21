@@ -354,8 +354,18 @@ proc/is_blind(A)
 	broadcast_hud_message(message, broadcast_source, med_hud_users, /obj/item/clothing/glasses/hud/health)
 
 /proc/broadcast_hud_message(var/message, var/broadcast_source, var/list/targets, var/icon)
-	var/turf/sourceturf = get_turf(broadcast_source)
-	for(var/mob/M in targets)
-		var/turf/targetturf = get_turf(M)
-		if((targetturf.z == sourceturf.z))
-			M.show_message("<span class='info'>\icon[icon] [message]</span>", 1)
+	var/source_turf_z
+
+	var/turf/target_turf
+	var/turf/source_turf = get_turf(broadcast_source)
+
+	if (!isnull(source_turf))
+		source_turf_z = source_turf.z
+		broadcast_source = null
+
+		for (var/mob/target in targets)
+			target_turf = get_turf(target)
+
+			if (!isnull(target_turf))
+				if (source_turf_z == target_turf.z)
+					target.show_message("<span class='info'>\icon[icon] [message]</span>", 1)
