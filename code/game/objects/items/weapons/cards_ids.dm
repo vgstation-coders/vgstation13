@@ -110,6 +110,7 @@
 		recharge_ticks = config.emag_recharge_ticks
 
 /obj/item/weapon/card/emag/process()
+	if(loc && loc:timestopped) return
 	if(energy < max_energy)
 		// Specified number of ticks has passed?  Add charge.
 		if(nticks >= recharge_ticks)
@@ -145,24 +146,32 @@
 
 	return 0
 
-/obj/item/weapon/card/emag/examine()
+/obj/item/weapon/card/emag/examine(mob/user)
 	..()
 	if(energy==-1)
-		usr << "<span class=\"info\">\The [name] has a tiny fusion generator for power.</span>"
+		user << "<span class=\"info\">\The [name] has a tiny fusion generator for power.</span>"
 	else
 		var/class="info"
 		if(energy/max_energy < 0.1 /* 10% energy left */)
 			class="warning"
-		usr << "<span class=\"[class]\">This [name] has [energy]MJ left in its capacitor ([max_energy]MJ capacity).</span>"
+		user << "<span class=\"[class]\">This [name] has [energy]MJ left in its capacitor ([max_energy]MJ capacity).</span>"
 	if(recharge_rate && recharge_ticks)
-		usr << "<span class=\"info\">A small label on a thermocouple notes that it recharges at a rate of [recharge_rate]MJ for every [recharge_ticks<=1?"":"[recharge_ticks] "]oscillator tick[recharge_ticks>1?"s":""].</span>"
+		user << "<span class=\"info\">A small label on a thermocouple notes that it recharges at a rate of [recharge_rate]MJ for every [recharge_ticks<=1?"":"[recharge_ticks] "]oscillator tick[recharge_ticks>1?"s":""].</span>"
+
+/obj/item/weapon/card/emag/attack()
+	return
+
+/obj/item/weapon/card/emag/afterattack(atom/target, mob/user, proximity)
+	var/atom/A = target
+	if(!proximity) return
+	A.emag_act(user)
 
 /obj/item/weapon/card/id
 	name = "identification card"
-	desc = "A card used to provide ID and determine access across the station."
+	desc = "A card used to provide ID and determine access across the station. Features a virtual wallet accessible by PDA."
 	icon_state = "id"
 	item_state = "card-id"
-	var/access = list()
+	var/list/access = list()
 	var/registered_name = "Unknown" // The name registered_name on the card
 	slot_flags = SLOT_ID
 
@@ -175,17 +184,29 @@
 	var/rank = null			//actual job
 	var/dorm = 0		// determines if this ID has claimed a dorm already
 
+	var/datum/money_account/virtual_wallet = null	//money!
+
 /obj/item/weapon/card/id/New()
 	..()
-	spawn(30)
-	if(istype(loc, /mob/living/carbon/human))
-		blood_type = loc:dna:b_type
-		dna_hash = loc:dna:unique_enzymes
-		fingerprint_hash = md5(loc:dna:uni_identity)
+	update_virtual_wallet()
+	spawn(30) //AWFULNESS AHOY
+		if(ishuman(loc))
+			var/mob/living/carbon/human/H = loc
+			SetOwnerInfo(H)
+		update_virtual_wallet()
+
+/obj/item/weapon/card/id/examine(mob/user)
+	..()
+
+	if(Adjacent(user))
+		user.show_message(text("The current assignment on the card is [src.assignment]."),1)
+		user.show_message("The blood type on the card is [blood_type].",1)
+		user.show_message("The DNA hash on the card is [dna_hash].",1)
+		user.show_message("The fingerprint hash on the card is [fingerprint_hash].",1)
 
 /obj/item/weapon/card/id/attack_self(mob/user as mob)
-	for(var/mob/O in viewers(user, null))
-		O.show_message(text("[] shows you: \icon[] []: assignment: []", user, src, src.name, src.assignment), 1)
+	user.visible_message("[user] shows you: \icon[src] [src.name]: assignment: [src.assignment]",\
+		"You flash your ID card: \icon[src] [src.name]: assignment: [src.assignment]")
 	src.add_fingerprint(user)
 	return
 
@@ -194,6 +215,33 @@
 
 /obj/item/weapon/card/id/GetID()
 	return src
+
+/obj/item/weapon/card/id/proc/update_virtual_wallet(var/new_funds=0)
+	if(!virtual_wallet)
+		virtual_wallet = new()
+		virtual_wallet.virtual = 1
+
+	virtual_wallet.owner_name = registered_name
+
+	if(new_funds)
+		virtual_wallet.money = new_funds
+
+	//Virtual wallet accounts are tied to an ID card, not an account database, thus they don't need an acount number.
+	//For now using the virtual wallet doesn't require a PIN either.
+
+	if(!virtual_wallet.account_number)
+		virtual_wallet.account_number = next_account_number
+		next_account_number += rand(1,25)
+
+/obj/item/weapon/card/id/proc/UpdateName()
+	name = "[src.registered_name]'s ID Card ([src.assignment])"
+
+/obj/item/weapon/card/id/proc/SetOwnerInfo(var/mob/living/carbon/human/H)
+	if(!H || !H.dna) return
+
+	blood_type = H.dna.b_type
+	dna_hash = H.dna.unique_enzymes
+	fingerprint_hash = md5(H.dna.uni_identity)
 
 /obj/item/weapon/card/id/proc/GetBalance(var/format=0)
 	var/amt = 0
@@ -204,7 +252,7 @@
 		amt = "$[num2septext(amt)]"
 	return amt
 
-/obj/item/weapon/card/id/GetJobName()
+/obj/item/weapon/card/id/proc/GetJobName()
 	var/jobName = src.assignment //what the card's job is called
 	var/alt_jobName = src.rank   //what the card's job ACTUALLY IS: determines access, etc.
 
@@ -215,6 +263,15 @@
 	if(jobName in get_all_centcom_jobs() || alt_jobName in get_all_centcom_jobs()) //Return with the NT logo if it is a Centcom job
 		return "Centcom"
 	return "Unknown" //Return unknown if none of the above apply
+
+/obj/item/weapon/card/id/proc/GetJobRealName()
+	if( rank in get_all_jobs() )
+		return rank
+
+	if( assignment in get_all_jobs() )
+		return assignment
+
+	return "Unknown"
 
 // vgedit: We have different wallets.
 /*
@@ -229,17 +286,6 @@
 		del(W)
 		return
 */
-/obj/item/weapon/card/id/verb/read()
-	set name = "Read ID Card"
-	set category = "Object"
-	set src in usr
-
-	usr << text("\icon[] []: The current assignment on the card is [].", src, src.name, src.assignment)
-	usr << "The blood type on the card is [blood_type]."
-	usr << "The DNA hash on the card is [dna_hash]."
-	usr << "The fingerprint hash on the card is [fingerprint_hash]."
-	return
-
 
 /obj/item/weapon/card/id/silver
 	name = "identification card"
@@ -259,22 +305,11 @@
 	origin_tech = "syndicate=3"
 	var/registered_user=null
 
-/obj/item/weapon/card/id/syndicate/New(mob/user as mob)
-	..()
-	if(!isnull(user)) // Runtime prevention on laggy starts or where users log out because of lag at round start.
-		registered_name = ishuman(user) ? user.real_name : user.name
-	else
-		registered_name = "Agent Card"
-	assignment = "Agent"
-	name = "[registered_name]'s ID Card ([assignment])"
-
 /obj/item/weapon/card/id/syndicate/afterattack(var/obj/item/weapon/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I = O
-		src.access |= I.access
-		if(istype(user, /mob/living) && user.mind)
-			if(user.mind.special_role)
-				usr << "\blue The card's microscanners activate as you pass it over the ID, copying its access."
+		user << "<span class='notice'>The [src]'s microscanners activate as you pass it over \the [I], copying its access.</span>"
+		access |= I.access
 
 /obj/item/weapon/card/id/syndicate/attack_self(mob/user as mob)
 	if(!src.registered_name)
@@ -285,37 +320,131 @@
 			return
 		src.registered_name = t
 
-		var u = copytext(sanitize(input(user, "What occupation would you like to put on this card?\nNote: This will not grant any access levels other than Maintenance.", "Agent card job assignment", "Agent")),1,MAX_MESSAGE_LEN)
+		var u = sanitize(stripped_input(user, "What occupation would you like to put on this card?\nNote: This will not grant any access levels other than Maintenance.", "Agent card job assignment", "Agent", MAX_MESSAGE_LEN))
 		if(!u)
 			alert("Invalid assignment.")
 			src.registered_name = ""
 			return
 		src.assignment = u
 		src.name = "[src.registered_name]'s ID Card ([src.assignment])"
-		user << "\blue You successfully forge the ID card."
+		user << "<span class='notice'>You successfully forge the ID card.</span>"
 		registered_user = user
 	else if(!registered_user || registered_user == user)
 
 		if(!registered_user) registered_user = user  //
 
-		switch(alert("Would you like to display the ID, or retitle it?","Choose.","Rename","Show"))
-			if("Rename")
-				var t = copytext(sanitize(input(user, "What name would you like to put on this card?", "Agent card name", ishuman(user) ? user.real_name : user.name)),1,26)
-				if(!t || t == "Unknown" || t == "floor" || t == "wall" || t == "r-wall") //Same as mob/new_player/prefrences.dm
-					alert("Invalid name.")
-					return
-				src.registered_name = t
-
-				var u = copytext(sanitize(input(user, "What occupation would you like to put on this card?\nNote: This will not grant any access levels other than Maintenance.", "Agent card job assignment", "Assistant")),1,MAX_MESSAGE_LEN)
-				if(!u)
-					alert("Invalid assignment.")
-					return
-				src.assignment = u
-				src.name = "[src.registered_name]'s ID Card ([src.assignment])"
-				user << "\blue You successfully forge the ID card."
-				return
+		switch(alert(user,"Would you like to display \the [src] or edit it?","Choose.","Show","Edit"))
 			if("Show")
-				..()
+				return ..()
+			if("Edit")
+				switch(input(user,"What would you like to edit on \the [src]?") in list("Name","Appearance","Occupation","Money account","Blood type","DNA hash","Fingerprint hash","Reset card"))
+					if("Name")
+						var/new_name = reject_bad_name(input(user,"What name would you like to put on this card?","Agent card name", ishuman(user) ? user.real_name : user.name))
+						if(!Adjacent(user)) return
+
+						src.registered_name = new_name
+						UpdateName()
+						user << "Name changed to [new_name]."
+
+					if("Appearance")
+						var/list/appearances = list(
+							"data",
+							"id",
+							"gold",
+							"silver",
+							"centcom_old",
+							"centcom",
+							"security",
+							"medical",
+							"HoS",
+							"research",
+							"engineering",
+							"CMO",
+							"RD",
+							"CE",
+							"clown",
+							"mime",
+							"syndie",
+							"deathsquad",
+							"creed",
+							"ERT_leader",
+							"ERT_security",
+							"ERT_engineering",
+							"ERT_medical",
+						)
+						var/choice = input(user, "Select the appearance for this card.", "Choose.") in appearances
+						if(!Adjacent(user))
+							return
+						if(!choice)
+							return
+						src.icon_state = choice
+						usr << "Appearance changed to [choice]."
+
+					if("Occupation")
+						var/new_job = sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Agent card occupation", "Assistant", MAX_MESSAGE_LEN))
+						if(!Adjacent(user)) return
+						src.assignment = new_job
+						user << "Occupation changed to [new_job]."
+						UpdateName()
+
+					if("Money account")
+						var/new_account = input(user,"What money account would you like to link to this card?","Agent card account",11111) as num
+						if(!Adjacent(user)) return
+						associated_account_number = new_account
+						user << "Linked money account changed to [new_account]."
+
+					if("Blood type")
+						var/default = "\[UNSET\]"
+						if(ishuman(user))
+							var/mob/living/carbon/human/H = user
+
+							if(H.dna)
+								default = H.dna.b_type
+
+						var/new_blood_type = sanitize(input(user,"What blood type would you like to be written on this card?","Agent card blood type",default) as text)
+						if(!Adjacent(user)) return
+						src.blood_type = new_blood_type
+						user << "Blood type changed to [new_blood_type]."
+
+					if("DNA hash")
+						var/default = "\[UNSET\]"
+						if(ishuman(user))
+							var/mob/living/carbon/human/H = user
+
+							if(H.dna)
+								default = H.dna.unique_enzymes
+
+						var/new_dna_hash = sanitize(input(user,"What DNA hash would you like to be written on this card?","Agent card DNA hash",default) as text)
+						if(!Adjacent(user)) return
+						src.dna_hash = new_dna_hash
+						user << "DNA hash changed to [new_dna_hash]."
+
+					if("Fingerprint hash")
+						var/default = "\[UNSET\]"
+						if(ishuman(user))
+							var/mob/living/carbon/human/H = user
+
+							if(H.dna)
+								default = md5(H.dna.uni_identity)
+
+						var/new_fingerprint_hash = sanitize(input(user,"What fingerprint hash would you like to be written on this card?","Agent card fingerprint hash",default) as text)
+						if(!Adjacent(user)) return
+						src.fingerprint_hash = new_fingerprint_hash
+						user << "Fingerprint hash changed to [new_fingerprint_hash]."
+
+					if("Reset card")
+						name = initial(name)
+						registered_name = initial(registered_name)
+						icon_state = initial(icon_state)
+						assignment = initial(assignment)
+						associated_account_number = initial(associated_account_number)
+						blood_type = initial(blood_type)
+						dna_hash = initial(dna_hash)
+						fingerprint_hash = initial(fingerprint_hash)
+						access = initial(access)
+						registered_user = null
+
+						user << "<span class='notice'>All information has been deleted from \the [src].</span>"
 	else
 		..()
 
@@ -416,7 +545,7 @@
 	registered_name = "CMO"
 	icon_state = "CMO"
 	desc = "It gives off the faint smell of chloral, mixed with a backdraft of shittery."
-	access = list(access_medical, access_morgue, access_genetics, access_heads, access_chemistry, access_virology, access_cmo, access_surgery, access_RC_announce, access_keycard_auth, access_sec_doors, access_paramedic)
+	access = list(access_medical, access_morgue, access_genetics, access_heads, access_chemistry, access_virology, access_cmo, access_surgery, access_RC_announce, access_keycard_auth, access_sec_doors, access_paramedic, access_maint_tunnels)
 
 /obj/item/weapon/card/id/rd
 	name = "Research Director ID"

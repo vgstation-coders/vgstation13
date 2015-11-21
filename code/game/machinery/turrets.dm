@@ -13,8 +13,6 @@
 
 /area/turret_protected/Entered(O)
 	..()
-	if( master && master != src )
-		return master.Entered(O)
 
 	if( iscarbon(O) )
 		turretTargets |= O
@@ -23,20 +21,17 @@
 		if( Mech.occupant )
 			turretTargets |= Mech
 	// /vg/ vehicles
-	else if( istype(O, /obj/structure/stool/bed/chair/vehicle) )
+	else if( istype(O, /obj/structure/bed/chair/vehicle) )
 		turretTargets |= O
 	else if(istype(O,/mob/living/simple_animal))
 		turretTargets |= O
 	return 1
 
 /area/turret_protected/Exited(O)
-	if( master && master != src )
-		return master.Exited(O)
-
 	if( ismob(O) && !issilicon(O) )
 		turretTargets -= O
 	// /vg/ vehicles
-	else if( istype(O, /obj/structure/stool/bed/chair/vehicle) )
+	else if( istype(O, /obj/structure/bed/chair/vehicle) )
 		turretTargets -= O
 	else if( istype(O, /obj/mecha) )
 		turretTargets -= O
@@ -125,8 +120,6 @@
 /obj/machinery/turret/proc/get_protected_area()
 	var/area/turret_protected/TP = get_area(src)
 	if(istype(TP))
-		if(TP.master && TP.master != TP)
-			TP = TP.master
 		return TP
 	return
 
@@ -136,6 +129,10 @@
 		if( !area_T || (area_T.type != protected_area.type) )
 			protected_area.Exited(T)
 			return 0 //If the guy is somehow not in the turret's area (teleportation), get them out the damn list. --NEO
+		if( ismob(T) )
+			var/mob/M = T
+			if(M.flags & INVULNERABLE)
+				return 0
 		if( iscarbon(T) )
 			var/mob/living/carbon/MC = T
 			if( !MC.stat )
@@ -146,9 +143,9 @@
 			if( ME.occupant )
 				return 1
 		// /vg/ vehicles
-		else if( istype(T, /obj/structure/stool/bed/chair/vehicle) )
-			var/obj/structure/stool/bed/chair/vehicle/V = T
-			if(V.buckled_mob)
+		else if( istype(T, /obj/structure/bed/chair/vehicle) )
+			var/obj/structure/bed/chair/vehicle/V = T
+			if(V.locked_atoms.len)
 				return 1
 		else if(istype(T,/mob/living/simple_animal))
 			var/mob/living/simple_animal/A = T
@@ -161,7 +158,7 @@
 	var/list/new_targets = new
 	var/new_target
 	for(var/mob/living/carbon/M in protected_area.turretTargets)
-		if(!M.stat)
+		if(!M.stat && !(M.flags & INVULNERABLE))
 			if(!M.lying || lasers)
 				new_targets += M
 	for(var/obj/mecha/M in protected_area.turretTargets)
@@ -169,12 +166,12 @@
 			new_targets += M
 
 	// /vg/ vehicles
-	for(var/obj/structure/stool/bed/chair/vehicle/V in protected_area.turretTargets)
-		if(V.buckled_mob)
+	for(var/obj/structure/bed/chair/vehicle/V in protected_area.turretTargets)
+		if(V.locked_atoms.len)
 			new_targets += V
 
 	for(var/mob/living/simple_animal/M in protected_area.turretTargets)
-		if(!M.stat)
+		if(!M.stat && !(M.flags & INVULNERABLE))
 			new_targets += M
 	if(new_targets.len)
 		new_target = pick(new_targets)
@@ -230,6 +227,7 @@
 /obj/machinery/turret/proc/shootAt(var/atom/movable/target)
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(target)
+	var/fire_sound = 'sound/weapons/Laser.ogg'
 	if (!T || !U)
 		return
 	var/obj/item/projectile/A
@@ -239,26 +237,32 @@
 				A = getFromPool(/obj/item/projectile/beam, loc)
 			if(2)
 				A = getFromPool(/obj/item/projectile/beam/heavylaser, loc)
+				fire_sound = 'sound/weapons/lasercannonfire.ogg'
 			if(3)
 				A = getFromPool(/obj/item/projectile/beam/pulse, loc)
+				fire_sound = 'sound/weapons/pulse.ogg'
 			if(4)
 				A = getFromPool(/obj/item/projectile/change, loc)
+				fire_sound = 'sound/weapons/radgun.ogg'
 			if(5)
 				A = getFromPool(/obj/item/projectile/beam/lastertag/blue, loc)
 			if(6)
 				A = getFromPool(/obj/item/projectile/beam/lastertag/red, loc)
-		A.original = target
 		use_power(500)
 	else
 		A = new /obj/item/projectile/energy/electrode( loc )
+		fire_sound = 'sound/weapons/Taser.ogg'
 		use_power(200)
 
 	A.original = target
+	A.target = U
 	A.current = T
+	A.starting = T
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
-	spawn( 0 )
-		A.process()
+	playsound(T, fire_sound, 50, 1)
+	A.OnFired()
+	A.process()
 	return
 
 
@@ -292,13 +296,13 @@
 	src.health -= Proj.damage
 	..()
 	if(prob(45) && Proj.damage > 0) src.spark_system.start()
-	del (Proj)
+
 	if (src.health <= 0)
 		src.die()
 	return
 
 /obj/machinery/turret/attackby(obj/item/weapon/W, mob/user)//I can't believe no one added this before/N
-	user.changeNext_move(10)
+	user.delayNextAttack(10)
 	if(..())
 		return 1
 	playsound(get_turf(src), 'sound/weapons/smash.ogg', 60, 1)
@@ -341,7 +345,7 @@
 	var/enabled = 1
 	var/lethal = 0
 	var/locked = 1
-	var/control_area //can be area name, path or nothing.
+	var/area/turret_protected/control_area //can be area name, path or nothing.
 	var/ailock = 0 // AI cannot use this
 	req_access = list(access_ai_upload)
 
@@ -352,22 +356,20 @@
 /obj/machinery/turretid/New()
 	..()
 	if(!control_area)
-		var/area/CA = get_area(src)
-		if(CA.master && CA.master != CA)
-			control_area = CA.master
-		else
-			control_area = CA
+		control_area = get_area(src)
 	else if(istext(control_area))
-		for(var/area/A in world)
+		for(var/area/A in areas)
 			if(A.name && A.name==control_area)
 				control_area = A
 				break
-	//don't have to check if control_area is path, since get_area_all_atoms can take path.
+	else if(ispath(control_area))
+		control_area = locate(control_area)
+
 	return
 
 /obj/machinery/turretid/emag(mob/user)
 	if(!emagged)
-		user << "\red You short out the turret controls' access analysis module."
+		user << "<span class='warning'>You short out the turret controls' access analysis module.</span>"
 		emagged = 1
 		locked = 0
 		if(user.machine==src)
@@ -438,14 +440,14 @@
 /obj/machinery/turret/attack_animal(mob/living/simple_animal/M as mob)
 	if(M.melee_damage_upper == 0)	return
 	if(!(stat & BROKEN))
-		visible_message("\red <B>[M] [M.attacktext] [src]!</B>")
+		visible_message("<span class='danger'>[M] [M.attacktext] [src]!</span>")
 		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
 		//src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 		src.health -= M.melee_damage_upper
 		if (src.health <= 0)
 			src.die()
 	else
-		M << "\red That object is useless to you."
+		M << "<span class='warning'>That object is useless to you.</span>"
 	return
 
 
@@ -454,18 +456,19 @@
 /obj/machinery/turret/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	if(!(stat & BROKEN))
 		playsound(get_turf(src), 'sound/weapons/slash.ogg', 25, 1, -1)
-		visible_message("\red <B>[] has slashed at []!</B>", M, src)
+		visible_message("<span class='danger'>[] has slashed at []!</span>", M, src)
 		src.health -= 15
 		if (src.health <= 0)
 			src.die()
 	else
-		M << "\green That object is useless to you."
+		M << "<span class='good'>That object is useless to you.</span>"
 	return
 
 
 
 /obj/machinery/turretid/Topic(href, href_list)
-	..()
+	if(..())
+		return 1
 	if (src.locked)
 		if (!istype(usr, /mob/living/silicon))
 			usr << "Control panel is locked!"
@@ -481,7 +484,8 @@
 
 /obj/machinery/turretid/proc/updateTurrets()
 	if(control_area)
-		for (var/obj/machinery/turret/aTurret in get_area_all_atoms(control_area))
+		//ASSERT(istype(control_area))
+		for(var/obj/machinery/turret/aTurret in control_area.contents)
 			aTurret.setState(enabled, lethal)
 	src.update_icons()
 
@@ -526,10 +530,6 @@
 		return
 
 	emp_act()
-		del src
-		return
-
-	meteorhit()
 		del src
 		return
 
@@ -587,7 +587,7 @@
 					if(src)
 						src.process()
 		if(href_list["scan_range"])
-			src.scan_range = between(1,src.scan_range+text2num(href_list["scan_range"]),8)
+			src.scan_range = Clamp(src.scan_range + text2num(href_list["scan_range"]), 1, 8)
 		if(href_list["scan_for"])
 			if(href_list["scan_for"] in scan_for)
 				scan_for[href_list["scan_for"]] = !scan_for[href_list["scan_for"]]
@@ -653,15 +653,10 @@
 			cur_target = null
 			return
 		src.dir = get_dir(src,target)
-		var/turf/targloc = get_turf(target)
-		var/target_x = targloc.x
-		var/target_y = targloc.y
-		var/target_z = targloc.z
-		targloc = null
 		spawn	for(var/i=1 to min(projectiles, projectiles_per_shot))
-			if(!src) break
+			if(!src || !target) break
 			var/turf/curloc = get_turf(src)
-			targloc = locate(target_x+GaussRandRound(deviation,1),target_y+GaussRandRound(deviation,1),target_z)
+			var/turf/targloc = get_turf(target)
 			if (!targloc || !curloc)
 				continue
 			if (targloc == curloc)
@@ -669,9 +664,13 @@
 			playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
 			var/obj/item/projectile/A = new /obj/item/projectile(curloc)
 			src.projectiles--
+			A.original = target
 			A.current = curloc
+			A.target = targloc
+			A.starting = curloc
 			A.yo = targloc.y - curloc.y
 			A.xo = targloc.x - curloc.x
+			A.OnFired()
 			A.process()
 			sleep(2)
 		return

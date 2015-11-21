@@ -49,6 +49,7 @@
 	)
 	fluffitems = list(
 		/obj/effect/gateway=1,
+		/obj/item/mounted/frame/painting/narsie=1,
 		/obj/effect/gibspawner=1,
 		/obj/structure/cult/talisman=1,
 		/obj/item/toy/crayon/red=2,
@@ -76,7 +77,7 @@
 		// /vg/: /obj/item/key=1
 		/obj/item/clothing/glasses/monocle=5,
 		// /vg/:
-		/obj/structure/stool/bed/chair/vehicle/wizmobile=1
+		/obj/structure/bed/chair/vehicle/wizmobile=1
 	)
 	fluffitems = list(
 		/obj/structure/safe/floor=1,
@@ -106,7 +107,7 @@
 	spawntypes = list(
 		/obj/mecha/working/ripley/mining=1,
 		/obj/item/weapon/pickaxe/jackhammer=2,
-		/obj/item/weapon/pickaxe/diamonddrill=2
+		/obj/item/weapon/pickaxe/drill/diamond=2
 	)
 	fluffitems = list(
 		/obj/effect/decal/cleanable/blood=3,
@@ -137,10 +138,10 @@
 	)
 	fluffitems = list(
 		/obj/structure/table/reinforced=2,
-		/obj/item/weapon/stock_parts/scanning_module/phasic=3,
-		/obj/item/weapon/stock_parts/matter_bin/super=3,
-		/obj/item/weapon/stock_parts/manipulator/pico=3,
-		/obj/item/weapon/stock_parts/capacitor/super=3,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic=3,
+		/obj/item/weapon/stock_parts/matter_bin/adv/super=3,
+		/obj/item/weapon/stock_parts/manipulator/nano/pico=3,
+		/obj/item/weapon/stock_parts/capacitor/adv/super=3,
 		/obj/item/device/pda/clear=1
 	)
 

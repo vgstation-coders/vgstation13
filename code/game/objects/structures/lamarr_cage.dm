@@ -39,13 +39,6 @@
 		Break()
 		qdel(src)
 
-
-/obj/structure/lamarr/meteorhit(obj/O as obj)
-		getFromPool(/obj/item/weapon/shard, loc)
-		Break()
-		qdel(src)
-
-
 /obj/structure/lamarr/proc/healthcheck()
 	if (src.health <= 0)
 		if (!( src.destroyed ))
@@ -79,10 +72,10 @@
 	if (src.destroyed)
 		return
 	else
-		usr << text("\blue You kick the lab cage.")
+		usr << text("<span class='notice'>You kick the lab cage.</span>")
 		for(var/mob/O in oviewers())
 			if ((O.client && !( O.blinded )))
-				O << text("\red [] kicks the lab cage.", usr)
+				O << text("<span class='warning'>[] kicks the lab cage.</span>", usr)
 		src.health -= 2
 		healthcheck()
 		return
@@ -98,7 +91,7 @@
 	name = "Lamarr"
 	desc = "The worst she might do is attempt to... couple with your head."//hope we don't get sued over a harmless reference, rite?
 	sterile = 1
-	gender = FEMALE
+	setGender(FEMALE)
 
 /obj/item/clothing/mask/facehugger/lamarr/New()//to prevent deleting it if aliums are disabled
 	return

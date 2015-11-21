@@ -19,12 +19,13 @@
 	var/datum/geosample/geologic_data
 	var/excavation_level = 0
 	var/list/finds = list()//no longer null to prevent those pesky runtime errors
-	var/next_rock = 0
+//	var/next_rock = 0
 	var/archaeo_overlay = ""
 	var/excav_overlay = ""
 	var/obj/item/weapon/last_find
 	var/datum/artifact_find/artifact_find
 	var/scan_state = null //Holder for the image we display when we're pinged by a mining scanner
+	var/busy = 0 //Used for a bunch of do_after actions, because we can walk into the rock to trigger them
 
 /turf/unsimulated/mineral/Destroy()
 	return
@@ -149,15 +150,15 @@
 	. = ..()
 	if(istype(AM,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = AM
-		if((istype(H.l_hand,/obj/item/weapon/pickaxe)) && (!H.hand))
-			attackby(H.l_hand,H)
-		else if((istype(H.r_hand,/obj/item/weapon/pickaxe)) && H.hand)
-			attackby(H.r_hand,H)
+		if(istype(H.get_active_hand(),/obj/item/weapon/pickaxe))
+			attackby(H.get_active_hand(), H)
+		else if(istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe))
+			attackby(H.get_inactive_hand(), H)
 
 	else if(istype(AM,/mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = AM
 		if(istype(R.module_active,/obj/item/weapon/pickaxe))
-			attackby(R.module_active,R)
+			attackby(R.module_active, R)
 
 	else if(istype(AM,/obj/mecha))
 		var/obj/mecha/M = AM
@@ -188,11 +189,16 @@
 
 /turf/unsimulated/mineral/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
-	if (!(istype(usr, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
-		usr << "\red You don't have the dexterity to do this!"
+	if(busy)
+		return
+
+	if (!usr.dexterity_check())
+		usr << "<span class='warning>You don't have the dexterity to do this!</span>"
 		return
 
 	if (istype(W, /obj/item/device/core_sampler))
+		if(!geologic_data)
+			geologic_data = new/datum/geosample(src)
 		geologic_data.UpdateNearbyArtifactInfo(src)
 		var/obj/item/device/core_sampler/C = W
 		C.sample_item(src, user)
@@ -205,39 +211,43 @@
 
 	if (istype(W, /obj/item/device/measuring_tape))
 		var/obj/item/device/measuring_tape/P = W
-		user.visible_message("\blue[user] extends [P] towards [src].","\blue You extend [P] towards [src].")
-		if(do_after(user,25))
-			user << "\blue \icon[P] [src] has been excavated to a depth of [2*excavation_level]cm."
+		user.visible_message("<span class='notice'>[user] extends [P] towards [src].</span>","<span class='notice'>You extend [P] towards [src].</span>")
+		busy = 1
+		if(do_after(user, src,25))
+			user << "<span class='notice'>\icon[P] [src] has been excavated to a depth of [2*excavation_level]cm.</span>"
+			busy = 0
+		else
+			busy = 0
 		return
 
 	if (istype(W, /obj/item/weapon/pickaxe))
-		var/turf/T = user.loc
-		if (!( istype(T, /turf) ))
-			return
-	/*
-		if (istype(W, /obj/item/weapon/pickaxe/radius))
-			var/turf/T = user.loc
-			if (!( istype(T, /turf) ))
-				return
-	*/
-	//Watch your tabbing, microwave. --NEO
+		if(user.loc != get_turf(user))
+			return //if we aren't in the tile we are located in, return
 
 		var/obj/item/weapon/pickaxe/P = W
+
+		if(!istype(P))
+			return
+
+		if(!(P.diggables & DIG_ROCKS))
+			return
+
 		if(last_act + P.digspeed > world.time)//prevents message spam
 			return
+
 		last_act = world.time
 
 		playsound(user, P.drill_sound, 20, 1)
 
 		//handle any archaeological finds we might uncover
-		var/fail_message
+		var/fail_message = ""
 		if(finds && finds.len)
 			var/datum/find/F = finds[1]
 			if(excavation_level + P.excavation_amount > F.excavation_required)
 
 				fail_message = ", <b>[pick("there is a crunching noise","[W] collides with some different rock","part of the rock face crumbles away","something breaks under [W]")]</b>"
 
-		user << "\red You start [P.drill_verb][fail_message ? fail_message : ""]."
+		user << "<span class='rose'>You start [P.drill_verb][fail_message].</span>"
 
 		if(fail_message && prob(90))
 			if(prob(25))
@@ -247,8 +257,12 @@
 				if(prob(50))
 					artifact_debris()
 
-		if(do_after(user,P.digspeed))
-			user << "\blue You finish [P.drill_verb] the rock."
+		busy = 1
+
+		if(do_after(user, src, P.digspeed) && user)
+			user << "<span class='notice'>You finish [P.drill_verb] the rock.</span>"
+
+			busy = 0
 
 			if(finds && finds.len)
 				var/datum/find/F = finds[1]
@@ -270,20 +284,47 @@
 				if(artifact_find)
 					if( excavation_level > 0 || prob(15) )
 
-						B = new(src)
+						B = getFromPool(/obj/structure/boulder, src)
 						if(artifact_find)
 							B.artifact_find = artifact_find
 					else
 						artifact_debris(1)
+
 				else if(prob(15))
+					B = getFromPool(/obj/structure/boulder, src)
 
-					B = new(src)
-
+				var/mineral/has_minerals = mineral
 				if(B)
 					GetDrilled(0)
 				else
 					GetDrilled(1)
+
+				if(!B && !has_minerals)
+					var/I = rand(1,500)
+					if(I == 1)
+						switch(polarstar)
+							if(0)
+								new/obj/item/weapon/gun/energy/polarstar(src)
+								polarstar = 1
+								visible_message("<span class='notice'>A gun was buried within!</span>")
+							if(1)
+								new/obj/item/device/modkit/spur_parts(src)
+								visible_message("<span class='notice'>Something came out of the wall! Looks like scrap metal.</span>")
+								polarstar = 2
 				return
+
+			if(finds && finds.len)
+				var/I = rand(1,100)
+				if(I == 1)
+					switch(polarstar)
+						if(0)
+							new/obj/item/weapon/gun/energy/polarstar(src)
+							polarstar = 1
+							visible_message("<span class='notice'>A gun was buried within!</span>")
+						if(1)
+							new/obj/item/device/modkit/spur_parts(src)
+							visible_message("<span class='notice'>Something came out of the wall! Looks like scrap metal.</span>")
+							polarstar = 2
 
 			excavation_level += P.excavation_amount
 
@@ -293,32 +334,20 @@
 					archaeo_overlay = "overlay_archaeo[rand(1,3)]"
 					overlays += archaeo_overlay
 
-			//there's got to be a better way to do this
 			var/update_excav_overlay = 0
-			if(excavation_level >= 75)
-				if(excavation_level - P.excavation_amount < 75)
-					update_excav_overlay = 1
-			else if(excavation_level >= 50)
-				if(excavation_level - P.excavation_amount < 50)
-					update_excav_overlay = 1
-			else if(excavation_level >= 25)
-				if(excavation_level - P.excavation_amount < 25)
-					update_excav_overlay = 1
+
+			var/subtractions = 0
+			while(excavation_level - 25*(subtractions + 1) >= 0 && subtractions < 3)
+				subtractions++
+			if(excavation_level - P.excavation_amount < subtractions * 25)
+				update_excav_overlay = 1
 
 			//update overlays displaying excavation level
 			if( !(excav_overlay && excavation_level > 0) || update_excav_overlay )
 				var/excav_quadrant = round(excavation_level / 25) + 1
 				excav_overlay = "overlay_excv[excav_quadrant]_[rand(1,3)]"
 				overlays += excav_overlay
-
-			/*
-			//extract pesky minerals while we're excavating
-			while(excavation_minerals.len && excavation_level > excavation_minerals[excavation_minerals.len])
-				DropMineral()
-				pop(excavation_minerals)
-				mineralAmt--
-			*/
-
+/*
 			//drop some rocks
 			next_rock += P.excavation_amount * 10
 			while(next_rock > 100)
@@ -328,10 +357,13 @@
 					geologic_data = new/datum/geosample(src)
 				geologic_data.UpdateNearbyArtifactInfo(src)
 				O.geologic_data = geologic_data
+*/
+
+		else //Note : If the do_after() fails
+			busy = 0
 
 	else
 		return attack_hand(user)
-
 
 /turf/unsimulated/mineral/proc/DropMineral()
 	if(!mineral)
@@ -353,12 +385,9 @@
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
 	if(artifact_find && artifact_fail)
-		var/pain = 0
-		if(prob(50))
-			pain = 1
 		for(var/mob/living/M in range(src, 200))
 			M << "<font color='red'><b>[pick("A high pitched [pick("keening","wailing","whistle")]","A rumbling noise like [pick("thunder","heavy machinery")]")] somehow penetrates your mind before fading away!</b></font>"
-			if(pain)
+			if(prob(50)) //pain
 				flick("pain",M.pain)
 				if(prob(50))
 					M.adjustBruteLoss(5)
@@ -386,7 +415,7 @@
 	if(prob_clean)
 		X = new /obj/item/weapon/archaeological_find(src, new_item_type = F.find_type)
 	else
-		X = new /obj/item/weapon/ore/strangerock(src, inside_item_type = F.find_type)
+		X = new /obj/item/weapon/strangerock(src, inside_item_type = F.find_type)
 		if(!geologic_data)
 			geologic_data = new/datum/geosample(src)
 		geologic_data.UpdateNearbyArtifactInfo(src)
@@ -405,7 +434,7 @@
 		var/obj/effect/suspension_field/S = locate() in src
 		if(!S || S.field_type != get_responsive_reagent(F.find_type))
 			if(X)
-				visible_message("\red<b>[pick("[display_name] crumbles away into dust","[display_name] breaks apart")].</b>")
+				visible_message("<span class='danger'>[pick("[display_name] crumbles away into dust","[display_name] breaks apart")].</span>")
 				del(X)
 
 	finds.Remove(F)
@@ -422,8 +451,8 @@
 				R.amount = rand(1,5)
 
 			if(3)
-				var/obj/item/stack/sheet/metal/R = new(src)
-				R.amount = rand(5,25)
+				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, (src))
+				M.amount = rand(5,25)
 
 			if(4)
 				var/obj/item/stack/sheet/plasteel/R = new(src)
@@ -487,63 +516,26 @@
 	if(!W || !user)
 		return 0
 
-	if ((istype(W, /obj/item/weapon/shovel)))
-		var/turf/T = user.loc
-		if (!( istype(T, /turf) ))
+	if (istype(W, /obj/item/weapon/pickaxe))
+		var/obj/item/weapon/pickaxe/used_digging = W //cast for dig speed and flags
+		if (get_turf(user) != user.loc) //if we aren't somehow on the turf we're in
+			return
+
+		if(!(used_digging.diggables & DIG_SOIL)) //if the pickaxe can't dig soil, we don't
+			user << "<span class='rose'>You can't dig soft soil with \the [W].</span>"
 			return
 
 		if (dug)
-			user << "\red This area has already been dug"
+			user << "<span class='rose'>This area has already been dug.</span>"
 			return
 
-		user << "\red You start digging."
+		user << "<span class='rose'>You start digging.<span>"
 		playsound(get_turf(src), 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
 
-		sleep(40)
-		if ((user.loc == T && user.get_active_hand() == W))
-			user << "\blue You dug a hole."
+		if(do_after(user, used_digging.digspeed) && user) //the better the drill, the faster the digging
+			playsound(src, 'sound/items/shovel.ogg', 50, 1)
+			user << "<span class='notice'>You dug a hole.</span>"
 			gets_dug()
-
-	if ((istype(W,/obj/item/weapon/pickaxe/drill)))
-		var/turf/T = user.loc
-		if (!( istype(T, /turf) ))
-			return
-
-		if (dug)
-			user << "\red This area has already been dug"
-			return
-
-		user << "\red You start digging."
-		playsound(get_turf(src), 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
-
-		sleep(30)
-		if ((user.loc == T && user.get_active_hand() == W))
-			user << "\blue You dug a hole."
-			gets_dug()
-
-	if ((istype(W,/obj/item/weapon/pickaxe/diamonddrill)) || (istype(W,/obj/item/weapon/pickaxe/borgdrill)))
-		var/turf/T = user.loc
-		if (!( istype(T, /turf) ))
-			return
-
-		if (dug)
-			user << "\red This area has already been dug"
-			return
-
-		user << "\red You start digging."
-		playsound(get_turf(src), 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
-
-		sleep(0)
-		if ((user.loc == T && user.get_active_hand() == W))
-			user << "\blue You dug a hole."
-			gets_dug()
-
-	if(istype(W,/obj/item/weapon/storage/bag/ore))
-		var/obj/item/weapon/storage/bag/ore/S = W
-		if(S.collection_mode)
-			for(var/obj/item/weapon/ore/O in contents)
-				O.attackby(W,user)
-				return
 
 	else
 		..(W,user)
@@ -563,7 +555,7 @@
 	return
 
 /turf/unsimulated/floor/asteroid/proc/updateMineralOverlays()
-	src.overlays.Cut()
+	src.overlays.len = 0
 
 	if(istype(get_step(src, NORTH), /turf/unsimulated/mineral))
 		src.overlays += image('icons/turf/walls.dmi', "rock_side_n")
@@ -601,20 +593,6 @@
 		A = get_step(src, SOUTH)
 		A.updateMineralOverlays()
 	src.updateMineralOverlays()
-
-/turf/unsimulated/floor/asteroid/Entered(atom/movable/M as mob|obj)
-	..()
-	if(istype(M,/mob/living/silicon/robot))
-		var/mob/living/silicon/robot/R = M
-		if(istype(R.module, /obj/item/weapon/robot_module/miner))
-			if(istype(R.module_state_1,/obj/item/weapon/storage/bag/ore))
-				attackby(R.module_state_1,R)
-			else if(istype(R.module_state_2,/obj/item/weapon/storage/bag/ore))
-				attackby(R.module_state_2,R)
-			else if(istype(R.module_state_3,/obj/item/weapon/storage/bag/ore))
-				attackby(R.module_state_3,R)
-			else
-				return
 
 /turf/unsimulated/mineral/random
 	name = "Mineral deposit"
@@ -857,8 +835,33 @@
 	det_time = rand(8,10) //So you don't know exactly when the hot potato will explode
 	..()
 
+/turf/unsimulated/mineral/gibtonite/Bumped(AM)
+	var/bump_reject = 0
+	if(istype(AM,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = AM
+		if((istype(H.get_active_hand(),/obj/item/weapon/pickaxe) || istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe)) && src.stage == 1)
+			H << "<span class='warning'>You don't think that's a good idea...</span>"
+			bump_reject = 1
+
+	else if(istype(AM,/mob/living/silicon/robot))
+		var/mob/living/silicon/robot/R = AM
+		if(istype(R.module_active, /obj/item/weapon/pickaxe))
+			R << "<span class='warning'>You don't think that's a good idea...</span>"
+			bump_reject = 1
+		else if(istype(R.module_active, /obj/item/device/mining_scanner))
+			attackby(R.module_active, R) //let's bump to disable. This is kinder, because borgs need some love
+
+	else if(istype(AM,/obj/mecha))
+		var/obj/mecha/M = AM
+		if(istype(M.selected, /obj/item/mecha_parts/mecha_equipment/tool/drill))
+			M.occupant_message("<span class='warning'>Safety features prevent this action.</span>")
+			bump_reject = 1
+
+	if(!bump_reject) //if we haven't been pushed off, we do the drilling bit
+		return ..()
+
 /turf/unsimulated/mineral/gibtonite/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/device/mining_scanner) && stage == 1)
+	if(((istype(I, /obj/item/device/mining_scanner)) || (istype(I, /obj/item/device/depth_scanner))) && stage == 1)
 		user.visible_message("<span class='notice'>You use [I] to locate where to cut off the chain reaction and attempt to stop it...</span>")
 		defuse()
 	if(istype(I, /obj/item/weapon/pickaxe))
@@ -893,7 +896,7 @@
 
 /turf/unsimulated/mineral/gibtonite/proc/defuse()
 	if(stage == 1)
-		icon_state = "rock_Gibtonite_inactive"
+		icon_state = "rock_Gibtonite" //inactive does not exist. The other icon is active.
 		desc = "An inactive gibtonite reserve. The ore can be extracted."
 		stage = 2
 		if(det_time < 0)
@@ -910,7 +913,7 @@
 		mineral.result_amount = 0
 		explosion(bombturf,1,2,5, adminlog = 0)
 	if(stage == 2) //Gibtonite deposit is now benign and extractable. Depending on how close you were to it blowing up before defusing, you get better quality ore.
-		var/obj/item/weapon/twohanded/required/gibtonite/G = new /obj/item/weapon/twohanded/required/gibtonite/(src)
+		var/obj/item/weapon/gibtonite/G = new /obj/item/weapon/gibtonite/(src)
 		if(det_time <= 0)
 			G.quality = 3
 			G.icon_state = "Gibtonite ore 3"
@@ -958,6 +961,7 @@
 	..()
 
 /turf/unsimulated/floor/asteroid/cave/proc/make_tunnel(var/dir)
+
 
 	var/turf/unsimulated/mineral/tunnel = src
 	var/next_angle = pick(45, -45)
@@ -1019,3 +1023,18 @@
 /turf/unsimulated/floor/asteroid/plating
 	intact=0
 	icon_state="asteroidplating"
+
+/turf/unsimulated/floor/asteroid/canBuildCatwalk()
+	return BUILD_FAILURE
+
+/turf/unsimulated/floor/asteroid/canBuildLattice()
+	if(!(locate(/obj/structure/lattice) in contents))
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
+/turf/unsimulated/floor/asteroid/canBuildPlating()
+	if(!dug)
+		return BUILD_IGNORE
+	if(locate(/obj/structure/lattice) in contents)
+		return BUILD_SUCCESS
+	return BUILD_FAILURE

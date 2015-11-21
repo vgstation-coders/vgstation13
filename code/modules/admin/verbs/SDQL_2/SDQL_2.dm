@@ -13,18 +13,36 @@
 
 	--You can use operators other than ==, such as >, <=, != and etc..
 
+	--Lists can be done through [], so say UPDATE /mob SET client.color = [1, 0.75, ...].
 */
 
-/client/proc/SDQL2_query(query_text as message)
+// Used by update statements, this is to handle shit like preventing editing the /datum/admins though SDQL but WITHOUT +PERMISSIONS.
+// Assumes the variable actually exists.
+/datum/proc/SDQL_update(var/const/var_name, var/new_value)
+	vars[var_name] = new_value
+	return 1
+
+// Because /client isn't a subtype of /datum...
+/client/proc/SDQL_update(var/const/var_name, var/new_value)
+	vars[var_name] = new_value
+	return 1
+	
+/client/proc/SDQL2_query(var/query_text as message)
 	set category = "Debug"
-	if(!check_rights(R_DEBUG))  //Shouldn't happen... but just to be safe.
-		message_admins("\red ERROR: Non-admin [usr.key] attempted to execute a SDQL query!")
-		log_admin("Non-admin [usr.key] attempted to execute a SDQL query!")
+
+	if(!check_rights(R_DEBUG))  // Shouldn't happen... but just to be safe.
+		message_admins("<span class='warning'>ERROR: Non-admin [usr.key] attempted to execute the following SDQL query: [query_text]</span>")
+		log_admin("Non-admin [usr.key] attempted to execute the following SDQL query: [query_text]!")
+		return
 
 	if(!query_text || length(query_text) < 1)
 		return
 
-	//world << query_text
+	var/query_log = "[key_name(src)] executed SDQL query: \"[query_text]\"."
+	world.log << query_log
+	message_admins(query_log)
+	log_game(query_log)
+	sleep(-1) // Incase the server crashes due to a huge query, we allow the server to log the above things (it might just delay it).
 
 	var/list/query_list = SDQL2_tokenize(query_text)
 
@@ -74,22 +92,20 @@
 			if(SDQL_expression(d, query_tree["where"]))
 				objs += d
 
-	var/query_log = "[key_name(src)] executed SDQL query: \"[query_text]\"."
-	world.log << query_log
-	message_admins(query_log)
-	log_game(query_log)
-
 	switch(query_tree[1])
 		if("call")
 			var/list/call_list = query_tree["call"]
 			var/list/args_list = query_tree["args"]
 
 			for(var/datum/d in objs)
+				var/list/new_args = list()
+				for(var/arg in args_list)
+					new_args += SDQL_expression(d, arg)
 				for(var/v in call_list)
 					// To stop any procs which sleep from executing slowly.
 					if(d)
 						if(hascall(d, v))
-							spawn() call(d, v)(arglist(args_list)) // Spawn in case the function sleeps.
+							spawn() call(d, v)(arglist(new_args)) // Spawn in case the function sleeps.
 
 		if("delete")
 			for(var/datum/d in objs)
@@ -120,26 +136,22 @@
 			if("set" in query_tree)
 				var/list/set_list = query_tree["set"]
 				for(var/datum/d in objs)
-					var/list/vals = list()
-					for(var/v in set_list)
-						if(v in d.vars)
-							vals += v
-							vals[v] = SDQL_expression(d, set_list[v])
+					for(var/list/sets in set_list)
+						var/datum/temp = d
+						var/i = 0
+						for(var/v in sets)
+							if(++i == sets.len)
+								if(istype(temp, /turf) && (v == "x" || v == "y" || v == "z"))
+									break
 
-					if(istype(d, /turf))
-						for(var/v in vals)
-							if(v == "x" || v == "y" || v == "z")
-								continue
+								temp.SDQL_update(v, SDQL_expression(d, set_list[sets]))
+								break
 
-							d.vars[v] = vals[v]
+							if(temp.vars.Find(v) && (istype(temp.vars[v], /datum) || istype(temp.vars[v], /client)))
+								temp = temp.vars[v]
 
-					else
-						for(var/v in vals)
-							d.vars[v] = vals[v]
-
-
-
-
+							else
+								break
 
 /proc/SDQL_parse(list/query_list)
 	var/datum/SDQL_parser/parser = new(query_list)
@@ -287,7 +299,7 @@
 				if("or", "||")
 					result = (result || val)
 				else
-					usr << "\red SDQL2: Unknown op [op]"
+					usr << "<span class='warning'>SDQL2: Unknown op [op]</span>"
 					result = null
 		else
 			result = val
@@ -328,6 +340,12 @@
 	else if(copytext(expression[i], 1, 2) in list("'", "\""))
 		val = copytext(expression[i], 2, length(expression[i]))
 
+	else if(expression[i] == "\[")
+		var/list/expressions_list = expression[++i]
+		val = list()
+		for(var/list/expression_list in expressions_list)			
+			val += SDQL_expression(object, expression_list)
+
 	else
 		val = SDQL_var(object, expression, i)
 		i = expression.len
@@ -335,7 +353,6 @@
 	return list("val" = val, "i" = i)
 
 /proc/SDQL_var(datum/object, list/expression, start = 1)
-
 	if(expression[start] in object.vars)
 
 		if(start < expression.len && expression[start + 1] == ".")
@@ -349,8 +366,9 @@
 
 /proc/SDQL2_tokenize(query_text)
 
+
 	var/list/whitespace = list(" ", "\n", "\t")
-	var/list/single = list("(", ")", ",", "+", "-", ".")
+	var/list/single = list("(", ")", ",", "+", "-", ".", "\[", "]")
 	var/list/multi = list(
 					"=" = list("", "="),
 					"<" = list("", "=", ">"),
@@ -392,7 +410,7 @@
 
 		else if(char == "'")
 			if(word != "")
-				usr << "\red SDQL2: You have an error in your SDQL syntax, unexpected ' in query: \"<font color=gray>[query_text]</font>\" following \"<font color=gray>[word]</font>\". Please check your syntax, and try again."
+				usr << "<span class='warning'>SDQL2: You have an error in your SDQL syntax, unexpected ' in query: \"<font color=gray>[query_text]</font>\" following \"<font color=gray>[word]</font>\". Please check your syntax, and try again.</span>"
 				return null
 
 			word = "'"
@@ -412,7 +430,7 @@
 					word += char
 
 			if(i > len)
-				usr << "\red SDQL2: You have an error in your SDQL syntax, unmatched ' in query: \"<font color=gray>[query_text]</font>\". Please check your syntax, and try again."
+				usr << "<span class='warning'>SDQL2: You have an error in your SDQL syntax, unmatched ' in query: \"<font color=gray>[query_text]</font>\". Please check your syntax, and try again.</span>"
 				return null
 
 			query_list += "[word]'"
@@ -420,7 +438,7 @@
 
 		else if(char == "\"")
 			if(word != "")
-				usr << "\red SDQL2: You have an error in your SDQL syntax, unexpected \" in query: \"<font color=gray>[query_text]</font>\" following \"<font color=gray>[word]</font>\". Please check your syntax, and try again."
+				usr << "<span class='warning'>SDQL2: You have an error in your SDQL syntax, unexpected \" in query: \"<font color=gray>[query_text]</font>\" following \"<font color=gray>[word]</font>\". Please check your syntax, and try again.</span>"
 				return null
 
 			word = "\""
@@ -440,7 +458,7 @@
 					word += char
 
 			if(i > len)
-				usr << "\red SDQL2: You have an error in your SDQL syntax, unmatched \" in query: \"<font color=gray>[query_text]</font>\". Please check your syntax, and try again."
+				usr << "<span class='warning'>SDQL2: You have an error in your SDQL syntax, unmatched \" in query: \"<font color=gray>[query_text]</font>\". Please check your syntax, and try again.</span>"
 				return null
 
 			query_list += "[word]\""

@@ -87,8 +87,8 @@ var/const/effectTypePower = 3
 	proc/sequenceCorrect()
 		if(blockList.len != blockListCurr.len) return 0 //Things went completely and entirely wrong and everything is broken HALP. Some dickwad probably messed with the global sequence.
 		for(var/i=0, i < blockList.len, i++)
-			var/datum/basePair/correct = blockList[i+1]
-			var/datum/basePair/current = blockListCurr[i+1]
+			var/datum/basepair/correct = blockList[i+1]
+			var/datum/basepair/current = blockListCurr[i+1]
 			if(correct.bpp1 != current.bpp1 || correct.bpp2 != current.bpp2) //NOPE
 				return 0
 		return 1
@@ -96,20 +96,20 @@ var/const/effectTypePower = 3
 	proc/pairCorrect(var/pair_index)
 		if(blockList.len != blockListCurr.len || !pair_index)
 			return 0
-		var/datum/basePair/correct = blockList[pair_index]
-		var/datum/basePair/current = blockListCurr[pair_index]
+		var/datum/basepair/correct = blockList[pair_index]
+		var/datum/basepair/current = blockListCurr[pair_index]
 		if(correct.bpp1 != current.bpp1 || correct.bpp2 != current.bpp2) //NOPE
 			return 0
 		return 1
 
 	proc/ModBlocks() //Gets the normal sequence for this mutation and then "corrupts" it locally.
-		for(var/datum/basePair/bp in blockList)
-			var/datum/basePair/bpNew = new()
+		for(var/datum/basepair/bp in blockList)
+			var/datum/basepair/bpNew = new()
 			bpNew.bpp1 = bp.bpp1
 			bpNew.bpp2 = bp.bpp2
 			blockListCurr.Add(bpNew)
 
-		for(var/datum/basePair/bp in blockListCurr)
+		for(var/datum/basepair/bp in blockListCurr)
 			if(prob(33))
 				if(prob(50))
 					bp.bpp1 = "X"
@@ -119,13 +119,13 @@ var/const/effectTypePower = 3
 		var/list/gapList = new/list() //Make sure you don't have more gaps than basepairs or youll get an error. But at that point the mutation would be unsolvable.
 
 		for(var/i=0, i<owner.blockGaps, i++)
-			var/datum/basePair/bp = pick(blockListCurr - gapList)
+			var/datum/basepair/bp = pick(blockListCurr - gapList)
 			gapList.Add(bp)
 			bp.bpp1 = "X"
 			bp.bpp2 = "X"
 
 		for(var/i=0, i<owner.lockedGaps, i++)
-			var/datum/basePair/bp = pick(blockListCurr - gapList)
+			var/datum/basepair/bp = pick(blockListCurr - gapList)
 			gapList.Add(bp)
 
 			bp.lockcode = ""
@@ -154,7 +154,7 @@ var/const/effectTypePower = 3
 		for(var/i=0, i < owner.blockCount, i++)
 			for(var/a=0, a < 4, a++) //4 pairs per block.
 				var/S = pick("G", "T", "C" , "A")
-				var/datum/basePair/B = new()
+				var/datum/basepair/B = new()
 				B.bpp1 = S
 				switch(S)
 					if("G")
@@ -168,7 +168,7 @@ var/const/effectTypePower = 3
 				blockList.Add(B)
 		return
 
-/datum/basePair
+/datum/basepair
 	var/bpp1 = ""
 	var/bpp2 = ""
 	var/marker = "green"

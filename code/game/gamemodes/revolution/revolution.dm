@@ -50,8 +50,7 @@
 	var/head_check = 0
 	for(var/mob/new_player/player in player_list)
 		if(player.mind.assigned_role in command_positions)
-			head_check = 1
-			break
+			head_check++
 
 	for(var/datum/mind/player in possible_headrevs)
 		for(var/job in restricted_jobs)//Removing heads and such from the list
@@ -66,8 +65,12 @@
 		head_revolutionaries += lenin
 
 	if((head_revolutionaries.len==0)||(!head_check))
+		log_admin("Failed to set-up a round of revolution. Couldn't find any heads of staffs or any volunteers to be head revolutionaries.")
+		message_admins("Failed to set-up a round of revolution. Couldn't find any heads of staffs or any volunteers to be head revolutionaries.")
 		return 0
 
+	log_admin("Starting a round of revolution with [head_revolutionaries.len] head revolutionaries and [head_check] heads of staff.")
+	message_admins("Starting a round of revolution with [head_revolutionaries.len] head revolutionaries and [head_check] heads of staff.")
 	return 1
 
 
@@ -118,7 +121,7 @@
 /datum/game_mode/proc/greet_revolutionary(var/datum/mind/rev_mind, var/you_are=1)
 	var/obj_count = 1
 	if (you_are)
-		rev_mind.current << "\blue You are a member of the revolutionaries' leadership!"
+		rev_mind.current << "<span class='notice'>You are a member of the revolutionaries' leadership!</span>"
 	for(var/datum/objective/objective in rev_mind.objectives)
 		rev_mind.current << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
 		rev_mind.special_role = "Head Revolutionary"
@@ -198,7 +201,7 @@
 		return -4
 
 	revolutionaries += rev_mind
-	rev_mind.current << "\red <FONT size = 3> You are now a revolutionary! Help your cause. Do not harm your fellow freedom fighters. You can identify your comrades by the red \"R\" icons, and your leaders by the blue \"R\" icons. Help them kill the heads to win the revolution!</FONT>"
+	rev_mind.current << "<span class='warning'><FONT size = 3> You are now a revolutionary! Help your cause. Do not harm your fellow freedom fighters. You can identify your comrades by the red \"R\" icons, and your leaders by the blue \"R\" icons. Help them kill the heads to win the revolution!</FONT></span>"
 	rev_mind.special_role = "Revolutionary"
 	update_rev_icons_added(rev_mind)
 
@@ -212,10 +215,10 @@
 		rev_mind.special_role = null
 
 		if(beingborged)
-			rev_mind.current << "\red <FONT size = 3><B>The frame's firmware detects and deletes your neural reprogramming!  You remember nothing from the moment you were flashed until now.</B></FONT>"
+			rev_mind.current << "<span class='danger'><FONT size = 3>The frame's firmware detects and deletes your neural reprogramming!  You remember nothing from the moment you were flashed until now.</FONT></span>"
 
 		else
-			rev_mind.current << "\red <FONT size = 3><B>You have been brainwashed! You are no longer a revolutionary! Your memory is hazy from the time you were a rebel...the only thing you remember is the name of the one who brainwashed you...</B></FONT>"
+			rev_mind.current << "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a revolutionary! Your memory is hazy from the time you were a rebel...the only thing you remember is the name of the one who brainwashed you...</FONT></span>"
 
 		update_rev_icons_removed(rev_mind)
 		for(var/mob/living/M in view(rev_mind.current))
@@ -232,7 +235,7 @@
 //CURRENTLY CONTAINS BUGS:///////////////////////////////////////////////////////////////////////
 //-PLAYERS THAT HAVE BEEN REVS FOR AWHILE OBTAIN THE BLUE ICON WHILE STILL NOT BEING A REV HEAD//
 // -Possibly caused by cloning of a standard rev/////////////////////////////////////////////////
-//-UNCONFIRMED: DECONVERTED REVS NOT LOSING THEIR ICON PROPERLY//////////////////////////////////
+//-UNCONFIRMED: DECONVERTED REVS NOT LOSING THEIR ICON properLY//////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /datum/game_mode/proc/update_all_rev_icons()
 	spawn(0)
@@ -241,25 +244,33 @@
 				if(head_rev_mind.current.client)
 					for(var/image/I in head_rev_mind.current.client.images)
 						if(I.icon_state == "rev" || I.icon_state == "rev_head")
-							del(I)
+							//del(I)
+							head_rev_mind.current.client.images -= I
 
 		for(var/datum/mind/rev_mind in revolutionaries)
 			if(rev_mind.current)
 				if(rev_mind.current.client)
 					for(var/image/I in rev_mind.current.client.images)
 						if(I.icon_state == "rev" || I.icon_state == "rev_head")
-							del(I)
+							//del(I)
+							rev_mind.current.client.images -= I
 
 		for(var/datum/mind/head_rev in head_revolutionaries)
 			if(head_rev.current)
 				if(head_rev.current.client)
 					for(var/datum/mind/rev in revolutionaries)
 						if(rev.current)
-							var/I = image('icons/mob/mob.dmi', loc = rev.current, icon_state = "rev")
+							var/imageloc = rev.current
+							if(istype(rev.current.loc,/obj/mecha))
+								imageloc = rev.current.loc
+							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev", layer = 13)
 							head_rev.current.client.images += I
 					for(var/datum/mind/head_rev_1 in head_revolutionaries)
 						if(head_rev_1.current)
-							var/I = image('icons/mob/mob.dmi', loc = head_rev_1.current, icon_state = "rev_head")
+							var/imageloc = head_rev_1.current
+							if(istype(head_rev_1.current.loc,/obj/mecha))
+								imageloc = head_rev_1.current.loc
+							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head", layer = 13)
 							head_rev.current.client.images += I
 
 		for(var/datum/mind/rev in revolutionaries)
@@ -267,11 +278,17 @@
 				if(rev.current.client)
 					for(var/datum/mind/head_rev in head_revolutionaries)
 						if(head_rev.current)
-							var/I = image('icons/mob/mob.dmi', loc = head_rev.current, icon_state = "rev_head")
+							var/imageloc = head_rev.current
+							if(istype(head_rev.current.loc,/obj/mecha))
+								imageloc = head_rev.current.loc
+							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head", layer = 13)
 							rev.current.client.images += I
 					for(var/datum/mind/rev_1 in revolutionaries)
 						if(rev_1.current)
-							var/I = image('icons/mob/mob.dmi', loc = rev_1.current, icon_state = "rev")
+							var/imageloc = rev_1.current
+							if(istype(rev_1.current.loc,/obj/mecha))
+								imageloc = rev_1.current.loc
+							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev", layer = 13)
 							rev.current.client.images += I
 
 ////////////////////////////////////////////////////
@@ -283,21 +300,33 @@
 		for(var/datum/mind/head_rev_mind in head_revolutionaries)
 			if(head_rev_mind.current)
 				if(head_rev_mind.current.client)
-					var/I = image('icons/mob/mob.dmi', loc = rev_mind.current, icon_state = "rev")
+					var/imageloc = rev_mind.current
+					if(istype(rev_mind.current.loc,/obj/mecha))
+						imageloc = rev_mind.current.loc
+					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev", layer = 13)
 					head_rev_mind.current.client.images += I
 			if(rev_mind.current)
 				if(rev_mind.current.client)
-					var/image/J = image('icons/mob/mob.dmi', loc = head_rev_mind.current, icon_state = "rev_head")
+					var/imageloc = head_rev_mind.current
+					if(istype(head_rev_mind.current.loc,/obj/mecha))
+						imageloc = head_rev_mind.current.loc
+					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head", layer = 13)
 					rev_mind.current.client.images += J
 
 		for(var/datum/mind/rev_mind_1 in revolutionaries)
 			if(rev_mind_1.current)
 				if(rev_mind_1.current.client)
-					var/I = image('icons/mob/mob.dmi', loc = rev_mind.current, icon_state = "rev")
+					var/imageloc = rev_mind.current
+					if(istype(rev_mind.current.loc,/obj/mecha))
+						imageloc = rev_mind.current.loc
+					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev", layer = 13)
 					rev_mind_1.current.client.images += I
 			if(rev_mind.current)
 				if(rev_mind.current.client)
-					var/image/J = image('icons/mob/mob.dmi', loc = rev_mind_1.current, icon_state = "rev")
+					var/imageloc = rev_mind_1.current
+					if(istype(rev_mind_1.current.loc,/obj/mecha))
+						imageloc = rev_mind_1.current.loc
+					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev", layer = 13)
 					rev_mind.current.client.images += J
 
 ///////////////////////////////////
@@ -309,21 +338,24 @@
 			if(head_rev_mind.current)
 				if(head_rev_mind.current.client)
 					for(var/image/I in head_rev_mind.current.client.images)
-						if((I.icon_state == "rev" || I.icon_state == "rev_head") && I.loc == rev_mind.current)
-							del(I)
+						if((I.icon_state == "rev" || I.icon_state == "rev_head") && ((I.loc == rev_mind.current) || (I.loc == rev_mind.current.loc)))
+							//del(I)
+							head_rev_mind.current.client.images -= I
 
 		for(var/datum/mind/rev_mind_1 in revolutionaries)
 			if(rev_mind_1.current)
 				if(rev_mind_1.current.client)
 					for(var/image/I in rev_mind_1.current.client.images)
-						if((I.icon_state == "rev" || I.icon_state == "rev_head") && I.loc == rev_mind.current)
-							del(I)
+						if((I.icon_state == "rev" || I.icon_state == "rev_head") && ((I.loc == rev_mind.current) || (I.loc == rev_mind.current.loc)))
+							//del(I)
+							rev_mind_1.current.client.images -= I
 
 		if(rev_mind.current)
 			if(rev_mind.current.client)
 				for(var/image/I in rev_mind.current.client.images)
 					if(I.icon_state == "rev" || I.icon_state == "rev_head")
-						del(I)
+						//del(I)
+						rev_mind.current.client.images -= I
 
 //////////////////////////
 //Checks for rev victory//
@@ -353,24 +385,32 @@
 /datum/game_mode/revolution/declare_completion()
 	if(finished == 1)
 		feedback_set_details("round_end_result","win - heads killed")
-		world << "\red <FONT size = 3><B> The heads of staff were killed or abandoned the station! The revolutionaries win!</B></FONT>"
+		completion_text = "<br><span class='danger'><FONT size = 3> The heads of staff were killed or abandoned the station! The revolutionaries win!</FONT></span>"
 	else if(finished == 2)
 		feedback_set_details("round_end_result","loss - rev heads killed")
-		world << "\red <FONT size = 3><B> The heads of staff managed to stop the revolution!</B></FONT>"
+		completion_text = "<br><span class='danger'><FONT size = 3> The heads of staff managed to stop the revolution!</FONT></span>"
 	..()
 	return 1
 
 /datum/game_mode/proc/auto_declare_completion_revolution()
 	var/list/targets = list()
-
+	var/text = ""
 	if(head_revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution))
-		var/text = "<FONT size = 2><B>The head revolutionaries were:</B></FONT>"
+		var/icon/logo1 = icon('icons/mob/mob.dmi', "rev_head-logo")
+		end_icons += logo1
+		var/tempstate = end_icons.len
+		text += {"<img src="logo_[tempstate].png"> <FONT size = 2><B>The head revolutionaries were:</B></FONT> <img src="logo_[tempstate].png">"}
 
 		for(var/datum/mind/headrev in head_revolutionaries)
-			text += "<br>[headrev.key] was [headrev.name] ("
 			if(headrev.current)
+				var/icon/flat = getFlatIcon(headrev.current, SOUTH, 1, 1)
+				end_icons += flat
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[headrev.key]</b> was <b>[headrev.name]</b> ("}
 				if(headrev.current.stat == DEAD)
 					text += "died"
+					flat.Turn(90)
+					end_icons[tempstate] = flat
 				else if(headrev.current.z != 1)
 					text += "fled the station"
 				else
@@ -378,22 +418,41 @@
 				if(headrev.current.real_name != headrev.name)
 					text += " as [headrev.current.real_name]"
 			else
+				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
+				end_icons += sprotch
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[headrev.key]</b> was <b>[headrev.name]</b> ("}
 				text += "body destroyed"
 			text += ")"
+			if(headrev.total_TC)
+				if(headrev.spent_TC)
+					text += "<br><span class='sinister'>TC Remaining: [headrev.total_TC - headrev.spent_TC]/[headrev.total_TC] - The tools used by the Head Revolutionary were:"
+					for(var/entry in headrev.uplink_items_bought)
+						text += "<br>[entry]"
+					text += "</span>"
+				else
+					text += "<br><span class='sinister'>The Head Revolutionary was a smooth operator this round (did not purchase any uplink items)</span>"
 
 			for(var/datum/objective/mutiny/objective in headrev.objectives)
 				targets |= objective.target
 
-		world << text
 
 	if(revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution))
-		var/text = "<FONT size = 2><B>The revolutionaries were:</B></FONT>"
+		var/icon/logo2 = icon('icons/mob/mob.dmi', "rev-logo")
+		end_icons += logo2
+		var/tempstate = end_icons.len
+		text += {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The revolutionaries were:</B></FONT> <img src="logo_[tempstate].png">"}
 
 		for(var/datum/mind/rev in revolutionaries)
-			text += "<br>[rev.key] was [rev.name] ("
 			if(rev.current)
+				var/icon/flat = getFlatIcon(rev.current, SOUTH, 1, 1)
+				end_icons += flat
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[rev.key]</b> was <b>[rev.name]</b> ("}
 				if(rev.current.stat == DEAD)
 					text += "died"
+					flat.Turn(90)
+					end_icons[tempstate] = flat
 				else if(rev.current.z != 1)
 					text += "fled the station"
 				else
@@ -401,24 +460,35 @@
 				if(rev.current.real_name != rev.name)
 					text += " as [rev.current.real_name]"
 			else
+				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
+				end_icons += sprotch
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[rev.key]</b> was <b>[rev.name]</b> ("}
 				text += "body destroyed"
 			text += ")"
 
-		world << text
 
 
 	if( head_revolutionaries.len || revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution) )
-		var/text = "<FONT size = 2><B>The heads of staff were:</B></FONT>"
+		var/icon/logo3 = icon('icons/mob/mob.dmi', "nano-logo")
+		end_icons += logo3
+		var/tempstate = end_icons.len
+		text += {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The heads of staff were:</B></FONT> <img src="logo_[tempstate].png">"}
 
 		var/list/heads = get_all_heads()
 		for(var/datum/mind/head in heads)
 			var/target = (head in targets)
 			if(target)
 				text += "<font color='red'>"
-			text += "<br>[head.key] was [head.name] ("
 			if(head.current)
+				var/icon/flat = getFlatIcon(head.current, SOUTH, 1, 1)
+				end_icons += flat
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[head.key]</b> was <b>[head.name]</b> ("}
 				if(head.current.stat == DEAD)
 					text += "died"
+					flat.Turn(90)
+					end_icons[tempstate] = flat
 				else if(head.current.z != 1)
 					text += "fled the station"
 				else
@@ -426,12 +496,17 @@
 				if(head.current.real_name != head.name)
 					text += " as [head.current.real_name]"
 			else
+				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
+				end_icons += sprotch
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[head.key]</b> was <b>[head.name]</b> ("}
 				text += "body destroyed"
 			text += ")"
 			if(target)
 				text += "</font>"
 
-		world << text
+		text += "<BR><HR>"
+	return text
 
 /proc/is_convertable_to_rev(datum/mind/mind)
 	return istype(mind) && \

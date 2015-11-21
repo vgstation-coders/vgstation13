@@ -16,7 +16,7 @@
 	- Beginning of line ^ or \A
 	- End of line $ or \Z
 	- Grouping with ()
-	- Special classes like \d, \w, \s and their opposites (uppercase)
+	- Special classes like \\d, \w, \s and their opposites (uppercase)
 	- Word break or non-break assertions \b or \B
 	- Back-references like \1, \2, etc. (multiple digits allowed)
 
@@ -245,7 +245,7 @@ regex
 					Literal characters that must be escaped
 					Special escapes including \t and \n
 					Literal ASCII characters as \0nnn (octal) or \xnn (hex)
-					Special character classes like \s or \d (treated as literal until compiled)
+					Special character classes like \s or \\d (treated as literal until compiled)
 					\b or \B (treated as literal until compiled)
 					\A or \Z
 					Backreferences
@@ -672,8 +672,11 @@ regex
 										if(ch2>=97 && ch2<=102) ch2-=87
 										else break
 								while(p.start<=e)
+							if(ch == 47)
+								goto slash
 							p.pattern=ascii2text(ch)
 							continue
+						slash:
 						p.pattern=copytext(p.pattern,p.start,e)
 					if(5)
 						p.pattern=copytext(p.pattern,p.start,e)
@@ -783,7 +786,7 @@ regex
 			i=FirstPossible(txt,i+1,first,stop,anyline)
 		while(stack.len)
 			i=stack[stack.len]
-			stack.Cut(stack.len)
+			stack.len--
 			if(FindHere(txt,i,first)) break
 			i=0
 		if(i && isfirst)

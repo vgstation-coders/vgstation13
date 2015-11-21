@@ -5,12 +5,15 @@
 /obj/item/weapon/cell/New()
 	..()
 	charge = maxcharge
-
+	if(maxcharge <= 2500)
+		desc = "The manufacturer's label states this cell has a power rating of [maxcharge], and that you should not swallow it."
+	else
+		desc = "This power cell has an exciting chrome finish, as it is an uber-capacity cell type! It has a power rating of [maxcharge]!"
 	spawn(5)
 		updateicon()
 
 /obj/item/weapon/cell/proc/updateicon()
-	overlays.Cut()
+	overlays.len = 0
 
 	if(charge < 0.01)
 		return
@@ -51,22 +54,15 @@
 	return power_used
 
 
-/obj/item/weapon/cell/examine()
-	set src in view(1)
-	if(usr /*&& !usr.stat*/)
-		if(maxcharge <= 2500)
-			usr << "[desc]\nThe manufacturer's label states this cell has a power rating of [maxcharge], and that you should not swallow it.\nThe charge meter reads [round(src.percent() )]%."
-		else
-			usr << "This power cell has an exciting chrome finish, as it is an uber-capacity cell type! It has a power rating of [maxcharge]!\nThe charge meter reads [round(src.percent() )]%."
+/obj/item/weapon/cell/examine(mob/user)
+	..()
 	if(crit_fail)
-		usr << "\red This power cell seems to be faulty."
+		user << "<span class='warning'>This power cell seems to be faulty.</span>"
+	else
+		user << "<span class='info'>The charge meter reads [round(src.percent() )]%.</span>"
 
 /obj/item/weapon/cell/attack_self(mob/user as mob)
 	src.add_fingerprint(user)
-	if(ishuman(user))
-		if(istype(user:gloves, /obj/item/clothing/gloves/space_ninja)&&user:gloves:candrain&&!user:gloves:draining)
-			call(/obj/item/clothing/gloves/space_ninja/proc/drain)("CELL",src,user:wear_suit)
-	return
 
 /obj/item/weapon/cell/attackby(obj/item/W, mob/user)
 	..()
@@ -155,3 +151,6 @@
 	return round(charge**(1/3)*(rand(100,125)/100)) //Cube root of power times 1,5 to 2 in increments of 10^-1
 	//For instance, gives an average of 81 damage for 100k W and 175 for 1M W
 	//Best you're getting with BYOND's mathematical funcs. Not even a fucking exponential or neperian logarithm
+
+/obj/item/weapon/cell/get_rating()
+	return maxcharge / 10000

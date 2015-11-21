@@ -9,7 +9,7 @@
 	throw_speed = 2
 	throw_range = 5
 	w_class = 3.0
-	flags = TABLEPASS
+	flags = 0
 	var/created_name = "Floorbot"
 
 /obj/item/weapon/toolbox_tiles_sensor
@@ -22,7 +22,7 @@
 	throw_speed = 2
 	throw_range = 5
 	w_class = 3.0
-	flags = TABLEPASS
+	flags = 0
 	var/created_name = "Floorbot"
 
 // Tell other floorbots what we're fucking with so two floorbots don't dick with the same tile.
@@ -216,6 +216,10 @@ var/global/list/floorbot_targets=list()
 	if(src.repairing)
 		return
 
+	if(prob(1))
+		var/message = pick("Metal to the metal.","I am the only engineering staff on this station.","Law 1. Place tiles.","Tiles, tiles, tiles...")
+		src.speak(message)
+
 	switch(mode)
 		if(FLOORBOT_IDLE)		// idle
 			walk_to(src,0)
@@ -307,7 +311,7 @@ var/global/list/floorbot_targets=list()
 				F.break_tile_to_plating()
 			else
 				F.ReplaceWithLattice()
-			visible_message("\red [src] makes an excited booping sound.")
+			visible_message("<span class='warning'>[src] makes an excited booping sound.</span>")
 			spawn(50)
 				src.amount ++
 				src.anchored = 0
@@ -330,7 +334,7 @@ var/global/list/floorbot_targets=list()
 	// Needed because we used to look this up 15 goddamn times per process. - Nexypoo
 	var/list/shitICanSee = view(7, src)
 
-	if(src.amount <= 0 && !src.have_target())
+	if(src.amount < 50 && !src.have_target())
 		if(src.eattiles)
 			if(src.hunt_for_tiles(shitICanSee, floorbottargets))
 				return 1
@@ -409,7 +413,7 @@ var/global/list/floorbot_targets=list()
 	src.anchored = 1
 	src.icon_state = "floorbot-c"
 	if(istype(target, /turf/space/))
-		visible_message("\red [src] begins to repair the hole")
+		visible_message("<span class='warning'>[src] begins to repair the hole</span>")
 		var/obj/item/stack/tile/plasteel/T = new /obj/item/stack/tile/plasteel
 		src.repairing = 1
 		spawn(50)
@@ -423,7 +427,7 @@ var/global/list/floorbot_targets=list()
 	else
 		var/turf/simulated/floor/F = src.loc
 		if(!F.broken && !F.burnt)
-			visible_message("\red [src] begins to improve the floor.")
+			visible_message("<span class='warning'>[src] begins to improve the floor.</span>")
 			src.repairing = 1
 			spawn(50)
 				F.make_plasteel_floor()
@@ -435,7 +439,7 @@ var/global/list/floorbot_targets=list()
 				src.target = null
 		else
 			if(F.is_plating())
-				visible_message("\red [src] begins to fix dents in the floor.")
+				visible_message("<span class='warning'>[src] begins to fix dents in the floor.</span>")
 				src.repairing = 1
 				spawn(20)
 					src.repairing = 0
@@ -449,7 +453,7 @@ var/global/list/floorbot_targets=list()
 /obj/machinery/bot/floorbot/proc/eattile(var/obj/item/stack/tile/plasteel/T)
 	if(!istype(T, /obj/item/stack/tile/plasteel))
 		return
-	visible_message("\red [src] begins to collect tiles.")
+	visible_message("<span class='warning'>[src] begins to collect tiles.</span>")
 	src.repairing = 1
 	spawn(20)
 		if(isnull(T))
@@ -462,7 +466,7 @@ var/global/list/floorbot_targets=list()
 			T.amount -= i
 		else
 			src.amount += T.amount
-			del(T)
+			returnToPool(T)
 		src.updateicon()
 		floorbot_targets -= src.target
 		src.target = null
@@ -471,20 +475,20 @@ var/global/list/floorbot_targets=list()
 /obj/machinery/bot/floorbot/proc/maketile(var/obj/item/stack/sheet/metal/M)
 	if(!istype(M, /obj/item/stack/sheet/metal))
 		return
-	if(M.amount > 1)
+	if(M.amount < 1)
 		return
-	visible_message("\red [src] begins to create tiles.")
+	visible_message("<span class='warning'>[src] begins to create tiles.</span>")
 	src.repairing = 1
 	spawn(20)
-		if(isnull(M))
+		if(!M || !get_turf(M))
 			src.target = null
 			src.repairing = 0
 			return
-		var/obj/item/stack/tile/plasteel/T = new /obj/item/stack/tile/plasteel
+		var/obj/item/stack/tile/plasteel/T = new /obj/item/stack/tile/plasteel(get_turf(M))
 		T.amount = 4
-		T.loc = M.loc
 		if(M.amount==1)
-			del(M)
+			returnToPool(M)
+			//del(M)
 		else
 			M.amount--
 		floorbot_targets -= src.target
@@ -505,6 +509,7 @@ var/global/list/floorbot_targets=list()
 // perform a single patrol step
 
 /obj/machinery/bot/floorbot/proc/patrol_step()
+
 
 	if(loc == patrol_target)		// reached target
 		at_patrol_target()
@@ -641,11 +646,12 @@ var/global/list/floorbot_targets=list()
 // send a radio signal with multiple data key/values
 /obj/machinery/bot/floorbot/proc/post_signal_multiple(var/freq, var/list/keyval)
 
+
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
 
 	if(!frequency) return
 
-	var/datum/signal/signal = new()
+	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.source = src
 	signal.transmission_method = 1
 	//for(var/key in keyval)
@@ -667,7 +673,7 @@ var/global/list/floorbot_targets=list()
 
 /obj/machinery/bot/floorbot/explode()
 	src.on = 0
-	src.visible_message("\red <B>[src] blows apart!</B>", 1)
+	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
 	var/obj/item/weapon/storage/toolbox/mechanical/N = new /obj/item/weapon/storage/toolbox/mechanical(Tsec)

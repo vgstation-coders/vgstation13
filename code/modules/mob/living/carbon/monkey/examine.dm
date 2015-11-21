@@ -1,10 +1,4 @@
-/mob/living/carbon/monkey/examine()
-	set src in oview()
-
-	if(!usr || !src)	return
-	if( (usr.sdisabilities & BLIND || usr.blinded || usr.stat) && !istype(usr,/mob/dead/observer) )
-		usr << "<span class='notice'>Something is there but you can't see it.</span>"
-		return
+/mob/living/carbon/monkey/examine(mob/user)
 
 	var/msg = "<span class='info'>*---------*\nThis is \icon[src] \a <EM>[src]</EM>!\n"
 
@@ -39,7 +33,14 @@
 	if (src.digitalcamo)
 		msg += "It is repulsively uncanny!\n"
 
+	var/butchery = "" //More information about butchering status, check out "code/datums/helper_datums/butchering.dm"
+	if(butchering_drops && butchering_drops.len)
+		for(var/datum/butchering_product/B in butchering_drops)
+			butchery = "[butchery][B.desc_modifier(src)]"
+	if(butchery)
+		msg += "<span class='info'>[butchery]</span>"
+
 	msg += "*---------*</span>"
 
-	usr << msg
-	return
+
+	user << msg

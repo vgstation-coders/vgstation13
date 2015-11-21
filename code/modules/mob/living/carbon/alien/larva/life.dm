@@ -11,9 +11,10 @@
 /mob/living/carbon/alien/larva/Life()
 	set invisibility = 0
 	//set background = 1
-
+	if (!loc) return
 	if (monkeyizing)
 		return
+	if(timestopped) return 0 //under effects of time magick
 
 	..()
 	var/datum/gas_mixture/enviroment = loc.return_air()
@@ -68,6 +69,7 @@
 /mob/living/carbon/alien/larva
 
 	proc/breathe()
+
 
 		if(reagents.has_reagent("lexorin"))
 			return
@@ -297,6 +299,7 @@
 
 
 	proc/handle_regular_hud_updates()
+
 
 		if (stat == 2 || (M_XRAY in mutations))
 			sight |= SEE_TURFS

@@ -17,6 +17,7 @@
 	layer = 3.9
 	pressure_resistance = 1
 	attack_verb = list("slaps", "baps", "whaps")
+
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
 	var/amount = 0
@@ -61,12 +62,10 @@
 		new/obj/item/weapon/ribbon(get_turf(src))
 		qdel(src)
 
-/obj/item/weapon/paper_pack/examine()
+/obj/item/weapon/paper_pack/examine(mob/user)
+	..()
 	if(amount)
-		..()
-		usr << "There are [amount] sheets in the pack."
-	else
-		..()
+		user << "<span class='info'>There are [amount] sheets in the pack.</span>"
 
 /obj/item/weapon/paper_pack/verb/ribbontie()
 	set name = "Untie Paper Pack"

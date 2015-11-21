@@ -16,7 +16,7 @@
 	var/temp = null
 	var/printing = null
 
-	l_color = "#0000FF"
+	light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/med_data/attack_ai(user as mob)
 	src.add_hiddenprint(user)
@@ -103,18 +103,18 @@
 				if(6.0)
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\computer\medical.dm:96: dat += "<center><b>Medical Robot Monitor</b></center>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\computer\\medical.dm:96: dat += "<center><b>Medical Robot Monitor</b></center>"
 					dat += {"<center><b>Medical Robot Monitor</b></center>
 						<a href='?src=\ref[src];screen=1'>Back</a>
 						<br><b>Medical Robots:</b>"}
 					// END AUTOFIX
 					var/bdat = null
-					for(var/obj/machinery/bot/medbot/M in world)
+					for(var/obj/machinery/bot/medbot/M in machines)
 
 						if(M.z != src.z)	continue	//only find medibots on the same z-level as the computer
 						var/turf/bl = get_turf(M)
 						if(bl)	//if it can't find a turf for the medibot, then it probably shouldn't be showing up
-							bdat += "[M.name] - <b>\[[bl.x-WORLD_X_OFFSET],[bl.y-WORLD_Y_OFFSET]\]</b> - [M.on ? "Online" : "Offline"]<br>"
+							bdat += "[M.name] - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]]\]</b> - [M.on ? "Online" : "Offline"]<br>"
 							if((!isnull(M.reagent_glass)) && M.use_beaker)
 								bdat += "Reservoir: \[[M.reagent_glass.reagents.total_volume]/[M.reagent_glass.reagents.maximum_volume]\]<br>"
 							else
@@ -160,8 +160,7 @@
 			else
 				var/obj/item/I = usr.get_active_hand()
 				if (istype(I, /obj/item/weapon/card/id))
-					usr.drop_item()
-					I.loc = src
+					usr.drop_item(I, src)
 					src.scan = I
 		else if (href_list["logout"])
 			src.authenticated = null
@@ -438,8 +437,9 @@
 					src.active2.fields[text("com_[]", href_list["del_c"])] = "<B>Deleted</B>"
 
 			if (href_list["search"])
-				var/t1 = input("Search String: (Name, DNA, or ID)", "Med. records", null, null)  as text
-				if ((!( t1 ) || usr.stat || !( src.authenticated ) || usr.restrained() || ((!in_range(src, usr)) && (!istype(usr, /mob/living/silicon)))))
+				var/norange = (usr.mutations && usr.mutations.len && (M_TK in usr.mutations))
+				var/t1 = copytext(sanitize(input("Search String: (Name, DNA, or ID)", "Med. records", null, null)  as text),1,MAX_MESSAGE_LEN)
+				if ((!( t1 ) || usr.stat || !( src.authenticated ) || usr.restrained() || ((!in_range(src, usr)) && (!istype(usr, /mob/living/silicon)) && !norange)))
 					return
 				src.active1 = null
 				src.active2 = null
@@ -450,7 +450,7 @@
 					else
 						//Foreach continue //goto(3229)
 				if (!( src.active2 ))
-					src.temp = text("Could not locate record [].", t1)
+					src.temp = text("Could not locate record [].", sanitize(t1))
 				else
 					for(var/datum/data/record/E in data_core.general)
 						if ((E.fields["name"] == src.active2.fields["name"] || E.fields["id"] == src.active2.fields["id"]))
@@ -524,6 +524,6 @@
 	anchored = 0
 	density = 0
 
-	l_color = "#00FF00"
+	light_color = LIGHT_COLOR_GREEN
 
 

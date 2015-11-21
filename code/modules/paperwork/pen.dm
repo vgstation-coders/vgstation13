@@ -50,41 +50,121 @@
 /datum/writing_style/New()
 	..()
 
-	addReplacement(REG_BBTAG("center"), "<center>")
-	addReplacement(REG_BBTAG("/center"),"</center>")
-	addReplacement(REG_BBTAG("br"),     "<BR>")
-	addReplacement(REG_BBTAG("b"),      "<B>")
-	addReplacement(REG_BBTAG("/b"),     "</B>")
-	addReplacement(REG_BBTAG("i"),      "<I>")
-	addReplacement(REG_BBTAG("/i"),     "</I>")
-	addReplacement(REG_BBTAG("u"),      "<U>")
-	addReplacement(REG_BBTAG("/u"),     "</U>")
-	addReplacement(REG_BBTAG("large"),  "<font size=\"4\">")
-	addReplacement(REG_BBTAG("/large"), "</font>")
-	//addReplacement(REG_BBTAG("sign"),   "<span style=\"[style_sign]\"><USERNAME /</span>")
-	//addReplacement(REG_BBTAG("field"),  "<span class=\"paper_field\"></span>")
+	addReplacement(REG_BBTAG("center"), 	"<center>")
+	addReplacement(REG_BBTAG("/center"),	"</center>")
+	addReplacement(REG_BBTAG("br"),     	"<BR>")
+	addReplacement(REG_BBTAG("b"),      	"<B>")
+	addReplacement(REG_BBTAG("/b"),     	"</B>")
+	addReplacement(REG_BBTAG("i"),      	"<I>")
+	addReplacement(REG_BBTAG("/i"),     	"</I>")
+	addReplacement(REG_BBTAG("u"),      	"<U>")
+	addReplacement(REG_BBTAG("/u"),     	"</U>")
+	addReplacement(REG_BBTAG("large"),  	"<span style=\"font-size:25px\">")
+	addReplacement(REG_BBTAG("/large"), 	"</span>")
+	//addReplacement(REG_BBTAG("sign"),   	"<span style=\"[style_sign]\"><USERNAME /</span>")
+	//addReplacement(REG_BBTAG("field"),  	"<span class=\"paper_field\"></span>")
 
 	// Fallthrough just fucking kills the tag
 	addReplacement(REG_BBTAG("\[^\\\]\]"), "")
 	return
 
+//var/stdshellout_dllFile = 'byond_markdown.dll'
+var/paperwork = 0
+var/paperwork_library
+
+/client/proc/handle_paperwork()
+
+	set category = "Debug"
+	set name = "Modify Paperwork Mode"
+
+	if(!check_rights(R_DEBUG)) return
+
+	if(!paperwork)
+		paperwork_setup()
+	else
+		paperwork_stop()
+		paperwork = 0
+
+/proc/paperwork_setup()
+	if(config.paperwork_library)
+		if(world.system_type == MS_WINDOWS)
+			paperwork_library = "markdown_byond.dll"
+		else
+			paperwork_library = "markdown_byond.so"
+		world.log << "Setting up paperwork..."
+		if(!fexists(paperwork_library))
+			world.log << "Paperwork was not properly setup, please notify a coder/host about this issue."
+			return
+		world.log << call(paperwork_library, "init_renderer")()
+		paperwork = 1
+		return 1
+	else
+		return 0
+	return 0
+
+/proc/paperwork_stop()
+	if(!fexists(paperwork_library))
+		world.log << "Paperwork file may be missing or something terrible has happened, don't panic and notify a coder/host about this issue."
+		return
+	if(paperwork)
+		call(paperwork_library, "free_memory")()
+		return
+	else
+		return
+
+/datum/writing_style/proc/parse_markdown(command_args)
+//	if(!fexists("byond_markdown.dll")){fcopy(stdshellout_dllFile,"[stdshellout_dllFile]")}
+	return call(paperwork_library,"render_html")(command_args)
+
+
 /datum/writing_style/proc/Format(var/t, var/obj/item/weapon/pen/P, var/mob/user, var/obj/item/weapon/paper/paper)
-	if(expressions.len)
-		for(var/key in expressions)
-			var/datum/speech_filter_action/SFA = expressions[key]
-			if(SFA && !SFA.broken)
-				t = SFA.Run(t,user,paper)
-	t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
-	t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
-	return "<span style=\"[style];color:[P.colour]\">[t]</span>"
+	if(paperwork)
+		t = parse_markdown(t)
+	else
+		var/count = 0
+		if(expressions.len)
+			for(var/key in expressions)
+				if(count >= 500)
+					break
+				count++
+				var/datum/speech_filter_action/SFA = expressions[key]
+				if(SFA && !SFA.broken)
+					t = SFA.Run(t,user,paper)
+				if(count%100 == 0)
+					sleep(1) //too much for us.
+		t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
+		t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
+	return "<span style=\"[style];color:[P.color]\">[t]</span>"
 
 /datum/writing_style/pen/New()
 	addReplacement(REG_BBTAG("*"), "<li>")
 	addReplacement(REG_BBTAG("hr"), "<HR>")
-	addReplacement(REG_BBTAG("small"), "<font size = \"1\">")
-	addReplacement(REG_BBTAG("/small"), "</font>")
+	addReplacement(REG_BBTAG("small"), "<span style=\"font-size:15px\">")
+	addReplacement(REG_BBTAG("/small"), "</span>")
+	addReplacement(REG_BBTAG("tiny"), "<span style=\"font-size:10px\">")
+	addReplacement(REG_BBTAG("/tiny"), "</span>")
 	addReplacement(REG_BBTAG("list"), "<ul>")
 	addReplacement(REG_BBTAG("/list"), "</ul>")
+	addReplacement(REG_BBTAG("agency"),  	"<span style=\"font-family:Agency FB\">")
+	addReplacement(REG_BBTAG("/agency"), 	"</span>")
+	addReplacement(REG_BBTAG("algerian"),  	"<span style=\"font-family:Algerian\">")
+	addReplacement(REG_BBTAG("/algerian"), 	"</span>")
+	addReplacement(REG_BBTAG("arial"),  	"<span style=\"font-family:Arial\">")
+	addReplacement(REG_BBTAG("/arial"), 	"</span>")
+	addReplacement(REG_BBTAG("arialb"),  	"<span style=\"font-family:Arial Black\">")
+	addReplacement(REG_BBTAG("/arialb"), 	"</span>")
+	addReplacement(REG_BBTAG("calibri"),  	"<span style=\"font-family:Calibri\">")
+	addReplacement(REG_BBTAG("/calibri"), 	"</span>")
+	addReplacement(REG_BBTAG("courier"),  	"<span style=\"font-family:Courier\">")
+	addReplacement(REG_BBTAG("/courier"), 	"</span>")
+	addReplacement(REG_BBTAG("helvetica"),  "<span style=\"font-family:Helvetica\">")
+	addReplacement(REG_BBTAG("/helvetica"), "</span>")
+	addReplacement(REG_BBTAG("impact"),  	"<span style=\"font-family:Impact\">")
+	addReplacement(REG_BBTAG("/impact"), 	"</span>")
+	addReplacement(REG_BBTAG("palatino"),  	"<span style=\"font-family:Palatino Linotype\">")
+	addReplacement(REG_BBTAG("/palatino"), 	"</span>")
+	addReplacement(REG_BBTAG("tnr"),		"<span style=\"font-family:Times New Roman\">")
+	addReplacement(REG_BBTAG("/tnr"),		"</span>")
 
 	// : is our delimiter, gi = global search, case-insensitive.
 	addExpression(":"+REG_BBTAG("img")+"("+REG_NOTBB+")"+REG_BBTAG("/img")+":gi", ACT_BBCODE_IMG,list())
@@ -110,13 +190,14 @@
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "pen"
 	item_state = "pen"
-	flags = FPRINT | TABLEPASS
+	sharpness = 0.5
+	flags = FPRINT
 	slot_flags = SLOT_BELT | slot_ears
 	throwforce = 0
 	w_class = 1.0
 	throw_speed = 7
 	throw_range = 15
-	m_amt = 10
+	starting_materials = list(MAT_IRON = 10)
 	w_type = RECYK_MISC
 	pressure_resistance = 2
 
@@ -140,7 +221,7 @@
 		return style.Format(text,src,user,P)
 
 /obj/item/weapon/pen/suicide_act(mob/user)
-	viewers(user) << "\red <b>[user]is jamming the [src.name]into \his ear! It looks like \he's trying to commit suicide.</b>"
+	viewers(user) << "<span class='danger'>[user]is jamming the [src.name]into \his ear! It looks like \he's trying to commit suicide.</span>"
 	return(OXYLOSS)
 
 /obj/item/weapon/pen/blue
@@ -163,7 +244,7 @@
 	if(!ismob(M))
 		return
 	user << "<span class='warning'>You stab [M] with the pen.</span>"
-	M << "\red You feel a tiny prick!"
+	M << "<span class='warning'>You feel a tiny prick!</span>"
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stabbed with [name]  by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to stab [M.name] ([M.ckey])</font>")
 	msg_admin_attack("[user.name] ([user.ckey]) Used the [name] to stab [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
@@ -179,7 +260,7 @@
  */
 /obj/item/weapon/pen/sleepypen
 	desc = "It's a black ink pen with a sharp point and a carefully engraved \"Waffle Co.\""
-	flags = FPRINT | TABLEPASS | OPENCONTAINER
+	flags = FPRINT  | OPENCONTAINER
 	slot_flags = SLOT_BELT
 	origin_tech = "materials=2;syndicate=5"
 
@@ -202,7 +283,7 @@
  * Parapens
  */
  /obj/item/weapon/pen/paralysis
-	flags = FPRINT | TABLEPASS | OPENCONTAINER
+	flags = FPRINT  | OPENCONTAINER
 	slot_flags = SLOT_BELT
 	origin_tech = "materials=2;syndicate=5"
 

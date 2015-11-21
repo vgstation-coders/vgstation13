@@ -9,12 +9,12 @@
 	throw_speed = 5
 	throw_range = 3
 	w_class = 3.0
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	attack_verb = list("mopped", "bashed", "bludgeoned", "whacked", "slapped", "whipped")
 
 /obj/item/weapon/mop/New()
 	. = ..()
-	create_reagents(5)
+	create_reagents(50)
 
 /obj/item/weapon/mop/proc/clean(turf/simulated/A as turf)
 	reagents.reaction(A,1,10) //Mops magically make chems ten times more efficient than usual, aka equivalent of 50 units of whatever you're using
@@ -31,7 +31,8 @@
 /obj/item/weapon/mop/afterattack(atom/A, mob/user as mob)
 	if(!user.Adjacent(A))
 		return
-
+	if(A.mop_act(src, user))
+		return
 	if(istype(A, /mob/living))
 		if(!(reagents.total_volume < 1)) //Slap slap slap
 			A.visible_message("<span class='danger'>[user] covers [A] in the mop's contents</span>")
@@ -43,7 +44,7 @@
 			user << "<span class='notice'>Your mop is dry!</span>"
 			return
 		user.visible_message("<span class='warning'>[user] begins to clean \the [get_turf(A)].</span>")
-		if(do_after(user, 30))
+		if(do_after(user,A, 30))
 			if(A)
 				clean(get_turf(A))
 				reagents.remove_any(1) //Might be a tad wonky with "special mop mixes", but fuck it

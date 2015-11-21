@@ -28,7 +28,7 @@
 	placetype=/obj/structure/table/reinforced
 
 /layout_rule/place_adjacent/chair
-	placetype=/obj/structure/stool/bed/chair
+	placetype=/obj/structure/bed/chair
 
 	min_to_place=1
 	min_to_place=2
@@ -38,13 +38,13 @@
 	)
 	// MUST NOT be next to these.
 	not_next_to=list(
-		/obj/structure/stool/bed/chair = ANY_SIDE
+		/obj/structure/bed/chair = ANY_SIDE
 	)
 
 	//flags = FACE_MATCH
 
 /layout_rule/place_adjacent/chair/wooden
-	placetype=/obj/structure/stool/bed/chair/wooden
+	placetype=/obj/structure/bed/chair/wooden
 
 	min_to_place=1
 	min_to_place=2
@@ -54,7 +54,7 @@
 	)
 	// MUST NOT be next to these.
 	not_next_to=list(
-		/obj/structure/stool/bed/chair = ANY_SIDE
+		/obj/structure/bed/chair = ANY_SIDE
 	)
 
 	//flags = FACE_MATCH
@@ -73,7 +73,7 @@
 		/obj/item/weapon/pickaxe/drill					=4,
 		/obj/item/weapon/pickaxe/jackhammer				=4,
 		/obj/item/weapon/pickaxe/diamond				=3,
-		/obj/item/weapon/pickaxe/diamonddrill			=3,
+		/obj/item/weapon/pickaxe/drill/diamond			=3,
 		/obj/item/weapon/pickaxe/gold					=3,
 		/obj/item/weapon/pickaxe/plasmacutter			=2,
 		/obj/structure/closet/syndicate/resources		=2,

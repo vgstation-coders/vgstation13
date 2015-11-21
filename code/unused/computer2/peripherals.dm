@@ -138,7 +138,7 @@
 			src.vend_prize()
 			src.last_vend = world.time
 		else
-			user << "\red [src] isn't ready to dispense a prize yet."
+			user << "<span class='warning'>[src] isn't ready to dispense a prize yet.</span>"
 
 		return
 
@@ -158,7 +158,7 @@
 				prize.name = "space ticket"
 				prize.desc = "It's almost like actual currency!"
 			if(2)
-				prize = new /obj/item/device/radio/beacon( prize_location )
+				prize = new /obj/item/beacon( prize_location )
 				prize.name = "electronic blink toy game"
 				prize.desc = "Blink.  Blink.  Blink."
 			if(3)

@@ -7,7 +7,7 @@
 	item_state = ""
 	throw_speed = 4
 	throw_range = 20
-	flags = FPRINT | TABLEPASS | NOBLUDGEON
+	flags = FPRINT  | NOBLUDGEON
 	var/c_tag = ""
 	var/active = 0
 	var/network = ""
@@ -31,9 +31,7 @@
 			user << "<span class='warning'>\The [I] is too small for \the [src]</span>"
 			return 0
 	user << "<span class='notice'>You stealthily place \the [src] onto \the [A]</span>"
-	user.drop_item(src)
-	loc = A
-	A.contents += src
+	user.drop_item(src, A)
 	active = 1
 	camera_bugs += src
 	return 1
@@ -64,4 +62,5 @@
 			explosion(loc, 0, prob(15), 2, 0)
 
 /obj/item/device/camera_bug/Destroy()
-	del(src)
+	camera_bugs -= src
+	..()

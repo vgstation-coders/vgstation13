@@ -22,6 +22,7 @@ var/savefile/Banlistjob
 
 /proc/LoadBansjob()
 
+
 	Banlistjob = new("data/job_fullnew.bdb")
 	log_admin("Loading Banlistjob")
 
@@ -141,7 +142,7 @@ var/savefile/Banlistjob
 
 	Banlistjob.cd = "/base"
 	if ( Banlistjob.dir.Find("[ckey][computerid][rank]") )
-		usr << text("\red Banjob already exists.")
+		usr << text("<span class='warning'>Banjob already exists.</span>")
 		return 0
 	else
 		Banlistjob.dir.Add("[ckey][computerid][rank]")
@@ -206,7 +207,7 @@ var/savefile/Banlistjob
 /datum/admins/proc/unjobbanpanel()
 	var/count = 0
 	var/dat
-	//var/dat = "<HR><B>Unban Player:</B> \blue(U) = Unban , (E) = Edit Ban\green (Total<HR><table border=1 rules=all frame=void cellspacing=0 cellpadding=3 >"
+	//var/dat = "<HR><B>Unban Player:</B> <span class='warning'>(U) = Unban , (E) = Edit Ban<span class='good'>(Total<HR><table border=1 rules=all frame=void cellspacing=0 cellpadding=3 ></span></span>"
 	Banlistjob.cd = "/base"
 	for (var/A in Banlistjob.dir)
 		count++
@@ -215,7 +216,7 @@ var/savefile/Banlistjob
 
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\newbanjob.dm:216: dat += "</table>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\newbanjob.dm:216: dat += "</table>"
 	dat += {"</table>
 		<HR><B>Bans:</B> <FONT COLOR=blue>(U) = Unban , </FONT> - <FONT COLOR=green>([count] Bans)</FONT><HR><table border=1 rules=all frame=void cellspacing=0 cellpadding=3 >[dat]"}
 	// END AUTOFIX
@@ -223,27 +224,28 @@ var/savefile/Banlistjob
 
 /*/datum/admins/proc/permjobban(ckey, computerid, reason, bannedby, temp, minutes, rank)
 	if(AddBanjob(ckey, computerid, reason, usr.ckey, 0, 0, job))
-		M << "\red<BIG><B>You have been banned from [job] by [usr.client.ckey].\nReason: [reason].</B></BIG>"
-		M << "\red This is a permanent ban."
+		M << "<span class='warning'><BIG><B>You have been banned from [job] by [usr.client.ckey].\nReason: [reason].</B></BIG></span>"
+		M << "<span class='warning'>This is a permanent ban.</span>"
 		if(config.banappeals)
-			M << "\red To try to resolve this matter head to [config.banappeals]"
+			M << "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>"
 		else
-			M << "\red No ban appeals URL has been set."
+			M << "<span class='warning'>No ban appeals URL has been set.</span>"
 		log_admin("[usr.client.ckey] has banned from [job] [ckey].\nReason: [reason]\nThis is a permanent ban.")
-		message_admins("\blue[usr.client.ckey] has banned from [job] [ckey].\nReason: [reason]\nThis is a permanent ban.")
+		message_admins("<span class='warning'>[usr.client.ckey] has banned from [job] [ckey].\nReason: [reason]\nThis is a permanent ban.</span>")
 /datum/admins/proc/timejobban(ckey, computerid, reason, bannedby, temp, minutes, rank)
 	if(AddBanjob(ckey, computerid, reason, usr.ckey, 1, mins, job))
-		M << "\red<BIG><B>You have been jobbanned from [job] by [usr.client.ckey].\nReason: [reason].</B></BIG>"
-		M << "\red This is a temporary ban, it will be removed in [mins] minutes."
+		M << "<span class='warning'><BIG><B>You have been jobbanned from [job] by [usr.client.ckey].\nReason: [reason].</B></BIG></span>"
+		M << "<span class='warning'>This is a temporary ban, it will be removed in [mins] minutes.</span>"
 		if(config.banappeals)
-			M << "\red To try to resolve this matter head to [config.banappeals]"
+			M << "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>"
 		else
-			M << "\red No ban appeals URL has been set."
+			M << "<span class='warning'>No ban appeals URL has been set.</span>"
 		log_admin("[usr.client.ckey] has jobbanned from [job] [ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.")
-		message_admins("\blue[usr.client.ckey] has banned from [job] [ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.")*/
+		message_admins("<span class='warning'>[usr.client.ckey] has banned from [job] [ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.</span>")*/
 //////////////////////////////////// DEBUG ////////////////////////////////////
 
 /proc/CreateBansjob()
+
 
 	UpdateTime()
 

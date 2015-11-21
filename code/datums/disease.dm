@@ -112,6 +112,8 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 
 	// If we're overriding how we spread, say so here
 	var/how_spread = spread_type
+	if(!istype(affected_mob))
+		return 0
 	if(force_spread)
 		how_spread = force_spread
 
@@ -126,7 +128,6 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 			source = affected_mob
 		else //no source and no mob affected. Rogue disease. Break
 			return
-
 	if(affected_mob.reagents != null)
 		if(affected_mob)
 			if(affected_mob.reagents.has_reagent("spaceacillin"))
@@ -186,7 +187,12 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 	del(src)	//delete the datum to stop it processing
 	return
 
-
+/datum/disease/Del()
+	active_diseases -= src
+	if(affected_mob)
+		affected_mob.viruses -= src
+	..()
+	
 /datum/disease/New(var/process=1, var/datum/disease/D)//process = 1 - adding the object to global list. List is processed by master controller.
 	cure_list = list(cure_id) // to add more cures, add more vars to this list in the actual disease's New()
 	if(process)				 // Viruses in list are considered active.

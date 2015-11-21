@@ -13,6 +13,7 @@
 
 /obj/machinery/computer/security/proc/drawmap(var/mob/user as mob)
 
+
 	var/icx = round(world.maxx/16) + 1
 	var/icy = round(world.maxy/16) + 1
 
@@ -67,7 +68,7 @@
 					if("/turf/simulated/wall")
 						colour = rgb(96,96,96)
 
-					if("/turf/simulated/wall/r_wall")
+					if("/turf/simulated/wall/r_wall", "/turf/simulated/wall/invulnerable")
 						colour = rgb(128,96,96)
 
 					if("/turf/unsimulated/floor")
@@ -164,7 +165,7 @@
 
 
 	for(var/i=0; i<icount;i++)
-		var/obj/screen/H = new /obj/screen()
+		var/obj/screen/H = getFromPool(/obj/screen)
 
 		H.screen_loc = "[5 + i%icx],[6+ round(i/icx)]"
 
@@ -295,7 +296,7 @@
 
 
 	for(var/i=0; i<icount;i++)
-		var/obj/screen/H = new /obj/screen()
+		var/obj/screen/H = getFromPool(/obj/screen)
 
 		H.screen_loc = "[5 + i%icx],[6+ round(i/icx)]"
 
@@ -353,7 +354,7 @@ proc/getb(col)
 /mob/proc/clearmap()
 	src.client.screen -= src.mapobjs
 	for(var/obj/screen/O in mapobjs)
-		del(O)
+		returnToPool(O)
 
 	mapobjs = null
 	src.unset_machine()

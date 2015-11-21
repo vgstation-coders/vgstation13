@@ -41,6 +41,7 @@
 
 /mob/camera/blob/proc/create_shield(var/turf/T)
 
+
 	var/obj/effect/blob/B = (locate(/obj/effect/blob) in T)
 
 	if(!B)//We are on a blob
@@ -253,6 +254,7 @@
 
 /mob/camera/blob/proc/rally_spores(var/turf/T)
 
+
 	if(!can_buy(5))
 		return
 
@@ -267,12 +269,12 @@
 			BS.LoseTarget()
 			BS.Goto(pick(surrounding_turfs), BS.move_to_delay)
 	return
-	
+
 /mob/camera/blob/verb/telepathy(message as text)
 	set category = "Blob"
 	set name = "Psionic Message (15)"
 	set desc = "Give a psionic message to all creatures on and around the station."
 
-	world << "\red Your vision becomes cloudy, and your mind becomes clear."
+	world << "<span class='warning'>Your vision becomes cloudy, and your mind becomes clear.</span>"
 	spawn(5)
 	world << "<span class='blob'>[message]</span>"

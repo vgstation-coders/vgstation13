@@ -7,7 +7,8 @@
 	icon = 'icons/mecha/mech_construct.dmi'
 	icon_state = "blank"
 	w_class = 20
-	flags = FPRINT | TABLEPASS | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	origin_tech = "programming=2;materials=2"
 
 
@@ -15,7 +16,8 @@
 	name="Mecha Chassis"
 	icon_state = "backbone"
 	var/datum/construction/construct
-	flags = FPRINT | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 
 	attackby(obj/item/W as obj, mob/user as mob)
 		if(!construct || !construct.action(W, user))
@@ -32,7 +34,7 @@
 
 	New()
 		..()
-		construct = new /datum/construction/mecha/ripley_chassis(src)
+		construct = new /datum/construction/mecha_chassis/ripley(src)
 
 /obj/item/mecha_parts/part/ripley_torso
 	name="Ripley Torso"
@@ -71,7 +73,7 @@
 
 	New()
 		..()
-		construct = new /datum/construction/mecha/gygax_chassis(src)
+		construct = new /datum/construction/mecha_chassis/gygax(src)
 
 /obj/item/mecha_parts/part/gygax_torso
 	name="Gygax Torso"
@@ -120,7 +122,7 @@
 
 	New()
 		..()
-		construct = new /datum/construction/mecha/durand_chassis(src)
+		construct = new /datum/construction/mecha_chassis/durand(src)
 
 /obj/item/mecha_parts/part/durand_torso
 	name="Durand Torso"
@@ -166,7 +168,7 @@
 
 	New()
 		..()
-		construct = new /datum/construction/mecha/firefighter_chassis(src)
+		construct = new /datum/construction/mecha_chassis/firefighter(src)
 /*
 /obj/item/mecha_parts/part/firefighter_torso
 	name="Ripley-on-Fire Torso"
@@ -196,7 +198,7 @@
 
 	New()
 		..()
-		construct = new /datum/construction/mecha/honker_chassis(src)
+		construct = new /datum/construction/mecha_chassis/honker(src)
 
 /obj/item/mecha_parts/part/honker_torso
 	name="H.O.N.K Torso"
@@ -231,7 +233,7 @@
 
 	New()
 		..()
-		construct = new /datum/construction/mecha/phazon_chassis(src)
+		construct = new /datum/construction/mecha_chassis/phazon(src)
 
 /obj/item/mecha_parts/part/phazon_torso
 	name="Phazon Torso"
@@ -276,7 +278,7 @@
 
 	New()
 		..()
-		construct = new /datum/construction/mecha/odysseus_chassis(src)
+		construct = new /datum/construction/mecha_chassis/odysseus(src)
 
 /obj/item/mecha_parts/part/odysseus_head
 	name="Odysseus Head"
@@ -318,7 +320,7 @@
 	icon_state = "odysseus_armour"
 	origin_tech = "materials=3;engineering=3"
 	construction_time = 200
-	materials = list("$iron"=15000)*/
+	materials = list(MAT_IRON=15000)*/
 
 
 ///////// Circuitboards
@@ -329,7 +331,8 @@
 	icon_state = "std_mod"
 	item_state = "circuitboard"
 	board_type = "other"
-	flags = FPRINT | TABLEPASS | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	force = 5.0
 	w_class = 2.0
 	throwforce = 5.0

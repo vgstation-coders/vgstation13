@@ -1,4 +1,5 @@
 /mob/living/silicon/robot/mommi/emote(var/act,var/m_type=1,var/message = null)
+	if(timestopped) return //under effects of time magick
 	var/param = null
 	if (findtext(act, "-", 1, null))
 		var/t1 = findtext(act, "-", 1, null)
@@ -13,7 +14,7 @@
 			src << "Available emotes: aflap, bow, clap, custom, flap, twitch, twitch_s, salute, nod, deathgasp, me, glare, stare, shrug, beep, ping, buzz, look"
 			return
 		if ("salute")
-			//if (!src.buckled)
+			//if (!src.locked_to)
 			var/M = null
 			if (param)
 				for (var/mob/A in view(null, null))
@@ -29,7 +30,7 @@
 				message = "<B>[src]</b> salutes."
 			m_type = VISIBLE
 		if ("bow")
-			if (!src.buckled)
+			if (!src.locked_to)
 				var/M = null
 				if (param)
 					for (var/mob/A in view(null, null))
@@ -234,7 +235,7 @@
 			m_type = VISIBLE
 
 		else
-			src << text("Invalid Emote: [], use *help", act)
+			custom_emote(VISIBLE, act) //src << text("Invalid Emote: [], use *help", act)
 	if ((message && src.stat == 0))
 		if (m_type & 1)
 			for(var/mob/O in viewers(src, null))

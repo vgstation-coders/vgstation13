@@ -81,6 +81,7 @@
 
 /proc/animate_rune_full(icon/input, rr1, rg1, rb1, ra1, rr2, rg2, rb2, ra2, br1, bg1, bb1, ba1, br2, bg2, bb2, ba2, ar1, ag1, ab1, aa1, ar2, ag2, ab2, aa2, or1, og1, ob1, oa1, or2, og2, ob2, oa2, frames)
 
+
 	var/list/colors[10]
 	colors[ 1] = list(rr1, rg1, rb1, ra1) //Rune color 1
 	colors[ 2] = list(rr2, rg2, rb2, ra2) //Rune color 2

@@ -124,7 +124,7 @@
 			//This happens when windows move or are constructed. We need to rebuild.
 			if((previously_open & d) && istype(unsim, /turf/simulated))
 				var/turf/simulated/sim = unsim
-				if(sim.zone == zone)
+				if(istype(zone) && sim.zone == zone)
 					zone.rebuild()
 					return
 
@@ -265,3 +265,7 @@
 	if(!air) air = new/datum/gas_mixture
 	air.copy_from(zone.air)
 	air.group_multiplier = 1
+
+
+/turf/attack_hand(mob/user as mob)
+	user.Move_Pulled(src)

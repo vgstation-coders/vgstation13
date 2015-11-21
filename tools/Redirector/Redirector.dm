@@ -62,6 +62,7 @@ mob/Login()
 
 proc/extract(var/data, var/type = PLAYERS)
 
+
 	var/nextpos = 0
 
 	if(type == PLAYERS)

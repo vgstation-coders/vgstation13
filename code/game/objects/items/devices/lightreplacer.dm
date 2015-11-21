@@ -47,7 +47,8 @@
 	icon_state = "lightreplacer0"
 	item_state = "electronic"
 
-	flags = FPRINT | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	origin_tech = "magnets=3;materials=2"
 
@@ -66,18 +67,17 @@
 	failmsg = "The [name]'s refill light blinks red."
 	..()
 
-/obj/item/device/lightreplacer/examine()
-	set src in view(2)
+/obj/item/device/lightreplacer/examine(mob/user)
 	..()
-	usr << "It has [uses] lights remaining."
+	user << "<span class='info'>It has [uses] light\s remaining.</span>"
 
 /obj/item/device/lightreplacer/attackby(obj/item/W, mob/user)
 	if(istype(W,  /obj/item/weapon/card/emag) && emagged == 0)
 		Emag()
 		return
 
-	if(istype(W, /obj/item/stack/sheet/glass))
-		var/obj/item/stack/sheet/glass/G = W
+	if(istype(W, /obj/item/stack/sheet/glass/glass))
+		var/obj/item/stack/sheet/glass/glass/G = W
 		if(G.amount - decrement >= 0 && uses < max_uses)
 			var/remaining = max(G.amount - decrement, 0)
 			if(!remaining && !(G.amount - decrement) == 0)
@@ -85,7 +85,7 @@
 				return
 			G.amount = remaining
 			if(!G.amount)
-				user.drop_item()
+				user.drop_item(G)
 				del(G)
 			AddUses(increment)
 			user << "You insert a piece of glass into the [src.name]. You have [uses] lights remaining."
@@ -97,7 +97,7 @@
 			if(uses < max_uses)
 				AddUses(1)
 				user << "You insert the [L.name] into the [src.name]. You have [uses] lights remaining."
-				user.drop_item()
+				user.drop_item(L)
 				del(L)
 				return
 		else
@@ -122,6 +122,7 @@
 
 /obj/item/device/lightreplacer/proc/Use(var/mob/user)
 
+
 	playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
 	AddUses(-1)
 	return 1
@@ -138,6 +139,7 @@
 
 /obj/item/device/lightreplacer/proc/ReplaceLight(var/obj/machinery/light/target, var/mob/living/U)
 
+
 	if(target.status != LIGHT_OK)
 		if(CanUse(U))
 			if(!Use(U)) return
@@ -148,7 +150,9 @@
 				var/obj/item/weapon/light/L1 = new target.light_type(target.loc)
 				L1.status = target.status
 				L1.rigged = target.rigged
-				L1.brightness = target.brightness
+				L1.brightness_range = target.brightness_range
+				L1.brightness_power = target.brightness_power
+				L1.brightness_color = target.brightness_color
 				L1.switchcount = target.switchcount
 				target.switchcount = 0
 				L1.update()
@@ -161,7 +165,9 @@
 			target.status = L2.status
 			target.switchcount = L2.switchcount
 			target.rigged = emagged
-			target.brightness = L2.brightness
+			target.brightness_range = L2.brightness_range
+			target.brightness_power = L2.brightness_power
+			target.brightness_color = L2.brightness_color
 			target.on = target.has_power()
 			target.update()
 			del(L2)

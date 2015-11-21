@@ -11,6 +11,7 @@
 	active_power_usage = 100
 	var/obj/item/weapon/reagent_containers/beaker = null
 	var/global/list/allowed_items = list (
+		/obj/item/weapon/reagent_containers/food/snacks/grown/apple  = "applejuice",
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato  = "tomatojuice",
 		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot  = "carrotjuice",
 		/obj/item/weapon/reagent_containers/food/snacks/grown/berries = "berryjuice",
@@ -121,7 +122,7 @@
 	set category = "Object"
 	set name = "Detach Beaker from the juicer"
 	set src in oview(1)
-	if (usr.stat != 0)
+	if (usr.stat != 0 || (usr.status_flags & FAKEDEATH))
 		return
 	if (!beaker)
 		return

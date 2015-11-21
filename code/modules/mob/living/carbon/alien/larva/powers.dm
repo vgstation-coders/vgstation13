@@ -24,7 +24,7 @@
 
 	//Seems about right
 	//if(handcuffed || legcuffed)
-		//src << "\red You cannot evolve when you are cuffed."
+		//src << "<span class='warning'>You cannot evolve when you are cuffed.</span>"
 
 	if(amount_grown >= max_grown)	//TODO ~Carn
 		//green is impossible to read, so i made these blue and changed the formatting slightly
@@ -43,6 +43,8 @@
 				new_xeno = new /mob/living/carbon/alien/humanoid/sentinel(loc)
 			if("Drone")
 				new_xeno = new /mob/living/carbon/alien/humanoid/drone(loc)
+		for(var/datum/language/L in languages)
+			new_xeno.add_language(L.name)
 		if(mind)	mind.transfer_to(new_xeno)
 		del(src)
 		playsound(get_turf(src), 'sound/effects/evolve.ogg', 40, 1)

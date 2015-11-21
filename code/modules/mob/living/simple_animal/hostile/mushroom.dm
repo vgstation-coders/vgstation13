@@ -8,7 +8,10 @@
 	turns_per_move = 1
 	maxHealth = 10
 	health = 10
+
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice
+	size = SIZE_SMALL
+
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm   = "whacks"
@@ -20,7 +23,6 @@
 	faction = "mushroom"
 	environment_smash = 0
 	stat_attack = 2
-	mouse_opacity = 1
 	speed = 1
 	var/powerlevel = 0 //Tracks our general strength level gained from eating other shrooms
 	var/bruised = 0 //If someone tries to cheat the system by attacking a shroom to lower its health, punish them so that it wont award levels to shrooms that eat it
@@ -29,14 +31,15 @@
 	var/image/cap_living = null //Where we store our cap icons so we dont generate them constantly to update our icon
 	var/image/cap_dead = null
 
-/mob/living/simple_animal/hostile/mushroom/examine()
+/mob/living/simple_animal/hostile/mushroom/examine(mob/user)
 	..()
 	if(health >= maxHealth)
-		usr << "<span class='info'>It looks healthy.</span>"
+		user << "<span class='info'>It looks healthy.</span>"
 	else
-		usr << "<span class='info'>It looks like it's been roughed up.</span>"
+		user << "<span class='info'>It looks like it's been roughed up.</span>"
 
 /mob/living/simple_animal/hostile/mushroom/Life()
+	if(timestopped) return 0 //under effects of time magick
 	..()
 	if(!stat)//Mushrooms slowly regenerate if conscious, for people who want to save them from being eaten
 		health = min(health+2, maxHealth)
@@ -90,7 +93,7 @@
 	UpdateMushroomCap()
 
 /mob/living/simple_animal/hostile/mushroom/proc/UpdateMushroomCap()
-	overlays.Cut()
+	overlays.len = 0
 	if(health == 0)
 		overlays += cap_dead
 	else
@@ -135,7 +138,7 @@
 
 /mob/living/simple_animal/hostile/mushroom/attack_hand(mob/living/carbon/human/M as mob)
 	..()
-	if(M.a_intent == "hurt")
+	if(M.a_intent == I_HURT)
 		Bruise()
 
 /mob/living/simple_animal/hostile/mushroom/hitby(atom/movable/AM)
@@ -148,12 +151,3 @@
 /mob/living/simple_animal/hostile/mushroom/bullet_act()
 	..()
 	Bruise()
-
-/mob/living/simple_animal/hostile/mushroom/harvest()
-	var/counter
-	for(counter=0, counter<=powerlevel, counter++)
-		var/obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/S = new /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice(src.loc)
-		S.reagents.add_reagent("psilocybin", powerlevel)
-		S.reagents.add_reagent("doctorsdelight", powerlevel)
-		S.reagents.add_reagent("synaptizine", powerlevel)
-	del(src)

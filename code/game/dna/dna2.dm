@@ -32,7 +32,7 @@
 #define DNA_UI_HAIR_STYLE  13
 #define DNA_UI_LENGTH      13 // Update this when you add something, or you WILL break shit.
 
-#define DNA_SE_LENGTH 50 // Was STRUCDNASIZE, size 27. 15 new blocks added = 42, plus room to grow.
+#define DNA_SE_LENGTH 54 // Was STRUCDNASIZE, size 27. 15 new blocks added = 42, plus room to grow.
 
 // Defines which values mean "on" or "off".
 //  This is to make some of the more OP superpowers a larger PITA to activate,
@@ -84,7 +84,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 				facial_hair_styles_male_list += H.name
 				facial_hair_styles_female_list += H.name
 	return
-	
+
 /////////////////
 // GENE DEFINES
 /////////////////
@@ -95,6 +95,9 @@ var/global/list/facial_hair_styles_female_list	= list()
 
 // One of the genes that can't be handed out at roundstart
 #define GENE_UNNATURAL         2
+
+// Species gene
+#define GENE_NATURAL           4
 
 #define GENETYPE_BAD  0
 #define GENETYPE_GOOD 1
@@ -282,6 +285,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 // Set a DNA SE block's raw value.
 /datum/dna/proc/SetSEValue(var/block,var/value,var/defer=0)
 
+
 	if (block<=0) return
 	ASSERT(value>=0)
 	ASSERT(value<=4095)
@@ -362,6 +366,9 @@ var/global/list/facial_hair_styles_female_list	= list()
 
 
 /proc/EncodeDNABlock(var/value)
+	if(!isnum(value))
+		WARNING("Expected a number, got [value]")
+		return 0
 	return add_zero2(num2hex(value,1), 3)
 
 /datum/dna/proc/UpdateUI()
@@ -407,3 +414,5 @@ var/global/list/facial_hair_styles_female_list	= list()
 
 	unique_enzymes = md5(character.real_name)
 	reg_dna[unique_enzymes] = character.real_name
+	if(character.species)
+		species = character.species.name

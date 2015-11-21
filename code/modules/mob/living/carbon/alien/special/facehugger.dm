@@ -15,8 +15,10 @@ var/const/MAX_ACTIVE_TIME = 400
 	icon_state = "facehugger"
 	item_state = "facehugger"
 	w_class = 1 //note: can be picked up by aliens unlike most other items of w_class below 4
-	flags = FPRINT | TABLEPASS | MASKCOVERSMOUTH | MASKCOVERSEYES | MASKINTERNALS
+	flags = FPRINT  | MASKINTERNALS | PROXMOVE
+	body_parts_covered = HEAD|MOUTH|EYES
 	throw_range = 5
+	var/real = 1 //Facehuggers are real, toys are not.
 
 	var/stat = CONSCIOUS //UNCONSCIOUS is the idle state in this case
 
@@ -25,6 +27,9 @@ var/const/MAX_ACTIVE_TIME = 400
 	var/strength = 5
 
 	var/attached = 0
+
+/obj/item/clothing/mask/facehugger/can_contaminate()
+	return 0
 
 /obj/item/clothing/mask/facehugger/attack_paw(user as mob) //can be picked up by aliens
 	if(isalien(user))
@@ -53,16 +58,17 @@ var/const/MAX_ACTIVE_TIME = 400
 	else
 		del(src)
 
-/obj/item/clothing/mask/facehugger/examine()
+/obj/item/clothing/mask/facehugger/examine(mob/user)
 	..()
+	if(!real) //Toy facehuggers are a child, avoid confusing examine text.
+		return
 	switch(stat)
 		if(DEAD,UNCONSCIOUS)
-			usr << "<span class='danger'>\The [src] is not moving.</span>"
+			user << "<span class='deadsay'>\The [src] is not moving.</span>"
 		if(CONSCIOUS)
-			usr << "<span class='danger'>\The [src] seems active.</span>"
+			user << "<span class='danger'>\The [src] seems active.</span>"
 	if (sterile)
-		usr << "<span class='danger'>It looks like \the [src]'s proboscis has been removed.</span>"
-	return
+		user << "<span class='danger'>It looks like \the [src]'s proboscis has been removed.</span>"
 
 /obj/item/clothing/mask/facehugger/attackby()
 	Die()
@@ -131,8 +137,9 @@ var/const/MAX_ACTIVE_TIME = 400
 
 	if(ishuman(L))
 		var/mob/living/carbon/human/H = L
-		if(H.head && H.head.flags & HEADCOVERSMOUTH)
-			H.visible_message("<span class='danger'>\The [src] smashes against [H]'s [H.head] !</span>")
+		var/obj/item/mouth_protection = H.get_body_part_coverage(MOUTH)
+		if(mouth_protection && mouth_protection != H.wear_mask) //can't be protected with your own mask, has to be a hat
+			H.visible_message("<span class='danger'>\The [src] smashes against [H]'s [mouth_protection] !</span>")
 			Die()
 			return 0
 
@@ -223,6 +230,7 @@ var/const/MAX_ACTIVE_TIME = 400
 
 /proc/CanHug(var/mob/M)
 
+
 	if(iscorgi(M))
 		return 1
 
@@ -232,6 +240,6 @@ var/const/MAX_ACTIVE_TIME = 400
 	var/mob/living/carbon/C = M
 	if(ishuman(C))
 		var/mob/living/carbon/human/H = C
-		if(H.head && H.head.flags & HEADCOVERSMOUTH)
+		if(H.check_body_part_coverage(MOUTH) || (locate(/obj/item/alien_embryo) in H))
 			return 0
 	return 1

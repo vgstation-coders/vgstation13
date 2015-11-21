@@ -2,7 +2,7 @@
 	if(!c_animation)//spamming turf animations can have unintended effects, such as the overlays never disapearing. hence this check.
 		if(anim_sound)
 			playsound(src, anim_sound, 50, 1)
-		c_animation = new /atom/movable/overlay(src)
+		c_animation = getFromPool(/atom/movable/overlay, src)
 		c_animation.name = "turf_animation"
 		c_animation.density = 0
 		c_animation.anchored = 1
@@ -16,10 +16,38 @@
 			c_animation.color = anim_color
 		flick("turf_animation",c_animation)
 		spawn(10)
-			c_animation.master = null
-			c_animation.loc = null
-			c_animation = null	//Letting the Garbage Collector take care of it.
+			if(c_animation)
+				returnToPool(c_animation)
+				c_animation = null
 
+//Requires either a target/location or both
+//Requires a_icon holding the animation
+//Requires either a_icon_state of the animation or the flick_anim
+//Does not require sleeptime, specifies for how long the animation should be allowed to exist before returning to pool
+//Does not require animation direction, but you can specify
+//Does not require a name
+proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,flick_anim as text,sleeptime = 0,direction as num, name as text)
+//This proc throws up either an icon or an animation for a specified amount of time.
+//The variables should be apparent enough.
+	if(!location && target)
+		location = get_turf(target)
+	if(location && !target)
+		target = location
+	var/atom/movable/overlay/animation = getFromPool(/atom/movable/overlay, location)
+	if(name)
+		animation.name = name
+	if(direction)
+		animation.dir = direction
+	animation.icon = a_icon
+	animation.layer = target:layer+1
+	if(a_icon_state)
+		animation.icon_state = a_icon_state
+	else
+		animation.icon_state = "blank"
+		animation.master = target
+		flick(flick_anim, animation)
+	spawn(max(sleeptime, 15))
+		returnToPool(animation)
 
 /*
 //called when the tile is cultified
@@ -40,7 +68,9 @@
 		c_animation.pixel_y = 0
 		flick("cultification",c_animation)
 		spawn(10)
-			del(c_animation)
+			c_animation.master = null
+			c_animation.loc = null
+			qdel(c_animation)
 
 //called by various cult runes
 /turf/proc/invocanimation(var/animation_type)
@@ -57,7 +87,7 @@
 		c_animation.pixel_y = 0
 		flick("invocanimation",c_animation)
 		spawn(10)
-			del(c_animation)
+			qdel(c_animation)
 
 //called whenever a null rod is blocking a spell or rune
 /turf/proc/nullding()

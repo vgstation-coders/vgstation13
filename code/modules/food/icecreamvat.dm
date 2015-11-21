@@ -24,8 +24,8 @@
 
 /obj/machinery/cooking/icemachine/proc/generateName(reagentName)
 	. = pick("Mr. ","Mrs. ","Super ","Happy ","Whippy ")
-	. += pick("Whippy ","Slappy ","Creamy ","Dippy ","Swirly ","Swirl ")
-	. += reagentName
+	. += pick("Whippy","Slappy","Creamy","Dippy","Swirly","Swirl")
+	if (reagentName) . += " [reagentName]"
 	return
 
 // Processing //////////////////////////////////////////////////
@@ -33,9 +33,8 @@
 /obj/machinery/cooking/icemachine/takeIngredient(var/obj/item/I,mob/user)
 	if(istype(I,/obj/item/weapon/reagent_containers/glass))
 		if(!src.beaker)
-			user.drop_item()
+			user.drop_item(I, src)
 			src.beaker = I
-			I.loc = src
 			. = 1
 			user << "<span class='notice'>You add the [I.name] to the [src.name].</span>"
 			src.updateUsrDialog()

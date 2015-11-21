@@ -1,3 +1,4 @@
+var/global/list/reagents_to_log = list("fuel"  =  "welder fuel", "plasma"=  "plasma", "pacid" =  "polytrinic acid", "sacid" =  "sulphuric acid" )
 /obj
 	var/origin_tech = null	//Used by R&D to determine what research bonuses it grants.
 	var/reliability = 100	//Used by SOME devices to determine how reliable they are.
@@ -5,22 +6,18 @@
 	var/unacidable = 0 //universal "unacidabliness" var, here so you can use it in any obj.
 	animate_movement = 2
 	var/throwforce = 1
+	var/siemens_coefficient = 0 // for electrical admittance/conductance (electrocution checks and shit) - 0 is not conductive, 1 is conductive - this is a range, not binary
+	var/sharpness = 0 //not a binary - rough guide is 0.8 cutting, 1 cutting well, 1.2 specifically sharp (knives, etc) 1.5 really sharp (scalpels, e-weapons)
+	var/heat_production = 0
 
-	var/sharp = 0 // whether this object cuts
 	var/edge = 0
 	var/in_use = 0 // If we have a user using us, this will be set on. We will check if the user has stopped using us, and thus stop updating and LAGGING EVERYTHING!
 
 	var/damtype = "brute"
 	var/force = 0
 
-	// What reagents should be logged when transferred TO this object?
-	// Reagent ID => friendly name
-	var/global/list/reagents_to_log = list( \
-		"fuel"  =  "welder fuel", \
-		"plasma"=  "plasma", \
-		"pacid" =  "polytrinic acid", \
-		"sacid" =  "sulphuric acid" \
-	)
+	//Should we alert about reagents that should be logged?
+	var/log_reagents = 1
 
 	var/list/mob/_using // All mobs dicking with us.
 
@@ -39,17 +36,31 @@
 /obj/item/proc/is_used_on(obj/O, mob/user)
 
 /obj/recycle(var/datum/materials/rec)
-	if (src.m_amt == 0 && src.g_amt == 0)
-		return NOT_RECYCLABLE
-	rec.addAmount("iron",src.m_amt/CC_PER_SHEET_METAL)
-	rec.addAmount("glass",src.g_amt/CC_PER_SHEET_GLASS)
+	if(..())
+		return 1
 	return w_type
 
+/*
 /obj/melt()
 	var/obj/effect/decal/slag/slag=locate(/obj/effect/decal/slag) in get_turf(src)
 	if(!slag)
 		slag = new(get_turf(src))
 	slag.slaggify(src)
+*/
+
+/obj/proc/is_conductor(var/siemens_min = 0.5)
+	if(src.siemens_coefficient >= siemens_min)
+		return 1
+	return
+
+/obj/proc/cultify()
+	qdel(src)
+
+/obj/proc/is_sharp()
+	return sharpness
+
+/obj/proc/is_hot()
+	return heat_production
 
 /obj/proc/process()
 	processing_objects.Remove(src)
@@ -102,17 +113,17 @@
 						src.attack_ai(M)
 
 					// check for TK users
-					else if (ishuman(M))
-						if(istype(M.l_hand, /obj/item/tk_grab) || istype(M.r_hand, /obj/item/tk_grab))
+					if(M.mutations && M.mutations.len)
+						if(M_TK in M.mutations)
 							is_in_use = 1
-							src.attack_hand(M)
+							src.attack_hand(M, TRUE) // The second param is to make sure brain damage on the user doesn't cause the UI to not update but the action to still happen.
 					else
 						// Remove.
 						_using.Remove(M)
 						continue
 				else // EVERYTHING FROM HERE DOWN MUST BE NEARBY
 					is_in_use = 1
-					attack_hand(M)
+					attack_hand(M, TRUE)
 		in_use = is_in_use
 
 /obj/proc/updateDialog()
@@ -136,6 +147,22 @@
 /obj/proc/interact(mob/user)
 	return
 
+/obj/singularity_act()
+	ex_act(1)
+	if(src)
+		qdel(src)
+	return 2
+
+/obj/shuttle_act(datum/shuttle/S)
+	return qdel(src)
+
+/obj/singularity_pull(S, current_size)
+	if(anchored)
+		if(current_size >= STAGE_FIVE)
+			anchored = 0
+			step_towards(src, S)
+	else step_towards(src, S)
+	
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"
 
@@ -154,6 +181,12 @@
 /obj/proc/getLink(var/idx)
 	return null
 
+/obj/proc/canClone(var/obj/O)
+	return 0
+
+/obj/proc/clone(var/obj/O)
+	return 0
+	
 /obj/proc/linkMenu(var/obj/O)
 	var/dat=""
 	if(canLink(O, list()))
@@ -172,6 +205,19 @@
 
 	if(!istype(P))
 		return 0
+
+	// Cloning stuff goes here.
+	if(P.clone && P.buffer) // Cloning is on.
+		if(!canClone(P.buffer))
+			user << "<span class='attack'>A red light flashes on \the [P]; you cannot clone to this device!</span>"
+			return
+
+		if(!clone(P.buffer))
+			user << "<span class='attack'>A red light flashes on \the [P]; something went wrong when cloning to this device!</span>"
+			return
+
+		user << "<span class='confirm'>A green light flashes on \the [P], confirming the device was cloned to.</span>"
+		return
 
 	var/dat = {"<html>
 	<head>
@@ -196,12 +242,14 @@ a {
 	dat += multitool_menu(user,P)
 	if(P)
 		if(P.buffer)
-			var/id="???"
+			var/id = null
 			if(istype(P.buffer, /obj/machinery/telecomms))
-				id=P.buffer:id
-			else
-				id=P.buffer:id_tag
-			dat += "<p><b>MULTITOOL BUFFER:</b> [P.buffer] ([id])"
+				var/obj/machinery/telecomms/buffer = P.buffer//Casting is better than using colons
+				id = buffer.id
+			else if(P.buffer.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
+				id = P.buffer:id_tag//sadly, : is needed
+
+			dat += "<p><b>MULTITOOL BUFFER:</b> [P.buffer] [id ? "([id])" : ""]"//If you can't into the ? operator, that will make it not display () if there's no ID.
 
 			dat += linkMenu(P.buffer)
 
@@ -252,15 +300,19 @@ a {
 /obj/proc/hide(h)
 	return
 
-
-/obj/proc/hear_talk(mob/M as mob, text)
-/*
-	var/mob/mo = locate(/mob) in src
-	if(mo)
-		var/rendered = "<span class='game say'><span class='name'>[M.name]: </span> <span class='message'>[text]</span></span>"
-		mo.show_message(rendered, 2)
-		*/
-	return
-
 /obj/proc/container_resist()
 	return
+
+/obj/proc/can_pickup(mob/living/user)
+	return 0
+
+/obj/proc/verb_pickup(mob/living/user)
+	return 0
+
+/**
+ * If a mob logouts/logins in side of an object you can use this proc.
+ */
+/obj/proc/on_log()
+	if (isobj(loc))
+		var/obj/location = loc
+		location.on_log()

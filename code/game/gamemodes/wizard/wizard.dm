@@ -1,5 +1,5 @@
-/proc/iswizard(mob/living/M as mob)
-	return istype(M) && M.mind && ticker && ticker.mode && (M.mind in ticker.mode.wizards)
+/*/proc/iswizard(mob/living/M as mob)
+	return istype(M) && M.mind && ticker && ticker.mode && (M.mind in ticker.mode.wizards)*/ //See _macros.dm
 
 /datum/game_mode
 	var/list/datum/mind/wizards = list()
@@ -11,6 +11,7 @@
 	required_players_secret = 10
 	required_enemies = 1
 	recommended_enemies = 1
+	rage = 0
 
 	uplink_welcome = "Wizardly Uplink Console:"
 	uplink_uses = 10
@@ -23,14 +24,13 @@
 
 /datum/game_mode/wizard/announce()
 	world << "<B>The current game mode is - Wizard!</B>"
-	world << "<B>There is a \red SPACE WIZARD\black on the station. You can't let him achieve his objective!</B>"
+	world << "<B>There is a <span class='danger'>SPACE WIZARD on the station. You can't let him achieve his objective!</span>"
 
-
-/datum/game_mode/wizard/can_start()//This could be better, will likely have to recode it later
-	if(!..())
-		return 0
+/datum/game_mode/wizard/pre_setup()
 	var/list/datum/mind/possible_wizards = get_players_for_role(ROLE_WIZARD)
 	if(possible_wizards.len==0)
+		log_admin("Failed to set-up a round of wizard. Couldn't find any volunteers to be wizards.")
+		message_admins("Failed to set-up a round of wizard. Couldn't find any volunteers to be wizards.")
 		return 0
 	var/datum/mind/wizard
 	while(possible_wizards.len)
@@ -43,6 +43,7 @@
 			break
 	if(isnull(wizard))
 		log_admin("COULD NOT MAKE A WIZARD, Mixed mode is [mixed ? "enabled" : "disabled"]")
+		message_admins("COULD NOT MAKE A WIZARD, Mixed mode is [mixed ? "enabled" : "disabled"]")
 		return 0
 	wizards += wizard
 	modePlayer += wizard
@@ -50,15 +51,16 @@
 	wizard.special_role = "Wizard"
 	wizard.original = wizard.current
 	if(wizardstart.len == 0)
-		wizard.current << "<B>\red A starting location for you could not be found, please report this bug!</B>"
+		wizard.current << "<span class='danger'>A starting location for you could not be found, please report this bug!</span>"
+		log_admin("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
+		message_admins("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
 		return 0
-	return 1
 
+	for(var/datum/mind/wwizard in wizards)
+		wwizard.current.loc = pick(wizardstart)
 
-/datum/game_mode/wizard/pre_setup()
-	for(var/datum/mind/wizard in wizards)
-		wizard.current.loc = pick(wizardstart)
-
+	log_admin("Starting a round of wizard with [wizards.len] wizards.")
+	message_admins("Starting a round of wizard with [wizards.len] wizards.")
 	return 1
 
 
@@ -128,6 +130,8 @@
 
 /datum/game_mode/proc/name_wizard(mob/living/carbon/human/wizard_mob)
 	//Allows the wizard to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.
+	if(wizard_mob.species && wizard_mob.species.name != "Human")
+		wizard_mob.set_species("Human", 1)
 	var/wizard_name_first = pick(wizard_first)
 	var/wizard_name_second = pick(wizard_second)
 	var/randomname = "[wizard_name_first] [wizard_name_second]"
@@ -146,7 +150,7 @@
 
 /datum/game_mode/proc/greet_wizard(var/datum/mind/wizard, var/you_are=1)
 	if (you_are)
-		wizard.current << "<B>\red You are the Space Wizard!</B>"
+		wizard.current << "<span class='danger'>You are the Space Wizard!</span>"
 	wizard.current << "<B>The Space Wizards Federation has given you the following tasks:</B>"
 
 	var/obj_count = 1
@@ -171,12 +175,12 @@
 		return
 
 	//So zards properly get their items when they are admin-made.
-	del(wizard_mob.wear_suit)
-	del(wizard_mob.head)
-	del(wizard_mob.shoes)
-	del(wizard_mob.r_hand)
-	del(wizard_mob.r_store)
-	del(wizard_mob.l_store)
+	qdel(wizard_mob.wear_suit)
+	qdel(wizard_mob.head)
+	qdel(wizard_mob.shoes)
+	qdel(wizard_mob.r_hand)
+	qdel(wizard_mob.r_store)
+	qdel(wizard_mob.l_store)
 
 	wizard_mob.equip_to_slot_or_del(new /obj/item/device/radio/headset(wizard_mob), slot_ears)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(wizard_mob), slot_w_uniform)
@@ -190,6 +194,9 @@
 //	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/scrying_gem(wizard_mob), slot_l_store) For scrying gem.
 	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(wizard_mob), slot_r_store)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/spellbook(wizard_mob), slot_r_hand)
+
+	// For Vox and plasmadudes.
+	//wizard_mob.species.handle_post_spawn(wizard_mob)
 
 	wizard_mob << "You will find a list of available spells in your spell book. Choose your magic arsenal carefully."
 	wizard_mob << "In your pockets you will find a teleport scroll. Use it as needed."
@@ -221,7 +228,7 @@
 				continue
 			traitors_alive++
 
-	if (wizards_alive || traitors_alive)
+	if (wizards_alive || traitors_alive || (rage && src:making_mage))
 		return ..()
 	else
 		finished = 1
@@ -232,26 +239,39 @@
 /datum/game_mode/wizard/declare_completion(var/ragin = 0)
 	if(finished && !ragin)
 		feedback_set_details("round_end_result","loss - wizard killed")
-		world << "\red <FONT size = 3><B> The wizard[(wizards.len>1)?"s":""] has been killed by the crew! The Space Wizards Federation has been taught a lesson they will not soon forget!</B></FONT>"
+		completion_text += "<br><span class='warning'><FONT size = 3><B> The wizard[(wizards.len>1)?"s":""] has been killed by the crew! The Space Wizards Federation has been taught a lesson they will not soon forget!</B></FONT></span>"
 	..()
 	return 1
 
 
 /datum/game_mode/proc/auto_declare_completion_wizard()
+	var/text = ""
 	if(wizards.len)
-		var/text = "<br><font size=3><b>the wizards/witches were:</b></font>"
+		var/icon/logo = icon('icons/mob/mob.dmi', "wizard-logo")
+		end_icons += logo
+		var/tempstate = end_icons.len
+		text += {"<br><img src="logo_[tempstate].png"> <font size=2><b>the wizards/witches were:</b></font> <img src="logo_[tempstate].png">"}
 
 		for(var/datum/mind/wizard in wizards)
 
-			text += "<br><b>[wizard.key]</b> was <b>[wizard.name]</b> ("
 			if(wizard.current)
+				var/icon/flat = getFlatIcon(wizard.current, SOUTH, 1, 1)
+				end_icons += flat
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[wizard.key]</b> was <b>[wizard.name]</b> ("}
 				if(wizard.current.stat == DEAD)
 					text += "died"
+					flat.Turn(90)
+					end_icons[tempstate] = flat
 				else
 					text += "survived"
 				if(wizard.current.real_name != wizard.name)
 					text += " as <b>[wizard.current.real_name]</b>"
 			else
+				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
+				end_icons += sprotch
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[wizard.key]</b> was <b>[wizard.name]</b> ("}
 				text += "body destroyed"
 			text += ")"
 
@@ -276,22 +296,24 @@
 			if(wizard.current && wizard.current.spell_list)
 				text += "<br><B>[wizard.name] used the following spells: </B>"
 				var/i = 1
-				for(var/obj/effect/proc_holder/spell/S in wizard.current.spell_list)
-					text += "[S.name]"
+				for(var/spell/S in wizard.current.spell_list)
+					var/icon/spellicon = icon('icons/mob/screen_spells.dmi', S.hud_state)
+					end_icons += spellicon
+					tempstate = end_icons.len
+					text += {"<br><img src="logo_[tempstate].png"> [S.name]"}
 					if(wizard.current.spell_list.len > i)
 						text += ", "
 					i++
 			text += "<br>"
-
-		world << text
-	return 1
+		text += "<HR>"
+	return text
 
 //OTHER PROCS
 
 //To batch-remove wizard spells. Linked to mind.dm.
 /mob/proc/spellremove(var/mob/M as mob)
-	for(var/obj/effect/proc_holder/spell/spell_to_remove in src.spell_list)
-		del(spell_to_remove)
+	for(var/spell/spell_to_remove in src.spell_list)
+		remove_spell(spell_to_remove)
 
 // Does this clothing slot count as wizard garb? (Combines a few checks)
 /proc/is_wiz_garb(var/obj/item/clothing/C)
@@ -345,14 +367,20 @@ Made a proc so this is not repeated 14 (or more) times.*/
 				if(wizard_mind.current.client)
 					for(var/datum/mind/wizard_mind_1 in wizards)
 						if(wizard_mind_1.current)
-							var/I = image('icons/mob/mob.dmi', loc = wizard_mind_1.current, icon_state = "wizard")
+							var/imageloc = wizard_mind_1.current
+							if(istype(wizard_mind_1.current.loc,/obj/mecha))
+								imageloc = wizard_mind_1.current.loc
+							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "wizard", layer = 13)
 							wizard_mind.current.client.images += I
 
 /datum/game_mode/proc/update_wizard_icons_added(datum/mind/wizard_mind)
 	spawn(0)
 		if(wizard_mind.current)
 			if(wizard_mind.current.client)
-				var/I = image('icons/mob/mob.dmi', loc = wizard_mind.current, icon_state = "wizard")
+				var/imageloc = wizard_mind.current
+				if(istype(wizard_mind.current.loc,/obj/mecha))
+					imageloc = wizard_mind.current.loc
+				var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "wizard", layer = 13)
 				wizard_mind.current.client.images += I
 
 /datum/game_mode/proc/update_wizard_icons_removed(datum/mind/wizard_mind)
@@ -361,11 +389,13 @@ Made a proc so this is not repeated 14 (or more) times.*/
 			if(wizard.current)
 				if(wizard.current.client)
 					for(var/image/I in wizard.current.client.images)
-						if(I.icon_state == "wizard" && I.loc == wizard_mind.current)
-							del(I)
+						if(I.icon_state == "wizard" && ((I.loc == wizard_mind.current) || (I.loc == wizard_mind.current.loc)))
+							//del(I)
+							wizard.current.client.images -= I
 
 		if(wizard_mind.current)
 			if(wizard_mind.current.client)
 				for(var/image/I in wizard_mind.current.client.images)
 					if(I.icon_state == "wizard")
-						del(I)
+						//del(I)
+						wizard_mind.current.client.images -= I

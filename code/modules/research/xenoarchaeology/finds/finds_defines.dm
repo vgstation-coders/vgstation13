@@ -130,6 +130,7 @@
 
 /proc/get_random_find_type(var/digsite)
 
+
 	var/find_type = 0
 	switch(digsite)
 		if(DIGSITE_GARDEN)

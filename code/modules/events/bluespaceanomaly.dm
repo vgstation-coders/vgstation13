@@ -41,9 +41,9 @@
 	var/turf/T = pick(get_area_turfs(impact_area))
 	if(T)
 			// Calculate new position (searches through beacons in world)
-		var/obj/item/device/radio/beacon/chosen
+		var/obj/item/beacon/chosen
 		var/list/possible = list()
-		for(var/obj/item/device/radio/beacon/W in world)
+		for(var/obj/item/beacon/W in beacons)
 			possible += W
 
 		if(possible.len > 0)
@@ -66,14 +66,14 @@
 			var/y_distance = TO.y - FROM.y
 			var/x_distance = TO.x - FROM.x
 			for (var/atom/movable/A in range(12, FROM )) // iterate thru list of mobs in the area
-				if(istype(A, /obj/item/device/radio/beacon)) continue // don't teleport beacons because that's just insanely stupid
+				if(istype(A, /obj/item/beacon)) continue // don't teleport beacons because that's just insanely stupid
 				if(A.anchored && istype(A, /obj/machinery)) continue
 				if(istype(A, /obj/structure/disposalpipe )) continue
 				if(istype(A, /obj/structure/cable )) continue
+				if(istype(A, /atom/movable/lighting_overlay)) continue
 
 				var/turf/newloc = locate(A.x + x_distance, A.y + y_distance, TO.z) // calculate the new place
-				if(!A.Move(newloc)) // if the atom, for some reason, can't move, FORCE them to move! :) We try Move() first to invoke any movement-related checks the atom needs to perform after moving
-					A.loc = locate(A.x + x_distance, A.y + y_distance, TO.z)
+				A.forceMove(newloc)
 
 				spawn()
 					if(ismob(A) && !(A in flashers)) // don't flash if we're already doing an effect
@@ -88,4 +88,4 @@
 							M.client.screen += blueeffect
 							sleep(20)
 							M.client.screen -= blueeffect
-							del(blueeffect)
+							qdel(blueeffect)

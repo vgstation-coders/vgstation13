@@ -34,6 +34,11 @@
 	var/list/datum/mind/necromancer = list() //Those who use a necromancy staff OR soulstone a shade/construct
 	var/list/datum/mind/risen = list() // Those risen by necromancy or soulstone
 	var/eldergod = 1 // Can cultists spawn Nar-Sie? (Set to 0 on cascade or narsie spawn)
+	var/completion_text = ""
+
+	var/list/datum/mind/deathsquad = list()
+	var/list/datum/mind/ert = list()
+	var/rage = 0
 
 /datum/game_mode/proc/announce() //to be calles when round starts
 	world << "<B>Notice</B>: [src] did not define announce()"
@@ -53,6 +58,9 @@
 	else
 		if(playerC >= required_players)
 			return 1
+
+	log_admin("Failed to start a round of [name]. Only [playerC] players ready out of [(master_mode=="secret") ? "[required_players_secret]" : "[required_players]"] needed.")
+	message_admins("Failed to start a round of [name]. Only [playerC] players ready out of [(master_mode=="secret") ? "[required_players_secret]" : "[required_players]"] needed.")
 	return 0
 
 
@@ -166,8 +174,9 @@
 
 /datum/game_mode/proc/send_intercept()
 
+
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\game_mode.dm:230: var/intercepttext = "<FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\game_mode.dm:230: var/intercepttext = "<FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR>"
 	var/intercepttext = {"<FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR>
 <B> In case you have misplaced your copy, attached is a list of personnel whom reliable sources&trade; suspect may be affiliated with the Syndicate:</B><br> <I>Reminder: Acting upon this information without solid evidence will result in termination of your working contract with Nanotrasen.</I></br>"}
 	// END AUTOFIX
@@ -192,10 +201,11 @@
 			if(suplink)
 				var/extra = 4
 				suplink.uses += extra
-				man << "\red We have received notice that enemy intelligence suspects you to be linked with us. We have thus invested significant resources to increase your uplink's capacity."
+				if(man.mind) man.mind.total_TC += extra
+				man << "<span class='warning'>We have received notice that enemy intelligence suspects you to be linked with us. We have thus invested significant resources to increase your uplink's capacity.</span>"
 			else
 				// Give them a warning!
-				man << "\red They are on to you!"
+				man << "<span class='warning'>They are on to you!</span>"
 
 		// Some poor people who were just in the wrong place at the wrong time..
 		else if(prob(10))
@@ -327,6 +337,11 @@
 		if(P.client && P.ready)
 			. ++
 
+/datum/game_mode/proc/Clean_Antags() //Cleans out the genetic defects of all antagonists
+	for(var/mob/living/A in player_list)
+		if((istype(A)) && A.mind && A.mind.special_role)
+			if(A.dna)
+				A.dna.ResetSE()
 
 ///////////////////////////////////
 //Keeps track of all living heads//
@@ -356,7 +371,7 @@
 //Reports player logouts//
 //////////////////////////
 proc/display_roundstart_logout_report()
-	var/msg = "\blue <b>Roundstart logout report\n\n"
+	var/msg = "<span class='notice'><b>Roundstart logout report\n\n</span>"
 	for(var/mob/living/L in mob_list)
 
 		if(L.ckey)
@@ -451,7 +466,8 @@ proc/get_nt_opposed()
 					for(var/image/I in t_mind.current.client.images)
 						if((I.icon_state == "minion" || I.icon_state == "necromancer") && I.loc == owner.current)
 							//world << "deleting [t_mind.current] overlay"
-							del(I)
+							//del(I)
+							t_mind.current.client.images -= I
 		if(head)
 			//world.log << "found [head.name]"
 			if(head.current)
@@ -459,13 +475,15 @@ proc/get_nt_opposed()
 					for(var/image/I in head.current.client.images)
 						if((I.icon_state == "minion" || I.icon_state == "necromancer") && I.loc == owner.current)
 							//world << "deleting [head.current] overlay"
-							del(I)
+							//del(I)
+							head.current.client.images -= I
 	if(owner.current)
 		if(owner.current.client)
 			for(var/image/I in owner.current.client.images)
 				if(I.icon_state == "minion" || I.icon_state == "necromancer")
 					//world << "deleting [owner.current] overlay"
-					del(I)
+					//del(I)
+					owner.current.client.images -= I
 
 /datum/game_mode/proc/update_all_necro_icons()
 	spawn(0)
@@ -476,13 +494,15 @@ proc/get_nt_opposed()
 					for(var/image/I in head.current.client.images)
 						if(I.icon_state == "minion" || I.icon_state == "necromancer")
 							//world << "deleting [head.current] overlay"
-							del(I)
+							//del(I)
+							head.current.client.images -= I
 			for(var/datum/mind/t_mind in necromancer[headref])
 				if(t_mind.current && t_mind.current.client)
 					for(var/image/I in t_mind.current.client.images)
 						if(I.icon_state == "minion" || I.icon_state == "necromancer")
 							//world << "deleting [t_mind.current] overlay"
-							del(I)
+							//del(I)
+							t_mind.current.client.images -= I
 
 		for(var/headref in necromancer)
 			var/datum/mind/head = locate(headref)

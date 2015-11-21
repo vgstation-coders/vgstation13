@@ -13,6 +13,7 @@
 	attack_sound = 'sound/weapons/bite.ogg'
 	faction = "creature"
 	speed = 4
+	size = SIZE_BIG
 
 /mob/living/simple_animal/hostile/creature/cult
 	faction = "cult"
@@ -31,22 +32,29 @@
 
 	supernatural = 1
 
+/mob/living/simple_animal/hostile/creature/cult/CanAttack(var/atom/the_target)
+	//IF WE ARE CULT MONSTERS (those who spawn after Nar-Sie has risen) THEN WE DON'T ATTACK CULTISTS
+	if(iscultist(the_target))
+		return 0
+	return ..(the_target)
+
 /mob/living/simple_animal/hostile/creature/cult/cultify()
 	return
 
 /mob/living/simple_animal/hostile/creature/cult/Life()
+	if(timestopped) return 0 //under effects of time magick
 	..()
 	if(emergency_shuttle.location == 1)
 		if(!enroute && !target)	//The shuttle docked, all monsters rush for the escape hallway
-			if(!shuttletarget || (get_dist(src, shuttletarget) >= 2))
-				shuttletarget = pick(get_area_turfs(locate(/area/hallway/secondary/exit)))
+			if(!shuttletarget && escape_list.len) //Make sure we didn't already assign it a target, and that there are targets to pick
+				shuttletarget = pick(escape_list) //Pick a shuttle target
 			enroute = 1
 			stop_automated_movement = 1
-			spawn()
+/*			spawn()
 				if(!src.stat)
-					horde()
+					horde()*/
 
-		if(get_dist(src, shuttletarget) <= 2)		//The monster reached the escape hallway
+		if(get_dist(src, shuttletarget) <= 2) //The monster reached the escape hallway
 			enroute = 0
 			stop_automated_movement = 0
 
@@ -57,7 +65,7 @@
 			var/obj/machinery/door/airlock/D = A
 			if(D.density && !D.locked && !D.welded)
 				D.open()
-		else if(istype(A,/obj/structure/mineral_door))
+		else if(istype(A,/obj/machinery/door/mineral))
 			var/obj/machinery/door/D = A
 			if(D.density)
 				D.open()

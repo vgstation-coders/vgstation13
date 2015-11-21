@@ -10,8 +10,8 @@
 
 // Concatenates a list of strings into a single string.  A seperator may optionally be provided.
 /proc/list2text(list/ls, sep)
-	if(ls.len <= 1) // Early-out code for empty or singleton lists.
-		return ls.len ? ls[1] : ""
+	if(ls && ls.len <= 1) // Early-out code for empty or singleton lists.
+		return (ls && ls.len) ? ls[1] : ""
 
 	var/l = ls.len // Made local for sanic speed.
 	var/i = 0 // Incremented every time a list index is accessed.
@@ -69,7 +69,7 @@
 		. = "[ls[++i]]" // Make sure the initial element is converted to text.
 
 		if(l-1 & 0x01) // 'i' will always be 1 here.
-			. += S1 // Append 1 element if the remaining elements are not a multiple of 2.
+			. += "[S1]" // Append 1 element if the remaining elements are not a multiple of 2.
 		if(l-i & 0x02)
 			. = text("[][][]", ., S1, S1) // Append 2 elements if the remaining elements are not a multiple of 4.
 		if(l-i & 0x04)
@@ -95,14 +95,29 @@
 		#undef S1
 
 //slower then list2text, but correctly processes associative lists.
-proc/tg_list2text(list/list, glue=",")
+proc/tg_list2text(list/list, glue = ",")
 	if(!istype(list) || !list.len)
 		return
-	var/output
 	for(var/i=1 to list.len)
-		output += (i!=1? glue : null)+(!isnull(list["[list[i]]"])?"[list["[list[i]]"]]":"[list[i]]")
-	return output
+		. += (i != 1 ? glue : null)+	\
+		(!isnull(list["[list[i]]"]) ?	\
+		"[list["[list[i]]"]]" :			\
+		"[list[i]]")
+	return .
 
+// Yeah, so list2text doesn't do assoc values, tg_list2text only does assoc values if they're available, and NTSL needs to stay relatively simple.
+/proc/vg_list2text(var/list/list, var/glue = ", ", var/assoc_glue = " = ")
+	if(!islist(list) || !list.len)
+		return // Valid lists you nerd.
+
+	for(var/i = 1 to list.len)
+		if(isnull(list[list[i]]))
+			. += "[list[i]][glue]"
+		else
+			. += "[list[i]][assoc_glue][list[list[i]]][glue]"
+
+	. = copytext(., 1, length(.) - length(glue) + 1) // Shush. (cut out the glue which is added to the end.)
+	
 // HTTP GET URL query builder thing.
 // list("a"="b","c"="d") -> ?a=b&c=d
 /proc/buildurlquery(list/list,sep="&")
@@ -119,7 +134,7 @@ proc/tg_list2text(list/list, glue=",")
 	return output
 
 //Converts a string into a list by splitting the string at each delimiter found. (discarding the seperator)
-/proc/text2list(text, delimiter="\n")
+/proc/text2list(text, delimiter = "\n")
 	var/delim_len = length(delimiter)
 	if(delim_len < 1) return list(text)
 	. = list()
@@ -150,15 +165,6 @@ proc/tg_list2text(list/list, glue=",")
 
 
 //Turns a direction into text
-
-/proc/num2dir(direction)
-	switch(direction)
-		if(1.0) return NORTH
-		if(2.0) return SOUTH
-		if(4.0) return EAST
-		if(8.0) return WEST
-		else
-			world.log << "UNKNOWN DIRECTION: [direction]"
 
 /proc/dir2text(direction)
 	switch(direction)

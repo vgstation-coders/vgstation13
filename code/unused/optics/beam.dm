@@ -108,6 +108,7 @@
 
 	proc/set_wavelength(var/lambda)
 
+
 		var/w = round(lambda,1)	// integer wavelength
 		wavelength = lambda
 		// first look for cached version of the icon at this wavelength

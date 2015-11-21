@@ -22,14 +22,17 @@
 	possible_traitors = get_players_for_role(ROLE_TRAITOR)
 
 	for(var/datum/mind/player in possible_traitors)
+		if(player.current.z == map.zCentcomm) //Players on the centcomm z-level can't turn into traitors!
+			possible_traitors -= player
+			continue
+
 		for(var/job in restricted_jobs)
-			if(player.assigned_role == job)
+			if(player.assigned_role == job) //Players with a job that is in the restricted job list can't turn into traitors!
 				possible_traitors -= player
+				continue
 
 
-	for(var/mob/new_player/P in world)
-		if(P.client && P.ready)
-			num_players++
+	num_players = num_players()
 
 	//var/r = rand(5)
 	var/num_traitors = 1
@@ -40,6 +43,8 @@
 
 	// Stop setup if no possible traitors
 	if(!possible_traitors.len)
+		log_admin("Failed to set-up a round of AutoTraitor. Couldn't find any volunteers to be traitor.")
+		message_admins("Failed to set-up a round of AutoTraitor. Couldn't find any volunteers to be traitor.")
 		return 0
 
 	if(config.traitor_scaling)
@@ -47,8 +52,6 @@
 		// mixed mode scaling
 		if(mixed)
 			num_traitors = min(3, num_traitors)
-		log_game("Number of traitors: [num_traitors]")
-		message_admins("Players counted: [num_players]  Number of traitors chosen: [num_traitors]")
 	else
 		num_traitors = max(1, min(num_players(), traitors_possible))
 
@@ -68,8 +71,9 @@
 		if(istype(traitor))
 			traitor.special_role = "traitor"
 
-//	if(!traitors.len)
-//		return 0
+	log_admin("Starting a round of AutoTraitor with [traitors.len] starting traitors.")
+	message_admins("Starting a round of AutoTraitor with [traitors.len] starting traitors.")
+
 	return 1
 
 
@@ -117,43 +121,33 @@
 			traitor_prob += 50
 
 
-		if(traitorcount < max_traitors)
+		if (traitorcount < max_traitors)
 			//message_admins("Number of Traitors is below maximum.  Rolling for new Traitor.")
 			//message_admins("The probability of a new traitor is [traitor_prob]%")
 
-			if(prob(traitor_prob))
-				message_admins("Making a new Traitor.")
-				if(!possible_traitors.len)
-					message_admins("No potential traitors.  Cancelling new traitor.")
-					traitorcheckloop()
-					return
-				var/mob/living/newtraitor = pick(possible_traitors)
-				//message_admins("[newtraitor.real_name] is the new Traitor.")
+			if (prob(traitor_prob))
+				message_admins("AUTOTRAITOR: making someone traitor")
 
-				forge_traitor_objectives(newtraitor.mind)
+				if (possible_traitors.len > 0)
+					var/mob/living/traitor_body = pick(possible_traitors)
 
-				if(istype(newtraitor, /mob/living/silicon))
-					add_law_zero(newtraitor)
+					if (traitor_body)
+						var/datum/mind/traitor_mind = traitor_body.mind
+
+						if (traitor_mind)
+							if (traitor_mind.make_traitor())
+								log_game("[key_name(traitor_body)] has been auto traitor'ed.")
+
+								message_admins("AUTOTRAITOR: [key_name_admin(traitor_body)] is now a traitor")
 				else
-					equip_traitor(newtraitor)
+					message_admins("AUTOTRAITOR: no potential traitors, mission is kill")
 
-				traitors += newtraitor.mind
-				newtraitor << "\red <B>ATTENTION:</B> \black It is time to pay your debt to the Syndicate..."
-				newtraitor << "<B>You are now a traitor.</B>"
-				newtraitor.mind.special_role = "traitor"
-				var/obj_count = 1
-				newtraitor << "\blue Your current objectives:"
-				for(var/datum/objective/objective in newtraitor.mind.objectives)
-					newtraitor << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
-					obj_count++
 			//else
 				//message_admins("No new traitor being added.")
 		//else
 			//message_admins("Number of Traitors is at maximum.  Not making a new Traitor.")
 
 		traitorcheckloop()
-
-
 
 /datum/game_mode/traitor/autotraitor/latespawn(mob/living/carbon/human/character)
 	..()
@@ -193,13 +187,14 @@
 				forge_traitor_objectives(character.mind)
 				equip_traitor(character)
 				traitors += character.mind
-				character << "\red <B>You are the traitor.</B>"
+				character << "<span class='danger'>You are the traitor.</span>"
 				character.mind.special_role = "traitor"
 				var/obj_count = 1
-				character << "\blue Your current objectives:"
+				character << "<span class='notice'>Your current objectives:</span>"
 				for(var/datum/objective/objective in character.mind.objectives)
 					character << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
 					obj_count++
+				character << sound('sound/voice/syndicate_intro.ogg')
 			//else
 				//message_admins("New traitor roll failed.  No new traitor.")
 	//else

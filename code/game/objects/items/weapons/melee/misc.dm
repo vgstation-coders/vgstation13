@@ -4,7 +4,8 @@
 	icon_state = "chain"
 	item_state = "chain"
 	hitsound = "sound/weapons/whip.ogg"
-	flags = FPRINT | TABLEPASS | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	force = 10
 	throwforce = 7
@@ -13,5 +14,5 @@
 	attack_verb = list("flogged", "whipped", "lashed", "disciplined")
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>"
 		return (OXYLOSS)

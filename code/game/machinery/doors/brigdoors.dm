@@ -5,7 +5,7 @@
 //  Description: This is a controls the timer for the brig doors, displays the timer on itself and
 //               has a popup window when used, allowing to set the timer.
 //  Code Notes: Combination of old brigdoor.dm code from rev4407 and the status_display.dm code
-//  Date: 01/September/2010
+//  Date: 01/september/2010
 //  Programmer: Veryinky
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /obj/machinery/door_timer
@@ -30,11 +30,11 @@
 		pixel_y = ((src.dir & 3)? (src.dir ==1 ? 24 : -32) : (0))
 
 		spawn(20)
-			for(var/obj/machinery/door/window/brigdoor/M in world)
+			for(var/obj/machinery/door/window/brigdoor/M in all_doors)
 				if (M.id_tag == src.id_tag)
 					targets += M
 
-			for(var/obj/machinery/flasher/F in world)
+			for(var/obj/machinery/flasher/F in flashers)
 				if(F.id_tag == src.id_tag)
 					targets += F
 
@@ -137,7 +137,7 @@
 		var/dat = "<HTML><BODY><TT>"
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\doors\brigdoors.dm:138: dat += "<HR>Timer System:</hr>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\\doors\brigdoors.dm:138: dat += "<HR>Timer System:</hr>"
 		dat += {"<HR>Timer System:</hr>
 			<b>Door [src.id_tag] controls</b><br/>"}
 		// END AUTOFIX
@@ -148,7 +148,7 @@
 
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\doors\brigdoors.dm:145: dat += "Time Left: [(minute ? text("[minute]:") : null)][second] <br/>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\\doors\brigdoors.dm:145: dat += "Time Left: [(minute ? text("[minute]:") : null)][second] <br/>"
 		dat += {"Time Left: [(minute ? text("[minute]:") : null)][second] <br/>
 			<a href='?src=\ref[src];tp=-60'>-</a> <a href='?src=\ref[src];tp=-1'>-</a> <a href='?src=\ref[src];tp=1'>+</a> <A href='?src=\ref[src];tp=60'>+</a><br/>"}
 		// END AUTOFIX
@@ -160,7 +160,7 @@
 
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\doors\brigdoors.dm:154: dat += "<br/><br/><a href='?src=\ref[user];mach_close=computer'>Close</a>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\\doors\brigdoors.dm:154: dat += "<br/><br/><a href='?src=\ref[user];mach_close=computer'>Close</a>"
 		dat += {"<br/><br/><a href='?src=\ref[user];mach_close=computer'>Close</a>
 			</TT></BODY></HTML>"}
 		// END AUTOFIX
@@ -231,7 +231,7 @@
 // Adds an icon in case the screen is broken/off, stolen from status_display.dm
 	proc/set_picture(var/state)
 		picture_state = state
-		overlays.Cut()
+		overlays.len = 0
 		overlays += image('icons/obj/status_display.dmi', icon_state=picture_state)
 
 
@@ -239,10 +239,10 @@
 // Stolen from status_display
 	proc/update_display(var/line1, var/line2)
 		if(line2 == null)		// single line display
-			overlays.Cut()
+			overlays.len = 0
 			overlays += texticon(line1, 23, -13)
 		else					// dual line display
-			overlays.Cut()
+			overlays.len = 0
 			overlays += texticon(line1, 23, -9)
 			overlays += texticon(line2, 23, -17)
 		// return an icon of a time text string (tn)

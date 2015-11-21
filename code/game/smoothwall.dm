@@ -3,7 +3,7 @@
 // FOR THIS SHIT I'M GOING TO MAKE ALL MY COMMENTS IN CAPS
 
 /atom
-	var/list/canSmoothWith=list() // TYPE PATHS I CAN SMOOTH WITH~~~~~
+	var/canSmoothWith // TYPE PATHS I CAN SMOOTH WITH~~~~~
 
 // MOVED INTO UTILITY FUNCTION FOR LESS DUPLICATED CODE.
 /atom/proc/findSmoothingNeighbors()
@@ -22,14 +22,21 @@
 
 	return junction
 
-/atom/proc/isSmoothableNeighbor(var/atom/A)
-	return is_type_in_list(A,canSmoothWith)
+/atom/proc/isSmoothableNeighbor(atom/A)
+	if(!A)
+		WARNING("[__FILE__]L[__LINE__]: atom/isSmoothableNeighbor given bad atom")
+		return 0
+	return isInTypes(A, canSmoothWith)
 
-/turf/simulated/wall/isSmoothableNeighbor(var/atom/A)
-	if(is_type_in_list(A,canSmoothWith))
+/turf/simulated/wall/isSmoothableNeighbor(atom/A)
+	if(!A)
+		WARNING("[__FILE__]L[__LINE__]: turf/isSmoothableNeighbor given bad atom")
+		return 0
+	if(isInTypes(A, canSmoothWith))
 		// COLON OPERATORS ARE TERRIBLE BUT I HAVE NO CHOICE
 		if(src.mineral == A:mineral)
 			return 1
+
 	return 0
 
 /**
@@ -61,7 +68,7 @@
 	if(!at)
 		at = get_turf(src)
 	// OPTIMIZE BY NOT CHECKING FOR NEIGHBORS IF WE DON'T FUCKING SMOOTH
-	if(canSmoothWith.len>0)
+	if(canSmoothWith)
 		for(var/cdir in cardinal)
 			var/turf/T = get_step(src,cdir)
 			if(isSmoothableNeighbor(T))
@@ -101,3 +108,17 @@
 // DE-HACK
 /turf/simulated/wall/vault/relativewall()
 	return
+
+var/list/smoothable_unsims = list(
+	"riveted",
+	)
+
+/turf/unsimulated/wall/New()
+	..()
+	if(icon_state in smoothable_unsims)
+		relativewall()
+		relativewall_neighbours()
+
+/turf/unsimulated/wall/relativewall()
+	var/junction=findSmoothingNeighbors()
+	icon_state = "[walltype][junction]"

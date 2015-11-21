@@ -6,11 +6,12 @@
 	icon_state = "powersink0"
 	item_state = "electronic"
 	w_class = 4.0
-	flags = FPRINT | TABLEPASS | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	throwforce = 5
 	throw_speed = 1
 	throw_range = 2
-	m_amt = 750
+	starting_materials = list(MAT_IRON = 750)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "powerstorage=3;syndicate=5"
@@ -54,7 +55,7 @@
 				for(var/mob/M in viewers(user))
 					if(M == user) continue
 					M << "[user] detaches the power sink from the cable."
-				SetLuminosity(0)
+				set_light(0)
 				icon_state = "powersink0"
 
 				return
@@ -62,7 +63,7 @@
 			..()
 
 	Destroy()
-		SetLuminosity(0)
+		set_light(0)
 		processing_objects.Remove(src)
 		attached.attached = null
 		attached = null
@@ -95,7 +96,7 @@
 					if(M == user) continue
 					M << "[user] deactivates the power sink!"
 				mode = 1
-				SetLuminosity(0)
+				set_light(0)
 				icon_state = "powersink0"
 				playsound(get_turf(src), 'sound/effects/teleport.ogg', 50, 1)
 				processing_objects.Remove(src)
@@ -104,12 +105,12 @@
 		if(attached)
 			var/datum/powernet/PN = attached.get_powernet()
 			if(PN)
-				SetLuminosity(12)
+				set_light(12)
 
 				// found a powernet, so drain up to max power from it
 
 				var/drained = min ( drain_rate, PN.avail )
-				PN.newload += drained
+				PN.load += drained
 				power_drained += drained
 
 				// if tried to drain more than available on powernet
@@ -121,6 +122,8 @@
 							if(A.operating && A.cell)
 								A.cell.charge = max(0, A.cell.charge - 50)
 								power_drained += 50
+								if(A.charging == 2)
+									A.charging = 1
 
 
 			if(power_drained > max_power * 0.95)

@@ -17,7 +17,7 @@
 	response_disarm = "shoves"
 	response_harm = "strikes"
 	status_flags = 0
-	a_intent = "hurt"
+	a_intent = I_HURT
 	var/throw_message = "bounces off of"
 	var/icon_aggro = null // for swapping to when we get aggressive
 
@@ -71,7 +71,7 @@
 	melee_damage_lower = 12
 	melee_damage_upper = 12
 	attacktext = "bites into"
-	a_intent = "hurt"
+	a_intent = I_HURT
 	attack_sound = 'sound/weapons/spiderlunge.ogg'
 	ranged_cooldown_cap = 4
 	aggro_vision_range = 9
@@ -137,7 +137,7 @@
 	melee_damage_lower = 0
 	melee_damage_upper = 0
 	attacktext = "barrels into"
-	a_intent = "help"
+	a_intent = I_HELP
 	throw_message = "sinks in slowly, before being pushed out of "
 	status_flags = CANPUSH
 	search_objects = 1
@@ -198,7 +198,7 @@
 	for(var/R in ore_types_eaten)
 		for(counter=0, counter < ore_eaten, counter++)
 			new R(src.loc)
-	ore_types_eaten.Cut()
+	ore_types_eaten.len = 0
 	ore_eaten = 0
 
 
@@ -242,7 +242,7 @@
 	pass_flags = PASSTABLE
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/OpenFire(var/the_target)
-	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = new /mob/living/simple_animal/hostile/asteroid/hivelordbrood(src.loc)
+	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = getFromPool(/mob/living/simple_animal/hostile/asteroid/hivelordbrood,src.loc)
 	A.GiveTarget(target)
 	A.friends = friends
 	A.faction = faction
@@ -252,6 +252,7 @@
 	OpenFire()
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/Die()
+	mouse_opacity = 1
 	new /obj/item/asteroid/hivelord_core(src.loc)
 	..()
 
@@ -268,23 +269,51 @@
 		desc = "The remains of a hivelord that have become useless, having been left alone too long after being harvested."
 
 /obj/item/asteroid/hivelord_core/attack(mob/living/M as mob, mob/living/user as mob)
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(inert)
-			user << "<span class='notice'>[src] have become inert, its healing properties are no more.</span>"
-			return
+	if (iscarbon(M) && user.a_intent != I_HURT)
+		return consume(user, M)
+	else
+		return ..()
+
+/obj/item/asteroid/hivelord_core/attack_self(mob/user as mob)
+	if (iscarbon(user))
+		return consume(user, user)
+
+/obj/item/asteroid/hivelord_core/proc/consume(var/mob/living/user, var/mob/living/carbon/target)
+	if (inert)
+		user << "<span class='notice'>[src] have become inert, its healing properties are no more.</span>"
+		return TRUE
+
+	if (target.stat == DEAD)
+		user << "<span class='notice'>[src] are useless on the dead.</span>"
+		return
+
+	// revive() requires a check for suiciding
+	if (target.suiciding)
+		user << "<span class='notice'>It's dead, Jim.</span>"
+		return
+
+	if (!target.hasmouth)
+		if (target != user)
+			user << "<span class='warning'>You attempt to feed \the [src] to [target], but you realize they don't have a mouth. How dumb!</span>"
 		else
-			if(H.stat == DEAD)
-				user << "<span class='notice'>[src] are useless on the dead.</span>"
-				return
-			if(H != user)
-				H.visible_message("<span class='notice'>[user] forces [H] to eat [src]... they quickly regenerate all injuries!</span>")
-			else
-				user << "<span class='notice'>You chomp into [src], barely managing to hold it down, but feel amazingly refreshed in mere moments.</span>"
-			playsound(src.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
-			H.revive()
-			del(src)
-	..()
+			user << "<span class='warning'>You don't have a mouth to eat \the [src] with.</span>"
+		return
+
+	// Delay feeding to others, just like in regular food
+	if (target != user)
+		user.visible_message("<span class='danger'>[user] attempts to feed [target] \the [src].</span>", "<span class='danger'>You attempt to feed [target] \the [src].</span>")
+		if (!do_mob(user, target))
+			return
+		user.visible_message("<span class='notice'>[user] feeds [target] the [src]... They look better!</span>")
+	else
+		user << "<span class='notice'>You chomp into \the [src], barely managing to hold it down, but feel amazingly refreshed in mere moments.</span>"
+
+	playsound(get_turf(src), 'sound/items/eatfood.ogg', rand(10, 50), 1)
+	target.revive()
+
+	user.drop_from_inventory(src)
+	qdel(src)
+	return TRUE
 
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood
 	name = "hivelord brood"
@@ -313,10 +342,10 @@
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood/New()
 	..()
 	spawn(100)
-		del(src)
+		returnToPool(src)
 
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood/Die()
-	del(src)
+	returnToPool(src)
 
 /mob/living/simple_animal/hostile/asteroid/goliath
 	name = "goliath"
@@ -328,7 +357,6 @@
 	icon_dead = "Goliath_dead"
 	icon_gib = "syndicate_gib"
 	attack_sound = 'sound/weapons/heavysmash.ogg'
-	mouse_opacity = 2
 	move_to_delay = 40
 	ranged = 1
 	ranged_cooldown_cap = 8
@@ -344,6 +372,8 @@
 	throw_message = "does nothing to the rocky hide of the"
 	aggro_vision_range = 9
 	idle_vision_range = 5
+
+	size = SIZE_BIG
 
 /mob/living/simple_animal/hostile/asteroid/goliath/OpenFire()
 	visible_message("<span class='warning'>The [src.name] digs its tentacles under [target.name]!</span>")
@@ -363,6 +393,7 @@
 	icon_state = "Goliath_tentacle"
 
 /obj/effect/goliath_tentacle/New()
+	..()
 	var/turftype = get_turf(src)
 	if(istype(turftype, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = turftype
@@ -395,11 +426,6 @@
 	if(isliving(O))
 		Trip()
 
-/mob/living/simple_animal/hostile/asteroid/goliath/Die()
-	var/obj/item/asteroid/goliath_hide/G = new /obj/item/asteroid/goliath_hide(src.loc)
-	G.layer = 4.1
-	..()
-
 /obj/item/asteroid/goliath_hide
 	name = "goliath hide plates"
 	desc = "Pieces of a goliath's rocky hide, these might be able to make your suit a bit more durable to attack from the local fauna."
@@ -410,13 +436,13 @@
 
 /obj/item/asteroid/goliath_hide/afterattack(atom/target, mob/user, proximity_flag)
 	if(proximity_flag)
-		if(istype(target, /obj/item/clothing/suit/space/rig/mining) || istype(target, /obj/item/clothing/head/helmet/space/rig/mining))
+		if(istype(target, /obj/item/clothing/suit/space/rig/mining) || istype(target, /obj/item/clothing/head/helmet/space/rig/mining) || istype(target, /obj/item/clothing/suit/space/plasmaman/miner) || istype(target, /obj/item/clothing/head/helmet/space/plasmaman/miner))
 			var/obj/item/clothing/C = target
 			var/current_armor = C.armor
 			if(current_armor.["melee"] < 90)
 				current_armor.["melee"] = min(current_armor.["melee"] + 10, 90)
 				user << "<span class='info'>You strengthen [target], improving its resistance against melee attacks.</span>"
-				del(src)
+				qdel(src)
 			else
 				user << "<span class='info'>You can't improve [C] any further.</span>"
 	return

@@ -2,24 +2,29 @@
 	icon = 'icons/turf/floors.dmi'
 	level = 1.0
 
+	luminosity = 0
+
 	//for floors, use is_plating(), is_plasteel_floor() and is_light_floor()
 	var/intact = 1
 
-	//Properties for open tiles (/floor)
+	//properties for open tiles (/floor)
 	var/oxygen = 0
 	var/carbon_dioxide = 0
 	var/nitrogen = 0
 	var/toxins = 0
 
-	//Properties for airtight tiles (/wall)
+	//properties for airtight tiles (/wall)
 	var/thermal_conductivity = 0.05
 	var/heat_capacity = 1
 
-	//Properties for both
+	//properties for both
 	var/temperature = T20C
 
 	var/blocks_air = 0
 	var/icon_old = null
+
+	//associated PathNode in the A* algorithm
+	var/PathNode/PNode = null
 
 	// Bot shit
 	var/targetted_by=null
@@ -30,8 +35,42 @@
 	// Flick animation shit
 	var/atom/movable/overlay/c_animation = null
 
+	// Powernet /datum/power_connections.  *Uninitialized until used to conserve memory*
+	var/list/power_connections = null
+
 	// holy water
 	var/holy = 0
+
+	// wizard sleep spell probably better way to do this
+	var/sleeping = 0
+
+	// left by bullets that went all the way through
+	var/bullet_marks = 0
+	penetration_dampening = 10
+
+/*
+ * Technically obsoleted by base_turf
+	//For building on the asteroid.
+ 	var/under_turf = /turf/space
+ */
+
+	var/explosion_block = 0
+
+	var/dynamic_lighting = 1
+
+	//For shuttles - if 1, the turf's underlay will never be changed when moved
+	//See code/datums/shuttle.dm @ 544
+	var/preserve_underlay = 0
+
+	forceinvertredraw = 1
+
+/turf/examine(mob/user)
+	..()
+	if(bullet_marks)
+		user << "It has bullet markings on it."
+
+/turf/proc/process()
+	universe.OnTurfTick(src)
 
 /turf/New()
 	..()
@@ -39,7 +78,11 @@
 		spawn( 0 )
 			src.Entered(AM)
 			return
-	return
+	turfs |= src
+
+	var/area/A = loc
+	if(!dynamic_lighting || !A.lighting_use_dynamic)
+		luminosity = 1
 
 /turf/DblClick()
 	if(istype(usr, /mob/living/silicon/ai))
@@ -57,7 +100,7 @@
 
 
 /turf/bullet_act(var/obj/item/projectile/Proj)
-	if(istype(Proj ,/obj/item/projectile/beam/pulse))
+	if(Proj.destroy)
 		src.ex_act(2)
 	..()
 	return 0
@@ -68,54 +111,82 @@
 	..()
 	return 0
 
-/turf/Enter(atom/movable/O, atom/oldloc)
-	if(movement_disabled && usr.ckey != movement_disabled_exception)
-		usr << "\red Movement is admin-disabled." //This is to identify lag problems
+/*
+ * IF YOU HAVE BYOND VERSION BELOW 507.1248 OR ARE ABLE TO WALK THROUGH WINDOORS/BORDER WINDOWS COMMENT OUT
+ * #define BORDER_USE_TURF_EXIT
+ * FOR MORE INFORMATION SEE: http://www.byond.com/forum/?post=1666940
+ *
+#ifdef BORDER_USE_TURF_EXIT
+/turf/Exit(atom/movable/mover, atom/target)
+	if(!mover)
+		return 1
+	// First, make sure it can leave its square
+	if(mover.loc == src)
+		// Nothing but border objects stop you from leaving a tile, only one loop is needed
+		for(var/obj/obstacle in src)
+			/*if(ismob(mover) && mover:client)
+				world << "<span class='danger'>EXIT</span>origin: checking exit of mob [obstacle]"*/
+			if(obstacle != mover && obstacle != target && !obstacle.CheckExit(mover, target))
+				/*if(ismob(mover) && mover:client)
+					world << "<span class='danger'>EXIT</span>Origin: We are bumping into [obstacle]"*/
+				mover.Bump(obstacle, 1)
+				return 0
+	return 1
+#if DM_VERSION < 507
+	#warn This compiler is too far out of date! You will experience issues with windows and windoors unles you update to atleast 507.1248 or comment out BORDER_USE_TURF_EXIT in global.dm!
+
+#endif
+*/
+/turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
+	if (!mover)
+		return 1
+
+//#ifndef BORDER_USE_TURF_EXIT
+//#warn BORDER_USE_TURF_EXIT is not defined, using possibly buggy turf/Enter code.
+	// First, make sure it can leave its square
+	if(isturf(mover.loc))
+		// Nothing but border objects stop you from leaving a tile, only one loop is needed
+		for(var/obj/obstacle in mover.loc)
+			if(obstacle != mover && obstacle != forget && !obstacle.CheckExit(mover, src) )
+				mover.Bump(obstacle, 1)
+				return 0
+//#endif
+	var/list/large_dense = list()
+	//Next, check objects to block entry that are on the border
+	for(var/atom/movable/border_obstacle in src)
+		if(border_obstacle.flags&ON_BORDER)
+			/*if(ismob(mover) && mover:client)
+				world << "<span class='danger'>ENTER</span>Target(border): checking CanPass of [border_obstacle]"*/
+			if(!border_obstacle.CanPass(mover, mover.loc) && (forget != border_obstacle) && mover != border_obstacle)
+				/*if(ismob(mover) && mover:client)
+					world << "<span class='danger'>ENTER</span>Target(border): We are bumping into [border_obstacle]"*/
+				mover.Bump(border_obstacle, 1)
+				return 0
+		else
+			large_dense += border_obstacle
+
+	//Then, check the turf itself
+	if (!src.CanPass(mover, src))
+		mover.Bump(src, 1)
 		return 0
 
-	// first, check objects to block exit that are not on the border
-	for(var/atom/movable/obstacle in oldloc)
-		if((obstacle.flags & ~ON_BORDER) && (obstacle != O))
-			if(!obstacle.CheckExit(O, src))
-				O.Bump(obstacle, 1)
-				return 0
-
-	// now, check objects to block exit that are on the border
-	for(var/atom/movable/border_obstacle in oldloc)
-		if((border_obstacle.flags & ON_BORDER) && (border_obstacle != O))
-			if(!border_obstacle.CheckExit(O, src))
-				O.Bump(border_obstacle, 1)
-				return 0
-
-	// next, check objects to block entry that are on the border
-	for(var/atom/movable/border_obstacle in contents)
-		if(border_obstacle.flags & ON_BORDER)
-			if(!border_obstacle.CanPass(O, oldloc))
-				O.Bump(border_obstacle, 1)
-				return 0
-
-	// then, check the turf itself
-	if (!CanPass(O, src))
-		O.Bump(src, 1)
-		return 0
-
-	// finally, check objects/mobs to block entry that are not on the border
-	for(var/atom/movable/obstacle in contents)
-		if(obstacle.flags & ~ON_BORDER)
-			if(!obstacle.CanPass(O, oldloc))
-				O.Bump(obstacle, 1)
-				return 0
-
-	return 1 // nothing found to block so return success!
+	//Finally, check objects/mobs to block entry that are not on the border
+	for(var/atom/movable/obstacle in large_dense)
+		/*if(ismob(mover) && mover:client)
+			world << "<span class='danger'>ENTER</span>target(large_dense): [mover] checking CanPass of [obstacle]"*/
+		if(!obstacle.CanPass(mover, mover.loc) && (forget != obstacle) && mover != obstacle)
+			/*if(ismob(mover) && mover:client)
+				world << "<span class='danger'>ENTER</span>target(large_dense): checking: We are bumping into [obstacle]"*/
+			mover.Bump(obstacle, 1)
+			return 0
+	return 1 //Nothing found to block so return success!
 
 /turf/Entered(atom/movable/Obj,atom/OldLoc)
 	var/loopsanity = 100
-	if(ismob(Obj))
-		if(!Obj:lastarea)
-			Obj:lastarea = get_area(Obj.loc)
-		if(Obj:lastarea.has_gravity == 0)
-			inertial_drift(Obj)
 
+	if(ismob(Obj))
+		if(Obj.areaMaster && Obj.areaMaster.has_gravity == 0)
+			inertial_drift(Obj)
 	/*
 		if(Obj.flags & NOGRAV)
 			inertial_drift(Obj)
@@ -125,13 +196,13 @@
 			Obj:inertia_dir = 0
 	..()
 	var/objects = 0
-	for(var/atom/A as mob|obj|turf|area in range(1))
-		if(objects > loopsanity)	break
-		objects++
-		spawn( 0 )
-			if ((A && Obj))
-				A.HasProximity(Obj, 1)
-			return
+	if(Obj && Obj.flags & PROXMOVE)
+		for(var/atom/A as mob|obj|turf|area in range(1))
+			if(objects > loopsanity)	break
+			objects++
+			spawn( 0 )
+				if ((A && Obj) && A.flags & PROXMOVE)
+					A.HasProximity(Obj, 1)
 	return
 
 /turf/proc/is_plating()
@@ -148,7 +219,9 @@
 	return 0
 /turf/proc/is_carpet_floor()
 	return 0
-/turf/proc/is_catwalk()
+/turf/proc/is_arcade_floor()
+	return 0
+/turf/proc/is_mineral_floor()
 	return 0
 /turf/proc/return_siding_icon_state()		//used for grass floors, which have siding.
 	return 0
@@ -163,10 +236,10 @@
 		spawn(5)
 			if((SP && (SP.loc == src)))
 				if(SP.inertia_dir)
-					step(SP, SP.inertia_dir)
+					SP.Move(get_step(SP, SP.inertia_dir), SP.inertia_dir)
 					return
-	if(istype(A, /obj/structure/stool/bed/chair/vehicle/) && src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy-1))
-		var/obj/structure/stool/bed/chair/vehicle/JC = A //A bomb!
+	if(istype(A, /obj/structure/bed/chair/vehicle/) && src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy-1))
+		var/obj/structure/bed/chair/vehicle/JC = A //A bomb!
 		if(JC.Process_Spacemove(1))
 			JC.inertia_dir = 0
 			return
@@ -184,13 +257,14 @@
 			return
 		spawn(5)
 			if((M && !(M.anchored) && !(M.pulledby) && (M.loc == src)))
+				var/mob/living/carbon/carbons = M
+				if(istype(carbons))
+					carbons.update_minimap() //Should this even be here, oh well whatever
 				if(M.inertia_dir)
 					step(M, M.inertia_dir)
-					call(/datum/pda_app/station_map/proc/minimap_update)(M)
 					return
 				M.inertia_dir = M.last_move
 				step(M, M.inertia_dir)
-				call(/datum/pda_app/station_map/proc/minimap_update)(M)
 	return
 
 /turf/proc/levelupdate()
@@ -211,7 +285,7 @@
 		del L
 
 //Creates a new turf
-/turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1)
+/turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0)
 	if (!N)
 		return
 
@@ -228,11 +302,20 @@
 					var/list/temp = list()
 					temp += W
 					c.add(temp,3,1) // report the new open space to the zcontroller
+
+					if(opacity != initialOpacity)
+						UpdateAffectingLights()
+
 					return W
 ///// Z-Level Stuff
 #endif
 
-	var/old_lumcount = lighting_lumcount - initial(lighting_lumcount)
+	var/datum/gas_mixture/env
+
+	var/old_opacity = opacity
+	var/old_dynamic_lighting = dynamic_lighting
+	var/list/old_affecting_lights = affecting_lights
+	var/old_lighting_overlay = lighting_overlay
 
 	//world << "Replacing [src.type] with [N]"
 
@@ -243,7 +326,16 @@
 		//Despite this being called a bunch during explosions,
 		//the zone will only really do heavy lifting once.
 		var/turf/simulated/S = src
+		env = S.air //Get the air before the change
 		if(S.zone) S.zone.rebuild()
+	if(istype(src,/turf/simulated/floor))
+		var/turf/simulated/floor/F = src
+		if(F.floor_tile)
+			returnToPool(F.floor_tile)
+			F.floor_tile = null
+		F = null
+
+	var/atom/movable/overlay/transfer_animation = c_animation
 
 	if(ispath(N, /turf/simulated/floor))
 		//if the old turf had a zone, connect the new turf to it as well - Cael
@@ -253,13 +345,9 @@
 		//	if(!zone.CheckStatus())
 		//		zone.SetStatus(ZONE_ACTIVE)
 
-		var/turf/simulated/W = new N( locate(src.x, src.y, src.z) )
-		//W.Assimilate_Air()
-
-		W.lighting_lumcount += old_lumcount
-		if(old_lumcount != W.lighting_lumcount)
-			W.lighting_changed = 1
-			lighting_controller.changed_turfs += W
+		var/turf/simulated/W = new N(src)
+		if(env)
+			W.air = env //Copy the old environment data over if both turfs were simulated
 
 		if (istype(W,/turf/simulated/floor))
 			W.RemoveLattice()
@@ -270,8 +358,13 @@
 		if(air_master)
 			air_master.mark_for_update(src)
 
+		if(transfer_animation)
+			W.c_animation = transfer_animation
+			transfer_animation.master = W
+
 		W.levelupdate()
-		return W
+
+		. = W
 
 	else
 		//if(zone)
@@ -279,11 +372,7 @@
 		//	if(!zone.CheckStatus())
 		//		zone.SetStatus(ZONE_ACTIVE)
 
-		var/turf/W = new N( locate(src.x, src.y, src.z) )
-		W.lighting_lumcount += old_lumcount
-		if(old_lumcount != W.lighting_lumcount)
-			W.lighting_changed = 1
-			lighting_controller.changed_turfs += W
+		var/turf/W = new N(src)
 
 		if(tell_universe)
 			universe.OnTurfChange(W)
@@ -291,8 +380,23 @@
 		if(air_master)
 			air_master.mark_for_update(src)
 
+		if(transfer_animation)
+			W.c_animation = c_animation
+			transfer_animation.master = W
+
 		W.levelupdate()
-		return W
+
+		. = W
+
+	lighting_overlay = old_lighting_overlay
+	affecting_lights = old_affecting_lights
+	if((old_opacity != opacity) || (dynamic_lighting != old_dynamic_lighting) || force_lighting_update)
+		reconsider_lights()
+	if(dynamic_lighting != old_dynamic_lighting)
+		if(dynamic_lighting)
+			lighting_build_overlays()
+		else
+			lighting_clear_overlays()
 
 /turf/proc/AddDecal(const/image/decal)
 	if(!decals)
@@ -363,8 +467,9 @@
 */
 
 /turf/proc/ReplaceWithLattice()
-	src.ChangeTurf(/turf/space)
-	new /obj/structure/lattice( locate(src.x, src.y, src.z) )
+	src.ChangeTurf(get_base_turf(src.z))
+	if(istype(src, /turf/space))
+		new /obj/structure/lattice(src)
 
 /turf/proc/kill_creatures(mob/U = null)//Will kill people/creatures and damage mechs./N
 //Useful to batch-add creatures to the list.
@@ -377,39 +482,159 @@
 			M.take_damage(100, "brute")
 
 /turf/proc/Bless()
-	if(flags & NOJAUNT)
-		return
 	flags |= NOJAUNT
 
-/turf/proc/AdjacentTurfs()
-	var/L[] = new()
-	for(var/turf/simulated/t in oview(src,1))
-		if(!t.density)
-			if(!LinkBlocked(src, t) && !TurfBlockedNonWindow(t))
-				L.Add(t)
+/////////////////////////////////////////////////////////////////////////
+// Navigation procs
+// Used for A-star pathfinding
+////////////////////////////////////////////////////////////////////////
+
+///////////////////////////
+//Cardinal only movements
+///////////////////////////
+
+// Returns the surrounding cardinal turfs with open links
+// Including through doors openable with the ID
+/turf/proc/CardinalTurfsWithAccess(var/obj/item/weapon/card/id/ID)
+	var/list/L = new()
+	var/turf/simulated/T
+
+	for(var/dir in cardinal)
+		T = get_step(src, dir)
+		if(istype(T) && !T.density)
+			if(!LinkBlockedWithAccess(src, T, ID))
+				L.Add(T)
 	return L
 
-// This Distance proc assumes that only cardinal movement is
+// Returns the surrounding cardinal turfs with open links
+// Don't check for ID, doors passable only if open
+/turf/proc/CardinalTurfs()
+	var/list/L = new()
+	var/turf/simulated/T
+
+	for(var/dir in cardinal)
+		T = get_step(src, dir)
+		if(istype(T) && !T.density)
+			if(!LinkBlocked(src, T))
+				L.Add(T)
+	return L
+
+///////////////////////////
+//All directions movements
+///////////////////////////
+
+// Returns the surrounding simulated turfs with open links
+// Including through doors openable with the ID
+/turf/proc/AdjacentTurfsWithAccess(var/obj/item/weapon/card/id/ID = null,var/list/closed)//check access if one is passed
+	var/list/L = new()
+	var/turf/simulated/T
+	for(var/dir in list(NORTHWEST,NORTHEAST,SOUTHEAST,SOUTHWEST,NORTH,EAST,SOUTH,WEST)) //arbitrarily ordered list to favor non-diagonal moves in case of ties
+		T = get_step(src,dir)
+		if(T in closed) //turf already proceeded in A*
+			continue
+		if(istype(T) && !T.density)
+			if(!LinkBlockedWithAccess(src, T, ID))
+				L.Add(T)
+	return L
+
+//Idem, but don't check for ID and goes through open doors
+/turf/proc/AdjacentTurfs(var/list/closed)
+	var/list/L = new()
+	var/turf/simulated/T
+	for(var/dir in list(NORTHWEST,NORTHEAST,SOUTHEAST,SOUTHWEST,NORTH,EAST,SOUTH,WEST)) //arbitrarily ordered list to favor non-diagonal moves in case of ties
+		T = get_step(src,dir)
+		if(T in closed) //turf already proceeded by A*
+			continue
+		if(istype(T) && !T.density)
+			if(!LinkBlocked(src, T))
+				L.Add(T)
+	return L
+
+// check for all turfs, including unsimulated ones
+/turf/proc/AdjacentTurfsSpace(var/obj/item/weapon/card/id/ID = null, var/list/closed)//check access if one is passed
+	var/list/L = new()
+	var/turf/T
+	for(var/dir in list(NORTHWEST,NORTHEAST,SOUTHEAST,SOUTHWEST,NORTH,EAST,SOUTH,WEST)) //arbitrarily ordered list to favor non-diagonal moves in case of ties
+		T = get_step(src,dir)
+		if(T in closed) //turf already proceeded by A*
+			continue
+		if(istype(T) && !T.density)
+			if(!ID)
+				if(!LinkBlocked(src, T))
+					L.Add(T)
+			else
+				if(!LinkBlockedWithAccess(src, T, ID))
+					L.Add(T)
+	return L
+
+//////////////////////////////
+//Distance procs
+//////////////////////////////
+
+//Distance associates with all directions movement
+/turf/proc/Distance(var/turf/T)
+	return get_dist(src,T)
+
+//  This Distance proc assumes that only cardinal movement is
 //  possible. It results in more efficient (CPU-wise) pathing
 //  for bots and anything else that only moves in cardinal dirs.
-/turf/proc/Distance_cardinal(turf/t)
-	if(!src || !t) return 0
-	return abs(src.x - t.x) + abs(src.y - t.y)
+/turf/proc/Distance_cardinal(turf/T)
+	if(!src || !T) return 0
+	return abs(src.x - T.x) + abs(src.y - T.y)
 
-/turf/proc/Distance(turf/t)
-	if(get_dist(src,t) == 1)
-		var/cost = (src.x - t.x) * (src.x - t.x) + (src.y - t.y) * (src.y - t.y)
-		return sqrt(cost)
-	else
-		return get_dist(src,t)
-/turf/proc/AdjacentTurfsSpace()
-	var/L[] = new()
-	for(var/turf/t in oview(src,1))
-		if(!t.density)
-			if(!LinkBlocked(src, t) && !TurfBlockedNonWindow(t))
-				L.Add(t)
-	return L
+////////////////////////////////////////////////////
+
 
 /turf/proc/cultify()
-	ChangeTurf(/turf/space)
+	if(istype(src, get_base_turf(src.z))) //Don't cultify the base turf, ever
+		return
+	ChangeTurf(get_base_turf(src.z))
+
+/turf/projectile_check()
+	return PROJREACT_WALLS
+
+/turf/singularity_act()
+	if(istype(src, get_base_turf(src.z))) //Don't singulo the base turf, ever
+		return
+	if(intact)
+		for(var/obj/O in contents)
+			if(O.level != 1)
+				continue
+			if(O.invisibility == 101)
+				O.singularity_act()
+	ChangeTurf(get_base_turf(src.z))
+	return(2)
+
+//Return a lattice to allow catwalk building
+/turf/proc/canBuildCatwalk()
+	return BUILD_FAILURE
+
+//Return true to allow lattice building
+/turf/proc/canBuildLattice()
+	return BUILD_FAILURE
+
+//Return a lattice to allow plating building, return 0 for error message, return -1 for silent fail.
+/turf/proc/canBuildPlating()
+	return BUILD_SILENT_FAILURE
+
+/turf/proc/dismantle_wall()
 	return
+
+/turf/change_area(oldarea, newarea)
+	lighting_build_overlays()
+
+/////////////////////////////////////////////////////
+
+/turf/proc/spawn_powerup()
+	spawn(5)
+		var/powerup = pick(
+			50;/obj/structure/powerup/bombup,
+			50;/obj/structure/powerup/fire,
+			50;/obj/structure/powerup/skate,
+			10;/obj/structure/powerup/kick,
+			10;/obj/structure/powerup/line,
+			10;/obj/structure/powerup/power,
+			10;/obj/structure/powerup/skull,
+			5;/obj/structure/powerup/full,
+			)
+		new powerup(src)

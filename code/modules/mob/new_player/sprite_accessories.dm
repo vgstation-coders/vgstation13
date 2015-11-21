@@ -320,6 +320,44 @@
 		icon_state = "hair_toriyama2"
 		gender = MALE
 
+	birdnest
+		name = "Bird Nest"
+		icon_state = "hair_birdnest"
+
+	unkept
+		name = "Unkempt"
+		icon_state = "hair_unkept"
+
+	duelist
+		name = "Duelist"
+		icon_state = "hair_duelist"
+		gender = MALE
+
+	fastline
+		name = "Fastline"
+		icon_state = "hair_fastline"
+		gender = MALE
+
+	modern
+		name = "Modern"
+		icon_state = "hair_modern"
+		gender = FEMALE
+
+	unshavenmohawk
+		name = "Unshaven Mohawk"
+		icon_state = "hair_unshavenmohawk"
+		gender = MALE
+
+	drills
+		name = "Twincurls"
+		icon_state = "hair_twincurl"
+		gender = FEMALE
+
+	minidrills
+		name = "Twincurls 2"
+		icon_state = "hair_twincurl2"
+		gender = FEMALE
+
 	cia
 		name = "CIA"
 		icon_state = "hair_cia"
@@ -498,6 +536,26 @@
 		name = "Dwarf Beard"
 		icon_state = "facial_dwarf"
 
+	britstache
+		name = "Brit Stache"
+		icon_state = "facial_britstache"
+
+	martialartist
+		name = "Martial Artist"
+		icon_state = "facial_martialartist"
+
+	moonshiner
+		name = "Moonshiner"
+		icon_state = "facial_moonshiner"
+
+	tribeard
+		name = "Tri-beard"
+		icon_state = "facial_tribeard"
+
+	unshaven
+		name = "Unshaven"
+		icon_state = "facial_unshaven"
+
 	// Before Goon gets all hot and bothered for "stealing":
 	// A. It's property of SEGA in the first place
 	// B. I sprited this by hand, despite Steve's pleas to the contrary.  I've never played on your server and probably never will.
@@ -654,37 +712,37 @@
 		do_colouration = 0
 
 	vox_quills_kingly
-		name = "Kingly"
+		name = "Vox Kingly"
 		icon_state = "vox_kingly"
 		species_allowed = list("Vox")
 		do_colouration = 0
 
 	vox_quills_afro
-		name = "Afro"
+		name = "Vox Afro"
 		icon_state = "vox_afro"
 		species_allowed = list("Vox")
 		do_colouration = 0
 
 	vox_quills_mohawk
-		name = "Mohawk"
+		name = "Vox Mohawk"
 		icon_state = "vox_mohawk"
 		species_allowed = list("Vox")
 		do_colouration = 0
 
 	vox_quills_yasu
-		name = "Yasuhiro"
+		name = "Vox Yasuhiro"
 		icon_state = "vox_yasu"
 		species_allowed = list("Vox")
 		do_colouration = 0
 
 	vox_quills_horns
-		name = "Quorns"
+		name = "Vox Quorns"
 		icon_state = "vox_horns"
 		species_allowed = list("Vox")
 		do_colouration = 0
 
 	vox_quills_nights
-		name = "Nights"
+		name = "Vox Nights"
 		icon_state = "vox_nights"
 		species_allowed = list("Vox")
 		do_colouration = 0
@@ -728,13 +786,13 @@
 		do_colouration = 0
 
 	vox_face_colonel
-		name = "Colonel"
+		name = "Vox Colonel"
 		icon_state = "vox_colonel"
 		species_allowed = list("Vox")
 		do_colouration = 0
 
 	vox_face_fu
-		name = "Fu"
+		name = "Quill Fu"
 		icon_state = "vox_fu"
 		species_allowed = list("Vox")
 		do_colouration = 0

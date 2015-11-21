@@ -1,51 +1,126 @@
 /mob/living/silicon/ai/say(var/message)
-	if(parent && istype(parent) && parent.stat != 2)
+	if(parent && istype(parent) && parent.stat != 2) //If there is a defined "parent" AI, it is actually an AI, and it is alive, anything the AI tries to say is said by the parent instead.
 		parent.say(message)
 		return
-		//If there is a defined "parent" AI, it is actually an AI, and it is alive, anything the AI tries to say is said by the parent instead.
 	..(message)
 
-/mob/living/silicon/ai/say_understands(var/other)
-	if (istype(other, /mob/living/carbon/human))
-		return 1
-	if (istype(other, /mob/living/silicon/robot))
-		return 1
-	if (istype(other, /mob/living/silicon/decoy))
-		return 1
-	if (istype(other, /mob/living/carbon/brain))
-		return 1
-	if (istype(other, /mob/living/silicon/pai))
-		return 1
-	return ..()
+
+/mob/living/silicon/ai/render_speaker_track_start(var/datum/speech/speech)
+	//this proc assumes that the message originated from a radio. if the speaker is not a virtual speaker this will probably fuck up hard.
+	var/mob/M = speech.speaker.GetSource()
+
+	var/atom/movable/virt_speaker = speech.radio
+	if(!virt_speaker || !istype(virt_speaker, /obj/item/device/radio))
+		virt_speaker = src
+	if(speech.speaker != src && M != src)
+		if(M)
+			var/faketrack = "byond://?src=\ref[virt_speaker];track2=\ref[src];track=\ref[M]"
+			if(speech.speaker.GetTrack())
+				faketrack = "byond://?src=\ref[virt_speaker];track2=\ref[src];faketrack=\ref[M]"
+
+			return "<a href='byond://?src=\ref[virt_speaker];open2=\ref[src];open=\ref[M]'>\[OPEN\]</a> <a href='[faketrack]'>"
+	return ""
+
+/mob/living/silicon/ai/render_speaker_track_end(var/datum/speech/speech)
+	//this proc assumes that the message originated from a radio. if the speaker is not a virtual speaker this will probably fuck up hard.
+	var/mob/M = speech.speaker.GetSource()
+
+	var/atom/movable/virt_speaker = speech.radio
+	if(!virt_speaker || !istype(virt_speaker, /obj/item/device/radio))
+		virt_speaker = src
+	if(speech.speaker != src && M != src)
+		if(M)
+			return "</a>"
+	return ""
+
 
 /mob/living/silicon/ai/say_quote(var/text)
 	var/ending = copytext(text, length(text))
 
 	if (ending == "?")
-		return "queries, \"[text]\"";
+		return "queries, [text]";
 	else if (ending == "!")
-		return "declares, \"[text]\"";
+		return "declares, [text]";
 
-	return "states, \"[text]\"";
+	return "states, [text]";
 
-/mob/living/silicon/ai/proc/IsVocal()
+/mob/living/silicon/ai/IsVocal()
+	return !config.silent_ai
+
+/mob/living/silicon/ai/get_message_mode(message)
+	if(department_radio_keys[copytext(message, 1, 3)] == MODE_DEPARTMENT)
+		return MODE_HOLOPAD
+	else
+		return ..()
+
+/mob/living/silicon/ai/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
+	say_testing(src, "[type]/handle_inherent_channels([message_mode])")
+
+	if(..(speech, message_mode))
+		return 1
+
+	if(message_mode == MODE_HOLOPAD)
+		holopad_talk(speech)
+		return 1
+
+//For holopads only. Usable by AI.
+/mob/living/silicon/ai/proc/holopad_talk(var/datum/speech/speech)
+	say_testing(src, "[type]/holopad_talk()")
+	var/turf/turf = get_turf(src)
+	log_say("[key_name(src)] (@[turf.x],[turf.y],[turf.z]) Holopad: [speech.message]")
+
+	speech.message = trim(speech.message)
+
+	if (!speech.message)
+		return
+
+	var/obj/machinery/hologram/holopad/T = current
+	if(istype(T) && T.hologram && T.master == src)//If there is a hologram and its master is the user.
+		T.send_speech(speech, 7, "R")
+		src << "<i><span class='[speech.render_wrapper_classes()]'>Holopad transmitted, <span class='name'>[real_name]</span> [speech.render_message()]</span></i>"//The AI can "hear" its own message.
+	else
+		src << "No holopad connected."
+	return
+
+/*
+ * This is effectly the exact same code as ..().
+ * The only difference is the source != current check, which also does the same thing.
+/mob/living/silicon/ai/send_speech(var/datum/speech/speech, var/message_range, var/bubble_type)
+	if(isnull(message_range)) message_range = 7
+	if(source != current)
+		return ..()
+
+	var/list/listeners = new/list()
+
+	for (var/mob/living/L in get_hearers_in_view(message_range, speech.speaker))
+		listeners.Add(L)
+
+	listeners.Add(observers)
+
+	var/rendered = compose_message(src, speaking, message)
+
+	for (var/atom/movable/listener in listeners)
+		if (listener)
+			listener.Hear(rendered, src, speaking, message)
+
+	send_speech_bubble(message, bubble_type, listeners)
+*/
 
 var/announcing_vox = 0 // Stores the time of the last announcement
 var/const/VOX_CHANNEL = 200
 var/const/VOX_DELAY = 600
 
 /mob/living/silicon/ai/verb/announcement_help()
-
 	set name = "Announcement Help"
 	set desc = "Display a list of vocal words to announce to the crew."
 	set category = "AI Commands"
 
 
-	var/dat = "Here is a list of words you can type into the 'Announcement' button to create sentences to vocally announce to everyone on the same level at you.<BR> \
+	var/dat = list("Here is a list of words you can type into the 'Announcement' button to create sentences to vocally announce to everyone on the same level at you.<BR> \
 	<UL><LI>You can also click on the word to preview it.</LI>\
 	<LI>You can only say 30 words for every announcement.</LI>\
 	<LI>Do not use punctuation as you would normally, if you want a pause you can use the full stop and comma characters by separating them with spaces, like so: 'Alpha . Test , Bravo'.</LI></UL>\
-	<font class='bad'>WARNING:</font><BR>Misuse of the announcement system will get you job banned.<HR>"
+	<font class='bad'>WARNING:</font><BR>Misuse of the announcement system will get you job banned.<HR>")
 
 	var/index = 0
 	for(var/word in vox_sounds)
@@ -54,13 +129,16 @@ var/const/VOX_DELAY = 600
 		if(index != vox_sounds.len)
 			dat += " / "
 
+	dat = list2text(dat)
 	var/datum/browser/popup = new(src, "announce_help", "Announcement Help", 500, 400)
 	popup.set_content(dat)
 	popup.open()
 
 
 /mob/living/silicon/ai/verb/announcement()
-
+	set name = "Announcement"
+	set desc = "Send an announcement to the crew"
+	set category = "AI Commands"
 	// If we're in an APC, and APC is ded, ABORT
 	if(parent && istype(parent) && parent.stat)
 		return
@@ -117,7 +195,7 @@ var/const/VOX_DELAY = 600
 		play_vox_word(word, src.z, null)
 
 
-var/list/vox_units=list(
+var/list/vox_digits=list(
 	'sound/vox_fem/one.ogg',
 	'sound/vox_fem/two.ogg',
 	'sound/vox_fem/three.ogg',
@@ -140,7 +218,8 @@ var/list/vox_units=list(
 )
 
 var/list/vox_tens=list(
-	'sound/vox_fem/ten.ogg',
+	null,
+	null,
 	'sound/vox_fem/twenty.ogg',
 	'sound/vox_fem/thirty.ogg',
 	'sound/vox_fem/fourty.ogg',
@@ -151,48 +230,15 @@ var/list/vox_tens=list(
 	'sound/vox_fem/ninety.ogg'
 )
 
-// Stolen from here: http://stackoverflow.com/questions/2729752/converting-numbers-in-to-words-c-sharp
+var/list/vox_units=list(
+	null, // Don't yell units
+	'sound/vox_fem/thousand.ogg',
+	'sound/vox_fem/million.ogg',
+	//'sound/vox_fem/billion.ogg'
+)
+
 /proc/vox_num2list(var/number)
-	if(!isnum(number))
-		warning("vox_num2list fed a non-number: [number]")
-		return list()
-	number=round(number)
-	if(number == 0)
-		return list('sound/vox_fem/zero.ogg')
-
-	if(number < 0)
-		return list('sound/vox_fem/minus.ogg') + vox_num2list(abs(number))
-
-	var/list/words=list()
-
-	if (round(number / 1000000) > 0)
-		words += vox_num2list(number / 1000000)
-		words.Add('sound/vox_fem/million.ogg')
-		number %= 1000000
-
-	if (round(number / 1000) > 0)
-		words += vox_num2list(number / 1000)
-		words.Add('sound/vox_fem/thousand.ogg')
-		number %= 1000
-
-	if (round(number / 100) > 0)
-		words += vox_num2list(number / 100)
-		words.Add('sound/vox_fem/hundred.ogg')
-		number %= 100
-
-	if (number > 0)
-		// Sounds fine without the and.
-		//if (words != "")
-		//	words += "and "
-
-		if (number < 20)
-			words += vox_units[number+1]
-		else
-			words += vox_tens[(number / 10)+1]
-			if ((number % 10) > 0)
-				words.Add(vox_units[(number % 10)+1])
-
-	return words
+	return num2words(number, zero='sound/vox_fem/zero.ogg', minus='sound/vox_fem/minus.ogg', hundred='sound/vox_fem/hundred.ogg', digits=vox_digits, tens=vox_tens, units=vox_units)
 
 /proc/play_vox_word(var/word, var/z_level, var/mob/only_listener)
 	word = lowertext(word)

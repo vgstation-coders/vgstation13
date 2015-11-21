@@ -61,6 +61,7 @@ var/datum/cameranet/cameranet = new()
 
 /datum/cameranet/proc/updateVisibility(atom/A, var/opacity_check = 1)
 
+
 	if(!ticker || (opacity_check && !A.opacity))
 		return
 	majorChunkChange(A, 2)
@@ -127,6 +128,7 @@ var/datum/cameranet/cameranet = new()
 // Will check if a mob is on a viewable turf. Returns 1 if it is, otherwise returns 0.
 
 /datum/cameranet/proc/checkCameraVis(mob/living/target as mob)
+
 
 	// 0xf = 15
 	var/turf/position = get_turf(target)

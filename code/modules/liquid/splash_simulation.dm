@@ -30,6 +30,7 @@ datum/puddle/Del()
 
 client/proc/splash()
 	set category = "Debug"
+
 	var/volume = input("Volume?","Volume?", 0 ) as num
 	if(!isnum(volume)) return
 	if(volume <= LIQUID_TRANSFER_THRESHOLD) return
@@ -72,9 +73,10 @@ obj/effect/liquid/New()
 
 obj/effect/liquid/proc/spread()
 
+
 	//world << "DEBUG: liquid spread!"
 	var/surrounding_volume = 0
-	var/list/spread_directions = list(1,2,4,8)
+	var/list/spread_directions = cardinal
 	var/turf/loc_turf = loc
 	for(var/direction in spread_directions)
 		var/turf/T = get_step(src,direction)

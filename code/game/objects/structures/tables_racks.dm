@@ -20,30 +20,36 @@
 	layer = 2.8
 	throwpass = 1	//You can throw objects over this, despite it's density.")
 	var/parts = /obj/item/weapon/table_parts
+	var/icon/clicked
 	var/flipped = 0
 	var/health = 100
 
 /obj/structure/table/proc/update_adjacent()
-	for(var/direction in list(1,2,4,8,5,6,9,10))
-		if(locate(/obj/structure/table,get_step(src,direction)))
-			var/obj/structure/table/T = locate(/obj/structure/table,get_step(src,direction))
+	for(var/direction in alldirs)
+		if(locate(/obj/structure/table, get_step(src, direction)))
+			var/obj/structure/table/T = locate(/obj/structure/table, get_step(src, direction))
 			T.update_icon()
 
 /obj/structure/table/cultify()
-	new /obj/structure/table/woodentable(loc)
-	..()
+	new /obj/structure/table/woodentable(loc) //See New() for qdel
 
 /obj/structure/table/New()
 	..()
 	for(var/obj/structure/table/T in src.loc)
 		if(T != src)
-			del(T)
+			qdel(T)
 	update_icon()
 	update_adjacent()
 
 /obj/structure/table/Destroy()
 	update_adjacent()
 	..()
+
+/obj/structure/table/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.destroy)
+		src.ex_act(1)
+	..()
+	return 0
 
 /obj/structure/table/proc/destroy()
 	new parts(loc)
@@ -54,6 +60,9 @@
 	new parts(loc)
 	density = 0
 	qdel(src)
+
+/obj/structure/table/proc/can_disassemble()
+	return 1
 
 /obj/structure/table/update_icon()
 	spawn(2) //So it properly updates when deleting
@@ -81,7 +90,7 @@
 			return 1
 
 		var/dir_sum = 0
-		for(var/direction in list(1,2,4,8,5,6,9,10))
+		for(var/direction in alldirs)
 			var/skip_sum = 0
 			for(var/obj/structure/window/W in src.loc)
 				if(W.dir == direction) //So smooth tables don't go smooth through windows
@@ -210,10 +219,12 @@
 				icon_state = "[initial(icon_state)]_dir2"
 			if(6)
 				icon_state = "[initial(icon_state)]_dir3"
-		if (dir_sum in list(1,2,4,8,5,6,9,10))
+		if (dir_sum in alldirs)
 			dir = dir_sum
 		else
 			dir = 2
+
+	clicked = new/icon(src.icon, src.icon_state, src.dir) //giving you runtime icon access is too byond Byond
 
 /obj/structure/table/ex_act(severity)
 	switch(severity)
@@ -239,7 +250,7 @@
 	if(M_HULK in user.mutations)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		visible_message("<span class='danger'>[user] smashes the [src] apart!</span>")
-		user.changeNext_move(8)
+		user.delayNextAttack(8)
 		destroy()
 
 
@@ -267,6 +278,10 @@
 	if(air_group || (height==0)) return 1
 	if(istype(mover,/obj/item/projectile))
 		return (check_cover(mover,target))
+	if(ismob(mover))
+		var/mob/M = mover
+		if(M.flying)
+			return 1
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
 	if (flipped)
@@ -275,6 +290,11 @@
 		else
 			return 1
 	return 0
+
+/obj/structure/table/Bumped(atom/AM)
+	if (istype(AM, /obj/structure/bed/chair/vehicle/wizmobile))
+		destroy()
+	return ..()
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the table. Returns 1 if it can, 0 if bullet stops.
 /obj/structure/table/proc/check_cover(obj/item/projectile/P, turf/from)
@@ -316,57 +336,51 @@
 /obj/structure/table/MouseDrop_T(obj/O as obj, mob/user as mob)
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
 		return
-	if(isrobot(user))
-		return
 	user.drop_item()
 	if (O.loc != src.loc)
 		step(O, get_dir(O, src))
 	return
 
 
-/obj/structure/table/attackby(obj/item/W as obj, mob/user as mob)
+/obj/structure/table/attackby(obj/item/W as obj, mob/user as mob, params)
 	if (!W) return
+
+	var/list/params_list = params2list(params)
+
 	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
 		var/obj/item/weapon/grab/G = W
 		if (istype(G.affecting, /mob/living))
 			var/mob/living/M = G.affecting
 			if (G.state < 2)
-				if(user.a_intent == "hurt")
+				if(user.a_intent == I_HURT)
 					if (prob(15))	M.Weaken(5)
 					M.apply_damage(8,def_zone = "head")
-					visible_message("\red [G.assailant] slams [G.affecting]'s face against \the [src]!")
+					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
 				else
-					user << "\red You need a better grip to do that!"
+					user << "<span class='warning'>You need a better grip to do that!</span>"
 					return
 			else
 				G.affecting.loc = src.loc
 				G.affecting.Weaken(5)
-				visible_message("\red [G.assailant] puts [G.affecting] on \the [src].")
-			del(W)
+				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
+			returnToPool(W)
 			return
 
-	if (istype(W, /obj/item/weapon/wrench))
-		user << "\blue Now disassembling table"
+	if (istype(W, /obj/item/weapon/wrench) && can_disassemble())
+		//if(!params_list.len || text2num(params_list["icon-y"]) < 8) //8 above the bottom of the icon
+		user << "<span class='notice'>Now disassembling table</span>"
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		if(do_after(user,50))
+		if(do_after(user, src,50))
 			destroy()
 		return
 
-	if(isrobot(user))
-		return
-
-	if(istype(W, /obj/item/weapon/melee/energy/blade))
-		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
-		spark_system.set_up(5, 0, src.loc)
-		spark_system.start()
-		playsound(get_turf(src), 'sound/weapons/blade1.ogg', 50, 1)
-		playsound(get_turf(src), "sparks", 50, 1)
-		for(var/mob/O in viewers(user, 4))
-			O.show_message("\blue The [src] was sliced apart by [user]!", 1, "\red You hear [src] coming apart.", 2)
-		destroy()
-
-	user.drop_item(src)
+	if(user.drop_item(W, src.loc))
+		if(W.loc == src.loc && params_list.len)
+			var/clamp_x = clicked.Width() / 2
+			var/clamp_y = clicked.Height() / 2
+			W.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
+			W.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
 	return
 
 /obj/structure/table/proc/straight_table_check(var/direction)
@@ -514,42 +528,49 @@
 	parts = /obj/item/weapon/table_parts/reinforced
 	var/status = 2
 
+/obj/structure/table/reinforced/can_disassemble()
+	return status != 2
+
 /obj/structure/table/reinforced/flip(var/direction)
 	if (status == 2)
 		return 0
 	else
 		return ..()
 
-/obj/structure/table/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/table/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
+	if(istype(W,/obj/item/weapon/stock_parts/scanning_module))
+		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		if(do_after(user, src, 40))
+			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			var/obj/machinery/optable/OPT = new /obj/machinery/optable(src.loc)
+			var/obj/item/weapon/stock_parts/scanning_module/SM = W
+			OPT.rating = SM.rating
+			user.drop_item(W)
+			qdel(W)
+			qdel(src)
+			return
 	if (istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(!(WT.welding))
-			user.drop_item(src)
-			return
+		if(!(WT.welding)/* || (params_list.len && text2num(params_list["icon-y"]) > 8)*/) //8 above the bottom of the icon
+			return ..()
 		if(WT.remove_fuel(0, user))
 			if(src.status == 2)
-				user << "\blue Now weakening the reinforced table"
+				user << "<span class='notice'>Now weakening the reinforced table</span>"
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-				if (do_after(user, 50))
+				if (do_after(user, src, 50))
 					if(!src || !WT.isOn()) return
-					user << "\blue Table weakened"
+					user << "<span class='notice'>Table weakened</span>"
 					src.status = 1
 			else
-				user << "\blue Now strengthening the reinforced table"
+				user << "<span class='notice'>Now strengthening the reinforced table</span>"
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-				if (do_after(user, 50))
+				if (do_after(user, src, 50))
 					if(!src || !WT.isOn()) return
-					user << "\blue Table strengthened"
+					user << "<span class='notice'>Table strengthened</span>"
 					src.status = 2
 			return
 		return
-
-	if (istype(W, /obj/item/weapon/wrench))
-		if(src.status == 2)
-			user.drop_item(src)
-			return
-
-	..()
+	return ..()
 
 /*
  * Racks
@@ -564,6 +585,13 @@
 	anchored = 1.0
 	throwpass = 1	//You can throw objects over this, despite it's density.
 	var/parts = /obj/item/weapon/rack_parts
+	var/offset_step = 0
+
+/obj/structure/rack/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.destroy)
+		src.ex_act(1)
+	..()
+	return 0
 
 /obj/structure/rack/ex_act(severity)
 	switch(severity)
@@ -596,12 +624,15 @@
 	else
 		return 0
 
+/obj/structure/rack/Bumped(atom/AM)
+	if (istype(AM, /obj/structure/bed/chair/vehicle/wizmobile))
+		destroy()
+	return ..()
+
 /obj/structure/rack/MouseDrop_T(obj/O as obj, mob/user as mob)
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
 		return
-	if(isrobot(user))
-		return
-	user.drop_item()
+	user.drop_item(O)
 	if (O.loc != src.loc)
 		step(O, get_dir(O, src))
 	return
@@ -612,15 +643,22 @@
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		del(src)
 		return
-	if(isrobot(user))
-		return
-	user.drop_item()
-	if(W && W.loc)	W.loc = src.loc
+
+	if(user.drop_item(W, src.loc))
+		if(W.loc == src.loc)
+			switch(offset_step)
+				if(1)
+					W.pixel_x = -3
+					W.pixel_y = 3
+				if(2)
+					W.pixel_x = 0
+					W.pixel_y = 0
+				if(3)
+					W.pixel_x = 3
+					W.pixel_y = -3
+					offset_step = 0
+			offset_step++
 	return 1
-
-/obj/structure/rack/meteorhit(obj/O as obj)
-	del(src)
-
 
 /obj/structure/table/attack_hand(mob/user)
 	if(M_HULK in user.mutations)

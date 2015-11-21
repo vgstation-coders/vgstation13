@@ -129,6 +129,7 @@ proc/check_for_newscaster_updates(type)
 
 proc/announce_newscaster_news(datum/news_announcement/news)
 
+
 	var/datum/feed_message/newMsg = new /datum/feed_message
 	newMsg.author = news.author
 	newMsg.is_admin_message = !news.can_be_redacted

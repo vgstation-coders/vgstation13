@@ -60,7 +60,28 @@
       If receiving object don't know right key, it must ignore encrypted signal in its receive_signal.
 
 */
+var/list/all_radios = list()
+/proc/add_radio(var/obj/item/radio, freq)
+	if(!freq || !radio)
+		return
+	if(!all_radios["[freq]"])
+		all_radios["[freq]"] = list(radio)
+		return freq
 
+	all_radios["[freq]"] |= radio
+	return freq
+
+/proc/remove_radio(var/obj/item/radio, freq)
+	if(!freq || !radio)
+		return
+	if(!all_radios["[freq]"])
+		return
+
+	all_radios["[freq]"] -= radio
+
+/proc/remove_radio_all(var/obj/item/radio)
+	for(var/freq in all_radios)
+		all_radios["[freq]"] -= radio
 /*
 Frequency range: 1200 to 1600
 Radiochat range: 1441 to 1489 (most devices refuse to be tune to other frequency, even during mapmaking)
@@ -83,6 +104,7 @@ Devices:
 
 On the map:
 1311 for prison shuttle console (in fact, it is not used)
+1367 for recycling/mining processing machinery and conveyors
 1435 for status displays
 1437 for atmospherics/fire alerts
 1439 for engine components
@@ -99,32 +121,47 @@ On the map:
 
 var/list/radiochannels = list(
 	"Common" = 1459,
-	"Science" = 1351,
+	"AI Private" = 1447,
+	"Deathsquad" = 1441,
+	"Security" = 1359,
+	"Engineering" = 1357,
 	"Command" = 1353,
 	"Medical" = 1355,
-	"Engineering" = 1357,
-	"Security" = 1359,
-	"Response Team" = 1345,
-	"Deathsquad" = 1341,
-	"Syndicate" = 1213,
+	"Science" = 1351,
+	"Service" = 1349,
 	"Supply" = 1347,
-	"Service" = 1349
-)
-//depenging helpers
-var/list/DEPT_FREQS = list(
-	1351,
-	1355,
-	1357,
-	1359,
-	1213,
-	1345,
-	1341,
-	1347,
-	1349
+	"Response Team" = 1345,
+	"Syndicate" = 1213,
+	"DJ" = 1201
 )
 
+var/list/radiochannelsreverse = list(
+	"1201" = "DJ",
+	"1213" = "Syndicate",
+	"1345" = "Response Team",
+	"1347" = "Supply",
+	"1349" = "Service",
+	"1351" = "Science",
+	"1355" = "Medical",
+	"1353" = "Command",
+	"1357" = "Engineering",
+	"1359" = "Security",
+	"1441" = "Deathsquad",
+	"1447" = "AI Private",
+	"1459" = "Common"
+)
+
+
+//depenging helpers
+var/const/SUPP_FREQ = 1347 //supply, coloured light brown in chat window
+var/const/SERV_FREQ = 1349 //service, coloured green in chat window
+var/const/DSQUAD_FREQ = 1441 //death squad frequency, coloured grey in chat window
+var/const/RESTEAM_FREQ = 1345 //response team frequency, uses the deathsquad color at the moment.
+var/const/AIPRIV_FREQ = 1447 //AI private, colored magenta in chat window
+var/const/DJ_FREQ = 1201 //Media
+
 // central command channels, i.e deathsquid & response teams
-var/list/CENT_FREQS = list(1345, 1341)
+var/list/CENT_FREQS = list(1345, 1441)
 
 var/const/COMM_FREQ = 1353 //command, colored gold in chat window
 var/const/SYND_FREQ = 1213
@@ -143,7 +180,7 @@ var/const/SER_FREQ = 1349
 /* filters */
 var/const/RADIO_TO_AIRALARM = "1"
 var/const/RADIO_FROM_AIRALARM = "2"
-var/const/RADIO_CHAT = "3"
+var/const/RADIO_CHAT = "3" //deprecated
 var/const/RADIO_ATMOSIA = "4"
 var/const/RADIO_NAVBEACONS = "5"
 var/const/RADIO_AIRLOCK = "6"
@@ -182,67 +219,68 @@ var/global/datum/controller/radio/radio_controller
 /datum/controller/radio/proc/return_frequency(const/_frequency)
 	return frequencies[num2text(_frequency)]
 
-datum/radio_frequency
+/datum/radio_frequency
 	var/frequency as num
 	var/list/list/obj/devices = list()
 
-	proc
-		post_signal(obj/source as obj|null, datum/signal/signal, var/filter = null as text|null, var/range = null as num|null)
-			//log_admin("DEBUG \[[world.timeofday]\]: post_signal {source=\"[source]\", [signal.debug_print()], filter=[filter]}")
-//			var/N_f=0
-//			var/N_nf=0
-//			var/Nt=0
-			var/turf/start_point
+/datum/radio_frequency/proc/post_signal(obj/source as obj|null, datum/signal/signal, var/filter = null as text|null, var/range = null as num|null)
+	//log_admin("DEBUG \[[world.timeofday]\]: post_signal {source=\"[source]\", [signal.debug_print()], filter=[filter]}")
+	//var/N_f=0
+	//var/N_nf=0
+	//var/Nt=0
+	var/turf/start_point
+	if(range)
+		start_point = get_turf(source)
+		if(!start_point)
+			returnToPool(signal)
+			return 0
+
+	if (filter) //here goes some copypasta. It is for optimisation. -rastaf0
+		for(var/obj/device in devices[filter])
+			if(device == source)
+				continue
 			if(range)
-				start_point = get_turf(source)
-				if(!start_point)
-//					del(signal)
-					return 0
-			if (filter) //here goes some copypasta. It is for optimisation. -rastaf0
-				for(var/obj/device in devices[filter])
-					if(device == source)
+				var/turf/end_point = get_turf(device)
+				if(!end_point)
+					continue
+				//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
+				if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
+					continue
+			device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
+		for(var/obj/device in devices["_default"])
+			if(device == source)
+				continue
+			if(range)
+				var/turf/end_point = get_turf(device)
+				if(!end_point)
+					continue
+				//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
+				if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
+					continue
+			device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
+			//N_f++
+
+	else
+		for (var/next_filter in devices)
+			//var/list/obj/DDD = devices[next_filter]
+			//Nt+=DDD.len
+			for(var/obj/device in devices[next_filter])
+				if(device == source)
+					continue
+				if(range)
+					var/turf/end_point = get_turf(device)
+					if(!end_point)
 						continue
-					if(range)
-						var/turf/end_point = get_turf(device)
-						if(!end_point)
-							continue
-						//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
-						if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
-							continue
-					device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
-				for(var/obj/device in devices["_default"])
-					if(device == source)
+					//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
+					if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
 						continue
-					if(range)
-						var/turf/end_point = get_turf(device)
-						if(!end_point)
-							continue
-						//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
-						if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
-							continue
-					device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
-//					N_f++
-			else
-				for (var/next_filter in devices)
-//					var/list/obj/DDD = devices[next_filter]
-//					Nt+=DDD.len
-					for(var/obj/device in devices[next_filter])
-						if(device == source)
-							continue
-						if(range)
-							var/turf/end_point = get_turf(device)
-							if(!end_point)
-								continue
-							//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
-							if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
-								continue
-						device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
-//						N_nf++
+				device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
+				//N_nf++
 
-//			log_admin("DEBUG: post_signal(source=[source] ([source.x], [source.y], [source.z]),filter=[filter]) frequency=[frequency], N_f=[N_f], N_nf=[N_nf]")
+	//log_admin("DEBUG: post_signal(source=[source] ([source.x], [source.y], [source.z]),filter=[filter]) frequency=[frequency], N_f=[N_f], N_nf=[N_nf]")
 
 
-//			del(signal)
+	returnToPool(signal)
 
 /datum/radio_frequency/proc/add_listener(const/obj/device, var/filter)
 	if(!filter) // FIXME
@@ -289,12 +327,16 @@ var/list/pointers = list()
 			src << S.debug_print()
 
 /obj/proc/receive_signal(datum/signal/signal, receive_method, receive_param)
-	return null
+	return
+
+#define SIGNAL_WIRE     0
+#define SIGNAL_RADIO    1
+#define SIGNAL_SUBSPACE 2
 
 /datum/signal
 	var/obj/source
 
-	var/transmission_method = 0
+	var/transmission_method = SIGNAL_WIRE
 	//0 = wire
 	//1 = radio transmission
 	//2 = subspace transmission
@@ -308,9 +350,14 @@ var/list/pointers = list()
 	..()
 	pointers += "\ref[src]"
 
-/datum/signal/Del()
+/datum/signal/Destroy()
 	pointers -= "\ref[src]"
-	..()
+
+/datum/signal/resetVariables()
+	. = ..("data")
+
+	source = null
+	data = list()
 
 /datum/signal/proc/copy_from(datum/signal/model)
 	source = model.source

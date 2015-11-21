@@ -10,6 +10,9 @@
 
 	volume = 750
 
+	var/minrate = 0//probably useless, but whatever
+	var/maxrate = 10 * ONE_ATMOSPHERE
+
 /obj/machinery/portable_atmospherics/scrubber/emp_act(severity)
 	if(stat & (BROKEN|NOPOWER))
 		..(severity)
@@ -38,7 +41,7 @@
 		name = "[name] (ID [id])"
 
 	attack_hand(var/mob/user as mob)
-		usr << "\blue You can't directly interact with this machine. Use the area atmos computer."
+		usr << "<span class='notice'>You can't directly interact with this machine. Use the area atmos computer.</span>"
 
 	update_icon()
 		src.overlays = 0
@@ -51,12 +54,12 @@
 	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 		if(istype(W, /obj/item/weapon/wrench))
 			if(on)
-				user << "\blue Turn it off first!"
+				user << "<span class='notice'>Turn it off first!</span>"
 				return
 
 			anchored = !anchored
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-			user << "\blue You [anchored ? "wrench" : "unwrench"] \the [src]."
+			user << "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>"
 
 			return
 
@@ -67,7 +70,7 @@
 
 	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 		if(istype(W, /obj/item/weapon/wrench))
-			user << "\blue The bolts are too tight for you to unscrew!"
+			user << "<span class='notice'>The bolts are too tight for you to unscrew!</span>"
 			return
 
 		..()
@@ -154,54 +157,51 @@
 	return src.attack_hand(user)
 
 /obj/machinery/portable_atmospherics/scrubber/attack_hand(var/mob/user as mob)
-
-	user.set_machine(src)
-	var/holding_text
-
-	if(holding)
-		holding_text = {"<BR><B>Tank Pressure</B>: [holding.air_contents.return_pressure()] KPa<BR>
-<A href='?src=\ref[src];remove_tank=1'>Remove Tank</A><BR>
-"}
-	var/output_text = {"<TT><B>[name]</B><BR>
-Pressure: [air_contents.return_pressure()] KPa<BR>
-Port Status: [(connected_port)?("Connected"):("Disconnected")]
-[holding_text]
-<BR>
-Power Switch: <A href='?src=\ref[src];power=1'>[on?("On"):("Off")]</A><BR>
-Power regulator: <A href='?src=\ref[src];volume_adj=-1000'>-</A> <A href='?src=\ref[src];volume_adj=-100'>-</A> <A href='?src=\ref[src];volume_adj=-10'>-</A> <A href='?src=\ref[src];volume_adj=-1'>-</A> [volume_rate] <A href='?src=\ref[src];volume_adj=1'>+</A> <A href='?src=\ref[src];volume_adj=10'>+</A> <A href='?src=\ref[src];volume_adj=100'>+</A> <A href='?src=\ref[src];volume_adj=1000'>+</A><BR>
-
-<HR>
-<A href='?src=\ref[user];mach_close=scrubber'>Close</A><BR>
-"}
-
-	user << browse(output_text, "window=scrubber;size=600x300")
-	onclose(user, "scrubber")
+	ui_interact(user)
 	return
+
+/obj/machinery/portable_atmospherics/scrubber/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+	var/list/data[0]
+	data["portConnected"] = connected_port ? 1 : 0
+	data["tankPressure"] = round(air_contents.return_pressure() > 0 ? air_contents.return_pressure() : 0)
+	data["rate"] = round(volume_rate)
+	data["minrate"] = round(minrate)
+	data["maxrate"] = round(maxrate)
+	data["on"] = on ? 1 : 0
+
+	data["hasHoldingTank"] = holding ? 1 : 0
+	if (holding)
+		data["holdingTank"] = list("name" = holding.name, "tankPressure" = round(holding.air_contents.return_pressure() > 0 ? holding.air_contents.return_pressure() : 0))
+
+	// update the ui if it exists, returns null if no ui is passed/found
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	if (!ui)
+		// the ui does not exist, so we'll create a new() one
+        // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
+		ui = new(user, src, ui_key, "portscrubber.tmpl", "Portable Scrubber", 480, 400)
+		// when the ui is first opened this is the data it will use
+		ui.set_initial_data(data)
+		// open the new ui window
+		ui.open()
+		// auto update every Master Controller tick
+		ui.set_auto_update(1)
 
 /obj/machinery/portable_atmospherics/scrubber/Topic(href, href_list)
-	..()
-	if (usr.stat || usr.restrained())
-		return
+	. = ..()
+	if(.)
+		return .
 
-	if (((get_dist(src, usr) <= 1) && istype(src.loc, /turf)))
-		usr.set_machine(src)
-
-		if(href_list["power"])
-			on = !on
-
-		if (href_list["remove_tank"])
-			if(holding)
-				holding.loc = loc
-				holding = null
-
-		if (href_list["volume_adj"])
-			var/diff = text2num(href_list["volume_adj"])
-			volume_rate = min(10*ONE_ATMOSPHERE, max(0, volume_rate+diff))
-
-		src.updateUsrDialog()
-		src.add_fingerprint(usr)
+	if(href_list["power"])
+		on = !on
 		update_icon()
-	else
-		usr << browse(null, "window=scrubber")
-		return
-	return
+
+	if(href_list["remove_tank"])
+		if(holding)
+			holding.loc = loc
+			holding = null
+
+	if(href_list["volume_adj"])
+		var/diff = text2num(href_list["volume_adj"])
+		volume_rate = Clamp(volume_rate+diff, minrate, maxrate)
+
+	src.add_fingerprint(usr)

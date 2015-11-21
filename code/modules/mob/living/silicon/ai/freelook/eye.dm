@@ -5,6 +5,7 @@
 
 /mob/camera/aiEye
 	name = "Inactive AI Eye"
+	anchored = TRUE
 
 	var/list/visibleCameraChunks = list()
 	var/mob/living/silicon/ai/ai = null
@@ -13,16 +14,23 @@
 // Use this when setting the aiEye's location.
 // It will also stream the chunk that the new loc is in.
 
-/mob/camera/aiEye/setLoc(var/T)
-
+/mob/camera/aiEye/forceMove(var/atom/destination)
 	if(ai)
 		if(!isturf(ai.loc))
 			return
-		T = get_turf(T)
-		loc = T
+		if(!isturf(destination))
+			for(destination = destination.loc; !isturf(destination); destination = destination.loc);
+		forceEnter(destination)
+
 		cameranet.visibility(src)
-		if(ai.client)
+		if(ai.client && ai.client.eye != src) // Set the eye to us and give the AI the sight & visibility flags it needs.
 			ai.client.eye = src
+			ai.sight |= SEE_TURFS
+			ai.sight |= SEE_MOBS
+			ai.sight |= SEE_OBJS
+			ai.see_in_dark = 8
+			ai.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+
 		//Holopad
 		if(istype(ai.current, /obj/machinery/hologram/holopad))
 			var/obj/machinery/hologram/holopad/H = ai.current
@@ -30,6 +38,19 @@
 
 /mob/camera/aiEye/Move()
 	return 0
+
+//An AI eyeobj mob cant have a virtualhearer to hear with unless it gets one from a malf module
+/mob/camera/aiEye/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if(speech.frequency) //HOW CAN IT POSSIBLY READ LIPS THROUGH RADIOS
+		return
+
+	var/mob/M = speech.speaker
+	if(istype(M))
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = speech.speaker
+			if(H.check_body_part_coverage(MOUTH)) //OR MASKS
+				return
+		ai.Hear(args) //He can only read the lips of mobs, I cant think of objects using lips
 
 
 // AI MOVEMENT
@@ -61,9 +82,9 @@
 		var/mob/living/silicon/ai/AI = usr
 		if(AI.eyeobj && AI.client.eye == AI.eyeobj)
 			AI.cameraFollow = null
-			//AI.eyeobj.setLoc(src)
+			//AI.eyeobj.forceMove(src)
 			if (isturf(src.loc) || isturf(src))
-				AI.eyeobj.setLoc(src)
+				AI.eyeobj.forceMove(src)
 
 /mob/living/Click()
 	if(isAI(usr))
@@ -82,6 +103,7 @@
 
 /client/proc/AIMove(n, direct, var/mob/living/silicon/ai/user)
 
+
 	var/initial = initial(user.sprint)
 	var/max_sprint = 50
 
@@ -91,7 +113,7 @@
 	for(var/i = 0; i < max(user.sprint, initial); i += 20)
 		var/turf/step = get_turf(get_step(user.eyeobj, direct))
 		if(step)
-			user.eyeobj.setLoc(step)
+			user.eyeobj.forceMove(step)
 
 	user.cooldown = world.timeofday + 5
 	if(user.acceleration)
@@ -108,20 +130,27 @@
 
 /mob/living/silicon/ai/proc/view_core()
 
+
 	current = null
 	cameraFollow = null
 	unset_machine()
 
 	if(src.eyeobj && src.loc)
-		src.eyeobj.loc = src.loc
+		//src.eyeobj.loc = src.loc
+		src.eyeobj.forceMove(src.loc)
 	else
 		src << "ERROR: Eyeobj not found. Creating new eye..."
 		src.eyeobj = new(src.loc)
 		src.eyeobj.ai = src
 		src.eyeobj.name = "[src.name] (AI Eye)" // Give it a name
+		src.eyeobj.forceMove(src.loc)
 
-	if(client && client.eye)
+	if(client && client.eye) // Reset these things so the AI can't view through walls and stuff.
 		client.eye = src
+		sight &= ~(SEE_TURFS | SEE_MOBS | SEE_OBJS)
+		see_in_dark = 0
+		see_invisible = SEE_INVISIBLE_LIVING
+
 	for(var/datum/camerachunk/c in eyeobj.visibleCameraChunks)
 		c.remove(eyeobj)
 

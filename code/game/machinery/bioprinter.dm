@@ -12,14 +12,10 @@
 	use_power = 1
 	idle_power_usage = 50
 
-	l_color = "#7BF9FF"
-
-	power_change()
-		..()
-		if(!(stat & (BROKEN|NOPOWER)))
-			SetLuminosity(2)
-		else
-			SetLuminosity(0)
+	light_color = LIGHT_COLOR_CYAN
+	light_range_on = 3
+	light_power_on = 2
+	use_auto_lights = 1
 
 	var/prints_prosthetics
 	var/stored_matter = 200
@@ -92,21 +88,21 @@
 	else if(!prints_prosthetics && istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
 		visible_message("<span class='notice'>\The [src] processes \the [W].</span>")
 		stored_matter += 50
-		user.drop_item()
-		del(W)
+		user.drop_item(W)
+		qdel(W)
 		return
 	// Steel for matter.
 	else if(prints_prosthetics && istype(W, /obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/M = W
 		visible_message("<span class='notice'>\The [src] processes \the [W].</span>")
 		stored_matter += M.amount * 10
-		user.drop_item()
-		del(W)
+		user.drop_item(M)
+		returnToPool(M)
 		return
 	else if(istype(W, /obj/item/weapon/wrench))
 		user.visible_message("<span class='notice'>[user] begins to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You begin to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		if(do_after(user, 30))
+		if(do_after(user, src, 30))
 			user.visible_message("<span class='notice'>[user] begins to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
 			if(anchored)
 				src.anchored = 0

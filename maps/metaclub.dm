@@ -6,6 +6,7 @@
 /datum/map/active
 	nameShort = "meta"
 	nameLong = "Meta Club"
+	map_dir = "metaclub"
 	tDomeX = 128
 	tDomeY = 69
 	tDomeZ = 2
@@ -21,12 +22,15 @@
 		/datum/zLevel/mining,
 		/datum/zLevel/space{
 			name = "spaceEmpty1" ;
-			},
-		/datum/zLevel/space{
-			name = "spaceEmpty2" ;
-			},
+			}
 		)
 
-////////////////////////////////////////////////////////////////
 
+
+// Metaclub areas
+/area/science/xenobiology/specimen_7
+	name = "\improper Xenobiology Specimen Cage 7"
+	icon_state = "xenocell7"
+
+////////////////////////////////////////////////////////////////
 #include "metaclub.dmm"

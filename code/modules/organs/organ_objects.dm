@@ -18,7 +18,7 @@
 /obj/item/organ/attack_self(mob/user as mob)
 
 	// Convert it to an edible form, yum yum.
-	if(!robotic && user.a_intent == "help" && user.zone_sel.selecting == "mouth")
+	if(!robotic && user.a_intent == I_HELP && user.zone_sel.selecting == "mouth")
 		bitten(user)
 		return
 
@@ -63,6 +63,7 @@
 
 /obj/item/organ/proc/roboticize()
 
+
 	robotic = (organ_data && organ_data.robotic) ? organ_data.robotic : 1
 
 	if(prosthetic_name)
@@ -74,6 +75,7 @@
 		//TODO: convert to greyscale.
 
 /obj/item/organ/proc/update()
+
 
 	if(!organ_tag || !organ_type)
 		return
@@ -158,6 +160,7 @@
 
 /obj/item/organ/proc/removed(var/mob/living/target,var/mob/living/user)
 
+
 	if(!target || !user)
 		return
 
@@ -216,10 +219,11 @@
 
 /obj/item/organ/proc/bitten(mob/user)
 
+
 	if(robotic)
 		return
 
-	user << "\blue You take an experimental bite out of \the [src]."
+	user << "<span class='notice'>You take an experimental bite out of \the [src].</span>"
 	var/datum/reagent/blood = reagents.reagent_list["blood"]
 	blood_splatter(src,blood,1)
 

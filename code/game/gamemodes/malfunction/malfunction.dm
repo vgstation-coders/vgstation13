@@ -34,7 +34,11 @@
 		if(player.mind && player.mind.assigned_role == "AI" && player.client.desires_role(ROLE_MALF))
 			malf_ai+=player.mind
 	if(malf_ai.len)
+		log_admin("Starting a round of AI malfunction.")
+		message_admins("Starting a round of AI malfunction.")
 		return 1
+	log_admin("Failed to set-up a round of AI malfunction. Didn't find any malf-volunteer AI.")
+	message_admins("Failed to set-up a round of AI malfunction. Didn't find any malf-volunteer AI.")
 	return 0
 
 
@@ -50,7 +54,7 @@ Rebooting world in 5 seconds."}
 				blackbox.save_all_data_to_sql()
 			CallHook("Reboot",list())
 			if (watchdog.waiting)
-				world << "\blue <B>Server will shut down for an automatic update in a few seconds.</B>"
+				world << "<span class='notice'><B>Server will shut down for an automatic update in a few seconds.</B></span>"
 				watchdog.signal_ready()
 				return
 			sleep(50)
@@ -99,13 +103,13 @@ Once done, you will be able to interface with all systems, notably the onboard n
 
 
 /datum/game_mode/malfunction/process()
-	if (apcs >= 3 && malf_mode_declared)
-		AI_win_timeleft -= ((apcs/6)*last_tick_duration) //Victory timer now de-increments based on how many APCs are hacked. --NeoFite
-	..()
-	if (AI_win_timeleft<=0)
-		check_win()
-	return
+	if(apcs >= 3 && malf_mode_declared)
+		AI_win_timeleft -= ((apcs / 6) * tickerProcess.getLastTickerTimeDuration()) //Victory timer now de-increments based on how many APCs are hacked. --NeoFite
 
+	..()
+
+	if(AI_win_timeleft <= 0)
+		check_win()
 
 /datum/game_mode/malfunction/check_win()
 	if (AI_win_timeleft <= 0 && !station_captured)
@@ -163,6 +167,7 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 	set category = "Malfunction"
 	set name = "System Override"
 	set desc = "Start the victory timer"
+
 	if (!istype(ticker.mode,/datum/game_mode/malfunction))
 		usr << "<span class='warning'>You cannot begin a takeover in this round type!</span>"
 		return
@@ -183,7 +188,7 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 	for(var/datum/mind/AI_mind in ticker.mode:malf_ai)
 		AI_mind.current.verbs -= /datum/game_mode/malfunction/proc/takeover
 	for(var/mob/M in player_list)
-		if(!istype(M,/mob/new_player))
+		if(!istype(M,/mob/new_player) && M.client)
 			M << sound('sound/AI/aimalf.ogg')
 
 
@@ -210,7 +215,7 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 		AI_mind.current.verbs -= /datum/game_mode/malfunction/proc/ai_win
 	ticker.mode:explosion_in_progress = 1
 	for(var/mob/M in player_list)
-		M << 'sound/machines/Alarm.ogg'
+		if(M.client) M << 'sound/machines/Alarm.ogg'
 	world << "<span class='danger'>Self-destruction signal received. Self-destructing in 10...</span>"
 	for (var/i=9 to 1 step -1)
 		sleep(10)
@@ -231,50 +236,54 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 
 	if      ( station_captured &&                station_was_nuked)
 		feedback_set_details("round_end_result","win - AI win - nuke")
-		world << "<FONT size = 3><B>AI Victory</B></FONT>"
-		world << "<B>Everyone was killed by the self-destruct!</B>"
+		completion_text += "<FONT size = 3><B>AI Victory</B></FONT>"
+		completion_text += "<BR><B>Everyone was killed by the self-destruct!</B>"
 
 	else if ( station_captured &&  malf_dead && !station_was_nuked)
 		feedback_set_details("round_end_result","halfwin - AI killed, staff lost control")
-		world << "<FONT size = 3><B>Neutral Victory</B></FONT>"
-		world << "<B>The AI has been killed!</B> The staff has lose control over the station."
+		completion_text += "<FONT size = 3><B>Neutral Victory</B></FONT>"
+		completion_text += "<BR><B>The AI has been killed!</B> The staff has lose control over the station."
 
 	else if ( station_captured && !malf_dead && !station_was_nuked)
 		feedback_set_details("round_end_result","win - AI win - no explosion")
-		world << "<FONT size = 3><B>AI Victory</B></FONT>"
-		world << "<B>The AI has chosen not to explode you all!</B>"
+		completion_text += "<FONT size = 3><B>AI Victory</B></FONT>"
+		completion_text += "<BR><B>The AI has chosen not to explode you all!</B>"
 
 	else if (!station_captured &&                station_was_nuked)
 		feedback_set_details("round_end_result","halfwin - everyone killed by nuke")
-		world << "<FONT size = 3><B>Neutral Victory</B></FONT>"
-		world << "<B>Everyone was killed by the nuclear blast!</B>"
+		completion_text += "<FONT size = 3><B>Neutral Victory</B></FONT>"
+		completion_text += "<BR><B>Everyone was killed by the nuclear blast!</B>"
 
 	else if (!station_captured &&  malf_dead && !station_was_nuked)
 		feedback_set_details("round_end_result","loss - staff win")
-		world << "<FONT size = 3><B>Human Victory</B></FONT>"
-		world << "<B>The AI has been killed!</B> The staff is victorious."
+		completion_text += "<FONT size = 3><B>Human Victory</B></FONT>"
+		completion_text += "<BR><B>The AI has been killed!</B> The staff is victorious."
 
 	else if (!station_captured && !malf_dead && !station_was_nuked && crew_evacuated)
 		feedback_set_details("round_end_result","halfwin - evacuated")
-		world << "<FONT size = 3><B>Neutral Victory</B></FONT>"
-		world << "<B>The Corporation has lose [station_name()]! All survived personnel will be fired!</B>"
+		completion_text += "<FONT size = 3><B>Neutral Victory</B></FONT>"
+		completion_text += "<BR><B>The Corporation has lose [station_name()]! All survived personnel will be fired!</B>"
 
 	else if (!station_captured && !malf_dead && !station_was_nuked && !crew_evacuated)
 		feedback_set_details("round_end_result","nalfwin - interrupted")
-		world << "<FONT size = 3><B>Neutral Victory</B></FONT>"
-		world << "<B>Round was mysteriously interrupted!</B>"
+		completion_text += "<FONT size = 3><B>Neutral Victory</B></FONT>"
+		completion_text += "<BR><B>Round was mysteriously interrupted!</B>"
 	..()
 	return 1
 
 
 /datum/game_mode/proc/auto_declare_completion_malfunction()
+	var/text = ""
 	if( malf_ai.len || istype(ticker.mode,/datum/game_mode/malfunction) )
-		var/text = "<FONT size = 2><B>The malfunctioning AI were:</B></FONT>"
+		text += "<FONT size = 2><B>The malfunctioning AI were:</B></FONT>"
 
 		for(var/datum/mind/malf in malf_ai)
 
-			text += "<br>[malf.key] was [malf.name] ("
 			if(malf.current)
+				var/icon/flat = getFlatIcon(malf.current)
+				end_icons += flat
+				var/tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[malf.key]</b> was <b>[malf.name]</b> ("}
 				if(malf.current.stat == DEAD)
 					text += "deactivated"
 				else
@@ -282,8 +291,12 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 				if(malf.current.real_name != malf.name)
 					text += " as [malf.current.real_name]"
 			else
+				var/icon/sprotch = icon('icons/mob/robots.dmi', "gib7")
+				end_icons += sprotch
+				var/tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[malf.key]</b> was <b>[malf.name]</b> ("}
 				text += "hardware destroyed"
 			text += ")"
 
-		world << text
-	return 1
+		text += "<BR><HR>"
+	return text

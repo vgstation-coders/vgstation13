@@ -21,7 +21,7 @@ Class Vars:
 Class Procs:
 
 	mark_for_update(turf/T)
-		Adds the turf to the update list. When updated, update_air_properties() will be called.
+		Adds the turf to the update list. When updated, update_air_/properties() will be called.
 		When stuff changes that might affect airflow, call this. It's basically the only thing you need.
 
 	add_zone(zone/Z) and remove_zone(zone/Z)
@@ -41,7 +41,7 @@ Class Procs:
 		Merges the zones to create a single zone.
 
 	connect(turf/simulated/A, turf/B)
-		Called by turf/update_air_properties(). The first argument must be simulated.
+		Called by turf/update_air_/properties(). The first argument must be simulated.
 		Creates a connection between A and B.
 
 	mark_zone_update(zone/Z)
@@ -96,14 +96,14 @@ Class Procs:
 	set background = 1
 	#endif
 
-	world << "\red \b Processing Geometry..."
+	world << "<span class='danger'>Processing Geometry...</span>"
 	sleep(-1)
 
 	var/start_time = world.timeofday
 
 	var/simulated_turf_count = 0
 
-	for(var/turf/simulated/S in world)
+	for(var/turf/simulated/S in turfs)
 		simulated_turf_count++
 		S.update_air_properties()
 
@@ -156,11 +156,12 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 			updated++
 			#endif
 			//sleep(1)
+			tcheck(85,1)
 
 		#ifdef ZASDBG
 		if(updated != updating.len)
 			tick_progress = "[updating.len - updated] tiles left unupdated."
-			world << "\red [tick_progress]"
+			world << "<span class='warning'>[tick_progress]</span>"
 			. = 0
 		#endif
 
@@ -170,6 +171,8 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 
 	for(var/connection_edge/edge in edges)
 		edge.tick()
+		tcheck(85,1)
+
 
 	//Process fires.
 	if(.)
@@ -177,6 +180,7 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 
 	for(var/obj/fire/fire in active_hotspots)
 		fire.process()
+		tcheck(85,1)
 
 	//Process zones.
 	if(.)
@@ -188,6 +192,7 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 		zones_to_update = list()
 		for(var/zone/zone in updating)
 			zone.tick()
+			tcheck(85,1)
 			zone.needs_update = 0
 
 	if(.)
@@ -245,7 +250,7 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 	if(block & AIR_BLOCKED) return
 
 	var/direct = !(block & ZONE_BLOCKED)
-	var/space = !istype(B)
+	var/space = (!istype(B))
 
 	if(direct && !space)
 		if(equivalent_pressure(A.zone,B.zone) || current_cycle == 0)
@@ -295,6 +300,7 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 	return A.air.compare(B.air)
 
 /datum/controller/air_system/proc/get_edge(zone/A, zone/B)
+
 
 	if(istype(B))
 		for(var/connection_edge/zone/edge in A.edges)

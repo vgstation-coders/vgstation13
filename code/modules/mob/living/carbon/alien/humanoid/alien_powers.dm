@@ -51,8 +51,9 @@ Doesn't work on other aliens/AI.*/
 		adjustToxLoss(-10)
 		var/msg = sanitize(input("Message:", "Alien Whisper") as text|null)
 		if(msg)
-			log_say("AlienWhisper: [key_name(src)]->[M.key] : [msg]")
-			M << "<span class='alien'>You hear a strange, alien voice in your head... \italic [msg]</span>"
+			var/turf/T = get_turf(src)
+			log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Alien Whisper: [msg]")
+			M << "<span class='alien'>You hear a strange, alien voice in your head... <em>[msg]</span></em>"
 			src << "<span class='alien'>You said: [msg] to [M]</span>"
 	return
 
@@ -124,8 +125,8 @@ Doesn't work on other aliens/AI.*/
 		playsound(get_turf(src), 'sound/weapons/pierce.ogg', 30, 1)
 		visible_message("<span class='alien'>\The [src] spits neurotoxin at [target] !</span>", "<span class='alien'>You spit neurotoxin at [target] !</span>")
 		//I'm not motivated enough to revise this. Prjectile code in general needs update.
-		var/turf/T = loc
-		var/turf/U = (istype(target, /atom/movable) ? target.loc : target)
+		var/turf/T = get_turf(src)
+		var/turf/U = get_turf(target)
 
 		if(!U || !T)
 			return
@@ -140,10 +141,15 @@ Doesn't work on other aliens/AI.*/
 			return
 
 		var/obj/item/projectile/energy/neurotoxin/A = new /obj/item/projectile/energy/neurotoxin(usr.loc)
-		A.current = U
+		A.original = target
+		A.target = U
+		A.current = T
+		A.starting = T
 		A.yo = U.y - T.y
 		A.xo = U.x - T.x
-		A.process()
+		spawn()
+			A.OnFired()
+			A.process()
 	return
 
 /mob/living/carbon/alien/humanoid/proc/resin() // -- TLE
@@ -158,13 +164,13 @@ Doesn't work on other aliens/AI.*/
 		visible_message("<span class='alien'>\The [src] vomits up a thick purple substance and shapes it into some form of resin structure!</span>", "<span class='alien'>You shape a [choice]</span>")
 		switch(choice)
 			if("resin door")
-				new /obj/structure/mineral_door/resin(loc)
+				new /obj/machinery/door/mineral/resin(loc)
 			if("resin wall")
 				new /obj/effect/alien/resin/wall(loc)
 			if("resin membrane")
 				new /obj/effect/alien/resin/membrane(loc)
 			if("resin nest")
-				new /obj/structure/stool/bed/nest(loc)
+				new /obj/structure/bed/nest(loc)
 	return
 
 /mob/living/carbon/alien/humanoid/verb/regurgitate()

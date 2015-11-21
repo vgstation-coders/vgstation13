@@ -10,13 +10,15 @@
 /obj/machinery/telecomms
 	var/temp = "" // output message
 	var/construct_op = 0
+	machine_flags = MULTITOOL_MENU
 
 
 /obj/machinery/telecomms/attackby(obj/item/P as obj, mob/user as mob)
 
 	// Using a multitool lets you access the receiver's interface
-	if(istype(P, /obj/item/device/multitool))
-		attack_hand(user)
+	. = ..()
+	if(.)
+		return .
 
 	switch(construct_op)
 		if(0)
@@ -42,18 +44,18 @@
 				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
 				user << "You remove the cables."
 				construct_op ++
-				var/obj/item/weapon/cable_coil/A = new /obj/item/weapon/cable_coil( user.loc )
+				var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( user.loc )
 				A.amount = 5
 				stat |= BROKEN // the machine's been borked!
 		if(3)
-			if(istype(P, /obj/item/weapon/cable_coil))
-				var/obj/item/weapon/cable_coil/A = P
+			if(istype(P, /obj/item/stack/cable_coil))
+				var/obj/item/stack/cable_coil/A = P
 				if(A.amount >= 5)
 					user << "You insert the cables."
 					A.amount -= 5
 					if(A.amount <= 0)
-						user.drop_item()
-						del(A)
+						user.drop_item(A)
+						returnToPool(A)
 					construct_op --
 					stat &= ~BROKEN // the machine's not borked anymore!
 				else
@@ -61,7 +63,7 @@
 			if(istype(P, /obj/item/weapon/crowbar))
 				user << "You begin prying out the circuit board and components..."
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				if(do_after(user,60))
+				if(do_after(user, src,60))
 					user << "You finish prying out the components."
 
 					// Drop all the component stuff
@@ -79,8 +81,8 @@
 								newpath = text2path(I)
 								var/obj/item/s = new newpath
 								s.loc = user.loc
-								if(istype(P, /obj/item/weapon/cable_coil))
-									var/obj/item/weapon/cable_coil/A = P
+								if(istype(s, /obj/item/stack/cable_coil))
+									var/obj/item/stack/cable_coil/A = s
 									A.amount = 1
 
 						// Drop a circuit board too
@@ -88,6 +90,7 @@
 
 					// Create a machine frame and delete the current machine
 					var/obj/machinery/constructable_frame/machine_frame/F = new
+					F.set_build_state(2)
 					F.loc = src.loc
 					del(src)
 
@@ -141,7 +144,7 @@
 			dat += "<li>\ref[T] [T.name] ([T.id])  <a href='?src=\ref[src];unlink=[i]'>\[X\]</a></li>"
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\telecomms\machine_interactions.dm:140: dat += "</ol>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\telecomms\\machine_interactions.dm:140: dat += "</ol>"
 		dat += {"</ol>
 			<h2>Filtering Frequencies:</h2>"}
 		// END AUTOFIX
@@ -156,7 +159,7 @@
 
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\telecomms\machine_interactions.dm:155: dat += "<br>  <a href='?src=\ref[src];input=freq'>\[Add Filter\]</a>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\telecomms\\machine_interactions.dm:155: dat += "<br>  <a href='?src=\ref[src];input=freq'>\[Add Filter\]</a>"
 		dat += {"<p><a href='?src=\ref[src];input=freq'>\[Add Filter\]</a></p>
 			<hr />"}
 		// END AUTOFIX
@@ -179,6 +182,7 @@
 
 
 /obj/machinery/telecomms/relay/proc/toggle_level()
+
 
 	var/turf/position = get_turf(src)
 
@@ -224,7 +228,7 @@
 		dat += "<br>Signal Locked to Station: <A href='?src=\ref[src];change_listening=1'>[listening_level == STATION_Z ? "TRUE" : "FALSE"]</a>"
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\telecomms\machine_interactions.dm:236: dat += "<br>Broadcasting: <A href='?src=\ref[src];broadcast=1'>[broadcasting ? "YES" : "NO"]</a>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\telecomms\\machine_interactions.dm:236: dat += "<br>Broadcasting: <A href='?src=\ref[src];broadcast=1'>[broadcasting ? "YES" : "NO"]</a>"
 	dat += {"<br>Broadcasting: <A href='?src=\ref[src];broadcast=1'>[broadcasting ? "YES" : "NO"]</a>
 		<br>Receiving:    <A href='?src=\ref[src];receive=1'>[receiving ? "YES" : "NO"]</a>"}
 	// END AUTOFIX

@@ -1,17 +1,23 @@
 
 // Called when the item is in the active hand, and clicked; alternately, there is an 'activate held object' verb or you can hit pagedown.
 /obj/item/proc/attack_self(mob/user)
-	return
+	if(flags & TWOHANDABLE)
+		if(!(flags & MUSTTWOHAND))
+			if(wielded)
+				. = src.unwield(user)
+			else
+				. = src.wield(user)
 
 // No comment
 /atom/proc/attackby(obj/item/W, mob/user)
 	return
+
 /atom/movable/attackby(obj/item/W, mob/user)
 	if(W && !(W.flags&NOBLUDGEON))
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
 
 /mob/living/attackby(obj/item/I, mob/user)
-	user.changeNext_move(10)
+	user.delayNextAttack(10)
 	if(istype(I) && ismob(user))
 		I.attack(src, user)
 
@@ -34,13 +40,13 @@ obj/item/proc/get_clamped_volume()
 		return Clamp(src.w_class * 6, 10, 100) // Multiply the item's weight class by 6, then clamp the value between 10 and 100
 
 /obj/item/proc/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
-
+	. = 1
 	if (!istype(M)) // not sure if this is the right thing...
-		return
+		return 0
 	//var/messagesource = M
 	if (can_operate(M))        //Checks if mob is lying down on table for surgery
 		if (do_surgery(M,user,src))
-			return
+			return 1
 	//if (istype(M,/mob/living/carbon/brain))
 	//	messagesource = M:container
 	if (hitsound)
@@ -63,8 +69,8 @@ obj/item/proc/get_clamped_volume()
 		if(istype(M, /mob/living/carbon/slime))
 			var/mob/living/carbon/slime/slime = M
 			if(prob(25))
-				user << "\red [src] passes right through [M]!"
-				return
+				user << "<span class='warning'>[src] passes right through [M]!</span>"
+				return 0
 
 			if(power > 0)
 				slime.attacked += 10
@@ -137,7 +143,7 @@ obj/item/proc/get_clamped_volume()
 		if(!(user in viewers(M, null)))
 			showname = "."
 
-		if(attack_verb && attack_verb.len)
+		if(istype(attack_verb,/list) && attack_verb.len)
 			M.visible_message("<span class='danger'>[M] has been [pick(attack_verb)] with [src][showname]</span>",
 			"<span class='userdanger'>[M] has been [pick(attack_verb)] with [src][showname]!</span>")
 		else if(force == 0)
@@ -149,12 +155,12 @@ obj/item/proc/get_clamped_volume()
 
 		if(!showname && user)
 			if(user.client)
-				user << "\red <B>You attack [M] with [src]. </B>"
-
+				user << "<span class='danger'>You attack [M] with [src]. </span>"
 
 
 	if(istype(M, /mob/living/carbon/human))
-		M:attacked_by(src, user, def_zone)
+		var/mob/living/carbon/human/H = M
+		. = H.attacked_by(src, user, def_zone)
 	else
 		switch(damtype)
 			if("brute")
@@ -162,7 +168,9 @@ obj/item/proc/get_clamped_volume()
 					M.adjustBrainLoss(power)
 
 				else
-
+					if(istype(M, /mob/living/carbon/monkey))
+						var/mob/living/carbon/monkey/K = M
+						power = K.defense(power,def_zone)
 					M.take_organ_damage(power)
 					if (prob(33) && src.force) // Added blood for whacking non-humans too
 						var/turf/location = M.loc
@@ -170,8 +178,11 @@ obj/item/proc/get_clamped_volume()
 							location:add_blood_floor(M)
 			if("fire")
 				if (!(M_RESIST_COLD in M.mutations))
+					if(istype(M, /mob/living/carbon/monkey))
+						var/mob/living/carbon/monkey/K = M
+						power = K.defense(power,def_zone)
 					M.take_organ_damage(0, power)
 					M << "Aargh it burns!"
 		M.updatehealth()
 	add_fingerprint(user)
-	return 1
+	return .
