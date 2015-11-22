@@ -3,7 +3,7 @@
 	desc = "A generic brand of lipstick."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "lipstick"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	w_class = 1.0
 	var/colour = "red"
 	var/open = 0
@@ -28,6 +28,7 @@
 /obj/item/weapon/lipstick/random/New()
 	colour = pick("red","purple","jade","black")
 	name = "[colour] lipstick"
+	..()
 
 
 /obj/item/weapon/lipstick/attack_self(mob/user as mob)
@@ -56,7 +57,7 @@
 		else
 			user.visible_message("<span class='warning'>[user] begins to do [H]'s lips with \the [src].</span>", \
 								 "<span class='notice'>You begin to apply \the [src].</span>")
-			if(do_after(user, 20) && do_after(H, 20, 5, 0))	//user needs to keep their active hand, H does not.
+			if(do_after(user,H, 20) && do_after(H,null, 20, 5, 0))	//user needs to keep their active hand, H does not.
 				user.visible_message("<span class='notice'>[user] does [H]'s lips with \the [src].</span>", \
 									 "<span class='notice'>You apply \the [src].</span>")
 				H.lip_style = colour
@@ -78,7 +79,7 @@
 			else
 				user.visible_message("<span class='warning'>[user] begins to wipe [H]'s lipstick off with \the [src].</span>", \
 								 	 "<span class='notice'>You begin to wipe off [H]'s lipstick.</span>")
-				if(do_after(user, 10) && do_after(H, 10, 5, 0))	//user needs to keep their active hand, H does not.
+				if(do_after(user, H, 10) && do_after(H, null, 10, 5, 0))	//user needs to keep their active hand, H does not.
 					user.visible_message("<span class='notice'>[user] wipes [H]'s lipstick off with \the [src].</span>", \
 										 "<span class='notice'>You wipe off [H]'s lipstick.</span>")
 					H.lip_style = null

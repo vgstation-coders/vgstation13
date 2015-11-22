@@ -5,24 +5,48 @@
 /mob/living/silicon/robot/get_active_hand()
 	return module_active
 
+/mob/living/silicon/robot/get_inactive_hand()
+	return
+
+/mob/living/silicon/robot/get_all_slots()
+	return list(module_state_1, module_state_2, module_state_3)
+
+//overridden from parent since they technically have no 'hands'
+/mob/living/silicon/robot/get_equipped_items()
+	return get_all_slots()
+
 /mob/living/silicon/robot/proc/uneq_module(const/obj/item/module)
 	if(!istype(module))
 		return 0
-
-	if(istype(module, /obj/item/borg/sight))
-		sight_mode &= ~module:sight_mode
 
 	if(client)
 		client.screen -= module
 
 	contents -= module
-	module.loc = src.module
+	if(module)
+		module.forceMove(src.module)
+	hud_used.update_robot_modules_display()
 	return 1
 
 /mob/living/silicon/robot/proc/uneq_active()
 	if(isnull(module_active))
 		return
 
+	if(module_active:loc != src)
+		if(!istype(module_active, /obj/item/weapon/reagent_containers/glass/beaker))
+			src << "<span class='warning'>Can't store something you're not holding!</span>"
+			return
+		else
+			var/obj/item/weapon/reagent_containers/glass/beaker/large/ourbeaker = module_active
+			if(istype(ourbeaker.loc, /obj/machinery))
+				ourbeaker.loc:detach()
+				ourbeaker.loc = src
+			else if(ismob(ourbeaker.loc))
+				var/mob/living/L = ourbeaker.loc
+				L.drop_item(ourbeaker)
+				ourbeaker.loc = src
+			else
+				ourbeaker.loc = src
 	if(module_state_1 == module_active)
 		uneq_module(module_state_1)
 		module_state_1 = null
@@ -38,6 +62,31 @@
 
 	module_active = null
 	updateicon()
+	hud_used.update_robot_modules_display()
+
+/mob/living/silicon/robot/proc/activate_module(var/obj/item/O)
+	if(!(locate(O) in src.module.modules) && O != src.module.emag)
+		return
+	if(activated(O))
+		src << "<span class='notice'>Already activated</span>"
+		return
+	if(!module_state_1)
+		module_state_1 = O
+		O.layer = 20
+		O.screen_loc = inv1.screen_loc
+		O.forceMove(src)
+	else if(!module_state_2)
+		module_state_2 = O
+		O.layer = 20
+		O.screen_loc = inv2.screen_loc
+		O.forceMove(src)
+	else if(!module_state_3)
+		module_state_3 = O
+		O.layer = 20
+		O.screen_loc = inv3.screen_loc
+		O.forceMove(src)
+	else
+		src << "<span class='notice'>You need to disable a module first!</span>"
 
 /mob/living/silicon/robot/proc/uneq_all()
 	module_active = null
@@ -57,6 +106,7 @@
 		module_state_3 = null
 		inv3.icon_state = "inv3"
 
+	unequip_sight()
 	updateicon()
 
 /mob/living/silicon/robot/proc/activated(obj/item/O)
@@ -189,3 +239,8 @@
 		if(slot_num > 3) slot_num = 1 //Wrap around.
 
 	return
+
+/mob/living/silicon/robot/before_take_item(var/obj/item/W)
+	..()
+	if(W.loc == src.module)
+		src.module.modules -= W //maybe fix the cable issues.

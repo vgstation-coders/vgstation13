@@ -3,31 +3,20 @@
 	desc = "It can be used to download Apps on your PDA."
 	icon_state = "pdaterm"
 	circuit = "/obj/item/weapon/circuitboard/pda_terminal"
-	l_color = "#993300"
+	light_color = LIGHT_COLOR_ORANGE
 
 	var/obj/item/device/pda/pda_device = null
+	var/machine_id = ""
 
-	var/obj/machinery/account_database/linked_db
-	var/datum/money_account/linked_account
+	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | PURCHASER
 
 /obj/machinery/computer/pda_terminal/New()
 	..()
-	reconnect_database()
-	linked_account = vendor_account
+	machine_id = "[station_name()] PDA Terminal #[multinum_display(num_pda_terminals,4)]"
+	num_pda_terminals++
 
-	spawn(40)//should fix a rare occurence where a terminal placed at round start wouldn't be linked to its account and/or database.
-		if(!linked_db)
-			reconnect_database()
-		if(!linked_account)
-			linked_account = vendor_account
-
-/obj/machinery/computer/pda_terminal/proc/reconnect_database()
-	for(var/obj/machinery/account_database/DB in account_DBs)
-		//Checks for a database on its Z-level, else it checks for a database at the main Station.
-		if((DB.z == src.z) || (DB.z == STATION_Z))
-			if((DB.stat == 0))//If the database if damaged or not powered, people won't be able to use the vending machines anymore.
-				linked_db = DB
-				break
+	if(ticker)
+		initialize()
 
 /obj/machinery/computer/pda_terminal/proc/format_apps(var/obj/item/device/pda/pda_hardware)//makes a list of all the apps that aren't yet installed on the PDA
 	if(!istype(pda_hardware))
@@ -65,8 +54,7 @@
 		return ..()
 
 	if(!pda_device)
-		user.drop_item()
-		user_pda.loc = src
+		user.drop_item(user_pda, src)
 		pda_device = user_pda
 		update_icon()
 
@@ -114,7 +102,9 @@
 /obj/machinery/computer/pda_terminal/Topic(href, href_list)
 	if(..())
 		return 1
-
+	if(href_list["close"])
+		if(usr.machine == src) usr.unset_machine()
+		return 1
 	switch(href_list["choice"])
 		if ("pda_device")
 			if (pda_device)
@@ -129,8 +119,7 @@
 			else
 				var/obj/item/I = usr.get_active_hand()
 				if (istype(I, /obj/item/device/pda))
-					usr.drop_item()
-					I.loc = src
+					usr.drop_item(I, src)
 					pda_device = I
 			update_icon()
 
@@ -151,25 +140,12 @@
 					flick("pdaterm-problem", src)
 					return
 
-				if(istype(usr, /mob/living/carbon/human))
-					var/mob/living/carbon/human/H=usr
-					var/obj/item/weapon/card/card = null
-					var/obj/item/device/pda/pda = null
+				if(istype(usr, /mob/living))
+					var/obj/item/weapon/card/card = usr.get_id_card()
 
-					if(pda_device.id)//we look for an ID in the inserted PDA first
+					if(!card && pda_device)
 						card = pda_device.id
-					else if(istype(H.wear_id,/obj/item/weapon/card))
-						card=H.wear_id
-					else if(istype(H.get_active_hand(),/obj/item/weapon/card))
-						card=H.get_active_hand()
-					else if(istype(H.wear_id,/obj/item/device/pda))
-						pda=H.wear_id
-						if(pda.id)
-							card=pda.id
-					else if(istype(H.get_active_hand(),/obj/item/device/pda))
-						pda=H.get_active_hand()
-						if(pda.id)
-							card=pda.id
+
 					if(card)
 						if (connect_account(usr,card,appdatum))
 							appdatum.onInstall(pda_device)
@@ -182,25 +158,12 @@
 						flick("pdaterm-problem", src)
 
 		if ("new_pda")
-			if(istype(usr, /mob/living/carbon/human))
-				var/mob/living/carbon/human/H=usr
-				var/obj/item/weapon/card/card = null
-				var/obj/item/device/pda/pda = null
+			if(istype(usr, /mob/living))
+				var/obj/item/weapon/card/card = usr.get_id_card()
 
-				if(pda_device && pda_device.id)//we look for an ID in the inserted PDA first
+				if(!card && pda_device)
 					card = pda_device.id
-				else if(istype(H.wear_id,/obj/item/weapon/card))
-					card=H.wear_id
-				else if(istype(H.get_active_hand(),/obj/item/weapon/card))
-					card=H.get_active_hand()
-				else if(istype(H.wear_id,/obj/item/device/pda))
-					pda=H.wear_id
-					if(pda.id)
-						card=pda.id
-				else if(istype(H.get_active_hand(),/obj/item/device/pda))
-					pda=H.get_active_hand()
-					if(pda.id)
-						card=pda.id
+
 				if(card)
 					if (connect_account(usr,card,0))
 						usr << "\icon[src]<span class='notice'>Enjoy your new PDA!</span>"
@@ -216,7 +179,7 @@
 					flick("pdaterm-problem", src)
 	return 1
 
-/obj/machinery/computer/pda_terminal/proc/connect_account(var/mob/user,var/obj/item/weapon/card/W,var/appdatum)
+/obj/machinery/computer/pda_terminal/connect_account(var/mob/user,var/obj/item/weapon/card/W,var/appdatum)
 	if(istype(W))
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(!linked_db)
@@ -230,50 +193,65 @@
 			user << "\icon[src]<span class='warning'>Unable to connect to accounts database.</span>"
 	return	0
 
-/obj/machinery/computer/pda_terminal/proc/scan_card(var/mob/user,var/obj/item/weapon/card/id/C,var/datum/pda_app/appdatum)
+/obj/machinery/computer/pda_terminal/scan_card(var/mob/user,var/obj/item/weapon/card/id/C,var/datum/pda_app/appdatum)
 	if(istype(C))
 		user << "<span class='info'>\the [src] detects and scans the following ID: [C].</span>"
 		if(linked_account)
-			var/datum/money_account/D = linked_db.attempt_account_access(C.associated_account_number, 0, 2, 0) // Pin = 0, Sec level 2, PIN not required.
-			if(D)
-				var/transaction_amount = (appdatum ? appdatum.price : 100)//if appdatum == 0, that means we're purchasing a new PDA.
-				if(transaction_amount <= D.money)
+			//we start by checking the ID card's virtual wallet
+			var/datum/money_account/D = C.virtual_wallet
+			var/using_account = "Virtual Wallet"
 
-					//transfer the money
-					D.money -= transaction_amount
-					linked_account.money += transaction_amount
+			//if there isn't one for some reason we create it, that should never happen but oh well.
+			if(!D)
+				C.update_virtual_wallet()
+				D = C.virtual_wallet
 
-					user << "\icon[src]<span class='notice'>Remaining balance: [D.money]$</span>"
+			var/transaction_amount = (appdatum ? appdatum.price : 100)//if appdatum == 0, that means we're purchasing a new PDA.
 
-					//create entries in the two account transaction logs
-					var/datum/transaction/T = new()
-					T.target_name = "[linked_account.owner_name] (via [src.name])"
-					T.purpose = "Purchase of [appdatum ? "[appdatum.name]" : "a new PDA"]"
-					T.amount = "[transaction_amount]"
-					T.source_terminal = src.name
-					T.date = current_date_string
-					T.time = worldtime2text()
-					D.transaction_log.Add(T)
-					//
-					T = new()
-					T.target_name = D.owner_name
-					T.purpose = "Purchase of [appdatum ? "[appdatum.name]" : "a new PDA"]"
-					T.amount = "[transaction_amount]"
-					T.source_terminal = src.name
-					T.date = current_date_string
-					T.time = worldtime2text()
-					linked_account.transaction_log.Add(T)
-
-					return 1
-
-				else
-					user << "\icon[src]<span class='warning'>You don't have that much money!</span>"
+			//if there isn't enough money in the virtual wallet, then we check the bank account connected to the ID
+			if(D.money < transaction_amount)
+				D = linked_db.attempt_account_access(C.associated_account_number, 0, 2, 0)
+				using_account = "Bank Account"
+				if(!D)								//first we check if there IS a bank account in the first place
+					usr << "\icon[src]<span class='warning'>You don't have that much money on your virtual wallet!</span>"
+					usr << "\icon[src]<span class='warning'>Unable to access your bank account.</span>"
 					return 0
-			else
-				user << "\icon[src]<span class='warning'>Unable to access account. Check security settings and try again.</span>"
-				return 0
+				else if(D.security_level > 0)		//next we check if the security is low enough to pay directly from it
+					usr << "\icon[src]<span class='warning'>You don't have that much money on your virtual wallet!</span>"
+					usr << "\icon[src]<span class='warning'>Lower your bank account's security settings if you wish to pay directly from it.</span>"
+					return 0
+				else if(D.money < transaction_amount)//and lastly we check if there's enough money on it, duh
+					usr << "\icon[src]<span class='warning'>You don't have that much money on your bank account!</span>"
+					return 0
+
+			//transfer the money
+			D.money -= transaction_amount
+			linked_account.money += transaction_amount
+
+			usr << "\icon[src]<span class='notice'>Remaining balance ([using_account]): [D.money]$</span>"
+
+			//create an entry on the buy's account's transaction log
+			var/datum/transaction/T = new()
+			T.target_name = "[linked_account.owner_name] (via [src.name])"
+			T.purpose = "Purchase of [appdatum ? "[appdatum.name]" : "a new PDA"]"
+			T.amount = "-[transaction_amount]"
+			T.source_terminal = machine_id
+			T.date = current_date_string
+			T.time = worldtime2text()
+			D.transaction_log.Add(T)
+
+			//and another entry on the vending machine's vendor account's transaction log
+			T = new()
+			T.target_name = D.owner_name
+			T.purpose = "Purchase of [appdatum ? "[appdatum.name]" : "a new PDA"]"
+			T.amount = "[transaction_amount]"
+			T.source_terminal = machine_id
+			T.date = current_date_string
+			T.time = worldtime2text()
+			linked_account.transaction_log.Add(T)
+			return 1
 		else
-			user << "\icon[src]<span class='warning'>EFTPOS is not connected to an account.</span>"
+			usr << "\icon[src]<span class='warning'>EFTPOS is not connected to an account.</span>"
 			return 0
 
 /obj/machinery/computer/pda_terminal/update_icon()

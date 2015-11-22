@@ -11,18 +11,66 @@
 	New()
 		block=NOBREATHBLOCK
 
-/datum/dna/gene/basic/remoteview
+/datum/dna/gene/basic/grant_spell/remoteview
 	name="Remote Viewing"
 	activation_messages=list("Your mind expands.")
 	deactivation_messages=list("Your mind is no longer expanded.")
+
+	drug_activation_messages=list("You feel in touch with the cosmos.")
+	drug_deactivation_messages=list("You no longer feel in touch with the cosmos.")
+
 	mutation=M_REMOTE_VIEW
+
+	spelltype = /spell/targeted/remoteobserve
 
 	New()
 		block=REMOTEVIEWBLOCK
 
-	activate(var/mob/M, var/connected, var/flags)
-		..(M,connected,flags)
-		M.verbs += /mob/living/carbon/human/proc/remoteobserve
+/spell/targeted/remoteobserve
+	name = "Remote View"
+	panel = "Mutant Powers"
+
+	charge_type = Sp_RECHARGE
+	charge_max = 50
+
+	invocation_type = SpI_NONE
+	range = -2
+	max_targets = 1
+	spell_flags = SELECTABLE | INCLUDEUSER
+
+	override_base = "genetic"
+	hud_state = "gen_rmind"
+	mind_affecting = 1
+
+/spell/targeted/remoteobserve/cast(var/list/targets, mob/living/carbon/human/user)
+	if(!targets || !targets.len || !user || !istype(user))
+		return
+
+	if(user.stat!=CONSCIOUS)
+		user.remoteview_target = null
+		user.reset_view(0)
+		return
+
+	if(istype(user.l_hand, /obj/item/tk_grab) || istype(user.r_hand, /obj/item/tk_grab/))
+		user << "<span class='warning'>Your mind is too busy with that telekinetic grab.</span>"
+		user.remoteview_target = null
+		user.reset_view(0)
+		return
+
+	if(user.client.eye != user.client.mob)
+		user.remoteview_target = null
+		user.reset_view(0)
+		return
+
+	for(var/mob/living/target in targets)
+		if (target)
+			if(target == user)
+				user.remoteview_target = null
+				user.reset_view(0)
+			else
+				user.remoteview_target = target
+				user.reset_view(target)
+			break
 
 /datum/dna/gene/basic/regenerate
 	name="Regenerate"
@@ -42,23 +90,67 @@
 	New()
 		block=INCREASERUNBLOCK
 
-/datum/dna/gene/basic/remotetalk
+/datum/dna/gene/basic/grant_spell/remotetalk
 	name="Telepathy"
 	activation_messages=list("You feel your voice can penetrate other minds.")
 	deactivation_messages=list("Your mind can no longer project your voice onto others.")
+
+	drug_activation_messages=list("You feel your voice can reach the astral plane now.")
+	drug_deactivation_messages=list("Your voice can no longer reach the astral plane.")
+
 	mutation=M_REMOTE_TALK
 
+	spelltype = /spell/targeted/remotesay
+
 	New()
+		..()
 		block=REMOTETALKBLOCK
 
-	activate(var/mob/M, var/connected, var/flags)
-		..(M,connected,flags)
-		M.verbs += /mob/living/carbon/human/proc/remotesay
+/spell/targeted/remotesay
+	name = "Project Mind"
+	desc = "Speak into the minds of others."
+	panel = "Mutant Powers"
+
+	charge_type = Sp_RECHARGE
+	charge_max = 50
+
+	invocation_type = SpI_NONE
+	range = -2 //the world
+	max_targets = 1
+	selection_type = "view"
+	spell_flags = SELECTABLE
+
+	override_base = "genetic"
+	hud_state = "gen_project"
+
+	compatible_mobs = list(/mob/living/carbon/human)
+	mind_affecting = 1
+
+/spell/targeted/remotesay/cast(var/list/targets, mob/living/carbon/human/user)
+	if(!targets || !targets.len || !user || !istype(user))
+		return
+
+	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
+	if(!say)
+		return
+
+	for(var/mob/living/carbon/human/target in targets)
+		if(M_REMOTE_TALK in target.mutations)
+			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: [say]</span>")
+		else
+			target.show_message("<span class='notice'>You hear a voice that seems to echo around the room: [say]</span>")
+		user.show_message("<span class='notice'>You project your mind into [target.real_name]: [say]</span>")
+		for(var/mob/dead/observer/G in dead_mob_list)
+			G.show_message("<i>Telepathic message from <b>[user]</b> to <b>[target]</b>: [say]</i>")
 
 /datum/dna/gene/basic/morph
 	name="Morph"
 	activation_messages=list("Your skin feels strange.")
 	deactivation_messages=list("Your skin no longer feels strange.")
+
+	drug_activation_messages=list("You feel like a chameleon.")
+	drug_deactivation_messages=list("You no longer feel like a chameleon.")
+
 	mutation=M_MORPH
 
 	New()
@@ -72,6 +164,10 @@
 	name="Heat Resistance"
 	activation_messages=list("Your skin is icy to the touch.")
 	deactivation_messages=list("Your skin stops feeling icy.")
+
+	drug_activation_messages=list()
+	drug_deactivation_messages=list()
+
 	mutation=M_RESIST_HEAT
 
 	New()
@@ -94,6 +190,10 @@
 	name="Cold Resistance"
 	activation_messages=list("Your body is filled with warmth.")
 	deactivation_messages=list("Your body is no longer filled with warmth.")
+
+	drug_activation_messages=list()
+	drug_deactivation_messages=list()
+
 	mutation=M_RESIST_COLD
 
 	New()
@@ -147,7 +247,11 @@
 
 	activate(var/mob/M, var/connected, var/flags)
 		..(M,connected,flags)
-		M.pass_flags |= 1
+		M.pass_flags |= PASSTABLE
+
+	deactivate(var/mob/M, var/connected, var/flags)
+		if(..(M,connected,flags))
+			M.pass_flags &= ~PASSTABLE
 
 /* OLD HULK BEHAVIOR
 /datum/dna/gene/basic/hulk
@@ -179,7 +283,7 @@
 			M.dna.SetSEState(HULKBLOCK,0)
 			M.update_mutations()		//update our mutation overlays
 			M.update_body()
-			M << "\red You suddenly feel very weak."
+			M << "<span class='warning'>You suddenly feel very weak.</span>"
 			M.Weaken(3)
 			M.emote("collapse")
 */
@@ -187,6 +291,10 @@
 	name="X-Ray Vision"
 	activation_messages=list("The walls suddenly disappear.")
 	deactivation_messages=list("The walls suddenly appear.")
+
+	drug_activation_messages=list("You see so much clearer now!")
+	drug_deactivation_messages=list("Your vision is obstructed again.")
+
 	mutation=M_XRAY
 
 	New()
@@ -196,6 +304,10 @@
 	name="Telekenesis"
 	activation_messages=list("You feel smarter.")
 	deactivation_messages=list("You feel less smart.")
+
+	drug_activation_messages=list("You feel like a nerd.")
+	drug_deactivation_messages=list("You feel normal again.")
+
 	mutation=M_TK
 	activation_prob=15
 

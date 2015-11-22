@@ -3,6 +3,14 @@
 /obj/item/weapon/wirecutters/clippers
 	name = "plant clippers"
 	desc = "A tool used to take samples from plants."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	icon_state = "plantclippers"
+	item_state = "plantclippers"
+
+/obj/item/weapon/wirecutters/clippers/New()
+	..()
+	icon_state = "plantclippers"
+	item_state = "plantclippers"
 
 /obj/item/device/analyzer/plant_analyzer
 	name = "plant analyzer"
@@ -44,11 +52,11 @@
 		grown_reagents = H.reagents
 
 	if(!grown_seed)
-		user << "\red [src] can tell you nothing about [target]."
+		user << "<span class='warning'>[src] can tell you nothing about [target].</span>"
 		return
 
 	var/dat = "<h3>Plant data for [target]</h3>"
-	user.visible_message("\blue [user] runs the scanner over [target].")
+	user.visible_message("<span class='notice'>[user] runs the scanner over [target].</span>")
 
 	dat += "<h2>General Data</h2>"
 
@@ -82,9 +90,9 @@
 		dat += "The mature plant will produce [grown_seed.products.len == 1 ? "fruit" : "[grown_seed.products.len] varieties of fruit"].<br>"
 
 	if(grown_seed.requires_nutrients)
-		if(grown_seed.nutrient_consumption < 0.05)
+		if(grown_seed.nutrient_consumption < 0.15)
 			dat += "It consumes a small amount of nutrient fluid.<br>"
-		else if(grown_seed.nutrient_consumption > 0.2)
+		else if(grown_seed.nutrient_consumption > 0.4)
 			dat += "It requires a heavy supply of nutrient fluid.<br>"
 		else
 			dat += "It requires a supply of nutrient fluid.<br>"
@@ -151,6 +159,14 @@
 	if(grown_seed.alter_temp)
 		dat += "<br>It will periodically alter the local temperature by [grown_seed.alter_temp] degrees Kelvin."
 
+	if(grown_seed.consume_gasses)
+		for(var/gas in grown_seed.consume_gasses)
+			dat += "<br>It will remove [gas] from the environment."
+
+	if(grown_seed.exude_gasses)
+		for(var/gas in grown_seed.exude_gasses)
+			dat += "<br>It will release [gas] into the environment."
+
 	if(grown_seed.biolum)
 		dat += "<br>It is [grown_seed.biolum_colour ? "<font color='[grown_seed.biolum_colour]'>bio-luminescent</font>" : "bio-luminescent"]."
 	if(grown_seed.flowers)
@@ -168,7 +184,7 @@
 /obj/item/weapon/plantspray
 	icon = 'icons/obj/hydroponics.dmi'
 	item_state = "spray"
-	flags = TABLEPASS | FPRINT | NOBLUDGEON
+	flags = FPRINT | NOBLUDGEON
 	slot_flags = SLOT_BELT
 	throwforce = 4
 	w_class = 2.0
@@ -220,7 +236,8 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "hoe"
 	item_state = "hoe"
-	flags = FPRINT | TABLEPASS | CONDUCT | NOBLUDGEON
+	flags = FPRINT  | NOBLUDGEON
+	siemens_coefficient = 1
 	force = 5.0
 	throwforce = 7.0
 	w_class = 2.0
@@ -235,7 +252,7 @@
 	name = "bottle of weedkiller"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle16"
-	flags = FPRINT |  TABLEPASS
+	flags = FPRINT
 	var/toxicity = 0
 	var/weed_kill_str = 0
 
@@ -243,7 +260,7 @@
 	name = "bottle of glyphosate"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle16"
-	flags = FPRINT |  TABLEPASS
+	flags = FPRINT
 	toxicity = 4
 	weed_kill_str = 2
 
@@ -251,7 +268,7 @@
 	name = "bottle of triclopyr"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle18"
-	flags = FPRINT |  TABLEPASS
+	flags = FPRINT
 	toxicity = 6
 	weed_kill_str = 4
 
@@ -259,7 +276,7 @@
 	name = "bottle of 2,4-D"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle15"
-	flags = FPRINT |  TABLEPASS
+	flags = FPRINT
 	toxicity = 8
 	weed_kill_str = 7
 
@@ -273,7 +290,7 @@
 	desc = "A small glass bottle. Can hold up to 10 units."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle16"
-	flags = FPRINT |  TABLEPASS | OPENCONTAINER
+	flags = FPRINT | OPENCONTAINER
 	possible_transfer_amounts = null
 	w_class = 2.0
 
@@ -313,13 +330,14 @@
 	desc = "A very sharp axe blade upon a short fibremetal handle. It has a long history of chopping things, but now it is used for chopping wood."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "hatchet"
-	flags = FPRINT | TABLEPASS | CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	force = 12.0
 	w_class = 2.0
 	throwforce = 15.0
 	throw_speed = 4
 	throw_range = 4
-	sharp = 1
+	sharpness = 1.5
 	origin_tech = "materials=2;combat=1"
 	attack_verb = list("chopped", "torn", "cut")
 
@@ -344,7 +362,7 @@
 	throw_speed = 1
 	throw_range = 3
 	w_class = 4.0
-	flags = FPRINT | TABLEPASS | NOSHIELD
+	flags = FPRINT
 	slot_flags = SLOT_BACK
 	origin_tech = "materials=2;combat=2"
 	attack_verb = list("chopped", "sliced", "cut", "reaped")
@@ -354,5 +372,82 @@
 	if(istype(A, /obj/effect/plantsegment))
 		for(var/obj/effect/plantsegment/B in orange(A,1))
 			if(prob(80))
-				del B
-		del A
+				qdel(B)
+		qdel(A)
+	if(istype(A, /turf/simulated/floor))
+		for(var/obj/effect/plantsegment/B in orange(A,1))
+			if(prob(80))
+				qdel(B)
+
+/obj/item/claypot
+	name = "clay pot"
+	desc = "Plants placed in those stop aging, but cannot be retrieved either."
+	icon = 'icons/obj/hydroponics2.dmi'
+	icon_state = "claypot-item"
+	item_state = "claypot"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	w_class = 3.0
+	force = 5.0
+	throwforce = 20.0
+	throw_speed = 1
+	throw_range = 3
+	flags = FPRINT
+
+/obj/item/claypot/attackby(var/obj/item/O,var/mob/user)
+	if(istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(O,/obj/item/weapon/grown))
+		user << "<span class='warning'>You have to transplant the plant into the pot directly from the hydroponic tray, using a spade.</span>"
+	else if(istype(O,/obj/item/weapon/pickaxe/shovel))
+		user << "<span class='warning'>There is no plant to remove in \the [src].</span>"
+	else
+		user << "<span class='warning'>You cannot plant \the [O] in \the [src].</span>"
+
+
+/obj/item/claypot/throw_impact(atom/hit_atom)
+	..()
+	if(prob(40))
+		playsound(loc, 'sound/effects/hit_on_shattered_glass.ogg', 75, 1)
+		new/obj/effect/decal/cleanable/clay_fragments(src.loc)
+		src.visible_message("<span class='warning'>\The [src.name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
+		qdel(src)
+
+/obj/structure/claypot
+	name = "clay pot"
+	desc = "Plants placed in those stop aging, but cannot be retrieved either."
+	icon = 'icons/obj/hydroponics2.dmi'
+	icon_state = "claypot"
+	anchored = 0
+	density = 0
+	var/plant_name = ""
+
+/obj/structure/claypot/examine(mob/user)
+	..()
+	if(plant_name)
+		user << "<span class='info'>You can see [plant_name] planted in it.</span>"
+
+/obj/structure/claypot/attack_hand(mob/user as mob)
+	user << "It's too heavy to pick up while it has a plant in it."
+
+/obj/structure/claypot/attackby(var/obj/item/O,var/mob/user)
+	if(istype(O,/obj/item/weapon/wrench))
+		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+		if(do_after(user, src, 30))
+			anchored = !anchored
+			user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"].</span>",
+									"<span class='notice'>\icon[src] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
+									"<span class='notice'>You hear a ratchet.</span>")
+	else if(plant_name && istype(O,/obj/item/weapon/pickaxe/shovel))
+		user << "<span class='notice'>\icon[src] You start removing the [plant_name] from \the [src].</span>"
+		if(do_after(user, src, 30))
+			playsound(loc, 'sound/items/shovel.ogg', 50, 1)
+			user.visible_message(	"<span class='notice'>[user] removes the [plant_name] from \the [src].</span>",
+									"<span class='notice'>\icon[src] You remove the [plant_name] from \the [src].</span>",
+									"<span class='notice'>You hear some digging.</span>")
+			var/obj/item/claypot/C = new(loc)
+			transfer_fingerprints(src, C)
+			qdel(src)
+
+	else if(istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(O,/obj/item/weapon/grown))
+		user << "<span class='warning'>There is already a plant in \the [src]</span>"
+
+	else
+		..()

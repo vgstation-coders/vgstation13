@@ -6,6 +6,7 @@
 /datum/map/active
 	nameShort = "box"
 	nameLong = "Box Station"
+	map_dir = "boxstation"
 	tDomeX = 128
 	tDomeY = 69
 	tDomeZ = 2
@@ -25,5 +26,5 @@
 		)
 
 ////////////////////////////////////////////////////////////////
-
+#include "defficiency/pipes.dm" // Atmos layered pipes.
 #include "tgstation.dmm"

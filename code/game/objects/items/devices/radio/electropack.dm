@@ -4,13 +4,33 @@
 	icon_state = "electropack0"
 	item_state = "electropack"
 	frequency = 1449
-	flags = FPRINT | CONDUCT | TABLEPASS
+	flags = FPRINT
+	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
 	w_class = 5.0
-	g_amt = 2500
-	m_amt = 10000
+	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 2500)
 	w_type = RECYK_ELECTRONIC
 	var/code = 2
+	var/datum/radio_frequency/radio_connection
+
+/obj/item/device/radio/electropack/New()
+	..()
+	if(radio_controller)
+		initialize()
+	else
+		spawn(50)
+			if(radio_controller) initialize()
+
+/obj/item/device/radio/electropack/initialize()
+	if(frequency < MINIMUM_FREQUENCY || frequency > MAXIMUM_FREQUENCY)
+		src.frequency = sanitize_frequency(src.frequency)
+
+	set_frequency(frequency)
+
+/obj/item/device/radio/electropack/set_frequency(new_frequency)
+	radio_controller.remove_object(src, frequency)
+	frequency = new_frequency
+	radio_connection = radio_controller.add_object(src, frequency)
 
 /obj/item/device/radio/electropack/attack_hand(mob/user as mob)
 	if(src == user.back)
@@ -26,6 +46,9 @@
 		else if(S.part2 == src)
 			S.part2 = null
 		master = null
+	if(radio_controller)
+		radio_controller.remove_object(src, frequency)
+	..()
 
 /obj/item/device/radio/electropack/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -91,16 +114,20 @@
 	if(!signal || signal.encryption != code)
 		return
 
-	if(ismob(loc) && on)
+	if(istype(src.loc, /obj/mecha) && on)
+		var/obj/mecha/R = src.loc //R is for GIANT ROBOT
+		R.shock_n_boot()
+
+	else if(ismob(loc) && on)
 		var/mob/M = loc
 		var/turf/T = M.loc
 		if(istype(T, /turf))
 			if(!M.moved_recently && M.last_move)
 				M.moved_recently = 1
 				step(M, M.last_move)
-				sleep(50)
-				if(M)
-					M.moved_recently = 0
+				spawn(50)
+					if(M)
+						M.moved_recently = 0
 		M << "<span class='danger'>You feel a sharp shock!</span>"
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(3, 1, M)
@@ -108,7 +135,7 @@
 
 		M.Weaken(10)
 
-	if(master && wires & 1)
+	if(master && isWireCut(1))
 		master.receive_signal()
 	return
 

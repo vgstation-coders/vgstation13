@@ -29,8 +29,21 @@
 		"mime",
 		"syndie" // yes no?
 	)
+	var/list/cent_card_skins = list(
+		"data",
+		"id",
+		"centcom_old",
+		"centcom",
+		"syndie",
+		"deathsquad",
+		"creed",
+		"ERT_leader",
+		"ERT_security",
+		"ERT_engineering",
+		"ERT_medical",
+	)
 
-	l_color = "#0000FF"
+	light_color = LIGHT_COLOR_BLUE
 
 	proc/is_centcom()
 		return istype(src, /obj/machinery/computer/card/centcom)
@@ -65,7 +78,11 @@
 	set name = "Eject ID Card"
 	set src in oview(1)
 
-	if(!usr || usr.stat || usr.lying)	return
+	if(!usr || usr.stat || usr.lying || (usr.status_flags & FAKEDEATH))	return
+
+	if(!usr.dexterity_check())
+		usr << "<span class='warning'>You don't have the dexterity to do this!</span>"
+		return
 
 	if(scan)
 		usr << "You remove \the [scan] from \the [src]."
@@ -87,13 +104,14 @@
 	if(!istype(id_card))
 		return ..()
 
-	if(!scan && access_change_ids in id_card.access)
-		user.drop_item()
-		id_card.loc = src
+	if(!is_centcom() && !scan && (access_change_ids in id_card.access))
+		user.drop_item(id_card, src)
+		scan = id_card
+	else if(is_centcom() && !scan && ((access_cent_creed in id_card.access) || (access_cent_captain in id_card.access)))
+		user.drop_item(id_card, src)
 		scan = id_card
 	else if(!modify)
-		user.drop_item()
-		id_card.loc = src
+		user.drop_item(id_card, src)
 		modify = id_card
 
 	nanomanager.update_uis(src)
@@ -118,7 +136,7 @@
 	data["station_name"] = station_name()
 	data["mode"] = mode
 	data["printing"] = printing
-	data["manifest"] = data_core ? data_core.get_manifest(0) : null
+	data["manifest"] = data_core ? html_decode(data_core.get_manifest(0)) : null
 	data["target_name"] = modify ? modify.name : "-----"
 	data["target_owner"] = modify && modify.registered_name ? modify.registered_name : "-----"
 	data["target_rank"] = get_target_rank()
@@ -137,6 +155,7 @@
 	data["civilian_jobs"] = format_jobs(civilian_positions)
 	data["centcom_jobs"] = format_jobs(get_all_centcom_jobs())
 	data["card_skins"] = format_card_skins(card_skins)
+	data["cent_card_skins"] = format_card_skins(cent_card_skins)
 
 	if(modify)
 		data["current_skin"] = modify.icon_state
@@ -144,10 +163,11 @@
 	if (modify && is_centcom())
 		var/list/all_centcom_access = list()
 		for(var/access in get_all_centcom_access())
-			all_centcom_access.Add(list(list(
-				"desc" = replacetext(get_centcom_access_desc(access), " ", "&nbsp"),
-				"ref" = access,
-				"allowed" = (access in modify.access) ? 1 : 0)))
+			if (get_centcom_access_desc(access))
+				all_centcom_access.Add(list(list(
+					"desc" = replacetext(get_centcom_access_desc(access), " ", "&nbsp"),
+					"ref" = access,
+					"allowed" = (access in modify.access) ? 1 : 0)))
 
 		data["all_centcom_access"] = all_centcom_access
 	else if (modify)
@@ -176,7 +196,9 @@
 /obj/machinery/computer/card/Topic(href, href_list)
 	if(..())
 		return 1
-
+	if(href_list["close"])
+		if(usr.machine == src) usr.unset_machine()
+		return 1
 	switch(href_list["choice"])
 		if ("modify")
 			if (modify)
@@ -193,8 +215,7 @@
 			else
 				var/obj/item/I = usr.get_active_hand()
 				if (istype(I, /obj/item/weapon/card/id))
-					usr.drop_item()
-					I.loc = src
+					usr.drop_item(I, src)
 					modify = I
 
 		if ("scan")
@@ -210,8 +231,7 @@
 			else
 				var/obj/item/I = usr.get_active_hand()
 				if (istype(I, /obj/item/weapon/card/id))
-					usr.drop_item()
-					I.loc = src
+					usr.drop_item(I, src)
 					scan = I
 
 		if("access")
@@ -231,10 +251,12 @@
 			if (is_authenticated() && modify)
 				var/t1 = href_list["assign_target"]
 				if(t1 == "Custom")
-					var/temp_t = copytext(sanitize(input("Enter a custom job assignment.","Assignment")),1,45)
-					//let custom jobs function as an impromptu alt title, mainly for sechuds
-					if(temp_t && modify)
-						modify.assignment = temp_t
+					var/temp_t = input("Enter a custom job assignment.","Assignment") as null|text
+					if(temp_t)
+						temp_t = copytext(sanitize(temp_t),1,45)
+						//let custom jobs function as an impromptu alt title, mainly for sechuds
+						if(temp_t && modify)
+							modify.assignment = temp_t
 				else
 					var/list/access = list()
 					if(is_centcom())
@@ -247,7 +269,7 @@
 								jobdatum = J
 								break
 						if(!jobdatum)
-							usr << "\red No log exists for this job: [t1]"
+							usr << "<span class='warning'>No log exists for this job: [t1]</span>"
 							return
 
 						access = jobdatum.get_access()
@@ -265,6 +287,7 @@
 						modify.registered_name = temp_name
 					else
 						src.visible_message("<span class='notice'>[src] buzzes rudely.</span>")
+					modify.update_virtual_wallet()
 			nanomanager.update_uis(src)
 
 		if ("account")
@@ -315,4 +338,7 @@
 /obj/machinery/computer/card/centcom
 	name = "CentCom Identification Computer"
 	circuit = "/obj/item/weapon/circuitboard/card/centcom"
-	req_access = list(access_cent_captain)
+	req_access = list(
+		access_cent_creed,
+		access_cent_captain,
+		)

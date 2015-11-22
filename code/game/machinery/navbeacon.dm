@@ -85,11 +85,12 @@
 
 	proc/post_signal()
 
+
 		var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
 
 		if(!frequency) return
 
-		var/datum/signal/signal = new()
+		var/datum/signal/signal = getFromPool(/datum/signal)
 		signal.source = src
 		signal.transmission_method = 1
 		signal.data["beacon"] = location
@@ -114,7 +115,7 @@
 					src.locked = !src.locked
 					user << "Controls are now [src.locked ? "locked." : "unlocked."]"
 				else
-					user << "\red Access denied."
+					user << "<span class='warning'>Access denied.</span>"
 				updateDialog()
 			else
 				user << "You must open the cover first!"
@@ -170,7 +171,7 @@ Transponder Codes:<UL>"}
 			for(var/key in codes)
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\navbeacon.dm:174: t += "<LI>[key] ... [codes[key]]"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\navbeacon.dm:174: t += "<LI>[key] ... [codes[key]]"
 				t += {"<LI>[key] ... [codes[key]]
 					<small><A href='byond://?src=\ref[src];edit=1;code=[key]'>(edit)</A>
 					<A href='byond://?src=\ref[src];delete=1;code=[key]'>(delete)</A></small><BR>"}
@@ -178,7 +179,7 @@ Transponder Codes:<UL>"}
 				t += "<LI>[key] ... [codes[key]]"
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\navbeacon.dm:177: t += "<small><A href='byond://?src=\ref[src];add=1;'>(add new)</A></small><BR>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\navbeacon.dm:177: t += "<small><A href='byond://?src=\ref[src];add=1;'>(add new)</A></small><BR>"
 			t += {"<small><A href='byond://?src=\ref[src];add=1;'>(add new)</A></small><BR>
 				<UL></TT>"}
 			// END AUTOFIX
@@ -187,10 +188,8 @@ Transponder Codes:<UL>"}
 		return
 
 	Topic(href, href_list)
-		..()
-		if (usr.stat)
-			return
-		if ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon)))
+		if(..()) return 1
+		else
 			if(panel_open && !locked)
 				usr.set_machine(src)
 

@@ -29,7 +29,10 @@
 	real_name = src.name
 	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid,/mob/living/carbon/alien/humanoid/proc/neurotoxin,/mob/living/carbon/alien/humanoid/proc/resin)
 	..()
-	verbs -= /mob/living/carbon/alien/verb/alien_ventcrawl
+	add_language(LANGUAGE_XENO)
+	default_language = all_languages[LANGUAGE_XENO]
+	verbs -= /mob/living/carbon/alien/verb/ventcrawl
+
 
 /mob/living/carbon/alien/humanoid/queen
 
@@ -59,6 +62,7 @@
 //Queen verbs
 /mob/living/carbon/alien/humanoid/queen/verb/lay_egg()
 
+
 	set name = "Lay Egg (75)"
 	set desc = "Lay an egg to produce huggers to impregnate prey with."
 	set category = "Alien"
@@ -82,7 +86,7 @@
 /mob/living/carbon/alien/humanoid/queen/large/update_icons()
 	lying_prev = lying	//so we don't update overlays for lying/standing unless our stance changes again
 	update_hud()		//TODO: remove the need for this to be here
-	overlays.Cut()
+	overlays.len = 0
 	if(lying)
 		if(resting)					icon_state = "queen_sleep"
 		else						icon_state = "queen_l"

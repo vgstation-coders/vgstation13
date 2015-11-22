@@ -11,6 +11,8 @@
 	set invisibility = 0
 	//set background = 1
 
+	if(timestopped) return 0 //under effects of time magick
+
 	if (monkeyizing)
 		return
 
@@ -257,6 +259,7 @@
 
 	proc/handle_chemicals_in_body()
 
+
 		if(reagents) reagents.metabolize(src)
 
 		if(M_FAT in mutations)
@@ -375,6 +378,7 @@
 
 	proc/handle_regular_hud_updates()
 
+
 		if (stat == 2 || (M_XRAY in mutations))
 			sight |= SEE_TURFS
 			sight |= SEE_MOBS
@@ -437,7 +441,7 @@
 				if (!( machine.check_eye(src) ))
 					reset_view(null)
 			else
-				if(client && !client.adminobs)
+				if(client && !client.adminobs && !isTeleViewing(client.eye))
 					reset_view(null)
 
 		return 1

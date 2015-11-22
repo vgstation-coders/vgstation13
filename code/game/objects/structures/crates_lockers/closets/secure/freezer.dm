@@ -1,7 +1,7 @@
 /obj/structure/closet/secure_closet/freezer
 
 /obj/structure/closet/secure_closet/freezer/update_icon()
-	overlays.Cut()
+	overlays.len = 0
 	if(broken)
 		icon_state = icon_broken
 	else
@@ -57,7 +57,7 @@
 		..()
 		sleep(2)
 		for(var/i = 0, i < 4, i++)
-			new /obj/item/weapon/reagent_containers/food/snacks/meat/monkey(src)
+			new /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey(src)
 		return
 
 

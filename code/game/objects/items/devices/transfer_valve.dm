@@ -10,10 +10,22 @@
 	var/valve_open = 0
 	var/toggle = 1
 
+	flags = FPRINT | PROXMOVE
+
 /obj/item/device/transfer_valve/proc/process_activation(var/obj/item/device/D)
 
 /obj/item/device/transfer_valve/IsAssemblyHolder()
 	return 1
+
+/obj/item/device/transfer_valve/Crossed(AM as mob|obj)
+	if(attached_device)
+		attached_device.Crossed(AM)
+	..()
+
+/obj/item/device/transfer_valve/on_found(AM as mob|obj)
+	if(attached_device)
+		attached_device.on_found(AM)
+	..()
 
 /obj/item/device/transfer_valve/attackby(obj/item/item, mob/user)
 	if(istype(item, /obj/item/weapon/tank))
@@ -23,13 +35,11 @@
 
 		if(!tank_one)
 			tank_one = item
-			user.drop_item()
-			item.loc = src
+			user.drop_item(item, src)
 			user << "<span class='notice'>You attach the tank to the transfer valve.</span>"
 		else if(!tank_two)
 			tank_two = item
-			user.drop_item()
-			item.loc = src
+			user.drop_item(item, src)
 			user << "<span class='notice'>You attach the tank to the transfer valve.</span>"
 
 		update_icon()
@@ -115,7 +125,7 @@
 			toggle = 1
 
 /obj/item/device/transfer_valve/update_icon()
-	overlays.Cut()
+	overlays.len = 0
 	underlays = null
 
 	if(!tank_one && !tank_two && !attached_device)

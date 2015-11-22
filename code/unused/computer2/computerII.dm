@@ -289,16 +289,16 @@
 
 	else if (istype(W, /obj/item/weapon/screwdriver))
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-		if(do_after(user, 20))
+		if(do_after(user, src, 20))
 			var/obj/computer2frame/A = new /obj/computer2frame( src.loc )
 			A.created_icon_state = src.base_icon_state
 			if (src.stat & BROKEN)
-				user << "\blue The broken glass falls out."
+				user << "<span class='notice'>The broken glass falls out.</span>"
 				new /obj/item/weapon/shard( src.loc )
 				A.state = 3
 				A.icon_state = "3"
 			else
-				user << "\blue You disconnect the monitor."
+				user << "<span class='notice'>You disconnect the monitor.</span>"
 				A.state = 4
 				A.icon_state = "4"
 

@@ -12,10 +12,9 @@
 	var/charge_states = 1 //if the gun changes icon states depending on charge, this is 1. Uses a var so it can be changed easily
 
 /obj/item/weapon/gun/energy/emp_act(severity)
-		power_supply.use(round(power_supply.maxcharge / severity))
-		update_icon()
-		..()
-
+	power_supply.use(round(power_supply.maxcharge / severity))
+	update_icon()
+	..()
 
 /obj/item/weapon/gun/energy/process_chambered()
 	if(in_chamber)	return 1
@@ -25,10 +24,22 @@
 	in_chamber = new projectile_type(src)
 	return 1
 
-
 /obj/item/weapon/gun/energy/update_icon()
-	var/ratio = power_supply.charge / power_supply.maxcharge
-	ratio = round(ratio, 0.25) * 100
+	var/ratio = 0
+
+	if(power_supply && power_supply.maxcharge > 0) //If the gun has a power cell, calculate how much % power is left in it
+		ratio = power_supply.charge / power_supply.maxcharge
+
+	//If there's no power cell, the gun looks as if it had an empty power cell
+
+	ratio *= 100
+	ratio = Clamp(ratio, 0, 100) //Value between 0 and 100
+
+	if(ratio >= 50)
+		ratio = Floor(ratio, 25)
+	else
+		ratio = Ceiling(ratio, 25)
+
 	if(modifystate && charge_states)
 		icon_state = "[modifystate][ratio]"
 	else if(charge_states)

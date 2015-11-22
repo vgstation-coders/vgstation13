@@ -132,7 +132,7 @@
 
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\intercept_report.dm:133: src.text += "<BR><BR>The <B>[name_1] [name_2]</B> implied an undercover operative was acting on their behalf on the station currently."
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\intercept_report.dm:133: src.text += "<BR><BR>The <B>[name_1] [name_2]</B> implied an undercover operative was acting on their behalf on the station currently."
 	src.text += {"<BR><BR>The <B>[name_1] [name_2]</B> implied an undercover operative was acting on their behalf on the station currently.
 		It would be in your best interests to suspect everybody, as these undercover operatives could have implants which trigger them to have their memories removed until they are needed. He, or she, could even be a high ranking officer.
 		After some investigation, we "}
@@ -140,14 +140,14 @@
 	if(prob(50))
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\intercept_report.dm:138: src.text += "are [prob_right_dude]% sure that [traitor_name] may have been involved, and should be closely observed."
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\intercept_report.dm:138: src.text += "are [prob_right_dude]% sure that [traitor_name] may have been involved, and should be closely observed."
 		src.text += {"are [prob_right_dude]% sure that [traitor_name] may have been involved, and should be closely observed.
 			<BR>Note: This group are known to be untrustworthy, so do not act on this information without proper discourse."}
 		// END AUTOFIX
 	else
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\intercept_report.dm:141: src.text += "discovered the following set of fingerprints ([fingerprints]) on sensitive materials, and their owner should be closely observed."
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\intercept_report.dm:141: src.text += "discovered the following set of fingerprints ([fingerprints]) on sensitive materials, and their owner should be closely observed."
 		src.text += {"discovered the following set of fingerprints ([fingerprints]) on sensitive materials, and their owner should be closely observed.
 			However, these could also belong to a current Cent. Com employee, so do not act on this without reason."}
 		// END AUTOFIX
@@ -162,7 +162,7 @@
 
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\intercept_report.dm:155: src.text += "<BR><BR>It has been brought to our attention that the [name_1] [name_2] have stumbled upon some dark secrets. They apparently want to spread the dangerous knowledge onto as many stations as they can."
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\intercept_report.dm:155: src.text += "<BR><BR>It has been brought to our attention that the [name_1] [name_2] have stumbled upon some dark secrets. They apparently want to spread the dangerous knowledge onto as many stations as they can."
 	src.text += {"<BR><BR>It has been brought to our attention that the [name_1] [name_2] have stumbled upon some dark secrets. They apparently want to spread the dangerous knowledge onto as many stations as they can.
 		Watch out for the following: praying to an unfamilar god, preaching the word of \[REDACTED\], sacrifices, magical dark power, living constructs of evil and a portal to the dimension of the underworld.
 		Based on our intelligence, we are [prob_right_dude]% sure that if true, someone doing the job of [traitor_job] on your station may have been converted 
@@ -180,7 +180,7 @@
 
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\intercept_report.dm:174: src.text += "<BR><BR>It has been brought to our attention that the [name_1] [name_2] are attempting to stir unrest on one of our stations in your sector."
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\intercept_report.dm:174: src.text += "<BR><BR>It has been brought to our attention that the [name_1] [name_2] are attempting to stir unrest on one of our stations in your sector."
 	src.text += {"<BR><BR>It has been brought to our attention that the [name_1] [name_2] are attempting to stir unrest on one of our stations in your sector.
 		Watch out for suspicious activity among the crew and make sure that all heads of staff report in periodically.
 		Based on our intelligence, we are [prob_right_dude]% sure that if true, someone doing the job of [traitor_job] on your station may have been brainwashed 
@@ -192,7 +192,7 @@
 
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\intercept_report.dm:187: src.text += "<BR><BR>The evil Space Wizards Federation have recently broke their most feared wizard, known only as \"[SWF_desc]\" out of space jail. "
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\intercept_report.dm:187: src.text += "<BR><BR>The evil Space Wizards Federation have recently broke their most feared wizard, known only as \"[SWF_desc]\" out of space jail. "
 	src.text += {"<BR><BR>The evil Space Wizards Federation have recently broke their most feared wizard, known only as \"[SWF_desc]\" out of space jail. 
 		He is on the run, last spotted in a system near your present location. If anybody suspicious is located aboard, please 
 		approach with EXTREME caution. Cent. Com also recommends that it would be wise to not inform the crew of this, due to their fearful nature.
@@ -200,8 +200,9 @@
 	// END AUTOFIX
 /datum/intercept_text/proc/build_nuke(datum/mind/correct_person)
 
+
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\intercept_report.dm:193: src.text += "<BR><BR>Cent. Com recently recieved a report of a plot to destroy one of our stations in your area. We believe the Nuclear Authentication Disc "
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\intercept_report.dm:193: src.text += "<BR><BR>Cent. Com recently recieved a report of a plot to destroy one of our stations in your area. We believe the Nuclear Authentication Disc "
 	src.text += {"<BR><BR>Cent. Com recently recieved a report of a plot to destroy one of our stations in your area. We believe the Nuclear Authentication Disc 
 		that is standard issue aboard your vessel may be a target. We recommend removal of this object, and it's storage in a safe 
 		environment. As this may cause panic among the crew, all efforts should be made to keep this information a secret from all but 
@@ -211,7 +212,7 @@
 	var/a_name = pick(src.anomalies)
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\intercept_report.dm:200: src.text += "<BR><BR>A [a_name] was recently picked up by a nearby stations sensors in your sector. If it came into contact with your ship or "
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\intercept_report.dm:200: src.text += "<BR><BR>A [a_name] was recently picked up by a nearby stations sensors in your sector. If it came into contact with your ship or "
 	src.text += {"<BR><BR>A [a_name] was recently picked up by a nearby stations sensors in your sector. If it came into contact with your ship or 
 		electrical equipment, it may have had hazardarous and unpredictable effect. Closely observe any non carbon based life forms 
 		for signs of unusual behaviour, but keep this information discreet at all times due to this possibly dangerous scenario."}
@@ -246,14 +247,14 @@
 	/*
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\intercept_report.dm:232: src.text += "Our intelligence suggests a [prob_right_job]% chance that a [changeling_job] on board your station has been replaced by the alien.  "
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\intercept_report.dm:232: src.text += "Our intelligence suggests a [prob_right_job]% chance that a [changeling_job] on board your station has been replaced by the alien.  "
 	src.text += {"Our intelligence suggests a [prob_right_job]% chance that a [changeling_job] on board your station has been replaced by the alien.  
 		Additionally, the report indicates a [prob_right_dude]% chance that [changeling_name] may have been in contact with the lifeform at a recent social gathering.  "}
 	// END AUTOFIX
 	*/
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\gamemodes\intercept_report.dm:235: src.text += "These lifeforms are assosciated with the [orgname1] [orgname2] and may be attempting to acquire sensitive materials on their behalf.  "
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\intercept_report.dm:235: src.text += "These lifeforms are assosciated with the [orgname1] [orgname2] and may be attempting to acquire sensitive materials on their behalf.  "
 	src.text += {"These lifeforms are assosciated with the [orgname1] [orgname2] and may be attempting to acquire sensitive materials on their behalf.  
 		Please take care not to alarm the crew, as [cname] may take advantage of a panic situation. Remember, they can be anybody, suspect everybody!"}
 	// END AUTOFIX

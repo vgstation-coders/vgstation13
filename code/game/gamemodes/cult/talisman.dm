@@ -4,6 +4,37 @@
 	var/uses = 0
 	var/nullblock = 0
 
+/obj/item/weapon/paper/talisman/examine(mob/user)
+	..()
+	if(iscultist(user) || isobserver(user))
+		switch(imbue)
+			if("newtome")
+				user << "This talisman has been imbued with the power of spawning a new Arcane Tome."
+			if("armor")
+				user << "This talisman has been imbued with the power of clothing yourself in cult fighting gear."
+			if("emp")
+				user << "This talisman has been imbued with the power of disabling technology in a small radius around you."
+			if("conceal")
+				user << "This talisman has been imbued with the power of concealing nearby runes."
+			if("revealrunes")
+				user << "This talisman has been imbued with the power of revealing hidden nearby runes."
+			if("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri")
+				user << "This talisman has been imbued with the power of taking you to someplace else. You can read <i>[imbue]</i> on it."
+			if("communicate")
+				user << "This talisman has been imbued with the power of communicating your whispers to your allies."
+			if("deafen")
+				user << "This talisman has been imbued with the power of deafening visible enemies."
+			if("blind")
+				user << "This talisman has been imbued with the power of blinding visible enemies."
+			if("runestun")
+				user << "This talisman has been imbued with the power of paralyzing the beings you touch with it. The effect works on silicons as well, but humans will also be muted for a short time."
+			if("supply")
+				user << "This talisman has been imbued with the power of providing you and your allies with some supplies to start your cult."
+			else
+				user << "This talisman.....has no particular power. Is this some kind of joke?"
+	else
+		user << "Something about the blood stains on this paper fills you with uneasiness."
+
 /obj/item/weapon/paper/talisman/proc/findNullRod(var/atom/target)
 	if(istype(target,/obj/item/weapon/nullrod))
 		var/turf/T = get_turf(target)
@@ -14,12 +45,6 @@
 		for(var/atom/A in target.contents)
 			findNullRod(A)
 	return 0
-
-
-/obj/item/weapon/paper/talisman/examine()
-	set src in view(2)
-	..()
-	return
 
 /obj/item/weapon/paper/talisman/New()
 	..()
@@ -52,19 +77,19 @@
 				delete = call(/obj/effect/rune/proc/communicate)()
 			if("deafen")
 				deafen()
-				del(src)
+				qdel(src)
 			if("blind")
 				blind()
-				del(src)
+				qdel(src)
 			if("runestun")
-				user << "\red To use this talisman, attack your target directly."
+				user << "<span class='warning'>To use this talisman, attack your target directly.</span>"
 				return
 			if("supply")
 				supply()
 		user.take_organ_damage(5, 0)
 		if(src && src.imbue!="supply" && src.imbue!="runestun")
 			if(delete)
-				del(src)
+				qdel(src)
 		return
 	else
 		user << "You see strange symbols on the paper. Are they supposed to mean something?"
@@ -76,7 +101,7 @@
 		if(imbue == "runestun")
 			user.take_organ_damage(5, 0)
 			runestun(T)
-			del(src)
+			qdel(src)
 		else
 			..()   ///If its some other talisman, use the generic attack code, is this supposed to work this way?
 	else
@@ -88,7 +113,7 @@
 
 /obj/item/weapon/paper/talisman/proc/supply(var/key)
 	if (!src.uses)
-		del(src)
+		qdel(src)
 		return
 
 	var/dat = {"<B>There are [src.uses] bloody runes on the parchment.</B>

@@ -15,6 +15,11 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "ash"
 	anchored = 1
+	layer = TURF_LAYER
+
+/obj/effect/decal/cleanable/ash/attack_hand(mob/user as mob)
+	user.visible_message("<span class='notice'>[user] wipes away \the [src].</span>")
+	qdel(src)
 
 /obj/effect/decal/cleanable/dirt
 	name = "dirt"
@@ -83,43 +88,13 @@
 	density = 0
 	anchored = 1
 	layer = 2
-	var/basecolor="#FFFF99"
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "vomit_1"
-	var/amount = 2
+
+	basecolor="#FFFF99"
+	amount = 2
 	random_icon_states = list("vomit_1", "vomit_2", "vomit_3", "vomit_4")
-	var/list/viruses = list()
-
-	Destroy()
-		for(var/datum/disease/D in viruses)
-			D.cure(0)
-			D.holder = null
-		..()
-
-/obj/effect/decal/cleanable/vomit/Crossed(mob/living/carbon/human/perp)
-	if (!istype(perp))
-		return
-	if(amount < 1)
-		return
-
-	if(perp.shoes)
-		perp.shoes:track_blood = max(amount,perp.shoes:track_blood)		//Adding blood to shoes
-		if(!perp.shoes.blood_overlay)
-			perp.shoes.generate_blood_overlay()
-		if(!perp.shoes.blood_DNA)
-			perp.shoes.blood_DNA = list()
-			perp.shoes.overlays += perp.shoes.blood_overlay
-			perp.update_inv_shoes(1)
-		//perp.shoes.blood_DNA |= blood_DNA.Copy()
-		perp.shoes.blood_color=basecolor
-	else
-		perp.track_blood = max(amount,perp.track_blood)				//Or feet
-		if(!perp.feet_blood_DNA)
-			perp.feet_blood_DNA = list()
-		//perp.feet_blood_DNA |= blood_DNA.Copy()
-		perp.feet_blood_color=basecolor
-
-	amount--
+	transfers_dna = 1
 
 /obj/effect/decal/cleanable/tomato_smudge
 	name = "tomato smudge"
@@ -148,6 +123,20 @@
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("smashed_pie")
 
+/obj/effect/decal/cleanable/clay_fragments
+	name = "clay fragments"
+	desc = "pieces from a broken clay pot"
+	gender = PLURAL
+	icon = 'icons/effects/tomatodecal.dmi'
+	icon_state = "clay_fragments"
+	anchored = 0
+	layer=2
+
+/obj/effect/decal/cleanable/clay_fragments/New()
+	..()
+	pixel_x = rand (-3,3)
+	pixel_y = rand (-3,3)
+
 /obj/effect/decal/cleanable/soot
 	name = "soot"
 	desc = "One hell of a party..."
@@ -160,3 +149,12 @@
 /obj/effect/decal/cleanable/soot/New()
 	..()
 	dir = pick(cardinal)
+
+/obj/effect/decal/cleanable/lspaceclutter
+	name = "clutter"
+	gender = PLURAL
+	density = 0
+	anchored = 1
+	layer = 2
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "lspaceclutter"

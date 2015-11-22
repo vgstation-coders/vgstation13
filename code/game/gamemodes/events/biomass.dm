@@ -27,19 +27,18 @@
 	if (!W || !user || !W.type)
 		return
 
-	switch(W.type)
+	switch(W.type) //This is absolutely terrible
 		if(/obj/item/weapon/circular_saw)
 			qdel(src)
 		if(/obj/item/weapon/kitchen/utensil/knife)
 			qdel(src)
-		if(/obj/item/weapon/scalpel)
-			qdel(src)
-		if(/obj/item/weapon/twohanded/fireaxe)
+		if(/obj/item/weapon/fireaxe)
 			qdel(src)
 		if(/obj/item/weapon/hatchet)
 			qdel(src)
 		if(/obj/item/weapon/melee/energy)
 			qdel(src)
+		if(/obj/item/weapon/pickaxe/plasmacutter) qdel(src)
 
 		// less effective weapons
 		if(/obj/item/weapon/wirecutters)
@@ -51,6 +50,8 @@
 
 		else // weapons with subtypes
 			if(istype(W, /obj/item/weapon/melee/energy/sword))
+				qdel(src)
+			else if(istype(W, /obj/item/weapon/scalpel))
 				qdel(src)
 			else if(istype(W, /obj/item/weapon/weldingtool))
 				var/obj/item/weapon/weldingtool/WeldingTool = W
@@ -195,12 +196,12 @@
 	for(var/type in typesof(/area/hallway))
 		var/area/Hallway = locate(type)
 
-		for(var/area/Related in Hallway.related)
-			for(var/turf/simulated/floor/Floor in Related.contents)
-				if(Floor.contents.len <= 0)
-					Floors += Floor
+		for(var/turf/simulated/floor/Floor in Hallway.contents)
+			if(!is_blocked_turf(Floor))
+				Floors += Floor
 
 	if(Floors.len) // pick a floor to spawn at
 		var/turf/simulated/floor/Floor = pick(Floors)
 		new/obj/effect/biomass_controller(Floor) // spawn a controller at floor
-		message_admins("<span class='notice'>Event: Biomass spawned at [Floor.loc] ([Floor.x].[Floor.y].[Floor.z])</span>")
+		log_admin("Event: Biomass spawned at [Floor.loc] ([Floor.x],[Floor.y],[Floor.z]).")
+		message_admins("Event: Biomass spawned at [Floor.loc] [formatJumpTo(Floor)]")

@@ -12,6 +12,8 @@ field_generator power level display
    -Aygar
 */
 
+var/global/list/obj/machinery/field_generator/field_gen_list = list()
+
 #define field_generator_max_power 250
 /obj/machinery/field_generator
 	name = "Field Generator"
@@ -34,7 +36,7 @@ field_generator power level display
 	machine_flags = WRENCHMOVE | FIXED2WORK | WELD_FIXED
 
 /obj/machinery/field_generator/update_icon()
-	overlays.Cut()
+	overlays.len = 0
 	if(!active)
 		if(warming_up)
 			overlays += "+a[warming_up]"
@@ -44,7 +46,7 @@ field_generator power level display
 	// Scale % power to % num_power_levels and truncate value
 	var/level = round(num_power_levels * power / field_generator_max_power)
 	// Clamp between 0 and num_power_levels for out of range power values
-	level = between(0, level, num_power_levels)
+	level = Clamp(level, 0, num_power_levels)
 	if(level)
 		overlays += "+p[level]"
 
@@ -55,6 +57,7 @@ field_generator power level display
 	..()
 	fields = list()
 	connected_gens = list()
+	field_gen_list += src
 	return
 
 /obj/machinery/field_generator/process()
@@ -93,7 +96,7 @@ field_generator power level display
 					"You turn on the [src.name].", \
 					"You hear heavy droning")
 				turn_on()
-				investigate_log("<font color='green'>activated</font> by [user.key].","singulo")
+				investigation_log(I_SINGULO,"<font color='green'>activated</font> by [user.key].")
 
 				src.add_fingerprint(user)
 	else
@@ -126,9 +129,6 @@ field_generator power level display
 	else
 		..()
 
-/obj/machinery/containment_field/meteorhit()
-	return 0
-
 /obj/machinery/field_generator/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.flag != "bullet")
 		power += Proj.damage
@@ -138,6 +138,7 @@ field_generator power level display
 
 /obj/machinery/field_generator/Destroy()
 	src.cleanup()
+	field_gen_list -= src
 	..()
 
 
@@ -178,9 +179,9 @@ field_generator power level display
 		return 1
 	else
 		for(var/mob/M in viewers(src))
-			M.show_message("\red The [src.name] shuts down!")
+			M.show_message("<span class='warning'>The [src.name] shuts down!</span>")
 		turn_off()
-		investigate_log("ran out of power and <font color='red'>deactivated</font>","singulo")
+		investigation_log(I_SINGULO,"ran out of power and <font color='red'>deactivated</font>")
 		src.power = 0
 		return 0
 
@@ -288,6 +289,11 @@ field_generator power level display
 
 /obj/machinery/field_generator/proc/cleanup()
 	clean_up = 1
+	for (var/obj/effect/beam/B in beams)
+		if(!B)
+			continue
+		if(B.target == src)
+			B.target = null
 	for (var/obj/machinery/containment_field/F in fields)
 		if (isnull(F))
 			continue
@@ -309,10 +315,10 @@ field_generator power level display
 	//I want to avoid using global variables.
 	spawn(1)
 		var/temp = 1 //stops spam
-		for(var/obj/machinery/singularity/O in machines)
+		for(var/obj/machinery/singularity/O in power_machines)
 			if(O.last_warning && temp)
 				if((world.time - O.last_warning) > 50) //to stop message-spam
 					temp = 0
 					message_admins("A singulo exists and a containment field has failed.",1)
-					investigate_log("has <font color='red'>failed</font> whilst a singulo exists.","singulo")
+					investigation_log(I_SINGULO,"has <font color='red'>failed</font> whilst a singulo exists.")
 			O.last_warning = world.time

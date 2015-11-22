@@ -75,8 +75,7 @@ datum
 	desc = "A small, open-topped glass container for delicate research samples. It sports a re-useable strip for labelling with a pen."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "solution_tray"
-	m_amt = 0
-	g_amt = 50
+	starting_materials = list(MAT_GLASS = 20)
 	w_type = RECYK_GLASS
 	w_class = 1.0
 	amount_per_transfer_from_this = 1
@@ -84,12 +83,14 @@ datum
 	volume = 2
 	flags = FPRINT | OPENCONTAINER
 
+/obj/item/weapon/reagent_containers/glass/solution_tray/mop_act(obj/item/weapon/mop/M, mob/user)
+	return 1
 obj/item/weapon/reagent_containers/glass/solution_tray/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
-	if(istype(W, /obj/item/weapon/pen))
-		var/new_label = input("What should the new label be?","Label solution tray")
-		if(new_label)
+	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
+		var/new_label = copytext(sanitize(input("What should the new label be?","Label solution tray") as text|null), 1, MAX_NAME_LEN)
+		if(new_label && Adjacent(user) && !user.stat)
 			name = "solution tray ([new_label])"
-			user << "\blue You write on the label of the solution tray."
+			user << "<span class='notice'> You write on the label of the solution tray.</span>"
 	else
 		..(W, user)
 

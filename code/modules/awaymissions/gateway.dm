@@ -20,6 +20,8 @@
 		return
 	icon_state = "off"
 
+/obj/machinery/gateway/shuttle_rotate()
+	return
 
 
 //this is da important part wot makes things go
@@ -231,6 +233,6 @@ obj/machinery/gateway/centerstation/process()
 			user << "\black The gate is already calibrated, there is no work for you to do here."
 			return
 		else
-			user << "\blue <b>Recalibration successful!</b>: \black This gate's systems have been fine tuned.  Travel to this gate will now be on target."
+			user << "<span class='notice'><b>Recalibration successful!</b>: </span>This gate's systems have been fine tuned.  Travel to this gate will now be on target."
 			calibrated = 1
 			return

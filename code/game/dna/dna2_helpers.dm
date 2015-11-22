@@ -144,11 +144,11 @@
 		H.b_eyes   = dna.GetUIValueRange(DNA_UI_EYES_B,    255)
 
 		H.s_tone   = 35 - dna.GetUIValueRange(DNA_UI_SKIN_TONE, 220) // Value can be negative.
-
+		H.setGender(MALE)
 		if (dna.GetUIState(DNA_UI_GENDER))
-			H.gender = FEMALE
+			H.setGender(FEMALE)
 		else
-			H.gender = MALE
+			H.setGender(MALE)
 
 		//Hair
 		var/hair = dna.GetUIValueRange(DNA_UI_HAIR_STYLE,hair_styles_list.len)
@@ -174,7 +174,8 @@
 
 /proc/query_genes(var/notflags = 0, var/flags = 0, var/genetype = -1)
 	. = list()
-	for(var/datum/dna/gene/gene in dna_genes)
+	for(var/gene_type in dna_genes)
+		var/datum/dna/gene/gene = dna_genes[gene_type]
 		if(!gene.block) continue
 		if(genetype>-1 && gene.genetype!=genetype) continue
 		if(flags!=0 && !(gene.flags & flags)) continue

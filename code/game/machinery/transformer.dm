@@ -6,7 +6,7 @@
 	layer = MOB_LAYER+1 // Overhead
 	anchored = 1
 	density = 1
-	var/transform_dead = 0
+	var/transform_dead = 0 //This variable doesn't seem to do anything
 	var/transform_standing = 0
 	var/cooldown_duration = 900 // 1.5 minutes
 	var/cooldown_time = 0
@@ -61,6 +61,10 @@
 
 	if(!transform_dead && H.stat == DEAD)
 		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
+		return
+
+	if(jobban_isbanned(H, "Cyborg"))
+		src.visible_message("<span class='danger'>\The [src.name] throws an exception. Lifeform not compatible with factory.</span>")
 		return
 
 	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
@@ -144,7 +148,7 @@
 
 /obj/machinery/transformer/Topic(href, href_list)
 	if(!isAI(usr))
-		usr << "\red This machine is way above your pay-grade."
+		usr << "<span class='warning'>This machine is way above your pay-grade.</span>"
 		return 0
 	if(!("act" in href_list))
 		return 0
@@ -152,7 +156,9 @@
 		if("force_class")
 			var/list/modules = list("(Robot's Choice)")
 			modules += getAvailableRobotModules()
-			var/sel_mod = input("Please, select a module!", "Robot", null, null) in modules
+			var/sel_mod = input("Please, select a module!", "Robot", null, null) as null|anything in modules
+			if(!sel_mod)
+				return
 			if(sel_mod == "(Robot's Choice)")
 				force_borg_module = null
 			else

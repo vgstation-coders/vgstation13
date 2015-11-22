@@ -10,18 +10,22 @@
 	speak_emote = list("growls", "roars")
 	emote_hear = list("rawrs","grumbles","grawls")
 	emote_see = list("stares ferociously", "stomps")
+	var/default_icon_space = "bear"
+	var/default_icon_floor = "bearfloor"
 	speak_chance = 1
 	turns_per_move = 5
 	see_in_dark = 6
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/bearmeat
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm   = "hits"
 	stop_automated_movement_when_pulled = 0
 	maxHealth = 60
 	health = 60
+	attacktext = "mauls"
 	melee_damage_lower = 20
 	melee_damage_upper = 30
+	size = SIZE_BIG
 
 	//Space bears aren't affected by atmos.
 	min_oxy = 0
@@ -45,15 +49,31 @@
 	response_disarm = "gently pushes aside"
 	response_harm   = "hits"
 
+/mob/living/simple_animal/hostile/bear/panda
+		name = "Space Panda"
+		desc = "Endangered even in space. A lack of bamboo has driven them somewhat mad."
+		icon_state = "panda"
+		icon_living = "panda"
+		icon_dead = "panda_dead"
+		icon_gib = "brownbear_gib"
+		default_icon_floor = "panda"
+		default_icon_space = "panda"
+		maxHealth = 50
+		health = 50
+		melee_damage_lower=10
+		melee_damage_upper=35
+
 /mob/living/simple_animal/hostile/bear/Move()
 	..()
 	if(stat != DEAD)
 		if(loc && istype(loc,/turf/space))
-			icon_state = "bear"
+			icon_state = default_icon_space
 		else
-			icon_state = "bearfloor"
+			icon_state = default_icon_floor
+
 
 /mob/living/simple_animal/hostile/bear/Life()
+	if(timestopped) return 0 //under effects of time magick
 	. =..()
 	if(!.)
 		return
@@ -118,6 +138,12 @@
 /mob/living/simple_animal/hostile/bear/Process_Spacemove(var/check_drift = 0)
 	return 1	//No drifting in space for space bears!
 
+/mob/living/simple_animal/hostile/bear/CanAttack(var/atom/the_target)
+	. = ..()
+	for(var/obj/effect/decal/cleanable/crayon/C in get_turf(the_target))
+		if(C.name == "o") //drawing a circle around yourself is the only way to ward off space bears!
+			return 0
+
 /mob/living/simple_animal/hostile/bear/FindTarget()
 	. = ..()
 	if(.)
@@ -126,23 +152,3 @@
 
 /mob/living/simple_animal/hostile/bear/LoseTarget()
 	..(5)
-
-/mob/living/simple_animal/hostile/bear/AttackingTarget()
-	emote( pick( list("slashes at [target]", "bites [target]") ) )
-
-	var/damage = rand(20,30)
-
-	if(ishuman(target))
-		var/mob/living/carbon/human/H = target
-		var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
-		var/datum/organ/external/affecting = H.get_organ(ran_zone(dam_zone))
-		H.apply_damage(damage, BRUTE, affecting, H.run_armor_check(affecting, "melee"))
-		return H
-	else if(isliving(target))
-		var/mob/living/L = target
-		L.adjustBruteLoss(damage)
-		return L
-	else if(istype(target,/obj/mecha))
-		var/obj/mecha/M = target
-		M.attack_animal(src)
-		return M

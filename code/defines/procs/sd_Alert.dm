@@ -66,9 +66,7 @@ Version 1 changes (from version 0):
 #define SD_ALERT_LINKS			4
 #define SD_ALERT_NOVALIDATE		8
 
-proc/sd_Alert(client/who, message, title, buttons = list("Ok"),\
-	default, duration = 0, unfocus = 1, size = "300x200", \
-	table = "width=100% height=100%", style, tag, select, flags = SD_ALERT_SCROLL)
+proc/sd_Alert(client/who, message, title, buttons = list("Ok"),	default, duration = 0, unfocus = 1, size = "300x200", 	table = "width=100% height=100%", style, tag, select, flags = SD_ALERT_SCROLL)
 
 	if(ismob(who))
 		var/mob/M = who

@@ -137,6 +137,7 @@ var/list/advance_cures = 	list(
 // Will generate new unique symptoms, use this if there are none. Returns a list of symptoms that were generated.
 /datum/disease/advance/proc/GenerateSymptoms(var/type_level_limit = RANDOM_STARTING_LEVEL, var/amount_get = 0)
 
+
 	var/list/generated = list() // Symptoms we generated.
 
 	// Generate symptoms. By default, we only choose non-deadly symptoms.
@@ -182,6 +183,7 @@ var/list/advance_cures = 	list(
 //Generate disease properties based on the effects. Returns an associated list.
 /datum/disease/advance/proc/GenerateProperties()
 
+
 	if(!symptoms || !symptoms.len)
 		CRASH("We did not have any symptoms before generating properties.")
 		return
@@ -200,6 +202,7 @@ var/list/advance_cures = 	list(
 
 // Assign the properties that are in the list.
 /datum/disease/advance/proc/AssignProperties(var/list/properties = list())
+
 
 	if(properties && properties.len)
 
@@ -234,6 +237,7 @@ var/list/advance_cures = 	list(
 	//world << "Setting spread type to [spread_id]/[spread]"
 
 /datum/disease/advance/proc/SetSeverity(var/level_sev)
+
 
 	switch(level_sev)
 
@@ -292,6 +296,7 @@ var/list/advance_cures = 	list(
 // Return a unique ID of the disease.
 /datum/disease/advance/proc/GetDiseaseID()
 
+
 	var/list/L = list()
 	for(var/datum/symptom/S in symptoms)
 		L += S.id
@@ -304,6 +309,7 @@ var/list/advance_cures = 	list(
 // Add a symptom, if it is over the limit (with a small chance to be able to go over)
 // we take a random symptom away and add the new one.
 /datum/disease/advance/proc/AddSymptom(var/datum/symptom/S)
+
 
 	if(HasSymptom(S))
 		return
@@ -328,6 +334,7 @@ var/list/advance_cures = 	list(
 
 // Mix a list of advance diseases and return the mixed result.
 /proc/Advance_Mix(var/list/D_list)
+
 
 	//world << "Mixing!!!!"
 
@@ -393,7 +400,7 @@ var/list/advance_cures = 	list(
 
 	if(D.symptoms.len > 0)
 
-		var/new_name = input(user, "Name your new disease.", "New Name")
+		var/new_name = copytext(sanitize(input(user, "Name your new disease.", "New Name")),1,MAX_NAME_LEN)
 		D.AssignName(new_name)
 		D.Refresh()
 
@@ -414,6 +421,7 @@ var/list/advance_cures = 	list(
 
 /*
 /mob/verb/test()
+
 
 	for(var/datum/disease/D in active_diseases)
 		src << "<a href='?_src_=vars;Vars=\ref[D]'>[D.name] - [D.holder]</a>"

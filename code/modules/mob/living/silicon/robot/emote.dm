@@ -1,4 +1,5 @@
 /mob/living/silicon/robot/emote(var/act,var/m_type=1,var/message = null)
+	if(timestopped) return //under effects of time magick
 	var/param = null
 	if (findtext(act, "-", 1, null))
 		var/t1 = findtext(act, "-", 1, null)
@@ -27,7 +28,7 @@
 			return custom_emote(m_type, message)
 
 		if ("salute")
-			if (!src.buckled)
+			if (!src.locked_to)
 				var/M = null
 				if (param)
 					for (var/mob/A in view(null, null))
@@ -43,7 +44,7 @@
 					message = "<B>[src]</b> salutes."
 			m_type = VISIBLE
 		if ("bow")
-			if (!src.buckled)
+			if (!src.locked_to)
 				var/M = null
 				if (param)
 					for (var/mob/A in view(null, null))
@@ -217,7 +218,7 @@
 		if ("help")
 			src << "salute, bow-(none)/mob, clap, flap, aflap, twitch, twitch_s, nod, deathgasp, glare-(none)/mob, stare-(none)/mob, look, beep, ping, \nbuzz, law, halt"
 		else
-			src << "\blue Unusable emote '[act]'. Say *help for a list."
+			src << "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>"
 
 	if ((message && src.stat == 0))
 		if (m_type & 1)

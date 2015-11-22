@@ -9,6 +9,7 @@
 
 /obj/item/clothing/suit/storage/proc/return_inv()
 
+
 	var/list/L = list(  )
 
 	L += src.contents
@@ -33,6 +34,7 @@
 
 /obj/item/clothing/suit/storage/proc/hide_from(mob/user as mob)
 
+
 	if(!user.client)
 		return
 	user.client.screen -= src.boxes
@@ -41,6 +43,7 @@
 	return
 
 /obj/item/clothing/suit/storage/proc/close(mob/user as mob)
+
 
 	src.hide_from(user)
 	user.s_active = null
@@ -142,19 +145,15 @@
 			user << "<span class='warning'>The [src] cannot hold \the [W] as it's a storage item of the same size.</span>"
 			return //To prevent the stacking of the same sized items.
 
-	user.u_equip(W)
+	user.u_equip(W,1)
 	playsound(get_turf(src), "rustle", 50, 1, -5)
 	W.loc = src
 	if ((user.client && user.s_active != src))
 		user.client.screen -= W
 	src.orient2hud(user)
-	W.dropped(user)
+	//W.dropped(user)
 	add_fingerprint(user)
 	show_to(user)
-
-
-/obj/item/weapon/storage/dropped(mob/user as mob)
-	return
 
 /obj/item/clothing/suit/storage/MouseDrop(atom/over_object)
 	if(ishuman(usr))
@@ -164,13 +163,13 @@
 		playsound(get_turf(src), "rustle", 50, 1, -5)
 		if ((!( M.restrained() ) && !( M.stat ) && M.wear_suit == src))
 			if (over_object.name == "r_hand")
-				M.u_equip(src)
+				M.u_equip(src,0)
 				M.put_in_r_hand(src)
 			//	if (!( M.r_hand ))
 			//		M.u_equip(src)
 			//		M.r_hand = src
 			else if (over_object.name == "l_hand")
-				M.u_equip(src)
+				M.u_equip(src,0)
 				M.put_in_l_hand(src)
 				//	if (!( M.l_hand ))
 				//		M.u_equip(src)
@@ -204,13 +203,13 @@
 
 /obj/item/clothing/suit/storage/New()
 	. = ..()
-	boxes = new /obj/screen/storage(  )
+	boxes = getFromPool(/obj/screen/storage)
 	boxes.name = "storage"
 	boxes.master = src
 	boxes.icon_state = "block"
 	boxes.screen_loc = "7,7 to 10,8"
 	boxes.layer = 19
-	closer = new /obj/screen/close(  )
+	closer = getFromPool(/obj/screen/close)
 	closer.master = src
 	closer.icon_state = "x"
 	closer.layer = 20
@@ -221,9 +220,10 @@
 		for(var/obj/O in contents)
 			O.emp_act(severity)
 	..()
-
+/*
 /obj/item/clothing/suit/hear_talk(mob/M, var/msg)
 	for (var/atom/A in src)
 		if(istype(A,/obj/))
 			var/obj/O = A
 			O.hear_talk(M, msg)
+*/

@@ -18,7 +18,7 @@
 	var/output = "<div align='center'><B>Player poll</B>"
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\poll.dm:19: output +="<hr>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:19: output +="<hr>"
 	output += {"<hr>
 		<b>We would like to expand our stats gathering.</b>
 		<br>This however involves gathering data about player behavior, play styles, unique player numbers, play times, etc. Data like that cannot be gathered fully anonymously, which is why we're asking you how you'd feel if player-specific data was gathered. Prior to any of this actually happening, a privacy policy will be discussed, but before that can begin, we'd preliminarily like to know how you feel about the concept.
@@ -55,7 +55,7 @@
 
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\poll.dm:56: var/output = "<div align='center'><B>Player polls</B>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:56: var/output = "<div align='center'><B>Player polls</B>"
 		var/output = {"<div align='center'><B>Player polls</B>
 <hr>"}
 		// END AUTOFIX
@@ -103,7 +103,7 @@
 			break
 
 		if(!found)
-			usr << "\red Poll question details not found."
+			usr << "<span class='warning'>Poll question details not found.</span>"
 			return
 
 		switch(polltype)
@@ -132,7 +132,7 @@
 				var/output = "<div align='center'><B>Player poll</B>"
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\poll.dm:133: output +="<hr>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:133: output +="<hr>"
 				output += {"<hr>
 					<b>Question: [pollquestion]</b><br>
 					<font size='2'>Poll runs from <b>[pollstarttime]</b> until <b>[pollendtime]</b></font><p>"}
@@ -140,7 +140,7 @@
 				if(!voted)	//Only make this a form if we have not voted yet
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\poll.dm:138: output += "<form name='cardcomp' action='?src=\ref[src]' method='get'>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:138: output += "<form name='cardcomp' action='?src=\ref[src]' method='get'>"
 					output += {"<form name='cardcomp' action='?src=\ref[src]' method='get'>
 						<input type='hidden' name='src' value='\ref[src]'>
 						<input type='hidden' name='votepollid' value='[pollid]'>
@@ -162,7 +162,7 @@
 				if(!voted)	//Only make this a form if we have not voted yet
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\poll.dm:156: output += "<p><input type='submit' value='Vote'>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:156: output += "<p><input type='submit' value='Vote'>"
 					output += {"<p><input type='submit' value='Vote'>
 						</form>"}
 					// END AUTOFIX
@@ -187,7 +187,7 @@
 				var/output = "<div align='center'><B>Player poll</B>"
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\poll.dm:177: output +="<hr>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:177: output +="<hr>"
 				output += {"<hr>
 					<b>Question: [pollquestion]</b><br>
 					<font size='2'>Feedback gathering runs from <b>[pollstarttime]</b> until <b>[pollendtime]</b></font><p>"}
@@ -195,7 +195,7 @@
 				if(!voted)	//Only make this a form if we have not voted yet
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\poll.dm:182: output += "<form name='cardcomp' action='?src=\ref[src]' method='get'>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:182: output += "<form name='cardcomp' action='?src=\ref[src]' method='get'>"
 					output += {"<form name='cardcomp' action='?src=\ref[src]' method='get'>
 						<input type='hidden' name='src' value='\ref[src]'>
 						<input type='hidden' name='votepollid' value='[pollid]'>
@@ -225,7 +225,7 @@
 				var/output = "<div align='center'><B>Player poll</B>"
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\poll.dm:211: output +="<hr>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:211: output +="<hr>"
 				output += {"<hr>
 					<b>Question: [pollquestion]</b><br>
 					<font size='2'>Poll runs from <b>[pollstarttime]</b> until <b>[pollendtime]</b></font><p>"}
@@ -242,7 +242,7 @@
 				if(!voted)	//Only make this a form if we have not voted yet
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\poll.dm:225: output += "<form name='cardcomp' action='?src=\ref[src]' method='get'>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:225: output += "<form name='cardcomp' action='?src=\ref[src]' method='get'>"
 					output += {"<form name='cardcomp' action='?src=\ref[src]' method='get'>
 						<input type='hidden' name='src' value='\ref[src]'>
 						<input type='hidden' name='votepollid' value='[pollid]'>
@@ -274,7 +274,7 @@
 
 
 						// AUTOFIXED BY fix_string_idiocy.py
-						// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\poll.dm:254: output += "<br>[optiontext]: <select name='o[optionid]'>"
+						// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:254: output += "<br>[optiontext]: <select name='o[optionid]'>"
 						output += {"<br>[optiontext]: <select name='o[optionid]'>
 							<option value='abstain'>abstain</option>"}
 						// END AUTOFIX
@@ -292,7 +292,7 @@
 
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\poll.dm:268: output += "<input type='hidden' name='minid' value='[minid]'>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:268: output += "<input type='hidden' name='minid' value='[minid]'>"
 					output += {"<input type='hidden' name='minid' value='[minid]'>
 						<input type='hidden' name='maxid' value='[maxid]'>
 						<p><input type='submit' value='Submit'>
@@ -332,7 +332,7 @@
 				var/output = "<div align='center'><B>Player poll</B>"
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\poll.dm:306: output +="<hr>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:306: output +="<hr>"
 				output += {"<hr>
 					<b>Question: [pollquestion]</b><br>You can select up to [multiplechoiceoptions] options. If you select more, the first [multiplechoiceoptions] will be saved.<br>
 					<font size='2'>Poll runs from <b>[pollstarttime]</b> until <b>[pollendtime]</b></font><p>"}
@@ -340,7 +340,7 @@
 				if(!voted)	//Only make this a form if we have not voted yet
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\poll.dm:311: output += "<form name='cardcomp' action='?src=\ref[src]' method='get'>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:311: output += "<form name='cardcomp' action='?src=\ref[src]' method='get'>"
 					output += {"<form name='cardcomp' action='?src=\ref[src]' method='get'>
 						<input type='hidden' name='src' value='\ref[src]'>
 						<input type='hidden' name='votepollid' value='[pollid]'>
@@ -364,7 +364,7 @@
 				if(!voted)	//Only make this a form if we have not voted yet
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\mob\new_player\poll.dm:331: output += "<p><input type='submit' value='Vote'>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:331: output += "<p><input type='submit' value='Vote'>"
 					output += {"<p><input type='submit' value='Vote'>
 						</form>"}
 					// END AUTOFIX
@@ -398,7 +398,7 @@
 			break
 
 		if(!validpoll)
-			usr << "\red Poll is not valid."
+			usr << "<span class='warning'>Poll is not valid.</span>"
 			return
 
 		var/DBQuery/select_query2 = dbcon.NewQuery("SELECT id FROM erro_poll_option WHERE id = [optionid] AND pollid = [pollid]")
@@ -411,7 +411,7 @@
 			break
 
 		if(!validoption)
-			usr << "\red Poll option is not valid."
+			usr << "<span class='warning'>Poll option is not valid.</span>"
 			return
 
 		var/alreadyvoted = 0
@@ -425,11 +425,11 @@
 				break
 
 		if(!multichoice && alreadyvoted)
-			usr << "\red You already voted in this poll."
+			usr << "<span class='warning'>You already voted in this poll.</span>"
 			return
 
 		if(multichoice && (alreadyvoted >= multiplechoiceoptions))
-			usr << "\red You already have more than [multiplechoiceoptions] logged votes on this poll. Enough is enough. Contact the database admin if this is an error."
+			usr << "<span class='warning'>You already have more than [multiplechoiceoptions] logged votes on this poll. Enough is enough. Contact the database admin if this is an error.</span>"
 			return
 
 		var/adminrank = "Player"
@@ -440,7 +440,7 @@
 		var/DBQuery/insert_query = dbcon.NewQuery("INSERT INTO erro_poll_vote (id ,datetime ,pollid ,optionid ,ckey ,ip ,adminrank) VALUES (null, Now(), [pollid], [optionid], '[usr.ckey]', '[usr.client.address]', '[adminrank]')")
 		insert_query.Execute()
 
-		usr << "\blue Vote successful."
+		usr << "<span class='notice'>Vote successful.</span>"
 		usr << browse(null,"window=playerpoll")
 
 
@@ -465,7 +465,7 @@
 			break
 
 		if(!validpoll)
-			usr << "\red Poll is not valid."
+			usr << "<span class='warning'>Poll is not valid.</span>"
 			return
 
 		var/alreadyvoted = 0
@@ -478,7 +478,7 @@
 			break
 
 		if(alreadyvoted)
-			usr << "\red You already sent your feedback for this poll."
+			usr << "<span class='warning'>You already sent your feedback for this poll.</span>"
 			return
 
 		var/adminrank = "Player"
@@ -498,7 +498,7 @@
 		var/DBQuery/insert_query = dbcon.NewQuery("INSERT INTO erro_poll_textreply (id ,datetime ,pollid ,ckey ,ip ,replytext ,adminrank) VALUES (null, Now(), [pollid], '[usr.ckey]', '[usr.client.address]', '[replytext]', '[adminrank]')")
 		insert_query.Execute()
 
-		usr << "\blue Feedback logging successful."
+		usr << "<span class='notice'>Feedback logging successful.</span>"
 		usr << browse(null,"window=playerpoll")
 
 
@@ -523,7 +523,7 @@
 			break
 
 		if(!validpoll)
-			usr << "\red Poll is not valid."
+			usr << "<span class='warning'>Poll is not valid.</span>"
 			return
 
 		var/DBQuery/select_query2 = dbcon.NewQuery("SELECT id FROM erro_poll_option WHERE id = [optionid] AND pollid = [pollid]")
@@ -536,7 +536,7 @@
 			break
 
 		if(!validoption)
-			usr << "\red Poll option is not valid."
+			usr << "<span class='warning'>Poll option is not valid.</span>"
 			return
 
 		var/alreadyvoted = 0
@@ -549,7 +549,7 @@
 			break
 
 		if(alreadyvoted)
-			usr << "\red You already voted in this poll."
+			usr << "<span class='warning'>You already voted in this poll.</span>"
 			return
 
 		var/adminrank = "Player"
@@ -560,5 +560,5 @@
 		var/DBQuery/insert_query = dbcon.NewQuery("INSERT INTO erro_poll_vote (id ,datetime ,pollid ,optionid ,ckey ,ip ,adminrank, rating) VALUES (null, Now(), [pollid], [optionid], '[usr.ckey]', '[usr.client.address]', '[adminrank]', [(isnull(rating)) ? "null" : rating])")
 		insert_query.Execute()
 
-		usr << "\blue Vote successful."
+		usr << "<span class='notice'>Vote successful.</span>"
 		usr << browse(null,"window=playerpoll")

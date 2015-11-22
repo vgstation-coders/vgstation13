@@ -245,14 +245,14 @@
 		if(song.lines.len > 0 && !(playing))
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\violin.dm:246: dat += "<A href='?src=\ref[src];play=1'>Play Song</A><BR><BR>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\violin.dm:246: dat += "<A href='?src=\ref[src];play=1'>Play Song</A><BR><BR>"
 			dat += {"<A href='?src=\ref[src];play=1'>Play Song</A><BR><BR>
 				<A href='?src=\ref[src];repeat=1'>Repeat Song: [repeat] times.</A><BR><BR>"}
 			// END AUTOFIX
 		if(playing)
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\violin.dm:249: dat += "<A href='?src=\ref[src];stop=1'>Stop Playing</A><BR>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\violin.dm:249: dat += "<A href='?src=\ref[src];stop=1'>Stop Playing</A><BR>"
 			dat += {"<A href='?src=\ref[src];stop=1'>Stop Playing</A><BR>
 				Repeats left: [repeat].<BR><BR>"}
 			// END AUTOFIX
@@ -261,7 +261,7 @@
 	else
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\violin.dm:254: dat += "<A href='?src=\ref[src];edit=1'>Hide Editor</A><BR>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\violin.dm:254: dat += "<A href='?src=\ref[src];edit=1'>Hide Editor</A><BR>"
 		dat += {"<A href='?src=\ref[src];edit=1'>Hide Editor</A><BR>
 			<A href='?src=\ref[src];newsong=1'>Start a New Song</A><BR>
 			<A href='?src=\ref[src];import=1'>Import a Song</A><BR><BR>"}
@@ -300,11 +300,10 @@
 	onclose(user, "violin")
 
 /obj/item/device/violin/Topic(href, href_list)
-
-	if(!in_range(src, usr) || issilicon(usr) || !isliving(usr) || !usr.canmove || usr.restrained())
-		usr << browse(null, "window=violin;size=700x300")
-		onclose(usr, "violin")
+	if(..())
 		return
+
+	usr.set_machine(src)
 
 	if(href_list["newsong"])
 		song = new()
@@ -399,7 +398,8 @@
 				song.tempo = tempo
 
 	add_fingerprint(usr)
-	for(var/mob/M in viewers(1, loc))
-		if((M.client && M.machine == src))
-			attack_self(M)
+	src.updateUsrDialog()
+	//for(var/mob/M in viewers(1, loc))
+	//	if((M.client && M.machine == src))
+	//		attack_self(M)
 	return

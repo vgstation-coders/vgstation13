@@ -9,10 +9,12 @@
 	w_class = 2.0
 	throw_speed = 4
 	throw_range = 10
-	flags = FPRINT | TABLEPASS| CONDUCT
+	flags = FPRINT
+	siemens_coefficient = 1
 	attack_verb = list("rang")
+
 	hitsound = 'sound/machines/ding2.ogg'
-	m_amt = 3750
+	starting_materials = list(MAT_IRON = 3750)
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
 	anchored = 1
@@ -36,7 +38,7 @@
 
 		if(wrenching)	return
 		wrenching = 1
-		if(do_after(user, 30))
+		if(do_after(user, src, 30))
 			if(src)
 				anchored = !anchored
 				user.visible_message(
@@ -72,7 +74,7 @@
 	return attack_hand(user)
 
 /obj/item/device/deskbell/attack_animal(var/mob/user)
-	return attack_hand(user)
+	return
 
 /obj/item/device/deskbell/attack_hand(var/mob/user)
 	ring()
@@ -134,7 +136,7 @@
 
 		if(wrenching)	return
 		wrenching = 1
-		if(do_after(user, 30))
+		if(do_after(user, src, 30))
 			if(src)
 				anchored = !anchored
 				user.visible_message(
@@ -172,13 +174,14 @@
 			if(!ringerdatum || !(ringerdatum.status))
 				continue
 			if(frequency == ringerdatum.frequency)
-				playsound(ring_pda, 'sound/machines/notify.ogg', 50, 1)
-				visible_message("\icon[ring_pda] *[src.name]*")
+				var/turf/T = get_turf(ring_pda)
+				playsound(T, 'sound/machines/notify.ogg', 50, 1)
+				T.visible_message("\icon[ring_pda] *[src.name]*")
 
 
 		if(!radio_connection) return	//the desk bell also works like a simple send-only signaler.
 
-		var/datum/signal/signal = new
+		var/datum/signal/signal = getFromPool(/datum/signal)
 		signal.source = src
 		signal.encryption = code					//Since its default code is 0, which cannot be set on a remote signaling device,
 		signal.data["message"] = "ACTIVATE"			//there is no risk that one of the desk bells already there at round start could trigger a signaler
@@ -195,6 +198,13 @@
 		return
 
 //////////////////
+
+/obj/item/device/deskbell/signaler/cargo
+	name = "Cargo desk bell"
+
+/obj/item/device/deskbell/signaler/cargo/New()
+	. = ..()
+	frequency = deskbell_freq_cargo
 
 /obj/item/device/deskbell/signaler/hop
 	name = "HoP desk bell"
@@ -234,8 +244,9 @@
 	w_class = 2.0
 	throw_speed = 4
 	throw_range = 10
-	flags = FPRINT | TABLEPASS| CONDUCT
-	m_amt = 3750
+	flags = FPRINT
+	siemens_coefficient = 1
+	starting_materials = list(MAT_IRON = 3750)
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
 
@@ -266,11 +277,13 @@
 				if(istype(W,/obj/item/weapon/wrench))
 					user << "<span class='notice'>You deconstruct \the [src].</span>"
 					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-					new /obj/item/stack/sheet/metal( get_turf(src.loc), 2)
+					//new /obj/item/stack/sheet/metal( get_turf(src.loc), 2)
+					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+					M.amount = 2
 					qdel(src)
 					return
-				if(istype(W,/obj/item/weapon/cable_coil))
-					var/obj/item/weapon/cable_coil/C=W
+				if(istype(W,/obj/item/stack/cable_coil))
+					var/obj/item/stack/cable_coil/C=W
 					user.visible_message(
 						"<span class='warning'>[user.name] has added cables to \the [src]!</span>",
 						"You add cables to \the [src].")
@@ -287,7 +300,7 @@
 					if(has_signaler)
 						user << "<span class='warning'>You must remove the signaler first.</span>"
 						return
-					new /obj/item/weapon/cable_coil(get_turf(src),1)
+					new /obj/item/stack/cable_coil(get_turf(src),1)
 					user.visible_message(
 						"<span class='warning'>[user.name] cut the cables.</span>",
 						"You cut the cables.")
@@ -315,7 +328,7 @@
 						code = 0
 					else
 						code = S.code
-					user.drop_item()
+					user.drop_item(W)
 					del(W)
 					has_signaler = 1
 					update_icon()
@@ -340,6 +353,7 @@
 //these frequencies are set by default on the PDAs of the corresponding jobs
 //they are determined at roundstart, and unlike radio frequencies (yet) are randomized
 var/global/list/deskbell_default_frequencies = list()
+var/global/deskbell_freq_cargo = call(/obj/item/device/deskbell/signaler/proc/get_new_bellfreq)()
 var/global/deskbell_freq_hop = call(/obj/item/device/deskbell/signaler/proc/get_new_bellfreq)()
 var/global/deskbell_freq_medbay = call(/obj/item/device/deskbell/signaler/proc/get_new_bellfreq)()
 var/global/deskbell_freq_brig = call(/obj/item/device/deskbell/signaler/proc/get_new_bellfreq)()

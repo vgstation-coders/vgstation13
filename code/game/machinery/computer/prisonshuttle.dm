@@ -19,7 +19,7 @@ var/prison_shuttle_timeleft = 0
 	var/temp = null
 	var/allowedtocall = 0
 	var/prison_break = 0
-
+	light_color = LIGHT_COLOR_CYAN
 
 	attackby(I as obj, user as mob)
 		if(!..())
@@ -35,15 +35,15 @@ var/prison_shuttle_timeleft = 0
 
 	emag(mob/user as mob)
 		emagged = 1
-		user << "\blue You disable the lock."
+		user << "<span class='notice'>You disable the lock.</span>"
 		return
 
 	attack_hand(var/mob/user as mob)
 		if(!src.allowed(user) && (!emagged))
-			user << "\red Access Denied."
+			user << "<span class='warning'>Access Denied.</span>"
 			return
 		if(prison_break)
-			user << "\red Unable to locate shuttle."
+			user << "<span class='warning'>Unable to locate shuttle.</span>"
 			return
 		if(..())
 			return
@@ -65,18 +65,18 @@ var/prison_shuttle_timeleft = 0
 
 	Topic(href, href_list)
 		if(..())
-			return
+			return 1
 
-		if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+		else
 			usr.set_machine(src)
 
 		if (href_list["sendtodock"])
 			if (!prison_can_move())
-				usr << "\red The prison shuttle is unable to leave."
+				usr << "<span class='warning'>The prison shuttle is unable to leave.</span>"
 				return
 			if(!prison_shuttle_at_station|| prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison) return
 			post_signal("prison")
-			usr << "\blue The prison shuttle has been called and will arrive in [(PRISON_MOVETIME/10)] seconds."
+			usr << "<span class='notice'>The prison shuttle has been called and will arrive in [(PRISON_MOVETIME/10)] seconds.</span>"
 			src.temp += "Shuttle sent.<BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
 			src.updateUsrDialog()
 			prison_shuttle_moving_to_prison = 1
@@ -86,11 +86,11 @@ var/prison_shuttle_timeleft = 0
 
 		else if (href_list["sendtostation"])
 			if (!prison_can_move())
-				usr << "\red The prison shuttle is unable to leave."
+				usr << "<span class='warning'>The prison shuttle is unable to leave.</span>"
 				return
 			if(prison_shuttle_at_station || prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison) return
 			post_signal("prison")
-			usr << "\blue The prison shuttle has been called and will arrive in [(PRISON_MOVETIME/10)] seconds."
+			usr << "<span class='notice'>The prison shuttle has been called and will arrive in [(PRISON_MOVETIME/10)] seconds.</span>"
 			src.temp += "Shuttle sent.<BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
 			src.updateUsrDialog()
 			prison_shuttle_moving_to_station = 1
@@ -131,7 +131,7 @@ var/prison_shuttle_timeleft = 0
 	proc/post_signal(var/command)
 		var/datum/radio_frequency/frequency = radio_controller.return_frequency(1311)
 		if(!frequency) return
-		var/datum/signal/status_signal = new
+		var/datum/signal/status_signal = getFromPool(/datum/signal)
 		status_signal.source = src
 		status_signal.transmission_method = 1
 		status_signal.data["command"] = command
@@ -158,7 +158,7 @@ var/prison_shuttle_timeleft = 0
 				if (prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison) return
 
 				if (!prison_can_move())
-					usr << "\red The prison shuttle is unable to leave."
+					usr << "<span class='warning'>The prison shuttle is unable to leave.</span>"
 					return
 
 				var/area/start_location = locate(/area/shuttle/prison/prison)
@@ -187,7 +187,7 @@ var/prison_shuttle_timeleft = 0
 				if (prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison) return
 
 				if (!prison_can_move())
-					usr << "\red The prison shuttle is unable to leave."
+					usr << "<span class='warning'>The prison shuttle is unable to leave.</span>"
 					return
 
 				var/area/start_location = locate(/area/shuttle/prison/station)

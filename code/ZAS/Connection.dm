@@ -115,7 +115,7 @@ Class Procs:
 		else
 			mark_direct()
 
-	var/b_is_space = !istype(B,/turf/simulated)
+	var/b_is_space = (!istype(B,/turf/simulated))
 
 	if(state & CONNECTION_SPACE)
 		if(!b_is_space)

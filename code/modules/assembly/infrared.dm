@@ -4,8 +4,7 @@
 	name = "infrared emitter"
 	desc = "Emits a visible or invisible beam and is triggered when the beam is interrupted."
 	icon_state = "infrared"
-	m_amt = 1000
-	g_amt = 500
+	starting_materials = list(MAT_IRON = 1000, MAT_GLASS = 500)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = "magnets=2"
 
@@ -16,6 +15,7 @@
 	var/on = 0
 	var/visible = 0
 	var/obj/effect/beam/infrared/beam = null
+	New() del(src)
 
 
 ///obj/item/device/assembly/infra/describe()
@@ -43,7 +43,7 @@
 
 
 /obj/item/device/assembly/infra/update_icon()
-	overlays.Cut()
+	overlays.len = 0
 	attached_overlays = list()
 	if(on)
 		overlays += "infrared_on"
@@ -55,19 +55,20 @@
 
 
 /obj/item/device/assembly/infra/process()//Old code
+	if(1) return PROCESS_KILL
 	if(!on && beam)
 		qdel(beam)
 		return
 	if(beam || !secured) return
 	var/turf/T = null
-	if(istype(loc,/turf))
-		T = loc
+	if(isturf(loc))
+		T = get_turf(src)
 	else if (holder)
 		if (istype(holder.loc,/turf))
 			T = holder.loc
-		else if (istype(holder.loc.loc,/turf)) //for onetankbombs and other tertiary builds with assemblies
+		else if (isturf(holder.loc.loc)) //for onetankbombs and other tertiary builds with assemblies
 			T = holder.loc.loc
-	else if(istype(loc,/obj/item/weapon/grenade) && istype(loc.loc,/turf))
+	else if(istype(loc,/obj/item/weapon/grenade) && isturf(loc.loc))
 		T = loc.loc
 	if(T)
 		if(!beam)
@@ -115,7 +116,7 @@
 	var/dat = text("<TT><B>Infrared Laser</B>\n<B>Status</B>: []<BR>\n<B>Visibility</B>: []<BR>\n</TT>", (on ? text("<A href='?src=\ref[];state=0'>On</A>", src) : text("<A href='?src=\ref[];state=1'>Off</A>", src)), (src.visible ? text("<A href='?src=\ref[];visible=0'>Visible</A>", src) : text("<A href='?src=\ref[];visible=1'>Invisible</A>", src)))
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\assembly\infrared.dm:117: dat += "<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\assembly\infrared.dm:117: dat += "<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>"
 	dat += {"<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>
 		<BR><BR><A href='?src=\ref[src];close=1'>Close</A>"}
 	// END AUTOFIX
@@ -171,7 +172,8 @@
 	var/visible = 0.0
 	var/left = null
 	anchored = 1.0
-	flags = TABLEPASS
+	flags = 0
+
 
 	var/obj/item/device/assembly/infra/assembly
 
@@ -196,5 +198,6 @@
 
 /obj/effect/beam/infrared/spawn_child()
 	var/obj/effect/beam/infrared/B = ..()
+	if(!B) return null
 	B.visible=visible
 	return B

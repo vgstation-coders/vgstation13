@@ -1,6 +1,5 @@
 /mob/living/simple_animal/hostile
 	faction = "hostile"
-	mouse_opacity = 2 //This makes it easier to hit hostile mobs, you only need to click on their tile, and is set back to 1 when they die
 	stop_automated_movement_when_pulled = 0
 	environment_smash = 1 //Set to 1 to break closets,tables,racks, etc; 2 for walls; 3 for rwalls
 
@@ -29,7 +28,13 @@
 	var/stat_exclusive = 0 //Mobs with this set to 1 will exclusively attack things defined by stat_attack, stat_attack 2 means they will only attack corpses
 	var/attack_faction = null //Put a faction string here to have a mob only ever attack a specific faction
 
+/mob/living/simple_animal/hostile/resetVariables()
+	..("wanted_objects", "friends", args)
+	wanted_objects = list()
+	friends = list()
+
 /mob/living/simple_animal/hostile/Life()
+	if(timestopped) return 0 //under effects of time magick
 	. = ..()
 	if(istype(loc, /obj/item/device/mobcapsule))
 		return 0
@@ -39,6 +44,13 @@
 	if(client && !deny_client_move)
 		return 0
 	if(!stat)
+		if(size > SIZE_TINY && istype(loc, /obj/item/weapon/holder)) //If somebody picked us up and we're big enough to fight!
+			var/mob/living/L = loc.loc
+			if(!istype(L) || (L.faction != src.faction) || !CanAttack(L)) //If we're not being held by a mob, OR we're being held by a mob who isn't from our faction OR we're being held by a mob whom we don't consider a valid target!
+				returnToPool(loc)
+			else
+				return 0
+
 		switch(stance)
 			if(HOSTILE_STANCE_IDLE)
 				if(environment_smash)
@@ -63,16 +75,17 @@
 
 
 /mob/living/simple_animal/hostile/proc/ListTargets()//Step 1, find out what we can see
-	var/list/L = list()
-	if(!search_objects)
-		var/list/Mobs = hearers(vision_range, src) - src //Remove self, so we don't suicide
-		L += Mobs
-		for(var/obj/mecha/M in mechas_list)
-			if(get_dist(M, src) <= vision_range && can_see(src, M, vision_range))
-				L += M
+	var/list/L = new()
+
+	if (!search_objects)
+		L.Add(ohearers(vision_range, src))
+
+		for (var/obj/mecha/M in mechas_list)
+			if (get_dist(M, src) <= vision_range && can_see(src, M, vision_range))
+				L.Add(M)
 	else
-		var/list/Objects = oview(vision_range, src)
-		L += Objects
+		L.Add(oview(vision_range, src))
+
 	return L
 
 /mob/living/simple_animal/hostile/proc/FindTarget()//Step 2, filter down possible targets to things we actually care about
@@ -85,11 +98,6 @@
 			Targets = FoundTarget
 			break
 		if(CanAttack(A))//Can we attack it?
-			if(isMoMMI(A))
-				continue
-			if(istype(src, /mob/living/simple_animal/hostile/scarybat))
-				if(A == src:owner)
-					continue
 			Targets += A
 			continue
 	Target = PickTarget(Targets)
@@ -115,23 +123,34 @@
 		return 0
 	if(isliving(the_target) && search_objects < 2)
 		var/mob/living/L = the_target
-		if(L.stat > stat_attack || L.stat != stat_attack && stat_exclusive == 1)
+		//WE ONLY ATTACK LIVING MOBS UNLESS SPECIFIED OTHERWISE
+		if(L.stat > stat_attack || (L.stat != stat_attack && stat_exclusive == 1))
 			return 0
+		//WE DON'T ATTACK INVULNERABLE MOBS (such as etheral jaunting mobs, or passengers of the adminbus)
 		if(L.flags & INVULNERABLE)
 			return 0
-		if(L.faction == src.faction && !attack_same || L.faction != src.faction && attack_same == 2 || L.faction != attack_faction && attack_faction)
+		//WE DON'T ATTACK MOMMI
+		if(isMoMMI(L))
 			return 0
-		if(iscultist(L) && (faction == "cult"))
+		//WE DON'T OUR OWN FACTION UNLESS SPECIFIED OTHERWISE
+		if((L.faction == src.faction && !attack_same) || (L.faction != src.faction && attack_same == 2) || (L.faction != attack_faction && attack_faction))
 			return 0
-		if(isslime(L) && (faction == "slimesummon"))
+		//IF OUR FACTION IS A REFERENCE TO A SPECIFIC MOB THEN WE DON'T ATTACK HIM (examples include viscerator grenades, staff of animation mimics, asteroid monsters)
+		if((faction == "\ref[L]") && !attack_same)
 			return 0
+		//IF WE ARE GOLD SLIME+PLASMA MONSTERS THEN WE DON'T ATTACK SLIMES/SLIME PEOPLE/ADAMANTINE GOLEMS
+		if(faction == "slimesummon")
+			if(isslime(L))
+				return 0
+			if(ishuman(L))
+				var/mob/living/carbon/human/H = L
+				if(H.dna)
+					if((H.dna.mutantrace == "slime") || (H.dna.mutantrace == "adamantine"))
+						return 0
+		//IF WE ARE MOBS SPAWNED BY THE ADMINBUS THEN WE DON'T ATTACK TEST DUMMIES OR IAN (wait what? man that's snowflaky as fuck)
 		if((istype(L,/mob/living/simple_animal/corgi/Ian) || istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
 			return 0
-		if(ishuman(L))
-			var/mob/living/carbon/human/H = L
-			if(H.dna)
-				if((H.dna.mutantrace == "slime") && (faction == "slimesummon"))
-					return 0
+		//WE DON'T ATTACK OUR FRIENDS (used by lazarus injectors, and rabid slimes)
 		if(L in friends)
 			return 0
 		return 1
@@ -163,20 +182,19 @@
 		if(ranged)//We ranged? Shoot at em
 			if(target_distance >= 2 && ranged_cooldown <= 0)//But make sure they're a tile away at least, and our range attack is off cooldown
 				OpenFire(target)
-		if(retreat_distance != null)//If we have a retreat distance, check if we need to run from our target
-			if(target_distance <= retreat_distance)//If target's closer than our retreat distance, run
+		if(isturf(loc) && target.Adjacent(src))	//If they're next to us, attack
+			AttackingTarget()
+		if(canmove)
+			if(retreat_distance != null && target_distance <= retreat_distance) //If we have a retreat distance, check if we need to run from our target
 				walk_away(src,target,retreat_distance,move_to_delay)
 			else
 				Goto(target,move_to_delay,minimum_distance)//Otherwise, get to our minimum distance so we chase them
-		else
-			Goto(target,move_to_delay,minimum_distance)
-		if(isturf(loc) && target.Adjacent(src))	//If they're next to us, attack
-			AttackingTarget()
 		return
 	if(target.loc != null && get_dist(src, target.loc) <= vision_range)//We can't see our target, but he's in our vision range still
 		if(FindHidden(target) && environment_smash)//Check if he tried to hide in something to lose us
 			var/atom/A = target.loc
-			Goto(A,move_to_delay,minimum_distance)
+			if(canmove)
+				Goto(A,move_to_delay,minimum_distance)
 			if(A.Adjacent(src))
 				A.attack_animal(src)
 			return
@@ -203,6 +221,7 @@
 				GiveTarget(new_target)
 
 /mob/living/simple_animal/hostile/proc/AttackTarget()
+
 
 	stop_automated_movement = 1
 	if(!target || !CanAttack(target))
@@ -240,31 +259,32 @@
 
 /mob/living/simple_animal/hostile/Die()
 	LoseAggro()
-	mouse_opacity = 1
 	..()
 	walk(src, 0)
 
-/mob/living/simple_animal/hostile/proc/OpenFire(var/the_target)
+/mob/living/simple_animal/hostile/proc/OpenFire(var/target)
 
-	var/target = the_target
-	visible_message("\red <b>[src]</b> [ranged_message] at [target]!", 1)
 
 	var/tturf = get_turf(target)
 	if(rapid)
 		spawn(1)
 			Shoot(tturf, src.loc, src)
+			if(ranged_message) visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
 			if(casingtype)
 				new casingtype(get_turf(src))
 		spawn(4)
 			Shoot(tturf, src.loc, src)
+			if(ranged_message) visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
 			if(casingtype)
 				new casingtype(get_turf(src))
 		spawn(6)
 			Shoot(tturf, src.loc, src)
+			if(ranged_message) visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
 			if(casingtype)
 				new casingtype(get_turf(src))
 	else
 		Shoot(tturf, src.loc, src)
+		if(ranged_message) visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
 		if(casingtype)
 			new casingtype
 	ranged_cooldown = ranged_cooldown_cap
@@ -282,9 +302,17 @@
 		del(A)
 		return
 	A.current = target
+
+	var/turf/T = get_turf(src)
+	var/turf/U = get_turf(target)
+	A.original = target
+	A.target = U
+	A.current = T
+	A.starting = T
 	A.yo = target:y - start:y
 	A.xo = target:x - start:x
-	spawn( 0 )
+	spawn()
+		A.OnFired()
 		A.process()
 	return
 
@@ -303,8 +331,8 @@
 	return
 
 /mob/living/simple_animal/hostile/proc/EscapeConfinement()
-	if(buckled)
-		buckled.attack_animal(src)
+	if(locked_to)
+		locked_to.attack_animal(src)
 	if(!isturf(src.loc) && src.loc != null)//Did someone put us in something?
 		var/atom/A = src.loc
 		A.attack_animal(src)//Bang on it till we get out

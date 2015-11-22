@@ -12,6 +12,7 @@
 
 /datum/admins/proc/quick_create_object(var/mob/user)
 
+
 	var/quick_create_object_html = null
 	var/pathtext = null
 

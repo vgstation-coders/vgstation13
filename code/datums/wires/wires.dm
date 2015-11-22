@@ -71,7 +71,8 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 		//wires = shuffle(wires)
 
 /datum/wires/proc/Interact(var/mob/living/user)
-
+	if(!istype(user))
+		return 0
 	var/html = null
 	if(holder && CanUse(user))
 		html = GetInteractWindow()
@@ -140,7 +141,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 				// Attach
 				else
 					if(istype(I, /obj/item/device/assembly/signaler))
-						L.drop_item()
+						L.drop_item(I)
 						Attach(colour, I)
 					else
 						L << "<span class='error'>You need a remote signaller!</span>"
@@ -255,6 +256,7 @@ var/const/POWER = 8
 
 
 /datum/wires/proc/Pulse(var/obj/item/device/assembly/signaler/S)
+
 
 	for(var/colour in signallers)
 		if(S == signallers[colour])

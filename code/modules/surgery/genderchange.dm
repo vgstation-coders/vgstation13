@@ -1,14 +1,21 @@
+
+//////PREPARE GENITALS///////
 /datum/surgery_step/prepare_genitals
-	allowed_tools = list(/obj/item/weapon/retractor = 100, \
-	/obj/item/weapon/crowbar = 75, \
-	/obj/item/weapon/kitchen/utensil/fork = 50, \
-	)
+	allowed_tools = list(
+		/obj/item/weapon/retractor = 100,
+		/obj/item/weapon/crowbar = 75,
+		/obj/item/weapon/kitchen/utensil/fork = 50,
+		)
+
 	priority = 1
 	min_duration = 40
 	max_duration = 60
 
 /datum/surgery_step/prepare_genitals/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if(target.species.flags & NO_SKIN)
+		user << "<span class='warning'>[target] has no genitalia to prepare.</span>"
+		return 0
 	return target_zone == "groin" && hasorgans(target) && affected.open >= 2 && affected.stage == 0
 
 /datum/surgery_step/prepare_genitals/begin_step(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
@@ -25,12 +32,22 @@
 	target.apply_damage(10, BRUTE, "groin", 1)
 	return 1
 
-//reshape_genitals
+
+
+//////RESHAPE GENITALS//////
+/datum/surgery_step/reshape_genitals/tool_quality(obj/item/tool)
+	. = ..()
+	if(!tool.is_sharp())
+		return 0
+
 /datum/surgery_step/reshape_genitals
-	allowed_tools = list(/obj/item/weapon/scalpel = 100, \
-	/obj/item/weapon/hatchet = 50, \
-	/obj/item/weapon/wirecutters = 35, \
-	)
+	allowed_tools = list(
+		/obj/item/weapon/scalpel = 100,
+		/obj/item/weapon/kitchen/utensil/knife/large = 75,
+		/obj/item/weapon/hatchet = 50,
+		/obj/item/weapon/wirecutters = 35,
+		)
+
 	priority = 10 //Fuck sakes
 	min_duration = 80
 	max_duration = 100
@@ -49,10 +66,10 @@
 	//H.gender_ambiguous = 0
 	if(target.gender == FEMALE)
 		user.visible_message("<span class='notice'>[user] has made a man out of [target]!</span>")
-		target.gender = MALE
+		target.setGender(MALE)
 	else
 		user.visible_message("<span class='notice'>[user] has made a woman out of [target]!</span>")
-		target.gender = FEMALE
+		target.setGender(FEMALE)
 	target.regenerate_icons()
 	target.op_stage.genitals = 0
 	return 1
@@ -61,7 +78,7 @@
 	//H.gender_ambiguous = 1
 	user.visible_message("<span class='warning'>[user] mutilates [target]'s genitals beyond recognition!</span>")
 	target.apply_damage(50, BRUTE, "groin", 1)
-	target.emote("scream", automatic = 1)
-	target.gender = pick(MALE, FEMALE)
+	target.emote("scream", , , 1)
+	target.setGender(pick(MALE, FEMALE))
 	target.regenerate_icons()
 	return 1

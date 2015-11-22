@@ -44,6 +44,29 @@
 			index = findtext(t, char)
 	return t
 
+/proc/strip_html_properly(input = "")
+	// these store the position of < and > respectively
+	var/opentag = 0
+	var/closetag = 0
+
+	while (input)
+		opentag = rfindtext(input, "<")
+		closetag = findtext(input, ">", opentag + 1)
+
+		if (!opentag || !closetag)
+			break
+
+		input = copytext(input, 1, opentag) + copytext(input, closetag + 1)
+
+	return input
+
+/proc/rfindtext(Haystack, Needle, Start = 1, End = 0)
+	var/i = findtext(Haystack, Needle, Start, End)
+
+	while (i)
+		. = i
+		i = findtext(Haystack, Needle, i + 1, End)
+
 //Removes a few problematic characters
 /proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","�"="�"))
 	for(var/char in repl_chars)
@@ -164,7 +187,7 @@
 	if(last_char_group == 1)
 		t_out = copytext(t_out,1,length(t_out))	//removes the last character (in this case a space)
 
-	for(var/bad_name in list("space","floor","wall","r-wall","monkey","unknown","inactive ai"))	//prevents these common metagamey names
+	for(var/bad_name in list("space","floor","wall","r-wall","monkey","unknown","inactive ai","plating"))	//prevents these common metagamey names
 		if(cmptext(t_out,bad_name))	return	//(not case sensitive)
 
 	return t_out
@@ -330,7 +353,7 @@ proc/checkhtml(var/t)
 /**
  * Format number with thousands seperators.
  * @param number Number to format.
- * @param sep Seperator to use
+ * @param sep seperator to use
  */
 /proc/format_num(var/number, var/sep=",")
 	var/c="" // Current char
@@ -345,3 +368,113 @@ proc/checkhtml(var/t)
 			. += sep
 	if(parts.len==2)
 		. += ".[parts[2]]"
+
+var/global/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
+/proc/format_watts(var/number)
+	if(number<0) return "-[format_watts(number)]"
+	if(number==0) return "0 W"
+
+	var/i=1
+	while (round(number/1000) >= 1)
+		number/=1000
+		i++
+	return "[format_num(number)] [watt_suffixes[i]]"
+
+
+// Custom algorithm since stackoverflow is full of complete garbage and even the MS algorithm sucks.
+// Uses recursion, in places.
+// (c)2015 Rob "N3X15" Nelson <nexisentertainment@gmail.com>
+// Available under the MIT license.
+
+var/list/number_digits=list(
+	"one",
+	"two",
+	"three",
+	"four",
+	"five",
+	"six",
+	"seven",
+	"eight",
+	"nine",
+	"ten",
+	"eleven",
+	"twelve",
+	"thirteen",
+	"fourteen",
+	"fifteen",
+	"sixteen",
+	"seventeen",
+	"eighteen",
+	"nineteen",
+)
+
+var/list/number_tens=list(
+	null, // 0 :V
+	null, // teens, special case
+	"twenty",
+	"thirty",
+	"forty",
+	"fifty",
+	"sixty",
+	"seventy",
+	"eighty",
+	"ninety"
+)
+
+var/list/number_units=list(
+	null, // Don't yell units
+	"thousand",
+	"million",
+	"billion"
+)
+
+/proc/num2words(var/number, var/zero="zero", var/minus="minus", var/hundred="hundred", var/list/digits=number_digits, var/list/tens=number_tens, var/list/units=number_units, var/recursion=0)
+	if(!isnum(number))
+		warning("num2words fed a non-number: [number]")
+		return list()
+	number=round(number)
+	//testing("num2words [recursion] ([number])")
+	if(number == 0)
+		return list(zero)
+
+	if(number < 0)
+		return list(minus) + num2words(abs(number), zero, minus, hundred, digits, tens, units, recursion+1)
+
+	var/list/out=list()
+	if(number < 1000)
+		var/hundreds = round(number/100)
+		//testing(" ([recursion]) hundreds=[hundreds]")
+		if(hundreds)
+			out += num2words(hundreds, zero, minus, hundred, digits, tens, units, recursion+1) + list(hundred)
+			number %= 100
+
+	if(number < 100)
+		// Teens
+		if(number <= 19)
+			out.Add(digits[number])
+		else
+			var/tens_place = tens[round(number/10)+1]
+			//testing(" ([recursion]) tens_place=[round(number/10)+1] = [tens_place]")
+			if(tens_place!=null)
+				out.Add(tens_place)
+			number = number%10
+			//testing(" ([recursion]) number%10+1 = [number+1] = [digits[number+1]]")
+			if(number>0)
+				out.Add(digits[number])
+	else
+		var/i=1
+		while(round(number) > 0)
+			var/unit_number = number%1000
+			//testing(" ([recursion]) [number]%1000 = [unit_number] ([i])")
+			if(unit_number > 0)
+				if(units[i])
+					//testing(" ([recursion]) units = [units[i]]")
+					out = list(units[i]) + out
+				out = num2words(unit_number, zero, minus, hundred, digits, tens, units, recursion+1) + out
+			number /= 1000
+			i++
+	//testing(" ([recursion]) out=list("+list2text(out,", ")+")")
+	return out
+
+///mob/verb/test_num2words(var/number as num)
+//	usr << "\"[list2text(num2words(number), " ")]\""

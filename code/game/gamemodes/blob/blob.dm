@@ -7,8 +7,8 @@ var/list/blob_nodes = list()
 
 
 /datum/game_mode/blob
-	name = "blob"
-	config_tag = "blob"
+	name = "Blob"
+	config_tag = "Blob"
 
 	required_players = 15
 	required_players_secret = 25
@@ -18,14 +18,18 @@ var/list/blob_nodes = list()
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
 	var/declared = 0
+	var/outbreak = 0
+	var/nuclear = 0
 
-	var/cores_to_spawn = 1
+	var/cores_to_spawn = 15
 	var/players_per_core = 30
 	var/blob_point_rate = 3
 
-	var/blobwincount = 500 // WAS: 350
+	var/blobwincount = 750 // WAS: 500
+	var/blobnukeposs = 650 // At this point the nuke has a chance of being authorized by Centcomm
 
 	var/list/infected_crew = list()
+	var/list/pre_escapees = list()
 
 /datum/game_mode/blob/pre_setup()
 
@@ -33,6 +37,8 @@ var/list/blob_nodes = list()
 
 	// stop setup if no possible traitors
 	if(!possible_blobs.len)
+		log_admin("Failed to set-up a round of blob. Couldn't find any volunteers to be blob.")
+		message_admins("Failed to set-up a round of blob. Couldn't find any volunteers to be blob.")
 		return 0
 
 	cores_to_spawn = max(round(num_players()/players_per_core, 1), 1)
@@ -50,8 +56,12 @@ var/list/blob_nodes = list()
 		possible_blobs -= blob
 
 	if(!infected_crew.len)
+		log_admin("Failed to set-up a round of blob. Couldn't select any crew members to infect.")
+		message_admins("Failed to set-up a round of blob. Couldn't select any crew members to infect.")
 		return 0
 
+	log_admin("Starting a round of blob with [infected_crew.len] starting blobs.")
+	message_admins("Starting a round of blob with [infected_crew.len] starting blobs.")
 	return 1
 
 
@@ -62,11 +72,11 @@ You must kill it all while minimizing the damage to the station."}
 
 
 /datum/game_mode/blob/proc/greet_blob(var/datum/mind/blob)
-	blob.current << {"<B>\red You are infected by the Blob!</B>
+	blob.current << {"<B><span class='warning'>You are infected by the Blob!</B>
 <b>Your body is ready to give spawn to a new blob core which will eat this station.</b>
-<b>Find a good location to spawn the core and then take control and overwhelm the station!</b>
+<b>Find a good location to spawn the core and then take control and overwhelm the station! Make sure you are ON the station when you burst!</b>
 <b>When you have found a location, wait until you spawn; this will happen automatically and you cannot speed up the process.</b>
-<b>If you go outside of the station level, or in space, then you will die; make sure your location has lots of ground to cover.</b>"}
+<b>If you go outside of the station level, or in space, then you will die; make sure your location has plenty of space to expand.</b></span>"}
 	return
 
 /datum/game_mode/blob/proc/show_message(var/message)
@@ -138,15 +148,16 @@ You must kill it all while minimizing the damage to the station."}
 		burst_blobs()
 
 		// Stage 0
-		sleep(40)
+		sleep(rand(600,1200))
 		stage(0)
 
 		// Stage 1
-		sleep(2000)
+		sleep(rand(2000,2400))
 		stage(1)
 	..()
 
 /datum/game_mode/blob/proc/stage(var/stage)
+
 
 	switch(stage)
 		if (0)
@@ -157,8 +168,19 @@ You must kill it all while minimizing the damage to the station."}
 		if (1)
 			command_alert("Biohazard outbreak alert status upgraded to level 9.  [station_name()] is now locked down, under Directive 7-10, until further notice.", "Directive 7-10 Initiated")
 			for(var/mob/M in player_list)
-				if(!istype(M,/mob/new_player))
+				if(!istype(M,/mob/new_player) && M.client)
 					M << sound('sound/AI/blob_confirmed.ogg')
+				var/T = M.loc
+				if((istype(T, /turf/space)) || ((istype(T, /turf)) && (M.z!=1)))
+					pre_escapees += M
+			send_intercept(1)
+			outbreak = 1
 
+			research_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice." //LOCKDOWN THESE SHUTTLES
+			mining_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice."
+		if (2)
+			command_alert("Biohazard outbreak containment status reaching critical mass, total quarantine failure is now possibile. As such, Directive 7-12 has now been authorized for [station_name()].", "Final Measure")
+			for(var/mob/camera/blob/B in player_list)
+				B << "<span class='blob'>The beings intend to eliminate you with a final suicidal attack, you must stop them quickly or consume the station before this occurs!</span>"
+			send_intercept(2)
 	return
-

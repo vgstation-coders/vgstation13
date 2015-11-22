@@ -3,8 +3,9 @@
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
 	density = 1
-
+	default_colour = "#0000b7"
 	anchored = 1.0
+	var/temp_offset = 0
 
 	current_heat_capacity = 1000
 
@@ -20,11 +21,8 @@
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/freezer,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
 		/obj/item/weapon/stock_parts/micro_laser,
 		/obj/item/weapon/stock_parts/console_screen
 	)
@@ -36,6 +34,12 @@
 
 	initialize_directions = dir
 
+/obj/machinery/atmospherics/unary/cold_sink/freezer/RefreshParts()
+	var/lasercount = 0
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser)) lasercount += SP.rating-1
+	temp_offset = initial(temp_offset) - 5*lasercount
+
 /obj/machinery/atmospherics/unary/cold_sink/freezer/update_icon()
 	if(src.node)
 		if(src.on)
@@ -44,8 +48,7 @@
 			icon_state = "freezer"
 	else
 		icon_state = "freezer_0"
-	return
-
+	..()
 /obj/machinery/atmospherics/unary/cold_sink/freezer/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)
@@ -71,8 +74,7 @@
 	if(src.on)
 		user << "You have to turn off the [src] first!"
 		return
-	if(..())
-		return 1
+	..()
 	if(!anchored)
 		verbs += rotate_verbs
 		if(node)
@@ -114,7 +116,8 @@
 	onclose(user, "freezer")
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/Topic(href, href_list)
-	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
+	if(..()) return 1
+	else
 		usr.set_machine(src)
 		if (href_list["start"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"turned [on?"off":"on"]"))
@@ -128,7 +131,7 @@
 			if(amount > 0)
 				src.current_temperature = min(T20C, src.current_temperature+amount)
 			else
-				src.current_temperature = max((T0C - 200), src.current_temperature+amount)
+				src.current_temperature = max((T0C - 200 + temp_offset), src.current_temperature+amount)
 	src.updateUsrDialog()
 	src.add_fingerprint(usr)
 	return
@@ -166,10 +169,10 @@
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
 	density = 1
-
 	anchored = 1.0
-
+	default_colour = "#b70000"
 	current_heat_capacity = 1000
+	var/temp_offset = 0
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
@@ -183,11 +186,8 @@
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/heater,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
 		/obj/item/weapon/stock_parts/micro_laser,
 		/obj/item/weapon/stock_parts/console_screen
 	)
@@ -199,6 +199,12 @@
 
 	initialize_directions = dir
 
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/RefreshParts()
+	var/lasercount = 0
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser)) lasercount += SP.rating-1
+	temp_offset = initial(temp_offset) + 5*lasercount
+
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/update_icon()
 	if(src.node)
 		if(src.on)
@@ -207,6 +213,7 @@
 			icon_state = "heater"
 	else
 		icon_state = "heater_0"
+	..()
 	return
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_ai(mob/user as mob)
@@ -234,8 +241,7 @@
 	if(src.on)
 		user << "You have to turn off the [src] first!"
 		return
-	if(..())
-		return 1
+	..()
 	if(!anchored)
 		verbs += rotate_verbs
 		if(node)
@@ -274,7 +280,8 @@
 	onclose(user, "heater")
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/Topic(href, href_list)
-	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
+	if(..()) return 1
+	else
 		usr.set_machine(src)
 		if (href_list["start"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"turned [on?"off":"on"]"))
@@ -286,7 +293,7 @@
 				return
 			var/amount = text2num(href_list["temp"])
 			if(amount > 0)
-				src.current_temperature = min((T20C+280), src.current_temperature+amount)
+				src.current_temperature = min((T20C+280+temp_offset), src.current_temperature+amount)
 			else
 				src.current_temperature = max(T20C, src.current_temperature+amount)
 	src.updateUsrDialog()
@@ -296,7 +303,6 @@
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/process()
 	..()
 	src.updateUsrDialog()
-
 
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate()

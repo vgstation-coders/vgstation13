@@ -28,9 +28,6 @@
 /**
 * Is the gene active in this mob's DNA?
 */
-/datum/dna/gene/proc/is_active(var/mob/M)
-	return M.active_genes && type in M.active_genes
-
 // Return 1 if we can activate.
 // HANDLE MUTCHK_FORCED HERE!
 /datum/dna/gene/proc/can_activate(var/mob/M, var/flags)
@@ -44,8 +41,16 @@
 * Called when the gene deactivates.  Undo your magic here.
 * Only called when the block is deactivated.
 */
+
+/datum/dna/gene/proc/can_deactivate(var/mob/M, var/flags)
+	if(flags & GENE_NATURAL)
+		//testing("[name]([type]) has natural flag.")
+		return 0
+	return 1
+
 /datum/dna/gene/proc/deactivate(var/mob/M, var/connected, var/flags)
-	return
+	M.active_genes.Remove(src.type)
+	return 1
 
 // This section inspired by goone's bioEffects.
 
@@ -106,6 +111,13 @@
 	// Possible deactivation messages
 	var/list/deactivation_messages=list()
 
+	// Activation messages which are shown when drugged
+	var/list/drug_activation_messages=list("You feel different.","You feel wonky.","You feel new!","You feel amazing.","You feel wobbly.","You feel goofy.",\
+		"You feel strong!","You feel weak.","You think you can speak vox pidgin now.","You feel like killing a space bear!","You are no longer afraid of carps.")
+
+	// Deactivation messages which are shown when drugged
+	var/list/drug_deactivation_messages=list("You feel like you've lost a friend.","You get a feeling of loss.","Your mind feels less burdened.","You feel old.",\
+		"You're not sure what's going on.","You feel concerned.","You feel like you forgot something important.","You feel trippy.","Your brain hurts.")
 
 /datum/dna/gene/basic/can_activate(var/mob/M,var/flags)
 	if(flags & MUTCHK_FORCED)
@@ -115,12 +127,32 @@
 
 /datum/dna/gene/basic/activate(var/mob/M)
 	M.mutations.Add(mutation)
+	var/msg1
+	var/msg2
 	if(activation_messages.len)
-		var/msg = pick(activation_messages)
-		M << "\blue [msg]"
+		msg1 = pick(activation_messages)
+	if(drug_activation_messages.len)
+		msg2 = pick(drug_activation_messages)
 
-/datum/dna/gene/basic/deactivate(var/mob/M)
-	M.mutations.Remove(mutation)
-	if(deactivation_messages.len)
-		var/msg = pick(deactivation_messages)
-		M << "\red [msg]"
+	if(msg2) msg2="<span class='notice'>[msg2]</span>" //Workaround to prevent simple_message from considering "<span class='notice'></span>" an actual message
+	M.simple_message("<span class='notice'>[msg1]</span>", msg2 )
+
+/datum/dna/gene/basic/can_deactivate(var/mob/M, var/flags)
+	if(flags & GENE_NATURAL)
+		//testing("[name]([type]) has natural flag.")
+		return 0
+	return 1
+
+/datum/dna/gene/basic/deactivate(var/mob/M, var/connected, var/flags)
+	if(..())
+		M.mutations.Remove(mutation)
+		var/msg1
+		var/msg2
+		if(deactivation_messages.len)
+			msg1 = pick(deactivation_messages)
+		if(drug_deactivation_messages.len)
+			msg2 = pick(drug_deactivation_messages)
+
+		if(msg2) msg2="<span class='notice'>[msg2]</span>" //Workaround to prevent simple_message from considering "<span class='notice'></span>" an actual message
+		M.simple_message("<span class='notice'>[msg1]</span>", msg2 )
+		return 1

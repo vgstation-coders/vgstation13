@@ -30,6 +30,7 @@ client/var/list/zone_debug_images
 
 client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 	set category = "Debug"
+
 	if(!istype(T))
 		return
 
@@ -99,7 +100,7 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 		for(var/turf/T in contents)
 			current_zone_images += image('icons/misc/debug_group.dmi', T, null, TURF_LAYER)
 
-		for(var/turf/space/S in unsimulated_tiles)
+		for(var/turf/S in unsimulated_tiles)
 			current_zone_images += image('icons/misc/debug_space.dmi', S, null, TURF_LAYER)
 
 		client << "<u>Zone Air Contents</u>"
@@ -111,7 +112,7 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 		client << "Heat Energy: [air.temperature * air.heat_capacity()] J"
 		client << "Pressure: [air.return_pressure()] KPa"
 		client << ""
-		client << "Space Tiles: [length(unsimulated_tiles)]"
+		client << "Unsimulated Zone(space/catwalk) Tiles: [length(unsimulated_tiles)]"
 		client << "Movable Objects: [length(movables())]"
 		client << "<u>Connections: [length(connections)]</u>"
 
@@ -147,7 +148,7 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 		for(var/zone/Z in air_master.zones)
 			if(Z.air == air && Z != src)
 				var/turf/zloc = pick(Z.contents)
-				client << "\red Illegal air datum shared by: [zloc.loc.name]"*/
+				client << "<span class='warning'>Illegal air datum shared by: [zloc.loc.name]</span>"*/
 
 
 /*client/proc/TestZASRebuild()

@@ -105,7 +105,7 @@ var/global/Holiday = null
 				if(5)
 					Holiday = "Beer Day"
 
-		if(9) // Sep
+		if(9) // sep
 			switch(DD)
 				if(19)
 					Holiday = "Talk-Like-a-Pirate Day"
@@ -175,7 +175,7 @@ var/global/Holiday = null
 	world.update_status()
 	Holiday_Game_Start()
 
-	message_admins("\blue ADMIN: Event: [key_name(src)] force-set Holiday to \"[Holiday]\"")
+	message_admins("<span class='notice'>ADMIN: Event: [key_name(src)] force-set Holiday to \"[Holiday]\"</span>")
 	log_admin("[key_name(src)] force-set Holiday to \"[Holiday]\"")
 
 
@@ -218,7 +218,7 @@ var/global/Holiday = null
 				if(S.z != 1)	continue
 				containers += S
 
-			message_admins("\blue DEBUG: Event: Egg spawned at [Egg.loc] ([Egg.x],[Egg.y],[Egg.z])")*/
+			message_admins("<span class='notice'>DEBUG: Event: Egg spawned at [Egg.loc] ([Egg.x],[Egg.y],[Egg.z])</span>")*/
 
 		if("End of the World")
 			if(prob(eventchance))	GameOver()

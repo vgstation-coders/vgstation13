@@ -1,44 +1,76 @@
-/obj/machinery/computer/centrifuge
+/obj/machinery/centrifuge
 	name = "Isolation Centrifuge"
 	desc = "Used to separate things with different weight. Spin 'em round, round, right round."
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "centrifuge"
-	circuit = "/obj/item/weapon/circuitboard/centrifuge"
+	density = 1
+	idle_power_usage = 10
+	active_power_usage = 500
+	machine_flags = SCREWTOGGLE | CROWDESTROY
+
+	var/base_state = "centrifuge"
 	var/curing
 	var/isolating
 
 	var/obj/item/weapon/reagent_containers/glass/beaker/vial/sample = null
 	var/datum/disease2/disease/virus2 = null
+	var/general_process_time = 40
 
-	l_color = "#000000"
+	light_color = null
 
-/obj/machinery/computer/centrifuge/attackby(var/obj/item/weapon/reagent_containers/glass/beaker/vial/I, var/mob/user as mob)
+/obj/machinery/centrifuge/New()
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/centrifuge,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator
+	)
+
+	RefreshParts()
+
+/obj/machinery/centrifuge/RefreshParts()
+	var/manipcount = 0
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+			manipcount += SP.rating
+	general_process_time = initial(general_process_time) / manipcount
+
+/obj/machinery/centrifuge/attackby(var/obj/item/weapon/reagent_containers/glass/beaker/vial/I, var/mob/user as mob)
 	if(!istype(I))
 		return ..()
 
 	var/mob/living/carbon/C = user
 	if(!sample)
 		sample = I
-		C.drop_item()
-		I.loc = src
+		if(!C.drop_item(I, src)) return 1
 
 	attack_hand(user)
 
-/obj/machinery/computer/centrifuge/update_icon()
-	..()
-	if(! (stat & (BROKEN|NOPOWER)) && (isolating || curing))
-		l_color = "#7BF9FF"
-		icon_state = "centrifuge_moving"
+//Also handles luminosity
+/obj/machinery/centrifuge/update_icon()
+	if(stat & BROKEN)
+		icon_state = "[base_state]b"
+		set_light(0)
+	else if(stat & NOPOWER)
+		icon_state = "[base_state]0"
+		set_light(0)
+	else if(isolating || curing)
+		set_light(l_range = 2, l_power = 2, l_color = LIGHT_COLOR_CYAN)
+		icon_state = "[base_state]_moving"
+	else
+		icon_state = "[base_state]"
+		set_light(0)
 
-/obj/machinery/computer/centrifuge/attack_hand(var/mob/user as mob)
+/obj/machinery/centrifuge/attack_hand(var/mob/user as mob)
 	if(..())
 		return
 	user.set_machine(src)
-	var/dat= ""
+	var/dat = list()
 	if(curing)
-		dat = "Antibody isolation in progress"
+		dat += "Antibody isolation in progress"
 	else if(isolating)
-		dat = "Pathogen isolation in progress"
+		dat += "Pathogen isolation in progress"
 	else
 		dat += "<BR>Blood sample:"
 		dat += "<br><table cellpadding='10'><tr><td>"
@@ -60,54 +92,61 @@
 				dat += "Please check container contents."
 			dat += "</td></tr><tr><td><A href='?src=\ref[src];action=sample'>Eject container</a>"
 		else
-			dat = "Please insert a container."
+			dat += "Please insert a container."
 		dat += "</td></tr></table><br>"
-
 		dat += "<hr>"
+	dat = list2text(dat)
+	var/datum/browser/popup = new(user, "iso_centrifuge", "Isolation Centrifuge", 400, 300, src)
+	popup.set_content(dat)
+	popup.open()
+	onclose(user, "iso_centrifuge")
 
-	user << browse(dat, "window=computer;size=400x500")
-	onclose(user, "computer")
-	return
+/obj/machinery/centrifuge/process()
 
-/obj/machinery/computer/centrifuge/process()
 	..()
 
 	if(stat & (NOPOWER|BROKEN))
+		update_icon()
 		return
-	use_power(500)
 
 	if(curing)
-		curing -= 1
-		if(curing == 0)
+		use_power = 2
+		curing--
+		if(!curing)
 			if(sample)
 				cure()
-			update_icon()
 	if(isolating)
-		isolating -= 1
-		if(isolating == 0)
+		use_power = 2
+		isolating--
+		if(!isolating)
 			if(sample)
 				isolate()
-			update_icon()
 
+	else
+		use_power = 1
+
+	update_icon() //This might be a bit more expensive, but it's foolproof
 	src.updateUsrDialog()
 	return
 
-/obj/machinery/computer/centrifuge/Topic(href, href_list)
-	if(..())
-		return
+/obj/machinery/centrifuge/Topic(href, href_list)
 
-	if(usr) usr.set_machine(src)
+	if(..())
+		return 1
+
+	if(usr)
+		usr.set_machine(src)
 
 	switch(href_list["action"])
 		if("antibody")
-			var/delay = 20
+			var/delay = general_process_time
 			var/datum/reagent/blood/B = locate(/datum/reagent/blood) in sample.reagents.reagent_list
-			if (!B)
-				state("\The [src.name] buzzes, \"No antibody carrier detected.\"", "blue")
+			if(!B)
+				say("No antibody carrier detected.")
 
 			else if(sample.reagents.has_reagent("toxins"))
-				state("\The [src.name] beeps, \"Pathogen purging speed above nominal.\"", "blue")
-				delay = delay/2
+				say("Pathogen purging speed above nominal.")
+				delay *= 0.5
 
 			else
 				curing = delay
@@ -121,14 +160,14 @@
 				var/choice = href_list["isolate"]
 				if (choice in virus)
 					virus2 = virus[choice]
-					isolating = 40
+					isolating = general_process_time * 2
 					update_icon()
 				else
-					state("\The [src.name] buzzes, \"No such pathogen detected.\"", "blue")
+					say("No such pathogen detected.")
 
 		if("sample")
 			if(sample)
-				sample.loc = src.loc
+				sample.forceMove(src.loc)
 				sample = null
 
 	src.add_fingerprint(usr)
@@ -136,8 +175,7 @@
 	attack_hand(usr)
 	return
 
-
-/obj/machinery/computer/centrifuge/proc/cure()
+/obj/machinery/centrifuge/proc/cure()
 	var/datum/reagent/blood/B = locate(/datum/reagent/blood) in sample.reagents.reagent_list
 	if (!B)
 		return
@@ -147,10 +185,10 @@
 	sample.reagents.remove_reagent("blood",amt)
 	sample.reagents.add_reagent("antibodies",amt,data)
 
-	state("\The [src.name] pings", "blue")
+	alert_noise("ping")
 
-/obj/machinery/computer/centrifuge/proc/isolate()
+/obj/machinery/centrifuge/proc/isolate()
 	var/obj/item/weapon/virusdish/dish = new/obj/item/weapon/virusdish(src.loc)
 	dish.virus2 = virus2
 
-	state("\The [src.name] pings", "blue")
+	alert_noise("ping")

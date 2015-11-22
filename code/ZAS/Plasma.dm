@@ -59,30 +59,20 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		if(zas_settings.Get(/datum/ZAS_Setting/SKIN_BURNS))
 			if(!pl_head_protected() || !pl_suit_protected())
 				burn_skin(0.75)
-				if(prob(20)) src << "\red Your skin burns!"
+				if(prob(20)) src << "<span class='warning'>Your skin burns!</span>"
 				updatehealth()
 
 		//Burn eyes if exposed.
 		if(zas_settings.Get(/datum/ZAS_Setting/EYE_BURNS))
-			if(!head)
-				if(!wear_mask)
-					burn_eyes()
-				else
-					if(!(wear_mask.flags & MASKCOVERSEYES))
-						burn_eyes()
-			else
-				if(!(head.flags & HEADCOVERSEYES))
-					if(!wear_mask)
-						burn_eyes()
-					else
-						if(!(wear_mask.flags & MASKCOVERSEYES))
-							burn_eyes()
+			var/eye_protection = get_body_part_coverage(EYES)
+			if(!eye_protection)
+				burn_eyes()
 
 		//Genetic Corruption
 		if(zas_settings.Get(/datum/ZAS_Setting/GENETIC_CORRUPTION))
 			if(rand(1,10000) < zas_settings.Get(/datum/ZAS_Setting/GENETIC_CORRUPTION))
 				randmutb(src)
-				src << "\red High levels of toxins cause you to spontaneously mutate."
+				src << "<span class='warning'>High levels of toxins cause you to spontaneously mutate.</span>"
 				domutcheck(src,null)
 
 
@@ -96,7 +86,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		E.damage += 2.5
 		eye_blurry = min(eye_blurry+1.5,50)
 		if (prob(max(0,E.damage - 15) + 1) && !eye_blind)
-			src << "\red You are blinded!"
+			src << "<span class='warning'>You are blinded!</span>"
 			eye_blind += 20
 
 /mob/living/carbon/human/proc/pl_head_protected()
@@ -105,7 +95,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY))
 			if(head.flags & PLASMAGUARD)
 				return 1
-		else if(head.flags & HEADCOVERSEYES)
+		else if(check_body_part_coverage(EYES))
 			return 1
 	return 0
 
@@ -124,7 +114,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	if(shoes) shoes.contaminate()
 	if(gloves) gloves.contaminate()
 
-
+/*
 /turf/Entered(atom/movable/Obj, atom/OldLoc)
 	..(Obj, OldLoc)
 
@@ -137,3 +127,4 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		if(environment.toxins > MOLES_PLASMA_VISIBLE + 1)
 			if(I.can_contaminate())
 				I.contaminate()
+*/

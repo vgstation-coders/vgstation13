@@ -27,7 +27,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	var/dat = "<B>[src.welcome]</B><BR>"
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\uplinks.dm:26: dat += "Tele-Crystals left: [src.uses]<BR>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\uplinks.dm:26: dat += "Tele-Crystals left: [src.uses]<BR>"
 	dat += {"Tele-Crystals left: [src.uses]<BR>
 		<HR>
 		<B>Request item:</B><BR>
@@ -83,7 +83,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	dat += src.generate_menu(user)
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\uplinks.dm:72: dat += "<A href='byond://?src=\ref[src];lock=1'>Lock</a>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\uplinks.dm:72: dat += "<A href='byond://?src=\ref[src];lock=1'>Lock</a>"
 	dat += {"<A href='byond://?src=\ref[src];lock=1'>Lock</a>
 		</font></body>"}
 	// END AUTOFIX

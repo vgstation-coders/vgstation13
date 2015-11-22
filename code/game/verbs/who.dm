@@ -13,7 +13,8 @@
 			if (C.holder && C.holder.fakekey)
 				entry += " <i>(as [C.holder.fakekey])</i>"
 
-			entry += " - Playing as [C.mob.real_name]"
+			if(C.mob.real_name)
+				entry += " - Playing as [C.mob.real_name]"
 
 			switch (C.mob.stat)
 				if (UNCONSCIOUS)
@@ -27,6 +28,8 @@
 							entry += " - <font color='gray'>Observing</font>"
 						else
 							entry += " - <font color='black'><b>DEAD</b></font>"
+					else if (isnewplayer(C.mob))
+						entry += " - <font color='gray'><i>Lobby</i></font>"
 					else
 						entry += " - <font color='black'><b>DEAD</b></font>"
 
@@ -35,6 +38,8 @@
 
 			entry += " (<A HREF='?_src_=holder;adminmoreinfo=\ref[C.mob]'>?</A>)"
 			Lines += entry
+
+		log_admin("[key_name(usr)] used who verb advanced (shows OOC key - IC name, status and if antagonist)")
 	else
 		for (var/client/C in clients)
 			if (C.holder && C.holder.fakekey)

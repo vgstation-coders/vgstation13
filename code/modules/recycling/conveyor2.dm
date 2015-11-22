@@ -24,6 +24,10 @@
 	var/frequency = 1367
 	var/datum/radio_frequency/radio_connection
 
+	var/max_moved = 25
+
+	machine_flags = SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
+
 /obj/machinery/conveyor/centcom_auto
 	id_tag = "round_end_belt"
 
@@ -86,8 +90,14 @@
 /obj/machinery/conveyor/New(loc, newdir = null, building = 0)
 	. = ..(loc)
 
+	//Gotta go fast!
+	machines -= src
+	fast_machines += src
+
 	if(newdir)
 		dir = newdir
+
+	component_parts = newlist(/obj/item/weapon/circuitboard/conveyor)
 
 	updateConfig(!building)
 
@@ -164,32 +174,28 @@
 				if(A.loc == src.loc) // prevents the object from being affected if it's not currently here.
 					step(A,movedir)
 					items_moved++
-			if(items_moved >= 10)
+			if(items_moved >= max_moved)
 				break
+
+/obj/machinery/conveyor/togglePanelOpen(var/obj/item/toggle_item, mob/user)
+	if(operating)
+		user << "You can't reach \the [src]'s panel through the moving machinery."
+		return -1
+	return ..()
+
+/obj/machinery/conveyor/crowbarDestroy(mob/user)
+	if(operating)
+		user << "You can't reach \the [src]'s panel through the moving machinery."
+		return -1
+	return ..()
 
 // attack with item, place item on conveyor
 /obj/machinery/conveyor/attackby(var/obj/item/W, mob/user)
-	if(istype(W, /obj/item/device/multitool))
-		update_multitool_menu(user)
-		return 1
-	if(!operating && istype(W, /obj/item/weapon/crowbar))
-		user << "\blue You begin prying apart \the [src]..."
-		if(do_after(user,50))
-			user << "\blue You disassemble \the [src]..."
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
-		return 1
-	if(isrobot(user))	return //Carn: fix for borgs dropping their modules on conveyor belts
-	user.drop_item()
-	if(W && W.loc)	W.loc = src.loc
-	return
+	. = ..()
+	if(.)
+		return .
+	user.drop_item(W, src.loc)
+	return 0
 
 /obj/machinery/conveyor/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	//var/obj/item/device/multitool/P = get_multitool(user)
@@ -199,10 +205,15 @@
 	return {"
 	<ul>
 		<li><b>Direction:</b>
-			<a href="?src=\ref[src];setdir=[NORTH]" title="North">&uarr;</a>
-			<a href="?src=\ref[src];setdir=[EAST]" title="East">&rarr;</a>
-			<a href="?src=\ref[src];setdir=[SOUTH]" title="South">&darr;</a>
-			<a href="?src=\ref[src];setdir=[WEST]" title="West">&larr;</a>
+			<a href="?src=\ref[src];setdir=[NORTH]" title="North">[src.in_reverse ? "&darr;" : "&uarr;"]</a>
+			<a href="?src=\ref[src];setdir=[EAST]" title="East">[src.in_reverse ? "&larr;" : "&rarr;"]</a>
+			<a href="?src=\ref[src];setdir=[SOUTH]" title="South">[src.in_reverse ? "&uarr;" : "&darr;"]</a>
+			<a href="?src=\ref[src];setdir=[WEST]" title="West">[src.in_reverse ? "&rarr;" : "&larr;"]</a>
+			<a href="?src=\ref[src];setdir=[NORTHEAST]" title="Northeast">[src.in_reverse ? "&#8601;" : "&#8599;"]</a>
+			<a href="?src=\ref[src];setdir=[NORTHWEST]" title="Northwest">[src.in_reverse ? "&#8598;" : "&#8600;"]</a>
+			<a href="?src=\ref[src];setdir=[SOUTHEAST]" title="Southeast">[src.in_reverse ? "&#8600;" : "&#8598;"]</a>
+			<a href="?src=\ref[src];setdir=[SOUTHWEST]" title="Southwest">[src.in_reverse ? "&#8599;" : "&#8601;"]</a>
+			<a href="?src=\ref[src];reverse" title="Reverse Direction">&#8644;</a>
 		</li>
 		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=1367">Reset</a>)</li>
 		<li><b>ID Tag:</b> <a href="?src=\ref[src];set_id=1">[dis_id_tag]</a></li>
@@ -217,24 +228,14 @@
 		dir=text2num(href_list["setdir"])
 		updateConfig()
 		return MT_UPDATE
-
+	if("reverse" in href_list)
+		operating=0
+		in_reverse=!in_reverse
+		updateConfig()
+		return MT_UPDATE
 // attack with hand, move pulled object onto conveyor
 /obj/machinery/conveyor/attack_hand(mob/user as mob)
-	if ((!( user.canmove ) || user.restrained() || !( user.pulling )))
-		return
-	if (user.pulling.anchored)
-		return
-	if ((user.pulling.loc != user.loc && get_dist(user, user.pulling) > 1))
-		return
-	if (ismob(user.pulling))
-		var/mob/M = user.pulling
-		M.stop_pulling()
-		step(user.pulling, get_dir(user.pulling.loc, src))
-		user.stop_pulling()
-	else
-		step(user.pulling, get_dir(user.pulling.loc, src))
-		user.stop_pulling()
-	return
+	user.Move_Pulled(src)
 
 
 // make the conveyor broken
@@ -257,6 +258,7 @@
 //set the operable var if ID matches, propagating in the given direction
 
 /obj/machinery/conveyor/proc/set_operable(stepdir, match_id, op)
+
 
 	if(id_tag != match_id)
 		return
@@ -294,6 +296,7 @@
 
 	var/frequency = 1367
 	var/datum/radio_frequency/radio_connection
+	machine_flags = MULTITOOL_MENU
 
 	anchored = 1
 
@@ -350,7 +353,7 @@
 // attack with hand, switch position
 /obj/machinery/conveyor_switch/attack_hand(mob/user)
 	if(isobserver(usr) && !canGhostWrite(user,src,"toggled"))
-		usr << "\red Nope."
+		usr << "<span class='warning'>Nope.</span>"
 		return 0
 	if(position == 0)
 		if(last_pos < 0)
@@ -370,7 +373,7 @@
 
 /obj/machinery/conveyor_switch/proc/send_command(var/command)
 	if(radio_connection)
-		var/datum/signal/signal = new
+		var/datum/signal/signal = getFromPool(/datum/signal)
 		signal.source=src
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = id_tag
@@ -381,29 +384,28 @@
 		radio_connection.post_signal(src, signal, range = CONVEYOR_CONTROL_RANGE)
 
 /obj/machinery/conveyor_switch/attackby(var/obj/item/W, mob/user)
-	if(istype(W, /obj/item/device/multitool))
-		update_multitool_menu(user)
-		return 1
+	. = ..()
+	if(.)
+		return .
 	if(istype(W, /obj/item/weapon/wrench))
-		user << "\blue Deconstructing \the [src]..."
-		if(do_after(user,50))
+		user << "<span class='notice'>Deconstructing \the [src]...</span>"
+		if(do_after(user, src,50))
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-			user << "\blue You disassemble \the [src]."
+			user << "<span class='notice'>You disassemble \the [src].</span>"
 			var/turf/T=get_turf(src)
 			new /obj/item/device/assembly/signaler(T)
 			new /obj/item/stack/rods(T,1)
 			del(src)
 		return 1
-	return ..()
 
 /obj/machinery/conveyor_switch/oneway
-	var/convdir = 1 //Set to 1 or -1 depending on which way you want the convayor to go. (In other words keep at 1 and set the proper dir on the belts.)
+	var/convdir = 1 //Set to 1 or -1 depending on which way you want the conveyor to go. (In other words keep at 1 and set the proper dir on the belts.)
 	desc = "A conveyor control switch. It appears to only go in one direction."
 
 // attack with hand, switch position
 /obj/machinery/conveyor_switch/oneway/attack_hand(mob/user)
 	if(isobserver(usr) && !canGhostWrite(user,src,"toggled"))
-		usr << "\red Nope."
+		usr << "<span class='warning'>Nope.</span>"
 		return 0
 	if(position == 0)
 		position = convdir

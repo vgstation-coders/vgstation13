@@ -4,7 +4,7 @@
 	icon_state = "aicard" // aicard-full
 	item_state = "electronic"
 	w_class = 2.0
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	slot_flags = SLOT_BELT
 	var/flush = null
 	origin_tech = "programming=4;materials=4"
@@ -23,13 +23,6 @@
 
 		playsound(get_turf(src), 'sound/machines/paistartup.ogg', 50, 1)
 		return
-
-	attack(mob/living/silicon/decoy/M as mob, mob/user as mob)
-		if (!istype (M, /mob/living/silicon/decoy))
-			return ..()
-		else
-			M.death()
-			user << "<b>ERROR ERROR ERROR</b>"
 
 	attack_self(mob/user)
 		if (!in_range(src, user))
@@ -82,7 +75,7 @@
 		return
 
 	Topic(href, href_list)
-		var/mob/U = usr
+		var/mob/living/U = usr
 		if (!in_range(src, U)||U.machine!=src)//If they are not in range of 1 or less or their machine is not the card (ie, clicked on something else).
 			U << browse(null, "window=aicard")
 			U.unset_machine()
@@ -109,6 +102,10 @@
 						for(var/mob/living/silicon/ai/A in src)
 							A.suiciding = 1
 							A << "Your core files are being wiped!"
+							A.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been wiped with an [src.name] by [U.name] ([U.ckey])</font>")
+							U.attack_log += text("\[[time_stamp()]\] <font color='red'>Used an [src.name] to wipe [A.name] ([A.ckey])</font>")
+							log_attack("[key_name(U)] Used an [src.name] to wipe [key_name(A)]")
+
 							while (A.stat != 2)
 								A.adjustOxyLoss(2)
 								A.updatehealth()

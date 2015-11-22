@@ -60,6 +60,7 @@ var/savefile/Banlist
 
 /proc/LoadBans()
 
+
 	Banlist = new("data/banlist.bdb")
 	log_admin("Loading Banlist")
 
@@ -95,6 +96,7 @@ var/savefile/Banlist
 
 /proc/AddBan(ckey, computerid, reason, bannedby, temp, minutes, address)
 
+
 	var/bantimestamp
 
 	if (temp)
@@ -103,7 +105,7 @@ var/savefile/Banlist
 
 	Banlist.cd = "/base"
 	if ( Banlist.dir.Find("[ckey][computerid]") )
-		usr << text("\red Ban already exists.")
+		usr << text("<span class='warning'>Ban already exists.</span>")
 		return 0
 	else
 		Banlist.dir.Add("[ckey][computerid]")
@@ -165,7 +167,7 @@ var/savefile/Banlist
 /datum/admins/proc/unbanpanel()
 	var/count = 0
 	var/dat
-	//var/dat = "<HR><B>Unban Player:</B> \blue(U) = Unban , (E) = Edit Ban\green (Total<HR><table border=1 rules=all frame=void cellspacing=0 cellpadding=3 >"
+	//var/dat = "<HR><B>Unban Player:</B> <span class='warning'>(U) = Unban , (E) = Edit Ban<span class='good'>(Total<HR><table border=1 rules=all frame=void cellspacing=0 cellpadding=3 ></span></span>"
 	Banlist.cd = "/base"
 	for (var/A in Banlist.dir)
 		count++
@@ -186,7 +188,7 @@ var/savefile/Banlist
 
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\admin\NewBan.dm:187: dat += "</table>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\NewBan.dm:187: dat += "</table>"
 	dat += {"</table>
 		<HR><B>Bans:</B> <FONT COLOR=blue>(U) = Unban , (E) = Edit Ban</FONT> - <FONT COLOR=green>([count] Bans)</FONT><HR><table border=1 rules=all frame=void cellspacing=0 cellpadding=3 >[dat]"}
 	// END AUTOFIX
@@ -195,6 +197,7 @@ var/savefile/Banlist
 //////////////////////////////////// DEBUG ////////////////////////////////////
 
 /proc/CreateBans()
+
 
 	UpdateTime()
 

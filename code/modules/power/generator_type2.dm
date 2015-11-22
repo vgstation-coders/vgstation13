@@ -108,7 +108,7 @@
 
 
 	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\Documents\Projects\vgstation13\code\modules\power\generator_type2.dm:113: t += "Output : [round(lastgen)] W<BR><BR>"
+	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\\power\generator_type2.dm:113: t += "Output : [round(lastgen)] W<BR><BR>"
 	t += {"Output : [round(lastgen)] W<BR><BR>
 [get_loop_state("Cold",input1_dir,input1)]
 [get_loop_state("Hot",input2_dir,input2)]

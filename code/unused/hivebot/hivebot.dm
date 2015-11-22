@@ -1,5 +1,5 @@
 /mob/living/silicon/hivebot/New(loc,mainframe)
-	src << "\blue Your icons have been generated!"
+	src << "<span class='notice'>Your icons have been generated!</span>"
 	updateicon()
 
 	if(mainframe)
@@ -17,8 +17,8 @@
 /mob/living/silicon/hivebot/proc/pick_module()
 	if(src.module)
 		return
-	var/mod = input("Please, select a module!", "Robot", null, null) in list("Combat", "Engineering")
-	if(src.module)
+	var/mod = input("Please, select a module!", "Robot", null, null) as null|anything in list("Combat", "Engineering")
+	if(src.module || !mod)
 		return
 	switch(mod)
 		if("Combat")
@@ -41,16 +41,12 @@
 
 /mob/living/silicon/hivebot/Stat()
 	..()
-	statpanel("Status")
-	if (src.client.statpanel == "Status")
+
+	if(statpanel("Status"))
 		if(emergency_shuttle.online && emergency_shuttle.location < 2)
 			var/timeleft = emergency_shuttle.timeleft()
 			if (timeleft)
 				stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
-/*
-		if(ticker.mode.name == "AI malfunction")
-			stat(null, "Points left until the AI takes over: [AI_points]/[AI_points_win]")
-*/
 
 		stat(null, text("Charge Left: [src.energy]/[src.energy_max]"))
 
@@ -88,7 +84,7 @@
 
 /mob/living/silicon/hivebot/meteorhit(obj/O as obj)
 	for(var/mob/M in viewers(src, null))
-		M.show_message(text("\red [src] has been hit by [O]"), 1)
+		M.show_message(text("<span class='warning'>[src] has been hit by [O]</span>"), 1)
 		//Foreach goto(19)
 	if (src.health > 0)
 		src.adjustBruteLoss(30)
@@ -163,7 +159,7 @@
 				if(prob(20))
 					for(var/mob/M in viewers(src, null))
 						if(M.client)
-							M << M << "\red <B>[src] fails to push [tmob]'s fat ass out of the way.</B>"
+							M << M << "<span class='danger'>[src] fails to push [tmob]'s fat ass out of the way.</span>"
 					src.now_pushing = 0
 					//src.unlock_medal("That's No Moon, That's A Gourmand!", 1)
 					return*/
@@ -188,7 +184,7 @@
 			src.updatehealth()
 			src.add_fingerprint(user)
 			for(var/mob/O in viewers(user, null))
-				O.show_message(text("\red [user] has fixed some of the dents on [src]!"), 1)
+				O.show_message(text("<span class='warning'>[user] has fixed some of the dents on [src]!</span>"), 1)
 		else
 			user << "Need more welding fuel!"
 			return
@@ -198,7 +194,7 @@
 	if (M.a_intent == "grab")
 		if (M == src)
 			return
-		var/obj/item/weapon/grab/G = new /obj/item/weapon/grab( M )
+		var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
 		G.assailant = M
 		if (M.hand)
 			M.l_hand = G
@@ -210,7 +206,7 @@
 		G.synch()
 		playsound(src.loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 		for(var/mob/O in viewers(src, null))
-			O.show_message(text("\red [] has grabbed [] passively!", M, src), 1)
+			O.show_message(text("<span class='warning'>[] has grabbed [] passively!</span>", M, src), 1)
 
 	else if (M.a_intent == "hurt")
 		var/damage = rand(5, 10)
@@ -224,7 +220,7 @@
 		*/
 			playsound(src.loc, 'sound/weapons/slash.ogg', 25, 1, -1)
 			for(var/mob/O in viewers(src, null))
-				O.show_message(text("\red <B>[] has slashed at []!</B>", M, src), 1)
+				O.show_message(text("<span class='danger'>[] has slashed at []!</span>", M, src), 1)
 			if(prob(8))
 				flick("noise", src.flash)
 			src.adjustBruteLoss(damage)
@@ -232,7 +228,7 @@
 		else
 			playsound(src.loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
 			for(var/mob/O in viewers(src, null))
-				O.show_message(text("\red <B>[] took a swipe at []!</B>", M, src), 1)
+				O.show_message(text("<span class='danger'>[] took a swipe at []!</span>", M, src), 1)
 			return
 
 	else if (M.a_intent == "disarm")
@@ -244,11 +240,11 @@
 				spawn(5) step(src,get_dir(M,src))
 				playsound(src.loc, 'sound/weapons/slash.ogg', 50, 1, -1)
 				for(var/mob/O in viewers(src, null))
-					O.show_message(text("\red <B>[] has pushed back []!</B>", M, src), 1)
+					O.show_message(text("<span class='danger'>[] has pushed back []!</span>", M, src), 1)
 			else
 				playsound(src.loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
 				for(var/mob/O in viewers(src, null))
-					O.show_message(text("\red <B>[] attempted to push back []!</B>", M, src), 1)
+					O.show_message(text("<span class='danger'>[] attempted to push back []!</span>", M, src), 1)
 	return
 
 /mob/living/silicon/hivebot/attack_hand(mob/user)
@@ -278,7 +274,8 @@
 
 /mob/living/silicon/hivebot/proc/updateicon()
 
-	src.overlays.Cut()
+
+	src.overlays.len = 0
 
 	if(src.stat == 0)
 		src.overlays += "eyes"
@@ -287,6 +284,7 @@
 
 
 /mob/living/silicon/hivebot/proc/installed_modules()
+
 
 	if(!src.module)
 		src.pick_module()
@@ -468,8 +466,8 @@ Frequency:
 							var/obj/item/weapon/grab/G = pick(M.grabbed_by)
 							if (istype(G, /obj/item/weapon/grab))
 								for(var/mob/O in viewers(M, null))
-									O.show_message(text("\red [G.affecting] has been pulled from [G.assailant]'s grip by [src]"), 1)
-								del(G)
+									O.show_message(text("<span class='warning'>[G.affecting] has been pulled from [G.assailant]'s grip by [src]</span>"), 1)
+								returnToPool(G)
 						else
 							ok = 0
 						if (locate(/obj/item/weapon/grab, M.grabbed_by.len))
@@ -499,5 +497,5 @@ Frequency:
 	if(mainframe)
 		mainframe.return_to(src)
 	else
-		src << "\red You lack a dedicated mainframe!"
+		src << "<span class='warning'>You lack a dedicated mainframe!</span>"
 		return

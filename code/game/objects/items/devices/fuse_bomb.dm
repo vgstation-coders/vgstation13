@@ -4,7 +4,7 @@
 	icon = 'icons/obj/device.dmi'
 	icon_state = "fuse_bomb_5"
 	item_state = "fuse_bomb"
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	var/fuse_lit = 0
 	var/seconds_left = 5
 
@@ -58,6 +58,7 @@
 
 /obj/item/device/fuse_bomb/proc/fuse_burn()
 	set waitfor = 0
+
 	if(src && src.fuse_lit)
 		if(src.seconds_left)
 			sleep(10)

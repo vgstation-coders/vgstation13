@@ -23,6 +23,10 @@
 	if(!src.client.holder)
 		src << "Only administrators may use this command."
 		return
+	if(alert("Sure you want to do this? It will cause a lot of lag", "generate maps", "Yes", "No") == "No")
+		return
+	message_admins("[ckey]/[src] started nanoui map generation")
+	log_admin("[ckey]/[src] started nanoui map generation")
 	var/turf/T = get_turf(src)
 	nanomapgen_DumpTile(1,1, T.z)
 
@@ -33,11 +37,23 @@
 	if(!src.client.holder)
 		src << "Only administrators may use this command."
 		return
+	if(alert("Sure you want to do this? It will cause a lot of lag", "generate maps", "Yes", "No") == "No")
+		return
+	message_admins("[ckey]/[src] started nanoui map generation")
+	log_admin("[ckey]/[src] started nanoui map generation")
 	//var/turf/T = get_turf(src)
 	nanomapgen_DumpTile(allz = 1)
 
 /mob/proc/nanomapgen_DumpTile(var/startX = 1, var/startY = 1, var/currentZ = 1, var/endX = -1, var/endY = -1, var/allz = 0)
 
+
+	if(currentZ == 2)
+		if(allz)
+			if(currentZ < world.maxz)
+				var/newz = currentZ+1
+				.(1,1,newz,-1,-1,1)
+		else
+			return 0
 	if (endX < 0 || endX > world.maxx)
 		endX = world.maxx
 
@@ -67,7 +83,7 @@
 		for(var/WorldY = startY, WorldY <= endY, WorldY++)
 
 			var/atom/Turf = locate(WorldX, WorldY, currentZ)
-
+			if(Turf.type == /turf/space) continue
 			var/icon/TurfIcon = new(Turf.icon, Turf.icon_state, Turf, 1, 0)
 			TurfIcon.Scale(NANOMAP_ICON_SIZE, NANOMAP_ICON_SIZE)
 
@@ -82,8 +98,10 @@
 	world.log << "NanoMapGen: sending nanoMap.png to client"
 
 	usr << browse(Tile, "window=picture;file=nanoMap[currentZ].png;display=0")
-
-	world.log << "NanoMapGen: Done."
+	var/F =file("nano/images/genned/[map.map_dir]/nanoMap[currentZ].png")
+	fdel(F)
+	fcopy(Tile, F)
+	world.log << "NanoMapGen: z-level [currentZ] Done."
 
 	if (Tile.Width() != NANOMAP_MAX_ICON_DIMENSION || Tile.Height() != NANOMAP_MAX_ICON_DIMENSION)
 		return NANOMAP_BADOUTPUT

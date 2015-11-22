@@ -214,18 +214,18 @@
 	if(master)
 		master.post_signal(signal, comm_line)
 	else
-		del(signal)
+		returnToPool(signal)
 
 
 /datum/computer/file/embedded_program/proc/signalDoor(var/tag, var/command)
-	var/datum/signal/signal = new
+	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.data["tag"] = tag
 	signal.data["command"] = command
 	post_signal(signal)
 
 
 /datum/computer/file/embedded_program/proc/signalPump(var/tag, var/power, var/direction, var/pressure)
-	var/datum/signal/signal = new
+	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.data = list(
 		"tag" = tag,
 		"sigtype" = "command",

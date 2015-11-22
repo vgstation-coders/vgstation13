@@ -1,6 +1,7 @@
 /mob/living/silicon/ai/proc/get_camera_list()
 
-	track.cameras.Cut()
+
+	track.cameras.len = 0
 
 	if(src.stat == 2)
 		return
@@ -23,16 +24,11 @@
 
 
 /mob/living/silicon/ai/proc/ai_camera_list(var/camera)
-
-	if(src.stat == 2)
-		src << "You can't list the cameras because you are dead!"
-		return
-
 	if (!camera)
 		return 0
 
 	var/obj/machinery/camera/C = track.cameras[camera]
-	src.eyeobj.setLoc(C)
+	src.eyeobj.forceMove(C)
 
 	return
 
@@ -46,10 +42,11 @@
 
 /mob/living/silicon/ai/proc/trackable_mobs()
 
-	track.names.Cut()
-	track.namecounts.Cut()
-	track.humans.Cut()
-	track.others.Cut()
+
+	track.names.len = 0
+	track.namecounts.len = 0
+	track.humans.len = 0
+	track.others.len = 0
 
 	if(usr.stat == 2)
 		return list()
@@ -79,10 +76,6 @@
 			//Cameras can't track people wearing an agent card or a ninja hood.
 			if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
 				continue
-			if(istype(H.head, /obj/item/clothing/head/helmet/space/space_ninja))
-				var/obj/item/clothing/head/helmet/space/space_ninja/hood = H.head
-				if(!hood.canremove)
-					continue
 		//Skipping aliens because shit, that's OP
 		if(isalien(M))
 			continue
@@ -105,13 +98,12 @@
 	var/list/targets = sortList(track.humans) + sortList(track.others)
 	return targets
 
-/mob/living/silicon/ai/proc/ai_camera_track(var/target_name)
+/mob/living/silicon/ai/verb/ai_camera_track(var/target_name as null|anything in trackable_mobs())
+	set name = "track"
+	set hidden = 1 //Don't display it on the verb lists. This verb exists purely so you can type "track Oldman Robustin" and follow his ass
 
-	if(src.stat == 2)
-		src << "You can't track with camera because you are dead!"
-		return
 	if(!target_name)
-		src.cameraFollow = null
+		return
 
 	var/mob/target = (isnull(track.humans[target_name]) ? track.others[target_name] : track.humans[target_name])
 
@@ -123,9 +115,6 @@
 		if(istype(target, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = target
 			if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
-				src << "Unable to locate an airlock"
-				return
-			if(istype(H.head, /obj/item/clothing/head/helmet/space/space_ninja) && !H.head.canremove)
 				src << "Unable to locate an airlock"
 				return
 			if(H.digitalcamo)
@@ -155,11 +144,11 @@
 				if("Yes")
 					var/nhref = "src=\ref[tobeopened];aiEnable=7"
 					tobeopened.Topic(nhref, params2list(nhref), tobeopened, 1)
-					src << "\blue You've opened \the [tobeopened] for [target]."
+					src << "<span class='notice'>You've opened \the [tobeopened] for [target].</span>"
 				if("No")
-					src << "\red You deny the request."
+					src << "<span class='warning'>You deny the request.</span>"
 		else
-			src << "\red You've failed to open an airlock for [target]"
+			src << "<span class='warning'>You've failed to open an airlock for [target]</span>"
 		return
 /mob/living/silicon/ai/proc/ai_actual_track(mob/living/target as mob)
 	if(!istype(target))	return
@@ -181,10 +170,6 @@
 					U << "Follow camera mode terminated."
 					U.cameraFollow = null
 					return
-		 		if(istype(H.head, /obj/item/clothing/head/helmet/space/space_ninja) && !H.head.canremove)
-		 			U << "Follow camera mode terminated."
-					U.cameraFollow = null
-					return
 				if(H.digitalcamo)
 					U << "Follow camera mode terminated."
 					U.cameraFollow = null
@@ -201,7 +186,7 @@
 				continue
 
 			if(U.eyeobj)
-				U.eyeobj.setLoc(get_turf(target))
+				U.eyeobj.forceMove(get_turf(target))
 			else
 				view_core()
 				return
@@ -223,7 +208,7 @@
 		return
 	if (!src.can_use())
 		return
-	user.eyeobj.setLoc(get_turf(src))
+	user.eyeobj.forceMove(get_turf(src))
 
 
 /mob/living/silicon/ai/attack_ai(var/mob/user as mob)

@@ -12,7 +12,7 @@
 	set category = "Object"
 	if(target)
 		stop_aim()
-		usr.visible_message("\blue \The [usr] lowers \the [src]...")
+		usr.visible_message("<span class='notice'>\The [usr] lowers \the [src]...</span>")
 
 //Clicking gun will still lower aim for guns that don't overwrite this
 /obj/item/weapon/gun/attack_self()
@@ -41,7 +41,7 @@
 		del(target)
 
 //Compute how to fire.....
-/obj/item/weapon/gun/proc/PreFire(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, params)
+/obj/item/weapon/gun/proc/PreFire(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, params, struggle = 0)
 	//Lets not spam it.
 	if(lock_time > world.time - 2) return
 	.
@@ -52,7 +52,7 @@
 		if(M && isliving(M) && M in view(user) && !(M in target))
 			Aim(M) //Aha!  Aim at them!
 		else if(!ismob(M) || (ismob(M) && !(M in view(user)))) //Nope!  They weren't there!
-			Fire(A,user,params)  //Fire like normal, then.
+			Fire(A,user,params, "struggle" = struggle)  //Fire like normal, then.
 	usr.dir = get_cardinal_dir(src, A)
 
 //Aiming at the target mob.
@@ -64,9 +64,9 @@
 				if(L)
 					L.NotTargeted(src)
 			del(target)
-			usr.visible_message("\red <b>[usr] turns \the [src] on [M]!</b>")
+			usr.visible_message("<span class='danger'>[usr] turns \the [src] on [M]!</span>")
 		else
-			usr.visible_message("\red <b>[usr] aims \a [src] at [M]!</b>")
+			usr.visible_message("<span class='danger'>[usr] aims \a [src] at [M]!</span>")
 		M.Targeted(src)
 
 //HE MOVED, SHOOT HIM!
@@ -74,7 +74,7 @@
 	var/mob/living/M = loc
 	if(M == T) return
 	if(!istype(M)) return
-	if(src != M.equipped())
+	if(src != M.get_active_hand())
 		stop_aim()
 		return
 	M.last_move_intent = world.time
@@ -84,7 +84,7 @@
 			if(firing_check == 1)
 				Fire(T,usr, reflex = 1)
 		else if(!told_cant_shoot)
-			M << "\red They can't be hit from here!"
+			M << "<span class='warning'>They can't be hit from here!</span>"
 			told_cant_shoot = 1
 			spawn(30)
 				told_cant_shoot = 0
@@ -162,15 +162,15 @@ mob/living/proc/Targeted(var/obj/item/weapon/gun/I) //Self explanitory.
 	if(!targeted_by) targeted_by = list()
 	targeted_by += I
 	I.lock_time = world.time + 20 //Target has 2 second to realize they're targeted and stop (or target the opponent).
-	src << "((\red <b>Your character is being targeted. They have 2 seconds to stop any click or move actions.</b> \black While targeted, they may \
+	src << "((<span class='danger'>Your character is being targeted. They have 2 seconds to stop any click or move actions. </span>While targeted, they may \
 	drag and drop items in or into the map, speak, and click on interface buttons. Clicking on the map objects (floors and walls are fine), their items \
-	 (other than a weapon to de-target), or moving will result in being fired upon. \red The aggressor may also fire manually, \
+	 (other than a weapon to de-target), or moving will result in being fired upon. <span class='warning'>The aggressor may also fire manually, </span>\
 	 so try not to get on their bad side.\black ))"
 
 	if(targeted_by.len == 1)
 		spawn(0)
 			target_locked = image("icon" = 'icons/effects/Targeted.dmi', "icon_state" = "locking")
-			overlays += target_locked
+			update_targeted()
 			spawn(0)
 				sleep(20)
 				if(target_locked)
@@ -191,19 +191,19 @@ mob/living/proc/Targeted(var/obj/item/weapon/gun/I) //Self explanitory.
 
 		//Processing the aiming. Should be probably in separate object with process() but lasy.
 		while(targeted_by && T.client)
-			if(last_move_intent > I.lock_time + 10 && !T.client.target_can_move) //If target moved when not allowed to
+			if((last_move_intent > I.lock_time + 10) && !T.client.target_can_move) //If target moved when not allowed to
 				I.TargetActed(src)
 				if(I.last_moved_mob == src) //If they were the last ones to move, give them more of a grace period, so that an automatic weapon can hold down a room better.
 					I.lock_time = world.time + 5
 				I.lock_time = world.time + 5
 				I.last_moved_mob = src
-			else if(last_move_intent > I.lock_time + 10 && !T.client.target_can_run && m_intent == "run") //If the target ran while targeted
+			else if((last_move_intent > I.lock_time + 10) && !T.client.target_can_run && m_intent == "run") //If the target ran while targeted
 				I.TargetActed(src)
 				if(I.last_moved_mob == src) //If they were the last ones to move, give them more of a grace period, so that an automatic weapon can hold down a room better.
 					I.lock_time = world.time + 5
 				I.lock_time = world.time + 5
 				I.last_moved_mob = src
-			if(last_target_click > I.lock_time + 10 && !T.client.target_can_click) //If the target clicked the map to pick something up/shoot/etc
+			if((last_target_click > I.lock_time + 10) && !T.client.target_can_click) //If the target clicked the map to pick something up/shoot/etc
 				I.TargetActed(src)
 				if(I.last_moved_mob == src) //If they were the last ones to move, give them more of a grace period, so that an automatic weapon can hold down a room better.
 					I.lock_time = world.time + 5
@@ -227,18 +227,6 @@ mob/living/proc/NotTargeted(var/obj/item/weapon/gun/I)
 		del targeted_by
 	spawn(1) update_targeted()
 
-mob/living/Move()
-	. = ..()
-	for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
-		var/mob/living/M = G.loc
-		if(!(M in view(src)))
-			NotTargeted(G)
-	for(var/obj/item/weapon/gun/G in src) //Handle the gunner loosing sight of their target/s
-		if(G.target)
-			for(var/mob/living/M in G.target)
-				if(M && !(M in view(src)))
-					M.NotTargeted(G)
-
 //If you move out of range, it isn't going to still stay locked on you any more.
 client/var
 	target_can_move = 0
@@ -249,17 +237,17 @@ client/var
 //These are called by the on-screen buttons, adjusting what the victim can and cannot do.
 client/proc/add_gun_icons()
 	if (!usr.item_use_icon)
-		usr.item_use_icon = new /obj/screen/gun/item(null)
+		usr.item_use_icon = getFromPool(/obj/screen/gun/item)
 		usr.item_use_icon.icon_state = "no_item[target_can_click]"
 		usr.item_use_icon.name = "[target_can_click ? "Disallow" : "Allow"] Item Use"
 
 	if (!usr.gun_move_icon)
-		usr.gun_move_icon = new /obj/screen/gun/move(null)
+		usr.gun_move_icon = getFromPool(/obj/screen/gun/move)
 		usr.gun_move_icon.icon_state = "no_walk[target_can_move]"
 		usr.gun_move_icon.name = "[target_can_move ? "Disallow" : "Allow"] Walking"
 
 	if (target_can_move && !usr.gun_run_icon)
-		usr.gun_run_icon = new /obj/screen/gun/run(null)
+		usr.gun_run_icon = getFromPool(/obj/screen/gun/run)
 		usr.gun_run_icon.icon_state = "no_run[target_can_run]"
 		usr.gun_run_icon.name = "[target_can_run ? "Disallow" : "Allow"] Running"
 
@@ -271,13 +259,18 @@ client/proc/add_gun_icons()
 client/proc/remove_gun_icons()
 	if(!usr)
 		return
-	screen -= usr.item_use_icon
-	screen -= usr.gun_move_icon
-	if (target_can_move)
+	if(usr.gun_move_icon)
+		returnToPool(usr.gun_move_icon)
+		screen -= usr.gun_move_icon
+		usr.gun_move_icon = null
+	if(usr.item_use_icon)
+		returnToPool(usr.item_use_icon)
+		screen -= usr.item_use_icon
+		usr.item_use_icon = null
+	if(usr.gun_run_icon)
+		returnToPool(usr.gun_run_icon)
 		screen -= usr.gun_run_icon
-	del usr.gun_move_icon
-	del usr.item_use_icon
-	del usr.gun_run_icon
+		usr.gun_run_icon = null
 
 client/verb/ToggleGunMode()
 	set hidden = 1
@@ -301,7 +294,7 @@ client/verb/AllowTargetMove()
 	target_can_move = !target_can_move
 	if(target_can_move)
 		usr << "Target may now walk."
-		usr.gun_run_icon = new /obj/screen/gun/run(null)	//adding icon for running permission
+		usr.gun_run_icon = getFromPool(/obj/screen/gun/run)	//adding icon for running permission
 		screen += usr.gun_run_icon
 	else
 		usr << "Target may no longer move."
@@ -321,10 +314,10 @@ client/verb/AllowTargetMove()
 				if(target_can_move)
 					M << "Your character may now <b>walk</b> at the discretion of their targeter."
 					if(!target_can_run && (ishuman(M)))
-						M << "\red Your move intent is now set to walk, as your targeter permits it."
+						M << "<span class='warning'>Your move intent is now set to walk, as your targeter permits it.</span>"
 						M.set_m_intent("walk")
 				else
-					M << "\red <b>Your character will now be shot if they move.</b>"
+					M << "<span class='danger'>Your character will now be shot if they move.</span>"
 
 mob/living/proc/set_m_intent(var/intent)
 	if (intent != "walk" && intent != "run")
@@ -357,7 +350,7 @@ client/verb/AllowTargetRun()
 				if(target_can_run)
 					M << "Your character may now <b>run</b> at the discretion of their targeter."
 				else
-					M << "\red <b>Your character will now be shot if they run.</b>"
+					M << "<span class='danger'>Your character will now be shot if they run.</span>"
 
 client/verb/AllowTargetClick()
 	set hidden=1
@@ -381,4 +374,4 @@ client/verb/AllowTargetClick()
 				if(target_can_click)
 					M << "Your character may now <b>use items</b> at the discretion of their targeter."
 				else
-					M << "\red <b>Your character will now be shot if they use items.</b>"
+					M << "<span class='danger'>Your character will now be shot if they use items.</span>"

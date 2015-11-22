@@ -63,10 +63,12 @@
 	var/idcheck = 1 //If true, arrest people with no IDs
 	var/weaponscheck = 1 //If true, arrest people for weapons if they don't have access
 	//List of weapons that secbots will not arrest for
-	var/safe_weapons = list(\
-	/obj/item/weapon/gun/energy/laser/bluetag,\
-	/obj/item/weapon/gun/energy/laser/redtag,\
-	/obj/item/weapon/gun/energy/laser/practice)
+	var/safe_weapons = list(
+		/obj/item/weapon/gun/energy/laser/bluetag,
+		/obj/item/weapon/gun/energy/laser/redtag,
+		/obj/item/weapon/gun/energy/laser/practice,
+		/obj/item/weapon/gun/hookshot,
+		)
 
 
 /obj/item/weapon/ed209_assembly
@@ -103,6 +105,12 @@
 				name = pick("BLUE BALLER","SANIC","BLUE KILLDEATH MURDERBOT")
 			if((lasercolor == "r") && (name == "ED-209 Security Robot"))
 				name = pick("RED RAMPAGE","RED ROVER","RED KILLDEATH MURDERBOT")
+
+/obj/machinery/bot/ed209/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover,/obj/machinery/bot/ed209))
+		return 1
+	else
+		return ..()
 
 /obj/machinery/bot/ed209/turn_on()
 	. = ..()
@@ -231,7 +239,7 @@ Auto Patrol: []"},
 		if(user) user << "<span class='warning'>You short out [src]'s target assessment circuits.</span>"
 		spawn(0)
 			for(var/mob/O in hearers(src, null))
-				O.show_message("\red <B>[src] buzzes oddly!</B>", 1)
+				O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		src.target = null
 		if(user) src.oldtarget_name = user.name
 		src.last_found = world.time
@@ -320,7 +328,7 @@ Auto Patrol: []"},
 					if(declare_arrests)
 						var/area/location = get_area(src)
 						broadcast_security_hud_message("[src.name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[target]</b> in <b>[location]</b>", src)
-					visible_message("\red <B>[src.target] has been stunned by [src]!</B>")
+					visible_message("<span class='danger'>[src.target] has been stunned by [src]!</span>")
 
 					mode = SECBOT_PREP_ARREST
 					src.anchored = 1
@@ -353,7 +361,7 @@ Auto Patrol: []"},
 				if (!src.target.handcuffed && !src.arrest_type)
 					playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
 					mode = SECBOT_ARREST
-					visible_message("\red <B>[src] is trying to put handcuffs on [src.target]!</B>")
+					visible_message("<span class='danger'>[src] is trying to put handcuffs on [src.target]!</span>")
 
 					spawn(60)
 						if (get_dist(src, src.target) <= 1)
@@ -431,6 +439,7 @@ Auto Patrol: []"},
 // perform a single patrol step
 
 /obj/machinery/bot/ed209/proc/patrol_step()
+
 
 	if(loc == patrol_target)		// reached target
 		at_patrol_target()
@@ -612,11 +621,12 @@ Auto Patrol: []"},
 // send a radio signal with multiple data key/values
 /obj/machinery/bot/ed209/proc/post_signal_multiple(var/freq, var/list/keyval)
 
+
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
 
 	if(!frequency) return
 
-	var/datum/signal/signal = new()
+	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.source = src
 	signal.transmission_method = 1
 	//for(var/key in keyval)
@@ -783,13 +793,13 @@ Auto Patrol: []"},
 */
 
 /obj/machinery/bot/ed209/proc/speak(var/message)
-	for(var/mob/O in hearers(src, null))
-		O.show_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"",2)
+	visible_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"",\
+		drugged_message="<span class='game say'><span class='name'>[src]</span> beeps, \"[pick("I-It's not like I like you or anything... baka!","You're s-so silly!","I-I'm only doing this because you asked me nicely, baka...","S-stop that!","Y-you're embarassing me!")]\"")
 	return
 
 /obj/machinery/bot/ed209/explode()
 	walk_to(src,0)
-	src.visible_message("\red <B>[src] blows apart!</B>", 1)
+	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
 	var/obj/item/weapon/ed209_assembly/Sa = new /obj/item/weapon/ed209_assembly(Tsec)
@@ -827,8 +837,9 @@ Auto Patrol: []"},
 	s.set_up(3, 1, src)
 	s.start()
 
-	new /obj/effect/decal/cleanable/blood/oil(src.loc)
-	del(src)
+	var/obj/effect/decal/cleanable/blood/oil/gib = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
+	gib.New(gib.loc)
+	qdel(src)
 
 
 /obj/machinery/bot/ed209/proc/shootAt(var/mob/target)
@@ -867,10 +878,14 @@ Auto Patrol: []"},
 	if (!( istype(U, /turf) ))
 		return
 	var/obj/item/projectile/A = new projectile (loc)
-	A.current = U
+	A.original = target
+	A.target = target
+	A.current = T
+	A.starting = T
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
-	spawn( 0 )
+	spawn()
+		A.OnFired()
 		A.process()
 		return
 	return
@@ -933,8 +948,8 @@ Auto Patrol: []"},
 	switch(build_step)
 		if(0,1)
 			if( istype(W, /obj/item/robot_parts/l_leg) || istype(W, /obj/item/robot_parts/r_leg) )
-				user.drop_item()
-				del(W)
+				user.drop_item(W)
+				qdel(W)
 				build_step++
 				user << "<span class='notice'>You add the robot leg to [src].</span>"
 				name = "legs/frame assembly"
@@ -951,8 +966,8 @@ Auto Patrol: []"},
 			else if( istype(W, /obj/item/clothing/suit/bluetag) )
 				lasercolor = "b"
 			if( lasercolor || istype(W, /obj/item/clothing/suit/armor/vest) )
-				user.drop_item()
-				del(W)
+				user.drop_item(W)
+				qdel(W)
 				build_step++
 				user << "<span class='notice'>You add the armor to [src].</span>"
 				name = "vest/legs/frame assembly"
@@ -968,8 +983,8 @@ Auto Patrol: []"},
 					user << "<span class='notice'>You welded the vest to [src].</span>"
 		if(4)
 			if( istype(W, /obj/item/clothing/head/helmet) )
-				user.drop_item()
-				del(W)
+				user.drop_item(W)
+				qdel(W)
 				build_step++
 				user << "<span class='notice'>You add the helmet to [src].</span>"
 				name = "covered and shielded frame assembly"
@@ -978,8 +993,8 @@ Auto Patrol: []"},
 
 		if(5)
 			if( isprox(W) )
-				user.drop_item()
-				del(W)
+				user.drop_item(W)
+				qdel(W)
 				build_step++
 				user << "<span class='notice'>You add the prox sensor to [src].</span>"
 				name = "covered, shielded and sensored frame assembly"
@@ -987,8 +1002,8 @@ Auto Patrol: []"},
 				icon_state = "[lasercolor]ed209_prox"
 
 		if(6)
-			if( istype(W, /obj/item/weapon/cable_coil) )
-				var/obj/item/weapon/cable_coil/coil = W
+			if( istype(W, /obj/item/stack/cable_coil) )
+				var/obj/item/stack/cable_coil/coil = W
 				var/turf/T = get_turf(user)
 				user << "<span class='notice'>You start to wire [src]...</span>"
 				sleep(40)
@@ -1018,8 +1033,8 @@ Auto Patrol: []"},
 			user << "<span class='notice'>You add [W] to [src].</span>"
 			src.item_state = "[lasercolor]ed209_taser"
 			src.icon_state = "[lasercolor]ed209_taser"
-			user.drop_item()
-			del(W)
+			user.drop_item(W)
+			qdel(W)
 
 		if(8)
 			if( istype(W, /obj/item/weapon/screwdriver) )
@@ -1038,10 +1053,10 @@ Auto Patrol: []"},
 				user << "<span class='notice'>You complete the ED-209.</span>"
 				var/turf/T = get_turf(src)
 				new /obj/machinery/bot/ed209(T,created_name,lasercolor)
-				user.drop_item()
-				del(W)
+				user.drop_item(W)
+				qdel(W)
 				user.drop_from_inventory(src)
-				del(src)
+				qdel(src)
 
 
 /obj/machinery/bot/ed209/bullet_act(var/obj/item/projectile/Proj)
@@ -1068,12 +1083,12 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/ed209/bluetag/New()//If desired, you spawn red and bluetag bots easily
 	new /obj/machinery/bot/ed209(get_turf(src),null,"b")
-	del(src)
+	qdel(src)
 
 
 /obj/machinery/bot/ed209/redtag/New()
 	new /obj/machinery/bot/ed209(get_turf(src),null,"r")
-	del(src)
+	qdel(src)
 
 /obj/machinery/bot/ed209/proc/check_for_weapons(var/obj/item/slot_item)
 	if(istype(slot_item, /obj/item/weapon/gun) || istype(slot_item, /obj/item/weapon/melee))

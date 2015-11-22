@@ -25,11 +25,11 @@
 /proc/get_area_master(const/O)
 	var/area/A = get_area(O)
 
-	if (isarea(A))
-		return A.master
+	if(isarea(A))
+		return A
 
 /proc/get_area_name(N) //get area by its name
-	for(var/area/A in world)
+	for(var/area/A in areas)
 		if(A.name == N)
 			return A
 	return 0
@@ -41,11 +41,17 @@
 	return 0 //not in range and not telekinetic
 
 // Like view but bypasses luminosity check
-/proc/hear(var/range, var/atom/source)
+/proc/get_hear(var/range, var/atom/source)
+
+
 	var/lum = source.luminosity
 	source.luminosity = 6
-	. = view(range, source)
+
+	var/list/heard = view(range, source)
 	source.luminosity = lum
+
+	return heard
+
 
 /proc/alone_in_area(var/area/the_area, var/mob/must_be_alone, var/check_type = /mob/living/carbon)
 	var/area/our_area = get_area_master(the_area)
@@ -59,6 +65,7 @@
 	return 1
 
 /proc/circlerange(center=usr,radius=3)
+
 
 	var/turf/centerturf = get_turf(center)
 	var/list/turfs = new/list()
@@ -74,6 +81,7 @@
 	return turfs
 
 /proc/circleview(center=usr,radius=3)
+
 
 	var/turf/centerturf = get_turf(center)
 	var/list/atoms = new/list()
@@ -98,11 +106,16 @@
 
 /proc/circlerangeturfs(center=usr,radius=3)
 
+
 	var/turf/centerturf = get_turf(center)
+	if(!centerturf)
+		usr << "cant get a center turf?"
+		return
 	var/list/turfs = new/list()
 	var/rsq = radius * (radius+0.5)
 
 	for(var/turf/T in range(radius, centerturf))
+		if(!T) continue
 		var/dx = T.x - centerturf.x
 		var/dy = T.y - centerturf.y
 		if(dx*dx + dy*dy <= rsq)
@@ -110,6 +123,7 @@
 	return turfs
 
 /proc/circleviewturfs(center=usr,radius=3)		//Is there even a diffrence between this proc and circlerangeturfs()?
+
 
 	var/turf/centerturf = get_turf(center)
 	var/list/turfs = new/list()
@@ -122,93 +136,33 @@
 			turfs += T
 	return turfs
 
+/proc/recursive_type_check(atom/O, type = /atom)
+	var/list/processing_list = list(O)
+	var/list/processed_list = new/list()
+	var/found_atoms = new/list()
 
+	while (processing_list.len)
+		var/atom/A = processing_list[1]
+
+		if (istype(A, type))
+			found_atoms |= A
+
+		for (var/atom/B in A)
+			if (!processed_list[B])
+				processing_list |= B
+
+		processing_list.Cut(1, 2)
+		processed_list[A] = A
+
+	return found_atoms
 
 //var/debug_mob = 0
 
-// Will recursively loop through an atom's contents and check for mobs, then it will loop through every atom in that atom's contents.
-// It will keep doing this until it checks every content possible. This will fix any problems with mobs, that are inside objects,
-// being unable to hear people due to being in a box within a bag.
-
-/proc/recursive_mob_check(var/atom/O,  var/list/L = list(), var/recursion_limit = 3, var/client_check = 1, var/sight_check = 1, var/include_radio = 1)
-
-	//debug_mob += O.contents.len
-	if(!recursion_limit)
-		return L
-	for(var/atom/movable/A in O.contents)
-
-		if(ismob(A))
-			var/mob/M = A
-			if(client_check && !M.client)
-				L = recursive_mob_check(A, L, recursion_limit - 1, client_check, sight_check, include_radio)
-				continue
-			if(sight_check && !isInSight(A, O))
-				continue
-			L |= M
-			//world.log << "[recursion_limit] = [M] - [get_turf(M)] - ([M.x], [M.y], [M.z])"
-
-		else if(include_radio && istype(A, /obj/item/device/radio))
-			if(sight_check && !isInSight(A, O))
-				continue
-			L |= A
-
-		L = recursive_mob_check(A, L, recursion_limit - 1, client_check, sight_check, include_radio)
-
-	return L
-
-// The old system would loop through lists for a total of 5000 per function call, in an empty server.
-// This new system will loop at around 1000 in an empty server.
-
-/proc/get_mobs_in_view(var/R, var/atom/source)
-	// Returns a list of mobs in range of R from source. Used in radio and say code.
-
-	var/turf/T = get_turf(source)
-	var/list/hear = list()
-
-	if(!T)
-		return hear
-
-	var/list/range = hear(R, T)
-
-	for(var/atom/movable/A in range)
-		if(ismob(A))
-			var/mob/M = A
-			if(M.client)
-				hear.Add(M)
-			//world.log << "Start = [M] - [get_turf(M)] - ([M.x], [M.y], [M.z])"
-		else if(istype(A, /obj/item/device/radio))
-			hear.Add(A)
-
-		hear = recursive_mob_check(A, hear, 3, 1, 0, 1)
-
-	return hear
-
-/proc/get_mobs_in_radio_ranges(var/list/obj/item/device/radio/radios)
-
-	//set background = 1
-
-	. = list()
-	// Returns a list of mobs who can hear any of the radios given in @radios
-	var/list/speaker_coverage = list()
-	for(var/i = 1; i <= radios.len; i++)
-		var/obj/item/device/radio/R = radios[i]
-		if(R)
-			var/turf/speaker = get_turf(R)
-			if(speaker)
-				for(var/turf/T in hear(R.canhear_range,speaker))
-					speaker_coverage[T] = T
-
-
-	// Try to find all the players who can hear the message
-	for(var/i = 1; i <= player_list.len; i++)
-		var/mob/M = player_list[i]
-		if(M)
-			var/turf/ear = get_turf(M)
-			if(ear)
-				// Ghostship is magic: Ghosts can hear radio chatter from anywhere
-				if(speaker_coverage[ear] || (istype(M, /mob/dead/observer) && (M.client) && (M.client.prefs.toggles & CHAT_GHOSTRADIO)))
-					. |= M		// Since we're already looping through mobs, why bother using |= ? This only slows things down.
-	return .
+/proc/get_contents_in_object(atom/O, type_path = /atom/movable)
+	if (O)
+		return recursive_type_check(O, type_path) - O
+	else
+		return new/list()
 
 #define SIGN(X) ((X<0)?-1:1)
 
@@ -295,6 +249,7 @@ var/list/DummyCache = list()
 
 /proc/CanReachThrough(turf/srcturf, turf/targetturf, atom/target, var/pass_flags=0)
 
+
 	var/obj/item/weapon/dummy/D = locate() in DummyCache
 	if(!D)
 		D = new /obj/item/weapon/dummy( srcturf )
@@ -305,7 +260,6 @@ var/list/DummyCache = list()
 	D.flags=initial(D.flags)
 	D.pass_flags=initial(D.pass_flags)
 	if(pass_flags&PASSTABLE)
-		D.flags      |= TABLEPASS
 		D.pass_flags |= PASSTABLE
 
 	if(targetturf.density && targetturf != get_turf(target))
@@ -348,7 +302,7 @@ var/list/DummyCache = list()
 	while(candidates.len <= 0 && i < 5)
 		roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Player list is [player_list.len] items long.")
 		for(var/mob/dead/observer/G in player_list)
-			if(!G.mind || (G.mind.current && G.mind.current.stat != DEAD))
+			if(G.mind && G.mind.current && G.mind.current.stat != DEAD)
 				roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Skipping [G]  - Shitty candidate.")
 				continue
 
@@ -434,6 +388,7 @@ var/list/DummyCache = list()
 	src.dest_y = dest_y
 
 /proc/projectile_trajectory(var/src_x, var/src_y, var/rotation, var/angle, var/power)
+
 
 	// returns the destination (Vx,y) that a projectile shot at [src_x], [src_y], with an angle of [angle],
 	// rotated at [rotation] and with the power of [power]

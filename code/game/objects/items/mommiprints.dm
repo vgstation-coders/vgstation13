@@ -5,22 +5,17 @@
 	icon_state = "blueprints"
 	attack_verb = list("attacked", "bapped", "hit")
 
+	can_rename_areas = list(AREA_BLUEPRINTS)
+
 /obj/item/blueprints/mommiprints/attack_self(mob/M as mob)
 	interact()
 	return
 
 /obj/item/blueprints/mommiprints/Topic(href, href_list)
-	..()
 	if ((usr.restrained() || usr.stat || usr.get_active_hand() != src))
-		return
-	if (!href_list["action"])
-		return
-	switch(href_list["action"])
-		if ("create_area")
-			if (get_area_type()!=AREA_SPACE)
-				interact()
-				return
-			create_area()
+		return 1
+	if(..())
+		return 1
 
 /obj/item/blueprints/mommiprints/interact()
 	var/area/A = get_area()
@@ -37,14 +32,34 @@
 		if (AREA_STATION)
 			text += {"
 <p>According the blueprints, you are now in <b>\"[A.name]\"</b>.</p>
-<p>You may not change the existing rooms, only create new ones.</p>
+<p>You may not change the existing rooms, only create new ones and rename them.</p>
 "}
 		if (AREA_SPECIAL)
 			text += {"
 <p>This place isn't noted on the blueprint.</p>
 "}
+		if (AREA_BLUEPRINTS)
+			text += {"
+<p>According to the blueprints, you are now in <b>\"[A.name]\"</b> This place seems to be relatively new on the blueprints.</p>"}
+			text += "<p>You may <a href='?src=\ref[src];action=edit_area'>move an amendment</a> to the drawing.</p>"
+
 		else
 			return
 	text += "</BODY></HTML>"
 	usr << browse(text, "window=blueprints")
 	onclose(usr, "blueprints")
+
+# undef AREA_ERRNONE
+# undef AREA_STATION
+# undef AREA_SPACE
+# undef AREA_SPECIAL
+
+# undef BORDER_ERROR
+# undef BORDER_NONE
+# undef BORDER_BETWEEN
+# undef BORDER_2NDTILE
+# undef BORDER_SPACE
+
+# undef ROOM_ERR_LOLWAT
+# undef ROOM_ERR_SPACE
+# undef ROOM_ERR_TOOLARGE

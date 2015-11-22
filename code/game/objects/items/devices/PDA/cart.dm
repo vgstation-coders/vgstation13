@@ -30,6 +30,8 @@
 	var/datum/data/record/active3 = null //Security
 	var/obj/machinery/power/monitor/powmonitor = null // Power Monitor
 	var/list/powermonitors = list()
+	var/obj/machinery/computer/station_alert/alertmonitor = null // Alert Monitor
+	var/list/alertmonitors = list()
 	var/message1	// used for status_displays
 	var/message2
 	var/list/stored_data = list()
@@ -123,7 +125,7 @@
 	access_reagent_scanner = 1
 	access_atmos = 1
 
-/obj/item/weapon/cartridge/signal/toxins/New()
+/obj/item/weapon/cartridge/signal/New()
 	..()
 	spawn(5)//giving time for the radio_controller to initialize
 		radio = new /obj/item/radio/integrated/signal(src)
@@ -245,11 +247,12 @@
 
 /obj/item/weapon/cartridge/proc/post_status(var/command, var/data1, var/data2)
 
+
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(1435)
 
 	if(!frequency) return
 
-	var/datum/signal/status_signal = new
+	var/datum/signal/status_signal = getFromPool(/datum/signal)
 	status_signal.source = src
 	status_signal.transmission_method = 1
 	status_signal.data["command"] = command
@@ -295,7 +298,7 @@ Code:
 
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:281: menu = "<h4><img src=pda_notes.png> Crew Manifest</h4>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:281: menu = "<h4><img src=pda_notes.png> Crew Manifest</h4>"
 			menu = {"<h4><img src=pda_notes.png> Crew Manifest</h4>
 				Entries cannot be modified from this terminal.<br><br>"}
 			// END AUTOFIX
@@ -307,7 +310,7 @@ Code:
 		if (42) //status displays
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:289: menu = "<h4><img src=pda_status.png> Station Status Display Interlink</h4>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:289: menu = "<h4><img src=pda_status.png> Station Status Display Interlink</h4>"
 			menu = {"<h4><img src=pda_status.png> Station Status Display Interlink</h4>
 				\[ <A HREF='?src=\ref[src];choice=Status;statdisp=blank'>Clear</A> \]<BR>
 				\[ <A HREF='?src=\ref[src];choice=Status;statdisp=shuttle'>Shuttle ETA</A> \]<BR>
@@ -320,36 +323,30 @@ Code:
 				<A HREF='?src=\ref[src];choice=Status;statdisp=alert;alert=biohazard'>Biohazard</A> \]<BR>"}
 			// END AUTOFIX
 		if (43) //Muskets' and Rockdtben's power monitor :D
-			menu = "<h4><img src=pda_power.png> Power Monitors - Please select one</h4><BR>"
-			powmonitor = null
-			powermonitors = list()
+			menu = "<h4><img src=pda_power.png> Please select a Power Monitoring Computer</h4><BR>No Power Monitoring Computer detected in the vicinity.<BR>"
 			var/powercount = 0
+			var/found = 0
 
-
-
-			for(var/obj/machinery/power/monitor/pMon in world)
-				if(!(pMon.stat & (NOPOWER|BROKEN)) )
-					powercount++
-					powermonitors += pMon
-
-
-			if(!powercount)
-				menu += "\red No connection<BR>"
-			else
-
-				menu += "<FONT SIZE=-1>"
-				var/count = 0
-				for(var/obj/machinery/power/monitor/pMon in powermonitors)
-					count++
-					menu += "<a href='byond://?src=\ref[src];choice=Power Select;target=[count]'> [pMon] </a><BR>"
-
+			for(var/obj/machinery/power/monitor/pMon in power_machines)
+				if(!(pMon.stat & (NOPOWER|BROKEN)))
+					var/turf/T = get_turf(src)
+					if(T.z == pMon.z)//the application may only detect power monitoring computers on its Z-level.
+						if(!found)
+							menu = "<h4><img src=pda_power.png> Please select a Power Monitoring Computer</h4><BR>"
+							found = 1
+							menu += "<FONT SIZE=-1>"
+						powercount++
+						menu += "<a href='byond://?src=\ref[src];choice=Power Select;target=[powercount]'> [pMon] </a><BR>"
+						powermonitors += "\ref[pMon]"
+			if(found)
 				menu += "</FONT>"
 
 		if (433) //Muskets' and Rockdtben's power monitor :D
-			menu = "<h4><img src=pda_power.png> Power Monitor </h4><BR>"
 			if(!powmonitor)
-				menu += "\red No connection<BR>"
+				menu = "<h4><img src=pda_power.png> Power Monitor </h4><BR>"
+				menu += "No connection<BR>"
 			else
+				menu = "<h4><img src=pda_power.png> [powmonitor] </h4><BR>"
 				var/list/L = list()
 				for(var/obj/machinery/power/terminal/term in powmonitor.powernet.nodes)
 					if(istype(term.master, /obj/machinery/power/apc))
@@ -358,7 +355,7 @@ Code:
 
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:338: menu += "<PRE>Total power: [powmonitor.powernet.avail] W<BR>Total load:  [num2text(powmonitor.powernet.viewload,10)] W<BR>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:338: menu += "<PRE>Total power: [powmonitor.powernet.avail] W<BR>Total load:  [num2text(powmonitor.powernet.viewload,10)] W<BR>"
 				menu += {"<PRE>Total power: [powmonitor.powernet.avail] W<BR>Total load:  [num2text(powmonitor.powernet.viewload,10)] W<BR>
 					<FONT SIZE=-1>"}
 				// END AUTOFIX
@@ -374,6 +371,56 @@ Code:
 
 				menu += "</FONT></PRE>"
 
+		if (53)
+			menu = "<h4><img src=pda_alert.png> Please select an Alert Computer</h4><BR>No Alert Computer detected in the vicinity.<BR>"
+			alertmonitor = null
+			alertmonitors = list()
+
+			var/alertcount = 0
+			var/found = 0
+
+			for(var/obj/machinery/computer/station_alert/aMon in machines)
+				if(!(aMon.stat & (NOPOWER|BROKEN)))
+					var/turf/T = get_turf(src)
+					if(T.z == aMon.z)//the application may only detect station alert computers on its Z-level.
+						if(!found)
+							menu = "<h4><img src=pda_alert.png> Please select an Alert Computer</h4><BR>"
+							found = 1
+							menu += "<FONT SIZE=-1>"
+						alertcount++
+						menu += "<a href='byond://?src=\ref[src];choice=Alert Select;target=[alertcount]'> [aMon] </a><BR>"
+						alertmonitors += "\ref[aMon]"
+			if(found)
+				menu += "</FONT>"
+
+		if (533)
+			if(!alertmonitor)
+				menu = "<h4><img src=pda_alert.png> Alert Monitor </h4><BR>"
+				menu += "No connection<BR>"
+			else
+				menu = "<h4><img src=pda_alert.png> [alertmonitor] </h4><BR>"
+				for (var/cat in alertmonitor.alarms)
+					menu += text("<B>[]</B><BR>\n", cat)
+					var/list/L = alertmonitor.alarms[cat]
+					if (L.len)
+						for (var/alarm in L)
+							var/list/alm = L[alarm]
+							var/area/A = alm[1]
+							var/list/sources = alm[3]
+
+							menu += {"<NOBR>
+								&bull;
+								[A.name]"}
+
+							if (sources.len > 1)
+								menu += text(" - [] sources", sources.len)
+							menu += "</NOBR><BR>\n"
+					else
+						menu += "-- All Systems Nominal<BR>\n"
+					menu += "<BR>\n"
+
+				menu += "</FONT></PRE>"
+
 		if (44) //medical records //This thing only displays a single screen so it's hard to really get the sub-menu stuff working.
 			menu = "<h4><img src=pda_medical.png> Medical Record List</h4>"
 			if(!isnull(data_core.general))
@@ -386,7 +433,7 @@ Code:
 			if (istype(active1, /datum/data/record) && (active1 in data_core.general))
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:364: menu += "Name: [active1.fields["name"]] ID: [active1.fields["id"]]<br>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:364: menu += "Name: [active1.fields["name"]] ID: [active1.fields["id"]]<br>"
 				menu += {"Name: [active1.fields["name"]] ID: [active1.fields["id"]]<br>
 					Sex: [active1.fields["sex"]]<br>
 					Age: [active1.fields["age"]]<br>
@@ -400,14 +447,14 @@ Code:
 
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:374: menu += "<br>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:374: menu += "<br>"
 			menu += {"<br>
 				<h4><img src=pda_medical.png> Medical Data</h4>"}
 			// END AUTOFIX
 			if (istype(active2, /datum/data/record) && (active2 in data_core.medical))
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:378: menu += "Blood Type: [active2.fields["b_type"]]<br><br>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:378: menu += "Blood Type: [active2.fields["b_type"]]<br><br>"
 				menu += {"Blood Type: [active2.fields["b_type"]]<br><br>
 					Minor Disabilities: [active2.fields["mi_dis"]]<br>
 					Details: [active2.fields["mi_dis_d"]]<br><br>
@@ -436,7 +483,7 @@ Code:
 			if (istype(active1, /datum/data/record) && (active1 in data_core.general))
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:408: menu += "Name: [active1.fields["name"]] ID: [active1.fields["id"]]<br>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:408: menu += "Name: [active1.fields["name"]] ID: [active1.fields["id"]]<br>"
 				menu += {"Name: [active1.fields["name"]] ID: [active1.fields["id"]]<br>
 					Sex: [active1.fields["sex"]]<br>
 					Age: [active1.fields["age"]]<br>
@@ -450,14 +497,14 @@ Code:
 
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:418: menu += "<br>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:418: menu += "<br>"
 			menu += {"<br>
 				<h4><img src=pda_cuffs.png> Security Data</h4>"}
 			// END AUTOFIX
 			if (istype(active3, /datum/data/record) && (active3 in data_core.security))
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:422: menu += "Criminal Status: [active3.fields["criminal"]]<br>"
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:422: menu += "Criminal Status: [active3.fields["criminal"]]<br>"
 				menu += {"Criminal Status: [active3.fields["criminal"]]<br>
 					Minor Crimes: [active3.fields["mi_crim"]]<br>
 					Details: [active3.fields["mi_crim"]]<br><br>
@@ -500,7 +547,7 @@ Code:
 
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:464: menu += "Location: [SC.botstatus["loca"] ]<BR>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:464: menu += "Location: [SC.botstatus["loca"] ]<BR>"
 					menu += {"Location: [SC.botstatus["loca"] ]<BR>
 						Mode: "}
 					// END AUTOFIX
@@ -520,7 +567,7 @@ Code:
 
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:481: menu += "<BR>\[<A href='byond://?src=\ref[SC];op=stop'>Stop Patrol</A>\] "
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:481: menu += "<BR>\[<A href='byond://?src=\ref[SC];op=stop'>Stop Patrol</A>\] "
 					menu += {"<BR>\[<A href='byond://?src=\ref[SC];op=stop'>Stop Patrol</A>\]
 						\[<A href='byond://?src=\ref[SC];op=go'>Start Patrol</A>\]
 						\[<A href='byond://?src=\ref[SC];op=summon'>Summon Bot</A>\]<BR>
@@ -529,7 +576,7 @@ Code:
 		if (47) //quartermaster order records
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:487: menu = "<h4><img src=pda_crate.png> Supply Record Interlink</h4>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:487: menu = "<h4><img src=pda_crate.png> Supply Record Interlink</h4>"
 			menu = {"<h4><img src=pda_crate.png> Supply Record Interlink</h4>
 				<BR><B>Supply shuttle</B><BR>
 				Location: [supply_shuttle.moving ? "Moving to station ([supply_shuttle.eta] Mins.)":supply_shuttle.at_station ? "Station":"Dock"]<BR>
@@ -540,7 +587,7 @@ Code:
 				menu += "<li>#[SO.ordernum] - [SO.object.name] approved by [SO.orderedby] [SO.comment ? "([SO.comment])":""]</li>"
 
 			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:495: menu += "</ol>"
+			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:495: menu += "</ol>"
 			menu += {"</ol>
 				Current requests: <BR><ol>"}
 			// END AUTOFIX
@@ -577,7 +624,7 @@ Code:
 
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:529: menu += "Location: [QC.botstatus["loca"] ]<BR>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:529: menu += "Location: [QC.botstatus["loca"] ]<BR>"
 					menu += {"Location: [QC.botstatus["loca"] ]<BR>
 						Mode: "}
 					// END AUTOFIX
@@ -599,7 +646,7 @@ Code:
 					var/obj/structure/closet/crate/C = QC.botstatus["load"]
 
 					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:548: menu += "<BR>Current Load: [ !C ? "<i>none</i>" : "[C.name] (<A href='byond://?src=\ref[QC];op=unload'><i>unload</i></A>)" ]<BR>"
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:548: menu += "<BR>Current Load: [ !C ? "<i>none</i>" : "[C.name] (<A href='byond://?src=\ref[QC];op=unload'><i>unload</i></A>)" ]<BR>"
 					menu += {"<BR>Current Load: [ !C ? "<i>none</i>" : "[C.name] (<A href='byond://?src=\ref[QC];op=unload'><i>unload</i></A>)" ]<BR>
 						Destination: [!QC.botstatus["dest"] ? "<i>none</i>" : QC.botstatus["dest"] ] (<A href='byond://?src=\ref[QC];op=setdest'><i>set</i></A>)<BR>
 						Power: [QC.botstatus["powr"]]%<BR>
@@ -618,8 +665,8 @@ Code:
 			if (cl)
 
 				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\Documents\Projects\vgstation13\code\game\objects\items\devices\PDA\cart.dm:565: menu += "Current Orbital Location: <b>\[[cl.x],[cl.y]\]</b>"
-				menu += {"Current Orbital Location: <b>\[[cl.x-WORLD_X_OFFSET],[cl.y-WORLD_Y_OFFSET]\]</b>
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:565: menu += "Current Orbital Location: <b>\[[cl.x],[cl.y]\]</b>"
+				menu += {"Current Orbital Location: <b>\[[cl.x-WORLD_X_OFFSET[cl.z]],[cl.y-WORLD_Y_OFFSET[cl.z]]\]</b>
 					<h4>Located Mops:</h4>"}
 				// END AUTOFIX
 				var/ldat
@@ -630,7 +677,7 @@ Code:
 						if (ml.z != cl.z)
 							continue
 						var/direction = get_dir(src, M)
-						ldat += "Mop - <b>\[[ml.x-WORLD_X_OFFSET],[ml.y-WORLD_Y_OFFSET] ([uppertext(dir2text(direction))])\]</b> - [M.reagents.total_volume ? "Wet" : "Dry"]<br>"
+						ldat += "Mop - <b>\[[ml.x-WORLD_X_OFFSET[ml.z]],[ml.y-WORLD_Y_OFFSET[ml.z]] ([uppertext(dir2text(direction))])\]</b> - [M.reagents.total_volume ? "Wet" : "Dry"]<br>"
 
 				if (!ldat)
 					menu += "None"
@@ -647,7 +694,7 @@ Code:
 						if (bl.z != cl.z)
 							continue
 						var/direction = get_dir(src, B)
-						ldat += "Bucket - <b>\[[bl.x-WORLD_X_OFFSET],[bl.y-WORLD_Y_OFFSET] ([uppertext(dir2text(direction))])\]</b> - Water level: [B.reagents.total_volume]/100<br>"
+						ldat += "Bucket - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text(direction))])\]</b> - Water level: [B.reagents.total_volume]/100<br>"
 
 				if (!ldat)
 					menu += "None"
@@ -664,7 +711,7 @@ Code:
 						if (bl.z != cl.z)
 							continue
 						var/direction = get_dir(src, B)
-						ldat += "Cleanbot - <b>\[[bl.x-WORLD_X_OFFSET],[bl.y-WORLD_Y_OFFSET] ([uppertext(dir2text(direction))])\]</b> - [B.on ? "Online" : "Offline"]<br>"
+						ldat += "Cleanbot - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text(direction))])\]</b> - [B.on ? "Online" : "Offline"]<br>"
 
 				if (!ldat)
 					menu += "None"
@@ -742,9 +789,17 @@ Code:
 					post_status(href_list["statdisp"])
 		if("Power Select")
 			var/pnum = text2num(href_list["target"])
-			powmonitor = powermonitors[pnum]
-			loc:mode = 433
-			mode = 433
+			powmonitor = locate(powermonitors[pnum])
+			if(istype(powmonitor))
+				loc:mode = 433
+				mode = 433
+
+		if("Alert Select")
+			var/pnum = text2num(href_list["target"])
+			alertmonitor = locate(alertmonitors[pnum])
+			if(istype(alertmonitor))
+				loc:mode = 533
+				mode = 533
 
 	generate_menu()
 	print_to_host(menu)

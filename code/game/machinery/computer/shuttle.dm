@@ -5,7 +5,7 @@
 	var/auth_need = 3.0
 	var/list/authorized = list(  )
 
-	l_color = "#7BF9FF"
+	light_color = LIGHT_COLOR_CYAN
 
 	attackby(var/obj/item/weapon/card/W as obj, var/mob/user as mob)
 		if(stat & (BROKEN|NOPOWER))	return
@@ -38,11 +38,11 @@
 					if (src.auth_need - src.authorized.len > 0)
 						message_admins("[key_name_admin(user)] has authorized early shuttle launch")
 						log_game("[user.ckey] has authorized early shuttle launch")
-						world << text("\blue <B>Alert: [] authorizations needed until shuttle is launched early</B>", src.auth_need - src.authorized.len)
+						world << text("<span class='notice'><B>Alert: [] authorizations needed until shuttle is launched early</B></span>", src.auth_need - src.authorized.len)
 					else
 						message_admins("[key_name_admin(user)] has launched the shuttle")
 						log_game("[user.ckey] has launched the shuttle early")
-						world << "\blue <B>Alert: Shuttle launch time shortened to 10 seconds!</B>"
+						world << "<span class='notice'><B>Alert: Shuttle launch time shortened to 10 seconds!</B></span>"
 						emergency_shuttle.online = 1
 						emergency_shuttle.settimeleft(10)
 						//src.authorized = null
@@ -51,21 +51,23 @@
 
 				if("Repeal")
 					src.authorized -= W:registered_name
-					world << text("\blue <B>Alert: [] authorizations needed until shuttle is launched early</B>", src.auth_need - src.authorized.len)
+					world << text("<span class='notice'><B>Alert: [] authorizations needed until shuttle is launched early</B></span>", src.auth_need - src.authorized.len)
 
 				if("Abort")
-					world << "\blue <B>All authorizations to shortening time for shuttle launch have been revoked!</B>"
+					world << "<span class='notice'><B>All authorizations to shortening time for shuttle launch have been revoked!</B></span>"
 					src.authorized.len = 0
 					src.authorized = list(  )
 		return
 
 /obj/machinery/computer/shuttle/emag(mob/user as mob)
 	if(!emagged)
+		new/obj/effect/effect/sparks(get_turf(src))
+		playsound(loc,"sparks",50,1)
 		var/choice = alert(user, "Would you like to launch the shuttle?","Shuttle control", "Launch", "Cancel")
 		if(emergency_shuttle.location == 1)
 			switch(choice)
 				if("Launch")
-					world << "\blue <B>Alert: Shuttle launch time shortened to 10 seconds!</B>"
+					world << "<span class='notice'><B>Alert: Shuttle launch time shortened to 10 seconds!</B></span>"
 					emergency_shuttle.settimeleft( 10 )
 					emagged = 1
 					return 1

@@ -44,13 +44,13 @@
 
 /obj/structure/sign/double/barsign/attack_hand(mob/user as mob)
 	if (!src.allowed(user))
-		user << "\red Access denied."
+		user << "<span class='warning'>Access denied.</span>"
 		return
 
 	if (!(get_dir(src, usr) in list(SOUTHWEST, SOUTH, SOUTHEAST)))
 		return
 
-	barsigns.Cut()
+	barsigns.len = 0
 	for(var/bartype in typesof(/datum/barsign))
 		var/datum/barsign/signinfo = new bartype
 		barsigns[signinfo.name] = signinfo

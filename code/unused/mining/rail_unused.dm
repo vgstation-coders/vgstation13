@@ -99,7 +99,7 @@
 
 /obj/machinery/rail_switch/attack_hand(user as mob)
 	user << "You switch the rail track's direction"
-	for (var/obj/machinery/rail_track/T in world)
+	for (var/obj/machinery/rail_track/T in machines)
 		if (T.id == src.id)
 			var/obj/machinery/rail_car/C = locate(/obj/machinery/rail_car, T.loc)
 			if (C)
@@ -196,6 +196,7 @@ for (var/client/C)
 
 /obj/machinery/rail_car/proc/load(var/atom/movable/C)
 
+
 	if(get_dist(C, src) > 1)
 		return
 	//mode = 1
@@ -223,7 +224,7 @@ for (var/client/C)
 	if(!load)
 		return
 
-	overlays.Cut()
+	overlays.len = 0
 
 	load.loc = src.loc
 	load.pixel_y -= 9

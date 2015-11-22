@@ -73,6 +73,7 @@
 
 	proc/Cmd(var/command, var/modifier)
 
+
 		if(command)
 			switch(command)
 				if("set-electriclevel")
@@ -178,7 +179,7 @@
 			center = locate(x+center_x, y+center_y, z)
 			if(center)
 				for(var/obj/M in orange(magnetic_field, center))
-					if(!M.anchored && (M.flags & CONDUCT))
+					if(!M.anchored && (M.is_conductor()))
 						step_towards(M, center)
 
 				for(var/mob/living/silicon/S in orange(magnetic_field, center))
@@ -222,7 +223,7 @@
 		..()
 
 		if(autolink)
-			for(var/obj/machinery/magnetic_module/M in world)
+			for(var/obj/machinery/magnetic_module/M in machines)
 				if(M.freq == frequency && M.code == code)
 					magnets.Add(M)
 
@@ -238,7 +239,7 @@
 
 	process()
 		if(magnets.len == 0 && autolink)
-			for(var/obj/machinery/magnetic_module/M in world)
+			for(var/obj/machinery/magnetic_module/M in machines)
 				if(M.freq == frequency && M.code == code)
 					magnets.Add(M)
 
@@ -269,7 +270,7 @@
 
 
 		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\Documents\Projects\vgstation13\code\game\machinery\magnet.dm:270: dat += "<br>Speed: <a href='?src=\ref[src];operation=minusspeed'>-</a> [speed] <a href='?src=\ref[src];operation=plusspeed'>+</a><br>"
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\\magnet.dm:270: dat += "<br>Speed: <a href='?src=\ref[src];operation=minusspeed'>-</a> [speed] <a href='?src=\ref[src];operation=plusspeed'>+</a><br>"
 		dat += {"<br>Speed: <a href='?src=\ref[src];operation=minusspeed'>-</a> [speed] <a href='?src=\ref[src];operation=plusspeed'>+</a><br>
 			Path: {<a href='?src=\ref[src];operation=setpath'>[path]</a>}<br>
 			Moving: <a href='?src=\ref[src];operation=togglemoving'>[moving ? "Enabled":"Disabled"]</a>"}
@@ -278,15 +279,15 @@
 		onclose(user, "magnet")
 
 	Topic(href, href_list)
-		if(stat & (BROKEN|NOPOWER))
-			return
+		if(..())
+			return 1
 		usr.set_machine(src)
 		src.add_fingerprint(usr)
 
 		if(href_list["radio-op"])
 
 			// Prepare signal beforehand, because this is a radio operation
-			var/datum/signal/signal = new
+			var/datum/signal/signal = getFromPool(/datum/signal)
 			signal.transmission_method = 1 // radio transmission
 			signal.source = src
 			signal.frequency = frequency
@@ -352,7 +353,7 @@
 			looping = 1
 
 			// Prepare the radio signal
-			var/datum/signal/signal = new
+			var/datum/signal/signal = getFromPool(/datum/signal)
 			signal.transmission_method = 1 // radio transmission
 			signal.source = src
 			signal.frequency = frequency

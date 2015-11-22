@@ -15,10 +15,14 @@
 	var/icon_locked = "lockbox+l"
 	var/icon_closed = "lockbox"
 	var/icon_broken = "lockbox+b"
+	var/tracked_access = "It doesn't look like it's ever been used."
+	health = 50
+
 
 
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id))
+		var/obj/item/weapon/card/id/ID = W
 		if(src.broken)
 			user << "<span class='rose'>It appears to be broken.</span>"
 			return
@@ -27,40 +31,33 @@
 			if(src.locked)
 				src.icon_state = src.icon_locked
 				user << "<span class='rose'>You lock the [src.name]!</span>"
+				tracked_access = "The tracker reads: 'Last locked by [ID.registered_name].'"
 				return
 			else
 				src.icon_state = src.icon_closed
 				user << "<span class='rose'>You unlock the [src.name]!</span>"
+				tracked_access = "The tracker reads: 'Last unlocked by [ID.registered_name].'"
 				return
 		else
 			user << "<span class='warning'>Access Denied</span>"
-	else if((istype(W, /obj/item/weapon/card/emag)||istype(W, /obj/item/weapon/melee/energy/blade)) && !src.broken)
+	else if(istype(W, /obj/item/weapon/card/emag) && !src.broken)
 		broken = 1
 		locked = 0
 		desc = "It appears to be broken."
 		icon_state = src.icon_broken
-		if(istype(W, /obj/item/weapon/melee/energy/blade))
-			var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
-			spark_system.set_up(5, 0, src.loc)
-			spark_system.start()
-			playsound(get_turf(src), 'sound/weapons/blade1.ogg', 50, 1)
-			playsound(get_turf(src), "sparks", 50, 1)
-			for(var/mob/O in viewers(user, 3))
-				O.show_message(text("<span class='notice'>The locker has been sliced open by [] with an energy blade!</span>", user), 1, text("<span class='warning>You hear metal being sliced and sparks flying.</span>"), 2)
-		else
-			for(var/mob/O in viewers(user, 3))
-				O.show_message(text("<span class='notice'>The locker has been broken by [] with an electromagnetic card!</span>", user), 1, text("You hear a faint electrical spark."), 2)
+		for(var/mob/O in viewers(user, 3))
+			O.show_message(text("<span class='notice'>The locker has been broken by [] with an electromagnetic card!</span>", user), 1, text("You hear a faint electrical spark."), 2)
 
 	if(!locked)
 		..()
 	else
-		user << "\red Its locked!"
+		user << "<span class='warning'>Its locked!</span>"
 	return
 
 
 /obj/item/weapon/storage/lockbox/show_to(mob/user as mob)
 	if(locked)
-		user << "\red Its locked!"
+		user << "<span class='warning'>Its locked!</span>"
 	else
 		..()
 	return
@@ -69,7 +66,7 @@
 	// WHY MUST WE DO THIS
 	// WHY
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lastertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+		if(!istype(Proj ,/obj/item/projectile/beam/lastertag) && !istype(Proj ,/obj/item/projectile/beam/practice) && !Proj.nodamage)
 			health -= Proj.damage
 	..()
 	if(health <= 0)
@@ -118,56 +115,54 @@
 	name = "Lockbox (Loyalty Implants)"
 	req_access = list(access_security)
 
-	New()
-		..()
-		new /obj/item/weapon/implantcase/loyalty(src)
-		new /obj/item/weapon/implantcase/loyalty(src)
-		new /obj/item/weapon/implantcase/loyalty(src)
-		new /obj/item/weapon/implanter/loyalty(src)
+/obj/item/weapon/storage/lockbox/loyalty/New()
+	..()
+	new /obj/item/weapon/implantcase/loyalty(src)
+	new /obj/item/weapon/implantcase/loyalty(src)
+	new /obj/item/weapon/implantcase/loyalty(src)
+	new /obj/item/weapon/implanter/loyalty(src)
 
 /obj/item/weapon/storage/lockbox/tracking
 	name = "Lockbox (Tracking Implants)"
 	req_access = list(access_security)
 
-	New()
-		..()
-		new /obj/item/weapon/implantcase/tracking(src)
-		new /obj/item/weapon/implantcase/tracking(src)
-		new /obj/item/weapon/implantcase/tracking(src)
-		new /obj/item/weapon/implantpad(src)
-		new /obj/item/weapon/implanter(src)
+/obj/item/weapon/storage/lockbox/tracking/New()
+	..()
+	new /obj/item/weapon/implantcase/tracking(src)
+	new /obj/item/weapon/implantcase/tracking(src)
+	new /obj/item/weapon/implantcase/tracking(src)
+	new /obj/item/weapon/implantpad(src)
+	new /obj/item/weapon/implanter(src)
 
 /obj/item/weapon/storage/lockbox/chem
 	name = "Lockbox (Chemical Implants)"
 	req_access = list(access_security)
 
-	New()
-		..()
-		new /obj/item/weapon/implantcase/chem(src)
-		new /obj/item/weapon/implantcase/chem(src)
-		new /obj/item/weapon/implantcase/chem(src)
-		new /obj/item/weapon/reagent_containers/syringe(src)
-		new /obj/item/weapon/implanter(src)
+/obj/item/weapon/storage/lockbox/chem/New()
+	..()
+	new /obj/item/weapon/implantcase/chem(src)
+	new /obj/item/weapon/implantcase/chem(src)
+	new /obj/item/weapon/implantcase/chem(src)
+	new /obj/item/weapon/reagent_containers/syringe(src)
+	new /obj/item/weapon/implanter(src)
 
 /obj/item/weapon/storage/lockbox/clusterbang
 	name = "lockbox (clusterbang)"
 	desc = "You have a bad feeling about opening this."
 	req_access = list(access_security)
 
-	New()
-		..()
-		new /obj/item/weapon/grenade/flashbang/clusterbang(src)
+/obj/item/weapon/storage/lockbox/clusterbang/New()
+	..()
+	new /obj/item/weapon/grenade/flashbang/clusterbang(src)
 
 /obj/item/weapon/storage/lockbox/unlockable
 	name = "semi-secure lockbox"
 	desc = "A securable locked box. Can't lock anything, but can track whoever used it."
 	req_access = list()
-	var/tracked_access = "It doesn't look like it's ever been used."
 
-/obj/item/weapon/storage/lockbox/unlockable/examine()
+/obj/item/weapon/storage/lockbox/examine(mob/user)
 	..()
-	usr << tracked_access
-	return 1
+	user << "<span class='info'>[tracked_access]</span>"
 
 /obj/item/weapon/storage/lockbox/unlockable/attackby(obj/O as obj, mob/user as mob)
 	if (istype(O, /obj/item/weapon/card/id))
@@ -189,3 +184,21 @@
 				return
 	else
 		..()
+
+/obj/item/weapon/storage/lockbox/coinbox
+	name = "coinbox"
+	desc = "A secure container for the profits of a vending machine."
+	icon_state = "coinbox+l"
+	w_class = 2
+	max_w_class = 1
+	can_hold = list("/obj/item/voucher","/obj/item/weapon/coin")
+	max_combined_w_class = 30
+	force = 8
+	throwforce = 10
+	storage_slots = 20
+	req_access = list(access_qm)
+	locked = 1
+	broken = 0
+	icon_locked = "coinbox+l"
+	icon_closed = "coinbox"
+	icon_broken = "coinbox+b"

@@ -1,9 +1,3 @@
-var/list/sacrificed = list()
-
-/obj/effect/rune
-	var/atom/movable/overlay/c_animation = null
-	var/nullblock = 0
-
 /obj/effect/rune/cultify()
 	return
 
@@ -29,7 +23,10 @@ var/list/sacrificed = list()
 	c_animation.icon_state = "[animation_icon]"
 	flick("cultification",c_animation)
 	spawn(10)
-		del(c_animation)
+		if(c_animation)
+			c_animation.master = null
+			qdel(c_animation)
+			c_animation = null
 
 /////////////////////////////////////////FIRST RUNE
 /obj/effect/rune/proc/teleport(var/key)
@@ -155,16 +152,19 @@ var/list/sacrificed = list()
 	"<span class='warning'>You hear a pop and smell ozone.</span>")
 	if(istype(src,/obj/effect/rune))
 		new /obj/item/weapon/tome(src.loc)
+		src.invocation("tome_spawn")
 	else
 		new /obj/item/weapon/tome(usr.loc)
 	qdel(src)
 	return
 
-
-
 /////////////////////////////////////////THIRD RUNE
 
 /obj/effect/rune/proc/convert()
+
+
+	var/datum/game_mode/cult/mode_ticker = ticker.mode
+
 	for(var/mob/living/carbon/M in src.loc)
 		if(iscultist(M))
 			usr << "<span class='warning'>You cannot convert what is already a follower of Nar-Sie.</span>"
@@ -175,7 +175,7 @@ var/list/sacrificed = list()
 		if(!M.mind)
 			usr << "<span class='warning'>You cannot convert that which has no soul</span>"
 			return 0
-		if((ticker.mode.name == "cult") && (M.mind == ticker.mode:sacrifice_target))
+		if(istype(mode_ticker) && (M.mind == mode_ticker.sacrifice_target))
 			usr << "<span class='warning'>The Geometer of blood wants this mortal for himself.</span>"
 			return 0
 		usr.say("Mah[pick("'","`")]weyh pleggh at e'ntrath!")
@@ -194,48 +194,155 @@ var/list/sacrificed = list()
 			M.mind.special_role = "Cultist"
 			M << "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>"
 			M << "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>"
-			log_admin("[usr]([ckey(usr.key)]) has converted [M] ([ckey(M.key)]) to the cult at [M.loc.x], [M.loc.y], [M.loc.z]")
+			M << "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>"
+			M.add_language("Cult")
+			log_admin("[usr]([ckey(usr.key)]) has converted [M] ([ckey(M.key)]) to the cult at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.loc.x];Y=[M.loc.y];Z=[M.loc.z]'>([M.loc.x], [M.loc.y], [M.loc.z])</a>")
+			if(M.client)
+				spawn(600)
+					if(M && !M.client)
+						var/turf/T = get_turf(M)
+						message_admins("[M] ([ckey(M.key)]) ghosted/disconnected less than a minute after having been converted to the cult! ([T.x],[T.y],[T.z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</a>)")
+						log_admin("[M]([ckey(M.key)]) ghosted/disconnected less than a minute after having been converted to the cult! ([T.x],[T.y],[T.z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</a>)")
 			return 1
 		else
+			if(jobban_isbanned(M, "cultist"))
+				M.Sleeping(300)//putting them to sleep for 5 minutes.
+				usr << "<span class='danger'>The ritual didn't work! Looks like this person just isn't suited to be part of our cult.</span>"
+				usr << "<span class='notice'>It appears that the ritual at least put the target to sleep. Try to figure a way to deal with them before they wake up.</span>"
+			else if(M.weakened)
+				usr << "<span class='danger'>The ritual didn't work, either something is disrupting it, or this person just isn't suited to be part of our cult.</span>"
+				usr << "<span class='danger'>You have to restrain him before the talisman's effects wear off!</span>"
 			M << "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>"
-			M << "<span class='warning'><b>And you were able to force it out of your mind. You now know the truth, there's something horrible out there, stop it and its minions at all costs.</b></span>"
+			M << "<span class='danger'>And you were able to force it out of your mind. You now know the truth, there's something horrible out there, stop it and its minions at all costs.</span>"
 			return 0
 
 	usr.say("Mah[pick("'","`")]weyh pleggh at e'ntrath!")
-	usr.show_message("\red The markings pulse with a small burst of light, then fall dark.", 3, "\red You hear a faint fizzle.", 2)
+	usr.show_message("<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>", 3, "<span class='warning'>You hear a faint fizzle.</span>", 2)
 	usr << "<span class='notice'> You remembered the words correctly, but the rune isn't working. Maybe your ritual is missing something important.</span>"
 
-
-
 /////////////////////////////////////////FOURTH RUNE
-var/global/cult_tearreality_lastattempt=0
-#define CULT_TEAR_REALITY_DELAY 50 // 5s minimum delay
-/obj/effect/rune/proc/tearreality()
-	var/cultist_count = 0
 
-	// Spamming this is getting so bad that it's impossible to process ahelps.
-	//if((world.time - cult_tearreality_lastattempt) < CULT_TEAR_REALITY_DELAY)
-	//	return fizzle()
-	//cult_tearreality_lastattempt=world.time
+/obj/effect/rune/proc/tearreality()
+	if(summoning)
+		return
+
+	var/list/active_cultists=list()
+	var/ghostcount = 0
+
+	for(var/mob/M in range(1,src))
+		if(iscultist(M) && !M.stat)
+			active_cultists.Add(M)
+			if (istype(M, /mob/living/carbon/human/manifested))
+				ghostcount++
 
 	if(universe.name == "Hell Rising")
-		for(var/mob/N in range(1,src))
-			if(iscultist(N))
-				N << "<span class='warning'>This plane of reality has already been torn into Nar-Sie's realm.</span>"
-	else
-		for(var/mob/M in range(1,src))
-			if(iscultist(M) && !M.stat)
-				M.say("Tok-lyr rqa'nap g[pick("'","`")]lt-ulotf!")
-				cultist_count += 1
-		if(cultist_count >= 9)
-			// Sanity checks
-			// Are we permitted to spawn Nar-Sie?
-			if(ticker.mode.eldergod)
-				new /obj/machinery/singularity/narsie/large(src.loc,cultspawn=1)
-				ticker.mode.eldergod = 0
-			return
+		for(var/mob/M in active_cultists)
+			M << "<span class='warning'>This plane of reality has already been torn into Nar-Sie's realm.</span>"
+		return
+
+	var/datum/game_mode/cult/mode_ticker = ticker.mode
+
+	if(mode_ticker.eldergod)
+		// Sanity checks
+		// Are we permitted to spawn Nar-Sie?
+
+		if((ticker.mode.name != "cult") || mode_ticker.narsie_condition_cleared)//if the game mode wasn't cult to begin with, there won't be need to complete a first objective to prepare the summoning.
+			if(active_cultists.len >= 9)
+				if(z != map.zMainStation)
+					for(var/mob/M in active_cultists)
+						M << "<span class='danger'>YOU HAVE A TERRIBLE FEELING. IS SOMETHING WRONG WITH THE RITUAL?</span>"//You get one warning
+				summoning = 1
+				log_admin("NAR-SIE SUMMONING: [active_cultists.len] are summoning Nar-Sie at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>). [6 + (ghostcount * 5)] seconds remaining.")
+				message_admins("NAR-SIE SUMMONING: [active_cultists.len] are summoning Nar-Sie at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>). [6 + (ghostcount * 5)] seconds remaining.")
+				updatetear(6 + (ghostcount * 5))	//the summoning takes 6 seconds by default , but for each manifested ghost around it takes 5 more seconds.
+				return								//with 8 manifested ghosts summoned by a single human, it'd take 46 seconds, which would cause 46*8 = 368 brute damage over time to the human.
+													//no more lone human summoning nar-sie all by himself (as all the ghosts would die as soon as he goes uncounscious)
 		else
-			return fizzle()
+			for(var/mob/M in active_cultists)
+				M << "<span class='sinister'>The Geometer of Blood has required of you to perform a certain task. This place cannot welcome him until this task has been cleared.</span>"
+			return
+
+	else
+		for(var/mob/M in active_cultists)
+			M << "<span class='danger'>Nar-Sie has lost interest in this world.</span>"//narsie won't appear if a supermatter cascade has started
+		return
+
+	return fizzle()
+
+
+/obj/effect/rune/proc/updatetear(var/currentCountdown)
+	if(!summoning)
+		summonturfs = list()
+		return
+	summonturfs = list()
+	var/list/active_cultists=list()
+	for(var/mob/M in range(1,src))
+		if(iscultist(M) && !M.stat)
+			active_cultists.Add(M)
+			var/turf/T = get_turf(M)
+			summonturfs += T
+			if(!(locate(/obj/effect/summoning) in T))
+				var/obj/effect/summoning/S = new(T)
+				S.init(src)
+
+
+	if(active_cultists.len < 9)
+		summoning = 0
+		summonturfs = list()
+		for(var/mob/M in active_cultists)
+			M << "<span class='warning'>The ritual has been disturbed. All summoners need to stay by the rune.</span>"
+		return
+
+	if(currentCountdown <= 0)
+		if(z != map.zMainStation)//No more summonings on the Asteroid!
+			for(var/mob/M in active_cultists)
+				M.say("Tok-lyr rqa'nap g[pick("'","`")]lt-ulotf!")
+			summonturfs = list()
+			summoning = 0
+			for(var/mob/M in active_cultists)
+				M << "<span class='sinister'>THE GEOMETER OF BLOOD IS HIGHLY DISAPOINTED WITH YOUR INABILITY TO PERFORM THE RITUAL IN ITS REQUESTED LOCATION.</span>"
+				M.gib()
+		else
+			for(var/mob/M in active_cultists)
+				// Only chant when Nar-Sie spawns
+				M.say("Tok-lyr rqa'nap g[pick("'","`")]lt-ulotf!")
+			ticker.mode.eldergod = 0
+			summonturfs = list()
+			summoning = 0
+			new /obj/machinery/singularity/narsie/large(src.loc)
+		return
+
+	currentCountdown--
+
+	sleep(10)
+
+	updatetear(currentCountdown)
+	return
+
+/obj/effect/summoning
+	name = "summoning"
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "summoning"
+	mouse_opacity = 0
+	density = 0
+	flags = 0
+	var/obj/effect/rune/summon_target = null
+
+/obj/effect/summoning/New()
+	..()
+	spawn(10)
+		update()
+
+/obj/effect/summoning/proc/update()
+	if(summon_target && (locate(get_turf(src)) in summon_target.summonturfs))
+		sleep(10)
+		update()
+		return
+	else
+		qdel(src)
+
+/obj/effect/summoning/proc/init(var/obj/effect/rune/S)
+	summon_target = S
 
 /////////////////////////////////////////FIFTH RUNE
 
@@ -272,14 +379,14 @@ var/global/cult_tearreality_lastattempt=0
 	if(!drain)
 		return fizzle()
 	usr.say ("Yu[pick("'","`")]gular faras desdae. Havas mithum javara. Umathar uf'kal thenar!")
-	usr.visible_message("\red Blood flows from the rune into [usr]!", \
+	usr.visible_message("<span class='warning'>Blood flows from the rune into [usr]!</span>", \
 	"<span class='warning'>The blood starts flowing from the rune and into your frail mortal body. You feel... empowered.</span>", \
 	"<span class='warning'>You hear a liquid flowing.</span>")
 	var/mob/living/user = usr
 	if(user.bhunger)
 		user.bhunger = max(user.bhunger-2*drain,0)
 	if(drain>=50)
-		user.visible_message("\red [user]'s eyes give off eerie red glow!", \
+		user.visible_message("<span class='warning'>[user]'s eyes give off eerie red glow!</span>", \
 		"<span class='warning'>...but it wasn't nearly enough. You crave, crave for more. The hunger consumes you from within.</span>", \
 		"<span class='warning'>You hear a heartbeat.</span>")
 		user.bhunger += drain
@@ -420,7 +527,7 @@ var/global/cult_tearreality_lastattempt=0
 		if(istype(src,/obj/effect/rune))
 			usr.say("Kla[pick("'","`")]atu barada nikt'o!")
 			for (var/mob/V in viewers(src))
-				V.show_message("\red The rune turns into gray dust, veiling the surrounding runes.", 3)
+				V.show_message("<span class='warning'>The rune turns into gray dust, veiling the surrounding runes.</span>", 3)
 			qdel(src)
 		else
 			usr.whisper("Kla[pick("'","`")]atu barada nikt'o!")
@@ -446,18 +553,17 @@ var/global/cult_tearreality_lastattempt=0
 		"<span class='warning'>The shadow that is your spirit separates itself from your body. You are now in the realm beyond. While this is a great sight, being here strains your mind and body. Hurry...</span>", \
 		"<span class='warning'>You hear only complete silence for a moment.</span>")
 		usr.ghostize(1)
-		L.ajourn = 1
+		L.ajourn = src
+		ajourn = L
 		while(L)
 			if(L.key)
-				L.ajourn=0
+				L.ajourn=null
+				ajourn = null
 				return
 			else
 				L.take_organ_damage(10, 0)
 			sleep(100)
 	return fizzle()
-
-
-
 
 /////////////////////////////////////////ELEVENTH RUNE
 
@@ -508,7 +614,6 @@ var/global/cult_tearreality_lastattempt=0
 			break
 	if(!chose_name)
 		D.real_name = "[pick(first_names_male)] [pick(last_names)]"
-	D.universal_speak = 1
 	D.status_flags &= ~GODMODE
 
 
@@ -516,13 +621,18 @@ var/global/cult_tearreality_lastattempt=0
 		ticker.mode:add_cultist(D.mind)
 	else
 		ticker.mode.cult+=D.mind
+
 	ticker.mode.update_cult_icons_added(D.mind)
 	D.canmove = 1
-	del(animation)
+	animation.master = null
+	qdel(animation)
 
 	D.mind.special_role = "Cultist"
 	D << "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>"
 	D << "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>"
+	D << "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>"
+
+	D.add_language("Cult")
 
 
 	var/mob/living/user = usr
@@ -535,10 +645,6 @@ var/global/cult_tearreality_lastattempt=0
 		"<span class='warning'>You hear faint rustle.</span>")
 		D.dust()
 	return
-
-
-
-
 
 /////////////////////////////////////////TWELFTH RUNE
 
@@ -623,7 +729,9 @@ var/global/cult_tearreality_lastattempt=0
 		qdel(newtalisman)
 		invocation("rune_imbue")
 	else
-		return fizzle()
+		usr.say("H'drak v[pick("'","`")]loso, mir'kanas verbot!")
+		usr.show_message("\<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>", 3, "<span class='warning'>You hear a faint fizzle.</span>", 2)
+		usr << "<span class='notice'> You remembered the words correctly, but the rune isn't working properly. Maybe you're missing something in the ritual.</span>"
 
 /////////////////////////////////////////THIRTEENTH RUNE
 
@@ -649,7 +757,8 @@ var/global/cult_tearreality_lastattempt=0
 // returns 0 if the rune is not used. returns 1 if the rune is used.
 /obj/effect/rune/proc/communicate()
 	. = 1 // Default output is 1. If the rune is deleted it will return 1
-	var/input = stripped_input(usr, "Please choose a message to tell to the other acolytes.", "Voice of Blood", "")
+	var/mob/user = usr
+	var/input = stripped_input(user, "Please choose a message to tell to the other acolytes.", "Voice of Blood", "")
 	if(!input)
 		if (istype(src))
 			fizzle()
@@ -657,17 +766,23 @@ var/global/cult_tearreality_lastattempt=0
 		else
 			return 0
 	if(istype(src,/obj/effect/rune))
-		usr.say("O bidai nabora se[pick("'","`")]sma!")
+		user.say("O bidai nabora se[pick("'","`")]sma!")
 	else
-		usr.whisper("O bidai nabora se[pick("'","`")]sma!")
+		user.whisper("O bidai nabora se[pick("'","`")]sma!")
 
 	if(istype(src,/obj/effect/rune))
-		usr.say("[input]")
+		user.say("[input]")
 	else
-		usr.whisper("[input]")
+		user.whisper("[input]")
 	for(var/datum/mind/H in ticker.mode.cult)
 		if (H.current)
-			H.current << "<span class='sinister'> \b [input]</span>"//changed from red to purple - Deity Link
+			H.current << "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[input]</span></B></span>"//changed from red to purple - Deity Link
+
+	for(var/mob/dead/observer/O in player_list)
+		O << "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinister'>[input]</span></span>"
+
+	log_cultspeak("[key_name(user)] Cult Communicate Rune: [input]")
+
 	qdel(src)
 	return 1
 
@@ -692,6 +807,13 @@ var/global/cult_tearreality_lastattempt=0
 		usr << "<span class='warning'>The presence of a null rod is perturbing the ritual.</span>"
 		return
 
+	var/cult_game = 0
+
+	if(ticker.mode.name == "cult")
+		cult_game = 1
+
+	var/datum/game_mode/cult/mode_ticker = ticker.mode
+
 	for(var/atom/A in loc)
 		if(iscultist(A))
 			continue
@@ -699,13 +821,15 @@ var/global/cult_tearreality_lastattempt=0
 //Humans and Animals
 		if(istype(A,/mob/living/carbon) || istype(A,/mob/living/simple_animal))//carbon mobs and simple animals
 			var/mob/living/M = A
-			if ((ticker.mode.name == "cult") && (M.mind == ticker.mode:sacrifice_target))
+			if (cult_game && (M.mind == mode_ticker.sacrifice_target))
 				if(cultsinrange.len >= 3)
-					sacrificed += M.mind
+					mode_ticker.sacrificed += M.mind
 					M.gib()
 					sacrificedone = 1
 					invocation("rune_sac")
 					ritualresponse += "The Geometer of Blood gladly accepts this sacrifice, your objective is now complete."
+					spawn(10)	//so the messages for the new phase get received after the feedback for the sacrifice
+						mode_ticker.additional_phase()
 				else
 					ritualresponse += "You need more cultists to perform the ritual and complete your objective."
 			else
@@ -737,12 +861,15 @@ var/global/cult_tearreality_lastattempt=0
 			var/mob/living/silicon/robot/B = A
 			var/obj/item/device/mmi/O = locate() in B
 			if(O)
-				if((ticker.mode.name == "cult") && (O.brainmob.mind == ticker.mode:sacrifice_target))
+				if(cult_game && (O.brainmob.mind == mode_ticker.sacrifice_target))
 					if(cultsinrange.len >= 3)
+						mode_ticker.sacrificed += O.brainmob.mind
 						ritualresponse += "The Geometer of Blood accepts this sacrifice, your objective is now complete."
 						sacrificedone = 1
 						invocation("rune_sac")
 						B.dust()
+						spawn(10)	//so the messages for the new phase get received after the feedback for the sacrifice
+							mode_ticker.additional_phase()
 					else
 						ritualresponse += "You need more cultists to perform the ritual and complete your objective."
 				else
@@ -790,9 +917,11 @@ var/global/cult_tearreality_lastattempt=0
 			var/obj/item/device/aicard/D = A
 			var/mob/living/silicon/ai/T = locate() in D
 			if(T)//there is an AI on the card
-				if((ticker.mode.name == "cult") && (T.mind == ticker.mode:sacrifice_target))//what are the odds this ever happens?
-					sacrificed += T.mind
+				if(cult_game && (T.mind == ticker.mode:sacrifice_target))//what are the odds this ever happens?
+					mode_ticker.sacrificed += T.mind
 					ritualresponse += "With a sigh, the Geometer of Blood accepts this sacrifice, your objective is now complete."//since you cannot debrain an AI.
+					spawn(10)	//so the messages for the new phase get received after the feedback for the sacrifice
+						mode_ticker.additional_phase()
 				else
 					ritualresponse += "The Geometer of Blood accepts to destroy that piece of technological garbage."
 				sacrificedone = 1
@@ -883,13 +1012,39 @@ var/global/cult_tearreality_lastattempt=0
 	for(var/mob/living/C in orange(1,src))
 		if(iscultist(C) && !C.stat)
 			users+=C
+
+	var/list/possible_targets = list()
+	for(var/mob/living/carbon/cultistarget in (cultists - users))
+		if (cultistarget.handcuffed)
+			possible_targets += cultistarget
+		else if (cultistarget.legcuffed)
+			possible_targets += cultistarget
+		else if (istype(cultistarget.wear_mask, /obj/item/clothing/mask/muzzle))
+			possible_targets += cultistarget
+		else if (istype(cultistarget.loc, /obj/structure/closet))
+			var/obj/structure/closet/closet = cultistarget.loc
+			if(closet.welded)
+				possible_targets += cultistarget
+		else if (istype(cultistarget.loc, /obj/structure/closet/secure_closet))
+			var/obj/structure/closet/secure_closet/secure_closet = cultistarget.loc
+			if (secure_closet.locked)
+				possible_targets += cultistarget
+		else if (istype(cultistarget.loc, /obj/machinery/dna_scannernew))
+			var/obj/machinery/dna_scannernew/dna_scannernew = cultistarget.loc
+			if (dna_scannernew.locked)
+				possible_targets += cultistarget
+
+	if(!possible_targets.len)
+		user << "<span class='warning'>None of the cultists are currently under restraints.</span>"
+		return fizzle()
+
 	if(users.len>=3)
-		var/mob/living/carbon/cultist = input("Choose the one who you want to free", "Followers of Geometer") as null|anything in (cultists - users)
+		var/mob/living/carbon/cultist = input("Choose the one who you want to free", "Followers of Geometer") as null|anything in possible_targets
 		if(!cultist)
 			return fizzle()
 		if (cultist == user) //just to be sure.
 			return
-		if(!(cultist.buckled || \
+		if(!(cultist.locked_to || \
 			cultist.handcuffed || \
 			istype(cultist.wear_mask, /obj/item/clothing/mask/muzzle) || \
 			(istype(cultist.loc, /obj/structure/closet)&&cultist.loc:welded) || \
@@ -898,7 +1053,7 @@ var/global/cult_tearreality_lastattempt=0
 		))
 			user << "<span class='warning'>The [cultist] is already free.</span>"
 			return
-		cultist.buckled = null
+		cultist.unlock_from()
 		if (cultist.handcuffed)
 			cultist.handcuffed.loc = cultist.loc
 			cultist.handcuffed = null
@@ -908,17 +1063,32 @@ var/global/cult_tearreality_lastattempt=0
 			cultist.legcuffed = null
 			cultist.update_inv_legcuffed()
 		if (istype(cultist.wear_mask, /obj/item/clothing/mask/muzzle))
-			cultist.u_equip(cultist.wear_mask)
-		if(istype(cultist.loc, /obj/structure/closet)&&cultist.loc:welded)
-			cultist.loc:welded = 0
-		if(istype(cultist.loc, /obj/structure/closet/secure_closet)&&cultist.loc:locked)
-			cultist.loc:locked = 0
-		if(istype(cultist.loc, /obj/machinery/dna_scannernew)&&cultist.loc:locked)
-			cultist.loc:locked = 0
+			cultist.u_equip(cultist.wear_mask, 1)
+		if(istype(cultist.loc, /obj/structure/closet))
+			var/obj/structure/closet/closet = cultist.loc
+			if(closet.welded)
+				closet.welded = 0
+		if(istype(cultist.loc, /obj/structure/closet/secure_closet))
+			var/obj/structure/closet/secure_closet/secure_closet = cultist.loc
+			if (secure_closet.locked)
+				secure_closet.locked = 0
+		if(istype(cultist.loc, /obj/machinery/dna_scannernew))
+			var/obj/machinery/dna_scannernew/dna_scannernew = cultist.loc
+			if (dna_scannernew.locked)
+				dna_scannernew.locked = 0
 		for(var/mob/living/carbon/C in users)
 			user.take_overall_damage(10, 0)
 			C.say("Khari[pick("'","`")]d! Gual'te nikka!")
+		cultist << "<span class='warning'>You feel a tingle as you find yourself freed from your restraints.</span>"
 		qdel(src)
+	else
+		var/text = "<span class='sinister'>The following cultists are currently under restraints:</span>"
+		for(var/mob/living/carbon/cultist in possible_targets)
+			text += "<br><b>[cultist]</b>"
+		user << text
+		user.say("Khari[pick("'","`")]d!")
+		return
+
 	return fizzle()
 
 /////////////////////////////////////////NINETEENTH RUNE
@@ -939,7 +1109,7 @@ var/global/cult_tearreality_lastattempt=0
 			return fizzle()
 		if (cultist == user) //just to be sure.
 			return
-		if(cultist.buckled || cultist.handcuffed || (!isturf(cultist.loc) && !istype(cultist.loc, /obj/structure/closet)))
+		if(cultist.locked_to || cultist.handcuffed || (!isturf(cultist.loc) && !istype(cultist.loc, /obj/structure/closet)))
 			user << "<span class='warning'>You cannot summon the [cultist], for his shackles of blood are strong</span>"
 			return fizzle()
 		var/turf/T = get_turf(cultist)
@@ -952,10 +1122,24 @@ var/global/cult_tearreality_lastattempt=0
 			if(iscultist(C) && !C.stat)
 				C.say("N'ath reth sh'yro eth d[pick("'","`")]rekkathnor!")
 				C.take_overall_damage(15, 0)
+				if(C != cultist)
+					C << "<span class='warning'>Your body take its toll as you drag your fellow cultist through dimensions.</span>"
+				else
+					C << "<span class='warning'>You feel a sharp pain as your body gets dragged through dimensions.</span>"
 		user.visible_message("<span class='warning'>The rune disappears with a flash of red light, and in its place now a body lies.</span>", \
 		"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that now instead of the rune there's a body.</span>", \
 		"<span class='warning'>You hear a pop and smell ozone.</span>")
 		qdel(src)
+	else
+		var/text = "<span class='sinister'>The following individuals are living and conscious followers of the Geometer of Blood:</span>"
+		for(var/mob/living/L in player_list)
+			if(L.stat != DEAD)
+				if(L.mind in ticker.mode.cult)
+					text += "<br><b>[L]</b>"
+		user << text
+		user.say("N'ath reth!")
+		return
+
 	return fizzle()
 
 /////////////////////////////////////////TWENTIETH RUNES
@@ -1071,7 +1255,7 @@ var/global/cult_tearreality_lastattempt=0
 					M << "<span class='warning'>The blood suddenly ignites, burning you!</span>"
 					var/turf/T = get_turf(B)
 					T.hotspot_expose(700,125,surfaces=1)
-					del(B)
+					qdel(B)
 		qdel(src)
 
 //////////             Rune 24 (counting burningblood, which kinda doesnt work yet.)
@@ -1109,8 +1293,13 @@ var/global/cult_tearreality_lastattempt=0
 		if(ishuman(user))
 			usr.visible_message("<span class='warning'> In flash of red light, a set of armor appears on [usr]...</span>", \
 			"<span class='warning'> You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
-			user.equip_to_slot_or_del(new /obj/item/clothing/head/culthood/alt(user), slot_head)
-			user.equip_to_slot_or_del(new /obj/item/clothing/suit/cultrobes/alt(user), slot_wear_suit)
+			var/datum/game_mode/cult/mode_ticker = ticker.mode
+			if((istype(mode_ticker) && mode_ticker.narsie_condition_cleared) || (universe.name == "Hell Rising"))
+				user.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(user), slot_head)
+				user.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(user), slot_wear_suit)
+			else
+				user.equip_to_slot_or_del(new /obj/item/clothing/head/culthood/alt(user), slot_head)
+				user.equip_to_slot_or_del(new /obj/item/clothing/suit/cultrobes/alt(user), slot_wear_suit)
 			user.equip_to_slot_or_del(new /obj/item/clothing/shoes/cult(user), slot_shoes)
 			user.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/cultpack(user), slot_back)
 			//the above update their overlay icons cache but do not call update_icons()
@@ -1136,8 +1325,13 @@ var/global/cult_tearreality_lastattempt=0
 				if(ishuman(M))
 					M.visible_message("<span class='warning'> In flash of red light, and a set of armor appears on [M]...</span>", \
 					"<span class='warning'> You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
-					M.equip_to_slot_or_del(new /obj/item/clothing/head/culthood/alt(M), slot_head)
-					M.equip_to_slot_or_del(new /obj/item/clothing/suit/cultrobes/alt(M), slot_wear_suit)
+					var/datum/game_mode/cult/mode_ticker = ticker.mode
+					if((istype(mode_ticker) && mode_ticker.narsie_condition_cleared) || (universe.name == "Hell Rising"))
+						M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(M), slot_head)
+						M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(M), slot_wear_suit)
+					else
+						M.equip_to_slot_or_del(new /obj/item/clothing/head/culthood/alt(M), slot_head)
+						M.equip_to_slot_or_del(new /obj/item/clothing/suit/cultrobes/alt(M), slot_wear_suit)
 					M.equip_to_slot_or_del(new /obj/item/clothing/shoes/cult(M), slot_shoes)
 					M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/cultpack(M), slot_back)
 					M.put_in_hands(new /obj/item/weapon/melee/cultblade(M))
@@ -1203,7 +1397,7 @@ var/global/cult_tearreality_lastattempt=0
 								del(M)
 								C << "<B>You are now an Artificer. You are incredibly weak and fragile, but you are able to construct new floors and walls, to break some walls apart, to repair allied constructs (by clicking on them), </B><I>and most important of all create new constructs</I><B> (Use your Artificer spell to summon a new construct shell and Summon Soulstone to create a new soulstone).</B>"
 								ticker.mode.update_cult_icons_added(C.mind)
-				del(src)
+				qdel(src)
 				return
 			else
 				usr << "<span class='warning'>Only the followers of Nar-Sie may be given their armor.</span>"

@@ -118,11 +118,9 @@
 	var/techdifference = 0
 	if(techlist.len && linked_console)
 		//message_admins("We have a techlist and a linked_console")
-		var/obj/machinery/computer/rdconsole/console = src.linked_console
-		var/list/possible_tech = console.files.possible_tech
 		for(var/checktech in techlist)
 			//message_admins("Looking at [checktech] with value of [techlist[checktech]]")
-			for(var/datum/tech/pointed_tech in possible_tech) //if we find that technology
+			for(var/datum/tech/pointed_tech in tech_list) //if we find that technology
 				if(pointed_tech.id == checktech)
 					if(techlist[checktech] > pointed_tech.level) //if the machine board's research level is higher than the one on the console
 						//message_admins("Found a difference of [techlist[checktech] - pointed_tech.level]")
@@ -137,6 +135,8 @@
 	return techdifference
 
 /obj/machinery/r_n_d/reverse_engine/proc/researchQueue()
+	if(!research_queue.len)
+		return
 	while(research_queue[1])
 		if(stat&(NOPOWER|BROKEN))
 			return 0
@@ -190,7 +190,7 @@
 /obj/machinery/r_n_d/reverse_engine/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(src.stat & (BROKEN|NOPOWER))
 		return
-	if((user.stat && !isobserver(user)) || user.restrained() || !allowed(user))
+	if((user.stat && !isobserver(user)) || user.restrained() || !allowed(user) || !Adjacent(user))
 		return
 
 	var/data[0]
@@ -199,11 +199,13 @@
 
 	for(var/i=1;i<=research_queue.len;i++)
 		var/datum/design/mechanic_design/research_item = research_queue[i]
-		todo_queue.Add(list(list("name" = research_item.name, "command1" = list("research" = i), "command2" = list("remove_tosearch" = i))))
+		if(istype(research_item, /datum/design/mechanic_design))
+			todo_queue.Add(list(list("name" = research_item.name, "command1" = list("research" = i), "command2" = list("remove_tosearch" = i))))
 
 	for(var/i=1;i<=ready_queue.len;i++)
 		var/datum/design/mechanic_design/ready_item = ready_queue[i]
-		done_queue.Add(list(list("name" = ready_item.name, "command1" = list("print_design" = i), "command2" = list("nanoprint_design" = i), "command3" = list("remove_researched" = i))))
+		if(istype(ready_item,/datum/design/mechanic_design))
+			done_queue.Add(list(list("name" = ready_item.name, "command1" = list("print_design" = i), "command2" = list("nanoprint_design" = i), "command3" = list("remove_researched" = i))))
 
 	data["research_queue"] = todo_queue
 	data["ready_queue"] = done_queue
@@ -218,7 +220,9 @@
 
 	if(..())
 		return
-
+	if(href_list["close"])
+		if(usr.machine == src) usr.unset_machine()
+		return 1
 	if(href_list["remove_tosearch"])
 		var/datum/design/mechanic_design/design = research_queue[text2num(href_list["remove_tosearch"])]
 		if(design)
