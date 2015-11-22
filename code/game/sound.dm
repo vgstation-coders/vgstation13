@@ -25,6 +25,8 @@ var/list/lightning_sound = list('sound/effects/lightning/chainlightning1.ogg', '
 
 	ASSERT(!isnull(turf_source))
 
+	source = null
+
 	var/frequency = get_rand_frequency() // Same frequency for everybody
 
 /* What's going on in this block?
