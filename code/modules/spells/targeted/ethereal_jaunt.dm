@@ -91,3 +91,7 @@
 	enteranim = "phase_shift"
 	exitanim = "phase_shift2"
 	mist = 0
+
+/spell/targeted/ethereal_jaunt/genie
+	charge_max = 120
+	spell_flags = Z2NOCAST | INCLUDEUSER

@@ -68,7 +68,7 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 				if(summoned_object && !istype(summoned_object, /turf))
 					qdel(summoned_object)
 		conjure_animation(animation, spawn_place)
-	return
+	return 1
 
 /spell/aoe_turf/conjure/proc/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
 	del(animation)
