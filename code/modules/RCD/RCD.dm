@@ -27,7 +27,7 @@
 
 	var/datum/html_interface/rcd/interface
 	var/datum/effect/effect/system/spark_spread/spark_system
-	
+
 	var/obj/screen/close/closer
 
 /obj/item/device/rcd/New()
@@ -135,6 +135,9 @@
 		return selected.Topic(href, href_list)
 
 /obj/item/device/rcd/afterattack(var/atom/A, var/mob/user)
+	if(istype(A,/obj/item/weapon/storage))
+		return 1 //We're putting this away
+
 	if(!selected)
 		return 1
 

@@ -88,7 +88,3 @@
 	if(selected)
 		update_options_menu()
 		interface.updateContent("selectedname",			selected.name)
-
-/obj/item/device/rcd/rpd/afterattack(var/atom/A, var/mob/user)
-	if(istype(A,/obj/item/weapon/storage/)) return 1
-	..()
