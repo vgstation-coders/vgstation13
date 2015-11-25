@@ -29,7 +29,6 @@
 
 //Looks like copy/pasted code... I doubt 'need_rebuild' is even used here - Nodrak
 /obj/machinery/shield/proc/update_nearby_tiles()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/shield/proc/update_nearby_tiles() called tick#: [world.time]")
 	if (isnull(air_master))
 		return 0
 
@@ -54,7 +53,7 @@
 
 	if (src.health <= 0)
 		visible_message("<span class='notice'>The [src] dissapates</span>")
-		del(src)
+		qdel(src)
 		return
 
 	opacity = 1
@@ -62,19 +61,18 @@
 
 	if(src.health <= 0)
 		visible_message("<span class='notice'>The [src] dissapates</span>")
-		del(src)
+		qdel(src)
 		return
 
 	opacity = 1
 	spawn(20) if(src) opacity = 0
-	return
 
 /obj/machinery/shield/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
 	..()
 	if(health <=0)
 		visible_message("<span class='notice'>The [src] dissapates</span>")
-		del(src)
+		qdel(src)
 		return
 	opacity = 1
 	spawn(20) if(src) opacity = 0
@@ -90,18 +88,17 @@
 		if(3.0)
 			if (prob(25))
 				qdel(src)
-	return
 
 /obj/machinery/shield/emp_act(severity)
 	switch(severity)
 		if(1)
-			del(src)
+			qdel(src)
 		if(2)
 			if(prob(50))
-				del(src)
+				qdel(src)
 
 /obj/machinery/shield/blob_act()
-	del(src)
+	qdel(src)
 
 
 /obj/machinery/shield/hitby(AM as mob|obj)
@@ -123,15 +120,14 @@
 	//Handle the destruction of the shield
 	if (src.health <= 0)
 		visible_message("<span class='notice'>The [src] dissapates</span>")
-		del(src)
+		qdel(src)
 		return
 
 	//The shield becomes dense to absorb the blow.. purely asthetic.
 	opacity = 1
 	spawn(20) if(src) opacity = 0
 
-	..()
-	return
+	return ..()
 
 
 
@@ -158,12 +154,12 @@
 
 /obj/machinery/shieldgen/Destroy()
 	for(var/obj/machinery/shield/shield_tile in deployed_shields)
+		deployed_shields -= shield_tile
 		qdel(shield_tile)
 	..()
 
 
 /obj/machinery/shieldgen/proc/shields_up()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/shieldgen/proc/shields_up() called tick#: [world.time]")
 	if(active) return 0 //If it's already turned on, how did this get called?
 
 	src.active = 1
@@ -175,30 +171,26 @@
 				deployed_shields += new /obj/machinery/shield(target_tile)
 
 /obj/machinery/shieldgen/proc/shields_down()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/shieldgen/proc/shields_down() called tick#: [world.time]")
 	if(!active) return 0 //If it's already off, how did this get called?
 
 	src.active = 0
 	update_icon()
 
 	for(var/obj/machinery/shield/shield_tile in deployed_shields)
-		del(shield_tile)
+		deployed_shields -= shield_tile
+		qdel(shield_tile)
 
 /obj/machinery/shieldgen/process()
 	if(malfunction && active)
 		if(deployed_shields.len && prob(5))
-			del(pick(deployed_shields))
-
-	return
+			qdel(pick(deployed_shields))
 
 /obj/machinery/shieldgen/proc/checkhp()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/shieldgen/proc/checkhp() called tick#: [world.time]")
 	if(health <= 30)
 		src.malfunction = 1
 	if(health <= 0)
-		del(src)
+		qdel(src)
 	update_icon()
-	return
 
 /obj/machinery/shieldgen/ex_act(severity)
 	switch(severity)
@@ -213,7 +205,6 @@
 		if(3.0)
 			src.health -= 10
 			src.checkhp()
-	return
 
 /obj/machinery/shieldgen/emp_act(severity)
 	switch(severity)
@@ -230,7 +221,6 @@
 /obj/machinery/shieldgen/attack_ghost(mob/user)
 	if(isAdminGhost(user))
 		src.attack_hand(user)
-	return
 
 /obj/machinery/shieldgen/attack_hand(mob/user as mob)
 	if(locked)
@@ -253,14 +243,12 @@
 			src.shields_up()
 		else
 			user << "The [src] must first be secured to the floor."
-	return
 
 /obj/machinery/shieldgen/emag(mob/user)
 	if(!emagged)
 		malfunction = 1
 		update_icon()
 		return 1
-	return
 
 /obj/machinery/shieldgen/wrenchAnchor(mob/user)
 	if(locked)
@@ -304,7 +292,6 @@
 		src.icon_state = malfunction ? "shieldonbr":"shieldon"
 	else
 		src.icon_state = malfunction ? "shieldoffbr":"shieldoff"
-	return
 
 ////FIELD GEN START //shameless copypasta from fieldgen, powersink, and grille
 #define maxstoredpower 500
@@ -334,12 +321,13 @@
 		machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/shieldwallgen/proc/power()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/shieldwallgen/proc/power() called tick#: [world.time]")
 	if(!anchored)
 		power = 0
 		return 0
 	var/turf/T = src.loc
 
+	if(!T)
+		return
 	var/obj/structure/cable/C = T.get_cable_node()
 	var/datum/powernet/PN
 	if(C)	PN = C.powernet		// find the powernet of the connected cable
@@ -429,7 +417,6 @@
 				src.cleanup(8)
 
 /obj/machinery/shieldwallgen/proc/setup_field(var/NSEW = 0)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/shieldwallgen/proc/setup_field() called tick#: [world.time]")
 	var/turf/T = src.loc
 	var/turf/T2 = src.loc
 	var/obj/machinery/shieldwallgen/G
@@ -480,7 +467,6 @@
 	if(..())
 		power()
 		return 1
-	return
 
 
 /obj/machinery/shieldwallgen/attack_ghost(mob/user)
@@ -503,55 +489,43 @@
 		visible_message("<span class='warning'>The [src.name] has been hit with the [W.name] by [user.name]!</span>")
 
 /obj/machinery/shieldwallgen/proc/cleanup(var/NSEW)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/shieldwallgen/proc/cleanup() called tick#: [world.time]")
-	var/obj/machinery/shieldwall/F
-	var/obj/machinery/shieldwallgen/G
 	var/turf/T = src.loc
-	var/turf/T2 = src.loc
 
-	for(var/dist = 0, dist <= 9, dist += 1) // checks out to 8 tiles away for fields
-		T = get_step(T2, NSEW)
-		T2 = T
-		if(locate(/obj/machinery/shieldwall) in T)
-			F = (locate(/obj/machinery/shieldwall) in T)
-			del(F)
+	for(var/dist = 0 to 8) // checks out to 8 tiles away for fields
+		T = get_step(T, NSEW)
+		for(var/obj/machinery/shieldwall/F in T)
+			qdel(F)
 
-		if(locate(/obj/machinery/shieldwallgen) in T)
-			G = (locate(/obj/machinery/shieldwallgen) in T)
+		for(var/obj/machinery/shieldwallgen/G in T)
 			if(!G.active)
-				break
+				return
 
 /obj/machinery/shieldwallgen/Destroy()
 	src.cleanup(1)
 	src.cleanup(2)
 	src.cleanup(4)
 	src.cleanup(8)
+	attached = null
 	..()
 
 /obj/machinery/shieldwallgen/bullet_act(var/obj/item/projectile/Proj)
 	storedpower -= Proj.damage
 	..()
-	return
-
 
 //////////////Containment Field START
 /obj/machinery/shieldwall
-		name = "Shield"
-		desc = "An energy shield."
-		icon = 'icons/effects/effects.dmi'
-		icon_state = "shieldwall"
-		anchored = 1
-		density = 1
-		unacidable = 1
-		luminosity = 3
-		var/needs_power = 0
-		var/active = 1
-//		var/power = 10
-		var/delay = 5
-		var/last_active
-		var/mob/U
-		var/obj/machinery/shieldwallgen/gen_primary
-		var/obj/machinery/shieldwallgen/gen_secondary
+	name = "Shield"
+	desc = "An energy shield."
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "shieldwall"
+	anchored = 1
+	density = 1
+	unacidable = 1
+	luminosity = 3
+	var/needs_power = 0
+	var/active = 1
+	var/obj/machinery/shieldwallgen/gen_primary
+	var/obj/machinery/shieldwallgen/gen_secondary
 
 /obj/machinery/shieldwall/New(var/obj/machinery/shieldwallgen/A, var/obj/machinery/shieldwallgen/B)
 	..()
@@ -560,6 +534,11 @@
 	if(A && B)
 		needs_power = 1
 
+/obj/machinery/shieldwall/Destroy()
+	..()
+	gen_primary = null
+	gen_secondary = null
+
 /obj/machinery/shieldwall/attack_hand(mob/user as mob)
 	return
 
@@ -567,18 +546,17 @@
 /obj/machinery/shieldwall/process()
 	if(needs_power)
 		if(isnull(gen_primary)||isnull(gen_secondary))
-			del(src)
+			qdel(src)
 			return
 
 		if(!(gen_primary.active)||!(gen_secondary.active))
-			del(src)
+			qdel(src)
 			return
-//
+
 		if(prob(50))
 			gen_primary.storedpower -= 10
 		else
 			gen_secondary.storedpower -=10
-
 
 /obj/machinery/shieldwall/bullet_act(var/obj/item/projectile/Proj)
 	if(needs_power)
@@ -589,7 +567,6 @@
 			G = gen_secondary
 		G.storedpower -= Proj.damage
 	..()
-	return
 
 
 /obj/machinery/shieldwall/ex_act(severity)
@@ -616,8 +593,6 @@
 				else
 					G = gen_secondary
 				G.storedpower -= 20
-	return
-
 
 /obj/machinery/shieldwall/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1

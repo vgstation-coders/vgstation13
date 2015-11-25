@@ -320,23 +320,11 @@
 
 /obj/structure/closet/crate/hydroponics/prespawned
 	//This exists so the prespawned hydro crates spawn with their contents.
-/*	name = "Hydroponics crate"
-	desc = "All you need to destroy those pesky weeds and pests."
-	icon = 'icons/obj/storage.dmi'
-	icon_state = "hydrocrate"
-	icon_opened = "hydrocrateopen"
-	icon_closed = "hydrocrate"
-	density = 1*/
 	New()
 		..()
 		new /obj/item/weapon/reagent_containers/spray/plantbgone(src)
 		new /obj/item/weapon/reagent_containers/spray/plantbgone(src)
 		new /obj/item/weapon/minihoe(src)
-//		new /obj/item/weapon/weedspray(src)
-//		new /obj/item/weapon/weedspray(src)
-//		new /obj/item/weapon/pestspray(src)
-//		new /obj/item/weapon/pestspray(src)
-//		new /obj/item/weapon/pestspray(src)
 
 
 /obj/structure/closet/crate/secure/New()
@@ -480,7 +468,7 @@
 /obj/structure/closet/crate/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opened)
 		return ..()
-	else if(istype(W, /obj/item/weapon/packageWrap))
+	else if(istype(W, /obj/item/stack/package_wrap))
 		return
 	else if(istype(W, /obj/item/stack/cable_coil))
 		if(rigged)

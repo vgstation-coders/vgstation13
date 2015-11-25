@@ -1,6 +1,5 @@
 
 /datum/admins/proc/player_panel_new()//The new one
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/player_panel_new() called tick#: [world.time]")
 	if (!usr.client.holder)
 		return
 	var/dat = "<html><head><title>Admin Player Panel</title></head>"
@@ -325,7 +324,6 @@
 
 //The old one
 /datum/admins/proc/player_panel_old()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/player_panel_old() called tick#: [world.time]")
 	if (!usr.client.holder)
 		return
 
@@ -391,7 +389,6 @@
 
 
 /datum/admins/proc/check_antagonists()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/admins/proc/check_antagonists() called tick#: [world.time]")
 	if (ticker && ticker.current_state >= GAME_STATE_PLAYING)
 		var/dat = "<html><head><title>Round Status</title></head><body><h1><B>Round Status</B></h1>"
 
@@ -694,6 +691,22 @@
 						<td><A href='?priv_msg=\ref[M]'>PM</A></td>"}
 					// END AUTOFIX
 			dat += "</table>"
+		if(ticker.mode.raiders.len)
+			dat += "<br><table cellspacing=5><tr><td><B>Thralls</B></td><td></td><td></td></tr>"
+			for(var/datum/mind/vox in ticker.mode.raiders)
+				var/mob/M = vox.current
+				if(M)
+					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
+				else
+					dat += "<tr><td><i>Vox Raider not found!</i></td></tr>"
+			dat += "</table>"
+		if(istype(ticker.mode, /datum/game_mode/heist))
+			var/datum/game_mode/heist/mode_ticker = ticker.mode
+			var/objective_count = 1
+			dat += "<br><B>Raider Objectives:</B>"
+			for(var/datum/objective/objective in mode_ticker.raid_objectives)
+				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
 
 		if(ticker.mode.ert.len > 0)
 			dat += "<br><table cellspacing=5><tr><td><B>ERT</B></td><td></td><td></td></tr>"

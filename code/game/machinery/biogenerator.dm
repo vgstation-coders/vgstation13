@@ -9,7 +9,6 @@
 	var/result=null
 
 /datum/biogen_recipe/proc/Render(var/context)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/biogen_recipe/proc/Render() called tick#: [world.time]")
 	var/html = "<li><a href='?src=\ref[context];action=create;item=[id];num=1'>[amount_per_unit==1?"":"[amount_per_unit] "][name]</a> <FONT COLOR=blue>([cost])</FONT>"
 	if(other_amounts.len)
 		var/first=1
@@ -159,14 +158,14 @@
 /datum/biogen_recipe/paper/giftwrap
 	cost=300
 	id="giftwrap"
-	name="Wrapping Paper"
-	result=/obj/item/weapon/wrapping_paper
+	name="Gift Wrap"
+	result=/obj/item/stack/package_wrap/gift
 
 /datum/biogen_recipe/paper/packagewrap
 	cost=350
 	id="packagewrap"
-	name="Package Wrapper"
-	result=/obj/item/weapon/packageWrap
+	name="Package Wrap"
+	result=/obj/item/stack/package_wrap
 
 /datum/biogen_recipe/paper/paperbin
 	cost=550 //100 from the cardboard, 30*15=450 from the paper
@@ -425,7 +424,6 @@
 	interact(user)
 
 /obj/machinery/biogenerator/proc/activate()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/biogenerator/proc/activate() called tick#: [world.time]")
 	if (usr.stat != 0)
 		return
 	if (src.stat != 0) //NOPOWER etc
@@ -454,7 +452,6 @@
 	return
 
 /obj/machinery/biogenerator/proc/check_cost(var/cost)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/biogenerator/proc/check_cost() called tick#: [world.time]")
 	if (cost > points)
 		menustat = "nopoints"
 		return 1
@@ -467,7 +464,6 @@
 		return 0
 
 /obj/machinery/biogenerator/proc/create_product(var/item, var/num)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/biogenerator/proc/create_product() called tick#: [world.time]")
 	var/datum/biogen_recipe/recipe=recipes[item]
 	num=Clamp(num,1,10)
 	if(check_cost(recipe.cost*num))

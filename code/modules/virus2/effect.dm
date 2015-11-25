@@ -12,14 +12,12 @@
 	virus=D
 
 /datum/disease2/effectholder/proc/runeffect(var/mob/living/carbon/human/mob,var/stage)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/effectholder/proc/runeffect() called tick#: [world.time]")
 	if(happensonce > -1 && effect.stage <= stage && prob(chance))
 		effect.activate(mob)
 		if(happensonce == 1)
 			happensonce = -1
 
 /datum/disease2/effectholder/proc/getrandomeffect(var/badness = 1)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/effectholder/proc/getrandomeffect() called tick#: [world.time]")
 	if(effect)
 		virus.log += "<br />[timestamp()] Effect [effect.name] [chance]% is now "
 	else
@@ -36,7 +34,6 @@
 	virus.log += "[effect.name] [chance]%:"
 
 /datum/disease2/effectholder/proc/minormutate()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/effectholder/proc/minormutate() called tick#: [world.time]")
 	switch(pick(1,2,3,4,5))
 		if(1)
 			chance = rand(0,effect.chance_maxm)
@@ -44,7 +41,6 @@
 			multiplier = rand(1,effect.maxm)
 
 /datum/disease2/effectholder/proc/majormutate()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/disease2/effectholder/proc/majormutate() called tick#: [world.time]")
 	getrandomeffect(2)
 
 ////////////////////////////////////////////////////////////////
@@ -58,9 +54,7 @@
 	var/maxm = 1
 	var/badness = 1
 	proc/activate(var/mob/living/carbon/mob,var/multiplier)
-		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/activate() called tick#: [world.time]")
 	proc/deactivate(var/mob/living/carbon/mob)
-		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/deactivate() called tick#: [world.time]")
 
 ////////////////////////SPECIAL/////////////////////////////////
 /*/datum/disease2/effect/alien
@@ -268,75 +262,61 @@
 /datum/disease2/effect/necrosis
 	name = "Necrosis"
 	stage = 4
-/datum/disease2/effect/necrosis/activate(var/mob/living/carbon/mob,var/multiplier)
-	//
-	var/mob/living/carbon/human/H = mob
-		//
-	var/inst = pick(1,2,3)
-	switch(inst)
-		if(1)
-			mob << "<span class = 'warning'>A chunk of meat falls off you!</span>"
-			var/totalslabs = 1
-			var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
-			if( istype(mob, /mob/living/carbon/human/) )
-					//
-				var/sourcename = mob.real_name
-				var/sourcejob = mob.job
-				var/sourcenutriment = mob.nutrition / 15
+/datum/disease2/effect/necrosis/activate(var/mob/living/carbon/mob, var/multiplier)
+
+	if(ishuman(mob)) //Only works on humans properly since it needs to do organ work
+		var/mob/living/carbon/human/H = mob
+		var/inst = pick(1, 2, 3)
+
+		switch(inst)
+
+			if(1)
+				H << "<span class='warning'>A chunk of meat falls off of you!</span>"
+				var/totalslabs = 1
+				var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
+				var/sourcename = H.real_name
+				var/sourcejob = H.job
+				var/sourcenutriment = H.nutrition / 15
 				//var/sourcetotalreagents = mob.reagents.total_volume
 
-				for(var/i=1 to totalslabs)
+				for(var/i = 1 to totalslabs)
 					var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new
 					newmeat.name = sourcename + newmeat.name
 					newmeat.subjectname = sourcename
 					newmeat.subjectjob = sourcejob
-					newmeat.reagents.add_reagent("nutriment", sourcenutriment / totalslabs) // Thehehe. Fat guys go first
+					newmeat.reagents.add_reagent("nutriment", sourcenutriment / totalslabs) //Thehehe. Fat guys go first
 					//src.occupant.reagents.trans_to(newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
 					allmeat[i] = newmeat
 
-
-
 					var/obj/item/meatslab = allmeat[i]
 					var/turf/Tx = locate(mob.x, mob.y, mob.z)
-					meatslab.loc = mob.loc
-					meatslab.throw_at(Tx,i,3)
-					if (!Tx.density)
+					meatslab.loc = get_turf(H)
+					meatslab.throw_at(Tx, i, 3)
 
+					if(!Tx.density)
 						var/obj/effect/decal/cleanable/blood/gibs/D = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
 						D.New(Tx,i)
 
+			if(2)
+				for(var/datum/organ/external/E in H.organs)
+					if(pick(1, 0))
+						E.droplimb(1)
 
-		if(2)
-			//mob << "<span class='warning'>i dont think i need this here</span>"
+			if(3)
+				if(H.species.name != "Skellington")
+					H << "<span class='warning'>Your necrotic skin ruptures!</span>"
 
-			for (var/datum/organ/external/E in H.organs)
-				if(pick(1,0))
-					E.droplimb(1)
+					for(var/datum/organ/external/E in H.organs)
+						if(pick(1,0))
+							E.createwound(CUT, pick(2, 4, 6, 8, 10))
 
-
-		if(3)
-			if(H.species.name != "Skellington")
-				mob << "<span class = 'warning'> Your necrotic skin ruptures!</span>"
-
-
-				for (var/datum/organ/external/E in H.organs)
-					if(pick(1,0))
-						E.createwound(CUT, pick(2,4,6,8,10))
-
-
-				if(prob(30))
-					//
-
-					if(H.species.name != "Skellington")
-						if(H.set_species("Skellington"))
-							mob << "<span class = 'warning'> A massive amount of flesh sloughs off your bones!</span>"
-							H.regenerate_icons()
-			else
-				return
-
-
-
-
+					if(prob(30))
+						if(H.species.name != "Skellington")
+							if(H.set_species("Skellington"))
+								mob << "<span class='warning'>A massive amount of flesh sloughs off your bones!</span>"
+								H.regenerate_icons()
+				else
+					return
 
 /datum/disease2/effect/fizzle
 	name = "Fizzle Effect"

@@ -1,6 +1,5 @@
 /datum/controller/gameticker/proc/scoreboard(var/completions)
 
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/controller/gameticker/proc/scoreboard() called tick#: [world.time]")
 
 	//Calls auto_declare_completion_* for all modes
 	for(var/handler in typesof(/datum/game_mode/proc))
@@ -158,12 +157,17 @@
 	*/
 
 	//Check station's power levels
-	for(var/obj/machinery/power/apc/A in power_machines)
-		if(A.z != map.zMainStation)
-			continue
-		for(var/obj/item/weapon/cell/C in A.contents)
-			if(C.percent() < 30)
-				score["powerloss"]++ //Enough to auto-cut equipment, so alarm
+	var/skip_power_loss = 0
+	for(var/datum/event/grid_check/check in events)
+		if(check.activeFor > check.startWhen && check.activeFor < check.endWhen)
+			skip_power_loss = 1
+	if(!skip_power_loss)
+		for(var/obj/machinery/power/apc/A in power_machines)
+			if(A.z != map.zMainStation)
+				continue
+			for(var/obj/item/weapon/cell/C in A.contents)
+				if(C.percent() < 30)
+					score["powerloss"]++ //Enough to auto-cut equipment, so alarm
 
 	var/roundlength = world.time/10 //Get a value in seconds
 	score["time"] = round(roundlength) //One point for every five seconds. One minute is 12 points, one hour 720 points
@@ -280,7 +284,6 @@
 	return
 
 /mob/proc/scorestats(var/completions)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/proc/scorestats() called tick#: [world.time]")
 	var/dat = completions
 	dat += {"<BR><h2>Round Statistics and Score</h2>"}
 

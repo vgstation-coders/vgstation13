@@ -9,7 +9,6 @@
 	var/category = "misc"
 
 /datum/storeitem/proc/deliver(var/mob/user,var/obj/machinery/computer/merch/merchcomp)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/storeitem/proc/deliver() called tick#: [world.time]")
 	if(istype(typepath,/obj/item/weapon/storage))
 		var/thing = new typepath(merchcomp.loc)
 		user.put_in_hands(thing)
@@ -50,7 +49,7 @@
 /datum/storeitem/wrapping_paper
 	name = "Wrapping Paper"
 	desc = "Makes gifts 200% more touching."
-	typepath = /obj/item/weapon/wrapping_paper
+	typepath = /obj/item/stack/package_wrap/gift
 	cost = 50
 
 /////////////////////////////

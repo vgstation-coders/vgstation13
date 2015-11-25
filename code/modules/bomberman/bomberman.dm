@@ -70,6 +70,7 @@ var/global/list/bombermangear = list()
 /obj/item/weapon/bomberman/Destroy()
 	..()
 	bombermangear -= src
+	arena = null
 
 /obj/item/weapon/bomberman/attack_self(mob/user)
 	var/turf/T = get_turf(src)
@@ -91,7 +92,6 @@ var/global/list/bombermangear = list()
 			new /obj/structure/bomberman(T, power, destroy_environnement, hurt_players, src, user.dir)
 
 /obj/item/weapon/bomberman/proc/cure(var/disease)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/bomberman/proc/cure() called tick#: [world.time]")
 	spawn(400)
 		switch(disease)
 			if("Low Power Disease")
@@ -107,7 +107,6 @@ var/global/list/bombermangear = list()
 				speed_bonus = skate
 
 /obj/item/weapon/bomberman/proc/lost()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/bomberman/proc/lost() called tick#: [world.time]")
 	if(arena)
 		arena.tools -= src
 		spawn()	//we're not waiting for the arena to close to despawn the BBD
@@ -192,7 +191,6 @@ var/global/list/bombermangear = list()
 	..()
 
 /obj/structure/bomberman/proc/ticking()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/bomberman/proc/ticking() called tick#: [world.time]")
 	countdown--
 	sleep(10)
 	if(countdown <= 0)
@@ -201,7 +199,6 @@ var/global/list/bombermangear = list()
 		ticking()
 
 /obj/structure/bomberman/proc/detonate()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/bomberman/proc/detonate() called tick#: [world.time]")
 	var/turf/T = get_turf(src)
 	playsound(T, 'sound/bomberman/bombexplode.ogg', 100, 1)
 	spawn()
@@ -216,7 +213,6 @@ var/global/list/bombermangear = list()
 	qdel(src)
 
 /obj/structure/bomberman/proc/kicked(var/kick_dir)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/bomberman/proc/kicked() called tick#: [world.time]")
 	var/turf/T1 = get_turf(src)
 	step(src, kick_dir)
 	var/turf/T2 = get_turf(src)
@@ -285,7 +281,7 @@ var/global/list/bombermangear = list()
 		step(src, flame_dir)
 		T2 = get_turf(src)
 		if(T1 == T2)
-			del(src)
+			qdel(src)
 			return
 	else
 		T2 = T1
@@ -309,7 +305,6 @@ obj/structure/bomberflame/Destroy()
 
 /obj/structure/bomberflame/proc/collisions(var/turf/T)
 
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/bomberflame/proc/collisions() called tick#: [world.time]")
 	for(var/obj/item/weapon/bomberman/dispenser in T)
 		dispenser.lost()
 		T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg')
@@ -332,7 +327,6 @@ obj/structure/bomberflame/Destroy()
 				L.ex_act(1)
 
 /obj/structure/bomberflame/proc/propagate(var/init)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/bomberflame/proc/propagate() called tick#: [world.time]")
 	if(init)
 		for(var/direction in cardinal)
 			spawn()	//so we don't wait for the flame to die before it spawns the next one, duh
@@ -433,7 +427,6 @@ obj/structure/bomberflame/Destroy()
 	bombermangear -= src
 
 /obj/structure/softwall/proc/pulverized()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/softwall/proc/pulverized() called tick#: [world.time]")
 	icon_state = "softwall_break"
 	density = 0
 	mouse_opacity = 0
@@ -444,7 +437,6 @@ obj/structure/bomberflame/Destroy()
 			qdel(src)
 
 /obj/structure/softwall/proc/pick_a_powerup()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/softwall/proc/pick_a_powerup() called tick#: [world.time]")
 	var/powerup = pick(
 		50;/obj/structure/powerup/bombup,
 		50;/obj/structure/powerup/fire,
@@ -554,7 +546,6 @@ obj/structure/bomberflame/Destroy()
 	..()
 
 /obj/structure/powerup/proc/apply_power(var/obj/item/weapon/bomberman/dispenser)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/powerup/proc/apply_power() called tick#: [world.time]")
 	playsound(get_turf(src), 'sound/bomberman/powerup.ogg', 50, 1)
 	qdel(src)
 	return
@@ -652,7 +643,6 @@ obj/structure/bomberflame/Destroy()
 	return
 
 /obj/structure/powerup/proc/pulverized()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/structure/powerup/proc/pulverized() called tick#: [world.time]")
 	qdel(src)
 
 /obj/structure/powerup/ex_act(severity)
@@ -775,8 +765,20 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		S.icon = P
 		planners += P
 
+/datum/bomberman_arena/Destroy()
+	..()
+	arena = null
+	under = null
+	center = null
+	planners = null
+	cameras = null
+	spawns = null
+	turfs = null
+	swalls = null
+	gladiators = null
+	tools = null
+
 /datum/bomberman_arena/proc/open(var/size,mob/user)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/bomberman_arena/proc/open() called tick#: [world.time]")
 	var/x = 1
 	var/y = 1
 	var/w = 1
@@ -972,7 +974,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 
 /datum/bomberman_arena/proc/spawn_player(var/turf/T)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/bomberman_arena/proc/spawn_player() called tick#: [world.time]")
 	var/mob/living/carbon/human/M = new(T)
 	M.name = "Bomberman #[rand(1,999)]"
 	M.real_name = M.name
@@ -991,7 +992,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	return M
 
 /datum/bomberman_arena/proc/dress_player(var/mob/living/carbon/human/M)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/bomberman_arena/proc/dress_player() called tick#: [world.time]")
 	M.equip_to_slot_or_del(new /obj/item/clothing/under/darkblue(M), slot_w_uniform)
 	M.equip_to_slot_or_del(new /obj/item/clothing/shoes/purple(M), slot_shoes)
 	M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/bomberman(M), slot_head)
@@ -1015,7 +1015,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 			C.armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /datum/bomberman_arena/proc/start()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/bomberman_arena/proc/start() called tick#: [world.time]")
 	status = ARENA_INGAME
 
 	if(counting)
@@ -1050,7 +1049,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		gladiators += M
 
 		if(S.player_mob)
-			del(S.player_mob)
+			qdel(S.player_mob)
 
 		S.player_mob = M
 
@@ -1064,7 +1063,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 			M << "<span class='danger'>Not enough players. Round canceled.</span>"
 
 		for(var/mob/M in gladiators)
-			del(M)
+			qdel(M)
 
 		gladiators = list()
 		for (var/datum/bomberman_spawn/S in spawns)
@@ -1096,7 +1095,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	return
 
 /datum/bomberman_arena/proc/end()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/bomberman_arena/proc/end() called tick#: [world.time]")
 	if(tools.len > 1)	return
 	if(status == ARENA_ENDGAME)	return
 	status = ARENA_ENDGAME
@@ -1126,7 +1124,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 
 /datum/bomberman_arena/proc/reset()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/bomberman_arena/proc/reset() called tick#: [world.time]")
 	status = ARENA_SETUP
 
 	if(counting)
@@ -1150,7 +1147,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 	for(var/mob/living/M in gladiators)
 		if(M)
-			del(M)	//qdel doesn't work nicely with mobs
+			qdel(M)	//qdel doesn't work nicely with mobs
 	gladiators = list()
 
 	for(var/obj/structure/softwall/W in swalls)
@@ -1216,7 +1213,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	status = ARENA_AVAILABLE
 
 /datum/bomberman_arena/proc/close(var/open_space=1)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/bomberman_arena/proc/close() called tick#: [world.time]")
 	status = ARENA_SETUP
 	for (var/obj/structure/planner/P in planners)
 		qdel(P)
@@ -1235,7 +1231,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 	for(var/mob/living/M in gladiators)
 		if(M)
-			del(M)	//qdel doesn't work nicely with mobs
+			qdel(M)	//qdel doesn't work nicely with mobs
 	gladiators = list()
 
 	for(var/obj/item/weapon/organ/O in arena)//gibs
@@ -1265,7 +1261,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	return
 
 /datum/bomberman_arena/proc/update_ready()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/bomberman_arena/proc/update_ready() called tick#: [world.time]")
 	var/list/ready = list()
 	var/slots = 0
 	for(var/datum/bomberman_spawn/S in spawns)
@@ -1304,7 +1299,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		countin()
 
 /datum/bomberman_arena/proc/planner(var/size,mob/user)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/bomberman_arena/proc/planner() called tick#: [world.time]")
 	var/choice = 0
 	switch(size)
 		if("15x13 (2 players)")
@@ -1382,6 +1376,10 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	..()
 	arena = a
 
+/obj/structure/planner/Destroy()
+	..()
+	arena = null
+
 /obj/structure/planner/ex_act(severity)
 	return
 
@@ -1400,6 +1398,10 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	..()
 	arena = a
 	spawnpoint = bs
+
+/obj/structure/planner/spawnpoint/Destroy()
+	..()
+	spawnpoint = null
 
 /obj/structure/planner/spawnpoint/attack_ghost(mob/user)
 	if(arena.status != ARENA_AVAILABLE)	return
