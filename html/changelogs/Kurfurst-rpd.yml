@@ -1,0 +1,4 @@
+author: Kurfurst
+delete-after: True
+changes:
+ - bugfix: RPD should no longer try to create pipes when attempting to place an RPD into a storage object.
