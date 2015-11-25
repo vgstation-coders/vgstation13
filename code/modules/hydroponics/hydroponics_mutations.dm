@@ -6,8 +6,6 @@
 //Mutates the plant overall (randomly).
 /obj/machinery/portable_atmospherics/hydroponics/proc/mutate(var/severity)
 
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/portable_atmospherics/hydroponics/proc/mutate() called tick#: [world.time]")
-
 	if(!severity) return
 
 	// No seed? Try to mutate the weeds or pests in the tray, if any.
@@ -28,11 +26,8 @@
 		apply_mut(mutation_type, severity)
 		return
 
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/seed/proc/mutate() called tick#: [world.time]")
 	var/mutation_type = pick_mut(severity)
 	apply_mut(mutation_type, severity)
-
-	return
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/pick_mut(var/severity, var/mutation_category = "")
 
@@ -138,7 +133,7 @@
 
 	check_for_divergence()
 
-	world << "So here we are about to apply this mutation [mutation_type]"
+	world << "So here we are about to apply this mutation [mutation_type] with severity [severity]"
 	switch(mutation_type)
 		if("code_explanation")
 			// DEARIE ME, WHAT IS GOING ON HERE?
@@ -341,7 +336,7 @@
 				visible_message("<span class='notice'>\The [seed.display_name]'s glow dims...</span>")
 			update_icon()
 
-		if("biolumchangecolor")
+		if("biolum_changecolor")
 			seed.biolum_colour = "#[get_random_colour(0,75,190)]"
 			visible_message("<span class='notice'>\The [seed.display_name]'s glow <font color='[seed.biolum_colour]'>changes colour</font>!</span>")
 			update_icon()
@@ -435,7 +430,7 @@
 
 	/*//This looks like shit, but it's a lot easier to read/change this way.
 	var/total_mutations = rand(1,1+degree)
-	for(var/i = 0;i<total_mutations;i++)
+	for(var/i = 0 to total_mutations)
 		switch(rand(0,11))
 			if(0) //Plant cancer!
 				lifespan = max(0,lifespan-rand(1,5))
@@ -501,20 +496,17 @@
 
 //Returns a key corresponding to an entry in the global seed list.
 /datum/seed/proc/get_mutant_variant()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/datum/seed/proc/get_mutant_variant() called tick#: [world.time]")
 	if(!mutants || !mutants.len || immutable > 0) return 0
 	return pick(mutants)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/mutate_species()
-
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/portable_atmospherics/hydroponics/proc/mutate_species() called tick#: [world.time]")
-
 	var/previous_plant = seed.display_name
 	var/newseed = seed.get_mutant_variant()
-	if(newseed in plant_controller.seeds)
-		seed = plant_controller.seeds[newseed]
-	else
+
+	if(!plant_controller.seeds.Find(newseed))
 		return
+
+	seed = plant_controller.seeds[newseed]
 
 	dead = 0
 	age = 1
@@ -525,5 +517,3 @@
 
 	update_icon()
 	visible_message("<span class='alert'>The</span> <span class='info'>[previous_plant]</span> <span class='alert'>has suddenly mutated into</span> <span class='info'>[seed.display_name]!</span>")
-
-	return

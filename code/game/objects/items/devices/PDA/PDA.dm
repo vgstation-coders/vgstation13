@@ -2333,8 +2333,9 @@ obj/item/device/pda/AltClick()
 			to_chat(M, "<span class='notice'>You slipped on the PDA!</span>")
 
 			if ((istype(M, /mob/living/carbon/human) && (M.real_name != src.owner) && (istype(src.cartridge, /obj/item/weapon/cartridge/clown))))
-				if (src.cartridge:honk_charges < 5)
-					src.cartridge:honk_charges++
+				var/obj/item/weapon/cartridge/clown/honkcartridge = src.cartridge
+				if (honkcartridge.honk_charges < 5)
+					honkcartridge.honk_charges++
 
 /obj/item/device/pda/proc/available_pdas()
 	var/list/names = list()

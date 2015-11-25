@@ -13,20 +13,15 @@
 		if(bloody)
 			return
 	nutrilevel += amount
-	return
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/adjust_water(var/amount)
 	waterlevel += amount
 	// Water dilutes toxin level.
 	if(amount > 0)
 		toxins -= round(amount/4)
-	return
 
 //Process reagents being input into the tray.
 /obj/machinery/portable_atmospherics/hydroponics/proc/process_reagents()
-
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/portable_atmospherics/hydroponics/proc/process_reagents() called tick#: [world.time]")
-
 	if(reagents.total_volume <= 0)
 		//Now that we've absorbed all the things in the tray, it would be a good time to mutate if we've recently absorbed mutagenic reagents
 		if(mutation_level)
@@ -53,21 +48,18 @@
 	if(T.seed && !T.dead)
 		T.health += 0.5
 	..()
-	return
 
 /datum/reagent/fertilizer/eznutrient/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
 	if(!T) T = holder.my_atom
 	T.adjust_nutrient(1)
 	..()
-	return
 
 /datum/reagent/water/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
 	if(!T) T = holder.my_atom
 	T.adjust_water(1)
 	..()
-	return
 
 /datum/reagent/mutagen
 	custom_plant_metabolism = 2
@@ -76,7 +68,6 @@
 	if(!T) T = holder.my_atom
 	T.mutation_level += 1*T.mutation_mod*custom_plant_metabolism
 	..()
-	return
 
 /datum/reagent/radium
 	custom_plant_metabolism = 2
@@ -89,7 +80,6 @@
 		T.health -= 1.5
 		if(prob(20))T.mutation_mod += 0.1 //ha ha
 	..()
-	return
 
 /datum/reagent/fertilizer/left4zed/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -99,7 +89,6 @@
 		T.health -= 0.5
 		if(prob(30)) T.mutation_mod += 0.2
 	..()
-	return
 
 /datum/reagent/diethylamine
 	custom_plant_metabolism = 0.1
@@ -126,7 +115,6 @@
 				world << "+ENDURANCE ON [T.seed.display_name] WITH PROBABILITY [chance]"
 				T.seed.endurance++
 	..()
-	return
 
 /datum/reagent/fertilizer/robustharvest
 	custom_plant_metabolism = 0.1
@@ -154,7 +142,6 @@
 			world << "-ENDURANCE ON [T.seed.display_name] WITH PROBABILITY [chance]"
 			T.seed.endurance--*/
 	..()
-	return
 
 /datum/reagent/toxin/plantbgone/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -165,7 +152,6 @@
 		T.health -= 20
 		T.mutation_mod += 0.1
 	..()
-	return
 
 /datum/reagent/clonexadone
 	custom_plant_metabolism = 0.5
@@ -186,7 +172,6 @@
 		T.skip_aging++
 		T.force_update = 1
 	..()
-	return
 
 /datum/reagent/milk/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -194,7 +179,6 @@
 	T.adjust_nutrient(0.1)
 	T.adjust_water(0.9)
 	..()
-	return
 
 /datum/reagent/beer/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -202,7 +186,6 @@
 	T.adjust_nutrient(0.25)
 	T.adjust_water(0.7)
 	..()
-	return
 
 /datum/reagent/blood/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -210,7 +193,6 @@
 	T.adjust_nutrient(0.5, bloody=1)
 	T.adjust_water(0.7)
 	..()
-	return
 
 /datum/reagent/phosphorus/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -219,7 +201,6 @@
 	T.adjust_water(-0.5)
 	T.weedlevel -= 2
 	..()
-	return
 
 /datum/reagent/sugar/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -228,7 +209,6 @@
 	T.weedlevel += 2
 	T.pestlevel += 2
 	..()
-	return
 
 /datum/reagent/sodiumchloride/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -241,7 +221,6 @@
 	if(T.seed && !T.dead)
 		T.health -= 2
 	..()
-	return
 
 /datum/reagent/sodawater/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -251,7 +230,6 @@
 	if(T.seed && !T.dead)
 		T.health += 0.1
 	..()
-	return
 
 /datum/reagent/ammonia/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -260,7 +238,6 @@
 	if(T.seed && !T.dead)
 		T.health += 0.5
 	..()
-	return
 
 /datum/reagent/adminordrazine/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -273,21 +250,18 @@
 	if(T.seed && !T.dead)
 		T.health += 50
 	..()
-	return
 
 /datum/reagent/anti_toxin/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
 	if(!T) T = holder.my_atom
 	T.toxins -= 10
 	..()
-	return
 
 /datum/reagent/toxin/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
 	if(!T) T = holder.my_atom
 	T.toxins += 10
 	..()
-	return
 
 /datum/reagent/fluorine/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -298,7 +272,6 @@
 	if(T.seed && !T.dead)
 		T.health -= 2
 	..()
-	return
 
 /datum/reagent/chlorine/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -309,7 +282,6 @@
 	if(T.seed && !T.dead)
 		T.health -= 1
 	..()
-	return
 
 /datum/reagent/sacid/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -319,7 +291,6 @@
 	if(T.seed && !T.dead)
 		T.health -= 4
 	..()
-	return
 
 /datum/reagent/pacid/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -329,7 +300,6 @@
 	if(T.seed && !T.dead)
 		T.health -= 8
 	..()
-	return
 
 /datum/reagent/cryoxadone/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return
@@ -338,7 +308,6 @@
 	if(T.seed && !T.dead)
 		T.health += 3
 	..()
-	return
 
 /*
 	// Reagent information for process(), consider moving this to a controller along

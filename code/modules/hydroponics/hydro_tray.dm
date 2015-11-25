@@ -500,8 +500,8 @@
 	if(!usr || usr.stat || usr.restrained() || (usr.status_flags & FAKEDEATH))
 		return
 
-	var/n_label = input(usr, "What would you like to set the tray's label display to?", "Hydroponics Tray Labeling", null)  as text
-	if(!usr || !n_label || usr.stat || usr.restrained() || (usr.status_flags & FAKEDEATH))
+	var/n_label = copytext(reject_bad_text(input(usr, "What would you like to set the tray's label display to?", "Hydroponics Tray Labeling", null) as text), 1, MAX_NAME_LEN)
+	if(!usr || !n_label || !Adjacent(usr) || usr.stat || usr.restrained() || (usr.status_flags & FAKEDEATH))
 		return
 
 	labeled = copytext(n_label, 1, 32) //technically replaces any traditional hand labeler labels, but will anyone really complain?

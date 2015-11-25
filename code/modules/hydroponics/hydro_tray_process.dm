@@ -321,7 +321,6 @@
 	set_light(light_out)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/check_level_sanity()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/portable_atmospherics/hydroponics/proc/check_level_sanity() called tick#: [world.time]")
 	//Make sure various values are sane.
 	if(seed)
 		health =     max(0,min(seed.endurance,health))
@@ -329,11 +328,11 @@
 		health = 0
 		dead = 0
 
-	mutation_level = max(0,min(mutation_level,100))
-	nutrilevel =     max(0,min(nutrilevel,10))
-	waterlevel =     max(0,min(waterlevel,100))
-	pestlevel =      max(0,min(pestlevel,10))
-	weedlevel =      max(0,min(weedlevel,10))
-	toxins =         max(0,min(toxins,100))
-	yield_mod = 	 max(0,min(yield_mod,2))
-	mutation_mod = 	 max(0,min(mutation_mod,3))
+	mutation_level = Clamp(mutation_level, 0, 100)
+	nutrilevel =     Clamp(nutrilevel, 0, 10)
+	waterlevel =     Clamp(waterlevel, 0, 100)
+	pestlevel =      Clamp(pestlevel, 0, 10)
+	weedlevel =      Clamp(weedlevel, 0, 10)
+	toxins =         Clamp(toxins, 0, 100)
+	yield_mod = 	 Clamp(yield_mod, 0, 2)
+	mutation_mod = 	 Clamp(mutation_mod, 0, 3)

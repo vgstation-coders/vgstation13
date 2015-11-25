@@ -16,7 +16,7 @@
 
 	var/health = 10
 	var/max_health = 100
-	var/list/neighbors = list()
+	var/list/turf/simulated/floor/neighbors = list()
 	var/turf/epicenter
 	var/datum/seed/seed
 	var/sampled = 0
@@ -37,7 +37,7 @@
 /obj/effect/plantsegment/Destroy()
 	if(plant_controller)
 		plant_controller.remove_plant(src)
-	for(var/obj/effect/plantsegment/neighbor in range(1,src))
+	for(var/obj/effect/plantsegment/neighbor in range(1,src)) //i ded, tell my neighbors to wake up so they can take up my space
 		plant_controller.add_plant(neighbor)
 	..()
 
@@ -133,7 +133,7 @@
 
 /obj/effect/plantsegment/attackby(var/obj/item/weapon/W, var/mob/user)
 
-	if(user.a_intent == I_HELP && (istype(W, /obj/item/weapon/wirecutters) || istype(W, /obj/item/weapon/scalpel)))
+	if(user.a_intent == I_HELP && is_type_in_list(W, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
 		if(sampled)
 			user << "<span class='warning'>\The [src] has already been sampled recently.</span>"
 			return
@@ -169,17 +169,17 @@
 	switch(severity)
 		if(1.0)
 			die_off()
-			return
 		if(2.0)
 			if (prob(50))
 				die_off()
-				return
 		if(3.0)
 			if (prob(5))
 				die_off()
-				return
 		else
-	return
+			do_nothing()
+
+/obj/effect/plantsegment/proc/do_nothing()
+	return "done"
 
 // Hotspots kill vines.
 /obj/effect/plantsegment/fire_act(null, temp, volume)

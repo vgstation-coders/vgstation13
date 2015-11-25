@@ -198,13 +198,13 @@
 
 	dat += "<br><br>\[<a href='?src=\ref[src];print=1'>print report</a>\] \[<a href='?src=\ref[src];clear=1'>clear</a>\]"
 	if(dat)
-		user << browse(dat,"window=plant_analyzer")
+		user << browse(dat,"window=plant_analyzer_\ref[src]")
 		last_data = dat
 	return
 
 /obj/item/device/analyzer/plant_analyzer/attack_self(mob/user as mob)
 	if(last_data)
-		user << browse(last_data,"window=plant_analyzer")
+		user << browse(last_data,"window=plant_analyzer_\ref[src]")
 	else
 		user << "<span class='notice'>\icon[src] No plant scan data in memory.</span>"
 	return 0
@@ -212,7 +212,7 @@
 /obj/item/device/analyzer/plant_analyzer/proc/print_report_verb()
 	set name = "Print Plant Report"
 	set category = "Object"
-	set src = usr
+	set src in usr
 
 	if (!usr || usr.stat || usr.lying || (usr.status_flags & FAKEDEATH)) return
 	print_report(usr)

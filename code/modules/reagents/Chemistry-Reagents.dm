@@ -100,7 +100,6 @@
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder) return 0
 	holder.remove_reagent(src.id, custom_plant_metabolism)
-	return
 
 /datum/reagent/proc/on_move(var/mob/M)
 	return

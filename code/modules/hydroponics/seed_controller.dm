@@ -26,7 +26,7 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 	var/plants_per_tick = PLANTS_PER_TICK
 	var/plant_tick_time = PLANT_TICK_TIME
 	var/list/plant_queue = list()           // All queued plants.
-	var/list/seeds = list()                 // All seed data stored here.
+	var/list/datum/seed/seeds = list()      // All seed data stored here.
 	var/list/gene_tag_masks = list()        // Gene obfuscation for delicious trial and error goodness.
 
 /datum/controller/plants/New()
@@ -79,7 +79,7 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 
 	if(survive_on_station)
 		if(seed.consume_gasses)
-			seed.consume_gasses["phoron"] = null
+			seed.consume_gasses["plasma"] = null //PHORON DOES NOT EXIST
 			seed.consume_gasses["carbon_dioxide"] = null
 		if(seed.chems && !isnull(seed.chems["pacid"]))
 			seed.chems["pacid"] = null // Eating through the hull will make these plants completely inviable, albeit very dangerous.

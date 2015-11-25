@@ -2,7 +2,7 @@
 #define MECHDRILL_ROCK_SPEED 3
 
 /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp
-	name = "Hydraulic Clamp"
+	name = "\improper Hydraulic Clamp"
 	icon_state = "mecha_clamp"
 	equip_cooldown = 15
 	energy_drain = 10
@@ -86,7 +86,7 @@
 
 	else if(istype(target,/mob/living))
 		var/mob/living/M = target
-		if(M.stat>1) return
+		if(M.stat == DEAD) return
 		if(chassis.occupant.a_intent == I_HURT)
 			M.take_overall_damage(dam_force)
 			if(!M) return //we killed some sort of simple animal and the corpse was deleted.
@@ -107,7 +107,7 @@
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill
-	name = "Exosuit-Mounted Drill"
+	name = "\improper Exosuit-Mounted Drill"
 	desc = "This is the drill that'll pierce the heavens! (Can be attached to: Combat and Engineering Exosuits)"
 	icon_state = "mecha_drill"
 	equip_cooldown = 45
@@ -214,7 +214,7 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill/diamonddrill
-	name = "Exosuit-Mounted Diamond Drill"
+	name = "\improper Exosuit-Mounted Diamond Drill"
 	desc = "This is an upgraded version of the drill that'll pierce the heavens! (Can be attached to: Combat and Engineering Exosuits)"
 	icon_state = "mecha_diamond_drill"
 	origin_tech = "materials=4;engineering=3"
@@ -227,9 +227,9 @@
 	//PROGRAMMING
 
 /obj/item/mecha_parts/mecha_equipment/tool/scythe
-	name = "Heavy Duty Pneumatic Scythe"
+	name = "\improper Heavy Duty Pneumatic Scythe"
 	desc = "An extremely heavy-duty pneumatic scythe. The \"giant robot\" approach to weed control. (Can be attached to: Engineering Exosuits)"
-	icon_state = "mecha_lazyscythecopypaste"
+	icon_state = "mecha_extremelylazyscythecopypaste"
 	equip_cooldown = 20
 	energy_drain = 15
 	var/dam_force = 20
@@ -256,7 +256,7 @@
 		set_ready_state(0)
 		var/olddir = chassis.dir
 		var/eradicated = 0
-		spawn for(var/i=1, i<=4, i++)
+		spawn for(var/i=1 to 4)
 			chassis.mechturn(turn(olddir, 90*i))
 			for(var/obj/effect/E in range(chassis,i == 4 ? 2 : 1))
 				if(get_dir(chassis,E)&chassis.dir || E.loc == get_turf(chassis)) //This kills vines through windows, but ehhhh
@@ -265,7 +265,7 @@
 						K.die_off()
 						eradicated++
 					else if(istype(E, /obj/effect/alien/weeds) || istype(E, /obj/effect/biomass))
-						E.Destroy()
+						qdel(E)
 						eradicated++
 			sleep(3)
 		if(eradicated)
@@ -274,7 +274,7 @@
 		set_ready_state(1)
 	else if(istype(target,/mob/living))
 		var/mob/living/M = target
-		if(M.stat>1) return //Why?
+		if(M.stat == DEAD) return
 		if(chassis.occupant.a_intent == I_HURT)
 			set_ready_state(0)
 			M.apply_damage(dam_force, BRUTE)
@@ -291,7 +291,7 @@
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher
-	name = "Exosuit-Mounted Foam Extinguisher"
+	name = "\improper Exosuit-Mounted Foam Extinguisher"
 	desc = "A fire extinguisher module for an exosuit. (Can be attached to: Firefighting exosuits)"
 	icon_state = "mecha_exting"
 	origin_tech = "materials=1;engineering=2"
@@ -381,7 +381,7 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/jetpack
-	name = "Exosuit-Mounted Jetpack"
+	name = "\improper Exosuit-Mounted Jetpack"
 	desc = "Using directed ion bursts and cunning solar wind reflection technique, this device enables controlled space flight."
 	icon_state = "mecha_jetpack"
 	origin_tech = "materials=5;engineering=5;magnets=4"
@@ -480,7 +480,7 @@
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/tool/rcd
-	name = "Exosuit-Mounted RCD"
+	name = "\improper Exosuit-Mounted RCD"
 	desc = "An exosuit-mounted Rapid Construction Device. (Can be attached to: Any exosuit)"
 	icon_state = "mecha_rcd"
 	origin_tech = "materials=4;bluespace=3;magnets=4;powerstorage=4"
@@ -583,7 +583,7 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/teleporter
-	name = "Exosuit-Mounted Teleporter"
+	name = "\improper Exosuit-Mounted Teleporter"
 	desc = "An exosuit module that allows exosuits to teleport to any position in view."
 	icon_state = "mecha_teleport"
 	origin_tech = "bluespace=10"
@@ -602,7 +602,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/wormhole_generator
-	name = "Wormhole Generator"
+	name = "\improper Wormhole Generator"
 	desc = "An exosuit module that allows generating of small quasi-stable wormholes."
 	icon_state = "mecha_wholegen"
 	origin_tech = "bluespace=3"
@@ -649,7 +649,7 @@
 		qdel(P)
 
 /obj/item/mecha_parts/mecha_equipment/gravcatapult
-	name = "Gravitational Catapult"
+	name = "\improper Gravitational Catapult"
 	desc = "An exosuit mounted Gravitational Catapult."
 	icon_state = "mecha_teleport"
 	origin_tech = "bluespace=2;magnets=3"
@@ -725,7 +725,7 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster //what is that noise? A BAWWW from TK mutants.
-	name = "Armor Booster Module (Close Combat Weaponry)"
+	name = "\improper Armor Booster Module (Close Combat Weaponry)"
 	desc = "Boosts exosuit armor against armed melee attacks. Requires energy to operate."
 	icon_state = "mecha_abooster_ccw"
 	origin_tech = "materials=3"
@@ -775,7 +775,7 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster
-	name = "Armor Booster Module (Ranged Weaponry)"
+	name = "\improper Armor Booster Module (Ranged Weaponry)"
 	desc = "Boosts exosuit armor against ranged attacks. Completely blocks taser shots. Requires energy to operate."
 	icon_state = "mecha_abooster_proj"
 	origin_tech = "materials=4"
@@ -846,7 +846,7 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid
-	name = "Repair Droid Module"
+	name = "\improper Repair Droid Module"
 	desc = "Automated repair droid. Scans exosuit for damage and repairs it. Can fix almost all types of external or internal damage."
 	icon_state = "repair_droid"
 	origin_tech = "magnets=3;programming=3"
@@ -931,7 +931,7 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay
-	name = "Energy Relay Module"
+	name = "\improper Energy Relay Module"
 	desc = "Wirelessly drains energy from any available power channel in area. The performance index is quite low."
 	icon_state = "tesla"
 	origin_tech = "magnets=4;syndicate=2"
@@ -1039,7 +1039,7 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/generator
-	name = "Plasma Converter Module"
+	name = "\improper Plasma Converter Module"
 	desc = "Generates power using solid plasma as fuel. Pollutes the environment."
 	icon_state = "tesla"
 	origin_tech = "plasmatech=2;powerstorage=2;engineering=1"
@@ -1176,7 +1176,7 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/generator/nuclear
-	name = "ExoNuclear Reactor"
+	name = "\improper ExoNuclear Reactor"
 	desc = "Generates power using uranium. Pollutes the environment."
 	icon_state = "tesla"
 	origin_tech = "powerstorage=3;engineering=3"
@@ -1210,7 +1210,7 @@
 
 //This is pretty much just for the death-ripley so that it is harmless
 /obj/item/mecha_parts/mecha_equipment/tool/safety_clamp
-	name = "KILL CLAMP"
+	name = "\improper KILL CLAMP"
 	icon_state = "mecha_clamp"
 	equip_cooldown = 15
 	energy_drain = 0

@@ -468,10 +468,10 @@ Class Procs:
 				reagents.trans_to(I, reagents.total_volume)
 			if(I.reliability != 100 && crit_fail)
 				I.crit_fail = 1
-			I.loc = src.loc
-	for(var/obj/I in src) //remove any stuff loaded, like for fridges
+			I.forceMove(src.loc)
+	for(var/atom/movable/I in src) //remove any stuff loaded, like for fridges
 		if(!prob(destroy_chance) && machine_flags &EJECTNOTDEL)
-			I.loc = src.loc
+			I.forceMove(src.loc)
 		else
 			qdel(I)
 
