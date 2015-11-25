@@ -51,13 +51,20 @@
 		grown_seed = H.seed
 		grown_reagents = H.reagents
 
+	else if(istype(target,/obj/effect/plantsegment))
+
+		var/obj/effect/plantsegment/K = target
+		grown_seed = K.seed
+
 	if(!grown_seed)
 		user << "<span class='warning'>\icon[src] [src] can tell you nothing about [target].</span>"
 		return
 
 	form_title = "[grown_seed.seed_name] (#[grown_seed.uid])"
-	var/dat = "<h3>Plant data for [form_title]</h3>"
 	user.visible_message("<span class='notice'>[user] runs the scanner over [target].</span>")
+
+	var/dat = list()
+	dat += "<h3>Plant data for [form_title]</h3>"
 
 	dat += "<h2>General Data</h2>"
 
@@ -198,6 +205,7 @@
 
 	dat += "<br><br>\[<a href='?src=\ref[src];print=1'>print report</a>\] \[<a href='?src=\ref[src];clear=1'>clear</a>\]"
 	if(dat)
+		dat = list2text(dat)
 		user << browse(dat,"window=plant_analyzer_\ref[src]")
 		last_data = dat
 	return

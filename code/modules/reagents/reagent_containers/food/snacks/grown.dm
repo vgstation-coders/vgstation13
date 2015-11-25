@@ -40,6 +40,13 @@
 					rtotal += round(potency/reagent_data[2])
 				reagents.add_reagent(rid, max(1, rtotal))
 
+			if(seed.teleporting)
+				name = "blue-space [name]"
+			if(seed.stinging)
+				name = "stinging [name]"
+			if(seed.juicy == 2)
+				name = "slippery [name]"
+
 		if(reagents.total_volume > 0)
 			bitesize = 1 + round(reagents.total_volume/2, 1)
 
@@ -98,7 +105,7 @@
 			var/mob/living/carbon/human/H = M
 			if(!H.check_body_part_coverage(FEET))
 				var/datum/organ/external/affecting = H.get_organ(pick("l_foot", "r_foot"))
-				if(!(affecting.status & (ORGAN_ROBOT|ORGAN_PEG)))
+				if(affecting && affecting.is_organic())
 					if(thorns_apply_damage(M, affecting))
 						H << "<span class='danger'>You step on \the [src]'s sharp thorns!</span>"
 						if(H.species && !(H.species.flags & NO_PAIN))
@@ -121,7 +128,7 @@
 		if(H.check_body_part_coverage(HANDS))
 			return
 		var/datum/organ/external/affecting = H.get_organ(pick("r_hand","l_hand"))
-		if(affecting.status & (ORGAN_ROBOT|ORGAN_PEG))
+		if(!affecting || !affecting.is_organic())
 			return
 		if(stinging_apply_reagents(H))
 			H << "<span class='danger'>You are stung by \the [src]!</span>"
@@ -730,7 +737,7 @@
 // *************************************
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato
-	name = "blue-space tomato"
+	name = "tomato" //"blue-space" is applied on new(), provided it's teleporting trait hasn't been removed
 	desc = "Its juices lubricate so well, you might slip through space-time."
 	icon_state = "bluespacetomato"
 	potency = 20
