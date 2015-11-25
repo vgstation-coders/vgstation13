@@ -18,7 +18,6 @@ datum
 
 		// /vg/: Send admin alerts with standardized code.
 		proc/send_admin_alert(var/datum/reagents/holder, var/reaction_name=src.name)
-			//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/send_admin_alert() called tick#: [world.time]")
 			var/message_prefix = "\A [reaction_name] reaction has occured"
 			var/message="[message_prefix]"
 			var/atom/A = holder.my_atom
@@ -39,7 +38,6 @@ datum
 			message_admins(message, 0, 1)
 
 		proc/on_reaction(var/datum/reagents/holder, var/created_volume)
-			//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/on_reaction() called tick#: [world.time]")
 			return
 
 		//I recommend you set the result amount to the total volume of all components.
@@ -775,6 +773,25 @@ datum
 			required_reagents = list("toxin" = 1, "water" = 4)
 			result_amount = 5
 
+//Special reaction for mimic meat: injecting it with 5 units of blood causes it to turn into a random food item. Makes more sense than hitting it with a fking rolling pin
+
+		mimicshift
+			name = "Shapeshift"
+			id = "mimic_meat_shift"
+			result = null
+			required_reagents = list("blood" = 5)
+			result_amount = 1
+			required_container = /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
+
+			on_reaction(var/datum/reagents/holder)
+				if(istype(holder.my_atom, /obj/item/weapon/reagent_containers/food/snacks/meat/mimic))
+					var/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/M = holder.my_atom
+					M.shapeshift()
+
+					if(ismob(holder.my_atom.loc))
+						var/mob/mob_holder = holder.my_atom.loc
+						mob_holder.drop_item(holder.my_atom) //Bandaid to work around items becoming invisible when their appearance is changed!
+
 
 /////////////////////////////////////OLD SLIME CORE REACTIONS ///////////////////////////////
 /*
@@ -1272,6 +1289,59 @@ datum
 				var/mob/living/simple_animal/hostile/C = new chosen
 				C.faction = "neutral" // Uh, beepsky ignores mobs in this faction as of Redmine #147 - N3X
 				C.loc = get_turf(holder.my_atom)
+
+		slimecritweak
+			name = "Slime Animation"
+			id = "m_tele4"
+			result = null
+			required_reagents = list("water" = 5)
+			result_amount = 1
+			required_container = /obj/item/slime_extract/gold
+			required_other = 1
+
+			on_reaction(var/datum/reagents/holder)
+				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
+				if (!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+					holder.my_atom.visible_message("<span class='warning'>The slime extract begins to slowly vibrate!</span>")
+					send_admin_alert(holder, reaction_name="gold slime + water")
+				else
+					send_admin_alert(holder, reaction_name="gold slime + water in a grenade")
+
+				spawn(50)
+					var/atom/location = holder.my_atom.loc
+					if(istype(location, /turf))
+						var/list/disguise_candidates = list()
+
+						for(var/obj/item/I in oview(4, holder.my_atom))
+							disguise_candidates += I
+
+						var/atom/disguise = null
+
+						if(disguise_candidates.len)
+							disguise = pick(disguise_candidates)
+
+						//If there are no nearby items to copy, become a completely random item!
+
+						new/mob/living/simple_animal/hostile/mimic/crate/item(location, disguise) //Create a mimic identical to a nearby item
+					else if(istype(location, /obj/structure/closet))
+						var/mob/living/simple_animal/hostile/mimic/crate/new_mimic = new(get_turf(location), location.type)
+						new_mimic.appearance = location.appearance //Create a crate mimic that looks exactly like the closet!
+
+						for(var/atom/movable/AM in location.contents)
+							AM.forceMove(new_mimic) //Move all items from the closet/crate to the new mimic
+
+						qdel(location) //Delete the old closet
+					else if(istype(location, /obj/item))
+						new /mob/living/simple_animal/hostile/mimic/crate/item(get_turf(location), location) //Copy the item we're inside of, drop it outside the item!
+					else if(ismob(location)) //Copy the mob! Owwwwwwwwwww this is going to be fun
+						var/mob/M = location
+
+						var/mob/mimic = new /mob/living/simple_animal/hostile/mimic/crate(get_turf(location), location)
+						mimic.appearance = M.appearance //Because mimics copy appearances from paths, not actual existing objects.
+
+						M << "<span class='sinister'>You feel something thoroughly analyzing you from inside...</span>"
+					else
+						new /mob/living/simple_animal/hostile/mimic/crate
 
 //Silver
 		slimebork
@@ -1863,6 +1933,22 @@ datum
 			id = "soysauce"
 			result = "soysauce"
 			required_reagents = list("soymilk" = 4, "sacid" = 1)
+			result_amount = 5
+
+		vinegar
+			name = "Malt Vinegar"
+			id = "vinegar"
+			result = "vinegar"
+			required_reagents = list("ethanol" = 5)
+			required_catalysts = list("enzyme" = 1)
+			result_amount = 5
+
+		sprinkles
+			name = "Sprinkles"
+			id = "sprinkles"
+			result = "sprinkles"
+			required_reagents = list("sugar" = 5)
+			required_catalysts = list("enzyme" = 1)
 			result_amount = 5
 
 		cheesewheel

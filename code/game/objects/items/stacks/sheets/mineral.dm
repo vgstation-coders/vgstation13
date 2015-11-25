@@ -149,6 +149,7 @@ var/global/list/datum/stack_recipe/plasma_recipes = list ( \
 	recyck_mat = MAT_PLASTIC
 
 var/global/list/datum/stack_recipe/plastic_recipes = list ( \
+	new/datum/stack_recipe("plastic floor tile", /obj/item/stack/tile/mineral/plastic, 1, 4, 20), \
 	new/datum/stack_recipe("plastic crate", /obj/structure/closet/pcrate, 10, one_per_turf = 1, on_floor = 1, one_per_turf = 1), \
 	new/datum/stack_recipe("plastic ashtray", /obj/item/ashtray/plastic, 2, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("plastic fork", /obj/item/weapon/kitchen/utensil/fork/plastic, 1, on_floor = 1), \

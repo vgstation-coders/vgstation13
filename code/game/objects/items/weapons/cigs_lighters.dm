@@ -70,7 +70,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/match/proc/update_brightness()
 
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/match/proc/update_brightness() called tick#: [world.time]")
 
 	if(lit == 1) //I wish I didn't need the == 1 part, but Dreamkamer is a dumb puppy
 		processing_objects.Add(src)
@@ -188,7 +187,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/proc/update_brightness()
 
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/mask/cigarette/proc/update_brightness() called tick#: [world.time]")
 
 	if(lit)
 		processing_objects.Add(src)
@@ -273,7 +271,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 				return
 
 /obj/item/clothing/mask/cigarette/proc/light(var/flavor_text = "[usr] lights \the [src].")
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/clothing/mask/cigarette/proc/light() called tick#: [world.time]")
 	if(lit) //Failsafe
 		return //"Normal" situations were already handled in attackby, don't show a message
 
@@ -514,6 +511,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		update_brightness()
 		var/turf/T = get_turf(src)
 		T.visible_message(flavor_text)
+		if(istype(loc,/mob))
+			var/mob/M = loc
+			if(M.wear_mask == src)
+				M.update_inv_wear_mask(0)
 
 /obj/item/clothing/mask/cigarette/pipe/process()
 	var/turf/location = get_turf(src)
@@ -525,7 +526,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			var/mob/living/M = loc
 			M.visible_message("<span class='notice'>[M]'s [name] goes out.</span>", \
 			"<span class='notice'>Your [name] goes out, and you empty the ash.</span>")
-			M.update_inv_wear_mask(0)
+			if(M.wear_mask == src)
+				M.update_inv_wear_mask(0)
 		update_brightness()
 		return
 	if(location)
@@ -622,7 +624,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter/proc/update_brightness()
 
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/item/weapon/lighter/proc/update_brightness() called tick#: [world.time]")
 
 	if(lit)
 		processing_objects.Add(src)

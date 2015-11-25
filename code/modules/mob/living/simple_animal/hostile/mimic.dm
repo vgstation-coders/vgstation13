@@ -124,8 +124,13 @@ var/global/list/crate_mimic_disguises = list(\
 	maxHealth = 100
 	health = 100
 
-/mob/living/simple_animal/hostile/mimic/crate/New()
-	environment_disguise() //Disguise ourselves appropriately
+/mob/living/simple_animal/hostile/mimic/crate/New(loc, atom/new_disguise = null)
+	if(ispath(new_disguise))
+		copied_object = new_disguise
+	else if(istype(new_disguise))
+		copied_object = new_disguise.type
+	else
+		environment_disguise()
 
 	..()
 
@@ -350,7 +355,7 @@ var/global/list/item_mimic_disguises = list(
 				/obj/item/device/pda/clown, /obj/item/device/rcd/matter/engineering, /obj/item/device/radio, /obj/item/device/robotanalyzer, /obj/item/device/soulstone,\
 				/obj/item/device/soundsynth, /obj/item/device/violin, /obj/item/device/wormhole_jaunter, /obj/item/weapon/gun/portalgun, /obj/item/target), //Common items
 
-	"medbay" = list(/obj/item/weapon/circular_saw, /obj/item/weapon/melee/defibrillator, /obj/item/weapon/surgicaldrill, /obj/item/weapon/hemostat, /obj/item/weapon/dnainjector/hulkmut,\
+	"medbay" = list(/obj/item/weapon/circular_saw, /obj/item/weapon/melee/defibrillator, /obj/item/weapon/surgicaldrill, /obj/item/weapon/hemostat, /obj/item/weapon/dnainjector/nofail/hulkmut,\
 				/obj/item/weapon/bonesetter, /obj/item/weapon/autopsy_scanner, /obj/item/weapon/FixOVein, /obj/item/stack/medical/ointment, /obj/item/weapon/storage/firstaid,\
 				/obj/item/weapon/gun/syringe/rapidsyringe, /obj/item/weapon/storage/firstaid/fire, /obj/item/weapon/storage/firstaid/o2, /obj/item/weapon/storage/firstaid/toxin,\
 				/obj/item/weapon/cautery, /obj/item/device/healthanalyzer, /obj/item/pizzabox/margherita, /obj/item/toy/balloon, /obj/item/weapon/coin/clown,\
@@ -395,10 +400,6 @@ var/global/list/item_mimic_disguises = list(
 	copied_object = /obj/item/target //Default form for us if we accidentally morph into an item with no icon. Gets overridden on New()
 
 	var/icon/mouth_overlay = icon('icons/mob/mob.dmi', icon_state = "mimic_mouth")
-
-/mob/living/simple_animal/hostile/mimic/crate/item/New()
-	environment_disguise()
-	..()
 
 /mob/living/simple_animal/hostile/mimic/crate/item/initialize()
 	return //Don't take any items!
@@ -540,21 +541,18 @@ var/global/list/protected_objects = list(
 	return . - creator
 
 /mob/living/simple_animal/hostile/mimic/copy/proc/ChangeOwner(var/mob/owner)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/hostile/mimic/copy/proc/ChangeOwner() called tick#: [world.time]")
 	if(owner != creator)
 		LoseTarget()
 		creator = owner
 		faction = "\ref[owner]"
 
 /mob/living/simple_animal/hostile/mimic/copy/proc/CheckObject(var/obj/O)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/hostile/mimic/copy/proc/CheckObject() called tick#: [world.time]")
 	if((istype(O, /obj/item) || istype(O, /obj/structure)) && !is_type_in_list(O, protected_objects))
 		return 1
 	return 0
 
 /mob/living/simple_animal/hostile/mimic/copy/proc/CopyObject(var/obj/O, var/mob/living/creator, var/destroy_original = 0)
 
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/living/simple_animal/hostile/mimic/copy/proc/CopyObject() called tick#: [world.time]")
 
 	if(destroy_original || CheckObject(O))
 

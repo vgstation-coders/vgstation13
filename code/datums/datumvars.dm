@@ -2,7 +2,6 @@
 /client/proc/debug_reagents(datum/D in world)
 	set category = "Debug"
 	set name = "Add Reagent"
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/debug_reagents() called tick#: [world.time]")
 
 	if(!usr.client || !usr.client.holder)
 		usr << "<span class='warning'>You need to be an administrator to access this.</span>"
@@ -24,7 +23,6 @@
 	set category = "Debug"
 	set name = "View Variables"
 	//set src in world
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/debug_variables() called tick#: [world.time]")
 
 
 	if(!usr.client || !usr.client.holder)
@@ -33,7 +31,7 @@
 
 
 	var/title = ""
-	var/body = ""
+	var/body = list()
 
 	if(!D)	return
 	if(istype(D, /atom))
@@ -342,6 +340,7 @@
 		body += debug_variable(V, D.vars[V], 0, D)
 
 	body += "</ol>"
+	body = list2text(body)
 
 	var/html = "<html><head>"
 	if (title)
@@ -375,7 +374,6 @@ body
 	return
 
 /client/proc/debug_variable(name, value, level, var/datum/DA = null)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\proc/debug_variable() called tick#: [world.time]")
 	var/html = ""
 
 	if(DA)
@@ -471,7 +469,6 @@ body
 	return html
 
 /client/proc/view_var_Topic(href, href_list, hsrc)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/client/proc/view_var_Topic() called tick#: [world.time]")
 	//This should all be moved over to datum/admins/Topic() or something ~Carn
 	if( (usr.client != src) || !src.holder )
 		return
@@ -721,11 +718,11 @@ body
 			return
 
 		var/turf/T = get_turf(usr)
-		if(!T)
-			usr << "You cannot teleport something into nullspace. Well I mean technically you can but that's not what that option is for."
-			return
-
-		A.forceMove(T)
+		if(istype(A,/mob))
+			var/mob/M = A
+			M.teleport_to(T)
+		else
+			A.forceMove(T)
 		switch(teleport_here_pref)
 			if("Flashy")
 				if(flashy_level > 0)
@@ -742,21 +739,16 @@ body
 	else if(href_list["teleport_to"])
 		if(!check_rights(0))	return
 
-		var/atom/movable/user = usr
+		var/mob/user = usr
 		if(!istype(user))
-			user << "Only movable atoms can use this option. Wait a second, how can you even not be a movable atom anyway?"
+			return
 
 		var/atom/A = locate(href_list["teleport_to"])
 		if(!istype(A))
 			user << "This can only be done to instances of atoms."
 			return
 
-		var/turf/T = get_turf(A)
-		if(!T)
-			user << "You cannot teleport into nullspace. Well I mean technically you can but that's not what that option is for."
-			return
-
-		user.forceMove(T)
+		user.teleport_to(A)
 
 	else if(href_list["delete"])
 		if(!check_rights(0))	return

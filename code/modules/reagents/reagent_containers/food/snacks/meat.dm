@@ -48,7 +48,6 @@
 	New()
 		..()
 		eatverb = pick("bite","chew","choke down","gnaw","swallow","chomp")
-		//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\eatverb = pick()  called tick#: [world.time]")
 		reagents.add_reagent("nutriment", 3)
 		reagents.add_reagent("carpotoxin", 3)
 		bitesize = 6
@@ -99,16 +98,6 @@
 		bitesize = 5
 
 		shapeshift()
-
-/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/attackby(obj/item/W, mob/user)
-	if(istype(W,/obj/item/weapon/kitchen/rollingpin))
-		user.visible_message("<span class='notice'>[user] starts smacking \the [src] with \the [W].</span>", "<span class='info'>You start reshaping \the [src] with \the [W].</span>")
-
-		if(do_after(user, src, 10))
-			if(prob(80))
-				shapeshift() //Turn into a random foodstuff
-			else
-				src.appearance = initial(src.appearance) //Turn into "mimic meat"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/bless()
 	visible_message("<span class='info'>\The [src] starts fizzling!</span>")

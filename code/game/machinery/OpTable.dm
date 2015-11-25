@@ -107,7 +107,6 @@
 		return
 
 /obj/machinery/optable/proc/check_victim()
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/optable/proc/check_victim() called tick#: [world.time]")
 	if (victim)
 		if (victim.loc == src.loc)
 			if (victim.lying)
@@ -128,7 +127,6 @@
 	check_victim()
 
 /obj/machinery/optable/proc/take_victim(mob/living/carbon/C, mob/living/carbon/user as mob)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/optable/proc/take_victim() called tick#: [world.time]")
 	if (victim)
 		user << "<span class='bnotice'>The table is already occupied!</span>"
 
@@ -154,7 +152,6 @@
 	set name = "Climb On Table"
 	set category = "Object"
 	set src in oview(1)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""]) \\/obj/machinery/optable/verb/climb_on()  called tick#: [world.time]")
 
 	if(usr.stat || !ishuman(usr) || usr.locked_to || usr.restrained() || (usr.status_flags & FAKEDEATH))
 		return
@@ -164,15 +161,17 @@
 /obj/machinery/optable/attackby(obj/item/weapon/W as obj, mob/living/carbon/user as mob)
 	if(iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		switch(rating)
-			if(1)
-				new /obj/item/weapon/stock_parts/scanning_module(src.loc)
-			if(2)
-				new /obj/item/weapon/stock_parts/scanning_module/adv(src.loc)
-			if(3)
-				new /obj/item/weapon/stock_parts/scanning_module/phasic(src.loc)
-		new /obj/structure/table/reinforced(src.loc)
-		qdel(src)
+		if(do_after(user, src, 40))
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+			switch(rating)
+				if(1)
+					new /obj/item/weapon/stock_parts/scanning_module(src.loc)
+				if(2)
+					new /obj/item/weapon/stock_parts/scanning_module/adv(src.loc)
+				if(3)
+					new /obj/item/weapon/stock_parts/scanning_module/adv/phasic(src.loc)
+			new /obj/structure/table/reinforced(src.loc)
+			qdel(src)
 		return
 	if (istype(W, /obj/item/weapon/grab))
 		if(iscarbon(W:affecting))
