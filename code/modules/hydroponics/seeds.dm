@@ -1356,7 +1356,6 @@
 	packet_icon = "seed-kudzu"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod)
 	plant_icon = "kudzu"
-	product_colour = "#96D278"
 	chems = list("nutriment" = list(1,50), "anti_toxin" = list(2,10))
 
 	lifespan = 20

@@ -55,7 +55,7 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 		S.update_seed()
 
 	//Might as well mask the gene types while we're at it.
-	var/list/gene_tags = list("products","consumption","environment","resistance","vigour","flowers")
+	var/list/gene_tags = list("products","consumption","environment","resistance","vigour","biolum")
 	var/list/used_masks = list()
 
 	while(gene_tags && gene_tags.len)

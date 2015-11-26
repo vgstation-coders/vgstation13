@@ -56,19 +56,14 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/ligneous = 0				// If 1, requires sharp instrument to harvest. Kudzu with this trait resists sharp items better.
 	var/teleporting = 0				// If 1, causes teleportation when thrown.
 	var/juicy = 0					// 0 = no, 1 = splatters when thrown, 2 = slips
-	var/splat_type = /obj/effect/decal/cleanable/fruit_smudge //Decal to create if the fruit is splatter-able and subsequently splattered.
 
 	// Cosmetics.
 	var/plant_dmi = 'icons/obj/hydroponics.dmi'// DMI  to use for the plant growing in the tray.
 	var/plant_icon                  // Icon to use for the plant growing in the tray.
-	var/product_icon                // Base to use for fruit coming from this plant (if a vine).
-	var/product_colour              // Colour to apply to product base (if a vine).
 	var/packet_icon = "seed"        // Icon to use for physical seed packet item.
 	var/biolum                      // Plant is bioluminescent.
 	var/biolum_colour               // The colour of the plant's radiance.
-	var/flowers                     // Plant has a flower overlay.
-	var/flower_icon = "vine_fruit"  // Which overlay to use.
-	var/flower_colour               // Which colour to use.
+	var/splat_type = /obj/effect/decal/cleanable/fruit_smudge //Decal to create if the fruit is splatter-able and subsequently splattered.
 
 	var/mob_drop					// Seed type dropped by the mobs when it dies without an host
 
@@ -355,7 +350,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 		if("consumption")
 
-			if(gene.values.len < 7) return
+			if(gene.values.len < 5) return
 
 			consume_gasses =       gene.values[1]
 			nutrient_consumption = gene.values[2]
@@ -393,17 +388,12 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			maturation =           gene.values[5]
 			production =           gene.values[6]
 
-		if("flowers")
+		if("biolum")
 
-			if(gene.values.len < 7) return
+			if(gene.values.len < 2) return
 
-			product_icon =         gene.values[1]
-			product_colour =       gene.values[2]
-			biolum =               gene.values[3]
-			biolum_colour =        gene.values[4]
-			flowers =              gene.values[5]
-			flower_icon =          gene.values[6]
-			flower_colour =        gene.values[7]
+			biolum =               gene.values[1]
+			biolum_colour =        gene.values[2]
 
 
 //Returns a list of the desired trait values.
@@ -462,20 +452,22 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(production           ? production           : 0)
 				)
 
-		if("flowers")
+		if("biolum")
 			P.values = list(
-				(product_icon         ? product_icon         : 0),
-				(product_colour       ? product_colour       : 0),
 				(biolum               ? biolum               : 0),
-				(biolum_colour        ? biolum_colour        : 0),
-				(flowers              ? flowers              : 0),
-				(flower_icon          ? flower_icon          : 0),
-				(flower_colour        ? flower_colour        : 0)
+				(biolum_colour        ? biolum_colour        : 0)
 				)
 
 	return (P ? P : 0)
 
-//Place the plant products at the feet of the user. //Why isn't this a hydro tray proc?
+//This may be a new line. Update the global if it is.
+/datum/seed/proc/add_newline_to_controller()
+	if(name == "new line" || !(name in plant_controller.seeds))
+		uid = plant_controller.seeds.len + 1
+		name = "[uid]"
+		plant_controller.seeds[name] = src
+
+//Place the plant products at the feet of the user.
 /datum/seed/proc/harvest(var/mob/user,var/yield_mod = 1)
 
 
@@ -487,11 +479,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	else
 		user << "You harvest from the [display_name]."
 
-		//This may be a new line. Update the global if it is.
-		if(name == "new line" || !(name in plant_controller.seeds))
-			uid = plant_controller.seeds.len + 1
-			name = "[uid]"
-			plant_controller.seeds[name] = src
+		add_newline_to_controller()
 
 		var/total_yield = 0
 		if(yield > -1)
@@ -573,6 +561,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 // Create a seed packet directly from the plant.
 /datum/seed/proc/spawn_seed_packet(turf/target)
+	add_newline_to_controller()
 	var/obj/item/seeds/seeds = new(target)
 	seeds.seed_type = src.name
 	seeds.update_seed()
@@ -629,14 +618,17 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.spread =               spread
 	new_seed.carnivorous =          carnivorous
 	new_seed.parasite =             parasite
+	new_seed.hematophage =          hematophage
+	new_seed.thorny =               thorny
+	new_seed.stinging =             stinging
+	new_seed.ligneous =             ligneous
+	new_seed.teleporting =          teleporting
+	new_seed.juicy =        	    juicy
 	new_seed.plant_icon =           plant_icon
-	new_seed.product_icon =         product_icon
-	new_seed.product_colour =       product_colour
+	new_seed.splat_type =           splat_type
 	new_seed.packet_icon =          packet_icon
 	new_seed.biolum =               biolum
 	new_seed.biolum_colour =        biolum_colour
-	new_seed.flowers =              flowers
-	new_seed.flower_icon =          flower_icon
 	new_seed.alter_temp = 			alter_temp
 
 	ASSERT(istype(new_seed)) //something happened... oh no...

@@ -238,7 +238,7 @@
 
 		return
 
-	if(istype(O, /obj/item/weapon/wirecutters) || istype(O, /obj/item/weapon/scalpel))
+	if(is_type_in_list(O, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
 
 		if(!seed)
 			to_chat(user, "There is nothing to take a sample from in \the [src].")
@@ -376,8 +376,6 @@
 			health -= O.force
 			check_health()
 		user.delayNextAttack(5)
-
-	return
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
 

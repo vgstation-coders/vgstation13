@@ -11,7 +11,6 @@
 	density = 0
 	layer = 5
 	pass_flags = PASSTABLE | PASSGRILLE
-	//flags = PROXMOVE
 	//mouse_opacity = 2
 
 	var/health = 10
