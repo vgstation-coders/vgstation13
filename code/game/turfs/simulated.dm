@@ -158,3 +158,9 @@
 	else if( istype(M, /mob/living/silicon/robot ))
 		var/obj/effect/decal/cleanable/blood/oil/B = getFromPool(/obj/effect/decal/cleanable/blood/oil,src)
 		B.New(src)
+		
+/turf/simulated/clean_blood()
+	for(var/obj/effect/decal/cleanable/blood/B in contents)
+		B.fluorescent = 0
+		B.invisibility = 100
+
