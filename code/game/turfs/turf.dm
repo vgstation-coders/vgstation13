@@ -638,3 +638,6 @@
 			5;/obj/structure/powerup/full,
 			)
 		new powerup(src)
+
+/turf/proc/update_blood_overlays()
+	return

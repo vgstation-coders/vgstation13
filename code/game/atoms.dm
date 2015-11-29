@@ -752,3 +752,8 @@ its easier to just keep the beam vertical.
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()
 	blessed = 1
+	
+//Reveal blood (luminol stuff)
+/atom/proc/reveal_blood()
+	return
+
