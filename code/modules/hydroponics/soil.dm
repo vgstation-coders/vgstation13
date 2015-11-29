@@ -31,4 +31,5 @@
 	..()
 	verbs -= /obj/machinery/portable_atmospherics/hydroponics/verb/close_lid
 	verbs -= /obj/machinery/portable_atmospherics/hydroponics/verb/set_label
+	verbs -= /obj/machinery/portable_atmospherics/hydroponics/verb/light_toggle
 	component_parts = list()

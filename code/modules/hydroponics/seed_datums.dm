@@ -130,7 +130,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		alter_temp = 1
 
 	/*if(prob(1))
-		immutable = -1*/ //shekels
+		immutable = -1*/ //todo this
 
 	var/carnivore_prob = rand(100)
 	if(carnivore_prob < 5)
@@ -295,38 +295,24 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 //Random mutations moved to hydroponics_mutations.dm!
 
 //Mutates a specific trait/set of traits. Used by the Bioballistic Delivery System.
-/datum/seed/proc/apply_gene(var/datum/plantgene/gene)
-
+/datum/seed/proc/apply_gene(var/datum/plantgene/gene, var/mode)
 
 	if(!gene || !gene.values || immutable > 0) return
 
 	switch(gene.genetype)
+		if(GENE_PHYTOCHEMISTRY)
+			if(!chems || mode == GENEGUN_MODE_PURGE)
+				chems = list()
 
-		//Splicing products has some detrimental effects on yield and lifespan.
-		if("products")
-
-			if(gene.values.len < 6) return
-
-			if(yield > 0)     yield =     max(1,round(yield*0.85))
-			if(endurance > 0) endurance = max(1,round(endurance*0.85))
-			if(lifespan > 0)  lifespan =  max(1,round(lifespan*0.85))
-
-			if(!products) products = list()
-			products |= gene.values[1]
-
-			if(!chems) chems = list()
-
-			var/list/gene_value = gene.values[2]
+			var/list/gene_value = gene.values[1]
 			for(var/rid in gene_value)
-
 				var/list/gene_chem = gene_value[rid]
 
 				if(!(rid in chems) || !chems[rid])
 					chems[rid] = gene_chem.Copy()
 					continue
 
-				for(var/i=1;i<=gene_chem.len;i++)
-
+				for(var/i=1 to gene_chem.len)
 					if(isnull(gene_chem[i]))
 						chems[rid][i] = 0
 						gene_chem[i] = 0
@@ -337,127 +323,185 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					else
 						chems[rid][i] = gene_chem[i]
 
-			var/list/new_gasses = gene.values[3]
+			switch(mode)
+				if(GENEGUN_MODE_PURGE)
+					potency 			= gene.values[2]
+					teleporting 		= gene.values[3]
+				if(GENEGUN_MODE_SPLICE)
+					potency 			= Ceiling(mix(gene.values[2], potency, rand(40, 60)/100))
+					teleporting 		= max(gene.values[3], teleporting)
+
+		if(GENE_MORPHOLOGY)
+			if(gene.values[1])
+				if(!products || mode == GENEGUN_MODE_PURGE)
+					products = list()
+				products |= gene.values[1]
+			switch(mode)
+				if(GENEGUN_MODE_PURGE)
+					thorny 				= gene.values[2]
+					stinging 			= gene.values[3]
+					ligneous 			= gene.values[4]
+					juicy 				= gene.values[5]
+				if(GENEGUN_MODE_SPLICE)
+					thorny 				= max(gene.values[2], thorny)
+					stinging 			= max(gene.values[3], stinging)
+					ligneous 			= max(gene.values[4], ligneous)
+					juicy 				= max(gene.values[5], juicy)
+
+		if(GENE_CHEMILUMINESCENCE)
+			switch(mode)
+				if(GENEGUN_MODE_PURGE)
+					biolum 				= gene.values[1]
+					biolum_colour 		= gene.values[2]
+				if(GENEGUN_MODE_SPLICE)
+					biolum 				= max(gene.values[1], biolum)
+					biolum_colour 		= BlendRGB(gene.values[2], biolum_colour, rand(40, 60)/100)
+
+		if(GENE_ECOLOGY)
+			switch(mode)
+				if(GENEGUN_MODE_PURGE)
+					ideal_heat 			= gene.values[1]
+					heat_tolerance 		= gene.values[2]
+					ideal_light 		= gene.values[3]
+					light_tolerance 	= gene.values[4]
+					lowkpa_tolerance	= gene.values[5]
+					highkpa_tolerance	= gene.values[6]
+				if(GENEGUN_MODE_SPLICE)
+					ideal_heat 			= Ceiling(mix(gene.values[1], ideal_heat, 		rand(40, 60)/100))
+					heat_tolerance 		= Ceiling(mix(gene.values[2], heat_tolerance, 	rand(40, 60)/100))
+					ideal_light 		= Ceiling(mix(gene.values[3], ideal_light,		rand(40, 60)/100))
+					light_tolerance 	= Ceiling(mix(gene.values[4], light_tolerance, 	rand(40, 60)/100))
+					lowkpa_tolerance	= Ceiling(mix(gene.values[5], lowkpa_tolerance, rand(40, 60)/100))
+					highkpa_tolerance	= Ceiling(mix(gene.values[6], highkpa_tolerance,rand(40, 60)/100))
+
+		if(GENE_ECOPHYSIOLOGY)
+			switch(mode)
+				if(GENEGUN_MODE_PURGE)
+					toxins_tolerance 	= gene.values[1]
+					pest_tolerance 		= gene.values[2]
+					weed_tolerance 		= gene.values[3]
+					lifespan 			= gene.values[4]
+					endurance			= gene.values[5]
+				if(GENEGUN_MODE_SPLICE)
+					toxins_tolerance 	= Ceiling(mix(gene.values[1], toxins_tolerance,	rand(40, 60)/100))
+					pest_tolerance 		= Ceiling(mix(gene.values[2], pest_tolerance, 	rand(40, 60)/100))
+					weed_tolerance 		= Ceiling(mix(gene.values[3], weed_tolerance, 	rand(40, 60)/100))
+					lifespan 			= Ceiling(mix(gene.values[4], lifespan, 		rand(40, 60)/100))
+					endurance			= Ceiling(mix(gene.values[5], endurance, 		rand(40, 60)/100))
+
+		if(GENE_METABOLISM)
+			switch(mode)
+				if(GENEGUN_MODE_PURGE)
+					nutrient_consumption	= gene.values[1]
+					water_consumption 		= gene.values[2]
+					alter_temp 				= gene.values[3]
+				if(GENEGUN_MODE_SPLICE)
+					nutrient_consumption	= Ceiling(mix(gene.values[1], nutrient_consumption,	rand(40, 60)/100))
+					water_consumption 		= Ceiling(mix(gene.values[2], water_consumption,	rand(40, 60)/100))
+					alter_temp 				= max(gene.values[3], alter_temp)
+			var/list/new_gasses = gene.values[4]
 			if(islist(new_gasses))
-				if(!exude_gasses) exude_gasses = list()
+				if(!exude_gasses || mode == GENEGUN_MODE_PURGE)
+					exude_gasses = list()
 				exude_gasses |= new_gasses
-				for(var/gas in exude_gasses)
-					exude_gasses[gas] = max(1,round(exude_gasses[gas]*0.8))
 
-			alter_temp =           gene.values[4]
-			potency =              gene.values[5]
-			harvest_repeat =       gene.values[6]
+		if(GENE_NUTRITION)
+			switch(mode)
+				if(GENEGUN_MODE_PURGE)
+					carnivorous 		= gene.values[1]
+					parasite 			= gene.values[2]
+					hematophage 		= gene.values[3]
+				if(GENEGUN_MODE_SPLICE)
+					carnivorous 		= max(gene.values[1], carnivorous)
+					parasite 			= max(gene.values[2], parasite)
+					hematophage 		= max(gene.values[3], hematophage)
+			var/list/new_gasses = gene.values[4]
+			if(islist(new_gasses))
+				if(!consume_gasses || mode == GENEGUN_MODE_PURGE)
+					consume_gasses = list()
+				consume_gasses |= new_gasses
 
-		if("consumption")
-
-			if(gene.values.len < 5) return
-
-			consume_gasses =       gene.values[1]
-			nutrient_consumption = gene.values[2]
-			water_consumption =    gene.values[3]
-			carnivorous =          gene.values[4]
-			parasite =             gene.values[5]
-
-		if("environment")
-
-			if(gene.values.len < 6) return
-
-			ideal_heat =           gene.values[1]
-			heat_tolerance =       gene.values[2]
-			ideal_light =          gene.values[3]
-			light_tolerance =      gene.values[4]
-			lowkpa_tolerance  =    gene.values[5]
-			highkpa_tolerance =    gene.values[6]
-
-		if("resistance")
-
-			if(gene.values.len < 3) return
-
-			toxins_tolerance =     gene.values[1]
-			pest_tolerance =       gene.values[2]
-			weed_tolerance =       gene.values[3]
-
-		if("vigour")
-
-			if(gene.values.len < 6) return
-
-			endurance =            gene.values[1]
-			yield =                gene.values[2]
-			lifespan =             gene.values[3]
-			spread =               gene.values[4]
-			maturation =           gene.values[5]
-			production =           gene.values[6]
-
-		if("biolum")
-
-			if(gene.values.len < 2) return
-
-			biolum =               gene.values[1]
-			biolum_colour =        gene.values[2]
-
+		if(GENE_DEVELOPMENT)
+			switch(mode)
+				if(GENEGUN_MODE_PURGE)
+					production 			= gene.values[1]
+					maturation 			= gene.values[2]
+					spread 				= gene.values[3]
+					harvest_repeat 		= gene.values[4]
+					yield				= gene.values[5]
+				if(GENEGUN_MODE_SPLICE)
+					production 			= Ceiling(mix(gene.values[1], production,	rand(40, 60)/100))
+					maturation 			= Ceiling(mix(gene.values[2], maturation,	rand(40, 60)/100))
+					spread 				= Ceiling(mix(gene.values[3], spread,		rand(40, 60)/100))
+					harvest_repeat 		= max(gene.values[4], harvest_repeat)
+					yield				= Ceiling(mix(gene.values[5], yield,		rand(40, 60)/100))
 
 //Returns a list of the desired trait values.
 /datum/seed/proc/get_gene(var/genetype)
-
-
 	if(!genetype) return 0
 
 	var/datum/plantgene/P = new()
 	P.genetype = genetype
 
 	switch(genetype)
-		if("products")
+		if(GENE_PHYTOCHEMISTRY)
 			P.values = list(
-				(products             ? products             : 0),
-				(chems                ? chems                : 0),
-				(exude_gasses         ? exude_gasses         : 0),
-				(alter_temp           ? alter_temp           : 0),
-				(potency              ? potency              : 0),
-				(harvest_repeat       ? harvest_repeat       : 0)
-				)
-
-		if("consumption")
+				(chems                	? chems                	: 0),
+				(potency				? potency 				: 0),
+				(teleporting          	? teleporting          	: 0) // Yes, bluespace anomalies are caused by a mystery chemical, I don't have to explain shit
+			)
+		if(GENE_MORPHOLOGY)
 			P.values = list(
-				(consume_gasses       ? consume_gasses       : 0),
-				(nutrient_consumption ? nutrient_consumption : 0),
-				(water_consumption    ? water_consumption    : 0),
-				(carnivorous          ? carnivorous          : 0),
-				(parasite             ? parasite             : 0)
-				)
-
-		if("environment")
+				(products           	? products            	: 0),
+				(thorny           	 	? thorny           		: 0),
+				(stinging            	? stinging            	: 0),
+				(ligneous             	? ligneous            	: 0),
+				(juicy             		? juicy             	: 0)
+			)
+		if(GENE_CHEMILUMINESCENCE) // Realistically, plant luminescence would be chemical, not biological.
 			P.values = list(
-				(ideal_heat           ? ideal_heat           : 0),
-				(heat_tolerance       ? heat_tolerance       : 0),
-				(ideal_light          ? ideal_light          : 0),
-				(light_tolerance      ? light_tolerance      : 0),
-				(lowkpa_tolerance     ? lowkpa_tolerance     : 0),
-				(highkpa_tolerance    ? highkpa_tolerance    : 0)
-				)
-
-		if("resistance")
+				(biolum               	? biolum              	: 0),
+				(biolum_colour        	? biolum_colour      	: 0)
+			)
+		if(GENE_ECOLOGY)
 			P.values = list(
-				(toxins_tolerance     ? toxins_tolerance     : 0),
-				(pest_tolerance       ? pest_tolerance       : 0),
-				(weed_tolerance       ? weed_tolerance       : 0)
-				)
-
-		if("vigour")
+				(ideal_heat           	? ideal_heat          	: 0),
+				(heat_tolerance      	? heat_tolerance     	: 0),
+				(ideal_light         	? ideal_light         	: 0),
+				(light_tolerance      	? light_tolerance     	: 0),
+				(lowkpa_tolerance     	? lowkpa_tolerance    	: 0),
+				(highkpa_tolerance   	? highkpa_tolerance   	: 0)
+			)
+		if(GENE_ECOPHYSIOLOGY)
 			P.values = list(
-				(endurance            ? endurance            : 0),
-				(yield                ? yield                : 0),
-				(lifespan             ? lifespan             : 0),
-				(spread               ? spread               : 0),
-				(maturation           ? maturation           : 0),
-				(production           ? production           : 0)
-				)
-
-		if("biolum")
+				(toxins_tolerance     	? toxins_tolerance    	: 0),
+				(pest_tolerance       	? pest_tolerance      	: 0),
+				(weed_tolerance       	? weed_tolerance      	: 0),
+				(lifespan      			? lifespan				: 0),
+				(endurance       		? endurance       		: 0)
+			)
+		if(GENE_METABOLISM)
 			P.values = list(
-				(biolum               ? biolum               : 0),
-				(biolum_colour        ? biolum_colour        : 0)
-				)
-
+				(nutrient_consumption 	? nutrient_consumption	: 0),
+				(water_consumption    	? water_consumption   	: 0),
+				(alter_temp    			? alter_temp    		: 0),
+				(exude_gasses    		? exude_gasses    		: 0)
+			)
+		if(GENE_NUTRITION)
+			P.values = list(
+				(carnivorous 			? carnivorous			: 0),
+				(parasite    			? parasite   			: 0),
+				(hematophage    		? hematophage    		: 0),
+				(consume_gasses    		? consume_gasses    	: 0)
+			)
+		if(GENE_DEVELOPMENT)
+			P.values = list(
+				(production           	? production          	: 0),
+				(maturation           	? maturation          	: 0),
+				(spread         		? spread         		: 0),
+				(harvest_repeat       	? harvest_repeat      	: 0),
+				(yield              	? yield              	: 0)
+			)
 	return (P ? P : 0)
 
 //This may be a new line. Update the global if it is.
@@ -469,8 +513,6 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 //Place the plant products at the feet of the user.
 /datum/seed/proc/harvest(var/mob/user,var/yield_mod = 1)
-
-
 	if(!user)
 		return
 
@@ -571,8 +613,6 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 // is set to a new datum copied from the original. This datum won't actually
 // be put into the global datum list until the product is harvested, though.
 /datum/seed/proc/diverge(var/modified)
-
-
 	if(immutable > 0) return
 
 	//Set up some basic information.

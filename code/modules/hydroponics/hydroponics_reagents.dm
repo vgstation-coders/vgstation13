@@ -104,12 +104,12 @@
 			world << "DIETHYLAMINE JUST MADE [T.seed.display_name] GROW UP FASTER. ISN'T THAT PRECIOUS?"
 		if(!T.seed.immutable)
 			var/chance
-			chance = linear_extrapolation(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
+			chance = unmix(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
 			if(prob(chance))
 				T.check_for_divergence(1)
 				world << "+LIFESPAN ON [T.seed.display_name] WITH PROBABILITY [chance]"
 				T.seed.lifespan++
-			chance = linear_extrapolation(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
+			chance = unmix(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
 			if(prob(chance))
 				T.check_for_divergence(1)
 				world << "+ENDURANCE ON [T.seed.display_name] WITH PROBABILITY [chance]"
@@ -126,17 +126,17 @@
 	if(T.seed && !T.dead && prob(25*custom_plant_metabolism)) T.pestlevel += 1
 	if(T.seed && !T.dead && !T.seed.immutable)
 		var/chance
-		chance = linear_extrapolation(T.seed.potency, 15, 150)*350*custom_plant_metabolism
+		chance = unmix(T.seed.potency, 15, 150)*350*custom_plant_metabolism
 		if(prob(chance))
 			T.check_for_divergence(1)
 			world << "+POTENCY ON [T.seed.display_name] WITH PROBABILITY [chance]"
 			T.seed.potency++
-		chance = linear_extrapolation(T.seed.yield, 6, 2)*15*custom_plant_metabolism
+		chance = unmix(T.seed.yield, 6, 2)*15*custom_plant_metabolism
 		if(prob(chance))
 			T.check_for_divergence(1)
 			world << "-YIELD ON [T.seed.display_name] WITH PROBABILITY [chance]"
 			T.seed.yield--
-		/*chance = linear_extrapolation(T.seed.endurance, 90, 15)*200*custom_plant_metabolism
+		/*chance = unmix(T.seed.endurance, 90, 15)*200*custom_plant_metabolism
 		if(prob(chance))
 			T.check_for_divergence(1)
 			world << "-ENDURANCE ON [T.seed.display_name] WITH PROBABILITY [chance]"
@@ -445,11 +445,11 @@
 				mutation_mod += beneficial_reagents[R.id][3] * reagent_total
 			// Stat-altering reagents are bound to slight randomness as well as a diminishing returns formula.
 			if(!seed.immutable && beneficial_reagents[R.id])
-				seed.endurance += stat_altering_reagents[R.id][1] * reagent_total * rand(80,120)/100 * linear_extrapolation(seed.endurance, 100, 125)
-				seed.lifespan  += stat_altering_reagents[R.id][2] * reagent_total * rand(80,120)/100 * linear_extrapolation(seed.lifespan, 100, 125)
-				seed.potency   += stat_altering_reagents[R.id][3] * reagent_total * rand(80,120)/100 * linear_extrapolation(seed.potency, 30, 100)
+				seed.endurance += stat_altering_reagents[R.id][1] * reagent_total * rand(80,120)/100 * unmix(seed.endurance, 100, 125)
+				seed.lifespan  += stat_altering_reagents[R.id][2] * reagent_total * rand(80,120)/100 * unmix(seed.lifespan, 100, 125)
+				seed.potency   += stat_altering_reagents[R.id][3] * reagent_total * rand(80,120)/100 * unmix(seed.potency, 30, 100)
 				if (seed.yield != -1)
-					seed.yield += stat_altering_reagents[R.id][3] * reagent_total * rand(80,120)/100 * linear_extrapolation(seed.yield, 3, 9)
+					seed.yield += stat_altering_reagents[R.id][3] * reagent_total * rand(80,120)/100 * unmix(seed.yield, 3, 9)
 			// Some reagents can directly modify the plant's age.
 			if(aging_reagents[R.id])
 				age += aging_reagents[R.id] * reagent_total

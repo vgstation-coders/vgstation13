@@ -78,7 +78,6 @@
 			4;"chemical_exotic", \
 			6;"fruit_exotic", \
 			2;"change_appearance", \
-			S.teleporting ? 0.2 : 5;"trait_teleporting", \
 			S.spread ? 0.1 : 2;"trait_creepspread",
 			)
 		if("SomethingBad")
@@ -120,9 +119,9 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_ratio(var/severity, var/list/softcaps, var/list/hardcaps, var/input)
 	var/i = min(Ceiling(severity/5), 5)
 	var/lerp_factor = (severity % 5) /5
-	var/softcap = Lerp(softcaps[i], softcaps[i+1], lerp_factor)
-	var/hardcap = Lerp(hardcaps[i], hardcaps[i+1], lerp_factor)
-	. = linear_extrapolation(input, softcap, hardcap)
+	var/softcap = mix(softcaps[i], softcaps[i+1], lerp_factor)
+	var/hardcap = mix(hardcaps[i], hardcaps[i+1], lerp_factor)
+	. = unmix(input, softcap, hardcap)
 	world << "Caps: [softcap]-[hardcap] / Final Ratio: [.]"
 	return
 
@@ -150,11 +149,11 @@
 			// Now we have two values to linearly interpolate from. To feed the linear interpolation something, we'll use the remainder of the division above.
 			var/lerp_factor = (severity % 5) /5
 			// Finally, we use the linear interpolation function, and we'll have our final soft cap and hard cap.
-			var/softcap = Lerp(softcap_values[i], softcap_values[i+1], lerp_factor)
-			var/hardcap = Lerp(hardcap_values[i], hardcap_values[i+1], lerp_factor)
+			var/softcap = mix(softcap_values[i], softcap_values[i+1], lerp_factor)
+			var/hardcap = mix(hardcap_values[i], hardcap_values[i+1], lerp_factor)
 			// Excellent! Now we can check if the mutation's strength should be affected by these caps.
-			// To do this, we use the linear_extrapolation function, which returns a decimal number from 0 to 1.
-			var/cap_ratio = linear_extrapolation(seed.potency, softcap, hardcap)
+			// To do this, we use the unmix function, which returns a decimal number from 0 to 1.
+			var/cap_ratio = unmix(seed.potency, softcap, hardcap)
 			// Now that we have all the final modifiers, we can calculate the mutation's final strength.
 			var/deviation = severity * (rand(50, 125)/100) * cap_ratio
 			//Deviation per 10u Mutagen before cap: 5-12.5

@@ -204,13 +204,13 @@
 	dat += "<br><br>\[<a href='?src=\ref[src];print=1'>print report</a>\] \[<a href='?src=\ref[src];clear=1'>clear</a>\]"
 	if(dat)
 		dat = list2text(dat)
-		user << browse(dat,"window=plant_analyzer_\ref[src]")
+		user << browse(dat,"window=plant_analyzer_\ref[src];size=400x500")
 		last_data = dat
 	return
 
 /obj/item/device/analyzer/plant_analyzer/attack_self(mob/user as mob)
 	if(last_data)
-		user << browse(last_data,"window=plant_analyzer_\ref[src]")
+		user << browse(last_data,"window=plant_analyzer_\ref[src];size=400x500")
 	else
 		user << "<span class='notice'>\icon[src] No plant scan data in memory.</span>"
 	return 0
@@ -419,7 +419,7 @@
 
 //If it's a hatchet it goes here. I guess
 /obj/item/weapon/hatchet/unathiknife
-	name = "duelling knife"
+	name = "dueling knife"
 	desc = "A length of leather-bound wood studded with razor-sharp teeth. How crude."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "unathiknife"
