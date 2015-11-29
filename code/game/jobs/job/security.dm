@@ -113,7 +113,7 @@
 
 	access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court, access_eva)
 	minimal_access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court)
-	alt_titles = list("Forensic Technician")
+	alt_titles = list("Forensic Technician","Private Investigator","Vice Officer")
 
 	minimal_player_age = 7
 
@@ -129,7 +129,7 @@
 			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
 			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		if(H.mind.role_alt_title && H.mind.role_alt_title == "Private Investigator")
-			H.equip_or_collect(new /obj/item/clothing/under/det2(H), slot_w_uniform)
+			H.equip_or_collect(new /obj/item/clothing/under/callum_suit(H), slot_w_uniform)
 		if(H.mind.role_alt_title && H.mind.role_alt_title == "Vice Officer")
 			H.equip_or_collect(new /obj/item/clothing/under/rank/vice(H), slot_w_uniform)
 		else

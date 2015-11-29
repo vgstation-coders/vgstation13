@@ -242,7 +242,7 @@
 		..()
 		sleep(2)
 		new /obj/item/clothing/under/det(src)
-		new /obj/item/clothing/under/det2(src)
+		new /obj/item/clothing/under/callum_suit(src)
 		new /obj/item/clothing/suit/storage/det_suit(src)
 		new /obj/item/clothing/under/rank/vice(src)
 		new /obj/item/weapon/reagent_containers/spray/luminol(src)
