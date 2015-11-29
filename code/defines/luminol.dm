@@ -1,0 +1,1 @@
+#define COLOR_LUMINOL "#66FFFF"

@@ -1,0 +1,6 @@
+author: ShiggyPiggy
+changes: 
+	- rscadd: Luminol and UV light ported from Baystation.
+	- tweak: Luminol and the light are used to reveal previously bloody turfs and objects.
+	- tweak: The detective has two new alternative job titles, each with a (old) new jumpsuit.
+delete-after: true

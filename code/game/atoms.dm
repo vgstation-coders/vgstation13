@@ -14,6 +14,7 @@ var/global/list/ghdel_profiling = list()
 	var/list/fingerprintshidden
 	var/fingerprintslast = null
 	var/list/blood_DNA
+	var/was_bloodied
 	var/blood_color
 	var/last_bumped = 0
 	var/pass_flags = 0
@@ -21,6 +22,8 @@ var/global/list/ghdel_profiling = list()
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
 	var/pressure_resistance = ONE_ATMOSPHERE
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
+	var/fluorescent // Shows up under a UV light.
+	
 
 	///Chemistry.
 	var/datum/reagents/reagents = null
@@ -651,6 +654,7 @@ its easier to just keep the beam vertical.
 	if(!M)//if the blood is of non-human source
 		if(!blood_DNA || !istype(blood_DNA, /list))
 			blood_DNA = list()
+		was_bloodied = 1
 		blood_color = "#A10808"
 		return 1
 	if (!( istype(M, /mob/living/carbon/human) ))
@@ -691,6 +695,7 @@ its easier to just keep the beam vertical.
 	if(istype(blood_DNA, /list))
 		//del(blood_DNA)
 		blood_DNA.len = 0
+		fluorescent = 0
 		return 1
 
 
@@ -748,3 +753,8 @@ its easier to just keep the beam vertical.
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()
 	blessed = 1
+	
+//Reveal blood
+/atom/proc/reveal_blood()
+	return 
+

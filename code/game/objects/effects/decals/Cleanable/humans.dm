@@ -24,6 +24,20 @@ var/global/list/blood_list = list()
 
 /obj/effect/decal/cleanable/blood/cultify()
 	return
+	
+/obj/effect/decal/cleanable/blood/reveal_blood()
+	if(!fluorescent)
+		fluorescent = 1
+		basecolor = COLOR_LUMINOL
+		update_icon()
+
+/obj/effect/decal/cleanable/blood/clean_blood()
+	fluorescent = 0
+	if(invisibility != 100)
+		invisibility = 100
+		amount = 0
+		processing_objects -= src
+
 
 /obj/effect/decal/cleanable/blood/update_icon()
 	if(basecolor == "rainbow") basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
