@@ -23,6 +23,7 @@ var/global/list/ghdel_profiling = list()
 	var/pressure_resistance = ONE_ATMOSPHERE
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
 	var/fluorescent // Shows up under a UV light.
+	
 
 	///Chemistry.
 	var/datum/reagents/reagents = null
@@ -753,7 +754,7 @@ its easier to just keep the beam vertical.
 /atom/proc/bless()
 	blessed = 1
 	
-//Reveal blood (luminol stuff)
+//Reveal blood
 /atom/proc/reveal_blood()
-	return
+	return 
 

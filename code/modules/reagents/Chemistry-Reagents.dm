@@ -1513,7 +1513,7 @@
 		T.overlays.len = 0
 		T.clean_blood()
 		for(var/obj/effect/decal/cleanable/C in src)
-			O.clean_blood()
+			T.clean_blood()
 
 		for(var/mob/living/carbon/slime/M in T)
 			M.adjustToxLoss(rand(5,10))
@@ -4889,8 +4889,8 @@ var/global/list/tonio_doesnt_remove=list(
 	reagent_state = LIQUID
 	color = "#F2F3F4"
 
-/datum/reagent/luminol/touch_obj(var/obj/O)
+/datum/reagent/luminol/reaction_obj(var/obj/O, var/volume)
 	O.reveal_blood()
 
-/datum/reagent/luminol/touch_mob(var/mob/living/L)
-	L.reveal_blood()
+/datum/reagent/luminol/reaction_turf(var/turf/T, var/volume)
+	T.reveal_blood()
