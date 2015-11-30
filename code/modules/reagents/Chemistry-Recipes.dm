@@ -776,8 +776,8 @@ datum
 			name = "Luminol"
 			id = "luminol"
 			result = "luminol"
-			required_reagents = list("hydrogen" = 2, "carbon" = 2, "ammonia" = 2)
-			result_amount = 6
+			required_reagents = list("hydrogen" = 1, "carbon" = 1, "ammonia" = 1)
+			result_amount = 3
 
 //Special reaction for mimic meat: injecting it with 5 units of blood causes it to turn into a random food item. Makes more sense than hitting it with a fking rolling pin
 
