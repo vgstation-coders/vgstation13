@@ -7,7 +7,7 @@
 //Food items that aren't eaten normally and leave an empty container behind
 //To clarify, these are special containers used to hold reagents specific to cooking, produced from the Kitchen CondiMaster
 /obj/item/weapon/reagent_containers/food/condiment
-	name = "Condiment Container"
+	name = "condiment container"
 	desc = "Just your average condiment container."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "emptycondiment"
@@ -30,12 +30,12 @@
 	var/datum/reagents/R = src.reagents
 
 	if(!R || !R.total_volume)
-		user << "<span class='warning'>\The [src] is empty.</span>"
+		to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 		return 0
 
 	if(M == user) //user drinking it
 
-		M << "<span class='notice'>You swallow some of the contents of \the [src].</span>"
+		to_chat(M, "<span class='notice'>You swallow some of the contents of \the [src].</span>")
 		if(reagents.total_volume) //Deal with the reagents in the food
 			reagents.reaction(M, INGEST)
 			spawn(5)
@@ -83,26 +83,26 @@
 	if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
 
 		if(!target.reagents.total_volume) //Nothing in the dispenser
-			user << "<span class='warning'>\The [target] is empty.</span>"
+			to_chat(user, "<span class='warning'>\The [target] is empty.</span>")
 			return
 
 		if(reagents.total_volume >= reagents.maximum_volume) //Our condiment bottle is full
-			user << "<span class='warning'>\The [src] is full.</span>"
+			to_chat(user, "<span class='warning'>\The [src] is full.</span>")
 			return
 
 		var/trans = target.reagents.trans_to(src, target:amount_per_transfer_from_this)
-		user << "<span class='notice'>You fill [src] with [trans] units of the contents of [target].</span>"
+		to_chat(user, "<span class='notice'>You fill [src] with [trans] units of the contents of [target].</span>")
 
 	//Something like a glass or a food item. Player probably wants to transfer TO it.
 	else if(target.is_open_container() || istype(target, /obj/item/weapon/reagent_containers/food/snacks))
 		if(!reagents.total_volume)
-			user << "<span class='warning'>\The [src] is empty.</span>"
+			to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 			return
 		if(target.reagents.total_volume >= target.reagents.maximum_volume)
-			user << "<span class='warning'>You can't add anymore to \the [target].</span>"
+			to_chat(user, "<span class='warning'>You can't add anymore to \the [target].</span>")
 			return
 		var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
-		user << "<span class='notice'>You transfer [trans] units of the condiment to \the [target].</span>"
+		to_chat(user, "<span class='notice'>You transfer [trans] units of the condiment to \the [target].</span>")
 
 /obj/item/weapon/reagent_containers/food/condiment/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
 
@@ -208,14 +208,14 @@
 				icon_state = "mixedcondiments"
 	else
 		icon_state = "emptycondiment"
-		name = "Condiment Bottle"
+		name = "condiment bottle"
 		desc = "An empty condiment bottle."
 		return
 
 //Specific condiment bottle entities for mapping and potentially spawning (these are NOT used for any above procs)
 
 /obj/item/weapon/reagent_containers/food/condiment/enzyme
-	name = "Universal Enzyme"
+	name = "universal enzyme"
 	desc = "Used in cooking various dishes."
 	icon_state = "enzyme"
 
@@ -230,7 +230,7 @@
 		reagents.add_reagent("sugar", 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/saltshaker
-	name = "Salt Shaker"
+	name = "salt shaker"
 	desc = "Salt. From space oceans, presumably."
 	icon_state = "saltshakersmall"
 	possible_transfer_amounts = list(1, 50) //For clowns turning the lid off.
@@ -241,7 +241,7 @@
 		reagents.add_reagent("sodiumchloride", 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/peppermill
-	name = "Pepper Mill"
+	name = "pepper mill"
 	desc = "Often used to flavor food or make people sneeze."
 	icon_state = "peppermillsmall"
 	possible_transfer_amounts = list(1, 50) //For clowns turning the lid off.
@@ -261,9 +261,17 @@
 		reagents.add_reagent("chefspecial", 20)
 
 /obj/item/weapon/reagent_containers/food/condiment/vinegar
-	name = "Malt Vinegar Bottle"
+	name = "malt vinegar bottle"
 	desc = "Perfect for fish and chips."
 	New()
 		..()
 		reagents.add_reagent("vinegar", 50)
 
+/obj/item/weapon/reagent_containers/food/condiment/exotic
+	name = "exotic bottle"
+	desc = "If you can see this label, something is wrong."
+	//~9% chance of anything but special sauce, which is .09 chance
+	var/global/list/possible_exotic_condiments = list("enzyme"=10,"blackpepper"=10,"vinegar"=10,"sodiumchloride"=10,"cinnamon"=10,"chefspecial"=1,"frostoil"=10,"soysauce"=10,"capsaicin"=10,"honey"=10,"ketchup"=10,"coco"=10)
+	New()
+		..()
+		reagents.add_reagent(pickweight(possible_exotic_condiments), 30)

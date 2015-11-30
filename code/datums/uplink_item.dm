@@ -117,6 +117,19 @@ var/list/uplink_items = list()
 	cost = 3
 	job = list("Librarian")
 
+//Cargo Technician
+/datum/uplink_item/jobspecific/syndiepaper
+	name = "Extra Adhesive Wrapping Paper"
+	desc = "This extra-strong wrapping paper is perfect for concealing bodies or trapping a victim with no escape. Simply apply directly to the victim and wrap them up into a regular-looking delivery package. Takes about three seconds to wrap."
+	item = /obj/item/stack/package_wrap/syndie
+	cost = 2
+	job = list("Cargo Technician", "Quartermaster")
+
+/datum/uplink_item/jobspecific/syndiepaper/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
+	U.uses -= max(cost, 0)
+	feedback_add_details("traitor_uplink_items_bought", name)
+	return new item(loc) //Fix for amount ref
+
 //Shaft Miner
 /datum/uplink_item/jobspecific/mastertrainer
 	name = "Master Trainer's Belt"
@@ -218,13 +231,21 @@ var/list/uplink_items = list()
 	cost = 4
 	job = list("Chemist", "Chief Medical Officer")
 
+//Medical Doctor
+/datum/uplink_item/jobspecific/wheelchair
+	name = "Syndicate Wheelchair"
+	desc = "A combat-modified motorized wheelchair pre-loaded with a hyper power cell. Forward thrust is sufficient to knock down and run over victims."
+	item = /obj/item/syndicate_wheelchair_kit
+	cost = 5
+	job = list("Medical Doctor", "Chief Medical Officer")
+
 //Engineer
 /datum/uplink_item/jobspecific/powergloves
 	name = "Power Gloves"
 	desc = "Insulated gloves that can utilize the power of the station to deliver a short arc of electricity at a target. Must be standing on a powered cable to use."
 	item = /obj/item/clothing/gloves/yellow/power
 	cost = 7
-	job = list("Station Engineer","Chief Engineer")
+	job = list("Station Engineer", "Chief Engineer")
 
 //Atmos Tech
 /datum/uplink_item/jobspecific/contortionist
@@ -232,7 +253,7 @@ var/list/uplink_items = list()
 	desc = "A highly flexible jumpsuit that will help you navigate the ventilation loops of the station internally. Comes with pockets and ID slot, but can't be used without stripping off most gear, including backpack, belt, helmet, and exosuit. Free hands are also necessary to crawl around inside."
 	item = /obj/item/clothing/under/contortionist
 	cost = 7
-	job = list("Atmospheric Technician","Chief Engineer")
+	job = list("Atmospheric Technician", "Chief Engineer")
 
 //Geneticist
 /datum/uplink_item/jobspecific/radgun

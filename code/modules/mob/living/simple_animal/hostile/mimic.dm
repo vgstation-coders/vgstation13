@@ -124,8 +124,13 @@ var/global/list/crate_mimic_disguises = list(\
 	maxHealth = 100
 	health = 100
 
-/mob/living/simple_animal/hostile/mimic/crate/New()
-	environment_disguise() //Disguise ourselves appropriately
+/mob/living/simple_animal/hostile/mimic/crate/New(loc, atom/new_disguise = null)
+	if(ispath(new_disguise))
+		copied_object = new_disguise
+	else if(istype(new_disguise))
+		copied_object = new_disguise.type
+	else
+		environment_disguise()
 
 	..()
 
@@ -189,7 +194,7 @@ var/global/list/crate_mimic_disguises = list(\
 	if(angry)
 		return ..()
 
-	user << "<span class='notice'>It won't budge.</span>"
+	to_chat(user, "<span class='notice'>It won't budge.</span>")
 
 	spawn(rand(1,20))
 		visible_message("<span class='warning'>\The [src] starts moving!</span>")
@@ -279,7 +284,7 @@ var/global/list/crate_mimic_disguises = list(\
 		else
 			if(H in locked_atoms)
 				if(prob(20))
-					H << "<span class='danger'>You feel very weak!</span>"
+					to_chat(H, "<span class='danger'>You feel very weak!</span>")
 					H.Weaken(3)
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/LoseTarget()
@@ -299,9 +304,9 @@ var/global/list/crate_mimic_disguises = list(\
 		return
 
 	if(user.loc == src) //We're inside the chest
-		user << "<span class='info'>You try to escape from \the [src]. This will take a while!</span>"
+		to_chat(user, "<span class='info'>You try to escape from \the [src]. This will take a while!</span>")
 		if(do_after(user, src, 300)) //30 seconds
-			user << "<span class='info'>You successfully escape from \the [src].</span>"
+			to_chat(user, "<span class='info'>You successfully escape from \the [src].</span>")
 			user.forceMove(get_turf(src))
 	else //We're being held by the mimic
 		var/mob/living/carbon/human/H = user
@@ -396,10 +401,6 @@ var/global/list/item_mimic_disguises = list(
 
 	var/icon/mouth_overlay = icon('icons/mob/mob.dmi', icon_state = "mimic_mouth")
 
-/mob/living/simple_animal/hostile/mimic/crate/item/New()
-	environment_disguise()
-	..()
-
 /mob/living/simple_animal/hostile/mimic/crate/item/initialize()
 	return //Don't take any items!
 
@@ -424,9 +425,9 @@ var/global/list/item_mimic_disguises = list(
 	else
 		pronoun = "It is"
 
-	user << "\icon[src] That's \a [src]. [pronoun] a [s_size] item."
+	to_chat(user, "\icon[src] That's \a [src]. [pronoun] a [s_size] item.")
 	if(desc)
-		user << desc
+		to_chat(user, desc)
 
 /mob/living/simple_animal/hostile/mimic/crate/item/Die()
 	copied_object = meat_type //Without this line, mimics would spawn items they're disguised as. Since they're relatively weak and can appear as gatling guns, this is required!

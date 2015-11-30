@@ -21,6 +21,8 @@
 	idle_power_usage = 20 //watts
 	active_power_usage = 300 //Because  I need to make up numbers~
 
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+
 	var/obj/item/weapon/reagent_containers/glass/held_container
 	var/obj/item/weapon/tank/fuel_container
 	var/target_scan_ticks = 30
@@ -144,9 +146,9 @@ obj/machinery/anomaly/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	if(istype(W, /obj/item/weapon/reagent_containers/glass))
 		//var/obj/item/weapon/reagent_containers/glass/G = W
 		if(held_container)
-			user << "<span class='warning'>You must remove the [held_container] first.</span>"
+			to_chat(user, "<span class='warning'>You must remove the [held_container] first.</span>")
 		else
-			user << "<span class='notice'>You put the [W] into the [src].</span>"
+			to_chat(user, "<span class='notice'>You put the [W] into the [src].</span>")
 			user.drop_item(W, src)
 
 			held_container = W
@@ -156,9 +158,9 @@ obj/machinery/anomaly/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	/*else if(istype(W, /obj/item/weapon/tank))
 		//var/obj/item/weapon/reagent_containers/glass/G = W
 		if(fuel_container)
-			user << "<span class='warning'>You must remove the [fuel_container] first.</span>"
+			to_chat(user, "<span class='warning'>You must remove the [fuel_container] first.</span>")
 		else
-			user << "<span class='notice'>You put the [fuel_container] into the [src].</span>"
+			to_chat(user, "<span class='notice'>You put the [fuel_container] into the [src].</span>")
 			user.drop_item(W, src)
 			fuel_container.loc = src
 			fuel_container = W

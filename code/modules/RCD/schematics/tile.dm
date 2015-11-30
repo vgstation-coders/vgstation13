@@ -48,6 +48,7 @@ s
 			return alldirs
 
 /datum/rcd_schematic/tile/get_HTML()
+	. = list()
 	. += "<p>"
 
 	var/list/our_list = get_our_list()
@@ -60,6 +61,7 @@ s
 			. += "<a href='?src=\ref[master.interface];select_paint=[our_list.Find(P)];set_dir=[dir]'[selected]><img src='[P.file_name][P.icon_state]_[dir].png'/></a>"
 
 	. += "</p>"
+	. = list2text(.)
 
 /datum/rcd_schematic/tile/Topic(var/href, var/href_list)
 	if(href_list["select_paint"])
@@ -94,7 +96,7 @@ s
 		if(PAINT_REINFORCED)	nname = "reinforced floor"	//also getting rid of the plaque if it's there
 		if(PAINT_PLATING)   	nname = "plating"
 
-	user << "Painting floor..."
+	to_chat(user, "Painting floor...")
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
 	if(!do_after(user, A, 20))
 		return 1

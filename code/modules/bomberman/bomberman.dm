@@ -70,6 +70,7 @@ var/global/list/bombermangear = list()
 /obj/item/weapon/bomberman/Destroy()
 	..()
 	bombermangear -= src
+	arena = null
 
 /obj/item/weapon/bomberman/attack_self(mob/user)
 	var/turf/T = get_turf(src)
@@ -280,7 +281,7 @@ var/global/list/bombermangear = list()
 		step(src, flame_dir)
 		T2 = get_turf(src)
 		if(T1 == T2)
-			del(src)
+			qdel(src)
 			return
 	else
 		T2 = T1
@@ -599,7 +600,7 @@ obj/structure/bomberflame/Destroy()
 		"Fire",
 		)
 	var/disease = pick(diseases)
-	dispenser.loc << "<span class='danger'>[disease][((disease != "Fire")&&(disease != "Change")) ? " for 40 seconds" : ""]!!</span>"
+	to_chat(dispenser.loc, "<span class='danger'>[disease][((disease != "Fire")&&(disease != "Change")) ? " for 40 seconds" : ""]!!</span>")
 	switch(disease)
 		if("Low Power Disease")
 			dispenser.small_bomb = 1
@@ -763,6 +764,19 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		var/obj/structure/planner/spawnpoint/P = new(S.spawnpoint, src, S)
 		S.icon = P
 		planners += P
+
+/datum/bomberman_arena/Destroy()
+	..()
+	arena = null
+	under = null
+	center = null
+	planners = null
+	cameras = null
+	spawns = null
+	turfs = null
+	swalls = null
+	gladiators = null
+	tools = null
 
 /datum/bomberman_arena/proc/open(var/size,mob/user)
 	var/x = 1
@@ -952,7 +966,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		log_game("[key_name_admin(user.client)] created a \"[size]\" Bomberman arena at [center.loc.name] ([center.x],[center.y],[center.z]) ")
 
 		for(var/mob/dead/observer/O in observers)
-			O << "<spawn class='notice'><b>[user.client.key] created a \"[size]\" Bomberman arena at [center.loc.name]. <A HREF='?src=\ref[O];jumptoarenacood=1;targetarena=\ref[src]'>Click here to JUMP to it.</A></b></span>"
+			to_chat(O, "<spawn class='notice'><b>[user.client.key] created a \"[size]\" Bomberman arena at [center.loc.name]. <A HREF='?src=\ref[O];jumptoarenacood=1;targetarena=\ref[src]'>Click here to JUMP to it.</A></b></span>")
 
 	else
 		qdel(src)
@@ -1035,7 +1049,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		gladiators += M
 
 		if(S.player_mob)
-			del(S.player_mob)
+			qdel(S.player_mob)
 
 		S.player_mob = M
 
@@ -1046,10 +1060,10 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		status = ARENA_AVAILABLE
 
 		for(var/mob/M in arena)
-			M << "<span class='danger'>Not enough players. Round canceled.</span>"
+			to_chat(M, "<span class='danger'>Not enough players. Round canceled.</span>")
 
 		for(var/mob/M in gladiators)
-			del(M)
+			qdel(M)
 
 		gladiators = list()
 		for (var/datum/bomberman_spawn/S in spawns)
@@ -1061,22 +1075,22 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 	for(var/mob/M in arena)
 		if(violence)
-			M << "Violence Mode activated! Bombs hurt players! Suits offer no protections! Initial Flame Range increased!"
+			to_chat(M, "Violence Mode activated! Bombs hurt players! Suits offer no protections! Initial Flame Range increased!")
 		if(M.client)
-			M.client << sound('sound/bomberman/start.ogg')
-		M << "<b>READY?</b>"
+			to_chat(M.client, sound('sound/bomberman/start.ogg'))
+		to_chat(M, "<b>READY?</b>")
 
 	for(var/obj/machinery/computer/security/telescreen/entertainment/E in machines)
 		E.visible_message("<span style='color:grey'>\icon[E] \The [E] brightens as it appears that a round is starting in [name].</span>")
 		flick("entertainment_arena",E)
 
 	for(var/mob/dead/observer/O in observers)
-		O << "<b>A round has began in <A HREF='?src=\ref[O];jumptoarenacood=1;X=[center.x];Y=[center.y];Z=[center.z]'>[name]</A>!</b>"
+		to_chat(O, "<b>A round has began in <A HREF='?src=\ref[O];jumptoarenacood=1;X=[center.x];Y=[center.y];Z=[center.z]'>[name]</A>!</b>")
 
 	sleep(40)
 
 	for(var/mob/M in arena)
-		M << "<span class='danger'>GO!</span>"
+		to_chat(M, "<span class='danger'>GO!</span>")
 
 	return
 
@@ -1092,9 +1106,9 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 	for(var/mob/M in arena)
 		if(winner && winner.client)
-			M << "[winner ? "<b>[winner.client.key]</b> as <b>[winner.name]</b> wins this round! " : ""]Resetting arena in 20 seconds."
+			to_chat(M, "[winner ? "<b>[winner.client.key]</b> as <b>[winner.name]</b> wins this round! " : ""]Resetting arena in 20 seconds.")
 		else
-			M << "Couldn't find a winner. Resetting arena in 20 seconds."
+			to_chat(M, "Couldn't find a winner. Resetting arena in 20 seconds.")
 
 	if(winner)
 		if(winner.client.key in arena_leaderboard)
@@ -1133,7 +1147,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 	for(var/mob/living/M in gladiators)
 		if(M)
-			del(M)	//qdel doesn't work nicely with mobs
+			qdel(M)	//qdel doesn't work nicely with mobs
 	gladiators = list()
 
 	for(var/obj/structure/softwall/W in swalls)
@@ -1217,7 +1231,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 	for(var/mob/living/M in gladiators)
 		if(M)
-			del(M)	//qdel doesn't work nicely with mobs
+			qdel(M)	//qdel doesn't work nicely with mobs
 	gladiators = list()
 
 	for(var/obj/item/weapon/organ/O in arena)//gibs
@@ -1321,7 +1335,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 				if(achoice=="Confirm")
 					choice = 1
 			else
-				user << "<span class='warning'>Part of the arena was outside the Z-Level.</span>"
+				to_chat(user, "<span class='warning'>Part of the arena was outside the Z-Level.</span>")
 		if("39x23 (10 players)")
 			var/obj/structure/planner/pencil = new(center, src)
 			var/w = 38
@@ -1362,6 +1376,10 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	..()
 	arena = a
 
+/obj/structure/planner/Destroy()
+	..()
+	arena = null
+
 /obj/structure/planner/ex_act(severity)
 	return
 
@@ -1380,6 +1398,10 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	..()
 	arena = a
 	spawnpoint = bs
+
+/obj/structure/planner/spawnpoint/Destroy()
+	..()
+	spawnpoint = null
 
 /obj/structure/planner/spawnpoint/attack_ghost(mob/user)
 	if(arena.status != ARENA_AVAILABLE)	return

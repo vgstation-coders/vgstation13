@@ -52,6 +52,7 @@
 		new /obj/item/weapon/reagent_containers/glass/beaker/large(), \
 		new /obj/item/weapon/reagent_containers/glass/bucket(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
+		new /obj/item/weapon/reagent_containers/food/drinks/mug(), \
 		),
 		"Assemblies"=list(
 		new /obj/item/device/assembly/igniter(), \
@@ -157,19 +158,19 @@
 
 	else if(I.materials)
 		if(I.materials.getVolume() + src.materials.getVolume() > max_material_storage)
-			user << "\The [src]'s material bin is too full to recycle \the [I]."
+			to_chat(user, "\The [src]'s material bin is too full to recycle \the [I].")
 			return 1
 		else if(I.materials.getAmount(MAT_IRON) + I.materials.getAmount(MAT_GLASS) < I.materials.getVolume())
-			user << "\The [src] can only accept objects made out of metal and glass."
+			to_chat(user, "\The [src] can only accept objects made out of metal and glass.")
 			return 1
 		else if(isrobot(user))
 			if(isMoMMI(user))
 				var/mob/living/silicon/robot/mommi/M = user
 				if(M.is_in_modules(I))
-					user << "You cannot recycle your built in tools."
+					to_chat(user, "You cannot recycle your built in tools.")
 					return 1
 			else
-				user << "You cannot recycle your built in tools."
+				to_chat(user, "You cannot recycle your built in tools.")
 				return 1
 		user.drop_item(I, src)
 		materials.removeFrom(I.materials)
