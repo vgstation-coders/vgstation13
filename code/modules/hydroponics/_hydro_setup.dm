@@ -3,7 +3,7 @@
 // Definitions for genes (trait groupings)
 #define GENE_PHYTOCHEMISTRY "phytochemistry"
 #define GENE_MORPHOLOGY "morphology"
-#define GENE_CHEMILUMINESCENCE "chemiluminescence"
+#define GENE_BIOLUMINESCENCE "bioluminescence"
 #define GENE_ECOLOGY "ecology"
 #define GENE_ECOPHYSIOLOGY "ecophysiology"
 #define GENE_METABOLISM "metabolism"

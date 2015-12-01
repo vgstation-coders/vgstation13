@@ -348,7 +348,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					ligneous 			= max(gene.values[4], ligneous)
 					juicy 				= max(gene.values[5], juicy)
 
-		if(GENE_CHEMILUMINESCENCE)
+		if(GENE_BIOLUMINESCENCE)
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
 					biolum 				= gene.values[1]
@@ -458,7 +458,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(ligneous             	? ligneous            	: 0),
 				(juicy             		? juicy             	: 0)
 			)
-		if(GENE_CHEMILUMINESCENCE) // Realistically, plant luminescence would be chemical, not biological.
+		if(GENE_BIOLUMINESCENCE)
 			P.values = list(
 				(biolum               	? biolum              	: 0),
 				(biolum_colour        	? biolum_colour      	: 0)
