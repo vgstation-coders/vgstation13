@@ -575,12 +575,12 @@
 /obj/effect/rune/proc/manifest()
 	var/obj/effect/rune/this_rune = src
 	src = null
-	if(usr.loc!=this_rune.loc)
+	if(usr.loc!=this_rune.loc || istype(usr,/mob/living/carbon/human/manifested)) //summon manifested ghost, proceeds to take no damage from using this a million times
 		return this_rune.fizzle()
 	var/mob/dead/observer/ghost
 	for(var/mob/dead/observer/O in this_rune.loc)
 		if(!O.client)	continue
-		if(O.mind && O.mind.current && O.mind.current.stat != DEAD)	continue
+		if(O.mind && O.mind.current && O.mind.current.stat != DEAD && !iscult(O))	continue
 		ghost = O
 		break
 	if(!ghost)
@@ -638,12 +638,12 @@
 	to_chat(D, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
 
 	D.add_language("Cult")
-
+	user.take_organ_damage(10,0)
 
 	var/mob/living/user = usr
 	while(this_rune && user && user.stat==CONSCIOUS && user.client && user.loc==this_rune.loc)
-		user.take_organ_damage(1, 0)
-		sleep(30)
+		user.take_organ_damage(4, 0)
+		sleep(3 SECONDS)
 	if(D)
 		D.visible_message("<span class='warning'>[D] slowly dissipates into dust and bones.</span>", \
 		"<span class='warning'>You feel pain, as bonds formed between your soul and this homunculus break.</span>", \
