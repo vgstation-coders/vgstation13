@@ -1375,8 +1375,8 @@
 		if(istype(M, /mob/living/carbon/human))
 			if(M.health >= -100 && M.health <= 0)
 				M.crit_op_stage = 0.0
-			for(var/obj/item/I in M.contents
-					I.waws_bloodied = null
+			for(var/obj/item/I in M.contents)
+					I.was_bloodied = null
 				M.was_bloodied = null
 	if (method==INGEST)
 		usr << "Well, that was stupid."
