@@ -1365,7 +1365,7 @@
 /datum/reagent/sterilizine
 	name = "Sterilizine"
 	id = "sterilizine"
-	description = "Sterilizes wounds in preparation for surgery."
+	description = "Sterilizes wounds in preparation for surgery and thoroughly removes blood."
 	reagent_state = LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 /*
@@ -1375,6 +1375,9 @@
 		if(istype(M, /mob/living/carbon/human))
 			if(M.health >= -100 && M.health <= 0)
 				M.crit_op_stage = 0.0
+			for(var/obj/item/I in M.contents)
+					I.was_bloodied = null
+				M.was_bloodied = null
 	if (method==INGEST)
 		to_chat(usr, "Well, that was stupid.")
 		M.adjustToxLoss(3)
@@ -1510,7 +1513,7 @@
 		T.overlays.len = 0
 		T.clean_blood()
 		for(var/obj/effect/decal/cleanable/C in src)
-			qdel(C)
+			T.clean_blood()
 
 		for(var/mob/living/carbon/slime/M in T)
 			M.adjustToxLoss(rand(5,10))
@@ -4878,3 +4881,16 @@ var/global/list/tonio_doesnt_remove=list(
 	sport = 5
 	color = "#CCFF66" //rgb: 204, 255, 51
 	custom_metabolism =  0.01
+	
+/datum/reagent/luminol
+	name = "Luminol"
+	id = "luminol"
+	description = "A compound that interacts with blood on the molecular level."
+	reagent_state = LIQUID
+	color = "#F2F3F4"
+
+/datum/reagent/luminol/reaction_obj(var/obj/O, var/volume)
+	O.reveal_blood()
+
+/datum/reagent/luminol/reaction_turf(var/turf/T, var/volume)
+	T.reveal_blood()

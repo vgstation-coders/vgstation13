@@ -27,3 +27,13 @@
 	req_tech = list("engineering" = 5, "materials" = 3, "bluespace" = 3)
 	materials = list(MAT_GLASS = 8000, MAT_IRON=2000)
 	category = "Misc"
+
+/datum/design/uvlight
+	name = "UV Light"
+	desc = "A stock part used in the construction of various devices."
+	id = "uvlight"
+	req_tech = list("magnets" = 1)
+	build_type = PROTOLATHE | AUTOLATHE
+	build_path = /obj/item/device/uv_light
+	materials = list(MAT_IRON = 50, MAT_GLASS = 20)
+	category = "Misc"

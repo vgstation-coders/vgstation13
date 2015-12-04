@@ -14,6 +14,10 @@
 	var/list/datum/disease2/disease/virus2 = list()
 	var/list/absorbs_types=list() // Types to aggregate.
 
+/obj/effect/decal/cleanable/clean_blood()
+	qdel(src)
+	
+
 /obj/effect/decal/cleanable/New()
 	if(random_icon_states && length(src.random_icon_states) > 0)
 		src.icon_state = pick(src.random_icon_states)

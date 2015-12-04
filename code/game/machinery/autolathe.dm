@@ -98,6 +98,7 @@
 		new /obj/item/device/taperecorder(), \
 		new /obj/item/weapon/chisel(), \
 		new /obj/item/device/rcd/tile_painter(), \
+		new /obj/item/device/uv_light(), \
 		),
 		"Misc_Other"=list(
 		new /obj/item/weapon/rcd_ammo(), \

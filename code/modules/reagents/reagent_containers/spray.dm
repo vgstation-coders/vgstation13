@@ -111,6 +111,16 @@ var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
 /obj/item/weapon/reagent_containers/spray/cleaner/New()
 	..()
 	reagents.add_reagent("cleaner", 250)
+	
+//sterlizine
+/obj/item/weapon/reagent_containers/spray/sterilizine
+	name = "sterilizine"
+	desc = "Great for hiding incriminating bloodstains and sterilizing scalpels."
+
+/obj/item/weapon/reagent_containers/spray/sterilizine/New()
+	..()
+	reagents.add_reagent("sterilizine", volume)
+
 
 //pepperspray
 /obj/item/weapon/reagent_containers/spray/pepper
