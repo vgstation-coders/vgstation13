@@ -22,11 +22,12 @@
 	var/spread_chance
 	var/spread_distance
 	var/mature_time
-	var/last_tick = 0
+	var/tmp/last_tick = 0
 	var/harvest = 0
 	var/age = 0
 	var/limited_growth = 0
 	var/plant_damage_noun = "Thorns"
+	var/tmp/on_resist_key //For resisting out of vines.
 
 /obj/effect/plantsegment/creeper
 	limited_growth = 1

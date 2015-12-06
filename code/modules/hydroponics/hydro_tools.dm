@@ -19,7 +19,7 @@
 	item_state = "analyzer"
 	var/form_title //Descriptive title of the last plant scanned, example: mutant watermelon (#81)
 	var/last_data  //Stores the entire last scan, for printing purposes.
-	var/last_print = 0 //When was the last printing, works as a cooldown to prevent paperspam
+	var/tmp/last_print = 0 //When was the last printing, works as a cooldown to prevent paperspam
 
 /obj/item/device/analyzer/plant_analyzer/afterattack(obj/target, mob/user, flag)
 	if(!flag) return
@@ -237,7 +237,7 @@
 	if(!last_data)
 		to_chat(user, "<span class='warning'>\icon[src] There is no plant scan data to print.</span>")
 		return
-	if (world.time < last_print + 100)
+	if (world.time < last_print + 4 SECONDS)
 		to_chat(user, "<span class='warning'>\icon[src] \The [src] is not yet ready to print again.</span>")
 		return
 	last_print = world.time
