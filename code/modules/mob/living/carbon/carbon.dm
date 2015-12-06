@@ -613,11 +613,11 @@
 
 	if (CheckSlip() < 1 || !on_foot())
 		return 0
-	spawn(1) //Fix for Lube+Portals crashing the server
-		stop_pulling()
-		Stun(stun_amount)
-		Weaken(weaken_amount)
 
-		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+	stop_pulling()
+	Stun(stun_amount)
+	Weaken(weaken_amount)
+
+	playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
 
 	return 1
