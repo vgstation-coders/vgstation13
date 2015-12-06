@@ -86,9 +86,9 @@
 			if(M.getarmor(def_zone, "melee") < 5)
 				var/reagentlist = stinging_apply_reagents(M)
 				if(reagentlist)
-					M << "<span class='danger'>You are stung by \the [src]!</span>"
+					to_chat(M, "<span class='danger'>You are stung by \the [src]!</span>")
 					add_attacklogs(user, M, "stung", object = src, addition = "Reagents: [english_list(seed.get_reagent_names())]", admin_warn = 1)
-			user << "<span class='alert'>Some of \the [src]'s stingers break off in the hit!</span>"
+			to_chat(user, "<span class='alert'>Some of \the [src]'s stingers break off in the hit!</span>")
 			potency -= rand(1,(potency/3)+1)
 		do_splat_effects(M)
 		return
@@ -107,15 +107,15 @@
 				var/datum/organ/external/affecting = H.get_organ(pick("l_foot", "r_foot"))
 				if(affecting && affecting.is_organic())
 					if(thorns_apply_damage(M, affecting))
-						H << "<span class='danger'>You step on \the [src]'s sharp thorns!</span>"
+						to_chat(H, "<span class='danger'>You step on \the [src]'s sharp thorns!</span>")
 						if(H.species && !(H.species.flags & NO_PAIN))
 							H.Weaken(3)
 					if(stinging_apply_reagents(M))
-						H << "<span class='danger'>Your step on \the [src]'s stingers!</span>"
+						to_chat(H, "<span class='danger'>Your step on \the [src]'s stingers!</span>")
 						potency -= rand(1,(potency/3)+1)
 	if(seed.juicy == 2)
 		if(M.Slip(3, 2))
-			M << "<span class='notice'>You slipped on the [name]!</span>"
+			to_chat(M, "<span class='notice'>You slipped on the [name]!</span>")
 			do_splat_effects(M)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pickup(mob/user)
@@ -131,10 +131,10 @@
 		if(!affecting || !affecting.is_organic())
 			return
 		if(stinging_apply_reagents(H))
-			H << "<span class='danger'>You are stung by \the [src]!</span>"
+			to_chat(H, "<span class='danger'>You are stung by \the [src]!</span>")
 			potency -= rand(1,(potency/3)+1)
 		if(thorns_apply_damage(H, affecting))
-			H << "<span class='danger'>You are prickled by the sharp thorns on \the [src]!</span>"
+			to_chat(H, "<span class='danger'>You are prickled by the sharp thorns on \the [src]!</span>")
 			spawn(3)
 				if(H.species && !(H.species.flags & NO_PAIN))
 					H.drop_item(src)
@@ -144,7 +144,7 @@
 		var/datum/organ/external/affecting = H.get_organ("head")
 		if(affecting)
 			if(thorns_apply_damage(H, affecting))
-				H << "<span class='danger'>Your mouth is cut by \the [src]'s sharp thorns!</span>"
+				to_chat(H, "<span class='danger'>Your mouth is cut by \the [src]'s sharp thorns!</span>")
 				//H.stunned++ //just a 1 second pause to prevent people from spamming pagedown on this, since it's important
 	..()
 
@@ -156,7 +156,7 @@
 	if(seed.thorny) traits += "<span class='alert'>It's covered in sharp thorns.</span> "
 	if(seed.juicy == 2) traits += "It looks ripe and excessively juicy. "
 	if(seed.teleporting) traits += "It seems to be spatially unstable. "
-	if(traits) user << traits
+	if(traits) to_chat(user, traits)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_decal(turf/T)
 	var/obj/effect/decal/cleanable/S = getFromPool(seed.splat_type,T)
@@ -286,7 +286,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/harebell
 	name = "harebell"
-	desc = "\"I'll sweeten thy sad grave: thou shalt not lack the flower that's like thy face, pale primrose, nor the azured hare-bell, like thy veins; no, nor the leaf of eglantine, whom not to slander, out-sweeten’d not thy breath.\""
+	desc = "\"I'll sweeten thy sad grave: thou shalt not lack the flower that's like thy face, pale primrose, nor the azured hare-bell, like thy veins; no, nor the leaf of eglantine, whom not to slander, out-sweetenï¿½d not thy breath.\""
 	icon_state = "harebell"
 	potency = 1
 	filling_color = "#D4B2C9"

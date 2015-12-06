@@ -9,7 +9,7 @@
 /obj/machinery/portable_atmospherics/hydroponics/soil/attackby(var/obj/item/W, var/mob/user)
 	if(istype(W, /obj/item/weapon/pickaxe/shovel))
 		if(!seed)
-			user << "You clear up [src]!"
+			to_chat(user, "You clear up [src]!")
 			new /obj/item/weapon/ore/glass(loc)//we get some of the dirt back
 			new /obj/item/weapon/ore/glass(loc)
 			qdel(src)

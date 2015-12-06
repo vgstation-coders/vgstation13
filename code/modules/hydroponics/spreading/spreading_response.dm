@@ -52,7 +52,7 @@
 				victim.apply_damage(damage, BRUTE, Ex)
 				if(Ex.parent)
 					Ex.parent.add_autopsy_data("[plant_damage_noun]", damage)
-				victim << "<span class='danger'>Your [Ex.display_name] is pierced by the thorns on \the [src]!</span>"
+				to_chat(victim, "<span class='danger'>Your [Ex.display_name] is pierced by the thorns on \the [src]!</span>")
 				cuts++
 				if(cuts >= 3) break
 
@@ -64,12 +64,12 @@
 		if(seed.chems && seed.chems.len)
 			for(var/rid in seed.chems)
 				victim.reagents.add_reagent(rid, Clamp(1, 5, seed.potency/10))
-			victim << "<span class='danger'>You are stung by \the [src]!</span>"
+			to_chat(victim, "<span class='danger'>You are stung by \the [src]!</span>")
 
 /obj/effect/plantsegment/proc/do_carnivorous_bite(var/mob/living/carbon/human/victim, var/chance)
 	if(!seed || !seed.carnivorous || !prob(chance))
 		return
-	victim << "<span class='danger'>\The [src] pierce your flesh greedily!</span>"
+	to_chat(victim, "<span class='danger'>\The [src] pierce your flesh greedily!</span>")
 	var/damage = rand(round(seed.potency/2),round(seed.potency))
 	if(!istype(victim))
 		victim.adjustBruteLoss(damage)
@@ -88,7 +88,7 @@
 
 /obj/effect/plantsegment/proc/do_chem_inject(var/mob/living/carbon/human/victim, var/chance)
 	if(seed.chems && seed.chems.len && istype(victim))
-		victim << "<span class='danger'>You feel something seeping into your skin!</span>"
+		to_chat(victim, "<span class='danger'>You feel something seeping into your skin!</span>")
 		for(var/rid in seed.chems)
 			var/injecting = min(5,max(1,seed.potency/5))
 			victim.reagents.add_reagent(rid,injecting)
@@ -125,7 +125,7 @@
 
 	lock_atom(victim)
 	if(victim.stat != DEAD)
-		victim << "<span class='danger'>The vines [pick("wind", "tangle", "tighten")] around you!</span>"
+		to_chat(victim, "<span class='danger'>The vines [pick("wind", "tangle", "tighten")] around you!</span>")
 
 /obj/effect/plantsegment/proc/grab_mob(var/mob/living/victim)
 

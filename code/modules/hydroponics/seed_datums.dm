@@ -517,9 +517,9 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		return
 
 	if(isnull(products) || !products.len || yield <= 0)
-		user << "<span class='warning'>You fail to harvest anything useful.</span>"
+		to_chat(user, "<span class='warning'>You fail to harvest anything useful.</span>")
 	else
-		user << "You harvest from the [display_name]."
+		to_chat(user, "You harvest from the [display_name].")
 
 		add_newline_to_controller()
 
@@ -580,14 +580,14 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 								H.updatehealth()
 							else
 								H.adjustBruteLoss(5+carnivorous*5)
-							H << "<span class='danger'>You are prickled by the sharp thorns on \the [seed_name]!</span>"
+							to_chat(H, "<span class='danger'>You are prickled by the sharp thorns on \the [seed_name]!</span>")
 							if(H.species && !(H.species.flags & NO_PAIN))
 								success = 0
 						if(stinging)
 							if(chems && chems.len)
 								for(var/rid in chems)
 									H.reagents.add_reagent(rid, Clamp(1, 5, potency/10))
-								H << "<span class='danger'>You are stung by \the [seed_name]!</span>"
+								to_chat(H, "<span class='danger'>You are stung by \the [seed_name]!</span>")
 								if(hematophage)
 									if(tray && H.species && !(H.species.flags & NO_BLOOD)) //the indentation gap doesn't stop from getting wider
 										var/drawing = min(15, H.vessel.get_reagent_amount("blood"))
@@ -597,7 +597,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(istype(user, /mob/living/carbon))
 			var/mob/living/carbon/M = user
 			if((!M.l_hand || !M.l_hand.is_sharp()) && (!M.r_hand || !M.r_hand.is_sharp()))
-				M << "<span class='warning'>The stems on this plant are too tough to cut by hand, you'll need something sharp in one of your hands to harvest it.</span>"
+				to_chat(M, "<span class='warning'>The stems on this plant are too tough to cut by hand, you'll need something sharp in one of your hands to harvest it.</span>")
 				success = 0
 	return success
 

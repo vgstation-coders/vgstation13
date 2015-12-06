@@ -819,7 +819,7 @@ steam.start() -- spawns the effect
 	if (istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
 		if (M.Slip(5, 2, 1))
-			M << "<span class='notice'>You slipped on the foam!</span>"
+			to_chat(M, "<span class='notice'>You slipped on the foam!</span>")
 
 
 /datum/effect/effect/system/foam_spread

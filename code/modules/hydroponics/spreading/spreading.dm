@@ -91,7 +91,7 @@
 	if(seed.ligneous) traits += "It's a tough and hard vine that can't be easily cut. "
 	if(seed.carnivorous == 2) traits += "It's quivering viciously. "
 	if(seed.hematophage) traits += "It's roots are blood red... "
-	if(traits) user << traits
+	if(traits) to_chat(user, traits)
 
 /obj/effect/plantsegment/update_icon()
 	var/arbitrary_measurement_of_how_lush_I_am_right_now // a post-mortem dedication to Comic
@@ -134,16 +134,16 @@
 
 	if(user.a_intent == I_HELP && is_type_in_list(W, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
 		if(sampled)
-			user << "<span class='warning'>\The [src] has already been sampled recently.</span>"
+			to_chat(user, "<span class='warning'>\The [src] has already been sampled recently.</span>")
 			return
 		if(!is_mature())
-			user << "<span class='warning'>\The [src] is not mature enough to yield a sample yet.</span>"
+			to_chat(user, "<span class='warning'>\The [src] is not mature enough to yield a sample yet.</span>")
 			return
 		if(!seed)
-			user << "<span class='warning'>There is nothing to take a sample from.</span>"
+			to_chat(user, "<span class='warning'>There is nothing to take a sample from.</span>")
 			return
 		if(sampled)
-			user << "<span class='danger'>You cannot take another sample from \the [src].</span>"
+			to_chat(user, "<span class='danger'>You cannot take another sample from \the [src].</span>")
 			return
 		if(prob(70))
 			sampled = 1

@@ -252,7 +252,7 @@
 
 		// Create a sample.
 		seed.spawn_seed_packet(get_turf(user))
-		user << "You take a sample from the [seed.display_name]."
+		to_chat(user, "You take a sample from the [seed.display_name].")
 		health -= (rand(3,5)*10)
 
 		if(prob(30))
@@ -411,32 +411,32 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/view_contents(mob/user)
 	if(src.seed && !src.dead)
-		user << "<span class='info'>[src.seed.display_name]</span> is growing here."
+		to_chat(user, "<span class='info'>[src.seed.display_name]</span> is growing here.")
 		if(src.health <= (src.seed.endurance / 2))
-			user << "The plant looks <span class='alert'>[age > seed.lifespan ? "old and wilting" : "unhealthy"].</span>"
+			to_chat(user, "The plant looks <span class='alert'>[age > seed.lifespan ? "old and wilting" : "unhealthy"].</span>")
 	else if(src.seed && src.dead)
 		to_chat(user, "[src] is full of dead plant matter.")
 	else
 		to_chat(user, "[src] has nothing planted.")
 	if (Adjacent(user) || isobserver(user) || issilicon(user))
-		user << "Water: [round(src.waterlevel,0.1)]/100"
-		if(seed && seed.hematophage) user << "<span class='danger'>Blood:</span> [round(src.nutrilevel,0.1)]/10" //so edgy!!
-		else user << "Nutrient: [round(src.nutrilevel,0.1)]/10"
+		to_chat(user, "Water: [round(src.waterlevel,0.1)]/100")
+		if(seed && seed.hematophage) to_chat(user, "<span class='danger'>Blood:</span> [round(src.nutrilevel,0.1)]/10") //so edgy!!
+		else to_chat(user, "Nutrient: [round(src.nutrilevel,0.1)]/10")
 		if(src.weedlevel >= 5)
 			to_chat(user, "[src] is <span class='alert'>filled with weeds!</span>")
 		if(src.pestlevel >= 5)
-			user << "[src] is <span class='alert'>filled with tiny worms!</span>"
+			to_chat(user, "[src] is <span class='alert'>filled with tiny worms!</span>")
 		if(draw_warnings)
 			if(src.toxins >= 40)
-				user << "The tray's <span class='alert'>toxicity level alert</span> is flashing red."
+				to_chat(user, "The tray's <span class='alert'>toxicity level alert</span> is flashing red.")
 			if(improper_light)
-				user << "The tray's <span class='alert'>improper light level alert</span> is blinking."
+				to_chat(user, "The tray's <span class='alert'>improper light level alert</span> is blinking.")
 			if(improper_heat)
-				user << "The tray's <span class='alert'>improper temperature alert</span> is blinking."
+				to_chat(user, "The tray's <span class='alert'>improper temperature alert</span> is blinking.")
 			if(improper_kpa)
-				user << "The tray's <span class='alert'>improper environment pressure alert</span> is blinking."
+				to_chat(user, "The tray's <span class='alert'>improper environment pressure alert</span> is blinking.")
 			if(missing_gas)
-				user << "The tray's <span class='alert'>improper gas environment alert</span> is blinking."
+				to_chat(user, "The tray's <span class='alert'>improper gas environment alert</span> is blinking.")
 
 		if(!istype(src,/obj/machinery/portable_atmospherics/hydroponics/soil))
 
@@ -460,7 +460,7 @@
 			if(T.dynamic_lighting)
 				light_available = T.get_lumcount() * 10
 
-			user << "The tray's sensor suite is reporting a light level of [round(light_available, 0.1)] lumens and a temperature of [environment.temperature]K."
+			to_chat(user, "The tray's sensor suite is reporting a light level of [round(light_available, 0.1)] lumens and a temperature of [environment.temperature]K.")
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/close_lid()
 	set name = "Toggle Tray Lid"

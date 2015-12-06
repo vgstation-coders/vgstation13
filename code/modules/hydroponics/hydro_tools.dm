@@ -57,7 +57,7 @@
 		grown_seed = K.seed
 
 	if(!grown_seed)
-		user << "<span class='warning'>\icon[src] [src] can tell you nothing about [target].</span>"
+		to_chat(user, "<span class='warning'>\icon[src] [src] can tell you nothing about [target].</span>")
 		return
 
 	form_title = "[grown_seed.seed_name] (#[grown_seed.uid])"
@@ -212,7 +212,7 @@
 	if(last_data)
 		user << browse(last_data,"window=plant_analyzer_\ref[src];size=400x500")
 	else
-		user << "<span class='notice'>\icon[src] No plant scan data in memory.</span>"
+		to_chat(user, "<span class='notice'>\icon[src] No plant scan data in memory.</span>")
 	return 0
 
 /obj/item/device/analyzer/plant_analyzer/proc/print_report_verb()
@@ -235,10 +235,10 @@
 
 /obj/item/device/analyzer/plant_analyzer/proc/print_report(var/mob/living/user) //full credits to Zuhayr
 	if(!last_data)
-		user << "<span class='warning'>\icon[src] There is no plant scan data to print.</span>"
+		to_chat(user, "<span class='warning'>\icon[src] There is no plant scan data to print.</span>")
 		return
 	if (world.time < last_print + 100)
-		user << "<span class='warning'>\icon[src] \The [src] is not yet ready to print again.</span>"
+		to_chat(user, "<span class='warning'>\icon[src] \The [src] is not yet ready to print again.</span>")
 		return
 	last_print = world.time
 	var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(get_turf(src))
@@ -409,7 +409,7 @@
 	throwforce = 15.0
 	throw_speed = 4
 	throw_range = 4
-	sharpness = 1.5
+	sharpness = 1.2
 	origin_tech = "materials=2;combat=1"
 	attack_verb = list("chopped", "torn", "cut")
 
@@ -433,7 +433,7 @@
 	throwforce = 5.0
 	throw_speed = 1
 	throw_range = 3
-	sharpness = 1.5
+	sharpness = 1.0
 	w_class = 4.0
 	flags = FPRINT
 	slot_flags = SLOT_BACK

@@ -89,7 +89,7 @@
 /obj/machinery/botany/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/seeds))
 		if(loaded_seed)
-			user << "There is already a seed loaded."
+			to_chat(user, "There is already a seed loaded.")
 			return
 		var/obj/item/seeds/S = W
 		if(S.seed && S.seed.immutable > 0)
@@ -97,7 +97,7 @@
 		else
 			user.drop_item(S, src)
 			loaded_seed = W
-			user << "You load [W] into [src]."
+			to_chat(user, "You load [W] into [src].")
 			nanomanager.update_uis(src)
 		return
 
@@ -119,7 +119,7 @@
 
 			user.drop_item(W, src)
 			loaded_disk = W
-			user << "You load [W] into [src]."
+			to_chat(user, "You load [W] into [src].")
 			nanomanager.update_uis(src)
 
 		return

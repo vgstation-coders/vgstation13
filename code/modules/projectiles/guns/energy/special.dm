@@ -163,7 +163,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 			projectile_type = "/obj/item/projectile/energy/floramut"
 			modifystate = "floramut"
 		if(2)
-			user << "<span class='warning'>The [src.name] appears to be locked into one mode.</span>"
+			to_chat(user, "<span class='warning'>The [src.name] appears to be locked into one mode.</span>")
 			return
 	update_icon()
 	return
@@ -181,13 +181,13 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 /obj/item/weapon/gun/energy/floragun/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(isEmag(W) || issolder(W))
 		if (mode == 2)
-			user << "The safeties are already de-activated."
+			to_chat(user, "The safeties are already de-activated.")
 		else
 			mode = 2
 			mutstrength = 25
 			charge_cost = mutstrength * 10
 			projectile_type = "/obj/item/projectile/energy/floramut/emag"
-			user << "<span class='warning'>You short out the safety limit of the [src.name]!</span>"
+			to_chat(user, "<span class='warning'>You short out the safety limit of the [src.name]!</span>")
 			desc += " It seems to have it's safety features de-activated."
 			playsound(get_turf(user), 'sound/effects/sparks4.ogg', 50, 1)
 			modifystate = "floraemag"
