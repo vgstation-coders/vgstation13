@@ -89,7 +89,8 @@ emp_act
 			return C
 	return null
 
-/mob/living/carbon/human/proc/get_exposed_body_parts() //because get_body_part_coverage(FULL_BODY) checks if any body part is covered, rather than if all of them are
+/mob/living/carbon/human/proc/get_exposed_body_parts()
+	//Because get_body_part_coverage(FULL_BODY) would only return true if the human has one piece of clothing that covers their whole body by itself.
 	var/body_coverage = FULL_BODY | FULL_HEAD
 	for(var/obj/item/clothing/C in get_clothing_items())
 		if(!C) continue

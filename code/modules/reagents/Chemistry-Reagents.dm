@@ -98,7 +98,13 @@
 	holder.remove_reagent(src.id, custom_metabolism) //Trigger metabolism
 
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
-	if(!holder) return 0
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+
 	holder.remove_reagent(src.id, custom_plant_metabolism)
 
 /datum/reagent/proc/on_move(var/mob/M)
@@ -1150,7 +1156,7 @@
 
 	if(O.unacidable)
 		return
-	
+
 	if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)))
 		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
 		I.desc = "Looks like this was \an [O] some time ago."
