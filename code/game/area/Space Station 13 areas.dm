@@ -76,6 +76,9 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/general_area = /area/station	// the highest parent bellow /area,
 	var/general_area_name = "Station"
 
+	// Area ambience moved here.  Use name for the ambience class.
+	var/ambience = AREA_AMB_SPACE
+
 
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
@@ -96,7 +99,8 @@ var/list/ghostteleportlocs = list()
 
 proc/process_ghost_teleport_locs()
 	for(var/area/AR in areas)
-		if(ghostteleportlocs.Find(AR.name)) continue
+		if(ghostteleportlocs.Find(AR.name))
+			continue
 		if(istype(AR, /area/turret_protected/aisat) || istype(AR, /area/derelict) || istype(AR, /area/tdome))
 			ghostteleportlocs += AR.name
 			ghostteleportlocs[AR.name] = AR
@@ -124,6 +128,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/station//TODO: make every area in the MAIN station inherit from this.
 	name = "Station"
+	ambience = AREA_AMB_STATION
 
 /area/station/custom //For blueprints!
 	power_equip = 0
@@ -133,25 +138,31 @@ proc/process_adminbus_teleport_locs()
 	lighting_use_dynamic = 1
 
 /area/engineering/
+	ambience = AREA_AMB_ENGINE
 
 /area/turret_protected/
+	ambience = AREA_AMB_AI
 
 /area/arrival
 	requires_power = 0
 	no_bluespaceanomaly = 1
+	ambience = AREA_AMB_STATION
 
 /area/arrival/start
 	name = "\improper Arrival Area"
 	icon_state = "start"
 	no_bluespaceanomaly = 1
+	ambience = AREA_AMB_STATION
 
 /area/admin
 	name = "\improper Admin room"
 	icon_state = "start"
 	no_bluespaceanomaly = 1
+	ambience = AREA_AMB_STATION
 
 /area/no_ethereal
 	anti_ethereal = 1
+	ambience = AREA_AMB_STATION
 
 
 
@@ -164,6 +175,7 @@ proc/process_adminbus_teleport_locs()
 	lighting_use_dynamic = 1 //Lighting STILL disabled, even with the new bay engine, because lighting doesn't play nice with our shuttles, might just be our shuttle code, or the small changes in the lighting engine we have from bay.
 	//haha fuck you we dynamic lights now
 	no_bluespaceanomaly = 1
+	ambience = AREA_AMB_STATION
 
 /area/shuttle/arrival
 	name = "\improper Arrival Shuttle"
@@ -467,6 +479,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	lighting_use_dynamic = 0
 	no_bluespaceanomaly = 1
+	ambience = AREA_AMB_STATION
 
 /area/centcom/control
 	name = "\improper Centcom Control"
@@ -506,6 +519,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	lighting_use_dynamic = 0
 	no_bluespaceanomaly = 1
+	ambience = AREA_AMB_STATION
 
 /area/syndicate_mothership/control
 	name = "\improper Syndicate Control Room"
@@ -522,6 +536,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "asteroid"
 	requires_power = 0
 	no_bluespaceanomaly = 1
+	ambience = AREA_AMB_MINE
 
 /area/asteroid/cave				// -- TLE
 	name = "\improper Asteroid - Underground"
@@ -574,6 +589,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	lighting_use_dynamic = 1
 	no_bluespaceanomaly = 1
+	ambience = AREA_AMB_STATION
 
 /area/syndicate_station/start
 	icon_state = "yellow"
@@ -616,6 +632,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	lighting_use_dynamic = 0
 	no_bluespaceanomaly = 1
+	ambience = AREA_AMB_STATION
 
 /area/vox_station/southwest_solars
 	name = "\improper aft port solars"
@@ -647,6 +664,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Prison Station"
 	icon_state = "brig"
 	no_bluespaceanomaly = 1
+	ambience = AREA_AMB_STATION
 
 /area/prison/arrival_airlock
 	name = "\improper Prison Station Airlock"
@@ -730,6 +748,9 @@ proc/process_adminbus_teleport_locs()
 
 //Maintenance
 
+/area/maintenance
+	ambience = AREA_AMB_MAINT
+
 /area/maintenance/fpmaint
 	name = "Fore Port Maintenance"
 	icon_state = "fpmaint"
@@ -812,6 +833,9 @@ proc/process_adminbus_teleport_locs()
 
 //Hallway
 
+/area/hallway
+	ambience = AREA_AMB_STATION
+
 /area/hallway/primary/fore
 	name = "\improper Fore Primary Hallway"
 	icon_state = "hallF"
@@ -853,6 +877,7 @@ proc/process_adminbus_teleport_locs()
 	music = "signal"
 	jammed=1
 	no_bluespaceanomaly = 1
+	ambience = AREA_AMB_STATION
 
 /area/bridge/meeting_room
 	name = "\improper Heads of Staff Meeting Room"
@@ -903,20 +928,24 @@ proc/process_adminbus_teleport_locs()
 /area/mint
 	name = "\improper Mint"
 	icon_state = "green"
+	ambience = AREA_AMB_STATION
 
 /area/comms
 	name = "\improper Communications Relay"
 	icon_state = "tcomsatcham"
+	ambience = AREA_AMB_AI
 
 /area/server
 	name = "\improper Messaging Server Room"
 	icon_state = "server"
+	ambience = AREA_AMB_AI
 
 //Crew
 
 /area/crew_quarters
 	name = "\improper Dormitories"
 	icon_state = "Sleep"
+	ambience = AREA_AMB_STATION
 
 /area/crew_quarters/toilet
 	name = "\improper Dormitory Toilets"
@@ -971,20 +1000,24 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "Theatre"
 
 /area/library
- 	name = "\improper Library"
- 	icon_state = "library"
+	name = "\improper Library"
+	icon_state = "library"
+	ambience = AREA_AMB_STATION
 
 /area/chapel/main
 	name = "\improper Chapel"
 	icon_state = "chapel"
+	ambience = AREA_AMB_CHAPEL
 
 /area/chapel/office
 	name = "\improper Chapel Office"
 	icon_state = "chapeloffice"
+	ambience = AREA_AMB_CHAPEL
 
 /area/lawoffice
 	name = "\improper Law Office"
 	icon_state = "law"
+	ambience = AREA_AMB_STATION
 
 /area/crew_quarters/casino
 	name = "Casino"
@@ -1000,6 +1033,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Holodeck"
 	icon_state = "Holodeck"
 	lighting_use_dynamic = 0
+	ambience = AREA_AMB_STATION
 
 /area/holodeck/alphadeck
 	name = "\improper Holodeck Alpha"
@@ -1076,6 +1110,7 @@ proc/process_adminbus_teleport_locs()
 //Engineering
 
 /area/engineering
+	ambience = AREA_AMB_ENGINE
 
 /area/engineering/engine_smes
 	name = "\improper Engineering SMES"
@@ -1136,6 +1171,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	lighting_use_dynamic = 0
 	no_bluespaceanomaly = 1
+	ambience = AREA_AMB_SPACE
 
 /area/solar/fport
 	name = "\improper Fore Port Solar Array"
@@ -1200,6 +1236,7 @@ proc/process_adminbus_teleport_locs()
 /area/science/showroom
 	name = "\improper Robotics Showroom"
 	icon_state = "showroom"
+	ambience = AREA_AMB_STATION
 
 /area/assembly/assembly_line //Derelict Assembly Line
 	name = "\improper Assembly Line"
@@ -1207,6 +1244,7 @@ proc/process_adminbus_teleport_locs()
 	power_equip = 0
 	power_light = 0
 	power_environ = 0
+	ambience = AREA_AMB_STATION
 
 //Teleporter
 
@@ -1215,18 +1253,24 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "teleporter"
 	music = "signal"
 	jammed=1
+	ambience = AREA_AMB_STATION
 
 /area/gateway
 	name = "\improper Gateway"
 	icon_state = "teleporter"
 	music = "signal"
+	ambience = AREA_AMB_STATION
 
 /area/AIsattele
 	name = "\improper AI Satellite Teleporter Room"
 	icon_state = "teleporter"
 	music = "signal"
+	ambience = AREA_AMB_AI
 
 //MedBay
+
+/area/medical
+	ambience = AREA_AMB_STATION
 
 /area/medical/medbay
 	name = "Medbay"
@@ -1320,6 +1364,9 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "paramedics"
 
 //Security
+
+/area/security
+	ambience = AREA_AMB_STATION
 
 /area/security/main
 	name = "\improper Security Office"
@@ -1460,6 +1507,7 @@ proc/process_adminbus_teleport_locs()
 /area/supply
 	name = "\improper Quartermasters"
 	icon_state = "quart"
+	ambience = AREA_AMB_STATION
 
 ///////////WORK IN PROGRESS//////////
 
@@ -1505,14 +1553,17 @@ proc/process_adminbus_teleport_locs()
 /area/janitor/
 	name = "\improper Custodial Closet"
 	icon_state = "janitor"
+	ambience = AREA_AMB_STATION
 
 /area/janitor2/
 	name = "\improper Custodial Closet"
 	icon_state = "janitor"
+	ambience = AREA_AMB_STATION
 
 /area/hydroponics
 	name = "Hydroponics"
 	icon_state = "hydro"
+	ambience = AREA_AMB_STATION
 
 //Toxins
 
@@ -1600,6 +1651,9 @@ proc/process_adminbus_teleport_locs()
 
 //Storage
 
+/area/storage
+	ambience = AREA_AMB_MAINT
+
 /area/storage/tools
 	name = "Auxiliary Tool Storage"
 	icon_state = "storage"
@@ -1657,10 +1711,12 @@ proc/process_adminbus_teleport_locs()
 /area/djstation
 	name = "\improper Ruskie DJ Station"
 	icon_state = "DJ"
+	ambience = AREA_AMB_AI
 
 /area/djstation/solars
 	name = "\improper DJ Station Solars"
 	icon_state = "DJ"
+	ambience = AREA_AMB_SPACE
 
 //DERELICT
 
@@ -1670,6 +1726,7 @@ proc/process_adminbus_teleport_locs()
 
 	general_area = /area/derelict
 	general_area_name = "Derelict Station"
+	ambience = AREA_AMB_DERELICT
 
 /area/derelict/hallway/primary
 	name = "\improper Derelict Primary Hallway"
@@ -1736,6 +1793,7 @@ proc/process_adminbus_teleport_locs()
 /area/derelict/medical/chapel
 	name = "\improper Derelict Chapel"
 	icon_state = "chapel"
+	ambience = AREA_AMB_CHAPEL
 
 /area/derelict/teleporter
 	name = "\improper Derelict Teleporter"
@@ -1770,10 +1828,12 @@ proc/process_adminbus_teleport_locs()
 /area/construction
 	name = "\improper Construction Area"
 	icon_state = "yellow"
+	ambience = AREA_AMB_MAINT
 
 /area/construction/mommi_nest
 	name = "\improper MoMMI Nest"
 	icon_state = "yellow"
+	ambience = AREA_AMB_STATION
 
 /area/construction/supplyshuttle
 	name = "\improper Supply Shuttle"
@@ -1804,6 +1864,8 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "yellow"
 
 //AI
+/area/ai_monitored
+	ambience = AREA_AMB_STATION
 
 /area/ai_monitored/storage/eva
 	name = "EVA Storage"
@@ -1817,6 +1879,9 @@ proc/process_adminbus_teleport_locs()
 /area/ai_monitored/storage/emergency
 	name = "Emergency Storage"
 	icon_state = "storage"
+
+/area/turret_protected
+	ambience = AREA_AMB_STATION
 
 /area/turret_protected/ai_upload
 	name = "\improper AI Upload Chamber"
@@ -1875,22 +1940,27 @@ proc/process_adminbus_teleport_locs()
 /area/wreck/ai
 	name = "\improper AI Chamber"
 	icon_state = "ai"
+	ambience = AREA_AMB_SPACE
 
 /area/wreck/main
 	name = "\improper Wreck"
 	icon_state = "storage"
+	ambience = AREA_AMB_SPACE
 
 /area/wreck/engineering
 	name = "\improper Power Room"
 	icon_state = "engine"
+	ambience = AREA_AMB_SPACE
 
 /area/wreck/bridge
 	name = "\improper Bridge"
 	icon_state = "bridge"
+	ambience = AREA_AMB_SPACE
 
 /area/generic
 	name = "Unknown"
 	icon_state = "storage"
+	ambience = AREA_AMB_SPACE
 
 
 //////////////////////////////
@@ -1903,6 +1973,7 @@ proc/process_adminbus_teleport_locs()
 
 	general_area = /area/vox_trading_post
 	general_area_name = "Vox Trade Outpost"
+	ambience = AREA_AMB_MINE
 
 /area/vox_trading_post/trading_floor
 	name = "\improper Vox Trading Floor"
@@ -1948,6 +2019,7 @@ proc/process_adminbus_teleport_locs()
 
 	general_area = /area/tcommsat
 	general_area_name = "Telecommunications Satellite"
+	ambience = AREA_AMB_TCOMMS
 
 /area/tcommsat/entrance
 	name = "\improper Satellite Teleporter"
@@ -1960,45 +2032,55 @@ proc/process_adminbus_teleport_locs()
 /area/tcomms/chamber
 	name = "\improper Telecoms Chamber"
 	icon_state = "ai"
+	ambience = AREA_AMB_TCOMMS
 
 /area/tcomms/storage
 	name = "\improper Telecoms Storage"
 	icon_state = "primarystorage"
+	ambience = AREA_AMB_TCOMMS
 
 /area/turret_protected/tcomms_control_room
 	name = "\improper Telecomms Control Room"
 	icon_state = "tcomsatcomp"
 	jammed=1
+	ambience = AREA_AMB_TCOMMS
 
 /area/turret_protected/tcomsat
 	name = "\improper Satellite Entrance"
 	icon_state = "tcomsatlob"
+	ambience = AREA_AMB_TCOMMS
 
 /area/turret_protected/tcomfoyer
 	name = "\improper Telecoms Foyer"
 	icon_state = "tcomsatentrance"
+	ambience = AREA_AMB_TCOMMS
 
 /area/turret_protected/tcomwest
 	name = "\improper Telecommunications Satellite West Wing"
 	icon_state = "tcomsatwest"
+	ambience = AREA_AMB_TCOMMS
 
 /area/turret_protected/tcomeast
 	name = "\improper Telecommunications Satellite East Wing"
 	icon_state = "tcomsateast"
+	ambience = AREA_AMB_TCOMMS
 
 /area/tcommsat/computer
 	name = "\improper Satellite Control Room"
 	icon_state = "tcomsatcomp"
+	ambience = AREA_AMB_TCOMMS
 
 /area/tcommsat/lounge
 	name = "\improper Satellite Lounge"
 	icon_state = "tcomsatlounge"
+	ambience = AREA_AMB_TCOMMS
 
 /area/turret_protected/goonroom
 	name = "\improper Goonecode Containment"
 	icon_state = "ai_upload"
 	jammed=2
 	anti_ethereal=1
+	ambience = AREA_AMB_TCOMMS // AREA_AMB_CHAPEL
 
 
 
@@ -2006,6 +2088,7 @@ proc/process_adminbus_teleport_locs()
 /area/awaymission
 	name = "\improper Strange Location"
 	icon_state = "away"
+	ambience = AREA_AMB_SPACE
 
 /area/awaymission/example
 	name = "\improper Strange Station"

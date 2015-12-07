@@ -1,0 +1,13 @@
+// Area ambience tags.
+#define AREA_AMB_SPACE    "space"
+#define AREA_AMB_CHAPEL   "chapel"
+#define AREA_AMB_MORGUE   "morgue"
+#define AREA_AMB_ENGINE   "engine"
+#define AREA_AMB_AI       "ai"
+#define AREA_AMB_GHETTO   "ghetto"
+#define AREA_AMB_DERELICT "derelict"
+#define AREA_AMB_MINE     "mine"
+#define AREA_AMB_MAINT    "maint"
+#define AREA_AMB_STATION  "station"
+#define AREA_AMB_TCOMMS   "tcomms"
+#define AREA_AMB_STATION  "station"
