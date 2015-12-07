@@ -98,8 +98,10 @@
 
 /obj/effect/plantsegment/proc/manual_unbuckle(mob/user as mob)
 	if(locked_atoms && locked_atoms.len)
+		var/mob/M = locked_atoms[1]
+		if(!user || !istype(user))
+			user = M //Since the event sytem can't hot-potato arguments, for now, assume if noone's trying to free you, then you're trying to free yourself.
 		if(prob(seed ? min(max(0,100 - seed.potency/2),100) : 50))
-			var/mob/M = locked_atoms[1]
 			if(M != user)
 				M.visible_message(\
 					"<span class='notice'>[user.name] frees [M.name] from \the [src].</span>",\
@@ -117,6 +119,27 @@
 				"<span class='notice'>[user.name] [text]s at \the [src].</span>",\
 				"<span class='notice'>You [text] at \the [src].</span>",\
 				"<span class='warning'>You hear shredding and ripping.</span>")
+
+/obj/effect/plantsegment/lock_atom(var/mob/living/M)
+	. = ..()
+	if(!.)
+		return
+
+	if(!istype(M))
+		return
+
+	on_resist_key = M.on_resist.Add(src, "manual_unbuckle")
+
+/obj/effect/plantsegment/unlock_atom(var/mob/living/M)
+	. = ..()
+	if(!.)
+		return
+
+	if(!istype(M))
+		return
+
+	M.on_resist.Remove(on_resist_key)
+	on_resist_key = null
 
 /obj/effect/plantsegment/proc/entangle_mob(var/mob/living/victim)
 

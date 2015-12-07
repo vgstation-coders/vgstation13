@@ -704,12 +704,27 @@ Thanks.
 				hook.override_starting_X--
 				hook.override_target_X--
 
+/mob/living
+    var/event/on_resist
+
+/mob/living/New()
+    . = ..()
+    on_resist = new(owner = src)
+
+/mob/living/Destroy()
+    . = ..()
+    qdel(on_resist)
+    on_resist = null
+
 /mob/living/verb/resist()
 	set name = "Resist"
 	set category = "IC"
 
 	if(!isliving(usr) || usr.special_delayer.blocked())
 		return
+
+	INVOKE_EVENT(on_resist, list())
+
 	delayNext(DELAY_ALL,20) // Attack, Move, and Special.
 
 	var/mob/living/L = usr
@@ -830,9 +845,9 @@ Thanks.
 			else
 				B.manual_unbuckle(L)
 		//release from kudzu
-		else if(istype(L.locked_to, /obj/effect/plantsegment))
+		/*else if(istype(L.locked_to, /obj/effect/plantsegment))
 			var/obj/effect/plantsegment/K = L.locked_to
-			K.manual_unbuckle(L)
+			K.manual_unbuckle(L)*/
 
 	//Breaking out of a locker?
 	if(src.loc && (istype(src.loc, /obj/structure/closet)))
