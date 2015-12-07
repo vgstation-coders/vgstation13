@@ -315,7 +315,7 @@
 	var/light_out = 0
 	if(light_on) light_out += internal_light
 	if(seed&&seed.biolum)
-		light_out+=round(seed.potency/10)
+		light_out+=(1+Ceiling(seed.potency/10))
 		if(seed.biolum_colour) light_color = seed.biolum_colour
 		else light_color = null
 	set_light(light_out)

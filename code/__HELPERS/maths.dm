@@ -138,7 +138,7 @@ proc/arctan(x)
  */
 /proc/unmix(x, a, b, min = 0, max = 1)
 	if(a==b) return 1
-	return Clamp( (x - a)/(b - a), min, max )
+	return Clamp( (b - x)/(b - a), min, max )
 
 /proc/Mean(...)
 	var/values 	= 0

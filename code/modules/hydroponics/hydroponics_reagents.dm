@@ -88,18 +88,18 @@
 		T.health += 0.1
 		if(prob(200*custom_plant_metabolism))
 			T.affect_growth(1)
-			world << "DIETHYLAMINE JUST MADE [T.seed.display_name] GROW UP FASTER. ISN'T THAT PRECIOUS?"
+			T.visible_message("DIETHYLAMINE JUST MADE [T.seed.display_name] GROW UP FASTER. ISN'T THAT PRECIOUS?") //shekels
 		if(!T.seed.immutable)
 			var/chance
 			chance = unmix(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
 			if(prob(chance))
 				T.check_for_divergence(1)
-				world << "+LIFESPAN ON [T.seed.display_name] WITH PROBABILITY [chance]"
+				T.visible_message("+LIFESPAN ON [T.seed.display_name] WITH PROBABILITY [chance]") //shekels
 				T.seed.lifespan++
 			chance = unmix(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
 			if(prob(chance))
 				T.check_for_divergence(1)
-				world << "+ENDURANCE ON [T.seed.display_name] WITH PROBABILITY [chance]"
+				T.visible_message("+ENDURANCE ON [T.seed.display_name] WITH PROBABILITY [chance]") //shekels
 				T.seed.endurance++
 
 /datum/reagent/fertilizer/robustharvest
@@ -114,17 +114,17 @@
 		chance = unmix(T.seed.potency, 15, 150)*350*custom_plant_metabolism
 		if(prob(chance))
 			T.check_for_divergence(1)
-			world << "+POTENCY ON [T.seed.display_name] WITH PROBABILITY [chance]"
+			T.visible_message("+POTENCY ON [T.seed.display_name] WITH PROBABILITY [chance]") //shekels
 			T.seed.potency++
 		chance = unmix(T.seed.yield, 6, 2)*15*custom_plant_metabolism
 		if(prob(chance))
 			T.check_for_divergence(1)
-			world << "-YIELD ON [T.seed.display_name] WITH PROBABILITY [chance]"
+			T.visible_message("-YIELD ON [T.seed.display_name] WITH PROBABILITY [chance]") //shekels
 			T.seed.yield--
 		/*chance = unmix(T.seed.endurance, 90, 15)*200*custom_plant_metabolism
 		if(prob(chance))
 			T.check_for_divergence(1)
-			world << "-ENDURANCE ON [T.seed.display_name] WITH PROBABILITY [chance]"
+			T.visible_message("-ENDURANCE ON [T.seed.display_name] WITH PROBABILITY [chance]") //shekels
 			T.seed.endurance--*/
 
 /datum/reagent/toxin/plantbgone/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
@@ -148,7 +148,7 @@
 			deviation = max(S.maturation-1, T.age-rand(7,10))
 		else
 			deviation = S.maturation/S.growth_stages
-		world << "CLONEX EFFECT ON [S.display_name] WITH STRENGTH [deviation]"
+		T.visible_message("CLONEX EFFECT ON [S.display_name] WITH STRENGTH [deviation]") //shekels
 		T.age -= deviation
 		T.skip_aging++
 		T.force_update = 1

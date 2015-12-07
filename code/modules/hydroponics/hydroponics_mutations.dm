@@ -42,14 +42,15 @@
 			// Effectively, the weight of each category is a linear function that increases with the potency of the mutation.
 			// Most categories have an integer deducted from severity, this means that the chance for that mutation
 			// is 0 below said severity (e.g. you won't get dangerous shit if you use less than 14u mutagen).
-			15;							MUTCAT_GOOD, \
-			min(7,	0.4*severity);		MUTCAT_BAD, \
-			min(8,	0.7*(severity-5));	MUTCAT_WEIRD, \
-			min(7,	severity-12);		MUTCAT_WEIRD2, \
-			min(14,	severity-12);		MUTCAT_BAD2, \
-			min(20,	severity-14);		MUTCAT_DANGEROUS \
+			15;								MUTCAT_GOOD, \
+			Clamp(0.4*severity, 	0, 7);	MUTCAT_BAD, \
+			Clamp(0.7*(severity-5), 0, 8); 	MUTCAT_WEIRD, \
+			Clamp(severity-12, 		0, 7); 	MUTCAT_WEIRD2, \
+			Clamp(severity-12, 		0, 14); MUTCAT_BAD2, \
+			Clamp(severity-14,		0, 20); MUTCAT_DANGEROUS \
 			)
-	world << "We're going for [mutation_category] with severity [severity]" //shekels
+	visible_message("Mutation Category: [mutation_category]. All weights at this sev: \
+	GOOD=15/BAD=[Clamp(0.4*severity,0, 7)]/WEIRD=[Clamp(0.7*(severity-5),0,8)]/WEIRD2=[Clamp(severity-12,0,7)]/BAD2=[Clamp(severity-12,0,14)]/DANGEROUS=[Clamp(severity-14,0,20)]") //shekels
 	var/mutation_type
 	//Now we'll pick a certain type of mutation from that category, special considerations in mind.
 	switch(mutation_category)
@@ -130,7 +131,7 @@
 	var/softcap = mix(softcaps[i], softcaps[i+1], lerp_factor)
 	var/hardcap = mix(hardcaps[i], hardcaps[i+1], lerp_factor)
 	. = unmix(input, softcap, hardcap)
-	world << "Caps: [softcap]-[hardcap] / Final Ratio: [.]" //shekels
+	visible_message("Caps: [softcap]-[hardcap] / Final Ratio: [.]") //shekels
 	return
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/apply_mut(var/mutation_type, var/severity)
@@ -140,7 +141,7 @@
 
 	check_for_divergence()
 
-	world << "So here we are about to apply this mutation [mutation_type] with severity [severity]" //shekels
+	visible_message("We're applying mutation type [mutation_type] with severity [severity]") //shekels
 	switch(mutation_type)
 		if("code_explanation")
 			// DEARIE ME, WHAT IS GOING ON HERE?
