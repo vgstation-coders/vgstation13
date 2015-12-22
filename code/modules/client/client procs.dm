@@ -57,7 +57,7 @@
 		var/job = text2num(href_list["asset_cache_confirm_arrival"])
 		completed_asset_jobs += job
 		return
-		
+
 	//Logs all hrefs
 	if(config && config.log_hrefs && investigations[I_HREFS])
 		var/datum/log_controller/I = investigations[I_HREFS]
@@ -185,7 +185,7 @@
 
 	if(!winexists(src, "asset_cache_browser")) // The client is using a custom skin, tell them.
 		to_chat(src, "<span class='warning'>Unable to access asset cache browser, if you are using a custom skin file, please allow DS to download the updated version, if you are not, then make a bug report. This is not a critical issue but can cause issues with resource downloading, as it is impossible to know when extra resources arrived to you.</span>")
-	
+
 	//////////////
 	//DISCONNECT//
 	//////////////
@@ -278,6 +278,26 @@
 		//New player!! Need to insert all the stuff
 		var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO erro_player (id, ckey, firstseen, lastseen, ip, computerid, lastadminrank, accountjoined) VALUES (null, '[sql_ckey]', Now(), Now(), '[sql_address]', '[sql_computerid]', '[sql_admin_rank]', '[Joined]')")
 		query_insert.Execute()
+
+	var/savefile/note_list = new("data/player_notes.sav")
+	var/list/note_keys
+	note_list >> note_keys
+	if(!note_keys)
+		note_keys = list()
+	if(!note_keys.Find(key)) // IF THIS PLAYER HAS NO NOTES.
+		note_keys += key
+		var/startingnote = "[key] first appeared [time2text(world.timeofday, "DDD, Month DD of YYYY")] (Player age: [player_age]) with"
+		if(related_accounts_ip)
+			startingnote += "related IPs: [related_accounts_ip]."
+		else
+			startingnote += "no related IPs."
+		startingnote += " And "
+		if(related_accounts_cid)
+			startingnote += "related CIDs: [related_accounts_cid]"
+		else
+			startingnote += "no related CIDs."
+		notes_add(ckey,startingnote)
+		message_admins("<span class='notice'>[startingnote]</span>")
 
 	if(!isnum(age))
 		var/DBQuery/query_age = dbcon.NewQuery("SELECT datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
