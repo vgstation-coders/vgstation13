@@ -142,11 +142,15 @@
 				to_chat(user, "<span class='warning'>[target] doesn't seem to have a mouth. Awkward!</span>")
 				return
 
-		if(reagents)	//Handle ingestion of any reagents (Note : Foods always have reagents)
+		if(reagents) //Handle ingestion of any reagents (Note : Foods always have reagents)
 			playsound(target.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
 			if(reagents.total_volume)
 				reagents.reaction(target, INGEST)
-				spawn(5) //WHY IS THIS SPAWN() HERE
+				if(reagents) //why I even have to do this I don't know, somehow reagents became null
+					if(reagents.total_volume == null || bitesize == null)
+						return
+					else if(reagents.total_volume <= 0 || bitesize <= 0)
+						return
 					if(reagents.total_volume > bitesize)
 						/*
 						 * I totally cannot understand what this code supposed to do.
@@ -159,9 +163,7 @@
 						reagents.trans_to(target, reagents.total_volume)
 					bitecount++
 					On_Consume(target)
-			return 1
-
-	return 0
+	return
 
 /obj/item/weapon/reagent_containers/food/snacks/examine(mob/user)
 	..()
