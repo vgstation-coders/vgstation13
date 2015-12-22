@@ -122,7 +122,7 @@
 "acr" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{tag = "icon-intact (SOUTHEAST)"; icon_state = "intact"; dir = 6},/turf/simulated/wall,/area/security/perma)
 "acs" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/wall,/area/security/perma)
 "act" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/floor{icon_state = "floorgrime"},/area/security/perma)
-"acu" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/floor{icon_state = "floorgrime"},/area/security/perma)
+"acu" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/mob/living/simple_animal/cat/snek/corpus,/turf/simulated/floor{icon_state = "floorgrime"},/area/security/perma)
 "acv" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/obj/item/weapon/stool{pixel_y = 8},/turf/simulated/floor{icon_state = "floorgrime"},/area/security/perma)
 "acw" = (/obj/machinery/atmospherics/unary/outlet_injector{dir = 8; frequency = 1443; icon_state = "on"; id_tag = "air_in"; on = 1},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/item/weapon/stool{pixel_y = 8},/turf/simulated/floor{icon_state = "floorgrime"},/area/security/perma)
 "acx" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 8},/obj/item/weapon/stool{pixel_y = 8},/turf/simulated/floor{icon_state = "floorgrime"},/area/security/perma)
