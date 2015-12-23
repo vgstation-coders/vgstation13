@@ -48,6 +48,15 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/static_environ
 
 	var/has_gravity = 1
+	var/is_on_station = 0 // Replacement for the_station_areas.
+	var/is_on_centcomm = 0 // Replacement for centcom_areas.
+	var/no_bluespaceanomaly = 0 // Replacement for safe_areas in bluespaceanomaly.  (Make critical flag?)
+
+
+	// For turrets/motion detection.
+	var/event/on_entered = new()
+	var/event/on_motion = new()
+	var/event/on_left = new()
 
 	var/no_air = null
 //	var/list/lights				// list of all lights on this area
@@ -66,6 +75,37 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 	var/general_area = /area/station	// the highest parent bellow /area,
 	var/general_area_name = "Station"
+
+	// Hopefully, we don't need this, permitting modular security systems
+	//var/obj/machinery/camera/motioncamera = null
+
+	// Disable motion detectors. (for use in space)
+	var/forbid_motion=FALSE
+
+	var/theme_chance=35 // used for theme music.
+	var/theme_id=THEME_SPACE
+
+	var/list/turretTargets = list()
+
+	var/obj/machinery/camera/motioncamera=null
+
+// Motion detection
+/area/Entered(atom/movable/O)
+	..()
+	if (ismob(O))
+		INVOKE_EVENT(src.on_entered,list("subject"=O))
+
+/area/Exited(atom/movable/O)
+	if (ismob(O))
+		INVOKE_EVENT(src.on_left,list("subject"=O))
+
+/area/proc/subjectDied(target)
+	if( isliving(target) )
+		if( !issilicon(target) )
+			var/mob/living/L = target
+			if( L.stat )
+				if( L in turretTargets )
+					src.Exited(L)
 
 
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
@@ -115,6 +155,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/station//TODO: make every area in the MAIN station inherit from this.
 	name = "Station"
+	theme_id = THEME_STATION
 
 /area/station/custom //For blueprints!
 	power_equip = 0
@@ -129,14 +170,17 @@ proc/process_adminbus_teleport_locs()
 
 /area/arrival
 	requires_power = 0
+	no_bluespaceanomaly = 1
 
 /area/arrival/start
 	name = "\improper Arrival Area"
 	icon_state = "start"
+	no_bluespaceanomaly = 1
 
 /area/admin
 	name = "\improper Admin room"
 	icon_state = "start"
+	no_bluespaceanomaly = 1
 
 /area/no_ethereal
 	anti_ethereal = 1
@@ -151,6 +195,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	lighting_use_dynamic = 1 //Lighting STILL disabled, even with the new bay engine, because lighting doesn't play nice with our shuttles, might just be our shuttle code, or the small changes in the lighting engine we have from bay.
 	//haha fuck you we dynamic lights now
+	no_bluespaceanomaly = 1
 
 /area/shuttle/arrival
 	name = "\improper Arrival Shuttle"
@@ -436,6 +481,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	lighting_use_dynamic = 0
 	has_gravity = 1
+	no_bluespaceanomaly = 1
 
 // === end remove
 
@@ -443,6 +489,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Alien base"
 	icon_state = "yellow"
 	requires_power = 0
+	no_bluespaceanomaly = 1
 
 // CENTCOM
 
@@ -451,6 +498,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "centcom"
 	requires_power = 0
 	lighting_use_dynamic = 0
+	no_bluespaceanomaly = 1
 
 /area/centcom/control
 	name = "\improper Centcom Control"
@@ -489,6 +537,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "syndie-ship"
 	requires_power = 0
 	lighting_use_dynamic = 0
+	no_bluespaceanomaly = 1
 
 /area/syndicate_mothership/control
 	name = "\improper Syndicate Control Room"
@@ -504,6 +553,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Asteroid"
 	icon_state = "asteroid"
 	requires_power = 0
+	no_bluespaceanomaly = 1
 
 /area/asteroid/cave				// -- TLE
 	name = "\improper Asteroid - Underground"
@@ -529,6 +579,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "thunder"
 	requires_power = 0
 	lighting_use_dynamic = 0
+	no_bluespaceanomaly = 1
 
 /area/tdome/tdome1
 	name = "\improper Thunderdome (Team 1)"
@@ -554,6 +605,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "yellow"
 	requires_power = 0
 	lighting_use_dynamic = 1
+	no_bluespaceanomaly = 1
 
 /area/syndicate_station/start
 	icon_state = "yellow"
@@ -595,6 +647,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "yellow"
 	requires_power = 0
 	lighting_use_dynamic = 0
+	no_bluespaceanomaly = 1
 
 /area/vox_station/southwest_solars
 	name = "\improper aft port solars"
@@ -625,6 +678,7 @@ proc/process_adminbus_teleport_locs()
 /area/prison
 	name = "\improper Prison Station"
 	icon_state = "brig"
+	no_bluespaceanomaly = 1
 
 /area/prison/arrival_airlock
 	name = "\improper Prison Station Airlock"
@@ -821,6 +875,7 @@ proc/process_adminbus_teleport_locs()
 /area/hallway/secondary/entry
 	name = "\improper Arrival Shuttle Hallway"
 	icon_state = "entry"
+	no_bluespaceanomaly = 1
 
 //Command
 
@@ -829,6 +884,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "bridge"
 	music = "signal"
 	jammed=1
+	no_bluespaceanomaly = 1
 
 /area/bridge/meeting_room
 	name = "\improper Heads of Staff Meeting Room"
@@ -1057,10 +1113,12 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Engineering SMES"
 	icon_state = "engine_smes"
 	requires_power = 0//This area only covers the batteries and they deal with their own power
+	no_bluespaceanomaly = 1
 
 /area/engineering/engine
 	name = "Engineering"
 	icon_state = "engine"
+	no_bluespaceanomaly = 1
 
 /area/engineering/engine_storage
 	name = "Engineering Secure Storage"
@@ -1109,6 +1167,7 @@ proc/process_adminbus_teleport_locs()
 /area/solar
 	requires_power = 0
 	lighting_use_dynamic = 0
+	no_bluespaceanomaly = 1
 
 /area/solar/fport
 	name = "\improper Fore Port Solar Array"
@@ -1795,6 +1854,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper AI Upload Chamber"
 	icon_state = "ai_upload"
 	jammed=1
+	no_bluespaceanomaly = 1
 
 /area/turret_protected/ai_upload_foyer
 	name = "AI Upload Access"
@@ -1804,6 +1864,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper AI Chamber"
 	icon_state = "ai_chamber"
 	jammed=1
+	no_bluespaceanomaly = 1
 
 /area/turret_protected/aisat
 	name = "\improper AI Satellite"
@@ -2118,9 +2179,12 @@ proc/process_adminbus_teleport_locs()
 /*
  Lists of areas to be used with is_type_in_list.
  Used in gamemodes code at the moment. --rastaf0
+
+ REPLACED WITH is_on_* - N3X
 */
 
 // CENTCOM
+/*
 var/list/centcom_areas = list (
 	/area/centcom,
 	/area/shuttle/escape/centcom,
@@ -2179,9 +2243,7 @@ var/list/the_station_areas = list (
 	/area/turret_protected/ai,
 	/area/derelictparts,
 )
-
-
-
+*/
 
 /area/beach/
 	name = "The metaclub's private beach"

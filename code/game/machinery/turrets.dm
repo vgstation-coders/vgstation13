@@ -1,18 +1,6 @@
-/area/turret_protected
-	name = "Turret Protected Area"
-	var/list/turretTargets = list()
 
-/area/turret_protected/proc/subjectDied(target)
-	if( isliving(target) )
-		if( !issilicon(target) )
-			var/mob/living/L = target
-			if( L.stat )
-				if( L in turretTargets )
-					src.Exited(L)
-
-
-/area/turret_protected/Entered(O)
-	..()
+/obj/machinery/turret/proc/area_on_entered(var/list/args)
+	var/O = args["subject"]
 
 	if( iscarbon(O) )
 		turretTargets |= O
@@ -27,7 +15,8 @@
 		turretTargets |= O
 	return 1
 
-/area/turret_protected/Exited(O)
+/obj/machinery/turret/proc/area_on_left(var/list/args)
+	var/O = args["subject"]
 	if( ismob(O) && !issilicon(O) )
 		turretTargets -= O
 	// /vg/ vehicles
@@ -37,6 +26,7 @@
 		turretTargets -= O
 	..()
 	return 1
+
 
 
 /obj/machinery/turret
@@ -70,7 +60,8 @@
 //	var/list/targets
 	var/atom/movable/cur_target
 	var/targeting_active = 0
-	var/area/turret_protected/protected_area
+	var/area/protected_area
+	var/list/turretTargets = list()
 
 
 /obj/machinery/turret/New()
@@ -185,6 +176,9 @@
 		src.cover = new /obj/machinery/turretcover(src.loc)
 		src.cover.host = src
 	protected_area = get_protected_area()
+	protected_area.on_entered.Add(src,"area_on_entered")
+	protected_area.on_left.Add(src,"area_on_left")
+
 	if(!enabled || !protected_area || protected_area.turretTargets.len<=0)
 		if(!isDown() && !isPopping())
 			popDown()
@@ -346,7 +340,7 @@
 	var/enabled = 1
 	var/lethal = 0
 	var/locked = 1
-	var/area/turret_protected/control_area //can be area name, path or nothing.
+	var/area/control_area //can be area name, path or nothing.
 	var/ailock = 0 // AI cannot use this
 	req_access = list(access_ai_upload)
 

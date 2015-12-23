@@ -8,7 +8,13 @@
 
 
 /datum/event/bluespace_anomaly/setup()
-	var/list/safe_areas = list(
+	var/list/selected = list()
+	for(var/A in typesof(/area) - /area)
+		var/area/instance = locate(A)
+		if(instance || instance.no_bluespaceanomaly)
+			continue
+		selected |= A
+	/* Old hardcoded list of protected areas:
 	/area/turret_protected/ai,
 	/area/turret_protected/ai_upload,
 	/area/engineering,
@@ -31,6 +37,8 @@
 
 
 	impact_area = locate(pick((the_station_areas - safe_areas) + danger_areas))	//need to locate() as it's just a list of paths.
+	*/
+	impact_area = locate(pick(selected))
 
 
 /datum/event/bluespace_anomaly/announce()

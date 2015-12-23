@@ -2,7 +2,7 @@
 
 	var/list/motionTargets = list()
 	var/detectTime = 0
-	var/area/ai_monitored/area_motion = null
+	var/area/area_motion = null
 	var/alarm_delay = 100 // Don't forget, there's another 10 seconds in queueAlarm()
 
 	flags = FPRINT | PROXMOVE
@@ -12,6 +12,13 @@
 	if(!isMotion())
 		. = PROCESS_KILL
 		return
+	if(!area_motion)
+		var/area/PAM = get_area(src)
+		if(PAM && PAM.motioncamera)
+			return
+		area_motion=PAM
+		area_motion.on_entered.Add(src,"area_on_entered")
+		area_motion.on_left.Add(src,"area_on_left")
 	if (detectTime > 0)
 		var/elapsed = world.time - detectTime
 		if (elapsed > alarm_delay)
@@ -26,6 +33,10 @@
 					// If they aren't in range, lose the target.
 					lostTarget(target)
 
+/obj/machinery/camera/proc/area_on_entered(var/list/args)
+	var/mob/target=args["subject"]
+	newTarget(target)
+
 /obj/machinery/camera/proc/newTarget(var/mob/target)
 	if (istype(target, /mob/living/silicon/ai)) return 0
 	if (detectTime == 0)
@@ -33,6 +44,10 @@
 	if (!(target in motionTargets))
 		motionTargets += target
 	return 1
+
+/obj/machinery/camera/proc/area_on_left(var/list/args)
+	var/mob/target=args["subject"]
+	lostTarget(target)
 
 /obj/machinery/camera/proc/lostTarget(var/mob/target)
 	if (target in motionTargets)

@@ -2,6 +2,32 @@
 #define DOORALERT_ATMOS 1
 #define DOORALERT_FIRE  2
 
+#define THEME_CHAPEL   1
+#define THEME_MORGUE   2
+#define THEME_SPACE    3
+#define THEME_ENGINE   4
+#define THEME_AI       5
+#define THEME_GHETTO   6
+#define THEME_DERELICT 7
+#define THEME_MINE     8
+#define THEME_MAINT    9
+#define THEME_STATION  10
+
+var/global/area_theme_types=list(
+	//Ambience goes down here -- make sure to list each area seperately for ease of adding things in later, thanks!
+	//Note: areas adjacent to each other should have the same sounds to prevent cutoff when possible.- LastyScratch.
+	THEME_CHAPEL = list('sound/ambience/ambicha1.ogg', 'sound/ambience/ambicha2.ogg', 'sound/ambience/ambicha3.ogg', 'sound/ambience/ambicha4.ogg'),
+	THEME_MORGUE = list('sound/ambience/ambimo1.ogg', 'sound/ambience/ambimo2.ogg', 'sound/music/main.ogg'),
+	THEME_SPACE = list('sound/ambience/ambispace.ogg', 'sound/music/space.ogg', 'sound/music/main.ogg', 'sound/music/traitor.ogg', 'sound/ambience/spookyspace1.ogg', 'sound/ambience/spookyspace2.ogg'),
+	THEME_ENGINE = list('sound/ambience/ambisin1.ogg', 'sound/ambience/ambisin2.ogg', 'sound/ambience/ambisin3.ogg', 'sound/ambience/ambisin4.ogg'),
+	THEME_AI = list('sound/ambience/ambimalf.ogg'),
+	THEME_GHETTO = list('sound/ambience/ghetto.ogg'),
+	THEME_DERELICT = list('sound/ambience/derelict1.ogg', 'sound/ambience/derelict2.ogg', 'sound/ambience/derelict3.ogg', 'sound/ambience/derelict4.ogg'),
+	THEME_MINE = list('sound/ambience/ambimine.ogg', 'sound/ambience/song_game.ogg', 'sound/music/torvus.ogg'),
+	THEME_MAINT = list('sound/ambience/spookymaint1.ogg', 'sound/ambience/spookymaint2.ogg'),
+	THEME_TCOMMS = list('sound/ambience/ambisin2.ogg', 'sound/ambience/signal.ogg', 'sound/ambience/signal.ogg', 'sound/ambience/ambigen10.ogg'),
+	THEME_STATION = list('sound/ambience/ambigen1.ogg', 'sound/ambience/ambigen3.ogg', 'sound/ambience/ambigen4.ogg', 'sound/ambience/ambigen5.ogg', 'sound/ambience/ambigen6.ogg', 'sound/ambience/ambigen7.ogg', 'sound/ambience/ambigen8.ogg', 'sound/ambience/ambigen9.ogg', 'sound/ambience/ambigen10.ogg', 'sound/ambience/ambigen11.ogg', 'sound/ambience/ambigen12.ogg', 'sound/ambience/ambigen14.ogg'),
+)
 /area
 	var/global/global_uid = 0
 	var/uid
@@ -363,6 +389,8 @@
 		if(ENVIRON)
 			used_environ += amount
 
+
+
 /area/Entered(atom/movable/Obj, atom/OldLoc)
 	var/area/oldArea = Obj.areaMaster
 	Obj.areaMaster = src
@@ -382,7 +410,7 @@
 			M.client.ambience_playing = 1
 			var/sound = 'sound/ambience/shipambience.ogg'
 
-			if(prob(35))
+			if(prob(theme_chance))
 				//Ambience goes down here -- make sure to list each area seperately for ease of adding things in later, thanks!
 				//Note: areas adjacent to each other should have the same sounds to prevent cutoff when possible.- LastyScratch.
 				//TODO: This is dumb - N3X.
@@ -416,8 +444,6 @@
 					M.client.ambience_playing = 0
 
 /area/proc/gravitychange(var/gravitystate = 0, var/area/A)
-
-
 	A.has_gravity = gravitystate
 
 	if(gravitystate)
