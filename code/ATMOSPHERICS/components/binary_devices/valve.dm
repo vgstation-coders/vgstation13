@@ -7,6 +7,11 @@
 	var/open = 0
 	var/openDuringInit = 0
 
+/obj/machinery/atmospherics/binary/valve/layered/one
+	piping_layer = 1
+	pixel_x = PIPING_LAYER_PIXEL_X(1)
+	pixel_y = PIPING_LAYER_PIXEL_Y(1)
+
 /obj/machinery/atmospherics/binary/valve/open
 	open = 1
 	icon_state = "hvalve1"
