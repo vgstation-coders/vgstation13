@@ -1,3 +1,4 @@
+/* OBSOLETE - see SS13 Areas.dm
 /area/ai_monitored
 	name = "AI Monitored Area"
 	var/obj/machinery/camera/motioncamera = null
@@ -22,5 +23,6 @@
 /area/ai_monitored/Exited(atom/movable/O)
 	if (ismob(O) && motioncamera)
 		motioncamera.lostTarget(O)
+*/
 
 

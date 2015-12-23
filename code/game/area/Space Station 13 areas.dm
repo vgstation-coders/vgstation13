@@ -76,6 +76,37 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/general_area = /area/station	// the highest parent bellow /area,
 	var/general_area_name = "Station"
 
+	// Hopefully, we don't need this, permitting modular security systems
+	//var/obj/machinery/camera/motioncamera = null
+
+	// Disable motion detectors. (for use in space)
+	var/forbid_motion=FALSE
+
+	var/theme_chance=35 // used for theme music.
+	var/theme_id=THEME_SPACE
+
+	var/list/turretTargets = list()
+
+	var/obj/machinery/camera/motioncamera=null
+
+// Motion detection
+/area/Entered(atom/movable/O)
+	..()
+	if (ismob(O))
+		INVOKE_EVENT(src.on_entered,list("subject"=O))
+
+/area/Exited(atom/movable/O)
+	if (ismob(O))
+		INVOKE_EVENT(src.on_left,list("subject"=O))
+
+/area/proc/subjectDied(target)
+	if( isliving(target) )
+		if( !issilicon(target) )
+			var/mob/living/L = target
+			if( L.stat )
+				if( L in turretTargets )
+					src.Exited(L)
+
 
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
@@ -124,6 +155,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/station//TODO: make every area in the MAIN station inherit from this.
 	name = "Station"
+	theme_id = THEME_STATION
 
 /area/station/custom //For blueprints!
 	power_equip = 0
