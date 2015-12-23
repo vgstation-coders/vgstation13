@@ -46,7 +46,7 @@ var/global/list/area_ambience_sounds=list(
 		'sound/ambience/spookymaint1.ogg',
 		'sound/ambience/spookymaint2.ogg'
 	),
-	AREA_AMB_TCOMMS = list(//if(istype(src, /area/tcommsat) || istype(src, /area/turret_protected/tcomwest) || istype(src, /area/turret_protected/tcomeast) || istype(src, /area/turret_protected/tcomfoyer) || istype(src, /area/turret_protected/tcomsat))
+	AREA_AMB_TCOMMS = list(
 		'sound/ambience/ambisin2.ogg',
 		'sound/ambience/signal.ogg',
 		//'sound/ambience/signal.ogg', // Was listed twice.

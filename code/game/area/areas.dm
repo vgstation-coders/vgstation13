@@ -1,11 +1,123 @@
-// Flags for door_alerts.
-#define DOORALERT_ATMOS 1
-#define DOORALERT_FIRE  2
 
 /area
 	var/global/global_uid = 0
 	var/uid
 	var/obj/machinery/power/apc/areaapc = null
+
+	var/fire = null
+	var/atmos = 1
+	var/atmosalm = 0
+	var/poweralm = 1
+	var/party = null
+	var/radalert = 0
+	level = null
+	name = "Space"
+	icon = 'icons/turf/areas.dmi'
+	icon_state = "unknown"
+	layer = 10
+	mouse_opacity = 0
+	luminosity = 0
+	var/lightswitch = 1
+
+	var/eject = null
+
+	var/requires_power = 1
+	var/always_unpowered = 0	//this gets overriden to 1 for space in area/New()
+
+	var/power_equip = 1
+	var/power_light = 1
+	var/power_environ = 1
+	var/music = null
+	var/used_equip = 0
+	var/used_light = 0
+	var/used_environ = 0
+	var/static_equip
+	var/static_light = 0
+	var/static_environ
+
+	var/has_gravity = 1
+	var/is_on_station = 0 // Replacement for the_station_areas.
+	var/is_on_centcomm = 0 // Replacement for centcom_areas.
+	var/no_bluespaceanomaly = 0 // Replacement for safe_areas in bluespaceanomaly.  (Make critical flag?)
+
+
+	// For turrets/motion detection.
+	var/event/on_entered = new()
+	var/event/on_motion = new()
+	var/event/on_left = new()
+
+	var/no_air = null
+//	var/list/lights				// list of all lights on this area
+	var/list/all_doors = list()		//Added by Strumpetplaya - Alarm Change - Contains a list of doors adjacent to this area
+
+	// /vg/: Bitmap of subsystems asking for firedoors.
+	var/door_alerts=0
+
+	var/doors_down=0
+
+	// /vg/: No teleporting for you. 2 = SUPER JAMMED, inaccessible even to telecrystals.
+	var/jammed = 0
+
+	// /vg/: Prevents entities using incorporeal move from entering the area (ghosts, jaunting wizards/ninjas...)
+	var/anti_ethereal = 0
+
+	var/general_area = /area/station	// the highest parent below /area,
+	var/general_area_name = "Station"
+
+	// Area ambience moved here.  Use name for the ambience class.
+	var/ambience = AREA_AMB_SPACE
+
+	var/wiz_can_teleport = 1
+	var/ghost_can_always_teleport = 0
+
+
+
+/*Adding a wizard area teleport list because motherfucking lag -- Urist*/
+/*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
+var/list/teleportlocs = list()
+
+proc/process_teleport_locs()
+	for(var/area/AR in areas)
+		// Handled by wiz_can_teleport
+		//if(istype(AR, /area/shuttle) || istype(AR, /area/syndicate_station) || istype(AR, /area/wizard_station)) continue
+		if(!AR.wiz_can_teleport) continue
+		if(teleportlocs.Find(AR.name)) continue
+		var/turf/picked = safepick(get_area_turfs(AR.type))
+		if (picked && picked.z == map.zMainStation)
+			teleportlocs += AR.name
+			teleportlocs[AR.name] = AR
+
+	sortTim(teleportlocs, /proc/cmp_text_asc)
+
+var/list/ghostteleportlocs = list()
+
+proc/process_ghost_teleport_locs()
+	for(var/area/AR in areas)
+		if(ghostteleportlocs.Find(AR.name))
+			continue
+		// Handled by ghost_can_always_teleport
+		//if(istype(AR, /area/turret_protected/aisat) || istype(AR, /area/derelict) || istype(AR, /area/tdome))
+		//	ghostteleportlocs += AR.name
+		//	ghostteleportlocs[AR.name] = AR
+		var/turf/picked = safepick(get_area_turfs(AR.type))
+		if (picked && (AR.ghost_can_always_teleport || picked.z == map.zMainStation || picked.z == map.zAsteroid || picked.z == map.zMainStation))
+			if(picked)
+				ghostteleportlocs += AR.name
+				ghostteleportlocs[AR.name] = AR
+
+	sortTim(ghostteleportlocs, /proc/cmp_text_asc)
+
+var/global/list/adminbusteleportlocs = list()
+
+proc/process_adminbus_teleport_locs()
+	for(var/area/AR in areas)
+		if(adminbusteleportlocs.Find(AR.name)) continue
+		var/turf/picked = safepick(get_area_turfs(AR.type))
+		if (picked)
+			adminbusteleportlocs += AR.name
+			adminbusteleportlocs[AR.name] = AR
+
+	sortTim(adminbusteleportlocs, /proc/cmp_text_dsc)
 
 /area/New()
 	icon_state = ""
