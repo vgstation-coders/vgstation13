@@ -528,7 +528,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = access_armory
 	group = "Security"
 
-/datum/supply_packs/security/armory/knight //why seperate them
+/datum/supply_packs/security/armory/knight
  	name = "Knight Armor Crate"
  	contains = list(/obj/item/clothing/suit/armor/knight,
  					/obj/item/clothing/suit/armor/knight/red,
@@ -539,7 +539,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
  					/obj/item/clothing/head/helmet/knight/yellow,
  					/obj/item/clothing/head/helmet/knight/blue)
  	cost = 35
- 	containername = "knight armor crate"
+ 	containername = "Knight armor crate"
+ 	group = "Security"
 
 /datum/supply_packs/loyalty
 	name = "Loyalty implant crate"
