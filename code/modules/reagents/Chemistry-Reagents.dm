@@ -3643,14 +3643,6 @@
 	if(common_data >= pass_out)
 		M.paralysis = max(M.paralysis, 20/sober_str)
 		M.drowsyness  = max(M.drowsyness, 30/sober_str)
-		if(ishuman(M))
-			var/mob/living/carbon/human/H = M
-			var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
-			if(!L)
-				H.adjustToxLoss(5)
-			else if(istype(L))
-				L.take_damage(0.05, 0.5)
-			H.adjustToxLoss(0.1)
 
 /datum/reagent/ethanol/reaction_obj(var/obj/O, var/volume)
 
@@ -3842,15 +3834,6 @@
 	id = "rum"
 	description = "Popular with the sailors. Not very popular with everyone else."
 	color = "#664300" //rgb: 102, 67, 0
-
-/datum/reagent/ethanol/deadrum/on_mob_life(var/mob/living/M)
-
-	if(..()) return 1
-
-	M.dizziness += 5
-
-	if(volume > REAGENTS_OVERDOSE)
-		M.adjustToxLoss(1)
 
 /datum/reagent/ethanol/deadrum/vodka
 	name = "Vodka"
