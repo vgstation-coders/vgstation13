@@ -1,0 +1,4 @@
+author: DeadPoolJ
+changes: 
+	- rscadd: Made a new admin verb, Send Fax, which lets admins send a fax without having to reply to one first.
+delete-after: true

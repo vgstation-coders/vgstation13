@@ -14,6 +14,7 @@ var/list/admin_verbs_default = list(
 var/list/admin_verbs_admin = list(
 	/client/proc/set_base_turf,
 	/datum/admins/proc/delay,
+	/client/proc/SendCentcommFax,		/*sends a fax to all fax machines*/
 	/client/proc/player_panel,			/*shows an interface for all players, with links to various panels (old style)*/
 	/client/proc/player_panel_new,		/*shows an interface for all players, with links to various panels*/
 	/client/proc/invisimin,				/*allows our mob to go invisible/visible*/
@@ -1042,3 +1043,41 @@ var/list/admin_verbs_mod = list(
 	message_admins("[key_name_admin(usr)] has stopped all media.", 1)
 
 	stop_all_media()
+
+/client/proc/SendCentcommFax()
+	set	category = "Fun"
+	set name = "Send Fax"
+	set desc = "Sends a fax to all fax machines."
+
+	var/cntcom_msg = input(src, "Please enter a message to send via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", "") as message|null
+	if(!cntcom_msg)	return
+
+	var/customname = input(src, "Pick a title for the report", "Title") as text|null
+
+	for(var/obj/machinery/faxmachine/F in allfaxes)
+		if(! (F.stat & (BROKEN|NOPOWER) ) )
+
+			// animate! it's alive!
+			flick("faxreceive", F)
+
+			// give the sprite some time to flick
+			spawn(20)
+				var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( F.loc )
+				P.name = "[command_name()]- [customname]"
+				P.info = cntcom_msg
+				P.update_icon()
+
+				playsound(F.loc, "sound/items/polaroid1.ogg", 50, 1)
+
+				// Stamps
+				var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
+				stampoverlay.icon_state = "paper_stamp-cent"
+				if(!P.stamped)
+					P.stamped = new
+				P.stamped += /obj/item/weapon/stamp
+				P.overlays += stampoverlay
+				P.stamps += "<HR><i>This paper has been stamped by the Central Command Quantum Relay.</i>"
+
+	to_chat(src, "Message reply to transmitted successfully.")
+	log_admin("[key_name(src)] has sent a fax to all machines: [cntcom_msg]")
+	message_admins("[key_name_admin(src)] sent a fax to all machines.", 1)
