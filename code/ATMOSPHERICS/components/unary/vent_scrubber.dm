@@ -29,6 +29,10 @@
 
 	machine_flags		= MULTITOOL_MENU
 
+/obj/machinery/atmospherics/unary/vent_scrubber/general
+	on					= 1
+	icon_state			= "on"
+
 /obj/machinery/atmospherics/unary/vent_scrubber/on
 	on					= 1
 	icon_state			= "on"
