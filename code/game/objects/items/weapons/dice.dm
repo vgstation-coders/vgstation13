@@ -226,7 +226,6 @@
 				to_chat(user, "<span class=sinister><B>You get nothing. No curse or reward! </span></B>")
 			if(result == 13)
 				to_chat(user, "<span class=sinister><B>You've rolled 13! The cursed dice is broken! </span></B>")
-				user.visible_message("<span class=danger><B>The dice shudders and loses its power! </span></B>")
 				deactivated = 1
 			if(result >= 14 && result <=19)
 				to_chat(user, "<span class=sinister><B>You've rolled well and shall be rewarded! </span></B>")
@@ -287,6 +286,5 @@
 				user.visible_message("<span class=danger><B>The dice shudders and loses its power! </span></B>")
 				name = "d20"
 				desc = "A die with twenty sides. The prefered die to throw at the GM."
-		sleep(100) //no dice spam
 	else
 		return 0
