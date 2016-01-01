@@ -185,7 +185,7 @@
 							for(var/datum/organ/external/r_arm/E in h.organs)
 								E.droplimb(2)
 						if(3)
-							if(h.species.name != "Tarjaran") //someone who was made a catbeast by the dice can't become a different species by getting lucky
+							if(h.species.name != "Tajaran") //someone who was made a catbeast by the dice can't become a different species by getting lucky
 								switch(pick(1,2,3))
 									if(1)
 										if(h.species.name != "Unathi")
@@ -227,7 +227,10 @@
 					to_chat(user, "<span class=sinister><B>You get nothing. No curse or reward! </span></B>")
 				if(13)
 					to_chat(user, "<span class=sinister><B>You've rolled 13! The cursed dice is broken! </span></B>")
-					deactivated = 1
+					explosion(get_turf(src), 0, 0, 4, 7)
+					to_chat(user, "<span class=danger><B>The dice explosively shatters! </span></B>")
+					qdel(src)
+
 				if(14 to 19)
 					to_chat(user, "<span class=sinister><B>You've rolled well and shall be rewarded! </span></B>")
 					switch(pick(1,2,3,4,5))
