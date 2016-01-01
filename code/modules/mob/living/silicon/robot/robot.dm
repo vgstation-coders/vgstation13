@@ -8,7 +8,6 @@
 
 	var/sight_mode = 0
 	var/custom_name = ""
-	var/base_icon
 	var/custom_sprite = 0 //Due to all the sprites involved, a var for our custom borgs may be best
 	//var/crisis //Admin-settable for combat module use.
 

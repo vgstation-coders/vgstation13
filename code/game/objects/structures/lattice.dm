@@ -7,7 +7,7 @@
 	anchored = 1.0
 	layer = 2.3 //under pipes
 	//	flags = CONDUCT
-	var/base_icon = "lattice"
+	base_icon = "lattice"
 
 	canSmoothWith = "/obj/structure/lattice=0&/obj/structure/catwalk=0&/turf=0"
 

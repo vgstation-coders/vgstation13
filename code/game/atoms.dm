@@ -56,6 +56,7 @@ var/global/list/ghdel_profiling = list()
 	var/forceinvertredraw = 0
 	var/tempoverlay
 	var/timestopped
+	var/base_icon
 
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
@@ -517,8 +518,7 @@ its easier to just keep the beam vertical.
 
 	if(canSmoothWith) //Smooth the smoothable
 		spawn //Usually when this is called right after an atom is moved. Not having this "spawn" here will cause this atom to look for its neighbours BEFORE they have finished moving, causing bad stuff.
-			relativewall()
-			relativewall_neighbours()
+			icon_smoothing()
 
 	if(pixel_x || pixel_y)
 		var/cosine	= cos(angle)

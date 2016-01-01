@@ -119,6 +119,7 @@
 	if(results[2] == 2 && !(dir in cardinal)) //Two connected walls, not a straight connection
 		resolve_diagonal(dir)
 
+
 /turf/simulated/shuttle/wall/proc/add_kink(results)
 	var/list/check
 	for(var/cardinaldir in cardinal)
@@ -144,6 +145,7 @@
 						var/list/check2 = T.findSmoothingNeighbors()
 						if(check2[2] == 2)//Is it a 2 walled sonuvabitch
 							return reorient_tri_corner(cardinaldir, buddy)
+
 
 /turf/simulated/shuttle/wall/proc/reorient_tri_corner(cardinaldir,var/turf/simulated/shuttle/wall/buddy)
 	buddy.icon_state = "[base_icon]-2"

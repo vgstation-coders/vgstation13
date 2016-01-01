@@ -12,11 +12,16 @@
 
 /turf/simulated/shuttle/wall
 	name = "wall"
-	icon_state = "wall1"
+	base_icon = "swall"
 	opacity = 1
 	density = 1
 	blocks_air = 1
 	explosion_block = 2
+	canSmoothWith = "/turf/simulated/shuttle/wall=0&/turf/simulated/shuttle/plating=0&/obj/structure/shuttle=0&/obj/machinery/door=0&/turf/simulated/shuttle/plating/airless=0"
+
+/turf/simulated/shuttle/wall/salvage
+	base_icon = "vwall"
+
 
 /turf/simulated/shuttle/wall/shuttle_rotate(angle) //delete this when autosmooth is added
 	src.transform = turn(src.transform, angle)
