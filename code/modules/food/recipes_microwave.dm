@@ -1635,18 +1635,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/cinnamonpie
 
-// Currently Disabled //////////////////////////////////////////
-
-/*
-
-/datum/recipe/bananaphone
-	reagents = list("psilocybin" = 5) //Trippin' balls, man.
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
-		/obj/item/device/radio
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/bananaphone
-
 /datum/recipe/telebacon
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat,
@@ -1660,5 +1648,18 @@
 		/obj/item/device/assembly/signaler
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/telebacon
+
+// Currently Disabled //////////////////////////////////////////
+
+/*
+
+/datum/recipe/bananaphone
+	reagents = list("psilocybin" = 5) //Trippin' balls, man.
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
+		/obj/item/device/radio
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bananaphone
+
 
 */
