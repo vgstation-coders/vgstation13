@@ -37,8 +37,9 @@ var/image/list/w_overlays = list("wet" = image('icons/effects/water.dmi',icon_st
 	var/spam_flag = 0 //For certain interactions, like bananium floors honking when stepped on
 	var/obj/item/stack/tile/floor_tile
 	var/image/floor_overlay
-
+	var/list/curdiag = list()
 	melt_temperature = 1643.15 // Melting point of steel
+
 
 /turf/simulated/floor/New()
 	..()

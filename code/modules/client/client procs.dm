@@ -316,6 +316,18 @@
 	to_chat(usr, "<span class='notice'>Re-sending NanoUI resources.  This may result in lag.</span>")
 	nanomanager.send_resources(src)
 
+/client/verb/rotate_view_clockwise()
+	set name = "Rotate View Right"
+	set desc = "Rotate your view of the station to the clockwise direction."
+	set category = "IC"
+	dir = turn(dir,90)
+
+/client/verb/rotate_view_counterclockwise()
+	set name = "Rotate View Left"
+	set desc = "Rotate your view of the station to the counter-clockwise direction."
+	set category = "IC"
+	dir = turn(dir,-90)
+
 //send resources to the client. It's here in its own proc so we can move it around easiliy if need be
 /client/proc/send_resources()
 //	preload_vox() //Causes long delays with initial start window and subsequent windows when first logged in.

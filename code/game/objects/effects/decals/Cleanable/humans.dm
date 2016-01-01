@@ -14,7 +14,7 @@ var/global/list/blood_list = list()
 	icon_state = "mfloor1"
 	random_icon_states = list("mfloor1", "mfloor2", "mfloor3", "mfloor4", "mfloor5", "mfloor6", "mfloor7")
 
-	var/base_icon = 'icons/effects/blood.dmi'
+	base_icon = 'icons/effects/blood.dmi'
 
 	basecolor="#A10808" // Color when wet.
 	amount = 5

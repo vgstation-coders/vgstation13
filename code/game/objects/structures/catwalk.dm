@@ -6,6 +6,7 @@
 	density = 0
 	anchored = 1.0
 	layer = 2.3 //under pipes
+	base_icon = "catwalk"
 
 	canSmoothWith = "/obj/structure/catwalk=0"
 
@@ -13,13 +14,12 @@
 
 	..(loc)
 
-	relativewall()
-	relativewall_neighbours()
+	if(ticker)
+		initialize()
+		relativewall_neighbours()
 
-/obj/structure/catwalk/relativewall()
-
-	var/junction = findSmoothingNeighbors()
-	icon_state = "catwalk[junction]"
+/obj/structure/catwalk/initialize()
+	icon_smoothing()
 
 /obj/structure/catwalk/isSmoothableNeighbor(atom/A)
 

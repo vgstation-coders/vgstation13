@@ -213,6 +213,11 @@ datum/controller/game_controller/proc/cachedamageicons()
 			count++
 	log_startup_progress("  Initialized [count] atmos devices in [stop_watch(watch)]s.")
 
+	watch = start_watch()
+	for(var/turf/turf in turfs)
+		turf.initialize()
+	log_startup_progress("  Initialized turfs in [stop_watch(watch)]s.")
+
 	spawn()
 		watch = start_watch()
 		log_startup_progress("Generating in-game minimaps...")

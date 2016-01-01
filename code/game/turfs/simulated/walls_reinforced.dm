@@ -41,15 +41,15 @@
 
 
 //We need to export this here because we want to handle it differently
-//This took me longer to find this than it should havle
-/turf/simulated/wall/r_wall/relativewall()
+//This took me longer to find this than it should have
+/turf/simulated/wall/r_wall/icon_smoothing()
 	if(d_state) //We are fucking building
 		return //Fuck off
 	..()
 
 /turf/simulated/wall/r_wall/update_icon()
 	if(!d_state) //Are we under construction or deconstruction ?
-		relativewall() //Well isn't that odd, let's pass this to smoothwall.dm
+		icon_smoothing() //Well isn't that odd, let's pass this to smoothwall.dm
 		relativewall_neighbours() //Let's make sure the other walls know about this travesty
 		return //Now fuck off
 	icon_state = "r_wall-[d_state]"  //You can thank me later

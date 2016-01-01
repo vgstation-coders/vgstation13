@@ -7,6 +7,10 @@
 
 /obj/item/stack/tile
 	var/material
+	var/global/list/diagonals[0]
+	var/diagonal_overlays = 0
+	var/smoothed = 0
+
 
 /obj/item/stack/tile/ex_act(severity)
 	switch(severity)
@@ -112,6 +116,19 @@
 	max_amount = 60
 
 	material = "fabric"
+	diagonal_overlays = 1
+	smoothed = 1
+	canSmoothWith = "/obj/item/stack/tile/carpet=0"
+
+/obj/item/stack/tile/carpet/New()
+	..()
+	if(diagonals["[name]"] == null)
+		diagonals["[name]"] = new /list(4)
+		diagonals["[name]"][1] = image("floors.dmi", "carpet-d", dir = 1)
+		diagonals["[name]"][2] = image("floors.dmi", "carpet-d", dir = 2)
+		diagonals["[name]"][3] = image("floors.dmi", "carpet-d", dir = 4)
+		diagonals["[name]"][4] = image("floors.dmi", "carpet-d", dir = 8)
+
 
 /obj/item/stack/tile/arcade
 	name = "length of arcade carpet"
