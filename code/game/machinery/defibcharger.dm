@@ -7,7 +7,7 @@ obj/machinery/recharger/defibcharger/wallcharger
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 150
-
+	transform_icon = 0
 	machine_flags = SCREWTOGGLE | CROWDESTROY //| WRENCHMOVE | FIXED2WORK if we want it to be wrenchable
 
 /********************************************************************
@@ -87,8 +87,9 @@ obj/machinery/recharger/defibcharger/wallcharger/process()
 	return -1
 
 obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as obj, mob/user as mob)
-
-	if(istype(user,/mob/living/silicon))
+	if(..())
+		return
+	if(istype(user, /mob/living/silicon))
 		return
 	if(istype(G, /obj/item/weapon/melee/defibrillator))
 		var/obj/item/weapon/melee/defibrillator/D = G
@@ -112,5 +113,4 @@ obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as o
 			update_icon()
 		else
 			user << "<span class='warning'>You can't let go of \the [G]!</span>"
-	else
-		return //Yeah no, fuck off with the shrunken guns
+
