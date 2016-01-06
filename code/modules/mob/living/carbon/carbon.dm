@@ -343,7 +343,7 @@
 
 	if (istype(item, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = item
-		item = G.toss() //throw the person instead of the grab
+		item = G.toss() //make "item" the person instead of the grab, so that we'll throw the person.
 		if(ismob(item))
 			var/turf/start_T = get_turf(loc) //Get the start and target tile for the descriptors
 			var/turf/end_T = get_turf(target)
@@ -362,6 +362,7 @@
 					M.LAssailant = usr
 				returnToPool(G)
 	if(!item) return //Grab processing has a chance of returning null
+	//Wait. Shouldn't we always be returning after throwing a grab?
 
 	var/obj/item/I = item
 	if(istype(I) && I.cant_drop > 0)
