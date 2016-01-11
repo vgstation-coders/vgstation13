@@ -271,7 +271,7 @@
 // Assumes the turf is visible and such.
 // For the love of god don't call this proc when it's not needed! Lighting artifacts WILL happen!
 /datum/light_source/proc/calc_turf(var/turf/T)
-	if(T.lighting_overlay)
+	if(T && T.lighting_overlay)
 		LUM_FALLOFF(., T, source_turf)
 		. *= light_power
 
