@@ -6,8 +6,8 @@
 	nameShort = "taxi"
 	nameLong = "Taxi Station"
 	map_dir = "taxistation"
-	tDomeX = 127
-	tDomeY = 67
+	tDomeX = 153
+	tDomeY = 82
 	tDomeZ = 2
 	zAsteroid = 6
 	zDeepSpace = 5
