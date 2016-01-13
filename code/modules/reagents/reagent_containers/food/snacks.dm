@@ -1540,8 +1540,7 @@
 		reagents.add_reagent("tomatojuice", 2)
 		bitesize = 5
 
-/* No more of this
-/obj/item/weapon/reagent_containers/food/snacks/telebacon
+/obj/item/weapon/reagent_containers/food/snacks/telebacon //THE TELEBACON IS BACK
 	name = "Tele Bacon"
 	desc = "It tastes a little odd but it is still delicious."
 	icon_state = "bacon"
@@ -1554,8 +1553,7 @@
 	On_Consume()
 		if(!reagents.total_volume)
 			baconbeacon.loc = usr
-			baconbeacon.digest_delay()
-*/
+			baconbeacon.digest_delay() //NOTE: I DON'T ACTUALLY KNOW WHAT THIS DOES -DoctorMad
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube
 	name = "monkey cube"
