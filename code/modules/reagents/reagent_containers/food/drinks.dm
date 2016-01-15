@@ -451,7 +451,7 @@
 			name = "Filk: Scripture Edition"
 			reagents.add_reagent("holywater", 30)
 		if(3)
-			name = "Filk: Carribean Edition"
+			name = "Filk: Caribbean Edition"
 			reagents.add_reagent("rum", 30)
 		if(4)
 			name = "Filk: Sugar Blast Editon"
@@ -613,6 +613,16 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans
 	vending_cat = "carbonated drinks"
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/verb/empty()
+	set name = "Empty Soda Can"
+	set category = "Object"
+	set src in usr
+
+	if(isturf(usr.loc))
+		to_chat(usr, "<span class='notice'>You empty the [src] onto the floor.</span>")
+		reagents.reaction(usr.loc)
+		spawn() src.reagents.clear_reagents()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola
 	name = "Space Cola"
