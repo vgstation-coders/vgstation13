@@ -1253,6 +1253,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		/obj/item/stack/sheet/mineral/gold    = list("gold" = 20),
 		/obj/item/weapon/grown/nettle         = list("sacid" = 0),
 		/obj/item/weapon/grown/deathnettle    = list("pacid" = 0),
+		/obj/item/weapon/grown/novaflower     = list("capsaicin" = 0),
 		/obj/item/stack/sheet/charcoal        = list("charcoal" = 20),
 
 		//Blender Stuff
@@ -1959,6 +1960,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	volume = 50
 	amount_per_transfer_from_this = 5
 	//We want the all-in-one grinder audience
+	//It really, really annoys me how this and the grinder don't both use a global list, and how this works differently from the grinder. But today is not the day I fix it.
 
 	var/list/blend_items = list (
 		/obj/item/stack/sheet/metal           = list("iron",20),
@@ -1967,8 +1969,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		/obj/item/stack/sheet/mineral/clown   = list("banana",20),
 		/obj/item/stack/sheet/mineral/silver  = list("silver",20),
 		/obj/item/stack/sheet/mineral/gold    = list("gold",20),
-		/obj/item/weapon/grown/nettle         = list("sacid",0),
-		/obj/item/weapon/grown/deathnettle    = list("pacid",0),
 		/obj/item/stack/sheet/charcoal        = list("charcoal",20),
 		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans = list("soymilk",1),
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato = list("ketchup",2),
@@ -1983,8 +1983,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		/obj/item/clothing/head/butt          = list("mercury", 10),
 		/obj/item/weapon/rocksliver           = list("ground_rock",30),
 
-		//Recipes must include both variables!
-		/obj/item/weapon/reagent_containers/food = list("generic",0)
+		/obj/item/weapon/reagent_containers/pill = list(),
+		/obj/item/weapon/grown 					 = list(),
+		/obj/item/weapon/reagent_containers/food = list()
 	)
 
 	var/list/juice_items = list (
@@ -2010,19 +2011,33 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	. = ..()
 
 /obj/item/weapon/reagent_containers/glass/mortar/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if (isscrewdriver(O))
+	if(isscrewdriver(O))
 		if(crushable)
 			crushable.forceMove(user.loc)
 		new /obj/item/stack/sheet/metal(user.loc)
 		new /obj/item/trash/bowl(user.loc)
 		qdel(src) //Important detail
 		return
-	if (crushable)
+	if(istype(O, /obj/item/weapon/reagent_containers/))
+		if(!istype(O, /obj/item/weapon/reagent_containers/food) || istype(O, /obj/item/weapon/reagent_containers/food/drinks)) //Why are drinks a child of food anyways
+			return 0 //Let their afterattack handle it, so we can pour things into the mortar.
+
+	if(crushable)
 		to_chat(user, "<span class ='warning'>There's already something inside!</span>")
 		return 1
-	if (!is_type_in_list(O, blend_items) && !is_type_in_list(O, juice_items))
+	if(!is_type_in_list(O, blend_items) && !is_type_in_list(O, juice_items))
 		to_chat(user, "<span class ='warning'>You can't grind that!</span>")
 		return ..()
+
+	if(isrobot(user))
+		if(isMoMMI(user))
+			var/mob/living/silicon/robot/mommi/M = user
+			if(M.is_in_modules(O))
+				to_chat(user, "You cannot grind your built in tools.")
+				return 1
+		else
+			to_chat(user, "You cannot grind your built in tools.")
+			return 1
 
 	if(istype(O, /obj/item/stack/))
 		var/obj/item/stack/N = new O.type(src, amount=1)
@@ -2033,7 +2048,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		return 0
 	else if(!user.drop_item(O, src))
 		to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
-		return
+		return 1
 
 	crushable = O
 	to_chat(user, "<span class='notice'>You place \the [O] in \the [src].</span>")
@@ -2057,7 +2072,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		return
 	if(is_type_in_list(crushable, juice_items))
 		to_chat(user, "<span class='notice'>You smash the contents into juice!</span>")
-		var/id = null
+		var/list/id = null
 		for(var/i in juice_items)
 			if(istype(crushable, i))
 				id = juice_items[i]
@@ -2069,7 +2084,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		reagents.add_reagent(id[1], min(round(5*sqrt(juiceable.potency)), volume - reagents.total_volume))
 	else if(is_type_in_list(crushable, blend_items))
 		to_chat(user, "<span class='notice'>You grind the contents into dust!</span>")
-		var/id = null
+		var/list/id = null
 		var/space = volume - reagents.total_volume
 		for(var/i in blend_items)
 			if(istype(crushable, i))
@@ -2077,15 +2092,13 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 				break
 		if(!id)
 			return
-		if(istype(crushable, /obj/item/weapon/reagent_containers/food/snacks)) //Most growable food
-			if(id[1] == "generic")
-				crushable.reagents.trans_to(src,crushable.reagents.total_volume)
-			else
-				reagents.add_reagent(id[1],min(id[2], space))
-		else if(istype(crushable, /obj/item/stack/sheet) || istype(crushable, /obj/item/seeds) || /obj/item/device/flashlight/flare || /obj/item/stack/cable_coil || /obj/item/weapon/cell || /obj/item/clothing/head/butt) //Generic processes
-			reagents.add_reagent(id[1],min(id[2], space))
-		else if(istype(crushable, /obj/item/weapon/grown)) //Nettle and death nettle
+
+		if(!id.len)
 			crushable.reagents.trans_to(src,crushable.reagents.total_volume)
+		else if(istype(crushable, /obj/item/weapon/reagent_containers/food/snacks)) //Most growable food
+			reagents.add_reagent(id[1],min(id[2], space))
+		else if(is_type_in_list(crushable, list(/obj/item/stack/sheet, /obj/item/seeds, /obj/item/device/flashlight/flare, /obj/item/stack/cable_coil, /obj/item/weapon/cell, /obj/item/clothing/head/butt))) //Generic processes
+			reagents.add_reagent(id[1],min(id[2], space))
 		else if(istype(crushable, /obj/item/weapon/rocksliver)) //Xenoarch
 			var/obj/item/weapon/rocksliver/R = crushable
 			reagents.add_reagent(id[1],min(id[2], space), R.geological_data)
