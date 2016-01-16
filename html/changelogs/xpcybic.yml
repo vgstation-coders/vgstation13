@@ -10,4 +10,4 @@ changes:
   - tweak: Removed the table between kitchen and botany so that chefs and botanists can get between departments.
   - rscadd: Added two trays to hydroponics.
   - tweak: Enlarged xenobio cells to 2x3.
-  -tweak: Adjusted lights in several areas which were too dim.
+  - tweak: Adjusted lights in several areas which were too dim.
