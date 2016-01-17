@@ -667,3 +667,25 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /atom/proc/create_reagents(const/max_vol)
 	reagents = new/datum/reagents(max_vol)
 	reagents.my_atom = src
+
+///Used by grinders////
+/datum/reagents/proc/grind_item(var/obj/item/I, var/process = 1)
+	if(!I) return is_full()
+	if(process && I.grindable_reagent) //Processing
+		var/result_amount = 0
+		var/data = null
+		if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/grown))
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/G = I
+			result_amount = max(1,round(G.potency/5,1))
+		else if(istype(I,/obj/item/stack/sheet)) result_amount = 20
+		else if(istype(I, /obj/item/weapon/rocksliver))
+			var/obj/item/weapon/rocksliver/R = I
+			result_amount = 30
+			data = R.geological_data
+		else result_amount = 10
+		add_reagent(I.grindable_reagent,min(result_amount,maximum_volume - total_volume),data)
+	else //Extracting
+		if(!I.reagents) return is_full()
+		I.reagents.trans_to(src,I.reagents.total_volume)
+	qdel(I)
+	return is_full()

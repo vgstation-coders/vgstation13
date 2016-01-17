@@ -5,6 +5,7 @@
  *		Wood
  *		Cloth
  *		Cardboard
+ *      Charcoal
  */
 
 /*
@@ -22,6 +23,7 @@
 	siemens_coefficient = 1
 	origin_tech = "materials=1"
 	melt_temperature = MELTPOINT_STEEL
+	grindable_reagent = "iron"
 
 /obj/item/stack/sheet/metal/resetVariables()
 	return ..("recipes", "pixel_x", "pixel_y")
@@ -154,6 +156,7 @@ var/global/list/datum/stack_recipe/charcoal_recipes = list ()
 	flags = FPRINT
 	origin_tech = "materials=1"
 	autoignition_temperature=AUTOIGNITION_WOOD
+	grindable_reagent = "charcoal"
 
 /obj/item/stack/sheet/charcoal/New(var/loc, var/amount=null)
 		recipes = charcoal_recipes

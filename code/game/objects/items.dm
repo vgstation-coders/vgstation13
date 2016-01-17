@@ -48,7 +48,7 @@
 
 	var/list/attack_verb // used in attack() to say how something was attacked "[x] [z.attack_verb] [y] with [z]". Present tense.
 
-
+	var/grindable_reagent //Null if you can't grind it up. Otherwise, what does this thing grind into?
 
 	var/vending_cat = null// subcategory for vending machines.
 	var/list/dynamic_overlay[0] //For items which need to slightly alter their on-mob appearance while being worn.

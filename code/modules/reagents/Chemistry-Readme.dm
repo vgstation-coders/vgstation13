@@ -30,7 +30,7 @@ About the Holder:
 
 		trans_to(var/obj/target, var/amount)
 			This proc equally transfers the contents of the holder to another
-			objects holder. You need to pass it the object (not the holder) you want
+			objects holder. You can be passed the object or the holder you want
 			to transfer to and the amount you want to transfer. Its return value is the
 			actual amount transfered (if one of the objects is full/empty)
 
@@ -97,6 +97,11 @@ About the Holder:
 		get_reagent_amount(var/reagent)
 			Returns the amount of the matching reagent inside the
 			holder. Returns 0 if the reagent is missing.
+
+		grind_item(var/obj/item/I, var/process = 1)
+			Deletes an item and places its grinder product into the holder or its contained reagents.
+			If process = 0, skip grinder products and move straight to reagents.
+			Returns 1 if total_volume = maximum_volume afterwards or 0 otherwise.
 
 		Important variables:
 

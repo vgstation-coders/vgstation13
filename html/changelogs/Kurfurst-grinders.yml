@@ -1,0 +1,11 @@
+author: Kurfurst
+delete-after: True
+changes:
+ - tweak: Instead of receiving a hardcoded amount of sulphuric acid or polytrinic acid from grinding nettles and death nettles, you simply get the amount that the nettles contain (and they no longer generate nutriment).
+ - rscadd: Similarly, many grinder products are now based on potency instead of hardcoded amounts (flour, rice, soy milk, sulphuric acid from nettles, etc.)
+ - bugfix: Grinder products which previously generated amounts based on nutriment now generate based on potency, so you can't just inject nutriment before grinding (corn oil, cherry jelly, etc.)
+ - rscadd: Juices also get calculated based on potancy as well
+ - rscdel: Removed the grind/juice dichotomy on grinders which was mostly irrelevant (only one thing used both)
+ - rscadd: Added process (to receive special products like flour or juice) and extract (to simply get the reagents out)
+ - tweak: Ketchup is now made from tomato juice and sugar
+ - bugfix: A lot of backend improvements to grinder code readability

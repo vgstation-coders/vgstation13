@@ -1896,6 +1896,13 @@
 	required_reagents = list("water" = 5, "coco" = 1)
 	result_amount = 5
 
+/datum/chemical_reaction/ketchup
+	name = "Ketchup"
+	id = "ketchup"
+	result = "ketchup"
+	required_reagents = list("tomatojuice" = 1, "sugar" = 1)
+	result_amount = 2
+
 /*
 /datum/chemical_reaction/coffee
 	name = "Coffee"

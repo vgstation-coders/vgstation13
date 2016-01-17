@@ -20,6 +20,7 @@
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "sliver1"	//0-4
 	w_class = W_CLASS_TINY
+	grindable_reagent = "ground_rock"
 	//item_state = "electronic"
 	var/source_rock = "/turf/unsimulated/mineral/"
 	var/datum/geosample/geological_data

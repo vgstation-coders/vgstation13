@@ -157,6 +157,7 @@
 	action_button_name = null //just pull it manually, neckbeard.
 	sound_on = "sound/items/flare_on.ogg"
 	sound_off = ""
+	grindable_reagent = "sulfur"
 	var/fuel = 0
 	var/on_damage = 7
 	var/produce_heat = 1500

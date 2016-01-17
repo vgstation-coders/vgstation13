@@ -271,6 +271,7 @@
 	potency = 40
 	filling_color = "#FFEE00"
 	trash = /obj/item/weapon/corncob
+	grindable_reagent = "cornoil"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/cherries
 	name = "cherries"
@@ -280,6 +281,7 @@
 	gender = PLURAL
 	plantname = "cherry"
 	slot_flags = SLOT_EARS
+	grindable_reagent = "cherryjelly"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/cinnamon
 	name = "cinnamon sticks"
@@ -288,6 +290,7 @@
 	filling_color = "#D2691E"
 	gender = PLURAL
 	plantname = "cinnamomum"
+	grindable_reagent = "cinnamon"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/poppy
 	name = "poppy"
@@ -320,6 +323,7 @@
 	potency = 25
 	filling_color = "#E6E8DA"
 	plantname = "potato"
+	grindable_reagent = "potato"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -372,6 +376,7 @@
 	icon_state = "berrypile"
 	filling_color = "#C2C9FF"
 	plantname = "berries"
+	grindable_reagent = "berryjuice"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/plastellium
 	name = "clump of plastellium"
@@ -413,6 +418,7 @@
 	potency = 15
 	filling_color = "#B422C7"
 	plantname = "poisonberries"
+	grindable_reagent = "poisonberryjuice"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/deathberries
 	name = "bunch of death-berries"
@@ -495,6 +501,7 @@
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/watermelonslice
 	slices_num = 5
 	plantname = "watermelon"
+	grindable_reagent = "watermelonjuice"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
 	name = "pumpkin"
@@ -519,6 +526,7 @@
 	potency = 20
 	filling_color = "#28FA59"
 	plantname = "lime"
+	grindable_reagent = "limejuice"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/lemon
 	name = "lemon"
@@ -527,6 +535,7 @@
 	potency = 20
 	filling_color = "#FAF328"
 	plantname = "lemon"
+	grindable_reagent = "lemonjuice"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/orange
 	name = "orange"
@@ -535,6 +544,7 @@
 	potency = 20
 	filling_color = "#FAAD28"
 	plantname = "orange"
+	grindable_reagent = "orangejuice"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet
 	name = "white-beet"
@@ -553,6 +563,7 @@
 	filling_color = "#FCF695"
 	trash = /obj/item/weapon/bananapeel
 	plantname = "banana"
+	grindable_reagent = "banana"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/chili
 	name = "chili"
@@ -575,6 +586,7 @@
 	filling_color = "#E6E8B7"
 	icon_state = "soybeans"
 	plantname = "soybean"
+	grindable_reagent = "soymilk"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/koibeans
 	name = "koibean"
@@ -591,6 +603,7 @@
 	filling_color = "#FF0000"
 	potency = 10
 	plantname = "tomato"
+	grindable_reagent = "tomatojuice"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/killertomato
 	name = "killer-tomato"
@@ -631,6 +644,7 @@
 	icon_state = "wheat"
 	filling_color = "#F7E186"
 	plantname = "wheat"
+	grindable_reagent = "flour"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk
 	name = "rice stalk"
@@ -639,6 +653,7 @@
 	icon_state = "rice"
 	filling_color = "#FFF8DB"
 	plantname = "rice"
+	grindable_reagent = "rice"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod
 	name = "kudzu pod"
