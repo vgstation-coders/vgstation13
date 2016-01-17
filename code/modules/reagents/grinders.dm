@@ -26,14 +26,9 @@ Contains:
 	var/list/holdingitems = list()
 	var/targetMoveKey
 
-/********************************************************************
-**   Adding Stock Parts to VV so preconstructed shit has its candy **
-********************************************************************/
-//Leaving large beakers out of the component part list to try and dodge beaker cloning.
 /obj/machinery/reagentgrinder/New()
 	. = ..()
 	beaker = new /obj/item/weapon/reagent_containers/glass/beaker/large(src)
-
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/reagentgrinder,
 		/obj/item/weapon/stock_parts/matter_bin,
@@ -41,10 +36,7 @@ Contains:
 		/obj/item/weapon/stock_parts/micro_laser,
 		/obj/item/weapon/stock_parts/scanning_module
 	)
-
 	RefreshParts()
-
-	return
 
 /obj/machinery/reagentgrinder/proc/user_moved(var/list/args)
 	var/event/E = args["event"]
@@ -73,7 +65,6 @@ Contains:
 
 /obj/machinery/reagentgrinder/update_icon()
 	icon_state = "juicer"+num2text(!isnull(beaker))
-	return
 
 /obj/machinery/reagentgrinder/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(beaker)
@@ -92,10 +83,7 @@ Contains:
 	if(..())
 		return 1
 
-	if (istype(O,/obj/item/weapon/reagent_containers/glass) || \
-		istype(O,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) || \
-		istype(O,/obj/item/weapon/reagent_containers/food/drinks/shaker))
-
+	if (is_type_in_list(O,list(/obj/item/weapon/reagent_containers/glass,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,/obj/item/weapon/reagent_containers/food/drinks/shaker)))
 		if (beaker)
 			return 0
 		if (panel_open)
@@ -258,7 +246,7 @@ Contains:
 	holdingitems.Cut()
 
 /obj/machinery/reagentgrinder/proc/is_allowed(var/obj/item/I)
-	if(I.grindable_reagent || istype(I, /obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/grown)) return 1
+	if(I.grindable_reagent || is_type_in_list(I, list(/obj/item/weapon/reagent_containers/food/snacks,/obj/item/weapon/grown))) return 1
 	return 0
 
 /obj/machinery/reagentgrinder/proc/grind(var/process = 0) //passed to grind_item
@@ -310,7 +298,7 @@ Begin Mortar
 	if (crushable)
 		to_chat(user, "<span class ='warning'>There's already something inside!</span>")
 		return 1
-	if (!O.grindable_reagent && !istype(O, /obj/item/weapon/reagent_containers/food/snacks) && !istype(O,/obj/item/weapon/grown))
+	if (!O.grindable_reagent && !is_type_in_list(O, list(/obj/item/weapon/reagent_containers/food/snacks,/obj/item/weapon/grown)))
 		to_chat(user, "<span class ='warning'>You can't grind that!</span>")
 		return ..()
 
@@ -327,7 +315,6 @@ Begin Mortar
 
 	crushable = O
 	to_chat(user, "<span class='notice'>You place \the [O] in \the [src].</span>")
-	return 0
 
 /obj/item/weapon/reagent_containers/glass/mortar/attack_hand(mob/user as mob)
 	add_fingerprint(user)
@@ -336,7 +323,6 @@ Begin Mortar
 		crushable.forceMove(user.loc)
 		user.put_in_active_hand(crushable)
 		crushable = null
-	return
 
 /obj/item/weapon/reagent_containers/glass/mortar/attack_self(mob/user as mob)
 	if(!crushable)
@@ -349,7 +335,6 @@ Begin Mortar
 	to_chat(user, "<span class='notice'>You grind the contents into reagents!</span>")
 	reagents.grind_item(crushable,1)
 	crushable = null
-	return
 
 /obj/item/weapon/reagent_containers/glass/mortar/examine(mob/user)
 	..()
