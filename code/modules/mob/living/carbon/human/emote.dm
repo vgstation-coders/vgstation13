@@ -596,9 +596,7 @@
 						else
 							continue
 					/*
-
 					GAY BROKEN SHIT
-
 					for(var/mob/M in view(1))
 						if(M != src)
 							if(!miming)
@@ -607,9 +605,7 @@
 								visible_message("<span class='danger'><b>[src]</b> silently farts in [M]'s face!</span>")
 						else
 							continue
-
 					GAY BROKEN SHIT
-
 					*/
 
 					var/list/farts = list(
