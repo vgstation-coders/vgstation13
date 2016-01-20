@@ -1,0 +1,4 @@
+author: Sircrab
+delete-after: True
+changes: 
+  - bugfix: Forensics Console no longer eats items when destroyed.

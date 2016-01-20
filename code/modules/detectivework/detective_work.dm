@@ -17,34 +17,28 @@ atom/proc/add_fibers(mob/living/carbon/human/M)
 	if(M.wear_suit)
 		fibertext = "Material from \a [M.wear_suit]."
 		if(prob(10*item_multiplier) && !(fibertext in suit_fibers))
-			//world.log << "Added fibertext: [fibertext]"
 			suit_fibers += fibertext
 		if(!(M.wear_suit.body_parts_covered & 32))
 			if(M.w_uniform)
 				fibertext = "Fibers from \a [M.w_uniform]."
 				if(prob(12*item_multiplier) && !(fibertext in suit_fibers)) //Wearing a suit means less of the uniform exposed.
-					//world.log << "Added fibertext: [fibertext]"
 					suit_fibers += fibertext
 		if(!(M.wear_suit.body_parts_covered & 64))
 			if(M.gloves)
 				fibertext = "Material from a pair of [M.gloves.name]."
 				if(prob(20*item_multiplier) && !(fibertext in suit_fibers))
-					//world.log << "Added fibertext: [fibertext]"
 					suit_fibers += fibertext
 	else if(M.w_uniform)
 		fibertext = "Fibers from \a [M.w_uniform]."
 		if(prob(15*item_multiplier) && !(fibertext in suit_fibers))
-			// "Added fibertext: [fibertext]"
 			suit_fibers += fibertext
 		if(M.gloves)
 			fibertext = "Material from a pair of [M.gloves.name]."
 			if(prob(20*item_multiplier) && !(fibertext in suit_fibers))
-				//world.log << "Added fibertext: [fibertext]"
 				suit_fibers += "Material from a pair of [M.gloves.name]."
 	else if(M.gloves)
 		fibertext = "Material from a pair of [M.gloves.name]."
 		if(prob(20*item_multiplier) && !(fibertext in suit_fibers))
-			//world.log << "Added fibertext: [fibertext]"
 			suit_fibers += "Material from a pair of [M.gloves.name]."
 	if(!suit_fibers.len) del suit_fibers
 
@@ -54,11 +48,13 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 /obj/machinery/computer/forensic_scanning
 	name = "\improper High-Res Forensic Scanning Computer"
 	icon_state = "forensic"
+	circuit = "/obj/item/weapon/circuitboard/forensic_computer"
 	var/obj/item/scanning
 	var/temp = ""
 	var/canclear = 1
 	var/authenticated = 0
-	circuit = "/obj/item/weapon/circuitboard/forensic_computer"
+
+
 	light_color = LIGHT_COLOR_RED
 
 //Here's the structure for files: each entry is a list, and entry one in that list is the string of their
@@ -83,8 +79,21 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 
 /obj/machinery/computer/forensic_scanning/New()
 	..()
-	new /obj/item/weapon/book/manual/detective(get_turf(src))
+	//new /obj/item/weapon/book/manual/detective(get_turf(src))
 	return
+//Check for item and eject it from the console.
+/obj/machinery/computer/forensic_scanning/proc/eject()
+	if(scanning)
+		scanning.forceMove(loc)
+		scanning = null
+
+/*Override of update_icon, check for changes in stat and
+pass the call. Not the best way of handling it but couldn't
+find another way.*/
+/obj/machinery/computer/forensic_scanning/update_icon()
+	if (stat & BROKEN|NOPOWER)
+		eject()
+	..()
 
 
 /obj/machinery/computer/forensic_scanning/attack_ai(mob/user)
@@ -110,12 +119,8 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 			dat += "<a href='?src=\ref[src];operation=logout'>{Log Out}</a><br><hr><br>"
 			if(scanning)
 				if(scan_process)
-
-					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\detectiveWork\\detective_work.dm:111: dat += "Scan Object: {[scanning.name]}<br>"
 					dat += {"Scan Object: {[scanning.name]}<br>
 						<a href='?src=\ref[src];operation=cancel'>{Cancel Scan}</a> {Print}<br>"}
-					// END AUTOFIX
 				else
 					if(isai) dat += "Scan Object: {[scanning.name]}<br>"
 					else dat += "Scan Object: <a href='?src=\ref[src];operation=eject'>{[scanning.name]}</a><br>"
@@ -125,11 +130,8 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 				else dat += "<a href='?src=\ref[src];operation=insert'>{No Object Inserted}</a><br>"
 				dat += "{Scan} <a href='?src=\ref[src];operation=print'>{Print}</a><br>"
 
-			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\detectiveWork\\detective_work.dm:121: dat += "<a href='?src=\ref[src];operation=database'>{Access Database}</a><br><br>"
 			dat += {"<a href='?src=\ref[src];operation=database'>{Access Database}</a><br><br>
 				<tt>[scan_data]</tt>"}
-			// END AUTOFIX
 			if(scan_data && !scan_process)
 				dat += "<br><a href='?src=\ref[src];operation=erase'>{Erase Data}</a>"
 	user << browse(dat,"window=scanner")
@@ -204,11 +206,9 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 			else
 				if(files && files.len)
 
-					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\detectiveWork\\detective_work.dm:195: temp = "<b>Criminal Evidence Database</b><br><br>"
 					temp = {"<b>Criminal Evidence Database</b><br><br>
 						Consolidated data points:<br>"}
-					// END AUTOFIX
+
 					for(var/print in files)
 						var/list/file = files[print]
 						temp += "<a href='?src=\ref[src];operation=record;identifier=[print]'>{[file[2]]}</a><br>"
@@ -217,11 +217,8 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 					temp = ""
 				if(misc && misc.len)
 
-					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\detectiveWork\\detective_work.dm:204: temp += "<b>Auxiliary Evidence Database</b><br><br>"
 					temp += {"<b>Auxiliary Evidence Database</b><br><br>
 						This is where anything without fingerprints goes.<br><br>"}
-					// END AUTOFIX
 					for(var/atom in misc)
 						var/list/data_entry = misc[atom]
 						temp += "<a href='?src=\ref[src];operation=auxiliary;identifier=[atom]'>{[data_entry[3]]}</a><br>"
@@ -236,11 +233,9 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 					else
 						to_chat(usr, "Illegal or blank name.")
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\detectiveWork\\detective_work.dm:219: temp = "<b>Criminal Evidence Database</b><br><br>"
 				temp = {"<b>Criminal Evidence Database</b><br><br>
 					Consolidated data points: [dossier[2]]<br>"}
-				// END AUTOFIX
+
 				var/print_string = "Fingerprints: Print not complete!<br>"
 				if(stringpercent(dossier[1]) <= FINGERPRINT_COMPLETE)
 					print_string = "Fingerprints: (80% or higher completion reached)<br>[dossier[1]]<br>"
@@ -252,12 +247,9 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 					var/list/outputs = dossier[object]
 					var/list/prints = outputs[1]
 
-					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\detectiveWork\\detective_work.dm:231: temp += "<big><b>Object:</b> [outputs[4]]</big><br>"
 					temp += {"<big><b>Object:</b> [outputs[4]]</big><br>
 						&nbsp<b>Fingerprints:</b><br>
 						&nbsp;&nbsp;&nbsp;&nbsp;[prints.len] Unique fingerprints found.<br>"}
-					// END AUTOFIX
 					var/complete_prints = 0
 					for(var/print in prints)
 						if(stringpercent(prints[print]) <= FINGERPRINT_COMPLETE)
@@ -278,12 +270,9 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 						for(var/named in blood)
 							temp += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type: [blood[named]], DNA: [named]<br>"
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\detectiveWork\\detective_work.dm:253: temp += "<br><a href='?src=\ref[src];operation=record;identifier=[href_list["identifier"]];ren=true'>{Rename this Dossier}</a>"
 				temp += {"<br><a href='?src=\ref[src];operation=record;identifier=[href_list["identifier"]];ren=true'>{Rename this Dossier}</a>
 					<br><a href='?src=\ref[src];operation=database;delete_record=[href_list["identifier"]]'>{Delete this Dossier}</a>
 					<br><a href='?src=\ref[src];operation=databaseprint;identifier=[href_list["identifier"]]'>{Print}</a>"}
-				// END AUTOFIX
 			else
 				temp = "ERROR.  Database not found!<br>"
 			temp += "<br><a href='?src=\ref[src];operation=database'>{Return}</a>"
@@ -294,11 +283,9 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 				P.name = "\improper Database File ([dossier[2]])"
 				P.overlays += "paper_words"
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\detectiveWork\\detective_work.dm:265: P.info = "<b>Criminal Evidence Database</b><br><br>"
 				P.info = {"<b>Criminal Evidence Database</b><br><br>
 					Consolidated data points: [dossier[2]]<br>"}
-				// END AUTOFIX
+
 				var/print_string = "Fingerprints: Print not complete!<br>"
 				if(stringpercent(dossier[1]) <= FINGERPRINT_COMPLETE)
 					print_string = "Fingerprints: (80% or higher completion reached)<br>[dossier[1]]<br>"
@@ -310,12 +297,9 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 					var/list/outputs = dossier[object]
 					var/list/prints = outputs[1]
 
-					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\detectiveWork\\detective_work.dm:277: P.info += "<big><b>Object:</b> [outputs[4]]</big><br>"
 					P.info += {"<big><b>Object:</b> [outputs[4]]</big><br>
 						&nbsp<b>Fingerprints:</b><br>
 						&nbsp;&nbsp;&nbsp;&nbsp;[prints.len] Unique fingerprints found.<br>"}
-					// END AUTOFIX
 					var/complete_prints = 0
 					for(var/print in prints)
 						if(stringpercent(prints[print]) <= FINGERPRINT_COMPLETE)
@@ -346,11 +330,8 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 				var/list/prints = outputs[4]
 				if(prints)
 
-					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\detectiveWork\\detective_work.dm:309: temp += "&nbsp<b>Fingerprints:</b><br>"
 					temp += {"&nbsp<b>Fingerprints:</b><br>
 						&nbsp;&nbsp;&nbsp;&nbsp;[prints.len] Unique fingerprints found.<br>"}
-					// END AUTOFIX
 					var/complete_prints = 0
 					for(var/print in prints)
 						if(stringpercent(prints[print]) <= FINGERPRINT_COMPLETE)
@@ -371,11 +352,8 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 					for(var/named in blood)
 						temp += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type: [blood[named]], DNA: [named]<br>"
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\detectiveWork\\detective_work.dm:330: temp += "<br><a href='?src=\ref[src];operation=database;delete_aux=[href_list["identifier"]]'>{Delete This Record}</a>"
 				temp += {"<br><a href='?src=\ref[src];operation=database;delete_aux=[href_list["identifier"]]'>{Delete This Record}</a>
 					<br><a href='?src=\ref[src];operation=auxiliaryprint;identifier=[href_list["identifier"]]'>{Print}</a>"}
-				// END AUTOFIX
 			else
 				temp = "ERROR.  Database not found!<br>"
 			temp += "<br><a href='?src=\ref[src];operation=database'>{Return}</a>"
@@ -386,19 +364,13 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 				P.name = "\improper Auxiliary Database File ([outputs[3]])"
 				P.overlays += "paper_words"
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\detectiveWork\\detective_work.dm:341: P.info = "<b>Auxiliary Evidence Database</b><br><br>"
 				P.info = {"<b>Auxiliary Evidence Database</b><br><br>
 					<big><b>Consolidated data points:</b> [outputs[3]]</big><br>"}
-				// END AUTOFIX
 				var/list/prints = outputs[4]
 				if(prints)
 
-					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\detectiveWork\\detective_work.dm:345: P.info += "&nbsp<b>Fingerprints:</b><br>"
 					P.info += {"&nbsp<b>Fingerprints:</b><br>
 						&nbsp;&nbsp;&nbsp;&nbsp;[prints.len] Unique fingerprints found.<br>"}
-					// END AUTOFIX
 					var/complete_prints = 0
 					for(var/print in prints)
 						if(stringpercent(prints[print]) <= FINGERPRINT_COMPLETE)
@@ -514,6 +486,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 
 
 /obj/machinery/computer/forensic_scanning/proc/add_data_scanner(var/obj/item/device/W)
+
 	if(istype(W, /obj/item/device/detective_scanner))
 		var/obj/item/device/detective_scanner/D = W
 		if(D.stored)
@@ -530,6 +503,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 	return
 
 /obj/machinery/computer/forensic_scanning/proc/add_data(var/atom/scanned_atom)
+
 	return add_data_master("\ref [scanned_atom]", scanned_atom.fingerprints,\
 	scanned_atom.suit_fibers, scanned_atom.blood_DNA, "[scanned_atom.name] (Direct Scan)")
 
