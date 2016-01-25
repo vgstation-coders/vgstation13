@@ -335,10 +335,6 @@
 	if(isslime(M))
 		M.adjustToxLoss(rand(15, 20))
 
-	if(istype(M,/mob/living/simple_animal/hostile/slime))
-		var/mob/living/simple_animal/hostile/slime/S = M
-		S.calm()
-
 	//Greys treat water like acid
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
@@ -398,6 +394,13 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
 		if(!cube.wrapped)
 			cube.Expand()
+
+/datum/reagent/water/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
+	..()
+
+	if(istype(M,/mob/living/simple_animal/hostile/slime))
+		var/mob/living/simple_animal/hostile/slime/S = M
+		S.calm()
 
 /datum/reagent/lube
 	name = "Space Lube"
@@ -3667,14 +3670,16 @@
 
 	if(istype(O, /obj/item/weapon/paper))
 		var/obj/item/weapon/paper/paperaffected = O
-		paperaffected.clearpaper()
-		O.visible_message("<span class='warning'>The solution melts away \the [O]'s ink.</span>")
+		if(paperaffected.info || paperaffected.stamps)
+			paperaffected.clearpaper()
+			O.visible_message("<span class='warning'>The solution melts away \the [O]'s ink.</span>")
 
 	if(istype(O, /obj/item/weapon/book))
 		if(volume >= 5)
 			var/obj/item/weapon/book/affectedbook = O
-			affectedbook.dat = null
-			O.visible_message("<span class='warning'>The solution melts away \the [O]'s ink.</span>")
+			if(affectedbook.dat)
+				affectedbook.dat = null
+				O.visible_message("<span class='warning'>The solution melts away \the [O]'s ink.</span>")
 
 //It's really much more stronger than other drinks
 /datum/reagent/ethanol/beer
