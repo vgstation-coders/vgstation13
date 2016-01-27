@@ -88,7 +88,7 @@ var/global/disable_vents     = 0
 #define GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE 1500		//For some gloves
 #define SHOE_MAX_HEAT_PROTECTION_TEMPERATURE 1500		//For gloves
 
-#define IS_SPACE_COLD 1
+#define IS_SPACE_COLD 0
 #define PRESSURE_DAMAGE_COEFFICIENT 4 //The amount of pressure damage someone takes is equal to (pressure / HAZARD_HIGH_PRESSURE)*PRESSURE_DAMAGE_COEFFICIENT, with the maximum of MAX_PRESSURE_DAMAGE
 #define MAX_HIGH_PRESSURE_DAMAGE 4	//This used to be 20... I got this much random rage for some retarded decision by polymorph?! Polymorph now lies in a pool of blood with a katana jammed in his spleen. ~Errorage --PS: The katana did less than 20 damage to him :(
 #define LOW_PRESSURE_DAMAGE 2 	//The amounb of damage someone takes when in a low pressure area (The pressure threshold is so low that it doesn't make sense to do any calculations, so it just applies this flat value).
