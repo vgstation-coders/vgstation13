@@ -93,6 +93,7 @@ var/global/mulebot_count = 0
 		/obj/structure/vendomatpack,
 		/obj/structure/stackopacks,
 		/obj/item/weapon/gift,
+		/obj/item/delivery
 		)
 
 /obj/machinery/bot/mulebot/Destroy()
@@ -390,23 +391,19 @@ var/global/mulebot_count = 0
 	else
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return 0
-
-// mousedrop a crate to load the bot
 // can load anything if emagged
 
-/obj/machinery/bot/mulebot/MouseDrop_T(var/atom/movable/C, mob/user)
 
+// Mousedrop a crate to load the bot
+
+/obj/machinery/bot/mulebot/MouseDrop_T(atom/dropping, mob/user)
 	if(user.stat)
-		return
+		load(dropping)
 
-	if (!on || !istype(C)|| C.anchored || get_dist(user, src) > 1 || get_dist(src,C) > 1 )
-		return
 
-	if(load)
-		return
-
-	load(C)
-
+/obj/machinery/bot/mulebot/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+	if(usr.stat)
+		unload(over_object)
 
 // called to load a crate
 /obj/machinery/bot/mulebot/proc/load(var/atom/movable/C)
