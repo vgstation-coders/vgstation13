@@ -12,4 +12,9 @@ else
   unzip -o byond.zip
   cd byond
   make here
+  if [ ! -f "$HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/DreamMaker" ]
+  then
+    echo "Couldn't find Dream Maker even after building, something is seriously wrong!"
+    exit 3
+  fi
 fi
