@@ -2,6 +2,7 @@
 
 dmepath=""
 retval=1
+source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
 
 for var
 do

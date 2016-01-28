@@ -14,7 +14,9 @@ else
   make here
   if [ ! -f "$HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/DreamMaker" ]
   then
-    echo "Couldn't find Dream Maker even after building, something is seriously wrong!"
+    echo "!!!!Couldn't find Dream Maker even after building, something is seriously wrong!!!!!"
     exit 3
+  else
+    echo "DreamMaker exists, we built correctly, hooray"
   fi
 fi
