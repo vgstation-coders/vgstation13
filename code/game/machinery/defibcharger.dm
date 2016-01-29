@@ -7,7 +7,7 @@ obj/machinery/recharger/defibcharger/wallcharger
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 150
-
+	transform_icon = 0
 	machine_flags = SCREWTOGGLE | CROWDESTROY //| WRENCHMOVE | FIXED2WORK if we want it to be wrenchable
 
 /********************************************************************
@@ -89,23 +89,23 @@ obj/machinery/recharger/defibcharger/wallcharger/process()
 obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as obj, mob/user as mob)
 	if(..())
 		return
-	if(istype(user,/mob/living/silicon))
+	if(istype(user, /mob/living/silicon))
 		return
 	if(istype(G, /obj/item/weapon/melee/defibrillator))
 		var/obj/item/weapon/melee/defibrillator/D = G
 		if(D.ready)
-			to_chat(user, "<span class='warning'>[D] won't fit. Try putting the paddles back on!</span>")
+			to_chat(user, "<span class='warning'>\The [D] won't fit. Try putting its paddles back on!</span>")
 			return
 		if(charging)
-			to_chat(user, "<span class='warning'>Remove [D] first!</span>")
+			to_chat(user, "<span class='warning'>Remove \the [D] first!</span>")
 			return
 		// Checks to make sure he's not in space doing it, and that the area got proper power.
 		var/area/a = get_area(src)
 		if(!isarea(a))
-			to_chat(user, "<span class='warning'>[src] blinks red as you try to insert [D]!</span>")
+			to_chat(user, "<span class='warning'>\The [src] blinks red as you try to insert \the [D]!</span>")
 			return
 		if(a.power_equip == 0)
-			to_chat(user, "<span class='warning'>[src] blinks red as you try to insert [D]!</span>")
+			to_chat(user, "<span class='warning'>\The [src] blinks red as you try to insert \the [D]!</span>")
 			return
 		if(user.drop_item(G, src))
 			charging = G
@@ -113,3 +113,4 @@ obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as o
 			update_icon()
 		else
 			user << "<span class='warning'>You can't let go of \the [G]!</span>"
+

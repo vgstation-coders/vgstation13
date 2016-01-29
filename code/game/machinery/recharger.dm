@@ -11,11 +11,9 @@
 	ghost_write = 0
 
 	var/self_powered = 0
-
 	var/obj/item/weapon/charging = null
-
 	var/appearance_backup = null
-
+	var/transform_icon = 1 //Set to 0 to disable inherited icon shrinking
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/recharger/New()
@@ -27,16 +25,19 @@
 
 /obj/machinery/recharger/Destroy()
 	if(charging)
-		charging.appearance = appearance_backup
+		if(transform_icon)
+			charging.appearance = appearance_backup
 		charging.update_icon()
 		charging.loc = loc
 		charging = null
-	appearance_backup=null
+	appearance_backup = null
 	..()
 
 /obj/machinery/recharger/attackby(obj/item/weapon/G, mob/user)
-	if(istype(user,/mob/living/silicon))
+
+	if(istype(user, /mob/living/silicon))
 		return
+
 	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G, /obj/item/energy_magazine) || istype(G, /obj/item/ammo_storage/magazine/lawgiver))
 		if(charging)
 			to_chat(user, "<span class='warning'>There's \a [charging] already charging inside!</span>")
@@ -50,26 +51,31 @@
 			to_chat(user, "<span class='notice'>[src] isn't connected to a power source.</span>")
 			return
 
-		if (istype(G, /obj/item/weapon/gun/energy/gun/nuclear) || istype(G, /obj/item/weapon/gun/energy/crossbow))
+		if(istype(G, /obj/item/weapon/gun/energy/gun/nuclear) || istype(G, /obj/item/weapon/gun/energy/crossbow))
 			to_chat(user, "<span class='notice'>Your gun's recharge port was removed to make room for a miniaturized reactor.</span>")
 			return
-		if (istype(G, /obj/item/weapon/gun/energy/staff))
+		if(istype(G, /obj/item/weapon/gun/energy/staff))
 			to_chat(user, "<span class='notice'>The recharger rejects the magical apparatus.</span>")
 			return
 		if(!user.drop_item(G, src))
 			user << "<span class='warning'>You can't let go of \the [G]!</span>"
 			return
 
-		appearance_backup = G.appearance
-		var/matrix/M = matrix()
-		M.Scale(0.625)
-		M.Translate(0,6)
-		G.transform = M
+		if(transform_icon)
+			appearance_backup = G.appearance
+			var/matrix/M = matrix()
+			M.Scale(0.625)
+			M.Translate(0, 6)
+			G.transform = M
+
 		charging = G
+
 		if(!self_powered)
 			use_power = 2
+
 		update_icon()
 		return
+
 	..()
 
 /obj/machinery/recharger/wrenchAnchor(mob/user)
@@ -88,14 +94,15 @@
 	add_fingerprint(user)
 
 	if(charging && Adjacent(user))
-		charging.appearance = appearance_backup
-		charging.update_icon()
+		if(transform_icon)
+			charging.appearance = appearance_backup
+			charging.update_icon()
 		charging.loc = loc
 		user.put_in_hands(charging)
 		charging = null
 		if(!self_powered)
 			use_power = 1
-		appearance_backup=null
+		appearance_backup = null
 		update_icon()
 
 /obj/machinery/recharger/attack_paw(mob/user)
@@ -107,9 +114,10 @@
 		return
 
 	if(!self_powered && (stat & (NOPOWER|BROKEN)))
-		if(charging)//Spit out anything being charged if it loses power or breaks
-			charging.appearance = appearance_backup
-			charging.update_icon()
+		if(charging) //Spit out anything being charged if it loses power or breaks
+			if(transform_icon)
+				charging.appearance = appearance_backup
+				charging.update_icon()
 			charging.loc = loc
 			visible_message("<span class='notice'>[src] powers down and ejects \the [charging].</span>")
 			charging = null
