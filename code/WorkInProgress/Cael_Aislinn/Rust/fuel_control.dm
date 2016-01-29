@@ -91,7 +91,7 @@
 		dat += {"<tr>
 			<td>[I.id_tag]</td>"}
 		if(I.cur_assembly)
-			dat += "<td><a href='?src=\ref[I];toggle_injecting=1;update_extern=\ref[src]'>\[[I.injecting ? "Halt injecting" : "Begin injecting"]\]</a></td>"
+			dat += "<td><a href='?src=\ref[src];toggle_injecting=1;update_extern=\ref[src]'>\[[I.injecting ? "Halt injecting" : "Begin injecting"]\]</a></td>"
 		else
 			dat += "<td>None</td>"
 		dat += "<td>[I.fuel_usage * 100]%</td>"
@@ -126,6 +126,13 @@
 		for(var/obj/machinery/power/rust_fuel_injector/I in range(scan_range, src))
 			if(check_injector_status(I))
 				connected_injectors.Add(I)
+
+	if( href_list["toggle_injecting"])
+		for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
+			if(I.injecting)
+				I.StopInjecting()
+			else
+				I.BeginInjecting()
 
 	if( href_list["toggle_stage"] )
 		var/cur_stage = href_list["toggle_stage"]

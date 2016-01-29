@@ -56,10 +56,11 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	light_range_on = 3
 	light_color = LIGHT_COLOR_BLUE
 
-	var/obj/effect/rust_em_field/owned_field
+	var/obj/machinery/power/rust_em_field/owned_field
 	var/field_strength = 1//0.01
 	var/field_frequency = 1
 	var/id_tag
+	var/power = 0
 
 	use_power = 1
 	idle_power_usage = 50
@@ -81,6 +82,16 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 /obj/machinery/power/rust_core/process()
 	if(stat & BROKEN || !powernet)
 		Shutdown()
+
+	if(owned_field)
+		power = owned_field.radiation
+		transfer_energy()
+		if (owned_field.temp > owned_field.danger_point && light_color == LIGHT_COLOR_BLUE)
+			light_color = LIGHT_COLOR_RED
+			set_light(light_range_on * 3, light_power_on * 3)
+		if (owned_field.temp < owned_field.danger_point && light_color == LIGHT_COLOR_RED)
+			light_color = LIGHT_COLOR_BLUE
+			set_light(light_range_on, light_power_on)
 
 /obj/machinery/power/rust_core/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
 	if(owned_field)
@@ -112,6 +123,7 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 			owned_field.ChangeFieldFrequency(field_frequency)
 
 /obj/machinery/power/rust_core/proc/Startup()
+	light_color = LIGHT_COLOR_BLUE
 	if(owned_field)
 		return
 
@@ -128,6 +140,7 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	if(owned_field)
 		icon_state = "core0"
 		qdel(owned_field)
+		owned_field = null
 		use_power = 1
 		set_light(0)
 
@@ -159,3 +172,9 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	field_frequency = value
 	if(owned_field)
 		owned_field.ChangeFieldFrequency(value)
+
+/obj/machinery/power/rust_core/proc/transfer_energy()
+	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
+		if(get_dist(R, src) <= 15) // Better than using orange() every process
+			R.receive_pulse(power)
+	return

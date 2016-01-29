@@ -1031,6 +1031,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Engineering"
 	access = access_engine
 
+/*	Not needed anymore.
 /datum/supply_packs/rust_assembly_port
 	contains = list(/obj/item/weapon/module/rust_fuel_port)
 	name = "R-UST Mk. 7 fuel assembly port circuitry"
@@ -1039,6 +1040,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "R-UST Mk. 7 fuel assembly port circuitry"
 	group = "Engineering"
 	access = access_engine
+*/
 
 /datum/supply_packs/rust_core
 	contains = list(/obj/machinery/power/rust_core)
@@ -1046,6 +1048,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure/large
 	containername = "R-UST Mk. 7 tokamak crate"
+	group = "Engineering"
+	access = access_engine
+
+/datum/supply_packs/rust_computers
+	contains = list(/obj/item/weapon/circuitboard/rust_gyrotron_control,
+					/obj/item/weapon/circuitboard/rust_core_control,
+					/obj/item/weapon/circuitboard/rust_core_monitor,
+					/obj/item/weapon/circuitboard/rust_fuel_control)
+	name = "R-UST Computer circuitry"
+	cost = 50
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "R-UST computer circuitry crate"
 	group = "Engineering"
 	access = access_engine
 

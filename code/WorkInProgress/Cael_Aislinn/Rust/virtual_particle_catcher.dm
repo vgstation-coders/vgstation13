@@ -5,7 +5,7 @@
 	density = 0
 	anchored = 1
 	layer = 4
-	var/obj/effect/rust_em_field/parent
+	var/obj/machinery/power/rust_em_field/parent
 	var/mysize = 0
 
 	invisibility = 101

@@ -24,11 +24,14 @@
 
 //////////////////////////////////////
 // RUST Fuel Port board
+//depreciated with the update to the fuel injector
 
+/*
 /obj/item/weapon/module/rust_fuel_port
 	name = "Internal circuitry (R-UST Mk. 7 fuel port)"
 	icon_state = "card_mod"
 	origin_tech = "engineering=4;materials=5"
+*/
 
 //////////////////////////////////////
 // RUST Fuel Compressor board
@@ -46,13 +49,12 @@
 	build_path = "/obj/machinery/power/rust_core"
 	board_type = "machine"
 	origin_tech = "bluespace=3;plasmatech=4;magnets=5;powerstorage=6"
-	frame_desc = "Requires 2 Pico Manipulators, 1 Ultra Micro-Laser, 5 Pieces of Cable, 1 Subspace Crystal and 1 Console Screen."
+	frame_desc = "Requires 5 Micro-Manipulators, 3 Micro-Lasers, 3 Subspace Crystals and 1 Console Screen."
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator/pico" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser/ultra" = 1,
-							"/obj/item/weapon/stock_parts/subspace/crystal" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 1,
-							"/obj/item/stack/cable_coil" = 5)
+							"/obj/item/weapon/stock_parts/manipulator" = 5,
+							"/obj/item/weapon/stock_parts/micro_laser" = 3,
+							"/obj/item/weapon/stock_parts/subspace/crystal" = 3,
+							"/obj/item/weapon/stock_parts/console_screen" = 1,)
 
 //////////////////////////////////////
 // RUST Fuel Injector board
@@ -62,13 +64,12 @@
 	build_path = "/obj/machinery/power/rust_fuel_injector"
 	board_type = "machine"
 	origin_tech = "powerstorage=3;engineering=4;plasmatech=4;materials=6"
-	frame_desc = "Requires 2 Pico Manipulators, 1 Phasic Scanning Module, 1 Super Matter Bin, 1 Console Screen and 5 Pieces of Cable."
+	frame_desc = "Requires 5 Micro-Manipulators, 3 Scanning Modules, 3 Matter Bins, and 1 Console Screen."
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator/pico" = 2,
-							"/obj/item/weapon/stock_parts/scanning_module/phasic" = 1,
-							"/obj/item/weapon/stock_parts/matter_bin/super" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 1,
-							"/obj/item/stack/cable_coil" = 5)
+							"/obj/item/weapon/stock_parts/manipulator" = 5,
+							"/obj/item/weapon/stock_parts/scanning_module" = 3,
+							"/obj/item/weapon/stock_parts/matter_bin" = 3,
+							"/obj/item/weapon/stock_parts/console_screen" = 1,)
 
 //Gyrotron controller board.
 /obj/item/weapon/circuitboard/rust_gyrotron_control

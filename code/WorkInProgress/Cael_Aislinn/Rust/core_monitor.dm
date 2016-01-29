@@ -38,7 +38,9 @@
 				. += {"
 			<b>Approximate field diameter (m):</b> [linked_core.owned_field.size]<br>
 			<b>Field mega energy:</b> [linked_core.owned_field.mega_energy]<br>
-			<b>Field sub-mega energy:</b> [linked_core.owned_field.energy]<hr>
+			<b>Field sub-mega energy:</b> [linked_core.owned_field.energy]<br>
+			<b>Field radiation:</b> [linked_core.owned_field.radiation]<br>
+			<b>Field temperature:</b> [linked_core.owned_field.held_plasma.temperature]<hr>
 			<b>Field dormant reagents:</b><br>
 			<table>
 				<tr>

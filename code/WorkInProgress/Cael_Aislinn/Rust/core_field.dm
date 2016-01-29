@@ -6,7 +6,7 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 
 //#DEFINE MAX_STORED_ENERGY (held_plasma.toxins * held_plasma.toxins * SPECIFIC_HEAT_TOXIN)
 
-/obj/effect/rust_em_field
+/obj/machinery/power/rust_em_field
 	name = "EM Field"
 	desc = "A coruscating, barely visible field of energy. It is shaped like a slightly flattened torus."
 	icon = 'code/WorkInProgress/Cael_Aislinn/Rust/rust.dmi'
@@ -19,7 +19,7 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	var/volume_covered = 0	//atmospheric volume covered
 
 	var/obj/machinery/power/rust_core/owned_core
-	var/list/dormant_reactant_quantities = new
+	var/list/dormant_reactant_quantities = new//
 
 	layer = 3.1
 
@@ -33,15 +33,28 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	var/datum/gas_mixture/held_plasma = new
 	var/particle_catchers[13]
 
+	var/temp = 0
+	var/temp_archived = 0
+	var/warning_point = 1000000
+	var/danger_point = 5000000
+	var/meltdown_point = 10000000
+	var/obj/item/device/radio/radio
+	var/instability = 0
+	var/lastwarning = 0
+	var/warning_delay = 30
+
 	var/emp_overload = 0
 
-/obj/effect/rust_em_field/New(loc, var/obj/machinery/power/rust_core/new_owned_core)
+/obj/machinery/power/rust_em_field/New(loc, var/obj/machinery/power/rust_core/new_owned_core)
 	..()
 	//create radiator
-	for(var/obj/machinery/rust/rad_source/rad in range(0))
+/*	for(var/obj/machinery/rust/rad_source/rad in range(0))
 		radiator = rad
 	if(!radiator)
-		radiator = new()
+		radiator = new() */
+	//actually, fuck the radiator
+
+	radio = new (src)
 
 	owned_core = new_owned_core
 
@@ -114,17 +127,17 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 
 	processing_objects.Add(src)
 
-/obj/effect/rust_em_field/process()
+/obj/machinery/power/rust_em_field/process()
 	//make sure the field generator is still intact
 	if(!owned_core)
 		qdel(src)
 
 	//handle radiation
-	if(!radiator)
+/*	if(!radiator)
 		radiator = new /obj/machinery/rust/rad_source()
 	radiator.mega_energy += radiation
-	radiator.source_alive++
-	radiation = 0
+	radiator.source_alive++ */
+	radiation = 0//start the radiation over again this process
 
 	//update values
 	var/transfer_ratio = field_strength / 50			//higher field strength will result in faster plasma aggregation
@@ -208,9 +221,43 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 			dormant_reactant_quantities[reactant] -= radiate
 			radiation += radiate
 
+	var/instability = round((temp / meltdown_point) * 100)
+	if(temp > warning_point) // while the core is still damaged and it's still worth noting its status
+
+		if((world.timeofday - lastwarning) / 10 >= warning_delay)
+			var/warning = ""
+			var/offset = 0
+
+			// Damage still low.
+			if(temp >= temp_archived) // The damage is still going up
+				warning = "Danger! EM Field instability detected, now at [instability]%."
+				offset=150
+
+				if(temp > danger_point)
+					warning = "EM FIELD INSTABILITY AT [instability]%. PANIC."
+					offset=0
+					//audio_offset = 100
+			if(temp < temp_archived)
+				warning = "EM Field returning to safe operating levels. Instability: [instability]%"
+			//radio.say(warning, "Supermatter [short_name] Monitor")
+			var/datum/speech/speech = radio.create_speech(warning, frequency=1459, transmitter=radio)
+			speech.name = "R-UST Monitor"
+			speech.job = "Automated Announcement"
+			speech.as_name = "R-UST Monitor"
+			Broadcast_Message(speech, level = list(0,1))
+			returnToPool(speech)
+
+			lastwarning = world.timeofday - offset
+			temp_archived = temp
+
+		if (temp > meltdown_point)
+			Destroy()
+
+	temp = held_plasma.temperature
+
 	return 1
 
-/obj/effect/rust_em_field/proc/ChangeFieldStrength(var/new_strength)
+/obj/machinery/power/rust_em_field/proc/ChangeFieldStrength(var/new_strength)
 	var/calc_size = 1
 	emp_overload = 0
 	if(new_strength <= 50)
@@ -227,10 +274,10 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	field_strength = new_strength
 	change_size(calc_size)
 
-/obj/effect/rust_em_field/proc/ChangeFieldFrequency(var/new_frequency)
+/obj/machinery/power/rust_em_field/proc/ChangeFieldFrequency(var/new_frequency)
 	frequency = new_frequency
 
-/obj/effect/rust_em_field/proc/AddEnergy(var/a_energy, var/a_mega_energy, var/a_frequency)
+/obj/machinery/power/rust_em_field/proc/AddEnergy(var/a_energy, var/a_mega_energy, var/a_frequency)
 	var/energy_loss_ratio = 0
 	if(a_frequency != src.frequency)
 		energy_loss_ratio = 1 / abs(a_frequency - src.frequency)
@@ -241,14 +288,14 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 		energy -= 100000
 		mega_energy += 0.1
 
-/obj/effect/rust_em_field/proc/AddParticles(var/name, var/quantity = 1)
+/obj/machinery/power/rust_em_field/proc/AddParticles(var/name, var/quantity = 1)
 	if(name in dormant_reactant_quantities)
 		dormant_reactant_quantities[name] += quantity
 	else if(name != "proton" && name != "electron" && name != "neutron")
 		dormant_reactant_quantities.Add(name)
 		dormant_reactant_quantities[name] = quantity
 
-/obj/effect/rust_em_field/proc/RadiateAll(var/ratio_lost = 1)
+/obj/machinery/power/rust_em_field/proc/RadiateAll(var/ratio_lost = 1)
 	for(var/particle in dormant_reactant_quantities)
 		radiation += dormant_reactant_quantities[particle]
 		dormant_reactant_quantities.Remove(particle)
@@ -259,7 +306,7 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	var/datum/gas_mixture/environment = loc.return_air()
 	environment.merge(held_plasma)
 
-/obj/effect/rust_em_field/proc/change_size(var/newsize = 1)
+/obj/machinery/power/rust_em_field/proc/change_size(var/newsize = 1)
 	//
 	var/changed = 0
 	switch(newsize)
@@ -301,7 +348,7 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	return changed
 
 //the !!fun!! part
-/obj/effect/rust_em_field/proc/React()
+/obj/machinery/power/rust_em_field/proc/React()
 	//loop through the reactants in random order
 	var/list/reactants_reacting_pool = dormant_reactant_quantities.Copy()
 	/*
@@ -342,7 +389,8 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 					continue
 				var/datum/fusion_reaction/cur_reaction = get_fusion_reaction(cur_primary_reactant, cur_secondary_reactant)
 				if(cur_reaction)
-//					to_chat(world, "<span class='notice'>secondary reactant: [cur_secondary_reactant], [reaction_products.len]</span>")
+//					to_chat(world, "<span class='notice'>secondary reactant: [cur_secondary_reactant]</span>")
+//					to_chat(world, "[cur_reaction]")
 					possible_reactions.Add(cur_reaction)
 
 			//if there are no possible reactions here, abandon this primary reactant and move on
@@ -427,20 +475,20 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 			AddParticles(reactant, reactants_reacting_pool[reactant])
 //			to_chat(world, "retained: [reactant], [reactants_reacting_pool[reactant]]")
 
-/obj/effect/rust_em_field/Destroy()
+/obj/machinery/power/rust_em_field/Destroy()
 	//radiate everything in one giant burst
 	for(var/obj/effect/rust_particle_catcher/catcher in particle_catchers)
 		qdel(catcher)
-
-	owned_core.owned_field = null
-	owned_core = null
 
 	RadiateAll()
 
 	processing_objects.Remove(src)
 	. = ..()
 
-/obj/effect/rust_em_field/bullet_act(var/obj/item/projectile/Proj)
+	owned_core.Shutdown()
+	owned_core = null
+
+/obj/machinery/power/rust_em_field/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.flag != "bullet")
 		AddEnergy(Proj.damage * 20, 0, 1)
 		update_icon()

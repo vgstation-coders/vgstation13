@@ -72,12 +72,13 @@
 		return
 
 	if(istype(W, /obj/item/weapon/fuel_assembly) && !cur_assembly)
+		interact(user)
 		if(emergency_insert_ready)
 			if(user.drop_item(W, src))
 				cur_assembly = W
 				emergency_insert_ready = 0
+				interact(user)
 				return
-
 	..()
 	return
 
@@ -107,13 +108,11 @@
 		dat += {"<B>Reactor Core Fuel Injector</B><hr>
 			<b>Device ID tag:</b> [id_tag] <a href='?src=\ref[src];modify_tag=1'>\[Modify\]</a><br>
 			<b>Status:</b> [injecting ? "<font color=green>Active</font> <a href='?src=\ref[src];toggle_injecting=1'>\[Disable\]</a>" : "<font color=blue>Standby</font> <a href='?src=\ref[src];toggle_injecting=1'>\[Enable\]</a>"]<br>
-			<b>Fuel usage:</b> [fuel_usage*100]% <a href='?src=\ref[src];fuel_usage=1'>\[Modify\]</a><br>
-			<b>Fuel assembly port:</b>
-			<a href='?src=\ref[src];fuel_assembly=1'>\[[cur_assembly ? "Eject assembly to port" : "Draw assembly from port"]\]</a> "}
+			<b>Fuel usage:</b> [fuel_usage*100]% <a href='?src=\ref[src];fuel_usage=1'>\[Modify\]</a><br>"}
 		if(cur_assembly)
-			dat += "<a href='?src=\ref[src];emergency_fuel_assembly=1'>\[Emergency eject\]</a><br>"
+			dat += "<a href='?src=\ref[src];emergency_fuel_assembly=1'>\[Eject assembly\]</a><br>"
 		else
-			dat += "<a href='?src=\ref[src];emergency_fuel_assembly=1'>\[[emergency_insert_ready ? "Cancel emergency insertion" : "Emergency insert"]\]</a><br>"
+			dat += "<a href='?src=\ref[src];emergency_fuel_assembly=1'>\[[emergency_insert_ready ? "Cancel insertion" : "Insert assembly"]\]</a><br>"
 		var/font_colour = "green"
 		if(cached_power_avail < active_power_usage)
 			font_colour = "red"
@@ -135,8 +134,10 @@
 	if( href_list["modify_tag"] )
 		id_tag = input("Enter new ID tag", "Modifying ID tag") as text|null
 
+/*
 	if( href_list["fuel_assembly"] )
 		attempt_fuel_swap()
+*/
 
 	if( href_list["emergency_fuel_assembly"] )
 		if(cur_assembly)
@@ -179,6 +180,7 @@
 /obj/machinery/power/rust_fuel_injector/proc/BeginInjecting()
 	if(!injecting && cur_assembly)
 		icon_state = "injector1"
+		update_icon()
 		injecting = 1
 		use_power = 1
 
@@ -186,6 +188,7 @@
 	if(injecting)
 		injecting = 0
 		icon_state = "injector0"
+		update_icon()
 		use_power = 0
 
 /obj/machinery/power/rust_fuel_injector/proc/Inject()
@@ -218,6 +221,7 @@
 	else
 		StopInjecting()
 
+/*
 /obj/machinery/power/rust_fuel_injector/proc/attempt_fuel_swap()
 	var/rev_dir = reverse_direction(dir)
 	var/turf/mid = get_step(src, rev_dir)
@@ -244,6 +248,7 @@
 		updateDialog()
 	else
 		src.visible_message("<span class='warning'>\icon[src] a red light flashes on [src].</span>")
+*/
 
 /obj/machinery/power/rust_fuel_injector/verb/rotate_clock()
 	set category = "Object"
