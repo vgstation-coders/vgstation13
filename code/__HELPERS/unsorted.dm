@@ -791,9 +791,6 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		if(istype(N, areatype)) theareas += N
 	return theareas
 
-/*
- * Severely broken, causes infinite loop runtimes on areas that are too big. Please don't do that
-
 //Takes: Area type as text string or as typepath OR an instance of the area.
 //Returns: A list of all turfs in areas of that type of that type in the world.
 /proc/get_area_turfs(var/areatype)
@@ -811,8 +808,6 @@ proc/GaussRandRound(var/sigma,var/roundto)
 			for(var/turf/T in N)
 				turfs += T
 	return turfs
-
-*/
 
 //Takes: Area type as text string or as typepath OR an instance of the area.
 //Returns: A list of all atoms	(objs, turfs, mobs) in areas of that type of that type in the world.
