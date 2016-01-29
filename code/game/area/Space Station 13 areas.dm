@@ -72,14 +72,9 @@ var/list/teleportlocs = list()
 //Wizards can teleport to any area on station
 proc/process_teleport_locs()
 	for(var/area/AR in areas)
-		//Cannot teleport on shuttles or antag outposts
-		//if(istype(AR, /area/shuttle) || istype(AR, /area/syndicate_station) || istype(AR, /area/wizard_station))
-			//continue
-		//if(teleportlocs.Find(AR.name))
-			//continue
 		var/turf/picked = safepick(get_area_turfs(AR.type))
 		if(picked && picked.z == map.zMainStation)
-			teleportlocs |= AR.name
+			teleportlocs += AR.name
 			teleportlocs[AR.name] = AR
 
 	sortTim(teleportlocs, /proc/cmp_text_asc)
@@ -89,11 +84,9 @@ var/list/ghostteleportlocs = list()
 //Ghosts can go wherever they want to go, they're free
 proc/process_ghost_teleport_locs()
 	for(var/area/AR in areas)
-		//if(ghostteleportlocs.Find(AR.name))
-			//continue
 		var/turf/picked = safepick(get_area_turfs(AR.type))
 		if(picked)
-			ghostteleportlocs |= AR.name
+			ghostteleportlocs += AR.name
 			ghostteleportlocs[AR.name] = AR
 
 	sortTim(ghostteleportlocs, /proc/cmp_text_asc)
@@ -103,11 +96,9 @@ var/global/list/adminbusteleportlocs = list()
 //Technically the same as ghost teleports for now
 proc/process_adminbus_teleport_locs()
 	for(var/area/AR in areas)
-		//if(adminbusteleportlocs.Find(AR.name))
-			//continue
 		var/turf/picked = safepick(get_area_turfs(AR.type))
 		if(picked)
-			adminbusteleportlocs |= AR.name
+			adminbusteleportlocs += AR.name
 			adminbusteleportlocs[AR.name] = AR
 
 	sortTim(adminbusteleportlocs, /proc/cmp_text_dsc)
