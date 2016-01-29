@@ -17,6 +17,10 @@
 		var/area/A = loc
 		A.area_turfs += src
 
+	if(ticker)
+		initialize()
+
+/turf/space/initialize()
 	if(!istype(src, /turf/space/transit))
 		icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
 
