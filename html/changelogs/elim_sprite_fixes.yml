@@ -1,0 +1,6 @@
+author: TheEliminator16
+delete-after: True
+changes: 
+  - imageadd: Added slime soup sprite which was previously missing
+  - bugfix: Fixed an issue with the HoP coat having holes where the hands should be when not worn
+  - bugfix: Fixed an issue with pushing the clown mask off of your face making it disappear
