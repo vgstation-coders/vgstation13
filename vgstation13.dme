@@ -207,7 +207,6 @@
 #include "code\datums\helper_datums\topic_input.dm"
 #include "code\datums\inventory\inventory.dm"
 #include "code\datums\inventory\slot.dm"
-#include "code\datums\regex\Regex.dm"
 #include "code\datums\research\research_tree.dm"
 #include "code\datums\research\unlockable.dm"
 #include "code\datums\saycode\speech.dm"
