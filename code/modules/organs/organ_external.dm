@@ -89,7 +89,11 @@
 	//If limb took enough damage, try to cut or tear it off
 	if(body_part != UPPER_TORSO && body_part != LOWER_TORSO) //As hilarious as it is, getting hit on the chest too much shouldn't effectively gib you.
 		if(config.limbs_can_break && brute_dam >= max_damage * config.organ_health_multiplier)
-			if(((sharp || is_peg()) && prob(5 * brute)) || (brute > 20 && prob(2 * brute)))
+			if(((sharp || is_peg()) && prob((5 * brute) * sharp)) || (brute > 20 && prob(2 * brute))) //sharp things have a greater chance to sever based on how sharp they are
+				droplimb(1)
+				return
+		else if((config.limbs_can_break && sharp == 100) || ((sharp >= 2) && (config.limbs_can_break && brute_dam >= (max_damage * config.organ_health_multiplier)/sharp))) //items of exceptional sharpness are capable of severing the limb below its damage threshold, the necessary threshold scaling inversely with sharpness
+			if(prob((5 * (brute * sharp)) * (sharp - 1))) //the same chance multiplier based on sharpness applies here as well
 				droplimb(1)
 				return
 
@@ -827,7 +831,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		var/emote_scream = pick("screams in pain and", "lets out a sharp cry and", "cries out and")
 		owner.emote("me", 1, "[(owner.species && owner.species.flags & NO_PAIN) ? "" : emote_scream ] drops what they were holding in their [hand_name]!")
 	if(is_malfunctioning())
-		owner.u_equip(c_hand, 1)
+		// owner.u_equip(c_hand, 1)
 		owner.emote("me", 1, "drops what they were holding, their [hand_name] malfunctioning!")
 		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
 		spark_system.set_up(5, 0, owner)
@@ -836,8 +840,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		spawn(10)
 			qdel(spark_system)
 			spark_system = null
-		if(!isturf(c_hand.loc) || !istype(c_hand.loc, /obj/structure/closet))
-			c_hand.loc = get_turf(c_hand)
+		owner.drop_item(c_hand)
 
 /datum/organ/external/proc/embed(var/obj/item/weapon/W, var/silent = 0)
 	if(!silent)

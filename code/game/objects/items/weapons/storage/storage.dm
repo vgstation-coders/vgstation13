@@ -34,7 +34,7 @@
 		var/mob/M = usr
 		if(istype(over_object, /obj/structure/table) && M.Adjacent(over_object))
 			var/mob/living/L = usr
-			if(istype(L) && !(L.restrained() || L.stat || L.weakened || L.stunned || L.paralysis || L.resting))
+			if(istype(L) && !(L.incapacitated() || L.lying))
 				empty_contents_to(over_object)
 		if(!( istype(over_object, /obj/screen) ))
 			return ..()
@@ -403,7 +403,7 @@
 /obj/item/weapon/storage/MouseDrop(over_object, src_location, over_location)
 	..()
 	orient2hud(usr)
-	if ((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
+	if (over_object == usr && (in_range(src, usr) || find_holder(src) == usr))
 		if (usr.s_active)
 			usr.s_active.close(usr)
 		src.show_to(usr)
@@ -414,7 +414,11 @@
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if((H.l_store == src || H.r_store == src) && !H.get_active_hand())	//Prevents opening if it's in a pocket.
+		if((H.l_store == src || H.r_store == src || H.head == src) && !H.get_active_hand())	//Prevents opening if it's in a pocket or head slot. Terrible kludge, I'm sorry.
+			return ..()
+	else if(isMoMMI(user))
+		var/mob/living/silicon/robot/mommi/MoM = user
+		if(MoM.head_state == src) //I'm so sorry. We have exactly one storage item that goes on head, and it can't hold any items while equipped. This is so you can actually take it off.
 			return ..()
 
 	src.orient2hud(user)

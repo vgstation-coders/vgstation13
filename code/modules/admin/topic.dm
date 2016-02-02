@@ -1938,37 +1938,50 @@
 			M.stuttering = 20
 
 	else if(href_list["CentcommReply"])
-		var/mob/living/carbon/human/H = locate(href_list["CentcommReply"])
-		if(!istype(H))
-			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
-			return
-		if(!istype(H.ears, /obj/item/device/radio/headset))
-			to_chat(usr, "The person you are trying to contact is not wearing a headset")
+		var/mob/M = locate(href_list["CentcommReply"])
+		var/receive_type
+		if(istype(M, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = M
+			if(!istype(H.ears, /obj/item/device/radio/headset))
+				to_chat(usr, "The person you are trying to contact is not wearing a headset")
+				return
+			receive_type = "headset"
+		else if(istype(M, /mob/living/silicon))
+			receive_type = "official communication channel"
+		if(!receive_type)
+			to_chat(usr, "This mob type cannot be replied to")
 			return
 
-		var/input = input(src.owner, "Please enter a message to reply to [key_name(H)] via their headset.","Outgoing message from Centcomm", "")
+		var/input = input(src.owner, "Please enter a message to reply to [key_name(M)] via their [receive_type].","Outgoing message from The Syndicate", "")
 		if(!input)	return
 
-		to_chat(src.owner, "You sent [input] to [H] via a secure channel.")
-		log_admin("[src.owner] replied to [key_name(H)]'s Centcomm message with the message [input].")
-		message_admins("[src.owner] replied to [key_name(H)]'s Centcom message with: \"[input]\"")
-		to_chat(H, "You hear something crackle in your headset for a moment before a voice speaks.  \"Please stand by for a message from Central Command.  Message as follows. <b>\"[input]\"</b>  Message ends.\"")
+		to_chat(src.owner, "You sent [input] to [M] via a secure channel.")
+		log_admin("[src.owner] replied to [key_name(M)]'s Centcomm message with the message [input].")
+		message_admins("[src.owner] replied to [key_name(M)]'s Centcom message with: \"[input]\"")
+		to_chat(M, "You hear something crackle from your [receive_type] for a moment before a voice speaks.  \"Please stand by for a message from Central Command.  Message as follows. <b>\"[input]\"</b>  Message ends.\"")
 
 	else if(href_list["SyndicateReply"])
-		var/mob/living/carbon/human/H = locate(href_list["SyndicateReply"])
-		if(!istype(H))
-			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
-			return
-		if(!istype(H.ears, /obj/item/device/radio/headset))
-			to_chat(usr, "The person you are trying to contact is not wearing a headset")
+		var/mob/M = locate(href_list["SyndicateReply"])
+		var/receive_type
+		if(istype(M, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = M
+			if(!istype(H.ears, /obj/item/device/radio/headset))
+				to_chat(usr, "The person you are trying to contact is not wearing a headset")
+				return
+			receive_type = "headset"
+		else if(istype(M, /mob/living/silicon))
+			receive_type = "undetectable communications channel"
+		if(!receive_type)
+			to_chat(usr, "This mob type cannot be replied to")
 			return
 
-		var/input = input(src.owner, "Please enter a message to reply to [key_name(H)] via their headset.","Outgoing message from The Syndicate", "")
+		var/input = input(src.owner, "Please enter a message to reply to [key_name(M)] via their [receive_type].","Outgoing message from The Syndicate", "")
 		if(!input)	return
 
-		to_chat(src.owner, "You sent [input] to [H] via a secure channel.")
-		log_admin("[src.owner] replied to [key_name(H)]'s Syndicate message with the message [input].")
-		to_chat(H, "You hear something crackle in your headset for a moment before a voice speaks.  \"Please stand by for a message from your benefactor.  Message as follows, agent. <b>\"[input]\"</b>  Message ends.\"")
+
+		to_chat(src.owner, "You sent [input] to [M] via a secure channel.")
+		log_admin("[src.owner] replied to [key_name(M)]'s Syndicate message with the message [input].")
+		to_chat(M, "You hear something crackle from your [receive_type] for a moment before a voice speaks.  \"Please stand by for a message from your benefactor.  Message as follows, agent. <b>\"[input]\"</b>  Message ends.\"")
 
 	else if(href_list["CentcommFaxView"])
 		var/obj/item/weapon/paper/P = locate(href_list["CentcommFaxView"])
@@ -2668,13 +2681,17 @@
 				floorIsLava = 1
 
 				message_admins("[key_name_admin(usr)] made the floor LAVA! It'll last [length] seconds and it will deal [damage] damage to everyone.", 1)
-
+				var/count = 0
+				var/list/lavaturfs = list()
 				for(var/turf/simulated/floor/F in turfs)
+					count++
+					if(!(count % 50000)) sleep(world.tick_lag)
 					if(F.z == 1)
 						F.name = "lava"
 						F.desc = "The floor is LAVA!"
 						F.overlays += "lava"
 						F.lava = 1
+						lavaturfs += F
 
 				spawn(0)
 					for(var/i = i, i < length, i++) // 180 = 3 minutes
@@ -2694,7 +2711,7 @@
 
 						sleep(10)
 
-					for(var/turf/simulated/floor/F in turfs) // Reset everything.
+					for(var/turf/simulated/floor/F in lavaturfs) // Reset everything.
 						if(F.z == 1)
 							F.name = initial(F.name)
 							F.desc = initial(F.desc)
@@ -3045,6 +3062,31 @@
 						hardcore_mode = 0
 						to_chat(world, "<h5><span class='danger'>Hardcore mode has been disabled</span></h5>")
 						to_chat(world, "<span class='info'>Starvation will no longer kill player-controlled characters.</span>")
+			if("hostile_infestation")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","HI")
+				message_admins("[key_name_admin(usr)] has triggered an infestation of hostile creatures.", 1)
+				new /datum/event/hostile_infestation
+			if("mass_hallucination")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","MH")
+				message_admins("[key_name_admin(usr)] made the whole crew trip balls.", 1)
+				new /datum/event/mass_hallucination
+			if("meaty_gores")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","ODF")
+				message_admins("[key_name_admin(usr)] has sent the station careening through a cloud of gore.", 1)
+				new /datum/event/thing_storm/meaty_gore
+			if("silent_meteors")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","SILM")
+				message_admins("[key_name_admin(usr)] has spawned meteors without a command alert.", 1)
+				new /datum/event/meteor_shower/meteor_quiet
+			if("mass_drunk")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","MASD")
+				message_admins("[key_name_admin(usr)] gave the station a vodka enema.", 1)
+				new /datum/event/mass_drunk
 		if(usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsfun"]]")
 			if(ok)
@@ -3118,7 +3160,7 @@
 				dat += "<table cellspacing=5><tr><th>Name</th><th>DNA</th><th>Blood Type</th></tr>"
 				for(var/mob/living/carbon/human/H in mob_list)
 					if(H.dna && H.ckey)
-						dat += "<tr><td>[H]</td><td>[H.dna.unique_enzymes]</td><td>[H.b_type]</td></tr>"
+						dat += "<tr><td>[H]</td><td>[H.dna.unique_enzymes]</td><td>[H.dna.b_type]</td></tr>"
 				dat += "</table>"
 				usr << browse(dat, "window=DNA;size=440x410")
 			if("fingerprints")
