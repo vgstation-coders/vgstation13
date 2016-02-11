@@ -31,7 +31,7 @@
 		/* buggy as fug
 		if(!H.species.has_sweat_glands)
 			return 1
-			
+
 		*/
 	if(forcesweat && ticker && ticker.hardcore_mode)
 		forcesweat = 0

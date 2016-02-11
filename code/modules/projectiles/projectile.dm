@@ -108,6 +108,8 @@ var/list/impact_master = list()
 	if(isanimal(atarget))	return 0
 	var/mob/living/L = atarget
 	if(L.flags & INVULNERABLE)			return 0
+	if((stun || weaken || paralyze || agony) && !(L.canmove))
+		L.drop_hands()
 	L.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked) // add in AGONY!
 	if(jittery)
 		L.Jitter(jittery)
