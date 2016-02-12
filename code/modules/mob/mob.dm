@@ -1492,7 +1492,7 @@ var/list/slot_equipment_priority = list( \
 		lying = 1
 		canmove = 0
 	else if(stunned)
-//		lying = 0
+		lying = 0
 		canmove = 0
 	else if(captured)
 		anchored = 1
@@ -1506,7 +1506,7 @@ var/list/slot_equipment_priority = list( \
 		if(ishuman(src))
 			layer = 3.9
 		density = 0
-		drop_hands()
+	//	drop_hands()
 	else
 		if(ishuman(src))
 			layer = 4
@@ -1573,6 +1573,8 @@ var/list/slot_equipment_priority = list( \
 
 
 /mob/proc/Stun(amount)
+	if(!canmove)
+		drop_hands()
 	if(status_flags & CANSTUN)
 		stunned = max(max(stunned,amount),0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
 	return
