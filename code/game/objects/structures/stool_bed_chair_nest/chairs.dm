@@ -3,7 +3,7 @@
 	desc = "You sit in this. Either by will or force."
 	icon_state = "chair"
 	lockflags = 0
-
+	var/can_rotate = 1
 	sheet_amt = 1
 
 /obj/structure/bed/chair/New()
@@ -54,7 +54,7 @@
 	set category = null //So it's only accessible from the right click menu
 	set src in oview(1)
 
-	if(!usr || !isturf(usr.loc))
+	if(!usr || !isturf(usr.loc) || !can_rotate)
 		return
 
 	if(!config.ghost_interaction && !blessed)

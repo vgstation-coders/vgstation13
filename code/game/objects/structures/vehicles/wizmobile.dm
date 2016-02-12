@@ -25,6 +25,7 @@
 	//ethereal=1 // NERF
 	var/can_move=1
 	layer = FLY_LAYER
+	can_rotate = 0
 
 	var/datum/effect/effect/system/trail/firebird/ion_trail
 
