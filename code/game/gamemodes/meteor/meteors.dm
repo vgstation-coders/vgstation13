@@ -120,7 +120,7 @@
 			possible_meteors[/obj/item/projectile/meteor/radioactive] = 10
 		if(!max_meteor_size || max_meteor_size >= 3) //Big waves
 			possible_meteors[/obj/item/projectile/meteor/big] = 10
-			possible_meteors[/obj/item/projectile/meteor/big/cluster] = 5
+			possible_meteors[/obj/item/projectile/meteor/big/cluster] = 1
 		var/chosen = pick(possible_meteors)
 		new chosen(pickedstart, pickedgoal)
 
@@ -291,7 +291,8 @@
 		var/c_endx = rand(TRANSITIONEDGE, world.maxx - TRANSITIONEDGE)
 		var/c_endy = rand(TRANSITIONEDGE, world.maxy - TRANSITIONEDGE)
 		var/c_pickedgoal = locate(c_endx, c_endy, 1)
-		new /obj/item/projectile/meteor(get_turf(src), c_pickedgoal)
+		if(c_pickedgoal)
+			new /obj/item/projectile/meteor(get_turf(src), c_pickedgoal)
 	qdel(src)
 
 //Placeholder for actual meteors of this kind, will be included SOON
