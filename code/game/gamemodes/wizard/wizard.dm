@@ -199,6 +199,8 @@
 	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(wizard_mob), slot_r_store)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/spellbook(wizard_mob), slot_r_hand)
 
+	wizard_mob.make_all_robot_parts_organic()
+
 	// For Vox and plasmadudes.
 	//wizard_mob.species.handle_post_spawn(wizard_mob)
 

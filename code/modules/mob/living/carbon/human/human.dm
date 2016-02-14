@@ -83,6 +83,7 @@
 	if(!dna)
 		dna = new /datum/dna(null)
 		dna.species=species.name
+		dna.b_type = random_blood_type()
 
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
@@ -484,8 +485,8 @@
 	return face_name
 //Returns "Unknown" if facially disfigured and real_name if not. Useful for setting name when polyacided or when updating a human's name variable
 /mob/living/carbon/human/proc/get_face_name()
-	var/datum/organ/external/head/head = get_organ("head")
-	if( !head || head.disfigured || (head.status & ORGAN_DESTROYED) || !real_name || (M_HUSK in mutations) )	//disfigured. use id-name if possible
+	var/datum/organ/external/head/head_organ = get_organ("head")
+	if((wear_mask && (is_slot_hidden(wear_mask.body_parts_covered,HIDEFACE)) && !istype(wear_mask,/obj/item/clothing/mask/gas/golem)) || ( head && (is_slot_hidden(head.body_parts_covered,HIDEFACE))) || !head_organ || head_organ.disfigured || (head_organ.status & ORGAN_DESTROYED) || !real_name || (M_HUSK in mutations) )	//Wearing a mask which hides our face, use id-name if possible
 		return "Unknown"
 	return real_name
 
@@ -1611,3 +1612,21 @@
 		to_chat(src, "<i>[pick(boo_phrases)]</i>")
 	else
 		to_chat(src, "<b><font color='[pick("red","orange","yellow","green","blue")]'>[pick(boo_phrases_drugs)]</font></b>")
+
+// Makes all robotic limbs organic.
+/mob/living/carbon/human/proc/make_robot_limbs_organic()
+	for(var/datum/organ/external/O in src.organs)
+		if(O.is_robotic())
+			O &= ~ORGAN_ROBOT
+	update_icons()
+
+// Makes all robot internal organs organic.
+/mob/living/carbon/human/proc/make_robot_internals_organic()
+	for(var/datum/organ/internal/O in src.organs)
+		if(O.robotic)
+			O.robotic = 0
+
+// Makes all robot organs, internal and external, organic.
+/mob/living/carbon/human/proc/make_all_robot_parts_organic()
+	make_robot_limbs_organic()
+	make_robot_internals_organic()
