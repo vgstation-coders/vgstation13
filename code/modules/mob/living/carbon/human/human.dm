@@ -431,6 +431,9 @@
 	else if(istype(AM,/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate))
 		var/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/WC = AM
 		WC.crush(src,species.blood_color)
+	else if(istype(AM, /obj/item/projectile/meteor)) //OOP damnit
+		var/obj/item/projectile/meteor/ME = AM
+		ME.Bump(src)
 	else
 		return //Don't make blood
 	var/obj/effect/decal/cleanable/blood/B = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(src))
