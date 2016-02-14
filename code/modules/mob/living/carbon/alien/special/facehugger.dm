@@ -228,19 +228,25 @@ var/const/MAX_ACTIVE_TIME = 400
 		var/obj/item/clothing/mask/facehugger/hugger = H.wear_mask
 		if(istype(hugger) && !hugger.sterile && !src.sterile) // Lamarr won't fight over faces and neither will normal huggers.
 			return
-			
+
 		if(mouth_protection && mouth_protection != H.wear_mask) //can't be protected with your own mask, has to be a hat
-			stat_collection.xeno.proper_head_protection++
-			if(prob(50)) // Temporary balance change, all mouth-covering hats will be more effective
+		var/obj/item/clothing/head/hat = mouth_protection
+		if(istype(hat))
+			if(hat.facehugger_protection <= 0) //Because WHO KNOWS HOW LOW YOU CAN GO (also helmets that get re-equipped will go lower than 0)
 				H.visible_message("<span class='danger'>\The [src] smashes against [H]'s [mouth_protection], and rips it off in the process!</span>")
 				H.drop_from_inventory(mouth_protection)
 			else
+				hat.facehugger_protection--
+				stat_collection.xeno.proper_head_protection++
 				H.visible_message("<span class='danger'>\The [src] bounces off of the [mouth_protection]!</span>")
 				if(prob(75))
 					Die()
 				else
 					GoIdle(15)
-					return
+				return
+		else
+			H.visible_message("<span class='danger'>\The [src] smashes against [H]'s [mouth_protection], and rips it off in the process!</span>")
+			H.drop_from_inventory(mouth_protection)
 
 	if(iscarbon(M))
 		var/mob/living/carbon/target = L

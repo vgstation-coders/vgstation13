@@ -16,6 +16,7 @@
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
 	species_restricted = list("exclude","Vox")
+	facehugger_protection = 4
 
 /obj/item/clothing/head/helmet/space/rig/New()
 	..()

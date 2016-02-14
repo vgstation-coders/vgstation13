@@ -152,6 +152,7 @@ BLIND     // can't see anything
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
+	var/facehugger_protection = 3
 
 //Mask
 /obj/item/clothing/mask
