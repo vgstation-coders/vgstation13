@@ -204,6 +204,8 @@ var/const/MAX_ACTIVE_TIME = 400
 		return
 	if(attached)
 		return 0
+	if(!src.Adjacent(M))
+		return
 	else
 		attached++
 		spawn(MAX_IMPREGNATION_TIME)
@@ -226,27 +228,28 @@ var/const/MAX_ACTIVE_TIME = 400
 		if(!real && mouth_protection)
 			return //Toys really shouldn't be forcefully removing gear
 		var/obj/item/clothing/mask/facehugger/hugger = H.wear_mask
-		if(istype(hugger) && !hugger.sterile && !src.sterile) // Lamarr won't fight over faces and neither will normal huggers.
+		if(istype(hugger) && !hugger.sterile && src.sterile) // Lamarr won't fight over faces and neither will normal huggers.
 			return
 
 		if(mouth_protection && mouth_protection != H.wear_mask) //can't be protected with your own mask, has to be a hat
-		var/obj/item/clothing/head/hat = mouth_protection
-		if(istype(hat))
-			if(hat.facehugger_protection <= 0) //Because WHO KNOWS HOW LOW YOU CAN GO (also helmets that get re-equipped will go lower than 0)
+			var/obj/item/clothing/head/hat = mouth_protection
+			if(istype(hat))
+				if(hat.facehugger_protection <= 0) //Because WHO KNOWS HOW LOW YOU CAN GO (also helmets that get re-equipped will go lower than 0)
+					H.visible_message("<span class='danger'>\The [src] smashes against [H]'s [mouth_protection], and rips it off in the process!</span>")
+					H.drop_from_inventory(mouth_protection)
+				else
+					hat.facehugger_protection--
+					stat_collection.xeno.proper_head_protection++
+					H.visible_message("<span class='danger'>\The [src] bounces off of the [mouth_protection]!</span>")
+					if(prob(75))
+						Die()
+					else
+						GoIdle(15)
+					return
+			else
 				H.visible_message("<span class='danger'>\The [src] smashes against [H]'s [mouth_protection], and rips it off in the process!</span>")
 				H.drop_from_inventory(mouth_protection)
-			else
-				hat.facehugger_protection--
-				stat_collection.xeno.proper_head_protection++
-				H.visible_message("<span class='danger'>\The [src] bounces off of the [mouth_protection]!</span>")
-				if(prob(75))
-					Die()
-				else
-					GoIdle(15)
-				return
-		else
-			H.visible_message("<span class='danger'>\The [src] smashes against [H]'s [mouth_protection], and rips it off in the process!</span>")
-			H.drop_from_inventory(mouth_protection)
+			return // So we don't continue trying to jump on someone's face directly after ripping off their hat.
 
 	if(iscarbon(M))
 		var/mob/living/carbon/target = L
@@ -341,8 +344,6 @@ var/const/MAX_ACTIVE_TIME = 400
 	return
 
 /proc/CanHug(var/mob/M)
-
-
 	if(iscorgi(M))
 		return 1
 
