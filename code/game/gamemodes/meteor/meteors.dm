@@ -163,6 +163,8 @@
 
 	if(istype(mover, /obj/item/projectile/meteor))
 		return 1 //Just move through it, no questions asked
+	if(isliving(mover))
+		return 0 //Collision
 	else
 		return ..() //Refer to atom/proc/CanPass
 
