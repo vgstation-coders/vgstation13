@@ -12,7 +12,9 @@
 	var/projectilesound
 	var/casingtype
 	var/move_to_delay = 2 //delay for the automated movement.
-	var/list/friends = list()
+
+	var/list/friends = list() //List of friends. Accepts both paths (/mob/living/simple_animal/corgi) and mob references.
+
 	var/vision_range = 9 //How big of an area to search for targets in, a vision of 9 attempts to find targets as soon as they walk into screen view
 
 	var/aggro_vision_range = 9 //If a mob is aggro, we search in this radius. Defaults to 9 to keep in line with original simple mob aggro radius
@@ -151,7 +153,7 @@
 		if((istype(L,/mob/living/simple_animal/corgi/Ian) || istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
 			return 0
 		//WE DON'T ATTACK OUR FRIENDS (used by lazarus injectors, and rabid slimes)
-		if(friends.Find(L))
+		if(friends.Find(L) || friends.Find(L.type))
 			return 0
 		return 1
 	if(isobj(the_target))
@@ -212,6 +214,16 @@
 
 /mob/living/simple_animal/hostile/adjustBruteLoss(var/damage)
 	..(damage)
+
+	if(usr && friends.len && prob(min(100, damage * 15))) //Chance to become angry at a friend is 15 * damage, as %.
+		friends.Remove(usr)
+
+		if(friends[usr.type])
+			friends[usr.type] -= damage
+
+			if(friends[usr.type] <= 0)
+				friends.Remove(usr.type)
+
 	if(!stat && search_objects < 3)//Not unconscious, and we don't ignore mobs
 		if(search_objects)//Turn off item searching and ignore whatever item we were looking at, we're more concerned with fight or flight
 			search_objects = 0

@@ -660,6 +660,15 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/mob/living/simple_animal/new_animal = new species_type(src.loc)
 
+	if(istype(src.loc, /obj/item/weapon/holder)) //If we're being held, escape
+		new_animal.forceMove(get_turf(src))
+
+		var/mob/living/L = src.loc.loc
+		if(istype(L))
+			to_chat(L, "<span class='info'>\The [src] grows up!</span>")
+			L.drop_item(src.loc, force_drop = 1)
+			qdel(src.loc)
+
 	if(locked_to) //Handle atom locking
 		var/atom/movable/A = locked_to
 		A.unlock_atom(src)
@@ -670,6 +679,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	new_animal.key = src.key
 
 	forceMove(get_turf(src))
+
 	qdel(src)
 
 /mob/living/simple_animal/proc/inherit_mind(mob/living/simple_animal/from)
