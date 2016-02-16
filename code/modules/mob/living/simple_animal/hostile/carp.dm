@@ -152,9 +152,9 @@
 					//If only one human feeds a carp, the carp will only see that human as a friend.
 					//If, however, two or more humans feed a carp, the carps will see the entire human species as friends. They'll still be agressive towards vox (unless two or more vox feed them) and other mobs.
 					for(var/mob/M in friends)
-						if(M.type == user.type) //If we're already friends with somebody else of the same species,
-							friends[user.type] += 1 //Increase our view of that species
-							friends[user.type] *= 2
+						if(M.type == user.type)
+							friends[user.type] += 2
+							break
 
 					friends.Add(user)
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")

@@ -219,7 +219,7 @@
 		friends.Remove(usr)
 
 		if(friends[usr.type])
-			friends[usr.type] -= damage
+			friends[usr.type] -= 2 * damage
 
 			if(friends[usr.type] <= 0)
 				friends.Remove(usr.type)
