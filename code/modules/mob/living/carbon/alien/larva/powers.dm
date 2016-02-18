@@ -48,8 +48,8 @@
 		if(mind)	mind.transfer_to(new_xeno)
 		transferImplantsTo(new_xeno)
 		transferBorers(new_xeno)
-		playsound(get_turf(src), 'sound/effects/evolve.ogg', 40, 1)
 		qdel(src)
+		playsound(get_turf(src), 'sound/effects/evolve.ogg', 40, 1)
 		return
 	else
 		to_chat(src, "<span class='warning'>You are not fully grown yet.</span>")

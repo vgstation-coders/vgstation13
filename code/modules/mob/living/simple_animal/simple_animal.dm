@@ -164,7 +164,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	//Movement
 	if((!client||deny_client_move) && !stop_automated_movement && wander && !anchored && (ckey == null) && !(flags & INVULNERABLE))
-		if(isturf(src.loc) && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
+		if(isturf(src.loc) && !resting && !locked_to && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Soma animals don't move when pulled
@@ -373,8 +373,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return
 
 /mob/living/simple_animal/MouseDrop(mob/living/carbon/human/M)
-	if(M != usr || !istype(M) || !Adjacent(M) || M.incapacitated())
-		return
+	if(M != usr)		return
+	if(!istype(M))		return
+	if(M.isUnconscious())return
+	if(M.restrained())	return
+	if(!Adjacent(M))	return
 
 	var/strength_of_M = (M.size - 1) //Can only pick up mobs whose size is less or equal to this value. Normal human's size is 3, so his strength is 2 - he can pick up TINY and SMALL animals. Varediting human's size to 5 will allow him to pick up goliaths.
 
@@ -622,8 +625,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/alone = 1
 	var/mob/living/simple_animal/partner
 	var/children = 0
-	for(var/mob/living/M in oview(7, src))
-		if(M.isUnconscious()) //Check if it's concious FIRSTER.
+	for(var/mob/M in oview(7, src))
+		if(M.stat != CONSCIOUS) //Check if it's concious FIRSTER.
 			continue
 		else if(istype(M, childtype)) //Check for children FIRST.
 			children++
@@ -642,34 +645,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/proc/give_birth()
 	for(var/i=1; i<=child_amount; i++)
 		if(animal_count[childtype] > ANIMAL_CHILD_CAP)
-			return 0
+			break
 
 		var/mob/living/simple_animal/child = new childtype(loc)
 		if(istype(child))
-			child.inherit_mind(src)
-
-	return 1
-
-/mob/living/simple_animal/proc/grow_up()
-	if(src.type == species_type) //Already grown up
-		return
-	
-	var/mob/living/simple_animal/new_animal = new species_type(src.loc)
-	
-	if(locked_to) //Handle atom locking
-		var/atom/movable/A = locked_to
-		A.unlock_atom(src)
-		A.lock_atom(new_animal)
-	
-	new_animal.inherit_mind(src)
-	new_animal.ckey = src.ckey
-	new_animal.key = src.key
-	
-	forceMove(get_turf(src))
-	qdel(src)
-
-/mob/living/simple_animal/proc/inherit_mind(mob/living/simple_animal/from)
-	src.faction = from.faction
+			child.faction = src.faction
 
 /mob/living/simple_animal/say_understands(var/mob/other,var/datum/language/speaking = null)
 	if(other) other = other.GetSource()

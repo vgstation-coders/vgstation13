@@ -17,7 +17,8 @@
 		var/area/A = loc
 		A.area_turfs += src
 
-	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
+	if(!istype(src, /turf/space/transit))
+		icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
 
 /turf/space/attack_paw(mob/user as mob)
 	return src.attack_hand(user)

@@ -445,6 +445,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		new_character.real_name = record_found.fields["name"]
 		new_character.setGender(record_found.fields["sex"])
 		new_character.age = record_found.fields["age"]
+		new_character.b_type = record_found.fields["b_type"]
 	else
 		new_character.setGender(pick(MALE,FEMALE))
 		var/datum/preferences/A = new()
@@ -466,7 +467,6 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(record_found)//Pull up their name from database records if they did have a mind.
 		new_character.dna = new()//Let's first give them a new DNA.
 		new_character.dna.unique_enzymes = record_found.fields["b_dna"]//Enzymes are based on real name but we'll use the record for conformity.
-		new_character.dna.b_type = record_found.fields["b_type"]
 
 		// I HATE BYOND.  HATE.  HATE. - N3X
 		var/list/newSE= record_found.fields["enzymes"]
@@ -602,7 +602,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(!input)
 		return
 	if(!customname)
-		customname = "Nanotrasen Update"
+		customname = "NanoTrasen Update"
 	for (var/obj/machinery/computer/communications/C in machines)
 		if(! (C.stat & (BROKEN|NOPOWER) ) )
 			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( C.loc )
@@ -616,7 +616,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		if("Yes")
 			command_alert(input, customname);
 		if("No")
-			to_chat(world, "<span class='warning'>New Nanotrasen Update available at all communication consoles.</span>")
+			to_chat(world, "<span class='warning'>New NanoTrasen Update available at all communication consoles.</span>")
 
 	to_chat(world, sound('sound/AI/commandreport.ogg', volume = 60))
 	log_admin("[key_name(src)] has created a command report: [input]")

@@ -438,39 +438,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "knight armor crate"
 	group = "Clothing"
 
-/datum/supply_packs/vox_supply
-	name = "Vox Resupply Crate"
-	contains = list(/obj/item/clothing/suit/space/vox/civ,
-					/obj/item/clothing/head/helmet/space/vox/civ,
-					/obj/item/weapon/tank/nitrogen,
-					/obj/item/clothing/mask/breath/vox)
-	cost = 100
-	containertype = /obj/structure/closet/crate
-	containername = "Vox Resupply Crate"
-	group = "Clothing"
-
-/datum/supply_packs/plasmaman_supply
-	name = "Plasmaman Containment Crate"
-	contains = list(/obj/item/clothing/suit/space/plasmaman/assistant,
-					/obj/item/clothing/head/helmet/space/plasmaman/assistant,
-					/obj/item/weapon/tank/plasma/plasmaman,
-					/obj/item/clothing/mask/breath)
-	cost = 100
-	containertype = /obj/structure/closet/crate
-	containername = "Plasmaman Containment Crate"
-	group = "Clothing"
-
-/datum/supply_packs/grey_supply
-	name = "Grey Space-Ex Crate"
-	contains = list(/obj/item/clothing/suit/space/grey,
-					/obj/item/clothing/head/helmet/space/grey,
-					/obj/item/weapon/tank/oxygen/red,
-					/obj/item/clothing/mask/breath)
-	cost = 100
-	containertype = /obj/structure/closet/crate
-	containername = "Grey Space-Ex Crate"
-	group = "Clothing"
-
 //////SECURITY//////
 
 /datum/supply_packs/specialops
@@ -809,8 +776,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/suit/jumper/christmas/blue,
 					/obj/item/clothing/mask/scarf/red,
 					/obj/item/clothing/mask/scarf/blue,
-					/obj/item/clothing/mask/scarf/green,
-					/obj/item/clothing/under/wintercasualwear)
+					/obj/item/clothing/mask/scarf/green)
 	cost = 30
 	containertype = /obj/structure/closet/crate
 	containername = "Festivus supplies"

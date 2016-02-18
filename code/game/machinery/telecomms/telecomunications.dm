@@ -146,10 +146,6 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 
 /obj/machinery/telecomms/New()
-	if(ticker) // if built in the round
-		construct_op = 3
-		stat |= BROKEN
-
 	telecomms_list += src
 	..()
 

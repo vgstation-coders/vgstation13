@@ -93,8 +93,7 @@
 		stance = HOSTILE_STANCE_ATTACK
 		if(isliving(target))
 			var/mob/living/L = target
-			L.bodytemperature = max(L.bodytemperature-1,T0C+25)
-			L.apply_damage(5, BURN, null, used_weapon = "Excessive Cold")
+			L.bodytemperature = max(L.bodytemperature-3,T0C+20)
 			visible_message("<span class='danger'>The [src.name]'s stare chills [L.name] to the bone!</span>")
 	return
 

@@ -25,8 +25,8 @@
 	desc = "You fear to wear it for the negligence it brings."
 	icon_state = "capcap"
 	flags = FPRINT
-	body_parts_covered = HEAD
-	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	flags_inv = 0
+	heat_conductivity = INS_HELMET_HEAT_CONDUCTIVITY
 	siemens_coefficient = 0.9
 
 //Chaplain
@@ -35,7 +35,8 @@
 	desc = "It's hood that covers the head. It keeps you warm during the space winters."
 	icon_state = "chaplain_hood"
 	flags = FPRINT
-	body_parts_covered = EARS|HEAD
+	flags_inv = HIDEHAIR
+	body_parts_covered = HEAD|EARS
 	siemens_coefficient = 0.9
 
 //Chaplain
@@ -44,7 +45,8 @@
 	desc = "Maximum piety in this star system."
 	icon_state = "nun_hood"
 	flags = FPRINT
-	body_parts_covered = EARS|HEAD
+	flags_inv = HIDEHAIR
+	body_parts_covered = HEAD|EARS
 	siemens_coefficient = 0.9
 
 //Mime
@@ -68,7 +70,7 @@
 	desc = "A cap surgeons wear during operations. Keeps their hair from tickling your internal organs."
 	icon_state = "surgcap_blue"
 	flags = FPRINT
-	body_parts_covered = EARS|HEAD
+	flags_inv = HIDEHEADHAIR
 
 /obj/item/clothing/head/surgery/purple
 	desc = "A cap surgeons wear during operations. Keeps their hair from tickling your internal organs. This one is deep purple."

@@ -66,19 +66,22 @@
 	var/list/obscured = list()
 
 	if(wear_suit)
-		if(is_slot_hidden(wear_suit.body_parts_covered,HIDEGLOVES))
+		if(wear_suit.flags_inv & HIDEGLOVES)
 			obscured |= slot_gloves
-		if(is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))
+		if(wear_suit.flags_inv & HIDEJUMPSUIT)
 			obscured |= slot_w_uniform
-		if(is_slot_hidden(wear_suit.body_parts_covered,HIDESHOES))
+		if(wear_suit.flags_inv & HIDESHOES)
 			obscured |= slot_shoes
+		if(wear_suit.flags_inv & HIDEBAG)
+			obscured |= slot_back
 	if(head)
-		if(is_slot_hidden(head.body_parts_covered,HIDEMASK))
+		if(head.flags_inv & HIDEMASK)
 			obscured |= slot_wear_mask
-		if(is_slot_hidden(head.body_parts_covered,HIDEEYES))
+		if(head.flags_inv & HIDEEYES)
 			obscured |= slot_glasses
-		if(is_slot_hidden(head.body_parts_covered,HIDEEARS))
+		if(head.flags_inv & HIDEEARS)
 			obscured |= slot_ears
+
 	if(obscured.len > 0)
 		return obscured
 	else
@@ -95,16 +98,11 @@
 
 /mob/living/carbon/human/proc/check_hidden_flags(var/list/items, var/hidden_flags = 0)
 	if(!items || !istype(items))
-		items = get_clothing_items()
-	items -= list(gloves,shoes,w_uniform,glasses,ears) // now that these can hide stuff they need to be excluded
-	if(!hidden_flags)
-		return
-	var/ignore_slot
+		items = get_clothing_items() //no argument returns all clothing
 	for(var/obj/item/equipped in items)
-		ignore_slot = (equipped == wear_mask) ? MOUTH : 0
 		if(!equipped)
 			continue
-		else if(is_slot_hidden(equipped.body_parts_covered,hidden_flags,ignore_slot))
+		if(equipped.flags_inv & hidden_flags)
 			return 1
 
 /mob/living/carbon/human/proc/equip_in_one_of_slots(obj/item/W, list/slots, act_on_fail = 1)

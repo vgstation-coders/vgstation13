@@ -40,8 +40,7 @@
 	return TRUE
 
 /datum/migration/sqlite/hasTable(var/tableName)
-	var/exists = hasResult("SELECT name FROM sqlite_master WHERE type='table' AND name='[tableName]';")
-	return exists
+	return hasResult("SELECT name FROM sqlite_master WHERE type='[tableName]'")
 
 /datum/migration/sqlite/hasColumn(var/tableName, var/columnName)
 	for(var/list/row in query("PRAGMA table_info([tableName])")) // Can't be turned into a SELECT.

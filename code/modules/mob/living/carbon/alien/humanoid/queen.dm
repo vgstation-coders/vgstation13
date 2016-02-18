@@ -80,7 +80,7 @@
 
 
 /mob/living/carbon/alien/humanoid/queen/large
-	icon = 'icons/mob/giantmobs.dmi'
+	icon = 'icons/mob/alienqueen.dmi'
 	icon_state = "queen_s"
 	pixel_x = -16
 

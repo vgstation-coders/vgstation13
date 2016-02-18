@@ -323,8 +323,10 @@
 /mob/living/silicon/robot/mommi/attack_ui(slot)
 	var/obj/item/W = tool_state
 	if(istype(W))
-		if(equip_to_slot_if_possible(W, slot))
+		if(equip_to_slot(W, slot))
 			update_items()
+		else
+			to_chat(src, "<span class='warning'>You are unable to equip that.</span>")
 
 // Quickly equip a hat by pressing "e"
 /mob/living/silicon/robot/mommi/verb/quick_equip()
@@ -349,3 +351,4 @@
 			update_items()
 		else
 			to_chat(M, "<span class='warning'>You are unable to equip that.</span>")
+

@@ -436,8 +436,7 @@
 		qdel(O)
 		to_chat(user, "<span class='notice'>You roll a blunt out of \the [src].</span>")
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/rolled(src.loc)
-		B.name = "[src.name] blunt"
-		B.filling = "[src.name]"
+		B.name = "[src] blunt"
 		reagents.trans_to(B, (reagents.total_volume))
 		user.put_in_hands(B)
 		user.drop_from_inventory(src)

@@ -35,11 +35,12 @@
 	desc = "Warning: moustache is fake."
 	icon_state = "fake-moustache"
 	flags = FPRINT
-	body_parts_covered = FACE //totally intentional
+	flags_inv = HIDEFACE
 
 //scarves (fit in in mask slot)
 /obj/item/clothing/mask/scarf
 	flags = FPRINT
+	flags_inv = HIDEFACE
 	action_button_name = "Toggle Scarf"
 	w_class = 2
 	gas_transfer_coefficient = 0.90
@@ -73,7 +74,8 @@
 	icon_state = "pig"
 	item_state = "pig"
 	flags = FPRINT
-	body_parts_covered = FACE
+	flags_inv = HIDEFACE|HIDEHAIR
+	body_parts_covered = HEAD
 	w_class = 2
 	siemens_coefficient = 0.9
 
@@ -83,7 +85,8 @@
 	icon_state = "horsehead"
 	item_state = "horsehead"
 	flags = FPRINT
-	body_parts_covered = FACE
+	flags_inv = HIDEFACE|HIDEHAIR
+	body_parts_covered = HEAD
 	w_class = 2
 	var/voicechange = 0
 	siemens_coefficient = 0.9
@@ -98,7 +101,7 @@
 	icon_state = "chapmask"
 	item_state = "chapmask"
 	flags = FPRINT
-	body_parts_covered = FACE
+	flags_inv = HIDEFACE
 	w_class = 2
 	gas_transfer_coefficient = 0.90
 
@@ -106,6 +109,7 @@
 	name = "bandana"
 	desc = "A colorful bandana."
 	action_button_name = "Toggle Bandana"
+	flags_inv = HIDEFACE
 	w_class = 1
 	can_flip = 1
 

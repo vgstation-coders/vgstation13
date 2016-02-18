@@ -74,8 +74,7 @@
 
 /obj/item/weapon/storage/secure/MouseDrop(over_object, src_location, over_location)
 	if (locked)
-		if(Adjacent(usr))
-			src.add_fingerprint(usr)
+		src.add_fingerprint(usr)
 		return
 	..()
 

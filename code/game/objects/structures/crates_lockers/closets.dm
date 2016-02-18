@@ -310,7 +310,7 @@
 		return 0
 	if(!isturf(O.loc))
 		return 0
-	if(user.incapacitated())
+	if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.lying)
 		return 0
 	if((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1))
 		return 0
@@ -396,7 +396,7 @@
 	set category = "Object"
 	set name = "Toggle Open"
 
-	if(usr.incapacitated())
+	if(!usr.canmove || usr.isUnconscious() || usr.restrained())
 		return
 
 	if(ishuman(usr) || isMoMMI(usr))

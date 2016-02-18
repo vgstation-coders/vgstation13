@@ -13,9 +13,6 @@
 		return
 	if(species && species.flags & NO_BREATHE)
 		return
-	if(nobreath)
-		nobreath--
-		return
 
 	var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
 	if(L)

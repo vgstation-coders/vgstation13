@@ -1,5 +1,3 @@
-#define DNA_SE_LENGTH 55
-
 //Content of the Round End Information window
 var/round_end_info = ""
 
@@ -54,7 +52,7 @@ var/GLASSESBLOCK = 0
 var/EPILEPSYBLOCK = 0
 var/TWITCHBLOCK = 0
 var/NERVOUSBLOCK = 0
-var/MONKEYBLOCK = DNA_SE_LENGTH
+var/MONKEYBLOCK = 54 // Monkey block will always be the DNA_SE_LENGTH
 
 var/BLOCKADD = 0
 var/DIFFMUT = 0
@@ -111,7 +109,6 @@ var/LOUDBLOCK = 0
 var/WHISPERBLOCK = 0
 var/DIZZYBLOCK = 0
 var/SANSBLOCK = 0
-var/NOIRBLOCK = 0
 
 
 

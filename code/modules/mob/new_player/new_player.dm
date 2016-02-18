@@ -458,9 +458,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	new_character.name = real_name
 	new_character.dna.ready_dna(new_character)
-
-	if(new_character.mind)
-		new_character.mind.store_memory("<b>Your blood type is:</b> [new_character.dna.b_type]<br>")
+	new_character.dna.b_type = client.prefs.b_type
 
 	if(client.prefs.disabilities & DISABILITY_FLAG_NEARSIGHTED)
 		new_character.dna.SetSEState(GLASSESBLOCK,1,1)

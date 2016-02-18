@@ -157,7 +157,7 @@ BLIND     // can't see anything
 /obj/item/clothing/mask
 	name = "mask"
 	icon = 'icons/obj/clothing/masks.dmi'
-	body_parts_covered = MOUTH
+	body_parts_covered = HEAD|MOUTH
 	slot_flags = SLOT_MASK
 	species_restricted = list("exclude","Muton")
 	var/can_flip = null
@@ -173,7 +173,7 @@ BLIND     // can't see anything
 	if(ignore_flip)
 		return
 	else
-		if(usr.incapacitated())
+		if(!usr.canmove || usr.isUnconscious() || usr.restrained())
 			return
 		if(!can_flip)
 			to_chat(usr, "You try pushing \the [src] out of the way, but it is very uncomfortable and you look like a fool. You push it back into place.")
@@ -183,6 +183,7 @@ BLIND     // can't see anything
 			gas_transfer_coefficient = initial(gas_transfer_coefficient)
 			permeability_coefficient = initial(permeability_coefficient)
 			flags = initial(flags)
+			flags_inv = initial(flags_inv)
 			body_parts_covered = initial(body_parts_covered)
 			to_chat(usr, "You push \the [src] back into place.")
 			src.is_flipped = 1
@@ -192,8 +193,9 @@ BLIND     // can't see anything
 			gas_transfer_coefficient = null
 			permeability_coefficient = null
 			flags = 0
+			flags_inv = null
 			src.is_flipped = 2
-			body_parts_covered &= ~(MOUTH|HEAD|BEARD)
+			body_parts_covered &= ~(MOUTH|HEAD)
 		usr.update_inv_wear_mask()
 
 /obj/item/clothing/mask/attack_self()
@@ -232,7 +234,6 @@ BLIND     // can't see anything
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_OCLOTHING
 	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
-	body_parts_covered = ARMS|LEGS|FULL_TORSO
 	var/blood_overlay_type = "suit"
 	species_restricted = list("exclude","Muton")
 	siemens_coefficient = 0.9
@@ -249,9 +250,10 @@ BLIND     // can't see anything
 	item_state = "space"
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD
+	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR
 	siemens_coefficient = 0.9
-	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	heat_conductivity = INS_HELMET_HEAT_CONDUCTIVITY
 	species_restricted = list("exclude","Diona","Muton")
 	eyeprot = 1
 	cold_breath_protection = 230
@@ -266,19 +268,20 @@ BLIND     // can't see anything
 	permeability_coefficient = 0.02
 	flags = FPRINT
 	pressure_resistance = 5 * ONE_ATMOSPHERE
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
 	slowdown = 3
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
+	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
 	siemens_coefficient = 0.9
 	species_restricted = list("exclude","Diona","Muton")
-	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	heat_conductivity = INS_ARMOUR_HEAT_CONDUCTIVITY
 
 //Under clothing
 /obj/item/clothing/under
 	icon = 'icons/obj/clothing/uniforms.dmi'
 	name = "under"
-	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
 	permeability_coefficient = 0.90
 	flags = FPRINT
 	slot_flags = SLOT_ICLOTHING
@@ -446,3 +449,5 @@ BLIND     // can't see anything
 /obj/item/clothing/under/rank/New()
 	. = ..()
 	sensor_mode = pick(0, 1, 2, 3)
+
+

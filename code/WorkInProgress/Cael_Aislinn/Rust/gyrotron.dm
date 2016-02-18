@@ -96,7 +96,7 @@
 	set src in oview(1)
 	set category = "Object"
 
-	if(usr.incapacitated() || !Adjacent(usr))
+	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting || !Adjacent(usr))
 		return
 
 	if(anchored)
@@ -110,7 +110,7 @@
 	set src in oview(1)
 	set category = "Object"
 
-	if(usr.incapacitated() || !Adjacent(usr))
+	if(usr.restrained() || usr.stat || usr.weakened || usr.stunned || usr.paralysis || usr.resting || !Adjacent(usr))
 		return
 
 	if(anchored)

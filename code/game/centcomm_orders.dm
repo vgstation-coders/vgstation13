@@ -91,7 +91,7 @@ var/global/current_centcomm_order_id=124901
 // ORDERS START HERE
 //////////////////////////////////////////////
 /datum/centcomm_order/per_unit/plasma
-	name = "Nanotrasen"
+	name = "NanoTrasen"
 	recurring = 1
 	requested = list(
 		/obj/item/stack/sheet/mineral/plasma = INFINITY

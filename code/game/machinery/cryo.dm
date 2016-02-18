@@ -14,7 +14,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	layer = 2.8
 
 	var/on = 0
-	var/ejecting = 0
 	var/temperature_archived
 	var/mob/living/carbon/occupant = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
@@ -70,7 +69,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return
 	if(O.loc == user) //no you can't pull things out of your ass
 		return
-	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
+	if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.resting) //are you cuffed, dying, lying, stunned or other
 		return
 	if(O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
 		return
@@ -109,7 +108,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 				user.pulling = null
 
 /obj/machinery/atmospherics/unary/cryo_cell/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(!ishuman(usr) && !isrobot(usr) || occupant == usr || usr.incapacitated() || usr.lying)
+	if(!ishuman(usr) && !isrobot(usr) || occupant == usr)
 		return
 	if(!occupant)
 		to_chat(usr, "<span class='warning'>The sleeper is unoccupied!</span>")
@@ -128,15 +127,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			if((A == src) || istype(A, /mob))
 				continue
 			return
-	visible_message("[usr] starts to remove [occupant.name] from \the [src].")
+	visible_message("[usr] removes [occupant.name] from \the [src].")
 	go_out(over_location)
 
 /obj/machinery/atmospherics/unary/cryo_cell/process()
 	..()
-
-	if(stat & NOPOWER)
-		on = 0
-
 	update_icon()
 	if(!node)
 		return
@@ -208,7 +203,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	// this is the data which will be sent to the ui
 	var/data[0]
 	data["isOperating"] = on
-	data["ejecting"] 	= ejecting
 	data["hasOccupant"] = occupant ? 1 : 0
 
 	var/occupantData[0]
@@ -231,12 +225,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		data["cellTemperatureStatus"] = "bad"
 	else if(air_contents.temperature > 225)
 		data["cellTemperatureStatus"] = "average"
-	data["occupantTemperatureStatus"] = "bad"
-	if(occupant)
-		if(occupant.bodytemperature <= 170) //Temperature at which Cryoxadone and Clonexadone start working
-			data["occupantTemperatureStatus"] = "good"
-		else if(occupant.bodytemperature <= T0C + 31) //Temperature at which a body temperature regulation cycle is necessary before ejection
-			data["occupantTemperatureStatus"] = "average"
 
 	data["isBeakerLoaded"] = beaker ? 1 : 0
 	/* // Removing beaker contents list from front-end, replacing with a total remaining volume
@@ -385,16 +373,14 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(air_contents.total_moles() < 10)
 		return
 	if(occupant)
-		if(occupant.stat == DEAD)
+		if(occupant.stat == 2)
 			return
-		modify_occupant_bodytemp()
+		occupant.bodytemperature += 2*(air_contents.temperature - occupant.bodytemperature)*current_heat_capacity/(current_heat_capacity + air_contents.heat_capacity())
+		occupant.bodytemperature = max(occupant.bodytemperature, air_contents.temperature) // this is so ugly i'm sorry for doing it i'll fix it later i promise
 		occupant.stat = 1
 		if(occupant.bodytemperature < T0C)
 			occupant.sleeping = max(5, (1/occupant.bodytemperature)*2000)
 			occupant.Paralyse(max(5, (1/occupant.bodytemperature)*3000))
-			var/mob/living/carbon/human/guy = occupant //Gotta cast to read this guy's species
-			if(istype(guy) && guy.species && guy.species.breath_type != "oxygen")
-				occupant.nobreath = 15 //Prevent them from suffocating until someone can get them internals. Also prevents plasmamen from combusting.
 			if(air_contents.oxygen > 2)
 				if(occupant.getOxyLoss()) occupant.adjustOxyLoss(-1)
 			else
@@ -412,15 +398,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(beaker && !has_cryo_medicine)
 			beaker.reagents.trans_to(occupant, 1, 1)
 			beaker.reagents.reaction(occupant)
-
-/obj/machinery/atmospherics/unary/cryo_cell/proc/modify_occupant_bodytemp()
-	if(!occupant)
-		return
-	if(!ejecting)
-		occupant.bodytemperature += 20*(air_contents.temperature - occupant.bodytemperature)*current_heat_capacity/(current_heat_capacity + air_contents.heat_capacity())
-		occupant.bodytemperature = max(occupant.bodytemperature, air_contents.temperature) // this is so ugly i'm sorry for doing it i'll fix it later i promise
-	else
-		occupant.bodytemperature = mix(occupant.bodytemperature, T0C + 37, 0.6)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/heat_gas_contents()
 	if(air_contents.total_moles() < 1)
@@ -443,41 +420,23 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	//loc.assume_air(expel_gas)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit = src.loc)
-	if(!occupant || ejecting)
+	if(!(occupant))
 		return 0
-	if (occupant.bodytemperature > T0C+31)
-		boot_contents(exit, regulatetemp = 0) //No temperature regulation cycle required
-	else
-		ejecting = 1
-		playsound(get_turf(src), 'sound/machines/pressurehiss.ogg', 40, 1)
-		modify_occupant_bodytemp() //Start to heat them up a little bit immediately
-		nanomanager.update_uis(src)
-		spawn(4 SECONDS)
-			if(!src || !src.ejecting)
-				return
-			ejecting = 0
-			boot_contents(exit)
-	return 1
-
-/obj/machinery/atmospherics/unary/cryo_cell/proc/boot_contents(var/exit = src.loc, var/regulatetemp = 1)
 	for (var/atom/movable/x in src.contents)
 		if((x in component_parts) || (x == src.beaker))
 			continue
 		x.forceMove(src.loc)
-	if(occupant)
-		if(exit == src.loc)
-			occupant.forceMove(get_step(loc, SOUTH))	//this doesn't account for walls or anything, but i don't forsee that being a problem.
-		else
-			occupant.forceMove(exit)
-		occupant.reset_view()
-		if (regulatetemp && occupant.bodytemperature < T0C+34.5)
-			occupant.bodytemperature = T0C+34.5 //just a little bit chilly still
-	//	occupant.metabslow = 0
-		occupant = null
+	if(exit == loc)
+		occupant.forceMove(get_step(loc, SOUTH))	//this doesn't account for walls or anything, but i don't forsee that being a problem.
+	else
+		occupant.forceMove(exit)
+	occupant.reset_view()
+	if (occupant.bodytemperature < T0C+23)
+		occupant.bodytemperature = T0C+23
+//	occupant.metabslow = 0
+	occupant = null
 	update_icon()
-	nanomanager.update_uis(src)
-
-
+	return 1
 /obj/machinery/atmospherics/unary/cryo_cell/proc/put_mob(mob/living/carbon/M as mob)
 	if (!istype(M))
 		to_chat(usr, "<span class='danger'>The cryo cell cannot handle such a lifeform!</span>")
@@ -504,7 +463,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	//M.metabslow = 1
 	add_fingerprint(usr)
 	update_icon()
-	nanomanager.update_uis(src)
 	M.ExtinguishMob()
 	return 1
 
@@ -520,6 +478,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(!src || !usr || !occupant || (occupant != usr)) //Check if someone's released/replaced/bombed him already
 			return
 		go_out()//and release him from the eternal prison.
+		occupant.bodytemperature = T0C+25 // because they've suffered enough.
 	else
 		if (usr.isUnconscious() || istype(usr, /mob/living/simple_animal))
 			return
@@ -531,7 +490,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	set name = "Move Inside"
 	set category = "Object"
 	set src in oview(1)
-	if(usr.incapacitated() || usr.lying || usr.locked_to) //are you cuffed, dying, lying, stunned or other
+	if(usr.restrained() || usr.isUnconscious() || usr.weakened || usr.stunned || usr.paralysis || usr.resting || usr.locked_to) //are you cuffed, dying, lying, stunned or other
 		return
 	for(var/mob/living/carbon/slime/M in range(1,usr))
 		if(M.Victim == usr)

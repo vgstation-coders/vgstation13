@@ -16,8 +16,6 @@
 
 	if(!species_type)
 		species_type = src.type
-	if(can_butcher && !meat_amount)
-		meat_amount = size
 
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
@@ -919,15 +917,9 @@ Thanks.
 	//putting out a fire
 		if(CM.on_fire && CM.canmove)
 			CM.fire_stacks -= 5
-			CM.SetWeakened(3)
-			playsound(CM.loc, 'sound/effects/bodyfall.ogg', 50, 1)
+			CM.weakened = 5
 			CM.visible_message("<span class='danger'>[CM] rolls on the floor, trying to put themselves out!</span>",
 							   "<span class='warning'>You stop, drop, and roll!</span>")
-
-			for(var/i = 1 to rand(8,12))
-				CM.dir = turn(CM.dir, pick(-90, 90))
-				sleep(2)
-
 			if(fire_stacks <= 0)
 				CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>",
 								   "<span class='notice'>You extinguish yourself.</span>")
@@ -1058,7 +1050,7 @@ Thanks.
 
 //same as above
 /mob/living/pointed(atom/A as mob|obj|turf in view())
-	if(src.incapacitated())
+	if(src.isUnconscious() || !src.canmove || src.restrained())
 		return 0
 	if(!..())
 		return 0
@@ -1314,7 +1306,7 @@ default behaviour is:
 	src.meat_taken++
 	src.being_butchered = 0
 
-	if(src.meat_taken < src.meat_amount)
+	if(src.meat_taken < src.size)
 		to_chat(user, "<span class='info'>You cut a chunk of meat out of \the [src].</span>")
 		return
 

@@ -59,7 +59,7 @@
 		CtrlClickOn(A)
 		return
 
-	if(isStunned())
+	if(stat || paralysis || stunned || weakened)
 		return
 
 	face_atom(A) // change direction to face what you clicked on
@@ -269,7 +269,7 @@
 	var/obj/item/projectile/beam/LE = getFromPool(/obj/item/projectile/beam, loc)
 	LE.icon = 'icons/effects/genetics.dmi'
 	LE.icon_state = "eyelasers"
-	playsound(usr.loc, 'sound/weapons/laser2.ogg', 75, 1)
+	playsound(usr.loc, 'sound/weapons/taser2.ogg', 75, 1)
 
 	LE.firer = src
 	LE.def_zone = get_organ_target()

@@ -95,7 +95,7 @@
 	return 0
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
-	if(user.incapacitated()  || destroyed)
+	if(user.stat || user.stunned || user.weakened || user.paralysis  || destroyed)
 		unlock_atom(user)
 		return
 	if(!check_key(user))
