@@ -101,8 +101,6 @@
 		for(var/mob/M in src)
 			shatter(M)
 
-	return
-
 /obj/structure/closet/statue/attack_animal(mob/living/simple_animal/user as mob)
 	if(user.environment_smash)
 		for(var/mob/M in src)
@@ -139,9 +137,9 @@
 	return
 
 /obj/structure/closet/statue/proc/shatter(mob/user as mob)
-	if (user)
-		user.gib()
 	dump_contents()
+	if(user)
+		user.gib()
 	visible_message("<span class='warning'>[src] shatters into pieces!. </span>")
 	qdel(src)
 
