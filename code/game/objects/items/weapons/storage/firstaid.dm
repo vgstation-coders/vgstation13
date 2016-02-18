@@ -125,6 +125,7 @@
 	use_to_pickup = 1
 	storage_slots = 14
 	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 60)
+	var/melted = 0
 	var/image/colour_overlay
 
 /obj/item/weapon/storage/pill_bottle/New()
@@ -134,12 +135,11 @@
 
 
 /obj/item/weapon/storage/pill_bottle/MouseDrop(obj/over_object as obj) //Quick pillbottle fix. -Agouri
-
 	if (ishuman(usr) || ismonkey(usr)) //Can monkeys even place items in the pocket slots? Leaving this in just in case~
-		var/mob/M = usr
+		var/mob/M = usr //I don't see how this is necessary
 		if (!( istype(over_object, /obj/screen) ))
 			return ..()
-		if ((!( M.restrained() ) && !( M.stat ) /*&& M.pocket == src*/))
+		if (!M.incapacitated())
 			switch(over_object.name)
 				if("r_hand")
 					M.u_equip(src,0)
@@ -158,6 +158,10 @@
 
 /obj/item/weapon/storage/pill_bottle/attackby(var/obj/item/I, var/mob/user)
 	if(!I) return
+	if(!melted)
+		if(I.is_hot())
+			to_chat(user, "You slightly melt the plastic on the side of \the [src] with \the [I].")
+			melted = 1
 	if(istype(I, /obj/item/weapon/storage/bag/chem))
 		var/obj/item/weapon/storage/bag/chem/C = I
 		to_chat(user, "<span class='notice'>You transfer the contents of [C].<span>")

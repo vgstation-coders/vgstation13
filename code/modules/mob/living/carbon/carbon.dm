@@ -125,7 +125,7 @@
 	if(damage <= 0)
 		damage = 0
 
-	if(take_overall_damage(0, damage, "[source]") == 0) // godmode
+	if(take_overall_damage(0, damage, used_weapon = "[source]") == 0) // godmode
 		return 0
 
 	//src.burn_skin(shock_damage)
@@ -143,6 +143,7 @@
 
 	//if(src.stunned < shock_damage)	src.stunned = shock_damage
 
+	Jitter(20) //Shake that body, friend
 	Stun(10) // this should work for now, more is really silly and makes you lay there forever
 
 	//if(src.weakened < 20*siemens_coeff)	src.weakened = 20*siemens_coeff
@@ -529,7 +530,7 @@
 	set category = "IC"
 
 	if(usr.sleeping)
-		to_chat(usr, "<span class='warning'>You are already sleeping</span>")
+		to_chat(usr, "<span class='warning'>You are already sleeping.</span>")
 		return
 	if(alert(src,"Are you sure you want to sleep for a while?","Sleep","Yes","No") == "Yes")
 		usr.sleeping = 150 //Long nap of 5 minutes. Those are MC TICKS. Don't get fooled

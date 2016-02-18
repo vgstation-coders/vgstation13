@@ -36,7 +36,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 		for(var/atom/movable/AM in client.screen)
 			var/obj/screen/screenobj = AM
 			if(istype(screenobj))
-				if(screenobj.pool_on_reset())
+				if(!screenobj.globalscreen) //Screens taken care of in other places or used by multiple people
 					returnToPool(AM)
 			else
 				qdel(AM)
@@ -973,6 +973,7 @@ var/list/slot_equipment_priority = list( \
 	set category = "IC"
 	set src = usr
 
+	if(attack_delayer.blocked()) return
 
 	if(istype(loc,/obj/mecha)) return
 
@@ -1449,14 +1450,14 @@ var/list/slot_equipment_priority = list( \
 /mob/proc/update_canmove()
 	if(locked_to)
 		canmove = 0
-		lying = locked_to.locked_should_lie
+		lying = (locked_to.lockflags & LOCKED_SHOULD_LIE) ? TRUE : FALSE //A lying value that !=1 will break this
 
 
-	else if( isUnconscious() || weakened || paralysis || resting || sleeping )
+	else if(isUnconscious() || weakened || paralysis || resting)
 		stop_pulling()
 		lying = 1
 		canmove = 0
-	else if( stunned )
+	else if(stunned)
 //		lying = 0
 		canmove = 0
 	else if(captured)

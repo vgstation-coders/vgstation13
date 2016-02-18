@@ -1,13 +1,7 @@
-var/global/list/coldwarning_light = list("It's a wee bit chilly, isn't it?","Your nose feels numb","It's pretty cold!","You should probably wrap up some more.","You can see your breath!","You feel like taking a nap.")
-var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold out here!","You should probably get warmed up quickly!","You can't feel your hands!","You can't feel anything!","You're absolutely exhausted!")
+var/global/list/coldwarning_light = list("You feel cold.","Your nose feels numb.","It's pretty cold!","You should probably wrap up some more.","You feel pretty cold.","You feel like taking a nap.")
+var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold!","You should probably get warmed up quickly!","You can't feel your hands!","You can't feel anything!","You're absolutely exhausted!")
 
 /mob/living/proc/undergoing_hypothermia()
-	if(!istype(src,/mob/living/carbon/human) && !istype(src,/mob/living/carbon/monkey))
-		return NO_HYPOTHERMIA
-	else
-		var/mob/living/carbon/human/H = src
-		if(!H.species.can_be_hypothermic)
-			return NO_HYPOTHERMIA
 	if((status_flags & GODMODE) || (flags & INVULNERABLE) || istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
 		return NO_HYPOTHERMIA
 	var/body_temp_celcius = src.bodytemperature - T0C
@@ -22,7 +16,23 @@ var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold out here!
 			return PROFOUND_HYPOTHERMIA // no vital signs
 	return NO_HYPOTHERMIA
 
-/mob/living/carbon/human/proc/is_vessel_dilated() // finds out if the blood vessel is dilated - ie expanded and more subsceptible to hypothermia.
+/mob/living/carbon/human/undergoing_hypothermia()
+	. = ..()
+	if(.)
+		if(species && !(species.can_be_hypothermic))
+			return NO_HYPOTHERMIA
+		else return .
+
+/mob/living/silicon/undergoing_hypothermia()
+	return NO_HYPOTHERMIA
+
+/mob/living/carbon/alien/undergoing_hypothermia()
+	return NO_HYPOTHERMIA
+
+/mob/living/simple_animal/undergoing_hypothermia()
+	return NO_HYPOTHERMIA
+
+/mob/living/proc/is_vessel_dilated() // finds out if the blood vessel is dilated - ie expanded and more subsceptible to hypothermia.
 	if(!reagents)
 		return 0
 	var/datum/reagents/blood = reagents
@@ -37,7 +47,7 @@ var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold out here!
 	return 0
 
 
-/mob/living/carbon/human/proc/get_skin_temperature()
+/mob/living/proc/get_skin_temperature()
 	var/skin_temperature = bodytemperature - T0C
 	var/modifier = 0.9 // this results in the skin temperature of a human who is 37C having 33.3C
 	if(!is_vessel_dilated())
@@ -47,7 +57,7 @@ var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold out here!
 	return skin_temperature
 
 
-/mob/living/carbon/human/proc/handle_hypothermia() // called in handle_body_temperature.dm
+/mob/living/proc/handle_hypothermia() // called in handle_body_temperature.dm
 	switch(undergoing_hypothermia())
 		if(MILD_HYPOTHERMIA) // shivering + stuttering + slowed down
 			// see human_movement.dm for slowdown.
@@ -73,7 +83,7 @@ var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold out here!
 				drop_item()
 			if(prob(1))
 				to_chat(src, "<span class='warning'>Your legs buckle underneath you, and you collapse!</span>")
-				say("*collapse")
+				emote("collapse")
 		if(SEVERE_HYPOTHERMIA) // unconcious, not shivering - we're going to burn up all you've eaten now.
 			// at this point, the pulse will go to rougly 30bpm, see handle_pulse for details.
 			// at this point, you are unconcious; see handle_regular_status_updates.dm for details.

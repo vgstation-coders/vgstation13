@@ -79,7 +79,13 @@
 	allowed = list(/obj/item/weapon/reagent_containers/food/snacks/candy_corn, /obj/item/weapon/pen)
 	armor = list(melee = 50, bullet = 5, laser = 25,energy = 10, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.9
+	var/noir = 0
 
+/obj/item/clothing/head/det_hat/noir
+	desc = "This hat's been with you for some time now. It was a gift from your ex, and you wore it during the war. Thinking back on it, the war was prettier."
+	icon_state = "detective_noir"
+	item_state = "detective_noir"
+	noir = 1
 /*
  * Head of Security
  */
@@ -101,7 +107,7 @@
 	icon_state = "hoscap"
 	flags = FPRINT
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
-	flags_inv = HIDEEARS
+	body_parts_covered = HEAD
 	siemens_coefficient = 0.8
 
 
@@ -110,9 +116,8 @@
 	desc = "A greatcoat enchanced with a special alloy for some protection and style."
 	icon_state = "hos"
 	item_state = "hos"
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	armor = list(melee = 65, bullet = 30, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
-	flags_inv = HIDEJUMPSUIT
 	siemens_coefficient = 0.6
 
 
@@ -137,5 +142,4 @@
 	desc = "A trenchcoat augmented with a special alloy for some protection and style."
 	icon_state = "jensencoat"
 	item_state = "jensencoat"
-	flags_inv = 0
 	siemens_coefficient = 0.6

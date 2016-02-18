@@ -174,7 +174,7 @@ var/global/num_vending_terminals = 1
 			sleep(30)
 			if(!user || !P || !src)
 				return
-			if (user.loc == user_loc && P.loc == pack_loc && anchored && self_loc == src.loc && !(user.stat) && (!user.stunned && !user.weakened && !user.paralysis && !user.lying))
+			if (user.loc == user_loc && P.loc == pack_loc && anchored && self_loc == src.loc && !(user.incapacitated()))
 				var/obj/machinery/vending/newmachine = new P.targetvendomat(loc)
 				to_chat(user, "<span class='notice'>\icon[newmachine] You finish filling the vending machine, and use the stickers inside the pack to decorate the frame.</span>")
 				playsound(newmachine, 'sound/machines/hiss.ogg', 50, 0, 0)
@@ -204,7 +204,7 @@ var/global/num_vending_terminals = 1
 				sleep(30)
 				if(!user || !P || !src)
 					return
-				if (user.loc == user_loc && P.loc == pack_loc && anchored && self_loc == src.loc && !(user.stat) && (!user.stunned && !user.weakened && !user.paralysis && !user.lying))
+				if (user.loc == user_loc && P.loc == pack_loc && anchored && self_loc == src.loc && !(user.incapacitated()))
 					to_chat(user, "<span class='notice'>\icon[src] You finish refilling the vending machine.</span>")
 					playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
 					for (var/datum/data/vending_product/D in product_records)
@@ -1423,7 +1423,7 @@ var/global/num_vending_terminals = 1
 				sleep(30)
 				if(!user || !O || !src)
 					return
-				if (user.loc == user_loc && O.loc == pack_loc && anchored && self_loc == src.loc && !(user.stat) && (!user.stunned && !user.weakened && !user.paralysis && !user.lying))
+				if (user.loc == user_loc && O.loc == pack_loc && anchored && self_loc == src.loc && !(user.incapacitated()))
 					to_chat(user, "<span class='notice'>\icon[src] You finish refilling the vending machine.</span>")
 					playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
 					var/obj/machinery/vending/wallmed1/newnanomed = new /obj/machinery/vending/wallmed1(src.loc)
@@ -1662,6 +1662,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/intercom_electronics = 10,
 		/obj/item/weapon/cell/high = 10,
 		/obj/item/weapon/reagent_containers/glass/fuelcan = 5,
+		/obj/item/weapon/stock_parts/capacitor = 10,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
@@ -1950,6 +1951,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/blackpants = 10,
 		/obj/item/clothing/under/redpants = 10,
 		/obj/item/clothing/under/greypants = 10,
+		/obj/item/clothing/under/greaser = 10,
 		)
 	contraband = list(
 		/obj/item/clothing/under/syndicate/tacticool = 5,
