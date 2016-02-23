@@ -161,6 +161,9 @@ var/shuttle_call/shuttle_calls[0]
 			setMenuState(usr,COMM_SCREEN_ERT)
 			return
 		if("request_emergency_team")
+			if(!map.linked_to_centcomm)
+				to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
+				return
 			if(menu_state != COMM_SCREEN_ERT) return //Not on the right screen.
 			if ((!(ticker) || emergency_shuttle.location))
 				to_chat(usr, "<span class='warning'>Warning: The evac shuttle has already arrived.</span>")
@@ -199,6 +202,9 @@ var/shuttle_call/shuttle_calls[0]
 
 		if("callshuttle")
 			if(src.authenticated)
+				if(!map.linked_to_centcomm)
+					to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
+					return
 				var/response = alert("Are you sure you wish to call the shuttle?", "Confirm", "Yes", "No")
 				if(response == "Yes")
 					var/justification = stripped_input(usr, "Please input a concise justification for the shuttle call. Note that failure to properly justify a shuttle call may lead to recall or termination", "Nanotrasen Anti-Comdom Systems")
@@ -209,6 +215,9 @@ var/shuttle_call/shuttle_calls[0]
 						post_status("shuttle")
 			setMenuState(usr,COMM_SCREEN_MAIN)
 		if("cancelshuttle")
+			if(!map.linked_to_centcomm)
+				to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
+				return
 			if(issilicon(usr)) return
 			if(src.authenticated)
 				var/response = alert("Are you sure you wish to recall the shuttle?", "Confirm", "Yes", "No")
@@ -263,6 +272,9 @@ var/shuttle_call/shuttle_calls[0]
 		// OMG CENTCOMM LETTERHEAD
 		if("MessageCentcomm")
 			if(src.authenticated==2)
+				if(!map.linked_to_centcomm)
+					to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
+					return
 				if(centcomm_message_cooldown)
 					to_chat(usr, "<span class='warning'>Arrays recycling.  Please stand by for a few seconds.</span>")
 					return
@@ -282,6 +294,9 @@ var/shuttle_call/shuttle_calls[0]
 		// OMG SYNDICATE ...LETTERHEAD
 		if("MessageSyndicate")
 			if((src.authenticated==2) && (src.emagged))
+				if(!map.linked_to_centcomm)
+					to_chat(usr, "<span class='danger'>Error: No connection can be made to \[ABNORMAL ROUTING CORDINATES\] .</span>")
+					return
 				if(centcomm_message_cooldown)
 					to_chat(usr, "<span class='warning'>Arrays recycling.  Please stand by for a few seconds.</span>")
 					return
@@ -347,7 +362,7 @@ var/shuttle_call/shuttle_calls[0]
 			list("name"="message",  "label"="Message",     "desc"="A custom message.")
 		),
 		"alerts"=list(
-			list("alert"="default",   "label"="NanoTrasen",  "desc"="Oh god."),
+			list("alert"="default",   "label"="Nanotrasen",  "desc"="Oh god."),
 			list("alert"="redalert",  "label"="Red Alert",   "desc"="Nothing to do with communists."),
 			list("alert"="lockdown",  "label"="Lockdown",    "desc"="Let everyone know they're on lockdown."),
 			list("alert"="biohazard", "label"="Biohazard",   "desc"="Great for virus outbreaks and parties."),
@@ -452,7 +467,9 @@ var/shuttle_call/shuttle_calls[0]
 
 	if(!universe.OnShuttleCall(user))
 		return
-
+	if(!map.linked_to_centcomm)
+		to_chat(usr, "<span class='danger'>Error: No connection can be made to central command .</span>")
+		return
 	if(sent_strike_team == 1)
 		to_chat(user, "Centcom will not allow the shuttle to be called. Consider all contracts terminated.")
 		return
@@ -475,11 +492,11 @@ var/shuttle_call/shuttle_calls[0]
 
 	emergency_shuttle.incall()
 	if(!justification)
-		justification = "#??!7E/_1$*/ARR-CON²FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
+		justification = "#??!7E/_1$*/ARR-CONï¿½FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
 	log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
 	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'. You are encouraged to act if that justification is shit", 1)
 	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification : '[justification]'")
-	to_chat(world, sound('sound/AI/shuttlecalled.ogg'))
+	world << sound('sound/AI/shuttlecalled.ogg')
 
 	return
 
@@ -586,7 +603,7 @@ var/shuttle_call/shuttle_calls[0]
 	log_game("All the AIs, comm consoles and boards are destroyed. Shuttle called.")
 	message_admins("All the AIs, comm consoles and boards are destroyed. Shuttle called.", 1)
 	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
-	to_chat(world, sound('sound/AI/shuttlecalled.ogg'))
+	world << sound('sound/AI/shuttlecalled.ogg')
 
 	..()
 
@@ -611,6 +628,6 @@ var/shuttle_call/shuttle_calls[0]
 	log_game("All the AIs, comm consoles and boards are destroyed. Shuttle called.")
 	message_admins("All the AIs, comm consoles and boards are destroyed. Shuttle called.", 1)
 	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
-	to_chat(world, sound('sound/AI/shuttlecalled.ogg'))
+	world << sound('sound/AI/shuttlecalled.ogg')
 
 	..()

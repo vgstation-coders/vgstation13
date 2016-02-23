@@ -89,7 +89,7 @@
 		kill_objective.find_target()
 		traitor.objectives += kill_objective
 
-		var/datum/objective/survive/survive_objective = new
+		var/datum/objective/siliconsurvive/survive_objective = new
 		survive_objective.owner = traitor
 		traitor.objectives += survive_objective
 
@@ -168,6 +168,8 @@
 	to_chat(traitor.current, {"
 	<SPAN CLASS='big bold center red'>You are now a traitor!</SPAN>
 	"})
+	var/wikiroute = role_wiki[ROLE_TRAITOR]
+	to_chat(traitor.current, "<span class='info'><a HREF='?src=\ref[traitor.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
 	var/obj_count = 1
 
@@ -180,10 +182,10 @@
 	//We are firing the alert here, because silicons have a special syndicate intro, courtesy of old mysterious content maker
 	if(istype(traitor.current, /mob/living/silicon))
 		add_law_zero(traitor.current)
-		to_chat(traitor.current, sound('sound/voice/AISyndiHack.ogg'))
+		traitor.current << sound('sound/voice/AISyndiHack.ogg')
 	else
 		equip_traitor(traitor.current)
-		to_chat(traitor.current, sound('sound/voice/syndicate_intro.ogg'))
+		traitor.current << sound('sound/voice/syndicate_intro.ogg')
 	return
 
 

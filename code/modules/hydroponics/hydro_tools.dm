@@ -57,7 +57,7 @@
 		grown_seed = K.seed
 
 	if(!grown_seed)
-		to_chat(user, "<span class='warning'>\icon[src] [src] can tell you nothing about [target].</span>")
+		to_chat(user, "<span class='warning'>[bicon(src)] [src] can tell you nothing about [target].</span>")
 		return
 
 	form_title = "[grown_seed.seed_name] (#[grown_seed.uid])"
@@ -184,13 +184,13 @@
 		dat += "<br>It is a ligneous plant with strong and robust stems."
 
 	if(grown_seed.thorny)
-		dat += "<br>It posesses a cover of sharp thorns."
+		dat += "<br>It possesses a cover of sharp thorns."
 
 	if(grown_seed.stinging)
-		dat += "<br>It posesses a cover of fine stingers capable of releasing chemicals on touch."
+		dat += "<br>It possesses a cover of fine stingers capable of releasing chemicals on touch."
 
 	if(grown_seed.teleporting)
-		dat += "<br>It posesses a high degree of temporal/spatial instability and may cause spontaneous bluespace disruptions."
+		dat += "<br>It possesses a high degree of temporal/spatial instability and may cause spontaneous bluespace disruptions."
 
 	switch(grown_seed.juicy)
 		if(1)
@@ -212,7 +212,7 @@
 	if(last_data)
 		user << browse(last_data,"window=plant_analyzer_\ref[src];size=400x500")
 	else
-		to_chat(user, "<span class='notice'>\icon[src] No plant scan data in memory.</span>")
+		to_chat(user, "<span class='notice'>[bicon(src)] No plant scan data in memory.</span>")
 	return 0
 
 /obj/item/device/analyzer/plant_analyzer/proc/print_report_verb()
@@ -235,10 +235,10 @@
 
 /obj/item/device/analyzer/plant_analyzer/proc/print_report(var/mob/living/user) //full credits to Zuhayr
 	if(!last_data)
-		to_chat(user, "<span class='warning'>\icon[src] There is no plant scan data to print.</span>")
+		to_chat(user, "<span class='warning'>[bicon(src)] There is no plant scan data to print.</span>")
 		return
 	if (world.time < last_print + 4 SECONDS)
-		to_chat(user, "<span class='warning'>\icon[src] \The [src] is not yet ready to print again.</span>")
+		to_chat(user, "<span class='warning'>[bicon(src)] \The [src] is not yet ready to print again.</span>")
 		return
 	last_print = world.time
 	var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(get_turf(src))
@@ -515,14 +515,14 @@
 		if(do_after(user, src, 30))
 			anchored = !anchored
 			user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"].</span>",
-									"<span class='notice'>\icon[src] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
+									"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
 									"<span class='notice'>You hear a ratchet.</span>")
 	else if(plant_name && istype(O,/obj/item/weapon/pickaxe/shovel))
-		to_chat(user, "<span class='notice'>\icon[src] You start removing the [plant_name] from \the [src].</span>")
+		to_chat(user, "<span class='notice'>[bicon(src)] You start removing the [plant_name] from \the [src].</span>")
 		if(do_after(user, src, 30))
 			playsound(loc, 'sound/items/shovel.ogg', 50, 1)
 			user.visible_message(	"<span class='notice'>[user] removes the [plant_name] from \the [src].</span>",
-									"<span class='notice'>\icon[src] You remove the [plant_name] from \the [src].</span>",
+									"<span class='notice'>[bicon(src)] You remove the [plant_name] from \the [src].</span>",
 									"<span class='notice'>You hear some digging.</span>")
 			var/obj/item/claypot/C = new(loc)
 			transfer_fingerprints(src, C)

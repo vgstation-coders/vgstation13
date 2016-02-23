@@ -13,6 +13,9 @@
 		return
 	if(species && species.flags & NO_BREATHE)
 		return
+	if(nobreath)
+		nobreath--
+		return
 
 	var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
 	if(L)
@@ -141,7 +144,7 @@
 		if(suiciding)
 			adjustOxyLoss(2) //If you are suiciding, you should die a little bit faster
 			failed_last_breath = 1
-			oxygen_alert = max(oxygen_alert, 1)
+			oxygen_alert = 1
 			return 0
 		if(health > config.health_threshold_crit)
 			adjustOxyLoss(HUMAN_MAX_OXYLOSS)
@@ -150,8 +153,12 @@
 			adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS)
 			failed_last_breath = 1
 
-		oxygen_alert = max(oxygen_alert, 1)
+		oxygen_alert = 1
 
 		return 0
 
-	return species.handle_breath(breath, src)
+	// Lungs now handle processing atmos shit.
+	for(var/datum/organ/internal/lungs/L in internal_organs)
+		L.handle_breath(breath,src)
+
+	return 1

@@ -38,7 +38,7 @@
 
 /obj/machinery/light_construct/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	src.add_fingerprint(user)
-	if (istype(W, /obj/item/weapon/wrench))
+	if (iswrench(W))
 		if (src.stage == 1)
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
 			to_chat(usr, "You begin deconstructing [src].")
@@ -78,6 +78,13 @@
 			qdel(src)
 			return
 	..()
+
+/obj/machinery/light_construct/kick_act(mob/living/carbon/human/H)
+	H.visible_message("<span class='danger'>[H] attempts to kick \the [src].</span>", "<span class='danger'>You attempt to kick \the [src].</span>")
+	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
+
+	H.apply_damage(rand(1,2), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))
+
 
 /obj/machinery/light_construct/small
 	name = "small light fixture frame"
@@ -141,6 +148,13 @@ var/global/list/obj/machinery/light/alllights = list()
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
 		if(!istype(Proj ,/obj/item/projectile/beam/lastertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 			broken()
+
+/obj/machinery/light/kick_act(mob/living/carbon/human/H)
+	H.visible_message("<span class='danger'>[H] attempts to kick \the [src].</span>", "<span class='danger'>You attempt to kick \the [src].</span>")
+	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
+
+	H.apply_damage(rand(1,2), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))
+
 
 /obj/machinery/light/small
 	icon_state = "lbulb1"
@@ -346,7 +360,7 @@ var/global/list/obj/machinery/light/alllights = list()
 			to_chat(user, "You hit the light!")
 	// attempt to deconstruct / stick weapon into light socket
 	else if(status == LIGHT_EMPTY)
-		if(istype(W, /obj/item/weapon/wirecutters)) //If it's a wirecutter take out the wires
+		if(iswirecutter(W)) //If it's a wirecutter take out the wires
 			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 75, 1)
 			user.visible_message("[user.name] removes \the [src]'s wires.", \
 				"You remove \the [src]'s wires.", "You hear a noise.")

@@ -55,6 +55,8 @@ var/list/impact_master = list()
 	var/agony = 0
 	var/jittery = 0
 
+	hitsound = null
+
 	var/destroy = 0	//if set to 1, will destroy wall, tables and racks on impact (or at least, has a chance to)
 
 	var/reflected = 0
@@ -94,6 +96,8 @@ var/list/impact_master = list()
 	animate_movement = 0
 	var/linear_movement = 1
 
+	var/penetration_message = 1 //Message that is shown when a projectile penetrates an object
+
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
 	if(blocked >= 2)		return 0//Full block
 	if(!isliving(atarget))	return 0
@@ -109,6 +113,7 @@ var/list/impact_master = list()
 	L.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked) // add in AGONY!
 	if(jittery)
 		L.Jitter(jittery)
+	playsound(loc, hitsound, 35, 1)
 	return 1
 
 /obj/item/projectile/proc/check_fire(var/mob/living/target as mob, var/mob/living/user as mob)  //Checks if you can hit them or not.
@@ -299,7 +304,8 @@ var/list/impact_master = list()
 			penetration = 0
 			bullet_die()
 			return 1
-		A.visible_message("<span class='warning'>\The [src] goes right through \the [A]!</span>")
+		if(penetration_message)
+			A.visible_message("<span class='warning'>\The [src] goes right through \the [A]!</span>")
 		src.forceMove(get_step(src.loc,dir))
 		if(linear_movement)
 			update_pixel()
@@ -606,3 +612,6 @@ var/list/impact_master = list()
 		if((!( ttarget ) || loc == ttarget))
 			ttarget = locate(min(max(x + xo, 1), world.maxx), min(max(y + yo, 1), world.maxy), z) //Finding the target turf at map edge
 		step_towards(src, ttarget)
+
+/obj/item/projectile/kick_act() //Can't be kicked around
+	return

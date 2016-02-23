@@ -22,7 +22,8 @@
 	desc = "A laser pistol issued to high ranking members of a certain shadow corporation."
 	icon_state = "xcomlaserpistol"
 	item_state = null
-	projectile_type = /obj/item/projectile/beam
+	w_class = 1.0
+	projectile_type = /obj/item/projectile/beam/lightlaser
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	charge_cost = 100 // holds less "ammo" then the rifle variant.
 
@@ -113,30 +114,37 @@ obj/item/weapon/gun/energy/laser/retro
 
 /obj/item/weapon/gun/energy/laser/cyborg
 	var/charge_tick = 0
-	New()
-		..()
-		processing_objects.Add(src)
+
+/obj/item/weapon/gun/energy/laser/cyborg/New()
+	..()
+	processing_objects.Add(src)
 
 
-	Destroy()
-		processing_objects.Remove(src)
-		..()
+/obj/item/weapon/gun/energy/laser/cyborg/Destroy()
+	processing_objects.Remove(src)
+	..()
 
-	process() //Every [recharge_time] ticks, recharge a shot for the cyborg
-		charge_tick++
-		if(charge_tick < 3) return 0
-		charge_tick = 0
+/obj/item/weapon/gun/energy/laser/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
+	charge_tick++
+	if(charge_tick < 3) return 0
+	charge_tick = 0
 
-		if(!power_supply) return 0 //sanity
-		if(isrobot(src.loc))
-			var/mob/living/silicon/robot/R = src.loc
-			if(R && R.cell)
-				R.cell.use(charge_cost) 		//Take power from the borg...
-				power_supply.give(charge_cost)	//... to recharge the shot
+	if(!power_supply) return 0 //sanity
+	if(isrobot(src.loc))
+		var/mob/living/silicon/robot/R = src.loc
+		if(R && R.cell)
+			R.cell.use(charge_cost) 		//Take power from the borg...
+			power_supply.give(charge_cost)	//... to recharge the shot
 
+	update_icon()
+	return 1
+
+/obj/item/weapon/gun/energy/laser/cyborg/restock()
+	if(power_supply.charge < power_supply.maxcharge)
+		power_supply.give(charge_cost)
 		update_icon()
-		return 1
-
+	else
+		charge_tick = 0
 
 
 /obj/item/weapon/gun/energy/lasercannon
@@ -154,6 +162,13 @@ obj/item/weapon/gun/energy/laser/retro
 	isHandgun()
 		return 0
 
+/obj/item/weapon/gun/energy/lasercannon/empty/New()
+	..()
+
+	if(power_supply)
+		power_supply.charge = 0
+		update_icon()
+
 /obj/item/weapon/gun/energy/lasercannon/cyborg/process_chambered()
 	if(in_chamber)
 		return 1
@@ -164,6 +179,11 @@ obj/item/weapon/gun/energy/laser/retro
 			in_chamber = new/obj/item/projectile/beam/heavylaser(src)
 			return 1
 	return 0
+
+/obj/item/weapon/gun/energy/lasercannon/cyborg/restock()
+	if(power_supply.charge < power_supply.maxcharge)
+		power_supply.give(charge_cost)
+		update_icon()
 
 /obj/item/weapon/gun/energy/xray
 	name = "xray laser gun"
@@ -193,9 +213,9 @@ obj/item/weapon/gun/energy/laser/retro
 	desc = "A state of the art pistol utilizing plasma in a uranium-235 lined core to output searing bolts of energy."
 	icon_state = "alienpistol"
 	item_state = null
-	w_class = 2.0
+	w_class = 1.0
 	projectile_type = /obj/item/projectile/energy/plasma/pistol
-	charge_cost = 50
+	charge_cost = 100
 
 /obj/item/weapon/gun/energy/plasma/light
 	name = "plasma rifle"
@@ -203,7 +223,7 @@ obj/item/weapon/gun/energy/laser/retro
 	icon_state = "lightalienrifle"
 	item_state = null
 	projectile_type = /obj/item/projectile/energy/plasma/light
-	charge_cost = 100
+	charge_cost = 50
 
 /obj/item/weapon/gun/energy/plasma/rifle
 	name = "plasma cannon"

@@ -35,7 +35,7 @@
 	..()
 	if(!stat && prob(speak_chance))
 		for(var/mob/M in view())
-			to_chat(M, 'sound/effects/mousesqueek.ogg')
+			M << 'sound/effects/mousesqueek.ogg'
 
 	if(!ckey && stat == CONSCIOUS && prob(0.5))
 		stat = UNCONSCIOUS
@@ -86,11 +86,14 @@
 	if(pipe)
 		handle_ventcrawl(pipe)
 
-//copy paste from alien/larva, if that func is updated please update this one alsoghost
+//copy paste from alien/larva, if that func is updated please update this one also
 /mob/living/simple_animal/mouse/verb/hide()
 	set name = "Hide"
 	set desc = "Allows to hide beneath tables or certain items. Toggled on or off."
 	set category = "Object"
+
+	if(isUnconscious())
+		return
 
 	if (layer != TURF_LAYER+0.2)
 		layer = TURF_LAYER+0.2
@@ -134,14 +137,13 @@
 
 /mob/living/simple_animal/mouse/start_pulling(var/atom/movable/AM)//Prevents mouse from pulling things
 	to_chat(src, "<span class='warning'>You are too small to pull anything.</span>")
-	return
 
 /mob/living/simple_animal/mouse/Crossed(AM as mob|obj)
 	if( ishuman(AM) )
 		if(!stat)
 			var/mob/M = AM
-			to_chat(M, "<span class='notice'>\icon[src] Squeek!</span>")
-			to_chat(M, 'sound/effects/mousesqueek.ogg')
+			to_chat(M, "<span class='notice'>[bicon(src)] Squeek!</span>")
+			M << 'sound/effects/mousesqueek.ogg'
 	..()
 
 /mob/living/simple_animal/mouse/Die()

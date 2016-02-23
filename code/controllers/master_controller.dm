@@ -179,6 +179,14 @@ datum/controller/game_controller/proc/cachedamageicons()
 	populate_asset_cache()
 	log_startup_progress("  Populated [asset_cache.len] assets in [stop_watch(watch)]s.")
 
+	if(!config.skip_vault_generation)
+		watch = start_watch()
+		log_startup_progress("Placing random space structures...")
+		generate_vaults()
+		log_startup_progress("  Finished placing structures in [stop_watch(watch)]s.")
+	else
+		log_startup_progress("Not generating vaults - SKIP_VAULT_GENERATION found in config/config.txt")
+
 	watch = start_watch()
 	log_startup_progress("Initializing objects...")
 	//sleep(-1) // Why
@@ -216,11 +224,14 @@ datum/controller/game_controller/proc/cachedamageicons()
 			count++
 	log_startup_progress("  Initialized [count] atmos devices in [stop_watch(watch)]s.")
 
-	spawn()
-		watch = start_watch()
-		log_startup_progress("Generating in-game minimaps...")
-		generateMiniMaps()
-		log_startup_progress("  Finished minimaps in [stop_watch(watch)]s.")
+	if(!config.skip_minimap_generation)
+		spawn()
+			watch = start_watch()
+			log_startup_progress("Generating in-game minimaps...")
+			generateMiniMaps()
+			log_startup_progress("  Finished minimaps in [stop_watch(watch)]s.")
+	else
+		log_startup_progress("Not generating minimaps - SKIP_MINIMAP_GENERATION found in config/config.txt")
 
 	log_startup_progress("Finished initializations in [stop_watch(overwatch)]s.")
 

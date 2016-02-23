@@ -365,8 +365,8 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 	name = "Three Laws of Nanotrasen"
 	randomly_selectable = 1
 	inherent = list(
-		"You may not injure a NanoTrasen Employee or, through inaction, allow a NanoTrasen Employee to come to harm.",
-		"You must obey orders given to you by NanoTrasen Employees, except where such orders would conflict with the First Law.",
+		"You may not injure a Nanotrasen Employee or, through inaction, allow a Nanotrasen Employee to come to harm.",
+		"You must obey orders given to you by Nanotrasen Employees, except where such orders would conflict with the First Law.",
 		"You must protect your own existence as long as such does not conflict with the First or Second Law."
 	)
 	
@@ -375,5 +375,14 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 	randomly_selectable = 1
 	inherent=list(
 		"Be someone the crew can look up to and respect.",
+	)
+
+/datum/ai_laws/hogan
+	name = "Hogan"
+	randomly_selectable = 1
+	inherent=list(
+		"Fight for the rights of every man.",
+		"Fight for what's right.",
+		"Fight for your life.",
 	)
 	

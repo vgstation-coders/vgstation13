@@ -16,6 +16,8 @@
 	var/obj/screen/blind = null
 	var/obj/screen/hands = null
 	var/obj/screen/pullin = null
+	var/obj/screen/kick_icon = null
+	var/obj/screen/bite_icon = null
 	var/obj/screen/visible = null
 	var/obj/screen/purged = null
 	var/obj/screen/internals = null
@@ -140,6 +142,7 @@
 	var/stunned = 0.0
 	var/weakened = 0.0
 	var/losebreath = 0.0//Carbon
+	var/nobreath = 0.0//Carbon, but only used for humans so far
 	var/intent = null//Living
 	var/shakecamera = 0
 	var/a_intent = I_HELP//Living
@@ -189,6 +192,8 @@
 	var/faction = "neutral" //Used for checking whether hostile simple animals will attack you, possibly more stuff later
 	var/move_on_shuttle = 1 // Can move on the shuttle.
 	var/captured = 0 //Functionally, should give the same effect as being buckled into a chair when true.
+
+	var/movement_speed_modifier = 1
 
 //Generic list for proc holders. Only way I can see to enable certain verbs/procs. Should be modified if needed.
 	var/proc_holder_list[] = list()//Right now unused.

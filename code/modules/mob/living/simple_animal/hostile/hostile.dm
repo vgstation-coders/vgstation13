@@ -151,7 +151,7 @@
 		if((istype(L,/mob/living/simple_animal/corgi/Ian) || istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
 			return 0
 		//WE DON'T ATTACK OUR FRIENDS (used by lazarus injectors, and rabid slimes)
-		if(L in friends)
+		if(friends.Find(L))
 			return 0
 		return 1
 	if(isobj(the_target))
@@ -177,19 +177,22 @@
 	if(!target || !CanAttack(target))
 		LoseTarget()
 		return
-	if(target in ListTargets())
-		var/target_distance = get_dist(src,target)
-		if(ranged)//We ranged? Shoot at em
-			if(target_distance >= 2 && ranged_cooldown <= 0)//But make sure they're a tile away at least, and our range attack is off cooldown
-				OpenFire(target)
-		if(isturf(loc) && target.Adjacent(src))	//If they're next to us, attack
-			AttackingTarget()
-		if(canmove)
-			if(retreat_distance != null && target_distance <= retreat_distance) //If we have a retreat distance, check if we need to run from our target
-				walk_away(src,target,retreat_distance,move_to_delay)
-			else
-				Goto(target,move_to_delay,minimum_distance)//Otherwise, get to our minimum distance so we chase them
-		return
+
+	if(isturf(loc))
+		if(target in ListTargets())
+			var/target_distance = get_dist(src,target)
+			if(ranged)//We ranged? Shoot at em
+				if(target_distance >= 2 && ranged_cooldown <= 0)//But make sure they're a tile away at least, and our range attack is off cooldown
+					OpenFire(target)
+			if(target.Adjacent(src))	//If they're next to us, attack
+				AttackingTarget()
+			if(canmove)
+				if(retreat_distance != null && target_distance <= retreat_distance) //If we have a retreat distance, check if we need to run from our target
+					walk_away(src,target,retreat_distance,move_to_delay)
+				else
+					Goto(target,move_to_delay,minimum_distance)//Otherwise, get to our minimum distance so we chase them
+			return
+
 	if(target.loc != null && get_dist(src, target.loc) <= vision_range)//We can't see our target, but he's in our vision range still
 		if(FindHidden(target) && environment_smash)//Check if he tried to hide in something to lose us
 			var/atom/A = target.loc
@@ -200,6 +203,8 @@
 			return
 		else
 			LostTarget()
+			return
+
 	LostTarget()
 
 /mob/living/simple_animal/hostile/proc/Goto(var/target, var/delay, var/minimum_distance)
@@ -262,6 +267,13 @@
 	..()
 	walk(src, 0)
 
+/mob/living/simple_animal/hostile/inherit_mind(mob/living/simple_animal/from)
+	..()
+
+	var/mob/living/simple_animal/hostile/H = from
+	if(istype(H))
+		src.friends |= H.friends
+
 /mob/living/simple_animal/hostile/proc/OpenFire(var/target)
 
 
@@ -293,14 +305,13 @@
 /mob/living/simple_animal/hostile/proc/Shoot(var/target, var/start, var/user, var/bullet = 0)
 	if(target == start)
 		return
+	if(!istype(target, /turf))
+		return
 
 	var/obj/item/projectile/A = new projectiletype(user:loc)
 	playsound(user, projectilesound, 100, 1)
 	if(!A)	return
 
-	if (!istype(target, /turf))
-		del(A)
-		return
 	A.current = target
 
 	var/turf/T = get_turf(src)
@@ -321,11 +332,9 @@
 		EscapeConfinement()
 		for(var/dir in cardinal)
 			var/turf/T = get_step(src, dir)
-			if(istype(T, /turf/simulated/wall) && T.Adjacent(src))
+			if(istype(T, /turf/simulated/wall))
 				T.attack_animal(src)
 			for(var/atom/A in T)
-				if(!A.Adjacent(src))
-					continue
 				if(istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
 					A.attack_animal(src)
 	return

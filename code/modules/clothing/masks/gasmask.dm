@@ -3,7 +3,6 @@
 	desc = "A face-covering mask that can be connected to an air supply."
 	icon_state = "gas_alt"
 	flags = FPRINT  | BLOCK_GAS_SMOKE_EFFECT | MASKINTERNALS
-	flags_inv = HIDEEARS|HIDEEYES|HIDEFACE
 	w_class = 3.0
 	can_flip = 1
 	action_button_name = "Toggle Mask"
@@ -12,7 +11,8 @@
 	permeability_coefficient = 0.01
 	siemens_coefficient = 0.9
 	species_fit = list("Vox")
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = FACE
+	pressure_resistance = ONE_ATMOSPHERE
 	var/stage = 0
 
 
@@ -46,6 +46,7 @@
 	item_state = "gas_mask"
 	armor = list(melee = 0, bullet = 0, laser = 2,energy = 2, bomb = 0, bio = 75, rad = 0)
 	species_fit = list("Vox")
+	can_flip = 0
 
 /obj/item/clothing/mask/gas/swat
 	name = "\improper SWAT mask"
@@ -53,6 +54,7 @@
 	icon_state = "swat"
 	siemens_coefficient = 0.7
 	species_fit = list("Vox")
+	can_flip = 0
 
 /obj/item/clothing/mask/gas/syndicate
 	name = "syndicate mask"
@@ -60,6 +62,7 @@
 	icon_state = "swat"
 	siemens_coefficient = 0.7
 	species_fit = list("Vox")
+	can_flip = 0
 
 /obj/item/clothing/mask/gas/voice
 	name = "gas mask"
@@ -107,10 +110,12 @@
 
 	desc = A.desc
 	name = A.name
+	flags = A.flags
 	icon = A.icon
 	icon_state = A.icon_state
 	item_state = A.item_state
-	flags_inv = A.flags_inv
+	can_flip = A.can_flip
+	body_parts_covered = A.body_parts_covered
 	usr.update_inv_wear_mask(1)	//so our overlays update.
 
 /obj/item/clothing/mask/gas/voice/attack_self(mob/user)
@@ -123,20 +128,30 @@
 	icon_state = "clown"
 	item_state = "clown_hat"
 	species_fit = list("Vox")
+	can_flip = 0
+
+/obj/item/clothing/mask/gas/clown_hat/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/clothing/shoes/clown_shoes))
+		new /mob/living/simple_animal/hostile/retaliate/cluwne/goblin(get_turf(src))
+		qdel(W)
+		qdel(src)
 
 /obj/item/clothing/mask/gas/clown_hat/wiz
-	name = "clown wig and mask"
+	name = "purple clown wig and mask"
 	desc = "Some pranksters are truly magical."
 	icon_state = "wizzclown"
 	item_state = "wizzclown"
+	can_flip = 0
 	//TODO species_fit = list("Vox")
 
-/obj/item/clothing/mask/gas/virusclown_hat
+/obj/item/clothing/mask/gas/virusclown_hat //why isn't this just a subtype of clown_hat???????
 	name = "clown wig and mask"
 	desc = "A true prankster's facial attire. A clown is incomplete without his wig and mask."
 	icon_state = "clown"
 	item_state = "clown_hat"
 	species_fit = list("Vox")
+	can_flip = 0
 
 /obj/item/clothing/mask/gas/sexyclown
 	name = "sexy-clown wig and mask"
@@ -144,6 +159,7 @@
 	icon_state = "sexyclown"
 	item_state = "sexyclown"
 	species_fit = list("Vox")
+	can_flip = 0
 
 /obj/item/clothing/mask/gas/mime
 	name = "mime mask"
@@ -151,6 +167,7 @@
 	icon_state = "mime"
 	item_state = "mime"
 	species_fit = list("Vox")
+	can_flip = 0
 	var/muted = 0
 
 /obj/item/clothing/mask/gas/mime/treat_mask_speech(var/datum/speech/speech)
@@ -163,6 +180,7 @@
 	icon_state = "monkeymask"
 	item_state = "monkeymask"
 	species_fit = list("Vox")
+	can_flip = 0
 
 /obj/item/clothing/mask/gas/sexymime
 	name = "sexy mime mask"
@@ -170,6 +188,7 @@
 	icon_state = "sexymime"
 	item_state = "sexymime"
 	species_fit = list("Vox")
+	can_flip = 0
 
 /obj/item/clothing/mask/gas/death_commando
 	name = "Death Commando Mask"
@@ -177,15 +196,18 @@
 	item_state = "death"
 	siemens_coefficient = 0.2
 	species_fit = list("Vox")
+	can_flip = 0
 
 /obj/item/clothing/mask/gas/cyborg
 	name = "cyborg visor"
 	desc = "Beep boop"
 	icon_state = "death"
 	species_fit = list("Vox")
+	can_flip = 0
 
 /obj/item/clothing/mask/gas/owl_mask
 	name = "owl mask"
 	desc = "Twoooo!"
 	icon_state = "owl"
 	species_fit = list("Vox")
+	can_flip = 0

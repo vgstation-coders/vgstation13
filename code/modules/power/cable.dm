@@ -162,7 +162,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(T.intact)
 		return
 
-	if(istype(W, /obj/item/weapon/wirecutters))
+	if(iswirecutter(W))
 		if(shock(user, 50))
 			return
 
@@ -214,6 +214,11 @@ By design, d1 is the smallest direction and d2 is the highest
 			shock(user, 50, 0.7)
 
 	src.add_fingerprint(user)
+
+/obj/structure/cable/bite_act(mob/living/carbon/human/H)
+	H.visible_message("<span class='danger'>[H] bites \the [src]!</span>", "<span class='userdanger'>You bite \the [src]!</span></span>")
+
+	shock(H, 100, 2.0)
 
 // shock the user with probability prb
 /obj/structure/cable/proc/shock(mob/user, prb, siemens_coeff = 1.0)

@@ -673,9 +673,6 @@ obj/structure/bomberflame/Destroy()
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	siemens_coefficient = 0
 	flags = FPRINT  | ONESIZEFITSALL
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
-	flags_inv = HIDEJUMPSUIT
-	heat_conductivity = INS_ARMOUR_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
@@ -702,8 +699,6 @@ obj/structure/bomberflame/Destroy()
 	icon_state = "bomberman"
 	item_state = "bomberman"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
-	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEHAIR
-	body_parts_covered = FULL_HEAD
 	siemens_coefficient = 0
 	species_restricted = list("exclude")
 	var/never_removed = 1
@@ -1084,11 +1079,11 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		if(violence)
 			to_chat(M, "Violence Mode activated! Bombs hurt players! Suits offer no protections! Initial Flame Range increased!")
 		if(M.client)
-			to_chat(M.client, sound('sound/bomberman/start.ogg'))
+			M.client << sound('sound/bomberman/start.ogg')
 		to_chat(M, "<b>READY?</b>")
 
 	for(var/obj/machinery/computer/security/telescreen/entertainment/E in machines)
-		E.visible_message("<span style='color:grey'>\icon[E] \The [E] brightens as it appears that a round is starting in [name].</span>")
+		E.visible_message("<span style='color:grey'>[bicon(E)] \The [E] brightens as it appears that a round is starting in [name].</span>")
 		flick("entertainment_arena",E)
 
 	for(var/mob/dead/observer/O in observers)

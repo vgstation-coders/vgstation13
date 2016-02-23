@@ -24,7 +24,7 @@ mob/living/carbon/proc/handle_hallucinations()
 	handling_hal = 1
 	while(hallucination > 20)
 		sleep(rand(200,500)/(hallucination/25))
-		var/halpick = rand(1,104)
+		var/halpick = rand(1,106)
 		switch(halpick)
 			if(0 to 15)
 				//Screwy HUD
@@ -277,9 +277,17 @@ mob/living/carbon/proc/handle_hallucinations()
 						spawn(duration)
 							if(C)
 								C.images.Remove(foodie) //Remove the image from hallucinating mob
+			if(87 to 88) //Turns your screen
+				var/angle = rand(1,3)*90
+				var/duration = rand(10 SECONDS, 40 SECONDS)
+
+				client.dir = turn(client.dir, angle)
+				to_chat(src, "<span class='danger'>[pick("You feel lost.", "The walls suddenly start moving.", "Everything around you shifts and distorts.")]</span>")
+
+				spawn(duration)
+					client.dir = turn(client.dir, -angle)
 
 	handling_hal = 0
-
 
 /*obj/machinery/proc/mockpanel(list/buttons,start_txt,end_txt,list/mid_txts)
 
@@ -386,7 +394,7 @@ proc/check_panel(mob/M)
 	else if(src.dir == WEST)
 		del src.currentimage
 		src.currentimage = new /image(left,src)
-	to_chat(my_target, currentimage)
+	my_target << currentimage
 
 
 /obj/effect/fake_attacker/proc/attack_loop()
@@ -406,7 +414,7 @@ proc/check_panel(mob/M)
 		else
 			if(prob(15))
 				if(weapon_name)
-					to_chat(my_target, sound(pick('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg')))
+					my_target << sound(pick('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg'))
 					my_target.show_message("<span class='danger'>[my_target] has been attacked with [weapon_name] by [src.name] </span>", 1)
 					my_target.halloss += 8
 					if(prob(20)) my_target.eye_blurry += 3
@@ -414,7 +422,7 @@ proc/check_panel(mob/M)
 						if(!locate(/obj/effect/overlay) in my_target.loc)
 							fake_blood(my_target)
 				else
-					to_chat(my_target, sound(pick('sound/weapons/punch1.ogg','sound/weapons/punch2.ogg','sound/weapons/punch3.ogg','sound/weapons/punch4.ogg')))
+					my_target << sound(pick('sound/weapons/punch1.ogg','sound/weapons/punch2.ogg','sound/weapons/punch3.ogg','sound/weapons/punch4.ogg'))
 					my_target.show_message("<span class='danger'>[src.name] has punched [my_target]!</span>", 1)
 					my_target.halloss += 4
 					if(prob(33))
@@ -432,7 +440,7 @@ proc/check_panel(mob/M)
 	var/obj/effect/overlay/O = getFromPool(/obj/effect/overlay,target.loc)
 	O.name = "blood"
 	var/image/I = image('icons/effects/blood.dmi',O,"floor[rand(1,7)]",O.dir,1)
-	to_chat(target, I)
+	target << I
 	spawn(300)
 		returnToPool(O)
 

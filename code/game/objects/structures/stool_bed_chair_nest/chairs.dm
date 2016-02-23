@@ -2,10 +2,11 @@
 	name = "chair"
 	desc = "You sit in this. Either by will or force."
 	icon_state = "chair"
-	locked_should_lie = 0
 	lockflags = 0
 
 	sheet_amt = 1
+
+	var/overrideghostspin = 0 //Set it to 1 if ghosts should NEVER be able to spin this
 
 /obj/structure/bed/chair/New()
 	..()
@@ -15,9 +16,6 @@
 /obj/structure/bed/chair/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/assembly/shock_kit))
 		var/obj/item/assembly/shock_kit/SK = W
-		if(!SK.status)
-			to_chat(user, "<span class='notice'>[SK] is not ready to be attached!</span>")
-			return
 		if(user.drop_item(W))
 			var/obj/structure/bed/chair/e_chair/E = new /obj/structure/bed/chair/e_chair(src.loc)
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
@@ -58,7 +56,7 @@
 	if(!usr || !isturf(usr.loc))
 		return
 
-	if(!config.ghost_interaction && !blessed)
+	if((!config.ghost_interaction && !blessed) || overrideghostspin)
 		if(usr.isUnconscious() || usr.restrained())
 			return
 

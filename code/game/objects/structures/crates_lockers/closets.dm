@@ -51,7 +51,7 @@
 
 /obj/structure/closet/proc/can_close()
 	for(var/obj/structure/closet/closet in get_turf(src))
-		if(closet != src)
+		if(closet != src && !closet.wall_mounted)
 			return 0
 	return 1
 
@@ -121,7 +121,7 @@
 			L.client.eye = src
 	else if(!istype(AM, /obj/item) && !istype(AM, /obj/effect/dummy/chameleon))
 		return 0
-	else if(AM.density || AM.anchored)
+	else if(AM.density || AM.anchored || istype(AM,/obj/structure/closet))
 		return 0
 	AM.loc = src
 	return 1
@@ -310,7 +310,7 @@
 		return 0
 	if(!isturf(O.loc))
 		return 0
-	if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.lying)
+	if(user.incapacitated())
 		return 0
 	if((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1))
 		return 0
@@ -371,8 +371,8 @@
 			temp_overlay.overlays += spooky_overlay
 
 			C.images += temp_overlay
-			to_chat(L, sound('sound/machines/click.ogg'))
-			to_chat(L, sound('sound/hallucinations/scary.ogg'))
+			L << sound('sound/machines/click.ogg')
+			L << sound('sound/hallucinations/scary.ogg')
 			L.Weaken(5)
 
 			sleep(50)
@@ -396,7 +396,7 @@
 	set category = "Object"
 	set name = "Toggle Open"
 
-	if(!usr.canmove || usr.isUnconscious() || usr.restrained())
+	if(usr.incapacitated())
 		return
 
 	if(ishuman(usr) || isMoMMI(usr))

@@ -86,7 +86,7 @@
 
 /obj/item/toy/syndicateballoon
 	name = "syndicate balloon"
-	desc = "There is a tag on the back that reads \"FUK NT!11!\"."
+	desc = "It's just a balloon. There is a tag on the back that reads \"FUK NT!11!\"."
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
@@ -393,7 +393,7 @@
 
 /obj/item/toy/bomb/attack_self(mob/user)
 	var/turf/T = get_turf(src)
-	T.visible_message("\icon[rendered]*beep* *beep*", "*beep* *beep*")
+	T.visible_message("[bicon(rendered)]*beep* *beep*", "*beep* *beep*")
 
 /*
  * Crayons
@@ -645,7 +645,7 @@
  */
 /obj/item/toy/gooncode
 	name = "Goonecode"
-	desc = "The holy grail of all programmers."
+	desc = "The holy grail of all programmers. It seems a bit leaky."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "gooncode"
 
@@ -656,12 +656,13 @@
 
 /obj/item/toy/minimeteor
 	name = "Mini Meteor"
-	desc = "Relive the horror of a meteor shower! SweetMeat-eor. Co is not responsible for any injury caused by Mini Meteor"
+	desc = "Relive the horrors of a meteor storm! Space Weather Incorporated is not responsible for any injuries caused by Mini Meteor."
 	icon = 'icons/obj/meteor.dmi'
-	icon_state = "flaming"
+	icon_state = "small"
 
-	attack_self(mob/user as mob)
-		playsound(user, 'sound/effects/bamf.ogg', 20, 1)
+/obj/item/toy/minimeteor/attack_self(mob/user as mob)
+
+	playsound(user, 'sound/effects/bamf.ogg', 20, 1)
 
 /obj/item/device/whisperphone
 	name = "whisperphone"

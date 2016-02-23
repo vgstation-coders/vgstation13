@@ -315,3 +315,280 @@
 	else
 		BEE.newTarget()
 	bullet_die()
+
+/obj/item/projectile/bullet/APS //Armor-piercing sabot round. Metal rods become this when fired from a railgun.
+	name = "armor-piercing sabot round"
+	icon_state = "APS"
+	damage = 10 //Default damage, actual damage is determined per-shot in railgun.dm
+	kill_count = 20 //This will be increased when the round is fired, based on the strength of the shot
+	stun = 0
+	weaken = 0
+	stutter = 0
+	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
+	penetration = 0 //By default. Higher-power shots will have penetration.
+	var/superspeed = 0
+
+/obj/item/projectile/bullet/APS/on_hit(var/atom/atarget, var/blocked = 0)
+	if(istype(atarget, /mob/living) && damage == 200)
+		var/mob/living/M = atarget
+		M.gib()
+	else ..()
+
+/obj/item/projectile/bullet/APS/OnFired()
+	..()
+	if(damage >= 100)
+		superspeed = 1
+		for (var/mob/M in player_list)
+			if(M && M.client)
+				var/turf/M_turf = get_turf(M)
+				if(M_turf && (M_turf.z == starting.z))
+					M.playsound_local(starting, 'sound/weapons/hecate_fire_far.ogg', 25, 1)
+
+/obj/item/projectile/bullet/APS/OnDeath()
+	var/turf/T = get_turf(src)
+	new /obj/item/stack/rods(T)
+
+/obj/item/projectile/bullet/APS/bresenham_step(var/distA, var/distB, var/dA, var/dB)
+	if(..())
+		if(superspeed)
+			superspeed = 0
+			return 1
+		else
+			superspeed = 1
+			return 0
+	else
+		return 0
+
+/obj/item/projectile/bullet/stinger
+	name = "alien stinger"
+	damage = 5
+	damage_type = TOX
+	flag = "bio"
+
+/obj/item/projectile/bullet/stinger/OnFired()
+	var/choice = rand(1,4)
+	switch(choice)
+		if(1)
+			stutter = 2
+		if(2)
+			eyeblur = 2
+		if(3)
+			agony = 2
+		if(4)
+			jittery = 2
+	..()
+
+/obj/item/projectile/bullet/vial
+	name = "vial"
+	icon_state = "vial"
+	damage = 0
+	penetration = 0
+	embed = 0
+	var/vial = null
+	var/user = null
+	var/hit_mob = 0
+
+/obj/item/projectile/bullet/vial/Destroy()
+	if(vial)
+		qdel(vial)
+		vial = null
+	if(user)
+		user = null
+
+/obj/item/projectile/bullet/vial/on_hit(var/atom/atarget, var/blocked = 0)
+	..()
+	if(!user)
+		return
+	if(vial)
+		var/obj/item/weapon/reagent_containers/glass/beaker/vial/V = vial
+		if(!V.is_open_container())
+			V.flags |= OPENCONTAINER
+		if(!V.is_empty())
+			hit_mob = 1
+			atarget.visible_message("<span class='warning'>\The [V] shatters, dousing [atarget] in its contents!</span>",
+								"<span class='warning'>\The [V] shatters, dousing you in its contents!</span>")
+
+		V.transfer(atarget, user, TRUE, FALSE, V.reagents.total_volume)
+
+		qdel(V)
+		vial = null
+		user = null
+
+/obj/item/projectile/bullet/vial/OnDeath()
+	if(!hit_mob)
+		src.visible_message("<span class='warning'>The vial shatters!</span>")
+	playsound(get_turf(src), "shatter", 20, 1)
+
+/obj/item/projectile/bullet/blastwave
+	name = "blast wave"
+	icon_state = null
+	damage = 0
+	penetration = -1
+	embed = 0
+	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
+	penetration_message = 0
+	var/heavy_damage_range = 0
+	var/medium_damage_range = 0
+	var/light_damage_range = 0
+
+/obj/item/projectile/bullet/blastwave/OnFired()
+	..()
+	if(!heavy_damage_range || !medium_damage_range || !light_damage_range)
+		bullet_die()
+		return
+
+/obj/item/projectile/bullet/blastwave/process_step()
+	..()
+	var/turf/T = get_turf(src)
+	if(light_damage_range)
+		if(medium_damage_range)
+			if(heavy_damage_range)
+				for(var/atom/movable/A in T.contents)
+					if(!istype(A, /obj/item/weapon/organ/head))
+						A.ex_act(1)
+				T.ex_act(1)
+				heavy_damage_range -= 1
+			else
+				for(var/atom/movable/A in T.contents)
+					A.ex_act(2)
+				T.ex_act(2)
+				medium_damage_range -= 1
+		else
+			for(var/atom/movable/A in T.contents)
+				A.ex_act(3)
+			T.ex_act(3)
+			light_damage_range -= 1
+	else
+		bullet_die()
+
+/obj/item/projectile/bullet/blastwave/ex_act()
+	return
+
+/obj/item/projectile/bullet/fire_plume
+	name = "fire plume"
+	icon_state = null
+	damage = 0
+	penetration = -1
+	embed = 0
+	phase_type = PROJREACT_MOBS|PROJREACT_BLOB|PROJREACT_OBJS
+	bounce_sound = null
+	custom_impact = 1
+	penetration_message = 0
+	var/has_O2_in_mix = 0
+	var/datum/gas_mixture/gas_jet = null
+	var/max_range = 10
+	var/stepped_range = 0
+	var/burn_strength = 0
+	var/has_reacted = 0
+	var/burn_damage = 0
+	var/jet_pressure = 0
+	var/original_total_moles = 0
+
+/obj/item/projectile/bullet/fire_plume/OnFired()
+	..()
+	if(!gas_jet)
+		bullet_die()
+	else
+		original_total_moles = gas_jet.total_moles()
+
+/obj/item/projectile/bullet/fire_plume/proc/create_puff()
+	if(gas_jet)
+		if(gas_jet.total_moles())
+			var/total_moles = gas_jet.total_moles()
+			var/o2_concentration = gas_jet.oxygen/total_moles
+			var/n2_concentration = gas_jet.nitrogen/total_moles
+			var/co2_concentration = gas_jet.carbon_dioxide/total_moles
+			var/plasma_concentration = gas_jet.toxins/total_moles
+			var/n2o_concentration = null
+
+			var/datum/gas_mixture/gas_dispersal = gas_jet.remove(original_total_moles/10)
+
+			if(gas_jet.trace_gases.len)
+				for(var/datum/gas/G in gas_jet.trace_gases)
+					if(istype(G, /datum/gas/sleeping_agent))
+						n2o_concentration = G.moles/total_moles
+
+			var/gas_type = null
+
+			if(o2_concentration > 0.5)
+				gas_type = "oxygen"
+			if(n2_concentration > 0.5)
+				gas_type = "nitrogen"
+			if(co2_concentration > 0.5)
+				gas_type = "CO2"
+			if(plasma_concentration > 0.5)
+				gas_type = "plasma"
+			if(n2o_concentration && n2o_concentration > 0.5)
+				gas_type = "N2O"
+
+			new /obj/effect/gas_puff(get_turf(src.loc), gas_dispersal, gas_type)
+
+/obj/item/projectile/bullet/fire_plume/proc/calculate_burn_strength(var/turf/T = null)
+	if(!gas_jet)
+		return
+
+	if(gas_jet.total_moles())
+		var/jet_total_moles = gas_jet.total_moles()
+		var/toxin_concentration = gas_jet.toxins/jet_total_moles
+		if(!(toxin_concentration > 0.01))
+			create_puff()
+			return
+	else
+		return
+
+	if(!has_O2_in_mix && T)
+		var/turf/location = get_turf(src)
+		var/datum/gas_mixture/turf_gases = location.return_air()
+		var/turf_total_moles = turf_gases.total_moles()
+		if(turf_total_moles)
+			var/o2_concentration = turf_gases.oxygen/turf_total_moles
+			if(!(o2_concentration > 0.01))
+				create_puff()
+				return
+		else
+			create_puff()
+			return
+		var/datum/gas_mixture/temp_gas_jet = new()
+		temp_gas_jet.copy_from(gas_jet)
+		temp_gas_jet.merge(turf_gases)
+		if(temp_gas_jet.temperature < 373.15)
+			temp_gas_jet.temperature = 383.15
+			temp_gas_jet.update_values()
+		for(var/i = 1; i <= 20; i++)
+			temp_gas_jet.react()
+		burn_strength = temp_gas_jet.temperature
+
+	else
+		if(!has_reacted)
+			if(gas_jet.temperature < 373.15)
+				gas_jet.temperature = 383.15
+				gas_jet.update_values()
+			for(var/i = 1; i <= 20; i++)
+				gas_jet.react()
+			has_reacted = 1
+		burn_strength = gas_jet.temperature
+
+	var/initial_burn_damage = burn_strength/100
+	burn_damage = ((((-(10 * (0.9**((initial_burn_damage/10) * 5))) + 10) * 0.4) * 20)/5) //Exponential decay function 20*(y=(-(10*(0.9^(x/10)))+10)*0.4)
+	//assuming the target stays in the fire for its duration, the total burn damage will be roughly 5 * burn_damage
+	new /obj/effect/fire_blast(get_turf(src.loc), burn_damage, stepped_range, 1, jet_pressure, burn_strength)
+
+/obj/item/projectile/bullet/fire_plume/process_step()
+	..()
+	if(stepped_range <= max_range)
+		stepped_range++
+	else
+		bullet_die()
+		return
+	var/turf/T = get_turf(src)
+	for(var/obj/effect/E in T)
+		if(istype(E, /obj/effect/blob))
+			stepped_range += 3
+			if(istype(E, /obj/effect/blob/shield)) //The fire can't penetrate through dense blob shields
+				calculate_burn_strength(get_turf(src))
+				bullet_die()
+				return
+	calculate_burn_strength(get_turf(src))
+
+/obj/item/projectile/bullet/fire_plume/ex_act()
+	return

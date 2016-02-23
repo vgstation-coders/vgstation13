@@ -99,11 +99,12 @@
 	. = ..()
 
 /obj/machinery/power/supermatter/proc/explode()
-	explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
-	new /turf/unsimulated/wall/supermatter(get_turf(src))
-	SetUniversalState(/datum/universal_state/supermatter_cascade)
-	empulse(get_turf(src), 100, 200, 1)
+	var/turf/turff = get_turf(src)
 	qdel(src)
+	new /turf/unsimulated/wall/supermatter(turff)
+	SetUniversalState(/datum/universal_state/supermatter_cascade)
+	explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
+	empulse(turff, 100, 200, 1)
 
 /obj/machinery/power/supermatter/shard/explode()
 	explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
@@ -118,21 +119,23 @@
 		else
 			return explode()
 
-/obj/machinery/power/supermatter/shard/singularity_act()
+/obj/machinery/power/supermatter/shard/singularity_act(current_size, obj/machinery/singularity/S)
 	var/prints = ""
 	if(src.fingerprintshidden)
 		prints = ", all touchers : [list2params(src.fingerprintshidden)]"
-	log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
-	message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
+	if(current_size == STAGE_FIVE)
+		S.expand(STAGE_SUPER, 1)
+		log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
+		message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
 	qdel(src)
 	return 15000
 
-/obj/machinery/power/supermatter/singularity_act()
+/obj/machinery/power/supermatter/singularity_act(current_size, obj/machinery/singularity/S)
 	var/prints = ""
 	if(src.fingerprintshidden)
 		prints = ", all touchers : " + src.fingerprintshidden
 	SetUniversalState(/datum/universal_state/supermatter_cascade)
-	//S.expand(STAGE_SUPER, 1)
+	S.expand(STAGE_SUPER, 1)
 	log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
 	message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
 	qdel(src)
@@ -199,11 +202,13 @@
 			for(var/sf in audio_sounds)
 				var/sound/voice = sound(sf, wait = 1, channel = VOX_CHANNEL)
 				voice.status = SOUND_STREAM
-				to_chat(world, voice)
+				world << voice
 			lastaudiowarning = world.timeofday - audio_offset
 
 		if(damage > explosion_point)
 			for(var/mob/living/mob in living_mob_list)
+				if(mob.z != src.z)//only make it effect mobs on the current Z level.
+					continue
 				if(istype(mob, /mob/living/carbon/human))
 					//Hilariously enough, running into a closet should make you get hit the hardest.
 					mob:hallucination += max(50, min(300, DETONATION_HALLUCINATION * sqrt(1 / (get_dist(mob, src) + 1)) ) )
@@ -337,6 +342,16 @@
 	else
 		attack_ai(user)
 
+/obj/machinery/power/supermatter/kick_act(mob/living/H)
+	..()
+
+	Consume(H)
+
+/obj/machinery/power/supermatter/bite_act(mob/living/H)
+	H.visible_message("<span class='danger'>[H] attempts to bite \the [src]!</span>", "<span class='userdanger'>You attempt to take a bite out of \the [src]. Your last thought before you burn to ashes is \"Touching it would've been a much wiser decision.\"")
+
+	Consume(H)
+
 /obj/machinery/power/supermatter/attack_ghost(mob/user as mob)
 	attack_ai(user)
 
@@ -422,4 +437,3 @@
 			l.show_message("<span class=\"warning\">You hear an uneartly ringing and notice your skin is covered in fresh radiation burns.</span>", 2)
 		var/rads = 500 * sqrt( 1 / (get_dist(l, src) + 1) )
 		l.apply_effect(rads, IRRADIATE, 0) // Permit blocking
-

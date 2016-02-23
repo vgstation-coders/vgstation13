@@ -25,19 +25,19 @@
 		if(!ismob(loc))
 			return
 		C = loc
-	if(C.canmove && !C.stat && !C.restrained())
+	if(!C.incapacitated())
 		if(!src.on)
 			src.on = !src.on
 			eyeprot = 2
 			vision_flags |= SEE_TURFS
 			see_invisible |= SEE_INVISIBLE_MINIMUM
-			body_parts_covered |= EYES
+//			body_parts_covered |= EYES
 			icon_state = initial(icon_state)
 			to_chat(C, "You turn [src] on.")
-		else //Mesons are like cyclops' visons. When off, your eyes are exposed
+		else
 			src.on = !src.on
 			eyeprot = 0
-			body_parts_covered &= ~EYES
+//			body_parts_covered &= ~EYES
 			vision_flags &= ~SEE_TURFS
 			see_invisible &= ~SEE_INVISIBLE_MINIMUM
 			icon_state = "[initial(icon_state)]off"
@@ -105,6 +105,15 @@
 	item_state = "glasses"
 	prescription = 1
 
+/obj/item/clothing/glasses/regular/kick_act(mob/living/carbon/human/H)
+	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
+	playsound(get_turf(src), "shatter", 50, 1)
+
+	var/obj/item/weapon/shard/S = new(get_turf(src))
+	S.Crossed()
+
+	qdel(src)
+
 /obj/item/clothing/glasses/regular/hipster
 	name = "Prescription Glasses"
 	desc = "Made by Uncool. Co."
@@ -126,6 +135,15 @@
 	darkness_view = -1
 	eyeprot = 1
 	species_fit = list("Vox")
+
+/obj/item/clothing/glasses/sunglasses/kick_act(mob/living/carbon/human/H)
+	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
+	playsound(get_turf(src), "shatter", 50, 1)
+
+	var/obj/item/weapon/shard/S = new(get_turf(src))
+	S.Crossed()
+
+	qdel(src)
 
 /obj/item/clothing/glasses/virussunglasses
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
@@ -160,7 +178,7 @@
 		if(!ismob(loc))
 			return
 		C = loc
-	if(C.canmove && !C.stat && !C.restrained())
+	if(!C.incapacitated())
 		if(src.up)
 			src.up = !src.up
 			eyeprot = 2

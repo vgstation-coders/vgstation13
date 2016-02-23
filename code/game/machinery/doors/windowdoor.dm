@@ -200,7 +200,7 @@
 
 /obj/machinery/door/window/attackby(obj/item/weapon/I as obj, mob/user as mob)
 	// Make emagged/open doors able to be deconstructed
-	if (!src.density && src.operating != 1 && istype(I, /obj/item/weapon/crowbar))
+	if (!src.density && src.operating != 1 && iscrowbar(I))
 		user.visible_message("[user] removes the electronics from the windoor assembly.", "You start to remove the electronics from the windoor assembly.")
 		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 100, 1)
 		if (do_after(user, src, 40) && src && !src.density && src.operating != 1)
@@ -297,7 +297,6 @@
 	var/obj/item/weapon/circuitboard/airlock/AE = (src.electronics ? src.electronics : new /obj/item/weapon/circuitboard/airlock(src.loc))
 	if (src.electronics)
 		src.electronics = null
-		AE.loc = src.loc
 		AE.installed = 0
 	else
 		if(operating == -1)
@@ -308,6 +307,7 @@
 		else if (src.req_one_access && src.req_one_access.len > 0)
 			AE.conf_access = src.req_one_access
 			AE.one_access = 1
+	AE.loc = src.loc
 
 /obj/machinery/door/window/brigdoor
 	name = "Secure Window Door"

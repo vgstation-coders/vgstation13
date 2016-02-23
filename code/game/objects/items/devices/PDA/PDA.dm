@@ -77,26 +77,26 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"The 'Universes Largest Oven' has been completed today in Space Germany. Prime Minister Adole Himmler has invited Space Isreal to see the oven first at its grand opening."
 		)
 	var/list/currentevents2 = list("CEO Discount Dan has been sued. Again.",
-		"NanoTrasen has inducted a new policy wherein clowns will be spanked for stealing milk.",
+		"Nanotrasen has inducted a new policy wherein clowns will be spanked for stealing milk.",
 		"Discount Dan's has created a new line of Discountu Danu food product for Space Japan. The food is comprised of Space Carp on rice. More at ten.",
 		"Discount Dan's has come under fire for their new 'Horsemeat Lasagna'",
-		"NanoTrasen's official website has been hacked this morning. The site read 'NT SUXZ, GO SYNDIEKATTZ!!1!1!!' for 48 hours until the site was fixed.",
-		"Read the all new book by a former unnamed syndicate, 'NanoTrasen sucks but the dental is good so whatever.'",
-		"NanoTrasen has released a new study that has been made useless by the internet.",
+		"Nanotrasen's official website has been hacked this morning. The site read 'NT SUXZ, GO SYNDIEKATTZ!!1!1!!' for 48 hours until the site was fixed.",
+		"Read the all new book by a former unnamed syndicate, 'Nanotrasen sucks but the dental is good so whatever.'",
+		"Nanotrasen has released a new study that has been made useless by the internet.",
 		"Discount Dan's 'Spooky Dan' line of product has come under fire for being unintentionally racist toward ghosts.",
 		"Discount Dan's 'Discounto Danito' line of product has come out with a new 'fiesta size' burrito. CEO Discount Dan has been quoted as saying, 'A big 'ol clot for a big 'ol family!'",
-		"The Syndicate has issued a press release stating that 'NanoTrasen sucks dicks.'",
-		"NanoTrasen CEO Johnson Lovelocker has been photographed kicking a Tajaran to death. This shameful publicity stunt is part of the new 'NT Hates Catbeasts, do you?' campaign.",
-		"NanoTrasen CEO Johnson Lovelocker has been photographed kicking a Vox in the cloaca. He commented that, 'BIRDS BELONG IN MY FUCKING MEALS DAMN IT'.",
-		"NanoTrasen CEO Johnson Lovelocker is in hot water for an alleged sex scandal with a confused syndicate woman that took the motto 'Fuck NT' too seriously.",
-		"NanoTrasen CEO Johnson Lovelocker issued a press release stating, 'Anybody who's fucking impersonating me is going to get fucking bluespaced unto a spike.'. We do not condone Lovelocker's use of foul language in the newsroom.",
-		"NanoTrasen CEO Johnson Lovelocker and Discount Dan's CEO Discount Dan have been photographed buying a new friend necklace. The Syndicate issued a statement that 'That's totally gay.'",
+		"The Syndicate has issued a press release stating that 'Nanotrasen sucks dicks.'",
+		"Nanotrasen CEO Johnson Lovelocker has been photographed kicking a Tajaran to death. This shameful publicity stunt is part of the new 'NT Hates Catbeasts, do you?' campaign.",
+		"Nanotrasen CEO Johnson Lovelocker has been photographed kicking a Vox in the cloaca. He commented that, 'BIRDS BELONG IN MY FUCKING MEALS DAMN IT'.",
+		"Nanotrasen CEO Johnson Lovelocker is in hot water for an alleged sex scandal with a confused syndicate woman that took the motto 'Fuck NT' too seriously.",
+		"Nanotrasen CEO Johnson Lovelocker issued a press release stating, 'Anybody who's fucking impersonating me is going to get fucking bluespaced unto a spike.'. We do not condone Lovelocker's use of foul language in the newsroom.",
+		"Nanotrasen CEO Johnson Lovelocker and Discount Dan's CEO Discount Dan have been photographed buying a new friend necklace. The Syndicate issued a statement that 'That's totally gay.'",
 		"Discount Dan has been photographed this evening hunting the endangered albino space panda. When questioned, he replied that the endangered animal was 'Good eats'.",
-		"NanoTrasen's head programmer quit this evening when people did not respond well to his new features on NTOS. Said features included the ability to instantly transmit pictures of your butt to people by blinking.",
-		"NanoTrasen CEO Johnson Lovelocker was photographed this morning celebrating his birthday will well deserved hookers and blow.",
+		"Nanotrasen's head programmer quit this evening when people did not respond well to his new features on NTOS. Said features included the ability to instantly transmit pictures of your butt to people by blinking.",
+		"Nanotrasen CEO Johnson Lovelocker was photographed this morning celebrating his birthday will well deserved hookers and blow.",
 		"Discount Dan's stock has risen 20 points today after CEO Discount Dan promised to include a free toy in every 'Happy Dan' meal. In other news, we have over 300 confirmed reports of broken teeth and lead poisoning in children 6 and under.",
 		"Discount Dan has come under fire today after trying to hug a plasmaman whilst smoking a cigar. He is being treated for 3rd degree burns at the moment, and we at the newsroom wish him luck.",
-		"NanoTrasen's treasurer Shlomo Goldburginstein died today in a tragic cooking incident with NT Officer Gass Judenraigh."
+		"Nanotrasen's treasurer Shlomo Goldburginstein died today in a tragic cooking incident with NT Officer Gass Judenraigh."
 		)
 	var/list/currentevents3 = list("Border patrol around Space America has tightened today after a wave of Tajarans yiffed their way across. We have reports of over 2000 molested Space Americans. More to come at seven.",
 		"Tajarans continue to protest in their 'Trillion Fur March' today. We have reports that the Space American army is giving a KOS order on all non-humans in the area.",
@@ -122,7 +122,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"The first man to step on Pluto slipped and was impaled on an ice spike shortly after landing.",
 		"North Korea became the first country to land a rocket on the sun.",
 		"Kim Jong Long Dong Silver, 58th generation leader of North Korea, died after being shot seventy two times in the chest.",
-		"NanoTrasen's new 'Space Station 13' project was announced.",
+		"Nanotrasen's new 'Space Station 13' project was announced.",
 		"Jupiter and Neptune became sentient for a period of 78 hours, Jupiter was heard screaming 'WHY AM I ALIVE DEAR GOD.', whilst curiously, Neptune only said 'Well here we go again.'.",
 		"The first furry in space was thrown out an airlock, along with his fursuit.",
 		"The 89th President of Space America read Woody's Got Wood aloud in his first State of the Union, and was beaten to death shortly after.",
@@ -576,7 +576,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 /obj/item/device/pda/proc/can_use(mob/user)
 	if(user && ismob(user))
-		if(user.stat || user.restrained() || user.paralysis || user.stunned || user.weakened)
+		if(user.incapacitated())
 			return 0
 		if(loc == user)
 			return 1
@@ -1397,12 +1397,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				var/mob/user = usr
 				var/amount = round(input("How much money do you wish to print?", "Currency Printer", 0) as num)
 				if(!amount || (amount < 0) || (id.virtual_wallet.money <= 0))
-					to_chat(user, "\icon[src]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
+					to_chat(user, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
 					return
 				if(amount > id.virtual_wallet.money)
 					amount = id.virtual_wallet.money
 				if(amount > 10000) // prevent crashes
-					to_chat(user, "\icon[src]<span class='notice'>The PDA's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'</span>")
+					to_chat(user, "[bicon(src)]<span class='notice'>The PDA's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'</span>")
 					amount = 10000
 
 				id.virtual_wallet.money -= amount
@@ -1717,18 +1717,18 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				var/obj/item/device/pda/P = locate(href_list["target"])
 				var/amount = round(input("How much money do you wish to transfer to [P.owner]?", "Money Transfer", 0) as num)
 				if(!amount || (amount < 0) || (id.virtual_wallet.money <= 0))
-					to_chat(usr, "\icon[src]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
+					to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
 					return
 				if(amount > id.virtual_wallet.money)
 					amount = id.virtual_wallet.money
 
 				switch(P.receive_funds(owner,amount,name))
 					if(1)
-						to_chat(usr, "\icon[src]<span class='notice'>The PDA's screen flashes, 'Transaction complete!'</span>")
+						to_chat(usr, "[bicon(src)]<span class='notice'>The PDA's screen flashes, 'Transaction complete!'</span>")
 					if(2)
-						to_chat(usr, "\icon[src]<span class='notice'>The PDA's screen flashes, 'Transaction complete! The recipient will earn the funds once he enters his ID in his PDA.'</span>")
+						to_chat(usr, "[bicon(src)]<span class='notice'>The PDA's screen flashes, 'Transaction complete! The recipient will earn the funds once he enters his ID in his PDA.'</span>")
 					else
-						to_chat(usr, "\icon[src]<span class='warning'>The PDA's screen flashes, 'Error, transaction canceled'</span>")
+						to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, transaction canceled'</span>")
 						return
 
 				id.virtual_wallet.money -= amount
@@ -1864,7 +1864,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		var/mob/living/carbon/human/H = user
 		if(istype(H.wear_id,/obj/item/weapon/storage/wallet))
 			dispense_cash(arbitrary_sum,H.wear_id)
-			to_chat(usr, "\icon[src]<span class='notice'>Funds were transferred into your physical wallet!</span>")
+			to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your physical wallet!</span>")
 			return
 	dispense_cash(arbitrary_sum,get_turf(src))
 
@@ -1875,7 +1875,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
 
 	for (var/mob/O in hearers(3, U))
-		if(!silent) O.show_message(text("\icon[src] *[src.ttone]*"))
+		if(!silent) O.show_message(text("[bicon(src)] *[src.ttone]*"))
 
 	var/mob/living/L = null
 	if(src.loc && isliving(src.loc))
@@ -1884,7 +1884,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		L = get(src, /mob/living/silicon)
 
 	if(L)
-		to_chat(L, "\icon[src] <b>Money transfer from [creditor_name] ([arbitrary_sum]$) </b>[id ? "" : "Insert your ID in the PDA to receive the funds."]")
+		to_chat(L, "[bicon(src)] <b>Money transfer from [creditor_name] ([arbitrary_sum]$) </b>[id ? "" : "Insert your ID in the PDA to receive the funds."]")
 
 	tnote += "<i><b>&larr; Money transfer from [creditor_name] ([arbitrary_sum]$)<br>"
 
@@ -1925,7 +1925,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/mob/living/L = null
 	if(src.loc && isliving(src.loc))
 		L = src.loc
-	to_chat(L, "\icon[src]<span class='notice'> <b>Transactions successfully received! </b></span>")
+	to_chat(L, "[bicon(src)]<span class='notice'> <b>Transactions successfully received! </b></span>")
 
 
 /obj/item/device/pda/proc/remove_id()
@@ -2006,7 +2006,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if (!P.silent)
 			playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
 		for (var/mob/O in hearers(3, P.loc))
-			if(!P.silent) O.show_message(text("\icon[P] *[P.ttone]*"))
+			if(!P.silent) O.show_message(text("[bicon(P)] *[P.ttone]*"))
 		//Search for holder of the PDA.
 		var/mob/living/L = null
 		if(P.loc && isliving(P.loc))
@@ -2016,7 +2016,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			L = get(P, /mob/living/silicon)
 
 		if(L)
-			L.show_message("\icon[P] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)", 2)
+			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)", 2)
 
 		log_pda("[usr] (PDA: [src.name]) sent \"[t]\" to [P.name]")
 		P.overlays.len = 0
@@ -2141,7 +2141,7 @@ obj/item/device/pda/AltClick()
 				to_chat(user, "<span class='notice'>You slide \the [C] into \the [src].</span>")
 	else if(istype(C,/obj/item/weapon/spacecash))
 		if(!id)
-			to_chat(user, "\icon[src]<span class='warning'>There is no ID in the PDA!</span>")
+			to_chat(user, "[bicon(src)]<span class='warning'>There is no ID in the PDA!</span>")
 			return
 		var/obj/item/weapon/spacecash/dosh = C
 		id.virtual_wallet.money += dosh.worth * dosh.amount

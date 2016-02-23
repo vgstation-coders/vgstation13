@@ -328,7 +328,7 @@
 		var/obj/item/I = O
 		if(istype(O, /obj/item/weapon/legcuffs/bolas)) //don't stack into infinity
 			return
-		if(istype(I, /obj/item/weapon/wirecutters)) //allows you to convert the wire back to a cable coil
+		if(iswirecutter(I)) //allows you to convert the wire back to a cable coil
 			if(!weight1 && !weight2) //if there's nothing attached
 				user.show_message("<span class='notice'>You cut the knot in the [src].</span>")
 				playsound(usr, 'sound/items/Wirecutter.ogg', 50, 1)
@@ -435,7 +435,7 @@
 				to_chat(user, "<span class='danger'>You shouldn't be reading this message! Contact a coder or someone, something broke!</span>")
 				IED = null
 				return
-	if(istype(I, /obj/item/weapon/screwdriver))
+	if(isscrewdriver(I))
 		if(IED)
 			IED.loc = get_turf(src.loc)
 			IED = null
@@ -585,6 +585,26 @@
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
 
+/obj/item/weapon/rack_parts/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/weapon/weldingtool))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(WT.remove_fuel(0, user))
+			to_chat(user, "You begin slicing through \the [src].")
+			playsound(user, 'sound/items/Welder.ogg', 50, 1)
+			if(do_after(user, src, 60))
+				to_chat(user, "You cut \the [src] into a gun stock.")
+				if(src.loc == user)
+					user.drop_item(src, force_drop = 1)
+					var/obj/item/weapon/metal_gun_stock/I = new (get_turf(user))
+					user.put_in_hands(I)
+					qdel(src)
+				else
+					new /obj/item/weapon/metal_gun_stock(get_turf(src.loc))
+					qdel(src)
+		else
+			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+
 /obj/item/weapon/SWF_uplink
 	name = "station-bounced radio"
 	desc = "Used for communication, it appears."
@@ -721,6 +741,10 @@
 	desc = "Keep away from fire."
 	icon_state = "wood_tableparts"
 	flags = 0
+
+/obj/item/weapon/table_parts/wood/poker
+	name = "gambling table parts"
+	icon_state = "gambling_tableparts"
 
 /obj/item/weapon/table_parts/wood/cultify()
 	return

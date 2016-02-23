@@ -94,7 +94,7 @@
 		return
 	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
 		return
-	if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.resting) //are you cuffed, dying, lying, stunned or other
+	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
 		return
 	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
 		return
@@ -140,7 +140,7 @@
 	return
 
 /obj/machinery/bodyscanner/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(!ishuman(usr) && !isrobot(usr))
+	if(!ishuman(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
 		return
 	if(!occupant)
 		to_chat(usr, "<span class='warning'>The scanner is unoccupied!</span>")
@@ -410,14 +410,14 @@
 
 	if(href_list["print"])
 		if(!src.connected)
-			to_chat(usr, "\icon[src]<span class='warning'>Error: No body scanner connected.</span>")
+			to_chat(usr, "[bicon(src)]<span class='warning'>Error: No body scanner connected.</span>")
 			return
 		var/mob/living/carbon/human/occupant = src.connected.occupant
 		if(!src.connected.occupant)
-			to_chat(usr, "\icon[src]<span class='warning'>\The [src.connected] is empty.</span>")
+			to_chat(usr, "[bicon(src)]<span class='warning'>\The [src.connected] is empty.</span>")
 			return
 		if(!istype(occupant,/mob/living/carbon/human))
-			to_chat(usr, "\icon[src]<span class='warning'>\The [src.connected] cannot scan that lifeform.</span>")
+			to_chat(usr, "[bicon(src)]<span class='warning'>\The [src.connected] cannot scan that lifeform.</span>")
 			return
 		var/obj/item/weapon/paper/R = new(src.loc)
 		R.name = "paper - 'body scan report'"

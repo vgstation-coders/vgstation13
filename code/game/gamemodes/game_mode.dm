@@ -225,12 +225,11 @@
 
 			comm.messagetitle.Add("[command_name()] Status Summary")
 			comm.messagetext.Add(intercepttext)
-		world << sound('sound/AI/commandreport.ogg', volume = 60)
 
 	command_alert("Summary downloaded and printed out at all communications consoles.", "Enemy communication intercept.")
 /*	for(var/mob/M in player_list)
 		if(!istype(M,/mob/new_player))
-			to_chat(M, sound('sound/AI/intercept.ogg'))
+			M << sound('sound/AI/intercept.ogg')
 	if(security_level < SEC_LEVEL_BLUE)
 		set_security_level(SEC_LEVEL_BLUE)*/
 

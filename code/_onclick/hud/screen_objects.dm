@@ -133,7 +133,7 @@
 /obj/screen/storage/Click(location, control, params)
 	if(usr.attack_delayer.blocked())
 		return
-	if(usr.stat || usr.paralysis || usr.stunned || usr.weakened)
+	if(usr.incapacitated())
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 		return 1
@@ -389,7 +389,7 @@
 												contents.Add(0)
 
 										// ACK ACK ACK Plasmen
-										if ("plasma")
+										if ("toxins")
 											if(t.air_contents.toxins)
 												contents.Add(t.air_contents.toxins)
 											else
@@ -444,6 +444,26 @@
 		if("throw")
 			if(!usr.stat && isturf(usr.loc) && !usr.restrained())
 				usr:toggle_throw_mode()
+
+		if("kick")
+			if(ishuman(usr))
+				var/mob/living/carbon/human/H = usr
+
+				var/list/modifiers = params2list(params)
+				if(modifiers["middle"] || modifiers["right"] || modifiers["ctrl"] || modifiers["shift"] || modifiers["alt"])
+					H.set_attack_type() //Reset
+				else
+					H.set_attack_type(ATTACK_KICK)
+		if("bite")
+			if(ishuman(usr))
+				var/mob/living/carbon/human/H = usr
+
+				var/list/modifiers = params2list(params)
+				if(modifiers["middle"] || modifiers["right"] || modifiers["ctrl"] || modifiers["shift"] || modifiers["alt"])
+					H.set_attack_type() //Reset
+				else
+					H.set_attack_type(ATTACK_BITE)
+
 		if("drop")
 			usr.drop_item_v()
 
@@ -792,7 +812,7 @@
 	// We don't even know if it's a middle click
 	if(usr.attack_delayer.blocked())
 		return
-	if(usr.stat || usr.paralysis || usr.stunned || usr.weakened)
+	if(usr.incapacitated())
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 		return 1

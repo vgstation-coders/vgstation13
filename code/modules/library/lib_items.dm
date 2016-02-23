@@ -94,7 +94,7 @@
 	if(contents.len)
 		var/obj/item/weapon/book/choice = input("Which book would you like to remove from \the [src]?") as null|obj in contents
 		if(choice)
-			if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.resting || get_dist(user, src) > 1)
+			if(user.incapacitated() || user.lying || get_dist(user, src) > 1)
 				return
 			if(!user.get_active_hand())
 				user.put_in_hands(choice)
@@ -314,7 +314,7 @@
 							return
 					scanner.computer.inventory.Add(src)
 					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Title added to general inventory.'")
-	else if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large) || istype(W, /obj/item/weapon/wirecutters))
+	else if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large) || iswirecutter(W))
 		if(carved)	return
 		to_chat(user, "<span class='notice'>You begin to carve out [title].</span>")
 		if(do_after(user, src, 30))

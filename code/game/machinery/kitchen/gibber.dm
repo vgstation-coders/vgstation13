@@ -42,6 +42,10 @@ obj/machinery/gibber/New()
 
 	RefreshParts()
 
+/obj/machinery/gibber/attack_ghost(mob/dead/observer/user as mob)
+	to_chat(user, "<span class='warning'>You can't do that while dead.</span>")
+	return
+
 /obj/machinery/gibber/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(operating)
 		to_chat(user, "<span class='notice'>[src] is currently gibbing something!</span>")
@@ -63,20 +67,20 @@ obj/machinery/gibber/New()
 	)
 	var/turf/input_plate
 
-	New()
-		..()
-		spawn(5)
-			for(var/i in cardinal)
-				var/obj/machinery/mineral/input/input_obj = locate( /obj/machinery/mineral/input, get_step(src.loc, i) )
-				if(input_obj)
-					if(isturf(input_obj.loc))
-						input_plate = input_obj.loc
-						qdel(input_obj)
-						break
+/obj/machinery/gibber/autogibber/New()
+	..()
+	spawn(5)
+		for(var/i in cardinal)
+			var/obj/machinery/mineral/input/input_obj = locate( /obj/machinery/mineral/input, get_step(src.loc, i) )
+			if(input_obj)
+				if(isturf(input_obj.loc))
+					input_plate = input_obj.loc
+					qdel(input_obj)
+					break
 
-			if(!input_plate)
-				diary << "a [src] didn't find an input plate."
-				return
+		if(!input_plate)
+			diary << "a [src] didn't find an input plate."
+			return
 
 /obj/machinery/gibber/autogibber/process()
 	if(!input_plate) return
@@ -170,7 +174,7 @@ obj/machinery/gibber/New()
 		update_icon()
 
 /obj/machinery/gibber/MouseDrop_T(mob/target, mob/user)
-	if(target != user || !istype(user, /mob/living/carbon/human) || user.stat || user.weakened || user.stunned || user.paralysis || user.locked_to || get_dist(user, src) > 1)
+	if(target != user || !istype(user, /mob/living/carbon/human) || user.incapacitated() || get_dist(user, src) > 1)
 		return
 	if(!anchored)
 		to_chat(user, "<span class='warning'>[src] must be anchored first!</span>")

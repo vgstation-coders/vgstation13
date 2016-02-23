@@ -15,6 +15,7 @@
 	nick = "pimpin' ride"
 	keytype = /obj/item/key/janicart
 	flags = OPENCONTAINER
+	overrideghostspin = 0
 	var/amount_per_transfer_from_this = 5 //shit I dunno, adding this so syringes stop runtime erroring. --NeoFite
 	var/obj/item/weapon/storage/bag/trash/mybag	= null
 
@@ -72,7 +73,7 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if((usr.canmove || occupant == usr) && !usr.isUnconscious() && !usr.restrained() && Adjacent(usr) && usr.dexterity_check())
+	if(mybag && !usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
 		mybag.forceMove(get_turf(usr))
 		usr.put_in_hands(mybag)
 		mybag = null

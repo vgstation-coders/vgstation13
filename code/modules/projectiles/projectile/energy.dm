@@ -14,7 +14,8 @@
 	stun = 10
 	weaken = 10
 	stutter = 10
-/*VG EDIT
+	hitsound = 'sound/weapons/taserhit.ogg'
+/*/vg/ EDIT
 	agony = 40
 	damage_type = HALLOSS
 */
@@ -62,17 +63,18 @@
 	return 0
 
 /obj/item/projectile/energy/plasma/pistol
-	damage = 12
+	damage = 25
 	icon_state = "plasma1"
 	irradiate = 12
 
 /obj/item/projectile/energy/plasma/light
-	damage = 25
+	damage = 35
 	icon_state = "plasma2"
+	irradiate = 20
 	knockdown_chance = 30
 
 /obj/item/projectile/energy/plasma/rifle
-	damage = 40
+	damage = 50
 	icon_state = "plasma3"
 	irradiate = 35
 	knockdown_chance = 50

@@ -283,7 +283,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 				var/mob/living/silicon/ai/A = src
 				oldname = null//don't bother with the records update crap
 //				to_chat(world, "<b>[newname] is the AI!</b>")
-//				to_chat(world, sound('sound/AI/newAI.ogg'))
+//				world << sound('sound/AI/newAI.ogg')
 				// Set eyeobj name
 				if(A.eyeobj)
 					A.eyeobj.name = "[newname] (AI Eye)"
@@ -699,7 +699,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(user && user.client) user.client.images -= progbar
 					if(progbar) progbar.loc = null
 			return 0
-		if ( user.loc != user_loc || target.loc != target_loc || user.get_active_hand() != holding || ( user.stat ) || ( user.stunned || user.weakened || user.paralysis || user.lying ) )
+		if ( user.loc != user_loc || target.loc != target_loc || user.get_active_hand() != holding || user.isStunned())
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
@@ -719,6 +719,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	var/delayfraction = round(delay/numticks)
 	var/Location = user.loc
 	var/holding = user.get_active_hand()
+	var/target_location = target.loc
 	var/image/progbar
 	//var/image/barbar
 	if(user && user.client && user.client.prefs.progress_bars && target)
@@ -741,7 +742,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		sleep(delayfraction)
 		//if(user.client && progbar.icon_state != oldstate)
 			//user.client.images.Remove(progbar)
-		if(!user || user.stat || user.weakened || user.stunned || !(user.loc == Location))
+		if(!user || user.isStunned() || !(user.loc == Location) || !(target.loc == target_location))
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
@@ -1516,8 +1517,3 @@ Game Mode config tags:
 					found_mode = GM
 					break
 	return found_mode
-
-
-// Use this to send to a client's chat, no exceptions (except this proc itself).
-/proc/to_chat(var/thing, var/output)
-	thing << output

@@ -66,7 +66,7 @@
 		qdel(I)
 		qdel(src)
 		return
-	if(istype(I, /obj/item/weapon/crowbar))
+	if(iscrowbar(I))
 		to_chat(user, "<span class='notice'>You start to [cistern ? "replace the lid on the cistern" : "lift the lid off the cistern"].</span>")
 		playsound(loc, 'sound/effects/stonedoor_openclose.ogg', 50, 1)
 		if(do_after(user, src, 30))
@@ -111,7 +111,8 @@
 			to_chat(user, "You carefully place \the [I] into the cistern.")
 			return
 
-
+/obj/structure/toilet/bite_act(mob/user)
+	user.simple_message("<span class='notice'>That would be disgusting.</span>", "<span class='info'>You're not high enough for that... Yet.</span>") //Second message 4 hallucinations
 
 /obj/structure/urinal
 	name = "urinal"
@@ -134,6 +135,9 @@
 				GM.adjustBruteLoss(8)
 			else
 				to_chat(user, "<span class='notice'>You need a tighter grip.</span>")
+
+/obj/structure/urinal/bite_act(mob/user)
+	user.simple_message("<span class='notice'>That would be disgusting.</span>", "<span class='info'>You're not high enough for that... Yet.</span>") //Second message 4 hallucinations
 
 /obj/machinery/shower
 	name = "shower"
@@ -182,6 +186,9 @@
 	if(panel_open)
 		to_chat(M, "<span class='warning'>The shower's maintenance hatch needs to be closed first.</span>")
 		return
+	if(!anchored)
+		to_chat(M, "<span class='warning'>The shower needs to be bolted to the floor to work.</span>")
+		return
 
 	on = !on
 	M.visible_message("<span class='notice'>[M] turns the shower [on ? "on":"off"]</span>", \
@@ -199,14 +206,18 @@
 		to_chat(user, "<span class='notice'>The water's temperature seems to be [watertemp].</span>")
 	if(panel_open) //The panel is open
 		if(iswrench(I))
-			user.visible_message("<span class='warning'>[user] starts wrenching \the [src] apart.</span>", \
-								 "<span class='notice'>You start wrenching \the [src] apart.</span>")
+			user.visible_message("<span class='warning'>[user] starts adjusting the bolts on \the [src].</span>", \
+								 "<span class='notice'>You start adjusting the bolts on \the [src].</span>")
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 			if(do_after(user, src, 50))
-				user.visible_message("<span class='warning'>[user] wrenches \the [src] apart.</span>", \
-								 "<span class='notice'>You wrench \the [src] apart.</span>")
-				getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 2)
-				qdel(src)
+				if(anchored == 1)
+					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
+								 "<span class='notice'>You unbolt \the [src] from the floor.</span>")
+					anchored = 0
+				else
+					src.visible_message("<span class='warning'>[user] bolts \the [src] to the floor.</span>", \
+								 "<span class='notice'>You bolt \the [src] to the floor.</span>")
+					anchored = 1
 	else
 		if(iswrench(I))
 			user.visible_message("<span class='warning'>[user] begins to adjust the [src]'s temperature valve with \a [I.name].</span>", \
@@ -282,19 +293,19 @@
 			var/washglasses = 1
 
 			if(H.wear_suit)
-				washgloves = !(H.wear_suit.flags_inv & HIDEGLOVES)
-				washshoes = !(H.wear_suit.flags_inv & HIDESHOES)
+				washgloves = !(is_slot_hidden(H.wear_suit.body_parts_covered,HIDEGLOVES))
+				washshoes = !(is_slot_hidden(H.wear_suit.body_parts_covered,HIDESHOES))
 
 			if(H.head)
-				washmask = !(H.head.flags_inv & HIDEMASK)
-				washglasses = !(H.head.flags_inv & HIDEEYES)
-				washears = !(H.head.flags_inv & HIDEEARS)
+				washmask = !(is_slot_hidden(H.head.body_parts_covered,HIDEMASK))
+				washglasses = !(is_slot_hidden(H.head.body_parts_covered,HIDEEYES))
+				washears = !(is_slot_hidden(H.head.body_parts_covered,HIDEEARS))
 
 			if(H.wear_mask)
 				if (washears)
-					washears = !(H.wear_mask.flags_inv & HIDEEARS)
+					washears = !(is_slot_hidden(H.wear_mask.body_parts_covered,HIDEEARS))
 				if (washglasses)
-					washglasses = !(H.wear_mask.flags_inv & HIDEEYES)
+					washglasses = !(is_slot_hidden(H.wear_mask.body_parts_covered,HIDEEYES))
 
 			if(H.head)
 				if(H.head.clean_blood())

@@ -125,7 +125,7 @@
 			var/mob/dead/observer/observer = new()
 
 			spawning = 1
-			to_chat(src, sound(null, repeat = 0, wait = 0, volume = 85, channel = 1))// MAD JAMS cant last forever yo
+			src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1) // MAD JAMS cant last forever yo
 
 
 			observer.started_as_observer = 1
@@ -347,7 +347,7 @@
 	// WHY THE FUCK IS THIS HERE
 	// FOR GOD'S SAKE USE EVENTS
 	if(bomberman_mode)
-		to_chat(character.client, sound('sound/bomberman/start.ogg'))
+		character.client << sound('sound/bomberman/start.ogg')
 		if(character.wear_suit)
 			var/obj/item/O = character.wear_suit
 			character.u_equip(O,1)
@@ -448,7 +448,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	else
 		client.prefs.copy_to(new_character)
 
-	to_chat(src, sound(null, repeat = 0, wait = 0, volume = 85, channel = 1))// MAD JAMS cant last forever yo
+	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1)// MAD JAMS cant last forever yo
 
 
 	if (mind)
@@ -458,7 +458,9 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	new_character.name = real_name
 	new_character.dna.ready_dna(new_character)
-	new_character.dna.b_type = client.prefs.b_type
+
+	if(new_character.mind)
+		new_character.mind.store_memory("<b>Your blood type is:</b> [new_character.dna.b_type]<br>")
 
 	if(client.prefs.disabilities & DISABILITY_FLAG_NEARSIGHTED)
 		new_character.dna.SetSEState(GLASSESBLOCK,1,1)

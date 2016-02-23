@@ -1,5 +1,5 @@
-var/global/list/coldwarning_light = list("It's a wee bit chilly, isn't it?","Your nose feels numb","It's pretty cold!","You should probably wrap up some more.","You can see your breath!","You feel like taking a nap.")
-var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold out here!","You should probably get warmed up quickly!","You can't feel your hands!","You can't feel anything!","You're absolutely exhausted!")
+var/global/list/coldwarning_light = list("You feel cold.","Your nose feels numb.","It's pretty cold!","You should probably wrap up some more.","You feel pretty cold.","You feel like taking a nap.")
+var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold!","You should probably get warmed up quickly!","You can't feel your hands!","You can't feel anything!","You're absolutely exhausted!")
 
 /mob/living/proc/undergoing_hypothermia()
 	if((status_flags & GODMODE) || (flags & INVULNERABLE) || istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
@@ -17,9 +17,11 @@ var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold out here!
 	return NO_HYPOTHERMIA
 
 /mob/living/carbon/human/undergoing_hypothermia()
-	if(species && !species.can_be_hypothermic)
-		return NO_HYPOTHERMIA
-	..()
+	. = ..()
+	if(.)
+		if(species && !(species.can_be_hypothermic))
+			return NO_HYPOTHERMIA
+		else return .
 
 /mob/living/silicon/undergoing_hypothermia()
 	return NO_HYPOTHERMIA
@@ -81,7 +83,7 @@ var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold out here!
 				drop_item()
 			if(prob(1))
 				to_chat(src, "<span class='warning'>Your legs buckle underneath you, and you collapse!</span>")
-				say("*collapse")
+				emote("collapse")
 		if(SEVERE_HYPOTHERMIA) // unconcious, not shivering - we're going to burn up all you've eaten now.
 			// at this point, the pulse will go to rougly 30bpm, see handle_pulse for details.
 			// at this point, you are unconcious; see handle_regular_status_updates.dm for details.

@@ -371,7 +371,10 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	src.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [H.name] ([H.ckey]) in the neck and draining their blood</font>")
 	H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [src.name] ([src.ckey])</font>")
 	log_attack("[src.name] ([src.ckey]) bit [H.name] ([H.ckey]) in the neck")
-	src.visible_message("<span class='danger'>[src.name] bites [H.name]'s neck!</span>", "<span class='danger'>You bite [H.name]'s neck and begin to drain their blood.</span>", "<span class='notice'>You hear a soft puncture and a wet sucking noise.</span>")
+
+	to_chat(src, "<span class='danger'>You latch on firmly to \the [H]'s neck.</span>")
+	to_chat(H, "<span class='userdanger'>\The [src] latches on to your neck!</span>")
+
 	if(!iscarbon(src))
 		H.LAssailant = null
 	else
@@ -723,6 +726,14 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		adjustBruteLoss(-4)
 		adjustFireLoss(-4)
 		adjustToxLoss(-4)
+		adjustOxyLoss(-4)
 		mind.vampire.smitecounter = 0
 		mind.vampire.nullified -= 5
+		for(var/datum/organ/internal/I in internal_organs)
+			if(I && I.damage > 0)
+				I.damage = max(0, I.damage - 4)
+			if(I)
+				I.status &= ~ORGAN_BROKEN
+				I.status &= ~ORGAN_SPLINTED
+				I.status &= ~ORGAN_BLEEDING
 	mind.vampire.nullified = max(0, mind.vampire.nullified - 1)

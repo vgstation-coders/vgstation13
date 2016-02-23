@@ -196,14 +196,15 @@
 				if(mixed)
 					ticker.mode.traitors |= character.mind
 					ticker.mode.modePlayer |= character.mind
-				to_chat(character, "<span class='danger'>You are the traitor.</span>")
+				var/wikiroute = role_wiki[ROLE_TRAITOR]
+				to_chat(character, "<span class='danger'>You are the traitor.</span> <span class='info'><a HREF='?src=\ref[character];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 				character.mind.special_role = "traitor"
 				var/obj_count = 1
 				to_chat(character, "<span class='notice'>Your current objectives:</span>")
 				for(var/datum/objective/objective in character.mind.objectives)
 					to_chat(character, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
 					obj_count++
-				to_chat(character, sound('sound/voice/syndicate_intro.ogg'))
+				character << sound('sound/voice/syndicate_intro.ogg')
 			//else
 				//message_admins("New traitor roll failed.  No new traitor.")
 	//else

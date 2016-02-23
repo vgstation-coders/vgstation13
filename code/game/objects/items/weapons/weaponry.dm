@@ -12,9 +12,9 @@
 	attack_verb = list("banned")
 
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>")
-		return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
+/obj/item/weapon/banhammer/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>")
+	return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
 
 /obj/item/weapon/sord
 	name = "\improper SORD"
@@ -29,9 +29,9 @@
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-		return(BRUTELOSS)
+/obj/item/weapon/sord/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return(BRUTELOSS)
 
 /obj/item/weapon/sord/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(get_turf(src), 'sound/weapons/bladeslice.ogg', 50, 1, -1)
@@ -54,12 +54,12 @@
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
 
-	IsShield()
-		return 1
+/obj/item/weapon/claymore/IsShield()
+	return 1
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
-		return(BRUTELOSS)
+/obj/item/weapon/claymore/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return(BRUTELOSS)
 
 /obj/item/weapon/claymore/cultify()
 	new /obj/item/weapon/melee/cultblade(loc)
@@ -81,6 +81,7 @@
 	force = 40
 	throwforce = 10
 	w_class = 3
+	sharpness = 1.2
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
 	suicide_act(mob/user)
@@ -107,7 +108,7 @@
 	attack_verb = list("jabbed","stabbed","ripped")
 
 obj/item/weapon/wirerod
-	name = "Wired rod"
+	name = "wired rod"
 	desc = "A rod with some wire wrapped around the top. It'd be easy to attach something to the top bit."
 	icon_state = "wiredrod"
 	item_state = "rods"
@@ -124,18 +125,48 @@ obj/item/weapon/wirerod
 obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	..()
 	if(istype(I, /obj/item/weapon/shard))
-		var/obj/item/weapon/spear/S = new /obj/item/weapon/spear
+		user.visible_message("<span class='notice'>[user] starts securing \the [I] to the top of \the [src].</span>",\
+		"<span class='info'>You attempt to create a spear by securing \the [I] to \the [src].</span>")
 
-		user.before_take_item(I)
-		user.before_take_item(src)
+		if(do_after(user, src, 5 SECONDS))
+			if(!I || !src) return
 
-		user.put_in_hands(S)
-		to_chat(user, "<span class='notice'>You fasten the glass shard to the top of the rod with the cable.</span>")
-		qdel(I)
-		I = null
-		qdel(src)
+			if(!user.drop_item(I))
+				to_chat(user, "<span class='warning'>You can't let go of \the [I]! You quickly unsecure it from \the [src].</span>")
+				return
 
-	else if(istype(I, /obj/item/weapon/wirecutters))
+			user.drop_item(src, force_drop = 1)
+
+			var/obj/item/weapon/spear/S = new /obj/item/weapon/spear
+
+			S.base_force = 5 + I.force
+			S.force = S.base_force
+
+			var/prefix = ""
+			switch(S.force)
+				if(-INFINITY to 5)
+					prefix = "useless"
+				if(5 to 9)
+					prefix = "dull"
+				if(11 to 19)
+					prefix = "sharp"
+				if(20 to 27)
+					prefix = "exceptional"
+				if(29 to INFINITY)
+					prefix = "legendary"
+
+			if(prefix)
+				S.name = "[prefix] [S.name]"
+
+			user.put_in_hands(S)
+			user.visible_message("<span class='danger'>[user] creates a spear with \a [I] and \a [src]!</span>",\
+			"<span class='notice'>You fasten \the [I] to the top of \the [src], creating \a [S].</span>")
+
+			qdel(I)
+			I = null
+			qdel(src)
+
+	else if(iswirecutter(I))
 		var/obj/item/weapon/melee/baton/cattleprod/P = new /obj/item/weapon/melee/baton/cattleprod
 
 		user.before_take_item(I)
@@ -145,6 +176,18 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 		to_chat(user, "<span class='notice'>You fasten the wirecutters to the top of the rod with the cable, prongs outward.</span>")
 		qdel(I)
 		I =  null
+		qdel(src)
+
+	else if(istype(I, /obj/item/stack/rods))
+		to_chat(user, "You fasten the metal rods together.")
+		var/obj/item/stack/rods/R = I
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/weapon/rail_assembly/Q = new (get_turf(user))
+			user.put_in_hands(Q)
+		else
+			new /obj/item/weapon/rail_assembly(get_turf(src.loc))
+		R.use(1)
 		qdel(src)
 
 

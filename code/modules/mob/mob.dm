@@ -52,7 +52,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 	gui_icons = null
 	qdel(hud_used)
 	hud_used = null
-	for(var/obj/leftovers in src)
+	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
 	if(on_uattack)
 		on_uattack.holder = null
@@ -973,6 +973,7 @@ var/list/slot_equipment_priority = list( \
 	set category = "IC"
 	set src = usr
 
+	if(attack_delayer.blocked()) return
 
 	if(istype(loc,/obj/mecha)) return
 
@@ -1447,16 +1448,16 @@ var/list/slot_equipment_priority = list( \
 
 //Updates canmove, lying and icons. Could perhaps do with a rename but I can't think of anything to describe it.
 /mob/proc/update_canmove()
-	if(locked_to)
+	if(locked_to && !(locked_to.lockflags & LOCKED_CAN_LIE_AND_STAND))
 		canmove = 0
-		lying = locked_to.locked_should_lie
+		lying = (locked_to.lockflags & LOCKED_SHOULD_LIE) ? TRUE : FALSE //A lying value that !=1 will break this
 
 
-	else if( isUnconscious() || weakened || paralysis || resting || sleeping )
+	else if(isUnconscious() || weakened || paralysis || resting || !can_stand)
 		stop_pulling()
 		lying = 1
 		canmove = 0
-	else if( stunned )
+	else if(stunned)
 //		lying = 0
 		canmove = 0
 	else if(captured)
@@ -1464,7 +1465,7 @@ var/list/slot_equipment_priority = list( \
 		canmove = 0
 		lying = 0
 	else
-		lying = !can_stand
+		lying = 0
 		canmove = has_limbs
 
 	if(lying)
@@ -1742,13 +1743,13 @@ mob/proc/on_foot()
 			return 1
 	return 0
 
-/mob/proc/get_subtle_message(var/msg)
-	var/pre_msg = "You hear a voice in your head..."
-	if(mind && mind.assigned_role == "Chaplain")
-		pre_msg = "You hear the voice of [ticker.Bible_deity_name] in your head... "
+/mob/proc/get_subtle_message(var/msg, var/deity = null)
+	if(!deity)
+		deity = "a voice" //sanity
+	var/pre_msg = "You hear [deity] in your head... "
 	if(src.hallucinating()) //If hallucinating, make subtle messages more fun
-		var/adjective = pick("an angry","a funny","a squeaky","a disappointed","your mother's","your father's","[ticker.Bible_deity_name]'s","an annoyed","a brittle","a loud","a very loud","a quiet")
-		var/location = pick(" from above"," from below"," in your head","")
+		var/adjective = pick("an angry","a funny","a squeaky","a disappointed","your mother's","your father's","[ticker.Bible_deity_name]'s","an annoyed","a brittle","a loud","a very loud","a quiet","an evil", "an angelic")
+		var/location = pick(" from above"," from below"," in your head"," from behind you"," from everywhere"," from nowhere in particular","")
 		pre_msg = pick("You hear [adjective] voice[location]...")
 
 	to_chat(src, "<b>[pre_msg] <em>[msg]</em></b>")
@@ -1770,6 +1771,11 @@ mob/proc/on_foot()
 
 /mob/proc/nuke_act() //Called when caught in a nuclear blast
 	return
+
+/mob/proc/remove_jitter()
+	if(jitteriness)
+		jitteriness = 0
+		animate(src)
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

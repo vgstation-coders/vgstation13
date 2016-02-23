@@ -1,5 +1,5 @@
 /obj/item/weapon/grenade/chem_grenade
-	name = "Grenade Casing"
+	name = "grenade casing"
 	icon_state = "chemg"
 	item_state = "flashbang"
 	desc = "A hand made chemical grenade."
@@ -127,6 +127,18 @@
 				to_chat(user, "<span class='warning'> \the [W] is empty.</span>")
 	else if (istype(W,/obj/item/slime_extract))
 		to_chat(user, "<span class='warning'> This grenade case is too small for a slime core to fit in it.</span>")
+	else if(iscrowbar(W))
+		to_chat(user, "You begin pressing \the [W] into \the [src].")
+		if(do_after(user, src, 30))
+			to_chat(user, "You poke a hole in \the [src].")
+			if(src.loc == user)
+				user.drop_item(src, force_drop = 1)
+				var/obj/item/weapon/fuel_reservoir/I = new (get_turf(user))
+				user.put_in_hands(I)
+				qdel(src)
+			else
+				new /obj/item/weapon/fuel_reservoir(get_turf(src.loc))
+				qdel(src)
 
 /obj/item/weapon/grenade/chem_grenade/examine(mob/user)
 	..()
@@ -183,7 +195,7 @@
 
 	playsound(get_turf(src), 'sound/effects/bamfgas.ogg', 50, 1)
 
-	visible_message("<span class='warning'>\icon[src] \The [src] bursts open.</span>")
+	visible_message("<span class='warning'>[bicon(src)] \The [src] bursts open.</span>")
 
 	reservoir = new /obj/item/weapon/reagent_containers/glass/beaker/noreactgrenade() //acts like a stasis beaker, so the chemical reactions don't occur before all the slime reactions have occured
 

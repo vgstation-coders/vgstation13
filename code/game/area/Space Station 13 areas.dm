@@ -67,7 +67,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/general_area = /area/station	// the highest parent bellow /area,
 	var/general_area_name = "Station"
 
-
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
 var/list/teleportlocs = list()
@@ -787,6 +786,14 @@ proc/process_adminbus_teleport_locs()
 /area/maintenance/ghettobar
 	name = "Ghetto Bar"
 	icon_state = "ghettobar"
+
+/area/maintenance/ghettotheatre
+	name = "Ghetto Theatre"
+	icon_state = "ghettotheatre"
+
+/area/maintenance/ghettomorgue
+	name = "Ghetto Morgue"
+	icon_state = "ghettomorgue"
 
 //Hallway
 
@@ -2091,6 +2098,7 @@ proc/process_adminbus_teleport_locs()
 		if(Obj:client)
 			mysound.status = SOUND_PAUSED | SOUND_UPDATE
 			Obj << mysound
+	..()
 
 /area/awaymission/beach/proc/process()
 	//set background = 1

@@ -41,7 +41,8 @@
 							/obj/item/toy/prize/seraph						= 1,
 							/obj/item/toy/prize/mauler						= 1,
 							/obj/item/toy/prize/odysseus					= 1,
-							/obj/item/toy/prize/phazon						= 1
+							/obj/item/toy/prize/phazon						= 1,
+							/obj/item/weapon/boomerang/toy					= 1,
 							)
 
 /obj/machinery/computer/arcade
@@ -303,3 +304,15 @@
 		A = new
 		export_game_data(A)
 	..(toggleitem, user, A)
+
+/obj/machinery/computer/arcade/kick_act()
+	..()
+
+	if(!emagged && prob(5)) //Bug
+		temp = "|eW R0vnb##[rand(0,9)]#"
+		player_hp = rand(1,30)
+		player_mp = rand(1,10)
+		enemy_hp = rand(1,60)
+		enemy_mp = rand(1,40)
+		gameover = 0
+		turtle = 0

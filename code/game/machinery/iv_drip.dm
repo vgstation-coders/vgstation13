@@ -38,7 +38,7 @@
 /obj/machinery/iv_drip/MouseDrop(over_object, src_location, over_location)
 	..()
 	if(isobserver(usr)) return
-	if(usr.stat) // Stop interacting with shit while dead pls
+	if(usr.incapacitated()) // Stop interacting with shit while dead pls
 		return
 	if(isanimal(usr))
 		return
@@ -61,7 +61,7 @@
 	if(isobserver(user)) return
 	if(user.stat)
 		return
-	if(istype(W, /obj/item/weapon/wrench))
+	if(iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,get_turf(src))
 		M.amount = 2
@@ -137,7 +137,7 @@
 				update_icon()
 
 /obj/machinery/iv_drip/attack_hand(mob/user as mob)
-	if(isobserver(usr) || user.stat)
+	if(isobserver(usr) || user.incapacitated())
 		return
 	if(attached)
 		visible_message("[src.attached] is detached from \the [src].")
@@ -164,11 +164,17 @@
 		return
 
 	mode = !mode
-	to_chat(usr, "The [src] is now [mode ? "injecting" : "taking blood"].")
+	to_chat(usr, "<span class='info'>The [src] is now [mode ? "injecting" : "taking blood"].</span>")
+
+/obj/machinery/iv_drip/AltClick()
+	if(!usr.isUnconscious() && Adjacent(usr))
+		toggle_mode()
+		return
+	return ..()
 
 /obj/machinery/iv_drip/examine(mob/user)
 	..()
-	to_chat(user, "The [src] is [mode ? "injecting" : "taking blood"].")
+	to_chat(user, "<span class='info'>\The [src] is [mode ? "injecting" : "taking blood"].</span>")
 	if(beaker)
 		if(beaker.reagents && beaker.reagents.reagent_list.len)
 			to_chat(user, "<span class='info'>Attached is \a [beaker] with [beaker.reagents.total_volume] units of liquid.</span>")

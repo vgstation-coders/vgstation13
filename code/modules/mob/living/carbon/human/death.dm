@@ -38,6 +38,12 @@
 	if(mind && species && (species.name == "Manifested") && (mind in ticker.mode.cult))//manifested ghosts are removed from the cult once their bodies are destroyed
 		ticker.mode.update_cult_icons_removed(mind)
 		ticker.mode.cult -= mind
+
+	for(var/obj/Overlays/O in obj_overlays)
+		returnToPool(O)
+	
+	obj_overlays = null
+
 	..()
 
 /mob/living/carbon/human/death(gibbed)
@@ -46,7 +52,7 @@
 	if(healths)		healths.icon_state = "health7"
 	stat = DEAD
 	dizziness = 0
-	jitteriness = 0
+	remove_jitter()
 
 	//If we have brain worms, dump 'em.
 	var/mob/living/simple_animal/borer/B=has_brain_worms()

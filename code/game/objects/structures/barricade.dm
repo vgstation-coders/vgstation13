@@ -28,7 +28,7 @@
 	else if(health >= 0.8*initial(health))
 		to_chat(user, "It has a few splinters and a plank is broken.")
 	else if(health >= 0.5*initial(health))
-		to_chat(user, "It has a fair amount of splinters and broken plants.")
+		to_chat(user, "It has a fair amount of splinters and broken planks.")
 	else if(health >= 0.2*initial(health))
 		to_chat(user, "It has most of its planks broken, you can barely tell how much weight the support beams are bearing.")
 	else
@@ -68,7 +68,7 @@
 
 /obj/structure/window/barricade/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
-	if(istype(W, /obj/item/weapon/crowbar) && user.a_intent == I_HURT && !busy) //Only way to deconstruct, needs harm intent
+	if(iscrowbar(W) && user.a_intent == I_HURT && !busy) //Only way to deconstruct, needs harm intent
 		playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
 		user.visible_message("<span class='warning'>[user] starts struggling to pry \the [src] back into planks.</span>", \
 		"<span class='notice'>You start struggling to pry \the [src] back into planks.</span>")

@@ -99,6 +99,15 @@
 
 	src = null
 
+/datum/reagent/proc/metabolize(var/mob/living/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
+		if(L)
+			L.metabolize_reagent(src.id, custom_metabolism)
+			return
+	holder.remove_reagent(src.id, custom_metabolism) // If we aren't human, we don't have a liver, so just metabolize it the old fashioned way.
+
 /datum/reagent/proc/on_mob_life(var/mob/living/M, var/alien)
 	set waitfor = 0
 
@@ -110,10 +119,6 @@
 		return 1
 	if(overdose && volume >= overdose) //This is the current overdose system
 		M.adjustToxLoss(overdose_dam)
-
-	holder.remove_reagent(src.id, custom_metabolism) //Trigger metabolism
-	if(!holder) // We might be out of the holder list and holder might be nulled, but if we don't do this then the reagent keeps on reacting
-		return 1
 
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
@@ -529,7 +534,7 @@
 	description = "An extremely toxic chemical that will surely end in death."
 	reagent_state = LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
-	custom_metabolism = 0.39
+	custom_metabolism = 0.01
 	data = 1 //Used as a tally
 
 /datum/reagent/chefspecial/on_mob_life(var/mob/living/M, var/alien)
@@ -676,7 +681,7 @@
 			M.drowsyness = 0
 			M.stuttering = 0
 			M.confused = 0
-			M.jitteriness = 0
+			M.remove_jitter()
 	data++
 
 /datum/reagent/inaprovaline
@@ -757,6 +762,10 @@
 			else
 				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. Your vampiric powers counter most of the damage.</span>")
 				H.mind.vampire.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
+		if(H.mind && H.mind.special_role == "VampThrall")
+			ticker.mode.remove_vampire_mind(H.mind, H.mind)
+			H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
+			"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 
 /datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
 
@@ -1281,7 +1290,7 @@
 	M.sdisabilities = 0
 
 	//Makes it more obvious that it worked.
-	M.jitteriness = 0
+	M.remove_jitter()
 
 	//Might need to update appearance for hulk etc.
 	if(needs_update)
@@ -1859,7 +1868,7 @@
 	M.stuttering = 0
 	M.confused = 0
 	M.sleeping = 0
-	M.jitteriness = 0
+	M.remove_jitter()
 	for(var/datum/disease/D in M.viruses)
 		D.spread = "Remissive"
 		D.stage--
@@ -2223,11 +2232,15 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /datum/reagent/nanites
-	name = "Nanomachines"
+	name = "Nanites"
 	id = "nanites"
 	description = "Microscopic construction robots."
 	reagent_state = LIQUID
 	color = "#535E66" //rgb: 83, 94, 102
+
+/datum/reagent/nanites/autist
+	name = "Autist nanites"
+	id = "autistnanites"
 
 /datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -2235,6 +2248,13 @@
 
 	if((prob(10) && method == TOUCH) || method == INGEST)
 		M.contract_disease(new /datum/disease/robotic_transformation(0), 1)
+
+/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+
+	if(..()) return 1
+
+	if((prob(10) && method == TOUCH) || method == INGEST)
+		M.contract_disease(new /datum/disease/robotic_transformation/mommi(0), 1)
 
 /datum/reagent/xenomicrobes
 	name = "Xenomicrobes"
@@ -2249,6 +2269,234 @@
 
 	if((prob(10) && method == TOUCH) || method == INGEST)
 		M.contract_disease(new /datum/disease/xeno_transformation(0), 1)
+
+/datum/reagent/nanobots
+	name = "Nanobots"
+	id = "nanobots"
+	description = "Microscopic robots intended for use in humans. Must be loaded with further chemicals to be useful."
+	reagent_state = LIQUID
+	color = "#3E3959" //rgb: 62, 57, 89
+
+
+//Great healing powers. Metabolizes extremely slowly, but gets used up when it heals damage.
+//Dangerous in amounts over 5 units, healing that occurs while over 5 units adds to a counter. That counter affects gib chance. Guaranteed gib over 20 units.
+/datum/reagent/mednanobots
+	name = "Medical Nanobots"
+	id = "mednanobots"
+	description = "Microscopic robots intended for use in humans. Configured for rapid healing upon infiltration into the body."
+	reagent_state = LIQUID
+	color = "#593948" //rgb: 89, 57, 72
+	custom_metabolism = 0.005
+	var/spawning_horror = 0
+	var/percent_machine = 0
+
+/datum/reagent/mednanobots/on_mob_life(var/mob/living/M)
+
+	if(..()) return 1
+
+	switch(volume)
+		if(1 to 5)
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				if(H.species.name != "Dionae")
+					var/datum/organ/external/affecting = H.get_organ()
+					for(var/datum/wound/W in affecting.wounds)
+						spawn(1)
+							affecting.wounds -= W
+							H.visible_message("<span class='warning'>[H]'s wounds close up in the blink of an eye!</span>")
+					if(H.getOxyLoss()>0 && prob(90))
+						if(holder.has_reagent("mednanobots"))
+							H.adjustOxyLoss(-4)
+							holder.remove_reagent("mednanobots", 4/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
+						else
+					if(H.getBruteLoss()>0 && prob(90))
+						if(holder.has_reagent("mednanobots"))
+							H.heal_organ_damage(5, 0)
+							holder.remove_reagent("mednanobots", 5/40)
+						else
+					if(H.getFireLoss()>0 && prob(90))
+						if(holder.has_reagent("mednanobots"))
+							H.heal_organ_damage(0, 5)
+							holder.remove_reagent("mednanobots", 5/40)
+						else
+					if(H.getToxLoss()>0 && prob(50))
+						if(holder.has_reagent("mednanobots"))
+							H.adjustToxLoss(-2)
+							holder.remove_reagent("mednanobots", 2/40)
+						else
+					if(H.getCloneLoss()>0 && prob(60))
+						if(holder.has_reagent("mednanobots"))
+							H.adjustCloneLoss(-2)
+							holder.remove_reagent("mednanobots", 2/40)
+					if(percent_machine>5)
+						if(holder.has_reagent("mednanobots"))
+							percent_machine-=1
+							if(prob(20))
+								to_chat(H, pick("You feel more like yourself again."))
+					if(H.dizziness != 0)
+						H.dizziness = max(0, H.dizziness - 15)
+					if(H.confused != 0)
+						H.confused = max(0, H.confused - 5)
+					for(var/datum/disease/D in M.viruses)
+						D.spread = "Remissive"
+						D.stage--
+						if(D.stage < 1)
+							D.cure()
+		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				if(H.species.name != "Dionae")
+					var/datum/organ/external/affecting = H.get_organ()
+					for(var/datum/wound/W in affecting.wounds)
+						spawn(1)
+							affecting.wounds -= W
+							H.visible_message("<span class='warning'>[H]'s wounds close up in the blink of an eye!</span>")
+					if(H.getOxyLoss()>0 && prob(90))
+						if(holder.has_reagent("mednanobots"))
+							H.adjustOxyLoss(-4)
+							holder.remove_reagent("mednanobots", 4/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
+							percent_machine +=1/2
+							if(prob(20))
+								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
+							else
+						else
+					if(H.getBruteLoss()>0 && prob(90))
+						if(holder.has_reagent("mednanobots"))
+							H.heal_organ_damage(5, 0)
+							holder.remove_reagent("mednanobots", 5/40)
+							percent_machine +=1/2
+							if(prob(20))
+								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
+							else
+						else
+					if(H.getFireLoss()>0 && prob(90))
+						if(holder.has_reagent("mednanobots"))
+							H.heal_organ_damage(0, 5)
+							holder.remove_reagent("mednanobots", 5/40)
+							percent_machine +=1/2
+							if(prob(20))
+								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
+							else
+						else
+					if(H.getToxLoss()>0 && prob(50))
+						if(holder.has_reagent("mednanobots"))
+							H.adjustToxLoss(-2)
+							holder.remove_reagent("mednanobots", 2/40)
+							percent_machine +=1/2
+							if(prob(20))
+								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
+							else
+						else
+					if(H.getCloneLoss()>0 && prob(60))
+						if(holder.has_reagent("mednanobots"))
+							H.adjustCloneLoss(-2)
+							holder.remove_reagent("mednanobots", 2/40)
+							percent_machine +=1/2
+							if(prob(20))
+								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
+							else
+						else
+					if(H.dizziness != 0)
+						H.dizziness = max(0, H.dizziness - 15)
+					if(H.confused != 0)
+						H.confused = max(0, H.confused - 5)
+					for(var/datum/disease/D in M.viruses)
+						D.spread = "Remissive"
+						D.stage--
+						if(D.stage < 1)
+							D.cure()
+					if(prob(percent_machine))
+						holder.add_reagent("mednanobots", 20)
+						to_chat(H, pick("<b><span class='warning'>Your body lurches!</b></span>"))
+		if(20 to INFINITY)
+			if(ishuman(M))
+				spawning_horror = 1
+				var/mob/living/carbon/human/H = M
+				to_chat(H, pick("<b><span class='warning'>Something doesn't feel right...</span></b>", "<b><span class='warning'>Something is growing inside you!</span></b>", "<b><span class='warning'>You feel your insides rearrange!</span></b>"))
+				spawn(60)
+					if(spawning_horror == 1)
+						to_chat(H, "<b><span class='warning'>Something bursts out from inside you!</span></b>")
+						message_admins("[key_name(H)] has gibbed and spawned a new cyber horror due to nanobots. ([formatJumpTo(H)])")
+						var/typepath = text2path("/mob/living/simple_animal/hostile/monster/cyber_horror/[H.species.name]")
+						if(ispath(typepath))
+							new typepath(H.loc)
+							spawning_horror = 0
+							H.gib()
+						else
+							new /mob/living/simple_animal/hostile/monster/cyber_horror(H.loc)
+							spawning_horror = 0
+							H.gib()
+
+/datum/reagent/comnanobots
+	name = "Combat Nanobots"
+	id = "comnanobots"
+	description = "Microscopic robots intended for use in humans. Configured to grant great resistance to damage."
+	reagent_state = LIQUID
+	color = "#343F42" //rgb: 52, 63, 66
+	custom_metabolism = 0.01
+	var/has_been_armstrong = 0
+	var/armstronged_at = 0 //world.time
+	data = 1 //Used as a tally
+
+/datum/reagent/comnanobots/reagent_deleted()
+
+	if(..()) return 1
+
+	if(!holder)
+		return
+	var/mob/M =  holder.my_atom
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!has_been_armstrong || (!(M_HULK in H.mutations)))
+			return
+		dehulk(H, 0, 1, 0)
+
+/datum/reagent/comnanobots/on_mob_life(var/mob/living/M)
+
+	if(..()) return 1
+
+	switch(volume)
+		if(1 to 4.5)
+			M.Jitter(5)
+			if(prob(10))
+				to_chat(M, "You feel slightly energized, but nothing happens")
+			if(has_been_armstrong>0) //Added in case person metabolizes below 5 units to prevent infinite hulk
+				dehulk(M)
+		if(4.5 to 15)
+			if(ishuman(M)) //Does nothing to non-humans.
+				var/mob/living/carbon/human/H = M
+				if(H.species.name != "Dionae") //Dionae are broken as fuck
+					if(H.hulk_time<world.time && !has_been_armstrong)
+						H.hulk_time = world.time + (45 SECONDS)
+						armstronged_at = H.hulk_time
+						if(!(M_HULK in H.mutations))
+							has_been_armstrong = 1
+							H.mutations.Add(M_HULK)
+							H.update_mutations() //Update our mutation overlays
+							H.update_body()
+							message_admins("[key_name(M)] is hopped up on combat nanobots! ([formatJumpTo(M)])")
+							to_chat(H, "The nanobots supercharge your body!")
+					else if(H.hulk_time<world.time && has_been_armstrong) //TIME'S UP
+						dehulk(H)
+		if(15 to INFINITY)
+			to_chat(M, "<b><big>The nanobots tear your body apart!</b></big>")
+			M.gib()
+			message_admins("[key_name(M)] took too many nanobots and gibbed!([formatJumpTo(M)])")
+
+
+	data++
+
+
+/datum/reagent/comnanobots/proc/dehulk(var/mob/living/carbon/human/H, damage = 0, override_remove = 1, gib = 0)
+
+		H.hulk_time = 0 //Just to be sure.
+		H.mutations.Remove(M_HULK)
+		holder.remove_reagent("comnanobots", holder.get_reagent_amount("comnanobots"))
+		//M.dna.SetSEState(HULKBLOCK,0)
+		H.update_mutations()		//update our mutation overlays
+		H.update_body()
+		to_chat(H, "The nanobots burn themselves out in your body.")
 
 //Foam precursor
 /datum/reagent/fluorosurfactant
@@ -3316,12 +3564,13 @@
 	adj_sleepy = -2
 	adj_temp = 25
 	custom_metabolism = 0.1
+	var/causes_jitteriness = 1
 
 /datum/reagent/drink/coffee/on_mob_life(var/mob/living/M)
 
 	if(..()) return 1
-
-	M.Jitter(5)
+	if(causes_jitteriness)
+		M.Jitter(5)
 	if(adj_temp > 0 && holder.has_reagent("frostoil"))
 		holder.remove_reagent("frostoil", 10 * REAGENTS_METABOLISM)
 
@@ -3554,7 +3803,7 @@
 
 /datum/reagent/drink/cold/rewriter
 	name = "Rewriter"
-	description = "The secert of the sanctuary of the Libarian..."
+	description = "The secret of the sanctuary of the Librarian..."
 	id = "rewriter"
 	color = "#485000" //rgb:72, 080, 0
 
@@ -4310,7 +4559,7 @@
 /datum/reagent/ethanol/deadrum/grog
 	name = "Grog"
 	id = "grog"
-	description = "Watered down rum, NanoTrasen approves!"
+	description = "Watered down rum, Nanotrasen approves!"
 	reagent_state = LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
@@ -4338,7 +4587,7 @@
 /datum/reagent/ethanol/deadrum/acid_spit
 	name = "Acid Spit"
 	id = "acidspit"
-	description = "A drink by NanoTrasen. Made from live aliens."
+	description = "A drink by Nanotrasen. Made from live aliens."
 	reagent_state = LIQUID
 	color = "#365000" //rgb: 54, 80, 0
 
@@ -4647,6 +4896,21 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Joe"
 	id = "detcoffee"
 	description = "Bitter, black, and tasteless. It's the way I've always had my joe, and the way I was having it when one of the officers came running toward me. The chief medical officer got axed, and no one knew who did it. I reluctantly took one last drink before putting on my coat and heading out. I knew that by the time I was finished, my joe would have fallen to a dreadfully low temperature, but I had work to do."
+	causes_jitteriness = 0
+
+/datum/reagent/drink/coffee/detcoffee/on_mob_life(var/mob/living/M)
+	if(..()) return 1
+	M.update_colour()
+
+/datum/reagent/drink/coffee/detcoffee/reagent_deleted()
+	if(..()) return 1
+
+	if(!holder)
+		return
+	var/mob/M =  holder.my_atom
+
+	if(ishuman(M))
+		M.update_colour()
 
 /datum/reagent/drink/coffee/etank
 	name = "Recharger"

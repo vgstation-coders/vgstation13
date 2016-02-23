@@ -71,7 +71,7 @@
 			client.verbs += /client/proc/readmin
 
 		if(M_FARSIGHT in mutations)
-			client.view = max(client.view, world.view+2)
+			client.view = max(client.view, world.view+1)
 	CallHook("Login", list("client" = src.client, "mob" = src))
 
 	if(spell_masters)
@@ -86,3 +86,8 @@
 	if(client && client.haszoomed && !client.holder)
 		client.view = world.view
 		client.haszoomed = 0
+
+	if(bad_changing_colour_ckeys["[client.ckey]"] == 1)
+		client.updating_colour = 0
+		bad_changing_colour_ckeys["[client.ckey]"] = 0
+	update_colour()

@@ -201,10 +201,6 @@
 		O.dir = direct
 
 /client/Move(loc,dir)
-	if(!mob)
-		return // Moved here to avoid nullrefs below. - N3X
-	if(mob.timestopped)
-		return 0
 	if(move_delayer.next_allowed > world.time)
 		return 0
 
@@ -223,10 +219,6 @@
 	if(mob.incorporeal_move)
 		Process_Incorpmove(dir)
 		return
-
-	for(var/obj/effect/stop/S in mob.loc)
-		if(S.victim == mob)
-			return
 
 	if(mob.stat == DEAD)
 		return
@@ -310,6 +302,8 @@
 
 		//We are now going to move
 		move_delay = max(move_delay,1)
+		if(mob.movement_speed_modifier)
+			move_delay *= (1/mob.movement_speed_modifier)
 		mob.delayNextMove(move_delay)
 		//Something with pulling things
 		if(Findgrab)
@@ -401,6 +395,11 @@
 				else
 					mob.forceEnter(get_step(mob, direct))
 					mob.dir = direct
+			if(isobserver(mob))
+				var/mob/dead/observer/observer = mob
+				mob.delayNextMove(observer.movespeed)
+			else
+				mob.delayNextMove(1)
 		if(INCORPOREAL_NINJA)
 			if(prob(50))
 				var/locx
@@ -439,6 +438,7 @@
 				anim(mobloc,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
 				mob.forceEnter(get_step(mob, direct))
 			mob.dir = direct
+			mob.delayNextMove(1)
 		if(INCORPOREAL_ETHEREAL) //Jaunting, without needing to be done through relaymove
 			var/turf/newLoc = get_step(mob,direct)
 			if(!(newLoc.flags & NOJAUNT))
@@ -452,7 +452,6 @@
 	for(var/obj/S in mob.loc)
 		if(istype(S,/obj/effect/step_trigger) || istype(S,/obj/effect/beam))
 			S.Crossed(mob)
-	mob.delayNextMove(1)
 
 	return 1
 
@@ -529,6 +528,8 @@
 	if(!canmove || restrained() || !pulling)
 		return
 	if(pulling.anchored)
+		return
+	if(src.locked_to == pulling)
 		return
 	if(!pulling.Adjacent(src))
 		return

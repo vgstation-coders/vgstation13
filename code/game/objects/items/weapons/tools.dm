@@ -48,6 +48,19 @@
 	origin_tech = "materials=1;engineering=1"
 	attack_verb = list("bashed", "battered", "bludgeoned", "whacked")
 
+/obj/item/weapon/wrench/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/weapon/handcuffs/cable) && !istype(src, /obj/item/weapon/wrench/socket))
+		to_chat(user, "<span class='notice'>You wrap the cable restraint around the top of the wrench.</span>")
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/weapon/wrench_wired/I = new (get_turf(user))
+			user.put_in_hands(I)
+		else
+			new /obj/item/weapon/wrench_wired(get_turf(src.loc))
+		qdel(src)
+		qdel(W)
+
 //we inherit a lot from wrench, so we change very little
 /obj/item/weapon/wrench/socket
 	name = "socket wrench"
@@ -249,7 +262,7 @@
 	if((!status) && (istype(W,/obj/item/stack/rods)))
 		var/obj/item/stack/rods/R = W
 		R.use(1)
-		var/obj/item/weapon/flamethrower/F = new/obj/item/weapon/flamethrower(user.loc)
+		var/obj/item/weapon/gun/projectile/flamethrower/F = new/obj/item/weapon/gun/projectile/flamethrower(user.loc)
 		src.loc = F
 		F.weldtool = src
 		if (user.client)
@@ -543,7 +556,6 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "engineering=1"
 	attack_verb = list("attacked", "bashed", "battered", "bludgeoned", "whacked")
-
 
 	suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")

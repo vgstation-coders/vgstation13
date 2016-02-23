@@ -129,6 +129,21 @@
 	health -= rand(30, 50)
 	healthcheck()
 
+/obj/structure/window/kick_act(mob/living/carbon/human/H)
+	playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
+
+	H.visible_message("<span class='danger'>\The [H] kicks \the [src].</span>", \
+	"<span class='danger'>You kick \the [src].</span>")
+
+	var/damage = rand(1,7) * (H.get_strength() - reinforced) //By default, humanoids can't damage windows with kicks. Being strong or a hulk changes that
+	var/obj/item/clothing/shoes/S = H.shoes
+	if(istype(S))
+		damage += S.bonus_kick_damage //Unless they're wearing heavy boots
+
+	if(damage > 0)
+		health -= damage
+		healthcheck()
+
 /obj/structure/window/CheckExit(var/atom/movable/O, var/turf/target)
 
 	if(istype(O) && O.checkpass(PASSGLASS))
@@ -258,7 +273,7 @@
 
 			if(WINDOWSECURE) //Reinforced, fully secured
 
-				if(istype(W, /obj/item/weapon/screwdriver))
+				if(isscrewdriver(W))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='warning'>[user] unfastens \the [src] from its frame.</span>", \
 					"<span class='notice'>You unfasten \the [src] from its frame.</span>")
@@ -267,14 +282,14 @@
 
 			if(WINDOWUNSECUREFRAME)
 
-				if(istype(W, /obj/item/weapon/screwdriver))
+				if(isscrewdriver(W))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='notice'>[user] fastens \the [src] to its frame.</span>", \
 					"<span class='notice'>You fasten \the [src] to its frame.</span>")
 					d_state = WINDOWSECURE
 					return
 
-				if(istype(W, /obj/item/weapon/crowbar))
+				if(iscrowbar(W))
 					playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
 					user.visible_message("<span class='warning'>[user] pries \the [src] from its frame.</span>", \
 					"<span class='notice'>You pry \the [src] from its frame.</span>")
@@ -283,14 +298,14 @@
 
 			if(WINDOWLOOSEFRAME)
 
-				if(istype(W, /obj/item/weapon/crowbar))
+				if(iscrowbar(W))
 					playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
 					user.visible_message("<span class='notice'>[user] pries \the [src] into its frame.</span>", \
 					"<span class='notice'>You pry \the [src] into its frame.</span>")
 					d_state = WINDOWUNSECUREFRAME
 					return
 
-				if(istype(W, /obj/item/weapon/screwdriver))
+				if(isscrewdriver(W))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='warning'>[user] unfastens \the [src]'s frame from the floor.</span>", \
 					"<span class='notice'>You unfasten \the [src]'s frame from the floor.</span>")
@@ -308,7 +323,7 @@
 
 			if(WINDOWLOOSE)
 
-				if(istype(W, /obj/item/weapon/screwdriver))
+				if(isscrewdriver(W))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='notice'>[user] fastens \the [src]'s frame to the floor.</span>", \
 					"<span class='notice'>You fasten \the [src]'s frame to the floor.</span>")
@@ -338,7 +353,7 @@
 
 	else if(!reinforced) //Normal window steps
 
-		if(istype(W, /obj/item/weapon/screwdriver))
+		if(isscrewdriver(W))
 			playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 			user.visible_message("<span class='[d_state ? "warning":"notice"]'>[user] [d_state ? "un":""]fastens \the [src].</span>", \
 			"<span class='notice'>You [d_state ? "un":""]fasten \the [src].</span>")

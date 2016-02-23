@@ -51,6 +51,12 @@
 		cmd_admin_pm(C,null)
 		return
 
+	//Wiki shortcuts
+	if(href_list["getwiki"])
+		var/url = href_list["getwiki"]
+		usr << link(getVGWiki(url))
+		return
+
 	// Global Asset cache stuff.
 	if(href_list["asset_cache_confirm_arrival"])
 //		to_chat(src, "ASSET JOB [href_list["asset_cache_confirm_arrival"]] ARRIVED.")
@@ -68,6 +74,11 @@
 		if("usr")		hsrc = mob
 		if("prefs")		return prefs.process_link(usr,href_list)
 		if("vars")		return view_var_Topic(href,href_list,hsrc)
+		if("chat")		return chatOutput.Topic(href, href_list)
+
+	switch(href_list["action"])
+		if ("openLink")
+			src << link(href_list["link"])
 
 	..()	//redirect to hsrc.Topic()
 	//testing("[usr] topic call took [(world.timeofday - timestart)/10] seconds")
@@ -106,6 +117,9 @@
 	//CONNECT//
 	///////////
 /client/New(TopicData)
+	// world.log << "creating chatOutput"
+	chatOutput = new /datum/chatOutput(src) // Right off the bat.
+	// world.log << "Done creating chatOutput"
 	if(config)
 		winset(src, null, "outputwindow.output.style=[config.world_style_config];")
 		winset(src, null, "window1.msay_output.style=[config.world_style_config];") // it isn't possible to set two window elements in the same winset so we need to call it for each element we're assigning a stylesheet.
@@ -150,6 +164,7 @@
 	prefs.last_id = computer_id			//these are gonna be used for banning
 
 	. = ..()	//calls mob.Login()
+	chatOutput.start()
 
 	if(custom_event_msg && custom_event_msg != "")
 		to_chat(src, "<h1 class='alert'>Custom Event</h1>")
@@ -401,3 +416,10 @@
 		else
 			to_chat(src, "<span style='recruit'>The game is currently looking for [role_id] candidates.  Your current answer is <a href='?src=\ref[prefs]&preference=set_role&role_id=[role_id]'>[get_role_desire_str(role_desired)]</a>.</span>")
 	return role_desired & ROLEPREF_ENABLE
+
+/client/proc/colour_transition(var/list/colour_to = default_colour_matrix,var/time = 10)	// call this with no parametres to reset to default.
+	if(!color)
+		color = default_colour_matrix
+	if(!(colour_to.len))
+		colour_to = default_colour_matrix
+	animate(src, color=colour_to, time=time, easing=SINE_EASING)

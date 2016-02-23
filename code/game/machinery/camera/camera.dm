@@ -171,12 +171,12 @@ var/list/camera_names=list()
 /obj/machinery/camera/attackby(W as obj, mob/living/user as mob)
 
 	// DECONSTRUCTION
-	if(istype(W, /obj/item/weapon/screwdriver))
+	if(isscrewdriver(W))
 //		to_chat(user, "<span class='notice'>You start to [panel_open ? "close" : "open"] the camera's panel.</span>")
 		//if(toggle_panel(user)) // No delay because no one likes screwdrivers trying to be hip and have a duration cooldown
 		togglePanelOpen(W, user, icon_state, icon_state)
 
-	else if((istype(W, /obj/item/weapon/wirecutters) || istype(W, /obj/item/device/multitool)) && panel_open)
+	else if((iswirecutter(W) || istype(W, /obj/item/device/multitool)) && panel_open)
 		wires.Interact(user)
 
 	else if(istype(W, /obj/item/weapon/weldingtool) && wires.CanDeconstruct())
@@ -416,10 +416,10 @@ var/list/camera_names=list()
 			if(S.current == src)
 				if(istype(S, /obj/machinery/computer/security/telescreen))
 					for(var/mob/M in viewers(world.view,S))
-						to_chat(M, "<span style='color:grey'>\icon[S][tv_message(M, speech, rendered_speech)]</span>")
+						to_chat(M, "<span style='color:grey'>[bicon(S)][tv_message(M, speech, rendered_speech)]</span>")
 				else
 					for(var/mob/M in viewers(1,S))
-						to_chat(M, "<span style='color:grey'>\icon[S][tv_message(M, speech, rendered_speech)]</span>")
+						to_chat(M, "<span style='color:grey'>[bicon(S)][tv_message(M, speech, rendered_speech)]</span>")
 
 /obj/machinery/camera/arena
 	name = "arena camera"
@@ -438,7 +438,7 @@ var/list/camera_names=list()
 	upgradeHearing()
 
 /obj/machinery/camera/arena/attackby(W as obj, mob/living/user as mob)
-	if(istype(W, /obj/item/weapon/screwdriver))
+	if(isscrewdriver(W))
 		to_chat(user, "<span class='warning'>There aren't any visible screws to unscrew.</span>")
 	else
 		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W] but it doesn't seem to affect it in the least.</span>","<span class='warning'>You hit \the [src] with \the [W] but it doesn't seem to affect it in the least</span>")
@@ -468,3 +468,9 @@ var/list/camera_names=list()
 
 /obj/machinery/camera/arena/attack_pai(mob/user as mob)
 	return
+
+/obj/machinery/camera/kick_act(mob/living/carbon/human/H)
+	H.visible_message("<span class='danger'>[H] attempts to kick \the [src].</span>", "<span class='danger'>You attempt to kick \the [src].</span>")
+	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
+
+	H.apply_damage(rand(1,2), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))

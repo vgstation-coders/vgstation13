@@ -1,3 +1,5 @@
+#define DNA_SE_LENGTH 55
+
 //Content of the Round End Information window
 var/round_end_info = ""
 
@@ -52,7 +54,7 @@ var/GLASSESBLOCK = 0
 var/EPILEPSYBLOCK = 0
 var/TWITCHBLOCK = 0
 var/NERVOUSBLOCK = 0
-var/MONKEYBLOCK = 54 // Monkey block will always be the DNA_SE_LENGTH
+var/MONKEYBLOCK = DNA_SE_LENGTH
 
 var/BLOCKADD = 0
 var/DIFFMUT = 0
@@ -109,6 +111,7 @@ var/LOUDBLOCK = 0
 var/WHISPERBLOCK = 0
 var/DIZZYBLOCK = 0
 var/SANSBLOCK = 0
+var/NOIRBLOCK = 0
 
 
 
@@ -396,3 +399,4 @@ var/global/hardcore_mode = 0
 
 //Global list of all unsimulated mineral turfs for xenoarch
 var/global/list/mineral_turfs = list()
+var/global/list/static_list = list('sound/effects/static/static1.ogg','sound/effects/static/static2.ogg','sound/effects/static/static3.ogg','sound/effects/static/static4.ogg','sound/effects/static/static5.ogg',)

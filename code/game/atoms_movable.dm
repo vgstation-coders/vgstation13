@@ -4,7 +4,10 @@
 	var/w_type = NOT_RECYCLABLE  // Waste category for sorters. See setup.dm
 
 	layer = 3
-	var/last_move = null
+
+	var/last_move = null //Direction in which this atom last moved
+	var/last_moved = 0   //world.time when this atom last moved
+
 	var/anchored = 0
 	var/move_speed = 10
 	var/l_move_time = 1
@@ -156,7 +159,40 @@
 	if(. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
 		spawn(0)
 			for(var/atom/movable/AM in locked_atoms)
-				AM.forceMove(loc)
+				var/new_loc = loc
+
+				if(locked_atoms[AM])
+					var/list/atomlock_params = locked_atoms[AM]
+
+					var/offset_x = atomlock_params[1]
+					var/offset_y = atomlock_params[2]
+
+					var/rotate_with_our_dir = atomlock_params[3]
+
+					if(rotate_with_our_dir)
+						var/newX = offset_x
+						var/newY = offset_y
+
+						switch(dir)
+							if(NORTH) //up
+								offset_x = newX
+								offset_y = newY
+							if(EAST) // right
+								offset_x = newY
+								offset_y = -newX
+							if(SOUTH) //down
+								offset_x = -newX
+								offset_y = -newY
+							if(WEST) //left
+								offset_x = -newY
+								offset_y = newX
+
+					if(offset_x || offset_y)
+						var/newer_loc = locate(x + offset_x, y + offset_y, z)
+						if(newer_loc)
+							new_loc = newer_loc
+
+				AM.forceMove(new_loc)
 
 	update_dir()
 
@@ -172,6 +208,7 @@
 			tether_datum.Delete_Chain()
 
 	last_move = Dir
+	last_moved = world.time
 	src.move_speed = world.timeofday - src.l_move_time
 	src.l_move_time = world.timeofday
 	// Update on_moved listeners.
@@ -196,14 +233,47 @@
 //Atom locking, lock an atom to another atom, and the locked atom will move when the other atom moves.
 //Essentially buckling mobs to chairs. For all atoms.
 //Please don't lock atoms to other atoms if the atoms locked to expect for example a different type, it's basically bound to runtime/glitch.
-/atom/movable/proc/lock_atom(var/atom/movable/AM)
+//x_offset, y_offset parameters are used if you don't want the locked atom to be on the top of this atom. So x_offset = 1 means the atom-locked object will always be one turf to the east, etc...
+//rotate_offsets parameter is used if you have set x_offset or y_offset, and want the offsets to be relative to the object's direction
+/atom/movable/proc/lock_atom(var/atom/movable/AM, var/x_offset = 0, var/y_offset = 0, var/rotate_offsets = 0)
 	if(AM in locked_atoms || AM.locked_to || !istype(AM))
 		return
 
 	AM.locked_to = src
 	locked_atoms += AM
 
-	AM.forceMove(loc)
+	if(x_offset || y_offset)
+		locked_atoms[AM] = list(x_offset, y_offset, rotate_offsets)
+
+		var/new_loc = loc
+
+		if(rotate_offsets)
+			var/newX = x_offset
+			var/newY = y_offset
+
+			switch(dir)
+				if(NORTH) //up
+					x_offset = newX
+					y_offset = newY
+				if(EAST) // right
+					x_offset = newY
+					y_offset = -newX
+				if(SOUTH) //down
+					x_offset = -newX
+					y_offset = -newY
+				if(WEST) //left
+					x_offset = -newY
+					y_offset = newX
+
+			var/newer_loc = locate(x + x_offset, y + y_offset, z)
+			if(newer_loc)
+				new_loc = newer_loc
+
+		AM.forceMove(new_loc)
+
+	else
+		AM.forceMove(loc)
+
 	AM.change_dir(dir, src)
 
 	if(ismob(AM))
@@ -261,7 +331,6 @@
 		src.throwing = 0
 
 	if ((Obstacle && yes))
-		Obstacle.last_bumped = world.time
 		Obstacle.Bumped(src)
 	return
 	..()
@@ -272,7 +341,11 @@
 		if(loc)
 			loc.Exited(src)
 
+		last_move = get_dir(loc, destination)
+		last_moved = world.time
+
 		loc = destination
+
 		loc.Entered(src)
 		if(isturf(destination))
 			var/area/A = get_area_master(destination)
@@ -283,7 +356,41 @@
 
 
 		for(var/atom/movable/AM in locked_atoms)
-			AM.forceMove(loc)
+			var/new_loc = loc
+
+			if(locked_atoms[AM])
+				var/list/atomlock_params = locked_atoms[AM]
+
+				var/offset_x = atomlock_params[1]
+				var/offset_y = atomlock_params[2]
+
+				var/rotate_with_our_dir = atomlock_params[3]
+
+				if(rotate_with_our_dir)
+					var/newX = offset_x
+					var/newY = offset_y
+
+					switch(dir)
+						if(NORTH) //up
+							offset_x = newX
+							offset_y = newY
+						if(EAST) // right
+							offset_x = newY
+							offset_y = -newX
+						if(SOUTH) //down
+							offset_x = -newX
+							offset_y = -newY
+						if(WEST) //left
+							offset_x = -newY
+							offset_y = newX
+
+				if(offset_x || offset_y)
+					var/newer_loc = locate(x + offset_x, y + offset_y, z)
+					if(newer_loc)
+						new_loc = newer_loc
+
+			AM.forceMove(new_loc)
+
 
 		// Update on_moved listeners.
 		INVOKE_EVENT(on_moved,list("loc"=loc))
@@ -307,6 +414,8 @@
 	return 0
 
 /atom/movable/proc/hit_check(var/speed, mob/user)
+	. = 1
+
 	if(src.throwing)
 		for(var/atom/A in get_turf(src))
 			if(A == src) continue
@@ -318,13 +427,15 @@
 
 				if(src.throwing == 1) //If throwing == 1, the throw was weak and will stop when it hits a dude. If a hulk throws this item, throwing is set to 2 (so the item will pass through multiple mobs)
 					src.throwing = 0
+					. = 0
 
 			else if(isobj(A))
 				if(A.density && !A.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
 					src.throw_impact(A, speed, user)
 					src.throwing = 0
+					. = 0
 
-/atom/movable/proc/throw_at(atom/target, range, speed, override = 1)
+/atom/movable/proc/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
 	if(!target || !src)	return 0
 	if(override)
 		sound_override = 1
@@ -333,6 +444,8 @@
 	throwing = 1
 	if(!speed)
 		speed = throw_speed
+	if(!fly_speed)
+		fly_speed = speed
 
 	var/mob/user
 	if(usr)
@@ -357,6 +470,9 @@
 	var/dist_travelled = 0
 	var/dist_since_sleep = 0
 	var/area/a = get_area(src.loc)
+
+	. = 1
+
 	if(dist_x > dist_y)
 		var/error = dist_x/2 - dist_y
 
@@ -375,25 +491,29 @@
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+					. = 0
 					break
+
 				src.Move(step)
-				hit_check(speed, user)
+				. = hit_check(speed, user)
 				error += dist_x
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= speed)
+				if(dist_since_sleep >= fly_speed)
 					dist_since_sleep = 0
 					sleep(1)
 			else
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+					. = 0
 					break
+
 				src.Move(step)
-				hit_check(speed, user)
+				. = hit_check(speed, user)
 				error -= dist_y
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= speed)
+				if(dist_since_sleep >= fly_speed)
 					dist_since_sleep = 0
 					sleep(1)
 			a = get_area(src.loc)
@@ -407,25 +527,29 @@
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+					. = 0
 					break
+
 				src.Move(step)
-				hit_check(speed, user)
+				. = hit_check(speed, user)
 				error += dist_y
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= speed)
+				if(dist_since_sleep >= fly_speed)
 					dist_since_sleep = 0
 					sleep(1)
 			else
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+					. = 0
 					break
+
 				src.Move(step)
-				hit_check(speed, user)
+				. = hit_check(speed, user)
 				error -= dist_x
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= speed)
+				if(dist_since_sleep >= fly_speed)
 					dist_since_sleep = 0
 					sleep(1)
 
@@ -470,8 +594,9 @@
 	if(get_dist(T,loc) <= 1)
 		return 1
 	else
-		var/turf/U = A.loc
-		return U.Enter(src,loc)
+		var/turf/U = get_turf(A)
+		if(!U) return null
+		return src.forceMove(U)
 
 /////////////////////////////
 // SINGULOTH PULL REFACTOR

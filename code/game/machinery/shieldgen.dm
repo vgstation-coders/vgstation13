@@ -231,14 +231,14 @@
 		return
 
 	if (src.active)
-		user.visible_message("<span class='notice'>\icon[src] [user] deactivated the shield generator.</span>", \
-			"<span class='notice'>\icon[src] You deactivate the shield generator.</span>", \
+		user.visible_message("<span class='notice'>[bicon(src)] [user] deactivated the shield generator.</span>", \
+			"<span class='notice'>[bicon(src)] You deactivate the shield generator.</span>", \
 			"You hear heavy droning fade out.")
 		src.shields_down()
 	else
 		if(anchored)
-			user.visible_message("<span class='notice'>\icon[src] [user] activated the shield generator.</span>", \
-				"<span class='notice'>\icon[src] You activate the shield generator.</span>", \
+			user.visible_message("<span class='notice'>[bicon(src)] [user] activated the shield generator.</span>", \
+				"<span class='notice'>[bicon(src)] You activate the shield generator.</span>", \
 				"You hear heavy droning.")
 			src.shields_up()
 		else
@@ -296,7 +296,7 @@
 ////FIELD GEN START //shameless copypasta from fieldgen, powersink, and grille
 #define maxstoredpower 500
 /obj/machinery/shieldwallgen
-		name = "Shield Generator"
+		name = "shield generator"
 		desc = "A shield generator."
 		icon = 'icons/obj/stationobjs.dmi'
 		icon_state = "Shield_Gen"
@@ -320,6 +320,9 @@
 
 		machine_flags = WRENCHMOVE | FIXED2WORK
 
+/obj/machinery/shieldwallgen/free_access
+	req_access = null
+
 /obj/machinery/shieldwallgen/proc/power()
 	if(!anchored)
 		power = 0
@@ -338,7 +341,7 @@
 
 	var/surplus = max(PN.avail-PN.load, 0)
 	var/shieldload = min(rand(50,200), surplus)
-	if(shieldload==0 && !storedpower)		// no cable or no power, and no power stored
+	if(shieldload==0 && storedpower <= 0)		// no cable or no power, and no power stored
 		power = 0
 		return 0
 	else

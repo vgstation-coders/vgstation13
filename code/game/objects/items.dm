@@ -23,7 +23,6 @@
 	var/action_button_name //It is also the text which gets displayed on the action button. If not set it defaults to 'Use [name]'. If it's not set, there'll be no button.
 
 	//Since any item can now be a piece of clothing, this has to be put here so all items share it.
-	var/flags_inv //This flag is used to determine when items in someone's inventory cover others. IE helmets making it so you can't see glasses, etc.
 	var/_color = null
 	var/body_parts_covered = 0 //see setup.dm for appropriate bit flags
 	//var/heat_transfer_coefficient = 1 //0 prevents all transfers, 1 is invisible
@@ -36,6 +35,7 @@
 	var/cant_drop = 0 //If 1, can't drop it from hands!
 
 	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+
 	var/list/allowed = null //suit storage stuff.
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
@@ -50,18 +50,8 @@
 	var/vending_cat = null// subcategory for vending machines.
 	var/list/dynamic_overlay[0] //For items which need to slightly alter their on-mob appearance while being worn.
 
-var/global/list/thermal_protection_value_list = list()
-
 /obj/item/proc/return_thermal_protection()
-	if(thermal_protection_value_list["[body_parts_covered]"])
-		return thermal_protection_value_list["[body_parts_covered]"] * (1 - src.heat_conductivity)
-	else
-		var/total_protection = 0
-		for(var/body_part in THERMAL_BODY_PARTS)
-			if (body_part & src.body_parts_covered)
-				total_protection += BODY_THERMAL_VALUE_LIST["[body_part]"]
-		thermal_protection_value_list["[body_parts_covered]"] = total_protection
-		return total_protection * (1 - src.heat_conductivity)
+	return return_cover_protection(body_parts_covered) * (1 - src.heat_conductivity)
 
 /obj/item/Destroy()
 	if(istype(src.loc, /mob))
@@ -101,6 +91,9 @@ var/global/list/thermal_protection_value_list = list()
 
 /obj/item/blob_act()
 	qdel(src)
+
+/obj/item/proc/restock() //used for borg recharging
+	return
 
 /obj/item/projectile_check()
 	return PROJREACT_OBJS
@@ -602,23 +595,30 @@ var/global/list/thermal_protection_value_list = list()
 					return 0
 				return 1
 		return 0 //Unsupported slot
-
 		//END MONKEY
+
+	else if(isMoMMI(M))
+		//START MOMMI ALSO THIS SO FUCKING SILLY
+		var/mob/living/silicon/robot/mommi/MoM = M
+		switch(slot)
+			if(slot_head)
+				if(MoM.head_state)
+					return 0
+				return 1
+		return 0 //Unsupported slot
+		//END MOMMI
 
 /obj/item/can_pickup(mob/living/user)
 	if(!(user) || !isliving(user)) //BS12 EDIT
 		return 0
-	if(!user.canmove || user.stat || user.restrained() || !Adjacent(user))
+	if(user.incapacitated() || !Adjacent(user))
 		return 0
 	if((!istype(user, /mob/living/carbon) && !isMoMMI(user)) || istype(user, /mob/living/carbon/brain)) //Is not a carbon being, MoMMI, or is a brain
 		to_chat(user, "You can't pick things up!")
-	if( user.stat || user.restrained() )//Is not asleep/dead and is not restrained
-		to_chat(user, "<span class='warning'>You can't pick things up!</span>")
-		return 0
 	if(src.anchored) //Object isn't anchored
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return 0
-	if(!istype(src.loc, /turf)) //Object is on a turf
+	if(!istype(src.loc, /turf)) //Object is not on a turf
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return 0
 	return 1
@@ -873,3 +873,35 @@ var/global/list/image/blood_overlays = list()
 //Gets the rating of the item, used in stuff like machine construction.
 /obj/item/proc/get_rating()
 	return 0
+
+/obj/item/kick_act(mob/living/carbon/human/H) //Kick items around!
+	if(anchored || w_class > 3 + H.get_strength())
+		H.visible_message("<span class='danger'>[H] attempts to kick \the [src]!</span>", "<span class='danger'>You attempt to kick \the [src]!</span>")
+		if(prob(70))
+			to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
+
+			H.apply_damage(rand(1,4), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))
+		return
+
+	var/kick_dir = get_dir(H, src)
+	if(H.loc == src.loc) kick_dir = H.dir
+
+	var/turf/T = get_edge_target_turf(loc, kick_dir)
+
+	var/kick_power = max((H.get_strength() * 10 - (w_class ** 2)), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
+
+	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
+
+	if(kick_power > 6) //Fly in an arc!
+		spawn()
+			var/original_pixel_y = pixel_y
+			animate(src, pixel_y = original_pixel_y + 32, time = 10, easing = CUBIC_EASING)
+
+			while(loc)
+				if(!throwing)
+					animate(src, pixel_y = original_pixel_y, time = 5, easing = ELASTIC_EASING)
+					break
+				sleep(5)
+
+	Crossed(H) //So you can't kick shards while naked without suffering
+	throw_at(T, kick_power, 1)

@@ -6,6 +6,67 @@
 	if(stat == DEAD || (status_flags & FAKEDEATH))
 		return 1
 
+/mob/proc/isStunned() //Because we have around four slighly different stunned variables for some reason.
+	if(isUnconscious() || paralysis || stunned || weakened)
+		return 1
+
+/mob/proc/incapacitated()
+	if(isStunned() || restrained())
+		return 1
+
+/mob/proc/get_screen_colour()
+	if(!client)
+		return 0
+	if(M_NOIR in mutations)
+		return NOIRMATRIX
+
+/mob/dead/observer/get_screen_colour()
+	return default_colour_matrix
+
+/mob/living/simple_animal/get_screen_colour()
+	. = ..()
+	if(.)
+		return .
+	else if(src.colourmatrix.len)
+		return src.colourmatrix
+
+/mob/living/carbon/human/get_screen_colour()
+	. = ..()
+	if(.)
+		return .
+	else if(has_reagent_in_blood("detcoffee"))
+		return NOIRMATRIX
+	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
+	if(eyes.colourmatrix.len && !(eyes.robotic))
+		return eyes.colourmatrix
+	else return default_colour_matrix
+
+/mob/proc/update_colour(var/time = 50,var/forceupdate = 0)
+	if(!client || (client.updating_colour && !forceupdate))
+		return
+	var/list/colour_to_apply = get_screen_colour()
+	var/list/difference = difflist(client.color,colour_to_apply)
+	if(difference || !(client.color) || !istype(difference) || !difference.len)
+		client.updating_colour = 1
+		var/cached_ckey = client.ckey
+		if(forceupdate)
+			time = 0
+		else if(colour_to_apply == NOIRMATRIX)
+			time = 170
+			src << sound('sound/misc/noirdarkcoffee.ogg')
+		client.colour_transition(colour_to_apply,time = time)
+		spawn(time)
+			if(client && client.mob != src)
+				return
+			if(client)
+				client.color = colour_to_apply
+				client.updating_colour = 0
+				difference = difflist(client.color,get_screen_colour())
+				if((difference || !(client.color) || !istype(difference) || !difference.len) && !forceupdate) // panic panic panic
+					src.update_colour(forceupdate = 1)
+			else
+				bad_changing_colour_ckeys["[cached_ckey]"] = 1
+
 /proc/RemoveAllFactionIcons(var/datum/mind/M)
 	ticker.mode.update_cult_icons_removed(M)
 	ticker.mode.update_rev_icons_removed(M)
@@ -169,7 +230,6 @@ proc/hasorgans(A)
 	return t
 
 proc/slur(phrase)
-	phrase = html_decode(phrase)
 	var/leng=length(phrase)
 	var/counter=length(phrase)
 	var/newphrase=""
@@ -192,7 +252,7 @@ proc/slur(phrase)
 	return newphrase
 
 /proc/stutter(n)
-	var/te = html_decode(n)
+	var/te = n
 	var/t = ""//placed before the message. Not really sure what it's for.
 	n = length(n)//length of the entire word
 	var/p = null
@@ -212,7 +272,7 @@ proc/slur(phrase)
 						n_letter = text("[n_letter]-[n_letter]")
 		t = text("[t][n_letter]")//since the above is ran through for each letter, the text just adds up back to the original word.
 		p++//for each letter p is increased to find where the next letter will be.
-	return copytext(sanitize(t),1,MAX_MESSAGE_LEN)
+	return copytext(t,1,MAX_MESSAGE_LEN)
 
 
 proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 for p will cause letters to be replaced instead of added
@@ -332,6 +392,25 @@ var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 				hud_used.action_intent.icon_state = "harm"
 			else
 				hud_used.action_intent.icon_state = "help"
+
+//For hotkeys
+
+/mob/verb/a_kick()
+	set name = "a-kick"
+	set hidden = 1
+
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		H.set_attack_type(ATTACK_KICK)
+
+/mob/verb/a_bite()
+	set name = "a-bite"
+	set hidden = 1
+
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		H.set_attack_type(ATTACK_BITE)
+
 proc/is_blind(A)
 	if(istype(A, /mob/living/carbon))
 		var/mob/living/carbon/C = A
@@ -366,4 +445,4 @@ proc/is_blind(A)
 	for(var/mob/M in targets)
 		var/turf/targetturf = get_turf(M)
 		if((targetturf.z == sourceturf.z))
-			M.show_message("<span class='info'>\icon[icon] [message]</span>", 1)
+			M.show_message("<span class='info'>[bicon(icon)] [message]</span>", 1)

@@ -21,6 +21,7 @@
 	icon = 'icons/obj/vehicles.dmi'
 	anchored = 1
 	density = 1
+	overrideghostspin = 1 //You guys are no fun
 	var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread
 
 	var/empstun = 0
@@ -95,7 +96,7 @@
 	return 0
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
-	if(user.stat || user.stunned || user.weakened || user.paralysis  || destroyed)
+	if(user.incapacitated()  || destroyed)
 		unlock_atom(user)
 		return
 	if(!check_key(user))

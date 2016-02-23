@@ -53,6 +53,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 	var/message = "";
 	var/dpt = ""; //the department which will be receiving the message
 	var/priority = -1 ; //Priority of the message being sent
+	var/announceSound = 'sound/vox/bloop.wav'
 	luminosity = 0
 
 /obj/machinery/requests_console/power_change()
@@ -274,6 +275,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		for(var/mob/M in player_list)
 			if(!istype(M,/mob/new_player) && M.client)
 				to_chat(M, "<b><font size = 3><font color = red>[department] announcement:</font color> [message]</font size></b>")
+				M << sound(announceSound)
 		announceAuth = 0
 		message = ""
 		screen = 0
@@ -308,7 +310,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 									Console.icon_state = "req_comp3"
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/request_urgent.ogg', 50, 1)
-									say(text("\icon[Console] *The Requests Console beeps: 'PRIORITY Alert in [department]'"))
+									say("PRIORITY Alert in [department]")
 								Console.messages += "<B><FONT color='red'>High Priority message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[sending]"
 
 		//					if("3")		//Not implemanted, but will be 		//Removed as it doesn't look like anybody intends on implimenting it ~Carn
@@ -318,7 +320,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		//						if(!Console.silent)
 		//							playsound(Console.loc, 'sound/machines/twobeep.ogg', 50, 1)
 		//							for (var/mob/O in hearers(7, Console.loc))
-		//								O.show_message(text("\icon[Console] *The Requests Console yells: 'EXTREME PRIORITY alert in [department]'"))
+		//								O.show_message(text("[bicon(Console)] *The Requests Console yells: 'EXTREME PRIORITY alert in [department]'"))
 		//						Console.messages += "<B><FONT color='red'>Extreme Priority message from [ckey(department)]</FONT></B><BR>[message]"
 
 							else		// Normal priority
@@ -327,14 +329,14 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 									Console.icon_state = "req_comp2"
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
-									say(text("\icon[Console] *The Requests Console beeps: 'Message from [department]'"))
+									say("Message from [department]")
 								Console.messages += "<B>Message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[message]"
 
 						screen = 6
 						Console.set_light(2)
 				messages += "<B>Message sent to [dpt]</B><BR>[message]"
 			else
-				say(text("\icon[src] *The Requests Console beeps: 'NOTICE: No server detected!'"))
+				say("NOTICE: No server detected!")
 
 
 	//Handle screen switching
@@ -393,7 +395,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 					//deconstruction and hacking
 /obj/machinery/requests_console/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
-	if (istype(O, /obj/item/weapon/crowbar))
+	if (iscrowbar(O))
 		if(open)
 			open = 0
 			icon_state="req_comp0"
@@ -403,7 +405,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				icon_state="req_comp_open"
 			else
 				icon_state="req_comp_rewired"
-	if (istype(O, /obj/item/weapon/screwdriver))
+	if (isscrewdriver(O))
 		if(open)
 			if(!hackState)
 				hackState = 1

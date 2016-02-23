@@ -527,7 +527,7 @@
 		/obj/item/weapon/coin/silver,
 		/obj/item/weapon/coin/uranium,
 		/obj/item/weapon/dice,
-		/obj/item/weapon/flamethrower/full,
+		/obj/item/weapon/gun/projectile/flamethrower/full,
 		/obj/item/weapon/gun/projectile/deagle/gold,
 		/obj/item/weapon/gun/projectile/russian,
 		/obj/item/weapon/handcuffs,
@@ -617,10 +617,34 @@
 		/obj/item/weapon/melee/classic_baton,
 		/obj/item/weapon/pickaxe/plasmacutter,
 		/obj/item/weapon/shield/energy,
-		/obj/item/weapon/organ/head,
-		/obj/item/weapon/organ/r_leg,
-		/obj/item/weapon/organ/l_arm,
-		/obj/item/weapon/organ/l_foot,
+		)
+		
+/obj/map/spawner/space/weapons2
+	name = "exotic space weapons spawner"
+	icon_state = "space_weapons"
+	amount = 2
+	toSpawn = list(
+		/obj/item/weapon/grenade/spawnergrenade/beenade,
+		/obj/item/weapon/grenade/spawnergrenade/spesscarp,
+		/obj/item/weapon/grenade/flashbang/clusterbang,
+		/obj/item/weapon/gun/energy/decloner,
+		/obj/item/weapon/gun/energy/mindflayer,
+		/obj/item/weapon/gun/energy/laser/retro,
+		/obj/item/weapon/gun/energy/gun/nuclear,
+		/obj/item/weapon/gun/energy/gun,
+		/obj/item/weapon/gun/energy/xray,
+		/obj/item/weapon/gun/energy/radgun,
+		/obj/item/weapon/gun/energy/crossbow,
+		/obj/item/weapon/gun/projectile/gyropistol,
+		/obj/item/weapon/gun/projectile/hecate,
+		/obj/item/weapon/gun/projectile/pistol,
+		/obj/item/weapon/gun/projectile/mateba,
+		/obj/item/weapon/gun/projectile/silenced,
+		/obj/item/weapon/gun/projectile/deagle/camo,
+		/obj/item/weapon/gun/projectile/automatic/xcom,
+		/obj/item/weapon/gun/osipr,
+		/obj/item/weapon/gun/gravitywell,
+		/obj/item/weapon/gun/grenadelauncher,
 		)
 
 /obj/map/spawner/space/tools
@@ -930,4 +954,29 @@
 		/obj/item/seeds/wheatseed,
 		/obj/item/seeds/whitebeetseed,
 		/obj/item/seeds/cinnamomum,
+		)
+
+// Gym ///////////////////////////////////////////////////////
+
+/obj/map/spawner/misc/gym //for the gym space vault
+	name = "gym spawner"
+	icon_state = "gym"
+	chance = 80
+	amount = 1
+	jiggle = 5
+	toSpawn = list(
+		/obj/item/weapon/dnainjector/nofail/hulkmut,
+		/obj/item/weapon/dnainjector/nofail/midgit,
+		/obj/item/weapon/dnainjector/nofail/fat,
+		/obj/item/weapon/dnainjector/nofail/runfast,
+		/obj/item/weapon/dnainjector/nofail/strong,
+		/obj/item/weapon/reagent_containers/food/snacks/chicken_fillet,
+		/obj/item/clothing/under/shorts/black,
+		/obj/item/clothing/under/shorts/blue,
+		/obj/item/clothing/under/shorts/red,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/storage/pill_bottle/hyperzine,
+		/obj/item/weapon/storage/pill_bottle/creatine,
+		/obj/item/weapon/storage/firstaid/regular,
+		/obj/item/weapon/storage/box/handcuffs,
 		)

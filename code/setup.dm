@@ -110,10 +110,12 @@ var/global/disable_vents     = 0
 #define INS_SHOE_HEAT_CONDUCTIVITY		0.3	//For insulated shoes like jackboots or magboots.
 
 #define HELMET_HEAT_CONDUCTIVITY		0.4 //For helmets
-#define INS_HELMET_HEAT_CONDUCTIVITY	0.1 //For heat insulated helmets
+#define INS_HELMET_HEAT_CONDUCTIVITY	0.2 //For heat insulated helmets
 
 #define GLOVES_HEAT_CONDUCTIVITY		0.4	//For normal gloves.
 #define INS_GLOVES_HEAT_CONDUCTIVITY	0.2	//For some heat insulated gloves (black and yellow.)
+
+#define SPACESUIT_HEAT_CONDUCTIVITY		0	// until a time where space is no longer cold
 
 // Doors!
 #define DOOR_CRUSH_DAMAGE 10
@@ -225,7 +227,12 @@ var/MAX_EXPLOSION_RANGE = 14
 
 //FLAGS BITMASK
 
+//Item flags!
 #define PROXMOVE		1	//Will the code check us when we move or when something moves near us?
+
+#define SLOWDOWN_WHEN_CARRIED 2 //Apply slowdown when carried in hands, instead of only when worn
+
+#define NOBLUDGEON  4  // when an item has this it produces no "X has been hit by Y with Z" message with the default handler
 
 #define MASKINTERNALS	8	// mask allows internals
 //#define SUITSPACE		8	// suit protects against space
@@ -235,7 +242,6 @@ var/MAX_EXPLOSION_RANGE = 14
 
 #define FPRINT		256		// takes a fingerprint
 #define ON_BORDER	512		// item has priority to check when entering or leaving
-#define NOBLUDGEON  4  // when an item has this it produces no "X has been hit by Y with Z" message with the default handler
 #define NOBLOODY	2048	// used to items if they don't want to get a blood overlay
 #define HEAR		16
 #define HEAR_ALWAYS 32 // Assign a virtualhearer to the mob even when no client is controlling it.
@@ -282,21 +288,8 @@ var/MAX_EXPLOSION_RANGE = 14
 
 //turf-only flags
 #define NOJAUNT		1
+#define NO_MINIMAP  2 //Invisible to minimaps (fuck minimaps)
 
-
-//Bit flags for the flags_inv variable, which determine when a piece of clothing hides another. IE a helmet hiding glasses.
-#define HIDEGLOVES		1	//APPLIES ONLY TO THE EXTERIOR SUIT!!
-#define HIDESUITSTORAGE	2	//APPLIES ONLY TO THE EXTERIOR SUIT!!
-#define HIDEJUMPSUIT	4	//APPLIES ONLY TO THE EXTERIOR SUIT!!
-#define HIDESHOES		8	//APPLIES ONLY TO THE EXTERIOR SUIT!!
-#define HIDEBAG			16	//APPLIES ONLY TO THE EXTERIOR SUIT
-#define HIDEMASK		1	//APPLIES ONLY TO HELMETS/MASKS!!
-#define HIDEEARS		2	//APPLIES ONLY TO HELMETS/MASKS!! (ears means headsets and such)
-#define HIDEEYES		4	//APPLIES ONLY TO HELMETS/MASKS!! (eyes means glasses)
-#define HIDEFACE		8	//APPLIES ONLY TO HELMETS/MASKS!! Dictates whether we appear as unknown.
-#define HIDEHEADHAIR 	16	// APPLIES ONLY TO HELMETS/MASKS!! removes the user's hair overlay
-#define HIDEBEARDHAIR	32	// APPLIES ONLY TO HELMETS/MASKS!! removes the user's beard overlay
-#define HIDEHAIR		48	// APPLIES ONLY TO HELMETS/MASKS!! removes the user's hair, facial and otherwise.
 
 //slots
 #define slot_back 1
@@ -322,46 +315,76 @@ var/MAX_EXPLOSION_RANGE = 14
 
 //Cant seem to find a mob bitflags area other than the powers one
 
-// bitflags for clothing parts
-#define HEAD			1 		//top of the head
+// bitflags for mob parts
+
+#define HEAD			1		//specifically the top of the head- imagine it as the scalp.
 #define EYES			2048
 #define MOUTH			4096
 #define EARS			8192
-#define FULL_HEAD		14337 //everything
+
 #define UPPER_TORSO		2
 #define LOWER_TORSO		4
 #define LEG_LEFT		8
 #define LEG_RIGHT		16
-#define LEGS			24
 #define FOOT_LEFT		32
 #define FOOT_RIGHT		64
-#define FEET			96
 #define ARM_LEFT		128
 #define ARM_RIGHT		256
-#define ARMS			384
 #define HAND_LEFT		512
 #define HAND_RIGHT		1024
-#define HANDS			1536
-#define FULL_BODY		16383
+
+
+// bitflags for clothing parts
+
+#define FULL_TORSO		UPPER_TORSO|LOWER_TORSO
+#define FACE			EYES|MOUTH|BEARD
+#define BEARD			32768
+#define FULL_HEAD		HEAD|EYES|MOUTH|EARS
+#define LEGS			LEG_LEFT|LEG_RIGHT 		// 24
+#define FEET			FOOT_LEFT|FOOT_RIGHT 	//96
+#define ARMS			ARM_LEFT|ARM_RIGHT		//384
+#define HANDS			HAND_LEFT|HAND_RIGHT //1536
+#define FULL_BODY		FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS
+#define IGNORE_INV		16384 // Don't make stuff invisible
+
+
+// bitflags for invisibility
+
+#define HIDEGLOVES		HANDS
+#define HIDEJUMPSUIT	ARMS|LEGS|FULL_TORSO
+#define HIDESHOES		FEET
+#define HIDEMASK		FACE
+#define HIDEEARS		EARS
+#define HIDEEYES		EYES
+#define HIDEFACE		FACE
+#define HIDEHEADHAIR 	EARS|HEAD
+#define HIDEBEARDHAIR	BEARD
+#define HIDEHAIR		HIDEHEADHAIR|HIDEBEARDHAIR
+#define	HIDESUITSTORAGE	LOWER_TORSO
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
-// Used with human/proc/get_heat_protection() and human/proc/get_cold_protection()
+// Used with human/proc/get_heat_protection() and human/proc/get_cold_protection() as well as calculate_affecting_pressure() now
 // The values here should add up to 1.
-// Hands and feet have 2.5%, arms and legs 7.5%, each of the torso parts has 15% and the head has 30%
-#define THERMAL_PROTECTION_HEAD			0.3
-#define THERMAL_PROTECTION_UPPER_TORSO	0.15
-#define THERMAL_PROTECTION_LOWER_TORSO	0.15
-#define THERMAL_PROTECTION_LEG_LEFT		0.075
-#define THERMAL_PROTECTION_LEG_RIGHT	0.075
-#define THERMAL_PROTECTION_FOOT_LEFT	0.025
-#define THERMAL_PROTECTION_FOOT_RIGHT	0.025
-#define THERMAL_PROTECTION_ARM_LEFT		0.075
-#define THERMAL_PROTECTION_ARM_RIGHT	0.075
-#define THERMAL_PROTECTION_HAND_LEFT	0.025
-#define THERMAL_PROTECTION_HAND_RIGHT	0.025
+// Hands and feet have 2.5%, arms and legs 7.5%, each of the torso parts has 15%, and each of the head parts has 7.5%
 
-var/global/list/THERMAL_BODY_PARTS = list(HEAD,UPPER_TORSO,LOWER_TORSO,LEG_LEFT,FOOT_LEFT,FOOT_RIGHT,ARM_LEFT,ARM_RIGHT,HAND_LEFT,HAND_RIGHT)
-var/global/list/BODY_THERMAL_VALUE_LIST=list("[HEAD]" = THERMAL_PROTECTION_HEAD,"[UPPER_TORSO]" = THERMAL_PROTECTION_UPPER_TORSO,"[LOWER_TORSO]" = THERMAL_PROTECTION_LOWER_TORSO,"[LEG_LEFT]" = THERMAL_PROTECTION_LEG_LEFT,"[LEG_RIGHT]" = THERMAL_PROTECTION_LEG_RIGHT,"[FOOT_LEFT]" = THERMAL_PROTECTION_FOOT_LEFT,"[FOOT_RIGHT]" = THERMAL_PROTECTION_FOOT_RIGHT,"[ARM_LEFT]" = THERMAL_PROTECTION_ARM_LEFT,"[ARM_RIGHT]" = THERMAL_PROTECTION_ARM_RIGHT,"[HAND_LEFT]" = THERMAL_PROTECTION_HAND_LEFT,"[HAND_RIGHT]" = THERMAL_PROTECTION_HAND_RIGHT)
+#define COVER_PROTECTION_HEAD			0.075
+#define COVER_PROTECTION_EYES			0.075
+#define COVER_PROTECTION_MOUTH			0.075
+#define COVER_PROTECTION_EARS			0.075
+
+#define COVER_PROTECTION_UPPER_TORSO	0.15
+#define COVER_PROTECTION_LOWER_TORSO	0.15
+#define COVER_PROTECTION_LEG_LEFT		0.075
+#define COVER_PROTECTION_LEG_RIGHT		0.075
+#define COVER_PROTECTION_FOOT_LEFT		0.025
+#define COVER_PROTECTION_FOOT_RIGHT		0.025
+#define COVER_PROTECTION_ARM_LEFT		0.075
+#define COVER_PROTECTION_ARM_RIGHT		0.075
+#define COVER_PROTECTION_HAND_LEFT		0.025
+#define COVER_PROTECTION_HAND_RIGHT		0.025
+
+var/global/list/BODY_PARTS = list(HEAD,EYES,EARS,MOUTH,UPPER_TORSO,LOWER_TORSO,LEG_RIGHT,LEG_LEFT,FOOT_LEFT,FOOT_RIGHT,ARM_LEFT,ARM_RIGHT,HAND_LEFT,HAND_RIGHT)
+var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EYES]" = COVER_PROTECTION_EYES,"[EARS]" = COVER_PROTECTION_EARS, "[MOUTH]" = COVER_PROTECTION_MOUTH, "[UPPER_TORSO]" = COVER_PROTECTION_UPPER_TORSO,"[LOWER_TORSO]" = COVER_PROTECTION_LOWER_TORSO,"[LEG_LEFT]" = COVER_PROTECTION_LEG_LEFT,"[LEG_RIGHT]" = COVER_PROTECTION_LEG_RIGHT,"[FOOT_LEFT]" = COVER_PROTECTION_FOOT_LEFT,"[FOOT_RIGHT]" = COVER_PROTECTION_FOOT_RIGHT,"[ARM_LEFT]" = COVER_PROTECTION_ARM_LEFT,"[ARM_RIGHT]" = COVER_PROTECTION_ARM_RIGHT,"[HAND_LEFT]" = COVER_PROTECTION_HAND_LEFT,"[HAND_RIGHT]" = COVER_PROTECTION_HAND_RIGHT)
 
 
 //bitflags for mutations
@@ -392,6 +415,8 @@ var/global/list/BODY_THERMAL_VALUE_LIST=list("[HEAD]" = THERMAL_PROTECTION_HEAD,
 // MUTATIONS
 ///////////////////////////////////////
 
+
+
 // Generic mutations:
 #define	M_TK			1
 #define M_RESIST_COLD	2
@@ -406,6 +431,7 @@ var/global/list/BODY_THERMAL_VALUE_LIST=list("[HEAD]" = THERMAL_PROTECTION_HEAD,
 #define M_LASER			9 	// harm intent - click anywhere to shoot lasers from eyes
 #define M_CLAWS			10	// Deal extra damage with punches (but without gloves), can butcher animals without tools
 #define M_BEAK			11	// Can buther animals without tools
+#define M_TALONS		12  // Bonus kick damage
 //#define HEAL			12 	// (Not implemented) healing people with hands
 //#define SHADOW		13 	// (Not implemented) shadow teleportation (create in/out portals anywhere) (25%)
 //#define SCREAM		14 	// (Not implemented) supersonic screaming (25%)
@@ -451,6 +477,14 @@ var/global/list/BODY_THERMAL_VALUE_LIST=list("[HEAD]" = THERMAL_PROTECTION_HEAD,
 #define M_DIZZY		210		// Trippy.
 #define M_SANS		211		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'fuck comic sans' IN YOUR PR.
 #define M_FARSIGHT	212		// Increases mob's view range by 2
+#define M_NOIR		213		// aww yis detective noir
+
+var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
+				 				  0.33,0.33,0.33,0,\
+								  0.33,0.33,0.33,0,\
+								  0.00,0.00,0.00,1,\
+								  0.00,0.00,0.00,0)
+var/global/list/bad_changing_colour_ckeys = list()
 
 // Bustanuts
 #define M_HARDCORE      300
@@ -888,6 +922,11 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 
 #define NO_SKIN 32768
 
+var/default_colour_matrix = list(1,0,0,0,\
+								 0,1,0,0,\
+								 0,0,1,0,\
+								 0,0,0,1)
+
 //species chemical flags
 #define NO_DRINK 1
 #define NO_EAT 2
@@ -1098,10 +1137,10 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define MUTATIONS_LAYER			3
 #define DAMAGE_LAYER			4
 #define UNIFORM_LAYER			5
-#define SHOES_LAYER				6
-#define GLOVES_LAYER			7
-#define EARS_LAYER				8
-#define SUIT_LAYER				9
+#define SUIT_LAYER				6
+#define SHOES_LAYER				7
+#define GLOVES_LAYER			8
+#define EARS_LAYER				9
 #define GLASSES_LAYER			10
 #define BELT_LAYER				11		//Possible make this an overlay of somethign required to wear a belt?
 #define SUIT_STORE_LAYER		12
@@ -1392,5 +1431,50 @@ var/proccalls = 1
 
 #define STARVATION_OXY_HEAL_RATE 1 //While starving, THIS much oxygen damage is restored per life tick (instead of the default 5)
 
-#define DENSE_WHEN_LOCKING 1
-#define DENSE_WHEN_LOCKED 2
+#define LOCKED_SHOULD_LIE 1
+#define DENSE_WHEN_LOCKING 2
+#define DENSE_WHEN_LOCKED 4
+#define CANT_BE_MOVED_BY_LOCKED_MOBS 8
+#define LOCKED_CAN_LIE_AND_STAND 16
+
+// Disposals destinations.
+
+#define DISP_DISPOSALS      "Disposals"
+#define DISP_CARGO_BAY      "Cargo Bay"
+#define DISP_QM_OFFICE      "QM Office"
+#define DISP_ENGINEERING    "Engineering"
+#define DISP_CE_OFFICE      "CE Office"
+#define DISP_ATMOSPHERICS   "Atmospherics"
+#define DISP_SECURITY       "Security"
+#define DISP_HOS_OFFICE     "HoS Office"
+#define DISP_MEDBAY         "Medbay"
+#define DISP_CMO_OFFICE     "CMO Office"
+#define DISP_CHEMISTRY      "Chemistry"
+#define DISP_RESEARCH       "Research"
+#define DISP_RD_OFFICE      "RD Office"
+#define DISP_ROBOTICS       "Robotics"
+#define DISP_HOP_OFFICE     "HoP Office"
+#define DISP_LIBRARY        "Library"
+#define DISP_CHAPEL         "Chapel"
+#define DISP_THEATRE        "Theatre"
+#define DISP_BAR            "Bar"
+#define DISP_KITCHEN        "Kitchen"
+#define DISP_HYDROPONICS    "Hydroponics"
+#define DISP_JANITOR_CLOSET "Janitor Closet"
+#define DISP_GENETICS       "Genetics"
+#define DISP_TELECOMMS      "Telecomms"
+#define DISP_MECHANICS      "Mechanics"
+#define DISP_TELESCIENCE    "Telescience"
+
+//Human attack types
+#define NORMAL_ATTACK 0
+#define ATTACK_BITE 1
+#define ATTACK_KICK 2
+
+// Defines for the map writer, moved here for reasons.
+#define DMM_IGNORE_AREAS 1
+#define DMM_IGNORE_TURFS 2
+#define DMM_IGNORE_OBJS 4
+#define DMM_IGNORE_NPCS 8
+#define DMM_IGNORE_PLAYERS 16
+#define DMM_IGNORE_MOBS 24

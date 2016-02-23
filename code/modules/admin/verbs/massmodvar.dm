@@ -73,7 +73,7 @@
 
 	else if(isicon(var_value))
 		to_chat(usr, "Variable appears to be <b>ICON</b>.")
-		var_value = "\icon[var_value]"
+		var_value = "[bicon(var_value)]"
 		default = "icon"
 
 	else if(istype(var_value,/atom) || istype(var_value,/datum))
@@ -161,7 +161,10 @@
 							A.vars[variable] = O.vars[variable]
 
 				else if(istype(O, /turf))
+					var/count = 0
 					for(var/turf/A in turfs)
+						count++
+						if(!(count % 50000)) sleep(world.tick_lag)
 						if (A.type == O.type)
 							A.vars[variable] = O.vars[variable]
 
@@ -195,7 +198,10 @@
 								A.vars[variable] = O.vars[variable]
 
 				else if(istype(O, /turf))
+					var/count = 0
 					for(var/turf/A in turfs)
+						count++
+						if(!(count % 50000)) sleep(world.tick_lag)
 						if ( istype(A , O.type) )
 							if(variable == "light_color")
 								A.set_light(l_color = new_value)
@@ -219,7 +225,10 @@
 								A.vars[variable] = O.vars[variable]
 
 				else if(istype(O, /turf))
+					var/count = 0
 					for(var/turf/A in turfs)
+						count++
+						if(!(count % 50000)) sleep(world.tick_lag)
 						if (A.type == O.type)
 							if(variable == "light_color")
 								A.set_light(l_color = new_value)
@@ -260,7 +269,10 @@
 								A.vars[variable] = O.vars[variable]
 
 				else if(istype(O, /turf))
+					var/count = 0
 					for(var/turf/A in turfs)
+						count++
+						if(!(count % 50000)) sleep(world.tick_lag)
 						if ( istype(A , O.type) )
 							if(variable=="light_range")
 								A.set_light(new_value)
@@ -291,7 +303,10 @@
 								A.vars[variable] = O.vars[variable]
 
 				else if(istype(O, /turf))
+					var/count = 0
 					for(var/turf/A in turfs)
+						count++
+						if(!(count % 50000)) sleep(world.tick_lag)
 						if (A.type == O.type)
 							if(variable=="light_range")
 								A.set_light(new_value)
@@ -317,7 +332,10 @@
 							A.vars[variable] = O.vars[variable]
 
 				else if(istype(O, /turf))
+					var/count = 0
 					for(var/turf/A in turfs)
+						count++
+						if(!(count % 50000)) sleep(world.tick_lag)
 						if ( istype(A , O.type) )
 							A.vars[variable] = O.vars[variable]
 			else
@@ -332,7 +350,10 @@
 							A.vars[variable] = O.vars[variable]
 
 				else if(istype(O, /turf))
+					var/count = 0
 					for(var/turf/A in turfs)
+						count++
+						if(!(count % 50000)) sleep(world.tick_lag)
 						if (A.type == O.type)
 							A.vars[variable] = O.vars[variable]
 
@@ -353,7 +374,10 @@
 							A.vars[variable] = O.vars[variable]
 
 				else if(istype(O.type, /turf))
+					var/count = 0
 					for(var/turf/A in turfs)
+						count++
+						if(!(count % 50000)) sleep(world.tick_lag)
 						if ( istype(A , O.type) )
 							A.vars[variable] = O.vars[variable]
 			else
@@ -368,7 +392,10 @@
 							A.vars[variable] = O.vars[variable]
 
 				else if(istype(O.type, /turf))
+					var/count = 0
 					for(var/turf/A in turfs)
+						count++
+						if(!(count % 50000)) sleep(world.tick_lag)
 						if (A.type == O.type)
 							A.vars[variable] = O.vars[variable]
 
@@ -388,7 +415,10 @@
 							A.vars[variable] = O.vars[variable]
 
 				else if(istype(O, /turf))
+					var/count = 0
 					for(var/turf/A in turfs)
+						count++
+						if(!(count % 50000)) sleep(world.tick_lag)
 						if ( istype(A , O.type) )
 							A.vars[variable] = O.vars[variable]
 
@@ -404,7 +434,10 @@
 							A.vars[variable] = O.vars[variable]
 
 				else if(istype(O, /turf))
+					var/count = 0
 					for(var/turf/A in turfs)
+						count++
+						if(!(count % 50000)) sleep(world.tick_lag)
 						if (A.type == O.type)
 							A.vars[variable] = O.vars[variable]
 

@@ -42,6 +42,40 @@
 
 	//Fuck the preprocessor
 	var/dorf = 0
+	var/linked_to_centcomm = 1
+
+	//If 1, only spawn vaults that are exclusive to this map (other vaults aren't spawned). For more info, see code/modules/randomMaps/vault_definitions.dm
+	var/only_spawn_map_exclusive_vaults = 0
+
+	// List of package tagger locations. Due to legacy shitcode you can only append or replace ones with null, or you'll break stuff.
+	var/list/default_tagger_locations = list(
+		DISP_DISPOSALS,
+		DISP_CARGO_BAY,
+		DISP_QM_OFFICE,
+		DISP_ENGINEERING,
+		DISP_CE_OFFICE,
+		DISP_ATMOSPHERICS,
+		DISP_SECURITY,
+		DISP_HOS_OFFICE,
+		DISP_MEDBAY,
+		DISP_CMO_OFFICE,
+		DISP_CHEMISTRY,
+		DISP_RESEARCH,
+		DISP_RD_OFFICE,
+		DISP_ROBOTICS,
+		DISP_HOP_OFFICE,
+		DISP_LIBRARY,
+		DISP_CHAPEL,
+		DISP_THEATRE,
+		DISP_BAR,
+		DISP_KITCHEN,
+		DISP_HYDROPONICS,
+		DISP_JANITOR_CLOSET,
+		DISP_GENETICS,
+		DISP_TELECOMMS,
+		DISP_MECHANICS,
+		DISP_TELESCIENCE
+	)
 
 /datum/map/New()
 
@@ -148,7 +182,10 @@ proc/get_base_turf(var/z)
 
 proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
 	if(update_old_base)
+		var/count = 0
 		for(var/turf/T in turfs)
+			count++
+			if(!(count % 50000)) sleep(world.tick_lag)
 			if(T.type == get_base_turf(choice) && T.z == choice)
 				T.ChangeTurf(new_base_path)
 	var/datum/zLevel/L = map.zLevels[choice]

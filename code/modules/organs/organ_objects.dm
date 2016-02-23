@@ -101,12 +101,32 @@
 	organ_type = /datum/organ/internal/heart
 
 /obj/item/organ/lungs
-	name = "lungs"
+	name = "human lungs"
 	icon_state = "lungs"
 	prosthetic_name = "gas exchange system"
 	prosthetic_icon = "lungs-prosthetic"
 	organ_tag = "lungs"
 	organ_type = /datum/organ/internal/lungs
+
+/obj/item/organ/lungs/vox
+	name = "vox lungs"
+	icon_state = "vox-lungs"
+	prosthetic_name = "vox gas exchange system"
+	organ_type = /datum/organ/internal/lungs/vox
+
+/obj/item/organ/lungs/plasmaman
+	name = "weird pink lungs"
+	icon_state = "plasmaman-lungs"
+	prosthetic_name = "plasmaman gas exchange system"
+	organ_type = /datum/organ/internal/lungs/plasmaman
+
+/obj/item/organ/lungs/filter
+	name = "advanced lungs"
+	icon_state = "filter-lungs"
+	prosthetic_name = null
+	prosthetic_icon = null
+	organ_type = /datum/organ/internal/lungs/filter
+	robotic=2
 
 /obj/item/organ/kidneys
 	name = "kidneys"
@@ -125,6 +145,38 @@
 	organ_type = /datum/organ/internal/eyes
 
 	var/eye_colour
+
+/obj/item/organ/eyes/tajaran
+	name = "tajaran eyeballs"
+	icon_state = "eyes-tajaran"
+	prosthetic_name = "tajaran visual prosthesis"
+	organ_type = /datum/organ/internal/eyes/tajaran
+
+/obj/item/organ/eyes/muton
+	name = "muton eyeballs"
+	icon_state = "eyes-muton"
+	prosthetic_name = "muton visual prosthesis"
+	organ_type = /datum/organ/internal/eyes/muton
+
+/obj/item/organ/eyes/grey
+	name = "grey eyeballs"
+	icon_state = "eyes-grey"
+	prosthetic_name = "grey visual prosthesis"
+	organ_type = /datum/organ/internal/eyes/grey
+
+/obj/item/organ/eyes/vox
+	name = "vox eyeballs"
+	icon_state = "eyes-vox"
+	prosthetic_name = "vox visual prosthesis"
+	organ_type = /datum/organ/internal/eyes/vox
+
+/obj/item/organ/eyes/adv_1
+	name = "advanced prosthesis eyeballs"
+	robotic = 2
+	prosthetic_name = null
+	prosthetic_icon = null
+	icon_state = "eyes-adv_1"
+	organ_type = /datum/organ/internal/eyes/adv_1
 
 /obj/item/organ/liver
 	name = "liver"

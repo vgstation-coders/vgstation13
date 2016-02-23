@@ -14,6 +14,7 @@
 	//  = - Strict type matching.  Will NOT check for subtypes.
 	var/list/can_hold = new/list() //List of objects which this item can store (if set, it can't store anything else)
 	var/list/cant_hold = new/list() //List of objects which this item can't store (in effect only if can_hold isn't set)
+	var/list/ignore_w_class = new/list() //List of objects which will fit in this item, regardless of size. AKA can_hold_too.
 	var/list/is_seeing = new/list() //List of mobs which are currently seeing the contents of this item's storage
 	var/max_w_class = 2 //Max size of objects that this object can store (in effect only if can_hold isn't set)
 	var/max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
@@ -34,7 +35,7 @@
 		var/mob/M = usr
 		if(istype(over_object, /obj/structure/table) && M.Adjacent(over_object))
 			var/mob/living/L = usr
-			if(istype(L) && !(L.restrained() || L.stat || L.weakened || L.stunned || L.paralysis || L.resting))
+			if(istype(L) && !(L.incapacitated() || L.lying))
 				empty_contents_to(over_object)
 		if(!( istype(over_object, /obj/screen) ))
 			return ..()
@@ -262,9 +263,22 @@
 			return 0
 
 	if (W.w_class > max_w_class)
-		if(!stop_messages)
-			to_chat(usr, "<span class='notice'>\The [W] is too big for \the [src].</span>")
-		return 0
+		var/yeh = 0
+		if(ignore_w_class.len)
+			for(var/A in ignore_w_class)
+				if(dd_hasprefix(A,"="))
+					// Force strict matching of type.
+					// No subtypes allowed.
+					if("[W.type]"==copytext(A,2))
+						yeh = 1
+						break
+				else if(istype(W, text2path(A) ))
+					yeh = 1
+					break
+		if(!yeh)
+			if(!stop_messages)
+				to_chat(usr, "<span class='notice'>\The [W] is too big for \the [src].</span>")
+			return 0
 
 	var/sum_w_class = W.w_class
 	for(var/obj/item/I in contents)
@@ -356,6 +370,7 @@
 			usr.s_active.show_to(usr)
 	if(W.maptext)
 		W.maptext = ""
+	W.layer = initial(W.layer)
 	W.on_exit_storage(src)
 	update_icon()
 	return 1
@@ -403,7 +418,7 @@
 /obj/item/weapon/storage/MouseDrop(over_object, src_location, over_location)
 	..()
 	orient2hud(usr)
-	if ((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
+	if (over_object == usr && (in_range(src, usr) || find_holder(src) == usr))
 		if (usr.s_active)
 			usr.s_active.close(usr)
 		src.show_to(usr)
@@ -414,7 +429,11 @@
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if((H.l_store == src || H.r_store == src) && !H.get_active_hand())	//Prevents opening if it's in a pocket.
+		if((H.l_store == src || H.r_store == src || H.head == src) && !H.get_active_hand())	//Prevents opening if it's in a pocket or head slot. Terrible kludge, I'm sorry.
+			return ..()
+	else if(isMoMMI(user))
+		var/mob/living/silicon/robot/mommi/MoM = user
+		if(MoM.head_state == src) //I'm so sorry. We have exactly one storage item that goes on head, and it can't hold any items while equipped. This is so you can actually take it off.
 			return ..()
 
 	src.orient2hud(user)

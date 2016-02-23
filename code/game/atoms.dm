@@ -15,7 +15,6 @@ var/global/list/ghdel_profiling = list()
 	var/fingerprintslast = null
 	var/list/blood_DNA
 	var/blood_color
-	var/last_bumped = 0
 	var/pass_flags = 0
 	var/throwpass = 0
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
@@ -75,18 +74,21 @@ var/global/list/ghdel_profiling = list()
 	return 1
 
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
+	var/old_pixel_x = pixel_x
+	var/old_pixel_y = pixel_y
+
 	switch(xy)
 		if(1)
-			src.pixel_x = rand(-intensity, intensity)
+			src.pixel_x += rand(-intensity, intensity)
 		if(2)
-			src.pixel_y = rand(-intensity, intensity)
+			src.pixel_y += rand(-intensity, intensity)
 		if(3)
-			src.pixel_x = rand(-intensity, intensity)
-			src.pixel_y = rand(-intensity, intensity)
+			src.pixel_x += rand(-intensity, intensity)
+			src.pixel_y += rand(-intensity, intensity)
 
 	spawn(2)
-	src.pixel_x = 0
-	src.pixel_y = 0
+	src.pixel_x = old_pixel_x
+	src.pixel_y = old_pixel_y
 
 // NOTE FROM AMATEUR CODER WHO STRUGGLED WITH RUNTIMES
 // throw_impact is called multiple times when an item is thrown: see /atom/movable/proc/hit_check at atoms_movable.dm
@@ -219,6 +221,12 @@ var/global/list/ghdel_profiling = list()
 
 /atom/proc/emp_act(var/severity)
 	return
+
+/atom/proc/kick_act(mob/living/carbon/human/user) //Called when this atom is kicked. If returns 1, normal click action will be performed after calling this (so attack_hand() in most cases)
+	return 1
+
+/atom/proc/bite_act(mob/living/carbon/human/user) //Called when this atom is bitten. If returns 1, same as kick_act()
+	return 1
 
 /atom/proc/singuloCanEat()
 	return 1
@@ -376,7 +384,7 @@ its easier to just keep the beam vertical.
 			f_name = "a "
 		f_name += "<span class='danger'>blood-stained</span> [name]!"
 
-	to_chat(user, "\icon[src] That's [f_name]" + size)
+	to_chat(user, "[bicon(src)] That's [f_name]" + size)
 	if(desc)
 		to_chat(user, desc)
 

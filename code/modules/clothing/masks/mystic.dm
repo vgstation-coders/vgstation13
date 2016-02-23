@@ -4,7 +4,7 @@
 	icon_state = "happiest"
 	item_state = "happiest"
 	flags = FPRINT|MASKINTERNALS
-	flags_inv = HIDEFACE
+	body_parts_covered = FACE
 	w_class = 2
 	siemens_coefficient = 3.0
 	gas_transfer_coefficient = 0.90
@@ -16,7 +16,7 @@
 	if(H.wear_mask == src)
 		flick("happiest_flash", src)
 		to_chat(H, "<span class='sinister'>Your thoughts are bombarded by incessant laughter.</span>")
-		to_chat(H, sound('sound/effects/hellclown.ogg'))
+		H << sound('sound/effects/hellclown.ogg')
 		canremove = 0
 
 /obj/item/clothing/mask/happy/attack_hand(mob/user as mob)

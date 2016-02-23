@@ -73,7 +73,7 @@ obj/structure/sign/poster/New(var/serial)
 		..()
 
 obj/structure/sign/poster/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/wirecutters))
+	if(iswirecutter(W))
 		playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
 		if(ruined)
 			to_chat(user, "<span class='notice'>You remove the remnants of the poster.</span>")
@@ -107,6 +107,15 @@ obj/structure/sign/poster/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	else
 		new /obj/item/mounted/poster(get_turf(src), serial_number)
 	qdel(src)
+
+/obj/structure/sign/poster/kick_act(mob/living/carbon/human/H)
+	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
+
+	if(prob(70))
+		to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
+
+		H.apply_damage(rand(5,7), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))
+
 
 /datum/poster
 	// Name suffix. Poster - [name]
