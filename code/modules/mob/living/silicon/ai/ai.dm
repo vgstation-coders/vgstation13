@@ -190,11 +190,11 @@ var/list/ai_list = list()
 	/* Jesus christ, more of this shit?
 	if(!custom_sprite) //Check to see if custom sprite time, checking the appopriate file to change a var
 		var/file = file2text("config/custom_sprites.txt")
-		var/lines = text2list(file, "\n")
+		var/lines = splittext(file, "\n")
 
 		for(var/line in lines)
 		// split & clean up
-			var/list/Entry = text2list(line, "-")
+			var/list/Entry = splittext(line, "-")
 			for(var/i = 1 to Entry.len)
 				Entry[i] = trim(Entry[i])
 

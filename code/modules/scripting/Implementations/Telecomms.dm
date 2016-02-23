@@ -182,9 +182,9 @@
 	interpreter.SetProc("shuffle",		/proc/shuffle)
 	interpreter.SetProc("uniquevector",	/proc/uniquelist)
 
-	interpreter.SetProc("text2vector",	/proc/text2list)
-	interpreter.SetProc("text2vectorEx",/proc/text2listEx)
-	interpreter.SetProc("vector2text",	/proc/vg_list2text)
+	interpreter.SetProc("text2vector",	/proc/n_splittext)
+	interpreter.SetProc("text2vectorEx",/proc/splittextEx)
+	interpreter.SetProc("vector2text",	/proc/vg_jointext)
 
 	// Strings
 	interpreter.SetProc("lower",		/proc/n_lower)

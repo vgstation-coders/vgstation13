@@ -62,6 +62,7 @@
 #include "code\_onclick\hud\ai.dm"
 #include "code\_onclick\hud\alien.dm"
 #include "code\_onclick\hud\alien_larva.dm"
+#include "code\_onclick\hud\fullscreen.dm"
 #include "code\_onclick\hud\hud.dm"
 #include "code\_onclick\hud\human.dm"
 #include "code\_onclick\hud\mommi.dm"

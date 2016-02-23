@@ -72,7 +72,6 @@
 		emote("deathgasp") //Let the world KNOW WE ARE DEAD
 
 		update_canmove()
-		if(client)	blind.layer = 0
 
 	tod = worldtime2text() //Weasellos time of death patch
 	if(mind)

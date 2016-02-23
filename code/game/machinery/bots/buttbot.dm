@@ -45,7 +45,7 @@ Here it is: Buttbot.
 
 /obj/machinery/bot/buttbot/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(prob(buttchance) && !findtext(speech.message,"butt"))
-		var/list/split_phrase = text2list(speech.message," ") // Split it up into words.
+		var/list/split_phrase = splittext(speech.message," ") // Split it up into words.
 
 		var/list/prepared_words = split_phrase.Copy()
 		var/i = rand(1,3)
@@ -59,7 +59,7 @@ Here it is: Buttbot.
 
 			split_phrase[index] = "butt"
 
-		say(list2text(split_phrase," "), speech.language) // No longer need to sanitize, speech is automatically html_encoded at render-time.
+		say(jointext(split_phrase," "), speech.language) // No longer need to sanitize, speech is automatically html_encoded at render-time.
 	return
 
 
