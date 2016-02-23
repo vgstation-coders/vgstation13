@@ -327,7 +327,7 @@
 	name = "summoning"
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "summoning"
-	mouse_opacity = 0
+	mouse_opacity = 1
 	density = 0
 	flags = 0
 	var/obj/effect/rune/summon_target = null
