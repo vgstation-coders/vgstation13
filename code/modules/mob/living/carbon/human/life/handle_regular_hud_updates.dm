@@ -8,7 +8,7 @@
 
 	regular_hud_updates()
 	
-	var/global_hud = src.global_hud //make local for sanic speed
+	var/datum/global_hud/global_hud = src.global_hud //make local for sanic speed
 	
 	client.screen.Remove(global_hud.blurry, global_hud.druggy, global_hud.vimpaired, global_hud.darkMask/*, global_hud.nvg*/)
 
@@ -156,7 +156,7 @@
 
 
 		if(healths)
-			var/healths = src.healths //make local for sanic speed
+			var/obj/screen/healths = src.healths //make local for sanic speed
 			healths.overlays.len = 0
 			if (analgesic)
 				healths.icon_state = "health_health_numb"
