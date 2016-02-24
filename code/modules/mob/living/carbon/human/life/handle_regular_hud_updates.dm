@@ -7,7 +7,9 @@
 	sight &= ~BLIND
 
 	regular_hud_updates()
-
+	
+	var/global_hud = src.global_hud //make local for sanic speed
+	
 	client.screen.Remove(global_hud.blurry, global_hud.druggy, global_hud.vimpaired, global_hud.darkMask/*, global_hud.nvg*/)
 
 	update_action_buttons()
@@ -154,6 +156,7 @@
 
 
 		if(healths)
+			var/healths = src.healths //make local for sanic speed
 			healths.overlays.len = 0
 			if (analgesic)
 				healths.icon_state = "health_health_numb"
@@ -271,19 +274,21 @@
 		if(eye_blurry)
 			if(!istype(global_hud.blurry,/obj/screen))
 				global_hud.blurry = getFromPool(/obj/screen)
-				global_hud.blurry.screen_loc = "WEST,SOUTH to EAST,NORTH"
-				global_hud.blurry.icon_state = "blurry"
-				global_hud.blurry.layer = 17
-				global_hud.blurry.mouse_opacity = 0
+				var/obj/screen/blurry = global_hud.blurry //make local for sanic speed
+				blurry.screen_loc = "WEST,SOUTH to EAST,NORTH"
+				blurry.icon_state = "blurry"
+				blurry.layer = 17
+				blurry.mouse_opacity = 0
 			client.screen += global_hud.blurry
 
 		if(druggy)
 			if(!istype(global_hud.druggy,/obj/screen))
 				global_hud.druggy = getFromPool(/obj/screen)
-				global_hud.druggy.screen_loc = "WEST,SOUTH to EAST,NORTH"
-				global_hud.druggy.icon_state = "druggy"
-				global_hud.druggy.layer = 17
-				global_hud.druggy.mouse_opacity = 0
+				var/obj/screen/druggy = global_hud.druggy //make local for sanic speed
+				druggy.screen_loc = "WEST,SOUTH to EAST,NORTH"
+				druggy.icon_state = "druggy"
+				druggy.layer = 17
+				druggy.mouse_opacity = 0
 			client.screen += global_hud.druggy
 
 		var/masked = 0
