@@ -246,11 +246,6 @@ proc/checkhtml(var/t)
 /*
  * Text modification
  */
-/proc/replacetext(text, find, replacement)
-	return list2text(text2list(text, find), replacement)
-
-/proc/replacetextEx(text, find, replacement)
-	return list2text(text2listEx(text, find), replacement)
 
 //Adds 'u' number of zeros ahead of the text 't'
 /proc/add_zero(t, u)
