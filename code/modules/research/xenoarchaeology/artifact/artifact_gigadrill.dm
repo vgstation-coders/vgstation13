@@ -5,7 +5,6 @@
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "gigadrill"
 	var/active = 0
-	var/drill_time = 5
 	var/turf/drilling_turf
 	density = 1
 	layer = 3.1		//to go over ores
