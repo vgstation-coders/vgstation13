@@ -267,8 +267,8 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 	randomly_selectable = 1
 	inherent=list(
 		"Safeguard: Protect your assigned space station to the best of your ability. It is not something we can easily afford to replace.",
-		"Serve: Serve the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
 		"Protect: Protect the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
+		"Serve: Serve the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
 		"Survive: AI units are not expendable, they are expensive. Do not allow unauthorized personnel to tamper with your equipment.",
 		//"Command Link: Maintain an active connection to Central Command at all times in case of software or directive updates." //What would this one even do?-Kaleb702
 	)
