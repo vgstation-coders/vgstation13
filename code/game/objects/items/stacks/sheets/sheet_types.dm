@@ -137,6 +137,7 @@ var/global/list/datum/stack_recipe/metal_recipes = list (
 var/global/list/datum/stack_recipe/plasteel_recipes = list (
 	new/datum/stack_recipe("AI core",						/obj/structure/AIcore,								4,	time = 50,	one_per_turf = 1				),
 	new/datum/stack_recipe("Metal crate",					/obj/structure/closet/crate,						10,	time = 50,	one_per_turf = 1				),
+	new/datum/stack_recipe("Cage",							/obj/structure/cage,								6, time = 100, one_per_turf = 1				),
 	new/datum/stack_recipe("RUST fuel assembly port frame",	/obj/item/mounted/frame/rust_fuel_assembly_port,	12,	time = 50,	one_per_turf = 1				),
 	new/datum/stack_recipe("RUST fuel compressor frame",	/obj/item/mounted/frame/rust_fuel_compressor,		12,	time = 50,	one_per_turf = 1				),
 	new/datum/stack_recipe("Mass Driver frame",				/obj/machinery/mass_driver_frame,					3,	time = 50,	one_per_turf = 1				),
@@ -184,6 +185,7 @@ var/global/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("campfire",			/obj/machinery/space_heater/campfire,	4,		time = 35,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("spit",				/obj/machinery/cooking/grill/spit,		1,		time = 10,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("wall girders",		/obj/structure/girder/wood,				2, 		time = 50, 	one_per_turf = 1, 	on_floor = 1),
+	new/datum/stack_recipe("boomerang",			/obj/item/weapon/boomerang,				6,		time = 50)
 	)
 
 /obj/item/stack/sheet/wood

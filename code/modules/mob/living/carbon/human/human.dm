@@ -219,12 +219,19 @@
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		add_logs(M, src, "attacked", admin=0)
+
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
+
 		if(M.zone_sel && M.zone_sel.selecting)
 			dam_zone = M.zone_sel.selecting
+
+		if(check_shields(damage)) //Shield check
+			return
+
 		var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
-		var/armor = run_armor_check(affecting, "melee")
+		var/armor = run_armor_check(affecting, "melee") //Armor check
+
 		apply_damage(damage, M.melee_damage_type, affecting, armor)
 		src.visible_message("<span class='danger'>[M] [M.attacktext] [src] in \the [affecting.display_name]!</span>")
 
@@ -425,14 +432,15 @@
 // called when something steps onto a human
 // this could be made more general, but for now just handle mulebot
 /mob/living/carbon/human/Crossed(var/atom/movable/AM)
-	if(istype(AM,/obj/machinery/bot/mulebot))
-		var/obj/machinery/bot/mulebot/MB = AM
+	var/obj/machinery/bot/mulebot/MB = AM
+	if(istype(MB))
 		MB.RunOverCreature(src,species.blood_color)
-	else if(istype(AM,/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate))
-		var/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/WC = AM
-		WC.crush(src,species.blood_color)
 	else
-		return //Don't make blood
+		var/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/WC = AM
+		if(istype(WC))
+			WC.crush(src,species.blood_color)
+		else
+			return //Don't make blood
 	var/obj/effect/decal/cleanable/blood/B = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(src))
 	B.New(B.loc)
 	B.blood_DNA = list()
@@ -918,12 +926,16 @@
 	. = 0
 	var/obj/item/clothing/head/headwear = src.head
 	var/obj/item/clothing/glasses/eyewear = src.glasses
+	var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 
 	if (istype(headwear))
 		. += headwear.eyeprot
 
 	if (istype(eyewear))
 		. += eyewear.eyeprot
+
+	if(E)
+		. += E.eyeprot
 
 	return Clamp(., -1, 2)
 
@@ -1370,9 +1382,12 @@
 
 	if(src.species)
 		//if(src.species.language)	src.remove_language(species.language)
-		if(src.species.abilities)	src.verbs -= species.abilities
+		if(src.species.abilities)
+			src.verbs -= species.abilities
 		if(species.language)
 			remove_language(species.language)
+		species.clear_organs(src)
+
 	var/datum/species/S = all_species[new_species_name]
 
 	src.species = new S.type
@@ -1384,8 +1399,11 @@
 	if(src.species.abilities)
 		//if(src.species.language)	src.add_language(species.language)
 		if(src.species.abilities)	src.verbs |= species.abilities
-	if(force_organs || !src.organs || !src.organs.len)	src.species.create_organs(src)
-	src.see_in_dark = species.darksight
+	if(force_organs || !src.organs || !src.organs.len)
+		src.species.create_organs(src)
+	var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
+	if(E)
+		src.see_in_dark = E.see_in_dark //species.darksight
 	if(src.see_in_dark > 2)	src.see_invisible = SEE_INVISIBLE_LEVEL_ONE
 	else					src.see_invisible = SEE_INVISIBLE_LIVING
 	if((src.species.default_mutations.len > 0) || (src.species.default_blocks.len > 0))

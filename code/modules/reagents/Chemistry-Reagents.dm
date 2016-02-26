@@ -99,6 +99,15 @@
 
 	src = null
 
+/datum/reagent/proc/metabolize(var/mob/living/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
+		if(L)
+			L.metabolize_reagent(src.id, custom_metabolism)
+			return
+	holder.remove_reagent(src.id, custom_metabolism) // If we aren't human, we don't have a liver, so just metabolize it the old fashioned way.
+
 /datum/reagent/proc/on_mob_life(var/mob/living/M, var/alien)
 	set waitfor = 0
 
@@ -111,9 +120,7 @@
 	if(overdose && volume >= overdose) //This is the current overdose system
 		M.adjustToxLoss(overdose_dam)
 
-	holder.remove_reagent(src.id, custom_metabolism) //Trigger metabolism
-	if(!holder) // We might be out of the holder list and holder might be nulled, but if we don't do this then the reagent keeps on reacting
-		return 1
+	metabolize(M)
 
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
@@ -3554,7 +3561,7 @@
 
 /datum/reagent/drink/cold/rewriter
 	name = "Rewriter"
-	description = "The secert of the sanctuary of the Libarian..."
+	description = "The secret of the sanctuary of the Librarian..."
 	id = "rewriter"
 	color = "#485000" //rgb:72, 080, 0
 
