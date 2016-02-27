@@ -424,7 +424,7 @@ var/list/uplink_items = list()
 	name = "Cryptographic Sequencer"
 	desc = "The emag is a small card that unlocks hidden functions in electronic devices, subverts intended functions and characteristically breaks security mechanisms."
 	item = /obj/item/weapon/card/emag
-	cost = 3
+	cost = 5
 
 /datum/uplink_item/device_tools/toolbox
 	name = "Fully Loaded Toolbox"
