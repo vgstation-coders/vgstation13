@@ -719,7 +719,7 @@
 				if(180) //From behind - -30%
 					base_block_chance -= 30
 
-			new_chance = Clamp(new_chance, 0, 80) //If you're facing away from the attack, the chance to block it may become 0%.
+			base_block_chance = Clamp(base_block_chance, 0, 80) //If you're facing away from the attack, the chance to block it may become 0%.
 
 		if(prob(base_block_chance))
 			loc.visible_message("<span class='danger'>[loc] blocks [attack_text] with \the [src]!</span>", "<span class='danger'>You block [attack_text] with \the [src]!</span>")
