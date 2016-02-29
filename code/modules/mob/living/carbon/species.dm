@@ -142,7 +142,8 @@ var/global/list/whitelisted_species = list("Human")
 		H.organs.len=0
 	if(H.internal_organs)
 		for(var/datum/organ/internal/I in H.internal_organs)
-			I.Remove(H, quiet=1) // GET OUT REEEEEEE
+			// I.Remove(H) // THIS DOES NOTHING AT THE MOMENT
+			qdel(I) // These don't get special garbage collection as is so they never get gotten from pool
 		H.internal_organs.len=0
 	if(H.organs_by_name)
 		H.organs_by_name.len=0
@@ -209,6 +210,7 @@ var/global/list/whitelisted_species = list("Human")
 		//testing("  ratio < 1, adding oxyLoss.")
 		H.adjustOxyLoss(min(5*ratio, HUMAN_MAX_OXYLOSS)) // Don't fuck them up too fast (space only does HUMAN_MAX_OXYLOSS after all!)
 		H.failed_last_breath = 1
+		H.oxygen_alert = 1
 		return moles*ratio/6
 
 // Used for species-specific names (Vox, etc)
@@ -474,7 +476,7 @@ var/global/list/whitelisted_species = list("Human")
 	eyes = "vox_eyes_s"
 	breath_type = "nitrogen"
 
-	default_mutations = list(M_BEAK)
+	default_mutations = list(M_BEAK, M_TALONS)
 	flags = IS_WHITELISTED | NO_SCAN
 
 	blood_color = "#2299FC"

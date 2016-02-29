@@ -129,6 +129,23 @@
 	health -= rand(30, 50)
 	healthcheck()
 
+/obj/structure/window/kick_act(mob/living/carbon/human/H)
+	playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
+
+	H.visible_message("<span class='danger'>\The [H] kicks \the [src].</span>", \
+	"<span class='danger'>You kick \the [src].</span>")
+
+	var/damage = rand(1,7) * (H.get_strength() - reinforced) //By default, humanoids can't damage windows with kicks. Being strong or a hulk changes that
+	var/obj/item/clothing/shoes/S = H.shoes
+	if(istype(S))
+		damage += S.bonus_kick_damage //Unless they're wearing heavy boots
+	else if(M_TALONS in H.mutations)
+		damage += rand(1,6) //Or they have talons and they don't have shoes
+
+	if(damage > 0)
+		health -= damage
+		healthcheck()
+
 /obj/structure/window/CheckExit(var/atom/movable/O, var/turf/target)
 
 	if(istype(O) && O.checkpass(PASSGLASS))
