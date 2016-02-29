@@ -13,10 +13,12 @@
 	desc = "This disease, actually acute nanomachine infection, converts the victim into a cyborg."
 	severity = "Major"
 	var/gibbed = 0
+	var/robot_type = "Cyborg"
 
 /datum/disease/robotic_transformation/mommi
 	name = "MoMMi Transformation"
 	agent = "R2D2 Autistnanites"
+	robot_type = "MoMMI"
 
 /datum/disease/robotic_transformation/stage_act()
 	..()
@@ -26,15 +28,15 @@
 				to_chat(affected_mob, "Your joints feel stiff.")
 				affected_mob.take_organ_damage(1)
 			if (prob(9))
-				to_chat(affected_mob, "<span class='warning'>Beep...boop..</span>")
+				to_chat(affected_mob, "<span class='warning'>Beep... boop...</span>")
 			if (prob(9))
-				to_chat(affected_mob, "<span class='warning'>Bop...beeep...</span>")
+				to_chat(affected_mob, "<span class='warning'>Boop... beeep...</span>")
 		if(3)
 			if (prob(8))
 				to_chat(affected_mob, "<span class='warning'>Your joints feel very stiff.</span>")
 				affected_mob.take_organ_damage(1)
 			if (prob(8))
-				affected_mob.say(pick("Beep, boop", "beep, beep!", "Boop...bop"))
+				affected_mob.say(pick("Beep, boop", "beep, beep!", "Boop boop!"))
 			if (prob(10))
 				to_chat(affected_mob, "Your skin feels loose.")
 				affected_mob.take_organ_damage(5)
@@ -60,54 +62,11 @@
 				gibs(affected_mob)
 				gibbed = 1
 				var/mob/living/carbon/human/H = affected_mob
-				if(istype(H) && !jobban_isbanned(affected_mob, "Cyborg"))
-					H.Robotize()
-				else
-					affected_mob.death(1)
-
-/datum/disease/robotic_transformation/mommi/stage_act()
-	..()
-	switch(stage)
-		if(2)
-			if (prob(8))
-				to_chat(affected_mob, "Your joints feel stiff.")
-				affected_mob.take_organ_damage(1)
-			if (prob(9))
-				to_chat(affected_mob, "<span class='warning'>You don't want to talk to anyone...</span>")
-			if (prob(9))
-				to_chat(affected_mob, "<span class='warning'>Beep... hats... boop...</span>")
-		if(3)
-			if (prob(8))
-				to_chat(affected_mob, "<span class='warning'>Your joints feel very stiff.</span>")
-				affected_mob.take_organ_damage(1)
-			if (prob(8))
-				affected_mob.say(pick("Beep, boop", "beep, beep!", "Boop...bop"))
-			if (prob(10))
-				to_chat(affected_mob, "Your skin feels loose.")
-				affected_mob.take_organ_damage(5)
-			if (prob(4))
-				to_chat(affected_mob, "<span class='warning'>You feel a stabbing pain in your head.</span>")
-				affected_mob.Paralyse(2)
-			if (prob(4))
-				to_chat(affected_mob, "<span class='warning'>You can feel something move...inside.</span>")
-		if(4)
-			if (prob(10))
-				to_chat(affected_mob, "<span class='warning'>Your skin feels very loose.</span>")
-				affected_mob.take_organ_damage(8)
-			if (prob(20))
-				affected_mob.say(pick("beep, beep!", "Boop bop boop beep."))
-			if (prob(8))
-				to_chat(affected_mob, "<span class='warning'>You can feel... something...inside you.</span>")
-		if(5)
-			to_chat(affected_mob, "<span class='warning'>Your skin feels as if it's about to burst off...</span>")
-			affected_mob.adjustToxLoss(10)
-			affected_mob.updatehealth()
-			if(prob(40))
-				if(src.gibbed != 0) return 0
-				gibs(affected_mob)
-				gibbed = 1
-				var/mob/living/carbon/human/H = affected_mob
-				if(istype(H) && !jobban_isbanned(affected_mob, "MoMMi"))
-					H.MoMMIfy(1)
+				if(istype(H) && !jobban_isbanned(affected_mob, robot_type))
+					switch(robot_type)
+						if("Cyborg")
+							H.Robotize()
+						if("MoMMI")
+							H.MoMMIfy(1)
 				else
 					affected_mob.death(1)
