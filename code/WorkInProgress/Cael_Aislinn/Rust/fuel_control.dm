@@ -74,7 +74,7 @@
 		[announce_stageprogression == 2 ? 	"Broadcasting"	: "<a href='?src=\ref[src];announce_stageprogression=2'>\[Broadcast\]</a>"]<br>"}*/
 	dat += {"
 		<hr>
-		<b>Detected devices</b> <a href='?src=\ref[src];scan=1'>\[Refresh list\]</a>
+		<b>Detected devices</b>
 		<table border=1 width='100%'>
 		<tr>
 		<td><b>ID</b></td>
@@ -120,12 +120,6 @@
 
 /obj/machinery/computer/rust_fuel_control/Topic(href, href_list)
 	if(..()) return 1
-
-	if( href_list["scan"] )
-		connected_injectors = list()
-		for(var/obj/machinery/power/rust_fuel_injector/I in range(scan_range, src))
-			if(check_injector_status(I))
-				connected_injectors.Add(I)
 
 	if( href_list["toggle_injecting"])
 		for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
@@ -200,3 +194,33 @@
 		return 0
 
 	return 1
+//Multitool menu shit starts here.
+//It's all . because . is faster than return, thanks BYOND.
+/obj/machinery/computer/rust_fuel_control/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+	. = "Linked R-UST Fuel Injectors:<br><lu>"
+
+	for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
+		. += "<li><b>[I.id_tag]</b> <a href='?src=\ref[src];unlink=[connected_injectors.Find(I)]'>\[X\]</a></li>"
+	. += "</ul>"
+
+/obj/machinery/computer/rust_fuel_control/linkMenu(var/obj/machinery/power/rust_fuel_injector/I)
+	if(istype(I))
+		. = "<a href='?src=\ref[src];link=1'>\[LINK\]</a> "
+
+/obj/machinery/computer/rust_fuel_control/canLink(var/obj/machinery/power/rust_fuel_injector/I, var/list/context)
+	. = (istype(I) && get_dist(src, I) < scan_range)
+
+/obj/machinery/computer/rust_fuel_control/isLinkedWith(var/obj/I)
+	. = (I in connected_injectors)
+
+/obj/machinery/computer/rust_fuel_control/linkWith(var/mob/user, var/obj/machinery/power/rust_fuel_injector/I, var/list/context)
+	connected_injectors += I
+	. = 1
+
+/obj/machinery/computer/rust_fuel_control/getLink(var/idx)
+	if(idx <= connected_injectors.len)
+		. = connected_injectors[idx]
+
+/obj/machinery/computer/rust_fuel_control/unlinkFrom(var/mob/user, var/obj/buffer)
+	connected_injectors -= buffer
+	. = 1

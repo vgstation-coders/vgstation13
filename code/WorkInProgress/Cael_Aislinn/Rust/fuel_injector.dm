@@ -11,7 +11,7 @@
 
 	var/obj/item/weapon/fuel_assembly/cur_assembly
 	var/fuel_usage = 0.0001			//percentage of available fuel to use per cycle
-	var/id_tag = "One"
+	var/id_tag
 	var/injecting = 0
 	var/trying_to_swap_fuel = 0
 
@@ -22,7 +22,17 @@
 	var/cached_power_avail = 0
 	var/emergency_insert_ready = 0
 
-	machine_flags = WRENCHMOVE | FIXED2WORK | WELD_FIXED | EMAGGABLE
+	machine_flags = WRENCHMOVE | FIXED2WORK | WELD_FIXED | EMAGGABLE | MULTITOOL_MENU
+
+/obj/machinery/power/rust_fuel_injector/New()
+	. = ..()
+	if(ticker)
+		initialize()
+
+/obj/machinery/power/rust_fuel_injector/initialize()
+	if(!id_tag)
+		assign_uid()
+		id_tag = num2text(uid)
 
 /obj/machinery/power/rust_fuel_injector/process()
 	if(injecting)
@@ -57,8 +67,6 @@
 		return 1
 	return -1
 /obj/machinery/power/rust_fuel_injector/attackby(obj/item/W, mob/user)
-	if(..())
-		return 1
 
 	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
 		if(emagged)
@@ -269,3 +277,10 @@
 		return
 
 	src.dir = turn(src.dir, 90)
+
+/obj/machinery/power/rust_fuel_injector/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+	return {"
+		<ul>
+			<li>[format_tag("ID Tag","id_tag")]</li>
+		</ul>
+	"}

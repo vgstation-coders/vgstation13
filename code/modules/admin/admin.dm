@@ -788,6 +788,7 @@ var/global/floorIsLava = 0
 			<BR>
 			<A href='?src=\ref[src];secretsfun=hellonearth'>Summon Nar-Sie</A><BR>
 			<A href='?src=\ref[src];secretsfun=supermattercascade'>Start a Supermatter Cascade</A><BR>
+			<A href='?src=\ref[src];secretsfun=nuclearblowout'>Start a Nuclear Blowout</A><BR>
 			"}
 
 	if(check_rights(R_SERVER,0))

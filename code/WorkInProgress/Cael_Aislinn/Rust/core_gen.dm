@@ -79,13 +79,19 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 		assign_uid()
 		id_tag = uid
 
+/obj/machinery/power/rust_core/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
+	. = ..()
+	if(.)
+		return .
+	if (istype(W, /obj/item/weapon/card/emag))
+		emagged = 1
+		return
+
 /obj/machinery/power/rust_core/process()
 	if(stat & BROKEN || !powernet)
 		Shutdown()
 
 	if(owned_field)
-		power = owned_field.radiation
-		transfer_energy()
 		if (owned_field.temp > owned_field.danger_point && light_color == LIGHT_COLOR_BLUE)
 			light_color = LIGHT_COLOR_RED
 			set_light(light_range_on * 3, light_power_on * 3)
@@ -172,9 +178,3 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	field_frequency = value
 	if(owned_field)
 		owned_field.ChangeFieldFrequency(value)
-
-/obj/machinery/power/rust_core/proc/transfer_energy()
-	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
-		if(get_dist(R, src) <= 15) // Better than using orange() every process
-			R.receive_pulse(power)
-	return

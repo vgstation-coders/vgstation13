@@ -35,8 +35,8 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 
 	var/temp = 0
 	var/temp_archived = 0
-	var/warning_point = 1000000
-	var/danger_point = 5000000
+	var/warning_point = 5000000
+	var/danger_point = 7500000
 	var/meltdown_point = 10000000
 	var/obj/item/device/radio/radio
 	var/instability = 0
@@ -171,8 +171,9 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 		//
 		environment.merge(gas_covered)
 
-	//let the particles inside the field react
-	React()
+	//let the particles inside the field react - BUT ONLY IF THERE'S PLASMA
+	if(held_plasma.toxins)
+		React()
 
 	//forcibly radiate any excess energy
 	/*var/energy_max = transfer_ratio * 100000
@@ -221,7 +222,13 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 			dormant_reactant_quantities[reactant] -= radiate
 			radiation += radiate
 
-	var/instability = round((temp / meltdown_point) * 100)
+	transfer_energy()
+
+	for(var/mob/living/l in range(src, round((radiation / 50000) ** 0.25 + (size / 2))))
+		var/rads = (radiation / 1000) * sqrt(1/(max(get_dist(l, src), 1)))
+		l.apply_effect(rads, IRRADIATE)
+
+	var/instability = round(((temp - warning_point) / (meltdown_point - warning_point)) * 100)
 	if(temp > warning_point) // while the core is still damaged and it's still worth noting its status
 
 		if((world.timeofday - lastwarning) / 10 >= warning_delay)
@@ -250,8 +257,18 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 			lastwarning = world.timeofday - offset
 			temp_archived = temp
 
-		if (temp > meltdown_point)
+		if (temp > meltdown_point && !owned_core.emagged)
 			Destroy()
+			return
+
+		if (temp > meltdown_point && owned_core.emagged)
+			Destroy()
+			SetUniversalState(/datum/universal_state/blowout)
+			if (emergency_shuttle)
+				emergency_shuttle.incall()
+				emergency_shuttle.can_recall = 0
+				emergency_shuttle.settimeleft(600)
+			return
 
 	temp = held_plasma.temperature
 
@@ -493,3 +510,9 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 		AddEnergy(Proj.damage * 20, 0, 1)
 		update_icon()
 	return 0
+
+/obj/machinery/power/rust_em_field/proc/transfer_energy()
+	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
+		if(get_dist(R, src) <= 15) // Better than using orange() every process
+			R.receive_pulse(radiation)
+	return
