@@ -449,7 +449,7 @@
 
 /obj/item/weapon/holo/esword/IsShield()
 	if(active)
-		return 1
+		return BLOCK_ALL //eswords block projectiles and attacks
 	return 0
 
 /obj/item/weapon/holo/esword/attack(target as mob, mob/user as mob)

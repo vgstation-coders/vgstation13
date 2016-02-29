@@ -137,7 +137,7 @@
 
 /obj/item/weapon/dualsaber/IsShield()
 	if(wielded)
-		return 1
+		return BLOCK_ALL
 	else
 		return 0
 
@@ -172,7 +172,7 @@
 
 /obj/item/weapon/katana/hfrequency/IsShield()
 	if(wielded)
-		return 1
+		return BLOCK_ATTACKS
 	else
 		return 0
 

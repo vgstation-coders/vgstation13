@@ -272,7 +272,7 @@
 			return
 
 		var/hit_area = affecting.display_name
-		if((user != target) && H.check_shields(7, "the [src.name]"))
+		if((user != target) && H.check_shields(7, "the [src.name]", user))
 			return
 
 		// Check for protection on the targeted area and show messages

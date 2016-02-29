@@ -1,6 +1,6 @@
 /mob/living/carbon/human/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	//M.delayNextAttack(10)
-	if(check_shields(0, M.name))
+	if(check_shields(0, M.name, M))
 		visible_message("<span class='danger'>[M] attempted to touch [src]!</span>")
 		return 0
 

@@ -25,7 +25,7 @@
 	return (BRUTELOSS)
 
 /obj/item/weapon/shield/riot/IsShield()
-	return 1
+	return BLOCK_ALL
 
 /obj/item/weapon/shield/riot/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/melee/baton))
@@ -42,7 +42,7 @@
 	icon_state = "roman_shield"
 
 /obj/item/weapon/shield/riot/roman/IsShield()
-	return 1
+	return BLOCK_ALL
 
 /obj/item/weapon/shield/riot/roman/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/spear))
@@ -78,7 +78,7 @@
 
 /obj/item/weapon/shield/energy/IsShield()
 	if(active)
-		return 1
+		return BLOCK_ALL
 	else
 		return 0
 
@@ -145,7 +145,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
 
 /obj/item/weapon/shield/riot/proto/IsShield()
-	return 1
+	return BLOCK_ALL
 
 /obj/item/weapon/shield/riot/proto/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/spear))
@@ -164,7 +164,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
 
 /obj/item/weapon/shield/riot/joe/IsShield()
-	return 1
+	return BLOCK_ALL
 
 /obj/item/weapon/shield/riot/joe/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/spear))

@@ -1453,3 +1453,8 @@ var/proccalls = 1
 #define NORMAL_ATTACK 0
 #define ATTACK_BITE 1
 #define ATTACK_KICK 2
+
+//Shield block flags (for isShield() proc)
+#define BLOCK_ATTACKS     1
+#define BLOCK_PROJECTILES 2
+#define BLOCK_ALL         255

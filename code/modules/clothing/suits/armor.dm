@@ -147,7 +147,7 @@
 
 /obj/item/clothing/suit/armor/reactive/IsShield()
 	if(active)
-		return 1
+		return BLOCK_ALL
 	return 0
 
 /obj/item/clothing/suit/armor/reactive/attack_self(mob/user as mob)

@@ -53,9 +53,8 @@
 	sharpness = 1.2
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
-
 /obj/item/weapon/claymore/IsShield()
-	return 1
+	return BLOCK_ATTACKS
 
 /obj/item/weapon/claymore/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -89,7 +88,7 @@
 		return(BRUTELOSS)
 
 /obj/item/weapon/katana/IsShield()
-		return 1
+	return BLOCK_ATTACKS
 
 /obj/item/weapon/katana/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(loc, 'sound/weapons/bloodyslice.ogg', 50, 1, -1)
