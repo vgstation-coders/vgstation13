@@ -81,10 +81,6 @@
 		<td><b>Assembly</b></td>
 		<td><b>Consumption</b></td>
 		<td><b>Depletion</b></td>
-		<td><b>Duration</b></td>
-		<td><b>Next stage</b></td>
-		<td></td>
-		<td></td>
 		</tr>"}
 	for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
 
@@ -99,17 +95,7 @@
 			dat += "<td>[I.cur_assembly.percent_depleted * 100]%</td>"
 		else
 			dat += "<td>NA</td>"
-		if(stage_times.Find(I.id_tag))
-			dat += "<td>[ticks_this_stage]/[stage_times[I.id_tag]]s <a href='?src=\ref[src];stage_time=[I.id_tag]'>Modify</td>"
-		else
-			dat += "<td>[ticks_this_stage]s <a href='?src=\ref[src];stage_time=[I.id_tag]'>Set</td>"
-		if(proceeding_stages.Find(I.id_tag))
-			dat += "<td><a href='?src=\ref[src];set_next_stage=[I.id_tag]'>[proceeding_stages[I.id_tag]]</a></td>"
-		else
-			dat += "<td>None <a href='?src=\ref[src];set_next_stage=[I.id_tag]'>\[modify\]</a></td>"
-
-		dat += {"<td><a href='?src=\ref[src];toggle_stage=[I.id_tag]'>\[[active_stages.Find(I.id_tag) ? "Deactivate stage" : "Activate stage "] \]</a></td>
-			</tr>"}
+		dat += {"</tr>"}
 
 	dat += {"</table>
 		<hr>

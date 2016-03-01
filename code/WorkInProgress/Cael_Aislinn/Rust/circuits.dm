@@ -48,7 +48,7 @@
 	name = "Internal circuitry (R-UST Mk. 7 tokamak core)"
 	build_path = "/obj/machinery/power/rust_core"
 	board_type = "machine"
-	origin_tech = "bluespace=3;plasmatech=4;magnets=5;powerstorage=6"
+	origin_tech = "bluespace=3;plasmatech=4;magnets=5;materials=6"
 	frame_desc = "Requires 5 Micro-Manipulators, 3 Micro-Lasers, 3 Subspace Crystals and 1 Console Screen."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 5,
@@ -63,7 +63,7 @@
 	name = "Internal circuitry (R-UST Mk. 7 fuel injector)"
 	build_path = "/obj/machinery/power/rust_fuel_injector"
 	board_type = "machine"
-	origin_tech = "powerstorage=3;engineering=4;plasmatech=4;materials=6"
+	origin_tech = "engineering=4;plasmatech=4;materials=6"
 	frame_desc = "Requires 5 Micro-Manipulators, 3 Scanning Modules, 3 Matter Bins, and 1 Console Screen."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 5,

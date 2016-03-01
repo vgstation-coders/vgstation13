@@ -110,6 +110,14 @@ datum/fusion_reaction/stravium7_dilithium
 	energy_production = 1
 	radiation = 4
 
+//Enhanced Breeder Inhibitor Reactions
+datum/fusion_reaction/uridium3_trilithium
+	primary_reactant = "Uridium-3"
+	secondary_reactant = "Trilithium"
+	energy_consumption = 4
+	energy_production = 1
+	radiation = 5
+
 //Enhanced Breeder Reactions
 
 datum/fusion_reaction/trilithium_obdurium

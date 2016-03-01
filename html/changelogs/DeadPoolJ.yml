@@ -1,0 +1,43 @@
+################################
+# Example Changelog File
+#
+# Note: This file, and files beginning with ".", and files that don't end in ".yml" will not be read.  If you change this file, you will look really dumb.
+#
+# Your changelog will be merged with a master changelog. (New stuff added only, and only on the date entry for the day it was merged.)
+# When it is, any changes listed below will disappear.
+#
+# Valid Prefixes: 
+#   bugfix
+#   wip (For works in progress)
+#   tweak
+#   soundadd
+#   sounddel
+#   rscdel (general deleting of nice things)
+#   rscadd (general adding of nice things)
+#   imageadd
+#   imagedel
+#   spellcheck (typo fixes)
+#   experiment
+#   tgs (TG-ported fixes?)
+#################################
+
+# Your name.  
+author: DeadPoolJ
+
+# Optional: Remove this file after generating master changelog.  Useful for PR changelogs that won't get used again.
+delete-after: True
+
+# Any changes you've made.  See valid prefix list above.
+# INDENT WITH TWO SPACES.  NOT TABS.  SPACES.
+# SCREW THIS UP AND IT WON'T WORK.
+# Also, this gets changed to [] after reading.  Just remove the brackets when you add new shit.
+changes: 
+- experiment: Rehauled the R-UST to make it feature-complete.
+- rscadd: The EM Field now powers rad collectors and radiates mobs.
+- rscadd: The EM Field must now also be kept under 100 million degrees Kelvin lest it shutdown from overheating.
+- rscadd: The Core Monitor will now display the field's radiation and temperature levels.
+- rscdel: Removed the Fuel Assembly port. Fuel Assemblies should now be inserted directly into the injector.
+- rscadd: Added the R-UST computer boards as a crate that can be ordered from Cargo.
+- tweak: Fixed construction on several R-UST parts. All the parts can now be built by Science or Mechanics.
+- tweak: Fuel Injectors now need to be linked to the Fuel Monitor via multitool.
+- rscadd: Overheating the EM Field can result in events that will bring the round to an end if done in a specific matter.

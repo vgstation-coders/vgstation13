@@ -9,7 +9,7 @@ var/const/max_assembly_amount = 300
 	icon = 'code/WorkInProgress/Cael_Aislinn/Rust/rust.dmi'
 	icon_state = "fuel_compressor0"
 	name = "Fuel Compressor"
-	var/list/new_assembly_quantities = list("Deuterium" = 150,"Tritium" = 150,"Rodinium-6" = 0,"Stravium-7" = 0, "Pergium" = 0, "Dilithium" = 0)
+	var/list/new_assembly_quantities = list("Deuterium" = 150,"Tritium" = 150,"Uridium-3" = 0,"Rodinium-6" = 0,"Stravium-7" = 0, "Pergium" = 0, "Dilithium" = 0, "Trilithium" = 0, )
 	var/compressed_matter = 0
 	anchored = 1
 	layer = 2.9

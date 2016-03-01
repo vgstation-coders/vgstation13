@@ -1043,7 +1043,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 */
 
 /datum/supply_packs/rust_core
-	contains = list(/obj/machinery/power/rust_core)
+	contains = list(/obj/machinery/power/rust_core,
+					/obj/item/weapon/book/manual/engineering_rust_guide)
 	name = "R-UST Mk. 7 Tokamak Core"
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure/large

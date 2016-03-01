@@ -19,7 +19,7 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	var/volume_covered = 0	//atmospheric volume covered
 
 	var/obj/machinery/power/rust_core/owned_core
-	var/list/dormant_reactant_quantities = new//
+	var/list/dormant_reactant_quantities = new
 
 	layer = 3.1
 
@@ -35,9 +35,9 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 
 	var/temp = 0
 	var/temp_archived = 0
-	var/warning_point = 5000000
-	var/danger_point = 7500000
-	var/meltdown_point = 10000000
+	var/warning_point = 50000000
+	var/danger_point = 75000000
+	var/meltdown_point = 100000000
 	var/obj/item/device/radio/radio
 	var/instability = 0
 	var/lastwarning = 0
@@ -241,7 +241,10 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 				offset=150
 
 				if(temp > danger_point)
-					warning = "EM FIELD INSTABILITY AT [instability]%. PANIC."
+					if(owned_core.emagged)
+						warning = "EM FIELD INSTABILITY AT [instability]%. Safety overrides will %//SZZZZZZZHT-instability."
+					else
+						warning = "EM FIELD INSTABILITY AT [instability]%. Safety overrides will activate at 100% instability."
 					offset=0
 					//audio_offset = 100
 			if(temp < temp_archived)
@@ -264,11 +267,6 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 		if (temp > meltdown_point && owned_core.emagged)
 			Destroy()
 			SetUniversalState(/datum/universal_state/blowout)
-			if (emergency_shuttle)
-				emergency_shuttle.incall()
-				emergency_shuttle.can_recall = 0
-				emergency_shuttle.settimeleft(600)
-			return
 
 	temp = held_plasma.temperature
 

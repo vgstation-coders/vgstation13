@@ -55,6 +55,12 @@
 				</body>
 				</html>"}
 
+/obj/item/weapon/book/manual/engineering_rust_guide
+	name = "Guide to the R-UST"
+	icon_state ="book"
+	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
+	title = "Guide to the R-UST"
+	wiki_page = "R-UST"
 
 /obj/item/weapon/book/manual/engineering_hacking
 	name = "Hacking"
