@@ -16,7 +16,7 @@ var/global/list/blood_list = list()
 	appearance_flags = NO_CLIENT_COLOR
 	var/base_icon = 'icons/effects/blood.dmi'
 
-	basecolor="#A10808" // Color when wet.
+	color="#A10808" // Color when wet.
 	amount = 5
 	counts_as_blood = 1
 	transfers_dna = 1
@@ -33,11 +33,6 @@ var/global/list/blood_list = list()
 /obj/effect/decal/cleanable/blood/update_icon()
 	if(basecolor == "rainbow") basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
 	color = basecolor
-
-	var/icon/blood = icon(base_icon,icon_state,dir)
-	blood.Blend(basecolor,ICON_MULTIPLY)
-
-	icon = blood
 
 /obj/effect/decal/cleanable/blood/splatter
 	random_icon_states = list("mgibbl1", "mgibbl2", "mgibbl3", "mgibbl4", "mgibbl5")
