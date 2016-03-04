@@ -381,9 +381,9 @@
 /mob/living/silicon/pai/proc/downloadSoftware()
 	var/dat = ""
 
-	dat += {"<h2>CentComm pAI Module Subversion Network</h2><br>
+	dat += {"<h2>CentComm pAI Module Git Network</h2><br>
 		<pre>Remaining Available Memory: [src.ram]</pre><br>
-		<p style=\"text-align:center\"><b>Trunks available for checkout</b><br>"}
+		<p style=\"text-align:center\"><b>Branches available for checkout</b><br>"}
 	for(var/s in available_software)
 		if(!software.Find(s))
 			var/cost = src.available_software[s]
