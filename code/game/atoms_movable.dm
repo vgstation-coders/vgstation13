@@ -279,7 +279,8 @@
 			A.Entered(src)
 
 		for(var/atom/movable/AM in loc)
-			AM.Crossed(src,no_tp)
+			if(AM != src && AM.locked_to != src)
+				AM.Crossed(src,no_tp)
 
 
 		for(var/atom/movable/AM in locked_atoms)
