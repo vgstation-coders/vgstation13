@@ -556,11 +556,13 @@
 		to_chat(src, "<span class='danger'>You send a punishing spike of psychic agony lancing into your host's brain.</span>")
 		to_chat(B.host_brain, "<span class='danger'><FONT size=3>Horrific, burning agony lances through you, ripping a soundless scream from your trapped mind!</FONT></span>")
 
-//Check for brain worms in head.
-/mob/proc/has_brain_worms()
+//Check for brain worms in given limb.
+/mob/proc/has_brain_worms(var/host_region = "head")
 	for(var/I in contents)
 		if(istype(I,/mob/living/simple_animal/borer))
-			return I
+			var/mob/living/simple_animal/borer/B = I
+			if(B.hostlimb == host_region)
+				return B
 
 	return 0
 
@@ -586,7 +588,7 @@
 	return 0
 
 /mob/living/carbon/CheckSlip()
-	return !locked_to && !lying
+	return !locked_to && !lying && !unslippable
 
 /mob/living/carbon/proc/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
 	if(!slip_on_walking && m_intent == "walk")
