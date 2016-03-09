@@ -176,6 +176,7 @@
 
 /obj/item/delivery/large/attack_hand(mob/user as mob)
 	if(wrapped)
+		playsound(get_turf(src), 'sound/items/poster_ripped.ogg', 100, 1)
 		wrapped.forceMove(get_turf(src.loc))
 	qdel(src)
 
