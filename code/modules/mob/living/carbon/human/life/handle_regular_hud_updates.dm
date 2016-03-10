@@ -240,7 +240,7 @@
 				else
 					clear_fullscreen("nearsighted")
 			else
-				clear_fullscreen("nearsighted")
+				overlay_fullscreen("nearsighted", /obj/screen/fullscreen/impaired, 1)
 		else
 			clear_fullscreen("nearsighted")
 		if(eye_blind || blinded)

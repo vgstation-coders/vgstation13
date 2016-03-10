@@ -1272,7 +1272,7 @@
 		if(!nullblock)
 			if(iscarbon(L))
 				var/mob/living/carbon/C = L
-				flick("e_flash", C.flash)
+				C.flash_eyes(visual = 1)
 				if(C.stuttering < 1 && (!(M_HULK in C.mutations)))
 					C.stuttering = 1
 				C.Weaken(1)

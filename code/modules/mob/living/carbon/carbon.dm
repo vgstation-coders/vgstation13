@@ -659,3 +659,7 @@
 			B.perform_infestation(C)
 		else
 			to_chat(B, "<span class='notice'>You're forcefully popped out of your host!</span>")
+
+/mob/living/carbon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
+	if(eyecheck() < intensity)
+		..()
