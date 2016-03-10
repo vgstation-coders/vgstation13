@@ -433,7 +433,10 @@
 	throw_speed = 1
 	throw_range = 5
 	throwforce = 0
+
 	w_class = 2.0
+	attack_delay = 10
+
 	flags = FPRINT
 	var/active = 0
 

@@ -8,7 +8,10 @@
 	var/r_speed = 1.0
 	var/health = null
 	var/hitsound = null
+
 	var/w_class = 3.0
+	var/attack_delay = -1 //If -1, attack_delay is calculated using w_class. Otherwise, attack delay is equal to this value
+
 	flags = FPRINT
 	var/slot_flags = 0		//This is used to determine on which slots an item can fit.
 	var/obj/item/offhand/wielded = null

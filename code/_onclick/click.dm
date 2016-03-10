@@ -82,18 +82,22 @@
 		return
 
 	var/obj/item/W = get_active_hand()
+	var/item_attack_delay = 0
 
-	if(W == A)
-		/*next_move = world.time + 6
-		if(W.flags&USEDELAY)
-			next_move += 5*/
-		W.attack_self(src, params)
-		if(hand)
-			update_inv_l_hand(0)
-		else
-			update_inv_r_hand(0)
+	if(W)
+		item_attack_delay = (W.attack_delay>-1 ? W.attack_delay : Clamp(6 + (1.5 * W.w_class), 1, 20)) //if item's attack_delay value is set, use it. Otherwise, calculate using w_class
 
-		return
+		if(W == A)
+			/*next_move = world.time + 6
+			if(W.flags&USEDELAY)
+				next_move += 5*/
+			W.attack_self(src, params)
+			if(hand)
+				update_inv_l_hand(0)
+			else
+				update_inv_r_hand(0)
+
+			return
 
 	if(!isturf(loc)) // This is going to stop you from telekinesing from inside a closet, but I don't shed many tears for that
 		return
@@ -106,11 +110,11 @@
 			if(!resolved)
 				resolved = A.attackby(W,src, params)
 				if(ismob(A) || istype(A, /obj/mecha) || istype(W, /obj/item/weapon/grab))
-					delayNextAttack(10)
+					delayNextAttack(item_attack_delay)
 				if(!resolved && A && W)
 					W.afterattack(A,src,1,params) // 1 indicates adjacency
 				else
-					delayNextAttack(10)
+					delayNextAttack(item_attack_delay)
 		else
 			if(ismob(A) || istype(W, /obj/item/weapon/grab))
 				delayNextAttack(10)
@@ -120,7 +124,7 @@
 	else // non-adjacent click
 		if(W)
 			if(ismob(A))
-				delayNextAttack(10)
+				delayNextAttack(item_attack_delay)
 			if(!W.preattack(A, src, 0,  params))
 				W.afterattack(A,src,0,params) // 0: not Adjacent
 		else
