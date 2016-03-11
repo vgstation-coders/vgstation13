@@ -48,3 +48,4 @@ players2.sqlite
 
 # Runtime condenser I/O files.
 /tools/Runtime\ Condenser/*.txt
+data/investigate/singulo.html

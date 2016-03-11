@@ -76,9 +76,9 @@
 			index = findtext(t, char)
 	return t
 
-//Runs byond's sanitization proc along-side sanitize_simple
+/* //Runs byond's sanitization proc along-side sanitize_simple ..я это точно не починит, используем text2ru.dm
 /proc/sanitize(var/t,var/list/repl_chars = null)
-	return html_encode(sanitize_simple(t,repl_chars))
+	return html_encode(sanitize_simple(t,repl_chars))*/
 
 //Runs sanitize and strip_html_simple
 //I believe strip_html_simple() is required to run first to prevent '<' from displaying as '&lt;' after sanitize() calls byond's html_encode()
