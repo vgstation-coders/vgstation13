@@ -227,15 +227,15 @@
 	if(obj == null)
 		return
 
+	if(!silent)
+		visible_message("The [obj.name] fades away!")
+
 	if(isobj(obj))
+		obj.force = 0
 		var/mob/M = obj.loc
 		if(ismob(M))
-			M.u_equip(obj, 0)
-			M.update_icons()	//so their overlays update
+			M.drop_item(obj)
 
-	if(!silent)
-		var/obj/oldobj = obj
-		visible_message("The [oldobj.name] fades away!")
 	qdel(obj)
 
 /obj/machinery/computer/HolodeckControl/proc/checkInteg(var/area/A)
@@ -438,11 +438,13 @@
 	var/active = 0
 
 /obj/item/weapon/holo/esword/green
+	name = "green holosword"
 	New()
 		..()
 		_color = "green"
 
 /obj/item/weapon/holo/esword/red
+	name = "red holosword"
 	New()
 		..()
 		_color = "red"
@@ -453,6 +455,14 @@
 	return 0
 
 /obj/item/weapon/holo/esword/attack(target as mob, mob/user as mob)
+	var/area/myarea = null
+	myarea = get_area(src.loc)
+	if(!istype(myarea, /area/holodeck))
+		force = 0
+		user.Stun(10)
+		user.Weaken(10)
+		user.drop_item(src)
+		qdel(src)
 	..()
 
 /obj/item/weapon/holo/esword/New()
