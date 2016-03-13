@@ -13,7 +13,7 @@
 	else
 		time_alive -= 0.1
 		if(time_alive < 0)
-			del(src)
+			qdel(src)//not even using this anymore but still make it a qdel()
 
 	//radiate mobs nearby here
 	//

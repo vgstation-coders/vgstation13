@@ -82,7 +82,7 @@
 		return powernet.load
 	else
 		return 0
-		
+
 /obj/machinery/power/proc/get_powernet()
 	check_rebuild()
 	return powernet

@@ -74,24 +74,20 @@
 		[announce_stageprogression == 2 ? 	"Broadcasting"	: "<a href='?src=\ref[src];announce_stageprogression=2'>\[Broadcast\]</a>"]<br>"}*/
 	dat += {"
 		<hr>
-		<b>Detected devices</b> <a href='?src=\ref[src];scan=1'>\[Refresh list\]</a>
+		<b>Detected devices</b>
 		<table border=1 width='100%'>
 		<tr>
 		<td><b>ID</b></td>
 		<td><b>Assembly</b></td>
 		<td><b>Consumption</b></td>
 		<td><b>Depletion</b></td>
-		<td><b>Duration</b></td>
-		<td><b>Next stage</b></td>
-		<td></td>
-		<td></td>
 		</tr>"}
 	for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
 
 		dat += {"<tr>
 			<td>[I.id_tag]</td>"}
 		if(I.cur_assembly)
-			dat += "<td><a href='?src=\ref[I];toggle_injecting=1;update_extern=\ref[src]'>\[[I.injecting ? "Halt injecting" : "Begin injecting"]\]</a></td>"
+			dat += "<td><a href='?src=\ref[src];toggle_injecting=1;update_extern=\ref[src]'>\[[I.injecting ? "Halt injecting" : "Begin injecting"]\]</a></td>"
 		else
 			dat += "<td>None</td>"
 		dat += "<td>[I.fuel_usage * 100]%</td>"
@@ -99,17 +95,7 @@
 			dat += "<td>[I.cur_assembly.percent_depleted * 100]%</td>"
 		else
 			dat += "<td>NA</td>"
-		if(stage_times.Find(I.id_tag))
-			dat += "<td>[ticks_this_stage]/[stage_times[I.id_tag]]s <a href='?src=\ref[src];stage_time=[I.id_tag]'>Modify</td>"
-		else
-			dat += "<td>[ticks_this_stage]s <a href='?src=\ref[src];stage_time=[I.id_tag]'>Set</td>"
-		if(proceeding_stages.Find(I.id_tag))
-			dat += "<td><a href='?src=\ref[src];set_next_stage=[I.id_tag]'>[proceeding_stages[I.id_tag]]</a></td>"
-		else
-			dat += "<td>None <a href='?src=\ref[src];set_next_stage=[I.id_tag]'>\[modify\]</a></td>"
-
-		dat += {"<td><a href='?src=\ref[src];toggle_stage=[I.id_tag]'>\[[active_stages.Find(I.id_tag) ? "Deactivate stage" : "Activate stage "] \]</a></td>
-			</tr>"}
+		dat += {"</tr>"}
 
 	dat += {"</table>
 		<hr>
@@ -121,11 +107,12 @@
 /obj/machinery/computer/rust_fuel_control/Topic(href, href_list)
 	if(..()) return 1
 
-	if( href_list["scan"] )
-		connected_injectors = list()
-		for(var/obj/machinery/power/rust_fuel_injector/I in range(scan_range, src))
-			if(check_injector_status(I))
-				connected_injectors.Add(I)
+	if( href_list["toggle_injecting"])
+		for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
+			if(I.injecting)
+				I.StopInjecting()
+			else
+				I.BeginInjecting()
 
 	if( href_list["toggle_stage"] )
 		var/cur_stage = href_list["toggle_stage"]
@@ -193,3 +180,33 @@
 		return 0
 
 	return 1
+//Multitool menu shit starts here.
+//It's all . because . is faster than return, thanks BYOND.
+/obj/machinery/computer/rust_fuel_control/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+	. = "Linked R-UST Fuel Injectors:<br><lu>"
+
+	for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
+		. += "<li><b>[I.id_tag]</b> <a href='?src=\ref[src];unlink=[connected_injectors.Find(I)]'>\[X\]</a></li>"
+	. += "</ul>"
+
+/obj/machinery/computer/rust_fuel_control/linkMenu(var/obj/machinery/power/rust_fuel_injector/I)
+	if(istype(I))
+		. = "<a href='?src=\ref[src];link=1'>\[LINK\]</a> "
+
+/obj/machinery/computer/rust_fuel_control/canLink(var/obj/machinery/power/rust_fuel_injector/I, var/list/context)
+	. = (istype(I) && get_dist(src, I) < scan_range)
+
+/obj/machinery/computer/rust_fuel_control/isLinkedWith(var/obj/I)
+	. = (I in connected_injectors)
+
+/obj/machinery/computer/rust_fuel_control/linkWith(var/mob/user, var/obj/machinery/power/rust_fuel_injector/I, var/list/context)
+	connected_injectors += I
+	. = 1
+
+/obj/machinery/computer/rust_fuel_control/getLink(var/idx)
+	if(idx <= connected_injectors.len)
+		. = connected_injectors[idx]
+
+/obj/machinery/computer/rust_fuel_control/unlinkFrom(var/mob/user, var/obj/buffer)
+	connected_injectors -= buffer
+	. = 1
