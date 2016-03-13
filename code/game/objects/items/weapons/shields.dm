@@ -44,10 +44,11 @@
 	icon_state = "buckler"
 	w_class = 3
 	slot_flags = 0
+	properties = list("blocking" = 33.3)
 	starting_materials = list()
 
 /obj/item/weapon/shield/riot/buckler/IsShield()
-	return prob(33) //Only attempt to block 1/3 of attacks
+	return BLOCK_ALL
 
 /obj/item/weapon/shield/riot/buckler/on_block(damage, attack_text = "the_attack")
 	if(damage > 10)
