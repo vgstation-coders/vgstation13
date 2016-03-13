@@ -11,6 +11,7 @@ env:
     - DM_MAPFILE="metaclub"
     - DM_MAPFILE="defficiency"
     - DM_MAPFILE="taxistation"
+    - DM_MAPFILE="" TEST_CHANGELOG = "-test-changelog"
 
 cache:
   directories:
@@ -25,8 +26,8 @@ addons:
       - libstdc++6:i386
 
 install:
-  - pip install --user PyYaml -q --download-cache $HOME/.pip-cache
-  - pip install --user beautifulsoup4 -q --download-cache $HOME/.pip-cache
+  - pip install --user PyYaml -q
+  - pip install --user beautifulsoup4 -q
 
 before_script:
   - chmod +x ./dm.sh
@@ -34,9 +35,8 @@ before_script:
   - ./install-byond.sh
 
 script:
-  - python tools/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
   - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
-  - ./dm.sh -M${DM_MAPFILE} vgstation13.dme
+  - ./dm.sh -M${DM_MAPFILE} vgstation13.dme ${TEST_CHANGELOG}
 
 notifications:
   irc:
