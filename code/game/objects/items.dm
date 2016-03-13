@@ -183,7 +183,7 @@
 
 				attack_types = copytext(attack_types, 1, len(attack_types)-2)
 
-				text = "It can be used to block: [attack_types] at [properties[P]]% efficiency"
+				text = "It can be used to block: [attack_types] at [properties[P]]% efficiency."
 
 		to_chat(user, "<span class='info'>[text]</span>")
 
