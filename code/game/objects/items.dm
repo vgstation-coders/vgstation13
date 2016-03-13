@@ -35,6 +35,20 @@
 	var/cant_drop = 0 //If 1, can't drop it from hands!
 
 	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	var/list/properties = list()
+	/* -Item properties-
+	Stores properties and their efficiency (in %)
+
+	Values:
+	"blocking"
+
+	Example:
+		properties = list("blocking" = 50)
+
+	This allows the item to block attacks, but only at 50% efficiency
+
+	*/
+
 	var/list/allowed = null //suit storage stuff.
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
@@ -48,6 +62,12 @@
 
 	var/vending_cat = null// subcategory for vending machines.
 	var/list/dynamic_overlay[0] //For items which need to slightly alter their on-mob appearance while being worn.
+
+//HOW TO MAKE SHIELDS
+/*
+	1) the item must have the "blocking" property (like this:  properties = list("blocking" = 100)   ). The value is between 0 and 100, and the higher it is, the better it works as a shield
+	2) the item must have the isShield() proc defined. The proc returns the types of attacks which the shield can block. BLOCK_ALL allows the shield to block everything. See setup.dm for other values
+*/
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - src.heat_conductivity)
@@ -141,6 +161,31 @@
 	if((cant_drop > 0) && ((src==user.l_hand) || (src==user.r_hand))) //Item can't be dropped, and is either in left or right hand!
 		user << "<span class='danger'>It's stuck to your hands!</span>"
 
+	if(!Adjacent(user))
+		return
+
+	for(var/P in properties)
+		var/text
+
+		switch(P)
+			if("blocking")
+				var/attack_types = ""
+				var/block_types = src.IsShield()
+
+				if(!block_types) continue
+
+				if(block_types & BLOCK_ATTACKS)
+					attack_types += "melee attacks, "
+				if(block_types & BLOCK_PROJECTILES)
+					attack_types += "projectiles, "
+				if(block_types & BLOCK_BEAMS)
+					attack_types += "energy beams, "
+
+				attack_types = copytext(attack_types, 1, length(attack_types)-1)
+
+				text = "It can be used to block [attack_types] at [properties[P]]% efficiency."
+
+		to_chat(user, "<span class='info'>[text]</span>")
 
 /obj/item/attack_ai(mob/user as mob)
 	..()
@@ -699,10 +744,36 @@
 	return 0
 
 //Called when the item blocks an attack. Return 1 to stop the hit, return 0 to let the hit go through
-/obj/item/proc/on_block(damage, attack_text = "the attack")
+/obj/item/proc/on_block(damage, attack_text = "the attack", atom/target, block_sound = null)
 	if(ismob(loc))
-		if(prob(50 - round(damage / 3)))
-			visible_message("<span class='danger'>[loc] blocks [attack_text] with \the [src]!</span>")
+		var/base_block_chance = max(50 - round(damage/3), 15) //Base chance ranges from 50% to 15%. The higher the damage, the lower the chance.
+
+		if(target && (get_turf(target) != get_turf(loc))) //If target isn't standing on the same turf as the attacker
+
+			var/angle = 180 + dir2angle(get_dir(target, loc)) - dir2angle(loc.dir) //This ranges from -180 to 180. 0 means the attacker is in front of the mob we're protecting. 90 means the attacker is attacking fron the side, 180 means the attacker is hitting from behind, ...
+			if(angle > 180) angle-=360
+
+			switch(abs(angle))
+				if(0) //Attack from front - +30% chance
+					base_block_chance += 30
+				if(45) //From diagonal - +10%
+					base_block_chance += 10
+				//if(90) //From side - nothing
+				if(135) //From behind, diagonal - -10%
+					base_block_chance -= 10
+				if(180) //From behind - -30%
+					base_block_chance -= 30
+
+			base_block_chance = Clamp(base_block_chance, 0, 80) //If you're facing away from the attack, the chance to block it may become 0%.
+
+		if(properties["blocking"])
+			base_block_chance *= (properties["blocking"]*0.01)
+
+		if(prob(base_block_chance))
+			loc.visible_message("<span class='danger'>[loc] blocks [attack_text] with \the [src]!</span>", "<span class='danger'>You block [attack_text] with \the [src]!</span>")
+
+			if(block_sound)
+				playsound(get_turf(src), block_sound, 50, 1)
 			return 1
 
 	return 0

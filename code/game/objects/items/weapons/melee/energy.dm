@@ -51,11 +51,11 @@
 	flags = FPRINT
 	origin_tech = "magnets=3;syndicate=4"
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
-
+	properties = list("blocking" = 80)
 
 /obj/item/weapon/melee/energy/sword/IsShield()
 	if(active)
-		return 1
+		return BLOCK_ALL
 	return 0
 
 /obj/item/weapon/melee/energy/sword/New()

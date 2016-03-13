@@ -22,7 +22,7 @@ emp_act
 
 				return -1 // complete projectile permutation
 
-	if(check_shields(P.damage, "the [P.name]"))
+	if(check_shields(P.damage, "the [P.name]", P))
 		P.on_hit(src, 2)
 		return 2
 	return (..(P , def_zone))
@@ -99,20 +99,31 @@ emp_act
 	return body_coverage
 
 
-/mob/living/carbon/human/proc/check_shields(var/damage = 0, var/attack_text = "the attack")
-	if(istype(l_hand, /obj/item/weapon)) //Check left hand
-		var/obj/item/weapon/I = l_hand
-		if(I.IsShield() && I.on_block(damage, attack_text))
+/mob/living/carbon/human/proc/check_shields(var/damage = 0, var/attack_text = "the attack", atom/source)
+	var/atom/attack_source = source //Used to calculate direction
+	var/required_flags = BLOCK_ATTACKS
+
+	if(istype(source, /obj/item/projectile))
+		var/obj/item/projectile/P = source
+		attack_source = P.starting
+		required_flags = BLOCK_PROJECTILES
+
+		if(istype(source, /obj/item/projectile/beam) || istype(source, /obj/item/projectile/ricochet) || istype(source, /obj/item/projectile/temp))
+			required_flags = BLOCK_BEAMS
+
+	if(istype(l_hand, /obj/item/)) //Check left hand
+		var/obj/item/I = l_hand
+		if(I.properties["blocking"] && (I.IsShield() & required_flags)&& I.on_block(damage, attack_text, attack_source))
 			return 1
 
-	if(istype(r_hand, /obj/item/weapon)) //Check right hand
-		var/obj/item/weapon/I = r_hand
-		if(I.IsShield() && I.on_block(damage, attack_text))
+	if(istype(r_hand, /obj/item/)) //Check right hand
+		var/obj/item/I = r_hand
+		if(I.properties["blocking"] && (I.IsShield() & required_flags) && I.on_block(damage, attack_text, attack_source))
 			return 1
 
 	if(istype(wear_suit, /obj/item/)) //Check armor
 		var/obj/item/I = wear_suit
-		if(I.IsShield() && I.on_block(damage, attack_text))
+		if((I.IsShield() & required_flags) && I.on_block(damage, attack_text, attack_source))
 			return 1
 
 	return 0
@@ -177,7 +188,7 @@ emp_act
 		return
 	var/hit_area = affecting.display_name
 
-	if((user != src) && check_shields(I.force, "the [I.name]"))
+	if((user != src) && check_shields(I.force, "the [I.name]", user))
 		return 0
 
 	if(istype(I,/obj/item/weapon/card/emag))

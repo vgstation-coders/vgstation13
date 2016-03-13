@@ -226,7 +226,7 @@
 		if(M.zone_sel && M.zone_sel.selecting)
 			dam_zone = M.zone_sel.selecting
 
-		if(check_shields(damage)) //Shield check
+		if(check_shields(damage, source = M)) //Shield check
 			return
 
 		var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))

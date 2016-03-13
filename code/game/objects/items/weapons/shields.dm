@@ -1,6 +1,15 @@
 /obj/item/weapon/shield
 	name = "shield"
 
+	properties = list("blocking" = 100)
+
+/obj/item/weapon/shield/on_block(damage, attack_text = "the attack", atom/target, block_sound = null)
+
+	if(!block_sound)
+		return ..(block_sound = 'sound/items/trayhit2.ogg')
+	else
+		return ..()
+
 /obj/item/weapon/shield/riot
 	name = "riot shield"
 	desc = "A shield adept at blocking blunt objects from connecting with the torso of the shield wielder."
@@ -25,7 +34,7 @@
 	return (BRUTELOSS)
 
 /obj/item/weapon/shield/riot/IsShield()
-	return 1
+	return BLOCK_ALL
 
 /obj/item/weapon/shield/riot/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/melee/baton))
@@ -42,12 +51,13 @@
 	icon_state = "buckler"
 	w_class = 3
 	slot_flags = 0
+	properties = list("blocking" = 33.3)
 	starting_materials = list()
 
 /obj/item/weapon/shield/riot/buckler/IsShield()
-	return prob(33) //Only attempt to block 1/3 of attacks
+	return BLOCK_ALL
 
-/obj/item/weapon/shield/riot/buckler/on_block(damage, attack_text = "the_attack")
+/obj/item/weapon/shield/riot/buckler/on_block(damage, attack_text = "the_attack", target, block_sound)
 	if(damage > 10)
 		if(prob(min(10*(damage-10), 75))) //Bucklers are prone to breaking apart
 			var/turf/T = get_turf(src)
@@ -60,7 +70,7 @@
 			qdel(src)
 			return
 
-	return ..()
+	return ..(block_sound = 'sound/effects/woodhit.ogg')
 
 /obj/item/weapon/shield/riot/roman
 	name = "roman shield"
@@ -68,7 +78,7 @@
 	icon_state = "roman_shield"
 
 /obj/item/weapon/shield/riot/roman/IsShield()
-	return 1
+	return BLOCK_ALL
 
 /obj/item/weapon/shield/riot/roman/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/spear))
@@ -96,6 +106,7 @@
 	w_class = 1
 	origin_tech = "materials=4;magnets=3;syndicate=4"
 	attack_verb = list("shoved", "bashed")
+	properties = list()
 	var/active = 0
 
 /obj/item/weapon/shield/energy/suicide_act(mob/user)
@@ -104,7 +115,7 @@
 
 /obj/item/weapon/shield/energy/IsShield()
 	if(active)
-		return 1
+		return BLOCK_ALL
 	else
 		return 0
 
@@ -116,11 +127,13 @@
 	if (active)
 		force = 10
 		w_class = 4
+		properties = list("blocking" = 100)
 		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
 		to_chat(user, "<span class='notice'>[src] is now active.</span>")
 	else
 		force = 3
 		w_class = 1
+		properties = list()
 		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
 		to_chat(user, "<span class='notice'>[src] can now be concealed.</span>")
 	icon_state = "eshield[active]"
@@ -171,7 +184,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
 
 /obj/item/weapon/shield/riot/proto/IsShield()
-	return 1
+	return BLOCK_ALL
 
 /obj/item/weapon/shield/riot/proto/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/spear))
@@ -190,7 +203,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
 
 /obj/item/weapon/shield/riot/joe/IsShield()
-	return 1
+	return BLOCK_ALL
 
 /obj/item/weapon/shield/riot/joe/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/spear))
