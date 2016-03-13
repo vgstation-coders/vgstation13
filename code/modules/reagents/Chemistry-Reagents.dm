@@ -120,8 +120,6 @@
 	if(overdose && volume >= overdose) //This is the current overdose system
 		M.adjustToxLoss(overdose_dam)
 
-	metabolize(M)
-
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
 		return
@@ -683,7 +681,7 @@
 			M.drowsyness = 0
 			M.stuttering = 0
 			M.confused = 0
-			M.jitteriness = 0
+			M.remove_jitter()
 	data++
 
 /datum/reagent/inaprovaline
@@ -1292,7 +1290,7 @@
 	M.sdisabilities = 0
 
 	//Makes it more obvious that it worked.
-	M.jitteriness = 0
+	M.remove_jitter()
 
 	//Might need to update appearance for hulk etc.
 	if(needs_update)
@@ -1870,7 +1868,7 @@
 	M.stuttering = 0
 	M.confused = 0
 	M.sleeping = 0
-	M.jitteriness = 0
+	M.remove_jitter()
 	for(var/datum/disease/D in M.viruses)
 		D.spread = "Remissive"
 		D.stage--
@@ -2286,6 +2284,7 @@
 	reagent_state = LIQUID
 	color = "#593948" //rgb: 89, 57, 72
 	custom_metabolism = 0.005
+	var/spawning_horror = 0
 
 /datum/reagent/mednanobots/on_mob_life(var/mob/living/M)
 
@@ -2336,14 +2335,17 @@
 							D.cure()
 		if(5 to INFINITY)
 			if(ishuman(M))
+				spawning_horror = 1
 				var/mob/living/carbon/human/H = M
 				to_chat(H, pick("<b><span class='warning'>Something doesn't feel right...</span></b>", "<b><span class='warning'>Something is growing inside you!</span></b>", "<b><span class='warning'>You feel your insides rearrange!</span></b>"))
 				spawn(60)
-					to_chat(H, "<b><span class='warning'>Something bursts out from inside you!</span></b>")
-					message_admins("[key_name(H)] has gibbed and spawned a new cyber horror due to nanobots. ([formatJumpTo(H)])")
-					H.visible_message("<b><span class='warning'>[H]'s body rips aparts to reveal something underneath!</b></span>")
-					new /mob/living/simple_animal/hostile/monster/cyber_horror(H.loc)
-					H.gib()
+					if(spawning_horror == 1)
+						to_chat(H, "<b><span class='warning'>Something bursts out from inside you!</span></b>")
+						message_admins("[key_name(H)] has gibbed and spawned a new cyber horror due to nanobots. ([formatJumpTo(H)])")
+						H.visible_message("<b><span class='warning'>[H]'s body rips aparts to reveal something underneath!</b></span>")
+						new /mob/living/simple_animal/hostile/monster/cyber_horror(H.loc)
+						spawning_horror = 0
+						H.gib()
 
 
 /datum/reagent/comnanobots
@@ -3483,12 +3485,13 @@
 	adj_sleepy = -2
 	adj_temp = 25
 	custom_metabolism = 0.1
+	var/causes_jitteriness = 1
 
 /datum/reagent/drink/coffee/on_mob_life(var/mob/living/M)
 
 	if(..()) return 1
-
-	M.Jitter(5)
+	if(causes_jitteriness)
+		M.Jitter(5)
 	if(adj_temp > 0 && holder.has_reagent("frostoil"))
 		holder.remove_reagent("frostoil", 10 * REAGENTS_METABOLISM)
 
@@ -4814,6 +4817,21 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Joe"
 	id = "detcoffee"
 	description = "Bitter, black, and tasteless. It's the way I've always had my joe, and the way I was having it when one of the officers came running toward me. The chief medical officer got axed, and no one knew who did it. I reluctantly took one last drink before putting on my coat and heading out. I knew that by the time I was finished, my joe would have fallen to a dreadfully low temperature, but I had work to do."
+	causes_jitteriness = 0
+
+/datum/reagent/drink/coffee/detcoffee/on_mob_life(var/mob/living/M)
+	if(..()) return 1
+	M.update_colour()
+
+/datum/reagent/drink/coffee/detcoffee/reagent_deleted()
+	if(..()) return 1
+
+	if(!holder)
+		return
+	var/mob/M =  holder.my_atom
+
+	if(ishuman(M))
+		M.update_colour()
 
 /datum/reagent/drink/coffee/etank
 	name = "Recharger"

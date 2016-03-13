@@ -52,7 +52,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 	gui_icons = null
 	qdel(hud_used)
 	hud_used = null
-	for(var/obj/leftovers in src)
+	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
 	if(on_uattack)
 		on_uattack.holder = null
@@ -1453,7 +1453,7 @@ var/list/slot_equipment_priority = list( \
 		lying = (locked_to.lockflags & LOCKED_SHOULD_LIE) ? TRUE : FALSE //A lying value that !=1 will break this
 
 
-	else if(isUnconscious() || weakened || paralysis || resting)
+	else if(isUnconscious() || weakened || paralysis || resting || !can_stand)
 		stop_pulling()
 		lying = 1
 		canmove = 0
@@ -1465,7 +1465,7 @@ var/list/slot_equipment_priority = list( \
 		canmove = 0
 		lying = 0
 	else
-		lying = !can_stand
+		lying = 0
 		canmove = has_limbs
 
 	if(lying)
@@ -1771,6 +1771,11 @@ mob/proc/on_foot()
 
 /mob/proc/nuke_act() //Called when caught in a nuclear blast
 	return
+
+/mob/proc/remove_jitter()
+	if(jitteriness)
+		jitteriness = 0
+		animate(src)
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING
