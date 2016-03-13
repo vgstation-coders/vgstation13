@@ -48,6 +48,8 @@
 /obj/item/offhand/proc/attach_to(var/obj/item/I)
 	I.wielded = src
 	wielding = I
+	properties = I.properties.Copy()
+
 	name = wielding.name + " offhand"
 	desc = "Your second grip on the [I.name]"
 
@@ -118,6 +120,8 @@
 	item_state = "dualsaber[wielded ? 1 : 0]"
 	force = wielded ? 30 : 3
 	w_class = wielded ? 5 : 2
+	properties = wielded ? list("blocking" = 100) : list()
+
 	if(user)
 		user.update_inv_l_hand()
 		user.update_inv_r_hand()
@@ -159,6 +163,7 @@
 	w_class = 4.0
 	flags = FPRINT | TWOHANDABLE
 	origin_tech = "magnets=4;combat=5"
+	properties = list("blocking" = 70)
 
 /obj/item/weapon/katana/hfrequency/update_wield(mob/user)
 	..()

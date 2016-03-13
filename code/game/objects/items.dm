@@ -35,6 +35,20 @@
 	var/cant_drop = 0 //If 1, can't drop it from hands!
 
 	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	var/list/properties = list()
+	/* -Item properties-
+	Stores properties and their efficiency (in %)
+
+	Values:
+	"blocking"
+
+	Example:
+		properties = list("blocking" = 50)
+
+	This allows the item to block attacks, but only at 50% efficiency
+
+	*/
+
 	var/list/allowed = null //suit storage stuff.
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
@@ -48,6 +62,12 @@
 
 	var/vending_cat = null// subcategory for vending machines.
 	var/list/dynamic_overlay[0] //For items which need to slightly alter their on-mob appearance while being worn.
+
+//HOW TO MAKE SHIELDS
+/*
+	1) the item must have the "blocking" property (like this:  properties = list("blocking" = 100)   ). The value is between 0 and 100, and the higher it is, the better it works as a shield
+	2) the item must have the isShield() proc defined. The proc returns the types of attacks which the shield can block. BLOCK_ALL allows the shield to block everything. See setup.dm for other values
+*/
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - src.heat_conductivity)
@@ -141,6 +161,31 @@
 	if((cant_drop > 0) && ((src==user.l_hand) || (src==user.r_hand))) //Item can't be dropped, and is either in left or right hand!
 		user << "<span class='danger'>It's stuck to your hands!</span>"
 
+	if(!Adjacent(user))
+		return
+
+	for(var/P in properties)
+		var/text
+
+		switch(P)
+			if("blocking")
+				var/attack_types = ""
+				var/block_types = isShield()
+
+				if(!block_types) continue
+
+				if(block_types & BLOCK_ATTACKS)
+					attack_types += "melee attacks, "
+				if(block_types & BLOCK_PROJECTILES)
+					attack_types += "projectiles, "
+				if(block_types & BLOCK_BEAMS)
+					attack_types += "energy beams, "
+
+				attack_types = copytext(attack_types, 1, len(attack_types)-2)
+
+				text = "It can be used to block: [attack_types] at [properties[P]]% efficiency"
+
+		to_chat(user, "<span class='info'>[text]</span>")
 
 /obj/item/attack_ai(mob/user as mob)
 	..()
@@ -720,6 +765,9 @@
 					base_block_chance -= 30
 
 			base_block_chance = Clamp(base_block_chance, 0, 80) //If you're facing away from the attack, the chance to block it may become 0%.
+
+		if(properties["blocking"])
+			base_block_chance *= (properties["blocking"]*0.01)
 
 		if(prob(base_block_chance))
 			loc.visible_message("<span class='danger'>[loc] blocks [attack_text] with \the [src]!</span>", "<span class='danger'>You block [attack_text] with \the [src]!</span>")

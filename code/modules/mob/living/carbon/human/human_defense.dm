@@ -108,14 +108,17 @@ emp_act
 		attack_source = P.starting
 		required_flags = BLOCK_PROJECTILES
 
-	if(istype(l_hand, /obj/item/weapon)) //Check left hand
-		var/obj/item/weapon/I = l_hand
-		if((I.IsShield() & required_flags)&& I.on_block(damage, attack_text, attack_source))
+		if(istype(source, /obj/item/projectile/beam) || istype(source, /obj/item/projectile/ricochet) || istype(source, /obj/item/projectile/temp))
+			required_flags = BLOCK_BEAMS
+
+	if(istype(l_hand, /obj/item/)) //Check left hand
+		var/obj/item/I = l_hand
+		if(I.properties["blocking"] && (I.IsShield() & required_flags)&& I.on_block(damage, attack_text, attack_source))
 			return 1
 
-	if(istype(r_hand, /obj/item/weapon)) //Check right hand
-		var/obj/item/weapon/I = r_hand
-		if((I.IsShield() & required_flags) && I.on_block(damage, attack_text, attack_source))
+	if(istype(r_hand, /obj/item/)) //Check right hand
+		var/obj/item/I = r_hand
+		if(I.properties["blocking"] && (I.IsShield() & required_flags) && I.on_block(damage, attack_text, attack_source))
 			return 1
 
 	if(istype(wear_suit, /obj/item/)) //Check armor

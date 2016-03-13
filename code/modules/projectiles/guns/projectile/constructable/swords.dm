@@ -15,9 +15,14 @@
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 	var/obj/item/weapon/reagent_containers/hypospray/hypo = null
 
+	properties = list("blocking" = 75)
+
 	suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
 		return(BRUTELOSS)
+
+/obj/item/weapon/sword/isShield()
+	return BLOCK_ATTACKS
 
 /obj/item/weapon/sword/attack_self(mob/user as mob)
 	if(!hypo)

@@ -32,5 +32,5 @@ delete-after: True
 # SCREW THIS UP AND IT WON'T WORK.
 # Also, this gets changed to [] after reading.  Just remove the brackets when you add new shit.
 changes: 
-- tweak: Swords (except for eswords) now only block melee attacks. Shields block both melee attacks and projectiles.
-- tweak: Slightly changed how blocking attacks works - facing the attacker increases your chances of blocking their attacks (by up to 30 percent), facing away from them decreases the chances (by up to 30 percent).
+- tweak: Changed how blocking attacks works - facing the attacker increases your chances of blocking their attacks (by up to 30 percent), facing away from them decreases the chances (by up to 30 percent).
+- tweak: Swords no longer block projectiles and beams, and have lower chance to block than shields. Examining an item now says if it can be used for blocking, and if yes, how well.

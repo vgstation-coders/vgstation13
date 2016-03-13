@@ -1,6 +1,8 @@
 /obj/item/weapon/shield
 	name = "shield"
 
+	properties = list("blocking" = 100)
+
 /obj/item/weapon/shield/riot
 	name = "riot shield"
 	desc = "A shield adept at blocking blunt objects from connecting with the torso of the shield wielder."
@@ -70,6 +72,7 @@
 	w_class = 1
 	origin_tech = "materials=4;magnets=3;syndicate=4"
 	attack_verb = list("shoved", "bashed")
+	properties = list()
 	var/active = 0
 
 /obj/item/weapon/shield/energy/suicide_act(mob/user)
@@ -90,11 +93,13 @@
 	if (active)
 		force = 10
 		w_class = 4
+		properties = list("blocking" = 100)
 		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
 		to_chat(user, "<span class='notice'>[src] is now active.</span>")
 	else
 		force = 3
 		w_class = 1
+		properties = list()
 		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
 		to_chat(user, "<span class='notice'>[src] can now be concealed.</span>")
 	icon_state = "eshield[active]"
