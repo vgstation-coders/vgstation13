@@ -90,7 +90,6 @@ datum/controller/process/New(var/datum/controller/processScheduler/scheduler)
 	previousStatus = "idle"
 	idle()
 	name = "process"
-	schedule_interval = 50
 	last_slept = 0
 	run_start = 0
 	tick_start = 0
@@ -100,10 +99,10 @@ datum/controller/process/New(var/datum/controller/processScheduler/scheduler)
 
 datum/controller/process/proc/started()
 	// Initialize last_slept so we can record timing information
-	last_slept = TimeOfHour
+	last_slept = TimeOfGame
 
 	// Initialize run_start so we can detect hung processes.
-	run_start = TimeOfHour
+	run_start = TimeOfGame
 
 	// Initialize tick_start so we can know when to sleep
 	tick_start = world.tick_usage
@@ -163,12 +162,8 @@ datum/controller/process/proc/handleHung()
 	if(istype(lastObj))
 		lastObjType = lastObj.type
 
-	// If world.timeofday has rolled over, then we need to adjust.
-	if (TimeOfHour < run_start)
-		run_start -= 36000
 	var/msg = "[name] process hung at tick #[ticks]. Process was unresponsive for [(TimeOfHour - run_start) / 10] seconds and was restarted. Last task: [last_task]. Last Object Type: [lastObjType]"
-	logTheThing("debug", null, null, msg)
-	logTheThing("diary", null, null, msg, "debug")
+	log_debug(msg)
 	message_admins(msg)
 
 	main.restartProcess(src.name)
@@ -176,8 +171,8 @@ datum/controller/process/proc/handleHung()
 datum/controller/process/proc/kill()
 	if (!killed)
 		var/msg = "[name] process was killed at tick #[ticks]."
-		logTheThing("debug", null, null, msg)
-		logTheThing("diary", null, null, msg, "debug")
+		log_debug(msg)
+		message_admins(msg)
 		//finished()
 
 		// Allow inheritors to clean up if needed
@@ -227,9 +222,7 @@ datum/controller/process/proc/update()
 		setStatus(PROCESS_STATUS_MAYBE_HUNG)
 
 datum/controller/process/proc/getElapsedTime()
-	if (TimeOfHour < run_start)
-		return TimeOfHour - (run_start - 36000)
-	return TimeOfHour - run_start
+	return TimeOfGame - run_start
 
 datum/controller/process/proc/tickDetail()
 	return
