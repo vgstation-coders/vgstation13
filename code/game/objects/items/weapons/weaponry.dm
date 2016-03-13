@@ -53,7 +53,7 @@
 	sharpness = 1.2
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
-	properties = list("blocking" = 75)
+	properties = list("blocking" = 70)
 
 /obj/item/weapon/claymore/IsShield()
 	return BLOCK_ATTACKS
@@ -85,7 +85,7 @@
 	sharpness = 1.2
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
-	properties = list("blocking" = 75)
+	properties = list("blocking" = 70)
 
 	suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")

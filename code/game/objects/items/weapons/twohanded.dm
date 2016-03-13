@@ -164,7 +164,7 @@
 	w_class = 4.0
 	flags = FPRINT | TWOHANDABLE
 	origin_tech = "magnets=4;combat=5"
-	properties = list("blocking" = 70)
+	properties = list("blocking" = 80)
 
 /obj/item/weapon/katana/hfrequency/update_wield(mob/user)
 	..()
