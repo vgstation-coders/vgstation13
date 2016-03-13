@@ -170,7 +170,7 @@
 		switch(P)
 			if("blocking")
 				var/attack_types = ""
-				var/block_types = isShield()
+				var/block_types = src.IsShield()
 
 				if(!block_types) continue
 
