@@ -1,36 +1,3 @@
-/obj/item/weapon/gun/energy/ionrifle
-	name = "ion rifle"
-	desc = "A man portable anti-armor weapon designed to disable mechanical threats"
-	icon_state = "ionrifle"
-	item_state = null
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	fire_sound = 'sound/weapons/ion.ogg'
-	origin_tech = "combat=2;magnets=4"
-	w_class = 4.0
-	flags = FPRINT
-	siemens_coefficient = 1
-	slot_flags = SLOT_BACK
-	charge_cost = 100
-	projectile_type = "/obj/item/projectile/ion"
-
-/obj/item/weapon/gun/energy/ionrifle/emp_act(severity)
-	if(severity <= 2)
-		power_supply.use(round(power_supply.maxcharge / severity))
-		update_icon()
-	else
-		return
-
-/obj/item/weapon/gun/energy/decloner
-	name = "biological demolecularisor"
-	desc = "A gun that discharges high amounts of controlled radiation to slowly break a target into component elements."
-	icon_state = "decloner"
-	item_state = null
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	fire_sound = 'sound/weapons/pulse3.ogg'
-	origin_tech = "combat=5;materials=4;powerstorage=3"
-	charge_cost = 100
-	projectile_type = "/obj/item/projectile/energy/declone"
-
 var/available_staff_transforms=list("monkey","robot","slime","xeno","human","furry")
 #define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
 
@@ -343,14 +310,6 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	item_state = "pen"
 	w_class = 1
 
-
-/obj/item/weapon/gun/energy/mindflayer
-	name = "mind flayer"
-	desc = "A prototype weapon recovered from the ruins of Research-Station Epsilon."
-	icon_state = "xray"
-	projectile_type = "/obj/item/projectile/beam/mindflayer"
-	fire_sound = 'sound/weapons/Laser.ogg'
-
 obj/item/weapon/gun/energy/staff/focus
 	name = "mental focus"
 	desc = "An artifact that channels the will of the user into destructive bolts of force. If you aren't careful with it, you might poke someone's brain out.\n Has two modes: Single and AoE"
@@ -380,14 +339,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	charge_cost = 50
 	var/overheat = 0
 	var/recent_reload = 1
-/*
-/obj/item/weapon/gun/energy/kinetic_accelerator/shoot_live_shot()
-	overheat = 1
-	spawn(20)
-		overheat = 0
-		recent_reload = 0
-	..()
-*/
+
 /obj/item/weapon/gun/energy/kinetic_accelerator/attack_self(var/mob/living/user/L)
 	if(overheat || recent_reload)
 		return
@@ -432,36 +384,6 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 			R.cell.use(charge_cost) 		//Take power from the borg...
 			power_supply.give(charge_cost)	//... to recharge the shot
 
-	update_icon()
-	return 1
-
-
-/obj/item/weapon/gun/energy/radgun
-	name = "radgun"
-	desc = "An experimental energy gun that fires radioactive projectiles that deal toxin damage, irradiate, and scramble DNA, giving the victim a different appearance and name, and potentially harmful or beneficial mutations. Recharges automatically."
-	icon_state = "radgun"
-	item_state = null
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	fire_sound = 'sound/weapons/radgun.ogg'
-	charge_cost = 100
-	var/charge_tick = 0
-	projectile_type = "/obj/item/projectile/energy/rad"
-
-/obj/item/weapon/gun/energy/radgun/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/radgun/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-/obj/item/weapon/gun/energy/radgun/process()
-	charge_tick++
-	if(charge_tick < 4) return 0
-	charge_tick = 0
-	if(!power_supply) return 0
-	power_supply.give(100)
 	update_icon()
 	return 1
 
