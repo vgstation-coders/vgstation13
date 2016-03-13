@@ -1,0 +1,4 @@
+author: Intigracy
+delete-after: True
+changes: 
+- rscadd: You can now photocopy the station blueprints to recieve a single use version of it. Copies count for the steal objective.
