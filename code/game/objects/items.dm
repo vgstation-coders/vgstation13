@@ -181,7 +181,7 @@
 				if(block_types & BLOCK_BEAMS)
 					attack_types += "energy beams, "
 
-				attack_types = copytext(attack_types, 1, len(attack_types)-2)
+				attack_types = copytext(attack_types, 1, length(attack_types)-2)
 
 				text = "It can be used to block: [attack_types] at [properties[P]]% efficiency."
 

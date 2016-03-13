@@ -21,7 +21,7 @@
 		to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
 		return(BRUTELOSS)
 
-/obj/item/weapon/sword/isShield()
+/obj/item/weapon/sword/IsShield()
 	return BLOCK_ATTACKS
 
 /obj/item/weapon/sword/attack_self(mob/user as mob)
