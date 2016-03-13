@@ -58,6 +58,9 @@
 /obj/item/weapon/claymore/IsShield()
 	return BLOCK_ATTACKS
 
+/obj/item/weapon/claymore/on_block()
+	return ..(block_sound = 'sound/items/metal_impact.ogg')
+
 /obj/item/weapon/claymore/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(BRUTELOSS)
@@ -93,6 +96,9 @@
 
 /obj/item/weapon/katana/IsShield()
 	return BLOCK_ATTACKS
+
+/obj/item/weapon/katana/on_block()
+	return ..(block_sound = 'sound/items/metal_impact.ogg')
 
 /obj/item/weapon/katana/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(loc, 'sound/weapons/bloodyslice.ogg', 50, 1, -1)

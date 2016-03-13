@@ -181,9 +181,9 @@
 				if(block_types & BLOCK_BEAMS)
 					attack_types += "energy beams, "
 
-				attack_types = copytext(attack_types, 1, length(attack_types)-2)
+				attack_types = copytext(attack_types, 1, length(attack_types)-1)
 
-				text = "It can be used to block: [attack_types] at [properties[P]]% efficiency."
+				text = "It can be used to block [attack_types] at [properties[P]]% efficiency."
 
 		to_chat(user, "<span class='info'>[text]</span>")
 
@@ -744,7 +744,7 @@
 	return 0
 
 //Called when the item blocks an attack. Return 1 to stop the hit, return 0 to let the hit go through
-/obj/item/proc/on_block(damage, attack_text = "the attack", atom/target)
+/obj/item/proc/on_block(damage, attack_text = "the attack", atom/target, block_sound = null)
 	if(ismob(loc))
 		var/base_block_chance = max(50 - round(damage/3), 15) //Base chance ranges from 50% to 15%. The higher the damage, the lower the chance.
 
@@ -771,6 +771,9 @@
 
 		if(prob(base_block_chance))
 			loc.visible_message("<span class='danger'>[loc] blocks [attack_text] with \the [src]!</span>", "<span class='danger'>You block [attack_text] with \the [src]!</span>")
+
+			if(block_sound)
+				playsound(get_turf(src), block_sound, 50, 1)
 			return 1
 
 	return 0

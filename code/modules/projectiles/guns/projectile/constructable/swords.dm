@@ -24,6 +24,9 @@
 /obj/item/weapon/sword/IsShield()
 	return BLOCK_ATTACKS
 
+/obj/item/weapon/sword/on_block()
+	return ..(block_sound = 'sound/items/metal_impact.ogg')
+
 /obj/item/weapon/sword/attack_self(mob/user as mob)
 	if(!hypo)
 		return

@@ -3,6 +3,13 @@
 
 	properties = list("blocking" = 100)
 
+/obj/item/weapon/shield/on_block(damage, attack_text = "the attack", atom/target, block_sound = null)
+
+	if(!block_sound)
+		return ..(block_sound = 'sound/items/trayhit2.ogg')
+	else
+		return ..()
+
 /obj/item/weapon/shield/riot
 	name = "riot shield"
 	desc = "A shield adept at blocking blunt objects from connecting with the torso of the shield wielder."
@@ -50,7 +57,7 @@
 /obj/item/weapon/shield/riot/buckler/IsShield()
 	return BLOCK_ALL
 
-/obj/item/weapon/shield/riot/buckler/on_block(damage, attack_text = "the_attack")
+/obj/item/weapon/shield/riot/buckler/on_block(damage, attack_text = "the_attack", target, block_sound)
 	if(damage > 10)
 		if(prob(min(10*(damage-10), 75))) //Bucklers are prone to breaking apart
 			var/turf/T = get_turf(src)
@@ -63,7 +70,7 @@
 			qdel(src)
 			return
 
-	return ..()
+	return ..(block_sound = 'sound/effects/woodhit.ogg')
 
 /obj/item/weapon/shield/riot/roman
 	name = "roman shield"
