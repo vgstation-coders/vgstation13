@@ -1,7 +1,7 @@
 /obj/item/weapon/gun/projectile/hivehand
 	name = "\improper Hivehand"
 	desc = "A living weapon, it can generate and fire mildly toxic stingers. Additionally, it possesses three sharp chitinous growths on the end that can serve as bayonets."
-	icon = 'icons/obj/gun.dmi'
+	icon = 'icons/obj/guns/misc.dmi'
 	icon_state = "hivehand"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	item_state = null

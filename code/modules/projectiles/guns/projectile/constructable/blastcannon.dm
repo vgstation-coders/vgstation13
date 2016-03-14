@@ -1,7 +1,7 @@
 /obj/item/weapon/gun/projectile/blastcannon
 	name = "pipe gun"
 	desc = "A pipe welded onto a gun stock. You're not sure how you could even use this."
-	icon = 'icons/obj/gun.dmi'
+	icon = 'icons/obj/guns/misc.dmi'
 	icon_state = "blastcannon_empty"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	item_state = null

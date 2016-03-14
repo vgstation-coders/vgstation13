@@ -126,7 +126,7 @@
 /obj/item/toy/gun
 	name = "cap gun"
 	desc = "It almost looks like the real thing! Ages 8 and up. Please recycle in an autolathe when you're out of caps!"
-	icon = 'icons/obj/gun.dmi'
+	icon = 'icons/obj/guns/misc.dmi'
 	icon_state = "revolver"
 	item_state = "gun"
 	flags = FPRINT
@@ -209,7 +209,7 @@
 /obj/item/toy/crossbow
 	name = "foam dart crossbow"
 	desc = "A weapon favored by many overactive children. Ages 8 and up."
-	icon = 'icons/obj/gun.dmi'
+	icon = 'icons/obj/guns/misc.dmi'
 	icon_state = "crossbow"
 	item_state = "crossbow"
 	flags = FPRINT

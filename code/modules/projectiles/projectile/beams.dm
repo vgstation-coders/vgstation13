@@ -257,7 +257,7 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam
 	name = "laser"
-	icon_state = "laser"
+	icon_state = "ibeam_new"
 	invisibility = 101
 	animate_movement = 2
 	linear_movement = 1

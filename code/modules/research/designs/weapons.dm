@@ -8,7 +8,7 @@
 	reliability_base = 76
 	category = "Weapons"
 	build_path = /obj/item/device/modkit/aeg_parts
-	
+
 
 /datum/design/stunrevolver
 	name = "Stun Revolver"
@@ -102,7 +102,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/projectile/automatic/xcom
+	build_path = /obj/item/weapon/gun/projectile/automatic/rifles/assault
 	locked = 1
 	req_lock_access = list(access_armory)
 

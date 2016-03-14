@@ -2,7 +2,7 @@
 
 /obj/item/weapon/gun/grenadelauncher
 	name = "grenade launcher"
-	icon = 'icons/obj/gun.dmi'
+	icon = 'icons/obj/guns/misc.dmi'
 	icon_state = "riotgun"
 	item_state = "riotgun"
 	w_class = 4.0

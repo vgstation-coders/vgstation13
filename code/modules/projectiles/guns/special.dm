@@ -1,7 +1,7 @@
 /obj/item/weapon/gun/portalgun	//-by Deity Link
 	name = "\improper Portal Gun"
 	desc = "There's a hole in the sky... through which I can fly."
-	icon = 'icons/obj/gun_experimental.dmi'
+	icon = 'icons/obj/guns/experimental.dmi'
 	icon_state = "portalgun0"
 	item_state = "portalgun0"
 	slot_flags = SLOT_BELT

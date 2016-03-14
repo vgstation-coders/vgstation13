@@ -1,7 +1,7 @@
 /obj/item/weapon/gun/gatling
 	name = "gatling gun"
 	desc = "Ya-ta-ta-ta-ta-ta-ta-ta ya-ta-ta-ta-ta-ta-ta-ta do-de-da-va-da-da-dada! Kaboom-Kaboom!"
-	icon = 'icons/obj/gun_experimental.dmi'
+	icon = 'icons/obj/guns/experimental.dmi'
 	icon_state = "minigun"
 	item_state = "minigun0"
 	origin_tech = "materials=4;combat=6"
@@ -12,6 +12,7 @@
 	w_class = 5.0//we be fuckin huge maaan
 	fire_delay = 0
 	fire_sound = 'sound/weapons/gatling_fire.ogg'
+	two_handed = 0
 	var/max_shells = 200
 	var/current_shells = 200
 
@@ -141,7 +142,7 @@
 /obj/item/weapon/gun/osipr
 	name = "\improper Overwatch Standard Issue Pulse Rifle"
 	desc = "Centuries ago those weapons striked fear in all of humanity when the Combine attacked the Earth. Nowadays these are just the best guns that the Syndicate can provide to its Elite Troops with its tight budget."
-	icon = 'icons/obj/gun_experimental.dmi'
+	icon = 'icons/obj/guns/experimental.dmi'
 	icon_state = "osipr"
 	item_state = "osipr"
 	slot_flags = SLOT_BELT
@@ -363,7 +364,7 @@
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita
 	name = "\improper Nikita"
 	desc = "A miniature cruise missile launcher. Using a pulsed rocket engine and sophisticated TV guidance system."
-	icon = 'icons/obj/gun_experimental.dmi'
+	icon = 'icons/obj/guns/experimental.dmi'
 	icon_state = "nikita"
 	item_state = null
 	origin_tech = "materials=5;combat=6;programming=4"
@@ -429,7 +430,7 @@
 /obj/item/weapon/gun/projectile/hecate
 	name = "\improper PGM Hécate II"
 	desc = "An Anti-Materiel Rifle. You can read \"Fabriqué en Haute-Savoie\" on the receiver. Whatever that means..."
-	icon = 'icons/obj/gun_experimental.dmi'
+	icon = 'icons/obj/guns/experimental.dmi'
 	icon_state = "hecate"
 	item_state = null
 	origin_tech = "materials=5;combat=6"
@@ -1062,7 +1063,7 @@
 /obj/item/weapon/gun/stickybomb
 	name = "stickybomb launcher"
 	desc = "Fired stickybombs take 5 seconds to become live. After which they'll progressively merge with their surroundings."
-	icon = 'icons/obj/gun_experimental.dmi'
+	icon = 'icons/obj/guns/experimental.dmi'
 	icon_state = "stickybomb"
 	item_state = null
 	slot_flags = SLOT_BELT
@@ -1315,7 +1316,7 @@
 /obj/item/weapon/gun/hookshot	//-by Deity Link
 	name = "hookshot"
 	desc = "Used to create tethers! It's a very experimental device, recently developped by Nanotrasen."
-	icon = 'icons/obj/gun_experimental.dmi'
+	icon = 'icons/obj/guns/experimental.dmi'
 	icon_state = "hookshot"
 	item_state = "hookshot"
 	slot_flags = SLOT_BELT
@@ -1752,7 +1753,7 @@
 /obj/item/weapon/gun/gravitywell	//-by Deity Link
 	name = "\improper Gravity Well Gun"
 	desc = "Whoever created that gun had a taste for organized chaos..."
-	icon = 'icons/obj/gun_experimental.dmi'
+	icon = 'icons/obj/guns/experimental.dmi'
 	icon_state = "gravitywell"
 	item_state = "gravitywell"
 	slot_flags = SLOT_BELT

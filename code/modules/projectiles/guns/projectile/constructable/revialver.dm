@@ -1,7 +1,7 @@
 /obj/item/weapon/gun/projectile/revialver
 	name = "revialver"
 	desc = "A makeshift single-action revolver, this weapon utilizes liquid pressure from the spray bottle to launch glass vials."
-	icon = 'icons/obj/gun.dmi'
+	icon = 'icons/obj/guns/misc.dmi'
 	icon_state = "revialver0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	item_state = null

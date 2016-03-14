@@ -5,6 +5,7 @@
 /obj/item/weapon/gun/projectile
 	desc = "A classic revolver. Uses 357 ammo"
 	name = "revolver"
+	icon = 'icons/obj/guns/projectile.dmi'
 	icon_state = "revolver"
 	caliber = list("357" = 1)
 	origin_tech = "combat=2;materials=2"
@@ -131,7 +132,100 @@
 			update_icon()
 			return 1
 
+	if(istype(A, /obj/item/gun_part/silencer))
+		var/obj/item/gun_part/silencer/S = A
+		if(barrel_slot_allowed)
+			if(!barrel_slot)
+				if(user.l_hand != src && user.r_hand != src)
+					user << "<span class='notice'>You'll need [src] in your hands to do that.</span>"
+					return
+				user.drop_item()
+				user << "<span class='notice'>You screw [S] onto [src].</span>"
+				silenced = A
+				S.oldsound = fire_sound
+				S.initial_w_class = w_class
+				fire_sound = 'sound/weapons/Gunshot_silenced.ogg'
+				w_class = 3 //so pistols do not fit in pockets when suppressed, and rifles can be fit in backpacks
+				A.loc = src
+				update_icon()
+				return
+			else
+				user << "<span class='warning'>[src] already have a [barrel_slot].</span>"
+				return
+		else
+			user << "<span class='warning'>You can't seem to figure out how to fit [S] on [src].</span>"
+			return
+
+	if(istype(A, /obj/item/gun_part/sniper_scope))
+		var/obj/item/gun_part/sniper_scope/S = A
+		if(scope_slot_allowed)
+			if(!scope_slot)
+				if(user.l_hand != src && user.r_hand != src)
+					user << "<span class='notice'>You'll need [src] in your hands to do that.</span>"
+					return
+				user.drop_item()
+				user << "<span class='notice'>You screw [S] onto [src].</span>"
+				scope_slot = A
+				A.loc = src
+				update_icon()
+				return
+			else
+				user << "<span class='warning'>[src] already have a [scope_slot].</span>"
+				return
+		else
+			user << "<span class='warning'>You can't seem to figure out how to fit [S] on [src].</span>"
+			return
+
+	if(istype(A, /obj/item/weapon/gun/projectile/grenadelauncher))
+		var/obj/item/weapon/gun/projectile/grenadelauncher/S = A
+		if(underbarrel_slot_allowed)
+			if(!underbarrel_slot)
+				if(user.l_hand != src && user.r_hand != src)
+					user << "<span class='notice'>You'll need [src] in your hands to do that.</span>"
+					return
+				user.drop_item()
+				user << "<span class='notice'>You screw [S] onto [src].</span>"
+				underbarrel_slot = A
+				A.loc = src
+				update_icon()
+				return
+			else
+				user << "<span class='warning'>[src] already have a [underbarrel_slot].</span>"
+				return
+		else
+			user << "<span class='warning'>You can't seem to figure out how to fit [S] on [src].</span>"
+			return
+
+	if(istype(A, /obj/item/weapon/screwdriver))
+		if(scope_slot && user.a_intent == "grab")
+			to_chat(user, "<span class='notice'>You remove [scope_slot] from [src].</span>")
+			user.drop_item(scope_slot)
+			silenced = 0
+			w_class = 2
+			update_icon()
+			return
+
+		if(underbarrel_slot && user.a_intent == "harm")
+			to_chat(user, "<span class='notice'>You remove [underbarrel_slot] from [src].</span>")
+			user.drop_item(underbarrel_slot)
+			silenced = 0
+			w_class = 2
+			update_icon()
+			return
+
+		if(barrel_slot && user.a_intent == "disarm")
+			to_chat(user, "<span class='notice'>You remove [barrel_slot] from [src].</span>")
+			user.drop_item(barrel_slot)
+			silenced = 0
+			w_class = 2
+			update_icon()
+			return
+		else
+			to_chat(user, "<span class='warning'>[src] have no tactical modules!</span>")
+		return
+
 	var/num_loaded = 0
+
 	if(istype(A, /obj/item/ammo_storage/magazine))
 		var/obj/item/ammo_storage/magazine/AM = A
 		if(load_method == MAGAZINE)
@@ -148,8 +242,7 @@
 			to_chat(user, "<span class='notice'>You successfully fill the [src] with [success_load] shell\s from the [AS].</span>")
 	if(istype(A, /obj/item/ammo_casing))
 		var/obj/item/ammo_casing/AC = A
-		//message_admins("Loading the [src], with [AC], [AC.caliber] and [caliber.len]") //Enable this for testing
-		if(AC.BB && caliber[AC.caliber]) // a used bullet can't be fired twice
+		if(AC.BB && caliber[AC.caliber])
 			if(load_method == MAGAZINE && !chambered)
 				if(user.drop_item(AC, src))
 					chambered = AC
@@ -160,7 +253,6 @@
 					loaded += AC
 					num_loaded++
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
-
 	if(num_loaded)
 		to_chat(user, "<span class='notice'>You load [num_loaded] shell\s into \the [src]!</span>")
 	A.update_icon()
@@ -170,7 +262,8 @@
 /obj/item/weapon/gun/projectile/attack_self(mob/user as mob)
 	if (target)
 		return ..()
-	if (loaded.len || stored_magazine)
+
+	if(user.a_intent == "disarm" && loaded.len || stored_magazine)
 		if (load_method == SPEEDLOADER)
 			var/obj/item/ammo_casing/AC = loaded[1]
 			loaded -= AC
@@ -188,18 +281,16 @@
 			to_chat(user, "<span class='notice'>You unload \the [AC] from \the [src]!</span>")
 			update_icon()
 			return
-		if(silenced)
-			if(user.l_hand != src && user.r_hand != src)
-				..()
+		else
+			to_chat(user, "<span class='warning'>Nothing loaded in \the [src]!</span>")
+
+	if(user.a_intent == "grab")
+		if(two_handed)
+			if(wielded)
+				unwield(user)
+			else
+				wield(user)
 				return
-			to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
-			user.put_in_hands(silenced)
-			silenced = 0
-			w_class = 2
-			update_icon()
-			return
-	else
-		to_chat(user, "<span class='warning'>Nothing loaded in \the [src]!</span>")
 
 /obj/item/weapon/gun/projectile/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, struggle = 0)
 	..()

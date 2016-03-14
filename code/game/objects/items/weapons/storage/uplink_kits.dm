@@ -64,7 +64,7 @@
 
 
 			if("smoothoperator")
-				new /obj/item/weapon/gun/projectile/pistol(src)
+				new /obj/item/weapon/gun/projectile/pistol/stechkin(src)
 				new /obj/item/gun_part/silencer(src)
 				new /obj/item/clothing/gloves/knuckles/spiked(src)
 				new /obj/item/weapon/soap/syndie(src)

@@ -3,7 +3,7 @@
 /obj/item/weapon/subspacetunneler
 	name = "subspace tunneler"
 	desc = "A device that uses subspace machinery components to focus and make use of the energy found in bluespace crystals."
-	icon = 'icons/obj/gun.dmi'
+	icon = 'icons/obj/guns/misc.dmi'
 	icon_state = "subspacetunneler"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	item_state = null

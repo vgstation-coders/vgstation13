@@ -1,8 +1,8 @@
 /obj/item/weapon/gun
 	name = "gun"
 	desc = "Its a gun. It's pretty terrible, though."
-	icon = 'icons/obj/gun.dmi'
-	icon_state = "detective"
+	icon = 'icons/obj/guns/misc.dmi'
+	icon_state = "test"
 	item_state = "gun"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -40,6 +40,24 @@
 	var/last_fired = 0
 
 	var/conventional_firearm = 1	//Used to determine whether, when examined, an /obj/item/weapon/gun/projectile will display the amount of rounds remaining.
+
+	//for twohanded weapon class
+	var/two_handed = 0
+	var/two_handed_to_shot = 0
+
+	//tactical slots for some weapons
+	var/scope_slot_allowed = 0
+	var/scope_slot = null
+
+	var/barrel_slot_allowed = 0
+	var/barrel_slot = null
+	var/zoom = 0
+
+	var/underbarrel_slot_allowed = 0
+	var/underbarrel_slot = null
+
+	var/tactical_slot_allowed = 0
+	var/tactical_slot = null
 
 /obj/item/weapon/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
@@ -113,10 +131,17 @@
 	if(!special_check(user))
 		return
 
-	if (!ready_to_fire())
+	if(!ready_to_fire())
 		if (world.time % 3) //to prevent spam
 			to_chat(user, "<span class='warning'>[src] is not ready to fire again!")
 		return
+
+	if(two_handed_to_shot && !wielded)
+		to_chat(user, "<span class='warning'>You must dual-wield \the [src] before you can fire it!</span>")
+
+	if(two_handed && !wielded && && prob(15))
+		to_chat(user, "<span class='warning'>You must dual-wield your [src] to stable fire from it!</span>")
+		return user.drop_item(src)
 
 	if(!process_chambered()) //CHECK
 		return click_empty(user)

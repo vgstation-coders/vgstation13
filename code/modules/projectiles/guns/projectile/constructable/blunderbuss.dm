@@ -1,7 +1,7 @@
 /obj/item/weapon/blunderbuss
 	name = "blunderbuss"
 	desc = "A muzzle-loaded firearm powered by welding fuel. It might not be a good idea to use more than 10u of fuel in one shot."
-	icon = 'icons/obj/gun.dmi'
+	icon = 'icons/obj/guns/misc.dmi'
 	icon_state = "blunderbuss"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	item_state = null

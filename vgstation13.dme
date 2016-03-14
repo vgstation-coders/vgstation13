@@ -1560,6 +1560,8 @@
 #include "code\modules\projectiles\guns\projectile\nagant.dm"
 #include "code\modules\projectiles\guns\projectile\pistol.dm"
 #include "code\modules\projectiles\guns\projectile\pneumatic.dm"
+#include "code\modules\projectiles\guns\projectile\revolver.dm"
+#include "code\modules\projectiles\guns\projectile\rifles.dm"
 #include "code\modules\projectiles\guns\projectile\shotgun.dm"
 #include "code\modules\projectiles\guns\projectile\constructable\blastcannon.dm"
 #include "code\modules\projectiles\guns\projectile\constructable\blinder.dm"

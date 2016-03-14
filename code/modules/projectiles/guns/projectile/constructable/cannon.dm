@@ -1,7 +1,7 @@
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon
 	name = "cannon"
 	desc = "A makeshift cannon. This primitive weapon uses centuries-old technology."
-	icon = 'icons/obj/gun.dmi'
+	icon = 'icons/obj/guns/misc.dmi'
 	icon_state = "cannon"
 	flags = FPRINT
 	var/fuel_level = 0
@@ -196,7 +196,7 @@
 		speed = (((fire_force*(4/object.w_class))/5)*2) //projectile speed.
 	else
 		speed = (((fire_force*2)/5)*2)
-		
+
 	speed = speed * damage_multiplier
 
 	var/distance = round(((20/object.w_class)*(fuel_level/10))*1.5)

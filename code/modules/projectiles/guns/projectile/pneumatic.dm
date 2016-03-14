@@ -1,7 +1,7 @@
 /obj/item/weapon/storage/pneumatic
 	name = "pneumatic cannon"
 	desc = "A launcher powered by compressed air."
-	icon = 'icons/obj/gun.dmi'
+	icon = 'icons/obj/guns/misc.dmi'
 	icon_state = "pneumatic"
 	item_state = "pneumatic"
 	w_class = 4.0

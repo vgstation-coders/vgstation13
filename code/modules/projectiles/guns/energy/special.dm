@@ -4,7 +4,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 /obj/item/weapon/gun/energy/staff
 	name = "staff of change"
 	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself"
-	icon = 'icons/obj/gun.dmi'
+	icon = 'icons/obj/guns/misc.dmi'
 	icon_state = "staffofchange"
 	item_state = "staffofchange"
 	fire_sound = 'sound/weapons/radgun.ogg'
@@ -390,7 +390,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 /obj/item/weapon/gun/energy/ricochet
 	name = "ricochet rifle"
 	desc = "They say that these were originally designed for duck games. Not that there's any duck in this part of space."
-	icon = 'icons/obj/gun_experimental.dmi'
+	icon = 'icons/obj/guns/experimental.dmi'
 	icon_state = "ricochet"
 	item_state = null
 	origin_tech = "materials=3;powerstorage=3;combat=3"
@@ -403,7 +403,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 /obj/item/weapon/gun/energy/bison
 	name = "\improper Righteous Bison"
 	desc = "A replica of Lord Cockswain's very own personnal ray gun."
-	icon = 'icons/obj/gun_experimental.dmi'
+	icon = 'icons/obj/guns/experimental.dmi'
 	icon_state = "bison"
 	item_state = null
 	origin_tech = "materials=3;powerstorage=3;combat=3"
@@ -452,7 +452,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 /obj/item/weapon/gun/energy/polarstar
 	name = "\improper Polar Star"
 	desc = "Despite being incomplete, the severe wear on this gun shows to which extent it's been used already."
-	icon = 'icons/obj/gun_experimental.dmi'
+	icon = 'icons/obj/guns/experimental.dmi'
 	icon_state = "polarstar"
 	item_state = null
 	slot_flags = SLOT_BELT

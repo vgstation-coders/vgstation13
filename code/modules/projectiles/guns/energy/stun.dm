@@ -44,20 +44,30 @@
 		update_icon()
 		return 1
 
+/obj/item/weapon/gun/energy/stunrevolver
+	name = "stun pistol"
+	desc = "A high-tech revolver that fires stun cartridges. The stun cartridges can be recharged using a conventional energy gun cell, who can be removed."
+	icon_state = "stunrevolver"
+	fire_sound = 'sound/weapons/Gunshot.ogg'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	origin_tech = "combat=3;materials=3;magnets=3;powerstorage=2"
+	cell_type = "/obj/item/weapon/cell/ammo"
+	charge_cost = 1000
+	cell_removing = 1
+	fire_delay = 2
+	w_class = 2.0
+	projectile_type = "/obj/item/projectile/energy/electrode"
 
 /obj/item/weapon/gun/energy/stunrevolver
 	name = "stun revolver"
 	desc = "A high-tech revolver that fires stun cartridges. The stun cartridges can be recharged using a conventional energy weapon recharger."
 	icon_state = "stunrevolver"
 	item_state = null
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	fire_sound = 'sound/weapons/Gunshot.ogg'
 	origin_tech = "combat=3;materials=3;powerstorage=2"
 	charge_cost = 125
 	projectile_type = "/obj/item/projectile/energy/electrode"
 	cell_type = "/obj/item/weapon/cell"
-
-
 
 /obj/item/weapon/gun/energy/crossbow
 	name = "mini energy-crossbow"
@@ -74,16 +84,13 @@
 	cell_type = "/obj/item/weapon/cell/crap"
 	var/charge_tick = 0
 
-
 	New()
 		..()
 		processing_objects.Add(src)
 
-
 	Destroy()
 		processing_objects.Remove(src)
 		..()
-
 
 	process()
 		charge_tick++
@@ -93,11 +100,8 @@
 		power_supply.give(100)
 		return 1
 
-
 	update_icon()
 		return
-
-
 
 /obj/item/weapon/gun/energy/crossbow/largecrossbow
 	name = "Energy Crossbow"
@@ -108,4 +112,36 @@
 	w_type = RECYK_ELECTRONIC
 	projectile_type = "/obj/item/projectile/energy/bolt/large"
 
+/obj/item/weapon/gun/energy/erttaser
+	name = "Advanced taser gun"
+	desc = "A small, low capacity gun used for non-lethal takedowns. Used by E.R.T. That taser have compact plasma reactor. Reactor fuel indicator shows that.. the fuel runs out in a year or two."
+	icon_state = "erttaser"
+	lefthand_file = 'icons/mob/guns_lefthand.dmi'
+	righthand_file = 'icons/mob/guns_righthand.dmi'
+	origin_tech = "combat=3;magnets=6;materials=6;powerstorage=8"
+	item_state = null	//so the human update icon uses the icon_state instead.
+	fire_sound = 'sound/weapons/Taser.ogg'
+	charge_cost = 1250
+	fire_delay = 6 //учитесь стрелять наконец!!
+	projectile_type = "/obj/item/projectile/energy/electrode"
+	cell_type = "/obj/item/weapon/cell/ammo/hyper"
+	origin_tech = "combat=2;materials=5;plasma=5"
+	var/charge_tick = 0
 
+	New()
+		..()
+		processing_objects.Add(src)
+
+
+	Destroy()
+		processing_objects.Remove(src)
+		..()
+
+	process()
+		charge_tick++
+		if(charge_tick < 4) return 0
+		charge_tick = 0
+		if(!power_supply) return 0
+		power_supply.give(100)
+		update_icon()
+		return 1

@@ -1,7 +1,7 @@
 /obj/item/weapon/gun/energy/gun
 	name = "energy gun"
 	desc = "A basic energy-based gun with two settings: Stun and kill."
-	icon_state = "energystun100"
+	icon_state = "egunstun100"
 	item_state = null	//so the human update icon uses the icon_state instead.
 	fire_sound = 'sound/weapons/Taser.ogg'
 
@@ -12,7 +12,6 @@
 
 	var/mode = 0 //0 = stun, 1 = kill
 
-
 	attack_self(mob/living/user as mob)
 		switch(mode)
 			if(0)
@@ -21,15 +20,53 @@
 				fire_sound = 'sound/weapons/Laser.ogg'
 				to_chat(user, "<span class='warning'>[src.name] is now set to kill.</span>")
 				projectile_type = "/obj/item/projectile/beam"
-				modifystate = "energykill"
+				modifystate = "egunkill"
 			if(1)
 				mode = 0
 				charge_cost = 100
 				fire_sound = 'sound/weapons/Taser.ogg'
 				to_chat(user, "<span class='warning'>[src.name] is now set to stun.</span>")
 				projectile_type = "/obj/item/projectile/energy/electrode"
-				modifystate = "energystun"
+				modifystate = "egunstun"
 		update_icon()
+
+/obj/item/weapon/gun/energy/gun/shockrifle
+	name = "Shock Rifle"
+	desc = "The Pacificer energy shock rifle, two modes, laser and taser"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	icon_state = "shockrifle"
+	item_state = "erttaser"
+	cell_type = "/obj/item/weapon/cell/ammo"
+	slot_flags = SLOT_BACK
+	scope_allowed = 1
+	two_handed = 1
+	cell_removing = 1
+	w_class = 4
+	force = 10
+
+	charge_cost = 500
+	fire_delay = 3
+	fire_sound = 'sound/weapons/Laser.ogg'
+	projectile_type = "/obj/item/projectile/beam/captain"
+
+	var/mode = 1
+
+	attack_self(mob/living/user as mob)
+		if(user.a_intent == "help")
+			switch(mode)
+				if(0)
+					mode = 1
+					charge_cost = 500
+					fire_sound = 'sound/weapons/Laser.ogg'
+					to_chat(user, "<span class='warning'>[src.name] is now set to kill.</span>")
+					projectile_type = "/obj/item/projectile/beam/captain"
+				if(1)
+					mode = 0
+					charge_cost = 1000
+					fire_sound = 'sound/weapons/Taser.ogg'
+					to_chat(user, "<span class='warning'>[src.name] is now set to stun.</span>")
+					projectile_type = "/obj/item/projectile/energy/electrode"
+			update_icon()
 
 /obj/item/weapon/gun/energy/pulse_rifle
 	name = "pulse rifle"
@@ -69,6 +106,55 @@
 	isHandgun()
 		return 0
 
+/obj/item/weapon/gun/energy/sniper //old and more multipurpose version
+	name = "Sniper Rifle"
+	desc = "pulse-based energy sniper rifle, stable model - Mark 8"
+	icon_state = "sniper"
+	item_state = null
+	cell_type = "/obj/item/weapon/cell/ammo"
+	slot_flags = SLOT_BACK
+	two_handed = 1
+	w_class = 4
+	force = 10
+	cell_removing = 1
+	//mode settings
+	charge_cost = 500
+	fire_delay = 20
+	projectile_type = "/obj/item/projectile/beam"
+	fire_sound = 'sound/weapons/pulse.ogg'
+
+	var/mode = 2
+
+	attack_self(mob/living/user as mob)
+		..()
+		if(user.a_intent == "help")
+			switch(mode)
+				if(2)
+					mode = 0
+					charge_cost = 500
+					fire_delay = 10 //учитесь стрелять наконец!!
+					fire_sound = 'sound/weapons/pulse.ogg'
+					user << "\red [src.name] is now set to shock beam mode."
+					projectile_type = "/obj/item/projectile/beam/xsniper"
+				if(0)
+					mode = 1
+					charge_cost = 250
+					fire_delay = 5
+					fire_sound = 'sound/weapons/Laser.ogg'
+					user << "\red [src.name] is now set to laser mode."
+					projectile_type = "/obj/item/projectile/beam"
+				if(1)
+					mode = 2
+					charge_cost = 500
+					fire_delay = 20 //Снайперка не автоматическая, не забывайте об этом.
+					fire_sound = 'sound/weapons/pulse.ogg'
+					user << "\red [src.name] is now set to high power sniper mode."
+					projectile_type = "/obj/item/projectile/beam/deathlaser"
+			return
+
+	isHandgun()
+		return 0
+
 /obj/item/weapon/gun/energy/pulse_rifle/cyborg/process_chambered()
 	if(in_chamber)
 		return 1
@@ -88,8 +174,6 @@
 
 	attack_self(mob/living/user as mob)
 		to_chat(user, "<span class='warning'>[src.name] has three settings, and they are all DESTROY.</span>")
-
-
 
 /obj/item/weapon/gun/energy/pulse_rifle/M1911
 	name = "m1911-P"
@@ -114,11 +198,9 @@
 		..()
 		processing_objects.Add(src)
 
-
 	Destroy()
 		processing_objects.Remove(src)
 		..()
-
 
 	process()
 		charge_tick++
@@ -130,7 +212,6 @@
 			power_supply.give(100)
 			update_icon()
 		return 1
-
 
 	proc
 		failcheck()
@@ -155,7 +236,6 @@
 				update_icon()
 			return 0
 
-
 		update_charge()
 			if (crit_fail)
 				overlays += "nucgun-whee"
@@ -163,7 +243,6 @@
 			var/ratio = power_supply.charge / power_supply.maxcharge
 			ratio = round(ratio, 0.25) * 100
 			overlays += "nucgun-[ratio]"
-
 
 		update_reactor()
 			if(crit_fail)
@@ -183,11 +262,9 @@
 			else if (mode == 1)
 				overlays += "nucgun-kill"
 
-
 	emp_act(severity)
 		..()
 		reliability -= round(15/severity)
-
 
 	update_icon()
 		overlays.len = 0

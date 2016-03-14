@@ -1,4 +1,5 @@
 /obj/item/weapon/gun/energy
+	icon = 'icons/obj/guns/energy.dmi'
 	icon_state = "energy"
 	name = "energy gun"
 	desc = "A basic energy-based gun."
@@ -10,6 +11,8 @@
 	var/projectile_type = "/obj/item/projectile/beam/practice"
 	var/modifystate
 	var/charge_states = 1 //if the gun changes icon states depending on charge, this is 1. Uses a var so it can be changed easily
+
+	var/cell_removing = 0
 
 /obj/item/weapon/gun/energy/emp_act(severity)
 	power_supply.use(round(power_supply.maxcharge / severity))
@@ -27,23 +30,56 @@
 /obj/item/weapon/gun/energy/update_icon()
 	var/ratio = 0
 
-	if(power_supply && power_supply.maxcharge > 0) //If the gun has a power cell, calculate how much % power is left in it
+	if(power_supply && power_supply.maxcharge > 0)
 		ratio = power_supply.charge / power_supply.maxcharge
 
-	//If there's no power cell, the gun looks as if it had an empty power cell
-
 	ratio *= 100
-	ratio = Clamp(ratio, 0, 100) //Value between 0 and 100
+	ratio = Clamp(ratio, 0, 100)
 
 	if(ratio >= 50)
 		ratio = Floor(ratio, 25)
 	else
 		ratio = Ceiling(ratio, 25)
 
+	if(power_supply)
+		if(modifystate && charge_states)
+			icon_state = "[modifystate][ratio]"
+		else if(charge_states)
+			icon_state = "[initial(icon_state)][ratio]"
+	else
+		icon_state = "[initial(icon_state)]-empty"
+	return
+
 	if(modifystate && charge_states)
 		icon_state = "[modifystate][ratio]"
 	else if(charge_states)
 		icon_state = "[initial(icon_state)][ratio]"
+
+
+/obj/item/weapon/gun/energy/attack_self(mob/user as mob)
+	if(user.a_intent == "disarm")
+		if(cell_removing)
+			if(power_supply)
+				power_supply.loc = get_turf(src.loc)
+				power_supply.update_icon()
+				user.put_in_hands(power_supply)
+				power_supply = null
+				update_icon()
+				user << "<span class='notice'>You pull the [power_supply] out of \the [src]!</span>"
+				return
+			else
+				user << "<span class='notice'>It has no cell!</span>"
+		else
+			user << "<span class='notice'>You cant remove cell from that gun</span>"
+			return
+
+	if(user.a_intent == "grab")
+		if(two_handed)
+			if(wielded)
+				unwield(user)
+			else
+				wield(user)
+				return
 
 /obj/item/weapon/gun/energy/New()
 	. = ..()
@@ -54,12 +90,3 @@
 		power_supply = new(src)
 
 	power_supply.give(power_supply.maxcharge)
-
-/*
-/obj/item/weapon/gun/energy/Destroy()
-	if(power_supply)
-		power_supply.loc = get_turf(src)
-		power_supply = null
-
-	..()
-*/

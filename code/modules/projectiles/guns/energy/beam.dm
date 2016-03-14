@@ -10,31 +10,54 @@
 	origin_tech = "combat=3;magnets=2"
 	projectile_type = "/obj/item/projectile/beam"
 
+/obj/item/weapon/gun/energy/laser/pistol
+	name = "Laser pistol"
+	desc = "A laser pistol issued to high ranking members of a certain shadow corporation."
+	icon_state = "lpistol"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	origin_tech = "combat=3;materials=6;magnets=3"
+	projectile_type = /obj/item/projectile/beam/lightlaser
+	cell_type = "/obj/item/weapon/cell/ammo"
+	starting_materials = list(MAT_IRON = 1000)
+	w_class = 2.0
+	cell_removing = 1
+	fire_delay = 3
+	charge_cost = 1250 // holds less "ammo" then the rifle variant.
+
+/obj/item/weapon/gun/energy/laser/rifle
+	name = "Laser rifle"
+	desc = "improper laser rifle, standart shots and ejectable cell"
+	icon_state = "lrifle"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	origin_tech = "combat=4;materials=4;magnets=3"
+	projectile_type = /obj/item/projectile/beam/captain
+	cell_type = "/obj/item/weapon/cell/ammo"
+	starting_materials = list(MAT_IRON = 2500)
+	cell_removing = 1
+	fire_delay = 0.5
+	charge_cost = 500
+	two_handed = 1
+
+/obj/item/weapon/gun/energy/lasercannon
+	name = "laser cannon"
+	desc = "With the L.A.S.E.R. cannon, the lasing medium is enclosed in a tube lined with uranium-235 and subjected to high neutron flux in a nuclear reactor core. This incredible technology may help YOU achieve high excitation rates with small laser volumes!"
+	icon_state = "lasercannon"
+	item_state = null
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	fire_sound = 'sound/weapons/lasercannonfire.ogg'
+	origin_tech = "combat=4;materials=3;powerstorage=3"
+	projectile_type = "/obj/item/projectile/beam/heavylaser"
+	fire_delay = 2
+
+	isHandgun()
+		return 0
+
 /obj/item/weapon/gun/energy/laser/practice
 	name = "practice laser gun"
 	desc = "A modified version of the basic laser gun, this one fires less concentrated energy bolts designed for target practice."
 	projectile_type = "/obj/item/projectile/beam/practice"
 	clumsy_check = 0
 	mech_flags = null // So it can be scanned by the Device Analyser
-
-/obj/item/weapon/gun/energy/laser/pistol
-	name = "laser pistol"
-	desc = "A laser pistol issued to high ranking members of a certain shadow corporation."
-	icon_state = "xcomlaserpistol"
-	item_state = null
-	w_class = 1.0
-	projectile_type = /obj/item/projectile/beam/lightlaser
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	charge_cost = 100 // holds less "ammo" then the rifle variant.
-
-/obj/item/weapon/gun/energy/laser/rifle
-	name = "laser rifle"
-	desc = "A laser rifle issued to high ranking members of a certain shadow corporation."
-	icon_state = "xcomlasergun"
-	item_state = null
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	projectile_type = /obj/item/projectile/beam
-	charge_cost = 50
 
 /obj/item/weapon/gun/energy/laser/admin
 	name = "infinite laser gun"
@@ -43,8 +66,8 @@
 	projectile_type = /obj/item/projectile/beam
 	charge_cost = 0
 
-/obj/item/weapon/gun/energy/laser/admin/update_icon()
-	return
+	update_icon()
+		return
 
 /obj/item/weapon/gun/energy/laser/blaster
 	name = "blaster rifle"
@@ -52,14 +75,14 @@
 	icon_state = "blaster"
 	fire_sound = "sound/weapons/blaster-storm.ogg"
 
-/obj/item/weapon/gun/energy/laser/blaster/New()
-	..()
-	if(prob(50))
-		charge_cost = 0
-		projectile_type = /obj/item/projectile/beam/practice/stormtrooper
-		desc = "Don't expect to hit anything with this."
+	New()
+		..()
+		if(prob(50))
+			charge_cost = 0
+			projectile_type = /obj/item/projectile/beam/practice/stormtrooper
+			desc = "Don't expect to hit anything with this."
 
-/obj/item/weapon/gun/energy/laser/blaster/update_icon()
+	update_icon()
 
 obj/item/weapon/gun/energy/laser/retro
 	name ="retro laser"
@@ -79,33 +102,30 @@ obj/item/weapon/gun/energy/laser/retro
 	var/charge_tick = 0
 	projectile_type = "/obj/item/projectile/beam/captain"
 
+	New()
+		..()
+		processing_objects.Add(src)
+
+	Destroy()
+		processing_objects.Remove(src)
+		..()
+
+
+	process()
+		charge_tick++
+		if(charge_tick < 4) return 0
+		charge_tick = 0
+		if(!power_supply) return 0
+		power_supply.give(100)
+		update_icon()
+		return 1
+
 /obj/item/weapon/gun/energy/mindflayer
 	name = "mind flayer"
 	desc = "A prototype weapon recovered from the ruins of Research-Station Epsilon."
 	icon_state = "xray"
 	projectile_type = "/obj/item/projectile/beam/mindflayer"
 	fire_sound = 'sound/weapons/Laser.ogg'
-
-
-/obj/item/weapon/gun/energy/laser/captain/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/laser/captain/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-
-/obj/item/weapon/gun/energy/laser/captain/process()
-	charge_tick++
-	if(charge_tick < 4) return 0
-	charge_tick = 0
-	if(!power_supply) return 0
-	power_supply.give(100)
-	update_icon()
-	return 1
-
 
 
 /*/obj/item/weapon/gun/energy/laser/cyborg/load_into_chamber()
@@ -145,23 +165,6 @@ obj/item/weapon/gun/energy/laser/retro
 		update_icon()
 		return 1
 
-
-
-/obj/item/weapon/gun/energy/lasercannon
-	name = "laser cannon"
-	desc = "With the L.A.S.E.R. cannon, the lasing medium is enclosed in a tube lined with uranium-235 and subjected to high neutron flux in a nuclear reactor core. This incredible technology may help YOU achieve high excitation rates with small laser volumes!"
-	icon_state = "lasercannon"
-	item_state = null
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	fire_sound = 'sound/weapons/lasercannonfire.ogg'
-	origin_tech = "combat=4;materials=3;powerstorage=3"
-	projectile_type = "/obj/item/projectile/beam/heavylaser"
-
-	fire_delay = 2
-
-	isHandgun()
-		return 0
-
 /obj/item/weapon/gun/energy/lasercannon/cyborg/process_chambered()
 	if(in_chamber)
 		return 1
@@ -183,45 +186,6 @@ obj/item/weapon/gun/energy/laser/retro
 	origin_tech = "combat=5;materials=3;magnets=2;syndicate=2"
 	projectile_type = "/obj/item/projectile/beam/xray"
 	charge_cost = 50
-
-
-/obj/item/weapon/gun/energy/plasma
-	name = "plasma gun"
-	desc = "A high-power plasma gun. You shouldn't ever see this."
-	icon_state = "xray"
-	item_state = null
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	fire_sound = 'sound/weapons/elecfire.ogg'
-	origin_tech = "combat=5;materials=3;magnets=2"
-	projectile_type = /obj/item/projectile/energy/plasma
-	charge_cost = 50
-
-/obj/item/weapon/gun/energy/plasma/pistol
-	name = "plasma pistol"
-	desc = "A state of the art pistol utilizing plasma in a uranium-235 lined core to output searing bolts of energy."
-	icon_state = "alienpistol"
-	item_state = null
-	w_class = 1.0
-	projectile_type = /obj/item/projectile/energy/plasma/pistol
-	charge_cost = 100
-
-/obj/item/weapon/gun/energy/plasma/light
-	name = "plasma rifle"
-	desc = "A state of the art rifle utilizing plasma in a uranium-235 lined core to output radiating bolts of energy."
-	icon_state = "lightalienrifle"
-	item_state = null
-	projectile_type = /obj/item/projectile/energy/plasma/light
-	charge_cost = 50
-
-/obj/item/weapon/gun/energy/plasma/rifle
-	name = "plasma cannon"
-	desc = "A state of the art cannon utilizing plasma in a uranium-235 lined core to output hi-power, radiating bolts of energy."
-	icon_state = "alienrifle"
-	item_state = null
-	w_class = 4.0
-	slot_flags = null
-	projectile_type = /obj/item/projectile/energy/plasma/rifle
-	charge_cost = 150
 
 /obj/item/weapon/gun/energy/plasma/MP40k
 	name = "Plasma MP40k"
