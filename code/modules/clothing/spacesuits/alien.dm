@@ -4,6 +4,7 @@
 	var/up = 0 //So Unathi helmets play nicely with the weldervision check.
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_restricted = list("Unathi")
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/unathi/helmet_cheap
 	name = "NT breacher helmet"
@@ -11,12 +12,14 @@
 	icon_state = "unathi_helm_cheap"
 	item_state = "unathi_helm_cheap"
 	_color = "unathi_helm_cheap"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/unathi
 	armor = list(melee = 40, bullet = 30, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 50)
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_restricted = list("Unathi")
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/unathi/rig_cheap
 	name = "NT breacher chassis"
@@ -38,58 +41,68 @@
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_restricted = list("Vox")
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 30, bio = 30, rad = 30)
 	species_restricted = list("Vox")
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/pressure
 	name = "alien helmet"
 	icon_state = "vox-pressure"
 	item_state = "vox-pressure"
 	desc = "Hey, wasn't this a prop in \'The Abyss\'?"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/pressure
 	name = "alien pressure suit"
 	icon_state = "vox-pressure"
 	item_state = "vox-pressure"
 	desc = "A huge, armoured, pressurized suit, designed for distinctly nonhuman proportions."
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/carapace
 	name = "alien visor"
 	icon_state = "vox-carapace"
 	item_state = "vox-carapace"
 	desc = "A glowing visor, perhaps stolen from a depressed Cylon."
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/carapace
 	name = "alien carapace armour"
 	icon_state = "vox-carapace"
 	item_state = "vox-carapace"
 	desc = "An armoured, segmented carapace with glowing purple lights. It looks pretty run-down."
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/stealth
 	name = "alien stealth helmet"
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "A smoothly contoured, matte-black alien helmet."
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/stealth
 	name = "alien stealth suit"
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "A sleek black suit. It seems to have a tail, and is very heavy."
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/medic
 	name = "alien goggled helmet"
 	icon_state = "vox-medic"
 	item_state = "vox-medic"
 	desc = "An alien helmet with enormous goggled lenses."
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/medic
 	name = "alien armour"
 	icon_state = "vox-medic"
 	item_state = "vox-medic"
 	desc = "An almost organic looking nonhuman pressure suit."
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/under/vox
 	has_sensor = 0
@@ -153,6 +166,7 @@
 	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 25)
 	pressure_resistance = 5 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ
 	name = "vox assistant pressure helmet"
@@ -162,39 +176,47 @@
 	flags = FPRINT //Flags need updating from inheritance above
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 25)
 	pressure_resistance = 5 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/civ/bartender
 	name = "vox bartender pressure suit"
 	icon_state = "vox-civ-bartender"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/bartender
 	name = "vox bartender pressure helmet"
 	icon_state = "vox-civ-bartender"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/civ/chef
 	name = "vox chef pressure suit"
 	icon_state = "vox-civ-chef"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/chef
 	name = "vox chef pressure helmet"
 	icon_state = "vox-civ-chef"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/civ/librarian
 	name = "vox librarian pressure suit"
 	icon_state = "vox-civ-librarian"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/librarian
 	name = "vox librarian pressure helmet"
 	icon_state = "vox-civ-librarian"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/civ/chaplain
 	name = "vox chaplain pressure suit"
 	icon_state = "vox-civ-chaplain"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/chaplain
 	name = "vox chaplain pressure helmet"
 	icon_state = "vox-civ-chaplain"
-
+	flags = FPRINT  | PLASMAGUARD
 //Engineering
 /obj/item/clothing/suit/space/vox/civ/engineer
 	name = "vox engineer pressure suit"
@@ -204,6 +226,7 @@
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 50)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer
 	name = "vox engineer pressure helmet"
@@ -213,12 +236,14 @@
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 50)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/civ/engineer/atmos
 	name = "vox atmos pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. Has some heat protection."
 	icon_state = "vox-civ-atmos"
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
 	name = "vox atmos pressure helmet"
@@ -226,6 +251,7 @@
 	desc = "A very alien-looking helmet for vox crewmembers. Has some heat protection."
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/civ/engineer/ce
 	name = "vox chief engineer pressure suit"
@@ -249,6 +275,7 @@
 	icon_state = "vox-civ-science"
 	item_state = "vox-pressure-science"
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 25)
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/science
 	name = "vox science pressure helmet"
@@ -256,19 +283,21 @@
 	item_state = "vox-pressure-science"
 	desc = "A very alien-looking helmet for vox crewmembers. This one is for SCIENCE!"
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 25)
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/civ/science/rd
 	name = "vox research director pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for the head of SCIENCE!"
 	icon_state = "vox-civ-rd"
 	item_state = "vox-pressure-science"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/science/rd
 	name = "vox research director pressure helmet"
 	icon_state = "vox-civ-rd"
 	item_state = "vox-pressure-science"
 	desc = "A very alien-looking helmet for vox crewmembers. This one is for head of SCIENCE!"
-
+	flags = FPRINT  | PLASMAGUARD
 
 //Med/Sci
 /obj/item/clothing/suit/space/vox/civ/medical
@@ -278,6 +307,7 @@
 	item_state = "vox-pressure-medical"
 	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical
 	name = "vox medical pressure helmet"
@@ -285,56 +315,67 @@
 	item_state = "vox-pressure-medical"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for medical personnel."
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/civ/medical/virologist
 	name = "vox virologist pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for virologists."
 	icon_state = "vox-civ-virologist"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/virologist
 	name = "vox virologist pressure helmet"
 	icon_state = "vox-civ-virologist"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for virologists."
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/civ/medical/chemist
 	name = "vox chemist pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for chemists."
 	icon_state = "vox-civ-chemist"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/chemist
 	name = "vox chemist pressure helmet"
 	icon_state = "vox-civ-chemist"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for chemists."
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/civ/medical/geneticist
 	name = "vox geneticist pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for geneticists."
 	icon_state = "vox-civ-geneticist"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/geneticist
 	name = "vox geneticist pressure helmet"
 	icon_state = "vox-civ-geneticist"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for geneticists."
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/civ/medical/paramedic
 	name = "vox paramedic pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for paramedics"
 	icon_state = "vox-civ-paramedic"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
 	name = "vox paramedic pressure helmet"
 	icon_state = "vox-civ-paramedic"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for paramedics."
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/vox/civ/medical/cmo
 	name = "vox cmo pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for the CMO."
 	icon_state = "vox-civ-cmo"
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
 	name = "vox cmo pressure helmet"
 	icon_state = "vox-civ-cmo"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for the CMO."
+	flags = FPRINT  | PLASMAGUARD
 
 //Security
 /obj/item/clothing/suit/space/vox/civ/security
@@ -345,6 +386,7 @@
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
 	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/vox/civ/security
 	name = "vox security pressure helmet"
@@ -352,6 +394,7 @@
 	item_state = "vox-pressure-security"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for security aligned vox."
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 //Old Vox Suits
 /*
@@ -435,6 +478,7 @@
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_restricted = list("Grey")
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/grey
 	name = "grey pressure suit"
@@ -443,3 +487,4 @@
 	desc = "A strange suit comprised of a series of tubes. Despite looking like a decent wind could tear it apart, it is surprisingly durable. Too thin for anything but a Grey to wear it."
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 50)
 	species_restricted = list("Grey")
+	flags = FPRINT  | PLASMAGUARD

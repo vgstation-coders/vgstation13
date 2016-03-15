@@ -5,6 +5,7 @@
 	icon_state = "paramedic-eva-helmet"
 	item_state = "paramedic-eva-helmet"
 	species_restricted = list("exclude","Vox")
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/paramedic
 	name = "Paramedic EVA suit"
@@ -13,13 +14,14 @@
 	desc = "A paramedic space suit. Used in the recovery of bodies from space."
 	species_restricted = list("exclude","Vox")
 	slowdown = 1
+	flags = FPRINT  | PLASMAGUARD
 
 //Space santa outfit suit
 /obj/item/clothing/head/helmet/space/santahat
 	name = "Santa's hat"
 	desc = "Ho ho ho. Merrry X-mas!"
 	icon_state = "santahat"
-	flags = FPRINT
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/santa
 	name = "Santa's suit"
@@ -27,7 +29,7 @@
 	icon_state = "santa"
 	item_state = "santa"
 	slowdown = 0
-	flags = FPRINT  | ONESIZEFITSALL
+	flags = FPRINT  | ONESIZEFITSALL | PLASMAGUARD
 	allowed = list(/obj/item) //for stuffing exta special presents
 
 
@@ -39,6 +41,7 @@
 	item_state = "pirate"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.9
+	flags = FPRINT  | PLASMAGUARD
 
 
 /obj/item/clothing/suit/space/pirate
@@ -51,7 +54,7 @@
 	slowdown = 0
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.9
-
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/ancient //slightly better then an anomalist's space suit
 	name = "ancient space suit"
@@ -61,6 +64,7 @@
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank)
 	armor = list(melee = 10, bullet = 10, laser = 10,energy = 10, bomb = 50, bio = 100, rad = 100)
 	species_restricted = list("Human")
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/ancient
 	name = "ancient space helmet"
@@ -69,4 +73,4 @@
 	desc = "Take your protein pills and put your helmet on."
 	armor = list(melee = 10, bullet = 10, laser = 10,energy = 10, bomb = 50, bio = 100, rad = 100)
 	species_restricted =list("Human")
-
+	flags = FPRINT  | PLASMAGUARD
