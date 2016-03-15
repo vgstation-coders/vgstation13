@@ -1,0 +1,5 @@
+author: Intigracy
+delete-after: True
+changes: 
+- rscadd: You can now EMP BoH's to make them spit out their contents.
+- bugfix: EMP grenades now actually disappear once they explode.

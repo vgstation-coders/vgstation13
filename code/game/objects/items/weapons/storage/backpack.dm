@@ -47,7 +47,7 @@
 	if(W == src)
 		return // HOLY FUCKING SHIT WHY STORAGE CODE, WHY - pomf
 	if(crit_fail)
-		to_chat(user, "<span class = 'warning'>The Bluespace generator isn't working.</span>")
+		to_chat(user, "<span class = 'warning'>The Bluespace portal generator isn't working.</span>")
 		return
 	//BoH+BoH=Singularity, WAS commented out
 	if(istype(W, /obj/item/weapon/storage/backpack/holding) && !W.crit_fail)
@@ -71,7 +71,7 @@
 		to_chat(user, "<span class = 'warning'>The Bluespace portal resists your attempt to add another item.</span>")//light failure
 
 	else
-		to_chat(user, "<span class = 'danger'>The Bluespace generator malfunctions!</span>")
+		to_chat(user, "<span class = 'danger'>The Bluespace portal malfunctions!</span>")
 		for (var/obj/O in src.contents) //it broke, delete what was in it
 			qdel(O)
 		crit_fail = 1
@@ -90,6 +90,15 @@
 	qdel(src)
 	return
 
+/obj/item/weapon/storage/backpack/holding/emp_act(severity)
+	if(prob(50+severity))
+		for(var/obj/O in src.contents)
+			if(istype(src.loc, /mob))
+				var/mob/user = src.loc
+				O.forceMove(user.loc)
+			else
+				O.forceMove(src.loc)
+		src.loc.visible_message("<span class = 'danger'>The Bluespace portal malfunctions, spitting out its contents onto the floor!</span>")
 
 /obj/item/weapon/storage/backpack/santabag
 	name = "Santa's Gift Bag"
