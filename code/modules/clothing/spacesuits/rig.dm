@@ -16,6 +16,7 @@
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
 	species_restricted = list("exclude","Vox")
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/rig/New()
 	..()
@@ -90,6 +91,7 @@
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 
 /obj/item/clothing/suit/space/rig/ghettorig
@@ -129,6 +131,7 @@
 	_color = "mining"
 	species_restricted = list("exclude","Vox")
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/mining
 	icon_state = "rig-mining"
@@ -137,6 +140,7 @@
 	item_state = "mining_hardsuit"
 	species_restricted = list("exclude","Vox")
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 
 //Syndicate rig
@@ -152,8 +156,8 @@
 	siemens_coefficient = 0.6
 	var/obj/machinery/camera/camera
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-
 	species_restricted = null
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/rig/syndi/attack_self(mob/user)
 	if(camera)
@@ -182,8 +186,8 @@
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs)
 	siemens_coefficient = 0.6
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-
 	species_restricted = null
+	flags = FPRINT  | PLASMAGUARD
 
 //Wizard Rig
 /obj/item/clothing/head/helmet/space/rig/wizard
@@ -200,6 +204,7 @@
 	wizard_garb = 1
 
 	species_restricted = null
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/wizard
 	icon_state = "rig-wiz"
@@ -216,6 +221,7 @@
 	wizard_garb = 1
 
 	species_restricted = null
+	flags = FPRINT  | PLASMAGUARD
 
 //Medical Rig
 /obj/item/clothing/head/helmet/space/rig/medical
@@ -226,6 +232,7 @@
 	_color = "medical"
 	species_restricted = list("exclude","Vox")
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/medical
 	icon_state = "rig-medical"
@@ -235,6 +242,7 @@
 	species_restricted = list("exclude","Vox")
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 
 	//Security
@@ -248,6 +256,7 @@
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
 	siemens_coefficient = 0.7
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/security
 	icon_state = "rig-sec"
@@ -259,6 +268,7 @@
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
 	siemens_coefficient = 0.7
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 	// stormtroopers
 
@@ -318,6 +328,7 @@
 	slowdown = 2
 	armor = list(melee = 30, bullet = 5, laser = 40,energy = 5, bomb = 35, bio = 100, rad = 60)
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/)
+	flags = FPRINT  | PLASMAGUARD
 
 //ADMINBUS RIGS. SOVIET + NAZI
 /obj/item/clothing/head/helmet/space/rig/nazi
@@ -329,6 +340,7 @@
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	_color = "nazi"
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/nazi
 	name = "nazi hardsuit"
@@ -340,6 +352,7 @@
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/rig/soviet
 	name = "soviet hardhelmet"
@@ -350,6 +363,7 @@
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	_color = "soviet"
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	flags = FPRINT  | PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/soviet
 	name = "soviet hardsuit"
@@ -361,7 +375,7 @@
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-
+	flags = FPRINT  | PLASMAGUARD
 
 //Death squad rig
 /obj/item/clothing/head/helmet/space/rig/deathsquad
