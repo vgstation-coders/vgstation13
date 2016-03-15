@@ -4,9 +4,9 @@
 	item_state = "emp"
 	origin_tech = "materials=2;magnets=3"
 
-	prime()
+/obj/item/weapon/grenade/empgrenade/prime()
 		..()
-		if(empulse(src, 4, 10))
-			del(src)
-		return
+		empulse(src, 4, 10)
+		sleep(5)
+		qdel(src)
 
