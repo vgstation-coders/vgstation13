@@ -20,10 +20,18 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "blueprints"
 	attack_verb = list("attacked", "bapped", "hit")
+	var/oneuse = 0
 
 	var/can_create_areas_in = list(AREA_SPACE)
 	var/can_rename_areas = list(AREA_STATION, AREA_BLUEPRINTS)
 	var/can_delete_areas = list(AREA_BLUEPRINTS)
+
+/obj/item/blueprints/cheap
+	name = "station blueprints copy"
+	desc = "A cheaply made copy of the station blueprints that looks like it can fall apart at any moment. It's incredibly faded."
+	icon_state ="blueprintsc"
+	oneuse = 1
+
 
 /obj/item/blueprints/attack_self(mob/M as mob)
 	if (!istype(M,/mob/living/carbon/human))
@@ -44,11 +52,13 @@
 				interact()
 				return 1
 			create_area()
+
 		if ("edit_area")
 			if (!(get_area_type() in can_rename_areas))
 				interact()
 				return 1
 			edit_area()
+
 		if ("delete_area")
 			if (!(get_area_type() in can_delete_areas))
 				interact()
@@ -151,8 +161,12 @@ move an amendment</a> to the drawing.</p>
 
 	ghostteleportlocs[newarea.name] = newarea
 
-	sleep(5)
-	interact()
+	if(oneuse)
+		to_chat(usr, "<span class='notice'>[src] crumbles into dust.</span>")
+		qdel(src)
+	else
+		sleep(5)
+		interact()
 
 /obj/item/blueprints/proc/edit_area()
 	var/area/areachanged = get_area()
@@ -168,7 +182,12 @@ move an amendment</a> to the drawing.</p>
 	for(var/atom/allthings in areachanged.contents)
 		allthings.change_area(prevname,areachanged)
 	to_chat(usr, "<span class='notice'>You set the area '[prevname]' title to '[str]'.</span>")
-	interact()
+
+	if(oneuse)
+		to_chat(usr, "<span class='notice'>[src] crumbles into dust.</span>")
+		qdel(src)
+	else
+		interact()
 
 /obj/item/blueprints/proc/delete_area(var/mob/user) //This functionality is currently commented out!
 	var/area/station/custom/areadeleted = get_area()
@@ -189,6 +208,10 @@ move an amendment</a> to the drawing.</p>
 		for(var/atom/movable/AM in T.contents)
 			AM.change_area(areadeleted,space)
 	to_chat(usr, "You've erased the \"[areadeleted]\" from the blueprints.")
+
+	if(oneuse)
+		to_chat(usr, "<span class='notice'>[src] crumbles into dust.</span>")
+		qdel(src)
 
 /obj/item/blueprints/proc/check_tile_is_border(var/turf/T2,var/dir)
 	if (istype(T2, /turf/space))

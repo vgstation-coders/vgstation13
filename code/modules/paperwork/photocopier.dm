@@ -10,12 +10,13 @@
 	power_channel = EQUIP
 	var/opened = 0
 	var/obj/item/weapon/paper/copy = null	//what's in the copier!
-	var/obj/item/weapon/photo/photocopy = null
+	var/obj/item/weapon/photo/photocopy = null //copy pictures!
+	var/mob/living/ass = null //ass pictures!
+	var/obj/item/blueprints/bp = null //for copying blueprints
 	var/copies = 1	//how many copies to print!
 	var/toner = 30 //how much toner is left! woooooo~
 	var/maxcopies = 10	//how many copies can be copied at once- idea shamelessly stolen from bs12's copier!
 	var/greytoggle = "Greyscale"
-	var/mob/living/ass = null
 	var/copying = 0
 
 /********************************************************************
@@ -49,7 +50,7 @@
 	user.set_machine(src)
 
 	var/dat = "Photocopier<BR><BR>"
-	if(copy || photocopy || (ass && (ass.loc == src.loc)))
+	if(copy || photocopy || (ass && (ass.loc == src.loc)) || bp)
 		dat += "<a href='byond://?src=\ref[src];remove=1'>Remove Paper</a><BR>"
 		if(toner)
 			dat += "<a href='byond://?src=\ref[src];copy=1'>Copy</a><BR>"
@@ -138,6 +139,19 @@
 					else
 						break
 				copying = 0
+		else if(bp) //copy dem blueprints
+			copies = Clamp(copies, 0, 10)
+			spawn()
+				copying = 1
+				for(var/i = 0, i < copies, i++)
+					if(!copying) break
+					if(toner >= 5)  //
+						new /obj/item/blueprints/cheap (loc)
+						toner -= 5
+						sleep(15)
+					else
+						break
+				copying = 0
 		else if(ass) //ASS COPY. By Miauw
 			copies = Clamp(copies, 0, 10)
 			spawn()
@@ -194,6 +208,15 @@
 				photocopy.loc = src.loc
 			to_chat(usr, "<span class='notice'>You take [photocopy] out of [src].</span>")
 			photocopy = null
+			updateUsrDialog()
+		else if(bp)
+			if(!istype(usr,/mob/living/silicon/ai))
+				bp.loc = usr.loc
+				usr.put_in_hands(bp)
+			else
+				bp.loc = src.loc
+			to_chat(usr, "<span class='notice'>You take [bp] out of [src].</span>")
+			bp = null
 			updateUsrDialog()
 		else if(check_ass())
 			to_chat(ass, "<span class='notice'>You feel a slight pressure on your ass.</span>")
@@ -280,6 +303,17 @@
 		if(copier_empty())
 			if(user.drop_item(O, src))
 				photocopy = O
+				to_chat(user, "<span class='notice'>You insert [O] into [src].</span>")
+				flick("bigscanner1", src)
+				updateUsrDialog()
+		else
+			to_chat(user, "<span class='notice'>There is already something in [src].</span>")
+	else if(istype(O, /obj/item/blueprints))
+		if(copier_empty())
+			if(istype(O, (/obj/item/blueprints/cheap || /obj/item/blueprints/mommiprints)))
+				to_chat(user, "<span class='notice'>[O] is too crappy to copy.</span>")
+			else if(user.drop_item(O, src))
+				bp = O
 				to_chat(user, "<span class='notice'>You insert [O] into [src].</span>")
 				flick("bigscanner1", src)
 				updateUsrDialog()
@@ -393,6 +427,10 @@
 		copy.loc = src.loc
 		visible_message("<span class='notice'>[copy] is shoved out of the way by [ass]!</span>")
 		copy = null
+	else if(bp)
+		bp.loc = src.loc
+		visible_message("<span class='notice'>[bp] is shoved out of the way by [ass]!</span>")
+		bp = null
 	updateUsrDialog()
 
 /obj/machinery/photocopier/proc/check_ass() //I'm not sure wether I made this proc because it's good form or because of the name.
@@ -411,7 +449,7 @@
 		return 1
 
 /obj/machinery/photocopier/proc/copier_empty()
-	if(copy || photocopy || check_ass())
+	if(copy || photocopy || check_ass() || bp)
 		return 0
 	else
 		return 1
