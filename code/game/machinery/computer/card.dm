@@ -117,6 +117,11 @@
 	nanomanager.update_uis(src)
 	attack_hand(user)
 
+/obj/machinery/computer/card/emag(mob/user as mob)
+	if(!emagged)
+		to_chat(user, "<span class='warning'>You emag [src]. Nothing happens.</span>")
+		emagged = 1
+
 /obj/machinery/computer/card/attack_ai(var/mob/user as mob)
 	return attack_hand(user)
 
