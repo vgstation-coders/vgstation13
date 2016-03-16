@@ -1,0 +1,4 @@
+author: Intigracy
+delete-after: True
+changes: 
+- tweak: Every spacesuit except the santa spacesuit and pirate spacesuit (they're clothing, what do you expect) now protect you against plasma contamination.
