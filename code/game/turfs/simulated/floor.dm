@@ -341,6 +341,7 @@ turf/simulated/floor/update_icon()
 	if(floor_tile)
 		//qdel(floor_tile)
 		returnToPool(floor_tile)
+	name = "plating"
 	icon_plating = "plating"
 	set_light(0)
 	floor_tile = null
@@ -385,6 +386,7 @@ turf/simulated/floor/update_icon()
 //If none is given it will make a new object. dropping or unequipping must be handled before or after calling
 //this proc.
 /turf/simulated/floor/proc/make_light_floor(var/obj/item/stack/tile/light/T = null)
+	name = "floor"
 	broken = 0
 	burnt = 0
 	intact = 1
@@ -405,6 +407,7 @@ turf/simulated/floor/update_icon()
 //This proc will make a turf into a grass patch. Fun eh? Insert the grass tile to be used as the argument
 //If no argument is given a new one will be made.
 /turf/simulated/floor/proc/make_grass_floor(var/obj/item/stack/tile/grass/T = null)
+	name = "floor"
 	broken = 0
 	burnt = 0
 	intact = 1
@@ -424,6 +427,7 @@ turf/simulated/floor/update_icon()
 //This proc will make a turf into a wood floor. Fun eh? Insert the wood tile to be used as the argument
 //If no argument is given a new one will be made.
 /turf/simulated/floor/proc/make_wood_floor(var/obj/item/stack/tile/wood/T = null)
+	name = "floor"
 	broken = 0
 	burnt = 0
 	intact = 1
@@ -443,6 +447,7 @@ turf/simulated/floor/update_icon()
 //This proc will make a turf into a carpet floor. Fun eh? Insert the carpet tile to be used as the argument
 //If no argument is given a new one will be made.
 /turf/simulated/floor/proc/make_carpet_floor(var/obj/item/stack/tile/carpet/T = null)
+	name = "floor"
 	broken = 0
 	burnt = 0
 	intact = 1
@@ -465,15 +470,13 @@ turf/simulated/floor/update_icon()
 	if(current_size >= STAGE_FIVE)
 		if(prob(75))
 			if(floor_tile && !broken && !burnt)
-				floor_tile.loc = src
-				floor_tile = null
+				new floor_tile.type(src)
 			make_plating()
 		return
 	if(current_size == STAGE_FOUR)
 		if(prob(30))
 			if(floor_tile && !broken && !burnt)
-				floor_tile.loc = src
-				floor_tile = null
+				new floor_tile.type(src)
 			make_plating()
 
 /turf/simulated/floor/attackby(obj/item/C as obj, mob/user as mob)
@@ -488,8 +491,7 @@ turf/simulated/floor/update_icon()
 				to_chat(user, "<span class='warning'>You forcefully pry off the planks, destroying them in the process.</span>")
 			else
 				to_chat(user, "<span class='notice'>You remove the [floor_tile.name].</span>")
-				floor_tile.loc = src
-				floor_tile = null
+				new floor_tile.type(src)
 
 		make_plating()
 		// Can't play sounds from areas. - N3X
@@ -531,6 +533,7 @@ turf/simulated/floor/update_icon()
 					if(floor_tile) returnToPool(floor_tile)
 					floor_tile = null
 					floor_tile = getFromPool(T.type, null)
+					name = "floor"
 					material = floor_tile.material
 					intact = 1
 					if(istype(T,/obj/item/stack/tile/light))
