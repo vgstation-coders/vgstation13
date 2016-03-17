@@ -85,7 +85,7 @@
 	var/item_attack_delay = 0
 
 	if(W)
-		item_attack_delay = (W.attack_delay>-1 ? W.attack_delay : Clamp(6 + (1.5 * W.w_class), 1, 20)) //if item's attack_delay value is set, use it. Otherwise, calculate using w_class
+		item_attack_delay = W.attack_delay
 
 		if(W == A)
 			/*next_move = world.time + 6

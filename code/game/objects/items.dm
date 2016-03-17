@@ -10,7 +10,7 @@
 	var/hitsound = null
 
 	var/w_class = 3.0
-	var/attack_delay = -1 //If -1, attack_delay is calculated using w_class. Otherwise, attack delay is equal to this value
+	var/attack_delay = 10 //Delay between attacking with this item, in 1/10s of a second (default = 1 second)
 
 	flags = FPRINT
 	var/slot_flags = 0		//This is used to determine on which slots an item can fit.
