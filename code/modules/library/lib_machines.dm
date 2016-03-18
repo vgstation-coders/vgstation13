@@ -59,7 +59,7 @@
 			where.Add("category = '[sanitizeSQL(category)]'")
 		if(title)
 			where.Add("title LIKE '%[sanitizeSQL(title)]%'")
-		return " WHERE "+list2text(where," AND ")
+		return " WHERE "+jointext(where," AND ")
 	return ""
 
 // So we can have catalogs of books that are programmatic, and ones that aren't.
@@ -121,7 +121,7 @@
 
 var/global/datum/library_catalog/library_catalog = new()
 
-var/global/list/library_section_names = list("Any", "Fiction", "Non-Fiction", "Adult", "Reference", "Religion")
+var/global/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", "Reference", "Religion")
 
 /** Scanner **/
 /obj/machinery/libraryscanner

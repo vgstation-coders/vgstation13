@@ -18,22 +18,15 @@
 
 	var/next_extinguish=0
 	var/extinguish_cooldown=10 SECONDS
-	var/extinguishes_left=10 // Yeah yeah, reagents, blah blah blah.  This should be simple.
-
-/obj/item/clothing/suit/space/plasmaman/examine(mob/user)
-	..()
-	to_chat(user, "<span class='info'>There are [extinguishes_left] extinguisher canisters left in this suit.</span>")
 
 /obj/item/clothing/suit/space/plasmaman/proc/Extinguish(var/mob/user)
 	var/mob/living/carbon/human/H=user
-	if(extinguishes_left)
-		if(next_extinguish > world.time)
-			return
+	if(next_extinguish > world.time)
+		return
 
-		next_extinguish = world.time + extinguish_cooldown
-		extinguishes_left--
-		to_chat(H, "<span class='warning'>Your suit automatically extinguishes the fire.</span>")
-		H.ExtinguishMob()
+	next_extinguish = world.time + extinguish_cooldown
+	to_chat(H, "<span class='warning'>Your suit automatically extinguishes the fire.</span>")
+	H.ExtinguishMob()
 
 /obj/item/clothing/head/helmet/space/plasmaman
 	name = "plasmaman helmet"
@@ -41,6 +34,7 @@
 	flags = FPRINT | PLASMAGUARD
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	species_restricted = list("Plasmaman")
+	eyeprot = 0
 
 	icon_state = "plasmaman_helmet0"
 	item_state = "plasmaman_helmet0"
@@ -96,6 +90,7 @@
 	base_state = "plasmamanEngineer_helmet"
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
+	eyeprot = 1
 
 /obj/item/clothing/suit/space/plasmaman/engineer/ce
 	name = "plasmaman chief engineer suit"
@@ -259,6 +254,7 @@
 	icon_state = "plasmamanSecurity_helmet0"
 	base_state = "plasmamanSecurity_helmet"
 	armor = list(melee = 40, bullet = 15, laser = 35,energy = 5, bomb = 35, bio = 100, rad = 20)
+	eyeprot = 1
 
 /obj/item/clothing/suit/space/plasmaman/security/hos
 	name = "plasmaman head of security suit"

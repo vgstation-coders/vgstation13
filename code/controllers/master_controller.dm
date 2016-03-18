@@ -90,8 +90,8 @@ datum/controller/game_controller/proc/setup()
 		garbageCollector = global.garbageCollector
 */
 
-	setup_objects() // Most log_startup spam happens here
 	setupgenetics()
+	setup_objects() // Most log_startup spam happens here
 	setupfactions()
 	setup_economy()
 	SetupXenoarch()
@@ -178,6 +178,14 @@ datum/controller/game_controller/proc/cachedamageicons()
 	log_startup_progress("Populating asset cache...")
 	populate_asset_cache()
 	log_startup_progress("  Populated [asset_cache.len] assets in [stop_watch(watch)]s.")
+
+	if(!config.skip_vault_generation)
+		watch = start_watch()
+		log_startup_progress("Placing random space structures...")
+		generate_vaults()
+		log_startup_progress("  Finished placing structures in [stop_watch(watch)]s.")
+	else
+		log_startup_progress("Not generating vaults - SKIP_VAULT_GENERATION found in config/config.txt")
 
 	watch = start_watch()
 	log_startup_progress("Initializing objects...")

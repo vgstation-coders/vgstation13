@@ -35,6 +35,7 @@
 	var/cant_drop = 0 //If 1, can't drop it from hands!
 
 	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+
 	var/list/allowed = null //suit storage stuff.
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
@@ -42,7 +43,7 @@
 	var/surgery_speed = 1 //When this item is used as a surgery tool, multiply the delay of the surgery step by this much.
 	var/nonplant_seed_type
 
-	var/list/attack_verb // used in attack() to say how something was attacked "[x] has been [z.attack_verb] by [y] with [z]"
+	var/list/attack_verb // used in attack() to say how something was attacked "[x] [z.attack_verb] [y] with [z]". Present tense.
 
 
 
@@ -90,6 +91,9 @@
 
 /obj/item/blob_act()
 	qdel(src)
+
+/obj/item/proc/restock() //used for borg recharging
+	return
 
 /obj/item/projectile_check()
 	return PROJREACT_OBJS
@@ -301,6 +305,10 @@
 					if(!disable_warning)
 						to_chat(H, "<span class='warning'>You're too fat to wear the [name].</span>")
 					return 0
+			if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+				if(!disable_warning)
+					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
+				return 0
 
 		switch(slot)
 			if(slot_l_hand)
@@ -313,6 +321,10 @@
 				return 1
 			if(slot_wear_mask)
 				if( !(slot_flags & SLOT_MASK) )
+					return 0
+				if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+					if(!disable_warning)
+						to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
 					return 0
 				if(H.wear_mask)
 					if(automatic)
@@ -338,6 +350,10 @@
 			if(slot_wear_suit)
 				if( !(slot_flags & SLOT_OCLOTHING) )
 					return 0
+				if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+					if(!disable_warning)
+						to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
+					return 0
 				if(H.wear_suit)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -350,6 +366,10 @@
 			if(slot_gloves)
 				if( !(slot_flags & SLOT_GLOVES) )
 					return 0
+				if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+					if(!disable_warning)
+						to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky fingers!</span>")
+					return 0
 				if(H.gloves)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -361,6 +381,10 @@
 				return 1
 			if(slot_shoes)
 				if( !(slot_flags & SLOT_FEET) )
+					return 0
+				if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+					if(!disable_warning)
+						to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky feet!</span>")
 					return 0
 				if(H.shoes)
 					if(automatic)
@@ -560,7 +584,7 @@
 			if(slot_in_backpack)
 				if (H.back && istype(H.back, /obj/item/weapon/storage/backpack))
 					var/obj/item/weapon/storage/backpack/B = H.back
-					if(B.contents.len < B.storage_slots && w_class <= B.max_w_class)
+					if(B.contents.len < B.storage_slots && w_class <= B.fits_max_w_class)
 						return 1
 				return 0
 		return 0 //Unsupported slot
@@ -754,13 +778,13 @@
 
 		if(M != user)
 			for(var/mob/O in (viewers(M) - user - M))
-				O.show_message("<span class='danger'>[M] has been stabbed in the eye with [src] by [user].</span>", 1)
-			to_chat(M, "<span class='userdanger'>[user] stabs you in the eye with [src]!</span>")
-			to_chat(user, "<span class='attack'>You stab [M] in the eye with [src]!</span>")
+				O.show_message("<span class='danger'>[user] stabs [M] in the eye with \the [src].</span>", 1)
+			to_chat(M, "<span class='userdanger'>[user] stabs you in the eye with \the [src]!</span>")
+			to_chat(user, "<span class='attack'>You stab [M] in the eye with \the [src]!</span>")
 		else
 			user.visible_message( \
-				"<span class='attack'>[user] has stabbed themself with [src]!</span>", \
-				"<span class='userdanger'>You stab yourself in the eyes with [src]!</span>" \
+				"<span class='attack'>[user] stabs themself with \the [src]!</span>", \
+				"<span class='userdanger'>You stab yourself in the eyes with \the [src]!</span>" \
 			)
 
 		eyes.damage += rand(3,4)
@@ -899,5 +923,5 @@ var/global/list/image/blood_overlays = list()
 					break
 				sleep(5)
 
-	throw_at(T, kick_power, 1)
 	Crossed(H) //So you can't kick shards while naked without suffering
+	throw_at(T, kick_power, 1)

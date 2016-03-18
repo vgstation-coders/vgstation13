@@ -206,6 +206,8 @@
 	perma_injury = 0
 	brute_dam = 0
 	burn_dam = 0
+	cancer_stage = 0
+	germ_level = 0
 
 	//Handle internal organs
 	for(var/datum/organ/internal/current_organ in internal_organs)
@@ -294,6 +296,7 @@
 	return 0
 
 /datum/organ/external/process()
+
 	//Process wounds, doing healing etc. Only do this every few ticks to save processing power
 	if(owner.life_tick % wound_update_accuracy == 0)
 		update_wounds()
@@ -310,6 +313,7 @@
 		if(!destspawn && config.limbs_can_break)
 			droplimb()
 		return
+
 	if(parent)
 		if(parent.status & ORGAN_DESTROYED)
 			status |= ORGAN_DESTROYED
@@ -323,7 +327,40 @@
 		perma_injury = 0
 
 	update_germs()
-	return
+
+//Cancer growth for external organs is simple, it grows, hurts, damages, and suddenly grows out of control
+//Limb cancer is relatively benign until it grows large, then it cripples you and metastases
+/datum/organ/external/handle_cancer()
+
+	if(..())
+		return 1
+
+	if(!is_existing()) //Limb has been destroyed or amputated, cancer's over as far as we are concerned since there is no limb to grow on anymore
+		cancer_stage = 0
+		return 1
+
+	switch(cancer_stage)
+		if(CANCER_STAGE_SMALL_TUMOR to CANCER_STAGE_LARGE_TUMOR) //Small tumors will not damage your limb, but might flash pain
+			if(prob(1))
+				owner.custom_pain("You feel a stabbing pain in your [display_name]!", 1)
+		if(CANCER_STAGE_LARGE_TUMOR to CANCER_STAGE_METASTASIS) //Large tumors will start damaging your limb and give the owner DNA damage (bodywide, can't go per limb)
+			if(prob(20))
+				take_damage(0.5, 0, 0, used_weapon = "tumor growth")
+				owner.custom_pain("You feel a stabbing pain in your [display_name]!", 1)
+			if(prob(1))
+				owner.apply_damage(0.5, CLONE, src)
+		if(CANCER_STAGE_METASTASIS to INFINITY) //Metastasis achieved, limb will start breaking down very rapidly, and cancer will spread to all other limbs in short order through bloodstream
+			if(prob(50))
+				take_damage(0.5, 0, 0, used_weapon = "tumor metastasis")
+			if(prob(20))
+				owner.apply_damage(0.5, CLONE, src)
+			if(prob(1))
+				owner.add_cancer() //Add a new cancerous growth
+
+	//Cancer has a single universal sign. Coughing. Has a chance to happen every tick
+	//Most likely not medically accurate, but whocares.ru
+	if(prob(1))
+		owner.emote("cough")
 
 //Updating germ levels. Handles organ germ levels and necrosis.
 /*
@@ -344,6 +381,7 @@ INFECTION_LEVEL_THREE	above this germ level the player will take additional toxi
 
 Note that amputating the affected organ does in fact remove the infection from the player's body.
 */
+
 /datum/organ/external/proc/update_germs()
 	if(!is_existing() || !is_organic()) //Needs to be organic and existing
 		germ_level = 0
@@ -616,6 +654,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 			"<span class='danger'>Your [display_name] goes flying off!</span>", \
 			"<span class='danger'>You hear a terrible sound of ripping tendons and flesh.</span>")
 
+			//Here, we assign the organ health facts from its old position on the body
+			//Type check to avoid to rewrite everything else, for now
+			if(istype(organ, /obj/item/weapon/organ))
+				var/obj/item/weapon/organ/O = organ
+				O.cancer_stage = cancer_stage
+
 			//Throw organs around
 			var/randomdir = pick(cardinal)
 			step(organ, randomdir)
@@ -703,6 +747,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 	//Fractures have a chance of getting you out of restraints
 	if(prob(25))
 		release_restraints()
+
+	if(isgolem(owner))
+		droplimb(1)
 
 	return
 
@@ -826,7 +873,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(!c_hand)
 		return
 
-	if(is_broken())
+	if(is_broken() && !istype(c_hand,/obj/item/tk_grab))
 		owner.drop_item(c_hand)
 		var/emote_scream = pick("screams in pain and", "lets out a sharp cry and", "cries out and")
 		owner.emote("me", 1, "[(owner.species && owner.species.flags & NO_PAIN) ? "" : emote_scream ] drops what they were holding in their [hand_name]!")
@@ -1056,10 +1103,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/head/generate_dropped_organ(current_organ)
 	if(!current_organ)
-		if(owner.species.flags & IS_SYNTHETIC)
-			current_organ = new /obj/item/weapon/organ/head/posi(owner.loc, owner)
-		else
-			current_organ = new /obj/item/weapon/organ/head(owner.loc, owner)
+		current_organ = new /obj/item/weapon/organ/head(owner.loc, owner)
+		owner.decapitated = current_organ
 	var/datum/organ/internal/brain/B = owner.internal_organs_by_name["brain"]
 	var/obj/item/weapon/organ/head/H = current_organ
 	if(B)
@@ -1132,6 +1177,9 @@ obj/item/weapon/organ
 	//They are transferred from the mob from which the organ was removed.
 	//Currently the only "butchering drops" which are going to be stored here are teeth
 	var/list/butchering_drops = list()
+
+	//Store health facts. Right now limited exclusively to cancer, but should likely include all limb stats eventually
+	var/cancer_stage = 0
 
 obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	..(loc)
@@ -1234,9 +1282,11 @@ obj/item/weapon/organ/head
 	name = "head"
 	icon_state = "head_m"
 	part = "head"
+	ashtype = /obj/item/weapon/skull
 	var/mob/living/carbon/brain/brainmob
 	var/mob/living/simple_animal/borer/borer
 	var/brain_op_stage = 0
+	var/mob/living/carbon/human/origin_body = null
 
 //obj/item/weapon/organ/head/with_teeth starts with 32 human teeth!
 /obj/item/weapon/organ/head/with_teeth/New()
@@ -1247,9 +1297,17 @@ obj/item/weapon/organ/head
 	name = "robotic head"
 
 obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
+	origin_body = H
+
 	if(istype(H))
 		src.icon_state = H.gender == MALE? "head_m" : "head_f"
 	..()
+	if(isgolem(H)) //Golems don't inhabit their severed heads, they turn to dust when they die.
+		var/mob/living/simple_animal/borer/B = H.has_brain_worms()
+		if(B)
+			B.detach()
+		qdel(src)
+		return
 	//Add (facial) hair.
 	if(H.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.f_style]
@@ -1302,56 +1360,69 @@ obj/item/weapon/organ/head/proc/transfer_identity(var/mob/living/carbon/human/H)
 
 obj/item/weapon/organ/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/scalpel) || istype(W,/obj/item/weapon/shard) || (istype(W,/obj/item/weapon/kitchen/utensil/knife/large) && !istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch)))
-		switch(brain_op_stage)
-			if(0)
-				user.visible_message("<span class='warning'>[user] cuts [brainmob]'s head open with \the [W].</span>", \
-				"<span class='notice'>You cut [brainmob]'s open with \the [W]!</span>")
+		if(organ_data)
+			switch(brain_op_stage)
+				if(0)
+					user.visible_message("<span class='warning'>[user] cuts [brainmob]'s head open with \the [W].</span>", \
+					"<span class='notice'>You cut [brainmob]'s open with \the [W]!</span>")
 
-				brain_op_stage = 1
+					brain_op_stage = 1
 
-			if(2)
-				user.visible_message("<span class='warning'>[user] severs [brainmob]'s brain connections delicately with \the [W].</span>", \
-				"<span class='notice'>You sever [brainmob]'s brain connections delicately with \the [W]!</span>")
+				if(2)
+					user.visible_message("<span class='warning'>[user] severs [brainmob]'s brain connections delicately with \the [W].</span>", \
+					"<span class='notice'>You sever [brainmob]'s brain connections delicately with \the [W]!</span>")
 
-				brain_op_stage = 3.0
+					brain_op_stage = 3.0
 
-			else
-				..()
+				else
+					..()
+		else
+			to_chat(user, "<span class='warning'>That head has no brain to remove!</span>")
 
 	else if(istype(W,/obj/item/weapon/circular_saw) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch) || istype(W,/obj/item/weapon/hatchet))
-		switch(brain_op_stage)
-			if(1)
-				user.visible_message("<span class='warning'>[user] saws [brainmob]'s head open with \the [W].</span>", \
-				"<span class='notice'>You saw [brainmob]'s head open with \the [W].</span>")
+		if(organ_data)
+			switch(brain_op_stage)
+				if(1)
+					user.visible_message("<span class='warning'>[user] saws [brainmob]'s head open with \the [W].</span>", \
+					"<span class='notice'>You saw [brainmob]'s head open with \the [W].</span>")
 
-				brain_op_stage = 2
-			if(3)
-				user.visible_message("<span class='warning'>[user] severs [brainmob]'s spine connections delicately with \the [W].</span>", \
-				"<span class='notice'>You sever [brainmob]'s spine connections delicately with \the [W]!</span>")
+					brain_op_stage = 2
+				if(3)
+					user.visible_message("<span class='warning'>[user] severs [brainmob]'s spine connections delicately with \the [W].</span>", \
+					"<span class='notice'>You sever [brainmob]'s spine connections delicately with \the [W]!</span>")
 
-				user.attack_log += "\[[time_stamp()]\]<font color='red'> Debrained [brainmob.name] ([brainmob.ckey]) with [W.name] (INTENT: [uppertext(user.a_intent)])</font>"
-				brainmob.attack_log += "\[[time_stamp()]\]<font color='orange'> Debrained by [user.name] ([user.ckey]) with [W.name] (INTENT: [uppertext(user.a_intent)])</font>"
-				msg_admin_attack("[user] ([user.ckey]) debrained [brainmob] ([brainmob.ckey]) (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+					user.attack_log += "\[[time_stamp()]\]<font color='red'> Debrained [brainmob.name] ([brainmob.ckey]) with [W.name] (INTENT: [uppertext(user.a_intent)])</font>"
+					brainmob.attack_log += "\[[time_stamp()]\]<font color='orange'> Debrained by [user.name] ([user.ckey]) with [W.name] (INTENT: [uppertext(user.a_intent)])</font>"
+					msg_admin_attack("[user] ([user.ckey]) debrained [brainmob] ([brainmob.ckey]) (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
-				//TODO: ORGAN REMOVAL UPDATE.
-				var/turf/T = get_turf(src)
-				if(istype(src,/obj/item/weapon/organ/head/posi))
-					var/obj/item/device/mmi/posibrain/B = new(T)
-					B.transfer_identity(brainmob)
+					//TODO: ORGAN REMOVAL UPDATE.
+					var/turf/T = get_turf(src)
+					if(istype(src,/obj/item/weapon/organ/head/posi))
+						var/obj/item/device/mmi/posibrain/B = new(T)
+						B.transfer_identity(brainmob)
+					else
+						var/obj/item/organ/brain/B = new(T)
+						B.transfer_identity(brainmob)
+
+					if(borer)
+						borer.detach()
+
+					brain_op_stage = 4.0
+					organ_data = null
 				else
-					var/obj/item/organ/brain/B = new(T)
-					B.transfer_identity(brainmob)
-
-				if(borer)
-					borer.detach()
-
-				brain_op_stage = 4.0
-			else
-				..()
+					..()
+		else
+			to_chat(user, "<span class='warning'>That head has no brain to remove!</span>")
+	else if(istype(W,/obj/item/device/soulstone))
+		W.capture_soul_head(src,user)
+		return
 	else
 		..()
 
 obj/item/weapon/organ/head/Destroy()
 	if(brainmob)
 		brainmob.ghostize()
+	if(origin_body)
+		origin_body.decapitated = null
+		origin_body = null
 	..()

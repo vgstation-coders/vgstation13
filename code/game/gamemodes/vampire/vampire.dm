@@ -211,7 +211,7 @@
 				special_role_text = "antagonist"
 			if(Mind.total_TC)
 				if(Mind.spent_TC)
-					text += "<br><span class='sinister'>TC Remaining: [Mind.total_TC - Mind.spent_TC]/[Mind.total_TC] - The tools used by the Enthralled were: [list2text(Mind.uplink_items_bought, ", ")]</span>"
+					text += "<br><span class='sinister'>TC Remaining: [Mind.total_TC - Mind.spent_TC]/[Mind.total_TC] - The tools used by the Enthralled were: [jointext(Mind.uplink_items_bought, ", ")]</span>"
 				else
 					text += "<span class='sinister'>The Enthralled was a smooth operator this round (did not purchase any uplink items)</span>"
 			if(traitorwin)
@@ -726,6 +726,14 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		adjustBruteLoss(-4)
 		adjustFireLoss(-4)
 		adjustToxLoss(-4)
+		adjustOxyLoss(-4)
 		mind.vampire.smitecounter = 0
 		mind.vampire.nullified -= 5
+		for(var/datum/organ/internal/I in internal_organs)
+			if(I && I.damage > 0)
+				I.damage = max(0, I.damage - 4)
+			if(I)
+				I.status &= ~ORGAN_BROKEN
+				I.status &= ~ORGAN_SPLINTED
+				I.status &= ~ORGAN_BLEEDING
 	mind.vampire.nullified = max(0, mind.vampire.nullified - 1)

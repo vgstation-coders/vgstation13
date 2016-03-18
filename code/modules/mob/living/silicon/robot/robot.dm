@@ -400,11 +400,11 @@
 	/* Oh jesus fucking christ bay
 	if(!custom_sprite) //Check for custom sprite
 		var/file = file2text("config/custom_sprites.txt")
-		var/lines = text2list(file, "\n")
+		var/lines = splittext(file, "\n")
 
 		for(var/line in lines)
 		// split & clean up
-			var/list/Entry = text2list(line, "-")
+			var/list/Entry = splittext(line, "-")
 			for(var/i = 1 to Entry.len)
 				Entry[i] = trim(Entry[i])
 
@@ -628,8 +628,7 @@
 		to_chat(src, "The bus' robustness protects you from the explosion.")
 		return
 
-	if(!blinded)
-		flick("flash", flash)
+	flash_eyes(visual = 1, affect_silicon = 1)
 
 	switch(severity)
 		if(1.0)
@@ -742,7 +741,7 @@
 					to_chat(src, "<span class='danger'>Would you like to send a report to NanoTraSoft? Y/N</span>")
 					sleep(10)
 					to_chat(src, "<span class='danger'>> N</span>")
-					to_chat(src, sound('sound/voice/AISyndiHack.ogg'))
+					src << sound('sound/voice/AISyndiHack.ogg')
 					sleep(20)
 					to_chat(src, "<span class='danger'>ERRORERRORERROR</span>")
 					to_chat(src, "<b>Obey these laws:</b>")
@@ -799,7 +798,7 @@
 		for(var/mob/O in viewers(user, null))
 			O.show_message(text("<span class='attack'>[user] has fixed some of the burnt wires on [src]!</span>"), 1)
 
-	else if (istype(W, /obj/item/weapon/crowbar))	// crowbar means open or close the cover
+	else if (iscrowbar(W))	// crowbar means open or close the cover
 		if(opened)
 			if(cell)
 				to_chat(user, "You close the cover.")
@@ -874,18 +873,18 @@
 			C.wrapped = W
 			C.install()
 
-	else if (istype(W, /obj/item/weapon/wirecutters) || istype(W, /obj/item/device/multitool))
+	else if (iswirecutter(W) || istype(W, /obj/item/device/multitool))
 		if (wiresexposed)
 			wires.Interact(user)
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(istype(W, /obj/item/weapon/screwdriver) && opened && !cell)	// haxing
+	else if(isscrewdriver(W) && opened && !cell)	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		updateicon()
 
-	else if(istype(W, /obj/item/weapon/screwdriver) && opened && cell)	// radio
+	else if(isscrewdriver(W) && opened && cell)	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
 		else
@@ -990,7 +989,7 @@
 				for(var/mob/O in viewers(src, null))
 					O.show_message(text("<span class='danger'>[] has slashed at []!</span>", M, src), 1)
 				if(prob(8))
-					flick("noise", flash)
+					flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
@@ -1062,7 +1061,7 @@
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("<span class='danger'>The [M.name] has electrified []!</span>", src), 1)
 
-				flick("noise", flash)
+				flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
 
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(5, 1, src)
@@ -1535,3 +1534,6 @@
 
 /mob/living/silicon/robot/proc/help_shake_act(mob/user)
 	user.visible_message("<span class='notice'>[user.name] pats [src.name] on the head.</span>")
+
+/mob/living/silicon/robot/CheckSlip()
+	return (istype(module,/obj/item/weapon/robot_module/engineering)? -1 : 0)

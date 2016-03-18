@@ -16,9 +16,8 @@
 	name = "body bag kit"
 	desc = "A kit specifically designed to fit bodybags."
 	icon_state = "bodybags" //Consider respriting this to a kit some day
-	max_w_class = 3
 	max_combined_w_class = 21
-	can_hold = list("/obj/item/bodybag") //Needed due to the last two variables, figures
+	can_only_hold = list("/obj/item/bodybag") //Needed due to the last two variables, figures
 
 /obj/item/weapon/storage/box/bodybags/New()
 		..()
@@ -60,7 +59,7 @@
 			src.name += " ([t])"
 			src.overlays += image(src.icon, "bodybag_label")
 		return
-	else if(istype(W, /obj/item/weapon/wirecutters))
+	else if(iswirecutter(W))
 		to_chat(user, "You cut the tag off the bodybag")
 		src.name = "body bag"
 		src.overlays.len = 0

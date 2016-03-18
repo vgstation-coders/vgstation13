@@ -74,6 +74,10 @@
 	for (var/channel_name in channels)
 		secure_radio_connections[channel_name] = add_radio(src, radiochannels[channel_name])
 
+/obj/item/device/radio/AltClick()
+	if(!usr.incapacitated() && find_holder_of_type(src, /mob/living) == usr)
+		attack_self(usr)
+
 /obj/item/device/radio/attack_self(mob/user as mob)
 	user.set_machine(src)
 	interact(user)
@@ -533,7 +537,7 @@
 /obj/item/device/radio/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	user.set_machine(src)
-	if (!( istype(W, /obj/item/weapon/screwdriver) ))
+	if (!( isscrewdriver(W) ))
 		return
 	b_stat = !( b_stat )
 	if (b_stat)

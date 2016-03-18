@@ -65,6 +65,9 @@
 
 	forceinvertredraw = 1
 
+	// This is the placed to store data for the holomap.
+	var/list/image/holomap_data
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -173,8 +176,7 @@
 
 	//Then, check the turf itself
 	if (!src.CanPass(mover, src))
-		mover.Bump(src, 1)
-		return 0
+		return 0 // Still bumps against the turf if we return 0.
 
 	//Finally, check objects/mobs to block entry that are not on the border
 	for(var/atom/movable/obstacle in large_dense)
@@ -415,7 +417,7 @@
 	var/old_dynamic_lighting = dynamic_lighting
 	var/list/old_affecting_lights = affecting_lights
 	var/old_lighting_overlay = lighting_overlay
-
+	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
 
 	if(connections) connections.erase_all()
@@ -486,6 +488,8 @@
 			lighting_build_overlays()
 		else
 			lighting_clear_overlays()
+
+	holomap_data = old_holomap // Holomap persists through everything.
 
 /turf/proc/AddDecal(const/image/decal)
 	if(!decals)
@@ -727,3 +731,21 @@
 			5;/obj/structure/powerup/full,
 			)
 		new powerup(src)
+
+// Holomap stuff!
+/turf/proc/add_holomap(var/atom/movable/AM)
+	var/image/I = new
+	I.appearance = AM.appearance
+	I.appearance_flags = RESET_COLOR | RESET_ALPHA | RESET_TRANSFORM
+	I.loc = src
+	I.dir = AM.dir
+	I.alpha = 128
+
+	if (!holomap_data)
+		holomap_data = list()
+	holomap_data += I
+
+// Calls the above, but only if the game has not yet started.
+/turf/proc/soft_add_holomap(var/atom/movable/AM)
+	if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
+		add_holomap(AM)

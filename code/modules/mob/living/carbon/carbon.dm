@@ -75,22 +75,12 @@
 					if(M.client)
 						M.show_message(text("<span class='warning'><B>[user] attacks [src]'s stomach wall with the [I.name]!</span>"), 2)
 				playsound(user.loc, 'sound/effects/attackblob.ogg', 50, 1)
-
-				if(prob(src.getBruteLoss() - 50))
-					for(var/atom/movable/A in stomach_contents)
-						A.loc = loc
-						stomach_contents.Remove(A)
-					src.gib()
+				src.delayNextMove(10) //no just holding the key for an instant gib
 
 /mob/living/carbon/gib()
 	dropBorers(1)
-	for(var/mob/M in src)
-		if(M in src.stomach_contents)
-			src.stomach_contents.Remove(M)
-		M.loc = src.loc
-		for(var/mob/N in viewers(src, null))
-			if(N.client)
-				N.show_message(text("<span class='danger'>[M] bursts out of [src]!</span>"), 2)
+	drop_stomach_contents()
+	src.visible_message("<span class='warning'>Something bursts from \the [src]'s stomach!</span>")
 	. = ..()
 
 /mob/living/carbon/proc/share_contact_diseases(var/mob/M)
@@ -207,16 +197,16 @@
 				if(brutedamage > 0)
 					status = "bruised"
 				if(brutedamage > 20)
-					status = "bleeding"
+					status = "<span class='warning'>bleeding</span>"
 				if(brutedamage > 40)
-					status = "mangled"
+					status = "<span class='danger'>mangled</span>"
 				if(brutedamage > 0 && burndamage > 0)
 					status += " and "
 				if(burndamage > 40)
-					status += "peeling away"
+					status += "<span class='orangeb'>peeling away</span>"
 
 				else if(burndamage > 10)
-					status += "blistered"
+					status += "<span class='orangei'>blistered</span>"
 				else if(burndamage > 0)
 					status += "numb"
 				if(org.status & ORGAN_DESTROYED)
@@ -247,8 +237,8 @@
 			M.visible_message( \
 				"<span class='notice'>[M] shakes [src] trying to wake [t_him] up!</span>", \
 				"<span class='notice'>You shake [src] trying to wake [t_him] up!</span>", \
-				drugged_message = "<span class='notice'>[M] starts massaging [t_him]'s back.</span>", \
-				self_drugged_message = "<span class='notice'>You start massaging [t_him]'s back.</span>"
+				drugged_message = "<span class='notice'>[M] starts massaging [src]'s back.</span>", \
+				self_drugged_message = "<span class='notice'>You start massaging [src]'s back.</span>"
 				)
 		// BEGIN HUGCODE - N3X
 		else
@@ -298,19 +288,21 @@
 //Throwing stuff
 
 /mob/living/carbon/proc/toggle_throw_mode()
-	if (src.in_throw_mode)
+	if (in_throw_mode)
 		throw_mode_off()
 	else
 		throw_mode_on()
 
 /mob/living/carbon/proc/throw_mode_off()
-	src.in_throw_mode = 0
-	src.throw_icon.icon_state = "act_throw_off"
+	in_throw_mode = 0
+	if(throw_icon)
+		throw_icon.icon_state = "act_throw_off"
 
 /mob/living/carbon/proc/throw_mode_on()
 	if(gcDestroyed) return
-	src.in_throw_mode = 1
-	src.throw_icon.icon_state = "act_throw_on"
+	in_throw_mode = 1
+	if(throw_icon)
+		throw_icon.icon_state = "act_throw_on"
 
 /mob/proc/throw_item(var/atom/target,var/atom/movable/what=null)
 	return
@@ -421,9 +413,8 @@
 	var/success = 0
 	if(!W)	return 0
 	else if (W == handcuffed)
-		handcuffed = null
+		handcuffed.handcuffs_remove(src)
 		success = 1
-		update_inv_handcuffed()
 
 	else if (W == legcuffed)
 		legcuffed = null
@@ -593,7 +584,7 @@
 
 /mob/living/carbon/proc/isInCrit()
 	// Health is in deep shit and we're not already dead
-	return (health < config.health_threshold_crit) && stat != 2
+	return (health < config.health_threshold_crit) && (stat != DEAD)
 
 /mob/living/carbon/get_default_language()
 	if(default_language)
@@ -659,3 +650,24 @@
 			B.perform_infestation(C)
 		else
 			to_chat(B, "<span class='notice'>You're forcefully popped out of your host!</span>")
+
+/mob/living/carbon/proc/drop_stomach_contents(var/target)
+	if(!target)
+		target = get_turf(src)
+
+	var/mob/living/simple_animal/borer/B = src.has_brain_worms()
+	for(var/mob/M in src)//mobs, all of them
+		if(M == B)
+			continue
+		if(M in src.stomach_contents)
+			src.stomach_contents.Remove(M)
+		M.forceMove(target)
+
+	for(var/obj/O in src)//objects, only the ones in the stomach
+		if(O in src.stomach_contents)
+			src.stomach_contents.Remove(O)
+			O.forceMove(target)
+
+/mob/living/carbon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
+	if(eyecheck() < intensity)
+		..()

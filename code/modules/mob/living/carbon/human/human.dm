@@ -54,6 +54,16 @@
 	h_style = "Bald"
 	..(new_loc, "Muton")
 
+/mob/living/carbon/human/grey/New(var/new_loc, delay_ready_dna = 0)
+	h_style = "Bald"
+	..(new_loc, "Grey")
+
+/mob/living/carbon/human/golem/New(var/new_loc, delay_ready_dna = 0)
+	h_style = "Bald"
+	..(new_loc, "Golem")
+	gender = NEUTER
+	meat_type = /obj/item/weapon/ore/diamond
+
 /mob/living/carbon/human/generate_static_overlay()
 	if(!istype(static_overlays,/list))
 		static_overlays = list()
@@ -73,9 +83,14 @@
 /mob/living/carbon/human/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
 	if(!hair_styles_list.len) buildHairLists()
 	if(!all_species.len) buildSpeciesLists()
+
+	if(new_species_name)
+		s_tone = random_skin_tone(new_species_name)
+
 	if(!src.species)
 		if(new_species_name)	src.set_species(new_species_name)
 		else					src.set_species()
+
 	default_language = get_default_language()
 
 	create_reagents(1000)
@@ -95,30 +110,30 @@
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")
 
-	obj_overlays[FIRE_LAYER] = new /obj/Overlays/fire_layer
-	obj_overlays[MUTANTRACE_LAYER] = new /obj/Overlays/mutantrace_layer
-	obj_overlays[MUTATIONS_LAYER] = new /obj/Overlays/mutations_layer
-	obj_overlays[DAMAGE_LAYER] = new /obj/Overlays/damage_layer
-	obj_overlays[UNIFORM_LAYER] = new /obj/Overlays/uniform_layer
-	obj_overlays[ID_LAYER] = new /obj/Overlays/id_layer
-	obj_overlays[SHOES_LAYER] = new /obj/Overlays/shoes_layer
-	obj_overlays[GLOVES_LAYER] = new /obj/Overlays/gloves_layer
-	obj_overlays[EARS_LAYER] = new /obj/Overlays/ears_layer
-	obj_overlays[SUIT_LAYER] = new /obj/Overlays/suit_layer
-	obj_overlays[GLASSES_LAYER] = new /obj/Overlays/glasses_layer
-	obj_overlays[BELT_LAYER] = new /obj/Overlays/belt_layer
-	obj_overlays[SUIT_STORE_LAYER] = new /obj/Overlays/suit_store_layer
-	obj_overlays[BACK_LAYER] = new /obj/Overlays/back_layer
-	obj_overlays[HAIR_LAYER] = new /obj/Overlays/hair_layer
-	obj_overlays[GLASSES_OVER_HAIR_LAYER] = new /obj/Overlays/glasses_over_hair_layer
-	obj_overlays[FACEMASK_LAYER] = new /obj/Overlays/facemask_layer
-	obj_overlays[HEAD_LAYER] = new /obj/Overlays/head_layer
-	obj_overlays[HANDCUFF_LAYER] = new /obj/Overlays/handcuff_layer
-	obj_overlays[LEGCUFF_LAYER] = new /obj/Overlays/legcuff_layer
-	obj_overlays[L_HAND_LAYER] = new /obj/Overlays/l_hand_layer
-	obj_overlays[R_HAND_LAYER] = new /obj/Overlays/r_hand_layer
-	obj_overlays[TAIL_LAYER] = new /obj/Overlays/tail_layer
-	obj_overlays[TARGETED_LAYER] = new /obj/Overlays/targeted_layer
+	obj_overlays[FIRE_LAYER]		= getFromPool(/obj/Overlays/fire_layer)
+	obj_overlays[MUTANTRACE_LAYER]	= getFromPool(/obj/Overlays/mutantrace_layer)
+	obj_overlays[MUTATIONS_LAYER]	= getFromPool(/obj/Overlays/mutations_layer)
+	obj_overlays[DAMAGE_LAYER]		= getFromPool(/obj/Overlays/damage_layer)
+	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/Overlays/uniform_layer)
+	obj_overlays[ID_LAYER]			= getFromPool(/obj/Overlays/id_layer)
+	obj_overlays[SHOES_LAYER]		= getFromPool(/obj/Overlays/shoes_layer)
+	obj_overlays[GLOVES_LAYER]		= getFromPool(/obj/Overlays/gloves_layer)
+	obj_overlays[EARS_LAYER]		= getFromPool(/obj/Overlays/ears_layer)
+	obj_overlays[SUIT_LAYER]		= getFromPool(/obj/Overlays/suit_layer)
+	obj_overlays[GLASSES_LAYER]		= getFromPool(/obj/Overlays/glasses_layer)
+	obj_overlays[BELT_LAYER]		= getFromPool(/obj/Overlays/belt_layer)
+	obj_overlays[SUIT_STORE_LAYER]	= getFromPool(/obj/Overlays/suit_store_layer)
+	obj_overlays[BACK_LAYER]		= getFromPool(/obj/Overlays/back_layer)
+	obj_overlays[HAIR_LAYER]		= getFromPool(/obj/Overlays/hair_layer)
+	obj_overlays[GLASSES_OVER_HAIR_LAYER] = getFromPool(/obj/Overlays/glasses_over_hair_layer)
+	obj_overlays[FACEMASK_LAYER]	= getFromPool(/obj/Overlays/facemask_layer)
+	obj_overlays[HEAD_LAYER]		= getFromPool(/obj/Overlays/head_layer)
+	obj_overlays[HANDCUFF_LAYER]	= getFromPool(/obj/Overlays/handcuff_layer)
+	obj_overlays[LEGCUFF_LAYER]		= getFromPool(/obj/Overlays/legcuff_layer)
+	obj_overlays[L_HAND_LAYER]		= getFromPool(/obj/Overlays/l_hand_layer)
+	obj_overlays[R_HAND_LAYER]		= getFromPool(/obj/Overlays/r_hand_layer)
+	obj_overlays[TAIL_LAYER]		= getFromPool(/obj/Overlays/tail_layer)
+	obj_overlays[TARGETED_LAYER]	= getFromPool(/obj/Overlays/targeted_layer)
 
 	..()
 
@@ -1141,16 +1156,39 @@
 		vessel.add_reagent("blood",560-vessel.total_volume)
 		fixblood()
 
-	for (var/obj/item/weapon/organ/head/H in world)
-		if(H.brainmob)
-			if(H.brainmob.real_name == src.real_name)
-				if(H.brainmob.mind)
-					H.brainmob.mind.transfer_to(src)
-					qdel(H)
-					H = null
-				if(H.borer)
-					H.borer.perform_infestation(src)
-					H.borer=null
+	var/datum/organ/internal/brain/BBrain = internal_organs_by_name["brain"]
+	if(!BBrain)
+		var/obj/item/weapon/organ/head/B = decapitated
+		if(B)
+			var/datum/organ/internal/brain/copied
+			if(B.organ_data)
+				var/datum/organ/internal/I = B.organ_data
+				copied = I.Copy()
+			else
+				copied = new
+			copied.owner = src
+			internal_organs_by_name["brain"] = copied
+			internal_organs += copied
+
+			var/datum/organ/external/affected = get_organ("head")
+			affected.internal_organs += copied
+			affected.status = 0
+			affected.amputated = 0
+			affected.destspawn = 0
+			update_body()
+			updatehealth()
+			UpdateDamageIcon()
+
+			if(B.brainmob.mind)
+				B.brainmob.mind.transfer_to(src)
+
+			if(B.borer)
+				B.borer.perform_infestation(src)
+				B.borer=null
+
+			decapitated = null
+
+			qdel(B)
 
 	for(var/datum/organ/internal/I in internal_organs)
 		I.damage = 0
@@ -1391,6 +1429,7 @@
 	var/datum/species/S = all_species[new_species_name]
 
 	src.species = new S.type
+	src.species.myhuman = src
 
 	if(species.language)
 		add_language(species.language)
@@ -1410,8 +1449,8 @@
 		src.do_deferred_species_setup = 1
 	spawn()
 		src.dna.species = new_species_name
+		src.species.handle_post_spawn(src)
 		src.update_icons()
-	src.species.handle_post_spawn(src)
 	return 1
 
 /mob/living/carbon/human/proc/bloody_doodle()
@@ -1709,3 +1748,48 @@
 		return 1
 
 	return 0
+
+/mob/living/carbon/human/proc/get_footprint_type()
+	var/obj/item/clothing/shoes/S = shoes //Why isn't shoes just typecast in the first place?
+	return ((istype(S) && S.footprint_type) || (species && species.footprint_type) || /obj/effect/decal/cleanable/blood/tracks/footprints) //The shoes' footprint type overrides the mob's, for obvious reasons. Shoes with a falsy footprint_type will let the mob's footprint take over, though.
+
+/mob/living/carbon/human/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
+	if(..()) // we've been flashed
+		var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
+		var/damage = intensity - eyecheck()
+		if(visual)
+			return
+		if(!eyes)
+			return
+		switch(damage)
+			if(0)
+				to_chat(src, "<span class='notice'>Something bright flashes in the corner of your vision!</span>")
+			if(1)
+				to_chat(src, "<span class='warning'>Your eyes sting a little.</span>")
+				if(prob(40))
+					eyes.damage += 1
+
+			if(2)
+				src << "<span class='warning'>Your eyes burn.</span>"
+				eyes.damage += rand(2, 4)
+
+			else
+				to_chat(src,"<span class='warning'>Your eyes itch and burn severely!</span>")
+				eyes.damage += rand(12, 16)
+
+		if(eyes.damage > 10)
+			eye_blind += damage
+			eye_blurry += damage * rand(3, 6)
+
+			if(eyes.damage > 20)
+				if (prob(eyes.damage - 20))
+					to_chat(src, "<span class='warning'>Your eyes start to burn badly!</span>")
+					disabilities |= NEARSIGHTED
+				else if(prob(eyes.damage - 25))
+					to_chat(src, "<span class='warning'>You can't see anything!</span>")
+					disabilities |= BLIND
+			else
+				to_chat(src, "<span class='warning'>Your eyes are really starting to hurt. This can't be good for you!</span>")
+		return 1
+	else
+		to_chat(src, "<span class='notice'>Something bright flashes in the corner of your vision!</span>")

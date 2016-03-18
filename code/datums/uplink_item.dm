@@ -147,12 +147,27 @@ var/list/uplink_items = list()
 	cost = 4
 	job = list("Clown")
 
+/datum/uplink_item/jobspecific/bsword
+	name = "Energized Bananium Sword"
+	desc = "When concealed a simple banana, when active a deadly means of executing swift justice.  Highly regarded for their utility on away missions from the Clown Planet"
+	item = /obj/item/weapon/melee/energy/sword/bsword
+	cost = 4
+	job = list("Clown")
+
 /datum/uplink_item/jobspecific/superglue
 	name = "1 Bottle of Superglue"
 	desc = "Considered illegal everywhere except for the Clown Planet, this water-resistant superglue can instantly bind human flesh to ANY material, permanently. One-time use."
 	item = /obj/item/weapon/glue
 	cost = 3
 	job = list("Clown", "Mime")
+
+//Security
+/datum/uplink_item/jobspecific/syndicuffs
+	name = "Syndicate Cuffs"
+	desc = "A pair of cuffs rigged with electronics and laced with a C4 charge. Can be toggled between explosion on application and explosion on removal."
+	item = /obj/item/weapon/handcuffs/syndicate
+	cost = 2
+	job = list("Security Officer", "Warden", "Head of Security")
 
 //Detective
 /datum/uplink_item/jobspecific/evidenceforger

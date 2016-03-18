@@ -13,7 +13,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/icon_living = ""
 	var/icon_dead = ""
-	var/icon_rest = ""
 	var/icon_gib = null	//We only try to show a gibbing animation if this exists.
 
 	var/list/speak = list()
@@ -325,7 +324,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 		add_logs(M, src, "attacked", admin=0)
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		adjustBruteLoss(damage,M.melee_damage_type)
+		if(M.melee_damage_type == "BRAIN") //because brain damage is apparently not a proper damage type like all the others
+			adjustBrainLoss(damage)
+		else
+			adjustBruteLoss(damage,M.melee_damage_type)
 		updatehealth()
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
@@ -576,6 +578,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(health < 1 && stat != DEAD)
 		Die()
 
+/mob/living/simple_animal/adjustFireLoss(damage)
+	health = Clamp(health - damage, 0, maxHealth)
+	if(health < 1 && stat != DEAD)
+		Die()
+
 /mob/living/simple_animal/proc/SA_attackable(target)
 	return CanAttack(target)
 
@@ -665,7 +672,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(locked_to) //Handle atom locking
 		var/atom/movable/A = locked_to
 		A.unlock_atom(src)
-		A.lock_atom(new_animal)
+		A.lock_atom(new_animal, /datum/locking_category/simple_animal)
 
 	new_animal.inherit_mind(src)
 	new_animal.ckey = src.ckey
@@ -693,3 +700,5 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		if("pacid")
 			if(!supernatural)
 				adjustBruteLoss(volume * 0.5)
+
+/datum/locking_category/simple_animal

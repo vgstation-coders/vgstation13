@@ -46,7 +46,7 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "materials=1;engineering=1"
-	attack_verb = list("bashed", "battered", "bludgeoned", "whacked")
+	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 
 /obj/item/weapon/wrench/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -89,7 +89,7 @@
 	starting_materials = list(MAT_IRON = 75)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	attack_verb = list("stabbed")
+	attack_verb = list("stabs")
 
 /obj/item/weapon/screwdriver/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is stabbing the [src.name] into \his temple! It looks like \he's trying to commit suicide.</span>", \
@@ -177,7 +177,7 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "materials=1;engineering=1"
-	attack_verb = list("pinched", "nipped")
+	attack_verb = list("pinches", "nips at")
 
 /obj/item/weapon/wirecutters/New()
 	. = ..()
@@ -188,12 +188,10 @@
 
 /obj/item/weapon/wirecutters/attack(mob/living/carbon/C as mob, mob/user as mob)
 	if((iscarbon(C)) && (C.handcuffed) && (istype(C.handcuffed, /obj/item/weapon/handcuffs/cable)))
-		usr.visible_message("\The [usr] cuts \the [C]'s restraints with \the [src]!",\
-		"You cut \the [C]'s restraints with \the [src]!",\
+		usr.visible_message("\The [user] cuts \the [C]'s [C.handcuffed.name] with \the [src]!",\
+		"You cut \the [C]'s [C.handcuffed.name] with \the [src]!",\
 		"You hear cable being cut.")
-		C.handcuffed.loc = null	//garbage collector awaaaaay
-		C.handcuffed = null
-		C.update_inv_handcuffed()
+		qdel(C.handcuffed)
 		return
 	else
 		..()
@@ -262,7 +260,7 @@
 	if((!status) && (istype(W,/obj/item/stack/rods)))
 		var/obj/item/stack/rods/R = W
 		R.use(1)
-		var/obj/item/weapon/flamethrower/F = new/obj/item/weapon/flamethrower(user.loc)
+		var/obj/item/weapon/gun/projectile/flamethrower/F = new/obj/item/weapon/gun/projectile/flamethrower(user.loc)
 		src.loc = F
 		F.weldtool = src
 		if (user.client)
@@ -455,8 +453,6 @@
 		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 		if(!E)
 			return
-		if(H.species.flags & IS_SYNTHETIC)
-			return
 		if(safety < 2)
 			switch(safety)
 				if(1)
@@ -555,8 +551,7 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "engineering=1"
-	attack_verb = list("attacked", "bashed", "battered", "bludgeoned", "whacked")
-
+	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
 
 	suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")

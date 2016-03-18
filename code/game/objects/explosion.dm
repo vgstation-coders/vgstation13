@@ -37,7 +37,7 @@ var/explosion_shake_message_cooldown = 0
 			explosion_rec(epicenter, power)
 			return
 
-		var/start = world.timeofday
+		var/watch = start_watch()
 		epicenter = get_turf(epicenter)
 		if(!epicenter)
 			return
@@ -96,7 +96,7 @@ var/explosion_shake_message_cooldown = 0
 		for(var/mob/M in mob_list) if(M.z == epicenter.z) if(!(M in close))
 			//Check if the mob can hear
 			if(M.ear_deaf <= 0 || !M.ear_deaf) if(!istype(M.loc,/turf/space))
-				to_chat(M, 'sound/effects/explosionfar.ogg')
+				M << 'sound/effects/explosionfar.ogg'
 		if(adminlog)
 			message_admins("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>)")
 			log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ")
@@ -144,7 +144,7 @@ var/explosion_shake_message_cooldown = 0
 
 			T.ex_act(dist)
 
-		var/took = (world.timeofday-start)/10
+		var/took = stop_watch(watch)
 		//You need to press the DebugGame verb to see these now....they were getting annoying and we've collected a fair bit of data. Just -test- changes  to explosion code using this please so we can compare
 		if(Debug2)
 			world.log << "## DEBUG: Explosion([x0],[y0],[z0])(d[devastation_range],h[heavy_impact_range],l[light_impact_range]): Took [took] seconds."

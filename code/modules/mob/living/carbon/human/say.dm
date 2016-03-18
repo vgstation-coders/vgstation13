@@ -34,7 +34,7 @@
 	// Should be handled via a virus-specific proc.
 	if(viruses)
 		for(var/datum/disease/pierrot_throat/D in viruses)
-			var/list/temp_message = text2list(speech.message, " ") //List each word in the message
+			var/list/temp_message = splittext(speech.message, " ") //List each word in the message
 			var/list/pick_list = list()
 			for(var/i = 1, i <= temp_message.len, i++) //Create a second list for excluding words down the line
 				pick_list += i
@@ -44,7 +44,7 @@
 					if(findtext(temp_message[H], "*") || findtext(temp_message[H], ";") || findtext(temp_message[H], ":")) continue
 					temp_message[H] = "HONK"
 					pick_list -= H //Make sure that you dont HONK the same word twice
-				speech.message = list2text(temp_message, " ")
+				speech.message = jointext(temp_message, " ")
 
 	..(speech)
 	if(dna)
@@ -54,9 +54,9 @@
 /mob/living/carbon/human/GetVoice()
 	if(istype(wear_mask, /obj/item/clothing/mask/gas/voice))
 		var/obj/item/clothing/mask/gas/voice/V = wear_mask
-		if(V.vchange && wear_id && V.is_flipped == 1) //the mask works, we have an id, and we are wearing it on the face instead of on the head
-			var/obj/item/weapon/card/id/idcard = wear_id.GetID()
-			if(istype(idcard))
+		if(V.vchange && V.is_flipped == 1) //the mask works and we are wearing it on the face instead of on the head
+			if(wear_id)
+				var/obj/item/weapon/card/id/idcard = wear_id.GetID()
 				return idcard.registered_name
 			else
 				return "Unknown"

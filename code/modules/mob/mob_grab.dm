@@ -32,6 +32,11 @@
 	hud.name = "reinforce grab"
 	hud.master = src
 
+/obj/item/weapon/grab/preattack()
+	if(!assailant || !affecting) return 1 //Cancel attack
+	if(!assailant.Adjacent(affecting)) return 1 //Cancel attack is assailant isn't near affected mob
+
+	return ..()
 
 //Used by throw code to hand over the mob, instead of throwing the grab. The grab is then deleted by the throw code.
 /obj/item/weapon/grab/proc/toss()
@@ -53,7 +58,8 @@
 
 
 /obj/item/weapon/grab/process()
-	confirm()
+	if(!confirm()) return
+
 	if(!assailant)
 		affecting = null
 		returnToPool(src)
@@ -77,9 +83,6 @@
 			if(G.affecting != affecting)
 				allow_upgrade = 0
 		if(state == GRAB_AGGRESSIVE)
-			var/h = affecting.hand
-			affecting.drop_hands()
-			affecting.hand = h
 			for(var/obj/item/weapon/grab/G in affecting.grabbed_by)
 				if(G == src) continue
 				if(G.state == GRAB_AGGRESSIVE)
@@ -134,6 +137,12 @@
 		assailant.visible_message("<span class='warning'>[assailant] has grabbed [affecting] aggressively (now hands)!</span>", \
 			drugged_message = "<span class='warning'>[assailant] has hugged [affecting] passionately!</span>")
 		state = GRAB_AGGRESSIVE
+		assailant.delayNextMove(10)
+		assailant.delayNextAttack(10)
+		hud.icon_state = "!reinforce"
+		spawn(10)
+			if(!disposed)
+				hud.icon_state = "reinforce"
 		icon_state = "grabbed1"
 	else
 		if(state < GRAB_NECK)
@@ -149,8 +158,13 @@
 			affecting.attack_log += "\[[time_stamp()]\] <font color='orange'>Has had their neck grabbed by [assailant.name] ([assailant.ckey])</font>"
 			assailant.attack_log += "\[[time_stamp()]\] <font color='red'>Grabbed the neck of [affecting.name] ([affecting.ckey])</font>"
 			log_attack("<font color='red'>[assailant.name] ([assailant.ckey]) grabbed the neck of [affecting.name] ([affecting.ckey])</font>")
-			hud.icon_state = "disarm/kill"
-			hud.name = "disarm/kill"
+			assailant.delayNextMove(10)
+			assailant.delayNextAttack(10)
+			hud.icon_state = "!reinforce"
+			spawn(10)
+				if(!disposed)
+					hud.icon_state = "disarm/kill"
+					hud.name = "disarm/kill"
 		else
 			if(state < GRAB_UPGRADING)
 				assailant.visible_message("<span class='danger'>[assailant] starts to tighten \his grip on [affecting]'s neck!</span>", \
@@ -212,6 +226,9 @@
 	if(M == assailant && state >= GRAB_AGGRESSIVE)
 		if( (ishuman(user) && (M_FAT in user.mutations) && ismonkey(affecting) ) || ( isalien(user) && iscarbon(affecting) ) )
 			var/mob/living/carbon/attacker = user
+			if(locate(/mob) in attacker.stomach_contents)
+				to_chat(attacker, "<span class='warning'>You already have something in your stomach.</span>")
+				return
 			user.visible_message("<span class='danger'>[user] is attempting to devour [affecting]!</span>", \
 				drugged_message="<span class='danger'>[user] is attempting to kiss [affecting]! Ew!</span>")
 			if(istype(user, /mob/living/carbon/alien/humanoid/hunter))

@@ -4,10 +4,10 @@
 
 /area/CATEGORY/OR/DESCRIPTOR/NAME 	(you can make as many subdivisions as you want)
 	name = "NICE NAME" 				(not required but makes things really nice)
-	icon = "ICON FILENAME" 			(defaults to areas.dmi)
-	icon_state = "NAME OF ICON" 	(defaults to "unknown" (blank))
+	icon = "ICON FILENAME" 			(defaults to 'areas.dmi')
+	icon_state = "NAME OF ICON" 	(defaults to 'unknown' (blank))
 	requires_power = 0 				(defaults to 1)
-	music = "music/music.ogg"		(defaults to "music/music.ogg")
+	music = "music/music.ogg"		(defaults to 'music/music.ogg')
 
 NOTE: there are two lists of areas in the end of this file: centcom and station itself. Please maintain these lists valid. --rastaf0
 
@@ -66,7 +66,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 	var/general_area = /area/station	// the highest parent bellow /area,
 	var/general_area_name = "Station"
-
 
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
@@ -329,6 +328,21 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/research/outpost
 	icon_state = "shuttle"
 
+/area/shuttle/voxresearch
+	name = "\improper Genetics Research"
+	icon_state = "yellow"
+	requires_power = 0
+
+/area/shuttle/voxresearch/station
+	name = "\improper Genetics Research"
+	icon_state = "yellow"
+	requires_power = 0
+
+/area/shuttle/voxresearch/outpost
+	name = "\improper Genetics Research"
+	icon_state = "yellow"
+	requires_power = 0
+	
 /area/shuttle/vox/station
 	name = "\improper Vox Skipjack"
 	icon_state = "yellow"
@@ -620,6 +634,22 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper nearby mining asteroid"
 	icon_state = "north"
 	requires_power = 0
+
+/area/vox_station/research_lab
+	name = "\improper Research Facility"
+	icon_state = "voxresearch"
+
+/area/vox_station/plasman_lab
+	name = "\improper Plasma Genetic Research"
+	icon_state = "voxtoxins"
+
+/area/vox_station/voxtest_lab
+	name = "\improper Vox Genetic Research"
+	icon_state = "voxgenetics"
+
+/area/vox_station/tradepost
+	name = "\improper Traders Den"
+	icon_state = "tradeden"
 
 //PRISON
 /area/prison
@@ -2099,6 +2129,7 @@ proc/process_adminbus_teleport_locs()
 		if(Obj:client)
 			mysound.status = SOUND_PAUSED | SOUND_UPDATE
 			Obj << mysound
+	..()
 
 /area/awaymission/beach/proc/process()
 	//set background = 1

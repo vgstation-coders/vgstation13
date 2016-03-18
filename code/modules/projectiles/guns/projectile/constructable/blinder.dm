@@ -69,13 +69,7 @@
 /obj/item/device/blinder/proc/flash(var/turf/T , var/mob/living/M)
 	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
 
-	var/eye_safety = 0
-	if(iscarbon(M))
-		var/mob/living/carbon/C = M
-		eye_safety = C.eyecheck()
-
-	if(eye_safety < 1)
-		flick("e_flash", M.flash)
+	M.flash_eyes(visual = 1)
 
 	if(issilicon(M))
 		M.Weaken(rand(5, 10))
@@ -176,7 +170,7 @@
 		to_chat(user, "<span class='notice'>There's no room in \the [src]'s film chamber with the [cell ? "power cell" : "wire"] inside it.</span>")
 		return
 
-	if(istype(W, /obj/item/weapon/wirecutters))
+	if(iswirecutter(W))
 		if(cell)
 			to_chat(user, "<span class='warning'>You can't reach the wires with the power cell in the way.</span>")
 			return

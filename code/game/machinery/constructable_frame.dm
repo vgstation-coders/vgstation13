@@ -67,7 +67,7 @@
 				qdel(src)
 				return
 			else
-				if(istype(P, /obj/item/weapon/wrench))
+				if(iswrench(P))
 					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
 					to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
 					//new /obj/item/stack/sheet/metal(src.loc, 5)
@@ -109,7 +109,7 @@
 					else
 						to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				else
-					if(istype(P, /obj/item/weapon/wirecutters))
+					if(iswirecutter(P))
 						playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
 						to_chat(user, "<span class='notice'>You remove the cables.</span>")
 						set_build_state(1)
@@ -118,7 +118,7 @@
 
 		if(3)
 			if(!..())
-				if(istype(P, /obj/item/weapon/crowbar))
+				if(iscrowbar(P))
 					playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 					set_build_state(2)
 					circuit.loc = src.loc
@@ -133,7 +133,7 @@
 					req_components = null
 					components = null
 				else
-					if(istype(P, /obj/item/weapon/screwdriver))
+					if(isscrewdriver(P))
 						var/component_check = 1
 						for(var/R in req_components)
 							if(req_components[R] > 0)
@@ -156,6 +156,7 @@
 							else
 								circuit.loc = null
 							new_machine.RefreshParts()
+							circuit.finish_building(new_machine, user)
 							components = null
 							qdel(src)
 					else
@@ -223,8 +224,11 @@
 		if(3)
 			icon_state = "box_2"
 
+/obj/item/weapon/circuitboard/proc/finish_building(var/obj/machinery/new_machine, var/mob/user) //Something that will get done after the last step of construction. Currently unused.
+	return
+
 //Machine Frame Circuit Boards
-/*Common Parts: Parts List: Ignitor, Timer, Infra-red laser, Infra-red sensor, t_scanner, Capacitor, Valve, sensor unit,
+/*Common Parts: Parts List: Igniter, Timer, Infra-red laser, Infra-red sensor, t_scanner, Capacitor, Valve, sensor unit,
 micro-manipulator, console screen, beaker, Microlaser, matter bin, power cells.
 Note: Once everything is added to the public areas, will add m_amt and g_amt to circuit boards since autolathe won't be able
 to destroy them and players will be able to make replacements.
@@ -274,8 +278,8 @@ to destroy them and players will be able to make replacements.
 	else if(iswelder(O))
 		var/obj/item/weapon/weldingtool/WT = O
 		if(WT.remove_fuel(1,user))
-			var/obj/item/stack/sheet/glass/glass/new_item = new /obj/item/stack/sheet/glass/glass(src.loc)
-			new_item.add_to_stacks(user)
+			var/obj/item/stack/sheet/glass/glass/new_item = new()
+			new_item.forceMove(src.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
 			returnToPool(src)
 			return
 	else
@@ -321,7 +325,6 @@ to destroy them and players will be able to make replacements.
 	origin_tech = "engineering=2;programming=2"
 	frame_desc = "Requires nothing."
 	req_components = list()
-
 
 /obj/item/weapon/circuitboard/circuit_imprinter
 	name = "Circuit board (Circuit Imprinter)"

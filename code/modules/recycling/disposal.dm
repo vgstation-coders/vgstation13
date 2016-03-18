@@ -23,6 +23,9 @@
 	var/flush_count = 0 //this var adds 1 once per tick. When it reaches flush_every_ticks it resets and tries to flush.
 	var/last_sound = 0
 
+	holomap = TRUE
+	auto_holomap = TRUE
+
 // create a new disposal
 // find the attached trunk (if present) and init gas resvr.
 /obj/machinery/disposal/New()
@@ -83,7 +86,7 @@
 		return
 	src.add_fingerprint(user)
 	if(mode<=0) // It's off
-		if(istype(I, /obj/item/weapon/screwdriver))
+		if(isscrewdriver(I))
 			if(contents.len > 0)
 				to_chat(user, "Eject the items first!")
 				return
@@ -439,66 +442,65 @@
 	else
 		return ..(mover, target, height, air_group)
 
-/obj/machinery/disposal/MouseDrop_T(atom/dropping, mob/user)
-	if(istype(user, /mob/living/silicon/ai))
+/obj/machinery/disposal/MouseDrop_T(atom/movable/dropping, mob/user)
+
+	if(isAI(user))
 		return
 
-	if(!ismob(dropping))
+	//We are restrained or can't move, this will compromise taking out the trash
+	if(user.restrained() || !user.canmove)
+		return
+
+	if(!ismob(dropping)) //Not a mob, so we can expect it to be an item
 		if(istype(dropping, /obj/item))
-			if(!user.restrained() && user.canmove)
-				attackby(dropping, user)
 
+			if(dropping.locked_to) //Items can very specifically be locked to something, check that here
+				return
+
+			attackby(dropping, user)
 		return
+
+	//From there, we are working on a mob (as our target, user is supposed to be a mob)
 
 	var/locHolder = dropping.loc
 	var/mob/target = dropping
 
+	//Our target, now confirmed to be a mob, is locked to something, same thing
+	if(target.locked_to)
+		return
+
 	if(target == user)
-		if(!user.restrained() && user.canmove)
-			target.visible_message("[target] starts climbing into the [src].", "You start climbing into the [src].")
-		else
-			return
+		target.visible_message("[target] starts climbing into \the [src].", "You start climbing into \the [src].")
+
 	else
+
 		if(isanimal(user))
-			return // animals cannot put mobs other than themselves into disposal
+			return //Animals cannot put mobs other than themselves into disposal
 
-		if(!user.restrained() && user.canmove)
-			if(target.locked_to)
-				return
-
-			user.visible_message("[user] starts stuffing [target] into the [src].", "You start stuffing [target] into the [src].")
-		else
-			return
+		user.visible_message("[user] starts stuffing \the [target] into \the [src].", "You start stuffing \the [target] into \the [src].")
 
 	if(!do_after(user, src, 20))
+		return
+
+	if(user.restrained() || !user.canmove)
+		return
+
+	if(target.locked_to)
 		return
 
 	if(locHolder != target.loc)
 		return
 
 	if(target == user)
-		if(!user.restrained() && user.canmove)
-			target.visible_message("[target] climbed into the [src].", "You climbed into the [src].")
-		else
-			return
-	else
-		if(!user.restrained() && user.canmove)
-			if(target.locked_to)
-				return
+		target.visible_message("[target] climbs into \the [src].", "You climb into \the [src].")
 
-			user.visible_message("[user] stuffed [target] into the [src]!", "You stuffed [target] into the [src]!")
-			log_attack("<SPAN CLASS='warning'>[key_name(user)] placed [key_name(target)] in a disposals unit/([src]).</SPAN>")
-		else
-			return
+	else
+
+		user.visible_message("[user] stuffed \the [target] into \the [src]!", "You stuffed \the [target] into \the [src]!")
+		log_attack("<span class='warning'>[key_name(user)] stuffed [key_name(target)] into a disposal unit/([src]).</span>")
 
 	add_fingerprint(user)
-
-	if(target.client)
-		target.client.perspective = EYE_PERSPECTIVE
-		target.client.eye = src
-
-	target.loc = src
-
+	target.forceMove(src)
 	update_icon()
 
 // virtual disposal object
@@ -542,7 +544,7 @@
 			AM.forceMove(src)
 			if(istype(AM, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = AM
-				if((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT))		// is a human and fat?
+				if(((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT)) || H.species.flags & IS_BULKY)		// is a human and fat?
 					has_fat_guy = 1			// set flag on holder
 			if(istype(AM, /obj/item/delivery/large) && !hasmob)
 				var/obj/item/delivery/large/T = AM
@@ -655,6 +657,8 @@
 	anchored = 1
 	density = 0
 
+	holomap = TRUE
+	auto_holomap = TRUE
 	level = 1			// underfloor only
 	var/dpdir = 0		// bitmask of pipe directions
 	dir = 0				// dir will contain dominant direction for junction pipes
@@ -1449,6 +1453,9 @@
 	var/mode = 0
 	var/obj/structure/disposalpipe/trunk/trunk
 
+	holomap = TRUE
+	auto_holomap = TRUE
+
 	New()
 		. = ..()
 
@@ -1502,7 +1509,7 @@
 		if(!I || !user)
 			return
 		src.add_fingerprint(user)
-		if(istype(I, /obj/item/weapon/screwdriver))
+		if(isscrewdriver(I))
 			if(mode==0)
 				mode=1
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)

@@ -57,6 +57,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 	if(on_uattack)
 		on_uattack.holder = null
 		on_uattack = null
+	qdel(on_logout)
+	on_logout = null
 	..()
 
 /mob/projectile_check()
@@ -205,6 +207,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 	store_position()
 	on_uattack = new("owner"=src)
+	on_logout = new("owner"=src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -451,8 +454,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 		narsimage.loc = src.loc
 		narglow.loc = src.loc
 		//Display the new narsimage to the player
-		to_chat(src, narsimage)
-		to_chat(src, narglow)
+		src << narsimage
+		src << narglow
 	else
 		if(narsimage)
 			del(narsimage)
@@ -664,6 +667,9 @@ var/list/slot_equipment_priority = list( \
 			if(slot_wear_mask)
 				if( !(slot_flags & SLOT_MASK) )
 					return 0
+//				if(H.species.flags & IS_BULKY)
+//					to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
+//					return 0
 				if(H.wear_mask)
 					return 0
 				return 1
@@ -679,6 +685,9 @@ var/list/slot_equipment_priority = list( \
 			if(slot_wear_suit)
 				if( !(slot_flags & SLOT_OCLOTHING) )
 					return 0
+//				if(H.species.flags & IS_BULKY)
+//					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
+//					return 0
 				if(H.wear_suit)
 					if(H.wear_suit.canremove)
 						return 2
@@ -688,6 +697,9 @@ var/list/slot_equipment_priority = list( \
 			if(slot_gloves)
 				if( !(slot_flags & SLOT_GLOVES) )
 					return 0
+//				if(H.species.flags & IS_BULKY)
+//					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky fingers!</span>")
+//					return 0
 				if(H.gloves)
 					if(H.gloves.canremove)
 						return 2
@@ -697,6 +709,9 @@ var/list/slot_equipment_priority = list( \
 			if(slot_shoes)
 				if( !(slot_flags & SLOT_FEET) )
 					return 0
+//				if(H.species.flags & IS_BULKY)
+//					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky feet!</span>")
+//					return 0
 				if(H.shoes)
 					if(H.shoes.canremove)
 						return 2
@@ -748,6 +763,9 @@ var/list/slot_equipment_priority = list( \
 					return 0
 				if((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT) && !(flags & ONESIZEFITSALL))
 					return 0
+//				if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+//					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
+//					return 0
 				if(H.w_uniform)
 					if(H.w_uniform.canremove)
 						return 2
@@ -827,7 +845,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_in_backpack)
 				if (H.back && istype(H.back, /obj/item/weapon/storage/backpack))
 					var/obj/item/weapon/storage/backpack/B = H.back
-					if(B.contents.len < B.storage_slots && w_class <= B.max_w_class)
+					if(B.contents.len < B.storage_slots && w_class <= B.fits_max_w_class)
 						return 1
 				return 0
 		return 0 //Unsupported slot
@@ -1448,9 +1466,11 @@ var/list/slot_equipment_priority = list( \
 
 //Updates canmove, lying and icons. Could perhaps do with a rename but I can't think of anything to describe it.
 /mob/proc/update_canmove()
-	if(locked_to && !(locked_to.lockflags & LOCKED_CAN_LIE_AND_STAND))
-		canmove = 0
-		lying = (locked_to.lockflags & LOCKED_SHOULD_LIE) ? TRUE : FALSE //A lying value that !=1 will break this
+	if (locked_to)
+		var/datum/locking_category/category = locked_to.locked_atoms[src]
+		if (category.flags ^ LOCKED_CAN_LIE_AND_STAND)
+			canmove = 0
+			lying = (category.flags & LOCKED_SHOULD_LIE) ? TRUE : FALSE //A lying value that !=1 will break this
 
 
 	else if(isUnconscious() || weakened || paralysis || resting || !can_stand)
@@ -1469,12 +1489,12 @@ var/list/slot_equipment_priority = list( \
 		canmove = has_limbs
 
 	if(lying)
-		if(ishuman(src))
-			layer = 3.9
+		if(iscarbon(src))
+			layer = 3.9//so we move under bedsheets
 		density = 0
 		drop_hands()
 	else
-		if(ishuman(src))
+		if(iscarbon(src))
 			layer = 4
 		density = 1
 
@@ -1743,13 +1763,13 @@ mob/proc/on_foot()
 			return 1
 	return 0
 
-/mob/proc/get_subtle_message(var/msg)
-	var/pre_msg = "You hear a voice in your head..."
-	if(mind && mind.assigned_role == "Chaplain")
-		pre_msg = "You hear the voice of [ticker.Bible_deity_name] in your head... "
+/mob/proc/get_subtle_message(var/msg, var/deity = null)
+	if(!deity)
+		deity = "a voice" //sanity
+	var/pre_msg = "You hear [deity] in your head... "
 	if(src.hallucinating()) //If hallucinating, make subtle messages more fun
-		var/adjective = pick("an angry","a funny","a squeaky","a disappointed","your mother's","your father's","[ticker.Bible_deity_name]'s","an annoyed","a brittle","a loud","a very loud","a quiet")
-		var/location = pick(" from above"," from below"," in your head","")
+		var/adjective = pick("an angry","a funny","a squeaky","a disappointed","your mother's","your father's","[ticker.Bible_deity_name]'s","an annoyed","a brittle","a loud","a very loud","a quiet","an evil", "an angelic")
+		var/location = pick(" from above"," from below"," in your head"," from behind you"," from everywhere"," from nowhere in particular","")
 		pre_msg = pick("You hear [adjective] voice[location]...")
 
 	to_chat(src, "<b>[pre_msg] <em>[msg]</em></b>")
@@ -1771,6 +1791,11 @@ mob/proc/on_foot()
 
 /mob/proc/nuke_act() //Called when caught in a nuclear blast
 	return
+
+/mob/proc/remove_jitter()
+	if(jitteriness)
+		jitteriness = 0
+		animate(src)
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

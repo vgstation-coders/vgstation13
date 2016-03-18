@@ -10,6 +10,8 @@
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey
 	species_type = /mob/living/carbon/monkey
 	treadmill_speed = 0.8 //Slow apes!
+	var/attack_text = "bites"
+	var/languagetoadd = LANGUAGE_MONKEY
 
 	mob_bump_flag = MONKEY
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
@@ -49,6 +51,7 @@
 	icon_state = "tajkey1"
 	uni_append = list(0x0A0,0xE00) // 0A0E00
 	species_type = /mob/living/carbon/monkey/tajara
+	languagetoadd = "Siik'tajr"
 
 /mob/living/carbon/monkey/skrell
 	name = "neaera"
@@ -57,6 +60,7 @@
 	icon_state = "skrellkey1"
 	uni_append = list(0x01C,0xC92) // 01CC92
 	species_type = /mob/living/carbon/monkey/skrell
+	languagetoadd = "Skrellian"
 
 /mob/living/carbon/monkey/unathi
 	name = "stok"
@@ -66,6 +70,7 @@
 	uni_append = list(0x044,0xC5D) // 044C5D
 	canWearClothes = 0
 	species_type = /mob/living/carbon/monkey/unathi
+	languagetoadd = "Sinta'unathi"
 
 /mob/living/carbon/monkey/New()
 	var/datum/reagents/R = new/datum/reagents(1000)
@@ -104,9 +109,8 @@
 
 		update_muts=1
 
-	if(!istype(src, /mob/living/carbon/monkey/diona))
-		add_language(LANGUAGE_MONKEY)
-		default_language = all_languages[LANGUAGE_MONKEY]
+		add_language(languagetoadd)
+		default_language = all_languages[languagetoadd]
 
 	..()
 	update_icons()
@@ -117,21 +121,18 @@
 	..()
 	dna.mutantrace = "lizard"
 	greaterform = "Unathi"
-	add_language("Sinta'unathi")
 
 /mob/living/carbon/monkey/skrell/New()
 
 	..()
 	dna.mutantrace = "skrell"
 	greaterform = "Skrell"
-	add_language("Skrellian")
 
 /mob/living/carbon/monkey/tajara/New()
 
 	..()
 	dna.mutantrace = "tajaran"
 	greaterform = "Tajaran"
-	add_language("Siik'tajr")
 
 
 ///mob/living/carbon/monkey/diona/New()
@@ -362,8 +363,11 @@
 		if ((M.a_intent == I_HURT && !( istype(wear_mask, /obj/item/clothing/mask/muzzle) )))
 			if ((prob(75) && health > 0))
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					O.show_message("<span class='danger'>[M.name] has bit [name]!</span>", 1)
+				if(istype(M, /mob/living/carbon/monkey))
+					var/mob/living/carbon/monkey/Mo = M
+					src.visible_message("<span class='danger'>[Mo.name] [Mo.attack_text] [name]!</span>")
+				else
+					src.visible_message("<span class='danger'>[M.name] bites [name]!</span>")
 				var/damage = rand(1, 5)
 				adjustBruteLoss(damage)
 				health = 100 - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
@@ -372,7 +376,7 @@
 						contract_disease(D,1,0)
 			else
 				for(var/mob/O in viewers(src, null))
-					O.show_message("<span class='danger'>[M.name] has attempted to bite [name]!</span>", 1)
+					O.show_message("<span class='danger'>[M.name] lunges towards [name], but misses!</span>", 1)
 	return
 
 
@@ -651,7 +655,7 @@
 		return
 
 	if(!blinded)
-		flick("flash", flash)
+		flash_eyes(visual = 1)
 
 	switch(severity)
 		if(1.0)

@@ -1,6 +1,6 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-#if DM_VERSION < 508
-#error Your version of byond is too old, you need version 508 or higher
+#if DM_VERSION < 510
+#error Your version of byond is too old, you need version 510 or higher
 #endif
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
@@ -68,9 +68,9 @@ var/global/disable_vents     = 0
 #define HAZARD_LOW_PRESSURE 20		//This is when the black ultra-low pressure icon is displayed. (This one is set as a constant)
 
 #define TEMPERATURE_DAMAGE_COEFFICIENT 1.5	//This is used in handle_temperature_damage() for humans, and in reagents that affect body temperature. Temperature damage is multiplied by this amount.
-#define BODYTEMP_AUTORECOVERY_DIVISOR 4 //This is the divisor which handles how much of the temperature difference between the current body temperature and 310.15K (optimal temperature) humans auto-regenerate each tick. The higher the number, the slower the recovery. This is applied each tick, so long as the mob is alive.
-#define BODYTEMP_AUTORECOVERY_MAXIMUM 0.25 //Maximum amount of kelvin moved toward 310.15K per tick. So long as abs(310.15 - bodytemp) is more than 0.5 .
-#define BODYTEMP_COLD_DIVISOR 150 //Similar to the BODYTEMP_AUTORECOVERY_DIVISOR, but this is the divisor which is applied at the stage that follows autorecovery. This is the divisor which comes into play when the human's loc temperature is lower than their body temperature. Make it lower to lose bodytemp faster.
+#define BODYTEMP_AUTORECOVERY_DIVISOR 0.5 //This is the divisor which handles how much of the temperature difference between the current body temperature and 310.15K (optimal temperature) humans auto-regenerate each tick. The higher the number, the slower the recovery. This is applied each tick, so long as the mob is alive.
+#define BODYTEMP_AUTORECOVERY_MAXIMUM 2.0 //Maximum amount of kelvin moved toward 310.15K per tick. So long as abs(310.15 - bodytemp) is more than 0.5 .
+#define BODYTEMP_COLD_DIVISOR 100 //Similar to the BODYTEMP_AUTORECOVERY_DIVISOR, but this is the divisor which is applied at the stage that follows autorecovery. This is the divisor which comes into play when the human's loc temperature is lower than their body temperature. Make it lower to lose bodytemp faster.
 #define BODYTEMP_HEAT_DIVISOR 80 //Similar to the BODYTEMP_AUTORECOVERY_DIVISOR, but this is the divisor which is applied at the stage that follows autorecovery. This is the divisor which comes into play when the human's loc temperature is higher than their body temperature. Make it lower to gain bodytemp faster.
 #define BODYTEMP_HEATING_MAX 10 //The maximum number of degrees that your body can heat up in 1 tick, when in a hot area.
 
@@ -227,7 +227,12 @@ var/MAX_EXPLOSION_RANGE = 14
 
 //FLAGS BITMASK
 
+//Item flags!
 #define PROXMOVE		1	//Will the code check us when we move or when something moves near us?
+
+#define SLOWDOWN_WHEN_CARRIED 2 //Apply slowdown when carried in hands, instead of only when worn
+
+#define NOBLUDGEON  4  // when an item has this it produces no "X has been hit by Y with Z" message with the default handler
 
 #define MASKINTERNALS	8	// mask allows internals
 //#define SUITSPACE		8	// suit protects against space
@@ -237,7 +242,6 @@ var/MAX_EXPLOSION_RANGE = 14
 
 #define FPRINT		256		// takes a fingerprint
 #define ON_BORDER	512		// item has priority to check when entering or leaving
-#define NOBLUDGEON  4  // when an item has this it produces no "X has been hit by Y with Z" message with the default handler
 #define NOBLOODY	2048	// used to items if they don't want to get a blood overlay
 #define HEAR		16
 #define HEAR_ALWAYS 32 // Assign a virtualhearer to the mob even when no client is controlling it.
@@ -284,6 +288,7 @@ var/MAX_EXPLOSION_RANGE = 14
 
 //turf-only flags
 #define NOJAUNT		1
+#define NO_MINIMAP  2 //Invisible to minimaps (fuck minimaps)
 
 
 //slots
@@ -913,7 +918,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 
 #define CAN_BE_FAT 8192 // /vg/
 
-#define IS_SYNTHETIC 16384 // from baystation
+#define IS_BULKY 16384 //can't wear exosuits, gloves, masks, or hardsuits
 
 #define NO_SKIN 32768
 
@@ -1126,25 +1131,25 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define STAGE_FIVE	9
 #define STAGE_SUPER	11
 
-//Human Overlays Indexes/////////
+//Human Overlays Indexes/////////THIS DEFINES WHAT LAYERS APPEARS ON TOP OF OTHERS
 #define FIRE_LAYER				1		//If you're on fire (/tg/ shit)
 #define MUTANTRACE_LAYER		2		//TODO: make part of body?
 #define MUTATIONS_LAYER			3
 #define DAMAGE_LAYER			4
 #define UNIFORM_LAYER			5
-#define SUIT_LAYER				6
-#define SHOES_LAYER				7
-#define GLOVES_LAYER			8
-#define EARS_LAYER				9
+#define SHOES_LAYER				6
+#define GLOVES_LAYER			7
+#define EARS_LAYER				8
+#define SUIT_LAYER				9
 #define GLASSES_LAYER			10
 #define BELT_LAYER				11		//Possible make this an overlay of somethign required to wear a belt?
 #define SUIT_STORE_LAYER		12
-#define BACK_LAYER				13
-#define ID_LAYER				14
-#define HAIR_LAYER				15		//TODO: make part of head layer?
-#define GLASSES_OVER_HAIR_LAYER	16
-#define FACEMASK_LAYER			17
-#define HEAD_LAYER				18
+#define HAIR_LAYER				13		//TODO: make part of head layer?
+#define GLASSES_OVER_HAIR_LAYER	14
+#define FACEMASK_LAYER			15
+#define HEAD_LAYER				16
+#define BACK_LAYER				17		//Back should be above head so that headgear doesn't hides backpack when facing north
+#define ID_LAYER				18		//IDs should be visible above suits and backpacks
 #define HANDCUFF_LAYER			19
 #define LEGCUFF_LAYER			20
 #define L_HAND_LAYER			21
@@ -1426,12 +1431,6 @@ var/proccalls = 1
 
 #define STARVATION_OXY_HEAL_RATE 1 //While starving, THIS much oxygen damage is restored per life tick (instead of the default 5)
 
-#define LOCKED_SHOULD_LIE 1
-#define DENSE_WHEN_LOCKING 2
-#define DENSE_WHEN_LOCKED 4
-#define CANT_BE_MOVED_BY_LOCKED_MOBS 8
-#define LOCKED_CAN_LIE_AND_STAND 16
-
 // Disposals destinations.
 
 #define DISP_DISPOSALS      "Disposals"
@@ -1465,3 +1464,17 @@ var/proccalls = 1
 #define NORMAL_ATTACK 0
 #define ATTACK_BITE 1
 #define ATTACK_KICK 2
+
+// Defines for the map writer, moved here for reasons.
+#define DMM_IGNORE_AREAS 1
+#define DMM_IGNORE_TURFS 2
+#define DMM_IGNORE_OBJS 4
+#define DMM_IGNORE_NPCS 8
+#define DMM_IGNORE_PLAYERS 16
+#define DMM_IGNORE_MOBS 24
+
+//Cancer defines for the scanners
+#define CANCER_STAGE_BENIGN 1 //Not 100 % medically correct, but we'll assume benign cancer never fails to worsen. No effect, but can be detected before it fucks you up. Instant
+#define CANCER_STAGE_SMALL_TUMOR 300 //Cancer starts to have small effects depending on what the affected limb is, generally inconclusive ones. 5 minutes
+#define CANCER_STAGE_LARGE_TUMOR 600 //Cancer starts to have serious effects depending on what the affected limb is, generally obvious one, up to visible tumor growth. 15 minutes
+#define CANCER_STAGE_METASTASIS 1200 //Cancer has maximal effects, growing out of control in the organ, and can start "colonizing" other organs very quickly, dooming the patient. 30 minutes

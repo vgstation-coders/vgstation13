@@ -201,6 +201,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];tdome2=\ref[M]'>Thunderdome Red</A> |
 			<A href='?src=\ref[src];tdomeadmin=\ref[M]'>Thunderdome Admin</A> |
 			<A href='?src=\ref[src];tdomeobserve=\ref[M]'>Thunderdome Observer</A> |
+			<A href='?src=\ref[src];addcancer=\ref[M]'>Inflict Cancer</A> |
 		"}
 
 	// language toggles
@@ -743,6 +744,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=spacevines'>Spawn Space-Vines</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
 			<A href='?src=\ref[src];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
+			<A href='?src=\ref[src];secretsfun=mobswarm'>Trigger mobs of your choice appearing out of thin air</A><BR>
 			<BR>
 			<B>Fun Secrets</B><BR>
 			<BR>
@@ -803,21 +805,24 @@ var/global/floorIsLava = 0
 
 	dat += "<BR>"
 
-	if(check_rights(R_DEBUG,0))
+	if(check_rights(R_FUN,0))
 		dat += {"
 			<B>Security Level Elevated</B><BR>
 			<BR>
-			<A href='?src=\ref[src];secretscoder=maint_access_engiebrig'>Change all maintenance doors to engie/brig access only</A><BR>
-			<A href='?src=\ref[src];secretscoder=maint_access_brig'>Change all maintenance doors to brig access only</A><BR>
-			<A href='?src=\ref[src];secretscoder=infinite_sec'>Remove cap on security officers</A><BR>
-			<a href='?src=\ref[src];secretscoder=virus_custom'>Custom Virus Outbreak</a><BR>
-			<BR>
-			<B>Coder Secrets</B><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsadmin=list_job_debug'>Show Job Debug</A><BR>
-			<A href='?src=\ref[src];secretscoder=spawn_objects'>Admin Log</A><BR>
+			<A href='?src=\ref[src];secretsfun=maint_access_engiebrig'>Change all maintenance doors to engie/brig access only</A><BR>
+			<A href='?src=\ref[src];secretsfun=maint_access_brig'>Change all maintenance doors to brig access only</A><BR>
+			<A href='?src=\ref[src];secretsfun=infinite_sec'>Remove cap on security officers</A><BR>
+			<a href='?src=\ref[src];secretsfun=virus_custom'>Custom Virus Outbreak</a><BR>
 			<BR>
 			"}
+	dat +=	{"
+		<B>Coder Secrets</B><BR>
+		<BR>
+		<A href='?src=\ref[src];secretsadmin=list_job_debug'>Show Job Debug</A><BR>
+		<A href='?src=\ref[src];secretsadmin=spawn_objects'>Admin Log</A><BR>
+		<BR>
+		"}
+
 
 	usr << browse(dat, "window=secrets")
 	return
@@ -1149,10 +1154,10 @@ var/global/floorIsLava = 0
 		if (ticker.mode.config_tag == "changeling")
 			return 2
 		return 1
-	if(isborer(M))
+	/*if(isborer(M)) //They ain't antags anymore
 		if (ticker.mode.config_tag == "borer")
 			return 2
-		return 1
+		return 1*/
 	if(isbadmonkey(M))
 		if (ticker.mode.config_tag == "monkey")
 			return 2
