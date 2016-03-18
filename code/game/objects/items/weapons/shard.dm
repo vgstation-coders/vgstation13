@@ -17,7 +17,7 @@
 	w_type = RECYK_GLASS
 	melt_temperature = MELTPOINT_GLASS
 	siemens_coefficient = 0 //no conduct
-	attack_verb = list("stabbed", "slashed", "sliced", "cut")
+	attack_verb = list("stabs", "slashes", "slices", "cuts")
 	var/glass = /obj/item/stack/sheet/glass/glass
 
 /obj/item/weapon/shard/New()
@@ -92,8 +92,8 @@
 	if (iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
-			var/obj/item/stack/sheet/glass/new_item = new glass(user.loc)
-			new_item.add_to_stacks(usr)
+			var/obj/item/stack/sheet/glass/new_item = new glass()
+			new_item.forceMove(user.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
 			returnToPool(src)
 			return
 	return ..()

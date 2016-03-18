@@ -122,7 +122,7 @@ BLIND     // can't see anything
 	var/clipped = 0
 	body_parts_covered = HANDS
 	slot_flags = SLOT_GLOVES
-	attack_verb = list("challenged")
+	attack_verb = list("challenges")
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
 	var/pickpocket = 0 //Master pickpocket?
 
@@ -193,7 +193,7 @@ BLIND     // can't see anything
 			permeability_coefficient = null
 			flags = 0
 			src.is_flipped = 2
-			body_parts_covered &= ~(MOUTH|HEAD|BEARD)
+			body_parts_covered &= ~(MOUTH|HEAD|BEARD|FACE)
 		usr.update_inv_wear_mask()
 
 /obj/item/clothing/mask/attack_self()

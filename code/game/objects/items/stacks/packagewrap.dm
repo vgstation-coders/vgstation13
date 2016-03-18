@@ -71,7 +71,9 @@
 	return 1
 
 /obj/item/stack/package_wrap/proc/try_wrap_human(var/mob/living/carbon/human/H, mob/user as mob)
-	if(!manpath) return 0
+	if(!manpath)
+		to_chat(user, "<span class='notice'>This material is not strong enough to wrap humanoids, try something else.</span>")
+		return 0
 	if(amount >= 2)
 		H.visible_message("<span class='danger'>[user] is trying to wrap up [H]!</span>")
 		if(do_mob(user,H,human_wrap_speed))
@@ -79,6 +81,7 @@
 			if (H.client)
 				H.client.perspective = EYE_PERSPECTIVE
 				H.client.eye = present
+			H.visible_message("<span class='warning'>[user] finishes wrapping [H]!</span>")
 			H.forceMove(present)
 			H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been wrapped with [src.name]  by [user.name] ([user.ckey])</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to wrap [H.name] ([H.ckey])</font>")
@@ -118,6 +121,7 @@
 
 /obj/item/delivery/New(turf/loc, var/obj/item/target = null, var/size = 2)
 	..()
+	w_class = size
 	wrapped = target
 	icon_state = "deliverycrate[min(size,5)]"
 
@@ -161,6 +165,7 @@
 	desc = "A big wrapped package."
 	name = "large parcel"
 	density = 1
+	w_class = 200 //Someone was going to find a way to exploit this some day
 	flags = FPRINT
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 

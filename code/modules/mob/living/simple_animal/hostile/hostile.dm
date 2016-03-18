@@ -305,14 +305,13 @@
 /mob/living/simple_animal/hostile/proc/Shoot(var/target, var/start, var/user, var/bullet = 0)
 	if(target == start)
 		return
+	if(!istype(target, /turf))
+		return
 
 	var/obj/item/projectile/A = new projectiletype(user:loc)
 	playsound(user, projectilesound, 100, 1)
 	if(!A)	return
 
-	if (!istype(target, /turf))
-		del(A)
-		return
 	A.current = target
 
 	var/turf/T = get_turf(src)
@@ -333,11 +332,9 @@
 		EscapeConfinement()
 		for(var/dir in cardinal)
 			var/turf/T = get_step(src, dir)
-			if(istype(T, /turf/simulated/wall) && T.Adjacent(src))
+			if(istype(T, /turf/simulated/wall))
 				T.attack_animal(src)
 			for(var/atom/A in T)
-				if(!A.Adjacent(src))
-					continue
 				if(istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
 					A.attack_animal(src)
 	return

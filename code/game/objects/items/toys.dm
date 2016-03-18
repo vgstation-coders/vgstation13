@@ -136,7 +136,7 @@
 	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 10)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_PLASTIC
-	attack_verb = list("struck", "pistol whipped", "hit", "bashed")
+	attack_verb = list("strikes", "pistol whips", "hits", "bashes")
 	var/bullets = 7.0
 
 /obj/item/toy/gun/examine(mob/user)
@@ -214,7 +214,7 @@
 	item_state = "crossbow"
 	flags = FPRINT
 	w_class = 2.0
-	attack_verb = list("attacked", "struck", "hit")
+	attack_verb = list("attacks", "strikes", "hits")
 	var/bullets = 5
 
 /obj/item/toy/crossbow/examine(mob/user)
@@ -335,7 +335,7 @@
 	var/active = 0.0
 	w_class = 2.0
 	flags = FPRINT
-	attack_verb = list("attacked", "struck", "hit")
+	attack_verb = list("attacks", "strikes", "hits")
 
 	attack_self(mob/user as mob)
 		src.active = !( src.active )
@@ -366,7 +366,7 @@
 	force = 5
 	throwforce = 5
 	w_class = 3
-	attack_verb = list("attacked", "slashed", "stabbed", "sliced")
+	attack_verb = list("attacks", "slashes", "stabs", "slices")
 
 /*
  * Clock bomb
@@ -393,7 +393,7 @@
 
 /obj/item/toy/bomb/attack_self(mob/user)
 	var/turf/T = get_turf(src)
-	T.visible_message("\icon[rendered]*beep* *beep*", "*beep* *beep*")
+	T.visible_message("[bicon(rendered)]*beep* *beep*", "*beep* *beep*")
 
 /*
  * Crayons
@@ -405,7 +405,7 @@
 	icon = 'icons/obj/crayons.dmi'
 	icon_state = "crayonred"
 	w_class = 1.0
-	attack_verb = list("attacked", "coloured")
+	attack_verb = list("attacks", "colours", "colors")//teehee
 	var/colour = "#A10808" //RGB
 	var/shadeColour = "#220000" //RGB
 	var/uses = 30 //0 for unlimited uses
@@ -568,6 +568,7 @@
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "ripleytoy"
 	var/cooldown = 0
+	w_class = 2
 
 //all credit to skasi for toy mech fun ideas
 /obj/item/toy/prize/attack_self(mob/user as mob)
@@ -648,6 +649,7 @@
 	desc = "The holy grail of all programmers. It seems a bit leaky."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "gooncode"
+	w_class = 1
 
 	suicide_act(mob/user)
 		to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
@@ -708,6 +710,7 @@
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "greyshirt"
 	var/cooldown = 0
+	w_class = 2
 
 /obj/item/toy/gasha/greyshirt
 	name = "toy greyshirt"

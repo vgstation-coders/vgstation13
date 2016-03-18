@@ -229,7 +229,7 @@
 	if(viewcontents)
 		..()
 	else
-		to_chat(user, "\icon[src] That's \a [src].")
+		to_chat(user, "[bicon(src)] That's \a [src].")
 		to_chat(user, desc)
 		to_chat(user, "<span class='info'>You can't quite make out its content!</span>")
 
@@ -620,7 +620,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/wirecutters))
+	if(iswirecutter(W))
 		to_chat(user, "You cut out the top and bottom of \the [src] with \the [W].")
 		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
 		if(src.loc == user)
@@ -847,7 +847,7 @@
 	sharpness = 0.8 //same as glass shards
 	w_class = 1
 	item_state = "beer"
-	attack_verb = list("stabbed", "slashed", "attacked")
+	attack_verb = list("stabs", "slashes", "attacks")
 	var/icon/broken_outline = icon('icons/obj/drinks.dmi', "broken")
 	starting_materials = list(MAT_GLASS = 500)
 	melt_temperature = MELTPOINT_GLASS

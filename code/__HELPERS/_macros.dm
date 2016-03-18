@@ -105,6 +105,10 @@
 
 #define iswindow(A) (istype(A, /obj/structure/window))
 
+#define isclient(A) (istype(A, /client))
+
+#define isatom(A) (istype(A, /atom))
+
 //Macros for antags
 
 #define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind.vampire)
@@ -135,6 +139,9 @@
 //Macro for AREAS!
 
 #define isspace(A) (A.type == /area)
+
+//This one returns the "space" area
+#define get_space_area (get_area(locate(1,1,2))) //xd
 
 //1 line helper procs compressed into defines.
 #define Clamp(x, y, z) 	(x <= y ? y : (x >= z ? z : x))

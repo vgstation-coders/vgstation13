@@ -185,7 +185,7 @@ var/const/MAX_SAVE_SLOTS = 8
 		if(!IsGuestKey(C.key))
 			var/load_pref = load_preferences_sqlite(C.ckey)
 			if(load_pref)
-				if(load_save_sqlite(C.ckey, src, default_slot))
+				if(load_save_sqlite(C.ckey, C, default_slot))
 					return
 		randomize_appearance_for()
 		real_name = random_name(gender)
@@ -347,7 +347,7 @@ var/const/MAX_SAVE_SLOTS = 8
 			function mouseDown(event,levelup,leveldown,rank){
 				return false;
 				}
-			
+
 			function mouseUp(event,levelup,leveldown,rank){
 				if(event.button == 0){
 					//alert("left click " + levelup + " " + rank);
@@ -1299,9 +1299,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				if("lobby_music")
 					toggles ^= SOUND_LOBBY
 					if(toggles & SOUND_LOBBY)
-						to_chat(user, sound(ticker.login_music, repeat = 0, wait = 0, volume = 85, channel = 1))
+						user << sound(ticker.login_music, repeat = 0, wait = 0, volume = 85, channel = 1)
 					else
-						to_chat(user, sound(null, repeat = 0, wait = 0, volume = 85, channel = 1))
+						user << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1)
 
 				if("jukebox")
 					toggles ^= SOUND_STREAMING

@@ -21,6 +21,7 @@
 	icon = 'icons/obj/vehicles.dmi'
 	anchored = 1
 	density = 1
+	overrideghostspin = 1 //You guys are no fun
 	var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread
 
 	var/empstun = 0
@@ -231,7 +232,7 @@
 		"<span class='notice'>[M] climbs onto \the [nick]!</span>",\
 		"<span class='notice'>You climb onto \the [nick]!</span>")
 
-	lock_atom(M)
+	lock_atom(M, /datum/locking_category/chair/vehicle)
 
 	add_fingerprint(user)
 
@@ -354,6 +355,8 @@
 	if(!.)
 		return
 
+	occupant = AM
+
 	update_mob()
 
-	occupant = AM
+/datum/locking_category/chair/vehicle

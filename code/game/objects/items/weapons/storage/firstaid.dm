@@ -120,7 +120,7 @@
 	icon = 'icons/obj/chemical.dmi'
 	item_state = "contsolid"
 	w_class = 2.0
-	can_hold = list("/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/dice","/obj/item/weapon/paper")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/dice","/obj/item/weapon/paper")
 	allow_quick_gather = 1
 	use_to_pickup = 1
 	storage_slots = 14
@@ -155,6 +155,12 @@
 			src.show_to(usr)
 			return
 	return
+
+/obj/item/weapon/storage/pill_bottle/AltClick()
+	if(!usr.isUnconscious() && Adjacent(usr))
+		change()
+		return
+	return ..()
 
 /obj/item/weapon/storage/pill_bottle/attackby(var/obj/item/I, var/mob/user)
 	if(!I) return
@@ -264,3 +270,17 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 		new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
 		new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
 		new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
+
+/obj/item/weapon/storage/pill_bottle/creatine
+	name = "Workout Supplements"
+	desc = "Because working out is far too much effort."
+
+	New()
+		..()
+		new /obj/item/weapon/reagent_containers/pill/creatine_safe( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+

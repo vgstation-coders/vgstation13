@@ -136,6 +136,9 @@ var/global/ingredientLimit = 10
 	else . = ..()
 
 /obj/machinery/cooking/attackby(obj/item/I,mob/user)
+	if(stat & (NOPOWER | BROKEN))
+		to_chat(user, "<span class='warning'> The power's off, it's no good. </span>")
+		return
 	if(src.active)
 		to_chat(user, "<span class='warning'>[src.name] is currently busy.</span>")
 		return
@@ -237,6 +240,8 @@ var/global/ingredientLimit = 10
 
 	var/obj/item/I = src.ingredient
 	var/obj/item/weapon/reagent_containers/food/new_food = new foodType(src.loc,I)
+	for(var/obj/item/embedded in I.contents)
+		embedded.forceMove(src.loc)
 	if(cooks_in_reagents)
 		transfer_reagents_to_food(new_food)
 
@@ -318,6 +323,8 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/cerealmaker/makeFood()
 	var/obj/item/weapon/reagent_containers/food/snacks/cereal/C = new(src.loc)
+	for(var/obj/item/embedded in src.ingredient.contents)
+		embedded.forceMove(src.loc)
 	if(src.ingredient.reagents)
 		src.ingredient.reagents.trans_to(C,src.ingredient.reagents.total_volume)
 	if(cooks_in_reagents)
@@ -398,6 +405,8 @@ var/global/ingredientLimit = 10
 		src.ingredient.name = "deep fried [src.ingredient.name]"
 		src.ingredient.color = "#FFAD33"
 		src.ingredient.loc = src.loc
+		for(var/obj/item/embedded in src.ingredient.contents)
+			embedded.forceMove(src.loc)
 	else //some admin enabled funfood and we're frying the captain's ID or someshit
 		var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
 		if(cooks_in_reagents)
@@ -414,6 +423,9 @@ var/global/ingredientLimit = 10
 				H.stored_mob.ghostize()
 				H.stored_mob.death()
 				qdel(H.stored_mob)
+
+		for(var/obj/item/embedded in src.ingredient.contents)
+			embedded.forceMove(src.loc)
 
 		qdel(src.ingredient)
 
@@ -482,6 +494,8 @@ var/global/ingredientLimit = 10
 			H.stored_mob.death()
 			qdel(H.stored_mob)
 
+	for(var/obj/item/embedded  in src.ingredient.contents)
+		embedded.forceMove(src.loc)
 	src.ingredient = null
 	return
 

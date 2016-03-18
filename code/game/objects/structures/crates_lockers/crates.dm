@@ -61,6 +61,13 @@
 	icon_opened = "chestopen"
 	icon_closed = "chest"
 
+/obj/structure/closet/crate/chest/potential_mimic/New()
+	..()
+
+	if(prob(33))
+		var/mob/living/simple_animal/hostile/mimic/crate/chest/C = new(src.loc)
+		forceMove(C)
+
 /*these aren't needed anymore
 /obj/structure/closet/crate/hat
 	desc = "A crate filled with Valuable Collector's Hats!."
@@ -486,7 +493,7 @@
 			if(user.drop_item(W, src.loc))
 				to_chat(user, "<span class='notice'>You attach [W] to [src].</span>")
 			return
-	else if(istype(W, /obj/item/weapon/wirecutters))
+	else if(iswirecutter(W))
 		if(rigged)
 			to_chat(user, "<span class='notice'>You cut away the wiring.</span>")
 			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)

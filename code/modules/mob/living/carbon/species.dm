@@ -40,7 +40,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/tail												// Name of tail image in species effects icon file.
 	var/language = "Galactic Common"								// Default racial language, if any.
 	var/default_language = "Galactic Common"						// Default language is used when 'say' is used without modifiers.
-	var/attack_verb = "punch"								// Empty hand hurt intent verb.
+	var/attack_verb = "punches"								// Empty hand hurt intent verb.
 	var/punch_damage = 0									// Extra empty hand attack damage.
 	var/punch_throw_range = 0
 	var/punch_throw_speed = 1
@@ -125,6 +125,13 @@ var/global/list/whitelisted_species = list("Human")
 	var/move_speed_mod = 0 //Higher value is slower, lower is faster.
 	var/can_be_hypothermic = 1
 	var/has_sweat_glands = 1
+
+/datum/species/New()
+	..()
+	if(all_species[name])
+		var/datum/species/globalspeciesholder = all_species[name]
+		default_blocks = globalspeciesholder.default_blocks.Copy()
+		default_mutations = globalspeciesholder.default_mutations.Copy()
 
 /datum/species/proc/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if(H.dna)
@@ -254,7 +261,7 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_def_lizard.dmi'
 	language = "Sinta'unathi"
 	tail = "sogtail"
-	attack_verb = "scratch"
+	attack_verb = "scratches"
 	punch_damage = 5
 	primitive = /mob/living/carbon/monkey/unathi
 	darksight = 3
@@ -272,15 +279,15 @@ var/global/list/whitelisted_species = list("Human")
 	flesh_color = "#34AF10"
 
 /datum/species/unathi/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	speech.message = replacetext(speech.message, "s", stutter("ss"))
-	return ..(speech, H)
+	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
+	speech.message = replacetext(speech.message, "s-ss-s", "ss-ss") //asshole shows up as ass-sshole
 
 /datum/species/skellington // /vg/
 	name = "Skellington"
 	icobase = 'icons/mob/human_races/r_skeleton.dmi'
 	deform = 'icons/mob/human_races/r_skeleton.dmi'  // TODO: Need deform.
 	language = "Clatter"
-	attack_verb = "punch"
+	attack_verb = "punches"
 	has_sweat_glands = 0
 	flags = IS_WHITELISTED | HAS_LIPS | NO_BREATHE | NO_BLOOD | NO_SKIN
 
@@ -307,7 +314,7 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_def_tajaran.dmi'
 	language = "Siik'tajr"
 	tail = "tajtail"
-	attack_verb = "scratch"
+	attack_verb = "scratches"
 	punch_damage = 2 //Claws add 3 damage without gloves, so the total is 5
 	darksight = 8
 
@@ -379,7 +386,7 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/r_grey.dmi'
 	deform = 'icons/mob/human_races/r_def_grey.dmi'
 	language = "Grey"
-	attack_verb = "punch"
+	attack_verb = "punches"
 	darksight = 5 // BOOSTED from 2
 	eyes = "grey_eyes_s"
 
@@ -410,7 +417,7 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/r_muton.dmi'
 	deform = 'icons/mob/human_races/r_def_muton.dmi'
 	language = "Muton"
-	attack_verb = "punch"
+	attack_verb = "punches"
 	darksight = 1
 	eyes = "eyes_s"
 
@@ -505,110 +512,110 @@ var/global/list/whitelisted_species = list("Human")
 		"eyes" =     /datum/organ/internal/eyes/vox
 	)
 
-	equip(var/mob/living/carbon/human/H)
-		// Unequip existing suits and hats.
-		if(H.mind.assigned_role != "MODE")
-			H.u_equip(H.wear_suit,1)
-			H.u_equip(H.head,1)
-		if(H.mind.assigned_role!="Clown")
-			H.u_equip(H.wear_mask,1)
+/datum/species/vox/equip(var/mob/living/carbon/human/H)
+	// Unequip existing suits and hats.
+	if(H.mind.assigned_role != "MODE")
+		H.u_equip(H.wear_suit,1)
+		H.u_equip(H.head,1)
+	if(H.mind.assigned_role!="Clown")
+		H.u_equip(H.wear_mask,1)
 
-		H.equip_or_collect(new /obj/item/clothing/mask/breath/vox(H), slot_wear_mask)
-		var/suit=/obj/item/clothing/suit/space/vox/civ
-		var/helm=/obj/item/clothing/head/helmet/space/vox/civ
-		var/tank_slot = slot_s_store
-		var/tank_slot_name = "suit storage"
-		switch(H.mind.assigned_role)
+	H.equip_or_collect(new /obj/item/clothing/mask/breath/vox(H), slot_wear_mask)
+	var/suit=/obj/item/clothing/suit/space/vox/civ
+	var/helm=/obj/item/clothing/head/helmet/space/vox/civ
+	var/tank_slot = slot_s_store
+	var/tank_slot_name = "suit storage"
+	switch(H.mind.assigned_role)
 
-			if("Bartender")
-				suit=/obj/item/clothing/suit/space/vox/civ/bartender
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/bartender
-			if("Chef")
-				suit=/obj/item/clothing/suit/space/vox/civ/chef
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/chef
-			if("Chaplain")
-				suit=/obj/item/clothing/suit/space/vox/civ/chaplain
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/chaplain
-			if("Librarian")
-				suit=/obj/item/clothing/suit/space/vox/civ/librarian
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/librarian
+		if("Bartender")
+			suit=/obj/item/clothing/suit/space/vox/civ/bartender
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/bartender
+		if("Chef")
+			suit=/obj/item/clothing/suit/space/vox/civ/chef
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/chef
+		if("Chaplain")
+			suit=/obj/item/clothing/suit/space/vox/civ/chaplain
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/chaplain
+		if("Librarian")
+			suit=/obj/item/clothing/suit/space/vox/civ/librarian
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/librarian
 
-			if("Chief Engineer")
-				suit=/obj/item/clothing/suit/space/vox/civ/engineer/ce
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/ce
-			if("Station Engineer")
-				suit=/obj/item/clothing/suit/space/vox/civ/engineer
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer
-			if("Atmospheric Technician")
-				suit=/obj/item/clothing/suit/space/vox/civ/engineer/atmos
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
+		if("Chief Engineer")
+			suit=/obj/item/clothing/suit/space/vox/civ/engineer/ce
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/ce
+		if("Station Engineer")
+			suit=/obj/item/clothing/suit/space/vox/civ/engineer
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer
+		if("Atmospheric Technician")
+			suit=/obj/item/clothing/suit/space/vox/civ/engineer/atmos
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
 
-			if("Scientist","Roboticist")
-				suit=/obj/item/clothing/suit/space/vox/civ/science
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/science
-			if("Research Director")
-				suit=/obj/item/clothing/suit/space/vox/civ/science/rd
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/science/rd
+		if("Scientist","Roboticist")
+			suit=/obj/item/clothing/suit/space/vox/civ/science
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/science
+		if("Research Director")
+			suit=/obj/item/clothing/suit/space/vox/civ/science/rd
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/science/rd
 
-			if("Medical Doctor")
-				suit=/obj/item/clothing/suit/space/vox/civ/medical
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/medical
-			if("Paramedic")
-				suit=/obj/item/clothing/suit/space/vox/civ/medical/paramedic
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
-			if("Geneticist")
-				suit=/obj/item/clothing/suit/space/vox/civ/medical/geneticist
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/geneticist
-			if("Virologist")
-				suit=/obj/item/clothing/suit/space/vox/civ/medical/virologist
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/virologist
-			if("Chemist")
-				suit=/obj/item/clothing/suit/space/vox/civ/medical/chemist
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/chemist
-			if("Chief Medical Officer")
-				suit=/obj/item/clothing/suit/space/vox/civ/medical/cmo
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
+		if("Medical Doctor")
+			suit=/obj/item/clothing/suit/space/vox/civ/medical
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical
+		if("Paramedic")
+			suit=/obj/item/clothing/suit/space/vox/civ/medical/paramedic
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
+		if("Geneticist")
+			suit=/obj/item/clothing/suit/space/vox/civ/medical/geneticist
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/geneticist
+		if("Virologist")
+			suit=/obj/item/clothing/suit/space/vox/civ/medical/virologist
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/virologist
+		if("Chemist")
+			suit=/obj/item/clothing/suit/space/vox/civ/medical/chemist
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/chemist
+		if("Chief Medical Officer")
+			suit=/obj/item/clothing/suit/space/vox/civ/medical/cmo
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
 
-			if("Head of Security","Warden","Detective","Security Officer")
-				suit=/obj/item/clothing/suit/space/vox/civ/security
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/security
+		if("Head of Security","Warden","Detective","Security Officer")
+			suit=/obj/item/clothing/suit/space/vox/civ/security
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/security
 
-			if("Clown","Mime")
-				tank_slot=slot_r_hand
-				tank_slot_name = "hand"
-			if("MODE") // Gamemode stuff
-				switch(H.mind.special_role)
-					if("Wizard")
-						suit = null
-						helm = null
-						tank_slot = slot_l_hand
-						tank_slot_name = "hand"
-		if(suit)
-			H.equip_or_collect(new suit(H), slot_wear_suit)
-		if(helm)
-			H.equip_or_collect(new helm(H), slot_head)
-		H.equip_or_collect(new/obj/item/weapon/tank/nitrogen(H), tank_slot)
-		to_chat(H, "<span class='info'>You are now running on nitrogen internals from the [H.s_store] in your [tank_slot_name]. Your species finds oxygen toxic, so <b>you must breathe nitrogen (AKA N<sub>2</sub>) only</b>.</span>")
-		H.internal = H.get_item_by_slot(tank_slot)
-		if (H.internals)
-			H.internals.icon_state = "internal1"
+		if("Clown","Mime")
+			tank_slot=slot_r_hand
+			tank_slot_name = "hand"
+		if("MODE") // Gamemode stuff
+			switch(H.mind.special_role)
+				if("Wizard")
+					suit = null
+					helm = null
+					tank_slot = slot_l_hand
+					tank_slot_name = "hand"
+	if(suit)
+		H.equip_or_collect(new suit(H), slot_wear_suit)
+	if(helm)
+		H.equip_or_collect(new helm(H), slot_head)
+	H.equip_or_collect(new/obj/item/weapon/tank/nitrogen(H), tank_slot)
+	to_chat(H, "<span class='info'>You are now running on nitrogen internals from the [H.s_store] in your [tank_slot_name]. Your species finds oxygen toxic, so <b>you must breathe nitrogen (AKA N<sub>2</sub>) only</b>.</span>")
+	H.internal = H.get_item_by_slot(tank_slot)
+	if (H.internals)
+		H.internals.icon_state = "internal1"
 
-	makeName(var/gender,var/mob/living/carbon/human/H=null)
-		var/sounds = rand(2,8)
-		var/i = 0
-		var/newname = ""
+/datum/species/vox/makeName(var/gender,var/mob/living/carbon/human/H=null)
+	var/sounds = rand(2,8)
+	var/i = 0
+	var/newname = ""
 
-		while(i<=sounds)
-			i++
-			newname += pick(vox_name_syllables)
-		return capitalize(newname)
+	while(i<=sounds)
+		i++
+		newname += pick(vox_name_syllables)
+	return capitalize(newname)
 
 /datum/species/diona
 	name = "Diona"
 	icobase = 'icons/mob/human_races/r_plant.dmi'
 	deform = 'icons/mob/human_races/r_def_plant.dmi'
 	language = "Rootspeak"
-	attack_verb = "slash"
+	attack_verb = "slashes"
 	punch_damage = 5
 	primitive = /mob/living/carbon/monkey/diona
 

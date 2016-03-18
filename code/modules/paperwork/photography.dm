@@ -90,7 +90,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "album"
 	item_state = "briefcase"
-	can_hold = list("/obj/item/weapon/photo",)
+	can_only_hold = list("/obj/item/weapon/photo",)
 
 
 /*
@@ -209,7 +209,7 @@
 
 
 /obj/item/device/camera/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/weapon/screwdriver))
+	if(isscrewdriver(I))
 		to_chat(user, "You [panelopen ? "close" : "open"] the panel on the side of \the [src].")
 		panelopen = !panelopen
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)

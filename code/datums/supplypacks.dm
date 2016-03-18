@@ -158,6 +158,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Porcelain Crate"
 	group = "Supplies"
 
+/datum/supply_packs/showers
+	name = "Showers Crate"
+	contains = list()
+	cost = 10
+	containertype = /obj/structure/largecrate/showers
+	containername = "Showers Crate"
+	group = "Supplies"
+
 /datum/supply_packs/metal50
 	name = "50 Metal Sheets"
 	contains = list(/obj/item/stack/sheet/metal)
@@ -523,7 +531,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/eweapons
 	name = "Incendiary weapons crate"
-	contains = list(/obj/item/weapon/flamethrower/full,
+	contains = list(/obj/item/weapon/gun/projectile/flamethrower/full,
 					/obj/item/weapon/tank/plasma,
 					/obj/item/weapon/tank/plasma,
 					/obj/item/weapon/tank/plasma,
@@ -1401,7 +1409,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/seeds/random,
 					/obj/item/seeds/random,
 					/obj/item/seeds/random,
-					/obj/item/seeds/kudzuseed)
+					/obj/item/seeds/kudzuseed,
+					/obj/item/seeds/nofruitseed)
 	cost = 15
 	containertype = /obj/structure/closet/crate/secure/hydrosec
 	containername = "Exotic Seeds crate"

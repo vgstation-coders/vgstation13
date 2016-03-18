@@ -185,7 +185,7 @@
 	throw_range = 5
 	w_class = 3		 //upped to three because books are, y'know, pretty big. (and you could hide them inside eachother recursively forever)
 	flags = FPRINT
-	attack_verb = list("bashed", "whacked", "educated")
+	attack_verb = list("bashes", "whacks", "educates")
 
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 3
@@ -314,7 +314,7 @@
 							return
 					scanner.computer.inventory.Add(src)
 					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Title added to general inventory.'")
-	else if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large) || istype(W, /obj/item/weapon/wirecutters))
+	else if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large) || iswirecutter(W))
 		if(carved)	return
 		to_chat(user, "<span class='notice'>You begin to carve out [title].</span>")
 		if(do_after(user, src, 30))
