@@ -35,6 +35,7 @@
 /obj/item/clothing/head/helmet/space/pirate
 	name = "pirate hat"
 	desc = "Yarr."
+	flags = FPRINT
 	icon_state = "pirate"
 	item_state = "pirate"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
@@ -44,6 +45,7 @@
 /obj/item/clothing/suit/space/pirate
 	name = "pirate coat"
 	desc = "Yarr."
+	flags = FPRINT
 	icon_state = "pirate"
 	item_state = "pirate"
 	w_class = 3
