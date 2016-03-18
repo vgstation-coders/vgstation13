@@ -259,7 +259,7 @@ var/paperwork_library
 /*
  * Sleepy Pens
  */
-/obj/item/weapon/pen/sleepypen
+/obj/item/weapon/pen/sleepypen //this is not given to antagonists in the uplinks
 	desc = "It's a black ink pen with a sharp point and a carefully engraved \"Waffle Co.\""
 	flags = FPRINT  | OPENCONTAINER
 	slot_flags = SLOT_BELT
