@@ -6,7 +6,6 @@
 	desc = "It's a corgi."
 	icon_state = "corgi"
 	icon_living = "corgi"
-	icon_rest = "corgi_sit"
 	icon_dead = "corgi_dead"
 	health = 30
 	maxHealth = 30
@@ -526,7 +525,6 @@
 	desc = "It's a corgi with a cute pink bow."
 	icon_state = "lisa"
 	icon_living = "lisa"
-	icon_rest = "lisa_sit"
 	icon_dead = "lisa_dead"
 	response_help  = "pets"
 	response_disarm = "bops"
@@ -567,7 +565,6 @@
 	desc = "It's a doberman, how intimidating!"
 	icon_state = "doby"
 	icon_living = "doby"
-	icon_rest = "doby_sit"
 	icon_dead = "doby_dead"
 	spin_emotes = list("prances around","chases her nub of a tail")
 
@@ -580,118 +577,3 @@
 		to_chat(usr, "<span class='warning'>[src] won't wear that!</span>")
 		return
 	..()
-
-/mob/living/simple_animal/corgi/update_icons()
-	lying_prev = lying	//so we don't update overlays for lying/standing unless our stance changes again
-	overlays.len = 0
-	if(lying)
-		if(resting)					icon_state = icon_rest
-		else						icon_state = icon_living
-	else
-		icon_state = icon_living
-
-//Seriously, when are we just converting this to canine.dm?
-/mob/living/simple_animal/corgi/pug
-	name = "Pug"
-	real_name = "Pug"
-	gender = MALE
-	desc = "A small breed of dog, with a broad flat nose and a deeply wrinkled face."
-	icon_state = "pug"
-	icon_living = "pug"
-	icon_rest = "pug_sit"
-	icon_dead = "pug_dead"
-	var/teleport = 0 //Set to 1 for bluespace accidents
-	var/teleport_cooldown = 300
-	var/teleport_max_cooldown = 300
-	var/teleport_range
-	var/teleport_random_chance = 5 //Out of 100 because prob
-	spin_emotes = list("dances around","chases his nub of a tail")
-
-	species_type = /mob/living/simple_animal/corgi/pug
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal
-
-/mob/living/simple_animal/corgi/pug/New()
-	..()
-	verbs.Add(/mob/living/simple_animal/corgi/pug/proc/Teleport)
-
-//Pugs can't wear hats, silly, they're too big
-/mob/living/simple_animal/corgi/pug/Topic(href, href_list)
-	if(href_list["remove_inv"] || href_list["add_inv"])
-		to_chat(usr, "<span class='warning'>\the [src] won't wear that!</span>")
-		return
-	..()
-
-/mob/living/simple_animal/corgi/pug/Life()
-	..()
-	if(teleport && prob(teleport_random_chance) && teleport_cooldown <= 0)
-		Teleport()
-
-	if(teleport_cooldown > 0)
-		teleport_cooldown--
-
-/mob/living/simple_animal/corgi/pug/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/bluespace_crystal))
-		if(teleport)
-			to_chat(user, "<span class='warning'>\the [src] already has a bluespace crystal set into their collar")
-			return
-		else
-			to_chat(user, "You set the crystal into [src]'s collar")
-			if(istype(O, /obj/item/bluespace_crystal/flawless))
-				//Less cooldown, less range, more stable
-				teleport_range = rand(1,4)
-				teleport_cooldown = 15
-				teleport_max_cooldown = 15
-				teleport_random_chance = 1
-				teleport = 1
-				qdel(O)
-			else if (istype(O, /obj/item/bluespace_crystal/artificial))
-				//More cooldown, more range, more unstable
-				teleport_range = rand(2,12)
-				teleport_cooldown = 45
-				teleport_max_cooldown = 45
-				teleport_random_chance = 10
-				teleport = 1
-				qdel(O)
-			else
-				//Normal cooldown, normal range
-				teleport_range = rand(3,6)
-				teleport_cooldown = 30
-				teleport_max_cooldown = 30
-				teleport_random_chance = 5
-				teleport = 1
-				qdel(O)
-
-
-/mob/living/simple_animal/corgi/pug/proc/Teleport()
-	set name = "Teleport"
-	set category = "Corgi" //Again with the corgi
-	set desc = "Teleport somewhere randomly in the vicinity"
-
-	if (src.isDead())
-		to_chat(src, text("<span class='warning'>You're too dead to teleport"))
-		return
-	if(teleport)
-		if(!teleport_range)
-			//Just in case it was set to 1 through varedit
-			teleport_range = rand(3,6)
-		if(teleport_cooldown <= 0)
-			visible_message("\the [src] disappears in a flash of light")
-			do_teleport(src, get_turf(src), teleport_range, asoundin = 'sound/effects/phasein.ogg')
-
-			teleport_cooldown = teleport_max_cooldown
-		else
-			to_chat(src, text("It's not quite reached critical charge yet, [teleport_cooldown] to go"))
-	else
-		to_chat(src, text("What do you think you are? A magical teleporting pug?"))
-
-
-/mob/living/simple_animal/corgi/pug/pugsley
-	name = "Pugsley"
-	real_name = "Pugsley"
-	desc = "Telesciences previous pet, before they ended up lost due to a freak bluespace accident."
-
-/mob/living/simple_animal/corgi/pug/depug
-	teleport = 1
-	teleport_cooldown = 1
-	teleport_max_cooldown = 1
-	teleport_random_chance = 100 //send help
