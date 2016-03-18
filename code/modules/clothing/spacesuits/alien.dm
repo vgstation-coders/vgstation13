@@ -129,6 +129,8 @@
 
 	stomp_attack_power = 0
 
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //They're like those five-toed shoes except for vox and with only three toes
+
 /obj/item/clothing/shoes/magboots/vox/toggle()
 	//set name = "Toggle Floor Grip"
 	if(usr.isUnconscious())
@@ -162,6 +164,7 @@
 	flags = FPRINT //Flags need updating from inheritance above
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 25)
 	pressure_resistance = 5 * ONE_ATMOSPHERE
+	eyeprot = 0
 
 /obj/item/clothing/suit/space/vox/civ/bartender
 	name = "vox bartender pressure suit"
@@ -256,6 +259,7 @@
 	item_state = "vox-pressure-science"
 	desc = "A very alien-looking helmet for vox crewmembers. This one is for SCIENCE!"
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 25)
+	eyeprot = 0
 
 /obj/item/clothing/suit/space/vox/civ/science/rd
 	name = "vox research director pressure suit"
@@ -285,6 +289,7 @@
 	item_state = "vox-pressure-medical"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for medical personnel."
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	eyeprot = 0
 
 /obj/item/clothing/suit/space/vox/civ/medical/virologist
 	name = "vox virologist pressure suit"

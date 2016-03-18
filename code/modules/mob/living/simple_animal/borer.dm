@@ -223,6 +223,9 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 
 		stat("Chemicals", chemicals)
 
+/mob/living/simple_animal/borer/start_pulling(var/atom/movable/AM)
+	to_chat(src, "<span class='warning'>You are too small to pull anything.</span>")
+
 // VERBS!
 /mob/living/simple_animal/borer/proc/borer_speak(var/message)
 	set category = "Alien"
@@ -444,12 +447,17 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 		to_chat(src, "<span class='warning'>You don't have enough energy to synthesize this much!</span>")
 		return
 
+	var/datum/reagent/C = chemical_reagents_list[chemID] //we need to get the datum for this reagent to read the overdose threshold
+	if(units >= C.overdose - host.reagents.get_reagent_amount(chemID))
+		if(alert("Secreting that much [chemID] would cause an overdose in your host. Are you sure?", "Secrete Chemicals", "Yes", "No") != "Yes")
+			return
+		add_gamelogs(src, "intentionally overdosed \the [host] with '[chemID]'", admin = TRUE, tp_link = TRUE, span_class = "danger")
 
 	if(!host || controlling || !src || stat) //Sanity check.
 		return
 
 	to_chat(src, "<span class='info'>You squirt a measure of [chem.name] from your reservoirs into [host]'s bloodstream.</span>")
-	add_gamelogs(src, "secreted [units]U of '[chemID]' into \the [host]", admin = TRUE, tp_link = TRUE, span_class = "danger")
+	add_gamelogs(src, "secreted [units]U of '[chemID]' into \the [host]", admin = TRUE, tp_link = TRUE, span_class = "message")
 	host.reagents.add_reagent(chem.name, units)
 	chemicals -= chem.cost*units
 

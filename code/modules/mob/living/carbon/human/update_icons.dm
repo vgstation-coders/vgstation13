@@ -413,6 +413,8 @@ var/global/list/damage_icon_parts = list()
 		race_icon = 'icons/mob/human_races/r_skeleton.dmi'
 	else
 		//Icon data is kept in species datums within the mob.
+		if(species && istype(species, /datum/species))
+			species.updatespeciescolor(src)
 		race_icon = species.icobase
 		deform_icon = species.deform
 	overlays -= obj_overlays[MUTANTRACE_LAYER]
@@ -467,7 +469,7 @@ var/global/list/damage_icon_parts = list()
 
 /* --------------------------------------- */
 //For legacy support.
-/mob/living/carbon/human/regenerate_icons()
+/mob/living/carbon/human/regenerate_icons()//Changing the order of those procs doesn't change which layer appears on top! That's what the defines in setup.dm are for.
 	..()
 	if(monkeyizing)		return
 	update_fire(0)
@@ -509,7 +511,7 @@ var/global/list/damage_icon_parts = list()
 		if(!t_color)		t_color = icon_state
 		var/image/standing	= image("icon_state" = "[t_color]_s")
 
-		if((M_FAT in mutations) && (species.flags & CAN_BE_FAT))
+		if(((M_FAT in mutations) && (species.flags & CAN_BE_FAT)) || species.flags & IS_BULKY)
 			if(w_uniform.flags&ONESIZEFITSALL)
 				standing.icon	= 'icons/mob/uniform_fat.dmi'
 			else
@@ -954,9 +956,6 @@ var/global/list/damage_icon_parts = list()
 		O.icon_state = "handcuff1"
 		overlays += O
 		obj_overlays[HANDCUFF_LAYER] = O
-		//overlays_standing[HANDCUFF_LAYER]	= image("icon" = 'icons/mob/mob.dmi', "icon_state" = "handcuff1")
-	//else
-		//overlays_standing[HANDCUFF_LAYER]	= null
 
 	if(update_icons)   update_icons()
 

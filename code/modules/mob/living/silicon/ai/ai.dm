@@ -310,10 +310,9 @@ var/list/ai_list = list()
 			to_chat(usr, "Wireless control is disabled!")
 			return
 
-	var/confirm = alert("Are you sure you want to call the shuttle?", "Confirm Shuttle Call", "Yes", "No")
-
+	var/justification = stripped_input(usr, "Please input a concise justification for the shuttle call. Note that failure to properly justify a shuttle call may lead to recall or termination.", "Nanotrasen Anti-Comdom Systems")
+	var/confirm = alert("Are you sure you want to call the shuttle?", "Confirm Shuttle Call", "Yes", "Cancel")
 	if(confirm == "Yes")
-		var/justification = stripped_input(usr, "Please input a concise justification for the shuttle call. Note that failure to properly justify a shuttle call may lead to recall or termination", "Nanotrasen Anti-Comdom Systems")
 		call_shuttle_proc(src, justification)
 
 	// hack to display shuttle timer
@@ -390,6 +389,8 @@ var/list/ai_list = list()
 
 	updatehealth()
 
+/mob/living/silicon/ai/put_in_hands(var/obj/item/W)
+	return 0
 
 /mob/living/silicon/ai/Topic(href, href_list)
 	if(usr != src)
@@ -811,7 +812,7 @@ var/list/ai_list = list()
 
 
 /mob/living/silicon/ai/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/wrench))
+	if(iswrench(W))
 		if(anchored)
 			user.visible_message("<span class='notice'>\The [user] starts to unbolt \the [src] from the plating...</span>")
 			if(!do_after(user, src,40))

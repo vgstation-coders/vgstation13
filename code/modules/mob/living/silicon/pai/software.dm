@@ -202,7 +202,7 @@
 
 				sradio.send_signal("ACTIVATE")
 				for(var/mob/O in hearers(1, src.loc))
-					O.show_message(text("\icon[] *beep* *beep*", src), 1, "*beep* *beep*", 2)
+					O.show_message("[bicon(src)] *beep* *beep*", 1, "*beep* *beep*", 2)
 
 			if(href_list["freq"])
 
@@ -381,7 +381,7 @@
 /mob/living/silicon/pai/proc/downloadSoftware()
 	var/dat = ""
 
-	dat += {"<h2>CentComm pAI Module Subversion Network</h2><br>
+	dat += {"<h2>CentComm pAI Module CVS Network</h2><br>
 		<pre>Remaining Available Memory: [src.ram]</pre><br>
 		<p style=\"text-align:center\"><b>Trunks available for checkout</b><br>"}
 	for(var/s in available_software)

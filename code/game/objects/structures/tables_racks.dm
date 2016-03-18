@@ -7,6 +7,7 @@
  */
 
 
+
 /*
  * Tables
  */
@@ -45,6 +46,13 @@
 	update_adjacent()
 	..()
 
+/obj/structure/table/glass/proc/checkhealth()
+	if(health <= 0)
+		playsound(get_turf(src), "shatter", 50, 1)
+		new /obj/item/weapon/shard(src.loc)
+		new /obj/item/weapon/table_parts(src.loc)
+		qdel(src)
+
 /obj/structure/table/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
 		src.ex_act(1)
@@ -80,6 +88,8 @@
 				base = "wood"
 			if (istype(src, /obj/structure/table/reinforced))
 				base = "rtable"
+			if (istype(src, /obj/structure/table/glass))
+				base = "glasstable"
 
 			icon_state = "[base]flip[type]"
 			if (type==1)
@@ -247,6 +257,11 @@
 	if(!usr) return
 	do_flip()
 
+/obj/structure/table/glass/kick_act()
+	health -= 5
+	checkhealth()
+	..()
+
 /obj/structure/table/blob_act()
 	if(prob(75))
 		destroy()
@@ -356,8 +371,9 @@
 		var/obj/item/weapon/grab/G = W
 		if (istype(G.affecting, /mob/living))
 			var/mob/living/M = G.affecting
-			if (G.state < 2)
+			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
+					G.affecting.forceMove(loc)
 					if (prob(15))	M.Weaken(5)
 					M.apply_damage(8,def_zone = "head")
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
@@ -366,13 +382,13 @@
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
 			else
-				G.affecting.loc = src.loc
+				G.affecting.forceMove(loc)
 				G.affecting.Weaken(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
 			return
 
-	if (istype(W, /obj/item/weapon/wrench) && can_disassemble())
+	if (iswrench(W) && can_disassemble())
 		//if(!params_list.len || text2num(params_list["icon-y"]) < 8) //8 above the bottom of the icon
 		to_chat(user, "<span class='notice'>Now disassembling table</span>")
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
@@ -412,6 +428,7 @@
 		to_chat(user, "<span class='notice'>You need hands for this.</span>")
 		return 0
 	return 1
+
 
 /obj/structure/table/verb/do_flip()
 	set name = "Flip table"
@@ -583,6 +600,57 @@
 	return ..()
 
 /*
+ * Glass
+ */
+
+/obj/structure/table/glass
+	name = "glass table"
+	desc = "A standard table with a fine glass finish."
+	icon_state = "glass_table"
+	parts = /obj/item/weapon/table_parts/glass
+	health = 30
+
+/obj/structure/table/glass/attackby(obj/item/W as obj, mob/user as mob, params)
+	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
+		var/obj/item/weapon/grab/G = W
+		if (istype(G.affecting, /mob/living))
+			var/mob/living/M = G.affecting
+			if (G.state < GRAB_AGGRESSIVE)
+				if(user.a_intent == I_HURT)
+					if (prob(15))	M.Weaken(5)
+					M.apply_damage(15,def_zone = "head")
+					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
+					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
+					playsound(get_turf(src), "shatter", 50, 1) //WRESTLEMANIA tax
+					new /obj/item/weapon/shard(src.loc)
+					new /obj/item/weapon/table_parts(src.loc)
+					qdel(src)
+				else
+					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
+					return
+			else
+				G.affecting.forceMove(loc)
+				G.affecting.Weaken(5)
+				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
+			returnToPool(W)
+
+	else if (user.a_intent == I_HURT)
+		user.delayNextAttack(10)
+		health -= W.force
+		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>", \
+		"<span class='warning'>You hit \the [src] with \the [W].</span>")
+		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 50, 1)
+		checkhealth()
+
+	else
+		..()
+
+
+
+
+
+
+/*
  * Racks
  */
 /obj/structure/rack
@@ -648,7 +716,7 @@
 	return
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/wrench))
+	if (iswrench(W))
 		new /obj/item/weapon/rack_parts( src.loc )
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		del(src)

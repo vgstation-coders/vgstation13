@@ -59,7 +59,7 @@
 /*	if(assembling)
 		if(unpacking.action(A, user))
 			return 1 */
-	if(istype(A, /obj/item/weapon/crowbar) && !assembling)
+	if(iscrowbar(A) && !assembling)
 		if(stacked.len)
 			to_chat(user, "<span class='rose'>You can't open this flatpack while others are stacked on top of it!</span>")
 			return
@@ -67,7 +67,7 @@
 		user.visible_message("<span class='notice'>[user] begins to open the flatpack...</span>", "<span class='notice'>You begin to open the flatpack...</span>")
 		if(do_after(user, src, rand(10,40)))
 			if(machine)
-				to_chat(user, "<span class='notice'>\icon [src]You successfully unpack \the [machine]!</span>")
+				to_chat(user, "<span class='notice'>[bicon(src)]You successfully unpack \the [machine]!</span>")
 //				overlays += "assembly"
 /*				var/obj/item/weapon/paper/instructions = new (get_turf(src))
 				var/list/inst_list = unpacking.GenerateInstructions()
@@ -82,7 +82,7 @@
 				machine = null
 				qdel(src)
 			else
-				to_chat(user, "<span class='notice'>\icon [src]It seems this [src] was empty...</span>")
+				to_chat(user, "<span class='notice'>[bicon(src)]It seems this [src] was empty...</span>")
 				qdel(src)
 		assembling = 0
 		return
@@ -95,6 +95,9 @@
 	qdel(src)
 
 /obj/structure/closet/crate/flatpack/attack_hand(mob/user, params)
+	return unstack(user, params, get_turf(user))
+
+/obj/structure/closet/crate/flatpack/proc/unstack(mob/user, params, location)
 	if(params && stacked.len)
 		var/list/params_list = params2list(params)
 		var/clicked_index = round((text2num(params_list["icon-y"]) - FLATPACK_HEIGHT)/ FLATPACK_HEIGHT) //which number are we clicking?
@@ -112,7 +115,7 @@
 			remove_stack(above) //remove all the flatpacks stacked above the clicked one
 
 		remove_stack(bottom_pack) //moves the flatpack to where the user is
-		bottom_pack.forceMove(get_turf(user))
+		bottom_pack.forceMove(location)
 
 		for(var/obj/structure/closet/crate/flatpack/newpack in removed_packs) //readd all the stacks we took off above it to the new one
 			bottom_pack.add_stack(newpack)
@@ -121,7 +124,19 @@
 								"You remove the top [bottom_pack.stacked.len + 1] flatpack\s from the stack.")
 
 		return 1
-	return
+
+/obj/structure/closet/crate/flatpack/MouseDrop(over_object,src_location,over_location,src_control,over_control,params)
+	if(istype(over_object, /obj/structure/closet/crate/flatpack))
+		var/obj/structure/closet/crate/flatpack/flatpack = over_object
+		return flatpack.MouseDrop_T(src,usr)
+	var/mob/user = usr
+	if(user.incapacitated() || user.lying)
+		return //Validate mob status
+	if(!isturf(user.loc) || !isturf(over_location) || !Adjacent(user) || !user.Adjacent(over_location))
+		return //Validate location, and distance to location and object
+	if(!ishuman(user) && !isrobot(user))
+		return //Validate mob type
+	unstack(user, params, over_location)
 
 /obj/structure/closet/crate/flatpack/MouseDrop_T(atom/dropping, mob/user)
 	if(istype(dropping, /obj/structure/closet/crate/flatpack) && dropping != src)

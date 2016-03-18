@@ -168,6 +168,8 @@
 	var/mommi_static = 0 //Scrambling mobs for mommis or not
 
 	var/skip_minimap_generation = 0 //If 1, don't generate minimaps
+	var/skip_vault_generation = 0 //If 1, don't generate vaults
+	var/shut_up_automatic_diagnostic_and_announcement_system = 0 //If 1, don't play the vox sounds at the start of every shift.
 
 /datum/configuration/New()
 	. = ..()
@@ -528,6 +530,10 @@
 					mommi_static = 1
 				if("skip_minimap_generation")
 					skip_minimap_generation = 1
+				if("skip_vault_generation")
+					skip_vault_generation = 1
+				if("shut_up_automatic_diagnostic_and_announcement_system")
+					shut_up_automatic_diagnostic_and_announcement_system = 1
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

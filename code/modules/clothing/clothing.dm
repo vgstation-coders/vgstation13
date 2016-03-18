@@ -13,7 +13,7 @@
 //BS12: Species-restricted clothing check.
 /obj/item/clothing/mob_can_equip(M as mob, slot)
 
-	. = ..() //Default return value. If 1, item can be equipped. If 0, it can't be.
+	. = ..(M, slot, 1) //Default return value. If 1, item can be equipped. If 0, it can't be.
 
 	if(species_restricted && istype(M,/mob/living/carbon/human))
 
@@ -122,7 +122,7 @@ BLIND     // can't see anything
 	var/clipped = 0
 	body_parts_covered = HANDS
 	slot_flags = SLOT_GLOVES
-	attack_verb = list("challenged")
+	attack_verb = list("challenges")
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
 	var/pickpocket = 0 //Master pickpocket?
 
@@ -193,7 +193,7 @@ BLIND     // can't see anything
 			permeability_coefficient = null
 			flags = 0
 			src.is_flipped = 2
-			body_parts_covered &= ~(MOUTH|HEAD|BEARD)
+			body_parts_covered &= ~(MOUTH|HEAD|BEARD|FACE)
 		usr.update_inv_wear_mask()
 
 /obj/item/clothing/mask/attack_self()
@@ -212,6 +212,7 @@ BLIND     // can't see anything
 	var/chained = 0
 	var/chaintype = null // Type of chain.
 	var/bonus_kick_damage = 0
+	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint left by someone wearing these
 
 	siemens_coefficient = 0.9
 	body_parts_covered = FEET
@@ -402,7 +403,7 @@ BLIND     // can't see anything
 /obj/item/clothing/under/proc/set_sensors(mob/usr as mob)
 	var/mob/M = usr
 	if (istype(M, /mob/dead/)) return
-	if (usr.stat || usr.restrained()) return
+	if (usr.incapacitated()) return
 	if(has_sensor >= 2)
 		to_chat(usr, "<span class='warning'>The controls are locked.</span>")
 		return 0
@@ -433,6 +434,10 @@ BLIND     // can't see anything
 	set src in usr
 	set_sensors(usr)
 	..()
+
+/obj/item/clothing/under/AltClick()
+	if(find_holder_of_type(src, /mob) == usr)
+		set_sensors(usr)
 
 /obj/item/clothing/under/verb/removetie()
 	set name = "Remove Accessory"

@@ -275,6 +275,13 @@
 
 // Pastries ////////////////////////////////////////////////////
 
+/datum/recipe/eclair
+	reagents = list("flour" = 5, "cream" = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/eclair
+
 /datum/recipe/waffles
 	reagents = list("flour" = 10)
 	items = list(
@@ -338,16 +345,9 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/faggot)
 	result = /obj/item/weapon/reagent_containers/food/snacks/donkpocket //SPECIAL
 
-/datum/recipe/donkpocket/proc/warm_up(var/obj/item/weapon/reagent_containers/food/snacks/donkpocket/being_cooked)
-	being_cooked.warm = 1
-	being_cooked.reagents.add_reagent("tricordrazine", 5)
-	being_cooked.bitesize = 6
-	being_cooked.name = "Warm " + being_cooked.name
-	being_cooked.cooltime()
-
 /datum/recipe/donkpocket/make_food(var/obj/container)
 	var/obj/item/weapon/reagent_containers/food/snacks/donkpocket/being_cooked = ..(container)
-	warm_up(being_cooked)
+	being_cooked.warm_up()
 	return being_cooked
 
 /datum/recipe/donkpocket/warm
@@ -357,7 +357,11 @@
 
 /datum/recipe/donkpocket/warm/make_food(var/obj/container)
 	var/obj/item/weapon/reagent_containers/food/snacks/donkpocket/being_cooked = locate() in container
-	if(being_cooked && !being_cooked.warm) warm_up(being_cooked)
+	if(istype(being_cooked))
+		if(being_cooked.warm <= 0)
+			being_cooked.warm_up()
+		else
+			being_cooked.warm = 80
 	return being_cooked
 
 // Bread ///////////////////////////////////////////////////////
@@ -781,6 +785,11 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pumpkinpie
+
+/datum/recipe/nofruitpie
+	reagents = list("flour" = 10)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie
 
 // Kebabs //////////////////////////////////////////////////////
 

@@ -201,6 +201,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];tdome2=\ref[M]'>Thunderdome Red</A> |
 			<A href='?src=\ref[src];tdomeadmin=\ref[M]'>Thunderdome Admin</A> |
 			<A href='?src=\ref[src];tdomeobserve=\ref[M]'>Thunderdome Observer</A> |
+			<A href='?src=\ref[src];addcancer=\ref[M]'>Inflict Cancer</A> |
 		"}
 
 	// language toggles
@@ -743,6 +744,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=spacevines'>Spawn Space-Vines</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
 			<A href='?src=\ref[src];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
+			<A href='?src=\ref[src];secretsfun=mobswarm'>Trigger mobs of your choice appearing out of thin air</A><BR>
 			<BR>
 			<B>Fun Secrets</B><BR>
 			<BR>
@@ -1149,10 +1151,10 @@ var/global/floorIsLava = 0
 		if (ticker.mode.config_tag == "changeling")
 			return 2
 		return 1
-	if(isborer(M))
+	/*if(isborer(M)) //They ain't antags anymore
 		if (ticker.mode.config_tag == "borer")
 			return 2
-		return 1
+		return 1*/
 	if(isbadmonkey(M))
 		if (ticker.mode.config_tag == "monkey")
 			return 2
