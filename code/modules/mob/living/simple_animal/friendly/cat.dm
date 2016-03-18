@@ -5,6 +5,7 @@
 	desc = "Kitty!!"
 	icon_state = "cat2"
 	icon_living = "cat2"
+	icon_rest = "cat2_sit"
 	icon_dead = "cat2_dead"
 	gender = MALE
 	size = SIZE_SMALL
@@ -36,6 +37,7 @@
 	desc = "GCAT"
 	icon_state = "cat"
 	icon_living = "cat"
+	icon_rest = "cat_sit"
 	icon_dead = "cat_dead"
 	gender = FEMALE
 
@@ -79,6 +81,15 @@
 				stop_automated_movement = 1
 				walk_to(src,movement_target,0,3)
 
+/mob/living/simple_animal/cat/update_icons()
+	lying_prev = lying	//so we don't update overlays for lying/standing unless our stance changes again
+	overlays.len = 0
+	if(lying)
+		if(resting)					icon_state = icon_rest
+		else						icon_state = icon_living
+	else
+		icon_state = icon_living
+
 /mob/living/simple_animal/cat/Proc
 	name = "Proc"
 
@@ -87,6 +98,7 @@
 	desc = "Meow."
 	icon_state = "salem"
 	icon_living= "salem"
+	icon_rest = "salem_sit"
 	icon_dead= "salem_dead"
 	gender = FEMALE
 
@@ -96,6 +108,7 @@
 	desc = "D'aaawwww"
 	icon_state = "kitten"
 	icon_living = "kitten"
+	icon_rest = "kitten_dead"
 	icon_dead = "kitten_dead"
 	gender = NEUTER
 	size = SIZE_TINY
@@ -106,6 +119,7 @@
 	desc = "sssSSSSsss"
 	icon_state = "snek"
 	icon_living = "snek"
+	icon_rest = "snek_rest"
 	icon_dead = "snek_dead"
 	gender = NEUTER
 	speak = list("SssssSSSS.", "Slirp.","HSSSSS")

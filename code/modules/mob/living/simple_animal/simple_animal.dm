@@ -13,6 +13,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/icon_living = ""
 	var/icon_dead = ""
+	var/icon_rest = ""
 	var/icon_gib = null	//We only try to show a gibbing animation if this exists.
 
 	var/list/speak = list()
