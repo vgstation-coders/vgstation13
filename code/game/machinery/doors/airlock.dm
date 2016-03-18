@@ -336,6 +336,7 @@ About the new airlock wires panel:
 			if(!src.justzap)
 				if(src.shock(user, 100))
 					src.justzap = 1
+					user.delayNextMove(10)
 					spawn (10)
 						src.justzap = 0
 					return
@@ -989,6 +990,7 @@ About the new airlock wires panel:
 		if (isElectrified())
 			// TODO: analyze the called proc
 			if (shock(user, 100))
+				user.delayNextAttack(10)
 				return
 	//Basically no open panel, not opening already, door has power, area has power, door isn't bolted
 	if (!panel_open && !operating && arePowerSystemsOn() && !(stat & (NOPOWER|BROKEN)) && !locked)
@@ -1015,6 +1017,7 @@ About the new airlock wires panel:
 		if (isElectrified())
 			// TODO: analyze the called proc
 			if (shock(user, 75))
+				user.delayNextAttack(10)
 				return
 
 	if(istype(I, /obj/item/weapon/batteringram))
@@ -1042,7 +1045,7 @@ About the new airlock wires panel:
 			qdel(src)
 		return
 
-	if (istype(I, /obj/item/weapon/weldingtool))
+	if (iswelder(I))
 		if (density && !operating)
 			var/obj/item/weapon/weldingtool/WT = I
 
@@ -1054,19 +1057,19 @@ About the new airlock wires panel:
 					welded = null
 
 				update_icon()
-	else if (istype(I, /obj/item/weapon/wirecutters))
+	else if (iswirecutter(I))
 		if (!operating && panel_open)
 			wires.Interact(user)
-	else if (istype(I, /obj/item/device/multitool))
+	else if (ismultitool(I))
 		if (!operating)
 			if(panel_open) wires.Interact(user)
 			else update_multitool_menu(user)
 		attack_hand(user)
-	else if(istype(I, /obj/item/weapon/crowbar) || istype(I, /obj/item/weapon/fireaxe) )
+	else if(iscrowbar(I) || istype(I, /obj/item/weapon/fireaxe) )
 		if(src.busy) return
 		src.busy = 1
 		var/beingcrowbarred = null
-		if(istype(I, /obj/item/weapon/crowbar) )
+		if(iscrowbar(I) )
 			beingcrowbarred = 1 //derp, Agouri
 		else
 			beingcrowbarred = 0

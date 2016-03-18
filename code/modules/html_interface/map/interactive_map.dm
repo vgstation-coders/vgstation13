@@ -78,7 +78,7 @@ var/const/ALLOW_CENTCOMM = FALSE
 		C << browse_rsc(file("[getMinimapFile(z)].png"), "minimap_[z].png")
 
 /proc/getMinimapFile(z)
-	return "data/minimaps/map_[z]"
+	return "data/minimaps/map_[map.nameLong][z]"
 
 // Activate this to debug tile mismatches in the minimap.
 // This will store the full information on each tile and compare it the next time you run the minimap.
@@ -168,7 +168,9 @@ var/const/ALLOW_CENTCOMM = FALSE
 		for(var/s = x1 to x2)
 			for(var/r = y1 to y2)
 				var/turf/tile = locate(s, r, z)
-				if (tile.loc.type != /area/start && (tile.type != /turf/space || (locate(/obj/structure/lattice) in tile) || (locate(/obj/structure/transit_tube) in tile)) && !istype(tile, /turf/space/transit))
+				if (tile.flags & NO_MINIMAP) continue
+
+				if (tile.loc.type != /area/start && (tile.type != /turf/space || (locate(/obj/structure/lattice) in tile) || (locate(/obj/structure/transit_tube) in tile)) && !istype(tile, /turf/space/transit) && !istype(tile.loc, /area/vault))
 					if (istype(tile.loc, /area/asteroid) || istype(tile.loc, /area/mine/unexplored) || istype(tile, /turf/unsimulated/mineral) || (isspace(tile.loc) && istype(tile, /turf/unsimulated/floor/asteroid)))
 						new_icon = 'icons/turf/walls.dmi'
 						new_icon_state = "rock"

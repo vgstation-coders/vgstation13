@@ -36,6 +36,7 @@
 	var/atom/movable/following = null
 	var/mob/canclone = null
 	incorporeal_move = INCORPOREAL_GHOST
+	var/movespeed = 0.75
 
 /mob/dead/observer/New(var/mob/body=null, var/flags=1)
 	sight |= SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF
@@ -296,7 +297,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Ghost"
 	set desc = "Relinquish your life and enter the land of the dead."
 
-	if(stat == DEAD)
+	if(src.health < 0 && src.health > -95.0) //crit people
+		succumb()
+		ghostize(1)
+	else if(stat == DEAD)
 		ghostize(1)
 	else
 		var/response = alert(src, "Are you -sure- you want to ghost?\n(You are alive. If you ghost, you won't be able to play this round for another 30 minutes! You can't change your mind so choose wisely!)","Are you sure you want to ghost?","Ghost","Stay in body")
@@ -908,3 +912,14 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/dead/observer/Logout()
 	observers -= src
 	..()
+
+/mob/dead/observer/verb/modify_movespeed()
+	set name = "Change Speed"
+	set category = "Ghost"
+	var/speed = input(usr,"What speed would you like to move at?","Observer Move Speed") in list("100%","125%","150%","175%","200%","FUCKING HYPERSPEED")
+	if(speed == "FUCKING HYPERSPEED") //April fools
+		client.move_delayer.min_delay = 0
+		movespeed = 0
+		return
+	speed = text2num(copytext(speed,1,4))/100
+	movespeed = 1/speed

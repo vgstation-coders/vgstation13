@@ -72,8 +72,8 @@
 /obj/item/weapon/tank/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 
-	if (istype(W, /obj/item/weapon/flamethrower))
-		var/obj/item/weapon/flamethrower/F = W
+	if (istype(W, /obj/item/weapon/gun/projectile/flamethrower))
+		var/obj/item/weapon/gun/projectile/flamethrower/F = W
 		if ((!F.status)||(F.ptank))	return
 		src.master = F
 		F.ptank = src
@@ -84,6 +84,7 @@
 /obj/item/weapon/tank/plasma/plasmaman
 	desc = "The lifeblood of plasmamen.  Warning:  Extremely flammable, do not inhale (unless you're a plasmaman)."
 	icon_state = "plasma_fr"
+	slot_flags = SLOT_BACK
 	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
 
 /*

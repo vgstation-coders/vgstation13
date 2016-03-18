@@ -22,15 +22,23 @@
 
 	var/fire_sound = 'sound/weapons/Gunshot.ogg'
 	var/empty_sound = 'sound/weapons/empty.ogg'
+	var/fire_volume = 50 //the volume of the fire_sound
 	var/obj/item/projectile/in_chamber = null
 	var/list/caliber //the ammo the gun will accept. Now multiple types (make sure to set them to =1)
 	var/silenced = 0
 	var/recoil = 0
 	var/ejectshell = 1
-	var/clumsy_check = 1
+
+	var/clumsy_check = 1				//Whether the gun disallows clumsy users from firing it.
+	var/advanced_tool_user_check = 1	//Whether the gun disallows users that cannot use advanced tools from firing it.
+	var/MoMMI_check = 1					//Whether the gun disallows MoMMIs from firing it.
+	var/nymph_check = 1					//Whether the gun disallows diona nymphs from firing it.
+	var/hulk_check = 1					//Whether the gun disallows hulks from firing it.
+	var/golem_check = 1					//Whether the gun disallows golems from firing it.
+
 	var/tmp/list/mob/living/target //List of who yer targeting.
 	var/tmp/lock_time = -100
-	var/tmp/mouthshoot = 0 ///To stop people from suiciding twice... >.>
+	var/mouthshoot = 0 ///To stop people from suiciding twice... >.>
 	var/automatic = 0 //Used to determine if you can target multiple people.
 	var/tmp/mob/living/last_moved_mob //Used to fire faster at more than one person.
 	var/tmp/told_cant_shoot = 0 //So that it doesn't spam them with the fact they cannot hit them.
@@ -73,6 +81,43 @@
 /obj/item/weapon/gun/proc/isHandgun()
 	return 1
 
+/obj/item/weapon/gun/proc/can_Fire(mob/user, var/display_message = 0)
+	var/firing_dexterity = 1
+	if(advanced_tool_user_check)
+		if (!user.IsAdvancedToolUser())
+			firing_dexterity = 0
+	if(MoMMI_check)
+		if(isMoMMI(user))
+			firing_dexterity = 0
+	if(nymph_check)
+		if(istype(user, /mob/living/carbon/monkey/diona))
+			firing_dexterity = 0
+	if(!firing_dexterity)
+		if(display_message)
+			to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return 0
+
+	if(istype(user, /mob/living))
+		if(hulk_check)
+			var/mob/living/M = user
+			if (M_HULK in M.mutations)
+				if(display_message)
+					to_chat(M, "<span class='warning'>Your meaty finger is much too large for the trigger guard!</span>")
+				return 0
+	if(ishuman(user))
+		var/mob/living/carbon/human/H=user
+		if(golem_check)
+			if(user.dna && (user.dna.mutantrace == "adamantine" || user.dna.mutantrace=="coalgolem"))
+				if(display_message)
+					to_chat(user, "<span class='warning'>Your fat fingers don't fit in the trigger guard!</span>")
+				return 0
+		var/datum/organ/external/a_hand = H.get_active_hand_organ()
+		if(!a_hand.can_use_advanced_tools())
+			if(display_message)
+				to_chat(user, "<span class='warning'>Your [a_hand] doesn't have the dexterity to do this!</span>")
+			return 0
+	return 1
+
 /obj/item/weapon/gun/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)//TODO: go over this
 	//Exclude lasertag guns from the M_CLUMSY check.
 	if(clumsy_check)
@@ -85,23 +130,8 @@
 				qdel(src)
 				return
 
-	if (!user.IsAdvancedToolUser() || isMoMMI(user) || istype(user, /mob/living/carbon/monkey/diona))
-		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+	if(!can_Fire(user, 1))
 		return
-	if(istype(user, /mob/living))
-		var/mob/living/M = user
-		if (M_HULK in M.mutations)
-			to_chat(M, "<span class='warning'>Your meaty finger is much too large for the trigger guard!</span>")
-			return
-	if(ishuman(user))
-		var/mob/living/carbon/human/H=user
-		if(user.dna && (user.dna.mutantrace == "adamantine" || user.dna.mutantrace=="coalgolem"))
-			to_chat(user, "<span class='warning'>Your fat fingers don't fit in the trigger guard!</span>")
-			return
-		var/datum/organ/external/a_hand = H.get_active_hand_organ()
-		if(!a_hand.can_use_advanced_tools())
-			to_chat(user, "<span class='warning'>Your [a_hand] doesn't have the dexterity to do this!</span>")
-			return
 
 	add_fingerprint(user)
 
@@ -123,7 +153,7 @@
 
 	if(!in_chamber)
 		return
-	if(!istype(src, /obj/item/weapon/gun/energy/laser/redtag) && !istype(src, /obj/item/weapon/gun/energy/laser/redtag))
+	if(!istype(src, /obj/item/weapon/gun/energy/laser/redtag) && !istype(src, /obj/item/weapon/gun/energy/laser/bluetag))
 		log_attack("[user.name] ([user.ckey]) fired \the [src] (proj:[in_chamber.name]) at [target] [ismob(target) ? "([target:ckey])" : ""] ([target.x],[target.y],[target.z])[struggle ? " due to being disarmed." :""]" )
 	in_chamber.firer = user
 
@@ -170,10 +200,14 @@
 
 	if(silenced)
 		if(fire_sound)
-			playsound(user, fire_sound, 10, 1)
+			playsound(user, fire_sound, fire_volume/5, 1)
+		else if (in_chamber.fire_sound)
+			playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
 	else
 		if(fire_sound)
-			playsound(user, fire_sound, 50, 1)
+			playsound(user, fire_sound, fire_volume, 1)
+		else if (in_chamber.fire_sound)
+			playsound(user, in_chamber.fire_sound, fire_volume, 1)
 		user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
 		"<span class='warning'>You fire [src][reflex ? "by reflex":""]!</span>", \
 		"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
@@ -235,17 +269,21 @@
 		mouthshoot = 1
 		M.visible_message("<span class='warning'>[user] sticks their gun in their mouth, ready to pull the trigger...</span>")
 		if(!do_after(user,src, 40))
-			M.visible_message("<span class='notice'>[user] decided life was worth living</span>")
+			M.visible_message("<span class='notice'>[user] decided life was worth living.</span>")
 			mouthshoot = 0
 			return
 		if (process_chambered())
 			user.visible_message("<span class = 'warning'>[user] pulls the trigger.</span>")
 			if(silenced)
 				if(fire_sound)
-					playsound(user, fire_sound, 10, 1)
+					playsound(user, fire_sound, fire_volume/5, 1)
+				else if (in_chamber.fire_sound)
+					playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
 			else
 				if(fire_sound)
-					playsound(user, fire_sound, 50, 1)
+					playsound(user, fire_sound, fire_volume, 1)
+				else if (in_chamber.fire_sound)
+					playsound(user, in_chamber.fire_sound, fire_volume, 1)
 			in_chamber.on_hit(M)
 			if (!in_chamber.nodamage)
 				user.apply_damage(in_chamber.damage*2.5, in_chamber.damage_type, "head", used_weapon = "Point blank shot in the mouth with \a [in_chamber]")

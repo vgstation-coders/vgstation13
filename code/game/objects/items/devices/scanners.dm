@@ -237,6 +237,9 @@ Subject's pulse: ??? BPM"})
 				if(W.internal)
 					message += text("<br><span class='danger'>Internal bleeding detected. Advanced scan required for location.</span>")
 					break
+			if(e.cancer_stage > CANCER_STAGE_LARGE_TUMOR) //Health analyzers can detect large tumors and above in external limbs, if all else fails
+				message += text("<br><span class='danger'>Serious cancerous growth detected. Advanced scan required for location.</span>")
+				break
 		if(H.vessel)
 			var/blood_volume = round(H.vessel.get_reagent_amount("blood"))
 			var/blood_percent =  round((blood_volume / 560) * 100)
@@ -297,7 +300,7 @@ Subject's pulse: ??? BPM"})
 
 	var/datum/gas_mixture/environment = location.return_air()
 
-	user << output_gas_scan(environment, location, 1)
+	to_chat(user, output_gas_scan(environment, location, 1))
 
 	src.add_fingerprint(user)
 	return
@@ -313,7 +316,7 @@ Subject's pulse: ??? BPM"})
 	if(!container || istype(container, /turf))
 		message += "<span class='bnotice'>Results:</span>"
 	else
-		message += "<span class='bnotice'><B>\icon [container] Results of [container] scan:</span>"
+		message += "<span class='bnotice'><B>[bicon(container)] Results of [container] scan:</span></B>"
 	if(total_moles)
 		message += "<br>[human_standard && abs(pressure - ONE_ATMOSPHERE) > 10 ? "<span class='bad'>" : "<span class='notice'>"] Pressure: [round(pressure, 0.1)] kPa</span>"
 		var/o2_concentration = scanned.oxygen/total_moles

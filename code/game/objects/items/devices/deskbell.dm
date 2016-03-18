@@ -29,7 +29,7 @@
 	var/wrenching = 0
 
 /obj/item/device/deskbell/attackby(obj/item/W, mob/user)
-	if(istype(W,/obj/item/weapon/wrench) && isturf(src.loc))
+	if(iswrench(W) && isturf(src.loc))
 		user.visible_message(
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
@@ -43,7 +43,7 @@
 				anchored = !anchored
 				user.visible_message(
 					"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
-					"<span class='notice'>\icon[src] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
+					"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
 					"<span class='notice'>You hear a ratchet.</span>"
 					)
 
@@ -128,7 +128,7 @@
 			radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
 
 /obj/item/device/deskbell/signaler/attackby(obj/item/W, mob/user)
-	if(istype(W,/obj/item/weapon/wrench))
+	if(iswrench(W))
 		user.visible_message(
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
@@ -142,7 +142,7 @@
 				anchored = !anchored
 				user.visible_message(
 					"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
-					"<span class='notice'>\icon[src] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
+					"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
 					"<span class='notice'>You hear a ratchet.</span>"
 					)
 		wrenching = 0
@@ -177,7 +177,7 @@
 			if(frequency == ringerdatum.frequency)
 				var/turf/T = get_turf(ring_pda)
 				playsound(T, 'sound/machines/notify.ogg', 50, 1)
-				T.visible_message("\icon[ring_pda] *[src.name]*")
+				T.visible_message("[bicon(ring_pda)] *[src.name]*")
 
 
 		if(!radio_connection) return	//the desk bell also works like a simple send-only signaler.
@@ -275,7 +275,7 @@
 	else
 		switch(build_step)
 			if(0)
-				if(istype(W,/obj/item/weapon/wrench))
+				if(iswrench(W))
 					to_chat(user, "<span class='notice'>You deconstruct \the [src].</span>")
 					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 					//new /obj/item/stack/sheet/metal( get_turf(src.loc), 2)

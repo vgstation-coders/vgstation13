@@ -94,7 +94,16 @@
 
 	var/is_critical = 0 // Endgame scenarios will not destroy this APC.
 
+	var/make_alerts = TRUE // Should this APC make power alerts to the area?
+
 	machine_flags = WIREJACK
+
+// Frame only.
+/obj/machinery/power/apc/frame
+	icon_state = "apcmaint"
+
+/obj/machinery/power/apc/frame/New()
+	return ..(loc, dir, 1)
 
 /obj/machinery/power/apc/New(loc, var/ndir, var/building=0)
 	..(loc)
@@ -362,7 +371,7 @@
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
 		return src.attack_hand(user)
 	src.add_fingerprint(user)
-	if (istype(W, /obj/item/weapon/crowbar) && opened)
+	if (iscrowbar(W) && opened)
 		if (has_electronics==1)
 			if (terminal)
 				to_chat(user, "<span class='warning'>Disconnect wires first.</span>")
@@ -386,7 +395,7 @@
 		else if (opened!=2) //cover isn't removed
 			opened = 0
 			update_icon()
-	else if (istype(W, /obj/item/weapon/crowbar) && !((stat & BROKEN) || malfhack) )
+	else if (iscrowbar(W) && !((stat & BROKEN) || malfhack) )
 		if(coverlocked && !(stat & MAINT))
 			to_chat(user, "<span class='warning'>The cover is locked and cannot be opened.</span>")
 			return
@@ -416,7 +425,7 @@
 					"You insert the power cell.")
 				chargecount = 0
 				update_icon()
-	else if	(istype(W, /obj/item/weapon/screwdriver))	// haxing
+	else if	(isscrewdriver(W))	// haxing
 		if(opened)
 			if (cell)
 				to_chat(user, "<span class='warning'>Close the APC first.</span>")//Less hints more mystery!
@@ -490,7 +499,7 @@
 			C.use(10)
 			terminal.connect_to_network()
 
-	else if (istype(W, /obj/item/weapon/wirecutters) && opened && terminal && has_electronics!=2)
+	else if (iswirecutter(W) && opened && terminal && has_electronics!=2)
 		var/turf/T = get_turf(src)
 		if (T.intact)
 			to_chat(user, "<span class='warning'>You must remove the floor plating in front of the APC first.</span>")
@@ -590,7 +599,7 @@
 				return src.attack_hand(user)
 			if (!opened && wiresexposed && \
 				(istype(W, /obj/item/device/multitool) || \
-				istype(W, /obj/item/weapon/wirecutters) || istype(W, /obj/item/device/assembly/signaler)))
+				iswirecutter(W) || istype(W, /obj/item/device/assembly/signaler)))
 				return src.attack_hand(user)
 			/*user.visible_message("<span class='warning'>The [src.name] has been hit with the [W.name] by [user.name]!</span>", \
 				"<span class='warning'>You hit the [src.name] with your [W.name]!</span>", \
@@ -1105,25 +1114,25 @@
 			equipment = autoset(equipment, 0)
 			lighting = autoset(lighting, 0)
 			environ = autoset(environ, 0)
-			if(areaMaster.poweralm)
+			if(areaMaster.poweralm && make_alerts)
 				areaMaster.poweralert(0, src)
 		else if(cell.percent() < 15 && longtermpower < 0)	// <15%, turn off lighting & equipment
 			equipment = autoset(equipment, 2)
 			lighting = autoset(lighting, 2)
 			environ = autoset(environ, 1)
-			if(areaMaster.poweralm)
+			if(areaMaster.poweralm && make_alerts)
 				areaMaster.poweralert(0, src)
 		else if(cell.percent() < 30 && longtermpower < 0)			// <30%, turn off equipment
 			equipment = autoset(equipment, 2)
 			lighting = autoset(lighting, 1)
 			environ = autoset(environ, 1)
-			if(areaMaster.poweralm)
+			if(areaMaster.poweralm && make_alerts)
 				areaMaster.poweralert(0, src)
 		else									// otherwise all can be on
 			equipment = autoset(equipment, 1)
 			lighting = autoset(lighting, 1)
 			environ = autoset(environ, 1)
-			if(cell.percent() > 75 && !areaMaster.poweralm)
+			if(cell.percent() > 75 && !areaMaster.poweralm && !make_alerts)
 				areaMaster.poweralert(1, src)
 
 		// now trickle-charge the cell
@@ -1168,7 +1177,8 @@
 		equipment = autoset(equipment, 0)
 		lighting = autoset(lighting, 0)
 		environ = autoset(environ, 0)
-		areaMaster.poweralert(0, src)
+		if(!make_alerts)
+			areaMaster.poweralert(0, src)
 
 	// update icon & area power if anything changed
 	if(last_lt != lighting || last_eq != equipment || last_en != environ)

@@ -653,18 +653,33 @@
 	icon_state = "donkpocket"
 	food_flags = FOOD_MEAT
 
-	New()
-		..()
-		reagents.add_reagent("nutriment", 4)
-
 	var/warm = 0
-	proc/cooltime() //Not working, derp?
-		if(warm)
-			spawn(4200)	//ew
-				warm = 0
-				reagents.del_reagent("tricordrazine")
-				name = initial(name)
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/New()
+	..()
+	reagents.add_reagent("nutriment", 4)
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/process()
+	if(warm <= 0)
+		warm = 0
+		name = initial(name)
+		reagents.del_reagent("tricordrazine")
+		processing_objects.Remove(src)
 		return
+
+	warm--
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/Destroy()
+	processing_objects.Remove(src)
+
+	..()
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/proc/warm_up()
+	warm = 80
+	reagents.add_reagent("tricordrazine", 5)
+	bitesize = 6
+	name = "warm [name]"
+	processing_objects.Add(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/brainburger
 	name = "brainburger"
@@ -1144,6 +1159,7 @@
 	trash = /obj/item/trash/bustanuts
 	New()
 		..()
+		reagents.add_reagent("nutriment", 6)
 		reagents.add_reagent("bustanut", 6)
 		reagents.add_reagent("sodiumchloride", 6)
 
@@ -3942,3 +3958,77 @@
 /obj/item/weapon/reagent_containers/food/snacks/eucharist/New()
 	..()
 	reagents.add_reagent("holywater", 5)
+	
+/obj/item/weapon/reagent_containers/food/snacks/eclair
+	name = "\improper eclair"
+	desc = "Plus doux que ses lèvres."
+	icon_state = "eclair"
+	bitesize = 5
+	New()
+		..()
+		reagents.add_reagent("nutriment", 3)
+		reagents.add_reagent("cream", 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie
+	name = "no-fruit pie"
+	desc = "It doesn't really taste like anything."
+	icon_state = "nofruitpie"
+	trash = /obj/item/trash/pietin
+	var/list/available_snacks = list()
+	var/switching = 0
+	var/current_path = null
+	var/counter = 1
+	New()
+		..()
+		reagents.add_reagent("nothing", 20)
+		bitesize = 10
+		available_snacks = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable)
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/verb/pick_leaf()
+	set name = "Pick no-fruit pie leaf"
+	set category = "Object"
+	set src in range(1)
+
+	if(usr.isUnconscious())
+		to_chat(usr, "You can't do that while unconscious.")
+		return
+
+	verbs -= /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/verb/pick_leaf
+
+	randomize()
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/attackby(obj/item/weapon/W, mob/user)
+	if(switching)
+		if(!current_path)
+			return
+		switching = 0
+		var/N = rand(1,3)
+		switch(N)
+			if(1)
+				playsound(user, 'sound/weapons/genhit1.ogg', 50, 1)
+			if(2)
+				playsound(user, 'sound/weapons/genhit2.ogg', 50, 1)
+			if(3)
+				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
+		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/I = new current_path(get_turf(user))
+			user.put_in_hands(I)
+		else
+			new current_path(get_turf(src))
+		qdel(src)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/proc/randomize()
+	switching = 1
+	spawn()
+		while(switching)
+			current_path = available_snacks[counter]
+			var/obj/item/weapon/reagent_containers/food/snacks/S = current_path
+			icon_state = initial(S.icon_state)
+			playsound(src, 'sound/misc/click.ogg', 50, 1)
+			sleep(1)
+			if(counter == available_snacks.len)
+				counter = 0
+			counter++

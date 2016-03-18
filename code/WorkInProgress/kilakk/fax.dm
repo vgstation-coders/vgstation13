@@ -196,7 +196,7 @@ var/list/alldepartments = list("Central Command")
 			if(usr.drop_item(idcard, src))
 				scan = idcard
 
-	else if(istype(O, /obj/item/weapon/wrench))
+	else if(iswrench(O))
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 		anchored = !anchored
 		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
@@ -211,7 +211,7 @@ var/list/alldepartments = list("Central Command")
 			C << output(msg, "window1.msay_output")//if i get told to make this a proc imma be fuckin mad
 		else
 			to_chat(C, msg)
-		to_chat(C, 'sound/effects/fax.ogg')
+		C << 'sound/effects/fax.ogg'
 
 proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm)
 

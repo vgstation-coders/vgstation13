@@ -52,16 +52,17 @@
 		return
 
 	var/msg = input("Message:", text("Subtle PM to [M.key]")) as text
-
 	if (!msg)
 		return
+	var/deity = input("Deity: The current chosen deity is [ticker.Bible_deity_name]. Input a different one, or leave blank to have the message be from 'a voice'.", text("Subtle PM to [M.key]"), ticker.Bible_deity_name) as text
+	if(!deity)
+		deity = "a voice"
 	if(usr)
 		if (usr.client)
 			if(usr.client.holder)
-				M.get_subtle_message(msg)
-
-	log_admin("SubtlePM: [key_name(usr)] -> [key_name(M)] : [msg]")
-	message_admins("<span class='notice'><B>SubtleMessage: [key_name_admin(usr)] -> [key_name_admin(M)] : [msg]</B></span>", 1)
+				M.get_subtle_message(msg, deity)
+	log_admin("SubtlePM: [key_name(usr)] as [deity] -> [key_name(M)] : [msg]")
+	message_admins("<span class='notice'><B>SubtleMessage: [key_name_admin(usr)] as [deity] -> [key_name_admin(M)] : [msg]</B></span>", 1)
 	feedback_add_details("admin_verb","SMS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/cmd_admin_world_narrate() // Allows administrators to fluff events a little easier -- TLE
@@ -620,7 +621,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		if("No")
 			to_chat(world, "<span class='warning'>New Nanotrasen Update available at all communication consoles.</span>")
 
-	to_chat(world, sound('sound/AI/commandreport.ogg', volume = 60))
+	world << sound('sound/AI/commandreport.ogg', volume = 60)
 	log_admin("[key_name(src)] has created a command report: [input]")
 	message_admins("[key_name_admin(src)] has created a command report", 1)
 	feedback_add_details("admin_verb","CCR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -810,7 +811,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	for (var/content in get_contents_in_object(L))
 		if (content)
-			to_chat(usr, "\icon[content] [content]")
+			to_chat(usr, "[bicon(content)] [content]")
 
 	feedback_add_details("admin_verb","CC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -881,7 +882,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	emergency_shuttle.incall()
 	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
-	to_chat(world, sound('sound/AI/shuttlecalled.ogg'))
+	world << sound('sound/AI/shuttlecalled.ogg')
 	feedback_add_details("admin_verb","CSHUT") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] admin-called the emergency shuttle.")
 	message_admins("<span class='notice'>[key_name_admin(usr)] admin-called the emergency shuttle.</span>", 1)
@@ -974,8 +975,47 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		config.allow_random_events = 1
 		to_chat(usr, "Random events enabled")
 		message_admins("Admin [key_name_admin(usr)] has enabled random events.", 1)
+
 	else
 		config.allow_random_events = 0
 		to_chat(usr, "Random events disabled")
 		message_admins("Admin [key_name_admin(usr)] has disabled random events.", 1)
+
 	feedback_add_details("admin_verb","TRE") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/client/proc/save_coordinates(var/x1 as num, var/y1 as num, var/z1 as num, var/x2 as num, var/y2 as num, var/z2 as num, var/mapname as text)
+	set name     = "Save map by coordinates"
+	set category = "Fun"
+	set desc     = "(x1, y1, z1, x2, y2, z2, mapname) Saves the map beetween (x1, y1, z1) and (x2, y2, z2), and it will be sent to your client, it will also be stored in data/logs/saved_maps."
+
+	if(!check_rights(R_SERVER))
+		return
+
+	if(!(x1 && x2 && y1 && y2 && z1 && z2))
+		usr << "Not all coordinates supplied."
+		return
+
+	if(ckeyEx(mapname) != mapname || !mapname)
+		usr << "Map name contains invalid characters or is empty."
+		return
+
+	var/confirm = alert("Are you sure you want to save the map between coordinates ([x1], [y1], [z1]) and ([x2], [y2], [z2])? This can cause quite a bit of lag!", "Save map", "Yes, do it!", "No")
+	if(confirm == "No")
+		return
+
+	var/dmm_suite/DMM = new
+
+	var/turf/T1 = locate(x1, y1, z1)
+	var/turf/T2 = locate(x2, y2, z2)
+
+	var/output = DMM.write_map(T1, T2, DMM_IGNORE_MOBS)
+
+	if(fexists("data/logs/saved_maps/[mapname].dmm"))
+		fdel("data/logs/saved_maps/[mapname].dmm")
+
+	var/F = file("data/logs/saved_maps/[mapname].dmm")
+	F   << output
+	usr << ftp(F)
+
+	feedback_add_details("admin_verb", "SCO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+

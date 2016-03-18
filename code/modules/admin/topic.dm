@@ -735,10 +735,27 @@
 				jobs += "</tr><tr align='center'>"
 				counter = 0
 
-		if(jobban_isbanned(M, "Internal Affairs Agent"))
-			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Internal Affairs Agent;jobban4=\ref[M]'><font color=red>Internal Affairs Agent</font></a></td>"
-		else
-			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Internal Affairs Agent;jobban4=\ref[M]'>Internal Affairs Agent</a></td>"
+		jobs += "</tr></table>"
+
+	//Cargo (Brown)
+		counter = 0
+		jobs += "<table cellpadding='1' cellspacing='0' width='100%'>"
+		jobs += "<tr bgcolor='b3a292'><th colspan='[length(cargo_positions)]'><a href='?src=\ref[src];jobban3=cargodept;jobban4=\ref[M]'>Cargo Positions</a></th></tr><tr align='center'>"
+		for(var/jobPos in cargo_positions)
+			if(!jobPos)	continue
+			var/datum/job/job = job_master.GetJob(jobPos)
+			if(!job) continue
+
+			if(jobban_isbanned(M, job.title))
+				jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=[job.title];jobban4=\ref[M]'><font color=red>[replacetext(job.title, " ", "&nbsp")]</font></a></td>"
+				counter++
+			else
+				jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=[job.title];jobban4=\ref[M]'>[replacetext(job.title, " ", "&nbsp")]</a></td>"
+				counter++
+
+			if(counter >= 5) //So things dont get squiiiiished!
+				jobs += "</tr><tr align='center'>"
+				counter = 0
 
 		jobs += "</tr></table>"
 
@@ -921,6 +938,12 @@
 					joblist += temp.title
 			if("civiliandept")
 				for(var/jobPos in civilian_positions)
+					if(!jobPos)	continue
+					var/datum/job/temp = job_master.GetJob(jobPos)
+					if(!temp) continue
+					joblist += temp.title
+			if("cargodept")
+				for(var/jobPos in cargo_positions)
 					if(!jobPos)	continue
 					var/datum/job/temp = job_master.GetJob(jobPos)
 					if(!temp) continue
@@ -1894,6 +1917,21 @@
 		feedback_inc("admin_cookies_spawned",1)
 		to_chat(H, "<span class='notice'>Your prayers have been answered!! You received the <b>best cookie</b>!</span>")
 
+	else if(href_list["addcancer"])
+		if(!check_rights(R_ADMIN|R_FUN))	return
+
+		var/mob/living/carbon/human/H = locate(href_list["addcancer"])
+		if(!ishuman(H))
+			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
+			return
+
+		if(alert(src.owner, "Are you sure you wish to inflict cancer upon [key_name(H)]?",  "Confirm Cancer?" , "Yes" , "No") != "Yes")
+			return
+
+		log_admin("[key_name(H)] was inflicted with cancer, courtesy of [key_name(src.owner)]")
+		message_admins("[key_name(H)] was inflicted with cancer, courtesy of [key_name(src.owner)]")
+		H.add_cancer()
+
 	else if(href_list["BlueSpaceArtillery"])
 		if(!check_rights(R_ADMIN|R_FUN))	return
 
@@ -1952,7 +1990,7 @@
 			to_chat(usr, "This mob type cannot be replied to")
 			return
 
-		var/input = input(src.owner, "Please enter a message to reply to [key_name(M)] via their [receive_type].","Outgoing message from The Syndicate", "")
+		var/input = input(src.owner, "Please enter a message to reply to [key_name(M)] via their [receive_type].","Outgoing message from Central Command", "")
 		if(!input)	return
 
 		to_chat(src.owner, "You sent [input] to [M] via a secure channel.")
@@ -1978,9 +2016,9 @@
 		var/input = input(src.owner, "Please enter a message to reply to [key_name(M)] via their [receive_type].","Outgoing message from The Syndicate", "")
 		if(!input)	return
 
-
 		to_chat(src.owner, "You sent [input] to [M] via a secure channel.")
 		log_admin("[src.owner] replied to [key_name(M)]'s Syndicate message with the message [input].")
+		message_admins("[src.owner] replied to [key_name(M)]'s Syndicate message with: \"[input]\"")
 		to_chat(M, "You hear something crackle from your [receive_type] for a moment before a voice speaks.  \"Please stand by for a message from your benefactor.  Message as follows, agent. <b>\"[input]\"</b>  Message ends.\"")
 
 	else if(href_list["CentcommFaxView"])
@@ -2570,7 +2608,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","GA")
 				command_alert("Gravitational anomalies detected on the station. There is no additional data.", "Anomaly Alert")
-				to_chat(world, sound('sound/AI/granomalies.ogg'))
+				world << sound('sound/AI/granomalies.ogg')
 				var/turf/T = pick(blobstart)
 				var/obj/effect/bhole/bh = new /obj/effect/bhole( T.loc, 30 )
 				spawn(rand(100, 600))
@@ -2735,7 +2773,7 @@
 				if(answer=="Let's fix it!")
 					message_admins("[key_name_admin(usr)] unleashed the bees onto the crew.", 1)
 					to_chat(world, "<font size='10' color='red'><b>NOT THE BEES!</b></font>")
-					to_chat(world, sound('sound/effects/bees.ogg'))
+					world << sound('sound/effects/bees.ogg')
 					for(var/mob/living/M in player_list)
 						var/mob/living/simple_animal/bee/BEE = new(get_turf(M))
 						BEE.strength = 16
@@ -2794,7 +2832,7 @@
 					W.item_state = "w_suit"
 					W._color = "schoolgirl"
 				message_admins("[key_name_admin(usr)] activated Japanese Animes mode")
-				to_chat(world, sound('sound/AI/animes.ogg'))
+				world << sound('sound/AI/animes.ogg')
 			if("eagles")//SCRAW
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","EgL")
@@ -2854,6 +2892,15 @@
 					new /turf/unsimulated/wall/supermatter(get_turf(usr))
 					SetUniversalState(/datum/universal_state/supermatter_cascade)
 					message_admins("[key_name_admin(usr)] has managed to destroy the universe with a supermatter cascade. Good job, [key_name_admin(usr)]")
+			if("mobswarm")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","CS")
+				var/choice = input("Are you sure you want to fill the station with a bunch of unnecessary mobs?") in list("Of course!", "No, I hate timespace anomalies involving fun")
+				if(choice == "Of course!")
+					var/amt = input("How many would you like to spawn?", 10) as num
+					var/mobtype = input("What mob would you like?", /mob/living/simple_animal/corgi) in list(typesof(/mob/living))
+					message_admins("[key_name_admin(usr)] triggered a mob swarm.")
+					new /datum/event/mob_swarm(mobtype, amt)
 			if("spawnadminbus")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AB")
@@ -2875,7 +2922,7 @@
 				D.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(D), slot_shoes)
 				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(D), slot_back)
-				D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/engineer(D.back), slot_in_backpack)
+				D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/engineer(D.back), slot_in_backpack)
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg')
 				D.name = "Admin"
 				D.real_name = "Admin"
@@ -2946,7 +2993,7 @@
 				message_admins("[key_name_admin(usr)] improvised himself as Micheal Bay and triggered [round(choice)] fake explosions.")
 				log_admin("[key_name_admin(usr)] improvised himself as Micheal Bay and triggered [round(choice)] fake explosions.")
 				for(var/i = 1 to choice)
-					to_chat(world, sound('sound/effects/explosionfar.ogg'))
+					world << sound('sound/effects/explosionfar.ogg')
 					sleep(rand(2, 10)) //Sleep 0.2 to 1 second
 			if("massbomber")
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2954,7 +3001,7 @@
 				var/choice = alert("Dress every player like Bomberman and give them BBDs?","Bomberman Mode Activation","Confirm","Cancel")
 				if(choice=="Confirm")
 					bomberman_mode = 1
-					to_chat(world, sound('sound/bomberman/start.ogg'))
+					world << sound('sound/bomberman/start.ogg')
 					for(var/mob/living/carbon/human/M in player_list)
 						if(M.wear_suit)
 							var/obj/item/O = M.wear_suit

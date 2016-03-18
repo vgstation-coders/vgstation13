@@ -15,7 +15,6 @@ var/global/list/ghdel_profiling = list()
 	var/fingerprintslast = null
 	var/list/blood_DNA
 	var/blood_color
-	var/last_bumped = 0
 	var/pass_flags = 0
 	var/throwpass = 0
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
@@ -385,7 +384,7 @@ its easier to just keep the beam vertical.
 			f_name = "a "
 		f_name += "<span class='danger'>blood-stained</span> [name]!"
 
-	to_chat(user, "\icon[src] That's [f_name]" + size)
+	to_chat(user, "[bicon(src)] That's [f_name]" + size)
 	if(desc)
 		to_chat(user, desc)
 

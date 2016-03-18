@@ -35,6 +35,7 @@
 	var/cant_drop = 0 //If 1, can't drop it from hands!
 
 	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+
 	var/list/allowed = null //suit storage stuff.
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
@@ -90,6 +91,9 @@
 
 /obj/item/blob_act()
 	qdel(src)
+
+/obj/item/proc/restock() //used for borg recharging
+	return
 
 /obj/item/projectile_check()
 	return PROJREACT_OBJS
@@ -899,5 +903,5 @@ var/global/list/image/blood_overlays = list()
 					break
 				sleep(5)
 
-	throw_at(T, kick_power, 1)
 	Crossed(H) //So you can't kick shards while naked without suffering
+	throw_at(T, kick_power, 1)

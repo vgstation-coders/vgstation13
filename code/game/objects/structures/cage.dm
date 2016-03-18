@@ -29,6 +29,19 @@
 
 	update_icon()
 
+/obj/structure/cage/autoclose/New() //Close when created - catching any creatures on the same turf
+	..()
+
+	spawn()
+		toggle_door() //Open it
+		toggle_door() //Close it again!
+
+/obj/structure/cage/autoclose/cover/New()
+	..()
+
+	spawn()
+		toggle_cover()
+
 /obj/structure/cage/Destroy()
 	for(var/atom/movable/M in contents)
 		M.forceMove(src.loc)
@@ -55,10 +68,12 @@
 		else
 			toggle_door(user)
 
-/obj/structure/cage/examine(mob/user)
-	..()
+/obj/structure/cage/verb/toggle_cover_v()
+	set name = "Toggle Cover"
+	set category = "Object"
+	set src in oview(1)
 
-	to_chat(user, "<span class='info'>Alt + click opens/closes the cage's cover.</span>")
+	return AltClick()
 
 /obj/structure/cage/AltClick()
 	if(Adjacent(usr) && !usr.incapacitated() && !mob_is_inside(usr))

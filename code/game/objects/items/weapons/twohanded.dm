@@ -15,6 +15,7 @@
 	icon_state = "offhand"
 	name = "offhand"
 	abstract = 1
+	flags = SLOWDOWN_WHEN_CARRIED
 	var/obj/item/wielding = null
 
 /obj/item/offhand/dropped(user)
@@ -58,6 +59,7 @@
  */
 /obj/item/weapon/fireaxe  // DEM AXES MAN, marker -Agouri
 	icon_state = "fireaxe0"
+	hitsound = "sound/weapons/bloodyslice.ogg"
 	name = "fire axe"
 	desc = "Truly, the weapon of a madman. Who would think to fight fire with an axe?"
 	w_class = 4.0
@@ -140,7 +142,58 @@
 		return 1
 	else
 		return 0
+/*
+ * Banana Bunch
+ */
+/obj/item/weapon/dualsaber/bananabunch
+	icon_state = "bananabunch0"
+	name = "banana bunch"
+	desc = "Potential for some serious chaos."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 3
+	throwforce = 5.0
+	throw_speed = 1
+	throw_range = 5
+	w_class = 2.0
+	flags = FPRINT | TWOHANDABLE
+	origin_tech = "magnets=3;syndicate=4"
+	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
+/obj/item/weapon/dualsaber/bananabunch/update_wield(mob/user)
+	..()
+	icon_state = "bananabunch[wielded ? 1 : 0]"
+	item_state = "bananabunch[wielded ? 1 : 0]"
+	force = wielded ? 30 : 3
+	w_class = wielded ? 5 : 2
+	if(user)
+		user.update_inv_l_hand()
+		user.update_inv_r_hand()
+	playsound(get_turf(src), wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
+	return
+
+/obj/item/weapon/dualsaber/bananabunch/attack(target as mob, mob/living/user as mob)
+	if(user.mind && !(user.mind.assigned_role == "Clown"))
+		to_chat(user, "<span class='warning'>Your clumsy hands fumble and you slice yourself open with [src].</span>")
+		user.take_organ_damage(40,50)
+		return
+	if((wielded) && (user.mind.assigned_role == "Clown"))
+		..()
+		spawn for(var/i=1, i<=8, i++)
+			user.dir = turn(user.dir, 45)
+			sleep(1)
+
+/obj/item/weapon/dualsaber/bananabunch/IsShield()
+	if(wielded)
+		return 1
+	else
+		return 0
+
+/obj/item/weapon/dualsaber/bananabunch/Crossed(AM as mob|obj)
+	if (istype(AM, /mob/living/carbon))
+		var/mob/living/carbon/M = AM
+		if (M.Slip(2, 2, 1))
+			M.simple_message("<span class='notice'>You slipped on [src]!</span>",
+				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 
 
 /*
@@ -180,6 +233,8 @@
 //spears
 /obj/item/weapon/spear
 	icon_state = "spearglass0"
+	var/base_state = "spearglass"
+
 	name = "spear"
 	desc = "A haphazardly-constructed yet still deadly weapon of ancient design."
 	force = 10
@@ -193,8 +248,8 @@
 	var/base_force = 10
 
 /obj/item/weapon/spear/update_wield(mob/user)
-	icon_state = "spearglass[wielded ? 1 : 0]"
-	item_state = "spearglass[wielded ? 1 : 0]"
+	icon_state = "[base_state][wielded ? 1 : 0]"
+	item_state = "[base_state][wielded ? 1 : 0]"
 
 	force = base_force
 	if(wielded) force += 8
@@ -203,3 +258,13 @@
 		user.update_inv_l_hand()
 		user.update_inv_r_hand()
 	return
+
+/obj/item/weapon/spear/wooden
+	name = "steel spear"
+	desc = "An ancient weapon of an ancient design, with a smooth wooden handle and a sharp steel blade."
+	icon_state = "spear0"
+	base_state = "spear"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+
+	force = 16
+	throwforce = 25

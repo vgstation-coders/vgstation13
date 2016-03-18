@@ -38,11 +38,11 @@
 	if(shoes)
 		tally += shoes.slowdown
 
-	if(istype(l_hand,/obj/item/offhand))
-		tally += r_hand.slowdown
-
-	if(istype(r_hand,/obj/item/offhand))
+	if(l_hand && (l_hand.flags & SLOWDOWN_WHEN_CARRIED))
 		tally += l_hand.slowdown
+
+	if(r_hand && (r_hand.flags & SLOWDOWN_WHEN_CARRIED))
+		tally += r_hand.slowdown
 
 	for(var/organ_name in list("l_foot","r_foot","l_leg","r_leg"))
 		var/datum/organ/external/E = get_organ(organ_name)
@@ -132,6 +132,10 @@
 		if(shoes && istype(shoes, /obj/item/clothing/shoes))
 			var/obj/item/clothing/shoes/S = shoes
 			S.step_action()
+
+		if(wear_suit && istype(wear_suit, /obj/item/clothing/suit))
+			var/obj/item/clothing/suit/SU = wear_suit
+			SU.step_action()
 
 		for(var/obj/item/weapon/bomberman/dispenser in src)
 			if(dispenser.spam_bomb)

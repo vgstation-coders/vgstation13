@@ -1,6 +1,3 @@
-/mob/proc/CheckSlip()
-	return 0
-
 /mob/living/New()
 	. = ..()
 	generate_static_overlay()
@@ -477,7 +474,7 @@ Thanks.
 	paralysis = 0
 	stunned = 0
 	weakened = 0
-	jitteriness = 0
+	remove_jitter()
 	germ_level = 0
 	next_pain_time = 0
 	traumatic_shock = 0
@@ -734,12 +731,28 @@ Thanks.
 	//Getting out of someone's inventory.
 	if(istype(src.loc,/obj/item/weapon/holder))
 		var/obj/item/weapon/holder/H = src.loc
-		src.loc = get_turf(src.loc)
+		forceMove(get_turf(src))
 		if(istype(H.loc, /mob/living))
 			var/mob/living/Location = H.loc
 			Location.drop_from_inventory(H)
 		qdel(H)
 		H = null
+		return
+	else if(istype(src.loc, /obj/structure/strange_present))
+		var/obj/structure/strange_present/present = src.loc
+		forceMove(get_turf(src))
+		qdel(present)
+		playsound(src.loc, 'sound/items/poster_ripped.ogg', 100, 1)
+		return
+	else if(istype(src.loc, /obj/item/delivery/large)) //Syndie item
+		var/obj/item/delivery/large/package = src.loc
+		to_chat(L, "<span class='warning'>You attempt to unwrap yourself, this package is tight and will take some time.</span>")
+		if(do_after(src, src, 100))
+			L.visible_message("<span class='danger'>[L] successfully breaks out of [package]!</span>",\
+							  "<span class='notice'>You successfully break out!</span>")
+			forceMove(get_turf(src))
+			qdel(package)
+			playsound(src.loc, 'sound/items/poster_ripped.ogg', 100, 1)
 		return
 
 	//Detaching yourself from a tether
@@ -858,15 +871,14 @@ Thanks.
 		var/obj/structure/closet/C = L.loc
 		if(C.opened)
 			return //Door's open... wait, why are you in it's contents then?
-		if(istype(L.loc, /obj/structure/closet/secure_closet))
-			var/obj/structure/closet/secure_closet/SC = L.loc
-			if(!SC.locked && !SC.welded)
-				return //It's a secure closet, but isn't locked. Easily escapable from, no need to 'resist'
-		else
-			if(!C.welded)
-				return //closed but not welded...
-		//	else Meh, lets just keep it at 2 minutes for now
-		//		breakout_time++ //Harder to get out of welded lockers than locked lockers
+		if(!istype(C.loc, /obj/item/delivery/large)) //Wouldn't want to interrupt escaping being wrapped over the next few trivial checks
+			if(istype(C, /obj/structure/closet/secure_closet))
+				var/obj/structure/closet/secure_closet/SC = L.loc
+				if(!SC.locked && !SC.welded)
+					return //It's a secure closet, but isn't locked. Easily escapable from, no need to 'resist'
+			else
+				if(!C.welded)
+					return //closed but not welded...
 
 		//okay, so the closet is either welded or locked... resist!!!
 		L.delayNext(DELAY_ALL,100)
@@ -877,14 +889,15 @@ Thanks.
 				if(!C || !L || L.stat != CONSCIOUS || L.loc != C || C.opened) //closet/user destroyed OR user dead/unconcious OR user no longer in closet OR closet opened
 					return
 
-				//Perform the same set of checks as above for weld and lock status to determine if there is even still a point in 'resisting'...
-				if(istype(L.loc, /obj/structure/closet/secure_closet))
-					var/obj/structure/closet/secure_closet/SC = L.loc
-					if(!SC.locked && !SC.welded)
-						return
-				else
-					if(!C.welded)
-						return
+				if(!istype(C.loc, /obj/item/delivery/large)) //Wouldn't want to interrupt escaping being wrapped over the next few trivial checks
+					//Perform the same set of checks as above for weld and lock status to determine if there is even still a point in 'resisting'...
+					if(istype(L.loc, /obj/structure/closet/secure_closet))
+						var/obj/structure/closet/secure_closet/SC = L.loc
+						if(!SC.locked && !SC.welded)
+							return
+					else
+						if(!C.welded)
+							return
 
 				//Well then break it!
 				if(istype(usr.loc, /obj/structure/closet/secure_closet))
@@ -1111,18 +1124,27 @@ default behaviour is:
 		if ((!( yes ) || now_pushing) || !loc)
 			return
 		now_pushing = 1
-		if (istype(AM, /mob/living))
-			var/mob/living/tmob = AM
-
-			for(var/mob/living/M in range(tmob, 1))
-				if(tmob.pinned.len ||  ((M.pulling == tmob && ( tmob.restrained() && !( M.restrained() ) && M.stat == 0)) || locate(/obj/item/weapon/grab, tmob.grabbed_by.len)) )
-					if ( !(world.time % 5) )
-						to_chat(src, "<span class='warning'>[tmob] is restrained, you cannot push past</span>")
+		if (istype(AM, /obj/structure/bed/roller)) //no pushing rollerbeds that have people on them
+			var/obj/structure/bed/roller/R = AM
+			for(var/mob/living/tmob in range(R, 1))
+				if(tmob.pulling == R && !(tmob.restrained()) && tmob.stat == 0 && R.density == 1)
+					to_chat(src, "<span class='warning'>[tmob] is pulling [R], you can't push past.</span>")
 					now_pushing = 0
 					return
-				if( tmob.pulling == M && ( M.restrained() && !( tmob.restrained() ) && tmob.stat == 0) )
-					if ( !(world.time % 5) )
-						to_chat(src, "<span class='warning'>[tmob] is restraining [M], you cannot push past</span>")
+		if (istype(AM, /mob/living)) //no pushing people pushing rollerbeds that have people on them
+			var/mob/living/tmob = AM
+			for(var/obj/structure/bed/roller/R in range(tmob, 1))
+				if(tmob.pulling == R && !(tmob.restrained()) && tmob.stat == 0 && R.density == 1)
+					to_chat(src, "<span class='warning'>[tmob] is pulling [R], you can't push past.</span>")
+					now_pushing = 0
+					return
+			for(var/mob/living/M in range(tmob, 1)) //no pushing prisoners or people pulling prisoners
+				if(tmob.pinned.len ||  ((M.pulling == tmob && (tmob.restrained() && !(M.restrained()) && M.stat == 0)) || locate(/obj/item/weapon/grab, tmob.grabbed_by.len)))
+					to_chat(src, "<span class='warning'>[tmob] is restrained, you can't push past.</span>")
+					now_pushing = 0
+					return
+				if(tmob.pulling == M && (M.restrained() && !(tmob.restrained()) && tmob.stat == 0))
+					to_chat(src, "<span class='warning'>[tmob] is restraining [M], you can't push past.</span>")
 					now_pushing = 0
 					return
 
@@ -1352,3 +1374,6 @@ default behaviour is:
 /mob/living/nuke_act() //Called when caught in a nuclear blast
 	health = 0
 	stat = DEAD
+
+/mob/proc/CheckSlip()
+	return 0

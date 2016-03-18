@@ -3,7 +3,7 @@
 #define MAGAZINE 2 //the gun takes a magazine into gun storage
 
 /obj/item/weapon/gun/projectile
-	desc = "A classic revolver. Uses 357 ammo"
+	desc = "A classic revolver. Uses 357 ammo."
 	name = "revolver"
 	icon_state = "revolver"
 	caliber = list("357" = 1)
@@ -69,7 +69,7 @@
 	return 0
 
 /obj/item/weapon/gun/projectile/verb/force_removeMag()
-	set name = "Remove Magazine"
+	set name = "Remove Ammo / Magazine"
 	set category = "Object"
 	set src in range(0)
 	if(stored_magazine)

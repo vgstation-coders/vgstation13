@@ -69,7 +69,7 @@
 		else
 			to_chat(user, "<span class='notice'>[src] already has a cell.</span>")
 
-	else if(istype(W, /obj/item/weapon/screwdriver))
+	else if(isscrewdriver(W))
 		if(bcell)
 			bcell.updateicon()
 			bcell.loc = get_turf(src.loc)
@@ -217,6 +217,10 @@
 		if(bcell.reliability != 100 && prob(50/severity))
 			bcell.reliability -= 10 / severity
 	..()
+
+/obj/item/weapon/melee/baton/restock()
+	if(bcell)
+		bcell.charge = bcell.maxcharge
 
 //Makeshift stun baton. Replacement for stun gloves.
 /obj/item/weapon/melee/baton/cattleprod

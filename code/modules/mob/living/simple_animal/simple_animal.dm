@@ -325,7 +325,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 		add_logs(M, src, "attacked", admin=0)
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		adjustBruteLoss(damage,M.melee_damage_type)
+		if(M.melee_damage_type == "BRAIN") //because brain damage is apparently not a proper damage type like all the others
+			adjustBrainLoss(damage)
+		else
+			adjustBruteLoss(damage,M.melee_damage_type)
 		updatehealth()
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
@@ -572,6 +575,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			adjustBruteLoss(30)
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
+	health = Clamp(health - damage, 0, maxHealth)
+	if(health < 1 && stat != DEAD)
+		Die()
+
+/mob/living/simple_animal/adjustFireLoss(damage)
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		Die()
