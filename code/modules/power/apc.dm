@@ -98,6 +98,9 @@
 
 	machine_flags = WIREJACK
 
+/obj/machinery/power/apc/no_alerts
+	make_alerts = FALSE
+
 // Frame only.
 /obj/machinery/power/apc/frame
 	icon_state = "apcmaint"

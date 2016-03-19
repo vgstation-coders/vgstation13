@@ -56,3 +56,12 @@ var/list/existing_vaults = list()
 
 /datum/vault/iou_vault
 	map_name = "iou_fort"
+
+/datum/vault/asteroids
+	map_name = "asteroids"
+
+/datum/vault/listening
+	map_name = "listening"
+
+/datum/vault/hivebot_crash
+	map_name = "hivebot_crash"

@@ -34,6 +34,11 @@
 
 /area/vault/ioufort
 
+/area/vault/hive_shuttle
+
+/area/vault/listening
+	requires_power = 1
+
 /mob/living/simple_animal/hostile/monster/cyber_horror/quiet
 	speak_chance = 1 //shut the fuck up
 
@@ -136,3 +141,20 @@
 /obj/item/weapon/paper/iou
 	name = "paper- 'IOU'"
 	info = "I owe you a rod of destruction. Redeemable at Milliway's at the end of time."
+
+/obj/machinery/telecomms/relay/preset/vault_listening
+	id = "syndicate relay"
+	hide = 1
+	toggled = 0
+	autolinkers = list("hub")
+
+/obj/machinery/power/apc/no_alerts/vault_listening/initialize()
+	. = ..()
+	name = "\improper Listening Outpost APC."
+
+/obj/machinery/power/battery/smes/vault_listening
+	chargelevel = 30000
+	chargemode  = TRUE
+
+/obj/machinery/power/solar/control/vault_listening
+	track = 2 // Automatic
