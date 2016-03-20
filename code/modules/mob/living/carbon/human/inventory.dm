@@ -535,7 +535,7 @@
 		if(isrobot(source) && place != "handcuff")
 			qdel(src)
 		for(var/mob/O in viewers(target, null))
-			O.show_message("<span class='danger'>[source] is trying to put [item.gender == PLURAL ? "[item]" : "\a [item]"] on [target]</span>", 1)
+			O.show_message("<span class='danger'>[source] is trying to put [item.gender == PLURAL ? "\the [item]" : "\a [item]"] on [target]</span>", 1)
 	else
 		var/message=null
 		switch(place)

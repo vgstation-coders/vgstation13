@@ -37,7 +37,7 @@
 			var/turf/p_loc_m = C.loc
 			playsound(get_turf(src), cuffing_sound, 30, 1, -2)
 			user.visible_message("<span class='danger'>[user] is trying to handcuff \the [C]!</span>", \
-								 "<span class='danger'>You try to handcuff on \the [C]!</span>")
+								 "<span class='danger'>You try to handcuff \the [C]!</span>")
 			if(do_after(user, C, 30))
 				if(!C)
 					return
@@ -140,10 +140,10 @@
 	switch(mode)
 		if(SYNDICUFFS_ON_REMOVE)
 			mode = SYNDICUFFS_ON_APPLY
-			user << "<span class='notice'>You pull the rotating arm back until you hear two clicks. \The [src] will detonate a few seconds after being applied.</span>"
+			to_chat(user, "<span class='notice'>You pull the rotating arm back until you hear two clicks. \The [src] will detonate a few seconds after being applied.</span>")
 		if(SYNDICUFFS_ON_APPLY)
 			mode = SYNDICUFFS_ON_REMOVE
-			user << "<span class='notice'>You pull the rotating arm back until you hear one click. \The [src] will detonate when removed.</span>"
+			to_chat(user, "<span class='notice'>You pull the rotating arm back until you hear one click. \The [src] will detonate when removed.</span>")
 
 //C4 and EMPs don't mix, will always explode at severity 1, and likely to explode at severity 2
 /obj/item/weapon/handcuffs/syndicate/emp_act(severity)
