@@ -33,3 +33,12 @@
 
 /datum/vault/spacegym
 	map_name = "spacegym"
+
+/datum/vault/supermarket
+	map_name = "costco"
+
+/datum/vault/supermarket/initialize(list/objects)
+	..()
+
+	var/area/vault/supermarket/shop/S = locate(/area/vault/supermarket/shop)
+	S.initialize()
