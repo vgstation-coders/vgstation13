@@ -961,8 +961,7 @@ Thanks.
 										   "<span class='notice'>You successfuly break your handcuffs.</span>")
 						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 						qdel(CM.handcuffed)
-						CM.handcuffed = null
-						CM.update_inv_handcuffed()
+						CM.handcuffed.handcuffs_remove(CM)
 					else
 						to_chat(CM, "<span class='warning'>Your cuff breaking attempt was interrupted.</span>")
 
@@ -983,8 +982,7 @@ Thanks.
 										   "<span class='notice'>You successfuly remove [HC].</span>",
 										   self_drugged_message="<span class='notice'>You successfully regain control of your hands.</span>")
 						CM.handcuffed.loc = usr.loc
-						CM.handcuffed = null
-						CM.update_inv_handcuffed()
+						CM.handcuffed.handcuffs_remove(CM)
 					else
 						CM.simple_message("<span class='warning'>Your uncuffing attempt was interrupted.</span>",
 							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
