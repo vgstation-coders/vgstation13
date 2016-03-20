@@ -9,16 +9,29 @@
 		if(is_special_character(H)) continue
 		if(prob(35) && !(H.mind in ticker.mode.traitors))
 			ticker.mode.traitors += H.mind
-			H.mind.special_role = "traitor"
+			H.mind.special_role = "Apprentice Candidate"
+			var/datum/objective/protect/protect = new
+			protect.owner = H.mind
+			protect.target = usr.mind
+			H.mind.objectives += protect
 			var/datum/objective/survive/survive = new
 			survive.owner = H.mind
 			H.mind.objectives += survive
-			H.attack_log += "\[[time_stamp()]\] <font color='red'>Was made into a survivor, and trusts no one!</font>"
-			to_chat(H, "<B>You are the survivor! Your own safety matters above all else, trust no one and kill anyone who gets in your way. However, armed as you are, now would be the perfect time to settle that score or grab that pair of yellow gloves you've been eyeing...</B>")
+			H.attack_log += "\[[time_stamp()]\] <font color='red'>Was made into an apprentice candidate, and is going to kill the other ones!</font>"
+			to_chat(H, "<B>The wizard's uncontrolled magic has managed to manifest within you, giving you the potential to yourself become a wizard in the future. The magic grants you sight of your rivals, kill them so you may become one of the wizard's apprentices.</B>")
 			var/obj_count = 1
 			for(var/datum/objective/OBJ in H.mind.objectives)
 				to_chat(H, "<B>Objective #[obj_count]</B>: [OBJ.explanation_text]")
 				obj_count++
+			spawn(5)
+				for(mind in ticker.mode.traitors) //get the other people that were made AC's
+					if(mind.special_role == "Apprentice Candidate" && mind != H.mind)
+						var/datum/objective/assassinate/assassinate = new //kill them
+						assassinate.owner = H.mind
+						assassinate.target = mind
+						H.mind.objectives += assassinate
+						to_chat(H, "[assassinate.explanation_text]") //not numbered because summons can be cast more than once, creating even more antags to deal with without their obj_count to worry about
+
 		var/randomizeguns = pick("taser","egun","laser","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","beegun")
 		var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","charge","wandnothing", "wanddeath", "wandresurrection", "wandpolymorph", "wandteleport", "wanddoor", "wandfireball", "staffchange", "staffhealing", "armor", "scrying")
 		if(!summon_type)

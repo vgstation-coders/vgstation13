@@ -248,7 +248,7 @@ Works together with spawning an observer, noted above.
 	for(var/mob/living/target in target_list)
 		if(iscarbon(target))
 			switch(target.mind.special_role)
-				if("traitor","Syndicate")
+				if("traitor","Syndicate","Apprentice Candidate")
 					U.client.images += image(tempHud,target,"hudsyndicate")
 				if("Revolutionary")
 					U.client.images += image(tempHud,target,"hudrevolutionary")
