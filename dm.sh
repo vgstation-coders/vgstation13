@@ -3,6 +3,20 @@
 dmepath=""
 retval=1
 
+while getopts ":test-changelog:M:" opt; do
+	case $opt in
+		test-changelog)
+			echo "Performing changelog dry run..."
+			"python tools/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run"
+			exit 1
+			;;
+		\?)
+			echo "Invalid option provided."
+			exit 2;
+			;;
+	esac
+done
+
 for var
 do
 	if [[ $var != -* && $var == *.dme ]]
