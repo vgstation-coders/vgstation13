@@ -1,168 +1,221 @@
 "aa" = (/turf/space,/area)
-"ab" = (/turf/simulated/wall/r_wall,/area/vault/supermarket/entrance)
-"ac" = (/obj/structure/flora/pottedplant/random,/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHWEST)"; icon_state = "warning"; dir = 9},/turf/simulated/floor,/area/vault/supermarket/shop)
-"ad" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor,/area/vault/supermarket/shop)
-"ae" = (/obj/machinery/light{dir = 1},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor,/area/vault/supermarket/shop)
-"af" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/obj/structure/sign/securearea{name = "STEALING IS PUNISHABLE BY DEATH"; pixel_y = 32},/turf/simulated/floor,/area/vault/supermarket/shop)
-"ag" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/obj/structure/sign/securearea{name = "DO NOT CROSS THE WARNING STRIPES WITH UNPAID ITEMS"; pixel_y = 32},/turf/simulated/floor,/area/vault/supermarket/shop)
-"ah" = (/obj/structure/flora/pottedplant/random,/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHEAST)"; icon_state = "warning"; dir = 5},/turf/simulated/floor,/area/vault/supermarket/shop)
-"ai" = (/obj/machinery/light{dir = 8},/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor,/area/vault/supermarket/shop)
-"aj" = (/turf/simulated/floor,/area/vault/supermarket/shop)
-"ak" = (/obj/machinery/light{dir = 4},/obj/effect/decal/warning_stripes{tag = "icon-warning (EAST)"; icon_state = "warning"; dir = 4},/turf/simulated/floor,/area/vault/supermarket/shop)
-"al" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor,/area/vault/supermarket/shop)
-"am" = (/obj/structure/rack,/obj/map/spawner/supermarket,/turf/simulated/floor,/area/vault/supermarket/shop)
-"an" = (/mob/living/simple_animal/hostile/retaliate/costco_guardian,/turf/simulated/floor,/area/vault/supermarket/shop)
-"ao" = (/obj/structure/table/woodentable,/obj/item/ashtray/glass,/turf/simulated/floor,/area/vault/supermarket/shop)
-"ap" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"aq" = (/obj/structure/flora/tree,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"ar" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"as" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (EAST)"; icon_state = "warning"; dir = 4},/turf/simulated/floor,/area/vault/supermarket/shop)
-"at" = (/obj/structure/bed/chair/comfy/brown{dir = 8},/turf/simulated/floor,/area/vault/supermarket/shop)
-"au" = (/obj/structure/flora/rock,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"av" = (/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"aw" = (/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"ax" = (/obj/structure/bed/chair/comfy/brown{dir = 4},/turf/simulated/floor,/area/vault/supermarket/shop)
-"ay" = (/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"az" = (/obj/structure/flora/rock,/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"aA" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/obj/structure/sign/securearea{name = "DO NOT CROSS THE WARNING STRIPES WITH UNPAID ITEMS"; pixel_x = -32; pixel_y = 0},/turf/simulated/floor,/area/vault/supermarket/shop)
-"aB" = (/obj/structure/flora/tree,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"aC" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (EAST)"; icon_state = "warning"; dir = 4},/obj/structure/sign/securearea{name = "DO NOT CROSS THE WARNING STRIPES WITH UNPAID ITEMS"; pixel_x = 32; pixel_y = 0},/turf/simulated/floor,/area/vault/supermarket/shop)
-"aD" = (/obj/structure/flora/rock/pile,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"aE" = (/obj/structure/flora/tree,/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"aF" = (/obj/structure/flora/grass/green,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"aG" = (/obj/structure/flora/grass/green,/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"aH" = (/obj/structure/flora/grass/green,/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"aI" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"aJ" = (/obj/structure/flora/tree,/obj/structure/window/reinforced,/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"aK" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
-"aL" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHWEST)"; icon_state = "warning"; dir = 10},/turf/simulated/floor,/area/vault/supermarket/shop)
-"aM" = (/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor,/area/vault/supermarket/shop)
-"aN" = (/obj/effect/decal/warning_stripes{tag = "icon-warning_corner"; icon_state = "warning_corner"; dir = 2},/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (WEST)"; icon_state = "warning_corner"; dir = 8},/turf/simulated/floor,/area/vault/supermarket/shop)
-"aO" = (/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (WEST)"; icon_state = "warning_corner"; dir = 8},/turf/simulated/floor,/area/vault/supermarket/shop)
-"aP" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/mob/living/simple_animal/robot/robot_cashier{dir = 4},/turf/simulated/floor,/area/vault/supermarket/shop)
-"aQ" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/turf/simulated/floor,/area/vault/supermarket/shop)
-"aR" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/structure/table/reinforced,/turf/simulated/floor,/area/vault/supermarket/shop)
-"aS" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/mob/living/simple_animal/robot/robot_cashier{dir = 8},/turf/simulated/floor,/area/vault/supermarket/shop)
-"aT" = (/obj/machinery/door/airlock/diamond{desc = "Gender-neutral."; name = "Bathroom"},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/obj/effect/decal/warning_stripes{tag = "icon-warning (EAST)"; icon_state = "warning"; dir = 4},/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor,/area/vault/supermarket/shop)
-"aU" = (/obj/machinery/light,/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor,/area/vault/supermarket/shop)
-"aV" = (/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (WEST)"; icon_state = "warning_corner"; dir = 8},/obj/effect/decal/warning_stripes{tag = "icon-warning_corner"; icon_state = "warning_corner"; dir = 2},/turf/simulated/floor,/area/vault/supermarket/shop)
-"aW" = (/obj/structure/flora/pottedplant/random,/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHEAST)"; icon_state = "warning"; dir = 6},/turf/simulated/floor,/area/vault/supermarket/shop)
-"aX" = (/obj/structure/toilet{dir = 4},/obj/machinery/newscaster{pixel_y = -32},/obj/machinery/light/small{dir = 8},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/entrance)
-"aY" = (/obj/machinery/door/airlock{name = "Toilet"},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 4; name = "Emergency Shutters"},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/entrance)
-"aZ" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHWEST)"; icon_state = "warning"; dir = 9},/obj/structure/sign/securearea{name = "STEALING IS PUNISHABLE BY DEATH"; pixel_y = 32},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/shop)
-"ba" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (EAST)"; icon_state = "warning"; dir = 4},/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (NORTH)"; icon_state = "warning_corner"; dir = 1},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/shop)
-"bb" = (/obj/machinery/door/airlock/highsecurity{name = "Supermarket Entrance"},/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/obj/effect/decal/warning_stripes{tag = "icon-warning (EAST)"; icon_state = "warning"; dir = 4},/turf/simulated/floor,/area/vault/supermarket/shop)
-"bc" = (/turf/simulated/wall,/area/vault/supermarket/entrance)
-"bd" = (/obj/structure/flora/pottedplant,/obj/machinery/light{dir = 8},/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/obj/structure/sign/securearea{name = "DO NOT CROSS THE WARNING STRIPES WITH UNPAID ITEMS"; pixel_x = -32; pixel_y = 0},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/shop)
-"be" = (/obj/structure/sink{dir = 4; pixel_x = 11},/obj/structure/mirror{pixel_x = 32},/obj/effect/decal/warning_stripes{tag = "icon-warning (EAST)"; icon_state = "warning"; dir = 4},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/shop)
-"bf" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHWEST)"; icon_state = "warning"; dir = 9},/turf/simulated/floor,/area/vault/supermarket/shop)
-"bg" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/obj/structure/sign/securearea{name = "STEALING IS PUNISHABLE BY DEATH"; pixel_y = 32},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/mob/living/simple_animal/robot/robot_greeter/warner,/turf/simulated/floor,/area/vault/supermarket/shop)
-"bh" = (/obj/effect/costco_entrance,/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (EAST)"; icon_state = "warning_corner"; dir = 4},/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (NORTH)"; icon_state = "warning_corner"; dir = 1},/turf/simulated/floor,/area/vault/supermarket/shop)
-"bi" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/obj/structure/sign/securearea{name = "DO NOT CROSS THE WARNING STRIPES WITH UNPAID ITEMS"; pixel_y = 32},/mob/living/simple_animal/robot/robot_greeter,/turf/simulated/floor,/area/vault/supermarket/shop)
-"bj" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHEAST)"; icon_state = "warning"; dir = 5},/turf/simulated/floor,/area/vault/supermarket/shop)
-"bk" = (/obj/machinery/door/airlock{name = "Toilet"},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 4; name = "Emergency Shutters"},/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/entrance)
-"bl" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHWEST)"; icon_state = "warning"; dir = 10},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/shop)
-"bm" = (/obj/structure/sink{dir = 4; pixel_x = 11},/obj/structure/mirror{pixel_x = 32},/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHEAST)"; icon_state = "warning"; dir = 6},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/shop)
-"bn" = (/obj/structure/flora/pottedplant/random,/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bo" = (/obj/machinery/vending/sovietsoda,/obj/structure/window/reinforced{dir = 8},/obj/machinery/light{dir = 1},/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bp" = (/obj/machinery/vending/boozeomat,/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bq" = (/obj/machinery/vending/nuka,/obj/structure/window/reinforced{dir = 4},/obj/machinery/light{dir = 1},/turf/simulated/floor,/area/vault/supermarket/entrance)
-"br" = (/obj/structure/window/reinforced,/turf/simulated/floor,/area/vault/supermarket/shop)
-"bs" = (/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bt" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHWEST)"; icon_state = "warning"; dir = 10},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor,/area/vault/supermarket/shop)
-"bu" = (/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/mob/living/simple_animal/hostile/retaliate/costco_guardian,/turf/simulated/floor,/area/vault/supermarket/shop)
-"bv" = (/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor,/area/vault/supermarket/shop)
-"bw" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHEAST)"; icon_state = "warning"; dir = 6},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor,/area/vault/supermarket/shop)
-"bx" = (/obj/machinery/computer/slot_machine,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor,/area/vault/supermarket/entrance)
-"by" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/item/weapon/stool,/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bz" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/machinery/door/window,/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bA" = (/obj/machinery/light{dir = 1},/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bB" = (/mob/living/simple_animal/hostile/retaliate/costco_guardian,/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bC" = (/obj/machinery/door/airlock/highsecurity{name = "Supermarket Entrance"},/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bD" = (/obj/machinery/door/airlock/glass{name = "Arcade"},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 4; name = "Emergency Shutters"},/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bE" = (/obj/machinery/door/airlock/glass{name = "Bistro"},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 8; name = "Emergency Shutters"},/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bF" = (/obj/structure/bed/chair/comfy/beige,/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bG" = (/obj/structure/bed/chair/comfy/black{dir = 4},/turf/simulated/floor{icon_state = "redcorner"},/area/vault/supermarket/entrance)
-"bH" = (/turf/simulated/floor{icon_state = "red"; dir = 9},/area/vault/supermarket/entrance)
-"bI" = (/turf/simulated/floor{icon_state = "red"; dir = 1},/area/vault/supermarket/entrance)
-"bJ" = (/obj/structure/window/reinforced/plasma,/turf/simulated/floor{icon_state = "red"; dir = 1},/area/vault/supermarket/entrance)
-"bK" = (/turf/simulated/floor{icon_state = "red"; dir = 5},/area/vault/supermarket/entrance)
-"bL" = (/obj/structure/bed/chair/comfy/black{dir = 8},/turf/simulated/floor{dir = 8; icon_state = "redcorner"},/area/vault/supermarket/entrance)
-"bM" = (/obj/structure/table/woodentable,/obj/item/ashtray/glass,/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bN" = (/obj/structure/bed/chair/comfy/beige{dir = 8},/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bO" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bP" = (/turf/simulated/floor{dir = 5; icon_state = "stage_stairs"; tag = "icon-whitegreen (NORTHEAST)"},/area/vault/supermarket/entrance)
-"bQ" = (/obj/structure/bed/chair/comfy/black{dir = 4},/obj/machinery/light{dir = 8},/turf/simulated/floor{icon_state = "red"; dir = 4},/area/vault/supermarket/entrance)
-"bR" = (/obj/structure/flora/tree,/turf/simulated/floor/grass,/area/vault/supermarket/entrance)
-"bS" = (/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bT" = (/obj/structure/bed/chair/comfy/black{dir = 8},/obj/machinery/light{dir = 4},/turf/simulated/floor{icon_state = "red"; dir = 8},/area/vault/supermarket/entrance)
-"bU" = (/obj/machinery/newscaster{pixel_x = 32; pixel_y = 0},/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bV" = (/obj/machinery/door/airlock/diamond{desc = "Gender-neutral."; name = "Bathroom"},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/supermarket/entrance)
-"bW" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/bed/chair/comfy/black{dir = 4},/turf/simulated/floor{icon_state = "red"; dir = 4},/area/vault/supermarket/entrance)
-"bX" = (/obj/structure/window/reinforced/plasma{dir = 1},/mob/living/simple_animal/hostile/retaliate/costco_guardian,/turf/simulated/floor,/area/vault/supermarket/entrance)
-"bY" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/bed/chair/comfy/black{dir = 8},/turf/simulated/floor{icon_state = "red"; dir = 8},/area/vault/supermarket/entrance)
-"bZ" = (/obj/structure/bed/chair/comfy/beige{dir = 4},/turf/simulated/floor,/area/vault/supermarket/entrance)
-"ca" = (/obj/machinery/bot/cleanbot{name = "Roger WillClean"},/turf/simulated/floor,/area/vault/supermarket/entrance)
-"cb" = (/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/entrance)
-"cc" = (/obj/structure/lattice,/obj/structure/window/reinforced{dir = 1},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/turf/space,/area/vault/supermarket/entrance)
-"cd" = (/obj/machinery/door/airlock/multi_tile/glass,/obj/structure/window/reinforced{dir = 8},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/turf/simulated/floor/airless{icon_state = "white"},/area/vault/supermarket/entrance)
-"ce" = (/obj/structure/window/reinforced{dir = 4},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/turf/simulated/floor/airless{icon_state = "white"},/area/vault/supermarket/entrance)
-"cf" = (/obj/structure/toilet{dir = 1},/obj/machinery/newscaster{pixel_x = -32},/obj/machinery/light/small,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/entrance)
-"cg" = (/obj/structure/mirror{pixel_x = -32; pixel_y = 0},/obj/structure/sink{dir = 8; pixel_x = -12; pixel_y = 2},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/entrance)
-"ch" = (/obj/structure/flora/pottedplant,/obj/machinery/light,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/entrance)
-"ci" = (/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/airless{icon_state = "white"},/area/vault/supermarket/entrance)
-"cj" = (/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/airless{icon_state = "white"},/area/vault/supermarket/entrance)
-"ck" = (/obj/machinery/vending/coffee,/obj/machinery/light,/turf/simulated/floor,/area/vault/supermarket/entrance)
-"cl" = (/obj/machinery/vending/snack,/turf/simulated/floor,/area/vault/supermarket/entrance)
-"cm" = (/obj/machinery/light,/turf/simulated/floor,/area/vault/supermarket/entrance)
-"cn" = (/obj/machinery/vending/cigarette,/turf/simulated/floor,/area/vault/supermarket/entrance)
-"co" = (/obj/machinery/door/airlock/multi_tile/glass,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/airless{icon_state = "white"},/area/vault/supermarket/entrance)
-"cp" = (/obj/structure/lattice,/turf/space,/area)
+"ab" = (/turf/simulated/wall,/area)
+"ac" = (/obj/structure/girder/reinforced,/turf/simulated/wall/r_wall,/area/vault/supermarket/entrance)
+"ad" = (/turf/simulated/wall/r_wall,/area/vault/supermarket/entrance)
+"ae" = (/obj/structure/window/reinforced/plasma,/turf/simulated/wall/r_wall,/area/vault/supermarket/entrance)
+"af" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/wall/r_wall,/area/vault/supermarket/entrance)
+"ag" = (/obj/structure/flora/pottedplant/random,/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHWEST)"; icon_state = "warning"; dir = 9},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"ah" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"ai" = (/obj/machinery/light{dir = 1},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"aj" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/obj/structure/sign/securearea{name = "STEALING IS PUNISHABLE BY DEATH"; pixel_y = 32},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"ak" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/obj/structure/sign/securearea{name = "DO NOT CROSS THE WARNING STRIPES WITH UNPAID ITEMS"; pixel_y = 32},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"al" = (/obj/structure/flora/pottedplant/random,/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHEAST)"; icon_state = "warning"; dir = 5},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"am" = (/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/wall/r_wall,/area/vault/supermarket/entrance)
+"an" = (/obj/machinery/light{dir = 8},/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"ao" = (/turf/simulated/floor,/area/vault/supermarket/shop)
+"ap" = (/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"aq" = (/obj/machinery/light{dir = 4},/obj/effect/decal/warning_stripes{tag = "icon-warning (EAST)"; icon_state = "warning"; dir = 4},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"ar" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"as" = (/obj/structure/rack,/obj/map/spawner/supermarket,/turf/simulated/floor,/area/vault/supermarket/shop)
+"at" = (/mob/living/simple_animal/hostile/costco_guardian,/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"au" = (/obj/structure/table/woodentable,/obj/item/ashtray/glass,/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"av" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aw" = (/obj/structure/flora/tree,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"ax" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"ay" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (EAST)"; icon_state = "warning"; dir = 4},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"az" = (/obj/structure/bed/chair/comfy/brown{dir = 8},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"aA" = (/obj/structure/flora/rock,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aB" = (/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aC" = (/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aD" = (/obj/structure/bed/chair/comfy/brown{dir = 4},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"aE" = (/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aF" = (/mob/living/simple_animal/hostile/costco_guardian,/turf/simulated/floor,/area/vault/supermarket/shop)
+"aG" = (/obj/structure/flora/rock,/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aH" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/obj/structure/sign/securearea{name = "DO NOT CROSS THE WARNING STRIPES WITH UNPAID ITEMS"; pixel_x = -32; pixel_y = 0},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"aI" = (/obj/structure/flora/tree,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aJ" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (EAST)"; icon_state = "warning"; dir = 4},/obj/structure/sign/securearea{name = "DO NOT CROSS THE WARNING STRIPES WITH UNPAID ITEMS"; pixel_x = 32; pixel_y = 0},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"aK" = (/obj/structure/flora/rock/pile,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aL" = (/obj/structure/flora/tree,/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aM" = (/obj/structure/flora/grass/green,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aN" = (/obj/structure/flora/grass/green,/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aO" = (/turf/simulated/wall/r_wall,/area/vault/supermarket/restricted)
+"aP" = (/obj/structure/window/reinforced{dir = 1; layer = 2.9},/obj/structure/window/reinforced{dir = 8},/mob/living/simple_animal/cockroach,/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"aQ" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/mob/living/simple_animal/cockroach,/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"aR" = (/obj/machinery/recharge_station,/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"aS" = (/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"aT" = (/obj/structure/flora/grass/green,/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aU" = (/obj/structure/window/reinforced{dir = 8},/obj/machinery/door/window{base_state = "right"; dir = 2; name = "Food"},/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"aV" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/mob/living/simple_animal/cockroach,/mob/living/simple_animal/cockroach,/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"aW" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aX" = (/obj/structure/flora/tree,/obj/structure/window/reinforced,/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aY" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/grass,/area/vault/supermarket/shop)
+"aZ" = (/obj/structure/disposalpipe/trunk{dir = 4},/obj/machinery/disposal/deliveryChute{dir = 1},/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"ba" = (/obj/structure/disposalpipe/segment{dir = 4; step_x = 0; step_y = 0},/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"bb" = (/obj/structure/disposalpipe/segment{dir = 2; icon_state = "pipe-c"},/obj/structure/girder/reinforced,/turf/simulated/wall/r_wall,/area/vault/supermarket/entrance)
+"bc" = (/obj/structure/disposalpipe/segment,/obj/structure/girder/reinforced,/turf/simulated/wall/r_wall,/area/vault/supermarket/entrance)
+"bd" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/mob/living/simple_animal/robot/robot_cashier{dir = 4},/turf/simulated/floor{icon_state = "solarpanel"},/area/vault/supermarket/shop)
+"be" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/turf/simulated/floor{icon_state = "solarpanel"},/area/vault/supermarket/shop)
+"bf" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/structure/table/reinforced,/turf/simulated/floor{icon_state = "solarpanel"},/area/vault/supermarket/shop)
+"bg" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/mob/living/simple_animal/robot/robot_cashier{dir = 8},/turf/simulated/floor{icon_state = "solarpanel"},/area/vault/supermarket/shop)
+"bh" = (/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/rack,/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/glass/glass{amount = 50},/obj/item/stack/rods{amount = 50},/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"bi" = (/obj/structure/window/reinforced/plasma{dir = 1},/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"bj" = (/obj/effect/decal/warning_stripes{tag = "icon-warning_corner"; icon_state = "warning_corner"; dir = 2},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"bk" = (/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"bl" = (/obj/machinery/light,/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"bm" = (/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (WEST)"; icon_state = "warning_corner"; dir = 8},/obj/effect/decal/warning_stripes{tag = "icon-warning_corner"; icon_state = "warning_corner"; dir = 2},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"bn" = (/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (WEST)"; icon_state = "warning_corner"; dir = 8},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"bo" = (/obj/structure/rack,/obj/item/weapon/storage/toolbox/mechanical,/obj/item/weapon/storage/toolbox/mechanical,/obj/item/device/robotanalyzer,/obj/item/stack/nanopaste,/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"bp" = (/obj/structure/disposalpipe/segment{dir = 4; icon_state = "pipe-c"},/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"bq" = (/obj/structure/disposalpipe/segment{dir = 8; icon_state = "pipe-c"},/obj/structure/girder/reinforced,/turf/simulated/wall/r_wall,/area/vault/supermarket/entrance)
+"br" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHWEST)"; icon_state = "warning"; dir = 10},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"bs" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHEAST)"; icon_state = "warning"; dir = 6},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"bt" = (/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/wall/r_wall,/area/vault/supermarket/entrance)
+"bu" = (/obj/structure/window/reinforced/plasma{dir = 1},/turf/simulated/wall/r_wall,/area/vault/supermarket/entrance)
+"bv" = (/obj/machinery/door/airlock/highsecurity{name = "Supermarket Entrance"},/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/obj/effect/decal/warning_stripes{tag = "icon-warning (EAST)"; icon_state = "warning"; dir = 4},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/supermarket/shop)
+"bw" = (/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/wall/r_wall,/area/vault/supermarket/entrance)
+"bx" = (/obj/structure/flora/pottedplant/random,/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHEAST)"; icon_state = "warning"; dir = 6},/turf/simulated/floor{icon_state = "dark"},/area/vault/supermarket/shop)
+"by" = (/obj/machinery/door/airlock/vault{desc = "Feed three times a day."; name = "Roboticists"},/turf/simulated/floor/engine,/area/vault/supermarket/restricted)
+"bz" = (/obj/structure/disposalpipe/segment,/turf/simulated/wall/r_wall,/area/vault/supermarket/restricted)
+"bA" = (/obj/machinery/door/airlock/hatch{name = "Chargers"},/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"bB" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHWEST)"; icon_state = "warning"; dir = 9},/turf/simulated/floor,/area/vault/supermarket/shop)
+"bC" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/obj/structure/sign/securearea{name = "STEALING IS PUNISHABLE BY DEATH"; pixel_y = 32},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/mob/living/simple_animal/robot/robot_greeter/warner,/turf/simulated/floor,/area/vault/supermarket/shop)
+"bD" = (/obj/effect/costco_entrance,/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (EAST)"; icon_state = "warning_corner"; dir = 4},/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (NORTH)"; icon_state = "warning_corner"; dir = 1},/turf/simulated/floor,/area/vault/supermarket/shop)
+"bE" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/obj/structure/sign/securearea{name = "DO NOT CROSS THE WARNING STRIPES WITH UNPAID ITEMS"; pixel_y = 32},/turf/simulated/floor,/area/vault/supermarket/shop)
+"bF" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHEAST)"; icon_state = "warning"; dir = 5},/turf/simulated/floor,/area/vault/supermarket/shop)
+"bG" = (/obj/structure/table/reinforced,/obj/item/trash/plate{pixel_x = -3; pixel_y = 6},/obj/item/trash/plate,/obj/item/weapon/reagent_containers/food/snacks/meat/roach{pixel_x = -3},/obj/item/weapon/reagent_containers/food/snacks/meat/roach,/obj/item/weapon/kitchen/utensil/fork/plastic,/turf/simulated/floor/engine,/area/vault/supermarket/restricted)
+"bH" = (/obj/item/weapon/reagent_containers/food/snacks/meat/roach,/turf/simulated/floor/engine,/area/vault/supermarket/restricted)
+"bI" = (/obj/structure/disposaloutlet{dir = 8},/obj/structure/disposalpipe/trunk{dir = 1},/turf/simulated/wall/r_wall,/area/vault/supermarket/restricted)
+"bJ" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor,/area/vault/supermarket/shop)
+"bK" = (/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/supermarket/shop)
+"bL" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (EAST)"; icon_state = "warning"; dir = 4},/turf/simulated/floor,/area/vault/supermarket/shop)
+"bM" = (/obj/item/weapon/stool,/obj/item/weapon/kitchen/utensil/knife/plastic,/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/cleanable/blood/drip,/obj/effect/landmark/corpse/roboticist/costco,/turf/simulated/floor/engine,/area/vault/supermarket/restricted)
+"bN" = (/obj/structure/toilet{dir = 8},/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/cleanable/vomit,/turf/simulated/floor/engine,/area/vault/supermarket/restricted)
+"bO" = (/obj/structure/sign/vacuum{pixel_x = -32},/obj/structure/bed/chair,/turf/simulated/floor,/area/vault/supermarket/restricted)
+"bP" = (/obj/structure/bed/chair,/obj/item/weapon/melee/classic_baton,/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor,/area/vault/supermarket/restricted)
+"bQ" = (/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/blood/drip,/obj/structure/window/reinforced/tinted{dir = 4},/turf/simulated/floor,/area/vault/supermarket/restricted)
+"bR" = (/obj/structure/window/reinforced/tinted{dir = 8},/turf/simulated/floor,/area/vault/supermarket/restricted)
+"bS" = (/turf/simulated/floor,/area/vault/supermarket/restricted)
+"bT" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHWEST)"; icon_state = "warning"; dir = 10},/obj/structure/window/reinforced{dir = 1; layer = 2.9},/turf/simulated/floor,/area/vault/supermarket/shop)
+"bU" = (/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1; layer = 2.9},/turf/simulated/floor,/area/vault/supermarket/shop)
+"bV" = (/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/obj/structure/window/reinforced,/turf/simulated/floor,/area/vault/supermarket/shop)
+"bW" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHEAST)"; icon_state = "warning"; dir = 6},/obj/structure/window/reinforced{dir = 1; layer = 2.9},/turf/simulated/floor,/area/vault/supermarket/shop)
+"bX" = (/obj/structure/flora/pottedplant/random,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"bY" = (/obj/machinery/vending/sovietsoda,/obj/structure/window/reinforced{dir = 8},/obj/machinery/light{dir = 1},/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"bZ" = (/obj/machinery/vending/boozeomat,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"ca" = (/obj/machinery/vending/nuka,/obj/structure/window/reinforced{dir = 4},/obj/machinery/light{dir = 1},/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"cb" = (/obj/machinery/door/airlock/hatch,/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor,/area/vault/supermarket/restricted)
+"cc" = (/obj/machinery/light/small,/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/remains/robot{name = "Roger WillClean remains"},/turf/simulated/floor,/area/vault/supermarket/restricted)
+"cd" = (/obj/effect/decal/cleanable/vomit,/turf/simulated/floor,/area/vault/supermarket/restricted)
+"ce" = (/obj/machinery/light/small,/obj/structure/window/reinforced/tinted{dir = 4},/turf/simulated/floor,/area/vault/supermarket/restricted)
+"cf" = (/turf/simulated/floor,/area/vault/supermarket/entrance)
+"cg" = (/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/supermarket/entrance)
+"ch" = (/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"ci" = (/obj/structure/lattice,/turf/space,/area)
+"cj" = (/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"ck" = (/mob/living/simple_animal/hostile/costco_guardian/secure_area,/turf/simulated/floor,/area/vault/supermarket/restricted)
+"cl" = (/obj/structure/flora/pottedplant/random,/turf/simulated/floor,/area/vault/supermarket/entrance)
+"cm" = (/mob/living/simple_animal/hostile/costco_guardian,/turf/simulated/floor,/area/vault/supermarket/entrance)
+"cn" = (/obj/machinery/computer/slot_machine,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor,/area/vault/supermarket/entrance)
+"co" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/item/weapon/stool,/turf/simulated/floor,/area/vault/supermarket/entrance)
+"cp" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/machinery/door/window,/turf/simulated/floor,/area/vault/supermarket/entrance)
+"cq" = (/obj/machinery/light{dir = 1},/turf/simulated/floor,/area/vault/supermarket/entrance)
+"cr" = (/obj/machinery/door/airlock/highsecurity{name = "Supermarket Entrance"},/turf/simulated/floor,/area/vault/supermarket/entrance)
+"cs" = (/obj/machinery/door/airlock/glass{name = "Arcade"},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 4; name = "Emergency Shutters"},/turf/simulated/floor,/area/vault/supermarket/entrance)
+"ct" = (/obj/machinery/door/airlock/glass{name = "Bistro"},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 8; name = "Emergency Shutters"},/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"cu" = (/obj/structure/bed/chair/comfy/beige,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"cv" = (/obj/structure/table/woodentable,/obj/item/ashtray/glass,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"cw" = (/obj/structure/bed/chair/comfy/beige{dir = 8},/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"cx" = (/obj/effect/decal/cleanable/blood,/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"cy" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor,/area/vault/supermarket/entrance)
+"cz" = (/turf/simulated/floor{dir = 5; icon_state = "stage_stairs"; tag = "icon-whitegreen (NORTHEAST)"},/area/vault/supermarket/entrance)
+"cA" = (/obj/machinery/newscaster{pixel_x = 32; pixel_y = 0},/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"cB" = (/obj/structure/crematorium,/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"cC" = (/obj/machinery/door/airlock/hatch{name = "Crematorium"},/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"cD" = (/obj/machinery/door/airlock/diamond{desc = "Gender-neutral."; name = "Bathroom"},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/supermarket/entrance)
+"cE" = (/obj/structure/bed/chair/comfy/black{dir = 4},/turf/simulated/floor{icon_state = "redcorner"},/area/vault/supermarket/entrance)
+"cF" = (/turf/simulated/floor{icon_state = "red"; dir = 9},/area/vault/supermarket/entrance)
+"cG" = (/turf/simulated/floor{icon_state = "red"; dir = 1},/area/vault/supermarket/entrance)
+"cH" = (/obj/structure/window/reinforced/plasma,/turf/simulated/floor{icon_state = "red"; dir = 1},/area/vault/supermarket/entrance)
+"cI" = (/turf/simulated/floor{icon_state = "red"; dir = 5},/area/vault/supermarket/entrance)
+"cJ" = (/obj/structure/bed/chair/comfy/black{dir = 8},/turf/simulated/floor{dir = 8; icon_state = "redcorner"},/area/vault/supermarket/entrance)
+"cK" = (/obj/structure/bed/chair/comfy/beige{dir = 4},/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"cL" = (/obj/machinery/bot/cleanbot{name = "Roger WillClean"},/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"cM" = (/obj/effect/decal/cleanable/ash,/obj/effect/landmark/corpse/civilian,/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"cN" = (/obj/machinery/crema_switch{id = "costco"; pixel_x = 32},/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
+"cO" = (/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/entrance)
+"cP" = (/obj/machinery/door/airlock{name = "Toilet"},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 4; name = "Emergency Shutters"},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/entrance)
+"cQ" = (/obj/structure/bed/chair/comfy/black{dir = 4},/obj/machinery/light{dir = 8},/turf/simulated/floor{icon_state = "red"; dir = 4},/area/vault/supermarket/entrance)
+"cR" = (/obj/structure/flora/tree,/turf/simulated/floor/grass,/area/vault/supermarket/entrance)
+"cS" = (/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/floor,/area/vault/supermarket/entrance)
+"cT" = (/obj/structure/bed/chair/comfy/black{dir = 8},/obj/machinery/light{dir = 4},/turf/simulated/floor{icon_state = "red"; dir = 8},/area/vault/supermarket/entrance)
+"cU" = (/obj/structure/toilet{dir = 1},/obj/machinery/newscaster{pixel_x = -32},/obj/machinery/light/small,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/entrance)
+"cV" = (/turf/simulated/wall,/area/vault/supermarket/entrance)
+"cW" = (/obj/structure/mirror{pixel_x = -32; pixel_y = 0},/obj/structure/sink{dir = 8; pixel_x = -12; pixel_y = 2},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/entrance)
+"cX" = (/obj/structure/flora/pottedplant,/obj/machinery/light,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/entrance)
+"cY" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/bed/chair/comfy/black{dir = 4},/turf/simulated/floor{icon_state = "red"; dir = 4},/area/vault/supermarket/entrance)
+"cZ" = (/obj/structure/window/reinforced/plasma{dir = 1},/mob/living/simple_animal/robot/robot_greeter/informer,/turf/simulated/floor,/area/vault/supermarket/entrance)
+"da" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/bed/chair/comfy/black{dir = 8},/turf/simulated/floor{icon_state = "red"; dir = 8},/area/vault/supermarket/entrance)
+"db" = (/mob/living/simple_animal/hostile/costco_guardian,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"dc" = (/obj/machinery/vending/coffee,/obj/machinery/light,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"dd" = (/obj/machinery/vending/snack,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"de" = (/obj/machinery/light,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"df" = (/obj/machinery/vending/cigarette,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"dg" = (/obj/structure/lattice,/obj/structure/window/reinforced{dir = 1},/turf/space,/area/vault/supermarket/entrance)
+"dh" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/mob/living/simple_animal/robot/robot_greeter,/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"di" = (/obj/structure/window/reinforced{dir = 4},/obj/effect/costco_entrance,/obj/machinery/door/airlock/glass{name = "Costco"},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"dj" = (/obj/structure/window/reinforced{dir = 8},/obj/effect/costco_entrance,/obj/machinery/door/airlock/glass{name = "Costco"},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"dk" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/mob/living/simple_animal/robot/robot_greeter,/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"dl" = (/obj/structure/lattice,/turf/space,/area/vault/supermarket/entrance)
+"dm" = (/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"dn" = (/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"do" = (/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/obj/structure/lattice,/turf/space,/area/vault/supermarket/entrance)
+"dp" = (/obj/machinery/door/airlock/multi_tile/glass,/obj/structure/window/reinforced{dir = 8},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"dq" = (/obj/structure/window/reinforced{dir = 4},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaabababababababababababababababababababababaaaaaaaaaa
-aaaaaaaaabababababababababababababababababababababaaaaaaaaaa
-aaaaaaaaababacadaeadadaeadafaeagadaeadadaeadahababaaaaaaaaaa
-aaaaaaaaababaiajajajajajajajajajajajajajajajakababaaaaaaaaaa
-aaaaaaaaababalamajamajanaoapaqaraoajajamajamasababaaaaaaaaaa
-aaaaaaaaababaiamajamajajatauavawaxajajamajamakababaaaaaaaaaa
-aaaaaaaaababaiamajamajajajayavawajanajamajamakababaaaaaaaaaa
-aaaaaaaaababalamajamajajajayavawajajajamajamasababaaaaaaaaaa
-aaaaaaaaababaiamajamajajatayazawaxajajamajamakababaaaaaaaaaa
-aaaaaaaaababaAajajajajanaoaBavawaoajajajajajaCababaaaaaaaaaa
-aaaaaaaaababaiajajajajajajaDaEawajajajajajajakababaaaaaaaaaa
-aaaaaaaaababalamajamajajajayavawajanajamajamasababaaaaaaaaaa
-aaaaaaaaababaiamajamajajatayavawaxajajamajamakababaaaaaaaaaa
-aaaaaaaaababalamajamajajaoaFavawaoajajamajamasababaaaaaaaaaa
-aaaaaaaaababaiamajamajajajaBavawajajajamajamakababaaaaaaaaaa
-aaaaaaaaababaAamajamajanajaDavawajajajamajamaCababaaaaaaaaaa
-aaaaaaaaababaiamajamajajatayaEawaxajajamajamakababaaaaaaaaaa
-aaaaaaaaababalajajajajajaoayavaGaoajajajajajasababaaaaaaaaaa
-aaaaaaaaababaiajajajajajajaBavawajajajajajajakababaaaaaaaaaa
-aaaaaaaaababalamajamajajajayaHawajanajamajamasababaaaaaaaaaa
-aaaaaaaaababaAamajamajajaoayavawaoajajamajamaCababaaaaaaaaaa
-aaaaaaaaababaiamajamajajataIaJaKaxajajamajamakababaaaaaaaaaa
-aaaaaaaaababalamajamajanajajajajajajajamajamasababaaaaaaaaaa
-aaaaaaaaababaiamajamajajajajajajajajajamajamakababaaaaaaaaaa
-aaaaaaaaababaLaMaMaNaMaOaPaQajaRaSajajajajajasababaaaaaaaaaa
-aaaaaaaaabababababaTabaLaUaMaVaMaUaMaMaMaMaMaWababaaaaaaaaaa
-aaaaaaaaababaXaYaZbaababababbbababababababababababaaaaaaaaaa
-aaaaaaaaababbcbcbdbeababbfbgbhbibjababababababababaaaaaaaaaa
-aaaaaaaaababaXbkblbmababalajajajasababbnbobpbqbnabaaaaaaaaaa
-aaaaaaaaababababababababaibrajbrakababbsbsbsbsbsabaaaaaaaaaa
-aaaaaaaaababababababababbtbubvbubwabababbsbsbsababaaaaaaaaaa
-aaaaaaaaabbxbybzbAbBababababbCababababbnbsbsbsbnabaaaaaaaaaa
-aaaaaaaaabbxbybzbsbsbDbsbAbsbsbsbAbsbEbsbsbsbFbsabaaaaaaaaaa
-aaaaaaaaabbxbybzbsbsabbGbHbIbJbIbKbLabbsbsbsbMbNabaaaaaaaaaa
-aaaaaaaaabbxbybzbObPabbQbsbObRbSbsbTabbsbFbsbsbUabaaaaaaaaaa
-aaaaaaaaabababababbVabbWbsbsbXbsbsbYabbZbMbscabsabaaaaaaaaaa
-aaaaaaaaaaabcbaYcbcbabcccdcecccdceccabbsbsbsbsbsabaaaaaaaaaa
-aaaaaaaaaaabcfbccgchabaacicjaacicjaaabbBckclcmcnabaaaaaaaaaa
-aaaaaaaaaaababababababaacocjcpcocjaaabababababababaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaabababababababababababababababababababababababaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacacacacacacacacacacacacacacacacacacacacacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacadaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeadacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafagahaiahahaiahajaiakahaiahahaiahalamacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafanaoaoaoapapapapapapapapapaoaoaoaqamacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafarasaoasaoatauavawaxauapaoasaoasayamacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafanasaoasaoaoazaAaBaCaDaoaoasaoasaqamacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafanasaoasaoaoapaEaBaCapaFaoasaoasaqamacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafarasaoasaoaoapaEaBaCapaoaoasaoasayamacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafanasaoasaoaoazaEaGaCaDaoaoasaoasaqamacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafaHaoaoaoaoaFauaIaBaCauaoaoaoaoaoaJamacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafanaoaoaoaoaoapaKaLaCapaoaoaoaoaoaqamacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafarasaoasaoaoapaEaBaCapaFaoasaoasayamacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafanasaoasaoaoazaEaBaCaDaoaoasaoasaqamacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafarasaoasaoaoauaMaBaCauaoaoasaoasayamacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafanasaoasaoaoapaIaBaCapaoaoasaoasaqamacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafaHasaoasaoaFapaKaBaCapaoaoasaoasaJamacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaabacafanasaoasaoaoazaEaLaCaDaoaoasaoasaqamacabaaaaaaaaaaaa
+ababababababababacafaraoaoaoaoaoauaEaBaNauaoaoaoaoaoayamacabaaaaaaaaaaaa
+abaOaOaOaOaOaOaOacafanaoaoaoaoaoapaIaBaCapaoaoaoaoaoaqamacabaaaaaaaaaaaa
+abaOaPaQaRaRaRaSacafarasaoasaoaoapaEaTaCapaFaoasaoasayamacabaaaaaaaaaaaa
+abaOaUaVaSaSaSaSacafaHasaoasaoaoauaEaBaCauaoaoasaoasaJamacabaaaaaaaaaaaa
+abaOaSaSaRaRaRaSacafanasaoasaoaoazaWaXaYaDaoaoasaoasaqamacabaaaaaaaaaaaa
+abaOaZbabababababbafarasaoasaoatapapapapapapaoasaoasayamacabaaaaaaaaaaaa
+abaOaSaSaRaRaRaSbcafanasaoasapapbdbeapbfbgapapasaoasaqamacabaaaaaaaaaaaa
+abaOaOaObhbibiaSbcafarapapbjbkbkblbkbmbkblbkbkbnapapayamacabaaaaaaaaaaaa
+abababaOboaSbpbabqafbrbkbkbsbtbubububvbubububwbrbkbkbxamacabaaaaaaaaaaaa
+aaaaabaOaObybzbAadadbubububuadadbBbCbDbEbFadadbubububuadacabaaaaaaaaaaaa
+aaaaabaObGbHbIaSadadadadadadadadbJaoaobKbLadadadadadadadadabaaaaaaaaaaaa
+aaaaabaObMbNaOaSaObObPbQbRbSadadbTbUbVbUbWadadbXbYbZcabXadabaaaaaaaaaaaa
+aaaaabaOaOaOaOaScbcccdbScebSadadcfcgcfcfcgadadchchchchchadabaaaaaaaaaaaa
+aaaaaaaaciaaaOcjadadadadadckadadclcmcfcmcladadadchchchadadabaaaaaaaaaaaa
+aaaaaaaaciaaaOcjadcncocpcqcfadadadadcradadadadbXchchchbXadabaaaaaaaaaaaa
+aaaaaaaaciciaOaSadcncocpcfcfcscfcqcmcfcmcqcfctchchchcuchadabaaaaaaaaaaaa
+aaaaaaaaciaaaOcjadcncocpcfcfadcfcfcfcfcfcfcfadchchchcvcwadabaaaaaaaaaaaa
+aaaaaaabaOaOaOcxadcncocpcyczadcfcfcfcfcfcfcfadchcuchchcAadabaaaaaaaaaaaa
+aaaaaaabaOcBaOcCadadadadadcDadcEcFcGcHcGcIcJadcKcvchcLchadabaaaaaaaaaaaa
+aaaaaaabaOcMaSaScNadcOcPcOcOadcQcfcycRcScfcTadchchchchchadabaaaaaaaaaaaa
+aaaaaaabaOaOaOaOaOadcUcVcWcXadcYcfcfcZcfcfdaaddbdcdddedfadabaaaaaaaaaaaa
+aaaaaaababababababadadadadadaddgdhdidgdjdkdgadadadadadadadabaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaababababababaddldmdndldmdndladabababababababaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaddodpdqdodpdqdoadaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}

@@ -107,15 +107,32 @@ var/list/shop_prices = list( //Cost in space credits
 
 /area/vault/supermarket/shop/proc/initialize()
 	spawn()
-		for(var/obj/item/I in contents)
-			for(var/type in shop_prices)
-				if(istype(I, type))
-					I.name = "[I.name] ($[shop_prices[type]])"
-					I.on_destroyed.Add(src, "update_items")
+		looping:
+			for(var/obj/item/I in contents)
+				for(var/type in shop_prices)
+					if(istype(I, type))
+						I.name = "[I.name] ($[shop_prices[type]])"
+						I.on_destroyed.Add(src, "item_destroyed") //Only trigger alarm when an item for sale is destroyed
 
-					items[I] = shop_prices[type]
+						items[I] = shop_prices[type]
 
-					continue
+						continue looping
+
+		var/area/vault/supermarket/entrance/E = locate(/area/vault/supermarket/entrance)
+		var/list/protected_objects = list(
+			/obj/structure/window, //Destroying these objects triggers an alarm
+			/turf/simulated/wall,
+			/obj/structure,
+			/mob/living/simple_animal,
+			/obj/machinery,
+			)
+
+		for(var/atom/movable/AM in (src.contents + E.contents))
+
+			if(!is_type_in_list(AM, protected_objects)) continue
+
+			if(AM.on_destroyed)
+				AM.on_destroyed.Add(src, "item_destroyed")
 
 /area/vault/supermarket/shop/Exited(atom/movable/AM, atom/newloc)
 	..()
@@ -136,10 +153,12 @@ var/list/shop_prices = list( //Cost in space credits
 	items.Remove(I)
 	I.name = initial(I.name)
 
-/area/vault/supermarket/shop/proc/update_items()
+/area/vault/supermarket/shop/proc/item_destroyed()
 	for(var/obj/item/I in items)
 		if(isnull(I.loc) || I.gcDestroyed)
 			items.Remove(I)
+
+	on_theft()
 
 /area/vault/supermarket/shop/proc/on_theft()
 	if(lockdown)
@@ -156,7 +175,7 @@ var/list/shop_prices = list( //Cost in space credits
 		spawn()
 			S.close()
 
-	for(var/mob/living/simple_animal/hostile/retaliate/costco_guardian/C in all_contents)
+	for(var/mob/living/simple_animal/hostile/costco_guardian/C in all_contents)
 		C.Retaliate()
 
 	src.firealert()
@@ -165,6 +184,15 @@ var/list/shop_prices = list( //Cost in space credits
 ///////ROBOTS
 /mob/living/simple_animal/robot
 	unsuitable_atoms_damage = 0
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
 
 /mob/living/simple_animal/robot/Die()
 	..()
@@ -178,12 +206,12 @@ var/list/shop_prices = list( //Cost in space credits
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "toddler"
 
-	invisibility = 0
+	invisibility = INVISIBILITY_MAXIMUM
 
 /obj/effect/costco_entrance/Crossed(atom/movable/AM)
 	if(isliving(AM))
 		spawn(1)
-			for(var/cdir in cardinal)
+			for(var/cdir in alldirs)
 				for(var/mob/living/simple_animal/robot/robot_greeter/G in get_step(src, cdir))
 					G.greet(AM)
 
@@ -201,29 +229,52 @@ var/list/shop_prices = list( //Cost in space credits
 	faction = "costco"
 
 	var/list/directional_responses = list(
-	NORTH = "Welcome to Costco. I love you.",
-	SOUTH = "Thank you for shopping at Costco, come again.",
+	"1" = "Welcome to Costco. I love you.",
+	"2" = "Thank you for shopping at Costco, come again.",
 	)
-
-/mob/living/simple_animal/robot/robot_greeter/Die()
-	say("Vaae-#@ism is forbieeen at aostAo. Your aAAount will be terminated. Aonnection to aostAo mainframe lost... Self-destructing in 5... 4... 3...")
-	say("2... 1...")
-
-	spawn(3)
-		..()
 
 /mob/living/simple_animal/robot/robot_greeter/warner
 	name = "WarnBot"
 	desc = "Don't say you weren't warned."
 
+	icon_state = "maximillion"
+
 	directional_responses = list(
-	NORTH = "Please don't attempt to commit any crimes while in Costco. Any attempts of theft or vandalism will result in lockdown and termination.",
-	SOUTH = "Are you sure you didn't forget to pay for anything? Possessing a stolen item when leaving Costco is grounds for immediate termination.",
+	"1" = "Please don't attempt to commit any crimes while in Costco. Any attempts of theft or vandalism will result in lockdown and termination.",
+	"2" = "Are you sure you didn't forget to pay for anything? Possessing a stolen item when leaving Costco is grounds for immediate termination.",
 	)
 
 /mob/living/simple_animal/robot/robot_greeter/proc/greet(var/atom/movable/AM)
-	if(directional_responses.Find(AM.dir))
-		say(directional_responses[AM.dir])
+	if(directional_responses.Find("[AM.dir]"))
+		say(directional_responses["[AM.dir]"])
+
+/mob/living/simple_animal/robot/robot_greeter/informer
+	name = "RulesBot"
+	desc = "To tell you the rules."
+
+	directional_responses = list("1" = "Hey! It looks like you're new here. Let me tell you the rules!")
+
+	var/list/rules = list(
+	"Here are the rules of Costco, customer. Breaking any of them will result in termination of you and your collaborators.",
+	"Rule number one: The customer is never right.",
+	"Rule number two: Damaging, or attempting to damage any Costco property will result in your termination. Items bought in the shopping area are not Costco property.",
+	"Rule number three: Leaving the shopping area with unpaid items will result in your termination. ",
+	"Rule number four: Unless you are a Costco employee with level 5 access, attempting to access secure areas will result in your termination.",
+	"That's it! Just remember these four rules, and as long as you don't break any of them, your experience at Costco will be top-notch!",
+	)
+
+	var/last_rules = 0
+
+/mob/living/simple_animal/robot/robot_greeter/informer/attack_hand(mob/user)
+	if((user.a_intent == I_HELP) && world.time > last_rules + ((rules.len+1) SECONDS))
+		last_rules = world.time
+
+		spawn()
+			for(var/i = 1 to rules.len)
+				say(rules[i])
+				sleep(10)
+	else
+		return ..()
 
 /mob/living/simple_animal/robot/robot_cashier
 	name = "Cashier"
@@ -272,10 +323,11 @@ var/list/shop_prices = list( //Cost in space credits
 			if(found_items.len > 0)
 				if(price > 0)
 					if(loaded_cash == 0)
-						say("[found_items.len] items, that will be $[price].00 space credits or [max(rand(0.1,9.9)*rand(0.1,9999.99),1)] bitcoins. Please insert cash or a check into the glowing cash slot.") //hehe
-						visible_message("<span class='info'>\The [src]'s cash slot rapidly flashes.</span>")
+						say("[found_items.len] items, that will be $[price].00 space credits or [rand(0.1, 9999999.9)] bitcoins. Please insert cash or a check into the cash slot.")
+						visible_message("<span class='info'>\The [src]'s cash slot flashes.</span>")
 					else if(loaded_cash < price)
-						say("[found_items.len] items, that will be $[price].00 space credits or [max(rand(0.1,9.9)*rand(0.1,9999.99),1)] bitcoins. Currently you only have [loaded_cash] credits inserted. Please insert more cash into the glowing cash slot.")
+						say("[found_items.len] items, that will be $[price].00 space credits or [rand(0.1, 9999999.9)] bitcoins. Currently you only have [loaded_cash] credits inserted. Please insert more money or a check into the cash slot.")
+						visible_message("<span class='info'>\The [src]'s cash slot flashes.</span>")
 					else
 						say("[found_items.len] items for $[price].00 space credits. Change: $[loaded_cash - price].00 space credits. Thank you for shopping at Costco!")
 						for(var/obj/item/I in found_items)
@@ -311,7 +363,7 @@ var/list/shop_prices = list( //Cost in space credits
 	else
 		return ..()
 
-/mob/living/simple_animal/hostile/retaliate/costco_guardian
+/mob/living/simple_animal/hostile/costco_guardian
 	name = "Costco MERC-Bot"
 	desc = "Equipped with a ballistic weapon and a melee range shocker that is powerful enough to knock out a mega goliath through three layers of protection, this EMP-proof bot is not to be messed around with."
 
@@ -339,21 +391,38 @@ var/list/shop_prices = list( //Cost in space credits
 	casingtype = /obj/item/ammo_casing/a357
 
 	unsuitable_atoms_damage = 0
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
 
 	faction = "costco"
 
-/mob/living/simple_animal/hostile/retaliate/costco_guardian/New()
+	var/alert_on_movement = 1 //If moved, trigger an alert and become agressive
+
+/mob/living/simple_animal/hostile/costco_guardian/New()
 	..()
 
 	overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-securitron"))
 
-/mob/living/simple_animal/hostile/retaliate/costco_guardian/Die()
+/mob/living/simple_animal/hostile/costco_guardian/Die()
 	..()
 
 	robogibs(get_turf(src))
 	qdel(src)
 
-/mob/living/simple_animal/hostile/retaliate/costco_guardian/Retaliate()
+/mob/living/simple_animal/hostile/costco_guardian/Move()
+	if(alert_on_movement && !canmove)
+		Retaliate()
+
+	..()
+
+/mob/living/simple_animal/hostile/costco_guardian/proc/Retaliate()
 	if(timestopped)
 		spawn(5)
 			canmove = 1
@@ -367,21 +436,16 @@ var/list/shop_prices = list( //Cost in space credits
 			var/phrase = pick("Costco law was broken. The punishment is death.", "Costco law is above everything. Prepare to die.", "Costco law is sacred. Die, heretic.", "Threat to Costco detected. Extermination protocol started.")
 			say(phrase)
 
-	var/area/vault/supermarket/shop/A = get_area(src)
+	var/area/vault/supermarket/A = get_area(src)
 	if(istype(A))
-		A.on_theft()
+		var/area/vault/supermarket/shop/AS = locate(/area/vault/supermarket/shop)
+		AS.on_theft()
 
-	..()
-
-/mob/living/simple_animal/hostile/retaliate/costco_guardian/attack_hand(mob/user)
+/mob/living/simple_animal/hostile/costco_guardian/secure_area/attack_hand(mob/user)
 	if(user.a_intent == I_HELP)
-		if(!enemies.Find(user) && !timestopped)
-			spawn(5)
-				say("For your safety, this area has been temporarily locked down due to crime. If you are innocent, you have nothing to fear. Please wait until Costco officials arrive.")
-			return 1
+		say("[user.gender == FEMALE ? "Miss" : "Sir"], only Costco employees with level 5 access may access this area. If you are a Costco employee, please show me your ID card.")
 	else
 		return ..()
-
 
 ///////SPAWNER
 /obj/map/spawner/supermarket
