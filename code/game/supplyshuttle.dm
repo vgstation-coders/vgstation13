@@ -375,6 +375,8 @@ var/list/mechtoys = list(
 		. = TRUE
 	else if (locate(/obj/effect/portal) in contents)//you crafty fuckers
 		. = TRUE
+	else if (locate(/obj/machinery/singularity) in contents) //22MAR16 the day the fun died
+		. = TRUE
 	else
 		. = FALSE
 

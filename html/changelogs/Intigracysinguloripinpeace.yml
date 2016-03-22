@@ -1,0 +1,4 @@
+author: Intigracy
+delete-after: True
+changes: 
+- rscdel: "You can't send singularities on the supply shuttle anymore. Sorry."
