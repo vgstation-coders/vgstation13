@@ -307,6 +307,23 @@
 	corpseidjob = "Scientist"
 	corpseidaccess = "Scientist"
 
+/obj/effect/landmark/corpse/roboticist
+	name = "Roboticist"
+	corpseradio = /obj/item/device/radio/headset/headset_rob
+	corpseuniform = /obj/item/clothing/under/rank/roboticist
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/science
+	corpseshoes = /obj/item/clothing/shoes/white
+	corpseid = 1
+	corpseidjob = "Roboticist"
+	corpseidaccess = "Roboticist"
+
+/obj/effect/landmark/corpse/roboticist/costco
+	corpseidjob = "Costco Roboticist"
+	generate_random_mob_name = 1
+	generate_random_appearance = 1
+	brute_dmg = 100
+	toxin_dmg = 6
+
 /obj/effect/landmark/corpse/miner
 	corpseradio = /obj/item/device/radio/headset/headset_mining
 	corpseuniform = /obj/item/clothing/under/rank/miner
