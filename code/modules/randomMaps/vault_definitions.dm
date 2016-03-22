@@ -33,3 +33,7 @@
 
 /datum/vault/spacegym
 	map_name = "spacegym"
+
+/datum/vault/research
+	map_name = "research_facility"
+
