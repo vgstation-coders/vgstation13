@@ -1,6 +1,5 @@
-#define NOT_SYNDICUFFS 0
-#define SYNDICUFFS_ON_APPLY 1
-#define SYNDICUFFS_ON_REMOVE 2
+#define SYNDICUFFS_ON_APPLY 0
+#define SYNDICUFFS_ON_REMOVE 1
 
 /obj/item/weapon/handcuffs
 	name = "handcuffs"
@@ -22,8 +21,6 @@
 	var/cuffing_sound = 'sound/weapons/handcuffs.ogg'
 	var/dispenser = 0
 	var/breakouttime = 1200 //Deciseconds = 120s = 2 minutes
-	var/mode = NOT_SYNDICUFFS //Handled at this level, Syndicate Cuffs code
-	var/charge_detonated = 0
 
 /obj/item/weapon/handcuffs/attack(mob/living/carbon/C as mob, mob/user as mob)
 
@@ -79,7 +76,7 @@
 	return
 
 //Our inventory procs should be able to handle the following, but our inventory code is hot spaghetti bologni, so here we go
-/obj/item/weapon/handcuffs/proc/handcuffs_apply(mob/living/carbon/C as mob, mob/user as mob)
+/obj/item/weapon/handcuffs/proc/handcuffs_apply(mob/living/carbon/C, mob/user)
 
 	if(!istype(C)) //Sanity doesn't hurt, right ?
 		return
@@ -104,8 +101,7 @@
 				feedback_add_details("handcuffs", "H")
 			playsound(get_turf(src), cuffing_sound, 30, 1, -2)
 			O.process()
-			if(mode == SYNDICUFFS_ON_APPLY && !charge_detonated)
-				detonate(1)
+
 	else
 		var/obj/effect/equip_e/monkey/O = new /obj/effect/equip_e/monkey()
 		O.source = user
@@ -118,32 +114,43 @@
 		spawn()
 			playsound(get_turf(src), cuffing_sound, 30, 1, -2)
 			O.process()
-			if(mode == SYNDICUFFS_ON_APPLY && !charge_detonated)
-				detonate(1)
 
 /obj/item/weapon/handcuffs/proc/handcuffs_remove(var/mob/living/carbon/C)
 
-	if(mode == SYNDICUFFS_ON_REMOVE && !charge_detonated)
-		detonate(0) //This handles cleaning up the inventory already
-	else
-		C.handcuffed = null
-		C.update_inv_handcuffed()
+	C.handcuffed = null
+	C.update_inv_handcuffed()
 
 //Syndicate Cuffs. Disguised as regular cuffs, they are pretty explosive
 /obj/item/weapon/handcuffs/syndicate
 
-	mode = SYNDICUFFS_ON_APPLY
-	var/countdown_time = 30
+	var/countdown_time = 60 //Time to handcuff + 3 seconds
+	var/mode = SYNDICUFFS_ON_APPLY //Handled at this level, Syndicate Cuffs code
+	var/charge_detonated = 0
 
 /obj/item/weapon/handcuffs/syndicate/attack_self(mob/user)
 
+	mode = !mode
+
 	switch(mode)
-		if(SYNDICUFFS_ON_REMOVE)
-			mode = SYNDICUFFS_ON_APPLY
-			to_chat(user, "<span class='notice'>You pull the rotating arm back until you hear two clicks. \The [src] will detonate a few seconds after being applied.</span>")
 		if(SYNDICUFFS_ON_APPLY)
-			mode = SYNDICUFFS_ON_REMOVE
+			to_chat(user, "<span class='notice'>You pull the rotating arm back until you hear two clicks. \The [src] will detonate a few seconds after being applied.</span>")
+		if(SYNDICUFFS_ON_REMOVE)
 			to_chat(user, "<span class='notice'>You pull the rotating arm back until you hear one click. \The [src] will detonate when removed.</span>")
+
+/obj/item/weapon/handcuffs/syndicate/handcuffs_apply(mob/living/carbon/C, mob/user)
+
+	..()
+
+	if(mode == SYNDICUFFS_ON_APPLY && !charge_detonated)
+		detonate(1)
+
+/obj/item/weapon/handcuffs/syndicate/handcuffs_remove(mob/living/carbon/C)
+
+	if(mode == SYNDICUFFS_ON_REMOVE && !charge_detonated)
+		detonate(0) //This handles cleaning up the inventory already
+		return //Don't clean up twice, we don't want runtimes
+
+	..()
 
 //C4 and EMPs don't mix, will always explode at severity 1, and likely to explode at severity 2
 /obj/item/weapon/handcuffs/syndicate/emp_act(severity)
