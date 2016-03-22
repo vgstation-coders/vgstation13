@@ -20,6 +20,8 @@
 /area/vault/rust
 	requires_power = 1
 
+/area/vault/research
+
 /mob/living/simple_animal/hostile/monster/cyber_horror/quiet
 	speak_chance = 1 //shut the fuck up
 

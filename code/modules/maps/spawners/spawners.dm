@@ -821,6 +821,18 @@
 		/mob/living/simple_animal/hostile/giant_spider/hunter,
 		)
 
+/obj/map/spawner/mobs/medivault
+	name = "medivault spawner"
+	icon_state = "mob_medivault"
+	chance = 50
+	toSpawn = list(
+		/mob/living/simple_animal/hostile/monster/cyber_horror/Tajaran,
+		/mob/living/simple_animal/hostile/monster/cyber_horror,
+		/mob/living/simple_animal/hostile/necro/skeleton,
+		/mob/living/simple_animal/hostile/necro/zombie,
+		)
+
+
 // Robutts /////////////////////////////////////////////////////
 
 /obj/map/spawner/robot/any
