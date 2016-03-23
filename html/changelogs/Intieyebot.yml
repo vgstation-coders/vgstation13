@@ -1,0 +1,6 @@
+author: Intigracy
+delete-after: True
+changes: 
+- rscadd: "New borg sprites, meet the eyebot."
+- tweak: "The list where you choose your borg sprite is now alphabetized. Did the MoMMi one too while I was at it."
+- tweak: "You now get 8 tries to pick your borg sprite, up from 6. This system will hopefully be replaced by a menu where you see previews of the borgs."
