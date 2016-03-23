@@ -250,27 +250,29 @@
 	switch(modtype)
 		if("Standard")
 			module = new /obj/item/weapon/robot_module/standard(src)
-			module_sprites["Basic"] = "robot_old"
+			module_sprites["#11"] = "servbot"
 			module_sprites["Android"] = "droid"
+			module_sprites["Basic"] = "robot_old"
 			module_sprites["Default"] = "robot"
+			module_sprites["Eyebot-SD"] = "eyebotSD"
 			module_sprites["Marina-SD"] = "marinaSD"
 			module_sprites["Sleek"] = "sleekstandard"
-			module_sprites["#11"] = "servbot"
 			module_sprites["Spider"] = "spider-standard"
 			speed = 0
 
 		if("Service")
 			module = new /obj/item/weapon/robot_module/butler(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_service(radio))
-			module_sprites["Waitress"] = "Service"
-			module_sprites["Kent"] = "toiletbot"
-			module_sprites["Bro"] = "Brobot"
-			module_sprites["Rich"] = "maximillion"
-			module_sprites["Default"] = "Service2"
-			module_sprites["R2-D2"] = "r2d2"
-			module_sprites["Marina-SV"] = "marinaSV"
-			module_sprites["Sleek"] = "sleekservice"
 			module_sprites["#27"] = "servbot-service"
+			module_sprites["Bro"] = "Brobot"
+			module_sprites["Default"] = "Service2"
+			module_sprites["Eyebot-SV"] = "eyebotSV"
+			module_sprites["Kent"] = "toiletbot"
+			module_sprites["Marina-SV"] = "marinaSV"
+			module_sprites["Rich"] = "maximillion"
+			module_sprites["R2-D2"] = "r2d2"
+			module_sprites["Sleek"] = "sleekservice"
+			module_sprites["Waitress"] = "Service"
 			speed = 0
 
 		if("Miner")
@@ -278,13 +280,14 @@
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_cargo(radio))
 			if(camera && "Robots" in camera.network)
 				camera.network.Add("MINE")
-			module_sprites["Basic"] = "Miner_old"
+			module_sprites["#31"] = "servbot-miner"
 			module_sprites["Advanced Droid"] = "droid-miner"
-			module_sprites["Treadhead"] = "Miner"
-			module_sprites["Wall-A"] = "wall-a"
+			module_sprites["Basic"] = "Miner_old"
+			module_sprites["Eyebot-MN"] = "eyebotMN"
 			module_sprites["Marina-MN"] = "marinaMN"
 			module_sprites["Sleek"] = "sleekminer"
-			module_sprites["#31"] = "servbot-miner"
+			module_sprites["Treadhead"] = "Miner"
+			module_sprites["Wall-A"] = "wall-a"
 			speed = -1
 
 		if("Medical")
@@ -292,27 +295,29 @@
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_med(radio))
 			if(camera && "Robots" in camera.network)
 				camera.network.Add("Medical")
-			module_sprites["Basic"] = "Medbot"
+			module_sprites["#17"] = "servbot-medi"
 			module_sprites["Advanced Droid"] = "droid-medical"
+			module_sprites["Basic"] = "Medbot"
+			module_sprites["Eve"] = "eve"
+			module_sprites["Eyebot-MD"] = "eyebotMD"
+			module_sprites["Marina-MD"] = "marina"
 			module_sprites["Needles"] = "medicalrobot"
 			module_sprites["Standard"] = "surgeon"
-			module_sprites["Marina-MD"] = "marina"
-			module_sprites["Eve"] = "eve"
 			module_sprites["Sleek"] = "sleekmedic"
-			module_sprites["#17"] = "servbot-medi"
 			speed = -2
 
 		if("Security")
 			module = new /obj/item/weapon/robot_module/security(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
+			module_sprites["#9"] = "servbot-sec"
 			module_sprites["Basic"] = "secborg"
-			module_sprites["Red Knight 2.0"] = "sleeksecurity"
 			module_sprites["Black Knight"] = "securityrobot"
 			module_sprites["Bloodhound"] = "bloodhound"
-			module_sprites["Securitron"] = "securitron"
+			module_sprites["Eyebot-SC"] = "eyebotSC"
 			module_sprites["Marina-SC"] = "marinaSC"
-			module_sprites["#9"] = "servbot-sec"
-			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>")
+			module_sprites["Red Knight 2.0"] = "sleeksecurity"
+			module_sprites["Securitron"] = "securitron"
+			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset.</b></big></span>")
 			speed = 0
 
 		if("Engineering")
@@ -320,38 +325,40 @@
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_eng(radio))
 			if(camera && "Robots" in camera.network)
 				camera.network.Add("Engineering")
-			module_sprites["Basic"] = "Engineering"
+			module_sprites["#25"] = "servbot-engi"
 			module_sprites["Antique"] = "engineerrobot"
+			module_sprites["Basic"] = "Engineering"
 			module_sprites["Engiseer"] = "Engiseer"
+			module_sprites["Eyebot-EN"] = "eyebotEN"
 			module_sprites["Landmate"] = "landmate"
-			module_sprites["Wall-E"] = "wall-e"
 			module_sprites["Marina-EN"] = "marinaEN"
 			module_sprites["Sleek"] = "sleekengineer"
-			module_sprites["#25"] = "servbot-engi"
+			module_sprites["Wall-E"] = "wall-e"
 			speed = -2
 
 		if("Janitor")
 			module = new /obj/item/weapon/robot_module/janitor(src)
+			module_sprites["#29"] = "servbot-jani"
 			module_sprites["Basic"] = "JanBot2"
+			module_sprites["Eyebot-JN"] = "eyebotJN"
+			module_sprites["HAN-D"] = "han-d"
+			module_sprites["Marina-JN"] = "marinaJN"
 			module_sprites["Mopbot"]  = "janitorrobot"
 			module_sprites["Mop Gear Rex"] = "mopgearrex"
 			module_sprites["Mechaduster"] = "mechaduster"
-			module_sprites["HAN-D"] = "han-d"
-			module_sprites["Marina-JN"] = "marinaJN"
 			module_sprites["Sleek"] = "sleekjanitor"
-			module_sprites["#29"] = "servbot-jani"
 			speed = -1
 
 		if("Combat")
 			module = new /obj/item/weapon/robot_module/combat(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
-			module_sprites["Combat Android"] = "droid-combat"
+			module_sprites["#41"] = "servbot-combat"
 			module_sprites["Bladewolf"] = "bladewolf"
 			module_sprites["Bladewolf Mk2"] = "bladewolfmk2"
-			module_sprites["Mr. Gutsy"] = "mrgutsy"
+			module_sprites["Combat Android"] = "droid-combat"
 			module_sprites["Marina-CB"] = "marinaCB"
+			module_sprites["Mr. Gutsy"] = "mrgutsy"
 			module_sprites["Squadbot"] = "squats"
-			module_sprites["#41"] = "servbot-combat"
 			speed = -1
 
 	//Custom_sprite check and entry
@@ -366,7 +373,7 @@
 		status_flags &= ~CANPUSH
 
 	if(!forced_module)
-		choose_icon(6, module_sprites)
+		choose_icon(8, module_sprites)
 	else
 		var/picked  = pick(module_sprites)
 		icon_state = module_sprites[picked]
