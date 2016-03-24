@@ -103,7 +103,8 @@
 	processing_objects.Remove(src)
 	owner = null
 
-	L.trigger = null
+	if(L && (L.trigger == src))
+		L.trigger = null
 	L = null
 
 	..()

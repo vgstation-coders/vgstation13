@@ -183,6 +183,9 @@ var/list/shop_prices = list( //Cost in space credits
 
 ///////ROBOTS
 /mob/living/simple_animal/robot
+	a_intent = I_HURT
+	anchored = 1
+
 	unsuitable_atoms_damage = 0
 	min_oxy = 0
 	max_oxy = 0
@@ -193,6 +196,12 @@ var/list/shop_prices = list( //Cost in space credits
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
+
+/mob/living/simple_animal/robot/New()
+	..()
+
+	if(icon == 'icons/mob/robots.dmi')
+		overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-[src.icon_state]"))
 
 /mob/living/simple_animal/robot/Die()
 	..()
@@ -362,6 +371,97 @@ var/list/shop_prices = list( //Cost in space credits
 			to_chat(user, "<span class='info'>You insert [money_add] space credits into \the [src]. \The [src] now holds [loaded_cash] space credits.</span>")
 	else
 		return ..()
+
+
+///FOOD SAMPLES BOT
+//Voice-activated, spawns food samples when its name is called
+
+
+/mob/living/simple_animal/robot/food_samples //A bot that generates 1u nutriment food samples
+	name = "Food Sample Bot"
+
+	var/id_tag = "fucktard" //When the robot hears this, it generates a food sample
+	var/id_num = 69
+
+	desc = "A robot that creates free food samples. It's voice activated; to receive a sample you must call it by its ID number or tag."
+	flags = HEAR_ALWAYS
+
+	icon = 'icons/mob/robots.dmi'
+	icon_state = "booty-red"
+
+	var/spawn_sample_on_creation = 1
+	var/obj/item/weapon/reagent_containers/food/snacks/food_type = /obj/item/weapon/reagent_containers/food/snacks/faggot //Type of the food
+	var/food_vars = list( //Modified vars
+		name = "Faggot's Delight",
+	)
+
+	var/last_spawned_sample = 0
+	var/cooldown_between_samples = 5 SECONDS
+
+/mob/living/simple_animal/robot/food_samples/examine(mob/user)
+	..()
+
+	to_chat(user, "Its ID tag is \"[id_tag]\", and its ID number is \"[id_num]\".")
+
+/mob/living/simple_animal/robot/food_samples/New()
+	var/list/all_food_types = (existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) - typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable) - /obj/item/weapon/reagent_containers/food/snacks/slimesoup - typesof(/obj/item/weapon/reagent_containers/food/snacks/sweet))
+	food_type = pick(all_food_types)
+
+	var/name_preffix = "[random_name(pick(MALE, FEMALE), (prob(30) ? "vox" : "human"))]'s "
+
+	name = "[name_preffix][name]"
+	id_tag = pick(first_names_female)
+	id_num = rand(1,1000)
+
+	icon_state = "booty-[pick("red","white","green","flower","yellow","blue")]"
+
+	if(prob(50))
+		name_preffix = "[name_preffix][pick("delicious", "tasty", "delightful", "appetizing", "mouth-watering", "unique", "authentic", "natural", "real", "satisfactory", "enjoyable", "genuine", "[pick("double", "triple", "quadruple")]-layered")] "
+
+	var/food_color = rgb(255,255,255)
+	if(prob(80))
+		food_color = rgb(rand(0,255), rand(0,255), rand(0,255))
+
+	var/matrix/M = matrix()
+
+	food_vars = list(
+		name = "[name_preffix][initial(food_type.name)] sample",
+		desc = "A tiny sample.",
+		color = food_color,
+		transform = M.Scale(0.75, 0.75)
+	)
+
+	if(spawn_sample_on_creation)
+		spawn(10)
+			spawn_sample(get_step(src, src.dir), 0)
+
+	..()
+
+/mob/living/simple_animal/robot/food_samples/Hear(datum/speech/speech, rendered_speech="")
+	..()
+
+	if(speech.speaker != src && (findtext(speech.message, "[id_tag]") || findtext(speech.message, "[id_num]")))
+		if(!spawn_sample(get_step(src, src.dir)))
+			say("I can't generate a sample right now. Please wait a few seconds, and try again!")
+
+/mob/living/simple_animal/robot/food_samples/proc/spawn_sample(turf/new_loc, be_loud = 1, force = 0)
+	if(!(force || (world.time > last_spawned_sample + cooldown_between_samples)))
+		return
+
+	var/obj/item/weapon/reagent_containers/food/snacks/S = new food_type(new_loc)
+
+	for(var/D in food_vars)
+		S.vars[D] = food_vars[D]
+
+	if(S.reagents)
+		S.reagents.remove_any(S.reagents.total_volume * 0.8) //Samples have 20% of actual reagents
+
+	last_spawned_sample = world.time
+
+	if(be_loud)
+		say("Enjoy your [S.name]!")
+
+	return 1
 
 /mob/living/simple_animal/hostile/costco_guardian
 	name = "Costco MERC-Bot"
