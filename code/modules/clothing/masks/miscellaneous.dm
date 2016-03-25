@@ -83,9 +83,11 @@
 	desc = "A mask made of soft vinyl and latex, representing the head of a horse."
 	icon_state = "horsehead"
 	item_state = "horsehead"
-	flags = FPRINT
+	flags = FPRINT| MASKINTERNALS
 	body_parts_covered = FACE
 	w_class = 2
+	gas_transfer_coefficient = 0.10
+	permeability_coefficient = 0.50
 	var/voicechange = 0
 	siemens_coefficient = 0.9
 
