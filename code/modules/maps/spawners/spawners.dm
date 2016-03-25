@@ -15,16 +15,20 @@
 	var/list/toSpawn = list()
 
 /obj/map/spawner/New()
-	var/obj/spawned
 	for(src.amount,src.amount,src.amount--)
 		if(prob(src.chance))
-			spawned = pick(src.toSpawn)
-			spawned = new spawned(src.loc)
-			if(src.jiggle)
-				spawned.pixel_x = rand(-src.jiggle,src.jiggle)
-				spawned.pixel_y = rand(-src.jiggle,src.jiggle)
+			CreateItem(pick(src.toSpawn))
 	qdel(src)
 	return
+
+/obj/map/spawner/proc/CreateItem(new_item_type)
+	var/obj/spawned = new new_item_type(src.loc)
+
+	if(src.jiggle)
+		spawned.pixel_x = rand(-src.jiggle, src.jiggle)
+		spawned.pixel_y = rand(-src.jiggle, src.jiggle)
+
+	return spawned
 
 //**************************************************************
 // Subtypes ////////////////////////////////////////////////////

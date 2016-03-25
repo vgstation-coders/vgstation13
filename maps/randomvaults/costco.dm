@@ -36,26 +36,27 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/glue = 500,
 /obj/item/weapon/chisel = 20,
 /obj/item/weapon/scythe = 50,
-/obj/item/bluespace_crystal/flawless = 300,
-/obj/item/bluespace_crystal = 100,
+/obj/item/bluespace_crystal/flawless = 10000,
+/obj/item/bluespace_crystal/artificial = 1000,
+/obj/item/bluespace_crystal = 750,
 /obj/item/device/assembly_frame = 50,
 /obj/item/device/camera = 30,
 /obj/item/device/flash = 20,
 /obj/item/device/robotanalyzer = 5,
 /obj/item/device/soundsynth = 20,
-/obj/item/device/transfer_valve = 350, //What could go wrong
-/obj/item/device/violin = 200,
-/obj/item/device/maracas = 10,
-/obj/item/device/aicard = 30,
+/obj/item/device/transfer_valve = 500, //What could go wrong
+/obj/item/device/violin = 80,
+/obj/item/device/maracas = 5,
+/obj/item/device/aicard = 50,
 /obj/item/device/soulstone = 400, //What could go wrong
-/obj/item/device/taperecorder = 50,
+/obj/item/device/taperecorder = 30,
 /obj/item/device/rcd/tile_painter = 30,
 /obj/item/device/rcd/matter/engineering = 30,
 /obj/item/device/paicard = 10,
-/obj/item/device/megaphone = 50,
+/obj/item/device/megaphone = 25,
 /obj/item/device/hailer = 10,
 /obj/item/broken_device = 1,
-/obj/item/toy/balloon = 70,
+/obj/item/toy/balloon = 1,
 /obj/item/toy/syndicateballoon = 700,
 /obj/item/weapon/am_containment = 60,
 /obj/item/weapon/cane = 5,
@@ -65,8 +66,16 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/resonator = 100,
 /obj/item/weapon/gun/energy/kinetic_accelerator = 80,
 /obj/item/device/modkit/aeg_parts = 99,
+/obj/item/device/modkit/gold_rig = 50,
+/obj/item/device/modkit/storm_rig = 50,
 /obj/item/clothing/accessory/medal/gold/captain = 1500,
 /obj/item/device/radio/headset/headset_earmuffs = 125,
+/obj/item/device/detective_scanner = 200,
+/obj/item/device/mass_spectrometer/adv = 150,
+/obj/item/device/mass_spectrometer = 100,
+/obj/item/device/mining_scanner = 15,
+/obj/item/device/mobcapsule = 200,
+/obj/item/weapon/solder = 10,
 
 
 //weapons
@@ -78,15 +87,23 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/spear/wooden = 200,
 /obj/item/weapon/spear = 30,
 /obj/item/weapon/crossbow = 100,
-/obj/item/weapon/hatchet = 50,
+/obj/item/weapon/hatchet = 20,
 /obj/item/weapon/harpoon = 125,
-/obj/item/weapon/boomerang = 30,
 /obj/item/weapon/boomerang/toy = 5,
+/obj/item/weapon/boomerang = 30,
 /obj/item/weapon/batteringram = 1000,
 /obj/item/weapon/shield/riot = 250,
 
 //No guns sorry
 )
+
+var/list/circuitboard_prices = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Costco
+
+var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/golem) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - list(/obj/item/clothing/suit/space/rig/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman) //What in the world could go wrong
+
+/area/vault/supermarket
+	name = "Costco"
+	flags = NO_PORTALS
 
 /area/vault/supermarket/entrance
 	name = "Costco Entrance"
@@ -106,10 +123,17 @@ var/list/shop_prices = list( //Cost in space credits
 	icon_state = "red"
 
 /area/vault/supermarket/shop/proc/initialize()
+	//Initialize prices
+	for(var/C in circuitboard_prices)
+		circuitboard_prices[C] = 75
+	for(var/C in clothing_prices)
+		clothing_prices[C] = 150
+
 	spawn()
+		/*
 		looping:
 			for(var/obj/item/I in contents)
-				for(var/type in shop_prices)
+				for(var/type in shop_prices + circuitboard_prices + clothing_prices)
 					if(istype(I, type))
 						I.name = "[I.name] ($[shop_prices[type]])"
 						I.on_destroyed.Add(src, "item_destroyed") //Only trigger alarm when an item for sale is destroyed
@@ -117,6 +141,7 @@ var/list/shop_prices = list( //Cost in space credits
 						items[I] = shop_prices[type]
 
 						continue looping
+		*/ //This is handled by spawners now
 
 		var/area/vault/supermarket/entrance/E = locate(/area/vault/supermarket/entrance)
 		var/list/protected_objects = list(
@@ -261,14 +286,14 @@ var/list/shop_prices = list( //Cost in space credits
 	name = "RulesBot"
 	desc = "To tell you the rules."
 
-	directional_responses = list("1" = "Hey! It looks like you're new here. Let me tell you the rules!")
+	directional_responses = list("1" = "New customer! Are you acquainted with Costco's rules? Not following them will land you into deep trouble.")
 
 	var/list/rules = list(
-	"Here are the rules of Costco, customer. Breaking any of them will result in termination of you and your collaborators.",
-	"Rule number one: The customer is never right.",
-	"Rule number two: Damaging, or attempting to damage any Costco property will result in your termination. Items bought in the shopping area are not Costco property.",
-	"Rule number three: Leaving the shopping area with unpaid items will result in your termination. ",
-	"Rule number four: Unless you are a Costco employee with level 5 access, attempting to access secure areas will result in your termination.",
+	"Breaking any of these rules will result in termination of you and all of your suspected cooperators.",
+	"Rule number one: The customer is never right here.",
+	"Rule number two: Do not break, eat or otherwise damage any property of Costco. Food samples are an exception - eat them all you want.",
+	"Rule number three: Do not leave the shopping area with unpaid items, and do not attempt to remove any unpaid item from the shopping area. The only exception is the changing room - you are allowed to bring unpaid clothing into the changing room to try it on.",
+	"Rule number four: Do not attempt to access secure areas, unless you are a level 5 Costco employee.",
 	"That's it! Just remember these four rules, and as long as you don't break any of them, your experience at Costco will be top-notch!",
 	)
 
@@ -348,7 +373,7 @@ var/list/shop_prices = list( //Cost in space credits
 							dispense_cash(loaded_cash - price, input_loc)
 							loaded_cash = 0
 				else
-					say("[found_items.len] items , free of charge. Thank you for shopping at Costco!")
+					say("[found_items.len] items, free of charge. Thank you for shopping at Costco!")
 					for(var/obj/item/I in found_items)
 						shop.purchased(I)
 			else
@@ -550,11 +575,42 @@ var/list/shop_prices = list( //Cost in space credits
 ///////SPAWNER
 /obj/map/spawner/supermarket
 	name = "Costco spawner"
+	amount = 4
+	chance = 50
+	jiggle = 10
+
+/obj/map/spawner/supermarket/CreateItem(new_item_type)
+	var/obj/item/I = ..()
+
+	spawn()
+		if(toSpawn[new_item_type])
+			var/area/vault/supermarket/shop/S = locate(/area/vault/supermarket/shop)
+			var/price = toSpawn[new_item_type]
+
+			I.name = "[I.name] ($[price])"
+			I.on_destroyed.Add(S, "item_destroyed") //Only trigger alarm when an item for sale is destroyed
+
+			S.items[I] = price
+
+	return I
+
+/obj/map/spawner/supermarket/tools
 	icon_state = "ass_tools"
 	amount = 4
 	chance = 50
 	jiggle = 10
 
-/obj/map/spawner/supermarket/New()
+/obj/map/spawner/supermarket/tools/New()
 	toSpawn = shop_prices
+	return ..()
+
+/obj/map/spawner/supermarket/circuits/New()
+	toSpawn = circuitboard_prices
+	return ..()
+
+/obj/map/spawner/supermarket/clothing
+	amount = 6
+
+/obj/map/spawner/supermarket/clothing/New()
+	toSpawn = clothing_prices
 	return ..()

@@ -69,6 +69,9 @@
 
 	M.iscorpse = 1
 
+	M.pixel_x = src.pixel_x
+	M.pixel_y = src.pixel_y
+
 	if(generate_random_appearance)
 		M.dna.ResetSE()
 		M.dna.ResetUI()
@@ -185,6 +188,7 @@
 				W.access = list()
 		if(corpseidjob)
 			W.assignment = corpseidjob
+			W.name = "[W.name] ([W.assignment])"
 		W.registered_name = M.real_name
 		M.equip_to_slot_or_del(W, slot_wear_id)
 
