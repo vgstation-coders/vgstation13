@@ -511,16 +511,3 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/cortical
 	name = "cortical stack"
 	desc = "A fist-sized mass of biocircuits and chips."
-
-//Cancer, right now adminbus only
-//When triggered, spawns a small tumor in someone's body. Grows over time, giving worse and worse symptoms, until metastatis, where widespread cancer growth massacres the target
-//Cancer can
-
-#define CANCER_STAGE_BENIGN 1 //Not 100 % medically correct, but we'll assume benign cancer is the first stage for our purposes, and that cancer never fails to worsen
-#define CANCER_STAGE_TUMOR 2 //Cancer starts to have effects depending on what the affected limb is
-#define CANCER_STAGE_METASTATIS 3 //Cancer has maximal effects, starts to grow out of control breaking the related organ, and can start "colonizing" other limbs
-
-/obj/item/weapon/implant/cancer
-	name = "tumor"
-	desc = "A mass of cancerous cells, growing without limits. The cost of immortality."
-	icon_state = "cancer"
