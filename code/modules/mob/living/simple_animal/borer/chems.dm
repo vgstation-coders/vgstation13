@@ -68,9 +68,11 @@
 
 /datum/borer_chem/arm/bicaridine
 	name = "bicaridine"
+	cost = 2
 
 /datum/borer_chem/arm/kelotane
 	name = "kelotane"
+	cost = 2
 
 /datum/borer_chem/leg/hyperzine
 	name = "hyperzine"
@@ -146,6 +148,18 @@
 /datum/borer_chem/arm/unlockable/creatine
 	name = "creatine"
 	cost = 2
+
+/datum/borer_chem/arm/unlockable/cafe_latte
+	name = "cafe_latte"
+	cost = 1
+
+/datum/borer_chem/arm/unlockable/hamserum
+	name = "hamserum"
+	cost = 100
+
+/datum/borer_chem/arm/unlockable/iron
+	name = "iron"
+	cost = 1
 
 /datum/borer_chem/leg/unlockable/bustanut
 	name = "bustanut"

@@ -69,6 +69,7 @@
 /datum/unlockable/borer/head/chem_unlock/unlock_action()
 	var/datum/borer_chem/C = new chem_type()
 	borer.avail_chems[C.name]=C
+	borer.unlocked_chems_head[C.name]=C
 	to_chat(borer, "<span class='info'>You learned how to secrete [C.name]!</span>")
 
 /datum/unlockable/borer/head/chem_unlock/peridaxon
@@ -132,6 +133,7 @@
 /datum/unlockable/borer/chest/chem_unlock/unlock_action()
 	var/datum/borer_chem/C = new chem_type()
 	borer.avail_chems[C.name]=C
+	borer.unlocked_chems_chest[C.name]=C
 	to_chat(borer, "<span class='info'>You learned how to secrete [C.name]!</span>")
 
 /datum/unlockable/borer/chest/chem_unlock/nutriment
@@ -193,6 +195,7 @@
 /datum/unlockable/borer/arm/chem_unlock/unlock_action()
 	var/datum/borer_chem/C = new chem_type()
 	borer.avail_chems[C.name]=C
+	borer.unlocked_chems_arm[C.name]=C
 	to_chat(borer, "<span class='info'>You learned how to secrete [C.name]!</span>")
 
 /datum/unlockable/borer/arm/chem_unlock/creatine
@@ -203,6 +206,33 @@
 	time = 60 SECONDS
 	chem_type = /datum/borer_chem/arm/unlockable/creatine
 
+/datum/unlockable/borer/arm/chem_unlock/cafe_latte
+	id = "cafe_latte"
+	name = "Latte Secretion"
+	desc = "Learn how to synthesize latte."
+	cost = 50
+	time = 20 SECONDS
+	chem_type = /datum/borer_chem/arm/unlockable/cafe_latte
+	prerequisites=list("bone_sword")
+
+/datum/unlockable/borer/arm/chem_unlock/hamserum
+	id = "hamserum"
+	name = "Ham Serum Secretion"
+	desc = "Learn how to synthesize electromagnetic ham serum."
+	cost = 150
+	time = 60 SECONDS
+	chem_type = /datum/borer_chem/arm/unlockable/hamserum
+	prerequisites=list("bone_shield")
+
+/datum/unlockable/borer/arm/chem_unlock/iron
+	id = "iron"
+	name = "Iron Secretion"
+	desc = "Learn how to synthesize iron."
+	cost = 50
+	time = 20 SECONDS
+	chem_type = /datum/borer_chem/arm/unlockable/iron
+	prerequisites=list("repair_bone")
+
 ///////////////Leg Unlocks//////////////////////////
 
 /datum/unlockable/borer/leg/chem_unlock
@@ -212,6 +242,7 @@
 /datum/unlockable/borer/leg/chem_unlock/unlock_action()
 	var/datum/borer_chem/C = new chem_type()
 	borer.avail_chems[C.name]=C
+	borer.unlocked_chems_leg[C.name]=C
 	to_chat(borer, "<span class='info'>You learned how to secrete [C.name]!</span>")
 
 /datum/unlockable/borer/leg/chem_unlock/bustanut
@@ -377,6 +408,33 @@
 				domutcheck(host,null,MUTCHK_FORCED)
 				host.update_mutations()
 				break
+
+/datum/unlockable/borer/chest/gene_unlock/strong
+	id = "strong"
+	name = "Increase Strength"
+	desc = "Improves your host's musculature, increasing your host's strength."
+	cost = 200
+	time = 1 MINUTES
+	gene_name = "STRONG"
+	prerequisites=list("bone_sword")
+
+/datum/unlockable/borer/chest/gene_unlock/regeneration
+	id = "regeneration"
+	name = "Regeneration"
+	desc = "Modifies your host's immune system to provide a small amount of damage regeneration."
+	cost = 200
+	time = 1 MINUTES
+	gene_name = "REGENERATE"
+	prerequisites=list("bone_shield")
+
+/datum/unlockable/borer/chest/gene_unlock/shock_immunity
+	id = "shock_immunity"
+	name = "Shock Immunity"
+	desc = "Adjusts your host's skin to be more resistant to electrical currents."
+	cost = 200
+	time = 1 MINUTES
+	gene_name = "SHOCKIMMUNITY"
+	prerequisites=list("repair_bone")
 
 ///////////////Leg Unlocks////////////////////
 
@@ -554,6 +612,71 @@
 	time=5 SECONDS
 	verb_type = /obj/item/verbs/borer/attached/taste_blood
 	give_when_attached=1
+
+/datum/unlockable/borer/arm/verb_unlock/bone_sword
+	id="bone_sword"
+	name = "Bone Sword"
+	desc = "Learn how to expend chemicals constantly in order to form a large blade of bone for your host. Learning this will lock you into the Offense tree."
+	cost=100
+	time=30 SECONDS
+	verb_type = /obj/item/verbs/borer/attached_arm/bone_sword
+	give_when_attached=1
+	antirequisites=list("bone_shield","repair_bone")
+
+/datum/unlockable/borer/arm/verb_unlock/bone_hammer
+	id="bone_hammer"
+	name = "Bone Hammer"
+	desc = "Learn how to expend chemicals constantly in order to form a large, heavy mass of bone on your host's arm."
+	cost=200
+	time=1 MINUTES
+	verb_type = /obj/item/verbs/borer/attached_arm/bone_hammer
+	give_when_attached=1
+	prerequisites=list("bone_sword")
+
+/datum/unlockable/borer/arm/verb_unlock/bone_shield
+	id="bone_shield"
+	name = "Bone Shield"
+	desc = "Learn how to expend chemicals constantly in order to form a large shield of bone for your host. Learning this will lock you into the Defense tree."
+	cost=100
+	time=30 SECONDS
+	verb_type = /obj/item/verbs/borer/attached_arm/bone_shield
+	give_when_attached=1
+	antirequisites=list("bone_sword","repair_bone")
+
+/datum/unlockable/borer/arm/verb_unlock/bone_cocoon
+	id="bone_cocoon"
+	name = "Bone Cocoon"
+	desc = "Learn how to expend chemicals constantly in order to form a large protective cocoon of bone around your host."
+	cost=200
+	time=1 MINUTES
+	verb_type = /obj/item/verbs/borer/attached_arm/bone_cocoon
+	give_when_attached=1
+	prerequisites=list("bone_shield")
+
+/datum/unlockable/borer/arm/verb_unlock/repair_bone
+	id="repair_bone"
+	name = "Repair Bone"
+	desc = "Learn how to expend chemicals in order to repair bones in your host's arm. Learning this will lock you into the Utility tree."
+	cost=50
+	time=10 SECONDS
+	verb_type = /obj/item/verbs/borer/attached_arm/repair_bone
+	give_when_attached=1
+	antirequisites=list("bone_sword","bone_shield")
+
+/datum/unlockable/borer/arm/extend_o_arm_unlock
+	remove_on_detach = 0 // Borer-side, so we don't lose it.
+
+/datum/unlockable/borer/arm/extend_o_arm_unlock/unlock_action()
+	borer.extend_o_arm_unlocked = 1
+	to_chat(borer, "<span class='info'>You learned [name]!</span>")
+
+/datum/unlockable/borer/arm/extend_o_arm_unlock/extend_o_arm
+	id="extend_o_arm"
+	name = "Extensible Arm"
+	desc = "Gain the ability to extrude a prehensile length of flesh from your host's arm."
+	cost=200
+	time=1 MINUTES
+	prerequisites=list("repair_bone")
 
 ////////////Leg Verbs////////////////////////////
 

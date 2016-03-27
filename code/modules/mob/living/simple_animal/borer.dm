@@ -53,11 +53,15 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/mob/living/captive_brain/host_brain // Used for swapping control of the body back and forth.
 	var/controlling                         // Used in human death check.
 	var/list/avail_chems=list()
+	var/list/unlocked_chems_head=list()
+	var/list/unlocked_chems_chest=list()
+	var/list/unlocked_chems_arm=list()
+	var/list/unlocked_chems_leg=list()
 	var/list/avail_abilities=list()         // Unlocked powers.
 	var/list/attached_verbs_head=list(/obj/item/verbs/borer/attached_head)
 	var/list/attached_verbs_chest=list(/obj/item/verbs/borer/attached_chest)
-	var/list/attached_verbs_arm=list()//obj/item/verbs/borer/attached_arm)
-	var/list/attached_verbs_leg=list()//obj/item/verbs/borer/attached_leg)
+	var/list/attached_verbs_arm=list(/obj/item/verbs/borer/attached_arm)
+	var/list/attached_verbs_leg=list(/obj/item/verbs/borer/attached_leg)
 	var/list/severed_verbs=list(/obj/item/verbs/borer/severed)
 	var/list/detached_verbs=list(/obj/item/verbs/borer/detached)
 	var/numChildren=0
@@ -74,6 +78,15 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/channeling_burn_resist = 0
 	var/channeling_speed_increase = 0
 	var/channeling_bone_talons = 0
+	var/channeling_bone_sword = 0
+	var/channeling_bone_shield = 0
+	var/channeling_bone_hammer = 0
+	var/channeling_bone_cocoon = 0
+
+	var/obj/item/weapon/gun/hookshot/flesh/extend_o_arm = null
+	var/extend_o_arm_unlocked = 0
+
+	var/attack_cooldown = 0 //to prevent spamming extend_o_arm attacks at close range
 
 	// Event handles
 	var/eh_emote
@@ -107,6 +120,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		var/datum/unlockable/borer/leg/U = new ultype()
 		if(U.id!="")
 			borer_avail_unlocks_leg.Add(U)
+
+	extend_o_arm = new /obj/item/weapon/gun/hookshot/flesh(src, src)
 
 /mob/living/simple_animal/borer/Login()
 	..()
@@ -146,24 +161,28 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				var/datum/borer_chem/C = new chemtype()
 				if(!C.unlockable)
 					avail_chems[C.name]=C
+			avail_chems += unlocked_chems_head
 		if(BORER_MODE_ATTACHED_CHEST) // 3
 			verbtypes=attached_verbs_chest
 			for(var/chemtype in borer_chem_types_chest)
 				var/datum/borer_chem/C = new chemtype()
 				if(!C.unlockable)
 					avail_chems[C.name]=C
+			avail_chems += unlocked_chems_chest
 		if(BORER_MODE_ATTACHED_ARM) // 4
 			verbtypes=attached_verbs_arm
 			for(var/chemtype in borer_chem_types_arm)
 				var/datum/borer_chem/C = new chemtype()
 				if(!C.unlockable)
 					avail_chems[C.name]=C
+			avail_chems += unlocked_chems_arm
 		if(BORER_MODE_ATTACHED_LEG) // 5
 			verbtypes=attached_verbs_leg
 			for(var/chemtype in borer_chem_types_leg)
 				var/datum/borer_chem/C = new chemtype()
 				if(!C.unlockable)
 					avail_chems[C.name]=C
+			avail_chems += unlocked_chems_leg
 	for(var/verbtype in verbtypes)
 		verb_holders+=new verbtype(src)
 
@@ -242,8 +261,17 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	var/encoded_message = html_encode(message)
 
-	to_chat(src, "You drop words into [host]'s mind: <span class='borer2host'>\"[encoded_message]\"</span>")
-	to_chat(host, "<b>Your mind speaks to you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+	to_chat(src, "You drop words into [host]'s body: <span class='borer2host'>\"[encoded_message]\"</span>")
+	if(hostlimb == "head")
+		to_chat(host, "<b>Your mind speaks to you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+	else
+		to_chat(host, "<b>Your [limb_to_name(hostlimb)] speaks to you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+	var/list/borers_in_host = host.get_brain_worms()
+	borers_in_host.Remove(src)
+	if(borers_in_host.len)
+		for(var/I in borers_in_host)
+			to_chat(I, "<b>Your host's [limb_to_name(hostlimb)] speaks:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+
 	var/turf/T = get_turf(src)
 	log_say("[truename] [key_name(src)] (@[T.x],[T.y],[T.z]) -> [host]([key_name(host)]) Borer->Host Speech: [message]")
 
@@ -450,7 +478,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	update_verbs(BORER_MODE_SEVERED)
 
-
 /mob/living/simple_animal/borer/proc/abandon_host()
 	set category = "Alien"
 	set name = "Abandon Host"
@@ -495,6 +522,13 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 		if(src.stat)
 			to_chat(src, "<span class='warning'>You cannot abandon [host] in your current state.</span>")
+			return
+
+		if(channeling)
+			to_chat(src, "<span class='warning'>You cannot abandon [host] while your focus is directed elsewhere.</span>")
+			return
+
+		if(!check_can_do())
 			return
 
 		if(severed)
@@ -550,7 +584,18 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	host = null
 	hostlimb = null
+	channeling = 0
+	channeling_brute_resist = 0
+	channeling_burn_resist = 0
+	channeling_speed_increase = 0
+	channeling_bone_talons = 0
+	channeling_bone_sword = 0
+	channeling_bone_shield = 0
+	channeling_bone_hammer = 0
+	channeling_bone_cocoon = 0
 	update_verbs(BORER_MODE_DETACHED)
+
+	extend_o_arm.forceMove(src)
 
 /client/proc/borer_infest()
 	set category = "Alien"
@@ -777,6 +822,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	// /vg/ - Our users are shit, so we start with control over host.
 	if(config.borer_takeover_immediately)
 		do_bonding(rptext=1)
+
+	extend_o_arm.forceMove(host)
 
 // So we can hear our host doing things.
 // NOTE:  We handle both visible and audible emotes because we're a brainslug that can see the impulses and shit.
@@ -1027,3 +1074,48 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			return 0
 
 	return 1
+
+/mob/living/simple_animal/borer/ClickOn( var/atom/A, var/params )
+	..()
+	if(host)
+		if(extend_o_arm_unlocked)
+			if(hostlimb == "r_arm" || hostlimb == "l_arm")
+				if(!extend_o_arm)
+					extend_o_arm = new /obj/item/weapon/gun/hookshot/flesh(src, src)
+					extend_o_arm.forceMove(host)
+				if(host.Adjacent(A))
+					if(hostlimb == "r_arm")
+						if(host.r_hand)
+							if(attack_cooldown)
+								return
+							else
+								A.attackby(host.r_hand, host, 1, src)
+								attack_cooldown = 1
+								spawn(10)
+									attack_cooldown = 0
+								return
+						else if(istype(A, /obj/item))
+							host.put_in_r_hand(A)
+							return
+					else
+						if(host.l_hand)
+							if(attack_cooldown)
+								return
+							else
+								A.attackby(host.l_hand, host, 1, src)
+								attack_cooldown = 1
+								spawn(10)
+									attack_cooldown = 0
+								return
+						else if(istype(A, /obj/item))
+							host.put_in_l_hand(A)
+							return
+				if(get_turf(A) == get_turf(host) && !istype(A, /obj/item))
+					return
+				if(hostlimb == "r_arm")
+					if(host.r_hand && istype(host.r_hand, /obj/item/weapon/gun/hookshot)) //I don't want to deal with the hookshot interacting with hookshots
+						return
+				else if(hostlimb == "l_arm")
+					if(host.l_hand && istype(host.l_hand, /obj/item/weapon/gun/hookshot))
+						return
+				extend_o_arm.afterattack(A, host)

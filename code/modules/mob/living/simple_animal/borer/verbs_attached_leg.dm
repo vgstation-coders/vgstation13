@@ -70,6 +70,7 @@
 		to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 		return
 	else
+		to_chat(host, "<span class='notice'>You feel the muscles in your [hostlimb == "r_leg" ? "right" : "left"] leg pulse.</span>")
 		to_chat(src, "You begin to focus your efforts on elevating the performance of your host's [limb_to_name(hostlimb)].")
 		channeling = 1
 		channeling_speed_increase = 1
@@ -80,6 +81,7 @@
 				chemicals -= 5
 				time_spent_channeling++
 				sleep(10)
+			to_chat(host, "<span class='notice'>It feels like the muscles in your [hostlimb == "r_leg" ? "right" : "left"] leg have returned to normal.</span>")
 			host.movement_speed_modifier += speed_increase
 			channeling = 0
 			channeling_speed_increase = 0
@@ -126,6 +128,7 @@
 		to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 		return
 	else
+		to_chat(host, "<span class='notice'>Bony talons have grown out of your [hostlimb == "r_leg" ? "right" : "left"] foot.</span>")
 		to_chat(src, "You begin to focus your efforts on elevating the performance of your host's [limb_to_name(hostlimb)].")
 		channeling = 1
 		channeling_bone_talons = 1
@@ -161,6 +164,7 @@
 				time_spent_channeling++
 				sleep(10)
 //			host.movement_speed_modifier -= speed_penalty
+			to_chat(host, "<span class='notice'>The bony talons on your [hostlimb == "r_leg" ? "right" : "left"] foot crumble into nothing.</span>")
 			host.unslippable = 0
 			channeling = 0
 			channeling_bone_talons = 0
