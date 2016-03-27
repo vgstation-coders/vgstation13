@@ -50,7 +50,9 @@
 
 	var/no_crew_manifest = 0 //If 1, don't inject players with this job into the crew manifest
 	var/no_starting_money = 0 //If 1, don't start with a bank account or money
-	var/no_id = 0 //If 1, don't spawn with an ID or PDA
+	var/no_id = 0 //If 1, don't spawn with an ID
+	var/no_pda= 0 //If 1, don't spawn with a PDA
+	var/no_headset = 0 //If 1, don't spawn with a headset
 
 	var/no_random_roll = 0 //If 1, don't select this job randomly!
 

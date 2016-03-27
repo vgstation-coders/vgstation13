@@ -441,7 +441,9 @@ var/global/datum/controller/occupations/job_master
 			to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
 	spawnId(H, rank, alt_title, balance_wallet)
-	H.equip_to_slot_or_del(new /obj/item/device/radio/headset(H), slot_ears)
+
+	if(!job || !job.no_headset)
+		H.equip_to_slot_or_del(new /obj/item/device/radio/headset(H), slot_ears)
 
 	//Gives glasses to the vision impaired
 	if(H.disabilities & DISABILITY_FLAG_NEARSIGHTED)
@@ -471,6 +473,9 @@ var/global/datum/controller/occupations/job_master
 			job = J
 			break
 
+	if(!job || !job.no_pda)
+		H.equip_or_collect(new job.pdatype(H), job.pdaslot)
+
 	if(job)
 		if(job.no_id)
 			return
@@ -494,7 +499,6 @@ var/global/datum/controller/occupations/job_master
 
 		C.update_virtual_wallet(wallet_funds)
 
-	H.equip_or_collect(new job.pdatype(H), job.pdaslot)
 	if(locate(/obj/item/device/pda,H))
 		var/obj/item/device/pda/pda = locate(/obj/item/device/pda,H)
 		pda.owner = H.real_name
@@ -535,7 +539,7 @@ var/global/datum/controller/occupations/job_master
 			if(!J)	continue
 			J.total_positions = text2num(value)
 			J.spawn_positions = text2num(value)
-			if(name == "AI" || name == "Cyborg" || name == "Mobile MMI")//I dont like this here but it will do for now
+			if(name == "AI" || name == "Cyborg" || name == "Mobile MMI" || name == "Trader")//I dont like this here but it will do for now
 				J.total_positions = 0
 
 	return 1

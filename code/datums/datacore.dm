@@ -47,8 +47,6 @@
 			assignment = "Unassigned"
 
 		var/datum/job/job = job_master.GetJob(H.job)
-		if(!job)
-			world << "o shit ([H.job])"
 		if(job && job.no_crew_manifest)
 			return
 
