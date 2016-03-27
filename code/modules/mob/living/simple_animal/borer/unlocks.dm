@@ -409,7 +409,7 @@
 				host.update_mutations()
 				break
 
-/datum/unlockable/borer/chest/gene_unlock/strong
+/datum/unlockable/borer/arm/gene_unlock/strong
 	id = "strong"
 	name = "Increase Strength"
 	desc = "Improves your host's musculature, increasing your host's strength."
@@ -418,7 +418,7 @@
 	gene_name = "STRONG"
 	prerequisites=list("bone_sword")
 
-/datum/unlockable/borer/chest/gene_unlock/regeneration
+/datum/unlockable/borer/arm/gene_unlock/regeneration
 	id = "regeneration"
 	name = "Regeneration"
 	desc = "Modifies your host's immune system to provide a small amount of damage regeneration."
@@ -427,7 +427,7 @@
 	gene_name = "REGENERATE"
 	prerequisites=list("bone_shield")
 
-/datum/unlockable/borer/chest/gene_unlock/shock_immunity
+/datum/unlockable/borer/arm/gene_unlock/shock_immunity
 	id = "shock_immunity"
 	name = "Shock Immunity"
 	desc = "Adjusts your host's skin to be more resistant to electrical currents."
@@ -469,7 +469,7 @@
 				host.update_mutations()
 				break
 
-/datum/unlockable/borer/head/gene_unlock/run
+/datum/unlockable/borer/leg/gene_unlock/run
 	id = "run"
 	name = "Improve Run"
 	desc = "Improves your host's slow-twitch leg muscles to negate speed loss from environmental factors."
