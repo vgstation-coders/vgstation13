@@ -7,6 +7,8 @@
 	var/flags    = 0
 	var/x_offset = 0
 	var/y_offset = 0
+	var/pixel_x_offset = 0
+	var/pixel_y_offset = 0
 	var/rotate_offsets = FALSE
 
 // Modifies the new atom according to our flags.
@@ -25,7 +27,11 @@
 	if (flags & DENSE_WHEN_LOCKING || AM.lockflags & DENSE_WHEN_LOCKED)
 		owner.density = TRUE
 
+	AM.pixel_x += pixel_x_offset
+	AM.pixel_y += pixel_y_offset
+
 	update_lock(AM)
+	AM.change_dir(owner.dir, owner)
 
 // Updates the position for AM.
 /datum/locking_category/proc/update_lock(var/atom/movable/AM)
@@ -51,7 +57,7 @@
 
 	if (new_x || new_y)
 		var/newer_loc = locate(owner.x + new_x, owner.y + new_y, owner.z)
-		if(newer_loc) // Edge (no pun intended) case for map borders.
+		if (newer_loc) // Edge (no pun intended) case for map borders.
 			new_loc = newer_loc
 
 	AM.forceMove(new_loc)
@@ -84,6 +90,9 @@
 	if (ismob(AM))
 		var/mob/M = AM
 		M.update_canmove()
+
+	AM.pixel_x -= pixel_x_offset
+	AM.pixel_y -= pixel_y_offset
 
 /datum/locking_category/New(var/atom/new_owner)
 	locked = list()

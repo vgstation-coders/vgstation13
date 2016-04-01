@@ -169,40 +169,8 @@
 	if(. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
 		spawn(0)
 			for(var/atom/movable/AM in locked_atoms)
-				var/new_loc = loc
-
-				if(locked_atoms[AM])
-					var/list/atomlock_params = locked_atoms[AM]
-
-					var/offset_x = atomlock_params[1]
-					var/offset_y = atomlock_params[2]
-
-					var/rotate_with_our_dir = atomlock_params[3]
-
-					if(rotate_with_our_dir)
-						var/newX = offset_x
-						var/newY = offset_y
-
-						switch(dir)
-							if(NORTH) //up
-								offset_x = newX
-								offset_y = newY
-							if(EAST) // right
-								offset_x = newY
-								offset_y = -newX
-							if(SOUTH) //down
-								offset_x = -newX
-								offset_y = -newY
-							if(WEST) //left
-								offset_x = -newY
-								offset_y = newX
-
-					if(offset_x || offset_y)
-						var/newer_loc = locate(x + offset_x, y + offset_y, z)
-						if(newer_loc)
-							new_loc = newer_loc
-
-				AM.forceMove(new_loc)
+				var/datum/locking_category/category = locked_atoms[AM]
+				category.update_lock(AM)
 
 	update_dir()
 
@@ -287,6 +255,20 @@
 		locking_categories_name[category] = .
 		locking_categories += .
 
+/atom/movable/proc/get_locked(var/category)
+	if (!category)
+		return locked_atoms
+
+	if (locking_categories_name.Find(category))
+		var/datum/locking_category/C = locking_categories_name[category]
+		return C.locked
+
+	return list()
+
+/atom/movable/proc/is_locking(var/category) // Returns true if we have any locked atoms in this category.
+	var/list/atom/movable/locked = get_locked(category)
+	return locked && locked.len
+
 /atom/movable/proc/recycle(var/datum/materials/rec)
 	if(materials)
 		for(var/matid in materials.storage)
@@ -332,40 +314,8 @@
 
 
 		for(var/atom/movable/AM in locked_atoms)
-			var/new_loc = loc
-
-			if(locked_atoms[AM])
-				var/list/atomlock_params = locked_atoms[AM]
-
-				var/offset_x = atomlock_params[1]
-				var/offset_y = atomlock_params[2]
-
-				var/rotate_with_our_dir = atomlock_params[3]
-
-				if(rotate_with_our_dir)
-					var/newX = offset_x
-					var/newY = offset_y
-
-					switch(dir)
-						if(NORTH) //up
-							offset_x = newX
-							offset_y = newY
-						if(EAST) // right
-							offset_x = newY
-							offset_y = -newX
-						if(SOUTH) //down
-							offset_x = -newX
-							offset_y = -newY
-						if(WEST) //left
-							offset_x = -newY
-							offset_y = newX
-
-				if(offset_x || offset_y)
-					var/newer_loc = locate(x + offset_x, y + offset_y, z)
-					if(newer_loc)
-						new_loc = newer_loc
-
-			AM.forceMove(new_loc)
+			var/datum/locking_category/category = locked_atoms[AM]
+			category.update_lock(AM)
 
 
 		// Update on_moved listeners.
