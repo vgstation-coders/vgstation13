@@ -33,10 +33,12 @@
 	//glide_size = 8
 
 	//Atom locking stuff.
-	var/list/locked_atoms
+	var/list/locked_atoms // Assoc list of atom = category.
 	var/atom/movable/locked_to
-	var/locked_should_lie = 0	//Whether locked mobs should lie down, used by beds.
-	var/lockflags = DENSE_WHEN_LOCKING | DENSE_WHEN_LOCKED
+	var/list/datum/locking_category/locking_categories // List of categories, unorganized.
+	var/list/datum/locking_category/locking_categories_name // Same as above but assoc with the key being the name or type.
+
+	var/lockflags = 0 // Flags for locking. DO NOT CONFUSE WITH /datum/locking_category/flags! These effect being locked.
 
 	// Can we send relaymove() if gravity is disabled or we are in space? (Should be handled by relaymove, but shitcode abounds)
 	var/internal_gravity = 0
@@ -47,7 +49,9 @@
 	if(flags & HEAR && !ismob(src))
 		getFromPool(/mob/virtualhearer, src)
 
-	locked_atoms = list()
+	locked_atoms            = list()
+	locking_categories      = list()
+	locking_categories_name = list()
 
 /atom/movable/Destroy()
 	if(flags & HEAR && !ismob(src))
@@ -58,11 +62,17 @@
 	tag = null
 	loc = null
 
-	for(var/atom/movable/AM in locked_atoms)
+	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
 
-	if(locked_to)
+	if (locked_to)
 		locked_to.unlock_atom(src)
+
+	for (var/datum/locking_category/category in locking_categories)
+		qdel(category)
+
+	locking_categories      = null
+	locking_categories_name = null
 
 	..()
 
@@ -230,78 +240,33 @@
 		dir = new_dir
 		update_dir()
 
-//Atom locking, lock an atom to another atom, and the locked atom will move when the other atom moves.
-//Essentially buckling mobs to chairs. For all atoms.
-//Please don't lock atoms to other atoms if the atoms locked to expect for example a different type, it's basically bound to runtime/glitch.
-//x_offset, y_offset parameters are used if you don't want the locked atom to be on the top of this atom. So x_offset = 1 means the atom-locked object will always be one turf to the east, etc...
-//rotate_offsets parameter is used if you have set x_offset or y_offset, and want the offsets to be relative to the object's direction
-/atom/movable/proc/lock_atom(var/atom/movable/AM, var/x_offset = 0, var/y_offset = 0, var/rotate_offsets = 0)
-	if(AM in locked_atoms || AM.locked_to || !istype(AM))
-		return
+// Atom locking, lock an atom to another atom, and the locked atom will move when the other atom moves.
+// Essentially buckling mobs to chairs. For all atoms.
+// Category is the locking category to lock this atom to, see /code/datums/locking_category.dm.
+// For category you should pass the typepath of the category, however strings should be used for slots made dynamically at runtime.
+/atom/movable/proc/lock_atom(var/atom/movable/AM, var/datum/locking_category/category = /datum/locking_category)
+	if (AM in locked_atoms || AM.locked_to || !istype(AM))
+		return 0
+
+	category = get_lock_cat(category)
+	if (!category) // String category which didn't exist.
+		return 0
 
 	AM.locked_to = src
-	locked_atoms += AM
 
-	if(x_offset || y_offset)
-		locked_atoms[AM] = list(x_offset, y_offset, rotate_offsets)
-
-		var/new_loc = loc
-
-		if(rotate_offsets)
-			var/newX = x_offset
-			var/newY = y_offset
-
-			switch(dir)
-				if(NORTH) //up
-					x_offset = newX
-					y_offset = newY
-				if(EAST) // right
-					x_offset = newY
-					y_offset = -newX
-				if(SOUTH) //down
-					x_offset = -newX
-					y_offset = -newY
-				if(WEST) //left
-					x_offset = -newY
-					y_offset = newX
-
-			var/newer_loc = locate(x + x_offset, y + y_offset, z)
-			if(newer_loc)
-				new_loc = newer_loc
-
-		AM.forceMove(new_loc)
-
-	else
-		AM.forceMove(loc)
-
-	AM.change_dir(dir, src)
-
-	if(ismob(AM))
-		var/mob/M = AM
-		M.update_canmove()
-
-	AM.anchored = 1
-
-	if((lockflags & DENSE_WHEN_LOCKING) && (AM.lockflags & DENSE_WHEN_LOCKED))
-		density = 1
+	locked_atoms[AM] = category
+	category.lock(AM)
 
 	return 1
 
 /atom/movable/proc/unlock_atom(var/atom/movable/AM)
-	if(!(AM in locked_atoms))
+	if (!locked_atoms.Find(AM))
 		return
 
-	locked_atoms -= AM
-	AM.locked_to = null
-
-	if(ismob(AM))
-		var/mob/M = AM
-		M.update_canmove()
-
-	AM.anchored = initial(AM.anchored)
-
-	if((lockflags & DENSE_WHEN_LOCKING) && (AM.lockflags && DENSE_WHEN_LOCKED))
-		density = initial(density)
+	var/datum/locking_category/category = locked_atoms[AM]
+	locked_atoms    -= AM
+	AM.locked_to     = null
+	category.unlock(AM)
 
 	return 1
 
@@ -310,6 +275,17 @@
 		return 0
 
 	locked_to.unlock_atom(src)
+
+/atom/movable/proc/get_lock_cat(var/category = /datum/locking_category)
+	. = locking_categories_name[category]
+
+	if (!.)
+		if (istext(category))
+			return
+
+		. = getFromPool(category, src)
+		locking_categories_name[category] = .
+		locking_categories += .
 
 /atom/movable/proc/recycle(var/datum/materials/rec)
 	if(materials)
