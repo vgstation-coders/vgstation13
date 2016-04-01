@@ -100,6 +100,7 @@
 		to_chat(usr, "<span class='notice'>You submit a DNA sample to \the [src].</span>")
 		verbs += /obj/item/weapon/gun/lawgiver/verb/erase_DNA_sample
 		verbs -= /obj/item/weapon/gun/lawgiver/verb/submit_DNA_sample
+		update_icon()
 		return 1
 
 /obj/item/weapon/gun/lawgiver/AltClick()
@@ -120,6 +121,7 @@
 			to_chat(usr, "<span class='notice'>You erase the DNA profile from \the [src].</span>")
 			verbs += /obj/item/weapon/gun/lawgiver/verb/submit_DNA_sample
 			verbs -= /obj/item/weapon/gun/lawgiver/verb/erase_DNA_sample
+			update_icon()
 		else
 			self_destruct(H)
 
