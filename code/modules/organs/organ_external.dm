@@ -289,7 +289,7 @@
 		return 1
 	if(brute_dam || burn_dam)
 		return 1
-	if(last_dam) //We had a non-null damage last process tick, update again
+	if(last_dam != brute_dam + burn_dam) //Process when we are fully healed up.
 		last_dam = brute_dam + burn_dam
 		return 1
 	last_dam = brute_dam + burn_dam
