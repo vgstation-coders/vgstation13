@@ -18,7 +18,7 @@
 	var/src_object = ui_host()
 
 	if(istype(user, /mob/dead/observer)) // Special-case ghosts.
-		if(IsAdminGhost(user))
+		if(isAdminGhost(user))
 			return UI_INTERACTIVE // If they turn it on, admins can interact.
 		if(get_dist(src_object, src) < user.client.view)
 			return UI_UPDATE // Regular ghosts can only view.
@@ -49,14 +49,14 @@
 /mob/proc/shared_ui_interaction(src_object)
 	if(!client) // Close UIs if mindless.
 		return UI_CLOSE
-	else if(stat) // Disable UIs if unconcious.
+	else if(isUnconscious()) // Disable UIs if unconcious.
 		return UI_DISABLED
 	else if(incapacitated() || lying) // Update UIs if incapicitated but concious.
 		return UI_UPDATE
 	return UI_INTERACTIVE
 
 /mob/living/silicon/ai/shared_ui_interaction(src_object)
-	if(lacks_power()) // Disable UIs if the AI is unpowered.
+	if(isUnconscious() || (aiRestorePowerRoutine && aiRestorePowerRoutine != 3)) // Disable UIs if the AI is unpowered.
 		return UI_DISABLED
 	return ..()
 
@@ -103,6 +103,6 @@
 	return UI_CLOSE // Otherwise, we got nothing.
 
 /mob/living/carbon/human/shared_living_ui_distance(atom/movable/src_object)
-	if(dna.check_mutation(TK) && tkMaxRangeCheck(src, src_object))
+	if(mutations.Find(M_TK) && get_dist(src, src_object) < tk_maxrange)
 		return UI_INTERACTIVE
 	return ..()

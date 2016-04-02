@@ -349,9 +349,7 @@ var/list/admin_verbs_mod = list(
 		/client/proc/kaboom,
 		/client/proc/splash,
 		/client/proc/cmd_admin_areatest,
-		/client/proc/readmin,
-		/client/proc/nanomapgen_DumpImage,
-		/client/proc/nanomapgen_DumpImageAll
+		/client/proc/readmin
 		)
 
 /client/proc/hide_most_verbs()//Allows you to keep some functionality while hiding some verbs

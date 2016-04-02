@@ -349,14 +349,6 @@
 	if(inactivity > duration)	return inactivity
 	return 0
 
-/client/verb/resend_resources()
-	set name = "Resend Resources"
-	set desc = "Re-send resources for NanoUI. May help those with NanoUI issues."
-	set category = "Preferences"
-
-	to_chat(usr, "<span class='notice'>Re-sending NanoUI resources.  This may result in lag.</span>")
-	nanomanager.send_resources(src)
-
 //send resources to the client. It's here in its own proc so we can move it around easiliy if need be
 /client/proc/send_resources()
 //	preload_vox() //Causes long delays with initial start window and subsequent windows when first logged in.
@@ -370,10 +362,6 @@
 	//The above bug report thing doesn't exist anymore so uh, whatever.
 	spawn
 		send_html_resources()
-
-	// Send NanoUI resources to this client
-	spawn nanomanager.send_resources(src)
-
 
 /client/proc/send_html_resources()
 	if(crewmonitor && minimapinit)

@@ -71,8 +71,7 @@
 		master_ui.children += src
 	src.state = state
 
-	var/datum/asset/assets = get_asset_datum(/datum/asset/simple/tgui)
-	assets.send(user)
+	send_asset_datum(/datum/asset/simple/tgui, user)
 
  /**
   * public
@@ -94,10 +93,9 @@
 	if(width && height) // If we have a width and height, use them.
 		window_size = "size=[width]x[height];"
 
-	var/debugable = check_rights_for(user.client, R_DEBUG)
-	user << browse(get_html(debugable), "window=[window_id];[window_size][list2params(window_options)]") // Open the window.
+	user << browse(get_html(), "window=[window_id];[window_size][list2params(window_options)]") // Open the window.
 	winset(user, window_id, "on-close=\"uiclose \ref[src]\"") // Instruct the client to signal UI when the window is closed.
-	SStgui.on_open(src)
+	tgui_process.on_open(src)
 
  /**
   * public
@@ -122,7 +120,7 @@
  **/
 /datum/tgui/proc/close()
 	user << browse(null, "window=[window_id]") // Close the window.
-	SStgui.on_close(src)
+	tgui_process.on_close(src)
 	for(var/datum/tgui/child in children) // Loop through and close all children.
 		child.close()
 	children.Cut()
@@ -186,20 +184,13 @@
   *
   * Generate HTML for this UI.
   *
-  * optional bool inline If the JSON should be inlined into the HTML (for debugging).
-  *
   * return string UI HTML output.
  **/
 /datum/tgui/proc/get_html(var/inline)
-	var/html
-	// Poplate HTML with JSON if we're supposed to inline.
-	if(inline)
-		html = replacetextEx(SStgui.basehtml, "{}", get_json(initial_data))
-	else
-		html = SStgui.basehtml
-	html = replacetextEx(html, "\[ref]", "\ref[src]")
-	html = replacetextEx(html, "\[style]", style)
-	return html
+	. = global.tgui_basehtml
+	. = replacetextEx(., "\[ref]", "\ref[src]")
+	. = replacetextEx(., "\[style]", style)
+	return .
 
  /**
   * private
@@ -273,7 +264,7 @@
 		if("tgui:view")
 			if(params["screen"])
 				src_object.ui_screen = params["screen"]
-			SStgui.update_uis(src_object)
+			tgui_process.update_uis(src_object)
 		if("tgui:link")
 			user << link(params["url"])
 		if("tgui:fancy")
@@ -283,7 +274,7 @@
 		else
 			update_status(push = 0) // Update the window state.
 			if(src_object.ui_act(action, params, src, state)) // Call ui_act() on the src_object.
-				SStgui.update_uis(src_object) // Update if the object requested it.
+				tgui_process.update_uis(src_object) // Update if the object requested it.
 
  /**
   * private

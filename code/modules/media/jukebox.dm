@@ -36,6 +36,7 @@ var/global/global_playlists = list()
 			if("/>" in json)
 				continue
 			var/json_reader/reader = new()
+
 			reader.tokens = reader.ScanJson(json)
 			reader.i = 1
 			var/songdata = reader.read_value()
