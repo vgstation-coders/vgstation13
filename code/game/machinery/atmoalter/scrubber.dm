@@ -22,7 +22,8 @@
 		on = !on
 		update_icon()
 
-	nanomanager.update_uis(src)
+	#warn TODO
+	//nanomanager.update_uis(src)
 	..(severity)
 
 /obj/machinery/portable_atmospherics/scrubber/huge
@@ -144,7 +145,8 @@
 			else
 				loc.assume_air(removed)
 		//src.update_icon()
-		nanomanager.update_uis(src)
+		//nanomanager.update_uis(src)
+		#warn TODO
 	//src.updateDialog()
 	return
 
@@ -162,6 +164,8 @@
 	ui_interact(user)
 	return
 
+#warn TODO
+/*
 /obj/machinery/portable_atmospherics/scrubber/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	var/list/data[0]
 	data["portConnected"] = connected_port ? 1 : 0
@@ -187,7 +191,7 @@
 		ui.open()
 		// auto update every Master Controller tick
 		//ui.set_auto_update(1)
-
+*/
 /obj/machinery/portable_atmospherics/scrubber/Topic(href, href_list)
 	. = ..()
 	if(.)

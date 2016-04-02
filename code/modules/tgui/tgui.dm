@@ -206,8 +206,9 @@
 			"screen"	= src_object.ui_screen,
 			"style"     = style,
 			"interface" = interface,
-			"fancy"     = user.client.prefs.tgui_fancy,
-			"locked"    = user.client.prefs.tgui_lock,
+			#warn TODO
+			//"fancy"     = user.client.prefs.tgui_fancy,
+			//"locked"    = user.client.prefs.tgui_lock,
 			"window"    = window_id,
 			"ref"       = "\ref[src]",
 			"user"      = list(
@@ -267,10 +268,11 @@
 			tgui_process.update_uis(src_object)
 		if("tgui:link")
 			user << link(params["url"])
-		if("tgui:fancy")
+		/*if("tgui:fancy")
 			user.client.prefs.tgui_fancy = TRUE
 		if("tgui:nofrills")
-			user.client.prefs.tgui_fancy = FALSE
+			user.client.prefs.tgui_fancy = FALSE*/
+		#warn TODO
 		else
 			update_status(push = 0) // Update the window state.
 			if(src_object.ui_act(action, params, src, state)) // Call ui_act() on the src_object.
@@ -284,7 +286,7 @@
   *
   * optional force bool If the UI should be forced to update.
  **/
-/datum/tgui/process(force = 0)
+/datum/tgui/proc/process(force = 0)
 	var/datum/host = src_object.ui_host()
 	if(!src_object || !host || !user) // If the object or user died (or something else), abort.
 		close()

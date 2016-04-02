@@ -85,7 +85,7 @@ var/global/list/atmos_controllers = list()
 		overridden = 1
 		return
 	return ..()
-
+/*
 /obj/machinery/computer/atmoscontrol/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(user.stat && !isobserver(user))
 		return
@@ -136,7 +136,8 @@ var/global/list/atmos_controllers = list()
 		// The UI is already open so push the new data to it
 		ui.push_data(data)
 		return
-
+*/
+#warn TODO
 
 /obj/machinery/computer/atmoscontrol/proc/is_in_filter(var/typepath)
 	if(!filter) return 1 // YEP.  TOTALLY.

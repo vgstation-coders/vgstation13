@@ -200,6 +200,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
   *
   * @return nothing
   */
+/*
 /obj/machinery/atmospherics/unary/cryo_cell/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 
 	if(user == occupant || (user.stat && !isobserver(user)))
@@ -238,7 +239,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		else if(occupant.bodytemperature <= T0C + 31) //Temperature at which a body temperature regulation cycle is necessary before ejection
 			data["occupantTemperatureStatus"] = "average"
 
-	data["isBeakerLoaded"] = beaker ? 1 : 0
+	data["isBeakerLoaded"] = beaker ? 1 : 0*/
 	/* // Removing beaker contents list from front-end, replacing with a total remaining volume
 	var beakerContents[0]
 	if(beaker && beaker.reagents && beaker.reagents.reagent_list.len)
@@ -246,6 +247,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			beakerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
 	data["beakerContents"] = beakerContents
 	*/
+	/*
 	data["beakerLabel"] = null
 	data["beakerVolume"] = 0
 	if(beaker)
@@ -266,7 +268,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		ui.open()
 		// auto update every Master Controller tick
 		ui.set_auto_update(1)
-
+*/
+#warn TODO
 /obj/machinery/atmospherics/unary/cryo_cell/Topic(href, href_list)
 	if(usr == occupant)
 		return 0 // don't update UIs attached to this object
@@ -451,7 +454,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		ejecting = 1
 		playsound(get_turf(src), 'sound/machines/pressurehiss.ogg', 40, 1)
 		modify_occupant_bodytemp() //Start to heat them up a little bit immediately
-		nanomanager.update_uis(src)
+		#warn TODO
+		//nanomanager.update_uis(src)
 		spawn(4 SECONDS)
 			if(!src || !src.ejecting)
 				return
@@ -475,7 +479,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	//	occupant.metabslow = 0
 		occupant = null
 	update_icon()
-	nanomanager.update_uis(src)
+	#warn TODO
+	//nanomanager.update_uis(src)
 
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/put_mob(mob/living/carbon/M as mob)
@@ -504,7 +509,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	//M.metabslow = 1
 	add_fingerprint(usr)
 	update_icon()
-	nanomanager.update_uis(src)
+	#warn TODO
+	//nanomanager.update_uis(src)
 	M.ExtinguishMob()
 	return 1
 

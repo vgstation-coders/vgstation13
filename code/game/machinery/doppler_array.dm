@@ -29,7 +29,8 @@ var/list/doppler_arrays = list()
 /obj/machinery/computer/bhangmeter/attack_hand(mob/user as mob)
 	//user.set_machine(src)
 	ui_interact(user)
-
+#warn TODO
+/*
 /obj/machinery/computer/bhangmeter/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(stat & (BROKEN|NOPOWER))
 		return
@@ -77,7 +78,7 @@ var/list/doppler_arrays = list()
 		//The UI is already open so push the new data to it
 		ui.push_data(data)
 		return
-
+*/
 /obj/machinery/computer/bhangmeter/interact(mob/user as mob)
 	var/listing = {"
 <html>
@@ -143,7 +144,8 @@ var/list/doppler_arrays = list()
 	bang["took"] = took
 	bang["area"] = get_area(locate(x0,y0,z0))
 	bangs += list(bang)
-	nanomanager.update_uis(src)
+	#warn TODO
+	//nanomanager.update_uis(src)
 
 /obj/machinery/doppler_array/say_quote(text)
 	return "coldly states, [text]"

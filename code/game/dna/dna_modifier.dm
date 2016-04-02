@@ -464,6 +464,8 @@
   *
   * @return nothing
   */
+#warn TODO
+  /*
 /obj/machinery/computer/scan_consolenew/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 
 	if(connected)
@@ -558,7 +560,7 @@
 		// open the new ui window
 		ui.open()
 		// auto update every Master Controller tick
-		ui.set_auto_update(1)
+		ui.set_auto_update(1)*/
 
 /obj/machinery/computer/scan_consolenew/Topic(href, href_list)
 	if(..())

@@ -206,7 +206,7 @@
 	*/
 	src.add_fingerprint(user)
 	ui_interact(user)
-
+/*
 // user interaction
 /obj/machinery/disposal/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 	var/list/data[0]
@@ -228,7 +228,7 @@
 		ui.open()
 		// Make the UI auto-update.
 		ui.set_auto_update(1)
-
+*/
 // handle machine interaction
 /obj/machinery/disposal/Topic(href, href_list)
 	if(usr.loc == src)
@@ -264,8 +264,6 @@
 
 		if(href_list["eject"])
 			eject()
-
-		nanomanager.update_uis(src)
 
 	return
 

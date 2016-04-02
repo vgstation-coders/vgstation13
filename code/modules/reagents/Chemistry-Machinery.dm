@@ -93,7 +93,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	energy = min(energy + rechargerate, max_energy)
 	if(energy != oldenergy)
 		use_power(3000) // This thing uses up alot of power (this is still low as shit for creating reagents from thin air)
-		nanomanager.update_uis(src) // update all UIs attached to src
+		//nanomanager.update_uis(src) // update all UIs attached to src
+		#warn TODO
 
 /obj/machinery/chem_dispenser/power_change()
 	if(powered())
@@ -101,7 +102,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	else
 		spawn(rand(0, 15))
 			stat |= NOPOWER
-	nanomanager.update_uis(src) // update all UIs attached to src
+	//nanomanager.update_uis(src) // update all UIs attached to src
+	#warn TODO
 
 /obj/machinery/chem_dispenser/proc/can_use(var/mob/living/silicon/robot/R)
 	if(!isMoMMI(R) && !istype(R.module,/obj/item/weapon/robot_module/medical)) //default chem dispenser can only be used by MoMMIs and Mediborgs
@@ -143,6 +145,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
   *
   * @return nothing
   */
+  /*
 /obj/machinery/chem_dispenser/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(stat & (BROKEN|NOPOWER)) return
 	if((user.stat && !isobserver(user)) || user.restrained()) return
@@ -186,7 +189,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		ui.set_initial_data(data)
 		// open the new ui window
 		ui.open()
-
+*/
+#warn TODO
 /obj/machinery/chem_dispenser/Topic(href, href_list)
 	if(..())
 		return
@@ -284,7 +288,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 			to_chat(user, "You add the beaker to the machine!")
 
-			nanomanager.update_uis(src) // update all UIs attached to src
+			#warn TODO
+			//nanomanager.update_uis(src) // update all UIs attached to src
 			return 1
 		else
 			to_chat(user, "You can't add a beaker to the machine while the panel is open.")

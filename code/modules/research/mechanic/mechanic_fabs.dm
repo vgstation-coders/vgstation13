@@ -105,7 +105,7 @@
 					spawn(10)
 						overlays -= "[base_state]-bp"
 		return 1
-
+/*
 /obj/machinery/r_n_d/fabricator/mechanic_fab/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(stat & (BROKEN|NOPOWER))
 		return
@@ -150,7 +150,8 @@
 		ui = new(user, src, ui_key, nano_file, name, GEN_FAB_WIDTH, GEN_FAB_HEIGHT)
 		ui.set_initial_data(data)
 		ui.open()
-
+*/
+#warn TODO
 /obj/machinery/r_n_d/fabricator/mechanic_fab/Topic(href, href_list)
 
 	if(..()) // critical exploit prevention, do not remove unless you replace it -walter0o

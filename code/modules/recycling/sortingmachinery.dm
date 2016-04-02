@@ -48,7 +48,8 @@
 		dat += "<a href='?src=\ref[src];new_dest=1'>Add destination</a>"
 
 	var/datum/browser/popup = new(user, "destTagger", name, 380, 350, src)
-	popup.add_stylesheet("shared", 'nano/css/shared.css')
+#warn TODO
+	// popup.add_stylesheet("shared", 'nano/css/shared.css')
 	popup.set_content(dat)
 	popup.open()
 
@@ -423,7 +424,8 @@
 		dat += "<a href='?src=\ref[src];toggle_types=[i]' class='[cssclass]'>[types[i]]</a><br>"
 
 	var/datum/browser/popup = new(user, "recycksortingmachine", name, 320, 200, src)
-	popup.add_stylesheet("shared", 'nano/css/shared.css')
+	#warn PLEASE JUST END
+	//popup.add_stylesheet("shared", 'nano/css/shared.css')
 	popup.set_content(dat)
 	popup.open()
 
@@ -474,7 +476,8 @@
 	dat += "<a href='?src=\ref[src];toggle_wrapped=1' class='[unwrapped ? "linkOn" : "LinkDanger"]'>Filter unwrapped packages</a>"
 
 	var/datum/browser/popup = new(user, "destsortingmachine", name, 320, 200, src)
-	popup.add_stylesheet("shared", 'nano/css/shared.css')
+	#warn PLEASE JUST END
+	//popup.add_stylesheet("shared", 'nano/css/shared.css')
 	popup.set_content(dat)
 	popup.open()
 

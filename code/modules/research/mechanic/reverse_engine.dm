@@ -186,7 +186,7 @@
 	else
 		src.visible_message("You need to link this machine to a research console first!")
 
-
+/*
 /obj/machinery/r_n_d/reverse_engine/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(src.stat & (BROKEN|NOPOWER))
 		return
@@ -214,7 +214,9 @@
 	if (!ui)
 		ui = new(user, src, ui_key, "rev-engine.tmpl", name, REV_ENG_WIDTH, REV_ENG_HEIGHT)
 		ui.set_initial_data(data)
-		ui.open()
+		ui.open()*/
+
+#warn TODO
 
 /obj/machinery/r_n_d/reverse_engine/Topic(href, href_list)
 

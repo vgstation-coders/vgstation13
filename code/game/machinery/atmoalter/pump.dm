@@ -43,7 +43,8 @@
 
 	target_pressure = rand(0,1300)
 	update_icon()
-	nanomanager.update_uis(src)
+	//nanomanager.update_uis(src)
+	#warn TODO
 
 	..(severity)
 
@@ -87,7 +88,8 @@
 
 				air_contents.merge(removed)
 		//src.update_icon()
-		nanomanager.update_uis(src)
+		#warn
+		//nanomanager.update_uis(src)
 
 	//src.updateDialog()
 	return
@@ -104,7 +106,8 @@
 
 /obj/machinery/portable_atmospherics/pump/attack_hand(var/mob/user as mob)
 	ui_interact(user)
-
+#warn TODO
+/*
 /obj/machinery/portable_atmospherics/pump/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	var/list/data[0]
 	data["portConnected"] = connected_port ? 1 : 0
@@ -131,7 +134,7 @@
 		ui.open()
 		// auto update every Master Controller tick
 		//ui.set_auto_update(1)
-
+*/
 /obj/machinery/portable_atmospherics/pump/Topic(href, href_list)
 	. = ..()
 	if(.)
