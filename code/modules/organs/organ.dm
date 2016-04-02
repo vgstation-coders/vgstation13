@@ -113,7 +113,7 @@
 	//Cancer check
 	for(var/datum/organ/external/Ec in organs)
 		if(Ec.cancer_stage)
-			bad_external_organs |= Ec
+			Ec.handle_cancer()
 
 	//Also handles some internal organ processing when the organs are missing completely.
 	//Only handles missing liver and kidneys for now.

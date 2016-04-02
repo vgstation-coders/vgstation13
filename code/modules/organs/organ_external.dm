@@ -289,8 +289,6 @@
 		return 1
 	if(brute_dam || burn_dam)
 		return 1
-	if(cancer_stage) //This limb is now cancerous, we need to process it every tick to track cancer evolution
-		return 1
 	if(last_dam) //We had a non-null damage last process tick, update again
 		last_dam = brute_dam + burn_dam
 		return 1
@@ -329,9 +327,6 @@
 		perma_injury = 0
 
 	update_germs()
-
-	if(cancer_stage)
-		handle_cancer()
 
 //Cancer growth for external organs is simple, it grows, hurts, damages, and suddenly grows out of control
 //Limb cancer is relatively benign until it grows large, then it cripples you and metastases
