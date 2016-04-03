@@ -242,7 +242,5 @@
 	cancerous_growth -= min(1, hardcores + holywater + ryetalyn - mutagen) + phalanximine + medbots //Simple enough, mut helps cancer growth, hardcores and holywater stall it, phalanx and medbots cure it
 	cancer_stage += cancerous_growth
 
-	//Cancer has a single universal sign. Coughing. Has a chance to happen every tick
-	//Most likely not medically accurate, but whocares.ru
-	if(prob(1))
-		owner.emote("cough")
+	if(cancerous_growth <= 0) //No cancerous growth this tick, no effects
+		return 0
