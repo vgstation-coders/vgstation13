@@ -32,4 +32,9 @@
     <ui-button icon='plus' state='{{data.releasePressure < data.maxReleasePressure ? null : "disabled"}}'
       action='pressure' params='{"pressure": "max"}'>Max</ui-button>
   </ui-section>
+  <ui-section label='Mask Release Valve'>
+      <ui-button icon='{{data.valveOpen ? "check-square-o" : "square-o"}}' style='{{data.valveOpen ? "selected" : null}}' action='valve'>
+          Valve
+      </ui-button>
+  </ui-section>
 </ui-display>

@@ -159,7 +159,7 @@
 		return
 
 	switch (action)
-		if("pressure")
+		if ("pressure")
 			var/pressure = params["pressure"]
 			if (pressure == "reset")
 				pressure = TANK_DEFAULT_RELEASE_PRESSURE
@@ -180,37 +180,26 @@
 			if (.)
 				distribute_pressure = Clamp(round(pressure), 0, TANK_MAX_RELEASE_PRESSURE)
 
-/obj/item/weapon/tank/Topic(href, href_list)
-	if (href_list["dist_p"])
-		if (href_list["dist_p"] == "reset")
-			src.distribute_pressure = TANK_DEFAULT_RELEASE_PRESSURE
-		else if (href_list["dist_p"] == "max")
-			src.distribute_pressure = TANK_MAX_RELEASE_PRESSURE
-		else
-			var/cp = text2num(href_list["dist_p"])
-			src.distribute_pressure += cp
-		src.distribute_pressure = min(max(round(src.distribute_pressure), 0), TANK_MAX_RELEASE_PRESSURE)
-	if (href_list["stat"])
-		if(istype(loc,/mob/living/carbon))
-			var/mob/living/carbon/location = loc
-			if(location.internal == src)
-				location.internal = null
-				location.internals.icon_state = "internal0"
-				to_chat(usr, "<span class='notice'>You close the tank release valve.</span>")
-				if (location.internals)
+		if ("valve")
+			if(iscarbon(loc))
+				var/mob/living/carbon/location = loc
+				if(location.internal == src)
+					location.internal = null
 					location.internals.icon_state = "internal0"
-			else
+					to_chat(usr, "<span class='notice'>You close the tank release valve.</span>")
+					if (location.internals)
+						location.internals.icon_state = "internal0"
+					return TRUE
+
 				if(location.wear_mask && (location.wear_mask.flags & MASKINTERNALS))
 					location.internal = src
 					to_chat(usr, "<span class='notice'>You open \the [src] valve.</span>")
 					if (location.internals)
 						location.internals.icon_state = "internal1"
+					return TRUE
+
 				else
 					to_chat(usr, "<span class='notice'>You need something to connect to \the [src].</span>")
-
-	src.add_fingerprint(usr)
-	return 1
-
 
 /obj/item/weapon/tank/remove_air(amount)
 	return air_contents.remove(amount)
