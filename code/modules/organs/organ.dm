@@ -222,10 +222,10 @@
 /datum/organ/proc/handle_cancer()
 
 	if(!cancer_stage) //This limb isn't cancerous, nothing to do in here
-		return 0
+		return 1
 
 	if(cancer_stage < CANCER_STAGE_BENIGN) //Abort immediately if the cancer has been suppresed
-		return 0
+		return 1
 
 	//List of reagents which will affect cancerous growth
 	//Phalanximine and Medical Nanobots are the only reagent which can reverse cancerous growth in high doses, the others can stall it, some can even accelerate it
@@ -243,4 +243,4 @@
 	cancer_stage += cancerous_growth
 
 	if(cancerous_growth <= 0) //No cancerous growth this tick, no effects
-		return 0
+		return 1

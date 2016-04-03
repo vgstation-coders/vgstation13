@@ -332,11 +332,12 @@
 //Limb cancer is relatively benign until it grows large, then it cripples you and metastases
 /datum/organ/external/handle_cancer()
 
-	..()
+	if(..())
+		return 1
 
 	if(!is_existing()) //Limb has been destroyed or amputated, cancer's over as far as we are concerned since there is no limb to grow on anymore
 		cancer_stage = 0
-		return 0
+		return 1
 
 	switch(cancer_stage)
 		if(CANCER_STAGE_SMALL_TUMOR to CANCER_STAGE_LARGE_TUMOR) //Small tumors will not damage your limb, but might flash pain
