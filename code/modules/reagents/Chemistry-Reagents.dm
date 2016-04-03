@@ -182,7 +182,7 @@
 
 	if(prob(1))
 		if(prob(42))
-			to_chat(M, "<span class='notice'>[pick("You feel like a villager.", "Rogan?", "ROGAN.")]")
+			to_chat(M, "<span class='notice'>[pick("Rogan?", "ROGAN.", "Food please.", "Wood please.", "Gold please.", "All hail, king of the losers!", "I'll beat you back to Age of Empires.", "Sure, blame it on your ISP.", "Start the game already!", "It is good to be the king.", "Long time, no siege.", "Nice town, I'll take it.", "Raiding party!", "Dadgum.", "Wololo.", "Attack an enemy now.", "Cease creating extra villagers.", "Create extra villagers.", "Build a navy.", "	Stop building a navy.", "Wait for my signal to attack.", "Build a wonder.", "Give me your extra resources.", "What age are you in?")]")
 		else
 			M.say("Rogan?")
 
