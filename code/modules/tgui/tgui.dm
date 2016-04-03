@@ -52,12 +52,14 @@
   * return datum/tgui The requested UI.
  **/
 /datum/tgui/New(mob/user, datum/src_object, ui_key, interface, title, width = 0, height = 0, datum/tgui/master_ui = null, datum/ui_state/state = default_state)
+	to_chat(world, "Creating new tgui interface, \ref[src]")
 	src.user = user
 	src.src_object = src_object
 	src.ui_key = ui_key
 	src.window_id = "\ref[src_object]-[ui_key]"
 
 	set_interface(interface)
+	to_chat(world, "Interface is [src.interface]")
 
 	if(title)
 		src.title = sanitize(title)
@@ -71,7 +73,9 @@
 		master_ui.children += src
 	src.state = state
 
-	send_asset_datum(/datum/asset/simple/tgui, user)
+	to_chat(world, "Sending assets to [user] (\ref[user])")
+	send_asset_datum(/datum/asset/tgui, user)
+	to_chat(world, "Done creating tgui datum. (src_object: [src_object], \ref[src_object]; ui_key: [ui_key]; window_id: [window_id]; title: [title]; dimensions: [src.width]x[src.height]; master: \ref[master_ui]); state: [state]")
 
  /**
   * public
@@ -79,20 +83,27 @@
   * Open this UI (and initialize it with data).
  **/
 /datum/tgui/proc/open()
+	to_chat(world, "Opening interface.")
 	if(!user.client)
+		to_chat(world, "No client!")
 		return // Bail if there is no client.
 
 	update_status(push = 0) // Update the window status.
+	to_chat(world, "Updated window status, new status is [status]")
 	if(status < UI_UPDATE)
+		to_chat(world, "Status is less than UI_UPDATE, aborting update")
 		return // Bail if we're not supposed to open.
 
 	if(!initial_data)
+		to_chat(world, "No initial data, getting data from the src object.")
 		set_initial_data(src_object.ui_data(user)) // Get the UI data.
 
 	var/window_size = ""
 	if(width && height) // If we have a width and height, use them.
 		window_size = "size=[width]x[height];"
+		to_chat(world, "Window size is [window_size]")
 
+	to_chat(world, "Opening tgui...")
 	user << browse(get_html(), "window=[window_id];[window_size][list2params(window_options)]") // Open the window.
 	winset(user, window_id, "on-close=\"uiclose \ref[src]\"") // Instruct the client to signal UI when the window is closed.
 	tgui_process.on_open(src)
@@ -207,7 +218,7 @@
 			"style"     = style,
 			"interface" = interface,
 			#warn TODO
-			//"fancy"     = user.client.prefs.tgui_fancy,
+			"fancy"     = TRUE, //user.client.prefs.tgui_fancy,
 			//"locked"    = user.client.prefs.tgui_lock,
 			"window"    = window_id,
 			"ref"       = "\ref[src]",

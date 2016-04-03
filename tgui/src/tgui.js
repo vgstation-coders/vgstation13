@@ -51,3 +51,14 @@ const fontawesome = new FontFaceObserver('FontAwesome')
 fontawesome.check('\uf240')
   .then(() => document.body.classList.add('icons'))
   .catch(() => document.body.classList.add('no-icons'))
+
+function keyboard(e) {
+    alert(e.keyCode)
+    if (e.keyCode == 123) {
+        alert("test");
+        var firebugEl = document.createElement('script');
+        firebugEl.src = 'https://getfirebug.com/firebug-lite-debug.js';
+        document.body.appendChild(firebugEl);
+    }
+}
+document.addEventListener("keydown", keyboard, false);

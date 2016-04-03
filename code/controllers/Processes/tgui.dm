@@ -6,6 +6,7 @@
 /datum/controller/process/tgui/setup()
 	name = "tgui"
 
+	global.tgui_basehtml = file2text("tgui/tgui.html")
 	tgui_process = src
 
 /datum/controller/process/tgui/doWork()

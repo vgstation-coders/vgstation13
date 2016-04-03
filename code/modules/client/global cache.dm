@@ -383,10 +383,12 @@
 		"spesspets_sleep.png"		= 'icons/pda_icons/spesspets_icons/spesspets_sleep.png'
 	)
 
-/datum/asset/simple/tgui/assets = list(
-		"tgui.css" = 'tgui/assets/tgui.css',
-		"tgui.js"  = 'tgui/assets/tgui.js'
-	)
+/datum/asset/tgui/register()
+	register_asset("tgui.css", file("tgui/assets/tgui.css"))
+	register_asset("tgui.js",  file("tgui/assets/tgui.js"))
+
+/datum/asset/tgui/send(var/client/C, var/verify = TRUE)
+	send_asset_list(C, list("tgui.css", "tgui.js"), verify)
 
 //Registers HTML I assets.
 /datum/asset/HTML_interface/register()

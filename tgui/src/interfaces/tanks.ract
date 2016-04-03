@@ -20,13 +20,13 @@
         state='{{tankPressureState}}'>{{Math.round(adata.tankPressure)}} kPa</ui-bar>
   </ui-section>
   <ui-section label='Release Pressure'>
-    <ui-bar min='{{data.minReleasePressure}}' max='{{data.maxReleasePressure}}'
+    <ui-bar min='0' max='{{data.maxReleasePressure}}'
       value='{{data.releasePressure}}'>{{Math.round(adata.releasePressure)}} kPa</ui-bar>
   </ui-section>
   <ui-section label='Pressure Regulator'>
     <ui-button icon='refresh' state='{{data.releasePressure != data.defaultReleasePressure ? null : "disabled"}}'
       action='pressure' params='{"pressure": "reset"}'>Reset</ui-button>
-    <ui-button icon='minus' state='{{data.releasePressure > data.minReleasePressure ? null : "disabled"}}'
+    <ui-button icon='minus' state='{{data.releasePressure > 0 ? null : "disabled"}}'
       action='pressure' params='{"pressure": "min"}'>Min</ui-button>
     <ui-button icon='pencil' action='pressure' params='{"pressure": "input"}'>Set</ui-button>
     <ui-button icon='plus' state='{{data.releasePressure < data.maxReleasePressure ? null : "disabled"}}'

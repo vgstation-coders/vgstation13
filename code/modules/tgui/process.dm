@@ -153,6 +153,7 @@
   * required ui datum/tgui The UI to be added.
  **/
 /datum/controller/process/tgui/proc/on_open(datum/tgui/ui)
+	to_chat(world, "\ref[ui] just called on_open()!")
 	var/src_object_key = "\ref[ui.src_object]"
 	if(isnull(global.open_tguis[src_object_key]) || !istype(global.open_tguis[src_object_key], /list))
 		global.open_tguis[src_object_key] = list(ui.ui_key = list()) // Make a list for the ui_key and src_object.
