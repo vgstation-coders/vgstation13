@@ -298,7 +298,7 @@
 
 			//So clones don't die of oxyloss in a running pod.
 			if (src.occupant.reagents.get_reagent_amount("inaprovaline") < 30)
-				src.occupant.reagents.add_reagent("inaprovaline", 60)
+				src.occupant.reagents.add_reagent("inaprovaline", 30)
 
 			var/mob/living/carbon/human/H = src.occupant
 
