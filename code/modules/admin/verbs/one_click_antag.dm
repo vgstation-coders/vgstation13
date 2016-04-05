@@ -2,6 +2,10 @@ client/proc/one_click_antag()
 	set name = "Create Antagonist"
 	set desc = "Auto-create an antagonist of your choice"
 	set category = "Admin"
+
+	var/confirm = alert("Are you sure you want to create an antag?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if(holder)
 		holder.one_click_antag()
 	return
@@ -29,6 +33,8 @@ client/proc/one_click_antag()
 
 /datum/admins/proc/makeMalfAImode()
 
+	var/confirm = alert("Are you sure you want to make an existing AI malf?","Sure?","Yes","No")
+	if(confirm == "No") return
 
 	var/list/mob/living/silicon/AIs = list()
 	var/mob/living/silicon/malfAI = null
@@ -297,6 +303,7 @@ client/proc/one_click_antag()
 /datum/admins/proc/makeAliens()
 	alien_infestation(3)
 	return 1
+
 /datum/admins/proc/makeDeathsquad()
 	var/list/mob/dead/observer/candidates = list()
 	var/mob/dead/observer/theghost = null

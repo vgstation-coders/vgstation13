@@ -606,10 +606,10 @@ var/list/admin_verbs_mod = list(
 	set desc = "Cause an explosion of varying strength at your location."
 
 	var/turf/epicenter = mob.loc
-	var/list/choices = list("Small Bomb (1,2,3)", "Medium Bomb (2,3,4)", "Big Bomb (3,5,7)", "Custom Bomb")
+	var/list/choices = list("Small Bomb (1,2,3)", "Medium Bomb (2,3,4)", "Big Bomb (3,5,7)", "Custom Bomb", "Cancel")
 	var/choice = input("What size explosion would you like to produce?") in choices
 	switch(choice)
-		if(null)
+		if(null || "Cancel")
 			return 0
 		if("Small Bomb (1,2,3)")
 			explosion(epicenter, 1, 2, 3, 3)
@@ -633,10 +633,10 @@ var/list/admin_verbs_mod = list(
 	set desc = "Cause an EMP of varying strength at your location."
 
 	var/turf/epicenter = mob.loc
-	var/list/choices = list("Small EMP (1,2)", "Medium EMP (2,4)", "Big EMP (4,8)", "Custom EMP")
+	var/list/choices = list("Small EMP (1,2)", "Medium EMP (2,4)", "Big EMP (4,8)", "Custom EMP", "Cancel")
 	var/choice = input("What size EMP would you like to produce?") in choices
 	switch(choice)
-		if(null)
+		if(null || "Cancel")
 			return 0
 		if("Small EMP (1,2)")
 			empulse(epicenter, 1, 2)
@@ -730,13 +730,11 @@ var/list/admin_verbs_mod = list(
 	set desc = "Toggle Air Processing"
 	if(air_processing_killed)
 		air_processing_killed = 0
-		to_chat(usr, "<b>Enabled air processing.</b>")
 	else
 		air_processing_killed = 1
-		to_chat(usr, "<b>Disabled air processing.</b>")
 	feedback_add_details("admin_verb","KA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	log_admin("[key_name(usr)] used 'kill air'.")
-	message_admins("<span class='notice'>[key_name_admin(usr)] used 'kill air'.</span>", 1)
+	log_admin("[key_name(usr)] used 'kill air' and [air_processing_killed ? "disabled" : "enabled"] airflow.")
+	message_admins("<span class='notice'>[key_name_admin(usr)] used 'kill air' and [air_processing_killed ? "disabled" : "enabled"] airflow.</span>", 1)
 
 /client/proc/deadmin_self()
 	set name = "De-admin self"
@@ -760,10 +758,10 @@ var/list/admin_verbs_mod = list(
 	if(config)
 		if(config.log_hrefs)
 			config.log_hrefs = 0
-			to_chat(src, "<b>Stopped logging hrefs</b>")
 		else
 			config.log_hrefs = 1
-			to_chat(src, "<b>Started logging hrefs</b>")
+		log_admin("[key_name(usr)] [config.log_hrefs ? "enabled" : "disabled"] logging hrefs.")
+		message_admins("<span class='notice'>[key_name_admin(usr)] [config.log_hrefs ? "enabled" : "disabled"] logging hrefs.</span>", 1)
 
 /client/proc/check_ai_laws()
 	set name = "Check AI Laws"
@@ -858,8 +856,10 @@ var/list/admin_verbs_mod = list(
 			to_chat(usr, "There are no fully staffed jobs.")
 			return
 		var/job = input("Please select job slot to free", "Free job slot")  as null|anything in jobs
-		if (job)
+		if(job)
 			job_master.FreeRole(job)
+			log_admin("[key_name(usr)] freed up a slot for [job].")
+			message_admins("<span class='notice'>[key_name_admin(usr)] freed up a slot for [job].</span>", 1)
 	return
 
 /client/proc/toggleattacklogs()
@@ -877,7 +877,7 @@ var/list/admin_verbs_mod = list(
 	set name = "Set Command Name"
 	set category = "Fun"
 
-	var/text = input(usr,"Please select a new Central Command name.", null)as text|null
+	var/text = input(usr,"Please select a new Central Command name. Leave blank to leave unchanged.", null)as text|null
 	if(text)
 		change_command_name(text)
 
@@ -898,6 +898,9 @@ var/list/admin_verbs_mod = list(
 	set name = "Man Up"
 	set desc = "Tells mob to man up and deal with it."
 
+	var/confirm = alert("Are you sure you want to tell [T] to man up? That's rude.","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	to_chat(T, "<span class='notice'><b><font size=3>Man up and deal with it.</font></b></span>")
 	to_chat(T, "<span class='notice'>Move on.</span>")
 
@@ -908,6 +911,9 @@ var/list/admin_verbs_mod = list(
 	set category = "Fun"
 	set name = "Man Up Global"
 	set desc = "Tells everyone to man up and deal with it."
+
+	var/confirm = alert("Are you sure you want to tell everyone to man up? That's rude on a grand scale.","Sure?","Yes","No")
+	if(confirm == "No") return
 
 	for (var/mob/T as mob in mob_list)
 		to_chat(T, "<br><center><span class='notice'><b><font size=4>Man up.<br> Deal with it.</font></b><br>Move on.</span></center><br>")
@@ -921,6 +927,10 @@ var/list/admin_verbs_mod = list(
 	set name = "Re-admin self"
 	set category = "Admin"
 	set desc = "Regain your admin powers."
+
+	var/confirm = alert("Are you sure you want to re-admin?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	var/datum/admins/D = admin_datums[ckey]
 	if(config.admin_legacy_system)
 		to_chat(src, "<span class='notice'>Legacy admins is not supported yet</span>")
@@ -1014,6 +1024,9 @@ var/list/admin_verbs_mod = list(
 	if(!holder || !config)
 		return
 
+	var/confirm = alert("Are you sure you want to toggle MoMMi's seeing mobs?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	config.mommi_static = !config.mommi_static
 	log_admin("[key_name(src)] turned MoMMI static [config.mommi_static ? "on" : "off"].")
 	message_admins("[key_name(src)] turned MoMMI static [config.mommi_static ? "on" : "off"].")
@@ -1042,6 +1055,9 @@ var/list/admin_verbs_mod = list(
 	if(!check_rights(R_FUN))
 		return
 
+	var/confirm = alert("Are you sure you want to stop all media?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	message_admins("[key_name_admin(usr)] has stopped all media.", 1)
 
 	stop_all_media()
@@ -1051,10 +1067,11 @@ var/list/admin_verbs_mod = list(
 	set name = "Send Fax"
 	set desc = "Sends a fax to all fax machines."
 
-	var/sent = input(src, "Please enter a message send via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", "") as message|null
+	var/sent = input(src, "Please enter a message to send via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks. Leave blank to cancel.", "Outgoing message from Centcomm", "") as message|null
 	if(!sent)	return
 
-	var/sentname = input(src, "Pick a title for the report", "Title") as text|null
+	var/sentname = input(src, "Pick a title for the report. Blank cancels as usual.", "Title", "Nanotrasen Fax") as text|null
+	if(!sentname) return
 
 	SendFax(sent, sentname, centcomm = 1)
 

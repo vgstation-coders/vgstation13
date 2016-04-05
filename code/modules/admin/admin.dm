@@ -683,7 +683,7 @@ var/global/floorIsLava = 0
 /datum/admins/proc/Secrets()
 	if(!check_rights(0))	return
 
-	var/dat = "<B>The first rule of adminbuse is: you don't talk about the adminbuse.</B><HR>"
+	var/dat = "<B>The first rule of adminbus is you don't talk about the adminbus.</B><HR>"
 
 	if(check_rights(R_FUN,0) || check_rights(R_ADMINBUS,0))
 		dat += {"
@@ -758,20 +758,15 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=quickpower'>Power all SMES</A><BR>
 			<A href='?src=\ref[src];secretsfun=breaklink'>Break the station's link with Central Command</A><BR>
 			<A href='?src=\ref[src];secretsfun=makelink'>Make the station linked with Central Command</A><BR>
-			<A href='?src=\ref[src];secretsfun=toggleprisonstatus'>Toggle Prison Shuttle Status(Use with S/R)</A><BR>
-			<A href='?src=\ref[src];secretsfun=activateprison'>Send Prison Shuttle</A><BR>
-			<A href='?src=\ref[src];secretsfun=deactivateprison'>Return Prison Shuttle</A><BR>
-			<A href='?src=\ref[src];secretsfun=prisonwarp'>Warp all Players to Prison</A><BR>
 			<A href='?src=\ref[src];secretsfun=tripleAI'>Triple AI mode (needs to be used in the lobby)</A><BR>
 			<A href='?src=\ref[src];secretsfun=traitor_all'>Everyone is the traitor</A><BR>
-			<A href='?src=\ref[src];secretsfun=onlyone'>There can only be one!</A><BR>
+			<A href='?src=\ref[src];secretsfun=onlyone'>There can be only one!</A><BR>
 			<A href='?src=\ref[src];secretsfun=flicklights'>Ghost Mode</A><BR>
 			<A href='?src=\ref[src];secretsfun=retardify'>Make all players retarded</A><BR>
 			<A href='?src=\ref[src];secretsfun=fakeguns'>Make all items look like guns</A><BR>
 			<A href='?src=\ref[src];secretsfun=experimentalguns'>Distribute experimental guns to the crew</A><BR>
 			<A href='?src=\ref[src];secretsfun=schoolgirl'>Japanese Animes Mode</A><BR>
 			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode</A><BR>
-			<A href='?src=\ref[src];secretsfun=movealienship'>Move Alien Dinghy</A><BR>
 			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=thebees'>Unleash THE BEES onto the crew</A><BR>
@@ -779,7 +774,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
 			<A href='?src=\ref[src];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
 			<A href='?src=\ref[src];secretsfun=fakebooms'>Adds in some Micheal Bay to the shift without major destruction</A><BR>
-			<A href='?src=\ref[src];secretsfun=massbomber'>Turn every players into Bomberman</A><BR>
+			<A href='?src=\ref[src];secretsfun=massbomber'>Turn every player into Bomberman</A><BR>
 			<A href='?src=\ref[src];secretsfun=bomberhurt'>Make Bomberman Bombs actually hurt players</A><BR>
 			<A href='?src=\ref[src];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy stuff</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players(default)</A><BR>
@@ -917,6 +912,9 @@ var/global/floorIsLava = 0
 	set desc="Globally Toggles OOC"
 	set name="Toggle OOC"
 
+	var/confirm = alert(src, "[ooc_allowed ? "Do you hate fun and want to turn off OOC?" : "Are you a wonderful person and want to re-enable OOC?"]", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
+
 	ooc_allowed = !( ooc_allowed )
 	if (ooc_allowed)
 		to_chat(world, "<B>The OOC channel has been globally enabled!</B>")
@@ -931,9 +929,13 @@ var/global/floorIsLava = 0
 	set category = "Server"
 	set desc="Toggle dis bitch"
 	set name="Toggle Dead OOC"
+
+	var/confirm = alert(src, "[ooc_allowed ? "Do you hate fun and want to turn off OOC for dead guys?" : "Do you want to re-enable OOC for dead guys?"]", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
+
 	dooc_allowed = !( dooc_allowed )
 
-	log_admin("[key_name(usr)] toggled OOC.")
+	log_admin("[key_name(usr)] toggled Dead OOC.")
 	message_admins("[key_name_admin(usr)] toggled Dead OOC.", 1)
 	feedback_add_details("admin_verb","TDOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -941,6 +943,9 @@ var/global/floorIsLava = 0
 	set category = "Server"
 	set desc="Toggle traitor scaling"
 	set name="Toggle Traitor Scaling"
+
+	var/confirm = alert(src, "Toggle traitor scaling?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
 
 	traitor_scaling = !traitor_scaling
 	log_admin("[key_name(usr)] toggled Traitor Scaling to [traitor_scaling].")
@@ -955,6 +960,10 @@ var/global/floorIsLava = 0
 	if(!ticker)
 		alert("Unable to start the game as it is not set up.")
 		return
+
+	var/confirm = alert(src, "Ignore the time left and start the game?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
+
 	if(ticker.current_state == GAME_STATE_PREGAME)
 		ticker.current_state = GAME_STATE_SETTING_UP
 		log_admin("[usr.key] has started the game.")
@@ -969,6 +978,9 @@ var/global/floorIsLava = 0
 	set category = "Server"
 	set desc="People can't enter"
 	set name="Toggle Entering"
+
+	var/confirm = alert(src, "Want to toggle people joining the game?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
 
 	enter_allowed = !( enter_allowed )
 	if (!( enter_allowed ))
@@ -985,6 +997,9 @@ var/global/floorIsLava = 0
 	set desc="People can't be AI"
 	set name="Toggle AI"
 
+	var/confirm = alert(src, "Want to toggle AI's?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
+
 	config.allow_ai = !( config.allow_ai )
 	if (!( config.allow_ai ))
 		to_chat(world, "<B>The AI job is no longer chooseable.</B>")
@@ -998,6 +1013,9 @@ var/global/floorIsLava = 0
 	set category = "Server"
 	set desc="Respawn basically"
 	set name="Toggle Respawn"
+
+	var/confirm = alert(src, "Want to toggle people respawning?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
 
 	abandon_allowed = !( abandon_allowed )
 	if (abandon_allowed)
@@ -1014,6 +1032,9 @@ var/global/floorIsLava = 0
 	set desc="Toggle alien mobs"
 	set name="Toggle Aliens"
 
+	var/confirm = alert(src, "Want to toggle aliens?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
+
 	aliens_allowed = !aliens_allowed
 	log_admin("[key_name(usr)] toggled Aliens to [aliens_allowed].")
 	message_admins("[key_name_admin(usr)] toggled Aliens [aliens_allowed ? "on" : "off"].", 1)
@@ -1026,20 +1047,28 @@ var/global/floorIsLava = 0
 	set desc="Delay the game start/end"
 	set name="Delay"
 
+	var/confirm = null
+
 	if(!check_rights(R_ADMIN))	return
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
 		if(ticker.delay_end == 2)
+			confirm = alert(src, "End the round?", "Confirm", "Yes", "No")
+			if(confirm != "Yes") return
 			to_chat(world, "<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
 			log_admin("<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
 			if(watchdog.waiting)
 				watchdog.signal_ready()
 			else
 				world.Reboot()
+		confirm = alert(src, "[ticker.delay_end ? "Un" : ""]Delay round end?", "Confirm", "Yes", "No")
+		if(confirm != "Yes") return
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
 		message_admins("<span class='notice'>[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].</span>", 1)
 
 		return //alert("Round end delayed", null, null, null, null, null)
+	confirm = alert(src, "[going == "LOBBY_TICKING_STOPPED" ? "Un" : ""]Delay round start?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
 	if (!( going ))
 		going = LOBBY_TICKING_RESTARTED
 		ticker.pregame_timeleft = world.timeofday + ticker.remaining_time
@@ -1057,6 +1086,9 @@ var/global/floorIsLava = 0
 	set desc="Toggle admin jumping"
 	set name="Toggle Jump"
 
+	var/confirm = alert(src, "Want to toggle admins being able to use jump verbs?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
+
 	config.allow_admin_jump = !(config.allow_admin_jump)
 	message_admins("<span class='notice'>Toggled admin jumping to [config.allow_admin_jump].</span>")
 	feedback_add_details("admin_verb","TJ") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -1066,6 +1098,9 @@ var/global/floorIsLava = 0
 	set desc="Toggle admin spawning"
 	set name="Toggle Spawn"
 
+	var/confirm = alert(src, "Want to toggle admins being able to spawn things?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
+
 	config.allow_admin_spawning = !(config.allow_admin_spawning)
 	message_admins("<span class='notice'>Toggled admin item spawning to [config.allow_admin_spawning].</span>")
 	feedback_add_details("admin_verb","TAS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -1074,6 +1109,9 @@ var/global/floorIsLava = 0
 	set category = "Server"
 	set desc="Toggle admin revives"
 	set name="Toggle Revive"
+
+	var/confirm = alert(src, "Want to toggle admins being able to revive?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
 
 	config.allow_admin_rev = !(config.allow_admin_rev)
 	message_admins("<span class='notice'>Toggled reviving to [config.allow_admin_rev].</span>")
@@ -1109,6 +1147,9 @@ var/global/floorIsLava = 0
 	set category = "Admin"
 	set name = "Unprison"
 
+	var/confirm = alert(src, "Want to take [M] out of admin prison?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
+
 	if (M.z == 2)
 		if (config.allow_admin_jump)
 			M.loc = pick(latejoin)
@@ -1122,7 +1163,7 @@ var/global/floorIsLava = 0
 
 ////////////////////////////////////////////////////////////////////////////////////////////////ADMIN HELPER PROCS
 
-/proc/is_special_character(mob/M as mob) // returns 1 for specail characters and 2 for heroes of gamemode
+/proc/is_special_character(mob/M as mob) // returns 1 for special characters and 2 for heroes of gamemode
 	if(!ticker || !ticker.mode)
 		return 0
 	if (!istype(M))
@@ -1240,6 +1281,9 @@ var/global/floorIsLava = 0
 	set desc="Reduces view range when wearing welding helmets"
 	set name="Toggle tinted welding helmes"
 
+	var/confirm = alert(src, "Want to toggle tinting for welding helmets?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
+
 	tinted_weldhelh = !( tinted_weldhelh )
 	if (tinted_weldhelh)
 		to_chat(world, "<B>The tinted_weldhelh has been enabled!</B>")
@@ -1253,6 +1297,9 @@ var/global/floorIsLava = 0
 	set category = "Server"
 	set desc="Guests can't enter"
 	set name="Toggle guests"
+
+	var/confirm = alert(src, "Want to toggle guests?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
 
 	guests_allowed = !( guests_allowed )
 	if (!( guests_allowed ))
