@@ -21,6 +21,10 @@
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
+
+	var/confirm = alert("Are you sure you want to send [M] to admin prison?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if (ismob(M))
 		if(istype(M, /mob/living/silicon/ai))
 			alert("The AI can't be sent to prison you jerk!", null, null, null, null, null)
@@ -41,6 +45,8 @@
 		log_admin("[key_name(usr)] sent [key_name(M)] to the prison station.")
 		message_admins("<span class='notice'>[key_name_admin(usr)] sent [key_name_admin(M)] to the prison station.</span>", 1)
 		feedback_add_details("admin_verb","PRISON") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	else
+		to_chat(src, "Only usable on mobs")
 
 /client/proc/cmd_admin_subtle_message(mob/M as mob in mob_list)
 	set category = "Special Verbs"
@@ -74,9 +80,9 @@
 		return
 
 	var/msg = input("Message:", text("Enter the text you wish to appear to everyone:")) as text
-
 	if (!msg)
 		return
+
 	to_chat(world, "[msg]")
 	log_admin("GlobalNarrate: [key_name(usr)] : [msg]")
 	message_admins("<span class='notice'><B>GlobalNarrate: [key_name_admin(usr)] : [msg]<BR></B></span>", 1)
@@ -97,7 +103,6 @@
 		return
 
 	var/msg = input("Message:", text("Enter the text you wish to appear to your target:")) as text
-
 	if( !msg )
 		return
 
@@ -115,7 +120,6 @@
 		return
 
 	var/msg = input("Message:", text("Enter the text you wish to appear to your target:")) as text
-
 	if( !msg )
 		return
 
@@ -130,6 +134,9 @@
 /client/proc/cmd_admin_godmode(mob/M as mob in mob_list)
 	set category = "Special Verbs"
 	set name = "Godmode"
+
+	var/confirm = alert("Are you sure you want to toggle godmode on [M]?","Are you a cheater?","Yes","No")
+	if(confirm == "No") return
 
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
@@ -199,8 +206,10 @@ proc/cmd_admin_mute(mob/M as mob, mute_type, automute = 0)
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
+
 	var/confirm = alert(src, "You sure?", "Confirm", "Yes", "No")
 	if(confirm != "Yes") return
+
 	log_admin("[key_name(src)] has added a random AI law.")
 	message_admins("[key_name_admin(src)] has added a random AI law.", 1)
 
@@ -307,6 +316,9 @@ Ccomp's first proc.
 	set name = "Toggle antagHUD usage"
 	set desc = "Toggles antagHUD usage for observers"
 
+	var/confirm = alert("Are you sure you want to let ghosts see antags?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 	var/action=""
@@ -342,6 +354,9 @@ Ccomp's first proc.
 	set name = "Toggle antagHUD Restrictions"
 	set desc = "Restricts players that have used antagHUD from being able to join this round."
 
+	var/confirm = alert("Restrict people who use antagHUD from rejoining the round?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 	var/action=""
@@ -354,7 +369,7 @@ Ccomp's first proc.
 	else
 		for(var/mob/dead/observer/g in get_ghosts())
 			to_chat(g, "<span class='danger'>The administrator has placed restrictions on joining the round if you use AntagHUD</span>")
-			to_chat(g, "<span class='danger'>Your AntagHUD has been disabled, you may choose to re-enabled it but will be under restrictions </span>")
+			to_chat(g, "<span class='danger'>Your AntagHUD has been disabled, you may choose to re-enable it but will be under these restrictions </span>")
 			g.antagHUD = 0
 			g.has_enabled_antagHUD = 0
 		action = "placed restrictions"
@@ -380,7 +395,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
-	var/input = ckey(input(src, "Please specify which key will be respawned.", "Key", ""))
+	var/input = ckey(input(src, "Please specify which key will be respawned. Blank to cancel.", "Key", ""))
 	if(!input)
 		return
 
@@ -546,9 +561,10 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
-	var/input = input(usr, "Please enter anything you want the AI to do. Anything. Serious.", "What?", "") as text|null
+	var/input = input(usr, "Please enter anything you want the AI to do. Anything. Serious. Except a blank input, that cancels this.", "What?", "") as text|null
 	if(!input)
 		return
+
 	for(var/mob/living/silicon/ai/M in mob_list)
 		if (M.stat == 2)
 			to_chat(usr, "Upload failed. No signal is being detected from the AI.")
@@ -579,6 +595,10 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(!istype(M))
 		alert("Cannot revive a ghost")
 		return
+
+	var/confirm = alert("Rejuvinate [M]?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if(config.allow_admin_rev)
 		M.revive(0)
 		M.suiciding = 0
@@ -600,8 +620,8 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		var/confirmation = alert("The station is not linked to central command by a relay. Ruin immersion?",,"Yes","No")
 		if(confirmation == "No")
 			return
-	var/input = input(usr, "Please enter anything you want. Anything. Serious.", "What?", "") as message|null
-	var/customname = input(usr, "Pick a title for the report.", "Title") as text|null
+	var/input = input(usr, "Please enter anything you want. Anything. Serious. Except a blank input, that cancels this.", "What?", "") as message|null
+	var/customname = input(usr, "Pick a title for the report, or leave blank to have one given automatically.", "Title") as text|null
 	if(!input)
 		return
 	if(!customname)
@@ -615,7 +635,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			C.messagetitle.Add("[command_name()] Update")
 			C.messagetext.Add(P.info)
 
-	switch(alert("Should this be announced to the general population?",,"Yes","No"))
+	switch(alert("Should this report's contents be announced to the general population?",,"Yes","No"))
 		if("Yes")
 			command_alert(input, customname,1);
 		if("No")
@@ -662,6 +682,9 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	if(!check_rights(R_DEBUG|R_FUN))	return
 
+	var/confirm = alert("Are you sure you want to make a room go boom at [O]?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	var/devastation = input("Range of total devastation. -1 to none", text("Input"))  as num|null
 	if(devastation == null) return
 	var/heavy = input("Range of heavy impact. -1 to none", text("Input"))  as num|null
@@ -673,7 +696,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	if ((devastation != -1) || (heavy != -1) || (light != -1) || (flash != -1))
 		if ((devastation > 20) || (heavy > 20) || (light > 20))
-			if (alert(src, "Are you sure you want to do this? It will laaag.", "Confirmation", "Yes", "No") == "No")
+			if (alert(src, "Are you absolutely sure you want to do this? It will laaag.", "Confirmation", "Yes", "No") == "No")
 				return
 
 		explosion(O, devastation, heavy, light, flash)
@@ -690,9 +713,9 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	if(!check_rights(R_DEBUG|R_FUN))	return
 
-	var/heavy = input("Range of heavy pulse.", text("Input"))  as num|null
+	var/heavy = input("Range of heavy pulse. Blank = cancel.", text("Input"))  as num|null
 	if(heavy == null) return
-	var/light = input("Range of light pulse.", text("Input"))  as num|null
+	var/light = input("Range of light pulse. Blank = cancel.", text("Input"))  as num|null
 	if(light == null) return
 
 	if (heavy || light)
@@ -712,7 +735,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	if(!check_rights(R_ADMIN|R_FUN))	return
 
-	var/confirm = alert(src, "You sure?", "Confirm", "Yes", "No")
+	var/confirm = alert(src, "You sure you want to ruin [M]'s day?", "Confirm gib", "Yes", "No")
 	if(confirm != "Yes") return
 	//Due to the delay here its easy for something to have happened to the mob
 	if(!M)	return
@@ -731,7 +754,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	set name = "Gibself"
 	set category = "Fun"
 
-	var/confirm = alert(src, "You sure?", "Confirm", "Yes", "No")
+	var/confirm = alert(src, "You sure you want to gib yourself?", "Confirm", "Yes", "No")
 	if(confirm == "Yes")
 		if (istype(mob, /mob/dead/observer)) // so they don't spam gibs everywhere
 			return
@@ -849,10 +872,13 @@ Traitors and the like can also be revived with the previous role mostly intact.
 /client/proc/toggle_view_range()
 	set category = "Special Verbs"
 	set name = "Change View Range"
-	set desc = "switches between 1x and custom views"
+	set desc = "switches between standard and custom views"
 
 	if(view == world.view)
-		view = input("Select view range:", "FUCK YE", 7) in list(1,2,3,4,5,6,7,8,9,10,11,12,13,14,128)
+		view = input("Select view range: (If you pick 0 it cancels)", "FUCK YE", 7) in list(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,128)
+		if(view == 0)
+			view = world.view
+			return
 	else
 		view = world.view
 
@@ -870,7 +896,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	if(!check_rights(R_ADMIN))	return
 
-	var/confirm = alert(src, "You sure?", "Confirm", "Yes", "No")
+	var/confirm = alert(src, "You sure you want to call the shuttle?", "Confirm", "Yes", "No")
 	if(confirm != "Yes") return
 
 	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction" || ticker.mode.name == "confliction")
@@ -894,7 +920,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	if(!check_rights(R_ADMIN))	return
 
-	if(alert(src, "You sure?", "Confirm", "Yes", "No") != "Yes") return
+	if(alert(src, "You sure you want to cancel the shuttle call?", "Confirm", "Yes", "No") != "Yes") return
 
 	if(!ticker || emergency_shuttle.location || emergency_shuttle.direction == 0)
 		return
@@ -909,6 +935,9 @@ Traitors and the like can also be revived with the previous role mostly intact.
 /client/proc/admin_deny_shuttle()
 	set category = "Admin"
 	set name = "Toggle Deny Shuttle"
+
+	var/confirm = alert(src, "You sure you want to prevent the shuttle from being called?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
 
 	if (!ticker)
 		return
@@ -970,6 +999,9 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	set desc = "Toggles random events such as meteors, black holes, blob (but not space dust) on/off"
 
 	if(!check_rights(R_SERVER))	return
+
+	var/confirm = alert(src, "You sure you want to toggle random events [config.allow_random_events ? "off" : "on"]?", "Confirm", "Yes", "No")
+	if(confirm != "Yes") return
 
 	if(!config.allow_random_events)
 		config.allow_random_events = 1

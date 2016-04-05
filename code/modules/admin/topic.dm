@@ -7,7 +7,9 @@
 		return
 
 	var/client/CLIENT = usr.client
+
 	if(href_list["makeAntag"])
+		if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 		switch(href_list["makeAntag"])
 			if("1")
 				log_admin("[key_name(usr)] has spawned a traitor.")
@@ -68,6 +70,7 @@
 			AI.notify_slaved(force_sync=1)
 
 	else if("add_law" in href_list)
+		if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 		var/mob/living/silicon/S = locate(href_list["mob"])
 		var/lawtypes = list(
 			"Law Zero"= LAW_ZERO,
@@ -116,6 +119,7 @@
 		lawchanges.Add("[key_name(usr)] has reset [key_name(S)]: [lawtype]")
 
 	else if("clear_laws" in href_list)
+		if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 		var/mob/living/silicon/S = locate(href_list["mob"])
 		S.laws.clear_inherent_laws()
 		S.laws.clear_supplied_laws()
@@ -305,6 +309,7 @@
 			return
 
 		switch(href_list["call_shuttle"])
+			if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 			if("1")
 				if ((!( ticker ) || emergency_shuttle.location))
 					return
@@ -331,6 +336,7 @@
 
 	else if(href_list["edit_shuttle_time"])
 		if(!check_rights(R_SERVER))	return
+		if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 
 		emergency_shuttle.settimeleft( input("Enter new shuttle duration (seconds):","Edit Shuttle Timeleft", emergency_shuttle.timeleft() ) as num )
 		log_admin("[key_name(usr)] edited the Emergency Shuttle's timeleft to [emergency_shuttle.timeleft()]")
@@ -340,7 +346,7 @@
 
 	else if(href_list["delay_round_end"])
 		if(!check_rights(R_SERVER))	return
-
+		if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
 		message_admins("<span class='notice'>[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].</span>", 1)
@@ -1306,7 +1312,7 @@
 		if(!istype(H))
 			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
 			return
-
+		if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 		log_admin("[key_name(usr)] attempting to monkeyize [key_name(H)]")
 		message_admins("<span class='notice'>[key_name_admin(usr)] attempting to monkeyize [key_name_admin(H)]</span>", 1)
 		var/mob/M = H.monkeyize()
@@ -1321,7 +1327,7 @@
 		if(!istype(H))
 			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
 			return
-
+		if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 		log_admin("[key_name(usr)] attempting to corgize [key_name(H)]")
 		message_admins("<span class='notice'>[key_name_admin(usr)] attempting to corgize [key_name_admin(H)]</span>", 1)
 		var/mob/M = H.corgize()
@@ -1336,7 +1342,7 @@
 		if(!ismob(M))
 			to_chat(usr, "this can only be used on instances of type /mob")
 
-		var/speech = input("What will [key_name(M)] say?.", "Force speech", "")// Don't need to sanitize, since it does that in say(), we also trust our admins.
+		var/speech = input("What will [key_name(M)] say? Leave blank to cancel.", "Force speech", "")// Don't need to sanitize, since it does that in say(), we also trust our admins.
 		if(!speech)	return
 		M.say(speech)
 		speech = sanitize(speech) // Nah, we don't trust them
@@ -1610,7 +1616,7 @@
 		if(!istype(L))
 			to_chat(usr, "This can only be used on instances of type /mob/living")
 			return
-
+		if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 		if(config.allow_admin_rev)
 			L.revive(0)
 			message_admins("<span class='warning'>Admin [key_name_admin(usr)] healed / revived [key_name_admin(L)]!</span>", 1)
@@ -1925,7 +1931,7 @@
 			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
 			return
 
-		if(alert(src.owner, "Are you sure you wish to inflict cancer upon [key_name(H)]?",  "Confirm Cancer?" , "Yes" , "No") != "Yes")
+		if(alert(src.owner, "Are you sure you wish to inflict cancer upon [key_name(H)]?",  "Are you Cancer?" , "Yes" , "No") != "Yes")
 			return
 
 		log_admin("[key_name(H)] was inflicted with cancer, courtesy of [key_name(src.owner)]")
@@ -1990,7 +1996,7 @@
 			to_chat(usr, "This mob type cannot be replied to")
 			return
 
-		var/input = input(src.owner, "Please enter a message to reply to [key_name(M)] via their [receive_type].","Outgoing message from Central Command", "")
+		var/input = input(src.owner, "Please enter a message to reply to [key_name(M)] via their [receive_type]. Blank to cancel.","Outgoing message from Central Command", "")
 		if(!input)	return
 
 		to_chat(src.owner, "You sent [input] to [M] via a secure channel.")
@@ -2013,7 +2019,7 @@
 			to_chat(usr, "This mob type cannot be replied to")
 			return
 
-		var/input = input(src.owner, "Please enter a message to reply to [key_name(M)] via their [receive_type].","Outgoing message from The Syndicate", "")
+		var/input = input(src.owner, "Please enter a message to reply to [key_name(M)] via their [receive_type]. Blank to cancel.","Outgoing message from The Syndicate", "")
 		if(!input)	return
 
 		to_chat(src.owner, "You sent [input] to [M] via a secure channel.")
@@ -2033,10 +2039,10 @@
 		var/mob/living/carbon/human/H = locate(href_list["CentcommFaxReply"])
 
 
-		var/sent = input(src.owner, "Please enter a message to reply to [key_name(H)] via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", "") as message|null
+		var/sent = input(src.owner, "Please enter a message to reply to [key_name(H)] via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks. Blank to cancel.", "Outgoing message from Centcomm", "") as message|null
 		if(!sent)	return
 
-		var/sentname = input(src.owner, "Pick a title for the report", "Title") as text|null
+		var/sentname = input(src.owner, "Pick a title for the report. Blanking does not cancel.", "Title") as text|null
 
 		SendFax(sent, sentname, centcomm = 1)
 
@@ -2272,18 +2278,21 @@
 		var/ok = 0
 		switch(href_list["secretsfun"])
 			if("sec_clothes")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SC")
 				for(var/obj/item/clothing/under/O in world)
 					del(O)
 				ok = 1
 			if("sec_all_clothes")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SAC")
 				for(var/obj/item/clothing/O in world)
 					del(O)
 				ok = 1
 			if("sec_classic1")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SC1")
 				for(var/obj/item/clothing/suit/fire/O in world)
@@ -2299,6 +2308,7 @@
 					del(O)
 				ok = 1*/
 			if("monkey")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","M")
 				for(var/mob/living/carbon/human/H in mob_list)
@@ -2306,6 +2316,7 @@
 						H.monkeyize()
 				ok = 1
 			if("corgi")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","M")
 				for(var/mob/living/carbon/human/H in mob_list)
@@ -2324,6 +2335,7 @@
 				if(!(ticker && ticker.mode))
 					to_chat(usr, "Please wait until the game starts!  Not sure how it will work otherwise.")
 					return
+				if(alert(usr, "You sure you want to toggle gravity?", "Confirm", "Yes", "No") != "Yes") return
 				gravity_is_on = !gravity_is_on
 				for(var/area/A in areas)
 					A.gravitychange(gravity_is_on,A)
@@ -2338,12 +2350,15 @@
 					message_admins("<span class='notice'>[key_name_admin(usr)] toggled gravity off.</span>", 1)
 					command_alert("Feedback surge detected in mass-distributions systems. Artifical gravity has been disabled whilst the system reinitializes. Further failures may result in a gravitational collapse and formation of blackholes. Have a nice day.")
 			if("wave")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Meteor")
 				log_admin("[key_name(usr)] spawned a meteor wave", 1)
 				message_admins("<span class='notice'>[key_name_admin(usr)] spawned a meteor wave.</span>", 1)
 				new /datum/event/meteor_wave
+
 			if("goblob")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Blob")
 				log_admin("[key_name(usr)] spawned a blob", 1)
@@ -2351,6 +2366,7 @@
 				new /datum/event/blob
 
 			if("aliens")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Aliens")
 				log_admin("[key_name(usr)] spawned an alien infestation", 1)
@@ -2359,32 +2375,42 @@
 
 
 			if("power")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","P")
 				log_admin("[key_name(usr)] made all areas powered", 1)
 				message_admins("<span class='notice'>[key_name_admin(usr)] made all areas powered</span>", 1)
 				power_restore()
+
 			if("unpower")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","UP")
 				log_admin("[key_name(usr)] made all areas unpowered", 1)
 				message_admins("<span class='notice'>[key_name_admin(usr)] made all areas unpowered</span>", 1)
 				power_failure()
+
 			if("quickpower")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","QP")
 				log_admin("[key_name(usr)] made all SMESs powered", 1)
 				message_admins("<span class='notice'>[key_name_admin(usr)] made all SMESs powered</span>", 1)
 				power_restore_quick()
+
 			if("breaklink")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				log_admin("[key_name(usr)] broke the link with central command", 1)
 				message_admins("<span class='notice'>[key_name_admin(usr)] broke the link with central command</span>", 1)
 				unlink_from_centcomm()
+
 			if("makelink")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				log_admin("[key_name(usr)] created a link with central command", 1)
 				message_admins("<span class='notice'>[key_name_admin(usr)] created a link with central command</span>", 1)
 				link_to_centcomm()
-			if("activateprison")
+
+			/*if("activateprison")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AP")
 				to_chat(world, "<span class='notice'><B>Transit signature detected.</B></span>")
@@ -2396,6 +2422,7 @@
 					AM.Move()
 				*/
 				message_admins("<span class='notice'>[key_name_admin(usr)] sent the prison shuttle to the station.</span>", 1)
+
 			if("deactivateprison")
 				/*
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2406,12 +2433,14 @@
 					AM.Move()
 				*/
 				message_admins("<span class='notice'>[key_name_admin(usr)] sent the prison shuttle back.</span>", 1)
+
 			if("toggleprisonstatus")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TPS")
 				for(var/obj/machinery/computer/prison_shuttle/PS in machines)
 					PS.allowedtocall = !(PS.allowedtocall)
 					message_admins("<span class='notice'>[key_name_admin(usr)] toggled status of prison shuttle to [PS.allowedtocall].</span>", 1)
+
 			if ("prisonwarp")
 				if (!ticker)
 					alert("The game hasn't started yet!", null, null, null, null, null)
@@ -2453,12 +2482,13 @@
 						else
 							H.loc = pick(prisonsecuritywarp) // teleport security person
 
-						prisonwarped += H
+						prisonwarped += H*/
+
 			if("traitor_all")
 				if(!ticker)
 					alert("The game hasn't started yet!")
 					return
-				var/objective = copytext(sanitize(input("Enter an objective")),1,MAX_MESSAGE_LEN)
+				var/objective = copytext(sanitize(input("Enter an objective. Leave blank to cancel.")),1,MAX_MESSAGE_LEN)
 				if(!objective)
 					return
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2487,12 +2517,14 @@
 					ticker.mode.finalize_traitor(A.mind)
 				message_admins("<span class='notice'>[key_name_admin(usr)] used everyone is a traitor secret. Objective is [objective]</span>", 1)
 				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")
-			if("moveadminshuttle")
+
+			/*if("moveadminshuttle")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ShA")
 				move_admin_shuttle()
 				message_admins("<span class='notice'>[key_name_admin(usr)] moved the centcom administration shuttle</span>", 1)
 				log_admin("[key_name(usr)] moved the centcom administration shuttle")
+
 			if("moveferry")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ShF")
@@ -2504,13 +2536,16 @@
 
 				message_admins("<span class='notice'>[key_name_admin(usr)] moved the centcom ferry</span>", 1)
 				log_admin("[key_name(usr)] moved the centcom ferry")
+
 			if("movealienship")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ShX")
 				move_alien_ship()
 				message_admins("<span class='notice'>[key_name_admin(usr)] moved the alien dinghy</span>", 1)
-				log_admin("[key_name(usr)] moved the alien dinghy")
+				log_admin("[key_name(usr)] moved the alien dinghy")*/
+
 			if("togglebombcap")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BC")
 				switch(MAX_EXPLOSION_RANGE)
@@ -2527,6 +2562,7 @@
 				log_admin("[key_name_admin(usr)] changed the bomb cap to [MAX_EXPLOSION_RANGE]")
 
 			if("flicklights")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FL")
 				while(!usr.stat)
@@ -2600,11 +2636,13 @@
 						sleep(rand(30,400))
 						Wall.ex_act(rand(2,1)) */
 			if("wave")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","MW")
 				new /datum/event/meteor_wave
 
 			if("gravanomalies")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","GA")
 				command_alert("Gravitational anomalies detected on the station. There is no additional data.", "Anomaly Alert")
@@ -2615,6 +2653,7 @@
 					del(bh)
 
 			if("timeanomalies")	//dear god this code was awful :P Still needs further optimisation
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","STA")
 				//moved to its own dm so I could split it up and prevent the spawns copying variables over and over
@@ -2622,27 +2661,36 @@
 				wormhole_event()
 
 			if("goblob")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BL")
 				mini_blob_event()
 				message_admins("[key_name_admin(usr)] has spawned blob", 1)
+
 			if("aliens")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AL")
 				if(aliens_allowed)
 					new /datum/event/alien_infestation
 					message_admins("[key_name_admin(usr)] has spawned aliens", 1)
+
 			if("alien_silent")								//replaces the spawn_xeno verb
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ALS")
 				if(aliens_allowed)
 					create_xeno()
+
 			if("spiders")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SL")
 				new /datum/event/spider_infestation
 				message_admins("[key_name_admin(usr)] has spawned spiders", 1)
+
 			if("comms_blackout")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","CB")
 				var/answer = alert(usr, "Would you like to alert the crew?", "Alert", "Yes", "No")
@@ -2653,60 +2701,77 @@
 				message_admins("[key_name_admin(usr)] triggered a communications blackout.", 1)
 
 			if("pda_spam")
+				if(alert(usr, "That seems fun. Are you sure you want to do it?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","PDA")
 				new /datum/event/pda_spam
 
 			if("carp")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","C")
-				var/choice = input("You sure you want to spawn carp?") in list("Badmin", "Cancel")
-				if(choice == "Badmin")
-					message_admins("[key_name_admin(usr)] has spawned carp.", 1)
-					new /datum/event/carp_migration
+				message_admins("[key_name_admin(usr)] has spawned carp.", 1)
+				new /datum/event/carp_migration
+
 			if("radiation")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","R")
 				message_admins("[key_name_admin(usr)] has has irradiated the station", 1)
 				new /datum/event/radiation_storm
+
 			if("immovable")
+				if(alert(usr, "You sure you want to do that? Rods cause immense damage and gib on impact with mobs.", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","IR")
 				message_admins("[key_name_admin(usr)] has sent an immovable rod to the station", 1)
 				immovablerod()
+
 			if("prison_break")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","PB")
 				message_admins("[key_name_admin(usr)] has allowed a prison break", 1)
 				prison_break()
+
 			if("lightout")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","LO")
 				message_admins("[key_name_admin(usr)] has broke a lot of lights", 1)
 				lightsout(1,2)
+
 			if("blackout")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BO")
 				message_admins("[key_name_admin(usr)] broke all lights", 1)
 				lightsout(0,0)
+
 			if("whiteout")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","WO")
 				for(var/obj/machinery/light/L in alllights)
 					L.fix()
 				message_admins("[key_name_admin(usr)] fixed all lights", 1)
+
 			if("aliens")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AL")
 				message_admins("[key_name_admin(usr)] has spawned aliens", 1)
 				//makeAliens()
 				new /datum/event/alien_infestation
+
 			if("radiation")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RAD")
 				message_admins("[key_name_admin(usr)] has started a radiation event", 1)
 				//makeAliens()
 				new /datum/event/radiation_storm
+
 			if("floorlava")
 				if(floorIsLava)
 					to_chat(usr, "The floor is lava already.")
@@ -2766,6 +2831,7 @@
 							F.update_icon()
 					floorIsLava = 0
 				return
+
 			if("thebees")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BEE")
@@ -2784,6 +2850,7 @@
 						BEE.icon_state = "bees_swarm-feral"
 
 			if("virus")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","V")
 				var/answer = alert("Do you want this to be a greater disease or a lesser one?",,"Greater","Lesser")
@@ -2793,14 +2860,18 @@
 				else
 					virus2_greater_infection()
 					message_admins("[key_name_admin(usr)] has triggered a greater virus outbreak.", 1)
+
 			if("retardify")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RET")
 				for(var/mob/living/carbon/human/H in player_list)
 					to_chat(H, "<span class='danger'>You suddenly feel stupid.</span>")
 					H.setBrainLoss(60)
 				message_admins("[key_name_admin(usr)] made everybody retarded")
+
 			if("fakeguns")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FG")
 				for(var/obj/item/W in world)
@@ -2810,7 +2881,9 @@
 					W.icon_state = "revolver"
 					W.item_state = "gun"
 				message_admins("[key_name_admin(usr)] made every item look like a gun")
+
 			if("experimentalguns")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","GUN")
 				for(var/mob/living/carbon/C in player_list)
@@ -2824,7 +2897,9 @@
 					to_chat(C, "<span class='danger'>A crate appears next to you. You think you can read \"[E.chosen_set]\" scribbled on it</span>")
 					U.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg')
 				message_admins("[key_name_admin(usr)] distributed experimental guns to the entire crew")
+
 			if("schoolgirl")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SG")
 				for(var/obj/item/clothing/under/W in world)
@@ -2833,7 +2908,9 @@
 					W._color = "schoolgirl"
 				message_admins("[key_name_admin(usr)] activated Japanese Animes mode")
 				world << sound('sound/AI/animes.ogg')
+
 			if("eagles")//SCRAW
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","EgL")
 				for(var/obj/machinery/door/airlock/W in all_doors)
@@ -2841,14 +2918,18 @@
 						W.req_access = list()
 				message_admins("[key_name_admin(usr)] activated Egalitarian Station mode")
 				command_alert("Centcomm airlock control override activated. Please take this time to get acquainted with your coworkers.")
+
 			if("dorf")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","DF")
 				for(var/mob/living/carbon/human/B in mob_list)
-					B.f_style = "Dward Beard"
+					B.f_style = "Dwarf Beard"
 					B.update_hair()
 				message_admins("[key_name_admin(usr)] activated dorf mode")
+
 			if("ionstorm")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","I")
 				generate_ion_law()
@@ -2856,26 +2937,33 @@
 				var/show_log = alert(usr, "Show ion message?", "Message", "Yes", "No")
 				if(show_log == "Yes")
 					command_alert("Ion storm detected near the station. Please check all AI-controlled equipment for errors.", "Anomaly Alert",alert='sound/AI/ionstorm.ogg')
+
 			if("spacevines")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","K")
 				new /datum/event/spacevine
 				message_admins("[key_name_admin(usr)] has spawned spacevines", 1)
+
 			if("onlyone")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","OO")
 				usr.client.only_one()
 //				message_admins("[key_name_admin(usr)] has triggered a battle to the death (only one)")
+
 			if("togglenarsie")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","NA")
-				var/choice = input("How do you wish for narsie to interact with her surroundings?") in list("CultStation13", "Nar-Singulo")
+				var/choice = input("How do you wish for narsie to interact with her surroundings?") in list("CultStation13", "Nar-Singulo","Cancel")
 				if(choice == "CultStation13")
 					message_admins("[key_name_admin(usr)] has set narsie's behaviour to \"CultStation13\".")
 					narsie_behaviour = "CultStation13"
 				if(choice == "Nar-Singulo")
 					message_admins("[key_name_admin(usr)] has set narsie's behaviour to \"Nar-Singulo\".")
 					narsie_behaviour = "Nar-Singulo"
+				else
+					return
+
 			if("hellonearth")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","NS")
@@ -2883,6 +2971,7 @@
 				if(choice == "PRAISE SATAN")
 					new /obj/machinery/singularity/narsie/large(get_turf(usr))
 					message_admins("[key_name_admin(usr)] has summoned narsie and brought about a new realm of suffering.")
+
 			if("supermattercascade")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SC")
@@ -2892,6 +2981,7 @@
 					new /turf/unsimulated/wall/supermatter(get_turf(usr))
 					SetUniversalState(/datum/universal_state/supermatter_cascade)
 					message_admins("[key_name_admin(usr)] has managed to destroy the universe with a supermatter cascade. Good job, [key_name_admin(usr)]")
+
 			if("mobswarm")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","CS")
@@ -2901,7 +2991,9 @@
 					var/mobtype = input("What mob would you like?", /mob/living/simple_animal/corgi) in list(typesof(/mob/living))
 					message_admins("[key_name_admin(usr)] triggered a mob swarm.")
 					new /datum/event/mob_swarm(mobtype, amt)
+
 			if("spawnadminbus")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AB")
 				var/obj/structure/bed/chair/vehicle/adminbus/A = new /obj/structure/bed/chair/vehicle/adminbus(get_turf(usr))
@@ -2910,7 +3002,9 @@
 				A.busjuke.dir = EAST
 				message_admins("[key_name_admin(usr)] has spawned an Adminbus. Who gave him the keys?")
 				log_admin("[key_name_admin(usr)] has spawned an Adminbus.")
+
 			if("spawnselfdummy")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TD")
 				message_admins("[key_name_admin(usr)] spawned himself as a Test Dummy.")
@@ -2935,13 +3029,14 @@
 				var/obj/item/weapon/card/id/admin/admin_id = new(D)
 				admin_id.registered_name = newname
 				D.equip_to_slot_or_del(admin_id, slot_wear_id)
+
 			//False flags and bait below. May cause mild hilarity or extreme pain. Now in one button
 			if("fakealerts")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEA")
-				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Return")
+				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Cancel")
 				//Big fat lists of effects, not very modular but at least there's less buttons
-				if(choice == "Return") //Actually fuck this
+				if(choice == "Cancel") //Actually fuck this
 					return //Duh
 				if(choice == "Biohazard") //GUISE WE HAVE A BLOB
 					var/levelchoice = input("Set the level of the biohazard alert, or leave at 0 to have a random level (1 to 7 supported only)", "Space FEMA Readiness Program", 0) as num
@@ -2983,10 +3078,11 @@
 					message_admins("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
 					log_admin("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
 					return
+
 			if("fakebooms") //Micheal Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEE")
-				var/choice = input("How much high-budget explosions do you want ?", "Micheal Bay SFX Systems", 1) as num
+				var/choice = input("How much high-budget explosions do you want? 0 or negative to cancel.", "Micheal Bay SFX Systems", 1) as num
 				if(choice < 1) //No negative or null explosion amounts here math genius
 					to_chat(usr, "<span class='warning'>Invalid input range (null or negative)</span>")
 					return
@@ -2995,6 +3091,7 @@
 				for(var/i = 1 to choice)
 					world << sound('sound/effects/explosionfar.ogg')
 					sleep(rand(2, 10)) //Sleep 0.2 to 1 second
+
 			if("massbomber")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BBM")
@@ -3022,9 +3119,10 @@
 							to_chat(M, "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>")
 							to_chat(M, "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>")
 
-				message_admins("[key_name_admin(usr)] turned everyone into Bomberman!")
-				log_admin("[key_name_admin(usr)] turned everyone into Bomberman!")
-			if("bomberhurt")
+					message_admins("[key_name_admin(usr)] turned everyone into Bomberman!")
+					log_admin("[key_name_admin(usr)] turned everyone into Bomberman!")
+			i
+			f("bomberhurt")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BBH")
 				var/choice = alert("Activate Cuban Pete mode? Note that newly spawned BBD will still have player damage deactivated.","Activating Bomberman Bombs Player Damage","Confirm","Cancel")
@@ -3033,8 +3131,9 @@
 					for(var/obj/item/weapon/bomberman/B in bombermangear)
 						if(!B.arena)
 							B.hurt_players = 1
-				message_admins("[key_name_admin(usr)] enabled the player damage of the Bomberman Bomb Dispensers currently in the world. Cuban Pete approves.")
-				log_admin("[key_name_admin(usr)] enabled the player damage of the Bomberman Bomb Dispensers currently in the world. Cuban Pete approves.")
+					message_admins("[key_name_admin(usr)] enabled the player damage of the Bomberman Bomb Dispensers currently in the world. Cuban Pete approves.")
+					log_admin("[key_name_admin(usr)] enabled the player damage of the Bomberman Bomb Dispensers currently in the world. Cuban Pete approves.")
+
 			if("bomberdestroy")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BBD")
@@ -3044,8 +3143,9 @@
 					for(var/obj/item/weapon/bomberman/B in bombermangear)
 						if(!B.arena)
 							B.destroy_environnement = 1
-				message_admins("[key_name_admin(usr)] enabled the environnement damage of the Bomberman Bomb Dispensers currently in the world. Michael Bay approves.")
-				log_admin("[key_name_admin(usr)] enabled the environnement damage of the Bomberman Bomb Dispensers currently in the world. Michael Bay approves.")
+					message_admins("[key_name_admin(usr)] enabled the environnement damage of the Bomberman Bomb Dispensers currently in the world. Michael Bay approves.")
+					log_admin("[key_name_admin(usr)] enabled the environnement damage of the Bomberman Bomb Dispensers currently in the world. Michael Bay approves.")
+
 			if("bombernohurt")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BBNH")
@@ -3055,8 +3155,9 @@
 					for(var/obj/item/weapon/bomberman/B in bombermangear)
 						if(!B.arena)
 							B.hurt_players = 0
-				message_admins("[key_name_admin(usr)] disabled the player damage of the Bomberman Bomb Dispensers currently in the world.")
-				log_admin("[key_name_admin(usr)] disabled the player damage of the Bomberman Bomb Dispensers currently in the world.")
+					message_admins("[key_name_admin(usr)] disabled the player damage of the Bomberman Bomb Dispensers currently in the world.")
+					log_admin("[key_name_admin(usr)] disabled the player damage of the Bomberman Bomb Dispensers currently in the world.")
+
 			if("bombernodestroy")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BBND")
@@ -3066,19 +3167,24 @@
 					for(var/obj/item/weapon/bomberman/B in bombermangear)
 						if(!B.arena)
 							B.destroy_environnement = 0
-				message_admins("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
-				log_admin("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
+					message_admins("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
+					log_admin("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
+
 			if("togglebombmethod")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BM")
-				var/choice = input("Do you wish for explosions to take walls and obstacles into account?") in list("Yes, let's have realistic explosions", "No, let's have perfectly circular explosions")
+				var/choice = input("Do you wish for explosions to take walls and obstacles into account? Cancel leaves unchanged.") in list("Yes, let's have realistic explosions", "No, let's have perfectly circular explosions", "Cancel")
 				if(choice == "Yes, let's have realistic explosions")
 					message_admins("[key_name_admin(usr)] has set explosions to take walls and obstacles into account.")
 					explosion_newmethod = 1
 				if(choice == "No, let's have perfectly circular explosions")
 					message_admins("[key_name_admin(usr)] has set explosions to completely pass through walls and obstacles.")
 					explosion_newmethod = 0
+				else
+					return
+
 			if("placeturret")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TUR")
 				var/list/possible_guns = list()
@@ -3096,8 +3202,9 @@
 				var/emag = input("Emag the turret?") in list("Yes", "No")
 				if(emag=="Yes")
 					Turret.emag(usr)
+
 			if("hardcore_mode")
-				var/choice = input("Are you sure you want to [ticker.hardcore_mode ? "disable" : "enable"] hardcore mode? Starvation will [ticker.hardcore_mode ? "no longer":""]slowly kill player-controlled humans.", "Admin Abuse") in list("Yes", "No!")
+				var/choice = input("Are you sure you want to [ticker.hardcore_mode ? "disable" : "enable"] hardcore mode? Starvation will [ticker.hardcore_mode ? "no longer":""] slowly kill player-controlled humans.", "Admin Abuse") in list("Yes", "No!")
 
 				if(choice == "Yes")
 					if(!hardcore_mode_on)
@@ -3111,28 +3218,37 @@
 						hardcore_mode = 0
 						to_chat(world, "<h5><span class='danger'>Hardcore mode has been disabled</span></h5>")
 						to_chat(world, "<span class='info'>Starvation will no longer kill player-controlled characters.</span>")
+
 			if("hostile_infestation")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","HI")
 				message_admins("[key_name_admin(usr)] has triggered an infestation of hostile creatures.", 1)
 				new /datum/event/hostile_infestation
+
 			if("mass_hallucination")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","MH")
 				message_admins("[key_name_admin(usr)] made the whole crew trip balls.", 1)
 				new /datum/event/mass_hallucination
+
 			if("meaty_gores")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ODF")
 				message_admins("[key_name_admin(usr)] has sent the station careening through a cloud of gore.", 1)
 				new /datum/event/thing_storm/meaty_gore
+
 			if("silent_meteors")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SILM")
 				message_admins("[key_name_admin(usr)] has spawned meteors without a command alert.", 1)
 				new /datum/event/meteor_shower/meteor_quiet
 		if(usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsfun"]]")
+			message_admins("[key_name(usr)] used secret [href_list["secretsfun"]]")
 			if(ok)
 				to_chat(world, text("<B>A secret has been activated by [usr.key]!</B>"))
 
@@ -3143,13 +3259,16 @@
 		var/ok = 0
 		switch(href_list["secretsadmin"])
 			if("clear_bombs")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				var/num=0
 				for(var/obj/item/device/transfer_valve/TV in world)
 					if(TV.tank_one||TV.tank_two)
 						del(TV)
 						TV++
 				message_admins("[key_name_admin(usr)] has removed [num] bombs", 1)
+
 			if("detonate_bombs")
+				if(alert(usr, "You ABSOLUTELY SURE you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				var/num=0
 				for(var/obj/item/device/transfer_valve/TV in world)
 					if(TV.tank_one||TV.tank_two)
@@ -3161,16 +3280,19 @@
 				for(var/l in bombers)
 					dat += text("[l]<BR>")
 				usr << browse(dat, "window=bombers")
+
 			if("list_signalers")
 				var/dat = "<B>Showing last [length(lastsignalers)] signalers.</B><HR>"
 				for(var/sig in lastsignalers)
 					dat += "[sig]<BR>"
 				usr << browse(dat, "window=lastsignalers;size=800x500")
+
 			if("list_lawchanges")
 				var/dat = "<B>Showing last [length(lawchanges)] law changes.</B><HR>"
 				for(var/sig in lawchanges)
 					dat += "[sig]<BR>"
 				usr << browse(dat, "window=lawchanges;size=800x500")
+
 			if("list_job_debug")
 				var/dat = "<B>Job Debug info.</B><HR>"
 				if(job_master)
@@ -3183,12 +3305,14 @@
 					usr << browse(dat, "window=jobdebug;size=600x500")
 			if("showailaws")
 				output_ai_laws()
+
 			if("showgm")
 				if(!ticker)
 					alert("The game hasn't started yet!")
 				else if (ticker.mode)
 					alert("The game mode is [ticker.mode.name]")
 				else alert("For some reason there's a ticker, but not a game mode")
+
 			if("manifest")
 				var/dat = "<B>Showing Crew Manifest.</B><HR>"
 				dat += "<table cellspacing=5><tr><th>Name</th><th>Position</th></tr>"
@@ -3197,8 +3321,10 @@
 						dat += text("<tr><td>[]</td><td>[]</td></tr>", H.name, H.get_assignment())
 				dat += "</table>"
 				usr << browse(dat, "window=manifest;size=440x410")
+
 			if("check_antagonist")
 				check_antagonists()
+
 			if("DNA")
 				var/dat = "<B>Showing DNA from blood.</B><HR>"
 				dat += "<table cellspacing=5><tr><th>Name</th><th>DNA</th><th>Blood Type</th></tr>"
@@ -3207,6 +3333,7 @@
 						dat += "<tr><td>[H]</td><td>[H.dna.unique_enzymes]</td><td>[H.dna.b_type]</td></tr>"
 				dat += "</table>"
 				usr << browse(dat, "window=DNA;size=440x410")
+
 			if("fingerprints")
 				var/dat = "<B>Showing Fingerprints.</B><HR>"
 				dat += "<table cellspacing=5><tr><th>Name</th><th>Fingerprints</th></tr>"
@@ -3237,24 +3364,32 @@
 				if(!admin_log.len)
 					dat += "No-one has done anything this round!"
 				usr << browse(dat, "window=admin_log")
+
 			if("maint_access_brig")
+				if(alert(usr, "You sure you want to do that? It's irreversible.", "Confirm", "Yes", "No") != "Yes") return
 				for(var/obj/machinery/door/airlock/maintenance/M in all_doors)
 					if (access_maint_tunnels in M.req_access)
 						M.req_access = list(access_brig)
 				message_admins("[key_name_admin(usr)] made all maint doors brig access-only.")
+
 			if("maint_access_engiebrig")
+				if(alert(usr, "You sure you want to do that? It's irreversible.", "Confirm", "Yes", "No") != "Yes") return
 				for(var/obj/machinery/door/airlock/maintenance/M in all_doors)
 					if (access_maint_tunnels in M.req_access)
 						M.req_access = list()
 						M.req_one_access = list(access_brig,access_engine)
 				message_admins("[key_name_admin(usr)] made all maint doors engineering and brig access-only.")
+
 			if("infinite_sec")
+				if(alert(usr, "You sure you want to do that? It's irreversible unless you're smart.", "Confirm", "Yes", "No") != "Yes") return
 				var/datum/job/J = job_master.GetJob("Security Officer")
 				if(!J) return
 				J.total_positions = -1
 				J.spawn_positions = -1
 				message_admins("[key_name_admin(usr)] has removed the cap on security officers.")
+
 			if("virus_custom")
+				if(alert(usr, "You sure you want to do that?", "Confirm", "Yes", "No") != "Yes") return
 				if(virus2_make_custom(usr.client))
 					feedback_add_details("admin_secrets_fun_used", "V_C")
 					message_admins("[key_name_admin(usr)] has trigger a custom virus outbreak.", 1)
@@ -3548,6 +3683,7 @@
 			to_chat(usr, "[S] ([S.type]) selected!")
 
 		shuttle_magic() //Update the window!
+
 	if(href_list["shuttle_add_docking_port"])
 		feedback_inc("admin_shuttle_magic_used",1)
 		feedback_add_details("admin_shuttle_magic_used","CD")

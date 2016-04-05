@@ -247,6 +247,10 @@ Pressure: [env.return_pressure()]"}
 	if(!ticker)
 		alert("Wait until the game starts")
 		return
+
+	var/confirm = alert("Make [M] a robot?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if(istype(M, /mob/living/carbon/human))
 		log_admin("[key_name(src)] has robotized [M.key].")
 		. = M:Robotize()
@@ -261,6 +265,10 @@ Pressure: [env.return_pressure()]"}
 	if(!ticker)
 		alert("Wait until the game starts")
 		return
+
+	var/confirm = alert("Make [M] a MoMMi?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if(istype(M, /mob/living/carbon/human))
 		log_admin("[key_name(src)] has MoMMIfied [M.key].")
 		. = M:MoMMIfy()
@@ -280,6 +288,9 @@ Pressure: [env.return_pressure()]"}
 		alert("That mob doesn't seem to exist, close the panel and try again.")
 		return
 
+	var/confirm = alert("Make [M] a simple animal?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if(istype(M, /mob/new_player))
 		alert("The mob must not be a new_player.")
 		return
@@ -292,6 +303,9 @@ Pressure: [env.return_pressure()]"}
 	set category = "Fun"
 	set name = "Make pAI"
 	set desc = "Specify a location to spawn a pAI device, then specify a key to play that pAI"
+
+	var/cf = alert("Are you sure you want to spawn someone as a pAI?","Sure?","Yes","No")
+	if(cf == "No") return
 
 	if(!T)
 		T = get_turf(usr)
@@ -324,6 +338,10 @@ Pressure: [env.return_pressure()]"}
 	if(!ticker)
 		alert("Wait until the game starts")
 		return
+
+	var/confirm = alert("Make [M] an alien?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if(ishuman(M))
 		log_admin("[key_name(src)] has alienized [M.key].")
 		spawn(10)
@@ -342,6 +360,10 @@ Pressure: [env.return_pressure()]"}
 	if(!ticker)
 		alert("Wait until the game starts")
 		return
+
+	var/confirm = alert("Make [M] a slime?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if(ishuman(M))
 		log_admin("[key_name(src)] has slimeized [M.key].")
 		spawn(10)
@@ -453,6 +475,10 @@ Pressure: [env.return_pressure()]"}
 	// to prevent REALLY stupid deletions
 	var/blocked = list(/obj, /mob, /mob/living, /mob/living/carbon, /mob/living/carbon/human, /mob/dead, /mob/dead/observer, /mob/living/silicon, /mob/living/silicon/robot, /mob/living/silicon/ai)
 	var/hsbitem = input(usr, "Choose an object to delete.", "Delete:") as null|anything in typesof(/obj) + typesof(/mob) - blocked
+
+	var/confirm = alert("Are you sure you want to mass delete [hsbitem]?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if(hsbitem)
 		for(var/atom/O in world)
 			if(istype(O, hsbitem))
@@ -464,6 +490,10 @@ Pressure: [env.return_pressure()]"}
 /client/proc/cmd_debug_make_powernets()
 	set category = "Debug"
 	set name = "Make Powernets"
+
+	var/confirm = alert("Are you sure you want to remake powernets?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	makepowernets()
 	log_admin("[key_name(src)] has remade the powernet. makepowernets() called.")
 	message_admins("[key_name_admin(src)] has remade the powernets. makepowernets() called.", 0)
@@ -472,6 +502,9 @@ Pressure: [env.return_pressure()]"}
 /client/proc/cmd_debug_tog_aliens()
 	set category = "Server"
 	set name = "Toggle Aliens"
+
+	var/confirm = alert("Are you sure you want to toggle aliens being allowed?","Sure?","Yes","No")
+	if(confirm == "No") return
 
 	aliens_allowed = !aliens_allowed
 	log_admin("[key_name(src)] has turned aliens [aliens_allowed ? "on" : "off"].")
@@ -485,6 +518,10 @@ Pressure: [env.return_pressure()]"}
 	if (!ticker)
 		alert("Wait until the game starts")
 		return
+
+	var/confirm = alert("Are you sure you want to give [M] all access? This includes centcomm access and syndicate access.","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if (istype(M, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 		if (H.wear_id)
@@ -663,9 +700,8 @@ Pressure: [env.return_pressure()]"}
 		"Bomberman(arena)",
 		)
 
-	var/dostrip = input("Do you want to strip [M] before equipping them? (0=no, 1=yes)", "STRIPTEASE") as null|anything in list(0,1)
-	if(isnull(dostrip))
-		return
+	var/dostrip = alert("Strip [M] before equipping them?","Strip them like a doll?","Yes","No", "Cancel")
+	if(dostrip == "Cancel") return
 	var/dresscode = input("Select dress for [M]", "Robust quick dress shop") as null|anything in dresspacks
 	if (isnull(dresscode))
 		return
@@ -1201,7 +1237,7 @@ Pressure: [env.return_pressure()]"}
 	set name = "Debug Mob Lists"
 	set desc = "For when you just gotta know"
 
-	switch(input("Which list?") in list("Players","Admins","Mobs","Living Mobs","Dead Mobs", "Clients"))
+	switch(input("Which list?") in list("Players","Admins","Mobs","Living Mobs","Dead Mobs", "Clients", "Cancel"))
 		if("Players")
 			to_chat(usr, list2text(player_list,","))
 		if("Admins")
@@ -1214,12 +1250,18 @@ Pressure: [env.return_pressure()]"}
 			to_chat(usr, list2text(dead_mob_list,","))
 		if("Clients")
 			to_chat(usr, list2text(clients,","))
+		if("Cancel")
+			return
 
 
 /client/proc/cmd_admin_toggle_block(var/mob/M,var/block)
 	if(!ticker)
 		alert("Wait until the game starts")
 		return
+
+	var/confirm = alert("Are you sure you want to change [M]'s SE?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if(istype(M, /mob/living/carbon))
 		M.dna.SetSEState(block,!M.dna.GetSEState(block))
 		genemutcheck(M,block,null,MUTCHK_FORCED)
@@ -1366,7 +1408,7 @@ Pressure: [env.return_pressure()]"}
 	set name = "Dispense Money"
 	set desc = "Honk"
 
-	var/response = input(src,"How much moneys?") as num
+	var/response = input(src,"How much moneys? 0 is an option.") as num
 	if( response < 1) return
 	dispense_cash(response, mob.loc)
 
@@ -1376,6 +1418,8 @@ var/global/blood_virus_spreading_disabled = 0
 	set name = "Disable Blood Virus Spreading"
 
 //	to_chat(usr, "<span class='warning'>Proc disabled.</span>")
+	var/confirm = alert("Are you sure you want to toggle blood spreading viruses [blood_virus_spreading_disabled ? "on" : "off"]?","Sure?","Yes","No")
+	if(confirm == "No") return
 
 	blood_virus_spreading_disabled = !blood_virus_spreading_disabled
 	if(blood_virus_spreading_disabled)
@@ -1408,6 +1452,10 @@ var/global/blood_virus_spreading_disabled = 0
 	if(!ticker)
 		alert("Wait until the game starts")
 		return
+
+	var/confirm = alert("Are you sure you want to fuck up [M]'s day?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if(ishuman(M))
 		return M:Cluwneize()
 		message_admins("<span class='notice'>[key_name_admin(usr)] made [key_name(M)] into a cluwne.</span>", 1)
@@ -1510,6 +1558,9 @@ client/proc/create_bomberman_arena()
 	set category = "Fun"
 
 	if(!check_rights(R_FUN)) return
+
+	var/confirm = alert("Are you sure you want to make a bomberman arena?","Sure?","Yes","No")
+	if(confirm == "No") return
 
 	var/list/arena_sizes = list(
 		"15x13 (2 players)",
@@ -1626,8 +1677,8 @@ client/proc/check_bomb()
 	set name = "Check Bomb Impact"
 	set category = "Debug"
 
-	var/newmode = alert("Use the new method?","Check Bomb Impact", "Yes","No")
-
+	var/newmode = alert("Use the new method?","Check Bomb Impact", "Yes","No","Cancel")
+	if(newmode == "Cancel") return
 
 	var/turf/epicenter = get_turf(usr)
 	var/devastation_range = 0
@@ -1705,6 +1756,9 @@ client/proc/cure_disease()
 	set name = "Cure Disease"
 	set category = "Debug"
 	if(!holder) return
+
+	var/confirm = alert("Are you sure you want to cure a disease?","Sure?","Yes","No")
+	if(confirm == "No") return
 
 	var/list/disease_by_name = list("-Cure All-" = null) + disease2_list + active_diseases
 

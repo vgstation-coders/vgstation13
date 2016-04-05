@@ -1,4 +1,7 @@
 /client/proc/only_one()
+	var/confirm = alert("Are you sure you want to make everyone a highlander?","Sure?","Yes","No")
+	if(confirm == "No") return
+
 	if(!ticker)
 		alert("The game hasn't started yet!")
 		return
