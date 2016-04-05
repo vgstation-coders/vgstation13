@@ -748,6 +748,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(prob(25))
 		release_restraints()
 
+	if(isgolem(owner))
+		droplimb(1)
+
 	return
 
 /datum/organ/external/proc/robotize()
