@@ -230,9 +230,6 @@ var/forceblob = 0
 
 var/polarstar = 0 //1 means that the polar star has been found, 2 means that the spur modification kit has been found
 
-// nanomanager, the manager for Nano UIs
-var/datum/nanomanager/nanomanager = new()
-
 #define SPEED_OF_LIGHT 3e8 //not exact but hey!
 #define SPEED_OF_LIGHT_SQ 9e+16
 #define FIRE_DAMAGE_MODIFIER 0.0215 //Higher values result in more external fire damage to the skin (default 0.0215)

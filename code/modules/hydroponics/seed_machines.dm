@@ -84,7 +84,8 @@
 			visible_message("[bicon(src)] [src] beeps and spits out [loaded_disk].")
 			loaded_disk = null
 
-	nanomanager.update_uis(src)
+	#warn TODO
+	//nanomanager.update_uis(src)
 
 /obj/machinery/botany/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/seeds))
@@ -98,7 +99,8 @@
 			user.drop_item(S, src, force_drop = 1)
 			loaded_seed = W
 			to_chat(user, "You load [W] into [src].")
-			nanomanager.update_uis(src)
+			//nanomanager.update_uis(src)
+		#warn TODO
 		return
 
 	if(istype(W,/obj/item/weapon/disk/botany))
@@ -122,7 +124,8 @@
 
 			loaded_disk = W
 			to_chat(user, "You load [W] into [src].")
-			nanomanager.update_uis(src)
+			//nanomanager.update_uis(src)
+			#warn MAKE IT END
 
 		return
 	return ..()
@@ -148,7 +151,7 @@
 		/obj/item/weapon/stock_parts/console_screen,
 		/obj/item/weapon/stock_parts/matter_bin,
 	)
-
+/*
 /obj/machinery/botany/extractor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 
 	if(!user)
@@ -189,7 +192,7 @@
 		ui.set_initial_data(data)
 		ui.open()
 		//ui.set_auto_update(1)
-
+*/
 /obj/machinery/botany/Topic(href, href_list)
 
 	if(..())
@@ -293,7 +296,8 @@
 		/obj/item/weapon/stock_parts/micro_laser,
 		/obj/item/weapon/stock_parts/console_screen,
 	)
-
+#warn TODO
+/*
 /obj/machinery/botany/editor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 
 	if(!user)
@@ -334,7 +338,7 @@
 		ui.set_initial_data(data)
 		ui.open()
 		//ui.set_auto_update(1)
-
+*/
 /obj/machinery/botany/editor/Topic(href, href_list)
 
 	if(..())

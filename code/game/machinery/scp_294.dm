@@ -20,6 +20,7 @@
 
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
+/*
 /obj/machinery/chem_dispenser/scp_294/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(stat & (BROKEN|NOPOWER)) return
 	if((user.stat && !isobserver(user)) || user.restrained()) return
@@ -53,7 +54,8 @@
 		ui.set_initial_data(data)
 		// open the new ui window
 		ui.open()
-
+*/
+#warn TODO
 /obj/machinery/chem_dispenser/scp_294/Topic(href, href_list)
 	if(stat & (NOPOWER|BROKEN))
 		return 0 // don't update UIs attached to this object

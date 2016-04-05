@@ -3,7 +3,7 @@
 	////////////
 #define TOPIC_SPAM_DELAY	2		//2 ticks is about 2/10ths of a second; it was 4 ticks, but that caused too many clicks to be lost due to lag
 #define UPLOAD_LIMIT		10485760	//Restricts client uploads to the server to 10MB //Boosted this thing. What's the worst that can happen?
-#define MIN_CLIENT_VERSION	0		//Just an ambiguously low version for now, I don't want to suddenly stop people playing.
+#define MIN_CLIENT_VERSION	510		//Just an ambiguously low version for now, I don't want to suddenly stop people playing.
 									//I would just like the code ready should it ever need to be used.
 	/*
 	When somebody clicks a link in game, this Topic is called first.
@@ -349,14 +349,6 @@
 	if(inactivity > duration)	return inactivity
 	return 0
 
-/client/verb/resend_resources()
-	set name = "Resend Resources"
-	set desc = "Re-send resources for NanoUI. May help those with NanoUI issues."
-	set category = "Preferences"
-
-	to_chat(usr, "<span class='notice'>Re-sending NanoUI resources.  This may result in lag.</span>")
-	nanomanager.send_resources(src)
-
 //send resources to the client. It's here in its own proc so we can move it around easiliy if need be
 /client/proc/send_resources()
 //	preload_vox() //Causes long delays with initial start window and subsequent windows when first logged in.
@@ -370,10 +362,6 @@
 	//The above bug report thing doesn't exist anymore so uh, whatever.
 	spawn
 		send_html_resources()
-
-	// Send NanoUI resources to this client
-	spawn nanomanager.send_resources(src)
-
 
 /client/proc/send_html_resources()
 	if(crewmonitor && minimapinit)

@@ -338,8 +338,8 @@ var/shuttle_call/shuttle_calls[0]
 
 	ui_interact(user)
 
-
-
+#warn TODO
+/*
 /obj/machinery/computer/communications/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(user.stat)
 		return
@@ -409,7 +409,7 @@ var/shuttle_call/shuttle_calls[0]
 		ui.open()
 		// auto update every Master Controller tick
 		ui.set_auto_update(1)
-
+*/
 /obj/machinery/computer/communications/emag(mob/user as mob)
 	if(!emagged)
 		emagged = 1

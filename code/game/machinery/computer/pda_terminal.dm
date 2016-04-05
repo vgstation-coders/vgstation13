@@ -58,7 +58,8 @@
 			pda_device = user_pda
 			update_icon()
 
-	nanomanager.update_uis(src)
+	#warn TODO
+	//nanomanager.update_uis(src)
 	attack_hand(user)
 
 /obj/machinery/computer/pda_terminal/attack_ai(var/mob/user)
@@ -82,7 +83,8 @@
 		return
 
 	ui_interact(user)
-
+#warn TODO
+/*
 /obj/machinery/computer/pda_terminal/ui_interact(mob/user, ui_key="main", datum/nanoui/ui=null)
 	user.set_machine(src)
 
@@ -98,7 +100,7 @@
 		ui = new(user, src, ui_key, "pda_terminal.tmpl", src.name, 800, 700)
 		ui.set_initial_data(data)
 		ui.open()
-
+*/
 /obj/machinery/computer/pda_terminal/Topic(href, href_list)
 	if(..())
 		return 1

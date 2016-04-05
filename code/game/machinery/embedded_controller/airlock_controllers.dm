@@ -20,7 +20,7 @@
 		<li>[format_tag("Interior","tag_interior_sensor")]</li>
 		<li>[format_tag("Exterior","tag_exterior_sensor")]</li>
 		</ul>"}
-
+/*
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(!program)//we need to initialize the controller to get a program
 		initialize()
@@ -45,7 +45,8 @@
 		ui.open()
 
 		ui.set_auto_update(1)
-
+*/
+#warn TODO
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/Topic(href, href_list)
 	if(..())
 		return 1
@@ -127,10 +128,10 @@
 		if(DPV.id_tag == tag_airpump)
 			tag_airpump = null
 			return 1
-		
+
 
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/isLinkedWith(var/obj/O)
-	
+
 	var/obj/machinery/door/airlock/D = O
 	if(istype(D))
 		if(tag_interior_door  == D.id_tag)
@@ -153,7 +154,7 @@
 		return 1
 
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/linkWith(var/mob/user, var/obj/O, var/list/context)
-	
+
 	var/obj/machinery/atmospherics/binary/dp_vent_pump/DP
 	if(istype(DP) && DP.id_tag == tag_airpump)
 		tag_airpump = DP.id_tag
@@ -162,7 +163,7 @@
 	if(istype(UV) && UV.id_tag == tag_airpump)
 		tag_airpump = UV.id_tag
 		return 1
-	
+
 	var/obj/machinery/door/airlock/D = O
 	if(istype(D))
 		if(context["slot"] == "int")
@@ -171,7 +172,7 @@
 		if(context["slot"] == "ext")
 			tag_exterior_door = D.id_tag
 			return 1
-	
+
 	var/obj/machinery/airlock_sensor/S = O
 	if(istype(S))
 		if(context["slot"] == "int")
@@ -208,7 +209,7 @@
 		<ul>
 		<li>[format_tag("Chamber","tag_chamber_sensor")]</li>
 		</ul>"}
-
+/*
 /obj/machinery/embedded_controller/radio/airlock_controller/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(!program)//we need to initialize the controller to get a program
 		initialize()
@@ -231,7 +232,8 @@
 		ui.open()
 
 		ui.set_auto_update(1)
-
+		*/
+		#warn TODO
 /obj/machinery/embedded_controller/radio/airlock_controller/Topic(href, href_list)
 	if(..())
 		return 1
@@ -320,7 +322,7 @@
 		return 1
 
 /obj/machinery/embedded_controller/radio/airlock_controller/linkWith(var/mob/user, var/obj/O, var/list/context)
-	
+
 	var/obj/machinery/atmospherics/binary/dp_vent_pump/DP
 	if(istype(DP) && DP.id_tag == tag_airpump)
 		tag_airpump = DP.id_tag
@@ -329,7 +331,7 @@
 	if(istype(UV) && UV.id_tag == tag_airpump)
 		tag_airpump = UV.id_tag
 		return 1
-	
+
 	var/obj/machinery/door/airlock/D = O
 	if(istype(D))
 		if(context["slot"] == "int")
@@ -338,7 +340,7 @@
 		if(context["slot"] == "ext")
 			tag_exterior_door = D.id_tag
 			return 1
-	
+
 	var/obj/machinery/airlock_sensor/S = O
 	if(istype(S))
 		if(context["slot"] == "chamber")
@@ -376,7 +378,7 @@
 			icon_state = "access_control_standby"
 	else
 		icon_state = "access_control_off"
-
+/*
 /obj/machinery/embedded_controller/radio/access_controller/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(!program)//we need to initialize the controller to get a program
 		initialize()
@@ -399,6 +401,8 @@
 
 		ui.set_auto_update(1)
 
+*/
+#warn TODO
 /obj/machinery/embedded_controller/radio/access_controller/Topic(href, href_list)
 	if(..())
 		return 1

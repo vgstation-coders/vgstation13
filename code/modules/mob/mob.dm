@@ -1403,8 +1403,8 @@ var/list/slot_equipment_priority = list( \
 					process = processScheduler.getProcess("pipenet")
 					stat(null, "PIP([pipe_networks.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
 
-					process = processScheduler.getProcess("nanoui")
-					stat(null, "NAN([nanomanager.processing_uis.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
+					process = processScheduler.getProcess("tgui")
+					stat(null, "TGU([global.processing_tguis.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
 
 					process = processScheduler.getProcess("event")
 					stat(null, "EVE([events.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")

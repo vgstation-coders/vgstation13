@@ -136,8 +136,26 @@
 	global.asset_cache_populated = TRUE
 
 //These datums are used to populate the asset cache, the proc "register()" does this.
+
+//all of our asset datums, used for referring to these later
+/var/list/datum/asset/asset_datums = list()
+
+//get a assetdatum or make a new one
+/proc/get_asset_datum(var/type)
+	return asset_datums[type] || new type
+
+/datum/asset/New()
+	asset_datums[type] = src
+
 /datum/asset/proc/register()
 	return
+
+/datum/asset/proc/send(var/client/C)
+	return
+
+/proc/send_asset_datum(var/type, var/client/C, var/verify = TRUE)
+	var/datum/asset/A = get_asset_datum(type)
+	return A.send(C, verify)
 
 //If you don't need anything complicated.
 /datum/asset/simple
@@ -146,6 +164,9 @@
 /datum/asset/simple/register()
 	for(var/asset_name in assets)
 		register_asset(asset_name, assets[asset_name])
+
+/datum/asset/simple/send(var/client/C, var/verify = TRUE)
+	send_asset_list(C, assets, verify)
 
 //DEFINITIONS FOR ASSET DATUMS START HERE.
 
@@ -362,6 +383,12 @@
 		"spesspets_sleep.png"		= 'icons/pda_icons/spesspets_icons/spesspets_sleep.png'
 	)
 
+/datum/asset/tgui/register()
+	register_asset("tgui.css", file("tgui/assets/tgui.css"))
+	register_asset("tgui.js",  file("tgui/assets/tgui.js"))
+
+/datum/asset/tgui/send(var/client/C, var/verify = TRUE)
+	send_asset_list(C, list("tgui.css", "tgui.js"), verify)
 
 //Registers HTML I assets.
 /datum/asset/HTML_interface/register()

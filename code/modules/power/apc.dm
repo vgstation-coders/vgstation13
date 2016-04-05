@@ -687,7 +687,8 @@
 			return 1 // 1 = APC not hacked.
 	else
 		return 0 // 0 = User is not a Malf AI
-
+#warn TODO
+/*
 /obj/machinery/power/apc/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(!user)
 		return
@@ -750,7 +751,7 @@
 		ui.open()
 		// auto update every Master Controller tick
 		ui.set_auto_update(1)
-
+*/
 /obj/machinery/power/apc/proc/report()
 	return "[areaMaster.name] : [equipment]/[lighting]/[environ] ([lastused_equip+lastused_light+lastused_environ]) : [cell? cell.percent() : "N/C"] ([charging])"
 
@@ -782,9 +783,8 @@
 		return 0
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to use this [src]!</span>")
-		nanomanager.close_user_uis(user, src)
-
 		return 0
+
 	if(user.restrained())
 		to_chat(user, "<span class='warning'>You must have free hands to use this [src]</span>")
 		return 0
@@ -804,18 +804,15 @@
 		)
 			if(!loud)
 				to_chat(user, "<span class='warning'>\The [src] have AI control disabled!</span>")
-				nanomanager.close_user_uis(user, src)
 
 			return 0
 	else if(isobserver(user))
 		if(malfhack && istype(malfai) && !isAdminGhost(user))
 			if(!loud)
 				to_chat(user, "<span class='warning'>\The [src] have AI control disabled!</span>")
-				nanomanager.close_user_uis(user, src)
 			return 0
 	else
 		if ((!in_range(src, user) || !istype(src.loc, /turf)))
-			nanomanager.close_user_uis(user, src)
 
 			return 0
 

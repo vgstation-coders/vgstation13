@@ -176,6 +176,8 @@ var/global/list/battery_online =	list(
 	add_fingerprint(user)
 	ui_interact(user)
 
+#warn TODO
+/*
 /obj/machinery/power/battery/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 
 	if(stat & BROKEN)
@@ -206,7 +208,7 @@ var/global/list/battery_online =	list(
 		ui.open()
 		// auto update every Master Controller tick
 		ui.set_auto_update(1)
-
+*/
 /obj/machinery/power/battery/Topic(href, href_list)
 	if(..())
 		return 1
@@ -316,4 +318,3 @@ var/global/list/battery_online =	list(
 	var/rate = "[href]=-[Max]'>-</A>[href]=-[Min]'>-</A> [(C?C : 0)] [href]=[Min]'>+</A>[href]=[Max]'>+</A>"
 	if(Limit) return "[href]=-[Limit]'>-</A>"+rate+"[href]=[Limit]'>+</A>"
 	return rate
-

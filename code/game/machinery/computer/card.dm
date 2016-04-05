@@ -114,7 +114,8 @@
 		if(user.drop_item(id_card, src))
 			modify = id_card
 
-	nanomanager.update_uis(src)
+	#warn TODO
+	//nanomanager.update_uis(src)
 	attack_hand(user)
 
 /obj/machinery/computer/card/attack_ai(var/mob/user as mob)
@@ -127,7 +128,8 @@
 	if(..()) return
 	if(stat & (NOPOWER|BROKEN)) return
 	ui_interact(user)
-
+#warn TODO
+/*
 /obj/machinery/computer/card/ui_interact(mob/user, ui_key="main", datum/nanoui/ui=null)
 	user.set_machine(src)
 
@@ -194,7 +196,7 @@
 		ui = new(user, src, ui_key, "identification_computer.tmpl", src.name, 800, 700)
 		ui.set_initial_data(data)
 		ui.open()
-
+*/
 /obj/machinery/computer/card/Topic(href, href_list)
 	if(..())
 		return 1
@@ -290,7 +292,8 @@
 					else
 						src.visible_message("<span class='notice'>[src] buzzes rudely.</span>")
 					modify.update_virtual_wallet()
-			nanomanager.update_uis(src)
+			#warn TODO
+			//nanomanager.update_uis(src)
 
 		if ("account")
 			if (is_authenticated())
@@ -298,7 +301,8 @@
 				if ((modify == t2 && (in_range(src, usr) || (istype(usr, /mob/living/silicon))) && istype(loc, /turf)))
 					var/account_num = text2num(href_list["account"])
 					modify.associated_account_number = account_num
-			nanomanager.update_uis(src)
+			#warn TODO
+			//nanomanager.update_uis(src)
 
 		if ("mode")
 			mode = text2num(href_list["mode_target"])
@@ -308,7 +312,8 @@
 				printing = 1
 				spawn(50)
 					printing = null
-					nanomanager.update_uis(src)
+					#warn TODO
+					//nanomanager.update_uis(src)
 
 					var/obj/item/weapon/paper/P = new(loc)
 					if (mode)

@@ -8,7 +8,7 @@
 			if(VH.attached == src)
 				returnToPool(VH)
 
-	nanomanager.user_logout(src) // this is used to clean up (remove) this user's Nano UIs
+	tgui_process.on_logout(src) // this is used to clean up (remove) this user's Nano UIs
 
 	player_list -= src
 

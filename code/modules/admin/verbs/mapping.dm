@@ -165,8 +165,6 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/Test_ZAS_Connection
 	src.verbs += /client/proc/SDQL2_query
 	src.verbs += /client/proc/check_sim_unsim
-	src.verbs += /client/proc/nanomapgen_DumpImage
-	src.verbs += /client/proc/nanomapgen_DumpImageAll
 	//src.verbs += /client/proc/cmd_admin_rejuvenate
 
 	feedback_add_details("admin_verb","mDV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -309,7 +307,7 @@ var/intercom_range_display_status = 0
 				var/oldcolor = initial(T.color)
 				var/newcolor = oldcolor
 				if(badtiles.len>0)
-					message_admins("Tile [formatJumpTo(T)] (BT: [basetype]) is next to: [list2text(badtiles,", ")]")
+					message_admins("Tile [formatJumpTo(T)] (BT: [basetype]) is next to: [jointext(badtiles,", ")]")
 					newcolor="#ff0000"
 				if(newcolor!=oldcolor)
 					T.color=newcolor

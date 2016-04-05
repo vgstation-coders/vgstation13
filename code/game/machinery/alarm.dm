@@ -154,7 +154,8 @@
 	for(var/obj/machinery/computer/atmoscontrol/AC in atmos_controllers)
 		if(AC.current == src)
 			AC.current = null
-			nanomanager.update_uis(src)
+			//nanomanager.update_uis(src)
+			#warn TODO
 
 	..()
 
@@ -610,7 +611,7 @@
 	data["scrubbers"]=scrubbers
 	return data
 
-
+/*
 /obj/machinery/alarm/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 	var/list/data=src.get_nano_data(user,FALSE)
 
@@ -625,7 +626,8 @@
 		ui.open()
 		// Auto update every Master Controller tick.
 		ui.set_auto_update(1)
-
+*/
+#warn TODO
 /obj/machinery/alarm/interact(mob/user)
 	if(buildstage!=2)
 		return

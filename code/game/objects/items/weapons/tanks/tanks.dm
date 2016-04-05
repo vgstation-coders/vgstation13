@@ -125,8 +125,13 @@
 
 	ui_interact(user)
 
-/obj/item/weapon/tank/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/item/weapon/tank/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = 0, datum/tgui/master_ui = null, datum/ui_state/state = hands_state)
+	ui = tgui_process.try_update_ui(user, src, ui_key, ui, force_open)
+	if(!ui)
+		ui = new(user, src, ui_key, "tanks", name, 420, 200, master_ui, state)
+		ui.open()
 
+/obj/item/weapon/tank/ui_data(var/mob/user)
 	var/using_internal
 	if(istype(loc,/mob/living/carbon))
 		var/mob/living/carbon/location = loc
@@ -147,59 +152,54 @@
 		if(location.internal == src || (location.wear_mask && (location.wear_mask.flags & MASKINTERNALS)))
 			data["maskConnected"] = 1
 
-	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
-	if (!ui)
-		// the ui does not exist, so we'll create a new() one
-        // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "tanks.tmpl", "Tank", 500, 300)
-		// when the ui is first opened this is the data it will use
-		ui.set_initial_data(data)
-		// open the new ui window
-		ui.open()
-		// auto update every Master Controller tick
-		ui.set_auto_update(1)
+	return data
 
-/obj/item/weapon/tank/Topic(href, href_list)
-	..()
-	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
-		return 1
-	if (usr.stat|| usr.restrained())
-		return 0
-	if (src.loc != usr)
-		return 0
+/obj/item/weapon/tank/ui_act(var/action, var/list/params, var/datum/tgui/ui, var/datum/ui_state/state)
+	if (..())
+		return
 
-	if (href_list["dist_p"])
-		if (href_list["dist_p"] == "reset")
-			src.distribute_pressure = TANK_DEFAULT_RELEASE_PRESSURE
-		else if (href_list["dist_p"] == "max")
-			src.distribute_pressure = TANK_MAX_RELEASE_PRESSURE
-		else
-			var/cp = text2num(href_list["dist_p"])
-			src.distribute_pressure += cp
-		src.distribute_pressure = min(max(round(src.distribute_pressure), 0), TANK_MAX_RELEASE_PRESSURE)
-	if (href_list["stat"])
-		if(istype(loc,/mob/living/carbon))
-			var/mob/living/carbon/location = loc
-			if(location.internal == src)
-				location.internal = null
-				location.internals.icon_state = "internal0"
-				to_chat(usr, "<span class='notice'>You close the tank release valve.</span>")
-				if (location.internals)
+	switch (action)
+		if ("pressure")
+			var/pressure = params["pressure"]
+			if (pressure == "reset")
+				pressure = TANK_DEFAULT_RELEASE_PRESSURE
+				. = TRUE
+			else if (pressure == "min")
+				pressure = 0
+				. = TRUE
+			else if (pressure == "max")
+				pressure = TANK_MAX_RELEASE_PRESSURE
+				. = TRUE
+			else if (pressure == "input")
+				pressure = input("New release pressure (0-[TANK_MAX_RELEASE_PRESSURE] kPa):", name, distribute_pressure) as num|null
+				if (!isnull(pressure) && !..())
+					. = TRUE
+			else if (text2num(pressure) != null)
+				pressure = text2num(pressure)
+				. = TRUE
+			if (.)
+				distribute_pressure = Clamp(round(pressure), 0, TANK_MAX_RELEASE_PRESSURE)
+
+		if ("valve")
+			if(iscarbon(loc))
+				var/mob/living/carbon/location = loc
+				if(location.internal == src)
+					location.internal = null
 					location.internals.icon_state = "internal0"
-			else
+					to_chat(usr, "<span class='notice'>You close the tank release valve.</span>")
+					if (location.internals)
+						location.internals.icon_state = "internal0"
+					return TRUE
+
 				if(location.wear_mask && (location.wear_mask.flags & MASKINTERNALS))
 					location.internal = src
 					to_chat(usr, "<span class='notice'>You open \the [src] valve.</span>")
 					if (location.internals)
 						location.internals.icon_state = "internal1"
+					return TRUE
+
 				else
 					to_chat(usr, "<span class='notice'>You need something to connect to \the [src].</span>")
-
-	src.add_fingerprint(usr)
-	return 1
-
 
 /obj/item/weapon/tank/remove_air(amount)
 	return air_contents.remove(amount)

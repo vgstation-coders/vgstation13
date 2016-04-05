@@ -36,6 +36,7 @@ var/global/global_playlists = list()
 			if("/>" in json)
 				continue
 			var/json_reader/reader = new()
+
 			reader.tokens = reader.ScanJson(json)
 			reader.i = 1
 			var/songdata = reader.read_value()
@@ -320,7 +321,7 @@ var/global/list/loopModeNames=list(
 			if(can_change) t += "</A>"
 			t += "</td><td>[song.album]</td></tr>"
 		t += "</table>"
-	t = list2text(t)
+	t = jointext(t,"")
 	return t
 
 /obj/machinery/media/jukebox/proc/ScreenPayment(var/mob/user)

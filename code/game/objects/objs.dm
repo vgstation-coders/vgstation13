@@ -31,6 +31,8 @@ var/global/list/reagents_to_log = list("fuel"  =  "welder fuel", "plasma"=  "pla
 	if(src in processing_objects)
 		processing_objects -= src
 
+	tgui_process.close_uis(src)
+
 	..()
 
 /obj/item/proc/is_used_on(obj/O, mob/user)

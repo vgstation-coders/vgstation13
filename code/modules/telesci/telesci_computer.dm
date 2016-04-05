@@ -94,6 +94,8 @@
   *
   * @return nothing
   */
+#warn TODO
+/*
 /obj/machinery/computer/telescience/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 	if(stat & (BROKEN|NOPOWER)) return
 	if(user.stat || user.restrained()) return
@@ -125,7 +127,7 @@
 		ui.open()
 		// Auto update every Master Controller tick.
 		ui.set_auto_update(1)
-
+*/
 /obj/machinery/computer/telescience/attack_paw(mob/user)
 	to_chat(user, "You are too primitive to use this computer.")
 	return
@@ -195,7 +197,8 @@
 
 	user.set_machine(src)
 	var/datum/browser/browserdatum = new(user, "telescience", name, 380, 210, src)
-	browserdatum.add_stylesheet("shared", 'nano/css/shared.css')
+	#warn TODO
+	//browserdatum.add_stylesheet("shared", 'nano/css/shared.css')
 	browserdatum.set_content(out)
 	browserdatum.open()
 
@@ -283,7 +286,7 @@
 			var/list/hostiles = typesof(/mob/living/simple_animal/hostile) - blocked
 			playsound(L, 'sound/effects/phasein.ogg', 100, 1, extrarange = 3, falloff = 5)
 			for(var/mob/living/carbon/human/M in viewers(L, null))
-				flick("e_flash", M.flash)
+				M.flash_eyes(visual = 1)
 			var/chosen = pick(hostiles)
 			var/mob/living/simple_animal/hostile/H = new chosen
 			H.loc = L
