@@ -209,9 +209,9 @@
 	whisper_verb = "grumbles"
 	colour = "brown"
 	native = 1
-	key = "g"
+	key = "p"
 	flags = RESTRICTED
-	syllables = list("oa","ur","ae","um","tu","gor","an","lo","ag","oon")
+	syllables = list("oa","ur","ae","um","tu","gor","an","lo","ag","oon","po")
 
 /datum/language/skellington/say_misunderstood(mob/M, message)
 	message="CLICK"
