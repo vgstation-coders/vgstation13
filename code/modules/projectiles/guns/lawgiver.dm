@@ -175,8 +175,8 @@
 				say("STUN")
 			else if((findtext(speech.message, "laser")) || (findtext(speech.message, "lethal")) || (findtext(speech.message, "beam")))
 				firing_mode = LASER
-				fire_sound = 'sound/weapons/lasercannonfire.ogg'
-				projectile_type = "/obj/item/projectile/beam/heavylaser"
+				fire_sound = 'sound/weapons/Laser.ogg'
+				projectile_type = "/obj/item/projectile/beam"
 				fire_delay = 5
 				sleep(3)
 				say("LASER")
