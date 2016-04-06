@@ -653,7 +653,7 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/golem
 	name = "Golem"
 	icobase = 'icons/mob/human_races/r_golem.dmi'
-	deform = 'icons/mob/human_races/r_golem.dmi'  // TODO: Need deform.
+	deform = 'icons/mob/human_races/r_def_golem.dmi'
 	language = "Golem"
 	attack_verb = "punch"
 	has_sweat_glands = 0
