@@ -60,7 +60,6 @@
 		name = "\improper Generator Room"
 		//icon_state = "engine_generators"
 
-
 	rust_control
 		name = "\improper Rust Control Room"
 		//icon_state = "engine_starboardgyro"
