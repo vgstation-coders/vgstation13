@@ -95,6 +95,7 @@
 	// TODO:  Special ash subtype that looks like charred chair legs
 
 	sheet_type = /obj/item/stack/sheet/wood
+	sheet_amt = 3
 
 /obj/structure/bed/chair/wood/normal
 	icon_state = "wooden_chair"
@@ -128,6 +129,8 @@
 	name = "comfy chair"
 	desc = "It looks comfy."
 	icon_state = "comfychair_black"
+
+	sheet_amt = 2
 
 	var/image/armrest
 
