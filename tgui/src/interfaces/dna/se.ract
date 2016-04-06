@@ -1,0 +1,66 @@
+<link rel='ractive' href='./radEmitter.ract' />
+<script>
+component.exports = {
+	computed: {
+		DNABlocks () {
+			return require('./helpers.js').DNABlocks(this.get("data.occupant.structuralEnzymes"));
+		}
+	}
+}
+</script>
+<ui-display title='Structural Enzymes'>
+	{{#if data.occupant.structuralEnzymes}}
+		{{#each DNABlocks:num}}
+		<div class='dnaBlock'>
+			<span class='dnaBlockNumber'>{{num+1}}</span>
+			{{#each .:subnum}}
+				<ui-button state='{{data.selectedSEBlock + 1 == num && data.selectedSESubBlock + 1 == subnum ? "selected" : null}}'
+				action='selectBlock'
+				params='{"selectSEBlock": {{num + 1}}, "selectSESubBlock":{{subnum + 1}}}'>
+					{{.}}
+				</ui-button>
+			{{/each}}
+		</div>
+		{{/each}}
+	{{else}}
+		<ui-notice>Please place a valid subject into the DNA modifier.</ui-notice>
+	{{/if}}
+</ui-display>
+<ui-display title='Controls'>
+	<ui-button icon='warning' action='irradiateBlock' state='{{data.occupant ? null : "disabled"}}'>Irradiate Block</ui-button>
+</ui-display>
+<radEmitter />
+
+<style>
+/*
+God I'm terrible at CSS. Not having access to the standard colours and shit doesn't help either.
+Horrible hacks BUT IT WORKS.
+*/
+.dnaBlock {
+	font-family: Fixed, monospace;
+	float:   left;
+	width:   100px;
+	padding: 0 0 5px 0;
+	font-size: 0px; /* Hack to fix whitespace, gets reset below. */
+}
+
+.dnaBlockNumber {
+	background: #363636;
+	text-align: center;
+	min-width:  20px;
+	height:     20px;
+	display:    inline-block;
+	margin :    0px !important;
+	border:     1px solid #272727;
+	vertical-align: middle;
+	font-size:  12px;
+	line-height: 17px;
+}
+
+.dnaBlock .button { /* All buttons inside a dnaBlocks div */
+	min-width: 16px;
+	margin:    0 0 0 2px !important;
+	height:    20px;
+	font-size: 12px;
+}
+</style>

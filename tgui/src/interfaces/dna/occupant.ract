@@ -1,0 +1,60 @@
+<script>
+component.exports = {
+	computed: {
+		statColor () {
+			const stat = this.get('data.occupant.stat');
+			switch (stat) {
+				case 0: return 'good';    // Alive and kicking.
+				case 1: return 'average'; // Alive but no longer kicking.
+				case 2: return 'bad';     // Neither alive nor kicking.
+			}
+		},
+		statName () {
+			const stat = this.get('data.occupant.stat');
+			switch (stat) {
+				case 0: return "Concious"
+				case 1: return "Unconcious"
+				case 2: return "DEAD"
+			}
+		}
+	}
+}
+</script>
+
+<ui-display title='Status' button>
+	{{#partial button}}
+		<ui-button icon='{{data.locked ? "lock" : "unlock"}}' action='lock'>{{data.locked ? "unlock" : "lock"}}</ui-button>
+		<ui-button icon='eject' action='eject' state='{{data.occupant ? null : "disabled"}}'>eject</ui-button>
+	{{/partial}}
+	{{#if data.occupant}}
+		<ui-section label='Occupant'>
+			{{data.occupant.name}} <i class="fa fa-arrow-right"></i> <span class='{{statColor}}'><b>{{statName}}</b></span>
+		</ui-section>
+		{{#if data.occupant.stat < 2}}
+			<ui-section label='Health'>
+				{{#if data.occupant.health >= 0}}
+					<ui-bar min='0' max='{{data.occupant.maxHealth}}' value='{{data.occupant.health}}' state='good'>{{Math.round(data.occupant.health)}}</ui-bar>
+				{{else}}
+					<ui-bar min='0' max='{{-data.occupant.minHealth}}' value='{{-data.occupant.health}}' state='average alignRight'>{{Math.round(data.occupant.health)}}</ui-bar>
+				{{/if}}
+			</ui-section>
+			<ui-section label='Radiation'>
+				<ui-bar min='0' max='100' value='{{data.occupant.radiationLevel}}' state='average'>{{Math.round(data.occupant.radiationLevel)}}</ui-bar>
+			</ui-section>
+		{{/if}}
+		<ui-section label='Unique Enzymes'>
+			{{{data.occupant.uniqueEnzymes || '<span class="bad">Unknown</span>'}}}
+		</ui-section>
+	{{else}}
+		Cell unoccupied!
+	{{/if}}
+	<!--
+		<ui-section label='Unique Indentifier'>
+			{{{data.occupant.uniqueIndentity || '<span class="bad">Unknown</span>'}}}
+		</ui-section>
+
+		<ui-section label='Structural Enzymes'>
+			{{{data.occupant.structuralEnzymes || '<span class="bad">Unknown</span>'}}}
+		</ui-section>
+	-->
+</ui-display>

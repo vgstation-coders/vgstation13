@@ -1,0 +1,13 @@
+<ui-display title='Radiation Emitter Settings'>
+	<ui-section label='Intensity'>
+		<ui-button icon='minus' action='changeIntensity' params='{"target": "+"}' state='{{data.radiationIntensity > 1  ? null : "disabled"}}'></ui-button>
+		{{data.radiationIntensity}}
+		<ui-button icon='plus'  action='changeIntensity' params='{"target": "-"}' state='{{data.radiationIntensity < 10 ? null : "disabled"}}'></ui-button>
+	</ui-section>
+	<ui-section label='Duration'>
+		<ui-button icon='minus' action='changeDuration' params='{"target": "+"}' state='{{data.radiationDuration > 2  ? null : "disabled"}}'></ui-button>
+		{{data.radiationDuration}}
+		<ui-button icon='plus'  action='changeDuration' params='{"target": "-"}' state='{{data.radiationDuration < 20 ? null : "disabled"}}'></ui-button>
+	</ui-section>
+	<ui-button icon='warning' action='pulseRadiation' state='{{data.occupant ? null : "disabled"}}'>Pulse Radiation</ui-button>
+</ui-display>

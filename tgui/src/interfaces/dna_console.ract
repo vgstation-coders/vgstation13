@@ -1,0 +1,20 @@
+<link rel='ractive' href='./dna/occupant.ract'>
+<link rel='ractive' href='./dna/ui.ract'>
+<link rel='ractive' href='./dna/se.ract'>
+<link rel='ractive' href='./dna/buffers.ract'>
+<!--<link rel='ractive' href='./dna/rejuvenators.ract'>-->
+
+<occupant />
+
+<ui-display title='Operations'>
+	<ui-button icon='link' state='{{data.selectedMenuKey == "ui" ? "selected" : null}}' action='menu' params='{"menu": "ui"}'>Modify U.I.</ui-button>
+	<ui-button icon='link' state='{{data.selectedMenuKey == "se" ? "selected" : null}}' action='menu' params='{"menu": "se"}'>Modify S.E.</ui-button>
+	<ui-button icon='floppy-o' state='{{data.selectedMenuKey == "buffer" ? "selected" : null}}' action='menu' params='{"menu": "buffer"}'>Transfer Buffers</ui-button>
+	<ui-button icon='plus' state='{{data.selectedMenuKey == "rejuvenators" ? "selected" : null}}' action='menu' params='{"menu": "rejuvenators"}'>Rejuvenators</ui-button>
+</ui-display>
+
+{{#if data.selectedMenuKey == 'ui'}}
+	<ui />
+{{elseif data.selectedMenuKey == 'se'}}
+	<se />
+{{/if}}

@@ -1,0 +1,7 @@
+<ui-display title='Transfer Buffers'>
+	{{#each data.buffers:num}}
+		<ui-display title='Buffer {{num+1}}'>
+			
+		</ui-display>
+	{{/each}}
+</ui-display>

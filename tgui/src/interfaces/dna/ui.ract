@@ -1,0 +1,89 @@
+<link rel='ractive' href='./radEmitter.ract' />
+<script>
+component.exports = {
+	computed: {
+		DNABlocks () {
+			return require('./helpers.js').DNABlocks(this.get("data.occupant.uniqueIdentity"));
+		}
+/*		DNABlocks2 () { // Seperate function for performance reasons.
+			var splitblocks = require('./helpers.js').DNABlocks(this.get("data.occupant.uniqueIdentity"));
+			var html = '';
+			splitblocks.forEach((value, index, array) => {
+				html += '<div class="dnaBlock">'
+				html += `<span class='dnaBlockNumber'>${index + 1}</span>`
+				value.forEach((subvalue, subindex, subarray) => {
+					html += `<ui-button state='${this.get(data.selectedUIBlock) + 1 == index && this.get(data.selectedUISubBlock) + 1 == subindex ? "selected" : null}' action='selectBlock'
+					params='{"selectUIBlock": ${index + 1}, "selectUISubBlock":${subindex + 1}}'>
+						${subvalue}
+					</ui-button>`;
+				});
+				html += "</div>"
+			});
+			return html;
+		}*/
+	}
+}
+</script>
+<ui-display title='Unique Identifier'>
+	{{#if data.occupant.uniqueIdentity}}
+		<!--{{{DNABlocks2}}}-->
+
+		{{#each DNABlocks:num}}
+		<div class='dnaBlock'>
+			<span class='dnaBlockNumber'>{{num+1}}</span>
+			{{#each .:subnum}}
+				<ui-button state='{{data.selectedUIBlock + 1 == num && data.selectedUISubBlock + 1 == subnum ? "selected" : null}}'
+				action='selectBlock'
+				params='{"selectUIBlock": {{num + 1}}, "selectUISubBlock":{{subnum + 1}}}'>
+					{{.}}
+				</ui-button>
+			{{/each}}
+		</div>
+		{{/each}}
+	{{else}}
+		<ui-notice>Please place a valid subject into the DNA modifier.</ui-notice>
+	{{/if}}
+</ui-display>
+<ui-display title='Controls'>
+	<ui-section label='Target'>
+		<ui-button icon='minus' action='changeUITarget' params='{"target": "+"}' state='{{data.selectedUITarget > 0  ? null : "disabled"}}'></ui-button>
+		{{data.selectedUITargetHex}}
+		<ui-button icon='plus'  action='changeUITarget' params='{"target": "-"}' state='{{data.selectedUITarget < 15 ? null : "disabled"}}'></ui-button>
+	</ui-section>
+	<ui-button icon='warning' action='irradiateBlock' state='{{data.occupant ? null : "disabled"}}'>Irradiate Block</ui-button>
+</ui-display>
+<radEmitter />
+
+<style>
+/*
+God I'm terrible at CSS. Not having access to the standard colours and shit doesn't help either.
+Horrible hacks BUT IT WORKS.
+*/
+.dnaBlock {
+	font-family: Fixed, monospace;
+	float:   left;
+	width:   100px;
+	padding: 0 0 5px 0;
+	font-size: 0px; /* Hack to fix whitespace, gets reset below. */
+}
+
+.dnaBlockNumber {
+	background: #363636;
+	text-align: center;
+	min-width:  20px;
+	height:     20px;
+	display:    inline-block;
+	margin :    0px !important;
+	border:     1px solid #272727;
+	vertical-align: middle;
+	font-size:  12px;
+	line-height: 17px;
+}
+
+.dnaBlock .button { /* All buttons inside a dnaBlocks div */
+	min-width: 16px;
+	margin:    0 0 0 2px !important;
+	height:    20px;
+	font-size: 12px;
+}
+</style>

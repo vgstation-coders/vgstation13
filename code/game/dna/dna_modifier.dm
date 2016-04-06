@@ -464,17 +464,11 @@
   *
   * @return nothing
   */
-#warn TODO
-  /*
-/obj/machinery/computer/scan_consolenew/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+#warn TODO // I should add the no-scanner warning back in.
 
-	if(connected)
-		if(user == connected.occupant || user.isUnconscious())
-			return
-	else
-		src.visible_message("[bicon(src)]<span class='notice'>No scanner connected!<span>")
-		return
+/obj/machinery/computer/scan_consolenew/SIMPLE_TGUI_INTERACT("dna_console", "DNA Modifier Console", 660, 700, default_state)
 
+/obj/machinery/computer/scan_consolenew/ui_data(var/mob/user)
 	// this is the data which will be sent to the ui
 	var/data[0]
 	data["selectedMenuKey"] = selected_menu_key
@@ -513,19 +507,8 @@
 	data["selectedUITarget"] = selected_ui_target
 	data["selectedUITargetHex"] = selected_ui_target_hex
 
-	var/occupantData[0]
-	if (!src.connected.occupant || !src.connected.occupant.dna)
-		occupantData["name"] = null
-		occupantData["stat"] = null
-		occupantData["isViableSubject"] = null
-		occupantData["health"] = null
-		occupantData["maxHealth"] = null
-		occupantData["minHealth"] = null
-		occupantData["uniqueEnzymes"] = null
-		occupantData["uniqueIdentity"] = null
-		occupantData["structuralEnzymes"] = null
-		occupantData["radiationLevel"] = null
-	else
+	if (src.connected.occupant && src.connected.occupant.dna)
+		var/list/occupantData[0]
 		occupantData["name"] = connected.occupant.name
 		occupantData["stat"] = connected.occupant.stat
 		occupantData["isViableSubject"] = 1
@@ -538,7 +521,7 @@
 		occupantData["uniqueIdentity"] = connected.occupant.dna.uni_identity
 		occupantData["structuralEnzymes"] = connected.occupant.dna.struc_enzymes
 		occupantData["radiationLevel"] = connected.occupant.radiation
-	data["occupant"] = occupantData;
+		data["occupant"] = occupantData;
 
 	data["isBeakerLoaded"] = connected.beaker ? 1 : 0
 	data["beakerLabel"] = null
@@ -549,18 +532,7 @@
 			for(var/datum/reagent/R in connected.beaker.reagents.reagent_list)
 				data["beakerVolume"] += R.volume
 
-	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
-	if (!ui)
-		// the ui does not exist, so we'll create a new() one
-        // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "dna_modifier.tmpl", "DNA Modifier Console", 660, 700)
-		// when the ui is first opened this is the data it will use
-		ui.set_initial_data(data)
-		// open the new ui window
-		ui.open()
-		// auto update every Master Controller tick
-		ui.set_auto_update(1)*/
+	return data
 
 /obj/machinery/computer/scan_consolenew/Topic(href, href_list)
 	if(..())

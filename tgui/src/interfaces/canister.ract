@@ -20,7 +20,7 @@
   <ui-section label='Pressure Regulator'>
     <ui-button icon='refresh' state='{{data.releasePressure != data.defaultReleasePressure ? null : "disabled"}}'
       action='pressure' params='{"pressure": "reset"}'>Reset</ui-button>
-    <ui-button icon='minus' state='{{data.releasePressure > data.minReleasePressure ? null : "disabled"}}'
+    <ui-button icon='minus' state='{{datareleasePressure > data.minReleasePressure ? null : "disabled"}}'
       action='pressure' params='{"pressure": "min"}'>Min</ui-button>
     <ui-button icon='pencil' action='pressure' params='{"pressure": "input"}'>Set</ui-button>
     <ui-button icon='plus' state='{{data.releasePressure < data.maxReleasePressure ? null : "disabled"}}'

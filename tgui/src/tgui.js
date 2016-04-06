@@ -53,12 +53,10 @@ fontawesome.check('\uf240')
   .catch(() => document.body.classList.add('no-icons'))
 
 function keyboard(e) {
-    alert(e.keyCode)
-    if (e.keyCode == 123) {
-        alert("test");
-        var firebugEl = document.createElement('script');
-        firebugEl.src = 'https://getfirebug.com/firebug-lite-debug.js';
-        document.body.appendChild(firebugEl);
+    if (e.keyCode == 123) { // F12, open a firebug debug console.
+        var firebug = document.createElement('script');
+        firebug.src = 'https://getfirebug.com/firebug-lite-debug.js';
+        document.body.appendChild(firebug);
     }
 }
 document.addEventListener("keydown", keyboard, false);

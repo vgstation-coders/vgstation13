@@ -165,13 +165,11 @@
 //Helper macro for eggs, called in process() of all fertilized eggs. If it returns 0, the egg will no longer be able to hatch
 #define is_in_valid_nest(egg) (isturf(egg.loc))
 
-/*
 // Less typing for making a tgui!
-#define SIMPLE_TGUI_INTERACT(interface, title, height, width, n_state) ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = 0, datum/tgui/master_ui = null, datum/ui_state/state = default_state) {\
+#define SIMPLE_TGUI_INTERACT(interface, title, height, width, n_state) ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = 0, datum/tgui/master_ui = null, datum/ui_state/state = n_state) {\
 	ui = tgui_process.try_update_ui(user, src, ui_key, ui, force_open);\
 	if(!ui){\
-		ui = new(user, src, ui_key, interface, title || name, height, width, master_ui, state);\
+		ui = new(user, src, ui_key, interface, title, height, width, master_ui, state);\
 		ui.open();\
 	}\
 }
-*/

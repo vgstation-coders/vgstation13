@@ -198,7 +198,7 @@
   * return string UI HTML output.
  **/
 /datum/tgui/proc/get_html(var/inline)
-	. = global.tgui_basehtml
+	. = replacetextEx(global.tgui_basehtml, "{}", get_json(initial_data))
 	. = replacetextEx(., "\[ref]", "\ref[src]")
 	. = replacetextEx(., "\[style]", style)
 	return .
