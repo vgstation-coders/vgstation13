@@ -69,7 +69,8 @@
 						"SOTP MESING WITH THE ROUNS SHITMAN!!!", \
 						"SKELINGTON IS 4 SHITERS!", \
 						"MOMMSI R THE WURST SCUM!!", \
-						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
+						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!", \
+						"BAUDS LOVES POYNIES NEIGHH"))
 				if(3)
 					emote("drool")
 
