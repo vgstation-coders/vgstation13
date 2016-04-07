@@ -32,6 +32,7 @@
 		new /obj/item/device/flash(src)
 		new /obj/item/device/gps/engineering(src)
 		new /obj/item/weapon/storage/belt/utility/chief(src)
+		new /obj/item/device/holomap(src)
 		return
 
 
@@ -119,6 +120,7 @@
 		new /obj/item/taperoll/engineering(src)
 		new /obj/item/taperoll/engineering(src)
 		new /obj/item/device/gps/engineering(src)
+		new /obj/item/device/holomap(src)
 		return
 
 /obj/structure/closet/secure_closet/engineering_atmos
@@ -153,6 +155,7 @@
 		new /obj/item/ammo_storage/box/flare(src)
 		new /obj/item/device/rcd/rpd(src)
 		new /obj/item/device/analyzer(src)
+		new /obj/item/device/holomap(src)
 		return
 
 /obj/structure/closet/secure_closet/engineering_mechanic

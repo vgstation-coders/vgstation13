@@ -735,13 +735,18 @@
 
 // Holomap stuff!
 /turf/proc/add_holomap(var/atom/movable/AM)
-	var/image/I = image()
-	I.appearance = A.appearance
+	var/image/I = new
+	I.appearance = AM.appearance
 	I.appearance_flags = RESET_COLOR | RESET_ALPHA | RESET_TRANSFORM
+	I.loc = src
+	I.dir = AM.dir
+	I.alpha = 128
 
+	if (!holomap_data)
+		holomap_data = list()
 	holomap_data += I
 
 // Calls the above, but only if the game has not yet started.
 /turf/proc/soft_add_holomap(var/atom/movable/AM)
-	if (ticker && ticker.current_state != GAME_STATE_PLAYING)
+	if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
 		add_holomap(AM)
