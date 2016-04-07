@@ -69,7 +69,7 @@ For the main html chat area
 
 	// world.log << "chatOutput: load() completed"
 
-/datum/chatOutput/Topic(var/href, var/list/href_list)
+/datum/chatOutput/Topic(var/href, var/list/href_list, var/old_afk)
 	if(usr.client != owner)
 		return 1
 
@@ -92,6 +92,7 @@ For the main html chat area
 			data = debug(arglist(params))
 
 		if("ping")
+			owner.last_activity = old_afk // Reset AFK in this specific occasion.
 			data = ping(arglist(params))
 
 		if("analyzeClientData")

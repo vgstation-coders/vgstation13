@@ -54,6 +54,7 @@ you will have to do something like if(client.rights & R_ADMIN) yourself.
 */
 /proc/check_rights(rights_required, show_msg=1)
 	if(usr && usr.client)
+		usr.client.reset_afk()
 		if(rights_required)
 			if(usr.client.holder)
 				if(rights_required & usr.client.holder.rights)

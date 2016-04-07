@@ -201,6 +201,7 @@
 		O.dir = direct
 
 /client/Move(loc,dir)
+	reset_afk()
 	if(move_delayer.next_allowed > world.time)
 		return 0
 

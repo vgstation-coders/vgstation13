@@ -30,6 +30,10 @@
 	if(!usr || usr != mob)	//stops us calling Topic for somebody else's client. Also helps prevent usr=null
 		return
 
+	// It's easier to fix the AFK if we shouldn't have reset it than to reset it for every possible option.
+	var/old_afk = last_activity
+	reset_afk()
+
 	//Reduces spamming of links by dropping calls that happen during the delay period
 //	if(next_allowed_topic_time > world.time)
 //		return
@@ -74,7 +78,8 @@
 		if("usr")		hsrc = mob
 		if("prefs")		return prefs.process_link(usr,href_list)
 		if("vars")		return view_var_Topic(href,href_list,hsrc)
-		if("chat")		return chatOutput.Topic(href, href_list)
+		if("chat")
+			return chatOutput.Topic(href, href_list, old_afk)
 
 	switch(href_list["action"])
 		if ("openLink")
@@ -343,11 +348,13 @@
 #undef UPLOAD_LIMIT
 #undef MIN_CLIENT_VERSION
 
-//checks if a client is afk
-//3000 frames = 5 minutes
-/client/proc/is_afk(duration=3000)
-	if(inactivity > duration)	return inactivity
-	return 0
+// Checks if a client is AFK.
+// Some actions may not reset AFK-ness, however most common ones should.
+// 3000 tenths of seconds = 5 minutes
+/client/proc/is_afk(var/duration = 3000)
+	. = world.time - last_activity
+	if(. < duration)
+		return 0
 
 /client/verb/resend_resources()
 	set name = "Resend Resources"
@@ -423,3 +430,10 @@
 	if(!(colour_to.len))
 		colour_to = default_colour_matrix
 	animate(src, color=colour_to, time=time, easing=SINE_EASING)
+
+/client/proc/reset_afk()
+	last_activity = world.time
+
+/client/Click()
+	reset_afk()
+	return ..()
