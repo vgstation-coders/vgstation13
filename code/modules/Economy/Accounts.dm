@@ -19,6 +19,7 @@ var/global/list/all_money_accounts = list()
 		station_account.account_number = rand(11111, 99999)
 		station_account.remote_access_pin = rand(1111, 9999)
 		station_account.money = 5000
+		station_account.wage_gain = 500
 
 		//create an entry in the account transaction log for when it was created
 		var/datum/transaction/T = new()
@@ -33,7 +34,7 @@ var/global/list/all_money_accounts = list()
 		station_account.transaction_log.Add(T)
 		all_money_accounts.Add(station_account)
 
-/proc/create_department_account(department)
+/proc/create_department_account(department, var/recieves_wage = 0)
 	next_account_number = rand(111111, 999999)
 
 	var/datum/money_account/department_account = new()
@@ -41,6 +42,8 @@ var/global/list/all_money_accounts = list()
 	department_account.account_number = rand(11111, 99999)
 	department_account.remote_access_pin = rand(1111, 9999)
 	department_account.money = 5000
+	if(recieves_wage == 1)
+		department_account.wage_gain = 500
 
 	//create an entry in the account transaction log for when it was created
 	var/datum/transaction/T = new()
@@ -60,7 +63,7 @@ var/global/list/all_money_accounts = list()
 //the current ingame time (hh:mm) can be obtained by calling:
 //worldtime2text()
 
-/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db)
+/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0)
 
 
 	//create a new account
@@ -68,6 +71,7 @@ var/global/list/all_money_accounts = list()
 	M.owner_name = new_owner_name
 	M.remote_access_pin = rand(1111, 9999)
 	M.money = starting_funds
+	M.wage_gain = wage_payout
 
 	//create an entry in the account transaction log for when it was created
 	var/datum/transaction/T = new()
@@ -130,6 +134,7 @@ var/global/list/all_money_accounts = list()
 							//1 - require manual login / account number and pin
 							//2 - require card and manual login
 	var/virtual = 0
+	var/wage_gain = 0 // How much an account gains per 'wage' tick.
 
 /datum/transaction
 	var/target_name = ""

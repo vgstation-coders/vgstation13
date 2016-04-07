@@ -4078,3 +4078,23 @@
 
 
 	//------------------------------------------------------------------Shuttle stuff end---------------------------------
+
+	if(href_list["wageController"])
+		if(check_rights(R_ADMIN))
+			if(wagePayoutController)
+				if(href_list["wageController"] == "enable" && !wagePayoutController.disabled)
+					to_chat(usr, "Wages are already enabled!")
+				else
+					if(wagePayoutController.disabled)
+						wagePayoutController.enable()
+						message_admins("<span class='notice'>[key_name_admin(usr)] has re-enabled wages!")
+					else
+						wagePayoutController.disable()
+						message_admins("<span class='notice'>[key_name_admin(usr)] has disabled wages!")
+			else
+				if(href_list["wageController"] == "enable")
+					message_admins("<span class='notice'>[key_name_admin(usr)] has enabled wages!")
+					wagePayoutController = new()
+				else
+					to_chat(usr, "Wages are already disabled!")
+		return
