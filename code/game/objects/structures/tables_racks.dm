@@ -508,7 +508,7 @@
 /obj/structure/table/woodentable
 	name = "wooden table"
 	desc = "Do not apply fire to this. Rumour says it burns easily."
-	icon_state = "woodtable"
+	icon_state = "wood_table"
 	parts = /obj/item/weapon/table_parts/wood
 	health = 50
 	autoignition_temperature = AUTOIGNITION_WOOD // TODO:  Special ash subtype that looks like charred table legs.
