@@ -270,13 +270,6 @@ var/list/uplink_items = list()
 	cost = 4
 	job = list("Atmospheric Technician", "Chief Engineer")
 
-/datum/uplink_item/jobspecific/holomap
-	name = "Modified Holomap"
-	desc = "A modified holomap that can rewrite the holomap of a tile."
-	item = /obj/item/device/holomap/syndicate
-	cost = 1
-	job = list("Station Engineer", "Chief Engineer", "Atmospheric Technician")
-
 //Geneticist
 /datum/uplink_item/jobspecific/radgun
 	name = "Radgun"

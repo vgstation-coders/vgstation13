@@ -10,6 +10,8 @@
 	var/list/image/showing = list()
 	var/client/viewing // Client that is using the device right now, also determines whether it's on or off.
 	//var/datum/delay_controller/delayer
+	var/hacked = FALSE
+	var/panel  = FALSE
 
 /obj/item/device/holomap/New()
 	..()
@@ -21,6 +23,11 @@
 
 	if (viewing)
 		viewing.mob.on_logout.Remove("\ref[src]:mob_logout")
+
+/obj/item/device/holomap/examine(var/mob/M)
+	..()
+	if (panel)
+		to_chat(M, "The panel is open.")
 
 /obj/item/device/holomap/attack_self(var/mob/user)
 	if (viewing)
@@ -56,7 +63,10 @@
 		if (TT.holomap_data)
 			. += TT.holomap_data
 
-/obj/item/device/holomap/syndicate/afterattack(var/turf/target, var/mob/user, var/proximity_flag, var/click_parameters)
+/obj/item/device/holomap/afterattack(var/turf/target, var/mob/user, var/proximity_flag, var/click_parameters)
+	if (!hacked)
+		return
+
 	if (!isturf(target))
 		target = get_turf(target)
 
@@ -68,3 +78,17 @@
 			target.add_holomap(O)
 
 	to_chat(user, "You reset the holomap data.")
+
+/obj/item/device/holomap/attackby(obj/item/W, mob/user)
+	if (isscrewdriver(W))
+		panel = !panel
+		to_chat(user, "<span class='notify'>You [panel ? "open" : "close"] the panel on \the [src].</span>")
+		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+		return 1
+
+	if (ismultitool(W) && panel)
+		hacked = !hacked
+		to_chat(user, "<span class='notify'>You [hacked ? "disable" : "enable"] the lock on \the [src].</span>")
+		return 1
+
+	. = ..()
