@@ -1,0 +1,4 @@
+author: PJB3005
+delete-after: true
+changes:
+  rscadd: "Added the holomap. They spawn in engineering lockers and the engi-vend. Using a holomap shows the original pipe layout."
