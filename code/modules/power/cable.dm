@@ -88,6 +88,8 @@ By design, d1 is the smallest direction and d2 is the highest
 
 	cable_list += src		//add it to the global cable list
 
+	T.soft_add_holomap(src)
+
 /obj/structure/cable/Destroy()			// called when a cable is deleted
 	if(powernet)
 		powernet.set_to_build()	// update the powernets

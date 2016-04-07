@@ -48,6 +48,10 @@ Pipelines + Other Objects -> Pipe network
 	machines.Remove(src)
 	atmos_machines |= src
 
+	if (isturf(loc))
+		var/turf/T = loc
+		T.soft_add_holomap(src)
+
 /obj/machinery/atmospherics/Destroy()
 	for(var/mob/living/M in src) //ventcrawling is serious business
 		M.remove_ventcrawl()
