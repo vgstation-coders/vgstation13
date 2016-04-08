@@ -4,7 +4,7 @@
     var/mob_to_spawn = /mob/living/simple_animal/corgi
     var/mob_name = null
     var/area/target_area = /area/shuttle/arrival/station
-    var/mobs_to_spawn = 10
+    var/spawn_amount = 10
     var/list/area/possible_locations = list(/area/science/xenobiology,
                                             /area/crew_quarters/bar,
                                             /area/bridge,
@@ -16,7 +16,7 @@
 
 /datum/event/mob_swarm/New(var/mob = /mob/living/simple_animal/corgi, var/amount = 10)
     mob_to_spawn = mob
-    mobs_to_spawn = round(amount)
+    spawn_amount = round(amount)
     . = ..()
 
 /datum/event/mob_swarm/setup()
@@ -37,7 +37,7 @@
             continue
         turfs.Add(T)
 
-    for(var/n = 0, n < mobs_to_spawn, n++)
+    for(var/n = 0, n < spawn_amount, n++)
         var/turf/targetTurf = pick(turfs)
         if(!targetTurf) // If all else goes wrong for SOME REASON
             targetTurf = get_turf(pick(target_area.contents)) // Areas contain more than turfs
@@ -47,6 +47,7 @@
         var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
         sparks.set_up(3,0,targetTurf)
         sparks.start()
+    message_admins("Mob swarm of [spawn_amount] [mob_to_spawn] at [target_area].")
 
 
 /datum/event/mob_swarm/announce()
