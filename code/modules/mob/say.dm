@@ -2,9 +2,6 @@
 	set name = "Say"
 	set category = "IC"
 
-	if (client)
-		client.reset_afk()
-
 	if(say_disabled)
 		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
