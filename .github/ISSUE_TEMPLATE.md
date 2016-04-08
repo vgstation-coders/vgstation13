@@ -1,9 +1,9 @@
-<!--
+<!---
 	If a specific field doesn't apply, remove it!
 	Anything inside tags like these is a comment and will not be displayed in the final issue.
 	Be careful not to write inside them!
 	Joke or spammed issues can and will result in punishment. Don't be a dick.
--->
+--->
 
 #### Description of issue
 
@@ -13,34 +13,34 @@
 
 
 
-#### Steps to reproduce 
+#### Steps to reproduce
 
 
 
 #### Specific information for locating
-<!-- e.g. an object name, paste specific message outputs... -->
+<!--- e.g. an object name, paste specific message outputs... --->
 
 
 
 #### Length of time in which bug has been known to occur
-<!--
+<!---
 	Be specific if you approximately know the time its been occurring
 	for—this can speed up finding the source. If you're not sure
 	about it, tell us too!
--->
+--->
 
 
 
 #### Server revision
-<!-- Found with the "Show server revision" verb in the OOC tab in game. -->
+<!--- Found with the "Show server revision" verb in the OOC tab in game. --->
 
 
 
 #### Issue bingo
 
-Please check whatever applies. More checkboxes checked increase your chances of not being yelled at by every contributor.
+<!--- Please check whatever applies. More checkboxes checked increase your chances of not being yelled at by every contributor. --->
 
-<!-- Check these by writing an x inside the [ ] (like this: [x])-->
+<!--- Check these by writing an x inside the [ ] (like this: [x])--->
 - [ ] Issue could be reproduced at least once
 - [ ] Issue could be reproduced by different players
 - [ ] Issue could be reproduced in multiple rounds
