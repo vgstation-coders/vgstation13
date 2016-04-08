@@ -201,29 +201,7 @@
 
 
 /proc/SDQL_testout(list/query_tree, indent = 0)
-	var/spaces = ""
-	for(var/s = 0, s < indent, s++)
-		spaces += "    "
-
-	for(var/item in query_tree)
-		if(istype(item, /list))
-			to_chat(usr, "[spaces](")
-			SDQL_testout(item, indent + 1)
-			to_chat(usr, "[spaces])")
-
-		else
-			to_chat(usr, "[spaces][item]")
-
-		if(!isnum(item) && query_tree[item])
-
-			if(istype(query_tree[item], /list))
-				to_chat(usr, "[spaces]    (")
-				SDQL_testout(query_tree[item], indent + 2)
-				to_chat(usr, "[spaces]    )")
-
-			else
-				to_chat(usr, "[spaces]    [query_tree[item]]")
-
+	to_chat(usr, list2json(query_tree))
 
 
 /proc/SDQL_from_objs(list/tree)
@@ -395,6 +373,9 @@
 	if(expression[start] in object.vars)
 		v = object.vars[expression[start]]
 
+	else if (hascall(object, expression[start]))
+		v = expression[start]
+
 	else if(expression [start] == "{" && start < expression.len)
 		if(lowertext(copytext(expression[start + 1], 1, 3)) != "0x")
 			to_chat(usr, "<span class='danger'>Invalid pointer syntax: [expression[start + 1]]</span>")
@@ -419,11 +400,24 @@
 			else
 				return null
 
-	if(start < expression.len && expression[start + 1] == ".")
-		return SDQL_var(v, expression[start + 2])
+	if(start < expression.len)
+		if (expression[start + 1] == ".")
+			return SDQL_var(v, expression[start + 2])
 
-	else
-		return v
+		else if (expression[start + 1] == ":")
+			return SDQL_function(object, v, expression[start + 2])
+
+	return v
+
+
+/proc/SDQL_function(var/datum/object, var/procname, var/list/arguments)
+	set waitfor = FALSE
+
+	var/list/new_args = list()
+	for(var/arg in arguments)
+		new_args += SDQL_expression(object, arg)
+
+	return call(object, procname)(arglist(new_args)) // Spawn in case the function sleeps.
 
 
 /proc/SDQL2_tokenize(query_text)

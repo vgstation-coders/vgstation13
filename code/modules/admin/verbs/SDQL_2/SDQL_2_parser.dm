@@ -354,6 +354,14 @@
 		L += "."
 		i = variable(i + 2, L)
 
+	else if (token(i + 1) == "(") // OH BOY PROC
+		to_chat(world, "FOUND PROC:")
+		var/list/arguments = list()
+		i = call_function(i, null, arguments)
+		L += ":"
+		L[++L.len] = arguments
+		to_chat(world, list2json(L))
+
 	else
 		i++
 
