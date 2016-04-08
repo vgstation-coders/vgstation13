@@ -113,6 +113,17 @@ For the main html chat area
 	messageQueue = null
 	src.sendClientData()
 
+	pingLoop()
+
+/datum/chatOutput/proc/pingLoop()
+	set waitfor = FALSE
+
+	while (owner)
+		if (!owner.is_afk(29 SECONDS))
+			ehjax_send(data = "pang")
+
+		sleep(30 SECONDS)
+
 /datum/chatOutput/proc/ehjax_send(var/client/C = owner, var/window = "browseroutput", var/data)
 	if(islist(data))
 		data = list2json(data)
