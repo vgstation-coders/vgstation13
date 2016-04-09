@@ -54,109 +54,116 @@
 	if(!querys || querys.len < 1)
 		return
 
-	for(var/list/query_tree in querys)
-		var/list/from_objs = list()
-		var/list/select_types = list()
+	try
+		for(var/list/query_tree in querys)
+			var/list/from_objs = list()
+			var/list/select_types = list()
 
-		switch(query_tree[1])
-			if("explain")
-				SDQL_testout(query_tree["explain"])
-				return
-
-			if("call")
-				if("on" in query_tree)
-					select_types = query_tree["on"]
-				else
+			switch(query_tree[1])
+				if("explain")
+					SDQL_testout(query_tree["explain"])
 					return
 
-			if("select", "delete", "update")
-				select_types = query_tree[query_tree[1]]
+				if("call")
+					if("on" in query_tree)
+						select_types = query_tree["on"]
+					else
+						return
 
-		from_objs = SDQL_from_objs(query_tree["from"])
+				if("select", "delete", "update")
+					select_types = query_tree[query_tree[1]]
 
-		var/list/objs = list()
+			from_objs = SDQL_from_objs(query_tree["from"])
 
-		for(var/type in select_types)
-			var/char = copytext(type, 1, 2)
+			var/list/objs = list()
 
-			if(char == "/" || char == "*")
-				for(var/from in from_objs)
-					objs += SDQL_get_all(type, from)
+			for(var/type in select_types)
+				var/char = copytext(type, 1, 2)
 
-			else if(char == "'" || char == "\"")
-				objs += locate(copytext(type, 2, length(type)))
+				if(char == "/" || char == "*")
+					for(var/from in from_objs)
+						objs += SDQL_get_all(type, from)
 
-		if("where" in query_tree)
-			var/objs_temp = objs
-			objs = list()
-			for(var/datum/d in objs_temp)
-				if(SDQL_expression(d, query_tree["where"]))
-					objs += d
+				else if(char == "'" || char == "\"")
+					objs += locate(copytext(type, 2, length(type)))
 
-		switch(query_tree[1])
-			if("call")
-				var/list/call_list = query_tree["call"]
-				var/list/args_list = query_tree["args"]
+			if("where" in query_tree)
+				var/objs_temp = objs
+				objs = list()
+				for(var/datum/d in objs_temp)
+					if(SDQL_expression(d, query_tree["where"]))
+						objs += d
 
-				for(var/datum/d in objs)
-					var/list/new_args = list()
-					for(var/arg in args_list)
-						new_args += SDQL_expression(d, arg)
-					for(var/v in call_list)
-						if(copytext(v, 1, 8) == "global.") // Global proc.
-							v = "/proc/[copytext(v, 8)]"
-							spawn()
-								call(v)(arglist(new_args))
-						else if(d)
-							if(hascall(d, v))
+			switch(query_tree[1])
+				if("call")
+					var/list/call_list = query_tree["call"]
+					var/list/args_list = query_tree["args"]
+
+					for(var/datum/d in objs)
+						var/list/new_args = list()
+						for(var/arg in args_list)
+							new_args += SDQL_expression(d, arg)
+						for(var/v in call_list)
+							if(copytext(v, 1, 8) == "global.") // Global proc.
+								v = "/proc/[copytext(v, 8)]"
 								spawn()
-									call(d, v)(arglist(new_args)) // Spawn in case the function sleeps.
+									call(v)(arglist(new_args))
+							else if(d)
+								if(hascall(d, v))
+									spawn()
+										call(d, v)(arglist(new_args)) // Spawn in case the function sleeps.
 
-			if("delete")
-				for(var/datum/d in objs)
-					qdel(d)
+				if("delete")
+					for(var/datum/d in objs)
+						qdel(d)
 
-			if("select")
-				var/text = ""
-				for(var/datum/t in objs)
-					text += "<A HREF='?_src_=vars;Vars=\ref[t]'>\ref[t]</A>"
-					if(istype(t, /atom))
-						var/atom/a = t
+				if("select")
+					var/text = ""
+					for(var/datum/t in objs)
+						text += "<A HREF='?_src_=vars;Vars=\ref[t]'>\ref[t]</A>"
+						if(istype(t, /atom))
+							var/atom/a = t
 
-						if(a.x)
-							text += ": [t] at ([a.x], [a.y], [a.z])<br>"
+							if(a.x)
+								text += ": [t] at ([a.x], [a.y], [a.z])<br>"
 
-						else if(a.loc && a.loc.x)
-							text += ": [t] in [a.loc] at ([a.loc.x], [a.loc.y], [a.loc.z])<br>"
+							else if(a.loc && a.loc.x)
+								text += ": [t] in [a.loc] at ([a.loc.x], [a.loc.y], [a.loc.z])<br>"
+
+							else
+								text += ": [t]<br>"
 
 						else
 							text += ": [t]<br>"
 
-					else
-						text += ": [t]<br>"
+					usr << browse(text, "window=SDQL-result")
 
-				usr << browse(text, "window=SDQL-result")
+				if("update")
+					if("set" in query_tree)
+						var/list/set_list = query_tree["set"]
+						for(var/datum/d in objs)
+							for(var/list/sets in set_list)
+								var/datum/temp = d
+								var/i = 0
+								for(var/v in sets)
+									if(++i == sets.len)
+										if(istype(temp, /turf) && (v == "x" || v == "y" || v == "z"))
+											break
 
-			if("update")
-				if("set" in query_tree)
-					var/list/set_list = query_tree["set"]
-					for(var/datum/d in objs)
-						for(var/list/sets in set_list)
-							var/datum/temp = d
-							var/i = 0
-							for(var/v in sets)
-								if(++i == sets.len)
-									if(istype(temp, /turf) && (v == "x" || v == "y" || v == "z"))
+										temp.SDQL_update(v, SDQL_expression(d, set_list[sets]))
 										break
 
-									temp.SDQL_update(v, SDQL_expression(d, set_list[sets]))
-									break
+									if(temp.vars.Find(v) && (istype(temp.vars[v], /datum) || istype(temp.vars[v], /client)))
+										temp = temp.vars[v]
 
-								if(temp.vars.Find(v) && (istype(temp.vars[v], /datum) || istype(temp.vars[v], /client)))
-									temp = temp.vars[v]
+									else
+										break
 
-								else
-									break
+	catch(var/exception/e)
+		to_chat(usr, "<span class='danger'>An exception has occured during the execution of your query and your query has been aborted.</span>")
+		to_chat(usr, "exception name: [e.name]")
+		to_chat(usr, "file/line: [e.file]/[e.line]")
+		return
 
 /proc/SDQL_parse(list/query_list)
 	var/datum/SDQL_parser/parser = new()
