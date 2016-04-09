@@ -233,7 +233,7 @@ var/global/list/available_paintings = list(
 			desc = "A painting by D.T.Link. The colours fill you with hope and determination."
 		if("Flowereater")
 			name = "\improper Blumenliebhaber"
-			desc = "A painting by Guertena Weiss. An odd painting that fills you with hesitation. Its said you can hear cackling at night wherever its hung."
+			desc = "A painting by Guertena Weiss. An odd painting that fills you with hesitation. It's said you can hear cackling at night wherever its hung."
 		if("Sadclown")
 			name = "\improper Pagliacci"
 			desc = "A morose painting of a sad clown. Is it possible that beneath that cheerful latext mask lays a somber and tired heart? Probably not."
@@ -242,7 +242,7 @@ var/global/list/available_paintings = list(
 			desc = "A painting depicting a compact but efficient hospital. The red really helps make the normally drab pallet pop."
 		if("prophecy")
 			name = "\improper Prophetic Mural"
-			desc = "A copy of an ancient mural. It depicts a blue armored warrior fighting off an inhuman monstrocity. Its said many still wait for its conclusion."
+			desc = "A copy of an ancient mural. It depicts a blue armored warrior fighting off an inhuman monstrocity. It's said many still wait for its conclusion."
 		if("anatomy")
 			name = "\improper Anatomy Poster"
 			desc = "A NT approved anatomy poster! Remember, eat a burger every 20-30 minutes. For your health."
