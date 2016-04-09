@@ -355,12 +355,20 @@
 		i = variable(i + 2, L)
 
 	else if (token(i + 1) == "(") // OH BOY PROC
-		to_chat(world, "FOUND PROC:")
 		var/list/arguments = list()
 		i = call_function(i, null, arguments)
 		L += ":"
 		L[++L.len] = arguments
-		to_chat(world, list2json(L))
+
+	else if (token(i + 1) == "\[")
+		var/list/expression = list()
+		i = expression(i + 2, expression)
+		if (token(i) != "]")
+			parse_error("Missing ] at the end of list access.")
+
+		L += "\["
+		L[++L.len] = expression
+		i++
 
 	else
 		i++

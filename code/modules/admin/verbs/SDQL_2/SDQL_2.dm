@@ -54,115 +54,109 @@
 	if(!querys || querys.len < 1)
 		return
 
-	try
-		for(var/list/query_tree in querys)
-			var/list/from_objs = list()
-			var/list/select_types = list()
+	for(var/list/query_tree in querys)
+		var/list/from_objs = list()
+		var/list/select_types = list()
 
-			switch(query_tree[1])
-				if("explain")
-					SDQL_testout(query_tree["explain"])
+		switch(query_tree[1])
+			if("explain")
+				SDQL_testout(query_tree["explain"])
+				return
+
+			if("call")
+				if("on" in query_tree)
+					select_types = query_tree["on"]
+				else
 					return
 
-				if("call")
-					if("on" in query_tree)
-						select_types = query_tree["on"]
-					else
-						return
+			if("select", "delete", "update")
+				select_types = query_tree[query_tree[1]]
 
-				if("select", "delete", "update")
-					select_types = query_tree[query_tree[1]]
+		from_objs = SDQL_from_objs(query_tree["from"])
 
-			from_objs = SDQL_from_objs(query_tree["from"])
+		var/list/objs = list()
 
-			var/list/objs = list()
+		for(var/type in select_types)
+			var/char = copytext(type, 1, 2)
 
-			for(var/type in select_types)
-				var/char = copytext(type, 1, 2)
+			if(char == "/" || char == "*")
+				for(var/from in from_objs)
+					objs += SDQL_get_all(type, from)
 
-				if(char == "/" || char == "*")
-					for(var/from in from_objs)
-						objs += SDQL_get_all(type, from)
+			else if(char == "'" || char == "\"")
+				objs += locate(copytext(type, 2, length(type)))
 
-				else if(char == "'" || char == "\"")
-					objs += locate(copytext(type, 2, length(type)))
+		if("where" in query_tree)
+			var/objs_temp = objs
+			objs = list()
+			for(var/datum/d in objs_temp)
+				if(SDQL_expression(d, query_tree["where"]))
+					objs += d
 
-			if("where" in query_tree)
-				var/objs_temp = objs
-				objs = list()
-				for(var/datum/d in objs_temp)
-					if(SDQL_expression(d, query_tree["where"]))
-						objs += d
+		switch(query_tree[1])
+			if("call")
+				var/list/call_list = query_tree["call"]
+				var/list/args_list = query_tree["args"]
 
-			switch(query_tree[1])
-				if("call")
-					var/list/call_list = query_tree["call"]
-					var/list/args_list = query_tree["args"]
-
-					for(var/datum/d in objs)
-						var/list/new_args = list()
-						for(var/arg in args_list)
-							new_args += SDQL_expression(d, arg)
-						for(var/v in call_list)
-							if(copytext(v, 1, 8) == "global.") // Global proc.
-								v = "/proc/[copytext(v, 8)]"
+				for(var/datum/d in objs)
+					var/list/new_args = list()
+					for(var/arg in args_list)
+						new_args += SDQL_expression(d, arg)
+					for(var/v in call_list)
+						if(copytext(v, 1, 8) == "global.") // Global proc.
+							v = "/proc/[copytext(v, 8)]"
+							spawn()
+								call(v)(arglist(new_args))
+						else if(d)
+							if(hascall(d, v))
 								spawn()
-									call(v)(arglist(new_args))
-							else if(d)
-								if(hascall(d, v))
-									spawn()
-										call(d, v)(arglist(new_args)) // Spawn in case the function sleeps.
+									call(d, v)(arglist(new_args)) // Spawn in case the function sleeps.
 
-				if("delete")
-					for(var/datum/d in objs)
-						qdel(d)
+			if("delete")
+				for(var/datum/d in objs)
+					qdel(d)
 
-				if("select")
-					var/text = ""
-					for(var/datum/t in objs)
-						text += "<A HREF='?_src_=vars;Vars=\ref[t]'>\ref[t]</A>"
-						if(istype(t, /atom))
-							var/atom/a = t
+			if("select")
+				var/text = ""
+				for(var/datum/t in objs)
+					text += "<A HREF='?_src_=vars;Vars=\ref[t]'>\ref[t]</A>"
+					if(istype(t, /atom))
+						var/atom/a = t
 
-							if(a.x)
-								text += ": [t] at ([a.x], [a.y], [a.z])<br>"
+						if(a.x)
+							text += ": [t] at ([a.x], [a.y], [a.z])<br>"
 
-							else if(a.loc && a.loc.x)
-								text += ": [t] in [a.loc] at ([a.loc.x], [a.loc.y], [a.loc.z])<br>"
-
-							else
-								text += ": [t]<br>"
+						else if(a.loc && a.loc.x)
+							text += ": [t] in [a.loc] at ([a.loc.x], [a.loc.y], [a.loc.z])<br>"
 
 						else
 							text += ": [t]<br>"
 
-					usr << browse(text, "window=SDQL-result")
+					else
+						text += ": [t]<br>"
 
-				if("update")
-					if("set" in query_tree)
-						var/list/set_list = query_tree["set"]
-						for(var/datum/d in objs)
-							for(var/list/sets in set_list)
-								var/datum/temp = d
-								var/i = 0
-								for(var/v in sets)
-									if(++i == sets.len)
-										if(istype(temp, /turf) && (v == "x" || v == "y" || v == "z"))
-											break
+				usr << browse(text, "window=SDQL-result")
 
-										temp.SDQL_update(v, SDQL_expression(d, set_list[sets]))
+			if("update")
+				if("set" in query_tree)
+					var/list/set_list = query_tree["set"]
+					for(var/datum/d in objs)
+						for(var/list/sets in set_list)
+							var/datum/temp = d
+							var/i = 0
+							for(var/v in sets)
+								if(++i == sets.len)
+									if(istype(temp, /turf) && (v == "x" || v == "y" || v == "z"))
 										break
 
-									if(temp.vars.Find(v) && (istype(temp.vars[v], /datum) || istype(temp.vars[v], /client)))
-										temp = temp.vars[v]
+									temp.SDQL_update(v, SDQL_expression(d, set_list[sets]))
+									break
 
-									else
-										break
+								if(temp.vars.Find(v) && (istype(temp.vars[v], /datum) || istype(temp.vars[v], /client)))
+									temp = temp.vars[v]
 
-	catch(var/exception/e)
-		to_chat(usr, "<span class='warning'>A runtime error has occured during the execution of your query and your query has been aborted.</span>")
-		to_chat(usr, e)
-		return
+								else
+									break
 
 /proc/SDQL_parse(list/query_list)
 	var/datum/SDQL_parser/parser = new()
@@ -201,8 +195,28 @@
 
 
 /proc/SDQL_testout(list/query_tree, indent = 0)
-	to_chat(usr, list2json(query_tree))
+	var/spaces = ""
+	for(var/s = 0, s < indent, s++)
+		spaces += "&nbsp;&nbsp;&nbsp;&nbsp;"
 
+	for(var/item in query_tree)
+		if(istype(item, /list))
+			to_chat(usr, "[spaces](")
+			SDQL_testout(item, indent + 1)
+			to_chat(usr, "[spaces])")
+
+		else
+			to_chat(usr, "[spaces][item]")
+
+		if(!isnum(item) && query_tree[item])
+
+			if(istype(query_tree[item], /list))
+				to_chat(usr, "[spaces]&nbsp;&nbsp;&nbsp;&nbsp;(")
+				SDQL_testout(query_tree[item], indent + 2)
+				to_chat(usr, "[spaces]&nbsp;&nbsp;&nbsp;&nbsp;)")
+
+			else
+				to_chat(usr, "[spaces]&nbsp;&nbsp;&nbsp;&nbsp;[query_tree[item]]")
 
 /proc/SDQL_from_objs(list/tree)
 	if("world" in tree)
@@ -406,6 +420,15 @@
 
 		else if (expression[start + 1] == ":")
 			return SDQL_function(object, v, expression[start + 2])
+
+		else if (expression[start + 1] == "\[" && islist(v))
+			var/list/L = v
+			var/index = SDQL_expression(object, expression[start + 2])
+			if (isnum(index) && (!IsInteger(index) || L.len < index))
+				to_chat(world, "<span class='danger'>Invalid list index: [index]</span>")
+				return null
+
+			return L[index]
 
 	return v
 
