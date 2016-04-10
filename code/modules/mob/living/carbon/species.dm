@@ -679,6 +679,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	burn_mod = 0.0001
 
+	has_mutant_race = 0
 	move_speed_mod = 1
 
 	chem_flags = NO_INJECT

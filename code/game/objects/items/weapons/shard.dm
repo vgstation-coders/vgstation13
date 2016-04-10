@@ -109,7 +109,7 @@
 		else //Stepping on the glass
 			to_chat(M, "<span class='danger'>You step in the broken glass!</span>")
 			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
-			if(ishuman(M))
+			if(ishuman(M) && !isgolem(M))
 				var/mob/living/carbon/human/H = M
 				if(!H.check_body_part_coverage(FEET))
 					var/datum/organ/external/affecting = H.get_organ(pick("l_foot", "r_foot"))
