@@ -699,4 +699,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				adjustBruteLoss(volume * 0.5)
 		if("pacid")
 			if(!supernatural)
-				adjustBruteLoss(volume * 0.5
+				adjustBruteLoss(volume * 0.5)
+
+/datum/locking_category/simple_animal
