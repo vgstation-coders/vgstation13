@@ -12,6 +12,7 @@
 	var/enemy_mp = 20
 	var/gameover = 0
 	var/blocked = 0 //Player cannot attack/heal while set
+	var/mob/emagger
 
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	emag_cost = 0 // because fun
@@ -123,7 +124,6 @@
 
 	user << browse(dat, "window=arcade")
 	onclose(user, "arcade")
-	return
 
 /obj/machinery/computer/arcade/Topic(href, href_list)
 	if(..())
@@ -185,10 +185,12 @@
 		if(emagged)
 			src.New()
 			emagged = 0
+			src.unlock_atom(emagger)
+			emagger = null
+
 
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
-	return
 
 /obj/machinery/computer/arcade/proc/arcade_action()
 	if ((src.enemy_mp <= 0) || (src.enemy_hp <= 0))
@@ -263,19 +265,22 @@
 			feedback_inc("arcade_loss_hp_normal")
 
 	src.blocked = 0
-	return
 
 /obj/machinery/computer/arcade/emag(mob/user as mob)
+	if(emagged)
+		return
 	temp = "If you die in the game, you die for real!"
+	to_chat(user,"<span class='danger'>Your legs become buckled to the machine, and you are unable to move unless you defeat Cuban Pete!")
 	player_hp = 30
 	player_mp = 10
 	enemy_hp = 45
 	enemy_mp = 20
 	gameover = 0
 	blocked = 0
+	src.lock_atom(user)
 
 	emagged = 1
-
+	emagger = user
 	enemy_name = "Cuban Pete"
 	name = "Outbomb Cuban Pete"
 
@@ -304,6 +309,8 @@
 		A = new
 		export_game_data(A)
 	..(toggleitem, user, A)
+	if(emagger && emagger.locked_to == src && emagged)
+		emagger.gib()
 
 /obj/machinery/computer/arcade/kick_act()
 	..()
