@@ -1,3 +1,6 @@
+#define SYNDICUFFS_ON_APPLY 0
+#define SYNDICUFFS_ON_REMOVE 1
+
 /obj/item/weapon/handcuffs
 	name = "handcuffs"
 	desc = "Use this to keep prisoners in line."
@@ -15,45 +18,42 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "materials=1"
+	var/cuffing_sound = 'sound/weapons/handcuffs.ogg'
 	var/dispenser = 0
 	var/breakouttime = 1200 //Deciseconds = 120s = 2 minutes
 
 /obj/item/weapon/handcuffs/attack(mob/living/carbon/C as mob, mob/user as mob)
-	if(!istype(C)) return
+
+	if(!istype(C))
+		return
+
+	//This one is not handled by the general code because Cyborgs in charge of not making shitcode worse
 	if(istype(src, /obj/item/weapon/handcuffs/cyborg) && isrobot(user))
 		if(!C.handcuffed)
 			var/turf/p_loc = user.loc
 			var/turf/p_loc_m = C.loc
-			playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
-			for(var/mob/O in viewers(user, null))
-				O.show_message("<span class='danger'>[user] is trying to put handcuffs on [C]!</span>", 1)
+			playsound(get_turf(src), cuffing_sound, 30, 1, -2)
+			user.visible_message("<span class='danger'>[user] is trying to handcuff \the [C]!</span>", \
+								 "<span class='danger'>You try to handcuff \the [C]!</span>")
 			if(do_after(user, C, 30))
-				if(!C)	return
+				if(!C)
+					return
 				if(p_loc == user.loc && p_loc_m == C.loc)
 					C.handcuffed = new /obj/item/weapon/handcuffs(C)
 					C.update_inv_handcuffed()
 
 	else
-		if ((M_CLUMSY in usr.mutations) && prob(50))
-			to_chat(usr, "<span class='warning'>Uh ... how do those things work?!</span>")
-			if (istype(C, /mob/living/carbon/human))
-				if(!C.handcuffed)
-					var/obj/effect/equip_e/human/O = new /obj/effect/equip_e/human(  )
-					O.source = user
-					O.target = user
-					O.item = user.get_active_hand()
-					O.s_loc = user.loc
-					O.t_loc = user.loc
-					O.place = "handcuff"
-					C.requests += O
-					spawn( 0 )
-						O.process()
+		if((M_CLUMSY in user.mutations) && prob(50))
+			if(ishuman(C))
+				handcuffs_apply(C, user)
 				return
 			return
-		if (!usr.dexterity_check())
+
+		if(!user.dexterity_check())
 			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 			return
-		if (istype(C, /mob/living/carbon/human))
+
+		if(ishuman(C))
 			if(!C.handcuffed)
 				C.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been handcuffed (attempt) by [user.name] ([user.ckey])</font>")
 				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Attempted to handcuff [C.name] ([C.ckey])</font>")
@@ -64,41 +64,147 @@
 
 				log_attack("<font color='red'>[user.name] ([user.ckey]) Attempted to handcuff [C.name] ([C.ckey])</font>")
 
-				var/obj/effect/equip_e/human/O = new /obj/effect/equip_e/human(  )
-				O.source = user
-				O.target = C
-				O.item = user.get_active_hand()
-				O.s_loc = user.loc
-				O.t_loc = C.loc
-				O.place = "handcuff"
-				C.requests += O
-				spawn( 0 )
-					if(istype(src, /obj/item/weapon/handcuffs/cable))
-						feedback_add_details("handcuffs","C")
-						playsound(get_turf(src), 'sound/weapons/cablecuff.ogg', 30, 1, -2)
-					else
-						feedback_add_details("handcuffs","H")
-						playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
-					O.process()
+				handcuffs_apply(C, user)
 			return
 		else
 			if(!C.handcuffed)
-				var/obj/effect/equip_e/monkey/O = new /obj/effect/equip_e/monkey(  )
-				O.source = user
-				O.target = C
-				O.item = user.get_active_hand()
-				O.s_loc = user.loc
-				O.t_loc = C.loc
-				O.place = "handcuff"
-				C.requests += O
-				spawn( 0 )
-					if(istype(src, /obj/item/weapon/handcuffs/cable))
-						playsound(get_turf(src), 'sound/weapons/cablecuff.ogg', 30, 1, -2)
-					else
-						playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
-					O.process()
+				handcuffs_apply(C, user)
 			return
+
+/obj/item/weapon/handcuffs/proc/detonate(var/countdown = 1)
+
 	return
+
+//Our inventory procs should be able to handle the following, but our inventory code is hot spaghetti bologni, so here we go
+/obj/item/weapon/handcuffs/proc/handcuffs_apply(mob/living/carbon/C, mob/user)
+
+	if(!istype(C)) //Sanity doesn't hurt, right ?
+		return
+
+	if(ishuman(C))
+		var/obj/effect/equip_e/human/O = new /obj/effect/equip_e/human()
+		O.source = user
+		if(M_CLUMSY in user.mutations)
+			O.target = user
+			O.t_loc = user.loc
+		else
+			O.target = C
+			O.t_loc = C.loc
+		O.item = user.get_active_hand()
+		O.s_loc = user.loc
+		O.place = "handcuff"
+		C.requests += O
+		spawn()
+			if(istype(src, /obj/item/weapon/handcuffs/cable))
+				feedback_add_details("handcuffs", "C")
+			else
+				feedback_add_details("handcuffs", "H")
+			playsound(get_turf(src), cuffing_sound, 30, 1, -2)
+			O.process()
+
+	else
+		var/obj/effect/equip_e/monkey/O = new /obj/effect/equip_e/monkey()
+		O.source = user
+		O.target = C
+		O.item = user.get_active_hand()
+		O.s_loc = user.loc
+		O.t_loc = C.loc
+		O.place = "handcuff"
+		C.requests += O
+		spawn()
+			playsound(get_turf(src), cuffing_sound, 30, 1, -2)
+			O.process()
+
+/obj/item/weapon/handcuffs/proc/handcuffs_remove(var/mob/living/carbon/C)
+
+	C.handcuffed = null
+	C.update_inv_handcuffed()
+
+//Syndicate Cuffs. Disguised as regular cuffs, they are pretty explosive
+/obj/item/weapon/handcuffs/syndicate
+
+	var/countdown_time = 60 //Time to handcuff + 3 seconds
+	var/mode = SYNDICUFFS_ON_APPLY //Handled at this level, Syndicate Cuffs code
+	var/charge_detonated = 0
+
+/obj/item/weapon/handcuffs/syndicate/attack_self(mob/user)
+
+	mode = !mode
+
+	switch(mode)
+		if(SYNDICUFFS_ON_APPLY)
+			to_chat(user, "<span class='notice'>You pull the rotating arm back until you hear two clicks. \The [src] will detonate a few seconds after being applied.</span>")
+		if(SYNDICUFFS_ON_REMOVE)
+			to_chat(user, "<span class='notice'>You pull the rotating arm back until you hear one click. \The [src] will detonate when removed.</span>")
+
+/obj/item/weapon/handcuffs/syndicate/handcuffs_apply(mob/living/carbon/C, mob/user)
+
+	..()
+
+	if(mode == SYNDICUFFS_ON_APPLY && !charge_detonated)
+		detonate(1)
+
+/obj/item/weapon/handcuffs/syndicate/handcuffs_remove(mob/living/carbon/C)
+
+	if(mode == SYNDICUFFS_ON_REMOVE && !charge_detonated)
+		detonate(0) //This handles cleaning up the inventory already
+		return //Don't clean up twice, we don't want runtimes
+
+	..()
+
+//C4 and EMPs don't mix, will always explode at severity 1, and likely to explode at severity 2
+/obj/item/weapon/handcuffs/syndicate/emp_act(severity)
+
+	switch(severity)
+		if(1)
+			if(prob(80))
+				detonate(1)
+			else
+				detonate(0)
+		if(2)
+			if(prob(50))
+				detonate(1)
+
+/obj/item/weapon/handcuffs/syndicate/ex_act(severity)
+
+	switch(severity)
+		if(1)
+			if(!charge_detonated)
+				detonate(0)
+		if(2)
+			if(!charge_detonated)
+				detonate(0)
+		if(3)
+			if(!charge_detonated && prob(50))
+				detonate(1)
+		else
+			return
+
+	qdel(src)
+
+/obj/item/weapon/handcuffs/syndicate/detonate(countdown)
+
+	if(charge_detonated)
+		return
+	charge_detonated = 1 //Do it before countdown to prevent spam fuckery
+	if(countdown)
+		//Cannot use a sleep() instruction here since we do NOT want to delay inventory handling
+		spawn(countdown_time)
+			explosion(get_turf(src), 0, 1, 3, 0)
+			qdel(src)
+	else
+		explosion(get_turf(src), 0, 1, 3, 0)
+		qdel(src)
+
+/obj/item/weapon/handcuffs/Destroy()
+
+	if(iscarbon(loc)) //Inventory shit
+		var/mob/living/carbon/C = loc
+		if(C.handcuffed)
+			C.handcuffed.loc = C.loc //Standby while we delete this shit
+			C.drop_from_inventory(src)
+
+	..()
 
 /obj/item/weapon/handcuffs/cable
 	name = "cable restraints"
@@ -106,6 +212,7 @@
 	icon_state = "cuff_red"
 	_color = "red"
 	breakouttime = 300 //Deciseconds = 30s
+	cuffing_sound = 'sound/weapons/cablecuff.ogg'
 
 /obj/item/weapon/handcuffs/cable/red
 	icon_state = "cuff_red"
@@ -158,20 +265,3 @@
 		to_chat(user, "<span class='notice'>You wrap the cable restraint around the top of the rod.</span>")
 
 		qdel(src)
-
-/* mite b cool - N3X
-/obj/item/weapon/handcuffs/cyborg/attack(mob/living/carbon/C, mob/user)
-	if(isrobot(user))
-		if(!C.handcuffed)
-			var/turf/user_loc = user.loc
-			var/turf/C_loc = C.loc
-			playsound(loc, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
-			C.visible_message("<span class='danger'>[user] is trying to put handcuffs on [C]!</span>", \
-								"<span class='userdanger'>[user] is trying to put handcuffs on [C]!</span>")
-			if(do_after(user, C, 30))
-				if(!C || C.handcuffed)
-					return
-				if(user_loc == user.loc && C_loc == C.loc)
-					C.handcuffed = new /obj/item/weapon/handcuffs(C)
-					C.update_inv_handcuffed(0)
-*/
