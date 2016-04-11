@@ -19,77 +19,45 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "materials=1"
 	var/cuffing_sound = 'sound/weapons/handcuffs.ogg'
-	var/dispenser = 0
-	var/breakouttime = 1200 //Deciseconds = 120s = 2 minutes
+	var/breakouttime = 2 MINUTES
 
-/obj/item/weapon/handcuffs/attack(mob/living/carbon/C as mob, mob/user as mob)
-
-	if(!istype(C))
+/obj/item/weapon/handcuffs/attack(var/mob/living/carbon/M, var/mob/user, var/def_zone)
+	if(!istype(M))
 		return
 
-	//This one is not handled by the general code because Cyborgs in charge of not making shitcode worse
-	if(istype(src, /obj/item/weapon/handcuffs/cyborg) && isrobot(user))
-		if(!C.handcuffed)
-			var/turf/p_loc = user.loc
-			var/turf/p_loc_m = C.loc
-			playsound(get_turf(src), cuffing_sound, 30, 1, -2)
-			user.visible_message("<span class='danger'>[user] is trying to handcuff \the [C]!</span>", \
-								 "<span class='danger'>You try to handcuff \the [C]!</span>")
-			if(do_after(user, C, 30))
-				if(!C)
-					return
-				if(p_loc == user.loc && p_loc_m == C.loc)
-					C.handcuffed = new /obj/item/weapon/handcuffs(C)
-					C.update_inv_handcuffed()
+	if(!user.dexterity_check())
+		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return
 
+	if((M_CLUMSY in user.mutations) && prob(50))
+		to_chat(usr, "<span class='warning'>Uh ... how do those things work?!</span>")
+		handcuffs_apply(user, user, TRUE)
+		return
+
+	if(M.handcuffed)
+		return
+
+	M.attack_log += text("\[[time_stamp()]] <span style='color: orange'>Has been handcuffed (attempt) by [user.name] ([user.ckey])</span>")
+	user.attack_log += text("\[[time_stamp()]] <span style='color: red'>Attempted to handcuff [M.name] ([M.ckey])</span>")
+	if(!iscarbon(user))
+		M.LAssailant = null
 	else
-		if((M_CLUMSY in user.mutations) && prob(50))
-			if(ishuman(C))
-				handcuffs_apply(C, user)
-				return
-			return
+		M.LAssailant = user
 
-		if(!user.dexterity_check())
-			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
-			return
+	log_attack("<span style='color: red'>[user.name] ([user.ckey]) Attempted to handcuff [M.name] ([M.ckey])</span>")
 
-		if(ishuman(C))
-			if(!C.handcuffed)
-				C.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been handcuffed (attempt) by [user.name] ([user.ckey])</font>")
-				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Attempted to handcuff [C.name] ([C.ckey])</font>")
-				if(!iscarbon(user))
-					C.LAssailant = null
-				else
-					C.LAssailant = user
-
-				log_attack("<font color='red'>[user.name] ([user.ckey]) Attempted to handcuff [C.name] ([C.ckey])</font>")
-
-				handcuffs_apply(C, user)
-			return
-		else
-			if(!C.handcuffed)
-				handcuffs_apply(C, user)
-			return
-
-/obj/item/weapon/handcuffs/proc/detonate(var/countdown = 1)
-
-	return
+	handcuffs_apply(M, user)
 
 //Our inventory procs should be able to handle the following, but our inventory code is hot spaghetti bologni, so here we go
-/obj/item/weapon/handcuffs/proc/handcuffs_apply(mob/living/carbon/C, mob/user)
-
+/obj/item/weapon/handcuffs/proc/handcuffs_apply(var/mob/living/carbon/C, var/mob/user, var/clumsy = FALSE)
 	if(!istype(C)) //Sanity doesn't hurt, right ?
-		return
+		return FALSE
 
 	if(ishuman(C))
 		var/obj/effect/equip_e/human/O = new /obj/effect/equip_e/human()
 		O.source = user
-		if(M_CLUMSY in user.mutations)
-			O.target = user
-			O.t_loc = user.loc
-		else
-			O.target = C
-			O.t_loc = C.loc
+		O.target = C
+		O.t_loc = C.loc
 		O.item = user.get_active_hand()
 		O.s_loc = user.loc
 		O.place = "handcuff"
@@ -116,16 +84,27 @@
 			O.process()
 
 /obj/item/weapon/handcuffs/proc/handcuffs_remove(var/mob/living/carbon/C)
-
 	C.handcuffed = null
 	C.update_inv_handcuffed()
 
+/obj/item/weapon/handcuffs/cyborg/attack(var/mob/living/carbon/M, var/mob/living/user, var/def_zone)
+	if (!istype(M) || M.handcuffed)
+		return FALSE
+
+	playsound(get_turf(src), cuffing_sound, 30, 1, -2)
+	user.visible_message("<span class='danger'>[user] is trying to handcuff \the [M]!</span>",
+						 "<span class='danger'>You try to handcuff \the [M]!</span>")
+	if(do_after(user, M, 30))
+		M.handcuffed = new/obj/item/weapon/handcuffs(M)
+		M.update_inv_handcuffed()
+
+	return TRUE
+
 //Syndicate Cuffs. Disguised as regular cuffs, they are pretty explosive
 /obj/item/weapon/handcuffs/syndicate
-
-	var/countdown_time = 60 //Time to handcuff + 3 seconds
-	var/mode = SYNDICUFFS_ON_APPLY //Handled at this level, Syndicate Cuffs code
-	var/charge_detonated = 0
+	var/countdown_time   = 3 SECONDS
+	var/mode             = SYNDICUFFS_ON_APPLY //Handled at this level, Syndicate Cuffs code
+	var/charge_detonated = FALSE
 
 /obj/item/weapon/handcuffs/syndicate/attack_self(mob/user)
 
@@ -137,15 +116,13 @@
 		if(SYNDICUFFS_ON_REMOVE)
 			to_chat(user, "<span class='notice'>You pull the rotating arm back until you hear one click. \The [src] will detonate when removed.</span>")
 
-/obj/item/weapon/handcuffs/syndicate/handcuffs_apply(mob/living/carbon/C, mob/user)
-
+/obj/item/weapon/handcuffs/syndicate/equipped(var/mob/user, var/slot)
 	..()
 
-	if(mode == SYNDICUFFS_ON_APPLY && !charge_detonated)
+	if(slot == "handcuff" && mode == SYNDICUFFS_ON_APPLY && !charge_detonated)
 		detonate(1)
 
 /obj/item/weapon/handcuffs/syndicate/handcuffs_remove(mob/living/carbon/C)
-
 	if(mode == SYNDICUFFS_ON_REMOVE && !charge_detonated)
 		detonate(0) //This handles cleaning up the inventory already
 		return //Don't clean up twice, we don't want runtimes
@@ -182,19 +159,17 @@
 
 	qdel(src)
 
-/obj/item/weapon/handcuffs/syndicate/detonate(countdown)
-
+/obj/item/weapon/handcuffs/syndicate/proc/detonate(countdown)
+	set waitfor = FALSE
 	if(charge_detonated)
 		return
-	charge_detonated = 1 //Do it before countdown to prevent spam fuckery
+
+	charge_detonated = TRUE // Do it before countdown to prevent spam fuckery.
 	if(countdown)
-		//Cannot use a sleep() instruction here since we do NOT want to delay inventory handling
-		spawn(countdown_time)
-			explosion(get_turf(src), 0, 1, 3, 0)
-			qdel(src)
-	else
-		explosion(get_turf(src), 0, 1, 3, 0)
-		qdel(src)
+		sleep(countdown_time)
+
+	explosion(get_turf(src), 0, 1, 3, 0)
+	qdel(src)
 
 /obj/item/weapon/handcuffs/Destroy()
 
@@ -248,9 +223,6 @@
 /obj/item/weapon/handcuffs/cable/update_icon()
 	if(_color)
 		icon_state = "cuff_[_color]"
-
-/obj/item/weapon/handcuffs/cyborg
-	dispenser = 1
 
 /obj/item/weapon/handcuffs/cable/attackby(var/obj/item/I, mob/user as mob)
 	..()
