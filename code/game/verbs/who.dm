@@ -9,6 +9,7 @@
 	//for admins
 	var/living = 0
 	var/ghosts = 0
+	var/lobby = 0
 	var/livingAntags = 0
 
 	if (holder)
@@ -36,6 +37,7 @@
 							entry += " - <font color='black'><b>DEAD</b></font>"
 					else if (isnewplayer(C.mob))
 						entry += " - <font color='gray'><i>Lobby</i></font>"
+						lobby++
 					else
 						entry += " - <font color='black'><b>DEAD</b></font>"
 						ghosts++
@@ -61,7 +63,7 @@
 	for (var/line in sortList(Lines))
 		msg += "[line]\n"
 	if(holder)
-		msg += "<b>Living: [living] | Dead/Ghosts: [ghosts] | Living Antags: [livingAntags] | </b>"
+		msg += "<b>Living: [living] | Dead/Ghosts: [ghosts] | in Lobby: [lobby] | Living Antags: <font color='red'>[livingAntags]</font> | </b>"
 	msg += "<b>Total Players: [length(Lines)]</b>\n"
 	to_chat(src, msg)
 
