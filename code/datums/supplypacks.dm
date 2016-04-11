@@ -546,8 +546,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/armor
 	name = "Armor crate"
-	contains = list(/obj/item/clothing/head/helmet,
-					/obj/item/clothing/head/helmet,
+	contains = list(/obj/item/clothing/head/helmet/tactical/sec,
+					/obj/item/clothing/head/helmet/tactical/sec,
 					/obj/item/clothing/suit/armor/vest,
 					/obj/item/clothing/suit/armor/vest)
 	cost = 15

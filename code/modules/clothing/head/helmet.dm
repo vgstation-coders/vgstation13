@@ -1,10 +1,9 @@
 /obj/item/clothing/head/helmet
 	name = "helmet"
-	desc = "Standard Security gear. Protects the head from impacts."
-	icon_state = "helmet"
+	icon_state = "helmet_sec"
+	item_state = "helmet_sec"
 	flags = FPRINT
-	item_state = "helmet"
-	armor = list(melee = 50, bullet = 15, laser = 50,energy = 10, bomb = 25, bio = 0, rad = 0)
+	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	body_parts_covered = HEAD|EARS|EYES
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
@@ -12,9 +11,33 @@
 
 /obj/item/clothing/head/helmet/warden
 	name = "warden's hat"
-	desc = "It's a special helmet issued to the Warden of a securiy force. Protects the head from impacts."
+	desc = "It's a special helmet issued to the Warden of a security force. Protects the head from impacts."
 	icon_state = "policehelm"
 	body_parts_covered = HEAD
+
+/obj/item/clothing/head/helmet/siren
+	name = "siren helmet"
+	desc = "For the officer that's off patrolling all the nation."
+	icon_state = "helmetgoofy" //Sprites courtesy of Blithering
+	item_state = "helmetgoofy"
+	light_power = 2.5
+	light_color = LIGHT_COLOR_RED
+	action_button_name = "Activate Siren"
+	var/spamcheck = 0
+
+/obj/item/clothing/head/helmet/siren/New()
+	..()
+	set_light(4)
+
+/obj/item/clothing/head/helmet/siren/attack_self(mob/user)
+	if(spamcheck)
+		return
+	playsound(get_turf(src), 'sound/voice/woopwoop.ogg', 100, 1, vary = 0)
+	user.show_message("<span class='warning'>[user]'s [name] rasps, \"WOOP WOOP!\"</span>",1)
+
+	spamcheck = 1
+	spawn(20)
+		spamcheck = 0
 
 /obj/item/clothing/head/helmet/riot
 	name = "riot helmet"
@@ -79,7 +102,7 @@
 
 /obj/item/clothing/head/helmet/hopcap
 	name = "Head of Personnel's Cap"
-	desc = "Papers, Please"
+	desc = "Papers, Please."
 	armor = list(melee = 25, bullet = 0, laser = 15, energy = 10, bomb = 5, bio = 0, rad = 0)
 	item_state = "hopcap"
 	icon_state = "hopcap"
