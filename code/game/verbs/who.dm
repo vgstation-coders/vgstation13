@@ -45,7 +45,7 @@
 					living++
 
 			if (is_special_character(C.mob))
-				entry += " - <b><font color='red'>Antagonist</font></b>"
+				entry += " - <b><span class='red'>Antagonist</span></b>"
 				if(!(C.mob.isDead()))
 					livingAntags++
 
@@ -63,7 +63,7 @@
 	for (var/line in sortList(Lines))
 		msg += "[line]\n"
 	if(holder)
-		msg += "<b>Living: [living] | Dead/Ghosts: [ghosts] | in Lobby: [lobby] | Living Antags: <font color='red'>[livingAntags]</font> | </b>\n"
+		msg += "<b>Living: [living] | Dead/Ghosts: [ghosts] | in Lobby: [lobby] | Living Antags: <span class='red'>[livingAntags]</span> | </b>\n"
 	msg += "<b>Total Players: [length(Lines)]</b>\n"
 	to_chat(src, msg)
 
