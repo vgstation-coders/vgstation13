@@ -76,10 +76,10 @@
 					say(pick("Benis :DD", \
 						"Oh Fugg :DDDD", \
 						"Dis Deff pace is grea8 :D", \
-						"Da Wild Ride not helping, fug me :DD", \
+						"Wild Ride not helping, fug me :DD", \
 						"Hit me rite in benis", \
 						"Dey sey finnlan not alow in spacestation, but here am :DDD", \
-						"Toxin fuggin run! Is snibetti snab!", \
+						"Toxin fuggin run! Is snibetti snab x-DDD!", \
 						"I do it polan! I make it!", \
 						"Fugg badmin bwoink me, halp me!"))
 
