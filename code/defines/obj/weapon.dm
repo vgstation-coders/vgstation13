@@ -735,6 +735,17 @@
 	melt_temperature=MELTPOINT_STEEL
 	flags = FPRINT
 	siemens_coefficient = 1
+	
+/obj/item/weapon/table_parts/glass
+	name = "DEBUG glass table parts"
+	desc = "Hard table parts. Well...harder..."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "reinf_tableparts"
+	starting_materials = list(MAT_IRON = 7500)
+	w_type = RECYK_METAL
+	melt_temperature=MELTPOINT_STEEL
+	flags = FPRINT
+	siemens_coefficient = 1
 
 /obj/item/weapon/table_parts/wood
 	name = "wooden table parts"

@@ -583,6 +583,17 @@
 	return ..()
 
 /*
+ * Glass
+ */
+
+/obj/structure/table/glass
+	name = "glass table"
+	desc = "A standard table with a fine glass finish."
+	icon_state = "glass_table"
+	parts = /obj/item/weapon/table_parts/glass
+
+
+/*
  * Racks
  */
 /obj/structure/rack
