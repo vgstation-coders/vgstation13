@@ -737,12 +737,12 @@
 	siemens_coefficient = 1
 	
 /obj/item/weapon/table_parts/glass
-	name = "DEBUG glass table parts"
-	desc = "Hard table parts. Well...harder..."
+	name = "glass table parts"
+	desc = "Glass table parts for the spaceman with style."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "reinf_tableparts"
-	starting_materials = list(MAT_IRON = 7500)
-	w_type = RECYK_METAL
+	icon_state = "glass_tableparts"
+	starting_materials = list(MAT_GLASS = 3750)
+	w_type = RECYK_GLASS
 	melt_temperature=MELTPOINT_STEEL
 	flags = FPRINT
 	siemens_coefficient = 1

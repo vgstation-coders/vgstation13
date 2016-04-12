@@ -356,8 +356,9 @@
 		var/obj/item/weapon/grab/G = W
 		if (istype(G.affecting, /mob/living))
 			var/mob/living/M = G.affecting
-			if (G.state < 2)
+			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
+					G.affecting.loc = src.loc
 					if (prob(15))	M.Weaken(5)
 					M.apply_damage(8,def_zone = "head")
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
@@ -591,6 +592,32 @@
 	desc = "A standard table with a fine glass finish."
 	icon_state = "glass_table"
 	parts = /obj/item/weapon/table_parts/glass
+	
+/obj/structure/table/glass/attackby(obj/item/W as obj, mob/user as mob, params)
+	if (!W) return
+	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
+		var/obj/item/weapon/grab/G = W
+		if (istype(G.affecting, /mob/living))
+			var/mob/living/M = G.affecting
+			if (G.state < GRAB_AGGRESSIVE)
+				if(user.a_intent == I_HURT)
+					if (prob(15))	M.Weaken(5)
+					M.apply_damage(8,def_zone = "head")
+					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
+					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
+					playsound(src.loc, "shatter", 50, 1) //WRESTLEMANIA tax, thanks tg for the goodcode of good coding
+					new /obj/item/weapon/shard(src.loc)
+					new /obj/item/weapon/shard(src.loc)
+					qdel(src)
+				else
+					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
+					return
+			else
+				G.affecting.loc = src.loc
+				G.affecting.Weaken(5)
+				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
+			returnToPool(W)
+			return
 
 
 /*

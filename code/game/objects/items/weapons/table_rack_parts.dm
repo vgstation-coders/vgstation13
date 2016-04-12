@@ -29,13 +29,13 @@
 			to_chat(user, "<span class='warning'>You need at least four rods to do this.</span>")
 	if (istype(W, /obj/item/stack/sheet/glass/glass))
 		var/obj/item/stack/sheet/glass/glass = W
-		if (glass.amount >= 4)
+		if (glass.amount >= 1)
 			new /obj/item/weapon/table_parts/glass( user.loc )
 			to_chat(user, "<span class='notice'>You add glass panes to the [name].</span>")
 			glass.use(1)
 			qdel(src)
 		else if (glass.amount < 1)
-			to_chat(user, "<span class='warning'>DEBUGPROBE Holy fuck nigger what are you doing?.</span>")
+			to_chat(user, "<span class='warning'>Dude where's your glass?</span>")
 
 /obj/item/weapon/table_parts/attack_self(mob/user as mob)
 	new /obj/structure/table( user.loc )
