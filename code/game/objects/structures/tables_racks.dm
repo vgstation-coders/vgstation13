@@ -623,15 +623,16 @@
 			return
 
 /obj/structure/table/glass/flip()
-	..()
+	
 	
 	if(prob(70))
-		do_flip()
+		. = ..()
 	else
 		playsound(src.loc, "shatter", 50, 1)
 		new /obj/item/weapon/shard(src.loc)
 		new /obj/item/weapon/shard(src.loc)
 		qdel(src)
+		usr.visible_message("<span class='warning'>[usr] flips \the [src]!</span>")
 			
 /obj/structure/table/glass/kick_act()
 	..()
@@ -644,6 +645,7 @@
 		new /obj/item/weapon/shard(src.loc)
 		new /obj/item/weapon/shard(src.loc)
 		qdel(src)
+		usr.visible_message("<span class='warning'>[usr] smashes \the [src]!</span>")
 		
 	
 					
