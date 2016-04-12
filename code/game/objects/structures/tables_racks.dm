@@ -80,6 +80,8 @@
 				base = "wood"
 			if (istype(src, /obj/structure/table/reinforced))
 				base = "rtable"
+			if (istype(src, /obj/structure/table/glass))
+				base = "glasstable" 
 
 			icon_state = "[base]flip[type]"
 			if (type==1)
@@ -592,6 +594,7 @@
 	desc = "A standard table with a fine glass finish."
 	icon_state = "glass_table"
 	parts = /obj/item/weapon/table_parts/glass
+
 	
 /obj/structure/table/glass/attackby(obj/item/W as obj, mob/user as mob, params)
 	if (!W) return
@@ -602,10 +605,10 @@
 			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
 					if (prob(15))	M.Weaken(5)
-					M.apply_damage(8,def_zone = "head")
+					M.apply_damage(10,def_zone = "head")
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
-					playsound(src.loc, "shatter", 50, 1) //WRESTLEMANIA tax, thanks tg for the goodcode of good coding
+					playsound(src.loc, "shatter", 50, 1) //WRESTLEMANIA tax
 					new /obj/item/weapon/shard(src.loc)
 					new /obj/item/weapon/shard(src.loc)
 					qdel(src)
@@ -619,7 +622,31 @@
 			returnToPool(W)
 			return
 
+/obj/structure/table/glass/flip()
+	..()
+	
+	if(prob(70))
+		do_flip()
+	else
+		playsound(src.loc, "shatter", 50, 1)
+		new /obj/item/weapon/shard(src.loc)
+		new /obj/item/weapon/shard(src.loc)
+		qdel(src)
+			
+/obj/structure/table/glass/kick_act()
+	..()
 
+	if(!usr) return
+	if(prob(70))
+		do_flip()
+	else
+		playsound(src.loc, "shatter", 50, 1)
+		new /obj/item/weapon/shard(src.loc)
+		new /obj/item/weapon/shard(src.loc)
+		qdel(src)
+		
+	
+					
 /*
  * Racks
  */
