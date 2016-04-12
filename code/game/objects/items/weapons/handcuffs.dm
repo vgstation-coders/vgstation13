@@ -119,7 +119,7 @@
 /obj/item/weapon/handcuffs/syndicate/equipped(var/mob/user, var/slot)
 	..()
 
-	if(slot == "handcuff" && mode == SYNDICUFFS_ON_APPLY && !charge_detonated)
+	if(slot == slot_handcuffed && mode == SYNDICUFFS_ON_APPLY && !charge_detonated)
 		detonate(1)
 
 /obj/item/weapon/handcuffs/syndicate/handcuffs_remove(mob/living/carbon/C)
