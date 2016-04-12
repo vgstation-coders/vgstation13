@@ -168,7 +168,7 @@
 			to_chat(M, "<span class='notice'>[pick("You feel quite hardcore", "Coderbased is your god", "Fucking kickscammers Bustration will be the best")].")
 		else
 			M.say(pick("Muh hardcores.", "Falling down is a feature.", "Gorrillionaires and Booty Borgs when?"))
-			
+
 /datum/reagent/rogan
 	name = "Rogan"
 	id = "rogan"
@@ -2213,8 +2213,8 @@
 	if(data >= 165)
 		M.adjustToxLoss(0.2)
 		M.adjustBrainLoss(5)
-		M.hallucination += 100
-		M.dizziness += 100
+		M.hallucination += 50
+		M.dizziness += 50
 		M.confused += 2
 	data++
 
@@ -2640,10 +2640,8 @@
 
 	if(..()) return 1
 
-	M.nutrition -= nutriment_factor
+	M.nutrition = max(0, M.nutrition -= nutriment_factor)
 	M.overeatduration = 0
-	if(M.nutrition < 0) //Prevent from going into negatives
-		M.nutrition = 0
 
 /datum/reagent/soysauce
 	name = "Soysauce"
@@ -4367,6 +4365,8 @@
 			H.dizziness = max(0, H.dizziness - 15)
 		if(H.confused != 0)
 			H.confused = max(0, H.confused - 5)
+		if(H.hallucination != 0)
+			H.hallucination = max(0, H.hallucination - 25)
 
 /datum/reagent/ethanol/deadrum/changelingsting
 	name = "Changeling Sting"

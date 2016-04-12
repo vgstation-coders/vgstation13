@@ -1,0 +1,5 @@
+author: Intigracy
+delete-after: True
+changes: 
+- rscadd: "Doctor's Delight now removes 25 units of hallucination per mob life tick."
+- tweak: "Spiritbreaker now applies 50 units of dizziness and hallucination per mob life tick, down from 100 each."
