@@ -242,7 +242,7 @@
 			desc = "The ever-loyal, the ever-vigilant."
 			valid = 1
 
-		if(/obj/item/clothing/head/helmet/swat)
+		if(/obj/item/clothing/head/helmet/tactical/swat)
 			name = "Lieutenant [real_name]"
 			desc = "When the going gets ruff..."
 			valid = 1

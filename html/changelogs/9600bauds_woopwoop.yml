@@ -33,6 +33,7 @@ delete-after: True
 # If you're using characters such as # ' : - or the like in your changelog, surround the entire change with quotes as shown in the second example. These quotes don't show up on the changelog once it's merged and prevent errors.
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
-- rscadd: "You may now attach flashlights to security helmets (currently, only the default one that spawns in every Sec locker). To unattach the flashlight, use a screwdriver."
-- imageadd: "New flashlight attachment sprites for security helmets courtesy of Blithering."
-- rscadd: "Added a new contraband item to SecTech vending machines."
+- rscadd: "Security helmets have gotten an upgrade to tactical helmets: They can now be attached with flashlights! This also includes the Warden's hat, HoS' hat, and SWAT helmets."
+- rscadd: "To unattach the flashlight attachment from a helmet, use a screwdriver."
+- imageadd: "New flashlight attachment sprites courtesy of Blithering."
+- rscadd: "Added a new premium item to SecTech vending machines."

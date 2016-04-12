@@ -9,12 +9,6 @@
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.7
 
-/obj/item/clothing/head/helmet/warden
-	name = "warden's hat"
-	desc = "It's a special helmet issued to the Warden of a security force. Protects the head from impacts."
-	icon_state = "policehelm"
-	body_parts_covered = HEAD
-
 /obj/item/clothing/head/helmet/siren
 	name = "siren helmet"
 	desc = "For the officer that's off patrolling all the nation."
@@ -49,25 +43,18 @@
 	siemens_coefficient = 0.7
 	eyeprot = 1
 
-/obj/item/clothing/head/helmet/swat
-	name = "\improper SWAT helmet"
-	desc = "They're often used by highly trained Swat Members."
-	icon_state = "swat"
-	flags = FPRINT
-	item_state = "swat"
-	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
-	heat_conductivity = INS_HELMET_HEAT_CONDUCTIVITY
-	species_fit = list("Vox")
-	pressure_resistance = 200 * ONE_ATMOSPHERE
-	siemens_coefficient = 0.5
-	eyeprot = 1
-
-/obj/item/clothing/head/helmet/swat/dredd
+/obj/item/clothing/head/helmet/dredd //same stats as /obj/item/clothing/head/helmet/tactical/swat
 	name = "Judge Helmet"
 	desc = "Judge, Jury, and Executioner."
 	icon_state = "dredd-helmet"
 	item_state = "dredd-helmet"
+	flags = FPRINT
+	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
+	heat_conductivity = INS_HELMET_HEAT_CONDUCTIVITY
 	species_fit = list()
+	pressure_resistance = 200 * ONE_ATMOSPHERE
+	siemens_coefficient = 0.5
+	eyeprot = 1
 
 /obj/item/clothing/head/helmet/thunderdome
 	name = "\improper Thunderdome helmet"
