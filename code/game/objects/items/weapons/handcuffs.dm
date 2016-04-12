@@ -31,7 +31,7 @@
 
 	if((M_CLUMSY in user.mutations) && prob(50))
 		to_chat(usr, "<span class='warning'>Uh ... how do those things work?!</span>")
-		handcuffs_apply(user, user, TRUE)
+		handcuffs_apply(M, user, TRUE)
 		return
 
 	if(M.handcuffed)
