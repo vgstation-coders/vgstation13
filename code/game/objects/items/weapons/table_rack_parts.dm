@@ -6,8 +6,6 @@
  *		Rack Parts
  */
 
-//var/obj/item/stack/sheet/glass/glass = glass
-
 /*
  * Table Parts
  */
@@ -106,8 +104,8 @@
 
 /obj/item/weapon/table_parts/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (iswrench(W))
-		new /obj/item/stack/sheet/wood( user.loc )
-		new /obj/item/stack/tile/grass( user.loc )
+		new /obj/item/stack/sheet/glass/glass( user.loc )
+		new /obj/item/stack/sheet/metal( user.loc )
 		qdel(src)
 
 /obj/item/weapon/table_parts/glass/attack_self(mob/user as mob)
