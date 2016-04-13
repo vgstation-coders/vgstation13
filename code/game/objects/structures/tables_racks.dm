@@ -608,7 +608,7 @@
 			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
 					if (prob(15))	M.Weaken(5)
-					M.apply_damage(10,def_zone = "head")
+					M.apply_damage(15,def_zone = "head")
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
 					playsound(src.loc, "shatter", 50, 1) //WRESTLEMANIA tax
@@ -638,7 +638,7 @@
 		qdel(src)
 		usr.visible_message("<span class='warning'>[usr] flips \the [src] and it shatters!</span>")
 
-/obj/structure/table/glass/kick_act()
+/obj/structure/table/glass/kick_act(mob/living/carbon/human/H)
 	..()
 	playsound(src.loc, "shatter", 50, 1)
 
@@ -650,7 +650,9 @@
 		new /obj/item/weapon/shard(src.loc)
 		new /obj/item/weapon/shard(src.loc)
 		qdel(src)
-		usr.visible_message("<span class='warning'>[usr] kicks apart \the [src]!</span>")
+		H.visible_message("<span class='danger'>[H] kicks \the [src] and it shatters!</span>", "<span class='danger'>You kick \the [src] and it shatters!</span>")
+		H.apply_damage(rand(10,15), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))
+		
 
 
 
