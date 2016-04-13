@@ -636,10 +636,11 @@
 		new /obj/item/weapon/shard(src.loc)
 		new /obj/item/weapon/shard(src.loc)
 		qdel(src)
-		usr.visible_message("<span class='warning'>[usr] flips \the [src]!</span>")
+		usr.visible_message("<span class='warning'>[usr] flips \the [src] and it shatters!</span>")
 
 /obj/structure/table/glass/kick_act()
 	..()
+	playsound(src.loc, "shatter", 50, 1)
 
 	if(!usr) return
 	if(prob(70))
@@ -649,7 +650,7 @@
 		new /obj/item/weapon/shard(src.loc)
 		new /obj/item/weapon/shard(src.loc)
 		qdel(src)
-		usr.visible_message("<span class='warning'>[usr] smashes \the [src]!</span>")
+		usr.visible_message("<span class='warning'>[usr] kicks apart \the [src]!</span>")
 
 
 
