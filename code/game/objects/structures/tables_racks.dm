@@ -7,6 +7,7 @@
  */
 
 
+
 /*
  * Tables
  */
@@ -23,6 +24,7 @@
 	var/icon/clicked
 	var/flipped = 0
 	var/health = 100
+	var/budgemute = 0
 
 /obj/structure/table/proc/update_adjacent()
 	for(var/direction in alldirs)
@@ -81,7 +83,7 @@
 			if (istype(src, /obj/structure/table/reinforced))
 				base = "rtable"
 			if (istype(src, /obj/structure/table/glass))
-				base = "glasstable" 
+				base = "glasstable"
 
 			icon_state = "[base]flip[type]"
 			if (type==1)
@@ -416,6 +418,7 @@
 		return 0
 	return 1
 
+	
 /obj/structure/table/verb/do_flip()
 	set name = "Flip table"
 	set desc = "Flips a non-reinforced table"
@@ -425,7 +428,7 @@
 		return
 	if (!can_touch(usr))
 		return
-	if(!flip(get_cardinal_dir(usr,src)))
+	if(!flip(get_cardinal_dir(usr,src)) && !budgemute)
 		to_chat(usr, "<span class='notice'>It won't budge.</span>")
 	else
 		usr.visible_message("<span class='warning'>[usr] flips \the [src]!</span>")
@@ -595,7 +598,7 @@
 	icon_state = "glass_table"
 	parts = /obj/item/weapon/table_parts/glass
 
-	
+
 /obj/structure/table/glass/attackby(obj/item/W as obj, mob/user as mob, params)
 	if (!W) return
 	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
@@ -623,17 +626,18 @@
 			return
 
 /obj/structure/table/glass/flip()
-	
-	
+
+
 	if(prob(70))
 		. = ..()
 	else
+		budgemute = 1
 		playsound(src.loc, "shatter", 50, 1)
 		new /obj/item/weapon/shard(src.loc)
 		new /obj/item/weapon/shard(src.loc)
 		qdel(src)
 		usr.visible_message("<span class='warning'>[usr] flips \the [src]!</span>")
-			
+
 /obj/structure/table/glass/kick_act()
 	..()
 
@@ -646,9 +650,9 @@
 		new /obj/item/weapon/shard(src.loc)
 		qdel(src)
 		usr.visible_message("<span class='warning'>[usr] smashes \the [src]!</span>")
-		
-	
-					
+
+
+
 /*
  * Racks
  */
