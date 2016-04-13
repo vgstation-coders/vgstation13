@@ -5,29 +5,29 @@
 // fun if you want to typecast humans/monkeys/etc without writing long path-filled lines.
 #define ishuman(A) istype(A, /mob/living/carbon/human)
 
-#define isjusthuman(A) A.type == /mob/living/carbon/human
+#define isjusthuman(A) (ishuman(A) && A.species && istype(A.species, /datum/species/human))
 
 #define ismonkey(A) istype(A, /mob/living/carbon/monkey)
 
-#define isvox(A) istype(A, /mob/living/carbon/human/vox)
+#define isvox(A) (ishuman(A) && A.species && istype(A.species, /datum/species/vox))
 
-#define isdiona(A) istype(A, /mob/living/carbon/human/diona)
+#define isdiona(A) (ishuman(A) && A.species && istype(A.species, /datum/species/diona))
 
-#define isgrey(A) istype(A, /mob/living/carbon/human/grey)
+#define isgrey(A) (ishuman(A) && A.species && istype(A.species, /datum/species/grey))
 
-#define isplasmaman(A) istype(A, /mob/living/carbon/human/plasma)
+#define isplasmaman(A) (ishuman(A) && A.species && istype(A.species, /datum/species/plasmaman))
 
-#define isskellington(A) istype(A, /mob/living/carbon/human/skellington)
+#define isskellington(A) (ishuman(A) && A.species && istype(A.species, /datum/species/skellington))
 
-#define iscatbeast(A) istype(A, /mob/living/carbon/human/tajaran)
+#define iscatbeast(A) (ishuman(A) && A.species && istype(A.species, /datum/species/tajaran))
 
-#define isunathi(A) istype(A, /mob/living/carbon/human/unathi)
+#define isunathi(A) (ishuman(A) && A.species && istype(A.species, /datum/species/unathi))
 
-#define isskrell(A) istype(A, /mob/living/carbon/human/skrell)
+#define isskrell(A) (ishuman(A) && A.species && istype(A.species, /datum/species/skrell))
 
-#define ismuton(A) istype(A, /mob/living/carbon/human/muton)
+#define ismuton(A) (ishuman(A) && A.species && istype(A.species, /datum/species/muton))
 
-#define isgolem(A) istype(A, /mob/living/carbon/human/golem)
+#define isgolem(A) (ishuman(A) && A.species && istype(A.species, /datum/species/golem))
 
 #define isbrain(A) istype(A, /mob/living/carbon/brain)
 
