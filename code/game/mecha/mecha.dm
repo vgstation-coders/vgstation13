@@ -246,6 +246,9 @@
 		target = safepick(view(3,target))
 		if(!target)
 			return
+	if(istype(target, /obj/machinery/door_control))
+		var/obj/machinery/door_control/button = target
+		return button.attack_hand(user)
 	if(get_dist(src, target)>1)
 		if(selected && selected.is_ranged())
 			selected.action(target)
