@@ -743,7 +743,7 @@
 	icon_state = "glass_tableparts"
 	starting_materials = list(MAT_GLASS = 3750)
 	w_type = RECYK_GLASS
-	melt_temperature=MELTPOINT_STEEL
+	melt_temperature=MELTPOINT_SILICON
 	flags = FPRINT
 	siemens_coefficient = 1
 
