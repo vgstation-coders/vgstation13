@@ -440,14 +440,12 @@
 		return ..(mover, target, height, air_group)
 
 /obj/machinery/disposal/MouseDrop_T(atom/dropping, mob/user)
-	if(istype(user, /mob/living/silicon/ai))
+	if(isAI(user))
 		return
 
-	if(!ismob(dropping))
-		if(istype(dropping, /obj/item))
-			if(!user.restrained() && user.canmove)
-				attackby(dropping, user)
-
+	if(istype(dropping, /obj/item))
+		if(!user.restrained() && user.canmove)
+			attackby(dropping, user)
 		return
 
 	var/locHolder = dropping.loc
@@ -455,20 +453,16 @@
 
 	if(target == user)
 		if(!user.restrained() && user.canmove && !user.locked_to)
-			target.visible_message("[target] starts climbing into the [src].", "You start climbing into the [src].")
-		else
-			return
+			target.visible_message("[target] starts climbing into \the [src].", "You start climbing into \the [src].")
 	else
 		if(isanimal(user))
-			return // animals cannot put mobs other than themselves into disposal
+			return //Animals cannot put mobs other than themselves into disposal
 
 		if(!user.restrained() && user.canmove)
 			if(target.locked_to)
 				return
 
-			user.visible_message("[user] starts stuffing [target] into the [src].", "You start stuffing [target] into the [src].")
-		else
-			return
+			user.visible_message("[user] starts stuffing \the [target] into \the [src].", "You start stuffing \the [target] into \the [src].")
 
 	if(!do_after(user, src, 20))
 		return
@@ -478,27 +472,17 @@
 
 	if(target == user)
 		if(!user.restrained() && user.canmove)
-			target.visible_message("[target] climbed into the [src].", "You climbed into the [src].")
-		else
-			return
+			target.visible_message("[target] climbs into \the [src].", "You climb into \the [src].")
 	else
 		if(!user.restrained() && user.canmove)
 			if(target.locked_to)
 				return
 
-			user.visible_message("[user] stuffed [target] into the [src]!", "You stuffed [target] into the [src]!")
-			log_attack("<SPAN CLASS='warning'>[key_name(user)] placed [key_name(target)] in a disposals unit/([src]).</SPAN>")
-		else
-			return
+			user.visible_message("[user] stuffed \the [target] into \the [src]!", "You stuffed \the [target] into \the [src]!")
+			log_attack("<span class='warning'>[key_name(user)] stuffed [key_name(target)] into a disposal unit/([src]).</span>")
 
 	add_fingerprint(user)
-
-	if(target.client)
-		target.client.perspective = EYE_PERSPECTIVE
-		target.client.eye = src
-
-	target.loc = src
-
+	target.forceMove(src)
 	update_icon()
 
 // virtual disposal object
