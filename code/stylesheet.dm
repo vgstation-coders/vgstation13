@@ -76,7 +76,7 @@ h1.alert, h2.alert		{color: #000000;}
 .skeleton				{color: #585858; font-weight: bold; font-style: italic;}
 .gutter					{color: #61380B; font-style: italic;}
 .orange					{color: #ffa500;}
-.orangei				{color: #ffa500;font-style: italic;}
+.orangei				{color: #ffa500; font-style: italic;}
 .orangeb				{color: #ffa500; font-weight: bold;}
 
 /* /vg/ */
