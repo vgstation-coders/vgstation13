@@ -29,3 +29,4 @@ delete-after: True
 
 changes: 
 - rscadd: "Added a new, vox-exclusive rounstart-only job: trader (alt titles: vagabond, merchant, traveler). Traders spawn on the vox outpost. They are not on the crew manifest and they don't have IDs, PDAs or any money."
+- rscadd: Added a shuttle wreckage to Metaclub's asteroid. Because Metaclub's vox outpost is overrun by aliens, traders spawn in the wreckage. Vox outposts on other maps have also received some basic supplies and tools.
