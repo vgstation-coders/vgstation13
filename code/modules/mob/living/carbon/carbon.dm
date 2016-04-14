@@ -213,10 +213,10 @@
 				if(brutedamage > 0 && burndamage > 0)
 					status += " and "
 				if(burndamage > 40)
-					status += "<span style='color:orange;font-weight:bold;'>peeling away</span>"
+					status += "<span class='orangeb'>peeling away</span>"
 
 				else if(burndamage > 10)
-					status += "<span style=color:orange>blistered</span>"
+					status += "<span class='orangei'>blistered</span>"
 				else if(burndamage > 0)
 					status += "numb"
 				if(org.status & ORGAN_DESTROYED)
