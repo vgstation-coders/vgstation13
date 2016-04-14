@@ -623,7 +623,7 @@
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
 			return 
-	..()
+	return ..()
 /obj/structure/table/glass/flip()
 
 
