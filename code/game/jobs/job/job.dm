@@ -48,6 +48,9 @@
 	var/list/species_blacklist = list() //Job not available to species in this list
 	var/list/species_whitelist = list() //If this list isn't empty, job is only available to species in this list
 
+	var/list/map_whitelist = list() //If this list isn't empty, this job will only appear on maps in this list (accepted values: map.nameShort, map.nameLong - so for example, "box" or "Box Station")
+	var/list/map_blacklist = list() //If the above list is empty, this job will NOT appear on maps in this list (accepted values - same as above)
+
 	var/no_crew_manifest = 0 //If 1, don't inject players with this job into the crew manifest
 	var/no_starting_money = 0 //If 1, don't start with a bank account or money
 	var/no_id = 0 //If 1, don't spawn with an ID

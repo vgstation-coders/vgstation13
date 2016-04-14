@@ -23,6 +23,16 @@ var/global/datum/controller/occupations/job_master
 		var/datum/job/job = new J()
 		if(!job)	continue
 		if(job.faction != faction)	continue
+
+		if(job.map_whitelist.len || job.map_blacklist.len) //Job is map-dependant - wait until the maps initialize
+
+			if(job.map_whitelist.len)
+				if(!job.map_whitelist.Find(map.nameShort) && !job.map_whitelist.Find(map.nameLong)) //Our map isn't in the list
+					continue
+			else if(job.map_blacklist.len) //Job doesn't appear on maps in the map_blacklist list!
+				if(job.map_blacklist.Find(map.nameShort) || job.map_blacklist.Find(map.nameLong))
+					continue
+
 		occupations += job
 
 
