@@ -32,14 +32,13 @@
 			to_chat(user, "<span class='notice'>You add glass panes to the [name].</span>")
 			glass.use(1)
 			qdel(src)
-		else if (glass.amount < 1)
-			to_chat(user, "<span class='warning'>Dude where's your glass?</span>")
+		
 
 /obj/item/weapon/table_parts/attack_self(mob/user as mob)
 	new /obj/structure/table( user.loc )
 	user.drop_item(src, force_drop = 1)
 	qdel(src)
-	return
+	
 
 
 /*

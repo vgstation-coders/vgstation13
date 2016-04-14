@@ -362,7 +362,7 @@
 			var/mob/living/M = G.affecting
 			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
-					G.affecting.loc = src.loc
+					G.affecting.forceMove(loc)
 					if (prob(15))	M.Weaken(5)
 					M.apply_damage(8,def_zone = "head")
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
@@ -371,7 +371,7 @@
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
 			else
-				G.affecting.loc = src.loc
+				G.affecting.forceMove(loc)
 				G.affecting.Weaken(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
@@ -418,7 +418,7 @@
 		return 0
 	return 1
 
-	
+
 /obj/structure/table/verb/do_flip()
 	set name = "Flip table"
 	set desc = "Flips a non-reinforced table"
@@ -600,7 +600,6 @@
 
 
 /obj/structure/table/glass/attackby(obj/item/W as obj, mob/user as mob, params)
-	if (!W) return
 	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
 		var/obj/item/weapon/grab/G = W
 		if (istype(G.affecting, /mob/living))
@@ -619,17 +618,17 @@
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
 			else
-				G.affecting.loc = src.loc
+				G.affecting.forceMove(loc)
 				G.affecting.Weaken(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
-			return
-
+			return 
+	..()
 /obj/structure/table/glass/flip()
 
 
 	if(prob(70))
-		. = ..()
+		. = ..() 
 	else
 		budgemute = 1
 		playsound(src.loc, "shatter", 50, 1)
@@ -642,7 +641,7 @@
 	..()
 	playsound(src.loc, "shatter", 50, 1)
 
-	if(!usr) return
+	if(!H) return
 	if(prob(70))
 		do_flip()
 	else
@@ -652,7 +651,7 @@
 		qdel(src)
 		H.visible_message("<span class='danger'>[H] kicks \the [src] and it shatters!</span>", "<span class='danger'>You kick \the [src] and it shatters!</span>")
 		H.apply_damage(rand(10,15), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))
-		
+
 
 
 
