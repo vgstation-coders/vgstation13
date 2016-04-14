@@ -111,7 +111,7 @@
 	new /obj/structure/table/glass( user.loc )
 	user.drop_item(src, force_drop = 1)
 	qdel(src)
-	return
+	
 
 
 /*
