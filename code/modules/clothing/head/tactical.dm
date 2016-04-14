@@ -56,11 +56,9 @@ obj/item/clothing/head/helmet/tactical/attack_self(mob/user)
 /obj/item/clothing/head/helmet/tactical/update_icon()
 	if(flashlight)
 		icon_state = "[initial(icon_state)]_[flashlight.on]"
-		item_state = "[initial(item_state)]_[flashlight.on]"
 		action_button_name = "Toggle Helmet Light"
 	else
 		icon_state = initial(icon_state)
-		item_state = initial(item_state)
 		action_button_name = null
 
 /obj/item/clothing/head/helmet/tactical/sec
@@ -92,6 +90,15 @@ obj/item/clothing/head/helmet/tactical/attack_self(mob/user)
 	desc = "It's a special helmet issued to the Warden of a security force. Protects the head from impacts."
 	icon_state = "policehelm"
 	body_parts_covered = HEAD
+
+/obj/item/clothing/head/helmet/tactical/riot
+	name = "riot helmet"
+	desc = "It's a helmet specifically designed to protect against close range attacks."
+	icon_state = "riot"
+	flags = FPRINT
+	armor = list(melee = 82, bullet = 15, laser = 5,energy = 5, bomb = 5, bio = 2, rad = 0)
+	siemens_coefficient = 0.7
+	eyeprot = 1
 
 /obj/item/clothing/head/helmet/tactical/swat
 	name = "\improper SWAT helmet"
