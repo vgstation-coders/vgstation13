@@ -207,16 +207,16 @@
 				if(brutedamage > 0)
 					status = "bruised"
 				if(brutedamage > 20)
-					status = "bleeding"
+					status = "<font color='red'>bleeding</font>"
 				if(brutedamage > 40)
-					status = "mangled"
+					status = "<font color='red'><b>mangled</b></font>"
 				if(brutedamage > 0 && burndamage > 0)
 					status += " and "
 				if(burndamage > 40)
-					status += "peeling away"
+					status += "<font color='orange'><b>peeling away</b></font>"
 
 				else if(burndamage > 10)
-					status += "blistered"
+					status += "<font color='orange'>blistered</font>"
 				else if(burndamage > 0)
 					status += "numb"
 				if(org.status & ORGAN_DESTROYED)
