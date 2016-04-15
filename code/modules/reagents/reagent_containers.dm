@@ -21,6 +21,26 @@ var/list/LOGGED_SPLASH_REAGENTS = list("fuel", "thermite")
 	if (N)
 		amount_per_transfer_from_this = N
 
+/obj/item/weapon/reagent_containers/verb/empty_contents()
+	set name = "Dump contents"
+	set category = "Object"
+	set src in usr
+
+	if(usr.incapacitated())
+		to_chat(usr, "<span class='warning'>You can't do that while incapacitated.</span>")
+		return
+	if(!is_open_container(src))
+		to_chat(usr, "<span class='warning'>You can't, \the [src] is closed.</span>")
+		return
+	if(src.is_empty())
+		to_chat(usr, "<span class='warning'>\The [src] is empty.</span>")
+		return
+	if(isturf(usr.loc))
+		to_chat(usr, "<span class='notice'>You empty the [src] onto the floor.</span>")
+		reagents.reaction(usr.loc)
+		playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+		spawn() src.reagents.clear_reagents()
+
 /obj/item/weapon/reagent_containers/AltClick()
 	if(find_holder_of_type(src, /mob) == usr && possible_transfer_amounts)
 		set_APTFT()
@@ -31,7 +51,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list("fuel", "thermite")
 	..()
 	create_reagents(volume)
 
-	if (!possible_transfer_amounts)
+	if(!is_open_container(src))
+		src.verbs -= /obj/item/weapon/reagent_containers/verb/empty_contents
+	if(!possible_transfer_amounts)
 		src.verbs -= /obj/item/weapon/reagent_containers/verb/set_APTFT
 
 /obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
