@@ -187,8 +187,7 @@
 	if(!stat && !ckey)
 		amount_grown += rand(1,2)
 		if(amount_grown >= 100)
-			new /mob/living/simple_animal/chicken(src.loc)
-			qdel(src)
+			grow_up()
 
 /mob/living/simple_animal/chicken
 	name = "chicken"
@@ -270,7 +269,7 @@
 		processing_objects.Remove(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/proc/hatch()
-	visible_message("[src] hatches with a quiet cracking sound.")
+	visible_message("<span class='info'>\The [src] hatches with a quiet cracking sound.</span>", "<span class='notice'>You hear a quiet cracking sound.</span>")
 	new /mob/living/simple_animal/chick(get_turf(src))
 	processing_objects.Remove(src)
 	qdel(src)
