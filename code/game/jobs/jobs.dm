@@ -44,11 +44,7 @@ var/const/CHAPLAIN			=(1<<10)
 var/const/CLOWN				=(1<<11)
 var/const/MIME				=(1<<12)
 var/const/ASSISTANT			=(1<<13)
-
-
-var/const/MISC				=(1<<3)
-
-var/const/TRADER			=(1<<0)
+var/const/TRADER			=(1<<14)
 
 
 var/list/assistant_occupations = list(

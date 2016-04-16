@@ -137,10 +137,6 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/job_engsec_med = 0
 	var/job_engsec_low = 0
 
-	var/job_misc_high = 0
-	var/job_misc_med = 0
-	var/job_misc_low = 0
-
 	//Keeps track of preferrence for not getting any wanted jobs
 	var/alternate_option = 0
 
@@ -696,10 +692,6 @@ var/const/MAX_SAVE_SLOTS = 8
 	job_engsec_med = 0
 	job_engsec_low = 0
 
-	job_misc_high = 0
-	job_misc_med = 0
-	job_misc_low = 0
-
 /datum/preferences/proc/GetJobDepartment(var/datum/job/job, var/level)
 	if(!job || !level)	return 0
 	switch(job.department_flag)
@@ -727,14 +719,6 @@ var/const/MAX_SAVE_SLOTS = 8
 					return job_engsec_med
 				if(3)
 					return job_engsec_low
-		if(MISC)
-			switch(level)
-				if(1)
-					return job_misc_high
-				if(2)
-					return job_misc_med
-				if(3)
-					return job_misc_low
 	return 0
 
 /datum/preferences/proc/SetJobDepartment(var/datum/job/job, var/level)
@@ -744,18 +728,15 @@ var/const/MAX_SAVE_SLOTS = 8
 			job_civilian_high = 0
 			job_medsci_high = 0
 			job_engsec_high = 0
-			job_misc_high = 0
 			return 1
 		if(2)//Set current highs to med, then reset them
 			job_civilian_med |= job_civilian_high
 			job_medsci_med |= job_medsci_high
 			job_engsec_med |= job_engsec_high
-			job_misc_med |= job_misc_high
 
 			job_civilian_high = 0
 			job_medsci_high = 0
 			job_engsec_high = 0
-			job_misc_high = 0
 
 	switch(job.department_flag)
 		if(CIVILIAN)
@@ -788,16 +769,6 @@ var/const/MAX_SAVE_SLOTS = 8
 					job_engsec_low &= ~job.flag
 				else
 					job_engsec_low |= job.flag
-		if(MISC)
-			switch(level)
-				if(2)
-					job_misc_high = job.flag
-					job_misc_med &= ~job.flag
-				if(3)
-					job_misc_med |= job.flag
-					job_misc_low &= ~job.flag
-				else
-					job_misc_low |= job.flag
 	return 1
 
 
@@ -852,14 +823,6 @@ var/const/MAX_SAVE_SLOTS = 8
 					job_engsec_med = new_flags
 				if(3) //low
 					job_engsec_low = new_flags
-		if(MISC)
-			switch(d_level)
-				if(1) //high
-					job_misc_high = new_flags
-				if(2) //med
-					job_misc_med = new_flags
-				if(3) //low
-					job_misc_low = new_flags
 
 /datum/preferences/proc/SetRoles(var/mob/user, var/list/href_list)
 	// We just grab the role from the POST(?) data.
