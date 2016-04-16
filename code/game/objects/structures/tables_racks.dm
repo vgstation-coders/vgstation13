@@ -626,7 +626,6 @@
 	return ..()
 /obj/structure/table/glass/flip()
 
-
 	if(prob(70))
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 50, 1)
 		. = ..() 
@@ -640,8 +639,7 @@
 
 /obj/structure/table/glass/kick_act(mob/living/carbon/human/H)
 	..()
-	playsound(src.loc, "shatter", 50, 1)
-
+	
 	if(!H) return
 	if(prob(70))
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 50, 1)
