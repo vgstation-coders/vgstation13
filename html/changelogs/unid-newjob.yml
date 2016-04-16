@@ -28,4 +28,4 @@ author: Unid
 delete-after: True
 
 changes: 
-- rscadd: "Added a new, vox-exclusive rounstart-only job: trader (alt titles: vagabond, merchant, traveler). Traders spawn on the vox outpost. They are not on the crew manifest and they don't have IDs, PDAs or any money."
+- rscadd: "Vox traders are back! Now they also start with a station bounced radio on their belt (if they are traitors, the radio becomes their uplink), an empty wallet and some food provisions."
