@@ -626,7 +626,7 @@
 	return ..()
 /obj/structure/table/glass/flip()
 
-	if(prob(70))
+	if(prob(90))
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 50, 1)
 		. = ..() 
 	else
@@ -641,7 +641,7 @@
 	..()
 	
 	if(!H) return
-	if(prob(70))
+	if(prob(90))
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 50, 1)
 		do_flip()
 	else
@@ -650,7 +650,7 @@
 		new /obj/item/weapon/table_parts(src.loc)
 		qdel(src)
 		H.visible_message("<span class='danger'>[H] kicks \the [src] and it shatters!</span>", "<span class='danger'>You kick \the [src] and it shatters!</span>")
-		H.apply_damage(rand(10,15), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))
+		H.apply_damage(rand(5,10), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))
 
 
 
