@@ -48,7 +48,7 @@
 	..()
 
 /obj/structure/table/proc/checkhealth()
-	if(health <= 0)
+	if(health <= 0 && istype(src, /obj/structure/table/glass))
 		playsound(src.loc, "shatter", 50, 1)
 		new /obj/item/weapon/shard(src.loc)
 		new /obj/item/weapon/table_parts(src.loc)
