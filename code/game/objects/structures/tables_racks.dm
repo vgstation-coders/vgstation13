@@ -597,7 +597,7 @@
 	desc = "A standard table with a fine glass finish."
 	icon_state = "glass_table"
 	parts = /obj/item/weapon/table_parts/glass
-
+	health = 30
 
 /obj/structure/table/glass/attackby(obj/item/W as obj, mob/user as mob, params)
 	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
@@ -622,20 +622,24 @@
 				G.affecting.Weaken(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
-			return 
-	return ..()
-/obj/structure/table/glass/flip()
-
-	if(prob(70))
+			return
+	else if (user.a_intent == I_HURT)
+		user.delayNextAttack(10)
+		health -= W.force
+		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>", \
+		"<span class='warning'>You hit \the [src] with \the [W].</span>")
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 50, 1)
-		. = ..() 
+		if(health <= 0)
+			playsound(src.loc, "shatter", 50, 1) //WRESTLEMANIA tax
+			new /obj/item/weapon/shard(src.loc)
+			new /obj/item/weapon/table_parts(src.loc)
+			qdel(src)
+			return
+		return
 	else
-		budgemute = 1
-		playsound(src.loc, "shatter", 50, 1)
-		new /obj/item/weapon/shard(src.loc)
-		new /obj/item/weapon/table_parts(src.loc)
-		qdel(src)
-		usr.visible_message("<span class='warning'>[usr] flips \the [src] and it shatters!</span>")
+		..()
+
+
 
 
 /*
