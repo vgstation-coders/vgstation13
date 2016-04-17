@@ -12,7 +12,7 @@
 	alt_titles = list("Merchant","Traveler","Vagabond")
 
 	species_whitelist = list("Vox")
-	map_whitelist = list("box", "taxi", "meta", "deff")
+	must_be_map_enabled = 1
 
 	no_random_roll = 1 //Don't become a vox trader randomly
 	no_crew_manifest = 1
