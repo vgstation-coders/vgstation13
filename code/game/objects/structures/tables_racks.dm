@@ -47,6 +47,13 @@
 	update_adjacent()
 	..()
 
+/obj/structure/table/proc/checkhealth()
+	if(health <= 0)
+		playsound(src.loc, "shatter", 50, 1)
+		new /obj/item/weapon/shard(src.loc)
+		new /obj/item/weapon/table_parts(src.loc)
+		qdel(src)
+	
 /obj/structure/table/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
 		src.ex_act(1)
@@ -249,7 +256,11 @@
 	..()
 
 	if(!usr) return
+	if(istype(src, /obj/structure/table/glass))
+		health -= 5
+		checkhealth()
 	do_flip()
+
 
 /obj/structure/table/blob_act()
 	if(prob(75))
@@ -629,15 +640,12 @@
 		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>", \
 		"<span class='warning'>You hit \the [src] with \the [W].</span>")
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 50, 1)
-		if(health <= 0)
-			playsound(src.loc, "shatter", 50, 1) //WRESTLEMANIA tax
-			new /obj/item/weapon/shard(src.loc)
-			new /obj/item/weapon/table_parts(src.loc)
-			qdel(src)
-			return
+		checkhealth()
 		return
 	else
 		..()
+
+
 
 
 
