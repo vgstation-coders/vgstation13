@@ -643,7 +643,7 @@
 	if(!H) return
 	if(prob(90))
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 50, 1)
-		do_flip()
+		flip()
 	else
 		playsound(src.loc, "shatter", 50, 1)
 		new /obj/item/weapon/shard(src.loc)
