@@ -24,8 +24,7 @@
 	var/icon/clicked
 	var/flipped = 0
 	var/health = 100
-	var/budgemute = 0
-
+	
 /obj/structure/table/proc/update_adjacent()
 	for(var/direction in alldirs)
 		if(locate(/obj/structure/table, get_step(src, direction)))
@@ -439,7 +438,7 @@
 		return
 	if (!can_touch(usr))
 		return
-	if(!flip(get_cardinal_dir(usr,src)) && !budgemute)
+	if(!flip(get_cardinal_dir(usr,src)))
 		to_chat(usr, "<span class='notice'>It won't budge.</span>")
 	else
 		usr.visible_message("<span class='warning'>[usr] flips \the [src]!</span>")
