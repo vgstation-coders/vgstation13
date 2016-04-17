@@ -439,47 +439,59 @@
 	else
 		return ..(mover, target, height, air_group)
 
-/obj/machinery/disposal/MouseDrop_T(atom/dropping, mob/user)
+/obj/machinery/disposal/MouseDrop_T(atom/movable/dropping, mob/user)
+
 	if(isAI(user))
 		return
 
+	//We are restrained, can't move or locked to something, this will compromise taking out the trash
+	if(user.restrained() || !user.canmove || user.locked_to)
+		return
+
 	if(istype(dropping, /obj/item))
-		if(!user.restrained() && user.canmove)
-			attackby(dropping, user)
+
+		if(dropping.locked_to) //Items can very specifically be locked to something, check that here
+			return
+
+		attackby(dropping, user)
 		return
 
 	var/locHolder = dropping.loc
 	var/mob/target = dropping
 
+	//Our target, now confirmed to be a mob, can't move or is locked to something, same thing
+	if(!target.canmove || target.locked_to)
+		return
+
 	if(target == user)
-		if(!user.restrained() && user.canmove && !user.locked_to)
-			target.visible_message("[target] starts climbing into \the [src].", "You start climbing into \the [src].")
+		target.visible_message("[target] starts climbing into \the [src].", "You start climbing into \the [src].")
+
 	else
+
 		if(isanimal(user))
 			return //Animals cannot put mobs other than themselves into disposal
 
-		if(!user.restrained() && user.canmove)
-			if(target.locked_to)
-				return
-
-			user.visible_message("[user] starts stuffing \the [target] into \the [src].", "You start stuffing \the [target] into \the [src].")
+		user.visible_message("[user] starts stuffing \the [target] into \the [src].", "You start stuffing \the [target] into \the [src].")
 
 	if(!do_after(user, src, 20))
+		return
+
+	if(user.restrained() || !user.canmove || user.locked_to)
+		return
+
+	if(!target.canmove || target.locked_to)
 		return
 
 	if(locHolder != target.loc)
 		return
 
 	if(target == user)
-		if(!user.restrained() && user.canmove)
-			target.visible_message("[target] climbs into \the [src].", "You climb into \the [src].")
-	else
-		if(!user.restrained() && user.canmove)
-			if(target.locked_to)
-				return
+		target.visible_message("[target] climbs into \the [src].", "You climb into \the [src].")
 
-			user.visible_message("[user] stuffed \the [target] into \the [src]!", "You stuffed \the [target] into \the [src]!")
-			log_attack("<span class='warning'>[key_name(user)] stuffed [key_name(target)] into a disposal unit/([src]).</span>")
+	else
+
+		user.visible_message("[user] stuffed \the [target] into \the [src]!", "You stuffed \the [target] into \the [src]!")
+		log_attack("<span class='warning'>[key_name(user)] stuffed [key_name(target)] into a disposal unit/([src]).</span>")
 
 	add_fingerprint(user)
 	target.forceMove(src)
