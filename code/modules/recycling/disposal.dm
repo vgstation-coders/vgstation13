@@ -444,8 +444,8 @@
 	if(isAI(user))
 		return
 
-	//We are restrained, can't move or locked to something, this will compromise taking out the trash
-	if(user.restrained() || !user.canmove || user.locked_to)
+	//We are restrained or can't move, this will compromise taking out the trash
+	if(user.restrained() || !user.canmove)
 		return
 
 	if(istype(dropping, /obj/item))
@@ -476,7 +476,7 @@
 	if(!do_after(user, src, 20))
 		return
 
-	if(user.restrained() || !user.canmove || user.locked_to)
+	if(user.restrained() || !user.canmove)
 		return
 
 	if(target.locked_to)
