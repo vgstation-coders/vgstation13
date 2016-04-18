@@ -459,8 +459,8 @@
 	var/locHolder = dropping.loc
 	var/mob/target = dropping
 
-	//Our target, now confirmed to be a mob, can't move or is locked to something, same thing
-	if(!target.canmove || target.locked_to)
+	//Our target, now confirmed to be a mob, is locked to something, same thing
+	if(target.locked_to)
 		return
 
 	if(target == user)
@@ -479,7 +479,7 @@
 	if(user.restrained() || !user.canmove || user.locked_to)
 		return
 
-	if(!target.canmove || target.locked_to)
+	if(target.locked_to)
 		return
 
 	if(locHolder != target.loc)
