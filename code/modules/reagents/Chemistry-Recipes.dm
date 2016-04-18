@@ -633,6 +633,20 @@ datum
 			required_reagents = list("capsaicin" = 1, "ethanol" = 5)
 			result_amount = 5
 
+		citalopram
+			name = "Citalopram"
+			id = "citalopram"
+			result = "citalopram"
+			required_reagents = list("mindbreaker" = 1, "oxygen" = 1, "inaprovaline" = 1)
+			result_amount = 2
+
+		paroxetine
+			name = "Paroxetine"
+			id = "paroxetine"
+			result = "paroxetine"
+			required_reagents = list("spiritbreaker" = 1, "citalopram" = 1)
+			result_amount = 2
+
 		methylin
 			name = "Methylin"
 			id = "methylin"
