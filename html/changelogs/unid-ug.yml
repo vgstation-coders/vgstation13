@@ -27,5 +27,5 @@ author: Unid
 delete-after: True
 
 changes: 
-- bugfix: "Fixed some issues with traders. Traders are no longer valid assassination targets for antagonists, and can no longer become double agents."
+- bugfix: "Traders can no longer become double agents. Fixed missing trader spawn points"
 - tweak: "Traders have more metal and glass at roundstart (50/50 of each)"
