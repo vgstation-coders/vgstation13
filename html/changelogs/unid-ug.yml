@@ -27,5 +27,5 @@ author: Unid
 delete-after: True
 
 changes: 
-- bugfix: "Traders can no longer become double agents. Fixed missing trader spawn points"
+- bugfix: "Fixed missing trader spawn points"
 - tweak: "Traders have more metal and glass at roundstart (50/50 of each)"
