@@ -1,7 +1,7 @@
 /datum/game_mode/traitor/double_agents
 	name = "double agents"
 	config_tag = "double_agents"
-	restricted_jobs = list("Cyborg", "AI", "Captain", "Head of Personnel", "Chief Medical Officer", "Research Director", "Chief Engineer", "Head of Security", "Mobile MMI", "Trader") // Human / Minor roles only.
+	restricted_jobs = list("Cyborg", "AI", "Captain", "Head of Personnel", "Chief Medical Officer", "Research Director", "Chief Engineer", "Head of Security", "Mobile MMI") // Human / Minor roles only.
 	required_players = 15
 	required_enemies = 2 //we only need 2 - the agent, and the other agent
 	recommended_enemies = 6
