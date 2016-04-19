@@ -458,7 +458,7 @@
 				return
 
 			attackby(dropping, user)
-			return
+		return
 
 	//From there, we are working on a mob (as our target, user is supposed to be a mob)
 
