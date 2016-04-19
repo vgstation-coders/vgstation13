@@ -252,6 +252,7 @@ var/shuttle_call/shuttle_calls[0]
 		// Status display stuff
 		if("setstat")
 			display_type=href_list["statdisp"]
+			to_chat(usr, "Set stat: [display_type]") //debug message
 			switch(display_type)
 				if("message")
 					post_status("message", stat_msg1, stat_msg2)
