@@ -101,13 +101,13 @@
 
 	if(href_list["show_preferences"])
 		if(!speciesinit)
-			return
+			return 1
 		client.prefs.ShowChoices(src)
 		return 1
 
 	if(href_list["ready"])
 		if(!speciesinit)
-			return
+			return 1
 		switch(text2num(href_list["ready"]))
 			if(1)
 				ready = 1
@@ -124,7 +124,7 @@
 
 	if(href_list["observe"])
 		if(!speciesinit)
-			return
+			return 1
 		if(alert(src,"Are you sure you wish to observe? You will not be able to play this round!","Player Setup","Yes","No") == "Yes")
 			if(!client)	return 1
 			sleep(1)
