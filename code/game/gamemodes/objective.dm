@@ -15,7 +15,7 @@ var/list/potential_theft_objectives=list(
 	var/target_amount = 0				//If they are focused on a particular number. Steal objectives have their own counter.
 	var/completed = 0					//currently only used for custom objectives.
 	var/blocked = 0                     // Universe fucked, you lost.
-	var/list/bad_targets = list("AI","Cyborg","Mobile MMI","Trader")//For roundstart cases where they are still human at the time of objective assignment
+	var/list/bad_targets = list("AI","Cyborg","Mobile MMI")//For roundstart cases where they are still human at the time of objective assignment
 
 /datum/objective/New(var/text)
 	if(text)
