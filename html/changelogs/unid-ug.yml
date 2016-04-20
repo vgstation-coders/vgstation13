@@ -28,4 +28,4 @@ delete-after: True
 
 changes: 
 - bugfix: "Fixed missing trader spawn points"
-- tweak: "Traders have more metal and glass at roundstart (50/50 of each)"
+- tweak: "Traders have more metal and glass at roundstart (50 of each)"
