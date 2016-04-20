@@ -4346,7 +4346,7 @@
 	description = "A gulp a day keeps the MediBot away. That's probably for the best."
 	reagent_state = LIQUID
 	nutriment_factor = FOOD_METABOLISM
-	color = "#664300" //rgb: 102, 67, 0
+	color = "#BA7DBA" //rgb: 73, 49, 73
 
 /datum/reagent/drink/doctor_delight/on_mob_life(var/mob/living/M)
 
