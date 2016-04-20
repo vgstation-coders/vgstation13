@@ -29,7 +29,7 @@
 		var/obj/item/stack/sheet/glass/glass = W
 		if (glass.amount >= 1)
 			new /obj/item/weapon/table_parts/glass( user.loc )
-			to_chat(user, "<span class='notice'>You add glass panes to the [name].</span>")
+			to_chat(user, "<span class='notice'>You add glass panes to \the [name].</span>")
 			glass.use(1)
 			qdel(src)
 		
@@ -109,7 +109,6 @@
 
 /obj/item/weapon/table_parts/glass/attack_self(mob/user as mob)
 	new /obj/structure/table/glass( user.loc )
-	user.drop_item(src, force_drop = 1)
 	qdel(src)
 	
 

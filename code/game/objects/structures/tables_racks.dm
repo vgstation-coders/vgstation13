@@ -24,7 +24,7 @@
 	var/icon/clicked
 	var/flipped = 0
 	var/health = 100
-	
+
 /obj/structure/table/proc/update_adjacent()
 	for(var/direction in alldirs)
 		if(locate(/obj/structure/table, get_step(src, direction)))
@@ -46,13 +46,13 @@
 	update_adjacent()
 	..()
 
-/obj/structure/table/proc/checkhealth()
-	if(health <= 0 && istype(src, /obj/structure/table/glass))
-		playsound(src.loc, "shatter", 50, 1)
+/obj/structure/table/glass/proc/checkhealth()
+	if(health <= 0)
+		playsound(get_turf(src), "shatter", 50, 1)
 		new /obj/item/weapon/shard(src.loc)
 		new /obj/item/weapon/table_parts(src.loc)
 		qdel(src)
-	
+
 /obj/structure/table/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
 		src.ex_act(1)
@@ -255,11 +255,12 @@
 	..()
 
 	if(!usr) return
-	if(istype(src, /obj/structure/table/glass))
-		health -= 5
-		checkhealth()
 	do_flip()
 
+/obj/structure/table/glass/kick_act()
+	health -= 5
+	checkhealth()
+	..()
 
 /obj/structure/table/blob_act()
 	if(prob(75))
@@ -620,9 +621,9 @@
 					M.apply_damage(15,def_zone = "head")
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
-					playsound(src.loc, "shatter", 50, 1) //WRESTLEMANIA tax
+					playsound(get_turf(src), "shatter", 50, 1) //WRESTLEMANIA tax
 					new /obj/item/weapon/shard(src.loc)
-					new /obj/item/weapon/shard(src.loc)
+					new /obj/item/weapon/table_parts(src.loc)
 					qdel(src)
 				else
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
@@ -632,7 +633,7 @@
 				G.affecting.Weaken(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
-			return
+
 	else if (user.a_intent == I_HURT)
 		user.delayNextAttack(10)
 		health -= W.force
@@ -640,7 +641,7 @@
 		"<span class='warning'>You hit \the [src] with \the [W].</span>")
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 50, 1)
 		checkhealth()
-		return
+
 	else
 		..()
 
