@@ -422,13 +422,6 @@ mob/living/carbon/human/airflow_hit(atom/A)
 
 	blocked = run_armor_check("groin","melee")
 	apply_damage(b_loss/3, BRUTE, "groin", blocked, 0, used_weapon = "Airflow")
-
-	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push) || AirflowCanPush())
-		if(airflow_speed > 10)
-			paralysis += round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun))
-			stunned = max(stunned,paralysis + 3)
-		else
-			stunned += round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)/2)
 	*/
 
 	var/b_loss = airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_damage)
@@ -446,6 +439,13 @@ mob/living/carbon/human/airflow_hit(atom/A)
 		var/turf/T = get_turf(src)
 		T.add_blood(src)
 		bloody_body(src)
+
+	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push) || AirflowCanPush())
+		if(airflow_speed > 10)
+			paralysis += round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun))
+			stunned = max(stunned,paralysis + 3)
+		else
+			stunned += round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)/2)
 
 	. = ..()
 
