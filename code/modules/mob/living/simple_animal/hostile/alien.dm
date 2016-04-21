@@ -48,7 +48,7 @@ var/list/nest_locations = list()
 		if(locate(/obj/effect/alien/weeds) in T)
 			weed += 4
 	else if(!stat && !client)
-		if(!(locate(/obj/effect/alien/weeds) in T) && isturf(src.loc) && !istype(T, /turf/space))
+		if(!(locate(/obj/effect/alien/weeds) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
 			weed = 0
 			visible_message("<span class='alien'>[src] has planted some alien weeds!</span>")
 			new /obj/effect/alien/weeds/node(T)
@@ -162,11 +162,18 @@ var/list/nest_locations = list()
 		return
 
 	if(isturf(loc))
-		if(dragging.Adjacent(src))
-			if(!pulling && !(dragging.pulledby && istype(dragging.pulledby,/mob/living/simple_animal/hostile/alien) && (dragging.pulledby != src)))
-				start_pulling(dragging)
-		else if(canmove)
-			Goto(dragging,move_to_delay,1)
+		if(!(dragging.pulledby && istype(dragging.pulledby,/mob/living/simple_animal/hostile/alien) && (dragging.pulledby != src)))
+			if(dragging.Adjacent(src))
+				if(!pulling && !(dragging.pulledby && istype(dragging.pulledby,/mob/living/simple_animal/hostile/alien) && (dragging.pulledby != src)))
+					start_pulling(dragging)
+			else if(canmove)
+				Goto(dragging,move_to_delay,1)
+		else//if another alien is dragging them, just leave them alone
+			dragging = null
+			walk(src, 0)
+			stop_automated_movement = 0
+			vision_range = idle_vision_range
+
 		return
 
 	walk(src, 0)

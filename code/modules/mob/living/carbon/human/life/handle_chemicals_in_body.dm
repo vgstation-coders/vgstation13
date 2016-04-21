@@ -6,12 +6,8 @@
 	if(reagents)
 
 		if(locked_to && istype(locked_to,/obj/structure/bed/nest))//alien nest will keep their victims alive for a bit longer.
-			if (reagents.get_reagent_amount("inaprovaline") < 1)
-				reagents.add_reagent("inaprovaline", 2)
-			if (reagents.get_reagent_amount("leporazine") < 1)
-				reagents.add_reagent("leporazine", 2)
-			if (reagents.get_reagent_amount("dexalin") < 1)
-				reagents.add_reagent("dexalin", 2)
+			if (reagents.get_reagent_amount("stabilizine") < 1)
+				reagents.add_reagent("stabilizine", 2)
 
 		var/alien = 0 //Not the best way to handle it, but neater than checking this for every single reagent proc.
 		if(src.species)
