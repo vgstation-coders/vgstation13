@@ -38,7 +38,6 @@ var/list/nest_locations = list()
 	heat_damage_per_tick = 20
 	treadmill_speed = 4 //Not as insane as it seems, because of their slow default move rate, this is more like a functional 2x human
 	var/weed = 45
-	var/
 	var/mob/living/dragging = null
 
 /mob/living/simple_animal/hostile/alien/Life()
