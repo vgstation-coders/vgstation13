@@ -1,3 +1,41 @@
+//Docking port disks
+/obj/item/weapon/disk/shuttle_coords
+	name = "shuttle destination disk"
+	desc = "A small disk containing encrypted coordinates and tracking data."
+	icon = 'icons/obj/cloning.dmi'
+	icon_state = "datadisk0"
+
+	var/obj/structure/docking_port/destination/destination //Docking port linked to this disk.
+	//If this variable contains a path like (/obj/structure/docking_port/destination/my_dungeon), the disk will find a destination docking port of that type and automatically link to it
+	//See example below
+
+	var/header = "ERROR" //Name of the disk, for example ""
+
+	var/list/allowed_shuttles = list() //List of allowed shuttles. Accepts paths (for example /datum/shuttle/arrival). If empty, all shuttles are allowed
+
+//Example:
+/obj/item/weapon/disk/shuttle_coords/station_arrivals
+	destination = /obj/structure/docking_port/destination/transport/station
+	header = "station arrivals"
+	allowed_shuttles = list(/datum/shuttle/research, /datum/shuttle/mining)
+//This disk will link to station's arrivals when spawned
+
+/obj/item/weapon/disk/shuttle_coords/New()
+	..()
+
+	if(ispath(destination))
+		spawn()
+			destination = locate(destination) in all_docking_ports
+			destination.disk_references.Add(src)
+
+/obj/item/weapon/disk/shuttle_coords/Destroy()
+	destination = null
+	..()
+
+/obj/item/weapon/disk/shuttle_coords/proc/reset()
+	destination = null
+	header = "ERROR"
+
 #define MAX_SHUTTLE_NAME_LEN
 
 /obj/machinery/computer/shuttle_control
@@ -21,11 +59,20 @@
 	var/allow_silicons = 1		//If 0, AIs and cyborgs can't use this computer
 								//used for admin-only shuttles so that borgs cant hijack 'em
 
+	var/obj/item/weapon/disk/shuttle_coords/disk
+
 /obj/machinery/computer/shuttle_control/New()
 	if(shuttle)
 		name = "[shuttle.name] console"
 
 	.=..()
+
+/obj/machinery/computer/shuttle_control/Destroy()
+	..()
+
+	if(disk)
+		qdel(disk)
+		disk = null
 
 /obj/machinery/computer/shuttle_control/proc/announce(var/message)
 	return say(message)
@@ -60,6 +107,10 @@
 	src.add_fingerprint(usr)
 	var/shuttle_name = "Unknown shuttle"
 	var/dat
+
+	if(selected_port)
+		if(!selected_port.loc) //If selected port was deleted, forget about it
+			selected_port = null
 
 	if(shuttle)
 		shuttle_name = shuttle.name
@@ -102,8 +153,15 @@
 
 					dat += " | [text] | "
 
+			if(disk && disk.destination)
+				if((!disk.allowed_shuttles.len) || (is_type_in_list(shuttle, disk.allowed_shuttles)))
+					dat += " | <b>[get_doc_href(disk.destination)]</b> | "
+				else //Shuttle not allowed to use disk
+					dat += " | <b>ERROR: Unable to read coordinates from disk (invalid decryption key)</b>"
+
 			dat += " |<BR>"
 			dat += "<center>[shuttle_name]:<br> <b><A href='?src=\ref[src];move=[1]'>Send[selected_port ? " to [selected_port.areaname]" : ""]</A></b></center><BR>"
+			dat += "<div align=\"right\"><a href='?src=\ref[src];disk=1'>[disk ? "External disk found: [disk.header]" : "Insert disk"]</a></div>"
 	else //No shuttle
 		dat = "<h1>NO SHUTTLE LINKED</h1><br>"
 		dat += "<a href='?src=\ref[src];link_to_shuttle=1'>Link to a shuttle</a>"
@@ -142,7 +200,8 @@
 			selected_port = pick(shuttle.docking_ports - shuttle.current_port)
 
 		if(!allow_selecting_all && !(selected_port in shuttle.docking_ports))
-			return
+			if(!disk || (disk.destination != selected_port))
+				return
 
 		if(selected_port.docked_with) //If used by another shuttle, don't try to move this shuttle
 			return
@@ -302,6 +361,24 @@
 			to_chat(usr, "Silicons may now use [src] again.")
 
 		src.updateUsrDialog()
+	if(href_list["disk"])
+		if(!disk) //No disk inserted - grab one from user's hand
+			var/obj/item/weapon/disk/shuttle_coords/D = usr.get_active_hand()
+
+			if(!istype(D))
+				if(istype(D, /obj/item/weapon/disk))
+					to_chat(usr, "<span class='info'>\The [src] rejects \the [D].</span>")
+				return
+
+			if(usr.drop_item(D, src))
+				disk = D
+				to_chat(usr, "<span class='info'>You insert \the [D] into \the [src].</span>")
+				src.updateUsrDialog()
+		else
+			disk.forceMove(get_turf(src))
+			to_chat(usr, "<span class='info'>You eject \the [disk] from \the [src].</span>")
+			disk = null
+			src.updateUsrDialog()
 
 /obj/machinery/computer/shuttle_control/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("[Proj] ricochets off [src]!")
