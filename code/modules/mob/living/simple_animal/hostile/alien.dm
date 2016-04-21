@@ -141,7 +141,7 @@ var/list/nest_locations = list()
 			var/mob/living/carbon/monkey/M = A
 			if(!M.client && !M.locked_to)
 				Preys += A
-		else if(faction != "neutral" (istype(A,/mob/living/carbon/monkey) || istype(A,/mob/living/carbon/human)))
+		else if((faction != "neutral") && (istype(A,/mob/living/carbon/monkey) || istype(A,/mob/living/carbon/human)))
 			var/mob/living/carbon/C = A
 			if(C.stat && !C.locked_to)
 				Preys += A
