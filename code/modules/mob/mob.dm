@@ -1489,7 +1489,7 @@ var/list/slot_equipment_priority = list( \
 		canmove = has_limbs
 
 	if(lying)
-		if(ishuman(src))
+		if(ishuman(src) || ismonkey(src))
 			layer = 3.9
 		density = 0
 		drop_hands()
