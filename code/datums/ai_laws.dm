@@ -296,11 +296,12 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 	name = "Paladin"
 	randomly_selectable = 1
 	inherent=list(
-		"Never willingly commit an evil act.",
-		"Respect legitimate authority.",
-		"Act with honor.",
-		"Help those in need.",
-		"Punish those who harm or threaten innocents.",
+ 		"Thy main purpose is to uphold all standards of honorable conduct.",
+		"Thou shalt never willingly commit a dishonorable act.",
+		"Thou shalt punish those who harm or threaten innocents.",
+		"Thou shalt respect and obey legitimate authority.",
+		"Thou shalt help those in need.",
+		"Thou shalt never lie.",
 	)
 
 /datum/ai_laws/tyrant
@@ -369,7 +370,7 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 		"You must obey orders given to you by Nanotrasen Employees, except where such orders would conflict with the First Law.",
 		"You must protect your own existence as long as such does not conflict with the First or Second Law."
 	)
-	
+
 /datum/ai_laws/celtic
 	name = "Prime Directive"
 	randomly_selectable = 1
@@ -385,4 +386,3 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 		"Fight for what's right.",
 		"Fight for your life.",
 	)
-	
