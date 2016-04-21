@@ -93,6 +93,15 @@ var/list/nest_locations = list()
 		if(L.light_range > 0)
 			L.attack_animal(src)
 
+	for(var/obj/machinery/door/D in range(src,1))
+		spawn()
+			if(D.density && !D.operating)
+				D.attack_hand(src)
+				if(D.density && !D.operating)
+					var/obj/item/weapon/crowbar/CB = new(src)//kek, but it works
+					D.attackby(CB,src)
+					qdel(CB)
+
 /mob/living/simple_animal/hostile/alien/CanAttack(var/atom/the_target)//they don't kill mindless monkeys so they can drag them to nests with a higher chance of a successful impregnation.
 	if(istype(the_target,/mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/M = the_target
@@ -192,6 +201,27 @@ var/list/nest_locations = list()
 			vision_range = idle_vision_range
 		else if(canmove)
 			Goto(dest,move_to_delay,0)
+
+
+/mob/living/simple_animal/hostile/alien/proc/CanOpenDoor(var/obj/machinery/door/D)
+	if(istype(D,/obj/machinery/door/poddoor))
+		return 0
+
+	// Don't fuck with doors that are doing something
+	if(D.operating>0)
+		return 0
+
+	// Don't open opened doors.
+	if(!D.density)
+		return 0
+
+	// Can't open bolted/welded doors
+	if(istype(D,/obj/machinery/door/airlock))
+		var/obj/machinery/door/airlock/A=D
+		if(A.locked || A.welded || A.jammed)
+			return 0
+
+	return 1
 
 /mob/living/simple_animal/hostile/alien/drone
 	name = "alien drone"

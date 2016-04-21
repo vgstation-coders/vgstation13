@@ -173,6 +173,7 @@
  * Weeds
  */
 #define NODERANGE 3
+#define HEARTBEAT_RATE 300
 
 /obj/effect/alien/weeds
 	name = "weeds"
@@ -182,13 +183,17 @@
 	anchored = 1
 	density = 0
 	layer = 2
-	var/health = 15
+	var/health = 14
 	var/obj/effect/alien/weeds/node/linked_node = null
+	var/obj/machinery/door/jammin = null
 
 /obj/effect/alien/weeds/Destroy()
 	if(linked_node)
 		linked_node.connected_weeds.Remove(src)
 		linked_node = null
+	if(jammin)
+		jammin.jammed = null
+		jammin = null
 	..()
 
 /obj/effect/alien/weeds/node
@@ -220,6 +225,11 @@
 		qdel(src)
 		return
 
+	for(var/obj/machinery/door/D in loc)
+		if(!D.density && !D.operating)
+			D.jammed = src
+			jammin = D
+
 	linked_node = N
 	if(linked_node)
 		linked_node.connected_weeds.Add(src)
@@ -230,9 +240,23 @@
 			Life()
 	return
 
-/obj/effect/alien/weeds/proc/Life()
-	if(timestopped) return 0 //under effects of time magick
+/obj/effect/alien/weeds/node/New()
+	..()
+	spawn(HEARTBEAT_RATE)
+		heartbeat()
 
+/obj/effect/alien/weeds/node/proc/heartbeat()
+	flick("weednode-heartbeat",src)
+
+	for(var/obj/effect/alien/weeds/W in connected_weeds)
+		if(W.health == 15)
+			spawn()
+				W.Life()
+	spawn(HEARTBEAT_RATE)
+		heartbeat()
+
+/obj/effect/alien/weeds/proc/Life()
+	health = 15
 	//set background = 1
 	var/turf/U = get_turf(src)
 /*
@@ -314,17 +338,14 @@ Alien plants should do something if theres a lot of poison
 	else
 		visible_message("<span class='warning'><B>[user] attacks \the [src] with \the [W]!</span>")
 
-	var/damage = W.force / 4.0
+	var/damage = W.force
 
-	if(istype(W, /obj/item/weapon/weldingtool))
-		var/obj/item/weapon/weldingtool/WT = W
+	if(!W.is_hot())
+		damage = damage / 4.0
 
-		if(WT.remove_fuel(0, user))
-			damage = 15
-			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+	src.health -= damage
+	src.healthcheck()
 
-	health -= damage
-	healthcheck()
 
 /obj/effect/alien/weeds/proc/healthcheck()
 	if(health <= 0)
