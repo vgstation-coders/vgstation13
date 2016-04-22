@@ -101,7 +101,7 @@
 
 /obj/item/weapon/winter_gift/regular/attack_self(mob/M as mob)
 	var/gift_type = pick(
-		/obj/item/weapon/sord,
+		/*/obj/item/weapon/sord,*/
 		/obj/item/weapon/storage/wallet,
 		/obj/item/device/camera,
 		/obj/item/device/camera/sepia,

@@ -22,7 +22,7 @@
 					spawned.pixel_y = rand(-src.jiggle,src.jiggle)
 	qdel(src)
 	return
-	
+
 //**************************************************************
 // Subtypes ////////////////////////////////////////////////////
 //**************************************************************
@@ -69,8 +69,8 @@
 	list(
 		/obj/item/clothing/gloves/white,
 		/obj/item/clothing/shoes/white,
-		/obj/item/clothing/under/scratch,
-		/obj/item/clothing/head/cueball,
+		/*/obj/item/clothing/under/scratch,
+		/obj/item/clothing/head/cueball,*/
 		),
 	list(
 		/obj/item/clothing/under/kilt,
