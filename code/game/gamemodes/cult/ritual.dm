@@ -370,7 +370,6 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	else
 		M.LAssailant = user
 
-		return
 	if(!istype(M))
 		return
 	if(!iscultist(user))
