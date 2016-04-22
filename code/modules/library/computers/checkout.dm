@@ -241,9 +241,10 @@
 	if(href_list["setcategory"])
 		var/newcategory = input("Choose a category to search for:") in (list("Any") + library_section_names)
 		if(newcategory)
-			query.category = sanitize(newcategory)
-		else if(newcategory == "Any")
-			query.category = null
+			if(newcategory == "Any")
+				query.category = null
+			else
+				query.category = sanitize(newcategory)
 	if(href_list["setauthor"])
 		var/newauthor = input("Enter an author to search for:") as text|null
 		if(newauthor)
@@ -361,10 +362,6 @@
 		var/newauthor = copytext(sanitize(input("Enter the author's name: ") as text|null),1,MAX_MESSAGE_LEN)
 		if(newauthor && scanner)
 			scanner.cache.author = newauthor
-	if(href_list["setcategory"])
-		var/newcategory = input("Choose a category: ") in list("Fiction", "Non-Fiction", "Adult", "Reference", "Religion")
-		if(newcategory)
-			upload_category = newcategory
 	if(href_list["upload"])
 		if(scanner)
 			if(scanner.cache)
