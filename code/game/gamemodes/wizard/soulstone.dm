@@ -11,8 +11,7 @@
 	origin_tech = "bluespace=4;materials=4"
 
 /obj/item/device/soulstone/Destroy()
-	for(var/mob/living/L in src)
-		L.loc = get_turf(loc)
+	eject_shade()
 	..()
 //////////////////////////////Capturing////////////////////////////////////////////////////////
 
@@ -71,11 +70,7 @@
 
 		if ("Summon")
 			for(var/mob/living/simple_animal/shade/A in src)
-				A.status_flags &= ~GODMODE
-				A.canmove = 1
-				to_chat(A, "<b>You have been released from your prison, but you are still bound to [U.name]'s will. Help them suceed in their goals at all costs.</b>")
-				A.loc = U.loc
-				A.cancel_camera()
+				eject_shade(U)
 				src.icon_state = "soulstone"
 				src.name = "Soul Stone Shard"
 
@@ -106,6 +101,14 @@
 
 ////////////////////////////Proc for moving soul in and out off stone//////////////////////////////////////
 
+/obj/item/device/soulstone/proc/eject_shade(var/mob/user=null)
+	for(var/mob/living/L in src)
+		L.loc = get_turf(src)
+		L.status_flags &= ~GODMODE
+		if(user)
+			to_chat(L, "<b>You have been released from your prison, but you are still bound to [user.name]'s will. Help them suceed in their goals at all costs.</b>")
+		L.canmove = 1
+		L.cancel_camera()
 
 /obj/item/proc/capture_soul(var/target, var/mob/user as mob)
 	if(istype(target, /mob/living/carbon))//humans, monkeys, aliens
