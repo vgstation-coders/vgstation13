@@ -226,6 +226,8 @@
 		return
 
 	for(var/obj/machinery/door/D in loc)
+		if(istype(D,/obj/machinery/door/mineral/resin))
+			continue
 		if(!D.density && !D.operating)
 			D.jammed = src
 			jammin = D
