@@ -50,7 +50,9 @@
 
 	species = null
 
-	decapitated = null
+	if(decapitated)
+		decapitated.origin_body = null
+		decapitated = null
 
 	..()
 

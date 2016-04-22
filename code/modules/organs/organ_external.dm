@@ -1422,5 +1422,7 @@ obj/item/weapon/organ/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 obj/item/weapon/organ/head/Destroy()
 	if(brainmob)
 		brainmob.ghostize()
-	origin_body = null
+	if(origin_body)
+		origin_body.decapitated = null
+		origin_body = null
 	..()
