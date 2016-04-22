@@ -360,7 +360,7 @@
 					T.canmove = 0
 					T.health = T.maxHealth
 					C.icon_state = "soulstone2"
-					C.item_state = "shard-soulstone"
+					C.item_state = "shard-soulstone2"
 					U.update_inv_l_hand()
 					U.update_inv_r_hand()
 					C.name = "Soul Stone: [T.real_name]"
