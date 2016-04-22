@@ -39,6 +39,8 @@ var/list/nest_locations = list()
 	treadmill_speed = 4 //Not as insane as it seems, because of their slow default move rate, this is more like a functional 2x human
 	var/weed = 45
 	var/mob/living/dragging = null
+	var/turf/last_loc = null
+	var/acid = 200
 
 /mob/living/simple_animal/hostile/alien/Life()
 	..()
@@ -52,6 +54,9 @@ var/list/nest_locations = list()
 			weed = 0
 			visible_message("<span class='alien'>[src] has planted some alien weeds!</span>")
 			new /obj/effect/alien/weeds/node(T)
+
+	if(acid < 200)
+		acid++
 
 	if(!client)
 		if(stance == HOSTILE_STANCE_IDLE)
@@ -79,10 +84,22 @@ var/list/nest_locations = list()
 			var/turf/T = get_step(src, dir)
 			if(istype(T, /turf/simulated/wall))
 				if(!locate(/obj/effect/alien/acid) in T)
-					new /obj/effect/alien/acid/hyper(T, T)
+					if(acid >= 200)
+						new /obj/effect/alien/acid/hyper(T, T)
+						acid = 0
 			for(var/atom/A in T)
 				if(istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
 					A.attack_animal(src)
+				else if(istype(A,/obj/machinery/door))
+					var/obj/machinery/door/D = A
+					if(D.density && !D.operating)
+						D.attack_hand(src)
+						if(D.density && !D.operating)
+							var/obj/item/weapon/crowbar/CB = new(src)//kek, but it works. Allows aliens to force open doors in unpowered environement thanks to their super strength claws.
+							CB.name = "claws"
+							CB.force = melee_damage_upper//if it's a windoor, we'll eventually break it down
+							D.attackby(CB,src)
+							qdel(CB)
 	return
 
 
@@ -98,7 +115,9 @@ var/list/nest_locations = list()
 			if(D.density && !D.operating)
 				D.attack_hand(src)
 				if(D.density && !D.operating)
-					var/obj/item/weapon/crowbar/CB = new(src)//kek, but it works
+					var/obj/item/weapon/crowbar/CB = new(src)//kek, but it works. Allows aliens to force open doors in unpowered environement thanks to their super strength claws.
+					CB.name = "claws"
+					CB.force = melee_damage_upper//if it's a windoor, we'll eventually break it down
 					D.attackby(CB,src)
 					qdel(CB)
 
@@ -176,6 +195,9 @@ var/list/nest_locations = list()
 				if(!pulling && !(dragging.pulledby && istype(dragging.pulledby,/mob/living/simple_animal/hostile/alien) && (dragging.pulledby != src)))
 					start_pulling(dragging)
 			else if(canmove)
+				if(last_loc && (last_loc == loc))
+					DestroySurroundings()
+				last_loc = loc
 				Goto(dragging,move_to_delay,1)
 		else//if another alien is dragging them, just leave them alone
 			dragging = null
@@ -200,6 +222,9 @@ var/list/nest_locations = list()
 			stop_automated_movement = 0
 			vision_range = idle_vision_range
 		else if(canmove)
+			if(last_loc && (last_loc == loc))
+				DestroySurroundings()
+			last_loc = loc
 			Goto(dest,move_to_delay,0)
 
 

@@ -532,6 +532,8 @@ Alien plants should do something if theres a lot of poison
 					if(CanHug(M))
 						child.Attach(M)
 						break
+				if(!ismob(child.loc))
+					child.findtarget()
 	health = min(health,0)
 
 /obj/effect/alien/egg/bullet_act(var/obj/item/projectile/Proj)
