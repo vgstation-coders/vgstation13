@@ -328,7 +328,7 @@
 		qdel(add_target)
 
 
-/obj/item/proc/transfer_soul(var/choice as text, var/target, var/mob/U as mob)
+/obj/item/proc/transfer_soul(var/choice as text, var/target, var/mob/living/carbon/U as mob)
 	var/deleteafter = 0
 	switch(choice)
 		if("VICTIM")
@@ -360,6 +360,9 @@
 					T.canmove = 0
 					T.health = T.maxHealth
 					C.icon_state = "soulstone2"
+					C.item_state = "shard-soulstone"
+					U.update_inv_l_hand()
+					U.update_inv_r_hand()
 					C.name = "Soul Stone: [T.real_name]"
 					to_chat(T, "Your soul has been recaptured by the soul stone, its arcane energies are reknitting your ethereal form")
 					to_chat(U, "<span class='notice'><b>Capture successful!</b>: </span>[T.name]'s has been recaptured and stored within the soul stone.")
