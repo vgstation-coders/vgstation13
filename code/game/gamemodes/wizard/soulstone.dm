@@ -53,7 +53,7 @@
 
 
 /obj/item/device/soulstone/Topic(href, href_list)
-	var/mob/U = usr
+	var/mob/living/carbon/U = usr
 	if (!in_range(src, U)||U.machine!=src)
 		U << browse(null, "window=aicard")
 		U.unset_machine()
@@ -72,6 +72,9 @@
 			for(var/mob/living/simple_animal/shade/A in src)
 				eject_shade(U)
 				src.icon_state = "soulstone"
+				src.item_state = "shard-soulstone"
+				U.update_inv_l_hand()
+				U.update_inv_r_hand()
 				src.name = "Soul Stone Shard"
 
 	attack_self(U)
