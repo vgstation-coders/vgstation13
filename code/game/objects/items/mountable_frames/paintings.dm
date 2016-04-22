@@ -8,7 +8,7 @@ var/global/list/available_paintings = list(
 	"xenolisa",
 	"bottles",
 	"aymao",
-	"flowey",
+	/*"flowey",*/
 	"sunset",
 	"Flowereater",
 	"Sadclown",
@@ -225,9 +225,9 @@ var/global/list/available_paintings = list(
 		if("aymao")
 			name = "\improper Ay Mao"
 			desc = "A painting of the glorious leader of the Grey Democratic Republic. He looks dignified, and a bit high too."
-		if("flowey")
+		/*if("flowey")
 			name = "\improper Flowey the Flower"
-			desc = "A painting of your best friend. Who's also a SERIAL MURDERER."
+			desc = "A painting of your best friend. Who's also a SERIAL MURDERER."*/
 		if("sunset")
 			name = "\improper Path toward the Sunset"
 			desc = "A painting by D.T.Link. The colours fill you with hope and determination."

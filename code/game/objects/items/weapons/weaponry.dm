@@ -16,7 +16,7 @@
 	to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>")
 	return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
 
-/obj/item/weapon/sord
+/*/obj/item/weapon/sord
 	name = "\improper SORD"
 	desc = "This thing is so unspeakably shitty you are having a hard time even holding it."
 	icon_state = "sord"
@@ -37,7 +37,7 @@
 	playsound(get_turf(src), 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	user.adjustBruteLoss(0.5)
 	return ..()
-
+*/
 /obj/item/weapon/claymore
 	name = "claymore"
 	desc = "What are you standing around staring at this for? Get to killing!"

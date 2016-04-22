@@ -328,7 +328,7 @@
 		while(!accepted)
 			if(!B)
 				break //Prevents possible runtime errors
-			new_book_style = input(H, "Which bible style would you like?") in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "Tome", "The King in Yellow", "Ithaqua", "Scientology", \
+			new_book_style = input(H, "Which bible style would you like?") in list("Bible", "Koran", /*"Scrapbook",*/ "Creeper", "White Bible", "Holy Light", "Athiest", "Tome", "The King in Yellow", "Ithaqua", "Scientology", \
 																				   "the bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
 			switch(new_book_style)
 				if("Koran")
