@@ -47,7 +47,7 @@
 					say(pick("FUS RO DAH", \
 						"fucking 4rries!", \
 						"stat me", \
-						">my face", \
+						"greater-than sign my face", \
 						"roll it easy!", \
 						"waaaaaagh!!!", \
 						"red wonz go fasta", \
@@ -56,7 +56,7 @@
 						"dem dwarfs man, dem dwarfs", \
 						"SPESS MAHREENS", \
 						"hwee did eet fhor khayosss", \
-						"lifelike texture ;_;", \
+						"lifelike texture semicolon underscore semicolon", \
 						"luv can bloooom", \
 						"PACKETS!!!", \
 						"SARAH HALE DID IT!!!", \
@@ -69,7 +69,7 @@
 						"SOTP MESING WITH THE ROUNS SHITMAN!!!", \
 						"SKELINGTON IS 4 SHITERS!", \
 						"MOMMSI R THE WURST SCUM!!", \
-						"Oh Fugg colon capital d capital d capital d capital d", \
+						"Oh Fugg colon capital dee capital dee capital dee capital dee", \
 						"Hit me rite in benis", \
 						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
 				if(3)
