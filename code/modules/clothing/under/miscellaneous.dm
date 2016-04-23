@@ -18,14 +18,14 @@
 	icon_state = "captain_fly"
 	item_state = "captain_fly"
 	_color = "captain_fly"
-
+/*
 /obj/item/clothing/under/scratch
 	name = "white suit"
 	desc = "A white suit, suitable for an excellent host"
 	icon_state = "scratch"
 	item_state = "scratch"
 	_color = "scratch"
-
+*/
 /obj/item/clothing/under/sl_suit
 	desc = "It's a very amish looking suit."
 	name = "amish suit"

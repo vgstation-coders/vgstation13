@@ -71,7 +71,7 @@
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD
 	siemens_coefficient = 2.0
-
+/*
 /obj/item/clothing/head/cueball
 	name = "cueball helmet"
 	desc = "A large, featureless white orb mean to be worn on your head. How do you even see out of this thing?"
@@ -79,7 +79,7 @@
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD
 	item_state="cueball"
-
+*/
 /obj/item/clothing/head/that
 	name = "sturdy top-hat"
 	desc = "It's an amish looking armored top hat."
