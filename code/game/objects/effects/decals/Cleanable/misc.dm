@@ -120,6 +120,7 @@
 		desc = "Gosh, how unpleasant."
 		mouse_opacity = 0
 		icon_state = "vomit_[rand(1,4)]_dry"
+		amount = 0
 
 /obj/effect/decal/cleanable/tomato_smudge
 	name = "tomato smudge"

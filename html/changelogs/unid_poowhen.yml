@@ -3,5 +3,5 @@ author: Unid
 delete-after: True
 
 changes: 
-- rscadd: "You can now vomit into a bucket or a toilet. It doesn't create a mess, and (in case of buckets) partially fills the container. Vomiting also removes some substances from your body."
+- rscadd: "You can now vomit into a bucket or a toilet by standing on them while vomiting. It doesn't create a mess, and (in case of buckets) partially fills the container. Vomiting also removes some substances from your body."
 - rscadd: Pools of vomit now dry over time. You can use a dropper or a syringe on a fresh pool of vomit to extract some of the substance.
