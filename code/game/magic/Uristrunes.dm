@@ -165,11 +165,51 @@ var/list/uristrune_cache = list()
 
 	var/icon/result = icon(I, "")
 
+	I.MapColors(0.5,0,0,0,0.5,0,0,0,0.5)//we'll darken that color a bit
+
+	var/icon/I1 = icon(I, "")
+	I1.MapColors(1,0.05,0,0,1,0.05,0.05,0,1)
+	result.Insert(I1,  "", frame = 1, delay = 10)
+
+/*
 	I.MapColors(rgb(0x80,0,0,0), rgb(0,0x80,0,0), rgb(0,0,0x80,0), rgb(0,0,0,0xff))//we'll darken that color a bit
 
-	var/icon/I0 = icon(I, "")
-	I0.MapColors(rgb(0xff,0x08,0,0), rgb(0,0xff,0x08,0), rgb(0x08,0,0xff,0), rgb(0,0,0,0xff))
-	result.Insert(I0,  "", frame = 1, delay = 10)
+	var/icon/I1 = icon(I, "")
+	I1.MapColors(rgb(0xff,0x08,0,0), rgb(0,0xff,0x08,0), rgb(0x08,0,0xff,0), rgb(0,0,0,0xff))
+	result.Insert(I1,  "", frame = 1, delay = 10)
+*/
+
+	if(animated == 1)
+		var/icon/I2 = icon(I, "")
+		I2.MapColors(1.125,0.06,0,0,1.125,0.06,0.06,0,1.125)
+
+		var/icon/I3 = icon(I, "")
+		I3.MapColors(1.25,0.12,0,0,1.25,0.12,0.12,0,1.25)
+
+		var/icon/I4 = icon(I, "")
+		I4.MapColors(1.375,0.19,0,0,1.375,0.19,0.19,0,1.375)
+
+		var/icon/I5 = icon(I, "")
+		I5.MapColors(1.5,0.27,0,0,1.5,0.27,0.27,0,1.5)
+
+		var/icon/I6 = icon(I, "")
+		I6.MapColors(1.625,0.35,0.06,0.06,1.625,0.35,0.35,0.06,1.625)
+
+		var/icon/I7 = icon(I, "")
+		I7.MapColors(1.75,0.45,0.12,0.12,1.75,0.45,0.45,0.12,1.75)
+
+		var/icon/I8 = icon(I, "")
+		I8.MapColors(1.875,0.56,0.19,0.19,1.875,0.56,0.56,0.19,1.875)
+
+		var/icon/I9 = icon(I, "")
+		I9.MapColors(2,0.67,0.27,0.27,2,0.67,0.67,0.27,2)
+
+/*
+	I.MapColors(rgb(0x80,0,0,0), rgb(0,0x80,0,0), rgb(0,0,0x80,0), rgb(0,0,0,0xff))//we'll darken that color a bit
+
+	var/icon/I1 = icon(I, "")
+	I1.MapColors(rgb(0xff,0x08,0,0), rgb(0,0xff,0x08,0), rgb(0x08,0,0xff,0), rgb(0,0,0,0xff))
+	result.Insert(I1,  "", frame = 1, delay = 10)
 
 	if(animated == 1)
 		var/icon/I2 = icon(I, "")
@@ -203,7 +243,7 @@ var/list/uristrune_cache = list()
 		var/icon/I9 = icon(I, "")
 		I9.MapColors(rgb(0xff,0x54,0x30,0), rgb(0x30,0xff,0x54,0), rgb(0x54,0x30,0xff,0), rgb(0,0,0,0xff))
 		I9.SetIntensity(2)
-
+*/
 		result.Insert(I2, "", frame = 2, delay = 2)
 		result.Insert(I3, "", frame = 3, delay = 2)
 		result.Insert(I4, "", frame = 4, delay = 1.5)
