@@ -1,0 +1,7 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+- rscadd: Vox traders now spawn with some money and coins.
+- rscadd: When vox traders spawn, they have an option to start with a traveler's ID. The ID has no access.
