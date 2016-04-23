@@ -69,7 +69,7 @@
 						"SOTP MESING WITH THE ROUNS SHITMAN!!!", \
 						"SKELINGTON IS 4 SHITERS!", \
 						"MOMMSI R THE WURST SCUM!!", \
-						"Oh Fugg :DDDD", \
+						"Oh Fugg colon capital d capital d capital d capital d", \
 						"Hit me rite in benis", \
 						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
 				if(3)
