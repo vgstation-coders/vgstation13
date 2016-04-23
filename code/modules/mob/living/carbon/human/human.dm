@@ -997,27 +997,55 @@
 	if(!lastpuke)
 		lastpuke = 1
 		to_chat(src, "<spawn class='warning'>You feel nauseous...</span>")
+
 		spawn(150)	//15 seconds until second warning
 			to_chat(src, "<spawn class='danger'>You feel like you are about to throw up!</span>")
-			spawn(100)	//And you have 10 more seconds to move it to the bathrooms
-				Stun(5)
 
-				if(hairball)
-					src.visible_message("<span class='warning'>[src] hacks up a hairball!</span>","<span class='danger'>You hack up a hairball!</span>")
-				else
-					src.visible_message("<span class='warning'>[src] throws up!</span>","<span class='danger'>You throw up!</span>")
-				playsound(loc, 'sound/effects/splat.ogg', 50, 1)
+			sleep(100)	//And you have 10 more seconds to move it to the bathrooms
 
-				var/turf/location = loc
+			Stun(5)
+
+			var/turf/location = loc
+			var/spawn_vomit_on_floor = 0
+
+			if(hairball)
+				src.visible_message("<span class='warning'>[src] hacks up a hairball!</span>","<span class='danger'>You hack up a hairball!</span>")
+
+			else
+				var/obj/structure/toilet/T = locate(/obj/structure/toilet) in location //Look for a toilet
+				if(T && T.open)
+					src.visible_message("<span class='warning'>[src] throws up into \the [T]!</span>", "<span class='danger'>You throw up into \the [T]!</span>")
+				else //Look for a bucket
+					var/obj/item/weapon/reagent_containers/glass/G = locate(/obj/item/weapon/reagent_containers/glass/bucket) in location
+
+					if(G && G.is_open_container())
+
+						src.visible_message("<span class='warning'>[src] throws up into \the [G]!</span>", "<span class='danger'>You throw up into \the [G]!</span>")
+						if(G.reagents)
+							if(G.reagents.total_volume < G.reagents.maximum_volume-10) //The container can't be full! If it is, fill it to the brim with vomit and put some more vomit on the floor
+								G.reagents.add_reagent("vomit", rand(1,10))
+								if(src.reagents) reagents.trans_to(G, 1 + reagents.total_volume * 0.1)
+							else
+								G.reagents.add_reagent("vomit", G.reagents.maximum_volume - G.reagents.total_volume)
+								spawn_vomit_on_floor = 1
+
+					else
+						src.visible_message("<span class='warning'>[src] throws up!</span>","<span class='danger'>You throw up!</span>")
+						spawn_vomit_on_floor = 1
+
+			playsound(get_turf(loc), 'sound/effects/splat.ogg', 50, 1)
+
+			if(spawn_vomit_on_floor)
 				if(istype(location, /turf/simulated))
-					location.add_vomit_floor(src, 1)
+					location.add_vomit_floor(src, 1, (hairball ? 0 : 1), 1)
 
-				if(!hairball)
-					nutrition = max(nutrition-40,0)
-					adjustToxLoss(-3)
+			if(!hairball)
+				nutrition = max(nutrition-40,0)
+				adjustToxLoss(-3)
 
-				spawn(350)	//Wait 35 seconds before next volley
-					lastpuke = 0
+			sleep(350)	//Wait 35 seconds before next volley
+
+			lastpuke = 0
 
 /mob/living/carbon/human/proc/morph()
 	set name = "Morph"
