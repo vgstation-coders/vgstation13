@@ -14,17 +14,17 @@
 
 	if(dna.mutantrace == "slime")
 		if (bodytemperature >= 330.23) // 135 F
-			return -1	// slimes become supercharged at high temperatures
+			return -5	// slimes become supercharged at high temperatures
 		if (bodytemperature < 183.222)
 			tally += (283.222 - bodytemperature) / 10 * 1.75
 	else if (undergoing_hypothermia())
-		tally += 2*undergoing_hypothermia()
+		tally += 4*undergoing_hypothermia()
 
 	//(/vg/ EDIT disabling for now) handle_embedded_objects() //Moving with objects stuck in you can cause bad times.
 
-	if(reagents.has_reagent("nuka_cola")) tally -= 10
+	if(reagents.has_reagent("nuka_cola")) tally -= 5
 
-	if((M_RUN in mutations)) tally -= 10
+	if((M_RUN in mutations)) tally -= 5
 
 	var/health_deficiency = (100 - health - halloss)
 	if(health_deficiency >= 40) tally += (health_deficiency / 25)
@@ -33,30 +33,30 @@
 	if (hungry >= 70) tally += hungry/50
 
 	if(wear_suit)
-		tally += wear_suit.slowdown
+		tally += (wear_suit.slowdown * 4) // Tempory until slowdown can be refactored for all items
 
 	if(shoes)
-		tally += shoes.slowdown
+		tally += (shoes.slowdown * 4) // Tempory until slowdown can be refactored for all items
 
 	if(l_hand && (l_hand.flags & SLOWDOWN_WHEN_CARRIED))
-		tally += l_hand.slowdown
+		tally += (l_hand.slowdown * 4) // Tempory until slowdown can be refactored for all items
 
 	if(r_hand && (r_hand.flags & SLOWDOWN_WHEN_CARRIED))
-		tally += r_hand.slowdown
+		tally += (r_hand.slowdown * 4) // Tempory until slowdown can be refactored for all items
 
 	for(var/organ_name in list("l_foot","r_foot","l_leg","r_leg"))
 		var/datum/organ/external/E = get_organ(organ_name)
 		if(!E || (E.status & ORGAN_DESTROYED))
-			tally += 4
+			tally += 10
 		if(E.status & ORGAN_SPLINTED)
-			tally += 0.5
+			tally += 1
 		else if(E.status & ORGAN_BROKEN)
-			tally += 1.5
+			tally += 6
 
 	if(shock_stage >= 50) tally += 3
 
 	if(M_FAT in src.mutations)
-		tally += 1.5
+		tally += 5
 
 	var/skate_bonus = 0
 	var/disease_slow = 0
@@ -69,12 +69,12 @@
 		if(dna.mutantrace == "slime")
 			tally *= 2
 		else
-			tally -= 10
+			tally -= 5
 
 	if(reagents.has_reagent("frostoil") && dna.mutantrace == "slime")
 		tally *= 5
 
-	return max((tally+config.human_delay), -1) //cap at -1 as the 'fastest'
+	return max((tally+config.human_delay), -100) //cap at -100 as the 'fastest'
 
 /mob/living/carbon/human/Process_Spacemove(var/check_drift = 0)
 	//Can we act
