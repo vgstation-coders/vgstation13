@@ -178,6 +178,7 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	var/progress_bars = 1 //Whether to show progress bars when doing delayed actions.
 	var/client/client
+	var/saveloaded = 0
 
 /datum/preferences/New(client/C)
 	client=C
@@ -190,14 +191,13 @@ var/const/MAX_SAVE_SLOTS = 8
 				var/load_pref = load_preferences_sqlite(theckey)
 				if(load_pref)
 					if(load_save_sqlite(theckey, C, default_slot) && C)
-						C.saveloaded = 1
+						saveloaded = 1
 						return
 
 			randomize_appearance_for()
 			real_name = random_name(gender)
 			save_character_sqlite(src, theckey, default_slot)
-			if(C)
-				C.saveloaded = 1
+			saveloaded = 1
 
 /datum/preferences/proc/setup_character_options(var/dat, var/user)
 
