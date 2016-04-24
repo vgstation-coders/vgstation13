@@ -148,7 +148,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			stat = CONSCIOUS
 			density = 1
 			update_canmove()
-		if(canRegenerate == 1 && isRegenerating == 0)
+		if(canRegenerate && !isRegenerating)
 			src.delayedRegen()
 		return 0
 
@@ -170,8 +170,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(purge)
 		purge -= 1
-	if(isRegenerating)
-		isRegenerating = 0
+
+	isRegenerating = 0
+
 	//Movement
 	if((!client||deny_client_move) && !stop_automated_movement && wander && !anchored && (ckey == null) && !(flags & INVULNERABLE))
 		if(isturf(src.loc) && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
