@@ -229,6 +229,7 @@ var/global/list/all_money_accounts = list()
 						<b>Account number:</b> #[detailed_account_view.account_number]<br>
 						<b>Account holder:<	/b> [detailed_account_view.owner_name]<br>
 						<b>Account balance:</b> $[detailed_account_view.money]<br>
+						<b>Assigned wage payout:</b> $[detailed_account_view.wage_gain]<br>
 						<table border=1 style='width:100%'>
 						<tr>
 						<td><b>Date</b></td>
