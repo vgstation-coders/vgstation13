@@ -1520,12 +1520,11 @@
 	description = "Stomach acid mixed with partially digested chunks of food."
 	reagent_state = LIQUID
 	color = "#EACF9D" //rgb: 234, 207, 157. Pale yellow
-	nutriment_factor = FOOD_METABOLISM * 0.25 //I mean it's got undigested food in it so why not
 
 /datum/reagent/vomit/on_mob_life(var/mob/living/M)
 	if(..()) return 1
 
-	M.adjustToxLoss(0.5)
+	M.adjustToxLoss(0.1)
 
 /datum/reagent/vomit/reaction_turf(turf/simulated/T, volume)
 	if(..()) return 1

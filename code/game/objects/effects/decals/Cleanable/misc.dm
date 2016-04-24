@@ -104,7 +104,7 @@
 /obj/effect/decal/cleanable/vomit/active/New()
 	..()
 
-	dry_state = rand(30,50)
+	dry_state = rand(50,80)
 	create_reagents(10)
 	reagents.add_reagent("vomit", rand(2,5))
 
