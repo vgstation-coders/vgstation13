@@ -1,0 +1,4 @@
+author: Intigracy
+delete-after: True
+changes: 
+- tweak: "Maps now require at least 2 votes to be considered for weighted voting."
