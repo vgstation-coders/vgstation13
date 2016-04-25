@@ -252,9 +252,7 @@ var/global/num_vending_terminals = 1
 			if(prob(25)) malfunction()
 
 /obj/machinery/vending/proc/build_inventory(var/list/productlist,hidden=0,req_coin=0)
-	var/obj/item/temp
-
-	for (var/typepath in productlist)
+	for(var/typepath in productlist)
 		var/amount = productlist[typepath]
 		var/price = prices[typepath]
 
@@ -278,10 +276,9 @@ var/global/num_vending_terminals = 1
 			R.category = CAT_NORMAL
 			product_records.Add(R)
 
-		temp = new typepath(null)
-
-		R.product_name = temp.name
-		R.subcategory = temp.vending_cat
+		var/obj/item/initializer = typepath
+		R.product_name = initial(initializer.name)
+		R.subcategory = initial(initializer.vending_cat)
 
 /obj/machinery/vending/proc/get_item_by_type(var/this_type)
 	var/list/datum_products = list()
@@ -1466,6 +1463,22 @@ var/global/num_vending_terminals = 1
 
 	pack = /obj/structure/vendomatpack/security
 
+/obj/machinery/vending/security/used
+	req_access_txt = 0
+	extended_inventory = 1
+	products = list(
+		/obj/item/weapon/handcuffs = 1,
+		/obj/item/weapon/grenade/flashbang = 1,
+		/obj/item/device/flash = 2,
+		/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 24,
+		/obj/item/weapon/storage/box/evidence = 1,
+		/obj/item/weapon/legcuffs/bolas = 2,
+		)
+	contraband = list(
+		/obj/item/clothing/glasses/sunglasses = 2,
+		/obj/item/weapon/storage/fancy/donut_box = 2,
+		)
+ 
 /obj/machinery/vending/hydronutrients
 	name = "NutriMax"
 	desc = "A plant nutrients vendor"
