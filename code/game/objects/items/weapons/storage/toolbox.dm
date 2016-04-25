@@ -6,7 +6,7 @@
 	item_state = "toolbox_red"
 	flags = FPRINT
 	siemens_coefficient = 1
-	force = 12.0
+	force = 25
 	hitsound = 'sound/weapons/toolbox.ogg'
 	throwforce = 10.0
 	throw_speed = 1

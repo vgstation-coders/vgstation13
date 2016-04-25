@@ -8,7 +8,7 @@
 	starting_materials = list(MAT_IRON = 937.5)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	throwforce = 15.0
+	throwforce = 5
 	throw_speed = 5
 	throw_range = 20
 	flags = FPRINT
