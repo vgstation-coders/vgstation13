@@ -34,15 +34,16 @@
 "H" = (/turf/unsimulated/wall{tag = "icon-sandstone0"; icon_state = "sandstone0"},/area/awaymission/beach)
 "I" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/beer,/turf/unsimulated/floor{tag = "icon-wood"; icon_state = "wood"},/area/awaymission/beach)
 "J" = (/obj/item/weapon/beach_ball,/turf/unsimulated/beach/sand,/area/awaymission/beach)
-"K" = (/obj/structure/stool,/turf/unsimulated/beach/sand,/area/awaymission/beach)
-"L" = (/mob/living/simple_animal/crab,/turf/unsimulated/beach/sand,/area/awaymission/beach)
+"K" = (/obj/item/weapon/stool,/turf/unsimulated/beach/sand,/area/awaymission/beach)
+"L" = (/mob/living/simple_animal/crab/kickstool,/turf/unsimulated/beach/sand,/area/awaymission/beach)
 "M" = (/obj/effect/overlay/coconut,/turf/unsimulated/beach/sand,/area/awaymission/beach)
-"N" = (/mob/living/simple_animal/crab/Coffee,/turf/unsimulated/beach/sand,/area/awaymission/beach)
-"O" = (/obj/structure/stool/bed/chair,/turf/unsimulated/beach/sand,/area/awaymission/beach)
-"P" = (/turf/unsimulated/beach/coastline,/area/awaymission/beach)
-"Q" = (/turf/unsimulated/beach/coastline{density = 1; opacity = 1},/area/awaymission/beach)
-"R" = (/turf/unsimulated/beach/water,/area/awaymission/beach)
-"S" = (/turf/unsimulated/beach/water{density = 1; opacity = 1},/area/awaymission/beach)
+"N" = (/mob/living/simple_animal/crab/snowy,/turf/unsimulated/beach/sand,/area/awaymission/beach)
+"O" = (/mob/living/simple_animal/crab/Coffee,/turf/unsimulated/beach/sand,/area/awaymission/beach)
+"P" = (/obj/structure/bed/chair,/turf/unsimulated/beach/sand,/area/awaymission/beach)
+"Q" = (/turf/unsimulated/beach/coastline,/area/awaymission/beach)
+"R" = (/turf/unsimulated/beach/coastline{density = 1; opacity = 1},/area/awaymission/beach)
+"S" = (/turf/unsimulated/beach/water,/area/awaymission/beach)
+"T" = (/turf/unsimulated/beach/water{density = 1; opacity = 1},/area/awaymission/beach)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -54,20 +55,20 @@ bbbbbbbbbbbbDEEEEEEEEEEsbbbbbbbbbbbbbbba
 bbbbbbbbbbbbFEEEEEEEEEEsbbbbbbbbbGbbbbba
 bbfbbbbbbbbbHxIxxxxxxxxDbbbGbbJbbbbbbbba
 bbbbbbbbbbbbbKKKKKKKKKKbbbbbbbbbbbbbbbba
+bbbLbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbba
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbfbbbbbbba
+bbbbbbGMbbNbbbbbbbbbbbGbbbbbObbbMbbbbbfa
+bbbJbbbbbbbbbPbPbPbPbPbPbbbbbbbbbbPbPbba
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbba
-bbbLbbbbbbbbbbbbbbbbbbbbbbbbbbbfbbbbbbba
-bbbbbbGMbbbbbbbbbbbbbbGbbbbbNbbbMbbbbbfa
-bbbJbbbbbbLbbObObObObObObbbbbbbbbbObObba
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbba
-PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPQ
-RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRS
-RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRS
-RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRS
-RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRS
-RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRS
-RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRS
-RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRS
-RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRS
-RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRS
-RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRS
+QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQR
+SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST
+SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST
+SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST
+SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST
+SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST
+SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST
+SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST
+SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST
+SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST
+SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST
 "}
