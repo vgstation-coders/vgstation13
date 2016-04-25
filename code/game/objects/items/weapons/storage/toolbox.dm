@@ -6,9 +6,9 @@
 	item_state = "toolbox_red"
 	flags = FPRINT
 	siemens_coefficient = 1
-	force = 20
+	force = 15
 	hitsound = 'sound/weapons/toolbox.ogg'
-	throwforce = 10.0
+	throwforce = 10
 	throw_speed = 1
 	throw_range = 7
 	starting_materials = list(MAT_IRON = 5000)
@@ -99,7 +99,7 @@
 	icon_state = "syndicate"
 	item_state = "toolbox_syndi"
 	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1"
-	force = 15.0
+	force = 20
 
 /obj/item/weapon/storage/toolbox/syndicate/New()
 	..()
