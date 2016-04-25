@@ -5,10 +5,6 @@
 
 	if(reagents)
 
-		if(locked_to && istype(locked_to,/obj/structure/bed/nest))//alien nest will keep their victims alive for a bit longer.
-			if (reagents.get_reagent_amount("stabilizine") < 1)
-				reagents.add_reagent("stabilizine", 2)
-
 		var/alien = 0 //Not the best way to handle it, but neater than checking this for every single reagent proc.
 		if(src.species)
 			if(src.species.has_organ["liver"])

@@ -66,12 +66,35 @@
 	user.delayNextAttack(10)
 	healthcheck()
 
+/obj/structure/bed/nest/bullet_act(var/obj/item/projectile/Proj)
+	health -= Proj.damage
+	..()
+	healthcheck()
+	return
+
+/obj/structure/bed/nest/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(exposed_temperature > 300)
+		health -= 5
+		healthcheck()
+
 /obj/structure/bed/nest/proc/healthcheck()
 	if(health <= 0)
-		if(locked_atoms.len)
-			var/mob/M = locked_atoms[1]
-			unlock_atom(M)
 		qdel(src)
+
+/obj/structure/bed/nest/proc/stabilize()
+	if(!locked_atoms || !locked_atoms.len)
+		return
+
+	var/mob/M = locked_atoms[1]
+
+	if(iscarbon(M) && (M.reagents.get_reagent_amount("stabilizine") < 1))
+		M.reagents.add_reagent("stabilizine", 2)
+	else
+		return
+
+	spawn(10)
+		if(!gcDestroyed && locked_atoms.len)
+			stabilize()
 
 #undef ALIEN_NEST_LOCKED_Y_OFFSET
 

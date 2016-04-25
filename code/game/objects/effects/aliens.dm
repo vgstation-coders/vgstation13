@@ -216,6 +216,7 @@
 		W.linked_node = null
 		spawn()
 			W.DieWeed()
+	connected_weeds = null
 	..()
 
 /obj/effect/alien/weeds/New(pos, var/obj/effect/alien/weeds/node/N)
@@ -255,25 +256,12 @@
 			spawn()
 				W.Life()
 	spawn(HEARTBEAT_RATE)
-		heartbeat()
+		if(!gcDestroyed)
+			heartbeat()
 
 /obj/effect/alien/weeds/proc/Life()
 	health = 15
-	//set background = 1
 	var/turf/U = get_turf(src)
-/*
-	if (locate(/obj/movable, U))
-		U = locate(/obj/movable, U)
-		if(U.density == 1)
-			del(src)
-			return
-
-Alien plants should do something if theres a lot of poison
-	if(U.poison> 200000)
-		health -= round(U.poison/200000)
-		update()
-		return
-*/
 	if (istype(U, /turf/space))
 		qdel(src)
 		return
