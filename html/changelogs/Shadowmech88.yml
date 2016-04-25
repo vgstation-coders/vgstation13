@@ -1,0 +1,4 @@
+author: Shadowmech88
+delete-after: True
+changes: 
+- tweak: Species damage modifiers are now applied when individual external organs take damage.
