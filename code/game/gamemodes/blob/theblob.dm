@@ -1,7 +1,8 @@
 //I will need to recode parts of this but I am way too tired atm
 /obj/effect/blob
 	name = "blob"
-	icon = 'icons/mob/blob.dmi'
+	icon = 'icons/mob/blob_64x64.dmi'
+	icon_state = "center"
 	luminosity = 3
 	desc = "Some blob creature thingy"
 	density = 0
@@ -12,6 +13,9 @@
 	var/health_timestamp = 0
 	var/brute_resist = 4
 	var/fire_resist = 1
+	pixel_x = -16
+	pixel_y = -16
+	layer = 6
 
 	// A note to the beam processing shit.
 	var/custom_process=0
@@ -25,6 +29,8 @@
 			blobmode.nuclear = 1
 	src.dir = pick(cardinal)
 	src.update_icon()
+	for(var/obj/effect/blob/B in orange(src,1))
+		B.update_icon()
 	..(loc)
 	for(var/atom/A in loc)
 		A.blob_act()
@@ -33,6 +39,8 @@
 
 /obj/effect/blob/Destroy()
 	blobs -= src
+	for(var/obj/effect/blob/B in orange(src,1))
+		B.update_icon()
 	..()
 
 /obj/effect/blob/projectile_check()
@@ -55,6 +63,7 @@
 	..()
 	apply_beam_damage(B)
 	last_beamchecks.Remove("\ref[B]") // RIP
+	update_health()
 	update_icon()
 	if(beams.len == 0)
 		if(!custom_process && src in processing_objects)
@@ -76,6 +85,7 @@
 	// New beam damage code (per-tick)
 	for(var/obj/effect/beam/B in beams)
 		apply_beam_damage(B)
+	update_health()
 	update_icon()
 
 /obj/effect/blob/process()
@@ -88,6 +98,7 @@
 	var/damage = Clamp(0.01 * exposed_temperature / fire_resist, 0, 4 - fire_resist)
 	if(damage)
 		health -= damage
+		update_health()
 		update_icon()
 
 /obj/effect/blob/proc/Life()
@@ -141,6 +152,7 @@
 	if(!T)	return 0
 	var/obj/effect/blob/normal/B = new(src.loc, min(src.health, 30))
 	B.density = 1
+	B.layer = layer - 0.0001
 	if(T.Enter(B,src))//Attempt to move into the tile
 		B.density = initial(B.density)
 		B.loc = T
@@ -156,6 +168,7 @@
 /obj/effect/blob/ex_act(severity)
 	var/damage = 150
 	health -= ((damage/brute_resist) - (severity * 5))
+	update_health()
 	update_icon()
 	return
 
@@ -163,10 +176,12 @@
 /obj/effect/blob/bullet_act(var/obj/item/projectile/Proj)
 	..()
 	switch(Proj.damage_type)
-	 if(BRUTE)
-		 health -= (Proj.damage/brute_resist)
-	 if(BURN)
-		 health -= (Proj.damage/fire_resist)
+		if(BRUTE)
+			health -= (Proj.damage/brute_resist)
+		if(BURN)
+			health -= (Proj.damage/fire_resist)
+
+	update_health()
 	update_icon()
 	return 0
 
@@ -202,7 +217,6 @@
 	qdel(src)
 
 /obj/effect/blob/normal
-	icon_state = "blob"
 	luminosity = 0
 	health = 21
 
@@ -211,11 +225,50 @@
 	blobs -= src
 	..()
 
-/obj/effect/blob/normal/update_icon()
+/obj/effect/blob/update_icon()
+	spawn(1)
+		overlays.len = 0
+
+		for(var/obj/effect/blob/B in orange(src,1))
+			overlays += image(icon,"connect",dir = get_dir(src,B), layer = 22)
+
+
+		/*
+		for(var/obj/effect/blob/B in blobs)
+			if(B.z == z)
+				if((B.x == x-1) && (B.y == y+1))
+					var/image/I = new(icon,"connect",dir = NORTHWEST)
+					overlays += I
+				if((B.x == x) && (B.y == y+1))
+					var/image/I = new(icon,"connect",dir = NORTH)
+					overlays += I
+				if((B.x == x+1) && (B.y == y+1))
+					var/image/I = new(icon,"connect",dir = NORTHEAST)
+					overlays += I
+				if((B.x == x-1) && (B.y == y))
+					var/image/I = new(icon,"connect",dir = WEST)
+					overlays += I
+				if((B.x == x+1) && (B.y == y))
+					var/image/I = new(icon,"connect",dir = EAST)
+					overlays += I
+				if((B.x == x-1) && (B.y == y-1))
+					var/image/I = new(icon,"connect",dir = SOUTHWEST)
+					overlays += I
+				if((B.x == x) && (B.y == y-1))
+					var/image/I = new(icon,"connect",dir = SOUTH)
+					overlays += I
+				if((B.x == x+1) && (B.y == y-1))
+					var/image/I = new(icon,"connect",dir = SOUTHEAST)
+					overlays += I
+					*/
+/*
+	if(health <= 15)
+		icon_state = "blob_damaged"
+		return
+*/
+
+/obj/effect/blob/proc/update_health()
 	if(health <= 0)
 		playsound(get_turf(src), 'sound/effects/blobsplat.ogg', 50, 1)
 		Delete()
-		return
-	if(health <= 15)
-		icon_state = "blob_damaged"
 		return

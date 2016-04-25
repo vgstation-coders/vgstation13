@@ -1,7 +1,6 @@
 /obj/effect/blob/core
 	name = "blob core"
-	icon = 'icons/mob/blob.dmi'
-	icon_state = "blob_core"
+	icon_state = "core"
 	health = 200
 	fire_resist = 2
 	custom_process=1
@@ -32,7 +31,7 @@
 /obj/effect/blob/core/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	return
 
-/obj/effect/blob/core/update_icon()
+/obj/effect/blob/core/update_health()
 	if(health <= 0)
 		playsound(get_turf(src), 'sound/effects/blobkill.ogg', 50, 1)
 		Delete()
@@ -102,3 +101,4 @@
 			mode.infected_crew += B.mind
 		return 1
 	return 0
+

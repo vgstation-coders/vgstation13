@@ -1,7 +1,5 @@
 /obj/effect/blob/node
 	name = "blob node"
-	icon = 'icons/mob/blob.dmi'
-	icon_state = "blob_node"
 	health = 100
 	fire_resist = 2
 	custom_process=1
@@ -27,7 +25,7 @@
 		Pulse(5, i)
 	health = min(initial(health), health + 1)
 
-/obj/effect/blob/node/update_icon()
+/obj/effect/blob/node/update_health()
 	if(health <= 0)
 		playsound(get_turf(src), 'sound/effects/blobsplatspecial.ogg', 50, 1)
 		Delete()
@@ -36,3 +34,8 @@
 
 /obj/effect/blob/node/run_action()
 	return 0
+
+/obj/effect/blob/node/update_icon()
+	..()
+	overlays += image(icon,"node",layer = 6.9)
+

@@ -1,14 +1,12 @@
 /obj/effect/blob/factory
 	name = "factory blob"
-	icon = 'icons/mob/blob.dmi'
-	icon_state = "blob_factory"
 	health = 100
 	fire_resist = 2
 	var/list/spores = list()
 	var/max_spores = 2
 	var/spore_delay = 50
 
-/obj/effect/blob/factory/update_icon()
+/obj/effect/blob/factory/update_health()
 	if(health <= 0)
 		playsound(get_turf(src), 'sound/effects/blobsplatspecial.ogg', 50, 1)
 		qdel(src)
@@ -79,3 +77,8 @@
 	if(factory)
 		factory.spores -= src
 	..()
+
+
+/obj/effect/blob/factory/update_icon()
+	..()
+	overlays += image(icon,"factory",layer = 6.9)
