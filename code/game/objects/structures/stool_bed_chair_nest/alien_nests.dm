@@ -70,7 +70,6 @@
 	health -= Proj.damage
 	..()
 	healthcheck()
-	return
 
 /obj/structure/bed/nest/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > 300)

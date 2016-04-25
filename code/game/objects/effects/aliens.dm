@@ -58,13 +58,11 @@
 	if(health <=0)
 		density = 0
 		qdel(src)
-	return
 
 /obj/effect/alien/resin/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
 	..()
 	healthcheck()
-	return
 
 /obj/effect/alien/resin/ex_act(severity)
 	switch(severity)
@@ -78,12 +76,10 @@
 			else
 				health-=25
 	healthcheck()
-	return
 
 /obj/effect/alien/resin/blob_act()
 	health-=50
 	healthcheck()
-	return
 
 /obj/effect/alien/resin/hitby(AM as mob|obj)
 	..()
@@ -98,7 +94,6 @@
 	health = max(0, health - tforce)
 	healthcheck()
 	..()
-	return
 
 /obj/effect/alien/resin/attack_hand()
 	usr.delayNextAttack(10)
@@ -113,7 +108,6 @@
 			O.show_message("<span class='warning'>[usr] claws at the [name]!</span>", 1)
 		health -= rand(5,10)
 	healthcheck()
-	return
 
 /obj/effect/alien/resin/attack_paw()
 	return attack_hand()
@@ -131,7 +125,6 @@
 		for(var/mob/O in oviewers(src))
 			O.show_message("<span class='warning'>[usr] slices the [name] apart!</span>", 1)
 	healthcheck()
-	return
 
 /obj/effect/alien/resin/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	/*if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
@@ -160,7 +153,6 @@
 	playsound(loc, 'sound/effects/attackblob.ogg', 100, 1)
 	healthcheck()
 	..()
-	return
 
 /obj/effect/alien/resin/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group) return 0
@@ -241,7 +233,6 @@
 	spawn(rand(100, 250))
 		if(src)
 			Life()
-	return
 
 /obj/effect/alien/weeds/node/New()
 	..()
@@ -319,7 +310,6 @@
 		if(3.0)
 			if (prob(5))
 				qdel(src)
-	return
 
 /obj/effect/alien/weeds/attackby(var/obj/item/weapon/W, var/mob/user)
 	user.delayNextAttack(10)
@@ -480,8 +470,7 @@
 		return attack_hand(user)
 
 /obj/effect/alien/egg/attack_hand(user as mob)
-	to_chat(user, "It feels slimy.")
-	return
+	to_chat(user, "<span class='warning'>It feels slimy.</span>")
 
 /obj/effect/alien/egg/proc/GetFacehugger()
 	return locate(/obj/item/clothing/mask/facehugger) in contents
@@ -495,8 +484,6 @@
 		if(CanHug(M))
 			Burst(0)
 			break
-
-	return
 
 /obj/effect/alien/egg/proc/Burst(var/kill = 1) //drops and kills the hugger if any is remaining
 	if(status == GROWN || status == GROWING)
@@ -528,7 +515,6 @@
 	health -= Proj.damage
 	..()
 	healthcheck()
-	return
 
 
 /obj/effect/alien/egg/attackby(var/obj/item/weapon/W, var/mob/user)
