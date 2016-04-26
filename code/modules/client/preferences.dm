@@ -178,26 +178,41 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	var/progress_bars = 1 //Whether to show progress bars when doing delayed actions.
 	var/client/client
+	var/loadingsave = 0
 	var/saveloaded = 0
 
 /datum/preferences/New(client/C)
 	client=C
 	if(istype(C))
 		var/theckey = C.ckey
+		var/thekey = C.key
 		spawn()
 			while(!speciesinit)
 				sleep(1)
-			if(!IsGuestKey(theckey))
+			if(!IsGuestKey(thekey))
 				var/load_pref = load_preferences_sqlite(theckey)
-				if(load_pref)
-					if(load_save_sqlite(theckey, C, default_slot) && C)
-						saveloaded = 1
-						return
+				if(load_pref) // We've established they aren't new here and have a save to load. No randomizing.
+					try_load_save_sqlite(theckey, C, default_slot) // Calls load_save_sqlite() over and over until it eventually works.
+					return
 
 			randomize_appearance_for()
 			real_name = random_name(gender)
 			save_character_sqlite(theckey, C, default_slot)
 			saveloaded = 1
+
+/datum/preferences/proc/try_load_save_sqlite(var/ckey, var/user, var/slot)
+	loadingsave = 1
+	if(!user)
+		loadingsave = 0
+		return
+	if(load_save_sqlite(ckey, user, slot))
+		saveloaded = 1
+		loadingsave = 0
+		return
+	else
+		spawn(10) //Guess we'll try again in a second.
+			try_load_save_sqlite(ckey, user, slot)
+		return
 
 /datum/preferences/proc/setup_character_options(var/dat, var/user)
 

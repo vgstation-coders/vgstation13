@@ -101,6 +101,8 @@
 
 	if(href_list["show_preferences"])
 		if(!client.prefs.saveloaded)
+			if(!client.prefs.loadingsave) //You disconnected in the middle of loading your save, so it didn't load.
+				client.prefs.try_load_save_sqlite(client.ckey, client, client.prefs.default_slot)
 			to_chat(usr, "<span class='warning'>Your character preferences have not yet loaded.</span>")
 			return
 		client.prefs.ShowChoices(src)
@@ -108,6 +110,8 @@
 
 	if(href_list["ready"])
 		if(!client.prefs.saveloaded)
+			if(!client.prefs.loadingsave) //You disconnected in the middle of loading your save, so it didn't load.
+				client.prefs.try_load_save_sqlite(client.ckey, client, client.prefs.default_slot)
 			to_chat(usr, "<span class='warning'>Your character preferences have not yet loaded.</span>")
 			return
 		switch(text2num(href_list["ready"]))
@@ -126,6 +130,8 @@
 
 	if(href_list["observe"])
 		if(!client.prefs.saveloaded)
+			if(!client.prefs.loadingsave) //You disconnected in the middle of loading your save, so it didn't load.
+				client.prefs.try_load_save_sqlite(client.ckey, client, client.prefs.default_slot)
 			to_chat(usr, "<span class='warning'>Your character preferences have not yet loaded.</span>")
 			return
 		if(alert(src,"Are you sure you wish to observe? You will not be able to play this round!","Player Setup","Yes","No") == "Yes")
