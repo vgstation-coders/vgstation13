@@ -342,7 +342,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Genetics Research"
 	icon_state = "yellow"
 	requires_power = 0
-	
+
 /area/shuttle/vox/station
 	name = "\improper Vox Skipjack"
 	icon_state = "yellow"
@@ -1948,6 +1948,32 @@ proc/process_adminbus_teleport_locs()
 /area/vox_trading_post/hallway
 	name = "\improper Vox Hallways"
 	icon_state = "hallP"
+
+/area/vox_trading_post/kitchen
+	name = "\improper Vox Kitchen"
+	icon_state = "kitchen"
+
+/area/vox_trading_post/dorms
+	name = "\improper Vox Dormitory"
+	icon_state = "blue"
+
+/area/vox_trading_post/bar
+	name = "\improper Vox Bar"
+	icon_state = "bar"
+
+/area/vox_trading_post/medbay
+	name = "\improper Vox Medbay"
+	icon_state = "medbay"
+
+/area/vox_trading_post/solararray
+	name = "\improper Vox Solar Array"
+	icon_state = "panelsS"
+	requires_power = 0
+	lighting_use_dynamic = 0
+
+/area/vox_trading_post/solars
+	name = "\improper Vox Solar Maintenance"
+	icon_state = "SolarcontrolS"
 
 
 
