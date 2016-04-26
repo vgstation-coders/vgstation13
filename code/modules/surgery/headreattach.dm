@@ -217,8 +217,8 @@
 				target.butchering_drops -= match //Remove it!
 				qdel(match)
 
-			target.butchering_drops += BP //Transfer
-			B.butchering_drops -= BP
+			target.butchering_drops.Add(BP) //Transfer
+			B.butchering_drops.Remove(BP)
 
 	affected.cancer_stage = B.cancer_stage
 
