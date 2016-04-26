@@ -46,6 +46,8 @@
 
 /obj/effect/blob/Destroy()
 	blobs -= src
+	for(var/atom/movable/overlay/O in loc)
+		returnToPool(O)
 	..()
 
 /obj/effect/blob/projectile_check()
