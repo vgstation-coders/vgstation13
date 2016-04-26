@@ -170,7 +170,7 @@ var/global/list/all_money_accounts = list()
 
 	if(department_accounts.len == 0)
 		for(var/department in station_departments)
-			create_department_account(department)
+			create_department_account(department, recieves_wage = 1)
 	if(!vendor_account)
 		create_department_account("Vendor")
 		vendor_account = department_accounts["Vendor"]

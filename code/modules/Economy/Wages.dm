@@ -16,4 +16,4 @@ var/global/roundstart_enable_wages = 0
 			T.time = worldtime2text()
 			T.source_terminal = "Nanotrasen Payroll Server"
 			Acc.transaction_log.Add(T)
-	captain_announce("Payroll has been processed. All accounts eligible have been paid to, including department accounts.")
+	captain_announce("Payroll has been processed. All accounts eligible have have recieved their paycheck as a direct deposit, including department accounts.")
