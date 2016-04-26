@@ -629,6 +629,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 		var/obj/item/weapon/organ/organ //Dropped limb object
 		if(spawn_limb)
 			organ = generate_dropped_organ(organ_item)
+			if(species)
+				organ.species = src.species
+				organ.update_icon(owner)
+
 		if(body_part == LOWER_TORSO)
 			to_chat(owner, "<span class='danger'>You are now sterile.</span>")
 
@@ -1197,33 +1201,11 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 			blood_DNA = list()
 		blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
 
+	src.species = H.species
+
 	//Forming icon for the limb
 	//Setting base icon for this mob's race
-	var/icon/base
-	if(H.species && H.species.icobase)
-		src.species = H.species //Also store the mob's species for later use
-
-		if(H.species.icobase)
-			base = icon(H.species.icobase)
-	else
-		base = icon('icons/mob/human_races/r_human.dmi')
-
-	if(base)
-		//Changing limb's skin tone to match owner
-		if(!H.species || H.species.flags & HAS_SKIN_TONE)
-			if(H.s_tone >= 0)
-				base.Blend(rgb(H.s_tone, H.s_tone, H.s_tone), ICON_ADD)
-			else
-				base.Blend(rgb(-H.s_tone,  -H.s_tone,  -H.s_tone), ICON_SUBTRACT)
-
-/*	if(base)
-		//Changing limb's skin color to match owner
-		if(!H.species || H.species.flags & HAS_SKIN_COLOR)
-			base.Blend(rgb(H.r_skin, H.g_skin, H.b_skin), ICON_ADD)*/
-
-	icon = base
-	dir = SOUTH
-	src.transform = turn(src.transform, rand(70, 130))
+	update_icon(H)
 
 	for(var/datum/butchering_product/B in H.butchering_drops) //Go through all butchering products (like teeth) in the parent
 		if(B.stored_in_organ == src.part) //If they're stored in our organ,
@@ -1248,6 +1230,36 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 			butchery = "[butchery][B.desc_modifier(src, user)]"
 	if(butchery)
 		to_chat(user, "<span class='warning'>[butchery]</span>")
+
+/obj/item/weapon/organ/update_icon(mob/living/carbon/human/H)
+	..()
+
+	if(!H && !species) return
+
+	var/icon/base
+	if(H)
+		if(H.species)
+			if(!src.species)
+				src.species = H.species //Also store the mob's species for later use
+
+			if(H.species.icobase)
+				base = icon(H.species.icobase)
+		else
+			base = icon('icons/mob/human_races/r_human.dmi')
+	else if(species)
+		base = icon(species.icobase)
+
+	if(base)
+		//Changing limb's skin tone to match owner
+		if(!H.species || H.species.flags & HAS_SKIN_TONE)
+			if(H.s_tone >= 0)
+				base.Blend(rgb(H.s_tone, H.s_tone, H.s_tone), ICON_ADD)
+			else
+				base.Blend(rgb(-H.s_tone,  -H.s_tone,  -H.s_tone), ICON_SUBTRACT)
+
+		icon = base
+		dir = SOUTH
+		src.transform = turn(src.transform, rand(70, 130))
 
 /****************************************************
 			   EXTERNAL ORGAN ITEMS DEFINES
