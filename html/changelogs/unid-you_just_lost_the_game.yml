@@ -1,0 +1,6 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+- imageadd: "Surgically attached limbs no longer magically transform when you attach them to another species' body (this means you can create a human with vox head, tajaran arms and muton legs). This is purely a visual effect"
