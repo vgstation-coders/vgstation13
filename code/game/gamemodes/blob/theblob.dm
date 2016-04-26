@@ -16,6 +16,8 @@
 	pixel_x = -16
 	pixel_y = -16
 	layer = 6
+	var/spawning = 1
+	var/dying = 0
 
 	// A note to the beam processing shit.
 	var/custom_process=0
@@ -29,6 +31,11 @@
 			blobmode.nuclear = 1
 	src.dir = pick(cardinal)
 	src.update_icon()
+	icon_state = initial(icon_state) + "_spawn"
+	spawn(7)
+		spawning = 0//for sprites
+		icon_state = initial(icon_state)
+		src.update_icon(1)
 	for(var/obj/effect/blob/B in orange(src,1))
 		B.update_icon()
 	..(loc)
@@ -39,8 +46,6 @@
 
 /obj/effect/blob/Destroy()
 	blobs -= src
-	for(var/obj/effect/blob/B in orange(src,1))
-		B.update_icon()
 	..()
 
 /obj/effect/blob/projectile_check()
@@ -225,13 +230,32 @@
 	blobs -= src
 	..()
 
-/obj/effect/blob/update_icon()
+/obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
+	..()
+	anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "pulse", sleeptime = 50, lay = 12, offX = -16, offY = -16)
+
+
+/obj/effect/blob/update_icon(var/spawnend = 0)
 	spawn(1)
 		overlays.len = 0
 
-		for(var/obj/effect/blob/B in orange(src,1))
-			overlays += image(icon,"connect",dir = get_dir(src,B), layer = 22)
+		overlays += image(icon,"roots", layer = 3)
 
+		if(!spawning)
+			for(var/obj/effect/blob/B in orange(src,1))
+				if(B.spawning)
+					anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_spawn", sleeptime = 50, direction = get_dir(src,B), lay = layer+0.2, offX = -16, offY = -16)
+					spawn(8)
+						update_icon()
+				else if(!B.dying)
+					if(spawnend)
+						anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_spawn", sleeptime = 50, direction = get_dir(src,B), lay = layer+0.2, offX = -16, offY = -16)
+					else
+						overlays += image(icon,"connect",dir = get_dir(src,B), layer = layer+0.2)
+
+		if(spawnend)
+			spawn(10)
+				update_icon()
 
 		/*
 		for(var/obj/effect/blob/B in blobs)
@@ -269,6 +293,12 @@
 
 /obj/effect/blob/proc/update_health()
 	if(health <= 0)
+		dying = 1
 		playsound(get_turf(src), 'sound/effects/blobsplat.ogg', 50, 1)
+
+		for(var/obj/effect/blob/B in orange(src,1))
+			B.update_icon()
+			anim(target = B.loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_die", sleeptime = 50, direction = get_dir(B,src), lay = layer+0.3, offX = -16, offY = -16, col = "red")
+
 		Delete()
 		return

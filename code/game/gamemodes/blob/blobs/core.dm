@@ -9,6 +9,7 @@
 	var/resource_delay = 0
 	var/point_rate = 2
 	var/mob/camera/blob/creator = null
+	layer = 7
 
 
 /obj/effect/blob/core/New(loc, var/h = 200, var/client/new_overmind = null, var/new_rate = 2, var/mob/camera/blob/C = null)

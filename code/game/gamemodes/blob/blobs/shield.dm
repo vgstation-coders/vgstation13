@@ -1,9 +1,11 @@
 /obj/effect/blob/shield
 	name = "strong blob"
+	icon_state = "strong"
 	desc = "Some blob creature thingy"
 	health = 75
 	fire_resist = 2
-
+	layer = 6.5
+	color = "red"
 
 /obj/effect/blob/shield/update_health()
 	if(health <= 0)
