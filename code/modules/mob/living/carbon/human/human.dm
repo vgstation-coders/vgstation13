@@ -68,13 +68,15 @@
 	f_style = pick(facial_hair_styles_list)
 	h_style = pick(hair_styles_list)
 
-	var/datum/species/new_species = all_species[pick(all_species)]
+	var/list/valid_species = (all_species - list("Krampus", "Horror"))
+
+	var/datum/species/new_species = all_species[pick(valid_species)]
 	..(new_loc, new_species.name)
 	gender = pick(MALE, FEMALE, NEUTER, PLURAL)
 	meat_type = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/meat))
 
 	for(var/datum/organ/external/E in organs)
-		E.species = all_species[pick(all_species)]
+		E.species = all_species[pick(valid_species)]
 
 	update_body()
 
