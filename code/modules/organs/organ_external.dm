@@ -3,6 +3,8 @@
 ****************************************************/
 /datum/organ/external
 	name = "external"
+
+	var/datum/species/species
 	var/icon_name = null
 	var/body_part = null
 	var/icon_position = 0
@@ -624,7 +626,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		for(var/datum/organ/external/O in children)
 			O.droplimb(1)
 
-		var/obj/organ //Dropped limb object
+		var/obj/item/weapon/organ/organ //Dropped limb object
 		if(spawn_limb)
 			organ = generate_dropped_organ(organ_item)
 		if(body_part == LOWER_TORSO)
@@ -828,9 +830,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(isFat && has_fat)
 		fat = "_fat"
 	var/icon_state = "[icon_name][gender][fat]"
-	var/baseicon = owner.race_icon
+	var/baseicon = (species ? species.icobase : owner.race_icon)
 	if(status & ORGAN_MUTATED)
-		baseicon = owner.deform_icon
+		baseicon = (species ? species.deform : owner.deform_icon)
 	else if(is_peg())
 		baseicon = 'icons/mob/human_races/o_peg.dmi'
 	else if(is_robotic())
@@ -1123,9 +1125,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/g = "m"
 	if(owner.gender == FEMALE)
 		g = "f"
-	var/baseicon = owner.race_icon
+
+	var/baseicon = (species ? species.icobase : owner.race_icon)
 	if(status & ORGAN_MUTATED)
-		baseicon = owner.deform_icon
+		baseicon = (species ? species.deform : owner.deform_icon)
+
 	if(is_peg())
 		baseicon = 'icons/mob/human_races/o_peg.dmi'
 	if(is_robotic())
@@ -1178,6 +1182,8 @@ obj/item/weapon/organ
 	//Currently the only "butchering drops" which are going to be stored here are teeth
 	var/list/butchering_drops = list()
 
+	var/datum/species/species
+
 	//Store health facts. Right now limited exclusively to cancer, but should likely include all limb stats eventually
 	var/cancer_stage = 0
 
@@ -1195,7 +1201,10 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	//Setting base icon for this mob's race
 	var/icon/base
 	if(H.species && H.species.icobase)
-		base = icon(H.species.icobase)
+		src.species = H.species //Also store the mob's species for later use
+
+		if(H.species.icobase)
+			base = icon(H.species.icobase)
 	else
 		base = icon('icons/mob/human_races/r_human.dmi')
 

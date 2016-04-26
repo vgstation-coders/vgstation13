@@ -197,6 +197,11 @@
 	affected.status = 0
 	affected.amputated = 0
 	affected.destspawn = 0
+
+	var/obj/item/weapon/organ/O = tool
+	if(istype(O))
+		affected.species = O.species
+
 	target.update_body()
 	target.updatehealth()
 	target.UpdateDamageIcon()
