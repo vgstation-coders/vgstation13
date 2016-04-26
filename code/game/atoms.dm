@@ -144,7 +144,7 @@ var/global/list/ghdel_profiling = list()
 		returnToPool(materials)
 
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
-	invisibility = 101
+	// invisibility = 101
 	INVOKE_EVENT(on_destroyed, list()) // No args.
 	if(on_moved)
 		on_moved.holder = null
