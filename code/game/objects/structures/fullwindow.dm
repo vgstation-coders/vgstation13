@@ -8,16 +8,18 @@
 	name = "window"
 	var/base_state = "window" //Base icon for update_icon
 	icon_state = "window0" //Specifically for the map
-	sheetamount = 2
 	mouse_opacity = 2 // Complete opacity //What in the name of everything is this variable ?
 	layer = 3.21 // Windows are at 3.2.
+
+	penetration_dampening = 1
+
 
 	cracked_base = "fcrack"
 
 /obj/structure/window/full/New(loc)
 
 	..(loc)
-	flags &= ~ON_BORDER
+	flags |= ON_BORDER
 
 /obj/structure/window/full/CheckExit(atom/movable/O as mob|obj, target as turf)
 
@@ -62,6 +64,7 @@
 	base_state = "rwindow"
 	sheettype = /obj/item/stack/sheet/glass/rglass
 	health = 40
+	penetration_dampening = 3
 	d_state = WINDOWSECURE
 	reinforced = 1
 
@@ -74,6 +77,7 @@
 	shardtype = /obj/item/weapon/shard/plasma
 	sheettype = /obj/item/stack/sheet/glass/plasmaglass
 	health = 120
+	penetration_dampening = 5
 
 	fire_temp_threshold = 32000
 	fire_volume_mod = 1000
@@ -86,6 +90,7 @@
 	shardtype = /obj/item/weapon/shard/plasma
 	sheettype = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
+	penetration_dampening = 7
 
 /obj/structure/window/full/reinforced/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	return
