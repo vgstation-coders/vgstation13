@@ -631,7 +631,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			organ = generate_dropped_organ(organ_item)
 			if(species)
 				organ.species = src.species
-				organ.update_icon(owner)
+				organ.update_icon()
 
 		if(body_part == LOWER_TORSO)
 			to_chat(owner, "<span class='danger'>You are now sterile.</span>")
@@ -1251,11 +1251,12 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 
 	if(base)
 		//Changing limb's skin tone to match owner
-		if(!H.species || H.species.flags & HAS_SKIN_TONE)
-			if(H.s_tone >= 0)
-				base.Blend(rgb(H.s_tone, H.s_tone, H.s_tone), ICON_ADD)
-			else
-				base.Blend(rgb(-H.s_tone,  -H.s_tone,  -H.s_tone), ICON_SUBTRACT)
+		if(H)
+			if(!H.species || H.species.flags & HAS_SKIN_TONE)
+				if(H.s_tone >= 0)
+					base.Blend(rgb(H.s_tone, H.s_tone, H.s_tone), ICON_ADD)
+				else
+					base.Blend(rgb(-H.s_tone,  -H.s_tone,  -H.s_tone), ICON_SUBTRACT)
 
 		icon = base
 		dir = SOUTH
