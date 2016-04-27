@@ -7,6 +7,11 @@
 	layer = 6.5
 	spawning = 0
 
+
+/obj/effect/blob/shield/New(loc)
+	..()
+	flick("morph_strong",src)
+
 /obj/effect/blob/shield/update_health()
 	if(health <= 0)
 		playsound(get_turf(src), 'sound/effects/blobsplat.ogg', 50, 1)
