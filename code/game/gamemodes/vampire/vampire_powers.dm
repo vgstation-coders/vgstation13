@@ -456,8 +456,8 @@
 		M.current.remove_vampire_blood(75)
 		M.current.verbs -= /client/proc/vampire_bats
 		sleep(1200)
-			if(M && M.current) // Because our vampire can be completely destroyed after the sleep ends, who knows
-				M.current.verbs += /client/proc/vampire_bats
+		if(M && M.current) // Because our vampire can be completely destroyed after the sleep ends, who knows
+			M.current.verbs += /client/proc/vampire_bats
 
 /client/proc/vampire_jaunt()
 	set category = "Vampire"
