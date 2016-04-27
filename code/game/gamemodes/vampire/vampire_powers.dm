@@ -472,8 +472,8 @@
 		new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 		ethereal_jaunt(M.current, duration, "batify", "debatify", 0)
 		sleep(600)
-			if(M && M.current)
-				M.current.verbs += /client/proc/vampire_jaunt
+		if(M && M.current)
+			M.current.verbs += /client/proc/vampire_jaunt
 
 // Blink for vamps
 // Less smoke spam.
