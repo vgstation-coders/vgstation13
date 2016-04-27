@@ -331,7 +331,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 
 	var/list/player_alt_list1 = new
 	var/list/player_alt_list2 = new()
-	player_alt_list1.Add(text2list(preference_list["player_alt_titles"], ";")) // we're getting the first part of the string for each job.
+	player_alt_list1.Add(splittext(preference_list["player_alt_titles"], ";")) // we're getting the first part of the string for each job.
 	for(var/item in player_alt_list1) // iterating through the list
 		if(!findtext(item, ":"))
 			continue
@@ -459,7 +459,8 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	if(!player_alt_titles) player_alt_titles = new()
 	if(!organ_data) src.organ_data = list()
 
-	to_chat(user, "Sucessfully loaded [real_name].")
+	if(user)
+		to_chat(user, "Sucessfully loaded [real_name].")
 
 	return 1
 

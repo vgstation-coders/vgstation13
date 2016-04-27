@@ -184,19 +184,24 @@ var/const/MAX_SAVE_SLOTS = 8
 	client=C
 	if(istype(C))
 		var/theckey = C.ckey
+		var/thekey = C.key
 		spawn()
 			while(!speciesinit)
 				sleep(1)
-			if(!IsGuestKey(theckey))
+			if(!IsGuestKey(thekey))
 				var/load_pref = load_preferences_sqlite(theckey)
 				if(load_pref)
 					if(load_save_sqlite(theckey, C, default_slot) && C)
 						saveloaded = 1
 						return
+					else
+						world.log << "[theckey] failed loading save slot."
+				else
+					world.log << "[theckey] failed loading preferences."
 
 			randomize_appearance_for()
 			real_name = random_name(gender)
-			save_character_sqlite(src, theckey, default_slot)
+			save_character_sqlite(theckey, C, default_slot)
 			saveloaded = 1
 
 /datum/preferences/proc/setup_character_options(var/dat, var/user)
