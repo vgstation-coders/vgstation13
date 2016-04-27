@@ -31,11 +31,12 @@
 			blobmode.nuclear = 1
 	src.dir = pick(cardinal)
 	src.update_icon()
-	icon_state = initial(icon_state) + "_spawn"
-	spawn(7)
-		spawning = 0//for sprites
-		icon_state = initial(icon_state)
-		src.update_icon(1)
+	if(spawning)
+		icon_state = initial(icon_state) + "_spawn"
+		spawn(7)
+			spawning = 0//for sprites
+			icon_state = initial(icon_state)
+			src.update_icon(1)
 	for(var/obj/effect/blob/B in orange(src,1))
 		B.update_icon()
 	..(loc)
@@ -234,7 +235,7 @@
 
 /obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
 	..()
-	anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "pulse", sleeptime = 50, lay = 12, offX = -16, offY = -16)
+	anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "pulse", sleeptime = 15, lay = 12, offX = -16, offY = -16)
 
 
 /obj/effect/blob/update_icon(var/spawnend = 0)
@@ -246,12 +247,12 @@
 		if(!spawning)
 			for(var/obj/effect/blob/B in orange(src,1))
 				if(B.spawning)
-					anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_spawn", sleeptime = 50, direction = get_dir(src,B), lay = layer+0.2, offX = -16, offY = -16)
+					anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_spawn", sleeptime = 15, direction = get_dir(src,B), lay = layer+0.2, offX = -16, offY = -16)
 					spawn(8)
 						update_icon()
 				else if(!B.dying)
 					if(spawnend)
-						anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_spawn", sleeptime = 50, direction = get_dir(src,B), lay = layer+0.2, offX = -16, offY = -16)
+						anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_spawn", sleeptime = 15, direction = get_dir(src,B), lay = layer+0.2, offX = -16, offY = -16)
 					else
 						overlays += image(icon,"connect",dir = get_dir(src,B), layer = layer+0.2)
 
@@ -259,34 +260,6 @@
 			spawn(10)
 				update_icon()
 
-		/*
-		for(var/obj/effect/blob/B in blobs)
-			if(B.z == z)
-				if((B.x == x-1) && (B.y == y+1))
-					var/image/I = new(icon,"connect",dir = NORTHWEST)
-					overlays += I
-				if((B.x == x) && (B.y == y+1))
-					var/image/I = new(icon,"connect",dir = NORTH)
-					overlays += I
-				if((B.x == x+1) && (B.y == y+1))
-					var/image/I = new(icon,"connect",dir = NORTHEAST)
-					overlays += I
-				if((B.x == x-1) && (B.y == y))
-					var/image/I = new(icon,"connect",dir = WEST)
-					overlays += I
-				if((B.x == x+1) && (B.y == y))
-					var/image/I = new(icon,"connect",dir = EAST)
-					overlays += I
-				if((B.x == x-1) && (B.y == y-1))
-					var/image/I = new(icon,"connect",dir = SOUTHWEST)
-					overlays += I
-				if((B.x == x) && (B.y == y-1))
-					var/image/I = new(icon,"connect",dir = SOUTH)
-					overlays += I
-				if((B.x == x+1) && (B.y == y-1))
-					var/image/I = new(icon,"connect",dir = SOUTHEAST)
-					overlays += I
-					*/
 /*
 	if(health <= 15)
 		icon_state = "blob_damaged"
