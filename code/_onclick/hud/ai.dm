@@ -132,4 +132,6 @@
 	using.layer = 20
 	adding += using
 
+	mymob.client.screen += adding + other + list(mymob.flash, mymob.blind)
+
 	return
