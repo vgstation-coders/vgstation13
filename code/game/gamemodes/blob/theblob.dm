@@ -3,24 +3,30 @@
 	name = "blob"
 	icon = 'icons/mob/blob_64x64.dmi'
 	icon_state = "center"
-	luminosity = 3
+	luminosity = 2
 	desc = "Some blob creature thingy"
 	density = 0
 	opacity = 0
 	anchored = 1
 	penetration_dampening = 17
 	var/health = 20
+	var/maxhealth = 20
 	var/health_timestamp = 0
 	var/brute_resist = 4
 	var/fire_resist = 1
 	pixel_x = -16
 	pixel_y = -16
 	layer = 6
-	var/spawning = 1
+	var/spawning = 2
 	var/dying = 0
 
 	// A note to the beam processing shit.
 	var/custom_process=0
+
+	var/time_since_last_pulse
+
+/obj/effect/blob/blob_act()
+	return
 
 /obj/effect/blob/New(loc)
 	blobs += src
@@ -30,25 +36,41 @@
 			blobmode.stage(2)
 			blobmode.nuclear = 1
 	src.dir = pick(cardinal)
-	src.update_icon()
+	time_since_last_pulse = world.time
 	if(spawning)
 		icon_state = initial(icon_state) + "_spawn"
-		spawn(7)
+		spawn(10)
 			spawning = 0//for sprites
 			icon_state = initial(icon_state)
 			src.update_icon(1)
-	for(var/obj/effect/blob/B in orange(src,1))
-		B.update_icon()
+	else
+		update_icon()
 	..(loc)
 	for(var/atom/A in loc)
 		A.blob_act()
 	return
 
+/obj/effect/blob/proc/aftermove()
+	for(var/obj/effect/blob/B in loc)
+		if(B != src)
+			qdel(src)
+			return
+	update_icon()
+	for(var/obj/effect/blob/B in orange(src,1))
+		B.update_icon()
+
 
 /obj/effect/blob/Destroy()
+	dying = 1
 	blobs -= src
 	for(var/atom/movable/overlay/O in loc)
 		returnToPool(O)
+
+	for(var/obj/effect/blob/B in orange(loc,1))
+		B.update_icon()
+		if(!spawning)
+			anim(target = B.loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_die", sleeptime = 50, direction = get_dir(B,src), lay = layer+0.3, offX = -16, offY = -16, col = "red")
+
 	..()
 
 /obj/effect/blob/projectile_check()
@@ -114,9 +136,16 @@
 
 
 /obj/effect/blob/proc/Pulse(var/pulse = 0, var/origin_dir = 0)//Todo: Fix spaceblob expand
-
+	/*
+	if(time_since_last_pulse >= world.time)
+		return
+	*/
+	time_since_last_pulse = world.time
 
 	//set background = 1
+
+	for(var/mob/M in loc)
+		M.blob_act()
 
 	if(run_action())//If we can do something here then we dont need to pulse more
 		return
@@ -135,7 +164,8 @@
 		if(!B)
 			expand(T)//No blob here so try and expand
 			return
-		B.Pulse((pulse+1),get_dir(src.loc,T))
+		spawn(2)
+			B.Pulse((pulse+1),get_dir(src.loc,T))
 		return
 	return
 
@@ -160,10 +190,17 @@
 	if(!T)	return 0
 	var/obj/effect/blob/normal/B = new(src.loc, min(src.health, 30))
 	B.density = 1
-	B.layer = layer - 0.0001
+	if(istype(src,/obj/effect/blob/normal))
+		var/num = rand(1,100)
+		num /= 10000
+		B.layer = layer - num
 	if(T.Enter(B,src))//Attempt to move into the tile
 		B.density = initial(B.density)
-		B.loc = T
+		spawn(1)
+			B.forceMove(T)
+			B.aftermove()
+			if(B.spawning > 1)
+				B.spawning = 1
 	else
 		T.blob_act()//If we cant move in hit the turf
 		B.Delete()
@@ -202,12 +239,13 @@
 	switch(W.damtype)
 		if("fire")
 			damage = (W.force / max(src.fire_resist,1))
-			if(istype(W, /obj/item/weapon/weldingtool))
+			if(istype(W, /obj/item/weapon/weldingtool) || istype(W, /obj/item/weapon/pickaxe/plasmacutter))
 				playsound(get_turf(src), 'sound/effects/blobweld.ogg', 100, 1)
 		if("brute")
 			damage = (W.force / max(src.brute_resist,1))
 
 	health -= damage
+	update_health()
 	update_icon()
 	return
 
@@ -218,6 +256,7 @@
 		new type(src.loc, 200, null, 1, M)
 	else
 		new type(src.loc)
+	spawning = 1//so we don't show red severed connections
 	Delete()
 	return
 
@@ -225,20 +264,18 @@
 	qdel(src)
 
 /obj/effect/blob/normal
-	luminosity = 0
+	luminosity = 2
 	health = 21
 
 /obj/effect/blob/normal/Delete()
-	src.loc = null
-	blobs -= src
 	..()
 
 /obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
 	..()
-	anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "pulse", sleeptime = 15, lay = 12, offX = -16, offY = -16)
+	anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "pulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 51)
 
 
-/obj/effect/blob/update_icon(var/spawnend = 0)
+/obj/effect/blob/normal/update_icon(var/spawnend = 0)
 	spawn(1)
 		overlays.len = 0
 
@@ -246,34 +283,49 @@
 
 		if(!spawning)
 			for(var/obj/effect/blob/B in orange(src,1))
-				if(B.spawning)
-					anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_spawn", sleeptime = 15, direction = get_dir(src,B), lay = layer+0.2, offX = -16, offY = -16)
+				if(B.spawning == 1)
+					anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_spawn", sleeptime = 15, direction = get_dir(src,B), lay = layer+0.1, offX = -16, offY = -16)
 					spawn(8)
 						update_icon()
-				else if(!B.dying)
+				else if(!B.dying && !B.spawning)
 					if(spawnend)
-						anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_spawn", sleeptime = 15, direction = get_dir(src,B), lay = layer+0.2, offX = -16, offY = -16)
+						anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_spawn", sleeptime = 15, direction = get_dir(src,B), lay = layer+0.1, offX = -16, offY = -16)
 					else
-						overlays += image(icon,"connect",dir = get_dir(src,B), layer = layer+0.2)
+
+						if(istype(B,/obj/effect/blob/core))
+							overlays += image(icon,"connect",dir = get_dir(src,B), layer = layer)
+						else
+							var/num = rand(1,100)
+							num /= 10000
+							overlays += image(icon,"connect",dir = get_dir(src,B), layer = layer+0.1-num)
 
 		if(spawnend)
 			spawn(10)
 				update_icon()
 
-/*
-	if(health <= 15)
-		icon_state = "blob_damaged"
-		return
-*/
+		..()
+
+/obj/effect/blob/update_icon(var/spawnend = 0)
+	if(health < maxhealth)
+		var/hurt_percentage = round((health * 100) / maxhealth)
+		var/hurt_icon
+		switch(hurt_percentage)
+			if(0 to 25)
+				hurt_icon = "hurt_100"
+			if(26 to 50)
+				hurt_icon = "hurt_75"
+			if(51 to 75)
+				hurt_icon = "hurt_50"
+			else
+				hurt_icon = "hurt_25"
+		overlays += image(icon,hurt_icon, layer = layer+0.15)
+
+
 
 /obj/effect/blob/proc/update_health()
 	if(health <= 0)
 		dying = 1
 		playsound(get_turf(src), 'sound/effects/blobsplat.ogg', 50, 1)
-
-		for(var/obj/effect/blob/B in orange(src,1))
-			B.update_icon()
-			anim(target = B.loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_die", sleeptime = 50, direction = get_dir(B,src), lay = layer+0.3, offX = -16, offY = -16, col = "red")
 
 		Delete()
 		return

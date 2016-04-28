@@ -91,12 +91,16 @@ You must kill it all while minimizing the damage to the station."})
 
 		if(iscarbon(blob.current))
 			var/mob/living/carbon/C = blob.current
+
+			for(var/obj/item/W in C)
+				C.drop_from_inventory(W)
+
 			if(directory[ckey(blob.key)])
 				blob_client = directory[ckey(blob.key)]
 				location = get_turf(C)
 				if(location.z != 1 || istype(location, /turf/space))
 					location = null
-				C.gib()
+				qdel(C)
 
 
 		if(blob_client && location)

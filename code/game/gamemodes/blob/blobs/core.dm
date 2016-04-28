@@ -2,6 +2,7 @@
 	name = "blob core"
 	icon_state = "core"
 	health = 200
+	maxhealth = 200
 	fire_resist = 2
 	custom_process=1
 	var/mob/camera/blob/overmind = null // the blob core's overmind
@@ -16,6 +17,11 @@
 	blob_cores += src
 	processing_objects.Add(src)
 	creator = C
+	if(new_overmind)
+		flick("core_spawn",src)
+	else
+		flick("morph_core",src)
+	playsound(src, get_sfx("gib"),50,1)
 	if(!overmind)
 		create_overmind(new_overmind)
 	point_rate = new_rate
@@ -48,19 +54,28 @@
 		if(resource_delay <= world.time)
 			resource_delay = world.time + 10 // 1 second
 			overmind.add_points(point_rate)
-	health = min(initial(health), health + 1)
-	var/turf/T = get_turf(overmind) //The overmind's mind can expand the blob
-	var/obj/effect/blob/O = locate() in T //As long as it is 'thinking' about a blob already
-	for(var/i = 1; i < 8; i += i)
-		Pulse(0, i)
-		if(istype(O))
-			O.Pulse(0,i)
-	for(var/b_dir in alldirs)
-		if(!prob(5))
-			continue
-		var/obj/effect/blob/normal/B = locate() in get_step(src, b_dir)
-		if(B)
-			B.change_to(/obj/effect/blob/shield)
+	health = min(maxhealth, health + 1)
+
+	if(!spawning)//no expanding on the first Life() tick
+
+		anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "corepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 200)
+		for(var/mob/M in viewers(src))
+			M.playsound_local(loc, 'sound/effects/blob_pulse.ogg', 50, 0, null, FALLOFF_SOUNDS, 0)
+
+		var/turf/T = get_turf(overmind) //The overmind's mind can expand the blob
+		var/obj/effect/blob/O = locate() in T //As long as it is 'thinking' about a blob already
+		for(var/i = 1; i < 8; i += i)
+			Pulse(0, i)
+			if(istype(O))
+				O.Pulse(0,i)
+		for(var/b_dir in alldirs)
+			if(!prob(5))
+				continue
+			var/obj/effect/blob/normal/B = locate() in get_step(src, b_dir)
+			if(B)
+				B.change_to(/obj/effect/blob/shield)
+	else
+		spawning = 0
 	..()
 
 
@@ -103,3 +118,17 @@
 		return 1
 	return 0
 
+/obj/effect/blob/core/update_icon(var/spawnend = 0)
+	spawn(1)
+		overlays.len = 0
+
+		overlays += image(icon,"roots", layer = 3)
+
+		if(!spawning)
+			for(var/obj/effect/blob/B in orange(src,1))
+				overlays += image(icon,"coreconnect",dir = get_dir(src,B), layer = layer+0.2)
+		if(spawnend)
+			spawn(10)
+				update_icon()
+
+		..()

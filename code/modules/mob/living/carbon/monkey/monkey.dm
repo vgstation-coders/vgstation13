@@ -677,6 +677,7 @@
 	return
 
 /mob/living/carbon/monkey/blob_act()
+	..()
 	if(flags & INVULNERABLE)
 		return
 	if (stat != 2)

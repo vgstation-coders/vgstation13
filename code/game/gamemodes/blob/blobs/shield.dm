@@ -3,8 +3,9 @@
 	icon_state = "strong"
 	desc = "Some blob creature thingy"
 	health = 75
+	maxhealth = 75
 	fire_resist = 2
-	layer = 6.5
+	layer = 6.2
 	spawning = 0
 
 
@@ -35,7 +36,7 @@
 
 /obj/effect/blob/shield/Pulse(var/pulse = 0, var/origin_dir = 0)
 	..()
-	anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "strongpulse", sleeptime = 15, lay = 12, offX = -16, offY = -16)
+	anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "strongpulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 51)
 
 /obj/effect/blob/shield/update_icon(var/spawnend = 0)
 	spawn(1)
@@ -45,13 +46,17 @@
 
 		if(!spawning)
 			for(var/obj/effect/blob/B in orange(src,1))
+				overlays += image(icon,"strongconnect",dir = get_dir(src,B), layer = layer+0.1)
+				/*
 				if(B.spawning)
 					anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_spawn", sleeptime = 15, direction = get_dir(src,B), lay = layer+0.2, offX = -16, offY = -16)
 					spawn(8)
 						update_icon()
 				else if(!B.dying)
 					overlays += image(icon,"strongconnect",dir = get_dir(src,B), layer = layer+0.2)
-
+				*/
 		if(spawnend)
 			spawn(10)
 				update_icon()
+
+		..()

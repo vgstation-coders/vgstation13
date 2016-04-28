@@ -11,6 +11,8 @@
 	pass_flags = PASSBLOB
 	faction = "blob"
 
+	layer = 15
+
 	var/obj/effect/blob/core/blob_core = null // The blob overmind's core
 	var/blob_points = 0
 	var/max_blob_points = 100

@@ -1,6 +1,7 @@
 /obj/effect/blob/factory
 	name = "factory blob"
 	health = 100
+	maxhealth = 100
 	fire_resist = 2
 	var/list/spores = list()
 	var/max_spores = 2
