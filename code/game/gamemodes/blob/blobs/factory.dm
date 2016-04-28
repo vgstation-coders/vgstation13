@@ -10,31 +10,15 @@
 	spawning = 0
 	layer = 6.6
 
+	layer_new = 6.6
+	icon_new = "factory"
+	icon_classic = "blob_factory"
+
 /obj/effect/blob/factory/New(loc,newlook = "new")
 	..()
 	if(blob_looks[looks] == 64)
 		flick("morph_factory",src)
 		spore_delay = world.time + (2 SECONDS)
-
-/obj/effect/blob/factory/update_looks(var/right_now = 0)
-	..()
-	switch(blob_looks[looks])
-		if(64)
-			icon_state = "factory"
-			pixel_x = -16
-			pixel_y = -16
-			layer = 6.6
-			if(right_now)
-				spawning = 0
-		if(32)
-			icon_state = "blob_factory"
-			pixel_x = 0
-			pixel_y = 0
-			layer = 3
-			overlays.len = 0
-
-	if(right_now)
-		update_icon()
 
 /obj/effect/blob/factory/update_health()
 	if(health <= 0)

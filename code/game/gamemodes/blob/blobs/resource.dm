@@ -9,6 +9,10 @@
 	spawning = 0
 	layer = 6.4
 
+	layer_new = 6.4
+	icon_new = "resource"
+	icon_classic = "blob_resource"
+
 /obj/effect/blob/resource/New(loc,newlook = "new")
 	..()
 	blob_resources += src
@@ -19,26 +23,6 @@
 /obj/effect/blob/resource/Destroy()
 	blob_resources -= src
 	..()
-
-/obj/effect/blob/resource/update_looks(var/right_now = 0)
-	..()
-	switch(blob_looks[looks])
-		if(64)
-			icon_state = "resource"
-			pixel_x = -16
-			pixel_y = -16
-			layer = 6.4
-			if(right_now)
-				spawning = 0
-		if(32)
-			icon_state = "blob_resource"
-			pixel_x = 0
-			pixel_y = 0
-			layer = 3
-			overlays.len = 0
-
-	if(right_now)
-		update_icon()
 
 /obj/effect/blob/resource/update_health()
 	if(health <= 0)

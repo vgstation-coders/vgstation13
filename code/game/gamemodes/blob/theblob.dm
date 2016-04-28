@@ -33,7 +33,6 @@ var/list/blob_looks
 /obj/effect/blob/normal
 /obj/effect/blob/normal/Delete()
 /obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
-/obj/effect/blob/normal/update_looks(var/right_now = 0)
 /obj/effect/blob/normal/update_icon(var/spawnend = 0)
 */
 
@@ -65,6 +64,9 @@ var/list/blob_looks
 
 	var/time_since_last_pulse
 
+	var/layer_new = 6
+	var/icon_new = "center"
+	var/icon_classic = "blob"
 
 /obj/effect/blob/blob_act()
 	return
@@ -224,7 +226,22 @@ var/list/blob_looks
 					hurt_icon = "hurt_25"
 			overlays += image(icon,hurt_icon, layer = layer+0.15)
 
-/obj/effect/blob/proc/update_looks()
+/obj/effect/blob/proc/update_looks(var/right_now = 0)
+	switch(blob_looks[looks])
+		if(64)
+			icon_state = icon_new
+			pixel_x = -16
+			pixel_y = -16
+			layer = layer_new
+			if(right_now)
+				spawning = 0
+		if(32)
+			icon_state = icon_classic
+			pixel_x = 0
+			pixel_y = 0
+			layer = 3
+			overlays.len = 0
+
 	switch(looks)
 		if("new")
 			icon = 'icons/mob/blob_64x64.dmi'
@@ -237,6 +254,9 @@ var/list/blob_looks
 		if("machineblob")
 			icon = 'icons/mob/blob_machine.dmi'
 		*/
+
+	if(right_now)
+		update_icon()
 
 var/list/blob_looks = list(
 	"new" = 64,
@@ -370,27 +390,6 @@ var/list/blob_looks = list(
 	..()
 	if(blob_looks[looks] == 64)
 		anim(target = loc, a_icon = icon, flick_anim = "pulse", sleeptime = 15, direction = dir, lay = 12, offX = -16, offY = -16, alph = 51)
-
-
-/obj/effect/blob/normal/update_looks(var/right_now = 0)
-	..()
-	switch(blob_looks[looks])
-		if(64)
-			icon_state = "center"
-			pixel_x = -16
-			pixel_y = -16
-			layer = 6
-			if(right_now)
-				spawning = 0
-		if(32)
-			icon_state = "blob"
-			pixel_x = 0
-			pixel_y = 0
-			layer = 3
-			overlays.len = 0
-
-	if(right_now)
-		update_icon()
 
 /obj/effect/blob/normal/update_icon(var/spawnend = 0)
 	if(blob_looks[looks] == 64)

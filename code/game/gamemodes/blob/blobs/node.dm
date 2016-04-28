@@ -8,6 +8,10 @@
 	layer = 6.8
 	spawning = 0
 
+	layer_new = 6.8
+	icon_new = "node"
+	icon_classic = "blob_node"
+
 /obj/effect/blob/node/New(loc,newlook = "new")
 	blob_nodes += src
 	processing_objects.Add(src)
@@ -23,26 +27,6 @@
 	blob_nodes -= src
 	processing_objects.Remove(src)
 	..()
-
-/obj/effect/blob/node/update_looks(var/right_now = 0)
-	..()
-	switch(blob_looks[looks])
-		if(64)
-			icon_state = "node"
-			pixel_x = -16
-			pixel_y = -16
-			layer = 6.8
-			if(right_now)
-				spawning = 0
-		if(32)
-			icon_state = "blob_node"
-			pixel_x = 0
-			pixel_y = 0
-			layer = 3
-			overlays.len = 0
-
-	if(right_now)
-		update_icon()
 
 /obj/effect/blob/node/Life()
 	if(timestopped) return 0 //under effects of time magick

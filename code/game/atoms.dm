@@ -442,6 +442,8 @@ its easier to just keep the beam vertical.
 
 /atom/proc/blob_act()
 	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
+	if(flags & INVULNERABLE)
+		return
 	anim(target = loc, a_icon = 'icons/mob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
 	return
 

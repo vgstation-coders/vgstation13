@@ -12,6 +12,10 @@
 	var/mob/camera/blob/creator = null
 	layer = 7
 
+	layer_new = 7
+	icon_new = "core"
+	icon_classic = "blob_core"
+
 
 /obj/effect/blob/core/New(loc, var/h = 200, var/client/new_overmind = null, var/new_rate = 2, var/mob/camera/blob/C = null,newlook = "new")
 	looks = newlook
@@ -40,26 +44,6 @@
 		overmind = null
 	processing_objects.Remove(src)
 	..()
-
-/obj/effect/blob/core/update_looks(var/right_now = 0)
-	..()
-	switch(blob_looks[looks])
-		if(64)
-			icon_state = "core"
-			pixel_x = -16
-			pixel_y = -16
-			layer = 7
-			if(right_now)
-				spawning = 0
-		if(32)
-			icon_state = "blob_core"
-			pixel_x = 0
-			pixel_y = 0
-			layer = 3
-			overlays.len = 0
-
-	if(right_now)
-		update_icon()
 
 /obj/effect/blob/core/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	return

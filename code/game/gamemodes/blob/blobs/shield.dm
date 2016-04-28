@@ -8,30 +8,13 @@
 	layer = 6.2
 	spawning = 0
 
+	layer_new = 6.2
+	icon_new = "strong"
+	icon_classic = "blob_idle"
 
 /obj/effect/blob/shield/New(loc,newlook = "new")
 	..()
 	flick("morph_strong",src)
-
-/obj/effect/blob/shield/update_looks(var/right_now = 0)
-	..()
-	switch(blob_looks[looks])
-		if(64)
-			icon_state = "strong"
-			pixel_x = -16
-			pixel_y = -16
-			layer = 6.2
-			if(right_now)
-				spawning = 0
-		if(32)
-			icon_state = "blob_idle"
-			pixel_x = 0
-			pixel_y = 0
-			layer = 3
-			overlays.len = 0
-
-	if(right_now)
-		update_icon()
 
 /obj/effect/blob/shield/update_health()
 	if(health <= 0)
