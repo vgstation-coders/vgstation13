@@ -1240,7 +1240,7 @@
 	id = "radium"
 	description = "Radium is an alkaline earth metal. It is extremely radioactive."
 	reagent_state = SOLID
-	color = "#C7C7C7" //rgb: 199,199,199
+	color = "#669966" //rgb: 102, 153, 102
 
 /datum/reagent/radium/on_mob_life(var/mob/living/M)
 
@@ -1434,7 +1434,7 @@
 	id = "iron"
 	description = "Pure iron is a metal."
 	reagent_state = SOLID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#666666" //rgb: 102, 102, 102
 
 /datum/reagent/gold
 	name = "Gold"
@@ -2244,6 +2244,34 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose = REAGENTS_OVERDOSE * 2 //No need for anyone to get suspicious.
 	custom_metabolism = 0.01
+
+/datum/reagent/stabilizine
+	name = "Stabilizine"
+	id = "stabilizine"
+	description = "A stabilizing chemical produced by alien nests to keep their occupants barely alive."
+	reagent_state = LIQUID
+	color = "#833484" //rgb: 131, 52, 132
+	custom_metabolism = 0.1
+
+/datum/reagent/stabilizine/on_mob_life(var/mob/living/M, var/alien)
+
+	if(..()) return 1
+
+	if(istype(M,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = M
+		for(var/datum/organ/external/temp in H.organs)
+			if(temp.status & ORGAN_BLEEDING)
+				temp.clamp()
+
+	if(M.losebreath >= 10)
+		M.losebreath = max(10, M.losebreath - 5)
+
+	M.adjustOxyLoss(-2 * REM)
+
+	if(M.bodytemperature > 310)
+		M.bodytemperature = max(310, M.bodytemperature - (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	else if(M.bodytemperature < 311)
+		M.bodytemperature = min(310, M.bodytemperature + (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -4346,7 +4374,7 @@
 	description = "A gulp a day keeps the MediBot away. That's probably for the best."
 	reagent_state = LIQUID
 	nutriment_factor = FOOD_METABOLISM
-	color = "#664300" //rgb: 102, 67, 0
+	color = "#BA7DBA" //rgb: 73, 49, 73
 
 /datum/reagent/drink/doctor_delight/on_mob_life(var/mob/living/M)
 

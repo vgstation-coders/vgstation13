@@ -43,11 +43,6 @@
 		ticker.mode.update_cult_icons_removed(mind)
 		ticker.mode.cult -= mind
 
-	for(var/obj/Overlays/O in obj_overlays)
-		returnToPool(O)
-
-	obj_overlays = null
-
 	species = null
 
 	if(decapitated)
@@ -55,6 +50,11 @@
 		decapitated = null
 
 	..()
+
+	for(var/obj/Overlays/O in obj_overlays)
+		returnToPool(O)
+
+	obj_overlays = null
 
 /mob/living/carbon/human/death(gibbed)
 	if(stat == DEAD)
@@ -88,7 +88,6 @@
 		emote("deathgasp") //Let the world KNOW WE ARE DEAD
 
 		update_canmove()
-		if(client)	blind.layer = 0
 
 	tod = worldtime2text() //Weasellos time of death patch
 	if(mind)

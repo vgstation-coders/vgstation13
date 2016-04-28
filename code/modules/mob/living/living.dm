@@ -175,10 +175,10 @@
 
 /mob/living/verb/succumb()
 	set hidden = 1
-	if ((src.health < 0 && src.health > -95.0))
+	if (src.health < 0 && stat != DEAD)
 		src.attack_log += "[src] has succumbed to death with [health] points of health!"
-		src.apply_damage(maxHealth + 5 + src.health, OXY) // This will ensure people die when using the command, but don't go into overkill. 15 oxy points over the limit for safety since brute and burn regenerates
-		src.health = 100 - src.getOxyLoss() - src.getToxLoss() - src.getFireLoss() - src.getBruteLoss()
+		src.apply_damage(maxHealth + src.health, OXY)
+		death(0)
 		to_chat(src, "<span class='info'>You have given up life and succumbed to death.</span>")
 
 
@@ -1382,3 +1382,22 @@ default behaviour is:
 
 /mob/proc/CheckSlip()
 	return 0
+
+
+
+/*
+	How this proc that I took from /tg/ works:
+	intensity determines the damage done to humans with eyes
+	visual determines whether the proc damages eyes (in the living/carbon/human proc). 1 for no damage
+	override_blindness_check = 1 means that it'll display a flash even if the mob is blind
+	affect_silicon = 0 means that the flash won't affect silicons at all.
+
+*/
+/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/screen/fullscreen/flash)
+	if(override_blindness_check || !(disabilities & BLIND))
+		// flick("e_flash", flash)
+		overlay_fullscreen("flash", type)
+		// addtimer(src, "clear_fullscreen", 25, FALSE, "flash", 25)
+		spawn(25)
+			clear_fullscreen("flash", 25)
+		return 1

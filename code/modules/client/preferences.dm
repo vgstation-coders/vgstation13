@@ -178,21 +178,42 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	var/progress_bars = 1 //Whether to show progress bars when doing delayed actions.
 	var/client/client
+	var/saveloaded = 0
 
 /datum/preferences/New(client/C)
 	client=C
 	if(istype(C))
+		var/theckey = C.ckey
+		var/thekey = C.key
 		spawn()
+			if(!IsGuestKey(thekey))
+				var/load_pref = load_preferences_sqlite(theckey)
+				if(load_pref)
+					while(!speciesinit)
+						sleep(1)
+					try_load_save_sqlite(theckey, C, default_slot)
+					return
+
 			while(!speciesinit)
 				sleep(1)
-			if(!IsGuestKey(C.key))
-				var/load_pref = load_preferences_sqlite(C.ckey)
-				if(load_pref)
-					if(load_save_sqlite(C.ckey, C, default_slot))
-						return
 			randomize_appearance_for()
 			real_name = random_name(gender)
-			save_character_sqlite(src, C.ckey, default_slot)
+			save_character_sqlite(theckey, C, default_slot)
+			saveloaded = 1
+
+/datum/preferences/proc/try_load_save_sqlite(var/theckey, var/theclient, var/theslot)
+	var/attempts = 0
+	while(!load_save_sqlite(theckey, theclient, theslot) && attempts < 100)
+		sleep(10)
+		attempts++
+	if(attempts >= 100)//failsafe so people don't get locked out of the round forever
+		randomize_appearance_for()
+		real_name = random_name(gender)
+		log_debug("Player [theckey] FAILED to load save 100 times and has been randomized.")
+		log_admin("Player [theckey] FAILED to load save 100 times and has been randomized.")
+		if(theclient)
+			alert(theclient, "For some reason you've failed to load your save slot 100 times now, so you've been generated a random character. Don't worry, it didn't overwrite your old one.","Randomized Character", "OK")
+	saveloaded = 1
 
 /datum/preferences/proc/setup_character_options(var/dat, var/user)
 
