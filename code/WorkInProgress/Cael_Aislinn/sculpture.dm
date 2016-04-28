@@ -14,6 +14,7 @@
 	response_harm   = "hits the"
 	meat_type = null
 	see_in_dark = 8 //Needs to see in darkness to snap in darkness
+	flags |= INVULNERABLE
 	var/response_snap = "snapped the neck of" //Past tense because it "happened before you could see it"
 	var/response_snap_target = "In the blink of an eye, something grabs you and snaps your neck!"
 	var/snap_sound = list('sound/scp/firstpersonsnap.ogg','sound/scp/firstpersonsnap2.ogg','sound/scp/firstpersonsnap3.ogg')
@@ -71,7 +72,7 @@
 			in_darkness = 1
 
 	//Humans can observe SCP-173. If a single human observes him, he's observed for everyone
-	//Note that humans have a 180° field of vision for the purposes of this proc
+	//Note that humans have a 180ï¿½ field of vision for the purposes of this proc
 	for(var/mob/living/carbon/human/H in view(7, src))
 		if(H.stat)
 			continue
@@ -288,11 +289,12 @@
 //You cannot destroy SCP-173, fool!
 /mob/living/simple_animal/sculpture/ex_act(var/severity)
 
+// Commented this out because it LITERALLY PREVENTS ADMINS FROM REMOVING IT ENTIRELY
 //But seriously, you just can't
-/mob/living/simple_animal/sculpture/Del()
-
-	replace_SCP()
-	..()
+// /mob/living/simple_animal/sculpture/Del()
+//
+// 	replace_SCP()
+// 	..()
 
 //Someone tried to use a cheese to kill SCP, warp him at any blob start (nuke disk method
 /mob/living/simple_animal/sculpture/proc/replace_SCP()
