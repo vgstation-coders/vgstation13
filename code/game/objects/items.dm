@@ -305,10 +305,18 @@
 					if(!disable_warning)
 						to_chat(H, "<span class='warning'>You're too fat to wear the [name].</span>")
 					return 0
-			if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
-				if(!disable_warning)
-					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
-				return 0
+
+			for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
+				if(!OE.species) //Organ has same species as body
+					if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL)) //Use the body's base species
+						if(!disable_warning)
+							to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
+						return 0
+				else //Organ's species is different from body
+					if(OE.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+						if(!disable_warning)
+							to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
+						return 0
 
 		switch(slot)
 			if(slot_l_hand)
@@ -322,10 +330,19 @@
 			if(slot_wear_mask)
 				if( !(slot_flags & SLOT_MASK) )
 					return 0
-				if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
-					if(!disable_warning)
-						to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
-					return 0
+
+				for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
+					if(!OE.species) //Organ has same species as body
+						if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL)) //Use the body's base species
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
+							return 0
+					else //Organ's species is different from body
+						if(OE.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
+							return 0
+
 				if(H.wear_mask)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -350,10 +367,19 @@
 			if(slot_wear_suit)
 				if( !(slot_flags & SLOT_OCLOTHING) )
 					return 0
-				if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
-					if(!disable_warning)
-						to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
-					return 0
+
+				for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
+					if(!OE.species) //Organ has same species as body
+						if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL)) //Use the body's base species
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky exterior!</span>")
+							return 0
+					else //Organ's species is different from body
+						if(OE.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky exterior!</span>")
+							return 0
+
 				if(H.wear_suit)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -366,10 +392,19 @@
 			if(slot_gloves)
 				if( !(slot_flags & SLOT_GLOVES) )
 					return 0
-				if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
-					if(!disable_warning)
-						to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky fingers!</span>")
-					return 0
+
+				for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
+					if(!OE.species) //Organ has same species as body
+						if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL)) //Use the body's base species
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky fingers!</span>")
+							return 0
+					else //Organ's species is different from body
+						if(OE.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky fingers!</span>")
+							return 0
+
 				if(H.gloves)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -382,10 +417,19 @@
 			if(slot_shoes)
 				if( !(slot_flags & SLOT_FEET) )
 					return 0
-				if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
-					if(!disable_warning)
-						to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky feet!</span>")
-					return 0
+
+				for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
+					if(!OE.species) //Organ has same species as body
+						if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL)) //Use the body's base species
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky feet!</span>")
+							return 0
+					else //Organ's species is different from body
+						if(OE.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky feet!</span>")
+							return 0
+
 				if(H.shoes)
 					if(automatic)
 						if(H.check_for_open_slot(src))

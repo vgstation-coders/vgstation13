@@ -768,6 +768,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.status &= ~ORGAN_DESTROYED
 	src.status &= ~ORGAN_PEG
 	src.status |= ORGAN_ROBOT
+	src.species = null
 	src.destspawn = 0
 	for (var/datum/organ/external/T in children)
 		if(T)
@@ -782,6 +783,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.status &= ~ORGAN_DESTROYED
 	src.status &= ~ORGAN_ROBOT
 	src.status |= ORGAN_PEG
+	src.species = null
 	src.wounds.len = 0
 	for (var/datum/organ/external/T in children)
 		if(T)
