@@ -95,6 +95,21 @@
 /mob/camera/blob/emote(var/act,var/m_type=1,var/message = null)
 	return
 
+/mob/camera/blob/ex_act()
+	return
+
+/mob/camera/blob/singularity_act()
+	return
+
+/mob/camera/blob/cultify()
+	return
+
+/mob/camera/blob/singuloCanEat()
+	return 0
+
+/mob/camera/blob/singularity_pull()
+	return
+
 /mob/camera/blob/blob_act()
 	return
 

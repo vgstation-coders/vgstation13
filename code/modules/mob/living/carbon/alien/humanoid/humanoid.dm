@@ -68,11 +68,11 @@
 	updatehealth()
 
 /mob/living/carbon/alien/humanoid/blob_act()
-	..()
 	if(flags & INVULNERABLE)
 		return
-	if(stat == 2)
+	if(stat == DEAD)
 		return
+	..()
 	var/shielded = 0
 	var/damage = null
 	if(stat != 2)

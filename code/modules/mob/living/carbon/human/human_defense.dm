@@ -406,12 +406,13 @@ emp_act
 
 
 /mob/living/carbon/human/blob_act()
-	..()
 	if(flags & INVULNERABLE)
 		return
-	if(stat == DEAD)
+	if((stat == DEAD) && (cloneloss < 200))
+		..()
 		adjustCloneLoss(rand(5,25))
 	else
+		..()
 		show_message("<span class='warning'>The blob attacks you!</span>")
 		var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
 		var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
