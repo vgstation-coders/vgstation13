@@ -9,4 +9,4 @@ changes:
   - rscadd: Admins can set the looks of every blobs in the world by the push of a new button under the Fun tab.
   - rscadd: Resource blobs now look darker if the overmind they were connected to has died. Other overminds can hover near it to take ownership of them and re-activate them.
   - tweak: Overminds are now immune to singularities, their pull, and Nar-Sie.
-  - rscadd: When a blob gets pulsed, it will now hurt any mob standing on their tile. The "telescience teleporting you right next to the core so you can destroy it without any danger" strategy is now suicide, unless you have a really good armor, a really powerful gun, and even then it will require some testing.
+  - rscadd: When a blob gets pulsed, it will now hurt any mob standing on their tile. Telescience teleporting you right next to the core so you can destroy it without any danger is no longer a viable strategy, unless you have a really good armor, a really powerful gun, and even then it will require some testing.
