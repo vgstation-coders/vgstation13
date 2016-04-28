@@ -1118,7 +1118,7 @@ default behaviour is:
 			return 1
 		return 0
 
-/mob/living/Bump(atom/movable/AM as mob|obj, yes)
+/mob/living/Bump(atom/movable/AM as mob|obj, yes = 1)
 	spawn(0)
 		if ((!( yes ) || now_pushing) || !loc)
 			return
