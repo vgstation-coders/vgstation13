@@ -14,7 +14,6 @@
 	response_harm   = "hits the"
 	meat_type = null
 	see_in_dark = 8 //Needs to see in darkness to snap in darkness
-	flags |= INVULNERABLE
 	var/response_snap = "snapped the neck of" //Past tense because it "happened before you could see it"
 	var/response_snap_target = "In the blink of an eye, something grabs you and snaps your neck!"
 	var/snap_sound = list('sound/scp/firstpersonsnap.ogg','sound/scp/firstpersonsnap2.ogg','sound/scp/firstpersonsnap3.ogg')
@@ -22,6 +21,10 @@
 	var/hibernate = 0 //Disables SCP until toggled back to 0
 	var/scare_played = 0 //Did we rape everyone's ears yet ?
 	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent //Graciously stolen from spider code
+
+/mob/living/simple_animal/sculpture/New()
+	. = ..()
+	flags |= INVULNERABLE
 
 /mob/living/simple_animal/sculpture/Life()
 	if(timestopped)
