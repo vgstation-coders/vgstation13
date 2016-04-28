@@ -4,6 +4,7 @@
 var/list/blobs = list()
 var/list/blob_cores = list()
 var/list/blob_nodes = list()
+var/list/blob_resources = list()
 
 
 /datum/game_mode/blob

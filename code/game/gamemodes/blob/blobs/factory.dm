@@ -1,14 +1,44 @@
 /obj/effect/blob/factory
 	name = "factory blob"
+	icon_state = "factory"
 	health = 100
 	maxhealth = 100
 	fire_resist = 2
 	var/list/spores = list()
 	var/max_spores = 2
 	var/spore_delay = 50
+	spawning = 0
+	layer = 6.6
+
+/obj/effect/blob/factory/New(loc,newlook = "new")
+	..()
+	if(blob_looks[looks] == 64)
+		flick("morph_factory",src)
+		spore_delay = world.time + (2 SECONDS)
+
+/obj/effect/blob/factory/update_looks(var/right_now = 0)
+	..()
+	switch(blob_looks[looks])
+		if(64)
+			icon_state = "factory"
+			pixel_x = -16
+			pixel_y = -16
+			layer = 6.6
+			if(right_now)
+				spawning = 0
+		if(32)
+			icon_state = "blob_factory"
+			pixel_x = 0
+			pixel_y = 0
+			layer = 3
+			overlays.len = 0
+
+	if(right_now)
+		update_icon()
 
 /obj/effect/blob/factory/update_health()
 	if(health <= 0)
+		dying = 1
 		playsound(get_turf(src), 'sound/effects/blobsplatspecial.ogg', 50, 1)
 		qdel(src)
 		return
@@ -20,7 +50,15 @@
 	if(spore_delay > world.time)
 		return 0
 	spore_delay = world.time + (40 SECONDS) // 30 seconds
-	new/mob/living/simple_animal/hostile/blobspore(src.loc, src)
+
+	if(blob_looks[looks] == 64)
+		flick("factorypulse",src)
+		anim(target = loc, a_icon = icon, flick_anim = "sporepulse", sleeptime = 15, lay = 7.2, offX = -16, offY = -16, alph = 220)
+		spawn(10)
+			new/mob/living/simple_animal/hostile/blobspore(src.loc, src)
+	else
+		new/mob/living/simple_animal/hostile/blobspore(src.loc, src)
+
 	return 1
 
 /obj/effect/blob/factory/Destroy()
@@ -28,6 +66,24 @@
 		for(var/mob/living/simple_animal/hostile/blobspore/S in spores)
 			S.Die()
 	..()
+
+/obj/effect/blob/factory/update_icon(var/spawnend = 0)
+	if(blob_looks[looks] == 64)
+		spawn(1)
+			overlays.len = 0
+
+			overlays += image(icon,"roots", layer = 3)
+
+			if(!spawning)
+				for(var/obj/effect/blob/B in orange(src,1))
+					overlays += image(icon,"factoryconnect",dir = get_dir(src,B), layer = layer+0.1)
+			if(spawnend)
+				spawn(10)
+					update_icon()
+
+			..()
+
+/////////////BLOB SPORE///////////////////////////////////////////////////////////////////////////////////////////////
 
 /mob/living/simple_animal/hostile/blobspore
 	name = "Blob Spore"
@@ -50,6 +106,7 @@
 	max_co2 = 0
 	minbodytemp = 0
 	maxbodytemp = 360
+	layer = 7.2
 
 /mob/living/simple_animal/hostile/blobspore/New(loc, var/obj/effect/blob/factory/linked_node)
 	if(istype(linked_node))
@@ -78,8 +135,3 @@
 	if(factory)
 		factory.spores -= src
 	..()
-
-
-/obj/effect/blob/factory/update_icon()
-	..()
-	overlays += image(icon,"factory",layer = 6.9)
