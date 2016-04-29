@@ -113,6 +113,9 @@
 /mob/camera/blob/blob_act()
 	return
 
+/mob/camera/blob/Process_Spacemove(var/check_drift = 0)
+	return 1
+
 /mob/camera/blob/Stat()
 	..()
 	if (statpanel("Blob Status"))
