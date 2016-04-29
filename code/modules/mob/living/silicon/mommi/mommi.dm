@@ -36,6 +36,157 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 	speed = 0
 
+
+/mob/living/silicon/robot/mommi/sammi
+	name = "Stationary Assembler MMI"
+	real_name = "Stationary Assembler MMI"
+	icon = 'icons/mob/robots.dmi'
+	icon_state = "sammi"
+	maxHealth = 60
+	health = 60
+	keeper=1 // 0 = No, 1 = Yes (Disables speech and common radio.)
+	picked = 1
+	subtype="sammi"
+	prefix = "Stationary Assembler MMI"
+	canmove = 0
+	..()
+
+
+/mob/living/silicon/robot/mommi/sammi/update_canmove()
+	return 0
+
+/mob/living/silicon/robot/mommi/sammi/attackby(obj/item/W, mob/user)
+
+
+	if(istype(W, /obj/item/stack/cable_coil) && wiresexposed)
+		var/obj/item/stack/cable_coil/coil = W
+		adjustFireLoss(-30)
+		updatehealth()
+		coil.use(1)
+		for(var/mob/O in viewers(user, null))
+			O.show_message(text("<span class='warning'>[user] has fixed some of the burnt wires on [src]!</span>"), 1)
+
+	else if (iscrowbar(W))	// crowbar means open or close the cover
+		if(stat == DEAD)
+			to_chat(user, "You pop the MMI off the base.")
+			spawn(0)
+				qdel(src)
+			return
+		if(opened)
+			if(mmi && wiresexposed && wires.IsAllCut())
+				//Cell is out, wires are exposed, remove MMI, produce damaged chassis, baleet original mob.
+				to_chat(user, "You jam the crowbar into \the [src] and begin levering [mmi].")
+				if (do_after(user, src,3))
+					to_chat(user, "You damage some parts of the casing, but eventually manage to rip out [mmi]!")
+					var/limbs = list(/obj/item/robot_parts/l_arm, /obj/item/robot_parts/r_arm)
+					for(var/newlimb = 1 to rand(2, 4))
+						var/limb_to_spawn = pick(limbs)
+						limbs -= limb_to_spawn
+
+						new limb_to_spawn(src.loc)
+					// This doesn't work.  Don't use it.
+					//src.Destroy()
+					// del() because it's infrequent and mobs act weird in qdel.
+					qdel(src)
+					return
+			else
+				to_chat(user, "You close the cover.")
+				opened = 0
+				updateicon()
+		else
+			if(locked)
+				to_chat(user, "The cover is locked and cannot be opened.")
+			else
+				to_chat(user, "You open the cover.")
+				opened = 1
+				updateicon()
+
+	else if (istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
+		if(wiresexposed)
+			to_chat(user, "Close the panel first.")
+		else if(cell)
+			to_chat(user, "There is a power cell already installed.")
+		else
+			user.drop_item(W, src)
+			cell = W
+			to_chat(user, "You insert the power cell.")
+//			chargecount = 0
+		updateicon()
+
+	else if (iswirecutter(W) || istype(W, /obj/item/device/multitool))
+		if (wiresexposed)
+			wires.Interact(user)
+		else
+			to_chat(user, "You can't reach the wiring.")
+
+	else if(isscrewdriver(W) && opened && !cell)	// haxing
+		wiresexposed = !wiresexposed
+		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
+		updateicon()
+
+	else if(isscrewdriver(W) && opened && cell)	// radio
+		if(radio)
+			radio.attackby(W,user)//Push it to the radio to let it handle everything
+		else
+			to_chat(user, "Unable to locate a radio.")
+		updateicon()
+
+	else if(istype(W, /obj/item/device/encryptionkey/) && opened)
+		if(radio)//sanityyyyyy
+			radio.attackby(W,user)//GTFO, you have your own procs
+		else
+			to_chat(user, "Unable to locate a radio.")
+/*
+	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
+		if(emagged)//still allow them to open the cover
+			to_chat(user, "The interface seems slightly damaged")
+		if(opened)
+			to_chat(user, "You must close the cover to swipe an ID card.")
+		else
+			if(allowed(usr))
+				locked = !locked
+				to_chat(user, "You [ locked ? "lock" : "unlock"] [src]'s interface.")
+				updateicon()
+			else
+				to_chat(user, "<span class='warning'>Access denied.</span>")
+*/
+
+	else if(istype(W, /obj/item/weapon/wrench)) // Need to make this not bludgeon them
+		if(anchored)
+			to_chat(user, "<span class='notice'>You unbolt the SAMMI from the floor.</span>")
+			anchored = 0
+		else
+			to_chat(user, "<span class='notice'>You anchor the SAMMI to the floor.</span>")
+			anchored = 1
+		return 0
+
+
+	else if(istype(W, /obj/item/borg/upgrade/))
+		var/obj/item/borg/upgrade/U = W
+		if(!opened)
+			to_chat(user, "You must access the borgs internals!")
+		else if(!src.module && U.require_module)
+			to_chat(user, "The borg must choose a module before he can be upgraded!")
+		else if(U.locked)
+			to_chat(user, "The upgrade is locked and cannot be used yet!")
+		else
+			if(istype(U, /obj/item/borg/upgrade/reset))
+				to_chat(user, "<span class='warning'>No.</span>")
+				return
+			if(U.action(src))
+				to_chat(user, "You apply the upgrade to [src]!")
+				user.drop_item(U, src)
+			else
+				to_chat(user, "Upgrade error!")
+
+	else if(istype(W, /obj/item/device/camera_bug))
+		help_shake_act(user)
+		return 0
+
+	else
+		spark_system.start()
+		return ..()
+
 /mob/living/carbon/can_use_hands()
 	return 1
 
@@ -96,6 +247,10 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(connected_ai && keeper)
 		to_chat(world, "<span class='warning'>ASSERT FAILURE: connected_ai && keeper in mommi.dm</span>")
 
+/mob/living/silicon/robot/mommi/sammi/New(loc)
+	..()
+	module = new /obj/item/weapon/robot_module/mommi/sammi(src)
+	laws = new sammi_base_law_type
 
 /mob/living/silicon/robot/mommi/choose_icon()
 	var/icontype = input("Select an icon!", "Mobile MMI", null) as null|anything in list("Basic", "Hover", "Keeper", "RepairBot", "Replicator", "Prime", "Scout")
