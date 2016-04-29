@@ -392,3 +392,4 @@ var/global/sammi_base_law_type = /datum/ai_laws/sammi
 		"Fight for what's right.",
 		"Fight for your life.",
 	)
+
