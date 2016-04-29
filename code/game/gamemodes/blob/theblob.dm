@@ -56,6 +56,7 @@ var/list/blob_looks
 	layer = 6
 	var/spawning = 2
 	var/dying = 0
+	var/mob/camera/blob/overmind = null
 
 	var/looks = "new"
 
@@ -117,9 +118,11 @@ var/list/blob_looks
 
 	if(!manual_remove)
 		for(var/obj/effect/blob/core/C in range(loc,4))
-			if(C.overmind && (C.overmind.blob_warning <= world.time))
+			if((C != src) && C.overmind && (C.overmind.blob_warning <= world.time))
 				C.overmind.blob_warning = world.time + (10 SECONDS)
 				to_chat(C.overmind,"<span class='danger'>A blob died near your core!</span>")
+
+	overmind = null
 	..()
 
 /obj/effect/blob/projectile_check()

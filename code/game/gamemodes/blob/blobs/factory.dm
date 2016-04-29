@@ -5,7 +5,6 @@
 	health = 100
 	maxhealth = 100
 	fire_resist = 2
-	var/mob/camera/blob/overmind = null
 	var/list/spores = list()
 	var/max_spores = 2
 	var/spore_delay = 50

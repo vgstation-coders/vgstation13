@@ -5,7 +5,6 @@
 	health = 30
 	maxhealth = 30
 	fire_resist = 2
-	var/mob/camera/blob/overmind = null
 	var/resource_delay = 0
 	spawning = 0
 	layer = 6.4

@@ -5,7 +5,6 @@
 	health = 100
 	maxhealth = 100
 	fire_resist = 2
-	var/mob/camera/blob/overmind = null
 	custom_process=1
 	layer = 6.8
 	spawning = 0
