@@ -457,10 +457,18 @@ var/global/list/alert_overlays_global = list()
 	air_properties_vary_with_direction = 1
 	flags = ON_BORDER
 
-/obj/machinery/door/firedoor/border_only/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/door/firedoor/border_only/Cross(atom/movable/mover, turf/target = loc, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
+	if(get_dir(mover.loc, target) == dir) //Make sure looking at appropriate border
+		//if(air_group) return 0
+		return !density
+	else
+		return 1
 
+/obj/machinery/door/firedoor/border_only/Uncross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover) && mover.checkpass(PASSGLASS))
+		return 1
 	if(get_dir(loc, target) == dir) //Make sure looking at appropriate border
 		//if(air_group) return 0
 		return !density

@@ -668,8 +668,8 @@ About the new airlock wires panel:
 			if (user)
 				src.attack_ai(user)
 
-/obj/machinery/door/airlock/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if (src.isElectrified())
+/obj/machinery/door/airlock/Cross(atom/movable/mover, turf/target = loc, height=1.5, air_group = 0)
+	if (isElectrified())
 		if (istype(mover, /obj/item))
 			var/obj/item/i = mover
 			if (i.materials && (i.materials.getAmount(MAT_IRON) > 0))

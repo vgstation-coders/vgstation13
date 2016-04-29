@@ -1,4 +1,6 @@
-/atom/proc/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/atom/proc/Cross() //It literally BLOWS my mind that you can do this without severe repercussions
+
+/atom/movable/Cross(atom/movable/mover, turf/target = loc, height=1.5, air_group = 0)
 	//Purpose: Determines if the object (or airflow) can pass this atom.
 	//Called by: Movement, airflow.
 	//Inputs: The moving atom (optional), target turf, "height" and air group
