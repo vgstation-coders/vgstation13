@@ -619,6 +619,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.status &= ~ORGAN_BLEEDING
 		src.status &= ~ORGAN_SPLINTED
 		src.status &= ~ORGAN_DEAD
+		src.species = null
+		
 		for(var/implant in implants)
 			qdel(implant)
 
