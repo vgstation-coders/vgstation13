@@ -1,0 +1,6 @@
+author: Intigracy
+delete-after: True
+changes: 
+- tweak: "Citalopram and Paroxetine are no longer useless fluff bay chemicals. They now remove hallucinations when they're in your system, with Parox being the stronger of the two. Overdosing (15 units) on either of these results in brain damage."
+- tweak: "Citalopram removes 20 units of hallucination at a time, plus 5 units of mindbreaker, and is made from a unit of mindbreaker, a unit of oxygen, and a unit of inaprovaline (2 units as a result)."
+- tweak: "Paroxetine removes 90 units of hallucination at a time, plus 10 units of mindbreaker and 5 units of spiritbreaker, and is made from a unit of citalopram and a unit of spiritbreaker (2 units as a result). It has a 10% chance per tick to instead deal 1 clone damage to you instead of removing hallucinations."

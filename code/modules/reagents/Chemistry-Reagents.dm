@@ -1869,6 +1869,8 @@
 		holder.remove_reagent("zombiepowder", 5)
 	if(holder.has_reagent("mindbreaker"))
 		holder.remove_reagent("mindbreaker", 5)
+	if(holder.has_reagent("spiritbreaker"))
+		holder.remove_reagent("spiritbreaker", 5)
 	M.hallucination = 0
 	M.setBrainLoss(0)
 	M.disabilities = 0
@@ -2217,6 +2219,63 @@
 		M.dizziness += 100
 		M.confused += 2
 	data++
+
+#define ANTIDEPRESSANT_MESSAGE_DELAY 60*10 //1 minute
+/datum/reagent/citalopram
+	name = "Citalopram"
+	id = "citalopram"
+	description = "Stabilizes the mind a little."
+	reagent_state = LIQUID
+	color = "#C8A5DC"
+	overdose = REAGENTS_OVERDOSE/2
+	data = 0
+
+/datum/reagent/citalopram/on_mob_life(var/mob/living/M as mob)
+	if(!M) M = holder.my_atom
+
+	if(volume > REAGENTS_OVERDOSE)
+		M.adjustBrainLoss(2)
+
+	if(!(..()))
+		if(world.time > data + ANTIDEPRESSANT_MESSAGE_DELAY)
+			to_chat(M, "<span class='notice'>Your concentration improves.</span>")
+			data = world.time
+		M.hallucination -= 20
+		if(holder.has_reagent("mindbreaker"))
+			holder.remove_reagent("mindbreaker", 5)
+
+/datum/reagent/paroxetine
+	name = "Paroxetine"
+	id = "paroxetine"
+	description = "Stabilizes the mind greatly, but has possible adverse effects."
+	reagent_state = LIQUID
+	color = "#C8A5DC"
+	overdose = REAGENTS_OVERDOSE/2
+	data = 0
+
+/datum/reagent/paroxetine/on_mob_life(var/mob/living/M as mob)
+	if(!M)
+		M = holder.my_atom
+
+	if(volume > REAGENTS_OVERDOSE)
+		M.adjustBrainLoss(5)
+
+	if(!(..()))
+		data = world.time
+		if(prob(90))
+			if(world.time > data + ANTIDEPRESSANT_MESSAGE_DELAY)
+				to_chat(M, "<span class='notice'>Your concentration greatly improves.</span>")
+				data = world.time
+			M.hallucination -= 90
+			if(holder.has_reagent("mindbreaker"))
+				holder.remove_reagent("mindbreaker", 10)
+			if(holder.has_reagent("spiritbreaker"))
+				holder.remove_reagent("spiritbreaker", 5)
+		else
+			M.adjustCloneLoss(1)
+			if(world.time > data + ANTIDEPRESSANT_MESSAGE_DELAY)
+				to_chat(M, "<span class = 'warning'>You feel weaker.</span>")
+				data = world.time
 
 /datum/reagent/methylin
 	name = "Methylin"
