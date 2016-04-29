@@ -83,21 +83,18 @@
 
 	var/obj/item/W = get_active_hand()
 	var/item_attack_delay = 0
+	
+	if(W == A)
+		/*next_move = world.time + 6
+		if(W.flags&USEDELAY)
+			next_move += 5*/
+		W.attack_self(src, params)
+		if(hand)
+			update_inv_l_hand(0)
+		else
+			update_inv_r_hand(0)
 
-	if(W)
-		item_attack_delay = W.attack_delay
-
-		if(W == A)
-			/*next_move = world.time + 6
-			if(W.flags&USEDELAY)
-				next_move += 5*/
-			W.attack_self(src, params)
-			if(hand)
-				update_inv_l_hand(0)
-			else
-				update_inv_r_hand(0)
-
-			return
+		return
 
 	if(!isturf(loc)) // This is going to stop you from telekinesing from inside a closet, but I don't shed many tears for that
 		return
@@ -105,7 +102,7 @@
 	// Allows you to click on a box's contents, if that box is on the ground, but no deeper than that
 	if(A.Adjacent(src, MAX_ITEM_DEPTH)) // see adjacent.dm
 		if(W)
-
+			item_attack_delay = W.attack_delay
 			var/resolved = W.preattack(A, src, 1, params)
 			if(!resolved)
 				resolved = A.attackby(W,src, params)
