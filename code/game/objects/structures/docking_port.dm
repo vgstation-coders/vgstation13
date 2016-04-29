@@ -42,6 +42,9 @@ var/global/list/all_docking_ports = list()
 /obj/structure/docking_port/ex_act()
 	return //we are eternal
 
+/obj/structure/docking_port/blob_act()
+	return //we are eternal
+
 /obj/structure/docking_port/cultify()
 	return //we are eternal
 

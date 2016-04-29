@@ -1,9 +1,11 @@
 /obj/effect/blob/node
 	name = "blob node"
 	icon_state = "node"
+	desc = "Some pulsating blob creature thingy"
 	health = 100
 	maxhealth = 100
 	fire_resist = 2
+	var/mob/camera/blob/overmind = null
 	custom_process=1
 	layer = 6.8
 	spawning = 0
@@ -25,6 +27,8 @@
 
 /obj/effect/blob/node/Destroy()
 	blob_nodes -= src
+	if(!manual_remove && overmind)
+		to_chat(overmind,"<span class='warning'>A node blob that you had created has been destroyed.</span>")
 	processing_objects.Remove(src)
 	..()
 

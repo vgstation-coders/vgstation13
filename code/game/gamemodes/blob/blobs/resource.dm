@@ -1,6 +1,7 @@
 /obj/effect/blob/resource
 	name = "resource blob"
 	icon_state = "resource"
+	desc = "Some smoke-producing blob creature thingy"
 	health = 30
 	maxhealth = 30
 	fire_resist = 2
@@ -22,6 +23,8 @@
 
 /obj/effect/blob/resource/Destroy()
 	blob_resources -= src
+	if(!manual_remove && overmind)
+		to_chat(overmind,"<span class='warning'>You lost a resource blob.</span>")
 	..()
 
 /obj/effect/blob/resource/update_health()
@@ -36,6 +39,7 @@
 	if(!overmind)
 		var/mob/camera/blob/B = (locate() in range(src,1))
 		if(B)
+			to_chat(B,"<span class='notice'>You take control of the resource blob.</span>")
 			overmind = B
 			update_icon()
 	..()
