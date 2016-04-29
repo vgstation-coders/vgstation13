@@ -512,7 +512,7 @@
 			visible_message("<span class='notice'>[user] dunks [W] into the [src]!</span>")
 			return
 
-/obj/structure/holohoop/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/holohoop/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover,/obj/item) && mover.throwing)
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))

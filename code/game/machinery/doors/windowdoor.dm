@@ -68,7 +68,7 @@
 		close()
 	return
 
-/obj/machinery/door/window/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/door/window/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if(get_dir(loc, target) == dir) //Make sure looking at appropriate border
@@ -82,7 +82,7 @@
 	return !density || (dir != to_dir) || check_access(ID)
 
 
-/obj/machinery/door/window/CheckExit(atom/movable/mover as mob|obj, turf/target as turf)
+/obj/machinery/door/window/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if(get_dir(loc, target) == dir)

@@ -144,7 +144,7 @@
 		health -= damage
 		healthcheck()
 
-/obj/structure/window/CheckExit(var/atom/movable/O, var/turf/target)
+/obj/structure/window/Uncross(var/atom/movable/O, var/turf/target)
 
 	if(istype(O) && O.checkpass(PASSGLASS))
 		return 1
@@ -152,7 +152,7 @@
 		return !density
 	return 1
 
-/obj/structure/window/CanPass(atom/movable/mover, turf/target, height = 0)
+/obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
 
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
@@ -400,7 +400,7 @@
 	if(!is_fulltile())
 		if(get_dir(user, src) & dir)
 			for(var/obj/O in loc)
-				if(!O.CanPass(user, user.loc, 1, 0))
+				if(!O.Cross(user, user.loc, 1, 0))
 					return 0
 	return 1
 

@@ -294,7 +294,7 @@
 /obj/structure/table/attack_tk() // no telehulk sorry
 	return
 
-/obj/structure/table/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/table/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 	if(istype(mover,/obj/item/projectile))
 		return (check_cover(mover,target))
@@ -343,7 +343,7 @@
 				return 1
 	return 1
 
-/obj/structure/table/CheckExit(atom/movable/O as mob|obj, target as turf)
+/obj/structure/table/Uncross(atom/movable/O as mob|obj, target as turf)
 	if(istype(O) && O.checkpass(PASSTABLE))
 		return 1
 	if (flipped)
@@ -697,7 +697,7 @@
 		del(src)
 		return
 
-/obj/structure/rack/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/rack/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 	if(src.density == 0) //Because broken racks -Agouri |TODO: SPRITE!|
 		return 1

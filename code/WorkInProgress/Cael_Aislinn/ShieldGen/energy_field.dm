@@ -40,7 +40,7 @@
 		invisibility = 101
 		density = 0
 
-/obj/effect/energy_field/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/effect/energy_field/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	//Purpose: Determines if the object (or airflow) can pass this atom.
 	//Called by: Movement, airflow.
 	//Inputs: The moving atom (optional), target turf, "height" and air group
