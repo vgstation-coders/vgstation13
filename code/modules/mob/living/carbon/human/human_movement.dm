@@ -18,13 +18,13 @@
 		if (bodytemperature < 183.222)
 			tally += (283.222 - bodytemperature) / 10 * 1.75
 	else if (undergoing_hypothermia())
-		tally += 4*undergoing_hypothermia()
+		tally += 2*undergoing_hypothermia()
 
 	//(/vg/ EDIT disabling for now) handle_embedded_objects() //Moving with objects stuck in you can cause bad times.
 
-	if(reagents.has_reagent("nuka_cola")) tally -= 4
+	if(reagents.has_reagent("nuka_cola")) tally -= 10
 
-	if((M_RUN in mutations)) tally -= 5
+	if((M_RUN in mutations)) tally -= 10
 
 	var/health_deficiency = (100 - health - halloss)
 	if(health_deficiency >= 40) tally += (health_deficiency / 25)
@@ -33,30 +33,30 @@
 	if (hungry >= 70) tally += hungry/50
 
 	if(wear_suit)
-		tally += (wear_suit.slowdown * 4) // Temporary until slowdown can be refactored for all items
+		tally += wear_suit.slowdown
 
 	if(shoes)
-		tally += (shoes.slowdown * 2) // Temporary until slowdown can be refactored for all items
+		tally += shoes.slowdown
 
 	if(l_hand && (l_hand.flags & SLOWDOWN_WHEN_CARRIED))
-		tally += (l_hand.slowdown * 4) // Temporary until slowdown can be refactored for all items
+		tally += l_hand.slowdown
 
 	if(r_hand && (r_hand.flags & SLOWDOWN_WHEN_CARRIED))
-		tally += (r_hand.slowdown * 4) // Temporary until slowdown can be refactored for all items
+		tally += r_hand.slowdown
 
 	for(var/organ_name in list("l_foot","r_foot","l_leg","r_leg"))
 		var/datum/organ/external/E = get_organ(organ_name)
 		if(!E || (E.status & ORGAN_DESTROYED))
-			tally += 10
+			tally += 4
 		if(E.status & ORGAN_SPLINTED)
-			tally += 1
+			tally += 0.5
 		else if(E.status & ORGAN_BROKEN)
-			tally += 6
+			tally += 1.5
 
 	if(shock_stage >= 50) tally += 3
 
 	if(M_FAT in src.mutations)
-		tally += 4
+		tally += 1.5
 
 	var/skate_bonus = 0
 	var/disease_slow = 0
@@ -67,41 +67,14 @@
 
 	if(reagents.has_reagent("hyperzine"))
 		if(dna.mutantrace == "slime")
-			tally += 4
+			tally *= 2
 		else
-			tally -= 4
-
-	//begin caffeine
-	var/caffeinated = 0
-
-	if(reagents.has_reagent("coffee"))
-		caffeinated = 1
-	if(reagents.has_reagent("icecoffee"))
-		caffeinated = 1
-
-	if(reagents.has_reagent("soy_latte"))
-		caffeinated = 1
-
-	if(reagents.has_reagent("cafe_latte"))
-		caffeinated = 1
-
-	if(reagents.has_reagent("tea"))
-		caffeinated = 1
-
-	if(reagents.has_reagent("icetea"))
-		caffeinated = 1
-
-	if(reagents.has_reagent("arnoldpalmer"))
-		caffeinated = 1
-
-	if(caffeinated)
-		tally -= 2
-
+			tally -= 10
 
 	if(reagents.has_reagent("frostoil") && dna.mutantrace == "slime")
-		tally += 10
+		tally *= 5
 
-	return max((tally+config.human_delay), -100) //cap at -100 as the 'fastest'
+	return max((tally+config.human_delay), -1) //cap at -1 as the 'fastest'
 
 /mob/living/carbon/human/Process_Spacemove(var/check_drift = 0)
 	//Can we act

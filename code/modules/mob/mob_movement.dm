@@ -304,7 +304,7 @@
 		move_delay = max(move_delay,1)
 		if(mob.movement_speed_modifier)
 			move_delay *= (1/mob.movement_speed_modifier)
-		mob.delayNextMove(move_delay*0.18)// *0.18 For speed refactoring; hyperzine, shoes, coffee, vtec, etc
+		mob.delayNextMove(move_delay)
 		//Something with pulling things
 		if(Findgrab)
 			var/list/L = mob.ret_grab()
