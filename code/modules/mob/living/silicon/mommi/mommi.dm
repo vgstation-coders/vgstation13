@@ -252,6 +252,38 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	module = new /obj/item/weapon/robot_module/mommi/sammi(src)
 	laws = new sammi_base_law_type
 
+
+/mob/living/silicon/robot/mommi/sammi/proc/transfer_personality(var/client/candidate)
+
+
+	if(!candidate)
+		return
+
+	src.mind = candidate.mob.mind
+	src.ckey = candidate.ckey
+	if(src.mind)
+		src.mind.assigned_role = "SAMMI"
+
+/mob/living/silicon/robot/mommi/sammi/ghost()
+	if(src.subtype == "sammi")
+		if(client && key)
+			ghostize(1)
+
+
+/mob/living/silicon/robot/mommi/sammi/attack_ghost(var/mob/dead/observer/O)
+	if(!(src.key))
+		if(O.can_reenter_corpse)
+			var/response = alert(O,"Do you want to take it over?","This SAMMI has no soul","Yes","No")
+			if(response == "Yes")
+				if(!(src.key))
+					src.transfer_personality(O.client)
+				else if(src.key)
+					to_chat(src, "<span class='notice'>Someone has already began controlling this SAMMI. Try another! </span>")
+		else if(!(O.can_reenter_corpse))
+			to_chat(O,"<span class='notice'>While the SAMMI may be souless, you have recently ghosted and thus are not allowed to take over for now.</span>")
+
+
+
 /mob/living/silicon/robot/mommi/choose_icon()
 	var/icontype = input("Select an icon!", "Mobile MMI", null) as null|anything in list("Basic", "Hover", "Keeper", "RepairBot", "Replicator", "Prime", "Scout")
 	if(!icontype)
