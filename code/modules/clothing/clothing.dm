@@ -16,7 +16,7 @@
 	. = ..(M, slot, 1) //Default return value. If 1, item can be equipped. If 0, it can't be.
 	if(!.) return //Default return value is 0 - don't check for species
 
-	if(species_restricted && istype(M,/mob/living/carbon/human) && (slot != 15 && slot != 16))
+	if(species_restricted && istype(M,/mob/living/carbon/human) && (slot != slot_l_store && slot != slot_r_store))
 
 		var/wearable = null
 		var/exclusive = null
