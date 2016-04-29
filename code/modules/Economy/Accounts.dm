@@ -227,7 +227,7 @@ var/global/list/all_money_accounts = list()
 					dat += {"<br>
 						<a href='?src=\ref[src];choice=view_accounts_list;'>Return to accounts list</a><hr>
 						<b>Account number:</b> #[detailed_account_view.account_number]<br>
-						<b>Account holder:<	/b> [detailed_account_view.owner_name]<br>
+						<b>Account holder:</b> [detailed_account_view.owner_name]<br>
 						<b>Account balance:</b> $[detailed_account_view.money]<br>
 						<b>Assigned wage payout:</b> $[detailed_account_view.wage_gain]<br>
 						<table border=1 style='width:100%'>
