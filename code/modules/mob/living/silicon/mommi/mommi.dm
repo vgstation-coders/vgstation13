@@ -44,7 +44,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	icon_state = "sammi"
 	maxHealth = 60
 	health = 60
-	keeper=1 // 0 = No, 1 = Yes (Disables speech and common radio.)
+	keeper=0 // 0 = No, 1 = Yes (Disables speech and common radio.)
 	picked = 1
 	subtype="sammi"
 	prefix = "Stationary Assembler MMI"
