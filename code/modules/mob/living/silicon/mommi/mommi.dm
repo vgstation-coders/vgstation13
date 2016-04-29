@@ -268,6 +268,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(src.subtype == "sammi")
 		if(client && key)
 			ghostize(1)
+			src.visible_message("<span class=\"warning\">[src] disconnects from the network...attempting to reconnect!</span>")
 
 
 /mob/living/silicon/robot/mommi/sammi/attack_ghost(var/mob/dead/observer/O)
@@ -277,6 +278,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			if(response == "Yes")
 				if(!(src.key))
 					src.transfer_personality(O.client)
+					src.visible_message("<span class=\"warning\">[src] is connected to the SAMMI network!</span>")
 				else if(src.key)
 					to_chat(src, "<span class='notice'>Someone has already began controlling this SAMMI. Try another! </span>")
 		else if(!(O.can_reenter_corpse))
