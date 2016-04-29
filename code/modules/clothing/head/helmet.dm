@@ -23,7 +23,7 @@
 	if(spamcheck)
 		return
 	playsound(get_turf(src), 'sound/voice/woopwoop.ogg', 100, 1, vary = 0)
-	user.show_message("<span class='warning'>[user]'s [name] rasps, \"WOOP WOOP!\"</span>",1)
+	visible_message("<span class='warning'>[user]'s [name] rasps, \"WOOP WOOP!\"</span>",1)
 
 	spamcheck = 1
 	spawn(15)
