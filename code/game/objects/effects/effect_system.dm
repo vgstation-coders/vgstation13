@@ -920,10 +920,7 @@ steam.start() -- spawns the effect
 /obj/structure/foamedmetal/attack_hand(var/mob/user)
 	user.delayNextAttack(10)
 	if ((M_HULK in user.mutations) || (prob(75 - metal*25)))
-		to_chat(user, "<span class='notice'>You smash through \the [src].</span>")
-		for(var/mob/O in oviewers(user))
-			if ((O.client && !( O.blinded )))
-				to_chat(O, "<span class='warning'>[user] smashes through \the [src].</span>")
+		user.visible_message("<span class='warning'>[user] smashes through \the [src].</span>","<span class='notice'>You smash through \the [src].</span>")
 		qdel(src)
 	else
 		to_chat(user, "<span class='notice'>You hit \the [src] but bounce off it.</span>")
@@ -940,18 +937,13 @@ steam.start() -- spawns the effect
 	if (istype(I, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = I
 		G.affecting.loc = src.loc
-		for(var/mob/O in viewers(src))
-			if (O.client)
-				to_chat(O, "<span class='warning'>[G.assailant] smashes [G.affecting] through \the [src].</span>")
+		visible_message("<span class='warning'>[G.assailant] smashes [G.affecting] through \the [src].</span>")
 		returnToPool(I)
 		qdel(src)
 		return
 
 	if(prob(I.force*20 - metal*25))
-		to_chat(user, "<span class='notice'>You smash through \the [src] with \the [I].</span>")
-		for(var/mob/O in oviewers(user))
-			if ((O.client && !( O.blinded )))
-				to_chat(O, "<span class='warning'>[user] smashes through \the [src].</span>")
+		user.visible_message("<span class='warning'>[user] smashes through \the [src].</span>","<span class='notice'>You smash through \the [src] with \the [I].</span>")
 		qdel(src)
 	else
 		to_chat(user, "<span class='notice'>You hit \the [src] to no effect.</span>")
@@ -992,14 +984,10 @@ steam.start() -- spawns the effect
 /turf/simulated/floor/foamedmetal/attack_hand(mob/user as mob)
 	user.delayNextAttack(10)
 	if ((M_HULK in user.mutations) || (prob(50)))
-		to_chat(user, "<span class='notice'>You smash through \the [src].</span>")
-		for(var/mob/O in oviewers(user))
-			if ((O.client && !( O.blinded )))
-				to_chat(O, "<span class='warning'>[user] smashes through \the [src].</span>")
+		user.visible_message("<span class='warning'>[user] smashes through \the [src].</span>","<span class='notice'>You smash through \the [src].</span>")
 		src.ChangeTurf(get_base_turf(src.z))
 	else
 		to_chat(user, "<span class='notice'>You hit \the [src] but bounce off it.</span>")
-	return
 
 /turf/simulated/floor/foamedmetal/attackby(obj/item/C as obj, mob/user as mob)
 	if(!(locate(/obj/structure/lattice) in contents))
@@ -1011,18 +999,13 @@ steam.start() -- spawns the effect
 	if (istype(C, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = C
 		G.affecting.loc = src.loc
-		for(var/mob/O in viewers(src))
-			if (O.client)
-				to_chat(O, "<span class='warning'>[G.assailant] smashes [G.affecting] through \the [src].</span>")
+		visible_message("<span class='warning'>[G.assailant] smashes [G.affecting] through \the [src].</span>")
 		returnToPool(C)
 		src.ChangeTurf(get_base_turf(src.z))
 		return
 
 	if(prob(C.force*20 - 25))
-		to_chat(user, "<span class='notice'>You smash through \the [src] with \the [C].</span>")
-		for(var/mob/O in oviewers(user))
-			if ((O.client && !( O.blinded )))
-				to_chat(O, "<span class='warning'>[user] smashes through \the [src].</span>")
+		user.visible_message("<span class='warning'>[user] smashes through \the [src].</span>","<span class='notice'>You smash through \the [src] with \the [C].</span>")
 		src.ChangeTurf(get_base_turf(src.z))
 	else
 		to_chat(user, "<span class='notice'>You hit \the [src] to no effect.</span>")
