@@ -65,7 +65,10 @@
 		if(resource_delay <= world.time)
 			resource_delay = world.time + 10 // 1 second
 			overmind.add_points(point_rate)
-	health = min(maxhealth, health + 1)
+
+	if(health < maxhealth)
+		health = min(maxhealth, health + 1)
+		update_icon()
 
 	if(!spawning)//no expanding on the first Life() tick
 

@@ -38,7 +38,10 @@
 
 	for(var/i = 1; i < 8; i += i)
 		Pulse(5, i)
-	health = min(maxhealth, health + 1)
+
+	if(health < maxhealth)
+		health = min(maxhealth, health + 1)
+		update_icon()
 
 /obj/effect/blob/node/update_health()
 	if(health <= 0)
