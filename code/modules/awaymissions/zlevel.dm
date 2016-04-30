@@ -35,7 +35,7 @@
 		if (!name)
 			continue
 
-		if(!fexists(name))
+		if(!isfile(name))
 			warning("fileList.txt contains a map that does not exist: [name]")
 			continue
 
@@ -49,7 +49,7 @@
 			log_game("Loading away mission [map]")
 
 			var/file = file(map)
-			if(fexists(file))
+			if(isfile(file))
 				maploader.load_map(file)
 
 				for(var/x = 1 to world.maxx)
