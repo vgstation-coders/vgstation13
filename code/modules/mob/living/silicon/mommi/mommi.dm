@@ -64,6 +64,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	var/hold = list(src.laws.inherent[1], sammitask, src.laws.inherent[3])
 	src.laws.inherent = hold
 	src.show_laws()
+	message_admins("<span class='warning'>[src.name] updated with: <span class='notice'>[sammitask]</span> -by: [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a></span>)",0,1)
 	user.visible_message("<span class='notice'>[user.name] enters commands into [src.name].</span>")
 
 /mob/living/silicon/robot/mommi/sammi/attackby(obj/item/W, mob/user)
