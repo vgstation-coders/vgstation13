@@ -64,6 +64,22 @@
 	gender = NEUTER
 	meat_type = /obj/item/weapon/ore/diamond
 
+/mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
+	f_style = pick(facial_hair_styles_list)
+	h_style = pick(hair_styles_list)
+
+	var/list/valid_species = (all_species - list("Krampus", "Horror"))
+
+	var/datum/species/new_species = all_species[pick(valid_species)]
+	..(new_loc, new_species.name)
+	gender = pick(MALE, FEMALE, NEUTER, PLURAL)
+	meat_type = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/meat))
+
+	for(var/datum/organ/external/E in organs)
+		E.species = all_species[pick(valid_species)]
+
+	update_body()
+
 /mob/living/carbon/human/generate_static_overlay()
 	if(!istype(static_overlays,/list))
 		static_overlays = list()
@@ -208,18 +224,6 @@
 			var/obj/spacepod/S = loc
 			stat("Spacepod Charge", "[istype(S.battery) ? "[(S.battery.charge / S.battery.maxcharge) * 100]" : "No cell detected"]")
 			stat("Spacepod Integrity", "[!S.health ? "0" : "[(S.health / initial(S.health)) * 100]"]%")
-
-/mob/living/carbon/human/blob_act()
-	if(flags & INVULNERABLE)
-		return
-	if(stat == DEAD)
-		return
-
-	show_message("<span class='warning'>The blob attacks you!</span>")
-	var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
-	var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
-	apply_damage(rand(30,40), BRUTE, affecting, run_armor_check(affecting, "melee"))
-	return
 
 /mob/living/carbon/human/attack_animal(mob/living/simple_animal/M as mob)
 	if(M.melee_damage_upper == 0)

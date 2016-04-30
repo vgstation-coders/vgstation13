@@ -255,7 +255,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/mining_scanner,
 					/obj/item/weapon/storage/bag/ore,
 					/obj/item/weapon/storage/bag/ore,
-					/obj/item/weapon/storage/bag/ore)
+					/obj/item/weapon/storage/bag/ore,
+					/obj/item/weapon/storage/bag/money,
+					/obj/item/weapon/storage/bag/money)
 	cost = 20
 	containertype = /obj/structure/closet/crate
 	containername = "Mining Equipment Crate"
@@ -625,16 +627,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/shotgunammo
 	name = "Shotgun shells"
-	contains = list(/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun)
+	contains = list(/obj/item/weapon/storage/box/lethalshells,
+					/obj/item/weapon/storage/box/buckshotshells,
+					/obj/item/weapon/storage/box/beanbagshells,
+					/obj/item/weapon/storage/box/stunshells,
+					/obj/item/weapon/storage/box/dartshells)
 	cost = 20
 	containertype = /obj/structure/closet/crate/secure
 	containername = "Shotgun shells"

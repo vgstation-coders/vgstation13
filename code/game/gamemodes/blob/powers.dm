@@ -94,7 +94,6 @@
 	var/obj/effect/blob/resource/R = locate() in T
 	if(R)
 		R.overmind = src
-
 	return
 
 /mob/camera/blob/proc/create_core()
@@ -160,6 +159,9 @@
 
 
 	B.change_to(/obj/effect/blob/node)
+	var/obj/effect/blob/node/N = locate() in T
+	if(N)
+		N.overmind = src
 	return
 
 
@@ -191,6 +193,9 @@
 		return
 
 	B.change_to(/obj/effect/blob/factory)
+	var/obj/effect/blob/factory/F = locate() in T
+	if(F)
+		F.overmind = src
 	return
 
 
@@ -212,6 +217,7 @@
 		to_chat(src, "Unable to remove this blob.")
 		return
 
+	B.manual_remove = 1
 	B.Delete()
 	return
 

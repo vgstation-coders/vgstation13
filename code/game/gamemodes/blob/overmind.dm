@@ -11,19 +11,28 @@
 	pass_flags = PASSBLOB
 	faction = "blob"
 
+	layer = 15
+
 	var/obj/effect/blob/core/blob_core = null // The blob overmind's core
 	var/blob_points = 0
 	var/max_blob_points = 100
 	var/maxjumprange = 20 //how far you can go in terms of non-blob tiles in a jump attempt
 
+	var/blob_warning = 0
+
 /mob/camera/blob/New()
 	var/new_name = "[initial(name)] ([rand(1, 999)])"
 	name = new_name
 	real_name = new_name
+	blob_overminds += src
 	..()
 	spawn(10)
 		if(src.mind)
 			src.mind.special_role = "Blob"
+
+/mob/camera/blob/Destroy()
+	blob_overminds -= src
+	..()
 
 /mob/camera/blob/Login()
 	..()
@@ -93,8 +102,26 @@
 /mob/camera/blob/emote(var/act,var/m_type=1,var/message = null)
 	return
 
+/mob/camera/blob/ex_act()
+	return
+
+/mob/camera/blob/singularity_act()
+	return
+
+/mob/camera/blob/cultify()
+	return
+
+/mob/camera/blob/singuloCanEat()
+	return 0
+
+/mob/camera/blob/singularity_pull()
+	return
+
 /mob/camera/blob/blob_act()
 	return
+
+/mob/camera/blob/Process_Spacemove(var/check_drift = 0)
+	return 1
 
 /mob/camera/blob/Stat()
 	..()

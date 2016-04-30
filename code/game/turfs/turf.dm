@@ -176,7 +176,8 @@
 
 	//Then, check the turf itself
 	if (!src.CanPass(mover, src))
-		return 0 // Still bumps against the turf if we return 0.
+		mover.Bump(src, 1)
+		return 0
 
 	//Finally, check objects/mobs to block entry that are not on the border
 	for(var/atom/movable/obstacle in large_dense)
@@ -448,7 +449,7 @@
 		if(env)
 			W.air = env //Copy the old environment data over if both turfs were simulated
 
-		if (istype(W,/turf/simulated/floor))
+		if (istype(W,/turf/simulated/floor) && !W.can_exist_under_lattice)
 			W.RemoveLattice()
 
 		if(tell_universe)
