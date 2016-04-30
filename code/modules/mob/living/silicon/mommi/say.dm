@@ -10,9 +10,9 @@
 
 /mob/living/silicon/robot/mommi/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
 	. = ..()
-	//if(.)
-	//	return .
-	if(src.subtype != "sammi") //To allow SAMMIs speech but still enforce silence in MoMMIs with them having the keeper lawset
+	if(.)
+		return .
+	if(src.keeper)
 		speech.message = trim(speech.message)
 		if (!speech.message)
 			return

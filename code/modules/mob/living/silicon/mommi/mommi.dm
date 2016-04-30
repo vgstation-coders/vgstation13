@@ -41,19 +41,30 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	name = "Stationary Assembler MMI"
 	real_name = "Stationary Assembler MMI"
 	icon = 'icons/mob/robots.dmi'
-	icon_state = "sammi"
+	icon_state = "sammi_offline"
 	maxHealth = 60
 	health = 60
 	keeper=0 // 0 = No, 1 = Yes (Disables speech and common radio.)
 	picked = 1
-	subtype="sammi"
+	subtype="sammi_offline"
 	prefix = "Stationary Assembler MMI"
 	canmove = 0
-	..()
+	//..()
 
 
 /mob/living/silicon/robot/mommi/sammi/update_canmove()
 	return 0
+
+/mob/living/silicon/robot/mommi/sammi/help_shake_act(mob/user)
+
+	var/sammitask = reject_bad_text(input(user,"Enter a task for this SAMMI:","SAMMI Controller",""))
+	if(!sammitask || !length(sammitask))
+		to_chat(user, "<span class='notice'>Invalid text.</span>")
+		return
+	var/hold = list(src.laws.inherent[1], sammitask, src.laws.inherent[3])
+	src.laws.inherent = hold
+	src.show_laws()
+	user.visible_message("<span class='notice'>[user.name] enters commands into [src.name].</span>")
 
 /mob/living/silicon/robot/mommi/sammi/attackby(obj/item/W, mob/user)
 
@@ -63,8 +74,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		adjustFireLoss(-30)
 		updatehealth()
 		coil.use(1)
-		for(var/mob/O in viewers(user, null))
-			O.show_message(text("<span class='warning'>[user] has fixed some of the burnt wires on [src]!</span>"), 1)
+		src.visible_message("<span class='warning'>[user] has fixed some of the burnt wires on [src]!</span>")
+		//for(var/mob/O in viewers(user, null))
+		//	O.show_message(text("<span class='warning'>[user] has fixed some of the burnt wires on [src]!</span>"), 1)
 
 	else if (iscrowbar(W))	// crowbar means open or close the cover
 		if(stat == DEAD)
@@ -103,7 +115,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 	else if (istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
 		if(wiresexposed)
-			to_chat(user, "Close the panel first.")
+			to_chat(user, "Close the wiring panel first.")
 		else if(cell)
 			to_chat(user, "There is a power cell already installed.")
 		else
@@ -155,9 +167,13 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		if(anchored)
 			to_chat(user, "<span class='notice'>You unbolt the SAMMI from the floor.</span>")
 			anchored = 0
+			updateicon()
+
 		else
 			to_chat(user, "<span class='notice'>You anchor the SAMMI to the floor.</span>")
 			anchored = 1
+			updateicon()
+
 		return 0
 
 
@@ -252,9 +268,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	module = new /obj/item/weapon/robot_module/mommi/sammi(src)
 	laws = new sammi_base_law_type
 
-
 /mob/living/silicon/robot/mommi/sammi/proc/transfer_personality(var/client/candidate)
-
 
 	if(!candidate)
 		return
@@ -265,11 +279,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		src.mind.assigned_role = "SAMMI"
 
 /mob/living/silicon/robot/mommi/sammi/ghost()
-	if(src.subtype == "sammi")
-		if(client && key)
-			ghostize(1)
-			src.visible_message("<span class=\"warning\">[src] disconnects from the network...attempting to reconnect!</span>")
-
+	//if(src.subtype == "sammi")
+	if(client && key)
+		ghostize(1)
+		src.visible_message("<span class=\"warning\">[src] disconnects from the network...attempting to reconnect!</span>")
+		subtype = "sammi_offline"
+		updateicon()
 
 /mob/living/silicon/robot/mommi/sammi/attack_ghost(var/mob/dead/observer/O)
 	if(!(src.key))
@@ -279,12 +294,16 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				if(!(src.key))
 					src.transfer_personality(O.client)
 					src.visible_message("<span class=\"warning\">[src] is connected to the SAMMI network!</span>")
+					subtype = "sammi_online"
+					updateicon()
 				else if(src.key)
 					to_chat(src, "<span class='notice'>Someone has already began controlling this SAMMI. Try another! </span>")
 		else if(!(O.can_reenter_corpse))
 			to_chat(O,"<span class='notice'>While the SAMMI may be souless, you have recently ghosted and thus are not allowed to take over for now.</span>")
 
 
+/mob/living/silicon/robot/mommi/sammi/handle_inherent_channels()
+	return
 
 /mob/living/silicon/robot/mommi/choose_icon()
 	var/icontype = input("Select an icon!", "Mobile MMI", null) as null|anything in list("Basic", "Hover", "Keeper", "RepairBot", "Replicator", "Prime", "Scout")

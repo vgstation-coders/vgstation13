@@ -61,9 +61,9 @@ obj/item/device/mmi/Destroy()
 		if(brainmob.stat == DEAD)
 			to_chat(user, "<span class='warning'>Yeah, good idea. Give something deader than the pizza in your fridge legs.  Mom would be so proud.</span>")
 			return TRUE
-		if(brainmob.mind in ticker.mode.head_revolutionaries)
-			to_chat(user, "<span class='warning'>The [src]'s firmware lets out a shrill sound, and flashes 'Abnormal Memory Engram'. It refuses to accept the brain.</span>")
-			return TRUE
+		//if(brainmob.mind in ticker.mode.head_revolutionaries)
+		//	to_chat(user, "<span class='warning'>The [src]'s firmware lets out a shrill sound, and flashes 'Abnormal Memory Engram'. It refuses to accept the brain.</span>")
+		//	return TRUE
 		if(jobban_isbanned(brainmob, "Mobile MMI"))
 			to_chat(user, "<span class='warning'>This brain does not seem to fit.</span>")
 			return TRUE
@@ -116,9 +116,9 @@ obj/item/device/mmi/Destroy()
 			if(brainmob.stat == DEAD)
 				to_chat(user, "<span class='warning'>Yeah, good idea. Give something deader than the pizza in your fridge legs.  Mom would be so proud.</span>")
 				return TRUE
-			if(brainmob.mind in ticker.mode.head_revolutionaries)
-				to_chat(user, "<span class='warning'>The [src]'s firmware lets out a shrill sound, and flashes 'Abnormal Memory Engram'. It refuses to accept the brain.</span>")
-				return TRUE
+			//if(brainmob.mind in ticker.mode.head_revolutionaries)
+			//	to_chat(user, "<span class='warning'>The [src]'s firmware lets out a shrill sound, and flashes 'Abnormal Memory Engram'. It refuses to accept the brain.</span>")
+			//	return TRUE
 			if(jobban_isbanned(brainmob, "SAMMI"))
 				to_chat(user, "<span class='warning'>This brain does not seem to fit.</span>")
 				return TRUE
@@ -138,13 +138,14 @@ obj/item/device/mmi/Destroy()
 				M.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
 
 			M.job = "SAMMI"
-
+			M.subtype = "sammi_online"
+			M.icon_state = "sammi_online"
 			M.cell = locate(/obj/item/weapon/cell) in contents
 			M.cell.loc = M
 			src.loc = M//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
 			M.mmi = src
 			return TRUE
-		else:
+		else
 			new /mob/living/silicon/robot/mommi/sammi(get_turf(loc))
 
 
