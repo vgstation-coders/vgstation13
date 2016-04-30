@@ -283,16 +283,13 @@
 /atom/movable/Crossed(atom/movable/AM)
 	return
 
-/atom/movable/Bump(atom/Obstacle, yes)
+/atom/movable/Bump(atom/Obstacle)
 	if(src.throwing)
 		src.throw_impact(Obstacle)
 		src.throwing = 0
 
-	if ((Obstacle && yes))
+	if (Obstacle)
 		Obstacle.Bumped(src)
-	return
-	..()
-	return
 
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0)
 	if(destination)

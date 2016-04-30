@@ -1,14 +1,9 @@
-/atom/proc/Cross() //It literally BLOWS my mind that you can do this without severe repercussions
+///atom/proc/Cross() //It literally BLOWS my mind that you can do this without severe repercussions
 
-/atom/movable/Cross(atom/movable/mover, turf/target = loc, height=1.5, air_group = 0)
-	//Purpose: Determines if the object (or airflow) can pass this atom.
-	//Called by: Movement, airflow.
-	//Inputs: The moving atom (optional), target turf, "height" and air group
-	//Outputs: Boolean if can pass.
-
+/atom/movable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	return (!density || !height || air_group)
 
-/turf/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/turf/proc/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(!target) return 0
 
 	if(istype(mover)) // turf/Enter(...) will perform more advanced checks
@@ -34,14 +29,20 @@
 // AIR_BLOCKED - Blocked
 // ZONE_BLOCKED - Not blocked, but zone boundaries will not cross.
 // BLOCKED - Blocked, zone boundaries will not cross even if opened.
-atom/proc/c_airblock(turf/other)
+/atom/proc/c_airblock(turf/other)
+
+/atom/movable/c_airblock(turf/other)
+	return 1
+	/*
 	#ifdef ZASDBG
 	ASSERT(isturf(other))
 	#endif
 	return !Cross(null, other, 0, 0) + 2*!Cross(null, other, 1.5, 1)
+	*/
 
-
-turf/c_airblock(turf/other)
+/turf/c_airblock(turf/other)
+	return 1
+	/*
 	#ifdef ZASDBG
 	ASSERT(isturf(other))
 	#endif
@@ -61,4 +62,4 @@ turf/c_airblock(turf/other)
 	for(var/atom/movable/M in contents)
 		result |= M.c_airblock(other)
 		if(result == BLOCKED) return BLOCKED
-	return result
+	return result*/

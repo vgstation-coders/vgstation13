@@ -149,6 +149,7 @@
 /turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
 	if (!mover)
 		return 1
+/*
 
 //#ifndef BORDER_USE_TURF_EXIT
 //#warn BORDER_USE_TURF_EXIT is not defined, using possibly buggy turf/Enter code.
@@ -180,7 +181,8 @@
 		if(!obstacle.Cross(mover, mover.loc) && (forget != obstacle) && mover != obstacle)
 			mover.Bump(obstacle, 1)
 			return 0
-	return 1 //Nothing found to block so return success!
+*/
+	return ..() //Nothing found to block so return success!
 
 /turf/Entered(atom/movable/A as mob|obj)
 	if(movement_disabled)
