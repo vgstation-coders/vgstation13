@@ -153,6 +153,11 @@ var/global/list/accessable_z_levels = list()
 	movementJammed = 1
 	base_turf = /turf/unsimulated/beach/sand
 
+/datum/zLevel/snow
+
+
+	base_turf = /turf/unsimulated/floor/snow
+
 // Debug ///////////////////////////////////////////////////////
 
 /*
