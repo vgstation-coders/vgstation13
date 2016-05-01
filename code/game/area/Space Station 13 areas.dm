@@ -2131,8 +2131,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/awaymission/leviathan
 	name = "Leviathan"
-	icon_state = "null"
-
+		
 /area/awaymission/leviathan/research
 	name = "Leviathan"
 	icon_state = "anolab"
