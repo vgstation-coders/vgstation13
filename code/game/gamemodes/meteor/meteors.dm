@@ -169,6 +169,8 @@
 		return ..() //Refer to atom/proc/Cross
 
 /obj/item/projectile/meteor/Bump(atom/A)
+	if(loc == null)
+		return
 
 	explosion(get_turf(src), 2, 4, 6, 8, 0, 1, 0) //Medium meteor, medium boom
 	qdel(src)
