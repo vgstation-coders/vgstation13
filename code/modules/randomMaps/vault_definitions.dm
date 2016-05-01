@@ -23,6 +23,7 @@ var/list/existing_vaults = list()
 		if(!ispath(zLevel.base_turf, /turf/space))
 			for(var/turf/space/new_turf in objects)
 				new_turf.ChangeTurf(zLevel.base_turf)
+				new_turf.flags |= NO_MINIMAP
 			
 
 //How to create a new vault:
