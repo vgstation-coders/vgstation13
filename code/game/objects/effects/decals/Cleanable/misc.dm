@@ -110,6 +110,11 @@
 
 	processing_objects.Add(src)
 
+/obj/effect/decal/cleanable/vomit/active/Destroy()
+	..()
+	
+	processing_objects.Remove(src)
+
 /obj/effect/decal/cleanable/vomit/active/process()
 	if(--dry_state <= 0) //Decrease dry_state by 1. Check if it's equal to zero
 		processing_objects.Remove(src)
