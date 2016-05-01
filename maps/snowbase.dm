@@ -17,7 +17,7 @@
 			},
 		/datum/zLevel/centcomm,
 		/datum/zLevel/snow{
-			name = "OldOutpost
+			name = "OldOutpost" ;
 			},
 		/datum/zLevel/snow{
 			name = "derelict" ;
