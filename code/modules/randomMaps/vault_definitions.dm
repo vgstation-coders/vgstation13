@@ -20,7 +20,7 @@ var/list/existing_vaults = list()
 	
 	if(location.z <= accessable_z_levels.len)
 		var/datum/zLevel/zLevel = accessable_z_levels[location.z]
-		if(zLevel.base_turf)
+		if(!ispath(zLevel.base_turf, /turf/space))
 			for(var/turf/space/new_turf in objects)
 				new_turf.ChangeTurf(zLevel.base_turf)
 			
