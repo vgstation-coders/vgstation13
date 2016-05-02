@@ -152,7 +152,7 @@
 		return !density
 	return 1
 
-/obj/structure/window/Cross(atom/movable/mover, turf/target = loc, height = 0)
+/obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
 
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1

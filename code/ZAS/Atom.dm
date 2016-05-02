@@ -1,5 +1,3 @@
-///atom/proc/Cross() //It literally BLOWS my mind that you can do this without severe repercussions
-
 /atom/movable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	return (!density || !height || air_group)
 
@@ -32,17 +30,12 @@
 /atom/proc/c_airblock(turf/other)
 
 /atom/movable/c_airblock(turf/other)
-	return 1
-	/*
 	#ifdef ZASDBG
 	ASSERT(isturf(other))
 	#endif
 	return !Cross(null, other, 0, 0) + 2*!Cross(null, other, 1.5, 1)
-	*/
 
 /turf/c_airblock(turf/other)
-	return 1
-	/*
 	#ifdef ZASDBG
 	ASSERT(isturf(other))
 	#endif
@@ -62,4 +55,4 @@
 	for(var/atom/movable/M in contents)
 		result |= M.c_airblock(other)
 		if(result == BLOCKED) return BLOCKED
-	return result*/
+	return result
