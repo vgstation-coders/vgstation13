@@ -460,7 +460,7 @@ var/global/list/alert_overlays_global = list()
 /obj/machinery/door/firedoor/border_only/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(get_dir(target, mover) == dir) //Make sure looking at appropriate border
+	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
 	return 1
 

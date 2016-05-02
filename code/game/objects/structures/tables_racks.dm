@@ -304,8 +304,8 @@
 			return 1
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
-	if (flipped)
-		if(get_dir(target, mover) == dir)
+	if(flipped)
+		if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 			return !density
 		else
 			return 1

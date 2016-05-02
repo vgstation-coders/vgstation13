@@ -145,6 +145,8 @@
 		else //Diagonal move, split it into cardinal moves
 			if (step(src, Dir & NORTH|SOUTH))
 				. = step(src, Dir & EAST|WEST)
+			else if (step(src, Dir & EAST|WEST))
+				. = step(src, Dir & NORTH|SOUTH)
 
 	if(. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
 		spawn(0)

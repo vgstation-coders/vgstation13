@@ -100,7 +100,7 @@
 		return 1 //We aren't airtight, only exception to PASSGLASS
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(get_dir(loc, target) == dir)
+	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
 	return 1
 
