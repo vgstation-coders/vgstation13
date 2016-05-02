@@ -144,19 +144,22 @@
 		health -= damage
 		healthcheck()
 
-/obj/structure/window/Uncross(var/atom/movable/O, var/turf/target)
-
-	if(istype(O) && O.checkpass(PASSGLASS))
+/obj/structure/window/Uncross(var/atom/movable/mover, var/turf/target)
+	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(get_dir(O.loc, target) == dir)
-		return !density
+	if(flags & ON_BORDER)
+		if(target) //Are we doing a manual check to see
+			if(get_dir(loc, target) == dir)
+				return !density
+		else if(mover.dir == dir) //Or are we using move code
+			if(density)	Bumped(mover)
+			return !density
 	return 1
 
 /obj/structure/window/Cross(atom/movable/mover, turf/target = loc, height = 0)
-
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(get_dir(loc, target) == dir)
+	if(get_dir(target, mover) == dir)
 		return !density
 	return 1
 
