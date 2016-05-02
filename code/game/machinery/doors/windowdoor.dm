@@ -71,7 +71,7 @@
 /obj/machinery/door/window/Cross(atom/movable/mover, turf/target = loc, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(get_dir(target, mover) == dir) //Make sure looking at appropriate border
+	if(get_dir(loc, target) == dir) //Make sure looking at appropriate border
 		if(air_group) return 0
 		return !density
 	else
@@ -85,14 +85,10 @@
 /obj/machinery/door/window/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)	Bumped(mover)
-			return !density
-	return 1
+	if(get_dir(loc, target) == dir)
+		return !density
+	else
+		return 1
 
 /obj/machinery/door/window/open()
 	if (src.operating == 1) //doors can still open when emag-disabled

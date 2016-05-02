@@ -22,6 +22,10 @@
 	..(loc)
 	flags |= ON_BORDER
 
+/obj/structure/window/full/Uncross(atom/movable/O as mob|obj, target as turf)
+
+	return 1
+
 /obj/structure/window/full/Cross(atom/movable/mover, turf/target = loc, height = 1.5, air_group = 0)
 
 	if(istype(mover) && mover.checkpass(PASSGLASS))

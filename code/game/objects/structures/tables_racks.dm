@@ -305,7 +305,7 @@
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
 	if (flipped)
-		if(get_dir(target, mover) == dir)
+		if (get_dir(loc, target) == dir)
 			return !density
 		else
 			return 1
@@ -343,16 +343,14 @@
 				return 1
 	return 1
 
-/obj/structure/table/Uncross(atom/movable/mover as mob|obj, target as turf)
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+/obj/structure/table/Uncross(atom/movable/O as mob|obj, target as turf)
+	if(istype(O) && O.checkpass(PASSTABLE))
 		return 1
-	if(flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)	Bumped(mover)
+	if (flipped)
+		if (get_dir(loc, target) == dir)
 			return !density
+		else
+			return 1
 	return 1
 
 /obj/structure/table/MouseDrop_T(obj/O as obj, mob/user as mob)
@@ -701,9 +699,12 @@
 
 /obj/structure/rack/Cross(atom/movable/mover, turf/target = loc, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
+	if(src.density == 0) //Because broken racks -Agouri |TODO: SPRITE!|
+		return 1
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
-	return !density
+	else
+		return 0
 
 /obj/structure/rack/Bumped(atom/AM)
 	if (istype(AM, /obj/structure/bed/chair/vehicle/wizmobile))

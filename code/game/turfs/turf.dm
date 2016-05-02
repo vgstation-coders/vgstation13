@@ -120,9 +120,68 @@
 	..()
 	return 0
 
+/*
+ * IF YOU HAVE BYOND VERSION BELOW 507.1248 OR ARE ABLE TO WALK THROUGH WINDOORS/BORDER WINDOWS COMMENT OUT
+ * #define BORDER_USE_TURF_EXIT
+ * FOR MORE INFORMATION SEE: http://www.byond.com/forum/?post=1666940
+ *
+#ifdef BORDER_USE_TURF_EXIT
+/turf/Exit(atom/movable/mover, atom/target)
+	if(!mover)
+		return 1
+	// First, make sure it can leave its square
+	if(mover.loc == src)
+		// Nothing but border objects stop you from leaving a tile, only one loop is needed
+		for(var/obj/obstacle in src)
+			/*if(ismob(mover) && mover:client)
+				to_chat(world, "<span class='danger'>EXIT</span>origin: checking exit of mob [obstacle]"*/)
+			if(obstacle != mover && obstacle != target && !obstacle.Uncross(mover, target))
+				/*if(ismob(mover) && mover:client)
+					to_chat(world, "<span class='danger'>EXIT</span>Origin: We are bumping into [obstacle]"*/)
+				mover.Bump(obstacle, 1)
+				return 0
+	return 1
+#if DM_VERSION < 507
+	#warn This compiler is too far out of date! You will experience issues with windows and windoors unles you update to atleast 507.1248 or comment out BORDER_USE_TURF_EXIT in global.dm!
+
+#endif
+*/
 /turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
 	if (!mover)
 		return 1
+/*
+
+//#ifndef BORDER_USE_TURF_EXIT
+//#warn BORDER_USE_TURF_EXIT is not defined, using possibly buggy turf/Enter code.
+	// First, make sure it can leave its square
+	if(isturf(mover.loc))
+		// Nothing but border objects stop you from leaving a tile, only one loop is needed
+		for(var/obj/obstacle in mover.loc)
+			if(obstacle != mover && obstacle != forget && !obstacle.Uncross(mover, src) )
+				mover.Bump(obstacle, 1)
+				return 0
+//#endif
+	var/list/large_dense = list()
+	//Next, check objects to block entry that are on the border
+	for(var/atom/movable/border_obstacle in src)
+		if(border_obstacle.flags&ON_BORDER)
+			if(!border_obstacle.Cross(mover, mover.loc) && (forget != border_obstacle) && mover != border_obstacle)
+				mover.Bump(border_obstacle, 1)
+				return 0
+		else
+			large_dense += border_obstacle
+
+	//Then, check the turf itself
+	if (!src.Cross(mover, src))
+		mover.Bump(src, 1)
+		return 0
+
+	//Finally, check objects/mobs to block entry that are not on the border
+	for(var/atom/movable/obstacle in large_dense)
+		if(!obstacle.Cross(mover, mover.loc) && (forget != obstacle) && mover != obstacle)
+			mover.Bump(obstacle, 1)
+			return 0
+*/
 	return ..() //Nothing found to block so return success!
 
 /turf/Entered(atom/movable/A as mob|obj)
