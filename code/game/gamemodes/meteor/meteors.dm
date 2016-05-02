@@ -176,9 +176,10 @@
 	explosion(get_turf(src), 2, 4, 6, 8, 0, 1, 0) //Medium meteor, medium boom
 	qdel(src)
 
-/obj/item/projectile/meteor/Move()
-	..()
-	return
+/obj/item/projectile/immovablerod/forceMove(atom/destination, var/no_tp = 0)
+	if(z != starting.z)
+		qdel(src)
+		return
 
 /obj/item/projectile/meteor/radioactive
 	name = "radioactive meteor"
