@@ -420,9 +420,6 @@
 	anchored = 1.0
 	flags = ON_BORDER
 
-/obj/structure/holowindow/Destroy()
-	..()
-
 /obj/item/weapon/holo
 	damtype = HALLOSS
 
