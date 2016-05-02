@@ -1080,7 +1080,7 @@ var/list/admin_verbs_mod = list(
 	message_admins("[key_name_admin(src)] sent a fax to all machines.", 1)
 
 /client/proc/create_awaymission()
-	set category = "Fun"
+	set category = "Admin"
 	set name = "Create Away Mission"
 	set desc = "Creates an away mission and links it to the station's gateway."
 
