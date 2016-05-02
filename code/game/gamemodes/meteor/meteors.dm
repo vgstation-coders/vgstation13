@@ -241,7 +241,7 @@
 
 		//Flashing everyone
 		if(eye_safety < 2)
-			flick("e_flash", M.flash)
+			M.flash_eyes(visual = 1)
 			switch(eye_safety)
 				if(1)
 					M.Stun(2)
@@ -330,7 +330,6 @@
 	..()
 
 /obj/item/projectile/meteor/Destroy()
-	walk(src, 0) //This cancels the walk_towards() proc
 	..()
 
 /obj/effect/meteor/gib    //non explosive meteor, appears to be a corpse spinning in space before impacting something and spraying gibs everywhere
