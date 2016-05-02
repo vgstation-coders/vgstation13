@@ -117,7 +117,7 @@
 
 	var/msg = input("Message:", text("Enter the text you wish to appear to your target, input nothing to cancel.")) as text
 
-	if(!msg
+	if(!msg)
 		return
 
 	for(var/mob/M in view())

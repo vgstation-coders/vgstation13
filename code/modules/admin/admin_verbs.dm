@@ -610,7 +610,7 @@ var/list/admin_verbs_mod = list(
 
 	var/turf/epicenter = mob.loc
 	var/list/choices = list("Small Bomb (1,2,3)", "Medium Bomb (2,3,4)", "Big Bomb (3,5,7)", "Custom Bomb", "Cancel")
-	var/choice = input("What size explosion would you like to produce?") in choices
+	var/choice = input("What size explosion would you like to produce?") in choices|null
 	switch(choice)
 		if(null)
 			return 0
@@ -639,7 +639,7 @@ var/list/admin_verbs_mod = list(
 
 	var/turf/epicenter = mob.loc
 	var/list/choices = list("Small EMP (1,2)", "Medium EMP (2,4)", "Big EMP (4,8)", "Custom EMP", "Cancel")
-	var/choice = input("What size EMP would you like to produce?") in choices
+	var/choice = input("What size EMP would you like to produce?") in choices|null
 	switch(choice)
 		if(null)
 			return 0
