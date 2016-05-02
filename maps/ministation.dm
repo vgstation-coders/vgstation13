@@ -18,7 +18,6 @@
 		/datum/zLevel/mining,
 		)
 	unavailable_items = list(
-		/obj/item/device/rcd/rpd,
 		/obj/item/clothing/shoes/magboots/elite,
 		/obj/item/clothing/suit/space/nasavoid,
 		/obj/item/clothing/under/rank/research_director,
