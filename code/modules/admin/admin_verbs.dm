@@ -126,7 +126,8 @@ var/list/admin_verbs_spawn = list(
 	/client/proc/spawn_datum, //Allows us to spawn datums to the marked datum buffer
 	/client/proc/cmd_admin_dress, //Allows us to spawn clothing and dress a mob with it in one click
 	/client/proc/respawn_character, //Allows us to re-spawn someone
-	/client/proc/debug_reagents //Allows us to spawn reagents in mobs/containers
+	/client/proc/debug_reagents, //Allows us to spawn reagents in mobs/containers
+	/client/proc/create_awaymission, //Allows us to summon away missions
 	)
 var/list/admin_verbs_server = list(
 	/client/proc/Set_Holiday,
@@ -147,7 +148,7 @@ var/list/admin_verbs_server = list(
 	/client/proc/toggle_random_events,
 	/client/proc/check_customitem_activity,
 	/client/proc/dump_chemreactions,
-	/client/proc/save_coordinates
+	/client/proc/save_coordinates,
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/gc_dump_hdl,
@@ -180,6 +181,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/test_snap_UI,
 	/client/proc/configFood,
 	/client/proc/debug_reagents,
+	/client/proc/create_awaymission,
 	/client/proc/make_invulnerable,
 	/client/proc/cmd_admin_dump_delprofile,
 	/client/proc/mob_list,
@@ -1076,3 +1078,40 @@ var/list/admin_verbs_mod = list(
 
 	log_admin("[key_name(src)] sent a fax to all machines.: [sent]")
 	message_admins("[key_name_admin(src)] sent a fax to all machines.", 1)
+
+/client/proc/create_awaymission()
+	set category = "Fun"
+	set name = "Create Away Mission"
+	set desc = "Creates an away mission and links it to the station's gateway."
+
+	var/list/L = getRandomZlevels(1)
+	var/list/choices = list()
+
+	if(!L.len)
+		to_chat(src, "No away missions found.")
+		return
+
+	for(var/datum/away_mission/AM in L)
+		choices[AM.name] = AM
+		to_chat(src, "<b>[AM.file_dir]</b> - <span class='info'>[(AM.desc ? AM.desc : "No description")]</span>")
+
+	var/choice = input(src, "Select an away mission to load. See chat for descriptions!", "AWAY MISSIONS") as null|anything in choices
+	if(!choice) return
+
+	log_admin("[key_name(src)] is loading an away mission: [choice]")
+	message_admins("[key_name_admin(src)] is loading an away mission: [choice]", 1)
+
+	var/datum/away_mission/AM = choices[choice]
+	to_chat(usr, "Loading [AM.file_dir]...")
+
+	var/override = 0
+	if(existing_away_missions.len)
+		var/abba = input(src, "There is already an away mission loaded. Do you want to load [AM.name] anyway?") as null|anything in list("Yes", "No")
+		if(!abba) return
+
+		if(abba == "Yes")
+			override = 1
+
+	to_chat(src, "Attempting to load [AM.name] ([AM.file_dir])...")
+	createRandomZlevel(override, AM, usr)
+	to_chat(src, "The away mission has been generated on z-level [world.maxz]")

@@ -127,7 +127,7 @@ obj/machinery/gateway/centerstation/process()
 	else
 		var/obj/effect/landmark/dest = pick(awaydestinations)
 		if(dest)
-			M.loc = dest.loc
+			M.forceMove(get_turf(dest))
 			M.dir = SOUTH
 			use_power(5000)
 		return

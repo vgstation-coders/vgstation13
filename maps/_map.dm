@@ -106,6 +106,8 @@
 	if(!level.movementJammed)
 		accessable_z_levels += list("[z_to_use]" = level.movementChance)
 
+	level.z = z_to_use
+
 var/global/list/accessable_z_levels = list()
 
 //This list contains the z-level numbers which can be accessed via space travel and the percentile chances to get there.
@@ -122,6 +124,7 @@ var/global/list/accessable_z_levels = list()
 	var/movementJammed = 0 //Prevents you from accessing the zlevel by drifting
 	var/movementChance = ZLEVEL_BASE_CHANCE
 	var/base_turf //Our base turf, what shows under the station when destroyed. Defaults to space because it's fukken Space Station 13
+	var/z //Number of the z-level (the z coordinate)
 
 ////////////////////////////////
 
