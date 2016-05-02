@@ -1515,10 +1515,15 @@ client/proc/create_bomberman_arena()
 		"15x13 (2 players)",
 		"15x15 (4 players)",
 		"39x23 (10 players)",
+		"Cancel",
 		)
 	var/arena_type = input("What size for the arena?", "Arena Construction") in arena_sizes
+
+	if(arena_type == "Cancel")
+		return
+
 	var/turf/T = get_turf(src.mob)
-	var/datum/bomberman_arena/A = new /datum/bomberman_arena(T,arena_type,src.mob)
+	var/datum/bomberman_arena/A = new /datum/bomberman_arena(T, arena_type, src.mob)
 	arenas += A
 
 client/proc/control_bomberman_arena()
