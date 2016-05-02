@@ -174,6 +174,8 @@ Example of the second method:
 
 		AM = pick(potentialRandomZlevels)
 		to_chat(messages, "<span class='danger'>[potentialRandomZlevels.len] away missions found. Loading...</span>")
+	else
+		to_chat(messages, "<span class='danger'>Loading an away mission...</span>")
 
 	log_game("Loading away mission [AM.file_dir]")
 

@@ -1102,7 +1102,6 @@ var/list/admin_verbs_mod = list(
 	message_admins("[key_name_admin(src)] is loading an away mission: [choice]", 1)
 
 	var/datum/away_mission/AM = choices[choice]
-	to_chat(usr, "Loading [AM.file_dir]...")
 
 	var/override = 0
 	if(existing_away_missions.len)
