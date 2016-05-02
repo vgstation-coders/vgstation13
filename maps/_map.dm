@@ -38,7 +38,7 @@
 	var/tDomeZ = 0
 
 	//List for traitor items which are not in the map
-	var/unavailable_items[]
+	var/list/unavailable_items
 
 	//nanoui stuff
 	var/map_dir = ""
